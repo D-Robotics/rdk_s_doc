@@ -17,6 +17,11 @@ Type "help", "copyright", "credits" or "license" for more information.
 'RDK_X5'
 ```
 
+:::tip
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。 
+:::
+
+
 ## 设置引脚编码方式
 
 开发板的引脚编码有 4 种模式：

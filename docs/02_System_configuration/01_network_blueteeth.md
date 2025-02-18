@@ -8,6 +8,13 @@ sidebar_position: 1
 
 ## 有线网络{#config_ethnet}
 
+:::info 注意
+此配置方式适用于`RDK X3`、`RDK X5`、`RDK X3 Module`和`RDK Ultra`开发板，不适用于`RDK S100`开发板。
+
+`RDK S100`使用 Netplan方式配置网络，具体见下一小节 "有线网络配置-Netplan方式"。
+:::
+
+
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=11
 
 开发板有线网络默认采用静态IP配置，初始IP地址为`192.168.127.10`。用户可通过如下方法实现静态、DHCP模式的切换。
@@ -76,6 +83,47 @@ iface eth0 inet static
 ```
 
 修改完成后，`reboot`重启让配置生效。
+
+## 有线网络配置-Netplan方式
+
+:::info 注意
+Netplan方式配置网络仅在`RDK S100`验证使用，其它平台暂不支持。
+
+`RDK S100`不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
+:::
+
+
+在 Ubuntu 系统中，开发板的静态网络配置信息存储于 `/etc/netplan/01-hobot-net.yaml` 文件。以下是具体配置说明：
+
+- **静态 IP 与子网掩码**：若需为网络接口设定静态 IP 地址和子网掩码，可借助 `addresses` 字段，并采用 CIDR 表示法子网掩码。
+- **DHCP 配置**：若要让指定网络接口通过 DHCP（动态主机配置协议）自动获取 IP 地址，将 `dhcp4` 或 `dhcp6` 字段值修改为 `yes` 即可。
+- **自定义 MAC 地址**：使用 `macaddress` 字段，能够为网络接口指定自定义的 MAC 地址。
+- **自定义 DNS 地址**：通过 `nameservers` 字段，可以为网络接口指定自定义的 DNS 地址。
+
+使用Netplan进行网络配置举例如下：
+
+```shell
+sudo vim /etc/netplan/01-hobot-net.yaml
+```
+
+```shell
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    eth1:
+      dhcp4: no
+      dhcp6: no
+      macaddress: fa:5b:14:b6:08:a6
+      addresses: [192.168.127.10/24, ]
+      gateway4: 192.168.127.1
+      nameservers:
+         addresses: [223.5.5.5, ]
+
+```
+
+修改完成后，`sudo netplan apply`让配置生效。
+
 
 ## 无线网络
 
@@ -294,6 +342,28 @@ DNS(Domain Name Server)是进行域名(domain name)和与之相对应的IP地址
     sudo mv /etc/resolv.conf  /etc/resolv.conf.bak
     sudo ln -s /run/systemd/resolve/resolv.conf /etc/
     ```
+
+
+## Proxy 配置
+
+Proxy 配置指的是对网络代理进行设置。在网络通信中，代理服务器作为客户端和目标服务器之间的中间层，客户端的请求先发送到代理服务器，再由代理服务器转发给目标服务器，目标服务器的响应也通过代理服务器返回给客户端。
+
+编辑 `~/.bashrc` 或 `/etc/environment` 文件。如果是为当前用户配置代理，编辑 `~/.bashrc`；如果是为所有用户配置代理，编辑 `/etc/environment`.
+
+在文件中添加以下内容（以 HTTP 代理为例）：
+
+```
+http_proxy=http://proxy_server_address:port
+https_proxy=http://proxy_server_address:port
+ftp_proxy=http://proxy_server_address:port
+no_proxy=localhost,127.0.0.1
+```
+
+保存文件后，执行以下命令使配置生效：
+
+```
+source ~/.bashrc
+```
 
 ##  系统更新
 出于系统安全、稳定性的考虑，推荐用户安装完系统后，通过`apt`命令对系统进行更新。

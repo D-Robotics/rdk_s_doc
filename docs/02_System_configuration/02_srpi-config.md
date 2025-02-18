@@ -5,7 +5,7 @@ sidebar_position: 2
 # 2.2 srpi-config 工具配置
 
 :::info 注意
-`srpi-config`配置工具仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`开发板
+`srpi-config`配置工具仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`和`RDK S100`开发板
 :::
 
 ## 简介

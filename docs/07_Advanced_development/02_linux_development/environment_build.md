@@ -34,3 +34,18 @@ RDK X5 的相关源码托管在 GitHub 的 [x5-rdk-gen 仓库](https://github.co
 - **系统编译方法**：包括搭建开发环境、构建系统镜像、交叉编译工具链配置、软件开发方法以及常见问题的解决方法。
 
 通过以上步骤，您可以完成 RDK OS 系统的开发和编译。详细信息请参考对应的 GitHub 仓库说明文件。
+
+### 开发 RDK S100
+
+
+
+//TODO RDK S100的源码位置暂不可用
+
+RDK S100 的相关源码托管在 GitHub 的 [s100-rdk-gen 仓库](https://github.com/D-Robotics/s100-rdk-gen)。
+
+
+
+- **开发环境搭建**：仓库中的 [README](https://github.com/D-Robotics/s100-rdk-gen/blob/main/README.md) 提供了从环境安装到源码编译的完整说明。
+- **系统编译方法**：包括搭建开发环境、构建系统镜像、交叉编译工具链配置、软件开发方法以及常见问题的解决方法。
+
+通过以上步骤，您可以完成 RDK OS 系统的开发和编译。详细信息请参考对应的 GitHub 仓库说明文件。

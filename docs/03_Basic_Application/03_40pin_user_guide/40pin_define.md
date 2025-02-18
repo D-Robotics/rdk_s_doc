@@ -9,11 +9,15 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-开发板上的 40PIN 功能管脚，接口定义请查看本章节。
+开发板上的存在扩展引脚排，方便用户进行外围扩展，接口定义请查看本章节。
 
 ## 管脚复用关系配置
 
 40PIN 的管脚会按照本章节所示，默认使能 UART、SPI、I2C、I2S 等专用功能，如需将特定管脚配置成 GPIO 功能，需要通过 `srpi-config` 配置工具进行配置。
+
+:::tip
+`srpi-config`配置工具仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`和`RDK S100`开发板
+:::
 
 注意，`srpi-config` 程序需要在**全屏命令行窗口**中运行，方法如下：
 
@@ -32,9 +36,9 @@ sudo srpi-config
 - 键盘上、下键选择功能项， 回车键开关功能
 - 键盘左、右键选择  Select 和 Exit ，回车键确认
 
-## 40PIN 管脚定义{#40pin_define}
+## 扩展引脚排定义{#40pin_define}
 
-开发板提供40PIN标准接口，方便用户进行外围扩展，其中数字IO采用3.3V电平设计。40PIN接口定义如下：
+开发板提供扩展引脚排标准接口，方便用户进行外围扩展，其中数字IO采用3.3V电平设计。接口定义如下：
 
 <Tabs groupId="rdk-type">
 <TabItem value="x3" label="RDK X3">
@@ -64,9 +68,19 @@ sudo srpi-config
 
 </TabItem>
 
+<TabItem value="S100" label="RDK S100">
+
+![image-rdk_100_mainboard_pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_pin.jpg)
+
+</TabItem>
+
 </Tabs>
 
 ## GPIO 读写操作示例
+
+:::tip
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。 
+:::
 
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
 
