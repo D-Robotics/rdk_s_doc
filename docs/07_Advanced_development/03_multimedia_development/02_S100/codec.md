@@ -1,4 +1,8 @@
-**S100 codec**
+---
+sidebar_position: 3
+---
+
+# 编解码
 
 ## 概述
 

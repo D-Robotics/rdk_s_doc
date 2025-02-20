@@ -1,4 +1,8 @@
-**RDK-S100 HBN camera 点亮说明**
+---
+sidebar_position: 2
+---
+
+# Camera点亮
 
 ## 范围
 

@@ -2,11 +2,11 @@
 sidebar_position: 1
 ---
 
-**S100 camsys 开发指南**
+# Camsys子系统
 
 ## 系统概述
 
-camsys子系统包含Camera sensor (包括 SerDes)、VIN（包括
+S100 camsys子系统包含Camera sensor (包括 SerDes)、VIN（包括
 MIPI、CIM）、ISP、PYM、GDC、YNR、STITCH模块。
 
 | 简称   | 全称                                   | 说明                                        |
