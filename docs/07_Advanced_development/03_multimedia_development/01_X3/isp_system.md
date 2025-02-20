@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 7.3.5 ISP图像系统
+# ISP图像系统
 
 ## 概述
 
