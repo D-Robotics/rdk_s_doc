@@ -19,8 +19,8 @@ sidebar_position: 2
 
 | 类型 | 供应商 | 型号 | 描述 | 购买链接 |
 | --- | --------- | -------- | --------------- | --------- |
-| GMSL2/FAKRA | 森云智能 | SG8S-AR0820C-5300-G2A | <td>ONSEMI 8.3MP AR0820 RGGB传感器</td><td>FOV HFOV 32°/64°/100°/114°/130°</td><td>2880*1860@30fps</td>| [购买链接](https://www.waveshare.net/shop/RPi-Camera-G.htm)  |
-| MIPI | 微雪 | IMX219摄像头 | IMX219传感器，800W像素，FOV 对角200度 | [购买链接](https://www.waveshare.net/shop/IMX219-200-Camera.htm)  |
+| GMSL2/FAKRA | 森云智能 | SG8S-AR0820C-5300-G2A | <li>ONSEMI 8.3MP AR0820 RGGB传感器</li><li>FOV HFOV 32°/64°/100°/114°/130°</li><li>2880*1860@30fps</li>| [购买链接](https://www.waveshare.net/shop/RPi-Camera-G.htm)  |
+| MIPI | 微雪 | IMX219摄像头 | <li>IMX219传感器</li><li>I800W像素</li><li>FOV 对角200度</li> | [购买链接](https://www.waveshare.net/shop/IMX219-200-Camera.htm)  |
 
 :::tip
 持续更新中....

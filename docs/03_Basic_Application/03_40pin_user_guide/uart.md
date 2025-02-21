@@ -10,7 +10,7 @@ RDK X5 在 40PIN 上默认使能 UART1，物理管脚号 8 和 10，IO电压 3.3
 
 RDK Ultra 在 40PIN 上默认使能 UART2，物理管脚号 8 和 10，IO电压 3.3V。
 
-//TODO RDK S100的默认引脚说明说明
+RDK S100 在 40PIN 上默认使能 UART1，物理管脚号 18 和 20，IO电压 1.8V。
 
 请参阅 `/app/40pin_samples/test_serial.py`了解如何使用串口的详细信息。
 

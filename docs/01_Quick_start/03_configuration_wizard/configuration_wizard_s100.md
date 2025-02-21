@@ -20,13 +20,12 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="rdk-type">
 <TabItem value="desktop" label="Desktop">
 
-使用菜单栏右上角的Wi-Fi管理工具连接Wi-Fi，如下图所示，点击需要连接的Wi-Fi名，然后在弹出的对话框中输入Wi-Fi密码。
 
 </TabItem>
 
 <TabItem value="server" label="Server">
 
-
+- [rdk_s100 局域网构造章节](../remote_login.md#Local_Area)
 
 </TabItem>
 </Tabs>
@@ -42,6 +41,25 @@ import TabItem from '@theme/TabItem';
 
 <TabItem value="server" label="Server">
 
+使用 systemctl 命令可以查看 SSH 服务当前的运行状态，命令如下：
+
+```
+sudo systemctl status ssh
+```
+
+执行该命令后，会输出 SSH 服务的详细状态信息。如果服务正在运行，输出中会显示 Active: active (running)；如果服务未运行，则会显示 Active: inactive (dead) 等相关信息。
+
+
+以下为 SSH 的控制命令：
+
+```bash
+sudo systemctl start ssh #开启 SSH 服务
+sudo systemctl stop ssh  #关闭 SSH 服务
+sudo sudo systemctl enable ssh #设置 SSH 服务开机自启
+sudo sudo systemctl disable ssh #禁止 SSH 服务开机自启
+sudo systemctl restart ssh #重启 SSH 服务
+
+```
 
 </TabItem>
 
@@ -51,47 +69,77 @@ SSH的使用请查看 [远程登录 - SSH登录](../remote_login#ssh)。
 
 ## 开启VNC服务
 
-<Tabs groupId="rdk-type">
-<TabItem value="desktop" label="Desktop">
+:::tip
+RDK S100芯片桌面服务用Wayland，其架构与安全机制使与依赖传统X11的VNC不兼容，暂不支持。 
+:::
 
-</TabItem>
-</Tabs>
-
-VNC 的使用请查看 [远程登录 - VNC登录](./remote_login#vnc登录)。
 
 ## 设置登录模式
 
-<Tabs groupId="rdk-type">
-<TabItem value="desktop" label="Desktop">
+### 字符终端自动登录
+修改`serial-getty@ttyS0.service`文件可以设置免密登陆，操作如下
+
+1. 打开serial-getty@ttyS0.service
+
+```bash
+vim /etc/systemd/system/serial-getty@ttyS0.service
+```
+
+2.  将`ExecStart=-/sbin/agetty`所在行修改为:
+
+```
+ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
+```
+
+**参数解释：** `-a `参数用于指定自动登录的用户名,`-o '-p -- \\u' `则对登录过程进行了额外的定制：保留当前环境变量，并在登录提示中显示用户名
 
 
-</TabItem>
+### 图形化终端自动登录
 
-<TabItem value="server" label="Server">
+:::tip
+持续更新中.... 
+:::
 
-</TabItem>
-</Tabs>
+3. 重启后用户将自动登录
 
 ## 设置中文环境
 
-<Tabs groupId="rdk-type">
-<TabItem value="desktop" label="Desktop">
 
-</TabItem>
+1. 安装命令包
 
-<TabItem value="server" label="Server">
+```bash
+sudo apt install language-pack-zh-hans language-pack-zh-hans-base fonts-wqy-microhei
+```
 
-</TabItem>
-</Tabs>
+- language-pack-zh-hans：包含中文语言的翻译文件，能让系统界面显示为中文。
+- language-pack-zh-hans-base：基础语言包，提供基本的中文支持。
+- fonts-wqy-microhei：安装中文字体
+
+2. 打开终端，输入以下命令打开语言设置配置文件：
+
+```bash
+sudo vim /etc/default/locale
+```
+
+文件中添加或修改以下内容：
+
+```text
+LANG=zh_CN.UTF-8
+LANGUAGE=zh_CN:zh
+LC_ALL=zh_CN.UTF-8
+```
+
+3. 执行以下命令更新配置：
+
+```bash
+fc-cache -fv
+source /etc/default/locale
+```
 
 ## 设置中文输入法
 
-<Tabs groupId="rdk-type">
-<TabItem value="desktop" label="Desktop">
+安装好中文环境之后，默认支持系统自带的输入法，按下 `Super（Windows 键）` + `Space `组合键，即可在不同的输入法之间进行切换。
 
-
-</TabItem>
-</Tabs>
 
 ## 设置RDK Studio
 

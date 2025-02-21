@@ -116,7 +116,7 @@ U-Boot方式需要占用串口，在输入fastboot命令后须保证串口没有
 
 2. 打开地瓜芯片工具D-Navigation，完成如下操作
 * 选择产品型号：S100
-* 下载模式：uboot；介质存储ufs；类型：secure
+* 下载模式：usb；介质存储ufs；类型：secure
 * 点击浏览选择固件所在product文件夹
 * 点击开始升级，等待升级完成
 
@@ -148,8 +148,7 @@ U-Boot方式需要占用串口，在输入fastboot命令后须保证串口没有
 
 Ubuntu Desktop 版本系统启动完成后，会通过Display传输接口在显示器上输出系统桌面，如下图：
 
-//TODO 桌面图片
-![image-desktop_display.jpg](../../../static/img/01_Quick_start/image/install_os/image-desktop_display.jpg)
+![image-desktop_display.jpg](../../../static/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg)
 
 ## **常见问题**  
 

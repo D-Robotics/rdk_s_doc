@@ -11,7 +11,6 @@ sidebar_position: 5
 - RDX Ultra 在 40PIN 上默认使能 I2C4（物理管脚号 3 和 5） 和 I2C6（物理管脚号 27 和 28），IO电压3.3V。
 
 - RDX S100 在 30PIN 上默认使能 I2C4（物理管脚号 12 和 13） 和 I2C6（物理管脚号 14 和 15），IO电压3.3V。
-//TODO RDK S100 待引脚电压
 
 请参阅 `/app/40pin_samples/test_i2c.py`了解如何使用I2C的详细信息。
 

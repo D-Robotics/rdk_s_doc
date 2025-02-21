@@ -88,7 +88,7 @@ SSH的使用请查看 [远程登录 - SSH登录](../remote_login#ssh)。
 </TabItem>
 </Tabs>
 
-VNC 的使用请查看 [远程登录 - VNC登录](./remote_login#vnc登录)。
+VNC 的使用请查看 [远程登录 - VNC登录](../remote_login#vnc登录)。
 
 ## 设置登录模式
 

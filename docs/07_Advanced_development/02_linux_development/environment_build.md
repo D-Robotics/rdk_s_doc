@@ -38,8 +38,11 @@ RDK X5 的相关源码托管在 GitHub 的 [x5-rdk-gen 仓库](https://github.co
 ### 开发 RDK S100
 
 
+:::tip
+持续更新中....
+笔者在写这篇文章时 RDK S100的源码位置暂不可用
+:::
 
-//TODO RDK S100的源码位置暂不可用
 
 RDK S100 的相关源码托管在 GitHub 的 [s100-rdk-gen 仓库](https://github.com/D-Robotics/s100-rdk-gen)。
 

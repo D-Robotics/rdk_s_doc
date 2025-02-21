@@ -10,7 +10,7 @@ sidebar_position: 4
 
 通过网络方式远程登录前，开发板需要通过有线以太网或者无线WiFi方式接入网络，配置好开发板IP地址。对于两种连接方式下的IP地址信息可参考如下描述：
 
-- 有线以太网：开发板默认采用静态IP模式，IP地址为`192.168.127.10/192.168.1.10`，掩码`255.255.255.0`，网关 `192.168.127.1/192.168.1.1`
+- 有线以太网：开发板默认采用静态IP模式，IP地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
 - 无线WiFi：开发板IP地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看wlan0网络的IP地址
 
 :::
@@ -21,10 +21,10 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
 
 在使用串口登录前，需要确认开发板串口线跟电脑正确连接，连接方法可参考对应开发板的调试串口章节：
 
-- [rdk_ultra 调试串口章节](../01_Quick_start/hardware_introduction/rdk_ultra.md#debug_uart)
-- [rdk_x3 调试串口章节](../01_Quick_start/hardware_introduction/rdk_x3.md#debug_uart)
-- [rdk_x5 调试串口章节](../01_Quick_start/hardware_introduction/rdk_x5.md#debug_uart)
-- [rdk_s100 调试串口章节](../01_Quick_start/hardware_introduction/rdk_s100.md#debug_uart)
+- [rdk_ultra 调试串口章节](../01_Quick_start/01_hardware_introduction/rdk_ultra.md#debug_uart)
+- [rdk_x3 调试串口章节](../01_Quick_start/01_hardware_introduction/rdk_x3.md#debug_uart)
+- [rdk_x5 调试串口章节](../01_Quick_start/01_hardware_introduction/rdk_x5.md#debug_uart)
+- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/rdk_s100.md#debug_uart)
 
 串口登录需要借助PC终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
 
@@ -41,7 +41,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
   
   | 配置项               | 参数值                               |
   | -------------------- | ------------------------------------ |
-  | 波特率（Baud rate）  |  921600（RDK X3、RDK Ultra、RDK S100），115200 （RDK X5） |
+  | 波特率（Baud rate）  |  <li>921600：RDK X3、RDK Ultra、RDK S100</li><li>1115200：RDK X5</li> |
   | 数据位（Data bits）  | 8                                    |
   | 奇偶校验（Parity）   | None                                 |
   | 停止位（Stop bits）  | 1                                    |
@@ -154,7 +154,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=4
 
 ![image-Cmdline-Linux](../../static/img/01_Quick_start/image/remote_login/linux_login_01.gif)
 
-## 局域网构造
+## 局域网构造{#Local_Area}
 
 对于上述各步骤登录，始终需要保持串口线链接，使用下面命令实现局域网访问
 
