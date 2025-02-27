@@ -20,7 +20,7 @@ sidebar_position: 4
 - **降频温度：**系统CPU、BPU降频温度点，温度超过该温度点时，CPU和BPU会降低运行频率来降低SoC功耗，CPU最低降到240MHz，BPU最低降到400MHz。可以通过命令 `cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_1_temp`获得当前配置值，默认是 95000（95摄氏度）。
 - **宕机温度：**系统宕机温度点，如果温度超过该温度，为了保护芯片和硬件，系统会关机，建议对设备做好散热处理，避免设备宕机，因为宕机后设备不会自动重启，需要用户手动给开发板断电后再重启。可以通过命令 `cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_2_temp`获得当前配置值，默认是 105000（105摄氏度）。
 
-可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态： 
+可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态：
 
 ![image-20220714113732289](../../static/img/02_System_configuration/image/cpu_frequency/image-20220714113732289.png)
 
@@ -65,7 +65,7 @@ scaling_driver						// 当前使用的调频驱动
 scaling_governor					// governor(调频)策略
 scaling_max_freq					// 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
 scaling_min_freq					// 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
-scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率 
+scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
 ```
 
 RDK系统使用的linux内核支持以下种类的调频策略:
@@ -123,7 +123,7 @@ sudo bash -c 'echo 0 > /sys/devices/system/cpu/cpufreq/boost'
 
 :::
 
-可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态： 
+可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态：
 
 ![image-20220714113732289](../../static/img/02_System_configuration/image/cpu_frequency/image-20220714113732289.png)
 
@@ -231,7 +231,7 @@ scaling_driver						// 当前使用的调频驱动
 scaling_governor					// governor(调频)策略
 scaling_max_freq					// 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
 scaling_min_freq					// 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
-scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率 
+scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
 ```
 
 目前支持的频率包括
@@ -290,7 +290,7 @@ echo 0 >/sys/devices/system/cpu/cpufreq/boost
 
 :::
 
-可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态： 
+可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态：
 
 ![image-20240829171934000](../../static/img/02_System_configuration/image/cpu_frequency/image-20240829171934000.png)
 
@@ -308,7 +308,7 @@ echo 0 >/sys/devices/system/cpu/cpufreq/boost
 ```
 root@ubuntu:~# cat /sys/class/hwmon/hwmon0/temp1_input
 46837000
-root@ubuntu:~# 
+root@ubuntu:~#
 ```
 ### Thermal机制
 Linux Thermal 是 Linux 系统下温度控制相关的模块，主要用来控制系统运行过程中芯片产生的热量，使芯片温度和设备外壳温度维持在一个安全、舒适的范围。
@@ -398,14 +398,12 @@ cpuinfo_transition_latency			// 处理器切换频率所需要的时间(单位:n
 related_cpus						// 该控制策略影响到哪些CPU核(包括了online+offline的所有cpu)
 scaling_available_frequencies		// CPU支持的主频率列表(单位: KHz）
 scaling_available_governors			// 当前内核中支持的所有 governor(调频)类型
-scaling_boost_frequencies			// 在boost（超频）模式下CPU支持的主频率列表(单位: KHz）
 scaling_cur_freq					// 保存着 cpufreq 模块缓存的当前 CPU 频率，不会对 CPU 硬件寄存器进行检查。
-scaling_disable_freq				// 禁止设置的CPU频率，只能设置一个
 scaling_driver						// 当前使用的调频驱动
 scaling_governor					// governor(调频)策略
 scaling_max_freq					// 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
 scaling_min_freq					// 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
-scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率 
+scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
 ```
 
 目前支持的频率包括
@@ -440,4 +438,4 @@ echo userspace >/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 ```
 
-可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态： 
+可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态：
