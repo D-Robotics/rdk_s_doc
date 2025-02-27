@@ -70,19 +70,19 @@ SSH的使用请查看 [远程登录 - SSH登录](../remote_login#ssh)。
 ## 开启VNC服务
 
 :::tip
-RDK S100芯片桌面服务用Wayland，其架构与安全机制使与依赖传统X11的VNC不兼容，暂不支持。 
+RDK S100芯片桌面服务用Wayland，其架构与安全机制使与依赖传统X11的VNC不兼容，暂不支持。
 :::
 
 
 ## 设置登录模式
 
 ### 字符终端自动登录
-修改`serial-getty@ttyS0.service`文件可以设置免密登陆，操作如下
+修改`serial-getty@.service`文件可以设置免密登陆，操作如下
 
-1. 打开serial-getty@ttyS0.service
+1. 打开serial-getty@.service
 
 ```bash
-vim /etc/systemd/system/serial-getty@ttyS0.service
+vim /lib/systemd/system/serial-getty@.service
 ```
 
 2.  将`ExecStart=-/sbin/agetty`所在行修改为:
@@ -97,7 +97,7 @@ ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
 ### 图形化终端自动登录
 
 :::tip
-持续更新中.... 
+持续更新中....
 :::
 
 3. 重启后用户将自动登录
