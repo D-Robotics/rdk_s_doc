@@ -55,8 +55,8 @@ sudo systemctl status ssh
 ```bash
 sudo systemctl start ssh #开启 SSH 服务
 sudo systemctl stop ssh  #关闭 SSH 服务
-sudo sudo systemctl enable ssh #设置 SSH 服务开机自启
-sudo sudo systemctl disable ssh #禁止 SSH 服务开机自启
+sudo systemctl enable ssh #设置 SSH 服务开机自启
+sudo systemctl disable ssh #禁止 SSH 服务开机自启
 sudo systemctl restart ssh #重启 SSH 服务
 
 ```
