@@ -30,7 +30,7 @@ sidebar_position: 2
 ## WiFi模组
 | 类型 | 供应商 | 型号 | 描述 | 购买链接 |
 | --- | --------- | -------- | --------------- | --------- |
-| M.2 | 微雪 | RTL8822CE | <li>2.4G/5GHz双频</li> | [购买链接](https://www.waveshare.net/shop/Wireless-RTL8822CE.htm)  |
+| M.2 | gxlinkstar | RTL8822CE+内置天线 | <li>2.4G/5GHz双频</li> | [购买链接](https://item.jd.com/10115715024347.html)  |
 
 
 :::tip
