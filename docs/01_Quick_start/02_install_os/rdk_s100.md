@@ -98,7 +98,15 @@ uboot
 U-Boot方式需要占用串口，在输入fastboot命令后须保证串口没有被其它设备占用。
 :::
 
-4. 打开地瓜芯片工具D-Navigation，完成如下操作：
+4. 根据系统不同，启动地瓜芯片工具D-Navigation方式分为两种：
+* Windows版本 启动：
+
+        双击打开D-Navigation.exe
+* Ubuntu版本 启动：
+
+        xhost +
+        sudo ./D-Navigation --no-sandbox
+5. 打开地瓜芯片工具D-Navigation，完成如下操作：
 * 选择产品型号：S100
 * 下载模式：uboot；介质存储ufs；类型：secure
 * 点击浏览选择固件所在product文件夹
