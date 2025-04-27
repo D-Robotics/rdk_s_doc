@@ -4,6 +4,4 @@ sidebar_position: 9
 
 # Thermal 系统
 
-:::tip
-持续更新中....
-:::
+[S100 Thermal 系统](../../../System_configuration/frequency_management#rdk-s100)
