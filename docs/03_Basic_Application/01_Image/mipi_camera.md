@@ -18,7 +18,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
 
   ```bash
   sunrise@ubuntu:~$ cd /app/pydev_demo/03_mipi_camera_sample/
-  sunrise@ubuntu:/app/pydev_demo/03_mipi_camera_sample$ sudo python3 ./mipi_camera.py 
+  sunrise@ubuntu:/app/pydev_demo/03_mipi_camera_sample$ python3 mipi_camera.py
   ```
 
 <details>
