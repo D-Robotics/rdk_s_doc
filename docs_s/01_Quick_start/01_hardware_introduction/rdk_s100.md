@@ -132,12 +132,26 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=6
 ## PIN Header接口
 
 
-RDK S100开发板提供两组pin header接口，分别位于Mainboard底板的接口3和MCU扩展板的接口26，支持GPIO、UART、I2C、SPI等多种接口，详细管脚定义、复用关系如下：
+RDK S100开发板存在两种硬件形态：
+
+其一：两组pin header接口，分别位于Mainboard底板的接口30和MCU扩展板的接口26，支持GPIO、UART、I2C、SPI等多种接口，详细管脚定义、复用关系如下：
 - Mainboard 底板30PIN接口
 
-![image-rdk_100_mainboard_pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_pin.jpg)
+![image-rdk_100_mainboard_pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_30pin.jpg)
 
 ![image-rdk_100_mainboard_phypin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_phypin.jpg)
+
+
+- MCU 扩展板
+
+:::tip
+持续更新中....
+:::
+
+其二：两组pin header接口，分别位于Mainboard底板的接口40和MCU扩展板的接口30，支持GPIO、UART、I2C、SPI等多种接口，详细管脚定义、复用关系如下：
+- Mainboard 底板40PIN接口
+
+![image-rdk_100_mainboard_pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_40pin.jpg)
 
 
 - MCU 扩展板
@@ -165,4 +179,7 @@ Camera模组的购买方式可参考社区配件页:
 
 ## MCU扩展板
 
-MCU扩展板提供一组26Pin接口，RJ45网口，两组CAN接口和一组UART接口，通过接口30与底板的接口21连接。
+MCU扩展板存在两种硬件形式
+
+其一： 提供一组26Pin接口，RJ45网口，两组CAN接口和一组UART接口，通过接口30与底板的接口21连接。
+其一： 提供一组30Pin接口，RJ45网口，五组CAN接口。

@@ -70,7 +70,13 @@ sudo srpi-config
 
 <TabItem value="S100" label="RDK S100">
 
-![image-rdk_100_mainboard_pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_pin.jpg)
+RDKS100有两种Pin的硬件形态，分别支持30pin和40pin。
+
+30pin接口定义如下：
+![image-rdk_100_mainboard_30pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_30pin.jpg)
+
+40pin接口定义如下：
+![image-rdk_100_mainboard_40pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_40pin.jpg)
 
 </TabItem>
 
@@ -84,28 +90,28 @@ sudo srpi-config
 
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
 
-开发板 `/app/40pin_samples/` 目录下，预置了多种40PIN管脚的功能测试代码，包括gpio的输入/输出测试、PWM、I2C、SPI、UART等测试。所有测试程序均使用python语言编写，详细信息可以查阅本章节其他模块。
+开发板 `/app/40pin_samples/` 目录下，预置了多种PIN管脚的功能测试代码，包括gpio的输入/输出测试、PWM、I2C、SPI、UART等测试。所有测试程序均使用python语言编写，详细信息可以查阅本章节其他模块。
 
-以`/app/40pin_samples/button_led.py`为例，该程序配置`37`号管脚为输入，配置`31`号管脚配置为输出，并根据`37`号管脚的输入状态来控制`31`号管脚的输出状态。
+以`/app/40pin_samples/button_led.py`为例，程序会自动识别硬件平台的id，以此判断是30pin还是40pin；以40pin的硬件形态为例，该程序配置`24`号管脚为输入，配置`23`号管脚配置为输出，并根据`24`号管脚的输入状态来控制`23`号管脚的输出状态。
 
 ## 环境准备
-使用杜邦线连接 `37`号管脚到 3.3v or GND，以控制其高低电平。
+使用杜邦线连接 `24`号管脚到 3.3v or GND，以控制其高低电平。
 
 ## 运行方式
 执行 `button_led.py` 程序，以启动 GPIO 读写程序
 
   ```bash
-  sunrise@ubuntu:~$ cd /app/40pin_samples/
-  sunrise@ubuntu:/app/40pin_samples$ sudo python3 ./button_led.py
+  root@ubuntu:~# cd /app/40pin_samples/
+  root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
   ```
 
 ## 预期效果
-通过控制`37`号管脚的高低电平，可以改变 `31`号管脚的输出电平值。
+通过控制`24`号管脚的高低电平，可以改变 `23`号管脚的输出电平值。
 
   ```bash
-  sunrise@ubuntu:/app/40pin_samples$ sudo python3 ./button_led.py
+  root@ubuntu:/app/40pin_samples# ./button_led.py 
   Starting demo now! Press CTRL+C to exit
-  Outputting 0 to Pin 31
-  Outputting 1 to Pin 31
-  Outputting 0 to Pin 31
+  Outputting 1 to Pin 23
+  Outputting 0 to Pin 23
+  Outputting 1 to Pin 23
   ```
