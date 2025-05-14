@@ -23,6 +23,132 @@ Acore与MCU之间的核间通信，Acore侧主要使用IPCFHAL，MCU侧使用IPC
 #### Acore发送数据到MCU
 ![Acore发送数据到MCU](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/acore2mcu.jpg)
 
+## IPC配置相关
+### IPC简介
+一个IPC有8个channels，但是共享一个中断，因此一个IPC只能在MCU0或MCU1其中一个系统上使能。
+### IPC配置
+当MCU1使用IPC时，需要配置两部分内容。
+1. 需要配置回调函数，作用是当IPC收到/发送数据时产生回调。当然客户可自行定制当传输数据错误时的回调函数。下文以IPC0为例介绍。
+```c
+static Ipc_ChannelConfigType Ipc_ShmInstance0CfgChannel[8] = {
+{
+    .ChannelId = 0,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_0BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+{
+    .ChannelId = 1,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_1BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+{
+    .ChannelId = 2,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_2BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+{
+    .ChannelId = 3,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_3BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+{
+    .ChannelId = 4,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_4BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+{
+    .ChannelId = 5,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_5BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+{
+    .ChannelId = 6,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_6BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+{
+    .ChannelId = 7,
+    .ChannelData   = {
+        .NumPools = 1,
+        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_7BufPool,
+        .RxCallback     = IpcTp_InsCan_RxCallback,
+        .RxCallbackArg  = (NULL_PTR),
+        .TxErrCallback    = DefaultTxErrCallback,
+        .TxErrCallbackArg = (NULL_PTR),
+    },
+},
+};
+```
+2. 设置receive_coreid。如果是在MCU1上，则需要"receive_coreid=Ipc_Receive_Core1"。同时需要保障MCU0关于IPC设置相同。
+MCU0文件地址：/mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c
+MCU1文件地址：/mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c
+```c
+Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
+    .Ipc_InstanceId       = 0U,
+    .Ipc_ChannelNum       = 8U,
+    .LocalCtlAddr         = 0xcdd9e00,
+    .RemoteCtlAddr        = 0xcdd9400,
+    .CtlShmSize           = 0xa00,
+    .LocalDataAddr        = 0xb4080000,
+    .RemoteDataAddr       = 0xb4000000,
+    .DataShmSize          = 0x80000,
+    .SendDmaChanIdx       = 0xffU,
+    .Async                = (TRUE),
+    .HwInfo               = {
+        .Ipc_HwId         = CPU_IPC0,/**< the id of the Hardware */
+        .RecvIrqUsed      = (TRUE),/**< Whether to use Recv interrupt */
+        .SendMboxId       = 0,/**< the mailbox id */
+        .RecvMboxId       = 16,/**< the mailbox id */
+        .RemoteIrq        = 16,
+        .LocalIrq         = 0,
+        .UseMDMA          = (TRUE),
+    },
+    .Ipc_ChannelConfigPtr = Ipc_ShmInstance0CfgChannel,
+    .receive_coreid = Ipc_Receive_Core1,
+};
+```
 ## IPC 使用情况
 
 // TODO 贴图
