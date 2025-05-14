@@ -57,6 +57,7 @@ MCU
 | FREERTOS_HEAP| 0x0CD5B000|512K |堆空间 |
 | LOG_SHARE_Reserved| 0x0CDDB000|8K |MCU1 log存放的空间，log会循环覆盖 |
 | SCMI_IPC_Reserved| 0x0CDDD000|12K |SCMI IPC通信需要的空间，用于buffer及关键数据 |
+
 在上述SRAM的排布中， 强烈不建议客户修改SCMI_IPC_Reserved及其之后的区域。 这些部分大部分都是其他域一定会使用的关键位置，修改可能导致异常。如果要修改，请先咨询地瓜相关支持人员。
 
 下面是地瓜版本中的链接文件，解释了链接脚本中提供的一些变量作用：
