@@ -4,12 +4,12 @@ sidebar_position: 3
 
 # 3.3.3 PWM应用
 
-Hobot.GPIO 库仅在带有附加硬件 PWM 控制器的引脚上支持 PWM。与 RPi.GPIO 库不同，Hobot.GPIO 库不实现软件模拟 PWM。RDK X3、RDK X5 和 RDK Ultra 都支持 2 个 PWM 通道。
+Hobot.GPIO 库仅在带有附加硬件 PWM 控制器的引脚上支持 PWM。与 RPi.GPIO 库不同，Hobot.GPIO 库不实现软件模拟 PWM。RDK S100硬件平台存在两种硬件形态，30pin的硬件形态没有PWM通道， 40pin的硬件形态支持两路LPWM。
 
 请参阅 `/app/40pin_samples/simple_pwm.py`了解如何使用 PWM 通道的详细信息。
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。 
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
 :::
 
 ### 测试代码

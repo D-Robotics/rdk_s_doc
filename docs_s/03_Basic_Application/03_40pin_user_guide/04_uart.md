@@ -3,19 +3,43 @@ sidebar_position: 4
 ---
 
 # 3.3.4 串口应用
+RDK S100 在 30PIN 上默认使能 UART1，物理管脚号 10 和 12，IO电压 1.8V。
 
-RDK X3 在 40PIN 上默认使能 UART3，物理管脚号 8 和 10，IO电压 3.3V。
+RDK S100 在 40PIN 支持UART2，没有使能，物理管脚号 8 和 10，IO电压 3.3V。
 
-RDK X5 在 40PIN 上默认使能 UART1，物理管脚号 8 和 10，IO电压 3.3V。
+:::info
 
-RDK Ultra 在 40PIN 上默认使能 UART2，物理管脚号 8 和 10，IO电压 3.3V。
+在`RDK S100`平台上，存在两种硬件形式， 分别支持30pin和40pin， 其中`40pin`上使用UART2有以下限制:
 
-RDK S100 在 40PIN 上默认使能 UART1，物理管脚号 18 和 20，IO电压 1.8V。
+- 40pin上需要波动拨码开关来选择使用UART2还是I2C5, 具体细节可以查看下图：
+
+![image-rdk_100_funcreuse_40pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png)
+
+- 波动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
+``` {.text}
+/*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
+uart2: uart@394C0000 {
+        power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
+        compatible = "snps,dw-apb-uart";
+        reg = <0x0 0x394C0000 0x0 0x10000>;
+        reg-shift = <2>;
+        reg-io-width = <4>;
+        interrupts = <GIC_SPI PERISYS_UART2_INTR PERISYS_UART2_INTR_TRIG_TYPE>;
+        clock-frequency = <200000000>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&peri_uart2>;
+        status = "okay";
+};
+```
+
+管脚定义请参考 [管脚配置与定义](./40pin_define.md#40pin_define)
+
+:::
 
 请参阅 `/app/40pin_samples/test_serial.py`了解如何使用串口的详细信息。
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。 
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
 :::
 
 ## 回环测试
@@ -25,18 +49,19 @@ RDK S100 在 40PIN 上默认使能 UART1，物理管脚号 18 和 20，IO电压 
 
 把 TXD 和 RXD 通过跳线帽直接硬件上连接在一起：
 
-![image-20220512101820743](../../../static/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-20220512101820743.png)
+![image-20220512101820743](../../../static/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png)
 
 ### 测试过程
 
 - 运行 `python3 /app/40pin_samples/test_serial.py`
-- 从打印的串口设备（其中 /dev/ttyS0 是系统调试口，不建议对它进行测试，除非你完全明白它的作用）中选择总线号和片选号作为输入选项，例如 RDK X3 选择测试 `/dev/ttyS3`，RDK X5 选择测试 `/dev/ttyS1`，RDK Ultra 选择测试 `/dev/ttyS2` 按回车键确认，并输入波特率参数：
+- 从打印的串口设备（其中 /dev/ttyS0 是系统调试口，不建议对它进行测试，除非你完全明白它的作用）中选择总线号和片选号作为输入选项，例如 RDK X3 选择测试 `/dev/ttyS3`，RDK X5 选择测试 `/dev/ttyS1`，RDK Ultra 选择测试 `/dev/ttyS2` ， RDK s100 选择测试 `/dev/ttyS2`按回车键确认，并输入波特率参数：
 
 ```
+root@ubuntu:/app/40pin_samples# ./test_serial.py
 List of enabled UART:
-/dev/ttyS0  /dev/ttyS1  /dev/ttyS3  /dev/ttyUSB0
+/dev/ttyS0  /dev/ttyS1  /dev/ttyS2  /dev/ttyS3
 
-请输出需要测试的串口设备名:/dev/ttyS3
+请输出需要测试的串口设备名:/dev/ttyS2
 请输入波特率(9600,19200,38400,57600,115200,921600):921600
 Serial<id=0x7f819dcac0, open=True>(port='/dev/ttyS3', baudrate=921600, bytesize=8, parity='N', stopbits=1, timeout=1, xonxoff=False, rtscts=False, dsrdtr=False)
 ```
