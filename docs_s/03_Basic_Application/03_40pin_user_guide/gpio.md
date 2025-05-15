@@ -66,6 +66,21 @@ GPIO.setwarnings(False)
 
 ## 管脚配置
 
+:::info
+
+在`RDK S100`平台上，存在两种硬件形式， 分别支持30pin和40pin， 其中`40pin`在使用过程中有如下的限制:
+
+- 40pin上有一组引脚涉及到二选一（UART2, I2C5）。
+- 40pin上PCM相关引脚如果要使用需要波动拨码开关。
+
+上述描述细节可以查看下图：
+
+![image-rdk_100_funcreuse_40pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png)
+
+管脚定义请参考 [管脚配置与定义](./40pin_define.md#40pin_define)
+
+:::
+
 GPIO管脚在使用之前，需要进行相应的配置，具体如下：
 
 设置为输入的方式如下：
@@ -147,9 +162,9 @@ GPIO.gpio_function(channel)
 
 :::info
 
-在`RDK Ultra`平台上，`40pin`上只有特定几个管脚才能作为中断管脚使用，它们在`BOARD`编码模式下的编号为：**13**、**16**、**18**、**22**、**27**、**28**、**32**、**33**、**37**
+在`RDK S100`平台上，存在两种硬件形式， 分别支持30pin和40pin，其中`40pin`上功能名为PERI_GPIO的管脚不支持中断使用，它们在`BOARD`编码模式下的编号为：**11**、**13**、**15**、**16**、**18**、**22**、**29**、**31**、**36**、**37**； `30pin`无该问题
 
-管脚定义请参考 [管脚配置与定义](./40pin_define#40pin_define)
+管脚定义请参考 [管脚配置与定义](./40pin_define.md#40pin_define)
 
 :::
 
@@ -255,10 +270,30 @@ import time
 def signal_handler(signal, frame):
     sys.exit(0)
 
-# 定义使用的GPIO通道为37
-output_pin = 37 # BOARD 编码 37
+
+# 定义使用的GPIO通道为output_pin
+BOARD_ID_PATH = "/sys/class/boardinfo/adc_boardid"
+
+
+def get_board_id():
+    try:
+        with open(BOARD_ID_PATH, "r") as f:
+            return f.read().strip().lower()[-1]
+    except Exception as e:
+        print(f"[WARN] Read {BOARD_ID_PATH} failed: {e}, use default pins")
+        return None
+
+
+def determine_pins():
+    last_char = get_board_id()
+    if last_char == '8':
+        return 37
+    else:
+        return 26
+
 
 def main():
+    output_pin = determine_pins()
     # 设置管脚编码模式为硬件编号 BOARD
     GPIO.setmode(GPIO.BOARD)
     # 设置为输出模式，并且初始化为高电平
@@ -292,14 +327,34 @@ import time
 def signal_handler(signal, frame):
     sys.exit(0)
 
-# 定义使用的GPIO通道为37
-input_pin = 37 # BOARD 编码 37
+
+# 定义使用的GPIO通道为input_pin
+BOARD_ID_PATH = "/sys/class/boardinfo/adc_boardid"
+
 
 GPIO.setwarnings(False)
 
+
+def get_board_id():
+    try:
+        with open(BOARD_ID_PATH, "r") as f:
+            return f.read().strip().lower()[-1]
+    except Exception as e:
+        print(f"[WARN] Read {BOARD_ID_PATH} failed: {e}, use default pins")
+        return None
+
+
+def determine_pins():
+    last_char = get_board_id()
+    if last_char == '8':
+        return 37
+    else:
+        return 26
+
+
 def main():
     prev_value = None
-
+    input_pin = determine_pins()
     # 设置管脚编码模式为硬件编号 BOARD
     GPIO.setmode(GPIO.BOARD)
     # 设置为输入模式
@@ -327,7 +382,7 @@ if __name__=='__main__':
 
 ```
 
-- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`, 实现检测37号管脚的下降沿，然后控制36号管脚的输出：
+- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`, 实现检测24号管脚的下降沿，然后控制23号管脚的输出：
 
 ```python
 #!/usr/bin/env python3
@@ -340,15 +395,32 @@ def signal_handler(signal, frame):
     sys.exit(0)
 
 # 定义使用的GPIO通道：
-# 36号作为输出，可以点亮一个LED
-# 37号作为输入，可以接一个按钮
-led_pin = 36 # BOARD 编码 36
-but_pin = 37 # BOARD 编码 37
+# led_pin作为输出，可以点亮一个LED
+# but_pin作为输入，可以接一个按钮
+BOARD_ID_PATH = "/sys/class/boardinfo/adc_boardid"
 
 # 禁用警告信息
 GPIO.setwarnings(False)
 
+def get_board_id():
+    try:
+        with open(BOARD_ID_PATH, "r") as f:
+            return f.read().strip().lower()[-1]
+    except Exception as e:
+        print(f"[WARN] Read {BOARD_ID_PATH} failed: {e}, use default pins")
+        return None
+
+def determine_pins():
+    last_char = get_board_id()
+    if last_char == '8':
+        return 23, 24
+    else:
+        return 26, 27
+
+
 def main():
+
+    led_pin, but_pin = determine_pins()
     # 设置管脚编码模式为硬件编号 BOARD
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(led_pin, GPIO.OUT)  # LED pin set as output
@@ -377,7 +449,7 @@ if __name__ == '__main__':
 
 ```
 
-- GPIO 设置为输入模式，启动gpio中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`, 实现检测 37 号管脚的下降沿，然后控制13号管脚快速切换高低电平 5 次：
+- GPIO 设置为输入模式，启动gpio中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`, 实现检测 24 号管脚的下降沿，然后控制13号管脚快速切换高低电平 5 次：
 
 ```python
 #!/usr/bin/env python3
@@ -392,14 +464,30 @@ def signal_handler(signal, frame):
 # 定义使用的GPIO通道：
 # 15号作为输出，可以点亮一个LED
 # 16号作为输出，可以点亮一个LED
-# 37号作为输入，可以接一个按钮
+# but_pin作为输入，可以接一个按钮
 led_pin_1 = 15 # BOARD 编码 15
 led_pin_2 = 16 # BOARD 编码 16
-but_pin = 37   # BOARD 编码 37
+BOARD_ID_PATH = "/sys/class/boardinfo/adc_boardid"
 
 
 # 禁用警告信息
 GPIO.setwarnings(False)
+
+def get_board_id():
+    try:
+        with open(BOARD_ID_PATH, "r") as f:
+            return f.read().strip().lower()[-1]
+    except Exception as e:
+        print(f"[WARN] Read {BOARD_ID_PATH} failed: {e}, use default pins")
+        return None
+
+def determine_pins():
+    last_char = get_board_id()
+    if last_char == '8':
+        return 24
+    else:
+        return 27
+
 
 # 按下按钮时 LED 2 快速闪烁 5 次
 def blink(channel):
@@ -411,6 +499,8 @@ def blink(channel):
         time.sleep(0.5)
 
 def main():
+
+    but_pin = determine_pins()
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD)  # BOARD pin-numbering scheme
     GPIO.setup([led_pin_1, led_pin_2], GPIO.OUT)  # LED pins set as output
