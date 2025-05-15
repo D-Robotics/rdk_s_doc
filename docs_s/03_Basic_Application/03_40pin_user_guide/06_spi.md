@@ -3,22 +3,14 @@ sidebar_position: 6
 ---
 
 # 3.3.6 SPI应用
-
-- RDK X3 在 40PIN 上物理管脚 `19, 21, 23, 24`引出了芯片的 `SPI2` 总线，支持一个片选，IO电压3.3V。
-
-- RDK X5 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了芯片的 `SPI1` 总线，支持两个片选，IO电压3.3V。
-
-- RDK Ultra 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了的 `SPI0` 总线，支持两个片选，IO电压3.3V。
-
-- RDK Ultra 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了的 `SPI0` 总线，支持两个片选，IO电压3.3V。
-
 - RDK S100 在 30PIN 上物理管脚 `21, 23, 25, 27, 29`引出了的 `SPI0` 总线，支持两个片选，IO电压1.8V； 在物理管脚 `24, 26, 28, 30`引出了的 `SPI1` 总线，支持1个片选，IO电压1.8V。
 
+- RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了的 `SPI0` 总线，支持两个片选，IO电压3.3V；
 
 请参阅 `/app/40pin_samples/test_spi.py`了解如何使用SPI的详细信息。
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。 
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
 :::
 
 ## 回环测试
@@ -27,7 +19,7 @@ sidebar_position: 6
 ### 硬件连接
 把MISO和MOSI通过跳线帽直接硬件上连接在一起：
 
-![image-20220512101915524](../../../static/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-20220512101915524.png)
+![image-20220512101915524](../../../static/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_spi.png)
 
 ### 测试过程
 
@@ -100,4 +92,3 @@ if __name__ == '__main__':
     spidevTest()
 
 ```
-
