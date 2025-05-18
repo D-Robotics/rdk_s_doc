@@ -110,7 +110,7 @@ API描述及使用参考官方文档介绍：https://www.alsa-project.org/alsa-d
 
 ### 使用准备
 
-S100适配微雪电子生产的音频转接板，通过40PIN实现和S100开发板连接。子板介绍和具体连接方法参考：[音频子板使用说明](../../07_Advanced_development/02_linux_development/driver_development_s100/driver_audio.md#音频子板使用说明)
+S100适配微雪电子生产的音频转接板，通过40PIN实现和S100开发板连接。子板介绍和具体连接方法参考：[音频子板使用说明](../../07_Advanced_development/02_linux_development/04_driver_development_s100/11_driver_audio.md#音频子板使用说明)
 
 ### 设备节点
 
@@ -139,5 +139,3 @@ aplay -Dhw:0,1 test.wav
 ```
 
 表示播放一个wav文件，数据格式会解析wav文件头获取并写入驱动
-
-
