@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # CAN使用
@@ -7,4 +7,3 @@ sidebar_position: 3
 :::tip
 暂不支持，持续更新中
 :::
-
