@@ -4,32 +4,7 @@ sidebar_position: 3
 
 # 7.2.3 应用实时内核
 
-本章节旨在描述如何在`RDK X3` 和 `RDK X3 Module`上启用实时内核（Preempt-RT kernel），并提供了相应的命令以便于用户使用。实时内核是一种能够提供更加精确和可靠的响应时间的操作系统内核，通常用于对时间敏感性要求较高的应用程序，在机器人控制、工业自动化等应用场景使用较多。以下是启用和禁用实时内核的相关命令以及一些常见用途和测试方法。
-
-## 实时内核启用命令
-
-要在RDK X3上启用实时内核，请执行以下命令：
-
-```bash
-sudo apt update
-sudo apt install hobot-kernel-headers=2.0.0-01~rt hobot-boot=2.0.2-01~rt hobot-bpu-drivers=2.0.0-01~rt
-sudo reboot
-```
-
-这些命令将安装与实时内核兼容的内核头文件、内核文件、驱动程序和BPU驱动，完成后重新启动系统以使更改生效，使用 `uname -a`命令可以看到 `PREEMPT RT`的内核版本信息说明。
-
-![image-20230914142401210](../../../static/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914142401210.png)
-
-## 恢复为标准内核命令
-
-如果需要恢复为标准内核，可以执行以下命令：
-
-```bash
-sudo apt install hobot-kernel-headers hobot-boot hobot-bpu-drivers
-sudo reboot
-```
-
-这些命令将卸载实时内核相关的组件，并且安装标准内核对应的组件，完成后重新启动系统以切换回标准内核。
+`RDKS100`默认启用实时内核。实时内核是一种能够提供更加精确和可靠的响应时间的操作系统内核，通常用于对时间敏感性要求较高的应用程序，在机器人控制、工业自动化等应用场景使用较多。以下是启用和禁用实时内核的相关命令以及一些常见用途和测试方法。
 
 ## 实时性能测
 
