@@ -18,7 +18,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。 
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
 :::
 
 
@@ -77,7 +77,7 @@ GPIO.setwarnings(False)
 
 ![image-rdk_100_funcreuse_40pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png)
 
-管脚定义请参考 [管脚配置与定义](./40pin_define.md#40pin_define)
+管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
 
 :::
 
@@ -164,7 +164,7 @@ GPIO.gpio_function(channel)
 
 在`RDK S100`平台上，存在两种硬件形式， 分别支持30pin和40pin，其中`40pin`上功能名为PERI_GPIO的管脚不支持中断使用，它们在`BOARD`编码模式下的编号为：**11**、**13**、**15**、**16**、**18**、**22**、**29**、**31**、**36**、**37**； `30pin`无该问题
 
-管脚定义请参考 [管脚配置与定义](./40pin_define.md#40pin_define)
+管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
 
 :::
 
