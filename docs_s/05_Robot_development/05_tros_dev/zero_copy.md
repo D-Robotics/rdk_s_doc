@@ -20,7 +20,7 @@ import TabItem from '@theme/TabItem';
 
 ## 前置条件
 
-已按照[安装](/docs/05_Robot_development/01_quick_start/install_tros.md)成功安装tros.b，并已掌握ROS2 node，topic，qos等基础知识，以及如何创建package和使用自定义消息，具体教程可见[ROS2官方文档](https://docs.ros.org/en/foxy/Tutorials.html)。
+已按照[安装](/docs_s/05_Robot_development/01_quick_start/install_tros.md)成功安装tros.b，并已掌握ROS2 node，topic，qos等基础知识，以及如何创建package和使用自定义消息，具体教程可见[ROS2官方文档](https://docs.ros.org/en/foxy/Tutorials.html)。
 
 ROS2软件包构建、编译等工具。安装命令：`sudo apt install ros-dev-tools`
 
@@ -143,16 +143,16 @@ class MinimalHbmemPublisher  : public rclcpp::Node {
     if (loanedMsg.is_valid()) {
       // 引用方式获取实际的消息
       auto& msg = loanedMsg.get();
-      
+
       // 获取当前时间，单位为us
       auto time_now =
           std::chrono::duration_cast<std::chrono::microseconds>(
               std::chrono::steady_clock::now().time_since_epoch()).count();
-      
+
       // 对消息的index和time_stamp进行赋值
       msg.index = count_;
       msg.time_stamp = time_now;
-      
+
       // 打印发送消息
       RCLCPP_INFO(this->get_logger(), "message: %d", msg.index);
       publisher_->publish(std::move(loanedMsg));
@@ -164,13 +164,13 @@ class MinimalHbmemPublisher  : public rclcpp::Node {
       RCLCPP_INFO(this->get_logger(), "Failed to get LoanMessage!");
     }
   }
-  
+
   // 定时器
   rclcpp::TimerBase::SharedPtr timer_;
 
   // hbmem publisher
   rclcpp::PublisherHbmem<hbmem_pubsub::msg::SampleMessage>::SharedPtr publisher_;
-  
+
   // 计数器
   size_t count_;
 };
@@ -219,16 +219,16 @@ class MinimalHbmemPublisher  : public rclcpp::Node {
     if (loanedMsg.is_valid()) {
       // 引用方式获取实际的消息
       auto& msg = loanedMsg.get();
-      
+
       // 获取当前时间，单位为us
       auto time_now =
           std::chrono::duration_cast<std::chrono::microseconds>(
               std::chrono::steady_clock::now().time_since_epoch()).count();
-      
+
       // 对消息的index和time_stamp进行赋值
       msg.index = count_;
       msg.time_stamp = time_now;
-      
+
       // 打印发送消息
       RCLCPP_INFO(this->get_logger(), "message: %d", msg.index);
       publisher_->publish(std::move(loanedMsg));
@@ -240,13 +240,13 @@ class MinimalHbmemPublisher  : public rclcpp::Node {
       RCLCPP_INFO(this->get_logger(), "Failed to get LoanMessage!");
     }
   }
-  
+
   // 定时器
   rclcpp::TimerBase::SharedPtr timer_;
 
   // hbmem publisher
   rclcpp::Publisher<hbmem_pubsub::msg::SampleMessage>::SharedPtr publisher_;
-  
+
   // 计数器
   size_t count_;
 };
@@ -329,7 +329,7 @@ class MinimalHbmemSubscriber  : public rclcpp::Node {
     RCLCPP_INFO(this->get_logger(), "msg %d, time cost %dus", msg->index,
                 time_now - msg->time_stamp);
   }
-  
+
   // hbmem subscription
   rclcpp::SubscriptionHbmem<hbmem_pubsub::msg::SampleMessage>::SharedPtr
       subscription_;
@@ -380,7 +380,7 @@ class MinimalHbmemSubscriber  : public rclcpp::Node {
     RCLCPP_INFO(this->get_logger(), "msg %d, time cost %dus", msg->index,
                 time_now - msg->time_stamp);
   }
-  
+
   // hbmem subscription
   rclcpp::Subscription<hbmem_pubsub::msg::SampleMessage>::SharedPtr
       subscription_;

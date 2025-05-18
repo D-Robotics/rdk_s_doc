@@ -26,7 +26,7 @@ sidebar_position: 2
 
 3 可以通过网络访问RDK的PC。
 
-关于`hobot_dnn)的详细使用说明可以参考`hobot_dnn)代码中的[README.md](https://github.com/D-Robotics/hobot_dnn/blob/develop/README.md)和[接口说明文档](https://github.com/D-Robotics/hobot_dnn/blob/develop/dnn_node/docs/API-Manual/API-Manual.md)。hobot_dnn的使用逻辑流程如下：
+关于`hobot_dnn)的详细使用说明可以参考`hobot_dnn)代码中的[README.md](https://github.com/D-Robotics/hobot_dnn/blob/develop/README.md)和[接口说明文档](https://github.com/D-Robotics/hobot_dnn/blob/develop/dnn_node/docs_s/API-Manual/API-Manual.md)。hobot_dnn的使用逻辑流程如下：
 
 ![](/../static/img/05_Robot_development/05_tros_dev/image/ai_predict/dnnnode_workflow.jpg)
 
@@ -167,7 +167,7 @@ void BodyDetNode::FeedImg(const hbm_img_msgs::msg::HbmMsg1080P::ConstSharedPtr i
     hobot::dnn_node::ImageProc::GetNV12PyramidFromNV12Img(
       reinterpret_cast<const char*>(img_msg->data.data()),
       img_msg->height, img_msg->width, model_input_height_, model_input_width_)};
-      
+
   // 创建模型输出数据，填充消息头信息
   auto dnn_output = std::make_shared<FasterRcnnOutput>();
   dnn_output->image_msg_header = std::make_shared<std_msgs::msg::Header>();
@@ -182,7 +182,7 @@ int BodyDetNode::PostProcess(const std::shared_ptr<hobot::dnn_node::DnnNodeOutpu
   if (!rclcpp::ok()) {
     return 0;
   }
-  
+
   // 验证输出数据的有效性
   if (node_output->outputs.empty() ||
     static_cast<int32_t>(node_output->outputs.size()) < box_output_index_) {
@@ -214,14 +214,14 @@ int BodyDetNode::PostProcess(const std::shared_ptr<hobot::dnn_node::DnnNodeOutpu
     in_box_list.emplace_back(
         MotBox(rect.left, rect.top, rect.right, rect.bottom, rect.conf));
   }
-  
+
   // 根据消息头计算当前帧的时间戳
   auto fasterRcnn_output =
       std::dynamic_pointer_cast<FasterRcnnOutput>(node_output);
   time_t time_stamp =
       fasterRcnn_output->image_msg_header->stamp.sec * 1000 +
       fasterRcnn_output->image_msg_header->stamp.nanosec / 1000 / 1000;
-  
+
   // 创建MOT算法的输出：带有目标编号的人体检测框和消失的目标编号
   std::vector<MotBox> out_box_list;
   std::vector<std::shared_ptr<MotTrackId>> disappeared_ids;
@@ -533,7 +533,7 @@ void BodyDetNode::FeedImg(const hbm_img_msgs::msg::HbmMsg1080P::ConstSharedPtr i
     hobot::dnn_node::ImageProc::GetNV12PyramidFromNV12Img(
       reinterpret_cast<const char*>(img_msg->data.data()),
       img_msg->height, img_msg->width, model_input_height_, model_input_width_)};
-      
+
   // 创建模型输出数据，填充消息头信息
   auto dnn_output = std::make_shared<FasterRcnnOutput>();
   dnn_output->image_msg_header = std::make_shared<std_msgs::msg::Header>();
@@ -562,7 +562,7 @@ int BodyDetNode::PostProcess(const std::shared_ptr<hobot::dnn_node::DnnNodeOutpu
   if (!rclcpp::ok()) {
     return 0;
   }
-  
+
   // 验证输出数据的有效性
   if (node_output->outputs.empty() ||
     static_cast<int32_t>(node_output->outputs.size()) < box_output_index_) {
@@ -594,14 +594,14 @@ int BodyDetNode::PostProcess(const std::shared_ptr<hobot::dnn_node::DnnNodeOutpu
     in_box_list.emplace_back(
         MotBox(rect.left, rect.top, rect.right, rect.bottom, rect.conf));
   }
-  
+
   // 根据消息头计算当前帧的时间戳
   auto fasterRcnn_output =
       std::dynamic_pointer_cast<FasterRcnnOutput>(node_output);
   time_t time_stamp =
       fasterRcnn_output->image_msg_header->stamp.sec * 1000 +
       fasterRcnn_output->image_msg_header->stamp.nanosec / 1000 / 1000;
-  
+
   // 创建MOT算法的输出：带有目标编号的人体检测框和消失的目标编号
   std::vector<MotBox> out_box_list;
   std::vector<std::shared_ptr<MotTrackId>> disappeared_ids;
@@ -811,7 +811,7 @@ find_package(dnn_node REQUIRED)
 find_package(hobot_mot REQUIRED)
 
 link_directories(
-  /opt/tros/lib/  
+  /opt/tros/lib/
   /usr/lib/hbbpu/
 )
 
@@ -858,8 +858,8 @@ colcon build --packages-select cpp_dnn_demo
 
 ```shell
 Starting >>> cpp_dnn_demo
-[Processing: cpp_dnn_demo]                              
-Finished <<< cpp_dnn_demo [32.7s]                       
+[Processing: cpp_dnn_demo]
+Finished <<< cpp_dnn_demo [32.7s]
 
 Summary: 1 package finished [33.4s]
 ```
@@ -873,7 +873,7 @@ Summary: 1 package finished [33.4s]
 ```
 # colcon build --packages-select cpp_dnn_demo
 Starting >>> cpp_dnn_demo
---- stderr: cpp_dnn_demo                         
+--- stderr: cpp_dnn_demo
 CMake Error at CMakeLists.txt:19 (find_package):
   By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project
   has asked CMake to find a package configuration file provided by
@@ -1202,7 +1202,7 @@ disappeared_targets: []
 
 本章节介绍了如何使用D-Robotics提供的模型，基于`hobot_dnn`创建并运行一个人体检测的算法推理示例。使用从摄像头发布的图片，获取算法输出并在PC端浏览器上实时渲染展示图片和算法推理结果。
 
-用户可以参考`hobot_dnn)中的[README.md](https://github.com/D-Robotics/hobot_dnn/blob/develop/README.md)和[接口说明文档](https://github.com/D-Robotics/hobot_dnn/blob/develop/docs/API-Manual/API-Manual.md)，了解更丰富的算法推理功能。
+用户可以参考`hobot_dnn)中的[README.md](https://github.com/D-Robotics/hobot_dnn/blob/develop/README.md)和[接口说明文档](https://github.com/D-Robotics/hobot_dnn/blob/develop/docs_s/API-Manual/API-Manual.md)，了解更丰富的算法推理功能。
 
 ## 算法wokflow构建
 
