@@ -247,7 +247,7 @@ find . -type f -group sunrise
 找出当前目录下所有`root`的文件，并把所有权更改为用户`sunrise`
 
 ```shell
-find .-type f -user root -exec chown sunrise {} \;
+find . -type f -user root -exec chown sunrise {} \;
 ```
 
 上例中， **{}** 用于与 **-exec** 选项结合使用来匹配所有文件，然后会被替换为相应的文件名。
@@ -299,7 +299,7 @@ find . -name "*.c"|xargs cat|grep -v ^$|wc -l # 代码行数统计, 排除空行
 ```shell
 find ~ -name '*jpg' # 主目录中找到所有的 jpg 文件。 -name 参数允许你将结果限制为与给定模式匹配的文件。
 find ~ -iname '*jpg' # -iname 就像 -name，但是不区分大小写
-find ~ ( -iname 'jpeg' -o -iname 'jpg' ) # 一些图片可能是 .jpeg 扩展名。幸运的是，我们可以将模式用“或”（表示为 -o）来组合。
+find ~ \( -iname 'jpeg' -o -iname 'jpg' \) # 一些图片可能是 .jpeg 扩展名。幸运的是，我们可以将模式用“或”（表示为 -o）来组合。
 find ~ \( -iname '*jpeg' -o -iname '*jpg' \) -type f # 如果你有一些以 jpg 结尾的目录呢？ （为什么你要命名一个 bucketofjpg 而不是 pictures 的目录就超出了本文的范围。）我们使用 -type 参数修改我们的命令来查找文件。
 find ~ \( -iname '*jpeg' -o -iname '*jpg' \) -type d # 也许你想找到那些命名奇怪的目录，以便稍后重命名它们
 ```

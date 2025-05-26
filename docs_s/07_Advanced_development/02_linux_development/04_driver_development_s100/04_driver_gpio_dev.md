@@ -163,7 +163,7 @@ cat /sys/kernel/debug/gpio
 查询上述节点，可以获取到当前系统中正在使用的gpio和所处的状态（in，out，IRQ）。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/gpio
+root@ubuntu:~# cat /sys/kernel/debug/gpio
 gpiochip4: GPIOs 423-438, parent: i2c/3-0076, 3-0076, can sleep:
 gpio-423 (                    |io-ser-reset0       ) out hi
 gpio-424 (                    |io-ser-reset1       ) out hi
@@ -183,7 +183,7 @@ gpio-495 (                    |sysfs               ) in  hi
 gpio-496 (                    |sysfs               ) in  hi
 gpio-498 (                    |sysfs               ) in  hi
 gpio-503 (                    |io-ext-reset        ) out lo
-root@hobot:~#
+root@ubuntu:~#
 ```
 
 ### 确定gpio-index
@@ -245,7 +245,7 @@ cat /sys/kernel/debug/gpio
 ```
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/gpio
+root@ubuntu:~# cat /sys/kernel/debug/gpio
 gpiochip4: GPIOs 423-438, parent: i2c/3-0076, 3-0076, can sleep:
 gpio-423 (                    |io-ser-reset0       ) out hi
 gpio-424 (                    |io-ser-reset1       ) out hi

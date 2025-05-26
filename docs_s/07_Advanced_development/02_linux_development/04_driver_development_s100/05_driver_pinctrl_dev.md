@@ -55,7 +55,7 @@ pinmux和pinconf一般是在设备dts里配置，具体如下：
 &pinctrl_peri {
     pinctrl_test_default: pinctrl_test_default {
         /* pinmux 的设置， 将peri_i2c5_scl和peri_i2c5_sda两个引脚复用为peri_i2c5的功能*/
-        pinmux { 
+        pinmux {
             function = "peri_i2c5";
             pins = "peri_i2c5_scl", "peri_i2c5_sda";
         };
@@ -200,7 +200,7 @@ int pinctrl_select_state(struct pinctrl *p, struct pinctrl_state *state)
 查看系统中都有哪些pinctrl设备，是否使用pinmux和pinconf模块。
 
 ```shell
-root@hobot:~# <debugfs>/pinctrl/pinctrl-devices
+root@ubuntu:~# <debugfs>/pinctrl/pinctrl-devices
 name [pinmux] [pinconf]
 peri yes yes
 cam yes yes
@@ -211,7 +211,7 @@ video yes yes
 查看已经被申请过的引脚配置映射。
 
 ```shell
-root@hobot:~# <debugfs>/pinctrl/pinctrl-handles
+root@ubuntu:~# <debugfs>/pinctrl/pinctrl-handles
  Requested pin control handlers their pinmux maps:
  device: 39420000.i2c current state: default
  state: default
@@ -240,7 +240,7 @@ root@hobot:~# <debugfs>/pinctrl/pinctrl-handles
 
  ...
 
- root@hobot:~#
+ root@ubuntu:~#
 ```
 
 #### \<debugfs>/pinctrl/pinctrl-maps
@@ -248,7 +248,7 @@ root@hobot:~# <debugfs>/pinctrl/pinctrl-handles
 查看被使用的引脚maps，包含每个被使用的引脚所在的控制器，哪些设备在使用，处于哪个pinctrl状态下，处于那一组引脚，被复用为什么功能。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/pinctrl/pinctrl-maps
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/pinctrl-maps
 Pinctrl maps:
 device 39420000.i2c
 state default
@@ -273,7 +273,7 @@ config 00000109
 
 ...
 
-root@hobot:~#
+root@ubuntu:~#
 ```
 
 #### \<debugfs>/pinctrl/\<pinctrl_dev>/gpio-ranges
@@ -281,11 +281,11 @@ root@hobot:~#
 查看pinctrl系统中引脚序号和gpio子系统中引脚的映射关系。
 
 ``` {.shell}
-root@hobot:~# <debugfs>/pinctrl/39ff5000.pinctrl-peri/gpio-ranges
+root@ubuntu:~# <debugfs>/pinctrl/39ff5000.pinctrl-peri/gpio-ranges
 GPIO ranges handled:
 0: 394f0000.gpio GPIOS [480 - 511] PINS [2 - 33]
 0: 39500000.gpio GPIOS [474 - 479] PINS [34 - 39]
-root@hobot:~#
+root@ubuntu:~#
 ```
 
 #### \<debugfs>/pinctrl/\<pinctrl_dev>/pinconf-pins
@@ -293,7 +293,7 @@ root@hobot:~#
 查看每个引脚的信息，包含pinmux对应的寄存器地址和值和pinconf对应的寄存器地址和值，是否支持电压转换以及电压值。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinconf-pins
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinconf-pins
 Pin config settings per pin
 Format: pin (name): configs
 pin 0 (UFS_REF_CLK): type 2, pwr 0, funs:(0,20,20,20,), mux(39ff5060: 0), cfg(39ff6010: 31), pwr(39ff5040: 1)
@@ -343,7 +343,7 @@ pin 39 (PCM0_DATA1): type 2, pwr 0, funs:(19,20,20,3,), mux(39ff50fc: 3), cfg(39
 查看每个引脚的电气属性配置，上下拉，输入使能，施密特，压摆率等等。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinconf-groups
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinconf-groups
 Pin config settings per pin group
 Format: group (name): configs
 0 (peri_ufs_ref_clk): input bias disabled, input bias pull down (0 ohms), input bias pull up (1 ohms), output drive strength (1 mA), input enabled, input schmitt enabled, slew rate (0)
@@ -393,7 +393,7 @@ Format: group (name): configs
 查看每个引脚组内引脚的配置，S100是每个引脚是一个group。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pingroups
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pingroups
 registered pin groups:
 group: peri_ufs_ref_clk
 pin 0 (UFS_REF_CLK)
@@ -515,7 +515,7 @@ pin 38 (PCM0_DATA0)
 group: peri_pcm0_data1
 pin 39 (PCM0_DATA1)
 
-root@hobot:~#
+root@ubuntu:~#
 ```
 
 #### \<debugfs>/pinctrl/\<pinctrl_dev>/pinmux-functions
@@ -523,7 +523,7 @@ root@hobot:~#
 引脚按照function进行分组。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinmux-functions
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinmux-functions
 function 0: peri_ufs, groups = [ peri_ufs_ref_clk peri_ufs_rsto ]
 function 1: peri_emac, groups = [ peri_emac_mdc_hsi0 peri_emac_mdio_hsi0 ]
 function 2: peri_clkout, groups = [ peri_emac_mdc_hsi0 ]
@@ -544,7 +544,7 @@ function 16: peri_uart1, groups = [ peri_uart1_txd peri_uart1_rxd ]
 function 17: peri_pcm1_data1, groups = [ peri_uart1_txd ]
 function 18: peri_pcm1_data0, groups = [ peri_uart1_rxd ]
 function 19: peri_pcm0, groups = [ peri_pcm0_mclk peri_pcm0_bclk peri_pcm0_fsync peri_pcm0_data0 peri_pcm0_data1 ]
-root@hobot:~#
+root@ubuntu:~#
 ```
 
 #### \<debugfs>/pinctrl/\<pinctrl_dev>/pinmux-pins
@@ -552,7 +552,7 @@ root@hobot:~#
 查看哪些引脚被占用了，是MUX占用还是GPIO占用。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinmux-pins
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinmux-pins
 Pinmux settings per pin
 Format: pin (name): mux_owner gpio_owner hog?
 pin 0 (UFS_REF_CLK): 39410000.ufs (GPIO UNCLAIMED) function peri_ufs group peri_ufs_ref_clk
@@ -613,7 +613,7 @@ echo  "peri_i2c5_sda peri_i2c5"  > pinmux-select
 查看每个引脚的信息，包含引脚名称和对应的gpio管脚。
 
 ``` {.shell}
-root@hobot:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pins
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pins
 registered pins: 40
 pin 0 (UFS_REF_CLK) 0:?
 pin 1 (UFS_RSTO) 0:?
@@ -655,5 +655,5 @@ pin 36 (PCM0_BCLK) 2:39500000.gpio
 pin 37 (PCM0_FSYNC) 3:39500000.gpio
 pin 38 (PCM0_DATA0) 4:39500000.gpio
 pin 39 (PCM0_DATA1) 5:39500000.gpio
-root@hobot:~#
+root@ubuntu:~#
 ```
