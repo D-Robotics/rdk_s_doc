@@ -192,26 +192,28 @@ pinctrl_test: pinctrl_test {
 int pinctrl_select_state(struct pinctrl *p, struct pinctrl_state *state)
 ```
 ## Pinctrl debugfs使用说明
-
+:::info
+注意：非root用户需要在命令前添加“sudo”
+:::
 ### Pin信息查询
 
-#### \<debugfs>/pinctrl/pinctrl-devices
+#### /sys/kernel/debug/pinctrl/pinctrl-devices
 
 查看系统中都有哪些pinctrl设备，是否使用pinmux和pinconf模块。
 
 ```shell
-root@ubuntu:~# <debugfs>/pinctrl/pinctrl-devices
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/pinctrl-devices
 name [pinmux] [pinconf]
 peri yes yes
 cam yes yes
 video yes yes
 ```
-#### \<debugfs>/pinctrl/pinctrl-handles
+#### /sys/kernel/debug/pinctrl/pinctrl-handles
 
 查看已经被申请过的引脚配置映射。
 
 ```shell
-root@ubuntu:~# <debugfs>/pinctrl/pinctrl-handles
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/pinctrl-handles
  Requested pin control handlers their pinmux maps:
  device: 39420000.i2c current state: default
  state: default
@@ -243,7 +245,7 @@ root@ubuntu:~# <debugfs>/pinctrl/pinctrl-handles
  root@ubuntu:~#
 ```
 
-#### \<debugfs>/pinctrl/pinctrl-maps
+#### /sys/kernel/debug/pinctrl/pinctrl-maps
 
 查看被使用的引脚maps，包含每个被使用的引脚所在的控制器，哪些设备在使用，处于哪个pinctrl状态下，处于那一组引脚，被复用为什么功能。
 
@@ -276,21 +278,21 @@ config 00000109
 root@ubuntu:~#
 ```
 
-#### \<debugfs>/pinctrl/\<pinctrl_dev>/gpio-ranges
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/gpio-ranges
 
-查看pinctrl系统中引脚序号和gpio子系统中引脚的映射关系。
+查看pinctrl系统中引脚序号和gpio子系统中引脚的映射关系。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 
 ``` {.shell}
-root@ubuntu:~# <debugfs>/pinctrl/39ff5000.pinctrl-peri/gpio-ranges
+root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/gpio-ranges
 GPIO ranges handled:
 0: 394f0000.gpio GPIOS [480 - 511] PINS [2 - 33]
 0: 39500000.gpio GPIOS [474 - 479] PINS [34 - 39]
 root@ubuntu:~#
 ```
 
-#### \<debugfs>/pinctrl/\<pinctrl_dev>/pinconf-pins
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/pinconf-pins
 
-查看每个引脚的信息，包含pinmux对应的寄存器地址和值和pinconf对应的寄存器地址和值，是否支持电压转换以及电压值。
+查看每个引脚的信息，包含pinmux对应的寄存器地址和值和pinconf对应的寄存器地址和值，是否支持电压转换以及电压值。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 
 ``` {.shell}
 root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinconf-pins
@@ -338,9 +340,9 @@ pin 38 (PCM0_DATA0): type 3, pwr 0, funs:(19,20,20,3,), mux(39ff50f8: 3), cfg(39
 pin 39 (PCM0_DATA1): type 2, pwr 0, funs:(19,20,20,3,), mux(39ff50fc: 3), cfg(39ff60ac: 32), pwr(39ff5040: 1)
 ```
 
-#### \<debugfs>/pinctrl/\<pinctrl_dev>/pinconf-groups
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/pinconf-groups
 
-查看每个引脚的电气属性配置，上下拉，输入使能，施密特，压摆率等等。
+查看每个引脚的电气属性配置，上下拉，输入使能，施密特，压摆率等等。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 
 ``` {.shell}
 root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinconf-groups
@@ -388,9 +390,9 @@ Format: group (name): configs
 39 (peri_pcm0_data1): input bias disabled, input bias pull down (0 ohms), input bias pull up (1 ohms), output drive strength (2 mA), input enabled, input schmitt enabled, slew rate (0)
 ```
 
-#### \<debugfs>/pinctrl/\<pinctrl_dev>/pingroups
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/pingroups
 
-查看每个引脚组内引脚的配置，S100是每个引脚是一个group。
+查看每个引脚组内引脚的配置，S100是每个引脚是一个group。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 
 ``` {.shell}
 root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pingroups
@@ -518,9 +520,9 @@ pin 39 (PCM0_DATA1)
 root@ubuntu:~#
 ```
 
-#### \<debugfs>/pinctrl/\<pinctrl_dev>/pinmux-functions
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/pinmux-functions
 
-引脚按照function进行分组。
+引脚按照function进行分组。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 
 ``` {.shell}
 root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinmux-functions
@@ -547,9 +549,9 @@ function 19: peri_pcm0, groups = [ peri_pcm0_mclk peri_pcm0_bclk peri_pcm0_fsync
 root@ubuntu:~#
 ```
 
-#### \<debugfs>/pinctrl/\<pinctrl_dev>/pinmux-pins
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/pinmux-pins
 
-查看哪些引脚被占用了，是MUX占用还是GPIO占用。
+查看哪些引脚被占用了，是MUX占用还是GPIO占用。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 
 ``` {.shell}
 root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pinmux-pins
@@ -597,20 +599,21 @@ pin 38 (PCM0_DATA0): (MUX UNCLAIMED) (GPIO UNCLAIMED)
 pin 39 (PCM0_DATA1): (MUX UNCLAIMED) (GPIO UNCLAIMED)
 ```
 
-#### \<debugfs>/\<pinctrl_dev>/pinmux-select
+#### /sys/kernel/debug/\<pinctrl_dev>/pinmux-select
 
 可以通过节点pinmux-functions来查询需要每个pin的group和function，
 通过pinmux-select节点设置pinmux， 参数group name和func name。
-
+以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 ``` {.shell}
-echo  "peri_spi0_csn0  peri_gpio"  > pinmux-select
+cd /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/
+echo  "peri_spi0_csn0 peri_gpio"  > pinmux-select
 echo  "peri_i2c5_scl peri_i2c5"  > pinmux-select
 echo  "peri_i2c5_sda peri_i2c5"  > pinmux-select
 ```
 
-#### \<debugfs>/\<pinctrl_dev>/pins
+#### /sys/kernel/debug/\<pinctrl_dev>/pins
 
-查看每个引脚的信息，包含引脚名称和对应的gpio管脚。
+查看每个引脚的信息，包含引脚名称和对应的gpio管脚。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 
 ``` {.shell}
 root@ubuntu:~# cat /sys/kernel/debug/pinctrl/39ff5000.pinctrl-peri/pins
