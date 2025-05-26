@@ -8,7 +8,7 @@ sidebar_position: 1
 
 ## 视频流解码
 
-本示例代码位于`/app/pydev_demo/07_decode_rtsp_stream/` 目录下，所实现的功能有：
+本示例代码位于`/app/pydev_demo/08_decode_rtsp_stream/` 目录下，所实现的功能有：
 1. 通过 opencv 打开 rtsp 码流，获取到码流数据
 2. 调用视频解码接口对码流进行解码
 3. 把解码后的视频通过 HDMI 显示
@@ -20,13 +20,13 @@ sidebar_position: 1
 用户可通过如下命令启动推流服务：
 
 ```
-cd /app/pydev_demo/07_decode_rtsp_stream/
-sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo ./live555MediaServer &
+cd /app/pydev_demo/08_decode_rtsp_stream/
+root@ubuntu:/app/pydev_demo/08_decode_rtsp_stream# sudo ./live555MediaServer &
 ```
 
 服务正常启动后的log如下， 注意最后一行的 `We use port 80`, 说明rtsp服务运行在80端口，它有可能存在8000和8080的情况，在后面设置rtsp url的时候需要根据实际使用的端口号做修改：
 ```bash
-sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream#
+root@ubuntu:/app/pydev_demo/08_decode_rtsp_stream#
 LIVE555 Media Server version 1.01 (LIVE555 Streaming Media library version 2020.07.09).
 Play streams from this server using the URL
         rtsp://192.168.127.10/<filename>
@@ -40,7 +40,7 @@ Each file's type is inferred from its name suffix:
 然后调用 `./decode_rtsp_stream.py ` 命令，启动拉流解码程序，并将 url 地址、分辨率、帧率等信息通过控制台输出，log 如下：
 
 ```shell
-sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# ./decode_rtsp_stream.py
+root@ubuntu:/app/pydev_demo/08_decode_rtsp_stream# ./decode_rtsp_stream.py
 ['rtsp://127.0.0.1/1080P_test.h264']
 RTSP stream frame_width:1920, frame_height:1080
 Decoder(0, 1) return:0 frame count: 0

@@ -5,7 +5,7 @@ sidebar_position: 2
 # 2.2 srpi-config 工具配置
 
 :::info 注意
-`srpi-config`配置工具仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`和`RDK S100`开发板
+`srpi-config`配置工具仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`开发板
 :::
 
 ## 简介
@@ -24,9 +24,9 @@ sudo srpi-config
 
 如果您使用的是桌面系统，那么您可以在菜单中找到`RDK Configuration`应用来进行配置。同样会打开如上图一样的配置终端。
 
-![image-20231123102024074](../../static/img/02_System_configuration/image/srpi-config/image-20231123102024074.png)
+![image-20231123102024074](../../static/img/02_System_configuration/image/srpi-config/20250507-160737.jpg)
 
-![image-20231123172041480](../../static/img/02_System_configuration/image/srpi-config/image-20231123172041480.png)
+![image-20231123172041480](../../static/img/02_System_configuration/image/srpi-config/20250507-160809.jpg)
 
 ## System Options
 

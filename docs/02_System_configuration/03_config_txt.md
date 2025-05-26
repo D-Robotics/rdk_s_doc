@@ -10,7 +10,7 @@ RDK 使用配置文件`config.txt`来设置一些启动时候的系统配置。`
 
 :::info 注意
 
-1. `config.txt`配置文件仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`和`RDK S100`开发板。
+1. `config.txt`配置文件仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`开发板。
 
 2. 系统版本不低于 `2.1.0`。
 

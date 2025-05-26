@@ -6,7 +6,7 @@ sidebar_position: 2
 
 本章节介绍多媒体库开发的多种功能示例，包括摄像头图像采集、视频编解码、视频显示、算法推理等功能。
 
-## 摄像头图像采集和显示 (RDK S100)
+## 摄像头图像采集和显示
 
 本示例`vio2display`示例实现了`MIPI`摄像头图像采集功能，并通过`HDMI`接口输出，用户可通过显示器预览画面。
 
@@ -22,8 +22,8 @@ sidebar_position: 2
     示例代码以源码形式提供，需要使用`make`命令进行编译后运行，步骤如下：
     ```bash
     sunrise@ubuntu:~$ cd /app/cdev_demo/vio2display
-    sunrise@ubuntu:/app/cdev_demo/vio2display$ make
-    sunrise@ubuntu:/app/cdev_demo/vio2display$ ./vio2display -w 1920 -h 1080
+    sunrise@ubuntu:/app/cdev_demo/vio2display$ sudo make
+    sunrise@ubuntu:/app/cdev_demo/vio2display$ sudo ./vio2display -w 1920 -h 1080
     ```
    参数说明：
     - -w: sensor输出宽度
