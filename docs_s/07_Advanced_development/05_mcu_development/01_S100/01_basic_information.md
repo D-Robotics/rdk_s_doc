@@ -166,23 +166,29 @@ MCU串口log获取，图示：
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)
 
 ## MCU串口使用
+### 旧版硬件
 如果RDK-S100含有连接方式如下，mcu串口和Acore串口为两个串口，自行查看：设备管理器 -》端口-》MCU-COM-波特率921600
 
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_COM.png)
 
-## MCU烧录流程
+### 新版硬件
+如果RDK-S100含有连接方式如下，mcu串口和Acore串口共用一个串口，自行查看：设备管理器 -》端口-》MCU-COM-波特率921600
+
+![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_COM1.jpg)
+
+## MCU0烧录流程
 ### 手动烧录
 #### 非空板烧录
 1. 打开板子，板端Acore串口常按enter进入uboot（一定要一直按）
 ```c
 fastboot 0
 ```
-2. 编译好的mcu 镜像/output/目录下找到相应的mcu镜像
+2. 编译好的mcu0 镜像/output_sysmcu/目录下找到相应的mcu0镜像
 ```c
 fastboot oem interface:mtd
-/* 编译出来的mcu镜像：MCU_S100_SIP_Matrix_V2.0.img */
-fastboot flash MCU_a "xxx/MCU_S100_SIP_Matrix_V2.0.img"
-fastboot flash MCU_b "xxx/MCU_S100_SIP_Matrix_V2.0.img"
+/* 编译出来的mcu0镜像：MCU_S100_SIP_V2.0.img */
+fastboot flash MCU_a "xxx/MCU_S100_SIP_V2.0.img"
+fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 ```
 #### 空片烧录或烧挂重新烧录
 1. 通过编译RDKS100-acore获取RDKS100镜像包，结构如下所示
@@ -190,21 +196,30 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_Matrix_V2.0.img"
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png)
 
 2. 烧录第一步：进入dfu模式，按照下图拨key即可(烧录完，记得拨回去！！！)
+##### 旧版硬件
 
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu.png)
 
-3. 烧录第二步：在你解压的镜像文件夹下执行下面的指令，即dfu下载进入uboot(nosec版本)
+##### 新版硬件
+1. 左下角有两个按键，在旁边有箭头丝印，箭头的方向表示实现对应功能的拨码方向
+2. 电源开关：向下拨动，给板子上电
+3. 烧录开关：向上拨动，给板子烧录
+4. 上述操作完成后，按图片中按键1，同时2处的灯变为红色
+
+![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1.png)
+
+3. 烧录第二步：在你解压的镜像文件夹下执行下面的指令，即dfu下载进入uboot(sec版本)
 ```c
-dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/nosec/out/s100/cmd_load_sbl
-dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/nosec/out/s100/sbl.pkg
-dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/nosec/out/s100/cmd_exit_sbl
-dfu-util.exe -d 3652:6620 -a 0 -R -D out/product/xmodem_tools/nosec/out/s100/u-boot-spl_ddr.bin
-dfu-util.exe -d 3652:6620 -a 0 -R -D out/product/xmodem_tools/nosec/out/s100/S100_MCU_V1.0.bin
+dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/sec/out/s100/cmd_load_sbl
+dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/sec/out/s100/sbl.pkg
+dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/sec/out/s100/cmd_exit_sbl
+dfu-util.exe -d 3652:6620 -a 0 -R -D out/product/xmodem_tools/sec/out/s100/u-boot-spl_ddr.bin
+dfu-util.exe -d 3652:6620 -a 0 -R -D out/product/xmodem_tools/sec/out/s100/S100_MCU_V1.0.bin
 # mcu启动可能费时比较久
-dfu-util.exe -d 3652:6625 -a 0 -D out/product/xmodem_tools/nosec/out/s100/hobot-s100-bl31.dtb
-dfu-util.exe -d 3652:6625 -a 1 -D out/product/xmodem_tools/nosec/out/s100/bl31.bin
-dfu-util.exe -d 3652:6625 -a 2 -D out/product/xmodem_tools/nosec/out/s100/tee-pager_v2.bin
-dfu-util.exe -d 3652:6625 -a 3 -R -D out/product/xmodem_tools/nosec/out/s100/u-boot.bin
+dfu-util.exe -d 3652:6625 -a 0 -D out/product/xmodem_tools/sec/out/s100/hobot-s100-bl31.dtb
+dfu-util.exe -d 3652:6625 -a 1 -D out/product/xmodem_tools/sec/out/s100/bl31.bin
+dfu-util.exe -d 3652:6625 -a 2 -D out/product/xmodem_tools/sec/out/s100/tee-pager_v2.bin
+dfu-util.exe -d 3652:6625 -a 3 -R -D out/product/xmodem_tools/sec/out/s100/u-boot.bin
 ```
 4. 烧录第三步：整体烧录命令如下：
 ```c
