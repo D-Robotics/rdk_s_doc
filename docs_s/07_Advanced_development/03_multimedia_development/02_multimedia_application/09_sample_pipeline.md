@@ -10,6 +10,8 @@
 | 目录      | 描述 |
 | ----------- | ----------- |
 | [single_pipe_vin_isp_ynr_pym_vpu](#single_pipe_vin_isp_ynr_pym_vpu)  | 单路 sensor 简单 pipeline 串联并编码示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联GDC变换示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联GDC变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
@@ -253,7 +255,7 @@ Offsets: 0 0 0
 
 运行时会保存如下文件：
 
-```
+```bash
 single_pipe_vin_isp_ynr_pym_vpu.h264
 pym_output_nv12_chn0_1920x1080_stride_1920_count_0.yuv
 pym_output_nv12_chn1_960x540_stride_960_count_0.yuv
@@ -263,7 +265,218 @@ pym_output_nv12_chn4_120x66_stride_128_count_0.yuv
 pym_output_nv12_chn5_60x32_stride_64_count_0.yuv
 ... ...
 ```
+## single_pipe_vin_isp_ynr_pym_gdc
 
+### 功能概述
+
+`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片。
+
+### 代码位置及目录结构
+- 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc`
+- 目录结构
+```
+single_pipe_vin_isp_ynr_pym_gdc
+├── Makefile
+└── single_pipe_vin_isp_ynr_pym_gdc.c
+```
+
+### 编译
+- 进入 single_pipe_vin_isp_ynr_pym_gdc 目录，执行 `make` 编译
+- 输出成果物是 single_pipe_vin_isp_ynr_pym_gdc 源码目录下的 `single_pipe_vin_isp_ynr_pym_gdc`
+
+
+### 运行
+#### 程序运行方法
+直接执行程序 `./single_pipe_vin_isp_ynr_pym_gdc` 可以获得帮助信息
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_gdc
+No sensors specified.
+Usage: single_pipe_vin_isp_pym_vpu [OPTIONS]
+Options:
+  -s <sensor_index>      Specify sensor index
+  -l <link_port>         Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D
+  -f <gdc_bin_file>      Specify sensor gdc_bin_file path
+  -h                     Show this help message
+index: 0  sensor_name: imx219-30fps             config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw10_30fps_2lane.c
+index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
+index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
+index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+```
+
+#### 程序参数选项说明
+
+- `-s`: 指定 Camera Sensor 型号和配置
+- `-l`: 指定 Serdes 类型的 Sensor 接入的 Link Port, 比如接入的是 Port A，指定为 0: `-l 0`
+
+:::caution 注意
+link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
+:::
+
+#### 运行效果
+
+`single_pipe_vin_isp_ynr_pym_gdc` 输出内容如下：
+1. 每隔 30 帧保存一张每个 GDC 输出通道的 NV12 图至当前运行目录下
+
+示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`
+
+日志示例如下所示：
+
+```
+# ./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin
+Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
+mipi mclk is not configed.
+Searching camera sensor on device: /proc/device-tree/soc/vcon@0 i2c bus: 1 mipi rx phy: 0
+mipi rx used phy: 00000000
+mipi mclk is not configed.
+Searching camera sensor on device: /proc/device-tree/soc/vcon@1 i2c bus: 2 mipi rx phy: 1
+mipi rx used phy: 00000000
+INFO: Found sensor_name:imx219-30fps on mipi rx csi 1, i2c addr 0x10, config_file:linear_1920x1080_raw10_30fps_1lane.c
+        [0] use [isp + ynr].
+                vin [hw:1]
+                isp [hw:1] [slot_id:0] [mode:1]
+                ynr [hw:1] [slot_id:0] [mode:1]
+                pym [hw:1] [slot_id:0] [mode:1]
+                vin ->online-> isp ->online-> ynr ->online-> pym
+
+INFO: ISP channel info:
+        input info: [mipi_rx: 1] [is_online: 1]
+        isp channel info: [hw_id: 1] [slot_id: 0] [mode:1]
+
+pym config:
+        ichn input width = 1920, height = 1080
+        ochn[0] ratio= 1, width = 1920, height = 1080 wstride=1920 vstride=1080 out[1920*1080]
+        ochn[1] ratio= 2, width = 960, height = 540 wstride=960 vstride=540 out[960*540]
+        ochn[2] ratio= 4, width = 480, height = 270 wstride=480 vstride=270 out[480*270]
+        ochn[3] ratio= 8, width = 240, height = 134 wstride=240 vstride=134 out[240*134]
+        ochn[4] ratio= 16, width = 120, height = 66 wstride=128 vstride=66 out[120*66]
+        ochn[5] ratio= 32, width = 60, height = 32 wstride=64 vstride=32 out[60*32]
+
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 1, timestamp: 21677343453900
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 31, timestamp: 21678330776125
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 61, timestamp: 21679318103925
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 91, timestamp: 21680305428000
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 121, timestamp: 21681292757750
+```
+
+运行时会保存如下文件：
+
+```bash
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_121_ts_21681292757750.yuv
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_1_ts_21677343453900.yuv
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_31_ts_21678330776125.yuv
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_61_ts_21679318103925.yuv
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21680305428000.yuv
+... ...
+```
+
+## single_pipe_vin_isp_ynr_pym_gdc_vpu
+
+### 功能概述
+
+`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片,  输出数据会再送给编码器编码后保存为 H264 视频码流。
+
+### 代码位置及目录结构
+- 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc_vpu`
+- 目录结构
+```
+single_pipe_vin_isp_ynr_pym_gdc_vpu
+├── Makefile
+└── single_pipe_vin_isp_ynr_pym_gdc_vpu.c
+```
+
+### 编译
+- 进入 single_pipe_vin_isp_ynr_pym_gdc_vpu 目录，执行 `make` 编译
+- 输出成果物是 single_pipe_vin_isp_ynr_pym_gdc_vpu 源码目录下的 `single_pipe_vin_isp_ynr_pym_gdc_vpu`
+
+
+### 运行
+#### 程序运行方法
+直接执行程序 `./single_pipe_vin_isp_ynr_pym_gdc_vpu` 可以获得帮助信息
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_gdc_vpu
+No sensors specified.
+Usage: single_pipe_vin_isp_pym_vpu [OPTIONS]
+Options:
+  -s <sensor_index>      Specify sensor index
+  -l <link_port>         Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D
+  -f <gdc_bin_file>      Specify sensor gdc_bin_file path
+  -h                     Show this help message
+index: 0  sensor_name: imx219-30fps             config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw10_30fps_2lane.c
+index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
+index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
+index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+```
+
+#### 程序参数选项说明
+
+- `-s`: 指定 Camera Sensor 型号和配置
+- `-l`: 指定 Serdes 类型的 Sensor 接入的 Link Port, 比如接入的是 Port A，指定为 0: `-l 0`
+
+:::caution 注意
+link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
+:::
+
+#### 运行效果
+
+`single_pipe_vin_isp_ynr_pym_gdc_vpu` 输出内容如下：
+1. 每隔 30 帧保存一张每个 GDC 输出通道的 NV12 图至当前运行目录下。
+2. 把 GDC 通道输出的图像送入编码器中编码，把编码后的文件保存到文件中。
+
+示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`
+
+日志示例如下所示：
+
+```bash
+# ./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin
+Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
+mipi mclk is not configed.
+Searching camera sensor on device: /proc/device-tree/soc/vcon@0 i2c bus: 1 mipi rx phy: 0
+mipi rx used phy: 00000000
+mipi mclk is not configed.
+Searching camera sensor on device: /proc/device-tree/soc/vcon@1 i2c bus: 2 mipi rx phy: 1
+mipi rx used phy: 00000000
+INFO: Found sensor_name:imx219-30fps on mipi rx csi 1, i2c addr 0x10, config_file:linear_1920x1080_raw10_30fps_1lane.c
+        [0] use [isp + ynr].
+                vin [hw:1]
+                isp [hw:1] [slot_id:0] [mode:1]
+                ynr [hw:1] [slot_id:0] [mode:1]
+                pym [hw:1] [slot_id:0] [mode:1]
+                vin ->online-> isp ->online-> ynr ->online-> pym
+
+INFO: ISP channel info:
+        input info: [mipi_rx: 1] [is_online: 1]
+        isp channel info: [hw_id: 1] [slot_id: 0] [mode:1]
+
+pym config:
+        ichn input width = 1920, height = 1080
+        ochn[0] ratio= 1, width = 1920, height = 1080 wstride=1920 vstride=1080 out[1920*1080]
+        ochn[1] ratio= 2, width = 960, height = 540 wstride=960 vstride=540 out[960*540]
+        ochn[2] ratio= 4, width = 480, height = 270 wstride=480 vstride=270 out[480*270]
+        ochn[3] ratio= 8, width = 240, height = 134 wstride=240 vstride=134 out[240*134]
+        ochn[4] ratio= 16, width = 120, height = 66 wstride=128 vstride=66 out[120*66]
+        ochn[5] ratio= 32, width = 60, height = 32 wstride=64 vstride=32 out[60*32]
+
+Encode idx: 0, init successful
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 1, timestamp: 21970340530375
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 31, timestamp: 21971327856500
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 61, timestamp: 21972315184900
+gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 91, timestamp: 21973302504675
+```
+
+运行时会保存如下文件：
+
+```bash
+single_pipe_vin_isp_ynr_pym_gdc_vpu.h264
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_1_ts_21970340530375.yuv
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_31_ts_21971327856500.yuv
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_61_ts_21972315184900.yuv  
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21973302504675.yuv
+... ...
+```
 
 ## multi_pipe_vin_isp_ynr_pym_gdc_vpu
 
