@@ -131,6 +131,12 @@ MCU侧串口打印
 
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_stop_log.png)
 
+:::caution
+stop mcu1之后，如果需要再次启动mcu1，必须等待系统进入wfi模式之后，才能再次start mcu1，见下图所示。原因解释：避免系统还没有进入wfi模式时，start mcu1会重新加载firmware至 mcu sram位置导致之前位置代码被覆盖，导致系统运行跑飞挂死
+
+![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu1_enter_wfi.png)
+:::
+
 ## MCU0/MCU1模块划分
 MCU整个系统含有ICU、RTC、IPC、port、CAN等模块，但是为了用户开发的方便，对于功能进行了划分，划分细节如下图所示。
 
