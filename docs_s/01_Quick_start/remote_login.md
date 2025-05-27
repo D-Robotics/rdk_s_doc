@@ -38,7 +38,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
 
   | 配置项               | 参数值                               |
   | -------------------- | ------------------------------------ |
-  | 波特率（Baud rate）  |  <li>921600：RDK X3、RDK Ultra、RDK S100</li><li>1115200：RDK X5</li> |
+  | 波特率（Baud rate）  | 921600                               |
   | 数据位（Data bits）  | 8                                    |
   | 奇偶校验（Parity）   | None                                 |
   | 停止位（Stop bits）  | 1                                    |
