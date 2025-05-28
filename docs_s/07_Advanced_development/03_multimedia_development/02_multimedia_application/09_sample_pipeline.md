@@ -5,7 +5,7 @@
 `sample_pipeline` 用于实现单路或多路 sensor pipeline 串联，实现用户常见的 pipeline 场景，用户可在通过 `sample_pipeline` 子目录了解各个 pipeline 的搭建方法。
 
 ### sample_pipeline 架构说明
-`sample_pipeline` 包含多个示例，每个示例均以子目录形式存在 `app/samples/platform_samples/sample_pipeline` 下，每个子目录描述如下
+`sample_pipeline` 包含多个示例，每个示例均以子目录形式存在 `app/multimedia_samples/sample_pipeline` 下，每个子目录描述如下
 
 | 目录      | 描述 |
 | ----------- | ----------- |
@@ -13,6 +13,7 @@
 | [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联GDC变换示例  |
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联GDC变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
+| [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -473,7 +474,7 @@ gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 single_pipe_vin_isp_ynr_pym_gdc_vpu.h264
 gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_1_ts_21970340530375.yuv
 gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_31_ts_21971327856500.yuv
-gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_61_ts_21972315184900.yuv  
+gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_61_ts_21972315184900.yuv
 gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21973302504675.yuv
 ... ...
 ```
@@ -643,4 +644,104 @@ All deserial link info:
 ```
 pipeline0_1920x1080_30fps.h264
 pipeline1_1280x720_30fps.h264
+```
+
+## uvc_capture_sample
+
+### 功能概述
+`uvc_capture_sample `是一个测试 uvc camera 视频采集通路的程序,  完成 uvc camera 的图像采集并保存输出的图片，支持显示 ISP 相关信息。
+
+### 代码位置及目录结构
+- 代码位置 `/app/multimedia_samples/sample_pipeline/uvc_capture_sample`
+
+- 目录结构
+
+```bash
+uvc_capture_sample
+├── Makefile
+├── common_utils.c
+├── common_utils.h
+├── uvc_capture_sample.c
+├── uvc_capture_sample.h
+├── v4l2_common_utils.c
+└── v4l2_common_utils.h
+```
+
+### 编译
+- 进入 uvc_capture_sample 目录，执行`make`编译
+- 输出成果物是 uvc_capture_sample 源码目录下的 `uvc_capture_sample`
+
+### 运行
+#### 程序运行方法
+
+直接执行程序 `./uvc_capture_sample -h` 可以获得帮助信息
+
+#### 程序参数选项说明
+
+**选项：**
+
+- `-i, --video_id <id>`
+  - 指定对应的 video 的节点，比如 video0、video1。
+- `-d, --dump_file`
+  - 是否保存图像文件。启用此选项会将捕获的图像保存为文件。
+- `-F, --format`
+  - 设置图像格式，根据 uvc camera 选择支持的 YUYV、NV12 等格式。
+- `-l, --loop_cnt <num>`
+  - 设置采集循环的次数（即捕获多少帧图像）。
+- `-H, --height <px>`
+  - 设置图像的高度（单位为像素）。
+- `-W, --width <px>`
+  - 设置图像的宽度（单位为像素）。
+- `-W, --width <px>`
+  - 显示 ISP exposure 和 white balance 信息。
+- `-H, --help`
+  - 显示帮助信息。
+
+**示例：**
+
+- 配置一条 uvc camera 视频通路，使用video0，指定格式 YUYV，保存 5 帧采集到的图像。
+
+```shell
+./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d
+```
+
+- 配置一条 uvc camera 视频通路，使用video0，指定格式 YUYV，保存 5 帧采集到的图像，并打印当前的 exposure 和 white balance 信息。
+
+```shell
+./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d -E
+```
+
+#### 运行效果
+
+运行以下命令:
+
+```shell
+./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d
+```
+
+日志示例如下所示：
+
+```shell
+ptc[0].video_id = 0
+ptc[0].loop_cnt = 5
+ptc[0].pic_width = 1920
+ptc[0].pic_height = 1080
+ptc[0].pic_format = 6
+ptc[0].dump_mask = 1
+DEBUG: index = 0, max_num = 24
+pipe_num:0
+TestContext[0] create pthread success
+loop_cnt: 5
+open device: /dev/video0 (fd=3)
+     driver: uvcvideo
+       card: FHD Camera Microphone: FHD Came
+    version: 6.1.83
+   all caps: 84a00001
+device caps: 04200001
+ 0: Motion-JPEG 0x47504a4d 0x1
+...
+filedump(./yuv_dump/isp_5_s0_c0_b1_f0_005838.yuv, size(4147200) is successed
+loop cnt use up
+pipe(0)Test thread 281473524101408---join done.
+------ Test case uvc_capture_sample done  ------
 ```
