@@ -86,11 +86,11 @@ echo 85000000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_1_temp
 ```
 如果想要调整关机温度为105摄氏度， 可通过修改所有thermal_zone的trip_point_0_temp来实现
 ```
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone1/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone2/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone3/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_0_temp
+echo 105000000 > /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp
+echo 105000000 > /sys/devices/virtual/thermal/thermal_zone1/trip_point_0_temp
+echo 105000000 > /sys/devices/virtual/thermal/thermal_zone2/trip_point_0_temp
+echo 105000000 > /sys/devices/virtual/thermal/thermal_zone3/trip_point_0_temp
+echo 105000000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_0_temp
 ```
 ps：以上设置断电重启后需要重新设置
 ### CPU频率管理
