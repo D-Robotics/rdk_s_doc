@@ -18,18 +18,9 @@ sidebar_position: 1
 ![image-20220329140159441](../../../static/img/07_Advanced_development/02_linux_development/image/environment_build/image-20220329140159441.png)
 
 ## RDK OS 开发指南
+
 ### 开发 RDK S100
 
 :::tip
-持续更新中....
-笔者在写这篇文章时 RDK S100的源码位置暂不可用
+产品未上市前，请联系 FAE 获取。
 :::
-
-
-RDK S100 的相关源码托管在 GitHub 的 [s100-rdk-gen 仓库](https://github.com/D-Robotics/s100-rdk-gen)。
-
-
-- **开发环境搭建**：仓库中的 [README](https://github.com/D-Robotics/s100-rdk-gen/blob/main/README.md) 提供了从环境安装到源码编译的完整说明。
-- **系统编译方法**：包括搭建开发环境、构建系统镜像、交叉编译工具链配置、软件开发方法以及常见问题的解决方法。
-
-通过以上步骤，您可以完成 RDK OS 系统的开发和编译。详细信息请参考对应的 GitHub 仓库说明文件。

@@ -3,20 +3,18 @@ sidebar_position: 4
 ---
 
 # 3.3.4 串口应用
-RDK S100 在 30PIN 上默认使能 UART1，物理管脚号 10 和 12，IO电压 1.8V。
 
-RDK S100 在 40PIN 支持UART2，没有使能，物理管脚号 8 和 10，IO电压 3.3V。
+RDK S100 在 40PIN 支持 UART2，没有使能，物理管脚号 8 和 10，IO 电压 3.3V。
 
 :::info
 
-在`RDK S100`平台上，存在两种硬件形式， 分别支持30pin和40pin， 其中`40pin`上使用UART2有以下限制:
-
-- 40pin上需要波动拨码开关来选择使用UART2还是I2C5, 具体细节可以查看下图：
+40pin 上需要波动拨码开关来选择使用 UART2 还是 I2C5, 具体细节可以查看下图：
 
 ![image-rdk_100_funcreuse_40pin](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png)
 
-- 波动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
-``` {.text}
+波动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
+
+```{.text}
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
 uart2: uart@394C0000 {
         power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
@@ -32,7 +30,7 @@ uart2: uart@394C0000 {
 };
 ```
 
-管脚定义请参考 [管脚配置与定义](./40pin_define.md#40pin_define)
+管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
 
 :::
 
@@ -43,6 +41,7 @@ uart2: uart@394C0000 {
 :::
 
 ## 回环测试
+
 把 TXD 和 RXD 在硬件上进行连接，然后运行测试程序，进行写和读操作，预期结果是读出的数据要完全等于写入的数据
 
 ### 硬件连接

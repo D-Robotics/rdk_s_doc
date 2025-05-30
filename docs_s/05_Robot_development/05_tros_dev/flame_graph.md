@@ -20,7 +20,7 @@ sidebar_position: 4
 
 | 平台    | 运行方式 |
 | ------- | ---------|
-| RDK X3, RDK X3 Module, RDK X5 | Ubuntu 20.04 (Foxy), Ubuntu 22.04 (Humble)    |
+| RDK X3, RDK X3 Module, RDK X5, RDK X5 Module | Ubuntu 20.04 (Foxy), Ubuntu 22.04 (Humble)    |
 | RDK Ultra| Ubuntu 20.04 (Foxy) |
 
 ## 准备工作
@@ -45,7 +45,7 @@ sidebar_position: 4
     root@ubuntu:~# perf script > out.perf
     ```
 
-3. 在PC或者RDK上 `git clone https://github.com/brendangregg/FlameGraph.git)，进入flamegraph目录，把第2步生成的out.perf拷贝到flamegraph目录内。使用flamegraph工具包内的stackcollapse-perf.pl 对out.perf 反折叠生成out.folded
+3. 在PC或者RDK上 `git clone https://github.com/brendangregg/FlameGraph.git`，进入flamegraph目录，把第2步生成的out.perf拷贝到flamegraph目录内。使用flamegraph工具包内的stackcollapse-perf.pl 对out.perf 反折叠生成out.folded
 
     ```shell
     ./stackcollapse-perf.pl out.perf > out.folded

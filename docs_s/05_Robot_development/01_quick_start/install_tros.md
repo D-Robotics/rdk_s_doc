@@ -23,7 +23,7 @@ import TabItem from '@theme/TabItem';
 :::caution 注意
 - **2.x版本tros.b仅支持2.x版本系统镜像，[1.x版本tros.b](https://developer.d-robotics.cc/api/v1/fileData/TogetherROS/index.html)仅支持1.x版本系统。**
 - **如果您使用的是1.x版本系统镜像，需要将[系统升级](./preparation)到2.x版本。**
-- **系统和tros.b版本号查看方法以及详细说明，请查看[FAQs](/docs_s/08_FAQ/03_applications_and_examples.md)。**
+- **系统和tros.b版本号查看方法以及详细说明，请查看[FAQs](/docs/08_FAQ/03_applications_and_examples.md)。**
 :::
 
 | 依赖关系    | 1.x tros.b  | 2.x tros.b |
@@ -180,5 +180,5 @@ Description: TogetheROS Bot
 
 :::caution
 - **如果您的X86平台已安装1.x版本tros.b，请先使用命令`sudo apt remove tros`删除后再安装2.x版本tros.b**。
-- **关于如何查看tros.b版本号，请查看[FAQs](/docs_s/08_FAQ/03_applications_and_examples.md)**。
+- **关于如何查看tros.b版本号，请查看[FAQs](/docs/08_FAQ/03_applications_and_examples.md)**。
 :::

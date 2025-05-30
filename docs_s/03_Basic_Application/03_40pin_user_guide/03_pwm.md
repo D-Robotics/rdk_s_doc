@@ -2,9 +2,9 @@
 sidebar_position: 3
 ---
 
-# 3.3.3 PWM应用
+# 3.3.3 PWM 应用
 
-Hobot.GPIO 库仅在带有附加硬件 PWM 控制器的引脚上支持 PWM。与 RPi.GPIO 库不同，Hobot.GPIO 库不实现软件模拟 PWM。RDK S100硬件平台存在两种硬件形态，30pin的硬件形态没有PWM通道， 40pin的硬件形态支持两路LPWM。
+Hobot.GPIO 库仅在带有附加硬件 PWM 控制器的引脚上支持 PWM。与 RPi.GPIO 库不同，Hobot.GPIO 库不实现软件模拟 PWM。RDK S100 40pin 的硬件形态支持两路 LPWM。
 
 请参阅 `/app/40pin_samples/simple_pwm.py`了解如何使用 PWM 通道的详细信息。
 
@@ -13,7 +13,8 @@ Hobot.GPIO 库仅在带有附加硬件 PWM 控制器的引脚上支持 PWM。与
 :::
 
 ### 测试代码
-打开 `output_pin` 指定的PWM通道，初始占空比 25%， 先每0.25秒增加5%占空比，达到100%之后再每0.25秒减少5%占空比，在正常输出波形时，可以通过示波器或者逻辑分析仪测量输出信号，观察波形。
+
+打开 `output_pin` 指定的 PWM 通道，初始占空比 25%， 先每 0.25 秒增加 5%占空比，达到 100%之后再每 0.25 秒减少 5%占空比，在正常输出波形时，可以通过示波器或者逻辑分析仪测量输出信号，观察波形。
 
 ```python
 #!/usr/bin/env python3

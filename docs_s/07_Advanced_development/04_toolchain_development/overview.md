@@ -1,4 +1,9 @@
 ---
 sidebar_position: 1
 ---
-<!-- TODO: Add Horizon Toolchain website link here -->
+
+# 概览
+
+:::tip
+产品未上市前，请联系 FAE 获取。
+:::

@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
+    "start": "rsync -a docs/05_Robot_development/ docs_s/05_Robot_development/ && rsync -a docs/08_FAQ/ docs_s/08_FAQ/ & docusaurus start",
+    "build": "rsync -a docs/05_Robot_development/ docs_s/05_Robot_development/ && rsync -a docs/08_FAQ/ docs_s/08_FAQ/ & docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

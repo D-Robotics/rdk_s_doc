@@ -2,29 +2,30 @@
 sidebar_position: 6
 ---
 
-# 3.3.6 SPI应用
-- RDK S100 在 30PIN 上物理管脚 `21, 23, 25, 27, 29`引出了的 `SPI0` 总线，支持两个片选，IO电压1.8V； 在物理管脚 `24, 26, 28, 30`引出了的 `SPI1` 总线，支持1个片选，IO电压1.8V。
+# 3.3.6 SPI 应用
 
-- RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了的 `SPI0` 总线，支持两个片选，IO电压3.3V；
+RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了的 `SPI0` 总线，支持两个片选，IO 电压 3.3V；
 
-请参阅 `/app/40pin_samples/test_spi.py`了解如何使用SPI的详细信息。
+请参阅 `/app/40pin_samples/test_spi.py`了解如何使用 SPI 的详细信息。
 
 :::tip
 以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
 :::
 
 ## 回环测试
+
 把 MISO 和 MOSI 在硬件上进行连接，然后运行 SPI 测试程序，进行写和读操作，预期结果是读出的数据要完全等于写入的数据
 
 ### 硬件连接
-把MISO和MOSI通过跳线帽直接硬件上连接在一起：
+
+把 MISO 和 MOSI 通过跳线帽直接硬件上连接在一起：
 
 ![image-20220512101915524](../../../static/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_spi.png)
 
 ### 测试过程
 
 - 运行 `python3 /app/40pin_samples/test_spi.py`
-- 从打印的spi控制器中选择总线号和片选号作为输入选项，例如选择测试 `spidev0.0`，则`bus num` 和 `cs num`都是`0`，按回车键确认：
+- 从打印的 spi 控制器中选择总线号和片选号作为输入选项，例如选择测试 `spidev0.0`，则`bus num` 和 `cs num`都是`0`，按回车键确认：
 
 ```
 List of enabled spi controllers:
@@ -33,7 +34,7 @@ Please input SPI bus num:0
 Please input SPI cs num:0
 ```
 
-- 程序正确运行起来后会持续打印 `0x55 0xAA`，如果打印的是 `0x00 0x00`，那么就说明spi的回环测试失败。
+- 程序正确运行起来后会持续打印 `0x55 0xAA`，如果打印的是 `0x00 0x00`，那么就说明 spi 的回环测试失败。
 
 ```
 Starting demo now! Press CTRL+C to exit

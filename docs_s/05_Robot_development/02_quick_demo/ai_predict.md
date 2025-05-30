@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 
 本章节介绍模型推理功能的使用，输入一张本地图片进行推理，得到渲染后的图片并保存在本地。
 
-最后展示TROS应用算法中的[人体检测](/docs_s/05_Robot_development/03_boxs/function/mono2d_body_detection.md)、[年龄识别](/docs_s/05_Robot_development/03_boxs/function/mono_face_age_detection.md)、[人脸关键点检测](/docs_s/05_Robot_development/03_boxs/function/mono_face_landmarks_detection.md)、[人手关键点检测](/docs_s/05_Robot_development/03_boxs/function/hand_lmk_detection.md)、[手势识别](/docs_s/05_Robot_development/03_boxs/function/hand_gesture_detection.md)的算法同时推理和融合后的效果。示例使用MIPI/USB摄像头/本地回灌输入，通过WEB展示推理渲染结果。
+最后展示TROS应用算法中的[人体检测](/docs/05_Robot_development/03_boxs/function/mono2d_body_detection.md)、[年龄识别](/docs/05_Robot_development/03_boxs/function/mono_face_age_detection.md)、[人脸关键点检测](/docs/05_Robot_development/03_boxs/function/mono_face_landmarks_detection.md)、[人手关键点检测](/docs/05_Robot_development/03_boxs/function/hand_lmk_detection.md)、[手势识别](/docs/05_Robot_development/03_boxs/function/hand_gesture_detection.md)的算法同时推理和融合后的效果。示例使用MIPI/USB摄像头/本地回灌输入，通过WEB展示推理渲染结果。
 
 代码仓库：[https://github.com/D-Robotics/hobot_dnn](https://github.com/D-Robotics/hobot_dnn)
 
@@ -22,11 +22,11 @@ import TabItem from '@theme/TabItem';
 | 平台    | 运行方式     |
 | ------- | ------------ |
 | RDK X3, RDK X3 Module | Ubuntu 20.04 (Foxy), Ubuntu 22.04 (Humble) |
-| RDK X5 | Ubuntu 22.04 (Humble) |
+| RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble) |
 | X86     | Ubuntu 20.04 (Foxy) |
 
 :::caution
-RDK Ultra模型推理功能体验参考[Boxs算法仓库](/docs_s/05_Robot_development/03_boxs/detection/yolo.md)。
+RDK Ultra模型推理功能体验参考[Boxs算法仓库](/docs/05_Robot_development/03_boxs/detection/yolo.md)。
 :::
 
 
@@ -114,7 +114,7 @@ ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_con
 :::warning
 仅`TROS Humble 2.3.1`以及后续版本支持此功能。
 
-`TROS`版本发布记录：[点击跳转](/docs_s/05_Robot_development/01_quick_start/changelog.md)，版本查看方法：[点击跳转](/docs_s/05_Robot_development/01_quick_start/install_tros.md)。
+`TROS`版本发布记录：[点击跳转](/docs/05_Robot_development/01_quick_start/changelog.md)，版本查看方法：[点击跳转](/docs/05_Robot_development/01_quick_start/install_tros.md)。
 :::
 
 **使用MIPI/USB摄像头发布图片**
