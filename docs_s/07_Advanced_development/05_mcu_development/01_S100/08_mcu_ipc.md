@@ -180,7 +180,7 @@ import pyhbipchal_utils as ipc_utils
 2. 源码路径
 
 ```bash
-root@ubuntu:/app/pyhpipchal_sample# tree
+root@ubuntu:/app/pyhbipchal_sample# tree
 .
 ├── ipcfhal_sample_config.json // 配置文件，用于初始化ipc
 ├── pyhbipchal_test.py // 使用pyhbipchal库编写基础python应用测试过用例
@@ -192,7 +192,7 @@ root@ubuntu:/app/pyhpipchal_sample# tree
 
 测试python库的效果与C++提供的接口是否一致
 ```bash
-root@ubuntu:/app/pyhpipchal_sample# python pyhbipchal_test.py
+root@ubuntu:/app/pyhbipchal_sample# python pyhbipchal_test.py
 Library version: 1.0.0
 ====================test error code==================
 
@@ -244,14 +244,14 @@ rx_data(64)
 
 tx_data and rx_data are identical.
 [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 deinit success.
-root@ubuntu:/app/pyhpipchal_sample#
+root@ubuntu:/app/pyhbipchal_sample#
 
 ```
 
 测试pyhbipchal_utils包的IPC通信功能是否正常。
 
 ```bash
-root@ubuntu:/app/pyhpipchal_sample# python pyhbipchal_utils_test.py
+root@ubuntu:/app/pyhbipchal_sample# python pyhbipchal_utils_test.py
 [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 init success.
 [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 config success.
 Tx: b'ipc_runcmd_send 7 0 123456789 10' | Rx: b'ipc_runcmd_send 7 0 123456789 10'
@@ -440,4 +440,3 @@ Return value：Std_ReturnType
     IPC_E_NO_BUF_ERROR: no buffer
     IPC_E_CHANNEL_NOT_OPEN: Instance has been closed
 ```
-
