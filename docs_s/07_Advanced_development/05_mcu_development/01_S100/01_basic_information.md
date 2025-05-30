@@ -172,12 +172,6 @@ MCU串口log获取，图示：
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)
 
 ## MCU串口使用
-### 旧版硬件
-如果RDK-S100含有连接方式如下，mcu串口和Acore串口为两个串口，自行查看：设备管理器 -》端口-》MCU-COM-波特率921600
-
-![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_COM.png)
-
-### 新版硬件
 如果RDK-S100含有连接方式如下，mcu串口和Acore串口共用一个串口，自行查看：设备管理器 -》端口-》MCU-COM-波特率921600
 
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_COM1.jpg)
@@ -202,15 +196,11 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png)
 
 2. 烧录第一步：进入dfu模式，按照下图拨key即可(烧录完，记得拨回去！！！)
-##### 旧版硬件
 
-![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu.png)
-
-##### 新版硬件
-1. 左下角有两个按键，在旁边有箭头丝印，箭头的方向表示实现对应功能的拨码方向
-2. 电源开关：向下拨动，给板子上电
-3. 烧录开关：向上拨动，给板子烧录
-4. 上述操作完成后，按图片中按键1，同时2处的灯变为红色
+a. 左下角有两个按键，在旁边有箭头丝印，箭头的方向表示实现对应功能的拨码方向
+b. 电源开关：向下拨动，给板子上电
+c. 烧录开关：向上拨动，给板子烧录
+d. 上述操作完成后，按图片中按键1，同时2处的灯变为红色
 
 ![](../../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1.png)
 
