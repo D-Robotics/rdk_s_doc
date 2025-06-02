@@ -30,7 +30,7 @@ S100 Adc 有一个Adc硬件，包含chennel0-channel13和channel15共15个通道
 | `Config/McalCdd/gen_s100_sip_B_mcu1/Adc/inc/Adc_PBcfg.h`          | 定义板级外设配置参数（如通道、采样率等）。               |
 | `Config/McalCdd/gen_s100_sip_B_mcu1/Adc/inc/Adc_Cfg.h`            | 提供通用配置宏或默认配置参数（如最大通道数、中断优先级）。|
 | `Config/McalCdd/gen_s100_sip_B_mcu1/Adc/src/Adc_PBcfg.c`          | 实现板级配置数据（如通道映射、硬件参数）。               |
-| `Service/Cmd_Utility/adc_cmd/src/Adc_Cmd.c`   | ADC sample 代码                                                       |
+| `samples/Adc/src/Adc_Cmd.c`                   | ADC sample 代码                                                       |
 
 
 ## 应用sample
@@ -449,4 +449,3 @@ Parameters(out)
     None
 Return value：None
 ```
-

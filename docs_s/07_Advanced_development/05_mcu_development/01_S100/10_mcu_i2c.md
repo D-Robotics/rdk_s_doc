@@ -40,7 +40,7 @@ S100 为MCU侧实现了一套类似i2c-tools开源工具的命令，来支持用
 
 代码路径
 ```sh
-Service/Cmd_Utility/i2c_cmd/src/I2c_Cmd.c
+samples/I2c/src/I2c_Cmd.c
 ```
 
 目前支持i2cdetect, i2cget, i2cset。
