@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 1.2.2 RDK S100
+# 1.2.1 RDK S100
 
 
 
@@ -73,56 +73,74 @@ RDK S100 开发套件可借助 PC 端工具 D-Navigation 来完成 Ubuntu 系统
 - **USB 烧录方式：** 该模式基于 DFU 协议，当RDK S100遇到无法进入 U-Boot 模式，或者系统损坏导致设备变砖等特殊情况时，使用此模式帮助恢复系统。
 
 
-uboot
 
 下面给出使用PC工具D-Navigation烧录的具体烧录步骤。
 
 :::tip
 
 在烧录Ubuntu系统镜像前，需要做如下准备：
-- 准备两根Type-C数据线，其中一根数据线的一端与板子的debug串口相连接，另一端与PC相连接；另一根数据线的一端与板子的USB下载口相连接，另一端与PC相连接。
-- 下载镜像烧录工具D-Navigation（可[点击此处下载](https://archive.d-robotics.cc/downloads/hbupdate/)）。
+- 准备一根Type-C数据线，数据线的一端与板子的Type-C 接口相连接，另一端与PC相连接。
+- 下载镜像烧录工具D-Navigation（可[点击此处下载](https://archive.d-robotics.cc/downloads/hbupdate/)）,根据系统不同，启动地瓜芯片工具D-Navigation方式分为三种：
+
+  * Windows版本启动：
+
+        双击打开D-Navigation.exe
+
+  * Ubuntu版本启动：
+
+        xhost +
+        sudo ./D-Navigation --no-sandbox
+  * MacOS版本启动(目前支持M芯片)：
+
+        双击打开D-Navigation.exe
 :::
 
 #### uboot烧录
 
 
-1. Key1拨到靠近按键Key2的一端(UFS启动模式)，
+1. 准备RDKS100镜像包，结构如下所示
 
-2. 开发板上电在串口中输入s，进入uboot串口命令行。
+![](../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png)
 
-3. 在出现 **"Hobot$"** 后输入`fastboot 0`，然后将串口终端关闭，查看PC的设备管理器是否出现Android Device设备，如果没有出现，建议安装下winusb_drivers驱动。
+
+2. 开发板上电
 
 :::tip
 
-U-Boot方式需要占用串口，在输入fastboot命令后须保证串口没有被其它设备占用。
+U-Boot方式需要占用串口，须保证串口没有被其它设备或应用占用。
 :::
 
-4. 根据系统不同，启动地瓜芯片工具D-Navigation方式分为两种：
-* Windows版本 启动：
-
-        双击打开D-Navigation.exe
-* Ubuntu版本 启动：
-
-        xhost +
-        sudo ./D-Navigation --no-sandbox
-5. 打开地瓜芯片工具D-Navigation，完成如下操作：
+3. 打开地瓜芯片工具D-Navigation，完成如下操作：
 * 选择产品型号：S100
 * 下载模式：uboot；介质存储emmc；类型：secure
 * 点击浏览选择固件所在product文件夹
-* 选择与RDK S连接的串口，波特率921600
-* 点击开始升级
+* 选择与RDK S100连接的串口，波特率921600
+* 点击开始升级(升级过程中，如有'Need manual reset'提示，请重新上电)
 
 ![image-S100-download](../../../static/img/01_Quick_start/image/install_os/image-S100-download.png)
 
-4. 待升级完成后重启。
+4. 待升级完成后重新上电
 
-#### USB烧录
+#### USB烧录(空片烧录或烧挂重新烧录)
 
 
-1. Key1拨到远离按键Key2的一端(DFU启动模式)。
+1. 准备RDKS100镜像包，结构如下所示
 
-2. 打开地瓜芯片工具D-Navigation，完成如下操作
+![](../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png)
+
+2. 将设备切换到dfu模式下，按下图操作
+
+烧录第一步：进入dfu模式，按照下图拨key即可(烧录完，记得拨回去！！！)
+
+* 左下角有两个按键，在旁边有箭头丝印，箭头的方向表示实现对应功能的拨码方向
+* 电源开关：向下拨动，给板子上电
+* 烧录开关：向上拨动，给板子烧录
+* 上述操作完成后，按图片中按键1，同时2处的灯变为红色，红灯亮起，表示进入dfu模式
+
+![](../../../static/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1.png)
+
+
+3. 打开地瓜芯片工具D-Navigation，完成如下操作
 * 选择产品型号：S100
 * 下载模式：usb；介质存储emmc；类型：secure
 * 点击浏览选择固件所在product文件夹
@@ -130,7 +148,7 @@ U-Boot方式需要占用串口，在输入fastboot命令后须保证串口没有
 
 ![image-S100-download](../../../static/img/01_Quick_start/image/install_os/image-S100-download_dfu.jpg)
 
-3. 关机，将Key1拨到靠近按键Key2的一端(UFS启动模式)后开机。
+4. 升级完成后，关闭电源，将烧录开关向下拨动后(从dfu模式退出)，重新上电。
 
 
 ### 启动系统
