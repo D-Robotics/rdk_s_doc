@@ -2851,7 +2851,7 @@ isp_attr_t
 | 名称        | 类型            | 含义                                                                                                                                 | 最大值 | 最小值 | 默认值 | 是否必选 |
 |-------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------------|--------|--------|--------|----------|
 | channel     | isp_channel_t   | isp通道属性                                                                                                                          | \-     | \-     | \-     | 是       |
-| sched_mode  | sched_mode_e    | isp调度模式 0 SCHED_MODE_TDMF 硬件直连 1 SCHED_MODE_MANUAL manual模式 2 SCHED_MODE_PASS_THRU 全online模式                            | 2      | 0      | \-     | 是       |
+| sched_mode  | sched_mode_e    | isp调度模式 1 SCHED_MODE_MANUAL manual模式 2 SCHED_MODE_PASS_THRU 全online模式                                                       | 2      | 1      | \-     | 是       |
 | work_mode   | isp_work_mode_e | isp工作模式 0 ISP_WORK_MODE_NOMAL 普通模式 1 ISP_WORK_MODE_TPG isp输出testpattern模式 2 ISP_WORK_MODE_CIM_TPG cim输出testpattern模式 | 2      | 0      | \-     | 否       |
 | hdr_mode    | hdr_mode_e      | isp hdr模式使能                                                                                                                      | 1      | 0      | \-     | 否       |
 | size        | image_size_t    | isp处理尺寸                                                                                                                          | \-     | \-     | \-     | 否       |
@@ -2863,15 +2863,66 @@ isp_channel_t
 
 | 名称    | 类型     | 含义                                                         | 最大值 | 最小值 | 默认值 | 是否必选 |
 |---------|----------|--------------------------------------------------------------|--------|--------|--------|----------|
-| hw_id   | uint32_t | isp硬件id                                                    | 1      | 0      | \-     | 是       |
+| hw_id   | uint32_t | isp硬件id                                                    | 1      | 0      | -     | 是       |
 | slot_id | uint32_t | isp内部硬件通道 online输入时配置0\~3，offline输入时配置4\~11 | 11     | 0      | 0      | 是       |
 
 image_size_t
 
 | 名称   | 类型     | 含义        | 最大值 | 最小值 | 默认值 | 是否必选 |
 |--------|----------|-------------|--------|--------|--------|----------|
-| width  | uint32_t | isp处理宽度 | 4096   | 32     | \-     | 是       |
-| height | uint32_t | isp处理高度 | 2160   | 32     | \-     | 是       |
+| width  | uint32_t | isp处理宽度 | 4096   | 32     | -     | 是       |
+| height | uint32_t | isp处理高度 | 2160   | 32     | -     | 是       |
+
+isp_ichn_attr_t
+
+| 名称               | 类型         | 含义                              | 最大值 | 最小值 | 默认值 | 是否必选 |
+| -------------------- | -------------- | ----------------------------------- | -------- | -------- | -------- | ---------- |
+| input_crop_cfg   | crop_cfg_t | 输入裁剪配置                      | -      | -      | -      | 否       |
+| in_buf_noclean   | uint32_t    | 输入buffer是否做cache clean       | 1      | 0      | -      | 否       |
+| in_buf_noncached | uint32_t    | 输入buffer是否分配为non cache内存 | 1      | 0      | -      | 否       |
+
+crop_cfg_t
+
+| 名称   | 类型           | 含义         | 最大值 | 最小值 | 默认值 | 是否必选 |
+| -------- | ---------------- | -------------- | -------- | -------- | -------- | ---------- |
+| rect   | image_rect_t | 输入裁剪尺寸 | -      | -      | -      | 否       |
+| enable | HB_BOOL       | 是否是能crop | 1      | 0      | -      | 否       |
+
+image_rect_t
+
+| 名称   | 类型      | 含义     | 最大值 | 最小值 | 默认值 | 是否必选 |
+| -------- | ----------- | ---------- | -------- | -------- | -------- | ---------- |
+| x      | uint32_t | x坐标    | -      | -      | -      | 否       |
+| y      | uint32_t | y坐标    | -      | -      | -      | 否       |
+| width  | uint32_t | rect宽度 | -      | -      | -      | 否       |
+| height | uint32_t | rect高度 | -      | -      | -      | 否       |
+
+isp_ochn_attr_t
+
+| 名称                 | 类型                          | 含义                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | 最大值 | 最小值 | 默认值 | 是否必选 |
+| ---------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | -------- | -------- | ---------- |
+| stream_output_mode | isp_stream_output_mode_e | 是否otf输出：1-enable0-disable                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 1      | 0      | 0      | 是       |
+| axi_output_mode    | isp_axi_output_mode_e     | ddr输出类型：AXI_OUTPUT_MODE_DISABLE = 0, | 14     | 0      | 0      | 是       |
+|||AXI_OUTPUT_MODE_RGB888 = 1,|||||
+|||AXI_OUTPUT_MODE_RAW8 = 2,
+|||AXI_OUTPUT_MODE_RAW10 = 3,
+|||AXI_OUTPUT_MODE_RAW12 = 4,
+|||AXI_OUTPUT_MODE_RAW16 = 5,
+|||AXI_OUTPUT_MODE_RAW24 = 6,
+|||AXI_OUTPUT_MODE_YUV444 = 7,
+|||AXI_OUTPUT_MODE_YUV422 = 8, /* yuv422 */
+|||AXI_OUTPUT_MODE_YUV420 = 9, /* yuv420 */
+|||AXI_OUTPUT_MODE_IR8 = 10,
+|||AXI_OUTPUT_MODE_YUV420_RAW12 = 11,/* yuv420 & raw12*/
+|||AXI_OUTPUT_MODE_YUV422_RAW12 = 12,/* yuv422 & raw12 */
+|||AXI_OUTPUT_MODE_YUV420_RAW16 = 13, /* yuv420 & raw16 */
+|||AXI_OUTPUT_MODE_YUV422_RAW16 = 14, /* yuv422 & raw16 */ 
+| output_crop_cfg    | crop_cfg_t                  | 输出裁剪配置                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | -      | -      | -      | 是       |
+| out_buf_noinvalid  | uint32_t                     | 输出buffer是否做cacha invalid                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | 1      | 0      | 0      | 否       |
+| out_buf_noncached  | uint32_t                     | 输出buffer是否分配为non cached                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 1      | 0      | 0      | 否       |
+| buf_num             | uint32_t                     | 分配输出buffer的个数                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | 16     | 3      | 0      | 是       |
+
+
 
 **YNR**
 
