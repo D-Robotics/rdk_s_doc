@@ -10,7 +10,7 @@ sidebar_position: 06
 # 在线镜像构建，从地瓜及第三方APT源下载依赖的deb包
 sudo ./pack_image.sh
 
-# 离线镜像构建，只安装out/product/deb_packages下的deb包
+# 离线镜像构建，只安装out/product/deb_packages下的deb包，使用此选项时请确保out/product/deb_packages内的deb符合预期，同时out/product/rootfs_packages下已有预编译根文件系统包
 sudo ./pack_image.sh -l
 
 # 仅搭建deb包编译环境，不打包镜像
