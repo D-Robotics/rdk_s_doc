@@ -15,6 +15,6 @@ hrut_socuid
 ## 常用命令
 
 ```shell
-sunrise@ubuntu:~$ sudo hrut_socuid
-soc_uid: 0x210627120003012002160908030307
+sunrise@ubuntu:~$ hrut_socuid
+060c0b0d3090694108255c4c00001079
 ```
