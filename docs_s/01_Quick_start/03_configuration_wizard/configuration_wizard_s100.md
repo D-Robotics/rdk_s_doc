@@ -70,10 +70,6 @@ sudo systemctl restart ssh #重启 SSH 服务
 
 SSH 的使用请查看 [远程登录 - SSH 登录](../remote_login#ssh)。
 
-## 开启 VNC 服务
-
-待补充
-
 ## 设置登录模式
 
 ### 字符终端自动登录

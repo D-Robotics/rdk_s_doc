@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # 1.4 远程登录
 
-本章节旨在向需要通过个人电脑(PC)远程访问开发板的用户介绍如何通过串口、网络(VNC、SSH)方式进行远程登录。
+本章节旨在向需要通过个人电脑(PC)远程访问开发板的用户介绍如何通过串口、网络(SSH)方式进行远程登录。
 
 :::tip
 通过网络方式远程登录前，开发板需要通过有线以太网或者无线 WiFi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：
@@ -47,31 +47,38 @@ sidebar_position: 4
 - 点击`OK`，输入用户名：`root`、密码：`root`登录设备
   ![image-Uart-Login](../../static/img/01_Quick_start/image/remote_login/image-Uart-Login.gif)
 
-此时，可使用`ifconfig`命令查询开发板 IP 地址，其中 eth0、wlan0 分别代表有线、无线网络：
+此时，可使用`ifconfig -a`命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：
 
 ```bash
-root@ubuntu:~# ifconfig
-eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.1.255
-        inet6 fe80::211:22ff:feaa:7637  prefixlen 64  scopeid 0x20<link>
-        ether 00:11:22:aa:76:37  txqueuelen 1000  (Ethernet)
-        RX packets 767  bytes 54006 (54.0 KB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 5766  bytes 246466 (246.4 KB)
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether c8:30:76:63:2d:93  txqueuelen 1000  (Ethernet)
+        RX packets 7547  bytes 2230733 (2.2 MB)
+        RX errors 0  dropped 2  overruns 0  frame 0
+        TX packets 1126  bytes 108615 (108.6 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 43  base 0xa000
+        device interrupt 93
+
+eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
+        inet6 fe80::e0b2:71ff:fea0:6ba7  prefixlen 64  scopeid 0x20<link>
+        ether e2:b2:71:a0:6b:a7  txqueuelen 1000  (Ethernet)
+        RX packets 43  bytes 3882 (3.8 KB)
+        RX errors 0  dropped 1  overruns 0  frame 0
+        TX packets 46  bytes 6234 (6.2 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 99
 
 lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         inet 127.0.0.1  netmask 255.0.0.0
         inet6 ::1  prefixlen 128  scopeid 0x10<host>
         loop  txqueuelen 1000  (Local Loopback)
-        RX packets 3847  bytes 339115 (339.1 KB)
+        RX packets 46  bytes 6342 (6.3 KB)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 3847  bytes 339115 (339.1 KB)
+        TX packets 46  bytes 6342 (6.3 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether 08:e9:f6:ae:f8:8a  txqueuelen 1000  (Ethernet)
+        ether 28:d0:43:83:63:57  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
@@ -98,13 +105,8 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../02_System_configuration/01_network_blueteeth.md)章节进行配置。
 
-## VNC 登录
-
-待补充
-
 ## SSH 登录{#ssh}
-
-除了 VNC 登录远程桌面外，还可以通过 SSH 连接登录开发板。下面分别介绍终端软件、终端命令行两种方法的创建步骤。
+下面分别介绍终端软件、终端命令行两种方法的创建步骤。
 
 ### 终端软件
 
