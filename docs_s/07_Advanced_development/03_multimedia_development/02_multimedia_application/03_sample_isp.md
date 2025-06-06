@@ -1,10 +1,19 @@
 # sample_isp 使用说明
 
-## get_isp_data
-
 ### 功能概述
 
-`get_isp_data` 完成 Camera Sensor 、 MIPI CSI 、 CIM 和 ISP 模块的初始化，实现从 ISP 模块获取视频帧数据的功能，支持从 ISP 模块获取 YUV 格式的图像。
+`sample_isp` 完成 Camera Sensor 、 MIPI CSI 、 CIM 和 ISP 模块的初始化，实现从 ISP 模块获取视频帧数据的功能，支持从 ISP 模块获取 YUV 格式的图像。
+
+### sample_isp 架构说明
+
+`sample_isp` 包含多个示例，每个示例均以子目录形式存在 `/app/multimedia_samples/sample_isp` 下，每个子目录描述如下
+
+| 目录      | 描述 |
+| ----------- | ----------- |
+| [get_isp_data](#get_isp_data)  | 单路 sensor 获取YUV视频帧示例  |
+| [isp_feedback](#isp_feedback)  | ISP回灌视频帧示例  |
+
+## get_isp_data
 
 #### 代码位置及目录结构
 
@@ -116,3 +125,109 @@ quit
 
 执行程序后会获取到如 `handle_100197_isp_chn0_1920x1080_stride_1920_frameid_27_ts_20832399744000.yuv` 命名格式的 YUV 图像。
 
+## isp_feedback
+
+#### 代码位置及目录结构
+
+`isp_feedback` 相关源码路径为 `/app/multimedia_samples/sample_isp/isp_feedback`，代码结构如下：
+
+```shell
+── isp_feedback
+   ├── isp_feedback.c
+   └── Makefile
+```
+
+- Makefile：用于编译程序的 Makefile 文件。
+- isp_feedback.c：程序的主要源代码文件。
+
+
+### 编译
+
+在源码路径下执行 `make` 命令即可完成编译：
+
+```Shell
+cd /app/multimedia_samples/sample_isp/isp_feedback
+make
+```
+
+### 运行
+#### 程序运行方法
+直接执行程序 `./isp_feedback -h` 可以获得帮助信息：
+
+#### 程序参数选项说明
+
+
+执行命令 `./isp_feedback -h` 可以获得帮助信息。
+
+```shell
+root@ubuntu:/app/multimedia_samples/sample_isp/isp_feedback# ./isp_feedback -h
+Usage: isp_feedback [OPTIONS]
+Options:
+  -s <sensor_index>      Specify sensor index
+  -f <file>              Specify Raw filename
+  -F <format>            Specify Raw format eg: raw8 raw10 raw12
+  -h                     Show this help message
+index: 0  sensor_name: imx219-30fps             config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw10_30fps_2lane.c
+index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
+index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
+index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy                    config_file:dummy_sensor.c
+```
+
+**命令参数说明：**
+
+- `s <sensor_index>`: 该选项用于指定要使用的传感器索引。用户需要提供一个有效的索引值。
+- `f <file>`: 该选项用于指定要使用 Raw 图的文件名。
+- `F <format>`: 该选项用于指定要使用 Raw 图的的格式，raw8、raw10、raw12。
+- `h`: 显示帮助信息。
+
+#### 运行效果
+
+- 先使用 `get_vin_data -s 0` 获取一张 imx219 的 raw 图，`get_vin_data` 的使用详细参考 [sample_vin](sample_vin.html)。
+- 接下来我们可以根据提示选择对应的 Camera Sensor 准备好的 RAW 图，ISP 回灌时会使用对应的 Camera Sensor 的 ISP 效果库进行调校。
+
+<div class="note">
+<strong>注意：</strong> <br />
+选择指定的 Camera Sensor 时，无需实际接入硬件设备。系统会将该传感器的参数应用到虚拟 Camera Sensor，并使用对应的 ISP 效果库进行调校。<br />
+</div>
+
+以 imx219 sensor 为例，执行 `./isp_feedback -s 0 -f handle_34661_chn0_1920x1080_stride_2400_frameid_3_ts_26933367644725.raw -F raw10` 。
+
+```shell
+root@ubuntu:/app/multimedia_samples/sample_isp/isp_feedback# ./isp_feedback -s 0 -f handle_34661_chn0_1920x1080_stride_2400_frameid_3_ts_26933367644725.raw -F raw10
+Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
+format_str = raw10
+[INFO] Create isp node handle: 100197
+isp process one frame cost:  2187075 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2128900 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2115925 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2112825 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2112700 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2115200 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2116475 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2112700 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2112775 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp process one frame cost:  2114200 ns
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+```
+
+程序运行启动，会在当前目录保存如下调校后的的 yuv 图像，默认回灌10次，计算每次的回灌耗时：
+
+- Using index / sensor_name / config_file：表明当前使用 sensor index 为 0，sensor 名称为 imx219，对应的 sensor 配置文件为 linear_1920x1080_raw10_30fps_1lane.c。
+- format_str = raw10：用户通过 -F raw10 参数指定 RAW 数据格式为 RAW10，该格式成功解析并设置。
+- 每处理一帧 RAW 数据，会输出以下ISP 处理完成耗时信息，isp process one frame cost:  2170275 ns。
+
+### isp_feedback 常见问题
+
+- 当 `isp_feedback` 指定的 RAW 图分辨率和格式与指定的 Camera Sensor 的分辨率及格式完全一致时，可以正常进行回灌。
+- 如果指定的 Camera Sensor 分辨率或格式与回灌图像不匹配，可能会导致图像异常。
