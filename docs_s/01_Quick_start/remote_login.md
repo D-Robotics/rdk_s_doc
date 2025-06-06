@@ -22,7 +22,7 @@ sidebar_position: 4
 
 在使用串口登录前，需要确认开发板串口线跟电脑正确连接，连接方法可参考对应开发板的调试串口章节：
 
-- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/rdk_s100.md#debug_uart)
+- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#debug_uart)
 
 串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
 
@@ -103,7 +103,7 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 ![image-20220416110242445](../../static/img/01_Quick_start/image/remote_login/image-20220416110242445.png)
 
-如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../02_System_configuration/01_network_blueteeth.md)章节进行配置。
+如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../02_System_configuration/01_network_bluetooth.md)章节进行配置。
 
 ## SSH 登录{#ssh}
 下面分别介绍终端软件、终端命令行两种方法的创建步骤。
