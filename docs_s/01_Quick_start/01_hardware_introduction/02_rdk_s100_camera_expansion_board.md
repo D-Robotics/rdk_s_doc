@@ -4,6 +4,8 @@ sidebar_position: 4
 
 # 1.1.2 相机扩展板
 
+![image-rdk_100_camera_expansion_board](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board.png)
+
 地瓜机器人 RDK S100 相机扩展板是 RDK S100 开发者套件的一个扩展件，用于将开发者套件上的 Camera 拓展接口转换为 MIPI 接口和 GMSL 接口。便于开发者接入 MIPI 或者 GMSL 相机，进行功能验证和二次开发。
 
 :::warning
