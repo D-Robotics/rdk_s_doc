@@ -131,13 +131,14 @@ sidebar_position: 2
   sp_module_bind(vio -> encoder) success!
   ```
 
+<!--
 ## 视频文件解码并显示
 
 本示例`decoder2display`实现了视频文件解码，并通过`HDMI`接口输出，用户可通过显示器预览画面。
 
 示例流程框图：（待更新）
 
-<!-- ![image-decoder_to_display](../../../static/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-decoder_to_display.png) -->
+![image-decoder_to_display](../../../static/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-decoder_to_display.png)
 
 - **环境准备：**
 
@@ -178,7 +179,7 @@ sidebar_position: 2
 
 示例流程框图：（待更新）
 
-<!-- ![rtsp2display](../../../static/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-rtsp_to_display.jpg) -->
+![rtsp2display](../../../static/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-rtsp_to_display.jpg)
 
 - **环境准备：**
 
@@ -228,6 +229,7 @@ sidebar_position: 2
 
 - **注意事项：**
   - 使用 UDP 协议传输码流时，可能出现因网络丢包导致的花屏现象，此时可切换成 TCP 协议传输解决。
+!-->
 
 ## VPS 缩放示例
 
