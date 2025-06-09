@@ -33,7 +33,7 @@ sudo rdkos_info
 部分输出如下：
 
 ```
-sunrise@ubuntu:~$ sudo rdkos_info
+sunrise@ubuntu:/root$ sudo rdkos_info
 ================ RDK System Information Collection ================
 
 [Hardware Model]:
@@ -42,29 +42,29 @@ sunrise@ubuntu:~$ sudo rdkos_info
 [CPU And BPU Status]:
         =====================1=====================
         temperature-->
-                pvt_cmn_pvtc1_t1 : 38.749 (C)
+                pvt_cmn_pvtc1_t1 : 38.932 (C)
                 pvt_cmn_pvtc1_t2 : 40.587 (C)
-                pvt_mcu_pvtc1_t1 : 37.829 (C)
-                pvt_mcu_pvtc1_t2 : 38.197 (C)
-                pvt_bpu_pvtc1_t1 : 38.932 (C)
+                pvt_mcu_pvtc1_t1 : 38.013 (C)
+                pvt_mcu_pvtc1_t2 : 38.381 (C)
+                pvt_bpu_pvtc1_t1 : 39.300 (C)
         voltage-->
                 FAKE     : 100.0 (mV)
                 VDDQ_DDR2 : 504.0 (mV)
                 VDD_MCU  : 749.0 (mV)
                 VDDIO_PVT_MCU : 1794.0 (mV)
                 VDDIO_TOP4_1V8 : 1794.0 (mV)
-                VDDQ_DDR0 : 504.0 (mV)
+                VDDQ_DDR0 : 498.0 (mV)
                 VDD2H_DDR0 : 1042.0 (mV)
                 VAA_DDR0 : 1794.0 (mV)
                 VDD_DDR0 : 743.0 (mV)
-                VDDQ_DDR1 : 504.0 (mV)
+                VDDQ_DDR1 : 498.0 (mV)
                 VDD2H_DDR1 : 1052.0 (mV)
                 VAA_DDR1 : 1794.0 (mV)
                 VDD_DDR1 : 743.0 (mV)
                 VDDIO_SD_SDIO_T : 1788.0 (mV)
                 VDD_CPU  : 776.0 (mV)
                 VAA_DDR2 : 1780.0 (mV)
-                VDD2H_DDR2 : 1030.0 (mV)
+                VDD2H_DDR2 : 1042.0 (mV)
                 VDD_DDR2 : 737.0 (mV)
                 VDDIO_TOP2_1V8 : 1780.0 (mV)
                 VDD_BPU  : 737.0 (mV)
@@ -90,12 +90,15 @@ sunrise@ubuntu:~$ sudo rdkos_info
 
 [Total Memory]:         4.7Gi
 [Used Memory]:          1.6Gi
-[Free Memory]:          1.7Gi
+[Free Memory]:          1.5Gi
 
 
 [RDK OS Version]:
         4.0.2-Beta
 
 [RDK Kernel Version]:
-        Linux ubuntu 6.1.112-rt43-g57e7e01f3c97-g9bfaa44977cf #26 SMP PREEMPT_RT Thu Jun  5 22:09:13 CST 2025 aarch64 aarch64 aarch64 GNU/Linux
+        Linux ubuntu 6.1.112-rt43-DR-4.0.2-2506091317-g08c4b8-g2e7d75 #80 SMP PREEMPT_RT Mon Jun  9 13:18:49 CST 2025 aarch64 aarch64 aarch64 GNU/Linux
+
+[RDK Miniboot Version]:
+        4.0.2-20250605231718
 ```
