@@ -64,6 +64,10 @@ sidebar_position: 2
 
 ## 转接板
 
+| 类型 | 供应商 | 型号 | 描述 | 购买链接 |
+| --- | --------- | -------- | --------------- | --------- |
+| 音频转接板 | 微雪 | Audio Driver HAT  | 支持环形4MIC录音，双通道播放，音频回采 | [购买链接](https://www.waveshare.net/shop/Audio-Driver-HAT.htm)  |
+
 :::tip
 持续更新中....
 :::
