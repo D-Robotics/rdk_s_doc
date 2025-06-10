@@ -305,3 +305,22 @@ void EL1_Undefined_Handler(void)
     __asm volatile ("ERET");
 }
 ```
+## MCU1 main函数简介
+main函数是进入系统后的关键代码，下述代码也是mcu1正常启动的关键，请勿随意删除相关代码，删除可能会导致启动异常。
+```c
+int main(void)
+{
+    Ipc_MainPowerUp = TRUE;   /* IPC 上电标志，mcu1默认上电，因为在mcu0已上电 */
+    PpsIcu_Irq_Init();        /* PPS相关中断配置为边沿触发函数 */
+    Uart_Init();              /* UART串口初始化，debug用 */
+    Log_Init();               /* log串口初始化，初始化后可在Acore获取相应mcu log信息 */
+    #ifdef SHELL_ENABLE
+    Shell_Init();             /* shell命令初始化，通过SHELL_ENABLE宏进行开关 */
+    #endif
+    Version_into_AonSram();   /* 获取mcu版本信息，初始化后可在Acore获取相应mcu version信息 */
+    LogSync("MCU FreeRtos Lite Init Success!\r\n");
+    FreeRtos_Irq_Init();      /* FreeRtos 中断初始化 */
+    FreeRtos_Task_Init();     /* FreeRtos 任务初始化以及调度启动 */
+    for(;;){};
+}
+```
