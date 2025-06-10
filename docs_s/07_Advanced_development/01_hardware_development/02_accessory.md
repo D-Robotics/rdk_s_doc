@@ -8,6 +8,10 @@ sidebar_position: 2
 
 ## 基础配件{#basic_accessories}
 
+| 类型 | 供应商 | 型号 | 描述 | 购买链接 |
+| --- | --------- | -------- | --------------- | --------- |
+| 电源 | 悠品 | PD-1904740T | 19V/4.74A 电源 | [购买链接](https://item.jd.com/100048009312.html)  |
+
 :::tip
 持续更新中....
 :::
@@ -15,7 +19,7 @@ sidebar_position: 2
 ## 摄像头
 
 |   型号  | 软件支持    |  描述   | 供应商  |   购买链接    |
-| ------ | -------- | ------- | ------- | ----------- | 
+| ------ | -------- | ------- | ------- | ----------- |
 | IMX219 摄像头（兼容树莓派 5） | 支持V4L2接口及HBN接口 | <li>IMX219 传感器</li><li>800W 像素</li><li> FOV 120度</li><li>MIPI 接口</li> | 微雪  | [购买链接](https://www.waveshare.net/shop/IMX219-200-Camera.htm) |
 | SC230AI 双目摄像头（V3 硬件版本） | 支持HBN接口    | <li>SC230AI 传感器</li><li>200W 像素</li><li>FOV 178 度</li><li>MIPI 接口</li> | 亚博 | [购买连接](https://item.taobao.com/item.htm?spm=a1z0d.6639537%2F202410.item.d893698797289.57177484f3aFnW&id=893698797289&from=cart&skuId=5743852141425&pisk=gGwSXq90eUY5z6kpAbj2h4Y-9QHQRiWNdHiLjkpyvYH-RvZQXXpFZYlIdr34U4rre2MQAlhL82ryqS4aXLyPZvJIEvDd7NWNQQroKvd-0HY9rqnIx9J-ppHoHzuA1KXNQuqX40IaDOyeid1I2BpLJbhvkD0x20nJeiMxjDDpeXpJME3mkvp-wXEYDcnp2vppwqdx40LJ2LhpDt3mvv3LJvIjHqmKaPXj0_g8Vg535mYFGOESlppLhmQoWu_WdmymVVu_289ppMmSNVE-laL2yRhYxXwHxpGL254nXzLRR22bD8FTWZRry5iQbWaAYBa_l5HjmSbBOVNL45VKGgB8cYgStmhJfIH79z2IZ7thjoH8o50iwsbmc8yZOVcXkaE4c4h_Oz7Dp4P_DrGa3EJZB54bdfHO4gpZ5c7HOnGMdmgNciOHtITJ5uFVG7rjwmm27isXPBc-mmgNciOHtbnm0GSfcUOh.) |
 | SC132GS 双目摄像头       | 支持HBN接口    |  <li>SC132GS 传感器</li><li>200W 像素</li><li> FOV 157度</li><li>MIPI接口</li> |御光| 原厂直采 |
@@ -60,6 +64,11 @@ sidebar_position: 2
 :::
 
 ## 显示屏
+
+| 类型 | 供应商 | 型号 | 描述 | 购买链接 |
+| --- | --------- | -------- | --------------- | --------- |
+| HDMI | 微雪 | 10英寸触控屏 | 分辨率1280x800，钢化玻璃面板，高色域触控屏 | [购买链接](https://www.waveshare.net/shop/10.1HP-CAPLCD-Monitor.htm)  |
+| HDMI | 微雪 | 13.3英寸触控屏 | 分辨率1920x1080，钢化玻璃面板，高色域触控屏 | [购买链接](https://www.waveshare.net/shop/13.3inch-HDMI-LCD-H-with-Holder-V2.htm)  |
 
 :::tip
 持续更新中....
