@@ -8,7 +8,7 @@ sidebar_position: 9
 
 - 最大可使用CAN controller数量：10。
 - CAN最高传输速率：8M。(受限于transceiver的波特率限制，目前实验室只测试验证到5M波特率。)
-- 个controller的Ram内划分的Block个数：
+- 一个controller的Ram内划分的Block个数：
     - CAN0~CAN3：4 Block (可变payload);
     - CAN4~CAN9：4 Block (可变payload)+ 4 Block(固定payload)。
 - 一个controller支持的最大Mailbox个数为128。
@@ -238,7 +238,7 @@ RDK S100默认配置了6组参数，用户可以通过修改Can_aControllerConfi
 
 ### 使用指南
 
-MCU侧CAN2IPC源码目录：mcu/Service/HouseKeeping/can_ipc/hb_CAN2IPC.c
+MCU侧CAN2IPC源码目录：mcu/Service/HouseKeeping/can_ipc/src/hb_CAN2IPC.c
 
 - 源码中hb_CAN2IPC_MainFunction函数被OS周期性调用，其内部通过调用hb_CAN2IPC_Proc 函数将指定的CAN控制器数据通过IPC转发到Acore。
 - hb_CAN2IPC_Proc 函数中三个传入参数分别为：CAN控制器、ipc instance、ipc 指定instance下的虚拟chennel。
