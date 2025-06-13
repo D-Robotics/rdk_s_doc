@@ -10,10 +10,10 @@ sidebar_position: 1
 
 ## 基础信息
 
-1. MCU编译工具链为GCC工具链，版本为gcc-arm-none-eabi-10.3-2021.10；
-2. MCU核为ARM R52+，可以用ARM R52 technical reference manual文档作为参考，请至ARM官网查询；
+1. MCU编译工具链为GCC工具链，版本为gcc-arm-none-eabi-10.3-2021.10
+2. MCU核为ARM R52+，可以用ARM R52 technical reference manual文档作为参考：[官网链接](https://developer.arm.com/documentation/100026/latest)
 3. MCU运行的操作系统均为FreeRTOS，版本为FreeRTOS Kernel V10.0.1
-4. MCU主要分为两部分：MCU0和MCU1。MCU0主要负责启动Acore、MCU1以及电源管理等功能，目前不开源；MCU1主要负责跑业务等功能，开源，客户可根据自己需求进行修改。
+4. MCU主要分为两部分：MCU0和MCU1。MCU0主要负责启动Acore、MCU1以及电源管理等功能，目前不开源；MCU1主要负责跑业务等功能，开源，客户可根据自己需求进行修改
 
 ## MCU框架
 MCU0是板子启动的开始，也是重中之重。因为MCU0负责启动Acore、MCU1以及电源管理等功能。Acore所运行的linux操作系统是客户开发功能的重要载体，而MCU1运行的FreeRTOS操作系统为客户的实时任务进行保驾护航。
@@ -219,12 +219,12 @@ dfu-util.exe -d 3652:6625 -a 3 -R -D out/product/xmodem_tools/sec/out/s100/u-boo
 ```
 4. 烧录第三步：整体烧录命令如下：
 ```c
-fastboot.exe oem interface:mtd 
+fastboot.exe oem interface:mtd
 fastboot.exe flash hb_vspiflash out/product/img_packages/disk/miniboot_flash_nose.img
 
 fastboot.exe oem interface:blk
 fastboot.exe oem bootdevice:scsi
-fastboot.exe flash 0x0 out/product/img_packages/disk/ufs_disk.simg
+fastboot.exe flash 0x0 out/product/img_packages/disk/emmc_disk.simg
 ```
 ### 自动烧录
 1. 能够正常进入Uboot，下载模式选择“uboot”
