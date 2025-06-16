@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 7.1.2 配件清单
 
-认证配件清单是指经过 D-Robotics 官方认证，可以适配 RDK S100 开发板的第三方配件配件清单。主要包含基础配件(电源、外壳、散热器)、摄像头、显示屏等类别，清单内容会不定期更新，逐步添加更多的配件型号。
+认证配件清单是指经过 D-Robotics 官方认证，可以适配 RDK S100 开发板的第三方配件清单。主要包含基础配件(电源、外壳、散热器)、摄像头、显示屏等类别，清单内容会不定期更新，逐步添加更多的配件型号。
 
 ## 基础配件{#basic_accessories}
 
@@ -47,7 +47,7 @@ sidebar_position: 2
 
 | 类型  | 供应商   | 型号         | 描述                                     | 购买链接                                                                                                    |
 |-------|-------|--------------|----------------------------------------|---------------------------------------------------------------------------------------------------------|
-| RS485 | 维特智能 | WTGAHRS5-485 | <li>六轴加速度计</li><li>六轴陀螺仪</li> | [购买链接](https://mall.wit-motion.cn/pc/#/detail?productId=1818234342381350912&shopId=1809199270148489216) |
+| RS485 | 维特智能 | WT61PC-485+485连接线 | <li>六轴加速度计</li><li>六轴陀螺仪</li> | [购买链接](https://detail.tmall.com/item.htm?abbucket=8&id=598376182207&pisk=gOls0DNIoGj1FlFAlRYFOsoQIsPjGeRrBZaxrqCNk5FODsiZyA7qgAkfGDiuHsuwIETbAmqaQ5ENGSgjmmyxgolfSXi5g1-MIqCbgSKy4QRrSVP0M3rWI97RSrzfDGI4WkFLgrGi-qQrSVV0DwSvUv3GlXIGsiUYDeNLlzXTMPCA9eabPoFYX-IKJrELMSEA62IL7z6OHsnA9BUgoGBYBseLpr4uMonYBegLxrNYDv9NOrpTyVTwWLchWOHmWk1AMfdgCusLfy4EOM2gVVh1Gs_05RZ-WktOq3X8pq2jiZfbxVHomznOXnZmO2hte0KFQlH7l4kjvEWjVDM8Ofw1k3FZfXFK1RAlN0ebfvhTdZCx72ZLFxi6fOqtQDwuJJQXZyozvVctdEjKW0r_6yeewUgLHvlgEf-d17Ho75kx2HWaXYaA4-CzVBYlhwwlGyZyRe6cn9sOVVKfVkh8By464eTCjtyT-yZWRes1eRU35DLBRGBd.&rn=8b71112fa9ac193128b4a8625125e912&skuId=5660200207716&spm=a1z10.3-b-s.w4011-23008269807.65.52764094tkJGsV) |
 
 :::tip
 持续更新中....
