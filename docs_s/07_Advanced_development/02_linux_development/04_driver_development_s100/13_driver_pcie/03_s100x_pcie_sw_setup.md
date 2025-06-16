@@ -57,12 +57,6 @@ CONFIG_PCIE_HOBOT_EP_FUN=m
 CONFIG_PCIE_HOBOT_DEBUG=y
 ```
 
-如果需要功能安全：
-
-```shell
-CONFIG_PCIE_HOBOT_STL=y
-```
-
 ## DTS
 要注意同一个控制器只能配置为RC或者EP模式。
 
