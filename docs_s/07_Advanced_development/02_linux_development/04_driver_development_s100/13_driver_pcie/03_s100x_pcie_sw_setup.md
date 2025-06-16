@@ -72,3 +72,21 @@ CONFIG_PCIE_HOBOT_DEBUG=y
 
 除了控制器本身需要配置，其子节点 `funX` 也需要进行配置。
 `fun0` 必须配置为使能状态。
+
+### PCIE链路配置
+PCIE的链路支持3种模式：
+- PCIE0 x4 Lane;
+- PCIE0 x2 Lane + GMAC0 + GMAC1;
+- PCIE0 x1 Lane + PCIE1 x1 Lane + GMAC0 + GMAC1;
+
+链路配置在dts内如下：
+```dts
+/* rdk-v0p5.dtsi */
+...
+
+    &hsis0 {
+        hsi-mode = <0x4>;  /* 0x1: pcie x4, 0x4: pcie x2 + gmac0 + gmac1, 0x8: pcie0 x1 + pcie1 x1 + gmac0 + gmac1 */
+    };
+
+...
+```
