@@ -6,10 +6,10 @@ sidebar_position: 6
 
 ## 系统镜像与工具
 
-| 名称                                                         | 最新版本    | 上传日期   | 说明文档                                                  |
-| ------------------------------------------------------------ | ----------- | ---------- | --------------------------------------------------------- |
-| [系统镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/) | V4.0.2-beta | 2025-06-10 | 产品 3D 模型，STEP 格式，便于进行机器人布局，外壳设计等。 |
-| [D-Navigation](https://archive.d-robotics.cc/downloads/software_tools/download_tools/) | V1.4.0      | 2025-06-10 | 系统镜像烧录工具，包含Window和Linux版本。                 |
+| 名称                                                         | 最新版本    | 上传日期   | 说明文档                                                     |
+| ------------------------------------------------------------ | ----------- | ---------- | ------------------------------------------------------------ |
+| [系统镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/) | V4.0.2-beta | 2025-06-10 | 系统镜像。                                                   |
+| [D-Navigation](https://archive.d-robotics.cc/downloads/software_tools/download_tools/) | V2.4.0      | 2025-06-10 | 系统镜像烧录工具，包含windows-x64、linux-x64和darwin-arm64版本。 |
 
 ## 硬件资料
 
