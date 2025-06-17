@@ -7,14 +7,14 @@ sidebar_position: 2
 开发板预置了 GPIO Python 库 `Hobot.GPIO`，用户可以通过如下命令导入GPIO库。
 
 ```shell
-sunrise@ubuntu:~$ sudo python3
-Python 3.8.10 (default, Mar 15 2022, 12:22:08)
+root@ubuntu:~# sudo python3
+Python 3.10.12 (main, Feb  4 2025, 14:57:36) [GCC 11.4.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import Hobot.GPIO as GPIO
 >>> GPIO.VERSION
 '0.0.2'
 >>> GPIO.model
-'RDK_X5'
+'RDK_S100'
 ```
 
 :::tip
