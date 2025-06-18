@@ -30,6 +30,45 @@ RDKS100 开发板支持 HDMI 显示接口。通过对应的线缆将开发板与
 
 RDK S100 开发板支持以太网、Wi-Fi 两种网络接口，用户可通过任意接口实现网络连接功能。
 
+### **驱动下载**
+
+安装USB驱动
+对于Windows操作系统，在使用adb和fastboot功能前，需要首先确认是否安装对应的驱动程序。
+
+在开发板的uboot命令行下输入fastboot 0，让开发板进入fastboot模式：
+
+```bash
+Warning: eth1 (eth0) using random MAC address - 9a:07:de:92:a2:c5
+eth0: eth1
+system_slot: 0 adc_boardinfo: 6a84
+strap_pin = 0x45bc0 bootinfo = 0x0 bootcount = 0x1
+boot_block_device [1]
+flash boot
+success!
+Hit any key to stop autoboot:  0
+Hobot$
+Hobot$
+Hobot$ fastboot 0
+```
+
+此时，设备管理器会提示存在USB download gadget的未知设备。
+
+未安装驱动时，设备管理器会提示存在USB download gadget的未知设备，如下图：
+
+![](../../../static/img/01_Quick_start/image/install_os/image-usbdriver-no.png)
+
+usb驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloads/software_tools/winusb_drivers/)）
+
+下载sunrise5_winusb.zip压缩包，进行驱动安装，步骤如下：
+
+1、解压 sunrise5_winusb.zip。
+
+2、进入sunrise5_winusb，右键点击install_driver.bat，选择以管理员身份运行。
+
+成功安装驱动后，设备管理器会显示Android Device设备，如下图：
+
+![](../../../static/img/01_Quick_start/image/install_os/image-usbdriver-ok.png)
+
 ## 系统烧录
 
 RDK S100 套件目前提供 Ubuntu 22.04 系统镜像，可支持 Desktop 桌面图形化交互。
