@@ -47,7 +47,7 @@ import TabItem from '@theme/TabItem';
 cat /etc/version
 ```
 
-![os_version](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/os_version.png)
+![os_version](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/os_version.png)
 
 - 如果系统版本不符合要求，请参考文档`1.2`章节进行镜像烧录
 
@@ -57,7 +57,7 @@ cat /etc/version
 apt list | grep tros-humble-hobot-stereonet/
 ```
 
-![hobot_stereonet_version](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/hobot_stereonet_version.png)
+![hobot_stereonet_version](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/hobot_stereonet_version.png)
 
 - 如果使用到RDK X5官方MIPI双目相机，还需要确保`tros-humble-mipi-cam`功能包在2.3.8版本，查询功能包版本的命令如下：
 
@@ -65,7 +65,7 @@ apt list | grep tros-humble-hobot-stereonet/
 apt list | grep tros-humble-mipi-cam/
 ```
 
-![mipi_cam_version](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/mipi_cam_version.png)
+![mipi_cam_version](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/mipi_cam_version.png)
 
 - 如果使用到ZED双目相机，还需要确保`tros-humble-hobot-zed-cam`功能包在2.3.3版本，查询功能包版本的命令如下：
 
@@ -73,7 +73,7 @@ apt list | grep tros-humble-mipi-cam/
 apt list | grep tros-humble-hobot-zed-cam/
 ```
 
-![zed_cam_version](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/zed_cam_version.png)
+![zed_cam_version](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/zed_cam_version.png)
 
 - 如果功能包版本不符合要求，需要进行升级，在RDK系统的终端中运行如下指令，即可更新：
 
@@ -96,7 +96,7 @@ apt upgrade
 
 <span style={{ color: 'red' }}> 注意：请用`root`用户执行文档中的命令，其它用户执行可能权限不够，造成一些不必要的错误 </span>
 
-![os_user](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/os_user.png)
+![os_user](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/os_user.png)
 
 双目深度算法支持多款相机，MIPI相机和USB相机都可以支持，启动命令有一些区别，具体启动命令如下：
 
@@ -104,11 +104,11 @@ apt upgrade
 
 - RDK X5官方MIPI双目相机如图所示：
 
-![RDK_Stereo_Cam_230ai](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/RDK_Stereo_Cam_230ai.png)
+![RDK_Stereo_Cam_230ai](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/RDK_Stereo_Cam_230ai.png)
 
 - 安装方式如图所示，接线请勿接反，会导致左右图对调，双目算法运行错误：
 
-![RDK_X5_230ai](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/RDK_X5_230ai.png)
+![RDK_X5_230ai](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/RDK_X5_230ai.png)
 
 - 确认相机连接是否正常，通过ssh连接RDK X5，执行以下命令，如果输出如图所示结果，则代表相机连接正常：
 
@@ -117,7 +117,7 @@ i2cdetect -r -y 4
 i2cdetect -r -y 6
 ```
 
-![i2cdetect_230ai](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/i2cdetect_230ai.png)
+![i2cdetect_230ai](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/i2cdetect_230ai.png)
 
 - 通过不同的launch文件，启动相应版本的双目算法，通过ssh连接RDK X5，执行以下命令：
 
@@ -178,15 +178,15 @@ need_rectify:=False height_min:=-10.0 height_max:=10.0 pc_max_depth:=5.0
 
 - 出现如下日志表示双目算法启动成功，`fx/fy/cx/cy/base_line`是相机内参，如果深度图正常，但估计出来的距离有偏差，可能是相机内参存在问题：
 
-![stereonet_run_success_log](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_run_success_log.png)
+![stereonet_run_success_log](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_run_success_log.png)
 
 - 通过网页端查看深度图，在浏览器输入 http://ip:8000 (图中RDK X5 ip是192.168.1.100)：
 
-![web_depth_visual](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/web_depth_visual.png)
+![web_depth_visual](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/web_depth_visual.png)
 
 - 通过rviz2查看点云，需要用户具备一定的ROS2基础，将PC和RDK X5配置到同一个网段，能够相互ping通，订阅双目模型节点发布的相关话题，才可以在rviz2中显示点云，注意rviz2中需要做如下配置：
 
-![stereonet_rviz](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_rviz.png)
+![stereonet_rviz](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_rviz.png)
 
 - 如果用户想保存深度估计结果，可以添加如下参数实现，`save_image_all`打开保存开关，`save_freq`控制保存频率，`save_dir`控制保存的目录（如果目录不存在会自动创建），`save_total`控制保存的总数。程序运行将会保存**相机内参、左右图、视差图、深度图、可视化图**：
 
@@ -210,15 +210,15 @@ save_image_all:=True save_freq:=4 save_dir:=./online_result save_total:=10
 | save_dir       | 设置为保存图像的目录 | 可根据需要设置保存位置             |
 | save_total     | 设置为10      | 总共保存10张图像，设置为-1则代表为一直保存 |
 
-![stereonet_save_log](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_save_log.png)
+![stereonet_save_log](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_save_log.png)
 
-![stereonet_save_files](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_save_files.png)
+![stereonet_save_files](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_save_files.png)
 
 #### (2) 本地图片离线回灌
 
 - 如果想利用本地图片评估算法效果，可以使用下列命令指定算法运行模式、图像数据地址以及相机内参，同时要保证图像数据经过去畸变、极线对齐。图片的格式如下图所示，第一张左目图像的命名为left000000.png，第二张左目图像的命名为left000001.png，以此类推。对应的第一张右目图像的命名为right000000.png，第二张右目图像的命名为right000001.png，以此类推。算法按序号遍历图像，直至图像全部计算完毕：
 
-![stereonet_rdk](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/image_format.png)
+![stereonet_rdk](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/image_format.png)
 
 - 算法离线运行方式如下，通过ssh连接RDK X5，执行以下命令：
 
@@ -275,7 +275,7 @@ save_image_all:=True save_dir:=./offline_result
 
 <span style={{ color: 'red' }}> 注意：回灌的图像需要经过极线矫正，并且一定要设置正确的相机参数，否则回灌保存的结果可能是错误的 </span>
 
-![stereonet_offline_log](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_offline_log.png)
+![stereonet_offline_log](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_offline_log.png)
 
 参数含义如下：
 
@@ -303,7 +303,7 @@ save_image_all:=True save_dir:=./offline_result
 
 - ZED双目摄像头如图所示：
 
-![zed_cam](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/zed_cam.png)
+![zed_cam](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/zed_cam.png)
 
 - 将ZED相机通过USB连接RDK X5，然后启动双目算法，通过ssh连接RDK X5，执行以下命令：
 
@@ -372,7 +372,7 @@ height_min:=-10.0 height_max:=10.0 pc_max_depth:=5.0
 </TabItem>
 </Tabs>
 
-![stereonet_zed_run_success_log](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_zed_run_success_log.png)
+![stereonet_zed_run_success_log](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/stereonet_zed_run_success_log.png)
 
 联网的情况下程序会自动下载标定文件，如果RDK X5没有联网，可以手动下载标定文件然后上传到RDK X5的`/root/zed/settings/`目录下
 

@@ -9,7 +9,7 @@ sidebar_position: 4
 ## 视频编解码
 
 ### Q1: 开发板解码RTSP视频流时报错（如下图所示），可能是什么原因？
-![RTSP解码报错图片](../../static/img/08_FAQ/image/multimedia/image-20220728110439753.png)
+![RTSP解码报错图片](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png)
 **A:** RTSP视频流解码报错，常见原因及解决方法如下：
 1.  **码流缺少PPS和SPS参数信息：**
     * **原因：** 推流服务器推送的RTSP码流（尤其是H.264格式）中必须包含`PPS` (Picture Parameter Set) 和 `SPS` (Sequence Parameter Set) 参数信息，解码器需要这些信息来正确解析视频。
@@ -26,6 +26,72 @@ sidebar_position: 4
     * **不推荐使用VLC直接推流：** 使用VLC软件直接进行RTSP推流可能无法成功被RDK解码，原因是VLC在某些配置下可能不支持在推流时主动添加或确保`PPS`和`SPS`信息。建议使用`ffmpeg`或其他能确保码流参数完整性的专业推流工具。
 
 ## Audio 常见问题
+
+### Q1: 示例中使用了tinyalsa，它的各个参数代表什么含义？如何使用？
+**A:** `tinyalsa` 是一个轻量级的音频库，主要用于Android和嵌入式Linux系统。它提供了对ALSA（Advanced Linux Sound Architecture）的简化接口，便于开发者进行音频处理。
+以下是一些常用的 `tinyalsa` 命令及其参数含义：
+1.  **列出所有声卡：**
+    ```bash
+    tinymix -l
+    ```
+    这个命令会列出系统中所有已识别的声卡及其控件。
+2.  **列出特定声卡的控件：**
+    ```bash
+    tinymix -c <card_number> -l
+    ```
+    其中 `<card_number>` 是声卡的序号。这个命令会列出指定声卡的所有控件。
+3.  **获取特定控件的值：**
+    ```bash 
+    tinymix -c <card_number> <control_name>
+    ```
+    这个命令会显示指定声卡上某个控件的当前值。例如：
+    ```bash
+    tinymix -c 0 'ADC PGA Gain'
+    ```
+    这将显示声卡0上名为 `ADC PGA Gain` 的控件的当前值。
+4.  **设置特定控件的值：**
+    ```bash
+    tinymix -c <card_number> <control_name> <value>
+    ```
+    这个命令会设置指定声卡上某个控件的值。例如：
+    ```bash
+    tinymix -c 0 'ADC PGA Gain' 80%
+    ```
+    这将把声卡0上名为 `ADC PGA Gain` 的控件设置为80%。
+5.  **查看当前音频状态：**
+    ```bash
+    tinymix -c <card_number> -s
+    ```
+    这个命令会显示指定声卡的当前音频状态，包括所有控件的当前值。
+6.  **播放音频文件：**
+     ```bash
+    tinyplay <file_name>
+    ```
+    这个命令会播放指定的音频文件。`<file_name>` 是音频文件的路径和名称。
+    例如：
+    ```bash
+    tinyplay /path/to/audio.wav
+    ```
+    这将播放指定的音频文件。
+7.  **录制音频：**
+    ```bash
+    tinycap <file_name> -D <card_number> -d <device_number> -c <channels> -b <bit_depth> -r <sample_rate> -p <period_size> -n <periods> -t <duration>
+    ```
+    这个命令会录制音频并保存到指定文件。各参数含义如下：
+    - `<file_name>`: 录制的音频文件名。
+    - `-D <card_number>`: 指定声卡序号。
+    - `-d <device_number>`: 指定设备序号（通常是PCM设备）。
+    - `-c <channels>`: 指定录音通道数（例如2表示立体声，4表示四通道）。
+    - `-b <bit_depth>`: 指定音频位深（例如16表示16位）。
+    - `-r <sample_rate>`: 指定采样率（例如48000表示48kHz）。
+    - `-p <period_size>`: 指定每个周期的大小（以帧为单位）。
+    - `-n <periods>`: 指定周期数。
+    - `-t <duration>`: 指定录音持续时间（以秒为单位）。
+    - **示例：**
+    ```bash
+    tinycap ./recorded_audio.wav -D 0 -d 1 -c 2 -b 16 -r 48000 -p 512 -n 4 -t 5
+    ```
+    这个命令会使用声卡0的设备1录制2通道16位48kHz的音频，持续5秒，并保存为 `recorded_audio.wav` 文件。
 
 ### Q2: RDK板卡上如何区分和使用USB声卡与板载声卡？特别是当同时连接了多种音频设备时。
 **A:** 当RDK板卡上同时连接了板载声卡（例如通过音频子板）和USB声卡时，Linux音频系统（ALSA）会为它们分配不同的声卡序号。您需要知道正确的声卡序号才能精确控制特定的音频设备。

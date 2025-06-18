@@ -13,10 +13,10 @@ import TabItem from '@theme/TabItem';
 
 智能盒子App功能为实现IPC视频流输入后智能分析，App由RTSP视频流、视频解码、人体人脸检测、图像编码、Web展示端组成，流程如下图：
 
-![](/../static/img/05_Robot_development/04_apps/image/video_boxs/video_boxs_workflow.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/04_apps/image/video_boxs/video_boxs_workflow.jpg)
 
 对应实际的客户应用中显示部分由客户的业务系统完成，智能盒子的主要功能由RTSP视频流、视频解码、人体人脸检测，智能结果和图像发布给客户的业务系统，流程如下图：
-![](/../static/img/05_Robot_development/04_apps/image/video_boxs/video_boxs_workflow2.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/04_apps/image/video_boxs/video_boxs_workflow2.jpg)
 
 代码仓库： (https://github.com/D-Robotics/hobot_rtsp_client.git)
 
@@ -158,4 +158,4 @@ $ ros2 topic list
 
 在PC端的浏览器输入http://IP:8000 ，人体人脸检测框，关键点和姿态检测结果在web端展示渲染效果（IP为RDK的IP地址）：
 
-![](/../static/img/05_Robot_development/04_apps/image/video_boxs/video_box_detection.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/04_apps/image/video_boxs/video_box_detection.jpg)

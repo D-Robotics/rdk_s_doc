@@ -4,9 +4,11 @@ sidebar_position: 6
 
 # 7.2.6 应用实时内核
 
-本章节旨在描述如何在`RDK X3` 和 `RDK X3 Module`上启用实时内核（Preempt-RT kernel），并提供了相应的命令以便于用户使用。实时内核是一种能够提供更加精确和可靠的响应时间的操作系统内核，通常用于对时间敏感性要求较高的应用程序，在机器人控制、工业自动化等应用场景使用较多。以下是启用和禁用实时内核的相关命令以及一些常见用途和测试方法。
+本章节旨在描述如何在`RDK X3` `RDK X3 Module` `RDK X5` `RDK X5 Module`上启用实时内核（Preempt-RT kernel），并提供了相应的命令以便于用户使用。实时内核是一种能够提供更加精确和可靠的响应时间的操作系统内核，通常用于对时间敏感性要求较高的应用程序，在机器人控制、工业自动化等应用场景使用较多。以下是启用和禁用实时内核的相关命令以及一些常见用途和测试方法。
 
-## 实时内核启用命令
+## X3系列板卡
+
+### 实时内核启用命令
 
 要在RDK X3上启用实时内核，请执行以下命令：
 
@@ -18,9 +20,9 @@ sudo reboot
 
 这些命令将安装与实时内核兼容的内核头文件、内核文件、驱动程序和BPU驱动，完成后重新启动系统以使更改生效，使用 `uname -a`命令可以看到 `PREEMPT RT`的内核版本信息说明。
 
-![image-20230914142401210](../../../static/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914142401210.png)
+![image-20230914142401210](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914142401210.png)
 
-## 恢复为标准内核命令
+### 恢复为标准内核命令
 
 如果需要恢复为标准内核，可以执行以下命令：
 
@@ -31,11 +33,11 @@ sudo reboot
 
 这些命令将卸载实时内核相关的组件，并且安装标准内核对应的组件，完成后重新启动系统以切换回标准内核。
 
-## 实时性能测
+### 实时性能测
 
 当需要对实时内核的性能进行测试时，一个常用的性能测试工具是`rt-tests`，它包括了多个测试程序，可以用来测试实时内核的性能。以下是一个使用`rt-tests`进行性能测试的示例：
 
-### 安装rt-tests工具
+#### 安装rt-tests工具
 
 如果尚未安装`rt-tests`工具，可以使用以下命令进行安装：
 
@@ -43,7 +45,7 @@ sudo reboot
 sudo apt install rt-tests
 ```
 
-### 运行cyclictest测试
+#### 运行cyclictest测试
 
 `cyclictest`测试是`rt-tests`中的一个常用测试，它用于评估系统的定时行为和响应时间。执行以下命令运行`cyclictest`测试：
 
@@ -62,13 +64,13 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 
 测试结果将显示出系统的最小、最大和平均延迟，以及一些其他性能统计信息。
 
-### 分析测试结果
+#### 分析测试结果
 
 分析`cyclictest`测试结果以评估实时内核的性能表现。关注最小延迟和最大延迟，以确保它们在可接受范围内。较小的最大延迟和更加一致的延迟表明实时内核的性能较好。下图是使用实时内核，并且运行了 `/app/pydev_demo/03_mipi_camera_sample` 示例的情况下测试的结果。
 
-![image-20230914145619064](../../../static/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png)
+![image-20230914145619064](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png)
 
-![image-20230914145234528](../../../static/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png)
+![image-20230914145234528](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png)
 
 `cyclictest` 输出中的每个字段含义如下：
 
@@ -80,3 +82,27 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 - `Act`: 当前测试周期的实际延迟，以微秒为单位。
 - `Avg`: 当前测试周期的平均延迟，以微秒为单位。
 - `Max`: 当前测试周期的最大延迟，以微秒为单位。
+
+## X5系列板卡
+
+### 实时内核启用命令
+
+要在RDK X5上启用实时内核。
+
+需要修改`/boot/boot.cmd`文件，将`imagefile="Image"`改为`imagefile="Image-rt"`，到`/boot/`目录下执行`mkimage -C none -A arm -T script -d boot.cmd boot.scr`。
+
+重启系统，即可切换到实时内核。
+
+切换回标准内核，需要将`imagefile="Image-rt"`改为`imagefile="Image"`，其他步骤同上。
+
+:::info 注意
+
+Linux 默认内核不具备实时性，若需实现低延迟和确定性响应，需引入 PREEMPT-RT 补丁（如 patch-6.1.83-rt28）以实现实时内核改造。
+
+官方提供了预编译的实时内核版本，可简化构建流程，但需注意以下事项：
+- 此版本为社区维护的衍生分支，非官方主线内核‌；
+- 尚未经过大规模工业应用验证，稳定性与兼容性需开发者自行评估；
+- 使用该版本存在潜在风险，建议仅在充分测试验证并可接受相关风险的场景中部署；
+:::
+
+

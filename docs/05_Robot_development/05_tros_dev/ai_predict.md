@@ -28,7 +28,7 @@ sidebar_position: 2
 
 关于`hobot_dnn)的详细使用说明可以参考`hobot_dnn)代码中的[README.md](https://github.com/D-Robotics/hobot_dnn/blob/develop/README.md)和[接口说明文档](https://github.com/D-Robotics/hobot_dnn/blob/develop/dnn_node/docs/API-Manual/API-Manual.md)。hobot_dnn的使用逻辑流程如下：
 
-![](/../static/img/05_Robot_development/05_tros_dev/image/ai_predict/dnnnode_workflow.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/05_tros_dev/image/ai_predict/dnnnode_workflow.jpg)
 
 在不了解`hobot_dnn)使用流程的情况下，用户也可以按照本章节流程使用`hobot_dnn)开发出模型推理示例。
 
@@ -325,7 +325,7 @@ int main(int argc, char** argv) {
 
 Node的设计和流程逻辑如下图：
 
-![](/../static/img/05_Robot_development/05_tros_dev/image/ai_predict/node_architecture.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/05_tros_dev/image/ai_predict/node_architecture.jpg)
 
 
 ##### 2.2 代码说明
@@ -955,7 +955,7 @@ Summary: 0 packages finished [1min 1s]
 
 运行时系统流程图如下：
 
-![](/../static/img/05_Robot_development/05_tros_dev/image/ai_predict/pipeline.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/05_tros_dev/image/ai_predict/pipeline.jpg)
 
 RDK上的运行4个node，其中算法推理为本示例。
 
@@ -1192,7 +1192,7 @@ disappeared_targets: []
 
 在PC端的WEB浏览器上输入 `http://IP:8000`（IP为RDK的IP地址，如本示例使用的IP地址为10.64.28.88）查看实时的图片和算法推理渲染效果：
 
-![](/../static/img/05_Robot_development/05_tros_dev/image/ai_predict/render.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/05_tros_dev/image/ai_predict/render.jpg)
 
 每个检测框上渲染了检测框类型（如`body`表示是人体检测框）和目标跟踪结果，浏览器左下角的`fps`字段表示实时的算法推理输出帧率。
 
@@ -1452,7 +1452,7 @@ root@ubuntu:~# ros2 topic list
 
 在PC端（**PC需要和RDK处于同一网段**）通过rqt的Node Graph功能可以可视化的展示RDK上运行的Node，Node发布和订阅的topic，以及Node基于这些Topic组成的graph，如下图：
 
-![](/../static/img/05_Robot_development/05_tros_dev/image/ai_predict/rosgraph_handlmk.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/05_tros_dev/image/ai_predict/rosgraph_handlmk.jpg)
 
 其中椭圆形框内为Node名，矩形框内为Topic名。可以看到，整个graph由3个Node和2个Topic组成。
 

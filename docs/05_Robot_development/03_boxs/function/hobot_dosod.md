@@ -226,7 +226,7 @@ webserver has launch
 
 在PC端的浏览器输入http://IP:8000 即可查看图像和算法渲染效果（IP为RDK的IP地址）：
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/render_dosod.jpeg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/render_dosod.jpeg)
 
 
 ## 进阶使用

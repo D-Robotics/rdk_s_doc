@@ -160,7 +160,7 @@ ros2 launch hobot_yolo_world yolo_world.launch.py yolo_world_texts:="red bottle,
 
 在PC端的浏览器输入http://IP:8000 即可查看图像和算法渲染效果（IP为RDK的IP地址）：
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/render_yolo_world.jpeg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/render_yolo_world.jpeg)
 
 
 ## 进阶使用

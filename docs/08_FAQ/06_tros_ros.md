@@ -117,9 +117,9 @@ sidebar_position: 6
     * 如何使用硬件编解码器（hobot_codec）进行图像/视频的编码（如H.264, H.265, MJPEG）和解码。
     * 如何在ROS2节点间高效传输图像数据（可能涉及零拷贝技术）。
     * 相关的示例代码和launch文件。
-    ![TROS多媒体方案示意图](../../static/img/08_FAQ/image/tros1.png)
-    ![TROS多媒体方案示意图](../../static/img/08_FAQ/image/tros2.png)
-    ![TROS多媒体方案示意图](../../static/img/08_FAQ/image/tros3.png)
+    ![TROS多媒体方案示意图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros1.png)
+    ![TROS多媒体方案示意图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros2.png)
+    ![TROS多媒体方案示意图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros3.png)
 
 ### Q8: 启动USB或MIPI摄像头节点后，终端提示“标定数据不存在”（例如 `[usb_camera_calibration.yaml] does not exist!`），这是正常的吗？
 **A:** 这个提示本身**通常是正常的，不一定代表摄像头无法工作**。

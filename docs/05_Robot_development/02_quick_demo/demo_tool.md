@@ -103,7 +103,7 @@ webserver has launch
 
 在PC端的浏览器输入 `http://IP:8000` 即可查看图像展示效果（IP为RDK/X86设备的IP地址）：
 
-![hobot_img_pub](/../static/img/05_Robot_development/02_quick_demo/image/demo_tool/show.png )
+![hobot_img_pub](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_tool/show.png)
 
 ### 视频发布使用介绍
 
@@ -191,7 +191,7 @@ webserver has launch
 
 在PC端的浏览器输入 `http://IP:8000` 即可查看图像展示效果（IP为RDK/X86设备的IP地址）：
 
-![hobot_img_pub](/../static/img/05_Robot_development/02_quick_demo/image/demo_tool/mp4show.jpg )
+![hobot_img_pub](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_tool/mp4show.jpg)
 
 
 ## Trigger记录工具
@@ -403,7 +403,7 @@ package初始化后，在终端输出如下信息：
 
 foxglove中播放效果：
 
-![](/../static/img/05_Robot_development/02_quick_demo/image/demo_tool/trigger_example_trash_det.gif)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_tool/trigger_example_trash_det.gif)
 
 说明：该Trigger示例记录了事件发生前5s和事件发生后5s的数据。同时看到在事件中间时刻，记录了Trigger事件发生的原因：即在场景中丢入了一个垃圾,使得场景中垃圾达到三个，触发Trigger。
 

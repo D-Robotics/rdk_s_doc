@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # 1.1.2 相机扩展板
 
-![image-rdk_100_camera_expansion_board](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board.png)
+![image-rdk_100_camera_expansion_board](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board.png)
 
 RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜机器人 RDK S100 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S100 Camera Expansion Connector 进行二次开发，提供了 2 个 MIPI 相机接口和 4 个 GMSL 相机接口。
 
@@ -49,11 +49,11 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 拓扑图
 
-![image-rdk_s100_camera_expansion_board_architecture_diagram.png](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram.png)
+![image-rdk_s100_camera_expansion_board_architecture_diagram.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram.png)
 
 ### 接口说明
 
-![camera_expansion_board_interface](../../../static/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png)
+![camera_expansion_board_interface](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png)
 
 | 接口  | 功能          | 接口   | g 功能                    |
 | :---- | :------------ | ------ | ------------------------- |

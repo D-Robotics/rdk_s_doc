@@ -160,6 +160,6 @@ python -m http.server 8080
 
 在PC端的浏览器输入http://IP:8080 即可查看图像检索结果（IP为设备IP地址）。
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/query_display.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/query_display.png)
 
 结果分析：按顺序依次可以看到检索文本与图片相似度依次检索结果。其中只有CLIP.png图片为本示例提供, 其他图片为用户实际config中图片, 因此预期可视化结果中只有首张图与示例中相同。

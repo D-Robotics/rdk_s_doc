@@ -252,14 +252,14 @@ package初始化后，在运行终端输出如下信息：
 
 示例中读取本地图片推理的结果会渲染到图片上，在PC端的浏览器输入http://IP:8000 即可查看图像和算法渲染效果（IP为RDK的IP地址），打开界面右上角设置。
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/operation_1.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/operation_1.png)
 
 选中”全图分割“选项，可以显示渲染效果。
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/operation_2.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/operation_2.png)
 
 可视化结果可以看到，室外场景下停车区域与行车区域有效分割开，区分了停车车道线和行车车道线，同时目标检测任务定位到远处车辆。
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/render_parking.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/render_parking.png)
 
 "dump_render_img"设置为"1"时，渲染效果保存在当前路径的result目录下。

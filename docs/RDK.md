@@ -38,7 +38,7 @@ sidebar_position: 0
 
 **RDK Ultra** 是一款高性能开发套件，具有 96Tops 端侧推理算力与 8 核 ARM A55 处理能力，支持 4 路 MIPI Camera 接入，4 路 USB3.0 接口，3 路 PCIe3.0 接口，充分满足各类场景的使用需求。
 
-![image-rdk-serials](../static/img/image-rdk-serials.jpg)
+![image-rdk-serials](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdk-serials.jpg)
 
 ### 工作温度与散热建议
 
@@ -95,8 +95,14 @@ sidebar_position: 0
 
 <font color="red">注意事项：</font>
 - 更新系统后，请使用 rdk-miniboot-update 命令更新nand固件至最新版本
+- 官方会定期发布新版镜像，这些镜像包含了最新的功能优化和问题修复。用户既可以通过下载最新镜像进行安装，也可以直接通过在线升级方式获取系统更新。
 
 ####  TROS算法升级 & 版本号：3.2.3
+
+镜像更新
+
+- **20250610** 更新ROS仓库GPG签名密钥；支持[实时内核切换](./Advanced_development/linux_development/realtime_kernel#x5系列板卡)；集成了最新版的iniboot固件，使用rdk-miniboot-update命令烧录nand后，会释放更多内存给系统。
+- **20250604** 修复了配置幻尔载板系统启动失败的问题。
 
 系统层更新
 

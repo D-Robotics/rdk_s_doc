@@ -104,7 +104,7 @@ ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_con
 
 渲染后的图片render_feedback_0_0.jpeg：
 
-![](/../static/img/05_Robot_development/02_quick_demo/image/ai_predict/render1.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/ai_predict/render1.jpg)
 
 
 ## 多算法推理
@@ -155,4 +155,4 @@ ros2 launch hand_gesture_detection hand_gesture_fusion.launch.py publish_image_s
 
 在PC端的浏览器输入http://IP:8000 即可查看图像和算法渲染效果（IP为RDK的IP地址）：
 
-![](/../static/img/05_Robot_development/02_quick_demo/image/ai_predict/ai_predict_all_perc_render.jpg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/ai_predict/ai_predict_all_perc_render.jpg)

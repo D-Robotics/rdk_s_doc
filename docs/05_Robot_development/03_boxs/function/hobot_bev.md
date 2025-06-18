@@ -185,13 +185,13 @@ ros2 launch hobot_bev hobot_bev.launch.py
 <Tabs groupId="tros-distro">
 <TabItem value="foxy" label="Foxy">
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/render_bev.jpeg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/render_bev.jpeg)
 
 </TabItem>
 
 <TabItem value="humble" label="Humble">
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/render_bev_s100.jpeg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/render_bev_s100.jpeg)
 
 </TabItem>
 

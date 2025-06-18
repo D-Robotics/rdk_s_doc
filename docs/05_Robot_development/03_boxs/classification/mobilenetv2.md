@@ -185,7 +185,7 @@ ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_con
 
 在PC端的浏览器输入http://IP:8000 即可查看图像和算法渲染效果（IP为RDK的IP地址）：
 
-![render_web](/../static/img/05_Robot_development/03_boxs/classification/image/mobilenetv2/mobilenetv2_render_web.jpeg)
+![render_web](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/classification/image/mobilenetv2/mobilenetv2_render_web.jpeg)
 
 ### 使用本地图片回灌
 
@@ -207,4 +207,4 @@ ros2 launch dnn_node_example dnn_node_example_feedback.launch.py dnn_example_con
 
 输出log显示，算法使用输入的图片config/target_class.jpg推理出的图片分类结果是window-shade，置信度为0.776356（算法只输出置信度最高的分类结果）。存储的渲染图片文件名为render_feedback_0_0.jpeg，渲染图片效果：
 
-![render_feedback](/../static/img/05_Robot_development/03_boxs/classification/image/mobilenetv2/mobilenetv2_render_feedback.jpeg)
+![render_feedback](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/classification/image/mobilenetv2/mobilenetv2_render_feedback.jpeg)

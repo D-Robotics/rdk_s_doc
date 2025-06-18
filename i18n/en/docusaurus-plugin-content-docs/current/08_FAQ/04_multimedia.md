@@ -9,7 +9,7 @@ This section addresses frequently asked questions related to video codec, audio 
 ## Video Codec
 
 ### Q1: What could cause errors when decoding RTSP video streams on the development board (as shown in the image below)?
-![RTSP decoding error image](../../../../../static/img/08_FAQ/image/multimedia/image-20220728110439753.png)
+![RTSP decoding error image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png)
 **A:** Common causes and solutions for RTSP video stream decoding errors include:
 
 1.  **Missing PPS and SPS parameter information in the stream:**
@@ -27,6 +27,79 @@ This section addresses frequently asked questions related to video codec, audio 
     * **VLC is not recommended for direct streaming:** Using VLC to stream RTSP may not work with RDK decoding, as VLC may not always add or ensure `PPS` and `SPS` information in the stream. It is recommended to use `ffmpeg` or other professional streaming tools that ensure complete stream parameters.
 
 ## Common Audio Questions
+
+### Q1: In the example, tinyalsa is used. What do its parameters mean and how do you use it?
+**A:** `tinyalsa` is a lightweight audio library mainly used in Android and embedded Linux systems. It provides a simplified interface to ALSA (Advanced Linux Sound Architecture), making audio processing easier for developers.
+
+Here are some common `tinyalsa` commands and the meaning of their parameters:
+
+1.  **List all sound cards:**
+    ```bash
+    tinymix -l
+    ```
+    This command lists all recognized sound cards and their controls in the system.
+
+2.  **List controls of a specific sound card:**
+    ```bash
+    tinymix -c <card_number> -l
+    ```
+    `<card_number>` is the index of the sound card. This command lists all controls of the specified sound card.
+
+3.  **Get the value of a specific control:**
+    ```bash
+    tinymix -c <card_number> <control_name>
+    ```
+    This command shows the current value of a specific control on the given sound card. For example:
+    ```bash
+    tinymix -c 0 'ADC PGA Gain'
+    ```
+    This displays the current value of the control named `ADC PGA Gain` on card 0.
+
+4.  **Set the value of a specific control:**
+    ```bash
+    tinymix -c <card_number> <control_name> <value>
+    ```
+    This command sets the value of a specific control on the given sound card. For example:
+    ```bash
+    tinymix -c 0 'ADC PGA Gain' 80%
+    ```
+    This sets the control `ADC PGA Gain` on card 0 to 80%.
+
+5.  **View current audio status:**
+    ```bash
+    tinymix -c <card_number> -s
+    ```
+    This command displays the current audio status of the specified sound card, including the values of all controls.
+
+6.  **Play an audio file:**
+    ```bash
+    tinyplay <file_name>
+    ```
+    This command plays the specified audio file. `<file_name>` is the path and name of the audio file. For example:
+    ```bash
+    tinyplay /path/to/audio.wav
+    ```
+    This will play the specified audio file.
+
+7.  **Record audio:**
+    ```bash
+    tinycap <file_name> -D <card_number> -d <device_number> -c <channels> -b <bit_depth> -r <sample_rate> -p <period_size> -n <periods> -t <duration>
+    ```
+    This command records audio and saves it to the specified file. The parameters mean:
+    - `<file_name>`: Name of the recorded audio file.
+    - `-D <card_number>`: Specify the sound card index.
+    - `-d <device_number>`: Specify the device index (usually the PCM device).
+    - `-c <channels>`: Number of recording channels (e.g., 2 for stereo, 4 for quad).
+    - `-b <bit_depth>`: Audio bit depth (e.g., 16 for 16-bit).
+    - `-r <sample_rate>`: Sampling rate (e.g., 48000 for 48kHz).
+    - `-p <period_size>`: Period size (in frames).
+    - `-n <periods>`: Number of periods.
+    - `-t <duration>`: Recording duration (in seconds).
+    - **Example:**
+    ```bash
+    tinycap ./recorded_audio.wav -D 0 -d 1 -c 2 -b 16 -r 48000 -p 512 -n 4 -t 5
+    ```
+    This command records 2-channel, 16-bit, 48kHz audio for 5 seconds using card 0, device 1, and saves it as `recorded_audio.wav`.
 
 ### Q2: How to distinguish and use USB sound cards and onboard sound cards on the RDK board, especially when multiple audio devices are connected?
 **A:** When both onboard sound cards (e.g., via an audio sub-board) and USB sound cards are connected to the RDK board, the Linux audio system (ALSA) assigns different card numbers to each. You need to know the correct card number to control a specific audio device.

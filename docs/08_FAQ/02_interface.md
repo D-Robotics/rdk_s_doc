@@ -4,6 +4,11 @@ sidebar_position: 2
 
 # 8.2 接口、外设与驱动
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 ### 40PIN接口
 
 #### Q1: 开发板是否支持将40PIN中的VDD_5V作为电源输入？
@@ -31,7 +36,7 @@ sidebar_position: 2
         * **奇偶校验 (Parity):** None (无)
         * **流控 (Flow control):** None (无)
     * 串口号 (COM Port)：确保选择了连接USB转串口模块后在电脑设备管理器中识别到的正确串口号。
-    ![串口终端参数配置示例](../../static/img/08_FAQ/image/interface/image-20221124200013163.png)
+    ![串口终端参数配置示例](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124200013163.png)
 4.  **USB转串口模块驱动：** 确保电脑已正确安装USB转串口模块的驱动程序。
 5.  **尝试其他串口模块或USB口：** 排除模块或USB接口故障的可能。
 
@@ -52,7 +57,16 @@ sidebar_position: 2
     * 使用 `ifconfig` 或 `ip addr` 查看网络接口状态和IP配置。
     * 使用 `route -n` 查看路由表信息。
     * 使用 `ping <网关IP>` 测试到网关的连通性。
-5.  **参考官方文档：** 详细的网络配置步骤和故障排除方法，请参考官方文档中关于“[网络配置](../02_System_configuration/01_network_blueteeth.md)”的章节 (请将链接替换为实际有效的文档路径)。
+5.  **参考官方文档：** 详细的网络配置步骤和故障排除方法，请参考官方文档中关于“网络配置”的章节。
+    <Tabs groupId="network_conf">
+    <TabItem value="rdk_x3/x5" label="rdk_x3/x5">
+    [RDK X3/X5 网络配置](../System_configuration/network_blueteeth)
+    </TabItem>
+    <TabItem value="rdk_s100" label="rdk_s100">
+    [RDK S100 网络配置](../rdk_s/System_configuration/network_bluetooth)
+    </TabItem>
+    </Tabs>
+
 
 #### Q5: 开发板无法通过SSH远程连接，可能是什么原因？
 **A:**
@@ -72,7 +86,7 @@ sidebar_position: 2
         1.  仔细检查您输入的用户名是否正确（例如 `sunrise`, `root`, `hobot` 等，取决于您的系统镜像和配置）。
         2.  仔细检查您输入的密码是否正确，注意大小写。
         3.  尝试使用开发板的默认账户和密码（如果未修改过）。
-    ![SSH认证失败示例](../../static/img/08_FAQ/image/interface/image-20221124201544978.png)
+    ![SSH认证失败示例](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124201544978.png)
 
 #### Q6: 开发板使用无线网络时，连接不稳定、传输速度慢，怎么办？
 **A:**

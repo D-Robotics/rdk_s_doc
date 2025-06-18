@@ -8,7 +8,7 @@ sidebar_position: 1
 
 Audio Driver HAT REV2是由微雪电子生产的一款音频转接板，采用ES7210+ES8156双Codec方案，可实现环形4麦克风录音、双通道音频播放、音频信号回采等功能。转接板外观如下图：
 
-![image-audio-driver-hat](../../../../static/img/03_Basic_Application/02_audio/image/image-audio-driver-hat.jpg)
+![image-audio-driver-hat](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/02_audio/image/image-audio-driver-hat.jpg)
 
 关于音频子板的详细介绍，请参考[Audio Driver HAT](https://www.waveshare.net/shop/Audio-Driver-HAT.htm)。
 
@@ -17,7 +17,7 @@ Audio Driver HAT REV2是由微雪电子生产的一款音频转接板，采用ES
 - ### 硬件部署
 
 1. 按照下图方式，将转接板接入RDK X3的40pin header。  
-![image-audio-driver-hat-setup](../../../../static/img/03_Basic_Application/02_audio/image/image-audio-driver-hat-setup.jpg)
+![image-audio-driver-hat-setup](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/02_audio/image/image-audio-driver-hat-setup.jpg)
 
 2. 使用命令`cat /sys/class/socinfo/som_name`，查询开发板类型，并根据返回值设置音频子板的拨码开关状态。
    - 返回值为5或者6时，3个拨码开关全部拨到`ON`位置。
@@ -29,7 +29,7 @@ Audio Driver HAT REV2是由微雪电子生产的一款音频转接板，采用ES
 1. 使用`srpi-config`配置音频板  
 进入`3 Interface Options`->`I5 Audio`  
 选择`Audio Driver HAT V2`：
-![image-audio-driver-hat-config00](../../../../static/img/03_Basic_Application/02_audio/image/image-audio-driver-hat-config00.png)  
+![image-audio-driver-hat-config00](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/02_audio/image/image-audio-driver-hat-config00.png)  
 
 2. 运行命令`sync && reboot`重启开发板，如`ls /dev/snd`下出现如下设备节点，说明转接板安装成功。
     ```shell
@@ -80,15 +80,7 @@ Audio Driver HAT REV2是由微雪电子生产的一款音频转接板，采用ES
 ### 2. 录音操作
 
 - **2通道麦克风录音**  
-  使用tinycap录制2通道音频，参数说明如下：
-  - `-D 0`：声卡编号（以上操作查看）
-  - `-d 1`：设备编号（以上操作查看）
-  - `-c 2`：通道数（2通道）
-  - `-b 16`：位宽16bit
-  - `-r 48000`：采样率48kHz
-  - `-p 512`：每帧采样点数
-  - `-n 4`：缓冲区数量
-  - `-t 5`：录音时长5秒
+  使用tinycap录制2通道音频：
 
   ```shell
   tinycap ./2chn_test.wav -D 0 -d 1 -c 2 -b 16 -r 48000 -p 512 -n 4 -t 5
@@ -103,9 +95,7 @@ Audio Driver HAT REV2是由微雪电子生产的一款音频转接板，采用ES
 ### 3. 播放操作
 
 - **双通道音频播放（不支持播放4通道）**  
-  使用tinyplay播放录制好的音频文件，常用参数如下：
-  - `-D 0`：声卡编号
-  - `-d 0`：播放设备编号（以上操作查看）
+  使用tinyplay播放录制好的音频文件：
 
   ```shell
   tinyplay ./2chn_test.wav -D 0 -d 0

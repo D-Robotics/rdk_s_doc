@@ -108,7 +108,7 @@ ros2 run hobot_llamacpp hobot_llamacpp --ros-args -p feed_type:=0 -p image:=conf
 
 程序启动后，可使用本地图片与自定义提示词进行输出。
 
-![vlm_result](/../static/img/05_Robot_development/02_quick_demo/image/hobot_llamacpp/vlm_result.png)
+![vlm_result](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/hobot_llamacpp/vlm_result.png)
 
 ## 注意事项
 

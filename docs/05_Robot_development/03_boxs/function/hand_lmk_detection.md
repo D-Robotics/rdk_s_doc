@@ -14,7 +14,7 @@ import TabItem from '@theme/TabItem';
 
 人手关键点索引如下图：
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/hand_lmk_index.jpeg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/hand_lmk_index.jpeg)
 
 代码仓库：
 
@@ -153,4 +153,4 @@ ros2 launch hand_lmk_detection hand_lmk_detection.launch.py
 
 在PC端的浏览器输入http://IP:8000 即可查看图像和算法渲染效果（IP为RDK的IP地址）：
 
-![](/../static/img/05_Robot_development/03_boxs/function/image/box_adv/hand_render.jpeg)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/hand_render.jpeg)
