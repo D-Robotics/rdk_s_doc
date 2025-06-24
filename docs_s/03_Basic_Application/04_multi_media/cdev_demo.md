@@ -10,9 +10,9 @@ sidebar_position: 2
 
 本示例`vio2display`示例实现了`MIPI`摄像头图像采集功能，并通过`HDMI`接口输出，用户可通过显示器预览画面。
 
-示例流程框图：（待更新）
+示例流程框图：
 
-<!-- ![image-vio_to_display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_to_display.jpg) -->
+ ![image-vio_to_display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png)
 
 - **环境准备：**
 
@@ -72,9 +72,9 @@ sidebar_position: 2
 
 本示例`vio2encoder`示例实现了 `MIPI` 摄像头图像采集功能，并编码后在本地保存，用户可通过显示器预览画面。
 
-示例流程框图：（待更新）
+示例流程框图：
 
-<!-- ![image-vio_to_encoder](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_to_encoder.png) -->
+![image-vio_to_encoder](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png)
 
 - **环境准备：**
 
@@ -131,14 +131,13 @@ sidebar_position: 2
   sp_module_bind(vio -> encoder) success!
   ```
 
-<!--
 ## 视频文件解码并显示
 
 本示例`decoder2display`实现了视频文件解码，并通过`HDMI`接口输出，用户可通过显示器预览画面。
 
-示例流程框图：（待更新）
+示例流程框图：
 
-![image-decoder_to_display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-decoder_to_display.png)
+![image-decoder_to_display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display.png)
 
 - **环境准备：**
 
@@ -177,9 +176,9 @@ sidebar_position: 2
 
 本示例`rtsp2display`实现了拉取`rtsp`码流、解码，并通过`HDMI`输出视频图像的功能，用户可通过显示器预览画面。
 
-示例流程框图：（待更新）
+示例流程框图：
 
-![rtsp2display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-rtsp_to_display.jpg)
+![rtsp2display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png)
 
 - **环境准备：**
 
@@ -229,7 +228,6 @@ sidebar_position: 2
 
 - **注意事项：**
   - 使用 UDP 协议传输码流时，可能出现因网络丢包导致的花屏现象，此时可切换成 TCP 协议传输解决。
-!-->
 
 ## VPS 缩放示例
 
@@ -272,6 +270,7 @@ sidebar_position: 2
   ... 省略 ...
   ```
 
+<!--
 ## 目标检测算法—fcos
 
 本示例基于`fcos`模型，实现了本地视频流的目标检测算法功能，用户可通过显示器预览检测结果。
@@ -386,3 +385,4 @@ sidebar_position: 2
   2000/01/01 19:06:40.013 !INFO [CamInitParam][0139]Setting VSE channel-1: input_width:1920, input_height:1080, dst_w:1920, dst_h:1080
   ... 省略 ...
   ```
+ -->
