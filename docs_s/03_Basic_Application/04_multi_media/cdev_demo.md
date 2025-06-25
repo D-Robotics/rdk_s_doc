@@ -185,8 +185,9 @@ sidebar_position: 2
   - 准备`rtsp`码流作为输入源，使用系统预置的推流服务。该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/1080P_test.h264`。用户可通过如下命令启动推流服务：
 
     ```text
-    cd /app/pydev_demo/08_decode_rtsp_stream/
-    root@ubuntu:/app/pydev_demo/08_decode_rtsp_stream# sudo ./live555MediaServer &
+    cd /app/pydev_demo/07_decode_rtsp_stream/
+    root@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo chmod +x live555MediaServer
+    root@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo ./live555MediaServer &
     ```
 
 - **运行方式：**
