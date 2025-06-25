@@ -65,8 +65,8 @@ echo user_space > /sys/class/thermal/thermal_zone0/policy
 ##### thermal_zone0简介
 在thermal_zone0中有4个trip_point，
 - trip_point_0_temp：关机温度，默认设置为120度
-- trip_point_1_temp：用于控制风扇转速，默认为50度，风扇档位范围2~5，表示超过50度，风扇将从关闭状态调整为2档，最高可提升到5档。
-- trip_point_2_temp：用于控制风扇转速，默认为75度，风扇档位范围6~10，表示超过75度，风扇将调整到6档，最高可提升到10档慢转速。
+- trip_point_1_temp：用于控制风扇转速，默认为43度，风扇档位范围2~5，表示超过43度，风扇将从关闭状态调整为2档，最高可提升到5档。
+- trip_point_2_temp：用于控制风扇转速，默认为65度，风扇档位范围6~10，表示超过65度，风扇将调整到6档，最高可提升到10档慢转速。
 - trip_point_3_temp：用于控制CPU Acore频率，默认为95度，表示超过95度，CPU Acore会降频。
 可通过sysfs查看相应的温度设置
 ```shell
