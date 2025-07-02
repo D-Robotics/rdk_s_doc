@@ -1,7 +1,6 @@
 # sample_pipeline 使用说明
 
-## 概述
-### 功能简介
+## 功能概述
 `sample_pipeline` 用于实现单路或多路 sensor pipeline 串联，实现用户常见的 pipeline 场景，用户可在通过 `sample_pipeline` 子目录了解各个 pipeline 的搭建方法。
 
 ### sample_pipeline 架构说明
