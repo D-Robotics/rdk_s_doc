@@ -376,7 +376,7 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21680305428000.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片,  输出数据会再送给编码器编码后保存为 H264 视频码流。
+`single_pipe_vin_isp_ynr_pym_gdc_vpu` 示例串联 `VIN`，`ISP`，`YNR`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、ISP、YNR、PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片，输出数据会再送给编码器编码后保存为 H264 视频码流。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc_vpu`
