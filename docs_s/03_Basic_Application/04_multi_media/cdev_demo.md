@@ -190,8 +190,8 @@ sidebar_position: 2
 
     ```text
     cd /app/pydev_demo/07_decode_rtsp_stream/
-    root@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo chmod +x live555MediaServer
-    root@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo ./live555MediaServer &
+    sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo chmod +x live555MediaServer
+    sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo ./live555MediaServer &
     ```
 
 - **运行方式：**
