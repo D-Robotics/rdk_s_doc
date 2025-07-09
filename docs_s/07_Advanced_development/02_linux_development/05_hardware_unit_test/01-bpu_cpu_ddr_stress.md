@@ -97,23 +97,27 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、 BPU 和 DDR 在高
 **1.** 开始压力测试前，需要在芯片上添加散热片，否则芯片可能会进入过温保护影响测试结果。
 
 **2.** 确认在 /app/multimedia_samples/chip_base_test/01_cpu_bpu_ddr 路径下存在的文件是否完整：
-
+:::warning
+下方路径中的`/lib/`路径内的动态库以及`module`路径下的模型文件及输入文件，仅限于**压力测试**场景用于**给BPU加压**场景，不能用于其他任何用途。
+:::
 ```shell
 01_cpu_bpu_ddr/
-`-- scripts
-	|-- Readme.md
-	|-- bpu_os_test
-	|-- lib
-	|   |-- libhbrt4.so
-	|   `-- libhbtl.so
-	|-- module
-	|   |-- input_1.bin
-	|   |-- input_2.bin
-	|   `-- yolov3.hbm
-	|-- run.sh
-	|-- stop_test.sh
-	|-- stress_test.sh
-	`-- stressapptest
+└── scripts
+    ├── Readme.md
+    ├── bpu_os_test
+    ├── lib
+    │   ├── libhbrt4.so
+    │   └── libhbtl.so
+    ├── module
+    │   ├── input_1.bin
+    │   ├── input_2.bin
+    │   └── yolov3.hbm
+    ├── run.sh
+    ├── stop_test.sh
+    ├── stress_test.sh
+    └── stressapptest
+
+3 directories, 11 files
 ```
 
 ## 测试方法
