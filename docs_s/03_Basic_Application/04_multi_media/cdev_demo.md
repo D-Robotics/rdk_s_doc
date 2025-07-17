@@ -6,10 +6,6 @@ sidebar_position: 2
 
 本章节介绍多媒体库开发的多种功能示例，包括摄像头图像采集、视频编解码、视频显示、算法推理等功能。
 
-:::warning
-以下Sample需要sudo权限执行。
-:::
-
 ## 摄像头图像采集和显示
 
 本示例`vio2display`示例实现了`MIPI`摄像头图像采集功能，并通过`HDMI`接口输出，用户可通过显示器预览画面。
@@ -56,8 +52,6 @@ sidebar_position: 2
   WARN: Sensor Name: ar0820std-30fps, Expected Chip ID: 0xCB34, Actual Chip ID Read: 0x00
   [0] INFO: Found sensor name:imx219-30fps on mipi rx csi 0, i2c addr 0x10, config_file:linear_1920x1080_raw10_30fps_1lane.c
   2025/06/16 10:12:21.575 !INFO [CamInitPymParam][0258]Setting PYM channel:0: crop_x:0, crop_y:0, input_width:1920, input_height:1080, dst_w:1920, dst_h:1080
-  [  110.667129] [E|ISP-2A|main.c+66]: [FW_GENERIC]/sys/class/vps/isp0_src/v3a open fail, err is Permission denied
-  [  110.667169] [E|ISP-2A|main.c+68]: [FW_GENERIC]/sys/class/vps/isp1_src/v3a open fail, err is Permission denied
   sp_open_camera success!
   2025/06/16 10:12:21.727 !INFO [OpenDisplay][0111]Wayland is available, using Wayland for rendering.
   Using default socket path: /run/user/1000/wayland-0
@@ -113,10 +107,6 @@ sidebar_position: 2
   WARN: Sensor Name: ar0820std-30fps, Expected Chip ID: 0xCB34, Actual Chip ID Read: 0x00
   [0] INFO: Found sensor name:imx219-30fps on mipi rx csi 0, i2c addr 0x10, config_file:linear_1920x1080_raw10_30fps_1lane.c
   2025/06/16 11:04:37.629 !INFO [CamInitPymParam][0258]Setting PYM channel:0: crop_x:0, crop_y:0, input_width:1920, input_height:1080, dst_w:1920, dst_h:1080
-  [ 3246.617496] [E|ISP-2A|main.c+66]: [FW_GENERIC]/sys/class/vps/isp0_src/v3a open fail, err is Permission denied
-
-  [ 3246.617538] [E|ISP-2A|main.c+68]: [FW_GENERIC]/sys/class/vps/isp1_src/v3a open fail, err is Permission denied
-
   sp_open_camera success!
   2025/06/16 11:04:37.770 !INFO [vp_encode_config_param][0408]codec type is h264: frame size:3110912  frame rate: 30
   sp_start_encode success!
