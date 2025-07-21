@@ -8,10 +8,12 @@ sidebar_position: 2
 
 ## 安装
 
-你可以通过以下命令安装内核头文件。
+你可以通过以下命令安装内核头文件及内核编译依赖。
 
 ```bash
+sudo apt update
 sudo apt install linux-headers-6.1.112-rt43
+sudo apt install bison flex
 ```
 命令运行成功后，内核头文件会被安装到`/usr/src`目录下
 ```bash
@@ -49,13 +51,13 @@ MODULE_DESCRIPTION("Simple Hello World kernel module");
 
 static int __init hello_init(void)
 {
-            printk(KERN_INFO "Hello, World! Kernel module loaded.\n");
-                return 0;
+	printk(KERN_INFO "Hello, World! Kernel module loaded.\n");
+	return 0;
 }
 
 static void __exit hello_exit(void)
 {
-            printk(KERN_INFO "Goodbye, World! Kernel module unloaded.\n");
+	printk(KERN_INFO "Goodbye, World! Kernel module unloaded.\n");
 }
 
 module_init(hello_init);
@@ -79,14 +81,14 @@ PWD := $(shell pwd)
 .PHONY := all prepare clean
 
 all: prepare
-        $(MAKE) -C $(KERN_DIR) M=$(PWD) modules
-        $(MAKE) -C $(KERN_DIR) KERNELRELEASE=$(KERN_VER) M=$(PWD) modules_install
+$(MAKE) -C $(KERN_DIR) M=$(PWD) modules
+	$(MAKE) -C $(KERN_DIR) KERNELRELEASE=$(KERN_VER) M=$(PWD) modules_install
 
 prepare:
-        $(MAKE) -C $(KERN_DIR) prepare
+	$(MAKE) -C $(KERN_DIR) prepare
 
 clean:
-        $(MAKE) -C $(KERN_DIR) M=$(PWD) clean
+	$(MAKE) -C $(KERN_DIR) M=$(PWD) clean
 
 endif
 ```
@@ -262,3 +264,4 @@ sunrise@ubuntu:~/test_ko$ dmesg | tail -n 2
 在 `/lib/modules-load.d` 目录下新建一个`conf`扩展名的配置文件，例如 `hello.conf`,在配置文件里添加需要自动加载的模块名（模块名不需要`.ko` 扩展名），例如需要自动加载`hello.ko`,就写一行`hello`，如果有多个模块需要加载，一个配置文件可以添加多个自加载模块，一行一个模块名，可以通过以下命令简便的完成配置文件的新建和配置：
 ```bash
 sudo echo hello > /lib/modules-load.d/hello.conf
+```
