@@ -70,7 +70,7 @@ module_exit(hello_exit);
 打开你熟悉的编辑器（比如VIM），创建文件 `Makefile`，输入下面的内容：
 ```makefile
 ifneq ($(KERNELRELEASE),)
-	obj-m := hello.o
+obj-m := hello.o
 else
 KERN_VER ?= $(shell uname -r)
 
