@@ -24,7 +24,7 @@ RDK 使用配置文件`config.txt`来设置一些启动时候的系统配置。`
 
 ### dtdebug
 
-`dtdebug` 如果非零，在`uboot`阶段的设备树配置过程中会在串口输出配置日志。
+`dtdebug` 如果非零，在`uboot`阶段的设备树配置过程中会在串口输出配置日志。` dtdebug` 要先于` dtoverlay` 配置。
 
 ```
 dtdebug=1
@@ -65,10 +65,10 @@ ion=ion_cma_size=0x08000000
 可以通过启动信息查看各个ION区域的大小：
 
 ```Shell
-root@ubuntu:~# dmesg | grep "Reserverd ion"
-[    0.207939] Reserverd ion-pool MEM start 0xa4100000, size 0x14000000
-[    0.207964] Reserverd ion-carveout MEM start 0xb8100000, size 0x14000000
-[    0.208068] Reserverd ion-cma MEM start 0xcc100000, size 0x8000000
+root@ubuntu:~# dmesg | grep "Reserved ion"
+[    0.207939] Reserved ion-pool MEM start 0xa4100000, size 0x14000000
+[    0.207964] Reserved ion-carveout MEM start 0xb8100000, size 0x14000000
+[    0.208068] Reserved ion-cma MEM start 0xcc100000, size 0x8000000
 ```
 
 ### dtparam
@@ -181,7 +181,7 @@ frequency=1200000
 
 ### gpio
 
-支持设置IO的功能复用，输出、输出模式，输出高、低电平，上下拉模式。
+支持设置IO的功能复用，输入、输出模式，输出高、低电平，上下拉模式，应选择 BOARD 编码 对应的 GPIO 编号。
 
 ```shell
 gpio:
@@ -233,9 +233,21 @@ gpio=6=op,dh,pu
 
 系统 CPU、BPU 降频温度点，温度超过该温度点时，CPU 和 BPU 会降低运行频率来减低功耗，CPU最低降到 240MHz，BPU 最低降到 400MHz。 
 
+例如设置降频温度为 `86℃`：
+
+```
+throttling_temp=86000
+```
+
 ### shutdown_temp
 
 系统宕机温度点，如果温度超过该温度，为了保护芯片和硬件，系统会自动关机，建议对设备做好散热处理，避免设备宕机，因为宕机后设备不会自动重启。
+
+例如设置宕机温度为 `112℃`：
+
+```
+shutdown_temp=112000
+```
 
 ## 选项过滤
 
@@ -266,7 +278,7 @@ gpio=6=op,dh,pu
 
 :::
 
-例如配置`RDK Module`的`40Pin`工作在`3v3`电压模式，此处示例使用了`[rdkmd]`作为过滤项：
+例如配置`RDK X3 Module`的`40Pin`工作在`3v3`电压模式，此处示例使用了`[rdkmd]`作为过滤项：
 
 ```
 # Voltage domain configuration for 40 Pin, 3.3V or 1.8V, defualt 3.3V
