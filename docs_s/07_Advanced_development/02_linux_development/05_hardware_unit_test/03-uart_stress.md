@@ -66,7 +66,7 @@ Options:
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
 
 **示例：**
-例如，使用命令： `./uartstress.sh -b 115200 -d /dev/ttyS2 -c 50 -o /app/multimedia_samples/chip_base_test` 自定义波特率为 115200 ，串口设备为 ttyS2( 与实际使用 uart 对应 )，循环次数为 50 次，输出目录为 /app/multimedia_samples/chip_base_test 。
+例如，使用命令： `./uartstress.sh -b 115200 -d /dev/ttyS2 -c 50 -o /app/chip_base_test` 自定义波特率为 115200 ，串口设备为 ttyS2( 与实际使用 uart 对应 )，循环次数为 50 次，输出目录为 /app/chip_base_test 。
 
 ### 执行程序使用说明
 

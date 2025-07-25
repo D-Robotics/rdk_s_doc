@@ -52,11 +52,6 @@ Status=enabled
 Description=eMMC stability test
 ExecStart=/app/chip_base_test/02_emmc/emmc_stability_test.sh -t 24h
 
-[NandFlash]
-Status=disabled
-Description=NAND flash stress test
-ExecStart=/app/chip_base_test/03_nand_flash/nand_test.sh -t 24h
-
 [UART]
 Status=enabled
 Description=UART stress test
@@ -93,7 +88,7 @@ ExecStart=/app/chip_base_test/05_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000
   ```bash
   /app/chip_base_test/startup.sh
   # 或者
-  cd /app/multimedia_samples/chip_base_test
+  cd /app/chip_base_test
   ./startup.sh
   ```
 

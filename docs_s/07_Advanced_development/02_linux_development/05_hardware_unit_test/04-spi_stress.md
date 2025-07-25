@@ -56,7 +56,7 @@ Options:
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
 
 **示例：**
-例如，使用命令： `./spistress.sh -d /dev/spidev0.0 -c 500 -s 24000000 -o /userdata/spi_test_logs` 自定义测试 SPI 设备 /dev/spidev0.0 ，设置传输速度为 24 MHz，进行 500 次测试，输出目录为 /app/multimedia_samples/chip_base_test 。
+例如，使用命令： `./spistress.sh -d /dev/spidev0.0 -c 500 -s 24000000 -o /userdata/spi_test_logs` 自定义测试 SPI 设备 /dev/spidev0.0 ，设置传输速度为 24 MHz，进行 500 次测试，输出目录为 /app/chip_base_test 。
 
 `spidev_tc` 源码中的详细参数与设置命令解析如下：
 
@@ -133,13 +133,13 @@ Test configuration:
   SPI Speed: 12000000 Hz
   Output Directory: /app/chip_base_test/log
   Log file: /app/chip_base_test/log/spi_test_log3.txt
-SPI test completed successfully! Log saved to: /app/chip_base_test/log/spi_test_log3.txt
+SPI test completed successfully! Log saved to: /app/chip_base_test/log/spi_test_log1.txt
 ```
 
 此时发现日志中没有打印其他信息，可直接在 /app/chip_base_test/log/ 路径下，查看 spi_test_log1 日志。
 
 ```shell
-root@buildroot:/app/multimedia_samples/chip_base_test# cat log/spi_test_log1.txt
+root@buildroot:/app/chip_base_test# cat log/spi_test_log1.txt
 spi mode: 0x0
 bits per word: 8
 max speed: 12000000 Hz (12000 kHz)

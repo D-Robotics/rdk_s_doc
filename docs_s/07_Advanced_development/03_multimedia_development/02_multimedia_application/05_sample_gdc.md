@@ -233,7 +233,7 @@ gdc gen cfg_buf 0xffff82090010, size 10972
 Generate bin file size:10972
 ```
 
-## gdc_static_valid
+## 3-gdc_static_valid
 
 ### 功能概述
 
@@ -323,7 +323,7 @@ output:1920x1080
 handle 34661 GDC dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
 ```
 
-## gdc_stress_test
+## 4-gdc_stress_test
 
 ### 功能概述
 
@@ -451,7 +451,7 @@ Gdc time consuming [process3]: 70
 fps average gdc [process3] = 142
 ```
 
-## gdc_equisolid
+## 5-gdc_equisolid
 ### 功能概述
 
 gdc_equisolid 程序会读取本地 NV12 的 YUV 图，把图片送入 GDC 做（全景 panoramic）校正处理，最后把校正的结果结果保存为本地 NV12 格式的 YUV 图。
