@@ -277,15 +277,15 @@ pip install -r ../../requirements.txt
 ### 注意事项
 - 若指定模型路径不存在，程序将尝试自动下载模型。
 
-## YOLOv5X 目标检测示例
+## Ultralytics YOLOv5x 目标检测示例
 
-本示例展示如何在 BPU 上使用量化后的 YOLOv5X 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存。
+本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存。
 
 
 ### 模型说明
 - 简介：
 
-    YOLOv5 是一类高性能的目标检测模型，其名称代表 "You Only Look Once"，可实现单次前向推理完成目标定位与分类。YOLOv5X 是其中最大的变体，具备更多的网络参数，检测精度高，适用于对准确率要求较高的场景。YOLOv5 模型将输入图像映射为多个网格，每个网格预测多个 anchor 的类别和边界框。本模型已量化为适用于BPU芯片的 HBM 格式，输入尺寸为 672×672 的 NV12 图像。
+    Ultralytics YOLOv5x 是一类高性能的目标检测模型，其名称代表 "You Only Look Once"，可实现单次前向推理完成目标定位与分类。Ultralytics YOLOv5x 是其中最大的变体，具备更多的网络参数，检测精度高，适用于对准确率要求较高的场景。Ultralytics YOLOv5x 模型将输入图像映射为多个网格，每个网格预测多个 anchor 的类别和边界框。本模型已量化为适用于BPU芯片的 HBM 格式，输入尺寸为 672×672 的 NV12 图像。
 
 - HBM 模型名称： yolov5x_672x672_nv12.hbm
 
@@ -297,7 +297,7 @@ pip install -r ../../requirements.txt
 ### 功能说明
 - 模型加载
 
-    通过 `hbm_runtime` 加载 yolov5x 量化模型，解析模型名称、输入输出名称、形状与量化参数等信息，为后续推理配置做好准备。
+    通过 `hbm_runtime` 加载 Ultralytics YOLOv5x 量化模型，解析模型名称、输入输出名称、形状与量化参数等信息，为后续推理配置做好准备。
 
 - 输入预处理
 
@@ -332,7 +332,7 @@ pip install -r ../../requirements.txt
 
 ```text
 .
-├── yolov5x.py                  # 主推理脚本
+├── ultralytics_yolov5x.py      # 主推理脚本
 └── README.md                   # 使用说明
 ```
 
@@ -354,11 +354,11 @@ pip install -r ../../requirements.txt
 - 运行模型
     - 使用默认参数
         ```bash
-        python yolov5x.py
+        python ultralytics_yolov5x.py
         ```
     - 指定参数运行
         ```bash
-        python yolov5x.py \
+        python ultralytics_yolov5x.py \
             --model-path yolov5x_672x672_nv12.hbm \
             --test-img ../../assets/kite.jpg \
             --label-file ../../labels/coco_classes.names \
@@ -378,14 +378,32 @@ pip install -r ../../requirements.txt
 ### 注意事项
 - 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
 
-## YOLOv11 目标检测示例
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
-本示例基于 YOLOv11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存。
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ```
+
+## Ultralytics YOLO11 目标检测示例
+
+本示例基于 Ultralytics YOLO11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存。
 
 ### 模型说明
 - 简介：
 
-    YOLOv11 是一款轻量级的 anchor-based 目标检测模型，融合了 anchor-free 与 anchor-based 思想，具备快速推理和精确定位的能力。该模型在回归阶段采用离散分桶（regression bin）方式，结合 softmax 分类和解码机制来提升定位精度。YOLOv11 适用于实时场景下的小模型部署，如安防监控、工业检测等任务。
+    Ultralytics YOLO11 是一款轻量级的 anchor-based 目标检测模型，融合了 anchor-free 与 anchor-based 思想，具备快速推理和精确定位的能力。该模型在回归阶段采用离散分桶（regression bin）方式，结合 softmax 分类和解码机制来提升定位精度。Ultralytics YOLO11 适用于实时场景下的小模型部署，如安防监控、工业检测等任务。
 
 - HBM 模型名称： yolo11n_detect_nashe_640x640_nv12.hbm
 
@@ -402,7 +420,7 @@ pip install -r ../../requirements.txt
 ### 功能说明
 - 模型加载
 
-    使用 `hbm_runtime` 接口加载 YOLOv11 量化模型，提取输入输出名称、形状、量化信息等模型元数据，供后续推理流程使用。
+    使用 `hbm_runtime` 接口加载 Ultralytics YOLO11 量化模型，提取输入输出名称、形状、量化信息等模型元数据，供后续推理流程使用。
 
 - 输入预处理
 
@@ -435,7 +453,7 @@ pip install -r ../../requirements.txt
 ### 目录结构
 ```text
 .
-├── yolov11.py                  # 主推理脚本
+├── ultralytics_yolo11.py       # 主推理脚本
 └── README.md                   # 使用说明
 ```
 
@@ -456,11 +474,11 @@ pip install -r ../../requirements.txt
 - 运行模型
     - 使用默认参数
         ```bash
-        python yolov11.py
+        python ultralytics_yolo11.py
         ```
     - 指定参数运行
         ```bash
-        python yolov11.py \
+        python ultralytics_yolo11.py \
             --model-path yolo11n_detect_nashe_640x640_nv12.hbm \
             --test-img ../../assets/kite.jpg \
             --label-file ../../labels/coco_classes.names \
@@ -479,6 +497,24 @@ pip install -r ../../requirements.txt
 
 ### 注意事项
 - 若指定模型路径不存在，程序将尝试自动下载模型。
+
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ```
 
 ## UNetMobileNet 语义分割示例
 
@@ -568,15 +604,14 @@ pip install -r ../../requirements.txt
     [Saved] Result saved to: result.jpg
     ```
 
-
-## YOLOv11 语义分割示例
+## Ultralytics YOLO11 实例分割示例
 
 本示例展示了如何基于 `hbm_runtime` 在 BPU 上运行 YOLOv11 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能。
 
 ### 模型说明
 - 简介：
 
-    YOLOv11 是一款轻量级目标检测与实例分割模型，基于 YOLO 系列设计并融合了 anchor-free 与 anchor-based 思想结构与回归分箱（distributional regression）策略。本模型为其实例分割变体，支持同时输出边界框、类别概率和高质量的像素级掩膜，适用于实时场景中的多对象检测与分割任务。
+    Ultralytics YOLO11 是一款轻量级目标检测与实例分割模型，基于 YOLO 系列设计并融合了 anchor-free 与 anchor-based 思想结构与回归分箱（distributional regression）策略。本模型为其实例分割变体，支持同时输出边界框、类别概率和高质量的像素级掩膜，适用于实时场景中的多对象检测与分割任务。
 
 - HBM 模型名称： yolo11n_seg_nashe_640x640_nv12.hbm
 
@@ -597,7 +632,7 @@ pip install -r ../../requirements.txt
 ### 功能说明
 - 模型加载
 
-    使用 `hbm_runtime` 加载量化后的 YOLOv11 实例分割模型，并解析输入输出张量的名称、形状、量化参数等运行时元数据。
+    使用 `hbm_runtime` 加载量化后的 Ultralytics YOLO11 实例分割模型，并解析输入输出张量的名称、形状、量化参数等运行时元数据。
 
 - 输入预处理
 
@@ -630,7 +665,7 @@ pip install -r ../../requirements.txt
 ### 目录结构
 ```text
 .
-├── yolov11_seg.py              # 主推理脚本
+├── ultralytics_yolo11_seg.py   # 主推理脚本
 └── README.md                   # 使用说明
 ```
 
@@ -652,11 +687,11 @@ pip install -r ../../requirements.txt
 - 运行模型
     - 使用默认参数
         ```bash
-        python yolov11_seg.py
+        python ultralytics_yolo11_seg.py
         ```
     - 指定参数运行
         ```bash
-        python yolov11_seg.py \
+        python ultralytics_yolo11_seg.py \
         --model-path yolo11n_seg_nashe_640x640_nv12.hbm \
         --test-img ../../assets/office_desk.jpg \
         --label-file ../../labels/coco_classes.names \
@@ -678,15 +713,32 @@ pip install -r ../../requirements.txt
 ### 注意事项
 - 若指定模型路径不存在，程序将尝试自动下载模型。
 
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
-## YOLOv11 姿态估计示例
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-本示例展示了如何基于 `hbm_runtime` 在 BPU 上运行 YOLOv11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注）。
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ```
+
+## Ultralytics YOLO11 姿态估计示例
+
+本示例展示了如何基于 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注）。
 
 ### 模型说明
 - 简介：
 
-    YOLOv11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它基于 YOLO anchor-free 结构并集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
+    Ultralytics YOLO11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
 
 - HBM 模型名称： yolo11n_pose_nashe_640x640_nv12.hbm
 
@@ -710,7 +762,7 @@ pip install -r ../../requirements.txt
 ### 功能说明
 - 模型加载
 
-    使用 `hbm_runtime` 加载指定的 YOLOv11 姿态估计模型，自动解析模型的输入输出张量名称、形状与量化参数。
+    使用 `hbm_runtime` 加载指定的 Ultralytics YOLO11 姿态估计模型，自动解析模型的输入输出张量名称、形状与量化参数。
 
 - 输入预处理
 
@@ -744,8 +796,8 @@ pip install -r ../../requirements.txt
 ### 目录结构
 ```text
 .
-├── yolov11pose.py              # 主推理脚本
-└── README.md                   # 使用说明
+├── ultralytics_yolo11_pose.py    # 主推理脚本
+└── README.md                     # 使用说明
 ```
 
 ### 参数说明
@@ -765,11 +817,11 @@ pip install -r ../../requirements.txt
 - 运行模型
     - 使用默认参数
         ```bash
-        python yolov11pose.py
+        python ultralytics_yolo11_pose.py
         ```
     - 指定参数运行
         ```bash
-        python yolov11pose.py \
+        python ultralytics_yolo11_pose.py \
         --model-path yolo11n_pose_nashe_640x640_nv12.hbm \
         --test-img ../../assets/bus.jpg \
         --label-file ../../labels/coco_classes.names \
@@ -790,14 +842,32 @@ pip install -r ../../requirements.txt
 ### 注意事项
 - 若指定模型路径不存在，程序将尝试自动下载模型。
 
-## YOLO-EV11 实例分割示例
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
-本示例展示了如何使用 `hbm_runtime` 在 BPU 上运行 YOLO-EV11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程。
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ```
+
+## Ultralytics YOLOE11 实例分割示例
+
+本示例展示了如何使用 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程。
 
 ### 模型说明
 - 简介：
 
-    YOLO-EV11 是一款高效能的端侧实例分割模型，适用于开放词汇物体检测与分割任务。该模型通过多尺度特征提取、密集分类和原型掩膜生成，有效识别图像中的物体并输出精细的实例分割结果。本示例使用的是 YOLO-EV11 的轻量级版本，输入图像为 640x640，支持 4585 类的广义物体分类与分割。
+    Ultralytics YOLOE11 是一款高效能的端侧实例分割模型，适用于开放词汇物体检测与分割任务。该模型通过多尺度特征提取、密集分类和原型掩膜生成，有效识别图像中的物体并输出精细的实例分割结果。本示例使用的是 Ultralytics YOLOE11 的轻量级版本，输入图像为 640x640，支持 4585 类的广义物体分类与分割。
 
 - HBM模型名称：yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
 
@@ -854,7 +924,7 @@ pip install -r ../../requirements.txt
 ### 目录结构
 ```text
 .
-├── yoloEv11_seg.py             # 主推理脚本
+├── yoloe11_seg.py              # 主推理脚本
 └── README.md                   # 使用说明
 ```
 
@@ -877,11 +947,11 @@ pip install -r ../../requirements.txt
 - 运行模型
     - 使用默认参数
         ```bash
-        python yoloEv11_seg.py
+        python yoloe11_seg.py
         ```
     - 指定参数运行
         ```bash
-        python yoloEv11_seg.py \
+        python yoloe11_seg.py \
         --model-path yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
         --priority 0 \
         --bpu-cores 0 \
@@ -898,6 +968,24 @@ pip install -r ../../requirements.txt
     运行成功后，会将结果绘制在原图上，并保存到 --img-save-path 指定路径
     ```bash
     [Saved] Result saved to: result.jpg
+    ```
+
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
 
 ### 注意事项
@@ -1222,9 +1310,10 @@ pip install -r ../../requirements.txt
 ### 注意事项
 - 若指定模型路径不存在，程序将尝试自动下载模型。
 
-## YOLOv5X USB Camera Inference 推理示例
 
-基于 `hbm_runtime` 的 YOLOv5X 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果。
+## Ultralytics YOLOv5x USB Camera Inference 推理示例
+
+基于 `hbm_runtime` 的 Ultralytics YOLOv5x 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果。
 
 ### 功能说明
 - 模型加载
@@ -1252,7 +1341,7 @@ pip install -r ../../requirements.txt
     将检测框及其类别、置信度绘制在图像上，并在窗口中全屏显示，支持实时处理和退出控制。
 
 ### 模型说明
-    参考 [YOLOv5X 目标检测示例小结](./02_Python_Sample.md#yolov5x-目标检测示例)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小结](./02_Python_Sample.md#Ultralytics YOLOv5x-目标检测示例)。
 
 ### 环境依赖
 - 确保安装了pydev中的环境依赖
@@ -1308,10 +1397,27 @@ pip install -r ../../requirements.txt
 
 - 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
 
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
-## YOLOv5X MIPI Camera Inference 推理示例
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-基于 `hbm_runtime` 的 YOLOv5X 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果。
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ```
+
+## Ultralytics YOLOv5x MIPI Camera Inference 推理示例
+
+基于 `hbm_runtime` 的 Ultralytics YOLOv5x 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果。
 
 ### 功能说明
 
@@ -1345,7 +1451,7 @@ pip install -r ../../requirements.txt
 
 
 ### 模型说明
-    参考 [YOLOv5X 目标检测示例小结](./02_Python_Sample.md#yolov5x-目标检测示例)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小结](./02_Python_Sample.md#Ultralytics YOLOv5x-目标检测示例)。
 
 
 ### 环境依赖
@@ -1403,9 +1509,27 @@ pip install -r ../../requirements.txt
 
 - 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
 
-## YOLOv5X WebSocket 推理示例
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
-本示例展示了如何在含有 HBM 加速器和 VIO 摄像头模块的嵌入式平台（如 RDK S100）上，使用 YOLOv5X 模型进行目标检测，并通过 WebSocket 实时推送 JPEG 图像和检测框。
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ```
+
+## Ultralytics YOLOv5x WebSocket 推理示例
+
+本示例展示了如何在含有 HBM 加速器和 VIO 摄像头模块的嵌入式平台（如 RDK S100）上，使用 Ultralytics YOLOv5x 模型进行目标检测，并通过 WebSocket 实时推送 JPEG 图像和检测框。
 
 ### 功能说明
 
@@ -1434,7 +1558,7 @@ pip install -r ../../requirements.txt
     接受网页端连接，持续获取相机图像，执行检测并给网页端返回 Protocol Buffer 结果
 
 ### 模型说明
-    参考 [YOLOv5X 目标检测示例小结](./02_Python_Sample.md#yolov5x-目标检测示例)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小结](./02_Python_Sample.md#Ultralytics YOLOv5x-目标检测示例)。
 
 ### 环境依赖
 - 确保安装了pydev中的环境依赖
@@ -1503,3 +1627,21 @@ pip install -r ../../requirements.txt
 
 ### 注意事项
 - 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
+
+### License
+    ```license
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    ```
