@@ -33,7 +33,7 @@ sidebar_label: 4.2 参考示例（python）
     **以上依赖库列表和安装文件仅列举了模型运行的基本库，部分示例程序需要额外的三方库，可通过相应示例的README.md文档或此文档的相应章节查看。**
 
 #### 其他组件
-- hbm_rumtime：用于加载和运行`.hbm`模型，系统默认已安装，如需自行安装可参考 [4.1 Python 接口](./01_Python_API.md#41-python-接口) 部分。
+- hbm_rumtime：用于加载和运行`.hbm`模型，系统默认已安装，如需自行安装可参考 [4.1 Python 接口](./01_Python_API.md#4.1-python-接口) 部分。
 
 
 - Hobot VIO：用于访问相机图像流（hobot_vio，如 libsrcampy）
@@ -155,7 +155,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                | `resnet18_224x224_nv12.hbm`                 |
+| `--model-path` | 模型文件路径（.hbm 格式）                                | `/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`                 |
 | `--test-img`   | 测试图片路径                                            | `../../assets/zebra_cls.jpg`                |
 | `--label-file` | 类别标签映射文件路径                                     | `../../labels/imagenet1000_clsidx_to_labels.txt` |
 | `--priority`   | 模型优先级（0~255，越大优先级越高）                      | `0`                                         |
@@ -460,7 +460,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数名           | 说明                                                         | 默认值                                         |
 |------------------|--------------------------------------------------------------|------------------------------------------------|
-| `--model-path`    | 模型文件路径（.hbm 格式）                                    | `yolo11n_detect_nashe_640x640_nv12.hbm`        |
+| `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`        |
 | `--test-img`      | 输入测试图片路径                                             | `../../assets/kite.jpg`                        |
 | `--label-file`    | 类别标签文件路径（每行一个类别名称）                         | `../../labels/coco_classes.names`              |
 | `--img-save-path` | 检测结果图像保存路径                                         | `result.jpg`                                   |
@@ -672,7 +672,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数                | 说明                    | 默认值 |
 |--------------------|-----------------------------|--------------------------------------|
-| `--model-path`     | 模型文件路径（.hbm 格式）     | `yolo11n_seg_nashe_640x640_nv12.hbm` |
+| `--model-path`     | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
 | `--test-img`       | 测试图片路径                 | `../../assets/office_desk.jpg`        |
 | `--label-file`     | 分类标签文件                 | `../../labels/coco_classes.names`     |
 | `--img-save-path`  | 输出结果图片保存路径          | `result.jpg`                          |
@@ -803,7 +803,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数名                | 说明                                              | 默认值                                |
 | ------------------ | --------------------------------------------------- | ------------------------------------- |
-| `--model-path`     | 模型文件路径（`.hbm` 格式）                           | `yolo11n_pose_nashe_640x640_nv12.hbm` |
+| `--model-path`     | 模型文件路径（`.hbm` 格式）                           | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
 | `--test-img`       | 测试图像路径                                         | `../../assets/bus.jpg`                |
 | `--label-file`     | 类别标签路径，每行一个类别名称                         | `../../labels/coco_classes.names`     |
 | `--img-save-path`  | 检测结果保存路径                                     | `result.jpg`                          |
@@ -931,7 +931,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数名               | 说明                                     | 默认值                                       |
 | ----------------- | ------------------------------------------ | ----------------------------------------- |
-| `--model-path`    | BPU 量化模型路径（\*.hbm）                  | `yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
+| `--model-path`    | BPU 量化模型路径（\*.hbm）                  | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
 | `--test-img`      | 输入测试图像路径                            | `../../assets/office_desk.jpg`            |
 | `--label-file`    | 类别标签文件路径（每行一个类别）             | `../../labels/coco_extended.names`        |
 | `--img-save-path` | 推理结果图像保存路径                        | `result.jpg`                              |
@@ -1053,7 +1053,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数名            | 说明                                      | 默认值                      |
 | -------------- | ------------------------------------------- | ------------------------ |
-| `--model-path` | 模型文件路径，`.hbm` 格式                     | `lanenet256x512.hbm`     |
+| `--model-path` | 模型文件路径，`.hbm` 格式                     | `/opt/hobot/model/s100/basic/lanenet256x512.hbm`     |
 | `--priority`   | 模型运行优先级，范围 0\~255，数值越大优先级越高 | `0`                      |
 | `--bpu-cores`  | 指定用于运行模型的 BPU 核心编号                | `[0]`                    |
 | `--test-img`   | 测试图像路径                                  | `../../assets/input.jpg` |
@@ -1146,7 +1146,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数名            | 说明                                          | 默认值                  |
 | ----------------- | -------------------------------------------- | ----------------------------|
-| `--model-path`    | 模型路径（`.hbm` 格式）                        | `asr.hbm`                    |
+| `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s100/basic/asr.hbm`                    |
 | `--audio-file`    | 输入音频文件（支持 `.wav` 或 `.flac`）         | `../../assets/chi_sound.wav` |
 | `--vocab-file`    | 词表文件，映射 token → id                     | `../../labels/vocab.json`    |
 | `--priority`      | 推理优先级，0\~255，数值越大越优先             | `0`                           |
@@ -1271,8 +1271,8 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数名                | 默认值                                        | 说明                             |
 | ------------------ | ----------------------------------------------- | -------------------------------- |
-| `--det-model-path` | `cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm` | 文本检测模型路径                  |
-| `--rec-model-path` | `cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm`   | 文本识别模型路径                  |
+| `--det-model-path` | `/opt/hobot/model/s100/basic/cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm` | 文本检测模型路径                  |
+| `--rec-model-path` | `/opt/hobot/model/s100/basic/cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm`   | 文本识别模型路径                  |
 | `--priority`       | `0`                                             | 模型推理优先级，数值越大优先级越高  |
 | `--bpu-cores`      | `[0]`                                           | 指定运行推理的 BPU 核心索引        |
 | `--test-img`       | `../../assets/gt_2322.jpg`                      | 输入图像路径                      |
@@ -1341,7 +1341,7 @@ pip install -r ../../requirements.txt
     将检测框及其类别、置信度绘制在图像上，并在窗口中全屏显示，支持实时处理和退出控制。
 
 ### 模型说明
-    参考 [Ultralytics YOLOv5x 目标检测示例小结](./02_Python_Sample.md#Ultralytics YOLOv5x-目标检测示例)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小结](#ultralytics-yolov5x-目标检测示例)。
 
 ### 环境依赖
 - 确保安装了pydev中的环境依赖
@@ -1451,7 +1451,7 @@ pip install -r ../../requirements.txt
 
 
 ### 模型说明
-    参考 [Ultralytics YOLOv5x 目标检测示例小结](./02_Python_Sample.md#Ultralytics YOLOv5x-目标检测示例)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小结](#ultralytics-yolov5x-目标检测示例)。
 
 
 ### 环境依赖
@@ -1558,7 +1558,7 @@ pip install -r ../../requirements.txt
     接受网页端连接，持续获取相机图像，执行检测并给网页端返回 Protocol Buffer 结果
 
 ### 模型说明
-    参考 [Ultralytics YOLOv5x 目标检测示例小结](./02_Python_Sample.md#Ultralytics YOLOv5x-目标检测示例)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小结](#ultralytics-yolov5x-目标检测示例)。
 
 ### 环境依赖
 - 确保安装了pydev中的环境依赖
