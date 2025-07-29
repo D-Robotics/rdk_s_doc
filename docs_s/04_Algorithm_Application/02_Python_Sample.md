@@ -244,7 +244,7 @@ pip install -r ../../requirements.txt
 ### 参数说明
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                  | `mobilenetv2_224x224_nv12.hbm`                 |
+| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`                 |
 | `--test-img`   | 测试图片路径                                              | `../../assets/zebra_cls.jpg`                |
 | `--label-file` | 类别标签映射文件路径                                       | `../../labels/imagenet1000_clsidx_to_labels.txt` |
 | `--priority`   | 模型优先级（0~255，越大优先级越高）                         | `0`                                         |
