@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 mobilenetv2图片分类算法示例使用图片作为输入，利用BPU进行算法推理，发布包含物体类别的算法msg。
 
 mobilenetv2是使用[ImageNet data](http://www.image-net.org/)数据集训练出来的caffe模型，模型来源： https://github.com/shicai/MobileNet-Caffe 。
-支持的目标类型包括人、动物、水果、交通工具等共1000种类型。具体支持的类别详见RDK板端文件 /opt/tros/`${TROS_DISTRO}`/lib/dnn_node_example/config/imagenet.list（已安装TogatherROS.Bot）。
+支持的目标类型包括人、动物、水果、交通工具等共1000种类型。具体支持的类别详见RDK板端文件 /opt/tros/`${TROS_DISTRO}`/lib/dnn_node_example/config/imagenet.list（已安装TogetheROS.Bot）。
 
 代码仓库： https://github.com/D-Robotics/hobot_dnn
 
@@ -30,6 +30,14 @@ mobilenetv2是使用[ImageNet data](http://www.image-net.org/)数据集训练出
 | RDK Ultra| Ubuntu 20.04 (Foxy) | · 启动MIPI/USB摄像头，并通过web展示推理渲染结果<br/>· 使用本地回灌，渲染结果保存在本地 |
 | RDK S100 | Ubuntu 22.04 (Humble) | · 启动MIPI/USB摄像头，并通过web展示推理渲染结果<br/>· 使用本地回灌，渲染结果保存在本地 |
 | X86     | Ubuntu 20.04 (Foxy) | · 使用本地回灌，渲染结果保存在本地 |
+
+## 算法信息
+
+| 模型 | 平台 | 输入尺寸 | 推理帧率(fps) |
+| ---- | ---- | ------------ | ---- |
+| mobilenetv2 | X3 | 1x3x224x224 | 414.17 |
+| mobilenetv2 | X5 | 1x3x224x224 | 683.46 |
+| mobilenetv2 | S100 | 1x3x224x224 | 1722.25 |
 
 ## 准备工作
 

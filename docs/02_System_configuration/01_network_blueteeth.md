@@ -6,7 +6,90 @@ sidebar_position: 1
 
 本章节主要介绍开发板有线、无线网络配置的修改方法。
 
-## 有线网络{#config_ethnet}
+## 有线网络：RDK X5（>= 3.3.0）
+
+开发板有线网络默认采用静态IP配置，初始IP地址为`192.168.127.10`。用户可通过如下方法实现静态、DHCP模式的切换。
+
+### [shell]修改静态IP配置
+开发板静态网络配置保存在`/etc/NetworkManager/system-connections/netplan-eth0.nmconnection`文件中，通过修改`address1`字段，可完成对静态IP配置的修改，`route-metri`是网络优先级配置，设置为`700`是为了让有线网络的优先级更低，当有线和无线网络同时使能时优先会使用无线网络。
+
+```shell
+sudo vim /etc/NetworkManager/system-connections/netplan-eth0.nmconnection
+```
+
+```shell
+[connection]
+id=netplan-eth0
+uuid=f6f8b5a7-9e23-49b2-a792-dc589b3d3e88
+type=ethernet
+interface-name=eth0
+timestamp=1754294545
+
+[ethernet]
+wake-on-lan=0
+
+[ipv4]
+address1=192.168.127.10/24,192.168.127.1
+dns=8.8.8.8;8.8.4.4;
+method=manual
+route-metric=700
+
+[ipv6]
+addr-gen-mode=eui64
+method=ignore
+
+[proxy]
+```
+
+修改完成后，命令行输入`sudo restart_network`命令让配置生效。
+
+### [shell]修改DHCP配置
+
+修改`[ipv4]`字段，只保留`method=auto`和`route-metric=700`
+
+```shell
+[ipv4]
+method=auto
+route-metric=700
+```
+
+修改完成后，命令行输入sudo restart_network命令让配置生效。
+
+### [shell]修改MAC地址配置
+
+修改`[ethernet]`字段，添加`cloned-mac-address=12:34:56:78:9A:BA`
+
+```shell
+[ethernet]
+cloned-mac-address=12:34:56:78:9A:BA
+wake-on-lan=0
+```
+
+修改完成后，reboot重启让配置生效。
+
+### [桌面]修改静态IP配置
+
+![image-edid](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-edid.png)
+
+![image-edid2](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-edid2.png)
+
+![image-setip](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-setip.png)
+
+### [桌面]修改DHCP配置
+
+![image-dhcp](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-dhcp.png)
+
+### [桌面]修改MAC地址配置
+
+![image-mac](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-mac.png)
+
+### [桌面]配置生效
+
+点选`netplan-eth0`，配置生效。
+
+![image-enable](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-enable.png)
+
+## 有线网络：RDK X3/X5（< 3.3.0）{#config_ethnet}
 
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=11
 
@@ -323,19 +406,19 @@ sudo reboot
 
 ## 蓝牙配置
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=9
+:::info 注意
+从 3.0.0 系统开始，蓝牙默认随系统启动，无需手动重复初始化。在 RDK X3 和 RDK X5 平台上均保持一致。
+:::
 
 ### 初始化
 
-开发板蓝牙功能默认没有开启，需要执行 `/usr/bin/startbt6212.sh`脚本进行初始化，该脚本完成以下工作：
+如果开发板蓝牙功能默认没有开启，`hciconfig`查看不到设备，可以执行 `/usr/bin/startbt.sh`脚本进行初始化，该脚本完成以下工作：
 
-- 复位蓝牙
-- 创建 `messagebus` 用户和用户组，`dbus-daemon` 程序运行时需要使用该用户
-- 运行 `brcm_patchram_plus` 完成蓝牙的驱动加载和固件加载
-- 循环检查 `/sys/class/bluetooth/hci0` 目录是否存在，确认蓝牙驱动已经正常运行
-- 出现 **Done setting line discpline**  表示蓝牙启用成功
+- 完成蓝牙初始化
 - 执行 `hciconfig hci0 up`  完成蓝牙的Link Up
-- 执行 `hciconfig hci0 piscan` 进行蓝牙扫描，本步骤可以根据情况去掉
+- 执行 `hciconfig hci0 piscan` 进行蓝牙扫描
+
+Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=9
 
 脚本执行成功后的log如下：
 
@@ -349,6 +432,40 @@ ps ax | grep "/usr/bin/dbus-daemon\|/usr/lib/bluetooth/bluetoothd"
 
 /usr/lib/bluetooth/bluetoothd
 ```
+
+### 通信接口
+
+为充分发挥开发板的扩展能力，当前硬件设计已集成多样化的接口与外设资源。
+
+受限于接口布局及硬件资源分配，开发板未能完整复现蓝牙模组的所有通信接口。
+
+目前仅提供 `BT_RX` `BT_TX` 双线模式，可满足无实时性要求的 AT 指令交互与数据传输等基础功能。
+
+基于 UART 接口的蓝牙模组，不同接口连接方式及对应功能如下：
+
+- ‌基础通信模式（UART Only）‌
+- - 接口引脚：`BT_RX` `BT_TX`
+- - 功能特性：基于UART的异步串行数据通信（如AT指令交互、低速率数据传输），无流控机制，在波特率超载或持续大数据量传输时，存在数据包丢失及缓冲区溢出风险。
+- ‌增强型传输模式（增加硬件流控）‌
+- - 接口引脚：`BT_RX` `BT_TX` `BT_CTS` `BT_RTS`
+- - 功能特性：可有效避免数据包丢失及缓冲区溢出风险，支持A2DP高保真单向音频流传输。
+- 语音通信模式（PCM同步接口）
+- - 接口引脚：`PCM_SYNC` `PCM_DIN` `PCM_CLK` `PCM_DOUT`
+- - 功能特性：支持基于SCO链路的实时双向音频传输，比如HPF/HSP
+
+### USB蓝牙
+
+如需深入使用蓝牙功能，例如在 `SPP（蓝牙虚拟串口）` 模式下实现高速稳定通信、在 `PAN（蓝牙虚拟网卡）` 模式下保证带宽质量，或在 `A2DP（高保真单向音频流）` 模式下避免音频中断，建议优先使用 `USB 接口蓝牙模块`。
+
+开发板已集成 `USB2.0-BT`、`CSR8510 A10` 等常见蓝牙驱动，可直接支持大部分免固件的 USB 蓝牙模组。
+
+![image-USB2.0-BT](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-USB2.0-BT.png)
+
+![image-CSR8510](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-CSR8510.png)
+
+![image-hci1](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-hci1.png)
+
+对于 `Realtek` 系列蓝牙模组，则需要额外的`固件`支持。请向模组厂家获取适配 Linux 平台 的固件，并将其放置到指定目录后，方可正常使用。
 
 ### 配网连接
 

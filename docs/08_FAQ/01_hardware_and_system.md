@@ -4,6 +4,12 @@ sidebar_position: 1
 
 # 8.1 硬件、系统与环境配置
 
+:::info 🔄 问题解决前请考虑更新到最新系统
+
+许多问题可通过系统更新解决，相关下载资源请参考：[下载资源汇总](../01_Quick_start/download.md)
+
+:::
+
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -267,6 +273,33 @@ F37摄像头连接示意图：
         sudo dpkg --configure -a  # 尝试修复任何未完成的包配置
         ```
     4.  再次尝试 `sudo apt update`。
+
+##### 3. ROS2 GPG密钥问题
+
+**典型报错信息：**
+
+    ```bash
+    W: GPG error: http://packages.ros.org/ros2/ubuntu jammy InReleaase: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY F42ED6FBAB17C654
+    E: The repository 'http://packages.ros.org/ros2/ubuntu jammy InRelease' is not signed.
+    N: Updating from such a repository can't be done securely, and is therefore disabled by default.
+    N: See apt-secure(8) manpage for repository creation and user configuration details.
+    ```
+
+**原因分析：**  
+ROS2官方软件源GPG签名密钥更新，导致本地配置过期。
+
+**解决步骤：**
+
+1. **更新GPG密钥**
+   ```bash
+   curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key | sudo tee /usr/share/keyrings/ros-archive-keyring.gpg > /dev/null
+   ```
+
+2. **重新更新软件包列表**
+        ```bash
+        sudo apt update
+        ```
+
 
 ### Q11: 如何查看RDK X3的CPU、BPU等硬件单元的运行状态?
 **A:** 可以使用地瓜机器人提供的 `hrut_somstatus` 工具来查看实时的系统状态，包括CPU各个核心的占用率、BPU（AI计算单元）的使用率、内存使用情况、芯片温度等。
@@ -661,7 +694,7 @@ no mmc device at slot X
     * **散热片安装：** 确保散热片与芯片（CPU/SoC）接触良好，导热硅脂或导热垫片已正确涂抹/放置。
 2.  **确保空气流通：** 避免将板卡放置在密闭或通风不良的环境中。
 3.  **监控温度：**
-    * 使用系统命令（如 `cpu_status_monitor`，或读取 `/sys/class/thermal/thermal_zoneX/temp` 文件内容）来实时监控芯片温度。
+    * 使用系统命令（如 `hrut_somstatus`，或读取 `/sys/class/thermal/thermal_zoneX/temp` 文件内容）来实时监控芯片温度。
     * 了解板卡芯片的安全工作温度范围，避免长时间超出上限。
 4.  **优化应用负载：**
     * 如果可能，优化您的应用程序，减少不必要的计算，降低CPU/BPU的持续高负载。
