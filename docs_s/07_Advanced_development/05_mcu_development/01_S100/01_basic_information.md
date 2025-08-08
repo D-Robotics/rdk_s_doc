@@ -171,27 +171,34 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 2. 系统存活时间taskcounter：表示mcu启动后持续的时间，单位：秒；
 3. mcu版本mcu_version：可以查看mcu版本信息，包括debug版本还是release版本，以及编译的时间；
 4. sbl版本sbl_version：可以查看sbl版本信息以及编译的时间，但是只有在remoteproc_mcu0下可以查看;
-5. MCU串口log:可以查看MCU串口log信息，分别remoteproc_mcu0对应MCU0，remoteproc_mcu1对应MCU1。
+5. mcu串口log: 可以查看MCU串口log信息，分别remoteproc_mcu0对应mcu0，remoteproc_mcu1对应mcu1。
+6. mcu cpuload: 可以获取到mcu0\mcu1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuload数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。
 
-系统状态alive，图示：
+:::info 图片中的信息可能因版本更新而有所不同，文中示例仅供参考
+:::
+1. 系统状态alive，图示：
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/alive_state.png)
 
-系统存活时间taskcounter，图示：
+2. 系统存活时间taskcounter，图示：
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/taskcounter_state.png)
 
-mcu版本mcu_version，图示：
+3. mcu版本mcu_version，图示：
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_version.png)
 
-sbl版本sbl_version，图示：
+4. sbl版本sbl_version，图示：
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/sbl_version.png)
 
-MCU串口log获取，图示：
+5. mcu串口log获取，图示：
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)
+
+6. mcu cpuload获取，图示:
+
+![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/cpuload.jpg)
 
 ## MCU串口使用
 如果RDK-S100含有连接方式如下，mcu串口和Acore串口共用一个串口，自行查看：设备管理器 -》端口-》MCU-COM-波特率921600
