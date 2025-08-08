@@ -121,6 +121,7 @@ RDK S100 开发套件可借助 PC 端工具 D-Navigation 来完成 Ubuntu 系统
 
   - MacOS 版本启动(目前支持 M 芯片)：
 
+            xattr -cr D-navigation.app # App 解除隔离，在终端执行
             双击打开D-Navigation.exe
 
     :::
