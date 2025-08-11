@@ -58,6 +58,60 @@ sidebar_position: 2
   Press 'q' to Exit !
   ```
 
+## 摄像头图像本地保存
+
+本示例vio_capture示例实现了MIPI摄像头图像采集，并将RAW和YUV两种格式的图像本地保存的功能。示例流程框图如下：
+
+示例流程框图：
+
+ ![image-vio_capture.png](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png)
+
+- **环境准备：**
+
+  - 开发板断电状态下，将`MIPI`摄像头接入开发板
+  - 开发板上电，并通过命令行登录
+
+- **运行方式：**
+  示例代码以源码形式提供，需要使用`make`命令进行编译后运行，步骤如下：
+
+  ```bash
+  sunrise@ubuntu:~$ cd /app/cdev_demo/vio_capture/
+  sunrise@ubuntu:/app/cdev_demo/vio_capture$ make
+  sunrise@ubuntu:/app/cdev_demo/vio_capture$ ./capture -b 16 -c 10 -h 1080 -w 1920
+  ```
+
+  参数说明：
+
+  - -b: RAW图bit数，IMX219 / IMX477 / OV5647 都设置为 16，只有极少数 Camera Sensor 需要设置为 8
+  - -c: 保存图像的数量
+  - -w: 保存图像的宽度
+  - -h: 保存图像的高度
+
+- **预期效果：**
+  程序正确运行后，当前目录保存指定数量的图片文件，`RAW`格式以`raw_*.raw`方式命名，`YUV`格式以`yuv_*.yuv`方式命名。运行log如下：
+
+  ```bash
+  sunrise@ubuntu:/app/cdev_demo/vio_capture$ ./capture -b 16 -c 10 -h 1080 -w 1920
+  [UCP]: log level = 3
+  [UCP]: UCP version = 3.7.3
+  [VP]: log level = 3
+  [DNN]: log level = 3
+  [HPL]: log level = 3
+  [UCPT]: log level = 6
+  2025/06/04 22:24:22.139 !INFO [CamInitParam][0296]set camera fps: -1,width: 1920,height: 1080
+
+  mipi mclk is not configed.
+  Searching camera sensor on device: /proc/device-tree/soc/vcon@0 i2c bus: 1 mipi rx phy: 0
+  WARN: Sensor Name: ar0820std-30fps, Expected Chip ID: 0xCB34, Actual Chip ID Read: 0x00
+  [0] INFO: Found sensor name:imx219-30fps on mipi rx csi 0, i2c addr 0x10, config_file:linear_1920x1080_raw10_30fps_1lane.c
+  2025/06/04 22:24:22.140 !INFO [CamInitPymParam][0259]Setting PYM channel:0: crop_x:0, crop_y:0, input_width:1920, input_height:1080, dst_w:1920, dst_h:1080
+  capture time :0
+  temp_ptr.data_size[0]:2592000
+  ... 省略 ...
+  capture time :9
+  temp_ptr.data_size[0]:2592000
+  ```
+
 ## 摄像头图像采集并编码
 
 本示例`vio2encoder`示例实现了 `MIPI` 摄像头图像采集功能，并编码后在本地保存，用户可通过显示器预览画面。
