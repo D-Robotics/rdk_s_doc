@@ -135,7 +135,7 @@ sidebar_position: 2
   ```bash
   sunrise@ubuntu:~$ cd /app/cdev_demo/decode2display
   sunrise@ubuntu:/app/cdev_demo/decode2display$ make
-  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/pydev_demo/07_decode_rtsp_stream/1080P_test.h264
+  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/res/1080P_test.h264
   ```
 
   参数说明：
@@ -147,7 +147,7 @@ sidebar_position: 2
 - **预期效果：**
   程序正确运行后，视频画面会通过开发板的`HDMI`接口输出，用户可以通过显示器预览视频画面。运行 log 如下：
   ```bash
-  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/pydev_demo/07_decode_rtsp_stream/1080P_test.h264
+  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/res/1080P_test.h264
   [UCP]: log level = 3
   [UCP]: UCP version = 3.7.3
   [VP]: log level = 3
@@ -179,9 +179,9 @@ sidebar_position: 2
   - 准备`rtsp`码流作为输入源，使用系统预置的推流服务。该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/1080P_test.h264`。用户可通过如下命令启动推流服务：
 
     ```text
-    cd /app/pydev_demo/07_decode_rtsp_stream/
-    sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo chmod +x live555MediaServer
-    sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo ./live555MediaServer &
+    cd /app/res
+    sunrise@ubuntu:/app/res# sudo chmod +x live555MediaServer
+    sunrise@ubuntu:/app/res# sudo ./live555MediaServer &
     ```
 
 - **运行方式：**

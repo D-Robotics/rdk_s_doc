@@ -20,13 +20,13 @@ sidebar_position: 1
 用户可通过如下命令启动推流服务：
 
 ```
-cd /app/pydev_demo/07_decode_rtsp_stream/
-sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# sudo ./live555MediaServer &
+cd /app/res
+sunrise@ubuntu:/app/res# sudo ./live555MediaServer &
 ```
 
 服务正常启动后的log如下， 注意最后一行的 `We use port 80`, 说明rtsp服务运行在80端口，它有可能存在8000和8080的情况，在后面设置rtsp url的时候需要根据实际使用的端口号做修改：
 ```bash
-sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream#
+sunrise@ubuntu:/app/res#
 LIVE555 Media Server version 1.01 (LIVE555 Streaming Media library version 2020.07.09).
 Play streams from this server using the URL
         rtsp://192.168.127.10/<filename>
