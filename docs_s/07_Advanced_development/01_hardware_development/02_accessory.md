@@ -56,12 +56,12 @@ sidebar_position: 2
 
 | 类型 | 供应商 | 型号            | 描述                                         | 购买链接                                                                          |
 | ---- | ------ | --------------- | -------------------------------------------- | --------------------------------------------------------------------------------- |
-| HDMI | 微雪   | 5 英寸触控屏   | 分辨率 800x480，钢化玻璃面板，高色域触控屏  | [购买链接](https://www.waveshare.net/shop/5inch-HDMI-LCD-H.htm)
-| HDMI | 微雪   | 7 英寸触控屏   | 分辨率 1024x600，钢化玻璃面板，高色域触控屏  | [购买链接](https://www.waveshare.net/shop/7inch-HDMI-LCD-H.htm)              |
-| HDMI | 微雪   | 10 英寸触控屏   | 分辨率 1024x600，钢化玻璃面板，高色域触控屏  | [购买链接](https://www.waveshare.net/shop/10.1inch-HDMI-LCD-E.htm)
-| HDMI | 微雪   | 10 英寸触控屏   | 分辨率 1280x800，钢化玻璃面板，高色域触控屏  | [购买链接](https://www.waveshare.net/shop/10.1HP-CAPLCD-Monitor.htm)              |
-| HDMI | 微雪   | 11.6 英寸触控屏   | 分辨率 1920x1080，钢化玻璃面板，高色域触控屏  | [购买链接](https://www.waveshare.net/shop/11.6inch-HDMI-LCD-H.htm)              |
-| HDMI | 微雪   | 13.3 英寸触控屏 V2 | 分辨率 1920x1080，钢化玻璃面板，高色域触控屏 | [购买链接](https://www.waveshare.net/shop/13.3inch-HDMI-LCD-H-with-Holder-V2.htm) |
+| HDMI | 微雪   | 5 英寸触控屏   | 分辨率 800x480，电容屏H版 钢化玻璃面板 高兼容性  | [购买链接](https://www.waveshare.net/shop/5inch-HDMI-LCD-H.htm)
+| HDMI | 微雪   | 7 英寸触控屏   | 分辨率 1024x600，电容屏H版 IPS 高兼容性 | [购买链接](https://www.waveshare.net/shop/7inch-HDMI-LCD-H.htm)              |
+| HDMI | 微雪   | 10.1 英寸触控屏   | 分辨率 1024x600，电容屏 IPS屏  | [购买链接](https://www.waveshare.net/shop/10.1inch-HDMI-LCD-E.htm)
+| HDMI | 微雪   | 10.1 英寸触控屏   | 分辨率 1280x800，钢化玻璃面板，高色域电容触控屏  | [购买链接](https://www.waveshare.net/shop/10.1HP-CAPLCD-Monitor.htm)              |
+| HDMI | 微雪   | 11.6 英寸触控屏   | 分辨率 1920x1080，钢化玻璃面板 IPS 高兼容性 | [购买链接](https://www.waveshare.net/shop/11.6inch-HDMI-LCD-H.htm)              |
+| HDMI | 微雪   | 13.3 英寸触控屏 V2 | 分辨率 1920x1080，钢化玻璃面板 IPS 高兼容性 | [购买链接](https://www.waveshare.net/shop/13.3inch-HDMI-LCD-H-with-Holder-V2.htm) |
 
 ## 转接板
 
