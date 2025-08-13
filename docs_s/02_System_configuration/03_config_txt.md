@@ -30,6 +30,45 @@ bootargs=isolcpus=1-2
 loglevel=8
 ```
 
+### 临时修改dts
+#### 使能或失能特定节点
+修改配置文件，添加：`fdt-enable=<dts节点1全路径>;<dts节点2全路径>;`；`fdt-disable=<dts节点1全路径>;<dts节点2全路径>;`，例如：
+```
+# Enable kernel dts node
+fdt-enable=/soc/uart@394C0000;
+
+# Disable kernel dts node
+fdt-disable=/soc/uart@394C0000;
+```
+
+:::info
+- 示例中配置行末尾的“;”不可省略；
+- dts节点全路径可以在板端`/proc/device-tree`下获取，例如：
+    ```shell
+      root@ubuntu:~# realpath --relative-to=/proc/device-tree/ /proc/device-tree/soc/uart@394C0000
+      soc/uart@394C0000
+    ```
+    注意命令获取到的路径需要添加行首的"/"；
+:::
+
+#### 配置DTB Overlay文件
+修改配置文件，添加：`dtbo_file_path=</boot分区下的相对路径>`，例如：
+```
+# Set dtbo file path relative to /boot partition
+dtbo_file_path=/test_overlay.dtbo
+```
+
+如果想要自定义分区，则可以添加：`dtbo_dev_part=<设备号>:<16进制分区号>`，RDK S100默认设备号为"0"，分区号可以通过`/dev/block/platform/by-name/`路径获取，以下以`userdata`分区为例：
+```
+# Set dtbo file device number and partition number:
+dtbo_dev_part=0:0x10
+```
+获取分区号的方法：`ls -l /dev/block/platform/by-name/<分区名>`，例如：
+```shell
+root@ubuntu:~# ls -l /dev/block/platform/by-name/userdata
+lrwxrwxrwx 1 root root 15 Jun  4 22:17 /dev/block/platform/by-name/userdata -> /dev/mmcblk0p16
+```
+
 ## 自定义config.txt指南
 地瓜Uboot会根据当前启动使用的储存介质和分区，自动获取默认的配置文件所在分区。
 
