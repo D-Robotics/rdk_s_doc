@@ -77,13 +77,13 @@ sidebar_position: 2
   ```bash
   sunrise@ubuntu:~$ cd /app/cdev_demo/vio_capture/
   sunrise@ubuntu:/app/cdev_demo/vio_capture$ make
-  sunrise@ubuntu:/app/cdev_demo/vio_capture$ ./capture -b 16 -c 10 -h 1080 -w 1920
+  sunrise@ubuntu:/app/cdev_demo/vio_capture$ ./capture -b 10 -c 10 -w 1920 -h 1080
   ```
 
   参数说明：
 
-  - -b: RAW图bit数，IMX219 / IMX477 / OV5647 都设置为 16，只有极少数 Camera Sensor 需要设置为 8
-  - -c: 保存图像的数量
+  - -b: RAW图bit数，例如IMX219支持格式为RAW10，则bit数为10。sensor支持格式可参考[配件清单](http://sysgbj2.hobot.cc/rdk_doc/rdk_s/Advanced_development/hardware_development/accessory)
+  - -c: 保存图像的数量，获取到每张图像的时间间隔一般为1/fps
   - -w: 保存图像的宽度
   - -h: 保存图像的高度
 
@@ -91,7 +91,7 @@ sidebar_position: 2
   程序正确运行后，当前目录保存指定数量的图片文件，`RAW`格式以`raw_*.raw`方式命名，`YUV`格式以`yuv_*.yuv`方式命名。运行log如下：
 
   ```bash
-  sunrise@ubuntu:/app/cdev_demo/vio_capture$ ./capture -b 16 -c 10 -h 1080 -w 1920
+  sunrise@ubuntu:/app/cdev_demo/vio_capture$ ./capture -b 10 -c 10 -w 1920 -h 1080
   [UCP]: log level = 3
   [UCP]: UCP version = 3.7.3
   [VP]: log level = 3

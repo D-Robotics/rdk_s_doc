@@ -185,7 +185,7 @@ F37摄像头连接示意图：
 
 #### 常见报错类型
 - 密钥验证失败或过期
-- 软件源域名无法解析  
+- 软件源域名无法解析
 - 锁文件被占用
 - 网络连接问题
 
@@ -199,7 +199,7 @@ F37摄像头连接示意图：
 - `Could not resolve 'archive.sunrisepi.tech'` (或其他旧域名)
 - `The following signatures couldn't be verified because the public key is not available: NO_PUBKEY ...`
 
-**原因分析：**  
+**原因分析：**
 地瓜机器人官方软件源域名或GPG签名密钥发生变更，导致本地配置过期。
 
 **解决步骤：**
@@ -208,7 +208,7 @@ F37摄像头连接示意图：
    ```bash
    cat /etc/apt/sources.list.d/sunrise.list
    ```
-   
+
    正确的配置应类似：
    ```
    deb [signed-by=/usr/share/keyrings/sunrise.gpg] http://archive.d-robotics.cc/ubuntu-rdk-s100 jammy main #RDK S100
@@ -217,7 +217,7 @@ F37摄像头连接示意图：
    ```
 
 2. **更新域名配置**
-   
+
    如果发现旧域名（如 `archive.sunrisepi.tech` 或 `sunrise.horizon.cc`等），需要更新：
    ```bash
    # 替换旧域名为新域名
@@ -227,7 +227,7 @@ F37摄像头连接示意图：
 
 3. **切换测试版到正式版**
    截至25-7-14 ，RDK S100的正式版源尚未发布。
-   
+
    如果使用测试版源（包含 `-beta` 后缀），需要切换到正式版：
    ```bash
    sudo sed -i 's/ubuntu-rdk-s100-beta/ubuntu-rdk-s100/g' /etc/apt/sources.list.d/sunrise.list
@@ -904,3 +904,41 @@ no mmc device at slot X
 * **仔细阅读官方文档：** 针对您使用的RDK型号和目标系统版本，务必以官方最新发布的开发文档、SDK说明和移植指南为准。
 * **保持环境一致性：** 交叉编译环境中所使用的库（尤其是系统库和核心依赖库）的版本，应尽可能与目标RDK板卡上实际运行的库版本保持一致或兼容，以避免运行时出现链接错误或行为不一致的问题。
 * **Sysroot的正确配置至关重要：** 无论是编译普通Linux程序还是ROS包，正确配置和使用Sysroot是交叉编译成功的关键环节。
+
+### Q44: IMX219等 MIPI摄像头如何连接到RDK S100? 连接后如何验证？
+**A:** IMX219这类MIPI摄像头模组通常通过24pin FPC（柔性扁平电缆）与开发板连接。
+**连接注意：** FPC排线的两端通常有蓝色或黑色加强筋，请确保**加强筋的一面朝上**（或朝向连接器卡扣的扳手面，具体取决于连接器类型）插入到开发板和摄像头模组的连接器中，并锁紧卡扣。
+
+IMX219摄像头连接示意图：
+![IMX219摄像头连接到RDK S100示意图](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect.png)
+
+
+**连接后验证：**
+1.  **确保摄像头已正确连接且开发板已上电。**
+2.  **运行MIPI摄像头示例程序 (以RDK S100为例)：**
+    ```bash
+    cd /app/pydev_demo/10_mipi_camera_sample # 路径可能因系统版本而异
+    python3 01_mipi_camera_yolov5x.py
+    ```
+    如果一切正常，您应该能通过HDMI输出或其他指定方式看到摄像头捕捉的画面以及可能的AI算法处理结果
+    示例算法渲染结果HDMI输出（检测到`teddy bear`、`cup`和`vase`）：
+    ![MIPI摄像头算法渲染结果示例](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png)
+
+3.  **通过 `i2cdetect` 命令检查I2C通信：**
+
+    MIPI摄像头通常通过I2C总线与主控芯片通信以进行配置。您可以使用 `i2cdetect` 命令来扫描连接到特定I2C总线上的设备。RDK S100上MIPI摄像头常用的I2C总线可能是 `i2c-1` 或 `i2c-2` (具体请查
+    ```bash
+    sudo i2cdetect -y -r 1  # 扫描 i2c-1 总线
+    # 或 sudo i2cdetect -y -r 2 # 扫描 i2c-2 总线
+    ```
+    **预期输出示例：**
+    * **IMX219 (通常地址为 0x10):**
+    ```
+        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- --
+    10: 10 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --  (0x10为IMX219地址)
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    30: -- -- -- -- -- -- -- -- -- -- -- UU -- -- -- --  (UU可能表示内核驱动已占用)
+    ...
+    ```
+    如果`i2cdetect`能够扫描到摄像头的I2C地址，说明摄像头至少在I2C通信层面被识别了。
