@@ -372,10 +372,10 @@ sidebar_position: 3
 ### scons简述
 目前RDK-S100 mcu仅仅支持s100_sip_B的编译，并且采用的是scons编译方式取代了Makefile。
 Scons跟Makefile类似，每个文件夹由Sconscript编译文件（类似于Makefile），最后有个总的SConstruct文件总体去控制编译。
-如mcu1的镜像就是SConstruct_Lite_FRtos_S100_sip_B控制。
+如MCU1的镜像就是SConstruct_Lite_FRtos_S100_sip_B控制。
 ### 增加编译目录流程
 1. 修改mcu/Build/FreeRtos_mcu1/SConstruct_Lite_FRtos_S100_sip_B文件，增加/删除相应的模块。
-   
+
    如增加mcu/Service/Log文件夹，只需增加相应的位置即可。变量False表示控制构建过程中不会将源文件复制到编译输出目录。
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/scons_add_context.png)
