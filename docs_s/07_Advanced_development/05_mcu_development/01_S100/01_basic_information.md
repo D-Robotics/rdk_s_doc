@@ -37,7 +37,7 @@ sudo apt-get install -y build-essential make cmake libpcre3 libpcre3-dev bc biso
                         curl repo git liblz4-tool apt-cacher-ng libssl-dev checkpolicy autoconf \
                         android-sdk-libsparse-utils mtools parted dosfstools udev rsync python3-pip scons
 
-pip install scons>=4.0.0
+pip install "scons>=4.0.0"
 pip install ecdsa
 pip install tqdm
 ```
