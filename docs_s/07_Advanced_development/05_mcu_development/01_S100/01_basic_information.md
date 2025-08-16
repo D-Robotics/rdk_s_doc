@@ -212,7 +212,7 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 ```c
 fastboot 0
 ```
-2. 编译好的mcu0 镜像/output_sysmcu/目录下找到相应的mcu0镜像（MCU0代码仅在商业版中提供）
+2. 编译好的mcu0 镜像/output_sysmcu/目录下找到相应的mcu0镜像（MCU0代码仅在企业版中提供）
 ```c
 fastboot oem interface:mtd
 /* 编译出来的mcu0镜像：MCU_S100_SIP_V2.0.img */

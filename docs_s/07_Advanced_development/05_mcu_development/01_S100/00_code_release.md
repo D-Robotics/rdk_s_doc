@@ -28,8 +28,10 @@ MCU
 ```c
 MCU
 ├── Build                # Build系统，包含编译/链接脚本
+│   ├── BootLoader       # Bootloader所用的编译配置文件（无需关注）
 |   ├── FreeRtos         # 用于编译MCU0的固件
 |   ├── FreeRtos_mcu1    # 用于编译MCU1的固件
+│   ├── FreeRtos_mcu1_community # 用于编译MCU1的固件（社区版）
 |   ├── ToolChain        # gcc工具链
 |   └── Tools            # 编译过程中使用的通用工具
 ├── Common               # 包含所有MCAL模块所需的通用文件和定义

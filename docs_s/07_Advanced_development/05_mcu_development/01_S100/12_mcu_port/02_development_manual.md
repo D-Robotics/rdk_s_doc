@@ -69,7 +69,7 @@ Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_FuncCfg.c
 地瓜根据各个功能的实际情况，提供了一套默认的PIN属性定义，在`Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_FuncCfg.c`文件内，客户可以根据自己的实际需求进行修改。
 
 ## Port模块
-Port模块是地瓜MCU底层的PinCtrl模块，一般用户使用Port_Func模块对需要使用的外设进行功能的初始化配置即可。以下部分属于进阶Port开发的内容，部分功能仅在商业版代码开放。
+Port模块是地瓜MCU底层的PinCtrl模块，一般用户使用Port_Func模块对需要使用的外设进行功能的初始化配置即可。以下部分属于进阶Port开发的内容，部分功能仅在企业版代码开放。
 
 ### Pin初始状态配置
 MCU0在启动时，会调度`Port_Init()`接口对MCU的所有PIN进行初始状态配置，MCU1在启动时默认不会再次`Port_Init()`接口。
@@ -88,7 +88,7 @@ MCU0在启动时，会调度`Port_Init()`接口对MCU的所有PIN进行初始状
 - 第一行“注释行”标注了代码行每一个参数所代表的含义；
 - 第二行“代码行”定义了每一根PIN的状态，下面介绍几个重点配置：
   - `PinMode`：定义了PIN的具体功能，功能定义可以参考`Config/McalCdd/gen_s100_sip_B/Port/src/Port_PBCfg.h`
-  - `Config Type`：定义了PIN的SlewRate控制，具体定义，商业版可以参考`Port/Inc/Port_Lld.h`，社区版可以参考：`Include/Port_Lld.h`
+  - `Config Type`：定义了PIN的SlewRate控制，具体定义，企业版可以参考`Port/Inc/Port_Lld.h`，社区版可以参考：`Include/Port_Lld.h`
   - `IsUsed`：定义Port模块是否会在初始化时对该PIN进行配置；
   - `ModeChange`：定义了调度Port模块（不包括Port_Func模块）API时，是否允许该PIN的功能在Runtime被修改；
   - `IsUsedGpio`：定义Port模块是否会在初始化时对该PIN进行GPIO的方向及输出配置；
