@@ -162,7 +162,7 @@ hobot-camera/
 │   ├── inc
 │   └── sensor
 ├── lib -> ../hobot-multimedia/debian/usr/hobot/lib # 方便编译的源码软连接
-├── sensor_calibration       # Sensor tuning库
+├── sensor_calibration       # Sensor tuning库，下列库仅为示例，以实际情况为准
 │   └── lib_imx219_linear.so
 └── tuning_tool              # 地瓜提供的Sensor tuning工具
     ├── bin
