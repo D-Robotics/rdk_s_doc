@@ -646,7 +646,7 @@ S100参考实现中，OTA升级完重启之后起到内核会触发systemd的OTA
 
   - 当差分升级时，S100 OTA会根据差分镜像和板端原始分区数据通过逆差分还原成目标镜像，并写入到对应的外部存储器分区，完成最终的升级。
 
-  - S100上使用的是开源的差分算法工具hdiffz/hpatch，详细信息请参考:https://github.com/sisong/HDiffPatch。
+  - S100上使用的是开源的差分算法工具hdiffz/hpatch，详细信息请参考:[github | HDiffPatch](https://github.com/sisong/HDiffPatch)。
 
 
 ### OTA 安全保护措施
