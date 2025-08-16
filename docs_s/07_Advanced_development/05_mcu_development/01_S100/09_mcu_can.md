@@ -21,20 +21,20 @@ sidebar_position: 9
 
 ## 软件架构
 
-S100芯片的Can控制器位于MCU域，负责Can数据收发。由于感知等应用位于Acore，因此部分Can数据需要通过IPC核间通信机制转发到Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避MCU侧高频转发小数据块导致CPU占用率过高，造成MCU实时性降低等性能问题。
+S100芯片的CAN控制器位于MCU域，负责CAN数据收发。由于感知等应用位于Acore，因此部分CAN数据需要通过IPC核间通信机制转发到Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避MCU侧高频转发小数据块导致CPU占用率过高，造成MCU实时性降低等性能问题。
 
-S100 Can转发方案的核心流程如下：
-- 首先通过MCU侧CAN2IPC模块将CAN通道映射到对应IPC通道，然后通过Acore侧CANHAL模块将IPC通道反映射为虚拟Can设备通道。最后用户通过CANHAL提供的API接口获取虚拟Can设备中的数据。其中，CAN2IPC模块为MCU侧服务，CANHAL模块为Acore侧提供给应用程序的动态库。
-- CAN2IPC模块周期性采集MCU侧CAN数据，按照指定传输协议进行打包，然后通过IPC核间通信转发到Acore。Ipc instance 0中的channel0~channel7默认分配给Can转发使用。
-- CANHAL模块获取来自MCU侧的IPC数据，按照指定的传输协议解析数据，并支持业务软件通过API获取原始Can帧。
+S100 CAN转发方案的核心流程如下：
+- 首先通过MCU侧CAN2IPC模块将CAN通道映射到对应IPC通道，然后通过Acore侧CANHAL模块将IPC通道反映射为虚拟CAN设备通道。最后用户通过CANHAL提供的API接口获取虚拟CAN设备中的数据。其中，CAN2IPC模块为MCU侧服务，CANHAL模块为Acore侧提供给应用程序的动态库。
+- CAN2IPC模块周期性采集MCU侧CAN数据，按照指定传输协议进行打包，然后通过IPC核间通信转发到Acore。Ipc instance 0中的channel0~channel7默认分配给CAN转发使用。
+- CANHAL模块获取来自MCU侧的IPC数据，按照指定的传输协议解析数据，并支持业务软件通过API获取原始CAN帧。
 
 
-![Acore与MCU之间透传Can数据架构图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can.png)
+![Acore与MCU之间透传CAN数据架构图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can.png)
 
 数据流如上图所示：
 - 外设数据通过CAN的PHY和控制器器件被MCU域CAN驱动接收后，CAN驱动将数据上报并缓存在hobot CANIF模块。
 - CAN2IPC Service周期性从CANIF模块取出CAN帧，按照可靠传输协议进行打包，然后通过IPC核间通信机制转发给Acore。
-- CANHAL模块获取来自MCU侧的IPC数据，按照指定的传输协议解析数据，Acore 应用程序通过CANHAL Lib库提供的API获取Can帧。
+- CANHAL模块获取来自MCU侧的IPC数据，按照指定的传输协议解析数据，Acore 应用程序通过CANHAL Lib库提供的API获取CAN帧。
 
 方案特性说明：
 - 支持数据透传正确性校验。
@@ -243,7 +243,7 @@ MCU侧CAN2IPC源码目录：mcu/Service/HouseKeeping/can_ipc/src/hb_CAN2IPC.c
 - 源码中hb_CAN2IPC_MainFunction函数被OS周期性调用，其内部通过调用hb_CAN2IPC_Proc 函数将指定的CAN控制器数据通过IPC转发到Acore。
 - hb_CAN2IPC_Proc 函数中三个传入参数分别为：CAN控制器、ipc instance、ipc 指定instance下的虚拟chennel。
 
-S100 默认将Can5~Can9 转发给ACORE，示例如下
+S100 默认将CAN5~CAN9 转发给ACORE，示例如下
 ```C
 void hb_CAN2IPC_MainFunction(void) {
 hb_CAN2IPC_Proc(CANTRANS_INS0CH5_CONTROLLER, IpcConf_IpcInstance_IpcInstance_0, IpcConf_IpcInstance_0_IpcChannel_4);
@@ -259,7 +259,7 @@ hb_CAN2IPC_Proc(CANTRANS_INS0CH9_CONTROLLER, IpcConf_IpcInstance_IpcInstance_0, 
 }
 ```
 
-Acore canhal使用可参考sample源码目录：source/hobot-io-samples/debian/app/Can，可以在S100的/app/Can目录下直接make编译使用。
+Acore canhal使用可参考sample源码目录：`source/hobot-io-samples/debian/app/Can`，可以在S100的`/app/Can`目录下直接make编译使用。
 
 以多路透传为例，目录结构如下：
 ```bash
@@ -270,15 +270,16 @@ $ tree /app/Can/can_multi_ch
 │   ├── channels.json
 │   ├── ipcf_channel.json
 │   └── nodes.json
-├── main.c
-└── readme.md
+├── main.cpp
+├── readme.md
+└── run.sh
 
 ```
 json文件配置主要包括3个json配置文件：node.json、ipcf_channel.json、channels.json。目前为了支持多进程，各个进程都会去当前路径下的config目录下寻找这3个配置文件。
 
-node.json负责创建虚拟Can设备节点给CANHAL API访问。关键配置选项包括：
-- channel_id字段指定该虚拟Can设备从ipc配置文件ipcf_channel.json中哪一个节点获取数据。
-- target字段表示该虚拟Can设备节点的名称，CANHAL API通过该名称访问指定的节点。
+node.json负责创建虚拟CAN设备节点给CANHAL API访问。关键配置选项包括：
+- channel_id字段指定该虚拟CAN设备从ipc配置文件ipcf_channel.json中哪一个节点获取数据。
+- target字段表示该虚拟CAN设备节点的名称，CANHAL API通过该名称访问指定的节点。
 - enable字段表示该节点是否使能。
 
 ```json
@@ -366,7 +367,7 @@ channels.json指定ipc配置文件，用户一般不需要更改。
 Acore无法直接操作CAN外设，需要通过借助Ipc模块来中转数据，与外设通道的映射关系可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md) 中的IPC 使用情况章节。
 
 
-Acore应用程序通过CANHAL获取MCU侧Can帧的流程伪代码如下：
+Acore应用程序通过CANHAL获取MCU侧CAN帧的流程伪代码如下：
 
 ```c
 void send_frame_data(void *arg)
@@ -432,8 +433,8 @@ int main(int argc, char *argv[])
 
 使用前提：
 - MCU1正常运行
-- 硬件连接：Can5连接Can6
-- 由于can_send和can_get都使用的instance channel4(默认映射来自Can5的数据)，**由于Ipc单个channel只能被一个线程使用**，因此修改can_send中的ipcf_channel.json，改为使用instance channel6，改动如下
+- 硬件连接：CAN5连接CAN6
+- 由于can_send和can_get都使用的instance channel4(默认映射来自CAN5的数据)，**由于Ipc单个channel只能被一个线程使用**，因此修改can_send中的ipcf_channel.json，改为使用instance channel6，改动如下
 
 ```json
 {
@@ -509,12 +510,12 @@ Send end, send package total: 1 frame total: 1
 ```
 
 ##### 此sample实现CAN总线多通道数据发送与接收：
-- **硬件连接**：Can6连接Can7， Can8连接Can9,CAN5连接其他Can设备，不可不接。
+- **硬件连接**：CAN6连接CAN7， CAN8连接CAN9,CAN5连接其他CAN设备，不可不接。
 - **发送线程**：为每个通道创建独立线程发送数据，数据内容固定。
 - **接收线程**：为每个通道创建独立线程接收数据。
 
 发送策略：
-- 相隔固定时间通过Can发送数据，可通过修改延时调整发送频率，目前测试4路Can的收发，每路Can的最高发送频率为1000Hz，大于时会出现丢包情况。
+- 相隔固定时间通过CAN发送数据，可通过修改延时调整发送频率，目前测试4路CAN的收发，每路CAN的最高发送频率为1000Hz，大于时会出现丢包情况。
 - 数据内容：通过CANFD发送扩展帧(64bytes)的数据。
 - 目标通道：CAN6~CAN9轮询发送
 
@@ -613,7 +614,7 @@ D-Robotics:/$ can_tran_debug
 [01217.804661 0]RecvNum[7]: 1, OverFlowErr[7]: 0
 [01217.806059 0]RecvNum[8]: 1, OverFlowErr[8]: 0
 [01217.806435 0]RecvNum[9]: 1, OverFlowErr[9]: 0
-[01217.806978 0]Hb_CanIf Statistics: // Can控制器收发数据统计
+[01217.806978 0]Hb_CanIf Statistics: // CAN控制器收发数据统计
 [01217.808159 0]Can 0 RxNum:          0 TxNum:          0 RxOverFlowErr:          0 TxCanBusyErr:          0 TxPduErr:          0
 [01217.809520 0]Can 1 RxNum:          0 TxNum:          0 RxOverFlowErr:          0 TxCanBusyErr:          0 TxPduErr:          0
 [01217.810941 0]Can 2 RxNum:          0 TxNum:          0 RxOverFlowErr:          0 TxCanBusyErr:          0 TxPduErr:          0
