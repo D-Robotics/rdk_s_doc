@@ -118,7 +118,7 @@ Options:
 - 打包后的目标文件路径为：ota_tools/out/ota_repack
 #### OTA 制作普通升级包
 
-通过如下命令可以制作系统升级包，使用的分区配置文件通过ota_pack_tool.sh脚本中的GPT_CONFIG配置，默认使用/out/product/img_packages/s100-gpt.json，可根据实际需求修改。
+通过如下命令可以制作系统升级包，使用的分区配置文件通过ota_pack_tool.sh脚本中的GPT_CONFIG配置，默认使用/out/product/img_packages/s100-ota-gpt.json，可根据实际需求修改。
 
 ```BASH
 
