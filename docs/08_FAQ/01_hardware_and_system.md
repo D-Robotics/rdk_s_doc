@@ -12,19 +12,19 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="accessory">
 <TabItem value="rdk_x3" label="rdk_x3">
 
-认证配件及购买链接请参考[RDK X3 认证配件清单](../Advanced_development/hardware_development/rdk_x3/accessory)
+认证配件及购买链接请参考[RDK X3 认证配件清单](/Advanced_development/hardware_development/rdk_x3/accessory)
 
 </TabItem>
 
 <TabItem value="rdk_x5" label="rdk_x5">
 
-认证配件及购买链接请参考[RDK X5 认证配件清单](../Advanced_development/hardware_development/rdk_x5/accessory)
+认证配件及购买链接请参考[RDK X5 认证配件清单](/Advanced_development/hardware_development/rdk_x5/accessory)
 
 </TabItem>
 
 <TabItem value="rdk_s100" label="rdk_s100">
 
-认证配件及购买链接请参考[RDK S100 认证配件清单](../rdk_s/Advanced_development/hardware_development/accessory)
+认证配件及购买链接请参考[RDK S100 认证配件清单](/rdk_s/Advanced_development/hardware_development/accessory)
 
 </TabItem>
 
@@ -77,7 +77,7 @@ import TabItem from '@theme/TabItem';
     * 主要支持早期的RDK X3硬件。
 
 **重要注意事项：**
-* **版本升级：** 1.x版本系统**无法**通过`apt`命令直接升级到2.x或更新版本的系统。如需升级，必须通过烧录新版本系统镜像的方式重新[安装操作系统](../install_os)。
+* **版本升级：** 1.x版本系统**无法**通过`apt`命令直接升级到2.x或更新版本的系统。如需升级，必须通过烧录新版本系统镜像的方式重新[安装操作系统](/install_os)。
 * **TROS兼容性：** 不同大版本的TROS（如基于Foxy的TROS和基于Humble的TROS）通常与特定的RDK OS大版本绑定。例如，RDK OS 2.x 通常搭载基于ROS2 Foxy的TROS，而RDK OS 3.x 通常搭载基于ROS2 Humble的TROS。
 
 ### Q4: 摄像头插拔有什么注意事项？
@@ -143,7 +143,7 @@ F37摄像头连接示意图：
         * 确保使用符合开发板要求的电源适配器（RDK X3推荐至少5V/2A，建议使用支持QC/PD的5V/3A或更高规格适配器）。
         * **禁止**使用PC的USB接口为开发板供电。
         * 使用质量可靠的USB Type-C供电线。
-        * 参考官方推荐的[基础配件清单](../Advanced_development/hardware_development/rdk_x3/accessory)中的电源适配器型号。
+        * 参考官方推荐的[基础配件清单](/Advanced_development/hardware_development/rdk_x3/accessory)中的电源适配器型号。
 
 * **启动介质问题 (Micro SD卡/eMMC)：**
     * **现象：** 串口日志提示无法挂载文件系统、找不到分区、MMC/SD卡初始化错误或超时。
@@ -302,7 +302,7 @@ sudo hrut_somstatus
     # Insert what you need before this line
     exit 0
     ```
-    参考：[RDK文档 - rc.local自启动](../System_configuration/self_start)
+    参考：[RDK文档 - rc.local自启动](/System_configuration/self_start)
 
 2.  **通过 `systemd` 服务（现代、推荐方式）：**
     创建一个 `.service` 配置文件（例如 `/etc/systemd/system/myapp.service`），定义服务的启动命令、依赖关系、运行用户、重启策略等。
@@ -732,10 +732,10 @@ no mmc device at slot X
     <Tabs groupId="sign_ko">
 
     <TabItem value="rdk_x3_x5" label="rdk_x3_x5">
-    [内核头文件与模块编译](../07_Advanced_development/02_linux_development/kernel_headers.md) (请查找此文档中关于模块签名的具体章节)。
+    [内核头文件与模块编译](/07_Advanced_development/02_linux_development/kernel_headers.md) (请查找此文档中关于模块签名的具体章节)。
     </TabItem>
     <TabItem value="rdk_s100" label="rdk_s100">
-    [内核头文件与模块编译](../rdk_s/07_Advanced_development/02_linux_development/02_kernel_headers) (请查找此文档中关于模块签名的具体章节)。
+    [内核头文件与模块编译](/rdk_s/Advanced_development/linux_development/kernel_headers) (请查找此文档中关于模块签名的具体章节)。
     </TabItem>
     </Tabs>
 
@@ -897,7 +897,7 @@ no mmc device at slot X
             1.  从官方渠道（如Docker Hub或地瓜机器人官方服务器）拉取对应TROS版本的交叉编译Docker镜像。
             2.  按照官方文档的指引启动Docker容器，并将您的ROS工作区源代码目录挂载到容器内部。
             3.  在Docker容器的终端内，使用 `colcon build` 配合适当的交叉编译参数（通常Docker环境已预设好）来编译您的工作区。
-        * **参考官方手册：** TROS用户手册中关于“源码安装”、“开发者指南”或“交叉编译”的章节通常会有详细的Docker使用方法和命令示例。例如，此链接可能包含相关信息：[TROS手册 - 交叉编译Docker参考](../Robot_development/quick_start/cross_compile) (请确认链接的有效性和相关性)。
+        * **参考官方手册：** TROS用户手册中关于“源码安装”、“开发者指南”或“交叉编译”的章节通常会有详细的Docker使用方法和命令示例。例如，此链接可能包含相关信息：[TROS手册 - 交叉编译Docker参考](/Robot_development/quick_start/cross_compile)。
     * **手动配置ROS/TROS交叉编译环境 (极不推荐，非常复杂且极易出错)：** 如果不使用官方提供的Docker环境，手动从零开始搭建一个完整的ROS/TROS交叉编译环境是一项非常复杂和耗时的工作。您需要自行交叉编译ROS的所有核心组件、消息类型、依赖库，并为Colcon等构建工具配置大量的交叉编译参数和环境变量。这通常只适用于有深厚交叉编译和ROS构建系统经验的开发者。
 
 **通用交叉编译建议：**
