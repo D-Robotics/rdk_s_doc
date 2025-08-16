@@ -212,7 +212,7 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 ```c
 fastboot 0
 ```
-2. 编译好的mcu0 镜像/output_sysmcu/目录下找到相应的mcu0镜像
+2. 编译好的mcu0 镜像/output_sysmcu/目录下找到相应的mcu0镜像（MCU0代码仅在商业版中提供）
 ```c
 fastboot oem interface:mtd
 /* 编译出来的mcu0镜像：MCU_S100_SIP_V2.0.img */
@@ -220,9 +220,9 @@ fastboot flash MCU_a "xxx/MCU_S100_SIP_V2.0.img"
 fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 ```
 #### 空片烧录或烧挂重新烧录
-1. 通过编译RDKS100-acore获取RDKS100镜像包，结构如下所示
+1. 通过编译RDKS100-acore或者[官方下载链接](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)获取RDKS100镜像包，结构如下所示，确保同一个文件夹内有`img_packages`及`xmodem_tools`两个文件夹即可正常烧录：
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png)
+  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png)
 
 2. 烧录第一步：进入dfu模式，按照下图拨key即可(烧录完，记得拨回去！！！)
 
@@ -235,34 +235,45 @@ d. 上述操作完成后，按图片中按键1，同时2处的灯变为红色
 
 3. 烧录第二步：在你解压的镜像文件夹下执行下面的指令，即dfu下载进入uboot(sec版本)
 ```c
-dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/sec/out/s100/cmd_load_sbl
-dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/sec/out/s100/sbl.pkg
-dfu-util.exe -d 3652:6610 -a 0 -D out/product/xmodem_tools/sec/out/s100/cmd_exit_sbl
-dfu-util.exe -d 3652:6620 -a 0 -R -D out/product/xmodem_tools/sec/out/s100/u-boot-spl_ddr.bin
-dfu-util.exe -d 3652:6620 -a 0 -R -D out/product/xmodem_tools/sec/out/s100/S100_MCU_V1.0.bin
+dfu-util.exe -d 3652:6610 -a 0 -D xmodem_tools/sec/out/s100/cmd_load_hsmfw
+dfu-util.exe -d 3652:6610 -a 0 -D xmodem_tools/sec/out/s100/hsmfw_se.pkg
+dfu-util.exe -d 3652:6610 -a 0 -D xmodem_tools/sec/out/s100/cmd_exit_hsmfw
+dfu-util.exe -d 3652:6615 -a 0 -R -D xmodem_tools/sec/out/s100/fpt.img
+dfu-util.exe -d 3652:6615 -a 0 -R -D xmodem_tools/sec/out/s100/keyimage.img
+dfu-util.exe -d 3652:6615 -a 0 -R -D xmodem_tools/sec/out/s100/SBL.img
+dfu-util.exe -d 3652:6615 -a 0 -R -D xmodem_tools/sec/out/s100/hsmrca.pkg
+dfu-util.exe -d 3652:6620 -a 0 -R -D xmodem_tools/sec/out/s100/spl.img
+dfu-util.exe -d 3652:6620 -a 0 -R -D xmodem_tools/sec/out/s100/MCU_S100_V1.0.img
 # mcu启动可能费时比较久
-dfu-util.exe -d 3652:6625 -a 0 -D out/product/xmodem_tools/sec/out/s100/hobot-s100-bl31.dtb
-dfu-util.exe -d 3652:6625 -a 1 -D out/product/xmodem_tools/sec/out/s100/bl31.bin
-dfu-util.exe -d 3652:6625 -a 2 -D out/product/xmodem_tools/sec/out/s100/tee-pager_v2.bin
-dfu-util.exe -d 3652:6625 -a 3 -R -D out/product/xmodem_tools/sec/out/s100/u-boot.bin
+dfu-util.exe -d 3652:6625 -a 0 -D xmodem_tools/sec/out/s100/acore_cfg.img
+dfu-util.exe -d 3652:6625 -a 1 -D xmodem_tools/sec/out/s100/bl31.img
+dfu-util.exe -d 3652:6625 -a 2 -D xmodem_tools/sec/out/s100/optee.img
+dfu-util.exe -d 3652:6625 -a 3 -R -D xmodem_tools/sec/out/s100/uboot.img
 ```
 4. 烧录第三步：整体烧录命令如下：
 ```c
 fastboot.exe oem interface:mtd
-fastboot.exe flash hb_vspiflash out/product/img_packages/disk/miniboot_flash_nose.img
+fastboot.exe flash hb_vspiflash img_packages/disk/miniboot_flash_nose.img
 
 fastboot.exe oem interface:blk
 fastboot.exe oem bootdevice:scsi
-fastboot.exe flash 0x0 out/product/img_packages/disk/emmc_disk.simg
+fastboot.exe flash 0x0 img_packages/disk/emmc_disk.simg
 ```
-### 自动烧录
-1. 能够正常进入Uboot，下载模式选择“uboot”
+### 工具烧录
+1. 能够正常进入Uboot时，按如下配置：
+   1. “下载模式”选择“uboot”；
+   2. “储存介质”选择“emmc”；
+   3. “类型”选择“secure”；
+   4. “选择镜像”位置请选择带有`img_packages`和`xmodem_tools`的文件夹；
+   5. “acore串口”根据实际情况选择；
+   6. “波特率”选择“921600”；
+   7. 单击“其他配置”的右方的小箭头，点击“分区选择”，然后只勾选“miniboot_flash”；
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_uboot.png)
+  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_uboot.png)
 
-2. 不能正常进入UBoot，下载模式选择“usb”
+2. 不能正常进入UBoot，下载模式选择“usb”，不需要选择串口及波特率，其他配置与能够正常进入Uboot时保持一致：
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_usb.png)
+  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_usb.png)
 
 ## MCU1 Undefined/Abort 异常处理原理
 
