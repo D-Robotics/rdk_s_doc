@@ -174,7 +174,7 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 3. mcu版本mcu_version：可以查看mcu版本信息，包括debug版本还是release版本，以及编译的时间；
 4. sbl版本sbl_version：可以查看sbl版本信息以及编译的时间，但是只有在remoteproc_mcu0下可以查看;
 5. mcu串口log: 可以查看MCU串口log信息，分别remoteproc_mcu0对应MCU0，remoteproc_mcu1对应MCU1。
-6. mcu cpuload: 可以获取到MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuload数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。
+6. mcu cpuloads: 可以获取到MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuloads数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。cpuloads的获取需要在MCU0/MCU1**已上电**的情况下才能进行获取。
 
 :::info 图片中的信息可能因版本更新而有所不同，文中示例仅供参考
 :::
@@ -198,7 +198,7 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)
 
-6. mcu cpuload获取，图示:
+6. mcu cpuloads获取，图示:
 
 ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/cpuload.jpg)
 
