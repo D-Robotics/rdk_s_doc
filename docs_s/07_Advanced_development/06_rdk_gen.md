@@ -290,7 +290,7 @@ RDK S100的分区定义文件保存在`source/bootloader/device/rdk/s100/partiti
 - `AB_part_b`：AB分区的B分区后缀；
 - `BAK_part_bak`：备份分区后缀；
 
-分区单独配置使用“分区名”：“分区配置类型”的形式，可以根据需要选择不同的分区配置类型。 例如：boot分区就需要首先在分区全局配置中添加boot分区的描述，然后在`source/bootloader/device/rdk/s100/sub_config`文件夹中创建`boot.json`，并在其中定义`boot_common`：
+分区单独配置使用“分区名”：“分区配置类型”的形式，可以根据需要选择不同的分区配置类型。 例如：boot分区就需要首先在分区全局配置中添加boot分区的描述，然后在`source/bootloader/device/rdk/s100/partition_config_files/sub_config`文件夹中创建`boot.json`，并在其中定义`boot_common`：
 ```json
 {
 	"boot_common": {
