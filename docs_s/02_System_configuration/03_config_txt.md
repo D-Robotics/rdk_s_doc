@@ -10,7 +10,7 @@ sidebar_position: 3
 :::
 
 ## 使用指南
-:::info
+:::info 提示
 - 配置文件默认格式为`<key>=<value>`，第一个`=`后面的所有内容均为`=`前的`<key>`的配置值；
 - 配置文件单行配置不能超过1024字符；
 - 配置文件内的配置默认不会被保存为Uboot的默认配置；
@@ -41,7 +41,7 @@ fdt-enable=/soc/uart@394C0000;
 fdt-disable=/soc/uart@394C0000;
 ```
 
-:::info
+:::info 提示
 - 示例中配置行末尾的“;”不可省略；
 - dts节点全路径可以在板端`/proc/device-tree`下获取，例如：
     ```shell
@@ -52,17 +52,87 @@ fdt-disable=/soc/uart@394C0000;
 :::
 
 #### 配置DTB Overlay文件
+
+DTB Overlay相关说明如下：
+1. Kernel V6.1 官方文档：[Devicetree Overlay Notes](https://kernel.org/doc/html/v6.1/devicetree/overlay-notes.html);
+2. Uboot V2022.10 官方文档：[Device Tree Overlays](https://docs.u-boot.org/en/v2022.10/usage/fdt_overlays.html);
+
+简单介绍：DTB Overlay文件，是可以在不修改当前启动使用的dts文件的情况下，对当前启动使用的dtb文件进行**增/改**（不支持删减）的功能。
+
+DTB Overlay示例文件如下：
+```dts
+/*
+ * Sample dtb overlay source file
+ * spi0_cs1_dev.dtso
+*/
+/dts-v1/;
+/plugin/;
+
+&spi0 {
+	slave@1 {
+		compatible = "sample-compatible-str";
+		spi-max-frequency = <32000000>;
+		reg = <1>;
+	};
+};
+
+```
+:::info 提示
+需要根据从设备实际情况修改：
+1. `compatible`字段：需要修改为从设备实际驱动的`compatible`字段；
+2. `spi-max-frequency`字段：需要修改为从设备实际支持的最高速度；
+:::
+
+DTB Overlay编译示例，以下命令可以在Host端/RDK板端执行，假设`spi0_cs1_dev.dtso`文件路径位于`~/rdk_dtbo/spi0_cs1_dev.dtso`：
+```
+# Install device-tree-compiler
+sudo apt install device-tree-compiler -y
+
+# Compile dtbo files
+dtc -I dts -O dtb -o ~/rdk_dtbo/spi0_cs1_dev.dtbo ~/rdk_dtbo/spi0_cs1_dev.dtso
+
+# Copy generated dtbo file to /boot for further usage
+sudo cp ~/rdk_dtbo/spi0_cs1_dev.dtbo /boot
+```
+
+编译示例输出：
+```
+sunrise@ubuntu:~/rdk_dtbo$ dtc -I dts -O dtb -o ~/rdk_dtbo/spi0_cs1_dev.dtbo ~/rdk_dtbo/spi0_cs1_dev.dtso
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtso:12.3-13: Warning (reg_format): /fragment@0/__overlay__/slave@1:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtso:9.10-13.4: Warning (avoid_default_addr_size): /fragment@0/__overlay__/slave@1: Relying on default #address-cells value
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtso:9.10-13.4: Warning (avoid_default_addr_size): /fragment@0/__overlay__/slave@1: Relying on default #size-cells value
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (avoid_unnecessary_addr_size): Failed prerequisite 'avoid_default_addr_size'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (unique_unit_address): Failed prerequisite 'avoid_default_addr_size'
+sunrise@ubuntu:~/rdk_dtbo$ ls
+spi0_cs1_dev.dtbo  spi0_cs1_dev.dtso
+```
+:::info 提示
+一般来说，编译中报的`Warning`级别的打印可以忽略。
+:::
+
 修改配置文件，添加：`dtbo_file_path=</boot分区下的相对路径>`，例如：
 ```
 # Set dtbo file path relative to /boot partition
-dtbo_file_path=/test_overlay.dtbo
+dtbo_file_path=/spi0_cs1_dev.dtbo
 ```
 
-如果想要自定义分区，则可以添加：`dtbo_dev_part=<设备号>:<16进制分区号>`，RDK S100默认设备号为"0"，分区号可以通过`/dev/block/platform/by-name/`路径获取，以下以`userdata`分区为例：
+重启后，可以看到设备树SPI0(spi@39800000)的路径下，新的从设备节点生成了：
+```shell
+sunrise@ubuntu:~$ ls /proc/device-tree/soc/spi@39800000/slave@1/
+compatible  name  reg  spi-max-frequency
+```
+
+如果想要自定义dtbo文件所在分区，则可以添加：`dtbo_dev_part=<设备号>:<16进制分区号>`，RDK S100默认设备号为"0"，分区号可以通过`/dev/block/platform/by-name/`路径获取，以下以`userdata`分区为例：
 ```
 # Set dtbo file device number and partition number:
 dtbo_dev_part=0:0x10
 ```
+
 获取分区号的方法：`ls -l /dev/block/platform/by-name/<分区名>`，例如：
 ```shell
 root@ubuntu:~# ls -l /dev/block/platform/by-name/userdata
