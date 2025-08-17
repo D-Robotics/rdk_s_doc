@@ -35,7 +35,7 @@ hbm_runtime是基于pybind11的Python绑定接口，用于访问和操作libhbuc
   - 支持量化参数结构 QuantParams，数据类型枚举 hbDNNDataType，模型调度参数对象SchedParam  和量化类型枚举 hbDNNQuantiType，提供类型安全的属性访问。
 
 ## 安装说明（Installation）
-本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和地平线提供的底层推理库（如 libdnn, libhbucp 等）。支持通过 wheel 包（*.whl） 或 系统 DEB 包（*.deb） 两种方式进行安装，适用于 Python 3.10 及以上版本。
+本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和地平线提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装，适用于 Python 3.10 及以上版本。
 ### 系统依赖
 | 依赖项       | 最低版本  | 说明                                                   |
 |------------|-----------|--------------------------------------------------------|
@@ -46,42 +46,14 @@ hbm_runtime是基于pybind11的Python绑定接口，用于访问和操作libhbuc
 | 地平线基础库 | 根据平台 | 如 libdnn.so、libucp.so 等，通常由 BSP 提供           |
 
 ### 安装方式
-#### 使用wheel包安装（推荐 Python 开发环境）
-- 安装 wheel 包（无需重新编译）
+- 安装 hobot-dnn 包
     ```python
-    #示例：使用 pip 安装
-    pip install hbmruntime-0.1.0-cp310-cp310-linux_aarch64.whl
+    sudo apt update
+    sudo apt install hobot-dnn
     ```
-- wheel 构建方式（如需从源码构建）
-  - 确保已安装 scikit-build-core 和 pybind11：
-    ``` python
-    pip install scikit-build-core pybind11
-    ```
-  - 构建 wheel：
-    ```python
-    # 在项目根目录执行
-    python -m build
-    # 或直接打包为 wheel
-    python -m build --wheel
-    ```
-- 输出文件位于 dist/ 目录下，可通过 pip 安装。
-#### 使用 .deb 包安装（适用于系统部署环境）
-- 安装 DEB 包
-    ```python
-    # 示例：安装预构建的 DEB 包
-    sudo dpkg -i hobot-dnn_4.0.2-20250714201215_arm64.deb
-    ```
-
-- 常见问题
-  - 如果.deb安装后文件未生效，检查是否有其他依赖阻止其覆盖（如已有老版本 hobot-spdev）。
-  - 可使用`dpkg -L hobot-dnn`查看文件是否成功部署。
 
 ### 卸载说明
-- 卸载 pip 安装的包：
-    ```python
-    pip uninstall hbmruntime
-    ```
-- 卸载 .deb 安装的包：
+- 卸载安装的包：
     ```python
     sudo apt remove hobot-dnn
     ```
@@ -386,7 +358,7 @@ print("版本:", HB_HBMRuntime.version)
     print(model.input_strides)
     # 输出：{'yolov5x_672x672_nv12': {'data_uv': [-1, -1, 2, 1], 'data_y': [-1, -1, 1, 1]}}
     ```
-    注意：stride的详细含义可参考OE文档中libdnn库中的描述；
+    注意：stride的详细含义可参考[OE文档](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html)中libdnn库中的描述；
 - output_counts: Dict[str, int]
   - 功能说明：
     - 每个模型输出张量数量。
@@ -475,7 +447,7 @@ print("版本:", HB_HBMRuntime.version)
     print(model.output_strides)
     # 输出：{'yolov5x_672x672_nv12': {'1310': [1806336, 43008, 1024, 4], '1312': [451584, 21504, 1024, 4], 'output': [7225344, 86016, 1024, 4]}}
     ```
-  注意：stride的详细含义可参考OE文档中libdnn库中的描述；
+  注意：stride的详细含义可参考[OE文档](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html)中libdnn库中的描述；
 
 - sched_params: Dict[str, SchedParam]
   - 功能说明：
@@ -527,7 +499,7 @@ print("版本:", HB_HBMRuntime.version)
     run(input_tensor: np.ndarray, **kwargs) -> Dict[str, Dict[str, np.ndarray]]
     ```
   - 功能说明
-    适用于单模型、单输入的推理。输入为一个 NumPy 数组，对应模型的唯一输入张量，当只有一个模型被加载时输入的模型名称可省略。。
+    适用于单模型、单输入的推理。输入为一个 NumPy 数组，对应模型的唯一输入张量，当只有一个模型被加载时输入的模型名称可省略。
   - 参数说明
 
     | 参数名       | 类型          | 说明                                                                                             |
