@@ -15,7 +15,7 @@ sidebar_position: 1
 
 ### 运行方法
 
-本示例运行依赖 rtsp 流，如用户不方便搭建 rtsp 推流服务，可使用系统预置的推流服务。该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/1080P_test.h264`。
+本示例运行依赖 rtsp 流，如用户不方便搭建 rtsp 推流服务，可使用系统预置的推流服务。该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/assets/1080P_test.h264`。
 
 用户可通过如下命令启动推流服务：
 
@@ -41,7 +41,7 @@ Each file's type is inferred from its name suffix:
 
 ```shell
 sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# ./decode_rtsp_stream.py
-['rtsp://127.0.0.1/1080P_test.h264']
+['rtsp://127.0.0.1/assets/1080P_test.h264']
 RTSP stream frame_width:1920, frame_height:1080
 Decoder(0, 1) return:0 frame count: 0
 Camera vps return:0
@@ -62,7 +62,7 @@ RTSP stream frame_width:1920, frame_height:1080
 ...
 
 # decode_rtsp_stream.py  actual command
-sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# ./decode_rtsp_stream.py -u rtsp://127.0.0.1:80/1080P_test.h264
+sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# ./decode_rtsp_stream.py -u rtsp://127.0.0.1:80/assets/1080P_test.h264
 ```
 :::
 
@@ -70,7 +70,7 @@ sunrise@ubuntu:/app/pydev_demo/07_decode_rtsp_stream# ./decode_rtsp_stream.py -u
 
 示例程序`decode_rtsp_stream.py`可通过修改启动参数，设置rtsp地址、开关HDMI输出、开关AI推理等功能。参数说明如下：
 
-- **-u**  ： 设置rtsp网络地址，支持输入多个地址，如：`-u "rtsp://127.0.0.1/1080P_test.h264;rtsp://192.168.1.10:8000/1080P_test.h264"`
+- **-u**  ： 设置rtsp网络地址，支持输入多个地址，如：`-u "rtsp://127.0.0.1/assets/1080P_test.h264;rtsp://192.168.1.10:8000/assets/1080P_test.h264"`
 - **-d**  ： 开启、关闭HDMI的显示输出，不设置时默认开启显示，`-d 0 ` 关闭显示，多路解码时只显示第一路的视频
 - **-a**  ： 开启、关闭AI算法推理功能，不设置时默认关闭算法，`-a`开启算法推理，运行目标检测算法
 

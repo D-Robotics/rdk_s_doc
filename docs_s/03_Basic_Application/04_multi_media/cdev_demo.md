@@ -189,7 +189,7 @@ sidebar_position: 2
   ```bash
   sunrise@ubuntu:~$ cd /app/cdev_demo/decode2display
   sunrise@ubuntu:/app/cdev_demo/decode2display$ make
-  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/res/1080P_test.h264
+  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/res/assets/1080P_test.h264
   ```
 
   参数说明：
@@ -201,7 +201,7 @@ sidebar_position: 2
 - **预期效果：**
   程序正确运行后，视频画面会通过开发板的`HDMI`接口输出，用户可以通过显示器预览视频画面。运行 log 如下：
   ```bash
-  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/res/1080P_test.h264
+  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./decoder2display -w 1920 -h 1080 -i /app/res/assets/1080P_test.h264
   [UCP]: log level = 3
   [UCP]: UCP version = 3.7.3
   [VP]: log level = 3
@@ -230,7 +230,7 @@ sidebar_position: 2
 
   - 通过 HDMI 线缆连接开发板和显示器
   - 开发板上电，并通过命令行登录
-  - 准备`rtsp`码流作为输入源，使用系统预置的推流服务。该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/1080P_test.h264`。用户可通过如下命令启动推流服务：
+  - 准备`rtsp`码流作为输入源，使用系统预置的推流服务。该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/assets/1080P_test.h264`。用户可通过如下命令启动推流服务：
 
     ```text
     cd /app/res
@@ -244,7 +244,7 @@ sidebar_position: 2
   ```bash
   sunrise@ubuntu:~$ cd /app/cdev_demo/rtsp2display
   sunrise@ubuntu:/app/cdev_demo/rtsp2display$ make #可能会打印一些警告信息，无需理会
-  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./rtsp2display -i rtsp://127.0.0.1/1080P_test.h264 -t tcp
+  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./rtsp2display -i rtsp://127.0.0.1/assets/1080P_test.h264 -t tcp
   ```
 
   参数配置：
@@ -256,7 +256,7 @@ sidebar_position: 2
   程序正确运行后，视频画面会通过开发板的`HDMI`接口输出，用户可以通过显示器预览视频画面。运行 log 如下：
 
   ```
-  sunrise@ubuntu:/app/cdev_demo/rtsp2display$ ./rtsp2display -i rtsp://127.0.0.1/1080P_test.h264 -t tcp
+  sunrise@ubuntu:/app/cdev_demo/rtsp2display$ ./rtsp2display -i rtsp://127.0.0.1/assets/1080P_test.h264 -t tcp
   [UCP]: log level = 3
   [UCP]: UCP version = 3.7.3
   [VP]: log level = 3
@@ -265,7 +265,7 @@ sidebar_position: 2
   [UCPT]: log level = 6
   avformat_open_input ok!
   avformat_find_stream_info ok!
-  Input #0, rtsp, from 'rtsp://127.0.0.1/1080P_test.h264':
+  Input #0, rtsp, from 'rtsp://127.0.0.1/assets/1080P_test.h264':
     Metadata:
       title           : H.264 Video, streamed by the LIVE555 Media Server
       comment         : 1080P_test.h264
@@ -294,7 +294,7 @@ sidebar_position: 2
     ...
 
     # rtsp2display actual command
-    sunrise@ubuntu:/app/cdev_demo/rtsp2display$ sudo ./rtsp2display -i rtsp://127.0.0.1:8080/1080P_test.h264 -t tcp
+    sunrise@ubuntu:/app/cdev_demo/rtsp2display$ sudo ./rtsp2display -i rtsp://127.0.0.1:8080/assets/1080P_test.h264 -t tcp
     ```
 
 ## VPS 缩放示例
