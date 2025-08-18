@@ -52,7 +52,7 @@ import TabItem from '@theme/TabItem';
 :::caution **注意**
 **如果`sudo apt update`命令执行失败或报错，请查看[常见问题](/docs/08_FAQ/01_hardware_and_system.md)章节的`Q10: apt update 命令执行失败或报错如何处理？`解决。**
 :::
-   
+
 4. 按照以下方法在RDK上接好环形或线形四麦音频板。
 
 ### 连接音频板
@@ -112,8 +112,19 @@ import TabItem from '@theme/TabItem';
 若没检测到，请重新检查设备的连接。
 
 #### 配置音频板
+<Tabs groupId="audio_board">
+<TabItem value="rdk_x3" label="rdk_x3">
 
-首次使用音频板需要使用`srpi-config`进行配置，配置方法参考RDK用户手册[音频转接板](https://developer.d-robotics.cc/documents_rdk/hardware_development/rdk_x3/audio_board)章节。
+首次使用音频板需要使用`srpi-config`进行配置，配置方法参考RDK用户手册[RDK X3音频转接板](/03_Basic_Application/02_audio/rdk_x3_and_rdk_x3_module)章节。
+
+</TabItem>
+
+<TabItem value="rdk_x5" label="rdk_x5">
+
+首次使用音频板需要使用`srpi-config`进行配置，配置方法参考RDK用户手册[RDK X5音频转接板](/03_Basic_Application/02_audio/rdk_x5)章节。
+
+</TabItem>
+</Tabs>
 
 ## 使用介绍
 
