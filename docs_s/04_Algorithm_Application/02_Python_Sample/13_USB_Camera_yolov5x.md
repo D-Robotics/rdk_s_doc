@@ -53,7 +53,7 @@ sidebar_position: 13
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
-| `--label-file`  | 类别标签文件路径                    | `../labels/coco_classes.names`                         |
+| `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
 | `--score-thres` | 检测置信度阈值                      | `0.25`                                                 |
 
@@ -71,7 +71,7 @@ sidebar_position: 13
         --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
         --priority 0 \
         --bpu-cores 0 \
-        --label-file ../labels/coco_classes.names \
+        --label-file /app/res/labels/coco_classes.names \
         --nms-thres 0.45 \
         --score-thres 0.25
         ```

@@ -67,7 +67,7 @@ pip install -r ../../requirements.txt
 | `--model-path` | 模型文件路径，`.hbm` 格式                     | `/opt/hobot/model/s100/basic/lanenet256x512.hbm`     |
 | `--priority`   | 模型运行优先级，范围 0\~255，数值越大优先级越高 | `0`                      |
 | `--bpu-cores`  | 指定用于运行模型的 BPU 核心编号                | `[0]`                    |
-| `--test-img`   | 测试图像路径                                  | `../../assets/input.jpg` |
+| `--test-img`   | 测试图像路径                                  | `/app/res/assets/input.jpg` |
 
 ## 快速运行
 - 运行模型
@@ -78,10 +78,10 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python lanenet.py \
-        --model-path lanenet256x512.hbm \
+        --model-path /opt/hobot/model/s100/basic/lanenet256x512.hbm \
         --priority 0 \
         --bpu-cores 0 \
-        --test-img ../../assets/input.jpg
+        --test-img /app/res/assets/input.jpg
         ```
 - 查看结果
 

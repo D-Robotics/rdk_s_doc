@@ -60,7 +60,7 @@ pip install -r ../../requirements.txt
 | 参数名               | 说明                                      | 默认值                                 |
 | ----------------- | --------------------------------------- | ----------------------------------- |
 | `--model-path`    | 模型文件路径（.hbm 格式）                              | `/opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm` |
-| `--test-img`      | 输入测试图像路径                                      | `../../assets/segmentation.png`     |
+| `--test-img`      | 输入测试图像路径                                      | `/app/res/assets/segmentation.png`     |
 | `--img-save-path` | 推理后结果图像保存路径                                  | `result.jpg`                        |
 | `--priority`      | 模型优先级（0\~255，越大优先级越高）                    | `0`                                 |
 | `--bpu-cores`     | 指定运行模型的 BPU 核心编号列表（如 `--bpu-cores 0 1`） | `[0]`                               |
@@ -77,7 +77,7 @@ pip install -r ../../requirements.txt
         ```bash
         python unet_mobilenet.py \
         --model-path /opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm \
-        --test-img ../../assets/segmentation.png \
+        --test-img /app/res/assets/segmentation.png \
         --img-save-path result.jpg \
         --alpha-f 0.75 \
         --priority 0 \

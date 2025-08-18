@@ -56,8 +56,8 @@ pip install -r ../../requirements.txt
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
 | `--model-path` | 模型文件路径（.hbm 格式）                                | `/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`                 |
-| `--test-img`   | 测试图片路径                                            | `../../assets/zebra_cls.jpg`                |
-| `--label-file` | 类别标签映射文件路径                                     | `../../labels/imagenet1000_clsidx_to_labels.txt` |
+| `--test-img`   | 测试图片路径                                            | `/app/res/assets/zebra_cls.jpg`                |
+| `--label-file` | 类别标签映射文件路径                                     | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--priority`   | 模型优先级（0~255，越大优先级越高）                      | `0`                                         |
 | `--bpu-cores`  | 推理使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）     | `[0]`                                       |
 
@@ -71,9 +71,9 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python resnet18.py \
-        --model-path resnet18_224x224_nv12.hbm \
-        --test-img ../../assets/zebra_cls.jpg \
-        --label-file ../../labels/imagenet1000_clsidx_to_labels.txt
+        --model-path /opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm \
+        --test-img /app/res/assets/zebra_cls.jpg \
+        --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
         ```
 
 - 查看结果

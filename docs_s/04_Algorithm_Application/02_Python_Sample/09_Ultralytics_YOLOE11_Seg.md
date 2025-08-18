@@ -74,8 +74,8 @@ pip install -r ../../requirements.txt
 | 参数名               | 说明                                     | 默认值                                       |
 | ----------------- | ------------------------------------------ | ----------------------------------------- |
 | `--model-path`    | BPU 量化模型路径（\*.hbm）                  | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
-| `--test-img`      | 输入测试图像路径                            | `../../assets/office_desk.jpg`            |
-| `--label-file`    | 类别标签文件路径（每行一个类别）             | `../../labels/coco_extended.names`        |
+| `--test-img`      | 输入测试图像路径                            | `/app/res/assets/office_desk.jpg`            |
+| `--label-file`    | 类别标签文件路径（每行一个类别）             | `/app/res/labels/coco_extended.names`        |
 | `--img-save-path` | 推理结果图像保存路径                        | `result.jpg`                              |
 | `--priority`      | 模型调度优先级（0\~255）                    | `0`                                       |
 | `--bpu-cores`     | 使用的 BPU 核心编号（如 `--bpu-cores 0 1`） | `[0]`                                     |
@@ -94,11 +94,11 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python yoloe11_seg.py \
-        --model-path yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
+        --model-path /opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
         --priority 0 \
         --bpu-cores 0 \
-        --test-img ../../assets/office_desk.jpg \
-        --label-file ../../labels/coco_extended.names \
+        --test-img /app/res/assets/office_desk.jpg \
+        --label-file /app/res/labels/coco_extended.names \
         --img-save-path result.jpg \
         --nms-thres 0.7 \
         --score-thres 0.25 \

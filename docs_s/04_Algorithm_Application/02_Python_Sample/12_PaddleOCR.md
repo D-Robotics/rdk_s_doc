@@ -95,8 +95,8 @@ sidebar_position: 12
 | `--rec-model-path` | `/opt/hobot/model/s100/basic/cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm`   | 文本识别模型路径                  |
 | `--priority`       | `0`                                             | 模型推理优先级，数值越大优先级越高  |
 | `--bpu-cores`      | `[0]`                                           | 指定运行推理的 BPU 核心索引        |
-| `--test-img`       | `../../assets/gt_2322.jpg`                      | 输入图像路径                      |
-| `--label-file`     | `../../labels/ppocr_keys_v1.txt`                | 文本识别所需标签文件路径           |
+| `--test-img`       | `/app/res/assets/gt_2322.jpg`                      | 输入图像路径                      |
+| `--label-file`     | `/app/res/labels/ppocr_keys_v1.txt`                | 文本识别所需标签文件路径           |
 | `--img-save-path`  | `result.jpg`                                    | 推理结果图像的保存路径             |
 | `--threshold`      | `0.5`                                           | 文本区域二值化的阈值               |
 | `--ratio-prime`    | `2.7`                                           | 文本框膨胀系数，用于检测框的形态调整 |
@@ -110,10 +110,10 @@ sidebar_position: 12
     - 指定参数运行
         ```bash
         python paddle_ocr.py \
-        --det-model-path cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm \
-        --rec-model-path cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm \
-        --test-img ../../assets/gt_2322.jpg \
-        --label-file ../../labels/ppocr_keys_v1.txt \
+        --det-model-path /opt/hobot/model/s100/basic/cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm \
+        --rec-model-path /opt/hobot/model/s100/basic/cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm \
+        --test-img /app/res/assets/gt_2322.jpg \
+        --label-file /app/res/labels/ppocr_keys_v1.txt \
         --img-save-path result.jpg \
         --priority 0 \
         --bpu-cores 0 \

@@ -67,8 +67,8 @@ sidebar_position: 11
 | 参数名            | 说明                                          | 默认值                  |
 | ----------------- | -------------------------------------------- | ----------------------------|
 | `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s100/basic/asr.hbm`                    |
-| `--audio-file`    | 输入音频文件（支持 `.wav` 或 `.flac`）         | `../../assets/chi_sound.wav` |
-| `--vocab-file`    | 词表文件，映射 token → id                     | `../../labels/vocab.json`    |
+| `--audio-file`    | 输入音频文件（支持 `.wav` 或 `.flac`）         | `/app/res/assets/chi_sound.wav` |
+| `--vocab-file`    | 词表文件，映射 token → id                     | `/app/res/labels/vocab.json`    |
 | `--priority`      | 推理优先级，0\~255，数值越大越优先             | `0`                           |
 | `--bpu-cores`   ` | 指定使用哪些 BPU 核心（如：`--bpu-cores 0 1`） | `[0]`                         |
 | `--audio_maxlen`  | 音频裁剪/填充后的固定长度（单位：采样点数）     | `30000`                         |
@@ -84,9 +84,9 @@ sidebar_position: 11
     - 指定参数运行
         ```bash
         python asr.py \
-        --model-path asr.hbm \
-        --audio-file ../../assets/chi_sound.wav \
-        --vocab-file ../../labels/vocab.json \
+        --model-path /opt/hobot/model/s100/basic/asr.hbm \
+        --audio-file /app/res/assets/chi_sound.wav \
+        --vocab-file /app/res/labels/vocab.json \
         --priority 0 \
         --bpu-cores 0 \
         --audio_maxlen 30000 \

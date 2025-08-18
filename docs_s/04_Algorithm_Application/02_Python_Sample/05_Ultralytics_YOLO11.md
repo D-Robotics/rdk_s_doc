@@ -67,8 +67,8 @@ pip install -r ../../requirements.txt
 | 参数名           | 说明                                                         | 默认值                                         |
 |------------------|--------------------------------------------------------------|------------------------------------------------|
 | `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`        |
-| `--test-img`      | 输入测试图片路径                                             | `../../assets/kite.jpg`                        |
-| `--label-file`    | 类别标签文件路径（每行一个类别名称）                         | `../../labels/coco_classes.names`              |
+| `--test-img`      | 输入测试图片路径                                             | `/app/res/assets/kite.jpg`                        |
+| `--label-file`    | 类别标签文件路径（每行一个类别名称）                         | `/app/res/labels/coco_classes.names`              |
 | `--img-save-path` | 检测结果图像保存路径                                         | `result.jpg`                                   |
 | `--priority`      | 模型调度优先级（0~255，数值越大优先级越高）                  | `0`                                            |
 | `--bpu-cores`     | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）             | `[0]`                                          |
@@ -85,9 +85,9 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python ultralytics_yolo11.py \
-            --model-path yolo11n_detect_nashe_640x640_nv12.hbm \
-            --test-img ../../assets/kite.jpg \
-            --label-file ../../labels/coco_classes.names \
+            --model-path /opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm \
+            --test-img /app/res/assets/kite.jpg \
+            --label-file /app/res/labels/coco_classes.names \
             --img-save-path result.jpg \
             --priority 0 \
             --bpu-cores 0 \

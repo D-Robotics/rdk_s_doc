@@ -52,8 +52,6 @@ sidebar_position: 1
     ├── 09_usb_camera_sample/            # USB 摄像头 + 目标检测样例
     ├── 10_mipi_camera_sample/           # MIPI 摄像头 + 目标检测样例
     ├── 11_web_display_camera_sample/    # 摄像头 + Web + 目标检测样例
-    ├── assets/                          # 测试用图片、音频等资源
-    ├── labels/                          # 各类模型所需标签文件
     ├── utils/                           # 通用预处理、后处理工具模块
     ├── requirements.txt                 # Python 环境依赖
     └── README.md                        # 顶层使用说明文档（本文件）
@@ -61,17 +59,17 @@ sidebar_position: 1
 
 ### 快速运行
 以图像分类示例 resnet18 为例：
-+ 进入sample目录
+- 进入sample目录
     ```bash
     cd 01_classification_sample/01_resnet18
     ```
-+ 运行模型
+- 运行模型
     ``` bash
     python3 resnet18.py \
-    --model-path resnet18_224x224_nv12.hbm \
-    --test-img ../../assets/zebra_cls.jpg
+    --model-path /opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm \
+    --test-img /app/res/assets/zebra_cls.jpg
     ```
-+ 查看结果
+- 查看结果
     ``` bash
     Top-5 Predictions:
     zebra: 0.9979
@@ -94,9 +92,5 @@ sidebar_position: 1
 
 ### 注意事项
 * 所有示例程序均使用`.hbm`格式模型，需配合平台`hbm_runtime`的python推理接口使用。
-
-* assets/ 文件夹中包含所有示例所需测试图像、音频等资源。
-
-* labels/ 文件夹中存放各类模型使用的标签文件，如 COCO 类别名、ImageNet 标签等。
 
 * 注意：各子目录下提供的`README.md`会详细介绍对应模型所需环境说明、命令行参数、运行方式等内容。

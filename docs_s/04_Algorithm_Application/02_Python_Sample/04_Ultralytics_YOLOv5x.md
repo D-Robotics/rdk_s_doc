@@ -66,8 +66,8 @@ pip install -r ../../requirements.txt
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
 | `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--test-img`   | 测试图片路径                                              | `../../assets/kite.jpg`                     |
-| `--label-file` | 类别标签路径（每行一个类别）                                | `../../labels/coco_classes.names`           |
+| `--test-img`   | 测试图片路径                                              | `/app/res/assets/kite.jpg`                     |
+| `--label-file` | 类别标签路径（每行一个类别）                                | `/app/res/labels/coco_classes.names`           |
 | `--img-save-path` | 检测结果图像保存路径                                    | `result.jpg`                                |
 | `--priority`  | 模型调度优先级（0~255）                                     | `0`                                         |
 | `--bpu-cores` | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）              | `[0]`                                      |
@@ -84,9 +84,9 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python ultralytics_yolov5x.py \
-            --model-path yolov5x_672x672_nv12.hbm \
-            --test-img ../../assets/kite.jpg \
-            --label-file ../../labels/coco_classes.names \
+            --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+            --test-img /app/res/assets/kite.jpg \
+            --label-file /app/res/labels/coco_classes.names \
             --img-save-path result.jpg \
             --priority 0 \
             --bpu-cores 0 \

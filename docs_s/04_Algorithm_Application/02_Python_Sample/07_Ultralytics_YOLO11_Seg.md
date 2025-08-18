@@ -71,8 +71,8 @@ pip install -r ../../requirements.txt
 | 参数                | 说明                    | 默认值 |
 |--------------------|-----------------------------|--------------------------------------|
 | `--model-path`     | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
-| `--test-img`       | 测试图片路径                 | `../../assets/office_desk.jpg`        |
-| `--label-file`     | 分类标签文件                 | `../../labels/coco_classes.names`     |
+| `--test-img`       | 测试图片路径                 | `/app/res/assets/office_desk.jpg`        |
+| `--label-file`     | 分类标签文件                 | `/app/res/labels/coco_classes.names`     |
 | `--img-save-path`  | 输出结果图片保存路径          | `result.jpg`                          |
 | `--priority`       | 模型优先级 (0~255)           | `0`                                   |
 | `--bpu-cores`      | BPU 核心编号                 | `[0]`                                 |
@@ -90,9 +90,9 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python ultralytics_yolo11_seg.py \
-        --model-path yolo11n_seg_nashe_640x640_nv12.hbm \
-        --test-img ../../assets/office_desk.jpg \
-        --label-file ../../labels/coco_classes.names \
+        --model-path /opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm \
+        --test-img /app/res/assets/office_desk.jpg \
+        --label-file /app/res/labels/coco_classes.names \
         --img-save-path result.jpg \
         --priority 0 \
         --bpu-cores 0 \
