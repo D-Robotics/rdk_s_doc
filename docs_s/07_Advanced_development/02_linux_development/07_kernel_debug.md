@@ -28,6 +28,17 @@ Bit idx  Function name   Status
 0        RAMDUMP         on
 ```
 
+抓取ramdump完成后，可关闭DDR ramdump功能
+```Shell
+root@ubuntu:~# hrut_ddr_misc s bit 0 0
+update misc para begin
+------------------------------------
+print new misc para:
+Bit idx  Function name   Status
+0        RAMDUMP         off
+------------------------------------
+```
+
 **当前ramdump功能只支持抓取由Kernel panic触发的场景**
 
 **ramdump的时候可能会损坏保存dump文件的分区，请务必将dump文件保存到非根文件系统分区，且分区容量大于DDR容量**
@@ -36,7 +47,17 @@ Bit idx  Function name   Status
 
 #### 自动抓取
 
-暂不支持
+- 在Uboot下设置环境变量
+```Shell
+setenv enable_ramdump 1
+setenv ramdump_part_name ramdump #这里的ramdump表明要保存dump文件的实际分区，请根据实际板子分区替换
+setenv ramdump_in map #这里的map表明让ramdump将文件保存进UFS或者eMMC（根据启动模式），请务必设置成map
+saveenv
+```
+
+- secure boot设备自动抓取ramdump需要烧写HB_APDP分区镜像，开启secure debug，参考 RDK S100商业客户文档补充说明中的HB_APDP生成 章节，RDK S100商业客户文档补充说明请联系FAE获取。
+
+- 这样一旦出现panic，重启后自动会进行ramdump
 
 #### 手动抓取
 
@@ -45,7 +66,7 @@ Bit idx  Function name   Status
 ```Shell
 Hobot$ setenv enable_ramdump 1
 Hobot$ setenv ramdump_part_name ramdump # 这里的ramdump表明要保存dump文件的实际分区，请根据实际板子分区替换
-Hobot$ setenv ramdump_in map # 这里的map表明让ramdump将文件保存进ufs或者emmc（根据启动模式），请务必设置成map
+Hobot$ setenv ramdump_in map # 这里的map表明让ramdump将文件保存进UFS或者eMMC（根据启动模式），请务必设置成map
 Hobot$ memdump userdata # 这里是进行ramdump的命令，命令中的userdata指的是DRAM的userdata
 intf mmc,dev 0,part 17 directory /Recovery required
 file found, deleting
