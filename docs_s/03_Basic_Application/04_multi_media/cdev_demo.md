@@ -243,7 +243,7 @@ sidebar_position: 2
   ```bash
   sunrise@ubuntu:~$ cd /app/cdev_demo/rtsp2display
   sunrise@ubuntu:/app/cdev_demo/rtsp2display$ make #可能会打印一些警告信息，无需理会
-  sunrise@ubuntu:/app/cdev_demo/decode2display$ ./rtsp2display -i rtsp://127.0.0.1/assets/1080P_test.h264 -t tcp
+  sunrise@ubuntu:/app/cdev_demo/rtsp2display$ ./rtsp2display -i rtsp://127.0.0.1/assets/1080P_test.h264 -t tcp
   ```
 
   参数配置：
@@ -285,7 +285,7 @@ sidebar_position: 2
 
 - **注意事项：**
   - 使用 UDP 协议传输码流时，可能出现因网络丢包导致的花屏现象，此时可切换成 TCP 协议传输解决；
-  - 注意上述命令中`127.0.0.1`部分需要根据`live555MediaServer`执行时打印出来的服务器实际运行端口，添加端口信息，例如：
+  - 若使用上述命令有Connection refused报错，则上述命令中`127.0.0.1`部分可能需要根据`live555MediaServer`执行时打印出来的服务器实际运行端口，添加端口信息，例如：
     ```shell
     # final output of live555MediaServer
     ...
@@ -293,7 +293,7 @@ sidebar_position: 2
     ...
 
     # rtsp2display actual command
-    sunrise@ubuntu:/app/cdev_demo/rtsp2display$ sudo ./rtsp2display -i rtsp://127.0.0.1:8080/assets/1080P_test.h264 -t tcp
+    sunrise@ubuntu:/app/cdev_demo/rtsp2display$ ./rtsp2display -i rtsp://127.0.0.1:8000/assets/1080P_test.h264 -t tcp
     ```
 
 ## VPS 缩放示例
