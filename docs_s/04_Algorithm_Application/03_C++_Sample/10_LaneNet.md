@@ -80,7 +80,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/Lanenet/lane
 | 参数名         | 说明                       | 默认值                                              |
 | -------------- |  ------------------------ | ------------------------------------------------ |
 | `--model_path` | 模型文件路径（`.hbm` 格式） | `/opt/hobot/model/s100/basic/lanenet256x512.hbm` |
-| `--test_img`   | 输入测试图像路径            | `../../../assets/input.jpg`                      |
+| `--test_img`   | 输入测试图像路径            | `/app/res/assets/input.jpg`                      |
 
 
 ## 快速运行
@@ -94,7 +94,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/Lanenet/lane
         ```bash
         ./lanenet \
             --model_path /opt/hobot/model/s100/basic/lanenet256x512.hbm \
-            --test_img   ../../../assets/input.jpg
+            --test_img   /app/res/assets/input.jpg
         ```
 - 查看结果
 

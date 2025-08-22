@@ -74,7 +74,7 @@ sudo apt install libgflags-dev
 | 参数名            | 说明                            | 默认值                                                             |
 | -------------- | ----------------------------- | --------------------------------------------------------------- |
 | `--model_path` | 模型文件路径（.hbm 格式）               | `/opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm` |
-| `--test_img`   | 输入测试图像路径                      | `../../../assets/segmentation.png`                              |
+| `--test_img`   | 输入测试图像路径                      | `/app/res/assets/segmentation.png`                              |
 | `--alpha_f`    | 可视化融合系数，`0.0=仅显示掩码`，`1.0=仅原图` | `0.75`                                                   |
 
 ## 快速运行
@@ -88,7 +88,7 @@ sudo apt install libgflags-dev
         ```bash
         ./unet_mobilenet \
         --model_path /opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm \
-        --test_img ../../../assets/segmentation.png \
+        --test_img /app/res/assets/segmentation.png \
         --alpha_f 0.75
         ```
 - 查看结果

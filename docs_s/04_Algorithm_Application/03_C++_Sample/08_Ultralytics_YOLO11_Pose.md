@@ -90,8 +90,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
 | 参数名                | 说明                     | 默认值                                                   |
 | ------------------ | ---------------------- | ----------------------------------------------------- |
 | `--model_path`     | 模型文件路径（`.hbm`）              | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
-| `--test_img`       | 输入测试图片路径                    | `../../../assets/bus.jpg`                             |
-| `--label_file`     | 类别标签文件（每行一个类别名称）       | `../../../labels/coco_classes.names`                  |
+| `--test_img`       | 输入测试图片路径                    | `/app/res/assets/bus.jpg`                             |
+| `--label_file`     | 类别标签文件（每行一个类别名称）       | `/app/res/labels/coco_classes.names`                  |
 | `--score_thres`    | 置信度阈值（低于该值的检测将被过滤）     | `0.25`                                                |
 | `--nms_thres`      | IoU 阈值（类别内 NMS 去重）                | `0.7`                                                 |
 | `--kpt_conf_thres` | 关键点可视化置信度阈值（低于该值的点不显示） | `0.5`                                                 |
@@ -107,8 +107,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
         ```bash
         ./ultralytics_yolo11_pose \
         --model_path /opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm \
-        --test_img   ../../../assets/bus.jpg \
-        --label_file ../../../labels/coco_classes.names \
+        --test_img   /app/res/assets/bus.jpg \
+        --label_file /app/res/labels/coco_classes.names \
         --score_thres 0.25 \
         --nms_thres   0.7 \
         --kpt_conf_thres 0.5

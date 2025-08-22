@@ -103,8 +103,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/paddle_ocr/c
 | ------------------ | ----------------------------------- | --------------------------------------------------------------------------- |
 | `--det_model_path` | 文本检测模型（`.hbm`）                    | `/opt/hobot/model/s100/basic/cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm` |
 | `--rec_model_path` | 文本识别模型（`.hbm`）                    | `/opt/hobot/model/s100/basic/cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm`  |
-| `--test_image`     | 输入测试图像路径                            | `../../../assets/gt_2322.jpg`                                        |
-| `--label_file`     | 识别标签文件                                | `../../../labels/ppocr_keys_v1.txt`                       |
+| `--test_image`     | 输入测试图像路径                            | `/app/res/assets/gt_2322.jpg`                                        |
+| `--label_file`     | 识别标签文件                                | `/app/res/labels/ppocr_keys_v1.txt`                       |
 | `--threshold`      | 文本区域二值化阈值（检测后处理用）                   | `0.5`                                                        |
 | `--ratio_prime`    | 文本框膨胀系数（检测后处理用，影响多边形外扩）        | `2.7`                                                        |
 
@@ -122,8 +122,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/paddle_ocr/c
         ./paddleOCR \
             --det_model_path /opt/hobot/model/s100/basic/cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm \
             --rec_model_path /opt/hobot/model/s100/basic/cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm \
-            --test_image     ../../../assets/gt_2322.jpg \
-            --label_file     ../../../labels/ppocr_keys_v1.txt \
+            --test_image     /app/res/assets/gt_2322.jpg \
+            --label_file     /app/res/labels/ppocr_keys_v1.txt \
             --threshold 0.5 \
             --ratio_prime 2.7
         ```

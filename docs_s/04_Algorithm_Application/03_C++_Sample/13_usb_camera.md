@@ -66,7 +66,7 @@ sudo apt install libgflags-dev
 | ---------------- | --------------------------------------------- | ----------------------------------------------------- |
 | `--video_device` | 指定视频设备（如 `/dev/video0`；为空则自动探测） | `""`（空：自动在 `/dev/video*` 中探测第一个可打开的设备） |
 | `--model_path`   | BPU 量化模型路径（`.hbm`）                     | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--label_file`   | 类别标签文件（逐行一个类别名）                  | `../../labels/coco_classes.names`                      |
+| `--label_file`   | 类别标签文件（逐行一个类别名）                  | `/app/res/labels/coco_classes.names`                      |
 | `--score_thres`  | 置信度阈值                                    | `0.25`                                                 |
 | `--nms_thres`    | NMS 的 IoU 阈值                               | `0.45`                                                 |
 
@@ -84,7 +84,7 @@ sudo apt install libgflags-dev
         ./usb_camera \
             --video_device /dev/video0 \
             --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file ../../labels/coco_classes.names \
+            --label_file /app/res/labels/coco_classes.names \
             --score_thres 0.25 \
             --nms_thres 0.45
         ```

@@ -71,8 +71,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mo
 | 参数             | 说明                  | 默认值                                                        |
 | -------------- | ------------------- | ---------------------------------------------------------- |
 | `--model_path` | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm` |
-| `--test_img`   | 测试图片路径              | `../../../assets/zebra_cls.jpg`                            |
-| `--label_file` | 类别标签映射文件路径（dict 格式） | `../../../labels/imagenet1000_clsidx_to_labels.txt`        |
+| `--test_img`   | 测试图片路径              | `/app/res/assets/zebra_cls.jpg`                            |
+| `--label_file` | 类别标签映射文件路径（dict 格式） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt`        |
 | `--top_k`      | 输出 top-k 分类结果       | `5`                                                        |
 
 ## 快速运行
@@ -86,8 +86,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mo
         ```bash
         ./mobilenetv2 \
         --model_path /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm \
-        --test_img ../../../assets/zebra_cls.jpg \
-        --label_file ../../../labels/imagenet1000_clsidx_to_labels.txt \
+        --test_img /app/res/assets/zebra_cls.jpg \
+        --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
         --top_k 5
         ```
 - 查看结果

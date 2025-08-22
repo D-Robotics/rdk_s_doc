@@ -11,22 +11,20 @@ sidebar_position: 1
 ## 目录结构总览
 
 ```text
-.
-|-- 01_classification_sample        # 图像分类示例（如 ResNet18、MobileNet）
-|-- 02_detection_sample             # 目标检测示例（YOLO 等）
-|-- 03_instance_segmentation_sample # 实例分割示例
-|-- 04_pose_sample                  # 关键点检测示例
-|-- 05_open_instance_seg_sample     # 开放实例分割示例
-|-- 06_lane_detection_sample        # 车道线检测示例
-|-- 07_speech_sample                # 语音识别示例
-|-- 08_OCR_sample                   # 光学字符识别示例
-|-- 09_usb_camera_sample            # USB 摄像头实时推理示例
-|-- 10_mipi_camera_sample           # MIPI 摄像头实时推理示例
-|-- 11_decode2display               # 视频解码、推理与显示示例
-|-- utils                           # 通用工具函数
-|-- assets                          # 测试用图片、视频等资源
-|-- labels                          # 类别标签文件
-`-- README.md                       # 项目说明文档（当前文件）
+|-- 01_classification_sample         # 图像分类示例（如 ResNet18、MobileNet）
+|-- 02_detection_sample              # 目标检测示例（YOLO 等）
+|-- 03_instance_segmentation_sample  # 实例分割示例
+|-- 04_pose_sample                   # 关键点检测示例
+|-- 05_open_instance_seg_sample      # 开放实例分割示例
+|-- 06_lane_detection_sample         # 车道线检测示例
+|-- 07_speech_sample                 # 语音识别示例
+|-- 08_OCR_sample                    # 光学字符识别示例
+|-- 09_usb_camera_sample             # USB 摄像头实时推理示例
+|-- 10_mipi_camera_sample            # MIPI 摄像头实时推理示例
+|-- 11_decode_yolov5x_display_sample # 视频解码、推理与显示示例
+|-- 12_rtsp_yolov5x_display_sample   # RTSP 流解码、推理与显示示例
+|-- utils                            # 通用工具函数
+`-- README.md                        # 项目说明文档（当前文件）
 ```
 
 ## 环境要求
@@ -128,9 +126,5 @@ utils
 
 ## 附加说明
 * 所有示例程序均使用`.hbm`格式模型。
-
-* assets/ 文件夹中包含所有示例所需测试图像、音频等资源。
-
-* labels/ 文件夹中存放各类模型使用的标签文件，如 COCO 类别名、ImageNet 标签等。
 
 * 注意：各子目录下提供的`README.md`会详细介绍对应模型所需环境说明、命令行参数、运行方式等内容。

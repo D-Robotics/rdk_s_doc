@@ -5,7 +5,7 @@ sidebar_position: 15
 # 视频解码及YOLOv5x 推理
 
 本示例演示如何在 RDK S100 等平台上，使用 SP 解码/显示/VIO 与 BPU 组合完成：
-本地 H.264 文件 → 硬件解码 (NV12) → YOLOv5X 推理 → 叠加框到显示图层 的端到端流程。
+本地 H.264 文件 → 硬件解码 (NV12) → YOLOv5X 推理 → 叠加框到显示图层 的端到端流程，本示例代码位于`/app/cdev_demo/bpu/decode_yolov5x_display/`目录下。
 
 ## 功能说明
 
@@ -23,7 +23,7 @@ sidebar_position: 15
 
 - 后处理 (Postprocess)
 
-    调用 yolov5x.post_process(score_thres, nms_thres, W, H)，完成解码、置信度过滤与 NMS，并将框坐标还原到原分辨率，本示例代码位于`/app/cdev_demo/bpu/11_decode2display/`目录下。
+    调用 yolov5x.post_process(score_thres, nms_thres, W, H)，完成解码、置信度过滤与 NMS，并将框坐标还原到原分辨率。
 
 - 相机管理 (VIO)
 
@@ -69,9 +69,9 @@ sudo apt install libgflags-dev
 | --------------- | ---------------------------------------------------- | -------------------------------------------------------- |
 | `--width`       | 源码流/解码期望宽度（像素）                             | `1920`                                                  |
 | `--height`      | 源码流/解码期望高度（像素）                             | `1080`                                                  |
-| `--input_path`  | 输入 H.264 文件路径（示例为本地文件；也可扩展为码流管道） | `../../assets/1080P_test.h264`                          |
+| `--input_path`  | 输入 H.264 文件路径（示例为本地文件；也可扩展为码流管道） | `/app/res/assets/1080P_test.h264`                          |
 | `--model_path`  | YOLOv5X 量化模型（`.hbm`）路径                         | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm`  |
-| `--label_file`  | 类别名列表文件（逐行一个类别名）                         | `../../labels/coco_classes.names`                      |
+| `--label_file`  | 类别名列表文件（逐行一个类别名）                         | `/app/res/labels/coco_classes.names`                      |
 | `--score_thres` | 置信度阈值（过滤低分框）                                | `0.25`                                                  |
 | `--nms_thres`   | NMS IoU 阈值                                          | `0.45`                                                  |
 
@@ -80,15 +80,15 @@ sudo apt install libgflags-dev
     - 确保在`build`目录中
     - 使用默认参数
         ```bash
-        ./decode2display
+        ./decode_yolov5x_display
         ```
     - 指定参数运行
         ```bash
-        ./decode2display \
+        ./decode_yolov5x_display \
             --width 1920 --height 1080 \
-            --input_path ../../assets/1080P_test.h264 \
+            --input_path /app/res/assets/1080P_test.h264 \
             --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file ../../labels/coco_classes.names \
+            --label_file /app/res/labels/coco_classes.names \
             --score_thres 0.25 \
             --nms_thres 0.45
         ```

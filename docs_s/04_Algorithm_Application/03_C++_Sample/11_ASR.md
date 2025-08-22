@@ -81,8 +81,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
 | 参数名           | 说明                               | 默认值                                   |
 | -------------- | -------------------------------- | ------------------------------------- |
 | `--model_path` | 模型文件路径（`.hbm`）                   | `/opt/hobot/model/s100/basic/asr.hbm` |
-| `--test_sound` | 输入音频文件路径（`.wav`）                 | `../../../assets/chi_sound.wav`       |
-| `--vocab_file` | 词表（JSON），映射 **class id → token** | `../../../labels/vocab.json`          |
+| `--test_sound` | 输入音频文件路径（`.wav`）                 | `/app/res/assets/chi_sound.wav`       |
+| `--vocab_file` | 词表（JSON），映射 **class id → token** | `/app/res/labels/vocab.json`          |
 
 ## 快速运行
 - 运行模型
@@ -95,8 +95,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
         ```bash
         ./asr \
             --model_path /opt/hobot/model/s100/basic/asr.hbm \
-            --test_sound ../../../assets/chi_sound.wav \
-            --vocab_file ../../../labels/vocab.json
+            --test_sound /app/res/assets/chi_sound.wav \
+            --vocab_file /app/res/labels/vocab.json
         ```
 - 查看结果
 
