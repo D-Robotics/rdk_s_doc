@@ -4,6 +4,10 @@ sidebar_position: 1
 
 # 3.4.1 参考示例（python）
 
+## MIPI Camera
+请参考[算法示例 | MIPI Camera部分](/rdk_s/Algorithm_Application/Python_Sample/mipi_camera_yolov5x)
+
+<!--
 本章节将通过视频流解码等示例程序，介绍 D-Robotics Python 语言的 `hobot_vio` 图像多媒体库的使用方法，包括视频拉流、缩放及编解码等操作。
 
 ## 视频流解码
@@ -111,3 +115,4 @@ sudo ./decode_rtsp_stream.py -a
 - rtsp视频流目前仅支持 1080P 分辨率
 
 - 不支持使用 vlc 软件进行 rtsp 推流，原因是 vlc 软件不支持添加`PPS`和`SPS`信息
+ -->
