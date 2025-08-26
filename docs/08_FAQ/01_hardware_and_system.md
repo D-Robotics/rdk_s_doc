@@ -285,7 +285,7 @@ F37摄像头连接示意图：
     N: See apt-secure(8) manpage for repository creation and user configuration details.
     ```
 
-**原因分析：**  
+**原因分析：**
 ROS2官方软件源GPG签名密钥更新，导致本地配置过期。
 
 **解决步骤：**
@@ -975,3 +975,11 @@ IMX219摄像头连接示意图：
     ...
     ```
     如果`i2cdetect`能够扫描到摄像头的I2C地址，说明摄像头至少在I2C通信层面被识别了。
+
+### Q45：RDK S100 Docker安装后服务启动失败
+docker需要使用iptables的legacy模式，用户可以使用以下命令修复docker运行：
+```shell
+sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+sudo systemctl restart docker
+```
