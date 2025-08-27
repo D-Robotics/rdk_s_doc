@@ -84,7 +84,7 @@ output/
 
 ## MCU1启动/关闭流程
 MCU1的启动/关闭是由Acore经过remoteproc框架传递信息给MCU0进而实现启动/关闭MCU1。
-### MCU1启动原理与步骤
+### MCU1启动原理与步骤{#start_mcu1}
 #### MCU1启动原理
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu1_start.png)
