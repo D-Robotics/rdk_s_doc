@@ -96,18 +96,28 @@ typedef struct Can_HwFilterType
 - 配置举例：
     - 这是CAN 7 的过滤器配置，拥有两个过滤器
     - 过滤器0的第一个元素的高2位为01，属于范围过滤方式
-    - 过滤器0和过滤1为"或"关系，即如果至少有一个过滤元件满足匹配标准，则CAN消息内容将被传输到增强型RX FIFO存储器
+    - 扩展帧和标准帧的过滤相互独立，互不影响
+    - 标准帧的所有过滤器，如下面的例子过滤器0和过滤1为"或"关系，即如果至少有一个过滤元件满足匹配标准，则CAN消息内容将被传输到增强型RX FIFO存储器
+    - 同理，扩展帧的所有过滤器，如下面的例子过滤器2和过滤3为"或"关系，即如果至少有一个过滤元件满足匹配标准，则CAN消息内容将被传输到增强型RX FIFO存储器
 
 ```c
 // Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
-static const Can_HwFilterType Can_aHwFilter_Object7[2U]=
+static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
-    {   // 接收id为0x0~0x7ff的消息
-        (uint32)0x400007ffU,
+    { /* Standard frame configuration */
+        (uint32)0x400007ffU,    // 标准帧配置：接收id为0x0~0x7ff的消息
         (uint32)0x00000000U
     },
-    {   // 接收id为0x600~0x7ff的消息
-        (uint32)0x400007ffU,
+    { /* Standard frame configuration */
+        (uint32)0x400007ffU,   // 标准帧配置：接收id为0x600~0x7ff的消息
+        (uint32)0x00000600U
+    },
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x0~0x1fffffff的消息
+        (uint32)0x00000000U
+    },
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x600~0x1fffffff的消息
         (uint32)0x00000600U
     }
 };
@@ -123,17 +133,25 @@ else
     // 丢弃该消
 ```
 
-举例代码如下：
+以标准帧过滤器0配置为例，代码如下：
 ```c
 // Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
-static const Can_HwFilterType Can_aHwFilter_Object7[2U]=
+static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
-    {
+    { /* Standard frame configuration */
         (uint32)0x00000400U,  // 只接收id = 0x400&0x7ff = 0x400 消息
         (uint32)0x000007ffU
     },
-    {   // 范围过滤方式，支持混用
-        (uint32)0x400007ffU,
+    {  /* Standard frame configuration */
+        (uint32)0x400007ffU,  // 范围过滤方式，支持混用
+        (uint32)0x00000600U
+    }
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x0~0x1fffffff的消息
+        (uint32)0x00000000U
+    },
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x600~0x1fffffff的消息
         (uint32)0x00000600U
     }
 };
@@ -150,17 +168,25 @@ if (id1 <= Received_ID <= id2)
 else
     // 丢弃该消息
 ```
-这也是S100mcu的默认模式;举例代码如下：
+这也是S100 MCU默认的过滤方式，也是最常用的过滤方式;举例代码如下：
 ```c
 // Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
-static const Can_HwFilterType Can_aHwFilter_Object7[2U]=
+static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
-    {   // 接收id为0x0~0x7ff的消息
-        (uint32)0x400007ffU,
+    { /* Standard frame configuration */
+        (uint32)0x00000400U,  // 只接收id = 0x400&0x7ff = 0x400 消息
+        (uint32)0x000007ffU
+    },
+    {  /* Standard frame configuration */
+        (uint32)0x400007ffU,  // 范围过滤方式，支持混用
+        (uint32)0x00000600U
+    }
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x0~0x1fffffff的消息
         (uint32)0x00000000U
     },
-    {   // 接收id为0x600~0x7ff的消息
-        (uint32)0x400007ffU,
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x600~0x1fffffff的消息
         (uint32)0x00000600U
     }
 };
@@ -179,26 +205,34 @@ else
     // 丢弃该消息
 ```
 
-举例代码如下：
+以标准帧过滤器0配置为例，代码如下：
 ```c
 // Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
-static const Can_HwFilterType Can_aHwFilter_Object7[2U]=
+static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
-    {
+    { /* Standard frame configuration */
         (uint32)0x80000404U,// 只接收id为404的消息
         (uint32)0x00000303U // 只接收id为303的消息
     },
-    {   // 范围过滤方式，支持混用
-        (uint32)0x400007ffU,
+    { /* Standard frame configuration */
+        (uint32)0x400007ffU,  // 范围过滤方式，支持混用
+        (uint32)0x00000600U
+    }
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x0~0x1fffffff的消息
+        (uint32)0x00000000U
+    },
+    { /* Extended frame configuration */
+        (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x600~0x1fffffff的消息
         (uint32)0x00000600U
     }
 };
 ```
 
 :::tip
-1. RDK S100软硬件支持同时接收扩展帧和标准帧，而不需要修改配置
-2. RDK S100硬件支持对扩展帧和标准帧分别过滤，软件暂不支持对扩展帧的过滤
-3. 扩展帧的id长度最高为11位，即最大为0x7FF
+1. RDK S100软硬件支持收发扩展帧和标准帧，而不需要修改配置
+2. RDK S100软硬件支持对扩展帧和标准帧分别过滤
+3. 注意id的长度配置，超出规定长度将发生截断，扩展帧的id长度最高为29位，即最大为0x1FFFFFFF，标准帧的id长度最高为11位，即最大为0x7FF
 :::
 
 
