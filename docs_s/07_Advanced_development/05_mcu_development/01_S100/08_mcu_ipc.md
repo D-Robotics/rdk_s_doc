@@ -139,12 +139,12 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 |----------|---------|------------------|-------------------|
 | instance0| 0       | Ipc_Receive_Core1| CAN Reserve       |
 | instance0| 1       | Ipc_Receive_Core1| CAN Reserve       |
-| instance0| 2       | Ipc_Receive_Core1| CAN8              |
+| instance0| 2       | Ipc_Receive_Core1| CAN Reserve       |
 | instance0| 3       | Ipc_Receive_Core1| CAN9              |
 | instance0| 4       | Ipc_Receive_Core1| CAN5              |
 | instance0| 5       | Ipc_Receive_Core1| CAN Reserve       |
 | instance0| 6       | Ipc_Receive_Core1| CAN6              |
-| instance0| 7       | Ipc_Receive_Core1| CAN7              |
+| instance0| 7       | Ipc_Receive_Core1| CAN Reserve       |
 
 #### instance1
 
@@ -185,12 +185,12 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 |----------|---------|------------------|---------------------|
 | instance4| 0       | Ipc_Receive_Core0| 客户预留：Reserve   |
 | instance4| 1       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance4| 2       | Ipc_Receive_Core0| 客户预留：Reserve   |
+| instance4| 2       | Ipc_Receive_Core0| CAN8               |
 | instance4| 3       | Ipc_Receive_Core0| 客户预留：Reserve   |
 | instance4| 4       | Ipc_Receive_Core0| 客户预留：Reserve   |
 | instance4| 5       | Ipc_Receive_Core0| 客户预留：Reserve   |
 | instance4| 6       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance4| 7       | Ipc_Receive_Core0| 客户预留：Reserve   |
+| instance4| 7       | Ipc_Receive_Core0| CAN7               |
 
 #### instance5
 
