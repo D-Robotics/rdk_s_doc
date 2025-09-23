@@ -5998,7 +5998,7 @@ Usage: ./sample_codec
 解码两路 3840x2160 的 h264 视频, 生成 yuv 图像
 
 ```
-/app/multimedia_demo/codec_demo/sample_venc_vdec/sample_codec -m 1 -n 2 -i
+/app/multimedia_demo/codec_demo/sample_venc_vdec/sample_codec -m 1 -n 2
 ```
 
 解码四路 1920x1080 的 h265 视频, 生成 yuv 图像
