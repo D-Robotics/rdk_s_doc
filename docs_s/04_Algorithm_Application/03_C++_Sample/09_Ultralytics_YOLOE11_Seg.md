@@ -104,7 +104,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     - 指定参数运行
         ```bash
         ./ultralytics_yoloe11_seg \
-            --model_path /app/res/models/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
+            --model_path /opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
             --test_img   /app/res/assets/office_desk.jpg \
             --label_file /app/res/labels/coco_extended.names \
             --score_thres 0.25 \
