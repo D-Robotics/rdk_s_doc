@@ -23,6 +23,8 @@ import TabItem from '@theme/TabItem';
 | RDK X3, RDK X3 Module | Ubuntu 20.04 (Foxy), Ubuntu 22.04 (Humble) |
 | RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble) |
 | RDK S100, RDK S100P | Ubuntu 22.04 (Humble) |
+| RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble) |
+| RDK S100, RDK S100P | Ubuntu 22.04 (Humble) |
 | RDK Ultra | Ubuntu 20.04 (Foxy) |
 | X86     | Ubuntu 20.04 (Foxy) |
 
@@ -288,7 +290,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
    hobot_usb_cam支持以下配置集：
    "mjpeg","mjpeg2rgb","rgb8","yuyv","yuyv2rgb","uyvy","uyvy2rgb","m4202rgb","mono8","mono16","y102mono8"
-   
+
    通过第一种的默认参数启动usb camera查询设备硬件所支持支持的formats，如下log：
 
     ```text
@@ -340,6 +342,9 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     如 imx219 摄像头的接入RDK S100方式如下图：
     ![image-S100-imx219](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-imx219.jpg)
 
+    如 imx219 摄像头的接入RDK S100方式如下图：
+    ![image-S100-imx219](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-imx219.jpg)
+
 2. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像
 
 3. RDK已成功安装tros.b
@@ -354,7 +359,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
 1. 通过 SSH 登录RDK，确定摄像头型号，这里以`F37`为例，确定相机标定文件的读取路径，这里以`/opt/tros/${TROS_DISTRO}/lib/mipi_cam/config/F37_calibration.yaml`为例
 
-2. 并通过下述命令启动 hobot_sensor 节点  
+2. 并通过下述命令启动 hobot_sensor 节点
 
     <Tabs groupId="tros-distro">
     <TabItem value="foxy" label="Foxy">
@@ -543,6 +548,36 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     - 检查硬件连接
     - 是否设置 tros.b 环境
     - 参数是否正确，具体参考[README.md](https://github.com/D-Robotics/hobot_mipi_cam/blob/develop/README.md)
+4. 由于同时如果两路图像向同一个topic发送图像，导致图像冲突，因此启动第二路图像需要重映射topic，启动第二个相机的指令（仅限X5和S100）：
+    <Tabs groupId="tros-distro">
+    <TabItem value="foxy" label="Foxy">
+
+    ```bash
+    # 配置tros.b环境
+    source /opt/tros/setup.bash
+    ```
+
+    </TabItem>
+
+    <TabItem value="humble" label="Humble">
+
+    ```bash
+    # 配置tros.b环境
+    source /opt/tros/humble/setup.bash
+    ```
+
+    </TabItem>
+
+    </Tabs>
+
+    ```shell
+    # run 方式启动
+    ros2 run mipi_cam mipi_cam --ros-args --remap /image_raw:=/image_raw_alias
+    # 或者launch 方式启动
+    ros2 launch mipi_cam mipi_cam_topic_remap.launch.py
+    ```
+
+
 
 ## 双目MIPI图像采集
 
@@ -552,8 +587,8 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
 | 类型 | 型号 | 规格 | 支持平台 |
 | ------ | ------ | ------ | ------ |
-| 摄像头| SC230ai | 200W | RDK X5, RDK X5 Module |
-| 摄像头| SC230ai | 200W | RDK S100, RDK S100P |
+| 摄像头| SC230ai | 200W | RDK X5, RDK X5 Module, RDK S100, RDK S100P |
+| 摄像头| SC132gs | 200W | RDK X5, RDK X5 Module, RDK S100, RDK S100P |
 
 代码仓库：[https://github.com/D-Robotics/hobot_mipi_cam.git](https://github.com/D-Robotics/hobot_mipi_cam.git)
 
@@ -563,6 +598,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 | ------ | ------------- |
 | RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble)  |
 | RDK 100, RDK S100P | Ubuntu 22.04 (Humble)  |
+| RDK 100, RDK S100P | Ubuntu 22.04 (Humble)  |
 
 ### 准备工作
 
@@ -571,6 +607,9 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 1. 确认摄像头正确接入RDK，例如 SC230ai 双目摄像头的接入RDK X5, RDK X5 Module方式如下图：
 
     ![image-X5-PI-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-X5-PI-DualCamera.jpg)
+
+    如SC230ai 双目摄像头的接入S100方式如下图：
+    ![image-S100-sc230ai-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-sc230ai-DualCamera.png)
 
     如SC230ai 双目摄像头的接入S100方式如下图：
     ![image-S100-sc230ai-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-sc230ai-DualCamera.png)
@@ -589,7 +628,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
 1. 通过 SSH 登录RDK，确定摄像头型号，这里以`SC230ai`为例
 
-2. 并通过下述命令启动 hobot_sensor 节点  
+2. 并通过下述命令启动 hobot_sensor 节点
 
     <Tabs groupId="tros-distro">
     <TabItem value="humble" label="Humble">
@@ -753,11 +792,11 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     HB_MIPI_InitSensor end
     HB_MIPI_SetDevAttr end
     pstHbVideoDev->vin_fd = 29
-    sensorID: 634-2362-2676-68d0 
+    sensorID: 634-2362-2676-68d0
     find local calib_file
-    
+
     find local calib_file
-    
+
     SDK Version: V4.4.35 build 20220525 09:27:53.
     read file(./calib-0634-2362-2676-68d0.bin), ok, file_len=132096, read_len=132096.......
     module config file(user custom) is: ./parameter/T00P11A-17.ini.
@@ -774,23 +813,23 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     mmzAlloc paddr = 0x1a6e6000, vaddr = 0x917e1000
     camera read reg: 0x9400 val:0x1
     ...
-    
+
     [wuwl-StartCamera]->camT=3, ret=0.
     camera read reg: 0x3e val:0x40
     [ERROR]["vio_devop"][utils/dev_ioctl.c:121] [499334.399304]dev_node_dqbuf_ispoll[121]: failed to ioctl: dq (14 - Bad address)
     [ERROR]["vio_devop"][utils/dev_ioctl.c:189] [499334.399355]entity_node_dqbuf_ispoll[189]: dev type(9) dq failed
-    
+
     [ERROR]["vio_core"][commom_grp/binding_main.c:1034] [499334.399371]comm_dq_no_data[1034]: G1 MIPI_SIF_MODULE module chn0 dq failed! maybe framedrop error_detail -14
-    
+
     [wuwl-StartCamera]->camT=1, ret=0.
     [INFO] [1654573500.226606117] [rclcpp]: [childStart]-> ret=0 !
-    
+
     [INFO] [1654573500.226831567] [rclcpp]: [StartStream]->pthread create sucess
-    
+
     [INFO] [1654573500.226963854] [rclcpp]: <========>[doCapStreamLoop]->Start.
-    
+
     [WARN] [1654573500.226998103] [rgbd_node]: [RgbdNode]->mipinode init sucess.
-    
+
     [WARN] [1654573500.227352507] [example]: [wuwl]->rgbd init!
     [WARN] [1654573500.228502174] [example]: [wuwl]->rgbd add_node!
 
@@ -802,7 +841,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     [INFO] [1662723985.951415418] [rgbd_node]: [pub_ori_pcl]->pub pcl w:h=24192:1,nIdx-24192:sz=24192.
     [INFO] [1662723985.960161280] [rgbd_node]: [timer_ros_pub]->pub dep w:h=224:129,sz=982464, infra w:h=224:108, sz=24192.
     ...
-    
+
     ```
 
 3. PC机上查询当前话题，查询命令及返回结果如下：
@@ -832,19 +871,19 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
     ```text
     /rgbd_CP3AM/depth/image_rect_raw
-    
+
     /rgbd_CP3AM/depth/color/points
-    
+
     /rgbd_CP3AM/color/camera_info
 
     /rgbd_CP3AM/aligned_depth_to_color/color/points
-    
+
     /rgbd_CP3AM/infra/image_rect_raw
-    
+
     /rgbd_CP3AM/color/image_rect_raw
-    
+
     /parameter_events
-    
+
     /rosout
     ```
 
@@ -1035,7 +1074,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
 ```shell
 # 安装RealSense SDK2.0
-sudo apt-get install ros-$ROS_DISTRO-librealsense2* -y 
+sudo apt-get install ros-$ROS_DISTRO-librealsense2* -y
 # 安装RealSense ROS2 wrapper
 sudo apt-get install ros-$ROS_DISTRO-realsense2-* -y
 ```
@@ -1079,7 +1118,7 @@ ros2 service call /camera/device_info realsense2_camera_msgs/srv/DeviceInfo
 在实际的应用中，经常需要双目相机的深度图对齐彩色图，RealSense也提供了对应的启动方式。
 
 ```shell
-ros2 launch realsense2_camera rs_launch.py enable_rgbd:=true enable_sync:=true align_depth.enable:=true enable_color:=true enable_depth:=true 
+ros2 launch realsense2_camera rs_launch.py enable_rgbd:=true enable_sync:=true align_depth.enable:=true enable_color:=true enable_depth:=true
 ```
 
 ![realsense-d2c-topic](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/realsense-d2c-topic.png)

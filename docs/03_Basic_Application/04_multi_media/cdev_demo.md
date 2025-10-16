@@ -402,7 +402,7 @@ sidebar_position: 2
 
 ## VPS 缩放示例
 
-本示例实现了基于视频处理模块 `VPS` 的视频缩放功能，用户可通过显示器预览画面。
+本示例实现了基于视频处理模块 `VPS` 的视频缩放功能，将文件保存到文件系统。
 
 - **环境准备：**
   - 通过 HDMI 线缆连接开发板和显示器
@@ -548,4 +548,3 @@ sidebar_position: 2
     2000/01/01 19:06:40.013 !INFO [CamInitParam][0139]Setting VSE channel-1: input_width:1920, input_height:1080, dst_w:1920, dst_h:1080
     ... 省略 ...
     ```
-
