@@ -264,85 +264,161 @@ Acore与MCU(POLL方式)之间API Sample运行流程图
 | `IPCF_HAL_E_BUSY` | 13 | 系统繁忙 |
 | `IPCF_HAL_E_CHANNEL_INVALID` | 14 | **数据写入通道状态异常：内核态RingBuffer已达容量上限，导致数据写入操作失败，建议等待1-2ms后重试操作;**<br/>**数据读取通道状态异常：内核态RingBuffer已空，导致数据读取操作失败，建议等待1-2ms后重试操作** |
 
-### C++ 应用
+### C++ 应用{#IPC_APP}
+
+Acore侧实现了多个应用，用于操作MCU端的外设，这些应用位于`/app/ipcbox_sample`目录下：
+```bash
+root@ubuntu:/app/ipcbox_sample# tree -L 1
+.
+├── common  # 公共文件，实现了对数据的封包和解包，数据校验等功能
+├── ipcbox_i2c # 操作MCU侧I2C外设 Sample
+├── ipcbox_runcmd # 运行mcu侧cmd命令 Sample
+├── ipcbox_spi # 操作MCU侧SPI外设 Sample
+└── ipcbox_uart # 操作MCU侧UART外设 Sample
+```
+
+:::tip
+操作这些外设时，需要确认MCU侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md#IPCBOX)
+:::
+
 
 #### RunCmd应用
 
 此sample实现了对读取了ADC chanel的电压。
-1. 开机进入S100后，打开应用目录/app/ipcbox_sample/ipcbox_runcmd
-2. 编译：make
-3. 运行: ./ipcbox_runcmd
-4. 出现`Extracted adc data:{"adc_ch":1,"adc_result":2411,"adc_mv":1059}`打印则测试通过
-
-其中表示adc对应pin口，adc_mv表示读出来的电压值
-
-```
-root@ubuntu:/app/ipcbox_sample/ipcbox_runcmd# ./ipcbox_runcmd
-[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 init success.
-[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 config success.
-[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 init success.
-[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 config success.
-Extracted adc data:{"adc_ch":1,"adc_result":2411,"adc_mv":1059}
-TxCmdItem(96)
-44 2D 49 50 43 42 4F 58 01 00 00 00 55 07 00 00
-69 70 63 73 65 6E 64 5F 61 64 63 20 31 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-60 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-
-rx_packet(160):D-IPCBOX
-44 2D 49 50 43 42 4F 58 01 00 00 00 4B 10 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-A0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-7B 22 61 64 63 5F 63 68 22 3A 31 2C 22 61 64 63
-5F 72 65 73 75 6C 74 22 3A 32 34 31 31 2C 22 61
-64 63 5F 6D 76 22 3A 31 30 35 39 7D 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 C9 F5 5A 58 13 C3 E8 F0 1C E7 DE FF FF 00 00
-CC 74 22 8A FF FF 00 00 74 47 67 8A FF FF 00 00
-A4 0F 1F D4 AA AA 00 00 06 00 00 00 01 00 00 00
-58 1D E7 DE FF FF 00 00 58 1D E7 DE FF FF 00 00
-01 00 00 00 00 00 00 00 D8 1C 20 D4 AA AA 00 00
-40 C0 69 8A FF FF 00 00 A4 0F 1F D4 AA AA 00 00
-
-[INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 deinit success.
-[INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 deinit success.
-```
+1. 开机进入S100后，打开应用目录`/app/ipcbox_sample/ipcbox_runcmd`
+2. 编译：`make`
+3. 运行: `./ipcbox_runcmd`
+4. 出现`Extracted adc data:{"adc_ch":1,"adc_result":628,"adc_mv":276}`的打印则测试通过，其中表示adc对应pin口，adc_mv表示读出来的电压值
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_runcmd# ./ipcbox_runcmd
+        [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 init success.
+        [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 config success.
+        Extracted adc data:{"adc_ch":1,"adc_result":628,"adc_mv":276}
+        [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 deinit success.
+        ```
 
 
 #### Uart透传
-此sample实现了对Uart5的透传，测试时需要将uart5的TX和RX短接。
+此sample实现了对`Uart5`的透传，测试时需要将`Uart5`的TX和RX短接。
 
-1. 开机进入S100后，打开应用目录cd /app/ipcbox_sample/ipcbox_uart
-2. 编译：make
-3. 运行: ./ipcbox_uart
-4. 出现tx_data and rx_data are identical.打印则测试通过, 参考log如下：
-```
-# ./ipcbox_uart
-[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 init success.
-[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 config success.
-tx_data(64)
-69 70 63 5F 72 75 6E 63 6D 64 5F 73 65 6E 64 20
-37 20 30 20 31 32 33 34 35 36 37 38 39 20 31 30
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+1. 开机进入S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_uart`
+2. 编译：`make`
+3. 运行: `./ipcbox_uart`
+4. 出现`tx_data and rx_data are identical.`的打印则测试通过, 参考log如下：
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_uart# ./ipcbox_uart
+        [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 init success.
+        [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 config success.
+        tx_data(32)
+        31 32 33 34 35 36 37 38 39 61 62 63 64 65 66 67
+        68 69 6A 6B 00 00 00 00 00 00 00 00 00 00 00 00
 
-rx_data(64)
-69 70 63 5F 72 75 6E 63 6D 64 5F 73 65 6E 64 20
-37 20 30 20 31 32 33 34 35 36 37 38 39 20 31 30
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+        rx_packet(32)
+        31 32 33 34 35 36 37 38 39 61 62 63 64 65 66 67
+        68 69 6A 6B 00 00 00 00 00 00 00 00 00 00 00 00
 
-tx_data and rx_data are identical.
-[INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 deinit success.
-```
+        [SUCCESS]: tx_data and rx_packet are identical.
+        [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 deinit success.
+        ```
 
+#### SPI读写测试
+
+此sample实现了对SPI的回环测试，测试时需要将`SPI3`的MOSI和MISO短接。
+
+1. 开机进入S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
+2. 编译：`make`
+3. 运行: `./ipcbox_spi`
+4. 出现`SPI write successful, 128 bytes`的打印则测试通过, 参考log如下：
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_spi# ./ipcbox_spi -b 3
+        [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 init success.
+        [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 config success.
+        SPI write successful, 128 bytes
+        tx_data(128)
+        00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+        10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F
+        20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F
+        30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F
+        40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F
+        50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F
+        60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F
+        70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+
+        rx_packet(128)
+        00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+        10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F
+        20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F
+        30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F
+        40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F
+        50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F
+        60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F
+        70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+
+        [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 deinit success.
+        ```
+
+:::tip
+ipcbox只实现了对SPI Master的操控，有以下限制
+- 不支持Slave模式
+- MCU侧底层默认使用中断+异步方式，支持同步模式
+- 不支持应用层控制帧长度
+:::
+
+#### I2C测试
+此sample实现了对I2c的detect测试，I2c寄存器的读写
+
+1. 开机进入S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
+2. 编译：`make`
+3. 运行: `./ipcbox_i2c` 出现如下参考命令
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c
+        Usage: ./ipcbox_i2c detect [i2c_channel]
+        ./ipcbox_i2c get [i2c_channel] [slave_addr] [reg_addr]
+        ./ipcbox_i2c set [i2c_channel] [slave_addr] [reg_addr] [val]
+        Examples:
+        ./ipcbox_i2c detect 0
+        ./ipcbox_i2c set 0 0x50 0x01 0xAA
+        ./ipcbox_i2c get 0 0x50 0x01
+        ```
+4. 输入`./ipcbox_i2c detect 6` ,探测`I2c6`的设备
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c detect 6
+        Parsed arguments: operation=detect, channel=6
+        [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 init success.
+        [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 config success.
+        0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+        00:    -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        10: -- -- -- 13 -- -- -- -- -- -- -- -- -- -- -- --
+        20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        30: -- -- 32 -- -- -- -- -- -- -- -- -- -- -- -- --
+        40: -- -- -- -- 44 45 -- 47 48 49 4a 4b 4c 4d 4e 4f
+        50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+        70: -- -- -- -- -- -- -- --
+        [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 deinit success.
+        ```
+5. 读取`I2c6` 上，slave地址为`0x13`,寄存器地址为`0x2`
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c get 6 0x13 0x2
+        Parsed arguments: operation=get, channel=6, slave_addr=0x13, reg_addr=0x2
+        [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 init success.
+        [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 config success.
+        Read data[0]: 0x3C
+        [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 deinit success.
+        ```
+
+:::tip
+ipcbox只实现了对i2c Master的简单传输，不支持Slave
+
+测试用例中的读写操作都是对8bit 地址的slave做测试，需要根据slave的实际情况更改MCU的IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于MCU的SDK中的Service/HouseKeeping/ipc_box/src/ipc_i2c.c
+:::
 
 ### Python应用
+
+:::tip
+操作这些外设时，需要确认MCU侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md#IPCBOX)
+:::
+
 
 S100提供python库文件使用IPC，其原理为通过pybind11调用C++接口，函数名与宏定义等两端保持一致。
 
