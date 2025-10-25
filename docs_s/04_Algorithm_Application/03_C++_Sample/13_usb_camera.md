@@ -90,7 +90,7 @@ sudo apt install libgflags-dev
         ```
 - 退出运行
 
-    按Q键退出
+    把鼠标放置在显示框中，按q键退出
 
 - 查看结果
 
