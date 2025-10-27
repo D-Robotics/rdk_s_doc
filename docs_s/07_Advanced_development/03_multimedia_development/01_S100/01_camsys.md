@@ -3280,6 +3280,7 @@ S100 Camsys 部分模块已经接入V4L2，可以通过标准V4L2编程及开源
   rmmod hobot_ynr
 
   #加载v4l2驱动
+  echo ion > /sys/module/hobot_camsys_adapter/parameters/mops # ion 或 dma 可选
   modprobe videobuf2-common
   modprobe videobuf2-v4l2
   modprobe videobuf2-memops
@@ -3355,8 +3356,33 @@ modprobe vid_v4l2  xxx=xxxx### 场景说明
 
 （其他link场景暂不支持，持续更新中）
 
+### v4l2 buffer分配方式
+目前有ion 和 dma 两种buffer 分配方式，默认使用ion分配
 
+目前两种buffer 分配方式支持的io_mode
+| buffer 分配方式 | 支持的io_mode                 |
+|----------------|-------------------------------|
+|  ion           | mmap                          |
+|  dma           | mmap dambuf userptr           |
 
+buffer分配方式切换流程
+```c
+#如果已加载vid_v4l2驱动，则卸载
+rmmod vid_v4l2
+
+#设置buffr 分配方式为ion 或 dma
+echo ion > /sys/module/hobot_camsys_adapter/parameters/mops
+或
+echo dma > /sys/module/hobot_camsys_adapter/parameters/mops
+
+#加载刚刚卸载的vid_v4l2驱动
+modprobe vid_v4l2  xxx=xxxx
+```
+
+查看当前buffer分配方式
+```c
+cat /sys/module/hobot_camsys_adapter/parameters/mops
+```
 
 ## camsys sample
 
