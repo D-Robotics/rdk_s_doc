@@ -173,8 +173,7 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 2. 系统存活时间taskcounter：表示mcu启动后持续的时间，单位：秒；
 3. mcu版本mcu_version：可以查看mcu版本信息，包括debug版本还是release版本，以及编译的时间；
 4. sbl版本sbl_version：可以查看sbl版本信息以及编译的时间，但是只有在remoteproc_mcu0下可以查看;
-5. mcu串口log: 可以查看MCU串口log信息，分别remoteproc_mcu0对应MCU0，remoteproc_mcu1对应MCU1。
-6. mcu cpuloads: 可以获取到MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuloads数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。cpuloads的获取需要在MCU0/MCU1**已上电**的情况下才能进行获取。
+5. mcu cpuloads: 可以获取到MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuloads数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。cpuloads的获取需要在MCU0/MCU1**已上电**的情况下才能进行获取。
 
 :::info 图片中的信息可能因版本更新而有所不同，文中示例仅供参考
 :::
@@ -194,11 +193,7 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/sbl_version.png)
 
-5. mcu串口log获取，图示：
-
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)
-
-6. mcu cpuloads获取，图示:
+5. mcu cpuloads获取，图示:
 
 ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/cpuload.jpg)
 
@@ -331,7 +326,11 @@ int main(void)
 }
 ```
 ## MCU Log简介
-MCU提供了基础的日志（Log）输出功能，主要用于调试与运行状态记录。当前版本的Log模块支持通过格式化字符串的方式输出信息，便于开发者在调试过程中快速定位问题和查看变量状态。
+MCU提供了基础的日志（Log）输出功能，主要用于调试与运行状态记录。当前版本的Log模块支持通过格式化字符串的方式输出信息，便于开发者在调试过程中快速定位问题和查看变量状态。在Acore侧可通过`/proc/remoteproc_mcu0`和`/proc/remoteproc_mcu1`这两个节点可以查看MCU0和MCU1的日志信息。
+
+以获取MCU1串口log信息为例，如下图所示：
+
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log2.png)
 
 目前，MCU Log支持的格式化输出类型包括：
 - %s —— 字符串
