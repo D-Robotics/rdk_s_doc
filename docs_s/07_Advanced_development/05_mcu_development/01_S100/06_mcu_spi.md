@@ -80,6 +80,7 @@ sidebar_position: 6
 
 
 :::tip
+- SPI只需要在INIT之后配置一次`set_AsyncMode()`，不需要反复调用，反复调用会导致传输异常。
 - 当传输发生异常的时候，SPI的状态机不会自动复位，需要手动调用 `Spi_Cancel()` 函数复位传输状态机。
 - Sample里用了DMA，但没进行初始化，这是因为在 `Target/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中已经完成了初始化。
 :::
