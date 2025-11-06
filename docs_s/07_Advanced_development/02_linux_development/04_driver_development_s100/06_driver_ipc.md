@@ -476,7 +476,7 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
         ```
 
 :::tip
-ipcbox只实现了对SPI Master的操控，有以下限制
+IpcBox只实现了对SPI Master的操控，有以下限制
 - 不支持Slave模式
 - MCU侧底层默认使用中断+异步方式，支持同步模式
 - 不支持应用层控制帧长度
@@ -538,19 +538,20 @@ ipcbox只实现了对i2c Master的简单传输，不支持Slave
 :::
 
 
-S100提供python库文件使用IPC，其原理为通过pybind11调用C++接口，函数名与宏定义等两端保持一致。
+S100提供Python库文件使用Ipc，其原理为通过pybind11调用C++接口，函数名与宏定义等两端保持一致。
 
 1. 包的导入
 ```
 import pyhbipchal as pyipc
 import pyhbipchal_utils as ipc_utils
+from ipcbox_packet import ipcbox_packet
 ```
 
 2. 源码路径
 
 ```bash
-root@ubuntu:/app/pyhbipchal_sample# tree
-.
+
+├── ipcbox_packet.py // ipcbox_packet对象封装
 ├── ipcfhal_sample_config.json // 配置文件，用于初始化ipc
 ├── pyhbipchal_test.py // 使用pyhbipchal库编写基础python应用测试过用例
 ├── pyhbipchal_utils.py // pyhbipchal_utils对象源码，pyhbipchal进行二次封装,相较于pyhbipchal更符合pyhton的编程习惯
@@ -597,23 +598,53 @@ IPCF_HAL_E_CHANNEL_INVALID (-14): Channel is invalid
 
 =====================test OK=======================
 
-[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 init success.
-[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 config success.
-tx_data(64)
-69 70 63 5F 72 75 6E 63 6D 64 5F 73 65 6E 64 20
-37 20 30 20 31 32 33 34 35 36 37 38 39 20 31 30
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 init success.
+[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 config success.
+=== Sending Packet ===
+Original message: This is the PYIPC UART test
+Original data length: 27 bytes
+Fixed data length: 32 bytes
+Fixed data content (hex):
+54 68 69 73 20 69 73 20 74 68 65 20 50 59 49 50
+43 20 55 41 52 54 20 74 65 73 74 00 00 00 00 00
 
-rx_data(64)
-69 70 63 5F 72 75 6E 63 6D 64 5F 73 65 6E 64 20
-37 20 30 20 31 32 33 34 35 36 37 38 39 20 31 30
+IPCBox packet length: 160
+Full packet content (hex):
+44 49 50 43 01 00 00 00 97 0A 00 00 A0 00 00 00
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+54 68 69 73 20 69 73 20 74 68 65 20 50 59 49 50
+43 20 55 41 52 54 20 74 65 73 74 00 00 00 00 00
 
-tx_data and rx_data are identical.
-[INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 deinit success.
-root@ubuntu:/app/pyhbipchal_sample#
+=== Received Packet ===
+Raw received data length: 160
+Raw received data (hex):
+44 49 50 43 01 00 00 00 97 0A 00 00 A0 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+54 68 69 73 20 69 73 20 74 68 65 20 50 59 49 50
+43 20 55 41 52 54 20 74 65 73 74 00 00 00 00 00
+
+tx_data(32)
+54 68 69 73 20 69 73 20 74 68 65 20 50 59 49 50
+43 20 55 41 52 54 20 74 65 73 74 00 00 00 00 00
+
+rx_data(32)
+54 68 69 73 20 69 73 20 74 68 65 20 50 59 49 50
+43 20 55 41 52 54 20 74 65 73 74 00 00 00 00 00
+
+[SUCCESS]: tx_data and rx_data are identical.
+[INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 deinit success.
 
 ```
 
@@ -621,10 +652,40 @@ root@ubuntu:/app/pyhbipchal_sample#
 
 ```bash
 root@ubuntu:/app/pyhbipchal_sample# python pyhbipchal_utils_test.py
-[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 init success.
-[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 config success.
-Tx: b'ipc_runcmd_send 7 0 123456789 10' | Rx: b'ipc_runcmd_send 7 0 123456789 10'
-[INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch4 [ins] 7 [id] 4 deinit success.
+[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 init success.
+[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 config success.
+Sending IPCBox packet:
+Original message: ipc_runcmd_send 7 0 123456789 10
+Fixed data length: 32 bytes
+IPCBox packet length: 160 bytes
+IPCBox packet content (hex):
+44 49 50 43 01 00 00 00 13 0B 00 00 A0 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+69 70 63 5F 72 75 6E 63 6D 64 5F 73 65 6E 64 20
+37 20 30 20 31 32 33 34 35 36 37 38 39 20 31 30
+
+Received data (hex):
+44 49 50 43 01 00 00 00 13 0B 00 00 A0 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+69 70 63 5F 72 75 6E 63 6D 64 5F 73 65 6E 64 20
+37 20 30 20 31 32 33 34 35 36 37 38 39 20 31 30
+
+Extracted data length: 32 bytes
+Extracted data content (hex):
+69 70 63 5F 72 75 6E 63 6D 64 5F 73 65 6E 64 20
+37 20 30 20 31 32 33 34 35 36 37 38 39 20 31 30
 ```
 
 ## Acore与MCU的传输流程
