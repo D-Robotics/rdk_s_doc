@@ -46,13 +46,10 @@ RDK默认不开启OTA功能，如需开启请按如下流程操作：
         # 仅建立编译环境
         sudo ./pack_image.sh -p
         ```
-2. 将build_params目录下的`ubuntu-22.04_desktop_rdk-s100_beta.conf`和`ubuntu-22.04_desktop_rdk-s100_release.conf`中的中的PARTITION_FILE配置为OTA版本（PARTITION_FILE="s100-ota-gpt.json）；
+2. 将build_params目录下的`ubuntu-22.04_desktop_rdk-s100_beta.conf`和`ubuntu-22.04_desktop_rdk-s100_release.conf`中的PARTITION_FILE配置为OTA版本:`export PARTITION_FILE="s100-ota-gpt.json"`，RDK_DM_VERIFY_ENABLE配置为开启:`export RDK_DM_VERIFY_ENABLE="yes"`；
 
-    ![ota_conf](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_conf.png)
+3. 将source/bootloader/device/rdk/s100目录下的`board_s100_debug.mk`和`board_s100_release.mk`文件中的`RDK_OTA`变量配置为开启`export RDK_OTA="yes"`；
 
-3. 将source/bootloader/device/rdk/s100目录下的`board_s100_debug.mk`和`board_s100_release.mk`文件中的`RDK_OTA`变量配置为开启（export RDK_OTA="yes"）
-
-    ![ota_board_conf](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_board_conf.png)
 4. 编译
    - 制作新的miniboot的deb包
         ```bash
