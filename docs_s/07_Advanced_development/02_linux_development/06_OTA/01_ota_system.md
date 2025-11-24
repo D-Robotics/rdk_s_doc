@@ -1,8 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 1
 ---
 
-# 7.2.6 OTA
+# 系统 OTA 升级
 
 ## 概述
 

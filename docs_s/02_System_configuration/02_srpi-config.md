@@ -55,7 +55,7 @@ sudo srpi-config
 
 - **Update Miniboot**
 
-  目前S100系统的Miniboot升级需要使用D-Navigation工具，详情请参考：[系统烧录](/rdk_s/Quick_start/install_os/rdk_s100)。
+  如果需要进行Miniboot相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot升级](../07_Advanced_development/02_linux_development/06_OTA/02_ota_miniboot.md)。
 
 ## Interface Options
 
