@@ -21,13 +21,13 @@ RDK S100 / S600 系统提供了两个默认账户，方便用户首次使用：
 :::tip
 通过网络方式远程登录前，开发板需要通过有线以太网或者无线 WiFi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：
 <Tabs groupId="soc_type">
-<TabItem value="s100" label="s100">
+<TabItem value="S100" label="S100">
 - 有线以太网：
   - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
   - 开发板 eth0 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
 - 无线 WiFi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
 </TabItem>
-<TabItem value="s600" label="s600">
+<TabItem value="S600" label="S600">
 - 有线以太网：
   - 开发板 eth3 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
   - 开发板 eth2 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
@@ -47,10 +47,10 @@ RDK S100 / S600 系统提供了两个默认账户，方便用户首次使用：
 在使用串口登录前，需要确认开发板串口线跟电脑正确连接，连接方法可参考对应开发板的调试串口章节：
 
 <Tabs groupId="soc_type">
-<TabItem value="s100" label="s100">
+<TabItem value="S100" label="S100">
 - [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#debug_uart)
 </TabItem>
-<TabItem value="s600" label="s600">
+<TabItem value="S600" label="S600">
 - [rdk_s600 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s600.md#debug_uart)
 </TabItem>
 </Tabs>
@@ -80,7 +80,7 @@ RDK S100 / S600 系统提供了两个默认账户，方便用户首次使用：
 此时，可使用`ifconfig -a`命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：
 
 <Tabs groupId="soc_type">
-<TabItem value="s100" label="s100">
+<TabItem value="S100" label="S100">
 
 ```bash
 eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
@@ -118,7 +118,7 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 </TabItem>
-<TabItem value="s600" label="s600">
+<TabItem value="S600" label="S600">
 
 ```bash
 eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
