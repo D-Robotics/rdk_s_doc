@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # D-Robotics RDK 套件
 
-本文档为 D-Robotics RDK 套件 Super 系列的用户手册，为开发者提供关于 RDK S100、RDK S100P 等产品的使用说明和开发指导，内容涵盖硬件设计、系统定制、应用开发、算法工具链等多个方面。欢迎用户使用，具体方法请参考**系统烧录**章节。
+本文档为 D-Robotics RDK 套件 Super 系列的用户手册，为开发者提供关于 RDK S100、RDK S100P、RDKS600 等产品的使用说明和开发指导，内容涵盖硬件设计、系统定制、应用开发、算法工具链等多个方面。欢迎用户使用，具体方法请参考**系统烧录**章节。
 
 :::info 注意
 用户如需确认系统版本号，可通过该命令查询 `cat /etc/version`, 2.1.0 及以上版本可以通过 `rdkos_info` 命令查看具体的版本信息。
@@ -19,16 +19,21 @@ sidebar_position: 0
 - RDK X5
 - RDK Ultra
 - RDK S100 系列
+- RDK S600 系列
 
 搭配 TogetheROS.Bot 机器人中间件，RDK 套件可以帮助发者快速搭建机器人原型，开展评测和验证工作。
 
-本文将详细说明 RDK S100、RDK S100P 套件的使用方法，包括开发环境搭建、示例教程的运行、应用程序的开发、系统镜像的定制等方面内容。无论您选择使用哪种硬件，本文所介绍的内容都将为您提供一致的使用体验。
+本文将详细说明 RDK S100、RDK S100P、RDKS600 套件的使用方法，包括开发环境搭建、示例教程的运行、应用程序的开发、系统镜像的定制等方面内容。无论您选择使用哪种硬件，本文所介绍的内容都将为您提供一致的使用体验。
 
 ## 产品介绍
 
 **RDK S100 系列** 是一款高性能开发套件，具有 80/128 TOPS 端侧推理算力与 6 核 ARM A78AE 处理能力，支持 2 路 MIPI Camera 接入，4 路 USB3.0 接口，2 路 PCIe3.0 接口，充分满足各类场景的使用需求。
 
 ![image-rdks100-serials](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png)
+
+**RDK S600 系列** 是一款高性能开发套件，具有 560 TOPS 端侧推理算力与 18 核 ARM A78AE 处理能力，支持 6 路 MIPI Camera 接入，6 路 USB3.0 接口，4 路 PCIe3.0 接口，充分满足各类场景的使用需求。
+
+![image-rdks600-serials](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks600-serials.png)
 
 ## 文档使用指引
 

@@ -119,7 +119,7 @@ const config = {
             sidebarId: "tutorialSidebar",
             docsPluginId: "docs_s",
             position: "left",
-            label: "RDK S100",
+            label: "RDK S100 / S600",
           },
 
           {
@@ -189,12 +189,12 @@ const config = {
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         docsRouteBasePath: ["/", "rdk_s"], // 支持多个文档路径
-        
+
         // 优化索引大小和加载速度
         indexDocs: true,
         indexBlog: false, // 禁用博客索引
         indexPages: false, // 禁用页面索引
-        
+
         // 搜索行为优化
         searchResultContextMaxLength: 50, // 减少上下文长度
       },
