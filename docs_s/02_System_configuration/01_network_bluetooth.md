@@ -11,9 +11,10 @@ sidebar_position: 1
 ### 有线网络配置-Netplan 方式
 
 :::info 注意
-Netplan 方式配置网络仅在`RDK S100`验证使用，其它平台暂不支持。
+Netplan 方式配置网络仅在`RDK S100 / RDK S600`验证使用，其它平台暂不支持。
 
-`RDK S100`根文件系统基于 Ubuntu-22.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
+- `RDK S100`根文件系统基于 Ubuntu-22.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
+- `RDK S600`根文件系统基于 Ubuntu-24.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
 :::
 
 在 Ubuntu 系统中，开发板的静态网络配置信息存储于 `/etc/netplan/01-hobot-net.yaml` 文件。以下是具体配置说明：
@@ -100,7 +101,7 @@ Station 模式下，开发板作为客户端，接入路由器无线热点进行
 ### Soft AP 模式
 
 :::tip
-RDK S100 的 WIFI AP 模式暂不可用
+RDK S100 / RDK S600 的 WIFI AP 模式暂不可用
 持续更新中....
 :::
 
@@ -340,32 +341,12 @@ sudo apt full-upgrade
 sudo reboot
 ```
 
-## 蓝牙配置（废弃）
-
-:::tip
-RDK S100 的蓝牙配置暂不可用
-持续更新中....
-:::
+## 蓝牙配置
 
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=9
 
 ### 初始化
-
-开发板蓝牙功能默认没有开启，需要执行 `/usr/bin/startbt6212.sh`脚本进行初始化，该脚本完成以下工作：
-
-- 复位蓝牙
-- 创建 `messagebus` 用户和用户组，`dbus-daemon` 程序运行时需要使用该用户
-- 运行 `brcm_patchram_plus` 完成蓝牙的驱动加载和固件加载
-- 循环检查 `/sys/class/bluetooth/hci0` 目录是否存在，确认蓝牙驱动已经正常运行
-- 出现 **Done setting line discpline** 表示蓝牙启用成功
-- 执行 `hciconfig hci0 up` 完成蓝牙的 Link Up
-- 执行 `hciconfig hci0 piscan` 进行蓝牙扫描，本步骤可以根据情况去掉
-
-脚本执行成功后的 log 如下：
-
-![image-20220601172145987](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172145987.png)
-
-此外，用户可以使用命令查询蓝牙进程是否正常，命令如下：
+用户可以使用命令查询蓝牙进程是否正常，命令如下：
 
 ```bash
 ps ax | grep "/usr/bin/dbus-daemon\|/usr/lib/bluetooth/bluetoothd"
