@@ -355,6 +355,12 @@ ps ax | grep "/usr/bin/dbus-daemon\|/usr/lib/bluetooth/bluetoothd"
 /usr/lib/bluetooth/bluetoothd
 ```
 
+用户可以使用命令查询蓝牙控制器是否正常，命令如下（注意以下命令示例中的`Controller <MAC Addr>`的`<MAC Addr>`会随实际蓝牙控制器变化而变化）：
+```bash
+bluetoothctl list
+Controller F0:68:E3:22:7E:91 ubuntu [default]
+```
+
 ### 配网连接
 
 执行`sudo bluetoothctl`进入交互模式下的蓝牙配置界面，出现了类似下图的设备信息表示蓝牙被识别到了，然后用`show`来查看蓝牙信息，留意蓝牙的`powered`和`discoverable`状态。
