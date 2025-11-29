@@ -1,8 +1,8 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
-# 1.3.1 RDK S100 入门配置
+# 1.3.2 RDK S600 入门配置
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 
 ## 默认登录账户
 
-在进行系统配置前，您需要先登录系统。RDK S100 系统提供了两个默认账户：
+在进行系统配置前，您需要先登录系统。RDK S600 系统提供了两个默认账户：
 
 - **普通用户：** 用户名 `sunrise`，密码 `sunrise`
 - **超级用户 (root)：** 用户名 `root`，密码 `root`
@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="rdk-type">
 <TabItem value="desktop" label="Desktop">
 
-参考 Ubuntu 22.04 Wi-Fi 链接教程进行。
+参考 Ubuntu 24.04 Wi-Fi 链接教程进行。
 
 </TabItem>
 
@@ -155,7 +155,7 @@ NoMachine下载官方网址： [NoMachine Download](https://downloads.nomachine.
 
 **下载安装包**
 
-进入官网后找到适合`RDK S100`的`ARM64`版本的安装包，点击`Download`
+进入官网后找到适合`RDK S600`的`ARM64`版本的安装包，点击`Download`
 
 ![image_s100_nomachine_dl](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG)
 
@@ -196,7 +196,7 @@ dpkg -i nomachine_*_arm64.deb
     sudo systemctl restart nxserver
     ```
 
-**重启S100**
+**重启S600**
 
 由于`NXServer`的配置问题，完成上述操作后直接连接会黑屏，需要重启后使用。
 
