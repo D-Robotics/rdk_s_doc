@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 3.3.2 GPIO应用
+# 3.3.2.2 GPIO应用
 
 开发板预置了 GPIO Python 库 `Hobot.GPIO`，用户可以通过如下命令导入GPIO库。
 
@@ -68,16 +68,9 @@ GPIO.setwarnings(False)
 
 :::info
 
-在`RDK S100`平台上，支持`40-pin` GPIO拓展， `40-pin`在使用过程中有如下的限制:
+在`RDK S600`平台上，支持3个10-pin 自锁接口，1个14-pin自锁接口GPIO拓展，在使用过程中有如下的限制:
 
-- `40-pin`上有一组引脚涉及到二选一（UART2, I2C5）。
-- `40-pin`上PCM相关引脚如果要使用需要拨动拨码开关。
-
-上述描述细节可以查看下图：
-
-![image-rdk_100_funcreuse_40pin](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png)
-
-管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
+管脚定义请参考 [管脚配置与定义](./01_overview.md#pin_define)
 
 :::
 
@@ -160,14 +153,6 @@ GPIO.gpio_function(channel)
 
 边沿是电信号`从低到高`（上升沿）或`从高到低`（下降沿）的变化，这种改变可以看作是一种事件的发生，这种事件可以用来触发CPU中断信号。
 
-:::info
-
-在`RDK S100`平台上，`40-pin`上功能名为PERI_GPIO的管脚不支持中断使用，它们在`BOARD`编码模式下的编号为：**11**、**13**、**15**、**16**、**18**、**22**、**29**、**31**、**36**、**37**；
-
-管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
-
-:::
-
 GPIO库提供了三种方法来检测输入事件：
 
 ### wait_for_edge() 函数
@@ -245,7 +230,7 @@ GPIO.remove_event_detect(channel)
 ```
 
 ## 测试例程
-
+TODO
 在 `/app/40pin_samples/`目录下提供主要的测试例程：
 
 | 测试例程名             | 说明                                          |
@@ -506,157 +491,231 @@ if __name__ == '__main__':
 ```
 ## hb_gpioinfo工具介绍
 
-hb_gpioinfo 是适配RDK S100的一个gpio帮助工具，可以查看当前开发板的的PinName和PinNum的对应关系，命令示例输出如下：
+hb_gpioinfo 是适配RDK S600的一个gpio帮助工具，可以查看当前开发板的的PinName和PinNum的对应关系，命令示例输出如下：
 ```shell
 sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |Idx|        Pin Name|            Pin Func|
 |--- ---------------- --------------------|
-|439|        GNSS_INT|                gpio|
+|402|        EMMC_CLK|      Not Configured|
 |--- ---------------- --------------------|
-|440|       PERI_RSTO|      Not Configured|
+|403|        EMMC_CMD|      Not Configured|
 |--- ---------------- --------------------|
-|441|        CAM_PINT|      Not Configured|
+|404|      EMMC_DATA0|      Not Configured|
 |--- ---------------- --------------------|
-|442|          SD_1V8|        video_sd_1v8|
+|405|      EMMC_DATA1|      Not Configured|
 |--- ---------------- --------------------|
-|443|      SD_BUS_POW|      Not Configured|
+|406|      EMMC_DATA2|      Not Configured|
 |--- ---------------- --------------------|
-|444|     SENSOR0_ERR|      Not Configured|
+|407|      EMMC_DATA3|      Not Configured|
 |--- ---------------- --------------------|
-|445|     SENSOR1_ERR|      Not Configured|
+|408|      EMMC_DATA4|      Not Configured|
 |--- ---------------- --------------------|
-|446|     SENSOR2_ERR|      Not Configured|
+|409|      EMMC_DATA5|      Not Configured|
 |--- ---------------- --------------------|
-|447|     SENSOR3_ERR|      Not Configured|
+|410|      EMMC_DATA6|                gpio|
 |--- ---------------- --------------------|
-|448|     SENSOR4_ERR|      Not Configured|
+|411|      EMMC_DATA7|      Not Configured|
 |--- ---------------- --------------------|
-|449|     SENSOR5_ERR|      Not Configured|
+|412|  EMMC_DATA_STRB|      Not Configured|
 |--- ---------------- --------------------|
-|450|     SENSOR6_ERR|      Not Configured|
+|413|   PERI_RSTN_OUT|      Not Configured|
 |--- ---------------- --------------------|
-|451|     SENSOR7_ERR|      Not Configured|
+|414|          SD_1V8|      Not Configured|
 |--- ---------------- --------------------|
-|452|     SENSOR8_ERR|      Not Configured|
+|415|        SD_DET_N|                gpio|
 |--- ---------------- --------------------|
-|453|     SENSOR9_ERR|                gpio|
+|416|        SD_WPROT|                gpio|
 |--- ---------------- --------------------|
-|454|    SENSOR10_ERR|      Not Configured|
+|417|      SD_BUS_POW|      Not Configured|
 |--- ---------------- --------------------|
-|455|    SENSOR11_ERR|      Not Configured|
+|418|          SD_CLK|      Not Configured|
 |--- ---------------- --------------------|
-|456|     LPWM0_DOUT0|     cam_lpwm0_dout0|
+|419|          SD_CMD|      Not Configured|
 |--- ---------------- --------------------|
-|457|     LPWM0_DOUT1|     cam_lpwm0_dout1|
+|420|        SD_DATA0|      Not Configured|
 |--- ---------------- --------------------|
-|458|     LPWM0_DOUT2|     cam_lpwm0_dout2|
+|421|        SD_DATA1|      Not Configured|
 |--- ---------------- --------------------|
-|459|     LPWM0_DOUT3|     cam_lpwm0_dout3|
+|422|        SD_DATA2|                gpio|
 |--- ---------------- --------------------|
-|460|     LPWM1_DOUT0|     cam_lpwm1_dout0|
+|423|        SD_DATA3|                gpio|
 |--- ---------------- --------------------|
-|461|     LPWM1_DOUT1|     cam_lpwm1_dout1|
+|424|        SD_DATA4|      Not Configured|
 |--- ---------------- --------------------|
-|462|     LPWM1_DOUT2|     cam_lpwm1_dout2|
+|425|        SD_DATA5|      Not Configured|
 |--- ---------------- --------------------|
-|463|     LPWM1_DOUT3|     cam_lpwm1_dout3|
+|426|        SD_DATA6|                gpio|
 |--- ---------------- --------------------|
-|464|        I2C0_SCL|        cam_i2c0_scl|
+|427|        SD_DATA7|                gpio|
 |--- ---------------- --------------------|
-|465|        I2C0_SDA|        cam_i2c0_sda|
+|428|    SD_DATA_STRB|                gpio|
 |--- ---------------- --------------------|
-|466|        I2C1_SCL|        cam_i2c1_scl|
+|429|     LPWM0_DOUT0|     cam_lpwm0_dout0|
 |--- ---------------- --------------------|
-|467|        I2C1_SDA|        cam_i2c1_sda|
+|430|     LPWM0_DOUT1|     cam_lpwm0_dout1|
 |--- ---------------- --------------------|
-|468|        I2C2_SCL|        cam_i2c2_scl|
+|431|     LPWM0_DOUT2|     cam_lpwm0_dout2|
 |--- ---------------- --------------------|
-|469|        I2C2_SDA|        cam_i2c2_sda|
+|432|     LPWM0_DOUT3|     cam_lpwm0_dout3|
 |--- ---------------- --------------------|
-|470|        I2C3_SCL|        cam_i2c3_scl|
+|433|     LPWM1_DOUT0|     cam_lpwm1_dout0|
 |--- ---------------- --------------------|
-|471|        I2C3_SDA|        cam_i2c3_sda|
+|434|     LPWM1_DOUT1|     cam_lpwm1_dout1|
 |--- ---------------- --------------------|
-|472|        I2C4_SCL|        cam_i2c4_scl|
+|435|     LPWM1_DOUT2|     cam_lpwm1_dout2|
 |--- ---------------- --------------------|
-|473|        I2C4_SDA|        cam_i2c4_sda|
+|436|     LPWM1_DOUT3|     cam_lpwm1_dout3|
 |--- ---------------- --------------------|
-|474|       UART1_RXD|      peri_uart1_rxd|
+|437|     LPWM2_DOUT0|     cam_lpwm2_dout0|
 |--- ---------------- --------------------|
-|475|       PCM0_MCLK|      Not Configured|
+|438|     LPWM2_DOUT1|     cam_lpwm2_dout1|
 |--- ---------------- --------------------|
-|476|       PCM0_BCLK|      Not Configured|
+|439|     LPWM2_DOUT2|     cam_lpwm2_dout2|
 |--- ---------------- --------------------|
-|477|      PCM0_FSYNC|      Not Configured|
+|440|     LPWM2_DOUT3|     cam_lpwm2_dout3|
 |--- ---------------- --------------------|
-|478|      PCM0_DATA0|      Not Configured|
+|441|     LPWM3_DOUT0|     cam_lpwm3_dout0|
 |--- ---------------- --------------------|
-|479|      PCM0_DATA1|      Not Configured|
+|442|     LPWM3_DOUT1|     cam_lpwm3_dout1|
 |--- ---------------- --------------------|
-|480|   EMAC_MDC_HSI0|  peri_emac_mdc_hsi0|
+|443|     LPWM3_DOUT2|     cam_lpwm3_dout2|
 |--- ---------------- --------------------|
-|481|  EMAC_MDIO_HSI0| peri_emac_mdio_hsi0|
+|444|     LPWM3_DOUT3|     cam_lpwm3_dout3|
 |--- ---------------- --------------------|
-|482|          SD_CLK|      Not Configured|
+|445|       SPI0_MOSI|       hsi_spi0_mosi|
 |--- ---------------- --------------------|
-|483|          SD_CMD|      Not Configured|
+|446|       SPI0_MISO|       hsi_spi0_miso|
 |--- ---------------- --------------------|
-|484|        SD_DATA0|      Not Configured|
+|447|       SPI0_SCLK|       hsi_spi0_sclk|
 |--- ---------------- --------------------|
-|485|        SD_DATA1|      Not Configured|
+|448|        I2C8_SCL|                gpio|
 |--- ---------------- --------------------|
-|486|        SD_DATA2|      Not Configured|
+|449|        I2C8_SDA|                gpio|
 |--- ---------------- --------------------|
-|487|        SD_DATA3|      Not Configured|
+|450|        I2C9_SCL|        hsi_i2c9_scl|
 |--- ---------------- --------------------|
-|488|        SD_DATA4|      Not Configured|
+|451|        I2C9_SDA|        hsi_i2c9_sda|
 |--- ---------------- --------------------|
-|489|        SD_DATA5|      Not Configured|
+|452|       PCM0_MCLK|      Not Configured|
 |--- ---------------- --------------------|
-|490|        SD_DATA6|      Not Configured|
+|453|       PCM0_BCLK|      Not Configured|
 |--- ---------------- --------------------|
-|491|        SD_DATA7|      Not Configured|
+|454|      PCM0_FSYNC|                gpio|
 |--- ---------------- --------------------|
-|492|    SD_DATA_STRB|      Not Configured|
+|455|      PCM0_DATA0|      Not Configured|
 |--- ---------------- --------------------|
-|493|        SD_DET_N|      Not Configured|
+|456|      PCM0_DATA1|      Not Configured|
 |--- ---------------- --------------------|
-|494|        SD_WPROT|      Not Configured|
+|457|       PCM1_MCLK|      Not Configured|
 |--- ---------------- --------------------|
-|495|        I2C5_SCL|       peri_i2c5_scl|
+|458|       PCM1_BCLK|                gpio|
 |--- ---------------- --------------------|
-|496|        I2C5_SDA|       peri_i2c5_sda|
+|459|      PCM1_FSYNC|      Not Configured|
 |--- ---------------- --------------------|
-|497|       SPI0_CSN0|      peri_spi0_csn0|
+|460|      PCM1_DATA0|      Not Configured|
 |--- ---------------- --------------------|
-|498|       SPI0_CSN1|      peri_spi0_csn1|
+|461|      PCM1_DATA1|                gpio|
 |--- ---------------- --------------------|
-|499|       SPI0_MOSI|      peri_spi0_mosi|
+|462|       PCM2_MCLK|      Not Configured|
 |--- ---------------- --------------------|
-|500|       SPI0_MISO|      peri_spi0_miso|
+|463|       PCM3_MCLK|                gpio|
 |--- ---------------- --------------------|
-|501|       SPI0_SCLK|      peri_spi0_sclk|
+|464|       PCM2_BCLK|      Not Configured|
 |--- ---------------- --------------------|
-|502|       SPI1_CSN0|      peri_spi1_csn0|
+|465|      PCM2_FSYNC|      Not Configured|
 |--- ---------------- --------------------|
-|503|       SPI1_CSN1|      peri_spi1_csn1|
+|466|      PCM2_DATA0|                gpio|
 |--- ---------------- --------------------|
-|504|       SPI1_MOSI|      peri_spi1_mosi|
+|467|      PCM2_DATA1|                gpio|
 |--- ---------------- --------------------|
-|505|       SPI1_MISO|      peri_spi1_miso|
+|468|       PCM3_BCLK|      Not Configured|
 |--- ---------------- --------------------|
-|506|       SPI1_SCLK|      peri_spi1_sclk|
+|469|      PCM3_FSYNC|                gpio|
 |--- ---------------- --------------------|
-|507|       UART0_TXD|      peri_uart0_txd|
+|470|      PCM3_DATA0|                gpio|
 |--- ---------------- --------------------|
-|508|       UART0_RXD|      peri_uart0_rxd|
+|471|      PCM3_DATA1|      Not Configured|
 |--- ---------------- --------------------|
-|509|      UART0_RTSN|     peri_uart0_rtsn|
+|472|       UART2_TXD|       hsi_uart2_txd|
 |--- ---------------- --------------------|
-|510|      UART0_CTSN|     peri_uart0_ctsn|
+|473|       UART2_RXD|       hsi_uart2_rxd|
 |--- ---------------- --------------------|
-|511|       UART1_TXD|      peri_uart1_txd|
+|474|       UART3_TXD|      Not Configured|
+|--- ---------------- --------------------|
+|475|       UART3_RXD|      Not Configured|
+|--- ---------------- --------------------|
+|476|       UART4_TXD|       hsi_uart4_txd|
+|--- ---------------- --------------------|
+|477|       UART4_RXD|       hsi_uart4_rxd|
+|--- ---------------- --------------------|
+|478|       SPI0_CSN0|       hsi_spi0_csn0|
+|--- ---------------- --------------------|
+|479|       SPI0_CSN1|                gpio|
+|--- ---------------- --------------------|
+|480|       SPI3_MOSI|      Not Configured|
+|--- ---------------- --------------------|
+|481|       SPI3_MISO|      Not Configured|
+|--- ---------------- --------------------|
+|482|       SPI3_CSN0|      Not Configured|
+|--- ---------------- --------------------|
+|483|       SPI3_SCLK|      Not Configured|
+|--- ---------------- --------------------|
+|484|   EMAC_MDC_HSI4|   hsi_emac_mdc_hsi4|
+|--- ---------------- --------------------|
+|485|  EMAC_MDIO_HSI4|  hsi_emac_mdio_hsi4|
+|--- ---------------- --------------------|
+|486|   EMAC_MDC_HSI5|   hsi_emac_mdc_hsi5|
+|--- ---------------- --------------------|
+|487|  EMAC_MDIO_HSI5|  hsi_emac_mdio_hsi5|
+|--- ---------------- --------------------|
+|488|   EMAC_MDC_HSI2|   hsi_emac_mdc_hsi2|
+|--- ---------------- --------------------|
+|489|  EMAC_MDIO_HSI2|  hsi_emac_mdio_hsi2|
+|--- ---------------- --------------------|
+|490|   EMAC_MDC_HSI3|   hsi_emac_mdc_hsi3|
+|--- ---------------- --------------------|
+|491|  EMAC_MDIO_HSI3|  hsi_emac_mdio_hsi3|
+|--- ---------------- --------------------|
+|492|   EMAC_MDC_HSI0|      Not Configured|
+|--- ---------------- --------------------|
+|493|  EMAC_MDIO_HSI0|      Not Configured|
+|--- ---------------- --------------------|
+|494|   EMAC_MDC_HSI1|      Not Configured|
+|--- ---------------- --------------------|
+|495|  EMAC_MDIO_HSI1|      Not Configured|
+|--- ---------------- --------------------|
+|496|        I2C0_SCL|        hsi_i2c0_scl|
+|--- ---------------- --------------------|
+|497|        I2C0_SDA|        hsi_i2c0_sda|
+|--- ---------------- --------------------|
+|498|        I2C1_SCL|                gpio|
+|--- ---------------- --------------------|
+|499|        I2C1_SDA|                gpio|
+|--- ---------------- --------------------|
+|500|        I2C2_SCL|        hsi_i2c2_scl|
+|--- ---------------- --------------------|
+|501|        I2C2_SDA|        hsi_i2c2_sda|
+|--- ---------------- --------------------|
+|502|        I2C3_SCL|        hsi_i2c3_scl|
+|--- ---------------- --------------------|
+|503|        I2C3_SDA|        hsi_i2c3_sda|
+|--- ---------------- --------------------|
+|504|        I2C4_SCL|        hsi_i2c4_scl|
+|--- ---------------- --------------------|
+|505|        I2C4_SDA|        hsi_i2c4_sda|
+|--- ---------------- --------------------|
+|506|        I2C5_SCL|        hsi_i2c5_scl|
+|--- ---------------- --------------------|
+|507|        I2C5_SDA|        hsi_i2c5_sda|
+|--- ---------------- --------------------|
+|508|        I2C6_SCL|      Not Configured|
+|--- ---------------- --------------------|
+|509|        I2C6_SDA|      Not Configured|
+|--- ---------------- --------------------|
+|510|        I2C7_SCL|        hsi_i2c7_scl|
+|--- ---------------- --------------------|
+|511|        I2C7_SDA|        hsi_i2c7_sda|
 |--- ---------------- --------------------|
 |--- ---------------- --------------------|
 ```

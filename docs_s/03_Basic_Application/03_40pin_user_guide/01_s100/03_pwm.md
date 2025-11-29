@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 3.3.3 PWM 应用
+# 3.3.1.3 PWM 应用
 
 Hobot.GPIO 库仅在带有附加硬件 PWM 控制器的引脚上支持 PWM。与 RPi.GPIO 库不同，Hobot.GPIO 库不实现软件模拟 PWM。RDK S100 40pin 的硬件形态支持两路 LPWM。
 
