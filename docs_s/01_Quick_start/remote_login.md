@@ -4,23 +4,38 @@ sidebar_position: 4
 
 # 1.4 远程登录
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 本章节旨在向需要通过个人电脑(PC)远程访问开发板的用户介绍如何通过串口、网络(SSH)方式进行远程登录。
 
 ## 默认登录账户
 
-RDK S100 系统提供了两个默认账户，方便用户首次使用：
+RDK S100 / S600 系统提供了两个默认账户，方便用户首次使用：
 
 - **普通用户：** 用户名 `sunrise`，密码 `sunrise`
 - **超级用户 (root)：** 用户名 `root`，密码 `root`
 
 :::tip
 通过网络方式远程登录前，开发板需要通过有线以太网或者无线 WiFi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：
-
+<Tabs groupId="soc_type">
+<TabItem value="s100" label="s100">
 - 有线以太网：
   - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
   - 开发板 eth0 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
 - 无线 WiFi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
-
+</TabItem>
+<TabItem value="s600" label="s600">
+- 有线以太网：
+  - 开发板 eth3 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
+  - 开发板 eth2 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+  - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
+  - 开发板 eth0 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+- 无线 WiFi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
+</TabItem>
+</Tabs>
 :::
 
 ## 串口登录{#login_uart}
@@ -31,8 +46,14 @@ RDK S100 系统提供了两个默认账户，方便用户首次使用：
 
 在使用串口登录前，需要确认开发板串口线跟电脑正确连接，连接方法可参考对应开发板的调试串口章节：
 
+<Tabs groupId="soc_type">
+<TabItem value="s100" label="s100">
 - [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#debug_uart)
-
+</TabItem>
+<TabItem value="s600" label="s600">
+- [rdk_s600 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s600.md#debug_uart)
+</TabItem>
+</Tabs>
 串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
 
 - 当串口 USB 转接板首次插入电脑时，需要安装串口驱动。驱动程序可从资源中心的[工具子栏目](https://developer.d-robotics.cc/resource)获取。驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
@@ -57,6 +78,9 @@ RDK S100 系统提供了两个默认账户，方便用户首次使用：
   ![image-Uart-Login](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif)
 
 此时，可使用`ifconfig -a`命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：
+
+<Tabs groupId="soc_type">
+<TabItem value="s100" label="s100">
 
 ```bash
 eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
@@ -93,6 +117,63 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
+</TabItem>
+<TabItem value="s600" label="s600">
+
+```bash
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 7a:5e:ca:06:4b:a1  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 136
+
+eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
+        inet6 fe80::58de:11ff:fe64:e19c  prefixlen 64  scopeid 0x20<link>
+        ether 5a:de:11:64:e1:9c  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 3  bytes 425 (425.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 192
+
+eth2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 02:8f:6f:81:99:10  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 201
+
+eth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether ee:71:51:40:ac:ad  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 218
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 224  bytes 21518 (21.5 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 224  bytes 21518 (21.5 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether f0:68:e3:22:7e:90  txqueuelen 1000  (Ethernet)
+        RX packets 8280  bytes 654536 (654.5 KB)
+        RX errors 0  dropped 5898  overruns 0  frame 0
+        TX packets 1138  bytes 139677 (139.6 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+</TabItem>
+</Tabs>
+
 ### **mac连接串口**
 
 macos系统下，使用minicom工具连接串口，步骤如下：
@@ -160,10 +241,10 @@ macos系统下，使用minicom工具连接串口，步骤如下：
 ## NoMachine登陆
 
 :::tip
-NoMachine功能需要S100端的软件包支持，配置指南见[NoMachine配置](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-配置)
+NoMachine功能需要S100/S600端的软件包支持，配置指南见[NoMachine配置](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-配置)
 :::
 
-本章节面向使用Ubuntu Desktop系统版本的用户，介绍如何通过`NoMachine`实现远程桌面登录功能。
+本章节面向使用Ubuntu Desktop系统版本的用户，介绍如何通过`NoMachine`实现远程桌面登录功能。以下章节以S100为例，S600的操作与S100一致，将链接名内的`S100`替换为`S600`即可。
 
 **连接开发板**
 
@@ -171,7 +252,7 @@ NoMachine功能需要S100端的软件包支持，配置指南见[NoMachine配置
 
 ![nomachine_login01](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg)
 
-2. 在跳出来的界面中填写`RDK100`的主机信息，完成后点击`Add`
+2. 在跳出来的界面中填写`RDK100/RDKS600`的主机信息，完成后点击`Add`
 
 ![nomachine_login02](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg)
 
