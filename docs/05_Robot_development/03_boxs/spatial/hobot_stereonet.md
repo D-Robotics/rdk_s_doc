@@ -47,7 +47,7 @@ zed相机代码仓库：https://github.com/D-Robotics/hobot_zed_cam
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu 22.04系统镜像
+1. RDK已烧录好RDK OS系统
 2. RDK已成功安装TogetheROS.Bot
 3. 如果需要实时在线推理，请准备好双目相机，目前支持官方MIPI相机、ZED mini/2i USB相机
 4. 如果需要离线推理，请准备好<strong style={{ color: 'red' }}>矫正后</strong>的双目图像数据

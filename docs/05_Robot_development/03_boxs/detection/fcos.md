@@ -39,7 +39,7 @@ FCOS是D-Robotics开源的Onnx模型，使用[COCO数据集](http://cocodataset.
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
+1. RDK已烧录好Ubuntu系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -61,7 +61,6 @@ FCOS是D-Robotics开源的Onnx模型，使用[COCO数据集](http://cocodataset.
 
 FCOS目标检测算法示例订阅sensor package发布的图片，经过推理后发布算法msg，通过websocket package实现在PC端浏览器上渲染显示发布的图片和对应的算法结果。
 
-
 <Tabs groupId="tros-distro">
 <TabItem value="foxy" label="Foxy">
 
@@ -71,7 +70,6 @@ source /opt/tros/setup.bash
 ```
 
 </TabItem>
-
 <TabItem value="humble" label="Humble">
 
 ```bash
@@ -79,9 +77,10 @@ source /opt/tros/setup.bash
 source /opt/tros/humble/setup.bash
 ```
 
-</TabItem>
 
+</TabItem>
 </Tabs>
+
 
 ```shell
 # 配置MIPI摄像头
@@ -93,7 +92,6 @@ ros2 launch dnn_node_example dnn_node_example.launch.py dnn_example_config_file:
 
 #### 使用USB摄像头发布图片
 
-
 <Tabs groupId="tros-distro">
 <TabItem value="foxy" label="Foxy">
 
@@ -103,7 +101,6 @@ source /opt/tros/setup.bash
 ```
 
 </TabItem>
-
 <TabItem value="humble" label="Humble">
 
 ```bash
@@ -111,8 +108,8 @@ source /opt/tros/setup.bash
 source /opt/tros/humble/setup.bash
 ```
 
-</TabItem>
 
+</TabItem>
 </Tabs>
 
 ```shell
@@ -127,7 +124,6 @@ ros2 launch dnn_node_example dnn_node_example.launch.py dnn_example_config_file:
 
 FCOS目标检测算法示例使用本地JPEG/PNG格式图片回灌，经过推理后将算法结果渲染后的图片存储在运行路径下。
 
-
 <Tabs groupId="tros-distro">
 <TabItem value="foxy" label="Foxy">
 
@@ -137,7 +133,6 @@ source /opt/tros/setup.bash
 ```
 
 </TabItem>
-
 <TabItem value="humble" label="Humble">
 
 ```bash
@@ -145,8 +140,8 @@ source /opt/tros/setup.bash
 source /opt/tros/humble/setup.bash
 ```
 
-</TabItem>
 
+</TabItem>
 </Tabs>
 
 ```shell

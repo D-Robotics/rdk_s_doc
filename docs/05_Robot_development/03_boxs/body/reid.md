@@ -38,7 +38,7 @@ Reid package 是基于[Reid](https://github.com/KaiyangZhou/deep-person-reid.git
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu 22.04系统镜像。
+1. RDK已烧录好RDK OS系统。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -51,13 +51,26 @@ package对外发布包含实例ID信息的算法msg, 用户可以订阅 "/percep
 **mipi摄像头发布图片**
 
 <Tabs groupId="tros-distro">
+<TabItem value="foxy" label="Foxy">
 
+```bash
+# 配置tros.b环境
+source /opt/tros/setup.bash
+```
+
+</TabItem>
 <TabItem value="humble" label="Humble">
 
-```shell
-# 配置ROS2环境
+```bash
+# 配置tros.b环境
 source /opt/tros/humble/setup.bash
+```
 
+</TabItem>
+</Tabs>
+
+
+```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 cp -r /opt/tros/${TROS_DISTRO}/lib/reid/config/ .
@@ -69,20 +82,29 @@ export CAM_TYPE=mipi
 ros2 launch reid reid.launch.py
 ```
 
-</TabItem>
-
-</Tabs>
-
 **使用usb摄像头发布图片**
 
 <Tabs groupId="tros-distro">
+<TabItem value="foxy" label="Foxy">
 
+```bash
+# 配置tros.b环境
+source /opt/tros/setup.bash
+```
+
+</TabItem>
 <TabItem value="humble" label="Humble">
 
-```shell
-# 配置ROS2环境
+```bash
+# 配置tros.b环境
 source /opt/tros/humble/setup.bash
+```
 
+
+</TabItem>
+</Tabs>
+
+```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 cp -r /opt/tros/${TROS_DISTRO}/lib/reid/config/ .
@@ -94,20 +116,29 @@ export CAM_TYPE=usb
 ros2 launch reid reid.launch.py
 ```
 
-</TabItem>
-
-</Tabs>
-
 **使用单张回灌图片**
 
 <Tabs groupId="tros-distro">
+<TabItem value="foxy" label="Foxy">
 
+```bash
+# 配置tros.b环境
+source /opt/tros/setup.bash
+```
+
+</TabItem>
 <TabItem value="humble" label="Humble">
 
-```shell
-# 配置ROS2环境
+```bash
+# 配置tros.b环境
 source /opt/tros/humble/setup.bash
+```
 
+
+</TabItem>
+</Tabs>
+
+```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 cp -r /opt/tros/${TROS_DISTRO}/lib/reid/config/ .
@@ -118,10 +149,6 @@ export CAM_TYPE=fb
 # 启动launch文件
 ros2 launch reid reid.launch.py publish_image_source:=config/person_body.jpg publish_image_format:=jpg publish_output_image_w:=1920 publish_output_image_h:=1080
 ```
-
-</TabItem>
-
-</Tabs>
 
 ## 结果分析
 

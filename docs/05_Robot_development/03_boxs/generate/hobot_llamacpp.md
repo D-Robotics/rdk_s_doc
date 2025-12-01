@@ -49,13 +49,25 @@ import TabItem from '@theme/TabItem';
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu 22.04系统镜像。
+1. RDK已烧录好Ubuntu系统镜像。
 2. RDK已成功安装TogetheROS.Bot。
 3. 下载安装功能包
 
+<Tabs groupId="tros-distro">
+<TabItem value="humble" label="Humble">
+
+```bash
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+```
+
+
+</TabItem>
+</Tabs>
+
 ```shell
 sudo apt update
-sudo apt install tros-humble-hobot-llamacpp
+sudo apt install tros-${TROS_DISTRO}-hobot-llamacpp
 ```
 
 :::caution **注意**
@@ -189,4 +201,4 @@ ros2 run hobot_llamacpp hobot_llamacpp --ros-args -p feed_type:=0 -p model_type:
 
 ## 注意事项
 
-X5平台 修改ION memory大小为1.6GB, S100平台 修改ION memory大小大于1.6GB, 否则会导致模型加载失败。
+X5平台 修改ION memory大小为1.6GB, S100平台修改ION memory大小大于1.6GB, 否则会导致模型加载失败。
