@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# UART使用指南
+# 7.5.5 UART使用指南
 
 S100 MCU芯片共有3路Uart，即Uart4~Uart6。其中Uart4作为调试控制台使用（MCU0、MCU1共用调试串口），默认不开启DMA，默认配置如下：
 

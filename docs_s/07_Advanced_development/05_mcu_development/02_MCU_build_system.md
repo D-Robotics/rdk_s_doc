@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# MCU系统说明
+# 7.5.3 MCU系统说明
 ## 编译系统基本说明
 MCU的编译系统基于Scons3.0.0创建（[Scons 3.0.0用户手册官网](https://scons.org/doc/3.0.0/HTML/scons-user.html)）。
 

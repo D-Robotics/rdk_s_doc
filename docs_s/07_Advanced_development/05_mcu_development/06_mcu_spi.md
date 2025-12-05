@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# SPI使用指南
+# 7.5.7 SPI使用指南
 
 ## 硬件支持
 

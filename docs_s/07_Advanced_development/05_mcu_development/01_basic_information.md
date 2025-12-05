@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# MCU快速入门指南
+# 7.5.2 MCU快速入门指南
 
 ## 范围
 

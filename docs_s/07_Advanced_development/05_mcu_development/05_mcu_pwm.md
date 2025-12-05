@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# PWM使用指南
+# 7.5.6 PWM使用指南
 
 ## 硬件支持
 

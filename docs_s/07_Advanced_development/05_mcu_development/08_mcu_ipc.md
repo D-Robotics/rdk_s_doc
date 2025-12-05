@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# IPC使用指南
+# 7.5.9 IPC使用指南
 
 此章节着重说明MCU侧的相关使用说明，更多的IPC的原理和使用可以查阅 [IPC模块介绍](../../../07_Advanced_development/02_linux_development/04_driver_development_s100/06_driver_ipc.md) 章节。
 
