@@ -4,6 +4,11 @@ sidebar_position: 11
 
 # 7.5.12 Eth使用指南
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 ## 基本概述
 
 ### 硬件特性
@@ -22,33 +27,46 @@ sidebar_position: 11
 
 ### 假设和限制
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 - 发送和接收方向的FIFO最多各支持6个。
-
+</TabItem>
+<TabItem value="S600" label="S600">
+- 发送和接收方向的FIFO最多各支持8个。
+</TabItem>
+</Tabs>
 - 不支持传输超过所使用控制器可用缓冲区大小的数据，较长的数据必须使用Internet协议(IP)和传输控制协议(TCP)传输。
 
 - 单个接收帧的长度(包括14字节的以太网帧头和4字节的FCS)必须小于或等于RX buffer的配置长度。
 
-- 模块时钟频率为300M，PTP时钟周期为20ns。
+- 模块时钟频率为250M，PTP时钟周期为20ns。
 
 ## 代码路径
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 - McalCdd/Ethernet/inc # 头文件
-
 - McalCdd/Ethernet/src/Eth.c # 提供对外API接口
-
 - McalCdd/Ethernet/src/Eth_Interrupt.c # 中断处理回调函数处理接口
-
 - McalCdd/Ethernet/src/Mac_Lld.c # 封装寄存器控制接口，供API接口调用
-
 - Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Eth_PBcfg.c # Eth预编译配置，用于提供给对外接口API初始化属性调用
-
 - Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Mac_Ip_PBcfg.c # MAC驱动预编译配置，对Eth_PBcfg.c构成静态配置依赖
-
 - samples/Eth/Eth_Test/Eth_test.c # Eth功能测试示例程序
+</TabItem>
+<TabItem value="S600" label="S600">
+- McalCdd/Ethernet/inc # 头文件
+- McalCdd/Ethernet/src/Eth.c # 提供对外API接口
+- McalCdd/Ethernet/src/Eth_Interrupt.c # 中断处理回调函数处理接口
+- McalCdd/Ethernet/src/Mac_Lld.c # 封装寄存器控制接口，供API接口调用
+- Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Eth_PBcfg.c # Eth预编译配置，用于提供给对外接口API初始化属性调用
+- Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Mac_Ip_PBcfg.c # Eth预编译配置，用于提供给对外接口API初始化属性调用
+- samples/Eth/Eth_Test/Eth_test.c # Eth功能测试示例程序
+</TabItem>
+</Tabs>
 
 ## 应用sample
 
-S100以```samples/Eth/Eth_Test/Eth_test.c```发送arp报文为例说明：
+以```samples/Eth/Eth_Test/Eth_test.c```发送arp报文为例说明：
 
 ### 数据发送
 
@@ -127,8 +145,8 @@ if(FrameType==0x800)
 
 ### 注意事项
 
-- S100默认数据传输模式是轮询。轮询模式下的数据发送需要注意申请的buffer在transmit发送之后，调用Eth_TxConfirmation释放buffer。
-- Eth_Init之前需要phy解复位保证初始化成功，S100上将phy reset pin拉高实现解复位
+- 默认数据传输模式是轮询。轮询模式下的数据发送需要注意申请的buffer在transmit发送之后，调用Eth_TxConfirmation释放buffer。
+- Eth_Init之前需要phy解复位保证初始化成功，在Eth初始化之前需要先通过phy reset pin拉高实现解复位。
 
 ### 应用程序接口
 
