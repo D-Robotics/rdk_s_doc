@@ -4,14 +4,30 @@ sidebar_position: 8
 
 # 7.5.9 IPC使用指南
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 此章节着重说明MCU侧的相关使用说明，更多的IPC的原理和使用可以查阅 [IPC模块介绍](../../../07_Advanced_development/02_linux_development/04_driver_development_s100/06_driver_ipc.md) 章节。
+
+## 使用限制说明
+
+1. 在使用Ipc_MDMA_SendMsg接口发送数据时, 需要保证数据buffer地址16字节对齐。
+2. 发送功能通过轮询方式查看dma状态，因此使用发送功能前必须关闭DMA中断(释放的代码默认已关闭)；使用接收功能时，DMA中断和IPC中断配置成相同的优先级，避免相互打断。
+3. Ipc Mdma发送通道只有两个，单核或多核多任务发送时，建议使用自旋锁或者关中断方式控制DMA资源抢占。
+4. IPC多核发送或接收基于Instance分配，不支持基于Channel分配。
+5. IPC初始化需要在DMA模块初始化后再调用。
+6. MCU IPC配置需要核对端IPC配置保持一致。包括Instance控制段与data段地址，Channel的数量与ID，Buffer数据，Buffer大小，两端配置不一致会导致IPC通信失败。
+7. Instance cfg中的receive_coreid配置，需要明确该Instance是工作在MCU0还是MCU1，工作在MCU1即配置为Ipc_Receive_Core1，该项配置错误会导致IPC通信失败。
+8. Instance工作在哪个MCU上，IPC中断即在哪个MCU上进行使能。如果在多核上都使能，可能出现中断被其他核抢占导致IPC通信失败。
 
 ## IPC配置相关
 
 一个IPC有8个channels，但是共享一个中断，因此一个IPC只能在MCU0或MCU1其中一个系统上使能。
 
 当MCU1使用IPC时，需要配置两部分内容。
-1. 需要配置回调函数，作用是当IPC收到/发送数据时产生回调。当然客户可自行定制当传输数据错误时的回调函数。下文以IPC0为例介绍。
+1. 需要配置回调函数，作用是IPC接收到notify信号时触发中断进入回调函数进行处理。当然客户可自行定制当传输数据错误时的回调函数。下文以Instance0为例介绍。
 ```c
 static Ipc_ChannelConfigType Ipc_ShmInstance0CfgChannel[8] = {
 {
@@ -25,83 +41,7 @@ static Ipc_ChannelConfigType Ipc_ShmInstance0CfgChannel[8] = {
         .TxErrCallbackArg = (NULL_PTR),
     },
 },
-{
-    .ChannelId = 1,
-    .ChannelData   = {
-        .NumPools = 1,
-        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_1BufPool,
-        .RxCallback     = IpcTp_InsCan_RxCallback,
-        .RxCallbackArg  = (NULL_PTR),
-        .TxErrCallback    = DefaultTxErrCallback,
-        .TxErrCallbackArg = (NULL_PTR),
-    },
-},
-{
-    .ChannelId = 2,
-    .ChannelData   = {
-        .NumPools = 1,
-        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_2BufPool,
-        .RxCallback     = IpcTp_InsCan_RxCallback,
-        .RxCallbackArg  = (NULL_PTR),
-        .TxErrCallback    = DefaultTxErrCallback,
-        .TxErrCallbackArg = (NULL_PTR),
-    },
-},
-{
-    .ChannelId = 3,
-    .ChannelData   = {
-        .NumPools = 1,
-        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_3BufPool,
-        .RxCallback     = IpcTp_InsCan_RxCallback,
-        .RxCallbackArg  = (NULL_PTR),
-        .TxErrCallback    = DefaultTxErrCallback,
-        .TxErrCallbackArg = (NULL_PTR),
-    },
-},
-{
-    .ChannelId = 4,
-    .ChannelData   = {
-        .NumPools = 1,
-        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_4BufPool,
-        .RxCallback     = IpcTp_InsCan_RxCallback,
-        .RxCallbackArg  = (NULL_PTR),
-        .TxErrCallback    = DefaultTxErrCallback,
-        .TxErrCallbackArg = (NULL_PTR),
-    },
-},
-{
-    .ChannelId = 5,
-    .ChannelData   = {
-        .NumPools = 1,
-        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_5BufPool,
-        .RxCallback     = IpcTp_InsCan_RxCallback,
-        .RxCallbackArg  = (NULL_PTR),
-        .TxErrCallback    = DefaultTxErrCallback,
-        .TxErrCallbackArg = (NULL_PTR),
-    },
-},
-{
-    .ChannelId = 6,
-    .ChannelData   = {
-        .NumPools = 1,
-        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_6BufPool,
-        .RxCallback     = IpcTp_InsCan_RxCallback,
-        .RxCallbackArg  = (NULL_PTR),
-        .TxErrCallback    = DefaultTxErrCallback,
-        .TxErrCallbackArg = (NULL_PTR),
-    },
-},
-{
-    .ChannelId = 7,
-    .ChannelData   = {
-        .NumPools = 1,
-        .PoolCfg        = Ipc_ShmIpcInstance_0CfgIpcChannel_7BufPool,
-        .RxCallback     = IpcTp_InsCan_RxCallback,
-        .RxCallbackArg  = (NULL_PTR),
-        .TxErrCallback    = DefaultTxErrCallback,
-        .TxErrCallbackArg = (NULL_PTR),
-    },
-},
+......
 };
 ```
 2. 设置receive_coreid。如果是在MCU1上，则需要"receive_coreid=Ipc_Receive_Core1"。同时需要保障MCU0关于IPC设置相同。
@@ -134,116 +74,40 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 ```
 ## IPC 使用情况
 
-#### instance0
-| Instance | Channel | receive core id  | Description       |
-|----------|---------|------------------|-------------------|
-| instance0| 0       | Ipc_Receive_Core1| CAN Reserve       |
-| instance0| 1       | Ipc_Receive_Core1| CAN Reserve       |
-| instance0| 2       | Ipc_Receive_Core1| CAN Reserve       |
-| instance0| 3       | Ipc_Receive_Core1| CAN9              |
-| instance0| 4       | Ipc_Receive_Core1| CAN5              |
-| instance0| 5       | Ipc_Receive_Core1| CAN Reserve       |
-| instance0| 6       | Ipc_Receive_Core1| CAN6              |
-| instance0| 7       | Ipc_Receive_Core1| CAN Reserve       |
-
-#### instance1
-
-| Instance | Channel | receive core id  | Description         |
-|----------|---------|------------------|---------------------|
-| instance1| 0       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance1| 1       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance1| 2       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance1| 3       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance1| 4       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance1| 5       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance1| 6       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance1| 7       | Ipc_Receive_Core0| Regulatory Reserve  |
-
-#### instance2
-
-| Instance | Channel | receive core id  | Description         |
-|----------|---------|------------------|---------------------|
-| instance2| 0       | Ipc_Receive_Core0| Regulatory Reserve  |
-| instance2| 1       | Ipc_Receive_Core0| Regulatory Reserve  |
-
-#### instance3
-
-| Instance | Channel | receive core id  | Description       |
-|----------|---------|------------------|-------------------|
-| instance3| 0       | Ipc_Receive_Core0| Crypto Reserve    |
-| instance3| 1       | Ipc_Receive_Core0| Crypto Reserve    |
-| instance3| 2       | Ipc_Receive_Core0| Crypto Reserve    |
-| instance3| 3       | Ipc_Receive_Core0| Crypto Reserve    |
-| instance3| 4       | Ipc_Receive_Core0| Crypto Reserve    |
-| instance3| 5       | Ipc_Receive_Core0| Crypto Reserve    |
-| instance3| 6       | Ipc_Receive_Core0| Crypto Reserve    |
-| instance3| 7       | Ipc_Receive_Core0| Crypto Reserve    |
-
-#### instance4
-
-| Instance | Channel | receive core id  | Description         |
-|----------|---------|------------------|---------------------|
-| instance4| 0       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-| instance4| 1       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-| instance4| 2       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-| instance4| 3       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-| instance4| 4       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-| instance4| 5       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-| instance4| 6       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-| instance4| 7       | Ipc_Receive_Core0| CAN Reserve （MCU2）|
-
-#### instance5
-
-| Instance | Channel | receive core id  | Description         |
-|----------|---------|------------------|---------------------|
-| instance5| 0       | Ipc_Receive_Core0| RTC驱动             |
-| instance5| 1       | Ipc_Receive_Core0| RTC驱动             |
-| instance5| 2       | Ipc_Receive_Core0| RTC驱动             |
-| instance5| 3       | Ipc_Receive_Core0| RTC驱动             |
-| instance5| 4       | Ipc_Receive_Core0| RTC驱动             |
-| instance5| 5       | Ipc_Receive_Core0| RTC驱动             |
-| instance5| 6       | Ipc_Receive_Core0| RTC驱动             |
-| instance5| 7       | Ipc_Receive_Core0| RTC驱动             |
-
-#### instance6
-
-| Instance | Channel | receive core id  | Description         |
-|----------|---------|------------------|---------------------|
-| instance6| 0       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance6| 1       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance6| 2       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance6| 3       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance6| 4       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance6| 5       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance6| 6       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance6| 7       | Ipc_Receive_Core0| 客户预留：Reserve   |
-
-#### instance7
-
-| Instance | Channel | receive core id  | Description       |
-|----------|---------|------------------|-------------------|
-| instance7| 0       | Ipc_Receive_Core1| IpcBox runcmd     |
-| instance7| 1       | Ipc_Receive_Core1| IpcBox UART       |
-| instance7| 2       | Ipc_Receive_Core1| IpcBox SPI        |
-| instance7| 3       | Ipc_Receive_Core1| IpcBox I2C        |
-| instance7| 4       | Ipc_Receive_Core1| IpcBox 预留        |
-| instance7| 5       | Ipc_Receive_Core1| IpcBox 预留        |
-| instance7| 6       | Ipc_Receive_Core1| IpcBox 预留        |
-| instance7| 7       | Ipc_Receive_Core1| IpcBox 预留        |
-
-#### instance8
-
-| Instance  | Channel | Function          | Description |
-|-----------|---------|-------------------|-------------|
-| instance8 | 0       | Ipc_Receive_Core0 | Reserve        |
-| instance8 | 1       | Ipc_Receive_Core0 | Reserve        |
-| instance8 | 2       | Ipc_Receive_Core0 | Reserve        |
-| instance8 | 3       | Ipc_Receive_Core0 | Reserve        |
-| instance8 | 4       | Ipc_Receive_Core0 | Reserve        |
-| instance8 | 5       | Ipc_Receive_Core0 | Reserve        |
-| instance8 | 6       | Ipc_Receive_Core0 | Reserve        |
-| instance8 | 7       | Ipc_Receive_Core0 | Crypto Reserve |
-
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+| MCU IPC Instance            | Using Module  | Interrupt Func                                                                                 | Opposite End          |
+|-----------------------------|---------------|--------------------------------------------------------------------------------------------------|------------------------|
+| Ipc_ShmCfgInstances0-8      | User          | ISR(Ipc_CpuIpc0Ch0Isr): Ipc_Driver_CpuIpc0ChxIsr() (x=0..8)                                      | Acore instance0-8     |
+| Ipc_ShmCfgInstances0/4      | canhal        | —                                                                                                | Acore instance0/4     |
+| Ipc_ShmCfgInstances5        | 外置RTC       | —                                                                                                | Acore instance5        |
+| Ipc_ShmCfgInstances7        | ipcbox       | —                                                                                                | Acore instance7        |
+| Ipc_ShmCfgInstances8        | mcu1 boot     | —                                                                                                | Acore instance8        |
+| Ipc_PrivShmCfgInstance0     | Crypto        | ISR(Ipc_HsmIpc1Ch4Isr): Ipc_Driver_HSMIpc1Ch4Isr()                                               | HSM                    |
+| Ipc_PrivShmCfgInstance1     | HSM DIAG      | ISR(Ipc_HsmIpc1Ch5Isr): Ipc_Driver_HSMIpc1Ch5Isr()                                               | HSM                    |
+| Ipc_PrivShmCfgInstance3     | TimeSync      | ISR(Ipc_CpuIpc0Ch10Isr): Ipc_Driver_CpuIpc0Ch10Isr()                                             | Acore Instance10       |
+| Ipc_PrivShmCfgInstance4     | Ota           | ISR(Ipc_CpuIpc0Ch11Isr): Ipc_Driver_CpuIpc0Ch11Isr()                                             | Acore Instance11       |
+| Ipc_PrivShmCfgInstance5     | QGA           | ISR(Ipc_CpuIpc0Ch12Isr): Ipc_Driver_CpuIpc0Ch12Isr()                                             | Acore Instance12       |
+| Housekeeping                | Housekeeping  | ISR(Ipc_CpuIpc0Ch15Isr): Housekeeping_IrqHandler()                                               | Acore Housekeeping     |
+| scmi                        | scmi          | ISR(Ipc_CpuIpc1Ch0Isr): ScmiIpc_Irq0Handler()      ISR(Ipc_CpuIpc1Ch1Isr): ScmiIpc_Irq1Handler()      ISR(Ipc_CpuIpc1Ch2Isr): ScmiIpc_Irq2Handler() | Acore scmi            |
+</TabItem>
+<TabItem value="S600" label="S600">
+| MCU IPC Instance           | Using Module | Interrupt Func                                                                 | Opposite End         |
+|----------------------------|--------------|---------------------------------------------------------------------------------|------------------------|
+| Ipc_ShmCfgInstances0-7     | User         | ISR(Ipc0_ChxIsr): Ipc_Driver_MCUIpc0ChxIsr() (x = 0..7)                         | Acore instance0-7     |
+| Ipc_ShmCfgInstances0 / 4   | canhal       | —                                                                               | Acore instance0/4     |
+| Ipc_ShmCfgInstances5       | 外置RTC      | —                                                                                | Acore instance5        |
+| Ipc_ShmCfgInstances7       | ipcbox       | —                                                                               | Acore instance7        |
+| Ipc_ShmCfgInstances8-15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8-15 (except 8 & 10) |
+| Ipc_ShmCfgInstance8        | mcu1 boot    | —                                                                               | Acore instance8       |
+| Ipc_ShmCfgInstance10       | timesync     | —                                                                               | Acore instance10      |
+| Ipc_PrivShmCfgInstance0    | Crypto       | ISR(Ipc_HsmIpc3Ch4Isr): Ipc_Driver_HSMIpc3Ch4Isr()                              | HSM                    |
+| Ipc_PrivShmCfgInstance1    | HSM Diag     | ISR(Ipc_HsmIpc3Ch5Isr): Ipc_Driver_HSMIpc3Ch5Isr()                              | HSM                    |
+| Ipc_PrivShmCfgInstance2    | Ota          | ISR(Ipc0_Ch8Isr): Ipc_Driver_MCUIpc0Ch8Isr()                                    | Acore instance50      |
+| Ipc_PrivShmCfgInstance3    | QGA          | ISR(Ipc0_Ch9Isr): Ipc_Driver_MCUIpc0Ch9Isr()                                    | Acore instance51      |
+| Housekeeping               | Housekeeping | ISR(Ipc2_Ch3Isr): Housekeeping_IrqHandler()                                     | Acore Housekeeping    |
+</TabItem>
+</Tabs>
 
 ## 应用sample
 

@@ -4,6 +4,11 @@ sidebar_position: 6
 
 # IPC模块介绍
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 IPC（Inter-Processor Communication）模块是用于多核之间的通信，支持同构核和异构核之间的通信，软件上基于buffer-ring进行共享内存的管理，硬件上基于MailBox实现核间中断。IPCF具有多路通道，大数据传输，适用多种平台的特点。RPMSG基于开源协议框架，支持Acore与VDSP的核间通信。
 
 
@@ -21,15 +26,26 @@ Acore与MCU之间的核间通信，Acore侧主要使用IPCFHAL，MCU侧使用IPC
 ![IPC典型使用场景图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcscen.png)
 
 
-IPC典型应用场景有OTA模块、诊断模块、规控、CANHAL等。
+IPC典型应用场景有OTA模块、规控、CANHAL等。
 
 
 ## IPC实例分配方案
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 IPC Acore侧实例编号范围为[0-34]，分别用于Acore与MCU通信的实例[0-14]、Acore与VDSP通信的实例[22-24]、Acore与BPU通信的实例[32-34]，其余实例做其它私有用途。Acore与MCU通信可使用实例[0-8]，实例[4-6]默认为客户预留，若用户不需要CANHAL、规控等业务，可以自行修改配置文件。S100中AOCRE与MCU的IPC通信情况可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md) 中的IPC 使用情况章节。
+</TabItem>
+<TabItem value="S600" label="S600">
+IPC Acore侧实例编号范围为[0-63]，分别用于Acore与MCU通信的实例[0-15]和[50~-53]、Acore与VDSP通信的实例[22-24]和[42-44]、Acore与BPU通信的实例[32-39]，其余实例做其它私有用途。客户Acore与MCU通信可使用实例[0-15]，其余实例为内部使用。
+
+IPC VDSP侧实例编号范围为[0-6]，分别用于VDSP与Acore通信的实例[0-2]（VDSP0对应Acore实例[22-24]，VDSP1对应Acore实例[42-44]），其余实例做私有用途。
+</TabItem>
+</Tabs>
 
 ### Acore侧配置实例方法
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 Acore侧配置实例可通过设备树文件配置，配置路径为：
 
 ```dts
@@ -47,11 +63,11 @@ ipcfhal_cfg: ipcfhal_cfg {
 
     /****************instance--num_chans--num_bufs--buf_size****************/
     ipc-ins = <&ipc_instance0	8	8	0x2000>, #(Acore&MCU)用于CANHAL
-            <&ipc_instance1	8	8	0x1000>, #(Acore&MCU)用于规控
-            <&ipc_instance2	2	8	0x800>, #(Acore&MCU)用于规控
-            <&ipc_instance3	8	8	0x1000>, #(Acore&MCU)用于crypto
-            <&ipc_instance4	8	8	0x1000>, #(Acore&MCU)空闲，用户可自行配置
-            <&ipc_instance5	8	8	0x1000>, #(Acore&MCU)空闲，用户可自行配置
+            <&ipc_instance1	8	8	0x1000>, #(Acore&MCU)空闲
+            <&ipc_instance2	2	8	0x800>, #(Acore&MCU)空闲
+            <&ipc_instance3	8	8	0x1000>, #(Acore&MCU)空闲
+            <&ipc_instance4	8	8	0x1000>, #(Acore&MCU)用于CANHAL
+            <&ipc_instance5	8	8	0x1000>, #(Acore&MCU)用于外置RTC
             <&ipc_instance6	8	8	0x1000>, #(Acore&MCU)空闲，用户可自行配置
             <&ipc_instance7	8	8	0x1000>, #(Acore&MCU)透传uart，spi，i2c等外设和运行mcu侧cmd应用
             <&ipc_instance8	8	8	0x1000>, #(Acore&MCU)部分空闲，用户可自行配置
@@ -63,9 +79,56 @@ ipcfhal_cfg: ipcfhal_cfg {
 };
 
 ```
+</TabItem>
+<TabItem value="S600" label="S600">
+Acore侧配置实例可通过设备树文件配置，配置路径为：
+
+```dts
+source/hobot-drivers/kernel-dts/drobot-s600-ipc.dtsi
+source/hobot-drivers/kernel-dts/include/drobot_s600_ipc.h
+```
+
+
+设备树配置信息如下（仅供参考）：
+
+```dts
+ipcfhal_cfg: ipcfhal_cfg {
+    status = "okay"; #节点状态，不需要改动
+    compatible = "hobot,hobot-ipcfhal";  #节点属性，不可改动
+
+    /****************instance--num_chans--num_bufs--buf_size****************/
+        ipc-ins = <&ipc_instance0         8       8       0x2000>, #Acore&MCU，canhal
+                <&ipc_instance1         8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance2         2       8       0x800>, #Acore&MCU，用户可自行配置
+                <&ipc_instance3         8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance4         8       8       0x1000>, #Acore&MCU，canhal
+                <&ipc_instance5         8       8       0x1000>, #Acore&MCU，外置RTC
+                <&ipc_instance6         8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance7         8       8       0x1000>, #Acore&MCU，ipcbox
+                <&ipc_instance8         8       8       0x1000>, #Acore&MCU，启动mcu1
+                <&ipc_instance9         2       5       0x400>, #Acore&MCU，用户可自行配置
+                <&ipc_instance10        1       5       0x200>, #Acore&MCU，timesync
+                <&ipc_instance11        8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance12        8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance13        8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance14        8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance15        8       8       0x1000>, #Acore&MCU，用户可自行配置
+                <&ipc_instance22        8       8       0x1000>, #Acore&VDSP0，暂未对客户开放
+                <&ipc_instance23        8       8       0x1000>, #Acore&VDSP0，暂未对客户开放
+                <&ipc_instance24        8       8       0x1000>, #Acore&VDSP0，暂未对客户开放
+                <&ipc_instance42        8       8       0x1000>, #Acore&VDSP1，暂未对客户开放
+                <&ipc_instance43        8       8       0x1000>, #Acore&VDSP1，暂未对客户开放
+                <&ipc_instance44        8       8       0x1000>; #Acore&VDSP1，暂未对客户开放
+};
+
+```
+</TabItem>
+</Tabs>
 
 ### 设备树配置说明
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 设备树ipcfhal_cfg节点默认配置了一些实例的属性：
 - 属性中第一列表示实例编号，必须唯一且在有效范围
 - 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为32个
@@ -134,6 +197,44 @@ ipc_instance6: ipc_instance6 {
 - 实例的控制段首地址存储实例是否初始化的状态，可用于判断实例是否初始化，其中Acore默认启动kernel时完成初始化。
 - 若用户需要自行分配数据段和地址段，则需要修改Acore设备树文件、Uboot设备树文件以及MCU配置文件。
 - 在同一个 channel 中，发送（push）和接收（pop）使用独立的 ring buffer 和中断机制，因此收发操作是相互独立、互不影响的。
+</TabItem>
+<TabItem value="S600" label="S600">
+设备树ipcfhal_cfg节点默认配置了一些实例的属性：
+- 属性中第一列表示实例编号，必须唯一且在有效范围
+- 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为32个
+- 属性的第三列表示每个通道的缓冲buf的个数，用户可以自行配置，最大值为1024个，但受控制空间大小的限制。属性第四列表示缓冲buf的大小，单位是Bytes，用户可以自行配置，通道个数\*缓冲buf个数\*buf大小需要小于等于0.5MB（目前每个实例预分配了1MB的数据空间，暂不扩增）。
+
+单个实例的设备树节点如下：
+
+```dts
+#Not used, User can apply for it
+ipc_instance3: ipc_instance3 {
+        status = "okay"; #节点状态，不需要改动
+        compatible = "hobot,hobot-ipc"; #节点属性，不可改动
+        mbox-names = "mbox-chan"; #mailbox名字属性，不可改动
+        mboxes = <&mailbox0 3 19 3>; #mailbox通信方向
+        instance = <3>; #实例id，不需要改动
+        data_local_addr = /bits/ 64 <IPC_INS3_DATA_LOCAL>; #Acore数据段
+        data_remote_addr = /bits/ 64 <IPC_INS3_DATA_REMOTE>; #MCU数据段
+        data_size = <IPC_SINGLE_DATA_SIZE>; #数据段大小，不可改动，单位Bytes
+        ctrl_local_addr = /bits/ 64 <IPC_INS3_CTRL_LOCAL>; #Acore控制段
+        ctrl_remote_addr = /bits/ 64 <IPC_INS3_CTRL_REMOTE>; #MCU控制段
+        ctrl_size = <IPC_SINGLE_CTRL_SIZE>; #数据段大小，不可改动，单位Bytes
+};
+```
+
+**设备树配置注意事项:**
+
+- 实例0~15数据段默认预分配了1MB空间，Acore侧使用0.5MB，MCU侧使用0.5MB，所以通道个数\*缓冲buf个数\*buf大小需要小于等于0.5MB。
+- 实例0~15控制段默认预分配了8KB空间，Acore侧使用4KB，MCU侧使用4KB，存放环形buf的控制信息和状态信息，所以(缓冲buf个数+2)\*16\*通道个数+8需要小于等于4KB。
+- 每个实例的通道数量需要小于等于32，缓冲buf个数需要小于等于1024，同时需要满足前两点的不等式。
+- 多个业务使用同一个实例的不同通道或者使用不同实例对传输影响不大，主要是参考buf_size/buf_num是否合适以及业务的开发和维护是否方便。
+- 底层Mailbox中断分配不支持修改。
+- Acore与MCU的通道个数、缓冲buf个数和大小需要保持一致，数据段和控制段的local和remote需要相反。
+- 实例的控制段首地址存储实例是否初始化的状态，可用于判断实例是否初始化，其中Acore默认启动kernel时完成初始化。
+- 若用户需要自行分配数据段和地址段，则需要修改Acore设备树文件、Uboot设备树文件以及MCU配置文件。
+</TabItem>
+</Tabs>
 
 ## 用户态IPC应用和配置文件的使用方法
 
