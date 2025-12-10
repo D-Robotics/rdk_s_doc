@@ -4,9 +4,28 @@ sidebar_position: 7
 
 # SPI调试指南
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 ## SPI硬件支持
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 S100 Acore支持2路SPI，且SPI0，SPI1只能做SPI Master。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+S600 Acore支持4路SPI，且所有的SPI只能做SPI Master。
+
+RDK S600 开发板中的SPI0与CAN0和CAN1复用4个引脚，由于这些引脚的物理线路已连接至CAN收发器；其他SPI控制器默认没有在RDK S600开发板上引出，因此Acore在硬件层面上**无法支持**外部SPI设备接入。
+
+</TabItem>
+</Tabs>
+
 
 ## 软件构架
 
@@ -65,6 +84,9 @@ oops@tiger$
 
 ### SPI 设备树代码
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 S100中涉及到spi配置相关的dts文件如下：
 
 ```C
@@ -72,8 +94,24 @@ S100中涉及到spi配置相关的dts文件如下：
 |-- drobot-s100-soc.dtsi           # spi 设备节点配置
 |-- drobot-s100-pdma.dtsi          # spi pdma使用配置
 ```
+</TabItem>
+<TabItem value="S600" label="S600">
+
+S600中涉及到spi配置相关的dts文件如下：
+
+```c
+|-- drobot-s600-pinctrl.dtsi       # spi pinctrl相关配置
+|-- drobot-s600-soc.dtsi           # spi 设备节点配置
+|-- drobot-s600-pdma.dtsi          # spi pdma使用配置
+```
+
+</TabItem>
+</Tabs>
 
 ### SPI 设备树配置说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ```dts
 spi0: spi@39800000 {
@@ -136,18 +174,143 @@ spi1: spi@39810000 {
 
 ```
 
-这里着重说明S100 SPI新增的配置项
+</TabItem>
+<TabItem value="S600" label="S600">
+
+```dts
+spi0: spi@34900000 {
+	compatible = "hobot,hb-dw-spi";
+	reg-io-width = <4>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	reg = <0x0 0x34900000 0x0 0x1000>;
+	interrupts = <GIC_SPI  HSISYS_SPI0_SSI_INTR  IRQ_TYPE_LEVEL_HIGH>;
+	status = "okay";
+	num-cs = <2>;
+	//resets = <&smc_reset 0>,
+	//			<&smc_reset 0>;
+	//reset-names = "spi_reset";
+	//clocks = <&scmi_smc_0>;
+	//clock-names = "spi_pclk";
+	//power-domains = <&scmi_smc_pd 0>;
+	freq-pclk = <200000000>;
+	sample-delay = <1>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&hsi_spi0_csn0_spi0_csn0 &hsi_spi0_mosi_spi0_mosi\
+			&hsi_spi0_miso_spi0_miso &hsi_spi0_sclk_spi0_sclk>;
+	dmas = <&pdma0 16            /* read channel */
+				&pdma0 17    >;      /* write channel */
+	dma-names = "rx", "tx";
+	spidev@0 {
+		compatible = "rohm,dh2228fv";
+		spi-max-frequency = <50000000>;
+		reg = <0>;
+	};
+};
+
+spi1: spi@34910000 {
+	compatible = "hobot,hb-dw-spi";
+	reg-io-width = <4>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	reg = <0x0 0x34910000 0x0 0x1000>;
+	interrupts = <GIC_SPI  HSISYS_SPI1_SSI_INTR  IRQ_TYPE_LEVEL_HIGH>;
+	status = "okay";
+	num-cs = <2>;
+	//resets = <&smc_reset 0>,
+	//			<&smc_reset 0>;
+	//reset-names = "spi_reset";
+	//clocks = <&scmi_smc_clk 0>;
+	//clock-names = "spi_pclk";
+	//power-domains = <&scmi_smc_pd 0>;
+	freq-pclk = <200000000>;
+	sample-delay = <1>;
+	//pinctrl-names = "default";
+	//pinctrl-0 = <&hsi_spi1>;
+	dmas = <&pdma0 18			/* read channel */
+			&pdma0 19	>;		/* write channel */
+	dma-names = "rx", "tx";
+	spidev@0 {
+		compatible = "rohm,dh2228fv";
+		spi-max-frequency = <50000000>;
+		reg = <0>;
+	};
+};
+
+spi2: spi@34920000 {
+	compatible = "hobot,hb-dw-spi";
+	reg-io-width = <4>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	reg = <0x0 0x34920000 0x0 0x1000>;
+	interrupts = <GIC_SPI HSISYS_SPI2_SSI_INTR IRQ_TYPE_LEVEL_HIGH>;
+	status = "okay";
+	num-cs = <2>;
+	//resets = <&smc_reset 0>,
+	//			<&smc_reset 0>;
+	//reset-names = "spi_reset";
+	//clocks = <&scmi_smc_clk 0>;
+	//clock-names = "spi_pclk";
+	//power-domains = <&scmi_smc_pd 0>;
+	freq-pclk = <200000000>;
+	sample-delay = <1>;
+	//pinctrl-names = "default";
+	//pinctrl-0 = <&hsi_spi2>;
+	dmas = <&pdma0 20			/* read channel */
+			&pdma0 21	>;		/* write channel */
+	dma-names = "rx", "tx";
+	spidev@0 {
+		compatible = "rohm,dh2228fv";
+		spi-max-frequency = <50000000>;
+		reg = <0>;
+	};
+};
+
+spi3: spi@34930000 {
+	compatible = "hobot,hb-dw-spi";
+	reg-io-width = <4>;
+	#address-cells = <1>;
+	#size-cells = <0>;
+	reg = <0x0 0x34930000 0x0 0x1000>;
+	interrupts = <GIC_SPI HSISYS_SPI3_SSI_INTR IRQ_TYPE_LEVEL_HIGH>;
+	status = "okay";
+	num-cs = <2>;
+	//resets = <&smc_reset 0>,
+	//			<&smc_reset 0>;
+	//reset-names = "spi_reset";
+	//clocks = <&scmi_smc_clk 0>;
+	//clock-names = "spi_pclk";
+	//power-domains = <&scmi_smc_pd 0>;
+	freq-pclk = <200000000>;
+	sample-delay = <1>;
+	//pinctrl-names = "default";
+	//pinctrl-0 = <&hsi_spi3>;
+	dmas = <&pdma0 22			/* read channel */
+			&pdma0 23	>;		/* write channel */
+	dma-names = "rx", "tx";
+	spidev@0 {
+		compatible = "rohm,dh2228fv";
+		spi-max-frequency = <50000000>;
+		reg = <0>;
+	};
+};
+```
+
+</TabItem>
+</Tabs>
+
+这里着重说明SPI新增的配置项
 
 -   sample-delay：spi控制器作master时，对接收数据的采样延迟值，如果出现数据bit位错位的情况，可以调整该值。
--   num-cs：spi控制器作master时，支持cs个数，S100 SPI作master时，最多支持两个片选。
+-   num-cs：spi控制器作master时，支持cs个数，SPI作master时，最多支持两个片选。
 
 ## SPI 验证及调试
 
-本小节主要介绍S100 SPI基本功能如何验证，包括环境如何配置，测试命令的执行及测试代码存放位置等。
+本小节主要介绍S100/S600 SPI基本功能如何验证，包括环境如何配置，测试命令的执行及测试代码存放位置等。
 
 ### 测试环境准备
 
-spidev_test是一个开源的SPI测试工具，用户可以直接从linux源码如下目录获取并编译使用.
+spidev_test是一个开源的SPI测试工具，用户可以直接从linux源码如下目录获取并编译使用。
 
 源码位置：kernel/tools/spi/spidev_test.c。
 
@@ -198,6 +361,9 @@ RX | 01 02 03 04 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 
 ### SPI 外部回环测试
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 SPI外部回环测试指SPI Master接SPI Slave。
 
 Master可以选择SPI1，SPI Slave选择外部SPI设备（客户自行选择）。
@@ -216,3 +382,11 @@ RX | FF FF FF FF __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 在Slave设备侧将收到S100侧Master发送的数据。
 
 **注：在进行外部回环测试时，需要先执行SPI Slave程序，再执行SPI Master程序。假如先执行SPI Master程序，后执行SPI Slave程序，可能会由于Master与Slave不同步导致SPI接收数据出现丢失。**
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+暂不支持该测试。
+
+</TabItem>
+</Tabs>
