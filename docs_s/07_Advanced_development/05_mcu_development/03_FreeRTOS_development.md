@@ -945,6 +945,8 @@ import TabItem from '@theme/TabItem';
 Scons跟Makefile类似，每个文件夹由Sconscript编译文件（类似于Makefile），最后有个总的SConstruct文件总体去控制编译。
 如MCU1的镜像就是SConstruct_Lite_FRtos_S100_sip_B控制。
 ### 增加编译目录流程
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 1. 修改mcu/Build/FreeRtos_mcu1/SConstruct_Lite_FRtos_S100_sip_B文件，增加/删除相应的模块。
 
    如增加mcu/Service/Log文件夹，只需增加相应的位置即可。变量False表示控制构建过程中不会将源文件复制到编译输出目录。
@@ -952,6 +954,18 @@ Scons跟Makefile类似，每个文件夹由Sconscript编译文件（类似于Mak
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/scons_add_context.png)
 
 2. 在添加编译的模块下，添加SConscript文件，SConscript文件可以从任意已经编译的模块文件夹下获取
+
+</TabItem>
+<TabItem value="S600" label="S600">
+1. 修改mcu/Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml文件，增加/删除相应的模块。
+
+   如增加mcu/Service/Log文件夹，只需增加相应的位置即可。目前Service/Platform/McalCdd/Common有独立的path，增加该目录需要放在响应位置。除此之外，其他文件夹的添加统一放在BuildPath即可
+
+![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg)
+
+2. 在添加编译的模块下，添加SConscript文件，SConscript文件可以从任意已经编译的模块文件夹下获取
+</TabItem>
+</Tabs>
 
 ## MCU FreeRtos系统简介
 MCU这边有几个系统关键功能，如下图所示：

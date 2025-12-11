@@ -13,6 +13,9 @@ import TabItem from '@theme/TabItem';
 MCU的编译系统基于Scons3.0.0创建（[Scons 3.0.0用户手册官网](https://scons.org/doc/3.0.0/HTML/scons-user.html)）。
 
 ## MCU1编译系统
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 MCU1编译系统位于mcu/Build/FreeRtos_mcu1，具体目录结构，如下图所示：
 ```c
 FreeRtos_mcu1
@@ -23,15 +26,49 @@ FreeRtos_mcu1
      └── gcc
           └── S100.ld
 ```
+</TabItem>
+<TabItem value="S600" label="S600">
+MCU1编译系统位于mcu/Build/FreeRtos_mcu1，具体目录结构，如下图所示：
+```c
+FreeRtos_mcu1
+├── build_config                        # 编译所需yaml文件，增删编译文件夹的文件
+     └── S600
+         └── lite-matrix-B-mcu1.yaml
+├── settings_files                      # gcc编译链接等参数
+     └── gcc
+         └── settings_lite_freertos.py
+├── site_scons                          # Scons编译链接命令文件
+     └── site_tools
+         └── gcc_arm.py
+├── Linker                              # 编译link脚本所在目录
+     └── gcc
+         └── S600.ld
+└── build_freertos.py                   # 编译的入口脚本
+```
+</TabItem>
+</Tabs>
 
 ## 编译流程介绍
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/MCU_build_system/build_freertos.png)
 
 ## 编译中的重点文件关系介绍
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 build_freertos.py是编译的整体入口，但是实际调度到scons时，能够对scons编译环境/流程产生影响的方式有以下几个：
 1. SConstruct文件：SConstruct文件是scons编译的定义文件，它和每个模块内的Sconscript组成了Cmake里Cmakefile；Make系统里makefile的作用；
 2. settings_freertos.py：该文件生效的入口实际上是SConstruct里面的“Variables”类的初始化，核心在于引入一系列静态定义的编译环境变量；环境变量的变量名就是settings_freertos.py里面的变量名，变量值就是settings_freertos.py里面的变量名对应的变量值；“Variables”类实例化后的示例会被Environment类使用，用于scons的编译
 3. gcc_arm.py：实际定义编译命令的定义文件，真正生效的入口是settings_freertos.py里面定义的“COMPILER_TOOL”字段，COMPILER_TOOL字段进一步会被Sconscruct文件的Variables添加并最后被env获取到其中的“CC”等配置
+
+</TabItem>
+<TabItem value="S600" label="S600">
+build_freertos.py是编译的整体入口，但是实际调度到scons时，能够对scons编译环境/流程产生影响的方式有以下几个：
+1. SConstruct文件：SConstruct文件是scons编译的定义文件，它和每个模块内的Sconscript组成了Cmake里Cmakefile；Make系统里makefile的作用；
+2. settings_freertos.py：该文件生效的入口实际上是SConstruct里面的“Variables”类的初始化，核心在于引入一系列静态定义的编译环境变量；环境变量的变量名就是settings_freertos.py里面的变量名，变量值就是settings_freertos.py里面的变量名对应的变量值；“Variables”类实例化后的示例会被Environment类使用，用于scons的编译
+3. gcc_arm.py：实际定义编译命令的定义文件，真正生效的入口是settings_freertos.py里面定义的“COMPILER_TOOL”字段，COMPILER_TOOL字段进一步会被Sconscruct文件的Variables添加并最后被env获取到其中的“CC”等配置
+4. lite-matrix-B-mcu1.yaml：被编译的文件夹，在该文件中增删编译涉及到的文件夹
+</TabItem>
+</Tabs>
 
 ## MCU1镜像layout
 <Tabs groupId="soc_type">

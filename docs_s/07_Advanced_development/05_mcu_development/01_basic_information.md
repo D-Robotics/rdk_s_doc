@@ -51,6 +51,8 @@ pip install tqdm
 
 1. 编译会使用python3，RDK S100开发使用的python3的版本为3.8.10；
 2. MCU1的镜像分为debug和release两个版本。debug版本的镜像会有调试信息，而release版本不含调试信息。
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ```shell
 # 编译MCU1 Debug版本
@@ -65,12 +67,40 @@ python build_freertos.py s100_sip_B debug
 cd mcu/Build/FreeRtos_mcu1
 python build_freertos.py s100_sip_B release
 ```
+</TabItem>
+<TabItem value="S600" label="S600">
+
+```shell
+# 编译MCU1 Debug版本
+cd mcu/Build/FreeRtos_mcu1
+python build_freertos.py lite matrix B s600 gcc mcu1 debug
+# 1.首次编译会从arm官网下载一份工具链然后解压缩（10min左右），网速不好可能会存在工具链下载不成功或者工具链下载不完整的问题，可删除已下载的工具链，再多尝试下载几次。
+# 2.如果已有相关工具链，可以将其移至/Build/ToolChain/Gcc/内，当检测到有工具链，就不会从官网下载。
+# mv 工具链地址/Gcc/ 新代码/Build/ToolChain/Gcc/
+*/
+
+# 编译MCU1 Debug版本
+cd mcu/Build/FreeRtos_mcu1
+python build_freertos.py lite matrix B s600 gcc mcu1 release
+```
+</TabItem>
+</Tabs>
 
 ## 编译成功标志
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/build_success.png)
+</TabItem>
+<TabItem value="S600" label="S600">
+![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/build_success.jpg)
+</TabItem>
+</Tabs>
 
 ### 编译输出目录
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ```c
 output/
@@ -86,6 +116,25 @@ output/
 |    ├── objs                           # 编译生成的i/s/o文件
 |    └── S100_MCU_SIP_V2.0              # 编译生成的bin/map/elf等文件
 ```
+</TabItem>
+<TabItem value="S600" label="S600">
+
+```c
+output/
+├── debug                               # 该文件夹下包含debug版本的编译生成文件
+|    ├── objs                           # 编译生成的i/s/o文件
+|    └── S600_MCU_Matrix_V2.0           # 编译生成的bin/map/elf等文件
+|         ├── S600_MCU_RAW.bin
+|         ├── S600_MCU_DEBUG.elf        # MCU1启动文件
+|         ├── S600_MCU_DEBUG.map
+|         ├── S600_MCU_Matrix_V2.0.bin
+├── objs                                # 编译生成的i/s/o文件，根据编译的版本变化
+├── release                             # 该文件夹下包含release版本的编译生成文件
+|    ├── objs                           # 编译生成的i/s/o文件
+|    └── S600_MCU_Matrix_V2.0           # 编译生成的bin/map/elf等文件
+```
+</TabItem>
+</Tabs>
 
 ## MCU1启动/关闭流程
 MCU1的启动/关闭是由Acore经过remoteproc框架传递信息给MCU0进而实现启动/关闭MCU1。
