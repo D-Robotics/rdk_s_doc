@@ -334,6 +334,19 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 #### 空板烧录
 **空板烧录请参考以下工具烧录**
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+工具详细说明请参考[1.2 系统烧录](../../01_Quick_start/02_install_os/rdk_s100.md)章节
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+工具详细说明请参考[1.2 系统烧录](../../01_Quick_start/02_install_os/rdk_s600.md)章节
+
+</TabItem>
+</Tabs>
+
 ### 工具烧录
 1. 能够正常进入Uboot时，按如下配置(实例截图是以S100为例)：
    1. “产品型号”根据实际型号去选择“S100”或“S600”；
@@ -345,11 +358,33 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
    7. “波特率”选择“921600”；
    8. 单击“其他配置”的右方的小箭头，点击“分区选择”，然后只勾选“miniboot_flash”；
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_uboot.png)
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/mcu_uboot_s600.png)
+
+</TabItem>
+</Tabs>
 
 2. 不能正常进入UBoot，下载模式选择“usb”，不需要选择串口及波特率，其他配置与能够正常进入Uboot时保持一致：
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_usb.png)
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/mcu_usb_s600.png)
+
+</TabItem>
+</Tabs>
 
 ## MCU1 Undefined/Abort 异常处理原理
 
