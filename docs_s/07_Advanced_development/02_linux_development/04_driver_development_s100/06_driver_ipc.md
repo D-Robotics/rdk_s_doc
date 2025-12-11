@@ -33,7 +33,7 @@ IPC典型应用场景有OTA模块、规控、CANHAL等。
 
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
-IPC Acore侧实例编号范围为[0-34]，分别用于Acore与MCU通信的实例[0-14]、Acore与VDSP通信的实例[22-24]、Acore与BPU通信的实例[32-34]，其余实例做其它私有用途。Acore与MCU通信可使用实例[0-8]，实例[4-6]默认为客户预留，若用户不需要CANHAL、规控等业务，可以自行修改配置文件。S100中AOCRE与MCU的IPC通信情况可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md) 中的IPC 使用情况章节。
+IPC Acore侧实例编号范围为[0-34]，分别用于Acore与MCU通信的实例[0-14]、Acore与VDSP通信的实例[22-24]、Acore与BPU通信的实例[32-34]，其余实例做其它私有用途。Acore与MCU通信可使用实例[0-8]，实例[4-6]默认为客户预留，若用户不需要CANHAL、规控等业务，可以自行修改配置文件。S100中AOCRE与MCU的IPC通信情况可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md) 中的IPC 使用情况章节。
 </TabItem>
 <TabItem value="S600" label="S600">
 IPC Acore侧实例编号范围为[0-63]，分别用于Acore与MCU通信的实例[0-15]和[50~-53]、Acore与VDSP通信的实例[22-24]和[42-44]、Acore与BPU通信的实例[32-39]，其余实例做其它私有用途。客户Acore与MCU通信可使用实例[0-15]，其余实例为内部使用。
@@ -497,15 +497,15 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 ```
 
 :::tip
-- 应用实际操作的是MCU侧外设，在使用前要确认MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../../../07_Advanced_development/05_mcu_development/01_S1000/01_basic_information.md#start_mcu1)
-- 操作这些外设时，需要确认MCU侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md#IPCBOX)
+- 应用实际操作的是MCU侧外设，在使用前要确认MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../../../07_Advanced_development/05_mcu_development/01_basic_information.md#start_mcu1)
+- 操作这些外设时，需要确认MCU侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md#IPCBOX)
 :::
 
 
 #### RunCmd应用
 
 此sample实现了对读取了ADC chanel的电压。
-1. 开机进入S100后，打开应用目录`/app/ipcbox_sample/ipcbox_runcmd`
+1. 开机进入S100/S600后，打开应用目录`/app/ipcbox_sample/ipcbox_runcmd`
 2. 编译：`make`
 3. 运行: `./ipcbox_runcmd`
 4. 出现`Extracted adc data:{"adc_ch":1,"adc_result":628,"adc_mv":276}`的打印则测试通过，其中表示adc对应pin口，adc_mv表示读出来的电压值
@@ -521,7 +521,7 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 #### Uart透传
 此sample实现了对`Uart5`的透传，测试时需要将`Uart5`的TX和RX短接。
 
-1. 开机进入S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_uart`
+1. 开机进入S100/S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_uart`
 2. 编译：`make`
 3. 运行: `./ipcbox_uart`
 4. 出现`tx_data and rx_data are identical.`的打印则测试通过, 参考log如下：
@@ -545,7 +545,7 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 
 此sample实现了对SPI的回环测试，测试时需要将`SPI3`的MOSI和MISO短接。
 
-1. 开机进入S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
+1. 开机进入S100/S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
 2. 编译：`make`
 3. 运行: `./ipcbox_spi`
 4. 出现`SPI write successful, 128 bytes`的打印则测试通过, 参考log如下：
@@ -587,7 +587,7 @@ IpcBox只实现了对SPI Master的操控，有以下限制
 #### I2C测试
 此sample实现了对I2c的detect测试，I2c寄存器的读写
 
-1. 开机进入S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
+1. 开机进入S100/S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
 2. 编译：`make`
 3. 运行: `./ipcbox_i2c` 出现如下参考命令
         ```
@@ -636,12 +636,12 @@ ipcbox只实现了对i2c Master的简单传输，不支持Slave
 ### Python应用
 
 :::tip
-- 应用实际操作的是MCU侧外设，在使用前要确认MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../../../07_Advanced_development/05_mcu_development/01_S1000/01_basic_information.md#start_mcu1)
-- 操作这些外设时，需要确认MCU侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md#IPCBOX)
+- 应用实际操作的是MCU侧外设，在使用前要确认MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../../../07_Advanced_development/05_mcu_development/01_basic_information.md#start_mcu1)
+- 操作这些外设时，需要确认MCU侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md#IPCBOX)
 :::
 
 
-S100提供Python库文件使用Ipc，其原理为通过pybind11调用C++接口，函数名与宏定义等两端保持一致。
+S100/S600提供Python库文件使用Ipc，其原理为通过pybind11调用C++接口，函数名与宏定义等两端保持一致。
 
 1. 包的导入
 ```

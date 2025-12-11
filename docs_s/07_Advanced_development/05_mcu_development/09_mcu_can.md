@@ -560,7 +560,7 @@ channels.json指定ipc配置文件，用户一般不需要更改。
 }
 ```
 
-Acore无法直接操作CAN外设，需要通过借助Ipc模块来中转数据，与外设通道的映射关系可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/01_S100/08_mcu_ipc.md) 中的IPC 使用情况章节。
+Acore无法直接操作CAN外设，需要通过借助Ipc模块来中转数据，与外设通道的映射关系可以查阅 [MCU IPC使用指南](./../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md) 中的IPC 使用情况章节。
 
 
 Acore应用程序通过CANHAL获取MCU侧CAN帧的流程伪代码如下：
