@@ -4,15 +4,22 @@ sidebar_position: 7
 
 # 7.5.8 ADC使用指南
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 ## 硬件支持
 
-S100 Adc 有一个Adc硬件，包含chennel0-channel13和channel15共15个通道。
-
-- Adc可测试电压范围：100mv - 1700mv。
-- 硬件触发、inject模式下只允许有一个组。
-- Adc在温度变化超过20°时，要进行校准操作。
-- Adc用户接口的使用需要确保上电自检结束后进行。
-
+| 特性项                 | S100 ADC                                      | S600 ADC                                      |
+|------------------------|-----------------------------------------------|-----------------------------------------------|
+| **ADC 硬件数量**       | 1 个                                          | 2 个（独立 ADC 模块）                         |
+| **通道配置**           | Channel 0–13 + Channel 15（共 15 通道；**无Channel 14**） | 每 ADC：Channel 0–7；共 **2 × 8 = 16 通道**   |
+| **电压测量范围**       | 100 mV – 1700 mV                              | 100 mV – 1700 mV                              |
+| **触发/Inject 模式限制** | 硬件触发或 Inject 模式下，**仅允许配置 1 个组**（全局） | 同左（**跨 ADC 共享组限制**，仍仅 1 组）       |
+| **温度校准条件**       | 环境温度变化 **> ±20°C** 时需校准             | 同左                                          |
+| **接口使用前提**       | 必须在 **上电自检（POST）完成之后** 调用       | 同左                                          |
+| **软件设计说明**       | 基于基本场景设计，**可扩展但未覆盖全部产品需求** | 同左                                          |
 
 ## 软件驱动
 
@@ -80,17 +87,21 @@ S100 Adc 有一个Adc硬件，包含chennel0-channel13和channel15共15个通道
 | `McalCdd/Adc/src/Adc.c`                       | 实现公共API，调用底层函数。                                                |
 | `McalCdd/Adc/src/Adc_Lld.c`                   | 实现底层硬件操作，直接配置寄存器。                                          |
 | `McalCdd/Adc/src/Adc_Private.c`               | 实现私有函数，辅助驱动内部逻辑。                                            |
-| `McalCdd/Common/Register/inc/Adc_Register.h`      | 定义ADC外设寄存器地址和位域。                                              |
+| `McalCdd/Common/Register/inc/Adc_Register.h`  | 定义ADC外设寄存器地址和位域。                                              |
 | `Platform/Schm/SchM_Adc.h`                    | 管理ADC的访问权限和资源保护（如中断安全）。                                 |
-| `Config/McalCdd/gen_s100_sip_B_mcu1/Adc/inc/Adc_PBcfg.h`          | 定义板级外设配置参数（如通道、采样率等）。               |
-| `Config/McalCdd/gen_s100_sip_B_mcu1/Adc/inc/Adc_Cfg.h`            | 提供通用配置宏或默认配置参数（如最大通道数、中断优先级）。|
-| `Config/McalCdd/gen_s100_sip_B_mcu1/Adc/src/Adc_PBcfg.c`          | 实现板级配置数据（如通道映射、硬件参数）。               |
-| `samples/Adc/src/Adc_Cmd.c`                   | ADC 软件触发单次采样的sample代码，通过Adc_Private的实现，简单场景可以直接使用。     |
-| `samples/Adc/src/Adc_SoftTrigerContinuous.c`  | ADC 软件触发连续采样的sample代码，通过标准函数实现，适用于复杂场景。          |
-
-
+| `Config/McalCdd/gen_xxxx/Adc/inc/Adc_PBcfg.h` | 定义板级外设配置参数（如通道、采样率等）。                                  |
+| `Config/McalCdd/gen_xxxx/Adc/inc/Adc_Cfg.h`   | 提供通用配置宏或默认配置参数（如最大通道数、中断优先级）。                  |
+| `Config/McalCdd/gen_xxx/Adc/src/Adc_PBcfg.c`  | 实现板级配置数据（如通道映射、硬件参数）。                                  |
+| `samples/Adc/xxx/src/Adc_Cmd.c`                   | ADC 软件触发单次采样的sample代码，通过Adc_Private的实现，简单场景可以直接使用。 |
+| `samples/Adc/S100/src/Adc_SoftTrigerContinuous.c` | S100平台专属，ADC 软件触发连续采样的sample代码，通过标准函数实现，适用于复杂场景。          |
+| `samples/Adc/S600/src/Adc_Test.c`             | S600平台专属，ADC 标准函数实现的sample代码，适用于复杂场景，可通过修改`Adc_PBcfg.h`实现连续采样。|
 
 ## 应用sample
+
+
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ### ADC 软件触发单次转换应用
 
@@ -217,7 +228,7 @@ static const Adc_GroupCfg Adc_GroupsCfg[] =
 - 语法
 
 ```
-Adc_TestNormal [Ation]
+Adc_TestNormal [Action]
 ```
 
 ##### 非中断方式
@@ -298,6 +309,104 @@ step3：停止ADC连续采集
 D-Robotics:/$ Adc_TestNormal stop
 [0268.403214 0]Adc test exit.
 ```
+</TabItem>
+<TabItem value="S600" label="S600">
+
+### ADC Private API测试
+
+private API属于oneshot API，用于测试ADC驱动。
+
+#### 使用示例
+
+
+- 语法
+
+```bash
+Adc_Test [instance] [ch_num]
+```
+
+**instance:** ADC 实例编号（必需）
+**ch_num:** ADC 通道编号（必需）
+
+
+- 示例
+
+```bash
+# 测试通道0
+D-Robotics:/$ Adc_Test 0 0
+Adc[0] channel[0] adcvalue:1117 voltage:490mv
+
+# 测试通道1
+D-Robotics:/$ Adc_Test 0 1
+Adc[0] channel[1] adcvalue:2393 voltage:1051mv
+
+# 测试通道2
+D-Robotics:/$ Adc_Test 0 2
+Adc[0] channel[2] adcvalue:1500 voltage:659mv
+```
+
+
+### ADC standard API测试
+
+##### 配置说明
+
+:::tip
+// TODO 持续更新中
+:::
+
+#### 使用示例
+
+这个应用实现了ADC标准API，对所有的adc通道进行多次测试。
+- 语法
+
+```bash
+Adc_TestNormal
+```
+
+- 示例
+
+```bash
+D-Robotics:/$ Adc_TestNormal
+[012349.428118 0]ADC0 channel: 0, sample: 2472 -> 1086 mv
+[012349.428746 0]ADC0 channel: 1, sample: 591 -> 259 mv
+[012349.429364 0]ADC0 channel: 2, sample: 585 -> 257 mv
+[012349.429983 0]ADC0 channel: 3, sample: 121 -> 53 mv
+[012349.430593 0]ADC0 channel: 4, sample: 585 -> 257 mv
+[012349.431211 0]ADC0 channel: 5, sample: 587 -> 258 mv
+[012349.431848 0]ADC0 channel: 6, sample: 596 -> 261 mv
+[012349.432466 0]ADC0 channel: 7, sample: 2030 -> 892 mv
+[012349.433096 0]ADC1 channel: 0, sample: 2053 -> 902 mv
+[012349.433725 0]ADC1 channel: 1, sample: 2158 -> 948 mv
+[012349.434354 0]ADC1 channel: 2, sample: 114 -> 50 mv
+[012349.434966 0]ADC1 channel: 3, sample: 2052 -> 901 mv
+[012349.435600 0]ADC1 channel: 4, sample: 2145 -> 942 mv
+[012349.436229 0]ADC1 channel: 5, sample: 2158 -> 948 mv
+[012349.436875 0]ADC1 channel: 6, sample: 2127 -> 934 mv
+[012349.437504 0]ADC1 channel: 7, sample: 2050 -> 901 mv
+[012349.438134 0]Timer: 0 Test Pass
+[012349.439569 0]ADC0 channel: 0, sample: 2475 -> 1087 mv
+[012349.440197 0]ADC0 channel: 1, sample: 589 -> 258 mv
+[012349.440822 0]ADC0 channel: 2, sample: 585 -> 257 mv
+[012349.441467 0]ADC0 channel: 3, sample: 121 -> 53 mv
+[012349.442065 0]ADC0 channel: 4, sample: 606 -> 266 mv
+[012349.442684 0]ADC0 channel: 5, sample: 579 -> 254 mv
+[012349.443302 0]ADC0 channel: 6, sample: 589 -> 258 mv
+[012349.443920 0]ADC0 channel: 7, sample: 1942 -> 853 mv
+[012349.444555 0]ADC1 channel: 0, sample: 2042 -> 897 mv
+[012349.445184 0]ADC1 channel: 1, sample: 2148 -> 944 mv
+[012349.445813 0]ADC1 channel: 2, sample: 114 -> 50 mv
+[012349.446421 0]ADC1 channel: 3, sample: 1962 -> 862 mv
+[012349.447071 0]ADC1 channel: 4, sample: 2114 -> 929 mv
+[012349.447700 0]ADC1 channel: 5, sample: 2149 -> 944 mv
+[012349.448330 0]ADC1 channel: 6, sample: 2125 -> 934 mv
+[012349.448961 0]ADC1 channel: 7, sample: 2044 -> 898 mv
+..........
+```
+
+</TabItem>
+</Tabs>
+
+
 
 ### 应用程序接口
 
@@ -590,31 +699,8 @@ Return value：Std_ReturnType
     E_NOT_OK: request rejected
 ```
 
-#### Std_ReturnType Adc_PreparePowerState(Adc_PowerStateType PowerState, Adc_PowerStateRequestResultType* Result)
-
-```shell
-Description：This API starts the needed process to allow the ADC HW module to
-             enter the requested power state.
-
-Sync/Async：Synchronous
-Parameters(in)
-    PowerState: The target power state intended to be attained
-Parameters(inout)
-    None
-Parameters(out)
-    Result:
-    If the API returns E_OK:
-        ADC_SERVICE_ACCEPTED: ADC Module power state preparation was started.
-    If the API returns E_NOT_OK:
-        ADC_NOT_INIT: ADC Module not initialized.
-        ADC_SEQUENCE_ERROR: wrong API call sequence (Current Power State = Target Power State).
-        ADC_POWER_STATE_NOT_SUPP: ADC Module does not support the requested power state.
-        ADC_TRANS_NOT_POSSIBLE: ADC Module cannot transition directly from the current power
-                                state to the requested power state or the HW peripheral is still busy.
-Return value：Std_ReturnType
-    E_OK: Mode could be read
-    E_NOT_OK: request rejected
-```
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 #### void Adc_EnableWdgNotification(Adc_ChannelType ChannelId)
 
@@ -645,3 +731,39 @@ Parameters(out)
     None
 Return value：None
 ```
+
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+#### void Adc_EnableWdgNotification(Adc_ChannelType ChannelId, uint8 Instance)
+
+```shell
+Description：Enable notification of a channel that has watchdog functionality configured at initialization
+
+Parameters(in)
+    ChannelId: The channel ID of ADC
+    Instance: Index of ADC
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### void Adc_DisableWdgNotification(Adc_ChannelType ChannelId, uint8 Instance)
+
+```shell
+Description：Disable notification of a channel that has watchdog functionality configured at initialization
+
+Parameters(in)
+    ChannelId: The channel ID of ADC
+    Instance: Index of ADC
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+</TabItem>
+</Tabs>

@@ -4,6 +4,14 @@ sidebar_position: 4
 
 # 7.5.5 UART使用指南
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 S100 MCU芯片共有3路Uart，即Uart4~Uart6。其中Uart4作为调试控制台使用（MCU0、MCU1共用调试串口），默认不开启DMA，默认配置如下：
 
 | **配置项**         | **uart4** | **uart5** | **uart6** |
@@ -17,12 +25,38 @@ S100 MCU芯片共有3路Uart，即Uart4~Uart6。其中Uart4作为调试控制台
 ## 硬件支持
 
 - MCU最大可用UART数量: 3个
+- UART FIFO 深度：64 * 8bit，水位：half full
+- 支持4800、9600、38400、115200、921600等常用波特率
+- 支持5-8位数据位配置
+- 支持奇偶校验配置
+- 支持1、1.5、2位停止位配置
+- 支持DMA模式，DMA模式下应用层提供的发送和接收buffer地址必须是64字节对齐的
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+S600 MCU芯片共有4路Uart，即Uart8~Uart11。其中Uart8作为调试控制台使用（MCU0、MCU1共用调试串口），默认不开启DMA，默认配置如下：
+| **配置项**     | **uart8**     | **uart9**     | **uart10**    | **uart11**    |
+|----------------|---------------|---------------|---------------|---------------|
+| 通道标识符     | Uart_Channel0 | Uart_Channel1 | Uart_Channel2 | Uart_Channel3 |
+| 波特率         | 921600        | 921600        | 921600        | 921600        |
+| 校验位         | 无            | 无            | 无            | 无            |
+| 停止位         | 1位           | 1位           | 1位           | 1位           |
+| 数据位         | 8位           | 8位           | 8位           | 8位           |
+
+## 硬件支持
+
+- MCU最大可用UART数量: 4个
 - UART FIFO 深度：8byte x 16
 - 支持4800、9600、38400 115200、921600等常用波特率
 - 支持5-8位数据位配置
 - 支持奇偶校验配置
 - 支持1、1.5、2位停止位配置
 - 支持DMA模式，DMA模式下应用层提供的发送和接收buffer地址必须是64字节对齐的
+
+</TabItem>
+</Tabs>
+
 
 
 ## 软件架构
@@ -41,17 +75,21 @@ S100 MCU芯片共有3路Uart，即Uart4~Uart6。其中Uart4作为调试控制台
 ## 代码路径
 
 
-- McalCdd/Common/Register/inc/Uart_Register.h # 寄存器相关内容
-- McalCdd/Uart/src/Uart.c # 驱动代码
-- McalCdd/Uart/src/Uart_Lld.c # 底层驱动代码
-- McalCdd/Uart/inc/Uart.h # 驱动头文件
-- McalCdd/Uart/inc/Uart_Lld.h # 底层驱动头文件
-- Config/McalCdd/gen_s100_sip_B_mcu1/Uart/src/Uart_PBcfg.c # mcu PB配置文件
-- Config/McalCdd/gen_s100_sip_B_mcu1/Uart/inc/Uart_PBcfg.h # PB配置头文件
-- samples/Uart/Uart_sample/Uart_Test.c  # 测试代码
-
+- `McalCdd/Common/Register/inc/Uart_Register.h`：寄存器相关内容
+- `McalCdd/Uart/src/Uart.c`：驱动代码
+- `McalCdd/Uart/src/Uart_Lld.c`：底层驱动代码
+- `McalCdd/Uart/inc/Uart.h`：驱动头文件
+- `McalCdd/Uart/inc/Uart_Lld.h`：底层驱动头文件
+- `Config/McalCdd/gen_xxx/Uart/src/Uart_PBcfg.c`：mcu PB配置文件
+- `Config/McalCdd/gen_xxx/Uart/inc/Uart_PBcfg.h`：PB配置头文件
+- `Config/McalCdd/gen_xxx/Uart/Uart_Board.h`：板级配置文件
+- `samples/Uart/src/Uart_Test.c`：测试代码
 
 ## 应用sample
+
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ### 使用示例
 
@@ -129,6 +167,86 @@ D-Robotics:/$ uarttest 5
 D-Robotics:/$ uarttest 6
 [042617.473286 0]Channel 1 Baud: 115200
 ```
+</TabItem>
+<TabItem value="S600" label="S600">
+
+
+S600 开发板将Uart10和Uart11引出供用户开发学习使用，PIN脚位于`Main Board`板上
+
+//TODO 增加板子图片
+
+
+### 使用示例
+
+- 语法格式
+    - `test_id`: 测试用例ID（必需）
+    - `bus`: UART总线编号（可选，部分测试用例使用）
+    - `baudrate`: 波特率设置（可选，部分测试用例使用）
+    - `parity`: 校验位设置（可选，部分测试用例使用）
+    - `stopbit`: 停止位设置（可选，部分测试用例使用）
+    - `databits`: 数据位设置（可选，部分测试用例使用）
+```
+uarttest <test_id> [bus] [baudrate] [parity] [stopbit] [databits]
+```
+
+
+
+- `uarttest 0 11 921600 0 1 8` 配置并初始化指定UART通道
+
+```shell
+D-Robotics:/$ uarttest 0 11 921600 0 1 8
+[0619.864809 0]g_UartTest updated:
+[0619.865186 0]  HwChannel: 3
+[0619.865522 0]  BaudRate: 921600
+[0619.866698 0]  Parity: 0
+[0619.867002 0]  StopBit: 1
+[0619.867317 0]  DataBits: 8
+[0619.867654 0]Init Uart 3
+[0619.867958 0]set data bit success!
+[0619.868377 0]set stop bit success!
+[0619.868797 0]UART configuration test passed!
+```
+
+- `uarttest 1` 初始化默认UART配置
+
+```shell
+D-Robotics:/$ uarttest 1
+[015229.133055 0]Init Uart 3
+[015229.133373 0]set data bit success!
+[015229.133816 0]set stop bit success!
+[015229.134257 0]UART configuration test passed!
+
+```
+
+
+- `uarttest 2` 接收数据，测试UART接收功能
+这里使用了串口助手(配置：921600波特率8-N-1)向mcu发送数据
+```shell
+D-Robotics:/$ uarttest 2
+Rx: 12 32 34 53 46 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+[0268.494060 0]AsyncSend & ASyncReceive test pass!
+
+```
+
+- `uarttest 3` 发送数据，测试UART发送功能
+```shell
+
+D-Robotics:/$ uarttest 3
+Tx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 41 42 43 44 45
+```
+
+- `uarttest 4` 回环测试，同时测试发送和接收功能
+
+
+```shell
+D-Robotics:/$ uarttest 4
+Tx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 41 42 43 44 45
+Rx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 41 42 43 44 45
+[0640.943787 0]SyncSend & AsyncReceive test pass!
+```
+</TabItem>
+</Tabs>
+
 
 ### 应用程序接口
 

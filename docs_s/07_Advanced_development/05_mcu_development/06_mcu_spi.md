@@ -4,6 +4,11 @@ sidebar_position: 6
 
 # 7.5.7 SPI使用指南
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 ## 硬件支持
 
 - 如果SPI使用DMA传输，必须保证以下限制:
@@ -12,6 +17,7 @@ sidebar_position: 6
     - Channel单次传输数据量不能超过4096字节；
 - 支持SPI作为Slave功能;
 - Mcu侧SPI做Slave时，速率大于9M，只能采用DMA模式;
+- 当MCU作为SPI从设备时，其通信时钟由主设备提供。因此，从设备必须对主设备的每一次数据传输请求做出即时响应。若采用中断处理模式，需确保SPI中断服务程序的执行时间足够短。若中断被阻塞过久，未能及时处理数据寄存器，将导致接收缓冲区溢出。为此，强烈推荐使用DMA传输模式，以硬件方式自动完成数据搬运，从而保障通信的实时性与可靠性。
 - Mcu侧SPI在8位模式下工作时，具有以下限制:
     - 1个SPI并行收发最大速度: 50M;
     - 2个SPI并行收发最大速度: 33.3M;
@@ -29,16 +35,19 @@ sidebar_position: 6
 
 ## 代码路径
 
-- McalCdd/Spi/inc/Spi.h - SPI驱动程序的头文件
-- McalCdd/Spi/inc/Spi_Lld.h - SPI底层驱动程序的头文件
-- McalCdd/Spi/src/Spi.c - SPI驱动程序的源文件
-- McalCdd/Spi/src/Spi_Lld.c - SPI底层驱动程序的源文件
-- McalCdd/Common/Register/inc/Spi_Register.h - SPI寄存器定义文件
-- Platform/Schm/SchM_Spi.h - SPI模块的调度管理头文件
-- Config/McalCdd/gen_s100_sip_B_mcu1/Spi/inc/Spi_Cfg.h - SPI配置头文件
-- Config/McalCdd/gen_s100_sip_B_mcu1/Spi/inc/Spi_PBcfg.h - SPI PB配置头文件
-- Config/McalCdd/gen_s100_sip_B_mcu1/Spi/src/Spi_PBcfg.c - SPI PB配置源文件
-- samples/Spi/SPI_sample/Spi_sample.c - SPI sample 代码
+- `McalCdd/Spi/inc/Spi.h`：SPI驱动程序的头文件
+- `McalCdd/Spi/inc/Spi_Lld.h`：SPI底层驱动程序的头文件
+- `McalCdd/Spi/src/Spi.c`：SPI驱动程序的源文件
+- `McalCdd/Spi/src/Spi_Lld.c`：SPI底层驱动程序的源文件
+- `McalCdd/Common/Register/inc/Spi_Register.h`：SPI寄存器定义文件
+- `Platform/Schm/SchM_Spi.h`：SPI模块的调度管理头文件
+- `Config/McalCdd/gen_xxx/Spi/inc/Spi_Board.h`：SPI 板级配置头文件
+- `Config/McalCdd/gen_xxx/Spi/inc/Spi_Cfg.h`：SPI配置头文件
+- `Config/McalCdd/gen_xxx/Spi/inc/Spi_PBcfg.h`：SPI PB配置头文件
+- `Config/McalCdd/gen_xxx/Spi/src/Spi_board.c`：SPI 板级配置源文件
+- `Config/McalCdd/gen_xxx/Spi/src/Spi_PBcfg.c`：SPI PB配置源文件
+- `samples/Spi/SPI_sample/Spi_sample.c`：SPI sample 代码
+- `samples/Spi/SPI_sample/Spi_common.c`：SPI sample 代码
 
 ## 应用sample
 
@@ -84,6 +93,9 @@ sidebar_position: 6
 - 当传输发生异常的时候，SPI的状态机不会自动复位，需要手动调用 `Spi_Cancel()` 函数复位传输状态机。
 - Sample里用了DMA，但没进行初始化，这是因为在 `Target/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中已经完成了初始化。
 :::
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ### 单片选使用示例
 
@@ -206,6 +218,197 @@ RX | 00 01 02 03 04 05 06 07 08 09 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 
 ```
 
+</TabItem>
+<TabItem value="S600" label="S600">
+
+### 单片选使用示例
+
+spi_test 命令用于测试SPI（Serial Peripheral Interface，串行外设接口）功能。该命令支持初始化和参数设置、显示当前参数以及执行SPI数据传输测试。
+
+**命令语法**
+
+:::tip
+应用层配置与底层配置应保持一致，否则会出现错误。
+:::
+
+**操作0：配置组1的参数**
+
+```bash
+spi_test 0 <spi_bus> <sync_mode> <trans_mode> <ch_cfg> <cs_seq0> <cs_seq1> <cs_seq2> <cs_seq3>
+```
+
+- bus_id: SPI总线ID（可选，默认为4）
+- sync_mode: 0=异步(async) 1=同步(sync)
+- trans_mode：0=轮询(polling) 1=中断(interrupt)
+- ch_cfg: SPI通道配置
+- cs_seq0：cs0 所用的SPI序列id，255=无效
+- cs_seq1：cs1 所用的SPI序列id，255=无效
+- cs_seq2：cs2 所用的SPI序列id，255=无效
+- cs_seq3：cs3 所用的SPI序列id，255=无效
+
+配置spi的基础参数配置，参数配置完成后，将参数保存在组1中。
+
+```shell
+D-Robotics:/$ spi_test 0 13 0 1 10 2 3 255 255
+[046.803972 0]Init&&Parameter setting
+[046.804397 0]Test parameters configured successfully:
+[046.804991 0]Test Parameter at index 0:
+[046.805447 0]  spi_bus: 13
+[046.805762 0]  sync_mode: ASYNC
+[046.806132 0]  trans_mode: INTERRUPT
+[046.806555 0]  ch_cfg: 10
+[046.806859 0]  cs_seq: [2, 3, 255, 255]
+```
+
+**操作1：显示参数信息**
+
+显示当前所有测试参数配置，其中第一组用于存储操作0的自定义配置
+
+```bash
+spi_test 1
+```
+
+```shell
+D-Robotics:/$ spi_test 1
+[06649.837117 0]Test Parameter at index 0:
+[06649.837581 0]  spi_bus: 255
+[06649.837928 0]  sync_mode: ASYNC
+[06649.838327 0]  trans_mode: INTERRUPT
+[06649.838772 0]  ch_cfg: 255
+[06649.839123 0]  cs_seq: [255, 255, 255, 255]
+[06649.839644 0]Test Parameter at index 1:
+[06649.840121 0]  spi_bus: 6
+[06649.840447 0]  sync_mode: ASYNC
+[06649.840837 0]  trans_mode: INTERRUPT
+[06649.841282 0]  ch_cfg: 0
+[06649.841597 0]  cs_seq: [0, 255, 255, 255]
+[06649.842096 0]Test Parameter at index 2:
+[06649.842573 0]  spi_bus: 4
+[06649.842899 0]  sync_mode: SYNC
+[06649.843295 0]  trans_mode: POLLING
+[06649.843718 0]  ch_cfg: 4
+[06649.844032 0]  cs_seq: [4, 255, 255, 255]
+```
+
+**操作2：执行SPI测试**
+
+```shell
+spi_test 2 [bus_id] [cs_id]
+```
+- bus_id: SPI总线ID（可选，默认为4），此处的busid必须存在于参数配置组中（即通过spi_test 1命令显示的参数配置组），否则测试将失败
+- cs_id: 芯片选择ID，范围0-3（可选，默认为0，当前仅支持cs0的测试，cs1-3需要修改代码后测试）
+
+```shell
+D-Robotics:/$ spi_test 2 4 0
+[0323.134926 0]Using SPI Bus ID: 4, CS ID: 0
+[0323.135502 0]spi channel: 4, transfer_length = 256 spi_framesize = 8
+[0323.138358 0]
+RxChBuf0 (256 bytes):
+ | ................
+ | ................
+ |  !"#$%&'()*+,-./
+ | 0123456789:;<=>?
+ | @ABCDEFGHIJKLMNO
+ | PQRSTUVWXYZ[\]^_
+ | `abcdefghijklmno
+ | pqrstuvwxyz{|}~.
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+[0323.145129 0]
+TxChBuf0 (256 bytes):
+ | ................
+ | ................
+ |  !"#$%&'()*+,-./
+ | 0123456789:;<=>?
+ | @ABCDEFGHIJKLMNO
+ | PQRSTUVWXYZ[\]^_
+ | `abcdefghijklmno
+ | pqrstuvwxyz{|}~.
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+ | ................
+[0323.151786 0]=====SPI SYNC TEST SUCCESS=====
+
+```
+
+### 双片选使用示例(BMI088 测试)
+
+S600 MCU子板上搭载了BMI088传感器，该传感器通过SPI13总线与MCU通信，其中cs0连接加速度计(acc)，cs1连接陀螺仪(gyr)。
+
+使用方式和参数解析如下：
+
+1. 初始化BMI088传感器
+```shell
+D-Robotics:/$ Bmi088_ShellInit
+[Bmi088_Init] ACC+GYR initialized.
+```
+2. BMI088传感器自测
+
+```shell
+D-Robotics:/$ Bmi088_SelfTestGyr
+[Bmi088_SelfTestGyr] SELF_TEST=0x12 (rdy=1 fail=0)
+[Bmi088_SelfTestGyr] PASS
+
+D-Robotics:/$ Bmi088_SelfTestAcc
+ACC_RANGE=0x03 (expect 0x03)
+ACC_CONF=0xAC (expect 0xA7)
+[Bmi088_SelfTestAcc] self_test(+)=0x0D
+[Bmi088_SelfTestAcc] x_pos=12386 mg, y_pos=12346 mg, z_pos=12851 mg
+[Bmi088_SelfTestAcc] self_test(-)=0x09
+[Bmi088_SelfTestAcc] x_neg=-13513 mg, y_neg=-13787 mg, z_neg=-9556 mg
+[Bmi088_SelfTestAcc] dx=25899 mg, dy=26133 mg, dz=22407 mg
+[Bmi088_SelfTestAcc] PASS
+```
+
+3. 多次读取acc数据
+```shell
+D-Robotics:/$ Bmi088_TestAcc 50
+[Bmi088_TestAcc] acc_id(raw)=0x1E
+[Bmi088_TestAcc] ACC RANGE readback=0x03 (expect 0x01)
+ACC ax:     3 ay:    -3 az:  1378
+ACC ax:0.000 ay:0.000 az:0.252
+ACC ax:    -7 ay:    -7 az:  1368
+ACC ax:0.001 ay:0.001 az:0.250
+ACC ax:     9 ay:   -15 az:  1379
+ACC ax:0.001 ay:0.002 az:0.252
+ACC ax:    -1 ay:    -8 az:  1383
+ACC ax:0.000 ay:0.001 az:0.253
+ACC ax:   -65 ay:    16 az:  1356
+ACC ax:0.011 ay:0.002 az:0.248
+ACC ax:   113 ay:   -88 az:  2027
+....
+```
+
+4. 多次读取gyr数据
+```shell
+D-Robotics:/$ Bmi088_TestGyr 50
+[Bmi088_TestGyr] gyr_id(raw)=0x0F
+[Bmi088_TestGyr] GYR RANGE readback=0x03 (expect 0x03)
+GYR gx:    22 gy:    13 gz:   -14
+GYR gx:0.167 gy:0.099 gz:0.106
+GYR gx:    78 gy:    61 gz:  1114
+GYR gx:0.595 gy:0.465 gz:8.499
+GYR gx:    89 gy:   120 gz:  1197
+GYR gx:0.679 gy:0.915 gz:9.132
+GYR gx:    69 gy:   102 gz:   853
+GYR gx:0.526 gy:0.778 gz:6.507
+GYR gx:  -321 gy:  -538 gz:  1482
+GYR gx:-2.449 gy:-4.104 gz:11.306
+```
+</TabItem>
+</Tabs>
+
 ### 配置文件说明{#spi_config}
 
 配置文件`Spi_PBcfg.c` 存放着SPI的驱动配置，其中`Spi_ConfigType`为顶层容器，它将所有配置信息（通道、作业、序列、硬件单元等）组织在一起，形成一个完整的、用于初始化 SPI 驱动程序的配置集。
@@ -289,6 +492,8 @@ erDiagram
 `SPI_HWUNIT` 和 `SPI_EXTERNAL_DEVICE` 都需要关联一个硬件实例（Instance），该实例决定了使用哪一个SPI接口进行通信。由于RDKS100平台共提供8个SPI 控制器，其中MAIN域包含2个（SPI0、SPI1），MCU域包含6个（SPI2 至 SPI7），因此MCU域中的 SPI 实际从 SPI2 开始编号。下表<font color='green'>**绿色**</font>字体部分展示了 SPI 序列配置（Spi SeqCfg）与对应硬件资源（Spi BusId、HWUnit、Instance）之间的映射关系。
 
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 | **SPI SeqCfg** | <font color='green'>**Spi BusId**</font>  | <font color='green'>**HWUnit**</font>  | <font color='green'>**Instance**</font>  | **Spi Baudrate** | **Spi Cs** | **Frame size**|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -306,6 +511,20 @@ erDiagram
 | SpiSequence_11 | <font color='green'>SPI5</font> | <font color='green'>CSIB3</font> | <font color='green'>3</font> | 1000000 | CS1 | 16 bit |
 | SpiSequence_12 | <font color='green'>SPI6</font> | <font color='green'>CSIB4</font> | <font color='green'>4</font> | 1000000 | CS1 | 8 bit |
 | SpiSequence_13 | <font color='green'>SPI7</font> | <font color='green'>CSIB5</font> | <font color='green'>5</font> | 1000000 | CS1 | 8 bit |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+| **SPI SeqCfg** | <font color='green'>**Spi BusId**</font>  | <font color='green'>**HWUnit**</font>  | <font color='green'>**Instance**</font>  | **Spi Baudrate** | **Spi Cs** | **Frame size**|
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| SpiSequence_0 | <font color='green'>SPI6</font> | <font color='green'>CSIB2</font> | <font color='green'>2</font> | 2000000 | CS0 | 16 bit |
+| SpiSequence_1 | <font color='green'>SPI6</font> | <font color='green'>CSIB2</font> | <font color='green'>2</font> | 2000000 | CS1 | 16 bit |
+| SpiSequence_2 | <font color='green'>SPI13</font> | <font color='green'>CSIB9</font> | <font color='green'>9</font> | 1000000 | CS0 | 8 bit |
+| SpiSequence_3 | <font color='green'>SPI13</font> | <font color='green'>CSIB9</font> | <font color='green'>9</font> | 1000000 | CS1 | 8 bit |
+| SpiSequence_4 | <font color='green'>SPI4</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 1000000 | CS0 | 8 bit |
+| SpiSequence_5 | <font color='green'>SPI4</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 1000000 | CS1 | 8 bit |
+</TabItem>
+</Tabs>
 
 :::tip
 MCU1 的 SPI 出厂默认参数基于 Spi_PBcfg.c 配置文件，具有一定的时效性，但通常不会发生变更。

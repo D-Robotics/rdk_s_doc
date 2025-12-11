@@ -4,18 +4,33 @@ sidebar_position: 5
 
 # 7.5.6 PWM使用指南
 
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+
 ## 硬件支持
 
-S100 有1个PWM，每个PWM IP 有12个通道。
+
 
 - 每个通道都是独立的，支持irq requset和dma requset
-- 可以支持硬件触发脉冲输出
+- 支持配置两种工作模式，通用工作模式（PWM脉冲输出），输入捕获模式。
 - 每个通道有自己独立的时钟分频寄存器
 - 每个IP所有通道共享一个中断
 - 当目标边沿或者脉冲类型到来的时候，会触发中断或者dma req
 - 支持DMA更新period和duty
 - 支持周期边沿对齐方式设置，可以设置为边沿对齐或者中心对齐
-- 支持pwm同步输出模式，6通道同步或者12通道同步。
+- 支持针对每个PWM通道配置其周期和占空比，需要满足如下限制：
+    - 周期配置粒度为clk_PWM，即PWM外设时钟，最大时钟计数值为：4294967295。
+
+S600和S100的IP配置如下：
+
+| 平台 | PWM IP数量 | 每个IP的通道数 | 总通道数 |
+|------|------------|----------------|----------|
+| S600 | 3个        | 12个Channel    | 36个Channel |
+| S100 | 1个        | 12个Channel    | 12个Channel |
 
 ## 软件驱动
 
@@ -30,51 +45,27 @@ S100 有1个PWM，每个PWM IP 有12个通道。
 
 # PWM 模块相关文件说明
 
-- Config/McalCdd/gen_s100_sip_B_mcu1/Pwm/src/Pwm_PBCfg.c: 正常模式下 PWM 的预编译配置源文件，包含通道和实例的具体配置参数（如周期、占空比、极性等）。
-- Config/McalCdd/gen_s100_sip_B_mcu1/Pwm/inc: 预编译配置头文件，定义宏开关。
-- McalCdd/Pwm/src/Pwm_Lld.c: 底层驱动实现文件，直接操作硬件寄存器，提供底层接口。
-- McalCdd/Pwm/src/Pwm.c: 上层驱动逻辑实现，封装API 接口，并处理错误检测、状态管理等控制逻辑。
-- McalCdd/Pwm/inc/Pwm_Lld.h: 底层驱动头文件，声明底层函数原型、结构体和枚举类型。
-- McalCdd/Pwm/inc/Pwm_Types.h: 定义通用数据类型、结构体和回调函数指针类型，供上下层共享使用。
-- McalCdd/Pwm/inc/Pwm.h: 主头文件，声明高层 API和核心结构体。
-- samples/Pwm/Pwm_sample/Pwm_test.c: Pwm测试sample。
+- `Config/McalCdd/gen_xxx/Pwm/src/Pwm_PBCfg.c`：正常模式下 PWM 的预编译配置源文件，包含通道和实例的具体配置参数（如周期、占空比、极性等）。
+- `Config/McalCdd/gen_xxx/Pwm/inc`：预编译配置头文件，定义宏开关。
+- `McalCdd/Pwm/src/Pwm_Lld.c`：底层驱动实现文件，直接操作硬件寄存器，提供底层接口。
+- `McalCdd/Pwm/src/Pwm.c`：上层驱动逻辑实现，封装API 接口，并处理错误检测、状态管理等控制逻辑。
+- `McalCdd/Pwm/inc/Pwm_Lld.h`：底层驱动头文件，声明底层函数原型、结构体和枚举类型。
+- `McalCdd/Pwm/inc/Pwm_Types.h`：定义通用数据类型、结构体和回调函数指针类型，供上下层共享使用。
+- `McalCdd/Pwm/inc/Pwm.h`：主头文件，声明高层 API和核心结构体。
+- `samples/Pwm/inc/Pwm_PBCfg.h`：Pwm测试sample头文件
+- `samples/Pwm/src/Pwm_test.c`：Pwm测试sample源文件。
 
-## 平台特殊配置
+## 重要配置说明
 
-PWM驱动中的配置源文件是Pwm_PBCfg.c，S100芯片默认是支持12个Channel的配置，但是由于Pcb的差异，部分PWM通道的引脚被占用，例如RDKS100的PWM2和PWM3被占用，为避免冲突，在配置上需要做如下更改：
+PWM驱动中的配置源文件是`Pwm_PBCfg.c`，支持对每个channel单独配置，S600和S100的驱动和配置兼容，以下以S600为例。
 
-1. 修改Pwm_Channels_PB数组中结构体成员LldChannelCfg的值为NULL，表示这个PWM通道无效
-```c
-static Pwm_ChannelConfigType Pwm_Channels_PB[PWM_CONF_CHANNELS_PB] = {
-    ......
-    {
-        /* @brief Pwm Channel id */
-        .ChannelId = 1,
-        /* @brief Pwm Channel Class */
-        .PwmChannelClass = PWM_VARIABLE_PERIOD,
-        /** @brief Pointer to channel pwm hw channel: pwm 0 - ch 1 */
-        .LldChannelCfg = &Pwm_HwChannelConfig_PB[0][1],
-    },
-    {
-        /* @brief Pwm Channel id */
-        .ChannelId = 2,
-        /* @brief Pwm Channel Class */
-        .PwmChannelClass = PWM_VARIABLE_PERIOD,
-        /** @brief Pointer to channel pwm hw channel: pwm 0 - ch 2 */
-        .LldChannelCfg = NULL,
-    },
-    ......
-}
-```
-
-2. 修改Pwm_HwChannelConfig_PB数组中的最后一个结构体成员HwChannelId的值为PWM_HW_CHANNEL_INVALID_ID，表示从这个配置开始，后面的配置无效
+1. `Pwm_HwChannelConfig_PB` 包含PWM的具体硬件配置，部分配置在pwm初始化时就会立即生效
 ```c
 static Pwm_Lld_ChannelConfigType Pwm_HwChannelConfig_PB[PWM_HW_CONF_MODS_PB][12] = {
     {
-        ......
         {
-            /**< pwm hardware channel PwmHwChId11 */
-            .HwChannelId = PwmHwChId11,
+            /**< pwm hardware channel PwmHwChId4 */
+            .HwChannelId = PwmHwChId4,
             /**< pwm hardware ip id 0 */
             .HwIpId = 0,
             /**< pwm clear mode */
@@ -82,46 +73,76 @@ static Pwm_Lld_ChannelConfigType Pwm_HwChannelConfig_PB[PWM_HW_CONF_MODS_PB][12]
             /**< pwm channel clock ratio*/
             .ClockRatio = 0,
             /**< pwm period*/
-            .Period = 3125000,
+            .Period = 9900000,
             /**< pwm polarity*/
             .Polarity = PWM_HIGH,
             /**< pwm duty cycle*/
-            .DutyCycle = 1562500,
+            .DutyCycle = 4950000,
             /**< pwm edge align mode */
             .EdgeAlign = PWM_LLD_GEN_ALIGN_EDGE,
             /**< pwm edge mode */
-            .EdgeMode = PWM_LLD_EDGEMODE_BOTH,
+            .EdgeMode = PWM_LLD_EDGEMODE_RISING,
             /**< hardware triger mask */
             .HwTrigMask = TRUE,
             /**< pwm hardware triger width*/
             .HwTrigWidth = 0,
             /**< the switch of isr notification*/
-            .NotificationEnable = TRUE,
+            .NotificationEnable = FALSE,
             /**< the callback of isr notification */
-            .Notification = Pwm_Channel_0_6_ISR,
+            .Notification = NULL_PTR,
             /**< the switch of dma complete notification*/
-            .DmaCpltCallbackEnable = TRUE,
+            .DmaCpltCallbackEnable = FALSE,
             /**< the callback of dma complete notification */
             .DmaCpltCallback = NULL_PTR,
         },
-        {
-            /**< Add termination structure members */
-            .HwChannelId = PWM_HW_CHANNEL_INVALID_ID,
-        }
-    }
-}
+        .......
 ```
 
+2. `Pwm_Channels_PB` 结构体数组定义了逻辑PWM通道与底层硬件通道之间的映射关系; `Pwm_HwChannelConfig_PB`结构体数组定义了每个PWM通道的默认硬件参数，如周期、占空比、极性、中断使能等。
+```c
+#define PWM_CONF_CHANNELS_PB 2
 
-:::tip
-- Pwm_Channels_PB 结构体数组定义了逻辑PWM通道与底层硬件通道之间的映射关系。
-- Pwm_HwChannelConfig_PB 结构体数组定义了每个PWM通道的默认硬件参数，如周期、占空比、极性、中断使能等。
-:::
 
+/** @brief Array of configured Pwm channels */
+static Pwm_ChannelConfigType Pwm_Channels_PB[PWM_CONF_CHANNELS_PB] = {
+    {
+        /* @brief Pwm Channel id */
+        .ChannelId = 0,
+        /* @brief Pwm Channel Class */
+        .PwmChannelClass = PWM_VARIABLE_PERIOD,
+        /** @brief Pointer to channel pwm hw channel: pwm 0 - ch 4 */
+        .LldChannelCfg = &Pwm_HwChannelConfig_PB[0][0],
+    },
+    {
+        /* @brief Pwm Channel id */
+        .ChannelId = 1,
+        /* @brief Pwm Channel Class */
+        .PwmChannelClass = PWM_VARIABLE_PERIOD,
+        /** @brief Pointer to channel pwm hw channel: pwm 0 - ch 5 */
+        .LldChannelCfg = &Pwm_HwChannelConfig_PB[0][1],
+    },
+};
+
+/** @brief Array of configured Pwm channels */
+const Pwm_ConfigType Pwm_Config = {
+    /** @brief Number of configured Pwm ips */
+    .NumInstances = PWM_HW_CONF_MODS_PB,
+    /** @brief Number of configured Pwm channels */
+    .NumChannels = PWM_CONF_CHANNELS_PB,
+    /** @brief Number of configured Pwm channels */
+    .PwmChannelsConfig = Pwm_Channels_PB,
+    /** @brief Pointer to array of Pwm channels */
+    .PwmLldIpConfig = Pwm_Lld_IpConfig_PB,
+};
+
+```
 
 
 ## 应用sample
 
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ### 使用示例
 S100 开发板将PWM引出供用户开发学习使用，已引出PWM Channel的PIN脚位置以及状态如下：
@@ -220,6 +241,107 @@ pwm                         CFG_LOCK_MODE 2237031c 0
 [06915.263883 0]INFO: Pwm_RegDump end
 
 ```
+
+
+</TabItem>
+<TabItem value="S600" label="S600">
+S600 开发板将PWM0 channel4和PWM0 channel5引出供用户开发学习使用，接口位于MCU子板。
+
+### 使用示例
+
+`pwmtest`命令用于配置和控制PWM（脉冲宽度调制）通道。下面是`pwmtest`命令的使用说明和示例。
+
+- 使用方法
+
+设置PWM占空比：
+```sh
+pwmtest <pwm_hwipid> <pwm_hwchid> <period> <duty_cycle>
+```
+
+停止PWM输出：
+```sh
+pwmtest stop <pwm_hwipid> <pwm_hwchid>
+```
+
+**参数说明**
+**pwm_hwipid:** PWM硬件IP实例ID (0-2)
+**pwm_hwchid:** PWM硬件通道ID (0-11)
+**period:** PWM信号周期值，32位数值
+**duty_cycle:** PWM信号占空比，必须在0x0000（0%）到0x8000（100%）范围内
+
+
+例如设置PWM0通道4，周期为0x600000，占空比为0x4000(50%)：
+```shell
+D-Robotics:/$ pwmtest 0x0 0x4 0x600000 0x4000
+PWM0-CH4 pwm_period = 0x00600000 pwm_dutycycle = 0x4000
+Set PWM pin function to PWM0-CH4
+```
+停止PWM0通道4的输出
+```shell
+D-Robotics:/$ pwmtest stop 0x0 0x4
+INFO: Stopping PWM0-Ch0004
+```
+
+
+### Debug Sample
+
+- 使用方法
+
+```bash
+pwmdumpregs <pwm_hwipid> <pwm_hwchid>
+```
+
+查看PWM0通道4的寄存器配置
+```shell
+D-Robotics:/$ pwmdumpregs 0 4
+[064961.196947 0]INFO: #####Get Version for Pwm
+[064961.197466 0]INFO: Pwm moduleID 121
+[064961.197926 0]INFO: Pwm vendorID 196
+[064961.198371 0]INFO: Pwm sw_major_version 1
+[064961.198885 0]INFO: Pwm sw_minor_version 0
+[064961.199395 0]INFO: Pwm sw_patch_version 0
+[064961.199906 0]INFO: Pwm_RegDump instance 0 channel 4
+[064961.200524 0]ch[4]                              PERIOD 234a00c0 0
+[064961.201300 0]ch[4]                              PERIOD 234a00c0 0
+[064961.202070 0]ch[4]                            CAP_TIME 234a00c4 0
+[064961.202841 0]ch[4]                            CAP_TIME 234a00c4 0
+[064961.203632 0]ch[4]               PWM_CTRL_REG.MODE_SEL          0
+[064961.204402 0]ch[4]          PWM_CTRL_REG.GEN_ALIGN_SEL          0
+[064961.205174 0]ch[4]           PWM_CTRL_REG.GEN_POLARITY          0
+[064961.205948 0]ch[4]               PWM_CTRL_REG.INT_MASK          0
+[064961.206718 0]ch[4]               PWM_CTRL_REG.DMA_MASK          0
+[064961.207491 0]ch[4]           PWM_CTRL_REG.HW_TRIG_MASK          0
+[064961.208274 0]ch[4]       PWM_CTRL_REG.GLITCH_FILTER_EN          0
+[064961.209049 0]ch[4]       PWM_CTRL_REG.GLITCH_THRESHOLD          0
+[064961.209819 0]ch[4]          PWM_CTRL_REG.HW_TRIG_WIDTH          0
+[064961.210589 0]ch[4]          PWM_CTRL_REG.CLK_DIV_RATIO          0
+[064961.211366 0]ch[4]               PWM_CTRL_REG.EDGE_SEL          0
+[064961.212136 0]ch[4]        PWM_CTRL_REG.CPU_HALT_ENABLE          0
+[064961.212927 0]ch[4]       PWM_CTRL_REG.TIMER_CLEAR_MODE          0
+[064961.213698 0]ch[4]           PWM_CTRL_REG.RESERVED_BIT          0
+[064961.214468 0]ch[4]                                  EN 234a00cc 0
+[064961.215240 0]ch[4]                       COMPARE_STATE 234a00d0 0
+[064961.216014 0]ch[4]                           PIN_STATE 234a00d4 0
+[064961.216784 0]ch[4]                   CAP_CNT_THRESHOLD 234a00d8 1
+[064961.217557 0]ch[4]                             CAP_CNT 234a00dc 0
+[064961.218340 0]ch[4]                                 EOI 234a00e4 0
+[064961.219114 0]ch[4]                              INT_ST 234a00e8 0
+[064961.219885 0]ch[4]                                 CNT 234a00ec 0
+[064961.220659 0]pwm                                  EOIS 234a0300 0
+[064961.221432 0]pwm                                INT_ST 234a0304 0
+[064961.222202 0]pwm                            RAW_INT_ST 234a0308 0
+[064961.222993 0]pwm                              RESERVED 234a030c 0
+[064961.223763 0]pwm                              CAP_MISS 234a0310 0
+[064961.224534 0]pwm                            CLEAR_MODE 234a0314 fff
+[064961.225328 0]pwm                             SYNC_MODE 234a0318 0
+[064961.226101 0]pwm                         CFG_LOCK_MODE 234a031c 0
+[064961.226872 0]INFO: Pwm_RegDump end
+
+```
+
+
+</TabItem>
+</Tabs>
 
 
 ### 应用程序接口
