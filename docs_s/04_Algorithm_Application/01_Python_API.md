@@ -149,7 +149,7 @@ import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
 # 加载模型
-model = HB_HBMRuntime("/opt/hobot/model/s100/basic/lanenet256x512.hbm")
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
 
 # 获取模型名与输入名
 model_name = model.model_names[0]
@@ -187,7 +187,7 @@ hb_dtype_map = {
 }
 
 # 加载模型
-model = HB_HBMRuntime("/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm")
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
 
 # 获取模型名（假设只加载了一个模型）
 model_name = model.model_names[0]
@@ -344,7 +344,7 @@ print("版本:", HB_HBMRuntime.version)
     ```python
     #打印所有模型文件的描述信息
     print(model.hbm_descs)
-    # 输出：{'/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
+    # 输出：{'/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
     ```
 - input_counts: Dict[str, int]
   - 功能说明：
@@ -647,8 +647,8 @@ print("版本:", HB_HBMRuntime.version)
     }
 
     # 加载多个模型
-    model_files = ["/opt/hobot/model/s100/basic/lanenet256x512.hbm",
-        "/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm"]
+    model_files = ["/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
+        "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm"]
 
     model = HB_HBMRuntime(model_files)
 
