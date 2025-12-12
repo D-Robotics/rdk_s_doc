@@ -37,7 +37,7 @@ sidebar_position: 13
 ## 环境依赖
 - 确保安装了pydev中的环境依赖
     ```bash
-    pip install -r ../requirements.txt
+    pip install -r ../requirements.txt --break-system-packages
     ```
 
 ## 目录结构
@@ -50,7 +50,7 @@ sidebar_position: 13
 ## 参数说明
 | 参数名           | 说明                              | 默认值                                                    |
 | --------------- | --------------------------------- | ------------------------------------------------------ |
-| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
@@ -68,7 +68,7 @@ sidebar_position: 13
     - 指定参数运行
         ```bash
         python usb_camera_yolov5x.py \
-        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
         --priority 0 \
         --bpu-cores 0 \
         --label-file /app/res/labels/coco_classes.names \
@@ -86,7 +86,7 @@ sidebar_position: 13
 ## 注意事项
 - 该程序需运行在桌面环境。
 
-- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
+- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s600/basic/`查找。
 
 ## License
     ```license

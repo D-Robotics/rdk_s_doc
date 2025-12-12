@@ -11,7 +11,7 @@ sidebar_position: 5
 
     Ultralytics YOLO11 是一款轻量级的 anchor-based 目标检测模型，融合了 anchor-free 与 anchor-based 思想，具备快速推理和精确定位的能力。该模型在回归阶段采用离散分桶（regression bin）方式，结合 softmax 分类和解码机制来提升定位精度。Ultralytics YOLO11 适用于实时场景下的小模型部署，如安防监控、工业检测等任务。
 
-- HBM 模型名称： yolo11n_detect_nashe_640x640_nv12.hbm
+- HBM 模型名称： yolo11n_detect_nashp_640x640_nv12.hbm
 
 - 输入格式： NV12 格式，大小为 640x640（Y、UV 分离）
 
@@ -20,7 +20,7 @@ sidebar_position: 5
 - 模型下载地址（程序自动下载）：
 
     ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_detect_nashe_640x640_nv12.hbm
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_detect_nashp_640x640_nv12.hbm
     ```
 
 ## 功能说明
@@ -53,7 +53,7 @@ sidebar_position: 5
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -66,7 +66,7 @@ pip install -r ../../requirements.txt
 ## 参数说明
 | 参数名           | 说明                                                         | 默认值                                         |
 |------------------|--------------------------------------------------------------|------------------------------------------------|
-| `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`        |
+| `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`        |
 | `--test-img`      | 输入测试图片路径                                             | `/app/res/assets/kite.jpg`                        |
 | `--label-file`    | 类别标签文件路径（每行一个类别名称）                         | `/app/res/labels/coco_classes.names`              |
 | `--img-save-path` | 检测结果图像保存路径                                         | `result.jpg`                                   |
@@ -85,7 +85,7 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python ultralytics_yolo11.py \
-            --model-path /opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm \
+            --model-path /opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm \
             --test-img /app/res/assets/kite.jpg \
             --label-file /app/res/labels/coco_classes.names \
             --img-save-path result.jpg \

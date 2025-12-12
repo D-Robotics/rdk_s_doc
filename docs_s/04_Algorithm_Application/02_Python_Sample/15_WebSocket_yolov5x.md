@@ -4,7 +4,7 @@ sidebar_position: 15
 
 # WebSocket YOLOv5x 推理
 
-本示例展示了如何在含有 HBM 加速器和 VIO 摄像头模块的嵌入式平台（如 RDK S100）上，使用 Ultralytics YOLOv5x 模型进行目标检测，并通过 WebSocket 实时推送 JPEG 图像和检测框，本示例代码位于`/app/pydev_demo/11_web_display_camera_sample/`目录下。
+本示例展示了如何在含有 HBM 加速器和 VIO 摄像头模块的嵌入式平台（如 RDK S600）上，使用 Ultralytics YOLOv5x 模型进行目标检测，并通过 WebSocket 实时推送 JPEG 图像和检测框，本示例代码位于`/app/pydev_demo/11_web_display_camera_sample/`目录下。
 
 ## 功能说明
 
@@ -42,13 +42,13 @@ sidebar_position: 15
     ```
 - 安装WebSocket的包
     ```bash
-    pip install websockets==15.0.1 protobuf==3.20.3
+    pip install websockets==15.0.1 protobuf==3.20.3 --break-system-packages
     ```
 
 ## 硬件环境
 - mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
 - 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s100_camera_expansion_board.md)部分。
+- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600_camera_expansion_board.md)部分。
 
 ## 目录结构
 ```text
@@ -60,7 +60,7 @@ sidebar_position: 15
 ## 参数说明
 | 参数名           | 说明                              | 默认值                                                    |
 | --------------- | --------------------------------- | ------------------------------------------------------ |
-| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
@@ -89,7 +89,7 @@ sidebar_position: 15
     - 指定参数运行
         ```bash
         python mipi_camera_web_yolov5x.py \
-        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
         --priority 0 \
         --bpu-cores 0 \
         --label-file /app/res/labels/coco_classes.names \
@@ -108,7 +108,7 @@ sidebar_position: 15
     在命令行输入Ctrl C
 
 ## 注意事项
-- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
+- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s600/basic/`查找。
 
 ## License
     ```license

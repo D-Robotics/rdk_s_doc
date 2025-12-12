@@ -42,10 +42,16 @@ sidebar_position: 6
 
     - 最终图像包含分割结果的直观覆盖图，可保存或展示。
 
+- 模型下载地址（程序自动下载）：
+
+    ```bash
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/unet_mobilenet/unet_mobilenet_1024x2048_nv12.hbm
+    ```
+
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -59,7 +65,7 @@ pip install -r ../../requirements.txt
 
 | 参数名               | 说明                                      | 默认值                                 |
 | ----------------- | --------------------------------------- | ----------------------------------- |
-| `--model-path`    | 模型文件路径（.hbm 格式）                              | `/opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm` |
+| `--model-path`    | 模型文件路径（.hbm 格式）                              | `/opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm` |
 | `--test-img`      | 输入测试图像路径                                      | `/app/res/assets/segmentation.png`     |
 | `--img-save-path` | 推理后结果图像保存路径                                  | `result.jpg`                        |
 | `--priority`      | 模型优先级（0\~255，越大优先级越高）                    | `0`                                 |
@@ -76,7 +82,7 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python unet_mobilenet.py \
-        --model-path /opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm \
         --test-img /app/res/assets/segmentation.png \
         --img-save-path result.jpg \
         --alpha-f 0.75 \

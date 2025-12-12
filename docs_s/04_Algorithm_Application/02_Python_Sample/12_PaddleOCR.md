@@ -3,8 +3,8 @@ sidebar_position: 12
 ---
 
 # 文本检测与识别-PaddleOCR
-
-本示例基于 `hbm_runtime` 推理引擎运行 PaddleOCR 模型进行文本检测与识别，支持中文场景的 OCR 识别与可视化，本示例代码位于`/app/pydev_demo/08_OCR_sample/01_paddleOCR/`目录下，本示例代码位于/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/ 目录下。
+暂不支持，敬请期待！
+<!-- 本示例基于 `hbm_runtime` 推理引擎运行 PaddleOCR 模型进行文本检测与识别，支持中文场景的 OCR 识别与可视化，本示例代码位于`/app/pydev_demo/08_OCR_sample/01_paddleOCR/`目录下，本示例代码位于/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/ 目录下。
 
 
 ## 模型说明
@@ -72,11 +72,11 @@ sidebar_position: 12
 ## 环境依赖
 - 确保安装了pydev中的环境依赖
     ```bash
-    pip install -r ../../requirements.txt
+    pip install -r ../../requirements.txt --break-system-packages
     ```
 - 安装OCR处理所需的包
     ```bash
-    pip install pyclipper==1.3.0.post6 Pillow==9.0.1 paddlepaddle
+    pip install pyclipper==1.3.0.post6 Pillow==9.0.1 paddlepaddle --break-system-packages
     ```
 
 ## 目录结构
@@ -128,4 +128,4 @@ sidebar_position: 12
     ```
 
 ## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。
+- 若指定模型路径不存在，程序将尝试自动下载模型。 -->

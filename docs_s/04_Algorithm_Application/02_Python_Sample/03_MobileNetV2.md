@@ -20,7 +20,7 @@ sidebar_position: 3
 - 模型下载地址（程序自动下载）：
 
     ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mobilenetv2_224x224_nv12.hbm
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/MobileNet/mobilenetv2_224x224_nv12.hbm
     ```
 ## 功能说明
 - 模型加载
@@ -42,7 +42,7 @@ sidebar_position: 3
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -56,7 +56,7 @@ pip install -r ../../requirements.txt
 ## 参数说明
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`                 |
+| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`                 |
 | `--test-img`   | 测试图片路径                                              | `/app/res/assets/zebra_cls.jpg`                |
 | `--label-file` | 类别标签映射文件路径                                       | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--priority`   | 模型优先级（0~255，越大优先级越高）                         | `0`                                         |
@@ -72,7 +72,7 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python mobilenetv2.py \
-        --model-path /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm \
         --test-img /app/res/assets/zebra_cls.jpg \
         --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
         ```

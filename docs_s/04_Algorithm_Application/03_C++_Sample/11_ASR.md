@@ -3,8 +3,8 @@ sidebar_position: 11
 ---
 
 # 自动语音识别-ASR
-
-本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
+暂不支持，敬请期待！
+<!-- 本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
 
 
 ## 模型说明
@@ -106,4 +106,4 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
     ```
 
 ## 注意事项
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。 -->

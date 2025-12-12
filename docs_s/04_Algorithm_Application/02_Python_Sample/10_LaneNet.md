@@ -3,7 +3,8 @@ sidebar_position: 10
 ---
 
 # 车道线检测-LaneNet
-
+暂不支持，敬请期待！
+<!--
 本示例基于 `hbm_runtime` 运行 LaneNet 模型，实现车道线的实例分割与二值分割，并将结果图像保存到本地，本示例代码位于/`app/pydev_demo/06_lane_detection_sample/01_lanenet/`目录下。
 
 ## 模型说明
@@ -51,7 +52,7 @@ sidebar_position: 10
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -91,4 +92,4 @@ pip install -r ../../requirements.txt
     ```
 
 ## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。
+- 若指定模型路径不存在，程序将尝试自动下载模型。 -->

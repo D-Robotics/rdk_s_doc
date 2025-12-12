@@ -3,7 +3,8 @@ sidebar_position: 9
 ---
 
 # 实例分割-Ultralytics YOLOE11
-
+暂不支持，敬请期待！
+<!--
 本示例展示了如何使用 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于`/app/pydev_demo/05_open_instance_seg_sample/01_yoloe11_seg/`目录下。
 
 ## 模型说明
@@ -11,7 +12,7 @@ sidebar_position: 9
 
     Ultralytics YOLOE11 是一款高效能的端侧实例分割模型，适用于开放词汇物体检测与分割任务。该模型通过多尺度特征提取、密集分类和原型掩膜生成，有效识别图像中的物体并输出精细的实例分割结果。本示例使用的是 Ultralytics YOLOE11 的轻量级版本，输入图像为 640x640，支持 4585 类的广义物体分类与分割。
 
-- HBM模型名称：yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
+- HBM模型名称：yoloe_11s_seg_pf_nashp_640x640_nv12.hbm
 
 - 输入格式：NV12，大小为 640x640
 
@@ -26,7 +27,7 @@ sidebar_position: 9
 - 模型下载地址（程序自动下载）：
 
     ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yoloe_11s_seg_pf_nashp_640x640_nv12.hbm
     ```
 ## 功能说明
 - 模型加载
@@ -60,7 +61,7 @@ sidebar_position: 9
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -73,7 +74,7 @@ pip install -r ../../requirements.txt
 ## 参数说明
 | 参数名               | 说明                                     | 默认值                                       |
 | ----------------- | ------------------------------------------ | ----------------------------------------- |
-| `--model-path`    | BPU 量化模型路径（\*.hbm）                  | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
+| `--model-path`    | BPU 量化模型路径（\*.hbm）                  | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashp_640x640_nv12.hbm` |
 | `--test-img`      | 输入测试图像路径                            | `/app/res/assets/office_desk.jpg`            |
 | `--label-file`    | 类别标签文件路径（每行一个类别）             | `/app/res/labels/coco_extended.names`        |
 | `--img-save-path` | 推理结果图像保存路径                        | `result.jpg`                              |
@@ -94,7 +95,7 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python yoloe11_seg.py \
-        --model-path /opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
+        --model-path /opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashp_640x640_nv12.hbm \
         --priority 0 \
         --bpu-cores 0 \
         --test-img /app/res/assets/office_desk.jpg \
@@ -131,4 +132,4 @@ pip install -r ../../requirements.txt
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+    ``` -->

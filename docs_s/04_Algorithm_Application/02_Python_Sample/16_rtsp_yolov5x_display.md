@@ -3,8 +3,8 @@ sidebar_position: 16
 ---
 
 # RTSP视频拉流及YOLOv5x 推理
-
-本示例演示如何在 RDK S100 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
+暂不支持，敬请期待！
+<!-- 本示例演示如何在 RDK S600 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
 RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于`/app/pydev_demo/12_rtsp_yolov5x_display_sample/`目录下。
 
 ## 功能说明
@@ -60,7 +60,7 @@ RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../requirements.txt
+pip install -r ../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -75,7 +75,7 @@ pip install -r ../requirements.txt
 | 参数名                  | 说 明                       | 默认值                                                 |
 | ----------------------- | -------------------------- | ------------------------------------------------------ |
 | `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/1080P_test.h264`                          |
-| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                   |
@@ -101,7 +101,7 @@ pip install -r ../requirements.txt
         ```bash
         python rtsp_yolov5x_display.py \
         --rtsp-urls rtsp://127.0.0.1/assets/1080P_test.h264 \
-        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
         --priority 0 \
         --bpu-cores 0 \
         --label-file /app/res/labels/coco_classes.names \
@@ -138,4 +138,4 @@ pip install -r ../requirements.txt
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+    ``` -->

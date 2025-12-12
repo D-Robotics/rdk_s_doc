@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 图像分类-ResNet18
 
-本示例演示如何使用`hbm_runtime`的python接口部署`ResNet18`模型进行图像分类推理。适用于搭载BPU芯片的 RDK S100设备，本示例代码位于`/app/pydev_demo/01_classification_sample/01_resnet18/`目录下。
+本示例演示如何使用`hbm_runtime`的python接口部署`ResNet18`模型进行图像分类推理。适用于搭载BPU芯片的 RDK S600设备，本示例代码位于`/app/pydev_demo/01_classification_sample/01_resnet18/`目录下。
 
 ## 模型说明
 - 简介：
@@ -19,7 +19,7 @@ sidebar_position: 2
 - 模型下载地址（程序自动下载）：
 
     ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ResNet/resnet18_224x224_nv12.hbm
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resnet18_224x224_nv12.hbm
     ```
 
 ## 功能说明
@@ -42,7 +42,7 @@ sidebar_position: 2
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -55,7 +55,7 @@ pip install -r ../../requirements.txt
 ## 参数说明
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                | `/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`                 |
+| `--model-path` | 模型文件路径（.hbm 格式）                                | `/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`                 |
 | `--test-img`   | 测试图片路径                                            | `/app/res/assets/zebra_cls.jpg`                |
 | `--label-file` | 类别标签映射文件路径                                     | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--priority`   | 模型优先级（0~255，越大优先级越高）                      | `0`                                         |
@@ -71,7 +71,7 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python resnet18.py \
-        --model-path /opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm \
         --test-img /app/res/assets/zebra_cls.jpg \
         --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
         ```

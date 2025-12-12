@@ -11,7 +11,7 @@ sidebar_position: 8
 
     Ultralytics YOLO11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
 
-- HBM 模型名称： yolo11n_pose_nashe_640x640_nv12.hbm
+- HBM 模型名称： yolo11n_pose_nashp_640x640_nv12.hbm
 
 - 输入格式： NV12 格式图像（Y、UV 分离），尺寸为 640×640
 
@@ -28,7 +28,7 @@ sidebar_position: 8
 - 模型下载地址（程序自动下载）：
 
     ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_pose_nashe_640x640_nv12.hbm
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_pose_nashp_640x640_nv12.hbm
     ```
 ## 功能说明
 - 模型加载
@@ -61,7 +61,7 @@ sidebar_position: 8
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -74,7 +74,7 @@ pip install -r ../../requirements.txt
 ## 参数说明
 | 参数名                | 说明                                              | 默认值                                |
 | ------------------ | --------------------------------------------------- | ------------------------------------- |
-| `--model-path`     | 模型文件路径（`.hbm` 格式）                           | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
+| `--model-path`     | 模型文件路径（`.hbm` 格式）                           | `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` |
 | `--test-img`       | 测试图像路径                                         | `/app/res/assets/bus.jpg`                |
 | `--label-file`     | 类别标签路径，每行一个类别名称                         | `/app/res/labels/coco_classes.names`     |
 | `--img-save-path`  | 检测结果保存路径                                     | `result.jpg`                          |
@@ -93,7 +93,7 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python ultralytics_yolo11_pose.py \
-        --model-path /opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm \
         --test-img /app/res/assets/bus.jpg \
         --label-file /app/res/labels/coco_classes.names \
         --img-save-path result.jpg \

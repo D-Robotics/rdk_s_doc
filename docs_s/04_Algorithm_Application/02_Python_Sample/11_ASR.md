@@ -3,8 +3,8 @@ sidebar_position: 11
 ---
 
 # 自动语音识别-ASR
-
-本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/pydev_demo/07_speech_sample/01_asr/` 目录下。
+暂不支持，敬请期待！
+<!-- 本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/pydev_demo/07_speech_sample/01_asr/` 目录下。
 
 
 ## 模型说明
@@ -21,7 +21,7 @@ sidebar_position: 11
 - 模型下载地址（程序自动下载）：
 
     ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
     ```
 ## 功能说明
 - 模型加载
@@ -50,11 +50,11 @@ sidebar_position: 11
 ## 环境依赖
 - 确保安装了pydev中的环境依赖
     ```bash
-    pip install -r ../../requirements.txt
+    pip install -r ../../requirements.txt --break-system-packages
     ```
 - 安装soundfile包
     ```bash
-    pip install soundfile==0.13.1
+    pip install soundfile==0.13.1 --break-system-packages
     ```
 
 ## 目录结构
@@ -66,7 +66,7 @@ sidebar_position: 11
 ## 参数说明
 | 参数名            | 说明                                          | 默认值                  |
 | ----------------- | -------------------------------------------- | ----------------------------|
-| `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s100/basic/asr.hbm`                    |
+| `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s600/basic/asr.hbm`                    |
 | `--audio-file`    | 输入音频文件（支持 `.wav` 或 `.flac`）         | `/app/res/assets/chi_sound.wav` |
 | `--vocab-file`    | 词表文件，映射 token → id                     | `/app/res/labels/vocab.json`    |
 | `--priority`      | 推理优先级，0\~255，数值越大越优先             | `0`                           |
@@ -84,7 +84,7 @@ sidebar_position: 11
     - 指定参数运行
         ```bash
         python asr.py \
-        --model-path /opt/hobot/model/s100/basic/asr.hbm \
+        --model-path /opt/hobot/model/s600/basic/asr.hbm \
         --audio-file /app/res/assets/chi_sound.wav \
         --vocab-file /app/res/labels/vocab.json \
         --priority 0 \
@@ -100,4 +100,4 @@ sidebar_position: 11
     ```
 
 ## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。
+- 若指定模型路径不存在，程序将尝试自动下载模型。 -->

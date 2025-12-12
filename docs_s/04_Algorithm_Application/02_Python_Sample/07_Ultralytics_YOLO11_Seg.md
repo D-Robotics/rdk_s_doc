@@ -11,7 +11,7 @@ sidebar_position: 7
 
     Ultralytics YOLO11 是一款轻量级目标检测与实例分割模型，基于 YOLO 系列设计并融合了 anchor-free 与 anchor-based 思想结构与回归分箱（distributional regression）策略。本模型为其实例分割变体，支持同时输出边界框、类别概率和高质量的像素级掩膜，适用于实时场景中的多对象检测与分割任务。
 
-- HBM 模型名称： yolo11n_seg_nashe_640x640_nv12.hbm
+- HBM 模型名称： yolo11n_seg_nashp_640x640_nv12.hbm
 
 - 输入格式： NV12 格式图像（Y/UV 分离），尺寸为 640x640
 
@@ -25,7 +25,7 @@ sidebar_position: 7
 - 模型下载地址（程序自动下载）：
 
     ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_seg_nashe_640x640_nv12.hbm
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_seg_nashp_640x640_nv12.hbm
     ```
 ## 功能说明
 - 模型加载
@@ -57,7 +57,7 @@ sidebar_position: 7
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
 ```bash
-pip install -r ../../requirements.txt
+pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 目录结构
@@ -70,7 +70,7 @@ pip install -r ../../requirements.txt
 ## 参数说明
 | 参数                | 说明                    | 默认值 |
 |--------------------|-----------------------------|--------------------------------------|
-| `--model-path`     | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
+| `--model-path`     | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` |
 | `--test-img`       | 测试图片路径                 | `/app/res/assets/office_desk.jpg`        |
 | `--label-file`     | 分类标签文件                 | `/app/res/labels/coco_classes.names`     |
 | `--img-save-path`  | 输出结果图片保存路径          | `result.jpg`                          |
@@ -90,7 +90,7 @@ pip install -r ../../requirements.txt
     - 指定参数运行
         ```bash
         python ultralytics_yolo11_seg.py \
-        --model-path /opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm \
+        --model-path /opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm \
         --test-img /app/res/assets/office_desk.jpg \
         --label-file /app/res/labels/coco_classes.names \
         --img-save-path result.jpg \

@@ -17,7 +17,7 @@ sidebar_position: 1
 |-- 04_pose_sample                   # 关键点检测示例
 |-- 05_open_instance_seg_sample      # 暂不支持
 |-- 06_lane_detection_sample         # 暂不支持
-|-- 07_speech_sample                 # 语音识别示例
+|-- 07_speech_sample                 # 暂不支持
 |-- 08_OCR_sample                    # 暂不支持
 |-- 09_usb_camera_sample             # USB 摄像头实时推理示例
 |-- 10_mipi_camera_sample            # MIPI 摄像头实时推理示例

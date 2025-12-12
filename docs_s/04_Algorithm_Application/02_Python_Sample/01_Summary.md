@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # 示例概述
 
-本项目包含多个基于 Python 编写的 AI 示例程序，适用于 RDK S100平台，覆盖图像分类、目标检测、实例分割、姿态估计、OCR、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
+本项目包含多个基于 Python 编写的 AI 示例程序，适用于 RDK S600平台，覆盖图像分类、目标检测、实例分割、姿态估计、OCR、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
 
 本项目的板端代码位置：`/app/pydev_demo/`。
 
@@ -25,7 +25,7 @@ sidebar_position: 1
 - 依赖安装
     ```bash
     # 安装依赖
-    pip install -r requirements.txt
+    pip install -r requirements.txt --break-system-packages
     ```
 - 注意
 
@@ -45,10 +45,10 @@ sidebar_position: 1
     ├── 02_detection_sample/             # 目标检测样例
     ├── 03_instance_segmentation_sample/ # 实例分割样例
     ├── 04_pose_sample/                  # 姿态估计样例
-    ├── 05_open_instance_seg_sample/     # 开放词表实例分割样例
-    ├── 06_lane_detection_sample/        # 车道线检测样例
-    ├── 07_speech_sample/                # 语音识别样例
-    ├── 08_OCR_sample/                   # OCR 文字识别样例
+    ├── 05_open_instance_seg_sample/     # 暂不支持
+    ├── 06_lane_detection_sample/        # 暂不支持
+    ├── 07_speech_sample/                # 暂不支持
+    ├── 08_OCR_sample/                   # 暂不支持
     ├── 09_usb_camera_sample/            # USB 摄像头 + 目标检测样例
     ├── 10_mipi_camera_sample/           # MIPI 摄像头 + 目标检测样例
     ├── 11_web_display_camera_sample/    # 摄像头 + Web + 目标检测样例
@@ -66,7 +66,7 @@ sidebar_position: 1
 - 运行模型
     ``` bash
     python3 resnet18.py \
-    --model-path /opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm \
+    --model-path /opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm \
     --test-img /app/res/assets/zebra_cls.jpg
     ```
 - 查看结果
