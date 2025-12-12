@@ -4,8 +4,14 @@ sidebar_position: 9
 
 # 7.5.10 CAN使用指南
 
-## 基本概述
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
 
+## 基本概述
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 - 最大可使用CAN controller数量：10。
 - CAN最高传输速率：8M。(受限于transceiver的波特率限制，目前实验室只测试验证到5M波特率。)
 - 一个controller的Ram内划分的Block个数：
@@ -17,16 +23,70 @@ sidebar_position: 9
     - CAN4~CAN9：32 * 64 bytes。
 - 不支持 TTController，即不支持TTCAN（一种基于CAN总线的高层协议）。
 - CAN支持多包合并传输，并且可以配置合包的数量和超时时间，默认合包数量为1，超时时间为1000us。
-
+</TabItem>
+<TabItem value="S600" label="S600">
+- 最大可使用CAN controller数量：16。
+- CAN最高传输速率：8M。(受限于transceiver的波特率限制，目前实验室只测试验证到5M波特率。)
+- 一个controller的Ram内划分的Block个数：
+    - CAN0~CAN3：4 Block (可变payload);
+    - CAN4~CAN11：4 Block (可变payload)+ 4 Block(固定payload)。
+    - CAN12~CAN15：4 Block (可变payload);
+- 一个controller支持的最大Mailbox个数为128。
+- 一个controller支持一路RxFIFO，FIFO深度为：
+    - CAN0~CAN3：8 * 64 bytes;
+    - CAN4~CAN11：32 * 64 bytes;
+    - CAN12~CAN15：8 * 64 bytes;
+- 考虑到系统层面的唤醒功能，软件驱动不支持controller的PretendedNetwork功能。
+- 不支持 TTController，即不支持TTCAN（一种基于CAN总线的高层协议）。
+- CAN支持多核使用，可将不同的CAN控制器绑定在不同的核心上，但不支持多个核心同时使用同一个CAN控制器。
+</TabItem>
+</Tabs>
 ## 软件架构
-
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 S100芯片的CAN控制器位于MCU域，负责CAN数据收发。由于感知等应用位于Acore，因此部分CAN数据需要通过IPC核间通信机制转发到Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避MCU侧高频转发小数据块导致CPU占用率过高，造成MCU实时性降低等性能问题。
 
 S100 CAN转发方案的核心流程如下：
 - 首先通过MCU侧CAN2IPC模块将CAN通道映射到对应IPC通道，然后通过Acore侧CANHAL模块将IPC通道反映射为虚拟CAN设备通道。最后用户通过CANHAL提供的API接口获取虚拟CAN设备中的数据。其中，CAN2IPC模块为MCU侧服务，CANHAL模块为Acore侧提供给应用程序的动态库。
-- CAN采用中断的方式接收数据，当接收到数据之后调用CAN2IPC模块，CAN2IPC模块将MCU侧CAN数据，按照指定传输协议进行打包，然后通过IPC核间通信转发到Acore。Ipc instance 0中的channel0~channel7默认分配给CAN转发使用，Ipc instance 4中的channel7和channel2分配给CAN7和CAN8使用。
-- CANHAL模块获取来自MCU侧的IPC数据，按照指定的传输协议解析数据，并支持业务软件通过API获取原始CAN帧。
+- CAN采用中断的方式接收数据，当接收到数据之后调用CAN2IPC模块，CAN2IPC模块将MCU侧CAN数据，按照指定传输协议进行打包，然后通过IPC核间通信转发到Acore。Ipc instance 0和Ipc instance 4分配给can使用，默认使能can5-can9, can5-can9与IPC对应关系如下表：
 
+|             | Ipc_ShmCfgInstances | channel |
+|-------------|---------------------|---------|
+| can0        | 0                   | -       |
+| can1        | 0                   | -       |
+| can2        | 0                   | -       |
+| can3        | 0                   | -       |
+| can4        | 0                   | -       |
+| can5        | 0                   | 4       |
+| can6        | 0                   | 6       |
+| can7        | 4                   | 7       |
+| can8        | 4                   | 2       |
+| can9        | 0                   | 3       |
+- CANHAL模块获取来自MCU侧的IPC数据，按照指定的传输协议解析数据，并支持业务软件通过API获取原始CAN帧。
+</TabItem>
+<TabItem value="S600" label="S600">
+S600芯片的CAN控制器位于MCU域，负责CAN数据收发。由于感知等应用位于Acore，因此部分CAN数据需要通过IPC核间通信机制转发到Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避MCU侧高频转发小数据块导致CPU占用率过高，造成MCU实时性降低等性能问题。
+
+S600 CAN转发方案的核心流程如下：
+- 首先通过MCU侧CAN2IPC模块将CAN通道映射到对应IPC通道，然后通过Acore侧CANHAL模块将IPC通道反映射为虚拟CAN设备通道。最后用户通过CANHAL提供的API接口获取虚拟CAN设备中的数据。其中，CAN2IPC模块为MCU侧服务，CANHAL模块为Acore侧提供给应用程序的动态库。
+- CAN采用中断的方式接收数据，当接收到数据之后调用CAN2IPC模块，CAN2IPC模块将MCU侧CAN数据，按照指定传输协议进行打包，然后通过IPC核间通信转发到Acore。Ipc instance 0和Ipc instance 4分配给can使用，默认使能can1-can10, can1-can10与IPC对应关系如下表：
+
+|             | Ipc_ShmCfgInstances | channel |
+|-------------|---------------------|---------|
+| can0        | 0                   | -       |
+| can1        | 0                   | 1       |
+| can2        | 0                   | 2       |
+| can3        | 0                   | 3       |
+| can4        | 4                   | 4       |
+| can5        | 0                   | 4       |
+| can6        | 4                   | 0       |
+| can7        | 4                   | 1       |
+| can8        | 4                   | 2       |
+| can9        | 4                   | 3       |
+| can10       | 4                   | 5       |
+- CANHAL模块获取来自MCU侧的IPC数据，按照指定的传输协议解析数据，并支持业务软件通过API获取原始CAN帧。
+</TabItem>
+</Tabs>
 
 ![Acore与MCU之间透传CAN数据架构图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can.png)
 
@@ -43,7 +103,8 @@ S100 CAN转发方案的核心流程如下：
 - 由于CANHAL底层通过ipc核间通信进行传输，而ipc目前不支持多个进程或者线程读写同一个通道，因此CANHAL也不支持该特性。
 
 ## 硬件连接说明
-
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 - CAN物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S100的sample默认采用闭环总线网络架构**。
 
 - CAN总线的引脚位于S100的MCU扩展板上，引出了5路CAN接口，连接器分别对应了5个绿色的螺丝式的3 PIN连接器。1 PIN（三角标志）为GND，中间PIN为CAN_L，剩下的为CAN_H。
@@ -54,7 +115,16 @@ S100 CAN转发方案的核心流程如下：
 
 
 ![MCU CAN简笔图示](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_sche.png)
+</TabItem>
+<TabItem value="S600" label="S600">
+- CAN物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S100的sample默认采用闭环总线网络架构**。
 
+- CAN总线的引脚位于S600的MCU扩展板上，引出了5路CAN接口，连接器分别对应了5个绿色的螺丝式的3 PIN连接器。1 PIN（三角标志）为GND，中间PIN为CAN_L，剩下的为CAN_H。
+:::info 提示
+还没有具体图像，但是使用上与S100一致。
+:::
+</TabItem>
+</Tabs>
 CAN闭环网络使用两个120欧姆电阻是CAN总线的标准配置，以下以S100举例，如何正确接入电阻：
 :::info 提示
 整体而言，开环网络配置不需要接入120欧姆电阻，而闭环网络配置总共需要插入**两个**120欧姆电阻；
