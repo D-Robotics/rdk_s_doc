@@ -1,8 +1,16 @@
 # debug信息
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 Hbmem支持通过sys节点查询相关debug信息。
 
 ## 如何查看当前ION内存分配情况
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 ```shell
 cat /sys/kernel/debug/ion/heaps/ion_cma
@@ -11,11 +19,39 @@ cat /sys/kernel/debug/ion/heaps/carveout
 cat /sys/kernel/debug/ion/heaps/all_heap_info
 ```
 
+</TabItem>
+<TabItem value="S600" label="S600">
+
+```shell
+cat /sys/kernel/debug/ion/heaps/ion_cma
+cat /sys/kernel/debug/ion/heaps/cma_reserved
+cat /sys/kernel/debug/ion/heaps/carveout
+cat /sys/kernel/debug/ion/heaps/ion_uncache
+cat /sys/kernel/debug/ion/heaps/custom
+cat /sys/kernel/debug/ion/heaps/all_heap_info
+```
+
+</TabItem>
+</Tabs>
+
 ## 如何查看当前的ION预留内存的情况
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 
 其中ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）和 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap的预留情况也可以查看启动日志，如下所示，第一行代表ION_HEAP_TYPE_CARVEOUT的起始地址和大小，第二行代表ION_HEAP_TYPE_CMA_RESERVED的起始地址和大小，第三行代表ION_HEAP_TYPE_DMA的起始地址和大小：
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/03_ion_region_kernel_print.png)
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+其中ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）、 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap、ION_HEAP_TYPE_CUSTOM（HB_MEM_USAGE_PRIV_HEAP_SRAM）和uncache heap的预留情况也可以查看启动日志， 如下所示，第一行代表ION_HEAP_TYPE_CARVEOUT的起始地址和大小，第二行代表ION_HEAP_TYPE_CMA_RESERVED的起始地址和大小，第三行代表ION_HEAP_TYPE_CUSTOM的起始地址和大小，第四行ION_HEAP_TYPE_DMA的起始地址和大小，第五行uncache heap的起始地址和大小：
+
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/hbmem/03_ion_region_kernel_print.png)
+
+</TabItem>
+</Tabs>
 
 ## 如何直接读写内存
 
