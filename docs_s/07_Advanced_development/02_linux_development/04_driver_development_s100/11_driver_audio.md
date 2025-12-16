@@ -4,6 +4,34 @@ sidebar_position: 11
 
 # 音频调试指南
 
+:::warning
+**S600仅适配了USB声卡**，适配的USB声卡官网使用说明文档：https://wiki.seeedstudio.com/respeaker_xvf3800_introduction
+
+**其他音频设备的支持待更新......**
+
+USB声卡验证说明：
+1. 无需额外编译驱动和使能配置项。
+2. 参考官网说明文档，将设备和S600连接。
+3. 功能验证说明如下：
+ls /dev/snd 查看是否有```pcmC*D*```节点。有说明usb声卡加载成功
+
+查看声卡支持属性
+```
+arecord -Dhw:1,0 --dump-hw-params
+```
+通过这一步，我们可以了解到该USB声卡支持配置的通道数/采样率/位宽属性值，进而在测试录音/播放功能时指定相关参数。
+
+录音命令
+```
+arecord -Dhw:1,0 -c 2 -r 16000 -f S16_LE -t wav -d 10 test.wav
+```
+播放命令
+```
+aplay -Dhw:1,0 test.wav
+```
+:::
+
+
 本章主要是S100 I2S的基本特性，语音基础知识以及添加codec、调试声卡的说明
 
 ## 概述

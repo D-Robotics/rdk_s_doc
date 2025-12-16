@@ -4,6 +4,10 @@ sidebar_position: 07
 
 # 7.7 VDSP开发指南
 
+:::warning
+**VDSP功能使用在S600上暂不支持!!!**
+:::
+
 ## 基础调试指南
 
 ### CPU侧开发
