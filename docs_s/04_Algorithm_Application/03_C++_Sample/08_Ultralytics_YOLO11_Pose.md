@@ -11,7 +11,7 @@ sidebar_position: 8
 
     Ultralytics YOLO11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
 
-- HBM 模型名称： yolo11n_pose_nashe_640x640_nv12.hbm
+- HBM 模型名称： yolo11n_pose_nashp_640x640_nv12.hbm
 
 - 输入格式： NV12 格式图像（Y、UV 分离），尺寸为 640×640
 
@@ -83,13 +83,13 @@ sudo apt install libgflags-dev
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_pose_nashe_640x640_nv12.hbm
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_pose_nashp_640x640_nv12.hbm
 ```
 
 ## 参数说明
 | 参数名                | 说明                     | 默认值                                                   |
 | ------------------ | ---------------------- | ----------------------------------------------------- |
-| `--model_path`     | 模型文件路径（`.hbm`）              | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
+| `--model_path`     | 模型文件路径（`.hbm`）              | `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` |
 | `--test_img`       | 输入测试图片路径                    | `/app/res/assets/bus.jpg`                             |
 | `--label_file`     | 类别标签文件（每行一个类别名称）       | `/app/res/labels/coco_classes.names`                  |
 | `--score_thres`    | 置信度阈值（低于该值的检测将被过滤）     | `0.25`                                                |
@@ -106,7 +106,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     - 指定参数运行
         ```bash
         ./ultralytics_yolo11_pose \
-        --model_path /opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm \
+        --model_path /opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm \
         --test_img   /app/res/assets/bus.jpg \
         --label_file /app/res/labels/coco_classes.names \
         --score_thres 0.25 \

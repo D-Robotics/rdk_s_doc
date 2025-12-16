@@ -4,8 +4,9 @@ sidebar_position: 10
 
 
 # 车道线检测-LaneNet
+暂不支持，敬请期待！
 
-本示例基于BPU运行 LaneNet 模型，实现车道线的实例分割与二值分割，并将结果图像保存到本地，本示例代码位于`/app/cdev_demo/bpu/06_lane_detection_sample/01_lanenet/`目录下。
+<!-- 本示例基于BPU运行 LaneNet 模型，实现车道线的实例分割与二值分割，并将结果图像保存到本地，本示例代码位于`/app/cdev_demo/bpu/06_lane_detection_sample/01_lanenet/`目录下。
 
 ## 模型说明
 - 简介：
@@ -106,4 +107,4 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/Lanenet/lane
 ## 注意事项
 - 输出结果存储为instance_pred.png 和 binary_pred.png，用户可自行查看。
 
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。 -->

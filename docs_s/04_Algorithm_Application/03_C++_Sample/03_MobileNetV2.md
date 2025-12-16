@@ -64,13 +64,13 @@ sudo apt install libgflags-dev
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mobilenetv2_224x224_nv12.hbm
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/MobileNet/mobilenetv2_224x224_nv12.hbm
 ```
 
 ## 参数说明
 | 参数             | 说明                  | 默认值                                                        |
 | -------------- | ------------------- | ---------------------------------------------------------- |
-| `--model_path` | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm` |
+| `--model_path` | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
 | `--test_img`   | 测试图片路径              | `/app/res/assets/zebra_cls.jpg`                            |
 | `--label_file` | 类别标签映射文件路径（dict 格式） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt`        |
 | `--top_k`      | 输出 top-k 分类结果       | `5`                                                        |
@@ -85,7 +85,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mo
     - 指定参数运行
         ```bash
         ./mobilenetv2 \
-        --model_path /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm \
+        --model_path /opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm \
         --test_img /app/res/assets/zebra_cls.jpg \
         --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
         --top_k 5

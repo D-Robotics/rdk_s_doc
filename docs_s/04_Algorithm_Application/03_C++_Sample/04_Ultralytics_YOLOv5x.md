@@ -74,10 +74,16 @@ sudo apt install libgflags-dev
     make -j$(nproc)
     ```
 
+## 模型下载
+若在程序运行时未找到模型，可通过下列命令下载
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+```
+
 ## 参数说明
 | 参数              | 说明                       | 默认值                                     |
 | --------------- | --------------------------- | ------------------------------------------ |
-| `--model-path`  | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--model-path`  | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
 | `--test-img`    | 测试图片路径                 | `/app/res/assets/kite.jpg`                 |
 | `--label-file`  | 类别标签文件路径             | `/app/res/labels/coco_classes.names`       |
 | `--score-thres` | 置信度阈值 (过滤低分框)      | `0.25`                                     |
@@ -92,7 +98,7 @@ sudo apt install libgflags-dev
     - 指定参数运行
         ```bash
         ./ultralytics_yolov5x \
-            --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+            --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
             --test-img /app/res/assets/kite.jpg \
             --label-file /app/res/labels/coco_classes.names \
             --score-thres 0.25 \

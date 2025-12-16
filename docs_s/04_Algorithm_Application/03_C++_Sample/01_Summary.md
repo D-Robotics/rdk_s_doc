@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # 示例概述
 
-本项目包含多个基于 C/C++ 编写的 AI 示例程序，适用于 RDK S100平台，覆盖图像分类、目标检测、实例分割、姿态估计、OCR、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
+本项目包含多个基于 C/C++ 编写的 AI 示例程序，适用于 RDK S600平台，覆盖图像分类、目标检测、实例分割、姿态估计、OCR、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
 
 本项目的板端代码位置：`/app/cdev_demo/bpu`。
 
@@ -15,10 +15,10 @@ sidebar_position: 1
 |-- 02_detection_sample              # 目标检测示例（YOLO 等）
 |-- 03_instance_segmentation_sample  # 实例分割示例
 |-- 04_pose_sample                   # 关键点检测示例
-|-- 05_open_instance_seg_sample      # 开放实例分割示例
-|-- 06_lane_detection_sample         # 车道线检测示例
+|-- 05_open_instance_seg_sample      # 暂不支持
+|-- 06_lane_detection_sample         # 暂不支持
 |-- 07_speech_sample                 # 语音识别示例
-|-- 08_OCR_sample                    # 光学字符识别示例
+|-- 08_OCR_sample                    # 暂不支持
 |-- 09_usb_camera_sample             # USB 摄像头实时推理示例
 |-- 10_mipi_camera_sample            # MIPI 摄像头实时推理示例
 |-- 11_decode_yolov5x_display_sample # 视频解码、推理与显示示例
@@ -32,7 +32,7 @@ sidebar_position: 1
 在运行示例前，请确保系统环境满足以下要求：
 
 ### 硬件
-- 支持 BPU 的S100开发板
+- 支持 BPU 的S600开发板
 - 摄像头（USB 或 MIPI）若需运行相关示例
 
 ### 系统与工具链
@@ -40,7 +40,10 @@ sidebar_position: 1
 
 - 操作系统
 
-    - Ubuntu 22.04.5 LTS (Jammy Jellyfish)
+    - Distributor ID: Ubuntu
+    - Description:    Ubuntu 24.04.3 LTS
+    - Release:        24.04
+    - Codename:       noble
 
 - 编译工具链
 
@@ -66,11 +69,11 @@ sidebar_position: 1
     sudo apt install libsamplerate0-dev
     ```
 
-- OCR 文字识别示例
+<!-- - OCR 文字识别示例
     ```bash
     sudo apt update
     sudo apt install libpolyclipping-dev
-    ```
+    ``` -->
 
 ## 编译方法
 以图像分类示例 resnet18 为例：

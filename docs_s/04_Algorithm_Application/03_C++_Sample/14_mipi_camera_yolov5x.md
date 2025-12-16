@@ -73,6 +73,12 @@ sudo apt install libgflags-dev
     make -j$(nproc)
     ```
 
+## 模型下载
+若在程序运行时未找到模型，可通过下列命令下载
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+```
+
 ## 参数说明
 | 参数名           | 说明                                  | 默认值                                                  |
 | --------------- | ------------------------------------- | ------------------------------------------------------ |

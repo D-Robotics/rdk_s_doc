@@ -11,7 +11,7 @@ sidebar_position: 7
 
     Ultralytics YOLO11 是一款轻量级目标检测与实例分割模型，基于 YOLO 系列设计并融合了 anchor-free 与 anchor-based 思想结构与回归分箱（distributional regression）策略。本模型为其实例分割变体，支持同时输出边界框、类别概率和高质量的像素级掩膜，适用于实时场景中的多对象检测与分割任务。
 
-- HBM 模型名称： yolo11n_seg_nashe_640x640_nv12.hbm
+- HBM 模型名称： yolo11n_seg_nashp_640x640_nv12.hbm
 
 - 输入格式： NV12 格式图像（Y/UV 分离），尺寸为 640x640
 
@@ -78,13 +78,13 @@ sudo apt install libgflags-dev
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_seg_nashe_640x640_nv12.hbm
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_seg_nashp_640x640_nv12.hbm
 ```
 
 ## 参数说明
 | 参数名             | 说明                       | 默认值                                                              |
 | --------------- | ------------------------ | ---------------------------------------------------------------- |
-| `--model_path`  | 模型文件路径（`.hbm`）           | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
+| `--model_path`  | 模型文件路径（`.hbm`）           | `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` |
 | `--test_img`    | 输入测试图片路径                 | `/app/res/assets/office_desk.jpg`                                |
 | `--label_file`  | 类别标签文件路径                 | `/app/res/labels/coco_classes.names`                             |
 | `--score_thres` | 置信度过滤阈值（低于该值的框会被丢弃）      | `0.25`                                                           |
@@ -100,7 +100,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     - 指定参数运行
         ```bash
         ./ultralytics_yolo11_seg \
-            --model_path /opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm \
+            --model_path /opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm \
             --test_img /app/res/assets/office_desk.jpg \
             --label_file /app/res/labels/coco_classes.names \
             --score_thres 0.25 \

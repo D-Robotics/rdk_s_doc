@@ -4,14 +4,16 @@ sidebar_position: 9
 
 # 实例分割-Ultralytics YOLOE11
 
-本示例展示了如何在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于`/app/cdev_demo/bpu/05_open_instance_seg_sample/01_yoloe11_seg/`目录下。
+暂不支持，敬请期待！
+
+<!-- 本示例展示了如何在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于`/app/cdev_demo/bpu/05_open_instance_seg_sample/01_yoloe11_seg/`目录下。
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLOE11 是一款高效能的端侧实例分割模型，适用于开放词汇物体检测与分割任务。该模型通过多尺度特征提取、密集分类和原型掩膜生成，有效识别图像中的物体并输出精细的实例分割结果。本示例使用的是 Ultralytics YOLOE11 的轻量级版本，输入图像为 640x640，支持 4585 类的广义物体分类与分割。
 
-- HBM模型名称：yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
+- HBM模型名称：yoloe_11s_seg_pf_nashp_640x640_nv12.hbm
 
 - 输入格式：NV12，大小为 640x640
 
@@ -82,13 +84,13 @@ sudo apt install libgflags-dev
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yoloe_11s_seg_pf_nashp_640x640_nv12.hbm
 ```
 
 ## 参数说明
 | 参数名             | 说明                    | 默认值                                                       |
 | --------------- | --------------------- | --------------------------------------------------------- |
-| `--model_path`  | 模型文件路径（`.hbm`）        | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
+| `--model_path`  | 模型文件路径（`.hbm`）        | `/opt/hobot/model/s600/basic/yoloe_11s_seg_pf_nashp_640x640_nv12.hbm` |
 | `--test_img`    | 输入测试图片路径              | `/app/res/assets/office_desk.jpg`                         |
 | `--label_file`  | 类别标签文件（每行一个类别名）       | `/app/res/labels/coco_extended.names`                     |
 | `--score_thres` | 置信度阈值（低于该值的检测将被过滤）    | `0.25`                                                    |
@@ -104,7 +106,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     - 指定参数运行
         ```bash
         ./ultralytics_yoloe11_seg \
-            --model_path /opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
+            --model_path /opt/hobot/model/s600/basic/yoloe_11s_seg_pf_nashp_640x640_nv12.hbm \
             --test_img   /app/res/assets/office_desk.jpg \
             --label_file /app/res/labels/coco_extended.names \
             --score_thres 0.25 \
@@ -142,4 +144,4 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     ```
 
 ## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。
+- 若指定模型路径不存在，程序将尝试自动下载模型。 -->

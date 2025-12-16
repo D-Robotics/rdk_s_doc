@@ -74,13 +74,13 @@ sudo apt install -y libgflags-dev libsndfile1-dev libsamplerate0-dev
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 ```
 
 ## 参数说明
 | 参数名           | 说明                               | 默认值                                   |
 | -------------- | -------------------------------- | ------------------------------------- |
-| `--model_path` | 模型文件路径（`.hbm`）                   | `/opt/hobot/model/s100/basic/asr.hbm` |
+| `--model_path` | 模型文件路径（`.hbm`）                   | `/opt/hobot/model/s600/basic/asr.hbm` |
 | `--test_sound` | 输入音频文件路径（`.wav`）                 | `/app/res/assets/chi_sound.wav`       |
 | `--vocab_file` | 词表（JSON），映射 **class id → token** | `/app/res/labels/vocab.json`          |
 
@@ -94,7 +94,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
     - 指定参数运行
         ```bash
         ./asr \
-            --model_path /opt/hobot/model/s100/basic/asr.hbm \
+            --model_path /opt/hobot/model/s600/basic/asr.hbm \
             --test_sound /app/res/assets/chi_sound.wav \
             --vocab_file /app/res/labels/vocab.json
         ```

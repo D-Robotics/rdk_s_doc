@@ -3,8 +3,9 @@ sidebar_position: 12
 ---
 
 # 文本检测与识别-PaddleOCR
+暂不支持，敬请期待！
 
-本示例基于BPU推理引擎运行 PaddleOCR 模型进行文本检测与识别，支持中文场景的 OCR 识别与可视化，本示例代码位于`/app/cdev_demo/bpu/08_OCR_sample/01_paddleOCR/`目录下。
+<!-- 本示例基于BPU推理引擎运行 PaddleOCR 模型进行文本检测与识别，支持中文场景的 OCR 识别与可视化，本示例代码位于`/app/cdev_demo/bpu/08_OCR_sample/01_paddleOCR/`目录下。
 
 
 ## 模型说明
@@ -137,4 +138,4 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/paddle_ocr/c
 ## 注意事项
 - 输出结果存储为result.jpg，用户可自行查看。
 
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。 -->

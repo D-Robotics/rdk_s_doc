@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 图像分类-ResNet18
 
-本示例演示如何使用`C/C++`部署`ResNet18`模型进行图像分类推理，适用于搭载BPU芯片的 RDK S100 设备，本示例代码位于`/app/cdev_demo/bpu/01_classification_sample/01_resnet18/`目录下。
+本示例演示如何使用`C/C++`部署`ResNet18`模型进行图像分类推理，适用于搭载BPU芯片的 RDK S600 设备，本示例代码位于`/app/cdev_demo/bpu/01_classification_sample/01_resnet18/`目录下。
 
 ## 模型说明
 - 简介：
@@ -64,13 +64,13 @@ sudo apt install libgflags-dev
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ResNet/resnet18_224x224_nv12.hbm
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resnet18_224x224_nv12.hbm
 ```
 
 ## 参数说明
 | 参数             | 说明                                    | 默认值                                                 |
 | -------------- | ------------------------------------- | --------------------------------------------------- |
-| `--model_path` | 模型文件路径（`.hbm` 格式）                     | `/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`         |
+| `--model_path` | 模型文件路径（`.hbm` 格式）                     | `/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`         |
 | `--test_img`   | 测试图片路径                                | `/app/res/assets/zebra_cls.jpg`                     |
 | `--label_file` | ImageNet 类别映射（dict，每行 `index\tlabel`） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--top_k`      | 输出 Top-K 分类结果数                        | `5`                                                 |
@@ -85,7 +85,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ResNet/resne
     - 指定参数运行
         ```bash
         ./resnet_18 \
-        --model_path /opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm \
+        --model_path /opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm \
         --test_img   /app/res/assets/zebra_cls.jpg \
         --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
         --top_k 5
