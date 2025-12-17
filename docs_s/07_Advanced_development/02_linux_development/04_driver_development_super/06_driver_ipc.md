@@ -519,7 +519,22 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 
 
 #### Uart透传
-此sample实现了对`Uart5`的透传，测试时需要将`Uart5`的TX和RX短接。
+
+**测试前提**
+在测试前，需要将用到的`Uart`的TX和RX短接。其中S100和S600默认使用的Uart如下:
+
+| 平台 | Uart id |
+|------|---------|
+| S100 | Uart5  |
+| S600 | Uart10 |
+
+所使用的Uart可以对mcu侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如S600，将`UART_TEST_HW_CHANNEL`定义为对应的Uart硬件
+
+```
+#define UART_TEST_HW_CHANNEL (UART10_HW_CHANNEL)
+```
+
+测试sample实现了对`Uart`的透传，操作步骤如下：
 
 1. 开机进入S100/S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_uart`
 2. 编译：`make`
@@ -543,7 +558,22 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 
 #### SPI读写测试
 
-此sample实现了对SPI的回环测试，测试时需要将`SPI3`的MOSI和MISO短接。
+**测试前提**
+在测试前，需要将用到的`SPI`的MOSI和MISO短接。其中S100和S600默认使用的SPI如下:
+
+| 平台 | SPI id |
+|------|--------|
+| S100 | SPI3   |
+| S600 | SPI6   |
+
+所使用的SPI可以对mcu侧的`mcu/Config/McalCdd/gen_xxxx/Spi/inc/Spi_Board.h`文件进行修改，例如S600，将`SPI_IPCBOXUSEBUS`定义为对应的SPI硬件
+
+```
+#define SPI_IPCBOXUSEBUS (SPI_BUS6)
+```
+
+
+测试sample实现了对SPI的回环测试，以S100使用SPI3为例，若使用S600注意将`./ipcbox_spi -b 3`修改为`./ipcbox_spi -b 6`
 
 1. 开机进入S100/S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
 2. 编译：`make`
@@ -585,7 +615,8 @@ IpcBox只实现了对SPI Master的操控，有以下限制
 :::
 
 #### I2C测试
-此sample实现了对I2c的detect测试，I2c寄存器的读写
+
+测试sample实现了对I2c的detect测试，以S100使用I2c6为例，若使用S600注意将`./ipcbox_i2c detect 6`修改为`./ipcbox_i2c detect 13`
 
 1. 开机进入S100/S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
 2. 编译：`make`
@@ -634,6 +665,20 @@ ipcbox只实现了对i2c Master的简单传输，不支持Slave
 :::
 
 ### Python应用
+
+**测试前提**
+由于Python应用调用了IpcBox中的Uart，所以与C++的用例类似，在测试前，需要将用到的`Uart`的TX和RX短接。其中S100和S600默认使用的Uart如下:
+
+| 平台 | Uart id |
+|------|---------|
+| S100 | Uart5  |
+| S600 | Uart10 |
+
+所使用的Uart可以对mcu侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如S600，将`UART_TEST_HW_CHANNEL`定义为对应的Uart硬件
+
+```
+#define UART_TEST_HW_CHANNEL (UART10_HW_CHANNEL)
+```
 
 :::tip
 - 应用实际操作的是MCU侧外设，在使用前要确认MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../../../07_Advanced_development/05_mcu_development/01_basic_information.md#start_mcu1)
