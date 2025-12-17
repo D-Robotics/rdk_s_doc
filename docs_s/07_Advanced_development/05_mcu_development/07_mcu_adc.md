@@ -171,15 +171,54 @@ D-Robotics:/$ Adc_Test
 
 ```
 
-### ADC 软件触发连续转换应用
+</TabItem>
+<TabItem value="S600" label="S600">
 
+### ADC Private API测试
+
+private API属于oneshot API，用于测试ADC驱动。
+
+#### 使用示例
+
+
+- 语法
+
+```bash
+Adc_Test [instance] [ch_num]
+```
+
+**instance:** ADC 实例编号（必需）
+**ch_num:** ADC 通道编号（必需）
+
+
+- 示例
+
+```bash
+# 测试通道0
+D-Robotics:/$ Adc_Test 0 0
+Adc[0] channel[0] adcvalue:1117 voltage:490mv
+
+# 测试通道1
+D-Robotics:/$ Adc_Test 0 1
+Adc[0] channel[1] adcvalue:2393 voltage:1051mv
+
+# 测试通道2
+D-Robotics:/$ Adc_Test 0 2
+Adc[0] channel[2] adcvalue:1500 voltage:659mv
+```
+
+
+</TabItem>
+</Tabs>
+
+### ADC 软件触发连续转换应用
 
 ADC 软件触发连续采样的应用基于标准ADC驱动实现 。其特点为自动重复转换，完成一次转换后立即开始下一次转换，无需额外触发， 适用于需要持续监控信号的场景，但由于持续工作，功耗相对较高。
 
 
 #### 关键配置
 ```c
-// McalCdd/gen_s100_sip_B_mcu1/Adc/src/Adc_PBcfg.c
+// McalCdd/gen_xxxx/Adc/src/Adc_PBcfg.c
 static const Adc_GroupCfg Adc_GroupsCfg[] =
 {
     /**< @brief Group0 -- Logical Unit Id 0 -- Hardware Unit ADC0 */
@@ -231,181 +270,45 @@ static const Adc_GroupCfg Adc_GroupsCfg[] =
 Adc_TestNormal [Action]
 ```
 
-##### 非中断方式
 :::tip
-注意将Adc_GroupsCfg中的 AdcWithoutInterrupt 字段配置为STD_ON
+注意将Adc_GroupsCfg中的 AdcWithoutInterrupt 字段配置为STD_ON，下面以S600为例
 :::
 
 step1：启动ADC连续采集
 ```
 D-Robotics:/$ Adc_TestNormal start
-[0129.823385 0]Adc test running...
+[053.313330 0]Adc test running...
 ```
 
 step2：读取采集结果
 ```
-D-Robotics:/$ Adc_TestNormal read noirq
-[0112.002331 0]not use irq
-[0112.002480 0]##############################
-[0112.002970 0] ResultBuffer0[0]: 1103 : 484 mv
-[0112.003502 0] ResultBuffer0[1]: 2346 : 1031 mv
-[0112.004044 0] ResultBuffer0[2]: 1728 : 759 mv
-[0112.004576 0] ResultBuffer0[3]: 1704 : 749 mv
-[0112.005108 0] ResultBuffer0[4]: 828 : 363 mv
-[0112.005629 0] ResultBuffer0[5]: 3411 : 1499 mv
-[0112.006171 0] ResultBuffer0[6]: 3180 : 1397 mv
-[0112.006713 0] ResultBuffer0[7]: 3051 : 1341 mv
-[0112.007256 0] ResultBuffer0[8]: 2935 : 1290 mv
-[0112.007798 0] ResultBuffer0[9]: 2820 : 1239 mv
-[0112.008341 0] ResultBuffer0[10]: 2731 : 1200 mv
-[0112.008894 0] ResultBuffer0[11]: 2645 : 1162 mv
-[0112.009448 0] ResultBuffer0[12]: 1854 : 814 mv
-[0112.009990 0] ResultBuffer0[13]: 1798 : 790 mv
-[0112.010533 0]==============================
+D-Robotics:/$ Adc_TestNormal read
+[058.068598 0]##############################
+[058.069085 0]ADC0 channel: 0, sample: 2466 -> 1083 mv
+[058.069692 0]ADC0 channel: 1, sample: 595 -> 261 mv
+[058.070278 0]ADC0 channel: 2, sample: 585 -> 257 mv
+[058.070864 0]ADC0 channel: 3, sample: 120 -> 52 mv
+[058.071439 0]ADC0 channel: 4, sample: 574 -> 252 mv
+[058.072025 0]ADC0 channel: 5, sample: 591 -> 259 mv
+[058.072630 0]ADC0 channel: 6, sample: 596 -> 261 mv
+[058.073216 0]ADC0 channel: 7, sample: 671 -> 294 mv
+[058.073802 0]ADC1 channel: 0, sample: 1997 -> 877 mv
+[058.074398 0]ADC1 channel: 1, sample: 1955 -> 859 mv
+[058.074997 0]ADC1 channel: 2, sample: 112 -> 49 mv
+[058.075572 0]ADC1 channel: 3, sample: 214 -> 94 mv
+[058.076147 0]ADC1 channel: 4, sample: 384 -> 168 mv
+[058.076739 0]ADC1 channel: 5, sample: 504 -> 221 mv
+[058.077325 0]ADC1 channel: 6, sample: 612 -> 269 mv
+[058.077923 0]ADC1 channel: 7, sample: 695 -> 305 mv
+[058.078509 0]==============================
 
 ```
 
 step3：停止ADC连续采集
 ```
 D-Robotics:/$ Adc_TestNormal stop
-[0268.403214 0]Adc test exit.
+[096.167557 0]Adc test exit.
 ```
-
-
-##### 中断方式
-:::tip
-注意将Adc_GroupsCfg中的 AdcWithoutInterrupt 字段配置为STD_OFF
-:::
-
-step1：启动ADC连续采集
-```
-D-Robotics:/$ Adc_TestNormal start
-[0129.823385 0]Adc test running...
-```
-
-step2：读取采集结果
-```
-D-Robotics:/$ Adc_TestNormal read irq
-[0195.226347 0]##############################
-[0195.228233 0] ResultBuffer0[0]: 1103 : 484 mv
-[0195.230181 0] ResultBuffer0[1]: 2346 : 1031 mv
-[0195.232191 0] ResultBuffer0[2]: 1727 : 759 mv
-[0195.234261 0] ResultBuffer0[3]: 1705 : 749 mv
-[0195.236271 0] ResultBuffer0[4]: 827 : 363 mv
-[0195.238261 0] ResultBuffer0[5]: 3396 : 1492 mv
-[0195.240231 0] ResultBuffer0[6]: 3229 : 1419 mv
-[0195.242241 0] ResultBuffer0[7]: 3076 : 1352 mv
-[0195.244292 0] ResultBuffer0[8]: 2953 : 1298 mv
-[0195.246263 0] ResultBuffer0[9]: 2841 : 1248 mv
-[0195.248331 0] ResultBuffer0[10]: 2735 : 1202 mv
-[0195.250341 0] ResultBuffer0[11]: 2657 : 1167 mv
-[0195.252392 0] ResultBuffer0[12]: 1856 : 815 mv
-[0195.254442 0] ResultBuffer0[13]: 1799 : 790 mv
-[0195.256431 0]==============================
-```
-
-step3：停止ADC连续采集
-```
-D-Robotics:/$ Adc_TestNormal stop
-[0268.403214 0]Adc test exit.
-```
-</TabItem>
-<TabItem value="S600" label="S600">
-
-### ADC Private API测试
-
-private API属于oneshot API，用于测试ADC驱动。
-
-#### 使用示例
-
-
-- 语法
-
-```bash
-Adc_Test [instance] [ch_num]
-```
-
-**instance:** ADC 实例编号（必需）
-**ch_num:** ADC 通道编号（必需）
-
-
-- 示例
-
-```bash
-# 测试通道0
-D-Robotics:/$ Adc_Test 0 0
-Adc[0] channel[0] adcvalue:1117 voltage:490mv
-
-# 测试通道1
-D-Robotics:/$ Adc_Test 0 1
-Adc[0] channel[1] adcvalue:2393 voltage:1051mv
-
-# 测试通道2
-D-Robotics:/$ Adc_Test 0 2
-Adc[0] channel[2] adcvalue:1500 voltage:659mv
-```
-
-
-### ADC standard API测试
-
-##### 配置说明
-
-:::tip
-// TODO 持续更新中
-:::
-
-#### 使用示例
-
-这个应用实现了ADC标准API，对所有的adc通道进行多次测试。
-- 语法
-
-```bash
-Adc_TestNormal
-```
-
-- 示例
-
-```bash
-D-Robotics:/$ Adc_TestNormal
-[012349.428118 0]ADC0 channel: 0, sample: 2472 -> 1086 mv
-[012349.428746 0]ADC0 channel: 1, sample: 591 -> 259 mv
-[012349.429364 0]ADC0 channel: 2, sample: 585 -> 257 mv
-[012349.429983 0]ADC0 channel: 3, sample: 121 -> 53 mv
-[012349.430593 0]ADC0 channel: 4, sample: 585 -> 257 mv
-[012349.431211 0]ADC0 channel: 5, sample: 587 -> 258 mv
-[012349.431848 0]ADC0 channel: 6, sample: 596 -> 261 mv
-[012349.432466 0]ADC0 channel: 7, sample: 2030 -> 892 mv
-[012349.433096 0]ADC1 channel: 0, sample: 2053 -> 902 mv
-[012349.433725 0]ADC1 channel: 1, sample: 2158 -> 948 mv
-[012349.434354 0]ADC1 channel: 2, sample: 114 -> 50 mv
-[012349.434966 0]ADC1 channel: 3, sample: 2052 -> 901 mv
-[012349.435600 0]ADC1 channel: 4, sample: 2145 -> 942 mv
-[012349.436229 0]ADC1 channel: 5, sample: 2158 -> 948 mv
-[012349.436875 0]ADC1 channel: 6, sample: 2127 -> 934 mv
-[012349.437504 0]ADC1 channel: 7, sample: 2050 -> 901 mv
-[012349.438134 0]Timer: 0 Test Pass
-[012349.439569 0]ADC0 channel: 0, sample: 2475 -> 1087 mv
-[012349.440197 0]ADC0 channel: 1, sample: 589 -> 258 mv
-[012349.440822 0]ADC0 channel: 2, sample: 585 -> 257 mv
-[012349.441467 0]ADC0 channel: 3, sample: 121 -> 53 mv
-[012349.442065 0]ADC0 channel: 4, sample: 606 -> 266 mv
-[012349.442684 0]ADC0 channel: 5, sample: 579 -> 254 mv
-[012349.443302 0]ADC0 channel: 6, sample: 589 -> 258 mv
-[012349.443920 0]ADC0 channel: 7, sample: 1942 -> 853 mv
-[012349.444555 0]ADC1 channel: 0, sample: 2042 -> 897 mv
-[012349.445184 0]ADC1 channel: 1, sample: 2148 -> 944 mv
-[012349.445813 0]ADC1 channel: 2, sample: 114 -> 50 mv
-[012349.446421 0]ADC1 channel: 3, sample: 1962 -> 862 mv
-[012349.447071 0]ADC1 channel: 4, sample: 2114 -> 929 mv
-[012349.447700 0]ADC1 channel: 5, sample: 2149 -> 944 mv
-[012349.448330 0]ADC1 channel: 6, sample: 2125 -> 934 mv
-[012349.448961 0]ADC1 channel: 7, sample: 2044 -> 898 mv
-..........
-```
-
-</TabItem>
-</Tabs>
-
 
 
 ### 应用程序接口
