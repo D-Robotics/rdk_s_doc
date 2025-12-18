@@ -55,15 +55,11 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 拓扑图
 
-TODO
-
-![image-rdk_s600_camera_expansion_board_architecture_diagram.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_architecture_diagram.png)
+![image-rdk_s600_camera_expansion_board_architecture_diagram.png](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_architecture_diagram.png)
 
 ### 接口说明
 
-TODO
-
-![s600_camera_expansion_board_interface](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface.png)
+![s600_camera_expansion_board_interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png)
 
 | 位号  | 功能          |
 | ----- | ------------- |

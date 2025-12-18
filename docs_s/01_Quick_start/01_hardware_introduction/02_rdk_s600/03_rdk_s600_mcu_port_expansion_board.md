@@ -6,14 +6,14 @@ sidebar_position: 6
 
 ![image-rdk_s600_mcu_port_expansion_board](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png)
 
-RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持以太网、CAN_FD、ADC 等。
+RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持CAN_FD、ADC 等。
 
 :::warning
 
 1. 本产品仅适配 RDK S600 系列主板使用，禁止与其他型号设备兼容。
 2. 使用时需将本扩展板放置于稳固、平坦且不导电的表面，避免因支撑不稳导致设备跌落或短路。
 3. 若将非兼容设备与本 MCU 扩展板连接，由此造成的设备损坏，本产品不提供维修服务。
-4. 所有配套使用的外围设备（包括但不限于网络设备、CAN 设备）须符合使用国家/地区的安全与性能标准，并标注合规认证信息。
+4. 所有配套使用的外围设备（包括但不限于CAN 设备）须符合使用国家/地区的安全与性能标准，并标注合规认证信息。
 5. 与本扩展板连接的所有外围设备电缆及连接器需具备充足绝缘性能，确保满足电气安全要求。
 
 :::
@@ -37,40 +37,45 @@ RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 
 
 :::info 提示
 
-FPC 正面丝印"MAIN"标识侧对应 RDK S600 主板的 J23 接口，"SUB"标识侧对应本扩展板的 J1 接口。
+FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识侧对应本扩展板的 J301 接口。
 
 :::
 
-## 产品规格
+## 产品规格  
+:::info 说明
+
+在 V0P1 硬件版本中，2x SPI接口暂时无法使用。
+
+:::
 
 | **名称** | **参数**                                                                   |
 | -------- | -------------------------------------------------------------------------- |
-| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x IIC, 2x SPI |
+| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x IIC, 2x SPI<br/> |
 | 板载模组 | IMU：BMI088（SPI）                                                         |
 | 工作温度 | 0℃~65℃                                                                     |
 | 尺寸     | 70x70x17mm                                                                 |
 
+
 ### 拓扑图
 
-TODO
 
-![image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png)
+![image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png)
 
 ### 接口描述
 
-TODO
-![image-rdk_s600_mcu_expansionboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2_interface.png)
+![image-rdk_s600_mcu_expansionboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2_interface.png)  
+
 
 | 位号  | 功能              |
 | ----- | ----------------- |
-| J301  | 板对板连接器      |
+| J301  | MCU扩展板80-pin连接器      |
 | J401  | MCU-CAN1 接口     |
 | J402  | MCU-CAN2 接口     |
 | J403  | MCU-CAN3 接口     |
 | J404  | MCU-CAN4 接口     |
 | J405  | MCU-CAN10 接口    |
 | J501  | 30-Pin 接口       |
-| SW401 | MCU CAN 120Ω 开关 |
+| SW401 | MCU CAN 120Ω 开关 |  
 
 ## 接口说明
 
@@ -86,21 +91,26 @@ TODO
 
 ### 30-Pin（J501）
 
-TODO
+接口定义: [drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx)
 
-接口定义: TODO
+:::tip
+30-Pin Connector 中如下 5 个 IQ 接外设使用时，必须保证外设对应管脚上电默认高/低状态与 Pin 定义文件中的 Pull Up/Down 状态保持一致，不允许添加/连接额外上下拉：
+
+- PIN11: MCU_GPIO0_3V3
+- PIN15: MCU_SPI4_CSN0_3V3
+- PIN19: MCU_SPI4_MOSI_3V3
+- PIN16: MCU_SPI6_CSN0_3V3
+- PIN20: SPI6_MOSI_BOOT1_3V3
+
+:::
 
 ### IMU（U301）
-
-TODO
 
 集成惯性测量单元（IMU，型号 Bosch Sensortec BMI088），支持通过 SPI-13 串行总线实现通信控制。
 
 ## 指示灯
 
-TODO
-
-扩展板 100PIN 连接器（J1）下方设有 1 颗绿色 LED 指示灯（标记为"CONNECT"），用于指示电源状态和 MCU 扩展板与 RDK S600 的连接状态：
+扩展板5路开关（SW401）下方设有 1 颗绿色 LED 指示灯（标记为"LINK"），用于指示电源状态和 MCU 扩展板与 RDK S600 的连接状态：
 
 - 绿灯常亮：RDK S600 和 MCU 扩展板连接正常，5V 电源已正常供电；
 - 绿灯熄灭：RDK S600 和 MCU 扩展板连接异常，无 5V 供电。
