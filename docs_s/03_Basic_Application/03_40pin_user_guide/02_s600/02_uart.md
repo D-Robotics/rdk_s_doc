@@ -4,6 +4,10 @@ sidebar_position: 3
 
 # 3.3.2.3 串口应用
 
+:::warning
+该功能在 RDK S600 上未验证
+:::
+
 RDK S600 在 自锁10-PIN 支持 UART6 UART7，IO 电压 3.3V。
 
 请参阅 `/app/40pin_samples/test_serial.py`了解如何使用串口的详细信息。

@@ -4,6 +4,10 @@ sidebar_position: 4
 
 # 3.3.2.4 SPI 应用
 
+:::warning
+该功能在 RDK S600 上未验证
+:::
+
 RDK S600 在 10-PIN自锁接口 上引出了的 `SPI0` 总线，支持两个片选，IO 电压 3.3V；
 
 请参阅 `/app/40pin_samples/test_spi.py`了解如何使用 SPI 的详细信息。

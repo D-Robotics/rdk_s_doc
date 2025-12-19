@@ -4,6 +4,10 @@ sidebar_position: 1
 
 # 3.3.2.1 管脚定义与应用
 
+:::warning
+该功能在 RDK S600 上未验证
+:::
+
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
