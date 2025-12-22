@@ -26,4 +26,5 @@ sidebar_position: 2
 
 ## 适配列表
 
-请访问：[RDK S100 AVL List](https://horizonrobotics.feishu.cn/wiki/PFpHw4NFSin1ULk2VOic437rnBb)
+- RDK S100：[RDK S100 AVL List](https://horizonrobotics.feishu.cn/wiki/PFpHw4NFSin1ULk2VOic437rnBb)
+- RDK S600：[RDK S600 AVL List（Early Access）](https://horizonrobotics.feishu.cn/wiki/NMBEwLysUiDHFYk547BcgA9QnIf)
