@@ -1,4 +1,9 @@
 {
   "label": "10.2 RDK S600 版本发布",
-  "position": 2
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "slug": "Release_Note/s600_ReleaseNote",
+    "description": "RDK S600 版本发布"
+  }
 }
