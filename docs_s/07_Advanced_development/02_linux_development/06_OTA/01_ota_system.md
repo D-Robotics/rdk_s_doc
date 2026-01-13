@@ -144,7 +144,7 @@ tree
 #### OTA 升级 Hook 机制
 - Hook 脚本放置位置
 
-    hooks 目录用于存放 OTA 分区升级过程中的前置 / 后置处理脚本，用于在分区烧写前或烧写后执行一些自定义逻辑，例如：
+    hooks 目录用于存放 OTA 分区升级过程中的前置 / 后置处理脚本，用于在分区烧写前或烧写后执行一些自定义逻辑，包括但不限于：
 
     - 升级前的环境检查
 
@@ -177,13 +177,37 @@ tree
 
 - 使用示例
 
-    假设某分区的 base_name 为 MCU，则可在 hooks 目录下创建以下脚本：
+    以MCU分区为例
 
-    ```text
-    hooks/
-    ├── preinst_MCU.sh     # 分区烧写前执行
-    ├── postinst_MCU.sh    # 分区烧写后执行
-    ```
+    - 打开`out/product/img_packages/ota_tools/ota_info.json`文件，查看`MCU`部分的`base_name`字段，确认分区名称。
+
+        **以下仅为示例，不与实际代码挂钩，实际分区表请参考源码**
+        ```json
+
+            "MCU_a_S600_V1.0": {
+                "base_name": "MCU",
+                "out": "/home/zxs/s600/source/bootloader/out/target/product/img_packages/MCU_S600_V1.0.img",
+                "medium": "nor",
+                "nose_support": null,
+                "secure": true,
+                "part_type": "AB",
+                "multi_img": true,
+                "life_img": false,
+                "multi_key": false,
+                "have_anti_ver": null,
+                "size": 6291456,
+                "ota_update_mode": "image"
+            }
+
+        ```
+
+    - 在 hooks 目录下创建以下脚本：
+
+        ```text
+        hooks/
+        ├── preinst_MCU.sh     # 分区烧写前执行
+        ├── postinst_MCU.sh    # 分区烧写后执行
+        ```
 
     如果该分区不需要任何前置或后置处理逻辑，则无需创建任何脚本文件。
 
