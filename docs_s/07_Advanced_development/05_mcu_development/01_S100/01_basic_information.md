@@ -174,6 +174,12 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 3. mcu版本mcu_version：可以查看mcu版本信息，包括debug版本还是release版本，以及编译的时间；
 4. sbl版本sbl_version：可以查看sbl版本信息以及编译的时间，但是只有在remoteproc_mcu0下可以查看;
 5. mcu cpuloads: 可以获取到MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuloads数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。cpuloads的获取需要在MCU0/MCU1**已上电**的情况下才能进行获取。
+6. 固件名firmware：该固件名为remoteproc框架下mcu0启动mcu1时的，mcu1的固件名字。当mcu0启动mcu1时，linux会去板端/lib/firmware文件夹下，找相应文件，从而加载至相应位置。
+7. 节点名name：如mcu0，为soc:remoteproc_mcu0;mcu1,为soc:remoteproc_mcu1。
+8. 状态state：指remoteproc子系统的状态。启动mcu1，经过是mcu0 remoteproc节点，所以会变为runing状态。未启动mcu1时，状态为offline。
+9. recovery节点：指当mcu挂掉后，是否可以获取coredump寄存器信息。该功能正常情况下是使能的，如果用到该功能，请参考[MCU ramdump章节](./13_mcu_ramdump.md)章节。
+10. uevent节点：指设备类型，为DEVTYPE=remoteproc。
+11. timesync节点：主从设备同步时间需要，MCU不支持该功能。
 
 :::info 图片中的信息可能因版本更新而有所不同，文中示例仅供参考
 :::
