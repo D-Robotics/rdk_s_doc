@@ -158,7 +158,7 @@ This document summarizes the download resources related to the D-Robotics RDK su
     <tr>
       <td>📄 **Specifications**</td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5/RDX%20X5.pdf">RDK X5 Specifications</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/RDK%20X5%20MD.pdf">RDK X5 Module Specifications</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/drobotics_rdk_x5_module_en_v1_2.pdf">RDK X5 Module Specifications</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3/RDK%20X3.pdf">RDK X3 Specifications</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3_module/RDK%20X3%20MD.pdf">RDK X3 Module Specifications</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_ultra/RDK_Ultra_Product_Brief.pdf">Development Kit Specifications</a> / <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_ultra/RDK_Ultra_Module_Product_Brief.pdf">Module Specifications</a></td>
@@ -166,17 +166,17 @@ This document summarizes the download resources related to the D-Robotics RDK su
     </tr>
     <tr>
       <td>🔧 **Schematics**</td>
-      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_IO_CONN_PUBLIC_V1.0.pdf">RDK X5 Schematics</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK_X5_Module_Carrier_Board_V1P0_0526.pdf">Official Carrier Board Schematics</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_IO_CONN_PUBLIC_V1.1.pdf">RDK X5 Schematics</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK X5 Module Carrier Board V1P1.pdf">Official Carrier Board Schematics</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x3/RDK_X3_2.0_IO_Schematics.pdf">RDK X3-2.0 Schematics</a></td>
-      <td>Not Currently Available</td>
+      <td>N/A</td>
       <td>Not Currently Available</td>
       <td>Circuit design schematics for reference design use</td>
     </tr>
     <tr>
       <td>📐 **Mechanical Drawings**</td>
-      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_LPDDR4_4266MHz_V1P0_bottom_dxf.dxf">2D bottom</a> / <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_LPDDR4_4266MHz_V1P0_top_dxf.dxf">2D top</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK_X5_MD_HW_V0P3_TOP.dxf">Module Structure (TOP)</a> / <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK_X5_MD_HW_V0P3_BOTTOM.dxf">Module Structure (BOTTOM)</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_LPDDR4_4266MHz_V1P0_bottom_dxf.dxf">2D bottom</a>/<a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_LPDDR4_4266MHz_V1P0_top_dxf.dxf">2D top</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/rdk_x5_md_hw_v1p1_dxf.zip">Module Structure_V1P1 </a><br/><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/rdk_x5_md_hw_v1p2_dxf.zip">Module Structure_V1P2 </a><br/></td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x3/RDK_X3_2D_2.0.pdf">RDK X3-2.0 2D</a></td>
       <td>Not Currently Available</td>
       <td>Not Currently Available</td>
@@ -185,7 +185,7 @@ This document summarizes the download resources related to the D-Robotics RDK su
     <tr>
       <td>🎯 **3D Models**</td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/RDK_X5_LPDDR4_4266MHz_V1P0_pcb.stp">RDK X5 3D</a></td>
-      <td>Coming Soon</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/rdk_x5_md_hw_v1p0_0708.stp">Module Structure_V1P0</a><br/><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/rdk_x5_md_hw_v1p1-0709.stp">Module Structure_V1P1</a><br/><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK X5 Module V1P2 3D.stp">Module Structure_V1P2</a><br/></td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x3/RDK_X3_3D_Step_Models.STEP">RDK X3-2.0 3D</a></td>
       <td>Not Currently Available</td>
       <td>Not Currently Available</td>
@@ -193,9 +193,9 @@ This document summarizes the download resources related to the D-Robotics RDK su
     </tr>
     <tr>
       <td>🛠️ **Reference Design Materials**</td>
-      <td>Coming Soon</td>
-      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK%20X5%20Module%20Hardware%20Design%20Guide_V1P0_0526.pdf">Hardware Design Guide</a> / <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK%20X5%20Module%20Pinout%20Description%20and%20Application%20Note_V1P0_0526.xlsx">Interface Definition Document</a></td>
-      <td>Not Currently Available</td>
+      <td>N/A</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK X5 Module Hardware Design Guide V1P1.pdf">Hardware Design Guide</a> / <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK X5 Module Pinout Description and Application Note V1P1.xlsx">Interface Definition Document</a></td>
+      <td>N/A</td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x3_module/reference_design">Design Materials</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_ultra/reference_design">Design Materials</a></td>
       <td>Hardware schematics, PCB, 3D models, BOM, gerber, and other technical resources</td>
@@ -229,7 +229,7 @@ Complete specification materials for RDK X3/X5 related products, accessories and
     </tr>
     <tr>
       <td>📄 **Module Specifications**</td>
-      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/RDK%20X5%20MD.pdf">RDK X5 Module</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/drobotics_rdk_x5_module_en_v1_2.pdf">RDK X5 Module</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3_module/RDK%20X3%20MD.pdf">RDK X3 Module</a></td>
       <td>Core computing module detailed technical specifications and product description</td>
     </tr>
@@ -240,10 +240,20 @@ Complete specification materials for RDK X3/X5 related products, accessories and
       <td>Camera module technical specifications and interface details</td>
     </tr>
     <tr>
-      <td>👁️ **Stereo Camera Module**</td>
+      <td rowspan="2">👁️ **Stereo Camera Module**</td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5/RDK%20Stereo%20Camera%20Module.pdf">RDK Stereo Camera Module</a></td>
       <td>-</td>
       <td>Dual camera module for stereo vision applications</td>
+    </tr>
+    <tr>
+      <td>
+      <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/d_robotics_rdk_stereo_camera_gs130w_en_v1_0.pdf">RDK Stereo Camera  
+       GS130W</a>
+      </td>
+      <td>-</td>
+      <td>
+      Used in scenarios such as robotic vision, machine vision inspection, and real-time motion monitoring.
+      </td>
     </tr>
     <tr>
       <td>🔌 **Camera Adapter**</td>
@@ -298,7 +308,7 @@ Providing comprehensive hardware design support materials for module customers t
       <p><strong>Content:</strong>Provides detailed technical parameters including electrical characteristics, interface specifications, dimensional definitions, and operating environment.</p>
       <p><strong>Use Case:</strong>Helps customers comprehensively understand module performance metrics for selection evaluation or system planning.</p>
       <div class="doc-link">
-        <a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/RDK%20X5%20MD.pdf" className="download-link">📥 RDK X5 Module Datasheet</a>
+        <a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/drobotics_rdk_x5_module_en_v1_2.pdf" className="download-link">📥 RDK X5 Module Datasheet</a>
       </div>
     </div>
   </div>
@@ -309,11 +319,11 @@ Providing comprehensive hardware design support materials for module customers t
       <h4>Hardware Design Guide</h4>
     </div>
     <div class="doc-content">
-      <p><strong>File:</strong>RDK X5 Module Hardware Design Guide</p>
+      <p><strong>File:</strong>RDK X5 Module Hardware Design Guide V1P1</p>
       <p><strong>Content:</strong>Detailed guidance on designing custom carrier boards, including power supply, power management, interface connections, and electrical protection.</p>
       <p><strong>Use Case:</strong>Applicable during initial carrier board hardware development to ensure design compatibility and reliability.</p>
       <div class="doc-link">
-        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK%20X5%20Module%20Hardware%20Design%20Guide_V1P0_0526.pdf" className="download-link">📥 Hardware Design Guide</a>
+        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK X5 Module Hardware Design Guide V1P1.pdf" className="download-link">📥 Hardware Design Guide</a>
       </div>
     </div>
   </div>
@@ -324,11 +334,11 @@ Providing comprehensive hardware design support materials for module customers t
       <h4>Interface Definition & Application Notes</h4>
     </div>
     <div class="doc-content">
-      <p><strong>File:</strong>RDK X5 Module Pinout Description and Application Note</p>
+      <p><strong>File:</strong>RDK X5 Module Pinout Description and Application Note V1P1</p>
       <p><strong>Content:</strong>Detailed definition of module interface pins with typical application scenarios to help developers understand signal meanings and usage.</p>
       <p><strong>Use Case:</strong>For interface design phase, ensuring correct pin connections and facilitating debugging.</p>
       <div class="doc-link">
-        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK%20X5%20Module%20Pinout%20Description%20and%20Application%20Note_V1P0_0526.xlsx" className="download-link">📥 Interface Definition Document</a>
+        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK X5 Module Pinout Description and Application Note V1P1.xlsx" className="download-link">📥 Interface Definition Document</a>
       </div>
     </div>
   </div>
@@ -339,11 +349,11 @@ Providing comprehensive hardware design support materials for module customers t
       <h4>Official Carrier Board Reference Design</h4>
     </div>
     <div class="doc-content">
-      <p><strong>File:</strong>RDK_X5_Module_Carrier_Board</p>
+      <p><strong>File:</strong>RDK X5 Module Carrier Board V1P1</p>
       <p><strong>Content:</strong>Complete schematics of the official carrier board, serving as an important reference for customer designs.</p>
       <p><strong>Use Case:</strong>Reference design usage to shorten development cycles and reduce design errors.</p>
       <div class="doc-link">
-        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK_X5_Module_Carrier_Board_V1P0_0526.pdf" className="download-link">📥 Official Carrier Board Schematics</a>
+        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK X5 Module Carrier Board V1P1.pdf" className="download-link">📥 Official Carrier Board Schematics</a>
       </div>
     </div>
   </div>
@@ -354,12 +364,12 @@ Providing comprehensive hardware design support materials for module customers t
       <h4>Module Structural Drawings</h4>
     </div>
     <div class="doc-content">
-      <p><strong>File:</strong>RDK_X5_MD_HW_V0P3_BOTTOM.dxf / RDK_X5_MD_HW_V0P3_TOP.dxf</p>
+      <p><strong>File:</strong>&nbsp;rdk_x5_md_hw_v1p1<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rdk_x5_md_hw_v1p2<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
       <p><strong>Content:</strong>2D structural drawings (DXF format) of module top and bottom, including hole positions, dimensions, and interface layout.</p>
       <p><strong>Use Case:</strong>Supports mechanical design, module mounting, and enclosure design.</p>
       <div class="doc-link">
-        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK_X5_MD_HW_V0P3_TOP.dxf" className="download-link">📥 TOP Drawing</a>
-        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/RDK_X5_MD_HW_V0P3_BOTTOM.dxf" className="download-link">📥 BOTTOM Drawing</a>
+        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/rdk_x5_md_hw_v1p1_dxf.zip" className="download-link">📥 Drawing_V1P1</a>
+        <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/rdk_x5_md_hw_v1p2_dxf.zip" className="download-link">📥 Drawing_V1P2</a>
       </div>
     </div>
   </div>
@@ -375,6 +385,21 @@ Providing comprehensive hardware design support materials for module customers t
       <p><strong>Use Case:</strong>For initial market promotion, project proposals, or preliminary customer understanding.</p>
       <div class="doc-link">
         <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5_module/drobotics_rdk_x5_md_brief_v0p5.pdf" className="download-link">📥 Module Brief Introduction</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-card">
+    <div class="doc-header">
+      <span class="doc-icon">🔋</span>
+      <h4>Module Typical Scenario Power Consumption Introduction</h4>
+    </div>
+    <div class="doc-content">
+      <p><strong>File:</strong>RDK X5 Module Typical Scenario Power Consumption V1P0</p>
+      <p><strong>Content:</strong>RDK X5 Module typical scenario power consumption.</p>
+      <p><strong>Use Case:</strong>Used to illustrate the typical power consumption of the module, helping customers complete power consumption assessment during the whole machine design phase.</p>
+      <div class="doc-link">
+        <a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/RDK X5 Module Typical Scenario Power Consumption V1P0-EN.xlsx" className="download-link">📥 Module Typical Scenario Power Consumption Introduction</a>
       </div>
     </div>
   </div>
@@ -600,8 +625,10 @@ Providing comprehensive hardware design support materials for module customers t
       <th>🇯🇵 **MIC**</th>
       <th>🇨🇳 **SRRC**</th>
       <th>🇰🇷 **KCC**</th>
-      <th>♻️ **RoHS**</th>
-      <th>♻️ **RoHS**</th>
+      <th>🇬🇧 **UKCA**</th>
+      <th>🇪🇺 **RoHS**</th>
+      <th>🇹🇭 **NBTC**</th>
+      <th>🇲🇾 **SIRIM**</th>
     </tr>
   </thead>
   <tbody>
@@ -613,8 +640,10 @@ Providing comprehensive hardware design support materials for module customers t
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/D-ROBOTICS%20211-241225%20MIC%20Radio%20Certificate.pdf">📄 MIC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/SRRC.pdf">📄 SRRC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/KCC.pdf">📄 KCC</a></td>
+      <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/RoHS/2402Z107564E_CNAS.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/RoHS/2402Z107564E_CNAS.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/NBTC.pdf">📄 NBTC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/SIRIM.pdf">📄 SIRIM</a></td>
     </tr>
     <tr>
       <td>**RDK X3**</td>
@@ -624,8 +653,10 @@ Providing comprehensive hardware design support materials for module customers t
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X3/MIC/D-ROBOTICS%20211-240607%20MIC%20Radio%20Certificate.pdf">📄 MIC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X3/SRRC/SRRC_Approval_RDK_X3.pdf">📄 SRRC</a></td>
       <td>-</td>
+      <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X3/RoHS/P-2401V86686E%20RDK%20X3.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X3/RoHS/P-2401V86686E%20RDK%20X3.pdf">📄 RoHS</a></td>
+      <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <td>**RDK X3 Module**</td>
@@ -635,6 +666,21 @@ Providing comprehensive hardware design support materials for module customers t
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X3_MD/MIC/D-ROBOTICS%20211-240608%20MIC%20Radio%20Certificate.pdf">📄 MIC</a></td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+     <tr>
+      <td>**RDK X5 Module**</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/CE/AOC_for_CE_certification.pdf">📄 CE RED</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/CE/AOC_for_CE_certification.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/FCC/D-ROBOTICS 2BGUG-RDKX5M FCC Grant - DSS.PDF">📄 FCC Grant - DSS.pdf</a><br/><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/FCC/D-ROBOTICS 2BGUG-RDKX5M FCC Grant - DTS.PDF">📄 FCC Grant - DTS.pdf</a><br/><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/FCC/D-ROBOTICS 2BGUG-RDKX5M FCC Grant - NII.PDF">📄 FCC Grant - NII.pdf</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/MIC/D-ROBOTICS 211-250814 MIC Radio Certificate.pdf">📄 MIC</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/UKCA/AOC for UKCA 证书.pdf">📄 UKCA</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/ROHS/AOC 2501X28112E-13.pdf">📄 RoHS</a></td>
       <td>-</td>
       <td>-</td>
     </tr>

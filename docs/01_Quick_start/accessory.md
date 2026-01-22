@@ -108,12 +108,20 @@ sidebar_position: 8
 | --- | --------- | -------- | --------------- | --------- | --------- |
 | MIPI | 第三方 | OV5647摄像头 | 效果库优化，OV5647传感器，500W像素，FOV 对角160度 | 1920x1080@30fps(default), 640x480@60fps, 1280x960@30fps, 2592x1944@15fps(max) | [购买链接](https://item.taobao.com/item.htm?id=798392753457&skuId=5440216832503)  |
 | MIPI | 微雪 | OV5647摄像头 | OV5647传感器，500W像素，FOV 对角160度 | 1920x1080@30fps(default), 640x480@60fps, 1280x960@30fps, 2592x1944@15fps(max) | [购买链接](https://www.waveshare.net/shop/RPi-Camera-G.htm)  |
-| MIPI | 微雪 | IMX219摄像头 | 效果库优化，IMX219传感器，800W像素，FOV 对角160度| 1920x1080@30fps(default), 640x480@30fps, 1632x1232@30fps, 3264x2464@15fps(max) | [购买链接](https://www.waveshare.net/shop/IMX219-160-Camera.htm)  |
+| MIPI | 微雪 | IMX219摄像头 | Jetson Nano，IMX219传感器，800W像素，FOV 对角160度(default)| 1920x1080@30fps(default), 640x480@30fps, 1632x1232@30fps, 3264x2464@15fps(max) | [购买链接](https://www.waveshare.net/shop/IMX219-160-Camera.htm)  |
+| MIPI | 微雪 | IMX219摄像头 | Pi5，IMX219传感器，800W像素，FOV 对角120度(需要先使用srpi-config切换效果库)| 1920x1080@30fps(default), 1632x1232@30fps, 3264x2464@15fps(max) | [购买链接](https://e.tb.cn/h.7lIWpbM80XTnoFu?tk=28dmU3MVDG4)  |
 | MIPI | 微雪 | IMX477摄像头 | IMX477传感器，1230W像素，FOV 对角160度 | 1920x1080@50fps(default), 1280x960@120fps, 2016x1520@40fps, 4000x3000@10fps(max) | [购买链接](https://www.waveshare.net/shop/IMX477-160-12.3MP-Camera.htm)  |
 | MIPI | 第三方 | IMX415摄像头 | IMX415传感器，800W像素，FOV 对角123度，22PIN无需转接板 | 待测试 | [购买链接](https://e.tb.cn/h.hNHZxXLFdgg6oHj?tk=b1Id4UgKNVn)  |
 | MIPI | 亚博 | IMX219摄像头 | IMX219传感器，800W像素，FOV 对角77度 | 1920x1080@30fps(default), 640x480@30fps, 1632x1232@30fps, 3264x2464@15fps(max) | [购买链接](https://detail.tmall.com/item.htm?abbucket=2&id=710344235988&rn=f64e2bbcef718a13a9f9c261124febd2&spm=a1z10.5-b-s.w4011-22651484606.110.4df82edcjJ7wap)  |
 | USB | 亚博 | USB摄像头 | 免驱USB麦克风摄像头，720p | 1280x720@30fps | [购买链接](https://detail.tmall.com/item.htm?abbucket=2&id=633040443710&rn=ed9c7f0eecc103e742248e32a32ba62e&spm=a1z10.5-b-s.w4011-22651484606.152.c3406a83G6l62o)  |
 | USB | 轮趣 | USB摄像头 | 免驱USB摄像头，金属外壳，1080p | 1920x1080@30fps | [购买链接](https://detail.tmall.com/item.htm?abbucket=12&id=666156389569&ns=1&spm=a230r.1.14.1.13e570f3eFF1sJ&skuId=4972914294771)  |
+
+### 双目摄像头
+
+| 类型 | 供应商 | 型号 | 描述 | 支持分辨率 | 购买链接 |
+| --- | --------- | -------- | --------------- | --------- | --------- |
+| MIPI | 地瓜机器人 | RDK Stereo Camera GS130W | SC132GS全局快门传感器，130W像素，FOV 对角178度，双目间距80mm | 1280×1080@120fps |  [购买链接](https://detail.tmall.com/item.htm?id=991101307919&spm=a211lz.success.0.0.7dea2b901R1WG0&skuId=6129733154197)  |
+
 
 ### 显示屏
 
@@ -137,7 +145,7 @@ MIPI DSI 屏幕在使用前需要驱动适配，已支持的MIPI DSI屏幕型号
 | MIPI | 微雪 | 7.9英寸MIPI LCD | 电容触控屏 IPS广视角 超长屏幕 | 400×1280 | [购买链接](https://www.waveshare.net/shop/7.9inch-DSI-LCD.htm)  | [7.9inch DSI LCD](display_use/display_rdkx5#79inch-dsi-lcd) |
 | MIPI | 微雪 | 8英寸MIPI LCD | 电容触控屏 IPS广视角 | 1280×800 | [购买链接](https://www.waveshare.net/shop/8inch-DSI-LCD-C.htm)  | [8inch DSI LCD](display_use/display_rdkx5#8inch-dsi-lcd) |
 | MIPI | 微雪 | 10.1英寸MIPI LCD | 电容触控屏 IPS广视角 | 1280×800 | [购买链接](https://www.waveshare.net/shop/10.1inch-DSI-LCD-C.htm)  | [10.1inch DSI LCD](display_use/display_rdkx5#101inch-dsi-lcd) |
-
+| MIPI | 微雪 | 11.9英寸MIPI LCD | 电容触控屏 IPS广视角 超长屏幕 | 320×1480 | [购买链接](https://www.waveshare.net/shop/11.9inch-DSI-LCD.htm)  | [11.9inch DSI LCD](display_use/display_rdkx5#119inch-dsi-lcd) |
 
 ### 转接板
 

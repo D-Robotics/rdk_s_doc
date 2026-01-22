@@ -74,6 +74,32 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 ```
 
+## Using RDK Studio for Remote Login to the Development Board and Device Management
+
+1. Click `+Hardware` in the upper right corner to enter the connection type selection interface.
+   
+   ![+ RDK Device Interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/en/rdk_studio_left_menu_device_manage_hr_add_device.png)
+
+2. Click the question mark icon next to `Choose Connection Type` to pop up the connection method guide window. This guides users through the device connection method corresponding to the selected connection type. Click `Next` to view subsequent content, or click `Previous` to review previous prompts again. After viewing all guide content, click `Finish` to close the window. You can also click the ` × ` in the upper right corner to directly close the pop-up at any time.
+  
+   ![Guide Window Interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/en/rdk_studio_left_menu_device_manage_hr_add_device_help.png)
+
+3. Click to select the `IP Address` connection type, then click `Next` to enter the IP address input interface.
+    
+    ![IP Input Interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/en/remote_login_ip_input.png)
+
+4. Click `Next` to enter the user type selection interface. Here, set the user type for logging into the RDK device, with options for "sunrise(Regular User)" or "root(Super User)".
+    
+   ![User Type Selection Interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/en/rdk_studio_left_menu_device_manage_hr_add_device_usertype.png)
+
+5. Click `Next` to enter the Create RDK Device Entry interface. Fill in the device name and description.
+    
+   ![Create RDK Device Entry Interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/en/left_menu_device_manage_hr_add_device_IP_name.png)
+
+7. Click `Confirm` to successfully add the RDK device. The device information will be displayed on the device card list page.
+    
+   ![Device Card List Interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/en/left_menu_device_manage_hr_add_device_success_IP.png)
+
 ## Network Status Confirmation
 
 Video: https://www.youtube.com/watch?v=Of4mN0MaoiU&list=PLSxjn4YS2IuFUWcLGj2_uuCfLYnNYw6Ld&index=14
@@ -96,7 +122,7 @@ Before using remote login, it is necessary to confirm that the computer and deve
 
 Configure the IP address of the computer to be on the same subnet as the development board. For example, the development board: `192.168.1.10` and the computer: `192.168.1.100`. Assigning an IP address depends on the Operating System of the computer. Taking the WIN10 system as an example, the method to modify the static IP of the computer is as follows:
 
-![image-20220416110242445](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416110242445.png)
+![image-setstaticip-en](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-setstaticip-en.png)
 
 If you want to configure the wired network of the development board to obtain IP dynamically via DHCP mode, please refer to the [Wired Network](../02_System_configuration/01_network_blueteeth.md) chapter for configuration.
 
