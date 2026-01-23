@@ -50,15 +50,15 @@ pip install tqdm
 ```shell
 # 编译MCU1 Debug版本
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py s100_sip_B debug
+python build_freertos.py lite matrix B s100 mcu1 gcc debug
 # 1.首次编译会从arm官网下载一份工具链然后解压缩（10min左右），网速不好可能会存在工具链下载不成功或者工具链下载不完整的问题，可删除已下载的工具链，再多尝试下载几次。
 # 2.如果已有相关工具链，可以将其移至/Build/ToolChain/Gcc/内，当检测到有工具链，就不会从官网下载。
 # mv 工具链地址/gcc-arm-none-eabi-10.3-2021.10/ 新代码/Build/ToolChain/Gcc/gcc-arm-none-eabi-10.3-2021.10
 */
 
-# 编译MCU1 Debug版本
+# 编译MCU1 Release版本
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py s100_sip_B release
+python build_freertos.py lite matrix B s100 mcu1 gcc release
 ```
 
 ## 编译成功标志
