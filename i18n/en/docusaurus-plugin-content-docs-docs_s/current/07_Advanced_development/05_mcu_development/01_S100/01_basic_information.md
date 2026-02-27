@@ -50,18 +50,28 @@ pip install tqdm
 1. Python3 is used for compilation. The RDK S100 development environment uses Python 3.8.10.
 2. MCU1 images are available in two versions: debug and release. The debug version includes debugging information, while the release version does not.
 
+:::info Toolchain Download Instructions
+
+The first compilation will download the toolchain from the official ARM website and extract it (taking about 10 minutes). Poor network speed may cause issues such as unsuccessful or incomplete download of the toolchain. It is recommended to compile using the following method:
+
+1. Click [Toolchain Download Link](../../../01_Quick_start/download.md#tools-download) to download the compilation toolchain.
+
+2. Move the existing toolchain to /Build/ToolChain/Gcc/. The command to move the toolchain is as follows:
+
+    `mv toolchain_storage_path/toolchain_filename new_code/Build/ToolChain/Gcc/`
+
+3. If a toolchain is detected during compilation, it will not be downloaded from the official website again.
+
+:::
+
 ```shell
 # Compile MCU1 Debug version
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py lite matrix B s100 mcu1 gcc debug
-# 1. On the first compilation, the toolchain will be downloaded from ARM's official website and extracted (takes ~10 minutes). Poor network connectivity may cause download failures or incomplete downloads. In such cases, delete the partially downloaded toolchain and retry.
-# 2. If you already have the toolchain, move it to /Build/ToolChain/Gcc/. The build script will skip downloading if the toolchain is detected.
-# mv <toolchain_path>/gcc-arm-none-eabi-10.3-2021.10/ <new_code_path>/Build/ToolChain/Gcc/gcc-arm-none-eabi-10.3-2021.10
-*/
+python build_freertos.py s100_sip_B debug
 
 # Compile MCU1 Release version
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py lite matrix B s100 mcu1 gcc release
+python build_freertos.py s100_sip_B release
 ```
 
 ## Compilation Success Indication
@@ -212,7 +222,7 @@ The information shown in the images may vary with version updates. The examples 
 
 5. MCU serial log retrieval:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)  
 
 6. Obtain MCU CPU loads, as shown below:
 
@@ -355,11 +365,11 @@ int main(void)
 The MCU provides basic logging functionality, primarily used for debugging and runtime status recording. The current version of the Log module supports formatted string output, enabling developers to quickly locate issues and inspect variable states during debugging.
 
 Currently supported format specifiers in MCU logs include:
-- %s —— String
-- %d —— Signed decimal integer
-- %u —— Unsigned decimal integer
-- %x —— Lowercase hexadecimal
-- %X —— Uppercase hexadecimal
-- %c —— Single character
+- %s —— String  
+- %d —— Signed decimal integer  
+- %u —— Unsigned decimal integer  
+- %x —— Lowercase hexadecimal  
+- %X —— Uppercase hexadecimal  
+- %c —— Single character  
 
 Other format specifiers are not currently supported. Future versions will gradually expand support for additional data types and formatting options to meet more diverse debugging needs.
