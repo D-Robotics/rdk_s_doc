@@ -106,6 +106,8 @@ The desktop graphical system supports four login modes:
 3. Character terminal, automatically log in.
 4. Character Terminal, User Manual Login
 
+The X5 series boards currently do not support Character terminal.
+
 Open `RDK Configuration` through the menu bar. Select System Options -> Boot / Auto Login to enter the following configuration options. Select the corresponding options according to your needs.
 
 ![image-20231127112703844](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image-20231127112703844.png)
@@ -186,3 +188,35 @@ Step three: Select "Intelligent Pinyin" and then you can right-click on the EN i
 
 </TabItem>
 </Tabs>
+
+## User Management
+
+**Modify Username**
+
+Taking the new username as `usertest` as an example:
+
+```shell
+# Terminate all processes of the sunrise user
+sudo pkill -u sunrise
+# Rename the sunrise user to usertest
+sudo usermod -l usertest sunrise
+# Change the user's home directory to /home/usertest
+sudo usermod -d /home/usertest -m usertest
+# Change the user password
+sudo passwd usertest
+```
+
+Finally, modify `autologin-user=sunrise` to `autologin-user=usertest` in the file `/etc/lightdm/lightdm.conf.d/22-hobot-autologin.conf` to update the auto-login username.
+
+**Add a New User**
+
+Taking adding a new user `usertest` as an example:
+
+```shell
+sudo useradd -U -m -d /home/usertest -k /etc/skel/ -s /bin/bash -G disk,kmem,dialout,sudo,audio,video,render,i2c,lightdm,vpu,gdm,weston-launch,graphics,jpu,ipu,vps,misc,gpio usertest
+sudo passwd usertest
+sudo cp -aRf /etc/skel/. /home/usertest
+sudo chown -R usertest:usertest /home/usertest
+```
+
+You can also refer to the steps for modifying the username to set the new user as the auto-login user.

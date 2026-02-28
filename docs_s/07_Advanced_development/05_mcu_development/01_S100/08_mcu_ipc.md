@@ -196,14 +196,14 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 
 | Instance | Channel | receive core id  | Description         |
 |----------|---------|------------------|---------------------|
-| instance5| 0       | Ipc_Receive_Core0| RTC-YSN8130         |
-| instance5| 1       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance5| 2       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance5| 3       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance5| 4       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance5| 5       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance5| 6       | Ipc_Receive_Core0| 客户预留：Reserve   |
-| instance5| 7       | Ipc_Receive_Core0| 客户预留：Reserve   |
+| instance5| 0       | Ipc_Receive_Core0| RTC驱动             |
+| instance5| 1       | Ipc_Receive_Core0| RTC驱动             |
+| instance5| 2       | Ipc_Receive_Core0| RTC驱动             |
+| instance5| 3       | Ipc_Receive_Core0| RTC驱动             |
+| instance5| 4       | Ipc_Receive_Core0| RTC驱动             |
+| instance5| 5       | Ipc_Receive_Core0| RTC驱动             |
+| instance5| 6       | Ipc_Receive_Core0| RTC驱动             |
+| instance5| 7       | Ipc_Receive_Core0| RTC驱动             |
 
 #### instance6
 

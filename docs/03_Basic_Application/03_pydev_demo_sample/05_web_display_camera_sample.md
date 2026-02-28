@@ -46,6 +46,13 @@ root@ubuntu:/app/pydev_demo/05_web_display_camera_sample# tree
 
 ### 编译以及运行
 首先需要启动 Nginx 服务器，然后运行 Python 脚本：
+
+:::info 提示
+
+采用 IMX477 相机时需要设置 mipi_camera_web.py 文件中（第 39 行左右）的 fps=50。
+
+:::
+
 ```bash
 # 启动 Nginx 服务器
 ./start_nginx.sh
@@ -57,12 +64,12 @@ python3 mipi_camera_web.py
 
 ### 执行效果
 
-运行后，程序会启动 Web 服务，可以通过浏览器访问开发板的 IP 地址查看实时视频流和目标检测结果：
+运行后，程序会启动 Web 服务，可以通过浏览器访问开发板的 IP 地址查看实时视频流和目标检测结果。
 
-```
-```
+在浏览器中访问 http:// 开发板 IP ，默认的是 http://192.168.127.10。
+![pydev_05_wb_disp_web_img](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_pydev_demo_sample/image/pydev_05_wb_disp_web_img.png)
 
-在浏览器中访问 http:// 开发板 IP 即可看到实时视频流和目标检测结果。默认的是 http://192.168.127.10
+点击浏览器中显示的 `web Display` ，即可看到实时视频流和目标检测结果，效果可以查看文章开头的 [效果展示小节](#效果展示)
 
 ## 详细介绍
 

@@ -245,7 +245,10 @@ Slave端log:
   ptp4l[8332.885]: master offset 47 s3 freq -349 path delay 689
   ptp4l[8333.885]: master offset 50 s3 freq -332 path delay 689
   ptp4l[8334.885]: master offset 22 s3 freq -345 path delay 689
+```
+
   Master端log:
+```
   ptp4l[3469.136]: config item /var/run/ptp4l.inhibit_delay_req is 1
   ptp4l[3469.136]: config item (null).uds_address is '/var/run/ptp4l'
   ptp4l[3469.136]: port 0: INITIALIZING to LISTENING on INIT_COMPLETE
@@ -645,7 +648,7 @@ MCU侧本sample的编译环境使用MCU代码中的build工具，请参考：[MC
 
 ```
   # 进入Build/FreeRtos目录
-  python build_freertos.py s100_sip_B debug # 硬件板或者项目名
+  python build_freertos.py lite matrix B s100 gcc debug # 硬件板或者项目名
 ```
 
 #### 运行

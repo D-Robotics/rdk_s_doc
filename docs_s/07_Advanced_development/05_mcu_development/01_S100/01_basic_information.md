@@ -47,18 +47,27 @@ pip install tqdm
 1. 编译会使用python3，RDK S100开发使用的python3的版本为3.8.10；
 2. MCU1的镜像分为debug和release两个版本。debug版本的镜像会有调试信息，而release版本不含调试信息。
 
+:::info 工具链下载说明
+
+首次编译会从 arm 官网下载工具链后解压缩（10min左右），网速不好可能会导致工具链下载不成功或下载不完整的问题，建议通过以下方式下载编译工具链：
+1. 点击[工具链下载链接](../../../01_Quick_start/download.md#工具下载)，下载编译工具链。
+2. 将已有工具链移至 /Build/ToolChain/Gcc/ 内，移动工具链命令如下：
+
+    `mv 工具链存储路径/工具链文件名 新代码/Build/ToolChain/Gcc/`
+
+3. 编译时检测到有工具链，不会再从官网下载。
+
+:::
+
 ```shell
-# 编译MCU1 Debug版本
+# 编译 MCU1 Debug 版本
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py s100_sip_B debug
-# 1.首次编译会从arm官网下载一份工具链然后解压缩（10min左右），网速不好可能会存在工具链下载不成功或者工具链下载不完整的问题，可删除已下载的工具链，再多尝试下载几次。
-# 2.如果已有相关工具链，可以将其移至/Build/ToolChain/Gcc/内，当检测到有工具链，就不会从官网下载。
-# mv 工具链地址/gcc-arm-none-eabi-10.3-2021.10/ 新代码/Build/ToolChain/Gcc/gcc-arm-none-eabi-10.3-2021.10
+python build_freertos.py lite matrix B s100 mcu1 gcc debug
 */
 
-# 编译MCU1 Debug版本
+# 编译MCU1 Release版本
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py s100_sip_B release
+python build_freertos.py lite matrix B s100 mcu1 gcc release
 ```
 
 ## 编译成功标志
@@ -174,6 +183,12 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 3. mcu版本mcu_version：可以查看mcu版本信息，包括debug版本还是release版本，以及编译的时间；
 4. sbl版本sbl_version：可以查看sbl版本信息以及编译的时间，但是只有在remoteproc_mcu0下可以查看;
 5. mcu cpuloads: 可以获取到MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuloads数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。cpuloads的获取需要在MCU0/MCU1**已上电**的情况下才能进行获取。
+6. 固件名firmware：该固件名为remoteproc框架下mcu0启动mcu1时的，mcu1的固件名字。当mcu0启动mcu1时，linux会去板端/lib/firmware文件夹下，找相应文件，从而加载至相应位置。
+7. 节点名name：如mcu0，为soc:remoteproc_mcu0;mcu1,为soc:remoteproc_mcu1。
+8. 状态state：指remoteproc子系统的状态。启动mcu1，经过是mcu0 remoteproc节点，所以会变为runing状态。未启动mcu1时，状态为offline。
+9. recovery节点：指当mcu挂掉后，是否可以获取coredump寄存器信息。该功能正常情况下是使能的，如果用到该功能，请参考[MCU ramdump章节](./13_mcu_ramdump.md)章节。
+10. uevent节点：指设备类型，为DEVTYPE=remoteproc。
+11. timesync节点：主从设备同步时间需要，MCU不支持该功能。
 
 :::info 图片中的信息可能因版本更新而有所不同，文中示例仅供参考
 :::
@@ -216,6 +231,10 @@ fastboot oem interface:mtd
 fastboot flash MCU_a "xxx/MCU_S100_SIP_V2.0.img"
 fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 ```
+
+#### 空板烧录
+**空板烧录请参考以下工具烧录**
+
 
 #### 空板烧录
 **空板烧录请参考以下工具烧录**
