@@ -233,27 +233,9 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 ```
 
 #### 空板烧录
-**空板烧录请参考以下工具烧录**
+**空板烧录请使用 Xburn 工具指定区域烧录，并指定 `miniboot_flash`**
 
-
-#### 空板烧录
-**空板烧录请参考以下工具烧录**
-
-### 工具烧录
-1. 能够正常进入Uboot时，按如下配置：
-   1. “下载模式”选择“uboot”；
-   2. “储存介质”选择“emmc”；
-   3. “类型”选择“secure”；
-   4. “选择镜像”位置请选择带有`img_packages`和`xmodem_tools`的文件夹；
-   5. “acore串口”根据实际情况选择；
-   6. “波特率”选择“921600”；
-   7. 单击“其他配置”的右方的小箭头，点击“分区选择”，然后只勾选“miniboot_flash”；
-
-  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_uboot.png)
-
-2. 不能正常进入UBoot，下载模式选择“usb”，不需要选择串口及波特率，其他配置与能够正常进入Uboot时保持一致：
-
-  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_usb.png)
+关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)章节
 
 ## MCU1 Undefined/Abort 异常处理原理
 
