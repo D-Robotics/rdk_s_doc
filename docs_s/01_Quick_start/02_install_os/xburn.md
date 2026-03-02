@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 ---
 
-# 1.2.2 Xburn 烧录工具
+# 1.2.3 Xburn 烧录工具
 
 Xburn 提供界面化烧录升级功能，如下
 
@@ -16,7 +16,7 @@ Xburn 提供界面化烧录升级功能，如下
 说明如下
 1. 产品类型： 请选择您要烧录设备的对应产品类型。
 
-- 每种产品类型对应一种特定的硬件型号或配置（例如 X5 、 RDKS100 等）。
+- 每种产品类型对应一种特定的硬件型号或配置（例如 X5 、 RDKS100 、RDKS600 等）。
 
 - 请确保选择与设备实际型号一致的选项，以确保刷入的固件与设备兼容，从而避免刷机失败。
 
@@ -122,5 +122,3 @@ brew update
 brew install android-platform-tools
 brew install dfu-util
 ```
-
-

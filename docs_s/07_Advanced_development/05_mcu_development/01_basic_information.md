@@ -353,7 +353,7 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 </TabItem>
 <TabItem value="S600" label="S600">
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/mcu_usb_s600.png)
+关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md)章节
 
 </TabItem>
 </Tabs>
