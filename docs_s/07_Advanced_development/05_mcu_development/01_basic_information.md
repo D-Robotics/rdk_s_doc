@@ -51,21 +51,30 @@ pip install tqdm
 
 1. 编译会使用python3，RDK S100开发使用的python3的版本为3.8.10；
 2. MCU1的镜像分为debug和release两个版本。debug版本的镜像会有调试信息，而release版本不含调试信息。
+
+:::info 工具链下载说明
+
+首次编译会从 arm 官网下载工具链后解压缩（10min左右），网速不好可能会导致工具链下载不成功或下载不完整的问题，建议通过以下方式下载编译工具链：
+1. 点击[工具链下载链接](../../../01_Quick_start/download.md#工具下载)，下载编译工具链。
+2. 将已有工具链移至 /Build/ToolChain/Gcc/ 内，移动工具链命令如下：
+
+    `mv 工具链存储路径/工具链文件名 新代码/Build/ToolChain/Gcc/`
+
+3. 编译时检测到有工具链，不会再从官网下载。
+
+:::
+
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
-
 ```shell
-# 编译MCU1 Debug版本
+# 编译MCU1 Debug 版本
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py s100_sip_B debug
-# 1.首次编译会从arm官网下载一份工具链然后解压缩（10min左右），网速不好可能会存在工具链下载不成功或者工具链下载不完整的问题，可删除已下载的工具链，再多尝试下载几次。
-# 2.如果已有相关工具链，可以将其移至/Build/ToolChain/Gcc/内，当检测到有工具链，就不会从官网下载。
-# mv 工具链地址/gcc-arm-none-eabi-10.3-2021.10/ 新代码/Build/ToolChain/Gcc/gcc-arm-none-eabi-10.3-2021.10
+python build_freertos.py lite matrix B s100 mcu1 gcc debug
 */
 
-# 编译MCU1 Debug版本
+# 编译MCU1 Release版本
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py s100_sip_B release
+python build_freertos.py lite matrix B s100 mcu1 gcc release
 ```
 </TabItem>
 <TabItem value="S600" label="S600">
@@ -74,12 +83,8 @@ python build_freertos.py s100_sip_B release
 # 编译MCU1 Debug版本
 cd mcu/Build/FreeRtos_mcu1
 python build_freertos.py lite matrix B s600 gcc mcu1 debug
-# 1.首次编译会从arm官网下载一份工具链然后解压缩（10min左右），网速不好可能会存在工具链下载不成功或者工具链下载不完整的问题，可删除已下载的工具链，再多尝试下载几次。
-# 2.如果已有相关工具链，可以将其移至/Build/ToolChain/Gcc/内，当检测到有工具链，就不会从官网下载。
-# mv 工具链地址/Gcc/ 新代码/Build/ToolChain/Gcc/
-*/
 
-# 编译MCU1 Debug版本
+# 编译MCU1 Release版本
 cd mcu/Build/FreeRtos_mcu1
 python build_freertos.py lite matrix B s600 gcc mcu1 release
 ```
@@ -276,6 +281,12 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 3. mcu版本mcu_version：可以查看mcu版本信息，包括debug版本还是release版本，以及编译的时间；
 4. sbl版本sbl_version：可以查看sbl版本信息以及编译的时间，但是只有在remoteproc_mcu0下可以查看;
 5. mcu cpuloads: 可以获取到MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去debug。cpuloads数据获取需要1s的延迟，因为会涉及到大量数据拷贝至sysfs文件系统下的输出buffer。cpuloads的获取需要在MCU0/MCU1**已上电**的情况下才能进行获取。
+6. 固件名firmware：该固件名为remoteproc框架下mcu0启动mcu1时的，mcu1的固件名字。当mcu0启动mcu1时，linux会去板端/lib/firmware文件夹下，找相应文件，从而加载至相应位置。
+7. 节点名name：如mcu0，为soc:remoteproc_mcu0;mcu1,为soc:remoteproc_mcu1。
+8. 状态state：指remoteproc子系统的状态。启动mcu1，经过是mcu0 remoteproc节点，所以会变为runing状态。未启动mcu1时，状态为offline。
+9. recovery节点：指当mcu挂掉后，是否可以获取coredump寄存器信息。该功能正常情况下是使能的，如果用到该功能，请参考[MCU ramdump章节](./13_mcu_ramdump.md)章节。
+10. uevent节点：指设备类型，为DEVTYPE=remoteproc。
+11. timesync节点：主从设备同步时间需要，MCU不支持该功能。
 
 :::info 图片中的信息可能因版本更新而有所不同，文中示例仅供参考
 :::
@@ -332,51 +343,12 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 ```
 
 #### 空板烧录
-**空板烧录请参考以下工具烧录**
+**空板烧录请使用 Xburn 工具指定区域烧录，并指定 `miniboot_flash`**
 
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
 
-工具详细说明请参考[1.2 系统烧录](../../01_Quick_start/02_install_os/rdk_s100.md)章节
-
-</TabItem>
-<TabItem value="S600" label="S600">
-
-工具详细说明请参考[1.2 系统烧录](../../01_Quick_start/02_install_os/rdk_s600.md)章节
-
-</TabItem>
-</Tabs>
-
-### 工具烧录
-1. 能够正常进入Uboot时，按如下配置(实例截图是以S100为例)：
-   1. “产品型号”根据实际型号去选择“S100”或“S600”；
-   2. “下载模式”选择“uboot”；
-   3. “储存介质”根据实际型号去选择(S100指定“emmc”，S600指定“ufc”)；
-   4. “类型”选择“secure”；
-   5. “选择镜像”位置请选择带有`img_packages`和`xmodem_tools`的文件夹；
-   6. “acore串口”根据实际情况选择；
-   7. “波特率”选择“921600”；
-   8. 单击“其他配置”的右方的小箭头，点击“分区选择”，然后只勾选“miniboot_flash”；
-
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
-
-  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_uboot.png)
-
-</TabItem>
-<TabItem value="S600" label="S600">
-
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/mcu_uboot_s600.png)
-
-</TabItem>
-</Tabs>
-
-2. 不能正常进入UBoot，下载模式选择“usb”，不需要选择串口及波特率，其他配置与能够正常进入Uboot时保持一致：
-
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
-
-  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_usb.png)
+关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)章节
 
 </TabItem>
 <TabItem value="S600" label="S600">

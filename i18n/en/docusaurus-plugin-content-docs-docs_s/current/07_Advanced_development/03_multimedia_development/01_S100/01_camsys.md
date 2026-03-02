@@ -109,7 +109,7 @@ GDC Tool is a PC-based utility that enables offline simulation of GDC processing
     - **Launch the application**: In the command prompt, navigate to the tool directory and run `node.exe app.js`. Then open Chrome and go to http://localhost:3000/.
 
 2. **Unix Environment**
-    - **Installation prerequisites** (macOS): Run `brew install node`.
+    - **Installation prerequisites** (MacOS): Run `brew install node`.
     - **Install dependencies**: In the tool directory, run `npm install --production`.
     - **Launch the application**: Run `node app.js` and open http://localhost:3000/ in your browser.
 
@@ -1089,7 +1089,7 @@ After RDK-S100 connects to cameras, the data flows through subsequent processing
 
 
 :::tip
-The commercial version offers more comprehensive feature support, deeper hardware capability exposure, and exclusive customization options. To ensure compliance and secure delivery, access to the commercial version will be granted through the following process:
+The commercial version offers more comprehensive feature support, deeper hardware capability exposure, and exclusive customization options. To ensure compliance and secure delivery, access to the commercial version will be granted through the following process.
 
 **Commercial Version Access Process:**  
 1. **Complete a questionnaire**: Submit your organization’s information and intended use case.  
@@ -1098,7 +1098,7 @@ The commercial version offers more comprehensive feature support, deeper hardwar
 
 If you wish to access the commercial version, please complete the questionnaire below. We will contact you within 3–5 business days:  
 
-Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre  
+Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnJQBMIkRm6K79rjXR0hr0Fg  
 :::
 
 - **CIM**: Receives input from RX and can output online to ISP0/ISP1 (RAW) or PYM0/PYM1 (YUV), or store offline to DDR for subsequent modules to access via DDR.
@@ -1483,17 +1483,17 @@ Create a camera handle and a deserializer handle based on the provided configura
 
 This API creates cameras by parsing a JSON configuration file, which differs from the non-JSON approach used in the sample code. For further details, please consult your FAE.
 
-:::tip
+:::tip Commercial Support
 The commercial version offers more comprehensive feature support, deeper hardware capability exposure, and exclusive customization options. To ensure compliance and secure delivery, access to the commercial version will be granted through the following process:
 
-Commercial Version Access Procedure:
+**Commercial Version Access Procedure:**
 1. **Complete a questionnaire**: Submit basic information about your organization and intended use case.
 2. **Sign a Non-Disclosure Agreement (NDA)**: We will contact you based on your submission, and both parties will sign the NDA upon mutual confirmation.
 3. **Content release**: After the NDA is signed, we will provide access to the commercial version materials through a private channel.
 
 If you wish to obtain the commercial version, please fill out the questionnaire below. We will contact you within 3–5 business days:
 
-Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
+Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnJQBMIkRm6K79rjXR0hr0Fg
 :::
 
 14. **hbn_deserial_create**

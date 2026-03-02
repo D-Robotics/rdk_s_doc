@@ -29,7 +29,7 @@ import TabItem from '@theme/TabItem';
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -65,7 +65,7 @@ tar -zxvf hobot_centerpoint_data.tar.gz -C config
 ```shell
 # 板端下载回灌的点云文件
 cd ~
-wget http://sunrise.horizon.cc/TogetheROS/data/hobot_centerpoint_data.tar.gz
+wget http://archive.d-robotics.cc/TogetheROS/data/hobot_centerpoint_data.tar.gz
 
 # 解压缩
 mkdir -p ~/centerpoint_data

@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 
 本章节介绍模型推理功能的使用，输入一张本地图片进行推理，得到渲染后的图片并保存在本地。
 
-最后展示TROS应用算法中的[人体检测](/docs/05_Robot_development/03_boxs/body/mono2d_body_detection.md)、[年龄识别](/docs/05_Robot_development/03_boxs/body/mono_face_age_detection.md)、[人脸关键点检测](/docs/05_Robot_development/03_boxs/body/mono_face_landmarks_detection.md)、[人手关键点检测](/docs/05_Robot_development/03_boxs/body/hand_lmk_detection.md)、[手势识别](/docs/05_Robot_development/03_boxs/body/hand_gesture_detection.md)的算法同时推理和融合后的效果。示例使用MIPI/USB摄像头/本地回灌输入，通过WEB展示推理渲染结果。
+最后展示TROS应用算法中的[人体检测](/docs/05_Robot_development/03_boxs/function/mono2d_body_detection.md)、[年龄识别](/docs/05_Robot_development/03_boxs/function/mono_face_age_detection.md)、[人脸关键点检测](/docs/05_Robot_development/03_boxs/function/mono_face_landmarks_detection.md)、[人手关键点检测](/docs/05_Robot_development/03_boxs/function/hand_lmk_detection.md)、[手势识别](/docs/05_Robot_development/03_boxs/function/hand_gesture_detection.md)的算法同时推理和融合后的效果。示例使用MIPI/USB摄像头/本地回灌输入，通过WEB展示推理渲染结果。
 
 代码仓库：[https://github.com/D-Robotics/hobot_dnn](https://github.com/D-Robotics/hobot_dnn)
 
@@ -26,7 +26,7 @@ import TabItem from '@theme/TabItem';
 | X86     | Ubuntu 20.04 (Foxy) |
 
 :::caution
-RDK S100/S600/Ultra平台的模型推理功能体验参考[Boxs算法仓库](/docs/05_Robot_development/03_boxs/detection/yolo.md)。
+RDK S100和RDK Ultra平台的模型推理功能体验参考[Boxs算法仓库](/docs/05_Robot_development/03_boxs/detection/yolo.md)。
 :::
 
 
@@ -34,7 +34,7 @@ RDK S100/S600/Ultra平台的模型推理功能体验参考[Boxs算法仓库](/do
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 

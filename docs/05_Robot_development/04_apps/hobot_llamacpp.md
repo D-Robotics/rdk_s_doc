@@ -27,7 +27,7 @@ import TabItem from '@theme/TabItem';
 ### RDK平台
 
 1. RDK为4GB内存版本
-2. RDK已烧录好RDK OS系统。
+2. RDK已烧录好Ubuntu 22.04系统镜像。
 3. RDK已成功安装TogetheROS.Bot。
 4. 安装ASR模块用于语言输入，命令为 `apt install tros-humble-sensevoice-ros2`。
 
@@ -41,19 +41,24 @@ import TabItem from '@theme/TabItem';
 
 - 已安装ASR工具
 
-- RDK 设备包含3.5mm 耳机孔, 且设备插入有线耳机。插入后检测音频设备是否正常:
+- RDK 设备外接 usb 音箱含麦克风扬声器（部分RDK 产品包含3.5 mm 耳机孔, 可接入有线耳机体验）插入后检测音频设备是否正常:
 
 ```bash
 root@ubuntu:~# ls /dev/snd/
 
-by-path  controlC1  pcmC1D0c  pcmC1D0p  timer
+by-id  by-path  controlC0  controlC2  pcmC0D0c  pcmC0D0p  pcmC2D0c  pcmC2D0p  timer
 ```
 
-如图显示的音频设备名应为 "hw:1,0"。
+如图显示的音频设备名应为 "plughw:0,0"。
 
 ![headset](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/04_apps/image/vlm_boxs/headset.jpg)
 
 ### 使用说明
+
+```bash
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+```
 
 <Tabs groupId="tros-distro">
 <TabItem value="x5" label="RDK X5">
@@ -61,21 +66,19 @@ by-path  controlC1  pcmC1D0c  pcmC1D0p  timer
 **使用MIPI摄像头发布图片**
 
 ```shell
-source /opt/tros/humble/setup.bash
 cp -r /opt/tros/${TROS_DISTRO}/lib/hobot_llamacpp/config/ .
 # 配置MIPI摄像头
 export CAM_TYPE=mipi
-ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=hw:1,0
+ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=plughw:0,0
 ```
 
 **使用USB摄像头发布图片**
 
 ```shell
-source /opt/tros/humble/setup.bash
 cp -r /opt/tros/${TROS_DISTRO}/lib/hobot_llamacpp/config/ .
 # 配置USB摄像头
 export CAM_TYPE=usb
-ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=hw:1,0
+ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=plughw:0,0
 ```
 
 **使用本地回灌图片**
@@ -84,7 +87,7 @@ ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=hw:1,0
 cp -r /opt/tros/${TROS_DISTRO}/lib/hobot_llamacpp/config/ .
 # 配置本地回灌图片
 export CAM_TYPE=fb
-ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=hw:1,0
+ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=plughw:0,0
 ```
 
 </TabItem>
@@ -93,89 +96,29 @@ ros2 launch hobot_llamacpp llama_vlm.launch.py audio_device:=hw:1,0
 
 **使用MIPI摄像头发布图片**
 
-<Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
-<TabItem value="humble" label="Humble">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/humble/setup.bash
-```
-
-
-</TabItem>
-</Tabs>
-
 ```shell
 cp -r /opt/tros/${TROS_DISTRO}/lib/hobot_llamacpp/config/ .
 # 配置MIPI摄像头
 export CAM_TYPE=mipi
-ros2 launch hobot_llamacpp llama_vlm.launch.py llamacpp_vit_model_file_name:=vit_model_int16.hbm audio_device:=hw:1,0
+ros2 launch hobot_llamacpp llama_vlm.launch.py llamacpp_vit_model_file_name:=vit_model_int16.hbm audio_device:=plughw:0,0
 ```
 
 **使用USB摄像头发布图片**
-
-<Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
-<TabItem value="humble" label="Humble">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/humble/setup.bash
-```
-
-
-</TabItem>
-</Tabs>
 
 ```shell
 cp -r /opt/tros/${TROS_DISTRO}/lib/hobot_llamacpp/config/ .
 # 配置USB摄像头
 export CAM_TYPE=usb
-ros2 launch hobot_llamacpp llama_vlm.launch.py llamacpp_vit_model_file_name:=vit_model_int16.hbm audio_device:=hw:1,0
+ros2 launch hobot_llamacpp llama_vlm.launch.py llamacpp_vit_model_file_name:=vit_model_int16.hbm audio_device:=plughw:0,0
 ```
 
 **使用本地回灌图片**
-
-<Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
-<TabItem value="humble" label="Humble">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/humble/setup.bash
-```
-
-
-</TabItem>
-</Tabs>
 
 ```shell
 cp -r /opt/tros/${TROS_DISTRO}/lib/hobot_llamacpp/config/ .
 # 配置本地回灌图片
 export CAM_TYPE=fb
-ros2 launch hobot_llamacpp llama_vlm.launch.py llamacpp_vit_model_file_name:=vit_model_int16.hbm audio_device:=hw:1,0
+ros2 launch hobot_llamacpp llama_vlm.launch.py llamacpp_vit_model_file_name:=vit_model_int16.hbm audio_device:=plughw:0,0
 ```
 
 </TabItem>
@@ -196,31 +139,15 @@ ros2 launch hobot_llamacpp llama_vlm.launch.py llamacpp_vit_model_file_name:=vit
 
 功能包本身除了支持视觉语言大模型能力, 同时支持单独使用纯语言模型进行对话：
 
-<Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
-<TabItem value="humble" label="Humble">
-
 ```bash
 # 配置tros.b环境
 source /opt/tros/humble/setup.bash
 ```
 
-
-</TabItem>
-</Tabs>
-
-
 ```shell
 cp -r /opt/tros/${TROS_DISTRO}/lib/hobot_llamacpp/config/ .
 
-ros2 launch hobot_llamacpp llama_llm.launch.py llamacpp_gguf_model_file_name:=Qwen2.5-0.5B-Instruct-Q4_0.gguf audio_device:=hw:1,0 
+ros2 launch hobot_llamacpp llama_llm.launch.py llamacpp_gguf_model_file_name:=Qwen2.5-0.5B-Instruct-Q4_0.gguf audio_device:=plughw:0,0 
 ```
 
 程序启动后，可通过语音提示与设备交互。具体使用方法：等待设备初始化后, 会说"我来啦"; 通过"你好"唤醒设备, 然后给设备说明任务。如"周末应该怎么休息?"。设备收到任务后, 开始推理并输出文字播报。

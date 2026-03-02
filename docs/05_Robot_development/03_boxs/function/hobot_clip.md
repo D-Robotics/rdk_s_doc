@@ -49,7 +49,7 @@ import TabItem from '@theme/TabItem';
 
 ### RDK平台
 
-1. RDK已烧录好RDK OS系统。
+1. RDK已烧录好Ubuntu 22.04系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -141,7 +141,6 @@ source /opt/tros/humble/setup.bash
 # 启动launch文件
 ros2 launch clip_manage hobot_clip_manage.launch.py clip_mode:=1 clip_image_model_file_name:=config/full_model_11.hbm clip_db_file:=clip.db clip_result_folder:=result clip_text:="a diagram"
 ```
-
 </TabItem>
 
 </Tabs>

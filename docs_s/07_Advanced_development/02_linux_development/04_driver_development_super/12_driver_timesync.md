@@ -711,7 +711,15 @@ MCU侧timesync sample代码位于工程目录：``{mcu_dir}/mcu/Service/TimeSync
 
 #### 编译环境
 
-MCU侧本sample的编译环境使用MCU代码中的build工具，编译命令请参考：[MCU编译](../../05_mcu_development/01_S100/01_basic_information.md#开发环境)。
+MCU侧本sample的编译环境使用MCU代码中的build工具，请参考：[MCU编译](../../05_mcu_development/01_S100/01_basic_information.md#开发环境)。
+
+编译FreeRtos镜像版本。注意
+
+```
+  # 进入Build/FreeRtos目录
+  python build_freertos.py lite matrix B s100 gcc debug # 硬件板或者项目名
+  python build_freertos.py lite matrix B s600 gcc debug # 硬件板或者项目名
+```
 
 #### 运行
 

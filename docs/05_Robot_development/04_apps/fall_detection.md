@@ -31,7 +31,7 @@ import TabItem from '@theme/TabItem';
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -52,25 +52,10 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="tros-distro">
 <TabItem value="foxy" label="Foxy">
 
-```bash
+```shell
 # 配置tros.b环境
 source /opt/tros/setup.bash
-```
 
-</TabItem>
-<TabItem value="humble" label="Humble">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/humble/setup.bash
-```
-
-
-</TabItem>
-</Tabs>
-
-
-```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 
@@ -81,30 +66,37 @@ export CAM_TYPE=mipi
 ros2 launch hobot_falldown_detection hobot_falldown_detection.launch.py
 ```
 
+</TabItem>
+
+<TabItem value="humble" label="Humble">
+
+```shell
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+
+# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+
+# 配置MIPI摄像头
+export CAM_TYPE=mipi
+
+# 启动launch文件
+ros2 launch hobot_falldown_detection hobot_falldown_detection.launch.py
+```
+
+</TabItem>
+
+</Tabs>
+
 **使用USB摄像头发布图片**
 
 <Tabs groupId="tros-distro">
 <TabItem value="foxy" label="Foxy">
 
-```bash
+```shell
 # 配置tros.b环境
 source /opt/tros/setup.bash
-```
 
-</TabItem>
-<TabItem value="humble" label="Humble">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/humble/setup.bash
-```
-
-
-</TabItem>
-</Tabs>
-
-
-```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 
@@ -114,6 +106,28 @@ export CAM_TYPE=usb
 # 启动launch文件
 ros2 launch hobot_falldown_detection hobot_falldown_detection.launch.py
 ```
+
+</TabItem>
+
+<TabItem value="humble" label="Humble">
+
+```shell
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+
+# 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+
+# 配置USB摄像头
+export CAM_TYPE=usb
+
+# 启动launch文件
+ros2 launch hobot_falldown_detection hobot_falldown_detection.launch.py
+```
+
+</TabItem>
+
+</Tabs>
 
 运行命令中的参数说明，参考hobot_falldown_detection package源码中的README.md。
 

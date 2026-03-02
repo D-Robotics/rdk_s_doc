@@ -22,15 +22,14 @@ import TabItem from '@theme/TabItem';
 | RDK X3 | Ubuntu 20.04 (Foxy), Ubuntu 22.04 (Humble) | 订阅文本消息，然后转化为语音数据，最后播放出去 |
 | RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble) | 订阅文本消息，然后转化为语音数据，最后播放出去 |
 | RDK S100, RDK S100P | Ubuntu 22.04 (Humble) | 订阅文本消息，然后转化为语音数据，最后播放出去 |
-| RDK S600 | Ubuntu 24.04 (Jazzy) | 订阅文本消息，然后转化为语音数据，最后播放出去 |
 
-**注意：仅支持RDK X3，RDK X3 Module暂不支持， RDK S100/S600只支持USB语音设备。**
+**注意：仅支持RDK X3，RDK X3 Module暂不支持， RDK S100只支持USB语音设备。**
 
 ## 准备工作
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 2. RDK已成功安装TogetheROS.Bot。
 3. 已有RDK适配的音频驱动板，并参考[智能语音章节](../03_boxs/audio/hobot_audio.md)搭建好环境。
 4. 音频板耳机接口连接耳机或音响。
@@ -60,16 +59,6 @@ import TabItem from '@theme/TabItem';
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    sudo apt update
-    sudo apt install tros-jazzy-hobot-tts
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
     </Tabs>
 
     ```bash
@@ -93,12 +82,12 @@ import TabItem from '@theme/TabItem';
     <Tabs groupId="board_type">
     <TabItem value="rdk_x3" label="RDK_X3">
 
-    首次使用音频板需要使用`srpi-config`进行配置，配置方法参考RDK用户手册[RDK X3微雪Audio Drive](/docs/03_Basic_Application/05_audio/rdk_x3_and_rdk_x3_module/audio_driver_hat2_rev2.md)章节。
+    首次使用音频板需要使用`srpi-config`进行配置，配置方法参考RDK用户手册[RDK X3微雪Audio Drive](/docs/03_Basic_Application/02_audio/rdk_x3_and_rdk_x3_module/audio_driver_hat2_rev2.md)章节。
 
     </TabItem>
     <TabItem value="rdk_x5" label="RDK_X5">
 
-    首次使用音频板需要使用`srpi-config`进行配置，配置方法参考RDK用户手册[RDK X5微雪Audio Drive](/docs/03_Basic_Application/05_audio/rdk_x5/audio_driver_hat2_rev2.md)章节。
+    首次使用音频板需要使用`srpi-config`进行配置，配置方法参考RDK用户手册[RDK X5微雪Audio Drive](/docs/03_Basic_Application/02_audio/rdk_x5/audio_driver_hat2_rev2.md)章节。
     
     </TabItem>
     </Tabs>
@@ -120,14 +109,6 @@ import TabItem from '@theme/TabItem';
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>
@@ -161,14 +142,6 @@ import TabItem from '@theme/TabItem';
   # 配置tros.b环境
   source /opt/tros/humble/setup.bash
   ```
-
-</TabItem>
-<TabItem value="jazzy" label="Jazzy">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/jazzy/setup.bash
-```
 
   </TabItem>
 

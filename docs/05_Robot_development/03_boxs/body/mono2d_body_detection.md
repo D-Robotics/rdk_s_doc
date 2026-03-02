@@ -55,7 +55,7 @@ import TabItem from '@theme/TabItem';
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -86,6 +86,7 @@ source /opt/tros/setup.bash
 ```
 
 </TabItem>
+
 <TabItem value="humble" label="Humble">
 
 ```bash
@@ -94,8 +95,8 @@ source /opt/tros/humble/setup.bash
 ```
 
 </TabItem>
-</Tabs>
 
+</Tabs>
 
 ```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
@@ -119,6 +120,7 @@ source /opt/tros/setup.bash
 ```
 
 </TabItem>
+
 <TabItem value="humble" label="Humble">
 
 ```bash
@@ -127,6 +129,7 @@ source /opt/tros/humble/setup.bash
 ```
 
 </TabItem>
+
 </Tabs>
 
 ```shell
@@ -152,6 +155,7 @@ source /opt/tros/setup.bash
 ```
 
 </TabItem>
+
 <TabItem value="humble" label="Humble">
 
 ```bash
@@ -160,6 +164,7 @@ source /opt/tros/humble/setup.bash
 ```
 
 </TabItem>
+
 </Tabs>
 
 ```shell

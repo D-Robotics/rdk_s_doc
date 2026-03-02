@@ -34,7 +34,7 @@ import TabItem from '@theme/TabItem';
 
 ### 系统准备
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 22.04系统镜像。
 2. RDK已成功安装TogetheROS.Bot。
 
 ### 模型下载
@@ -74,26 +74,10 @@ devmem 0x2b047004 32 0x99
 
 #### 终端交互体验
 
-<Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
-<TabItem value="humble" label="Humble">
-
 ```bash
 # 配置tros.b环境
 source /opt/tros/humble/setup.bash
 ```
-
-
-</TabItem>
-</Tabs>
-
 
 ```bash
 lib=/opt/tros/humble/lib/hobot_xlm/lib
@@ -111,26 +95,10 @@ ros2 run hobot_xlm hobot_xlm --ros-args -p feed_type:=0 -p model_name:="DeepSeek
 
 1. 启动 hobot_llm
 
-   <Tabs groupId="tros-distro">
-   <TabItem value="foxy" label="Foxy">
-
-   ```bash
-   # 配置tros.b环境
-   source /opt/tros/setup.bash
-   ```
-
-   </TabItem>
-   <TabItem value="humble" label="Humble">
-
-   ```bash
-   # 配置tros.b环境
-   source /opt/tros/humble/setup.bash
-   ```
-
-
-   </TabItem>
-   </Tabs>
-
+    ```bash
+    # 配置tros.b环境
+    source /opt/tros/humble/setup.bash
+    ```
 
     ```bash
     lib=/opt/tros/humble/lib/hobot_xlm/lib
@@ -144,26 +112,10 @@ ros2 run hobot_xlm hobot_xlm --ros-args -p feed_type:=0 -p model_name:="DeepSeek
 
 2. 新开一个终端订阅输出结果topic
 
-   <Tabs groupId="tros-distro">
-   <TabItem value="foxy" label="Foxy">
-
-   ```bash
-   # 配置tros.b环境
-   source /opt/tros/setup.bash
-   ```
-
-   </TabItem>
-   <TabItem value="humble" label="Humble">
-
-   ```bash
-   # 配置tros.b环境
-   source /opt/tros/humble/setup.bash
-   ```
-
-
-   </TabItem>
-   </Tabs>
-
+    ```bash
+    # 配置tros.b环境
+    source /opt/tros/humble/setup.bash
+    ```
 
     ```bash
     ros2 topic echo /tts_text
@@ -171,26 +123,10 @@ ros2 run hobot_xlm hobot_xlm --ros-args -p feed_type:=0 -p model_name:="DeepSeek
 
 3. 新开一个终端发布消息
 
-   <Tabs groupId="tros-distro">
-   <TabItem value="foxy" label="Foxy">
-
-   ```bash
-   # 配置tros.b环境
-   source /opt/tros/setup.bash
-   ```
-
-   </TabItem>
-   <TabItem value="humble" label="Humble">
-
-   ```bash
-   # 配置tros.b环境
-   source /opt/tros/humble/setup.bash
-   ```
-
-
-   </TabItem>
-   </Tabs>
-
+    ```bash
+    # 配置tros.b环境
+    source /opt/tros/humble/setup.bash
+    ```
 
     ```bash
     ros2 topic pub --once /prompt_text std_msgs/msg/String "{data: ""简单描述人工智能的发展""}"

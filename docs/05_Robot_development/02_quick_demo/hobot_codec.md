@@ -21,7 +21,6 @@ import TabItem from '@theme/TabItem';
 | ------- | ------------ | ------------------------------ |
 | RDK X3, RDK X3 Module | Ubuntu 20.04 (Foxy), Ubuntu 22.04 (Humble) | 启动MIPI摄像头获取图像，然后进行图像编码，最后通过Web展示 |
 | RDK X5, RDK X5 Module, RDK S100 | Ubuntu 22.04 (Humble) | 启动MIPI摄像头获取图像，然后进行图像编码，最后通过Web展示 |
-| RDK S600 | Ubuntu 24.04 (Jazzy) | 启动MIPI摄像头获取图像，然后进行图像编码，最后通过Web展示 |
 | RDK Ultra | Ubuntu 20.04 (Foxy) | 启动MIPI摄像头获取图像，然后进行图像编码，最后通过Web展示 |
 | X86     | Ubuntu 20.04 (Foxy) | 使用图像发布工具发布YUV图像，然后进行图像编码，最后通过Web展示 |
 
@@ -31,7 +30,7 @@ import TabItem from '@theme/TabItem';
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -73,14 +72,6 @@ import TabItem from '@theme/TabItem';
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -108,14 +99,6 @@ import TabItem from '@theme/TabItem';
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -140,14 +123,6 @@ import TabItem from '@theme/TabItem';
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>
@@ -186,14 +161,6 @@ import TabItem from '@theme/TabItem';
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -226,14 +193,6 @@ import TabItem from '@theme/TabItem';
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -258,14 +217,6 @@ import TabItem from '@theme/TabItem';
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>

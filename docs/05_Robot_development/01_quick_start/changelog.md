@@ -4,15 +4,17 @@ sidebar_position: 6
 
 # 5.1.6 版本发布记录
 
-## tros-jazzy
-
-### 版本号：2.5.0 (2025-12-02)
-
-新增功能：
-
-- 支持`RDK S600`平台。
-
 ## tros-humble
+
+### 版本号：2.4.5 (2025-10-28)
+
+问题修复（`RDK X5`平台）：
+
+- 修复图像处理加速模块[`hobot_cv`](/docs/05_Robot_development/02_quick_demo/demo_cv.md)使用vse加速图像resize的bug。
+- 修复板端模型推理框架[`dnn_node`](https://github.com/D-Robotics/hobot_dnn.git)统计推理延迟错误的问题。
+- 修复由于MIPI图像采集和算法等模块的`ros component so`安装路径错误，导致运行时加载失败的问题。
+- 优化[图像编解码](/docs/05_Robot_development/02_quick_demo/hobot_codec.md)的配置，删除无效的配置参数，增加用于debug的配置参数。
+
 
 ### 版本号：2.4.4 (2025-10-24)
 

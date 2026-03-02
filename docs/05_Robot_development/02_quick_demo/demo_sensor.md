@@ -23,7 +23,8 @@ import TabItem from '@theme/TabItem';
 | RDK X3, RDK X3 Module | Ubuntu 20.04 (Foxy), Ubuntu 22.04 (Humble) |
 | RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble) |
 | RDK S100, RDK S100P | Ubuntu 22.04 (Humble) |
-| RDK S600 | Ubuntu 24.04 (Jazzy) |
+| RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble) |
+| RDK S100, RDK S100P | Ubuntu 22.04 (Humble) |
 | RDK Ultra | Ubuntu 20.04 (Foxy) |
 | X86     | Ubuntu 20.04 (Foxy) |
 
@@ -33,7 +34,7 @@ import TabItem from '@theme/TabItem';
 
 1. 确认手中USB摄像头工作正常，将USB摄像头接入RDK的USB插槽
 
-2. RDK已烧录好Ubuntu系统镜像
+2. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像
 
 3. RDK已成功安装tros.b
 
@@ -69,14 +70,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
     ```
-
-   </TabItem>
-   <TabItem value="jazzy" label="Jazzy">
-
-   ```bash
-   # 配置tros.b环境
-   source /opt/tros/jazzy/setup.bash
-   ```
 
     </TabItem>
 
@@ -130,14 +123,6 @@ source /opt/tros/humble/setup.bash
 ```
 
 </TabItem>
-<TabItem value="jazzy" label="Jazzy">
-
-```bash
-# 配置tros.b环境
-source /opt/tros/jazzy/setup.bash
-```
-
-</TabItem>
 
 </Tabs>
 
@@ -174,14 +159,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>
@@ -236,14 +213,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -269,14 +238,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>
@@ -312,14 +273,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>
@@ -371,7 +324,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 | ---- | ------ | -------------------- | -------- |  -------- | ------------------------------------------------------------ |
 | 1    | F37    | ![F37](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/F37.jpg)       | 200W像素 | RDK X3, RDK X3 Module | [F37](https://developer.d-robotics.cc/accessory#23) |
 | 2    | GC4663 | ![GC4663](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/GC4663.jpg) | 400W像素 | RDK X3, RDK X3 Module | [GC4663](https://developer.d-robotics.cc/accessory#23) |
-| 3    | IMX219 | ![IMX219](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/IMX219.jpg) | 800W像素 | RDK X3, RDK X3 Module, RDK Ultra, RDK X5, RDK X5 Module, RDK S100, RDK S600 | [IMX219](https://detail.tmall.com/item.htm?abbucket=9&id=710344235988&rn=259e73f46059c2e6fc9de133ba9ddddf&spm=a1z10.5-b-s.w4011-22651484606.159.55df6a83NWrGPi) |
+| 3    | IMX219 | ![IMX219](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/IMX219.jpg) | 800W像素 | RDK X3, RDK X3 Module, RDK Ultra, RDK X5, RDK X5 Module, RDK S100 | [IMX219](https://detail.tmall.com/item.htm?abbucket=9&id=710344235988&rn=259e73f46059c2e6fc9de133ba9ddddf&spm=a1z10.5-b-s.w4011-22651484606.159.55df6a83NWrGPi) |
 | 4    | IMX477 | ![IMX477](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/IMX477.jpg) | 200W像素 | RDK X3, RDK X3 Module | [IMX477](https://www.waveshare.net/shop/IMX477-160-12.3MP-Camera.htm) |
 | 5    | OV5647 | ![OV5647](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/OV5647.jpg) | 200W像素 | RDK X3, RDK X3 Module, RDK X5, RDK X5 Module | [OV5647](https://www.waveshare.net/shop/RPi-Camera-G.htm) |
 | 6    | IMX415 | ![IMX415](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/IMX415.jpg) | 200W像素 | RDK X5, RDK X5 Module | [IMX415](https://e.tb.cn/h.hNHZxXLFdgg6oHj?tk=b1Id4UgKNVn) |
@@ -382,17 +335,17 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
 #### RDK平台
 
-1. 确认摄像头正确接入RDK。
-
-    如 F37 摄像头的接入RDK X3方式如下图：
+1. 确认摄像头正确接入RDK，例如 F37 摄像头的接入RDK X3方式如下图：
 
     ![image-X3-PI-Camera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-X3-PI-Camera.png)
 
     如 imx219 摄像头的接入RDK S100方式如下图：
-    
     ![image-S100-imx219](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-imx219.jpg)
 
-2. RDK已烧录好Ubuntu系统镜像
+    如 imx219 摄像头的接入RDK S100方式如下图：
+    ![image-S100-imx219](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-imx219.jpg)
+
+2. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像
 
 3. RDK已成功安装tros.b
 
@@ -423,14 +376,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>
@@ -471,14 +416,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -508,13 +445,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
    ```shell
    root@ubuntu:~# source /opt/ros/humble/setup.bash
-   ```
-
-</TabItem>
-<TabItem value="jazzy" label="Jazzy">
-
-   ```shell
-   root@ubuntu:~# source /opt/ros/jazzy/setup.bash
    ```
 
 </TabItem>
@@ -602,14 +532,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -645,14 +567,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -675,8 +589,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 | ------ | ------ | ------ | ------ |
 | 摄像头| SC230ai | 200W | RDK X5, RDK X5 Module, RDK S100, RDK S100P |
 | 摄像头| SC132gs | 200W | RDK X5, RDK X5 Module, RDK S100, RDK S100P |
-| 摄像头| SC132gs | 200W | RDK S600 | Ubuntu 24.04 (Jazzy) |
-| 摄像头| SC230ai | 200W | RDK S600 | Ubuntu 24.04 (Jazzy) |
 
 代码仓库：[https://github.com/D-Robotics/hobot_mipi_cam.git](https://github.com/D-Robotics/hobot_mipi_cam.git)
 
@@ -686,23 +598,23 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 | ------ | ------------- |
 | RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble)  |
 | RDK 100, RDK S100P | Ubuntu 22.04 (Humble)  |
-| RDK S600 | Ubuntu 24.04 (Jazzy) |
+| RDK 100, RDK S100P | Ubuntu 22.04 (Humble)  |
 
 ### 准备工作
 
 #### RDK平台
 
-1. 确认摄像头正确接入RDK。
-
-    如 SC230ai 双目摄像头的接入RDK X5, RDK X5 Module方式如下图：
+1. 确认摄像头正确接入RDK，例如 SC230ai 双目摄像头的接入RDK X5, RDK X5 Module方式如下图：
 
     ![image-X5-PI-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-X5-PI-DualCamera.jpg)
 
     如SC230ai 双目摄像头的接入S100方式如下图：
-
     ![image-S100-sc230ai-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-sc230ai-DualCamera.png)
 
-2. RDK已烧录好RDK OS系统
+    如SC230ai 双目摄像头的接入S100方式如下图：
+    ![image-S100-sc230ai-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-sc230ai-DualCamera.png)
+
+2. RDK已烧录好Ubuntu 22.04系统镜像
 
 3. RDK已成功安装tros.b
 
@@ -714,9 +626,9 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 
 下面以 SC230ai 为例，介绍摄像头数据获取和预览的方法：
 
-1. 只启动双目摄像机的启动方式,方便其他node订阅。
-   
-   (1) 通过下述命令启动 hobot_sensor 节点
+1. 通过 SSH 登录RDK，确定摄像头型号，这里以`SC230ai`为例
+
+2. 并通过下述命令启动 hobot_sensor 节点
 
     <Tabs groupId="tros-distro">
     <TabItem value="humble" label="Humble">
@@ -727,14 +639,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```
 
     </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
-    ```
-
-    </TabItem>
 
     </Tabs>
 
@@ -742,7 +646,8 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     # launch 方式启动
     ros2 launch mipi_cam mipi_cam_dual_channel.launch.py
     ```
-    (2) 如程序输出如下信息，说明节点已成功启动
+
+3. 如程序输出如下信息，说明节点已成功启动
 
     ```text
     [INFO] [launch]: All log files can be found below /root/.ros/log/2024-09-18-19-15-26-160110-ubuntu-3931
@@ -763,9 +668,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ...
     ```
 
-2. Web端查看双目摄像头图像，由于发布原始数据，需要一个编码JPEG图像的节点，一个用webservice发布的节点
-   
-   (1) 启动命令如下：
+4. Web端查看双目摄像头图像，由于发布原始数据，需要一个编码JPEG图像的节点，一个用webservice发布的节点，启动命令如下：
 
     <Tabs groupId="tros-distro">
     <TabItem value="humble" label="Humble">
@@ -773,14 +676,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```bash
     # 配置tros.b环境
     source /opt/tros/humble/setup.bash
-    ```
-
-    </TabItem>
-    <TabItem value="jazzy" label="Jazzy">
-
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/jazzy/setup.bash
     ```
 
     </TabItem>
@@ -792,7 +687,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ros2 launch mipi_cam mipi_cam_dual_channel_websocket.launch.py
     ```
 
-    (2) PC打开浏览器（chrome/firefox/edge）输入 `http://IP:8000`（IP为RDK IP地址），点击左上方Web端展示即可看到双目输出的实时画面
+5. PC打开浏览器（chrome/firefox/edge）输入 `http://IP:8000`（IP为RDK IP地址），点击左上方Web端展示即可看到双目输出的实时画面
     ![web-dualcamera-codec](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/web-dualcamera-codec.jpg)
 
 
@@ -836,7 +731,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ![hobot_rgbd](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/hobot_rgbd.png)
 
     **注意：RGBD模组需要额外转接板才能接到RDK X3上**。
-2. RDK已烧录好Ubuntu系统镜像。
+2. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 
 3. RDK已成功安装tros.b
 
@@ -1137,7 +1032,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 #### RDK平台
 
 1. 确认手中RealSense相机工作正常，将USB数据线接入RDK的USB插槽
-2. RDK已烧录好Ubuntu系统镜像
+2. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像
 3. RDK已成功安装tros.b
 4. 确认PC机能够通过网络访问RDK
 
@@ -1266,7 +1161,7 @@ ros2 launch realsense2_camera rs_launch.py enable_rgbd:=true enable_sync:=true a
 #### RDK平台
 
 1. 确认手中Orbbec相机工作正常，将USB数据线接入RDK的<font color="red"><b>USB3.0</b></font>插槽（目前发现USB2.0可能存在无法启动的问题）
-2. RDK已烧录好Ubuntu系统镜像
+2. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像
 3. RDK已成功安装tros.b
 4. 确认PC机能够通过网络访问RDK
 
@@ -1459,7 +1354,7 @@ ros2 launch orbbec_camera gemini2.launch.py depth_registration:=true
 #### RDK平台
 
 1. 确认手中ZED相机工作正常，将USB数据线接入RDK的USB插槽
-2. RDK已烧录好RDK OS系统
+2. RDK已烧录好Ubuntu 22.04系统镜像
 3. RDK已成功安装tros.b
 4. 确认PC机能够通过网络访问RDK
 
@@ -1467,18 +1362,9 @@ ros2 launch orbbec_camera gemini2.launch.py depth_registration:=true
 
 1. 通过SSH登录RDK，并通过下述命令启动ZED相机
 
-<Tabs groupId="tros-distro">
-<TabItem value="humble" label="Humble">
-
-```bash
+```shell
 # 配置tros.b环境
 source /opt/tros/humble/setup.bash
-```
-
-</TabItem>
-</Tabs>
-
-```shell
 
 # 启动ZED相机，发布双目图像数据
 ros2 launch hobot_zed_cam pub_stereo_imgs.launch.py need_rectify:=true

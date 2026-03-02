@@ -50,14 +50,24 @@ pip install tqdm
 1. Python3 is used for compilation. The RDK S100 development environment uses Python 3.8.10.
 2. MCU1 images are available in two versions: debug and release. The debug version includes debugging information, while the release version does not.
 
+:::info Toolchain Download Instructions
+
+The first compilation will download the toolchain from the official ARM website and extract it (taking about 10 minutes). Poor network speed may cause issues such as unsuccessful or incomplete download of the toolchain. It is recommended to compile using the following method:
+
+1. Click [Toolchain Download Link](../../../01_Quick_start/download.md#tools-download) to download the compilation toolchain.
+
+2. Move the existing toolchain to /Build/ToolChain/Gcc/. The command to move the toolchain is as follows:
+
+    `mv toolchain_storage_path/toolchain_filename new_code/Build/ToolChain/Gcc/`
+
+3. If a toolchain is detected during compilation, it will not be downloaded from the official website again.
+
+:::
+
 ```shell
 # Compile MCU1 Debug version
 cd mcu/Build/FreeRtos_mcu1
 python build_freertos.py s100_sip_B debug
-# 1. On the first compilation, the toolchain will be downloaded from ARM's official website and extracted (takes ~10 minutes). Poor network connectivity may cause download failures or incomplete downloads. In such cases, delete the partially downloaded toolchain and retry.
-# 2. If you already have the toolchain, move it to /Build/ToolChain/Gcc/. The build script will skip downloading if the toolchain is detected.
-# mv <toolchain_path>/gcc-arm-none-eabi-10.3-2021.10/ <new_code_path>/Build/ToolChain/Gcc/gcc-arm-none-eabi-10.3-2021.10
-*/
 
 # Compile MCU1 Release version
 cd mcu/Build/FreeRtos_mcu1
@@ -226,7 +236,7 @@ If the RDK-S100 uses the following connection method, the MCU UART and Acore UAR
 ## MCU0 Flashing Procedure
 ### Manual Flashing
 #### Flashing on a Non-Blank Board
-1. Power on the board and continuously press Enter on the Acore UART to enter U-Boot (keep pressing Enter).
+1. Power on the board and continuously press Enter on the Acore UART to enter Uboot (keep pressing Enter).
 ```c
 fastboot 0
 ```
@@ -242,8 +252,8 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 **For blank board flashing, please refer to the following tool-based flashing method.**
 
 ### Tool-Based Flashing
-1. When you can successfully enter U-Boot, configure as follows:
-   1. Select "U-Boot" for "Download Mode";
+1. When you can successfully enter Uboot, configure as follows:
+   1. Select "Uboot" for "Download Mode";
    2. Select "eMMC" for "Storage Medium";
    3. Select "Secure" for "Type";
    4. For "Image Directory", choose the folder containing `img_packages` and `xmodem_tools`;
@@ -253,7 +263,7 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
   ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_uboot-en.png)
 
-2. If you cannot enter U-Boot normally, select "USB" for download mode—no need to specify UART port or baud rate. Keep all other settings consistent with the U-Boot scenario:
+2. If you cannot enter Uboot normally, select "USB" for download mode—no need to specify UART port or baud rate. Keep all other settings consistent with the Uboot scenario:
 
   ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_usb-en.png)
 

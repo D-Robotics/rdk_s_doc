@@ -37,7 +37,7 @@ import TabItem from '@theme/TabItem';
 </Tabs>
 
 ### Q1: 什么是D-Robotics RDK套件？
-**A:** D-Robotics Developer Kits，简称[D-Robotics RDK套件](https://developer.d-robotics.cc/rdk_doc/)，是基于D-Robotics智能芯片打造的机器人开发者套件，目前主要包括**RDK X3（旭日X3派）**、**RDK X3 Module（旭日X3模组）**、**RDK X5**、**RDK Ultra**、**RDK S100**等系列。
+**A:** D-Robotics Developer Kits，简称[D-Robotics RDK套件](https://developer.d-robotics.cc/rdk_doc/)，是基于D-Robotics智能芯片打造的机器人开发者套件，目前主要包括**RDK X3（旭日X3派）**、**RDK X3 Module（旭日X3模组）**、**RDK X5**、**RDK X5 Module（旭日X5模组）**、**RDK Ultra**、**RDK S100**等系列。
 
 ### Q2: 如何查看RDK板卡的系统版本号？
 **A:** 登录到RDK板卡的系统后，您可以使用以下命令：
@@ -984,28 +984,12 @@ sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 sudo systemctl restart docker
 ```
 
-### Q46：时区设置
-<Tabs groupId="accessory">
-<TabItem value="rdk_s100" label="rdk_s100">
-
+### Q46：RDK S100 时区设置
 RDK S100系统默认使用上海时区（UTC+8），该配置通过`/etc/systemd/system.conf`文件中的以下参数实现：
 ```bash
 DefaultEnvironment="TZ=CST-08:00"
 ```
 如果需要手动配置，请注释掉`DefaultEnvironment="TZ=CST-08:00"`，然后`reboot`重启设备使配置生效。
-
-</TabItem>
-
-<TabItem value="rdk_s600" label="rdk_s600">
-
-RDK S600系统默认使用上海时区（UTC+8），该配置通过`/etc/systemd/system.conf`文件中的以下参数实现：
-```bash
-DefaultEnvironment="TZ=CST-08:00"
-```
-如果需要手动配置，请注释掉`DefaultEnvironment="TZ=CST-08:00"`，然后`reboot`重启设备使配置生效。
-
-</TabItem>
-</Tabs>
 
 ### Q47: RDKS100 桌面应用`Power Statistics` 应用设备节点显示不全问题
     RDKS100默认不支持，未提供相应的驱动。如用户需要支持显示适配器信息和电池信息，请用户自行联系电源管理芯片供应商提供驱动。

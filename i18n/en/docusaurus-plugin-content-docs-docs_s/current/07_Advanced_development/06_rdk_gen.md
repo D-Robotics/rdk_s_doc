@@ -399,7 +399,7 @@ After modifying the partition table, the following steps are required for the ch
 	```
 
 :::tip
-The commercial version provides more comprehensive feature support, deeper hardware capability access, and exclusive customization options. To ensure compliance and secure delivery, we will grant access to the commercial version through the following process:
+The commercial version provides more comprehensive feature support, deeper hardware capability access, and exclusive customization options. To ensure compliance and secure delivery, we will grant access to the commercial version through the following process.
 
 **Commercial Version Access Process:**
 1. **Complete a questionnaire**: Submit basic information about your organization and intended use case.
@@ -408,5 +408,5 @@ The commercial version provides more comprehensive feature support, deeper hardw
 
 If you wish to obtain the commercial version, please complete the questionnaire below. We will contact you within 3–5 business days:
 
-Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
+Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnJQBMIkRm6K79rjXR0hr0Fg
 :::

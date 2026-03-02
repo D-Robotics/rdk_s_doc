@@ -27,7 +27,7 @@ import TabItem from '@theme/TabItem';
 
 ## 准备工作
 
-1. RDK已烧录好Ubuntu系统镜像。
+1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
 2. RDK已成功安装TogetheROS.Bot。
 3. RDK已成功安装智能语音算法包，安装命令：
 

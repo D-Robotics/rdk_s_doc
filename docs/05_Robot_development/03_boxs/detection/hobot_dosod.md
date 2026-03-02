@@ -34,7 +34,7 @@ DOSOD (Decoupled Open-Set Object Detector)[https://github.com/D-Robotics-AI-Lab/
 
 ### RDK平台
 
-1. RDK已烧录好RDK OS系统。
+1. RDK已烧录好Ubuntu 22.04系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -52,23 +52,13 @@ DOSOD (hobot_dosod) package订阅sensor package发布的图片，并输入模型
 **使用MIPI摄像头发布图片**
 
 <Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
 
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
 <TabItem value="humble" label="Humble">
 
 ```bash
 # 配置tros.b环境
 source /opt/tros/humble/setup.bash
 ```
-
-</TabItem>
-</Tabs>
 
 ```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
@@ -81,27 +71,20 @@ export CAM_TYPE=mipi
 ros2 launch hobot_dosod dosod.launch.py
 ```
 
+</TabItem>
+
+</Tabs>
+
 **使用USB摄像头发布图片**
 
 <Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
 
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
 <TabItem value="humble" label="Humble">
 
 ```bash
 # 配置tros.b环境
 source /opt/tros/humble/setup.bash
 ```
-
-</TabItem>
-</Tabs>
-
 
 ```shell
 
@@ -115,28 +98,20 @@ export CAM_TYPE=usb
 ros2 launch hobot_dosod dosod.launch.py
 ```
 
+</TabItem>
+
+</Tabs>
 
 **使用本地回灌图片**
 
 <Tabs groupId="tros-distro">
-<TabItem value="foxy" label="Foxy">
 
-```bash
-# 配置tros.b环境
-source /opt/tros/setup.bash
-```
-
-</TabItem>
 <TabItem value="humble" label="Humble">
 
 ```bash
 # 配置tros.b环境
 source /opt/tros/humble/setup.bash
 ```
-
-</TabItem>
-</Tabs>
-
 
 ```shell
 # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
@@ -149,7 +124,15 @@ export CAM_TYPE=fb
 ros2 launch hobot_dosod dosod.launch.py
 ```
 
-除了设定模型，还支持变更模型与配置。更改模型文件配置为`dosod_model_file_name:="config/dosod_mlp3x_l_rep-int8.bin"`，更改模型类别配置为`dosod_vocabulary_file_name:=config/offline_vocabulary.json"`。
+</TabItem>
+
+</Tabs>
+
+除了设定模型，还支持变更模型与配置。
+
+- X5: 更改模型文件配置为`dosod_model_file_name:="config/dosod_mlp3x_l_rep-int8.bin"`，更改模型类别配置为`dosod_vocabulary_file_name:=config/offline_vocabulary.json"`。
+
+- S100: 更改模型文件配置为`dosod_model_file_name:="config/dosod_mlp3x_l_rep-int16.hbm"`，更改模型类别配置为`dosod_vocabulary_file_name:=config/offline_vocabulary.json"`。
 
 ## 结果分析
 
