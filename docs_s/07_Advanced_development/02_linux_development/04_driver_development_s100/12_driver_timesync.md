@@ -263,6 +263,32 @@ Slave端log:
   ptp4l[3469.886]: port 1: master sync timeout
 ```
 
+#### ptp时间同步方案
+
+硬件特性限制，驱动实现不能同时支持E2E/P2P。S100/S600默认支持使用P2P延迟测量机制。
+
+在使用ptp时间同步方案，比如雷达作为ptp4l slave且不支持P2P协议，需要使用E2E协议可以通过以下修改进行测试：
+
+:::tip
+以下修改仅在soc作为ptp4l master时有效。此修改会影响soc作为ptp4l slave时的功能!
+:::
+
+```
+  diff --git a/ethernet/hobot/hobot_eth_super_ptp.c b/ethernet/hobot/hobot_eth_super_ptp.c
+  index 0bfe2250..60577ea4 100755
+  --- a/ethernet/hobot/hobot_eth_super_ptp.c
+  +++ b/ethernet/hobot/hobot_eth_super_ptp.c
+  @@ -238,6 +238,7 @@ static void ptp_hwtstamp_ctr_config(struct hwtstamp_config *config, struct hwtst
+                          break;
+                  case (s32)HWTSTAMP_FILTER_PTP_V2_EVENT:
+                          ctr_config->ptp_v2 = (u32)PTP_TCR_TSVER2ENA;
+  +                       ctr_config->ts_master_en = (u32)PTP_TCR_TSMSTRENA;
+                          ctr_config->snap_type_sel = PTP_GMAC4_TCR_SNAPTYPSEL_1;/*PRQA S 1882, 0478, 0636, 4501*/
+                          ctr_config->ptp_over_ipv4_udp = (u32)PTP_TCR_TSIPV4ENA;
+                          ctr_config->ptp_over_ipv6_udp = (u32)PTP_TCR_TSIPV6ENA;
+```
+
+
 ## 全局时间源配置
 
 由于当前系统中存在多个timeline，比如systime、phc、rtc等，而各个模块支持选择不同的timeline来打印各自的时间戳。为了统一各个模块的日志中时间戳的timeline，添加了一个hb\_systime的模块，来统一系统各个模块的timeline的选择。该模块实现的具体功能如下：
