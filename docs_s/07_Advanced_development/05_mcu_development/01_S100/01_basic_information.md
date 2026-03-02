@@ -60,7 +60,7 @@ pip install tqdm
 :::
 
 ```shell
-# 编译 MCU1 Debug 版本
+# 编译MCU1 Debug版本
 cd mcu/Build/FreeRtos_mcu1
 python build_freertos.py lite matrix B s100 mcu1 gcc debug
 */
