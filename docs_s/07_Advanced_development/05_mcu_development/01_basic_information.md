@@ -67,7 +67,7 @@ pip install tqdm
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
 ```shell
-# 编译MCU1 Debug 版本
+# 编译MCU1 Debug版本
 cd mcu/Build/FreeRtos_mcu1
 python build_freertos.py lite matrix B s100 mcu1 gcc debug
 */
