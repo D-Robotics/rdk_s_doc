@@ -291,7 +291,7 @@ DDR thermal_zone包含thermal_zone7到thermal_zone10
 
 thermal_zone中有1个trip_point，都表示的是关机温度，默认为120度
 
-##### BOU thermal_zone简介
+##### BPU thermal_zone简介
 
 BPU thermal_zone包含thermal_zone11到thermal_zone18
 
