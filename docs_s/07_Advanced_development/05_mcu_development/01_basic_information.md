@@ -348,12 +348,12 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)章节
+关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/02_install_os/rdk_s100.md#指定区域烧录)章节
 
 </TabItem>
 <TabItem value="S600" label="S600">
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md)章节
+关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/02_install_os/rdk_s600.md#指定区域烧录)章节
 
 </TabItem>
 </Tabs>
