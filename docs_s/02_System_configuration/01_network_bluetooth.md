@@ -340,7 +340,6 @@ sudo apt full-upgrade
 sudo reboot
 ```
 
-## 蓝牙配置
 
 ## 蓝牙配置
 
