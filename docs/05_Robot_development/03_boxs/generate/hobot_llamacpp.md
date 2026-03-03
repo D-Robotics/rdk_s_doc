@@ -51,36 +51,48 @@ import TabItem from '@theme/TabItem';
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu 22.04系统镜像。
+1. RDK已烧录好Ubuntu系统镜像。
 2. RDK已成功安装TogetheROS.Bot。
 3. 下载安装功能包
 
+<Tabs groupId="tros-distro">
+<TabItem value="humble" label="Humble">
+
+```bash
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+```
+
+
+</TabItem>
+</Tabs>
+
 ```shell
 sudo apt update
-sudo apt install tros-humble-hobot-llamacpp
+sudo apt install tros-${TROS_DISTRO}-hobot-llamacpp
 ```
 
 :::caution **注意**
 **如果`sudo apt update`命令执行失败或报错，请查看[常见问题](/docs/08_FAQ/01_hardware_and_system.md)章节的`Q10: apt update 命令执行失败或报错如何处理？`解决。**
 :::
 
+4. 系统配置
+
+使用命令`srpi-config`修改ION memory大小为1.6GB，重启后设置CPU为最高频率。
+
+  - RDK X5 参考: 
+  
+    1) `srpi-config`使用指南[Performance Options](/docs/02_System_configuration/02_srpi-config.md#performance-options)
+
+    2) CPU调频方法: [CPU频率管理](/docs/02_System_configuration/04_frequency_management.md#cpu%E9%A2%91%E7%8E%87%E7%AE%A1%E7%90%86-1)
+
+  - RDK S100 参考: 
+
+    1) `srpi-config`使用指南[Performance Options](/docs_s/02_System_configuration/02_srpi-config.md#performance-options)
+
+    2) CPU调频方法: [CPU频率管理](/docs_s/02_System_configuration/04_frequency_management.md#cpu%E9%A2%91%E7%8E%87%E7%AE%A1%E7%90%86-1)
+
 ## 使用方式
-
-使用命令`srpi-config`修改ION memory大小为1.6GB，设置方法参考RDK用户手册配置工具`srpi-config`使用指南[Performance Options](https://developer.d-robotics.cc/rdk_doc/System_configuration/srpi-config#performance-options)章节。
-
-重启后设置CPU最高频率为1.5GHz，以及调度模式为`performance`，命令如下：
-
-```bash
-sudo bash -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu1/cpufreq/scaling_governor'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu2/cpufreq/scaling_governor'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu3/cpufreq/scaling_governor'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu4/cpufreq/scaling_governor'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu5/cpufreq/scaling_governor'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu6/cpufreq/scaling_governor'
-sudo bash -c 'echo performance >/sys/devices/system/cpu/cpu7/cpufreq/scaling_governor'
-```
 
 目前提供两种体验方式，一种直接终端输入图片,文本体验，一种订阅图片和文本消息，然后将结果以文本方式发布出去。
 
@@ -191,4 +203,4 @@ ros2 run hobot_llamacpp hobot_llamacpp --ros-args -p feed_type:=0 -p model_type:
 
 ## 注意事项
 
-X5平台 修改ION memory大小为1.6GB, S100平台 修改ION memory大小大于1.6GB, 否则会导致模型加载失败。
+X5平台 修改ION memory大小为1.6GB, S100平台修改ION memory大小大于1.6GB, 否则会导致模型加载失败。
