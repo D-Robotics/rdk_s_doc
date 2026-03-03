@@ -81,15 +81,15 @@ SSH 的使用请查看 [远程登录 - SSH 登录](../remote_login#ssh)。
 
 ### 字符终端自动登录
 
-修改`serial-getty@.service`文件可以设置免密登陆，操作如下
+修改`serial-getty@ttyS0.service `文件可以设置免密登陆，操作如下
 
-1. 打开serial-getty@.service
+1. 打开serial-getty@ttyS0.service
 
 ```bash
 # root用户登陆
-vim /lib/systemd/system/serial-getty@.service
+vim /usr/lib/systemd/system/serial-getty@ttyS0.service
 # sunrise用户登陆
-sudo vim /lib/systemd/system/serial-getty@.service
+sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
 ```
 
 2.  将`ExecStart=-/sbin/agetty`所在行修改为:
