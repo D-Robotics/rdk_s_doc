@@ -47,10 +47,10 @@ RDK S100 / S600 系统提供了两个默认账户，方便用户首次使用：
 
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
-- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#debug_uart)
+- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100/index.md#type-c-j16)
 </TabItem>
 <TabItem value="S600" label="S600">
-- [rdk_s600 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s600.md#debug_uart)
+- [rdk_s600 调试串口章节](../01_Quick_start/01_hardware_introduction/02_rdk_s600/index.md#闪连-烧录mainmcu-调试-j4)
 </TabItem>
 </Tabs>
 串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
@@ -189,7 +189,7 @@ macos系统下，使用minicom工具连接串口，步骤如下：
 
 :::tip
 
-使用minicom连接出现乱码，请查看[使用macos系统笔记本串口乱码](../01_Quick_start/02_install_os/rdk_s100.md#使用macos系统笔记本串口乱码问题)
+使用minicom连接出现乱码，请查看[使用macos系统笔记本串口乱码](../01_Quick_start/02_install_os/rdk_s100.md#使用-macos-系统笔记本串口乱码问题)
 :::
 
 ## 网络状态确认{#network_config}
@@ -237,7 +237,7 @@ macos系统下，使用minicom工具连接串口，步骤如下：
 ![image-Cmdline-Linux](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif)
 
 
-## NoMachine登陆
+## NoMachine 登录
 
 :::tip
 NoMachine功能需要S100/S600端的软件包支持，配置指南见[NoMachine配置](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-配置)

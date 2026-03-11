@@ -93,7 +93,7 @@ sidebar_position: 4
 
 ## 接口说明{#interface}
 
-接口定义: [D-Robotics_RDK_S600_Connector_Application_Note_V0P1.xlsx](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/D-Robotics_RDK_S600_Connector_Application_Note_V0P1-20251219.xlsx)
+接口定义: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/D-Robotics_RDK_S600_Connector_Application_Note_V0P1-20251219.xlsx">D-Robotics_RDK_S600_Connector_Application_Note_V0P1.xlsx</a>
 
 ### 主板供电接口 (J1)
 

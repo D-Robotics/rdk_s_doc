@@ -24,7 +24,7 @@ sidebar\_position: 4
 
 ### Q5：MCU 子板和 CAM 子板与 RDK S100 主板如何连接，是否有参考指引？​
 
-**A: [1.1.1 RDK S100 系列](01_rdk_s100.md)** 和 **[1.1.3 MCU 接口扩展板](03_rdk_s100_mcu_port_expansion_board.md)** 章节分别有介绍 CAM 子板和 MCU 子板与 RDK S100 主板连接的参考视频可供参考。​
+**A: [1.1.1.1 RDK S100 相机扩展板](../01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board.md)** 和 **[1.1.1.2 RDK S100 MCU 接口扩展板](../01_hardware_introduction/01_rdk_s100/03_rdk_s100_mcu_port_expansion_board.md)** 章节分别有介绍 CAM 子板和 MCU 子板与 RDK S100 主板连接的参考视频可供参考。​
 
 ### Q6：RDK S100 Pinlist Excel 文件中描述的 AO，AI，I，O，IO，NULL，/ 等字符表示什么意思？​
 
