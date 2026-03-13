@@ -19,7 +19,7 @@ import TabItem from '@theme/TabItem';
 
 :::warning 注意
 
-RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取
+RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取。
 
 :::
 
@@ -37,11 +37,89 @@ RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取
 </TabItem>
 <TabItem value="S600" label="S600">
 
-| 名称          | 版本 | 上传日期   | 路径                                                                                             |
-| ------------- | ---- | ---------- | ------------------------------------------------------------------------------------------------ |
-| Brief(Module) | V0.1 | 2025-12-20 | RDKS600_datasheet_and_design_guide/Datasheet/drobotics_s600_module_brief_v0p1_zh_251216.pdf      |
-| Brief(Kit)    | V0.1 | 2025-12-20 | RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_brief_v0p1_zh_251216.pdf         |
-| STEP 模型     | V0.1 | 2025-12-19 | RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/rdk_s600_v0p1_full_model_20251020.rar |
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>版本</th>
+      <th>上传日期</th>
+      <th>路径</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">Brief (Module)</td>
+      <td>-</td>
+      <td>2025/12/20</td>
+      <td>**V0P1:** RDKS600_datasheet_and_design_guide/Datasheet/drobotics_s600_module_brief_v0p1_zh_251216.pdf</td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P2:** RDKS600_datasheet_and_design_guide/Datasheet/drobotics_s600_module_brief_v0p2_260306.pdf</td>
+    </tr>
+    <tr>
+      <td>Brief (Kit)</td>
+      <td>-</td>
+      <td>2025/12/20</td>
+      <td>RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_brief_v0p1_zh_251216.pdf</td>
+    </tr>
+    <tr>
+      <td>Datasheet (Module)</td>
+      <td>V0.1</td>
+      <td>2026/3/12</td>
+      <td>RDKS600_datasheet_and_design_guide/Datasheet/D-Robotics_RDK_S600_Module_Datasheet_V0P1_20260122.pdf</td>
+    </tr>
+    <tr>
+      <td>硬件设计指南 (Module)</td>
+      <td>V0.1</td>
+      <td>2026/3/12</td>
+      <td>RDKS600_datasheet_and_design_guide/HardwareDesignGuide/D-Robotics_RDK_S600_Module_Hardware_Design_Guide_V0P1_0122.pdf</td>
+    </tr>
+    <tr>
+      <td>热设计指南</td>
+      <td>V0.1</td>
+      <td>2026/3/12</td>
+      <td>RDKS600_datasheet_and_design_guide/HardwareDesignGuide/D-Robotics_RDK_S600_Module_Thermal_Simulation_Constraints_Checklist_V0P1_20260105.xlsx</td>
+    </tr>
+    <tr>
+      <td>699 Pin B2B 连接器使用说明 (Module)</td>
+      <td>V0.1</td>
+      <td>2026/3/12</td>
+      <td>RDKS600_datasheet_and_design_guide/Pinlist/D-Robotics_RDK_S600_Module_699-Pin_B2B_Connector_Application_Note_V0P1_20251219.xlsx</td>
+    </tr>
+    <tr>
+      <td>参考设计 (Carrier Board)</td>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P2:** RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_Module_Carrier_Board/RDK_S600_Module_Carrier_Board_Release_V0P2.XXX</td>
+    </tr>
+    <tr>
+      <td>STEP 模型(kit)</td>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P2:** RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/</td>
+    </tr>
+    <tr>
+      <td>STEP 模型 (Module)</td>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P2:** RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_Module_3D_V0P2_20260105.zip</td>
+    </tr>
+    <tr>
+      <td rowspan="2">典型场景功耗计算</td>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P1:** RDKS600_datasheet_and_design_guide/TypicalScenarioPowerConsumption/D-Robotics_RDK_S600_Power_V0P1_20251222.pdf</td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P2:** D-Robotics_RDK_S600_Typical_Scenario_Power_Consumption_V0P2_20260122.pdf</td>
+    </tr>
+  </tbody>
+</table>
+
 
 </TabItem>
 </Tabs>
@@ -61,10 +139,40 @@ RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取
 </TabItem>
 <TabItem value="S600" label="S600">
 
-| 名称  | 版本 | 上传日期   | 说明文档                                                                                                     |
-| ----- | ---- | ---------- | ------------------------------------------------------------------------------------------------------------ |
-| Brief | V0.2 | 2025-12-20 | RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_camera_expansion_board_brief_v0p2_251219.pdf |
-
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>版本</th>
+      <th>上传日期</th>
+      <th>路径</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">Brief</td>
+      <td>V0.2</td>
+      <td>2025/12/20</td>
+      <td>**V0P2:** RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_camera_expansion_board_brief_v0p2_251219.pdf</td>
+    </tr>
+    <tr>
+      <td>V0.3</td>
+      <td>2026/3/12</td>
+      <td>**V0P3:** RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_camera_expansion_board_brief_v0p3_260311.pdf</td>
+    </tr>
+    <tr>
+      <td rowspan="2">参考设计</td>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P2:** RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_CAMERA_EXPANSION_BOARD/RDK_S600_CAMERA_EXPANSION_BOARD_V0P2.XXX</td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>2026/3/16</td>
+      <td>**V0P3:** RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_CAMERA_EXPANSION_BOARD/RDK_S600_CAMERA_EXPANSION_BOARD_V0P3.XXX</td>
+    </tr>
+  </tbody>
+</table>
 </TabItem>
 </Tabs>
 
@@ -84,9 +192,35 @@ RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取
 </TabItem>
 <TabItem value="S600" label="S600">
 
-| 名称  | 版本 | 上传日期   | 说明文档                                                                                                 |
-| ----- | ---- | ---------- | -------------------------------------------------------------------------------------------------------- |
-| Brief | V0.2 | 2025-12-20 | RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_mcu_port_expansion_board_v0p2_251219.pdf |
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>版本</th>
+      <th>上传日期</th>
+      <th>路径</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">Brief</td>
+      <td>V0.2</td>
+      <td>2025/12/20</td>
+      <td>**V0P2:** RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_mcu_port_expansion_board_v0p2_251219.pdf</td>
+    </tr>
+    <tr>
+      <td>V0.3</td>
+      <td>2026/3/12</td>
+      <td>**V0P3:** RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_mcu_port_expansion_board_v0p3_260311.pdf</td>
+    </tr>
+    <tr>
+      <td>参考设计</td>
+      <td>-</td>
+      <td>2026/3/12</td>
+      <td>**V0P3:** RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_MCU_PORT_EXPANSION_BOARD/RDK_S600_MCU_PORT_EXPANSION_BOARD_V0P3.XXX</td>
+    </tr>
+  </tbody>
+</table>
 
 </TabItem>
 </Tabs>

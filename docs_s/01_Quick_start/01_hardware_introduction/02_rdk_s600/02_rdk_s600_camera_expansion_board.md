@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 2
 ---
 
 # 1.1.2.1 RDK S600 相机扩展板
@@ -12,6 +12,7 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 1. 本产品仍处于研发阶段，所述内容可能会有变更。
 2. 对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
+3. 使用前请先阅读 [**RDK S600 早期样机情况说明**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd)，获取硬件相关情况。
 
 :::
 
@@ -48,7 +49,7 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 | ----------- | ------------------------------------------------ |
 | 解串器      | 2x Maxim MAX96712                                |
 | GMSL 连接器 | 2x FAKRA-Mini 4in1                               |
-| 外部供电    | 12V DC，仅用于电流需求大于 700mA 时，最大 4.8A。 |
+| 外部供电    | 12V DC，仅用于电流需求大于 2.4A 时，最大 4.8A。 |
 | 工作温度    | 0℃~65℃                                           |
 
 ### 拓扑图
@@ -57,7 +58,12 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 接口说明
 
+**V0P2 接口图**
 ![s600_camera_expansion_board_interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png)
+
+**V0P3 接口图**
+![s600_camera_expansion_board_interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface-V0P3.png)
+
 
 | 位号  | 功能            |
 | ----- | --------------- |

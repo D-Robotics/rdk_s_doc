@@ -1,10 +1,10 @@
 ---
 
-sidebar\_position: 4
+sidebar_position: 3
 
 ---
 
-# 1.1.4 FAQ
+# 1.1.3 FAQ
 
 ### Q1：RDK S100 Pinlist Excel 文件中的 Pull up/down列表达的是什么意思？​
 
