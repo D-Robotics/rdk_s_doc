@@ -17,7 +17,7 @@ Netplan 方式配置网络仅在`RDK S100 / RDK S600`验证使用，其它平台
 - `RDK S600`根文件系统基于 Ubuntu-24.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
 :::
 
-在 Ubuntu 系统中，开发板的静态网络配置信息存储于 `/etc/netplan/01-hobot-net.yaml` 文件。以下是具体配置说明：
+在 Ubuntu 系统中，开发板的静态网络配置信息存储于 `/etc/netplan/99-hobot-net.yaml` 文件。以下是具体配置说明：
 
 - **静态 IP 与子网掩码**：若需为网络接口设定静态 IP 地址和子网掩码，可借助 `addresses` 字段，并采用 CIDR 表示法子网掩码。
 - **DHCP 配置**：若要让指定网络接口通过 DHCP（动态主机配置协议）自动获取 IP 地址，将 `dhcp4` 或 `dhcp6` 字段值修改为 `yes` 即可。
@@ -27,7 +27,7 @@ Netplan 方式配置网络仅在`RDK S100 / RDK S600`验证使用，其它平台
 使用 Netplan 进行网络配置举例如下：
 
 ```shell
-sudo vim /etc/netplan/01-hobot-net.yaml
+sudo vim /etc/netplan/99-hobot-net.yaml
 ```
 
 ```shell
@@ -340,6 +340,7 @@ sudo apt full-upgrade
 ```bash
 sudo reboot
 ```
+
 
 ## 蓝牙配置
 

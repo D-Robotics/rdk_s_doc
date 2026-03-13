@@ -132,7 +132,6 @@ Options:
 -c, --config="sensor=id"
 	Configure parameters for each video pipeline, can be repeated up to 6 times.
 	sensor   --  Sensor index,can have multiple parameters, reference sensor list.
-	mode     --  Sensor mode of camera_config_t
 	link     --  Sensor link port number, serdes sensor must be configured according to the hardware connection, can be set to [0-3] 0:A 1:B 2:C 3:D.
 -h, --help      Show help message
 Support sensor list:
