@@ -569,7 +569,7 @@ VDSP侧：
 
 1. 代码位置：
 ``` shell
-  ARM侧：{sdk_dir}/source/hobot-sp-samples/debian/app/vdsp_demo/
+  ARM侧：{sdk_dir}/source/hobot-multimedia-samples/debian/app/vdsp_demo/
   DSP侧：{sdk_dir}/vdsp_fw/samples/libxi-sample/
 ```
 

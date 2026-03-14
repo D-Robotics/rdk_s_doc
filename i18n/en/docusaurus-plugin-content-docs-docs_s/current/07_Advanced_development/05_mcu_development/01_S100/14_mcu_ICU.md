@@ -231,7 +231,7 @@ static Gpio_Icu_ChannelConfigType Icu_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MODS_P
             /**< The notification functions shall have no parameters and no return value.*/
             .GpioChannelNotification = Icu_Gpio_Channel_0_21_ISR,
             /**< Interrupt Enable or Disable . */
-            .IntEnable = IntEnable,
+            .IntEnable = TRUE,
             /**< Interrupt Mask or Umask . */
             .IntMask = FALSE,
         },
@@ -266,15 +266,15 @@ The callback function is the final entry point after an interrupt is triggered. 
 /** GPIO_MCU[20] interrupt callback function */
 void Icu_Gpio_Channel_0_20_ISR(void)
 {
-	LogSync("enter Icu_Gpio_Channel_0_20_ISR!!!\r\n");
-	/** Add user code here */
+    LogSync("enter Icu_Gpio_Channel_0_20_ISR!!!\r\n");
+    /** Add user code here */
 }
 
 /** GPIO_MCU[21] interrupt callback function */
 void Icu_Gpio_Channel_0_21_ISR(void)
 {
-	LogSync("enter Icu_Gpio_Channel_0_21_ISR!!!\r\n");
-	/** Add user code here */
+    LogSync("enter Icu_Gpio_Channel_0_21_ISR!!!\r\n");
+    /** Add user code here */
 }
 ```
 
@@ -287,54 +287,54 @@ Before configuring an interrupt, it is necessary to identify the interrupt numbe
 ```c
 void Icu_Gpio_Interrupt_Init(uint8 Instance, uint8 priority)
 {
-	uint8 cmd = Instance;
+    uint8 cmd = Instance;
 
-	switch (cmd) {
-	case 0:
-		INT_SYS_InstallHandler(MCUSYS_GPIO0_INTR, Gpio0_ExtIsr, 0);
-		INT_SYS_SetPriority(MCUSYS_GPIO0_INTR, priority);
-		INT_SYS_EnableIRQ(MCUSYS_GPIO0_INTR);
-		break;
-	case 1:
-		INT_SYS_InstallHandler(MCUSYS_GPIO1_INTR, Gpio1_ExtIsr, 0);
-		INT_SYS_SetPriority(MCUSYS_GPIO1_INTR, priority);
-		INT_SYS_EnableIRQ(MCUSYS_GPIO1_INTR);
-		break;
-	case 2:
-		INT_SYS_InstallHandler(MCUSYS_GPIO2_INTR, Gpio2_ExtIsr, 0);
-		INT_SYS_SetPriority(MCUSYS_GPIO2_INTR, priority);
-		INT_SYS_EnableIRQ(MCUSYS_GPIO2_INTR);
-		break;
-	case 3:
-		INT_SYS_InstallHandler(AON_WAKEUP_GPIO_INTR, Gpio3_ExtIsr, 0);
-		INT_SYS_SetPriority(AON_WAKEUP_GPIO_INTR, priority);
-		INT_SYS_EnableIRQ(AON_WAKEUP_GPIO_INTR);
-		break;
-	default:
-		break;
-	}
+    switch (cmd) {
+    case 0:
+        INT_SYS_InstallHandler(MCUSYS_GPIO0_INTR, Gpio0_ExtIsr, 0);
+        INT_SYS_SetPriority(MCUSYS_GPIO0_INTR, priority);
+        INT_SYS_EnableIRQ(MCUSYS_GPIO0_INTR);
+        break;
+    case 1:
+        INT_SYS_InstallHandler(MCUSYS_GPIO1_INTR, Gpio1_ExtIsr, 0);
+        INT_SYS_SetPriority(MCUSYS_GPIO1_INTR, priority);
+        INT_SYS_EnableIRQ(MCUSYS_GPIO1_INTR);
+        break;
+    case 2:
+        INT_SYS_InstallHandler(MCUSYS_GPIO2_INTR, Gpio2_ExtIsr, 0);
+        INT_SYS_SetPriority(MCUSYS_GPIO2_INTR, priority);
+        INT_SYS_EnableIRQ(MCUSYS_GPIO2_INTR);
+        break;
+    case 3:
+        INT_SYS_InstallHandler(AON_WAKEUP_GPIO_INTR, Gpio3_ExtIsr, 0);
+        INT_SYS_SetPriority(AON_WAKEUP_GPIO_INTR, priority);
+        INT_SYS_EnableIRQ(AON_WAKEUP_GPIO_INTR);
+        break;
+    default:
+        break;
+    }
 }
 
 void Icu_Gpio_Interrupt_DeInit(uint8 Instance)
 {
-	uint8 cmd = Instance;
+    uint8 cmd = Instance;
 
-	switch (cmd) {
-	case 0:
-		INT_SYS_DisableIRQ(MCUSYS_GPIO0_INTR);
-		break;
-	case 1:
-		INT_SYS_DisableIRQ(MCUSYS_GPIO1_INTR);
-		break;
-	case 2:
-		INT_SYS_DisableIRQ(MCUSYS_GPIO2_INTR);
-		break;
-	case 3:
-		INT_SYS_DisableIRQ(AON_WAKEUP_GPIO_INTR);
-		break;
-	default:
-		break;
-	}
+    switch (cmd) {
+    case 0:
+        INT_SYS_DisableIRQ(MCUSYS_GPIO0_INTR);
+        break;
+    case 1:
+        INT_SYS_DisableIRQ(MCUSYS_GPIO1_INTR);
+        break;
+    case 2:
+        INT_SYS_DisableIRQ(MCUSYS_GPIO2_INTR);
+        break;
+    case 3:
+        INT_SYS_DisableIRQ(AON_WAKEUP_GPIO_INTR);
+        break;
+    default:
+        break;
+    }
 }
 ```
 

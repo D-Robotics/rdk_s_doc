@@ -611,14 +611,14 @@ Host端构建支持两种构建方式：
     ```shell
     sunrise@ubuntu:~$ sudo nmcli device status
     nmcli device status
-    DEVICE         TYPE      STATE                   CONNECTION 
-    lo             loopback  connected (externally)  lo         
-    wlan0          wifi      disconnected            --         
-    p2p-dev-wlan0  wifi-p2p  disconnected            --         
-    eth0           ethernet  unavailable             --         
-    eth2           ethernet  unavailable             --         
-    eth3           ethernet  unavailable             --         
-    eth1           ethernet  unmanaged               -- 
+    DEVICE         TYPE      STATE                   CONNECTION
+    lo             loopback  connected (externally)  lo
+    wlan0          wifi      disconnected            --
+    p2p-dev-wlan0  wifi-p2p  disconnected            --
+    eth0           ethernet  unavailable             --
+    eth2           ethernet  unavailable             --
+    eth3           ethernet  unavailable             --
+    eth1           ethernet  unmanaged               --
     ```
     此时查看 IP 地址，可以看到 eth0 是 DOWN 状态：
     ```shell
@@ -627,7 +627,7 @@ Host端构建支持两种构建方式：
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
         inet 127.0.0.1/8 scope host lo
         valid_lft forever preferred_lft forever
-        inet6 ::1/128 scope host noprefixroute 
+        inet6 ::1/128 scope host noprefixroute
         valid_lft forever preferred_lft forever
     2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
         link/ether c6:40:e8:32:f0:8a brd ff:ff:ff:ff:ff:ff
@@ -709,7 +709,7 @@ Host端构建支持两种构建方式：
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
         inet 127.0.0.1/8 scope host lo
         valid_lft forever preferred_lft forever
-        inet6 ::1/128 scope host noprefixroute 
+        inet6 ::1/128 scope host noprefixroute
         valid_lft forever preferred_lft forever
     2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
         link/ether c6:40:e8:32:f0:8a brd ff:ff:ff:ff:ff:ff
@@ -717,7 +717,7 @@ Host端构建支持两种构建方式：
     3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
         link/ether c2:97:53:60:e3:5b brd ff:ff:ff:ff:ff:ff
         altname end3
-        inet6 fe80::c097:53ff:fe60:e35b/64 scope link 
+        inet6 fe80::c097:53ff:fe60:e35b/64 scope link
         valid_lft forever preferred_lft forever
     ...
 
