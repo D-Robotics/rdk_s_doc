@@ -22,7 +22,7 @@ sidebar_position: 8
 | Wi-Fi天线 | 微雪 | ORD-CM4-ANTENNA | SMA天线 支持2.4G/5G WiFi频段 | [购买链接](https://www.waveshare.net/shop/ORD-CM4-ANTENNA.htm)  |
 | 4G通信模块 | 微雪 | SIM7600G-H 4G DTU | 工业级4G通信模块，支持USB/UART/RS232/RS485接口，4G/3G/2G网络及GNSS定位 | [购买链接](https://www.waveshare.net/shop/SIM7600G-H-4G-DTU.htm)  |
 
-### IMU 
+### IMU
 | 类型 | 供应商 | 型号 | 描述 |使用指南|购买链接 |
 | --- | --------- | -------- | --------------- | --------- | --------- |
 | IMU 模组 | 地瓜机器人 | RDK IMU Module | 高性能 6 轴惯性测量单元（IMU）BMI088，包含一个三轴陀螺仪和一个三轴加速度计，使用 I2C 接口进行连接 |[点击查看](https://github.com/D-Robotics/rdk_imu)<br/>[点击查看](https://github.com/D-Robotics/rdk_imu/tree/library)|[购买链接](https://detail.tmall.com/item.htm?abbucket=11&id=950559188647&mi_id=0000y73ip0pJqD4bU7HI9v6_ueVB9SpvJQKtSGGzP2qQC4E&ns=1&priceTId=2147850217700998222523124e1266&skuId=5862025952973&spm=a21n57.1.hoverItem.3&utparam=%7B%22aplus_abtest%22%3A%22d17d854d12fb2c2c542d2e5885d44a3e%22%7D&xxc=taobaoSearch)  |
@@ -107,11 +107,12 @@ sidebar_position: 8
 | 电源 | 微雪 | PSU-27W-USB-C-CN-B | Type-C接口 5V/5A 定制电源 | [购买链接](https://www.waveshare.net/shop/PSU-27W-USB-C-CN-B.htm)  |
 | Wi-Fi天线 | 微雪 | ORD-CM4-ANTENNA | SMA天线 支持2.4G/5G WiFi频段 | [购买链接](https://www.waveshare.net/shop/ORD-CM4-ANTENNA.htm)  |
 | 4G通信模块 | 微雪 | SIM7600G-H 4G DTU | 工业级4G通信模块，支持USB/UART/RS232/RS485接口，4G/3G/2G网络及GNSS定位 | [购买链接](https://www.waveshare.net/shop/SIM7600G-H-4G-DTU.htm)  |
+| 4G通信模块 | 微雪 | SIM7600G-H 4G DONGLE | 工业级4G通信模块，支持USB/UART接口，4G/3G/2G网络及GNSS定位 | [购买链接](https://www.waveshare.net/shop/SIM7600G-H-4G-DONGLE.htm)  |
 | 外壳 | 地瓜机器人 | RDK X5 Case | 全金属黑色外壳 | [购买链接](https://item.taobao.com/item.htm?abbucket=11&id=623862263232&mi_id=0000TakHYTmsuMbPUMYV_dByLYk8Z3qEoQjHCjwjgpyQD58&ns=1&priceTId=213e032717694105383204838e131d&skuId=5633976856940&spm=a21n57.1.hoverItem.8&utparam=%7B%22aplus_abtest%22%3A%224d58468e1aea4fb2bc2fb94fb4afe5db%22%7D&xxc=taobaoSearch)  |
 | 以太网供电模块 | 微雪 | RDK X5 PoE Module | 40PIN GPIO 接口连接，兼容 IEEE 802.3af/at 网络标准，全隔离开关电源（SMPS）设计，具备板载高转速主动散热风扇和金属散热片|[购买链接](https://www.waveshare.net/shop/RDK-PoE-Module.htm)  |
 
 
-### IMU 
+### IMU
 | 类型 | 供应商 | 型号 | 描述 |使用指南|购买链接 |
 | --- | --------- | -------- | --------------- | --------- | --------- |
 | IMU 模组 | 地瓜机器人 | RDK IMU Module | 高性能 6 轴惯性测量单元（IMU）BMI088，包含一个三轴陀螺仪和一个三轴加速度计，使用 I2C 接口进行连接 |[点击查看](https://github.com/D-Robotics/rdk_imu)<br/>[点击查看](https://github.com/D-Robotics/rdk_imu/tree/library)|[购买链接](https://detail.tmall.com/item.htm?abbucket=11&id=950559188647&mi_id=0000y73ip0pJqD4bU7HI9v6_ueVB9SpvJQKtSGGzP2qQC4E&ns=1&priceTId=2147850217700998222523124e1266&skuId=5862025952973&spm=a21n57.1.hoverItem.3&utparam=%7B%22aplus_abtest%22%3A%22d17d854d12fb2c2c542d2e5885d44a3e%22%7D&xxc=taobaoSearch)  |

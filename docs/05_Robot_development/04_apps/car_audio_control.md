@@ -32,7 +32,7 @@ APP以PC端Gazebo仿真环境下的虚拟小车举例，发布的控制指令也
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04镜像。
+1. RDK已烧录好Ubuntu镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
@@ -61,7 +61,7 @@ APP以PC端Gazebo仿真环境下的虚拟小车举例，发布的控制指令也
 **如果`sudo apt update`命令执行失败或报错，请查看[常见问题](/docs/08_FAQ/01_hardware_and_system.md)章节的`Q10: apt update 命令执行失败或报错如何处理？`解决。**
 :::
 
-4. RDK已成功接好适配的音频板（可参考[智能语音章节](../03_boxs/function/hobot_audio.md)）。
+4. RDK已成功接好适配的音频板（可参考[智能语音章节](/docs/05_Robot_development/03_boxs/audio/hobot_audio.md)）。
 
 5. 和RDK在同一网段（有线或者连接同一无线网，IP地址前三段需保持一致）的PC，PC端需要安装的环境包括：
 
@@ -126,24 +126,25 @@ RDK平台启动程序：
 
 1. 拷贝音频配置文件
 
- <Tabs groupId="tros-distro">
- <TabItem value="foxy" label="Foxy">
+<Tabs groupId="tros-distro">
+<TabItem value="foxy" label="Foxy">
 
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/setup.bash
-    ```
+```bash
+# 配置tros.b环境
+source /opt/tros/setup.bash
+```
 
- </TabItem>
- <TabItem value="humble" label="Humble">
+</TabItem>
+<TabItem value="humble" label="Humble">
 
-    ```bash
-    # 配置tros.b环境
-    source /opt/tros/humble/setup.bash
-    ```
+```bash
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+```
 
- </TabItem>
- </Tabs>
+
+</TabItem>
+</Tabs>
 
     ```shell
     # 从tros.b的安装路径中拷贝出运行示例需要的配置文件。
@@ -165,7 +166,6 @@ RDK平台启动程序：
     ```
 
     </TabItem>
-
     <TabItem value="humble" label="Humble">
 
     ```bash
@@ -174,7 +174,6 @@ RDK平台启动程序：
     ```
 
     </TabItem>
-
     </Tabs>
 
     ```shell

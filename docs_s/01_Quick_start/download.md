@@ -27,7 +27,7 @@ RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取
 <TabItem value="S100" label="S100">
 | 名称                                                                                   | 最新版本    | 上传日期   | 说明文档                                                             |
 | -------------------------------------------------------------------------------------- | ----------- | ---------- | -------------------------------------------------------------------- |
-| [系统镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)                | V4.0.4-beta | 2025-10-24 | 系统镜像。                                                           |
+| [系统镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)                | V4.0.5 | 2026-03-05 | 系统镜像。                                                           |
 | [BSP 源码包](https://developer.d-robotics.cc/resource)                | V4.0.4-beta | 2026-01-29 | BSP 源码包。                                                           |
 
 </TabItem>
@@ -35,7 +35,7 @@ RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取
 
 | 名称     | 最新版本    | 上传日期   | 路径                                                                            |
 | -------- | ----------- | ---------- | ------------------------------------------------------------------------------- |
-| 系统镜像 | V5.0.0-beta | 2025-12-19 | RDKS600_LNX_SDK/RDKS600_V5.0.0-BETA/board_support_package/firmwares/product.zip |
+| 系统镜像 | V5.0.1-beta | 2026-03-12 | RDKS600_LNX_SDK/RDKS600_V5.0.1-BETA/board_support_package/firmwares/product.zip |
 
 </TabItem>
 </Tabs>

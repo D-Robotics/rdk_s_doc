@@ -24,10 +24,11 @@ import TabItem from '@theme/TabItem';
 | ------ | ------------ | ---------------------------------- |
 | RDK X5, RDK X5 Module | Ubuntu 22.04 (Humble) | 启动音频模块算法，并在终端显示结果 |
 | RDK S100, RDK S100P | Ubuntu 22.04 (Humble) | 启动音频模块算法，并在终端显示结果 |
+| RDK S600 | Ubuntu 24.04 (Jazzy) | 启动音频模块算法，并在终端显示结果 |
 
 ## 准备工作
 
-1. RDK已烧录好Ubuntu 22.04系统镜像。
+1. RDK已烧录好Ubuntu系统镜像。
 2. RDK已成功安装TogetheROS.Bot。
 3. RDK已成功安装智能语音2算法包，安装命令：
 
@@ -35,12 +36,24 @@ import TabItem from '@theme/TabItem';
    <TabItem value="humble" label="Humble">
 
    ```bash
-   sudo apt update
-   sudo apt install tros-humble-sensevoice-ros2
+   source /opt/tros/humble/setup.bash
    ```
+   
+    </TabItem>
+    <TabItem value="jazzy" label="Jazzy">
+
+    ```bash
+    source /opt/tros/jazzy/setup.bash
+    ```
 
    </TabItem>
    </Tabs>
+
+
+   ```bash
+   sudo apt update
+   sudo apt install tros-${ROS_DISTRO}-sensevoice-ros2
+   ```
 
 :::caution **注意**
 **如果`sudo apt update`命令执行失败或报错，请查看[常见问题](/docs/08_FAQ/01_hardware_and_system.md)章节的`Q10: apt update 命令执行失败或报错如何处理？`解决。**
@@ -87,12 +100,24 @@ RDK板端运行sensevoice_ros2 package：
    ```
 
 </TabItem>
+<TabItem value="jazzy" label="Jazzy">
+
+   ```shell
+   # 配置tros.b环境
+   
+   source /opt/tros/jazzy/setup.bash
+
+   #启动launch文件
+   ros2 launch sensevoice_ros2 sensevoice_ros2.launch.py micphone_name:="plughw:0,0"
+   ```
+
+</TabItem>
 
 </Tabs>
 
 ## 结果分析
 
-在旭日X3板端运行终端输出如下信息：
+在RDK上运行终端输出如下信息：
 
 ```text
 alsa_device_init, snd_pcm_open. handle((nil)), name(plughw:0,0), direct(1), mode(0)
@@ -144,3 +169,7 @@ $ ros2 topic list
 /audio_smart
 /audio_asr
 ```
+
+/audio_asr 话题需要特定的唤醒词 “你好，地瓜机器人” 才会有输出，`ros2 topic echo /asr_text`结果为：
+
+![执行结果](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/audio_asr.jpg)

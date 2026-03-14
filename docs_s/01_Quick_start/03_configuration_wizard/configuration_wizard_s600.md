@@ -83,7 +83,7 @@ SSH 的使用请查看 [远程登录 - SSH 登录](../remote_login#ssh)。
 
 修改`serial-getty@ttyS0.service `文件可以设置免密登陆，操作如下
 
-1. 打开serial-getty@ttyS0.service
+1. 打开 serial-getty@ttyS0.service
 
 ```bash
 # root用户登陆
@@ -200,7 +200,7 @@ dpkg -i nomachine_*_arm64.deb
 
 由于`NXServer`的配置问题，完成上述操作后直接连接会黑屏，需要重启后使用。
 
-`NoMachine`的使用请查看 [远程登录 - NoMachine登录](../remote_login#Nomachine登陆)。
+`NoMachine`的使用请查看 [远程登录 - NoMachine登录](../remote_login#nomachine-登录)。
 
 ## 用户管理
 

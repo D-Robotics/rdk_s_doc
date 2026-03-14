@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 1
 ---
 
 # 1.1.2 RDK S600 系列
@@ -9,7 +9,8 @@ sidebar_position: 4
 :::danger 注意
 
 1. 本产品仍处于研发阶段，所述内容可能会有变更。
-2. 对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
+2. 对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)。
+3. 使用前请先阅读 [**RDK S600 早期样机情况说明**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd)，获取硬件相关情况。
 
 :::
 
@@ -75,6 +76,11 @@ sidebar_position: 4
 
 ### 接口图
 
+**V0P1 接口图:**
+
+![image-rdk_600_mainboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface_V0P1.png)
+
+**V0P2 接口图：**
 ![image-rdk_600_mainboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png)
 
 | 序号     | 功能                      | 序号 | 功能                  | 序号 | 功能              |
@@ -93,7 +99,7 @@ sidebar_position: 4
 
 ## 接口说明{#interface}
 
-接口定义: [D-Robotics_RDK_S600_Connector_Application_Note_V0P1.xlsx](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/D-Robotics_RDK_S600_Connector_Application_Note_V0P1-20251219.xlsx)
+接口定义: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/D-Robotics_RDK_S600_Connector_Application_Note_V0P1-20251219.xlsx">D-Robotics_RDK_S600_Connector_Application_Note_V0P1.xlsx</a>
 
 ### 主板供电接口 (J1)
 

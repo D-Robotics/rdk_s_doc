@@ -35,7 +35,7 @@ zed相机代码仓库：https://github.com/D-Robotics/hobot_zed_cam
 
 ### RDK平台
 
-1. RDK已烧录好Ubuntu 22.04系统镜像
+1. RDK已烧录好RDK OS系统
 
 2. RDK已成功安装TogetheROS.Bot
 
@@ -60,10 +60,27 @@ zed相机代码仓库：https://github.com/D-Robotics/hobot_zed_cam
 
 - 在RDK上执行以下命令（X5和S100均支持）:
 
-```bash
-# 配置tros.b humble环境
-source /opt/tros/humble/setup.bash
+<Tabs groupId="tros-distro">
+<TabItem value="foxy" label="Foxy">
 
+```bash
+# 配置tros.b环境
+source /opt/tros/setup.bash
+```
+
+</TabItem>
+<TabItem value="humble" label="Humble">
+
+```bash
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+```
+
+
+</TabItem>
+</Tabs>
+
+```bash
 # 启动ZED-2i相机和占用网络推理程序
 ros2 launch dstereo_occnet zed2i_occ_node.launch.py
 ```
@@ -74,11 +91,30 @@ ros2 launch dstereo_occnet zed2i_occ_node.launch.py
 
 - 程序启动后可以通过rviz2可查看占用网格，RDK可直接安装rviz2查看，注意rviz2中需要做如下配置：
 
+<Tabs groupId="tros-distro">
+<TabItem value="foxy" label="Foxy">
+
+```bash
+# 配置tros.b环境
+source /opt/tros/setup.bash
+```
+
+</TabItem>
+<TabItem value="humble" label="Humble">
+
+```bash
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+```
+
+
+</TabItem>
+</Tabs>
+
 ```bash
 # 安装rviz2
 sudo apt install ros-humble-rviz2
 # 启动rviz2
-source /opt/tros/humble/setup.bash
 rviz2
 ```
 
@@ -86,10 +122,27 @@ rviz2
 
 - 如需保存结果请加入以下参数，`save_occ_flag`打开保存开关，`save_occ_dir`控制保存的目录（如果目录不存在会自动创建），`save_freq`控制保存频率，`save_total`控制保存的总数：
 
-```bash
-# 配置tros.b humble环境
-source /opt/tros/humble/setup.bash
+<Tabs groupId="tros-distro">
+<TabItem value="foxy" label="Foxy">
 
+```bash
+# 配置tros.b环境
+source /opt/tros/setup.bash
+```
+
+</TabItem>
+<TabItem value="humble" label="Humble">
+
+```bash
+# 配置tros.b环境
+source /opt/tros/humble/setup.bash
+```
+
+
+</TabItem>
+</Tabs>
+
+```bash
 # 启动ZED-2i相机和占用网络推理程序
 ros2 launch dstereo_occnet zed2i_occ_node.launch.py \
 save_occ_flag:=True save_occ_dir:=./occ_result save_freq:=4 save_total:=10

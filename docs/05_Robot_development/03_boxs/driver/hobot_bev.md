@@ -27,7 +27,7 @@ BEV感知算法是使用[OpenExplorer](https://developer.d-robotics.cc/api/v1/fi
 
 ## 准备工作
 
-1. RDK已烧录好Ubuntu 20.04/Ubuntu 22.04系统镜像。
+1. RDK已烧录好Ubuntu系统镜像。
 
 2. RDK已成功安装TogetheROS.Bot。
 
