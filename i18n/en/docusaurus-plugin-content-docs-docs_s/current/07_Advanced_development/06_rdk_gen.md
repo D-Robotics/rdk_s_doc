@@ -1,7 +1,7 @@
 ---
 sidebar_position: 06
 ---
-# 7.6 RDK S100 Build System Development Guide
+# 7.6 RDK S100/S600 Build System Development Guide
 
 :::tip Commercial Support
 The commercial version provides more comprehensive feature support, deeper hardware capability access, and exclusive customization options. To ensure compliance and secure delivery, we will grant access to the commercial version through the following process.
@@ -40,7 +40,7 @@ sudo ./pack_images.sh -p
 ```
 
 ## 7.6.2 Precompiled Root Filesystem Package Build Instructions
-The root filesystem for RDK S100 is generated using `multistrap` + `chroot`.
+The root filesystem for RDK is generated using `multistrap` + `chroot`.
 
 ### multistrap
 #### Official Documentation
@@ -63,17 +63,24 @@ In D-Robotics's provided `multistrap` build script, based on practical experienc
 #### Configuration File Introduction
 `multistrap` supports both single-file and multi-file configurations. In multi-file mode, the `include` field allows including all content from a base configuration file, enabling version-specific customization—greatly simplifying maintenance across multiple filesystem variants.
 
-Configuration files referenced in the following sections are located at the S100 code path: `samplefs/configs`:
+Configuration files referenced in the following sections are located at: `samplefs/configs`:
 ```bash
 $ tree samplefs/configs/
 samplefs/configs/
 ├── jammy-base.conf
 ├── jammy-desktop.conf
 ├── jammy-server.conf
+├── noble-base.conf
+├── noble-desktop.conf
 └── pip-requirements.list
 
-0 directories, 4 files
+0 directories, 6 files
 ```
+
+:::info Platform Selection
+- **RDK S100**: Uses `jammy-*` configuration files (Ubuntu 22.04)
+- **RDK S600**: Uses `noble-*` configuration files (Ubuntu 24.04)
+:::
 
 ##### Basic Format Introduction
 For detailed field descriptions, please refer to the official documentation. Here, we focus on explaining key configurations used in D-Robotics's setup.
@@ -91,21 +98,49 @@ Key fields explained:
 - **source / suite / components / omitdebsrc**  
   Define key parameters for APT sources. Refer to the [APT source format definition](https://manpages.ubuntu.com/manpages/xenial/man5/sources.list.5.html) for details:
   - **source**: Root URL of the APT repository, corresponding to the "uri" field in APT source format.
-  - **suite**: Suite name of the APT repository, corresponding to the "suite" field (e.g., Ubuntu code names like `jammy`, `focal`, or updates/security suites like `jammy-updates`, `jammy-security`).
+  - **suite**: Suite name of the APT repository, corresponding to the "suite" field (e.g., Ubuntu code names like `jammy`, `focal`, `noble`, or updates/security suites like `jammy-updates`, `noble-security`).
   - **components**: Repository components, matching the "component" field; multiple components can be specified.
   - **omitdebsrc**: Whether to skip downloading source packages (`*.dsc`, etc.) when fetching metadata and packages. Typically set to `true` to accelerate builds.
 - **packages**  
   Specifies packages to be fetched. Multiple packages can be listed in one `packages` field (space-separated), and the union of all `packages` fields forms the final package list.
 
 ##### Multi-file Configuration Example
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+<TabItem value="s100" label="RDK S100">
+
 Refer to `samplefs/configs/jammy-desktop.conf`.
 
-### RDK S100 Implementation
+</TabItem>
+<TabItem value="s600" label="RDK S600">
+
+Refer to `samplefs/configs/noble-desktop.conf`.
+
+</TabItem>
+</Tabs>
+
+### RDK Implementation
 #### Configuration File Design
-By default, RDK S100 splits `multistrap` configuration into three parts:
+By default, RDK splits `multistrap` configuration into multiple parts based on the platform:
+
+<Tabs>
+<TabItem value="s100" label="RDK S100">
+
 - **jammy-base.conf**: Configures common defaults for all RDK S100 root filesystems, including APT sources and packages included in all variants.
 - **jammy-desktop.conf**: Adds desktop-specific packages on top of `jammy-base.conf`.
 - **jammy-server.conf**: Adds server-specific packages on top of `jammy-base.conf`.
+
+</TabItem>
+<TabItem value="s600" label="RDK S600">
+
+- **noble-base.conf**: Configures common defaults for all RDK S600 root filesystems, including APT sources and packages included in all variants.
+- **noble-desktop.conf**: Adds desktop-specific packages on top of `noble-base.conf`.
+
+</TabItem>
+</Tabs>
 
 #### Build Process Instructions
 Users typically build the root filesystem using the script `samplefs/make_ubuntu_samplefs.sh`. If invoked with `sudo`, the build process includes package configuration, significantly increasing build time.
@@ -121,7 +156,20 @@ It is **recommended to invoke** `samplefs/make_ubuntu_samplefs.sh` **with `sudo`
 
 The script must be run from within the `samplefs` directory.
 
-Running `sudo ./make_ubuntu_samplefs.sh` without arguments defaults to building the desktop image using `jammy-desktop.conf`.
+Running `sudo ./make_ubuntu_samplefs.sh` without arguments:
+
+<Tabs>
+<TabItem value="s100" label="RDK S100">
+
+Defaults to building the desktop image using `jammy-desktop.conf`.
+
+</TabItem>
+<TabItem value="s600" label="RDK S600">
+
+Defaults to building the desktop image using `noble-desktop.conf`.
+
+</TabItem>
+</Tabs>
 
 To specify a custom config file:  
 `sudo ./make_ubuntu_samplefs.sh build <config_file_name>`  
@@ -139,7 +187,19 @@ D-Robotics also ensures packages marked as "**important**" are installed.
 :::
 
 ##### Trimming/Customizing Packages Not Marked "important" or "required"
+
+<Tabs>
+<TabItem value="s100" label="RDK S100">
+
 Users can directly remove unwanted packages from the `packages` fields in config files like `samplefs/configs/jammy-base.conf`, or define a new stanza and update the `bootstrap` field in `[General]` to exclude the original stanza and include the new one.
+
+</TabItem>
+<TabItem value="s600" label="RDK S600">
+
+Users can directly remove unwanted packages from the `packages` fields in config files like `samplefs/configs/noble-base.conf`, or define a new stanza and update the `bootstrap` field in `[General]` to exclude the original stanza and include the new one.
+
+</TabItem>
+</Tabs>
 
 ##### Trimming/Customizing Packages Marked "important" or "required"
 **Note**: APT maintainers typically mark the minimal system package set (for Ubuntu/Debian versions) as "Required", but further trimming is possible. At this level, users **must guarantee the completeness and usability** of the resulting root filesystem.
@@ -148,9 +208,9 @@ Steps:
 1. Add `omitrequired=true` in the `[General]` stanza.
 2. Explicitly define all required packages in the `Packages` stanza.
 
-## 7.6.3 RDK S100 Deb Package Build Process
+## 7.6.3 RDK Deb Package Build Process
 ### Introduction
-RDK S100 manages D-Robotics-customized user-space features as deb packages. Source code for building these deb packages is stored under the SDK's `source/` directory.
+RDK manages D-Robotics-customized user-space features as deb packages. Source code for building these deb packages is stored under the SDK's `source/` directory.
 
 ### Build Script Introduction
 The entry script for building debs is `mk_debs.sh`, located in the SDK root directory. Users can build repository-contained deb packages via this script.
@@ -229,8 +289,8 @@ During image building, deb packages are integrated into the board's root filesys
 ### Online Image Building
 #### Process Overview
 When `pack_image.sh` is run without the `-l` option, it follows the online image build process:
-1. Retrieve the default build config file from the `DEFAULT_CONFIG` field in `pack_image.sh` (e.g., `build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`).- This configuration file can be specified via the `-c` option.
-2. Retrieve the `RDK_DPKG_DEB_PKG_LIST` field from `build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`;
+1. Retrieve the default build config file from the `DEFAULT_CONFIG` field in `pack_image.sh` (e.g., `build_params/ubuntu-22.04_desktop_rdk-s100_release.conf` for S100, or `build_params/ubuntu-24.04_desktop_rdk-s600_release.conf` for S600). This configuration file can be specified via the `-c` option.
+2. Retrieve the `RDK_DPKG_DEB_PKG_LIST` field from the build configuration file.
 3. chroot into the `out/deploy/rootfs` directory:
    1. Attempt to download all deb packages from the existing on-device apt repositories based on the `RDK_DPKG_DEB_PKG_LIST` field;
    2. Install all deb packages;
@@ -266,12 +326,28 @@ Package names can be obtained via two methods:
 1. You only know the required file, and the host has never installed the package:
    - It is recommended to use search engines such as Google or Baidu to identify the deb package containing the file and confirm its apt repository. The reference process is as follows:
      - Search for the deb package name by filename on [debian.org](https://www.debian.org/distrib/packages), noting that you must perform the search under the "Search the contents of packages" section;
-     - After confirming the package name, search for its repository on [Ubuntu Launchpad](https://launchpad.net/ubuntu/+search) to verify that the package exists in components such as main/universe/multiverse under jammy/jammy-updates;
+     - After confirming the package name, search for its repository on [Ubuntu Launchpad](https://launchpad.net/ubuntu/+search) to verify that the package exists in components such as main/universe/multiverse under jammy/jammy-updates (S100) or noble/noble-updates (S600);
 2. You know the required file, and the host has already installed it:
    - You can obtain the package name using the command `dpkg -S <filename>`.
 
 ## 7.6.5 Custom Partition Description
+
+<Tabs>
+<TabItem value="s100" label="RDK S100">
+
 The partition definition file for RDK S100 is stored in the folder `source/bootloader/device/rdk/s100/partition_config_files`. The default partition table used is: `source/bootloader/device/rdk/s100/partition_config_files/s100-gpt.json`
+
+</TabItem>
+<TabItem value="s600" label="RDK S600">
+
+The partition definition file for RDK S600 is stored in the folder `source/bootloader/device/rdk/s600/partition_config_files`. The default partition table used is: `source/bootloader/device/rdk/s600/partition_config_files/s600-gpt.json`
+
+</TabItem>
+</Tabs>
+
+<Tabs>
+<TabItem value="s100" label="RDK S100">
+
 ```json
 {
 	"global": {
@@ -300,9 +376,9 @@ The partition definition file for RDK S100 is stored in the folder `source/bootl
 	"veeprom": "veeprom_common",        //                  // //                  //
 	"ubootenv": "ubootenv_common",      //                  // //                  //
 	"acore_cfg": "acore_cfg_common",    //   miniboot_emmc  // //                  //
-	"bl31": "bl31_common",              //                  // //                  //
+	"bl31": "bl31_common",              //                  // //     emmc_disk    //
 	"optee": "optee_common",            //                  // //                  //
-	"uboot": "uboot_common",            //------------------// //     emmc_disk    //
+	"uboot": "uboot_common",            //------------------// //                  //
 	"boot": "boot_common",                                     //                  //
 	"ota": "ota_common",                                       //                  //
 	"log": "log_common",                                       //                  //
@@ -310,10 +386,55 @@ The partition definition file for RDK S100 is stored in the folder `source/bootl
 	"system": "system_common"                                  //------------------//
 }
 ```
+
+</TabItem>
+<TabItem value="s600" label="RDK S600">
+
+```json
+{
+	"global": {
+		"antirollbackUpdate_host": true,
+		"antirollbackUpdate_hsm": false,
+		"ab_sync": false,
+		"backup_dir": "/tmp/ota/backup",
+		"AB_part_a": "_a",
+		"AB_part_b": "_b",
+		"BAK_part_bak": "_bak"
+	},
+	"fpt": "fpt_common",                //------------------//
+	"recovery": "recovery_common",      //                  //
+	"misc": "misc_common",              //                  //
+	"HB_APDP":"HB_APDP_common",         //                  //
+	"keystorage": "keystorage_common",  //                  //
+	"HSM_FW": "HSM_FW_common",          //  miniboot_flash  //
+	"HSM_RCA": "HSM_RCA_common",        //                  //
+	"keyimage": "keyimage_common",      //                  //
+	"SBL": "SBL_common",                //                  //
+	"spl": "spl_common",                //                  //
+	"MCU": "MCU_common",                //------------------//
+
+	"quickboot": "quickboot_common",    //------------------// //------------------//
+	"veeprom": "veeprom_common",        //                  // //                  //
+	"ubootenv": "ubootenv_common",      //                  // //                  //
+	"acore_cfg": "acore_cfg_common",    //   miniboot_emmc  // //                  //
+	"bl31": "bl31_common",              //                  // //     emmc_disk    //
+	"optee": "optee_common",            //                  // //                  //
+	"uboot": "uboot_common",            //------------------// //                  //
+	"boot": "boot_common",                                     //                  //
+	"ota": "ota_common",                                       //                  //
+	"log": "log_common",                                       //                  //
+	"userdata": "userdata_common",                             //                  //
+	"system": "system_common"                                  //------------------//
+}
+```
+
+</TabItem>
+</Tabs>
+
 ### Default Images and Partition Descriptions
-1. **miniboot_flash**: Basic boot image stored on the S100 Nor Flash, including images for system components such as HSM/MCU0;
-2. **miniboot_emmc**: Basic boot image stored on the S100 eMMC, including images for system components such as BL31/Uboot;
-3. **emmc_disk**: Full image on the S100 eMMC, which includes miniboot_emmc. During compilation, it is automatically converted into an Android Sparse image ([Android Sparse Image Format Explanation (third-party website, for reference only)](https://www.2net.co.uk/tutorial/android-sparse-image-format)) to reduce system storage space usage;
+1. **miniboot_flash**: Basic boot image stored on the RDK Nor Flash, including images for system components such as HSM/MCU0;
+2. **miniboot_emmc**: Basic boot image stored on the RDK eMMC, including images for system components such as BL31/Uboot;
+3. **emmc_disk**: Full image on the RDK eMMC, which includes miniboot_emmc. During compilation, it is automatically converted into an Android Sparse image ([Android Sparse Image Format Explanation (third-party website, for reference only)](https://www.2net.co.uk/tutorial/android-sparse-image-format)) to reduce system storage space usage;
 
 ### Configuration File Description
 The overall partition table configuration consists of global shared settings and individual partition settings. Global shared settings are placed under the `"global"` field and apply to all partitions.
@@ -327,7 +448,21 @@ The overall partition table configuration consists of global shared settings and
 - `AB_part_b`: Suffix for the B partition in AB partitioning;
 - `BAK_part_bak`: Suffix for backup partitions;
 
-Individual partition configurations follow the format `"partition_name": "partition_config_type"`, allowing different partition configuration types to be selected as needed. For example, for the boot partition, you first need to add a description for the boot partition in the global partition configuration, then create `boot.json` in the folder `source/bootloader/device/rdk/s100/partition_config_files/sub_config` and define `boot_common` as follows:
+Individual partition configurations follow the format `"partition_name": "partition_config_type"`, allowing different partition configuration types to be selected as needed. For example, for the boot partition, you first need to add a description for the boot partition in the global partition configuration, then create `boot.json` in the appropriate sub_config folder and define `boot_common` as follows:
+
+<Tabs>
+<TabItem value="s100" label="RDK S100">
+
+Create `boot.json` in `source/bootloader/device/rdk/s100/partition_config_files/sub_config`:
+
+</TabItem>
+<TabItem value="s600" label="RDK S600">
+
+Create `boot.json` in `source/bootloader/device/rdk/s600/partition_config_files/sub_config`:
+
+</TabItem>
+</Tabs>
+
 ```json
 {
 	"boot_common": {
@@ -393,7 +528,7 @@ Individual partition configurations follow the format `"partition_name": "partit
 :::
 
 ### Partition Modification Instructions
-S100X supports modifying partitions on eMMC/UFS by simply adding, deleting, or modifying the corresponding partition fields in the partition configuration. For modifications to flash partitions, please contact D-Robotics.
+RDK S100/S600 supports modifying partitions on eMMC/UFS by simply adding, deleting, or modifying the corresponding partition fields in the partition configuration. For modifications to flash partitions, please contact D-Robotics.
 
 :::warning Partition Modification Notes
 1. In the partition table, partitions up to and including `log` are boot partitions, and modifications are generally not recommended.
