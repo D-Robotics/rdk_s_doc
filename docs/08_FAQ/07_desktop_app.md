@@ -22,6 +22,27 @@ import TabItem from '@theme/TabItem';
 ```
 <!-- </TabItem>
 </Tabs> -->
+
+### Q2: RDKS100 安装 NoMachine 后 GNOME Wayland 会话无法启动，系统回退到 X11 会话？
+
+问题描述：RDKS100 设备安装 NoMachine 后，原本默认的 Wayland 会话无法启动，登录桌面后仅运行在 X11 模式下。
+
+解决方案：升级 NoMachine 至最新版本（使用的版本为9.3.7）后，Wayland 会话可以正常启动，远程连接功能恢复正常。
+
+确认当前会话类型：
+可通过以下两种方式查看当前使用的显示协议
+
+1、在桌面终端执行下面命令可以查看，输出内容为会话模式，Wayland模式会输出Wayland
+```bash
+    echo $XDG_SESSION_TYPE
+```
+2、打开桌面的 `settings` 应用，选择 `about`，在 `Windowing System` 一栏可查看当前会话模式（Wayland 或 X11）
+
+手动切换回 Wayland 会话：若启动后发现会话模式为 X11，可执行以下命令切换至 Wayland
+```bash
+    systemctl restart gdm
+```
+
 ## 已知问题
 
 1、切换语言问题会遇到下面问题
