@@ -8,56 +8,146 @@ sidebar_position: 1
 
 ## 有线网络{#config_ethnet}
 
-### 有线网络配置-Netplan 方式
+### 有线网络配置-Network Manager 方式
 
 :::info 注意
-Netplan 方式配置网络仅在`RDK S100 / RDK S600`验证使用，其它平台暂不支持。
+`RDK S100 / RDK S600` 默认使用 `NetworkManager + Netplan` 管理网络，其它平台请以对应系统文档为准。
 
 - `RDK S100`根文件系统基于 Ubuntu-22.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
 - `RDK S600`根文件系统基于 Ubuntu-24.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
 :::
 
-在 Ubuntu 系统中，开发板的静态网络配置信息存储于 `/etc/netplan/99-hobot-net.yaml` 文件。以下是具体配置说明：
+在 Ubuntu 系统中，开发板的网络连接配置保存在 `/etc/NetworkManager/system-connections/` 目录下（每个网卡连接一个 `.nmconnection` 文件）。常用字段说明如下：
 
-- **静态 IP 与子网掩码**：若需为网络接口设定静态 IP 地址和子网掩码，可借助 `addresses` 字段，并采用 CIDR 表示法子网掩码。
-- **DHCP 配置**：若要让指定网络接口通过 DHCP（动态主机配置协议）自动获取 IP 地址，将 `dhcp4` 或 `dhcp6` 字段值修改为 `yes` 即可。
-- **自定义 MAC 地址**：使用 `macaddress` 字段，能够为网络接口指定自定义的 MAC 地址。
-- **自定义 DNS 地址**：通过 `nameservers` 字段，可以为网络接口指定自定义的 DNS 地址。
+- **DHCP 配置**：将 `[ipv4]` 中 `method` 设置为 `auto`，由 DHCP 自动分配地址。
+- **静态地址配置**：将 `[ipv4]` 中 `method` 设置为 `manual`，使用 `address1=IP/CIDR,Gateway` 配置 IP、掩码和网关。
+- **自定义 DNS**：通过 `dns=` 字段指定 DNS 服务器，多个地址以分号分隔。
 
-使用 Netplan 进行网络配置举例如下：
+### ETH0 DHCP 配置示例
+
+编辑连接文件：
 
 ```shell
-sudo vim /etc/netplan/99-hobot-net.yaml
+sudo vim /etc/NetworkManager/system-connections/eth0_cfg.nmconnection
 ```
 
 ```shell
-network:
-  version: 2
-  renderer: NetworkManager
-  ethernets:
-    eth0:
-      dhcp4: yes
-      dhcp6: yes
-      nameservers:
-        addresses: [10.9.1.2, 8.8.8.8, 8.8.4.4]
-    eth1:
-      addresses:
-        - 192.168.127.10/24
-      nameservers:
-        addresses: [10.9.1.2, 8.8.8.8, 8.8.4.4]
+[connection]
+id=eth0_cfg
+uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b2222
+type=ethernet
+interface-name=eth0
+timestamp=1773022723
+
+[ethernet]
+
+[ipv4]
+dns=10.9.1.2;8.8.8.8;8.8.4.4;
+method=auto
+
+[ipv6]
+addr-gen-mode=eui64
+method=disabled
+
+[proxy]
 
 ```
 
-修改完成后，`sudo netplan apply`让配置生效。
+### ETH1 静态 IP 配置示例
 
-Netplan配置文件详解请参考：[Ubuntu Manpage: netplan](https://manpages.ubuntu.com/manpages/jammy/man5/netplan.5.html)。
+编辑连接文件：
+
+```shell
+sudo vim /etc/NetworkManager/system-connections/eth1_cfg.nmconnection
+```
+
+```shell
+[connection]
+id=eth1_cfg
+uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b1111
+type=ethernet
+interface-name=eth1
+timestamp=1773022363
+
+[ethernet]
+
+[ipv4]
+address1=192.168.127.10/24,192.168.127.1
+dns=10.9.1.2;8.8.8.8;8.8.4.4;
+method=manual
+
+[ipv6]
+addr-gen-mode=eui64
+method=disabled
+
+[proxy]
+
+```
+
+修改完成后，建议按以下顺序使配置生效：
+
+```shell
+# 建议检查配置文件权限（NetworkManager 要求仅 root 可读写）
+sudo chmod 600 /etc/NetworkManager/system-connections/*.nmconnection
+
+# 重新加载连接配置
+sudo nmcli connection reload
+
+# 启用对应连接
+sudo nmcli connection up eth0_cfg
+# 或
+sudo nmcli connection up eth1_cfg
+
+```
+
+使用命令行配置静态 IP 示例：
+
+```shell
+# 配置 eth1 静态 IP 为 192.168.10.100/24，网关为 192.168.10.1，DNS 为 223.5.5.5 和 8.8.8.8
+nmcli connection modify "eth1_cfg" \
+  ipv4.method manual \
+  ipv4.addresses "192.168.10.100/24" \
+  ipv4.gateway "192.168.10.1" \
+  ipv4.dns "223.5.5.5 8.8.8.8" \
+  connection.autoconnect yes
+
+# 重启连接使配置生效
+nmcli connection down "eth1_cfg"
+nmcli connection up "eth1_cfg"
+
+```
+
+使用命令行配置DHCP示例：
+
+```shell
+# 切换 eth1 为 DHCP
+nmcli connection modify "eth1_cfg" \
+  ipv4.method auto \
+  ipv4.addresses "" \
+  ipv4.gateway "" \
+  ipv4.dns "" \
+  connection.autoconnect yes
+
+# 重启连接使配置生效
+nmcli connection down "eth1_cfg"
+nmcli connection up "eth1_cfg"
+```
+
+使用命令行查看当前 IP/网关/DNS 配置：
+
+```shell
+# 查看设备当前 IP/网关/DNS
+nmcli device show eth1
+
+```
+
+更多配置字段说明可参考：
+[Ubuntu Manpage: NetworkManager](https://networkmanager.dev/docs/api/latest/nmcli.html)
 
 :::tip 提示
-RDKS100的桌面版本默认使用NetworkManager+Netplan作为网络管理框架。用户通过NetworkManager（GUI或者nmcli命令）保存网络连接配置后，会在`/etc/NetworkManager/system-connections`文件夹下生成对应的配置文件。
+`RDK S100` 桌面版本默认采用 `NetworkManager + Netplan` 网络框架。通过 GUI 或 `nmcli` 保存配置后，配置会写入 `/etc/NetworkManager/system-connections/`。
 
-Ubuntu系统启动时会根据`/etc/netplan/`文件夹内的Netplan配置文件在`/run/NetworkManager/system-connections`文件夹下生成对应的网络连接配置文件。Ubuntu默认`/run/NetworkManager/system-connections`文件夹下的连接配置文件优先级**高于**`/etc/NetworkManager/system-connections`文件夹下的连接配置文件。
-
-所以如果用户想要通过NetworkManager（GUI或者nmcli命令）配置的网络连接属性生效，需要先行将`/etc/netplan/`下配置文件的对应配置属性**删除**。
+也可以直接编辑该目录中的 `.nmconnection` 文件；编辑完成后，执行 `sudo nmcli connection reload` 和 `sudo nmcli connection up [connection_name]` 使配置生效。
 :::
 
 ## 无线网络

@@ -33,9 +33,12 @@ import TabItem from '@theme/TabItem';
 
 ![image_set_static_dns](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_dns.png)
 
-5. 一个网卡配置多个ip地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置ip地址和步骤3、4一致，完成配置后注意选中`netplan-eth1`出现`√`选项
+5. 一个网卡配置多个ip地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置ip地址和步骤3、4一致，完成配置后注意选中`eth1_cfg`出现`√`选项
 
-![image-sel_ok](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-sel_ok.jpg)
+![image-sel_nmcli_netplan](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_netplan.jpg)
+
+若是/etc/netplan/目录下的配置文件中没有网络配置项，则配置界面如下。
+![image-sel_nmcli_only](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_only.jpg)
 
 ## 修改 Proxy 配置
 
