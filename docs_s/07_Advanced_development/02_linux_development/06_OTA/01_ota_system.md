@@ -252,16 +252,13 @@ Options:
 # tar格式升级包(-t参数省略)，sys_signed代表打包secure版本升级包
  ./ota_pack_tool.sh -c sys_signed -d ~/s600/out/product/img_packages/
 
-# zip格式升级包，sys代表打包nonsecure版本升级包
-./ota_pack_tool.sh -c sys -d ~/s600/out/product/img_packages -t zip
+# zip格式升级包
+./ota_pack_tool.sh -c sys_signed -d ~/s600/out/product/img_packages -t zip
 ```
 生成的 OTA 升级包将输出到`out/product/ota_packages`目录，在该目录下，您将看到`zip`或`.zst.tar`结尾的升级包和`signature`结尾的升级包的签名文件：
 ```BASH
 all_in_one_signed.signature     #secure 升级包签名文件
 all_in_one_signed.zst.tar       #secure 升级包文件
-
-all_in_one.signature            #nonsecure 升级包签名文件
-all_in_one.zip                  #nonsecure 升级包文件
 ```
 
 #### OTA 制作差分升级包
@@ -291,7 +288,7 @@ all_in_one.zip                  #nonsecure 升级包文件
 #### OTA 升级包解包与重打包
 升级包解包指令为：
 ```bash
-./ota_pack_tool.sh -x all_in_one.zip
+./ota_pack_tool.sh -x all_in_one_signed.zip
 ```
 - 升级包解包后，可以更新`out/deploy/ota_deploy/unpack`下的镜像，重新制作OTA包，使用的OTA配置文件与ota_process均位于`out/deploy/ota_deploy/unpack`目录，该方法无法修改OTA配置文件gpt.conf。
 
@@ -883,16 +880,16 @@ ota_tool Usage:
 
 ```BASH
 # 全量升级，不验证包完整性
-ota_tool -p all_in_one.zip
+ota_tool -p all_in_one_signed.zip
 
 # 全量升级，验证包完整性
-ota_tool -c -p all_in_one.zip -i all_in_one.signature
+ota_tool -c -p all_in_one_signed.zip -i all_in_one_signed.signature
 
 # 差分升级，不验证包完整性
-ota_tool -p all_in_one_inc.zip
+ota_tool -p all_in_one_signed_inc.zip
 
 # 差分升级，验证包完整性
-ota_tool -c -p all_in_one_inc.zip -i all_in_one_inc.signature
+ota_tool -c -p all_in_one_signed_inc.zip -i all_in_one_signed_inc.signature
 ```
 
 ### ota_tool 实现
