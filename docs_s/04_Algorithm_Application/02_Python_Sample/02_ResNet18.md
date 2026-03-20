@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 图像分类-ResNet18
 
-本示例演示如何使用`hbm_runtime`的python接口部署`ResNet18`模型进行图像分类推理。适用于搭载BPU芯片的 RDK S600设备，本示例代码位于`/app/pydev_demo/01_classification_sample/01_resnet18/`目录下。
+本示例演示如何使用`hbm_runtime`的python接口部署`ResNet18`模型进行图像分类推理。适用于搭载BPU芯片的 RDK S600设备，本示例代码位于 `/app/pydev_demo/classification_sample/resnet18/` 目录下。
 
 ## 模型说明
 - 简介：

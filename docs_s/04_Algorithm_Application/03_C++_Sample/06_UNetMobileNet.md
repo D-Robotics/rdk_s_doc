@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # 语义分割-UNetMobileNet
 
-本示例展示了如何在 BPU 上运行 UNet-MobileNet 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/cdev_demo/bpu/03_instance_segmentation_sample/01_unetmobilenet/`目录下。
+本示例展示了如何在 BPU 上运行 UNet-MobileNet 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于 `/app/cdev_demo/bpu/instance_segmentation_sample/unetmobilenet/` 目录下。
 
 ## 模型说明
 - 简介：

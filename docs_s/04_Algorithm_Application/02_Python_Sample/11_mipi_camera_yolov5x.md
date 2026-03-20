@@ -1,10 +1,10 @@
 ---
-sidebar_position: 14
+sidebar_position: 11
 ---
 
 # MIPI Camera YOLOv5x 推理
 
-基于 `hbm_runtime` 的 Ultralytics YOLOv5x 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于`/app/pydev_demo/10_mipi_camera_sample/`目录下。
+基于 `hbm_runtime` 的 Ultralytics YOLOv5x 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于 `/app/pydev_demo/mipi_camera_sample/` 目录下。
 
 ## 功能说明
 

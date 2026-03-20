@@ -1,11 +1,11 @@
 ---
-sidebar_position: 15
+sidebar_position: 12
 ---
 
 # 视频解码及YOLOv5x 推理
 
 本示例演示如何在 RDK S100 等平台上，使用 SP 解码/显示/VIO 与 BPU 组合完成：
-本地 H.264 文件 → 硬件解码 (NV12) → YOLOv5X 推理 → 叠加框到显示图层 的端到端流程，本示例代码位于`/app/cdev_demo/bpu/11_decode_yolov5x_display_sample`目录下。
+本地 H.264 文件 → 硬件解码 (NV12) → YOLOv5X 推理 → 叠加框到显示图层 的端到端流程，本示例代码位于 `/app/cdev_demo/bpu/decode_yolov5x_display_sample` 目录下。
 
 ## 功能说明
 

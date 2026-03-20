@@ -1,10 +1,9 @@
 ---
-sidebar_position: 11
+sidebar_position: 9
 ---
 
 # 自动语音识别-ASR
-暂不支持，敬请期待！
-<!-- 本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/pydev_demo/07_speech_sample/01_asr/` 目录下。
+本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/pydev_demo/speech_sample/asr/` 目录下。
 
 
 ## 模型说明
@@ -100,4 +99,4 @@ sidebar_position: 11
     ```
 
 ## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。 -->
+- 若指定模型路径不存在，程序将尝试自动下载模型。

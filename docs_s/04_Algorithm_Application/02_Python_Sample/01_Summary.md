@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # 示例概述
 
-本项目包含多个基于 Python 编写的 AI 示例程序，适用于 RDK S600平台，覆盖图像分类、目标检测、实例分割、姿态估计、OCR、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
+本项目包含多个基于 Python 编写的 AI 示例程序，适用于 RDK S600平台，覆盖图像分类、目标检测、实例分割、姿态估计、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
 
 本项目的板端代码位置：`/app/pydev_demo/`。
 
@@ -41,17 +41,15 @@ sidebar_position: 1
 ### 目录结构
     ```text
     .
-    ├── 01_classification_sample/        # 图像分类样例
-    ├── 02_detection_sample/             # 目标检测样例
-    ├── 03_instance_segmentation_sample/ # 实例分割样例
-    ├── 04_pose_sample/                  # 姿态估计样例
-    ├── 05_open_instance_seg_sample/     # 暂不支持
-    ├── 06_lane_detection_sample/        # 暂不支持
-    ├── 07_speech_sample/                # 暂不支持
-    ├── 08_OCR_sample/                   # 暂不支持
-    ├── 09_usb_camera_sample/            # USB 摄像头 + 目标检测样例
-    ├── 10_mipi_camera_sample/           # MIPI 摄像头 + 目标检测样例
-    ├── 11_web_display_camera_sample/    # 摄像头 + Web + 目标检测样例
+    ├── classification_sample/           # 图像分类样例
+    ├── detection_sample/                # 目标检测样例
+    ├── instance_segmentation_sample/    # 实例分割样例
+    ├── pose_sample/                     # 姿态估计样例
+    ├── speech_sample/                   # 语音识别样例
+    ├── usb_camera_sample/               # USB 摄像头 + 目标检测样例
+    ├── mipi_camera_sample/              # MIPI 摄像头 + 目标检测样例
+    ├── web_display_camera_sample/       # 摄像头 + Web + 目标检测样例
+    ├── rtsp_yolov5x_display_sample/     # RTSP 视频流 + 目标检测样例
     ├── utils/                           # 通用预处理、后处理工具模块
     ├── requirements.txt                 # Python 环境依赖
     └── README.md                        # 顶层使用说明文档（本文件）
@@ -61,7 +59,7 @@ sidebar_position: 1
 以图像分类示例 resnet18 为例：
 - 进入sample目录
     ```bash
-    cd 01_classification_sample/01_resnet18
+    cd classification_sample/resnet18
     ```
 - 运行模型
     ``` bash

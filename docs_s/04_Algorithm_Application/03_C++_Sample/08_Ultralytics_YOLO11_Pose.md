@@ -4,7 +4,7 @@ sidebar_position: 8
 
 # 姿态估计-Ultralytics YOLO11
 
-本示例展示了如何在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于`/app/cdev_demo/bpu/04_pose_sample/01_ultralytics_yolo11_pose/`目录下。
+本示例展示了如何在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于 `/app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose/` 目录下。
 
 ## 模型说明
 - 简介：

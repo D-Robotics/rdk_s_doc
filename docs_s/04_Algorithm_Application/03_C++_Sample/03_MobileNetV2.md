@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 图像分类-MobileNetV2
 
-本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `C/C++` 进行推理，本示例代码位于`/app/cdev_demo/bpu/01_classification_sample/02_mobilenetv2/`目录下。
+本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `C/C++` 进行推理，本示例代码位于 `/app/cdev_demo/bpu/classification_sample/mobilenetv2/` 目录下。
 
 ## 模型说明
 - 简介：
