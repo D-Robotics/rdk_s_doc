@@ -5,34 +5,33 @@ title: Python 接口手册
 sidebar_label: 4.1 Python 接口
 ---
 ## 简介（Overview）
-hbm_runtime是基于pybind11的Python绑定接口，用于访问和操作libhbucp/libdnn C++ 库，提供高性能的神经网络模型加载和推理功能。
+hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作底层 libhbucp / libdnn C++ 库，提供高性能的神经网络模型加载与推理能力。
 
-该接口封装了底层模型运行时细节，使 Python 用户能够方便地加载单个或多个神经网络模型，管理模型的输入输出信息，并灵活执行推理操作。接口支持多种输入数据格式，且通过智能转换保证输入数据连续存储，提升运行效率。
+该接口封装了底层模型运行时细节，使 Python 用户能够方便地加载单个或多个神经网络模型，查询并管理模型的输入/输出元信息，并灵活执行推理操作。接口支持多种输入数据格式，并在必要时自动将输入转换为 C 连续（C-contiguous）存储，以保证底层访问正确性与效率。
+
+此外，新版接口在推理阶段会在 C++ 侧释放 Python GIL，使 Python 多线程可并发调用 run()；对多模型推理场景，底层会自动使用多线程并行调度各模型推理任务，以提升吞吐。
 
 ### 适用场景
-- 在 Python 环境中快速集成和调用 hbm_runtime运行时功能。
-- 机器人视觉、智能边缘计算等对推理效率和灵活性有较高要求的应用。
-- 需要同时加载和管理多个模型，动态配置推理优先级及硬件资源分配的场景。
+- 在 Python 环境中快速集成和调用 hbm_runtime 运行时能力。
+- 机器人视觉、智能边缘计算等对推理效率和调度灵活性有较高要求的应用。
+- 需要同时加载和管理多个模型，并在不同推理调用中按需配置任务调度参数（优先级/核心绑定/设备 ID 等）的场景。
+- 需要查询模型编译期 BPU 相关信息（例如编译期 BPU core 数）以辅助运行时资源配置与一致性检查的场景。
 
 ### 关键特性
 - 多模型支持
-  - 支持加载单个模型或多个模型组成的模型组，每个模型均可独立获取输入输出元信息并进行推理。
+  - 支持加载单个模型或多个模型组成的模型组；每个模型均可独立获取输入/输出元信息并进行推理。
+  - run() 支持对多模型输入进行一次性推理，并按模型名返回结果（即使只跑单个模型也返回 `{model_name: {...}}` 的嵌套结构）。
 - 灵活输入格式
   - 支持单输入（numpy.ndarray）；
-  - 支持模型名映射的输入字典（Dict[str, np.ndarray]）；
-  - 支持多模型多输入结构（Dict[str, Dict[str, np.ndarray]]）；所有输入均自动检查是否为 C 连续内存格式，必要时进行拷贝，保证底层高效正确访问。
-- 指定推理优先级（priority）
-  - 可通过 priority: Dict[str, int] 参数显式指定模型任务的调度优先级，支持调度器在有限硬件资源下合理调度推理任务。
-- 指定推理 BPU 核心（bpu_cores）
-  - 支持通过 bpu_cores: Dict[str, List[int]] 显式指定模型推理时使用的 BPU 计算核心，实现异构核资源绑定等策略。
-- 多模型并行推理
-  - 对于多模型输入场景，底层自动采用多线程机制并行执行每个模型的推理任务（multi-threaded launch），在多核 BPU 系统上可获得更高吞吐（单核BPU底层还是串行执行）。
-- 元信息访问接口
-  - 输入输出数量、名称、数据类型（hbDNNDataType 枚举）；
-  - 输入输出张量形状、内存 stride、量化参数（包括 scale、zero point、量化类型）；
-  - 模型描述信息、HBM文件描述信息等。
-- 完整绑定的类型系统
-  - 支持量化参数结构 QuantParams，数据类型枚举 hbDNNDataType，模型调度参数对象SchedParam  和量化类型枚举 hbDNNQuantiType，提供类型安全的属性访问。
+  - 支持单模型多输入字典（Dict[str, np.ndarray]，key 为 input tensor name）；
+  - 支持多模型多输入结构（Dict[str, Dict[str, np.ndarray]]，外层 key 为 model name，内层 key 为 input tensor name）。
+  - 所有输入均自动检查是否为 C 连续内存格式，必要时进行拷贝，以保证底层高效正确访问（非连续输入可能带来额外拷贝开销）。
+- 调度参数配置：默认参数 + 单次调用覆盖（run-local）
+  - 支持通过 set_scheduling_params(...) 设置模型级默认调度参数（持久化在 runtime 内部，可多次复用）。
+  - 同时支持在每次 run() 调用时，通过可选参数对调度进行单次覆盖（run-time overrides），覆盖规则为：run() 参数优先于默认参数，且该覆盖仅作用于本次调用，不影响其他线程/其他 run() 调用。
+- 多线程推理能力
+  - Python 多线程并发调用 run()：推理阶段在 C++ 内部释放 GIL，使多个 Python 线程可同时发起推理调用。
+  - 多模型并行推理：当输入为多模型结构时，底层会为每个模型启动线程并行执行推理任务（multi-threaded launch），在多核 BPU 系统上可提升吞吐；单模型场景则仅对应一个推理线程。
 
 ## 安装说明（Installation）
 本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和地平线提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装，适用于 Python 3.10 及以上版本。
@@ -142,14 +141,15 @@ hbm_runtime是基于pybind11的Python绑定接口，用于访问和操作libhbuc
 ### 环境准备
   请确保已正确安装 HBMRuntime（详见[安装说明](#安装说明installation)），并已具备模型文件 hbm 模型。
 ### 示例
-#### 单模型单输入推理
-  适用于模型只有一个输入张量的情况。
+#### 单线程推理
+##### 单线程单模型单输入推理
+适用于模型只有一个输入张量的情况。
 ```python
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
 # 加载模型
-model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/lanenet256x512.hbm")
 
 # 获取模型名与输入名
 model_name = model.model_names[0]
@@ -168,8 +168,8 @@ outputs = model.run(input_tensor)
 output_array = outputs[model_name]
 print("Output:", output_array)
 ```
-#### 单模型多输入推理
-    适用于模型有多个输入张量的情况。
+##### 单线程单模型多输入推理
+适用于模型有多个输入张量的情况。
 ```python
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
@@ -219,8 +219,182 @@ results = model.run(input_tensors)
 # 输出结果
 for output_name, output_data in results[model_name].items():
     print(f"Output: {output_name}, shape={output_data.shape}")
-
 ```
+##### 单线程多模型多输入推理
+适用于多模型有多个输入张量的情况，注意这里的多模型可以是多个 HBM 文件，也可以是单个 HBM 文件里面包含多个模型。
+```python
+"""Multi-model inference quick start."""
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+MODEL_PATHS = [
+    "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm",
+    "/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
+]
+
+DTYPE_MAP = {
+    "U8": np.uint8, "S8": np.int8,
+    "F16": np.float16, "F32": np.float32,
+}
+
+# Load models
+rt = HB_HBMRuntime(MODEL_PATHS)
+
+# Build inputs from model metadata
+inputs = {
+    m: {
+        inp: np.random.rand(*rt.input_shapes[m][inp]).astype(
+            DTYPE_MAP.get(rt.input_dtypes[m][inp].name, np.float32)
+        )
+        for inp in rt.input_names[m]
+    }
+    for m in rt.model_names
+}
+
+# Optional: default scheduling params
+rt.set_scheduling_params(
+    priority={m: 5 for m in rt.model_names},
+    bpu_cores={m: [0] for m in rt.model_names},
+)
+
+# Run inference (multi-model, parallel internally)
+outputs = rt.run(inputs)
+
+# Print results
+for m, outs in outputs.items():
+    print(f"[{m}]")
+    for name, arr in outs.items():
+        print(f"  {name}: {arr.shape}, {arr.dtype}")
+```
+
+#### 多线程推理
+##### 多线程单模型单输入推理
+适用于模型只有一个输入张量的情况。
+```python
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+# Load model
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/asr.hbm")
+
+model_name = model.model_names[0]
+input_name = model.input_names[model_name][0]
+input_shape = model.input_shapes[model_name][input_name]
+
+# Shared input (read-only)
+input_tensor = np.ones(input_shape, dtype=np.float32)
+
+def worker(core_id: int):
+    outputs = model.run(
+        input_tensor,
+        model_name=model_name,
+        priority={model_name: 5},
+        bpu_cores={model_name: [core_id]},
+        custom_id={model_name: core_id},  # optional
+    )
+    # Print minimal info
+    outs = outputs[model_name]
+    first_name, first_arr = next(iter(outs.items()))
+    print(f"[T{core_id}] {first_name}: shape={first_arr.shape}, dtype={first_arr.dtype}")
+
+threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
+for t in threads: t.start()
+for t in threads: t.join()
+```
+##### 多线程单模型多输入推理
+适用于模型有多个输入张量的情况。
+```python
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+hb_dtype_map = {
+    "U8": np.uint8, "S8": np.int8,
+    "F16": np.float16, "F32": np.float32,
+    "U16": np.uint16, "S16": np.int16,
+    "U32": np.uint32, "S32": np.int32,
+    "BOOL8": np.bool_,
+}
+
+# Load single model
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
+model_name = model.model_names[0]
+
+# Build input tensors (shared, read-only)
+input_tensors = {
+    name: np.ones(
+        model.input_shapes[model_name][name],
+        dtype=hb_dtype_map.get(model.input_dtypes[model_name][name].name, np.float32)
+    )
+    for name in model.input_names[model_name]
+}
+
+def worker(core_id: int):
+    results = model.run(
+        input_tensors,
+        model_name=model_name,
+        priority={model_name: 5},
+        bpu_cores={model_name: [core_id]},
+        custom_id={model_name: core_id},   # optional, for tracing
+    )
+
+    out_name, out_arr = next(iter(results[model_name].items()))
+    print(f"[T{core_id}] {out_name}: {out_arr.shape}, {out_arr.dtype}")
+
+# Launch 4 threads, bind to BPU cores 0~3
+threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
+for t in threads: t.start()
+for t in threads: t.join()
+```
+##### 多线程多模型多输入推理
+```python
+"""4-thread demo: each thread runs inference on a dedicated BPU core."""
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+MODEL_PATHS = [
+    "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm",
+    "/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
+]
+
+DTYPE_MAP = {
+    "U8": np.uint8, "S8": np.int8,
+    "F16": np.float16, "F32": np.float32,
+}
+
+rt = HB_HBMRuntime(MODEL_PATHS)
+
+# Build one shared input package (read-only in each thread)
+inputs = {
+    m: {
+        inp: np.random.rand(*rt.input_shapes[m][inp]).astype(
+            DTYPE_MAP.get(rt.input_dtypes[m][inp].name, np.float32)
+        )
+        for inp in rt.input_names[m]
+    }
+    for m in rt.model_names
+}
+
+def worker(core_id: int):
+    # Per-run scheduling override: bind this run to a specific BPU core
+    outputs = rt.run(
+        inputs,
+        priority={m: 5 for m in rt.model_names},
+        bpu_cores={m: [core_id] for m in rt.model_names},
+        custom_id={m: core_id for m in rt.model_names},  # optional, for tracing
+    )
+    # Print one line per model to keep it simple
+    for m, outs in outputs.items():
+        first_out = next(iter(outs.values()))
+        print(f"[T{core_id}][{m}] first_out: {first_out.shape}, {first_out.dtype}")
+
+threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
+for t in threads: t.start()
+for t in threads: t.join()
+```
+
 ### 常见问题
 | 问题                     | 说明                                                       |
 |------------------------|------------------------------------------------------------|
@@ -301,8 +475,10 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     - 获取库版本号。
   - 结构说明：
     - str：版本号字符串。
-    - 示例：
-print("版本:", HB_HBMRuntime.version)
+  - 示例：
+    ```python
+    print("版本:", HB_HBMRuntime.version)
+    ```
 - model_names: List[str]
   - 功能说明：
     - 加载的模型名称列表。
@@ -339,12 +515,27 @@ print("版本:", HB_HBMRuntime.version)
   - 功能说明：
     - 每个 HBM 文件中的备注信息。
   - 结构说明：
-    - Dict[str, int]：键为.hbm 文件名（例如 "resnet18"），值为HBM 文件中的注释或元信息字符串。
+    - Dict[str, str]：键为 .hbm 文件名（例如 "resnet18"），值为 HBM 文件中的注释或元信息字符串。
   - 示例：
     ```python
     #打印所有模型文件的描述信息
     print(model.hbm_descs)
     # 输出：{'/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
+    ```
+- compile_bpu_core_num: Dict[str, int]
+  - 功能说明：
+    - 获取各模型在编译阶段指定的 BPU core 数量。该信息反映模型在 HBM 编译时所使用的 BPU 核配置，可用于运行时进行资源规划或与运行时 bpu_cores 参数设置进行一致性校验。
+  - 结构说明：
+    - Dict[str, int]：
+      - key：模型名称（model name）
+      - value：该模型在编译期指定的 BPU core 数
+  - 示例：
+    ```bash
+    # 查询模型编译期 BPU core 数
+    print(model.compile_bpu_core_num)
+
+    # 示例输出
+    # {'model_1': 1, 'model_2': 2}
     ```
 - input_counts: Dict[str, int]
   - 功能说明：
@@ -571,132 +762,6 @@ print("版本:", HB_HBMRuntime.version)
     #   deviceId: 0
     ```
     注意：bpu_cores返回-1表示由调度器自动分配；
-##### 推理执行函数
-- run(input_tensor, **kwargs)
-  - 函数签名
-    ```python
-    run(input_tensor: np.ndarray, **kwargs) -> Dict[str, Dict[str, np.ndarray]]
-    ```
-  - 功能说明
-    适用于单模型、单输入的推理。输入为一个 NumPy 数组，对应模型的唯一输入张量，当只有一个模型被加载时输入的模型名称可省略。
-  - 参数说明
-
-    | 参数名       | 类型          | 说明                                                                                             |
-    |--------------|---------------|--------------------------------------------------------------------------------------------------|
-    | input_tensor | np.ndarray    | 单输入张量，仅用于单模型且单输入的推理场景。张量 shape 必须与模型对应输入一致。                    |
-    | kwargs       | 可变关键字参数 |`model_name` (`str`): 指定模型名称（若为单个模型可省略，否则需指定）|
-
-  - 返回值
-    - 类型：Dict[str, Dict[str, np.ndarray]]
-    - 外层字典键：模型名称
-    - 内层字典键：输出张量名称
-    - 值：对应的 NumPy 输出数组
-  - 示例：参考快速开始章节，单模型单输入推理部分。
-- run(input_tensors: Dict[str, np.ndarray], **kwargs)
-  - 函数签名
-    ```python
-    run(input_tensors: Dict[str, np.ndarray], **kwargs) -> Dict[str, Dict[str, np.ndarray]]
-    ```
-  - 功能说明
-    适用于单模型、多输入的推理。每个输入张量通过输入名指定，与模型定义保持一致，当只有一个模型被加载时输入的模型名称可省略。
-  - 参数说明
-
-    | 参数名        | 类型                      | 说明                                                                                           |
-    |---------------|---------------------------|------------------------------------------------------------------------------------------------|
-    | input_tensors | Dict[str, np.ndarray]     | 多输入张量，仅用于单模型多输入的推理场景。键为输入张量名称，值为对应的 NumPy 数组。                |
-    | kwargs        | 可变关键字参数            |`model_name` (`str`): 指定模型名称（若为单个模型可省略，否则需指定）|
-
-  - 返回值
-    同上。
-  - 示例：参考快速开始章节，单模型多输入推理部分。
-- run(multi_input_tensors: Dict[str, Dict[str, np.ndarray]], **kwargs)
-  - 函数签名
-    ```python
-    run(multi_input_tensors: Dict[str, Dict[str, np.ndarray]], **kwargs) -> Dict[str, Dict[str, np.ndarray]]
-    ```
-  - 功能说明
-    适用于多模型同时推理的场景，每个模型提供各自的多个输入张量，不需要指定 model_name，模型名已在 key 中体现，若指定模型名称则只会推理指定的模型。
-  - 参数说明
-
-        | 参数名              | 类型                              | 说明 |
-        |-------------------|-----------------------------------|------|
-        | multi_input_tensors | Dict[str, Dict[str, np.ndarray]] | 多模型推理，外层键为模型名称，内层是输入名 → 张量的映射。支持同时运行多个模型（每个模型可多输入）。 |
-        | kwargs             | 可变关键字参数                    | `model_name (str)`: 指定模型名称（若为单个模型可省略，否则需指定） |
-
-  - 返回值
-
-    同上
-  - 示例
-    ```python
-    import numpy as np
-    from hbm_runtime import HB_HBMRuntime
-
-    # 映射 hbDNNDataType 到 numpy 类型
-    hb_dtype_map = {
-        "F32": np.float32,
-        "F16": np.float16,
-        "S8": np.int8,
-        "U8": np.uint8,
-        "S16": np.int16,
-        "U16": np.uint16,
-        "S32": np.int32,
-        "U32": np.uint32,
-        "S64": np.int64,
-        "U64": np.uint64,
-        "BOOL8": np.bool_,
-    }
-
-    # 加载多个模型
-    model_files = ["/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
-        "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm"]
-
-    model = HB_HBMRuntime(model_files)
-
-    # 打印加载的模型名称
-    print("Loaded models:", model.model_names)
-
-    # 为每个模型构造多个输入张量
-    multi_input_tensors = {}
-
-    for model_name in model.model_names:
-        model_inputs = {}
-
-        for input_name in model.input_names[model_name]:
-            shape = model.input_shapes[model_name][input_name]
-            dtype_enum = model.input_dtypes[model_name][input_name]
-
-            np_dtype = hb_dtype_map.get(dtype_enum.name, np.float32)
-
-            model_inputs[input_name] = np.ones(shape, dtype=np_dtype)
-
-        multi_input_tensors[model_name] = model_inputs
-
-    # 可选：指定推理优先级和 BPU 设备
-    priority = {name: 5 for name in model.model_names}
-    bpu_cores = {name: [0] for name in model.model_names}
-
-    model.set_scheduling_params(
-        priority=priority,
-        bpu_cores=bpu_cores
-    )
-
-    # 执行推理
-    results = model.run(multi_input_tensors)
-
-    # 输出结果
-    for model_name, outputs in results.items():
-        print(f"\nModel: {model_name}")
-        for output_name, output_tensor in outputs.items():
-            print(f"  Output: {output_name}, shape={output_tensor.shape}, dtype={output_tensor.dtype}")
-    ```
-- kwargs 参数详细说明
-  - model_name
-    - 类型：str模型字符串
-    - 说明：指定当前推理使用的模型，必须是当前加载的模型之一。在前两个run方法中，若加的模型只有一个，此参数可省略，若有多个模型，必须指定该参数。第三个run方法中还是可省略，省略后会推理multi_input_tensors中给出的所有模型，若指定，则只会推理指定的模型。
-    - 示例：
-        ```python
-        outputs = model.run(input_tensor，model_name="resnet18")
-        ```
 ##### 配置函数
 - set_scheduling_params
   - 函数签名
@@ -708,30 +773,175 @@ print("版本:", HB_HBMRuntime.version)
         device_id: Optional[Dict[str, int]] = None
     ) -> None
     ```
+  - 功能说明
+
+    设置模型的默认调度参数（priority / bpu_cores / custom_id / device_id）。该函数用于配置 HB_HBMRuntime 实例级别的持久化调度参数，作为后续推理调用的默认值。
+
+    与 run() 调度参数的关系说明：
+    - set_scheduling_params() 设置的是**模型级默认调度参数**，会保存在运行时实例中，持续生效。
+    - run() 接口同样支持通过参数传入调度配置，用于**单次推理调用的临时覆盖（run-local）**。
+    - 当 run() 调用中显式传入调度参数时，其优先级**高于** set_scheduling_params() 中设置的默认值。
+    - run() 中传入的调度参数**仅对当前一次推理调用生效**，不会修改或影响已设置的默认调度参数。
+    - 若 run() 中未传入某一调度字段，则该字段将自动使用 set_scheduling_params() 中配置的默认值。
+
+    优先级关系：`run() 参数  >  set_scheduling_params() 默认值  >  内置初始默认值`
+
   - 参数说明
 
     | 参数名      | 类型                             | 说明                                                                 |
     |-------------|----------------------------------|----------------------------------------------------------------------|
     | priority    | 可选字典（模型名 -> int）        | 设置每个模型的调度优先级，范围通常为 0～255，数值越高优先级越高       |
     | bpu_cores   | 可选字典（模型名 -> List[int]）  | 指定模型绑定的 BPU 核心索引列表，默认表示自动分配，具体需看硬件支持情况 |
-    | custom_id   | 可选字典（模型名 -> int）        | 自定义优先级，例如：时间戳、frame id等，数值越小优先级越高。优先级：priority > customId。|
+    | custom_id   | 可选字典（模型名 -> int）        | 自定义优先级，例如：时间戳、frame id 等，数值越小优先级越高。优先级：priority > customId。|
     | device_id   | 可选字典（模型名 -> int）        | 指定模型运行在哪个设备上                                             |
 
   - 返回值
+
     无（None）
+
   - 示例：
     ```python
-    # 设置调度参数
+    # 设置模型级默认调度参数
     model.set_scheduling_params(
         priority={"model1": 200, "model2": 100},
         bpu_cores={"model1": [0, 1], "model2": [0]}
     )
 
-    # 验证设置是否生效
-    params = runtime.sched_params
-    print(params["model1"].priority)   # 输出: 200
-    print(params["model1"].bpu_cores)  # 输出: [0, 1]
+    # 验证默认参数是否生效
+    params = model.sched_params
+    print(params["model1"].priority)    # 输出: 200
+    print(params["model1"].bpu_cores)   # 输出: [0, 1]
+
+    # 在 run() 中进行单次调用覆盖（不会修改默认值）
+    outputs = model.run(
+        inputs,
+        priority={"model1": 50}          # 仅本次调用生效
+    )
+
+    # 默认参数仍然保持不变
+    print(model.sched_params["model1"].priority)  # 仍为: 200
     ```
+
+##### 推理执行函数
+
+run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多输入），并且每次调用都可以单独传入调度参数：priority / bpu_cores / custom_id / device_id。
+
+**多线程支持说明（重要）**
+
+- 多模型推理的并行方式：当使用 `run(multi_input_tensors, ...)` 进行多模型推理时，底层会为 `multi_input_tensors` 中的每个模型创建一个 C++ 线程，并行执行各自的推理流程。
+- Python 多线程可并发调用：可以实现"Python 多线程并发调用 run + 底层多模型并行推理"的吞吐提升（实际效果与 BPU 核数、模型配置、系统负载有关）。
+- 每次调用可设置自己的调度参数：run() 的 priority/bpu_cores/custom_id/device_id 属于本次调用的临时覆盖，不同线程/不同调用可以传入不同调度参数，互不影响。
+
+- run（单模型 · 单输入）
+  - 函数签名
+    ```python
+    run(
+        input_tensor: np.ndarray,
+        model_name: Optional[str] = None,
+        priority: Optional[Dict[str, int]] = None,
+        bpu_cores: Optional[Dict[str, List[int]]] = None,
+        custom_id: Optional[Dict[str, int]] = None,
+        device_id: Optional[Dict[str, int]] = None,
+    ) -> Dict[str, Dict[str, np.ndarray]]
+    ```
+  - 功能说明
+
+    适用于单模型、单输入的推理场景。
+    - 当仅加载一个模型时 `model_name` 可省略；当加载多个模型时**必须指定** `model_name`（否则报错）。
+    - 若选中的模型输入数不为 1，会直接报错（该重载不适用）。
+    - 会校验输入 dtype 与模型输入类型一致；校验 shape 与模型输入一致（支持模型维度为 -1 的动态维度按实际输入补全）。
+    - 推理返回结构为：`{model_name: {output_name: np.ndarray}}`
+
+  - 参数说明
+
+    | 参数名       | 类型                             | 说明                                                                |
+    |--------------|----------------------------------|---------------------------------------------------------------------|
+    | input_tensor | np.ndarray                       | 单输入张量，仅用于单模型且单输入的推理场景。张量 shape 必须与模型对应输入一致。 |
+    | model_name   | str（可选）                      | 指定模型名称（若为单个模型可省略，否则需指定）                       |
+    | priority     | 可选字典（模型名 -> int）        | 本次调用的推理优先级（临时覆盖，不影响默认值）                       |
+    | bpu_cores    | 可选字典（模型名 -> List[int]）  | 本次调用绑定的 BPU 核心索引列表                                      |
+    | custom_id    | 可选字典（模型名 -> int）        | 本次调用的自定义优先级                                               |
+    | device_id    | 可选字典（模型名 -> int）        | 本次调用指定的设备 ID                                                |
+
+  - 返回值
+    - 类型：Dict[str, Dict[str, np.ndarray]]
+    - 外层 key：模型名称
+    - 内层 key：输出张量名称
+    - value：对应输出 numpy 数组（零拷贝封装 device buffer，随数组生命周期自动释放）
+  - 示例：参考快速开始章节，单线程单模型单输入推理部分。
+
+- run（单模型 · 多输入）
+  - 函数签名
+    ```python
+    run(
+        input_tensors: Dict[str, np.ndarray],
+        model_name: Optional[str] = None,
+        priority: Optional[Dict[str, int]] = None,
+        bpu_cores: Optional[Dict[str, List[int]]] = None,
+        custom_id: Optional[Dict[str, int]] = None,
+        device_id: Optional[Dict[str, int]] = None,
+    ) -> Dict[str, Dict[str, np.ndarray]]
+    ```
+  - 功能说明
+
+    适用于单模型、多输入的推理场景。
+    - `input_tensors` 的 key 必须是该模型真实存在的输入名（否则报错）。
+    - 当仅加载一个模型时 `model_name` 可省略；当加载多个模型时**必须指定** `model_name`（否则报错）。
+    - 每个输入张量都会检查是否为 C 连续内存，不满足时会自动拷贝。
+
+  - 参数说明
+
+    | 参数名        | 类型                             | 说明                                                              |
+    |---------------|----------------------------------|-------------------------------------------------------------------|
+    | input_tensors | Dict[str, np.ndarray]            | 多输入张量，键为输入张量名称，值为对应的 NumPy 数组。              |
+    | model_name    | str（可选）                      | 指定模型名称（若为单个模型可省略，否则需指定）                     |
+    | priority      | 可选字典（模型名 -> int）        | 本次调用的推理优先级（临时覆盖，不影响默认值）                     |
+    | bpu_cores     | 可选字典（模型名 -> List[int]）  | 本次调用绑定的 BPU 核心索引列表                                    |
+    | custom_id     | 可选字典（模型名 -> int）        | 本次调用的自定义优先级                                             |
+    | device_id     | 可选字典（模型名 -> int）        | 本次调用指定的设备 ID                                              |
+
+  - 返回值
+
+    同上。
+
+  - 示例：参考快速开始章节，单线程单模型多输入推理部分。
+
+- run（多模型 · 多输入）
+  - 函数签名
+    ```python
+    run(
+        multi_input_tensors: Dict[str, Dict[str, np.ndarray]],
+        model_name: Optional[str] = None,
+        priority: Optional[Dict[str, int]] = None,
+        bpu_cores: Optional[Dict[str, List[int]]] = None,
+        custom_id: Optional[Dict[str, int]] = None,
+        device_id: Optional[Dict[str, int]] = None,
+    ) -> Dict[str, Dict[str, np.ndarray]]
+    ```
+  - 功能说明
+
+    适用于多模型同时推理场景：外层 key 为模型名，内层为该模型的 输入名 -> numpy 数组。
+    - 若**不指定** `model_name`：推理 `multi_input_tensors` 中提供的全部模型。
+    - 若**指定** `model_name`：会仅保留该模型对应输入并执行推理（其余模型输入会被过滤掉）。
+    - 多线程并行执行：底层会为每个模型创建一个线程并行推理，并在推理阶段释放 GIL，从而支持 Python 多线程并发调用时获得更高吞吐。
+
+  - 参数说明
+
+    | 参数名              | 类型                              | 说明 |
+    |---------------------|-----------------------------------|------|
+    | multi_input_tensors | Dict[str, Dict[str, np.ndarray]]  | 多模型推理，外层键为模型名称，内层是输入名 → 张量的映射。支持同时运行多个模型（每个模型可多输入）。 |
+    | model_name          | str（可选）                       | 若指定，则只推理该模型；若不指定，则推理所有提供输入的模型 |
+    | priority            | 可选字典（模型名 -> int）         | 本次调用的推理优先级（临时覆盖，不影响默认值）             |
+    | bpu_cores           | 可选字典（模型名 -> List[int]）   | 本次调用绑定的 BPU 核心索引列表                            |
+    | custom_id           | 可选字典（模型名 -> int）         | 本次调用的自定义优先级                                     |
+    | device_id           | 可选字典（模型名 -> int）         | 本次调用指定的设备 ID                                      |
+
+  - 返回值
+
+    同上
+
+  - 示例：参考快速开始章节，单线程多模型多输入推理部分。
+
 - 异常说明
   - 若输入张量维度、类型与模型不匹配，会抛出 ValueError。
   - 若输入张量非连续（非 C-style），内部会自动 copy 一份连续张量。
@@ -754,30 +964,40 @@ print("版本:", HB_HBMRuntime.version)
     ```
 
 #### SchedParam 类
-  模型调度参数对象，用于配置模型在硬件上的运行调度策略（优先级、核心绑定等）。
+  模型调度参数对象，用于描述单个模型的默认调度状态（优先级、核心绑定等）。该对象通常用于读取当前模型的调度配置，而不是作为主要的配置入口。
 ##### 属性
 - priority: Dict[str, int]
- 每个模型的优先级设置。键为模型名，值为优先级整数（数值越大，优先级越高，取值范围为 0~255）。
+
+  模型推理任务的调度优先级，取值范围 0~255，数值越大优先级越高。
+
 - customId: Dict[str, int]
- 自定义优先级，例如：时间戳、frame id等，数值越小优先级越高。优先级：priority > customId。
+
+  用户自定义标识（如 frame id、时间戳等），用于传递给底层调度器。优先级：priority > customId。
+
 - bpu_cores: Dict[str, List[int]]
- 模型绑定的 BPU 核心编号列表。键为模型名，值为一个整数列表，例如 [0], [0, 1] 表示绑定一个或多个核心。
+
+  模型绑定的 BPU core 列表；[-1] 表示 ANY，由调度器自动选择。S100 只能取 1，S600 取 0~3。
+
 - deviceId: Dict[str, int]
- 指定模型部署的设备 ID。键为模型名，值为设备编号。
+
+  模型部署的设备 ID（多设备场景使用）。
+
 ##### 示例：
   ```python
-  from hbm_runtime import HB_HBMRuntime, SchedParam
+  from hbm_runtime import HB_HBMRuntime
 
-  #创建一个调度参数对象
-  sched = SchedParam()
-  sched.priority = {"modelA": 8}
-  sched.customId = {"modelA": 1001}
-  sched.bpu_cores = {"modelA": [0, 1]}
-  sched.deviceId = {"modelA": 0}
+  runtime = HB_HBMRuntime("model.hbm")
 
-  # 应用调度参数到运行时
-  model.set_scheduling_params(priority=sched.priority,
-                              custom_id=sched.customId,
-                              bpu_cores=sched.bpu_cores,
-                              device_id=sched.deviceId)
+  sched_params = runtime.sched_params   # Dict[str, SchedParam]
+  for model_name, sp in sched_params.items():
+      print(
+          model_name,
+          sp.priority,
+          sp.customId,
+          sp.bpu_cores,
+          sp.deviceId
+      )
   ```
+
+## 注意事项
+- 动态输入和输出未经测试，谨慎使用；
