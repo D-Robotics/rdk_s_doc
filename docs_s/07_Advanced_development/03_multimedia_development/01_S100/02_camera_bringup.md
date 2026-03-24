@@ -1031,3 +1031,184 @@ duty单位为ns，没有特殊要求可以配置为10000
 SERDES_OP(priv->dser_dev, trigger_enable, priv->dser_dev, sen_dev, enable);
 ```
 在stream开关流时，调用trigger_enable打开或关闭lpwm输出
+
+### 深度相机点亮注意事项
+目前 S100 camera 支持使用 RealSense D457 和奥比 Gemini 335Lg 两款 GMSL 形式的深度相机，该部分针对深度相机相比较其他普通 GMSL 相机的差异点做出说明。
+#### 限制
+1. 只支持获取深度数据(depth)和颜色数据(color)，**不支持获取 IR 数据**。
+        - Gemini 335Lg 通过官方 SDK 额外获取 IMU 数据；
+        - D457 在本方案中不支持获取 IMU 数据。
+2. 每 1 路数据通路都会占用解串器的 1 个输入 port。
+        - S100 camera 子板默认搭载的为 1 路解串器，最多支持 4 路数据流(例如 depth + color 组合为 2 路)。
+3. 接入不同路数的相机，或 D457 与 335Lg 组合使用时，需要自行适配 dtb overlay，确保每一路的 I2C 地址、虚拟通道（VC）、port 绑定关系正确。
+4. D457 和 335Lg 固件本身也存在问题，具体遗留问题请参考官网的说明与 release note。
+
+这里以接入 2 路 D457，生成 V4L2 video 节点，并在官方 SDK 预览显示为例，描述注意事项。
+#### dtb overlay 文件编写和添加
+参考上面 dtbo 编写方法，[dtbo 编写说明](./02_camera_bringup.md#sensor-dtbo-文件编写配置说明)
+主要注意点参考下面的代码注释：
+```c
+ d457@11 {
+                compatible="intel,d4xx";
+                reg = <0x11>;    // 映射后的 i2c 地址
+                def-addr = <0x10>;    // d457 实际的 i2c 物理地址
+                width = <640>;
+                height = <480>;
+                cam-type = "Depth";    // d457 输出数据类型，目前可选 Depth, RGB
+                data_type = <0x2e>;    // 对应的 datatype，Depth -> 0x2e, RGB -> 0x1e
+                lane_num = <2>;    // d457 mipi lane 数，固定为 2 lane
+                vc_id = <0>;    // 最后解串器送给 soc 对应的 mipi 虚拟通道
+                d-robotics,serdes-ser-device = <&ser_a>;     // 注意这一路接到 port_a，用 port_a d457 输出 depth 数据
+                d-robotics,serdes-dser-device = <&dser>;
+                status = "okay";
+
+                port {
+                        d457_0_to_mipi_csi4: endpoint {
+                                remote-endpoint = <&mipi_csi4_from_d457_0>;
+                                virtual-channel = <0>;
+                        };
+                };
+        };
+ d457@12 {
+                compatible="intel,d4xx";
+                reg = <0x12>;
+                def-addr = <0x10>;
+                width = <640>;
+                height = <480>;
+                cam-type = "RGB";
+                data_type = <0x1e>;
+                lane_num = <2>;
+                vc_id = <1>;
+                d-robotics,serdes-ser-device = <&ser_a>;  // 注意这一路接到 port_a，用 port_a d457 输出 rgb 数据
+                d-robotics,serdes-dser-device = <&dser>;
+                status = "okay";
+
+                port {
+                        d457_1_to_mipi_csi4: endpoint {
+                                remote-endpoint = <&mipi_csi4_from_d457_1>;
+                                virtual-channel = <1>;
+                        };
+                };
+        };
+d457@13 {
+        compatible="intel,d4xx";
+        reg = <0x13>;
+        def-addr = <0x10>;
+        width = <640>;
+        height = <480>;
+        cam-type = "Depth";
+        data_type = <0x2e>;
+        lane_num = <2>;
+        vc_id = <2>;
+        d-robotics,serdes-ser-device = <&ser_c>;
+        d-robotics,serdes-dser-device = <&dser>;
+        status = "okay";
+
+        port {
+                d457_2_to_mipi_csi4: endpoint {
+                        remote-endpoint = <&mipi_csi4_from_d457_2>;
+                        virtual-channel = <2>;
+                };
+        };
+};
+
+d457@14 {
+        compatible="intel,d4xx";
+        reg = <0x14>;
+        def-addr = <0x10>;
+        width = <640>;
+        height = <480>;
+        cam-type = "RGB";
+        data_type = <0x1e>;
+        lane_num = <2>;
+        vc_id = <3>;
+        d-robotics,serdes-ser-device = <&ser_c>;
+        d-robotics,serdes-dser-device = <&dser>;
+        status = "okay";
+
+        port {
+                d457_3_to_mipi_csi4: endpoint {
+                        remote-endpoint = <&mipi_csi4_from_d457_3>;
+                        virtual-channel = <3>;
+                };
+        };
+};
+```
+* `cam-type` 与 `data_type` 必须匹配，否则 Depth/RGB 会解析失败；
+* `vc_id` 规划需与每路 depth/color 的数量对应，避免多个流抢占同一个虚拟通道；
+* 需要注意 `d-robotics,serdes-ser-device` 的 `ser_a/ser_c` 对应物理接线与实际要对应。
+
+目前板端支持的 dtb overlay 功能说明：
+1. `s100_d457_rx4_4v_dpeth.dtbo` S100 官方 camera 扩展板，通过 MIPI RX4 接入 4 路 D457，同时可以获取 4 路深度图。
+2. `s100_12v_camera_board_d457_rx4_portAC_rx1_portAC_depth_color.dtbo` S100 官方提供 12路 GMSL camera 扩展板，通过 MIPI RX4 和 MIPI RX1 接入 4 路 D457，同时可以获取 4 路深度图和 4 路 RGB 图。
+3. `s100_335lg_rx4_2v_portA_portB_depth_color.dtbo` S100 官方 camera 扩展板，通过 MIPI RX4 接入 2 路 335Lg，同时可以获取 2 路深度图和 2 路 RGB 图。
+
+#### 切换到 V4L2 模式
+参考 [V4L2 使用方式](./01_camsys.md#v4l2)，加载 camsys V4L2 ko，注意的是，需要加载对应的深度相机 ko, D457 为**d457.ko**， 335Lg 为**g300.ko**。
+#### 修改官方 SDK
+D457 和 335Lg 官方 SDK 是针对其他平台做的适配，所以想要在 RDK-S100 平台上正常运行，需要修改 SDK 源码。
+D457 SDK 官网链接：[D457](https://github.com/realsenseai/librealsense), 335LG SDK 官网链接：[335Lg](https://github.com/orbbec/OrbbecSDK_v2)
+D457 的修改 diff 如下：
+```c
+diff --git a/src/linux/backend-v4l2.cpp b/src/linux/backend-v4l2.cpp
+index 974827d48..9e7472e9c 100644
+--- a/src/linux/backend-v4l2.cpp
++++ b/src/linux/backend-v4l2.cpp
+@@ -1745,7 +1745,12 @@ namespace librealsense
+             std::string driver_str = reinterpret_cast<char*>(cap.driver);
+             // checking if "tegra" is part of the driver string
+             size_t pos = driver_str.find("tegra");
+-            return pos != std::string::npos;
++            size_t pos_vs = driver_str.find("vs");
++            // return pos != std::string::npos;
++            if (pos != std::string::npos || pos_vs != std::string::npos) {
++                return true;
++            }
++            return false;
+         }
+
+         void v4l_uvc_device::acquire_metadata(buffers_mgr& buf_mgr,fd_set &, bool compressed_format)
+```
+335Lg 的修改 diff 如下：
+```c
+git diff .
+diff --git a/src/platform/usb/uvc/ObV4lGmslDevicePort.cpp b/src/platform/usb/uvc/ObV4lGmslDevicePort.cpp
+index 7b561e79..864ff72d 100644
+--- a/src/platform/usb/uvc/ObV4lGmslDevicePort.cpp
++++ b/src/platform/usb/uvc/ObV4lGmslDevicePort.cpp
+@@ -1779,7 +1779,7 @@ int ObV4lGmslDevicePort::resetGmslDriver() {
+ }
+
+ // bus_info:platform:tegra-capture-vi:0
+-#define GMSL_MIPI_DEVICE_TAG "platform:tegra-capture-vi"
++#define GMSL_MIPI_DEVICE_TAG "platform"
+ bool is_gmsl_mipi_device(const std::string bus_info) {
+     return bus_info.find(GMSL_MIPI_DEVICE_TAG) != std::string::npos;
+ }
+ ```
+ SDK 编译参考官网说明即可。
+ #### D457 建立软链接
+> 注意：D457 官方 SDK 内部通过固定的 `/dev/video-rs-*` 设备名称进行匹配，因此需要手动建立软链接。
+> 路数或 video 节点编号变化时，需同步调整软链接指向。
+
+ 下面以 2 路 depth + 2 路 color 为例，建立软链接：
+```c
+# modprobe vid_v4l2 scene=0, 此时 mipi rx4 从 video2 开始。
+ln -s /dev/video2 /dev/video-rs-depth-0
+ln -s /dev/video3 /dev/video-rs-color-0
+ln -s /dev/video4 /dev/video-rs-depth-1
+ln -s /dev/video5 /dev/video-rs-color-1
+# video0 和 video1 为 RX0/RX1，目前没有使用。
+# 增加 imu 软链接是为了 S100 平台适配 librealsense
+ln -s /dev/video0 /dev/video-rs-imu-0
+ln -s /dev/video0 /dev/video-rs-imu-1
+```
+scene num 的说明参考 [scene 场景说明](./01_camsys.md#场景说明)
+
+#### 预览图片
+D457 SDK 编译完成后，在终端输入 realsense-viewer，添加 D457 设备，即可预览，如下：
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_16.png)
+viewer 默认显示一路 D457，如果需要显示多路数据，请点击左上角 Add Source 按钮进行添加。
+
+335Lg SDK 编译完成后，启动 viewer 并查看 depth 和 color 图像。
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_17.png)
