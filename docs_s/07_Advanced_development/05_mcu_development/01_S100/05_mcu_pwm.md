@@ -142,17 +142,17 @@ S100 开发板将PWM引出供用户开发学习使用，已引出PWM Channel的P
 
 设置PWM占空比：
 ```sh
-pwmtest <pwm通道> <周期> <占空比>
+pwmtest <pwm_id> <pwm通道> <周期> <占空比>
 ```
 
 停止PWM输出：
 ```sh
-pwmtest stop <pwm通道>
+pwmtest <pwm_id> stop <pwm通道>
 ```
 
 例如设置PWM通道0的周期为1000us，占空比为50%：
 ```
-pwmtest 0 0x30d40 0x4000
+pwmtest 0 0 0x30d40 0x4000
 ```
 
 - 参数说明
@@ -175,12 +175,12 @@ PWM周期=时钟源频率/周期寄存器值​
 - 使用方法
 
 ```bash
-pwmdumpregs <pwm通道>
+pwmdumpregs <pwm_id> <pwm通道>
 ```
 
 例如dump pwm channel0的寄存器
 ```bash
-D-Robotics:/$ pwmdumpregs 0
+D-Robotics:/$ pwmdumpregs 0 0
 [06915.231597 0]INFO: Pwm_RegDump pwm channel:0
 [06915.231967 0]INFO: Pwm_RegDump channel 0
 ch[0]                              PERIOD 22370000 60000 # 周期
