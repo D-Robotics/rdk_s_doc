@@ -526,12 +526,12 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 | 平台 | Uart id |
 |------|---------|
 | S100 | Uart5  |
-| S600 | Uart10 |
+| S600 | Uart11 |
 
 所使用的Uart可以对mcu侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如S600，将`UART_TEST_HW_CHANNEL`定义为对应的Uart硬件
 
 ```
-#define UART_TEST_HW_CHANNEL (UART10_HW_CHANNEL)
+#define UART_IPCBOX_HW_CHANNEL (UART11_HW_CHANNEL)
 ```
 
 测试sample实现了对`Uart`的透传，操作步骤如下：
@@ -672,12 +672,12 @@ ipcbox只实现了对i2c Master的简单传输，不支持Slave
 | 平台 | Uart id |
 |------|---------|
 | S100 | Uart5  |
-| S600 | Uart10 |
+| S600 | Uart11 |
 
 所使用的Uart可以对mcu侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如S600，将`UART_TEST_HW_CHANNEL`定义为对应的Uart硬件
 
 ```
-#define UART_TEST_HW_CHANNEL (UART10_HW_CHANNEL)
+#define UART_IPCBOX_HW_CHANNEL (UART11_HW_CHANNEL)
 ```
 
 :::tip
