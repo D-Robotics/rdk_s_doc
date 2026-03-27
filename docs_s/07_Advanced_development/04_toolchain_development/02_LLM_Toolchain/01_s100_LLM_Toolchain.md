@@ -2,13 +2,13 @@
 sidebar_position: 1
 ---
 
-# 7.4.2 LLM工具链
+# RDK S100 LLM 工具链
 
 ## RDK S100 1.0.0 大模型工具链
 
-在 S100/S100P 平台上，D-Robotics_LLM_S100 目前支持以下模型和功能： 
+在 RDK S100/S100P 平台上，D-Robotics_LLM_S100 目前支持以下模型和功能： 
 
-**LLM:**
+**LLM**
 1. DeepSeek-R1-Distill-Qwen：支持 DeepSeek-R1-Distill-Qwen-1.5B 和 DeepSeek-R1-Distill-Qwen-7B，提供模型量化、简单会话、多轮对话、PPL评估功能。 
 
 2. InternLM2：支持 InternLM2-1.8B，提供模型量化、简单会话、PPL评估功能。 
