@@ -33,6 +33,11 @@ import TabItem from '@theme/TabItem';
       <td>GNOME Boxes是一个轻量虚拟机软件</td>
       <td></td>
     </tr>
+    <tr>
+      <td>搜狗输入法</td>
+      <td>搜狗输入法是一款智能中文输入法，支持拼音、五笔等多种输入方式</td>
+      <td>Linux版本基于fcitx框架开发，依赖 X11（Xorg）输入法机制（XIM），不支持 Wayland 输入协议</td>
+    </tr>
   </tbody>
 </table>
 
