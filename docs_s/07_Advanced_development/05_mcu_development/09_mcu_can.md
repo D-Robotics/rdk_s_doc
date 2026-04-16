@@ -864,14 +864,18 @@ Send end, send package total: 1 frame total: 1
 本程序实现CAN总线多通道数据发送与接收：
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
+
 - **硬件连接**：使用CAN闭环总线网络，Can6连接Can7，Can8连接Can9，Can5单独通道不接，CAN_H和CAN_L之间接入120欧姆电阻（把所用到的CAN总线的接线柱后面的2 PIN引脚使用跳线帽或杜邦线短接）。
 - **发送线程**：为每个通道创建独立线程发送数据，当使用CANFD时，数据包含计数器和时间戳，当使用经典CAN时，数据为全0x55。
 - **接收线程**：为每个通道创建独立线程接收数据并验证数据正确性。
+
 </TabItem>
 <TabItem value="S600" label="S600">
+
 - **硬件连接**：使用CAN闭环总线网络，建议两两互联进行回环测试（例如Can1连接Can2，Can3连接Can4，Can5连接Can6，Can7连接Can8，Can9连接Can10），并将参与组网的CAN通道对应拨码开关拨到ON端，使CAN_H和CAN_L之间接入120欧姆电阻。
 - **发送线程**：为每个通道创建独立线程发送数据，当使用CANFD时，数据包含计数器和时间戳，当使用经典CAN时，数据为全0x55。
 - **接收线程**：为每个通道创建独立线程接收数据并验证数据正确性。
+
 </TabItem>
 </Tabs>
 
@@ -919,8 +923,8 @@ Send end, send package total: 1 frame total: 1
 | CAN10  | CAN10RX      | "can10"|
 
 > 说明：`can_multi_ch/config/ipcf_channel.json` 中默认IPC映射为  
-> CAN1→ins0/ch1，CAN2→ins0/ch2，CAN3→ins0/ch3，CAN4→ins4/ch4，CAN5→ins0/ch4，  
-> CAN6→ins4/ch0，CAN7→ins4/ch1，CAN8→ins4/ch2，CAN9→ins4/ch3，CAN10→ins4/ch5。
+> CAN1→'ins0/ch1'，CAN2→'ins0/ch2'，CAN3→'ins0/ch3'，CAN4→'ins4/ch4'，CAN5→'ins0/ch4'，  
+> CAN6→'ins4/ch0'，CAN7→'ins4/ch1'，CAN8→'ins4/ch2'，CAN9→'ins4/ch3'，CAN10→'ins4/ch5'。
 </TabItem>
 </Tabs>
 
