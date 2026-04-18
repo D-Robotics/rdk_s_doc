@@ -5,7 +5,7 @@ sidebar_position: 07
 # 7.7 VDSP开发指南
 
 :::warning
-**VDSP功能使用在S600上暂不支持!!!**
+**S600上包含两个VDSP核，以下描述关于VDSP1的使用只有在S600上支持！**
 :::
 
 ## 基础调试指南
@@ -14,18 +14,24 @@ sidebar_position: 07
 
 #### 镜像加载卸载
 
-S100系统在启动时默认不启动VDSP FW（Firmware），需要用户通过命令的形式手动加载和卸载FW，命令如下所示：
+VDSP所有核共用一个Firmware，默认名字为vdsp0。第二个VDSP核（VDSP1，仅S600等双核平台）与VDSP0在功能上一致：同样通过 remoteproc 节点设置 FW 名称、执行加载/卸载，并可通过 `version`、`state` 等节点查看版本与运行状态；区别仅在于 sysfs 节点为 `remoteproc_vdsp1`（以及启停、日志等路径中的实例号，见下文各小节）。系统在启动时默认不启动VDSP FW（Firmware），需要用户通过命令的形式手动加载和卸载FW，命令如下所示：
 
 ``` shell
 echo -n <firmware路径> > /sys/module/firmware_class/parameters/path
 
-#S100 VDSP0
 # 设置VDSP0 FW名称：
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
 #VDSP0的FW加载：
 echo start > /sys/class/remoteproc/remoteproc_vdsp0/state
 #VDSP0的FW卸载：
 echo stop > /sys/class/remoteproc/remoteproc_vdsp0/state
+
+# 设置VDSP1 FW名称：
+echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
+#VDSP1的FW加载：
+echo start > /sys/class/remoteproc/remoteproc_vdsp1/state
+#VDSP1的FW卸载：
+echo stop > /sys/class/remoteproc/remoteproc_vdsp1/state
 ```
 
 用户可通过以下命令修改FW路径（**必须是绝对路径**）：
@@ -37,8 +43,11 @@ echo -n <firmware路径> > /sys/module/firmware_class/parameters/path
 用户可根据自己命名的FW名称在加载之前进行调整：
 
 ``` shell
-#S100 VDSP0
+# VDSP0
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
+
+# VDSP1
+echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
 ```
 
 用户需要修改原始镜像，配置init.rc，kernel启动后由init进程自动加载VDSP镜像。
@@ -46,9 +55,13 @@ echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
 ``` shell
 #首先将编译出的FW镜像（如vdsp0）拷贝到/userdata 下
 echo -n <firmware路径> > /sys/module/firmware_class/parameters/path
-#S100 VDSP0
+# VDSP0
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
 echo start > /sys/class/remoteproc/remoteproc_vdsp0/state
+
+# VDSP1
+echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
+echo start > /sys/class/remoteproc/remoteproc_vdsp1/state
 ```
 
 **FW版本查看**
@@ -56,6 +69,8 @@ echo start > /sys/class/remoteproc/remoteproc_vdsp0/state
 ``` shell
 #S100 VDSP0
 cat /sys/class/remoteproc/remoteproc_vdsp0/version # for vdsp0
+#S600 VDSP1（与 VDSP0 相同，仅节点不同）
+cat /sys/class/remoteproc/remoteproc_vdsp1/version # for vdsp1
 ```
 
 **VDSP运行状态查看**
@@ -64,6 +79,8 @@ cat /sys/class/remoteproc/remoteproc_vdsp0/version # for vdsp0
 #running表示已加载，offline表示未加载
 #S100 VDSP0
 cat /sys/class/remoteproc/remoteproc_vdsp0/state # for vdsp0
+#S600 VDSP1（与 VDSP0 相同，仅节点不同）
+cat /sys/class/remoteproc/remoteproc_vdsp1/state # for vdsp1
 ```
 
 **心跳监控**
@@ -92,13 +109,6 @@ echo N > /sys/module/hobot_remoteproc/parameters/heartbeat_enable
 | DSP0/1 | dcore0_acore_heart/dcore1_acore_heart                 | 心跳机制使用，目前未使用，用户可用作其他用途               | 否               | 否            |
 | DSP0/1 | dcore0_rpmsg_bpu/dcore1_rpmsg_bpu                     | BPU相关的控制，目前未使用，用户可用作其他用途             | 否               | 否            |
 | DSP0/1 | dcore0_rpmsg_op/dcore1_rpmsg_op                       | 工具链算子相关的控制，目前未使用，用户可用作其他用途           | 否               | 否            |
-
-| VDSP | 服务名称                         | 作用                                   | 是否必须启动          | VDSP侧是否默认启动 |
-| ---- | ---------------------------- | ------------------------------------ | --------------- | ------------ |
-| DSP0 | dcore0_device_op           | 系统软件内部对DSP的调试控制，系统软件已经使用，用户不可再次注册和使用 | 是               | 是            |
-| DSP0 | dcore0_acore_heart         | 心跳机制使用，目前未使用，用户可用作其他用途               | 否               | 否            |
-| DSP0 | dcore0_rpmsg_bpu           | BPU相关的控制，目前未使用，用户可用作其他用途             | 否               | 否            |
-| DSP0 | dcore0_rpmsg_op            | 工具链算子相关的控制，目前未使用，用户可用作其他用途           | 否               | 否            |
 
 用户可使用的API可参考下表：
 
@@ -188,16 +198,21 @@ echo 0 > /proc/sys/kernel/printk
 当没有串口可用的情况下，用户可通过ssh登录板子，后台默认会启动hrut_remoteproc_log服务：
 
 ``` shell
-#S100 VDSP0 默认开机执行的启动命令，日志保存路径：/log/dsp0/message
+#VDSP0 默认开机执行的启动命令，日志保存路径：/log/dsp0/message
 hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp0/log -f /log/dsp0/message -r 2048 -n 200
+#VDSP1（与 VDSP0 相同用法，仅 remoteproc 节点与落盘路径换为 dsp1）
+hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp1/log -f /log/dsp1/message -r 2048 -n 200
 ```
 
 同样的，VDSP FW的日志会写入Share memory中，由CPU侧log服务进程存入文件系统中。因此用户可通过以下路径下的文件查看日志，但是需要注意的是这里的日志并不是实时的。
 
 ``` shell
-#S100 VDSP0的日志路径：
+#VDSP0的日志路径：
 /log/dsp0/message
 /log/dsp0/archive/
+#VDSP1的日志路径：
+/log/dsp1/message
+/log/dsp1/archive/
 #message是临时文件，存满之后会写入到archive/目录下，当该目录下的文件达到一定数量后，会删除时间较早产生的文件
 ```
 
@@ -223,6 +238,9 @@ DSP_*接口使用注意事项：
 #S100 VDSP0：
 echo on > /sys/devices/virtual/misc/vdsp0/vdsp_ctrl/dspthread
 echo off > /sys/devices/virtual/misc/vdsp0/vdsp_ctrl/dspthread
+#S600 VDSP1（与 VDSP0 相同，仅 misc 设备节点为 vdsp1）：
+echo on > /sys/devices/virtual/misc/vdsp1/vdsp_ctrl/dspthread
+echo off > /sys/devices/virtual/misc/vdsp1/vdsp_ctrl/dspthread
 ```
 
 #### coredump查看
@@ -269,7 +287,7 @@ VDSP发生coredump时，Acore会把VDSP所有可能使用的memory空间(iram/dr
 ddr)全部写入指定的文件系统中，路径如下：
 
 ``` shell
-#vdsp0
+#vdsp0 / vdsp1 的落盘目录相同；具体 dump 文件名会带 vdsp0_* 或 vdsp1_* 前缀以区分实例
 /log/coredump/
 ```
 
@@ -286,6 +304,7 @@ restore vdsp0_ddr_2024-05-06-02-50-03.hex binary 0xf0000000
 restore vdsp0_iram_2024-05-06-02-50-03.hex binary 0x08080000
 restore vdsp0_dram0_2024-05-06-02-50-03.hex binary 0x08000000
 restore vdsp0_dram1_2024-05-06-02-50-03.hex binary 0x08040000
+# VDSP1：调试步骤与 VDSP0 相同，将上述文件替换为实际生成的 vdsp1_ddr_*.hex、vdsp1_iram_*.hex 等
 
 set $ar0 = 0xf00502a8
 set $ar1 = 0xf3fdded0
@@ -519,7 +538,7 @@ Firmware状态并确保已经进入停止状态后才继续相应的动作；同
 
 ### 功能概述
 
-本章节介绍S100系列SOC芯片平台的VDSP用例，该用例实现了VDSP的启停、核间消息的收发和VDSP图像处理。
+本章节介绍S系列SOC芯片平台的VDSP用例，该用例实现了VDSP的启停、核间消息的收发和VDSP图像处理。
 
 ### 软件架构说明
 
@@ -594,10 +613,12 @@ VDSP侧：
 # ARM侧sample编译可以直接在板端完成。sample在板端的路径如下所示：
 /app/vdsp_demo/vdsp_sample
 # 编译命令
-cd /app/vdsp_demo/vdsp_sample && Makefile
+cd /app/vdsp_demo/vdsp_sample && make
 
 # VDSP编译命令
-cd vdsp_fw && ./make.sh
+cd vdsp_fw
+export HR_TARGET_PROJECT=S100 (可配置项：S100/S600)
+./make.sh
 
 # VDSP侧输出文件:
 {sdk_dir}/vdsp_fw/samples/libxi-sample/vdsp0-{build_type}
@@ -607,7 +628,7 @@ cd vdsp_fw && ./make.sh
 
 ### 支持平台
 
-S100
+S100/S600
 
 #### 硬件环境搭建
 
@@ -617,28 +638,32 @@ NA
 
 下面列出vdsp sample支持的输入参数，可以通过 `--help` 获取到所有参数的说明。
 
-| 参数名         | 用法                                                                 | 默认值 |
-|----------------|----------------------------------------------------------------------|--------|
-| `dsp_id`       | `dsp_id=<0>` 指定 VDSP 0                                            | 0      |
-| `vdsp_pathname`| `vdsp_pathname=*`，指定 VDSP firmware 路径                          | `/app/vdsp_demo/vdsp_sample/res/q8sample` |
-| `sample-type`  | `sample-type=<0,1>`，指定 sample 类型：0 表示基础 sample，1 表示完整链路 sample | 1      |
-| `help`         | 打印帮助信息                                                         | —      |
+| 参数名 | 用法 | 默认值 |
+| :--- | :--- | :--- |
+| `dsp_id` | `-d` / `--dsp_id=<id>`，指定 VDSP 核编号（与 `hb_vdsp_*`、`dcore<id>_rpmsg_op` 等一致） | `0` |
+| `dsp_pathname` | `-p` / `--dsp_pathname=<path>`，指定 VDSP Firmware 路径（传给 `hb_vdsp_start`） | `/app/vdsp_demo/vdsp_sample/res/q8sample` |
+| `sample-type` | `-t` / `--sample-type=<0\|1>`，sample 类型：`0` 基础（basic）、`1` 完整链路（full） | `1` |
+| `case` | `-c` / `--case=<name>`，用例名（如 `xi-sample-flip`；代码中还分支 `flip_stress`、`flops_stress` 等） | `xi-sample-flip` |
+| `test_time` | `--test_time=<秒>`，压力类用例时长，单位秒（用于 `flip_stress` / `flops_stress` 等） | `5` |
+| `loading` | `--loading=<0-100>`，压力类用例负载百分比 | `80` |
+| `help` | `-h` / `--help`，打印用法并退出（未知参数也会进入 `usage()`） | （无） |
 
 ### 运行结果说明
 
 ``` bash
-root@ubuntu:/app/vdsp_demo/vdsp_sample# ./vdsp_sample
-vdsp_sample_cxt_s:
-        vdsp_id:0
-        vdsp_pathname:/app/vdsp_demo/vdsp_sample/res/q8sample
-vdsp_call_params_s:
+root@ubuntu:/app/vdsp_demo/vdsp_sample# ./vdsp_sample -d 1 -p /app/vdsp_demo/vdsp_sample/res/q8sample -t 0
+vdsp_sample_cxt:
+        vdsp_id:1
+        case_name:xi-sample-flip
+        dsp_pathname:/app/vdsp_demo/vdsp_sample/res/q8sample
+vdsp_call_params:
         cmd:xi-sample-flip
-        type:1
+        type:0
         buf_width:128
         buf_height:128
-        vdsp_buf0:0xfffc0000
-        vdsp_buf1:0xfffd0000
-recv_buf: 0
+        vdsp_buf0:0xfffd0000
+        vdsp_buf1:0xfffc0000
+result: 0
 ```
 
 运行结束后会得到上述log输出，recv_buf返回0表示执行正常。
