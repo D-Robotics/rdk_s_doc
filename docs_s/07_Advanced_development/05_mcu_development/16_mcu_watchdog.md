@@ -1,19 +1,25 @@
 ---
 sidebar_position: 16
 ---
-# 7.5.16 MCU 看门狗
+# 7.5.17 MCU 看门狗
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
+## 1. 简介
+
 <Tabs groupId="soc_type">
 <TabItem value="S100" label="S100">
-
-## 1. 简介
 本用户文档旨在提供WDG驱动的相关信息，包括功能、配置参数、API。
 文档每一处提及的Wdgx，x为索引，有效范围为0、1、2。
+</TabItem>
+<TabItem value="S600" label="S600">
+本用户文档旨在提供WDG驱动的相关信息，包括功能、配置参数、API。
+文档每一处提及的Wdgx，x为索引，有效范围为0、1、2、3、4。
+</TabItem>
+</Tabs>
 
 ## 2. 概览
 ### 2.1 文件列表
@@ -26,6 +32,9 @@ import TabItem from '@theme/TabItem';
 - McalCdd\Wdg\src\Wdg_Common.c
 
 #### Highlevel接口
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 这些是用于用户调用的API实现文件，每一个Wdg的instance需要一份独立代码文件：
 
 - McalCdd\Wdg\src\Wdg0.c
@@ -34,6 +43,22 @@ import TabItem from '@theme/TabItem';
 - McalCdd\Wdg\inc\Wdg0.h
 - McalCdd\Wdg\inc\Wdg1.h
 - McalCdd\Wdg\inc\Wdg2.h
+</TabItem>
+<TabItem value="S600" label="S600">
+这些是用于用户调用的API实现文件，每一个Wdg的instance需要一份独立代码文件：
+
+- McalCdd\Wdg\src\Wdg0.c
+- McalCdd\Wdg\src\Wdg1.c
+- McalCdd\Wdg\src\Wdg2.c
+- McalCdd\Wdg\src\Wdg3.c
+- McalCdd\Wdg\src\Wdg4.c
+- McalCdd\Wdg\inc\Wdg0.h
+- McalCdd\Wdg\inc\Wdg1.h
+- McalCdd\Wdg\inc\Wdg2.h
+- McalCdd\Wdg\inc\Wdg3.h
+- McalCdd\Wdg\inc\Wdg4.h
+</TabItem>
+</Tabs>
 
 ## 3. 应用程序接口
 
@@ -158,6 +183,9 @@ import TabItem from '@theme/TabItem';
 | Available via | Wdgx.h |
 
 ### 3.3 中断处理
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
 | ISR Name | Hardware Interrupt Vector |
 |---|---|
 | Wdg_Ins0IntIsr | 71 |
@@ -166,6 +194,22 @@ import TabItem from '@theme/TabItem';
 | Wdg_Ins1RstIsr | 74 |
 | Wdg_Ins2IntIsr | 75 |
 | Wdg_Ins2RstIsr | 76 |
+</TabItem>
+<TabItem value="S600" label="S600">
+| ISR Name | Hardware Interrupt Vector |
+|---|---|
+| Wdg_Ins0IntIsr | 93 |
+| Wdg_Ins0RstIsr | 94 |
+| Wdg_Ins1IntIsr | 95 |
+| Wdg_Ins1RstIsr | 96 |
+| Wdg_Ins2IntIsr | 97 |
+| Wdg_Ins2RstIsr | 98 |
+| Wdg_Ins3IntIsr | 99 |
+| Wdg_Ins3RstIsr | 100 |
+| Wdg_Ins4IntIsr | 101 |
+| Wdg_Ins4RstIsr | 102 |
+</TabItem>
+</Tabs>
 
 ### 3.4 临界区
 使用`SchM_Enter_Wdg_ExclusiveZone_XX`和`SchM_Exit_Wdg_ExclusiveZone_XX`来定义进入和退出临界区的操作，WDG驱动程序需要用户结合实际应用部署情况来处理临界区，其函数已在驱动中调用。
@@ -198,5 +242,23 @@ import TabItem from '@theme/TabItem';
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
-</TabItem>
-</Tabs>
+## 4. Acore看门狗超时MCU处理流程
+
+### 4.1 复位配置使能
+
+在 Target 的 `main.c` 调用 `Wdg_Enable_RstConfig()`（实现见 `Wdg_Common.c`，声明见 `Wdg_Prv.h`），完成看门狗侧与 MCU 复位/通知链路相关的底层使能。
+
+| Name | Description |
+|---|---|
+| Wdg_Enable_RstConfig | 复位配置 |
+
+### 4.2 MCU侧处理流程
+
+Acore侧看门狗超时触发中断送到MCU0侧，由MCU0侧在延时后发起复位，以便Acore打印栈等信息。
+
+流程为 中断置标志 → 专用任务里延时 → 触发长复位，执行长复位的责任在 OS 任务。
+
+| Name | Location | Description |
+|---|---|---|
+| 中断（入口） | Target\...\HorizonISR.c：ISR(Wdt_CfIntIsr) | 置 g_need_reset = 1（g_need_reset 在 McalCdd\Wdg\src\Wdg_Common.c），Os_Disable_Wdt_CfIntIsr()；与 IntRouter、ConfigInterrupts.h 绑定 |
+| OS 任务（延时 + 长复位） | Target\...\HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
