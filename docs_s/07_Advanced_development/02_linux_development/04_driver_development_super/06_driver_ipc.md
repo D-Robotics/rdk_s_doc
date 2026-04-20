@@ -528,10 +528,22 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 | S100 | Uart5  |
 | S600 | Uart11 |
 
-所使用的Uart可以对mcu侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如S600，将`UART_TEST_HW_CHANNEL`定义为对应的Uart硬件
+所使用的Uart可以对mcu侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如S600，将`UART_IPCBOX_HW_CHANNEL`定义为对应的Uart硬件
 
 ```
 #define UART_IPCBOX_HW_CHANNEL (UART11_HW_CHANNEL)
+```
+
+同时需要检查MCU侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`uart`对应项使能。默认如下配置中`uart`为`DISABLE`，需要改为`ENABLE`：
+
+```c
+{ IPCBOX_COM_ID_UART, "uart", IpcConf_IpcInstance_IpcInstance_7,
+#if ((SOC_TYPE_S100 == SOC_TYPE) || (SOC_TYPE_S100P == SOC_TYPE))
+  IpcConf_IpcInstance_7_IpcChannel_1, ENABLE, UART5_CHANNEL,
+#else
+  IpcConf_IpcInstance_7_IpcChannel_1, ENABLE, UART_IPCBOX_HW_CHANNEL,
+#endif
+  IpcBox_UartInit, IpcBox_UartDeinit },
 ```
 
 测试sample实现了对`Uart`的透传，操作步骤如下：
@@ -570,6 +582,14 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 
 ```
 #define SPI_IPCBOXUSEBUS (SPI_BUS6)
+```
+
+同时需要检查MCU侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`spi`对应项使能。默认如下配置中`spi`为`DISABLE`，需要改为`ENABLE`：
+
+```c
+{ IPCBOX_COM_ID_SPI, "spi", IpcConf_IpcInstance_IpcInstance_7,
+  IpcConf_IpcInstance_7_IpcChannel_2, ENABLE, IPCBOX_PERIID_INVALID,
+  IpcBox_SpiInit, IpcBox_SpiDeinit },
 ```
 
 
@@ -617,6 +637,14 @@ IpcBox只实现了对SPI Master的操控，有以下限制
 #### I2C测试
 
 测试sample实现了对I2c的detect测试，以S100使用I2c6为例，若使用S600注意将`./ipcbox_i2c detect 6`修改为`./ipcbox_i2c detect 13`
+
+同时需要检查MCU侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`i2c`对应项使能。默认如下配置中`i2c`为`DISABLE`，需要改为`ENABLE`：
+
+```c
+{ IPCBOX_COM_ID_I2C, "i2c", IpcConf_IpcInstance_IpcInstance_7,
+  IpcConf_IpcInstance_7_IpcChannel_3, ENABLE, IPCBOX_PERIID_INVALID,
+  IpcBox_I2cInit, IpcBox_I2cDeinit },
+```
 
 1. 开机进入S100/S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
 2. 编译：`make`
