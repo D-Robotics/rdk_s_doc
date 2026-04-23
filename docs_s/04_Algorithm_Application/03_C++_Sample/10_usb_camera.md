@@ -1,10 +1,10 @@
 ---
-sidebar_position: 13
+sidebar_position: 10
 ---
 
 # USB Camera YOLOv5x 推理
 
-基于BPU的 Ultralytics YOLOv5x 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于`/app/cdev_demo/bpu/09_usb_camera_sample/`目录下。
+基于BPU的 Ultralytics YOLOv5x 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于 `/app/cdev_demo/bpu/usb_camera_sample/` 目录下。
 
 ## 功能说明
 - 模型加载

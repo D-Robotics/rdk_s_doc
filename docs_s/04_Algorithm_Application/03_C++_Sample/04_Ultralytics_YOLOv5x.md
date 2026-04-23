@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # 目标检测-Ultralytics YOLOv5x
 
-本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于`/app/cdev_demo/bpu/02_detection_sample/01_ultralytics_yolov5x/`目录下。
+本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于 `/app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x/` 目录下。
 
 
 ## 模型说明

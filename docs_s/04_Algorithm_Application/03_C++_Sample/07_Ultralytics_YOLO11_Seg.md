@@ -4,7 +4,7 @@ sidebar_position: 7
 
 # 实例分割-Ultralytics YOLO11
 
-本示例展示了如何基在 BPU 上运行 YOLOv11 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/cdev_demo/bpu/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`目录下。
+本示例展示了如何基在 BPU 上运行 YOLOv11 实例分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于 `/app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg/` 目录下。
 
 ## 模型说明
 - 简介：

@@ -1,11 +1,10 @@
 ---
-sidebar_position: 16
+sidebar_position: 13
 ---
 
 # RTSP视频拉流及YOLOv5x 推理
-暂不支持，敬请期待！
-<!-- 本示例演示如何在 RDK S600 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
-RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于`/app/pydev_demo/12_rtsp_yolov5x_display_sample/`目录下。
+本示例演示如何在 RDK S600 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
+RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/pydev_demo/rtsp_yolov5x_display_sample/` 目录下。
 
 ## 功能说明
 
@@ -138,4 +137,4 @@ pip install -r ../requirements.txt --break-system-packages
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ``` -->
+    ```

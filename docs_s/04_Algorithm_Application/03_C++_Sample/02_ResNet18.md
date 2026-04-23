@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 图像分类-ResNet18
 
-本示例演示如何使用`C/C++`部署`ResNet18`模型进行图像分类推理，适用于搭载BPU芯片的 RDK S600 设备，本示例代码位于`/app/cdev_demo/bpu/01_classification_sample/01_resnet18/`目录下。
+本示例演示如何使用`C/C++`部署`ResNet18`模型进行图像分类推理，适用于搭载BPU芯片的 RDK S600 设备，本示例代码位于 `/app/cdev_demo/bpu/classification_sample/resnet18/` 目录下。
 
 ## 模型说明
 - 简介：

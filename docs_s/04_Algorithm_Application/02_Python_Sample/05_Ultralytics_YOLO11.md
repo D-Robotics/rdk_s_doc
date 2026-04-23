@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # 目标检测-Ultralytics YOLO11
 
-本示例基于 Ultralytics YOLO11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于`/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/`目录下。
+本示例基于 Ultralytics YOLO11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于 `/app/pydev_demo/detection_sample/ultralytics_yolo11/` 目录下。
 
 ## 模型说明
 - 简介：
