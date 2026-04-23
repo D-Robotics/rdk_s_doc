@@ -4,14 +4,41 @@ sidebar_position: 7
 
 # 实例分割-Ultralytics YOLO11
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例展示了如何基在 BPU 上运行 YOLOv11 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/cdev_demo/bpu/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例展示了如何基在 BPU 上运行 YOLOv11 实例分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于 `/app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLO11 是一款轻量级目标检测与实例分割模型，基于 YOLO 系列设计并融合了 anchor-free 与 anchor-based 思想结构与回归分箱（distributional regression）策略。本模型为其实例分割变体，支持同时输出边界框、类别概率和高质量的像素级掩膜，适用于实时场景中的多对象检测与分割任务。
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- HBM 模型名称： yolo11n_seg_nashe_640x640_nv12.hbm
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - HBM 模型名称： yolo11n_seg_nashp_640x640_nv12.hbm
+
+</TabItem>
+</Tabs>
 
 - 输入格式： NV12 格式图像（Y/UV 分离），尺寸为 640x640
 
@@ -77,11 +104,40 @@ sudo apt install libgflags-dev
 
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_seg_nashe_640x640_nv12.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_seg_nashp_640x640_nv12.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名             | 说明                       | 默认值                                                              |
+| --------------- | ------------------------ | ---------------------------------------------------------------- |
+| `--model_path`  | 模型文件路径（`.hbm`）           | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
+| `--test_img`    | 输入测试图片路径                 | `/app/res/assets/office_desk.jpg`                                |
+| `--label_file`  | 类别标签文件路径                 | `/app/res/labels/coco_classes.names`                             |
+| `--score_thres` | 置信度过滤阈值（低于该值的框会被丢弃）      | `0.25`                                                           |
+| `--nms_thres`   | IoU 阈值（类别内 NMS 用于去除重复检测） | `0.7`                                                            |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名             | 说明                       | 默认值                                                              |
 | --------------- | ------------------------ | ---------------------------------------------------------------- |
 | `--model_path`  | 模型文件路径（`.hbm`）           | `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` |
@@ -89,6 +145,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | `--label_file`  | 类别标签文件路径                 | `/app/res/labels/coco_classes.names`                             |
 | `--score_thres` | 置信度过滤阈值（低于该值的框会被丢弃）      | `0.25`                                                           |
 | `--nms_thres`   | IoU 阈值（类别内 NMS 用于去除重复检测） | `0.7`                                                            |
+
+</TabItem>
+</Tabs>
 
 ## 快速运行
 - 运行模型
@@ -98,6 +157,22 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         ./ultralytics_yolo11_seg
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        ./ultralytics_yolo11_seg \
+            --model_path /opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm \
+            --test_img /app/res/assets/office_desk.jpg \
+            --label_file /app/res/labels/coco_classes.names \
+            --score_thres 0.25 \
+            --nms_thres 0.7
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         ./ultralytics_yolo11_seg \
             --model_path /opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm \
@@ -106,6 +181,10 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
             --score_thres 0.25 \
             --nms_thres 0.7
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
 
     运行成功后，会将结果绘制在原图上，并保存到build/result.jpg

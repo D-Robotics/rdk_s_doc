@@ -1,10 +1,26 @@
 ---
-sidebar_position: 11
+sidebar_position: 14
 ---
 
 # MIPI Camera YOLOv5x 推理
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+基于 BPU 的 Ultralytics YOLOv5x 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于`/app/cdev_demo/bpu/10_mipi_camera_sample/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 基于 BPU 的 Ultralytics YOLOv5x 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于 `/app/cdev_demo/bpu/mipi_camera_sample/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 功能说明
 
@@ -73,13 +89,32 @@ sudo apt install libgflags-dev
     make -j$(nproc)
     ```
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+## 模型下载
+若在程序运行时未找到模型，可通过下列命令下载
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 | 参数名           | 说明                                  | 默认值                                                  |
 | --------------- | ------------------------------------- | ------------------------------------------------------ |
 | `--width`       | 传感器原始宽度（用于 VIO 参数/显示缩放） | `1920`                                                 |
@@ -88,6 +123,21 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | `--label_file`  | 类别标签文件（逐行一个类别名）           | `/app/res/labels/coco_classes.names`                      |
 | `--score_thres` | 置信度阈值                             | `0.25`                                                 |
 | `--nms_thres`   | NMS 的 IoU 阈值                        | `0.45`                                                |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+| 参数名           | 说明                                  | 默认值                                                  |
+| --------------- | ------------------------------------- | ------------------------------------------------------ |
+| `--width`       | 传感器原始宽度（用于 VIO 参数/显示缩放） | `1920`                                                 |
+| `--height`      | 传感器原始高度（用于 VIO 参数/显示缩放） | `1080`                                                 |
+| `--model_path`  | BPU 量化模型路径（`.hbm`）             | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`  |
+| `--label_file`  | 类别标签文件（逐行一个类别名）           | `/app/res/labels/coco_classes.names`                      |
+| `--score_thres` | 置信度阈值                             | `0.25`                                                 |
+| `--nms_thres`   | NMS 的 IoU 阈值                        | `0.45`                                                |
+
+</TabItem>
+</Tabs>
 
 ## 快速运行
 注意：该程序需运行在桌面环境。
@@ -98,6 +148,10 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         ./mipi_camera
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
         ```bash
         ./mipi_camera \
             --width 1920 --height 1080 \
@@ -106,6 +160,21 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
             --score_thres 0.25 \
             --nms_thres 0.45
         ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
+        ```bash
+        ./mipi_camera \
+            --width 1920 --height 1080 \
+            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+            --label_file /app/res/labels/coco_classes.names \
+            --score_thres 0.25 \
+            --nms_thres 0.45
+        ```
+
+        </TabItem>
+        </Tabs>
 - 退出运行
 
     在命令行输入Ctrl C

@@ -4,7 +4,23 @@ sidebar_position: 4
 
 # 目标检测-Ultralytics YOLOv5x
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于`/app/cdev_demo/bpu/02_detection_sample/01_ultralytics_yolov5x/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于 `/app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x/` 目录下。
+
+</TabItem>
+</Tabs>
 
 
 ## 模型说明
@@ -74,13 +90,43 @@ sudo apt install libgflags-dev
     make -j$(nproc)
     ```
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+## 模型下载
+若在程序运行时未找到模型，可通过下列命令下载
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数              | 说明                       | 默认值                                     |
+| --------------- | --------------------------- | ------------------------------------------ |
+| `--model-path`  | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--test-img`    | 测试图片路径                 | `/app/res/assets/kite.jpg`                 |
+| `--label-file`  | 类别标签文件路径             | `/app/res/labels/coco_classes.names`       |
+| `--score-thres` | 置信度阈值 (过滤低分框)      | `0.25`                                     |
+| `--nms-thres`   | IoU 阈值 (NMS 非极大值抑制)  | `0.45`                                     |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数              | 说明                       | 默认值                                     |
 | --------------- | --------------------------- | ------------------------------------------ |
 | `--model-path`  | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
@@ -89,6 +135,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | `--score-thres` | 置信度阈值 (过滤低分框)      | `0.25`                                     |
 | `--nms-thres`   | IoU 阈值 (NMS 非极大值抑制)  | `0.45`                                     |
 
+</TabItem>
+</Tabs>
+
 ## 快速运行
 - 运行模型
     - 使用默认参数
@@ -96,6 +145,22 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         ./ultralytics_yolov5x
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        ./ultralytics_yolov5x \
+            --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+            --test-img /app/res/assets/kite.jpg \
+            --label-file /app/res/labels/coco_classes.names \
+            --score-thres 0.25 \
+            --nms-thres 0.45
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         ./ultralytics_yolov5x \
             --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
@@ -104,6 +169,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
             --score-thres 0.25 \
             --nms-thres 0.45
         ```
+
+        </TabItem>
+        </Tabs>
 - 查看结果
 
     运行成功后，会将目标检测框绘制在原图上，并保存在 build/result.jpg

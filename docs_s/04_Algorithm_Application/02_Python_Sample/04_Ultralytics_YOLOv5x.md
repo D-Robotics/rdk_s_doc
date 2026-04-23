@@ -4,7 +4,23 @@ sidebar_position: 4
 
 # 目标检测-Ultralytics YOLOv5x
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于`/app/pydev_demo/02_detection_sample/01_ultralytics_yolov5x/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于 `/app/pydev_demo/detection_sample/ultralytics_yolov5x/` 目录下。
+
+</TabItem>
+</Tabs>
 
 
 ## 模型说明
@@ -46,18 +62,47 @@ sidebar_position: 4
 
     - 叠加检测框并保存结果图像。
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- 模型下载地址（程序自动下载）：
+
+    ```bash
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+    ```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - 模型下载地址（程序自动下载）：
 
     ```bash
     https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
     ```
 
+</TabItem>
+</Tabs>
+
 
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+pip install -r ../../requirements.txt
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 pip install -r ../../requirements.txt --break-system-packages
 ```
+
+</TabItem>
+</Tabs>
 
 ## 目录结构
 
@@ -68,6 +113,23 @@ pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数           | 说明                                                     | 默认值                                      |
+|----------------|----------------------------------------------------------|---------------------------------------------|
+| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--test-img`   | 测试图片路径                                              | `/app/res/assets/kite.jpg`                     |
+| `--label-file` | 类别标签路径（每行一个类别）                                | `/app/res/labels/coco_classes.names`           |
+| `--img-save-path` | 检测结果图像保存路径                                    | `result.jpg`                                |
+| `--priority`  | 模型调度优先级（0~255）                                     | `0`                                         |
+| `--bpu-cores` | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）              | `[0]`                                      |
+| `--nms-thres`   | 非极大值抑制（NMS）阈值                                    | `0.45`                                    |
+| `--score-thres` | 置信度阈值                                                | `0.25`                                    |
+
+</TabItem>
+<TabItem value="S600" label="S600">
 
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
@@ -80,6 +142,9 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--nms-thres`   | 非极大值抑制（NMS）阈值                                    | `0.45`                                    |
 | `--score-thres` | 置信度阈值                                                | `0.25`                                    |
 
+</TabItem>
+</Tabs>
+
 
 ## 快速运行
 - 运行模型
@@ -88,6 +153,25 @@ pip install -r ../../requirements.txt --break-system-packages
         python ultralytics_yolov5x.py
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        python ultralytics_yolov5x.py \
+            --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+            --test-img /app/res/assets/kite.jpg \
+            --label-file /app/res/labels/coco_classes.names \
+            --img-save-path result.jpg \
+            --priority 0 \
+            --bpu-cores 0 \
+            --nms-thres 0.45 \
+            --score-thres 0.25
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         python ultralytics_yolov5x.py \
             --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
@@ -99,6 +183,10 @@ pip install -r ../../requirements.txt --break-system-packages
             --nms-thres 0.45 \
             --score-thres 0.25
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
 
     运行成功后，会将目标检测框绘制在原图上，并保存到 --img-save-path 指定路径
@@ -107,7 +195,19 @@ pip install -r ../../requirements.txt --break-system-packages
     ```
 
 ## 注意事项
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - 若指定模型路径不存在，可尝试去`/opt/hobot/model/s600/basic/`查找。
+
+</TabItem>
+</Tabs>
 
 ## License
     ```license

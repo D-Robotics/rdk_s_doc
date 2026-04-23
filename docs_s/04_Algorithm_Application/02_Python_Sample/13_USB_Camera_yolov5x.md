@@ -1,10 +1,26 @@
 ---
-sidebar_position: 10
+sidebar_position: 13
 ---
 
 # USB Camera YOLOv5x 推理
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+基于 `hbm_runtime` 的 Ultralytics YOLOv5x 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于`/app/pydev_demo/09_usb_camera_sample/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 基于 `hbm_runtime` 的 Ultralytics YOLOv5x 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于 `/app/pydev_demo/usb_camera_sample/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 功能说明
 - 模型加载
@@ -36,9 +52,23 @@ sidebar_position: 10
 
 ## 环境依赖
 - 确保安装了pydev中的环境依赖
+
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    pip install -r ../requirements.txt
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     pip install -r ../requirements.txt --break-system-packages
     ```
+
+    </TabItem>
+    </Tabs>
 
 ## 目录结构
 ```text
@@ -48,6 +78,22 @@ sidebar_position: 10
 ```
 
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名           | 说明                              | 默认值                                                    |
+| --------------- | --------------------------------- | ------------------------------------------------------ |
+| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
+| `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
+| `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
+| `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
+| `--score-thres` | 检测置信度阈值                      | `0.25`                                                 |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名           | 说明                              | 默认值                                                    |
 | --------------- | --------------------------------- | ------------------------------------------------------ |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
@@ -56,6 +102,9 @@ sidebar_position: 10
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
 | `--score-thres` | 检测置信度阈值                      | `0.25`                                                 |
+
+</TabItem>
+</Tabs>
 
 
 ## 快速运行
@@ -66,6 +115,23 @@ sidebar_position: 10
         python usb_camera_yolov5x.py
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        python usb_camera_yolov5x.py \
+        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
+        --priority 0 \
+        --bpu-cores 0 \
+        --label-file /app/res/labels/coco_classes.names \
+        --nms-thres 0.45 \
+        --score-thres 0.25
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         python usb_camera_yolov5x.py \
         --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
@@ -75,6 +141,10 @@ sidebar_position: 10
         --nms-thres 0.45 \
         --score-thres 0.25
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 退出运行
 
     把鼠标放置在显示框中，按q键退出
@@ -86,7 +156,18 @@ sidebar_position: 10
 ## 注意事项
 - 该程序需运行在桌面环境。
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - 若指定模型路径不存在，可尝试去`/opt/hobot/model/s600/basic/`查找。
+
+</TabItem>
+</Tabs>
 
 ## License
     ```license

@@ -4,14 +4,41 @@ sidebar_position: 8
 
 # 姿态估计-Ultralytics YOLO11
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例展示了如何基于 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于`/app/pydev_demo/04_pose_sample/01_ultralytics_yolo11_pose/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例展示了如何基于 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于 `/app/pydev_demo/pose_sample/ultralytics_yolo11_pose/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLO11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- HBM 模型名称： yolo11n_pose_nashe_640x640_nv12.hbm
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - HBM 模型名称： yolo11n_pose_nashp_640x640_nv12.hbm
+
+</TabItem>
+</Tabs>
 
 - 输入格式： NV12 格式图像（Y、UV 分离），尺寸为 640×640
 
@@ -27,9 +54,23 @@ sidebar_position: 8
 
 - 模型下载地址（程序自动下载）：
 
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_pose_nashe_640x640_nv12.hbm
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_pose_nashp_640x640_nv12.hbm
     ```
+
+    </TabItem>
+    </Tabs>
+
 ## 功能说明
 - 模型加载
 
@@ -60,9 +101,23 @@ sidebar_position: 8
 
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+pip install -r ../../requirements.txt
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 pip install -r ../../requirements.txt --break-system-packages
 ```
+
+</TabItem>
+</Tabs>
 
 ## 目录结构
 ```text
@@ -72,6 +127,25 @@ pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名                | 说明                                              | 默认值                                |
+| ------------------ | --------------------------------------------------- | ------------------------------------- |
+| `--model-path`     | 模型文件路径（`.hbm` 格式）                           | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
+| `--test-img`       | 测试图像路径                                         | `/app/res/assets/bus.jpg`                |
+| `--label-file`     | 类别标签路径，每行一个类别名称                         | `/app/res/labels/coco_classes.names`     |
+| `--img-save-path`  | 检测结果保存路径                                     | `result.jpg`                          |
+| `--priority`       | 模型调度优先级（0\~255，数值越大优先级越高）           | `0`                                   |
+| `--bpu-cores`      | 推理所使用的 BPU 核心编号列表（如：`--bpu-cores 0 1`） | `[0]`                                 |
+| `--nms-thres`      | 非极大值抑制（NMS）中的 IoU 阈值                      | `0.7`                                 |
+| `--score-thres`    | 目标置信度阈值（低于该值的目标将被过滤）               | `0.25`                                |
+| `--kpt-conf-thres` | 关键点可视化置信度阈值（低于该值的关键点将不显示）      | `0.5`                                 |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名                | 说明                                              | 默认值                                |
 | ------------------ | --------------------------------------------------- | ------------------------------------- |
 | `--model-path`     | 模型文件路径（`.hbm` 格式）                           | `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` |
@@ -84,6 +158,9 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--score-thres`    | 目标置信度阈值（低于该值的目标将被过滤）               | `0.25`                                |
 | `--kpt-conf-thres` | 关键点可视化置信度阈值（低于该值的关键点将不显示）      | `0.5`                                 |
 
+</TabItem>
+</Tabs>
+
 ## 快速运行
 - 运行模型
     - 使用默认参数
@@ -91,6 +168,26 @@ pip install -r ../../requirements.txt --break-system-packages
         python ultralytics_yolo11_pose.py
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        python ultralytics_yolo11_pose.py \
+        --model-path /opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm \
+        --test-img /app/res/assets/bus.jpg \
+        --label-file /app/res/labels/coco_classes.names \
+        --img-save-path result.jpg \
+        --priority 0 \
+        --bpu-cores 0 \
+        --score-thres 0.25 \
+        --nms-thres 0.7 \
+        --kpt-conf-thres 0.5
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         python ultralytics_yolo11_pose.py \
         --model-path /opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm \
@@ -103,6 +200,10 @@ pip install -r ../../requirements.txt --break-system-packages
         --nms-thres 0.7 \
         --kpt-conf-thres 0.5
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
 
     运行成功后，会将结果绘制在原图上，并保存到 --img-save-path 指定路径

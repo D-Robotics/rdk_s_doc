@@ -4,14 +4,41 @@ sidebar_position: 5
 
 # 目标检测-Ultralytics YOLO11
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例基于 Ultralytics YOLO11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于`/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例基于 Ultralytics YOLO11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于 `/app/pydev_demo/detection_sample/ultralytics_yolo11/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLO11 是一款轻量级的 anchor-based 目标检测模型，融合了 anchor-free 与 anchor-based 思想，具备快速推理和精确定位的能力。该模型在回归阶段采用离散分桶（regression bin）方式，结合 softmax 分类和解码机制来提升定位精度。Ultralytics YOLO11 适用于实时场景下的小模型部署，如安防监控、工业检测等任务。
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- HBM 模型名称： yolo11n_detect_nashe_640x640_nv12.hbm
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - HBM 模型名称： yolo11n_detect_nashp_640x640_nv12.hbm
+
+</TabItem>
+</Tabs>
 
 - 输入格式： NV12 格式，大小为 640x640（Y、UV 分离）
 
@@ -19,9 +46,22 @@ sidebar_position: 5
 
 - 模型下载地址（程序自动下载）：
 
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_detect_nashe_640x640_nv12.hbm
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_detect_nashp_640x640_nv12.hbm
     ```
+
+    </TabItem>
+    </Tabs>
 
 ## 功能说明
 - 模型加载
@@ -52,9 +92,23 @@ sidebar_position: 5
 
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+pip install -r ../../requirements.txt
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 pip install -r ../../requirements.txt --break-system-packages
 ```
+
+</TabItem>
+</Tabs>
 
 ## 目录结构
 ```text
@@ -64,6 +118,24 @@ pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名           | 说明                                                         | 默认值                                         |
+|------------------|--------------------------------------------------------------|------------------------------------------------|
+| `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`        |
+| `--test-img`      | 输入测试图片路径                                             | `/app/res/assets/kite.jpg`                        |
+| `--label-file`    | 类别标签文件路径（每行一个类别名称）                         | `/app/res/labels/coco_classes.names`              |
+| `--img-save-path` | 检测结果图像保存路径                                         | `result.jpg`                                   |
+| `--priority`      | 模型调度优先级（0~255，数值越大优先级越高）                  | `0`                                            |
+| `--bpu-cores`     | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）             | `[0]`                                          |
+| `--nms-thres`     | 非极大值抑制（NMS）的 IoU 阈值                                | `0.45`                                         |
+| `--score-thres`   | 置信度过滤阈值（低于该值的目标将被过滤）                      | `0.25`                                         |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名           | 说明                                                         | 默认值                                         |
 |------------------|--------------------------------------------------------------|------------------------------------------------|
 | `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`        |
@@ -75,6 +147,9 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--nms-thres`     | 非极大值抑制（NMS）的 IoU 阈值                                | `0.45`                                         |
 | `--score-thres`   | 置信度过滤阈值（低于该值的目标将被过滤）                      | `0.25`                                         |
 
+</TabItem>
+</Tabs>
+
 
 ## 快速运行
 - 运行模型
@@ -83,6 +158,25 @@ pip install -r ../../requirements.txt --break-system-packages
         python ultralytics_yolo11.py
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        python ultralytics_yolo11.py \
+            --model-path /opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm \
+            --test-img /app/res/assets/kite.jpg \
+            --label-file /app/res/labels/coco_classes.names \
+            --img-save-path result.jpg \
+            --priority 0 \
+            --bpu-cores 0 \
+            --nms-thres 0.45 \
+            --score-thres 0.25
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         python ultralytics_yolo11.py \
             --model-path /opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm \
@@ -94,6 +188,10 @@ pip install -r ../../requirements.txt --break-system-packages
             --nms-thres 0.45 \
             --score-thres 0.25
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
 
     运行成功后，会将目标检测框绘制在原图上，并保存到 --img-save-path 指定路径

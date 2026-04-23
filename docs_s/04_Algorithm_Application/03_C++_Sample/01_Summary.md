@@ -4,11 +4,50 @@ sidebar_position: 1
 
 # 示例概述
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本项目包含多个基于 C/C++ 编写的 AI 示例程序，适用于 RDK S100平台，覆盖图像分类、目标检测、实例分割、姿态估计、OCR、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本项目包含多个基于 C/C++ 编写的 AI 示例程序，适用于 RDK S600平台，覆盖图像分类、目标检测、实例分割、姿态估计、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。
+
+</TabItem>
+</Tabs>
 
 本项目的板端代码位置：`/app/cdev_demo/bpu`。
 
 ## 目录结构总览
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```text
+|-- 01_classification_sample         # 图像分类示例（如 ResNet18、MobileNet）
+|-- 02_detection_sample              # 目标检测示例（YOLO 等）
+|-- 03_instance_segmentation_sample  # 实例分割示例
+|-- 04_pose_sample                   # 关键点检测示例
+|-- 05_open_instance_seg_sample      # 开放实例分割示例
+|-- 06_lane_detection_sample         # 车道线检测示例
+|-- 07_speech_sample                 # 语音识别示例
+|-- 08_OCR_sample                    # 光学字符识别示例
+|-- 09_usb_camera_sample             # USB 摄像头实时推理示例
+|-- 10_mipi_camera_sample            # MIPI 摄像头实时推理示例
+|-- 11_decode_yolov5x_display_sample # 视频解码、推理与显示示例
+|-- 12_rtsp_yolov5x_display_sample   # RTSP 流解码、推理与显示示例
+|-- utils                            # 通用工具函数
+`-- README.md                        # 项目说明文档（当前文件）
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
 
 ```text
 |-- classification_sample            # 图像分类示例（如 ResNet18、MobileNet）
@@ -24,23 +63,50 @@ sidebar_position: 1
 `-- README.md                        # 项目说明文档（当前文件）
 ```
 
+</TabItem>
+</Tabs>
+
 ## 环境要求
 
 在运行示例前，请确保系统环境满足以下要求：
 
 ### 硬件
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- 支持 BPU 的S100开发板
+- 摄像头（USB 或 MIPI）若需运行相关示例
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - 支持 BPU 的S600开发板
 - 摄像头（USB 或 MIPI）若需运行相关示例
+
+</TabItem>
+</Tabs>
 
 ### 系统与工具链
 本项目已在以下环境中验证可运行：
 
 - 操作系统
 
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    - Ubuntu 22.04.5 LTS (Jammy Jellyfish)
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     - Distributor ID: Ubuntu
     - Description:    Ubuntu 24.04.3 LTS
     - Release:        24.04
     - Codename:       noble
+
+    </TabItem>
+    </Tabs>
 
 - 编译工具链
 
@@ -66,14 +132,45 @@ sidebar_position: 1
     sudo apt install libsamplerate0-dev
     ```
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- OCR 文字识别示例
+    ```bash
+    sudo apt update
+    sudo apt install libpolyclipping-dev
+    ```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 <!-- - OCR 文字识别示例
     ```bash
     sudo apt update
     sudo apt install libpolyclipping-dev
     ``` -->
 
+</TabItem>
+</Tabs>
+
 ## 编译方法
 以图像分类示例 resnet18 为例：
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+cd 01_classification_sample/01_resnet18
+
+mkdir build && cd build
+
+cmake ..
+
+make -j$(nproc)
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
 
 ```bash
 cd classification_sample/resnet18
@@ -85,12 +182,29 @@ cmake ..
 make -j$(nproc)
 ```
 
+</TabItem>
+</Tabs>
+
 ## 运行示例
 以图像分类示例 resnet18 为例：
 + 进入sample目录的编译目录
+
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    cd 01_classification_sample/01_resnet18/build
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     cd classification_sample/resnet18/build
     ```
+
+    </TabItem>
+    </Tabs>
 + 运行模型
     ``` bash
     ./resnet_18

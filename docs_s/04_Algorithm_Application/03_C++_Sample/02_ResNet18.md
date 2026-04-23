@@ -4,7 +4,23 @@ sidebar_position: 2
 
 # 图像分类-ResNet18
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例演示如何使用`C/C++`部署`ResNet18`模型进行图像分类推理，适用于搭载BPU芯片的 RDK S100 设备，本示例代码位于`/app/cdev_demo/bpu/01_classification_sample/01_resnet18/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例演示如何使用`C/C++`部署`ResNet18`模型进行图像分类推理，适用于搭载BPU芯片的 RDK S600 设备，本示例代码位于 `/app/cdev_demo/bpu/classification_sample/resnet18/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
@@ -63,17 +79,48 @@ sudo apt install libgflags-dev
 
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ResNet/resnet18_224x224_nv12.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resnet18_224x224_nv12.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数             | 说明                                    | 默认值                                                 |
+| -------------- | ------------------------------------- | --------------------------------------------------- |
+| `--model_path` | 模型文件路径（`.hbm` 格式）                     | `/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`         |
+| `--test_img`   | 测试图片路径                                | `/app/res/assets/zebra_cls.jpg`                     |
+| `--label_file` | ImageNet 类别映射（dict，每行 `index\tlabel`） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
+| `--top_k`      | 输出 Top-K 分类结果数                        | `5`                                                 |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数             | 说明                                    | 默认值                                                 |
 | -------------- | ------------------------------------- | --------------------------------------------------- |
 | `--model_path` | 模型文件路径（`.hbm` 格式）                     | `/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`         |
 | `--test_img`   | 测试图片路径                                | `/app/res/assets/zebra_cls.jpg`                     |
 | `--label_file` | ImageNet 类别映射（dict，每行 `index\tlabel`） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--top_k`      | 输出 Top-K 分类结果数                        | `5`                                                 |
+
+</TabItem>
+</Tabs>
 
 ## 快速运行
 - 运行模型
@@ -83,6 +130,21 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resne
         ./resnet_18
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        ./resnet_18 \
+        --model_path /opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm \
+        --test_img   /app/res/assets/zebra_cls.jpg \
+        --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
+        --top_k 5
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         ./resnet_18 \
         --model_path /opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm \
@@ -90,6 +152,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resne
         --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
         --top_k 5
         ```
+
+        </TabItem>
+        </Tabs>
 
 - 查看结果
     ```bash

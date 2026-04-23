@@ -4,7 +4,23 @@ sidebar_position: 3
 
 # 图像分类-MobileNetV2
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `hbm_runtime` 进行推理，本示例代码位于`/app/pydev_demo/01_classification_sample/02_mobilenetv2/ `目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `hbm_runtime` 进行推理，本示例代码位于 `/app/pydev_demo/classification_sample/mobilenetv2/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
@@ -19,9 +35,23 @@ sidebar_position: 3
 
 - 模型下载地址（程序自动下载）：
 
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mobilenetv2_224x224_nv12.hbm
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/MobileNet/mobilenetv2_224x224_nv12.hbm
     ```
+
+    </TabItem>
+    </Tabs>
+
 ## 功能说明
 - 模型加载
 
@@ -41,9 +71,23 @@ sidebar_position: 3
 
 ## 环境依赖
 本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+pip install -r ../../requirements.txt
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 pip install -r ../../requirements.txt --break-system-packages
 ```
+
+</TabItem>
+</Tabs>
 
 ## 目录结构
 
@@ -54,6 +98,21 @@ pip install -r ../../requirements.txt --break-system-packages
 ```
 
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数           | 说明                                                     | 默认值                                      |
+|----------------|----------------------------------------------------------|---------------------------------------------|
+| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`                 |
+| `--test-img`   | 测试图片路径                                              | `/app/res/assets/zebra_cls.jpg`                |
+| `--label-file` | 类别标签映射文件路径                                       | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
+| `--priority`   | 模型优先级（0~255，越大优先级越高）                         | `0`                                         |
+| `--bpu-cores`  | 推理使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）         | `[0]`                                       |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数           | 说明                                                     | 默认值                                      |
 |----------------|----------------------------------------------------------|---------------------------------------------|
 | `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`                 |
@@ -61,6 +120,9 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--label-file` | 类别标签映射文件路径                                       | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--priority`   | 模型优先级（0~255，越大优先级越高）                         | `0`                                         |
 | `--bpu-cores`  | 推理使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）         | `[0]`                                       |
+
+</TabItem>
+</Tabs>
 
 
 ## 快速运行
@@ -70,12 +132,30 @@ pip install -r ../../requirements.txt --break-system-packages
         python mobilenetv2.py
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        python mobilenetv2.py \
+        --model-path /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm \
+        --test-img /app/res/assets/zebra_cls.jpg \
+        --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         python mobilenetv2.py \
         --model-path /opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm \
         --test-img /app/res/assets/zebra_cls.jpg \
         --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
     ```bash
     Top-5 Predictions:

@@ -4,14 +4,41 @@ sidebar_position: 8
 
 # 姿态估计-Ultralytics YOLO11
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例展示了如何在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于`/app/cdev_demo/bpu/04_pose_sample/01_ultralytics_yolo11_pose/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例展示了如何在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于 `/app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLO11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- HBM 模型名称： yolo11n_pose_nashe_640x640_nv12.hbm
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - HBM 模型名称： yolo11n_pose_nashp_640x640_nv12.hbm
+
+</TabItem>
+</Tabs>
 
 - 输入格式： NV12 格式图像（Y、UV 分离），尺寸为 640×640
 
@@ -82,11 +109,41 @@ sudo apt install libgflags-dev
 
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_pose_nashe_640x640_nv12.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_pose_nashp_640x640_nv12.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名                | 说明                     | 默认值                                                   |
+| ------------------ | ---------------------- | ----------------------------------------------------- |
+| `--model_path`     | 模型文件路径（`.hbm`）              | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
+| `--test_img`       | 输入测试图片路径                    | `/app/res/assets/bus.jpg`                             |
+| `--label_file`     | 类别标签文件（每行一个类别名称）       | `/app/res/labels/coco_classes.names`                  |
+| `--score_thres`    | 置信度阈值（低于该值的检测将被过滤）     | `0.25`                                                |
+| `--nms_thres`      | IoU 阈值（类别内 NMS 去重）                | `0.7`                                                 |
+| `--kpt_conf_thres` | 关键点可视化置信度阈值（低于该值的点不显示） | `0.5`                                                 |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名                | 说明                     | 默认值                                                   |
 | ------------------ | ---------------------- | ----------------------------------------------------- |
 | `--model_path`     | 模型文件路径（`.hbm`）              | `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` |
@@ -96,6 +153,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | `--nms_thres`      | IoU 阈值（类别内 NMS 去重）                | `0.7`                                                 |
 | `--kpt_conf_thres` | 关键点可视化置信度阈值（低于该值的点不显示） | `0.5`                                                 |
 
+</TabItem>
+</Tabs>
+
 ## 快速运行
 - 运行模型
     - 确保在`build`目录中
@@ -104,6 +164,23 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         ./ultralytics_yolo11_pose
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        ./ultralytics_yolo11_pose \
+        --model_path /opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm \
+        --test_img   /app/res/assets/bus.jpg \
+        --label_file /app/res/labels/coco_classes.names \
+        --score_thres 0.25 \
+        --nms_thres   0.7 \
+        --kpt_conf_thres 0.5
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         ./ultralytics_yolo11_pose \
         --model_path /opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm \
@@ -113,6 +190,10 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         --nms_thres   0.7 \
         --kpt_conf_thres 0.5
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
 
     运行成功后，会将结果绘制在原图上，并保存到build/result.jpg

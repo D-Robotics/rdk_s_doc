@@ -1,9 +1,30 @@
 ---
-sidebar_position: 9
+sidebar_position: 11
 ---
 
 # 自动语音识别-ASR
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/pydev_demo/07_speech_sample/01_asr/` 目录下。
+
+:::warning
+当前 RDK S100 系统镜像**未内置** `asr.hbm` 模型，运行本示例前需手动下载（见下方"模型说明"中的下载地址），并放到默认路径 `/opt/hobot/model/s100/basic/asr.hbm`，或通过 `--model-path` 指定其它路径。
+:::
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/pydev_demo/speech_sample/asr/` 目录下。
+
+</TabItem>
+</Tabs>
 
 
 ## 模型说明
@@ -19,9 +40,23 @@ sidebar_position: 9
 
 - 模型下载地址（程序自动下载）：
 
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
     ```
+
+    </TabItem>
+    </Tabs>
+
 ## 功能说明
 - 模型加载
 
@@ -48,13 +83,42 @@ sidebar_position: 9
 
 ## 环境依赖
 - 确保安装了pydev中的环境依赖
+
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    pip install -r ../../requirements.txt
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     pip install -r ../../requirements.txt --break-system-packages
     ```
+
+    </TabItem>
+    </Tabs>
+
 - 安装soundfile包
+
+    <Tabs groupId="soc_type">
+    <TabItem value="S100" label="S100">
+
+    ```bash
+    pip install soundfile==0.13.1
+    ```
+
+    </TabItem>
+    <TabItem value="S600" label="S600">
+
     ```bash
     pip install soundfile==0.13.1 --break-system-packages
     ```
+
+    </TabItem>
+    </Tabs>
 
 ## 目录结构
 ```text
@@ -63,6 +127,23 @@ sidebar_position: 9
 ```
 
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名            | 说明                                          | 默认值                  |
+| ----------------- | -------------------------------------------- | ----------------------------|
+| `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s100/basic/asr.hbm`                    |
+| `--audio-file`    | 输入音频文件（支持 `.wav` 或 `.flac`）         | `/app/res/assets/chi_sound.wav` |
+| `--vocab-file`    | 词表文件，映射 token → id                     | `/app/res/labels/vocab.json`    |
+| `--priority`      | 推理优先级，0\~255，数值越大越优先             | `0`                           |
+| `--bpu-cores`   ` | 指定使用哪些 BPU 核心（如：`--bpu-cores 0 1`） | `[0]`                         |
+| `--audio_maxlen`  | 音频裁剪/填充后的固定长度（单位：采样点数）     | `30000`                         |
+| `--new_rate`      | 目标采样率，音频会自动重采样为该采样率          | `16000`                         |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名            | 说明                                          | 默认值                  |
 | ----------------- | -------------------------------------------- | ----------------------------|
 | `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s600/basic/asr.hbm`                    |
@@ -73,6 +154,9 @@ sidebar_position: 9
 | `--audio_maxlen`  | 音频裁剪/填充后的固定长度（单位：采样点数）     | `30000`                         |
 | `--new_rate`      | 目标采样率，音频会自动重采样为该采样率          | `16000`                         |
 
+</TabItem>
+</Tabs>
+
 
 ## 快速运行
 - 运行模型
@@ -81,6 +165,24 @@ sidebar_position: 9
         python asr.py
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        python asr.py \
+        --model-path /opt/hobot/model/s100/basic/asr.hbm \
+        --audio-file /app/res/assets/chi_sound.wav \
+        --vocab-file /app/res/labels/vocab.json \
+        --priority 0 \
+        --bpu-cores 0 \
+        --audio_maxlen 30000 \
+        --new_rate 16000
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         python asr.py \
         --model-path /opt/hobot/model/s600/basic/asr.hbm \
@@ -91,6 +193,10 @@ sidebar_position: 9
         --audio_maxlen 30000 \
         --new_rate 16000
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
 
     运行成功后，会将结果打印出来

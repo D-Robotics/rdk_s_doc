@@ -1,11 +1,28 @@
 ---
-sidebar_position: 13
+sidebar_position: 16
 ---
 
 # RTSP视频拉流及YOLOv5x 推理
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 本示例演示如何在 RDK S100 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
 RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/` 目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+本示例演示如何在 RDK S100 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
+RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 功能说明
 
@@ -72,13 +89,32 @@ sudo apt install libgflags-dev
     make -j$(nproc)
     ```
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+## 模型下载
+若在程序运行时未找到模型，可通过下列命令下载
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
 | 参数名            | 说明                             | 默认值                                                    |
 | ----------------- | ------------------------------- | ------------------------------------------------------ |
 | `--rtsp_url`      | RTSP 流 URL                     | `rtsp://127.0.0.1/assets/1080P_test.h264`              |
@@ -87,6 +123,21 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | `--label_file`    | 类别名文件（每行一个类别名）       | `/app/res/labels/coco_classes.names`                   |
 | `--score_thres`   | 置信度阈值（过滤低分检测框）       | `0.25`                                                 |
 | `--nms_thres`     | NMS IoU 阈值                    | `0.45`                                                 |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+| 参数名            | 说明                             | 默认值                                                    |
+| ----------------- | ------------------------------- | ------------------------------------------------------ |
+| `--rtsp_url`      | RTSP 流 URL                     | `rtsp://127.0.0.1/assets/1080P_test.h264`              |
+| `--transfer_type` | RTSP 传输类型（tcp/udp）         | `tcp`                                                  |
+| `--model_path`    | YOLOv5x 量化 BPU 模型路径 (.hbm) | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
+| `--label_file`    | 类别名文件（每行一个类别名）       | `/app/res/labels/coco_classes.names`                   |
+| `--score_thres`   | 置信度阈值（过滤低分检测框）       | `0.25`                                                 |
+| `--nms_thres`     | NMS IoU 阈值                    | `0.45`                                                 |
+
+</TabItem>
+</Tabs>
 
 
 ## 快速运行
@@ -105,6 +156,10 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         ./rtsp_yolov5x_display
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
         ```bash
         ./rtsp_yolov5x_display \
             --rtsp_url rtsp://127.0.0.1/assets/1080P_test.h264 \
@@ -114,6 +169,22 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
             --score_thres 0.3 \
             --nms_thres 0.5
         ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
+        ```bash
+        ./rtsp_yolov5x_display \
+            --rtsp_url rtsp://127.0.0.1/assets/1080P_test.h264 \
+            --transfer_type tcp \
+            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+            --label_file /app/res/labels/coco_classes.names \
+            --score_thres 0.3 \
+            --nms_thres 0.5
+        ```
+
+        </TabItem>
+        </Tabs>
 
 - 退出运行
 

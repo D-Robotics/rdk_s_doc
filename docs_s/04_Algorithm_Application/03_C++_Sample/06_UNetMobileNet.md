@@ -4,7 +4,23 @@ sidebar_position: 6
 
 # 语义分割-UNetMobileNet
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例展示了如何在 BPU 上运行 UNet-MobileNet 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/cdev_demo/bpu/03_instance_segmentation_sample/01_unetmobilenet/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例展示了如何在 BPU 上运行 UNet-MobileNet 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于 `/app/cdev_demo/bpu/instance_segmentation_sample/unetmobilenet/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
@@ -71,11 +87,26 @@ sudo apt install libgflags-dev
 
 ## 参数说明
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名            | 说明                            | 默认值                                                             |
+| -------------- | ----------------------------- | --------------------------------------------------------------- |
+| `--model_path` | 模型文件路径（.hbm 格式）               | `/opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm` |
+| `--test_img`   | 输入测试图像路径                      | `/app/res/assets/segmentation.png`                              |
+| `--alpha_f`    | 可视化融合系数，`0.0=仅显示掩码`，`1.0=仅原图` | `0.75`                                                   |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名            | 说明                            | 默认值                                                             |
 | -------------- | ----------------------------- | --------------------------------------------------------------- |
 | `--model_path` | 模型文件路径（.hbm 格式）               | `/opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm` |
 | `--test_img`   | 输入测试图像路径                      | `/app/res/assets/segmentation.png`                              |
 | `--alpha_f`    | 可视化融合系数，`0.0=仅显示掩码`，`1.0=仅原图` | `0.75`                                                   |
+
+</TabItem>
+</Tabs>
 
 ## 快速运行
 - 运行模型
@@ -85,12 +116,30 @@ sudo apt install libgflags-dev
         ./unet_mobilenet
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        ./unet_mobilenet \
+        --model_path /opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm \
+        --test_img /app/res/assets/segmentation.png \
+        --alpha_f 0.75
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         ./unet_mobilenet \
         --model_path /opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm \
         --test_img /app/res/assets/segmentation.png \
         --alpha_f 0.75
         ```
+
+        </TabItem>
+        </Tabs>
+
 - 查看结果
 
     运行成功后，会将结果绘制在原图上，并保存到build/result.jpg

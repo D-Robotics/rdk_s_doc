@@ -1,9 +1,30 @@
 ---
-sidebar_position: 9
+sidebar_position: 11
 ---
 
 # 自动语音识别-ASR
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
+
+:::warning
+当前 RDK S100 系统镜像**未内置** `asr.hbm` 模型，运行本示例前需手动下载（见下方"模型说明"中的下载地址），并放到默认路径 `/opt/hobot/model/s100/basic/asr.hbm`，或通过 `--model_path` 指定其它路径。
+:::
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下。
+
+</TabItem>
+</Tabs>
 
 
 ## 模型说明
@@ -72,16 +93,46 @@ sudo apt install -y libgflags-dev libsndfile1-dev libsamplerate0-dev
 
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名           | 说明                               | 默认值                                   |
+| -------------- | -------------------------------- | ------------------------------------- |
+| `--model_path` | 模型文件路径（`.hbm`）                   | `/opt/hobot/model/s100/basic/asr.hbm` |
+| `--test_sound` | 输入音频文件路径（`.wav`）                 | `/app/res/assets/chi_sound.wav`       |
+| `--vocab_file` | 词表（JSON），映射 **class id → token** | `/app/res/labels/vocab.json`          |
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 | 参数名           | 说明                               | 默认值                                   |
 | -------------- | -------------------------------- | ------------------------------------- |
 | `--model_path` | 模型文件路径（`.hbm`）                   | `/opt/hobot/model/s600/basic/asr.hbm` |
 | `--test_sound` | 输入音频文件路径（`.wav`）                 | `/app/res/assets/chi_sound.wav`       |
 | `--vocab_file` | 词表（JSON），映射 **class id → token** | `/app/res/labels/vocab.json`          |
+
+</TabItem>
+</Tabs>
 
 ## 快速运行
 - 运行模型
@@ -91,12 +142,29 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
         ./asr
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        ./asr \
+            --model_path /opt/hobot/model/s100/basic/asr.hbm \
+            --test_sound /app/res/assets/chi_sound.wav \
+            --vocab_file /app/res/labels/vocab.json
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         ./asr \
             --model_path /opt/hobot/model/s600/basic/asr.hbm \
             --test_sound /app/res/assets/chi_sound.wav \
             --vocab_file /app/res/labels/vocab.json
         ```
+
+        </TabItem>
+        </Tabs>
 - 查看结果
 
     运行成功后，会将结果打印出来

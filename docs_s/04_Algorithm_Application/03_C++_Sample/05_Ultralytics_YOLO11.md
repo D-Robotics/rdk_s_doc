@@ -4,14 +4,41 @@ sidebar_position: 5
 
 # 目标检测-Ultralytics YOLO11
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+本示例基于 Ultralytics YOLO11 模型，通过C/C++完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于`/app/cdev_demo/bpu/02_detection_sample/02_ultralytics_yolo11/`目录下。
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 本示例基于 Ultralytics YOLO11 模型，通过C/C++完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于 `/app/cdev_demo/bpu/detection_sample/ultralytics_yolo11/` 目录下。
+
+</TabItem>
+</Tabs>
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLO11 是一款轻量级的 anchor-based 目标检测模型，融合了 anchor-free 与 anchor-based 思想，具备快速推理和精确定位的能力。该模型在回归阶段采用离散分桶（regression bin）方式，结合 softmax 分类和解码机制来提升定位精度。Ultralytics YOLO11 适用于实时场景下的小模型部署，如安防监控、工业检测等任务。
 
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+- HBM 模型名称： yolo11n_detect_nashe_640x640_nv12.hbm
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 - HBM 模型名称： yolo11n_detect_nashp_640x640_nv12.hbm
+
+</TabItem>
+</Tabs>
 
 - 输入格式： NV12 格式，大小为 640x640（Y、UV 分离）
 
@@ -74,11 +101,39 @@ sudo apt install libgflags-dev
 
 ## 模型下载
 若在程序运行时未找到模型，可通过下列命令下载
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+```bash
+wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_detect_nashe_640x640_nv12.hbm
+```
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_detect_nashp_640x640_nv12.hbm
 ```
 
+</TabItem>
+</Tabs>
+
 ## 参数说明
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+| 参数名             | 说明                           | 默认值                                                                 |
+| --------------- | -------------------------------- | ------------------------------------------------------------------- |
+| `--model_path`  | 模型文件路径（.hbm 格式）          | `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm` |
+| `--test_img`    | 输入测试图片路径                   | `/app/res/assets/kite.jpg`                                          |
+| `--label_file`  | 类别标签文件路径（每行一个类别名称）   | `/app/res/labels/coco_classes.names`                                |
+| `--score_thres` | 置信度过滤阈值（低于该值的目标将被过滤） | `0.25`                                                              |
+| `--nms_thres`   | 非极大值抑制（NMS）的 IoU 阈值         | `0.7`                                                               |
+
+</TabItem>
+<TabItem value="S600" label="S600">
 
 | 参数名             | 说明                           | 默认值                                                                 |
 | --------------- | -------------------------------- | ------------------------------------------------------------------- |
@@ -88,6 +143,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | `--score_thres` | 置信度过滤阈值（低于该值的目标将被过滤） | `0.25`                                                              |
 | `--nms_thres`   | 非极大值抑制（NMS）的 IoU 阈值         | `0.7`                                                               |
 
+</TabItem>
+</Tabs>
+
 
 ## 快速运行
 - 运行模型
@@ -96,6 +154,22 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         ./ultralytics_yolo11
         ```
     - 指定参数运行
+
+        <Tabs groupId="soc_type">
+        <TabItem value="S100" label="S100">
+
+        ```bash
+        ./ultralytics_yolo11 \
+            --model_path /opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm \
+            --test_img /app/res/assets/kite.jpg \
+            --label_file /app/res/labels/coco_classes.names \
+            --score_thres 0.25 \
+            --nms_thres 0.7
+        ```
+
+        </TabItem>
+        <TabItem value="S600" label="S600">
+
         ```bash
         ./ultralytics_yolo11 \
             --model_path /opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm \
@@ -104,6 +178,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
             --score_thres 0.25 \
             --nms_thres 0.7
         ```
+
+        </TabItem>
+        </Tabs>
 - 查看结果
 
     运行成功后，会将目标检测框绘制在原图上，并保存到build/result.jgp
