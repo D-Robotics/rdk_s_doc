@@ -18,7 +18,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> GPIO.VERSION
 '0.0.2'
 >>> GPIO.model
-'RDK_S100'
+'RDK_S600'
 ```
 
 :::tip
@@ -72,9 +72,9 @@ GPIO.setwarnings(False)
 
 :::info
 
-在`RDK S600`平台上，支持3个10-pin 自锁接口，1个14-pin自锁接口GPIO拓展，在使用过程中有如下的限制:
+在`RDK S600`平台上，支持2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin自锁接口GPIO拓展，在使用过程中有如下的限制:
 
-管脚定义请参考 [管脚配置与定义](./01_overview.md#pin_define)
+管脚定义请参考 [管脚配置与定义](./01_ext_io.md#pin_define)
 
 :::
 
@@ -260,22 +260,22 @@ def signal_handler(signal, frame):
 
 
 # 定义使用的GPIO通道为output_pin
-
-
 def determine_pins():
     board_id = GPIO.gpio_pin_data.parse_boardid()
-    if GPIO.gpio_pin_data.if_s100_40pin(board_id):
-        return 37
+    if GPIO.gpio_pin_data.if_s600_30pin(board_id):
+        return 3
     else:
-        return 26
+        return 4
 
 
 def main():
     output_pin = determine_pins()
+
     # 设置管脚编码模式为硬件编号 BOARD
     GPIO.setmode(GPIO.BOARD)
     # 设置为输出模式，并且初始化为高电平
     GPIO.setup(output_pin, GPIO.OUT, initial=GPIO.HIGH)
+
     # 记录当前管脚状态
     curr_value = GPIO.HIGH
     print("Starting demo now! Press CTRL+C to exit")
@@ -292,6 +292,7 @@ def main():
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     main()
+
 ```
 
 - GPIO 设置为`输入模式`，通过忙轮询方式读取管脚电平值，测试代码 `simple_input.py`：
@@ -316,15 +317,16 @@ GPIO.setwarnings(False)
 
 def determine_pins():
     board_id = GPIO.gpio_pin_data.parse_boardid()
-    if GPIO.gpio_pin_data.if_s100_40pin(board_id):
-        return 37
+    if GPIO.gpio_pin_data.if_s600_30pin(board_id):
+        return 3
     else:
-        return 26
+        return 4
 
 
 def main():
     prev_value = None
     input_pin = determine_pins()
+
     # 设置管脚编码模式为硬件编号 BOARD
     GPIO.setmode(GPIO.BOARD)
     # 设置为输入模式
@@ -353,7 +355,7 @@ if __name__=='__main__':
 
 ```
 
-- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`, 实现检测24号管脚的下降沿，然后控制23号管脚的输出：
+- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`, 实现检测4号管脚的下降沿，然后控制3号管脚的输出：
 
 ```python
 #!/usr/bin/env python3
@@ -376,13 +378,12 @@ BOARD_ID_PATH = "/sys/class/boardinfo/adc_boardid"
 # 禁用警告信息
 GPIO.setwarnings(False)
 
-
 def determine_pins():
     board_id = GPIO.gpio_pin_data.parse_boardid()
-    if GPIO.gpio_pin_data.if_s100_40pin(board_id):
-        return 23, 24
+    if GPIO.gpio_pin_data.if_s600_30pin(board_id):
+        return 3, 4
     else:
-        return 26, 27
+        return 6, 7
 
 
 def main():
@@ -415,11 +416,12 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     main()
 
+
 ```
 
 - GPIO 设置为输入模式，启动gpio中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`, 实现了：
-  - 控制15号管脚以周期为4s，占空比为50%的模式拉高拉低，也就是拉高2s后拉低2s，在程序运行期间持续运转；
-  - 检测 24 号管脚的下降沿触发中断，中断处理函数会控制16号管脚快速切换高低电平 5 次。用户只要拉低了24号管脚，就可以看到16号管脚以1s的周期，50%的占空比，也就是0.5s拉高，0.5s拉低，运行总共5个周期。
+  - 控制 1 号管脚以周期为4s，占空比为50%的模式拉高拉低，也就是拉高2s后拉低2s，在程序运行期间持续运转；
+  - 检测 3 号管脚的下降沿触发中断，中断处理函数会控制2号管脚快速切换高低电平 5 次。用户只要拉低了3号管脚，就可以看到2号管脚以1s的周期，50%的占空比，也就是0.5s拉高，0.5s拉低，运行总共5个周期。
 
 ```python
 #!/usr/bin/env python3
@@ -437,8 +439,8 @@ def signal_handler(signal, frame):
 # 15号作为输出，可以点亮一个LED
 # 16号作为输出，可以点亮一个LED
 # but_pin作为输入，可以接一个按钮
-led_pin_1 = 15  # BOARD 编码 15
-led_pin_2 = 16  # BOARD 编码 16
+led_pin_1 = 1  # BOARD 编码 1
+led_pin_2 = 2  # BOARD 编码 2
 
 # 禁用警告信息
 GPIO.setwarnings(False)
@@ -446,10 +448,10 @@ GPIO.setwarnings(False)
 
 def determine_pins():
     board_id = GPIO.gpio_pin_data.parse_boardid()
-    if GPIO.gpio_pin_data.if_s100_40pin(board_id):
-        return 24
+    if GPIO.gpio_pin_data.if_s600_30pin(board_id):
+        return 3
     else:
-        return 27
+        return 4
 
 
 # 按下按钮时 LED 2 快速闪烁 5 次
@@ -527,9 +529,9 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |414|          SD_1V8|      Not Configured|
 |--- ---------------- --------------------|
-|415|        SD_DET_N|                gpio|
+|415|        SD_DET_N|      Not Configured|
 |--- ---------------- --------------------|
-|416|        SD_WPROT|                gpio|
+|416|        SD_WPROT|      Not Configured|
 |--- ---------------- --------------------|
 |417|      SD_BUS_POW|      Not Configured|
 |--- ---------------- --------------------|
@@ -541,19 +543,19 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |421|        SD_DATA1|      Not Configured|
 |--- ---------------- --------------------|
-|422|        SD_DATA2|                gpio|
+|422|        SD_DATA2|      Not Configured|
 |--- ---------------- --------------------|
-|423|        SD_DATA3|                gpio|
+|423|        SD_DATA3|      Not Configured|
 |--- ---------------- --------------------|
 |424|        SD_DATA4|      Not Configured|
 |--- ---------------- --------------------|
 |425|        SD_DATA5|      Not Configured|
 |--- ---------------- --------------------|
-|426|        SD_DATA6|                gpio|
+|426|        SD_DATA6|      Not Configured|
 |--- ---------------- --------------------|
-|427|        SD_DATA7|                gpio|
+|427|        SD_DATA7|      Not Configured|
 |--- ---------------- --------------------|
-|428|    SD_DATA_STRB|                gpio|
+|428|    SD_DATA_STRB|      Not Configured|
 |--- ---------------- --------------------|
 |429|     LPWM0_DOUT0|     cam_lpwm0_dout0|
 |--- ---------------- --------------------|
@@ -593,9 +595,9 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |447|       SPI0_SCLK|       hsi_spi0_sclk|
 |--- ---------------- --------------------|
-|448|        I2C8_SCL|                gpio|
+|448|        I2C8_SCL|        hsi_i2c8_scl|
 |--- ---------------- --------------------|
-|449|        I2C8_SDA|                gpio|
+|449|        I2C8_SDA|        hsi_i2c8_sda|
 |--- ---------------- --------------------|
 |450|        I2C9_SCL|        hsi_i2c9_scl|
 |--- ---------------- --------------------|
@@ -605,7 +607,7 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |453|       PCM0_BCLK|      Not Configured|
 |--- ---------------- --------------------|
-|454|      PCM0_FSYNC|                gpio|
+|454|      PCM0_FSYNC|      Not Configured|
 |--- ---------------- --------------------|
 |455|      PCM0_DATA0|      Not Configured|
 |--- ---------------- --------------------|
@@ -613,33 +615,33 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |457|       PCM1_MCLK|      Not Configured|
 |--- ---------------- --------------------|
-|458|       PCM1_BCLK|                gpio|
+|458|       PCM1_BCLK|      Not Configured|
 |--- ---------------- --------------------|
 |459|      PCM1_FSYNC|      Not Configured|
 |--- ---------------- --------------------|
 |460|      PCM1_DATA0|      Not Configured|
 |--- ---------------- --------------------|
-|461|      PCM1_DATA1|                gpio|
+|461|      PCM1_DATA1|      Not Configured|
 |--- ---------------- --------------------|
 |462|       PCM2_MCLK|      Not Configured|
 |--- ---------------- --------------------|
-|463|       PCM3_MCLK|                gpio|
+|463|       PCM3_MCLK|      Not Configured|
 |--- ---------------- --------------------|
 |464|       PCM2_BCLK|      Not Configured|
 |--- ---------------- --------------------|
 |465|      PCM2_FSYNC|      Not Configured|
 |--- ---------------- --------------------|
-|466|      PCM2_DATA0|                gpio|
+|466|      PCM2_DATA0|      Not Configured|
 |--- ---------------- --------------------|
-|467|      PCM2_DATA1|                gpio|
+|467|      PCM2_DATA1|      Not Configured|
 |--- ---------------- --------------------|
-|468|       PCM3_BCLK|      Not Configured|
+|468|       PCM3_BCLK|       hsi_pcm3_bclk|
 |--- ---------------- --------------------|
-|469|      PCM3_FSYNC|                gpio|
+|469|      PCM3_FSYNC|      hsi_pcm3_fsync|
 |--- ---------------- --------------------|
-|470|      PCM3_DATA0|                gpio|
+|470|      PCM3_DATA0|      hsi_pcm3_data0|
 |--- ---------------- --------------------|
-|471|      PCM3_DATA1|      Not Configured|
+|471|      PCM3_DATA1|      hsi_pcm3_data1|
 |--- ---------------- --------------------|
 |472|       UART2_TXD|       hsi_uart2_txd|
 |--- ---------------- --------------------|
@@ -693,9 +695,9 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |497|        I2C0_SDA|        hsi_i2c0_sda|
 |--- ---------------- --------------------|
-|498|        I2C1_SCL|                gpio|
+|498|        I2C1_SCL|        hsi_i2c1_scl|
 |--- ---------------- --------------------|
-|499|        I2C1_SDA|                gpio|
+|499|        I2C1_SDA|        hsi_i2c1_sda|
 |--- ---------------- --------------------|
 |500|        I2C2_SCL|        hsi_i2c2_scl|
 |--- ---------------- --------------------|
@@ -721,5 +723,5 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |511|        I2C7_SDA|        hsi_i2c7_sda|
 |--- ---------------- --------------------|
-|--- ---------------- --------------------|
+|--- ---------------- --------------------
 ```
