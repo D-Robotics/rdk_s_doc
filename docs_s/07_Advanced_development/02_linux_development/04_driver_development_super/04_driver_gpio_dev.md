@@ -8,6 +8,18 @@ S100 Acore芯片内中共有3个sys有gpio设备，分别是peri, cam和video，
 
 ![gpio_devs](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/gpio_devs.png)
 
+## S600 GPIO概述
+
+S600芯片内中共有3个sys有gpio设备，分别是hsi, cam和peri，总共110个gpio引脚，并且每个gpio引脚都支持中断。
+
+| GPIO控制器 | 引脚数量 | 基地址 | 设备节点 |
+|-----------|---------|--------|----------|
+| hsi_gpio0 | 32 | 0x33810000 | hsi_port0 |
+| hsi_gpio1 | 32 | 0x33814000 | hsi_port1 |
+| hsi_gpio2 | 3 | 0x33818000 | hsi_port2 |
+| cam_gpio0 | 16 | 0x37130000 | cam_port0 |
+| peri_gpio0 | 27 | 0x390b0000 | peri_port0 |
+
 ## 驱动代码
 
 ```bash
@@ -26,6 +38,12 @@ S100 GPIO控制器的设备树定义位于SDK包的kernel文件夹下的arch/arm
 
 :::info 备注
 s100.dtsi中的节点主要声明SoC共有特性，和具体电路板无关，一般情况下不用修改。
+:::
+
+S600 GPIO控制器的设备树定义位于SDK包的hobot-drivers/kernel-dts文件夹下的drobot-s600-pinctrl.dtsi文件内。
+
+:::info 备注
+drobot-s600-pinctrl.dtsi中的节点主要声明SoC共有特性，和具体电路板无关，一般情况下不用修改。
 :::
 
 ## GPIO使用
@@ -55,6 +73,28 @@ gpio-test {
                       &peri_port1 17 GPIO_ACTIVE_HIGH
                       &cam_port0 28 GPIO_ACTIVE_HIGH
                       &video_port0 18 GPIO_ACTIVE_HIGH>;
+};
+```
+
+S600所有引脚的GPIO配置位于SDK包的hobot-drivers/kernel-dts文件夹下路径为`drobot-s600-pinctrl.dtsi`的文件内。
+
+用户需要配置特定引脚为GPIO功能时，可以直接引用预定义GPIO配置：
+
+GPIO设备树节点的属性命名方式一般为`<names>-gpios`或`<names>-gpio`，举例如下：
+
+```c
+/**
+* hsi_port0表示hsi sys的第一个gpio设备
+* 下列设备节点共有三个gpio引脚，分别是：
+*       hsi sys的第一个gpio设备 0号引脚(从0开始)
+*       hsi sys的第一个gpio设备 1号引脚(从0开始)
+*       cam sys的第一个gpio设备 8号引脚(从0开始)
+* GPIO_ACTIVE_HIGH表示高电平有效，一般设为GPIO_ACTIVE_HIGH
+*/
+gpio-test {
+        test-gpios = <&hsi_port0 0 GPIO_ACTIVE_HIGH
+                      &hsi_port0 1 GPIO_ACTIVE_HIGH
+                      &cam_port0 8 GPIO_ACTIVE_HIGH>;
 };
 ```
 
@@ -272,4 +312,65 @@ gpiochip0: GPIOs 480-511, parent: platform/394f0000.gpio, 394f0000.gpio:
 gpio-495 (                    |scl                 ) out lo
 gpio-496 (                    |sda                 ) in  lo
 gpio-503 (                    |io-ext-reset        ) out lo
+```
+
+## S600 GPIO调试
+
+### 确定gpio-index
+
+以pin cam_sensor0_err为例：通过查看
+drobot-s600-pinctrl.dtsi，可以知道cam_sensor0_err对应的gpio chip是
+cam_port0: gpio\@37130000，对应的offset是 8（cam_lpwm2_dout0在cam_gpio列表中的位置）。
+查看/sys/kernel/debug/gpio，可知"cam_gpio0:
+gpio\@37130000"对应的base，则cam_sensor0_err 对应的gpio kernel
+index是：base + 8
+
+### 查看drobot-s600-pinctrl.dtsi，获取offset和base
+
+下面设备树可知cam_sensor0_err使用cam_lpwm2_dout0引脚，对应的gpio
+chip是"cam_port0: gpio\@37130000"。
+cam_gpio列表中cam_lpwm2_dout0的位置是第9个（从0开始计数为8）。
+
+``` {.shell}
+pinctrl_cam: pinctrl@37121000 {
+   compatible = "drobot,s600-pinctrl";
+   reg = <0x0 0x37121000 0x0 0x1000>,
+         <0x0 0x37125000 0x0 0x1000>;
+   pctldev-name = "cam";
+   status = "okay";
+
+   cam_gpio: cam_gpio_func {
+      pinmux {
+         function = "cam_gpio";
+         pins = "cam_lpwm0_dout0", "cam_lpwm0_dout1",
+                "cam_lpwm0_dout2", "cam_lpwm0_dout3", "cam_lpwm1_dout0",
+                "cam_lpwm1_dout1", "cam_lpwm1_dout2",
+                "cam_lpwm1_dout3", "cam_lpwm2_dout0", "cam_lpwm2_dout1",
+                "cam_lpwm2_dout2", "cam_lpwm2_dout3", "cam_lpwm3_dout0",
+                "cam_lpwm3_dout1", "cam_lpwm3_dout2",
+                "cam_lpwm3_dout3";
+      };
+      pinconf {
+         pins = "cam_lpwm0_dout0", "cam_lpwm0_dout1",
+                "cam_lpwm0_dout2", "cam_lpwm0_dout3", "cam_lpwm1_dout0",
+                "cam_lpwm1_dout1", "cam_lpwm1_dout2",
+                "cam_lpwm1_dout3", "cam_lpwm2_dout0", "cam_lpwm2_dout1",
+                "cam_lpwm2_dout2", "cam_lpwm2_dout3", "cam_lpwm3_dout0",
+                "cam_lpwm3_dout1", "cam_lpwm3_dout2",
+                "cam_lpwm3_dout3";
+         drive-strength = <1>;
+      };
+   };
+
+   cam_sensor0_err: cam_sensor0_err_func {
+      pinmux {
+         function = "cam_sensor0_err";
+         pins = "cam_lpwm2_dout0";
+      };
+      pinconf {
+         pins = "cam_lpwm2_dout0";
+         drive-strength = <1>;
+      };
+   };
+}
 ```
