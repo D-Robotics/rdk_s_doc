@@ -5842,6 +5842,10 @@ typedef struct _mc_audio_codec_dec_params {
 
 ## Codec sample
 
+:::info 注意
+    只有S600支持VPU多核，编解码示例通过`-u`配置不同核只在S600上生效。
+:::
+
 ### 编码示例
 
 #### 功能概述
@@ -5920,7 +5924,7 @@ make
 
 ##### 支持平台
 
-RDKS100。
+RDKS100/RDKS600。
 
 ##### 板端部署及配置
 
@@ -5952,6 +5956,8 @@ RDKS100。
 
 -o：输出文件的路径，默认`./output_${w}x${h}_${pixfmt}<_thread_idx>.{code_type}`
 
+-u: vpu core id，默认0，可配置值：0/1/2
+
 -H：打印帮助信息
 
 ###### 帮助菜单
@@ -5967,6 +5973,7 @@ Usage: ./sample_codec
         -n --threadnum test thread number, default 1
         -i --inputfile input file name, default ./input_${w}x${h}_${pixfmt}<_thread_idx>.yuv
         -o --outputfile output file name, default ./output_${w}x${h}_${pixfmt}<_thread_idx>.{code_type}
+        -u --core unit, default 0
         -H --help print usage
 ```
 
@@ -6099,7 +6106,7 @@ make
 
 ##### 支持平台
 
-RDKS100。
+RDKS100/RDKS600。
 
 ##### 板端部署及配置
 
@@ -6131,6 +6138,8 @@ RDKS100。
 
 -o：输出文件的路径，默认`./output_${w}x${h}_${pixfmt}<_thread_idx>.{code_type}`
 
+-u: vpu core id，默认0，可配置值：0/1/2
+
 -H：打印帮助信息
 
 ###### 帮助菜单
@@ -6145,6 +6154,7 @@ Usage: ./sample_codec
         -n --threadnum test thread number, default 1
         -i --inputfile input file name, default ./input_${w}x${h}_${pixfmt}<_thread_idx>.yuv
         -o --outputfile output file name, default ./output_${w}x${h}_${pixfmt}<_thread_idx>.{code_type}
+        -u --core unit, default 0
         -H --help print usage
 ```
 
