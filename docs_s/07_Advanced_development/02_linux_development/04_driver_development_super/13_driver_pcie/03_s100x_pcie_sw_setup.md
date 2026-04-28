@@ -1,12 +1,7 @@
 ---
 sidebar_position: 3
 ---
-# S100(600) PCIe模块功能在kernel下的配置
-
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-```
+# S100X PCIe模块功能在kernel下的配置
 
 在Kernel中，PCIe的配置分为defconfig和DTS两部分：
 
@@ -77,17 +72,10 @@ CONFIG_PCIE_HOBOT_DEBUG=y
 `fun0` 必须配置为使能状态。
 
 ### PCIE链路配置
-:::warning
-- S100和S600的pcie/ethernet phy复用情况有微小差异。
-- 主要是S100支持PCIE x2 + GMAC0 + GMAC1, 而S600支持PCIE X2 + PCIE X2模式。
-- 细节参考下文以及dts描述。
-:::
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
-S100 PCIE的链路支持3种模式：
-- 0x1: PCIE0 x4 Lane;
-- 0x4: PCIE0 x2 Lane + GMAC0 + GMAC1;
-- 0x8: PCIE0 x1 Lane + PCIE1 x1 Lane + GMAC0 + GMAC1;
+PCIE的链路支持3种模式：
+- PCIE0 x4 Lane;
+- PCIE0 x2 Lane + GMAC0 + GMAC1;
+- PCIE0 x1 Lane + PCIE1 x1 Lane + GMAC0 + GMAC1;
 
 链路配置在dts内如下：
 ```dts
@@ -100,19 +88,3 @@ S100 PCIE的链路支持3种模式：
 
 ...
 ```
-</TabItem>
-<TabItem value="S600" label="S600">
-S600 PCIE的链路支持3种模式：
-- 0x1: PCIE0 x4 Lane;
-- 0x2: PCIE0 x2 Lane + PCIE1 x2 Lane;
-- 0x4: PCIE0 x1 Lane + PCIE1 x1 Lane + GMAC0 + GMAC1;
-```dts
-/* rdk-s600-mcb.dtsi */
-...
-    &hsis0 {
-        hsi-mode = <0x4>;  /* 0x1: pcie x4, 0x2: pcie x2x2, 0x4: pcie x2 + gmac0 + gmac1 */
-    };
-...
-```
-</TabItem>
-</Tabs>
