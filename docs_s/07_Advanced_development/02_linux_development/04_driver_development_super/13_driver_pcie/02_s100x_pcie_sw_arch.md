@@ -1,13 +1,13 @@
 ---
 sidebar_position: 2
 ---
-# S100X PCIe软件架构与模块划分
+# S100(600) PCIe软件架构与模块划分
 
 ## 软件框架
 
 PCIe软件框架分为RC和EP两个部分：
 
-![S100X_PCIE_sw_arch](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch.png)
+![S100_600_PCIE_sw_arch](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch.png)
 
 ## 驱动模块说明
 
