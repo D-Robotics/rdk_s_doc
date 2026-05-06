@@ -675,6 +675,19 @@ uvc_capture_sample
 
 直接执行程序 `./uvc_capture_sample -h` 可以获得帮助信息
 
+```sh
+# ./uvc_capture_sample -h
+Usage: ./uvc_capture_sample
+        -i --video_id <id>              Video device ID
+        -d --dump_file                  Save image file flag
+        -F --format <fmt>               picture format(e.g., YUYV, NV12)
+        -l --loop_cnt <num>             Number of capture loops
+        -H --height <px>                Image height
+        -W --width <px>                 Image width
+        -E --isp_info                   Show Isp Info flag
+        -h --help                       Show this message
+```
+
 #### 程序参数选项说明
 
 **选项：**
@@ -683,7 +696,7 @@ uvc_capture_sample
   - 指定对应的 video 的节点，比如 video0、video1。
 - `-d, --dump_file`
   - 是否保存图像文件。启用此选项会将捕获的图像保存为文件。
-- `-F, --format`
+- `-F, --format <fmt>`
   - 设置图像格式，根据 uvc camera 选择支持的 YUYV、NV12 等格式。
 - `-l, --loop_cnt <num>`
   - 设置采集循环的次数（即捕获多少帧图像）。
@@ -691,9 +704,9 @@ uvc_capture_sample
   - 设置图像的高度（单位为像素）。
 - `-W, --width <px>`
   - 设置图像的宽度（单位为像素）。
-- `-W, --width <px>`
+- `-E, --isp_info`
   - 显示 ISP exposure 和 white balance 信息。
-- `-H, --help`
+- `-h, --help`
   - 显示帮助信息。
 
 **示例：**
