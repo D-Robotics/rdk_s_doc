@@ -178,7 +178,10 @@ Host端构建支持两种构建方式：
 - **适用场景**：需要 NetworkManager 管理其他网络接口，但不想让 eth0 被管理
 - **前提条件**：保留 NetworkManager 服务运行
 - **优势**：既能保留 NetworkManager 服务，又能避免对 EtherCAT 所使用接口产生干扰
-- **注意**：目前板卡上预装的是 igh 1.5.x 的版本，默认没有办法实现网口自动 up/down,需要手动启用 EtherCAT 所使用接口 **eth0** 网卡。igh 在 1.6.4 及之后版本支持配置文件配置网口自动 up/down 。具体参考：[自动启停网卡](#自动启停网卡ethercat-igh-主站164版本之后支持)
+- **注意**：配置 NetworkManager 不管理 eth0 接口之后，对应的网口在系统启动的时候不会自动 up，使用时请参阅下方注意信息与配置方法进行使用。
+:::warning **注意**
+<font color="red">目前板卡上预装的是 igh 1.5.x 的版本，默认没有办法实现网口自动 up/down, 需要手动启用 EtherCAT 所使用接口 **eth0** 网卡。</font> igh 在 1.6.4 及之后版本支持配置文件配置网口自动 up/down, 具体参考：[自动启停网卡](#自动启停网卡ethercat-igh-主站164版本之后支持)
+:::
 
 **[方案二：使用 netplan 将 eth0 配置为静态IP地址](#方案二使用-netplan-将-eth0-配置为静态ip地址)、[方案三：使用 netplan 将 eth0 配置为本地链路](#方案三使用-netplan-将-eth0-配置为本地链路)**：保留 NetworkManager 服务运行，通过 netplan 配置 eth0
 - **适用场景**：需要 NetworkManager 管理其他网络接口
