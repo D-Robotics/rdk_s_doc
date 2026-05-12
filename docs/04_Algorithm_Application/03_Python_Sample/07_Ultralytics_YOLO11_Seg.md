@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 <DocScope products="RDK-S100">
-本示例展示了如何基于 `hbm_runtime` 在 BPU 上运行 YOLOv11 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/pydev_demo/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`目录下。
+本示例展示了如何基于 `hbm_runtime` 在 BPU 上运行 YOLOv11 实例分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/pydev_demo/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
@@ -116,9 +116,9 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--img-save-path`  | 输出结果图片保存路径          | `result.jpg`                          |
 | `--priority`       | 模型优先级 (0~255)           | `0`                                   |
 | `--bpu-cores`      | BPU 核心编号                 | `[0]`                                 |
-| `--nms-thres`      | NMS IoU 队值间值             | `0.7`                                 |
-| `--score-thres`    | 精度阈值                     | `0.25`                                |
-| `--is-open`        | 是否对分割结果进行形态形象处理 | `True`                                |
+| `--nms-thres`      | NMS IoU 阈值                 | `0.7`                                 |
+| `--score-thres`    | 置信度阈值                   | `0.25`                                |
+| `--is-open`        | 是否对分割结果进行形态学处理   | `True`                                |
 | `--is-point`       | 是否在边缘处绘制边线上的点     | `True`                                |
 
 </DocScope>
@@ -131,9 +131,9 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--img-save-path`  | 输出结果图片保存路径          | `result.jpg`                          |
 | `--priority`       | 模型优先级 (0~255)           | `0`                                   |
 | `--bpu-cores`      | BPU 核心编号                 | `[0]`                                 |
-| `--nms-thres`      | NMS IoU 队值间值             | `0.7`                                 |
-| `--score-thres`    | 精度阈值                     | `0.25`                                |
-| `--is-open`        | 是否对分割结果进行形态形象处理 | `True`                                |
+| `--nms-thres`      | NMS IoU 阈值                 | `0.7`                                 |
+| `--score-thres`    | 置信度阈值                   | `0.25`                                |
+| `--is-open`        | 是否对分割结果进行形态学处理   | `True`                                |
 | `--is-point`       | 是否在边缘处绘制边线上的点     | `True`                                |
 
 </DocScope>

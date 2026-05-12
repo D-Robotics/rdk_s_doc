@@ -11,6 +11,12 @@ sidebar_products: RDK-S100
 
 本示例基于 `hbm_runtime` 推理引擎运行 PaddleOCR 模型进行文本检测与识别，支持中文场景的 OCR 识别与可视化，本示例代码位于`/app/pydev_demo/08_OCR_sample/01_paddleOCR/`目录下。
 
+:::warning
+安装本示例所需的 `paddlepaddle` 会强制将 `protobuf` 升级到较高版本（如 7.x），与 `15_WebSocket_yolov5x` 示例要求的 `protobuf==3.20.3` 不兼容。如需在同一环境中运行 PaddleOCR 和 WebSocket 示例，建议：
+- 使用 Python 虚拟环境（venv）隔离依赖；或
+- 在切换示例时按对应 README 重新执行 `pip install` 命令以恢复期望的 `protobuf` 版本。
+:::
+
 
 ## 模型说明
 - 简介：

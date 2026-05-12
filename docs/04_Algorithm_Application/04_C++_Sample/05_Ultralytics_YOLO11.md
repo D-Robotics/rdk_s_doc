@@ -172,7 +172,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         </DocScope>
 - 查看结果
 
-    运行成功后，会将目标检测框绘制在原图上，并保存到build/result.jgp
+    运行成功后，会将目标检测框绘制在原图上，并保存到build/result.jpg
     ```bash
     [Saved] Result saved to: result.jpg
     ```

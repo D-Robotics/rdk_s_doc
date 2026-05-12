@@ -149,12 +149,11 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resne
 
 - 查看结果
     ```bash
-    Top-5 Predictions:
-    zebra: 0.9979
-    impala, Aepyceros melampus: 0.0005
-    cheetah, chetah, Acinonyx jubatus: 0.0005
-    gazelle: 0.0004
-    prairie chicken, prairie grouse, prairie fowl: 0.0002
+    TOP 0: label=zebra, prob=0.99872
+    TOP 1: label=cheetah, chetah, Acinonyx jubatus, prob=0.000448407
+    TOP 2: label=impala, Aepyceros melampus, prob=0.000398787
+    TOP 3: label=gazelle, prob=0.000253181
+    TOP 4: label=prairie chicken, prairie grouse, prairie fowl, prob=0.000179423
     ```
 
 ## 注意事项

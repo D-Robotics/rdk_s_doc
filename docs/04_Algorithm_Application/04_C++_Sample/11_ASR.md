@@ -87,17 +87,21 @@ sudo apt install -y libgflags-dev libsndfile1-dev libsamplerate0-dev
     ```
 
 ## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
+若在程序运行时未找到模型，可通过下列命令下载。注意需下载到 `--model_path` 的默认路径下，否则使用默认参数运行时仍会提示找不到模型。
 
 <DocScope products="RDK-S100">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+sudo mkdir -p /opt/hobot/model/s100/basic
+sudo wget -O /opt/hobot/model/s100/basic/asr.hbm \
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
 ```
 
 </DocScope>
 <DocScope products="RDK-S600">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
+sudo mkdir -p /opt/hobot/model/s600/basic
+sudo wget -O /opt/hobot/model/s600/basic/asr.hbm \
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 ```
 
 </DocScope>
@@ -152,6 +156,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 
     运行成功后，会将结果打印出来
     ```bash
+    Full transcription:
     我是来自阿里云的大规模语言磨型过叫通意千问||
     ```
 

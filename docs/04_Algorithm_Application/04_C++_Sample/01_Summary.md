@@ -101,11 +101,24 @@ import DocScope from '@site/src/components/DocScope';
 
 - 编译工具链
 
+    <DocScope products="RDK-S100">
+
     - CMake: 3.22.1
 
     - GCC: 11.4.0
 
     - G++: 11.4.0
+
+    </DocScope>
+    <DocScope products="RDK-S600">
+
+    - CMake: 3.28.3
+
+    - GCC: 13.3.0
+
+    - G++: 13.3.0
+
+    </DocScope>
 
 ### 依赖库
 不同的示例依赖不同的开发包，请根据需求安装。

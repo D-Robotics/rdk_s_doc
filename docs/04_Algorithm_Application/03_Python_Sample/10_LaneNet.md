@@ -9,7 +9,7 @@ sidebar_products: RDK-S100
 本示例仅适用于 RDK S100。RDK S600 镜像未内置对应 hbm 模型，相关示例代码也仅在 S100 上随系统镜像发布；S600 上暂不支持。
 :::
 
-本示例基于 `hbm_runtime` 运行 LaneNet 模型，实现车道线的实例分割与二值分割，并将结果图像保存到本地，本示例代码位于/`app/pydev_demo/06_lane_detection_sample/01_lanenet/`目录下。
+本示例基于 `hbm_runtime` 运行 LaneNet 模型，实现车道线的实例分割与二值分割，并将结果图像保存到本地，本示例代码位于`/app/pydev_demo/06_lane_detection_sample/01_lanenet/`目录下。
 
 ## 模型说明
 - 简介：

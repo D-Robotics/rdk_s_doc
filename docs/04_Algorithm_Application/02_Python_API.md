@@ -6,6 +6,10 @@ sidebar_label: 4.1 Python 接口
 ---
 # 4.2 Python 接口
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作底层 libhbucp / libdnn C++ 库，提供高性能的神经网络模型加载与推理能力。
 
 该接口封装了底层模型运行时细节，使 Python 用户能够方便地加载单个或多个神经网络模型，查询并管理模型的输入/输出元信息，并灵活执行推理操作。接口支持多种输入数据格式，并在必要时自动将输入转换为 C 连续（C-contiguous）存储，以保证底层访问正确性与效率。
@@ -35,20 +39,40 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   - 多模型并行推理：当输入为多模型结构时，底层会为每个模型启动线程并行执行推理任务（multi-threaded launch），在多核 BPU 系统上可提升吞吐；单模型场景则仅对应一个推理线程。
 
 ## 安装说明（Installation）
-本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和地平线提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装，适用于 Python 3.10 及以上版本。
+本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和地平线提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装。
 ### 系统依赖
+
+<DocScope products="RDK-S100">
+
 | 依赖项       | 最低版本  | 说明                                                   |
 |------------|-----------|--------------------------------------------------------|
-| Python     | ≥ 3.10    | 推荐使用 Python 3.10                                   |
+| Python     | ≥ 3.10    | 推荐使用 Python 3.10（已在 3.10.12 测试通过）          |
 | pip        | ≥ 22.0    | 安装 wheel 包所需                                      |
 | pybind11   | 任意      | 构建时使用，安装包时不需要依赖                         |
 | scikit-build-core | ≥ 0.7 | 构建 wheel 包时使用（仅源码构建）                    |
 | 地平线基础库 | 根据平台 | 如 libdnn.so、libucp.so 等，通常由 BSP 提供           |
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+| 依赖项       | 最低版本  | 说明                                                   |
+|------------|-----------|--------------------------------------------------------|
+| Python     | ≥ 3.12    | 推荐使用 Python 3.12（已在 3.12.3 测试通过）           |
+| pip        | ≥ 22.0    | 安装 wheel 包所需                                      |
+| pybind11   | 任意      | 构建时使用，安装包时不需要依赖                         |
+| scikit-build-core | ≥ 0.7 | 构建 wheel 包时使用（仅源码构建）                    |
+| 地平线基础库 | 根据平台 | 如 libdnn.so、libucp.so 等，通常由 BSP 提供           |
+
+</DocScope>
+
+
 ### 构建wheel包
 构建wheel包的方式有三种下面分别介绍。
 #### 安装deb时构建
 在hobot-dnn包的安装过程中添加了hbm_runtime的wheel构建，deb包安装完成后就会生成hbm-runtime的whl包。
+
+<DocScope products="RDK-S100">
+
   ```bash
   #通过源安装
   sudo apt-get install hobot-dnn
@@ -63,8 +87,30 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+  ```bash
+  #通过源安装
+  sudo apt-get install hobot-dnn
+
+  #通过本地deb包安装（注意不同时间编译的包名称，以实际情况为准）
+  dpkg -i hobot-dnn_4.0.4-20250909195426_arm64.deb
+
+  #安装完成后可在板端的/tmp目录下找到wheel包
+  ls /tmp
+
+  #注意不同版本号whl包名称不同，xxx代表版本
+  #hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+</DocScope>
+
 #### 编译系统软件时构建
 在系统软件的镜像编译时会安装hobot-dnn的deb，安装的过程中会构建hbm-runtime的whl包，并转存到`out/product/deb_packages`目录
+
+<DocScope products="RDK-S100">
+
   ```bash
   sudo ./pack_image.sh
 
@@ -74,7 +120,24 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+  ```bash
+  sudo ./pack_image.sh
+
+  ls out/product/deb_packages
+
+  #注意不同版本号whl包名称不同，xxx代表版本
+  #hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+</DocScope>
+
 #### 在端侧构建
+
+<DocScope products="RDK-S100">
+
   ```bash
   #进入hbm_runtime的源码库
   cd /usr/hobot/lib/hbm_runtime
@@ -89,6 +152,25 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+  ```bash
+  #进入hbm_runtime的源码库
+  cd /usr/hobot/lib/hbm_runtime
+
+  #运行构建命令
+  ./build.sh
+
+  #查看构建好的wheel包
+  ls dist/
+
+  #注意不同版本号whl包名称不同，xxx代表版本
+  #hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+</DocScope>
+
 ### 安装方式
 
 #### 使用 wheel 包
@@ -96,10 +178,22 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 - 通过本地 wheel 包安装
   - 找到通过“构建wheel包”小节中构建的whl文件。
 
+  <DocScope products="RDK-S100">
+
   ```bash
   #示例：使用 pip 安装本地whl包(注意不同版本号whl包名称不同，xxx代表版本)
   pip install hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
+
+  </DocScope>
+  <DocScope products="RDK-S600">
+
+  ```bash
+  #示例：使用 pip 安装本地whl包(注意不同版本号whl包名称不同，xxx代表版本)
+  pip install hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+  </DocScope>
 
 - 从pypi源安装
   ```bash
@@ -125,11 +219,10 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   - 可使用 dpkg -L hobot-dnn 查看文件是否成功部署。
 
 
-
 ### 卸载说明
 - 卸载 pip 安装的包：
   ```bash
-  pip uninstall hbmruntime
+  pip uninstall hbm_runtime
   ```
 
 - 卸载 .deb 安装的包：
@@ -145,12 +238,15 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 #### 单线程推理
 ##### 单线程单模型单输入推理
 适用于模型只有一个输入张量的情况。
+
+<DocScope products="RDK-S100">
+
 ```python
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
 # 加载模型
-model = HB_HBMRuntime("/opt/hobot/model/s600/basic/lanenet256x512.hbm")
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/lanenet256x512.hbm")
 
 # 获取模型名与输入名
 model_name = model.model_names[0]
@@ -169,8 +265,65 @@ outputs = model.run(input_tensor)
 output_array = outputs[model_name]
 print("Output:", output_array)
 ```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+```python
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+# 加载模型（S600 平台用 ASR 模型作为单输入示例）
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/asr.hbm")
+
+# 获取模型名与输入名
+model_name = model.model_names[0]
+input_name = model.input_names[model_name][0]  # 假设模型只有一个输入
+
+# 获取该输入对应的 shape
+input_shape = model.input_shapes[model_name][input_name]
+
+# 构造 numpy 输入
+input_tensor = np.ones(input_shape, dtype=np.float32)
+
+# 执行推理
+outputs = model.run(input_tensor)
+
+# 获取输出结果
+output_array = outputs[model_name]
+print("Output:", output_array)
+```
+
+</DocScope>
+
 ##### 单线程单模型多输入推理
 适用于模型有多个输入张量的情况。
+
+<DocScope products="RDK-S100">
+
+```python
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+hb_dtype_map = {
+    "U8": np.uint8,
+    "S8": np.int8,
+    "F32": np.float32,
+    "F16": np.float16,
+    "U16": np.uint16,
+    "S16": np.int16,
+    "S32": np.int32,
+    "U32": np.uint32,
+    "BOOL8": np.bool_,
+}
+
+# 加载模型
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm")
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
@@ -189,7 +342,11 @@ hb_dtype_map = {
 
 # 加载模型
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
+```
 
+</DocScope>
+
+```python
 # 获取模型名（假设只加载了一个模型）
 model_name = model.model_names[0]
 
@@ -223,6 +380,23 @@ for output_name, output_data in results[model_name].items():
 ```
 ##### 单线程多模型多输入推理
 适用于多模型有多个输入张量的情况，注意这里的多模型可以是多个 HBM 文件，也可以是单个 HBM 文件里面包含多个模型。
+
+<DocScope products="RDK-S100">
+
+```python
+"""Multi-model inference quick start."""
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+MODEL_PATHS = [
+    "/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm",
+    "/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm",
+]
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 """Multi-model inference quick start."""
 import numpy as np
@@ -232,6 +406,11 @@ MODEL_PATHS = [
     "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm",
     "/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
 ]
+```
+
+</DocScope>
+
+```python
 
 DTYPE_MAP = {
     "U8": np.uint8, "S8": np.int8,
@@ -271,6 +450,21 @@ for m, outs in outputs.items():
 #### 多线程推理
 ##### 多线程单模型单输入推理
 适用于模型只有一个输入张量的情况。
+
+<DocScope products="RDK-S100">
+
+```python
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+# Load model
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/asr.hbm")
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 import threading
 import numpy as np
@@ -278,6 +472,11 @@ from hbm_runtime import HB_HBMRuntime
 
 # Load model
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/asr.hbm")
+```
+
+</DocScope>
+
+```python
 
 model_name = model.model_names[0]
 input_name = model.input_names[model_name][0]
@@ -305,6 +504,29 @@ for t in threads: t.join()
 ```
 ##### 多线程单模型多输入推理
 适用于模型有多个输入张量的情况。
+
+<DocScope products="RDK-S100">
+
+```python
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+hb_dtype_map = {
+    "U8": np.uint8, "S8": np.int8,
+    "F16": np.float16, "F32": np.float32,
+    "U16": np.uint16, "S16": np.int16,
+    "U32": np.uint32, "S32": np.int32,
+    "BOOL8": np.bool_,
+}
+
+# Load single model
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm")
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 import threading
 import numpy as np
@@ -320,6 +542,11 @@ hb_dtype_map = {
 
 # Load single model
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
+```
+
+</DocScope>
+
+```python
 model_name = model.model_names[0]
 
 # Build input tensors (shared, read-only)
@@ -349,6 +576,24 @@ for t in threads: t.start()
 for t in threads: t.join()
 ```
 ##### 多线程多模型多输入推理
+
+<DocScope products="RDK-S100">
+
+```python
+"""4-thread demo: each thread runs inference on a dedicated BPU core."""
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+MODEL_PATHS = [
+    "/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm",
+    "/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm",
+]
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 """4-thread demo: each thread runs inference on a dedicated BPU core."""
 import threading
@@ -359,6 +604,11 @@ MODEL_PATHS = [
     "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm",
     "/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
 ]
+```
+
+</DocScope>
+
+```python
 
 DTYPE_MAP = {
     "U8": np.uint8, "S8": np.int8,
@@ -521,7 +771,8 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     ```python
     #打印所有模型文件的描述信息
     print(model.hbm_descs)
-    # 输出：{'/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
+    # 输出（S100）：{'/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
+    # 输出（S600）：{'/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
     ```
 - compile_bpu_core_num: Dict[str, int]
   - 功能说明：

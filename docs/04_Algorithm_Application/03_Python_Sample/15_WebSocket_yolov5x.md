@@ -88,6 +88,9 @@ import DocScope from '@site/src/components/DocScope';
 ```text
 .
 ├── mipi_camera_web_yolov5x.py      # 主程序
+├── start_nginx.sh                  # nginx 启动脚本
+├── webservice/                     # nginx + 静态前端资源
+├── x3_pb2.py                       # protobuf 生成的消息定义
 └── README.md                       # 使用说明
 ```
 

@@ -105,7 +105,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/Lanenet/lane
 
     运行成功后，会将结果绘制出来，保存到 instance_pred.png 和 binary_pred.png
     ```bash
-    Results saved to: instance_pred.png and binary_pred.png
+    [Saved] Instance result saved to: instance_pred.png
+    [Saved] Binary result saved to: binary_pred.png
     ```
 
 ## 注意事项

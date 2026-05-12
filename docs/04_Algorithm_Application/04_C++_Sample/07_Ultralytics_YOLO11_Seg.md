@@ -10,12 +10,12 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK-S100">
 
-本示例展示了如何基在 BPU 上运行 YOLOv11 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/cdev_demo/bpu/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`目录下。
+本示例展示了如何基于 BPU 上运行 YOLOv11 实例分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/cdev_demo/bpu/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
 
-本示例展示了如何基在 BPU 上运行 YOLOv11 实例分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于 `/app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg/` 目录下。
+本示例展示了如何基于 BPU 上运行 YOLOv11 实例分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于 `/app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg/` 目录下。
 
 </DocScope>
 

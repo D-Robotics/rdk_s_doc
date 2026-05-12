@@ -138,11 +138,11 @@ pip install -r ../../requirements.txt --break-system-packages
 - 查看结果
     ```bash
     Top-5 Predictions:
-    zebra: 0.8916
-    tiger, Panthera tigris: 0.0028
-    hartebeest: 0.0018
-    jaguar, panther, Panthera onca, Felis onca: 0.0016
-    tiger cat: 0.0016
+    zebra: 0.9922
+    tiger, Panthera tigris: 0.0040
+    hartebeest: 0.0013
+    tiger cat: 0.0007
+    impala, Aepyceros melampus: 0.0005
     ```
 
 ## 注意事项

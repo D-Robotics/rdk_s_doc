@@ -107,6 +107,7 @@ import DocScope from '@site/src/components/DocScope';
 ```text
 01_asr/
 ├── asr.py                      # 主推理脚本
+└── README.md                   # 使用说明
 ```
 
 ## 参数说明

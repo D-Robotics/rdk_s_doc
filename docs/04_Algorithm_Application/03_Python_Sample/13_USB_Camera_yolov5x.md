@@ -66,6 +66,7 @@ import DocScope from '@site/src/components/DocScope';
 ```text
 .
 ├── usb_camera_yolov5x.py       # 主程序
+├── usb_camera_snap.py          # USB 摄像头静态抓拍（与目标检测无关）
 └── README.md                   # 使用说明
 ```
 

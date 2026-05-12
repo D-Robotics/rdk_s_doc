@@ -101,7 +101,7 @@ pip install -r ../requirements.txt --break-system-packages
 <DocScope products="RDK-S100">
 | 参数名                  | 说 明                       | 默认值                                                 |
 | ----------------------- | -------------------------- | ------------------------------------------------------ |
-| `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/1080P_test.h264`                          |
+| `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/assets/1080P_test.h264`                   |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
@@ -113,7 +113,7 @@ pip install -r ../requirements.txt --break-system-packages
 <DocScope products="RDK-S600">
 | 参数名                  | 说 明                       | 默认值                                                 |
 | ----------------------- | -------------------------- | ------------------------------------------------------ |
-| `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/1080P_test.h264`                          |
+| `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/assets/1080P_test.h264`                   |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
