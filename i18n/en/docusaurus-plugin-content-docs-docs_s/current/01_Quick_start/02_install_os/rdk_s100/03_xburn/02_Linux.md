@@ -8,6 +8,15 @@ sidebar_position: 2
 
 Use a Type-C data cable to connect the USB port of your PC to the Type-C port of the development board.
 
+:::warning Note
+
+Please ensure that the Type-C data cable is of high quality to guarantee the stability of the burning process.
+1. It should have a shielding layer.
+2. The shorter the length, the better.
+3. It should have high data transmission quality.
+
+:::
+
 ## Install Required Tools
 
 Ubuntu users can install the tools using the following commands:
@@ -26,7 +35,7 @@ sudo apt install dfu-util
 
 :::warning Note
 
-- Currently, **you need to set the SW3 switch to the ↑ position** to boot from the onboard eMMC. Booting from an M.2 NVMe SSD is not supported yet.
+- Currently, you need to set the **SW3 switch to [[Boot from onboard eMMC]](../../../01_hardware_introduction/01_rdk_s100.md#boot-device-selection-sw3)**; booting from an M.2 NVMe SSD is not supported at this time.
 - The Xburn tool on Windows PC requires successful [driver installation](#driver-download-and-installation) before use. Ensure the driver is installed successfully before proceeding.
 
 :::
@@ -81,7 +90,7 @@ Configuration steps:
    - Connection Mode: `usb`, Download Mode: `Fastboot`
    - Storage Medium: `emmc`, Type: `secure`
    - Image Directory: Click Browse and select the `product` folder containing the firmware
-   
+
       ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot-en.png)
 
    - Click `Start Upgrade`. The device will enter Fastboot mode. Wait for the process to complete.
@@ -112,7 +121,7 @@ Configuration steps:
    - Storage Medium: `emmc`, Type: `secure`
    - Image Directory: Click Browse and select the `product` folder containing the firmware
    - Advanced Settings: Check `Flash specified partitions`, then check `miniboot_flash` and `miniboot_emmc`
-   
+
       ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition-en.png)
 
    - Click `Start Upgrade`, power on the device, and wait for the process to complete.
@@ -130,7 +139,7 @@ The RDK S100 supports backing up specific partitions via Xburn. The supported ba
 
 #### Backing Up Specific Partitions with Xburn
 
-Example: Backing up `miniboot_flash` only.
+Take the specified backup `miniboot_flash` as an example.
 
 Configuration steps:
 
@@ -145,11 +154,13 @@ Configuration steps:
    - Click `Start Upgrade`, power on the device, and wait for the operation to complete.
 
    - After completion, navigate to the `img_packages/disk/` folder to view the backup image file `miniboot_flash_backup.img`.
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image.png)
+
+      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png)
 
    :::warning Note
 
-   Backing up the entire storage medium data can be time-consuming. Please wait patiently for the backup to finish.
+   - Backing up the entire storage medium data can be time-consuming. Please wait patiently for the backup to finish.
+   - The backup image format is `.img`. When burning, you need to select a file in `.simg` format; simply replace the `.img` extension of the backup image file with `.simg`.
 
    :::
 

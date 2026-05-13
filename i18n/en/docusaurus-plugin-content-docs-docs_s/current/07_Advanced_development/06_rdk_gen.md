@@ -1,7 +1,7 @@
 ---
 sidebar_position: 06
 ---
-# 7.6 RDK S100/S600 Build System Development Guide
+# 7.6 RDK S100 Build System Development Guide
 
 :::tip Commercial Support
 The commercial version provides more comprehensive feature support, deeper hardware capability access, and exclusive customization options. To ensure compliance and secure delivery, we will grant access to the commercial version through the following process.
@@ -89,19 +89,19 @@ For detailed field descriptions, please refer to the official documentation. Her
 2. **Field sets (stanzas/sections)**: Defined by `[Some-Section]`, grouping all fields from that line until the next `[Next-Section]` into a single "Section".
 
 Key fields explained:
-- **include**  
+- **include**
   Specifies the path to configuration files to be included.
-- **bootstrap**  
+- **bootstrap**
   Defines the stanza containing APT sources used to generate the root filesystem and the packages to be downloaded and decompressed.
-- **aptsources**  
+- **aptsources**
   Defines the stanza specifying APT sources to be saved under `/etc/sources.list.d/` in the generated root filesystem. **Note**: These sources do not necessarily need to match those used in `bootstrap`, but we strongly recommend that the sources defined in `aptsources` are a superset of those in `bootstrap`.
-- **source / suite / components / omitdebsrc**  
+- **source / suite / components / omitdebsrc**
   Define key parameters for APT sources. Refer to the [APT source format definition](https://manpages.ubuntu.com/manpages/xenial/man5/sources.list.5.html) for details:
   - **source**: Root URL of the APT repository, corresponding to the "uri" field in APT source format.
   - **suite**: Suite name of the APT repository, corresponding to the "suite" field (e.g., Ubuntu code names like `jammy`, `focal`, `noble`, or updates/security suites like `jammy-updates`, `noble-security`).
   - **components**: Repository components, matching the "component" field; multiple components can be specified.
   - **omitdebsrc**: Whether to skip downloading source packages (`*.dsc`, etc.) when fetching metadata and packages. Typically set to `true` to accelerate builds.
-- **packages**  
+- **packages**
   Specifies packages to be fetched. Multiple packages can be listed in one `packages` field (space-separated), and the union of all `packages` fields forms the final package list.
 
 ##### Multi-file Configuration Example
@@ -171,9 +171,9 @@ Defaults to building the desktop image using `noble-desktop.conf`.
 </TabItem>
 </Tabs>
 
-To specify a custom config file:  
-`sudo ./make_ubuntu_samplefs.sh build <config_file_name>`  
-For example, if you create a new config `new-desktop.conf`, place it in `samplefs/configs/` and run:  
+To specify a custom config file:
+`sudo ./make_ubuntu_samplefs.sh build <config_file_name>`
+For example, if you create a new config `new-desktop.conf`, place it in `samplefs/configs/` and run:
 `sudo ./make_ubuntu_samplefs.sh build new-desktop.conf`
 
 Build workflow diagram:
@@ -181,8 +181,8 @@ Build workflow diagram:
 
 #### Methods for Trimming/Customizing the Root Filesystem
 :::info Tip
-The **Priority** field in APT source (deb package control info) determines trimming/customization behavior.  
-By default, `multistrap` installs all packages with Priority "**Required**".  
+The **Priority** field in APT source (deb package control info) determines trimming/customization behavior.
+By default, `multistrap` installs all packages with Priority "**Required**".
 D-Robotics also ensures packages marked as "**important**" are installed.
 :::
 
@@ -276,9 +276,9 @@ For full details, refer to the `mk_debs.sh` script implementation. Simplified wo
 4. In the `switch` block of the `make_debian_deb` function in `mk_debs.sh`, add a `case` for `new_package`:
    - Call `gen_control_file` to generate the required `control` file.
    - Use `sed` to replace the default "Depends" field with actual dependencies. For example, if `new_package` depends on `dep_pkg1` and `dep_pkg2`:
-     - With dependencies:  
+     - With dependencies:
        `sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
-     - Without dependencies:  
+     - Without dependencies:
        `sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
    - *(Optional)* If source compilation is needed before packaging, add compilation commands—ensuring all outputs go to `out/build/debs/new_pkg/debian/`.
    - Set `is_allowed=1`.

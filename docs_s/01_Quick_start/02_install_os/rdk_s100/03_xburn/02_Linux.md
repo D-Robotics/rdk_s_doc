@@ -92,7 +92,7 @@ sudo apt install dfu-util
    - 连接模式: `usb`, 下载模式: `Fastboot`
    - 介质存储: `emmc`, 类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
-   
+
       ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot.png)
 
 
@@ -126,7 +126,7 @@ RDK S100 支持通过 Xburn 烧录指定区域，支持的烧录区域如下
    - 介质存储: `emmc`, 类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
    - 高级配置: 勾选 `烧录指定区域`，勾选 `miniboot_flash` 和 `miniboot_emmc`
-   
+
       ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition.png)
 
 
@@ -193,6 +193,3 @@ RDK S100 支持通过 Xburn 备份指定区域，支持的备份区域如下
 Ubuntu Desktop 版本系统启动完成后，会通过 Display 传输接口在显示器上输出系统桌面，如下图：
 
 ![image-desktop_display.jpg](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg)
-
-
-

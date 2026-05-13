@@ -154,7 +154,7 @@ nmcli device show eth1
 
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=12
 
-开发板集成了 2.4GHz 无线 WiFi 模块，支持 Soft AP 和 Station 两种模式，默认运行在 Station 模式下。下面介绍两种模式的使用方法。
+开发板需安装无线 Wi-Fi 模块，支持 Soft AP 和 Station 两种模式，默认运行在 Station 模式下。下面介绍两种模式的使用方法。
 
 ### Station 模式
 

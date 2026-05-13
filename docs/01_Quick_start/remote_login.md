@@ -85,7 +85,10 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 :::info 说明
 
-- RDK Studio 下载链接：[点此下载](https://developer.d-robotics.cc/rdkstudio)
+- RDK Studio 下载链接：
+- [点此下载 windows 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22%20Setup.exe)
+- [点此下载 macOS 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22-arm64.dmg)
+
 - 更多 RDK Studio 使用指导参见 [RDK Studio 使用指南](../01_Quick_start/09_RDK_Studio/01_rdk_studio.md)
 
 :::
@@ -197,9 +200,9 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=4
 
 ![image-Cmdline-Linux](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif)
 
-## 局域网构造
+## LAN access
 
-对于上述各步骤登录，始终需要保持串口线链接，使用下面命令实现局域网访问
+对于上述各步骤登录，始终需要保持串口线连接，使用下面命令实现局域网访问
 
 ```bash
 sudo nmcli device wifi rescan # 扫描wifi⽹络
@@ -209,4 +212,4 @@ sudo wifi_connect "SSID" "PASSWD" # 连接指定wifi
 
 上述命令成功后，会出现`successfully xxx`
 
-最后板卡端使用`ifconfig`便可获得板卡IP地址，便可拔掉串口线，使用前文SSH登录进行远程链接
+最后板卡端使用`ifconfig`便可获得板卡IP地址，便可拔掉串口线，使用前文SSH登录进行远程连接。

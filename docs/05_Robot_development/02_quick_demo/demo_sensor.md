@@ -697,7 +697,6 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ![image-X5-PI-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-X5-PI-DualCamera.jpg)
 
     如SC230ai 双目摄像头的接入S100方式如下图：
-
     ![image-S100-sc230ai-DualCamera](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/image-S100-sc230ai-DualCamera.png)
 
 2. RDK已烧录好RDK OS系统
@@ -713,7 +712,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
 下面以 SC230ai 为例，介绍摄像头数据获取和预览的方法：
 
 1. 只启动双目摄像机的启动方式,方便其他node订阅。
-   
+
    (1) 通过下述命令启动 hobot_sensor 节点
 
     <Tabs groupId="tros-distro">
@@ -762,7 +761,7 @@ RDK和X86平台使用方式相同，其中以RDK平台为例：
     ```
 
 2. Web端查看双目摄像头图像，由于发布原始数据，需要一个编码JPEG图像的节点，一个用webservice发布的节点
-   
+
    (1) 启动命令如下：
 
     <Tabs groupId="tros-distro">
@@ -1230,7 +1229,7 @@ ros2 launch realsense2_camera rs_launch.py enable_rgbd:=true enable_sync:=true a
 
 #### 5. 图像和点云的显示
 
-要显示RealSense的图像和点云，有多种方式，可参考[2.2 数据展示](./demo_render.md)，例如可以在PC机上使用`rviz2`显示，这种方式需要确认PC机能够通过网络访问RDK，数据通过网络传输，压力较大，可能会出现卡顿的现象。
+要显示RealSense的图像和点云，有多种方式，可参考[5.2.2 数据展示](./demo_render.md)，例如可以在PC机上使用`rviz2`显示，这种方式需要确认PC机能够通过网络访问RDK，数据通过网络传输，压力较大，可能会出现卡顿的现象。
 
 ![realsense-rviz2](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/realsense-rviz2.png)
 
@@ -1427,7 +1426,7 @@ ros2 launch orbbec_camera gemini2.launch.py depth_registration:=true
 
 #### 5. 图像和点云的显示
 
-要显示Orbbec的图像和点云，有多种方式，可参考[2.2 数据展示](./demo_render.md)，例如可以在PC机上使用`rviz2`显示，这种方式需要确认PC机能够通过网络访问RDK，数据通过网络传输，压力较大，可能会出现卡顿的现象。
+要显示Orbbec的图像和点云，有多种方式，可参考[5.2.2 数据展示](./demo_render.md)，例如可以在PC机上使用`rviz2`显示，这种方式需要确认PC机能够通过网络访问RDK，数据通过网络传输，压力较大，可能会出现卡顿的现象。
 
 ![orbbec-rviz2](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/02_quick_demo/image/demo_sensor/orbbec-rviz2.png)
 

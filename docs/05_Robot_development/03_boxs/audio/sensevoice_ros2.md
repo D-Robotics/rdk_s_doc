@@ -38,7 +38,7 @@ import TabItem from '@theme/TabItem';
    ```bash
    source /opt/tros/humble/setup.bash
    ```
-   
+
     </TabItem>
     <TabItem value="jazzy" label="Jazzy">
 
@@ -58,7 +58,7 @@ import TabItem from '@theme/TabItem';
 :::caution **注意**
 **如果`sudo apt update`命令执行失败或报错，请查看[常见问题](/docs/08_FAQ/01_hardware_and_system.md)章节的`Q10: apt update 命令执行失败或报错如何处理？`解决。**
 :::
-   
+
 4. 音频板正确连接到RDK X5的3.5mm的耳麦接口。
 5. USB音响正确连接到RDK X5的usb接口。
 
@@ -92,7 +92,7 @@ RDK板端运行sensevoice_ros2 package：
 
    ```shell
    # 配置tros.b环境
-   
+
    source /opt/tros/humble/setup.bash
 
    #启动launch文件
@@ -104,7 +104,7 @@ RDK板端运行sensevoice_ros2 package：
 
    ```shell
    # 配置tros.b环境
-   
+
    source /opt/tros/jazzy/setup.bash
 
    #启动launch文件
@@ -162,14 +162,14 @@ result_str:向后退,
 ```
 
 
-sensevoice_ros2默认发布的智能语音消息话题名为：**/audio_smart** 和 **/audio_asr**，`ros2 topic list`结果为：
+sensevoice_ros2默认发布的智能语音消息话题名为：**/audio_smart** 和 **/asr_text**，`ros2 topic list`结果为：
 
 ```shell
 $ ros2 topic list
 /audio_smart
-/audio_asr
+/asr_text
 ```
 
-/audio_asr 话题需要特定的唤醒词 “你好，地瓜机器人” 才会有输出，`ros2 topic echo /asr_text`结果为：
+/asr_text 话题需要特定的唤醒词 “你好，地瓜机器人” 才会有输出，`ros2 topic echo /asr_text`结果为：
 
 ![执行结果](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/03_boxs/function/image/box_adv/audio_asr.jpg)

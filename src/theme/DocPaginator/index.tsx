@@ -9,6 +9,9 @@ const getCustomTitle = (permalink: string, locale: string): string | null => {
     en: [
       // s100
       { pattern: /^\/rdk_doc\/en\/rdk_s\/Quick_start$/, title: '1. Quick Start' },
+      { pattern: /^\/rdk_doc\/en\/rdk_s\/RDK_Studio$/, title: '1.7 RDK Studio User Guide' },
+      { pattern: /^\/rdk_doc\/en\/rdk_s\/Device_management$/, title: '1.7.5 Device Management' },
+      { pattern: /^\/rdk_doc\/en\/rdk_s\/Example_Applications$/, title: '1.7.6 Example Applications' },
       { pattern: /^\/rdk_doc\/en\/rdk_s\/System_configuration$/, title: '2. System Configuration'},
       { pattern: /^\/rdk_doc\/en\/rdk_s\/01_hardware_introduction$/, title: '1.1 Hardware Introduction' },
       { pattern: /^\/rdk_doc\/en\/rdk_s\/Basic_Application$/, title: '3. Basic Application Development' },
@@ -95,6 +98,8 @@ const getCustomTitle = (permalink: string, locale: string): string | null => {
       { pattern: /^\/rdk_doc\/en\/Basic_Application\/multi_media_sp_dev_api\/pydev_vio_demo$/, title: '3.6.2 Reference Examples (python)' },
       { pattern: /^\/rdk_doc\/en\/Basic_Application\/multi_media_sp_dev_api\/pydev_multimedia_api_x3$/, title: '3.6.3 RDK X3/X5 Multimedia Interface User Guide' },
      
+      { pattern: /^\/rdk_doc\/en\/Basic_Development$/, title: '4. Algorithm Application Development' },
+
       { pattern: /^\/rdk_doc\/en\/Robot_development$/, title: '5. Robotics Application' },
       { pattern: /^\/rdk_doc\/en\/Robot_development\/boxs\/generate\/hobot_xlm$/, title: 'DeepSeek large language model' },
 

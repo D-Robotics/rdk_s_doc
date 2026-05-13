@@ -157,7 +157,7 @@ This document summarizes the download resources related to the D-Robotics RDK su
   <tbody>
     <tr>
       <td>📄 **Specifications**</td>
-      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5/RDX%20X5.pdf">RDK X5 Specifications</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5/d_robotics_rdk_x5_en_v1_1.pdf">RDK X5 Specifications</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5_module/drobotics_rdk_x5_module_en_v1_2.pdf">RDK X5 Module Specifications</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3/RDK%20X3.pdf">RDK X3 Specifications</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3_module/RDK%20X3%20MD.pdf">RDK X3 Module Specifications</a></td>
@@ -223,7 +223,7 @@ Complete specification materials for RDK X3/X5 related products, accessories and
   <tbody>
     <tr>
       <td>📄 **Development Board Specifications**</td>
-      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5/RDX%20X5.pdf">RDK X5 Specifications</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5/d_robotics_rdk_x5_en_v1_1.pdf">RDK X5 Specifications</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3/RDK%20X3.pdf">RDK X3 Specifications</a></td>
       <td>Development board detailed technical specifications and product description</td>
     </tr>
@@ -240,7 +240,7 @@ Complete specification materials for RDK X3/X5 related products, accessories and
       <td>Camera module technical specifications and interface details</td>
     </tr>
     <tr>
-      <td rowspan="2">👁️ **Stereo Camera Module**</td>
+      <td rowspan="3">👁️ **Stereo Camera Module**</td>
       <td><a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x5/RDK%20Stereo%20Camera%20Module.pdf">RDK Stereo Camera Module</a></td>
       <td>-</td>
       <td>Dual camera module for stereo vision applications</td>
@@ -254,6 +254,12 @@ Complete specification materials for RDK X3/X5 related products, accessories and
       <td>
       Used in scenarios such as robotic vision, machine vision inspection, and real-time motion monitoring.
       </td>
+    </tr>
+    <tr>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_x5/2026.04.09_RDK Stereo Camera GS130WI_en_v1_1.pdf">RDK Stereo Camera  
+       GS130WI</a></td>
+      <td> - </td>
+      <td>Used in applications such as robot vision, machine vision inspection, and motion posture sensing.</td>
     </tr>
     <tr>
       <td>🔌 **Camera Adapter**</td>
@@ -594,18 +600,13 @@ Providing comprehensive hardware design support materials for module customers t
       <td>Backup download source to prevent conditions from restricting code retrieval from GitHub.</td>
     </tr>
     <tr>
-      <td><img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/image.png" alt="icon" width="8%"/>  **RDK Studio**</td>
-      <td><a href="https://developer.d-robotics.cc/rdkstudio">Visit Official Website</a></td>
-      <td>RDK Studio provides device connection and management, quick AI sample experience, and fast access to the community forum. Board Support: Perfectly supports the use of the entire RDK series of boards, helping users manage all their RDK boards. System Updates: Offers a brand-new board upgrade method—users can obtain the latest RDK OS with one click and quickly complete board upgrades using just a data cable.</td>
-    </tr>
-    <tr>
       <td>🔄 **hbupdate**</td>
       <td><a href="https://archive.d-robotics.cc/downloads/hbupdate">Click to Visit</a></td>
       <td>hbupdate is a professional tool for burning operating system images and minimal boot images for RDK development boards.</td>
     </tr>
     <tr>
       <td>💾 **Image Burning Tool**</td>
-      <td><a href="https://developer.d-robotics.cc/api/v1/static/fileData/1650948745611.rar">Rufus</a><br/><a href="https://developer.d-robotics.cc/en/rdkstudio">RDK Studio</a></td>
+      <td><a href="https://developer.d-robotics.cc/api/v1/static/fileData/1650948745611.rar">Rufus</a><br/><a href="https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22%20Setup.exe">RDK Studio Windows </a><br/><a href="https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22-arm64.dmg">RDK Studio Windows macOS </a></td>
       <td>Software tool for writing image files to SD cards, supporting multiple image formats.</td>
     </tr>
     <tr>
@@ -642,6 +643,8 @@ Providing comprehensive hardware design support materials for module customers t
       <th>🇰🇷 **KCC**</th>
       <th>🇬🇧 **UKCA**</th>
       <th>🇪🇺 **RoHS**</th>
+      <th>🇪🇺 **REACH**</th>
+      <th> **HF**</th>
       <th>🇹🇭 **NBTC**</th>
       <th>🇲🇾 **SIRIM**</th>
     </tr>
@@ -657,6 +660,8 @@ Providing comprehensive hardware design support materials for module customers t
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/KCC.pdf">📄 KCC</a></td>
       <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/RoHS/2402Z107564E_CNAS.pdf">📄 RoHS</a></td>
+      <td>-</td>
+      <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/NBTC.pdf">📄 NBTC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5/SIRIM.pdf">📄 SIRIM</a></td>
     </tr>
@@ -672,6 +677,8 @@ Providing comprehensive hardware design support materials for module customers t
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X3/RoHS/P-2401V86686E%20RDK%20X3.pdf">📄 RoHS</a></td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
+      <td>-</td>
     </tr>
     <tr>
       <td>**RDK X3 Module**</td>
@@ -685,6 +692,8 @@ Providing comprehensive hardware design support materials for module customers t
       <td>-</td>
       <td>-</td>
       <td>-</td>
+      <td>-</td>
+      <td>-</td>
     </tr>
      <tr>
       <td>**RDK X5 Module**</td>
@@ -692,10 +701,12 @@ Providing comprehensive hardware design support materials for module customers t
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/CE/AOC_for_CE_certification.pdf">📄 CE EMC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/FCC/D-ROBOTICS 2BGUG-RDKX5M FCC Grant - DSS.PDF">📄 FCC Grant - DSS.pdf</a><br/><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/FCC/D-ROBOTICS 2BGUG-RDKX5M FCC Grant - DTS.PDF">📄 FCC Grant - DTS.pdf</a><br/><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/FCC/D-ROBOTICS 2BGUG-RDKX5M FCC Grant - NII.PDF">📄 FCC Grant - NII.pdf</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/MIC/D-ROBOTICS 211-250814 MIC Radio Certificate.pdf">📄 MIC</a></td>
-      <td>-</td>
-      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/SRRC/RDK_X5_MD_SRRC.pdf">📄 SRRC</a></td>
+       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/KCC/RDKX5MD108064_KCC.pdf">📄 KCC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/UKCA/AOC for UKCA 证书.pdf">📄 UKCA</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/ROHS/AOC 2501X28112E-13.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/REACH/AiTSZ-26012001401-REACH-RDKX5MD002000-REPORT.pdf">📄 REACH</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_X5_MD/HF/AiTSZ-26012001402-HF-RDKX5MD002000-REPORT.pdf">📄 HF</a></td>
       <td>-</td>
       <td>-</td>
     </tr>

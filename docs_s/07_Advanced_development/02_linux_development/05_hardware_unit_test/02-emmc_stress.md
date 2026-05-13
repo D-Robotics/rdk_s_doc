@@ -301,7 +301,7 @@ loop_test: 1
 测试目标是确保系统能够在 48 小时内稳定运行，不发生重启或挂死的情况。为确保测试过程中的稳定性，可通过以下命令检查日志文件中是否存在 fail、 error、 timeout 等异常信息：
 
 ```shell
-cd "/app/chip_base_test/output/" && grep -iE 'error|fail|timeout' test_iozone_emmc_stability*.log
+cd "/app/chip_base_test/log/" && grep -iE 'error|fail|timeout' test_iozone_emmc_stability*.log
 ```
 
 ### eMMC 稳定性测试结果

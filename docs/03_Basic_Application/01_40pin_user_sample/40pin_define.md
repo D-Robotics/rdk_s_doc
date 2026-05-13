@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 3.1.1 管脚定义与应用
+# 管脚定义与应用
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -122,7 +122,9 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
 
 :::info 提示
 
-- RDK Studio 下载链接：[点此下载](https://developer.d-robotics.cc/rdkstudio)
+- RDK Studio 下载链接：
+  - [点此下载 windows 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22%20Setup.exe)
+  - [点此下载 macOS 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22-arm64.dmg)
 - RDK Studio 使用指南：[点此查看](../../01_Quick_start/09_RDK_Studio/01_rdk_studio.md)
 
 :::
@@ -193,6 +195,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
   sunrise@ubuntu:~$ cd /app/40pin_samples/
   sunrise@ubuntu:/app/40pin_samples$ sudo python3 ./button_led.py
   ```
+
 
 </TabItem>
 

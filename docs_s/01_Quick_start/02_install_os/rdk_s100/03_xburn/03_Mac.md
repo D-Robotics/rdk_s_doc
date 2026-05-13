@@ -9,6 +9,14 @@ sidebar_position: 3
 
 使用 Type-C 数据线将 PC 的 USB 接口和开发板的 Type-C 接口相连接。
 
+:::warning 注意
+
+请确保 Type-C 数据线为高质量数据线，以确保烧录的稳定性。
+1. 带有屏蔽层 。
+2. 长度越短越好 。
+3. 数据传输质量高。
+
+:::
 
 ## 安装依赖工具
 
@@ -30,7 +38,7 @@ brew install dfu-util
 
 :::warning 注意
 
-- 目前**需要将 SW3 拨至 ↑ 位置**，使用板载 eMMC 来启动，暂时不支持从 M.2 NVMe 固态硬盘启动。
+- 目前需要将 **SW3开关拨至 [[从板载 eMMC 启动]](../../../01_hardware_introduction/01_rdk_s100.md#系统启动盘选择-sw3)**，暂时不支持从 M.2 NVMe 固态硬盘启动。
 - windows pc 上 Xburn 工具 需要在[驱动安装](#驱动下载与安装)成功后才能使用，使用前请确保驱动安装成功。
 
 :::
@@ -92,7 +100,7 @@ brew install dfu-util
    - 连接模式: `usb`, 下载模式: `Fastboot`
    - 介质存储: `emmc`, 类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
-   
+
       ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot.png)
 
 
@@ -126,8 +134,8 @@ RDK S100 支持通过 Xburn 烧录指定区域，支持的烧录区域如下
    - 介质存储: `emmc`, 类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
    - 高级配置: 勾选 `烧录指定区域`，勾选 `miniboot_flash` 和 `miniboot_emmc`
-   
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition.png)
+
+      ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-partition.png)
 
 
    - 点击开始升级，设备上电并等待升级完成
@@ -164,12 +172,13 @@ RDK S100 支持通过 Xburn 备份指定区域，支持的备份区域如下
    - 点击开始升级，设备上电并等待操作完成
 
    - 操作完成后，打开 `img_packages/disk/`，查看备份镜像文件 `miniboot_flash_backup.img`
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image.png)
 
+      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition.png)
 
    :::warning 注意
 
-   对于整个存储介质数据备份，耗时较长，请耐心等待备份结束。
+   - 对于整个存储介质数据备份，耗时较长，请耐心等待备份结束。
+   - 备份镜像格式为 `.img` 格式，烧录时需要选择 `.simg` 格式的文件，直接将备份镜像文件的后缀 `.img` 替换为 `.simg` 即可。
 
    :::
 
@@ -193,8 +202,3 @@ RDK S100 支持通过 Xburn 备份指定区域，支持的备份区域如下
 Ubuntu Desktop 版本系统启动完成后，会通过 Display 传输接口在显示器上输出系统桌面，如下图：
 
 ![image-desktop_display.jpg](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg)
-
-
-
-
-

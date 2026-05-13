@@ -1,13 +1,15 @@
 ---
 sidebar_position: 2
 ---
-# 3.1.2 Using GPIO
+# Using GPIO
 
 
 
 :::info Note
 
-- RDK Studio download link: [Click to download](https://developer.d-robotics.cc/en/rdkstudio)
+- RDK Studio Download Links
+    - [Click here to download Windows version](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22%20Setup.exe)
+    - [Click here to download macOS version](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22-arm64.dmg)
 - RDK Studio user guide: [Click to view](../../01_Quick_start/09_RDK_Studio/01_rdk_studio.md)
 
 :::
@@ -45,7 +47,7 @@ sidebar_position: 2
         
         ![VScode interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/rdk_studio/open_vscode_terminal.png)
 
-    3. Execute GPIO [configuration commands](#gpio-settings).
+    3. Execute GPIO [configuration commands](#setting-method-2-log-in-to-the-development-board-and-set-the-gpio).
 
  ### Board-side VS Code Web
 
@@ -69,8 +71,7 @@ sidebar_position: 2
 
      ![VScode new terminal interface](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/rdk_studio/vscode_open_terminal.png)
 
- 6. Execute GPIO [configuration commands](#gpio-settings).
-
+ 6. Execute GPIO [configuration commands](#setting-method-2-log-in-to-the-development-board-and-set-the-gpio).
 
 
  ## Setting Method 2: Log in to the development board and set the GPIO
@@ -495,7 +496,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     main()
 ```
-:::
+
 ### Introduction to `hb_gpioinfo` Tool
 The `hb_gpioinfo` tool is a GPIO helper tool adapted for the X5 platform. It is used to view the mapping relationship between `PinName` and `PinNum` on the current development board.
 

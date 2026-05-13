@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 3.1.2 GPIO应用
+# GPIO应用
 
 
 
@@ -10,7 +10,9 @@ sidebar_position: 2
 
 :::info 提示
 
-- RDK Studio 下载链接：[点此下载](https://developer.d-robotics.cc/rdkstudio)
+- RDK Studio 下载链接：
+    - [点此下载 windows 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22%20Setup.exe)
+    - [点此下载 macOS 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22-arm64.dmg)
 - RDK Studio 使用指南：[点此查看](../../01_Quick_start/09_RDK_Studio/01_rdk_studio.md)
 
 :::
@@ -46,9 +48,9 @@ sidebar_position: 2
         
         ![VScode界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/rdk_studio/open_vscode_terminal.png)
 
-    3.  执行 GPIO [设置命令](./gpio.md#gpio-设置)。
+    3.  执行 GPIO [设置命令](#设置方式二登录开发板)。
 
- ### 板端 VS Code Web
+### 板端 VS Code Web
 
     1. 点击应用空间图标，查看更多应用。
 
@@ -70,14 +72,10 @@ sidebar_position: 2
 
         ![VScode 新建终端界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/rdk_studio/vscode_open_terminal.png)
 
-    6.  执行 GPIO [设置命令](./gpio.md#gpio-设置)。
+    6.  执行 GPIO [设置命令](#设置方式二登录开发板)。
 
 
-
-
-
-
-## 设置方式二：登录开发板设置 GPIO
+## 设置方式二：登录开发板
 
 ### 导入 GPIO Python 库
 

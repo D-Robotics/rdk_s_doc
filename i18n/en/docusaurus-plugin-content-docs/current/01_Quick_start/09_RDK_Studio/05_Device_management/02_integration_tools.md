@@ -56,23 +56,14 @@ VS Code must be installed locally.
    
 </TabItem>
 
-<TabItem value="linux" label="Linux">
+
+
+
+<TabItem value="macOS" label="macOS">
 
 :::tip
 
-The RDK Studio Windows version is now officially released. For Linux and Mac users, please wait a little longer while our developers are coding at full speed.
-
-:::
-
-</TabItem>
-
-
-
-<TabItem value="mac" label="Mac">
-
-:::tip
-
-The RDK Studio Windows version is now officially released. For Linux and Mac users, please wait a little longer while our developers are coding at full speed.
+The RDK Studio Windows version is now officially released. For macOS users, please wait a little longer while our developers are coding at full speed.
 
 :::
 

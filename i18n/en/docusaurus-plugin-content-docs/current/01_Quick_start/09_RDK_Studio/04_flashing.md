@@ -13,9 +13,9 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="rdk-type">
 <TabItem value="windows" label="Windows">
 
-:::info Note
-
-If your storage device has already completed the system flashing process, you can skip this chapter and proceed directly to [Adding an RDK Device](../09_RDK_Studio/04_Device_management/01_hardware_resource.md).
+:::warning Note
+- The RDK Studio supports burning using both a card reader and quicklink method. Among these, the quicklink method uses a USB 2.0 interface and has a slower burning speed. Therefore, using the card reader method is recommended for a faster burning experience.
+- If your storage device has already completed the system flashing process, you can skip this chapter and proceed directly to [Adding an RDK Device](../09_RDK_Studio/05_Device_management/01_hardware_resource.md).
 :::
 
 ## Flashing Preparation
@@ -60,6 +60,7 @@ There are two methods for flashing the system: "Using Local Image" and "Download
    
    :::warning
    - You can identify the storage device here using the following method: Unplug the storage device and click the refresh button to see which device option disappears from the list; then reconnect the storage device, click the refresh button, and select the storage device that changes (appears/disappears) with the plug/unplug operation.
+   - When burning an RDK device to eMMC or an onboard SD card, you can perform the burning by [mapping the boot medium as a USB drive]. During the burning process, in the "Select storage device" step, be sure to choose the USB drive mapped from the boot medium.
    - Flashing the system will <font color="red">erase all data on the storage device</font>. Please ensure you select the correct storage device!
    :::
 
@@ -100,6 +101,7 @@ If you already have the target image locally, please go directly to [Selecting a
    
    :::warning
    - You can identify the storage device here using the following method: Unplug the storage device and click the refresh button to see which device option disappears from the list; then reconnect the storage device, click the refresh button, and select the storage device that changes (appears/disappears) with the plug/unplug operation.
+   - When burning an RDK device to eMMC or an onboard SD card, you can perform the burning by [mapping the boot medium as a USB drive]. During the burning process, in the "Select storage device" step, be sure to choose the USB drive mapped from the boot medium.
    - Flashing the system will <font color="red">erase all data on the storage device</font>. Please ensure you select the correct storage device!
    :::
 
@@ -116,23 +118,13 @@ If you already have the target image locally, please go directly to [Selecting a
 
 </TabItem>
 
-<TabItem value="linux" label="Linux">
+
+
+<TabItem value="mac" label="macOS">
 
 :::tip
 
-Currently, the RDK Studio Windows system has been officially released. For friends using Linux and Mac, please wait a moment—the development team is rapidly coding!
-
-:::
-
-</TabItem>
-
-
-
-<TabItem value="mac" label="Mac">
-
-:::tip
-
-Currently, the RDK Studio Windows system has been officially released. For friends using Linux and Mac, please wait a moment—the development team is rapidly coding!
+For those using macOS, please wait a moment as the documentation is being rapidly prepared.
 
 :::
 

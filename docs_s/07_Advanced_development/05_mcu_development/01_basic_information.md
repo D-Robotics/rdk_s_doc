@@ -82,11 +82,7 @@ python build_freertos.py lite matrix B s100 mcu1 gcc release
 ```shell
 # 编译MCU1 Debug版本
 cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py lite matrix B s600 gcc mcu1 debug
-
-# 编译MCU1 Release版本
-cd mcu/Build/FreeRtos_mcu1
-python build_freertos.py lite matrix B s600 gcc mcu1 release
+python build_freertos.py s100_sip_B release
 ```
 </TabItem>
 </Tabs>
@@ -306,14 +302,14 @@ MCU目前在sysfs上支持查看系统状态alive，系统存活时间taskcounte
 
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/sbl_version.png)
 
-5. mcu cpuloads获取，图示:
+5. mcu串口log获取，图示：
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/cpuload.jpg)
-</TabItem>
-<TabItem value="S600" label="S600">
-相关功能待开发调试。
-</TabItem>
-</Tabs>
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png)
+
+6. mcu cpuloads获取，图示:
+
+![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/cpuload.jpg)
+
 ## MCU串口使用
 如果RDK-S100/S600含有连接方式如下，mcu串口和Acore串口共用一个串口，自行查看：设备管理器 -》端口-》MCU-COM-波特率921600
 
@@ -343,20 +339,23 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 ```
 
 #### 空板烧录
-**空板烧录请使用 Xburn 工具指定区域烧录，并指定 `miniboot_flash`**
+**空板烧录请参考以下工具烧录**
 
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
+### 工具烧录
+1. 能够正常进入Uboot时，按如下配置：
+   1. “下载模式”选择“uboot”；
+   2. “储存介质”选择“emmc”；
+   3. “类型”选择“secure”；
+   4. “选择镜像”位置请选择带有`img_packages`和`xmodem_tools`的文件夹；
+   5. “acore串口”根据实际情况选择；
+   6. “波特率”选择“921600”；
+   7. 单击“其他配置”的右方的小箭头，点击“分区选择”，然后只勾选“miniboot_flash”；
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/02_install_os/rdk_s100/03_xburn/01_windows.md#使用-xburn-指定区域烧录)章节
+  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_uboot.png)
 
-</TabItem>
-<TabItem value="S600" label="S600">
+2. 不能正常进入UBoot，下载模式选择“usb”，不需要选择串口及波特率，其他配置与能够正常进入Uboot时保持一致：
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../../01_Quick_start/02_install_os/rdk_s600.md#指定区域烧录)章节
-
-</TabItem>
-</Tabs>
+  ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/mcu_usb.png)
 
 ## MCU1 Undefined/Abort 异常处理原理
 

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 ---
-# 3.1.3 Using PWM
+# Using PWM
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -157,7 +157,6 @@ Execute the `simple_pwm.py` program to start the GPIO read/write program.
   sunrise@ubuntu:~$ cd /app/40pin_samples/
   sunrise@ubuntu:/app/40pin_samples$ sudo python3 ././simple_pwm.py
   ```
-
 
 
 </TabItem>

@@ -103,6 +103,7 @@ This section summarizes the third-party accessory list officially certified by D
 | Power | Waveshare | PSU-27W-USB-C-CN-B | Type-C interface 5V/5A custom power supply | [Purchase Link](https://www.waveshare.net/shop/PSU-27W-USB-C-CN-B.htm)  |
 | Wi-Fi Antenna | Waveshare | ORD-CM4-ANTENNA | SMA antenna supporting 2.4G/5G WiFi bands | [Purchase Link](https://www.waveshare.net/shop/ORD-CM4-ANTENNA.htm)  |
 | 4G Communication Module | Waveshare | SIM7600G-H 4G DTU | Industrial-grade 4G communication module, supports USB/UART/RS232/RS485 interfaces, 4G/3G/2G networks and GNSS positioning | [Purchase Link](https://www.waveshare.net/shop/SIM7600G-H-4G-DTU.htm)  |
+| 4G Communication Module | Waveshare | SIM7600G-H 4G DONGLE | Industrial-grade 4G communication module, supports USB/UART interfaces, 4G/3G/2G networks and GNSS positioning | [Purchase Link](https://www.waveshare.net/shop/SIM7600G-H-4G-DONGLE.htm)  |
 | Case | D-Robotics | RDK X5 Case |  Full Metal Black Enclosure | [Purchase Link](https://item.taobao.com/item.htm?abbucket=11&id=623862263232&mi_id=0000TakHYTmsuMbPUMYV_dByLYk8Z3qEoQjHCjwjgpyQD58&ns=1&priceTId=213e032717694105383204838e131d&skuId=5633976856940&spm=a21n57.1.hoverItem.8&utparam=%7B%22aplus_abtest%22%3A%224d58468e1aea4fb2bc2fb94fb4afe5db%22%7D&xxc=taobaoSearch)  |
 | PoE Power Supply Module | Waveshare | RDK X5 PoE Module | Based on the 40PIN GPIO interface connection, compatible with IEEE 802.3af/at network standards, featuring a fully isolated switch-mode power supply (SMPS) design, equipped with an onboard high-speed active cooling fan and metal heat sink| [Purchase Link](https://www.waveshare.net/shop/RDK-PoE-Module.htm)  |
 
@@ -123,8 +124,8 @@ This section summarizes the third-party accessory list officially certified by D
 | Type | Supplier | Model | Description | Supported Resolutions| User Guide| Purchase Link |
 | --- | --------- | -------- | --------------- | --------- | --------- |--------- |
 | MIPI | D-Robotics | RDK Stereo Camera Module | SmartSens SC230AI, 1/2.8-inch CMOS, rolling shutter, 2MP, diagonal 178° / horizontal 150° / vertical 80° | 1920x1080 | [Click to View](../05_Robot_development/03_boxs/spatial/hobot_stereonet.md#1-startup-with-rdk-stereo-camera-module) | [Purchase Link](https://item.taobao.com/item.htm?id=854591367752&mi_id=0000vEM7hxW2z-nLLTEOwsSqHTMyfw56sg0mU79IxSOWpEs&spm=a21xtw.29978516.0.0&xxc=shop&skuId=5656880664831) |
-| MIPI | D-Robotics | RDK Stereo Camera GS130W | SC132GS Global Shutter Sensor, 1.3MP, FOV diagonal 178° ,Interpupillary distance 80mm| 1280×1080@120fps |[Click to view](../05_Robot_development/03_boxs/spatial/hobot_stereonet.md#2-startup-with-rdk-stereo-camera-gs130w)|[Purchase Link](https://detail.tmall.com/item.htm?id=991101307919&spm=a211lz.success.0.0.7dea2b901R1WG0&skuId=6129733154197) |
-
+| MIPI | D-Robotics | RDK Stereo Camera GS130W | SC132GS Global Shutter Sensor, 1.3MP, FOV diagonal 157.2° ,Interpupillary distance 80mm| 1280×1080@120fps |[Click to view](../05_Robot_development/03_boxs/spatial/hobot_stereonet.md#2-startup-with-rdk-stereo-camera-gs130w)|[Purchase Link](https://detail.tmall.com/item.htm?id=991101307919&spm=a211lz.success.0.0.7dea2b901R1WG0&skuId=6129733154197) |
+| MIPI | D-Robotics | RDK Stereo Camera GS130WI | SC132GS Global Shutter Sensor, ICM-42688-P 6-Axis IMU, 130W pixels, High Dynamic Range (HDR), High Signal-to-Noise Ratio (40 dB), and 850/940 nm Near-Infrared Enhancement Capability | 1280×1080@120fps |[Click to view](../05_Robot_development/03_boxs/spatial/stereo_imu_cam.md)|-|
 
 ### Displays
 

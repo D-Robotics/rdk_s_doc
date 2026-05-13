@@ -13,9 +13,10 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="rdk-type">
 <TabItem value="windows" label="Windows">
 
-:::info 提示
+:::warning 注意
 
-如果您的存储设备已完成过系统烧录，可跳过此章节直接进行[添加 RDK 设备](../09_RDK_Studio/04_Device_management/01_hardware_resource.md)。
+- RDK Studio 支持使用读卡器和闪连两种方式进行烧录，其中，闪连方式使用 USB 2.0 接口，烧录速度较慢，因此推荐使用读卡器方式以获得更快的烧录体验。
+- 如果您的存储设备已完成过系统烧录，可跳过此章节直接进行[添加 RDK 设备](../09_RDK_Studio/05_Device_management/01_hardware_resource.md)。
 :::
 
 ## 烧录准备
@@ -60,6 +61,7 @@ import TabItem from '@theme/TabItem';
    
    :::warning
    - 此处可通过以下方法确定存储设备：拔出存储设备点击刷新按钮，查看设备列表中消失的设备选项；再连接存储设备，点击刷新按钮，选择随拔插操作发生减增变化的存储设备。
+   - RDK 设备烧录 eMMC 或 在板 SD 卡时，可以通过 [将启动介质映射成 U 盘] 进行烧录，烧录步骤中 “选择存储设备” 步骤务必选择启动介质映射成的 U 盘。
    - 烧录系统会<font color="red">清空存储设备中的所有数据</font>，请务必选择正确的存储设备！
    :::
 
@@ -100,6 +102,7 @@ import TabItem from '@theme/TabItem';
    
    :::warning
    - 此处可通过以下方法确定存储设备：拔出存储设备点击刷新按钮，查看设备列表中消失的设备选项；再连接存储设备，点击刷新按钮，选择随拔插操作发生减增变化的存储设备。
+   - RDK 设备烧录 eMMC 或 在板 SD 卡时，可以通过 [将启动介质映射成 U 盘] 进行烧录，烧录步骤中 “选择存储设备” 步骤务必选择启动介质映射成的 U 盘。
    - 烧录系统会<font color="red">清空存储设备中的所有数据</font>，请务必选择正确的存储设备！
    :::
 
@@ -116,23 +119,14 @@ import TabItem from '@theme/TabItem';
 
 </TabItem>
 
-<TabItem value="linux" label="Linux">
+
+
+
+<TabItem value="mac" label="macOS">
 
 :::tip
 
-目前RDK Studio Windows系统已正式出炉，使用 Linux 和 Mac 的小伙伴们，稍微等等开发小哥正在火速敲键盘
-
-:::
-
-</TabItem>
-
-
-
-<TabItem value="mac" label="Mac">
-
-:::tip
-
-目前 RDK Studio Windows 系统已正式出炉，使用 Linux 和 Mac 的小伙伴们，稍微等等开发小哥正在火速敲键盘
+目前 RDK Studio Windows 系统已正式出炉，使用 Linux 和 macOS 的小伙伴们，稍微等等开发小哥正在火速敲键盘
 
 :::
 
