@@ -27,7 +27,7 @@ sidebar_position: 4
 
 ## Audio 常见问题
 
-### Q1: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
+### Q2: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
 **A:** `tinyalsa` 是一个轻量级的音频库，主要用于 Android 和嵌入式 Linux 系统。它提供了对 ALSA（ Advanced Linux Sound Architecture）的简化接口，便于开发者进行音频处理。
 以下是一些常用的 `tinyalsa` 命令及其参数含义：
 1.  **列出所有声卡：**
@@ -93,7 +93,7 @@ sidebar_position: 4
     ```
     这个命令会使用声卡 0 的设备 1 录制 2 通道 16 位 48kHz 的音频，持续 5 秒，并保存为 `recorded_audio.wav` 文件。
 
-### Q2: RDK 板卡上如何区分和使用 USB 声卡与板载声卡？特别是当同时连接了多种音频设备时。
+### Q3: RDK 板卡上如何区分和使用 USB 声卡与板载声卡？特别是当同时连接了多种音频设备时。
 **A:** 当 RDK 板卡上同时连接了板载声卡（例如通过音频子板）和 USB 声卡时， Linux 音频系统（ ALSA）会为它们分配不同的声卡序号。您需要知道正确的声卡序号才能精确控制特定的音频设备。
 
 1.  **查看已识别的声卡及其序号：**
@@ -128,79 +128,6 @@ sidebar_position: 4
         要设置值，可以使用 `sset` 代替 `sget`，例如：`amixer -c 1 sset 'ADC PGA Gain',0 80%`。
 
 通过以上方法，您可以准确地识别并控制连接到 RDK 板卡上的不同音频设备。
-
-### Q3: RDK X3 系列的音频子板如何与 USB 声卡共存并同时使用（例如，让 PulseAudio 识别和管理它们）？
-**A:** 如果您希望在 RDK X3 上同时使用板载的音频子板（例如基于 WM8960 芯片的）和外接的 USB 声卡，并且让 PulseAudio 等上层音频服务能够识别和管理它们，您可能需要进行一些配置。
-
-以下步骤以 WM8960 音频子板和 USB 全双工声卡为例进行说明：
-
-1.  **确保音频子板正常工作：**
-    * 首先，根据对应音频子板的教程，确保其驱动已正确加载，并且在单独使用时可以正常录音和播放。
-
-2.  **接入 USB 声卡并识别新增节点：**
-    * 将 USB 声卡连接到 RDK X3 的 USB 接口。等待系统加载驱动。
-    * 观察 `/dev/snd/` 目录下新增的 PCM 设备节点。 ALSA 为每个声卡的每个 PCM 设备（播放、录音）创建节点。
-        ```bash
-        ls /dev/snd/
-        ```
-        **示例输出 (假设 `controlC0`, `pcmC0D0c`, `pcmC0D0p`, `pcmC0D1c`, `pcmC0D1p` 是音频子板的节点，而 `pcmC1D0c`, `pcmC1D0p` 是新接入的 USB 声卡的节点)：**
-        ```text
-        by-path  controlC0  pcmC0D0c  pcmC0D0p  pcmC0D1c  pcmC0D1p  pcmC1D0c  pcmC1D0p  timer
-        ```
-        在这个例子中：
-        * `pcmC0...` 通常对应声卡 0 (card 0)。`D0c` 表示设备 0 的录音 (capture) 端点，`D0p` 表示设备 0 的播放 (playback) 端点。`D1c`, `D1p` 可能表示声卡 0 上的第二个 PCM 设备（例如 HDMI 音频输出）。
-        * `pcmC1D0c`, `pcmC1D0p` 则对应声卡 1 (card 1)，即新接入的 USB 声卡。如果 USB 声卡是全双工且只有一个 PCM 设备，它通常会表现为一个录音端点和一个播放端点。
-
-3.  **修改 PulseAudio 配置文件 (`/etc/pulse/default.pa`)：**
-    * 为了让 PulseAudio 能够同时加载和使用这两个声卡，您需要编辑其默认配置文件。
-    * 找到文件中加载 ALSA 声卡源（ source, 用于录音）和槽（ sink, 用于播放）的模块部分，通常在 `.ifexists module-udev-detect.so` 块内或 `.else` 块内。
-    * 在已有的 `load-module module-alsa-source` 和 `load-module module-alsa-sink` 行之后，为您的 USB 声卡（假设它是声卡 1 ，设备 0 ，根据 `cat /proc/asound/cards` 确认）添加新的加载指令。
-
-    **修改 `/etc/pulse/default.pa` 示例：**
-    ```apacheconf
-    # ... ( 文件其他内容 ) ...
-
-    .ifexists module-udev-detect.so
-    # load-module module-udev-detect tsched=0 # 或者类似这行
-
-    ### Existing ALSA Sink/Source for onboard audio (card 0)
-    ### 请根据您板载声卡的实际配置调整 device=hw:X,Y 中的 X 和 Y
-    ### 例如，如果板载播放是 card 0, device 1; 板载录音是 card 0, device 0
-    load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=960 rate=48000 channels=2 rewind_safeguard=960
-    load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=960 rate=48000 channels=2
-
-    ### Add these lines for the USB sound card (assuming it's card 1, device 0 for both playback and capture)
-    ### 注意：这里的 device=hw:1,0 是基于前面 ls /dev/snd/ 和 cat /proc/asound/cards 的推断，
-    ### 实际应根据 `cat /proc/asound/cards` 确认 USB 声卡的 card number (X)，
-    ### 并根据 `aplay -l` 和 `arecord -l` 确认其播放和录音的 device number (Y)。
-    load-module module-alsa-sink device=hw:1,0 # 用于 USB 声卡播放
-    load-module module-alsa-source device=hw:1,0 # 用于 USB 声卡录音
-
-    .else
-    # ... (Fallback configuration if udev-detect is not available) ...
-    # You might need to add similar lines here if this block is active
-    ### Fallback sink
-    load-module module-alsa-sink # Default sink
-    ### Fallback source
-    load-module module-alsa-source device=hw:0,0 # Example for onboard capture
-
-    ### Add for USB sound card if udev is not used
-    # load-module module-alsa-sink device=hw:1,0
-    # load-module module-alsa-source device=hw:1,0
-    .endif
-
-    # ... ( 文件其他内容 ) ...
-    ```
-    **重要说明：**
-    * `device=hw:X,Y` 中的 `X` 是声卡序号 (Card Number)，`Y` 是 PCM 设备序号 (Device Number)。您需要根据 `cat /proc/asound/cards` ( 查看声卡 X) 和 `aplay -l` / `arecord -l` ( 查看设备 Y) 的输出来确定 USB 声卡实际的 `X` 和 `Y` 值。
-    * 上述示例中的 `mmap=false tsched=0 fragments=2 fragment_size=960 rate=48000 channels=2 rewind_safeguard=960` 等参数是针对特定音频子板优化的，对于 USB 声卡，您可能不需要这么多参数，或者可以先尝试只用 `device=hw:X,Y`。如果遇到声音卡顿或爆音，再尝试调整这些参数。
-
-4.  **保存配置并重启：**
-    * 保存对 `/etc/pulse/default.pa` 文件的修改。
-    * 重启 RDK 开发板使 PulseAudio 重新加载配置。
-    * 或者，尝试重启 PulseAudio 服务（如果知道如何操作且系统支持，例如 `systemctl --user restart pulseaudio.service` 或 `pulseaudio -k && pulseaudio --start`，但这可能不如重启板卡干净）。
-
-重启后，您应该可以在系统的声音设置（如果使用桌面环境）或通过 `pactl list sources` / `pactl list sinks` 命令看到两个声卡的输入和输出设备，并能选择使用它们。
 
 ### Q4: RDKS100 如何通过图形化界面方式支持音频功能使用
 

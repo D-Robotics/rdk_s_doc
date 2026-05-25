@@ -379,19 +379,19 @@ Date: 2023
 * **和系统版本、RDK平台硬件对应关系：**
     * **2.x版本tros.b (及后续如3.x等)：**
         * 通常仅支持对应大版本的RDK OS系统（例如，tros.b 2.x支持RDK OS 2.x）。
-        * 支持RDK X3、RDK X3 Module等较新的全系列硬件。
+        * 支持对应版本RDK OS的全系列硬件。
         * 未来tros.b的新增功能和主要维护会集中在这些较新的版本上。
         * 代码通常托管在GitHub上的 `D-Robotics` 组织下。
     * **1.x版本tros.b：**
         * 属于历史版本。
-        * 仅支持较早的1.x版本RDK OS系统和特定的RDK硬件（如早期的RDK X3）。
+        * 仅支持较早的1.x版本RDK OS系统和对应硬件。
         * 未来1.x版本tros.b可能仅发布关键问题修复，不再有新功能迭代。
         * 代码曾托管在gitlab或其他内部平台。
         * 参考链接 (历史版本文档)：[1.x版本tros.b说明](https://developer.d-robotics.cc/api/v1/fileData/TogetherROS/index.html)
 
     :::caution **注意**
     1.x版本tros.b**无法**通过`apt`命令直接升级到2.x或更新版本的tros.b。如果需要使用新版tros.b，必须先将RDK板卡的整个操作系统通过烧录镜像的方式升级到支持新版tros.b的RDK OS版本，然后再安装对应版本的tros.b。
-    参考：[安装对应板卡系统](../01_Quick_start/install_os/rdk_x3.md) (请将链接替换为实际有效的文档路径)
+    参考：安装对应板卡系统（请参考当前文档站内对应机型安装章节）
     :::
 
 * **功能差异：**

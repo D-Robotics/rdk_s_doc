@@ -208,17 +208,7 @@ sidebar_position: 6
 
 通过这种方式，可以将计算密集型的可视化和仿真任务放在PC上，而RDK板卡则专注于运行其实时机器人应用程序，从而保证整体系统的性能和稳定性。
 
-### Q12: RDK X3的内核版本较老，是否还能支持使用RealSense D435i深度相机？如何安装？
-**A:**
-* **支持情况：** 尽管RDK X3的Linux内核版本可能相对较老（例如4.14.x），但D-Robotics官方通常会在其发布的RDK OS系统镜像中，针对常用的外设（如Intel RealSense系列深度相机）**预先打入或集成了所需的内核补丁 (patches) 和驱动模块**。
-* **安装方法：** 因此，您通常**不需要**自行从RealSense SDK源码编译内核模块。D-Robotics官方会提供通过APT软件包管理器直接安装RealSense相机驱动和相关工具的方式。
-    * **官方教程：** 请参考D-Robotics开发者社区或RDK X3用户手册中关于“传感器Demo”或“外设支持”章节中针对RealSense D435i（或其他型号）的说明。
-        例如，此链接曾提供相关指导：[RDK文档 - RealSense图像采集](https://developer.d-robotics.cc/rdk_doc/Robot_development/quick_demo/demo_sensor#realsense%E5%9B%BE%E5%83%8F%E9%87%87%E9%9B%86)。
-    * **APT安装：** 安装过程通常是在配置好D-Robotics官方APT源后，执行类似 `sudo apt install librealsense2-dkms librealsense2-utils librealsense2-dev` 的命令。
-* **使用：** 安装完成后，您就可以在RDK X3上使用RealSense SDK (librealsense2) 提供的API来获取深度图、彩色图、红外图以及IMU数据（对于D435i）。
-* **具体API和数据获取：** 关于如何使用librealsense2的API来获取特定数据流、配置相机参数等具体编程问题，请参考Intel RealSense官方的SDK文档和示例代码。
-
-### Q13: 如何为TROS配置零拷贝（Zero-Copy）数据传输环境？
+### Q12: 如何为TROS配置零拷贝（Zero-Copy）数据传输环境？
 **A:** 零拷贝是一种优化ROS2节点间大数据（如图像）传输性能的技术，通过共享内存等机制避免不必要的内存拷贝。TROS（基于ROS2）也支持零拷贝。
 
 * **TROS Foxy版本 (基于ROS2 Foxy)：**
@@ -239,7 +229,7 @@ sidebar_position: 6
     * D-Robotics官方文档中关于TROS通信优化或特定Demo（如图像传输Demo）的章节，通常会包含零拷贝的配置指南。
         例如：[RDK文档 - ROS通信 - 零拷贝配置](https://developer.d-robotics.cc/rdk_doc/Robot_development/quick_demo/demo_communication) (请确认链接的最新有效性)。
 
-### Q14: 除了D-Robotics官方的APT源，是否有其他ROS2的公开软件源可以使用？
+### Q13: 除了D-Robotics官方的APT源，是否有其他ROS2的公开软件源可以使用？
 **A:** 是的。标准的ROS2发行版（如Foxy, Humble, Iron等）都有其官方的APT软件源，由Open Robotics（现为Intrinsic）维护。
 * **ROS2官方源：**
     * 地址通常是 `http://packages.ros.org/ros2/ubuntu`。

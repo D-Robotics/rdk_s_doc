@@ -7,6 +7,7 @@ sidebar_position: 2
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
 ```
 
 ### 40PIN接口
@@ -16,7 +17,7 @@ import TabItem from '@theme/TabItem';
 
 #### Q2: 开发板是否支持通过C/C++语言操作40PIN GPIO接口？
 **A:** 是的，支持。您可以参考地平线开发者社区论坛中的相关文章和代码示例，例如：
-* [旭日X3派WiringPi](https://developer.d-robotics.cc/forumDetail/109609560406362634) (一个适配RDK X3的C/C++ GPIO库)
+* C/C++ GPIO库：请优先使用当前文档与SDK中提供的接口和示例。
 * 查阅对应RDK型号的官方文档中关于GPIO开发的章节，通常会提供底层的操作方法或推荐的库。
 
 ### 串口
@@ -58,15 +59,9 @@ import TabItem from '@theme/TabItem';
     * 使用 `route -n` 查看路由表信息。
     * 使用 `ping <网关IP>` 测试到网关的连通性。
 5.  **参考官方文档：** 详细的网络配置步骤和故障排除方法，请参考官方文档中关于“网络配置”的章节。
-    <Tabs groupId="network_conf">
-    <TabItem value="rdk_x3/x5" label="rdk_x3/x5">
-    [RDK X3/X5 网络配置](../System_configuration/network_blueteeth)
-    </TabItem>
-    <TabItem value="rdk_s100" label="rdk_s100">
+    <DocScope products="RDK S100">
     [RDK S100 网络配置](/rdk_s/System_configuration/network_bluetooth)
-    </TabItem>
-    </Tabs>
-
+    </DocScope>
 
 #### Q5: 开发板无法通过SSH远程连接，可能是什么原因？
 **A:**
@@ -119,7 +114,7 @@ import TabItem from '@theme/TabItem';
 ### USB接口
 
 #### Q8: 开发板接入USB摄像头后，默认的设备节点是什么？
-**A:** 在地平线RDK板卡（如RDK X3系列）上，当您接入一个标准的UVC (USB Video Class) 摄像头后，它在Linux系统中创建的视频设备节点通常**不是**像PC上常见的 `/dev/video0`。
+**A:** 在RDK板卡上，当您接入一个标准的UVC (USB Video Class) 摄像头后，它在Linux系统中创建的视频设备节点通常**不是**像PC上常见的 `/dev/video0`。
 * **默认设备节点通常是：`/dev/video8`**
 * 也可能是 `/dev/video9`, `/dev/video10` 等，如果系统中有其他视频设备或多个USB摄像头。
 
@@ -133,7 +128,7 @@ import TabItem from '@theme/TabItem';
     * 确保USB摄像头已牢固插入到开发板的USB Host接口。
     * 尝试重新插拔摄像头，或者更换到开发板上的其他USB Host接口（如果板卡有多个）。
 3.  **避免Micro USB接口冲突（针对特定板卡）：**
-    * 部分开发板（如某些版本的RDK X3）上的Micro USB接口可能用于系统调试、ADB或作为USB Device功能，**当此Micro USB接口通过数据线连接到PC时，可能会影响板上其他USB Host接口的功能或USB设备的枚举**。
+    * 部分开发板的Micro USB接口可能用于系统调试、ADB或作为USB Device功能，**当此Micro USB接口通过数据线连接到PC时，可能会影响板上其他USB Host接口的功能或USB设备的枚举**。
     * **解决方法：** 如果您的Micro USB接口正连接着数据线（例如用于串口调试或ADB），请尝试**断开该Micro USB数据线**，然后再测试USB摄像头是否能被识别。
 4.  **查看内核日志：**
     * 在插入USB摄像头后，立即通过串口或SSH登录到板卡，执行 `dmesg | tail` 查看最新的内核日志。日志中通常会包含USB设备插入、识别、驱动加载或失败的详细信息。
@@ -174,17 +169,9 @@ import TabItem from '@theme/TabItem';
     * **连接器锁紧：** 确保FPC排线已完全插入连接器，并且连接器两端的卡扣已牢固锁紧。
     * **接口对应：** 如果板卡有多个MIPI CSI接口，确保摄像头连接到了您在软件配置或设备树中指定的那个接口。
     * **参考文档：** 仔细查阅您所使用的RDK板卡型号对应的硬件手册或快速入门指南中关于“MIPI摄像头”连接的章节，确认连接细节。
-        <Tabs groupId="network_conf">
-        <TabItem value="rdk_x3" label="rdk_x3">
-        [RDK X3 MIPI摄像头](../01_Quick_start/hardware_introduction/rdk_x3.md)
-        </TabItem>
-        <TabItem value="rdk_x5" label="rdk_x5">
-        [RDK X5 MIPI摄像头](../01_Quick_start/hardware_introduction/rdk_x5.md)
-        </TabItem>
-        <TabItem value="rdk_s100" label="rdk_s100">
+        <DocScope products="RDK S100">
         [RDK S100 MIPI摄像头](/rdk_s/Quick_start/hardware_introduction/rdk_s100_camera_expansion_board)
-        </TabItem>
-        </Tabs>
+        </DocScope>
 2.  **禁止带电插拔：**
     * **严禁在开发板通电的情况下插拔MIPI摄像头！** 带电操作极易因瞬间的电流冲击或引脚接触顺序错误而导致摄像头模组或板卡MIPI接口电路短路损坏。
 3.  **I2C总线和地址：**
@@ -211,16 +198,16 @@ import TabItem from '@theme/TabItem';
 ### 显示接口
 
 #### Q13: 开发板的HDMI接口可以支持哪些分辨率？
-**A:** RDK开发板HDMI接口具体支持的分辨率类型会因**板卡型号（RDK X3, X5, Ultra等）、SoC型号、以及所运行的RDK OS系统版本**而有所不同。
+**A:** RDK开发板HDMI接口具体支持的分辨率类型会因**板卡型号、SoC型号、以及所运行的RDK OS系统版本**而有所不同。
 * **通用支持：** 大部分RDK板卡至少会支持一些常见的分辨率，如：
     * 1920x1080 (1080p) @ 60Hz/50Hz/30Hz
     * 1280x720 (720p) @ 60Hz/50Hz
     * 更低的分辨率如 640x480, 800x600 等。
 * **特定型号和版本：**
-    * 较新版本的RDK OS（如RDK X3的2.1.0及以上版本）可能会引入对更多分辨率和刷新率组合的支持。
-    * RDK X5或Ultra等更高性能的板卡，其HDMI输出能力（如是否支持4K分辨率）也会更强。
+    * 较新版本的RDK OS通常会引入对更多分辨率和刷新率组合的支持。
+    * 不同性能档位的板卡在HDMI输出能力（如是否支持4K分辨率）上会有差异。
 * **查询方法：**
-    1.  **官方文档：** 最准确的信息来源是查阅您所使用的具体RDK板卡型号和系统版本的官方《用户手册》或《硬件规格说明书》中关于“[HDMI接口](../01_Quick_start/hardware_introduction/rdk_x3.md)”或显示子系统的章节 (请将链接替换为实际有效的文档路径)。
+    1.  **官方文档：** 最准确的信息来源是查阅您所使用的具体RDK板卡型号和系统版本的官方《用户手册》或《硬件规格说明书》中关于“HDMI接口”或显示子系统的章节。
     2.  **系统内查询（如果已连接显示器）：**
         * 如果板卡已连接显示器并能进入Linux系统（例如Desktop版），有时可以通过 `xrandr` 命令（在X Window环境下）查看当前活动输出支持的分辨率模式。
         * 查看内核启动日志 (`dmesg | grep -i hdmi` 或 `dmesg | grep -i drm`)，有时会打印出显示驱动初始化时检测到的显示器支持模式。
