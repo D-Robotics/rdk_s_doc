@@ -77,7 +77,7 @@ sample_bezier/
 ##### 程序运行方法
 程序执行前需要做如下准备工作：
 1. RDKS100 通过 HDMI 接口接上显示器
-2. RDKS100 接上鼠标和键盘，通过显示器界面登录到Ubuntu系统中
+2. RDKS100 接上鼠标和键盘，通过显示器界面登录到 Ubuntu 系统中
 
 执行程序：
 1. 进入目录：`cd /app/multimedia_samples/sample_gpu_3d/gles/sample_bezier`

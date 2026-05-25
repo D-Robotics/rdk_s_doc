@@ -1,7 +1,7 @@
 ---
 sidebar_position: 14
 ---
-# 7.5.15 ICU使用指南
+# 7.5.15 ICU 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -11,11 +11,11 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-ICU模块是基于S100芯片解决方案的一个软件子模块，在整个系统属于基础服务软件。在S100整体设计中，ICU软件主要是对系统内有输入捕获属性的硬件进行软件抽象并统一管理，硬件层IP涉及到PWM和GPIO两个硬件。本文重点介绍GPIO中断的配置和实现。
+ICU 模块是基于 S100芯片解决方案的一个软件子模块，在整个系统属于基础服务软件。在 S100整体设计中，ICU 软件主要是对系统内有输入捕获属性的硬件进行软件抽象并统一管理，硬件层 IP 涉及到 PWM 和 GPIO 两个硬件。本文重点介绍 GPIO 中断的配置和实现。
 
-## GPIO中断使用指南
+## GPIO 中断使用指南
 
-S100 MCU中，GPIO共有四个IO组，分别是3个GPIO0，GPIO1，GPIO2，GPIO_AON。其中，前三组共计提供88个 Pin，而GPIO_AON组则提供12个Pin。该部分可参考 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_PBcfg.c` 。所有的Pin支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
+S100 MCU 中，GPIO 共有四个 IO 组，分别是3个 GPIO0，GPIO1，GPIO2，GPIO_AON。其中，前三组共计提供88个 Pin，而 GPIO_AON 组则提供12个 Pin。该部分可参考 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_PBcfg.c` 。所有的 Pin 支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
 
 | ISR Function | IRQ | IRQ Define           | Description |
 | :----------- | :-- | :------------------- | :---------- |
@@ -24,16 +24,16 @@ S100 MCU中，GPIO共有四个IO组，分别是3个GPIO0，GPIO1，GPIO2，GPIO_
 | Gpio2_ExtIsr | 70  | MCUSYS_GPIO2_INTR    | Gpio Mode   |
 | Gpio3_ExtIsr | 361 | AON_WAKEUP_GPIO_INTR | Gpio Mode   |
 
-### Port配置
+### Port 配置
 
-S100 MCU上的每个Pin支持至少一个功能，因此在使用GPIO中断之前需要通过Port子系统配置Pin的功能和属性，也就是重定义过程。以 `GPIO_MCU[20]` 和 `GPIO_MCU[21]` 为例子，这两个Pin的功能如下：
+S100 MCU 上的每个 Pin 支持至少一个功能，因此在使用 GPIO 中断之前需要通过 Port 子系统配置 Pin 的功能和属性，也就是重定义过程。以 `GPIO_MCU[20]` 和 `GPIO_MCU[21]` 为例子，这两个 Pin 的功能如下：
 
 | FUNC0     | IO TYPE0 | FUNC1      | IO TYPE1 | FUNC2   | IO TYPE2 | FUNC3        | IO TYPE3 |
 | :-------- | :------- | :--------- | :------- | :------ | :------- | :----------- | :------- |
 | SPI3_CSN0 | O        | DEBUG_OUT5 | O        | TRC_CTL | O        | GPIO_MCU[20] | IO       |
 | SPI3_CSN1 | IO       | PPS_IN0    | I        | TRC_CLK | O        | GPIO_MCU[21] | IO       |
 
-需要将两个Pin配置为FUNC3，即GPIO模式，关于Port的介绍和使用可以查阅 [Port使用指南](./12_mcu_port/01_user_manual.md) 和 [Port开发指南](./12_mcu_port/02_development_manual.md) 这两个章节。具体的配置文件为 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_PBcfg.c`。
+需要将两个 Pin 配置为 FUNC3，即 GPIO 模式，关于 Port 的介绍和使用可以查阅 [Port使用指南](./12_mcu_port/01_user_manual.md) 和 [Port开发指南](./12_mcu_port/02_development_manual.md) 这两个章节。具体的配置文件为 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_PBcfg.c`。
 
 ```c
 static const Port_Lld_PinConfigType Port_McuPinConfigs[PORT_MCU_MAX_NUM]=
@@ -47,9 +47,9 @@ static const Port_Lld_PinConfigType Port_McuPinConfigs[PORT_MCU_MAX_NUM]=
 }
 ```
 
-### ICU配置
+### ICU 配置
 
-ICU文件列表：
+ICU 文件列表：
 
 > - mcu/McalCdd/Icu/src/Icu_Lld_Gpio.c
 > - mcu/McalCdd/Icu/src/Icu_Lld.c
@@ -59,7 +59,7 @@ ICU文件列表：
 > - mcu/McalCdd/Icu/inc/Icu_Types.h
 > - mcu/McalCdd/Icu/inc/Icu.h
 
-GPIO中断功能由ICU统一管理，其引脚的详细属性（如中断类型、回调函数等）均需通过ICU配置。具体的配置文件为 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Icu/src/Icu_PBCfg.c` ，通过修改 `Icu_ConfigType` 、 `Icu_Lld_IpConfigType` 、 `Gpio_Icu_IpConfigType`、 `Icu_Lld_ChannelConfigType` 、 `Icu_ChannelConfigType` 、 `Gpio_Icu_ChannelConfigType` 等结构体实现。 其中， `Gpio_Icu_ChannelConfigType` 是关键结构，负责定义中断回调函数、触发类型及中断屏蔽位等。
+GPIO 中断功能由 ICU 统一管理，其引脚的详细属性（如中断类型、回调函数等）均需通过 ICU 配置。具体的配置文件为 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Icu/src/Icu_PBCfg.c` ，通过修改 `Icu_ConfigType` 、 `Icu_Lld_IpConfigType` 、 `Gpio_Icu_IpConfigType`、 `Icu_Lld_ChannelConfigType` 、 `Icu_ChannelConfigType` 、 `Gpio_Icu_ChannelConfigType` 等结构体实现。 其中， `Gpio_Icu_ChannelConfigType` 是关键结构，负责定义中断回调函数、触发类型及中断屏蔽位等。
 
 #### Icu_ConfigType
 
@@ -82,7 +82,7 @@ const Icu_ConfigType Icu_Config = {
 
 | Parameter            | Description                                 |
 | :------------------- | :------------------------------------------ |
-| nNumInstances        | GPIO控制器实例数                            |
+| nNumInstances        | GPIO 控制器实例数                            |
 | NumChannels          | 通道数(或引脚数)                            |
 | Icu_ChannelConfigPtr | 指向 `Icu_ChannelConfigType` 结构体的指针 |
 | Icu_LldConfigPtr     | 指向 `Icu_Lld_IpConfigType` 结构体的指针  |
@@ -109,7 +109,7 @@ static Icu_Lld_IpConfigType Icu_Lld_IpConfig_PB[ICU_CONF_IPS_PB] = {
 | Parameter    | Description                                     |
 | :----------- | :---------------------------------------------- |
 | instanceNo   | 控制器实例(如0 - GPIO0)                         |
-| InstanceMode | GPIO或者PWM模式                                 |
+| InstanceMode | GPIO 或者 PWM 模式                                 |
 | GpioConfig   | 指向 `Icu_Lld_ChannelConfigType` 结构体的指针 |
 
 #### Gpio_Icu_IpConfigType
@@ -193,7 +193,7 @@ static Icu_Lld_ChannelConfigType Icu_Lld_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MOD
 
 | Parameter           | Description                                      |
 | :------------------ | :----------------------------------------------- |
-| ChannelMode         | GPIO或者PWM模式                                  |
+| ChannelMode         | GPIO 或者 PWM 模式                                  |
 | instanceNo          | 控制器实例(如0 - GPIO0)                          |
 | gpioHwChannelConfig | 指向 `Gpio_Icu_ChannelConfigType` 结构体的指针 |
 
@@ -260,15 +260,15 @@ static Gpio_Icu_ChannelConfigType Icu_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MODS_P
 `IntEnable` 与 `IntMask` 均用于中断开关控制，两者区别在于：
 
 - `IntEnable`： 为 `FALSE` 时，从根本上禁止中断产生，中断状态寄存器不会置位。
-- `IntMask`： 为 `TRUE` 时，仅阻止中断信号上报至CPU，但中断事件仍会触发并在状态寄存器中置位。
+- `IntMask`： 为 `TRUE` 时，仅阻止中断信号上报至 CPU，但中断事件仍会触发并在状态寄存器中置位。
 
 配置建议:
 
 - 启用中断时：`IntEnable = TRUE` 且 `IntMask = FALSE`。
 - 禁用中断时：`IntEnable = FALSE` 且 `IntMask = TRUE`。
 
-回调函数是中断触发后的最终入口，完整流程为：中断函数 -> ICU中断处理函数 -> 回调函数。
-`NotificationEnable` 用于控制是否执行回调函数，将其设为 `FALSE` 会跳过回调，但不影响中断的发生与标志位的产生。若要完整启用中断及回调，必须确保 `NotificationEnable = TRUE`、`IntEnable = TRUE`、`IntMask = FALSE` 且 `GpioChannelNotification` 指向具体的回调函数。建议回调函数名应体现其所属Instance与Channel，如 `Icu_Gpio_Channel_0_20_ISR`。具体的回调函数在文件 `mcu/samples/Interrupt/src/gpio_Interrupt_test.c` 定义:
+回调函数是中断触发后的最终入口，完整流程为：中断函数 -> ICU 中断处理函数 -> 回调函数。
+`NotificationEnable` 用于控制是否执行回调函数，将其设为 `FALSE` 会跳过回调，但不影响中断的发生与标志位的产生。若要完整启用中断及回调，必须确保 `NotificationEnable = TRUE`、`IntEnable = TRUE`、`IntMask = FALSE` 且 `GpioChannelNotification` 指向具体的回调函数。建议回调函数名应体现其所属 Instance 与 Channel，如 `Icu_Gpio_Channel_0_20_ISR`。具体的回调函数在文件 `mcu/samples/Interrupt/src/gpio_Interrupt_test.c` 定义:
 
 ```c
 /** GPIO_MCU[20] interrupt callback function */
@@ -286,11 +286,11 @@ void Icu_Gpio_Channel_0_21_ISR(void)
 }
 ```
 
-> 值得注意的一点是，用户仅需在回调函数中实现业务逻辑，无需手动清除中断标志位，此操作由ICU驱动自动完成。
+> 值得注意的一点是，用户仅需在回调函数中实现业务逻辑，无需手动清除中断标志位，此操作由 ICU 驱动自动完成。
 
 ### 中断实现
 
-配置中断前，需明确目标引脚（Pin）所绑定的中断号（IRQ）及其中断入口函数。基于本文前述对MCU GPIO中断资源的介绍，可知引脚 `GPIO_MCU[20]` 与 `GPIO_MCU[21]` 共享中断入口函数 `Gpio0_ExtIsr` ，其对应的中断号为68。中断的注册、优先级配置及使能过程，均在源文件 `mcu/McalCdd/Icu/src/Icu_Lld_Gpio.c` 中定义。
+配置中断前，需明确目标引脚（Pin）所绑定的中断号（IRQ）及其中断入口函数。基于本文前述对 MCU GPIO 中断资源的介绍，可知引脚 `GPIO_MCU[20]` 与 `GPIO_MCU[21]` 共享中断入口函数 `Gpio0_ExtIsr` ，其对应的中断号为68。中断的注册、优先级配置及使能过程，均在源文件 `mcu/McalCdd/Icu/src/Icu_Lld_Gpio.c` 中定义。
 
 ```c
 void Icu_Gpio_Interrupt_Init(uint8 Instance, uint8 priority)
@@ -356,20 +356,20 @@ Icu_Gpio_Interrupt_Init(0, 30);
 Icu_Gpio_Interrupt_DeInit(0);
 ```
 
-## GPIO中断sample
+## GPIO 中断 sample
 
-在MCU1串口端初始化GPIO中断
+在 MCU1串口端初始化 GPIO 中断
 
 ```bash
 D-Robotics:/$ gpio_interrupt on
 [0975.377836 0]INFO: Start gpio_interrupt test...
 ```
 
-用杜邦线一头接下图的两个GPIO引脚，另一头接地
+用杜邦线一头接下图的两个 GPIO 引脚，另一头接地
 
-![GPIO接线图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/gpio_interrupt.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/gpio_interrupt.png" alt="GPIO接线图" style={{ width: '100%' }} />
 
-此时串口打印如下则表示GPIO中断触发成功
+此时串口打印如下则表示 GPIO 中断触发成功
 
 ```bash
 # GPIO_MCU[20] 回调函数 0-instanceNo，20-PinId
@@ -379,7 +379,7 @@ D-Robotics:/$ gpio_interrupt on
 [0593.171002 0]INFO: Enter Icu_Gpio_Channel_0_21_ISR!!!
 ```
 
-通过下面方式关闭GPIO中断
+通过下面方式关闭 GPIO 中断
 
 ```bash
 D-Robotics:/$ gpio_interrupt off
@@ -389,11 +389,11 @@ D-Robotics:/$ gpio_interrupt off
 </DocScope>
 <DocScope products="RDK S600">
 
-ICU模块是基于S600芯片解决方案的一个软件子模块，在整个系统属于基础服务软件。在S600整体设计中，ICU软件主要是对系统内有输入捕获属性的硬件进行软件抽象并统一管理，硬件层IP涉及到PWM和GPIO两个硬件。本文重点介绍GPIO中断的配置和实现。
+ICU 模块是基于 S600芯片解决方案的一个软件子模块，在整个系统属于基础服务软件。在 S600整体设计中，ICU 软件主要是对系统内有输入捕获属性的硬件进行软件抽象并统一管理，硬件层 IP 涉及到 PWM 和 GPIO 两个硬件。本文重点介绍 GPIO 中断的配置和实现。
 
-## GPIO中断使用指南
+## GPIO 中断使用指南
 
-S600 MCU中，GPIO共有5个IO组，分别是GPIO0，GPIO1，GPIO2，GPIO3, GPIO_AON。其中，GPIO组共计提供105个 Pin，而GPIO_AON组则提供42个Pin。该部分可参考 `mcu/Config/McalCdd/gen_S600_sip_B_mcu1/Port/src/Port_PBcfg.c` 。所有的Pin支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
+S600 MCU 中，GPIO 共有5个 IO 组，分别是 GPIO0，GPIO1，GPIO2，GPIO3, GPIO_AON。其中，GPIO 组共计提供105个 Pin，而 GPIO_AON 组则提供42个 Pin。该部分可参考 `mcu/Config/McalCdd/gen_S600_sip_B_mcu1/Port/src/Port_PBcfg.c` 。所有的 Pin 支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
 
 | ISR Function | IRQ | IRQ Define        | Description |
 | :----------- | :-- | :---------------- | :---------- |
@@ -403,16 +403,16 @@ S600 MCU中，GPIO共有5个IO组，分别是GPIO0，GPIO1，GPIO2，GPIO3, GPIO
 | Gpio3_ExtIsr | 92  | MCUSYS_GPIO3_INTR | Gpio Mode   |
 | Gpio4_ExtIsr | 371 | AON_GPIO_INTR     | Gpio Mode   |
 
-### Port配置
+### Port 配置
 
-S600 MCU上的每个Pin支持至少一个功能，因此在使用GPIO中断之前需要通过Port子系统配置Pin的功能和属性，也就是重定义过程。以 `GPIO_MCU[52]` 和 `GPIO_MCU[53]` 为例子，这两个Pin的功能如下：
+S600 MCU 上的每个 Pin 支持至少一个功能，因此在使用 GPIO 中断之前需要通过 Port 子系统配置 Pin 的功能和属性，也就是重定义过程。以 `GPIO_MCU[52]` 和 `GPIO_MCU[53]` 为例子，这两个 Pin 的功能如下：
 
 | FUNC0   | IO TYPE0 | FUNC1      | IO TYPE1 | FUNC2     | IO TYPE2 | FUNC3        | IO TYPE3 |
 | :------ | :------- | :--------- | :------- | :-------- | :------- | :----------- | :------- |
 | PWM4_IO | IO       | SPI11_MISO | I        | USS_PWM17 | IO       | GPIO_MCU[52] | IO       |
 | PWM5_IO | IO       | SPI11_SCLK | O        | USS_PWM18 | IO       | GPIO_MCU[53] | IO       |
 
-需要将两个Pin配置为FUNC3，即GPIO模式，关于Port的介绍和使用可以查阅 [Port使用指南](./12_mcu_port/01_user_manual.md) 和 [Port开发指南](./12_mcu_port/02_development_manual.md) 这两个章节。具体的配置文件为 `mcu/Config/McalCdd/gen_s600_md/Port/src/Port_PBcfg.c`。
+需要将两个 Pin 配置为 FUNC3，即 GPIO 模式，关于 Port 的介绍和使用可以查阅 [Port使用指南](./12_mcu_port/01_user_manual.md) 和 [Port开发指南](./12_mcu_port/02_development_manual.md) 这两个章节。具体的配置文件为 `mcu/Config/McalCdd/gen_s600_md/Port/src/Port_PBcfg.c`。
 
 ```c
 static const Port_Lld_PinConfigType Port_McuPinConfigs[PORT_MCU_MAX_NUM]=
@@ -426,9 +426,9 @@ static const Port_Lld_PinConfigType Port_McuPinConfigs[PORT_MCU_MAX_NUM]=
 }
 ```
 
-### ICU配置
+### ICU 配置
 
-ICU文件列表：
+ICU 文件列表：
 
 > - mcu/McalCdd/Icu/src/Icu_Lld_Gpio.c
 > - mcu/McalCdd/Icu/src/Icu_Lld.c
@@ -438,7 +438,7 @@ ICU文件列表：
 > - mcu/McalCdd/Icu/inc/Icu_Types.h
 > - mcu/McalCdd/Icu/inc/Icu.h
 
-GPIO中断功能由ICU统一管理，其引脚的详细属性（如中断类型、回调函数等）均需通过ICU配置。具体的配置文件为 `mcu/Config/McalCdd/gen_s600_md_mcu1/Icu/src/Icu_PBCfg.c` ，通过修改 `Icu_ConfigType` 、 `Icu_Lld_IpConfigType` 、 `Gpio_Icu_IpConfigType`、 `Icu_Lld_ChannelConfigType` 、 `Icu_ChannelConfigType` 、 `Gpio_Icu_ChannelConfigType` 等结构体实现。 其中， `Gpio_Icu_ChannelConfigType` 是关键结构，负责定义中断回调函数、触发类型及中断屏蔽位等。
+GPIO 中断功能由 ICU 统一管理，其引脚的详细属性（如中断类型、回调函数等）均需通过 ICU 配置。具体的配置文件为 `mcu/Config/McalCdd/gen_s600_md_mcu1/Icu/src/Icu_PBCfg.c` ，通过修改 `Icu_ConfigType` 、 `Icu_Lld_IpConfigType` 、 `Gpio_Icu_IpConfigType`、 `Icu_Lld_ChannelConfigType` 、 `Icu_ChannelConfigType` 、 `Gpio_Icu_ChannelConfigType` 等结构体实现。 其中， `Gpio_Icu_ChannelConfigType` 是关键结构，负责定义中断回调函数、触发类型及中断屏蔽位等。
 
 #### Icu_ConfigType
 
@@ -461,7 +461,7 @@ const Icu_ConfigType Icu_Config = {
 
 | Parameter            | Description                                 |
 | :------------------- | :------------------------------------------ |
-| nNumInstances        | GPIO控制器实例数                            |
+| nNumInstances        | GPIO 控制器实例数                            |
 | NumChannels          | 通道数(或引脚数)                            |
 | Icu_ChannelConfigPtr | 指向 `Icu_ChannelConfigType` 结构体的指针 |
 | Icu_LldConfigPtr     | 指向 `Icu_Lld_IpConfigType` 结构体的指针  |
@@ -488,7 +488,7 @@ static Icu_Lld_IpConfigType Icu_Lld_IpConfig_PB[ICU_CONF_IPS_PB] = {
 | Parameter    | Description                                     |
 | :----------- | :---------------------------------------------- |
 | instanceNo   | 控制器实例(如1 - GPIO1)                         |
-| InstanceMode | GPIO或者PWM模式                                 |
+| InstanceMode | GPIO 或者 PWM 模式                                 |
 | GpioConfig   | 指向 `Icu_Lld_ChannelConfigType` 结构体的指针 |
 
 #### Gpio_Icu_IpConfigType
@@ -572,7 +572,7 @@ static Icu_Lld_ChannelConfigType Icu_Lld_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MOD
 
 | Parameter           | Description                                      |
 | :------------------ | :----------------------------------------------- |
-| ChannelMode         | GPIO或者PWM模式                                  |
+| ChannelMode         | GPIO 或者 PWM 模式                                  |
 | instanceNo          | 控制器实例(如1 - GPIO1)                          |
 | gpioHwChannelConfig | 指向 `Gpio_Icu_ChannelConfigType` 结构体的指针 |
 
@@ -639,15 +639,15 @@ static Gpio_Icu_ChannelConfigType Icu_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MODS_P
 `IntEnable` 与 `IntMask` 均用于中断开关控制，两者区别在于：
 
 - `IntEnable`： 为 `FALSE` 时，从根本上禁止中断产生，中断状态寄存器不会置位。
-- `IntMask`： 为 `TRUE` 时，仅阻止中断信号上报至CPU，但中断事件仍会触发并在状态寄存器中置位。
+- `IntMask`： 为 `TRUE` 时，仅阻止中断信号上报至 CPU，但中断事件仍会触发并在状态寄存器中置位。
 
 配置建议:
 
 - 启用中断时：`IntEnable = TRUE` 且 `IntMask = FALSE`。
 - 禁用中断时：`IntEnable = FALSE` 且 `IntMask = TRUE`。
 
-回调函数是中断触发后的最终入口，完整流程为：中断函数 -> ICU中断处理函数 -> 回调函数。
-`NotificationEnable` 用于控制是否执行回调函数，将其设为 `FALSE` 会跳过回调，但不影响中断的发生与标志位的产生。若要完整启用中断及回调，必须确保 `NotificationEnable = TRUE`、`IntEnable = TRUE`、`IntMask = FALSE` 且 `GpioChannelNotification` 指向具体的回调函数。建议回调函数名应体现其所属Instance与Channel，如 `Icu_Gpio_Channel_0_20_ISR`。具体的回调函数在文件 `mcu/samples/Interrupt/src/gpio_Interrupt_test.c` 定义:
+回调函数是中断触发后的最终入口，完整流程为：中断函数 -> ICU 中断处理函数 -> 回调函数。
+`NotificationEnable` 用于控制是否执行回调函数，将其设为 `FALSE` 会跳过回调，但不影响中断的发生与标志位的产生。若要完整启用中断及回调，必须确保 `NotificationEnable = TRUE`、`IntEnable = TRUE`、`IntMask = FALSE` 且 `GpioChannelNotification` 指向具体的回调函数。建议回调函数名应体现其所属 Instance 与 Channel，如 `Icu_Gpio_Channel_0_20_ISR`。具体的回调函数在文件 `mcu/samples/Interrupt/src/gpio_Interrupt_test.c` 定义:
 
 ```c
 /** GPIO_MCU[52] interrupt callback function */
@@ -665,11 +665,11 @@ void Icu_Gpio_Channel_1_21_ISR(void)
 }
 ```
 
-> 值得注意的一点是，用户仅需在回调函数中实现业务逻辑，无需手动清除中断标志位，此操作由ICU驱动自动完成。
+> 值得注意的一点是，用户仅需在回调函数中实现业务逻辑，无需手动清除中断标志位，此操作由 ICU 驱动自动完成。
 
 ### 中断实现
 
-配置中断前，需明确目标引脚（Pin）所绑定的中断号（IRQ）及其中断入口函数。基于本文前述对MCU GPIO中断资源的介绍，可知引脚 `GPIO_MCU[52]` 与 `GPIO_MCU[53]` 共享中断入口函数 `Gpio1_ExtIsr` ，其对应的中断号为90。中断的注册、优先级配置及使能过程，均在源文件 `mcu/McalCdd/Icu/src/Icu_Lld_Gpio.c` 中定义。
+配置中断前，需明确目标引脚（Pin）所绑定的中断号（IRQ）及其中断入口函数。基于本文前述对 MCU GPIO 中断资源的介绍，可知引脚 `GPIO_MCU[52]` 与 `GPIO_MCU[53]` 共享中断入口函数 `Gpio1_ExtIsr` ，其对应的中断号为90。中断的注册、优先级配置及使能过程，均在源文件 `mcu/McalCdd/Icu/src/Icu_Lld_Gpio.c` 中定义。
 
 ```c
 void Icu_Gpio_Interrupt_Init(uint8 Instance, uint8 priority)
@@ -761,20 +761,20 @@ Icu_Gpio_Interrupt_Init(1, 30);
 Icu_Gpio_Interrupt_DeInit(1);
 ```
 
-## GPIO中断sample
+## GPIO 中断 sample
 
-在MCU1串口端初始化GPIO中断
+在 MCU1串口端初始化 GPIO 中断
 
 ```bash
 D-Robotics:/$ gpio_interrupt on
 [0975.377836 0]INFO: Start gpio_interrupt test...
 ```
 
-用杜邦线一头接下图的两个GPIO引脚，另一头接地
+用杜邦线一头接下图的两个 GPIO 引脚，另一头接地
 
-![GPIO接线图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/gpio_interrupt.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/gpio_interrupt.png" alt="GPIO接线图" style={{ width: '100%' }} />
 
-此时串口打印如下则表示GPIO中断触发成功
+此时串口打印如下则表示 GPIO 中断触发成功
 
 ```bash
 # GPIO_MCU[52] 回调函数 1-instanceNo，20-PinId
@@ -784,7 +784,7 @@ D-Robotics:/$ gpio_interrupt on
 [0593.171002 0]INFO: Enter Icu_Gpio_Channel_1_21_ISR!!!
 ```
 
-通过下面方式关闭GPIO中断
+通过下面方式关闭 GPIO 中断
 
 ```bash
 D-Robotics:/$ gpio_interrupt off

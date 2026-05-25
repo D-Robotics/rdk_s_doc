@@ -9,8 +9,8 @@
 | 目录      | 描述 |
 | ----------- | ----------- |
 | [single_pipe_vin_isp_ynr_pym_vpu](#single_pipe_vin_isp_ynr_pym_vpu)  | 单路 sensor 简单 pipeline 串联并编码示例  |
-| [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联GDC变换示例  |
-| [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联GDC变换示例并编码示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联 GDC 变换示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联 GDC 变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
 | [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
 
@@ -269,7 +269,7 @@ pym_output_nv12_chn5_60x32_stride_64_count_0.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片。
+`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc`
@@ -375,7 +375,7 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21680305428000.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc_vpu` 示例串联 `VIN`，`ISP`，`YNR`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、ISP、YNR、PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片，输出数据会再送给编码器编码后保存为 H264 视频码流。
+`single_pipe_vin_isp_ynr_pym_gdc_vpu` 示例串联 `VIN`，`ISP`，`YNR`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、ISP、YNR、PYM 模块后达到 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片，输出数据会再送给编码器编码后保存为 H264 视频码流。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc_vpu`
@@ -533,7 +533,7 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
   - sensor 是必须的参数， channel、 type、 output 是可选参数，用户不配置时，程序会使用默认值。
   - `sensor`：传感器索引，必须参数，可以有多个参数，参考传感器列表。
   - `link`： Serdes 类型的 Sensor 接入的 Link Port (MIPI 类型的 Sensor 忽略此参数 ), 比如接入的是 Port A，指定为 0: `-l 0`
-  - `channel`： VSE 通道索引，可选参数，默认为 0 ，可以设置为 [0-5]。
+  - `channel`： VSE 通道索引，可选参数，默认为 0 ，可以设置为 [0~5]。
   - `type`：编码类型，可选参数，默认为 h264 ，可以设置为 [h264, h265]。
   - `output`：保存编码流数据到文件，可选参数，默认为 `pipeline[xx]_[width]x[height]_[xxx]fps.[type]`。
 
@@ -711,13 +711,13 @@ Usage: ./uvc_capture_sample
 
 **示例：**
 
-- 配置一条 uvc camera 视频通路，使用video0，指定格式 YUYV，保存 5 帧采集到的图像。
+- 配置一条 uvc camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像。
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d
 ```
 
-- 配置一条 uvc camera 视频通路，使用video0，指定格式 YUYV，保存 5 帧采集到的图像，并打印当前的 exposure 和 white balance 信息。
+- 配置一条 uvc camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像，并打印当前的 exposure 和 white balance 信息。
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d -E

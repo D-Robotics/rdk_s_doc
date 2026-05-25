@@ -2,25 +2,25 @@
 sidebar_position: 4
 ---
 
-# GPIO使用
+# GPIO 使用
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
 <DocScope products="RDK S100">
-S100 Acore芯片内中共有3个sys有gpio设备，分别是peri, cam和video，每个设备最多有32个gpio引脚，并且每个gpio引脚都支持中断。
+S100 Acore 芯片内中共有3个 sys 有 gpio 设备，分别是 peri, cam 和 video，每个设备最多有32个 gpio 引脚，并且每个 gpio 引脚都支持中断。
 
-![gpio_devs](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/gpio_devs.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/gpio_devs.png" alt="gpio_devs" style={{ width: '100%' }} />
 
 </DocScope>
 
 <DocScope products="RDK S600">
-## S600 GPIO概述
+## S600 GPIO 概述
 
-S600芯片内中共有3个sys有gpio设备，分别是hsi, cam和peri，总共110个gpio引脚，并且每个gpio引脚都支持中断。
+S600芯片内中共有3个 sys 有 gpio 设备，分别是 hsi, cam 和 peri，总共110个 gpio 引脚，并且每个 gpio 引脚都支持中断。
 
-| GPIO控制器 | 引脚数量 | 基地址 | 设备节点 |
+| GPIO 控制器 | 引脚数量 | 基地址 | 设备节点 |
 |-----------|---------|--------|----------|
 | hsi_gpio0 | 32 | 0x33810000 | hsi_port0 |
 | hsi_gpio1 | 32 | 0x33814000 | hsi_port1 |
@@ -40,41 +40,41 @@ kernel/drivers/gpio/gpio-dwapb.c # gpio驱动源文件
 
 GPIO_DWAPB
 
-![image-GPIO_MENUCONFIG](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/GPIO_MENUCONFIG.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/GPIO_MENUCONFIG.png" alt="image-GPIO_MENUCONFIG" style={{ width: '100%' }} />
 
-### 内核DTS配置
+### 内核 DTS 配置
 
 <DocScope products="RDK S100">
 
-S100 GPIO控制器的设备树定义位于SDK包的kernel文件夹下的arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi文件内。
+S100 GPIO 控制器的设备树定义位于 SDK 包的 kernel 文件夹下的 arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi 文件内。
 
 :::info 备注
-s100.dtsi中的节点主要声明SoC共有特性，和具体电路板无关，一般情况下不用修改。
+s100.dtsi 中的节点主要声明 SoC 共有特性，和具体电路板无关，一般情况下不用修改。
 :::
 
 </DocScope>
 <DocScope products="RDK S600">
 
-S600 GPIO控制器的设备树定义位于SDK包的hobot-drivers/kernel-dts文件夹下的drobot-s600-pinctrl.dtsi文件内。
+S600 GPIO 控制器的设备树定义位于 SDK 包的 hobot-drivers/kernel-dts 文件夹下的 drobot-s600-pinctrl.dtsi 文件内。
 
 :::info 备注
-drobot-s600-pinctrl.dtsi中的节点主要声明SoC共有特性，和具体电路板无关，一般情况下不用修改。
+drobot-s600-pinctrl.dtsi 中的节点主要声明 SoC 共有特性，和具体电路板无关，一般情况下不用修改。
 :::
 </DocScope>
 
-## GPIO使用
+## GPIO 使用
 
 ### Kernel Space
 
-#### DTS配置
+#### DTS 配置
 
 <DocScope products="RDK S100">
 
-s100所有引脚的GPIO配置位于SDK包的kernel文件夹下路径为`arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi`的文件内。
+s100所有引脚的 GPIO 配置位于 SDK 包的 kernel 文件夹下路径为`arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi`的文件内。
 
-用户需要配置特定引脚为GPIO功能时，可以直接引用预定义GPIO配置：
+用户需要配置特定引脚为 GPIO 功能时，可以直接引用预定义 GPIO 配置：
 
-GPIO设备树节点的属性命名方式一般为`<names>-gpios`或`<names>-gpio`，举例如下：
+GPIO 设备树节点的属性命名方式一般为`<names>-gpios`或`<names>-gpio`，举例如下：
 
 ```c
 /**
@@ -97,11 +97,11 @@ gpio-test {
 </DocScope>
 <DocScope products="RDK S600">
 
-S600所有引脚的GPIO配置位于SDK包的hobot-drivers/kernel-dts文件夹下路径为`drobot-s600-pinctrl.dtsi`的文件内。
+S600所有引脚的 GPIO 配置位于 SDK 包的 hobot-drivers/kernel-dts 文件夹下路径为`drobot-s600-pinctrl.dtsi`的文件内。
 
-用户需要配置特定引脚为GPIO功能时，可以直接引用预定义GPIO配置：
+用户需要配置特定引脚为 GPIO 功能时，可以直接引用预定义 GPIO 配置：
 
-GPIO设备树节点的属性命名方式一般为`<names>-gpios`或`<names>-gpio`，举例如下：
+GPIO 设备树节点的属性命名方式一般为`<names>-gpios`或`<names>-gpio`，举例如下：
 
 ```c
 /**
@@ -145,9 +145,9 @@ int gpio_to_irq(unsigned int gpio);
 
 #### 控制接口
 
-在用户层可以使用/sys/class/gpio节点来进行相关gpio的操作。
+在用户层可以使用/sys/class/gpio 节点来进行相关 gpio 的操作。
 
-在sys节点下存在如下节点：
+在 sys 节点下存在如下节点：
 
 ```shell
 #申请gpio
@@ -176,21 +176,21 @@ cat /sys/kernel/debug/gpio
 cat /sys/kernel/debug/pinctrl/<pinctrl_dev>/gpio-ranges
 ```
 
-### sysfs接口介绍
+### sysfs 接口介绍
 
 #### export&unexport
 
-/sys/class/gpio/export和/sys/class/gpio/unexport，这两个节点只能写不能读。
+/sys/class/gpio/export 和/sys/class/gpio/unexport，这两个节点只能写不能读。
 
-用户程序通过写入gpio的编号来向内核申请将某个gpio的控制权导出到用户空间，前提是没有内核代码申请这个gpio端口，如用户申请编号为480的GPIO的命令：
+用户程序通过写入 gpio 的编号来向内核申请将某个 gpio 的控制权导出到用户空间，前提是没有内核代码申请这个 gpio 端口，如用户申请编号为480的 GPIO 的命令：
 
 ``` {.shell}
 echo 480 > export
 ```
 
-上述操作会为480号gpio创建一个节点gpio480，此时/sys/class/gpio目录下边生成一个gpio480的目录。
+上述操作会为480号 gpio 创建一个节点 gpio480，此时/sys/class/gpio 目录下边生成一个 gpio480的目录。
 
-/sys/class/gpio/unexport和导出的效果相反，比如移除gpio480这个节点操作命令：
+/sys/class/gpio/unexport 和导出的效果相反，比如移除 gpio480这个节点操作命令：
 
 ``` {.shell}
 echo 480 > unexport #该操作将会移除gpio480这个节点，释放序号为480的gpio。
@@ -198,19 +198,19 @@ echo 480 > unexport #该操作将会移除gpio480这个节点，释放序号为4
 
 #### direction
 
-其中direction表示gpio端口的方向，读取结果是in或out。也可以对该文件进行写操作，写入out时该gpio设为输出，写入in时该gpio设为输入。
+其中 direction 表示 gpio 端口的方向，读取结果是 in 或 out。也可以对该文件进行写操作，写入 out 时该 gpio 设为输出，写入 in 时该 gpio 设为输入。
 
 #### value
 
-当设置dir为in时，cat value表示输入的值(0-低，1-高)。
+当设置 dir 为 in 时，cat value 表示输入的值(0-低，1-高)。
 
-当设置dir为out时，可以向value中echo 1/0，分别表示输入高低电平。
+当设置 dir 为 out 时，可以向 value 中 echo 1/0，分别表示输入高低电平。
 
 #### edge
 
-用户层设置中断时，direction需要设置为in，然后向edge中设置相应的值。
+用户层设置中断时，direction 需要设置为 in，然后向 edge 中设置相应的值。
 
-| edge的值 | 含义 |
+| edge 的值 | 含义 |
 | --- | --- |
 | none | 表示引脚为输入，不是中断引脚 |
 | rising | 表示引脚为中断输入，上升沿触发 |
@@ -225,7 +225,7 @@ echo 480 > unexport #该操作将会移除gpio480这个节点，释放序号为4
 cat /sys/kernel/debug/gpio
 ```
 
-查询上述节点，可以获取到当前系统中正在使用的gpio和所处的状态（in，out，IRQ）。
+查询上述节点，可以获取到当前系统中正在使用的 gpio 和所处的状态（in，out，IRQ）。
 
 ``` {.shell}
 root@ubuntu:~# cat /sys/kernel/debug/gpio
@@ -251,23 +251,23 @@ gpio-503 (                    |io-ext-reset        ) out lo
 root@ubuntu:~#
 ```
 
-### 确定gpio-index
+### 确定 gpio-index
 
 kernel_index = base + offset，base 通过 "/sys/class/gpio"
-或者"/sys/kernel/debug/gpio" 获取，offset通过dts获取。
+或者"/sys/kernel/debug/gpio" 获取，offset 通过 dts 获取。
 
-以pin sensor8_err为例：通过查看
-drobot-s100-pinctrl.dtsi，可以知道sensor8_err对应的gpio chip是
-video_port0: gpio\@360b0000，对应的offset是 13。
+以 pin sensor8_err 为例：通过查看
+drobot-s100-pinctrl.dtsi，可以知道 sensor8_err 对应的 gpio chip 是
+video_port0: gpio\@360b0000，对应的 offset 是 13。
 查看/sys/kernel/debug/gpio，可知"video_port0:
-gpio\@360b0000"对应的base是439 则sensor8_err 对应的gpio kernel
-index是：439+13 = 452
+gpio\@360b0000"对应的 base 是439 则 sensor8_err 对应的 gpio kernel
+index 是：439+13 = 452
 
-### 查看drobot-s100-pinctrl.dtsi，获取offset和base
+### 查看 drobot-s100-pinctrl.dtsi，获取 offset 和 base
 
-下面设备树可知sensor8_err对应video_sensor8_err，对应的gpio
-chip是"video_port0: gpio\@360b0000"。
-video_gnss_int的offset为0，递增计数，则video_sensor8_err的offset为13。
+下面设备树可知 sensor8_err 对应 video_sensor8_err，对应的 gpio
+chip 是"video_port0: gpio\@360b0000"。
+video_gnss_int 的 offset 为0，递增计数，则 video_sensor8_err 的 offset 为13。
 
 ``` {.shell}
 pinctrl_video: pinctrl@36090000 {
@@ -302,8 +302,8 @@ pinctrl_video: pinctrl@36090000 {
 }
 ```
 
-如这行：gpiochip3: GPIOs 439-455, parent: platform/360b0000.gpio,
-360b0000.gpio: "GPIOs 439-455"代表base是439
+如这行：gpiochip3: GPIOs 439~455, parent: platform/360b0000.gpio,
+360b0000.gpio: "GPIOs 439~455"代表 base 是439
 
 ``` {.shell}
 cat /sys/kernel/debug/gpio
@@ -340,22 +340,22 @@ gpio-503 (                    |io-ext-reset        ) out lo
 ```
 </DocScope>
 <DocScope products="RDK S600">
-## S600 GPIO调试
+## S600 GPIO 调试
 
-### 确定gpio-index
+### 确定 gpio-index
 
-以pin cam_sensor0_err为例：通过查看
-drobot-s600-pinctrl.dtsi，可以知道cam_sensor0_err对应的gpio chip是
-cam_port0: gpio\@37130000，对应的offset是 8（cam_lpwm2_dout0在cam_gpio列表中的位置）。
+以 pin cam_sensor0_err 为例：通过查看
+drobot-s600-pinctrl.dtsi，可以知道 cam_sensor0_err 对应的 gpio chip 是
+cam_port0: gpio\@37130000，对应的 offset 是 8（cam_lpwm2_dout0在 cam_gpio 列表中的位置）。
 查看/sys/kernel/debug/gpio，可知"cam_gpio0:
-gpio\@37130000"对应的base，则cam_sensor0_err 对应的gpio kernel
-index是：base + 8
+gpio\@37130000"对应的 base，则 cam_sensor0_err 对应的 gpio kernel
+index 是：base + 8
 
-### 查看drobot-s600-pinctrl.dtsi，获取offset和base
+### 查看 drobot-s600-pinctrl.dtsi，获取 offset 和 base
 
-下面设备树可知cam_sensor0_err使用cam_lpwm2_dout0引脚，对应的gpio
-chip是"cam_port0: gpio\@37130000"。
-cam_gpio列表中cam_lpwm2_dout0的位置是第9个（从0开始计数为8）。
+下面设备树可知 cam_sensor0_err 使用 cam_lpwm2_dout0引脚，对应的 gpio
+chip 是"cam_port0: gpio\@37130000"。
+cam_gpio 列表中 cam_lpwm2_dout0的位置是第9个（从0开始计数为8）。
 
 ``` {.shell}
 pinctrl_cam: pinctrl@37121000 {

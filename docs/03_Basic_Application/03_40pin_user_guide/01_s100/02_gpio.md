@@ -2,9 +2,9 @@
 sidebar_position: 2
 ---
 
-# 3.3.1.2 GPIO应用
+# 3.3.1.2 GPIO 应用
 
-开发板预置了 GPIO Python 库 `Hobot.GPIO`，用户可以通过如下命令导入GPIO库。
+开发板预置了 GPIO Python 库 `Hobot.GPIO`，用户可以通过如下命令导入 GPIO 库。
 
 ```shell
 root@ubuntu:~# sudo python3
@@ -27,8 +27,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 开发板的引脚编码有 4 种模式：
 
 - BOARD：物理引脚序号，与开发板的丝印序号一一对应。
-- BCM：根据博通SoC制定的GPIO命名规则。
-- CVM： 使用字符串代替数字，对应于CVM / CVB连接器的信号名称。
+- BCM：根据博通 SoC 制定的 GPIO 命名规则。
+- CVM： 使用字符串代替数字，对应于 CVM / CVB 连接器的信号名称。
 - SOC： 对应的编号是芯片内部的 GPIO 管脚序号。
 
 本文推荐用户使用`BOARD`编码模式，设置编码的方式如下：
@@ -55,7 +55,7 @@ GPIO.getmode()
 
 以下几种情况下运行代码，会有警告日志输出，但并不会影响正常功能：
 
- - 用户尝试使用的GPIO，已在其他应用程序中使用；
+ - 用户尝试使用的 GPIO，已在其他应用程序中使用；
  - 在设置模式和通道之前，尝试调用 `GPIO.cleanup` 清理管脚；
 
 如要屏蔽警告信息，可通过如下命令实现：
@@ -68,20 +68,20 @@ GPIO.setwarnings(False)
 
 :::info
 
-在`RDK S100`平台上，支持`40-pin` GPIO拓展， `40-pin`在使用过程中有如下的限制:
+在`RDK S100`平台上，支持`40-pin` GPIO 拓展， `40-pin`在使用过程中有如下的限制:
 
 - `40-pin`上有一组引脚涉及到二选一（UART2, I2C5）。
-- `40-pin`上PCM相关引脚如果要使用需要拨动拨码开关。
+- `40-pin`上 PCM 相关引脚如果要使用需要拨动拨码开关。
 
 上述描述细节可以查看下图：
 
-![image-rdk_100_funcreuse_40pin](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png" alt="image-rdk_100_funcreuse_40pin" style={{ width: '100%' }} />
 
 管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
 
 :::
 
-GPIO管脚在使用之前，需要进行相应的配置，具体如下：
+GPIO 管脚在使用之前，需要进行相应的配置，具体如下：
 
 设置为输入的方式如下：
 ```python
@@ -158,17 +158,17 @@ GPIO.gpio_function(channel)
 
 ## 边沿检测与中断
 
-边沿是电信号`从低到高`（上升沿）或`从高到低`（下降沿）的变化，这种改变可以看作是一种事件的发生，这种事件可以用来触发CPU中断信号。
+边沿是电信号`从低到高`（上升沿）或`从高到低`（下降沿）的变化，这种改变可以看作是一种事件的发生，这种事件可以用来触发 CPU 中断信号。
 
 :::info
 
-在`RDK S100`平台上，`40-pin`上功能名为PERI_GPIO的管脚不支持中断使用，它们在`BOARD`编码模式下的编号为：**11**、**13**、**15**、**16**、**18**、**22**、**29**、**31**、**36**、**37**；
+在`RDK S100`平台上，`40-pin`上功能名为 PERI_GPIO 的管脚不支持中断使用，它们在`BOARD`编码模式下的编号为：**11**、**13**、**15**、**16**、**18**、**22**、**29**、**31**、**36**、**37**；
 
 管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
 
 :::
 
-GPIO库提供了三种方法来检测输入事件：
+GPIO 库提供了三种方法来检测输入事件：
 
 ### wait_for_edge() 函数
 
@@ -185,7 +185,7 @@ GPIO.wait_for_edge(channel, GPIO.RISING)
 GPIO.wait_for_edge(channel, GPIO.RISING, timeout=500)
 ```
 
-在超时时间内外部信号发生变化，函数返回检测的通道号；如果发生超时，函数返回None。
+在超时时间内外部信号发生变化，函数返回检测的通道号；如果发生超时，函数返回 None。
 
 ### event_detected() 函数
 
@@ -252,11 +252,11 @@ GPIO.remove_event_detect(channel)
 | ---------------------- | --------------------------------------------- |
 | simple_out.py          | 单个管脚`输出`测试                            |
 | simple_input.py        | 单个管脚`输入`测试                            |
-| button_led.py          | 一个管脚作为按键输入，一个管脚作为输出控制LED |
+| button_led.py          | 一个管脚作为按键输入，一个管脚作为输出控制 LED |
 | button_event.py        | 捕获管脚的上升沿、下降沿事件                  |
 | button_interrupt.py    | 中断方式处理管脚的上升沿、下降沿事件          |
 
-- GPIO 设置为`输出模式`，1秒钟切换输出电平，可以用于控制LED灯的循环亮灭， 测试代码 `simple_out.py`：
+- GPIO 设置为`输出模式`，1秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭， 测试代码 `simple_out.py`：
 
 ```python
 #!/usr/bin/env python3
@@ -428,9 +428,9 @@ if __name__ == '__main__':
 
 ```
 
-- GPIO 设置为输入模式，启动gpio中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`, 实现了：
-  - 控制15号管脚以周期为4s，占空比为50%的模式拉高拉低，也就是拉高2s后拉低2s，在程序运行期间持续运转；
-  - 检测 24 号管脚的下降沿触发中断，中断处理函数会控制16号管脚快速切换高低电平 5 次。用户只要拉低了24号管脚，就可以看到16号管脚以1s的周期，50%的占空比，也就是0.5s拉高，0.5s拉低，运行总共5个周期。
+- GPIO 设置为输入模式，启动 gpio 中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`, 实现了：
+  - 控制15号管脚以周期为4s，占空比为50%的模式拉高拉低，也就是拉高2s 后拉低2s，在程序运行期间持续运转；
+  - 检测 24 号管脚的下降沿触发中断，中断处理函数会控制16号管脚快速切换高低电平 5 次。用户只要拉低了24号管脚，就可以看到16号管脚以1s 的周期，50%的占空比，也就是0.5s 拉高，0.5s 拉低，运行总共5个周期。
 
 ```python
 #!/usr/bin/env python3
@@ -504,9 +504,9 @@ if __name__ == '__main__':
     main()
 
 ```
-## hb_gpioinfo工具介绍
+## hb_gpioinfo 工具介绍
 
-hb_gpioinfo 是适配RDK S100的一个gpio帮助工具，可以查看当前开发板的的PinName和PinNum的对应关系，命令示例输出如下：
+hb_gpioinfo 是适配 RDK S100的一个 gpio 帮助工具，可以查看当前开发板的的 PinName 和 PinNum 的对应关系，命令示例输出如下：
 ```shell
 sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|

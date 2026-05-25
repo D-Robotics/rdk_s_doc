@@ -108,7 +108,7 @@ This is uart send test 3 times
 
 ### 注意事项
 
-为了 RDK_S100 接口良好的扩展性，目前 i2c5 和 uart2 是可以通过拨码开关进行切换的，运行该测试时需要修改设备树管脚复用关系重新编译dtb安装，并把拨码开关拨到正确的位置。
+为了 RDK_S100 接口良好的扩展性，目前 i2c5 和 uart2 是可以通过拨码开关进行切换的，运行该测试时需要修改设备树管脚复用关系重新编译 dtb 安装，并把拨码开关拨到正确的位置。
 
 **1.** 测试 uart2 需要修改设备树如下：
 
@@ -140,16 +140,16 @@ index 504b21b..8d72794 100644
 
 **2.** 根据下面的 RDK_S100 实物图并找到 uart2 对应并将拨码开关往右拨到 连接 uart2 的位置：
 
-![Actual_device_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram.png" alt="Actual_device_diagram" style={{ width: '100%' }} />
 
 **3.** 查看 RDK_S100 原理图并找到 uart2 对应的引脚与连接器位置，如图：
 
-![Schematic_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png" alt="Schematic_diagram" style={{ width: '100%' }} />
 
 
 并将双母头杜邦线将 uart2_tx 与 uart2_rx 相连。
 
-![Connection_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png" alt="Connection_diagram" style={{ width: '100%' }} />
 
 **4.** 确认在 /app/chip_base_test/03_uart_test 路径下存在 `uartstress.sh`、`uart_test.c`、`uart_test` 三个文件。
 

@@ -10,7 +10,7 @@ sidebar_position: 3
 
 当需要对实时内核的性能进行测试时，一个常用的性能测试工具是`rt-tests`，它包括了多个测试程序，可以用来测试实时内核的性能。以下是一个使用`rt-tests`进行性能测试的示例：
 
-### 安装rt-tests工具
+### 安装 rt-tests 工具
 
 如果尚未安装`rt-tests`工具，可以使用以下命令进行安装：
 
@@ -19,7 +19,7 @@ sudo apt update
 sudo apt install rt-tests
 ```
 
-### 运行cyclictest测试
+### 运行 cyclictest 测试
 
 `cyclictest`测试是`rt-tests`中的一个常用测试，它用于评估系统的定时行为和响应时间。执行以下命令运行`cyclictest`测试：
 
@@ -30,8 +30,8 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 这个命令将运行一个实时性能测试，其中：
 
 - `-l50000000`: 设置测试运行的循环次数。
-- `-m`: 指 `cyclictest` 在测试期间将当前和接下来的内存通过mlock锁定，防止发生swap影响测试。
-- `-S`: 指标准smp架构测试，所有的线程将使用相同的-a -t -n和优先级。
+- `-m`: 指 `cyclictest` 在测试期间将当前和接下来的内存通过 mlock 锁定，防止发生 swap 影响测试。
+- `-S`: 指标准 smp 架构测试，所有的线程将使用相同的-a -t -n 和优先级。
 - `-p90`: 指定实时线程的优先级。`-p90` 表示测试将在优先级 90 的实时调度类别中运行。
 - `-i200`: 设置测试线程睡眠的时间。
 - `-h400`: 测试完成后输出一个直方图，并输出延时小于指定值（400）微秒的次数统计。
@@ -42,9 +42,9 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 
 分析`cyclictest`测试结果以评估实时内核的性能表现。关注最小延迟和最大延迟，以确保它们在可接受范围内。较小的最大延迟和更加一致的延迟表明实时内核的性能较好。下图是使用实时内核，并且运行了 `/app/pydev_demo/03_mipi_camera_sample` 示例的情况下测试的结果。
 
-![image-20230914145619064](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png" alt="image-20230914145619064" style={{ width: '100%' }} />
 
-![image-20230914145234528](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png" alt="image-20230914145234528" style={{ width: '100%' }} />
 
 `cyclictest` 输出中的每个字段含义如下：
 

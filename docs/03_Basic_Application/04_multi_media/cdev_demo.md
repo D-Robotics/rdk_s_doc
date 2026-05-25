@@ -12,11 +12,11 @@ sidebar_position: 2
 
 示例流程框图：
 
- ![image-vio_to_display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png)
+ <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png" alt="image-vio_to_display" style={{ width: '100%' }} />
 
 - **环境准备：**
 
-  - 开发板断电状态下，将`MIPI`摄像头接入开发板，目前该sample仅支持MIPI sensor: IMX219, SC230AI
+  - 开发板断电状态下，将`MIPI`摄像头接入开发板，目前该 sample 仅支持 MIPI sensor: IMX219, SC230AI
   - 通过 HDMI 线缆连接开发板和显示器
   - 开发板上电，并通过命令行登录
 
@@ -60,15 +60,15 @@ sidebar_position: 2
 
 ## 摄像头图像本地保存
 
-本示例vio_capture示例实现了MIPI摄像头图像采集，并将RAW和YUV两种格式的图像本地保存的功能。示例流程框图如下：
+本示例 vio_capture 示例实现了 MIPI 摄像头图像采集，并将 RAW 和 YUV 两种格式的图像本地保存的功能。示例流程框图如下：
 
 示例流程框图：
 
- ![image-vio_capture.png](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png)
+ <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png" alt="image-vio_capture.png" style={{ width: '100%' }} />
 
 - **环境准备：**
 
-  - 开发板断电状态下，将`MIPI`摄像头接入开发板, 目前该sample仅支持MIPI sensor: IMX219, SC230AI
+  - 开发板断电状态下，将`MIPI`摄像头接入开发板, 目前该 sample 仅支持 MIPI sensor: IMX219, SC230AI
   - 开发板上电，并通过命令行登录
 
 - **运行方式：**
@@ -82,13 +82,13 @@ sidebar_position: 2
 
   参数说明：
 
-  - -b: RAW图bit数，例如IMX219支持格式为RAW10，则bit数为10。sensor支持格式可参考[配件清单](http://sysgbj2.hobot.cc/rdk_doc/rdk_s/Advanced_development/hardware_development/accessory)
+  - -b: RAW 图 bit 数，例如 IMX219支持格式为 RAW10，则 bit 数为10。sensor 支持格式可参考[配件清单](http://sysgbj2.hobot.cc/rdk_doc/rdk_s/Advanced_development/hardware_development/accessory)
   - -c: 保存图像的数量，获取到每张图像的时间间隔一般为1/fps
   - -w: 保存图像的宽度
   - -h: 保存图像的高度
 
 - **预期效果：**
-  程序正确运行后，当前目录保存指定数量的图片文件，`RAW`格式以`raw_*.raw`方式命名，`YUV`格式以`yuv_*.yuv`方式命名。运行log如下：
+  程序正确运行后，当前目录保存指定数量的图片文件，`RAW`格式以`raw_*.raw`方式命名，`YUV`格式以`yuv_*.yuv`方式命名。运行 log 如下：
 
   ```bash
   sunrise@ubuntu:/app/cdev_demo/vio_capture$ ./capture -b 10 -c 10 -w 1920 -h 1080
@@ -118,11 +118,11 @@ sidebar_position: 2
 
 示例流程框图：
 
-![image-vio_to_encoder](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png" alt="image-vio_to_encoder" style={{ width: '100%' }} />
 
 - **环境准备：**
 
-  - 开发板断电状态下，将`MIPI`摄像头接入开发板, 目前该sample仅支持MIPI sensor: IMX219, SC230AI
+  - 开发板断电状态下，将`MIPI`摄像头接入开发板, 目前该 sample 仅支持 MIPI sensor: IMX219, SC230AI
   - 开发板上电，并通过命令行登录
 
 - **运行方式：** 按照以下命令执行程序
@@ -174,7 +174,7 @@ sidebar_position: 2
 
 示例流程框图：
 
-![image-decoder_to_display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display.png" alt="image-decoder_to_display" style={{ width: '100%' }} />
 
 - **环境准备：**
 
@@ -223,7 +223,7 @@ sidebar_position: 2
 
 示例流程框图：
 
-![rtsp2display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="rtsp2display" style={{ width: '100%' }} />
 
 - **环境准备：**
 
@@ -285,7 +285,7 @@ sidebar_position: 2
 
 - **注意事项：**
   - 使用 UDP 协议传输码流时，可能出现因网络丢包导致的花屏现象，此时可切换成 TCP 协议传输解决；
-  - 若使用上述命令有Connection refused报错，则上述命令中`127.0.0.1`部分可能需要根据`live555MediaServer`执行时打印出来的服务器实际运行端口，添加端口信息，例如：
+  - 若使用上述命令有 Connection refused 报错，则上述命令中`127.0.0.1`部分可能需要根据`live555MediaServer`执行时打印出来的服务器实际运行端口，添加端口信息，例如：
     ```shell
     # final output of live555MediaServer
     ...

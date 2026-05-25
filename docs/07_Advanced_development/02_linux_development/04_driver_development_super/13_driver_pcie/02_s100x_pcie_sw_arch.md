@@ -2,17 +2,17 @@
 sidebar_position: 2
 sidebar_products: RDK S100, RDK S600
 ---
-# PCIe软件架构与模块划分
+# PCIe 软件架构与模块划分
 
 ## 软件框架
 
-PCIe软件框架分为RC和EP两个部分：
+PCIe 软件框架分为 RC 和 EP 两个部分：
 
-![S100_600_PCIE_sw_arch](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch.png" alt="S100_600_PCIE_sw_arch" style={{ width: '100%' }} />
 
 ## 驱动模块说明
 
-驱动相关的源码在hobot-drivers/pcie目录下，各个模块的细节信息如下：
+驱动相关的源码在 hobot-drivers/pcie 目录下，各个模块的细节信息如下：
 
 | side | component                          | output                    | Source file                     |
 |------|------------------------------------|---------------------------|---------------------------------|
@@ -26,9 +26,9 @@ PCIe软件框架分为RC和EP两个部分：
 | EP   | S13E01C06 PCIe function wrapper    | hobot-pcie-ep-fun.ko      | hobot-ep-fun/                   |
 | EP   | S13E01C07 PCIe hybrid function driver |                           |                                 |
 
-## PCIe驱动加载/卸载
+## PCIe 驱动加载/卸载
 
-### RC端加载
+### RC 端加载
 
 ```shell
 modprobe hobot-pcie
@@ -37,14 +37,14 @@ modprobe hobot-pcie-ep-dev
 modprobe hobot-pcie-dev-manager
 ```
 
-### EP端加载
+### EP 端加载
 
 ```shell
 modprobe hobot-pcie
 modprobe hobot-pcie-ep-fun
 ```
 
-### RC端卸载
+### RC 端卸载
 
 ```shell
 rmmod hobot_pcie_dev_manager
@@ -54,7 +54,7 @@ rmmod hobot_pcie_common
 rmmod hobot_pcie
 ```
 
-### EP端卸载
+### EP 端卸载
 
 ```shell
 rmmod hobot_pcie_ep_fun
@@ -65,27 +65,27 @@ rmmod hobot_pcie
 
 需要注意：
 
-1. 卸载驱动前一定要保证PCIe的应用程序都已关闭，按照先卸载RC驱动，再卸载EP驱动的顺序进行
+1. 卸载驱动前一定要保证 PCIe 的应用程序都已关闭，按照先卸载 RC 驱动，再卸载 EP 驱动的顺序进行
 2. 系统休眠前需要遵循以下流程：
-   - 停掉两端的PCIe应用程序
-   - 卸载RC驱动
-   - 卸载EP驱动
+   - 停掉两端的 PCIe 应用程序
+   - 卸载 RC 驱动
+   - 卸载 EP 驱动
 3. 系统唤醒后需要遵循以下流程：
-   - 加载EP驱动
-   - 加载RC驱动
-   - 启动PCIe应用程序
-4. 链路信号不稳定或对端重启导致PCIe link down后，需要重启RC和EP以保证PCIe功能的可用性以及系统的稳定性
-5. 在不使用pcie功能的时候，不要加载pcie相关驱动
+   - 加载 EP 驱动
+   - 加载 RC 驱动
+   - 启动 PCIe 应用程序
+4. 链路信号不稳定或对端重启导致 PCIe link down 后，需要重启 RC 和 EP 以保证 PCIe 功能的可用性以及系统的稳定性
+5. 在不使用 pcie 功能的时候，不要加载 pcie 相关驱动
 6. 系统重启前需要遵循以下流程：
-   - 停掉两端的PCIe应用程序
-   - 卸载RC驱动
-   - 卸载EP驱动
-   - RC系统重启
-   - EP系统重启
+   - 停掉两端的 PCIe 应用程序
+   - 卸载 RC 驱动
+   - 卸载 EP 驱动
+   - RC 系统重启
+   - EP 系统重启
 
 ## 用户态模块说明
 
-用户态相关的源码在hbre目录下，各个模块的细节信息如下：
+用户态相关的源码在 hbre 目录下，各个模块的细节信息如下：
 
 | side | component                     | output          | Source file  |
 |------|-------------------------------|-----------------|--------------|

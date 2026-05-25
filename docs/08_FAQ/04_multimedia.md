@@ -9,7 +9,7 @@ sidebar_position: 4
 ## 视频编解码
 
 ### Q1: 开发板解码 RTSP 视频流时报错（如下图所示），可能是什么原因？
-![RTSP 解码报错图片 ](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png" alt="RTSP 解码报错图片 " style={{ width: '100%' }} />
 **A:** RTSP 视频流解码报错，常见原因及解决方法如下：
 1.  **码流缺少 PPS 和 SPS 参数信息：**
     * **原因：** 推流服务器推送的 RTSP 码流（尤其是 H.264 格式）中必须包含 `PPS` (Picture Parameter Set) 和 `SPS` (Sequence Parameter Set) 参数信息，解码器需要这些信息来正确解析视频。
@@ -145,7 +145,7 @@ sidebar_position: 4
     ```
 
     :::tip
-    以上配置，`device=hw:X,Y` 中的 `X` 代表声卡号，`Y` 代表设备号。用户可根据实际需求制定声卡 / 设备号，声卡 / 设备号确认方法请查看：[ 控制命令 ](/rdk_s/Basic_Application/audio/audio_board_s100# 控制命令 )。
+    以上配置，`device=hw:X,Y` 中的 `X` 代表声卡号，`Y` 代表设备号。用户可根据实际需求制定声卡 / 设备号，声卡 / 设备号确认方法请查看：[控制命令](/Basic_Application/audio/audio_board_s100#控制命令)。
     :::
 
 2. 修改后保存配置并重启系统，加载音频驱动后图形化界面功能即可正常使用。

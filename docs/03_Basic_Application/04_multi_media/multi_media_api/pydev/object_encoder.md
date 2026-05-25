@@ -2,15 +2,15 @@
 sidebar_position: 2
 ---
 
-# Encoder对象
+# Encoder 对象
 
-Encoder对象实现了对视频数据的编码压缩功能，包含了`encode`、`encode_file`、`get_img`、`close`等几种方法，详细说明如下：
+Encoder 对象实现了对视频数据的编码压缩功能，包含了`encode`、`encode_file`、`get_img`、`close`等几种方法，详细说明如下：
 
 ## encode
 
 <font color='Blue'>【功能描述】</font>
 
-配置并使能encode编码模块
+配置并使能 encode 编码模块
 
 <font color='Blue'>【函数声明】</font>
 
@@ -69,7 +69,7 @@ Encoder.encode_file(img)
 
 | 参数名称 | 描述              | 取值范围                     |
 | -------- | ----------------- | --------------------- |
-| img      | 需要编码的图像数据，需要使用NV12格式 | 无 |
+| img      | 需要编码的图像数据，需要使用 NV12格式 | 无 |
 
 <font color='Blue'>【使用方法】</font> 
 

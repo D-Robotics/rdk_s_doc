@@ -1,6 +1,6 @@
 # sample_pym 使用说明
 ## 功能概述
-sample_pym 将 YUV 文件读入 hbm 申请的内存，并传入 PYM，PYM按照金字塔图层的方式处理，最后将处理好的 YUV 数据 dump 到文件系统中。
+sample_pym 将 YUV 文件读入 hbm 申请的内存，并传入 PYM，PYM 按照金字塔图层的方式处理，最后将处理好的 YUV 数据 dump 到文件系统中。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pym`
@@ -35,10 +35,10 @@ Options:
 -f, --feedback                  Specify feedback mode
 -V, --verbose           Enable verbose mode
 ```
-- i: 指定输入的YUV文件，测试程序使用 NV12 格式的文件作为输入
+- i: 指定输入的 YUV 文件，测试程序使用 NV12 格式的文件作为输入
 - w: 输入 YUV 图像的宽度
 - h: 输入 YUV 图像的高度
-- f: 指定pym运行的模式， 默认按照Vflow的方式运行
+- f: 指定 pym 运行的模式， 默认按照 Vflow 的方式运行
 ### 运行效果
 以输入分辨率为 1920 x 1080 的 YUV 图片为例，执行 `./sample_pym -i /app/res/assets/nv12_1920x1080.yuv -w 1920 -h 1080`。
 
@@ -68,4 +68,4 @@ pym config:
 ```
 
 注意：
-1. pym模块输出的宽度按照16字节对齐，在浏览图片时需要注意 width 与 wstride 参数不同的情况
+1. pym 模块输出的宽度按照16字节对齐，在浏览图片时需要注意 width 与 wstride 参数不同的情况

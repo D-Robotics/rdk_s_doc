@@ -20,7 +20,7 @@ RDK S600 在 自锁10-PIN 支持 UART6 UART7，IO 电压 3.3V。
 
 测试之前，把 TXD 和 RXD 短接：
 
-![image-rdk_s600_uart](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_uart.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_uart.png" alt="image-rdk_s600_uart" style={{ width: '100%' }} />
 
 ### 测试过程
 
@@ -50,7 +50,7 @@ Recv:  AA55
 
 :::caution 注意
 设备树中 ttyS 与 uart 硬件控制器的引脚对应关系如下：ttyS0 使用 uart2 的引脚，ttyS1 使用 uart0 的引脚，ttyS2 使用 uart1 的引脚。例如，测试 ttyS1 时应使用 J19 排针的第 2、3 号管脚（uart0 TX/RX）。
-具体引脚请参考 [3.3.2.1 管脚定义与应用](./01_overview.md) 章节。
+具体引脚请参考 [3.3.2.1 管脚定义与应用](./01_overview) 章节。
 :::
 
 ```python

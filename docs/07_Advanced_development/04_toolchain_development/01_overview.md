@@ -27,7 +27,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 
 **下载地址：**
 <!-- ```bash
-wget -c ftp://oeftp@sdk.d-robotics.cc/oe_v3.2.0/s100-3.2.0-oe-doc.zip --ftp-password=Oeftp~123$%
+wget -c ftp://oeftp@sdk.d-robotics.cc/oe_v3.2.0/s100~3.2.0-oe-doc.zip --ftp-password=Oeftp~123$%
 ```   -->
 
 👉 [OE用户手册 3.7.0 版本下载](https://archive.d-robotics.cc/toolchain/oe-doc-3.7.0-s100-s600.zip)

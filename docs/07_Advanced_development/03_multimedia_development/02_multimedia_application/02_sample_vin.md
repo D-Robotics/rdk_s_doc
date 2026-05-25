@@ -1,7 +1,7 @@
 # sample_vin 使用说明
 
 ## 功能概述
-`sample_vin`完成 Camera Sensor 、MIPI CSI 和 SIF 模块的初始化，实现从vin模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
+`sample_vin`完成 Camera Sensor 、MIPI CSI 和 SIF 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
 
 ### sample_vin 架构说明
 
@@ -150,7 +150,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 
 #### 运行效果
 
-以 imx219 sensor 和 ar0820std 4K sensor为例，执行 `./get_multi_vin_data -c "sensor=0" -c "sensor=2 link=1"` 。
+以 imx219 sensor 和 ar0820std 4K sensor 为例，执行 `./get_multi_vin_data -c "sensor=0" -c "sensor=2 link=1"` 。
 
 :::caution 注意
 link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。

@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # ENCODER（编码模块）API
 
-`ENCODER` API提供了以下的接口：
+`ENCODER` API 提供了以下的接口：
 
 | 函数 | 功能 |
 | ---- | ----- |
@@ -131,8 +131,8 @@ sidebar_position: 2
 **【参数】**
 
 - `obj`： 已经初始化的`ENCODER`对象指针
-- `stream_buffer`：获取成功后，码流数据会存在本buffer中。此buffer的大小需要根据编码分辨率和码率进行调整。
+- `stream_buffer`：获取成功后，码流数据会存在本 buffer 中。此 buffer 的大小需要根据编码分辨率和码率进行调整。
 
 **【返回类型】** 
 
-成功返回码流数据的size，失败返回 -1
+成功返回码流数据的 size，失败返回 -1

@@ -31,10 +31,10 @@ import TabItem from '@theme/TabItem';
 通过串口或者 SSH，参考下述指令完成连接
 
 ```bash
-# 扫描wifi⽹络
+# 扫描 Wi-Fi 网络
 sudo nmcli device wifi rescan
-sudo nmcli device wifi list # 列出找到的wifi
-sudo wifi_connect "SSID" "PASSWD" # 连接指定wifi
+sudo nmcli device wifi list # 列出找到的 Wi-Fi
+sudo wifi_connect "SSID" "PASSWD" # 连接指定 Wi-Fi
 ```
 
 上述命令成功后，会出现`successfully xxx`，使用`ifconfig`便可获得板卡 Wi-Fi 的 IP 地址。
@@ -84,7 +84,7 @@ SSH 的使用请查看 [远程登录 - SSH 登录](../remote_login#ssh)。
 
 修改`serial-getty@.service`文件可以设置免密登陆，操作如下
 
-1. 打开serial-getty@.service
+1. 打开 serial-getty@.service
 
 ```bash
 # root用户登陆
@@ -152,13 +152,13 @@ source /etc/default/locale
 
 `NoMachine`当前不支持`apt`下载，需要到官网获取`deb`包。
 
-NoMachine下载官方网址： [NoMachine Download](https://downloads.nomachine.com/download/?id=30&platform=linux&distro=arm)
+NoMachine 下载官方网址： [NoMachine Download](https://downloads.nomachine.com/download/?id=30&platform=linux&distro=arm)
 
 **下载安装包**
 
 进入官网后找到适合`RDK S100`的`ARM64`版本的安装包，点击`Download`
 
-![image_s100_nomachine_dl](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="image_s100_nomachine_dl" style={{ width: '100%' }} />
 
 **安装**
 
@@ -197,7 +197,7 @@ dpkg -i nomachine_*_arm64.deb
     sudo systemctl restart nxserver
     ```
 
-**重启S100**
+**重启 S100**
 
 由于`NXServer`的配置问题，完成上述操作后直接连接会黑屏，需要重启后使用。
 

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
 ---
-# PCIe 用户态 High Level API介绍
+# PCIe 用户态 High Level API 介绍
 
 ## 简介
 
@@ -11,11 +11,11 @@ High Level API (libhbpciehl.so) 基于 Low Level API（libhbpcie.so)，抽象出
 
 - 数据的发送（publish）
 - 数据的接收（subscribe）
-- 发送/接收Buffer的管理
-  - 使用内建buffer
-  - 使用用户申请的buffer(要求物理地址连续）
+- 发送/接收 Buffer 的管理
+  - 使用内建 buffer
+  - 使用用户申请的 buffer(要求物理地址连续）
 
-## API列表
+## API 列表
 
 ```c
 pcieErrCode pcieInit(pcieHandler *ph, uint8_t chipID, uint8_t topicID);
@@ -34,7 +34,7 @@ pcieErrCode pcieSendData(pcieHandler ph, uint32_t size);
 
 发送方和接收方的流程如下图：
 
-![图片描述](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/hl_process.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/hl_process.png" alt="图片描述" style={{ width: '100%' }} />
 
 ### Publisher(chip#0)
 

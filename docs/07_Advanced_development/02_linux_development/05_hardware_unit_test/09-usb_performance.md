@@ -46,7 +46,7 @@ dd if=/path/to/source_file of=/dev/null bs=4K iflag=direct
 
 ### U 盘读写准备方法
 
-**1.** 将 U 盘插入 RDK_S100 开发板 USB3.0 接口，可输入命令查看 U 盘接口类型：
+**1.** 将 U 盘插入 RDK_S100 开发板 USB 3.0 接口，可输入命令查看 U 盘接口类型：
 
 ```shell
 root@ubuntu:~# lsusb
@@ -57,7 +57,7 @@ Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 ```
 
-lsblk 识别到了 /dev/sda1 u盘设备
+lsblk 识别到了 /dev/sda1 u 盘设备
 
 ```shell
 root@ubuntu:~# lsblk
@@ -147,11 +147,11 @@ root@ubuntu:~# dd if=/mnt/usb/myfile of=/dev/null bs=4K count=256K
 
 ### usb 虚拟网口准备方法
 
-**1.** 将 RDK_S100 开发板的 usb2.0 口连接至 PC 的 USB2.0 ，如图：
+**1.** 将 RDK_S100 开发板的 USB 2.0 口连接至 PC 的 USB 2.0 ，如图：
 
-![S100_USB2.0](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/S100_USB2.0.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/S100_USB2.0.png" alt="S100_USB2.0" style={{ width: '100%' }} />
 
-**2.** 将 usb2.0 虚拟为网口，命令如下：
+**2.** 将 USB 2.0 虚拟为网口，命令如下：
 
 ```shell
 usb-gadget.sh stop adb
@@ -188,7 +188,7 @@ usb-gadget start succeed.
 
 在电脑上可以查看网络配置页面，可以看到如下图所示的 `Remote RNIS Compatible Device` 网卡。
 
-![RNIS_Device](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="RNIS_Device" style={{ width: '100%' }} />
 
 **3.** 使用以下命令来配置 usb0 网络接口的 IP 地址，使其与 PC 端远程网卡的 IP 地址网段一致。
 
@@ -198,7 +198,7 @@ ifconfig usb0 192.168.1.110
 
 PC 端远程网卡 ip 配置如图：
 
-![NETWORK_CONFIG](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png" alt="NETWORK_CONFIG" style={{ width: '100%' }} />
 
 ## 测试方法
 
@@ -232,7 +232,7 @@ Accepted connection from 192.168.1.110, port 57220
 
 USB 总线的理论速率（最高）：
 
-- usb 2.0 ： 480Mbps 即 60MB/s
+- USB 2.0 ： 480Mbps 即 60MB/s
 - USB 3.1 Gen 1 (即 USB 3.0)： 5Gbps 即 625MB/s
 - USB 3.1 Gen 2：10 Gbps 即 1250MB/s
 
@@ -240,7 +240,7 @@ USB 总线的理论速率（最高）：
 
 ### 常见影响因素
 
-- **USB 版本**： USB 3.1 Gen 1 、 USB 3.1 Gen 2 和 usb 2.0 的带宽差异会直接影响数据传输速率。如果你在 USB 2.0 接口上使用设备，理论最大速度为 480 Mbps，实际速度可能更低。
+- **USB 版本**： USB 3.1 Gen 1 、 USB 3.1 Gen 2 和 USB 2.0 的带宽差异会直接影响数据传输速率。如果你在 USB 2.0 接口上使用设备，理论最大速度为 480 Mbps，实际速度可能更低。
 - **设备类型**： USB 设备（如 U 盘、外接硬盘、 SSD）具有不同的读写性能，尤其是闪存类型的 U 盘速度较慢，而 SSD 性能更好。
 - **块大小 (`bs`)**：`dd` 命令的块大小选择对测试结果有很大影响，较大的块大小可能提高吞吐量，而过小的块大小可能导致效率低下，可适当更改 dd 命令参数来达到更好的测试效果。
 

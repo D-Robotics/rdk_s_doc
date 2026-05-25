@@ -2,18 +2,18 @@
 sidebar_position: 1
 ---
 
-# 配置U-Boot和Kernel选项参数
+# 配置 U-Boot 和 Kernel 选项参数
 
 
-在系统软件开发中，经常需要对u-boot和kernel的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
+在系统软件开发中，经常需要对 u-boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
 
-## 配置uboot选项参数
+## 配置 uboot 选项参数
 
 :::info 注意
 
 ​	以下说明以修改 `hobot_s100_defconfig`配置文件为例。
 
-​	Uboot具体使用的配置文件可以在`./xbuild.sh lunch`之后查看`bootloader/device/.board_config.mk`板级配置文件中 `HR_UBOOT_CONFIG_FILE`的变量值。
+​	Uboot 具体使用的配置文件可以在`./xbuild.sh lunch`之后查看`bootloader/device/.board_config.mk`板级配置文件中 `HR_UBOOT_CONFIG_FILE`的变量值。
 
 :::
 
@@ -29,18 +29,18 @@ sidebar_position: 1
 └── uboot # Uboot源代码
 ```
 
-`build/xbuild.sh`为主编译脚本，提供了以下命令帮助用户进行 Uboot 的选项配置，该命令会自动使用板级配置文件中设置的 Uboot 配置文件，在配置完成后，自动完成savedefconfig 和保存工作。
+`build/xbuild.sh`为主编译脚本，提供了以下命令帮助用户进行 Uboot 的选项配置，该命令会自动使用板级配置文件中设置的 Uboot 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
 ```
 ./xbuild.sh uboot menuconfig
 ```
 
 命令执行成功后会打开 Uboot 图形化配置界面，您可以在这个交互界面下完成选项的配置，包括删除不需要的功能和启用需要的功能。
 
-![image-20220518111319607](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/screenshot-20241120-201418.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/screenshot-20241120-201418.png" alt="image-20220518111319607" style={{ width: '100%' }} />
 
-在menuconfig的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
+在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
 
-![image-20220518111506018](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="image-20220518111506018" style={{ width: '100%' }} />
 
 在配置退出后，会自动执行配置的文件的保存。自动完成的内容为：
 
@@ -53,7 +53,7 @@ cp -f defconfig <板级配置文件中设置的Uboot配置文件>
 
 ### 手动配置
 
-首先进入`source/bootloader/uboot`目录，执行`make ARCH=arm64 hobot_s100_defconfig `。因为`make`命令将首先执行顶级目录下的 Makefile 文件。其中对于以config结尾的目标都有一个共同的入口：
+首先进入`source/bootloader/uboot`目录，执行`make ARCH=arm64 hobot_s100_defconfig `。因为`make`命令将首先执行顶级目录下的 Makefile 文件。其中对于以 config 结尾的目标都有一个共同的入口：
 
 ```makefile
 %config: scripts_basic outputmakefile FORCE
@@ -84,7 +84,7 @@ make ARCH=arm64 hobot_s100_defconfig
 
 然后就可以执行`make ARCH=arm64 menuconfig`打开图形化的配置界面进行`uboot`的选项参数配置。
 
-在menuconfig的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
+在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
 
 保存配置后，可以执行命令 `diff .config configs/hobot_s100_defconfig` 对比一下差异，再次确认一下修改是否符合预期。
 
@@ -97,19 +97,19 @@ make distclean
 make mrproper
 ```
 
-## 配置Kernel选项参数
+## 配置 Kernel 选项参数
 
 :::info 注意
 
 ​	以下说明以修改 `drobot_s100_defconfig`配置文件为例。
 
-​	kernel具体使用的配置文件可以查看 `mk_kernel.sh` 脚本中 `kernel_config_file` 的变量值。
+​	kernel 具体使用的配置文件可以查看 `mk_kernel.sh` 脚本中 `kernel_config_file` 的变量值。
 
 :::
 
 ### 通过 mk_kernel 命令配置
 
-`mk_kernel.sh`提供了以下命令帮助用户进行 Kernel 的选项配置，该命令会自动使用板级配置文件中设置的 Kernel 配置文件，在配置完成后，自动完成savedefconfig 和保存工作。
+`mk_kernel.sh`提供了以下命令帮助用户进行 Kernel 的选项配置，该命令会自动使用板级配置文件中设置的 Kernel 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
 
 ```
 ./mk_kernel.sh menuconfig
@@ -117,11 +117,11 @@ make mrproper
 
 命令执行成功后会打开 Kernel 图形化配置界面，您可以在这个交互界面下完成选项的配置，包括删除不需要的功能，启用需要的功能。
 
-![image-20220518111319607](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-s100-kernel.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-s100-kernel.png" alt="image-20220518111319607" style={{ width: '100%' }} />
 
-在menuconfig的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
+在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
 
-![image-20220518111506018](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="image-20220518111506018" style={{ width: '100%' }} />
 
 在配置退出后，会自动执行配置的文件的保存。自动完成的内容为：
 

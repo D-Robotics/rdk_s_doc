@@ -2,7 +2,7 @@
 sidebar_position: 11
 ---
 
-# 7.5.12 Eth使用指南
+# 7.5.12 Eth 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -14,60 +14,60 @@ import DocScope from '@site/src/components/DocScope';
 
 ### 硬件特性
 
-- 最大支持1000Mbps数据传输速率
+- 最大支持1000Mbps 数据传输速率
 
-- 支持全双工流控操作(包括IEEE 802.3x Pause packets and Priority flow control)
+- 支持全双工流控操作(包括 IEEE 802.3x Pause packets and Priority flow control)
 
 - 支持网络统计功能
 
-- 支持IEEE 1588-2002/1588-2008标准定义的以太网报文时间戳
+- 支持 IEEE 1588-2002/1588-2008标准定义的以太网报文时间戳
 
-- 支持输出PPS秒脉冲信号
+- 支持输出 PPS 秒脉冲信号
 
 - 支持可编程以太网帧长度，最大支持16KB
 
 ### 假设和限制
 
 <DocScope products="RDK S100">
-- 发送和接收方向的FIFO最多各支持6个。
+- 发送和接收方向的 FIFO 最多各支持6个。
 </DocScope>
 <DocScope products="RDK S600">
-- 发送和接收方向的FIFO最多各支持8个。
+- 发送和接收方向的 FIFO 最多各支持8个。
 </DocScope>
-- 不支持传输超过所使用控制器可用缓冲区大小的数据，较长的数据必须使用Internet协议(IP)和传输控制协议(TCP)传输。
+- 不支持传输超过所使用控制器可用缓冲区大小的数据，较长的数据必须使用 Internet 协议(IP)和传输控制协议(TCP)传输。
 
-- 单个接收帧的长度(包括14字节的以太网帧头和4字节的FCS)必须小于或等于RX buffer的配置长度。
+- 单个接收帧的长度(包括14字节的以太网帧头和4字节的 FCS)必须小于或等于 RX buffer 的配置长度。
 
-- 模块时钟频率为250M，PTP时钟周期为20ns。
+- 模块时钟频率为250M，PTP 时钟周期为20ns。
 
 ## 代码路径
 
 <DocScope products="RDK S100">
 - McalCdd/Ethernet/inc # 头文件
-- McalCdd/Ethernet/src/Eth.c # 提供对外API接口
+- McalCdd/Ethernet/src/Eth.c # 提供对外 API 接口
 - McalCdd/Ethernet/src/Eth_Interrupt.c # 中断处理回调函数处理接口
-- McalCdd/Ethernet/src/Mac_Lld.c # 封装寄存器控制接口，供API接口调用
-- Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Eth_PBcfg.c # Eth预编译配置，用于提供给对外接口API初始化属性调用
-- Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Mac_Ip_PBcfg.c # MAC驱动预编译配置，对Eth_PBcfg.c构成静态配置依赖
-- samples/Eth/Eth_Test/Eth_test.c # Eth功能测试示例程序
+- McalCdd/Ethernet/src/Mac_Lld.c # 封装寄存器控制接口，供 API 接口调用
+- Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Eth_PBcfg.c # Eth 预编译配置，用于提供给对外接口 API 初始化属性调用
+- Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Mac_Ip_PBcfg.c # MAC 驱动预编译配置，对 Eth_PBcfg.c 构成静态配置依赖
+- samples/Eth/Eth_Test/Eth_test.c # Eth 功能测试示例程序
 </DocScope>
 <DocScope products="RDK S600">
 - McalCdd/Ethernet/inc # 头文件
-- McalCdd/Ethernet/src/Eth.c # 提供对外API接口
+- McalCdd/Ethernet/src/Eth.c # 提供对外 API 接口
 - McalCdd/Ethernet/src/Eth_Interrupt.c # 中断处理回调函数处理接口
-- McalCdd/Ethernet/src/Mac_Lld.c # 封装寄存器控制接口，供API接口调用
-- Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Eth_PBcfg.c # Eth预编译配置，用于提供给对外接口API初始化属性调用
-- Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Mac_Ip_PBcfg.c # Eth预编译配置，用于提供给对外接口API初始化属性调用
-- samples/Eth/Eth_Test/Eth_test.c # Eth功能测试示例程序
+- McalCdd/Ethernet/src/Mac_Lld.c # 封装寄存器控制接口，供 API 接口调用
+- Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Eth_PBcfg.c # Eth 预编译配置，用于提供给对外接口 API 初始化属性调用
+- Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Mac_Ip_PBcfg.c # Eth 预编译配置，用于提供给对外接口 API 初始化属性调用
+- samples/Eth/Eth_Test/Eth_test.c # Eth 功能测试示例程序
 </DocScope>
 
-## 应用sample
+## 应用 sample
 
-以```samples/Eth/Eth_Test/Eth_test.c```发送arp报文为例说明：
+以```samples/Eth/Eth_Test/Eth_test.c```发送 arp 报文为例说明：
 
 ### 数据发送
 
-Eth_test.c测试程序外发构造的arp报文，PC通过wiresharke抓包检查数据能否正常收到。其中，IP地址默认且不支持动态修改。
+Eth_test.c 测试程序外发构造的 arp 报文，PC 通过 wiresharke 抓包检查数据能否正常收到。其中，IP 地址默认且不支持动态修改。
 
 ```
 0xd4, 0xfd, 0x9b, 0xae, 0x48, 0xf5, //Sender MAC address: d4:fd:9b:ae:48:f5  //MCU
@@ -86,7 +86,7 @@ Eth_TxConfirmation //释放buffer
 
 - 测试说明
 
-系统启动默认只完成eth初始化，数据发送步骤如下：
+系统启动默认只完成 eth 初始化，数据发送步骤如下：
 
 ```
 # 使能EthTest_Mainfunc周期性调用
@@ -102,7 +102,7 @@ setvar eth_testCase 14
 
 ### 数据接收
 
-在EthIf_RxIndication里把接收的报文通过串口打印出来。参考如下：
+在 EthIf_RxIndication 里把接收的报文通过串口打印出来。参考如下：
 
 ```
 if(eth_getIngressTsFlag)
@@ -142,8 +142,8 @@ if(FrameType==0x800)
 
 ### 注意事项
 
-- 默认数据传输模式是轮询。轮询模式下的数据发送需要注意申请的buffer在transmit发送之后，调用Eth_TxConfirmation释放buffer。
-- Eth_Init之前需要phy解复位保证初始化成功，在Eth初始化之前需要先通过phy reset pin拉高实现解复位。
+- 默认数据传输模式是轮询。轮询模式下的数据发送需要注意申请的 buffer 在 transmit 发送之后，调用 Eth_TxConfirmation 释放 buffer。
+- Eth_Init 之前需要 phy 解复位保证初始化成功，在 Eth 初始化之前需要先通过 phy reset pin 拉高实现解复位。
 
 ### 应用程序接口
 

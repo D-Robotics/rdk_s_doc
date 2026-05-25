@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # dpkg-deb
 
-**dpkg-deb命令** 是Debian Linux下的软件包管理工具，它可以对软件包执行打包和解包操作以及提供软件包信息。
+**dpkg-deb 命令** 是 Debian Linux 下的软件包管理工具，它可以对软件包执行打包和解包操作以及提供软件包信息。
 
 ## 语法说明
 
@@ -16,7 +16,7 @@ sidebar_position: 1
 
 dpkg-deb 命令不仅有选项可以设置，还需要设置命令来执行不同的功能。
 
-- -b：创建debian软件包。
+- -b：创建 debian 软件包。
 - -c：显示软件包中的文件列表；
 - -e：将主控信息解压；
 - -f：把字段内容打印到标准输出；
@@ -53,7 +53,7 @@ dpkg-deb -x hobot-configs_2.2.0-20231030133209_arm64.deb
 dpkg-deb -e hobot-configs_2.2.0-20231030133209_arm64.deb hobot-configs/DEBIAN
 ```
 
-- 查询deb包中的文件内容
+- 查询 deb 包中的文件内容
 
 ```shell
 dpkg-deb -c hobot-configs_2.2.0-20231030133209_arm64.deb

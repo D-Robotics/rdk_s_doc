@@ -14,7 +14,7 @@ Kernel 版本包含标准驱动库的基础上，系统 BSP。
 
 软件框图如下所示：
 
-![software_framwork](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework.png" alt="software_framwork" style={{ width: '100%' }} />
 
 ### 微核设计
 
@@ -95,7 +95,7 @@ log  sunrise_camera  www
 1. 模块插件静态插拔控制
 2. 模块 CMD 指令中转
 
-![event_bus](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="event_bus" style={{ width: '100%' }} />
 
 示例：
 
@@ -103,7 +103,7 @@ camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera
 
 整个过程如下图所示：
 
-![event_bus_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="event_bus_flow" style={{ width: '100%' }} />
 
 #### 模块代码结构
 
@@ -128,7 +128,7 @@ camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera
 
 示例：
 
-![cmd_register](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="cmd_register" style={{ width: '100%' }} />
 
 **sdk_cmd_register**
 
@@ -215,7 +215,7 @@ vp_wrap 实现多媒体模块的接口封装；
 
  bpu_wrap 模块实现算法推理接口和后处理方法的封装。
 
-![platform_module](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="platform_module" style={{ width: '100%' }} />
 
 #### 功能描述
 
@@ -236,7 +236,7 @@ typedef struct vpp_ops {
 
 启动一个应用方案（以启动 vpp_camera 为例）的流程如下：
 
-![vpp_camera_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="vpp_camera_flow" style={{ width: '100%' }} />
 
 其他子模块的初始化、启动流程都可以参考本流程图。
 
@@ -268,7 +268,7 @@ typedef struct vpp_ops {
 
 #### Meida Server 模块
 
-本模块是对 ZLMediakit 的封装实现，把 ZLMediakit 封装成 init、 create_media、push_video 等几个简单接口。目前支持 H264和H265 码流的推流。
+本模块是对 ZLMediakit 的封装实现，把 ZLMediakit 封装成 init、 create_media、push_video 等几个简单接口。目前支持 H264和 H265 码流的推流。
 
 本模块的启动和使用可以参考 主程序入口 章节的流程介绍。
 
@@ -288,13 +288,13 @@ typedef struct vpp_ops {
 
 #### 执行流程
 
-![main_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow.png" alt="main_flow" style={{ width: '100%' }} />
 
 ### WebServer
 
 ####  概述
 
-本模块通过 ZLMediakit 实现 HTTP协议的 web 服务，让用户可以直接通过浏览器预览视频和配置应用场景。
+本模块通过 ZLMediakit 实现 HTTP 协议的 web 服务，让用户可以直接通过浏览器预览视频和配置应用场景。
 
 ####  功能描述
 
@@ -309,7 +309,7 @@ typedef struct vpp_ops {
 
 模块运行时序如下：
 
-![bpu_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow.png" alt="bpu_flow" style={{ width: '100%' }} />
 
 ### 添加一个新模型流程
 

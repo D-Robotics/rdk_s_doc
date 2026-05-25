@@ -22,7 +22,7 @@ apt 命令执行需要超级管理员权限(root)。
 
 ## 常用命令
 
-- 更新apt软件源数据库：**sudo apt update**
+- 更新 apt 软件源数据库：**sudo apt update**
 
 - 更新已安装的软件包：**sudo apt upgrade**
 

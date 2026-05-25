@@ -128,7 +128,7 @@ nmcli connection up "eth1_cfg"
 
 ```
 
-使用命令行配置DHCP示例：
+使用命令行配置 DHCP 示例：
 
 ```shell
 # 切换 eth1 为 DHCP
@@ -172,7 +172,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=12
 Station 模式下，开发板作为客户端，接入路由器无线热点进行联网。
 
 - 对于使用 Ubuntu Desktop 版本系统的用户，可点击桌面右上角 Wi-Fi 图标，选择对应热点并输入密码以完成网络配置，如下图：
-  ![image-wifi-config](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-wifi-config.jpeg)
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-wifi-config.jpeg" alt="image-wifi-config" style={{ width: '100%' }} />
 
 - 对于使用 Ubuntu Server 版本系统的用户，可通过命令行完成无线网络配置，步骤如下：
 
@@ -202,11 +202,11 @@ Station 模式下，开发板作为客户端，接入路由器无线热点进行
 ### Soft AP 模式
 
 :::tip
-WIFI AP 模式暂不可用
+Wi-Fi AP 模式暂不可用
 持续更新中....
 :::
 
-<!-- 开发板无线网络默认运行在Station模式下，如需使用Soft AP模式，请按照以下步骤进行配置。
+<!-- 开发板无线网络默认运行在 Station 模式下，如需使用 Soft AP 模式，请按照以下步骤进行配置。
 
 1. 安装`hostapd` 和 `isc-dhcp-server`
 
@@ -302,11 +302,11 @@ WIFI AP 模式暂不可用
     wlan0: interface state UNINITIALIZED->ENABLED
     wlan0: AP-ENABLED
    ```
-   - 通过`ifconfig`命令，配置无线接口`wlan0`的IP和网段，注意要跟第三步的配置保持一致
+   - 通过`ifconfig`命令，配置无线接口`wlan0`的 IP 和网段，注意要跟第三步的配置保持一致
     ```bash
     sudo ifconfig wlan0 10.5.5.1 netmask 255.255.255.0
     ```
-   - 最后开启`dhcp`服务器，连上热点会从`10.5.5.100`到`10.5.5.255`之间分配一个ip地址给客户端
+   - 最后开启`dhcp`服务器，连上热点会从`10.5.5.100`到`10.5.5.255`之间分配一个 ip 地址给客户端
     ```bash
     sudo ifconfig wlan0 10.5.5.1 netmask 255.255.255.0
     sudo systemctl start isc-dhcp-server
@@ -314,7 +314,7 @@ WIFI AP 模式暂不可用
     ```
 
 6. 连接开发板热点，例如 `sunrise`
-![image-20220601203025803](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-20220601203025803.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-20220601203025803.png" alt="image-20220601203025803" style={{ width: '100%' }} />
 
 7. 如需切换回`Station`模式，可按如下方式进行：
 
@@ -467,25 +467,25 @@ Controller F0:68:E3:22:7E:91 ubuntu [default]
 
 执行`sudo bluetoothctl`进入交互模式下的蓝牙配置界面，出现了类似下图的设备信息表示蓝牙被识别到了，然后用`show`来查看蓝牙信息，留意蓝牙的`powered`和`discoverable`状态。
 
-![image-20220601172604051](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png" alt="image-20220601172604051" style={{ width: '100%' }} />
 
 执行 `power on` 使能蓝牙，如下图所示：
 
-![image-20220601172501882](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png" alt="image-20220601172501882" style={{ width: '100%' }} />
 
 为了能够使蓝牙被附近的设备发现，需要执行`discoverable on`使能蓝牙并打开蓝牙可发现属性，如下图所示：
 
-![image-20220601172648853](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png" alt="image-20220601172648853" style={{ width: '100%' }} />
 
 此时使用手机或者电脑扫描蓝牙就可以发现 `ubuntu` 这个名称的蓝牙设备：
 
-![image-20220601175322650](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650.png" alt="image-20220601175322650" style={{ width: '100%' }} />
 
 接下来测试蓝牙的主动扫描功能，在`bluetoothctl`的交互界面输入`scan on`即可打开主动扫描，它会周期性地打印附近的设备，可以看到已经发现了我的手机设备，`scan off`关闭扫描功能并汇总打印扫描到的蓝牙设备：
 
-![image-20220601154131158](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png" alt="image-20220601154131158" style={{ width: '100%' }} />
 
-![image-20220601154253947](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png" alt="image-20220601154253947" style={{ width: '100%' }} />
 
 然后就是和其他蓝牙的配对：
 
@@ -493,6 +493,6 @@ Controller F0:68:E3:22:7E:91 ubuntu [default]
 
 - 配对成功后可以使用`trust [targetMAC]`来让下次自动连接
 
-![image-20220601154414717](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png" alt="image-20220601154414717" style={{ width: '100%' }} />
 
 经过以上操作后，蓝牙的扫描、配对的基本功能就完成了，如需使用更多功能，可查阅 `BlueZ`的官方帮助说明。

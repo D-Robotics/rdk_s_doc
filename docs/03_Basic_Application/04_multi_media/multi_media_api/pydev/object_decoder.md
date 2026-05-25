@@ -2,15 +2,15 @@
 sidebar_position: 3
 ---
 
-# Decoder对象
+# Decoder 对象
 
-Decoder对象实现了对视频数据的解码功能，包含了`decode`、`set_img`、`get_img`、`close`等几种方法，详细说明如下：
+Decoder 对象实现了对视频数据的解码功能，包含了`decode`、`set_img`、`get_img`、`close`等几种方法，详细说明如下：
 
 ## decode
 
 <font color='Blue'>【功能描述】</font>
 
-使能decode解码模块，并对视频文件进行解码
+使能 decode 解码模块，并对视频文件进行解码
 
 <font color='Blue'>【函数声明】</font>  
 

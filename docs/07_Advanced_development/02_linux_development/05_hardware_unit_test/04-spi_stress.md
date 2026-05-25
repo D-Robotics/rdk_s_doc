@@ -87,15 +87,15 @@ Options:
 
 **1.** 查看 RDK_S100 原理图并找到 SPI0_MOSI 和 SPI0_MISO 对应的引脚与连接器位置，如图：
 
-![Spi_Schematic_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png" alt="Spi_Schematic_diagram" style={{ width: '100%' }} />
 
 并将双母头杜邦线将 SPI0_MOSI 与 SPI0_MISO 相连，位置如图：
 
-![Spi_Connection_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png" alt="Spi_Connection_diagram" style={{ width: '100%' }} />
 
 :::caution 注意
-RDKS100 Acore支持2路SPI，且SPI0，SPI1只能做SPI Master。
-SPI内部回环测试仅SPI Master支持，其原理是SPI硬件IP的tx fifo将数据发给rx fifo从而形成回环。
+RDKS100 Acore 支持2路 SPI，且 SPI0，SPI1只能做 SPI Master。
+SPI 内部回环测试仅 SPI Master 支持，其原理是 SPI 硬件 IP 的 tx fifo 将数据发给 rx fifo 从而形成回环。
 :::
 
 **3.** 确认 SDK 中 `/app/chip_base_test/04_spi_test` 路径下，或者板端 `sunrise@ubuntu:/app/chip_base_test/04_spi_test#` 路径下存在 `spistress.sh`、`spidev_tc.c`、`spidev_tc` 三个文件。
@@ -193,11 +193,11 @@ Test times: 0 Data verification Successful
 
 #### SPI 外部回环测试
 
-可以准备一块 RDK_S100 开发板，将SPI的4根线飞好。Master可以选择SPI0，SPI Slave选择外部SPI设备（客户自行选择）。
+可以准备一块 RDK_S100 开发板，将 SPI 的4根线飞好。Master 可以选择 SPI0，SPI Slave 选择外部 SPI 设备（客户自行选择）。
 
-![SPI_wiring_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png" alt="SPI_wiring_diagram" style={{ width: '100%' }} />
 
-保证Master和Slave的SPI波特率、传输模式等设置正确，Slave设备侧先执行接收数据测试命令；
+保证 Master 和 Slave 的 SPI 波特率、传输模式等设置正确，Slave 设备侧先执行接收数据测试命令；
 
 ```shell
 ./spidev_tc -D /dev/spidev0.0 -s 12000000 -I 1 -e 2 -S 32 -v
@@ -219,7 +219,7 @@ RX | 67 C6 69 73 51 FF 4A EC 29 CD __ __ __ __ __ __ __ __ __ __ __ __ __ __ __
 ```
 
 :::caution 注意
-性能说明：SPI最大通信速率参考值是30Mbps，实际可能受到系统压力等综合因素影响而上下浮动，因此建议以实测为准。如果测试出现FIFO overrun/underrun提示，建议尝试降低通信速率。
+性能说明：SPI 最大通信速率参考值是30Mbps，实际可能受到系统压力等综合因素影响而上下浮动，因此建议以实测为准。如果测试出现 FIFO overrun/underrun 提示，建议尝试降低通信速率。
 
 注：在进行外部回环测试时，需要先执行 SPI Slave 程序，再执行 SPI Master 程序。假如先执行 SPI Master 程序，后执行 SPI Slave 程序，可能会由于 Master 与 Slave 不同步导致 SPI 接收数据出现丢失。
 :::

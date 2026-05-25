@@ -2,13 +2,13 @@
 
 ## 功能概述
 
-hbmem api使用说明，包括com buffer、graphic buffer、graphic buffer group、queue、pool、share pool的创建使用，多进程共享等。
+hbmem api 使用说明，包括 com buffer、graphic buffer、graphic buffer group、queue、pool、share pool 的创建使用，多进程共享等。
 
 ## 软件架构说明
 
-本sample基于libhbmem API实现，调用libhbmem提供的API，实现不同buffer类型的内存申请和进程间共享。
+本 sample 基于 libhbmem API 实现，调用 libhbmem 提供的 API，实现不同 buffer 类型的内存申请和进程间共享。
 
-![hbmem_sample_block_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_block_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_block_diagram.png" alt="hbmem_sample_block_diagram" style={{ width: '100%' }} />
 
 ## 代码位置及目录结构
 
@@ -27,37 +27,37 @@ hbmem api使用说明，包括com buffer、graphic buffer、graphic buffer group
     └── sample_share_pool.c
 ```
 
-## API流程说明
+## API 流程说明
 
-libhbmem库调用ion进行buffer分配
+libhbmem 库调用 ion 进行 buffer 分配
 
-![hbmem_sample_call_sequence](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_call_sequence.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_call_sequence.png" alt="hbmem_sample_call_sequence" style={{ width: '100%' }} />
 
 com buffer、graph buffer、graphic buffer group 分配流程图
 
-![hbmem_alloc_buf](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_alloc_buf.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_alloc_buf.png" alt="hbmem_alloc_buf" style={{ width: '100%' }} />
 
-queue使用流程图
+queue 使用流程图
 
-![hbmem_queue](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_queue.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_queue.png" alt="hbmem_queue" style={{ width: '100%' }} />
 
-pool使用流程图
+pool 使用流程图
 
-![hbmem_pool](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_pool.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_pool.png" alt="hbmem_pool" style={{ width: '100%' }} />
 
 share pool 使用流程图
 
-![hbmem_share_pool](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_share_pool.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_share_pool.png" alt="hbmem_share_pool" style={{ width: '100%' }} />
 
 ## 编译
 
 ### 编译环境
 
-本sample支持在板端直接编译。
+本 sample 支持在板端直接编译。
 
 ### 编译说明
 
-本sample主要依赖libhbmem提供的头文件：
+本 sample 主要依赖 libhbmem 提供的头文件：
 
 ```c
 #include <hb_mem_mgr.h>
@@ -91,109 +91,109 @@ make
 
 #### 运行方法
 
-创建com buffer
+创建 com buffer
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 1
 ```
 
-创建cache，noncached com buffer，赋值，比较耗时
+创建 cache，noncached com buffer，赋值，比较耗时
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 2
 ```
 
-在各个heaps里，创建com buffer
+在各个 heaps 里，创建 com buffer
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 3
 ```
 
-创建graph buffer
+创建 graph buffer
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 4
 ```
 
-在各个heaps里，创建graph buffer
+在各个 heaps 里，创建 graph buffer
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 5
 ```
 
-创建graph buffer group
+创建 graph buffer group
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 6
 ```
 
-在各个heaps里，创建graph buffer group
+在各个 heaps 里，创建 graph buffer group
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 7
 ```
 
-进程内common buffer共享
+进程内 common buffer 共享
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 8
 ```
 
-进程内common buffer共享，consume_cnt
+进程内 common buffer 共享，consume_cnt
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 9
 ```
 
-进程间common buffer共享
+进程间 common buffer 共享
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 10
 ```
 
-进程内graphic buffer共享
+进程内 graphic buffer 共享
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 11
 ```
 
-进程内graphic buffer共享，consume_cnt
+进程内 graphic buffer 共享，consume_cnt
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 12
 ```
 
-进程间graphic buffer共享
+进程间 graphic buffer 共享
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 13
 ```
 
-进程内graphic buffer group共享
+进程内 graphic buffer group 共享
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 14
 ```
 
-进程内graphic buffer group共享，consume_cnt
+进程内 graphic buffer group 共享，consume_cnt
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 15
 ```
 
-进程间graphic buffer group共享
+进程间 graphic buffer group 共享
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 16
 ```
 
-进程间share pool 共享
+进程间 share pool 共享
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 17
 ```
 
-share pool使用
+share pool 使用
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 18
@@ -205,25 +205,25 @@ buffer queue 使用
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 19
 ```
 
-pool使用
+pool 使用
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 20
 ```
 
-在graphic buffer与common buffer之间实现buffer转换
+在 graphic buffer 与 common buffer 之间实现 buffer 转换
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 21
 ```
 
-增加common buffer用户态引用计数
+增加 common buffer 用户态引用计数
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 22
 ```
 
-增加graphic buffer用户态引用计数
+增加 graphic buffer 用户态引用计数
 
 ```bash
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 23
@@ -231,15 +231,15 @@ pool使用
 
 ### 运行参数说明
 
-- `-m` 指定sample用例，具体见运行结果展示
+- `-m` 指定 sample 用例，具体见运行结果展示
 
 ### 测试结果说明
 
-- 如果log最后以`xxxx done`结尾，则表示sample执行成功
+- 如果 log 最后以`xxxx done`结尾，则表示 sample 执行成功
 
 ### 运行结果展示
 
-#### 创建com buffer
+#### 创建 com buffer
 
 ```text
 /app/communication_demo/hbmem_demo/sample_hbmem/libhbmem_sample -m 1

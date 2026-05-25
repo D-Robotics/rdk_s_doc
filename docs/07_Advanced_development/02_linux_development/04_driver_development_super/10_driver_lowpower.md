@@ -11,28 +11,28 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 ## 芯片电源域
-内部有AON、MCU和Main域三个电源域。其中AON为非下电状态需要一直供电的电源域，MCU电源域用于给Hsm和MCU及其内部IP供电，Main域给其他部分供电。
+内部有 AON、MCU 和 Main 域三个电源域。其中 AON 为非下电状态需要一直供电的电源域，MCU 电源域用于给 Hsm 和 MCU 及其内部 IP 供电，Main 域给其他部分供电。
 
 ## 电源状态列表
-目前实现了Off，MCU only，Working，Deep sleep和Light sleep五种电源状态，详细说明如下：
+目前实现了 Off，MCU only，Working，Deep sleep 和 Light sleep 五种电源状态，详细说明如下：
 
-| 电源状态    |       描述                             |  AON  |  MCU  |  Main  |  DDR颗粒  |
+| 电源状态    |       描述                             |  AON  |  MCU  |  Main  |  DDR 颗粒  |
 | --------   | ---------------------------------------| ----  | ----- | -----  | ---------- |
 | Off        | 芯片完全下电                            | Off   |   Off |   Off  |   Off      |
-| MCU only   | MCU Rcore正常工作                       | On   |   On   |   Off  |   Off      |
-| Deep sleep | 只有AON工作，可被唤醒                    | On   |   Off  |   Off  |   自刷新    |
+| MCU only   | MCU Rcore 正常工作                       | On   |   On   |   Off  |   Off      |
+| Deep sleep | 只有 AON 工作，可被唤醒                    | On   |   Off  |   Off  |   自刷新    |
 | Working    | 正常工作模式                            | On    |   On  |   On   |   On    |
-| Light sleep | MCU正常工作，Main仅DDR颗粒供电维持自刷新  | On   |   On   |   Off  |   自刷新    |
+| Light sleep | MCU 正常工作，Main 仅 DDR 颗粒供电维持自刷新  | On   |   On   |   Off  |   自刷新    |
 
 
 ## 休眠唤醒
 
 :::warning
-**注意：以下介绍的唤醒源的API及命令，Light sleep模式下的唤醒API及命令，只能在MCU0内调用**
+**注意：以下介绍的唤醒源的 API 及命令，Light sleep 模式下的唤醒 API 及命令，只能在 MCU0内调用**
 :::
 
 ### 设置休眠模式
-休眠模式默认为Deep sleep模式
+休眠模式默认为 Deep sleep 模式
 
 #### 显示当前支持的休眠模式
 ```Shell
@@ -40,7 +40,7 @@ root@ubuntu:~# cat /sys/devices/platform/suspend-mode/suspend_mode/suspend_mode
 light deep
 ```
 
-当前支持的休眠模式有deep和light，默认是deep
+当前支持的休眠模式有 deep 和 light，默认是 deep
 
 #### 显示当前的休眠模式
 ```Shell
@@ -60,13 +60,13 @@ light
 ### 设置唤醒源
 
 <DocScope products="RDK S100">
-唤醒源默认是RTC，时间为15秒。
+唤醒源默认是 RTC，时间为15秒。
 </DocScope>
 <DocScope products="RDK S600">
-唤醒源默认是RTC，时间为10秒。
+唤醒源默认是 RTC，时间为10秒。
 </DocScope>
 
-#### 通过MCU命令设置唤醒源
+#### 通过 MCU 命令设置唤醒源
 
 ```Shell
 D-Robotics:/$ wakeupsource
@@ -77,9 +77,9 @@ D-Robotics:/$ wakeupsource
 [01504.151093 0]        type:  0:level other:edge
 [01504.151628 0]        level: 0:low   other:high
 ```
-目前仅支持设置RTC和GPIO作为唤醒源，以下是使用示例：
+目前仅支持设置 RTC 和 GPIO 作为唤醒源，以下是使用示例：
 
-- 设置RTC作为唤醒源，时间是60秒
+- 设置 RTC 作为唤醒源，时间是60秒
 ```Shell
 D-Robotics:/$ wakeupsource rtc 60
 [01620.452562 0]rtc init alarm time 60.
@@ -88,7 +88,7 @@ Return: 0, 0x00000000
 
 <DocScope products="RDK S100">
 
-- 设置GPIO为唤醒源，AON GPIO 11，低电平有效
+- 设置 GPIO 为唤醒源，AON GPIO 11，低电平有效
 ```Shell
 D-Robotics:/$ wakeupsource gpio 11 0 0
 [01680.254419 0]set gpio wakeup source with index 11 type 0 level 0.
@@ -98,7 +98,7 @@ Return: 0, 0x00000000
 </DocScope>
 <DocScope products="RDK S600">
 
-- 设置GPIO为唤醒源，AON GPIO 8，低电平有效
+- 设置 GPIO 为唤醒源，AON GPIO 8，低电平有效
 ```Shell
 D-Robotics:/$ wakeupsource gpio 8 0 0
 [01680.254419 0]set gpio wakeup source with index 8 type 0 level 0.
@@ -107,9 +107,9 @@ Return: 0, 0x00000000
 
 </DocScope>
 
-#### 通过MCU API设置唤醒源
+#### 通过 MCU API 设置唤醒源
 
-##### RTC唤醒时间设置
+##### RTC 唤醒时间设置
 
 **SysPower_RtcWakeupSet**
 
@@ -126,9 +126,9 @@ Return: 0, 0x00000000
 | Description | Set rtc wakeup time |
 | Available via | as extern function |
 
-**RTC 唤醒时间设置后，从MCU实际开始做休眠动作才会计时；即SysPower_Suspend调用后，core0进入休眠再开始计时**
+**RTC 唤醒时间设置后，从 MCU 实际开始做休眠动作才会计时；即 SysPower_Suspend 调用后，core0进入休眠再开始计时**
 
-##### GPIO唤醒源设置
+##### GPIO 唤醒源设置
 
 **SysPower_GpioWakeupSet**
 
@@ -145,7 +145,7 @@ Return: 0, 0x00000000
 | Description | Set gpio wakeup source |
 | Available via | as extern function |
 
-##### GPIO Index定义
+##### GPIO Index 定义
 <DocScope products="RDK S100">
 
 ```Shell
@@ -160,29 +160,29 @@ AON GPIO0 ~ GPIO20
 
 </DocScope>
 
-**可以单独设置RTC为唤醒源，不能单独设置GPIO为唤醒源。设置GPIO为唤醒源时必须同时设置RTC作为唤醒源**
+**可以单独设置 RTC 为唤醒源，不能单独设置 GPIO 为唤醒源。设置 GPIO 为唤醒源时必须同时设置 RTC 作为唤醒源**
 
 ### 休眠命令
 
-- 通过按键（SLEEP按键）休眠（短按）
-- Acore输入`systemctl suspend`
+- 通过按键（SLEEP 按键）休眠（短按）
+- Acore 输入`systemctl suspend`
 
 ### 唤醒命令
 
-- Deep sleep模式下，RTC作为唤醒源时可以自动唤醒
+- Deep sleep 模式下，RTC 作为唤醒源时可以自动唤醒
 
-- Deep sleep模式下，设置GPIO作为唤醒源，休眠之后短按按键（SLEEP按键）可以唤醒
+- Deep sleep 模式下，设置 GPIO 作为唤醒源，休眠之后短按按键（SLEEP 按键）可以唤醒
 
-- Light sleep模式下，只能通过在MCU执行命令或者调用API接口唤醒
+- Light sleep 模式下，只能通过在 MCU 执行命令或者调用 API 接口唤醒
 
-#### Light sleep模式唤醒命令
+#### Light sleep 模式唤醒命令
 ```Shell
 D-Robotics:/$ wakefromll
 D-Robotics:/$ [0544.238961 0] main on start
 ...
 ```
 
-#### Light sleep模式唤醒接口
+#### Light sleep 模式唤醒接口
 
 <DocScope products="RDK S100">
 
@@ -203,7 +203,7 @@ D-Robotics:/$ [0544.238961 0] main on start
 | Description | main domain power on or resume, and main domain periperals |
 | Available via | Pmu.h |
 
-以下是唤醒Acore或对Acore上电的示例：
+以下是唤醒 Acore 或对 Acore 上电的示例：
 ```C
 int wakefromll(void)
 {
@@ -247,7 +247,7 @@ int wakefromll(void)
 | Available via | Power_Manager_Cust.h |
 
 :::warning
-hb_PM_RequestSt接口不支持连续多次调用。只有在当前电源状态切换完成后，才允许再次发起新的状态请求。在调用hb_PM_RequestSt之后，可通过hb_PM_GetCurrSt接口查询当前电源状态，以判断状态切换是否已完成。
+hb_PM_RequestSt 接口不支持连续多次调用。只有在当前电源状态切换完成后，才允许再次发起新的状态请求。在调用 hb_PM_RequestSt 之后，可通过 hb_PM_GetCurrSt 接口查询当前电源状态，以判断状态切换是否已完成。
 :::
 
 状态定义：
@@ -270,7 +270,7 @@ typedef enum {
 } PowerManagerState_Type;
 ```
 
-以下是唤醒Acore或对Acore上电的示例：
+以下是唤醒 Acore 或对 Acore 上电的示例：
 ```C
 int wakefromll(void)
 {
@@ -278,15 +278,15 @@ int wakefromll(void)
 }
 ```
 
-以上休眠唤醒API调用sample在```Service/Cmd_Utility/power_sample_cmd/src/PowerControl.c```
+以上休眠唤醒 API 调用 sample 在```Service/Cmd_Utility/power_sample_cmd/src/PowerControl.c```
 
 </DocScope>
 
-### Acore休眠唤醒回调
+### Acore 休眠唤醒回调
 
-使用systemd来进行系统服务管理，相关的关机或休眠唤醒回调均可以使用systemd支持的形式来使用。
+使用 systemd 来进行系统服务管理，相关的关机或休眠唤醒回调均可以使用 systemd 支持的形式来使用。
 
-- 休眠：当Acore收到休眠指令(systemctl suspend)时，会调用systemd的suspend接口，该接口会向所有服务发送信号，并等待服务退出，然后调用kernel的suspend接口，完成休眠流程。
+- 休眠：当 Acore 收到休眠指令(systemctl suspend)时，会调用 systemd 的 suspend 接口，该接口会向所有服务发送信号，并等待服务退出，然后调用 kernel 的 suspend 接口，完成休眠流程。
 
 当系统进入或退出休眠时, 所有在/usr/lib/systemd/system-sleep/目录下的可执行程序将会运行，系统会传递两个参数给这些可执行程序。目录下所有的脚本都是并行处理的，只有当所有的程序都执行完成之后，系统才会进行接下来的动作。
 
@@ -299,7 +299,7 @@ int wakefromll(void)
 |          	| hybrid-sleep           	| 不支持         	|
 |          	| suspend-then-hibernate 	| 不支持         	|
 
-如果需要在休眠唤醒前关闭service，在休眠唤醒后打开service，可以将控制逻辑添加到/usr/lib/systemd/system-sleep/example.sh下
+如果需要在休眠唤醒前关闭 service，在休眠唤醒后打开 service，可以将控制逻辑添加到/usr/lib/systemd/system-sleep/example.sh 下
 ```Shell
 #!/bin/bash
 
@@ -323,7 +323,7 @@ esac
 exit 0
 ```
 
-目前在RDK代码source/hobot-configs/debian/usr/lib/systemd/system-sleep/suspend_resume.sh中实现了地瓜软件休眠唤醒的回调逻辑
+目前在 RDK 代码 source/hobot-configs/debian/usr/lib/systemd/system-sleep/suspend_resume.sh 中实现了地瓜软件休眠唤醒的回调逻辑
 
 :::warning
 在休眠前要关闭所有上层服务，否则可能导致系统无法正常进行休眠唤醒。

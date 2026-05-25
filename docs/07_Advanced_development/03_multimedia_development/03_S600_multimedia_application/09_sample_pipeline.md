@@ -9,8 +9,8 @@
 | 目录      | 描述 |
 | ----------- | ----------- |
 | [single_pipe_vin_isp_ynr_pym_vpu](#single_pipe_vin_isp_ynr_pym_vpu)  | 单路 sensor 简单 pipeline 串联并编码示例  |
-| [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联GDC变换示例  |
-| [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联GDC变换示例并编码示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联 GDC 变换示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联 GDC 变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
 | [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
 
@@ -65,14 +65,14 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 #### 程序参数选项说明
 
 - `-s`: 指定 Camera Sensor 型号和配置
-- `-m`: 指定 Serdes Sensor 连接的mipi host
+- `-m`: 指定 Serdes Sensor 连接的 mipi host
 - `-l`: 指定 Serdes 类型的 Sensor 接入的 Link Port, 比如接入的是 Port A，指定为 0: `-l 0`
 
 :::caution 注意
-- 非 Serdes sensor 无需设置link 和 mipi
+- 非 Serdes sensor 无需设置 link 和 mipi
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有mipi host 0，2，4，5 可以使用
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+- 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
 #### 运行效果
@@ -281,7 +281,7 @@ pym_output_nv12_chn5_60x32_stride_64_count_0.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片。
+`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc`
@@ -321,14 +321,14 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 #### 程序参数选项说明
 
 - `-s`: 指定 Camera Sensor 型号和配置
-- `-m`: 该选项用于指定 Serdes Sensor 连接的mipi host
+- `-m`: 该选项用于指定 Serdes Sensor 连接的 mipi host
 - `-l`: 指定 Serdes 类型的 Sensor 接入的 Link Port, 比如接入的是 Port A，指定为 0: `-l 0`
 
 :::caution 注意
-- 非 Serdes sensor 无需设置link 和 mipi 
+- 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有mipi host 0，2，4，5 可以使用
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+- 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
 #### 运行效果
@@ -394,7 +394,7 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21680305428000.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc_vpu` 示例串联 `VIN`，`ISP`，`YNR`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、ISP、YNR、PYM 模块后达到 GDC 模块， GDC 根据 GDC bin文件进行变换，生成 YUV 图片，输出数据会再送给编码器编码后保存为 H264 视频码流。
+`single_pipe_vin_isp_ynr_pym_gdc_vpu` 示例串联 `VIN`，`ISP`，`YNR`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、ISP、YNR、PYM 模块后达到 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片，输出数据会再送给编码器编码后保存为 H264 视频码流。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc_vpu`
@@ -434,14 +434,14 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 #### 程序参数选项说明
 
 - `-s`: 指定 Camera Sensor 型号和配置
-- `-m`: 指定 Serdes Sensor 连接的mipi host
+- `-m`: 指定 Serdes Sensor 连接的 mipi host
 - `-l`: 指定 Serdes 类型的 Sensor 接入的 Link Port, 比如接入的是 Port A，指定为 0: `-l 0`
 
 :::caution 注意
-- 非 Serdes sensor 无需设置link 和 mipi
+- 非 Serdes sensor 无需设置 link 和 mipi
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有mipi host 0，2，4，5 可以使用
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+- 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
 #### 运行效果
@@ -562,7 +562,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
   - `sensor`：传感器索引，必须参数，可以有多个参数，参考传感器列表。
   - `link`： Serdes 类型的 Sensor 接入的 Link Port (MIPI 类型的 Sensor 忽略此参数 ), 比如接入的是 Port A，指定为 0: `-l 0`
   - `mipi`： Serdes 类型的 Sensor 接入的 mipi host
-  - `channel`： VSE 通道索引，可选参数，默认为 0 ，可以设置为 [0-5]。
+  - `channel`： VSE 通道索引，可选参数，默认为 0 ，可以设置为 [0~5]。
   - `type`：编码类型，可选参数，默认为 h264 ，可以设置为 [h264, h265]。
   - `output`：保存编码流数据到文件，可选参数，默认为 `pipeline[xx]_[width]x[height]_[xxx]fps.[type]`。
 
@@ -575,10 +575,10 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 注意：
 1. Serdes 类型的 Sensor 必须指定 Link Port。
 2. 如果需要调整视频通路的数量，增减 `-c` 参数集合的数量即可
-3. 非 Serdes sensor 无需设置link mipi 
+3. 非 Serdes sensor 无需设置 link mipi 
 4. link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-5. mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-6. 目前仅有mipi host 0，2 可以使用
+5. mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+6. 目前仅有 mipi host 0，2 可以使用
 
 #### 运行效果
 `multi_pipe_vin_isp_ynr_pym_gdc_vpu` 的输出：每条视频处理通道（ pipeline）都会将处理后的视频流编码为 H.264/H.265 格式并保存。
@@ -731,13 +731,13 @@ uvc_capture_sample
 
 **示例：**
 
-- 配置一条 uvc camera 视频通路，使用video0，指定格式 YUYV，保存 5 帧采集到的图像。
+- 配置一条 uvc camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像。
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d
 ```
 
-- 配置一条 uvc camera 视频通路，使用video0，指定格式 YUYV，保存 5 帧采集到的图像，并打印当前的 exposure 和 white balance 信息。
+- 配置一条 uvc camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像，并打印当前的 exposure 和 white balance 信息。
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d -E

@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# 7.5.8 ADC使用指南
+# 7.5.8 ADC 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -15,7 +15,7 @@ import DocScope from '@site/src/components/DocScope';
 | 特性项                 | S100 ADC                                      | S600 ADC                                      |
 |------------------------|-----------------------------------------------|-----------------------------------------------|
 | **ADC 硬件数量**       | 1 个                                          | 2 个（独立 ADC 模块）                         |
-| **通道配置**           | Channel 0–13 + Channel 15（共 15 通道；**无Channel 14**） | 每 ADC：Channel 0–7；共 **2 × 8 = 16 通道**   |
+| **通道配置**           | Channel 0~13 + Channel 15（共 15 通道；**无 Channel 14**） | 每 ADC：Channel 0~7；共 **2 × 8 = 16 通道**   |
 | **电压测量范围**       | 100 mV – 1700 mV                              | 100 mV – 1700 mV                              |
 | **触发/Inject 模式限制** | 硬件触发或 Inject 模式下，**仅允许配置 1 个组**（全局） | 同左（**跨 ADC 共享组限制**，仍仅 1 组）       |
 | **温度校准条件**       | 环境温度变化 **> ±20°C** 时需校准             | 同左                                          |
@@ -24,19 +24,19 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 软件驱动
 
-代码中实际上存在着两套ADC驱动，区别如下
+代码中实际上存在着两套 ADC 驱动，区别如下
 
-- 标准ADC驱动（Main ADC Driver）
-    - 位于 McalCdd/Adc 目录下, 包含完整的ADC模块实现，文件包括 Adc.h、Adc.c、Adc_Lld.h、Adc_Lld.c 等
-    - 提供完整的ADC功能
+- 标准 ADC 驱动（Main ADC Driver）
+    - 位于 McalCdd/Adc 目录下, 包含完整的 ADC 模块实现，文件包括 Adc.h、Adc.c、Adc_Lld.h、Adc_Lld.c 等
+    - 提供完整的 ADC 功能
 
-- 私有ADC驱动（Private ADC Driver）
+- 私有 ADC 驱动（Private ADC Driver）
     - 位于 McalCdd/Adc 目录下，包含 Adc_Private.h 和 Adc_Private.c
     - 提供特定于内部使用的简化接口
 
 ### 使用流程
 
-- 标准ADC驱动的一般使用流程：
+- 标准 ADC 驱动的一般使用流程：
     ```c
     // 1. 初始化ADC模块
     Adc_Init(&Adc_Config);
@@ -52,7 +52,7 @@ import DocScope from '@site/src/components/DocScope';
     Adc_DeInit();
     ```
 
-- 私有ADC驱动使用流程：
+- 私有 ADC 驱动使用流程：
     ```c
     // 1. 初始化ADC硬件
     Adc_Private_Init(0);
@@ -64,11 +64,11 @@ import DocScope from '@site/src/components/DocScope';
 
 ### 主要区别
 
-| 特性         | 标准ADC驱动                              | 私有ADC驱动                          |
+| 特性         | 标准 ADC 驱动                              | 私有 ADC 驱动                          |
 |--------------|----------------------------------------|-------------------------------------|
-| 复杂度       | 完整的ADC驱动实现，功能丰富              | 简化的接口，功能有限         |
-| 配置方式     | 使用完整的配置结构体（包括Adc_GroupsCfg） | 直接操作硬件寄存器         |
-| API丰富度    | 提供完整的ADC功能API                     | 只提供最基本的初始化和读取功能   |
+| 复杂度       | 完整的 ADC 驱动实现，功能丰富              | 简化的接口，功能有限         |
+| 配置方式     | 使用完整的配置结构体（包括 Adc_GroupsCfg） | 直接操作硬件寄存器         |
+| API 丰富度    | 提供完整的 ADC 功能 API                     | 只提供最基本的初始化和读取功能   |
 | 中断支持     | 完整的中断和回调机制                     | 不使用中断                 |
 | 转换模式     | 单次转换和多次转换                  | 仅支持单次转换                  |
 | 触发模式     | 硬件触发和软件触发                  | 仅支持软件触发                  |
@@ -82,22 +82,22 @@ import DocScope from '@site/src/components/DocScope';
 
 | **文件路径**                                  | **作用**                                                                 |
 |-----------------------------------------------|--------------------------------------------------------------------------|
-| `McalCdd/Adc/inc/Adc.h`                       | 公共API接口，供上层调用。                                                 |
+| `McalCdd/Adc/inc/Adc.h`                       | 公共 API 接口，供上层调用。                                                 |
 | `McalCdd/Adc/inc/Adc_Lld.h`                   | 声明底层硬件操作函数。                                                    |
 | `McalCdd/Adc/inc/Adc_Private.h`               | 定义私有结构、宏和函数声明。                                               |
-| `McalCdd/Adc/src/Adc.c`                       | 实现公共API，调用底层函数。                                                |
+| `McalCdd/Adc/src/Adc.c`                       | 实现公共 API，调用底层函数。                                                |
 | `McalCdd/Adc/src/Adc_Lld.c`                   | 实现底层硬件操作，直接配置寄存器。                                          |
 | `McalCdd/Adc/src/Adc_Private.c`               | 实现私有函数，辅助驱动内部逻辑。                                            |
-| `McalCdd/Common/Register/inc/Adc_Register.h`  | 定义ADC外设寄存器地址和位域。                                              |
-| `Platform/Schm/SchM_Adc.h`                    | 管理ADC的访问权限和资源保护（如中断安全）。                                 |
+| `McalCdd/Common/Register/inc/Adc_Register.h`  | 定义 ADC 外设寄存器地址和位域。                                              |
+| `Platform/Schm/SchM_Adc.h`                    | 管理 ADC 的访问权限和资源保护（如中断安全）。                                 |
 | `Config/McalCdd/gen_xxxx/Adc/inc/Adc_PBcfg.h` | 定义板级外设配置参数（如通道、采样率等）。                                  |
 | `Config/McalCdd/gen_xxxx/Adc/inc/Adc_Cfg.h`   | 提供通用配置宏或默认配置参数（如最大通道数、中断优先级）。                  |
 | `Config/McalCdd/gen_xxx/Adc/src/Adc_PBcfg.c`  | 实现板级配置数据（如通道映射、硬件参数）。                                  |
-| `samples/Adc/xxx/src/Adc_Cmd.c`                   | ADC 软件触发单次采样的sample代码，通过Adc_Private的实现，简单场景可以直接使用。 |
-| `samples/Adc/S100/src/Adc_SoftTrigerContinuous.c` | S100平台专属，ADC 软件触发连续采样的sample代码，通过标准函数实现，适用于复杂场景。          |
-| `samples/Adc/S600/src/Adc_Test.c`             | S600平台专属，ADC 标准函数实现的sample代码，适用于复杂场景，可通过修改`Adc_PBcfg.h`实现连续采样。|
+| `samples/Adc/xxx/src/Adc_Cmd.c`                   | ADC 软件触发单次采样的 sample 代码，通过 Adc_Private 的实现，简单场景可以直接使用。 |
+| `samples/Adc/S100/src/Adc_SoftTrigerContinuous.c` | S100平台专属，ADC 软件触发连续采样的 sample 代码，通过标准函数实现，适用于复杂场景。          |
+| `samples/Adc/S600/src/Adc_Test.c`             | S600平台专属，ADC 标准函数实现的 sample 代码，适用于复杂场景，可通过修改`Adc_PBcfg.h`实现连续采样。|
 
-## 应用sample
+## 应用 sample
 
 
 
@@ -105,7 +105,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### ADC 软件触发单次转换应用
 
-`AdcTest`应用用于对设备执行 ADC 单次采样测试，通过Adc_Private的实现，能够读取特定通道或多个通道的 ADC 值，获取这些值并以原始值和毫伏 (mv) 格式显示结果。
+`AdcTest`应用用于对设备执行 ADC 单次采样测试，通过 Adc_Private 的实现，能够读取特定通道或多个通道的 ADC 值，获取这些值并以原始值和毫伏 (mv) 格式显示结果。
 
 
 #### 使用示例
@@ -174,9 +174,9 @@ D-Robotics:/$ Adc_Test
 </DocScope>
 <DocScope products="RDK S600">
 
-### ADC Private API测试
+### ADC Private API 测试
 
-private API属于oneshot API，用于测试ADC驱动。
+private API 属于 oneshot API，用于测试 ADC 驱动。
 
 #### 使用示例
 
@@ -212,7 +212,7 @@ Adc[0] channel[2] adcvalue:1500 voltage:659mv
 
 ### ADC 软件触发连续转换应用
 
-ADC 软件触发连续采样的应用基于标准ADC驱动实现 。其特点为自动重复转换，完成一次转换后立即开始下一次转换，无需额外触发， 适用于需要持续监控信号的场景，但由于持续工作，功耗相对较高。
+ADC 软件触发连续采样的应用基于标准 ADC 驱动实现 。其特点为自动重复转换，完成一次转换后立即开始下一次转换，无需额外触发， 适用于需要持续监控信号的场景，但由于持续工作，功耗相对较高。
 
 
 #### 关键配置
@@ -270,10 +270,10 @@ Adc_TestNormal [Action]
 ```
 
 :::tip
-注意将Adc_GroupsCfg中的 AdcWithoutInterrupt 字段配置为STD_ON，下面以S600为例
+注意将 Adc_GroupsCfg 中的 AdcWithoutInterrupt 字段配置为 STD_ON，下面以 S600为例
 :::
 
-step1：启动ADC连续采集
+step1：启动 ADC 连续采集
 ```
 D-Robotics:/$ Adc_TestNormal start
 [053.313330 0]Adc test running...
@@ -303,7 +303,7 @@ D-Robotics:/$ Adc_TestNormal read
 
 ```
 
-step3：停止ADC连续采集
+step3：停止 ADC 连续采集
 ```
 D-Robotics:/$ Adc_TestNormal stop
 [096.167557 0]Adc test exit.

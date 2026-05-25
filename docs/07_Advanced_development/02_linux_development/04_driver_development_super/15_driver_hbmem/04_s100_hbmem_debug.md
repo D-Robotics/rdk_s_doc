@@ -1,4 +1,4 @@
-# debug信息
+# debug 信息
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -6,9 +6,9 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-Hbmem支持通过sys节点查询相关debug信息。
+Hbmem 支持通过 sys 节点查询相关 debug 信息。
 
-## 如何查看当前ION内存分配情况
+## 如何查看当前 ION 内存分配情况
 
 <DocScope products="RDK S100">
 
@@ -33,26 +33,26 @@ cat /sys/kernel/debug/ion/heaps/all_heap_info
 
 </DocScope>
 
-## 如何查看当前的ION预留内存的情况
+## 如何查看当前的 ION 预留内存的情况
 
 <DocScope products="RDK S100">
 
-其中ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）和 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap的预留情况也可以查看启动日志，如下所示，第一行代表ION_HEAP_TYPE_CARVEOUT的起始地址和大小，第二行代表ION_HEAP_TYPE_CMA_RESERVED的起始地址和大小，第三行代表ION_HEAP_TYPE_DMA的起始地址和大小：
+其中 ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）和 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap 的预留情况也可以查看启动日志，如下所示，第一行代表 ION_HEAP_TYPE_CARVEOUT 的起始地址和大小，第二行代表 ION_HEAP_TYPE_CMA_RESERVED 的起始地址和大小，第三行代表 ION_HEAP_TYPE_DMA 的起始地址和大小：
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/03_ion_region_kernel_print.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/03_ion_region_kernel_print.png" alt="" style={{ width: '100%' }} />
 
 </DocScope>
 <DocScope products="RDK S600">
 
-其中ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）、 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap、ION_HEAP_TYPE_CUSTOM（HB_MEM_USAGE_PRIV_HEAP_SRAM）和uncache heap的预留情况也可以查看启动日志， 如下所示，第一行代表ION_HEAP_TYPE_CARVEOUT的起始地址和大小，第二行代表ION_HEAP_TYPE_CMA_RESERVED的起始地址和大小，第三行代表ION_HEAP_TYPE_CUSTOM的起始地址和大小，第四行ION_HEAP_TYPE_DMA的起始地址和大小，第五行uncache heap的起始地址和大小：
+其中 ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）、 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap、ION_HEAP_TYPE_CUSTOM（HB_MEM_USAGE_PRIV_HEAP_SRAM）和 uncache heap 的预留情况也可以查看启动日志， 如下所示，第一行代表 ION_HEAP_TYPE_CARVEOUT 的起始地址和大小，第二行代表 ION_HEAP_TYPE_CMA_RESERVED 的起始地址和大小，第三行代表 ION_HEAP_TYPE_CUSTOM 的起始地址和大小，第四行 ION_HEAP_TYPE_DMA 的起始地址和大小，第五行 uncache heap 的起始地址和大小：
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/hbmem/03_ion_region_kernel_print.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/hbmem/03_ion_region_kernel_print.png" alt="" style={{ width: '100%' }} />
 
 </DocScope>
 
 ## 如何直接读写内存
 
-### 使用devmem工具可以直接访问内存
+### 使用 devmem 工具可以直接访问内存
 
 ```shell
 root@ubuntu:~# devmem -h

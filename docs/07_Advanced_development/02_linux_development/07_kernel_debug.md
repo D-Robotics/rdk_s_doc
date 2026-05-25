@@ -2,13 +2,13 @@
 sidebar_position: 7
 ---
 
-# 7.2.7 Linux调试功能介绍
+# 7.2.7 Linux 调试功能介绍
 
-## crash分析ramdump
+## crash 分析 ramdump
 
-### 抓取ramdump
+### 抓取 ramdump
 
-当前ramdump功能默认为关闭状态，在Linux下可以通过工具`hrut_ddr_misc`手动开启:
+当前 ramdump 功能默认为关闭状态，在 Linux 下可以通过工具`hrut_ddr_misc`手动开启:
 
 ```Shell
 root@ubuntu:/userdata# hrut_ddr_misc s bit 0 1
@@ -20,7 +20,7 @@ Bit idx  Function name   Status
 ------------------------------------
 ```
 
-查看当前ramdump功能是否开启：
+查看当前 ramdump 功能是否开启：
 
 ```Shell
 root@ubuntu:/userdata# hrut_ddr_misc g
@@ -28,7 +28,7 @@ Bit idx  Function name   Status
 0        RAMDUMP         on
 ```
 
-抓取ramdump完成后，可关闭DDR ramdump功能
+抓取 ramdump 完成后，可关闭 DDR ramdump 功能
 ```Shell
 root@ubuntu:~# hrut_ddr_misc s bit 0 0
 update misc para begin
@@ -39,15 +39,15 @@ Bit idx  Function name   Status
 ------------------------------------
 ```
 
-**当前ramdump功能只支持抓取由Kernel panic触发的场景**
+**当前 ramdump 功能只支持抓取由 Kernel panic 触发的场景**
 
-**ramdump的时候可能会损坏保存dump文件的分区，请务必将dump文件保存到非根文件系统分区，且分区容量大于DDR容量**
+**ramdump 的时候可能会损坏保存 dump 文件的分区，请务必将 dump 文件保存到非根文件系统分区，且分区容量大于 DDR 容量**
 
-**建议创建一个专门用于ramdump的分区，[自定义分区说明](../rdk_gen#自定义分区说明)，比如分区命名为ramdump**
+**建议创建一个专门用于 ramdump 的分区，[自定义分区说明](../rdk_gen#自定义分区说明)，比如分区命名为 ramdump**
 
 #### 自动抓取
 
-- 在Uboot下设置环境变量
+- 在 Uboot 下设置环境变量
 ```Shell
 setenv enable_ramdump 1
 setenv ramdump_part_name ramdump #这里的ramdump表明要保存dump文件的实际分区，请根据实际板子分区替换
@@ -55,13 +55,13 @@ setenv ramdump_in map #这里的map表明让ramdump将文件保存进UFS或者eM
 saveenv
 ```
 
-- secure boot设备自动抓取ramdump需要烧写HB_APDP分区镜像，开启secure debug，参考 RDK S100商业客户文档补充说明中的HB_APDP生成 章节，RDK S100商业客户文档补充说明请联系FAE获取。
+- secure boot 设备自动抓取 ramdump 需要烧写 HB_APDP 分区镜像，开启 secure debug，参考 RDK S100商业客户文档补充说明中的 HB_APDP 生成 章节，RDK S100商业客户文档补充说明请联系 FAE 获取。
 
-- 这样一旦出现panic，重启后自动会进行ramdump
+- 这样一旦出现 panic，重启后自动会进行 ramdump
 
 #### 手动抓取
 
-触发Kernel panic重启到U-Boot之后，在U-Boot下执行以下命令，数据存储到eMMC或者ufs的/ramdump/目录。
+触发 Kernel panic 重启到 U-Boot 之后，在 U-Boot 下执行以下命令，数据存储到 eMMC 或者 ufs 的/ramdump/目录。
 
 ```Shell
 Hobot$ setenv enable_ramdump 1
@@ -138,33 +138,33 @@ update journal finished
 2147479552 bytes written in 33372 ms
 ```
 
-### crash介绍
+### crash 介绍
 
-crash主要是用来离线分析linux内核内存转存文件，它整合了gdb工具，具有很强的功能，可以查看堆栈，dmesg日志，内核数据结构，反汇编等等。其支持多种工具生成的内存转储文件格式，包括：
+crash 主要是用来离线分析 linux 内核内存转存文件，它整合了 gdb 工具，具有很强的功能，可以查看堆栈，dmesg 日志，内核数据结构，反汇编等等。其支持多种工具生成的内存转储文件格式，包括：
 
-- Live linux系统。
+- Live linux 系统。
 
-- kdump产生的正常的和压缩的内存转储文件。
+- kdump 产生的正常的和压缩的内存转储文件。
 
-- 由makedumpfile命令生成的压缩的内存转储文件。
+- 由 makedumpfile 命令生成的压缩的内存转储文件。
 
-- 由netdump生成的内存转储文件。
+- 由 netdump 生成的内存转储文件。
 
-- 由diskdump生成的内存转储文件。
+- 由 diskdump 生成的内存转储文件。
 
-- 由kdump生成的Xen的内存转储文件。
+- 由 kdump 生成的 Xen 的内存转储文件。
 
-- LKCD生成的内存转储文件。
+- LKCD 生成的内存转储文件。
 
-- Mcore生成的内存转储文件。
+- Mcore 生成的内存转储文件。
 
-- ramdump格式的raw内存转储文件。
+- ramdump 格式的 raw 内存转储文件。
 
-### crash使用方法
+### crash 使用方法
 
-本文主要使用crash来分析ramdump文件。ramdump文件几乎是对整个内存的镜像，除了一些security类型的memory抓不出来之外，几乎所有的DRAM都能被抓下来。有些问题的复现概率低，而且有些问题是由于踩内存导致的，这种问题靠log往往是无法分析出来的，所以如果可以在问题发生时候把内存镜像保存下来，就可以分析了。
+本文主要使用 crash 来分析 ramdump 文件。ramdump 文件几乎是对整个内存的镜像，除了一些 security 类型的 memory 抓不出来之外，几乎所有的 DRAM 都能被抓下来。有些问题的复现概率低，而且有些问题是由于踩内存导致的，这种问题靠 log 往往是无法分析出来的，所以如果可以在问题发生时候把内存镜像保存下来，就可以分析了。
 
-#### crash工具代码获取及编译方法：
+#### crash 工具代码获取及编译方法：
 
 ```Shell
 sudo apt install -y texinfo
@@ -172,25 +172,25 @@ git clone --depth=1 https://github.com/crash-utility/crash.git
 make target=arm64
 ```
 
-**目前只支持在X86-64平台使用crash**
+**目前只支持在 X86~64平台使用 crash**
 
-#### 复制ramdump文件到服务器
+#### 复制 ramdump 文件到服务器
 
-将板端ramdump分区保存的DDR*.bin和cpu-contexts.bin复制到crash二进制存在的目录下，由于DDR*.bin是整个DDR的数据，与DDR容量接近，推荐使用scp命令传输
+将板端 ramdump 分区保存的 DDR*.bin 和 cpu-contexts.bin 复制到 crash 二进制存在的目录下，由于 DDR*.bin 是整个 DDR 的数据，与 DDR 容量接近，推荐使用 scp 命令传输
 
-#### 获取crash 扩展文件和cpu-context解析脚本
+#### 获取 crash 扩展文件和 cpu-context 解析脚本
 
 文件位于对外服务器上，路径为[https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/](https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/)
 
-下载其中的parse-cpu-contexts.py和arm64-regs.so，并保存到crash二进制存在的目录下
+下载其中的 parse-cpu-contexts.py 和 arm64-regs.so，并保存到 crash 二进制存在的目录下
 
-#### 解析cpu的寄存器信息
+#### 解析 cpu 的寄存器信息
 
 ```Shell
 python3 parse-cpu-contexts.py cpu-contexts.bin >./coreregs.txt
 ```
 
-#### 使用crash工具进入crash现场
+#### 使用 crash 工具进入 crash 现场
 
 ```Shell
 ./crash ./vmlinux DDRCS0-0.bin@0x80000000,/dev/zero@0xa0000000,DDRCS0-2.bin@0xaa000000,DDRCS1-0.bin@0x400000000,DDRCS1-1.bin@0x480000000,DDRCS2-0.bin@0x800000000,DDRCS2-1.bin@0x880000000,DDRCS3-0.bin@0xc80000000 --machdep vabits_actual=48
@@ -268,14 +268,14 @@ crash> extend arm64-regs.so
 ./arm64-regs.so: shared object loaded
 ```
 
-#### 添加cpu寄存器信息
+#### 添加 cpu 寄存器信息
 ```Shell
 crash> arm64_core_set -l coreregs.txt
 loading cpu core regs from coreregs.txt
 loading cpu core regs from coreregs.txt done
 ```
 
-#### 查看panic时的堆栈信息
+#### 查看 panic 时的堆栈信息
 ```Shell
 crash> bt
 PID: 4240     TASK: ffff00040f10f000  CPU: 0    COMMAND: "bash"

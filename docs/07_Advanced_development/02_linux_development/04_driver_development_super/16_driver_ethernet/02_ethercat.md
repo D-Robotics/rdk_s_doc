@@ -7,27 +7,27 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 :::warning
-<font color="red">**注意：**</font>使用 EtherCAT 协议需要系统版本V4.0.4及以上。
+<font color="red">**注意：**</font>使用 EtherCAT 协议需要系统版本 V4.0.4及以上。
 :::
 
 ## 使用前网络配置
 
 <DocScope products="RDK S100">
 :::warning
-<font color="red">**注意：**</font>EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
+<font color="red">**注意：**</font>EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
 
-**特别注意：RDK S100默认使用eth0作为DHCP网口，如果用户原本使用eth0作为SSH连接开发板的主要模式，在使用eth0作为EtherCAT主站后，需要配置eth1为DHCP，或配置用户本地网络可用的固定IP作为SSH连接方式，并且将连接的网线改接到eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
+**特别注意：RDK S100默认使用 eth0作为 DHCP 网口，如果用户原本使用 eth0作为 SSH 连接开发板的主要模式，在使用 eth0作为 EtherCAT 主站后，需要配置 eth1为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
 <DocScope products="RDK S600">
 :::warning
-<font color="red">**注意：**</font>EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
+<font color="red">**注意：**</font>EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
 
-**特别注意：RDK S600默认使用eth0作为DHCP网口，如果用户原本使用eth0作为SSH连接开发板的主要模式，在使用eth0作为EtherCAT主站后，需要配置eth1为DHCP，或配置用户本地网络可用的固定IP作为SSH连接方式，并且将连接的网线改接到eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
+**特别注意：RDK S600默认使用 eth0作为 DHCP 网口，如果用户原本使用 eth0作为 SSH 连接开发板的主要模式，在使用 eth0作为 EtherCAT 主站后，需要配置 eth1为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
 
-## EtherCAT使用指南
+## EtherCAT 使用指南
 
 1. 确认硬件连接：
     - 从站已上电。
@@ -93,18 +93,18 @@ import DocScope from '@site/src/components/DocScope';
     sudo systemctl enable ethercat
     ```
 
-## EtherCAT开发指南
+## EtherCAT 开发指南
 
 ### 软件栈
 地瓜 RDK S100 默认提供 EtherCAT-IgH 1.5 版本软件栈（本节以 S100 为例，S600 同理）。[EtherCAT-IgH软件栈](https://docs.etherlab.org/ethercat/1.5/pdf/ethercat_doc.pdf)是目前主流的开源 EtherCAT 主站协议。
 
-EtherCAT官网：[EtherLab | EtherCAT](https://etherlab.org/en_GB/ethercat)
-EtherCAT开源代码仓库：[Gitlab | EtherLab - EtherCAT](https://gitlab.com/etherlab.org/ethercat)
+EtherCAT 官网：[EtherLab | EtherCAT](https://etherlab.org/en_GB/ethercat)
+EtherCAT 开源代码仓库：[Gitlab | EtherLab - EtherCAT](https://gitlab.com/etherlab.org/ethercat)
 
 ### 编译和部署
-#### Host端构建
-Host端构建支持两种构建方式：
-1. 单独编译debian包并部署
+#### Host 端构建
+Host 端构建支持两种构建方式：
+1. 单独编译 debian 包并部署
    ```shell
    # Construct debian package
    ./mk_debs.sh hobot-ethercat
@@ -115,10 +115,10 @@ Host端构建支持两种构建方式：
    dpkg -i /userdata/hobot-ethercat_4.0.4-20250827135836_arm64.deb
    ```
 
-   hobot-ethercat的构建包括内核模块+用户层应用两个大模块。内核模块构建依赖用户本地构建的内核输出物。在用户没有在本地构建过内核时会自动跳过内核模块的构建。
+   hobot-ethercat 的构建包括内核模块+用户层应用两个大模块。内核模块构建依赖用户本地构建的内核输出物。在用户没有在本地构建过内核时会自动跳过内核模块的构建。
 
 2. 整编 \
-   默认rdk-gen构建系统在整编disk镜像后，镜像内会默认集成hobot-ethercat debian 包，内部包括内核模块及用户层应用。
+   默认 rdk-gen 构建系统在整编 disk 镜像后，镜像内会默认集成 hobot-ethercat debian 包，内部包括内核模块及用户层应用。
 
 #### 板端构建
 1. 下载源码：
@@ -403,7 +403,7 @@ Host端构建支持两种构建方式：
 
 如果你使用的是 EtherCAT igh 主站1.6.4以上的版本，可以参考[自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）](#自动启停网卡ethercat-igh-主站164版本之后支持)进行配置。
 
-### 方案二：使用 netplan 将 eth0 配置为静态IP地址
+### 方案二：使用 netplan 将 eth0 配置为静态 IP 地址
 <details>
     <summary>点击这里展开更多内容</summary>
 1. 修改配置文件 `/etc/netplan/01-hobot-net.yaml` 如下（以下配置作为示例，用户自行按需配置）：

@@ -4,7 +4,7 @@ sidebar_position: 6
 
 # SYS（模块绑定）API
 
-`SYS` API提供了以下的接口：
+`SYS` API 提供了以下的接口：
 
 | 函数 | 功能 |
 | ---- | ----- |
@@ -19,7 +19,7 @@ sidebar_position: 6
 
 **【功能描述】**  
 
-本接口可以把 `VIO`，`ENCODER`，`DECODER`，`DISPLAY`, 这四个模块的输出与输入进行内部绑定，绑定后的两个模块的数据会在内部自动流转，无需用户操作。比如绑定 `VIO` 和 `DISPLAY` 后，打开的mipi摄像头的数据会直接显示到显示屏上，不需要调用`VIO`的`sp_vio_get_frame`接口获取数据，之后再调用`DISPLAY`的`sp_display_set_image`接口进行显示。
+本接口可以把 `VIO`，`ENCODER`，`DECODER`，`DISPLAY`, 这四个模块的输出与输入进行内部绑定，绑定后的两个模块的数据会在内部自动流转，无需用户操作。比如绑定 `VIO` 和 `DISPLAY` 后，打开的 mipi 摄像头的数据会直接显示到显示屏上，不需要调用`VIO`的`sp_vio_get_frame`接口获取数据，之后再调用`DISPLAY`的`sp_display_set_image`接口进行显示。
 
 支持绑定的模块关系如下：
 

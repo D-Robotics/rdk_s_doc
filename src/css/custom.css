@@ -1187,7 +1187,7 @@ mark.search-highlight {
 
 /* ------------------------------------------------------------------ */
 /* 文档正文表格与 TOC 防重叠：
- * - 正文列可收缩，不被长表格撑出到 TOC 区域
+ * - 表格宽度占满可用正文区域
  * - 表格超宽时在正文内横向滚动 */
 .theme-doc-markdown.markdown,
 article.markdown,
@@ -1199,13 +1199,19 @@ article.markdown,
 article.markdown table,
 main .container article table,
 main article table {
-  display: block;
-  width: max-content;
+  display: table !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  border-collapse: collapse;
+}
+
+.theme-doc-markdown.markdown .table-responsive,
+article.markdown .table-responsive {
+  width: 100%;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  box-sizing: border-box;
-  border-collapse: collapse;
   -webkit-overflow-scrolling: touch;
 }
 

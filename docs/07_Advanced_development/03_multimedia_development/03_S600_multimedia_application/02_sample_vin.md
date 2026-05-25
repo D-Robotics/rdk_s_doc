@@ -1,7 +1,7 @@
 # sample_vin 使用说明
 
 ## 功能概述
-`sample_vin`完成 Camera Sensor 、MIPI CSI 和 SIF 模块的初始化，实现从vin模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
+`sample_vin`完成 Camera Sensor 、MIPI CSI 和 SIF 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
 
 ### sample_vin 架构说明
 
@@ -50,7 +50,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 
 - `s <sensor_index>`: 该选项用于指定要使用的传感器索引。用户需要提供一个有效的索引值。
 - `l <link_port>`: 该选项用于指定 Serdes Sensor 的连接的端口 , Serdes sensor 必须指定。
-- `m <mipi_rx>`: 该选项用于指定 Serdes Sensor 连接的mipi host。
+- `m <mipi_rx>`: 该选项用于指定 Serdes Sensor 连接的 mipi host。
 - `h`: 显示帮助信息。
 
 #### 运行效果
@@ -63,7 +63,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 - 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
 - mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有mipi host 0，2，4，5 可以使用
+- 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
 ```shell
@@ -160,7 +160,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 
 - `c <sensor>`: 该选项用于指定要使用的传感器索引。用户需要提供一个有效的索引值。
 - `l <link_port>`: 该选项用于指定 Serdes Sensor 的连接的端口 , Serdes sensor 必须指定。
-- `m <mipi_rx>`: 该选项用于指定 Serdes Sensor 连接的mipi host。
+- `m <mipi_rx>`: 该选项用于指定 Serdes Sensor 连接的 mipi host。
 - `h`: 显示帮助信息。
 
 #### 运行效果
@@ -168,10 +168,10 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 以 imx219 sensor 和 连接到 mipi host 2，link port 1 的 ovx3cstd Serdes sensor 为例，执行 `./get_multi_vin_data -c "sensor=0" -c "sensor=4 mipi=2 link=1"` 。
 
 :::caution 注意
-- 非 Serdes sensor 无需设置link 和 mipi 
+- 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有mipi host 0，2，4，5 可以使用
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+- 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
 ```shell

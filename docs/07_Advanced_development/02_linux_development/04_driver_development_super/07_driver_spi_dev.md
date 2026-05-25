@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# SPI调试指南
+# SPI 调试指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -10,45 +10,45 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-## SPI硬件支持
+## SPI 硬件支持
 
 <DocScope products="RDK S100">
 
-S100 Acore支持2路SPI，且SPI0，SPI1只能做SPI Master。
+S100 Acore 支持2路 SPI，且 SPI0，SPI1只能做 SPI Master。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-S600 Acore支持4路SPI，且所有的SPI只能做SPI Master。
+S600 Acore 支持4路 SPI，且所有的 SPI 只能做 SPI Master。
 
-RDK S600 开发板中的SPI0与CAN0和CAN1复用4个引脚，由于这些引脚的物理线路已连接至CAN收发器；其他SPI控制器默认没有在RDK S600开发板上引出，因此Acore在硬件层面上**无法支持**外部SPI设备接入。
+RDK S600 开发板中的 SPI0与 CAN0和 CAN1复用4个引脚，由于这些引脚的物理线路已连接至 CAN 收发器；其他 SPI 控制器默认没有在 RDK S600开发板上引出，因此 Acore 在硬件层面上**无法支持**外部 SPI 设备接入。
 
 </DocScope>
 
 
 ## 软件构架
 
-![image-spi_software](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-spi_software.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-spi_software.png" alt="image-spi_software" style={{ width: '100%' }} />
 
 
-如上图为SPI软件架构图，从下到上依次可以分为硬件IP层，内核层和用户空间层，下面依次对各层进行介绍。
+如上图为 SPI 软件架构图，从下到上依次可以分为硬件 IP 层，内核层和用户空间层，下面依次对各层进行介绍。
 
--   硬件IP层：该层为SPI硬件层。
+-   硬件 IP 层：该层为 SPI 硬件层。
 -   内核层：又可以细分为3层。
-    -   spi driver层：主要实现对SPI硬件IP的操作，另外还实现了spi
-        framework定义的接口。
-    -   spi framework层：可以理解为spi
-        driver的适配层，对下层定义了一组driver层需要实现的接口，对上提供了通用接口屏蔽了硬件细节。
+    -   spi driver 层：主要实现对 SPI 硬件 IP 的操作，另外还实现了 spi
+        framework 定义的接口。
+    -   spi framework 层：可以理解为 spi
+        driver 的适配层，对下层定义了一组 driver 层需要实现的接口，对上提供了通用接口屏蔽了硬件细节。
     -   spi char
-        device层：为用户空间提供节点，方便用户空间与内核空间进行数据交换。目前使用kernel自带的spidev字符设备。
--   app层：为各种应用程序，这些应用程序通过调用字符设备驱动达到与内核空间数据交换的目的。
+        device 层：为用户空间提供节点，方便用户空间与内核空间进行数据交换。目前使用 kernel 自带的 spidev 字符设备。
+-   app 层：为各种应用程序，这些应用程序通过调用字符设备驱动达到与内核空间数据交换的目的。
 
 
 ## 代码路径
 
 ### Hobot SPI 协议代码
 
-hobot spi驱动相关代码都放在 **\$project/hobot-drivers/spi** 目录下
+hobot spi 驱动相关代码都放在 **\$project/hobot-drivers/spi** 目录下
 
 ``` {.text}
 oops@tiger$ tree . -L 1
@@ -71,7 +71,7 @@ oops@tiger$ tree . -L 1
 
 ### Linux SPI 框架代码
 
-Linux spi协议相关代码都放在 **\$project/kernel/drivers/spi** 目录下
+Linux spi 协议相关代码都放在 **\$project/kernel/drivers/spi** 目录下
 
 ``` {.text}
 oops@tiger$ tree kernel/drivers/spi/
@@ -85,7 +85,7 @@ oops@tiger$
 
 <DocScope products="RDK S100">
 
-S100中涉及到spi配置相关的dts文件如下：
+S100中涉及到 spi 配置相关的 dts 文件如下：
 
 ```C
 |-- drobot-s100-pinctrl.dtsi       # spi pinctrl相关配置
@@ -95,7 +95,7 @@ S100中涉及到spi配置相关的dts文件如下：
 </DocScope>
 <DocScope products="RDK S600">
 
-S600中涉及到spi配置相关的dts文件如下：
+S600中涉及到 spi 配置相关的 dts 文件如下：
 
 ```c
 |-- drobot-s600-pinctrl.dtsi       # spi pinctrl相关配置
@@ -294,10 +294,10 @@ spi3: spi@34930000 {
 
 </DocScope>
 
-这里着重说明SPI新增的配置项
+这里着重说明 SPI 新增的配置项
 
--   sample-delay：spi控制器作master时，对接收数据的采样延迟值，如果出现数据bit位错位的情况，可以调整该值。
--   num-cs：spi控制器作master时，支持cs个数，SPI作master时，最多支持两个片选。
+-   sample-delay：spi 控制器作 master 时，对接收数据的采样延迟值，如果出现数据 bit 位错位的情况，可以调整该值。
+-   num-cs：spi 控制器作 master 时，支持 cs 个数，SPI 作 master 时，最多支持两个片选。
 
 ### SPI 配置 GPIO CS
 
@@ -361,19 +361,19 @@ peri_spi0: peri_spi0_func {
 ## SPI 验证及调试
 
 <DocScope products="RDK S100">
-本小节主要介绍S100 SPI基本功能如何验证，包括环境如何配置，测试命令的执行及测试代码存放位置等。
+本小节主要介绍 S100 SPI 基本功能如何验证，包括环境如何配置，测试命令的执行及测试代码存放位置等。
 </DocScope>
 <DocScope products="RDK S600">
-本小节主要介绍S600 SPI基本功能如何验证，包括环境如何配置，测试命令的执行及测试代码存放位置等。
+本小节主要介绍 S600 SPI 基本功能如何验证，包括环境如何配置，测试命令的执行及测试代码存放位置等。
 </DocScope>
 
 ### 测试环境准备
 
-spidev_test是一个开源的SPI测试工具，用户可以直接从linux源码如下目录获取并编译使用。
+spidev_test 是一个开源的 SPI 测试工具，用户可以直接从 linux 源码如下目录获取并编译使用。
 
 源码位置：kernel/tools/spi/spidev_test.c。
 
-spidev_test常见参数说明如下：
+spidev_test 常见参数说明如下：
 
 ```bash
 root@ubuntu:/map# ./spidev_test -h
@@ -404,8 +404,8 @@ Usage: ./spidev_test [-DsbdlHOLC3vpNR24SI]
 
 ### SPI 内部回环测试
 
-SPI内部回环测试仅SPI Master支持，其原理是SPI硬件IP的tx fifo将数据发给rx
-fifo从而形成回环。
+SPI 内部回环测试仅 SPI Master 支持，其原理是 SPI 硬件 IP 的 tx fifo 将数据发给 rx
+fifo 从而形成回环。
 
 测试命令及结果参考如下：
 
@@ -422,9 +422,9 @@ RX | 01 02 03 04 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 
 <DocScope products="RDK S100">
 
-SPI外部回环测试指SPI Master接SPI Slave。
+SPI 外部回环测试指 SPI Master 接 SPI Slave。
 
-Master可以选择SPI1，SPI Slave选择外部SPI设备（客户自行选择）。
+Master 可以选择 SPI1，SPI Slave 选择外部 SPI 设备（客户自行选择）。
 
 S100侧的发送测试命令参考如下：
 
@@ -437,9 +437,9 @@ TX | 01 02 03 04 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 RX | FF FF FF FF __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __  |....|
 ```
 
-在Slave设备侧将收到S100侧Master发送的数据。
+在 Slave 设备侧将收到 S100侧 Master 发送的数据。
 
-**注：在进行外部回环测试时，需要先执行SPI Slave程序，再执行SPI Master程序。假如先执行SPI Master程序，后执行SPI Slave程序，可能会由于Master与Slave不同步导致SPI接收数据出现丢失。**
+**注：在进行外部回环测试时，需要先执行 SPI Slave 程序，再执行 SPI Master 程序。假如先执行 SPI Master 程序，后执行 SPI Slave 程序，可能会由于 Master 与 Slave 不同步导致 SPI 接收数据出现丢失。**
 
 </DocScope>
 <DocScope products="RDK S600">

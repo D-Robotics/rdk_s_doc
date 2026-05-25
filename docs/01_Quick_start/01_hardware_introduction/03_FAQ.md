@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope versions=">=4.0.5" products="RDK S100">
 
-### Q1：RDK S100 Pinlist Excel 文件中的 Pull up/down列表达的是什么意思？​
+### Q1：RDK S100 Pinlist Excel 文件中的 Pull up/down 列表达的是什么意思？​
 
 **A:** Pinlist Excel 文件中的 Pull up/down 列为接口信号上电时的默认上拉或下拉状态描述。​
 
@@ -65,7 +65,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **A:**   
 
-- **a.** 按照社区文档中的 CAM 子板和 MCU 子板连接指引视频扣接好两块子板，确认扣接位置准确并无松动后，给 RDK S100 主板供电；若不需要使用子板，则可以直接给 RDK S100 子板供电 12-20V 电源并开机。​
+- **a.** 按照社区文档中的 CAM 子板和 MCU 子板连接指引视频扣接好两块子板，确认扣接位置准确并无松动后，给 RDK S100 主板供电；若不需要使用子板，则可以直接给 RDK S100 子板供电 12~20V 电源并开机。​
 
 - **b.** 使用 RDK S100 开发套件的过程中，注意周边环境是否有可能与开发套件的电路直接接触的导体，若有，将开发套件移至远离裸露导体的位置，避免开发套件发生短路。
 

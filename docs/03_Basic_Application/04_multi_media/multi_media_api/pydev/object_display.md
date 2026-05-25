@@ -2,9 +2,9 @@
 sidebar_position: 4
 ---
 
-# Display对象
+# Display 对象
 
-Display对象实现了视频显示功能，可以将图像数据通过`HDMI`接口输出到显示器，该对象包含`display`、`set_img`、`set_graph_rect`、`set_graph_word`、`close`等方法，详细说明如下：
+Display 对象实现了视频显示功能，可以将图像数据通过`HDMI`接口输出到显示器，该对象包含`display`、`set_img`、`set_graph_rect`、`set_graph_word`、`close`等方法，详细说明如下：
 
 ## display
 <font color='Blue'>【功能描述】</font>
@@ -25,7 +25,7 @@ Display.display(chn, width, height, vot_intf, vot_out_mode)
 | width        | 输入图像的宽度       | 不超过1920 |
 | height       | 输入图像的高度       | 不超过1080 |
 | vot_intf     | 视频接口输出分辨率 | 默认为0，1080p |
-| vot_out_mode | 视频输出接口     | 默认为1，HDMI输出 |
+| vot_out_mode | 视频输出接口     | 默认为1，HDMI 输出 |
 
 <font color='Blue'>【使用方法】</font> 
 
@@ -46,7 +46,7 @@ ret = disp.display(0, 1920, 1080, 0, 1)
 
 <font color='Blue'>【注意事项】</font> 
 
-开发板HDMI接口分辨率基于显示器EDID获取，目前只支持`1920x1080`、`1280x720`、`1024x600`、`800x480`几种分辨率。使能显示模块时，需要注意配置分辨率跟显示器实际分辨率相匹配。
+开发板 HDMI 接口分辨率基于显示器 EDID 获取，目前只支持`1920x1080`、`1280x720`、`1024x600`、`800x480`几种分辨率。使能显示模块时，需要注意配置分辨率跟显示器实际分辨率相匹配。
 
 <font color='Blue'>【参考代码】</font>  
 
@@ -56,7 +56,7 @@ ret = disp.display(0, 1920, 1080, 0, 1)
 
 <font color='Blue'>【功能描述】</font>
 
-向display模块输入显示数据，格式需要为`NV12`
+向 display 模块输入显示数据，格式需要为`NV12`
 
 <font color='Blue'>【函数声明】</font>  
 
@@ -134,12 +134,12 @@ Display.set_graph_rect(x0, y0, x1, y1, chn, flush, color, line_width)
 
 | 参数名称   | 定义描述             |    取值范围            |
 | ---------- | ----------------------- | --------- |
-| x0         | 绘制矩形框左上角的坐标值x   | 不超过视频画面尺寸   |
-| y0         | 绘制矩形框左上角的坐标值y   | 不超过视频画面尺寸   |
-| x1         | 绘制矩形框右下角的坐标值x   | 不超过视频画面尺寸   |
-| y1         | 绘制矩形框右下角的坐标值y   | 不超过视频画面尺寸   |
+| x0         | 绘制矩形框左上角的坐标值 x   | 不超过视频画面尺寸   |
+| y0         | 绘制矩形框左上角的坐标值 y   | 不超过视频画面尺寸   |
+| x1         | 绘制矩形框右下角的坐标值 x   | 不超过视频画面尺寸   |
+| y1         | 绘制矩形框右下角的坐标值 y   | 不超过视频画面尺寸   |
 | chn        | 图形层通道号 |  范围2~3，默认为2     |
-| flush      | 是否清零图形层buffer   | 0：否，1：是      |
+| flush      | 是否清零图形层 buffer   | 0：否，1：是      |
 | color      | 矩形框颜色设置 |  ARGB8888格式 |
 | line_width | 矩形框边的宽度        | 范围1~16，默认为4      |
 
@@ -185,11 +185,11 @@ Display.set_graph_word(x, y, str, chn, flush, color, line_width)
 
 | 参数名称   | 描述                    | 取值范围         |
 | ---------- | ---------------------- | ------------- |
-| x          | 绘制字符的起始坐标值x     | 不超过视频画面尺寸   |
-| y          | 绘制字符的起始坐标值y   | 不超过视频画面尺寸   |
+| x          | 绘制字符的起始坐标值 x     | 不超过视频画面尺寸   |
+| y          | 绘制字符的起始坐标值 y   | 不超过视频画面尺寸   |
 | str        | 需要绘制的字符数据 | GB2312编码 |
 | chn        | 图形层通道号 |  范围2~3，默认为2     |
-| flush      | 是否清零图形层buffer   | 0：否，1：是      |
+| flush      | 是否清零图形层 buffer   | 0：否，1：是      |
 | color      | 字符颜色设置 |  ARGB8888格式 |
 | line_width | 字符线条的宽度        | 范围1~16，默认为1      |
 
@@ -256,7 +256,7 @@ Display.close()
 
 无
 
-## bind接口
+## bind 接口
 
 <font color='Blue'>【功能描述】</font>
 
@@ -307,7 +307,7 @@ print("libsrcampy bind return:%d" % ret)
 
 无
 
-## unbind接口
+## unbind 接口
 
 <font color='Blue'>【功能描述】</font>
 

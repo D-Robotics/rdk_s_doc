@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 7.5.6 PWM使用指南
+# 7.5.6 PWM 使用指南
 
 
 ```mdx-code-block
@@ -16,29 +16,29 @@ import DocScope from '@site/src/components/DocScope';
 
 
 
-- 每个通道都是独立的，支持irq requset和dma requset
-- 支持配置两种工作模式，通用工作模式（PWM脉冲输出），输入捕获模式。
+- 每个通道都是独立的，支持 irq requset 和 dma requset
+- 支持配置两种工作模式，通用工作模式（PWM 脉冲输出），输入捕获模式。
 - 每个通道有自己独立的时钟分频寄存器
-- 每个IP所有通道共享一个中断
-- 当目标边沿或者脉冲类型到来的时候，会触发中断或者dma req
-- 支持DMA更新period和duty
+- 每个 IP 所有通道共享一个中断
+- 当目标边沿或者脉冲类型到来的时候，会触发中断或者 dma req
+- 支持 DMA 更新 period 和 duty
 - 支持周期边沿对齐方式设置，可以设置为边沿对齐或者中心对齐
-- 支持针对每个PWM通道配置其周期和占空比，需要满足如下限制：
-    - 周期配置粒度为clk_PWM，即PWM外设时钟，最大时钟计数值为：4294967295。
+- 支持针对每个 PWM 通道配置其周期和占空比，需要满足如下限制：
+    - 周期配置粒度为 clk_PWM，即 PWM 外设时钟，最大时钟计数值为：4294967295。
 
-S600和S100的IP配置如下：
+S600和 S100的 IP 配置如下：
 
-| 平台 | PWM IP数量 | 每个IP的通道数 | 总通道数 |
+| 平台 | PWM IP 数量 | 每个 IP 的通道数 | 总通道数 |
 |------|------------|----------------|----------|
-| S600 | 3个        | 12个Channel    | 36个Channel |
-| S100 | 1个        | 12个Channel    | 12个Channel |
+| S600 | 3个        | 12个 Channel    | 36个 Channel |
+| S100 | 1个        | 12个 Channel    | 12个 Channel |
 
 ## 软件驱动
 
-- 支持CPU更新PWM通道的周期和占空比
-- 支持DMA更新PWM通道的周期和占空比
-- 支持设置开启和关闭PWM中断，设置PWM通道的中断函数，支持中断类型：上升沿，下降沿，双边沿
-- 读取PWM输出信号的内部状态并将其返回
+- 支持 CPU 更新 PWM 通道的周期和占空比
+- 支持 DMA 更新 PWM 通道的周期和占空比
+- 支持设置开启和关闭 PWM 中断，设置 PWM 通道的中断函数，支持中断类型：上升沿，下降沿，双边沿
+- 读取 PWM 输出信号的内部状态并将其返回
 - 支持多通道同步输出
 
 
@@ -49,18 +49,18 @@ S600和S100的IP配置如下：
 - `Config/McalCdd/gen_xxx/Pwm/src/Pwm_PBCfg.c`：正常模式下 PWM 的预编译配置源文件，包含通道和实例的具体配置参数（如周期、占空比、极性等）。
 - `Config/McalCdd/gen_xxx/Pwm/inc`：预编译配置头文件，定义宏开关。
 - `McalCdd/Pwm/src/Pwm_Lld.c`：底层驱动实现文件，直接操作硬件寄存器，提供底层接口。
-- `McalCdd/Pwm/src/Pwm.c`：上层驱动逻辑实现，封装API 接口，并处理错误检测、状态管理等控制逻辑。
+- `McalCdd/Pwm/src/Pwm.c`：上层驱动逻辑实现，封装 API 接口，并处理错误检测、状态管理等控制逻辑。
 - `McalCdd/Pwm/inc/Pwm_Lld.h`：底层驱动头文件，声明底层函数原型、结构体和枚举类型。
 - `McalCdd/Pwm/inc/Pwm_Types.h`：定义通用数据类型、结构体和回调函数指针类型，供上下层共享使用。
-- `McalCdd/Pwm/inc/Pwm.h`：主头文件，声明高层 API和核心结构体。
-- `samples/Pwm/inc/Pwm_PBCfg.h`：Pwm测试sample头文件
-- `samples/Pwm/src/Pwm_test.c`：Pwm测试sample源文件。
+- `McalCdd/Pwm/inc/Pwm.h`：主头文件，声明高层 API 和核心结构体。
+- `samples/Pwm/inc/Pwm_PBCfg.h`：Pwm 测试 sample 头文件
+- `samples/Pwm/src/Pwm_test.c`：Pwm 测试 sample 源文件。
 
 ## 重要配置说明
 
-PWM驱动中的配置源文件是`Pwm_PBCfg.c`，支持对每个channel单独配置，S600和S100的驱动和配置兼容，以下以S600为例。
+PWM 驱动中的配置源文件是`Pwm_PBCfg.c`，支持对每个 channel 单独配置，S600和 S100的驱动和配置兼容，以下以 S600为例。
 
-1. `Pwm_HwChannelConfig_PB` 包含PWM的具体硬件配置，部分配置在pwm初始化时就会立即生效
+1. `Pwm_HwChannelConfig_PB` 包含 PWM 的具体硬件配置，部分配置在 pwm 初始化时就会立即生效
 ```c
 static Pwm_Lld_ChannelConfigType Pwm_HwChannelConfig_PB[PWM_HW_CONF_MODS_PB][12] = {
     {
@@ -99,7 +99,7 @@ static Pwm_Lld_ChannelConfigType Pwm_HwChannelConfig_PB[PWM_HW_CONF_MODS_PB][12]
         .......
 ```
 
-2. `Pwm_Channels_PB` 结构体数组定义了逻辑PWM通道与底层硬件通道之间的映射关系; `Pwm_HwChannelConfig_PB`结构体数组定义了每个PWM通道的默认硬件参数，如周期、占空比、极性、中断使能等。
+2. `Pwm_Channels_PB` 结构体数组定义了逻辑 PWM 通道与底层硬件通道之间的映射关系; `Pwm_HwChannelConfig_PB`结构体数组定义了每个 PWM 通道的默认硬件参数，如周期、占空比、极性、中断使能等。
 ```c
 #define PWM_CONF_CHANNELS_PB 2
 
@@ -139,39 +139,39 @@ const Pwm_ConfigType Pwm_Config = {
 ```
 
 
-## 应用sample
+## 应用 sample
 
 
 <DocScope products="RDK S100">
 
 ### 使用示例
-S100 开发板将PWM引出供用户开发学习使用，已引出PWM Channel的PIN脚位置以及状态如下：
+S100 开发板将 PWM 引出供用户开发学习使用，已引出 PWM Channel 的 PIN 脚位置以及状态如下：
 
-| PWM通道 | 所属板子                  | 引脚状态/复用              |
+| PWM 通道 | 所属板子                  | 引脚状态/复用              |
 |--------|---------------------------|---------------------------|
-| pwm0   | MCU扩展板                 |  与I2C9 SCL复用            |
-| pwm1   | MCU扩展板                 |  NONE                     |
-| pwm6   | Mainboad板的MCU expansion Header | NONE               |
-| pwm7   | Mainboad板的MCU expansion Header | NONE              |
-| pwm10  | MCU扩展板                 | 与I2C8 SCL复用            |
-| pwm11  | MCU扩展板                 | 与I2C8 SDA复用            |
+| pwm0   | MCU 扩展板                 |  与 I2C9 SCL 复用            |
+| pwm1   | MCU 扩展板                 |  NONE                     |
+| pwm6   | Mainboad 板的 MCU expansion Header | NONE               |
+| pwm7   | Mainboad 板的 MCU expansion Header | NONE              |
+| pwm10  | MCU 扩展板                 | 与 I2C8 SCL 复用            |
+| pwm11  | MCU 扩展板                 | 与 I2C8 SDA 复用            |
 
 
-`pwmtest`命令用于配置和控制PWM（脉冲宽度调制）通道。下面是`pwmtest`命令的使用说明和示例。
+`pwmtest`命令用于配置和控制 PWM（脉冲宽度调制）通道。下面是`pwmtest`命令的使用说明和示例。
 
 - 使用方法
 
-设置PWM占空比：
+设置 PWM 占空比：
 ```sh
 pwmtest <pwm_id> <pwm通道> <周期> <占空比>
 ```
 
-停止PWM输出：
+停止 PWM 输出：
 ```sh
 pwmtest <pwm_id> stop <pwm通道>
 ```
 
-例如设置PWM通道0的周期为1000us，占空比为50%：
+例如设置 PWM 通道0的周期为1000us，占空比为50%：
 ```
 pwmtest 0 0 0x30d40 0x4000
 ```
@@ -186,9 +186,9 @@ pwmtest 0 0 0x30d40 0x4000
 
 - 周期计算
 
-PWM周期=时钟源频率/周期寄存器值​
+PWM 周期=时钟源频率/周期寄存器值​
 
-例：输出周期为1000us的波，pwm时钟源默认为200Mhz，则需要在寄存器中写入 200000000/1000=200000(0x30d40)。
+例：输出周期为1000us 的波，pwm 时钟源默认为200Mhz，则需要在寄存器中写入 200000000/1000=200000(0x30d40)。
 
 
 ### Debug Sample
@@ -199,7 +199,7 @@ PWM周期=时钟源频率/周期寄存器值​
 pwmdumpregs <pwm_id> <pwm通道>
 ```
 
-例如dump pwm channel0的寄存器
+例如 dump pwm channel0的寄存器
 ```bash
 D-Robotics:/$ pwmdumpregs 0 0
 [06915.231597 0]INFO: Pwm_RegDump pwm channel:0
@@ -245,38 +245,38 @@ pwm                         CFG_LOCK_MODE 2237031c 0
 
 </DocScope>
 <DocScope products="RDK S600">
-S600 开发板将PWM0 channel4和PWM0 channel5引出供用户开发学习使用，接口位于MCU子板。
+S600 开发板将 PWM0 channel4和 PWM0 channel5引出供用户开发学习使用，接口位于 MCU 子板。
 
 ### 使用示例
 
-`pwmtest`命令用于配置和控制PWM（脉冲宽度调制）通道。下面是`pwmtest`命令的使用说明和示例。
+`pwmtest`命令用于配置和控制 PWM（脉冲宽度调制）通道。下面是`pwmtest`命令的使用说明和示例。
 
 - 使用方法
 
-设置PWM占空比：
+设置 PWM 占空比：
 ```sh
 pwmtest <pwm_hwipid> <pwm_hwchid> <period> <duty_cycle>
 ```
 
-停止PWM输出：
+停止 PWM 输出：
 ```sh
 pwmtest stop <pwm_hwipid> <pwm_hwchid>
 ```
 
 **参数说明**
-**pwm_hwipid:** PWM硬件IP实例ID (0-2)
-**pwm_hwchid:** PWM硬件通道ID (0-11)
-**period:** PWM信号周期值，32位数值
-**duty_cycle:** PWM信号占空比，必须在0x0000（0%）到0x8000（100%）范围内
+**pwm_hwipid:** PWM 硬件 IP 实例 ID (0~2)
+**pwm_hwchid:** PWM 硬件通道 ID (0~11)
+**period:** PWM 信号周期值，32位数值
+**duty_cycle:** PWM 信号占空比，必须在0x0000（0%）到0x8000（100%）范围内
 
 
-例如设置PWM0通道4，周期为0x600000，占空比为0x4000(50%)：
+例如设置 PWM0通道4，周期为0x600000，占空比为0x4000(50%)：
 ```shell
 D-Robotics:/$ pwmtest 0x0 0x4 0x600000 0x4000
 PWM0-CH4 pwm_period = 0x00600000 pwm_dutycycle = 0x4000
 Set PWM pin function to PWM0-CH4
 ```
-停止PWM0通道4的输出
+停止 PWM0通道4的输出
 ```shell
 D-Robotics:/$ pwmtest stop 0x0 0x4
 INFO: Stopping PWM0-Ch0004
@@ -291,7 +291,7 @@ INFO: Stopping PWM0-Ch0004
 pwmdumpregs <pwm_hwipid> <pwm_hwchid>
 ```
 
-查看PWM0通道4的寄存器配置
+查看 PWM0通道4的寄存器配置
 ```shell
 D-Robotics:/$ pwmdumpregs 0 4
 [064961.196947 0]INFO: #####Get Version for Pwm

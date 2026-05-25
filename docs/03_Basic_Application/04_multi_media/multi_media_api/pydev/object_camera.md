@@ -2,14 +2,14 @@
 sidebar_position: 1
 ---
 
-# Camera对象
+# Camera 对象
 
-Camera对象用于完成MIPI Camera的图像采集和处理功能，包含了`open_cam`、`open_vps`、`get_img`、`set_img`、`close_cam`等几种方法，详细说明如下：
+Camera 对象用于完成 MIPI Camera 的图像采集和处理功能，包含了`open_cam`、`open_vps`、`get_img`、`set_img`、`close_cam`等几种方法，详细说明如下：
 ## open_cam
 
 <font color='Blue'>【功能描述】</font>  
 
-打开指定通道的MIPI摄像头，并设置摄像头输出帧率、分辨率格式。
+打开指定通道的 MIPI 摄像头，并设置摄像头输出帧率、分辨率格式。
 
 <font color='Blue'>【函数声明】</font>  
 
@@ -21,13 +21,13 @@ Camera.open_cam(pipe_id, video_index, fps, width, height, raw_height, raw_width)
 
 | 参数名称      | 定义描述                  | 取值范围    |
 | ----------- | ------------------------ | --------  |
-| pipe_id     | camera对应的pipeline通道号  | 默认从0开始，范围0~7  |
-| video_index | camera对应的host编号，-1表示自动探测 | 取值 -1,0,1,2 请参考host编号选择小节 |
-| fps         | camera图像输出帧率          | 依据camera型号而定，默认值30   |
-| width       | camera最终图像输出宽度    |  视camera型号而定，默认值1920 |
-| height      | camera最终图像输出高度  |    视camera型号而定，默认值1080 |
-| raw_height       | camera原始RAW图像输出宽度    |  视camera型号而定，默认值1920|
-| raw_width      | camera原始RAW图像输出高度  |    视camera型号而定，默认值1080|
+| pipe_id     | camera 对应的 pipeline 通道号  | 默认从0开始，范围0~7  |
+| video_index | camera 对应的 host 编号，-1表示自动探测 | 取值 -1,0,1,2 请参考 host 编号选择小节 |
+| fps         | camera 图像输出帧率          | 依据 camera 型号而定，默认值30   |
+| width       | camera 最终图像输出宽度    |  视 camera 型号而定，默认值1920 |
+| height      | camera 最终图像输出高度  |    视 camera 型号而定，默认值1080 |
+| raw_height       | camera 原始 RAW 图像输出宽度    |  视 camera 型号而定，默认值1920|
+| raw_width      | camera 原始 RAW 图像输出高度  |    视 camera 型号而定，默认值1080|
 
 <font color='Blue'>【使用方法】</font> 
 
@@ -48,13 +48,13 @@ ret = camera.open_cam(0, -1, 30, 1920, 1080)
 
 <font color='Blue'>【注意事项】</font> 
 
-`width`，`height`参数支持`list`类型输入，表示使能camera多组不同分辨率输出。`list`最多支持6组缩小, 缩放区间为camera原始分辨率的[1 ,1/64)。使用方式如下：
+`width`，`height`参数支持`list`类型输入，表示使能 camera 多组不同分辨率输出。`list`最多支持6组缩小, 缩放区间为 camera 原始分辨率的[1 ,1/64)。使用方式如下：
 
 ```python
 ret = cam.open_cam(0, -1, 30, [1920, 1280], [1080, 720])
 ```
 
-`raw_height`，`raw_width` 只有在需要摄像头不是默认分辨率的情况下才设置，比如在使用`IMX477`摄像头时，若想同时输出4k分辨率（3840x2160）和1080P分辨率（1920x1080），则可以这样使用：
+`raw_height`，`raw_width` 只有在需要摄像头不是默认分辨率的情况下才设置，比如在使用`IMX477`摄像头时，若想同时输出4k 分辨率（3840x2160）和1080P 分辨率（1920x1080），则可以这样使用：
 ```python
 cam.open_cam(0, -1, 10, [3840, 1920], [2160, 1080], 3000, 4000)
 ```
@@ -85,7 +85,7 @@ cam.open_cam(0, -1, 10, [3840, 1920], [2160, 1080], 3000, 4000)
 
 <font color='Blue'>【功能描述】</font>
 
-使能指定camera通道的vps(video process)图像处理功能，支持对输入图像完成缩放、裁剪等功能。
+使能指定 camera 通道的 vps(video process)图像处理功能，支持对输入图像完成缩放、裁剪等功能。
 
 <font color='Blue'>【函数声明】</font>  
 
@@ -98,10 +98,10 @@ Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height
 
 | 参数名称      | 定义描述                  | 取值范围    |
 | ----------- | ------------------------ | --------  |
-| pipe_id    | camera对应的pipeline通道号  | 默认从0开始，范围0~7  |
+| pipe_id    | camera 对应的 pipeline 通道号  | 默认从0开始，范围0~7  |
 | proc_mode  | 图像处理模式配置，支持缩放、裁剪   | 范围1~4，分别表示`缩放`、`裁剪+缩放`|
-| src_width  | 图像输入宽度                 | 视camera输出宽度而定 |
-| src_height | 图像输入高度                 | 视camera输出高度而定 |
+| src_width  | 图像输入宽度                 | 视 camera 输出宽度而定 |
+| src_height | 图像输入高度                 | 视 camera 输出高度而定 |
 | dst_width  | 图像输出宽度 | 输入宽度的[1, 1/64)倍 |
 | dst_height | 图像输出高度 | 输入高度的[1, 1/64)倍 |
 | crop_rect  | 裁剪区域的宽高，输入格式[x, y] | 不超过输入图像尺寸 |
@@ -127,7 +127,7 @@ ret = camera.open_vps(1, 1, 1920, 1080, 512, 512)
 | -1    | 失败 |
 
 :::info 注意！
-- vps处理功能最多支持6个通道输出，只支持缩小。缩小倍率范围为[1, 1/64)，多通道配置通过输入参数`list`传递。
+- vps 处理功能最多支持6个通道输出，只支持缩小。缩小倍率范围为[1, 1/64)，多通道配置通过输入参数`list`传递。
 - 图像裁剪功能以图像左上角为原点，按照配置尺寸进行裁剪
 - 图像裁剪会在缩放、旋转操作之前进行，多通道配置通过输入参数`list`传递。
 :::
@@ -156,7 +156,7 @@ ret = camera.open_vps(0, 1, 3840, 2160, [1920, 1280], [1080, 720], [2560, 1440])
 
 <font color='Blue'>【功能描述】</font>
 
-获取camera对象的图像输出，需要在`open_cam`、`open_vps`之后调用
+获取 camera 对象的图像输出，需要在`open_cam`、`open_vps`之后调用
 
 <font color='Blue'>【函数声明】</font> 
 
@@ -250,7 +250,7 @@ Camera.set_img(img)
 
 | 参数名称 | 定义描述     | 取值范围      |
 | -------- | -------------------- | ----- |
-| img      | 需要处理的图像数据 | 跟vps输入尺寸保持一致 |
+| img      | 需要处理的图像数据 | 跟 vps 输入尺寸保持一致 |
 
 <font color='Blue'>【使用方法】</font> 
 
@@ -326,7 +326,7 @@ test_camera_vps()
 
 <font color='Blue'>【功能描述】</font>
 
-关闭使能的MIPI camera摄像头
+关闭使能的 MIPI camera 摄像头
 
 <font color='Blue'>【函数声明】</font>  
 
@@ -362,7 +362,7 @@ cam.close_cam()
 <font color='Blue'>【参考代码】</font>  
 
 无
-## host编号选择
-camera对应的host编号如下图所示
+## host 编号选择
+camera 对应的 host 编号如下图所示
 
-![20250220-114529.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="20250220-114529.png" style={{ width: '100%' }} />

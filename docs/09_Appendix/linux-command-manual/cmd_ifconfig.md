@@ -63,7 +63,7 @@ ifconfig eth0 up
 ifconfig eth0 down
 ```
 
-配置IP地址
+配置 IP 地址
 
 ```shell
 ifconfig eth0 192.168.1.10

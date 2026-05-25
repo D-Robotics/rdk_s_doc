@@ -6,18 +6,18 @@ sidebar_position: 1
 
 `VIO` 模块提供操作 `MIPI` 摄像头和操作图像处理的功能。
 
-`VIO` API提供了以下的接口：
+`VIO` API 提供了以下的接口：
 
 | 函数 | 功能 |
 | ---- | ----- |
-| sp_init_vio_module | **初始化VIO对象** |
-| sp_release_vio_module | **销毁VIO对象** |
+| sp_init_vio_module | **初始化 VIO 对象** |
+| sp_release_vio_module | **销毁 VIO 对象** |
 | sp_open_camera | **打开摄像头** |
 | sp_open_camera_v2 | **指定分辨率打开摄像头** |
-| sp_open_vps | **打开VPS** |
+| sp_open_vps | **打开 VPS** |
 | sp_vio_close | **关闭摄像头** |
 | sp_vio_get_frame | **获取视频图像帧** |
-| sp_vio_set_frame | **发送视频图像帧给vps模块** |
+| sp_vio_set_frame | **发送视频图像帧给 vps 模块** |
 
 
 ## sp_init_vio_module  
@@ -64,14 +64,14 @@ sidebar_position: 1
 
 **【功能描述】**  
 
-初始化接入到RDK S100上的MIPI摄像头。
+初始化接入到 RDK S100上的 MIPI 摄像头。
 支持设置输出分辨率，支持设置最多6组分辨率，只支持缩小。缩小倍率范围为[1, 1/64)
 
 **【参数】**
 
 - `obj`： 已经初始化的`VIO`对象指针
 - `pipe_id`：支持多组数据输入，建议填0
-- `video_index`：camera对应的host编号。 -1表示自动探测；0, 1, 2 请参考host编号选择小节
+- `video_index`：camera 对应的 host 编号。 -1表示自动探测；0, 1, 2 请参考 host 编号选择小节
 - `chn_num`：设置输出多少种不同分辨率的图像，最大为6，最小为1。
 - `width`：配置输出宽度的数组地址
 - `height`：配置输出高度的数组地址
@@ -88,8 +88,8 @@ sidebar_position: 1
 
 **【功能描述】**  
 
-初始化接入到RDK S100上的MIPI摄像头。  
-支持指定摄像头原始输出RAW的分辨率大小，通过`sp_sensors_parameters`设置。  
+初始化接入到 RDK S100上的 MIPI 摄像头。  
+支持指定摄像头原始输出 RAW 的分辨率大小，通过`sp_sensors_parameters`设置。  
 支持设置输出分辨率，支持设置最多6组分辨率，只支持缩小。缩小倍率范围为[1, 1/64)
 
 目前支持的摄像头分辨率见下表：
@@ -103,9 +103,9 @@ sidebar_position: 1
 
 - `obj`： 已经初始化的`VIO`对象指针
 - `pipe_id`：支持多组数据输入，建议填0
-- `video_index`：camera对应的host编号。 -1表示自动探测；0, 1, 2 请参考host编号选择小节
+- `video_index`：camera 对应的 host 编号。 -1表示自动探测；0, 1, 2 请参考 host 编号选择小节
 - `chn_num`：设置输出多少种不同分辨率的图像，最大为6，最小为1。
-- `parameters`：camera RAW输出相关结构体，用于指定分辨率和帧率
+- `parameters`：camera RAW 输出相关结构体，用于指定分辨率和帧率
 - `width`：配置输出宽度的数组地址
 - `height`：配置输出高度的数组地址
 
@@ -113,8 +113,8 @@ sidebar_position: 1
 
 | 数据类型 | 成员 | 注释 |
 | ---- | ----- | ----- |
-|int32_t|raw_height|摄像头输出RAW的高度|
-|int32_t|raw_width|摄像头输出RAW的宽度|
+|int32_t|raw_height|摄像头输出 RAW 的高度|
+|int32_t|raw_width|摄像头输出 RAW 的宽度|
 |int32_t|fps|摄像头输出的帧率|
 
 :::info 注意！
@@ -147,8 +147,8 @@ sidebar_position: 1
 - `src_height`：原始帧高度
 - `dst_width`：配置目标输出宽度的数组地址
 - `dst_height`：配置目标输出高度的数组地址
-- `crop_x`：裁剪区域的左上角x坐标集合，当`proc_mod`没有设置裁剪功能时，传入`NULL`
-- `crop_y`：裁剪区域的左上角y坐标集合，当`proc_mod`没有设置裁剪功能时，传入`NULL`
+- `crop_x`：裁剪区域的左上角 x 坐标集合，当`proc_mod`没有设置裁剪功能时，传入`NULL`
+- `crop_y`：裁剪区域的左上角 y 坐标集合，当`proc_mod`没有设置裁剪功能时，传入`NULL`
 - `crop_width`：裁剪区域的宽度，当`proc_mod`没有设置裁剪功能时，传入`NULL`
 - `crop_height`：裁剪区域的高度，当`proc_mod`没有设置裁剪功能时，传入`NULL`
 - `rotate`：旋转角度集合，当前不支持旋转功能，需传入`NULL`
@@ -171,7 +171,7 @@ sidebar_position: 1
 
 **【功能描述】**  
 
-根据传入的 `obj` 是打开的 `camera` 还是 `vps`决定关闭camera还是vps模块。
+根据传入的 `obj` 是打开的 `camera` 还是 `vps`决定关闭 camera 还是 vps 模块。
 
 **【参数】**
 
@@ -194,7 +194,7 @@ sidebar_position: 1
 **【参数】**
 
 - `obj`： 已经初始化的`VIO`对象指针
-- `frame_buffer`：已经预分配内存的buffer指针，用于保存获取出来的图片，目前获取到的图像都是`NV12`格式，所以预分配内存大小可以由公式`高 * 宽 * 3 / 2 `，也可以利用提供的宏定义 `FRAME_BUFFER_SIZE(w, h)`进行内存大小计算
+- `frame_buffer`：已经预分配内存的 buffer 指针，用于保存获取出来的图片，目前获取到的图像都是`NV12`格式，所以预分配内存大小可以由公式`高 * 宽 * 3 / 2 `，也可以利用提供的宏定义 `FRAME_BUFFER_SIZE(w, h)`进行内存大小计算
 - `width`：`image_buffer`保存图片的宽，必须是在`sp_open_camera`或者`sp_open_vps`配置好的输出宽
 - `height`：`image_buffer`保存图片的高，必须是在`sp_open_camera`或者`sp_open_vps`配置好的输出高
 - `timeout`：获取图片的超时时间，单位为`ms`，一般设置为`2000`
@@ -211,14 +211,14 @@ sidebar_position: 1
 
 **【功能描述】**  
 
-获取摄像头的raw图数据
+获取摄像头的 raw 图数据
 
 **【参数】**
 
 - `obj`： 已经初始化的`VIO`对象指针
-- `frame_buffer`：已经预分配内存的buffer指针，用于保存获取出来的raw图，预分配内存字节大小可以由公式`(高 * 宽 * 图像深度)/8`计算得出
-- `width`：获取raw图时传`NULL`
-- `height`：获取raw图时传`NULL`
+- `frame_buffer`：已经预分配内存的 buffer 指针，用于保存获取出来的 raw 图，预分配内存字节大小可以由公式`(高 * 宽 * 图像深度)/8`计算得出
+- `width`：获取 raw 图时传`NULL`
+- `height`：获取 raw 图时传`NULL`
 - `timeout`：获取图片的超时时间，单位为`ms`，一般设置为`2000`
 
 **【返回类型】**  
@@ -233,14 +233,14 @@ sidebar_position: 1
 
 **【功能描述】**  
 
-获取摄像头的ISP模块的YUV数据
+获取摄像头的 ISP 模块的 YUV 数据
 
 **【参数】**
 
 - `obj`： 已经初始化的`VIO`对象指针
-- `frame_buffer`：已经预分配内存的buffer指针，用于保存获取出来的图片，目前获取到的图像都是`NV12`格式，所以预分配内存大小可以由公式`高 * 宽 * 3 / 2 `，也可以利用提供的宏定义 `FRAME_BUFFER_SIZE(w, h)`进行内存大小计算
-- `width`：获取ISP的YUV数据时传`NULL`
-- `height`：获取ISP的YUV数据传`NULL`
+- `frame_buffer`：已经预分配内存的 buffer 指针，用于保存获取出来的图片，目前获取到的图像都是`NV12`格式，所以预分配内存大小可以由公式`高 * 宽 * 3 / 2 `，也可以利用提供的宏定义 `FRAME_BUFFER_SIZE(w, h)`进行内存大小计算
+- `width`：获取 ISP 的 YUV 数据时传`NULL`
+- `height`：获取 ISP 的 YUV 数据传`NULL`
 - `timeout`：获取图片的超时时间，单位为`ms`，一般设置为`2000`
 
 **【返回类型】**  
@@ -267,7 +267,7 @@ sidebar_position: 1
 
 成功返回 0，失败返回 -1
 
-## host编号选择
-camera对应的host编号如下图所示
+## host 编号选择
+camera 对应的 host 编号如下图所示
 
-![20250220-114529.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="20250220-114529.png" style={{ width: '100%' }} />

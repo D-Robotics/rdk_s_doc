@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # 1.1.2 开发者套件
 
-![image-rdk_600_mainboard_overview](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="image-rdk_600_mainboard_overview" style={{ width: '100%' }} />
 
 :::danger 注意
 
@@ -55,11 +55,11 @@ sidebar_position: 1
 | **Memory**     | • 32/64GB LPDDR5, 256-bit, up to 6400MT/s                                                                                                                                                                                                                                                                                                                                                |
 | **Storage**    | • 64/256GB UFS 3.1<br />• M.2 Key M Connector for NVMe SSD                                                                                                                                                                                                                                                                                                                               |
 | **USB**        | • 6x USB 3.2 Gen 1x1 Type-A<br />• 1x USB 2.0 Type-C (for flashing and debugging)                                                                                                                                                                                                                                                                                                        |
-| **Network**    | • M.2 Key E Connector for WIFI&BT Module<br />• 2x 1GbE RJ45 Ports<br />• 2x 10GbE RJ45 Ports<br />• 1x 1GbE RJ45 Ports (MCU-Domain)                                                                                                                                                                                                                                                     |
+| **Network**    | • M.2 Key E Connector for Wi-Fi&BT Module<br />• 2x 1GbE RJ45 Ports<br />• 2x 10GbE RJ45 Ports<br />• 1x 1GbE RJ45 Ports (MCU-Domain)                                                                                                                                                                                                                                                     |
 | **Display**    | • 1x HDMI 2.1                                                                                                                                                                                                                                                                                                                                                                            |
 | **Expansion**  | • 2x Camera Expansion Connector<br />• 1x MCU Port Expansion Connector                                                                                                                                                                                                                                                                                                                   |
 | **Connectors** | • 1x 2-pin RTC Battery Connector<br />• 1x 4-pin Fan Connector<br />• 1x 12-pin Automotive Connector<br />• 1x JTAG Debug Connector (for Main and MCU)<br />• 1x 12-pin MCU-Domain CAN(5x) Connector<br />• 1x 10-pin Main-Domain CAN(4x) Connector<br />• 1x 10-pin MCU-Domain UART(2x) & Main-Domain UART(2x) Connector<br />• 1x 10-pin PCM Connector<br />• 2x 22-pin MIPI Connector |
-| **Power**      | • 12–28V<br />• 4-pin Connector                                                                                                                                                                                                                                                                                                                                                          |
+| **Power**      | • 12~28V<br />• 4-pin Connector                                                                                                                                                                                                                                                                                                                                                          |
 | **Size**       | • 140mm x 123mm x 78mm                                                                                                                                                                                                                                                                                                                                                                   |
 
 ### 型号说明
@@ -72,16 +72,16 @@ sidebar_position: 1
 
 ### 拓扑图
 
-![image-rdk_s600_architecture_diagram.png](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_architecture_diagram.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_architecture_diagram.png" alt="image-rdk_s600_architecture_diagram.png" style={{ width: '100%' }} />
 
 ### 接口图
 
 **V0P1 接口图:**
 
-![image-rdk_600_mainboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface_V0P1.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface_V0P1.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
 
 **V0P2 接口图：**
-![image-rdk_600_mainboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
 
 | 序号     | 功能                      | 序号 | 功能                  | 序号 | 功能              |
 | -------- | ------------------------- | ---- | --------------------- | ---- | ----------------- |
@@ -94,7 +94,7 @@ sidebar_position: 1
 | J4       | 闪连(烧录，Main&MCU 调试) | J17  | MAIN-CAN 接口         | SW7  | MAIN-CAN 电阻选择 |
 | J5       | M.2 Key E 接口            | J18  | UART 接口（MAIN&MCU） | U44  | 2x 1GbE           |
 | J6       | M.2 Key M 接口            | J19  | PCM+I2C 接口          | U45  | 2x 10GbE          |
-| J7/J8/J9 | USB3.0 Type-A 接口        | J20  | RTC 电池接口          | U80  | 1x 1Gbe (MCU)     |
+| J7/J8/J9 | USB 3.0 Type-A 接口        | J20  | RTC 电池接口          | U80  | 1x 1Gbe (MCU)     |
 | J10      | HDMI 接口                 | J21  | 风扇接口              |      |                   |
 
 ## 接口说明{#interface}
@@ -177,7 +177,7 @@ V0P1 版本硬件不支持以下功能：
 :::
 
 :::info 提示
-- 在V0P1版本硬件中，I2C7 默认已用于 M.2 KEY M 接口、RTC IC 及 风扇 (FAN) 转速控制 IC 的通讯，RTC IC 和 风扇转速控制 IC 的 I2C 地址分别为 0X32 和 0X2F（不含读写位）。
+- 在 V0P1版本硬件中，I2C7 默认已用于 M.2 KEY M 接口、RTC IC 及 风扇 (FAN) 转速控制 IC 的通讯，RTC IC 和 风扇转速控制 IC 的 I2C 地址分别为 0X32 和 0X2F（不含读写位）。
 - 当系统处于 light sleep 和 deep sleep 模式时，VDD_PERI_3V3 电源关闭，最大供电电流为 700mA。
 
 :::
@@ -252,7 +252,7 @@ RDK S600 开发者套件包含一个 80-Pin 扩展接口 MCU Expansion Connector
 :::warning 注意
 
 - 在 V0P1 硬件版本中，SPI4 无法使用，SPI6 在 MCU 子卡上无法使用。    
-- 在 V0P1 硬件版本中，需使用地瓜提供的MCU扩展板。
+- 在 V0P1 硬件版本中，需使用地瓜提供的 MCU 扩展板。
 :::
 
 :::info 提示
@@ -395,21 +395,21 @@ V0P1 硬件版本暂不支持 10G base-T。
 | :------- | :-------------------- | :--------------------------- |
 | J1       | 430450400             | Molex                        |
 | J2       | 2034560003            | Molex                        |
-| J3       | 356-110A0CMBB1        | 深圳市广德众电子科技有限公司 |
-| J4       | U262-161N-4BVC11      | 中国星坤                     |
+| J3       | 356~110A0CMBB1        | 深圳市广德众电子科技有限公司 |
+| J4       | U262~161N-4BVC11      | 中国星坤                     |
 | J5       | X1302WVS-67CE-LPV01   | 中国星坤                     |
 | J6       | X1302WVS-67CM-LPV01   | 中国星坤                     |
 | J7/J8/J9 | USB-303WSD-BRY        | XUNPU （讯普）               |
-| J10      | A71-06H0-111N1        | 中国星坤                     |
+| J10      | A71~06H0~111N1        | 中国星坤                     |
 | J11/J13  | AFC01-S22FCA-00       | JS （钜硕电子）              |
-| J12/J14  | DY01-080S-B           | KEL Corporation              |
-| J15      | DY01-080S-B           | KEL Corporation              |
+| J12/J14  | DY01~080S-B           | KEL Corporation              |
+| J15      | DY01~080S-B           | KEL Corporation              |
 | J16      | X1251WRS-12HF-LPSW    | 中国星坤                     |
 | J17/J18  | X1251WRS-10HF-LPSW    | 中国星坤                     |
 | J19      | X1251WRS-14HF-LPSW    | 中国星坤                     |
 | J20      | HDGC1002WV-S-2P       | HDGC （华德共创）            |
 | J21      | 470531000             | Molex                        |
-| J22      | HX JN1.27-2X6 WZ H4.9 | hanxia(韩下)                 |
+| J22      | HX JN1.27~2X6 WZ H4.9 | hanxia(韩下)                 |
 | U44      | LPJG17561BGNL         | LINK-PP                      |
 | U45      | LPJM17012BHNL         | LINK-PP                      |
 | U80      | LPJG4806FBNL          | LINK-PP                      |

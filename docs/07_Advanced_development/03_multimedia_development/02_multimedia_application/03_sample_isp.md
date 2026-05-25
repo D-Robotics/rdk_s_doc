@@ -10,8 +10,8 @@
 
 | 目录      | 描述 |
 | ----------- | ----------- |
-| [get_isp_data](#get_isp_data)  | 单路 sensor 获取YUV视频帧示例  |
-| [isp_feedback](#isp_feedback)  | ISP回灌视频帧示例  |
+| [get_isp_data](#get_isp_data)  | 单路 sensor 获取 YUV 视频帧示例  |
+| [isp_feedback](#isp_feedback)  | ISP 回灌视频帧示例  |
 
 ## get_isp_data
 
@@ -173,21 +173,21 @@ Options:
 
 - `f <file>`: 该选项用于指定要使用 Raw 图的文件名。
 - `F <format>`: 该选项用于指定要使用 Raw 图的的格式，raw8、raw10、raw12。
-- `W <width>`: 该选项用于指定要使用 Raw 图的width。
-- `H <height>`: 该选项用于指定要使用 Raw 图的height。
+- `W <width>`: 该选项用于指定要使用 Raw 图的 width。
+- `H <height>`: 该选项用于指定要使用 Raw 图的 height。
 - `l <loop>`: 该选项用于指定要使用 Raw 图的回灌的次数，默认10次。
 - `h`: 显示帮助信息。
 
 #### 运行效果
 
 - 先使用 `get_vin_data -s 0` 获取一张 imx219 的 raw 图，`get_vin_data` 的使用详细参考 [sample_vin](sample_vin.html)。
-- 接下来我们可以根据提示准备好的 RAW 图指定format、width、height等参数进行回灌，ISP 回灌时会使用对应的 dummy Sensor 的 ISP 效果库进行调校。
+- 接下来我们可以根据提示准备好的 RAW 图指定 format、width、height 等参数进行回灌，ISP 回灌时会使用对应的 dummy Sensor 的 ISP 效果库进行调校。
 
 <div class="note">
 <strong>注意：</strong> <br />
-使用 dummy Sensor 进行回灌，无需实际接入硬件设备。程序会将raw图进行回灌isp，并使用对应的 ISP 效果库进行调校。<br />
+使用 dummy Sensor 进行回灌，无需实际接入硬件设备。程序会将 raw 图进行回灌 isp，并使用对应的 ISP 效果库进行调校。<br />
 dummy Sensor 的配置参数路径：/app/multimedia_samples/vp_sensors/dummy_sensor/dummy_sensor.c<br />
-在使用 dummy sensor 进行图像调试或 ISP 回灌时，请根据实际采集到的raw图，正确配置 sensor_param 中的 bayer_start 和 bayer_pattern 字段。配置错误可能导致图像出现反色或颜色异常。<br />
+在使用 dummy sensor 进行图像调试或 ISP 回灌时，请根据实际采集到的 raw 图，正确配置 sensor_param 中的 bayer_start 和 bayer_pattern 字段。配置错误可能导致图像出现反色或颜色异常。<br />
 </div>
 
 以 imx219 sensor 为例，执行 `./isp_feedback  -f handle_34661_chn0_1920x1080_stride_2400_frameid_1_ts_5752227762025.raw -F raw10 -H 1080 -W 1920` 。
@@ -222,7 +222,7 @@ isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 程序运行启动，会在当前目录保存如下调校后的的 yuv 图像，默认回灌10次，计算每次的回灌耗时：
 
 - Using index / sensor_name / config_file：表明当前使用 sensor index 为 5，sensor 名称为 dummy，对应的 sensor 配置文件为 dummy_sensor.c。
-- 每处理一帧 RAW 数据，会输出以下ISP 处理完成耗时信息，isp process one frame cost:  2170275 ns。
+- 每处理一帧 RAW 数据，会输出以下 ISP 处理完成耗时信息，isp process one frame cost:  2170275 ns。
 
 ### isp_feedback 常见问题
 

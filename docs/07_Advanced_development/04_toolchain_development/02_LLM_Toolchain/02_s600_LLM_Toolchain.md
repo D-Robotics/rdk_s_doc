@@ -10,10 +10,10 @@ sidebar_products: RDK S600
 在 RDK S600 平台上，D-Robotics_LLM_S600 目前支持以下模型和功能：
 
 **LLM**  
-支持 DeepSeek-R1-Distill-Qwen-1.5B，Qwen3-0.6B/1.7B/4B/8B 的单轮对话和多轮对话。
+支持 DeepSeek-R1-Distill-Qwen-1.5B，Qwen3~0.6B/1.7B/4B/8B 的单轮对话和多轮对话。
 
 **VLM**  
-支持 Qwen2.5-VL-3B/7B-Instruct，Qwen3-VL-2B/4B/8B-Instruct，InternVL2-2B 的图像文本处理。
+支持 Qwen2.5-VL-3B/7B-Instruct，Qwen3-VL-2B/4B/8B-Instruct，InternVL2~2B 的图像文本处理。
 
 **VLA**  
 支持 Pi0 的 x86 仿真运行和 S600 端侧推理，以及硬件在环体验。

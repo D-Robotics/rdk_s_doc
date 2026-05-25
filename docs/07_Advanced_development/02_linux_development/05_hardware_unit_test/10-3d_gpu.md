@@ -10,7 +10,7 @@ sidebar_position: 10
 - OpenCL（计算性能测试）：使用 clpeak 进行测试，评估 GPU 在通用计算（ GPGPU）任务中的性能，如浮点计算、内存带宽、整数计算等。
 
 ## 测试准备工作
-1.  S100 开发板存放了 clpeak 的patch 和 build 方法 , 可以 `cd` 到如下路径查看 :
+1.  S100 开发板存放了 clpeak 的 patch 和 build 方法 , 可以 `cd` 到如下路径查看 :
 	```bash
 	cd /app/chip_base_test/10_gpu_3d_test/
 	ls clpeak

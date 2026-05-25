@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # DECODER（解码模块）API
 
-`DECODER` API提供了以下的接口：
+`DECODER` API 提供了以下的接口：
 
 | 函数 | 功能 |
 | ---- | ----- |
@@ -23,7 +23,7 @@ sidebar_position: 3
 
 **【功能描述】**  
 
-初始化解码模块对象，在使用解码模块时需要调用获得操作句柄，支持H264、H265和Mjpeg格式的视频码流。
+初始化解码模块对象，在使用解码模块时需要调用获得操作句柄，支持 H264、H265和 Mjpeg 格式的视频码流。
 
 **【参数】**
 
@@ -64,8 +64,8 @@ sidebar_position: 3
 **【参数】**
 
 - `obj`： 已经初始化的`DECODER`对象指针
-- `stream_file`：当 `stream_file` 设置为一个码流文件名时，表示对这个码流文件进行解码，例如设置H264的码流文件“stream.h264”, 当 `stream_file` 传入空字符串时，表示解码的数据流需要通过调用 `sp_decoder_set_image` 传入。
-- `video_chn`：解码通道号，支持 0-31。
+- `stream_file`：当 `stream_file` 设置为一个码流文件名时，表示对这个码流文件进行解码，例如设置 H264的码流文件“stream.h264”, 当 `stream_file` 传入空字符串时，表示解码的数据流需要通过调用 `sp_decoder_set_image` 传入。
+- `video_chn`：解码通道号，支持 0~31。
 - `type`：解码的数据类型，支持 `SP_ENCODER_H264`，`SP_ENCODER_H265` 和 `SP_ENCODER_MJPEG`。
 - `width`：解码出来的图像帧的分辨率 - 宽
 - `height`：解码出来的图像帧的分辨率 - 高
@@ -105,7 +105,7 @@ sidebar_position: 3
 **【参数】**
 
 - `obj`：已经初始化的`DECODER`对象指针
-- `image_buffer`：返回的图像帧数据，这个buffer大小与图像分辨率的关系为 `(width * height * 3) / 2`。
+- `image_buffer`：返回的图像帧数据，这个 buffer 大小与图像分辨率的关系为 `(width * height * 3) / 2`。
 
 **【返回类型】** 
 
@@ -120,7 +120,7 @@ sidebar_position: 3
 **【功能描述】**  
 
 向已经打开的解码通道送入码流数据。
-如果是解码 H264 或 H265 码流，需要先发送3-5帧数据，让解码器完成帧缓存后，再获取解码帧数据。
+如果是解码 H264 或 H265 码流，需要先发送3~5帧数据，让解码器完成帧缓存后，再获取解码帧数据。
 如果解码 H264 码流，首先第一帧送入解码的数据需要是 sps 和 pps 的描述信息，否者解码器会报错退出。
 
 **【参数】**

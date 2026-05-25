@@ -4,9 +4,9 @@ sidebar_position: 1
 
 # dpkg
 
-Debian Linux系统上安装、创建和管理软件包。
+Debian Linux 系统上安装、创建和管理软件包。
 
-**dpkg命令** 是Debian Linux系统用来安装、创建和管理软件包的实用工具。
+**dpkg 命令** 是 Debian Linux 系统用来安装、创建和管理软件包的实用工具。
 
 ## 语法说明
 
@@ -33,7 +33,7 @@ dpkg 命令不仅有选项可以设置，还需要设置命令来执行不同的
 - --admindir=`目录`          使用 `目录` 而非 /var/lib/dpkg。
 - --root=`目录`              安装到另一个根目录下。
 - --instdir=`目录`           改变安装目录的同时保持管理目录不变。
-- --path-exclude=`表达式`    不要安装符合Shell表达式的路径。
+- --path-exclude=`表达式`    不要安装符合 Shell 表达式的路径。
 - --path-include=`表达式`    在排除模式后再包含一个模式。
 - -O|--selected-only         忽略没有被选中安装或升级的软件包。
 - -E|--skip-same-version     忽略版本与已安装软件版本相同的软件包。
@@ -82,7 +82,7 @@ dpkg -L package
 dpkg -l package
 ```
 
-- 解开deb包的内容
+- 解开 deb 包的内容
 
 ```
 dpkg --unpack package.deb
@@ -100,7 +100,7 @@ dpkg -S keyword
 dpkg -l
 ```
 
-- 列出deb包的内容
+- 列出 deb 包的内容
 
 ```
 dpkg -c package.deb

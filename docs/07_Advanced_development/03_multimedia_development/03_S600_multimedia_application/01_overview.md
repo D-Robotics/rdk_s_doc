@@ -38,10 +38,10 @@
 ### 硬件使用指南
 
 mipi host 编号如图                                                                                                               
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="" style={{ width: '100%' }} />
 
 mipi host 2 对应的解串器 link 编号如图
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png" alt="" style={{ width: '100%' }} />
 
 ### 软件使用指南
 
@@ -73,7 +73,7 @@ Options:
 ### 编译方法
 
 本模块的示例代码的依赖如下:
-1. 依赖 BSP 源码编译生成的 hbre 头文件、库文件，以及根文件系统中的 ffmpeg 等头文件和动态库, 相关库和路径的引用在各个 Sample 目录下的Makfile中指定
+1. 依赖 BSP 源码编译生成的 hbre 头文件、库文件，以及根文件系统中的 ffmpeg 等头文件和动态库, 相关库和路径的引用在各个 Sample 目录下的 Makfile 中指定
 ```
 LDFLAGS += -lvpf -lvio -lcam -lhbmem
 LDFLAGS := -L/usr/hobot/lib

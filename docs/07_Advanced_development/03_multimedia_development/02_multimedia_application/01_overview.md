@@ -63,7 +63,7 @@ Options:
 ### 编译方法
 
 本模块的示例代码的依赖如下:
-1. 依赖 BSP 源码编译生成的 hbre 头文件、库文件，以及根文件系统中的 ffmpeg 等头文件和动态库, 相关库和路径的引用在各个 Sample 目录下的Makfile中指定
+1. 依赖 BSP 源码编译生成的 hbre 头文件、库文件，以及根文件系统中的 ffmpeg 等头文件和动态库, 相关库和路径的引用在各个 Sample 目录下的 Makfile 中指定
 ```
 LDFLAGS += -lvpf -lvio -lcam -lhbmem
 LDFLAGS := -L/usr/hobot/lib

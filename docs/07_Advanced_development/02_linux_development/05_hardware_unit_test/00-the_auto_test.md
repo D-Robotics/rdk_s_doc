@@ -90,7 +90,7 @@ ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000
 ​	此方式便于调试单项测试内容或观察测试执行情况。
 
 - **自启动或调试测试项**
-  测试项已经配置完成且调试通过时，也可以将startup.sh 放到 rc.local 自启动脚本中进行自启动测试，需要开发板在上电后自动运行测试的场景
+  测试项已经配置完成且调试通过时，也可以将 startup.sh 放到 rc.local 自启动脚本中进行自启动测试，需要开发板在上电后自动运行测试的场景
 
 ## 查看测试日志
 

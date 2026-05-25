@@ -12,28 +12,28 @@ import DocScope from '@site/src/components/DocScope';
 ## 1. 简介
 
 <DocScope products="RDK S100">
-本用户文档旨在提供WDG驱动的相关信息，包括功能、配置参数、API。
-文档每一处提及的Wdgx，x为索引，有效范围为0、1、2。
+本用户文档旨在提供 WDG 驱动的相关信息，包括功能、配置参数、API。
+文档每一处提及的 Wdgx，x 为索引，有效范围为0、1、2。
 </DocScope>
 <DocScope products="RDK S600">
-本用户文档旨在提供WDG驱动的相关信息，包括功能、配置参数、API。
-文档每一处提及的Wdgx，x为索引，有效范围为0、1、2、3、4。
+本用户文档旨在提供 WDG 驱动的相关信息，包括功能、配置参数、API。
+文档每一处提及的 Wdgx，x 为索引，有效范围为0、1、2、3、4。
 </DocScope>
 
 ## 2. 概览
 ### 2.1 文件列表
-#### Lowlevel接口
-这些是Watchdog底层驱动的实现和内部公共接口文件，一般用户不需要直接关注：
+#### Lowlevel 接口
+这些是 Watchdog 底层驱动的实现和内部公共接口文件，一般用户不需要直接关注：
 
 - McalCdd\Wdg\inc\Wdg_Lld.h
 - McalCdd\Wdg\src\Wdg_Lld.c
 - McalCdd\Wdg\inc\Wdg_Prv.h
 - McalCdd\Wdg\src\Wdg_Common.c
 
-#### Highlevel接口
+#### Highlevel 接口
 
 <DocScope products="RDK S100">
-这些是用于用户调用的API实现文件，每一个Wdg的instance需要一份独立代码文件：
+这些是用于用户调用的 API 实现文件，每一个 Wdg 的 instance 需要一份独立代码文件：
 
 - McalCdd\Wdg\src\Wdg0.c
 - McalCdd\Wdg\src\Wdg1.c
@@ -43,7 +43,7 @@ import DocScope from '@site/src/components/DocScope';
 - McalCdd\Wdg\inc\Wdg2.h
 </DocScope>
 <DocScope products="RDK S600">
-这些是用于用户调用的API实现文件，每一个Wdg的instance需要一份独立代码文件：
+这些是用于用户调用的 API 实现文件，每一个 Wdg 的 instance 需要一份独立代码文件：
 
 - McalCdd\Wdg\src\Wdg0.c
 - McalCdd\Wdg\src\Wdg1.c
@@ -207,7 +207,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 
 ### 3.4 临界区
-使用`SchM_Enter_Wdg_ExclusiveZone_XX`和`SchM_Exit_Wdg_ExclusiveZone_XX`来定义进入和退出临界区的操作，WDG驱动程序需要用户结合实际应用部署情况来处理临界区，其函数已在驱动中调用。
+使用`SchM_Enter_Wdg_ExclusiveZone_XX`和`SchM_Exit_Wdg_ExclusiveZone_XX`来定义进入和退出临界区的操作，WDG 驱动程序需要用户结合实际应用部署情况来处理临界区，其函数已在驱动中调用。
 
 保护`Wdg_LastMode`:
 - SchM_Enter_Wdg_ExclusiveZone_00
@@ -237,7 +237,7 @@ import DocScope from '@site/src/components/DocScope';
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
-## 4. Acore看门狗超时MCU处理流程
+## 4. Acore 看门狗超时 MCU 处理流程
 
 ### 4.1 复位配置使能
 
@@ -247,9 +247,9 @@ import DocScope from '@site/src/components/DocScope';
 |---|---|
 | Wdg_Enable_RstConfig | 复位配置 |
 
-### 4.2 MCU侧处理流程
+### 4.2 MCU 侧处理流程
 
-Acore侧看门狗超时触发中断送到MCU0侧，由MCU0侧在延时后发起复位，以便Acore打印栈等信息。
+Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发起复位，以便 Acore 打印栈等信息。
 
 流程为 中断置标志 → 专用任务里延时 → 触发长复位，执行长复位的责任在 OS 任务。
 

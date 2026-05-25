@@ -24,7 +24,7 @@ RDK S100 开发板提供以下 USB 接口：
 | 接口类型 | 位置 | 数量 | 工作模式 | 用途 |
 |---------|------|------|---------|------|
 | USB Type-C | J16 | 1 | Device Only | 镜像烧录、调试串口、USB Gadget |
-| USB 3.0 Type-A | J19/J20 | 4 | Host Only | 连接 USB 外设（U盘、键盘、鼠标等） |
+| USB 3.0 Type-A | J19/J20 | 4 | Host Only | 连接 USB 外设（U 盘、键盘、鼠标等） |
 
 :::warning 重要限制
 
@@ -43,7 +43,7 @@ RDK S600 开发板提供以下 USB 接口：
 | 接口类型 | 位置 | 数量 | 工作模式 | 用途 |
 |---------|------|------|---------|------|
 | USB Type-C | J4 | 1 | Device Only | 镜像烧录、调试串口、USB Gadget |
-| USB 3.2 Gen 1x1 Type-A | J7/J8/J9 | 6 | Host Only | 连接 USB 外设（U盘、键盘、鼠标等） |
+| USB 3.2 Gen 1x1 Type-A | J7/J8/J9 | 6 | Host Only | 连接 USB 外设（U 盘、键盘、鼠标等） |
 
 :::warning 重要限制
 
@@ -145,7 +145,7 @@ usb-gadget start succeed.
 
 连接到 PC 后，在电脑的网络配置页面可以看到 `Remote NDIS Compatible Device` 网卡：
 
-![RNDIS_Device](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="RNDIS_Device" style={{ width: '100%' }} />
 
 **配置网络 IP：**
 
@@ -157,7 +157,7 @@ ifconfig usb0 192.168.1.110
 
 PC 端配置远程网卡 IP 地址（需要与开发板在同一网段）：
 
-![NETWORK_CONFIG](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png" alt="NETWORK_CONFIG" style={{ width: '100%' }} />
 
 **验证网络连接：**
 

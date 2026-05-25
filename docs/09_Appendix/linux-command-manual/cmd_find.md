@@ -6,7 +6,7 @@ sidebar_position: 1
 
 find 命令用于在指定目录下查找文件和目录。
 
-它可以使用不同的选项来过滤和限制查找的结果。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则find命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。
+它可以使用不同的选项来过滤和限制查找的结果。任何位于参数之前的字符串都将被视为欲查找的目录名。如果使用该命令时，不设置任何参数，则 find 命令将在当前目录下查找子目录与文件。并且将查找到的子目录和文件全部进行显示。
 
 ## 语法说明
 
@@ -87,13 +87,13 @@ find . -type f
 find . -size +1M
 ```
 
-搜索小于10KB的文件
+搜索小于10KB 的文件
 
 ```shell
 find . -type f -size -10k
 ```
 
-搜索等于10KB的文件
+搜索等于10KB 的文件
 
 ```shell
 find . -type f -size 10k
@@ -155,7 +155,7 @@ find . -type f -perm 644 -exec ls -l {} \;
 find / -type f -size 0 -exec ls -l {} \;
 ```
 
-当前目录及子目录下查找所有以.txt和.pdf结尾的文件
+当前目录及子目录下查找所有以.txt 和.pdf 结尾的文件
 
 ```shell
 find . \( -name "*.txt" -o -name "*.pdf" \)
@@ -181,7 +181,7 @@ find . -regex ".*\(\.txt\|\.pdf\)$"
 find . -iregex ".*\(\.txt\|\.pdf\)$"
 ```
 
-否定参数, 找出/home下不是以.txt结尾的文件
+否定参数, 找出/home 下不是以.txt 结尾的文件
 
 ```shell
 find /home ! -name "*.txt"
@@ -266,7 +266,7 @@ find $HOME/. -name "*.txt" -ok rm {} \;
 find . -type f -name "*.txt" -exec cat {} \;> /all.txt
 ```
 
-查找当前目录或者子目录下所有.txt文件，但是跳过子目录sk
+查找当前目录或者子目录下所有.txt 文件，但是跳过子目录 sk
 
 ```shell
 find . -path "./sk" -prune -o -name "*.txt" -print

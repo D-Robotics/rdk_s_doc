@@ -839,12 +839,12 @@ Ec_SlaveOP <slave> <index> <subindex> <value> <action>
 **可能原因**：
 - `Eth_Init` 或 `Eth_SetControllerMode` 调用失败
 - 控制器 0 未正确配置或未上电
-- MCU网口速率和从站网口速率不一致
+- MCU 网口速率和从站网口速率不一致
 
 **排查**：
 1. 确认 McalCdd/Ethernet 模块已正确初始化（`Eth_Platform_Inited` 标志）
 2. 检查硬件连接和以太网控制器配置
-3. 检查MCU网口速率与从站速率是否一致
+3. 检查 MCU 网口速率与从站速率是否一致
 
 ---
 
@@ -854,13 +854,13 @@ Ec_SlaveOP <slave> <index> <subindex> <value> <action>
 - 网线未连接或从站未上电
 - 以太网帧类型不匹配（应为 `0x88A4`）
 - 接收滤波器未放通 EtherCAT 帧
-- MCU网口速率和从站网口速率不一致
+- MCU 网口速率和从站网口速率不一致
 
 **排查**：
 1. 确认物理连接正常
 2. 检查 `ETH_FRAME_TYPE_ECAT` 宏是否为 `0x88A4`
 3. 检查 `Eth_Receive_ethercat` 是否被正确实现，能收到 EtherCAT 帧
-4. 检查MCU网口速率与从站速率是否一致
+4. 检查 MCU 网口速率与从站速率是否一致
 ---
 
 ### Q3：WKC 持续与 expectedWKC 不符
@@ -1088,7 +1088,7 @@ Ec_SlaveOP upload <slave> <index> <subindex>
 
 **操作步骤**：
 
-读取第 1 台从站（`slave=0`）的led8的value（`0x7010:08`）：
+读取第 1 台从站（`slave=0`）的 led8的 value（`0x7010:08`）：
 
 ```
 Ec_SlaveOP upload 0 0x7010 8

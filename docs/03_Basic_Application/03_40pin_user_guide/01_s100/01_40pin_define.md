@@ -19,10 +19,10 @@ import TabItem from '@theme/TabItem';
 
 RDKS100 有 40-pin，方便用户进行外围扩展，其中数字 IO 采用 3.3V 电平设计。接口定义如下：
 
-![image-rdk_100_mainboard_40pin](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_40pin.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_40pin.png" alt="image-rdk_100_mainboard_40pin" style={{ width: '100%' }} />
 
 :::info
-接口定义中，命名为`40PIN_GPIO[x]_3V3`的管脚是I2C拓展IO芯片提供的GPIO，不受芯片Pinctrl控制器管理，没有其他功能可复用，不需要在dts内配置Pinmux功能，仅能作为**GPIO功能**使用。
+接口定义中，命名为`40PIN_GPIO[x]_3V3`的管脚是 I2C 拓展 IO 芯片提供的 GPIO，不受芯片 Pinctrl 控制器管理，没有其他功能可复用，不需要在 dts 内配置 Pinmux 功能，仅能作为**GPIO 功能**使用。
 :::
 
 ## GPIO 读写操作示例

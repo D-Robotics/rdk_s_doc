@@ -64,7 +64,7 @@ mount -o ro /dev/hda1 /mnt
 mount -o remount,rw /
 ```
 
-挂载nfs网络文件系统
+挂载 nfs 网络文件系统
 
 ```
 mount -t nfs -o nolock 192.168.1.20:/home/ /tmp/nfs

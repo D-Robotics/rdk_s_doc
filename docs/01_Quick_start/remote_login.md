@@ -20,14 +20,14 @@ import DocScope from '@site/src/components/DocScope';
 - **超级用户 (root)：** 用户名 `root`，密码 `root`
 
 :::tip
-通过网络方式远程登录前，开发板需要通过有线以太网或者无线 WiFi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：
+通过网络方式远程登录前，开发板需要通过有线以太网或者无线 Wi-Fi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：
 
 <DocScope products="RDK S100">
 
 - 有线以太网：
   - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
-  - 开发板 eth0 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
-- 无线 WiFi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
+  - 开发板 eth0 接口默认采用 dhcp 模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+- 无线 Wi-Fi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
 
 </DocScope>
 
@@ -36,8 +36,8 @@ import DocScope from '@site/src/components/DocScope';
 - 有线以太网：
   - 开发板 eth2 eth3 仍在调试中，暂不支持使用
   - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
-  - 开发板 eth0 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
-- 无线 WiFi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
+  - 开发板 eth0 接口默认采用 dhcp 模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+- 无线 Wi-Fi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
 
 </DocScope>
 
@@ -45,7 +45,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 串口登录{#login_uart}
 
-### **win连接串口**
+### **win 连接串口**
 
 参考视频: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
 
@@ -63,7 +63,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 当串口 USB 转接板首次插入电脑时，需要安装串口驱动。驱动程序可从资源中心的[工具子栏目](https://developer.d-robotics.cc/resource)获取。驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
 
-![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="image-20220416105939067" style={{ width: '100%' }} />
 
 - 打开`MobaXterm`工具，点击`Session`，然后选择`Serial`
 
@@ -80,7 +80,7 @@ import DocScope from '@site/src/components/DocScope';
   | 流控（Flow Control） | 无     |
 
 - 点击`OK`，输入用户名：`root`、密码：`root`登录设备
-  ![image-Uart-Login](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif)
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="image-Uart-Login" style={{ width: '100%' }} />
 
 此时，可使用`ifconfig -a`命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：
 
@@ -177,23 +177,23 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 ```
 </DocScope>
 
-### **mac连接串口**
+### **mac 连接串口**
 
-macos系统下，使用minicom工具连接串口，步骤如下：
-1. 使用minicom命令连接串口验证(`minicom -D /dev/tty.wchusbserial* -b 921600 -8`）
+macos 系统下，使用 minicom 工具连接串口，步骤如下：
+1. 使用 minicom 命令连接串口验证(`minicom -D /dev/tty.wchusbserial* -b 921600 -8`）
       ```bash
       minicom  # 启动 minicom 终端工具，用于串口通信
       -D       # 指定要使用的串口设备（device）
       -b       # 设置串口波特率（baud rate）
       -8       # 设置 数据位数为 8 位（data bits）
       ```
-      ![image-S100-download](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="image-S100-download" style={{ width: '100%' }} />
 2. 连接开发板验证
-   ![image-S100-download](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="image-S100-download" style={{ width: '100%' }} />
 
 :::tip
 
-使用minicom连接出现乱码，请查看[使用macos系统笔记本串口乱码](../01_Quick_start/02_install_os/rdk_s100/05_FAQ.md#使用-macos-系统笔记本串口乱码问题)
+使用 minicom 连接出现乱码，请查看[使用macos系统笔记本串口乱码](../01_Quick_start/02_install_os/rdk_s100/05_FAQ.md#使用-macos-系统笔记本串口乱码问题)
 :::
 
 ## 网络状态确认{#network_config}
@@ -212,7 +212,7 @@ macos系统下，使用minicom工具连接串口，步骤如下：
 - 找到 Internet 协议版本 4 选项并双击打开
 - 在下图红框位置填入对应的网络参数，点击确定
 
-![image-20220416110242445](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="image-20220416110242445" style={{ width: '100%' }} />
 
 如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../02_System_configuration/01_network_bluetooth.md)章节进行配置。
 
@@ -228,7 +228,7 @@ macos系统下，使用minicom工具连接串口，步骤如下：
 3. 选中`specify username`，输入`sunrise`
 4. 点击 OK 后，输入用户名（sunrise）、密码（sunrise）即可完成登录
 
-![image-Network-Login](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="image-Network-Login" style={{ width: '100%' }} />
 
 ### 电脑命令行
 
@@ -238,33 +238,33 @@ macos系统下，使用minicom工具连接串口，步骤如下：
 2. 弹出连接确认提示，输入 YES
 3. 输入密码（sunrise）即可完成登录
 
-![image-Cmdline-Linux](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="image-Cmdline-Linux" style={{ width: '100%' }} />
 
 
 ## NoMachine 登录
 
 :::tip
-NoMachine功能需要S100/S600端的软件包支持，配置指南见[NoMachine配置](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-配置)
+NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachine配置](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-配置)
 :::
 
-本章节面向使用Ubuntu Desktop系统版本的用户，介绍如何通过`NoMachine`实现远程桌面登录功能。以下章节以S100为例，S600的操作与S100一致，将链接名内的`S100`替换为`S600`即可。
+本章节面向使用 Ubuntu Desktop 系统版本的用户，介绍如何通过`NoMachine`实现远程桌面登录功能。以下章节以 S100为例，S600的操作与 S100一致，将链接名内的`S100`替换为`S600`即可。
 
 **连接开发板**
 
 1. 打开`NoMachine`客户端，点击`Add`增加主机配置
 
-![nomachine_login01](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="nomachine_login01" style={{ width: '100%' }} />
 
 2. 在跳出来的界面中填写`RDK100/RDKS600`的主机信息，完成后点击`Add`
 
-![nomachine_login02](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="nomachine_login02" style={{ width: '100%' }} />
 
 3. 此时返回主界面，双击刚才生成的主机
 
-![nomachine_login03](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="nomachine_login03" style={{ width: '100%' }} />
 
-4. 弹出登录界面，输入用户名、密码点击OK即可完成远程登陆
+4. 弹出登录界面，输入用户名、密码点击 OK 即可完成远程登陆
 
-![nomachine_login04](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="nomachine_login04" style={{ width: '100%' }} />
 
-![nomachine_login05](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="nomachine_login05" style={{ width: '100%' }} />

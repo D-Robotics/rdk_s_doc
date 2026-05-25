@@ -1,0 +1,108 @@
+{
+  "files": 198,
+  "links_total": 448,
+  "img_total": 536,
+  "local_missing_links": [
+    {
+      "file": "docs/08_FAQ/01_hardware_and_system.md",
+      "target": "/rdk_s/Advanced_development/hardware_development/accessory"
+    },
+    {
+      "file": "docs/08_FAQ/01_hardware_and_system.md",
+      "target": "/install_os"
+    },
+    {
+      "file": "docs/08_FAQ/01_hardware_and_system.md",
+      "target": "/System_configuration/self_start"
+    },
+    {
+      "file": "docs/08_FAQ/01_hardware_and_system.md",
+      "target": "/rdk_s/Advanced_development/linux_development/kernel_headers"
+    },
+    {
+      "file": "docs/08_FAQ/01_hardware_and_system.md",
+      "target": "/Robot_development/quick_start/cross_compile"
+    },
+    {
+      "file": "docs/08_FAQ/02_interface.md",
+      "target": "/rdk_s/System_configuration/network_bluetooth"
+    },
+    {
+      "file": "docs/08_FAQ/02_interface.md",
+      "target": "/rdk_s/Quick_start/hardware_introduction/rdk_s100_camera_expansion_board"
+    },
+    {
+      "file": "docs/08_FAQ/04_multimedia.md",
+      "target": "/rdk_s/Basic_Application/audio/audio_board_s100#"
+    },
+    {
+      "file": "docs/08_FAQ/05_toolchain.md",
+      "target": "x[i]"
+    },
+    {
+      "file": "docs/07_Advanced_development/02_linux_development/08_log_introduction.md",
+      "target": "../05_mcu_development/01_S100/01_basic_information.md#mcu-log简介"
+    },
+    {
+      "file": "docs/07_Advanced_development/05_mcu_development/01_basic_information.md",
+      "target": "../../../01_Quick_start/02_install_os/rdk_s100/03_xburn/01_windows.md#使用-xburn-指定区域烧录"
+    },
+    {
+      "file": "docs/07_Advanced_development/05_mcu_development/01_basic_information.md",
+      "target": "../../../01_Quick_start/02_install_os/rdk_s600.md#指定区域烧录"
+    },
+    {
+      "file": "docs/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/03_sample_isp.md",
+      "target": "./overview#示例使用指南"
+    },
+    {
+      "file": "docs/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/09_sample_pipeline.md",
+      "target": "./overview#示例使用指南"
+    },
+    {
+      "file": "docs/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/09_sample_pipeline.md",
+      "target": "./overview#示例使用指南"
+    },
+    {
+      "file": "docs/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/09_sample_pipeline.md",
+      "target": "./overview#示例使用指南"
+    },
+    {
+      "file": "docs/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/09_sample_pipeline.md",
+      "target": "./overview#示例使用指南"
+    },
+    {
+      "file": "docs/07_Advanced_development/02_linux_development/04_driver_development_super/09_driver_thermal_dev.md",
+      "target": "../../../System_configuration/frequency_management#rdk-s100"
+    },
+    {
+      "file": "docs/07_Advanced_development/02_linux_development/04_driver_development_super/09_driver_thermal_dev.md",
+      "target": "../../../System_configuration/frequency_management#rdk-s600"
+    },
+    {
+      "file": "docs/07_Advanced_development/02_linux_development/04_driver_development_super/12_driver_timesync.md",
+      "target": "../../05_mcu_development/01_S100/01_basic_information.md#开发环境"
+    },
+    {
+      "file": "docs/03_Basic_Application/04_multi_media/cdev_demo.md",
+      "target": "2000-01-01,19:06:39.821.214"
+    },
+    {
+      "file": "docs/03_Basic_Application/04_multi_media/cdev_demo.md",
+      "target": "2000-01-01,19:06:39.876.293"
+    },
+    {
+      "file": "docs/03_Basic_Application/04_multi_media/pydev_vio_demo.md",
+      "target": "/rdk_s/Algorithm_Application/Python_Sample/mipi_camera_yolov5x"
+    },
+    {
+      "file": "docs/01_Quick_start/01_hardware_introduction/01_rdk_s100/index.md",
+      "target": "/rdk_s/Basic_Application/Image/usb_camera#usb20摄像头接入说明"
+    }
+  ],
+  "local_missing_images": [],
+  "cjk_en_spacing_hits": 5900,
+  "range_hyphen_hits": 177,
+  "usb_no_space_hits": 47,
+  "wifi_variant_hits": 22
+}

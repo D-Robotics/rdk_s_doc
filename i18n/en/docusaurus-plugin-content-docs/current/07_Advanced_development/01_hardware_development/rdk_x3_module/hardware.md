@@ -35,4 +35,6 @@ This section provides hardware design guidelines and module pin multiplexing ins
 
 **Pin Multiplexing Instructions**
 
-- [RDK X3 Module Pin Multiplexing Instructions](https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3_module/RDK_X3_Module_PINMUX.xlsx)
+- <a href="https://archive.d-robotics.cc/downloads/en/hardware/rdk_x3_module/RDK_X3_Module_PINMUX.xlsx">
+  RDK X3 Module Pin Multiplexing Instructions
+</a>

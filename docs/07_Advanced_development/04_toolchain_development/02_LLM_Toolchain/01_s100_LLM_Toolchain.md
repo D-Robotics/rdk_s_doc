@@ -10,11 +10,11 @@ sidebar_products: RDK S100
 在 RDK S100/S100P 平台上，D-Robotics_LLM_S100 目前支持以下模型和功能： 
 
 **LLM**
-1. DeepSeek-R1-Distill-Qwen：支持 DeepSeek-R1-Distill-Qwen-1.5B 和 DeepSeek-R1-Distill-Qwen-7B，提供模型量化、简单会话、多轮对话、PPL评估功能。 
+1. DeepSeek-R1-Distill-Qwen：支持 DeepSeek-R1-Distill-Qwen-1.5B 和 DeepSeek-R1-Distill-Qwen-7B，提供模型量化、简单会话、多轮对话、PPL 评估功能。 
 
-2. InternLM2：支持 InternLM2-1.8B，提供模型量化、简单会话、PPL评估功能。 
+2. InternLM2：支持 InternLM2~1.8B，提供模型量化、简单会话、PPL 评估功能。 
 
-3. Qwen2.5：支持 Qwen2.5-1.5B、Qwen2.5-7B、Qwen2.5-1.5B-Instruct 和Qwen2.5-7B-Instruct，提供模型量化、简单会话、多轮对话（仅 Instruct）、PPL 评估功能。 
+3. Qwen2.5：支持 Qwen2.5~1.5B、Qwen2.5~7B、Qwen2.5~1.5B-Instruct 和 Qwen2.5~7B-Instruct，提供模型量化、简单会话、多轮对话（仅 Instruct）、PPL 评估功能。 
 
 **多模态**
 1. Qwen2.5-Omni：支持 Qwen2.5-Omni-3B，提供模型量化、离线运行、在线运行功能。

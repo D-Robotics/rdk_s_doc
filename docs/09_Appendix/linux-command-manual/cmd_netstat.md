@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # netstat
 
-**netstat命令** 用来打印Linux中网络系统的状态信息，可让你得知整个系统的网络情况。
+**netstat 命令** 用来打印 Linux 中网络系统的状态信息，可让你得知整个系统的网络情况。
 
 ## 语法说明
 
@@ -57,13 +57,13 @@ netstat -at    #列出所有tcp端口
 netstat -au    #列出所有udp端口   
 ```
 
-显示当前户籍UDP连接状况
+显示当前户籍 UDP 连接状况
 
 ```
 netstat -nu
 ```
 
-显示UDP端口号的使用情况
+显示 UDP 端口号的使用情况
 
 ```
 netstat -apu
@@ -98,15 +98,15 @@ netstat -lu       #只列出所有监听 udp 端口
 netstat -lx       #只列出所有监听 UNIX 端口
 ```
 
-在netstat输出中显示 PID 和进程名称
+在 netstat 输出中显示 PID 和进程名称
 
 ```
 netstat -pt
 ```
 
-`netstat -p`可以与其它开关一起使用，就可以添加“PID/进程名称”到netstat输出中。
+`netstat -p`可以与其它开关一起使用，就可以添加“PID/进程名称”到 netstat 输出中。
 
-持续输出netstat信息
+持续输出 netstat 信息
 
 ```
 netstat -c   #每隔一秒输出网络信息
@@ -134,7 +134,7 @@ netstat -ap | grep ssh
 netstat -an | grep ':80'
 ```
 
-通过端口找进程ID
+通过端口找进程 ID
 
 ```bash
 netstat -anp|grep 8081 | grep LISTEN|awk '{printf $7}'|cut -d/ -f1
