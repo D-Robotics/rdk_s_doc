@@ -295,20 +295,11 @@ function extractSidebarScopeConfig(filePath) {
 
 /**
  * 将路径转换为 Docusaurus docId 格式
- * - 转换为小写
- * - 去除数字前缀（如 02_02_02_Quick_start 变成 quick_start）
+ * @param {string} relativePath
+ * @param {(path: string) => string} normalizeDocIdFromPath
  */
-function toDocId(relativePath) {
-  const parts = relativePath.split('/');
-  
-  const docIdParts = parts.map(part => {
-    // 去除数字前缀（如 02_02_02_Quick_start -> 02_02_Quick_start）
-    return part.replace(/^\d+_/, '');
-  });
-  
-  const docId = docIdParts.join('/').toLowerCase();
-  
-  return docId;
+function toDocId(relativePath, normalizeDocIdFromPath) {
+  return normalizeDocIdFromPath(relativePath);
 }
 
 /**
@@ -327,8 +318,9 @@ function formatVersions(versions) {
 
 /**
  * 扫描目录中的所有 Markdown 文件和 _sidebar_scope.json
+ * @param {{ collectDocScopeKeys: Function, normalizeDocIdFromPath: Function }} idUtils
  */
-function scanDirectory(dir, baseDir, config) {
+function scanDirectory(dir, baseDir, config, idUtils) {
   if (!fs.existsSync(dir)) {
     return;
   }
@@ -341,7 +333,7 @@ function scanDirectory(dir, baseDir, config) {
     
     if (stat.isDirectory()) {
       // 递归扫描子目录
-      scanDirectory(fullPath, baseDir, config);
+      scanDirectory(fullPath, baseDir, config, idUtils);
     } else if (item === '_sidebar_scope.json') {
       // 处理 _sidebar_scope.json 文件
       const scopeConfig = extractSidebarScopeConfig(fullPath);
@@ -351,7 +343,7 @@ function scanDirectory(dir, baseDir, config) {
         const folderPath = path.relative(baseDir, path.dirname(fullPath)).replace(/\\/g, '/');
         
         // 转换为 Docusaurus docId 格式
-        const folderId = toDocId(folderPath);
+        const folderId = toDocId(folderPath, idUtils.normalizeDocIdFromPath);
         
         const productsNorm = normalizeScopeProductList(scopeConfig.products);
 
@@ -374,9 +366,7 @@ function scanDirectory(dir, baseDir, config) {
       if (frontMatter && (frontMatter.sidebar_versions || frontMatter.sidebar_products)) {
         // 计算相对路径（相对于当前扫描根目录，如 docs/ 或 i18n/.../current/）
         const relativePath = path.relative(baseDir, fullPath).replace(/\.md$/, '').replace(/\\/g, '/');
-        
-        // 转换为 Docusaurus docId 格式
-        const docId = toDocId(relativePath);
+        const scopeKeys = idUtils.collectDocScopeKeys(relativePath, frontMatter.id);
         
         const versions = parseScopeList(frontMatter.sidebar_versions);
         
@@ -402,10 +392,12 @@ function scanDirectory(dir, baseDir, config) {
           versions: versions,
           products: productsNorm,
         };
-        config[docId] = mergeScopeConfig(config[docId], nextScope);
+        for (const key of scopeKeys) {
+          config[key] = mergeScopeConfig(config[key], nextScope);
+        }
         
         console.log(`✓ 找到文档配置: ${relativePath}`);
-        console.log(`  docId: ${docId}`);
+        console.log(`  docId keys: ${scopeKeys.join(', ')}`);
         console.log(`  版本: ${formatVersions(versions)}`);
         console.log(`  产品: ${productsNorm.join(', ') || '所有产品'}`);
       }
@@ -416,7 +408,10 @@ function scanDirectory(dir, baseDir, config) {
 /**
  * 主函数
  */
-function main() {
+async function main() {
+  const { collectDocScopeKeys, normalizeDocIdFromPath } = await import('../src/context/doc-scope-id-utils.mjs');
+  const idUtils = { collectDocScopeKeys, normalizeDocIdFromPath };
+
   console.log('开始扫描文档文件...\n');
   
   const config = {};
@@ -424,14 +419,14 @@ function main() {
   // 扫描 docs 目录
   if (fs.existsSync(docsDir)) {
     console.log('扫描 docs 目录:');
-    scanDirectory(docsDir, docsDir, config);
+    scanDirectory(docsDir, docsDir, config, idUtils);
     console.log('');
   }
   
   // 扫描英文 i18n current 目录（与 watch-sidebar-config 监听范围一致）
   if (fs.existsSync(i18nEnDocsCurrentDir)) {
     console.log('扫描 i18n/en/docusaurus-plugin-content-docs/current 目录:');
-    scanDirectory(i18nEnDocsCurrentDir, i18nEnDocsCurrentDir, config);
+    scanDirectory(i18nEnDocsCurrentDir, i18nEnDocsCurrentDir, config, idUtils);
     console.log('');
   }
   
@@ -471,4 +466,7 @@ function main() {
   console.log(`共找到 ${Object.keys(config).length} 个配置\n`);
 }
 
-main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

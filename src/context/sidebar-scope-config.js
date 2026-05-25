@@ -1,4 +1,8 @@
 import { scopeProductsMatchCurrent } from './doc-scope-product-utils.js';
+import {
+  lookupDocScopeConfig,
+  normalizeDocIdFromPath,
+} from './doc-scope-id-utils.js';
 import { matchVersion } from './doc-scope-version-utils.js';
 
 /**
@@ -15,7 +19,11 @@ import { matchVersion } from './doc-scope-version-utils.js';
  * ---
  * sidebar_versions: 3.5.0
  * sidebar_products: RDK X5
+ * id: custom-doc-id
  * ---
+ *
+ * 若设置了 front matter `id`，配置会同时写入「文件路径 key」与「id key」，
+ * 运行时侧边栏按 Docusaurus docId（通常为 front matter id）过滤时也能命中。
  * 
  * 或使用版本范围表达式：
  * ---
@@ -57,26 +65,6 @@ try {
 }
 
 /**
- * 将路径转换为 Docusaurus docId 格式
- * - 转换为小写
- * - 去除数字前缀（如 02_02_02_Quick_start 变成 quick_start）
- * @param {string} path 路径
- * @returns {string} docId 格式的路径
- */
-function normalizeDocId(path) {
-  if (!path) return '';
-  
-  const parts = path.toLowerCase().split('/');
-  
-  const normalizedParts = parts.map(part => {
-    // 去除数字前缀（如 02_02_02_Quick_start -> 02_02_Quick_start）
-    return part.replace(/^\d+_/, '');
-  });
-  
-  return normalizedParts.join('/');
-}
-
-/**
  * 检查指定 docId 的文档是否应该在当前版本/产品下显示
  * @param {string} docId 文档 ID
  * @param {string} version 当前版本
@@ -84,13 +72,13 @@ function normalizeDocId(path) {
  * @returns {boolean} 是否显示
  */
 export function shouldShowDoc(docId, version, product) {
-  const normalizedId = normalizeDocId(docId);
+  const normalizedId = normalizeDocIdFromPath(docId);
 
-  // 1. 先检查文档级别的精确匹配
-  if (generatedFrontmatterConfig[normalizedId]) {
-    const scope = generatedFrontmatterConfig[normalizedId];
-    const vMatch = matchVersion(version, scope.versions);
-    const pMatch = scopeProductsMatchCurrent(scope.products, product);
+  // 1. 文档级匹配：支持文件路径 key 与 front matter id 两种写法
+  const docScope = lookupDocScopeConfig(docId, generatedFrontmatterConfig);
+  if (docScope) {
+    const vMatch = matchVersion(version, docScope.versions);
+    const pMatch = scopeProductsMatchCurrent(docScope.products, product);
     return vMatch && pMatch;
   }
 
@@ -98,7 +86,7 @@ export function shouldShowDoc(docId, version, product) {
   for (const [configPath, scope] of Object.entries(generatedFrontmatterConfig)) {
     if (!scope.isCategory) continue;
     
-    const normalizedConfigPath = normalizeDocId(configPath);
+    const normalizedConfigPath = normalizeDocIdFromPath(configPath);
     
     if (normalizedId.startsWith(normalizedConfigPath + '/') || normalizedId === normalizedConfigPath) {
       const vMatch = matchVersion(version, scope.versions);

@@ -79,10 +79,15 @@ const config = {
     {
       src: "https://rdk.d-robotics.cc/embed.min.js",
       id: "rJYrxmxmjOkjEx2c",
-      defer: true,
     },
   ],
   headTags: [
+    {
+      tagName: "script",
+      attributes: {},
+      innerHTML:
+        "window.difyChatbotConfig=window.difyChatbotConfig||{token:'rJYrxmxmjOkjEx2c',baseUrl:'https://rdk.d-robotics.cc',inputs:{},systemVariables:{},userVariables:{}};",
+    },
     {
       tagName: "meta",
       attributes: {
