@@ -3,69 +3,70 @@ sidebar_position: 1
 sidebar_products: RDK S600
 ---
 
-# 7.4.2.2 RDK S600 LLM 工具链
+# 7.4.2.2 RDK S600 LLM Toolchain
 
-## RDK S600 1.0.0 大模型工具链  
+## RDK S600 1.0.0 Large Model Toolchain  
 
-在 RDK S600 平台上，D-Robotics_LLM_S600 目前支持以下模型和功能：
+On the RDK S600 platform, D-Robotics_LLM_S600 currently supports the following models and functionalities:
 
 **LLM**  
-支持 DeepSeek-R1-Distill-Qwen-1.5B，Qwen3~0.6B/1.7B/4B/8B 的单轮对话和多轮对话。
+Supports single-turn and multi-turn conversations for DeepSeek-R1-Distill-Qwen-1.5B, Qwen3~0.6B/1.7B/4B/8B.
 
 **VLM**  
-支持 Qwen2.5-VL-3B/7B-Instruct，Qwen3-VL-2B/4B/8B-Instruct，InternVL2~2B 的图像文本处理。
+Supports image and text processing for Qwen2.5-VL-3B/7B-Instruct, Qwen3-VL-2B/4B/8B-Instruct, InternVL2~2B.
 
 **VLA**  
-支持 Pi0 的 x86 仿真运行和 S600 端侧推理，以及硬件在环体验。
+Supports x86 emulation and S600 edge-side inference for Pi0, as well as hardware-in-the-loop experiences.
 
 **ASR**  
-支持 whisper-medium 的中英文音频识别。
+Supports Chinese and English audio recognition for whisper-medium.
 
-## 下载方式
+## Download Methods
 
-**D-Robotics_LLM_S600 开发工具包**
+**D-Robotics_LLM_S600 Development Toolkit**
 
 ```bash 
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.0/D-Robotics_LLM_S600_1.0.0_SDK.tar.gz
 ```
 
-**D-Robotics_LLM_S600 用户手册**
+**D-Robotics_LLM_S600 User Manual**
 
 ```bash
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.0/D-Robotics_LLM_S600_1.0.0_Doc.zip
 ```
 
-**D-Robotics_LLM_S600 已编译模型**  
+**D-Robotics_LLM_S600 Compiled Models**  
 
-下载开发工具包后，查看 oellm_runtime/model/resolve_model_nash-p.md 获取下载链接。
-
-
-## 模型性能 Benchmark
+After downloading the development toolkit, refer to `oellm_runtime/model/resolve_model_nash-p.md` for download links.
 
 
-### 测试条件
+## Model Performance Benchmark
 
-- 测试开发板：RDK S600
 
-- 运行环境：Linux
+### Test Conditions
 
-### 统计信息
+- Development Board: RDK S600
 
-- model：模型名。
+- Operating Environment: Linux
 
-- BPU core num：模型运行时占用的BPU核数量。
+### Metrics and Statistics
 
-- qtype：模型的量化精度。
+- model: Name of the model.
 
-- max context：模型累计能处理的token序列最大长度。
+- BPU core num: Number of BPU (Brain Processing Unit) cores utilized during model execution.
 
-- TTFT(ms)：首字生成时间。
+- qtype: Quantization precision of the model.
 
-- Decode(TPS)：Decode阶段每秒生成的token数。
+- max context: Maximum cumulative token sequence length the model can handle.
 
-- memory(GB)：模型的内存占用量。
+- TTFT(ms): Time To First Token; the latency for generating the first token.
 
-### 实测数据
+- Decode(TPS): Tokens Per Second; the generation rate during the decoding stage.
+
+- memory(GB): Memory usage of the model.
+
+
+### Measured Data
 
 <table>
 <colgroup>
@@ -153,4 +154,3 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.0/D
 
 </tbody>
 </table>
-
