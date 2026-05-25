@@ -111,7 +111,7 @@ infe cost time:1314
 guss_time cost time:2685
 hobotcv save rate:0.510615
 
-analyse_result start 
+analyse_result start
 ---------GaussianBlur
 out_filter type:2,cols:320,rows:240,channel:1
 cls_filter type:2,cols:320,rows:240,channel:1
@@ -129,9 +129,9 @@ mat_diff max,x:110,y:14
 
 error sum:8.46524e+06,max:2,mean_error:0.439232
 analyse_result,time_used_ms_end:2
-analyse_result end 
+analyse_result end
 
-------------------------- 
+-------------------------
 ```
 
 其中：
@@ -684,7 +684,7 @@ cpu占用为单核百分比，耗时统计单位为ms
 
 ### 功能介绍
 
-实现图像的nv12,gbr24之间的转换。
+实现图像的nv12,bgr24之间的转换。
 
 代码仓库：[https://github.com/D-Robotics/hobot_cv](https://github.com/D-Robotics/hobot_cv)
 

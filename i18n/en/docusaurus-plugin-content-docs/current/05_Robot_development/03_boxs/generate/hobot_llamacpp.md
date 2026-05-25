@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 
 ## Feature Overview
 
-This section introduces how to experience on-device Vision Language Models (VLMs) on the RDK platform. Thanks to the outstanding achievements of [InternVL](https://hf-mirror.com/OpenGVLab/InternVL2_5-1B) and [SmolVLM](https://hf-mirror.com/HuggingFaceTB/SmolVLM2-256M-Video-Instruct), we have implemented quantization and deployment on the RDK platform. Additionally, this example leverages the powerful KV Cache management capabilities from [llama.cpp](https://github.com/ggml-org/llama.cpp) combined with the computational advantages of the RDK platform's BPU module to enable local VLM deployment.
+This section introduces how to experience on-device Vision Language Models (VLMs) on the RDK platform. Thanks to the outstanding achievements of [InternVL](https://huggingface.co/OpenGVLab/InternVL2_5-1B) and [SmolVLM](https://huggingface.co/HuggingFaceTB/SmolVLM2-256M-Video-Instruct), we have implemented quantization and deployment on the RDK platform. Additionally, this example leverages the powerful KV Cache management capabilities from [llama.cpp](https://github.com/ggml-org/llama.cpp) combined with the computational advantages of the RDK platform's BPU module to enable local VLM deployment.
 
 Code repository: (https://github.com/D-Robotics/hobot_llamacpp.git)
 
@@ -26,23 +26,23 @@ Code repository: (https://github.com/D-Robotics/hobot_llamacpp.git)
 
 | Model Type   | Parameters | Platform | Image Encoder Model                                                                                                               | Text Decoder Model                                                                                             |
 | ------------ | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| InternVL2_5  | 1B         | X5       | [vit_model_int16_v2.bin](https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_v2.bin)       | [Qwen2.5-0.5B-Instruct-Q4_0.gguf](https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf) |
-| InternVL2_5  | 1B         | S100     | [vit_model_int16.hbm](https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdks100/vit_model_int16.hbm)           | [Qwen2.5-0.5B-Instruct-Q4_0.gguf](https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf) |
-| InternVL3    | 1B         | X5       | [vit_model_int16_VL3_1B_Instruct_X5.bin](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_VL3_1B_Instruct_X5.bin) | [qwen2_5_q8_0_InternVL3_1B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
-| InternVL3    | 1B         | S100     | [vit_model_int16_VL3_1B_Instruct.hbm](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/rdks100/vit_model_int16_VL3_1B_Instruct.hbm) | [qwen2_5_q8_0_InternVL3_1B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
-| InternVL3    | 2B         | X5       | [vit_model_int16_VL3_2B_Instruct.bin](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_VL3_2B_Instruct.bin) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
-| InternVL3    | 2B         | S100     | [vit_model_int16_VL3_2B_Instruct.hbm](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdks100/vit_model_int16_VL3_2B_Instruct.hbm) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
-| SmolVLM2     | 256M       | X5       | [SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin) | [SmolVLM2-256M-Video-Instruct-Q8_0.gguf](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf) |
-| SmolVLM2     | 256M       | S100     | [SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdks100/SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm) | [SmolVLM2-256M-Video-Instruct-Q8_0.gguf](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf) |
-| SmolVLM2     | 500M       | X5       | [SigLip_int16_SmolVLM2_500M_Instruct_MLP_C1_UP_X5.bin](https://hf-mirror.com/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_500M_Instruct_MLP_C1_UP_X5.bin) | [SmolVLM2-500M-Video-Instruct-Q8_0.gguf](https://hf-mirror.com/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-500M-Video-Instruct-Q8_0.gguf) |
-| SmolVLM2     | 500M       | S100     | [SigLip_int16_SmolVLM2_500M_Instruct_S100.hbm](https://hf-mirror.com/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/rdks100/SigLip_int16_SmolVLM2_500M_Instruct_S100.hbm) | [SmolVLM2-500M-Video-Instruct-Q8_0.gguf](https://hf-mirror.com/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-500M-Video-Instruct-Q8_0.gguf) |
+| InternVL2_5  | 1B         | X5       | [vit_model_int16_v2.bin](https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_v2.bin)       | [Qwen2.5-0.5B-Instruct-Q4_0.gguf](https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf) |
+| InternVL2_5  | 1B         | S100     | [vit_model_int16.hbm](https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdks100/vit_model_int16.hbm)           | [Qwen2.5-0.5B-Instruct-Q4_0.gguf](https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf) |
+| InternVL3    | 1B         | X5       | [vit_model_int16_VL3_1B_Instruct_X5.bin](https://huggingface.co/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_VL3_1B_Instruct_X5.bin) | [qwen2_5_q8_0_InternVL3_1B_Instruct.gguf](https://huggingface.co/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
+| InternVL3    | 1B         | S100     | [vit_model_int16_VL3_1B_Instruct.hbm](https://huggingface.co/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/rdks100/vit_model_int16_VL3_1B_Instruct.hbm) | [qwen2_5_q8_0_InternVL3_1B_Instruct.gguf](https://huggingface.co/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
+| InternVL3    | 2B         | X5       | [vit_model_int16_VL3_2B_Instruct.bin](https://huggingface.co/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_VL3_2B_Instruct.bin) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://huggingface.co/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/blob/main/qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf) |
+| InternVL3    | 2B         | S100     | [vit_model_int16_VL3_2B_Instruct.hbm](https://huggingface.co/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdks100/vit_model_int16_VL3_2B_Instruct.hbm) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://huggingface.co/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/blob/main/qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf) |
+| SmolVLM2     | 256M       | X5       | [SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin](https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin) | [SmolVLM2-256M-Video-Instruct-Q8_0.gguf](https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf) |
+| SmolVLM2     | 256M       | S100     | [SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm](https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdks100/SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm) | [SmolVLM2-256M-Video-Instruct-Q8_0.gguf](https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf) |
+| SmolVLM2     | 500M       | X5       | [SigLip_int16_SmolVLM2_500M_Instruct_MLP_C1_UP_X5.bin](https://huggingface.co/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_500M_Instruct_MLP_C1_UP_X5.bin) | [SmolVLM2-500M-Video-Instruct-Q8_0.gguf](https://huggingface.co/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-500M-Video-Instruct-Q8_0.gguf) |
+| SmolVLM2     | 500M       | S100     | [SigLip_int16_SmolVLM2_500M_Instruct_S100.hbm](https://huggingface.co/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/rdks100/SigLip_int16_SmolVLM2_500M_Instruct_S100.hbm) | [SmolVLM2-500M-Video-Instruct-Q8_0.gguf](https://huggingface.co/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-500M-Video-Instruct-Q8_0.gguf) |
 
 ## Algorithm Performance Metrics
 
 | Model        | Parameters | Quantization | Platform | Input Size      | Image Encoder Time (ms) | Prefill Eval Time (ms/token) | Eval Time (ms/token) |
 | ------------ | ---------- | ------------ | -------- | --------------- | ------------------------ | ---------------------------- | -------------------- |
-| InternVL2_5  | 0.5B       | Q4_0         | X5       | 1x3x448x448     | 2456.00                  | 7.7                          | 51.6                 |
-| InternVL3    | 0.5B       | Q8_0         | S100     | 1x3x448x448     | 100.00                   | 9.19                         | 41.65                |
+| InternVL2_5  | 1B       | Q4_0         | X5       | 1x3x448x448     | 2456.00                  | 7.7                          | 51.6                 |
+| InternVL3    | 1B       | Q8_0         | S100     | 1x3x448x448     | 100.00                   | 9.19                         | 41.65                |
 | SmolVLM2     | 256M       | Q8_0         | X5       | 1x3x512x512     | 1053                     | 9.3                          | 27.8                 |
 | SmolVLM2     | 500M       | Q8_0         | X5       | 1x3x512x512     | 1053                     | 27.3                         | 65.7                 |
 
@@ -67,17 +67,9 @@ sudo apt install tros-humble-hobot-llamacpp
 
 Use the command `srpi-config` to set ION memory size to 1.6GB and configure the CPU to run at its maximum frequency after reboot.
 
-- For RDK X5, refer to:
+- ION Setting: `2.2 srpi-config Configuration Tool User Guide`
 
-  1) `srpi-config` usage guide: [Performance Options](../../../02_System_configuration/02_srpi-config.md#performance-options)
-
-  2) CPU frequency scaling method: [CPU Frequency Management](../../../02_System_configuration/04_frequency_management.md#cpu-frequency-management-1)
-
-- For RDK S100, refer to:
-
-  1) `srpi-config` usage guide: [Performance Options](../../../02_System_configuration/02_srpi-config.md#performance-options)
-
-  2) CPU frequency scaling method: [CPU Frequency Management](../../../02_System_configuration/04_frequency_management.md#cpu-frequency-management-1)
+- CPU Setting: `2.4 Thermal Control and CPU Frequency Management`
 
 ## Usage Instructions
 
@@ -91,8 +83,8 @@ Before running the program, download the model files to your working directory u
 <TabItem value="x5" label="RDK X5">
 
 ```bash
-wget https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf
-wget https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_v2.bin
+wget https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf
+wget https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_v2.bin
 ```
 
 </TabItem>
@@ -100,8 +92,8 @@ wget https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdkx5
 <TabItem value="s100" label="RDK S100">
 
 ```bash
-wget https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf
-wget https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdks100/vit_model_int16.hbm
+wget https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf
+wget https://huggingface.co/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdks100/vit_model_int16.hbm
 ```
 
 </TabItem>
@@ -143,8 +135,8 @@ Before running the program, download the model files to your working directory u
 <TabItem value="x5" label="RDK X5">
 
 ```bash
-wget https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin
-wget https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf
+wget https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin
+wget https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf
 ```
 
 </TabItem>
@@ -152,8 +144,8 @@ wget https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/reso
 <TabItem value="s100" label="RDK S100">
 
 ```bash
-wget https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdks100/SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm
-wget https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf
+wget https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdks100/SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm
+wget https://huggingface.co/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf
 ```
 
 </TabItem>

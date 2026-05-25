@@ -30,8 +30,8 @@ import TabItem from '@theme/TabItem';
 | InternVL2_5 | 1B | S100 | [vit_model_int16.hbm](https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/rdks100/vit_model_int16.hbm) | [Qwen2.5-0.5B-Instruct-Q4_0.gguf](https://hf-mirror.com/D-Robotics/InternVL2_5-1B-GGUF-BPU/resolve/main/Qwen2.5-0.5B-Instruct-Q4_0.gguf) |
 | InternVL3 | 1B | X5 | [vit_model_int16_VL3_1B_Instruct_X5.bin](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_VL3_1B_Instruct_X5.bin) | [qwen2_5_q8_0_InternVL3_1B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
 | InternVL3 | 1B | S100 | [vit_model_int16_VL3_1B_Instruct.hbm](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/rdks100/vit_model_int16_VL3_1B_Instruct.hbm) | [qwen2_5_q8_0_InternVL3_1B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
-| InternVL3 | 2B | X5 | [vit_model_int16_VL3_2B_Instruct.bin](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_VL3_2B_Instruct.bin) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
-| InternVL3 | 2B | S100 | [vit_model_int16_VL3_2B_Instruct.hbm](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdks100/vit_model_int16_VL3_2B_Instruct.hbm) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-1B-Instruct-GGUF-BPU/resolve/main/qwen2_5_q8_0_InternVL3_1B_Instruct.gguf) |
+| InternVL3 | 2B | X5 | [vit_model_int16_VL3_2B_Instruct.bin](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdkx5/vit_model_int16_VL3_2B_Instruct.bin) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/blob/main/qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf) |
+| InternVL3 | 2B | S100 | [vit_model_int16_VL3_2B_Instruct.hbm](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/resolve/main/rdks100/vit_model_int16_VL3_2B_Instruct.hbm) | [qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf](https://hf-mirror.com/D-Robotics/InternVL3-2B-Instruct-GGUF-BPU/blob/main/qwen2_5_1.5b_q8_0_InternVL3_2B_Instruct.gguf) |
 | SmolVLM2 | 256M | X5 | [SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_256M_Instruct_MLP_C1_UP_X5.bin) | [SmolVLM2-256M-Video-Instruct-Q8_0.gguf](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf) |
 | SmolVLM2 | 256M | S100 | [SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/rdks100/SigLip_int16_SmolVLM2_256M_Instruct_S100.hbm) | [SmolVLM2-256M-Video-Instruct-Q8_0.gguf](https://hf-mirror.com/D-Robotics/SmolVLM2-256M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-256M-Video-Instruct-Q8_0.gguf) |
 | SmolVLM2 | 500M | X5 | [SigLip_int16_SmolVLM2_500M_Instruct_MLP_C1_UP_X5.bin](https://hf-mirror.com/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/rdkx5/SigLip_int16_SmolVLM2_500M_Instruct_MLP_C1_UP_X5.bin) | [SmolVLM2-500M-Video-Instruct-Q8_0.gguf](https://hf-mirror.com/D-Robotics/SmolVLM2-500M-Video-Instruct-GGUF-BPU/resolve/main/SmolVLM2-500M-Video-Instruct-Q8_0.gguf) |
@@ -42,8 +42,8 @@ import TabItem from '@theme/TabItem';
 
 | 模型 | 参数量 | 量化方式 | 平台 | 输入尺寸 | image encoder time(ms) | prefill eval time(ms/token) | eval time(ms/token) |
 | ---- | ---- | ---- | ---- | ------------ | ---- | ---- | ---- |
-| InternVL2_5 | 0.5B | Q4_0 | X5 | 1x3x448x448 | 2456.00 | 7.7 | 51.6 |
-| InternVL3 | 0.5B | Q8_0 | S100 | 1x3x448x448 | 100.00 | 9.19 | 41.65 |
+| InternVL2_5 | 1B | Q4_0 | X5 | 1x3x448x448 | 2456.00 | 7.7 | 51.6 |
+| InternVL3 | 1B | Q8_0 | S100 | 1x3x448x448 | 2851.00 | 9.19 | 41.65 |
 | Smolvlm2 | 256M | Q8_0 | X5 | 1x3x512x512 | 1053 | 9.3 | 27.8 |
 | Smolvlm2 | 500M | Q8_0 | X5 | 1x3x512x512 | 1053 | 27.3 | 65.7 |
 
@@ -80,17 +80,9 @@ sudo apt install tros-${TROS_DISTRO}-hobot-llamacpp
 
 使用命令`srpi-config`修改ION memory大小为1.6GB，重启后设置CPU为最高频率。
 
-  - RDK X5 参考: 
-  
-    1) `srpi-config`使用指南[Performance Options](/docs/02_System_configuration/02_srpi-config.md#performance-options)
+- ION 大小配置参考: 手册 `2.2 srpi-config 工具配置` 
 
-    2) CPU调频方法: [CPU频率管理](/docs/02_System_configuration/04_frequency_management.md#cpu%E9%A2%91%E7%8E%87%E7%AE%A1%E7%90%86-1)
-
-  - RDK S100 参考: 
-
-    1) `srpi-config`使用指南[Performance Options](/docs_s/02_System_configuration/02_srpi-config.md#performance-options)
-
-    2) CPU调频方法: [CPU频率管理](/docs_s/02_System_configuration/04_frequency_management.md#cpu%E9%A2%91%E7%8E%87%E7%AE%A1%E7%90%86-1)
+- CPU 频率配置参考：手册 `2.4 Thermal和CPU频率管理`
 
 ## 使用方式
 
