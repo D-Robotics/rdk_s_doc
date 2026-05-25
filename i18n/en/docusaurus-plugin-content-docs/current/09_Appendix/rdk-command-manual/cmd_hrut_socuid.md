@@ -2,19 +2,19 @@
 sidebar_position: 1
 ---
 
-# hrut_socid
+# hrut_socuid
 
-The **hrut_socid** command prints the Unique Identifier (UID) of the current SOC chip.
+The **hrut_socuid** command prints the UID (Unique Identifier) of the current SoC chip.
 
 ## Syntax
 
 ```
-hrut_socid
+hrut_socuid
 ```
 
-## Common Commands
+## Common Usage
 
 ```shell
-sunrise@ubuntu:~$ sudo hrut_socuid
-soc_uid: 0x210627120003012002160908030307
+sunrise@ubuntu:~$ hrut_socuid
+060c0b0d3090694108255c4c00001079
 ```

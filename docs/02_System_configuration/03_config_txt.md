@@ -3,289 +3,152 @@ sidebar_position: 3
 ---
 
 # 2.3 config.txt 文件配置
-
-RDK 使用配置文件`config.txt`来设置一些启动时候的系统配置。`config.txt` 会在`uboot`阶段被读取，支持修改设备树的配置，IO管脚状态，ION内存，CPU频率等。该文件通常可以从 Linux 访问`/boot/config.txt`，并且必须以`root`用户身份进行编辑。如果在`config.txt`配置设置，但是该文件还不存在，只需将其创建为新的文本文件即可。
-
-## 注意事项
-
-:::info 注意
-
-1. `config.txt`配置文件仅适用于`RDK X3`、`RDK X5`和`RDK X3 Module`开发板，不适用于`RDK Ultra`开发板。
-
-2. 系统版本不低于 `2.1.0`。
-
-3. `miniboot`版本不能低于 `20231126`日期的版本。参考 [rdk-miniboot-update](../09_Appendix/rdk-command-manual/cmd_rdk-miniboot-update.md) 在板更新 miniboot。
-
-4. 如果您在本配置文件添加了过滤项，那么使用`srpi-config`工具时请注意配置项是否会被过滤掉。
-
+:::warning
+- 所有配置文件内的配置，均可以在Uboot内手动覆盖。Uboot内手动配置（在Uboot命令行使用setenv）的优先级**高于**配置文件内的配置。完整环境变量优先级：`setenv > 配置文件 > 上一次启动saveenv`；
+- 本章内容均以“配置文件”指代**默认路径**为`/boot/config.txt`的配置文件；
+- 使用配置文件时，会需要修改启动分区的内容，这与[AVB](https://source.android.com/docs/security/features/verifiedboot)的要求是冲突的，所以本功能在使能AVB时（AVB功能**默认不使能**）不能使用；
 :::
 
-## 设备树配置
-
-### dtdebug
-
-`dtdebug` 如果非零，在`uboot`阶段的设备树配置过程中会在串口输出配置日志。` dtdebug` 要先于` dtoverlay` 配置。
-
-```
-dtdebug=1
-```
-
-### dtoverlay
-
-支持设备树覆盖，提供更加灵活的设备树调整方式。
-
-【RDK X3】例如通过`ion_resize`调整`ION`内存的大小，以下配置会修改`ION`内存大小为 `1GB`。
-
-```Shell
-dtoverlay=ion_resize,size=0x40000000
-```
-
-【RDK X5】通过dtoverlay_spi5_spidev增加/dev/spidev5.0（注意：can设备也接到了spi5，spidev和can只能二选一）
-
-```Shell
-dtoverlay=dtoverlay_spi5_spidev
-```
-
-### RDK X5 配置 ION
-
-通过 ion_reserved_size，ion_carveout_size， ion_cma_size 修改 boot 环境变量，进而修改 ION 分区大小。
-
-| boot环境变量名         | dts标签        | dts compatible字符串 | 默认大小 |
-| ----------------- | ------------ | ----------------- | ---- |
-| ion_reserved_size | ion_reserved | ion-pool          | 320M |
-| ion_carveout_size | ion_carveout | ion-carveout      | 320M |
-| ion_cma_size      | ion_cma      | ion-cma           | 128M |
-
-```Shell
-ion=ion_reserved_size=0x14000000
-ion=ion_carveout_size=0x14000000
-ion=ion_cma_size=0x08000000
-```
-
-可以通过启动信息查看各个ION区域的大小：
-
-```Shell
-root@ubuntu:~# dmesg | grep "Reserved ion"
-[    0.207939] Reserved ion-pool MEM start 0xa4100000, size 0x14000000
-[    0.207964] Reserved ion-carveout MEM start 0xb8100000, size 0x14000000
-[    0.208068] Reserved ion-cma MEM start 0xcc100000, size 0x8000000
-```
-
-### dtparam
-
-支持设置 uart、i2c、spi、i2s 等总线的使能与关闭。
-
-目前支持的选项参数：
-
-RDK X3 支持： uart3, spi0, spi1, spi2, i2c0, i2c1, i2c2, i2c3, i2c4, i2c5, i2s0, i2s1
-
-RDK X5 支持： uart1, uart2, uart3, uart6，spi1, spi2, i2c0, i2c1, i2c5, i2c4, i2c5, dw_i2s1
-
-:::info 注意
-
-RDK X5需要注意管脚的复用关系，当一行的所有接口都为dsiable时，引脚为gpio功能脚
-
-  | 功能1 | 功能2 | 
-  | ---- | ---- |
-  | uart3 | i2c5 |
-  | i2c0 | pwm2 |
-  | spi2 | pwm0 |
-  | spi2 | pwm1 |
-  | i2c1 | pwm3 |
-
+## 使用指南
+:::info 提示
+- 配置文件默认格式为`<key>=<value>`，第一个`=`后面的所有内容均为`=`前的`<key>`的配置值；
+- 配置文件单行配置不能超过1024字符；
+- 配置文件内的配置默认不会被保存为Uboot的默认配置；
 :::
 
-例如关闭串口3：
-
+### 配置内核bootargs（内核cmdline）
+修改配置文件，添加：`bootargs=<自定义bootargs>`，例如：
 ```
-dtparam=uart3=off
-```
-
-例如打开`i2c5`:
-
-```
-dtparam=i2c5=on
+# Add cpu isolation configuration
+bootargs=isolcpus=1-2
 ```
 
-## X3 CPU频率
-
-### arm_boost
-
-当设置为1时，开启超频，RDK v1.x 版本最高频率提高到 1.5GHz，RDK V2.0 和 RDK Module 最高频率提高到1.8GHz，通过 `cat /sys/devices/system/cpu/cpufreq/policy0/scaling_boost_frequencies` 获取使能 boost 后会开放哪些更高 CPU 频率。
-
-默认不开启超频，设置`arm_boost` 为 `1`时开启，例如：
-
+### 修改内核启动打印等级
+修改配置文件，添加：`loglevel=<自定义打印等级>`，例如：
 ```
-arm_boost=1
+# Add kernel loglevel configuration
+loglevel=8
 ```
 
-### governor
-
-CPU 频率的调度方式，有 `conservative ondemand userspace powersave performance schedutil` 方式可以选择， 通过 `cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors ` 获取可以设置的模式。
-
-例如设置`CPU`运行在性能模式：
-
+### 临时修改dts
+#### 使能或失能特定节点
+修改配置文件，添加：`fdt-enable=<dts节点1全路径>;<dts节点2全路径>;`；`fdt-disable=<dts节点1全路径>;<dts节点2全路径>;`，例如：
 ```
-governor=performance
-```
+# Enable kernel dts node
+fdt-enable=/soc/uart@394C0000;
 
-有关`CPU`调度方式的说明请查阅 [X3 CPU频率管理](frequency_management#cpu频率管理)。
-
-### frequency
-
-`governor`设置为 `userspace` 时，可以通过本选型设置`CPU`运行在一个固定的频率上，目前一般可以设置`240000 500000 800000 1000000 1200000 1500000 1800000`这些频率，具体可以通过`cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies` 获取可以设置的频率列表。
-
-例如设置`CPU`降频运行在 `1GHz`：
-
-```
-governor=userspace
-frequency=1000000
+# Disable kernel dts node
+fdt-disable=/soc/uart@394C0000;
 ```
 
-## X5 CPU频率
+:::info 提示
+- 示例中配置行末尾的“;”不可省略；
+- dts节点全路径可以在板端`/proc/device-tree`下获取，例如：
+    ```shell
+      root@ubuntu:~# realpath --relative-to=/proc/device-tree/ /proc/device-tree/soc/uart@394C0000
+      soc/uart@394C0000
+    ```
+    注意命令获取到的路径需要添加行首的"/"；
+:::
 
-有关`CPU`调度方式的说明请查阅 [X5 CPU频率管理](frequency_management#cpu频率管理-1)，若计划进行超频，请务必先阅读文档中`CPU 超频`一节，全面了解风险与注意事项。
+#### 配置DTB Overlay文件
 
-本处仅介绍通过`config.txt`进行的 配置方法，不包含调度策略或超频原理相关内容。
+DTB Overlay相关说明如下：
+1. Kernel V6.1 官方文档：[Devicetree Overlay Notes](https://kernel.org/doc/html/v6.1/devicetree/overlay-notes.html);
+2. Uboot V2022.10 官方文档：[Device Tree Overlays](https://docs.u-boot.org/en/v2022.10/usage/fdt_overlays.html);
 
-### arm_boost
+简单介绍：DTB Overlay文件，是可以在不修改当前启动使用的dts文件的情况下，对当前启动使用的dtb文件进行**增/改**（不支持删减）的功能。
 
-当设置为1时，开启超频，RDK RDK X5 最高频率提高到1.8GHz，通过 `cat /sys/devices/system/cpu/cpufreq/policy0/scaling_boost_frequencies` 获取使能 boost 后会开放哪些更高 CPU 频率。
+DTB Overlay示例文件如下：
+```dts
+/*
+ * Sample dtb overlay source file
+ * spi0_cs1_dev.dtso
+*/
+/dts-v1/;
+/plugin/;
 
-默认不开启超频，设置`arm_boost` 为 `1`时开启，例如：
+&spi0 {
+	slave@1 {
+		compatible = "sample-compatible-str";
+		spi-max-frequency = <32000000>;
+		reg = <1>;
+	};
+};
 
 ```
-arm_boost=1
+:::info 提示
+需要根据从设备实际情况修改：
+1. `compatible`字段：需要修改为从设备实际驱动的`compatible`字段；
+2. `spi-max-frequency`字段：需要修改为从设备实际支持的最高速度；
+:::
+
+DTB Overlay编译示例，以下命令可以在Host端/RDK板端执行，假设`spi0_cs1_dev.dtso`文件路径位于`~/rdk_dtbo/spi0_cs1_dev.dtso`：
+```
+# Install device-tree-compiler
+sudo apt install device-tree-compiler -y
+
+# Compile dtbo files
+dtc -I dts -O dtb -o ~/rdk_dtbo/spi0_cs1_dev.dtbo ~/rdk_dtbo/spi0_cs1_dev.dtso
+
+# Copy generated dtbo file to /boot for further usage
+sudo cp ~/rdk_dtbo/spi0_cs1_dev.dtbo /boot
 ```
 
-### governor
-
-CPU 频率的调度方式，有 `conservative ondemand userspace powersave performance schedutil ` 方式可以选择， 通过 `cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors` 获取可以设置的模式。
-
-例如设置`CPU`运行在性能模式：
-
+编译示例输出：
 ```
-governor=performance
+sunrise@ubuntu:~/rdk_dtbo$ dtc -I dts -O dtb -o ~/rdk_dtbo/spi0_cs1_dev.dtbo ~/rdk_dtbo/spi0_cs1_dev.dtso
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtso:12.3-13: Warning (reg_format): /fragment@0/__overlay__/slave@1:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtso:9.10-13.4: Warning (avoid_default_addr_size): /fragment@0/__overlay__/slave@1: Relying on default #address-cells value
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtso:9.10-13.4: Warning (avoid_default_addr_size): /fragment@0/__overlay__/slave@1: Relying on default #size-cells value
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (avoid_unnecessary_addr_size): Failed prerequisite 'avoid_default_addr_size'
+/home/sunrise/rdk_dtbo/spi0_cs1_dev.dtbo: Warning (unique_unit_address): Failed prerequisite 'avoid_default_addr_size'
+sunrise@ubuntu:~/rdk_dtbo$ ls
+spi0_cs1_dev.dtbo  spi0_cs1_dev.dtso
+```
+:::info 提示
+一般来说，编译中报的`Warning`级别的打印可以忽略。
+:::
+
+修改配置文件，添加：`dtbo_file_path=</boot分区下的相对路径>`，例如：
+```
+# Set dtbo file path relative to /boot partition
+dtbo_file_path=/spi0_cs1_dev.dtbo
 ```
 
-### frequency
-
-`governor`设置为 `userspace` 时，可以通过本选型设置`CPU`运行在一个固定的频率上，目前一般可以设置`300000 600000 1200000 1500000`这些频率，具体可以通过`cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies` 获取可以设置的频率列表。
-
-例如设置`CPU`降频运行在 `1.2GHz`：
-
-```
-governor=userspace
-frequency=1200000
-```
-
-## IO初始化
-
-### gpio
-
-支持设置IO的功能复用，输入、输出模式，输出高、低电平，上下拉模式，应选择 BOARD 编码 对应的 GPIO 编号。
-
+重启后，可以看到设备树SPI0(spi@39800000)的路径下，新的从设备节点生成了：
 ```shell
-gpio:
-ip - Input                             设置为输入模式
-op - Output                            设置为输出模式
-f0-f3 - Func0-Func3                    设置功能复用，X3 f3功能都是设置为io模式，X3的其他功能和X5的所有功能请查看40PIN 管脚定义,或查阅相关寄存器文档
-dh - Driving high (for outputs)        输出高电平
-dl - Driving low (for outputs)         输出低电平
-pu - Pull up                           推挽上拉
-pd - Pull down                         推挽下拉
-pn/np - No pull                        无上下拉
+sunrise@ubuntu:~$ ls /proc/device-tree/soc/spi@39800000/slave@1/
+compatible  name  reg  spi-max-frequency
 ```
 
-### 示例
-
-配置`40Pin`管脚上的 `GPIO5` 和 `GPIO6`为IO模式：
-
+如果想要自定义dtbo文件所在分区，则可以添加：`dtbo_dev_part=<设备号>:<16进制分区号>`，RDK S100默认设备号为"0"，分区号可以通过`/dev/block/platform/by-name/`路径获取，以下以`userdata`分区为例：
 ```
-gpio=5=f3
-gpio=6=f3
-# 对于连续的管脚，也可以使用以下方式配置
-gpio=5-6=f3
+# Set dtbo file device number and partition number:
+dtbo_dev_part=0:0x10
 ```
 
-配置`40Pin`管脚上的 `GPIO5` 为输入模式：
-
-```
-gpio=5=f3
-gpio=5=ip
-```
-
-配置`40Pin`管脚上的 `GPIO6` 为输出模式，并且输出低电平：
-
-```
-gpio=6=f3
-gpio=6=op,dl
+获取分区号的方法：`ls -l /dev/block/platform/by-name/<分区名>`，例如：
+```shell
+root@ubuntu:~# ls -l /dev/block/platform/by-name/userdata
+lrwxrwxrwx 1 root root 15 Jun  4 22:17 /dev/block/platform/by-name/userdata -> /dev/mmcblk0p16
 ```
 
-配置`40Pin`管脚上的 `GPIO6` 为输出模式，并且输出高电平，并且设置上拉：
+## 自定义config.txt指南
+地瓜Uboot会根据当前启动使用的储存介质和分区，自动获取默认的配置文件所在分区。
 
-```
-gpio=6=f3
-gpio=6=op,dh,pu
-```
+客户可以通过Uboot内的环境变量来自定义下一次启动使用的配置文件的储存介质和分区，步骤如下：
+  1. 启动过程中停止并进入Uboot命令行；
+  2. 以下环境变量可以用于自定义配置文件，每个变量均可单独使用：
+     1. `boot_config_f`：改变默认寻找的配置文件名称，例如`setenv boot_config_f test.txt`，下一次启动的配置文件获取，就会去寻找文件名为`test.txt`的文件，而不是`config.txt`
+     2. `boot_config_dev_part`：改变默认寻找配置文件的分区，例如`setenv boot_config_dev_part 0:0xd`，下一次启动的配置文件获取，就会去当前启动介质的第13个分区(0xd)寻找配置文件；
+     3. `boot_config_intf`：改变默认寻找配置文件的储存介质，例如`setenv boot_config_intf scsi`。
+  3. 保存环境变量：`saveenv`
 
-## 温度控制
-
-### throttling_temp
-
-系统 CPU、BPU 降频温度点，温度超过该温度点时，CPU 和 BPU 会降低运行频率来减低功耗，CPU最低降到 240MHz，BPU 最低降到 400MHz。 
-
-例如设置降频温度为 `86℃`：
-
-```
-throttling_temp=86000
-```
-
-### shutdown_temp
-
-系统宕机温度点，如果温度超过该温度，为了保护芯片和硬件，系统会自动关机，建议对设备做好散热处理，避免设备宕机，因为宕机后设备不会自动重启。
-
-例如设置宕机温度为 `112℃`：
-
-```
-shutdown_temp=112000
-```
-
-## 选项过滤
-
-支持使用 [] 设置过滤项，过滤项的设置需要在配置文件的尾部添加，因为文件前面未添加过滤项的部分属于 `all`，一旦添加过滤设置，则之后的配置只属于该过滤属性，直到配置文件结尾或者设置了另一个过滤项。
-
-当前支持的过滤项以硬件型号为区分，支持以下过滤项：
-
-| 过滤项    | 适配的型号               |
-| --------- | ------------------------ |
-| [all]     | 所有硬件，默认属性       |
-| [rdkv1]   | RDK x3 v1.0，RDK x3 v1.1 |
-| [rdkv1.2] | RDK x3 v1.2              |
-| [rdkv2]   | RDK x3 v2.1              |
-| [rdkmd]   | RDK x3 Module            |
-| [x5-rdk]  | RDK X5 V0.1             |
-
-## 电压域
-
-### voltage_domain
-
-配置40pin管脚的电压域，支持配置为 3.3V 和 1.8V，不配置时默认3.3V。
-
-本配置项需要配合硬件上的电压域切换的跳线帽使用。
-
-:::info 注意
-
-仅RDK Modelu支持本项配置。
-
-:::
-
-例如配置`RDK X3 Module`的`40Pin`工作在`3v3`电压模式，此处示例使用了`[rdkmd]`作为过滤项：
-
-```
-# Voltage domain configuration for 40 Pin, 3.3V or 1.8V, defualt 3.3V
-# Only RDK Module supported
-[rdkmd]
-voltage_domain=3.3V
-```
-
+## config.txt解析开发指南
+配置文件的解析功能代码路径位于Uboot目录的：`board/hobot/common/drobot_boot_config.c`文件内。

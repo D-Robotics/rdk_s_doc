@@ -2,8 +2,9 @@
   "label": "3. Basic Application Development",
   "position": 4,
   "link": {
+    "title":"3. Basic Application Development",
     "type": "generated-index",
     "slug": "/Basic_Application",
-    "description": "Basic applications including image input, audio input, and interface development."
+    "description": "Introductory system applications, including image input, audio input, and API development, etc."
   }
 }

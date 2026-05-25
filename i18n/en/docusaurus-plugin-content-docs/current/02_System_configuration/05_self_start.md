@@ -1,17 +1,18 @@
 ---
 sidebar_position: 5
 ---
-# 2.5 Autostart Programs on Boot
 
-Video: https://www.youtube.com/watch?v=9N_wFttgPeE&list=PLSxjn4YS2IuFUWcLGj2_uuCfLYnNYw6Ld&index=4
+# 2.5 Boot Auto-Start Configuration
 
-There are multiple ways to add autostart programs in Ubuntu system. This section provides two methods as reference.
+<!-- Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=15 -->
 
-## Setting up Autostart Service
+There are multiple ways to add auto-start programs in Ubuntu. This section provides two methods for reference.
+
+## Configure an Auto-Start Service
 
 1. Create a startup script
 
-   Use any text editor and create a new startup script under the `/etc/init.d` directory, assuming it's named `your_script_name`. Here is an example of the script:
+   Use any text editor to create a new startup script in the `/etc/init.d` directory. Assume the script is named `your_script_name`. Below is a sample script for reference:
 
    ```bash
    #!/bin/bash
@@ -31,49 +32,50 @@ There are multiple ways to add autostart programs in Ubuntu system. This section
    exit 0
    ```
 
-2. Set the startup script to have execute permission
+2. Make the startup script executable
 
-   ```bash
+   ```
    sudo chmod +x /etc/init.d/your_script_name
    ```
 
-3. Use the update-rc.d command to add the script to the system's startup items
+3. Use the `update-rc.d` command to add the script to the system's startup items
 
-   ```bash
+   ```
    sudo update-rc.d your_script_name defaults
    ```
 
-4. Enable autostart using the systemctl command
+4. Enable auto-start using the `systemctl` command
 
-   ```bash
+   ```
    sudo systemctl enable your_script_name
    ```
 
-5. Restart the development board to verify if the autostart service program is running correctly
+5. Reboot the development board to verify that the auto-start service runs correctly
 
-   ```bash
-   root@ubuntu:~# systemctl status your_script_name.service 
-   ● your_script_name.service - LSB: Start your_service_name at boot time
-      Loaded: loaded (/etc/init.d/your_script_name; generated)
-      Active: active (exited) since Wed 2023-04-19 15:01:12 CST; 57s ago
-      Docs: man:systemd-sysv-generator(8)
-      Process: 2768 ExecStart=/etc/init.d/your_script_name start (code=exited, status=0/SUCCESS)
-   ```
+    ```
+    root@ubuntu:~# systemctl status your_script_name.service 
+    ● your_script_name.service - LSB: Start your_service_name at boot time
+        Loaded: loaded (/etc/init.d/your_script_name; generated)
+        Active: active (exited) since Wed 2023-04-19 15:01:12 CST; 57s ago
+        Docs: man:systemd-sysv-generator(8)
+        Process: 2768 ExecStart=/etc/init.d/your_script_name start (code=exited, status=0/SUCCESS)
+    ```
 
 
 
-## Add to rc.local service
+## Add to the rc.local Service
 
-rc.local is a system service used to automatically execute scripts or commands when the system starts. This service is automatically called during system startup, and it executes user-specified scripts or commands after the system has finished starting in order to perform custom configurations or operations during system startup.
+`rc.local` is a system service used to automatically execute scripts or commands during system boot. This service is automatically invoked at system startup and executes user-specified scripts or commands after the system has finished booting, enabling custom configurations or operations at boot time.
 
-In earlier Linux distributions, rc.local was the last service to be run during the system startup process by default. With the popularity of systemd, rc.local is considered to be a legacy system service.
+In earlier Linux distributions, `rc.local` was the last service executed by default during the system boot process. With the widespread adoption of systemd, `rc.local` is now considered a legacy system service.
 
-This can be achieved by adding the startup command at the end of the `sudo vim /etc/rc.local` file, for example:
+You can implement this by adding your startup command at the end of the `/etc/rc.local` file (edited via `sudo vim /etc/rc.local`), for example:
 
 ```bash
 #!/bin/bash -e
-
+#
 # rc.local
+#
 # This script is executed at the end of each multiuser runlevel.
 # Make sure that the script will "exit 0" on success or any other
 # value on error.

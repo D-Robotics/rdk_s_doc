@@ -1,35 +1,52 @@
 {
-  "name": "rdk-doc",
+  "name": "rdk-s-doc",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
-    "build": "docusaurus build",
+    "generate-sidebar-config": "node scripts/generate-sidebar-config.js",
+    "renumber-docs-md": "node scripts/renumber-docs-md.js",
+    "fix-relative-docs-links": "node scripts/fix-relative-docs-links.js",
+    "watch-sidebar-config": "node scripts/watch-sidebar-config.js",
+    "start": "npm run generate-sidebar-config && concurrently --kill-others --raw \"npm run watch-sidebar-config\" \"docusaurus start --locale zh-Hans\"",
+    "start:en": "npm run generate-sidebar-config && concurrently --kill-others --raw \"npm run watch-sidebar-config\" \"docusaurus start --locale en\"",
+    "start:port": "npm run generate-sidebar-config && concurrently --kill-others --raw \"npm run watch-sidebar-config\" \"docusaurus start --port 3001 --locale zh-Hans\"",
+    "start:no-watch": "npm run generate-sidebar-config && docusaurus start --locale zh-Hans",
+    "start:no-watch:en": "npm run generate-sidebar-config && docusaurus start --locale en",
+    "build": "npm run generate-sidebar-config && docusaurus build",
+    "build:scope": "npm run generate-sidebar-config && node scripts/build-scoped-site.js",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
+    "deploy": "npm run build && docusaurus deploy --skip-build",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
+    "@docsearch/css": "^4.6.3",
+    "@docsearch/js": "^4.6.3",
     "@docusaurus/core": "^3.7.0",
     "@docusaurus/plugin-sitemap": "^3.8.1",
     "@docusaurus/preset-classic": "^3.7.0",
     "@docusaurus/theme-mermaid": "3.8.1",
-    "@easyops-cn/docusaurus-search-local": "^0.52.2",
     "@giscus/react": "^3.0.0",
     "@mdx-js/react": "^3.0.0",
+    "cheerio": "^1.1.0",
     "clsx": "^2.0.0",
+    "lodash": "^4.18.1",
     "medium-zoom": "^1.1.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "remark-directive": "^4.0.0",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.7.0",
-    "@docusaurus/types": "^3.7.0"
+    "@docusaurus/types": "^3.7.0",
+    "concurrently": "^9.2.1",
+    "dotenv": "^17.4.2",
+    "pagefind": "^1.3.0"
   },
   "browserslist": {
     "production": [

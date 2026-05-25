@@ -9,7 +9,7 @@ from tqdm import tqdm # 导入tqdm库用于显示进度条
 
 # --- 配置项 ---
 # 包含 Markdown 文件的根目录列表
-MARKDOWN_ROOT_DIRS = ["docs", "docs_s", "i18n/en/docusaurus-plugin-content-docs", "i18n/en/docusaurus-plugin-content-docs-docs_s"] # 请修改为您的目录列表
+MARKDOWN_ROOT_DIRS = ["docs", "i18n/en/docusaurus-plugin-content-docs/current"]
 # 图片将下载到的子目录名。
 IMAGE_OUTPUT_SUBDIR = "img"
 # IMAGE_OUTPUT_SUBDIR 的父文件夹名

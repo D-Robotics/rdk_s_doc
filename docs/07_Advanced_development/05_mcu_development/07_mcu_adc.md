@@ -1,0 +1,671 @@
+---
+sidebar_position: 7
+---
+
+# 7.5.8 ADC使用指南
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
+```
+
+## 硬件支持
+
+| 特性项                 | S100 ADC                                      | S600 ADC                                      |
+|------------------------|-----------------------------------------------|-----------------------------------------------|
+| **ADC 硬件数量**       | 1 个                                          | 2 个（独立 ADC 模块）                         |
+| **通道配置**           | Channel 0–13 + Channel 15（共 15 通道；**无Channel 14**） | 每 ADC：Channel 0–7；共 **2 × 8 = 16 通道**   |
+| **电压测量范围**       | 100 mV – 1700 mV                              | 100 mV – 1700 mV                              |
+| **触发/Inject 模式限制** | 硬件触发或 Inject 模式下，**仅允许配置 1 个组**（全局） | 同左（**跨 ADC 共享组限制**，仍仅 1 组）       |
+| **温度校准条件**       | 环境温度变化 **> ±20°C** 时需校准             | 同左                                          |
+| **接口使用前提**       | 必须在 **上电自检（POST）完成之后** 调用       | 同左                                          |
+| **软件设计说明**       | 基于基本场景设计，**可扩展但未覆盖全部产品需求** | 同左                                          |
+
+## 软件驱动
+
+代码中实际上存在着两套ADC驱动，区别如下
+
+- 标准ADC驱动（Main ADC Driver）
+    - 位于 McalCdd/Adc 目录下, 包含完整的ADC模块实现，文件包括 Adc.h、Adc.c、Adc_Lld.h、Adc_Lld.c 等
+    - 提供完整的ADC功能
+
+- 私有ADC驱动（Private ADC Driver）
+    - 位于 McalCdd/Adc 目录下，包含 Adc_Private.h 和 Adc_Private.c
+    - 提供特定于内部使用的简化接口
+
+### 使用流程
+
+- 标准ADC驱动的一般使用流程：
+    ```c
+    // 1. 初始化ADC模块
+    Adc_Init(&Adc_Config);
+    // 2. 设置结果缓冲区
+    Adc_SetupResultBuffer(AdcGroup_0, dataBuffer);
+    // 3. 启动转换
+    Adc_StartGroupConversion(AdcGroup_0);
+    // 4. 读取结果
+    Adc_ReadGroup(AdcGroup_0, dataBuffer);
+    // 5. 停止转换
+    Adc_StopGroupConversion(AdcGroup_0);
+    // 6. 反初始化
+    Adc_DeInit();
+    ```
+
+- 私有ADC驱动使用流程：
+    ```c
+    // 1. 初始化ADC硬件
+    Adc_Private_Init(0);
+    // 2. 读取特定通道结果
+    Adc_Private_ReadChannelResult(0, channel, &result);
+    // 3. 反初始化
+    Adc_Private_DeInit(0);
+    ```
+
+### 主要区别
+
+| 特性         | 标准ADC驱动                              | 私有ADC驱动                          |
+|--------------|----------------------------------------|-------------------------------------|
+| 复杂度       | 完整的ADC驱动实现，功能丰富              | 简化的接口，功能有限         |
+| 配置方式     | 使用完整的配置结构体（包括Adc_GroupsCfg） | 直接操作硬件寄存器         |
+| API丰富度    | 提供完整的ADC功能API                     | 只提供最基本的初始化和读取功能   |
+| 中断支持     | 完整的中断和回调机制                     | 不使用中断                 |
+| 转换模式     | 单次转换和多次转换                  | 仅支持单次转换                  |
+| 触发模式     | 硬件触发和软件触发                  | 仅支持软件触发                  |
+| 阈值检查     | 软件阈值检查和硬件阈值检查                    |  不支持阈值检查                   |
+| 是否支持注入转换      | 支持注入转换和正常转换                 |  仅支持正常转换                  |
+| 错误处理     | 完整的错误检测和报告机制                  | 简单的错误处理                  |
+
+
+
+## 代码路径
+
+| **文件路径**                                  | **作用**                                                                 |
+|-----------------------------------------------|--------------------------------------------------------------------------|
+| `McalCdd/Adc/inc/Adc.h`                       | 公共API接口，供上层调用。                                                 |
+| `McalCdd/Adc/inc/Adc_Lld.h`                   | 声明底层硬件操作函数。                                                    |
+| `McalCdd/Adc/inc/Adc_Private.h`               | 定义私有结构、宏和函数声明。                                               |
+| `McalCdd/Adc/src/Adc.c`                       | 实现公共API，调用底层函数。                                                |
+| `McalCdd/Adc/src/Adc_Lld.c`                   | 实现底层硬件操作，直接配置寄存器。                                          |
+| `McalCdd/Adc/src/Adc_Private.c`               | 实现私有函数，辅助驱动内部逻辑。                                            |
+| `McalCdd/Common/Register/inc/Adc_Register.h`  | 定义ADC外设寄存器地址和位域。                                              |
+| `Platform/Schm/SchM_Adc.h`                    | 管理ADC的访问权限和资源保护（如中断安全）。                                 |
+| `Config/McalCdd/gen_xxxx/Adc/inc/Adc_PBcfg.h` | 定义板级外设配置参数（如通道、采样率等）。                                  |
+| `Config/McalCdd/gen_xxxx/Adc/inc/Adc_Cfg.h`   | 提供通用配置宏或默认配置参数（如最大通道数、中断优先级）。                  |
+| `Config/McalCdd/gen_xxx/Adc/src/Adc_PBcfg.c`  | 实现板级配置数据（如通道映射、硬件参数）。                                  |
+| `samples/Adc/xxx/src/Adc_Cmd.c`                   | ADC 软件触发单次采样的sample代码，通过Adc_Private的实现，简单场景可以直接使用。 |
+| `samples/Adc/S100/src/Adc_SoftTrigerContinuous.c` | S100平台专属，ADC 软件触发连续采样的sample代码，通过标准函数实现，适用于复杂场景。          |
+| `samples/Adc/S600/src/Adc_Test.c`             | S600平台专属，ADC 标准函数实现的sample代码，适用于复杂场景，可通过修改`Adc_PBcfg.h`实现连续采样。|
+
+## 应用sample
+
+
+
+<DocScope products="RDK S100">
+
+### ADC 软件触发单次转换应用
+
+`AdcTest`应用用于对设备执行 ADC 单次采样测试，通过Adc_Private的实现，能够读取特定通道或多个通道的 ADC 值，获取这些值并以原始值和毫伏 (mv) 格式显示结果。
+
+
+#### 使用示例
+
+
+- 语法
+
+```bash
+AdcTest [ADC 通道]
+```
+
+ADC 通道 (可选): 要读取的特定 ADC 通道。如果未提供，该命令将读取多个通道。
+
+- 示例
+
+读取通道 1 的 ADC 值：
+```bash
+D-Robotics:/$ Adc_Test 1
+[052.860562 0]--------------Adc_PrivateApiTest start-----------!
+[052.876472 0]AdcCurrentValue [1]: 2404 -> 1056 mv
+[052.869226 0]--------------Adc_PrivateApiTest end!-----------
+```
+
+
+读取所有通道的 ADC 值：
+
+```bash
+D-Robotics:/$ Adc_Test
+[038.836359 0]--------------Adc_PrivateApiTest start-----------!
+[038.852268 0]AdcCurrentValue [0]: 1117 -> 490 mv
+[038.852648 0]BoradIdMsb code: 6!
+[038.853028 0]
+[038.853212 0]AdcCurrentValue [1]: 2393 -> 1051 mv
+[038.854451 0]BoradIdLsb code: 10!
+[038.854842 0]
+[038.855026 0]AdcCurrentValue [2]: 1754 -> 770 mv
+[038.856320 0]DDR TYPE code: 8!
+[038.856634 0]
+[038.856819 0]AdcCurrentValue [3]: 1725 -> 758 mv
+[038.858210 0]
+[038.858306 0]AdcCurrentValue [4]: 630 -> 276 mv
+[038.858760 0]
+[038.858945 0]AdcCurrentValue [5]: 2515 -> 1105 mv
+[038.860273 0]
+[038.860391 0]AdcCurrentValue [6]: 2492 -> 1095 mv
+[038.860925 0]
+[038.861109 0]AdcCurrentValue [7]: 2156 -> 947 mv
+[038.862341 0]
+[038.862525 0]AdcCurrentValue [8]: 2163 -> 950 mv
+[038.863067 0]
+[038.863252 0]AdcCurrentValue [9]: 2161 -> 949 mv
+[038.864483 0]
+[038.864667 0]AdcCurrentValue [10]: 2169 -> 953 mv
+[038.865220 0]
+[038.866262 0]AdcCurrentValue [11]: 2223 -> 977 mv
+[038.866665 0]
+[038.866850 0]AdcCurrentValue [12]: 1837 -> 807 mv
+[038.868234 0]
+[038.868331 0]AdcCurrentValue [13]: 2101 -> 923 mv
+[038.868825 0]
+[038.868999 0]PASS.
+[038.869226 0]--------------Adc_PrivateApiTest end!-----------
+
+```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+### ADC Private API测试
+
+private API属于oneshot API，用于测试ADC驱动。
+
+#### 使用示例
+
+
+- 语法
+
+```bash
+Adc_Test [instance] [ch_num]
+```
+
+**instance:** ADC 实例编号（必需）
+**ch_num:** ADC 通道编号（必需）
+
+
+- 示例
+
+```bash
+# 测试通道0
+D-Robotics:/$ Adc_Test 0 0
+Adc[0] channel[0] adcvalue:1117 voltage:490mv
+
+# 测试通道1
+D-Robotics:/$ Adc_Test 0 1
+Adc[0] channel[1] adcvalue:2393 voltage:1051mv
+
+# 测试通道2
+D-Robotics:/$ Adc_Test 0 2
+Adc[0] channel[2] adcvalue:1500 voltage:659mv
+```
+
+
+</DocScope>
+
+### ADC 软件触发连续转换应用
+
+ADC 软件触发连续采样的应用基于标准ADC驱动实现 。其特点为自动重复转换，完成一次转换后立即开始下一次转换，无需额外触发， 适用于需要持续监控信号的场景，但由于持续工作，功耗相对较高。
+
+
+#### 关键配置
+```c
+// McalCdd/gen_xxxx/Adc/src/Adc_PBcfg.c
+static const Adc_GroupCfg Adc_GroupsCfg[] =
+{
+    /**< @brief Group0 -- Logical Unit Id 0 -- Hardware Unit ADC0 */
+    {
+        /**< @brief Index of group */
+        0U, /* GroupId */
+        /**< @brief ADC Logical Unit Id that the group belongs to */
+        (uint8)0, /* UnitId */
+        /**< @brief Access mode */
+        ADC_ACCESS_MODE_SINGLE, /* AccessMode */
+        /**< @brief Conversion mode */
+        ADC_CONV_MODE_CONTINUOUS, /* Mode */  //使用连续转换方式
+        /**< @brief Conversion type */
+        ADC_NORMAL_CONV, /* Type */ // 可选择正常转换和注入转换
+#if (ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE)
+        /**< @brief Priority configured */
+        (Adc_GroupPriorityType)ADC_GROUP_PRIORITY(0), /* Priority */
+#endif /* ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE */
+        /**< @brief Trigger source configured */
+        ADC_TRIGG_SRC_SW, /* TriggerSource */  // 软件触发
+#if (STD_ON == ADC_HW_TRIGGER_API)
+        /**< @brief Hardware trigger source for the group */
+        0U, /* HwTriggerSource */
+#endif /* (STD_ON == ADC_HW_TRIGGER_API) */
+#if (STD_ON == ADC_GRP_NOTIF_CAPABILITY)
+        /**< @brief Notification function */
+        Adc_TestNormal_Notification_0, /* Notification */ // 通知函数，用于通知上层应用转换已经完成
+#endif /* (STD_ON == ADC_GRP_NOTIF_CAPABILITY) */
+    ............
+        /**< @brief Enables or Disables the ADC and DMA interrupts */
+        (uint8)(STD_ON), /* AdcWithoutInterrupt */  // STD_ON：非中断方式; STD_OFF: 中断方式;S100默认使用非中断方式
+#if (ADC_ENABLE_LIMIT_CHECK == STD_ON)
+        /**< @brief Enables or disables the usage of limit checking for an ADC group. */
+        (boolean)FALSE, /* AdcGroupLimitcheck */
+#endif /* (STD_ON == ADC_ENABLE_LIMIT_CHECK) */
+        { { 0x3FFFU } }, /* AssignedChannelMask */
+#if (ADC_SET_ADC_CONV_TIME_ONCE == STD_OFF)
+        &AdcLldGroupConfig_0 /* AdcLldGroupConfigPtr */
+#endif /* (ADC_SET_ADC_CONV_TIME_ONCE == STD_OFF) */
+    }
+};
+```
+
+#### 使用示例
+
+- 语法
+
+```
+Adc_TestNormal [Action]
+```
+
+:::tip
+注意将Adc_GroupsCfg中的 AdcWithoutInterrupt 字段配置为STD_ON，下面以S600为例
+:::
+
+step1：启动ADC连续采集
+```
+D-Robotics:/$ Adc_TestNormal start
+[053.313330 0]Adc test running...
+```
+
+step2：读取采集结果
+```
+D-Robotics:/$ Adc_TestNormal read
+[058.068598 0]##############################
+[058.069085 0]ADC0 channel: 0, sample: 2466 -> 1083 mv
+[058.069692 0]ADC0 channel: 1, sample: 595 -> 261 mv
+[058.070278 0]ADC0 channel: 2, sample: 585 -> 257 mv
+[058.070864 0]ADC0 channel: 3, sample: 120 -> 52 mv
+[058.071439 0]ADC0 channel: 4, sample: 574 -> 252 mv
+[058.072025 0]ADC0 channel: 5, sample: 591 -> 259 mv
+[058.072630 0]ADC0 channel: 6, sample: 596 -> 261 mv
+[058.073216 0]ADC0 channel: 7, sample: 671 -> 294 mv
+[058.073802 0]ADC1 channel: 0, sample: 1997 -> 877 mv
+[058.074398 0]ADC1 channel: 1, sample: 1955 -> 859 mv
+[058.074997 0]ADC1 channel: 2, sample: 112 -> 49 mv
+[058.075572 0]ADC1 channel: 3, sample: 214 -> 94 mv
+[058.076147 0]ADC1 channel: 4, sample: 384 -> 168 mv
+[058.076739 0]ADC1 channel: 5, sample: 504 -> 221 mv
+[058.077325 0]ADC1 channel: 6, sample: 612 -> 269 mv
+[058.077923 0]ADC1 channel: 7, sample: 695 -> 305 mv
+[058.078509 0]==============================
+
+```
+
+step3：停止ADC连续采集
+```
+D-Robotics:/$ Adc_TestNormal stop
+[096.167557 0]Adc test exit.
+```
+
+
+### 应用程序接口
+
+#### void Adc_Init(const Adc_ConfigType* ConfigPtr)
+
+```shell
+Description：Initializes the ADC hardware units and driver.
+
+Sync/Async：Synchronous
+Parameters(in)
+    None
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+
+
+#### Std_ReturnType Adc_SetupResultBuffer(Adc_GroupType Group, const Adc_ValueGroupType* DataBufferPtr)
+
+```shell
+Description：Initializes the group specific ADC result buffer pointer as configured
+             to point to the pDataBufferPtr address which is passed as parameter.
+
+Sync/Async：Synchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC channel group.
+    DataBufferPtr: pointer to result data buffer.
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：Std_ReturnType
+    E_OK: result buffer pointer initialized correctly
+    E_NOT_OK: operation failed or development error occurred
+```
+
+#### void Adc_DeInit(void)
+
+```shell
+Description：Returns all ADC HW Units to a state comparable to their power on reset state.
+
+Sync/Async：Synchronous
+Parameters(in)
+    ConfigPtr: Pointer to configuration set in Variant PB
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### void Adc_StartGroupConversion(Adc_GroupType Group)
+
+```shell
+Description：Starts the conversion of all channels of the requested ADC Channel group.
+
+Sync/Async：Synchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### Std_ReturnType Adc_ReadGroup(Adc_GroupType Group, Adc_ValueGroupType* DataBufferPt)
+
+```shell
+Description：Reads the group conversion result of the last completed conversion round of the requested group
+             and stores the channel values starting at the DataBufferPtr address.
+             The group channel values are stored in ascending channel number order
+             (in contrast to the storage layout of the result buffer if streaming access is configured).
+
+Sync/Async：Synchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    DataBufferPtr: ADC results of all channels of the selected group are stored in the data buffer
+                   addressed with the pointer.
+Return value：Std_ReturnType
+    E_OK: Aresults are available and written to the data buffer
+    E_NOT_OK: no results are available or development error occurred
+```
+
+#### void Adc_EnableHardwareTrigger(Adc_GroupType Group)
+
+```shell
+Description：Enables the hardware trigger for the requested ADC Channel group.
+
+Sync/Async：Asynchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    DataBufferPtr: ADC results of all channels of the selected group are stored
+                   in the data buffer addressed with the pointer.
+Return value：None
+```
+
+#### void Adc_DisableHardwareTrigger(Adc_GroupType Group)
+
+```shell
+Description：Disables the hardware trigger for the requested ADC Channel group.
+
+Sync/Async：Asynchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### void Adc_EnableGroupNotification(Adc_GroupType Group)
+
+```shell
+Description：Enables the notification mechanism for the requested ADC Channel group.
+
+Sync/Async：Asynchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### void Adc_DisableGroupNotification(Adc_GroupType Group)
+
+```shell
+Description：Disables the notification mechanism for the requested ADC Channel group.
+
+Sync/Async：Asynchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
+
+```shell
+Description：Returns the conversion status of the requested ADC Channel group.
+
+Sync/Async：Asynchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：Adc_StatusType
+	Conversion status for the requested group.
+```
+
+#### Adc_StreamNumSampleType Adc_GetStreamLastPointer(Adc_GroupType Group, Adc_ValueGroupType** PtrToSamplePtr)
+
+```shell
+Description：Returns the number of valid samples per channel, stored in the result buffer.
+             Reads a pointer, pointing to a position in the group result buffer.
+             With the pointer position, the results of all group channels of the last
+             completed conversion round can be accessed.
+             With the pointer and the return value, all valid group conversion results can
+             be accessed.
+
+Sync/Async：Synchronous
+Parameters(in)
+    Group: Numeric ID of requested ADC Channel group.
+Parameters(inout)
+    None
+Parameters(out)
+    PtrToSamplePtr: Pointer to result buffer pointer.
+Return value：Adc_StreamNum SampleType
+	Number of valid samples per channel.
+```
+
+#### void Adc_GetVersionInfo(Std_VersionInfoType* versioninfo)
+
+```shell
+Description：Returns the version information of this module.
+
+Sync/Async：Synchronous
+Parameters(in)
+    None
+Parameters(inout)
+    None
+Parameters(out)
+    versioninfo: Pointer to where to store the version information of this module.
+Return value：None
+
+```
+
+#### Std_ReturnType Adc_SetPowerState(Adc_PowerStateRequestResultType* Result)
+
+```shell
+Description：This API configures the Adc module so that it enters the already prepared
+             power state, chosen between a predefined set of configured ones.
+
+Sync/Async：Synchronous
+Parameters(in)
+    None
+Parameters(inout)
+    None
+Parameters(out)
+    Result: If the API returns E_OK:
+        ADC_SERVICE_ACCEPTED: Power state change executed.
+    If the API returns E_NOT_OK:
+        ADC_NOT_INIT: ADC Module not initialized.
+        ADC_SEQUENCE_ERROR: wrong API call sequence.
+        ADC_HW_FAILURE: the HW module has a failure which prevents it to enter the required power state.
+Return value：Std_ReturnType
+    E_OK: Power Mode changed
+    E_NOT_OK: request rejected
+```
+
+#### Std_ReturnType Adc_GetCurrentPowerState(Adc_PowerStateType* CurrentPowerState, Adc_PowerStateRequestResultType* Result)
+
+```shell
+Description：This API returns the current power state of the ADC HW unit.
+
+
+Sync/Async：Synchronous
+Parameters(in)
+    None
+Parameters(inout)
+    None
+Parameters(out)
+    CurrentPowerState: The current power mode of the ADC HW Unit is returned in this parameter
+    Result: If the API returns E_OK: ADC_SERVICE_ACCEPTED: Current power mode was returned
+            If the API returns E_NOT_OK: ADC_NOT_INIT: ADC Module not initialized.
+Return value：Std_ReturnType
+    E_OK: Mode could be read
+    E_NOT_OK: request rejected
+```
+
+#### Std_ReturnType Adc_GetTargetPowerState(Adc_PowerStateType* TargetPowerState, Adc_PowerStateRequestResultType* Result)
+
+```shell
+Description：This API returns the Target power state of the ADC HW unit.
+
+
+Sync/Async：Synchronous
+Parameters(in)
+    None
+Parameters(inout)
+    None
+Parameters(out)
+    CurrentPowerState: The current power mode of the ADC HW Unit is returned in this parameter
+    Result: If the API returns E_OK: ADC_SERVICE_ACCEPTED: Current power mode was returned
+            If the API returns E_NOT_OK: ADC_NOT_INIT: ADC Module not initialized.
+Return value：Std_ReturnType
+    E_OK: Mode could be read
+    E_NOT_OK: request rejected
+```
+
+#### Std_ReturnType Adc_PreparePowerState(Adc_PowerStateType PowerState, Adc_PowerStateRequestResultType* Result)
+
+```shell
+Description：This API returns the Target power state of the ADC HW unit.
+
+Sync/Async：Synchronous
+Parameters(in)
+    PowerState: The target power state intended to be attained
+Parameters(inout)
+    None
+Parameters(out)
+    Result:
+    If the API returns E_OK:
+        ADC_SERVICE_ACCEPTED: ADC Module power state preparation was started.
+    If the API returns E_NOT_OK:
+        ADC_NOT_INIT: ADC Module not initialized.
+        ADC_SEQUENCE_ERROR: wrong API call sequence (Current Power State = Target Power State).
+        ADC_POWER_STATE_NOT_SUPP: ADC Module does not support the requested power state.
+        ADC_TRANS_NOT_POSSIBLE: ADC Module cannot transition directly from the current power
+                                state to the requested power state or the HW peripheral is still busy.
+Return value：Std_ReturnType
+    E_OK: Mode could be read
+    E_NOT_OK: request rejected
+```
+
+<Tabs groupId="soc_type">
+<TabItem value="S100" label="S100">
+
+#### void Adc_EnableWdgNotification(Adc_ChannelType ChannelId)
+
+```shell
+Description：Enable notification of a channel that has watchdog functionality
+             configured at initialization
+
+Parameters(in)
+    Adc_ChannelType: Symbolic name of channel
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### void Adc_DisableWdgNotification(Adc_ChannelType ChannelId)
+
+```shell
+Description：Disable notification of a channel that has watchdog functionality
+             configured at initialization
+
+Parameters(in)
+    Adc_ChannelType: Symbolic name of channel
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+
+</TabItem>
+<TabItem value="S600" label="S600">
+
+#### void Adc_EnableWdgNotification(Adc_ChannelType ChannelId, uint8 Instance)
+
+```shell
+Description：Enable notification of a channel that has watchdog functionality configured at initialization
+
+Parameters(in)
+    ChannelId: The channel ID of ADC
+    Instance: Index of ADC
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+
+#### void Adc_DisableWdgNotification(Adc_ChannelType ChannelId, uint8 Instance)
+
+```shell
+Description：Disable notification of a channel that has watchdog functionality configured at initialization
+
+Parameters(in)
+    ChannelId: The channel ID of ADC
+    Instance: Index of ADC
+Parameters(inout)
+    None
+Parameters(out)
+    None
+Return value：None
+```
+</TabItem>
+</Tabs>

@@ -1,35 +1,33 @@
 ---
 sidebar_position: 2
 ---
-# 2.2 srpi-config Configuration Tool User Guide
 
-:::info Note
-The `srpi-config` configuration tool is only applicable to the `RDK X3`、`RDK X5` and `RDK X3 Module` development boards and is not suitable for the `RDK Ultra` development board.
-:::
+# 2.2 srpi-config Tool Configuration
 
 ## Introduction
 
-`srpi-config` is a system configuration tool. To open the configuration tool, type the following command in the command line:
+`srpi-config` is a system configuration tool. To open the configuration tool, please enter the following command in the command line:
 
 ```
 sudo srpi-config
 ```
 
-> `sudo` is a command for privilege management. It is necessary to enter it here in order to have root privileges for configuration management. The default sunrise account does not have permission to modify system files.
+> sudo is a privilege escalation command and must be entered here to perform configuration management with root permissions. The default `sunrise` account does not have system file modification permissions.
 
-![image-20231123101913960](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123101913960.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-home_s100.png)
 
-If you are using a desktop system, you can find the `RDK Configuration` application in the menu for configuration. It will also open a configuration terminal similar to the image above.
 
-![image-20231123102024074](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/20250507-160737.jpg)
+If you are using a desktop system, you can find the `RDK Configuration` application in the menu to perform configuration. This will open the same configuration terminal as shown above. The difference in background color is related to the terminal environment variable `TERM` when opening the terminal.
 
-<!-- ![image-20231123172041480](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/20250507-160809.jpg) -->
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/desktop_rdk_configuration_s100.png)
+
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-home_s100.png)
 
 ## System Options
 
-The System Options menu allows you to configure changes to various parts such as Wi-Fi network, user password, hostname, system login mode, browser selection, and some system-level changes.
+The System Options menu allows you to make configuration changes to various parts such as Wi-Fi network, user password, hostname, system login mode, browser selection, etc., as well as some system-level changes.
 
-![image-20231123102447793](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123102447793.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-system_s100.png)
 
 - **Wireless LAN**
 
@@ -37,7 +35,7 @@ The System Options menu allows you to configure changes to various parts such as
 
 - **Password**
 
-  Change the default user password. The default account is `sunrise`.
+  Change the "default" user password. The default account is `sunrise`.
 
 - **Hostname**
 
@@ -45,150 +43,82 @@ The System Options menu allows you to configure changes to various parts such as
 
 - **Boot / Auto login**
 
-  Choose whether to boot to console or desktop, and whether automatic login is required. If automatic login is chosen, it will be logged in with the default account `sunrise`.
-  
+  Choose whether to boot to console or desktop, and whether auto-login is required. If auto-login is selected, the system will use the default account `sunrise` for login.
+
 - **Power LED**
- 
-  If the model of RDK allows, you can change the behavior of the power LED in this option. The default is off or flashing.
+
+  If the RDK model allows it, you can change the behavior of the power LED in this option. The default is off or blinking.
 
 - **Browser**
- 
-  If using a desktop system, you can set the default browser. If not configured, `firefox` is used by default, and users can install the `chromium` browser with the command `sudo apt install chromium`.
 
-## Display Options
- 
- Display options menu.
- 
- ![image-20240113163313195](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20240113163313195.png)
+  If you are using a desktop system, you can set the default browser. Without configuration, `firefox` is used by default. Users can install the `chromium` browser via the command `sudo apt install chromium`.
 
-- **FB Console Resolution**
- 
-  Supports setting the HDMI display resolution in `Server` system and `console` mode.
+- **Update Miniboot**
 
-
-
-- **Dsiplay Chose DSI or HDMI**
-  
-  Support switching between `DSI` and `HDMI` display.
-[Only X5 supports]
-
-![image-20240113163313195](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20240819160611000.png)  
+  If you need to upgrade Miniboot-related partitions, you can perform operations in this option. For the specific upgrade principle and partitions involved in the upgrade, please refer to: [Miniboot Upgrade](../07_Advanced_development/02_linux_development/06_OTA/02_ota_miniboot.md).
 
 ## Interface Options
- 
- Interface options menu, with the following options to enable/disable: SSH, VNC, SPI, I2C, I2S, Serial, etc.
- 
- ![image-20231123103322961](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20240819162241000.png)
- 
+
+The Interface Options menu has the following options to enable/disable: SSH, peripherals, etc.
+
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-intf_s100.png)
+
 - **SSH**
- 
-  Use SSH to enable/disable remote login to `RDK`. By default, the SSH option is enabled.
- 
+
+  Enable/disable remote login to the `RDK` via SSH. By default, the system has the SSH option enabled.
+
 - **VNC**
- 
-  Enable/disable X11vnc virtual network computing server.
- 
-> VNC (Virtual Network Console) is an abbreviation for Virtual Network Console. It is a remote control software that can be enabled when remotely accessing the desktop system.
- 
-- **Peripheral bus config**
- 
-  Enable/disable SPI, I2C, Serial Port, I2S and other interfaces on the 40-pin interface. This configuration directly modifies the `status` of the corresponding bus in the device tree file and takes effect after reboot.
-  [RDK X5] has added a PWM interface;
-  In the table below, each row of interfaces uses the same pins and can only have one function in effect. When all interfaces in a row are dsiable, the pins are gpio function pins
 
+  S100 is currently adapting to VNC;
 
-| fun1 | fun2 | 
-| ---- | ---- |
-| serial3 | i2c5 |
-| i2c0 | pwm2 |
-| spi2 | pwm0 |
-| spi2 | pwm1 |
-| i2c1 | pwm3 |
-  
- ![image-20231123103758686](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123103758686.png)
- 
-- **Configure Wi-Fi antenna**
-  
-  Switch Wi-Fi antenna mode, supports setting to use onboard or external antenna.
+- **Peripheral Configuration**
 
-> Currently supported in RDK X3 (V2.1) RDK X5 (V0.1 V1.0) RDK X5 MD (less than V1.1).
-
-
-![img-20250903-163740](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/img-20250903-163740.png)
-
-  Confirm antenna status 
-  
-  ```shell
-  cat /boot/config.txt
-  ```
-
-  `antenna_option=trace` indicates the onboard antenna, `antenna_option=cable` indicates the external antenna.  
-
-- **Audio**
-  Install and uninstall audio adapter board
-  Possible supported audio adapters include Audio Driver HAT V1, Audio Driver HAT V2, and WM8960 Audio HAT. Different hardware may also support different audio adapters
-
-
- ![image-20231123103758686](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20240819164716000.png)
+  It is recommended to refer to [config.txt File Configuration](./config_txt) for peripheral configuration;
 
 ## Performance Options
- 
- Performance options, including overclocking, CPU operating mode and frequency settings, adjusting ION memory size, etc.
- 
- ![image-20231123104234000](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123104234000.png)
- - **CPU frequency**
 
-  Use this tool to overclock the CPU of the RDK. It is generally not recommended to enable this option, but you can try modifying it if sufficient cooling measures are in place.  
+The Performance Options include CPU running mode and frequency settings, adjusting ION memory size, etc.
 
-
- For an explanation of the `CPU` scheduling method in the `X5 series`, please refer to [X5 CPU Frequency Management](frequency_management). If you plan to overclock, be sure to read the `CPU Overclocking` section in the documentation to fully understand the risks and precautions.  
-
-  ![image-20231123104553727](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123104553727.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-performance_s100.png)
 
 - **ION memory**
 
-  Use this option to configure the common size of ION memory.
+  You can configure the common size of ION memory through this option.
 
-> ION memory is a physical memory space reserved for the BPU, image, and video multimedia functions. The default configuration size is 672MB. If you need to run large algorithm models or decode multiple videos at the same time, adjust the memory size according to specific needs.
+> ION memory is the physical memory space reserved for BPU and image/video multimedia functions. The default configuration size is 672MB. If you need to run larger algorithm models and encode/decode multiple video streams simultaneously, please adjust this memory size according to specific needs.
 
 ## Localisation Options
 
-Localisation options provide the following choices: local language, time zone, and keyboard layout.
+The Localisation Options provide you with the following options to choose from: local language, time zone, keyboard layout.
 
-![image-20231123105018338](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123105018338.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-localisation_s100.png)
 
 - **Locale**
 
-  Select a locale, such as configuring English environment `en_GB.UTF-8`. Restart to take effect.
+  Select a language environment, for example, configure a Chinese environment as `zh_CN.UTF-8`, which takes effect after restart.
 
 - **Time Zone**
 
-  Select your local time zone, starting from the region, for example, Europe, and then choose a city, like London. Type a letter to jump to that point in the alphabet.
+  Select your local time zone, starting from the region, for example, Asia, and then select a city, for example, Shanghai. Type a letter to jump down the list to that point in the alphabet.
 
 - **Keyboard**
 
-  Reading all keyboard types may take a long time to display. Changes usually take effect immediately but may require a restart.
+  Reading all keyboard types takes a long time to display. Changes usually take effect immediately, but may require a restart.
 
 ## Advanced Options
 
-Advanced options allow you to configure disk expansion, network proxy settings, and more.
+The Advanced Options allow you to set options such as disk expansion, network proxy, etc.
 
-![image-20231123105616627](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123105616627.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-advanced_s100.png)
 
 - **Expand Filesystem**
 
-  This option expands the installation to fill the entire TF card, providing more space for the file system.
-
-> If the system is copied from another system that has already been initialized and configured, the capacity of the `TF` card may not be automatically adjusted to the current TF card. Use this feature to conveniently complete the expansion.
+  This option will expand the filesystem to fill the entire storage medium (S100 defaults to eMMC), providing more space for the filesystem.
 
 - **Network Proxy Settings**
 
-  Configure the network proxy settings.
+  Configure network proxy settings.
 
-- **Boot Order**
-
-  The RDK X3 module and RDK X5 Module support booting the system from eMMC and SD cards. This option is used to switch the boot mode.
-  
 ## Update
 
 Update the `srpi-config` tool to the latest version.
@@ -197,12 +127,12 @@ Update the `srpi-config` tool to the latest version.
 
 Information about `srpi-config`
 
-Choosing this option will display the following information:
+Selecting this option will display the following information:
 
-![image-20231123110127905](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123110127905-en.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-about_s100.png)
 
-## Finish button
+## Finish Button
 
-![image-20231123110246286](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/image-20231123110246286.png)
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-finish_s100.png)
 
-After making the changes, select the `Finish` button. If the modifications you made require a restart to take effect, the system will prompt you to restart immediately.
+After completing the changes, select the `Finish` button. For system configurations provided by `srpi-config` that depend on restart to take effect, it will ask you whether you want to restart. If you do not restart, the configuration will not take effect normally. Please decide on the restart timing according to your usage.

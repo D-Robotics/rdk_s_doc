@@ -1,64 +1,71 @@
-English| [简体中文](./README_CN.md)
+[English](./README_EN.md) | 简体中文
 
-Welcome to this project! This document will help you quickly get started with the installation, development, building, and deployment of RDK_DOC.
 
-### I. Environment Installation
+## 1. 依赖安装
 
-To install the dependencies for this project, execute the following command:
+### 环境要求
 
-```shell
+- Node.js >= 18
+- npm（随 Node.js 安装）
+
+### 安装方式
+
+首次拉取或日常本地开发：
+
+```bash
 npm install
 ```
 
-### II. Online Operation
+CI 或需要严格锁定依赖版本时：
 
-
-To build only the Chinese manual:
-
-```shell
-npm run start
+```bash
+npm ci
 ```
 
-To build only the English manual:
+## 2. 文档维护流程
 
-```shell
-npm run start  -- --locale en
-```
+1. 修改中文文档：`docs/`
+2. 修改英文文档：`i18n/en/docusaurus-plugin-content-docs/current/`
+3. 若改动了显示范围（`sidebar_versions`、`sidebar_products`、`_sidebar_scope.json`、`DocScope`），执行一次配置生成：
 
-This method does not support switching between Chinese and English documents. It can only build a single language document. If you need to display Chinese and English simultaneously, please refer to the method in Step III.
+   ```bash
+   npm run generate-sidebar-config
+   ```
 
-### III. Offline Deployment
+   或执行：
 
-To fully deploy the manual offline, please run the following script to download all images locally:
-
-```shell
-python3 download_imgs.py
-```
+  ```bash
+   npm run start
+  ```
 
 
-For compiling and deploying the documents, use the following command:
+4. 本地预览验证（中文或英文）：
+   - 中文：`npm run start`
+   - 英文：`npm run start:en`
+5. 提交前做完整构建检查：
 
-```shell
-npm run build
-```
+   ```bash
+   npm run build
+   ```
 
-To deploy the documents, use the following command:
+6. 需要本地查看构建产物时：
 
-```shell
-#Direct Deployment
+   ```bash
+   npm run serve
+   ```
 
-npm run serve
+## 3. 维护常用命令
 
-#Deploy with Specified IP Address and Port Number
-
-npm run serve -- --host=10.64.62.34 --port=1688 --no-open
-```
-
-This will start a static file server and provide the following links for access in the browser，The port number should be based on the actual port number:
-
-***English manual link***: http://localhost:3000/en/rdk_doc/
-
-***Chinese manual link***: http://localhost:3000/rdk_doc/
-
-**Note:** Please ensure that Node.js version 18.0 or higher is required.
+| 命令 | 用途 |
+|---|---|
+| `npm run generate-sidebar-config` | 手动生成侧边栏显示范围配置 |
+| `npm run watch-sidebar-config` | 监听文档变化并自动更新范围配置 |
+| `npm run start` | 本地启动中文文档开发服务（含配置监听） |
+| `npm run start:en` | 本地启动英文文档开发服务（含配置监听） |
+| `npm run start:no-watch` | 本地启动中文文档（不监听配置变化） |
+| `npm run start:no-watch:en` | 本地启动英文文档（不监听配置变化） |
+| `npm run start:port` | 在 3001 端口启动中文文档（含配置监听） |
+| `npm run build` | 生产构建（含侧边栏配置生成） |
+| `npm run serve` | 本地预览 build 产物 |
+| `npm run deploy` | 构建并部署到 GitHub Pages |
 

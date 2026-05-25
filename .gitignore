@@ -16,6 +16,8 @@
 # Misc
 .DS_Store
 .env.local
+
+# Local Pagefind artifacts (dev/temporary)
 .env.development.local
 .env.test.local
 .env.production.local
@@ -32,3 +34,5 @@ yarn.lock
 # package-lock.json
 
 .idea
+
+.env.local

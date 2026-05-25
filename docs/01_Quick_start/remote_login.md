@@ -4,212 +4,267 @@ sidebar_position: 4
 
 # 1.4 远程登录
 
-本章节旨在向需要通过个人电脑(PC)远程访问开发板的用户介绍如何通过串口、RDK Studio、网络(VNC、SSH)方式进行远程登录。
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
+```
+
+本章节旨在向需要通过个人电脑(PC)远程访问开发板的用户介绍如何通过串口、网络(SSH)方式进行远程登录。
+
+## 默认登录账户
+
+系统提供了两个默认账户，方便用户首次使用：
+
+- **普通用户：** 用户名 `sunrise`，密码 `sunrise`
+- **超级用户 (root)：** 用户名 `root`，密码 `root`
 
 :::tip
+通过网络方式远程登录前，开发板需要通过有线以太网或者无线 WiFi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：
 
-通过网络方式远程登录前，开发板需要通过有线以太网或者无线WiFi方式接入网络，配置好开发板IP地址。对于两种连接方式下的IP地址信息可参考如下描述：
+<DocScope products="RDK S100">
 
-- 有线以太网：开发板默认采用静态IP模式，IP地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
-- 无线WiFi：开发板IP地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看wlan0网络的IP地址
+- 有线以太网：
+  - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
+  - 开发板 eth0 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+- 无线 WiFi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+- 有线以太网：
+  - 开发板 eth2 eth3 仍在调试中，暂不支持使用
+  - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
+  - 开发板 eth0 接口默认采用dhcp模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+- 无线 WiFi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
+
+</DocScope>
 
 :::
 
 ## 串口登录{#login_uart}
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
+### **win连接串口**
+
+参考视频: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
 
 在使用串口登录前，需要确认开发板串口线跟电脑正确连接，连接方法可参考对应开发板的调试串口章节：
 
-- [rdk_ultra 调试串口章节](../01_Quick_start/hardware_introduction/rdk_ultra.md#debug_uart)
-- [rdk_x3 调试串口章节](../01_Quick_start/hardware_introduction/rdk_x3.md#debug_uart)
-- [rdk_x5 调试串口章节](../01_Quick_start/hardware_introduction/rdk_x5.md#debug_uart)
+<DocScope products="RDK S100">
+- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100/index.md#type-c-j16)
+</DocScope>
 
-串口登录需要借助PC终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
+<DocScope products="RDK S600">
+- [rdk_s600 调试串口章节](../01_Quick_start/01_hardware_introduction/02_rdk_s600/index.md#闪连-烧录mainmcu-调试-j4)
+</DocScope>
 
-- 当串口USB转接板首次插入电脑时，需要安装串口驱动。驱动程序可从资源中心的[工具子栏目](https://developer.d-robotics.cc/resource)获取。驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
+串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
+
+- 当串口 USB 转接板首次插入电脑时，需要安装串口驱动。驱动程序可从资源中心的[工具子栏目](https://developer.d-robotics.cc/resource)获取。驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
 
 ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png)
 
-
 - 打开`MobaXterm`工具，点击`Session`，然后选择`Serial`
 
-- 配置端口号，例如`COM3`，实际使用的串口号以PC识别到的串口号为准
+- 配置端口号，例如`COM3`，实际使用的串口号以 PC 识别到的串口号为准
 
 - 设置串口配置参数，如下：
 
-  | 配置项               | 参数值                               |
-  | -------------------- | ------------------------------------ |
-  | 波特率（Baud rate）  | RDK X3 （921600），RDK X5 （115200） |
-  | 数据位（Data bits）  | 8                                    |
-  | 奇偶校验（Parity）   | None                                 |
-  | 停止位（Stop bits）  | 1                                    |
-  | 流控（Flow Control） | 无                                   |
+  | 配置项               | 参数值 |
+  | -------------------- | ------ |
+  | 波特率（Baud rate）  | 921600 |
+  | 数据位（Data bits）  | 8      |
+  | 奇偶校验（Parity）   | None   |
+  | 停止位（Stop bits）  | 1      |
+  | 流控（Flow Control） | 无     |
 
 - 点击`OK`，输入用户名：`root`、密码：`root`登录设备
-![image-Uart-Login](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif)
+  ![image-Uart-Login](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif)
 
-此时，可使用`ifconfig`命令查询开发板IP地址，其中eth0、wlan0分别代表有线、无线网络：
+此时，可使用`ifconfig -a`命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：
+
+<DocScope products="RDK S100">
+
 ```bash
-root@ubuntu:~# ifconfig
-eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.1.255
-        inet6 fe80::211:22ff:feaa:7637  prefixlen 64  scopeid 0x20<link>
-        ether 00:11:22:aa:76:37  txqueuelen 1000  (Ethernet)
-        RX packets 767  bytes 54006 (54.0 KB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 5766  bytes 246466 (246.4 KB)
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether c8:30:76:63:2d:93  txqueuelen 1000  (Ethernet)
+        RX packets 7547  bytes 2230733 (2.2 MB)
+        RX errors 0  dropped 2  overruns 0  frame 0
+        TX packets 1126  bytes 108615 (108.6 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 43  base 0xa000
+        device interrupt 93
+
+eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
+        inet6 fe80::e0b2:71ff:fea0:6ba7  prefixlen 64  scopeid 0x20<link>
+        ether e2:b2:71:a0:6b:a7  txqueuelen 1000  (Ethernet)
+        RX packets 43  bytes 3882 (3.8 KB)
+        RX errors 0  dropped 1  overruns 0  frame 0
+        TX packets 46  bytes 6234 (6.2 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 99
 
 lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         inet 127.0.0.1  netmask 255.0.0.0
         inet6 ::1  prefixlen 128  scopeid 0x10<host>
         loop  txqueuelen 1000  (Local Loopback)
-        RX packets 3847  bytes 339115 (339.1 KB)
+        RX packets 46  bytes 6342 (6.3 KB)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 3847  bytes 339115 (339.1 KB)
+        TX packets 46  bytes 6342 (6.3 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether 08:e9:f6:ae:f8:8a  txqueuelen 1000  (Ethernet)
+        ether 28:d0:43:83:63:57  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
-## RDK Studio 登录
+</DocScope>
+<DocScope products="RDK S600">
 
-本章节面向使用 RDK Studio 登录开发板的用户，RDK Studio 提供安全的设备远程访问能力，支持从客户端通过 IP 远程登录 RDK 设备并实时控制与管理。操作步骤如下:
+```bash
+eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 7a:5e:ca:06:4b:a1  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 136
 
+eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
+        inet6 fe80::58de:11ff:fe64:e19c  prefixlen 64  scopeid 0x20<link>
+        ether 5a:de:11:64:e1:9c  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 3  bytes 425 (425.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 192
 
-:::info 说明
+eth2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 02:8f:6f:81:99:10  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 201
 
-- RDK Studio 下载链接：
-- [点此下载 windows 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22%20Setup.exe)
-- [点此下载 macOS 版本](https://rdkstudio.bj.bcebos.com/rdkstudio/lastversion/RDKStudio-0.3.22-arm64.dmg)
+eth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether ee:71:51:40:ac:ad  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 218
 
-- 更多 RDK Studio 使用指导参见 [RDK Studio 使用指南](../01_Quick_start/09_RDK_Studio/01_rdk_studio.md)
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 224  bytes 21518 (21.5 KB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 224  bytes 21518 (21.5 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
-:::
+wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether f0:68:e3:22:7e:90  txqueuelen 1000  (Ethernet)
+        RX packets 8280  bytes 654536 (654.5 KB)
+        RX errors 0  dropped 5898  overruns 0  frame 0
+        TX packets 1138  bytes 139677 (139.6 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+```
+</DocScope>
 
-1. 点击右上角 `+ RDK 设备`，进入选择连接类型界面。
+### **mac连接串口**
 
-   ![+ RDK 设备界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/rdk_studio_left_menu_device_manage_hr_add_device.png)
-
-
-2. 点击 “选择连接类型” 后面的问号图标，弹出连接方式导览窗口，指导用户根据所选连接类型进行设备连接，点击 `下一步` 可查看后续内容，也可点击 `上一步` 再次查看之前的提示，查看全部导览内容后点击 `结束导览` 关闭窗口，也可随时点击右上角 ` × ` 直接关闭弹窗。
-
-   ![导览窗口界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/rdk_studio_left_menu_device_manage_hr_add_device_help.png)
-
-3. 点击选中 `IP 地址（已知IP情况下使用）`连接类型，点击 `下一步` ，进入填写 IP 地址界面。
-
-    ![填写IP界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/remote_login_ip_input.png)
-
-
-4. 点击 `下一步` ，进入选择用户类型界面，此处设置登录到 RDK 设备的用户类型，可选择 “sunrise（普通用户权限）” 或 “root（超级用户权限）”。
-
-
-   ![选择用户类型界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/rdk_studio_left_menu_device_manage_hr_add_device_usertype.png)
-
-
-5. 点击 `下一步` ，进入创建 RDK 设备条目界面，填写设备名称及描述。
-
-
-   ![创建 RDK 设备条目界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/left_menu_device_manage_hr_add_device_IP_name.png)
-
-
-7. 点击 `确认`，成功添加 RDK 设备，在设备卡列表页面显示设备信息。
-
-
-   ![设备卡列表界面](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/rdk_studio/left_menu_device_manage_hr_add_device_success_IP.png)
-
-
-
-## 网络状态确认{#network_config}
-
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=3
-
-在使用远程登录前，需要确保电脑、开发板网络通信正常，如无法`ping`通，需按如下步骤进行确认：
+macos系统下，使用minicom工具连接串口，步骤如下：
+1. 使用minicom命令连接串口验证(`minicom -D /dev/tty.wchusbserial* -b 921600 -8`）
+      ```bash
+      minicom  # 启动 minicom 终端工具，用于串口通信
+      -D       # 指定要使用的串口设备（device）
+      -b       # 设置串口波特率（baud rate）
+      -8       # 设置 数据位数为 8 位（data bits）
+      ```
+      ![image-S100-download](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png)
+2. 连接开发板验证
+   ![image-S100-download](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png)
 
 :::tip
 
-各个版本的镜像对应的IP地址为：
-
-| 板卡系列     | 镜像版本      | 网口IP地址                   |
-| ------------ | ------------- | ---------------------------- |
-| X3           | 小于等于2.0.0 | 192.168.1.10/24              |
-| X3           | 大于等于2.1.0 | 192.168.127.10/24            |
-| X5           | 3.0.0         | 192.168.127.10/24            |
-| **板卡系列** | **镜像版本**  | **闪连口(USB Device)IP地址** |
-| X5           | 3.0.0         | 192.168.128.10/24            |
-
+使用minicom连接出现乱码，请查看[使用macos系统笔记本串口乱码](../01_Quick_start/02_install_os/rdk_s100/05_FAQ.md#使用-macos-系统笔记本串口乱码问题)
 :::
 
-- 确认开发板、电脑IP地址配置，一般前三段需要是一样的，例如开发板：`192.168.127.10`  电脑：`192.168.127.100`
+## 网络状态确认{#network_config}
+
+参考: https://www.bilibili.com/video/BV1rm4y1E73q/?p=3
+
+在使用远程登录前，需要确保电脑、开发板网络通信正常，如无法`ping`通，需按如下步骤进行确认：
+
+- 确认开发板、电脑 IP 地址配置，一般前三段需要是一样的，例如开发板：`192.168.127.10` 电脑：`192.168.127.100`
 - 确认开发板、电脑的子网掩码、网关配置是否一致
 - 确认电脑网络防火墙是否处于关闭状态
 
-开发板有线以太网默认采用静态IP模式，IP地址为`192.168.127.10`。对于开发板、电脑网络直连的情况，只需要将电脑配置为静态IP，保证跟开发板处于同一网段即可。以WIN10系统为例，电脑静态IP修改方法如下：
+开发板靠外的有线以太网口（eth1）默认采用静态 IP 模式，IP 地址为`192.168.127.10`。对于开发板、电脑网络直连的情况，只需要将电脑配置为静态 IP，保证跟开发板处于同一网段即可。以 WIN10 系统为例，电脑静态 IP 修改方法如下：
 
 - 在网络连接中找到对应的以太网设备并双击打开
-- 找到Internet协议版本4选项并双击打开
+- 找到 Internet 协议版本 4 选项并双击打开
 - 在下图红框位置填入对应的网络参数，点击确定
 
-![image-setstaticip](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-setstaticip.png)
+![image-20220416110242445](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png)
 
-如需将开发板有线网络配置为动态获取DHCP模式，可参考[有线网络](../02_System_configuration/01_network_blueteeth.md)章节进行配置。
+如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../02_System_configuration/01_network_bluetooth.md)章节进行配置。
 
-## VNC登录
-
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=4
-
-本章节面向使用Ubuntu Desktop系统版本的用户，介绍如何通过`VNC Viewer`实现远程桌面登录功能。`VNC Viewer`是一个图形桌面共享软件，可在电脑上实现设备远程登录和控制桌面。该软件可以通过电脑显示器预览开发板系统桌面，并使用电脑的鼠标、键盘进行远程操作。用户通过VNC Viewer操作，可以获得跟开发板本地操作相同的效果，下载链接[VNC Viewer](https://www.realvnc.com/en/connect/download/viewer/)。
-
-**连接开发板**
-目前VNC支持直接、云端两种连接方式，用户可以根据自身情况选择。本文推荐使用直接连接方式，连接步骤如下：
-
-- 输入设备ip地址，例如：192.168.127.10
-![image-20220610160658103](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220610160658103.png)
-
-- 输入IP地址后回车，弹出链接未加密的提示，点击 `Continue`
-![image-20220610160715916](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220610160715916.png)
-
-- 输入密码 `sunrise`，勾选 `Remember password`, 点击 `OK`连接
-![image-20220610160928136](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220610160928136.png)
-
-## SSH登录{#ssh}
-除了VNC登录远程桌面外，还可以通过SSH连接登录开发板。下面分别介绍终端软件、终端命令行两种方法的创建步骤。
+## SSH 登录{#ssh}
+下面分别介绍终端软件、终端命令行两种方法的创建步骤。
 
 ### 终端软件
-目前常用终端工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建SSH连接过程：
+
+目前常用终端工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建 SSH 连接过程：
 
 1. 打开`MobaXterm`工具，点击`Session`，然后选择`SSH`
-2. 输入开发板IP地址，例如`192.168.127.10`
+2. 输入开发板 IP 地址，例如`192.168.127.10`
 3. 选中`specify username`，输入`sunrise`
-4. 点击OK后，输入用户名（sunrise）、密码（sunrise）即可完成登录
+4. 点击 OK 后，输入用户名（sunrise）、密码（sunrise）即可完成登录
 
 ![image-Network-Login](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif)
 
 ### 电脑命令行
-用户也可通过命令行方式进行SSH登录，步骤如下：
 
-1. 打开终端窗口，输入SSH登录命令，例如`ssh sunrise@192.168.127.10`
-2. 弹出连接确认提示，输入YES
+用户也可通过命令行方式进行 SSH 登录，步骤如下：
+
+1. 打开终端窗口，输入 SSH 登录命令，例如`ssh sunrise@192.168.127.10`
+2. 弹出连接确认提示，输入 YES
 3. 输入密码（sunrise）即可完成登录
 
 ![image-Cmdline-Linux](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif)
 
-## LAN access
 
-对于上述各步骤登录，始终需要保持串口线连接，使用下面命令实现局域网访问
+## NoMachine 登录
 
-```bash
-sudo nmcli device wifi rescan # 扫描wifi⽹络
-sudo nmcli device wifi list # 列出找到的wifi
-sudo wifi_connect "SSID" "PASSWD" # 连接指定wifi
-```
+:::tip
+NoMachine功能需要S100/S600端的软件包支持，配置指南见[NoMachine配置](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-配置)
+:::
 
-上述命令成功后，会出现`successfully xxx`
+本章节面向使用Ubuntu Desktop系统版本的用户，介绍如何通过`NoMachine`实现远程桌面登录功能。以下章节以S100为例，S600的操作与S100一致，将链接名内的`S100`替换为`S600`即可。
 
-最后板卡端使用`ifconfig`便可获得板卡IP地址，便可拔掉串口线，使用前文SSH登录进行远程连接。
+**连接开发板**
+
+1. 打开`NoMachine`客户端，点击`Add`增加主机配置
+
+![nomachine_login01](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg)
+
+2. 在跳出来的界面中填写`RDK100/RDKS600`的主机信息，完成后点击`Add`
+
+![nomachine_login02](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg)
+
+3. 此时返回主界面，双击刚才生成的主机
+
+![nomachine_login03](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg)
+
+4. 弹出登录界面，输入用户名、密码点击OK即可完成远程登陆
+
+![nomachine_login04](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg)
+
+![nomachine_login05](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg)

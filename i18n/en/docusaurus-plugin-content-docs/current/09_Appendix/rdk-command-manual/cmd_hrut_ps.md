@@ -4,32 +4,32 @@ sidebar_position: 1
 
 # hrut_ps
 
-The **hrut_ps** command prints process information that is not supported by the `ps` command in busybox, including process ID, parent process ID, priority, memory, virtual memory, etc.
+The **hrut_ps** command prints process status information not supported by BusyBox's `ps` command, including process ID, parent process ID, priority, memory usage, virtual memory, and more.
 
 ## Syntax
 
 ```
-hrut_ps
+  hrut_ps
 ```
 
 ## Supported Information
 
-- **pid**: Process ID. Each process in the operating system has a unique identifier called the process ID (pid). It is used to uniquely identify and identify a process in the system.
-- **ppid**: Parent Process ID. It indicates the parent process that created this process.
-- **state**: Running state.
+- **pid**: Process ID. Each process in the operating system has a unique identifier called the process ID (pid), which is used to uniquely identify and reference a process within the system.
+- **ppid**: Parent Process ID. This indicates the parent process that created the current process.
+- **state**: Process state.
   - `I`: Idle.
   - `R`: Running.
   - `S`: Sleeping.
-  - `D`: Disk sleeping.
+  - `D`: Disk sleeping (uninterruptible sleep).
   - `T`: Stopped.
   - `X`: Dead.
   - `Z`: Zombie.
   - `t`: Tracing stop.
   - `P`: Parked.
-- **prio**: Priority. It represents the scheduling priority of the process, usually a numerical value. A higher value indicates a higher priority, and the process may be more likely to obtain CPU time slices.
-- **nice**: Scheduling priority. It represents the scheduling priority of the process, usually an integer value. A lower nice value indicates a higher priority, allowing the process to get CPU time more frequently.
-- **rt_prio**: Real-time priority. It represents the priority of real-time processes. A lower value indicates a higher real-time priority.
-- **policy**: Scheduling policy. It represents the scheduling policy of the process, usually a scheduling algorithm, such as First-In-First-Out (FIFO), Round Robin, etc.
-- **vsize**: Virtual memory size. It represents the size of the process's virtual memory, which is the size of the virtual address space that the process can access.
-- **rss**: Resident Set Size. It represents the current occupied physical memory size of the process, which is the actual amount of physical RAM allocated to the process.
-- **comm**: Command name. It contains the command name of the process or the name of the executable file, which is used to identify the type or purpose of the process.
+- **prio**: Priority. Represents the scheduling priority of the process, usually expressed as a numeric value. A higher number typically indicates higher priority, making the process more likely to receive CPU time slices.
+- **nice**: Nice value. Represents the scheduling priority as an integer. A lower nice value indicates higher priority, allowing the process to obtain CPU time more frequently.
+- **rt_prio**: Real-time priority. Indicates the priority of real-time processes; a lower value signifies higher real-time priority.
+- **policy**: Scheduling policy. Specifies the scheduling policy used for the process, typically a scheduling algorithm such as First-In-First-Out (FIFO), Round Robin (RR), etc.
+- **vsize**: Virtual memory size. Represents the size of the virtual memory address space accessible to the process.
+- **rss**: Resident Set Size (physical memory usage). Indicates the amount of physical RAM currently allocated and used by the process.
+- **comm**: Command name. Contains the name of the command or executable file associated with the process, used to identify the process type or purpose.
