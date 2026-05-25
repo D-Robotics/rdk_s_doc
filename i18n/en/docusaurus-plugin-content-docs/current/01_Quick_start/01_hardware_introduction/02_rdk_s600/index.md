@@ -265,9 +265,13 @@ The RDK S600 developer kit includes an 80-Pin expansion interface MCU Expansion 
 
 The RDK S600 developer kit includes a CAN bus interface for the MCU domain. This interface uses a 12-pin latching connector and has 5 MCU domain CAN interfaces. The 120Ω resistor can be connected or disconnected via the SW6 switch. See [Interface Description](#interface) for MCU-CAN interface signal definitions.
 
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s600-J16-pin1.jpg" alt="image-rdk_s600_mcu_can_interface" style={{ width: '100%' }} />
+
 ### MAIN-CAN Interface (J17)
 
 The RDK S600 developer kit includes a CAN bus interface for the MAIN domain. This interface uses a 10-pin latching connector and has 4 MAIN domain CAN interfaces. The 120Ω resistor can be connected or disconnected via the SW7 switch. See [Interface Description](#interface) for MAIN-CAN interface signal definitions.
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s600-J17-pin1.jpg" alt="image-rdk_s600_main_can_interface" style={{ width: '100%' }} />
 
 :::warning Note
 
@@ -279,6 +283,8 @@ This interface is currently unavailable, pending driver updates.
 
 The RDK S600 developer kit includes a UART interface for the MAIN domain and MCU. This interface uses a 10-pin latching connector and has 2 MCU domain and 2 MAIN domain UART interfaces. See [Interface Description](#interface) for UART interface signal definitions.
 
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s600-J18-pin1.jpg" alt="image-rdk_s600_uart_interface" style={{ width: '100%' }} />
+
 :::warning Note
 
 In V0P1 version hardware, the MAIN domain UART is temporarily unavailable.
@@ -288,6 +294,8 @@ In V0P1 version hardware, the MAIN domain UART is temporarily unavailable.
 ### PCM+I2C Interface (J19)
 
 This interface uses a 14-pin latching connector, featuring 2 PCM and 1 I2C interface for connecting audio-related function daughter cards. See [Interface Description](#interface) for PCM audio interface signal definitions.
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s600-J19-pin1.jpg" alt="image-rdk_s600_pcm_i2c_interface" style={{ width: '100%' }} />
 
 :::warning Note
 
