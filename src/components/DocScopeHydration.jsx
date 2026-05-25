@@ -1,4 +1,5 @@
 import React, { useLayoutEffect } from 'react';
+import { useLocation } from '@docusaurus/router';
 import { useDocScopeFilter } from '@site/src/context/DocScopeFilterContext';
 import { scopeProductsMatchCurrent } from '@site/src/context/doc-scope-product-utils';
 import { matchVersion } from '@site/src/context/doc-scope-version-utils';
@@ -53,11 +54,34 @@ function syncTocByDocScope(root) {
   });
 }
 
+function wrapMarkdownTables(root) {
+  root.querySelectorAll('table').forEach((table) => {
+    const parent = table.parentElement;
+    if (!parent) {
+      return;
+    }
+    if (
+      parent.classList.contains('markdown-table-scroll') ||
+      parent.classList.contains('table-responsive')
+    ) {
+      return;
+    }
+    const wrap = document.createElement('div');
+    wrap.className = 'markdown-table-scroll';
+    wrap.setAttribute('role', 'region');
+    wrap.setAttribute('aria-label', 'Scrollable table');
+    wrap.tabIndex = 0;
+    parent.insertBefore(wrap, table);
+    wrap.appendChild(table);
+  });
+}
+
 /**
  * 根据当前版本/产品，为 .doc-scope 节点切换 doc-scope--hidden（由 remark-doc-scope 注入）。
  */
 export default function DocScopeHydration() {
   const { version, product } = useDocScopeFilter();
+  const location = useLocation();
 
   useLayoutEffect(() => {
     const root =
@@ -69,6 +93,7 @@ export default function DocScopeHydration() {
     if (!root) {
       return;
     }
+    wrapMarkdownTables(root);
     root.querySelectorAll('.doc-scope[data-doc-scope]').forEach((el) => {
       const raw = el.getAttribute('data-doc-scope');
       if (!raw) {
@@ -82,8 +107,9 @@ export default function DocScopeHydration() {
         el.classList.remove('doc-scope--hidden');
       }
     });
+    wrapMarkdownTables(root);
     syncTocByDocScope(root);
-  }, [version, product]);
+  }, [version, product, location.pathname]);
 
   return null;
 }

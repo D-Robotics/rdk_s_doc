@@ -354,5 +354,89 @@
   "sidebar.tutorialSidebar.category.7.2.6 OTA.link.generated-index.description": {
     "message": "TA Upgrade Instructions",
     "description": "The generated-index page description for category 7.2.6 OTA in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.1.1 S100 系列": {
+    "message": "1.1 S100 Series",
+    "description": "The label for category 1.1 S100 系列 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.1.2 S600 系列": {
+    "message": "1.2 S600 Series",
+    "description": "The label for category 1.2 S600 系列 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.1.2.1 系统烧录": {
+    "message": "1.2.1 System Flashing",
+    "description": "The label for category 1.2.1 系统烧录 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.3.3.1 RDK S100 扩展引脚排应用": {
+    "message": "3.3.1 RDK S100 Expansion Pin Application",
+    "description": "The label for category 3.3.1 RDK S100 扩展引脚排应用 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.3.3.2 RDK S600 扩展引脚排应用": {
+    "message": "3.3.2 RDK S600 Expansion Pin Application",
+    "description": "The label for category 3.3.2 RDK S600 扩展引脚排应用 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.2.4 RDK S100 / S600 驱动开发指南": {
+    "message": "7.2.4 RDK S100 / S600 Driver Development Guide",
+    "description": "The label for category 7.2.4 RDK S100 / S600 驱动开发指南 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.2.4 RDK S100 / S600 驱动开发指南.link.generated-index.description": {
+    "message": "RDK S100 / S600 Driver Development Guide",
+    "description": "The generated-index page description for category 7.2.4 RDK S100 / S600 驱动开发指南 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.1 多媒体开发指南": {
+    "message": "7.3.1 Multimedia Development Guide",
+    "description": "The label for category 7.3.1 多媒体开发指南 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.1 多媒体开发指南.link.generated-index.description": {
+    "message": "Multimedia Development Guide",
+    "description": "The generated-index page description for category 7.3.1 多媒体开发指南 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.2 S100 多媒体应用开发 ": {
+    "message": "7.3.2 S100 Multimedia Application Development ",
+    "description": "The label for category 7.3.2 S100 多媒体应用开发  in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.2 S100 多媒体应用开发 .link.generated-index.description": {
+    "message": " S100 Multimedia Application Development ",
+    "description": "The generated-index page description for category 7.3.2 S100 多媒体应用开发  in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.3 S600 多媒体应用开发 ": {
+    "message": "7.3.3 S600 Multimedia Application Development ",
+    "description": "The label for category 7.3.3 S600 多媒体应用开发  in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.3 S600 多媒体应用开发 .link.generated-index.description": {
+    "message": " S600 Multimedia Application Development ",
+    "description": "The generated-index page description for category 7.3.3 S600 多媒体应用开发  in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.4.2 LLM 工具链": {
+    "message": "7.4.2 LLM Toolchain",
+    "description": "The label for category 7.4.2 LLM 工具链 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.4.2 LLM 工具链.link.generated-index.description": {
+    "message": "LLM Toolchain Development Guide",
+    "description": "The generated-index page description for category 7.4.2 LLM 工具链 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.5.13 PORT模块指南": {
+    "message": "7.5.13 PORT Module Guide",
+    "description": "The label for category 7.5.13 PORT模块指南 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.5.13 PORT模块指南.link.generated-index.description": {
+    "message": "PORT Module Guide",
+    "description": "The generated-index page description for category 7.5.13 PORT模块指南 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.10.1 RDK S100 版本发布": {
+    "message": "10.1 RDK S100 Version Release",
+    "description": "The label for category 10.1 RDK S100 版本发布 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.10.1 RDK S100 版本发布.link.generated-index.description": {
+    "message": "RDK S100 Version Release",
+    "description": "The generated-index page description for category 10.1 RDK S100 版本发布 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.10.2 RDK S600 版本发布": {
+    "message": "10.2 RDK S600 Version Release",
+    "description": "The label for category 10.2 RDK S600 版本发布 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.10.2 RDK S600 版本发布.link.generated-index.description": {
+    "message": "RDK S600 Version Release",
+    "description": "The generated-index page description for category 10.2 RDK S600 版本发布 in sidebar tutorialSidebar"
   }
 }

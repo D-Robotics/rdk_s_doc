@@ -1,69 +1,74 @@
 ---
 sidebar_position: 06
 ---
-# 7.6 RDK S100 Build System Development Guide
+# 7.6 Build System Development Guide
 
-:::tip Commercial Support
-The commercial version provides more comprehensive feature support, deeper hardware capability access, and exclusive customization options. To ensure compliance and secure delivery, we will grant access to the commercial version through the following process.
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
 
-**Commercial Version Access Process:**
-1. **Complete a questionnaire**: Submit basic information about your organization and intended use case.
-2. **Sign an NDA**: We will contact you based on your submission, and both parties will sign a Non-Disclosure Agreement upon mutual confirmation.
-3. **Content release**: After the agreement is signed, we will provide access to commercial version materials through a private channel.
+:::info BSP Source Package
 
-If you wish to obtain the commercial version, please complete the questionnaire below. We will contact you within 3–5 business days:
+For BSP source package download, see: [System Software](../01_Quick_start/download.md#system-software) (registration and login required)
 
-Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnJQBMIkRm6K79rjXR0hr0Fg
 :::
 
-## 7.6.1 Overview
-This section is primarily intended for users who need to customize the RDK build system. For instructions on using `rdk_gen`, please refer to the README.md in the `rdk_gen` repository.
+:::tip Commercial Support
+The commercial edition provides more complete feature support, deeper hardware capability access, and exclusive customized content. To ensure compliant and secure delivery, we grant access to the commercial edition through the following process.
 
-Basic usage instructions:
+Commercial edition access process:
+1. Fill out the questionnaire: submit basic information such as your organization and use case
+2. Sign a Non-Disclosure Agreement (NDA): we will contact you based on your submission; after mutual confirmation, both parties sign the NDA
+3. Content release: after the agreement is signed, we will grant access to commercial edition materials through a private channel
+
+If you would like to obtain the commercial edition, click the link below to fill out the questionnaire. We will contact you within 3–5 business days:
+https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
+:::
+
+
+## 7.6.1 Overview
+This chapter mainly introduces customization of the RDK build system. For rdk_gen usage, refer to the README.md in the rdk_gen repository.
+
+Basic usage:
 ``` bash
-# Online image building: download required deb packages from D-Robotics and third-party APT repositories
+# Online image build: download dependent deb packages from D-Robotics and third-party APT sources
 sudo ./pack_image.sh
 
-# Offline image building: only install deb packages under out/product/deb_packages.
-# When using this option, ensure that the deb packages in out/product/deb_packages meet expectations,
-# and that precompiled rootfs packages already exist under out/product/rootfs_packages.
+# Offline image build: install only deb packages under out/product/deb_packages. When using this option, ensure deb packages in out/product/deb_packages meet expectations, and a prebuilt root filesystem package exists under out/product/rootfs_packages
 sudo ./pack_image.sh -l
 
-# Only set up the deb package build environment without packing an image
+# Set up deb build environment only, without packing an image
 sudo ./pack_images.sh -p
 
 # Build all deb packages
 ./mk_debs.sh
 
-# Build a specific deb package (e.g., hobot-configs)
+# Build a specific deb package, e.g. hobot-configs
 ./mk_debs.sh hobot-configs
 ```
 
-## 7.6.2 Precompiled Root Filesystem Package Build Instructions
-The root filesystem for RDK is generated using `multistrap` + `chroot`.
+## 7.6.2 Root Filesystem Prebuilt Package Build Guide
+The root filesystem is built with multistrap + chroot.
 
 ### multistrap
 #### Official Documentation
   - [Debian Wiki | Multistrap](https://wiki.debian.org/Multistrap)
   - [Debian manpage](https://manpages.debian.org/bookworm/multistrap/multistrap.1.en.html)
 
-#### Tool Introduction
-In summary, `multistrap` is an alternative tool to `debootstrap` for generating root filesystems based on Debian/Ubuntu APT repositories. It uses one or more configuration files to define which APT sources to use and which packages should be included by default in the generated root filesystem.
+#### Tool Overview
+In summary, `multistrap` is another tool (independent of `debootstrap`) for generating root filesystems based on APT sources for Debian/Ubuntu and similar systems. It uses one or more configuration files to define the APT sources used to generate the root filesystem and which packages are installed by default.
+The main differences from `debootstrap` are:
+1. Flexibility: `multistrap` allows users to fully customize all packages in the newly generated root filesystem, including packages marked as required in the APT source, but users must ensure root filesystem integrity and usability themselves;
+2. Build flow: unlike `debootstrap`, the `multistrap` build flow can be summarized as follows. The biggest difference is step 4: `multistrap` only unpacks packages and does not configure them (i.e., it does not run [pre/post]install scripts):
+  1. Read configuration files
+  2. Fetch metadata from specified APT sources according to the configuration
+  3. Download specified packages according to the configuration
+  4. Unpack specified packages according to the configuration
+In the `multistrap` build scripts provided by D-Robotics, based on practical experience, we use `binfmt-support + chroot` under sudo to configure packages so that the root filesystem you build can be flashed directly to the board.
 
-Key differences from `debootstrap` include:
-1. **Flexibility**: `multistrap` allows users to fully customize all packages within the newly generated root filesystem—including those marked as essential in APT sources—but users must ensure the completeness and usability of the resulting root filesystem themselves.
-2. **Build Process**: Unlike `debootstrap`, the `multistrap` generation process can be summarized in the following steps. The key difference lies in step 4: `multistrap` only decompresses packages without configuring them (i.e., without executing `[pre/post]install` scripts):
-   1. Read configuration file(s)
-   2. Fetch metadata from specified APT sources according to the configuration
-   3. Attempt to download specified packages per the configuration
-   4. Decompress specified packages per the configuration
-
-In D-Robotics's provided `multistrap` build script, based on practical experience, we implement package configuration using `binfmt-support + chroot` under `sudo` privileges, enabling users to directly flash the generated root filesystem onto the board for immediate use.
-
-#### Configuration File Introduction
-`multistrap` supports both single-file and multi-file configurations. In multi-file mode, the `include` field allows including all content from a base configuration file, enabling version-specific customization—greatly simplifying maintenance across multiple filesystem variants.
-
-Configuration files referenced in the following sections are located at: `samplefs/configs`:
+#### Configuration File Overview
+`multistrap` configuration files support single-file and multi-file formats. In multi-file mode, you can use the "include" field to include all content from a base version and then configure only the specific variant, which greatly simplifies maintenance of multiple filesystems.
+Configuration files referenced in the following sections are under: `samplefs/configs`:
 ```bash
 $ tree samplefs/configs/
 samplefs/configs/
@@ -78,164 +83,142 @@ samplefs/configs/
 ```
 
 :::info Platform Selection
-- **RDK S100**: Uses `jammy-*` configuration files (Ubuntu 22.04)
-- **RDK S600**: Uses `noble-*` configuration files (Ubuntu 24.04)
+- **RDK S100**: Use `jammy-*` configuration files (Ubuntu 22.04)
+- **RDK S600**: Use `noble-*` configuration files (Ubuntu 24.04)
 :::
 
-##### Basic Format Introduction
-For detailed field descriptions, please refer to the official documentation. Here, we focus on explaining key configurations used in D-Robotics's setup.
+##### Basic Format
+For detailed field descriptions, refer to the official documentation. This section focuses on important settings in D-Robotics configuration files.
+1. Field: `key1=value1` format defines the value of field "key1" as "value1"
+2. Field set (stanza/section): define "`[Some-Section]`" to group all fields from that line until the next "`[Next-Section]`" into one "`Section`"
 
-1. **Field format**: `key1=value1` defines the value of field "key1" as "value1".
-2. **Field sets (stanzas/sections)**: Defined by `[Some-Section]`, grouping all fields from that line until the next `[Next-Section]` into a single "Section".
-
-Key fields explained:
-- **include**
-  Specifies the path to configuration files to be included.
-- **bootstrap**
-  Defines the stanza containing APT sources used to generate the root filesystem and the packages to be downloaded and decompressed.
-- **aptsources**
-  Defines the stanza specifying APT sources to be saved under `/etc/sources.list.d/` in the generated root filesystem. **Note**: These sources do not necessarily need to match those used in `bootstrap`, but we strongly recommend that the sources defined in `aptsources` are a superset of those in `bootstrap`.
-- **source / suite / components / omitdebsrc**
-  Define key parameters for APT sources. Refer to the [APT source format definition](https://manpages.ubuntu.com/manpages/xenial/man5/sources.list.5.html) for details:
-  - **source**: Root URL of the APT repository, corresponding to the "uri" field in APT source format.
-  - **suite**: Suite name of the APT repository, corresponding to the "suite" field (e.g., Ubuntu code names like `jammy`, `focal`, `noble`, or updates/security suites like `jammy-updates`, `noble-security`).
-  - **components**: Repository components, matching the "component" field; multiple components can be specified.
-  - **omitdebsrc**: Whether to skip downloading source packages (`*.dsc`, etc.) when fetching metadata and packages. Typically set to `true` to accelerate builds.
-- **packages**
-  Specifies packages to be fetched. Multiple packages can be listed in one `packages` field (space-separated), and the union of all `packages` fields forms the final package list.
-
-##### Multi-file Configuration Example
+Key fields:
+- include
+  - Path to configuration files to include
+- bootstrap
+  - Field set defining the APT source used to generate the root filesystem and packages to download and unpack
+- aptsources
+  - Field set defining APT sources saved under /etc/sources.list.d/ in the generated root filesystem. **Note**: this source does not have to match the source used in bootstrap to generate the root filesystem, but we strongly recommend that aptsources defines a superset of the bootstrap source.
+- source/suite/components/omitdebsrc
+  - Keywords for APT sources. See [APT sources.list format](https://manpages.ubuntu.com/manpages/xenial/man5/sources.list.5.html)
+  - source: root URL of the APT source, matching the "uri" field in APT source format
+  - suite: suite of the APT source, matching the "suite" field in APT source format, generally the system code name + attribute, e.g. Ubuntu jammy/focal/noble/jammy-updates/noble-security
+  - components: component of the APT source, matching the "component" field in APT source format; multiple can be added
+  - omitdebsrc: when fetching APT metadata and packages, whether to download src packages corresponding to deb packages; usually set to "true" (do not download src packages) to speed up builds.
+- packages
+  - Field for defining packages to fetch. One packages field can define multiple packages separated by spaces. The union of all packages fields is the final package list.
+##### Multi-File Configuration Example
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-<Tabs>
-<TabItem value="s100" label="RDK S100">
-
-Refer to `samplefs/configs/jammy-desktop.conf`.
-
-</TabItem>
-<TabItem value="s600" label="RDK S600">
-
-Refer to `samplefs/configs/noble-desktop.conf`.
-
-</TabItem>
-</Tabs>
+<DocScope products="RDK S100">
+Refer to code path `samplefs/configs/jammy-desktop.conf`
+</DocScope>
+<DocScope products="RDK S600">
+Refer to code path `samplefs/configs/noble-desktop.conf`
+</DocScope>
 
 ### RDK Implementation
 #### Configuration File Design
-By default, RDK splits `multistrap` configuration into multiple parts based on the platform:
+On RDK, multistrap configuration files are divided by platform by default:
 
-<Tabs>
-<TabItem value="s100" label="RDK S100">
+<DocScope products="RDK S100">
 
-- **jammy-base.conf**: Configures common defaults for all RDK S100 root filesystems, including APT sources and packages included in all variants.
-- **jammy-desktop.conf**: Adds desktop-specific packages on top of `jammy-base.conf`.
-- **jammy-server.conf**: Adds server-specific packages on top of `jammy-base.conf`.
+- jammy-base.conf: common default root filesystem configuration for RDK S100, including APT sources and packages included by default in all RDK S100 variants;
+- jammy-desktop.conf: additional packages for RDK S100 desktop root filesystem based on jammy-base.conf;
+- jammy-server.conf: additional packages for RDK S100 server root filesystem based on jammy-base.conf;
 
-</TabItem>
-<TabItem value="s600" label="RDK S600">
+</DocScope>
+<DocScope products="RDK S600">
 
-- **noble-base.conf**: Configures common defaults for all RDK S600 root filesystems, including APT sources and packages included in all variants.
-- **noble-desktop.conf**: Adds desktop-specific packages on top of `noble-base.conf`.
+- noble-base.conf: common default root filesystem configuration for RDK S600, including APT sources and packages included by default in all RDK S600 variants;
+- noble-desktop.conf: additional packages for RDK S600 desktop root filesystem based on noble-base.conf;
+</DocScope>
 
-</TabItem>
-</Tabs>
+#### Build Flow
+Users generally use the `samplefs/make_ubuntu_samplefs.sh` script to build the root filesystem. If the script is invoked with sudo, package configuration is included and build time increases significantly.
 
-#### Build Process Instructions
-Users typically build the root filesystem using the script `samplefs/make_ubuntu_samplefs.sh`. If invoked with `sudo`, the build process includes package configuration, significantly increasing build time.
+If the script is invoked without sudo, package configuration is skipped and build time is shorter, but on first boot on the board you must run `rm -rf /var/lock/* ; dpkg --configure -a --force-confdef --force-confold ; systemctl enable /etc/systemd/system/S*.service` to initialize the system and reboot to ensure normal operation.
 
-If invoked without `sudo`, package configuration is skipped, reducing build time—but on first boot, the board must run the following command to initialize the system and reboot for proper operation:
-```bash
-rm -rf /var/lock/* ; dpkg --configure -a --force-confdef --force-confold ; systemctl enable /etc/systemd/system/S*.service
-```
-
-:::info **Tip**
-It is **recommended to invoke** `samplefs/make_ubuntu_samplefs.sh` **with `sudo`**.
+:::info **Note**
+It is **recommended to use sudo** when invoking samplefs/make_ubuntu_samplefs.sh.
 :::
 
-The script must be run from within the `samplefs` directory.
+The `samplefs/make_ubuntu_samplefs.sh` script must be run from the samplefs directory.
 
-Running `sudo ./make_ubuntu_samplefs.sh` without arguments:
+When invoked without arguments as `sudo ./make_ubuntu_samplefs.sh`:
 
-<Tabs>
-<TabItem value="s100" label="RDK S100">
+<DocScope products="RDK S100">
 
-Defaults to building the desktop image using `jammy-desktop.conf`.
+The script builds the desktop image by default, using `jammy-desktop.conf` to build the root filesystem.
 
-</TabItem>
-<TabItem value="s600" label="RDK S600">
+</DocScope>
+<DocScope products="RDK S600">
 
-Defaults to building the desktop image using `noble-desktop.conf`.
+The script builds the desktop image by default, using `noble-desktop.conf` to build the root filesystem.
 
-</TabItem>
-</Tabs>
+</DocScope>
 
-To specify a custom config file:
-`sudo ./make_ubuntu_samplefs.sh build <config_file_name>`
-For example, if you create a new config `new-desktop.conf`, place it in `samplefs/configs/` and run:
-`sudo ./make_ubuntu_samplefs.sh build new-desktop.conf`
+To specify a configuration file: `sudo ./make_ubuntu_samplefs.sh build <config_file_name>`. For example, if the new configuration file is `new-desktop.conf`, run: `sudo ./make_ubuntu_samplefs.sh build new-desktop.conf`. Place `new-desktop.conf` under `samplefs/configs`.
 
-Build workflow diagram:
-![samplefs_flowchart](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/samplefs_flowchart-en.jpg)
+Build flow diagram:
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/samplefs_flowchart-en.jpg" alt="samplefs_flowchart" style={{ width: '100%' }} />
 
-#### Methods for Trimming/Customizing the Root Filesystem
-:::info Tip
-The **Priority** field in APT source (deb package control info) determines trimming/customization behavior.
-By default, `multistrap` installs all packages with Priority "**Required**".
-D-Robotics also ensures packages marked as "**important**" are installed.
+#### Trimming / Customizing the Root Filesystem
+:::info Note
+The Priority field in APT sources (deb package control information) affects trimming/customization flow.
+multistrap installs all packages with Priority "Required" by default.
+D-Robotics also installs packages marked as important.
 :::
 
-##### Trimming/Customizing Packages Not Marked "important" or "required"
+##### Trim/customize only packages whose APT priority is not "important"/"required"
 
-<Tabs>
-<TabItem value="s100" label="RDK S100">
+<DocScope products="RDK S100">
 
-Users can directly remove unwanted packages from the `packages` fields in config files like `samplefs/configs/jammy-base.conf`, or define a new stanza and update the `bootstrap` field in `[General]` to exclude the original stanza and include the new one.
+Remove unwanted packages directly from the "packages" fields in samplefs/configs/jammy-base.conf and similar files, or define a new field set and replace the original field set in the "bootstrap" field of the "[General]" field set with your own.
 
-</TabItem>
-<TabItem value="s600" label="RDK S600">
+</DocScope>
+<DocScope products="RDK S600">
 
-Users can directly remove unwanted packages from the `packages` fields in config files like `samplefs/configs/noble-base.conf`, or define a new stanza and update the `bootstrap` field in `[General]` to exclude the original stanza and include the new one.
+Remove unwanted packages directly from the "packages" fields in samplefs/configs/noble-base.conf and similar files, or define a new field set and replace the original field set in the "bootstrap" field of the "[General]" field set with your own.
 
-</TabItem>
-</Tabs>
+</DocScope>
 
-##### Trimming/Customizing Packages Marked "important" or "required"
-**Note**: APT maintainers typically mark the minimal system package set (for Ubuntu/Debian versions) as "Required", but further trimming is possible. At this level, users **must guarantee the completeness and usability** of the resulting root filesystem.
+##### Trim/customize packages whose APT priority is "important"/"required"
+**Note**: APT maintainers generally mark the minimum set of packages for a system (each Ubuntu/Debian release) as "Required", but further trimming is possible. When trimming to this extent, users must **ensure root filesystem integrity and usability themselves**.
 
 Steps:
-1. Add `omitrequired=true` in the `[General]` stanza.
-2. Explicitly define all required packages in the `Packages` stanza.
+1. Add `omitrequired=true` in the `[General]` field set;
+2. Define all packages to add in `Packages`.
 
-## 7.6.3 RDK Deb Package Build Process
-### Introduction
-RDK manages D-Robotics-customized user-space features as deb packages. Source code for building these deb packages is stored under the SDK's `source/` directory.
+## 7.6.3 RDK deb Package Build Flow
+### Overview
+RDK manages D-Robotics customized user-space features as deb packages by default. Source code for building all customized deb packages is under the SDK source/ directory.
 
-### Build Script Introduction
-The entry script for building debs is `mk_debs.sh`, located in the SDK root directory. Users can build repository-contained deb packages via this script.
+### Build Script
+The entry script for building deb packages is `mk_debs.sh` at the SDK root. Use it to build deb packages in the repository.
 
-### Deb Package Source Directory Structure
-All directories under `source/`, except `bootloader`, `kernel`, and `hobot-drivers`, contain source code for D-Robotics-customized deb packages. Directories like `hobot-spdev`, `hobot-camera`, and `hobot-io` include source code for corresponding dynamic libraries; compiling these packages via `mk_debs.sh` triggers compilation of their source code.
-
-Basic structure of a deb source directory (using `hobot-configs` as an example):
+### deb Package Source Directory
+Under `source`, all directories except `bootloader`, `kernel`, and `hobot-drivers` contain source for D-Robotics customized deb packages. Directories such as `hobot-spdev`, `hobot-camera`, and `hobot-io` contain source for corresponding libraries; when mk_debs.sh builds these packages, the source is compiled.
+Basic structure of a deb package source directory (using hobot-configs as an example):
 ```bash
 hobot-configs/
-├── LICENSE          # License information for the deb source
+├── LICENSE          # License for deb package source
 ├── README.md        # Brief description of the deb package
-├── VERSION          # Version number in major.minor.patch format; timestamp appended during build
-└── debian           # Root directory for the deb package (mirrors root filesystem upon installation)
-    ├── DEBIAN       # Deb metadata
-    |   ├── postinst # Standard deb script: runs after file copying during dpkg install
-    │   ├── postrm   # Standard deb script: runs after file deletion during dpkg removal
-    │   ├── preinst  # Standard deb script: runs before file copying during dpkg install
-    │   └── prerm    # Standard deb script: runs before file deletion during dpkg removal
-    ├── etc          # Files to copy to rootfs (e.g., this dir → /etc on target)
-    ├── lib          # Files to copy to rootfs
-    └── usr          # Files to copy to rootfs
+├── VERSION          # Version in major.minor.patch form; timestamp added at build time by default
+└── debian           # Root directory of the deb package, equivalent to root on the board
+    ├── DEBIAN       # deb package metadata
+    |   ├── postinst # Standard deb script, runs after dpkg copy step during install
+    │   ├── postrm   # Standard deb script, runs after dpkg file removal during uninstall
+    │   ├── preinst  # Standard deb script, runs before dpkg copy step during install
+    │   └── prerm    # Standard deb script, runs before dpkg file removal during uninstall
+    ├── etc          # Files to copy into the root filesystem as needed. Paths relative to "debian" map to paths on the root filesystem, e.g. this directory is installed to /etc on the board
+    ├── lib          # Files to copy into the root filesystem as needed.
+    └── usr          # Files to copy into the root filesystem as needed.
 ```
 
-For deb packages containing source code (e.g., `hobot-camera`), additional source directories appear alongside `debian`:
+For deb packages that include source code, a source directory is added outside debian, e.g. hobot-camera:
 ```bash
 hobot-camera/
 ├── LICENSE
@@ -245,108 +228,103 @@ hobot-camera/
 │   ├── DEBIAN
 │   ├── etc
 │   └── usr
-├── drivers             # Source code directory requiring compilation
+├── drivers             # Source directory to compile
 │   ├── Makefile        # Entry Makefile for compilation
-│   ├── deserial        # Subdirectory
+│   ├── deserial        # Source subdirectory
 │   ├── inc
 │   └── sensor
-├── lib -> ../hobot-multimedia/debian/usr/hobot/lib # Symlink for easier compilation
-├── sensor_calibration       # Sensor tuning library (example only; actual libs may vary)
+├── lib -> ../hobot-multimedia/debian/usr/hobot/lib # Symlink for convenient compilation
+├── sensor_calibration       # Sensor tuning libraries; examples below, actual set may vary
 │   └── lib_imx219_linear.so
-└── tuning_tool              # D-Robotics-provided sensor tuning tool
+└── tuning_tool              # D-Robotics Sensor tuning tool
     ├── bin
     ├── cfg
     ├── control_tool
     ├── res
     └── scripts
 ```
+### Build Flow
+For details, refer to the `mk_debs.sh` implementation. Simplified flow:
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/mk_debs_flowchart-en.jpg" alt="mk_debs_flowchart" style={{ width: '100%' }} />
 
-### Build Process Overview
-For full details, refer to the `mk_debs.sh` script implementation. Simplified workflow:
-![mk_debs_flowchart](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/mk_debs_flowchart-en.jpg)
+### Custom deb Package Flow
+1. Under `source/`, create a folder named after the package name (dpkg package name), e.g. "new_package";
+2. Under `source/new_package`, create a `debian` folder with four script files (they may be empty):
+    - preinst: runs before copying files when installing new_package;
+    - postinst: runs after copy completes when installing new_package;
+    - prerm: runs before removal when uninstalling new_package;
+    - postrm: runs after removal when uninstalling new_package.
+3. To build this package automatically when `mk_debs.sh` is run without arguments, add `new_package` to the `deb_pkg_list` variable in `mk_debs.sh`;
+4. In the `switch` of the `make_debian_deb` function in `mk_debs.sh`, add a `case` for `new_package`:
+     - Call `gen_control_file` in the `case` to generate the control file needed to build the deb;
+     - Use `sed` in the `case` to replace the default "depends" field with actual deb dependencies. If `new_package` depends on `dep_pkg1` and `dep_pkg2`:
+       - With dependencies: `sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
+       - Without dependencies: `sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
+     - (Optional) If source must be compiled before packing, invoke compile commands; all output must go under `out/build/debs/new_pkg/debian/`;
+     - Set `is_allowed=1`
 
-### Custom Deb Package Creation Guide
-1. Create a new directory under `source/` named after your package (e.g., `new_package`).
-2. Inside `source/new_package`, create a `debian` directory containing four (possibly empty) standard deb scripts:
-   - `preinst`: Runs before file copying during package installation.
-   - `postinst`: Runs after file copying during package installation.
-   - `prerm`: Runs before file deletion during package removal.
-   - `postrm`: Runs after file deletion during package removal.
-3. To auto-build this package when running `mk_debs.sh` without arguments, add `new_package` to the `deb_pkg_list` variable in `mk_debs.sh`.
-4. In the `switch` block of the `make_debian_deb` function in `mk_debs.sh`, add a `case` for `new_package`:
-   - Call `gen_control_file` to generate the required `control` file.
-   - Use `sed` to replace the default "Depends" field with actual dependencies. For example, if `new_package` depends on `dep_pkg1` and `dep_pkg2`:
-     - With dependencies:
-       `sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
-     - Without dependencies:
-       `sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
-   - *(Optional)* If source compilation is needed before packaging, add compilation commands—ensuring all outputs go to `out/build/debs/new_pkg/debian/`.
-   - Set `is_allowed=1`.
+## 7.6.4 Including deb Packages in the Image
+During image build, deb packages are integrated into the board root filesystem.
 
-## 7.6.4 Including Deb Packages in Images
-During image building, deb packages are integrated into the board's root filesystem.
-
-### Online Image Building
-#### Process Overview
-When `pack_image.sh` is run without the `-l` option, it follows the online image build process:
-1. Retrieve the default build config file from the `DEFAULT_CONFIG` field in `pack_image.sh` (e.g., `build_params/ubuntu-22.04_desktop_rdk-s100_release.conf` for S100, or `build_params/ubuntu-24.04_desktop_rdk-s600_release.conf` for S600). This configuration file can be specified via the `-c` option.
-2. Retrieve the `RDK_DPKG_DEB_PKG_LIST` field from the build configuration file.
-3. chroot into the `out/deploy/rootfs` directory:
-   1. Attempt to download all deb packages from the existing on-device apt repositories based on the `RDK_DPKG_DEB_PKG_LIST` field;
+### Online Image Build
+#### Flow
+When `pack_image.sh` is invoked without the `-l` option, the online image build flow runs:
+1. Read the default build config from `DEFAULT_CONFIG` in `pack_image.sh`, e.g. S100: `build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`, S600: `build_params/ubuntu-24.04_desktop_rdk-s600_release.conf`;
+     - Override with the `-c` option
+2. Read `RDK_DPKG_DEB_PKG_LIST` from the build config;
+3. chroot into `out/deploy/rootfs`:
+   1. Download all deb packages listed in `RDK_DPKG_DEB_PKG_LIST` from board APT sources;
    2. Install all deb packages;
 
-#### Method to Add Additional Deb Packages
-1. Identify the name of the package to be installed;
-2. Add the corresponding package name to the `RDK_DPKG_DEB_PKG_LIST` variable in the specified build configuration file.
+#### Adding Extra deb Packages
+1. Find the package name to install;
+2. Add the package name to `RDK_DPKG_DEB_PKG_LIST` in the chosen build config.
 
 :::info Note
-For instructions on how to obtain package names, please refer to [Method to Obtain Required Deb Package Names](#get_package_name)
+See [How to Get Required deb Package Names](#get_package_name) for finding package names.
 :::
 
-### Offline Image Building
-#### Process Description
-When the `-l` option is added to `pack_image.sh` during execution, the offline image building process is triggered. The process is described as follows:
+### Offline Image Build
+#### Flow
+When `pack_image.sh` is invoked with `-l`, the offline image build flow runs:
 1. chroot:
-   1. Install each deb package based on the existing deb packages in `out/product/deb_packages`;
+   1. Install each deb package present under `out/product/deb_packages`;
 
-#### Method to Add Additional Deb Packages
-1. Identify the name of the package to be installed;
-2. Execute the following command to download the corresponding package into `out/product/deb_packages`:
+#### Adding Extra deb Packages
+1. Find the package name to install;
+2. Download packages to `out/product/deb_packages`:
 ```bash
 cd out/product/deb_packages
 apt download <package names>
 ```
 
 :::info Note
-For instructions on how to obtain package names, please refer to [Method to Obtain Required Deb Package Names](#get_package_name)
+See [How to Get Required deb Package Names](#get_package_name) for finding package names.
 :::
 
-### Method to Obtain Required Deb Package Names {#get_package_name}
-Package names can be obtained via two methods:
-1. You only know the required file, and the host has never installed the package:
-   - It is recommended to use search engines such as Google or Baidu to identify the deb package containing the file and confirm its apt repository. The reference process is as follows:
-     - Search for the deb package name by filename on [debian.org](https://www.debian.org/distrib/packages), noting that you must perform the search under the "Search the contents of packages" section;
-     - After confirming the package name, search for its repository on [Ubuntu Launchpad](https://launchpad.net/ubuntu/+search) to verify that the package exists in components such as main/universe/multiverse under jammy/jammy-updates (S100) or noble/noble-updates (S600);
-2. You know the required file, and the host has already installed it:
-   - You can obtain the package name using the command `dpkg -S <filename>`.
+### How to Get Required deb Package Names{#get_package_name}
+Package names can be obtained in two ways:
+1. You know the file needed and the host has not installed the package:
+   - Use search engines (Google/Baidu, etc.) to find the deb package containing the file and its APT source. Example flow:
+     - Search by filename under "Search the contents of packages" on [debian.org](https://www.debian.org/distrib/packages);
+     - After confirming the package name, search on [Ubuntu Launchpad](https://launchpad.net/ubuntu/+search) for the source; confirm the package exists in jammy/jammy-updates (S100) or noble/noble-updates (S600) main/universe/multiverse components;
+2. You know the file needed and it is installed on the host:
+   - Use `dpkg -S <filename>` to get the package name.
 
-## 7.6.5 Custom Partition Description
+## 7.6.5 Custom Partition Guide
 
-<Tabs>
-<TabItem value="s100" label="RDK S100">
+<DocScope products="RDK S100">
 
-The partition definition file for RDK S100 is stored in the folder `source/bootloader/device/rdk/s100/partition_config_files`. The default partition table used is: `source/bootloader/device/rdk/s100/partition_config_files/s100-gpt.json`
+RDK S100 partition definitions are under `source/bootloader/device/rdk/s100/partition_config_files`. Default partition table: `source/bootloader/device/rdk/s100/partition_config_files/s100-gpt.json`
 
-</TabItem>
-<TabItem value="s600" label="RDK S600">
+</DocScope>
+<DocScope products="RDK S600">
 
-The partition definition file for RDK S600 is stored in the folder `source/bootloader/device/rdk/s600/partition_config_files`. The default partition table used is: `source/bootloader/device/rdk/s600/partition_config_files/s600-gpt.json`
+RDK S600 partition definitions are under `source/bootloader/device/rdk/s600/partition_config_files`. Default partition table: `source/bootloader/device/rdk/s600/partition_config_files/s600-gpt.json`
 
-</TabItem>
-</Tabs>
+</DocScope>
 
-<Tabs>
-<TabItem value="s100" label="RDK S100">
+<DocScope products="RDK S100">
 
 ```json
 {
@@ -387,8 +365,8 @@ The partition definition file for RDK S600 is stored in the folder `source/bootl
 }
 ```
 
-</TabItem>
-<TabItem value="s600" label="RDK S600">
+</DocScope>
+<DocScope products="RDK S600">
 
 ```json
 {
@@ -428,40 +406,37 @@ The partition definition file for RDK S600 is stored in the folder `source/bootl
 }
 ```
 
-</TabItem>
-</Tabs>
+</DocScope>
 
-### Default Images and Partition Descriptions
-1. **miniboot_flash**: Basic boot image stored on the RDK Nor Flash, including images for system components such as HSM/MCU0;
-2. **miniboot_emmc**: Basic boot image stored on the RDK eMMC, including images for system components such as BL31/Uboot;
-3. **emmc_disk**: Full image on the RDK eMMC, which includes miniboot_emmc. During compilation, it is automatically converted into an Android Sparse image ([Android Sparse Image Format Explanation (third-party website, for reference only)](https://www.2net.co.uk/tutorial/android-sparse-image-format)) to reduce system storage space usage;
+
+### Default Images and Partitions
+1. miniboot_flash: basic boot images on RDK Nor Flash, including HSM/MCU0 and other system components;
+2. miniboot_emmc: basic boot images on RDK eMMC, including BL31/Uboot and other system components;
+3. emmc_disk: full image on RDK eMMC, includes miniboot_emmc; at build time it is converted to Android Sparse image format ([Android Sparse image format (third-party reference)](https://www.2net.co.uk/tutorial/android-sparse-image-format)) to reduce storage use;
 
 ### Configuration File Description
-The overall partition table configuration consists of global shared settings and individual partition settings. Global shared settings are placed under the `"global"` field and apply to all partitions.
-
-**Supported Global Parameters:**
-- `antirollbackUpdate_host`: Whether to update the host's anti-rollback version (true or false);
-- `antirollbackUpdate_hsm`: Whether to update the HSM's anti-rollback version (true or false);
-- `ab_sync`: Reserved field for D-Robotics;
+The partition table has global shared settings and per-partition settings. Global settings are in the "global" field and apply to all partitions.
+**Supported global parameters:**
+- `antirollbackUpdate_host`: whether to update host anti-rollback version, true or false;
+- `antirollbackUpdate_hsm`: whether to update HSM anti-rollback version, true or false;
+- `ab_sync`: D-Robotics internal reserved field;
 - `backup_dir`: HSM backup directory;
-- `AB_part_a`: Suffix for the A partition in AB partitioning;
-- `AB_part_b`: Suffix for the B partition in AB partitioning;
-- `BAK_part_bak`: Suffix for backup partitions;
+- `AB_part_a`: suffix for A partition in AB layout;
+- `AB_part_b`: suffix for B partition in AB layout;
+- `BAK_part_bak`: backup partition suffix;
 
-Individual partition configurations follow the format `"partition_name": "partition_config_type"`, allowing different partition configuration types to be selected as needed. For example, for the boot partition, you first need to add a description for the boot partition in the global partition configuration, then create `boot.json` in the appropriate sub_config folder and define `boot_common` as follows:
+Per-partition configuration uses "partition name":"partition config type". Choose the config type as needed. For example, for the boot partition, add boot in the global partition config, then create `boot.json` under the corresponding sub_config folder and define `boot_common`:
 
-<Tabs>
-<TabItem value="s100" label="RDK S100">
+<DocScope products="RDK S100">
 
-Create `boot.json` in `source/bootloader/device/rdk/s100/partition_config_files/sub_config`:
+Create `boot.json` under `source/bootloader/device/rdk/s100/partition_config_files/sub_config`:
 
-</TabItem>
-<TabItem value="s600" label="RDK S600">
+</DocScope>
+<DocScope products="RDK S600">
 
-Create `boot.json` in `source/bootloader/device/rdk/s600/partition_config_files/sub_config`:
+Create `boot.json` under `source/bootloader/device/rdk/s600/partition_config_files/sub_config`:
 
-</TabItem>
-</Tabs>
+</DocScope>
 
 ```json
 {
@@ -503,39 +478,45 @@ Create `boot.json` in `source/bootloader/device/rdk/s600/partition_config_files/
 	}
 }
 ```
-**Supported Partition Parameters:**
-- `depends`: Specifies partition dependencies; lists partitions that must be built before the current partition can be built;
-- `components`: Specifies the contents included in the current partition, which can be sub-image paths or file directories. File directories will be formatted as filesystems. Currently supported filesystems are ext4 and fat16. Append `":"` followed by a size to indicate the space this component occupies within the partition. Multiple sub-images are allowed, and it is recommended to place sub-images under the corresponding partition directory in `out/xxx/deploy`;
-- `components_nose`: Components for non-secure boot images;
-- `pre_cmd`: Commands to execute before building the image from the `components`;
-- `post_cmd`: Commands to execute after building the image from the `components`;
-- `fs_type`: Image filesystem type: None/ext4/fat16/misc;
-- `medium`: Storage medium for the image: emmc/nor;
-- `ota_is_update`: Whether the partition is included in full OTA packages;
-- `ota_update_mode`: OTA update method for the partition; `image` for full image updates (default), `image_diff` for differential image updates;
-- `is_rootfs`: Whether this is the rootfs partition;
-- `part_type`: Partition type; currently supports AB, BAK, PERMANENT;
-- `size`: Partition size, with units k, m, or g;
-- `magic`: Magic value for the partition; only valid for partition images with a flash image header;
-- `have_anti_ver`: Whether the partition image includes an anti-rollback version (true or false);
-- `load_addr`: Load address for the image; only valid for partition images with a flash image header;
-- `entry_addr`: Entry address for the image; only valid for partition images with a flash image header;
-- `nose_support`: Support for non-secure boot images;
+**Supported partition parameters:**
+- `depends`: partition dependencies; list partition names that must be built before this partition;
+- `components`: content for this partition: sub-image paths or directories; directories become filesystems (ext4 or fat16 supported). Use ":" after the path for size in the partition. Multiple sub-images allowed; place under out/xxx/deploy in the partition directory;
+- `components_nose`: non-secure boot image components;
+- `pre_cmd`: commands before building the image from components;
+- `post_cmd`: commands after building the image from components;
+- `fs_type`: image type: None/ext4/fat16/misc;
+- `medium`: storage: emmc/nor;
+- `ota_is_update`: include in full OTA package;
+- `ota_update_mode`: OTA upgrade mode; image (default) or image_diff for differential;
+- `is_rootfs`: whether this is the rootfs partition;
+- `part_type`: AB, BAK, or PERMANENT;
+- `size`: partition size; units k, m, g;
+- `magic`: partition magic (flash images with header only);
+- `have_anti_ver`: whether image contains anti-rollback version, true or false;
+- `load_addr`: load address (flash images with header only);
+- `entry_addr`: entry address (flash images with header only);
+- `nose_support`: non-secure boot image support;
 
 :::info Note
-1. The order of partitions in the JSON file corresponds to the actual partition order on the device;
-2. Partition sizes must be aligned according to the sector size of the storage medium to which the partition belongs;
+1. Partition order in the JSON file is the actual order on the board;
+2. Partition size must be aligned to the sector size of the storage medium;
 :::
 
-### Partition Modification Instructions
-RDK S100/S600 supports modifying partitions on eMMC/UFS by simply adding, deleting, or modifying the corresponding partition fields in the partition configuration. For modifications to flash partitions, please contact D-Robotics.
+### Modifying Partitions
+
+<DocScope products="RDK S100">
+RDK S100 supports changing partitions on eMMC/UFS by adding, removing, or editing partition fields. For flash partitions, contact D-Robotics if changes are needed.
+</DocScope>
+<DocScope products="RDK S600">
+RDK S600 supports changing partitions on eMMC/UFS by adding, removing, or editing partition fields. For flash partitions, contact D-Robotics if changes are needed.
+</DocScope>
 
 :::warning Partition Modification Notes
-1. In the partition table, partitions up to and including `log` are boot partitions, and modifications are generally not recommended.
-2. Other partitions, such as `userdata` and `system`, can have their sizes freely adjusted. If adding a new partition, remember to update the `fstab` file to ensure the partition is properly mounted;
+1. In the partition table, partitions through `log` are boot partitions; modifying them is not recommended in principle.
+2. Other partitions such as `userdata` and `system` can be resized freely. If you add partitions, update `fstab` so they mount correctly;
 :::
 
-After modifying the partition table, the following steps are required for the changes to take effect:
+After modifying the partition table, apply changes as follows:
 1. Build the hobot-miniboot deb package:
 	```shell
 	# In RDK Source Root Directory
@@ -546,3 +527,74 @@ After modifying the partition table, the following steps are required for the ch
 	# In RDK Source Root Directory
 	sudo ./pack_image.sh -l
 	```
+## 7.6.6 eMMC/UFS/NVMe Image Build Notes
+### Using D-Robotics ubuntu-22.04_desktop_rdk-s100_XXX.conf
+For eMMC, UFS, and NVMe, drivers are selected via different config variables. Before building, set the build config to match your storage.
+
+S100 example — edit both:
+1. /build_params/ubuntu-22.04_desktop_rdk-s100_beta.conf
+2. /build_params/ubuntu-22.04_desktop_rdk-s100_release.conf
+
+Set `RDK_DISK_MEDIUM` to the storage type in use:
+
+```shell
+# eMMC
+export RDK_DISK_MEDIUM="emmc"
+
+# UFS
+export RDK_DISK_MEDIUM="ufs"
+
+# NVMe
+export RDK_DISK_MEDIUM="nvme"
+```
+
+### Using Your Own conf File
+If you write your own conf file:
+1. Include `RDK_DISK_MEDIUM` and set it to the storage type in use:
+```shell
+# eMMC
+export RDK_DISK_MEDIUM="emmc"
+
+# UFS
+export RDK_DISK_MEDIUM="ufs"
+
+# NVMe
+export RDK_DISK_MEDIUM="nvme"
+```
+2. Update five places in the S100 build system that reference the conf file (release example):
+- `download_deb_packages.sh`:
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-22.04_desktop_rdk-s100_release.conf"
+```
+- `download_samplefs.sh`:
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-22.04_desktop_rdk-s100_release.conf"
+```
+- `mk_kernel.sh`:
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-22.04_desktop_rdk-s100_release.conf"
+```
+- `pack_image.sh`:
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-22.04_desktop_rdk-s100_release.conf"
+```
+- `mk_uboot.sh`:
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/../../build_params/ubuntu-22.04_desktop_rdk-s100_release.conf"
+```
+
+### Build Flow After conf Changes
+After changes, build uboot/spl, update miniboot/bootloader, and run a full build:
+```shell
+# From source root, build hobot-miniboot deb
+./mk_debs.sh hobot-miniboot # Output: out/product/deb_packages/hobot-miniboot_4.0.Z-xxx_arm64.deb
+
+# Build disk image
+sudo ./pack_image.sh -l  # -l uses local deb packages; without -l, remote packages are used
+```
+
+:::warning NVMe Boot Notes
+- NVMe boot is supported on RDK S100 V0P6 and later; set [D13:D12] to [1:0] on the board
+- miniboot_flash built in NVMe mode supports NVMe boot only; miniboot_flash built in eMMC/UFS mode also supports NVMe boot
+- Flash tool 1.1.10 and later supports NVMe image flashing
+:::

@@ -4,67 +4,92 @@ sidebar_position: 07
 
 # 7.7 VDSP Development Guide
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+:::warning
+**The S600 includes two VDSP cores. The VDSP1 descriptions below are supported on S600 only!**
+:::
+
 ## Basic Debugging Guide
 
-### CPU Side Development
+### CPU-side Development
 
-#### Image Loading and Unloading
+#### Image Load and Unload
 
-The S100 system does not start the VDSP FW (Firmware) by default during boot. Users need to manually load and unload the FW using commands, as shown below:
+All VDSP cores share one Firmware image; the default name is vdsp0. The second VDSP core (VDSP1, on dual-core platforms such as S600 only) is functionally identical to VDSP0: you set the FW name through remoteproc nodes, load/unload it, and read version and running status through nodes such as `version` and `state`. The only difference is the sysfs node name `remoteproc_vdsp1` (and the instance number in start/stop, log, and other paths described in the sections below). The system does not start VDSP FW (Firmware) by default at boot; users must load and unload FW manually with commands as shown below:
 
 ``` shell
-echo -n <firmware path> > /sys/module/firmware_class/parameters/path
+echo -n <firmware_path> > /sys/module/firmware_class/parameters/path
 
-#S100 VDSP0
 # Set VDSP0 FW name:
-echo <firmware name> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
+echo <firmware_name> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
 # Load VDSP0 FW:
 echo start > /sys/class/remoteproc/remoteproc_vdsp0/state
 # Unload VDSP0 FW:
 echo stop > /sys/class/remoteproc/remoteproc_vdsp0/state
+
+# Set VDSP1 FW name:
+echo <firmware_name> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
+# Load VDSP1 FW:
+echo start > /sys/class/remoteproc/remoteproc_vdsp1/state
+# Unload VDSP1 FW:
+echo stop > /sys/class/remoteproc/remoteproc_vdsp1/state
 ```
 
-Users can modify the FW path using the following command (**must be an absolute path**):
+Users can change the FW path with the following command (**must be an absolute path**):
 
 ``` shell
-echo -n <firmware path> > /sys/module/firmware_class/parameters/path
+echo -n <firmware_path> > /sys/module/firmware_class/parameters/path
 ```
 
-Users can adjust the FW name before loading, based on their own naming:
+Users can adjust the FW name before loading:
 
 ``` shell
-#S100 VDSP0
-echo <firmware name> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
+# VDSP0
+echo <firmware_name> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
+
+# VDSP1
+echo <firmware_name> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
 ```
 
-Users need to modify the original image, configure init.rc, so that the init process automatically loads the VDSP image after kernel startup.
+To auto-load the VDSP image after kernel boot, modify the original image and configure init.rc so the init process loads the VDSP image automatically.
 
 ``` shell
-# First, copy the compiled FW image (e.g., vdsp0) to /userdata
-echo -n <firmware path> > /sys/module/firmware_class/parameters/path
-#S100 VDSP0
-echo <firmware name> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
+# First copy the built FW image (e.g. vdsp0) to /userdata
+echo -n <firmware_path> > /sys/module/firmware_class/parameters/path
+# VDSP0
+echo <firmware_name> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
 echo start > /sys/class/remoteproc/remoteproc_vdsp0/state
+
+# VDSP1
+echo <firmware_name> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
+echo start > /sys/class/remoteproc/remoteproc_vdsp1/state
 ```
 
-**Check FW Version**
+**View FW Version**
 
 ``` shell
-#S100 VDSP0
+# S100 VDSP0
 cat /sys/class/remoteproc/remoteproc_vdsp0/version # for vdsp0
+# S600 VDSP1 (same as VDSP0; only the node differs)
+cat /sys/class/remoteproc/remoteproc_vdsp1/version # for vdsp1
 ```
 
-**Check VDSP Running Status**
+**View VDSP Running Status**
 
 ``` shell
-# running indicates loaded, offline indicates not loaded
-#S100 VDSP0
+# running means loaded; offline means not loaded
+# S100 VDSP0
 cat /sys/class/remoteproc/remoteproc_vdsp0/state # for vdsp0
+# S600 VDSP1 (same as VDSP0; only the node differs)
+cat /sys/class/remoteproc/remoteproc_vdsp1/state # for vdsp1
 ```
 
 **Heartbeat Monitoring**
 
-Disabled by default. It can be enabled or disabled using the following commands; the heartbeat monitoring and sending cycle is 100ms. If 7 consecutive heartbeats are lost, an error will be reported, and VDSP will be reset.
+Disabled by default. Use the following commands to enable or disable it. Heartbeat monitoring sends every 100 ms; if 7 consecutive heartbeats are lost, a diagnostic is reported and VDSP is reset.
 
 ``` shell
 # Enable heartbeat monitoring
@@ -73,69 +98,63 @@ echo Y > /sys/module/hobot_remoteproc/parameters/heartbeat_enable
 echo N > /sys/module/hobot_remoteproc/parameters/heartbeat_enable
 ```
 
-#### Operating VDSP via Function Interface
+#### Operating VDSP via Function APIs
 
-Use the libvdsp.so dynamic link library to load DSP programs, enabling functions such as loading, starting, stopping, resetting, and obtaining DSP status. For API introduction, refer to [VDSP Start/Stop Control Interface](#vdsp_boot_api).
+Load the DSP program through the libvdsp.so shared library to load, start, stop, reset, and query DSP status. For API details, see
+[VDSP Boot/Stop Control APIs](#vdsp_boot_api).
 
 #### Message Connection and Sending
 
-Currently, users can only use the system's predefined service names. The available service names are listed in the table below:
+Currently users can only use system-predefined service names. Available service names are listed below:
 
-| VDSP   | Service Name                                                 | Function                                | Must Start | Default Start on VDSP Side |
-| ------ | ------------------------------------------------------------ | --------------------------------------- | ---------- | -------------------------- |
-| DSP0/1 | dcore0_device_op/dcore1_device_op                            | Debug control for DSP by system software. Already used by system software. Users cannot register or use again. | Yes        | Yes                        |
-| DSP0/1 | dcore0_acore_heart/dcore1_acore_heart                        | Used for heartbeat mechanism, currently not in use. Users can use for other purposes. | No         | No                         |
-| DSP0/1 | dcore0_rpmsg_bpu/dcore1_rpmsg_bpu                            | BPU-related control, currently not in use. Users can use for other purposes. | No         | No                         |
-| DSP0/1 | dcore0_rpmsg_op/dcore1_rpmsg_op                              | Toolchain operator-related control, currently not in use. Users can use for other purposes. | No         | No                         |
+| VDSP   | Service Name                                                      | Purpose                                   | Must Be Started          | Started by Default on VDSP Side |
+| ------ | --------------------------------------------------------- | ------------------------------------ | --------------- | ------------ |
+| DSP0/1 | dcore0_device_op/dcore1_device_op                     | Internal system software debug control for the DSP; already used by system software; users cannot register or use it again | Yes               | Yes            |
+| DSP0/1 | dcore0_acore_heart/dcore1_acore_heart                 | Used for heartbeat; currently unused; users may repurpose it               | No               | No            |
+| DSP0/1 | dcore0_rpmsg_bpu/dcore1_rpmsg_bpu                     | BPU-related control; currently unused; users may repurpose it             | No               | No            |
+| DSP0/1 | dcore0_rpmsg_op/dcore1_rpmsg_op                       | Toolchain operator-related control; currently unused; users may repurpose it           | No               | No            |
 
-| VDSP | Service Name               | Function                                | Must Start | Default Start on VDSP Side |
-| ---- | -------------------------- | --------------------------------------- | ---------- | -------------------------- |
-| DSP0 | dcore0_device_op           | Debug control for DSP by system software. Already used by system software. Users cannot register or use again. | Yes        | Yes                        |
-| DSP0 | dcore0_acore_heart         | Used for heartbeat mechanism, currently not in use. Users can use for other purposes. | No         | No                         |
-| DSP0 | dcore0_rpmsg_bpu           | BPU-related control, currently not in use. Users can use for other purposes. | No         | No                         |
-| DSP0 | dcore0_rpmsg_op            | Toolchain operator-related control, currently not in use. Users can use for other purposes. | No         | No                         |
+Available APIs are listed below:
 
-APIs available for users are listed in the table below:
+| API                            | Function   | Header File          | Library         |
+| ----------------------------- | ---- | ------------ | ----------- |
+| hb_rpmsg_connect_server    | Connect to service | rpmsg_lib.h | librpmsg.so |
+| hb_rpmsg_disconnect_server | Disconnect from service | rpmsg_lib.h | librpmsg.so |
+| hb_rpmsg_send               | Send message | rpmsg_lib.h | librpmsg.so |
+| hb_rpmsg_recv               | Receive message | rpmsg_lib.h | librpmsg.so |
 
-| Interface                     | Function            | Header File    | Related Library |
-| ----------------------------- | ------------------- | -------------- | --------------- |
-| hb_rpmsg_connect_server       | Connect to service  | rpmsg_lib.h    | librpmsg.so     |
-| hb_rpmsg_disconnect_server    | Disconnect service  | rpmsg_lib.h    | librpmsg.so     |
-| hb_rpmsg_send                 | Send message        | rpmsg_lib.h    | librpmsg.so     |
-| hb_rpmsg_recv                 | Receive message     | rpmsg_lib.h    | librpmsg.so     |
+Concurrent receive or send from multiple processes or threads on the same service channel is not supported.
 
-Note: The same service channel does not support concurrent reception or transmission by multiple processes or threads.
+#### Heap-related Development
 
-#### Heap Related Development
+VDSP provides dynamic heap allocation and release APIs, supports custom memory alignment, and supports querying current heap status. When the VDSP side needs dynamic heap allocation, use the following APIs.
 
-VDSP provides interfaces for dynamically allocating and freeing heap memory, supports configuring custom memory alignment sizes, and allows checking the current heap status. When VDSP needs to dynamically allocate heap memory, the following interfaces can be used.
+| **API**                      | **Function**             | **Header File**            |
+| --------------------------- | ------------------ | -------------------- |
+| hb_mem_heap_initialize   | Initialize memory allocator APIs  | hb_mem_allocator.h |
+| hb_mem_heap_deinitialize | Deinitialize memory allocator APIs | hb_mem_allocator.h |
+| hb_mem_heap_alloc        | Allocate heap space           | hb_mem_allocator.h |
+| hb_mem_heap_free         | Free allocated heap space       | hb_mem_allocator.h |
+| hb_mem_heap_get_status  | Get current heap status         | hb_mem_allocator.h |
 
-| **Interface**                 | **Function**                      | **Related Header File**   |
-| ------------------------------ | --------------------------------- | ------------------------- |
-| hb_mem_heap_initialize         | Initialize memory allocator interface | hb_mem_allocator.h      |
-| hb_mem_heap_deinitialize       | De-initialize memory allocator interface | hb_mem_allocator.h      |
-| hb_mem_heap_alloc              | Allocate heap space               | hb_mem_allocator.h      |
-| hb_mem_heap_free               | Free allocated heap space         | hb_mem_allocator.h      |
-| hb_mem_heap_get_status         | Get current heap status           | hb_mem_allocator.h      |
+### VDSP-side Development
 
-### VDSP Side Development
-
-The steps to obtain the code are as follows:
+Follow these steps to obtain the source code:
 
 ``` shell
-(1) First, obtain the release package and unzip it to confirm that the vdsp source code is present. If not, contact the relevant person at Dija to obtain it.
-(2) The vdsp source code can be found in the vdsp path.
+(1) Obtain the release package and verify that VDSP source code is included after extraction. If not, contact D-Robotics personnel.
+(2) VDSP source code is available under the vdsp path.
 ```
 
 #### Linux Environment Setup
 
 :::tip
-Obtain the build package to set up the compilation environment. For the build package, please contact the relevant person at Dija.
+Obtain the build package to set up the build environment. Contact D-Robotics personnel to obtain the build package.
 
-This document only provides instructions for setting up and compiling in a Linux environment. For debugging documents mentioned in the xplorer, please contact the relevant person at Dija.
+This document only describes Linux environment setup and build instructions. For debugging documentation in Xplorer mentioned in this document, contact D-Robotics personnel.
 :::
 
-Command to install the build in a Linux environment:
+Command to install the build package in Linux:
 
 ``` shell
 tar -zxvf Vision_Q8_linux.tgz \
@@ -146,22 +165,22 @@ tar -zxvf Vision_Q8_linux.tgz \
    /opt/xtensa/XtDevTools/install/tools/RI-2023.11-linux/XtensaTools/
 ```
 
-#### Compilation
+#### Build
 
-Steps to compile after obtaining the code:
+After obtaining the source code, build as follows:
 
 ``` shell
 (1) cd vdsp_fw
 (2) bash make.sh
 ```
 
-The static library is generated in the library directory:
+Static libraries are generated in the library directory
 
 ``` shell
 library/libvdsp0.a
 ```
 
-The binary image is generated in the samples directory:
+Binary images are generated in the samples directory
 
 ``` shell
 samples/{subdir}/vdsp0
@@ -169,67 +188,75 @@ samples/{subdir}/vdsp0
 
 ### Debugging Guide
 
-#### Log Viewing
+#### Viewing Logs
 
-Logs from VDSP FW are output via the serial port.
+VDSP FW logs are output through the serial port.
 
-Note that VDSP FW shares a serial port with other modules, such as BL31 and optee. If VDSP FW outputs too many logs, it may block the log output of these modules and trigger a watchdog.
-Additionally, VDSP FW logs and kernel logs are both output to the serial port, which can interfere with each other. Users can reduce the kernel log level to prevent interference:
+Note that VDSP FW shares a serial port with other modules such as BL31 and OP-TEE. Excessive VDSP FW logging may block log output from those modules and trigger the watchdog.
+VDSP FW logs and kernel logs are both output to the serial port and may interfere with each other. Users can reduce the kernel log level to avoid interference:
 
 ``` shell
 echo 0 > /proc/sys/kernel/printk
 ```
 
-When a serial port is unavailable, users can log in to the board via SSH. The hrut_remoteproc_log service starts by default in the background:
+When no serial port is available, users can log in to the board via SSH. The hrut_remoteproc_log service starts by default in the background:
 
 ``` shell
-#S100 VDSP0 default startup command at boot, log save path: /log/dsp0/message
+# Default startup command for VDSP0 at boot; log path: /log/dsp0/message
 hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp0/log -f /log/dsp0/message -r 2048 -n 200
+# VDSP1 (same usage as VDSP0; only the remoteproc node and log path change to dsp1)
+hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp1/log -f /log/dsp1/message -r 2048 -n 200
 ```
 
-Similarly, VDSP FW logs are written to shared memory and stored in the file system by the CPU-side log service process. Therefore, users can view logs in the following paths, but note that these logs are not real-time.
+VDSP FW logs are also written to shared memory and stored in the file system by the CPU-side log service. Users can view logs from the following paths, but note that these logs are not real-time.
 
 ``` shell
-#S100 VDSP0 log path:
+# VDSP0 log paths:
 /log/dsp0/message
 /log/dsp0/archive/
-# message is a temporary file. When full, it is written to the archive/ directory. When the number of files in this directory reaches a certain limit, older files are deleted.
+# VDSP1 log paths:
+/log/dsp1/message
+/log/dsp1/archive/
+# message is a temporary file; when full, logs are written to archive/. When the number of files in that directory reaches a threshold, older files are deleted
 ```
 
-#### Log Printing Interface
+#### Log Print APIs
 
-Using the `printf` interface, logs are output via the serial port.
+Using the printf API outputs logs through the serial port.
 
-It is recommended to use the `DSP_ERR`, `DSP_WARN`, `DSP_INFO`, and `DSP_DBG` interfaces. These interfaces output logs via the serial port and also write them to shared memory. The CPU-side log service then stores the log information in the file system.
+DSP_ERR, DSP_WARN, DSP_INFO, and DSP_DBG are recommended. In addition to serial output, these APIs write logs to shared memory, and the CPU-side log service stores them in the file system.
 
-Notes on using `DSP_*` interfaces:
+Notes for DSP_* APIs:
 
-1. Header file: `hb_vdsp_log.h`
-2. Interface usage example. For instance, when entering an exception branch and needing to print a log, use the `DSP_ERR` interface: `DSP_ERR("Input parameter invalid.\n");`
+1. Header file: ``hb_vdsp_log.h``
+2. Example usage. For example, when entering an error branch, use DSP_ERR: ``DSP_ERR("Input parameter invalid.\n");``
 
-#### Thread Status Viewing
+#### Viewing Thread Status
 
-The following command can be used to view thread status on the VDSP side via the serial port. Note that collecting and outputting this data may affect VDSP performance.
+Use the following commands to view VDSP-side thread status in the serial port. Note that collecting and printing this data may affect VDSP performance.
 
-Usage: First, enable `#define THREAD_STACK_CHECK (1)` in the code. Second, enable stack tracing before starting a new thread, as shown below:
+Usage: first enable ``#define THREAD_STACK_CHECK (1)`` in code, then enable stack tracking before starting a new thread as shown below:
 
 ``` shell
 (void)hb_enable_stack_track(dev_thread_stack, sizeof(dev_thread_stack)/sizeof(dev_thread_stack[0]));
-#S100 VDSP0：
+# S100 VDSP0:
 echo on > /sys/devices/virtual/misc/vdsp0/vdsp_ctrl/dspthread
 echo off > /sys/devices/virtual/misc/vdsp0/vdsp_ctrl/dspthread
+# S600 VDSP1 (same as VDSP0; only the misc device node is vdsp1):
+echo on > /sys/devices/virtual/misc/vdsp1/vdsp_ctrl/dspthread
+echo off > /sys/devices/virtual/misc/vdsp1/vdsp_ctrl/dspthread
 ```
 
-#### Coredump Viewing
+#### Viewing Coredump
 
-System software initialization related to coredump mainly involves two parts: registering exceptions and enabling the watchdog.
+System software initialization related to coredump has two main parts: register exceptions and enable the watchdog.
 
 ``` shell
 hb_wdt_on();
 hb_enable_coredump();
 ```
 
-Currently, XOS can handle the following exception types:
+The exception types currently handled by XOS are as follows:
 
 ``` shell
 /*  EXCCAUSE register values:  */
@@ -246,7 +273,7 @@ Currently, XOS can handle the following exception types:
 /* Debug exception */
 #define EXCCAUSE_DEBUG                  UINT32_C(4)
 /* Syscall exception */
-#define EXCCAUSE_SYSCALL                 UINT32_C(5)
+#define EXCCAUSE_SYSCALL                UINT32_C(5)
 /* Hardware failure */
 #define EXCCAUSE_HARDWARE               UINT32_C(6)
 /* Memory management */
@@ -256,18 +283,18 @@ Currently, XOS can handle the following exception types:
 /*  Reserved 9-15  */
 ```
 
-Exception handlers should not be registered for exception reasons 4 (debug exception), 5 (SYSCALL exception), and 8 (coprocessor exception) on VQ8, as they are reserved for system use.
-Note: Types 9-15 are also reserved and should not be registered.
+Do not register exception handlers on VQ8 for exception causes 4 (debug exception), 5 (SYSCALL exception), or 8 (coprocessor exception); these are reserved for system use.
+Note: causes 9~15 are reserved and should also be skipped.
 
-Offline debugging method:
-When VDSP encounters a coredump, Acore writes all potentially used memory spaces (iram/dram0/dram1/reserved ddr) into the specified file system. The path is as follows:
+Offline debugging procedure:
+When VDSP coredumps, Acore writes all potentially used VDSP memory spaces (iram/dram0/dram1/reserved ddr) to the file system at the following path:
 
 ``` shell
-#vdsp0
+# vdsp0 and vdsp1 use the same dump directory; dump file names are prefixed with vdsp0_* or vdsp1_* to distinguish instances
 /log/coredump/
 ```
 
-Create a new `restore.script.sh` script. Set the paths of the 4 memory dump files according to the actual project storage location. Copy the obtained CPU registers to the corresponding positions in this script, as shown below:
+Create a restore.script.sh script. Set the paths of the four memory dump files according to your project layout, and copy the obtained CPU register values into the corresponding places in the script as shown below:
 
 ``` shell
 python import thread_aware_rtos
@@ -279,6 +306,7 @@ restore vdsp0_ddr_2024-05-06-02-50-03.hex binary 0xf0000000
 restore vdsp0_iram_2024-05-06-02-50-03.hex binary 0x08080000
 restore vdsp0_dram0_2024-05-06-02-50-03.hex binary 0x08000000
 restore vdsp0_dram1_2024-05-06-02-50-03.hex binary 0x08040000
+# VDSP1: debugging steps are the same as VDSP0; replace the files above with the generated vdsp1_ddr_*.hex, vdsp1_iram_*.hex, etc.
 
 set $ar0 = 0xf00502a8
 set $ar1 = 0xf3fdded0
@@ -318,19 +346,19 @@ set $pc = 0xf0050057
 python thread_aware_rtos.k.rtos_support.XOS_initialized = True
 ```
 
-Open the xt-gdb command line (either xplorer or command line mode) and execute the following operations in order:
+Open the xt-gdb command line (Xplorer or command-line mode), then execute the following steps in order:
 
 ``` shell
-xt-gdb vdsp0 (executable object file)
+xt-gdb vdsp0 (target file of the executable)
 (xt-gdb) >> source restore.script.sh
 (xt-gdb) >> run
-ctrl+c // Cancel run
+ctrl+c // cancel execution
 (xt-gdb) >> stepi
 (xt-gdb) >> info threads
 (xt-gdb) >> bt
 ```
 
-The backtrace debug information is displayed as follows:
+Backtrace debug output looks like this:
 
 ``` shell
 (xt-gdb) bt
@@ -342,60 +370,60 @@ The backtrace debug information is displayed as follows:
 #5  0xf0030306 in main (argc=1, argv=0xf0073704) at main.c:68
 ```
 
-#### Stack Usage Viewing
+#### Viewing Stack Usage
 
-For an explanation of stack usage, it is recommended to read the Xtensa® XOS Reference Manual: `<VDSP installation path>/xtensa/XtDevTools/downloads/<version>/docs/xos_rm.pdf`.
+For Stack usage details, see the Xtensa® XOS Reference Manual: \<VDSP install path\>/xtensa/XtDevTools/downloads/\<version\>/docs/xos_rm.pdf.
 
 #### MPU Configuration
 
-The currently deployed MPU has two main functions: first, to limit the range of addresses VDSP can access; accessing addresses outside the MPU-allowed range will cause a coredump error. Second, it can configure attributes of address segments. For detailed introduction, please refer to the Xtensa® System Software Reference Manual: `<VDSP installation path>/xtensa/XtDevTools/downloads/<version>/docs/xos_rm.pdf`.
+The deployed MPU serves two main purposes: limit the address range VDSP can access (access beyond the allowed MPU range triggers a coredump), and configure address segment attributes. For details, see the Xtensa® System Software Reference Manual: \<VDSP install path\>/xtensa/XtDevTools/downloads/\<version\>/docs/xos_rm.pdf.
 
-The VDSP address mapping and MPU protection are shown in the figure below. Accessing addresses outside the MPU protection range will result in a coredump error.
+VDSP address mapping and MPU protection are shown below. Access outside the MPU-protected address range triggers a coredump.
 
-![image_2](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_2.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_2.png" alt="VDSP development diagram 2" style={{ width: '100%' }} />
 
-The error log is shown in the figure below. The error address is 0x0, indicating access to an address that is not permitted:
+The error log is shown below. Error address 0x0 indicates access to a disallowed address:
 
-![image_3](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_3.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_3.png" alt="VDSP development diagram 3" style={{ width: '100%' }} />
 
-Currently, the attribute configuration for VDSP addresses mainly includes three parts:
+Current VDSP address attribute configuration includes three parts:
 
-(1) Attribute configuration for ION space: `XTHAL_MEM_WRITEBACK`
+(1) ION space attribute: XTHAL_MEM_WRITEBACK
 
-(2) Attribute configuration for the two shared memory regions: `XTHAL_MEM_NON_CACHEABLE`
+(2) Two shared memory regions: XTHAL_MEM_NON_CACHEABLE
 
-(3) Attribute configuration for segments other than (1) and (2): `XTHAL_MEM_WRITEBACK`
+(3) All other segments except (1) and (2): XTHAL_MEM_WRITEBACK
 
-#### Cadence Documentation Path Location
+#### Cadence Documentation Location
 
-After installing Xplorer, you can view the downloaded documentation paths at the following location: `<VDSP installation path>/xtensa/XtDevTools/downloads/RI-2023.11/docs`.
+After installing Xplorer, downloaded documentation is available at \<VDSP install path\>/xtensa/XtDevTools/downloads/RI-2023.11/docs.
 
 ### FAQ
 
-#### What are the methods for time consumption statistics on the VDSP side?
+#### How to Measure Elapsed Time on the VDSP Side?
 
-Users can use `gettimeofday()` to get the time directly, or use `XT_RSR_CCOUNT()` to get the count number and convert it to time. The former requires including the `#include <sys/time.h>` header file. The latter is recommended for more precise time statistics. Printing logs in scenarios with high time consumption requirements is not recommended.
+Users can call gettimeofday() directly or use XT_RSR_CCOUNT() to read cycle counts and convert them to time. The former requires ``#include <sys/time.h>``. The latter is recommended for timing because it is more accurate. Avoid logging in latency-sensitive paths.
 
-Additionally, users can refer to the Xtensa® Software Development Toolkit User's Guide: `<VDSP installation path>/xtensa/XtDevTools/downloads/<version>/docs/sw_dev_toolkit_ug.pdf`.
+Users can also refer to the Xtensa® Software Development Toolkit User's Guide: \<VDSP install path\>/xtensa/XtDevTools/downloads/\<version\>/docs/sw_dev_toolkit_ug.pdf.
 
-#### How to modify LSP?
+#### How to Modify the LSP?
 
-(1) Copy a template lsp.
+(1) Copy an LSP template
 
-(2) Edit `memmap.xmm`.
+(2) Edit memmap.xmm
 
-(3) Regenerate memmap by executing the command: `xt-genldscripts -b custom_lsp/q8-min-rt/`.
+(3) Regenerate memmap with: xt-genldscripts -b custom_lsp/q8-min-rt/
 
 :::tip
-When debugging with xos tools and encountering "toolchain not found," first confirm whether the xos build environment is established.
-If established, configure environment variables, e.g., set a temporary environment variable: `export PATH=$PATH:[*]/XtensaTools/bin`.
+If the XOS tool cannot find the toolchain during debugging, first confirm that the XOS build environment is set up.
+If it is, configure the environment variable, for example: ``export PATH=$PATH:[*]/XtensaTools/bin``
 :::
 
-#### What if starting (load) or stopping (unload) FW on the CPU side is unsuccessful?
+#### Start/Stop FW Load or Unload Fails on the CPU Side?
 
-Possibly, the service was not started when stopping, or the service was already started when starting.
+This may happen because the service was not started when stop was issued, or because the service was already started when start was issued.
 
-#### How to add a user thread on the VDSP side?
+#### How to Add User Threads on the VDSP Side?
 
 Example code:
 
@@ -403,71 +431,74 @@ Example code:
 ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", dev_thread_stack, STACK_SIZE_1, TRACE_THREAD_PRIO, 0, 0);
 ```
 
-Here, `dev_thread_func` represents the created thread function, used to implement the functionality the user wants to handle within the thread function. `dev_thread_stack` points to the starting address of the thread stack (allocated by the user). `STACK_SIZE_1` is the stack size. `TRACE_THREAD_PRIO` is the thread priority, ranging from 0 to 15, with lower numbers indicating higher priority.
+dev_thread_func is the thread entry function that implements user logic. dev_thread_stack points to the start of the thread stack (allocated by the user). STACK_SIZE_1 is the stack size. TRACE_THREAD_PRIO is the thread priority in the range 0~15; smaller values mean higher priority.
 
-#### How to get the device ID on the VDSP side?
+#### How to Get the Device ID on the VDSP Side?
 
-You can use `xthal_get_prid()`.
+Use xthal_get_prid().
 
-#### Which library to use for idma on the VDSP side?
+#### Which Library Should Be Used for IDMA on the VDSP Side?
 
-![image_5](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_5.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_5.png" alt="VDSP development diagram 5" style={{ width: '100%' }} />
 
-Please use `libidma-os` or `libidma-debug-os`, as we use xos.
+Use libidma-os or libidma-debug-os because we use XOS.
 
-#### What if printing variables of type int64_t/uint64_t/float results in errors?
+#### Printing int64_t/uint64_t/float Variables Shows Incorrect Values?
 
-If variables defined as `int64_t`/`uint64_t`/`float` output abnormal values when printed, but function normally during usage (e.g., size comparisons), this is because the `xtensa/xtutil.h` header file replaces functions like `printf`, `vsnprintf` with `xt_printf`, `xt_vsnprintf`. Users need to comment out the `xtutil.h` header file and use the native `printf`, `vsnprintf` interfaces.
+If variables defined as int64_t/uint64_t/float print incorrect values but behave correctly in comparisons and other operations:
+
+This happens because xtensa/xtutil.h replaces printf, vsnprintf, and similar functions with xt_printf and xt_vsnprintf. Comment out xtutil.h and use the native printf and vsnprintf APIs.
 
 :::danger
-Standard C library functions like `printf` cannot be used in interrupt handlers; otherwise, the system will hang.
+Standard C library printf and similar functions cannot be used in interrupt handlers; doing so will hang the system.
 :::
 
-#### What if VDSP gets stuck during operation?
+#### VDSP Hangs During Runtime
 
-Check if the address of the variable pointer is aligned:
+Check whether variable pointer addresses are aligned:
 
-(1) Addresses of pointers to `(int64_t *)` type variables need 8-byte alignment.
+(1) int64_t * pointers must be 8-byte aligned
 
-(2) Addresses of pointers to `(int32_t *)` type variables need 4-byte alignment.
+(2) int32_t * pointers must be 4-byte aligned
 
-(3) Addresses of pointers to `(int16_t *)` type variables need 2-byte alignment.
+(3) int16_t * pointers must be 2-byte aligned
 
-Confirm whether standard C library functions like `printf` are used in interrupt handlers. Currently, interrupt handlers do not support their use.
+Confirm whether standard C library printf or similar functions are used in interrupt handlers; they are not supported.
 
-#### What if a seg segment overflow error occurs during sim soft simulation?
+#### Segment Overflow During SIM Soft Simulation
 
-You need to modify the sim's `xmm` file. Path: `xtensa/xtensa/XtDevTools/install/builds/RI-2023.11-win32/Vision_Q8/xtensa-elf/lib/sim/memmap.xmm`. Increase the value of the corresponding overflow segment. Open cmd under xplorer:
+Modify the SIM xmm file at xtensa/xtensa/XtDevTools/install/builds/RI-2023.11-win32/Vision_Q8/xtensa-elf/lib/sim/memmap.xmm.
+Increase the size of the overflowing segment, then open cmd in Xplorer:
 
-![image_6](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_6.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_6.png" alt="VDSP development diagram 6" style={{ width: '100%' }} />
 
-Navigate to the `xtensa-elf/lib` path:
+Go to the xtensa-elf/lib path:
 
-![image_7](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_7.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_7.png" alt="VDSP development diagram 7" style={{ width: '100%' }} />
 
-Execute `xt-genldscripts -b sim`. Success is indicated as follows:
+Run xt-genldscripts -b sim. The message below indicates success:
 
-![image_8](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_8.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_8.png" alt="VDSP development diagram 8" style={{ width: '100%' }} />
 
-Recompile the vdsp project and proceed with sim soft simulation.
+Rebuild the VDSP project and run SIM soft simulation again.
 
-#### What if an abnormal stop occurs during Idma transfer?
+#### IDMA Transfer Stops Abnormally
 
-If this happens, check if a runtime is set in the `idma init` function. Setting it to 0 disables the time limit:
+If this happens, check whether a runtime limit is set in the IDMA init function. Set it to 0 to disable the time limit:
 
-![image_9](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png" alt="VDSP development diagram 9" style={{ width: '100%' }} />
 
-#### What if an image compiled in a Windows environment prompts "dcore0_rpmsg_op server not start"?
+#### Windows-built Image Reports dcore0_rpmsg_op Server Not Started
 
-You need to manually add `CONFIG_TEST_CASE` in Build Properties:
+Manually add CONFIG_TEST_CASE in Build Properties:
 
-![image_10](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png" alt="VDSP development diagram 10" style={{ width: '100%' }} />
 
-#### What if thread status viewing does not work in an environment with more than 32 total threads?
+#### Thread Status Viewing Does Not Work When Total Threads Exceed 32
 
-This is because when implementing the thread dump function, the array size for storing thread information is defined as 32 by default. You can increase the array size to support viewing status for more than 32 threads.
+The thread dump implementation uses a default array size of 32 for thread information. Increase the array size to support viewing status for more than 32 threads.
 
-For example, the following modification supports viewing status for up to 64 threads:
+The example below supports viewing status for up to 64 threads:
 
 ``` C
 static int32_t cycle_check(void * arg, int32_t unused)
@@ -475,89 +506,89 @@ static int32_t cycle_check(void * arg, int32_t unused)
     const int32_t countMax = 64;
 ```
 
-#### Adaptation Notes for VDSP Exit Process
+#### VDSP Exit Flow Adaptation Notes
 
-The system relies on the normal operation of the `dev_control` thread. Users control whether it is started by the `hb_platform_init` function via the enable macro `CONFIG_PLATFORM_INIT_BUILTIN_THREADS`. If the user does not enable it, they need to create the corresponding thread themselves. Additionally, user threads must follow the procedure below:
+The system depends on the dev_control thread running normally. Users control whether hb_platform_init starts it with the CONFIG_PLATFORM_INIT_BUILTIN_THREADS macro. If not enabled, create the corresponding thread yourself. User threads must follow this flow:
 
-(1) Add exit judgment logic in the user task loop thread: Call the function `hb_is_thread_stop`. A return value of 1 indicates the thread needs to exit immediately.
+(1) Add exit logic in the user task loop by calling hb_is_thread_stop; a return value of 1 means the thread should exit immediately
 
-#### VDSP Log Usage Scenario Restrictions
+#### VDSP Log Usage Restrictions
 
-(1) Current interrupt handlers do not support directly or indirectly using the standard C library's `printf`. Using it will cause VDSP to hang.
+(1) Interrupt handlers do not support direct or indirect use of standard C library printf; doing so will hang VDSP
 
-(2) Direct or indirect use of the standard C library's `printf` before `hb_platform_init` is not supported. Using it may cause low-probability boot failures.
+(2) Direct or indirect use of standard C library printf before hb_platform_init is not supported and may cause low-probability boot failures
 
-#### VDSP Compilation Notes
+#### VDSP Build Notes
 
-(1) Platform macros need to be defined. Macros for different platforms include: `CONFIG_ARCH_HOBOT_SOC_SIGIE`, `CONFIG_ARCH_HOBOT_SOC_SIGIP`, `CONFIG_ARCH_HOBOT_SOC_SIGIB`.
+(1) Define the platform macro. Platform macros include CONFIG_ARCH_HOBOT_SOC_SIGIE, CONFIG_ARCH_HOBOT_SOC_SIGIP, and CONFIG_ARCH_HOBOT_SOC_SIGIB
 
-(2) By default, different VDSP COREs can load the same FW. Therefore, there is no need to define `CONFIG_VDSP` macros (`CONFIG_VDSP0`/`CONFIG_VDSP1` are no longer used).
+(2) By default, different VDSP cores can load the same FW, so CONFIG_VDSP is not required (CONFIG_VDSP0/CONFIG_VDSP1 are no longer used)
 
-#### Safe Power-Off and Sleep Process
+#### Safe Power-off and Sleep Flow
 
-(1) During the safe power-off and sleep process, the driver checks the VDSP Firmware status and ensures it has entered a stopped state before proceeding with corresponding actions. It is also recommended to implement the VDSP exit process in the APP.
+(1) During safe power-off and sleep, the driver checks VDSP Firmware status and continues only after it has stopped. Implement the VDSP exit flow in the application as well.
 
-## VDSP sample
+## VDSP Sample
 
-### Function Overview
+### Overview
 
-This section introduces the VDSP use case for the S100 series SOC chip platform. This use case implements VDSP start/stop, inter-core message transmission and reception, and VDSP image processing.
+This section introduces a VDSP sample for S-series SoC platforms. It demonstrates VDSP start/stop, inter-core message send/receive, and VDSP image processing.
 
-### Software Architecture Description
+### Software Architecture
 
-Development needs to be carried out simultaneously on both the ARM side and the VDSP side. The current implementation is based on the RPMSG IPC communication mechanism to achieve client/server business interaction logic.
+Development is required on both the ARM side and the VDSP side. Client/server business logic is implemented using the RPMSG IPC mechanism.
 
-![vdsp1](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp1.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp1.png" alt="VDSP sample diagram 1" style={{ width: '100%' }} />
 
-#### ARM Side Development Process
+#### ARM-side Development Flow
 
-The main tasks for the ARM side user are loading the VDSP Firmware, connecting to the services on the VDSP side, and sending rpmsg computation requests to the VDSP side as a client.
+On the ARM side, users mainly load VDSP Firmware, connect to VDSP-side services, and send RPMSG compute requests to VDSP as the client.
 
-![vdsp2](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp2.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp2.png" alt="VDSP sample diagram 2" style={{ width: '100%' }} />
 
-#### VDSP Side Development Process
+#### VDSP-side Development Flow
 
-The main tasks on the VDSP side are initializing its operating environment, starting relevant services (the VDSP side can start multiple services as a server, supporting a one-to-one mode),
-receiving and replying to information from the client side via the rpmsg mechanism. Additionally, other threads can be started for business development.
+On the VDSP side, initialize the runtime environment and start related services (VDSP acts as the server and can start multiple one-to-one services),
+receive and reply to client messages through RPMSG, and start additional threads for application development.
 
-![vdsp3](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp3.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp3.png" alt="VDSP sample diagram 3" style={{ width: '100%' }} />
 
-#### This Use Case Process Description:
+#### Sample Flow Description:
 
-The interaction process between the ARM side and the VDSP is as follows:
+The interaction flow between the ARM side and VDSP is shown below:
 
-![vdsp4](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp4.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp4.png" alt="VDSP sample diagram 4" style={{ width: '100%' }} />
 
-ARM Side:
+ARM side:
 
-1)  Start VDSP
-2)  Connect to rpmsg server (dcore0_rpmsg_op)
-3)  Send rpmsg to VDSP
-4)  Receive rpmsg sent by VDSP
-5)  Disconnect from rpmsg server
-6)  Stop VDSP
+1) Start VDSP
+2) Connect to RPMSG server (dcore0_rpmsg_op)
+3) Send RPMSG to VDSP
+4) Receive RPMSG from VDSP
+5) Disconnect from RPMSG server
+6) Stop VDSP
 
-VDSP Side:
+VDSP side:
 
-1)  Initialize environment
-2)  Start rpmsg server (dcore0_rpmsg_op)
-3)  Receive rpmsg sent by ARM
-4)  Parse the received rpmsg data and execute the corresponding image processing function
-5)  Reply to ARM with rpmsg containing the execution result
+1) Initialize environment
+2) Start RPMSG server (dcore0_rpmsg_op)
+3) Receive RPMSG from ARM
+4) Parse received RPMSG data and run the corresponding image processing function
+5) Reply to ARM with RPMSG containing the execution result
 
 #### Code Location and Directory Structure
 
-Code Paths
+Code paths
 
-1.  Code locations:
+1. Code location:
 ``` shell
-  ARM side: {sdk_dir}/source/hobot-sp-samples/debian/app/vdsp_demo/
+  ARM side: {sdk_dir}/source/hobot-multimedia-samples/debian/app/vdsp_demo/
   DSP side: {sdk_dir}/vdsp_fw/samples/libxi-sample/
 ```
 
-2.  Directory structure:
+2. Directory structure:
 ``` shell
-# Source and binary file directory structure, excluding build framework files (Makefile, Kconfig, etc.)
+# Source and binary directory structure, excluding build framework files (Makefile, Kconfig, etc.)
   ARM:
      └── src
          └── vdsp_sample.c
@@ -566,76 +597,82 @@ Code Paths
      └── main.c
 ```
 
-### Compilation
+### Build
 
-#### Compilation Instructions
+#### Build Instructions
 
-Compilation commands
+Build commands
 
 ``` bash
-# ARM side sample compilation can be done directly on the board. The path of the sample on the board is as follows:
+# The ARM-side sample can be built directly on the board. On-board path:
 /app/vdsp_demo/vdsp_sample
-# Compilation command
-cd /app/vdsp_demo/vdsp_sample && Makefile
+# Build command
+cd /app/vdsp_demo/vdsp_sample && make
 
-# VDSP compilation command
-cd vdsp_fw && ./make.sh
+# VDSP build command
+cd vdsp_fw
+export HR_TARGET_PROJECT=S100 (options: S100/S600)
+./make.sh
 
-# VDSP side output file:
+# VDSP-side output file:
 {sdk_dir}/vdsp_fw/samples/libxi-sample/vdsp0-{build_type}
 ```
 
-### Running
+### Run
 
 ### Supported Platforms
 
-S100
+S100/S600
 
-#### Hardware Environment Setup
+#### Hardware Setup
 
-N/A
+NA
 
-#### Running Parameter Description
+#### Run Parameters
 
-The following lists the input parameters supported by the vdsp sample. Descriptions of all parameters can be obtained using `--help`.
+The table below lists supported vdsp sample input parameters. Use `--help` for full parameter descriptions.
 
-| Parameter Name | Usage                                                                 | Default Value |
-|----------------|-----------------------------------------------------------------------|---------------|
-| `dsp_id`       | `dsp_id=<0>` Specify VDSP 0                                          | 0             |
-| `vdsp_pathname`| `vdsp_pathname=*`, Specify VDSP firmware path                        | `/app/vdsp_demo/vdsp_sample/res/q8sample` |
-| `sample-type`  | `sample-type=<0,1>`, Specify sample type: 0 for basic sample, 1 for full link sample | 1             |
-| `help`         | Print help information                                                | —             |
+| Parameter | Usage | Default |
+| :--- | :--- | :--- |
+| `dsp_id` | `-d` / `--dsp_id=<id>`, specify VDSP core ID (consistent with `hb_vdsp_*`, `dcore<id>_rpmsg_op`, etc.) | `0` |
+| `dsp_pathname` | `-p` / `--dsp_pathname=<path>`, specify VDSP Firmware path (passed to `hb_vdsp_start`) | `/app/vdsp_demo/vdsp_sample/res/q8sample` |
+| `sample-type` | `-t` / `--sample-type=<0\|1>`, sample type: `0` basic, `1` full pipeline | `1` |
+| `case` | `-c` / `--case=<name>`, case name (e.g. `xi-sample-flip`; code also branches to `flip_stress`, `flops_stress`, etc.) | `xi-sample-flip` |
+| `test_time` | `--test_time=<seconds>`, duration for stress cases in seconds (for `flip_stress` / `flops_stress`, etc.) | `5` |
+| `loading` | `--loading=<0-100>`, load percentage for stress cases | `80` |
+| `help` | `-h` / `--help`, print usage and exit (unknown arguments also call `usage()`) | (none) |
 
-### Running Result Description
+### Run Result Description
 
 ``` bash
-root@ubuntu:/app/vdsp_demo/vdsp_sample# ./vdsp_sample
-vdsp_sample_cxt_s:
-        vdsp_id:0
-        vdsp_pathname:/app/vdsp_demo/vdsp_sample/res/q8sample
-vdsp_call_params_s:
+root@ubuntu:/app/vdsp_demo/vdsp_sample# ./vdsp_sample -d 1 -p /app/vdsp_demo/vdsp_sample/res/q8sample -t 0
+vdsp_sample_cxt:
+        vdsp_id:1
+        case_name:xi-sample-flip
+        dsp_pathname:/app/vdsp_demo/vdsp_sample/res/q8sample
+vdsp_call_params:
         cmd:xi-sample-flip
-        type:1
+        type:0
         buf_width:128
         buf_height:128
-        vdsp_buf0:0xfffc0000
-        vdsp_buf1:0xfffd0000
-recv_buf: 0
+        vdsp_buf0:0xfffd0000
+        vdsp_buf1:0xfffc0000
+result: 0
 ```
 
-After the execution finishes, the above log output will be obtained. `recv_buf` returning 0 indicates normal execution.
+After execution, the log output above is produced. recv_buf returning 0 indicates success.
 
-## VDSP API Introduction
+## VDSP API Reference
 
-### Inter-core Communication RPMSG Interface
+### Inter-core Communication RPMSG APIs
 
-#### Inter-core Communication RPMSG Header Files and Libraries
+#### RPMSG Inter-core Communication Headers and Libraries
 
   - VDSP side
 
     Header file: hb_rpmsg_interface.h
 
-    Library: None
+    Library: none
 
   - Acore side
 
@@ -643,7 +680,7 @@ After the execution finishes, the above log output will be obtained. `recv_buf` 
 
     Library: librpmsg.so
 
-#### Inter-core Communication RPMSG API Return Values {#rpmsg_api_return_value}
+#### RPMSG Inter-core Communication API Return Values {#rpmsg_api_return_value}
 
 VDSP side
 
@@ -651,13 +688,13 @@ VDSP side
 #define RPMSG_ERR_INVALID_ARG               (-1)
 #define RPMSG_ERR_PATH_NOT_LINK             (-2)
 #define RPMSG_ERR_SERVER_NOT_CONNECT        (-3)
-#define RPMSG_ERR_OUT_OF_RES                 (-4)
+#define RPMSG_ERR_OUT_OF_RES                (-4)
 #define RPMSG_ERR_SEND_BUF_OVERSIZE         (-5)
-#define RPMSG_ERR_NO_MEM                     (-6)
-#define RPMSG_ERR_TIMEOUT                    (-7)
-#define RPMSG_ERR_RECV_BUF_OVERFLOW          (-8)
-#define RPMSG_ERR_INVALID_SERVER             (-9)
-#define RPMSG_ERR_CRC_CHECK                  (-10)
+#define RPMSG_ERR_NO_MEM                    (-6)
+#define RPMSG_ERR_TIMEOUT                   (-7)
+#define RPMSG_ERR_RECV_BUF_OVERFLOW         (-8)
+#define RPMSG_ERR_INVALID_SERVER            (-9)
+#define RPMSG_ERR_CRC_CHECK                 (-10)
 ```
 
 Acore side
@@ -665,37 +702,37 @@ Acore side
 ``` c
 #define RPMSG_ERR_INVALID_ARG           (-1)
 #define RPMSG_ERR_INVALID_SERVER        (-2)
-#define RPMSG_ERR_OUT_OF_RES             (-3)
-#define RPMSG_ERR_KER_USR_TRANS          (-4)
-#define RPMSG_ERR_SEND_BUF_OVERSIZE      (-5)
-#define RPMSG_ERR_NO_MEM                  (-6)
-#define RPMSG_ERR_TIMEOUT                  (-7)
-#define RPMSG_ERR_SIGNAL_STOP              (-8)
-#define RPMSG_ERR_RECV_BUF_OVERFLOW        (-9)
-#define RPMSG_ERR_NOT_START_SERVER         (-10)
-#define RPMSG_ERR_CRC_CHECK                 (-11)
-#define RPMSG_ERR_DRV_VERSION               (-12)
-#define RPMSG_ERR_UNKNOWN_ERR               (-13)
+#define RPMSG_ERR_OUT_OF_RES            (-3)
+#define RPMSG_ERR_KER_USR_TRANS         (-4)
+#define RPMSG_ERR_SEND_BUF_OVERSIZE     (-5)
+#define RPMSG_ERR_NO_MEM                (-6)
+#define RPMSG_ERR_TIMEOUT               (-7)
+#define RPMSG_ERR_SIGNAL_STOP           (-8)
+#define RPMSG_ERR_RECV_BUF_OVERFLOW     (-9)
+#define RPMSG_ERR_NOT_START_SERVER      (-10)
+#define RPMSG_ERR_CRC_CHECK             (-11)
+#define RPMSG_ERR_DRV_VERSION           (-12)
+#define RPMSG_ERR_UNKNOWN_ERR           (-13)
 ```
 
-#### Inter-core Communication RPMSG (VDSP side) API
+#### RPMSG Inter-core Communication (VDSP-side) APIs
 
 ##### hb_rpmsg_start_server
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_start_server(const char* server_name, uint32_t flags, rl_ept_rx_cb_t rx_cb, void* rx_cb_data, uint32_t timeout, rpmsg_handle** handle);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] server_name: Service name
-  - \[IN\] flags: Communication characteristics
-  - \[IN\] rx_cb: Callback function for receiving messages
-  - \[IN\] rx_cb_data: Callback parameter
-  - \[IN\] timeout: Receive timeout (in ms)
-  - \[OUT\] handle: Represents the rpmsg communication handle
+  - [IN] server_name: Service name
+  - [IN] flags: Communication flags
+  - [IN] rx_cb: Callback function for received messages
+  - [IN] rx_cb_data: Callback argument
+  - [IN] timeout: Receive timeout (unit: ms)
+  - [OUT] handle: RPMSG communication handle
 
-Available service names for users:
+Available service names:
 
 VDSP0
 
@@ -710,27 +747,27 @@ VDSP1
   - dcore1_rpmsg_op.
 
 :::warning
-S100 does not have VDSP1, please pay attention when using.
+S100 does not have VDSP1. Keep this in mind when using these APIs.
 :::
 
-【Description】
+**Notes**
 
-Usage of Flags parameter (using bitwise operators):
+Flags usage (use bitwise operators):
 
-  - RPMSG_F_BLOCK Blocking transmission
-  - RPMSG_F_NONBLOCK Non-blocking transmission
-  - RPMSG_F_CRC_CHECK Support CRC check
+  - RPMSG_F_BLOCK: blocking transfer
+  - RPMSG_F_NONBLOCK: non-blocking transfer
+  - RPMSG_F_CRC_CHECK: enable CRC check
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Start rpmsg communication service
+Start the RPMSG communication service
 
-【Example Code】
+**Example**
 
 ``` c
 #include <hb_rpmsg_interface.h>
@@ -793,100 +830,99 @@ int32_t rpmsg_test()
 
 ##### hb_rpmsg_stop_server
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_stop_server(rpmsg_handle* handle);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
+  - [IN] handle: RPMSG communication handle
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Stop rpmsg communication service
+Stop the RPMSG communication service
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_start_server](#hb_rpmsg_start_server)
+See [hb_rpmsg_start_server](#hb_rpmsg_start_server)
 
 ##### hb_rpmsg_send
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_send(const rpmsg_handle* handle, char *buf, uint32_t len);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[IN\] buf: Address of data to be sent
-  - \[IN\] len: Length of data to be sent, optional values: 1 ~ 240
+  - [IN] handle: RPMSG communication handle
+  - [IN] buf: Address of data to send
+  - [IN] len: Length of data to send; valid range: 1 ~ 240
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually sent
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Success: number of bytes actually sent
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
 Send communication service frame data
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_start_server](#hb_rpmsg_start_server)
+See [hb_rpmsg_start_server](#hb_rpmsg_start_server)
 
 ##### hb_rpmsg_recv
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_recv(rpmsg_handle* handle, char* buf, uint32_t len);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[OUT\] buf: Address for receiving data
-  - \[IN\] len: Length of data to receive, optional values: 1 ~ 240
+  - [IN] handle: RPMSG communication handle
+  - [OUT] buf: Address of receive buffer
+  - [IN] len: Length of data to receive; valid range: 1 ~ 240
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually received
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
-
-【Function Description】
+  - Success: number of bytes actually received
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
+**Description**
 
 Receive communication service frame data
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_start_server](#hb_rpmsg_start_server)
+See [hb_rpmsg_start_server](#hb_rpmsg_start_server)
 
 ##### hb_rpmsg_send_timeout
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_send_timeout(const rpmsg_handle* handle, char* buf, uint32_t len, uint32_t timeout);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[IN\] buf: Address of data to be sent
-  - \[IN\] len: Length of data to be sent, optional values: 1 ~ 240
-  - \[IN\] timeout: Sending blocking duration
+  - [IN] handle: RPMSG communication handle
+  - [IN] buf: Address of data to send
+  - [IN] len: Length of data to send; valid range: 1 ~ 240
+  - [IN] timeout: Send blocking duration
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually sent
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Success: number of bytes actually sent
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Send communication service frame data with timeout parameter
+Send communication service frame data with a timeout parameter
 
-【Example Code】
+**Example**
 
 ``` c
 #include <hb_rpmsg_interface.h>
@@ -949,64 +985,64 @@ int32_t rpmsg_test()
 
 ##### hb_rpmsg_recv_timeout
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hb_rpmsg_recv_timeout(rpmsg_handle* handle, char* buf,
 uint32_t len, uint32_t timeout);
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[OUT\] buf: Address for receiving data
-  - \[IN\] len: Length of data to receive, optional values: 1 ~ 240
-  - \[IN\] timeout: Receiving blocking time
+  - [IN] handle: RPMSG communication handle
+  - [OUT] buf: Address of receive buffer
+  - [IN] len: Length of data to receive; valid range: 1 ~ 240
+  - [IN] timeout: Receive blocking duration
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually received
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Success: number of bytes actually received
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Receive communication service frame data with timeout parameter
+Receive communication service frame data with a timeout parameter
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_send_timeout](#hb_rpmsg_send_timeout)
+See [hb_rpmsg_send_timeout](#hb_rpmsg_send_timeout)
 
-#### Inter-core Communication RPMSG (Acore side) API
+#### RPMSG Inter-core Communication (Acore-side) APIs
 
 ##### hb_rpmsg_connect_server
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_connect_server(char *server_name, int flags, int timeout, rpmsg_handle **handle);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] server_name: Service name
-  - \[IN\] flags: Communication characteristics
-  - \[IN\] timeout: Timeout in blocking mode (in ms)
-  - \[OUT\] handle: Returns the rpmsg communication handle
+  - [IN] server_name: Service name
+  - [IN] flags: Communication flags
+  - [IN] timeout: Timeout in blocking mode (unit: ms)
+  - [OUT] handle: Returned RPMSG communication handle
 
-【Description】
+**Notes**
 
-Usage of Flags parameter (using bitwise operators):
+Flags usage (use bitwise operators):
 
-  - RPMSG_F_BLOCK Blocking transmission
-  - RPMSG_F_NONBLOCK Non-blocking transmission
-  - RPMSG_F_CRC_CHECK Support CRC check
+  - RPMSG_F_BLOCK: blocking transfer
+  - RPMSG_F_NONBLOCK: non-blocking transfer
+  - RPMSG_F_CRC_CHECK: enable CRC check
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Connect to communication service
+Connect to the communication service
 
-【Example Code】
+**Example**
 
 ``` c
 #include <stdio.h>
@@ -1085,96 +1121,96 @@ int main(int argc, char *argv[])
 
 ##### hb_rpmsg_disconnect_server
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_disconnect_server(rpmsg_handle* handle);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
+  - [IN] handle: RPMSG communication handle
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Disconnect communication service
+Disconnect from the communication service
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
+See [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
 
 ##### hb_rpmsg_send
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_send(const rpmsg_handle* handle, char *buf, int32_t len);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[IN\] buf: Address of data to be sent
-  - \[IN\] len: Length of data to be sent, optional values: 1 ~ 240
+  - [IN] handle: RPMSG communication handle
+  - [IN] buf: Address of data to send
+  - [IN] len: Length of data to send; valid range: 1 ~ 240
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually sent
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Success: number of bytes actually sent
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Send specific communication service frame data
+Send communication service frame data for a specific service
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
+See [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
 
 ##### hb_rpmsg_recv
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_recv(rpmsg_handle* handle, char* buf, int32_t  len);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[OUT\] buf: Address for receiving data
-  - \[IN\] len: Length of data to receive, optional values: 1 ~ 240
+  - [IN] handle: RPMSG communication handle
+  - [OUT] buf: Address of receive buffer
+  - [IN] len: Length of data to receive; valid range: 1 ~ 240
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually received
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Success: number of bytes actually received
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
 Receive communication service frame data
 
 ##### hb_rpmsg_send_timeout
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_send_timeout(const rpmsg_handle* handle, char *buf, int32_t len, int32_t timeout);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[IN\] buf: Address of data to be sent
-  - \[IN\] len: Length of data to be sent, optional values: 1 ~ 240
-  - \[IN\] timeout: Sending blocking duration
+  - [IN] handle: RPMSG communication handle
+  - [IN] buf: Address of data to send
+  - [IN] len: Length of data to send; valid range: 1 ~ 240
+  - [IN] timeout: Send blocking duration
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually sent
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Success: number of bytes actually sent
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Send communication service frame data with timeout parameter
+Send communication service frame data with a timeout parameter
 
-【Example Code】
+**Example**
 
 ``` c
 #include <stdio.h>
@@ -1243,95 +1279,95 @@ int main(int argc, char *argv[])
 
 ##### hb_rpmsg_recv_timeout
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_recv_timeout(rpmsg_handle* handle, char* buf, int32_t len, int32_t timeout);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] handle: Represents the rpmsg communication handle
-  - \[OUT\] buf: Address for receiving data
-  - \[IN\] len: Length of data to receive, optional values: 1 ~ 240
-  - \[IN\] timeout: Receiving blocking time
+  - [IN] handle: RPMSG communication handle
+  - [OUT] buf: Address of receive buffer
+  - [IN] len: Length of data to receive; valid range: 1 ~ 240
+  - [IN] timeout: Receive blocking duration
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually received
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Success: number of bytes actually received
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Receive communication service frame data with timeout parameter
+Receive communication service frame data with a timeout parameter
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_send_timeout](#hb_rpmsg_send_timeout_acore)
+See [hb_rpmsg_send_timeout](#hb_rpmsg_send_timeout)
 
 ##### hb_rpmsg_get_version
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_rpmsg_get_version(uint32_t* major, uint32_t* minor, uint32_t* patch);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[OUT\] major: major version number
-  - \[OUT\] minor: minor version number
-  - \[OUT\] patch: patch
+  - [OUT] major: Major version number
+  - [OUT] minor: Minor version number
+  - [OUT] patch: Patch version number
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code for exception, refer to [Inter-core Communication RPMSG API Return Values](#rpmsg_api_return_value)
+  - Failure: negative error code; see [RPMSG Inter-core Communication API Return Values](#rpmsg_api_return_value)
 
-【Function Description】
+**Description**
 
-Get rpmsg dynamic library version number
+Get the RPMSG shared library version
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
+See [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
 
 ##### hb_rpmsg_error_message
 
-【Function Declaration】
+**Function Declaration**
 
 ``const char* hb_rpmsg_error_message(int32_t error_code);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] error_code: Error code
+  - [IN] error_code: Error code
 
-【Return Value】
+**Return Value**
 
-  - Success: Error description string
+  - Success: error description string
   - Failure: NULL
 
-【Function Description】
+**Description**
 
-Convert error code to error description string
+Convert an error code to an error description string
 
-【Example Code】
+**Example**
 
-Refer to [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
+See [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
 
-### Inter-core Communication IPCFHAL Interface
+### Inter-core Communication IPCFHAL APIs
 
-#### Inter-core Communication IPCFHAL Header Files and Libraries
+#### IPCFHAL Inter-core Communication Headers and Libraries
 
   - VDSP side
 
-    Header files: hb_ipcfhal_interface.h ipcf_hal_errno.h
+    Header file: hb_ipcfhal_interface.h ipcf_hal_errno.h
 
-    Library: None
+    Library: none
 
   - Acore side
 
-    Header files: hb_ipcfhal_interface.h ipcf_hal_errno.h
+    Header file: hb_ipcfhal_interface.h ipcf_hal_errno.h
 
     Library: libhbipcfhal.so
 
-#### Inter-core Communication IPCFHAL API Return Values {#vdsp_ipcfhal_api_return}
+#### IPCFHAL Inter-core Communication API Return Values {#vdsp_ipcfhal_api_return}
 
 ``` c
 #define IPCF_HAL_E_OK           0/**< General OK*/
@@ -1351,33 +1387,33 @@ Refer to [hb_rpmsg_connect_server](#hb_rpmsg_connect_server)
 #define IPCF_HAL_E_CHANNEL_INVALID  14/**< Channel is invalid*/
 ```
 
-API return values are the negative values of the above macro definitions.
+API return values are the negated values of the macros above.
 
-#### Inter-core Communication IPCFHAL (VDSP side) API
+#### IPCFHAL Inter-core Communication (VDSP-side) APIs
 
 ##### hb_ipcfhal_init
 
-【Function Declaration】
+**Function Declaration**
 
-``int32_t hb_ipcfhal_init(ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_init(ipcfhal_chan_t *channel);`
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] channel: ipcfhal channel information
+  - [IN] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: 0
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL initialization
+Initialize IPCFHAL
 
-【IPCFHAL Initialization Example Code】
+**IPCFHAL Initialization Example**
 
 :::info
-For complete code compilation and execution, refer to ``/app/vdsp_demo/vdsp_ipcfhal_sample/READTME.md``
+For full build and run instructions, see `/app/vdsp_demo/vdsp_ipcfhal_sample/READTME.md`
 :::
 
 ``` c
@@ -1385,249 +1421,249 @@ For complete code compilation and execution, refer to ``/app/vdsp_demo/vdsp_ipcf
 #define DATA_LEN 1024
 
 static int32_t ipcfhal_thread_func(void *arg, int32_t unused) {
-  int32_t ret;
-  char *ch_name = "cpu-vdsp-ins0ch0";
-  ipcfhal_chan_t channel;
-  uint8_t rx_data[DATA_LEN] = {0};
-  uint8_t tx_data[DATA_LEN] = {0};
-  int32_t timeout = -1;
-  uint32_t major, minor, patch;
+	int32_t ret;
+	char *ch_name = "cpu-vdsp-ins0ch0";
+	ipcfhal_chan_t channel;
+	uint8_t rx_data[DATA_LEN] = {0};
+	uint8_t tx_data[DATA_LEN] = {0};
+	int32_t timeout = -1;
+	uint32_t major, minor, patch;
 
-  ret = vdsp_server_ready(BOOT_COMPLETE_EVENT_MASK_BIT1 | BOOT_COMPLETE_EVENT_MASK_BIT2);
+	ret = vdsp_server_ready(BOOT_COMPLETE_EVENT_MASK_BIT1 | BOOT_COMPLETE_EVENT_MASK_BIT2);
 
-  ret = hb_ipcfhal_get_version(&major, &minor, &patch);
-  if (ret < 0) {
-    return ret;
-  } else {
-    printf("ipcfhal verion: %u.%u.%u\n", major, minor, patch);
-  }
+	ret = hb_ipcfhal_get_version(&major, &minor, &patch);
+	if (ret < 0) {
+		return ret;
+	} else {
+		printf("ipcfhal verion: %u.%u.%u\n", major, minor, patch);
+	}
 
-  ret = hb_ipcfhal_getchan_byjson(ch_name, &channel, CFG_FILE);
-  if (ret < 0)
-    return ret;
-  ret = hb_ipcfhal_init(&channel);
-  if (ret < 0)
-    return ret;
-  ret = hb_ipcfhal_config(&channel);
-  if (ret < 0)
-    return ret;
+	ret = hb_ipcfhal_getchan_byjson(ch_name, &channel, CFG_FILE);
+	if (ret < 0)
+		return ret;
+	ret = hb_ipcfhal_init(&channel);
+	if (ret < 0)
+		return ret;
+	ret = hb_ipcfhal_config(&channel);
+	if (ret < 0)
+		return ret;
 
-  while (hb_is_thread_stop() != 1) {
-    memset(tx_data, 0x55, DATA_LEN);
-    ret = hb_ipcfhal_send(tx_data, DATA_LEN, &channel);
-    if (ret < 0)
-      continue;
+	while (hb_is_thread_stop() != 1) {
+		memset(tx_data, 0x55, DATA_LEN);
+		ret = hb_ipcfhal_send(tx_data, DATA_LEN, &channel);
+		if (ret < 0)
+			continue;
 
-    memset((void *)rx_data, 0, DATA_LEN);
-    ret = hb_ipcfhal_recv(rx_data, DATA_LEN, timeout, &channel);
-    if (ret < 0)
-      continue;
-    for (int i = 0; i < DATA_LEN; i++) {
-      if (rx_data[i] != 0x55) {
-        DSP_ERR("recv rx_data[%d] err. 0x%x\n", i, rx_data[i]);
-        break;
-      }
-    }
-    xos_thread_sleep_msec(2);
-  }
+		memset((void *)rx_data, 0, DATA_LEN);
+		ret = hb_ipcfhal_recv(rx_data, DATA_LEN, timeout, &channel);
+		if (ret < 0)
+			continue;
+		for (int i = 0; i < DATA_LEN; i++) {
+			if (rx_data[i] != 0x55) {
+				DSP_ERR("recv rx_data[%d] err. 0x%x\n", i, rx_data[i]);
+				break;
+			}
+		}
+		xos_thread_sleep_msec(2);
+	}
 
-  return ret;
+	return ret;
 }
 ```
 
 ##### hb_ipcfhal_getchan_byjson
 
-【Function Declaration】
+**Function Declaration**
 
-``int32_t hb_ipcfhal_getchan_byjson(const char *name, ipcfhal_chan_t *channel, const char *json_file);``
+`int32_t hb_ipcfhal_getchan_byjson(const char *name, ipcfhal_chan_t *channel, const char *json_file);`
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] name: ipcfhal channel name
-  - \[IN\] json_file: ipcfhal json configuration file
-  - \[OUT\] channel: ipcfhal channel information
+  - [IN] name: IPCFHAL channel name
+  - [IN] json_file: IPCFHAL JSON configuration file
+  - [OUT] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
-  - Success: channel id
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: channel ID
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL gets channel from json configuration file
+Get a channel from the IPCFHAL JSON configuration file
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init)
+See [hb_ipcfhal_init](#hb_ipcfhal_init)
 
 ##### hb_ipcfhal_config
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hb_ipcfhal_config(ipcfhal_chan_t *channel);
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] channel: ipcfhal channel information
+  - [IN] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
-  - Success: >=0
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: \>=0
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL configure channel
+Configure an IPCFHAL channel
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init)
+See [hb_ipcfhal_init](#hb_ipcfhal_init)
 
 ##### hb_ipcfhal_send
 
-【Function Declaration】
+**Function Declaration**
 
-``int32_t hb_ipcfhal_send(const uint8_t *data, int16_t length, ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_send(const uint8_t *data, int16_t length, ipcfhal_chan_t *channel);`
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] data: Data buffer to send
-  - \[IN\] length: Length of the buffer to send
-  - \[IN\] channel: ipcfhal channel information
+  - [IN] data: Send data buffer
+  - [IN] length: Send buffer length
+  - [IN] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually sent
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: number of bytes actually sent
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL send message
+Send an IPCFHAL message
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init)
+See [hb_ipcfhal_init](#hb_ipcfhal_init)
 
 ##### hb_ipcfhal_recv
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_recv(uint8_t *data, int16_t length, int32_t  timeout, ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] length: Maximum length of the buffer
-  - \[IN\] timeout: 0 non-blocking, >0 blocking timeout ms, -1 blocking.
-  - \[IN\] channel: ipcfhal channel information
-  - \[OUT\] data: Buffer for received data
+  - [IN] length: Maximum buffer length
+  - [IN] timeout: 0 = non-blocking, >0 = blocking timeout in ms, -1 = blocking
+  - [IN] channel: IPCFHAL channel information
+  - [OUT] data: Receive data buffer
 
-【Return Value】
+**Return Value**
 
-  - Success: Number of bytes actually received
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: number of bytes actually received
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL receive message
+Receive an IPCFHAL message
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init)
+See [hb_ipcfhal_init](#hb_ipcfhal_init)
 
 ##### hb_ipcfhal_deinit
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_deinit(ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] channel: ipcfhal channel information
+  - [IN] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: 0
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL de-initialization
+Deinitialize IPCFHAL
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init)
+See [hb_ipcfhal_init](#hb_ipcfhal_init)
 
 ##### hb_ipcfhal_trans_err
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_trans_err(int32_t err_code, char **err_str);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] err_code: Return value error code
-  - \[OUT\] err_str: Converted error string
+  - [IN] err_code: Return value error code
+  - [OUT] err_str: Converted error string
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: 0
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-Convert IPCFHAL error code to error string
+Convert an IPCFHAL error code to an error string
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init)
+See [hb_ipcfhal_init](#hb_ipcfhal_init)
 
 ##### hb_ipcfhal_get_version
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[OUT\] major: libhbipcfhal major version number
-  - \[OUT\] minor: libhbipcfhal minor version number
-  - \[OUT\] patch: libhbipcfhal patch version number
+  - [OUT] major: libhbipcfhal major version number
+  - [OUT] minor: libhbipcfhal minor version number
+  - [OUT] patch: libhbipcfhal patch version number
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: 0
+  - Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-Get the version number of the IPCFHAL library
+Get the IPCFHAL library version
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init)
+See [hb_ipcfhal_init](#hb_ipcfhal_init)
 
 ##### hb_ipcfhal_register_callback
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_register_callback(uint8_t *user_data, user_cb_t user_cb, ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] user_data: User data
-  - \[IN\] user_cb: User callback function
-  - \[IN\] channel: ipcfhal channel information
+  - [IN] user_data: User data
+  - [IN] user_cb: User callback function
+  - [IN] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: !0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+  - Success: 0
+  - Failure: !=0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL register callback function, VDSP side reception mode configured as callback mode; when parameter is NULL, unregister callback function, VDSP side reception mode configured as recv mode; using callback for multiple channels in the same instance will block execution, callbacks between channels of different instances will execute concurrently.
+Register an IPCFHAL callback function. On the VDSP side, the receive mode is configured as callback mode. When the parameters are NULL, the callback is unregistered and the VDSP-side receive mode is configured as recv mode. When multiple channels in the same instance use callbacks, execution is blocking; callbacks across channels in different instances run concurrently.
 
-【IPCFHAL Register Callback Function Example Code】
+**IPCFHAL Register Callback Example**
 
 ``` c
 static void test_ipcfhal_callback_func(uint8_t *userdata, int32_t instance, int32_t chan_id,
@@ -1664,31 +1700,31 @@ static int32_t hb_libipchal_register_callback_func(void)
 }
 ```
 
-#### Inter-core Communication IPCFHAL (Acore side) API
+#### IPCFHAL Inter-core Communication (Acore-side) APIs
 
 ##### hb_ipcfhal_init {#hb_ipcfhal_init_arm}
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_init(ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
--   \[IN\] channel: ipcfhal channel
+-   [IN] channel: IPCFHAL channel
 
-【Return Value】
+**Return Value**
 
--   Success: =0
--   Failure: !0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: 0
+-   Failure: !=0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL initialization
+Initialize IPCFHAL
 
-【IPCFHAL Initialization Example Code】
+**IPCFHAL Initialization Example**
 
 :::info
-For complete code compilation and execution, refer to ``/app/vdsp_demo/vdsp_ipcfhal_sample/READTME.md``
+For full build and run instructions, see ``/app/vdsp_demo/vdsp_ipcfhal_sample/READTME.md``
 :::
 
 ``` c
@@ -1977,188 +2013,188 @@ int main(int argc, char *argv[])
 
 ##### hb_ipcfhal_getchan_byjson
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_getchan_byjson(const char *name, ipcfhal_chan_t *channel, const char *json_file);``
 
-【Parameter Description】
+**Parameters**
 
--   \[IN\] name: ipcfhal channel name
--   \[IN\] json_file: ipcfhal json configuration file
--   \[OUT\] channel: ipcfhal channel information
+-   [IN] name: IPCFHAL channel name
+-   [IN] json_file: IPCFHAL JSON configuration file
+-   [OUT] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
--   Success: >=0
--   Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: \>=0
+-   Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL gets channel from json configuration file. After channel initialization, users are not allowed to modify structure member values.
+Get a channel from the IPCFHAL JSON configuration file. After channel initialization, modifying structure member values is not supported.
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
+See [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 
 ##### hb_ipcfhal_config
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_config(ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
--   \[IN\] channel: ipcfhal channel information
+-   [IN] channel: IPCFHAL channel information
 
-【Return Value】
+**Return Value**
 
--   Success: >=0
--   Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: \>=0
+-   Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL configure channel
+Configure an IPCFHAL channel
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
+See [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 
 ##### hb_ipcfhal_send
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_send(const uint8_t *data, uint32_t length, ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
--   \[IN\] data: Data buffer to send
--   \[IN\] length: Length of the buffer to send
--   \[IN\] channel: Channel information
+-   [IN] data: Send data buffer
+-   [IN] length: Send buffer length
+-   [IN] channel: Channel information
 
-【Return Value】
+**Return Value**
 
--   Success: Number of bytes actually sent
--   Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: number of bytes actually sent
+-   Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL send message
+Send an IPCFHAL message
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
+See [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 
 ##### hb_ipcfhal_recv
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_recv(uint8_t *data, uint32_t length, int32_t timeout, ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
--   \[IN\] length: Maximum length of the buffer
--   \[IN\] timeout: 0 non-blocking, >0 blocking timeout ms, -1 blocking
--   \[IN\] channel: Channel information
--   \[OUT\] data: Buffer for received data
+-   [IN] length: Maximum buffer length
+-   [IN] timeout: 0 = non-blocking, >0 = blocking timeout in ms, -1 = blocking
+-   [IN] channel: Channel information
+-   [OUT] data: Receive data buffer
 
-【Return Value】
+**Return Value**
 
--   Success: Number of bytes actually received
--   Failure: \<0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: number of bytes actually received
+-   Failure: \<0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL receive message
+Receive an IPCFHAL message
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
+See [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 
 ##### hb_ipcfhal_deinit
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_deinit(ipcfhal_chan_t *channel);``
 
-【Parameter Description】
+**Parameters**
 
--   \[IN\] channel: Channel information
+-   [IN] channel: Channel information
 
-【Return Value】
+**Return Value**
 
--   Success: =0
--   Failure: !0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: 0
+-   Failure: !=0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-IPCFHAL de-initialization
+Deinitialize IPCFHAL
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
+See [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 
 ##### hb_ipcfhal_trans_err
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_trans_err(int32_t err_code, char **err_str);``
 
-【Parameter Description】
+**Parameters**
 
--   \[IN\] err_code: Return value error code
--   \[OUT\] err_str: Converted error string
+-   [IN] err_code: Return value error code
+-   [OUT] err_str: Converted error string
 
-【Return Value】
+**Return Value**
 
--   Success: =0
--   Failure: !0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: 0
+-   Failure: !=0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-Convert IPCFHAL error code to error string
+Convert an IPCFHAL error code to an error string
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
+See [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 
 ##### hb_ipcfhal_get_version
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_ipcfhal_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);``
 
-【Parameter Description】
+**Parameters**
 
--   \[OUT\] major: libhbipcfhal major version number
--   \[OUT\] minor: libhbipcfhal minor version number
--   \[OUT\] patch: libhbipcfhal patch version number
+-   [OUT] major: libhbipcfhal major version number
+-   [OUT] minor: libhbipcfhal minor version number
+-   [OUT] patch: libhbipcfhal patch version number
 
-【Return Value】
+**Return Value**
 
--   Success: =0
--   Failure: !0, refer to [Inter-core Communication IPCFHAL API Return Values](#vdsp_ipcfhal_api_return)
+-   Success: 0
+-   Failure: !=0; see [IPCFHAL Inter-core Communication API Return Values](#vdsp_ipcfhal_api_return)
 
-【Function Description】
+**Description**
 
-Get the version number of the IPCFHAL library
+Get the IPCFHAL library version
 
-【Example Code】
+**Example**
 
-Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
+See [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 
-### HEAP Allocation Interface
+### HEAP Allocation APIs
 
-#### HEAP Allocation Header Files and Link Libraries
+#### HEAP Allocation Headers and Libraries
 
-  - VDSP Side
+  - VDSP side
 
-    Header File: hb_mem_allocator.h
+    Header file: hb_mem_allocator.h
 
-    Link Library: None
+    Library: none
 
 #### HEAP Allocation API Return Values {#vdsp_heap_api_return}
 
-```c
+``` c
 #define HB_MEM_OK                                    0
 #define HB_MEM_ERR_INVALID_PARAMS                    (-16777215)
 #define HB_MEM_ERR_REPEAT_INIT                       (-16777214)
@@ -2166,33 +2202,33 @@ Refer to [hb_ipcfhal_init](#hb_ipcfhal_init_arm)
 #define HB_MEM_ERR_INSUFFICIENT_MEM                  (-16777212)
 ```
 
-#### HEAP Allocation API
+#### HEAP Allocation APIs
 
 ##### hb_mem_heap_initialize
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_mem_heap_initialize(hb_mem_heap_t heap_id, void *start_vaddr, size_t heap_size, uint32_t align);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] heap_id: Valid heap index, optional values: 0, 1
-  - \[IN\] start_vaddr: Starting address of the heap
-  - \[IN\] heap_size: Size of the heap
-  - \[IN\] align: Alignment size of the heap space
+  - [IN] heap_id: Valid heap index; valid values: 0, 1
+  - [IN] start_vaddr: Heap start address
+  - [IN] heap_size: Heap size
+  - [IN] align: Heap alignment size
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [HEAP Allocation API Return Values](#vdsp_heap_api_return)
+  - Success: 0
+  - Failure: \<0; see [HEAP Allocation API Return Values](#vdsp_heap_api_return)
 
-【Function Description】
+**Description**
 
-Initializes the heap allocation interface
+Initialize the heap allocation APIs
 
-【Example Code】
+**Example**
 
-```c
+``` c
 int32_t ret;
 void *start_vaddr[2] = {(void *)heapDRAM0, heapDRAM1};
 size_t heap_size[2] = {sizeof(heapDRAM0), sizeof(heapDRAM1)};
@@ -2212,26 +2248,26 @@ return 0;
 
 ##### hb_mem_heap_deinitialize
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_mem_heap_deinitialize(hb_mem_heap_t heap_id);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] heap_id: Valid heap index, optional values: 0, 1
+  - [IN] heap_id: Valid heap index; valid values: 0, 1
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [HEAP Allocation API Return Values](#vdsp_heap_api_return)
+  - Success: 0
+  - Failure: \<0; see [HEAP Allocation API Return Values](#vdsp_heap_api_return)
 
-【Function Description】
+**Description**
 
-Deinitializes the heap allocation interface
+Deinitialize the heap allocation APIs
 
-【Example Code】
+**Example**
 
-```c
+``` c
 int32_t ret;
 void *start_vaddr[2] = {(void *)heapDRAM0, heapDRAM1};
 size_t heap_size[2] = {sizeof(heapDRAM0), sizeof(heapDRAM1)};
@@ -2251,29 +2287,29 @@ return 0;
 
 ##### hb_mem_heap_alloc
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_mem_heap_alloc(hb_mem_heap_t heap_id, size_t req_size, uint32_t align, void ** vaddr);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] heap_id: Valid heap index, optional values: 0, 1
-  - \[IN\] req_size: Size of allocation in bytes
-  - \[IN\] align: Alignment size of the heap space
-  - \[OUT\] vaddr: Starting address of the allocated buffer
+  - [IN] heap_id: Valid heap index; valid values: 0, 1
+  - [IN] req_size: Number of bytes to allocate
+  - [IN] align: Heap alignment size
+  - [OUT] vaddr: Start address of allocated buffer
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [HEAP Allocation API Return Values](#vdsp_heap_api_return)
+  - Success: 0
+  - Failure: \<0; see [HEAP Allocation API Return Values](#vdsp_heap_api_return)
 
-【Function Description】
+**Description**
 
-Heap allocation interface
+Heap allocation API
 
-【Example Code】
+**Example**
 
-```c
+``` c
 int32_t ret;
 void *start_vaddr[2] = {(void *)heapDRAM0, heapDRAM1};
 size_t heap_size[2] = {sizeof(heapDRAM0), sizeof(heapDRAM1)};
@@ -2304,27 +2340,27 @@ return 0;
 
 ##### hb_mem_heap_free
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_mem_heap_free(hb_mem_heap_t heap_id, void *vaddr);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] heap_id: Valid heap index, optional values: 0, 1
-  - \[IN\] vaddr: Starting address of the allocated buffer
+  - [IN] heap_id: Valid heap index; valid values: 0, 1
+  - [IN] vaddr: Start address of allocated buffer
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [HEAP Allocation API Return Values](#vdsp_heap_api_return)
+  - Success: 0
+  - Failure: \<0; see [HEAP Allocation API Return Values](#vdsp_heap_api_return)
 
-【Function Description】
+**Description**
 
-Frees allocated heap space
+Free allocated heap space
 
-【Example Code】
+**Example**
 
-```c
+``` c
 int32_t ret;
 void *start_vaddr[2] = {(void *)heapDRAM0, heapDRAM1};
 size_t heap_size[2] = {sizeof(heapDRAM0), sizeof(heapDRAM1)};
@@ -2359,27 +2395,27 @@ return 0;
 
 ##### hb_mem_heap_get_status
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_mem_heap_get_status(hb_mem_heap_t heap_id, hb_mem_heap_status_t *heap_status);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] heap_id: Valid heap index, optional values: 0, 1
-  - \[OUT\] heap_status: Heap status information
+  - [IN] heap_id: Valid heap index; valid values: 0, 1
+  - [OUT] heap_status: Heap status information
 
-【Return Value】
+**Return Value**
 
-  - Success: =0
-  - Failure: \<0, refer to [HEAP Allocation API Return Values](#vdsp_heap_api_return)
+  - Success: 0
+  - Failure: \<0; see [HEAP Allocation API Return Values](#vdsp_heap_api_return)
 
-【Function Description】
+**Description**
 
-Retrieves the heap allocation status
+Get heap allocation status
 
-【Example Code】
+**Example**
 
-```c
+``` c
 int32_t ret;
 void *start_vaddr[2] = {(void *)heapDRAM0, heapDRAM1};
 size_t heap_size[2] = {sizeof(heapDRAM0), sizeof(heapDRAM1)};
@@ -2404,19 +2440,19 @@ if (ret < 0) {
 return 0;
 ```
 
-### VDSP Start/Stop Control Interface {#vdsp_boot_api}
+### VDSP Boot/Stop Control APIs {#vdsp_boot_api}
 
-#### VDSP Start/Stop Control Header Files and Link Libraries
+#### VDSP Boot/Stop Control Headers and Libraries
 
-  - Acore Side
+  - Acore side
 
-    Header File: hb_vdsp_mgr.h
+    Header file: hb_vdsp_mgr.h
 
-    Link Library: libvdsp.so
+    Library: libvdsp.so
 
-#### VDSP Start/Stop Control API Return Values {#vdsp_boot_api_return}
+#### VDSP Boot/Stop Control API Return Values {#vdsp_boot_api_return}
 
-```c
+``` c
 #define HB_VDSP_OK                      (0)
 #define HB_VDSP_OPEN_DEV_ERR                    (-1)
 #define HB_VDSP_START_IOCTL_ERR                 (-2)
@@ -2448,32 +2484,32 @@ return 0;
 #define HB_VDSP_ERR_RBTREE_SEARCH_NODE              (-29)
 ```
 
-#### VDSP Start/Stop Control API
+#### VDSP Boot/Stop Control APIs
 
 ##### hb_vdsp_get_version
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[OUT\] major: libvdsp major version number
-  - \[OUT\] minor: libvdsp minor version number
-  - \[OUT\] patch: libvdsp patch version number
+  - [OUT] major: libvdsp major version number
+  - [OUT] minor: libvdsp minor version number
+  - [OUT] patch: libvdsp patch version number
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Retrieves the version number of the VDSP start/stop control library
+Get the VDSP boot/stop control library version
 
-【Example Code for Retrieving VDSP Library Version】
+**Get VDSP Library Version Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 
 int32_t boot_lib_version_test(int32_t dsp_id)
@@ -2495,26 +2531,26 @@ int32_t boot_lib_version_test(int32_t dsp_id)
 
 ##### hb_vdsp_init
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_init(int32_t dsp_id);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Initializes the VDSP start/stop control library
+Initialize the VDSP boot/stop control library
 
-【Example Code for Initializing VDSP Library】
+**Initialize VDSP Library Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 
 int32_t boot_lib_init_test(int32_t dsp_id)
@@ -2539,51 +2575,51 @@ int32_t boot_lib_init_test(int32_t dsp_id)
 
 ##### hb_vdsp_deinit
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_deinit(int32_t dsp_id);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Releases the VDSP start/stop control library
+Release the VDSP boot/stop control library
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_init](#hb_vdsp_init)
+See [hb_vdsp_init](#hb_vdsp_init)
 
 ##### hb_vdsp_start
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_start(int32_t dsp_id, int32_t timeout, const char *pathname);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[IN\] timeout: 0 for asynchronous; -1 for synchronous; >0 for synchronous timeout in ms
-  - \[IN\] pathname: Full path of the VDSP image, including the image name
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [IN] timeout: 0 = asynchronous; -1 = synchronous; >0 = synchronous timeout wait time in ms
+  - [IN] pathname: Full VDSP image path, including the image name
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Starts the VDSP
+Start VDSP
 
-【Example Code for Synchronous VDSP Start】
+**Synchronously Start VDSP Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 
 #define VDSP_BOOT_MODE_ASYNC        (0)
@@ -2636,9 +2672,9 @@ boot_lib_sync_test(0, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 boot_lib_sync_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 ```
 
-【Example Code for Asynchronous VDSP Start】
+**Asynchronously Start VDSP Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 #include <poll.h>
 
@@ -2718,77 +2754,77 @@ boot_lib_async_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 ##### hb_vdsp_stop
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_stop(int32_t dsp_id);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Stops the VDSP
+Stop VDSP
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_start](#hb_vdsp_start_sync)
+See [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_get_status
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_get_status(int32_t dsp_id, int32_t *status);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[OUT\] status: VDSP running status
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [OUT] status: VDSP running status
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Retrieves the VDSP running status
+Get VDSP running status
 
 ::: tip
-This interface does not support concurrent use in multi-process or multi-thread environments.
+This API does not support concurrent use from multiple processes or threads.
 :::
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_start](#hb_vdsp_start_sync)
+See [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_reset
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_reset(int32_t dsp_id);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Resets the VDSP
+Reset VDSP
 
-【Example Code】
+**Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 
 #define VDSP_BOOT_MODE_ASYNC        (0)
@@ -2851,27 +2887,27 @@ boot_lib_reset_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 ##### hb_vdsp_set_path
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_set_path(int32_t dsp_id, const char* path);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[IN\] path: Full path of the VDSP image, excluding the image name
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [IN] path: Full VDSP image path, excluding the image name
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Sets the VDSP image path
+Set the VDSP image path
 
-【Example Code】
+**Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 
 #define VDSP_BOOT_MODE_ASYNC        (0)
@@ -2940,101 +2976,101 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 ##### hb_vdsp_set_name
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_set_name(int32_t dsp_id, const char* name);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[IN\] name: VDSP image name
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [IN] name: VDSP image name
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Sets the VDSP image name
+Set the VDSP image name
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_set_path](#hb_vdsp_setpathname)
+See [hb_vdsp_set_path](#hb_vdsp_set_path)
 
 ##### hb_vdsp_get_fd
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_get_fd(int32_t dsp_id, int32_t *retfd);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[OUT\] retfd: VDSP device file descriptor handle
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [OUT] retfd: VDSP device file descriptor
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Opens and returns the VDSP device file descriptor handle
+Open and return the VDSP device file descriptor
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_start](#hb_vdsp_start_async)
+See [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_close_fd
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_close_fd(int32_t fd);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] fd: VDSP device file descriptor handle
+  - [IN] fd: VDSP device file descriptor
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Closes the VDSP device
+Close the VDSP device
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_start](#hb_vdsp_start_async)
+See [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_mem_alloc
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_mem_alloc(int32_t dsp_id, uint64_t size, int64_t flags, uint64_t *va, uint64_t *iova);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[IN\] size: Size of memory to allocate
-  - \[IN\] flags: Flags for memory allocation using libhbmem
-  - \[OUT\] va: Virtual address of memory allocated using libhbmem
-  - \[OUT\] iova: Mapped VDSP device address
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [IN] size: Requested memory size
+  - [IN] flags: Flags for memory allocation via libhbmem
+  - [OUT] va: Virtual address of memory allocated via libhbmem
+  - [OUT] iova: Mapped VDSP device address
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Allocates memory via libvdsp and maps it to a VDSP-accessible device address
+Allocate memory via libvdsp and map it to a device address accessible by VDSP
 
-【Example Code for Allocating and Mapping Memory】
+**Allocate Memory and Map Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 
 int32_t boot_lib_mem_alloc_test(int32_t dsp_id)
@@ -3077,53 +3113,53 @@ int32_t boot_lib_mem_alloc_test(int32_t dsp_id)
 
 ##### hb_vdsp_mem_free
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_mem_free(int32_t dsp_id, uint64_t va);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[IN\] va: Virtual address of memory allocated using libhbmem
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [IN] va: Virtual address of memory allocated via libhbmem
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Unmaps the VDSP device address and frees memory via libvdsp
+Unmap the VDSP device address and free memory via libvdsp
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_mem_alloc](#hb_vdsp_mem_alloc)
+See [hb_vdsp_mem_alloc](#hb_vdsp_mem_alloc)
 
 ##### hb_vdsp_mmu_map
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_mmu_map(int32_t dsp_id, uint64_t va, uint64_t size, uint64_t *iova);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[IN\] va: Virtual address of memory allocated using libhbmem
-  - \[IN\] size: Size of memory to map
-  - \[OUT\] iova: Mapped VDSP device address
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [IN] va: Virtual address of memory allocated via libhbmem
+  - [IN] size: Memory size to map
+  - [OUT] iova: Mapped VDSP device address
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Maps a virtual address to a VDSP-accessible device address via libvdsp; map supports multiple mappings of the same address, map and unmap must be used in pairs. The interval specified by the input parameters va and size must not exceed the actual size of the allocated buffer.
+Map a virtual address to a device address accessible by VDSP via libvdsp. map supports multiple mappings of the same address. map and unmap must be used in pairs. The range specified by input parameters va and size must not exceed the actual allocated buffer size.
 
-【Example Code for Mapping Memory to Device Address】
+**Map Memory to Device Address Example**
 
-```c
+``` c
 #include <hb_vdsp_mgr.h>
 
 int32_t boot_lib_mem_map_test(int32_t dsp_id)
@@ -3214,24 +3250,24 @@ int32_t boot_lib_mem_map_test(int32_t dsp_id)
 
 ##### hb_vdsp_mmu_unmap
 
-【Function Declaration】
+**Function Declaration**
 
 ``int32_t hb_vdsp_mmu_unmap(int32_t dsp_id, uint64_t va);``
 
-【Parameter Description】
+**Parameters**
 
-  - \[IN\] dsp_id: DSP number, values 0 or 1, corresponding to dsp0 and dsp1
-  - \[IN\] va: Virtual address of memory allocated using libhbmem
+  - [IN] dsp_id: DSP index; valid values: 0, 1, corresponding to dsp0 and dsp1
+  - [IN] va: Virtual address of memory allocated via libhbmem
 
-【Return Value】
+**Return Value**
 
   - Success: 0
-  - Failure: Negative error code, refer to [VDSP Start/Stop Control API Return Values](#vdsp_boot_api_return)
+  - Failure: negative error code; see [VDSP Boot/Stop Control API Return Values](#vdsp_boot_api_return)
 
-【Function Description】
+**Description**
 
-Unmaps the VDSP device address via libvdsp
+Unmap the VDSP device address via libvdsp
 
-【Example Code】
+**Example**
 
-Refer to [hb_vdsp_mmu_map](#hb_vdsp_mmu_map)
+See [hb_vdsp_mmu_map](#hb_vdsp_mmu_map)

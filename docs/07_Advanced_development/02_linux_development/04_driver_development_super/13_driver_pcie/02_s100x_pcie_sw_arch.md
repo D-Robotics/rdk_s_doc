@@ -1,6 +1,5 @@
 ---
 sidebar_position: 2
-sidebar_products: RDK S100, RDK S600
 ---
 # PCIe 软件架构与模块划分
 

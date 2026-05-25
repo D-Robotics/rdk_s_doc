@@ -1,6 +1,5 @@
 ---
 sidebar_position: 1
-sidebar_products: RDK S100, RDK S600
 ---
 # PCIe 硬件规格以及支持的拓扑结构
 

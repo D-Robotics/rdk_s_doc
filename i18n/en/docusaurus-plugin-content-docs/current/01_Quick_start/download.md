@@ -2,15 +2,44 @@
 sidebar_position: 6
 ---
 
-# 1.6 Resource Summary
+# 1.6 Resource Summary 
+
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
+```
+
+<DocScope products="RDK S600">
+
+:::warning Note
+For RDK S600 Early Access users, please read first: RDK S600 Early Access Note
+
+:::
+
+:::warning Note
+
+RDK S600 materials should be obtained from the FTP server according to the paths in the table
+
+:::
+
+</DocScope>
 
 ## system software
+
+<DocScope products="RDK S100">
 
 | Name                                                                                   | Latest Version | Upload Date | Documentation                                                             |
 | -------------------------------------------------------------------------------------- | -------------- | ----------- | ------------------------------------------------------------------------- |
 | [System Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)            | V4.0.5    | 2026-03-05  | System image.                                                             |
 
+</DocScope>
 
+<DocScope products="RDK S600">
+| Name     | Latest Version    | Upload Date   | Path                                                                            |
+| -------- | ----------- | ---------- | ------------------------------------------------------------------------------- |
+| System Image | V5.0.1-beta | 2026-03-12 | RDKS600_LNX_SDK/RDKS600_V5.0.1-BETA/board_support_package/firmwares/product.zip |
+</DocScope>
 
 ## Tools Download
 | Name                                                                                   | Latest Version | Upload Date | Documentation                                                             |
@@ -20,9 +49,10 @@ sidebar_position: 6
 | [MCU Cross Compilation Toolchain](https://archive.d-robotics.cc/downloads/software_tools/mcu_toolchain/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2) | -      | 2026-01-27 | MCU Cross Compilation Toolchain. |
 | [CH340 Serial Port Driver](https://archive.d-robotics.cc/downloads/software_tools/serial_to_usb_drivers/CH34x_Install_Windows_v3_4.zip) | V3.4      | 2026-03-17 | Serial port driver. |
 
-
+<DocScope products="RDK S100">
 
 ## Hardware Documentation
+
 
 ### RDK S100
 
@@ -150,3 +180,5 @@ sidebar_position: 6
   </tbody>
 </table>
 </div>
+
+</DocScope>

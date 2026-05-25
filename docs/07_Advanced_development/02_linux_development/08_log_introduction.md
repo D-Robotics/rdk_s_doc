@@ -1,5 +1,6 @@
 ---
 sidebar_position: 8
+title: 7.2.8            Log 使用指南
 ---
 
 ```mdx-code-block

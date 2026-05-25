@@ -4,83 +4,185 @@ sidebar_position: 1
 
 # 2.1 Network and Bluetooth Configuration
 
-This section mainly introduces how to modify wired and wireless network configurations on the development board.
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
 
-## Wired Network {#config_ethnet}
+This section mainly introduces how to modify the wired and wireless network configurations of the development board.
 
-### Wired Network Configuration – Netplan Method
+## Wired Network{#config_ethnet}
+
+### Wired Network Configuration - Network Manager Method
 
 :::info Note
-Network configuration via Netplan has only been verified and used on the `RDK S100`; other platforms are currently not supported.
 
-The root filesystem of `RDK S100` is built upon Ubuntu 22.04, which by default does not support enabling or disabling network interfaces using the traditional `ifup`/`ifdown` commands.
+  By default, `NetworkManager + Netplan` is used to manage the network. For other platforms, please refer to the corresponding system documentation.
+
+<DocScope products="RDK S100">
+  - The `RDK S100` root file system is built on Ubuntu-22.04 and does not support enabling or disabling network interfaces using ifup/ifdown by default.
+</DocScope>
+
+<DocScope products="RDK S600">
+  - The `RDK S600` root file system is built on Ubuntu-24.04 and does not support enabling or disabling network interfaces using ifup/ifdown by default.
+</DocScope>
+
 :::
 
-In Ubuntu systems, static network configuration for the development board is stored in the file `/etc/netplan/01-hobot-net.yaml`. Below are specific configuration instructions:
+In the Ubuntu system, the network connection configuration of the development board is stored in the `/etc/NetworkManager/system-connections/` directory (each network card connects to a `.nmconnection` file). Common field descriptions are as follows:
 
-- **Static IP and Subnet Mask**: To assign a static IP address and subnet mask to a network interface, use the `addresses` field with CIDR notation for the subnet mask.
-- **DHCP Configuration**: To enable a specified network interface to automatically obtain an IP address via DHCP (Dynamic Host Configuration Protocol), set the `dhcp4` or `dhcp6` field to `yes`.
-- **Custom MAC Address**: Use the `macaddress` field to assign a custom MAC address to a network interface.
-- **Custom DNS Servers**: Use the `nameservers` field to specify custom DNS server addresses for a network interface.
+- **DHCP Configuration**: Set `method` in `[ipv4]` to `auto`, and the address will be automatically assigned by DHCP.
+- **Static Address Configuration**: Set `method` in `[ipv4]` to `manual`, and use `address1=IP/CIDR,Gateway` to configure IP, mask, and gateway.
+- **Custom DNS**: Specify the DNS server using the `dns=` field, with multiple addresses separated by semicolons.
 
-An example of network configuration using Netplan is as follows:
+### ETH0 DHCP Configuration Example
+
+Edit the connection file:
 
 ```shell
-sudo vim /etc/netplan/01-hobot-net.yaml
+sudo vim /etc/NetworkManager/system-connections/eth0_cfg.nmconnection
 ```
 
 ```shell
-network:
-  version: 2
-  renderer: NetworkManager
-  ethernets:
-    eth0:
-      dhcp4: yes
-      dhcp6: yes
-      nameservers:
-        addresses: [10.9.1.2, 8.8.8.8, 8.8.4.4]
-    eth1:
-      addresses:
-        - 192.168.127.10/24
-      nameservers:
-        addresses: [10.9.1.2, 8.8.8.8, 8.8.4.4]
+[connection]
+id=eth0_cfg
+uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b2222
+type=ethernet
+interface-name=eth0
+timestamp=1773022723
+
+[ethernet]
+
+[ipv4]
+dns=10.9.1.2;8.8.8.8;8.8.4.4;
+method=auto
+
+[ipv6]
+addr-gen-mode=eui64
+method=disabled
+
+[proxy]
 
 ```
 
-After making changes, run `sudo netplan apply` to apply the new configuration.
+### ETH1 Static IP Configuration Example
 
-For detailed documentation on Netplan configuration files, please refer to: [Ubuntu Manpage: netplan](https://manpages.ubuntu.com/manpages/jammy/man5/netplan.5.html).
+Edit the connection file:
 
-:::tip Tip
-The desktop version of RDK S100 uses NetworkManager + Netplan as its default network management framework. When users configure network connections via NetworkManager (either through GUI or the `nmcli` command), corresponding configuration files are generated under `/etc/NetworkManager/system-connections`.
+```shell
+sudo vim /etc/NetworkManager/system-connections/eth1_cfg.nmconnection
+```
 
-During Ubuntu system boot, Netplan configuration files located in `/etc/netplan/` are used to generate corresponding connection profiles under `/run/NetworkManager/system-connections`. By default in Ubuntu, connection profiles under `/run/NetworkManager/system-connections` take **precedence over** those under `/etc/NetworkManager/system-connections`.
+```shell
+[connection]
+id=eth1_cfg
+uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b1111
+type=ethernet
+interface-name=eth1
+timestamp=1773022363
 
-Therefore, if you wish configurations made via NetworkManager (GUI or `nmcli`) to take effect, you must first **remove** the corresponding settings from the Netplan configuration files under `/etc/netplan/`.
+[ethernet]
+
+[ipv4]
+address1=192.168.127.10/24,192.168.127.1
+dns=10.9.1.2;8.8.8.8;8.8.4.4;
+method=manual
+
+[ipv6]
+addr-gen-mode=eui64
+method=disabled
+
+[proxy]
+
+```
+
+After modification, it is recommended to apply the configuration in the following order:
+
+```shell
+# Check configuration file permissions (NetworkManager requires root read/write only)
+sudo chmod 600 /etc/NetworkManager/system-connections/*.nmconnection
+
+# Reload connection configuration
+sudo nmcli connection reload
+
+# Enable the corresponding connection
+sudo nmcli connection up eth0_cfg
+# or
+sudo nmcli connection up eth1_cfg
+
+```
+
+Example of configuring a static IP using the command line:
+
+```shell
+# Configure eth1 static IP as 192.168.10.100/24, gateway as 192.168.10.1, DNS as 223.5.5.5 and 8.8.8.8
+nmcli connection modify "eth1_cfg" \
+  ipv4.method manual \
+  ipv4.addresses "192.168.10.100/24" \
+  ipv4.gateway "192.168.10.1" \
+  ipv4.dns "223.5.5.5 8.8.8.8" \
+  connection.autoconnect yes
+
+# Restart the connection for changes to take effect
+nmcli connection down "eth1_cfg"
+nmcli connection up "eth1_cfg"
+
+```
+
+Example of configuring DHCP using the command line:
+
+```shell
+# Switch eth1 to DHCP
+nmcli connection modify "eth1_cfg" \
+  ipv4.method auto \
+  ipv4.addresses "" \
+  ipv4.gateway "" \
+  ipv4.dns "" \
+  connection.autoconnect yes
+
+# Restart the connection for changes to take effect
+nmcli connection down "eth1_cfg"
+nmcli connection up "eth1_cfg"
+```
+
+Check the current IP/gateway/DNS configuration using the command line:
+
+```shell
+# Check the device's current IP/gateway/DNS
+nmcli device show eth1
+
+```
+
+For more information on configuration fields, please refer to:
+[Ubuntu Manpage: NetworkManager](https://networkmanager.dev/docs/api/latest/nmcli.html)
+
+:::tip Note
+The `RDK S100` desktop version uses the `NetworkManager + Netplan` network framework by default. After saving configurations via GUI or `nmcli`, the configurations are written to `/etc/NetworkManager/system-connections/`.
+
+You can also directly edit the `.nmconnection` file in this directory; after editing, run `sudo nmcli connection reload` and `sudo nmcli connection up [connection_name]` to apply the configuration.
 :::
 
 ## Wireless Network
 
-<!-- Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=12 -->
+Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=12
 
-The development board integrates a 2.4GHz Wi-Fi module, supporting both Soft AP and Station modes, and runs in Station mode by default. The following sections describe how to use both modes.
+The development board needs to be equipped with a wireless Wi-Fi module, supporting both Soft AP and Station modes, and runs in Station mode by default. The usage of the two modes is described below.
 
 ### Station Mode
 
-In Station mode, the development board acts as a client connecting to a router's Wi-Fi hotspot for internet access.
+In Station mode, the development board acts as a client, connecting to the router's wireless hotspot for networking.
 
-- For users running the Ubuntu Desktop edition, click the Wi-Fi icon in the top-right corner of the desktop, select the desired hotspot, and enter the password to complete network setup, as shown below:  
-  ![image-wifi-config](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-wifi-config.jpeg)
+- For users using the Ubuntu Desktop version, you can click the Wi-Fi icon in the upper right corner of the desktop, select the corresponding hotspot, and enter the password to complete the network configuration, as shown below:
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-wifi-config.jpeg" alt="image-wifi-config" style={{ width: '100%' }} />
 
-- For users running the Ubuntu Server edition, wireless network configuration can be performed via command line as follows:
+- For users using the Ubuntu Server version, wireless network configuration can be done via the command line as follows:
 
-1. Use the command `sudo nmcli device wifi rescan` to scan for available hotspots. If you receive the following message, scanning was too frequent—please wait and try again later:
+1. Use the `sudo nmcli device wifi rescan` command to scan for hotspots. If the following message appears, it indicates that scanning is too frequent; please try again later.
    ```shell
    root@ubuntu:~# sudo nmcli device wifi rescan
    Error: Scanning not allowed immediately following previous scan.
    ```
-2. Use the command `sudo nmcli device wifi list` to display the list of discovered hotspots.
-3. Connect to a hotspot using the command `sudo wifi_connect "SSID" "PASSWD"`. A successful connection will return output similar to the following:
+2. Use the `sudo nmcli device wifi list` command to list the scanned hotspots.
+3. Use the `sudo wifi_connect "SSID" "PASSWD"` command to connect to the hotspot. The following message indicates a successful network connection:
 
    ```shell
    root@ubuntu:~# sudo wifi_connect "WiFi-Test" "12345678"
@@ -88,7 +190,7 @@ In Station mode, the development board acts as a client connecting to a router's
    ```
 
    :::tip
-   If after attempting to connect you receive the following message, the hotspot was not found. In this case, run `sudo nmcli device wifi rescan` to rescan and then retry the connection:
+   If, after connecting to the hotspot, the following message appears, it means the hotspot was not found. You can run the `sudo nmcli device wifi rescan` command to rescan and then try again.
 
    ```shell
    root@ubuntu:~# sudo wifi_connect "WiFi-Test" "12345678"
@@ -100,13 +202,13 @@ In Station mode, the development board acts as a client connecting to a router's
 ### Soft AP Mode
 
 :::tip
-Wi-Fi AP mode on RDK S100 is currently unavailable.  
-Continuously being updated....
+Wi-Fi AP mode is currently unavailable
+Continuously updating...
 :::
 
-<!-- By default, the development board’s wireless network operates in Station mode. To switch to Soft AP mode, follow the steps below.
+<!-- The development board's wireless network runs in Station mode by default. If you need to use Soft AP mode, follow the steps below for configuration.
 
-1. Install `hostapd` and `isc-dhcp-server`:
+1. Install `hostapd` and `isc-dhcp-server`
 
     ```shell
     sudo apt update
@@ -114,18 +216,18 @@ Continuously being updated....
     sudo apt install isc-dhcp-server
     ```
 
-2. Run `sudo vim /etc/hostapd.conf` to configure `hostapd.conf`, focusing primarily on the following fields:
+2. Run the `sudo vim /etc/hostapd.conf` command to configure `hostapd.conf`, paying attention to the following fields:
 
     ```shell
-    interface=wlan0 # Network interface acting as AP hotspot
-    ssid=Sunrise # Wi-Fi name
-    wpa=2 # 0 for WPA, 2 for WPA2 (typically set to 2)
-    wpa_key_mgmt=WPA-PSK # Encryption algorithm (usually WPA-PSK)
-    wpa_passphrase=12345678 # Password
-    wpa_pairwise=CCMP # Encryption protocol (typically CCMP)
+    interface=wlan0 #Network card acting as AP hotspot
+    ssid=Sunrise #WiFi name
+    wpa=2 #0 for WPA, 2 for WPA2, usually 2
+    wpa_key_mgmt=WPA-PSK #Encryption algorithm, usually WPA-PSK
+    wpa_passphrase=12345678 #Password
+    wpa_pairwise=CCMP #Encryption protocol, usually CCMP
     ```
 
-      - For an open (password-free) hotspot, add the following content to `hostapd.conf`:
+      - For a passwordless hotspot configuration, add the following content to the `hostapd.conf` file:
 
     ```shell
     interface=wlan0
@@ -138,7 +240,7 @@ Continuously being updated....
     ignore_broadcast_ssid=0
     ```
 
-      - For a secured hotspot (with password), add the following content to `hostapd.conf`:
+      - For a password-protected hotspot configuration, add the following content to the `hostapd.conf` file:
 
     ```shell
     interface=wlan0
@@ -155,29 +257,29 @@ Continuously being updated....
     wpa_passphrase=12345678
     ```
 
-3. Configure the `isc-dhcp-server` as follows:
+3. Configure the `isc-dhcp-server` file as follows:
 
-    - Edit `/etc/default/isc-dhcp-server` by running `sudo vim /etc/default/isc-dhcp-server` and add the following defined network interface:
+    - Run `sudo vim /etc/default/isc-dhcp-server` to edit the `isc-dhcp-server` file, and add the defined network interface as follows:
     ```shell
     INTERFACESv4="wlan0"
     ```
-    - Edit `/etc/dhcp/dhcpd.conf` by running `sudo vim /etc/dhcp/dhcpd.conf` and uncomment the following line:
+    - Run `sudo vim /etc/dhcp/dhcpd.conf` to edit the `dhcpd.conf` file, and uncomment the following field:
     ```shell
       authoritative;
     ```
-    - Then append the following configuration block at the end of `/etc/dhcp/dhcpd.conf`:
+    - Then add the following configuration at the end of the `/etc/dhcp/dhcpd.conf` file:
     ```shell
-      subnet 10.5.5.0 netmask 255.255.255.0 { # Subnet and subnet mask
-      range 10.5.5.100 10.5.5.254; # IP address range available for assignment
-      option subnet-mask 255.255.255.0; # Subnet mask
-      option routers 10.5.5.1; # Default gateway
-      option broadcast-address 10.5.5.31; # Broadcast address
-      default-lease-time 600; # Default lease time in seconds
-      max-lease-time 7200; # Maximum lease time in seconds
+      subnet 10.5.5.0 netmask 255.255.255.0 { #Network segment and subnet mask
+      range 10.5.5.100 10.5.5.254;#Range of obtainable IPs
+      option subnet-mask 255.255.255.0; #Subnet mask
+      option routers 10.5.5.1;#Default gateway
+      option broadcast-address 10.5.5.31;#Broadcast address
+      default-lease-time 600;#Default lease time, in seconds
+      max-lease-time 7200;#Maximum lease time, in seconds
     }
     ```
 
-4. Stop the `wpa_supplicant` service and restart `wlan0`:
+4. Stop the `wpa_supplicant` service and restart `wlan0`
 
     ```bash
     systemctl mask wpa_supplicant
@@ -191,30 +293,30 @@ Continuously being updated....
     ```
 
 5. Start the `hostapd` service as follows:
-   - Execute the command `sudo hostapd -B /etc/hostapd.conf`:
+   - Execute the `sudo hostapd -B /etc/hostapd.conf` command
    ```bash
     root@ubuntu:~# sudo hostapd -B /etc/hostapd.conf
 
     Configuration file: /etc/hostapd.conf
     Using interface wlan0 with hwaddr 08:e9:f6:af:18:26 and ssid "sunrise"
     wlan0: interface state UNINITIALIZED->ENABLED
-   ```wlan0: AP-ENABLED
+    wlan0: AP-ENABLED
    ```
-   - Use the `ifconfig` command to configure the IP address and subnet for the wireless interface `wlan0`. Ensure this configuration matches the settings from Step 3.
+   - Use the `ifconfig` command to configure the IP and network segment of the wireless interface `wlan0`, ensuring consistency with the configuration in step 3.
     ```bash
     sudo ifconfig wlan0 10.5.5.1 netmask 255.255.255.0
     ```
-   - Finally, start the `dhcp` server. When clients connect to the hotspot, they will be assigned an IP address from the range `10.5.5.100` to `10.5.5.255`.
+   - Finally, start the DHCP server. When connected to the hotspot, the client will be assigned an IP address between `10.5.5.100` and `10.5.5.255`.
     ```bash
     sudo ifconfig wlan0 10.5.5.1 netmask 255.255.255.0
     sudo systemctl start isc-dhcp-server
     sudo systemctl enable isc-dhcp-server
     ```
 
-6. Connect to the development board's hotspot, for example, `sunrise`.
-![image-20220601203025803](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-20220601203025803.png)
+6. Connect to the development board hotspot, e.g., `sunrise`
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-20220601203025803.png" alt="image-20220601203025803" style={{ width: '100%' }} />
 
-7. To switch back to `Station` mode, follow these steps:
+7. To switch back to Station mode, you can do the following:
 
     [RDK X5]
 
@@ -222,7 +324,7 @@ Continuously being updated....
     # Stop hostapd
     killall -9 hostapd
 
-    # Clear the IP address of wlan0
+    # Clear wlan0 address
     ip addr flush dev wlan0
     sleep 0.5
     ifconfig wlan0 down
@@ -233,11 +335,11 @@ Continuously being updated....
     systemctl unmask wpa_supplicant
     systemctl restart wpa_supplicant
 
-    # Reinstall the Wi-Fi driver
+    # Reload wifi driver
     rmmod aic8800_fdrv
     modprobe aic8800_fdrv
 
-    # Connect to a hotspot; refer to the previous section "Wireless Network" for detailed instructions.
+    # Connect to hotspot; see the previous section "Wireless Network" for details
     wifi_connect "WiFi-Test" "12345678"
     ```
 
@@ -247,7 +349,7 @@ Continuously being updated....
     # Stop hostapd
     killall -9 hostapd
 
-    # Clear the IP address of wlan0
+    # Clear wlan0 address
     ip addr flush dev wlan0
     sleep 0.5
     ifconfig wlan0 down
@@ -258,25 +360,24 @@ Continuously being updated....
     systemctl unmask wpa_supplicant
     systemctl restart wpa_supplicant
 
-    # Connect to a hotspot; refer to the previous section "Wireless Network" for detailed instructions.
+    # Connect to hotspot; see the previous section "Wireless Network" for details
     wifi_connect "WiFi-Test" "12345678"
     ``` -->
 
 ## DNS Service
 
-<!-- Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=13 -->
 
 DNS (Domain Name Server) is a server that translates domain names into their corresponding IP addresses.
 
-The DNS configuration on the development board is managed via the `/etc/systemd/resolved.conf` file. Users can modify this file to configure DNS settings as follows:
+The DNS configuration of the development board is managed through the `/etc/systemd/resolved.conf` file. Users can modify this file to complete DNS-related configurations as follows:
 
-1. Edit the `resolved.conf` file and add DNS server addresses, for example:
+1. Edit the `resolved.conf` file and add the DNS server address, for example:
 
    ```bash
    DNS=8.8.8.8 114.114.114.114
    ```
 
-2. Apply the DNS configuration with the following commands:
+2. Apply the DNS configuration using the following commands:
 
    ```bash
    sudo systemctl restart systemd-resolved
@@ -287,11 +388,11 @@ The DNS configuration on the development board is managed via the `/etc/systemd/
 
 ## Proxy Configuration
 
-Proxy configuration refers to setting up a network proxy. In network communication, a proxy server acts as an intermediary between the client and the destination server. The client sends requests to the proxy server, which then forwards them to the target server. Similarly, responses from the target server are returned to the client via the proxy server.
+Proxy configuration refers to setting up a network proxy. In network communication, a proxy server acts as an intermediary between the client and the target server. The client's request is first sent to the proxy server, which then forwards it to the target server. The target server's response is also returned to the client through the proxy server.
 
-Edit either the `~/.bashrc` or `/etc/environment` file. Edit `~/.bashrc` to configure the proxy for the current user, or edit `/etc/environment` to configure it system-wide for all users.
+Edit the `~/.bashrc` or `/etc/environment` file. If configuring the proxy for the current user, edit `~/.bashrc`; if configuring the proxy for all users, edit `/etc/environment`.
 
-Add the following lines to the file (using an HTTP proxy as an example):
+Add the following content to the file (using HTTP proxy as an example):
 
 ```
 http_proxy=http://proxy_server_address:port
@@ -309,32 +410,32 @@ source ~/.bashrc
 ## System Update
 
 :::warning
-Do not execute before the product is officially released.
+Do not execute before the product is released
 :::
 
-For system security and stability, it is recommended that users update the system using the `apt` command after installation.
+For system security and stability reasons, it is recommended that users update the system using the `apt` command after installing the system.
 
-The `/etc/apt/sources.list` file contains the list of software repositories used by the `apt` command. Before installing software, you should first update the package list using `apt`.
+The `/etc/apt/source.list` file contains the list of software sources for the `apt` command. Before installing software, you need to update the package list using the `apt` command.
 
-Open a terminal and run the following command:
+First, open the terminal command line and enter the following command:
 
 ```bash
 sudo apt update
 ```
 
-Next, upgrade all installed packages to their latest versions with:
+Next, upgrade all installed packages to the latest versions using the following command:
 
 ```bash
 sudo apt full-upgrade
 ```
 
 :::tip
-It is recommended to use `full-upgrade` instead of `upgrade`, as `full-upgrade` will also update dependency packages when dependencies change.
+It is recommended to use the `full-upgrade` option instead of `upgrade` so that dependency packages are also updated synchronously when related dependencies change.
 
-When running `sudo apt full-upgrade`, the system will display the amount of data to be downloaded and the disk space required. However, `apt` does not check whether sufficient disk space is available. It is advisable to manually verify available disk space using the `df -h` command. Additionally, downloaded `.deb` files during the upgrade process are stored in `/var/cache/apt/archives`. You can free up disk space by clearing this cache with `sudo apt clean`.
+When running the `sudo apt full-upgrade` command, the system will prompt you about the data download and disk space usage, but `apt` does not check if there is sufficient disk space. It is recommended that users manually check using the `df -h` command. Additionally, the deb files downloaded during the upgrade are saved in the `/var/cache/apt/archives` directory. Users can delete the cache files using the `sudo apt clean` command to free up disk space.
 :::
 
-After running `apt full-upgrade`, drivers, kernel files, and some system software may be reinstalled. It is recommended to manually reboot the device to apply all updates:
+After executing the `apt full-upgrade` command, drivers, kernel files, and some system software may be reinstalled. It is recommended that users manually reboot the device for the updates to take effect using the following command:
 
 ```bash
 sudo reboot
@@ -342,25 +443,9 @@ sudo reboot
 
 ## Bluetooth Configuration
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=9
 
 ### Initialization
-
-Bluetooth functionality is disabled by default on the development board. You need to run the `/usr/bin/startbt6212.sh` script to initialize it. This script performs the following tasks:
-
-- Resets the Bluetooth module.
-- Creates the `messagebus` user and group, which are required by the `dbus-daemon` process.
-- Runs `brcm_patchram_plus` to load the Bluetooth driver and firmware.
-- Continuously checks for the existence of the `/sys/class/bluetooth/hci0` directory to confirm that the Bluetooth driver is running properly.
-- Displays **Done setting line discipline** when Bluetooth initialization succeeds.
-- Executes `hciconfig hci0 up` to bring the Bluetooth interface up.
-- Executes `hciconfig hci0 piscan` to enable Bluetooth scanning (this step can be omitted depending on your needs).
-
-The log output after successful script execution is shown below:
-
-![image-20220601172145987](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172145987.png)
-
-Additionally, you can verify whether Bluetooth processes are running normally with the following command:
+Users can use commands to check whether the Bluetooth process is normal as follows:
 
 ```bash
 ps ax | grep "/usr/bin/dbus-daemon\|/usr/lib/bluetooth/bluetoothd"
@@ -369,36 +454,42 @@ ps ax | grep "/usr/bin/dbus-daemon\|/usr/lib/bluetooth/bluetoothd"
 /usr/lib/bluetooth/bluetoothd
 ```
 
-### Network Pairing and Connection
+Users can use commands to check whether the Bluetooth controller is normal as follows (note that the `<MAC Addr>` in `Controller <MAC Addr>` in the command example below will vary depending on the actual Bluetooth controller):
+```bash
+bluetoothctl list
+Controller F0:68:E3:22:7E:91 ubuntu [default]
+```
 
-Run `sudo bluetoothctl` to enter the interactive Bluetooth configuration interface. If the device information appears as shown in the image below, the Bluetooth adapter has been recognized. Use the `show` command to view Bluetooth details, paying attention to the `powered` and `discoverable` states.
+### Network Configuration and Connection
 
-![image-20220601172604051](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png)
+Execute `sudo bluetoothctl` to enter the Bluetooth configuration interface in interactive mode. If device information similar to the image below appears, it means the Bluetooth device has been recognized. Then use `show` to view Bluetooth information, paying attention to the `powered` and `discoverable` status of Bluetooth.
 
-Execute `power on` to enable Bluetooth, as shown below:
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png" alt="image-20220601172604051" style={{ width: '100%' }} />
 
-![image-20220601172501882](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png)
+Execute `power on` to enable Bluetooth, as shown in the image below:
 
-To make the Bluetooth device discoverable by nearby devices, run `discoverable on` to enable Bluetooth and set it to discoverable mode, as illustrated below:
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png" alt="image-20220601172501882" style={{ width: '50%' }} />
 
-![image-20220601172648853](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png)
+To allow Bluetooth to be discovered by nearby devices, execute `discoverable on` to enable Bluetooth and turn on the Bluetooth discoverable property, as shown in the image below:
 
-At this point, scanning with a smartphone or computer will reveal a Bluetooth device named `ubuntu`:
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png" alt="image-20220601172648853" style={{ width: '100%' }} />
 
-![image-20220601175322650](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650-en.jpg)
+At this point, using a phone or computer to scan for Bluetooth will reveal a Bluetooth device named `ubuntu`:
 
-Next, test active Bluetooth scanning. In the `bluetoothctl` interactive interface, type `scan on` to start active scanning. The system will periodically print nearby devices—in this case, my smartphone has been detected. Use `scan off` to stop scanning and display a summary of discovered Bluetooth devices:
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650-en.jpg" alt="image-20220601175322650" style={{ width: '100%' }} />
 
-![image-20220601154131158](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png)
+Next, test the active scanning function of Bluetooth. Enter `scan on` in the `bluetoothctl` interactive interface to enable active scanning. It will periodically print nearby devices. It should have discovered your phone device. Use `scan off` to disable the scanning function and summarize the list of scanned Bluetooth devices:
 
-![image-20220601154253947](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png" alt="image-20220601154131158" style={{ width: '100%' }} />
 
-Then comes pairing with other Bluetooth devices:
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png" alt="image-20220601154253947" style={{ width: '100%' }} />
 
-- Pairing command: `pair [targetMAC]`. After entering this command, type `yes` when prompted, and select the `Pair` option on the remote Bluetooth device to complete pairing.
+Then, proceed to pair with other Bluetooth devices:
+
+- Pairing command: `pair [targetMAC]`. After entering this command, type `yes` as prompted, and select the `Pair` option on the peer Bluetooth device to complete pairing.
 
 - After successful pairing, you can use `trust [targetMAC]` to enable automatic connection the next time.
 
-![image-20220601154414717](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png" alt="image-20220601154414717" style={{ width: '100%' }} />
 
-After the above steps, basic Bluetooth scanning and pairing functionality is complete. For more advanced features, please refer to the official `BlueZ` documentation.
+After the above operations, the basic functions of Bluetooth scanning and pairing are completed. For more advanced features, please refer to the official help documentation of `BlueZ`.

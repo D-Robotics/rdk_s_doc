@@ -1,0 +1,412 @@
+---
+sidebar_position: 1
+---
+
+# 1.1.2 Developer Kit
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="image-rdk_600_mainboard_overview" style={{ width: '100%' }} />
+
+:::danger Note
+
+1. This product is still in the development stage, and the content described is subject to change.
+2. For RDK S600 Early Access users, please read first: [**RDK S600 Early Access Note**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink).
+3. Before use, please read [**RDK S600 Early Prototype Status Description**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd) for hardware-related information.
+
+:::
+
+:::warning Warning
+
+1. The RDK S600 uses an external power supply and must comply with relevant regional regulatory standards.
+2. This product should be used in a well-ventilated environment. When used in an enclosed space, appropriate heat dissipation measures must be taken.
+3. During use, the product should be placed on a stable, flat, non-conductive surface.
+4. Damage caused by connecting incompatible devices to the RDK S600 will not be covered for repair.
+5. All peripheral devices used with this product must comply with the relevant standards of the country of use and be clearly marked to ensure safety and performance requirements are met. Peripheral devices include, but are not limited to, keyboards, monitors, and mice used in conjunction with the RDK S600.
+6. Cables and connectors for all peripheral devices used with this product must have adequate insulation to meet relevant safety requirements.
+
+:::
+
+:::warning Safety Instructions
+
+To avoid malfunction or damage to this product, please observe the following:
+
+1. During operation, do not expose to water or moisture, place on conductive surfaces, or contact any heat source, to ensure reliable operation within normal ambient temperatures.
+2. During assembly, avoid mechanical or electrical damage to printed circuit boards and connectors.
+3. When powered on, avoid touching the printed circuit board and board edges to reduce the risk of electrostatic discharge damage.
+
+:::
+
+:::info Tip
+
+For peripherals with an independent external power supply, the development board should be powered on first, followed by the peripherals. If a peripheral is powered on before the S600 development board and causes reverse current to the main board, the development board may trigger a protection state and fail to start.
+
+:::
+
+## Product Introduction
+
+The D-Robotics RDK S600 series developer kit is equipped with the S600 intelligent computing chip, with the BPU delivering up to 560 TOPS of computing power. It is a development board designed for intelligent computing and robotics applications, featuring rich interfaces, extreme ease of use, and a unique heterogeneous design that can simultaneously meet the demands of perception, inference, and real-time motion control, reducing the size and complexity of the control system.
+
+### Main Specifications
+
+| Category       | Specifications                                                                                                                                                                                                                                                                                                                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **CPU**        | • 18x Arm® Cortex®-A78AE CPU 2.0GHz                                                                                                                                                                                                                                                                                                                                                      |
+| **MCU**        | • 6x Arm® Cortex®-R52+ MCU (1× DCLS, 2× Split-Lock)                                                                                                                                                                                                                                                                                                                                      |
+| **BPU**        | • 4x BPU Nash core provides up to 560 TOPS                                                                                                                                                                                                                                                                                                                                               |
+| **Memory**     | • 32/64GB LPDDR5, 256-bit, up to 6400MT/s                                                                                                                                                                                                                                                                                                                                                |
+| **Storage**    | • 64/256GB UFS 3.1<br />• M.2 Key M Connector for NVMe SSD                                                                                                                                                                                                                                                                                                                               |
+| **USB**        | • 6x USB 3.2 Gen 1x1 Type-A<br />• 1x USB 2.0 Type-C (for flashing and debugging)                                                                                                                                                                                                                                                                                                        |
+| **Network**    | • M.2 Key E Connector for Wi-Fi&BT Module<br />• 2x 1GbE RJ45 Ports<br />• 2x 10GbE RJ45 Ports<br />• 1x 1GbE RJ45 Ports (MCU-Domain)                                                                                                                                                                                                                                                     |
+| **Display**    | • 1x HDMI 2.1                                                                                                                                                                                                                                                                                                                                                                            |
+| **Expansion**  | • 2x Camera Expansion Connector<br />• 1x MCU Port Expansion Connector                                                                                                                                                                                                                                                                                                                   |
+| **Connectors** | • 1x 2-pin RTC Battery Connector<br />• 1x 4-pin Fan Connector<br />• 1x 12-pin Automotive Connector<br />• 1x JTAG Debug Connector (for Main and MCU)<br />• 1x 12-pin MCU-Domain CAN(5x) Connector<br />• 1x 10-pin Main-Domain CAN(4x) Connector<br />• 1x 10-pin MCU-Domain UART(2x) & Main-Domain UART(2x) Connector<br />• 1x 10-pin PCM Connector<br />• 2x 22-pin MIPI Connector |
+| **Power**      | • 12~28V<br />• 4-pin Connector                                                                                                                                                                                                                                                                                                                                                          |
+| **Size**       | • 140mm x 123mm x 78mm                                                                                                                                                                                                                                                                                                                                                                   |
+
+### Model Description
+
+| Product Name   | Model       | Memory       | Storage     | Remarks      |
+| ------------ | ----------- | ----------- | --------- | -------- |
+| RDK S600 32G | KS6X032064C | 32GB LPDDR5 | 64GB UFS   | Official Model |
+| RDK S600 64G | KS6X064256C | 64GB LPDDR5 | 256GB UFS  | Official Model |
+| RDK S600 32G | KS6X032256C | 32GB LPDDR5 | 256GB UFS  | Test Model     |
+
+### Topology Diagram
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_architecture_diagram.png" alt="image-rdk_s600_architecture_diagram.png" style={{ width: '100%' }} />
+
+### Interface Diagram
+
+**V0P1 Interface Diagram:**
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface_V0P1.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
+
+**V0P2 Interface Diagram:**
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
+
+| Ref.     | Function                 | Ref. | Function             | Ref. | Function           |
+| -------- | ------------------------ | ---- | -------------------- | ---- | ------------------ |
+| D59      | System LED               | J11  | MIPI Camera Interface      | J22  | Main Board Function Interface      |
+| D60      | Power LED                  | J12  | Camera Expansion Interface          | K1   | RST Button          |
+| D61      | Flash LED                  | J13  | MIPI Camera Interface         | K2   | WAKE Button         |
+| J1       | Main Board Power Interface              | J14  | Camera Expansion Interface          | SW2  | Burn Switch          |
+| J2       | 699-Pin B2B Connector     | J15  | MCU Expansion Interface          | SW3  | Power Switch          |
+| J3       | JTAG Interface (MCU&MAIN)      | J16  | MCU-CAN Interface          | SW6  | MCU-CAN Resistor Selection  |
+| J4       | Flash Connect (Burn, Main&MCU Debugging) | J17  | MAIN-CAN Interface         | SW7  | MAIN-CAN Resistor Selection |
+| J5       | M.2 Key E Interface            | J18  | UART Interface (MAIN&MCU) | U44  | 2x 1GbE           |
+| J6       | M.2 Key M Interface            | J19  | PCM+I2C Interface          | U45  | 2x 10GbE          |
+| J7/J8/J9 | USB 3.0 Type-A Interface        | J20  | RTC Battery Interface          | U80  | 1x 1Gbe (MCU)     |
+| J10      | HDMI Interface                 | J21  | Fan Interface              |      |                   |
+
+## Interface Description{#interface}
+
+Interface Definition: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/D-Robotics_RDK_S600_Connector_Application_Note_V0P1-20251219.xlsx">D-Robotics_RDK_S600_Connector_Application_Note_V0P1.xlsx</a>
+
+### Main Board Power Interface (J1)
+
+:::warning Note
+
+For V0P1 version hardware, please use the power adapter provided by D-Robotics.
+
+:::
+
+:::info Tip
+
+- The RDK S600 developer kit supports 12V-28V power supply, supports a maximum current of 16A, 4-pin Microfit Connector.
+- The power adapter provided by D-Robotics has a rated output voltage of 24V and a maximum output current of 8A.
+
+:::
+
+### 699-Pin B2B Connector (J2)
+
+The RDK S600 developer kit provides a 699-Pin connector for connecting the RDK S600 system-on-module.
+
+:::info Tip
+
+If you need to use the 699-Pin B2B Connector, please contact FAE in advance for more detailed information.
+
+:::
+
+### JTAG Interface MCU&MAIN (J3)
+
+The RDK S600 developer kit provides a 10-Pin connector for JTAG debugging of the RDK S600 system-on-module MCU.
+
+### Flash Connect Burn, Main&MCU Debugging (J4)
+
+USB Type-C (J16) is only used for burning and debugging. It is not a standard full-featured USB Type-C port and includes the following functions:
+
+- Debug serial port. Hardware uses two `CH340` chips to convert the debug serial ports of the Main domain and MCU domain of the core module to a USB interface. Users can use this interface for various debugging tasks. The first time you use this interface, you need to install the CH340 driver on your computer. You can search for `CH340 serial driver` keyword to download and install. The parameters of the computer's serial tool should be configured as follows:
+
+  - Baud rate: 921600
+  - Data bits: 8
+  - Parity: None
+  - Stop bits: 1
+  - Flow Control: None
+
+- USB download interface. The download interface provided by the RDK S600 development board is used for firmware download. For details, please refer to [1.2 System Flashing](../../02_install_os/rdk_s600.md)
+
+:::info Tip
+The USB Type-C port provided by the RDK S600 developer kit only supports Device mode.
+:::
+
+### M.2 Key E Interface (J5)
+
+Default configuration for connecting PCIe Wi-Fi and USB 2.0 BT modules, also supports UART 4-wire BT modules. PCIe supports Gen3x1. Provides SDIO interface, PCM audio interface, no LED and ALERT signals.
+
+:::warning Note
+
+V0P1 version hardware does not support the following features:
+- Does not support Wi-Fi cards using the SDIO protocol
+- Does not support PCM audio
+
+:::
+
+:::info Tip
+
+1. If you need to support Wi-Fi/Bluetooth wake-up of the S600, please contact D-Robotics engineers for support.
+2. When the system is in light sleep and deep sleep modes, the VDD_AON_PERI_3V3 power supply remains on, with a maximum supply current of 750mA.
+
+:::
+
+### M.2 Key M Interface (J6)
+
+Used for connecting PCIe solid-state drives, supports Gen4x2, has ALERT signal, no LED signal.
+
+:::warning Note
+
+Wake-up function is not supported.
+:::
+
+:::info Tip
+- In V0P1 version hardware, I2C7 is default used for communication with the M.2 KEY M interface, RTC IC, and Fan speed control IC. The I2C addresses of the RTC IC and Fan speed control IC are 0X32 and 0X2F respectively (excluding read/write bit).
+- When the system is in light sleep and deep sleep modes, the VDD_PERI_3V3 power supply is turned off, with a maximum supply current of 700mA.
+
+:::
+
+### USB 3.0 Type-A Interface (J7/J8/J9)
+
+The RDK S600 development board provides six PCIe-expanded USB 3.0 standard interfaces, allowing up to 6 USB peripherals to be connected simultaneously. Each USB 3.0 interface supports a maximum output power of 5V/1A.
+
+:::info Tip
+
+- The USB 3.0 interfaces provided by the RDK S600 development board only support Host mode.
+- Note the [USB 2.0 Camera Access Limitation](../../../03_Basic_Application/01_Image/02_usb_camera.md#USB2.0 Camera Access Instructions).
+  :::
+
+### HDMI Interface (J10)
+
+The RDK S600 developer kit provides one HDMI display interface, supporting up to 2k 60-frame display mode. After power-on, the developer kit outputs the Ubuntu graphical interface through the HDMI interface. With specific sample programs, it also supports preview display functions for camera and video stream feeds.
+
+### MIPI Camera Interface (J11/J13)
+
+The RDK S600 includes 2 camera expansion interfaces, which can be used to connect monocular or binocular cameras. Each MIPI camera interface provides 1 MIPI DPHY, 1 IIC, and 1 3.3V power supply. See [Interface Description](#interface) for MIPI camera interface signal definitions.
+
+:::info Tip
+
+- IIC level standard is 3.3V.
+- Maximum current for 3.3V supply is 1A.  
+:::
+
+### Camera Expansion Interface (J12/J14)
+
+The RDK S600 developer kit includes 2 camera expansion interfaces. The camera expansion interface uses an 80-pin board-to-board connector, and each camera expansion interface provides the following functions. See [Interface Description](#interface) for camera expansion interface signal definitions.
+
+- 2 D-PHY or configurable to 1 D-PHY + 1 C-PHY.
+- 2 IIC interfaces.
+- 4 PWM signals for camera triggering.
+- 2 sensor error signals.
+- 2 deserializer lock signals.
+- 2 deserializer error signals.
+- 2 deserializer PWRON signals.
+- 2 POC EN signals.
+- 2 POC INT signals.
+- 12V power supply, max support 2A.
+- 3.3V power supply, max support 1A.
+- 1.8V power supply, max support 50mA, used for signal pull-up/pull-down.
+
+:::warning Note
+
+In V0P1 hardware version, IIC1 and MIPI RX1 of J12 are temporarily unavailable. 
+:::
+
+:::info Tip
+
+The maximum power supply capacity for 12V is 2A, please pay attention to the total power consumption of the sensors used.
+
+:::
+
+### MCU Expansion Interface (J15)
+
+The RDK S600 developer kit includes an 80-Pin expansion interface MCU Expansion Connector, hereinafter referred to as MCU 80-Pin Connector.
+
+- Power signals: VDD_MCU_PERI_5V, VDD_MCU_PERI_3V3, VDDIO_MCU_3V3, VDDIO_MCU_1V8
+- Communication interfaces:
+  - I2C13, configured with equivalent 2.2K pull-up resistors on the motherboard.
+  - I2C14, configured with equivalent 2.2K pull-up resistors on the motherboard.
+  - SPI4, SPI6, SPI8, SPI13.
+- CAN interfaces: CAN1, CAN2, CAN3, CAN4, CAN10
+- Other signals: GPIO, PWM, ADC, PPS signal
+
+:::warning Note
+
+- In V0P1 hardware version, SPI4 cannot be used, and SPI6 cannot be used on the MCU daughter board.    
+- In V0P1 hardware version, the MCU expansion board provided by D-Robotics must be used.
+:::
+
+:::info Tip
+
+1. The MCU 80-Pin Connector includes IOs with two logic levels: 1.8V and 3.3V. For detailed information, please refer to [Interface Description](#interface).
+2. When the system is in light sleep, the VDD_MCU_PERI_5V and VDD_MCU_PERI_3V3 power supplies remain on, with a maximum supply current of 1000mA each.
+3. When the system is in deep sleep, the VDD_MCU_PERI_5V and VDD_MCU_PERI_3V3 power supplies are turned off.
+4. The maximum supply current for VDDIO_MCU_3V3 and VDDIO_MCU_1V8 is 50mA each, only for low-power applications such as level shifting, pull-up/down resistors, ADC voltage division, etc. When the system is in light sleep mode, the VDDIO_MCU_3V3 and VDDIO_MCU_1V8 power supplies remain on. When the system is in deep sleep mode, the VDDIO_MCU_3V3 and VDDIO_MCU_1V8 power supplies are turned off.
+
+:::
+
+### MCU-CAN Interface (J16)
+
+The RDK S600 developer kit includes a CAN bus interface for the MCU domain. This interface uses a 12-pin latching connector and has 5 MCU domain CAN interfaces. The 120Ω resistor can be connected or disconnected via the SW6 switch. See [Interface Description](#interface) for MCU-CAN interface signal definitions.
+
+### MAIN-CAN Interface (J17)
+
+The RDK S600 developer kit includes a CAN bus interface for the MAIN domain. This interface uses a 10-pin latching connector and has 4 MAIN domain CAN interfaces. The 120Ω resistor can be connected or disconnected via the SW7 switch. See [Interface Description](#interface) for MAIN-CAN interface signal definitions.
+
+:::warning Note
+
+This interface is currently unavailable, pending driver updates.
+
+:::
+
+### UART Interface MAIN&MCU (J18)
+
+The RDK S600 developer kit includes a UART interface for the MAIN domain and MCU. This interface uses a 10-pin latching connector and has 2 MCU domain and 2 MAIN domain UART interfaces. See [Interface Description](#interface) for UART interface signal definitions.
+
+:::warning Note
+
+In V0P1 version hardware, the MAIN domain UART is temporarily unavailable.
+
+:::
+
+### PCM+I2C Interface (J19)
+
+This interface uses a 14-pin latching connector, featuring 2 PCM and 1 I2C interface for connecting audio-related function daughter cards. See [Interface Description](#interface) for PCM audio interface signal definitions.
+
+:::warning Note
+
+In V0P1 version hardware, this interface is temporarily unavailable.
+
+:::
+
+### RTC Battery Interface (J20)
+
+The RDK S600 developer kit includes a battery interface for connecting an external RTC battery.
+
+### Fan Interface (J21)
+
+The FAN Connector is used to connect a cooling fan and supports fan speed control.
+
+:::info Tip
+
+The maximum supply current for 12V is 200mA. When the system is in light sleep and deep sleep modes, the VDD_PERI_12V power supply is turned off.
+
+:::
+
+### Main Board Function Interface (J22)
+
+The RDK S600 developer kit main board has an Automatic EXT CTRL Connector 12-Pin connector, mainly used for:
+
+- Extending the system operation LED and power indicator LED on the main board to the outside for easy observation of the board's operating status.
+- Extending the burn switch, sleep button, reset button, and power switch to the outside for manual operation after complete assembly.
+
+:::info Tip
+
+1. The green LED indicates whether the main board's small system is powered on, and the orange LED indicates whether the MAIN domain system of the main board is operating normally.
+2. The Automatic EXT CTRL Connector 12-Pin interface power supply is only allowed to connect circuits involved in the function description. Connecting high-power loads is prohibited.
+3. When the system is in light sleep and deep sleep modes, the VDD_AON_PERI_5V and DCIN_CONN power supplies remain on, while the VDD_PERI_3V3 power supply is turned off. When connecting an external daughter board, a short-circuit protection circuit should be reserved to prevent power supply anomalies on the main board due to short circuits on the external daughter board.
+4. The maximum output currents for VDD_AON_PERI_5V, DCIN_CONN, and VDD_PERI_3V3 are 50mA, 5mA, and 100mA respectively.
+
+:::
+
+### 2x 1GbE (U44)
+
+Two Gigabit Ethernet interfaces, compatible with 1000BASE-T and 100BASE-T standards, support auto-negotiation for rate switching.
+
+| Position | Label | Function Description                        | IP Configuration Method        | Default IP Address |
+| -------- | ----- | ------------------------------------------- | ------------------------------ | ------------------ |
+| Lower    | eth0  | General Ethernet interface, requires user IP configuration | External DHCP assignment or manual static configuration | None               |
+| Upper    | eth1  | Management or dedicated communication interface, built-in static IP address | Fixed static IP                | 192.168.127.10     |
+
+### 2x 10GbE (U45)
+
+:::warning Note
+
+V0P1 hardware version does not currently support 10G base-T.
+
+:::
+
+This interface consists of 2 10-Gigabit Ethernet interfaces.
+
+### 1x 1GbE MCU (U80)
+
+This interface is the Gigabit Ethernet port for the MCU domain.
+
+## Switches, Buttons, and LEDs Description
+
+### Indicator LEDs (D59/D60/D61)
+
+| Ref. | Name       | Off            | Steady On       | Blinking        |
+| ---- | ---------- | -------------- | --------------- | --------------- |
+| D59  | System LED | System abnormal | System abnormal | System running normally |
+| D60  | Power LED  | Power off      | Power on        | -               |
+| D61  | Flash LED  | Normal boot mode | DFU flashing mode | -               |
+
+### Switches (SW2/SW3)
+
+| Ref. | Name       | OFF            | ON             | Remarks              |
+| ---- | ---------- | -------------- | -------------- | -------------------- |
+| SW2  | Burn Switch | Normal boot mode | DFU flashing mode | Controlled by jumper |
+| SW3  | Power Switch | Power off      | Power on       | △ position is ON     |
+
+### DIP Switches (SW6/SW7)
+
+| Ref. | Name            | OFF | ON  | Remarks |
+| ---- | --------------- | --- | --- | ------- |
+| SW6  | MCU-CAN1 120Ω   | OFF | ON  | -       |
+|      | MCU-CAN2 120Ω   | OFF | ON  | -       |
+|      | MCU-CAN3 120Ω   | OFF | ON  | -       |
+|      | MCU-CAN4 120Ω   | OFF | ON  | -       |
+|      | MCU-CAN5 120Ω   | OFF | ON  | -       |
+| SW7  | MAIN-CAN1 120Ω | OFF | ON  | -       |
+|      | MAIN-CAN2 120Ω | OFF | ON  | -       |
+|      | MAIN-CAN3 120Ω | OFF | ON  | -       |
+|      | MAIN-CAN4 120Ω | OFF | ON  | -       |
+
+### Buttons (K1/K2)
+
+| Ref. | Name       | OFF            | ON             | Remarks              |
+| ---- | ---------- | -------------- | -------------- | -------------------- |
+| K1   | RST Button  | Normal boot mode | DFU flashing mode | Controlled by jumper |
+| K2   | WAKE Button | Power off      | Power on       | △ position is ON     |
+
+## Connector Models
+
+| Connector | Connector Model         | Manufacturer                 |
+| :-------- | :---------------------- | :--------------------------- |
+| J1        | 430450400               | Molex                        |
+| J2        | 2034560003              | Molex                        |
+| J3        | 356-110A0CMBB1          | Shenzhen Guangdezhong Electronics Technology Co., Ltd. |
+| J4        | U262-161N-4BVC11        | XKB Connectivity             |
+| J5        | X1302WVS-67CE-LPV01     | XKB Connectivity             |
+| J6        | X1302WVS-67CM-LPV01     | XKB Connectivity             |
+| J7/J8/J9  | USB-303WSD-BRY          | XUNPU                        |
+| J10       | A71-06H0-111N1          | XKB Connectivity             |
+| J11/J13   | AFC01-S22FCA-00         | JS (Ju Shuo Electronics)     |
+| J12/J14   | DY01-080S-B             | KEL Corporation              |
+| J15       | DY01-080S-B             | KEL Corporation              |
+| J16       | X1251WRS-12HF-LPSW      | XKB Connectivity             |
+| J17/J18   | X1251WRS-10HF-LPSW      | XKB Connectivity             |
+| J19       | X1251WRS-14HF-LPSW      | XKB Connectivity             |
+| J20       | HDGC1002WV-S-2P         | HDGC (Huade Gongchuang)      |
+| J21       | 470531000               | Molex                        |
+| J22       | HX JN1.27-2X6 WZ H4.9   | Hanxia                       |
+| U44       | LPJG17561BGNL           | LINK-PP                      |
+| U45       | LPJM17012BHNL           | LINK-PP                      |
+| U80       | LPJG4806FBNL            | LINK-PP                      |

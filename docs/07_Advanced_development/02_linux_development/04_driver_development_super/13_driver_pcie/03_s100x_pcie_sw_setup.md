@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
-sidebar_products: RDK S100, RDK S600
 ---
 # PCIe 模块功能在 kernel 下的配置
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
 ```
 
 在 Kernel 中，PCIe 的配置分为 defconfig 和 DTS 两部分：
@@ -83,8 +83,8 @@ CONFIG_PCIE_HOBOT_DEBUG=y
 - 主要是 S100支持 PCIE x2 + GMAC0 + GMAC1, 而 S600支持 PCIE X2 + PCIE X2模式。
 - 细节参考下文以及 dts 描述。
 :::
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
+
+<DocScope products="RDK S100">
 S100 PCIE 的链路支持3种模式：
 - 0x1: PCIE0 x4 Lane;
 - 0x4: PCIE0 x2 Lane + GMAC0 + GMAC1;
@@ -101,8 +101,8 @@ S100 PCIE 的链路支持3种模式：
 
 ...
 ```
-</TabItem>
-<TabItem value="S600" label="S600">
+</DocScope>
+<DocScope products="RDK S600">
 S600 PCIE 的链路支持3种模式：
 - 0x1: PCIE0 x4 Lane;
 - 0x2: PCIE0 x2 Lane + PCIE1 x2 Lane;
@@ -115,5 +115,4 @@ S600 PCIE 的链路支持3种模式：
     };
 ...
 ```
-</TabItem>
-</Tabs>
+</DocScope>

@@ -395,21 +395,21 @@ V0P1 硬件版本暂不支持 10G base-T。
 | :------- | :-------------------- | :--------------------------- |
 | J1       | 430450400             | Molex                        |
 | J2       | 2034560003            | Molex                        |
-| J3       | 356~110A0CMBB1        | 深圳市广德众电子科技有限公司 |
-| J4       | U262~161N-4BVC11      | 中国星坤                     |
+| J3       | 356-110A0CMBB1        | 深圳市广德众电子科技有限公司 |
+| J4       | U262-161N-4BVC11      | 中国星坤                     |
 | J5       | X1302WVS-67CE-LPV01   | 中国星坤                     |
 | J6       | X1302WVS-67CM-LPV01   | 中国星坤                     |
 | J7/J8/J9 | USB-303WSD-BRY        | XUNPU （讯普）               |
-| J10      | A71~06H0~111N1        | 中国星坤                     |
+| J10      | A71-06H0-111N1        | 中国星坤                     |
 | J11/J13  | AFC01-S22FCA-00       | JS （钜硕电子）              |
-| J12/J14  | DY01~080S-B           | KEL Corporation              |
-| J15      | DY01~080S-B           | KEL Corporation              |
+| J12/J14  | DY01-080S-B           | KEL Corporation              |
+| J15      | DY01-080S-B           | KEL Corporation              |
 | J16      | X1251WRS-12HF-LPSW    | 中国星坤                     |
 | J17/J18  | X1251WRS-10HF-LPSW    | 中国星坤                     |
 | J19      | X1251WRS-14HF-LPSW    | 中国星坤                     |
 | J20      | HDGC1002WV-S-2P       | HDGC （华德共创）            |
 | J21      | 470531000             | Molex                        |
-| J22      | HX JN1.27~2X6 WZ H4.9 | hanxia(韩下)                 |
+| J22      | HX JN1.27-2X6 WZ H4.9 | hanxia(韩下)                 |
 | U44      | LPJG17561BGNL         | LINK-PP                      |
 | U45      | LPJM17012BHNL         | LINK-PP                      |
 | U80      | LPJG4806FBNL          | LINK-PP                      |

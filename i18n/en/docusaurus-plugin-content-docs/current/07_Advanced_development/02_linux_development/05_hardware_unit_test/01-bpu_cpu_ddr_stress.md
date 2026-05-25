@@ -38,7 +38,6 @@ The CPU-BPU-DDR stress test primarily evaluates the performance and stability of
 	```
 
 	- Thread Synchronization and Management: Functions like `pthread_join()` ensure proper thread execution and synchronization.
-
 - **stressapptest DDR Stress Test Principle**: DDR memory stress testing primarily involves extensive memory allocation, access, and data exchange through high memory usage, frequent read/write operations, and memory bandwidth consumption.
 	- Memory Allocation: During memory stress testing, `stressapptest` allocates a specified amount of memory according to the `-M` parameter (e.g., `-M 8192`).
 
@@ -82,11 +81,13 @@ The CPU-BPU-DDR stress test primarily evaluates the performance and stability of
 - **Test Purpose**: Ensure the BPU produces correct results consistent with expectations during computational tasks, and verify that it remains stable under prolonged high-load operation without crashing or producing errors.
 
 - **tc_hbdk3 BPU Stress Test Principle**: Load models containing extensive computational tasks and leverage the BPU for accelerated computation, thereby conducting BPU stress testing.
+
 - **Command Analysis**: After running the stress test script, execute the following command: `tc_hbdk3 -t $1 -b $2 -f $HBM_FILE -i $SRC_FILE -n $MODEL_NAME -o $OUTPUT_0_0,$OUTPUT_0_1,$OUTPUT_1_0,$OUTPUT_1_1 -g 0 -c 0`
 	- `-t $1`: Passes the value of the `$portion` parameter, allowing flexible control over stress test intensity and enabling selection of appropriate load levels based on different test requirements.
 	- `-b $2`: Specifies the number of BPU cores to use.
 	- `-f $HBM_FILE`: The `-f` parameter specifies the HBM file.
 	- `-i $SRC_FILE`: This file contains input data used for model inference or training; the program reads data from it and passes it to the BPU for computation.
+
 	- `-n $MODEL_NAME`: The `-n` parameter specifies the model name to load and run.
 	- `-o $OUTPUT_0_0`: These output files store computation results or log data.
 
@@ -150,9 +151,9 @@ Parameter explanations:
 - `o <directory>`: Sets the log output directory, with a default value of `../../log`.
 - `h, --help`: Displays help information and exits the script.
 
+
 **Example:**
 For instance, run the command `sudo ./stress_test.sh -t 24h -m 200 -i 8 -b 80` to perform a 24-hour stress test using 200 MB of memory, 8 I/O threads, and 80% BPU load.
-
 After completing the preparation steps, execute the test command:
 
 ```shell
@@ -232,9 +233,11 @@ bpu status information---->
 
 The output of the `hrut_somstatus` command is explained as follows:
 
+
 - `temperature`: Represents the current temperatures of the board, MCU, and BPU.
 - `cpu frequency`: Represents the CPU's minimum, current, and maximum operating frequencies (in MHz).
 - `bpu status information`: Represents the BPU's minimum, current, and maximum operating frequencies, where `ratio` indicates the current BPU utilization.
+
 
 Execute the `htop` command to check CPU utilization:
 
@@ -252,8 +255,8 @@ CpuX  [ progress bar ]
 - `*`: Represents the kernel-space (system) utilization percentage.
 - `Load average: 7.10 9.56 9.57`: Represents the system’s average load over the past 1, 5, and 15 minutes.
 
-## Test Metrics
 
+## Test Metrics
 After the test program starts, it generates two log files—`bpu-stressX.log` and `cpu-stressX.log`—in the `/app/chip_base_test/log` directory to record system status during stress testing. Ensure the following conditions are met during the stress test:
 
 - Stable operation for 48 hours without rebooting or hanging.
@@ -279,6 +282,7 @@ The output is as follows:
 cpu-stress1.log:2025/05/19-22:01:32(CST) Stats: Completed: 206320.00M in 9.46s 21819.44MB/s, with 0 hardware incidents, 0 errors
 cpu-stress1.log:2025/05/19-22:01:32(CST) Status: PASS - please verify no corrected errors
 cpu-stress2.log:2025/05/19-22:20:22(CST) Stats: Completed: 220626.00M in 9.00s 24511.95MB/s, with 0 hardware incidents, 0 errors
+
 cpu-stress2.log:2025/05/19-22:20:22(CST) Status: PASS - please verify no corrected errors
 cpu-stress3.log:2025/05/19-22:21:20(CST) Stats: Completed: 196480.00M in 9.00s 21829.11MB/s, with 0 hardware incidents, 0 errors
 ```

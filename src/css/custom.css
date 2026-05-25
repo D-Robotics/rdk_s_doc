@@ -1,5 +1,5 @@
 :root {
-  --ifm-color-primary: #2e8555;
+  --ifm-color-primary: #FF5125;
   --ifm-color-primary-dark: #29784c;
   --ifm-color-primary-darker: #277148;
   --ifm-color-primary-darkest: #205d3b;
@@ -1187,44 +1187,83 @@ mark.search-highlight {
 
 /* ------------------------------------------------------------------ */
 /* 文档正文表格与 TOC 防重叠：
- * - 表格宽度占满可用正文区域
- * - 表格超宽时在正文内横向滚动 */
+ * - 正文列允许收缩（min-width: 0），避免宽表格撑进右侧 TOC 区域
+ * - 宽表格仅在 .markdown-table-scroll 容器内横向滚动（见 DocScopeHydration） */
+@media (min-width: 997px) {
+  main .container .row > .col--9,
+  main .container .row > .col:first-child {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .theme-doc-toc-desktop {
+    position: sticky;
+    top: calc(var(--ifm-navbar-height) + 1rem);
+    z-index: 2;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+}
+
 .theme-doc-markdown.markdown,
-article.markdown,
-.theme-doc-markdown.markdown > * {
+article.markdown {
   min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.theme-doc-markdown.markdown table,
-article.markdown table,
-main .container article table,
-main article table {
-  display: table !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box;
-  border-collapse: collapse;
-}
-
+.markdown-table-scroll,
 .theme-doc-markdown.markdown .table-responsive,
 article.markdown .table-responsive {
+  display: block;
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
+  margin: 0 0 1rem;
+  scrollbar-gutter: stable;
 }
 
-/* 右侧导航栏（TOC）位置调整，与左侧目录对齐 */
-@media (min-width: 997px) {
-  .theme-doc-toc-desktop {
-    top: var(--ifm-navbar-height) !important;
-    position: sticky;
-  }
-  
-  .theme-doc-toc-mobile {
-    margin-top: 1rem;
-  }
+.markdown-table-scroll > table,
+.theme-doc-markdown.markdown .table-responsive > table,
+article.markdown .table-responsive > table {
+  display: table;
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.theme-doc-markdown.markdown .markdown-table-scroll > table th,
+.theme-doc-markdown.markdown .markdown-table-scroll > table td,
+article.markdown .markdown-table-scroll > table th,
+article.markdown .markdown-table-scroll > table td,
+.markdown-table-scroll > table th,
+.markdown-table-scroll > table td,
+.theme-doc-markdown.markdown .table-responsive > table th,
+.theme-doc-markdown.markdown .table-responsive > table td,
+article.markdown .table-responsive > table th,
+article.markdown .table-responsive > table td {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+.theme-doc-markdown.markdown table th,
+.theme-doc-markdown.markdown table td,
+article.markdown table th,
+article.markdown table td,
+main .container article table th,
+main .container article table td,
+main article table th,
+main article table td {
+  white-space: normal;
+  word-break: break-word;
 }
 
 /* Dify 问答小助手：高于反馈浮标 (z-index:9999)，避免点击落在浮标上导致「点了没反应」 */
