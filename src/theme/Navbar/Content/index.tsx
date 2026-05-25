@@ -11,9 +11,10 @@ import {
 } from '@docusaurus/theme-common/internal';
 import NavbarItem, {type Props as NavbarItemConfig} from '@theme/NavbarItem';
 import NavbarColorModeToggle from '@theme/Navbar/ColorModeToggle';
+import SearchBar from '@theme/SearchBar';
+import NavbarSearch from '@theme/Navbar/Search';
 import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import NavbarLogo from '@theme/Navbar/Logo';
-// import PagefindSearch from '@site/src/components/PagefindSearch';
 
 import styles from './styles.module.css';
 
@@ -74,6 +75,7 @@ export default function NavbarContent(): ReactNode {
 
   const items = useNavbarItems();
   const [leftItems, rightItems] = splitNavbarItems(items);
+  const searchBarItem = items.find((item) => item.type === 'search');
 
   return (
     <NavbarContentLayout
@@ -88,9 +90,11 @@ export default function NavbarContent(): ReactNode {
         <>
           <NavbarItems items={rightItems} />
           <NavbarColorModeToggle className={styles.colorModeToggle} />
-          {/* <div className="navbar__item navbar__item--pagefind">
-            <PagefindSearch mode="navbar" />
-          </div> */}
+          {!searchBarItem && (
+            <NavbarSearch>
+              <SearchBar />
+            </NavbarSearch>
+          )}
         </>
       }
     />

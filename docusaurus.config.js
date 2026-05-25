@@ -37,6 +37,22 @@ const config = {
         : {
             enabled: false,
           },
+
+          feedbackFloat: {
+            enabled: true,
+            questionnaireUrl: "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf",
+            questionnaireUrlByLocale: {
+              "zh-Hans": "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tblIRpryehWqWy88&view=vewEkEvyTe",
+              en: "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tbl3YxZ2U4e0vkX5&view=vewEkEvyTe",
+            },
+            // 站点内路径规则（基于 baseUrl 之后的路径）：
+            // - "/" 精确匹配中文首页
+            // - "/en" 精确匹配英文首页
+            // - "/*" 匹配全部页面
+            // - "/en/*" 匹配英文全部页面
+            showOnPathRules: ["/*"],
+            hideOnPathRules: [],
+          },
   },
 
   // GitHub pages deployment config.
@@ -56,13 +72,13 @@ const config = {
       src: "https://hm.baidu.com/hm.js?24dd63cad43b63889ea6bede5fd1ab9e",
       async: true,
     },
-    // Dify Chatbot Configuration
+    // Dify Chatbot Configuration (must load before embed.min.js)
     {
-      src: "/rdk_s_doc/js/dify-config.js",
+      src: "js/dify-config.js",
     },
     {
       src: "https://rdk.d-robotics.cc/embed.min.js",
-      id: "MltLQTHPb5EeP7uz",
+      id: "rJYrxmxmjOkjEx2c",
       defer: true,
     },
   ],
@@ -206,7 +222,23 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
     }),
-  themes: ["@docusaurus/theme-mermaid"],
+  themes: [
+    "@docusaurus/theme-mermaid",
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      {
+        hashed: true,
+        language: ["en", "zh"],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+        docsRouteBasePath: ["/", "rdk_s"],
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: false,
+        searchResultContextMaxLength: 50,
+      },
+    ],
+  ],
 };
 
 export default config;
