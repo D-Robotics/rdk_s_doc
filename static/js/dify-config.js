@@ -4,6 +4,8 @@ window.difyChatbotConfig = {
   inputs: {},
   systemVariables: {},
   userVariables: {},
+  // 由 dify-config.js 在 body 就绪后动态加载 embed，需立即初始化按钮
+  dynamicScript: true,
 };
 
 // Auto-switch token based on language
@@ -22,11 +24,33 @@ window.difyChatbotConfig = {
   }
 })();
 
+function runWhenBodyReady(callback) {
+  if (document.body) {
+    callback();
+    return;
+  }
+  document.addEventListener('DOMContentLoaded', callback, { once: true });
+}
+
+function loadDifyEmbedScript() {
+  const embedId = 'rJYrxmxmjOkjEx2c';
+  if (document.getElementById(embedId)) {
+    return;
+  }
+  const script = document.createElement('script');
+  script.id = embedId;
+  script.src = 'https://rdk.d-robotics.cc/embed.min.js';
+  document.body.appendChild(script);
+}
+
 /**
  * Dify Chatbot Draggable Logic
  * Enables the chatbot button to be dragged around the screen.
  * Keeps the chat window anchored relative to the button.
  */
+runWhenBodyReady(function () {
+  loadDifyEmbedScript();
+
 (function () {
   const FEEDBACK_FLOAT_ID = 'feedback-float-entry';
   const ASSISTANT_BUTTON_ID = 'dify-chatbot-bubble-button';
@@ -310,3 +334,4 @@ window.difyChatbotConfig = {
 
   observer.observe(document.body, { childList: true, subtree: true });
 })();
+});
