@@ -12,6 +12,7 @@
 .docusaurus
 .cache-loader
 .vscode
+src/context/generated-sidebar-config.json
 
 # Misc
 .DS_Store
