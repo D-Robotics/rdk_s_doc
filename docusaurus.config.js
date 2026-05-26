@@ -10,7 +10,6 @@ import { themes as prismThemes } from "prism-react-renderer";
 const require = createRequire(import.meta.url);
 import remarkDirective from "remark-directive";
 import remarkDocScope from "./src/remark/remark-doc-scope.js";
-import remarkGenerateSidebarConfig from "./src/remark/remark-generate-sidebar-config.js";
 
 const buildProduct = process.env.DOC_BUILD_PRODUCT?.trim() || "";
 const buildVersion = process.env.DOC_BUILD_VERSION?.trim() || "";
@@ -131,7 +130,7 @@ const config = {
           routeBasePath: "/", // 修改默认文档路径
           sidebarPath: "./sidebars.js",
           showLastUpdateTime: true,
-          remarkPlugins: [remarkDirective, remarkDocScope, remarkGenerateSidebarConfig],
+          remarkPlugins: [remarkDirective, remarkDocScope],
 
           
         },
@@ -143,7 +142,7 @@ const config = {
     ],
   ],
   plugins: [
-  
+    require.resolve("./src/plugins/sidebar-scope-config-plugin"),
   ],
   markdown: {
     mermaid: true,

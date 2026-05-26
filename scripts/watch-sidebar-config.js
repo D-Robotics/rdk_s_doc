@@ -7,13 +7,16 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
+const {
+  getGeneratedSidebarConfigPath,
+} = require('./lib/sidebar-scope-config-generator');
+
 const docsDir = path.join(__dirname, '../docs');
-/** 英文翻译文档根目录（与 docs 目录结构一致，docId 与默认语言相同） */
 const i18nEnDocsCurrentDir = path.join(
   __dirname,
   '../i18n/en/docusaurus-plugin-content-docs/current',
 );
-const configFilePath = path.join(__dirname, '../src/context/generated-sidebar-config.json');
+const configFilePath = getGeneratedSidebarConfigPath(path.join(__dirname, '..'));
 
 let isGenerating = false;
 let lastGenerateTime = 0;
