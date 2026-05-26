@@ -13,6 +13,7 @@ import remarkDocScope from "./src/remark/remark-doc-scope.js";
 
 const buildProduct = process.env.DOC_BUILD_PRODUCT?.trim() || "";
 const buildVersion = process.env.DOC_BUILD_VERSION?.trim() || "";
+const siteBaseUrl = "/rdk_s_doc/";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -24,7 +25,7 @@ const config = {
   url: "https://liqinglian01.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/rdk_s_doc/",
+  baseUrl: siteBaseUrl,
   customFields: {
     docBuildScope:
       buildProduct && buildVersion
@@ -71,13 +72,9 @@ const config = {
       src: "https://hm.baidu.com/hm.js?24dd63cad43b63889ea6bede5fd1ab9e",
       async: true,
     },
-    // Dify Chatbot Configuration (must load before embed.min.js)
+    // Dify：仅加载配置脚本；embed.min.js 在 body 就绪后由 dify-config.js 动态注入
     {
-      src: "js/dify-config.js",
-    },
-    {
-      src: "https://rdk.d-robotics.cc/embed.min.js",
-      id: "rJYrxmxmjOkjEx2c",
+      src: `${siteBaseUrl}js/dify-config.js`,
     },
   ],
   headTags: [
@@ -85,7 +82,7 @@ const config = {
       tagName: "script",
       attributes: {},
       innerHTML:
-        "window.difyChatbotConfig=window.difyChatbotConfig||{token:'rJYrxmxmjOkjEx2c',baseUrl:'https://rdk.d-robotics.cc',inputs:{},systemVariables:{},userVariables:{}};",
+        "window.difyChatbotConfig=window.difyChatbotConfig||{token:'rJYrxmxmjOkjEx2c',baseUrl:'https://rdk.d-robotics.cc',inputs:{},systemVariables:{},userVariables:{},dynamicScript:true};",
     },
     {
       tagName: "meta",
