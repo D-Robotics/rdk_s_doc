@@ -28,89 +28,6 @@ import DocScope from '@site/src/components/DocScope';
 
 :::
 
-在 Ubuntu 系统中，开发板的网络连接配置保存在 `/etc/NetworkManager/system-connections/` 目录下（每个网卡连接一个 `.nmconnection` 文件）。常用字段说明如下：
-
-- **DHCP 配置**：将 `[ipv4]` 中 `method` 设置为 `auto`，由 DHCP 自动分配地址。
-- **静态地址配置**：将 `[ipv4]` 中 `method` 设置为 `manual`，使用 `address1=IP/CIDR,Gateway` 配置 IP、掩码和网关。
-- **自定义 DNS**：通过 `dns=` 字段指定 DNS 服务器，多个地址以分号分隔。
-
-### ETH0 DHCP 配置示例
-
-编辑连接文件：
-
-```shell
-sudo vim /etc/NetworkManager/system-connections/eth0_cfg.nmconnection
-```
-
-```shell
-[connection]
-id=eth0_cfg
-uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b2222
-type=ethernet
-interface-name=eth0
-timestamp=1773022723
-
-[ethernet]
-
-[ipv4]
-dns=10.9.1.2;8.8.8.8;8.8.4.4;
-method=auto
-
-[ipv6]
-addr-gen-mode=eui64
-method=disabled
-
-[proxy]
-
-```
-
-### ETH1 静态 IP 配置示例
-
-编辑连接文件：
-
-```shell
-sudo vim /etc/NetworkManager/system-connections/eth1_cfg.nmconnection
-```
-
-```shell
-[connection]
-id=eth1_cfg
-uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b1111
-type=ethernet
-interface-name=eth1
-timestamp=1773022363
-
-[ethernet]
-
-[ipv4]
-address1=192.168.127.10/24,192.168.127.1
-dns=10.9.1.2;8.8.8.8;8.8.4.4;
-method=manual
-
-[ipv6]
-addr-gen-mode=eui64
-method=disabled
-
-[proxy]
-
-```
-
-修改完成后，建议按以下顺序使配置生效：
-
-```shell
-# 建议检查配置文件权限（NetworkManager 要求仅 root 可读写）
-sudo chmod 600 /etc/NetworkManager/system-connections/*.nmconnection
-
-# 重新加载连接配置
-sudo nmcli connection reload
-
-# 启用对应连接
-sudo nmcli connection up eth0_cfg
-# 或
-sudo nmcli connection up eth1_cfg
-
-```
-
 使用命令行配置静态 IP 示例：
 
 ```shell
@@ -120,6 +37,7 @@ nmcli connection modify "eth1_cfg" \
   ipv4.addresses "192.168.10.100/24" \
   ipv4.gateway "192.168.10.1" \
   ipv4.dns "223.5.5.5 8.8.8.8" \
+  ipv4.never-default yes \
   connection.autoconnect yes
 
 # 重启连接使配置生效
