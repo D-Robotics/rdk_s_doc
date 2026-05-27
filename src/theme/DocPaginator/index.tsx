@@ -102,7 +102,7 @@ function normalizePath(path: string | undefined): string {
 
 function normalizePathTail(path: string | undefined): string {
   return normalizePath(path)
-    .replace(/^\/rdk_s_doc\//, '/')
+    .replace(/^\/rdk_x_doc\//, '/')
     .replace(/^\/en\//, '/');
 }
 
@@ -178,6 +178,20 @@ function normalizePaginatorTitle(
   return derived;
 }
 
+function applyPaginatorTitle(
+  entry: {title?: string; permalink: string} | null | undefined,
+  skipNormalize: boolean,
+  locale: string,
+): {title?: string; permalink: string} | null {
+  if (!entry) return null;
+  return {
+    ...entry,
+    title: skipNormalize
+      ? entry.title
+      : normalizePaginatorTitle(entry.title, entry.permalink, locale),
+  };
+}
+
 export default function DocPaginatorWrapper(props: Props): JSX.Element {
   const { pathname } = useLocation();
   const { previous, next } = props;
@@ -211,37 +225,37 @@ export default function DocPaginatorWrapper(props: Props): JSX.Element {
     );
   });
 
-  const autoPrevious =
-    currentIndex > 0
-      ? {
-          title: orderedDocLinks[currentIndex - 1].label || previous?.title,
-          permalink: (orderedDocLinks[currentIndex - 1].href || orderedDocLinks[currentIndex - 1].permalink) as string,
-        }
-      : null;
-
-  const autoNext =
+  const prevLink = currentIndex > 0 ? orderedDocLinks[currentIndex - 1] : null;
+  const nextLink =
     currentIndex >= 0 && currentIndex < orderedDocLinks.length - 1
-      ? {
-          title: orderedDocLinks[currentIndex + 1].label || next?.title,
-          permalink: (orderedDocLinks[currentIndex + 1].href || orderedDocLinks[currentIndex + 1].permalink) as string,
-        }
+      ? orderedDocLinks[currentIndex + 1]
       : null;
-  
-  const baseNext = autoNext ?? next ?? null;
-  const customNext = baseNext
+
+  const autoPrevious = prevLink
     ? {
-        ...baseNext,
-        title: normalizePaginatorTitle(baseNext.title, baseNext.permalink, currentLocale),
+        title: prevLink.label || previous?.title,
+        permalink: (prevLink.href || prevLink.permalink) as string,
       }
     : null;
 
-  const basePrevious = autoPrevious ?? previous ?? null;
-  const customPrevious = basePrevious
+  const autoNext = nextLink
     ? {
-        ...basePrevious,
-        title: normalizePaginatorTitle(basePrevious.title, basePrevious.permalink, currentLocale),
+        title: nextLink.label || next?.title,
+        permalink: (nextLink.href || nextLink.permalink) as string,
       }
     : null;
+
+  const customNext = applyPaginatorTitle(
+    autoNext ?? next ?? null,
+    Boolean(nextLink?.label),
+    currentLocale,
+  );
+
+  const customPrevious = applyPaginatorTitle(
+    autoPrevious ?? previous ?? null,
+    Boolean(prevLink?.label),
+    currentLocale,
+  );
 
   return (
     <DocPaginator
