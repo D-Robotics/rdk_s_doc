@@ -13,7 +13,12 @@ import remarkDocScope from "./src/remark/remark-doc-scope.js";
 
 const buildProduct = process.env.DOC_BUILD_PRODUCT?.trim() || "";
 const buildVersion = process.env.DOC_BUILD_VERSION?.trim() || "";
-const siteBaseUrl = "/rdk_s_doc/";
+const COPYRIGHT_START_YEAR = 2024;
+const currentYear = new Date().getFullYear();
+const copyrightYearLabel =
+  currentYear > COPYRIGHT_START_YEAR
+    ? `${COPYRIGHT_START_YEAR}-${currentYear}`
+    : `${COPYRIGHT_START_YEAR}`;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -25,7 +30,7 @@ const config = {
   url: "https://liqinglian01.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: siteBaseUrl,
+  baseUrl: "/rdk_s_doc/",
   customFields: {
     docBuildScope:
       buildProduct && buildVersion
@@ -74,7 +79,7 @@ const config = {
     },
     // Dify：仅加载配置脚本；embed.min.js 在 body 就绪后由 dify-config.js 动态注入
     {
-      src: `${siteBaseUrl}js/dify-config.js`,
+      src: "/rdk_s_doc/js/dify-config.js",
     },
   ],
   headTags: [
@@ -216,7 +221,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} D-Robotics.`,
+        copyright: `Copyright © ${copyrightYearLabel} D-Robotics.`,
       },
       prism: {
         theme: prismThemes.github,
