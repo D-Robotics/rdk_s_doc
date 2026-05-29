@@ -31,7 +31,7 @@ RDKS100 有 40-pin，方便用户进行外围扩展，其中数字 IO 采用 3.3
 以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
 :::
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
+
 
 开发板 `/app/40pin_samples/` 目录下，预置了多种 PIN 管脚的功能测试代码，包括 gpio 的输入/输出测试、PWM、I2C、SPI、UART 等测试。所有测试程序均使用 python 语言编写，详细信息可以查阅本章节其他模块。
 
