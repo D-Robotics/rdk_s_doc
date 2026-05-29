@@ -13,7 +13,17 @@ import DocScope from '@site/src/components/DocScope';
 
 ## alsa-lib 介绍
 
-由于 S100/S600都是基于 alsa 实现，因此接口使用统一，区别仅在于参数配置的不同，以下说明常用参数配置含义以及测试参考命令。
+<DocScope products="RDK-S100">
+
+S100 基于 alsa 实现，以下说明常用参数配置含义以及测试参考命令。
+
+</DocScope>
+
+<DocScope products="RDK-S600">
+
+S600 基于 alsa 实现，以下说明常用参数配置含义以及测试参考命令。
+
+</DocScope>
 
 ### arecord/aplay 参数介绍
 
@@ -185,7 +195,7 @@ aplay -Dhw:0,1 test.wav
 
 ## 音频回采测试
 
-音频回采功能可用于采集播放通道的信号，便于做回声消除等。以下介绍以 Audio Driver HAT REV2音频板为示例说明。
+音频回采功能可用于采集播放通道的信号，便于做回声消除等。以下介绍以 Audio Driver HAT REV2 音频板为示例说明。
 
 - **8通道麦克风录音（含回采）**
   Audio Driver HAT REV2音频板的回采信号映射在录音通道 7 和 8 。需使用 8 通道录音命令（如果使用同一个 I2S ，需要保持通道数、位深、采样率对齐，这款转接板根据拨码开关固定了一路 I2S）：
