@@ -130,7 +130,7 @@ GPIO.output(channel, state)
 
 ## 清理管脚占用
 
-在程序推出前，推荐进行通道清理动作，请使用：
+在程序退出前，推荐进行通道清理动作，请使用：
 
 ```python
 GPIO.cleanup()
