@@ -12,7 +12,17 @@ The audio module is developed based on the standard ALSA framework. In user spac
 
 ## Introduction to alsa-lib
 
-Since both S100 and S600 are implemented based on ALSA, the interface usage is consistent, with differences only in parameter configurations. The following describes the meanings of common parameter configurations and provides test reference commands.
+<DocScope products="RDK-S100">
+
+The S100 is implemented based on ALSA. The following explains the meaning of common parameter configurations and provides reference commands for testing.
+
+</DocScope>
+
+<DocScope products="RDK-S600">
+
+The S600 is implemented based on ALSA. The following explains the meaning of common parameter configurations and provides reference commands for testing.
+
+</DocScope>
 
 ### arecord/aplay Parameter Introduction
 
