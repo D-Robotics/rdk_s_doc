@@ -22,7 +22,7 @@ The RDKS600 has two 10-pin self-locking interfaces, one 12-pin self-locking inte
 The pins mentioned below are for illustrative purposes only. Port values may vary across different platforms, and actual conditions should prevail. You may also directly use the code in the `/app/40pin_samples/` directory, which has been verified on the board.
 :::
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
+
 
 In the development board's `/app/40pin_samples/` directory, various functional test codes for PIN pins are pre-installed, including GPIO input/output tests, I2C, SPI, UART, and other tests. All test programs are written in Python. Refer to other sections of this chapter for more details.
 
