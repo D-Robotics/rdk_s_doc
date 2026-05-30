@@ -1,6 +1,6 @@
 ---
 sidebar_position: 8
-title: 7.2.8            Log 使用指南
+title: 7.2.8  Log 使用指南
 ---
 
 ```mdx-code-block
@@ -160,7 +160,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
 
 1.  log 管理
     -   容量管控：
-        -   在 hobot-log 脚本中配置了各个模块的日志文件大小和数量限制，这些限制会通过入参传递给各个模块日志进程。每个模块日志文件限制说明见：[log分区](#log分区)
+        -   在 hobot-log 脚本中配置了各个模块的日志文件大小和数量限制，这些限制会通过入参传递给各个模块日志进程。每个模块日志文件限制说明见：[log分区](#log-分区)
         -   各个模块的进程管理各自的日志文件大小和数量限制，超过限制后会删除产生时间比较早的文件
     -   log 文件重命名归档：
         -   启动时，转存 uboot 和 pstore log，命名格式如下：
@@ -350,7 +350,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
 
 其中，转存到 Acore 的临时文件节点在：`/proc/remoteproc_mcu0`和`/proc/remoteproc_mcu1`，Acore 会启动 hrut_remoteproc_log 进程周期性的获取 proc 节点中的日志写入`/log/mcu*`的 messag 文件实现转存。
 
-由于单个文件可以存储的日志大小有限，加上重启后上一次存储的 message 日志会被启动的 log 进程重写覆盖。所以实现了 log 管理机制支持对 log 文件重命名归档，具体描述见：[log管理](#log管理)。
+由于单个文件可以存储的日志大小有限，加上重启后上一次存储的 message 日志会被启动的 log 进程重写覆盖。所以实现了 log 管理机制支持对 log 文件重命名归档，具体描述见：[log管理](#log-管理)。
 
 1.  LogSync 用于同步打印优先级较低的日志。
 
