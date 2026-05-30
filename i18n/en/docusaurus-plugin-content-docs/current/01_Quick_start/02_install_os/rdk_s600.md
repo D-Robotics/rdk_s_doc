@@ -57,8 +57,8 @@ The specific differences between the two download modes are as follows:
 
 | Download Mode     | Connection Type | <center> Scenario </center>                                  | <center> Precautions </center>                                    |
 | :---------------: | :-------------: | ------------------------------------------------------------ | ---------------------------------------------------------------- |
-| [DFU+Fastboot](#DFU-Fastboot-flashing) | USB             | Special cases like an empty board or system corruption causing the device to be bricked | Requires setting the boot mode to enter `dfu` state               |
-| [Fastboot](#Fastboot-flashing)         | USB             | Updating the system on a non-empty board, suitable for common flashing scenarios | Requires a non-empty board state and the system to enter `uboot` mode |
+| [DFU+Fastboot](#dfu-fastboot-flashing) | USB             | Special cases like an empty board or system corruption causing the device to be bricked | Requires setting the boot mode to enter `dfu` state               |
+| [Fastboot](#fastboot-flashing)         | USB             | Updating the system on a non-empty board, suitable for common flashing scenarios | Requires a non-empty board state and the system to enter `uboot` mode |
 
 ### **DFU-Fastboot Flashing**
 
