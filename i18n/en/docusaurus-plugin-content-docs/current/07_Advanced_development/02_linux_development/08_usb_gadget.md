@@ -31,7 +31,7 @@ The RDK S100 development board provides the following USB interfaces:
 1. **USB Type-C (J16) supports Device mode only**. It does not support Host mode and cannot be used to read USB drives or connect other USB devices.
 2. **USB 3.0 Type-A (J19/J20) supports Host mode only** and cannot be configured as Gadget mode.
 3. The USB Type-C interface includes a debug serial port function. The CH340 chip converts debug serial ports from the Main domain and MCU domain into a USB interface.
-4. Note the USB 2.0 camera connection limitations. For details, see the [USB Camera documentation](/Basic_Application/Image/usb_camera#notes-on-connecting-usb-20-cameras) in the Basic Application chapter.
+4. Note the USB 2.0 camera connection limitations. For details, see the [USB Camera documentation](../../03_Basic_Application/01_Image/02_usb_camera.md#usb-2.0-note) in the Basic Application chapter.
 
 :::
 
@@ -50,7 +50,7 @@ The RDK S600 development board provides the following USB interfaces:
 1. **USB Type-C (J4) supports Device mode only**. It does not support Host mode and cannot be used to read USB drives or connect other USB devices.
 2. **USB 3.2 Type-A (J7/J8/J9) supports Host mode only** and cannot be configured as Gadget mode.
 3. The USB Type-C interface includes a debug serial port function. The CH340 chip converts debug serial ports from the Main domain and MCU domain into a USB interface.
-4. Note the USB 2.0 camera connection limitations. For details, see the [USB Camera documentation](/Basic_Application/Image/usb_camera#notes-on-connecting-usb-20-cameras) in the Basic Application chapter.
+4. Note the USB 2.0 camera connection limitations. For details, see the [USB Camera documentation](../../03_Basic_Application/01_Image/02_usb_camera.md#usb-2.0-note) in the Basic Application chapter.
 
 :::
 

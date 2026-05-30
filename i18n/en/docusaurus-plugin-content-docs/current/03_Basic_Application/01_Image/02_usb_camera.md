@@ -62,7 +62,10 @@ Before connecting two USB cameras, you need to limit the bandwidth usage of the 
 
 :::
 
-## Notes on Connecting USB 2.0 Cameras
+
+## Notes on Connecting USB 2.0 Cameras{#usb-2.0-note}
+
+
 :::tip
 1. USB 2.0 has a bandwidth of 480 Mb/s. A 720p30fps USB camera theoretically requires 1280×720×16×30 = 442 Mb/s, which is already close to the theoretical limit of USB 2.0. Additionally, UVC protocol overhead consumes part of the bandwidth, leaving only about 50% available for actual image data transmission. Therefore, in theory, it's not feasible to connect two 720p30fps USB 2.0 cameras to the same USB host. However, testing has shown that two 640×480@20fps USB 2.0 cameras can operate simultaneously on the same USB host.
 2. The S100 development board has two USB hosts. The top and bottom USB ports belong to the same host. To connect two USB 2.0 720p cameras, you must plug them into the left and right ports respectively, so that each USB 2.0 camera uses a separate host.
