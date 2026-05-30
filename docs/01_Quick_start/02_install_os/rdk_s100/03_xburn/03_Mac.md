@@ -38,7 +38,7 @@ brew install dfu-util
 
 :::warning 注意
 
-- 目前需要将 **SW3 开关拨至 [[从板载 eMMC 启动]](../../../01_hardware_introduction/01_rdk_s100/index.md#系统启动盘选择-sw3)**，暂时不支持从 M.2 NVMe 固态硬盘启动。
+- 目前需要将 **SW3开关拨至 [[从板载 eMMC 启动]](../../../01_hardware_introduction/01_rdk_s100.md#系统启动盘选择-sw3)**，暂时不支持从 M.2 NVMe 固态硬盘启动。
 - windows pc 上 Xburn 工具 需要在[驱动安装](#驱动下载与安装)成功后才能使用，使用前请确保驱动安装成功。
 
 :::
@@ -134,8 +134,8 @@ RDK S100 支持通过 Xburn 烧录指定区域，支持的烧录区域如下
    - 介质存储: `emmc`, 类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
    - 高级配置: 勾选 `烧录指定区域`，勾选 `miniboot_flash` 和 `miniboot_emmc`
-
-      <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-partition.png" alt="" style={{ width: '100%' }} />
+   
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-partition.png" alt="" style={{ width: '100%' }} />
 
 
    - 点击开始升级，设备上电并等待升级完成

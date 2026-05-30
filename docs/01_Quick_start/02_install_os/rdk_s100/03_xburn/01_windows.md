@@ -10,6 +10,15 @@ sidebar_position: 1
 使用 Type-C 数据线将 PC 的 USB 接口和开发板的 Type-C 接口相连接。
 
 
+:::warning 注意
+
+请确保 Type-C 数据线为高质量数据线，以确保烧录的稳定性。
+1. 带有屏蔽层 。
+2. 长度越短越好 。
+3. 数据传输质量高。
+
+:::
+
 ## 驱动下载与安装
 
 
@@ -27,21 +36,52 @@ usb 驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloa
 
 **验证驱动安装**
 
-1. 在开发板的 uboot 命令行下输入 fastboot 0，让开发板进入 fastboot 模式：
 
-   ```bash
-   Hit any key to stop autoboot:  0
-   Hobot$
-   Hobot$
-   Hobot$ fastboot 0
-   ```
-2. 成功安装驱动后，设备管理器会显示 Android Device 设备，如下图：
+1. 连接串口，首次连接需要安装 CH340 串口驱动，驱动程序可从资源汇总的[工具下载](../../../download.md#工具下载)获取。
+2. 驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png" alt="" style={{ width: '100%' }} />
+   <!-- ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png) -->
+   <img 
+   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" 
+   style={{ width: '60%', height: 'auto', align:'center'}}
+   />
+   
+   
+3. 下载远程连接工具 [Mobaxterm](https://mobaxterm.mobatek.net/download.html)。
+
+3. 打开`MobaXterm`工具，点击`Session`，然后选择`Serial`，配置端口号，例如`COM3`，实际使用的串口号以 PC 识别到的串口号为准，设置完成后点击 `OK`。
+
+   串口配置参数如下：
+
+   | 配置项               | 参数值 |
+   | -------------------- | ------ |
+   | 波特率（Baud rate）  | 921600 |
+   | 数据位（Data bits）  | 8      |
+   | 奇偶校验（Parity）   | None   |
+   | 停止位（Stop bits）  | 1      |
+   | 流控（Flow Control） | 无     |
+   
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png)
+
+4. 开发板上电后立刻长按空格键，进入 uboot 命令行模式，输入 fastboot 0，让开发板进入 fastboot 模式：
+
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png)
+
+5. 成功安装驱动后，设备管理器会显示 Android Device 设备，如下图：
+
+   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png) -->
+   <img 
+   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png" 
+   style={{ width: '100%', height: 'auto', align:'center'}}
+   />
 
    如果未成功安装驱动时，设备管理器会提示存在 USB download gadget 的未知设备，如下图：
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png" alt="" style={{ width: '100%' }} />
+   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png) -->
+   <img 
+   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png" 
+   style={{ width: '100%', height: 'auto', align:'center'}}
+   />
 
 
 ## 系统烧录
@@ -52,7 +92,7 @@ usb 驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloa
 
 :::warning 注意
 
-- 目前**需要将 SW3 拨至 ↑ 位置**，使用板载 eMMC 来启动，暂时不支持从 M.2 NVMe 固态硬盘启动。
+- 目前需要将 **SW3开关拨至 [[从板载 eMMC 启动]](../../../01_hardware_introduction/01_rdk_s100.md#系统启动盘选择-sw3)**，暂时不支持从 M.2 NVMe 固态硬盘启动。
 - windows pc 上 Xburn 工具 需要在[驱动安装](#驱动下载与安装)成功后才能使用，使用前请确保驱动安装成功。
 
 :::
@@ -148,8 +188,8 @@ RDK S100 支持通过 Xburn 烧录指定区域，支持的烧录区域如下
    - 介质存储: `emmc`, 类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
    - 高级配置: 勾选 `烧录指定区域`，勾选 `miniboot_flash` 和 `miniboot_emmc`
-
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition.png" alt="" style={{ width: '100%' }} />
+   
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-partition.png" alt="" style={{ width: '100%' }} />
 
 
    - 点击开始升级，设备上电并等待升级完成
@@ -169,7 +209,7 @@ RDK S100 支持通过 Xburn 备份指定区域，支持的备份区域如下
 
 #### 使用 Xburn 指定区域备份
 
-以指定烧录 `miniboot_flash` 为例
+以指定备份 `miniboot_flash` 为例
 
 设置方法如下：
 
@@ -186,12 +226,14 @@ RDK S100 支持通过 Xburn 备份指定区域，支持的备份区域如下
    - 点击开始升级，设备上电并等待操作完成
 
    - 操作完成后，打开 `img_packages/disk/`，查看备份镜像文件 `miniboot_flash_backup.img`
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image.png" alt="" style={{ width: '100%' }} />
+   
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition.png" alt="" style={{ width: '100%' }} />
 
 
    :::warning 注意
 
-   对于整个存储介质数据备份，耗时较长，请耐心等待备份结束。
+   - 对于整个存储介质数据备份，耗时较长，请耐心等待备份结束。
+   - 备份镜像格式为 `.img` 格式，烧录时需要选择 `.simg` 格式的文件，直接将备份镜像文件的后缀 `.img` 替换为 `.simg` 即可。
 
    :::
 
