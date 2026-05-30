@@ -451,6 +451,7 @@ int main(void)
 ```
 </DocScope>
 <DocScope products="RDK S600">
+
 ```c
 int main(void)
 {
@@ -493,9 +494,11 @@ int main(void)
    }
 }
 ```
+
 </DocScope>
 
 ## Introduction to MCU Log
+
 The MCU provides basic log output functionality, primarily for debugging and recording runtime status. The current version of the log module supports outputting information via formatted strings, making it easier for developers to quickly locate issues and view variable states during debugging. On the Acore side, log information for MCU0 and MCU1 can be viewed through the `/proc/remoteproc_mcu0` and `/proc/remoteproc_mcu1` nodes.
 
 Example of retrieving MCU1 serial log information, as shown below:
