@@ -145,7 +145,7 @@ Using the methods above, you can accurately identify and control different audio
     ```
 
     :::tip
-    In the configuration above, `X` in `device=hw:X,Y` represents the sound card number and `Y` represents the device number. Configure them according to your actual requirements. For how to confirm sound card/device numbers, see [Control Commands](/Basic_Application/audio/audio_board_s100#control-commands).
+    In the configuration above, `X` in `device=hw:X,Y` represents the sound card number and `Y` represents the device number. Configure them according to your actual requirements. For how to confirm sound card/device numbers, see [Control Commands](../03_Basic_Application/02_audio/01_audio_board_super.md#control-commands).
     :::
 
 2. After saving the configuration, restart the system. Once the audio driver is loaded, the graphical interface features will work normally.

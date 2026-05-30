@@ -145,7 +145,7 @@ sidebar_position: 4
     ```
 
     :::tip
-    以上配置，`device=hw:X,Y` 中的 `X` 代表声卡号，`Y` 代表设备号。用户可根据实际需求制定声卡 / 设备号，声卡 / 设备号确认方法请查看：[控制命令](/Basic_Application/audio/audio_board_s100#控制命令)。
+    以上配置，`device=hw:X,Y` 中的 `X` 代表声卡号，`Y` 代表设备号。用户可根据实际需求制定声卡 / 设备号，声卡 / 设备号确认方法请查看：[控制命令](../03_Basic_Application/02_audio/01_audio_board_super.md#控制命令)。
     :::
 
 2. 修改后保存配置并重启系统，加载音频驱动后图形化界面功能即可正常使用。
