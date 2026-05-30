@@ -10,25 +10,25 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-This chapter focuses on MCU-side usage. For more details on IPC principles and usage, refer to [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md).
+This section focuses on the usage instructions for the MCU side. For more details on the principles and usage of IPC, please refer to the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md) section.
 
 ## Usage Restrictions
 
 1. When using the `Ipc_MDMA_SendMsg` interface to send data, the data buffer address must be 16-byte aligned.
-2. The send function checks DMA status by polling, so DMA interrupts must be disabled before using the send function (the release code disables them by default). When using the receive function, configure DMA interrupts and IPC interrupts with the same priority to avoid mutual preemption.
-3. There are only two Ipc MDMA send channels. For single-core or multi-core multi-task sending, it is recommended to use spin locks or interrupt disable to control DMA resource contention.
-4. IPC multi-core send/receive is allocated by Instance and does not support allocation by Channel.
+2. The send function checks the DMA status via polling. Therefore, DMA interrupts must be disabled before using the send function (disabled by default in the release code). When using the receive function, configure the DMA interrupt and IPC interrupt with the same priority to avoid mutual interruption.
+3. There are only two IPC MDMA send channels. For single-core or multi-core multi-task sending, it is recommended to use spinlocks or disable interrupts to control DMA resource preemption.
+4. IPC multi-core sending and receiving are allocated based on Instance, not on Channel.
 5. IPC initialization must be called after the DMA module is initialized.
-6. MCU IPC configuration must match the peer-side IPC configuration, including Instance control segment and data segment addresses, Channel count and IDs, Buffer data, and Buffer size. Inconsistent configuration on both sides will cause IPC communication failure.
-7. The `receive_coreid` field in Instance cfg must clearly indicate whether the Instance runs on MCU0 or MCU1. If it runs on MCU1, configure it as `Ipc_Receive_Core1`. Incorrect configuration will cause IPC communication failure.
-8. IPC interrupts must be enabled on the MCU where the Instance runs. If enabled on multiple cores, interrupts may be preempted by other cores and cause IPC communication failure.
+6. MCU IPC configuration must be consistent with the peer IPC configuration. This includes Instance control segment and data segment addresses, number and IDs of Channels, buffer data, and buffer size. Inconsistent configurations between the two sides will cause IPC communication failure.
+7. The `receive_coreid` in the Instance configuration must specify whether the Instance works on MCU0 or MCU1. If it works on MCU1, configure it as `Ipc_Receive_Core1`. An incorrect configuration will cause IPC communication failure.
+8. The IPC interrupt is enabled on the MCU where the Instance works. If enabled on multiple cores, the interrupt may be preempted by other cores, leading to IPC communication failure.
 
 ## IPC Configuration
 
-One IPC instance has one or more channels. All channels in the same instance share one interrupt, so one IPC can only be enabled on either MCU0 or MCU1.
+An IPC instance has one or more channels. Instances share the same interrupt. Therefore, an IPC can only be enabled on either MCU0 or MCU1.
 
-When MCU1 uses IPC, two parts of configuration are required:
-1. Configure callback functions. Their purpose is to trigger an interrupt and enter the callback when IPC receives a notify signal. Customers can also customize callbacks for transmission errors. The example below uses Instance0.
+When MCU1 uses IPC, two parts need to be configured.
+1. Configure the callback function. Its purpose is to trigger an interrupt and enter the callback function for processing when the IPC receives a notify signal. Customers can also customize the callback function for data transmission errors. The following example uses Instance0.
 ```c
 static Ipc_ChannelConfigType Ipc_ShmInstance0CfgChannel[8] = {
 {
@@ -45,7 +45,7 @@ static Ipc_ChannelConfigType Ipc_ShmInstance0CfgChannel[8] = {
 ......
 };
 ```
-2. Set `receive_coreid`. If running on MCU1, set `receive_coreid=Ipc_Receive_Core1`. At the same time, ensure the IPC settings on MCU0 are consistent.
+2. Set `receive_coreid`. If it is on MCU1, set `receive_coreid = Ipc_Receive_Core1`. Also, ensure that MCU0 has the same IPC settings.
 - MCU0 file path: `/mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c`
 - MCU1 file path: `/mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c`
 ```c
@@ -81,7 +81,7 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 | Ipc_ShmCfgInstances0~8      | User          | ISR(Ipc_CpuIpc0Ch0Isr): Ipc_Driver_CpuIpc0ChxIsr() (x=0..8)                                      | Acore instance0~8     |
 | Ipc_ShmCfgInstances0/4      | canhal        | —                                                                                                | Acore instance0/4     |
 | Ipc_ShmCfgInstances5        | External RTC  | —                                                                                                | Acore instance5        |
-| Ipc_ShmCfgInstances7        | ipcbox       | —                                                                                                | Acore instance7        |
+| Ipc_ShmCfgInstances7        | ipcbox        | —                                                                                                | Acore instance7        |
 | Ipc_ShmCfgInstances8        | mcu1 boot     | —                                                                                                | Acore instance8        |
 | Ipc_PrivShmCfgInstance0     | Crypto        | ISR(Ipc_HsmIpc1Ch4Isr): Ipc_Driver_HSMIpc1Ch4Isr()                                               | HSM                    |
 | Ipc_PrivShmCfgInstance1     | HSM DIAG      | ISR(Ipc_HsmIpc1Ch5Isr): Ipc_Driver_HSMIpc1Ch5Isr()                                               | HSM                    |
@@ -96,7 +96,7 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 |----------------------------|--------------|---------------------------------------------------------------------------------|------------------------|
 | Ipc_ShmCfgInstances0~7     | User         | ISR(Ipc0_ChxIsr): Ipc_Driver_MCUIpc0ChxIsr() (x = 0..7)                         | Acore instance0~7     |
 | Ipc_ShmCfgInstances0 / 4   | canhal       | —                                                                               | Acore instance0/4     |
-| Ipc_ShmCfgInstances5       | External RTC | —                                                                               | Acore instance5        |
+| Ipc_ShmCfgInstances5       | External RTC  | —                                                                                | Acore instance5        |
 | Ipc_ShmCfgInstances7       | ipcbox       | —                                                                               | Acore instance7        |
 | Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 (except 8 & 10) |
 | Ipc_ShmCfgInstance8        | mcu1 boot    | —                                                                               | Acore instance8       |
@@ -111,23 +111,25 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 ## Application Sample
 
 :::tip
-All application samples run on the Acore side and communicate with MCU1. Therefore, the MCU1 system must be running before use.
+The application samples all run on the Acore side and communicate with MCU1. Therefore, the MCU1 system must be running before use.
 
 **How to run:** [MCU1 Startup Steps](./01_basic_information.md#start_mcu1)
 :::
 
-### IpcBox Overview{#IPCBOX}
+### IpcBox Feature Introduction{#IPCBOX}
 
-IpcBox is an application extension built on the MCU-side IPC communication framework. It is used to manage peripheral passthrough functionality. Its implementation diagram is shown below:
-Peripherals are connected to IpcBox through a unified interface for management. In simple terms, peripheral data is forwarded through IPC Box and returned to the Acore side. Likewise, data from the Acore side is forwarded through IpcBox to operate the actual peripherals. The data flow is: `Acore<->IPC<->MCU<->Peri`
+IpcBox is an application extension based on the IPC communication framework on the MCU side. It is used to manage the passthrough functionality of peripherals. The implementation block diagram is as follows:
+Various peripherals are managed through a unified interface into the IpcBox. Simply put, peripheral data is forwarded through the IPC Box and returned to the Acore side. Similarly, data from the Acore side is forwarded through the IpcBox to operate the actual peripherals. The data flow is: `Acore<->IPC<->MCU<->Peri`
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IpcBox architecture diagram" style={{ width: '100%' }} />
-
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IPCBOX Architecture Diagram" style={{ width: '100%' }} />
 
 :::tip
-For the corresponding Acore-side application, see the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md#IPC_APP) chapter.
+Refer to the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md) section for the corresponding Acore side application.
 
-IpcBox was refactored during the upgrade from `RDKS100 V4.0.4-Beta` to `RDKS100 V4.0.5-Beta`. The changes include packet structure, IPC channels, and default passthrough peripheral configuration. Pay attention to version compatibility between the MCU side and the Acore side.
+<DocScope products="RDK S100">
+IpcBox underwent a refactoring during the upgrade from version `RDKS100 V4.0.4-Beta` to `RDKS100 V4.0.5-Beta`. The changes include the packet structure, IPC channels, and default configuration for passthrough peripherals. Pay attention to the version compatibility between the MCU side and the Acore side.
+
+</DocScope>
 
 :::
 
@@ -135,17 +137,16 @@ IpcBox was refactored during the upgrade from `RDKS100 V4.0.4-Beta` to `RDKS100 
 
 **Implementation Status:**
 
-| Item | Status | Notes |
-|---------- |---------|----------------|
-| RunCmd    | Implemented | None |
-| SPI       | Implemented | None |
-| I2C       | Implemented | None |
-| Uart      | Implemented | Fixed to use Uart5 |
-
+| Item      | Implementation Status | Remarks                |
+|----------|----------------------|------------------------|
+| RunCmd    | Implemented          | None                   |
+| SPI       | Implemented          | None                   |
+| I2C       | Implemented          | None                   |
+| Uart      | Implemented          | Fixed using Uart5      |
 
 **Protocol Packet Parsing**
 
-In general, the packet occupies 128 bytes. The packet length can be extended through data field 2 at the end. It is recommended to keep it at 128 bytes so that when 64-byte aligned memory is allocated for the packet, the `data[]` array remains 64-byte aligned.
+Generally, it occupies 128 bytes. The packet length can be extended using data field 2. It is recommended to keep it at 128 bytes so that the `data[]` array remains 64-byte aligned when allocating 64-byte aligned memory for the packet.
 ```c
 typedef struct {
     uint32 magic; // Magic number
@@ -160,9 +161,8 @@ typedef struct {
 
 **Usage**
 
-Because IpcBox occupies peripheral resources, this feature is disabled by default at boot. Enable it manually if needed.
-There are two ways to enable it:
-1. Modify the array configuration in the MCU SDK, locate the corresponding peripheral, and change `DISABLE` to `ENABLE`
+Since IpcBox occupies peripheral resources, this feature is disabled by default at startup. To use it, enable it manually. There are two ways to enable it:
+1. Modify the array configuration in the MCU SDK. Find the corresponding peripheral and change `DISABLE` to `ENABLE`.
     ```c
     // Service/HouseKeeping/ipc_box/src/ipc_box.c
     static Ipcbox_ComType IpcBox_InstanceMap[] = {
@@ -179,10 +179,9 @@ There are two ways to enable it:
         IpcConf_IpcInstance_7_IpcChannel_3, DISABLE, IPCBOX_PERIID_INVALID,
         IpcBox_I2cInit, IpcBox_I2cDeinit },
     };
-
     ```
-2. This is a temporary enable method through the MCU1 command line, for example:
-    - Check passthrough peripheral enable status
+2. This is a temporary way to enable it via the MCU1 command line, e.g.:
+    - Check the status of peripheral passthrough functionality.
     ```bash
     D-Robotics:/$ ipcbox_set_mode debug
     [066378.758965 0]Module: runcmd, Enable
@@ -190,7 +189,7 @@ There are two ways to enable it:
     [066378.759663 0]Module: spi, Enable
     [066378.760075 0]Module: i2c, Enable
     ```
-    - Enable and disable IpcBox UART passthrough
+    - Enable and disable IpcBox UART passthrough functionality.
     ```bash
     D-Robotics:/$ ipcbox_set_mode uart 1
     [066386.990200 0]uart processing enabled
@@ -201,7 +200,7 @@ There are two ways to enable it:
     [066389.267399 0]IpcBox_uart task resources released and terminating
     [066389.701820 0]IpcBox_uart task exited properly
     ```
-    - Enable and disable IpcBox I2C passthrough
+    - Enable and disable IpcBox I2C passthrough functionality.
     ```bash
     D-Robotics:/$ ipcbox_set_mode i2c 1
     [066394.631826 0]i2c processing enabled
@@ -212,7 +211,7 @@ There are two ways to enable it:
     [066397.085213 0]IpcBox_i2c task resources released and terminating
     [066397.087215 0]IpcBox_i2c task exited properly
     ```
-    - Enable and disable IpcBox SPI passthrough
+    - Enable and disable IpcBox SPI passthrough functionality.
     ```bash
     D-Robotics:/$ ipcbox_set_mode spi 1
     [066403.227424 0]spi processing enabled
@@ -226,7 +225,7 @@ There are two ways to enable it:
 
 **Log Control**
 
-IpcBox log output can be dynamically enabled or disabled using the `ipcbox_loglevel` command:
+Log messages for the IpcBox module can be dynamically toggled using the `ipcbox_loglevel` command.
 ```bash
 D-Robotics:/$ ipcbox_loglevel help
 Usage: loglevel <level|subcommand>
@@ -235,7 +234,7 @@ Usage: loglevel <level|subcommand>
     show - show current log level
     help - show this message
 ```
-Enter `ipcbox_loglevel 0` for minimal logging, and `ipcbox_loglevel 4` for maximum logging:
+Enter `ipcbox_loglevel 0` to print the least, and `ipcbox_loglevel 4` to print the most.
 ```bash
 D-Robotics:/$ ipcbox_loglevel 0
 [066736.123326 0]This is an ERROR message
@@ -248,53 +247,50 @@ D-Robotics:/$ ipcbox_loglevel 4
 [066738.475309 0]This is a DEBUG message
 ```
 
+#### Implementation of IpcBox RunCmd
 
-#### IpcBox RunCmd Implementation
+Executes CMD applications on the MCU side based on commands received from the Acore side, referred to as the RunCmd application.
 
-Based on commands sent from the Acore side, the MCU-side CMD application is executed. This is referred to as the RunCmd application.
-
-Peripheral data forwarding through IPC Box follows a similar principle and mainly consists of the following two processes:
+The data forwarding for various peripherals via IPC Box is similar. The implementation principle is mainly divided into the following two processes:
 1. `Acore->Ipc->MCU` process
-    - When Acore sends data to MCU, an MCU interrupt is triggered. In the interrupt callback, the data is stored in a queue.
+    - When Acore sends data to MCU, it triggers an interrupt on the MCU. In the interrupt callback, the data is stored in a queue.
 2. `MCU->Ipc->Acore` process
-    - MCU has a resident thread that continuously checks whether the queue is empty. If not, it validates and parses the data, identifies the cmd command, and executes it.
-    - The FreeRTOS cmd application is similar to u-boot cmd commands. In this way, users can easily customize their own applications. In this scenario, the executed cmd reads ADC values and returns them to Acore through IPC.
+    - There is a resident thread on the MCU that continuously checks if the queue is empty. If not, it validates and parses the data, identifies the CMD command, and runs it.
+    - The FreeRTOS CMD application is similar to U-Boot CMD commands. This allows users to easily customize their own applications. In this scenario, the executed CMD reads the ADC value and returns it to the Acore via IPC.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="RunCmd passthrough architecture between Acore and MCU" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="Data Passthrough Architecture Diagram between Acore and MCU for CAN Data" style={{ width: '100%' }} />
 
-#### IpcBox Uart Implementation
-Similar to RunCmd, in this scenario an MCU interrupt is triggered when MCU sends data to Acore, but a queue is not used for storage.
+#### Implementation of IpcBox Uart
+Similar to the RunCmd implementation, in this scenario, when the MCU sends data to the Acore, it triggers an interrupt on the MCU, but does not use a queue for storage.
 
-The implementation mainly consists of the following two processes:
+The implementation principle is mainly divided into the following two processes:
 1. `Acore->Ipc->MCU` process
-    - When Acore sends data to MCU, an MCU interrupt is triggered. The data is parsed in the interrupt and sent through the Uart peripheral.
+    - When Acore sends data to MCU, it triggers an interrupt on the MCU. The interrupt parses the data and sends it out via the UART peripheral.
 2. `MCU->Ipc->Acore` process
-    - MCU has a resident thread that continuously calls the Uart peripheral to receive data. When data is available, it is packed and forwarded to Acore.
+    - There is a resident thread on the MCU that continuously calls the UART peripheral to receive data. When data is available, it packages the data and forwards it to the Acore.
 
-#### IpcBox I2c Implementation
-Similar to RunCmd, in this scenario an MCU interrupt is triggered when MCU sends data to Acore. In the interrupt callback, the data is stored in a queue and then returned to Acore through IPC.
-The implementation mainly consists of the following two processes:
+#### Implementation of IpcBox I2c
+Similar to the RunCmd implementation, in this scenario, when the MCU sends data to the Acore, it triggers an interrupt on the MCU. In the interrupt callback, the data is stored in a queue and then returned to the Acore via IPC.
+The implementation principle is mainly divided into the following two processes:
 1. `Acore->Ipc->MCU` process
-    - When Acore sends data to MCU, an MCU interrupt is triggered. In the interrupt callback, the data is stored in a queue.
+    - When Acore sends data to MCU, it triggers an interrupt on the MCU. In the interrupt callback, the data is stored in a queue.
 2. `MCU->Ipc->Acore` process
-    - MCU has a resident thread that continuously checks whether the queue is empty. If not, it validates and parses the data.
-    - Perform detect/get/set operations according to the command code.
-    - Because slave devices vary (for example, address width and operation steps differ), get/set implementations differ. Customers need to implement `IpcBox_I2cGetValue` and `IpcBox_I2cSetValue` according to actual scenarios. These two APIs are located in `Service/HouseKeeping/ipc_box/src/ipc_i2c.c`.
+    - There is a resident thread on the MCU that continuously checks if the queue is empty. If not, it validates and parses the data.
+    - Implements detect/get/set operations based on the command code.
+    - Since slave devices vary (e.g., address width and operation steps), the implementation of get/set operations differs. Customers need to implement `IpcBox_I2cGetValue` and `IpcBox_I2cSetValue` according to the actual scenario. These APIs are located in `Service/HouseKeeping/ipc_box/src/ipc_i2c.c`.
 
-#### IpcBox Spi Implementation
-Similar to RunCmd, in this scenario an MCU interrupt is triggered when MCU sends data to Acore. In the interrupt callback, the data is stored in a queue and then returned to Acore through IPC.
-The implementation mainly consists of the following two processes:
+#### Implementation of IpcBox Spi
+Similar to the RunCmd implementation, in this scenario, when the MCU sends data to the Acore, it triggers an interrupt on the MCU. In the interrupt callback, the data is stored in a queue and then returned to the Acore via IPC.
+The implementation principle is mainly divided into the following two processes:
 1. `Acore->Ipc->MCU` process
-    - When Acore sends data to MCU, an MCU interrupt is triggered. In the interrupt callback, the data is stored in a queue.
+    - When Acore sends data to MCU, it triggers an interrupt on the MCU. In the interrupt callback, the data is stored in a queue.
 2. `MCU->Ipc->Acore` process
-    - MCU has a resident thread that continuously checks whether the queue is empty. If not, it validates and parses the data.
-    - Execute read/write, read-only, or write-only operations according to the command code. Because SPI is full-duplex communication, read-only actually sends invalid data of equal length, and write-only works similarly.
+    - There is a resident thread on the MCU that continuously checks if the queue is empty. If not, it validates and parses the data.
+    - Performs read/write, read-only, and write-only functions based on the command code. Since SPI is full-duplex communication, read-only actually sends invalid data of the same length, and similarly for write-only.
 
+### Application Interface
 
-
-### Application Programming Interface
-
-This section describes MCU-side IPC interfaces.
+This section covers the IPC interface on the MCU side.
 
 #### void Ipc_MDMA_Init(Ipc_InstanceConfigType* pConfigPtr, uint32 InstanceId)
 
@@ -311,7 +307,6 @@ Parameters(out)
     None
 Return value：None
 ```
-
 
 #### void Ipc_MDMA_DeInit(uint32 InstanceId)
 
@@ -343,7 +338,6 @@ Parameters(out)
 Return value：None
 ```
 
-
 #### Std_ReturnType Ipc_MDMA_CheckRemoteCoreReady(uint32 InstanceId)
 
 ```shell
@@ -364,7 +358,7 @@ Return value：Std_ReturnType
     IPC_E_CHANNEL_NOT_OPEN: Instance is not open
 ```
 
-#### void Std_ReturnType Ipc_MDMA_SendMsg(uint32 InstanceId, uint32 ChanId, uint32 Size, uint8* Buf, uint32 Timeout)
+#### Std_ReturnType Ipc_MDMA_SendMsg(uint32 InstanceId, uint32 ChanId, uint32 Size, uint8* Buf, uint32 Timeout)
 
 ```shell
 Description：send message.
@@ -387,11 +381,11 @@ Return value：Std_ReturnType
     IPC_E_CHANNEL_NOT_OPEN: Instance is not open
     IPC_E_TIMEOUT_ERROR: send timeout
     IPC_E_NO_MEMORY_ERROR: no memory to send buf
-    PC_E_CHECKRESERROR: check resource error
+    IPC_E_CHECKRESERROR: check resource error
 ```
 
 :::tip
-The DMA hardware requires the transfer address to be 16-byte aligned. Define the buffer as follows, with both the start address and size 16-byte aligned: `static uint8 __attribute__((aligned(16))) Ipc_Send_Buf[8192];`
+DMA hardware requires the transfer address to be 16-byte aligned. The buffer should be defined as follows, with the start address and size 16-byte aligned: `static uint8 __attribute__((aligned(16))) Ipc_Send_Buf[8192];`
 :::
 
 #### Std_ReturnType Ipc_MDMA_PollMsg(uint32 InstanceId)
@@ -411,7 +405,7 @@ Return value：Std_ReturnType
     IPC_E_PARAM_ERROR: param is illegal
     IPC_E_DRIVER_NOT_INIT: Driver is not init
     IPC_E_CHANNEL_NOT_OPEN: Instance is not open
-    IPC_E_NO_DATA_TO_RECEIVE_ER ROR: No data to be recvived
+    IPC_E_NO_DATA_TO_RECEIVE_ERROR: No data to be received
 ```
 
 #### Std_ReturnType Ipc_MDMA_OpenInstance(uint32 InstanceId)
@@ -433,7 +427,7 @@ Return value：Std_ReturnType
     IPC_E_PARAM_ERROR param is illegal
 ```
 
-### Std_ReturnType Ipc_MDMA_CloseInstance(uint32 InstanceId)
+#### Std_ReturnType Ipc_MDMA_CloseInstance(uint32 InstanceId)
 
 ```shell
 Description：close a Instance pointed to by ID.
@@ -452,8 +446,7 @@ Return value：Std_ReturnType
     IPC_E_PARAM_ERROR param is illegal
 ```
 
-
-### Std_ReturnType Ipc_MDMA_TryGetHwResource(uint32 InstanceId, uint32 ChanId, uint32 BufSize)
+#### Std_ReturnType Ipc_MDMA_TryGetHwResource(uint32 InstanceId, uint32 ChanId, uint32 BufSize)
 
 ```shell
 Description：try get Hardware resource.

@@ -127,7 +127,11 @@ IpcBox 基于 MCU 侧的 IPC 通信框架增加的应用扩展，用于管理外
 :::tip
 配套的 Acore 侧应用见[IPC模块介绍](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md#IPC_APP) 章节。
 
+<DocScope products="RDK S100">
+
 IpcBox 在版本 `RDKS100的V4.0.4-Beta` -> `RDKS100的V4.0.5-Beta` 升级过程中进行了一次重构，修改范围包括数据包结构，Ipc 通道，透传外设的默认配置，注意 MCU 侧和 Acore 侧的版本对应关系。
+
+</DocScope>
 
 :::
 

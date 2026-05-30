@@ -148,7 +148,7 @@ Open Xburn and set the parameters as follows:
 
 - Power cycle the device after the upgrade is complete.
 
-## **Designated Area Flashing**
+## **Designated Area Flashing**{#designated-area-flashing}
 
 ### **Description of Flashing Areas**
 
