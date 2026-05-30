@@ -65,7 +65,7 @@ The first compilation will download the toolchain from the ARM official website 
 1. Click the [Toolchain Download Link](../../01_Quick_start/download.md#tool-download) to download the compilation toolchain.
 2. Move the existing toolchain to /Build/ToolChain/Gcc/. Use the following command to move the toolchain:
 
-    `mv /path/to/toolchain/toolchain-filename /path/to/new/code/Build/ToolChain/Gcc/`
+    `mv path to toolchain/toolchain-filename path to new code/Build/ToolChain/Gcc/`
 
 3. During compilation, if the toolchain is detected, it will not be downloaded from the official website again.
 
@@ -344,12 +344,12 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
 <DocScope products="RDK S100">
 
-For information on using the Xburn tool to flash a specific area, refer to the [Flashing a Specific Area](../../01_Quick_start/02_install_os/rdk_s100/03_xburn/01_windows.md#using-xburn-to-flash-a-specific-area) section.
+For information on using the Xburn tool to flash a specific area, refer to the [Flashing a Specific Area](../../01_Quick_start/02_install_os/rdk_s100/03_xburn/01_windows.md#flashing-specific-partitions) section.
 
 </DocScope>
 <DocScope products="RDK S600">
 
-For information on using the Xburn tool to flash a specific area, refer to the [Flashing a Specific Area](../../01_Quick_start/02_install_os/rdk_s600.md#flashing-a-specific-area) section.
+For information on using the Xburn tool to flash a specific area, refer to the [Flashing a Specific Area](../../01_Quick_start/02_install_os/rdk_s600.md#designated-area-flashing) section.
 
 </DocScope>
 

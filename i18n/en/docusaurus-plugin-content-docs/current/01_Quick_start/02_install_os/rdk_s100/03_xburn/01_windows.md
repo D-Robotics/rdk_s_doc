@@ -143,7 +143,7 @@ Configuration method is as follows:
 
 - After the upgrade is complete, power on again.
 
-### Flashing Specific Partitions
+### Flashing Specific Partitions{#flashing-specific-partitions}
 
 #### Partition Flashing Description
 
