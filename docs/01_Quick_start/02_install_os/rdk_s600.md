@@ -62,8 +62,8 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
 
 |       下载模式   |     连接类型     | <center> 场景 </center>|  <center> 注意事项 </center>  |
 | :-------------: | :--------------: | ----------  | -------------------------|
-| [DFU+Fastboot](#DFU-Fastboot烧录) |  USB  |  空板或者系统损坏导致设备变砖等特殊情况   | 需设置启动模式进入 `dfu` 状态 |
-| [Fastboot](#Fastboot烧录)     |  USB  |  非空板状态更新系统，满足常用烧录场景  | 要求非空板状态，且系统能进入 `uboot` 模式 |
+| [DFU+Fastboot](#dfu-fastboot-烧录) |  USB  |  空板或者系统损坏导致设备变砖等特殊情况   | 需设置启动模式进入 `dfu` 状态 |
+| [Fastboot](#fastboot-烧录)     |  USB  |  非空板状态更新系统，满足常用烧录场景  | 要求非空板状态，且系统能进入 `uboot` 模式 |
 
 
 ### **DFU-Fastboot 烧录**
