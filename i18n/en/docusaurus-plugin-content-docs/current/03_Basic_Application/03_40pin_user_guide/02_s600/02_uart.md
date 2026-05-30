@@ -50,7 +50,7 @@ Recv:  AA55
 
 :::caution Note
 The pin mapping between ttyS and uart hardware controllers in the device tree is as follows: ttyS0 uses uart2 pins, ttyS1 uses uart0 pins, ttyS2 uses uart1 pins. For example, when testing ttyS1, you should use pins 2 and 3 (uart0 TX/RX) of the J19 header.
-For specific pins, please refer to section [3.3.2.1 Pin Definition and Application](./01_overview).
+For specific pins, please refer to section [Pin Definition and Application](./01_ext_io.md).
 :::
 
 ```python
