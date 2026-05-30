@@ -123,10 +123,13 @@ root@ubuntu:/userdata# cat /proc/asound/cards
 
 API 描述及使用参考官方文档介绍：https://www.alsa-project.org/alsa-doc/alsa-lib/pcm_2pcm_8c.html
 
-<DocScope products="RDK S100">
+
+
+
+
+<DocScope products="RDK-S100">
 
 ## 适配音频子板介绍
-
 
 ### S100
 
@@ -164,7 +167,7 @@ aplay -Dhw:0,1 test.wav
 
 表示播放一个 wav 文件，数据格式会解析 wav 文件头获取并写入驱动
 
-</DocScope>
+
 
 ## 音频回采测试
 
@@ -193,37 +196,14 @@ aplay -Dhw:0,1 test.wav
 - 若录音或播放无声，请确认音频文件格式、通道数与命令参数一致。
 - 若回采通道无信号，请确认已正确使用 8 通道录音命令，如果是使用了同一组 I2S ，请确认数据格式是否一致。
 
-## 音频回采测试
-
-音频回采功能可用于采集播放通道的信号，便于做回声消除等。以下介绍以 Audio Driver HAT REV2 音频板为示例说明。
-
-- **8通道麦克风录音（含回采）**
-  Audio Driver HAT REV2音频板的回采信号映射在录音通道 7 和 8 。需使用 8 通道录音命令（如果使用同一个 I2S ，需要保持通道数、位深、采样率对齐，这款转接板根据拨码开关固定了一路 I2S）：
-
-  ```shell
-  arecord -Dhw:0,0 -c 8 -r 48000 -f S16_LE -t wav -d 5 ./8chn_test.wav --period-size=256 --buffer-size=1024
-  ```
-
-- **同时启动格式对齐的8通道音频播放**
-
-  ```shell
-  aplay -Dhw:0,1 1khz.wav --period-size=1024 --buffer-size=1024
-  ```
-  这个 `1khz.wav` 可以是自己制作的格式对齐的正弦波音频文件，这样方便分析。
-
-- **分析回采信号**
-  录制完成后，可使用如 Audacity 等音频分析软件，打开 `8chn_test.wav`，查看第 7 、 8 通道的频谱频率是否符合预期，验证回采功能是否正常。
-
-## 常见问题排查
-
-- 若未检测到声卡，请检查硬件连接和拨码开关设置是否正确。
-- 若录音或播放无声，请确认音频文件格式、通道数与命令参数一致。
-- 若回采通道无信号，请确认已正确使用 8 通道录音命令，如果是使用了同一组 I2S ，请确认数据格式是否一致。
+</DocScope>
 
 <DocScope products="RDK S600">
-### S600
 
-#### USB 声卡
+
+## S600
+
+### USB 声卡
 
 适配的 USB 声卡官网使用说明文档：https://wiki.seeedstudio.com/respeaker_xvf3800_introduction
 
@@ -231,7 +211,7 @@ USB 声卡验证说明：
 1. 无需额外编译驱动和使能配置项。
 2. 参考官网说明文档，将设备和 S600连接。
 3. 功能验证说明如下：
-ls /dev/snd 查看是否有```pcmC*D*```节点。有说明 usb 声卡加载成功
+ls /dev/snd 查看是否有`pcmC*D*`节点。有说明 usb 声卡加载成功
 
 查看声卡支持属性
 ```
@@ -248,7 +228,7 @@ arecord -Dhw:1,0 -c 2 -r 16000 -f S16_LE -t wav -d 10 test.wav
 aplay -Dhw:1,0 test.wav
 ```
 
-#### 其他声卡
+### 其他声卡
 
 S600预留了14PIN，包含 I2S/I2C 接口。
 

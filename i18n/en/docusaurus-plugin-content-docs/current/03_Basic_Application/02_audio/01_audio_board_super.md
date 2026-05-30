@@ -160,66 +160,41 @@ aplay -Dhw:0,1 test.wav
 
 This plays a wav file. The data format is parsed from the wav file header and written to the driver.
 
+
+
+## Audio Loopback Capture Test
+
+The audio loopback capture function can be used to capture signals from the playback channel, facilitating echo cancellation, etc. The following uses the Audio Driver HAT REV2 audio board as an example.
+
+- **8-channel Microphone Recording (including loopback)**
+  The loopback signal of the Audio Driver HAT REV2 audio board is mapped to recording channels 7 and 8. An 8-channel recording command is required (if using the same I2S, the number of channels, bit depth, and sample rate must be aligned; this adapter board fixes one I2S line via DIP switches):
+
+  ```shell
+  arecord -Dhw:0,0 -c 8 -r 48000 -f S16_LE -t wav -d 5 ./8chn_test.wav --period-size=256 --buffer-size=1024
+  ```
+
+- **Simultaneously start format-aligned 8-channel audio playback**
+
+  ```shell
+  aplay -Dhw:0,1 1khz.wav --period-size=1024 --buffer-size=1024
+  ```
+  The `1khz.wav` file can be a self-made format-aligned sine wave audio file for easier analysis.
+
+- **Analyze the loopback signal**
+  After recording, use audio analysis software such as Audacity to open the `8chn_test.wav` file and check whether the spectral frequencies of channels 7 and 8 meet expectations, verifying that the loopback function is working properly.
+
+## Common Issue Troubleshooting
+
+- If the sound card is not detected, please check whether the hardware connection and DIP switch settings are correct.
+- If recording or playback is silent, please confirm that the audio file format and number of channels match the command parameters.
+- If there is no signal on the loopback channel, please confirm that the 8-channel recording command was used correctly. If the same I2S line is used, please confirm that the data formats are consistent.
+
 </DocScope>
 
-## Audio Loopback Capture Test
-
-The audio loopback capture function can be used to capture signals from the playback channel, facilitating echo cancellation, etc. The following uses the Audio Driver HAT REV2 audio board as an example.
-
-- **8-channel Microphone Recording (including loopback)**
-  The loopback signal of the Audio Driver HAT REV2 audio board is mapped to recording channels 7 and 8. An 8-channel recording command is required (if using the same I2S, the number of channels, bit depth, and sample rate must be aligned; this adapter board fixes one I2S line via DIP switches):
-
-  ```shell
-  arecord -Dhw:0,0 -c 8 -r 48000 -f S16_LE -t wav -d 5 ./8chn_test.wav --period-size=256 --buffer-size=1024
-  ```
-
-- **Simultaneously start format-aligned 8-channel audio playback**
-
-  ```shell
-  aplay -Dhw:0,1 1khz.wav --period-size=1024 --buffer-size=1024
-  ```
-  The `1khz.wav` file can be a self-made format-aligned sine wave audio file for easier analysis.
-
-- **Analyze the loopback signal**
-  After recording, use audio analysis software such as Audacity to open the `8chn_test.wav` file and check whether the spectral frequencies of channels 7 and 8 meet expectations, verifying that the loopback function is working properly.
-
-## Common Issue Troubleshooting
-
-- If the sound card is not detected, please check whether the hardware connection and DIP switch settings are correct.
-- If recording or playback is silent, please confirm that the audio file format and number of channels match the command parameters.
-- If there is no signal on the loopback channel, please confirm that the 8-channel recording command was used correctly. If the same I2S line is used, please confirm that the data formats are consistent.
-
-## Audio Loopback Capture Test
-
-The audio loopback capture function can be used to capture signals from the playback channel, facilitating echo cancellation, etc. The following uses the Audio Driver HAT REV2 audio board as an example.
-
-- **8-channel Microphone Recording (including loopback)**
-  The loopback signal of the Audio Driver HAT REV2 audio board is mapped to recording channels 7 and 8. An 8-channel recording command is required (if using the same I2S, the number of channels, bit depth, and sample rate must be aligned; this adapter board fixes one I2S line via DIP switches):
-
-  ```shell
-  arecord -Dhw:0,0 -c 8 -r 48000 -f S16_LE -t wav -d 5 ./8chn_test.wav --period-size=256 --buffer-size=1024
-  ```
-
-- **Simultaneously start format-aligned 8-channel audio playback**
-
-  ```shell
-  aplay -Dhw:0,1 1khz.wav --period-size=1024 --buffer-size=1024
-  ```
-  The `1khz.wav` file can be a self-made format-aligned sine wave audio file for easier analysis.
-
-- **Analyze the loopback signal**
-  After recording, use audio analysis software such as Audacity to open the `8chn_test.wav` file and check whether the spectral frequencies of channels 7 and 8 meet expectations, verifying that the loopback function is working properly.
-
-## Common Issue Troubleshooting
-
-- If the sound card is not detected, please check whether the hardware connection and DIP switch settings are correct.
-- If recording or playback is silent, please confirm that the audio file format and number of channels match the command parameters.
-- If there is no signal on the loopback channel, please confirm that the 8-channel recording command was used correctly. If the same I2S line is used, please confirm that the data formats are consistent.
-
 <DocScope products="RDK S600">
-### S600
+## S600
 
-#### USB Sound Card
+### USB Sound Card
 
 Official user guide for the adapted USB sound card: https://wiki.seeedstudio.com/respeaker_xvf3800_introduction
 
@@ -245,7 +220,7 @@ Playback command
 aplay -Dhw:1,0 test.wav
 ```
 
-#### Other Sound Cards
+### Other Sound Cards
 
 The S600 provides a 14-pin interface, including I2S/I2C interfaces.
 
