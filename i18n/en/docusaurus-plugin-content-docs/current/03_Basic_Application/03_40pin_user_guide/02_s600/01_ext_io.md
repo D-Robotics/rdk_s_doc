@@ -29,7 +29,7 @@ In the development board's `/app/40pin_samples/` directory, various functional t
 Take `/app/40pin_samples/button_led.py` as an example. This program configures pin `4` as input and pin `3` as output, controlling the output state of pin `3` based on the input state of pin `4`.
 
 ## Environment Setup
-TODO
+
 Use a jumper wire to connect pin `4` to 1.8V or GND to control its high/low logic level.
 
 ## How to Run
@@ -42,7 +42,7 @@ root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 ```
 
 ## Expected Outcome
-TODO
+
 
 By controlling the high/low logic level of pin `4`, you can change the output logic level of pin `3`.
 
