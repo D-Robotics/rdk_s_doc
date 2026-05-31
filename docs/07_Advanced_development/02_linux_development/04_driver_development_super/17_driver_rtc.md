@@ -940,7 +940,7 @@ ln -s /dev/rtc1 /dev/rtc
   }
   ```
 
-上述这些接口函数中的 IOCTL 命令（`RTC_SET_TIME`、`RTC_RD_TIME`、`RTC_AIE_OFF` 等）都是在前文驱动代码章节提及的 [rtc_dev_ioctl](#RTC_IOCTL) 函数中定义好的。
+上述这些接口函数中的 IOCTL 命令（`RTC_SET_TIME`、`RTC_RD_TIME`、`RTC_AIE_OFF` 等）都是在前文驱动代码章节提及的 [rtc_dev_ioctl](#rtc-驱动代码) 函数中定义好的。
 
 #### RTC 测试用例
 
