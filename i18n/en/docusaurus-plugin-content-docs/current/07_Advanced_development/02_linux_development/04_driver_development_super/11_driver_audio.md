@@ -410,4 +410,4 @@ The connection method is shown below:
 
 When toggling the pin functions with the DIP switch, move the upper 40-pin DIP switch to the left, and move the lower PCM DIP switch to the right. As shown in the figure below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3-en.png" alt="" style={{ width: '100%' }} />
