@@ -438,5 +438,29 @@
   "sidebar.tutorialSidebar.category.10.2 RDK S600 版本发布.link.generated-index.description": {
     "message": "RDK S600 Version Release",
     "description": "The generated-index page description for category 10.2 RDK S600 版本发布 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.4.2 参考示例（Python）": {
+    "message": "4.2 Reference Examples (Python)",
+    "description": "The label for category 4.2 参考示例（Python） in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.4.2 参考示例（Python）.link.generated-index.description": {
+    "message": "Python algorithm development examples.",
+    "description": "The generated-index page description for category 4.2 参考示例（Python） in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.4.3 参考示例（C++）": {
+    "message": "4.3 Reference Examples (C++)",
+    "description": "The label for category 4.3 参考示例（C++） in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.4.3 参考示例（C++）.link.generated-index.description": {
+    "message": "Provides C++ algorithm development examples.",
+    "description": "The generated-index page description for category 4.3 参考示例（C++） in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.3 多媒体应用开发 ": {
+    "message": "7.3.3 Multimedia Application Development ",
+    "description": "The label for category 7.3.3 多媒体应用开发  in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.3 多媒体应用开发 .link.generated-index.description": {
+    "message": " S600 Multimedia Application Development ",
+    "description": "The generated-index page description for category 7.3.3 多媒体应用开发  in sidebar tutorialSidebar"
   }
 }

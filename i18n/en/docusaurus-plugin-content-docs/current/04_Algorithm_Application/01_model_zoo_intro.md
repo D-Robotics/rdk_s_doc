@@ -24,4 +24,4 @@ The RDK Model Zoo is a community-driven open-source project. We warmly welcome d
 
 ## User Manual
 
-[ModelZoo User Manual](https://liqinglian01.github.io/model_zoo_doc/model_zoo_intro)
+[ModelZoo User Manual](https://developer.d-robotics.cc//model_zoo_doc/model_zoo_intro)
