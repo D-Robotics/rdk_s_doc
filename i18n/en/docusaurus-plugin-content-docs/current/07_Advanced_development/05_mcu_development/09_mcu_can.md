@@ -873,9 +873,18 @@ This program implements multi-channel CAN send and receive:
 
 </DocScope>
 
+<DocScope products="RDK S100">
+
 Send strategy:
 - Send data at fixed intervals. Adjust delay to change send frequency. Too high a frequency may cause packet loss.
-- Target channels: broadcast according to enabled CAN channels in the configuration file (S100 default CAN5 ~ CAN9, S600 default CAN1 ~ CAN10)
+- Target channels: broadcast according to enabled CAN channels in the configuration file (S100 default CAN5 ~ CAN9)
+
+</DocScope>
+<DocScope products="RDK S600">
+Send strategy:
+- Send data at fixed intervals. Adjust delay to change send frequency. Too high a frequency may cause packet loss.
+- Target channels: broadcast according to enabled CAN channels in the configuration file (S600 default CAN1 ~ CAN10)
+</DocScope>
 
 Receive strategy:
 - Passively receive data, verify counters, and compute transmission delay
@@ -932,10 +941,20 @@ You can also use logcat for more logs
 
 ##### Sender
 
+<DocScope products="RDK S100">
+
 Send strategy:
 - Send data at fixed intervals. Adjust delay to change send frequency. Too high a frequency may cause packet loss.
 - Data content: send extended frames (64 bytes) via CAN FD.
-- Target channels: send according to enabled CAN channels in the configuration file (S100 default CAN5 ~ CAN9, S600 default CAN1 ~ CAN10)
+- Target channels: send according to enabled CAN channels in the configuration file (S100 default CAN5 ~ CAN9)
+
+</DocScope>
+<DocScope products="RDK S600">
+Send strategy:
+- Send data at fixed intervals. Adjust delay to change send frequency. Too high a frequency may cause packet loss.
+- Data content: send extended frames (64 bytes) via CAN FD.
+- Target channels: send according to enabled CAN channels in the configuration file (S600 default CAN1 ~ CAN10)
+</DocScope>
 
 ##### Receiver
 
