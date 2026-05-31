@@ -6,11 +6,22 @@ sidebar_position: 1
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
 ```
 
 ## Preface
+
+<DocScope products="RDK S100">
+
 The S100 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet收发, PTP/TSN time-sensitive networking, and EtherCAT master features.  
+
+</DocScope>
+<DocScope products="RDK S600">
+
 The S600 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet收发, PTP/TSN time-sensitive networking, and EtherCAT master features.  
+
+</DocScope>
+
 The controllers have built-in hardware multi-queue, MTL layer 2 transport layer, DMA engine, etc., to achieve packet收发 in the various scenarios mentioned above.  
 This document mainly includes a network card usage guide, development board Bringup, and key feature descriptions.
 
@@ -117,8 +128,17 @@ This document mainly includes a network card usage guide, development board Brin
 ## Network Driver Development
 ### U-Boot ETH Development
 #### Hardware Connection
+
+<DocScope products="RDK S100">
+
 - Refer to S100 Design Schematic
+
+</DocScope>
+<DocScope products="RDK S600">
+
 - Refer to S600 Design Schematic
+
+</DocScope>
 
 #### Device Tree Configuration
 ```dts
