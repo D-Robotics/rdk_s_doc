@@ -42,3 +42,11 @@ jobs:
           --region cn-beijing \
           --update \
           --retry-times=3
+      - name: 查看 ossutil 错误详情
+        if: failure()  # 只有失败时才执行
+        run: |
+          echo "=== 查找所有 report 文件 ==="
+          find /home/runner/work/rdk_s_doc/rdk_s_doc/ossutil_output/ -name "*.report" -type f
+    
+          echo "=== 显示最新的 report 内容 ==="
+          cat /home/runner/work/rdk_s_doc/rdk_s_doc/ossutil_output/ossutil_report_20260531_135738_2295.report
