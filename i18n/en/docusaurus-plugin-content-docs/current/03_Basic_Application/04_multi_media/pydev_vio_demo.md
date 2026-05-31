@@ -5,7 +5,7 @@ sidebar_position: 1
 # 3.4.1 Reference Examples (Python)
 
 ## MIPI Camera
-Please refer to [Algorithm Examples | MIPI Camera section](/rdk_s/Algorithm_Application/Python_Sample/mipi_camera_yolov5x)
+Please refer to [Algorithm Examples | MIPI Camera section](../../03_Basic_Application/01_Image/01_mipi_camera.md)
 
 <!--
 This section introduces the usage of D-Robotics' Python `hobot_vio` image and multimedia library through example programs such as video stream decoding, covering operations like video streaming, scaling, encoding, and decoding.

@@ -5,7 +5,7 @@ sidebar_position: 1
 # 3.4.1 参考示例（python）
 
 ## MIPI Camera
-请参考[算法示例 | MIPI Camera 部分](/Basic_Application/Image/mipi_camera)
+请参考[算法示例 | MIPI Camera 部分](../../03_Basic_Application/01_Image/01_mipi_camera.md) 
 
 <!--
 本章节将通过视频流解码等示例程序，介绍 D-Robotics Python 语言的 `hobot_vio` 图像多媒体库的使用方法，包括视频拉流、缩放及编解码等操作。
