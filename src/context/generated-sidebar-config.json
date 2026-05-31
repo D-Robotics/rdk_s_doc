@@ -91,9 +91,8 @@
   "basic_application/multi_media/multi_media_api/pydev/pydev_multimedia_api_s100": {
     "versions": [],
     "products": [
-      "RDK-S100"
-    ],
-    "isCategory": false
+      "RDK S100"
+    ]
   },
   "basic_application/multi_media/multi_media_api/pydev": {
     "versions": [
@@ -312,6 +311,42 @@
     ]
   },
   "current/algorithm_application/python_sample/ultralytics_yoloe11_seg": {
+    "versions": [],
+    "products": [
+      "RDK-S100"
+    ]
+  },
+  "current/basic_application/c++_sample/lanenet": {
+    "versions": [],
+    "products": [
+      "RDK-S100"
+    ]
+  },
+  "current/basic_application/c++_sample/paddleocr": {
+    "versions": [],
+    "products": [
+      "RDK-S100"
+    ]
+  },
+  "current/basic_application/python_sample/lanenet": {
+    "versions": [],
+    "products": [
+      "RDK-S100"
+    ]
+  },
+  "current/basic_application/c++_sample/ultralytics_yoloe11_seg": {
+    "versions": [],
+    "products": [
+      "RDK-S100"
+    ]
+  },
+  "current/basic_application/python_sample/paddleocr": {
+    "versions": [],
+    "products": [
+      "RDK-S100"
+    ]
+  },
+  "current/basic_application/python_sample/ultralytics_yoloe11_seg": {
     "versions": [],
     "products": [
       "RDK-S100"
