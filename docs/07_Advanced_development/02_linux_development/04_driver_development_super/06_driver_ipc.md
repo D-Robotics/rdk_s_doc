@@ -823,11 +823,6 @@ ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave
 
 测试用例中的读写操作都是对8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于 MCU 的 SDK 中的 Service/HouseKeeping/ipc_box/src/ipc_i2c.c
 :::
-:::tip
-ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave
-
-测试用例中的读写操作都是对8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于 MCU 的 SDK 中的 Service/HouseKeeping/ipc_box/src/ipc_i2c.c
-:::
 
 ### Python 应用
 
