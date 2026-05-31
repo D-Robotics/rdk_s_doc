@@ -163,14 +163,14 @@ AON GPIO0 ~ GPIO20
 
 ### Sleep Command
 
-- Sleep via button (SLEEP button) (short press)
+- Sleep via button (WAKE button) (short press)
 - Acore enters `systemctl suspend`
 
 ### Wakeup Command
 
 - In Deep sleep mode, automatic wakeup is possible when RTC is set as the wakeup source.
 
-- In Deep sleep mode, if GPIO is set as the wakeup source, short pressing the button (SLEEP button) after sleep can wake the system.
+- In Deep sleep mode, if GPIO is set as the wakeup source, short pressing the button (WAKE button) after sleep can wake the system.
 
 - In Light sleep mode, wakeup can only be achieved by executing a command on the MCU or calling an API interface.
 
