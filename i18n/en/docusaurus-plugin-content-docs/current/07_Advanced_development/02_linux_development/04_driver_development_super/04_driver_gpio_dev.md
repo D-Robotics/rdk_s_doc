@@ -296,7 +296,7 @@ pinctrl_video: pinctrl@36090000 {
 }
 ```
 
-For example this line: gpiochip3: GPIOs 439~455, parent: platform/360b0000.gpio, 360b0000.gpio: "GPIOs 439~455" means the base is 439
+For example this line: gpiochip3: GPIOs 439-455, parent: platform/360b0000.gpio, 360b0000.gpio: "GPIOs 439-455" means the base is 439
 
 ``` {.shell}
 cat /sys/kernel/debug/gpio

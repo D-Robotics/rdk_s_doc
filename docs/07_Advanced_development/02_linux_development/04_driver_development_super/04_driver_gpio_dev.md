@@ -302,8 +302,8 @@ pinctrl_video: pinctrl@36090000 {
 }
 ```
 
-如这行：gpiochip3: GPIOs 439~455, parent: platform/360b0000.gpio,
-360b0000.gpio: "GPIOs 439~455"代表 base 是439
+如这行：gpiochip3: GPIOs 439-455, parent: platform/360b0000.gpio,
+360b0000.gpio: "GPIOs 439-455"代表 base 是439
 
 ``` {.shell}
 cat /sys/kernel/debug/gpio
