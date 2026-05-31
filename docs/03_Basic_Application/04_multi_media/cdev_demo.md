@@ -82,7 +82,7 @@ sidebar_position: 2
 
   参数说明：
 
-  - -b: RAW 图 bit 数，例如 IMX219支持格式为 RAW10，则 bit 数为10。sensor 支持格式可参考[配件清单](http://sysgbj2.hobot.cc/rdk_doc/rdk_s/Advanced_development/hardware_development/accessory)
+  - -b: RAW 图 bit 数，例如 IMX219支持格式为 RAW10，则 bit 数为10。sensor 支持格式可参考[配件清单](../../07_Advanced_development/01_hardware_development/02_accessory.md)
   - -c: 保存图像的数量，获取到每张图像的时间间隔一般为1/fps
   - -w: 保存图像的宽度
   - -h: 保存图像的高度
