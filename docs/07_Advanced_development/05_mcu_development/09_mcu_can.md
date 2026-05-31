@@ -872,9 +872,17 @@ Send end, send package total: 1 frame total: 1
 
 </DocScope>
 
+
+<DocScope products="RDK S100">
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
-- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S100默认 CAN5~CAN9，S600默认 CAN1~CAN10）
+- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S100默认 CAN5-CAN9）
+</DocScope>
+<DocScope products="RDK S600">
+发送策略：
+- 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
+- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S600默认 CAN1-CAN10）
+</DocScope>
 
 接收策略:
 - 被动接收数据，验证接收数据的计数器和计算传输时延
@@ -931,10 +939,20 @@ Send end, send package total: 1 frame total: 1
 
 ##### 发送端
 
+<DocScope products="RDK S100">
+
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
 - 数据内容：通过 CANFD 发送扩展帧(64bytes)的数据。
-- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S100默认 CAN5~CAN9，S600默认 CAN1~CAN10）
+- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S100默认 CAN5-CAN9）
+
+</DocScope>
+<DocScope products="RDK S600">
+发送策略：
+- 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
+- 数据内容：通过 CANFD 发送扩展帧(64bytes)的数据。
+- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S600默认 CAN1-CAN10）
+</DocScope>
 
 ##### 接收端
 
