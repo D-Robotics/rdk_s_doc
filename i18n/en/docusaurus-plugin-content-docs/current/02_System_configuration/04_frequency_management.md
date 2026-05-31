@@ -150,7 +150,7 @@ For the emc2305 fan controller on the RDK S100 development board, you can obtain
    ```
 
 :::info
-**Note**: When the policy of thermal_zone0 is `step_wise`, the fan gear configured by the user will be automatically adjusted by the system based on the current temperature. If customers need to fix the fan to a specific gear, please refer to the [Thermal Zone](#introduction-to-thermal-zone) section and change the policy of thermal_zone0 to `user_space`.
+**Note**: When the policy of thermal_zone0 is `step_wise`, the fan gear configured by the user will be automatically adjusted by the system based on the current temperature. If customers need to fix the fan to a specific gear, please refer to the [Thermal Zone](#thermal-zone-introduction) section and change the policy of thermal_zone0 to `user_space`.
 :::
 
 ### CPU Frequency Management
@@ -397,7 +397,7 @@ For the emc2305 fan controller on the RDK S600 development board, you can obtain
    ```
 
 :::info
-**Note**: When the policy of thermal_zone2 or thermal_zone16 is `step_wise`, the fan gear configured by the user will be automatically adjusted by the system based on the current temperature. If customers need to fix the fan to a specific gear, please refer to the [Thermal Zone](#introduction-to-thermal-zone-1) section and change the policy of thermal_zone2 and thermal_zone16 to `user_space`.
+**Note**: When the policy of thermal_zone2 or thermal_zone16 is `step_wise`, the fan gear configured by the user will be automatically adjusted by the system based on the current temperature. If customers need to fix the fan to a specific gear, please refer to the [Thermal Zone](#thermal-zone-introduction-1) section and change the policy of thermal_zone2 and thermal_zone16 to `user_space`.
 :::
 
 ### CPU Frequency Management
