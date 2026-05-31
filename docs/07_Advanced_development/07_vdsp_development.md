@@ -101,7 +101,7 @@ echo N > /sys/module/hobot_remoteproc/parameters/heartbeat_enable
 #### 通过函数接口形式操作 vdsp
 
 通过 libvdsp.so 动态链接库加载 DSP 程序，实现加载、启动、停止、复位、获取 DSP 状态等功能，API 介绍可参考
-[VDSP启停控制接口](#vdsp_boot_api)。
+[VDSP启停控制接口](#vdsp-启停控制-api)。
 
 #### 消息连接和发送
 
@@ -1311,7 +1311,7 @@ int main(int argc, char *argv[])
 
 【示例代码】
 
-参考 [hb_rpmsg_send_timeout](#hb_rpmsg_send_timeout_acore)
+参考 [hb_rpmsg_send_timeout](#hb_rpmsg_send_timeout)
 
 ##### hb_rpmsg_get_version
 
@@ -2783,7 +2783,7 @@ boot_lib_async_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 【示例代码】
 
-参考 [hb_vdsp_start](#hb_vdsp_start_sync)
+参考 [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_get_status
 
@@ -2811,7 +2811,7 @@ boot_lib_async_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 【示例代码】
 
-参考 [hb_vdsp_start](#hb_vdsp_start_sync)
+参考 [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_reset
 
@@ -3006,7 +3006,7 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 【示例代码】
 
-参考 [hb_vdsp_set_path](#hb_vdsp_setpathname)
+参考 [hb_vdsp_set_path](#hb_vdsp_set_path)
 
 ##### hb_vdsp_get_fd
 
@@ -3030,7 +3030,7 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 【示例代码】
 
-参考 [hb_vdsp_start](#hb_vdsp_start_async)
+参考 [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_close_fd
 
@@ -3053,7 +3053,7 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 【示例代码】
 
-参考 [hb_vdsp_start](#hb_vdsp_start_async)
+参考 [hb_vdsp_start](#hb_vdsp_start)
 
 ##### hb_vdsp_mem_alloc
 
