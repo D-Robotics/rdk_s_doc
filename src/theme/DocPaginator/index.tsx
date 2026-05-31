@@ -192,6 +192,23 @@ function applyPaginatorTitle(
   };
 }
 
+function resolveTitleForVisibleLink(
+  link: SidebarItem | null,
+  fallback: {title?: string; permalink: string} | null | undefined,
+): {title?: string; fromSidebarLabel: boolean} {
+  if (!link) {
+    return {title: fallback?.title, fromSidebarLabel: false};
+  }
+  const permalink = (link.href || link.permalink) as string;
+  const sameTarget =
+    Boolean(fallback?.permalink) &&
+    normalizePath(fallback?.permalink) === normalizePath(permalink);
+  if (sameTarget && fallback?.title) {
+    return {title: fallback.title, fromSidebarLabel: false};
+  }
+  return {title: link.label || fallback?.title, fromSidebarLabel: Boolean(link.label)};
+}
+
 export default function DocPaginatorWrapper(props: Props): JSX.Element {
   const { pathname } = useLocation();
   const { previous, next } = props;
@@ -231,29 +248,32 @@ export default function DocPaginatorWrapper(props: Props): JSX.Element {
       ? orderedDocLinks[currentIndex + 1]
       : null;
 
+  const previousTitle = resolveTitleForVisibleLink(prevLink, previous as any);
+  const nextTitle = resolveTitleForVisibleLink(nextLink, next as any);
+
   const autoPrevious = prevLink
     ? {
-        title: prevLink.label || previous?.title,
+        title: previousTitle.title,
         permalink: (prevLink.href || prevLink.permalink) as string,
       }
     : null;
 
   const autoNext = nextLink
     ? {
-        title: nextLink.label || next?.title,
+        title: nextTitle.title,
         permalink: (nextLink.href || nextLink.permalink) as string,
       }
     : null;
 
   const customNext = applyPaginatorTitle(
     autoNext ?? next ?? null,
-    Boolean(nextLink?.label),
+    nextTitle.fromSidebarLabel,
     currentLocale,
   );
 
   const customPrevious = applyPaginatorTitle(
     autoPrevious ?? previous ?? null,
-    Boolean(prevLink?.label),
+    previousTitle.fromSidebarLabel,
     currentLocale,
   );
 
