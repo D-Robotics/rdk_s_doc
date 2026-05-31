@@ -19,7 +19,16 @@ import DocScope from '@site/src/components/DocScope'
 
 交叉编译环境的搭建是开发过程中必不可少的一步。下图展示了交叉编译环境的整体框架：
 
+<DocScope products="RDK S100">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/environment_build/build_host_target.png" alt="build_host_target" style={{ width: '100%' }} />
+
+</DocScope>
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/environment_build/build_host_target.png" alt="build_host_target" style={{ width: '100%' }} />
+
+</DocScope>
 
 <DocScope products="RDK S100">
 ## RDK OS 开发指南
