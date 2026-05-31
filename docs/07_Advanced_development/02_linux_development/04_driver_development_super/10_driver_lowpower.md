@@ -164,14 +164,14 @@ AON GPIO0 ~ GPIO20
 
 ### 休眠命令
 
-- 通过按键（SLEEP 按键）休眠（短按）
+- 通过按键（WAKE 按键）休眠（短按）
 - Acore 输入`systemctl suspend`
 
 ### 唤醒命令
 
 - Deep sleep 模式下，RTC 作为唤醒源时可以自动唤醒
 
-- Deep sleep 模式下，设置 GPIO 作为唤醒源，休眠之后短按按键（SLEEP 按键）可以唤醒
+- Deep sleep 模式下，设置 GPIO 作为唤醒源，休眠之后短按按键（WAKE 按键）可以唤醒
 
 - Light sleep 模式下，只能通过在 MCU 执行命令或者调用 API 接口唤醒
 
