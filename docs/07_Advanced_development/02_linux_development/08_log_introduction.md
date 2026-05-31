@@ -379,7 +379,7 @@ LogAsync 输出原则同 LogSync。
 #endif
 ```
 
-MCU Log 使用注意事项，请参考：[MCU Log简介](../05_mcu_development/01_basic_information.md#mcu-log-intro)。
+MCU Log 使用注意事项，请参考：[MCU Log简介](../05_mcu_development/01_basic_information.md#mcu-log-简介)。
 
 ### DSP
 
