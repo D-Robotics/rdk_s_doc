@@ -55,7 +55,7 @@ import DocScope from '@site/src/components/DocScope';
     **以上依赖库列表和安装文件仅列举了模型运行的基本库，部分示例程序需要额外的三方库，可通过相应示例的README.md文档或此文档的相应章节查看。**
 
 #### 其他组件
-- hbm_rumtime：用于加载和运行`.hbm`模型，系统默认已安装，如需自行安装可参考 [Python 接口](../01_Python_API.md#模块类函数说明api-reference) 部分。
+- hbm_rumtime：用于加载和运行`.hbm`模型，系统默认已安装，如需自行安装可参考 [Python 接口](../05_Python_API.md#模块类函数说明api-reference) 部分。
 
 
 - Hobot VIO：用于访问相机图像流（hobot_vio，如 libsrcampy）
