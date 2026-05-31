@@ -1,1 +1,230 @@
----\nsidebar_position: 1\n---\n\n# 示例概述\n\n```mdx-code-block\nimport DocScope from '@site/src/components/DocScope';\n```\n\n<DocScope products="RDK-S100">\n\n本项目包含多个基于 C/C++ 编写的 AI 示例程序，适用于 RDK S100平台，覆盖图像分类、目标检测、实例分割、姿态估计、OCR、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。\n\n</DocScope>\n<DocScope products="RDK-S600">\n\n本项目包含多个基于 C/C++ 编写的 AI 示例程序，适用于 RDK S600平台，覆盖图像分类、目标检测、实例分割、姿态估计、语音识别等常见 AI 任务。示例使用 `.hbm` 格式的量化模型进行推理，便于开发者快速验证模型效果并开展应用开发。\n\n</DocScope>\n\n本项目的板端代码位置：`/app/cdev_demo/bpu`。\n\n## 目录结构总览\n\n<DocScope products="RDK-S100">\n\n```text\n|-- 01_classification_sample         # 图像分类示例（如 ResNet18、MobileNet）\n|-- 02_detection_sample              # 目标检测示例（YOLO 等）\n|-- 03_instance_segmentation_sample  # 实例分割示例\n|-- 04_pose_sample                   # 关键点检测示例\n|-- 05_open_instance_seg_sample      # 开放实例分割示例\n|-- 06_lane_detection_sample         # 车道线检测示例\n|-- 07_speech_sample                 # 语音识别示例\n|-- 08_OCR_sample                    # 光学字符识别示例\n|-- 09_usb_camera_sample             # USB 摄像头实时推理示例\n|-- 10_mipi_camera_sample            # MIPI 摄像头实时推理示例\n|-- 11_decode_yolov5x_display_sample # 视频解码、推理与显示示例\n|-- 12_rtsp_yolov5x_display_sample   # RTSP 流解码、推理与显示示例\n|-- utils                            # 通用工具函数\n`-- README.md                        # 项目说明文档（当前文件）\n```\n\n</DocScope>\n<DocScope products="RDK-S600">\n\n```text\n|-- classification_sample            # 图像分类示例（如 ResNet18、MobileNet）\n|-- detection_sample                 # 目标检测示例（YOLO 等）\n|-- instance_segmentation_sample     # 实例分割示例\n|-- pose_sample                      # 关键点检测示例\n|-- speech_sample                    # 语音识别示例\n|-- usb_camera_sample                # USB 摄像头实时推理示例\n|-- mipi_camera_sample               # MIPI 摄像头实时推理示例\n|-- decode_yolov5x_display_sample    # 视频解码、推理与显示示例\n|-- rtsp_yolov5x_display_sample      # RTSP 流解码、推理与显示示例\n|-- utils                            # 通用工具函数\n`-- README.md                        # 项目说明文档（当前文件）\n```\n\n</DocScope>\n\n## 环境要求\n\n在运行示例前，请确保系统环境满足以下要求：\n\n### 硬件\n\n<DocScope products="RDK-S100">\n\n- 支持 BPU 的S100开发板\n- 摄像头（USB 或 MIPI）若需运行相关示例\n\n</DocScope>\n<DocScope products="RDK-S600">\n\n- 支持 BPU 的S600开发板\n- 摄像头（USB 或 MIPI）若需运行相关示例\n\n</DocScope>\n\n### 系统与工具链\n本项目已在以下环境中验证可运行：\n\n- 操作系统\n\n    <DocScope products="RDK S100">\n\n    - Ubuntu 22.04.5 LTS (Jammy Jellyfish)\n\n    </DocScope>\n    <DocScope products="RDK S600">\n\n    - Distributor ID: Ubuntu\n    - Description:    Ubuntu 24.04.3 LTS\n    - Release:        24.04\n    - Codename:       noble\n\n    </DocScope>\n\n- 编译工具链\n\n    - CMake: 3.22.1\n\n    - GCC: 11.4.0\n\n    - G++: 11.4.0\n\n### 依赖库\n不同的示例依赖不同的开发包，请根据需求安装。\n\n- 通用依赖\n    ```bash\n    sudo apt update\n    sudo apt install libgflags-dev\n    ```\n\n- ASR 语音识别示例\n    ```bash\n    sudo apt update\n    sudo apt install libsndfile1-dev\n    sudo apt install libsamplerate0-dev\n    ```\n\n<DocScope products="RDK-S100">\n\n- OCR 文字识别示例\n    ```bash\n    sudo apt update\n    sudo apt install libpolyclipping-dev\n    ```\n\n</DocScope>\n<DocScope products="RDK-S600">\n\n<!-- - OCR 文字识别示例\n    ```bash\n    sudo apt update\n    sudo apt install libpolyclipping-dev\n    ``` -->\n\n</DocScope>\n\n## 编译方法\n以图像分类示例 resnet18 为例：\n\n<DocScope products="RDK-S100">\n\n```bash\ncd 01_classification_sample/01_resnet18\n\nmkdir build && cd build\n\ncmake ..\n\nmake -j$(nproc)\n```\n\n</DocScope>\n<DocScope products="RDK-S600">\n\n```bash\ncd classification_sample/resnet18\n\nmkdir build && cd build\n\ncmake ..\n\nmake -j$(nproc)\n```\n\n</DocScope>\n\n## 运行示例\n以图像分类示例 resnet18 为例：\n+ 进入sample目录的编译目录\n\n    <DocScope products="RDK-S100">\n\n    ```bash\n    cd 01_classification_sample/01_resnet18/build\n    ```\n\n    </DocScope>\n    <DocScope products="RDK-S600">\n\n    ```bash\n    cd classification_sample/resnet18/build\n    ```\n\n    </DocScope>\n+ 运行模型\n    ``` bash\n    ./resnet_18\n    ```\n+ 查看结果\n    ``` bash\n    TOP 0: label=zebra, prob=0.99872\n    TOP 1: label=cheetah, chetah, Acinonyx jubatus, prob=0.000448407\n    TOP 2: label=impala, Aepyceros melampus, prob=0.000398787\n    TOP 3: label=gazelle, prob=0.000253181\n    TOP 4: label=prairie chicken, prairie grouse, prairie fowl, prob=0.000179423\n    ```\n\n## 通用工具说明\nutils 目录包含了BPU C/C++ 推理示例中的公共工具函数，用于图像预处理、推理结果后处理、多媒体处理及通用工具函数，方便在不同示例中复用。\n\n```bash\n\nutils\n├── inc                          # 头文件目录\n│   ├── common_utils.hpp         # 通用工具函数（反量化、结果绘制、常用数据结构等）\n│   ├── multimedia_utils.hpp     # 多媒体处理工具（视频帧解码、像素格式转换等）\n│   ├── postprocess_utils.hpp    # 推理结果后处理（NMS、解码、mask处理等）\n│   └── preprocess_utils.hpp     # 输入数据预处理（图像缩放、归一化、格式转换等）\n└── src                          # 源码目录（具体实现）\n    ├── common_utils.cc\n    ├── multimedia_utils.cc\n    ├── postprocess_utils.cc\n    └── preprocess_utils.cc\n\n\n```\n\n## 附加说明\n* 所有示例程序均使用`.hbm`格式模型。\n\n* 注意：各子目录下提供的`README.md`会详细介绍对应模型所需环境说明、命令行参数、运行方式等内容。\n
+---
+sidebar_position: 1
+---
+
+# Example Overview
+
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+<DocScope products="RDK-S100">
+
+This project includes multiple AI example programs written in C/C++ for the RDK S100 platform, covering common AI tasks such as image classification, object detection, instance segmentation, pose estimation, OCR, and speech recognition. The examples run inference with quantized models in `.hbm` format so developers can quickly validate model performance and start application development.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+This project includes multiple AI example programs written in C/C++ for the RDK S600 platform, covering common AI tasks such as image classification, object detection, instance segmentation, pose estimation, and speech recognition. The examples run inference with quantized models in `.hbm` format so developers can quickly validate model performance and start application development.
+
+</DocScope>
+
+On-device code for this project is located at: `/app/cdev_demo/bpu`.
+
+## Directory Structure Overview
+
+<DocScope products="RDK-S100">
+
+```text
+|-- 01_classification_sample         # Image classification examples (e.g. ResNet18, MobileNet)
+|-- 02_detection_sample              # Object detection examples (e.g. YOLO)
+|-- 03_instance_segmentation_sample  # Instance segmentation examples
+|-- 04_pose_sample                   # Keypoint detection examples
+|-- 05_open_instance_seg_sample      # Open-vocabulary instance segmentation examples
+|-- 06_lane_detection_sample         # Lane detection examples
+|-- 07_speech_sample                 # Speech recognition examples
+|-- 08_OCR_sample                    # OCR examples
+|-- 09_usb_camera_sample             # USB camera real-time inference examples
+|-- 10_mipi_camera_sample            # MIPI camera real-time inference examples
+|-- 11_decode_yolov5x_display_sample # Video decode, inference, and display examples
+|-- 12_rtsp_yolov5x_display_sample   # RTSP stream decode, inference, and display examples
+|-- utils                            # Shared utility functions
+`-- README.md                        # Project documentation (this file)
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+```text
+|-- classification_sample            # Image classification examples (e.g. ResNet18, MobileNet)
+|-- detection_sample                 # Object detection examples (e.g. YOLO)
+|-- instance_segmentation_sample     # Instance segmentation examples
+|-- pose_sample                      # Keypoint detection examples
+|-- speech_sample                    # Speech recognition examples
+|-- usb_camera_sample                # USB camera real-time inference examples
+|-- mipi_camera_sample               # MIPI camera real-time inference examples
+|-- decode_yolov5x_display_sample    # Video decode, inference, and display examples
+|-- rtsp_yolov5x_display_sample      # RTSP stream decode, inference, and display examples
+|-- utils                            # Shared utility functions
+`-- README.md                        # Project documentation (this file)
+```
+
+</DocScope>
+
+## Environment Requirements
+
+Before running the examples, ensure your system meets the following requirements:
+
+### Hardware
+
+<DocScope products="RDK-S100">
+
+- RDK S100 development board with BPU support
+- Camera (USB or MIPI) if you plan to run camera-related examples
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- RDK S600 development board with BPU support
+- Camera (USB or MIPI) if you plan to run camera-related examples
+
+</DocScope>
+
+### System and Toolchain
+This project has been verified to run in the following environment:
+
+- Operating system
+
+    <DocScope products="RDK S100">
+
+    - Ubuntu 22.04.5 LTS (Jammy Jellyfish)
+
+    </DocScope>
+    <DocScope products="RDK S600">
+
+    - Distributor ID: Ubuntu
+    - Description:    Ubuntu 24.04.3 LTS
+    - Release:        24.04
+    - Codename:       noble
+
+    </DocScope>
+
+- Build toolchain
+
+    - CMake: 3.22.1
+
+    - GCC: 11.4.0
+
+    - G++: 11.4.0
+
+### Dependencies
+Different examples require different development packages. Install them as needed.
+
+- Common dependencies
+    ```bash
+    sudo apt update
+    sudo apt install libgflags-dev
+    ```
+
+- ASR (speech recognition) example
+    ```bash
+    sudo apt update
+    sudo apt install libsndfile1-dev
+    sudo apt install libsamplerate0-dev
+    ```
+
+<DocScope products="RDK-S100">
+
+- OCR example
+    ```bash
+    sudo apt update
+    sudo apt install libpolyclipping-dev
+    ```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+<!-- - OCR example
+    ```bash
+    sudo apt update
+    sudo apt install libpolyclipping-dev
+    ``` -->
+
+</DocScope>
+
+## Build Instructions
+Using the ResNet18 image classification example:
+
+<DocScope products="RDK-S100">
+
+```bash
+cd 01_classification_sample/01_resnet18
+
+mkdir build && cd build
+
+cmake ..
+
+make -j$(nproc)
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+```bash
+cd classification_sample/resnet18
+
+mkdir build && cd build
+
+cmake ..
+
+make -j$(nproc)
+```
+
+</DocScope>
+
+## Running Examples
+Using the ResNet18 image classification example:
+
++ Go to the sample build directory
+
+    <DocScope products="RDK-S100">
+
+    ```bash
+    cd 01_classification_sample/01_resnet18/build
+    ```
+
+    </DocScope>
+    <DocScope products="RDK-S600">
+
+    ```bash
+    cd classification_sample/resnet18/build
+    ```
+
+    </DocScope>
++ Run the model
+    ``` bash
+    ./resnet_18
+    ```
++ View results
+    ``` bash
+    TOP 0: label=zebra, prob=0.99872
+    TOP 1: label=cheetah, chetah, Acinonyx jubatus, prob=0.000448407
+    TOP 2: label=impala, Aepyceros melampus, prob=0.000398787
+    TOP 3: label=gazelle, prob=0.000253181
+    TOP 4: label=prairie chicken, prairie grouse, prairie fowl, prob=0.000179423
+    ```
+
+## Common Utilities
+The `utils` directory contains shared utility functions used across BPU C/C++ inference examples, including image preprocessing, inference post-processing, multimedia processing, and general helpers for reuse across samples.
+
+```bash
+
+utils
+├── inc                          # Header files
+│   ├── common_utils.hpp         # General utilities (dequantization, result drawing, common data structures, etc.)
+│   ├── multimedia_utils.hpp     # Multimedia utilities (video frame decode, pixel format conversion, etc.)
+│   ├── postprocess_utils.hpp    # Inference post-processing (NMS, decoding, mask handling, etc.)
+│   └── preprocess_utils.hpp     # Input preprocessing (image resize, normalization, format conversion, etc.)
+└── src                          # Source implementations
+    ├── common_utils.cc
+    ├── multimedia_utils.cc
+    ├── postprocess_utils.cc
+    └── preprocess_utils.cc
+
+
+```
+
+## Additional Notes
+* All examples use models in `.hbm` format.
+
+* Each subdirectory includes a `README.md` with environment requirements, command-line arguments, and run instructions for that model.
