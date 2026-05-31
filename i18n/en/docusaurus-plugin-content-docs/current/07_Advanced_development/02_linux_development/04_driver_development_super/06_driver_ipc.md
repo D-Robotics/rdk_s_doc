@@ -27,12 +27,12 @@ Typical IPC application scenarios include the OTA module, planning and control, 
 ## IPC Instance Allocation Scheme
 
 <DocScope products="RDK S100">
-The instance number range on the IPC Acore side is [0~34], used for Acore-MCU communication instances [0~14], Acore-VDSP communication instances [22~24], Acore-BPU communication instances [32~34], with the remaining instances for other private purposes. Instances [0~8] can be used for Acore-MCU communication, instances [4~6] are reserved for customers by default. If users do not need CANHAL, planning and control, etc., they can modify the configuration file themselves. For IPC communication status between AOCRE and MCU in S100, please refer to the IPC Usage section in [MCU IPC User Guide](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md).
+The instance number range on the IPC Acore side is [0-34], used for Acore-MCU communication instances [0-14], Acore-VDSP communication instances [22-24], Acore-BPU communication instances [32-34], with the remaining instances for other private purposes. Instances [0-8] can be used for Acore-MCU communication, instances [4-6] are reserved for customers by default. If users do not need CANHAL, planning and control, etc., they can modify the configuration file themselves. For IPC communication status between AOCRE and MCU in S100, please refer to the IPC Usage section in [MCU IPC User Guide](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md).
 </DocScope>
 <DocScope products="RDK S600">
-The instance number range on the IPC Acore side is [0~63], used for Acore-MCU communication instances [0~15] and [50~53], Acore-VDSP communication instances [22~24] and [42~44], Acore-BPU communication instances [32~39], with the remaining instances for other private purposes. Customers can use instances [0~15] for Acore-MCU communication, while the other instances are for internal use.
+The instance number range on the IPC Acore side is [0-63], used for Acore-MCU communication instances [0-15] and [50-53], Acore-VDSP communication instances [22-24] and [42-44], Acore-BPU communication instances [32-39], with the remaining instances for other private purposes. Customers can use instances [0-15] for Acore-MCU communication, while the other instances are for internal use.
 
-The instance number range on the IPC VDSP side is [0~6], used for VDSP-Acore communication instances [0~2] (VDSP0 corresponds to Acore instances [22~24], VDSP1 corresponds to Acore instances [42~44]), with the remaining instances for private purposes.
+The instance number range on the IPC VDSP side is [0-6], used for VDSP-Acore communication instances [0-2] (VDSP0 corresponds to Acore instances [22-24], VDSP1 corresponds to Acore instances [42-44]), with the remaining instances for private purposes.
 </DocScope>
 
 ### Method for Configuring Instances on the Acore Side
