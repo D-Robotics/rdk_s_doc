@@ -16,7 +16,7 @@ The `mipi_camera_streamer.py` program is installed on the development board to t
 Execute the program with the following commands:
 
   ```bash
-  sunrise@ubuntu:~$ cd /app/pydev_demo/10_mipi_camera_sample
+  sunrise@ubuntu:~$ cd /app/pydev_demo/mipi_camera_sample
   sunrise@ubuntu:/app/pydev_demo/10_mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
   ```
 
