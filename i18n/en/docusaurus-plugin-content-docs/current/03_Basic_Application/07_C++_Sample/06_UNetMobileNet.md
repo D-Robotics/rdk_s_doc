@@ -1,1 +1,142 @@
----\nsidebar_position: 6\n---\n\n# 语义分割-UNetMobileNet\n\n```mdx-code-block\nimport DocScope from '@site/src/components/DocScope';\n```\n\n<DocScope products="RDK-S100">\n\n本示例展示了如何在 BPU 上运行 UNet-MobileNet 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于`/app/cdev_demo/bpu/03_instance_segmentation_sample/01_unetmobilenet/`目录下。\n\n</DocScope>\n<DocScope products="RDK-S600">\n\n本示例展示了如何在 BPU 上运行 UNet-MobileNet 语义分割模型，支持图像预处理、推理、后处理（解析输出并叠加彩色分割掩码）等功能，本示例代码位于 `/app/cdev_demo/bpu/instance_segmentation_sample/unetmobilenet/` 目录下。\n\n</DocScope>\n\n## 模型说明\n- 简介：\n\n    UNet 是一种经典的语义分割网络结构，采用编码器-解码器架构，在医学图像分析等领域表现出色。本示例使用 MobileNet 作为编码器主干网络，以降低模型复杂度并加快推理速度，适用于边缘设备上的实时分割任务。模型输出为每个像素的类别标签，用于实现城市街景分割等应用。\n\n- HBM 模型名称： unet_mobilenet_1024x2048_nv12.hbm\n\n- 输入格式： NV12，大小为 1024x2048（Y、UV 平面分离）\n\n- 输出： 尺寸与输入一致的分割图，每个像素点对应一个 0~18 的类别编号（共 19 类）\n\n## 功能说明\n- 模型加载\n\n    加载量化后的语义分割模型，提取模元数据。\n\n- 输入预处理\n\n    原始图像以 BGR 格式加载后被缩放至 1024×2048，转换为 NV12 格式（Y/UV 分离），并封装为推理接口要求的输入字典结构。\n\n- 推理执行\n\n    使用 .infer() 方法执行模型前向推理，输出为类别 logits 张量。\n\n- 结果后处理\n\n    - 对输出张量取 argmax 得到每个像素所属类别；\n\n    - 将预测图 resize 到输入图大小；\n\n    - 恢复为原图尺寸并映射到指定颜色调色板；\n\n    - 使用设定的 alpha 融合系数与原图进行混合，生成分割可视化图；\n\n    - 最终图像包含分割结果的直观覆盖图，可保存或展示。\n\n## 环境依赖\n在编译运行前，请确保安装以下依赖：\n```bash\nsudo apt update\nsudo apt install libgflags-dev\n```\n\n## 目录结构\n```text\n.\n├── CMakeLists.txt             # CMake 构建配置文件\n├── README.md                  # 使用说明文档（当前文件）\n├── inc\n│   └── unet_mobilenet.hpp      # UnetMobileNet 类头文件（声明模型加载、预处理、推理和后处理接口）\n└── src\n    ├── main.cc                 # 主程序入口，完成推理流程控制\n    └── unet_mobilenet.cc       # UnetMobileNet 类实现\n```\n\n## 编译工程\n- 配置与编译\n    ```bash\n    mkdir build && cd build\n    cmake ..\n    make -j$(nproc)\n    ```\n\n## 参数说明\n\n<DocScope products="RDK-S100">\n| 参数名            | 说明                            | 默认值                                                             |\n| -------------- | ----------------------------- | --------------------------------------------------------------- |\n| `--model_path` | 模型文件路径（.hbm 格式）               | `/opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm` |\n| `--test_img`   | 输入测试图像路径                      | `/app/res/assets/segmentation.png`                              |\n| `--alpha_f`    | 可视化融合系数，`0.0=仅显示掩码`，`1.0=仅原图` | `0.75`                                                   |\n\n</DocScope>\n<DocScope products="RDK-S600">\n| 参数名            | 说明                            | 默认值                                                             |\n| -------------- | ----------------------------- | --------------------------------------------------------------- |\n| `--model_path` | 模型文件路径（.hbm 格式）               | `/opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm` |\n| `--test_img`   | 输入测试图像路径                      | `/app/res/assets/segmentation.png`                              |\n| `--alpha_f`    | 可视化融合系数，`0.0=仅显示掩码`，`1.0=仅原图` | `0.75`                                                   |\n\n</DocScope>\n\n## 快速运行\n- 运行模型\n    - 确保在`build`目录中\n    - 使用默认参数\n        ```bash\n        ./unet_mobilenet\n        ```\n    - 指定参数运行\n\n        <DocScope products="RDK-S100">\n        ```bash\n        ./unet_mobilenet \\n        --model_path /opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm \\n        --test_img /app/res/assets/segmentation.png \\n        --alpha_f 0.75\n        ```\n\n        </DocScope>\n        <DocScope products="RDK-S600">\n        ```bash\n        ./unet_mobilenet \\n        --model_path /opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm \\n        --test_img /app/res/assets/segmentation.png \\n        --alpha_f 0.75\n        ```\n\n        </DocScope>\n\n- 查看结果\n\n    运行成功后，会将结果绘制在原图上，并保存到build/result.jpg\n    ```bash\n    [Saved] Result saved to: result.jpg\n    ```\n\n## 注意事项\n- 输出结果存储为result.jpg，用户可自行查看。\n\n- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。\n
+---
+sidebar_position: 6
+---
+
+# Semantic Segmentation - UNetMobileNet
+
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+<DocScope products="RDK-S100">
+
+This example shows how to run the UNet-MobileNet semantic segmentation model on the BPU. It supports image preprocessing, inference, and post-processing (parse outputs and overlay colored segmentation masks). The sample code is located in `/app/cdev_demo/bpu/03_instance_segmentation_sample/01_unetmobilenet/`.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+This example shows how to run the UNet-MobileNet semantic segmentation model on the BPU. It supports image preprocessing, inference, and post-processing (parse outputs and overlay colored segmentation masks). The sample code is located in `/app/cdev_demo/bpu/instance_segmentation_sample/unetmobilenet/`.
+
+</DocScope>
+
+## Model Description
+- Overview:
+
+    UNet is a classic semantic segmentation architecture with an encoder-decoder design, widely used in medical image analysis and similar domains. This example uses MobileNet as the encoder backbone to reduce model complexity and improve inference speed, making it suitable for real-time segmentation on edge devices. The model outputs a per-pixel class label map for applications such as urban street-scene segmentation.
+
+- HBM model name: unet_mobilenet_1024x2048_nv12.hbm
+
+- Input format: NV12, size 1024x2048 (Y and UV planes separated)
+
+- Output: Segmentation map with the same size as the input; each pixel has a class index from 0 to 18 (19 classes total)
+
+## Feature Overview
+- Model loading
+
+    Load the quantized semantic segmentation model and extract model metadata.
+
+- Input preprocessing
+
+    Load the original image in BGR format, resize it to 1024×2048, convert it to NV12 format (Y/UV separated), and build the input structure required by the inference interface.
+
+- Inference execution
+
+    Run the forward pass via the `.infer()` method; the output is a class logits tensor.
+
+- Result post-processing
+
+    - Apply argmax on the output tensor to obtain the class index per pixel;
+
+    - Resize the prediction map to the input image size;
+
+    - Map classes to the color palette and restore to the original image dimensions;
+
+    - Blend with the original image using the configured alpha value to produce a visualization;
+
+    - The final image shows the segmentation overlay and can be saved or displayed.
+
+## Environment Dependencies
+Before building and running, ensure the following dependencies are installed:
+```bash
+sudo apt update
+sudo apt install libgflags-dev
+```
+
+## Directory Structure
+```text
+.
+├── CMakeLists.txt             # CMake build configuration
+├── README.md                  # Usage instructions (this file)
+├── inc
+│   └── unet_mobilenet.hpp      # UnetMobileNet class header (load, preprocess, infer, postprocess)
+└── src
+    ├── main.cc                 # Main entry: runs the full inference pipeline
+    └── unet_mobilenet.cc       # UnetMobileNet class implementation
+```
+
+## Build the Project
+- Configure and build
+    ```bash
+    mkdir build && cd build
+    cmake ..
+    make -j$(nproc)
+    ```
+
+## Parameter Reference
+
+<DocScope products="RDK-S100">
+| Parameter       | Description                                              | Default Value                                                       |
+| --------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
+| `--model_path`  | Model file path (.hbm format)                            | `/opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm`     |
+| `--test_img`    | Input test image path                                    | `/app/res/assets/segmentation.png`                                  |
+| `--alpha_f`     | Visualization blend factor; `0.0` = mask only, `1.0` = original image only | `0.75`                                                      |
+
+</DocScope>
+<DocScope products="RDK-S600">
+| Parameter       | Description                                              | Default Value                                                       |
+| --------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
+| `--model_path`  | Model file path (.hbm format)                            | `/opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm`     |
+| `--test_img`    | Input test image path                                    | `/app/res/assets/segmentation.png`                                  |
+| `--alpha_f`     | Visualization blend factor; `0.0` = mask only, `1.0` = original image only | `0.75`                                                      |
+
+</DocScope>
+
+## Quick Start
+- Run the model
+    - Make sure you are in the `build` directory
+    - Use default parameters
+        ```bash
+        ./unet_mobilenet
+        ```
+    - Run with custom parameters
+
+        <DocScope products="RDK-S100">
+        ```bash
+        ./unet_mobilenet \
+        --model_path /opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm \
+        --test_img /app/res/assets/segmentation.png \
+        --alpha_f 0.75
+        ```
+
+        </DocScope>
+        <DocScope products="RDK-S600">
+        ```bash
+        ./unet_mobilenet \
+        --model_path /opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm \
+        --test_img /app/res/assets/segmentation.png \
+        --alpha_f 0.75
+        ```
+
+        </DocScope>
+
+- View results
+
+    After a successful run, results are drawn on the original image and saved to `build/result.jpg`.
+    ```bash
+    [Saved] Result saved to: result.jpg
+    ```
+
+## Notes
+- The output image is saved as `result.jpg` in the build directory.
+
+- For more deployment options or model support details, refer to the official documentation or contact platform technical support.
