@@ -11,9 +11,6 @@ import TabItem from '@theme/TabItem';
 
 The development board features an expansion pin header to facilitate peripheral expansion for users. Please refer to this section for interface definitions.
 
-## Pin Multiplexing Configuration (Deprecated)
-
-To be updated
 
 ## Expansion Pin Header Definition {#40pin_define}
 
