@@ -91,8 +91,9 @@
   "basic_application/multi_media/multi_media_api/pydev/pydev_multimedia_api_s100": {
     "versions": [],
     "products": [
-      "RDK S100"
-    ]
+      "RDK-S100"
+    ],
+    "isCategory": false
   },
   "basic_application/multi_media/multi_media_api/pydev": {
     "versions": [
