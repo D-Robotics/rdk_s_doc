@@ -148,7 +148,7 @@ rsync [OPTION...] SRC... [DEST]
   - --log-file-format=FMT: Log updates using the specified FMT
   - --password-file=FILE: Read daemon access password from FILE- --list-only: List files without copying them
   - --bwlimit=RATE: Limit socket I/O bandwidth
-  - --stop-at=y-m-dTh:m: Stop rsync at year-month-dayThour:minute
+  - --stop-at=y-m-dTh:m : Stop rsync at year-month-dayThour:minute
   - --time-limit=MINS: Stop rsync after MINS minutes
   - --outbuf=N|L|B: Set output buffering to none, line, or block
   - --write-batch=FILE: Write batch update to FILE

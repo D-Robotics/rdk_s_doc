@@ -51,6 +51,10 @@ ip [ -force ] -batch filename
 
 ## Common Commands
 
+:::info
+The IP addresses, gateways, and routing addresses in the following examples are for demonstration purposes only. Please modify them according to your actual situation.
+:::
+
 ```shell
 ip link show                     # Show network interface information
 ip link set eth0 up             # Enable network card
