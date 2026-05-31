@@ -497,7 +497,7 @@ int main(void)
 
 </DocScope>
 
-## MCU Log 简介{#mcu-log-intro}
+## MCU Log 简介
 
 MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行状态记录。当前版本的 Log 模块支持通过格式化字符串的方式输出信息，便于开发者在调试过程中快速定位问题和查看变量状态。在 Acore 侧可通过`/proc/remoteproc_mcu0`和`/proc/remoteproc_mcu1`这两个节点可以查看 MCU0和 MCU1的日志信息。
 
