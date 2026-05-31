@@ -94,7 +94,7 @@ This document mainly includes a network card usage guide, development board Brin
       ip link set eth0.10 type vlan egress 0:5 1:5 2:5 3:5 4:5 5:5 6:5 7:5          //configure vlan priority 5
 ```
 
-## Software Introduction <a id="chap_code_position"></a>
+## Software Introduction<a id="chap_code_position"></a>
 ### Code Location
 - U-Boot ETH Code Location
 ```shell
@@ -296,16 +296,25 @@ This document mainly includes a network card usage guide, development board Brin
 - Most of the controller driver part does not require modification; the main task is to configure the relevant device tree based on the development board hardware.
 
 #### hsis Mode Configuration
+<DocScope products="RDK S100">
+
 :::warning
 - Since the PHY parts of S100 Ethernet and PCIe have multiplexing relationships, special attention must be paid to the configuration of the hsis module.  
 - This includes lane usage configuration and reference clock configuration. Particularly note that U-Boot also configures it once during startup,  
 - so ensure that the U-Boot hsis configuration is consistent with the Kernel's. Otherwise, actual lane configuration may be incorrect.
 :::
+
+</DocScope>
+<DocScope products="RDK S600">
+
 :::warning
 - Since the PHY parts of S600 Ethernet and PCIe have multiplexing relationships, special attention must be paid to the configuration of the hsis module.  
 - This includes lane usage configuration and reference clock configuration. Particularly note that U-Boot also configures it once during startup,  
 - so ensure that the U-Boot hsis configuration is consistent with the Kernel's. Otherwise, actual lane configuration may be incorrect.
 :::
+
+</DocScope>
+
 ```dts
     &hsis0 {
             hsi-mode = <0x4>;  /* 0x1: pcie x4, 0x4: pcie x2 + gmac0 + gmac1, 0x8: pcie0 x1 + pcie1 x1 + gmac0 + gmac1 >
