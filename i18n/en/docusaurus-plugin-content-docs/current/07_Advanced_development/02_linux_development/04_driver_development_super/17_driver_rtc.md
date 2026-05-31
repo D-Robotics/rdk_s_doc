@@ -940,7 +940,7 @@ Below are some common interface functions for the RTC in user-space applications
   }
   ```
 
-The IOCTL commands (e.g., `RTC_SET_TIME`, `RTC_RD_TIME`, `RTC_AIE_OFF`, etc.) used in these interface functions are defined in the [rtc_dev_ioctl](#RTC_IOCTL) function mentioned in the driver code section earlier.
+The IOCTL commands (e.g., `RTC_SET_TIME`, `RTC_RD_TIME`, `RTC_AIE_OFF`, etc.) used in these interface functions are defined in the [rtc_dev_ioctl](#rtc-driver-code) function mentioned in the driver code section earlier.
 
 #### RTC Test Case
 
