@@ -410,7 +410,7 @@ echo -n "file pcm_lib.c +p" > /sys/kernel/debug/dynamic_debug/control
 
 **注意事项**：40pin 上的 PCM pin 脚与 PCIE 的 Wi-Fi 模组复用，硬件上提供了拨码开关实现 pin 脚功能切换。
 
-拨码开关切换 pin 脚功能说明如下图：
+拨码开关切换 pin 脚功时，将上面的 40 PIN 拨码左拨，下面的 PCM 拨码右拨。如下图：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="" style={{ width: '100%' }} />
 
