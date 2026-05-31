@@ -1,1 +1,0 @@
-../../../docs/09_Appendix/rdk-command-manual/cmd_devmem.md

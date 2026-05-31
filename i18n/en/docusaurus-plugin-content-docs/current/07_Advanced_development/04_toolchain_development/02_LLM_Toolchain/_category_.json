@@ -1,9 +1,0 @@
-{
-  "label": "7.4.2 LLM Toolchain",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "slug": "/04_toolchain_development/02_LLM_Toolchain/",
-    "description": "LLM Toolchain Development Guide"
-  }
-}
