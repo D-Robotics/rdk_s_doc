@@ -211,6 +211,7 @@ echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 </DocScope>
 
 <DocScope products="RDK S600">
+
 ## RDK S600
 ### 温度传感器
 在 RDKS600芯片中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。

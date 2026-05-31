@@ -4,5 +4,17 @@ sidebar_position: 9
 
 # Thermal System
 
-[S100 Thermal System](../../../System_configuration/frequency_management#rdk-s100)
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
 
+<DocScope products="RDK S100">
+
+[S100 Thermal System](../../../02_System_configuration/04_frequency_management.md#rdk-s100)
+
+</DocScope>
+<DocScope products="RDK S600">
+
+[S600 Thermal System](../../../02_System_configuration/04_frequency_management.md#rdk-s600)
+
+</DocScope>

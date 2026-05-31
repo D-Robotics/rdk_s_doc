@@ -213,6 +213,7 @@ You can use the `sudo hrut_somstatus` command to view the current chip operating
 </DocScope>
 
 <DocScope products="RDK S600">
+
 ## RDK S600
 ### Temperature Sensors
 There are 19 temperature sensors in the RDK S600 chip, used to display the temperatures of BPU/CPU/DDR. Among them, the BPU has 8 temperature sensors, the CPU has 7 temperature sensors, and the DDR has 4 temperature sensors.
