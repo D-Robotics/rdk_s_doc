@@ -375,13 +375,13 @@
     "message": "3.3.2 RDK S600 Expansion Pin Application",
     "description": "The label for category 3.3.2 RDK S600 扩展引脚排应用 in sidebar tutorialSidebar"
   },
-  "sidebar.tutorialSidebar.category.7.2.4 RDK S100 / S600 驱动开发指南": {
-    "message": "7.2.4 RDK S100 / S600 Driver Development Guide",
-    "description": "The label for category 7.2.4 RDK S100 / S600 驱动开发指南 in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.7.2.4 驱动开发指南": {
+    "message": "7.2.4 Driver Development Guide",
+    "description": "The label for category 7.2.4 驱动开发指南 in sidebar tutorialSidebar"
   },
-  "sidebar.tutorialSidebar.category.7.2.4 RDK S100 / S600 驱动开发指南.link.generated-index.description": {
-    "message": "RDK S100 / S600 Driver Development Guide",
-    "description": "The generated-index page description for category 7.2.4 RDK S100 / S600 驱动开发指南 in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.7.2.4 驱动开发指南.link.generated-index.description": {
+    "message": "Driver Development Guide",
+    "description": "The generated-index page description for category 7.2.4 驱动开发指南 in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.7.3.1 多媒体开发指南": {
     "message": "7.3.1 Multimedia Development Guide",
