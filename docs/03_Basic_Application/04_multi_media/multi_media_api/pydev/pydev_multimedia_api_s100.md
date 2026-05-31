@@ -1,6 +1,6 @@
 ---
 sidebar_position: 0
-sidebar_products: RDK S100
+sidebar_products: RDK-S100
 ---
 
 # RDK S100多媒体接口说明
