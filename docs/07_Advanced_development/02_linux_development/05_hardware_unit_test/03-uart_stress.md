@@ -162,7 +162,7 @@ sunrise@ubuntu:/app/chip_base_test/03_uart_test$ tree
 └── uartstress.sh
 ```
 
-**4.** 可使用编译命令重新生成执行文件，命令如下：
+**5.** 可使用编译命令重新生成执行文件，命令如下：
 
 ```shell
 gcc -o uart_test uart_test.c
