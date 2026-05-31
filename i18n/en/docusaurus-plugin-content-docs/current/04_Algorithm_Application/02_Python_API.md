@@ -4,7 +4,7 @@ id: python-api
 title: Python API Reference
 sidebar_label: 4.1 Python API
 ---
-## Overview
+# 4.2 Overview
 hbm_runtime is a Python binding built on pybind11 for accessing and operating the underlying libhbucp / libdnn C++ libraries, providing high-performance neural network model loading and inference.
 
 This interface encapsulates low-level model runtime details so Python users can conveniently load single or multiple neural network models, query and manage model input/output metadata, and run inference flexibly. It supports multiple input data formats and, when necessary, automatically converts inputs to C-contiguous storage to ensure correct and efficient low-level access.

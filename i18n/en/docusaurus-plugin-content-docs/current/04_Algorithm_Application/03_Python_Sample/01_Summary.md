@@ -55,7 +55,7 @@ This project is written in Python and depends on several third-party libraries. 
     **The dependency list and install file above only cover the basic libraries required to run the models. Some examples need additional third-party libraries; see each example's README.md or the corresponding section in this document.**
 
 #### Other Components
-- hbm_runtime: Loads and runs `.hbm` models. Installed by default on the system. For manual installation, see the [Python API](../05_Python_API.md#module-class-and-function-reference-api-reference) section.
+- hbm_runtime: Loads and runs `.hbm` models. Installed by default on the system. For manual installation, see the [Python API](../02_Python_API.md#module-class-and-function-reference-api-reference) section.
 
 - Hobot VIO: Accesses camera image streams (hobot_vio, e.g. libsrcampy)
 
