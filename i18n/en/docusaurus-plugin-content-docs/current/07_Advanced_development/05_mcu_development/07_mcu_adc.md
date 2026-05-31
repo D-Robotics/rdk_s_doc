@@ -124,9 +124,9 @@ ADC channel (optional): The specific ADC channel to read. If not provided, the c
 Read the ADC value of channel 1:
 ```bash
 D-Robotics:/$ Adc_Test 1
-[052.860562 0]--------------Adc_PrivateApiTest start-----------!
-[052.876472 0]AdcCurrentValue [1]: 2404 -> 1056 mv
-[052.869226 0]--------------Adc_PrivateApiTest end!-----------
+[01513.529013 0]---Adc_PrivateApiTest start---!
+[01513.529588 0]Usage: Adc_Test [instance] [ch_num]
+[01513.530162 0]    Adc_Test (scan all channels)
 ```
 
 
