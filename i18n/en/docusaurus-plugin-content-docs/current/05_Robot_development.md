@@ -14,4 +14,4 @@ The source code of TogetheROS.Bot is hosted on GitHub under the [D-Robotics orga
 
 ## User Manual
 
-[TogetheROS.Bot User Manual](https://liqinglian01.github.io/tros_doc/tros)
+[TogetheROS.Bot User Manual](https://developer.d-robotics.cc//tros_doc/tros)

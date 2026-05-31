@@ -708,7 +708,7 @@ Choose based on errors, resources, and time constraints. Adding swap is a common
             1.  Pull the cross-compile Docker image from Docker Hub or D-Robotics hosting.
             2.  Start the container per official docs and mount your ROS workspace.
             3.  Run `colcon build` inside the container (cross-compile settings are usually preset).
-        * **Manuals:** TROS user guide sections on source install, developer guide, or cross-compile include Docker examples. See: [TROS manual](https://liqinglian01.github.io/tros_doc/tros).
+        * **Manuals:** TROS user guide sections on source install, developer guide, or cross-compile include Docker examples. See: [TROS manual](https://developer.d-robotics.cc//tros_doc/tros).
     * **Manual ROS/TROS cross-compile (not recommended):** Building the full stack without Docker is complex and error-prone; only for experienced developers.
 
 **General cross-compile advice:**
