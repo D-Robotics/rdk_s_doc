@@ -404,10 +404,10 @@ Refer to the physical diagram below: the red circles indicate the es7210, the ye
 
 The connection method is shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio2.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio2.png" alt="" style={{ width: '100%' }} /> 
 
 **Note:** The PCM pins on the 40-pin header are multiplexed with the PCIe Wi-Fi module. The hardware provides a DIP switch to switch the pin functionality.
 
-Instructions for switching pin functions using the DIP switch are shown in the figure below:
+When toggling the pin functions with the DIP switch, move the upper 40-pin DIP switch to the left, and move the lower PCM DIP switch to the right. As shown in the figure below:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="" style={{ width: '100%' }} />
