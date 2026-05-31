@@ -315,41 +315,5 @@
     "products": [
       "RDK-S100"
     ]
-  },
-  "current/basic_application/c++_sample/lanenet": {
-    "versions": [],
-    "products": [
-      "RDK-S100"
-    ]
-  },
-  "current/basic_application/c++_sample/paddleocr": {
-    "versions": [],
-    "products": [
-      "RDK-S100"
-    ]
-  },
-  "current/basic_application/python_sample/lanenet": {
-    "versions": [],
-    "products": [
-      "RDK-S100"
-    ]
-  },
-  "current/basic_application/c++_sample/ultralytics_yoloe11_seg": {
-    "versions": [],
-    "products": [
-      "RDK-S100"
-    ]
-  },
-  "current/basic_application/python_sample/paddleocr": {
-    "versions": [],
-    "products": [
-      "RDK-S100"
-    ]
-  },
-  "current/basic_application/python_sample/ultralytics_yoloe11_seg": {
-    "versions": [],
-    "products": [
-      "RDK-S100"
-    ]
   }
 }
