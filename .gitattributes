@@ -1,0 +1,41 @@
+# Normalize line endings: store LF in Git, avoid CRLF warnings on Windows.
+* text=auto
+
+*.md text eol=lf
+*.mdx text eol=lf
+*.json text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+*.bash text eol=lf
+*.ps1 text eol=lf
+*.toml text eol=lf
+*.xml text eol=lf
+*.svg text eol=lf
+*.gitignore text eol=lf
+*.gitattributes text eol=lf
+*.editorconfig text eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tgz binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.hbm binary
