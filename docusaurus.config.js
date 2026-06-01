@@ -22,12 +22,12 @@ const copyrightYearLabel =
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "RDK S DOC",
+  title: "RDK S100/S600 DOC",
   // tagline: 'Dinosaurs are cool',
   favicon: "img/logo.png",
   // Set the production url of your site here
   // url: "https://developer.d-robotics.cc",
-  url: "https://developer.d-robotics.cc/",
+  url: "https://developer.d-robotics.cc",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/rdk_s_doc/",
