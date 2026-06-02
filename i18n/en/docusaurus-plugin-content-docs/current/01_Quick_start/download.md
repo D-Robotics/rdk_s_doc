@@ -13,11 +13,6 @@ import DocScope from '@site/src/components/DocScope';
 <DocScope products="RDK S600">
 
 :::warning Note
-For RDK S600 Early Access users, please read first: RDK S600 Early Access Note
-
-:::
-
-:::warning Note
 
 RDK S600 materials should be obtained from the FTP server according to the paths in the table
 
