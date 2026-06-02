@@ -1,71 +1,151 @@
-# RDK DOC Maintenance Guide
+[English](./README.md) | 简体中文
 
-English | [简体中文](./README.md)
+# Documentation Repository
 
-## 1. Dependency Installation
+This repository contains the source code for the RDK S100 / S600 development documentation site, built with Docusaurus. It includes the main Chinese documentation, English translations, site theme customization, document scope filtering (Doc Scope), and an automated release process.
 
-### Requirements
+Core features of the documentation site include:
+- Multilingual documentation (`zh-Hans` / `en`)
+- Document content filtering by product and version (`DOC_BUILD_PRODUCT`, `DOC_BUILD_VERSION`)
+- Automatic generation and monitoring of sidebar scope configuration
+- GitHub Pages build and deployment, as well as OSS synchronization
 
-- Node.js >= 18
-- npm (bundled with Node.js)
+## Repository Structure Overview
 
-### Install
+The main directories are described as follows:
 
-For first-time setup or daily local development:
+- `docs/`: Main content of the Chinese documentation
+- `i18n/en/docusaurus-plugin-content-docs/current/`: English documentation content
+- `scripts/`: Maintenance and build helper scripts (numbering, link fixing, scope building, etc.)
+- `src/`: Theme customization, plugins, and remark extensions
+- `static/`: Static assets
+- `.github/workflows/`: CI/CD workflows (Pages deployment and OSS synchronization)
+- `docusaurus.config.js`: Main site configuration
+- `sidebars.js`: Entry point for document sidebar configuration
+
+## Environment Setup
+
+- Node.js: `>= 18`
+- Package manager: `npm`
 
 ```bash
+# Install dependencies (recommended: unified approach for CI and local)
+npm ci
+
+# Or: Quick installation for daily development (updates dependencies according to semver)
 npm install
 ```
 
-For CI or strictly locked dependency installation:
+## Documentation Maintenance Workflow
+
+It is recommended to follow the steps below in order:
 
 ```bash
-npm ci
+# 1) Modify document content
+# Chinese directory: docs/
+# English directory: i18n/en/docusaurus-plugin-content-docs/current/
+
+# 2) Renumber only the Markdown files under docs/ (as needed)
+npm run renumber-docs-md
+
+# 3) Renumber directories + Markdown files under docs/ (as needed, use with caution as it has wide impact)
+node scripts/renumber-docs-and-folders.js
+
+# 4) Renumber the English directory (optional, only needed if English directory also requires adjustment)
+node scripts/renumber-docs-and-folders.js i18n/en/docusaurus-plugin-content-docs/current
+
+# 5) Fix relative Markdown links under docs/ affected by renaming (as needed)
+npm run fix-relative-docs-links
+
+# 6) Generate/update sidebar scope configuration
+npm run generate-sidebar-config
+
+# 7) Local preview (Chinese)
+npm run start
+
+# 8) Local preview (English)
+npm run start:en
+
+# 9) Perform a full build check before committing
+npm run build
+
+# 10) Locally serve the build output for verification
+npm run serve
 ```
 
-## 2. Documentation Maintenance Workflow
+## Common Maintenance Commands
 
-1. Update Chinese docs in `docs/`.
-2. Update English docs in `i18n/en/docusaurus-plugin-content-docs/current/`.
-3. If you changed visibility scope (`sidebar_versions`, `sidebar_products`, `_sidebar_scope.json`, `DocScope`), regenerate config once:
+### Content and Structure Maintenance
 
-   ```bash
-   npm run generate-sidebar-config
-   ```
+```bash
+# Use the following with caution
 
-   Or run:
+# Renumber Markdown files under docs/ according to sidebar_position
+npm run renumber-docs-md
 
-   ```bash
-   npm run start
-   ```
+# Renumber directories + Markdown files, and attempt to batch fix repository path references
+node scripts/renumber-docs-and-folders.js
 
-4. Verify locally (Chinese or English):
-   - Chinese: `npm run start`
-   - English: `npm run start:en`
-5. Run full build check before commit:
+# Renumber the English documentation directory (optional)
+node scripts/renumber-docs-and-folders.js i18n/en/docusaurus-plugin-content-docs/current
 
-   ```bash
-   npm run build
-   ```
+# Fix relative links under docs/ affected by renaming
+npm run fix-relative-docs-links
 
-6. Preview build artifacts locally when needed:
+# Generate sidebar scope configuration (Doc Scope)
+npm run generate-sidebar-config
 
-   ```bash
-   npm run serve
-   ```
+# Watch document changes during development and automatically update sidebar scope configuration
+npm run watch-sidebar-config
+```
 
-## 3. Common Maintenance Commands
+### Local Development
 
-| Command | Purpose |
-|---|---|
-| `npm run generate-sidebar-config` | Manually generate sidebar visibility scope config |
-| `npm run watch-sidebar-config` | Watch doc changes and auto-update scope config |
-| `npm run start` | Start Chinese docs dev server (with config watch) |
-| `npm run start:en` | Start English docs dev server (with config watch) |
-| `npm run start:no-watch` | Start Chinese docs without config watch |
-| `npm run start:no-watch:en` | Start English docs without config watch |
-| `npm run start:port` | Start Chinese docs on port 3001 (with config watch) |
-| `npm run build` | Production build (includes sidebar config generation) |
-| `npm run serve` | Preview build artifacts locally |
-| `npm run deploy` | Build and deploy to GitHub Pages |
+```bash
+# Chinese development mode (includes sidebar config watching)
+npm run start
 
+# English development mode (includes sidebar config watching)
+npm run start:en
+
+# Chinese development mode, using port 3001
+npm run start:port
+
+# Chinese development mode (without starting watcher)
+npm run start:no-watch
+
+# English development mode (without starting watcher)
+npm run start:no-watch:en
+
+# Clear Docusaurus cache
+npm run clear
+```
+
+### Build and Output Verification
+
+```bash
+# Standard full build
+npm run build
+
+# Locally preview the build directory
+npm run serve
+
+# Preview with specified host and port (example)
+npm run serve -- --host=10.64.62.34 --port=1688 --no-open
+```
+
+Common access paths (the port will depend on the actual `serve` output):
+- English: `http://localhost:3000/en/rdk_s_doc/RDK`
+- Chinese: `http://localhost:3000/rdk_s_doc/RDK`
+
+### CI Automated Deployment
+
+Two workflows are configured in the repository:
+
+1. `Deploy Docusaurus site to GitHub Pages` (`.github/workflows/deploy.yml`)  
+   - Trigger: Push to the `main` branch or manual trigger  
+   - Actions: Install dependencies, build, deploy to `gh-pages`
+
+2. `Sync gh-pages to OSS` (`.github/workflows/sync-gh-pages.yml`)  
+   - Trigger: Successful completion of the Pages deployment workflow  
+   - Actions: Sync the content of `gh-pages` to OSS
