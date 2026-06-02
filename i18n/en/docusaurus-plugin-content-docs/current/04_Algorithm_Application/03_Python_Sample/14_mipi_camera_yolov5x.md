@@ -78,7 +78,7 @@ This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`.
 </DocScope>
 <DocScope products="RDK-S600">
 
-- For MIPI camera installation, refer to [MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/index.md#mipi-camera-interfacej11j13).
+- For MIPI camera installation, refer to [MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-camera-interfacej11j13).
 
 </DocScope>
 
