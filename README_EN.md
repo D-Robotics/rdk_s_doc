@@ -29,10 +29,7 @@ The main directories are described as follows:
 - Package manager: `npm`
 
 ```bash
-# Install dependencies (recommended: unified approach for CI and local)
-npm ci
-
-# Or: Quick installation for daily development (updates dependencies according to semver)
+#  Quick installation for daily development (updates dependencies according to semver)
 npm install
 ```
 
@@ -137,15 +134,3 @@ npm run serve -- --host=10.64.62.34 --port=1688 --no-open
 Common access paths (the port will depend on the actual `serve` output):
 - English: `http://localhost:3000/en/rdk_s_doc/RDK`
 - Chinese: `http://localhost:3000/rdk_s_doc/RDK`
-
-### CI Automated Deployment
-
-Two workflows are configured in the repository:
-
-1. `Deploy Docusaurus site to GitHub Pages` (`.github/workflows/deploy.yml`)  
-   - Trigger: Push to the `main` branch or manual trigger  
-   - Actions: Install dependencies, build, deploy to `gh-pages`
-
-2. `Sync gh-pages to OSS` (`.github/workflows/sync-gh-pages.yml`)  
-   - Trigger: Successful completion of the Pages deployment workflow  
-   - Actions: Sync the content of `gh-pages` to OSS
