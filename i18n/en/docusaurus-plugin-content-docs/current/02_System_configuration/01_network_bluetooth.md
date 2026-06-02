@@ -28,89 +28,6 @@ This section mainly introduces how to modify the wired and wireless network conf
 
 :::
 
-In the Ubuntu system, the network connection configuration of the development board is stored in the `/etc/NetworkManager/system-connections/` directory (each network card connects to a `.nmconnection` file). Common field descriptions are as follows:
-
-- **DHCP Configuration**: Set `method` in `[ipv4]` to `auto`, and the address will be automatically assigned by DHCP.
-- **Static Address Configuration**: Set `method` in `[ipv4]` to `manual`, and use `address1=IP/CIDR,Gateway` to configure IP, mask, and gateway.
-- **Custom DNS**: Specify the DNS server using the `dns=` field, with multiple addresses separated by semicolons.
-
-### ETH0 DHCP Configuration Example
-
-Edit the connection file:
-
-```shell
-sudo vim /etc/NetworkManager/system-connections/eth0_cfg.nmconnection
-```
-
-```shell
-[connection]
-id=eth0_cfg
-uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b2222
-type=ethernet
-interface-name=eth0
-timestamp=1773022723
-
-[ethernet]
-
-[ipv4]
-dns=10.9.1.2;8.8.8.8;8.8.4.4;
-method=auto
-
-[ipv6]
-addr-gen-mode=eui64
-method=disabled
-
-[proxy]
-
-```
-
-### ETH1 Static IP Configuration Example
-
-Edit the connection file:
-
-```shell
-sudo vim /etc/NetworkManager/system-connections/eth1_cfg.nmconnection
-```
-
-```shell
-[connection]
-id=eth1_cfg
-uuid=1f3c0cb8-3ef4-4d7f-9f22-0a0f6f0b1111
-type=ethernet
-interface-name=eth1
-timestamp=1773022363
-
-[ethernet]
-
-[ipv4]
-address1=192.168.127.10/24,192.168.127.1
-dns=10.9.1.2;8.8.8.8;8.8.4.4;
-method=manual
-
-[ipv6]
-addr-gen-mode=eui64
-method=disabled
-
-[proxy]
-
-```
-
-After modification, it is recommended to apply the configuration in the following order:
-
-```shell
-# Check configuration file permissions (NetworkManager requires root read/write only)
-sudo chmod 600 /etc/NetworkManager/system-connections/*.nmconnection
-
-# Reload connection configuration
-sudo nmcli connection reload
-
-# Enable the corresponding connection
-sudo nmcli connection up eth0_cfg
-# or
-sudo nmcli connection up eth1_cfg
-
-```
-
 Example of configuring a static IP using the command line:
 
 ```shell
@@ -120,6 +37,7 @@ nmcli connection modify "eth1_cfg" \
   ipv4.addresses "192.168.10.100/24" \
   ipv4.gateway "192.168.10.1" \
   ipv4.dns "223.5.5.5 8.8.8.8" \
+  ipv4.never-default yes \
   connection.autoconnect yes
 
 # Restart the connection for changes to take effect
