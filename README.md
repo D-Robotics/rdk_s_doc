@@ -29,10 +29,7 @@
 - 包管理：`npm`
 
 ```bash
-# 安装依赖（推荐：CI 和本地统一使用）
-npm ci
-
-# 或：日常开发快速安装（会按 semver 更新依赖）
+# 日常开发快速安装（会按 semver 更新依赖）
 npm install
 ```
 
@@ -140,16 +137,4 @@ npm run serve -- --host=10.64.62.34 --port=1688 --no-open
 - 中文：`http://localhost:3000/rdk_s_doc/RDK`
 
 
-
-### CI 自动部署
-
-仓库内已配置两条工作流：
-
-1. `Deploy Docusaurus site to GitHub Pages`（`.github/workflows/deploy.yml`）  
-   - 触发：`main` 分支 push 或手动触发  
-   - 执行：安装依赖、构建、发布到 `gh-pages`
-
-2. `Sync gh-pages to OSS`（`.github/workflows/sync-gh-pages.yml`）  
-   - 触发：Pages 部署工作流成功后  
-   - 执行：将 `gh-pages` 内容同步到 OSS
 
