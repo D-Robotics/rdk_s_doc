@@ -37,8 +37,8 @@ export default function NavbarLogo() {
 
   const title = isEnglish ? 'Documentation Center' : '文档中心';
   const docCenterUrl = isEnglish
-    ? 'https://developer.d-robotics.cc/rdk_doc_manager/en/'
-    : 'https://developer.d-robotics.cc/rdk_doc_manager/';
+    ? 'https://developer.d-robotics.cc/rdk_doc_center/en/'
+    : 'https://developer.d-robotics.cc/rdk_doc_center/';
 
   const fallbackAlt = logo?.alt ?? title;
   const alt = logo?.alt ?? fallbackAlt;
