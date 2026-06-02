@@ -80,7 +80,7 @@ This sample demonstrates how to run Ultralytics YOLOv5x object detection on an e
 </DocScope>
 <DocScope products="RDK-S600">
 
-- For MIPI camera installation, refer to [MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/index.md#mipi-camera-interface-j11j13).
+- For MIPI camera installation, refer to [MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-camera-interface-j11j13).
 
 </DocScope>
 

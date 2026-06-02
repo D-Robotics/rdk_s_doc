@@ -80,7 +80,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 <DocScope products="RDK-S600">
 
-- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/index.md#mipi-相机接口-j11j13)部分。
+- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-相机接口-j11j13)部分。
 
 </DocScope>
 

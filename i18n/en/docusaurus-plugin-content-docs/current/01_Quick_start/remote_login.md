@@ -51,11 +51,11 @@ Before logging in remotely via the network, the development board needs to be co
 Before logging in via the serial port, you need to ensure that the development board's serial port cable is correctly connected to the computer. For connection methods, refer to the debug serial port section of the corresponding development board:
 
 <DocScope products="RDK S100">
-- [rdk_s100 Debug Serial Port Section](../01_Quick_start/01_hardware_introduction/01_rdk_s100/index.md#type-c-j16)
+- [rdk_s100 Debug Serial Port Section](../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#type-c-j16)
 </DocScope>
 
 <DocScope products="RDK S600">
-- [rdk_s600 Debug Serial Port Section](../01_Quick_start/01_hardware_introduction/02_rdk_s600/index.md#flash-connect-burn-mainmcu-debug-j4)
+- [rdk_s600 Debug Serial Port Section](../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#flash-connect-burn-mainmcu-debug-j4)
 </DocScope>
 
 Serial port login requires a PC terminal tool. Commonly used tools include `Putty`, `MobaXterm`, etc. Users can choose according to their habits. The port configuration process for different tools is basically similar. The following uses `MobaXterm` as an example to introduce the process of creating a new serial port connection:
