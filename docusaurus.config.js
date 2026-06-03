@@ -25,7 +25,7 @@ const config = {
   title: "RDK S100/S600 DOC",
   // tagline: 'Dinosaurs are cool',
   favicon: "img/logo.png",
-  trailingSlash: false,
+  // trailingSlash: false,
   // Set the production url of your site here
   // url: "https://developer.d-robotics.cc",
   url: "https://developer.d-robotics.cc",
