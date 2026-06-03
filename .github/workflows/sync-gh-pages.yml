@@ -9,7 +9,7 @@ on:
 
 jobs:
   sync-gh-pages:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -29,37 +29,16 @@ jobs:
           mv ossutil /usr/local/bin/ && sudo ln -s /usr/local/bin/ossutil /usr/bin/ossutil
           ossutil version
 
-      - name: Mirror gh-pages to OSS (upload + delete stale objects)
+      - name: Upload to OSS via Custom Domain
         env:
           OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
           OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
         run: |
-          sudo ossutil sync . oss://cn-rdk-front-prod/rdk_s_doc/ \
-            -e https://d-robotics.cc \
-            -i $OSS_ACCESS_KEY_ID \
-            -k $OSS_ACCESS_KEY_SECRET \
-            --region cn-beijing \
-            --update \
-            --delete \
-            -f \
-            --retry-times=3
-
-      - name: Remove known legacy path prefixes (extra cleanup)
-        env:
-          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
-          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
-        run: |
-          LEGACY_PREFIXES=(
-            "Quick_start"
-            "en/Quick_start"
-          )
-          for prefix in "${LEGACY_PREFIXES[@]}"; do
-            echo "Removing legacy prefix: rdk_s_doc/${prefix}/"
-            sudo ossutil rm -r "oss://cn-rdk-front-prod/rdk_s_doc/${prefix}/" \
-              -e https://d-robotics.cc \
-              -i $OSS_ACCESS_KEY_ID \
-              -k $OSS_ACCESS_KEY_SECRET \
-              --region cn-beijing \
-              -f \
-              || true
-          done
+          # 直接使用命令行参数，避免配置步骤
+          sudo ossutil cp -r . oss://cn-rdk-front-prod/rdk_s_doc/ \
+          -e https://d-robotics.cc \
+          -i $OSS_ACCESS_KEY_ID \
+          -k $OSS_ACCESS_KEY_SECRET \
+          --region cn-beijing \
+          --update \
+          --retry-times=3
