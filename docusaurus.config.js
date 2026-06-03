@@ -48,8 +48,8 @@ const config = {
             enabled: true,
             questionnaireUrl: "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf",
             questionnaireUrlByLocale: {
-              "zh-Hans": "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tblIRpryehWqWy88&view=vewEkEvyTe",
-              en: "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tbl3YxZ2U4e0vkX5&view=vewEkEvyTe",
+              "zh-Hans": "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tblZSK5RpDLRZkad&view=vewpz6d6Un",
+              en: "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tblchS7yyQojb6b9&view=vewpz6d6Un",
             },
             // 站点内路径规则（基于 baseUrl 之后的路径）：
             // - "/" 精确匹配中文首页
