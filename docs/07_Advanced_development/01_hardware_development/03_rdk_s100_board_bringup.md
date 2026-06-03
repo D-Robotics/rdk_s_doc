@@ -114,6 +114,33 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 }
 ```
 
+### 取消SLEEP KEY的处理
+
+在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
+
+在MCU0代码中，会检测AON GPIO 11的中断状态以决定是否要进入休眠模式，中断在ICU模块中注册，因此需要在ICU模块中关闭AON GPIO 11的中断
+
+在MCU代码`mcu/Config/McalCdd/gen_s100_sip_B/Icu/src/Icu_PBCfg.c`的`Icu_Gpio_ChannelConfig_PB`数组中，需要做以下设置：
+
+```c
+        ...
+         /** @brief gpio mod 3 channel 11 */
+        {
+            .PinId = 11,
+            .instanceNo = 3,
+            .DefaultStartEdge = GPIO_ICU_FALLING_EDGE,
+            .NotificationEnable = FALSE,
+            .GpioChannelNotification = Icu_Gpio_Channel_3_11_ISR,
+            .IntEnable = FALSE,
+            .IntMask = TRUE,
+        },
+        ...
+```
+
+- `NotificationEnable`改为`FALSE`
+- `IntEnable`改为`FALSE`
+- `IntMask`改为`TRUE`
+
 ## 在 spl 和 Uboot 下新增硬件
 
 spl 为 Uboot 下的 spl
@@ -249,6 +276,20 @@ const static struct hb_super_btype_node hb_super_btype_list[] = {
 ```
 
 其中`hb_super_btype_node`中`fdt_feat`为 Kernel dtb 的名字，`pxe_label`为 extlinux 中的 Kernel 配置，名字必须相互对应
+
+### 取消SLEEP KEY的处理
+
+在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
+
+在uboot代码`source/bootloader/uboot/arch/arm/mach-hobot/super/boot_info.c`中，对于函数`hb_get_fb_key_status`，强制返回`1`
+
+```c
+static uint32_t hb_get_fb_key_status(void)
+{
+    return 1;
+    ...
+}
+```
 
 ## 在 Kernel 下新增硬件
 
