@@ -589,12 +589,14 @@ After changes, build uboot/spl, update miniboot/bootloader, and run a full build
 # From source root, build hobot-miniboot deb
 ./mk_debs.sh hobot-miniboot # Output: out/product/deb_packages/hobot-miniboot_4.0.Z-xxx_arm64.deb
 
+./mk_kernel.sh # Output: out/product/deb_packages/linux-image-rdk-s100*_arm64.deb
+
 # Build disk image
 sudo ./pack_image.sh -l  # -l uses local deb packages; without -l, remote packages are used
 ```
 
 :::warning NVMe Boot Notes
-- NVMe boot is supported on RDK S100 V0P6 and later; set [D13:D12] to [1:0] on the board
+- NVMe boot is only supported on RDKS100 V0P6, RDKS600 V1P0, and their higher versions. [D13:D12] on the board can be set to [1:0] via DIP switches
 - miniboot_flash built in NVMe mode supports NVMe boot only; miniboot_flash built in eMMC/UFS mode also supports NVMe boot
 - Flash tool 1.1.10 and later supports NVMe image flashing
 :::
