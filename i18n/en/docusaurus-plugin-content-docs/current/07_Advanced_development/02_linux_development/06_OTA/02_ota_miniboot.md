@@ -5,78 +5,98 @@ sidebar_position: 2
 # miniboot Upgrade
 
 :::note
-- The miniboot upgrade described in this section can be used in non-OTA images;
-- The miniboot upgrade requires a reboot to take effect;
+- This upgrade method is only applicable to **non-OTA** images for online miniboot updates. For OTA images, please follow the complete [System OTA Upgrade](./01_ota_system.md) process.
+- The process **does not go through the `ota_tool` state machine** but directly writes via `dd`. **A reboot is required for the upgrade to take effect**.
 :::
 
 ## Overview
 
-To meet the system's requirement for standalone miniboot updates, the miniboot upgrade solution adopts a partition-level update mechanism based on OTA (Over-The-Air) technology, performing secure and controllable version updates for the critical partitions involved in miniboot. This solution focuses on system security, upgrade reliability, and stability of non-upgradable partitions, ensuring that the system will not brick under any abnormal upgrade circumstances and can automatically recover and continue booting.
+When you need to update only the miniboot-related partitions individually without reprogramming the entire system, you can directly flash the miniboot upgrade package on the board using `rdk-miniboot-update`.
 
-## Features
+- Script: `/usr/bin/rdk-miniboot-update` (provided by the `hobot-miniboot` deb package)
+- Upgrade package directory: `/usr/lib/firmware/rdk/miniboot/stable/<release|debug>/img_packages/`
 
-This solution has the following core features:
+This solution adopts a **direct flash** strategy:
 
-- Only upgrades miniboot-related BAK partitions and partitions using A/B mechanism
+- **NOR**: Uses a full-disk image pre-arranged in FPT order, overwriting the entire NOR at once with `dd` (a single call updates all miniboot-related NOR partitions, including the BAK partition and both A/B slots).
+- **eMMC / UFS**: Flashes several AB partitions individually with `dd`, writing only to the **current slot**.
 
-    Partitions in miniboot are divided into three types: Permanent, BAK, and A/B. Permanent partitions are critical permanent areas that are not normally updated and have an extremely low update frequency. To ensure system stability and avoid irreversible brick risks caused by misoperation, this solution only supports OTA upgrades for BAK partitions and A/B partitions, without touching Permanent partitions. The specific partitions involved in the upgrade include: `HSM_FW, HSM_RCA, keyimage, SBL, scp, spl, MCU, acore_cfg, bl31, optee, uboot`.
+:::warning Important Feature
+The process does not use the "upgrade → verify → switch slot" two-stage state machine of `ota_tool` and **has no built-in automatic rollback**. If any `dd` step fails or power is lost midway, the device may fail to boot.
+:::
 
-- Uses onboard ota_tool to complete upgrades, with comprehensive verification and recovery mechanisms
+## Working Principle
 
-    When performing upgrade operations on the device side, the system uses the built-in ota_tool, which provides complete upgrade process management including: partition package verification, partition write protection, upgrade status recording, and failure rollback mechanisms. Whether facing abnormal power failure, upgrade interruption, or data corruption, the system can automatically fall back to a normally bootable version, ensuring the device does not brick in case of upgrade failure.
+Script execution order:
 
-- Automatically handles A/B synchronization issues for partitions not involved in the upgrade
+1. **OHP Lifecycle Check**: If the device has entered the `OHP` stage, online upgrades are rejected, and the factory tool must be used to reprogram the entire NOR.
+2. **Read Current AB Slot**: Obtains A/B via `ota_tool -g`. During the eMMC stage, writes to `<part>_<slot>` based on the current slot.
+3. **Select NOR Image**: Uses `miniboot_flash.img` (signed version) if the kernel cmdline includes `hobotboot.secureboot=1`; otherwise, uses `miniboot_flash_nose.img`.
+4. **NOR Full Flash**: Performs a single `dd` (`bs=2M`) to `/dev/block/platform/by-name/hb_vspiflash`, overwriting the entire NOR. For 22MB, this takes approximately 3.5 minutes.
+5. **eMMC / UFS Individual Flash**: Flashes the four AB partitions (`acore_cfg_<slot>`, `bl31_<slot>`, `optee_<slot>`, `uboot_<slot>`) separately with `dd` (`bs=4M`). **Only writes to the current slot, does not synchronize across slots**, and **does not touch other AB partitions** (e.g., `vbmeta` on RDK S600). This process does not upgrade them; for those, please follow the complete system OTA process.
+6. **Optional Reboot**: Based on `--reboot y|n` or interactive input, decides whether to `reboot` immediately. **The new miniboot will only take effect after a reboot.**
 
-    After OTA upgrade completion, during the A/B switching process, the system may switch to partitions that were not involved in this upgrade. To avoid risks caused by inconsistent content between A/B sides, ota_tool automatically synchronizes and copies all A/B partitions that were not involved in the upgrade, ensuring partition content consistency and guaranteeing normal system boot and operation.
+## Usage Instructions
 
-- This method does not support partition table upgrades
+### Automatic Upgrade (triggered when installing `hobot-miniboot` via apt)
 
-    Before upgrading, this solution compares the partition table in the upgrade package with the partition table information in the device. If they are inconsistent, the upgrade will exit. Therefore, for upgrades involving partition table changes, the full system flashing must be completed using Dijia tools. Reference: [System Burning](../../../01_Quick_start/02_install_os/rdk_s100/01_instruction.md).
+After running the following commands on the board, the `hobot-miniboot` deb package will **automatically call** `rdk-miniboot-update` during installation/upgrade to complete the miniboot flash:
 
-Overall, based on flexible OTA upgrade capabilities, strict verification mechanisms, and comprehensive rollback strategies, this solution achieves secure updates of miniboot partitions while minimizing risks during the system upgrade process. For the principles and detailed introduction of OTA upgrade, please refer to the [System OTA Upgrade](./01_ota_system.md) section.
-
-## Usage Guide
-
-### Updating the miniboot Package
-
-Update the hobot-miniboot package on the device side:
 ```bash
 sudo apt update
 sudo apt-get install -y hobot-miniboot
 ```
 
-### On-Device Upgrade
+In most scenarios, the above step is sufficient to complete the miniboot upgrade. If you need to switch to the debug version, skip the interactive prompts in CI/batch scripts, or manually re-flash later, call the script manually as described below.
 
-After updating the miniboot package, there are two ways to initiate the upgrade:
-1. Upgrade using the `rdk-miniboot-update` command
-    - Parameter Description
+### Manual Method 1: `rdk-miniboot-update` Command
 
-        | Parameter            | Description                                                        |
-        | -------------------- | ------------------------------------------------------------------ |
-        | `--build` / `--type` | Specifies the Miniboot upgrade version type, options `release` or `debug`, optional **Default: release** |
-        | `--reboot`           | Specifies whether to reboot immediately after upgrade completion, values `y` or `n`, optional, if omitted, confirmation will be interactive |
+Parameter description:
 
-    - Examples
-        ```bash
-        # Without any parameters, use interactive mode to confirm upgrade behavior (default uses release version)
-        rdk-miniboot-update
+| Parameter | Values | Description |
+|---|---|---|
+| `--build` / `--type` | `release` / `debug` | Upgrade version type, can be omitted (**default is `release`**) |
+| `--reboot` | `y` / `n` | Whether to reboot immediately after the upgrade, prompts interactively if omitted |
+| `--confirm` | `y` / `n` | Skips the initial "WARNING" confirmation, prompts interactively if omitted |
 
-        # Use release version for upgrade (default), reboot immediately after upgrade
-        rdk-miniboot-update --reboot y
+Example:
 
-        # Use release version for upgrade (default), do not reboot immediately after upgrade
-        rdk-miniboot-update --reboot n
+```bash
+# Fully interactive: asks for confirmation first, then asks whether to reboot (default release)
+rdk-miniboot-update
 
-        # Use debug version for upgrade, reboot immediately after upgrade
-        rdk-miniboot-update --build debug --reboot y
+# Release version, skip confirmation, reboot immediately after upgrade
+rdk-miniboot-update --confirm y --reboot y
 
-        # Use debug version for upgrade, do not reboot immediately after upgrade
-        rdk-miniboot-update --build debug --reboot n
+# Debug version, do not reboot (preserve the scene to observe logs; reboot manually later for the upgrade to take effect)
+rdk-miniboot-update --build debug --reboot n
 
-        ```
+# CI / batch script: fully non-interactive
+rdk-miniboot-update --build release --confirm y --reboot y
+```
 
-2. Upgrade via srpi-config
+On failure, the script exits with `exit 1` and prints:
 
-    - This method can be referenced in the Update miniboot section of [srpi-config](../../../02_System_configuration/02_srpi-config.md#system-options).
+```text
+Error: N step(s) failed to flash.
+```
 
-    - **Note: This method only supports release version upgrades. For debug version upgrades, please use the `rdk-miniboot-update` command.**
+Before rebooting, it is recommended to check `dmesg | tail` for related errors.
+
+### Manual Method 2: `srpi-config` Menu
+
+Refer to the Update miniboot entry in [srpi-config](../../../02_System_configuration/02_srpi-config.md#system-options).
+
+:::warning
+`srpi-config` can only initiate **release version** upgrades. To upgrade to the debug version, you must use the `rdk-miniboot-update` command.
+:::
+
+## Limitations
+
+- **No automatic rollback**: If any `dd` step fails or power is lost midway, the corrupted partition will not be restored.
+- **Not available in OHP stage**: Devices that have entered the OHP lifecycle can only be fully programmed using the factory tool.
+- **Does not upgrade other eMMC AB partitions**: Partitions other than `acore_cfg` / `bl31` / `optee` / `uboot` (such as `vbmeta` on S600) are not touched.
+
+## Precautions
+
+- **Do not** unplug the power, cut off power, reboot, or perform any other write operations on the partitions during the upgrade process — interrupting a `dd` full flash will directly brick the device.

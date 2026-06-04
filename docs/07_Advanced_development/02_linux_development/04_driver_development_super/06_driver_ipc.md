@@ -33,12 +33,12 @@ IPC 典型应用场景有 OTA 模块、规控、CANHAL 等。
 ## IPC 实例分配方案
 
 <DocScope products="RDK S100">
-IPC Acore 侧实例编号范围为[0~34]，分别用于 Acore 与 MCU 通信的实例[0~14]、Acore 与 VDSP 通信的实例[22~24]、Acore 与 BPU 通信的实例[32~34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0~8]，实例[4~6]默认为客户预留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md) 中的 IPC 使用情况章节。
+IPC Acore 侧实例编号范围为[0-34]，分别用于 Acore 与 MCU 通信的实例[0-14]、Acore 与 VDSP 通信的实例[22-24]、Acore 与 BPU 通信的实例[32-34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0-8]，实例[4-6]默认为客户预留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md) 中的 IPC 使用情况章节。
 </DocScope>
 <DocScope products="RDK S600">
-IPC Acore 侧实例编号范围为[0~63]，分别用于 Acore 与 MCU 通信的实例[0~15]和[50~-53]、Acore 与 VDSP 通信的实例[22~24]和[42~44]、Acore 与 BPU 通信的实例[32~39]，其余实例做其它私有用途。客户 Acore 与 MCU 通信可使用实例[0~15]，其余实例为内部使用。
+IPC Acore 侧实例编号范围为[0-63]，分别用于 Acore 与 MCU 通信的实例[0-15]和[50-53]、Acore 与 VDSP 通信的实例[22-24]和[42-44]、Acore 与 BPU 通信的实例[32-39]，其余实例做其它私有用途。客户 Acore 与 MCU 通信可使用实例[0-15]，其余实例为内部使用。
 
-IPC VDSP 侧实例编号范围为[0~6]，分别用于 VDSP 与 Acore 通信的实例[0~2]（VDSP0对应 Acore 实例[22~24]，VDSP1对应 Acore 实例[42~44]），其余实例做私有用途。
+IPC VDSP 侧实例编号范围为[0-6]，分别用于 VDSP 与 Acore 通信的实例[0-2]（VDSP0对应 Acore 实例[22-24]，VDSP1对应 Acore 实例[42-44]），其余实例做私有用途。
 </DocScope>
 
 ### Acore 侧配置实例方法
@@ -818,11 +818,6 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
         [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 deinit success.
         ```
 
-:::tip
-ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave
-
-测试用例中的读写操作都是对8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于 MCU 的 SDK 中的 Service/HouseKeeping/ipc_box/src/ipc_i2c.c
-:::
 :::tip
 ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave
 

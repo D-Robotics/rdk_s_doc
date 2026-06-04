@@ -617,8 +617,10 @@ fixed mode: 固定的 pps 模式，它的周期固定，且占空比也固定为
 若在 fixed mode 下有整秒时刻输出 PPS 的需求，需要注意 ETH 的整秒时刻在下降沿出现，而 LPWM 被 ETH 上升沿同步。因此需要参考下图，调整 LPWM 的 offset。以 camera 一秒30帧举例，PPS 上升沿在536.871ms，下降沿在1s 整秒处，要求在整秒位置出图的话，offset=463.129对33.333取余数=29.8ms。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image44.png" alt="" style={{ width: '100%' }} />
+
 </DocScope>
 <DocScope products="RDK S600">
+
 Acore Eth PPS有两种输出方法，flex mode和fix mode两种。上电默认是fix mode。可以通过下文中ethtool命令设置为flex mode。若要重置为fix mode，可以通过重启网卡或者重启系统完成恢复。
 
 flex mode: 灵活的pps模式，它的开始/结束时间、周期、占空比均可以灵活配置，其上升沿是整秒时刻，PPS输出不会随着PHC时间的变化而变化；当前软件版本下，其占空比是百分之一，周期可以根据下方配置方法灵活配置，常用的有1s，400ms。
@@ -649,11 +651,13 @@ eth[y]：根据 ifconfig 输出，确定目标网卡对应的接口编号。
 
 **以上配置需在时间同步前执行**。
 :::
+
 </DocScope>
 
 ### Acore Eth PPS 的输出配置方法
 
 <DocScope products="RDK S100">
+
 Acore Eth PPS 的输出，可以借助 ethtool 工具，命令格式如下 :
 
 配置 Eth0的 PPS 输出1秒的周期：ethtool hobot\_gmac \--set-flex-pps eth0 index 0 fpps on interval 1000000000;
@@ -661,8 +665,10 @@ Acore Eth PPS 的输出，可以借助 ethtool 工具，命令格式如下 :
 配置 Eth1的 PPS 输出1秒的周期：ethtool hobot\_gmac \--set-flex-pps eth1 index 0 fpps on interval 1000000000;
 
 如果需要修改输出周期的话，修改最后一个参数\<1000000000\>，该参数的单位是 ns，如果要修改为400ms 的话，则改为\<400000000\>。
+
 </DocScope>
 <DocScope products="RDK S600">
+
 Acore Eth PPS配置为flex输出，可以借助ethtool工具，命令格式如下：
 
 ```
@@ -675,15 +681,20 @@ ethtool hobot_gmac --set-flex-pps ethX index 0 fpps on interval 1000000000;
 当前软件版本默认配置为fixed mode，固定输出周期为1s。如果需要修改输出周期的话，需要先在内核dts中配置选择`hobot,pps = <0>;`切换成flex mode。然后修改最后一个参数\<1000000000\>，该参数的单位是ns，如果要修改为400ms的话，则改为\<400000000\>。
 
 不论是gmac还是xgmac，ethtool配置的命令格式都是：ethtool hobot_gmac –set-flex-pps eth0 index 0 fpps on interval 1000000000，只有ethX和最后一个参数配置有差异。
+
 </DocScope>
 
 ### MCU Eth PPS 的配置方法
 
 <DocScope products="RDK S100">
+
 MCU Eth PPS 的信号周期和脉冲宽度在`Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Mac_Ip_PBcfg.c`配置文件中设置默认值，其中 PpsInterval 的默认值为1000(ms)，参数 PpsWidth 的默认值为10(ms)。
+
 </DocScope>
 <DocScope products="RDK S600">
+
 MCU Eth PPS 的信号周期和脉冲宽度在`Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Mac_Ip_PBcfg.c`配置文件中设置默认值，其中 PpsInterval 的默认值为1000(ms)，参数 PpsWidth 的默认值为10(ms)。
+
 </DocScope>
 
 限制条件：

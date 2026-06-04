@@ -2,14 +2,13 @@ const fs = require("fs");
 const path = require("path");
 const { spawnSync } = require("child_process");
 
+const {
+  getGeneratedSidebarConfigPath,
+} = require("./lib/sidebar-scope-config-generator");
+
 const repoRoot = path.resolve(__dirname, "..");
 const docsDir = path.join(repoRoot, "docs");
-const generatedScopePath = path.join(
-  repoRoot,
-  "src",
-  "context",
-  "generated-sidebar-config.json",
-);
+const generatedScopePath = getGeneratedSidebarConfigPath(repoRoot);
 
 function toProductFolder(product) {
   return String(product)

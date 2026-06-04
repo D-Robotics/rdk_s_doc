@@ -31,7 +31,7 @@ RDK S100 开发板提供以下 USB 接口：
 1. **USB Type-C (J16) 仅支持 Device 模式**，不支持 Host 模式，无法通过该接口读取 U 盘或连接其他 USB 设备。
 2. **USB 3.0 Type-A (J19/J20) 仅支持 Host 模式**，无法配置为 Gadget 模式。
 3. USB Type-C 接口包含调试串口功能，通过 CH340 芯片将 Main 域和 MCU 域的调试串口转换为 USB 接口。
-4. 注意 USB 2.0 Camera 接入能力限制，详见基础应用章节的 USB 摄像头文档。
+4. 注意 USB 2.0 Camera 接入能力限制，详见基础应用章节的 [USB 摄像头文档](../../03_Basic_Application/01_Image/02_usb_camera.md#usb-2.0摄像头接入说明)。
 
 :::
 
@@ -50,7 +50,7 @@ RDK S600 开发板提供以下 USB 接口：
 1. **USB Type-C (J4) 仅支持 Device 模式**，不支持 Host 模式，无法通过该接口读取 U 盘或连接其他 USB 设备。
 2. **USB 3.2 Type-A (J7/J8/J9) 仅支持 Host 模式**，无法配置为 Gadget 模式。
 3. USB Type-C 接口包含调试串口功能，通过 CH340 芯片将 Main 域和 MCU 域的调试串口转换为 USB 接口。
-4. 注意 USB 2.0 Camera 接入能力限制，详见基础应用章节的 USB 摄像头文档。
+4. 注意 USB 2.0 Camera 接入能力限制，详见基础应用章节的 [USB 摄像头文档](../../03_Basic_Application/01_Image/02_usb_camera.md#usb-2.0-note)。
 
 :::
 

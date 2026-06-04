@@ -22,14 +22,14 @@ The RDKS600 has two 10-pin self-locking interfaces, one 12-pin self-locking inte
 The pins mentioned below are for illustrative purposes only. Port values may vary across different platforms, and actual conditions should prevail. You may also directly use the code in the `/app/40pin_samples/` directory, which has been verified on the board.
 :::
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
+
 
 In the development board's `/app/40pin_samples/` directory, various functional test codes for PIN pins are pre-installed, including GPIO input/output tests, I2C, SPI, UART, and other tests. All test programs are written in Python. Refer to other sections of this chapter for more details.
 
 Take `/app/40pin_samples/button_led.py` as an example. This program configures pin `4` as input and pin `3` as output, controlling the output state of pin `3` based on the input state of pin `4`.
 
 ## Environment Setup
-TODO
+
 Use a jumper wire to connect pin `4` to 1.8V or GND to control its high/low logic level.
 
 ## How to Run
@@ -42,7 +42,7 @@ root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 ```
 
 ## Expected Outcome
-TODO
+
 
 By controlling the high/low logic level of pin `4`, you can change the output logic level of pin `3`.
 

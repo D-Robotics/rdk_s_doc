@@ -52,11 +52,11 @@ import DocScope from '@site/src/components/DocScope';
 在使用串口登录前，需要确认开发板串口线跟电脑正确连接，连接方法可参考对应开发板的调试串口章节：
 
 <DocScope products="RDK S100">
-- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100/index.md#type-c-j16)
+- [rdk_s100 调试串口章节](../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#type-c-j16)
 </DocScope>
 
 <DocScope products="RDK S600">
-- [rdk_s600 调试串口章节](../01_Quick_start/01_hardware_introduction/02_rdk_s600/index.md#闪连-烧录mainmcu-调试-j4)
+- [rdk_s600 调试串口章节](../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#闪连-烧录mainmcu-调试-j4)
 </DocScope>
 
 串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：

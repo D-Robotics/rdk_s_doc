@@ -1,16 +1,13 @@
 ---
 
 sidebar_position: 3
+sidebar_products: "RDK S100"
 
 ---
 
 # 1.1.3 FAQ
 
-```mdx-code-block
-import DocScope from '@site/src/components/DocScope';
-```
 
-<DocScope versions=">=4.0.5" products="RDK S100">
 
 ### Q1：RDK S100 Pinlist Excel 文件中的 Pull up/down 列表达的是什么意思？​
 
@@ -69,4 +66,3 @@ import DocScope from '@site/src/components/DocScope';
 
 - **b.** 使用 RDK S100 开发套件的过程中，注意周边环境是否有可能与开发套件的电路直接接触的导体，若有，将开发套件移至远离裸露导体的位置，避免开发套件发生短路。
 
-</DocScope>

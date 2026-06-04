@@ -344,12 +344,12 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
 <DocScope products="RDK S100">
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../01_Quick_start/02_install_os/rdk_s100/03_xburn/01_windows.md#使用-xburn-指定区域烧录)章节
+关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../01_Quick_start/02_install_os/rdk_s100/03_xburn/01_windows.md#指定区域烧录)章节。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../01_Quick_start/02_install_os/rdk_s600.md#指定区域烧录)章节
+关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../01_Quick_start/02_install_os/rdk_s600.md#指定区域烧录)章节。
 
 </DocScope>
 
@@ -451,6 +451,7 @@ int main(void)
 ```
 </DocScope>
 <DocScope products="RDK S600">
+
 ```c
 int main(void)
 {
@@ -493,9 +494,11 @@ int main(void)
    }
 }
 ```
+
 </DocScope>
 
 ## MCU Log 简介
+
 MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行状态记录。当前版本的 Log 模块支持通过格式化字符串的方式输出信息，便于开发者在调试过程中快速定位问题和查看变量状态。在 Acore 侧可通过`/proc/remoteproc_mcu0`和`/proc/remoteproc_mcu1`这两个节点可以查看 MCU0和 MCU1的日志信息。
 
 以获取 MCU1串口 log 信息为例，如下图所示：

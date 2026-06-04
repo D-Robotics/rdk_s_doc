@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 4 Model Zoo 概述
+# 4.1 Model Zoo 概述
 
 ## 产品介绍
 
@@ -24,4 +24,4 @@ RDK Model Zoo 是一个社区开源共建项目。我们非常欢迎开发者贡
 
 ## 用户手册
 
-[ModelZoo用户手册](https://liqinglian01.github.io/model_zoo_doc/model_zoo_intro)
+[ModelZoo用户手册](https://developer.d-robotics.cc//model_zoo_doc/model_zoo_intro)

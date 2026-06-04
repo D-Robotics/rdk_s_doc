@@ -10,19 +10,25 @@ import { themes as prismThemes } from "prism-react-renderer";
 const require = createRequire(import.meta.url);
 import remarkDirective from "remark-directive";
 import remarkDocScope from "./src/remark/remark-doc-scope.js";
-import remarkGenerateSidebarConfig from "./src/remark/remark-generate-sidebar-config.js";
 
 const buildProduct = process.env.DOC_BUILD_PRODUCT?.trim() || "";
 const buildVersion = process.env.DOC_BUILD_VERSION?.trim() || "";
+const COPYRIGHT_START_YEAR = 2024;
+const currentYear = new Date().getFullYear();
+const copyrightYearLabel =
+  currentYear > COPYRIGHT_START_YEAR
+    ? `${COPYRIGHT_START_YEAR}-${currentYear}`
+    : `${COPYRIGHT_START_YEAR}`;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "RDK S DOC",
+  title: "RDK S100/S600 DOC",
   // tagline: 'Dinosaurs are cool',
   favicon: "img/logo.png",
+  // trailingSlash: false,
   // Set the production url of your site here
   // url: "https://developer.d-robotics.cc",
-  url: "https://liqinglian01.github.io/",
+  url: "https://developer.d-robotics.cc",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/rdk_s_doc/",
@@ -40,10 +46,10 @@ const config = {
 
           feedbackFloat: {
             enabled: true,
-            questionnaireUrl: "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf",
-            questionnaireUrlByLocale: {
-              "zh-Hans": "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tblIRpryehWqWy88&view=vewEkEvyTe",
-              en: "https://horizonrobotics.feishu.cn/wiki/EZs4w6IxMixCDbklSuvcYHhtnaf?table=tbl3YxZ2U4e0vkX5&view=vewEkEvyTe",
+                questionnaireUrl: "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
+                questionnaireUrlByLocale: {
+                  "zh-Hans": "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
+                  en: "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
             },
             // 站点内路径规则（基于 baseUrl 之后的路径）：
             // - "/" 精确匹配中文首页
@@ -57,7 +63,7 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "liqinglian01", // Usually your GitHub org/user name.
+  organizationName: "D-Robotics", // Usually your GitHub org/user name.
   projectName: "rdk_s_doc", // Usually your repo name.
 
   // onBrokenLinks: 'throw',
@@ -72,13 +78,9 @@ const config = {
       src: "https://hm.baidu.com/hm.js?24dd63cad43b63889ea6bede5fd1ab9e",
       async: true,
     },
-    // Dify Chatbot Configuration (must load before embed.min.js)
+    // Dify：仅加载配置脚本；embed.min.js 在 body 就绪后由 dify-config.js 动态注入
     {
-      src: "js/dify-config.js",
-    },
-    {
-      src: "https://rdk.d-robotics.cc/embed.min.js",
-      id: "rJYrxmxmjOkjEx2c",
+      src: "/rdk_s_doc/js/dify-config.js",
     },
   ],
   headTags: [
@@ -86,7 +88,7 @@ const config = {
       tagName: "script",
       attributes: {},
       innerHTML:
-        "window.difyChatbotConfig=window.difyChatbotConfig||{token:'rJYrxmxmjOkjEx2c',baseUrl:'https://rdk.d-robotics.cc',inputs:{},systemVariables:{},userVariables:{}};",
+        "window.difyChatbotConfig=window.difyChatbotConfig||{token:'rJYrxmxmjOkjEx2c',baseUrl:'https://rdk.d-robotics.cc',inputs:{},systemVariables:{},userVariables:{},dynamicScript:true};",
     },
     {
       tagName: "meta",
@@ -100,7 +102,7 @@ const config = {
       attributes: {
         defer: "defer",
         src: "https://cloud.umami.is/script.js",
-        "data-website-id": "fbd84605-92b5-43f6-aa3e-4861b62ea8df",
+        "data-website-id": "b0c771b8-947e-4fa4-8880-606ecab89c36",
       },
     },
   ],
@@ -131,7 +133,7 @@ const config = {
           routeBasePath: "/", // 修改默认文档路径
           sidebarPath: "./sidebars.js",
           showLastUpdateTime: true,
-          remarkPlugins: [remarkDirective, remarkDocScope, remarkGenerateSidebarConfig],
+          remarkPlugins: [remarkDirective, remarkDocScope],
 
           
         },
@@ -143,7 +145,7 @@ const config = {
     ],
   ],
   plugins: [
-  
+    require.resolve("./src/plugins/sidebar-scope-config-plugin"),
   ],
   markdown: {
     mermaid: true,
@@ -220,7 +222,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} D-Robotics.`,
+        copyright: `Copyright © ${copyrightYearLabel} D-Robotics.`,
       },
       prism: {
         theme: prismThemes.github,

@@ -8,7 +8,7 @@ The `mipi_camera_streamer.py` program is installed on the development board to t
 
 ## Environment Setup
 
-  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to - [Hardware Introduction - MIPI Interface](../../Quick_start/hardware_introduction/rdk_s100_camera_expansion_board)
+  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to - [Hardware Introduction - MIPI Interface](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201)
   - Currently, this sample only supports MIPI sensors: IMX219, SC230AI
   - Connect the development board to a display using an HDMI cable
 
@@ -16,7 +16,7 @@ The `mipi_camera_streamer.py` program is installed on the development board to t
 Execute the program with the following commands:
 
   ```bash
-  sunrise@ubuntu:~$ cd /app/pydev_demo/10_mipi_camera_sample
+  sunrise@ubuntu:~$ cd /app/pydev_demo/mipi_camera_sample
   sunrise@ubuntu:/app/pydev_demo/10_mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
   ```
 

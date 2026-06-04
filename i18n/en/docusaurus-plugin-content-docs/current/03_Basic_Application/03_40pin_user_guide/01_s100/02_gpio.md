@@ -76,7 +76,7 @@ On the `RDK S100` platform, `40-pin` GPIO expansion is supported, with the follo
 
 For more details, refer to the diagram below:
 
-![image-rdk_100_funcreuse_40pin](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg)
+![image-rdk_100_funcreuse_40pin](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3-en.png)
 
 For pin definitions, please refer to [Pin Configuration and Definitions](./01_40pin_define.md#40pin_define).
 

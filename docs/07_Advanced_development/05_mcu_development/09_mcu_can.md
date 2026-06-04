@@ -15,12 +15,12 @@ import DocScope from '@site/src/components/DocScope';
 - 最大可使用 CAN controller 数量：10。
 - CAN 最高传输速率：8M。(受限于 transceiver 的波特率限制，目前实验室只测试验证到5M 波特率。)
 - 一个 controller 的 Ram 内划分的 Block 个数：
-    - CAN0~CAN3：4 Block (可变 payload);
-    - CAN4~CAN9：4 Block (可变 payload)+ 4 Block(固定 payload)。
+    - CAN0-CAN3：4 Block (可变 payload);
+    - CAN4-CAN9：4 Block (可变 payload)+ 4 Block(固定 payload)。
 - 一个 controller 支持的最大 Mailbox 个数为128。
 - 一个 controller 支持一路 RxFIFO，FIFO 深度为：
-    - CAN0~CAN3：8 * 64 bytes;
-    - CAN4~CAN9：32 * 64 bytes。
+    - CAN0-CAN3：8 * 64 bytes;
+    - CAN4-CAN9：32 * 64 bytes。
 - 不支持 TTController，即不支持 TTCAN（一种基于 CAN 总线的高层协议）。
 - CAN 支持多包合并传输，并且可以配置合包的数量和超时时间，默认合包数量为1，超时时间为1000us。
 </DocScope>
@@ -28,14 +28,14 @@ import DocScope from '@site/src/components/DocScope';
 - 最大可使用 CAN controller 数量：16。
 - CAN 最高传输速率：8M。(受限于 transceiver 的波特率限制，目前实验室只测试验证到5M 波特率。)
 - 一个 controller 的 Ram 内划分的 Block 个数：
-    - CAN0~CAN3：4 Block (可变 payload);
-    - CAN4~CAN11：4 Block (可变 payload)+ 4 Block(固定 payload)。
-    - CAN12~CAN15：4 Block (可变 payload);
+    - CAN0-CAN3：4 Block (可变 payload);
+    - CAN4-CAN11：4 Block (可变 payload)+ 4 Block(固定 payload)。
+    - CAN12-CAN15：4 Block (可变 payload);
 - 一个 controller 支持的最大 Mailbox 个数为128。
 - 一个 controller 支持一路 RxFIFO，FIFO 深度为：
-    - CAN0~CAN3：8 * 64 bytes;
-    - CAN4~CAN11：32 * 64 bytes;
-    - CAN12~CAN15：8 * 64 bytes;
+    - CAN0-CAN3：8 * 64 bytes;
+    - CAN4-CAN11：32 * 64 bytes;
+    - CAN12-CAN15：8 * 64 bytes;
 - 考虑到系统层面的唤醒功能，软件驱动不支持 controller 的 PretendedNetwork 功能。
 - 不支持 TTController，即不支持 TTCAN（一种基于 CAN 总线的高层协议）。
 - CAN 支持多核使用，可将不同的 CAN 控制器绑定在不同的核心上，但不支持多个核心同时使用同一个 CAN 控制器。
@@ -114,8 +114,8 @@ CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以�
 :::
 - 在使用开环网络时，确保 CAN_H 与 CAN_L 线路正确连接，所用到的 CAN 不要插入跳线帽(在网络中不接入120欧姆电阻)；
 - 若将 S100的 CAN5和 CAN6连接组成双节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要在 CAN5和 CAN6接线端子后面的插针插入跳帽(在网络中插入两个120欧姆电阻)；
-- 若将 S100的 CAN5~CAN9连接组成多节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要插入两个跳线帽，任意选择两个，严禁插入超过2个跳线帽，以免出现不可预测的问题；
-- 若将 S100的 CAN5~CAN9中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要在 RDK 的 CAN 控制器的接线端子后面的插针插入跳帽，并在网络中其它设备端接入一个120Ω电阻；
+- 若将 S100的 CAN5-CAN9连接组成多节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要插入两个跳线帽，任意选择两个，严禁插入超过2个跳线帽，以免出现不可预测的问题；
+- 若将 S100的 CAN5-CAN9中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要在 RDK 的 CAN 控制器的接线端子后面的插针插入跳帽，并在网络中其它设备端接入一个120Ω电阻；
 </DocScope>
 <DocScope products="RDK S600">
 - CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S600的 sample 默认采用闭环总线网络架构**。
@@ -168,7 +168,7 @@ CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以�
 CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以下以 S600举例，如何正确接入电阻：
 - 在使用开环网络时，确保 CAN_H 与 CAN_L 线路正确连接，所用到的 CAN(在网络中不接入120欧姆电阻)；
 - 若将 S600的 CAN1和 CAN2连接组成双节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要将 CAN1和 CAN2对应拨码开关波动到 ON 端(在网络中插入两个120欧姆电阻)；
-- 若将 S600的 CAN1~CAN10中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要将 RDK 的 CAN 控制器对应的莫玛开源波动到 ON 端，并在网络中其它设备端接入一个120Ω电阻；
+- 若将 S600的 CAN1-CAN10中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要将 RDK 的 CAN 控制器对应的莫玛开源波动到 ON 端，并在网络中其它设备端接入一个120Ω电阻；
 </DocScope>
 
 ## CAN Filter 配置
@@ -550,7 +550,7 @@ D-Robotics:/$ Can_Set_Merge_Num 8   // 设置合包数量为8
 
 D-Robotics:/$ Can_Set_Merge_Time 100  // 设置超时时间为100us
 ```
-acore 侧也支持多包合并传输功能，下面只简单介绍相关数据结构，具体可以使用[应用sample](#应用sample)中提供的测试用例进行修改验证。
+acore 侧也支持多包合并传输功能，下面只简单介绍相关数据结构，具体可以使用[应用sample](#应用-sample)中提供的测试用例进行修改验证。
 ```c
 #define CAN_FRAME_NUM (1)   // Acore侧表示合并传输数据包的数量
 struct pack_info pack = { 0 };
@@ -872,9 +872,17 @@ Send end, send package total: 1 frame total: 1
 
 </DocScope>
 
+
+<DocScope products="RDK S100">
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
-- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S100默认 CAN5~CAN9，S600默认 CAN1~CAN10）
+- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S100默认 CAN5-CAN9）
+</DocScope>
+<DocScope products="RDK S600">
+发送策略：
+- 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
+- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S600默认 CAN1-CAN10）
+</DocScope>
 
 接收策略:
 - 被动接收数据，验证接收数据的计数器和计算传输时延
@@ -931,10 +939,20 @@ Send end, send package total: 1 frame total: 1
 
 ##### 发送端
 
+<DocScope products="RDK S100">
+
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
 - 数据内容：通过 CANFD 发送扩展帧(64bytes)的数据。
-- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S100默认 CAN5~CAN9，S600默认 CAN1~CAN10）
+- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S100默认 CAN5-CAN9）
+
+</DocScope>
+<DocScope products="RDK S600">
+发送策略：
+- 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
+- 数据内容：通过 CANFD 发送扩展帧(64bytes)的数据。
+- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S600默认 CAN1-CAN10）
+</DocScope>
 
 ##### 接收端
 

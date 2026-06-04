@@ -196,7 +196,7 @@ The RDK S600 development board provides six PCIe-expanded USB 3.0 standard inter
 
 The RDK S600 developer kit provides one HDMI display interface, supporting up to 2k 60-frame display mode. After power-on, the developer kit outputs the Ubuntu graphical interface through the HDMI interface. With specific sample programs, it also supports preview display functions for camera and video stream feeds.
 
-### MIPI Camera Interface (J11/J13)
+### MIPI Camera Interface(J11/J13)
 
 The RDK S600 includes 2 camera expansion interfaces, which can be used to connect monocular or binocular cameras. Each MIPI camera interface provides 1 MIPI DPHY, 1 IIC, and 1 3.3V power supply. See [Interface Description](#interface) for MIPI camera interface signal definitions.
 

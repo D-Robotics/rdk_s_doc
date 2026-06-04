@@ -22,14 +22,13 @@ RDKS600 有 2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin 自�
 以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
 :::
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=16
 
 开发板 `/app/40pin_samples/` 目录下，预置了多种 PIN 管脚的功能测试代码，包括 gpio 的输入/输出测试 I2C、SPI、UART 等测试。所有测试程序均使用 python 语言编写，详细信息可以查阅本章节其他模块。
 
 以`/app/40pin_samples/button_led.py`为例，该程序配置`4`号管脚为输入，配置`3`号管脚配置为输出，并根据`4`号管脚的输入状态来控制`3`号管脚的输出状态。
 
 ## 环境准备
-TODO
+
 使用杜邦线连接 `4`号管脚到 1.8v or GND，以控制其高低电平。
 
 ## 运行方式
@@ -42,7 +41,7 @@ root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 ```
 
 ## 预期效果
-TODO
+
 
 通过控制`4`号管脚的高低电平，可以改变 `3`号管脚的输出电平值。
 

@@ -1,66 +1,58 @@
 ---
 
 sidebar_position: 3
-
+sidebar_products: "RDK S100"
 ---
 
 # 1.1.3 FAQ
 
+### Q1: What does the Pull up/down column in the RDK S100 Pinlist Excel file mean?
 
-### Q1：RDK S100 Pinlist Excel 文件中的 Pull up/down 列表达的是什么意思？​
+**A:** The Pull up/down column in the Pinlist Excel file describes the default pull-up or pull-down state of the interface signals at power-on.
 
-**A:** Pinlist Excel 文件中的 Pull up/down 列为接口信号上电时的默认上拉或下拉状态描述。​
+### Q2: Can the input voltage range of the RDK S100 power JACK exceed 20V or go below 12V?
 
-### Q2：RDK S100 电源 JACK 的输入电压范围是否可以超过 20V 或低于 12V ？​
+**A:** Exceeding 20V may damage the RDK S100 development board; going below 12V may cause abnormal startup, such as abnormal power-on or failure to boot into the kernel.
 
-**A:** 超过 20V 会导致 RDK S100 开发板损坏；低于 12V 可能会导致开机异常，如电源上电异常，开机未进入 kernal 等。​
+### Q3: Where can I find the description of the power supply capability of the RDK S100 external interface output?
 
-### Q3：RDK S100 对外接口输出电源的供电能力描述信息在哪里获取？​
+**A:** It is described in the "Tip" or "Note" section of each interface introduction.
 
-**A:** 在每个接口介绍部分的“提示”或“注意”信息中进行了描述。​
+### Q4: Can the power supply capability of the RDK S100 external interface output exceed the maximum supply current provided by Dijia?
 
-### Q4：RDK S100 对外接口输出电源的供电能力是否可以超过地瓜提供的最大供电电流？​
+**A:** No, it cannot exceed the maximum supply current provided by Dijia; otherwise, it may cause board damage or abnormal startup.
 
-**A:** 不可以超出地瓜提供的最大供电电流，否则可能导致开发板损坏或开机异常。​
+### Q5: How to connect the MCU daughter board and CAM daughter board to the RDK S100 main board? Is there a reference guide?
 
-### Q5：MCU 子板和 CAM 子板与 RDK S100 主板如何连接，是否有参考指引？​
+**A:** The sections **[1.1.1.1 RDK S100 Camera Expansion Board](../01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board.md)** and **[1.1.1.2 RDK S100 MCU Port Expansion Board](../01_hardware_introduction/01_rdk_s100/03_rdk_s100_mcu_port_expansion_board.md)** include reference videos on connecting the CAM daughter board and MCU daughter board to the RDK S100 main board.
 
-**A: [1.1.1.1 RDK S100 相机扩展板](../01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board.md)** 和 **[1.1.1.2 RDK S100 MCU 接口扩展板](../01_hardware_introduction/01_rdk_s100/03_rdk_s100_mcu_port_expansion_board.md)** 章节分别有介绍 CAM 子板和 MCU 子板与 RDK S100 主板连接的参考视频可供参考。​
+### Q6: What do the characters AO, AI, I, O, IO, NULL, /, etc., in the RDK S100 Pinlist Excel file mean?
 
-### Q6：RDK S100 Pinlist Excel 文件中描述的 AO，AI，I，O，IO，NULL，/ 等字符表示什么意思？​
+**A:**
+- **AO:** Analog Output
+- **AI:** Analog Input
+- **I:** Digital Input
+- **O:** Digital Output
+- **IO:** Digital Input or Output
+- **NULL:** Null value
+- **/:** Indicates no pin or no state
 
-**A:** 
-- **AO :** 模拟输出
+### Q7: What should I do if the 3.3V pin cannot drive my sensor?
 
-- **AI :** 模拟输入
+**A:** It is recommended to check whether the power supply provided by the RDK S100 meets the electrical characteristics (e.g., voltage/current/level matching) required by the sensor. Also, check for any hardware circuit connection errors.
 
-- **I :** 数字输入
+### Q8: Can I parallel multiple pins to increase the output current?
 
-- **O :** 数字输出
+**A:** The maximum current that can be output by any pin on the RDK S100 external interface is the maximum current available to the peripheral. Paralleling multiple pins cannot provide a higher current capability.
 
-- **IO :** 数字输入或输出
+### Q9: Why won’t my USB device start properly?
 
-- **NULL :** 空值
+**A:** It is recommended to check for loose hardware connections, whether the USB cable is too long, whether the development board can meet the power requirements of the USB device, whether the USB software configuration is correct, and try using a different USB device to identify the issue.
 
-- **/ :** 表示无引脚或无状态
+### Q10: Are there any safety recommendations for using the RDK S100 kit?
 
-### Q7：3.3V 引脚带不动我的传感器怎么办？​
+**A:**  
 
-**A:** 建议排查 RDK S100 提供的电源供电是否满足传感器本身的电压/电流/电平幅度匹配等电气特性要求，也建议检查是否有硬件电路连接错误。​
+- **a.** Follow the connection guide videos for the CAM daughter board and MCU daughter board in the community documentation to properly attach both daughter boards. Ensure the connections are secure and not loose before powering on the RDK S100 main board. If the daughter boards are not needed, you can directly power the RDK S100 main board with a 12–20V power supply and turn it on.  
 
-### Q8：是否可以并联多个引脚来提高输出电流？​
-
-**A:** RDK S100 对外接口的所有 PIN 脚能输出的最大电流就是外设能获取的最大电流，无法通过并联多个 PIN 脚提供更大的电流能力。​
-
-### Q9：为什么我的 USB 设备无法正常启动？​
-
-**A:** 建议检查硬件连接是否松动，USB 连接线是否过长，USB 设备需要的功耗开发板是否可以满足，USB 软件配置是准确，也可更换不同 USB 设备进行问题确认。​
-
-### Q10：对于 RDK S100 套件是否有相关的安全使用建议？​
-
-**A:**   
-
-- **a.** 按照社区文档中的 CAM 子板和 MCU 子板连接指引视频扣接好两块子板，确认扣接位置准确并无松动后，给 RDK S100 主板供电；若不需要使用子板，则可以直接给 RDK S100 子板供电 12~20V 电源并开机。​
-
-- **b.** 使用 RDK S100 开发套件的过程中，注意周边环境是否有可能与开发套件的电路直接接触的导体，若有，将开发套件移至远离裸露导体的位置，避免开发套件发生短路。
-
+- **b.** While using the RDK S100 development kit, be aware of any conductors in the surrounding environment that may come into direct contact with the kit’s circuitry. If such conductors exist, move the kit away from exposed conductors to avoid short circuits.

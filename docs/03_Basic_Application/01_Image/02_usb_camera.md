@@ -60,7 +60,8 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=18
 
 :::
 
-## USB 2.0摄像头接入说明{#USB 2.0摄像头接入说明}
+## USB 2.0摄像头接入说明{#usb-2.0-note}
+
 :::tip
 1. USB 2.0带宽为480Mb/s，720p30fps 的 usb camera 理论带宽1280x720x16x30=442Mb/s 已经接近2.0理论带宽，另外 uvc 协议开销也会占用一部分带宽，实际剩余传输图像数据的带宽可能在五成左右，本身理论上也不能在同一个 host 接入两路 usb2.0 720p30fps 的 camera，经验证，同一个 usb host 上可以接入两路 usb2.0 640x480 20fps。
 2. s100开发板有两个 usb host，上下两个口为同一个 host，如果接入两个 usb2.0 720p camera，需要左右两个口插入，每个 usb2.0相机占用一个 host 的方式。

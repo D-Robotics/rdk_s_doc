@@ -148,7 +148,7 @@ RDK S100开发板上的 emc2305风扇控制器，可以通过设备节点获取�
    ```
 
 :::info
-**注意**：当 thermal_zone0的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone简介)章节，将 thermal_zone0的策略改为`user_space`
+**注意**：当 thermal_zone0的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone-简介)章节，将 thermal_zone0的策略改为`user_space`
 :::
 
 ### CPU 频率管理
@@ -211,6 +211,7 @@ echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 </DocScope>
 
 <DocScope products="RDK S600">
+
 ## RDK S600
 ### 温度传感器
 在 RDKS600芯片中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。
