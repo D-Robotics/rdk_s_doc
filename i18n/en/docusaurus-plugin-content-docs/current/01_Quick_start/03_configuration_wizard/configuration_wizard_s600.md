@@ -144,7 +144,7 @@ After setting up the Chinese environment, the system's built-in input method is 
 
 ## Setting Up RDK Studio
 
-To be updated.
+For the usage instructions of RDK Studio, please refer to the [RDK Studio User Manual](https://developer.d-robotics.cc/rdk_studio_doc/en/category/1-product-intro).
 
 ## NoMachine Configuration
 

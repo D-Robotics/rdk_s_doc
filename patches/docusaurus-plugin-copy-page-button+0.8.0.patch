@@ -1,0 +1,28 @@
+diff --git a/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js b/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js
+index 9ef6ac7..7473ac0 100644
+--- a/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js
++++ b/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js
+@@ -271,7 +271,22 @@ Please provide a clear summary and help me understand the key concepts covered i
+     }
+ 
+     try {
+-      const blob = new Blob([contentToView], { type: "text/plain" });
++      const host = window.location.hostname || "";
++      const isLocalDev = host === "localhost" || host === "127.0.0.1";
++      if (generateMarkdownRoutes && !isLocalDev) {
++        // .md routes are generated during static build, not guaranteed in dev server.
++        window.open(getMarkdownRouteUrl(window.location.href), "_blank");
++        return;
++      }
++
++      // Render markdown in a UTF-8 HTML shell so browsers never guess encoding
++      // for blob:// plain-text content (which can cause CJK mojibake on Windows).
++      const escaped = contentToView
++        .replace(/&/g, "&amp;")
++        .replace(/</g, "&lt;")
++        .replace(/>/g, "&gt;");
++      const html = `<!doctype html><html><head><meta charset="utf-8"><title>View as Markdown</title><style>body{margin:0;padding:16px;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#fff;color:#111;}pre{white-space:pre-wrap;word-break:break-word;}</style></head><body><pre>${escaped}</pre></body></html>`;
++      const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+       const url = URL.createObjectURL(blob);
+       window.open(url, "_blank");
+     } catch (err) {
