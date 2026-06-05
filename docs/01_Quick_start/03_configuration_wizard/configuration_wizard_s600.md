@@ -146,7 +146,9 @@ source /etc/default/locale
 
 ## 设置 RDK Studio
 
-待更新
+RDK Studio 是面向机器人开发的 AI 原生桌面工作台。它把 Moss 对话、项目工作区、设备连接、远程开发、烧录、本地模型和板端 Agent 放在同一个原生窗口里。
+
+RDK Studio 的使用方法请参考 [RDK Studio用户手册](https://developer.d-robotics.cc/rdk_studio_doc/category/1-product-intro)。
 
 ## NoMachine 配置
 
