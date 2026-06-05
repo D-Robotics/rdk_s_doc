@@ -1314,3 +1314,24 @@ max user IRQ frequency  : 1
 [03384.497509 0]INFO: Instance 5 Remote Core ready
 [03384.498117 0]INFO: Inst 5 chan 0 2 success
 ```
+
+## 常见问题
+
+### Q1：为什么无法设置秒级的闹钟
+
+RTC-YSN8130 存在硬件限制，闹钟最细粒度为分钟级，不支持秒级精度。
+
+### Q2：如何禁用 RTC 的中断
+
+修改 `Isr_Hal.c` 中 `Interrupt_McuConfigs[]` 数组对应中断项的使能字段为 `DISABLE`：
+
+文件路径: `mcu/Target/Target_Sxxx/Target-hobot-lite-freertos/target/FreeRtosOsHal/Isr_Hal.c`
+
+  各板端对应的中断项：
+
+| 板端 | 中断配置项                    |
+|------|-------------------------------|
+| S100 | Os_IntChannel_Gpio_Icu3ExtIsr |
+| S600 | Os_IntChannel_Aon_GpioIsr     |
+
+> 示例（S100）：将 Interrupt_McuConfigs[] 中 Os_IntChannel_Gpio_Icu3ExtIsr 行末尾的 ENABLE 改为 DISABLE 即可，S600 操作同理。
