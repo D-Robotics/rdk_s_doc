@@ -5,7 +5,7 @@ sidebar_products: RDK S600
 
 # 1.2.1 System Flashing
 
-The RDK S600 kit currently provides the Ubuntu 22.04 system image, which supports Desktop graphical interaction. The RDK S600 is pre-flashed with a test version system image from the factory. To ensure the latest system version is used, it is recommended to refer to this document to flash the latest system image.
+The RDK S600 kit currently provides the Ubuntu 24.04 system image, which supports Desktop graphical interaction. The RDK S600 is pre-flashed with a test version system image from the factory. To ensure the latest system version is used, it is recommended to refer to this document to flash the latest system image.
 
 Based on the PC flashing tool Xburn provided by the system, the following firmware update operations can be performed:
 
