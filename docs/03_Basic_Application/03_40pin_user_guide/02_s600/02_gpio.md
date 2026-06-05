@@ -4,10 +4,6 @@ sidebar_position: 2
 
 # 3.3.2.2 GPIO 应用
 
-:::warning
-该功能在 RDK S600 上未验证
-:::
-
 开发板预置了 GPIO Python 库 `Hobot.GPIO`，用户可以通过如下命令导入 GPIO 库。
 
 ```shell
