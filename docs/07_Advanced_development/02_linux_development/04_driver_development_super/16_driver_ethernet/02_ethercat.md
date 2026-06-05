@@ -10,24 +10,252 @@ import DocScope from '@site/src/components/DocScope';
 <font color="red">**注意：**</font>使用 EtherCAT 协议需要系统版本 V4.0.4及以上。
 :::
 
+## Native 驱动与 Generic 驱动
+
+### 版本说明
+
+<DocScope products="RDK S100">
+**RDK S100 V4.0.7 及以上版本默认使用 Native（hobot）EtherCAT 驱动**，而非 Generic 驱动。
+
+:::warning
+<font color="red">**注意：**</font>本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V4.0.7 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
+:::
+</DocScope>
+
+<DocScope products="RDK S600">
+**RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动**，而非 Generic 驱动。
+
+:::warning
+<font color="red">**注意：**</font>本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V5.1.0 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
+:::
+</DocScope>
+
+
+### Native 驱动与 Generic 驱动的区别
+
+| 特性 | Native 驱动（`ec_hobot`） | Generic 驱动（`ec_generic`） |
+|------|--------------------------|---------------------------|
+| 驱动模块 | `ec_hobot` | `ec_generic` |
+| 网络性能 | 更优（直接操作硬件，绕过 Linux 网络栈） | 标准 Linux 网络栈 |
+| 与 gmac 驱动兼容性 | **互斥**，需卸载 `hobot_eth_super` | **兼容**，可共存 |
+| 网口配置方式 | **必须使用 MAC 地址** | 支持网口名或 MAC 地址 |
+| 网口在系统中的可见性 | 被 Native 驱动接管后，对应 MAC 的网口**从 `ip a` 中消失** | 网口始终可见 |
+
+## Native 驱动使用步骤
+
+### 网口 MAC 地址参考
+
+以下为 S100/S600 的四个示例以太网口 MAC 地址：
+
+| 网口 | MAC 地址 |
+|------|----------|
+| eth0 | `xx:xx:xx:xx:01:18` |
+| eth1 | `xx:xx:xx:xx:01:19` |
+| eth2 | `xx:xx:xx:xx:01:1a` |
+| eth3 | `xx:xx:xx:xx:01:1b` |
+
+:::tip
+实际的 MAC 地址可能因硬件版本不同而略有差异。请以设备上 `ip link show` 命令输出为准。
+:::
+
+### Native 驱动配置步骤
+
+**步骤 1：确认配置文件**
+
+默认镜像中 `/etc/ethercat.conf` 已预配置为 Native 模式。如需切换 EtherCAT 使用的网口，修改 `MASTER0_DEVICE` 为对应网口的 MAC 地址：
+
+```
+MASTER0_DEVICE="xx:xx:xx:xx:01:18"  # eth0 的 MAC 地址
+DEVICE_MODULES="hobot"
+```
+
+如需使用 eth1 作为 EtherCAT 网口：
+```
+MASTER0_DEVICE="xx:xx:xx:xx:01:19"  # eth1 的 MAC 地址
+DEVICE_MODULES="hobot"
+```
+
+**步骤 2：配置 systemd drop-in（必须）**
+
+由于 Native 驱动与 gmac 驱动互斥，需要配置 systemd drop-in 来自动处理驱动的卸载与恢复。在设备上执行以下命令，实现：
+- 启动 EtherCAT 前自动卸载 `hobot_eth_super`
+- 停止 EtherCAT 后自动重新加载 `hobot_eth_super` 恢复网络
+
+```shell
+sudo mkdir -p /etc/systemd/system/ethercat.service.d
+
+sudo tee /etc/systemd/system/ethercat.service.d/prestart.conf << 'EOF'
+[Service]
+ExecStartPre=-/sbin/rmmod hobot_eth_super
+ExecStopPost=-/sbin/modprobe hobot_eth_super
+EOF
+
+sudo systemctl daemon-reload
+```
+
+:::info
+- `ExecStartPre=-`：启动前自动卸载 `hobot_eth_super`（前缀 `-` 表示即使该命令失败也继续执行）
+- `ExecStopPost=-`：停止后自动重新加载 `hobot_eth_super` 以恢复普通网络功能
+:::
+
+:::warning
+<font color="red">**SSH 连接注意事项：**</font>如果通过 SSH 远程连接开发板，执行 `systemctl start ethercat` 或 `systemctl stop ethercat` 时，由于 gmac 驱动的卸载/重装，**网络会短暂中断几秒**（ping 会显示 `Destination Host Unreachable`），SSH 客户端通常会自动重连。这是正常现象，无需手动干预。
+:::
+
+**步骤 3：启动 EtherCAT**
+
+```shell
+sudo systemctl start ethercat
+sudo systemctl status ethercat
+```
+
+正常输出示例：
+```
+● ethercat.service - EtherCAT Master Kernel Modules
+     Loaded: loaded (/usr/lib/systemd/system/ethercat.service; disabled; preset: enabled)
+    Drop-In: /etc/systemd/system/ethercat.service.d
+             └─prestart.conf
+     Active: active (exited) since Thu 2026-03-26 20:48:36 CST; 4s ago
+    Process: 6476 ExecStartPre=/sbin/rmmod hobot_eth_super (code=exited, status=0/SUCCESS)
+    Process: 6504 ExecStart=/sbin/ethercatctl start (code=exited, status=0/SUCCESS)
+   Main PID: 6504 (code=exited, status=0/SUCCESS)
+```
+
+**步骤 4：验证**
+
+启动后，检查 `ip a` 可以发现被 EtherCAT 绑定的网口 MAC 地址已从内核协议栈中消失（不再出现在列表中）：
+
+```shell
+$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> ...
+6: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP> ...
+7: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> ...    # MAC 为未绑定的网口
+8: eth1: <NO-CARRIER,BROADCAST,MULTICAST,UP> ...    # MAC 为未绑定的网口
+9: eth2: <NO-CARRIER,BROADCAST,MULTICAST,UP> ...    # MAC 为未绑定的网口
+# 注意：MAC 为 xx:xx:xx:xx:01:18 的 eth0 已不在列表中（被 Native 驱动接管）
+```
+
+检查 EtherCAT 主站状态：
+
+```shell
+$ sudo ethercat master
+Master0
+  Phase: Idle
+  Active: no
+  Slaves: 1
+  Ethernet devices:
+    Main: xx:xx:xx:xx:01:18 (attached)
+      Link: UP
+      ...
+
+$ sudo ethercat slaves
+0  0:0  PREOP  +  SSC-Device
+```
+
+**步骤 5：停止 EtherCAT（切换回普通网络模式）**
+
+停止 EtherCAT 服务后，`ExecStopPost` 会自动加载 `hobot_eth_super`，所有网口恢复为普通网络模式：
+
+```shell
+sudo systemctl stop ethercat
+```
+
+### 切换 Native 驱动使用的网口
+
+如需切换 EtherCAT 使用的网口，只需修改 `/etc/ethercat.conf` 中的 `MASTER0_DEVICE` 为对应网口的 MAC 地址，然后重启 EtherCAT 服务：
+
+1. 修改配置（例如从 eth0 切换到 eth1）：
+   ```
+   MASTER0_DEVICE="xx:xx:xx:xx:01:19"  # 改为 eth1 的 MAC
+   DEVICE_MODULES="hobot"
+   ```
+
+2. 重启服务：
+   ```shell
+   sudo systemctl restart ethercat
+   ```
+
+3. 验证新网口已生效：
+   ```shell
+   sudo ethercat master
+   # 应显示新的 MAC 地址: Main: xx:xx:xx:xx:01:19 (attached)
+   ```
+
+### Native 驱动的风险与影响
+
+:::warning
+<font color="red">**重要：**</font>由于 Native 驱动与 gmac 驱动互斥，**强烈推荐使用 `systemctl` 管理 EtherCAT 服务**（配合 systemd drop-in 自动处理驱动的卸载与恢复），**不要直接使用 `ethercatctl` 命令**。直接使用 `ethercatctl start` 需要手动 `rmmod hobot_eth_super`，一旦操作不当（如忘记卸载 gmac 驱动）将导致 EtherCAT 启动失败；且在远程 SSH 连接场景下，手动操作可能导致网络丢失无法恢复。
+:::
+
+#### 1. 与 gmac 驱动冲突
+
+Native 驱动 `ec_hobot` 与系统的 `hobot_eth_super`（xgmac）驱动**互斥**，两者不能同时加载。启动 EtherCAT 前必须先卸载 `hobot_eth_super`，否则 EtherCAT 服务无法正常启动。
+
+**影响**：卸载 `hobot_eth_super` 后，EtherCAT 主站绑定的网口被 Native 驱动接管，**其余以太网口仍可正常使用**（可配置 IP、用于 SSH 连接等）。但在 `rmmod`/`modprobe hobot_eth_super` 的瞬间，所有以太网口会短暂中断数秒后自动恢复，SSH 连接通常会自动重连。
+
+**恢复方式**：停止 EtherCAT 后，`ExecStopPost` 会自动重新加载 `hobot_eth_super`，所有以太网口恢复普通网络功能。
+
+#### 2. 网口被 Native 驱动独占
+
+当 Native 驱动启动后，配置文件中 `MASTER0_DEVICE` 绑定的 MAC 地址对应的网口将从 Linux 内核协议栈中**消失**（`ip a` 中不再显示该网口），完全被 EtherCAT 独占。其余未绑定的网口仍然可见且可正常使用。
+
+#### 3. MAC 地址配置要求
+
+Native 驱动模式下，`/etc/ethercat.conf` 中的 `MASTER0_DEVICE` **必须配置为对应网口的实际 MAC 地址**（如 `"xx:xx:xx:xx:01:18"`），不能使用 `ff:ff:ff:ff:ff:ff` 广播地址或网口名（如 `"eth0"`），否则驱动无法正确绑定。
+
+### deb 包升级注意事项
+
+升级 EtherCAT 相关 deb 包时，**必须保证版本一致**，同步升级以下两个包：
+
+```shell
+# 两个包必须同步升级，版本号必须匹配
+dpkg -i hobot-ethercat_5.1.0-20260525160326_arm64.deb
+dpkg -i linux-image-rdk-s600_6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c-29_arm64.deb
+```
+
+如果只升级 `hobot-ethercat` 而不升级 `linux-image`，可能因内核模块版本不匹配导致驱动无法加载。
+
+### 切换到 Generic 驱动模式
+
+如果您需要使用 Generic 驱动模式（支持多网口 eth0/eth1、可与 gmac 驱动共存、可正常停止服务），请修改 `/etc/ethercat.conf`：
+
+```shell
+# 修改为 Generic 驱动配置
+sudo sed -i 's/DEVICE_MODULES="hobot"/DEVICE_MODULES="generic"/' /etc/ethercat.conf
+sudo sed -i 's/MASTER0_DEVICE=".*"/MASTER0_DEVICE="eth0"/' /etc/ethercat.conf
+```
+
+修改后重启设备或重启 EtherCAT 服务即可。Generic 模式下的详细使用方式请参考后续章节（「使用前网络配置」起）。
+
+---
+
 ## 使用前网络配置
 
 <DocScope products="RDK S100">
 :::warning
-<font color="red">**注意：**</font>EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
+<font color="red">**注意：**</font>以下内容适用于 **Generic 驱动模式**。如果您使用的是 V4.0.7 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
+
+EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
 
 **特别注意：RDK S100默认使用 eth0作为 DHCP 网口，如果用户原本使用 eth0作为 SSH 连接开发板的主要模式，在使用 eth0作为 EtherCAT 主站后，需要配置 eth1为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
+
 <DocScope products="RDK S600">
 :::warning
-<font color="red">**注意：**</font>EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
+<font color="red">**注意：**</font>以下内容适用于 **Generic 驱动模式**。如果您使用的是 V5.1.0 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
+
+EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
 
 **特别注意：RDK S600默认使用 eth0作为 DHCP 网口，如果用户原本使用 eth0作为 SSH 连接开发板的主要模式，在使用 eth0作为 EtherCAT 主站后，需要配置 eth1为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
 
 ## EtherCAT 使用指南
+
+:::info
+本节内容适用于 **Generic 驱动模式**。如果您使用的是 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
+:::
 
 1. 确认硬件连接：
     - 从站已上电。
@@ -102,6 +330,18 @@ EtherCAT 官网：[EtherLab | EtherCAT](https://etherlab.org/en_GB/ethercat)
 EtherCAT 开源代码仓库：[Gitlab | EtherLab - EtherCAT](https://gitlab.com/etherlab.org/ethercat)
 
 ### 编译和部署
+<DocScope products="RDK S100">
+:::info
+V4.0.7 默认使用 Native 驱动（`ec_hobot`），该驱动已预编译在系统镜像中。以下 Host 端和板端构建说明适用于自行编译 EtherCAT 软件栈的场景。
+:::
+</DocScope>
+
+<DocScope products="RDK S600">
+:::info
+V5.1.0 默认使用 Native 驱动（`ec_hobot`），该驱动已预编译在系统镜像中。以下 Host 端和板端构建说明适用于自行编译 EtherCAT 软件栈的场景。
+:::
+</DocScope>
+
 #### Host 端构建
 Host 端构建支持两种构建方式：
 1. 单独编译 debian 包并部署
@@ -110,12 +350,16 @@ Host 端构建支持两种构建方式：
    ./mk_debs.sh hobot-ethercat
 
    # Deploy
-   ## Transfer generated out/product/deb_packages/hobot-ethercat_<***>_arm64.deb package to RDK S100, the "<***>" is the version string
-   ## On RDK S100, presuming debian package is transferred to /userdata
+   ## Transfer generated out/product/deb_packages/hobot-ethercat_<***>_arm64.deb package to RDK S100/S600, the "<***>" is the version string
+   ## On RDK S100/S600, presuming debian package is transferred to /userdata
    dpkg -i /userdata/hobot-ethercat_4.0.4-20250827135836_arm64.deb
    ```
 
    hobot-ethercat 的构建包括内核模块+用户层应用两个大模块。内核模块构建依赖用户本地构建的内核输出物。在用户没有在本地构建过内核时会自动跳过内核模块的构建。
+
+   :::info
+   `hobot-ethercat` debian 包中同时包含 Native 驱动（`ec_hobot`）和 Generic 驱动（`ec_generic`），通过 `/etc/ethercat.conf` 中的 `DEVICE_MODULES` 配置切换。
+   :::
 
 2. 整编 \
    默认 rdk-gen 构建系统在整编 disk 镜像后，镜像内会默认集成 hobot-ethercat debian 包，内部包括内核模块及用户层应用。
