@@ -4,9 +4,6 @@ sidebar_position: 2
 
 # 3.3.2.2 GPIO Application
 
-:::warning
-This feature has not been verified on RDK S600
-:::
 
 The development board comes with the GPIO Python library `Hobot.GPIO`. Users can import the GPIO library using the following command.
 
