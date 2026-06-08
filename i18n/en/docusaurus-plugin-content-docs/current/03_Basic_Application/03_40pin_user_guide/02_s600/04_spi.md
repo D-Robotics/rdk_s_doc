@@ -20,7 +20,7 @@ Hardware-connect MISO and MOSI, then run the SPI test program to perform write a
 
 Before testing, short MISO and MOSI:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_spi.png" alt="image-rdk_s600_spi.png" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_spi-en.png" alt="image-rdk_s600_spi.png" style={{ width: '100%' }} />
 
 ### Test Procedure
 

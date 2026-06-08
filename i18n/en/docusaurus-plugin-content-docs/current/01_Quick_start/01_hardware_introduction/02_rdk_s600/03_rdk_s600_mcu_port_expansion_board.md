@@ -1,6 +1,9 @@
 ---
 sidebar_position: 3
+sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 ---
+
+
 
 # 1.1.2.2 MCU Interface Expansion Board
 
@@ -8,13 +11,13 @@ sidebar_position: 3
 
 The RDK S600 MCU Port Expansion Board (including the matching FPC) is a core expansion module for the D-Robotics RDK S600 series developer kit. It is mainly used to expand MCU interface functions, supporting CAN_FD, ADC, etc.
 
-:::danger Note
+<!-- :::danger Note
 
 1. This product is still in the development stage, and the content described is subject to change.
 2. For RDK S600 Early Access users, please read first: [**RDK S600 Early Access Note**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
 3. Please read the [**RDK S600 Early Prototype Status Description**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd) before use to obtain hardware-related information.
 
-:::
+::: -->
 
 :::warning
 
@@ -49,12 +52,20 @@ The side with the "CB" silkscreen on the front of the FPC corresponds to the J15
 
 :::
 
+<details>
+<summary>This document corresponds to **MCU Port Expansion Board V1P0**，Click to view previous versions</summary>
+
+- [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
+- [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
+
+</details>
+
 ## Product Specifications  
-:::warning Note
+<!-- :::warning Note
 
 In hardware version V0P1, the 2x SPI interfaces are temporarily unavailable.
 
-:::
+::: -->
 
 | **Item**      | **Parameters**                                                                                   |
 | ------------- | ------------------------------------------------------------------------------------------------ |
@@ -69,11 +80,11 @@ In hardware version V0P1, the 2x SPI interfaces are temporarily unavailable.
 
 ### Interface Description
 
-**V0P2 Interface Diagram**
+<!-- **V0P2 Interface Diagram**
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2_interface.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
 
-**V0P3 Interface Diagram**
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p3_interface.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
+**V0P3 Interface Diagram** -->
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
 
 | Reference | Function                    |
 | --------- | --------------------------- |
@@ -124,3 +135,4 @@ Below the 5 switches (SW401) on the expansion board, there is one green LED indi
 
 - Green light constantly on: The RDK S600 and MCU expansion board are connected normally, and 5V power is being supplied correctly.
 - Green light off: The connection between the RDK S600 and MCU expansion board is abnormal, with no 5V power supply.
+

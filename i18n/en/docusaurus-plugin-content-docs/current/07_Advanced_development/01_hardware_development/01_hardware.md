@@ -12,13 +12,26 @@ import DocScope from '@site/src/components/DocScope';
 
 This section provides product manuals and design documentation to help developers fully understand the product and provide guidance for hardware design work.
 
-<DocScope products="RDK S600">
+:::tip Commercial Support
+The commercial version offers more comprehensive feature support, deeper hardware capability access, and exclusive customization options. To ensure compliance and secure delivery, we will grant access to the commercial version through the following process:
 
-:::warning Note
+**Commercial Version Access Procedure:**
+
+1. **Complete a questionnaire**: Submit basic information about your organization and intended use case.  
+2. **Sign a Non-Disclosure Agreement (NDA)**: We will contact you based on your submission, and both parties will sign the NDA upon mutual confirmation.  
+3. **Content release**: After the agreement is signed, we will provide access to the commercial version materials through a private channel.
+If you wish to obtain the commercial version, please complete the questionnaire below. We will contact you within 3–5 business days:
+
+Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnJQBMIkRm6K79rjXR0hr0Fg
+:::
+
+<!-- <DocScope products="RDK S600">
+
+ :::warning Note
 
 For RDK S600 Early Access users, please read first: [**RDK S600 Early Access Note**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
 
-:::
+::: 
 
 :::warning Note
 
@@ -104,4 +117,7 @@ Please obtain RDK S600 documentation from the FTP server according to the paths 
 |                   | V0.3    | 2026/3/12   | **V0P3:** RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_mcu_port_expansion_board_v0p3_260311.pdf           |
 | Reference Design  | -       | 2026/3/12   | **V0P3:** RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_MCU_PORT_EXPANSION_BOARD/RDK_S600_MCU_PORT_EXPANSION_BOARD_V0P3.XXX |
 
-</DocScope>
+</DocScope> -->
+
+
+For hardware information, refer to [Resource Summary](../../01_Quick_start/download.md).

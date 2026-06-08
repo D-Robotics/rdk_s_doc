@@ -9,7 +9,7 @@ sidebar_products: RDK-S100
 本示例仅适用于 RDK S100。RDK S600 镜像未内置对应 hbm 模型，相关示例代码也仅在 S100 上随系统镜像发布；S600 上暂不支持。
 :::
 
-本示例基于 `hbm_runtime` 推理引擎运行 PaddleOCR 模型进行文本检测与识别，支持中文场景的 OCR 识别与可视化，本示例代码位于`/app/pydev_demo/08_OCR_sample/01_paddleOCR/`目录下，本示例代码位于/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/ 目录下。
+本示例基于 `hbm_runtime` 推理引擎运行 PaddleOCR 模型进行文本检测与识别，支持中文场景的 OCR 识别与可视化，本示例代码位于`/app/pydev_demo/08_OCR_sample/01_paddleOCR/`目录下。
 
 
 ## 模型说明

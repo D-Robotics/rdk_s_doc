@@ -12,25 +12,24 @@ import DocScope from '@site/src/components/DocScope';
 
 本章节提供产品手册和设计资料，帮助开发者全面了解产品，并为硬件设计工作提供指导。
 
-<DocScope products="RDK S600">
+:::tip 商业支持
 
-:::warning 注意
+商业版提供更完整的功能支持、更深入的硬件能力开放和专属的定制内容。为确保内容合规、安全交付，我们将通过以下方式开放商业版访问权限。
 
-对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
+商业版本获取流程：
+1. 填写问卷：提交您的机构信息、使用场景等基本情况
+2. 签署保密协议（NDA）：我们将根据提交信息与您联系，双方确认后签署保密协议
+3. 内容释放：完成协议签署后，我们将通过私有渠道为您开放商业版本资料
+  
+如您希望获取商业版内容，请点击下方链接填写问卷，我们将在 3 ～ 5 个工作日内与您联系：
+https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 
 :::
 
-:::warning 注意
-
-RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取。
-
-:::
-
-</DocScope>
 
 
 
-<DocScope products="RDK S100">
+<!-- <DocScope products="RDK S100">
 
 
 
@@ -223,4 +222,6 @@ RDK S600 资料请根据表格中的路径，在 FTP 服务器中获取。
   </tbody>
 </table>
 
-</DocScope>
+</DocScope> -->
+
+硬件资料参见[资源汇总](../../01_Quick_start/download.md)

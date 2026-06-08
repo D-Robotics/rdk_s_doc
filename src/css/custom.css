@@ -299,7 +299,7 @@ body.plugin-id-os-rdk-s600        .navbar-version-dropdown--os-rdk-s600 {
 /* ------------------------------------------------------------------ */
 /* 文档正文表格与 TOC 防重叠：
  * - 正文列允许收缩（min-width: 0），避免宽表格撑进右侧 TOC 区域
- * - 宽表格仅在 .markdown-table-scroll 容器内横向滚动（见 DocScopeHydration） */
+ * - 宽表格在直接父节点内横向滚动（纯 CSS，避免 JS 改 DOM 与 React 冲突） */
 @media (min-width: 997px) {
   main .container .row > .col--9,
   main .container .row > .col:first-child {
@@ -323,6 +323,8 @@ article.markdown {
   overflow-x: hidden;
 }
 
+.theme-doc-markdown.markdown *:has(> table),
+article.markdown *:has(> table),
 .markdown-table-scroll,
 .theme-doc-markdown.markdown .table-responsive,
 article.markdown .table-responsive {
@@ -336,6 +338,8 @@ article.markdown .table-responsive {
   scrollbar-gutter: stable;
 }
 
+.theme-doc-markdown.markdown *:has(> table) > table,
+article.markdown *:has(> table) > table,
 .markdown-table-scroll > table,
 .theme-doc-markdown.markdown .table-responsive > table,
 article.markdown .table-responsive > table {
@@ -349,6 +353,10 @@ article.markdown .table-responsive > table {
   table-layout: auto;
 }
 
+.theme-doc-markdown.markdown *:has(> table) > table th,
+.theme-doc-markdown.markdown *:has(> table) > table td,
+article.markdown *:has(> table) > table th,
+article.markdown *:has(> table) > table td,
 .theme-doc-markdown.markdown .markdown-table-scroll > table th,
 .theme-doc-markdown.markdown .markdown-table-scroll > table td,
 article.markdown .markdown-table-scroll > table th,
@@ -430,3 +438,69 @@ main article table td {
 [data-theme='dark'] .markdown a:hover {
   color: #79b8ff;
 } 
+
+/* 图片点击放大交互光标 */
+.markdown img {
+  cursor: zoom-in;
+}
+
+.medium-zoom-image--opened {
+  cursor: zoom-out;
+}
+
+/* 图片放大层级高于右侧 TOC（含 sticky z-index） */
+.medium-zoom-overlay {
+  z-index: 2000 !important;
+}
+
+.medium-zoom-image--opened {
+  z-index: 2001 !important;
+}
+
+/* 文档底部分页与正文拉开距离 */
+.pagination-nav {
+  margin-top: 1.5rem;
+}
+
+/* 历史版本页：固定返回最新版本按钮 */
+.latest-version-fab-wrap {
+  position: fixed;
+  top: calc(var(--ifm-navbar-height) + 1.8rem);
+  left: clamp(25rem, 18vw, 15rem);
+  z-index: 30;
+}
+
+.latest-version-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--ifm-color-primary) !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none !important;
+  box-shadow: none;
+}
+
+.latest-version-fab::before {
+  content: "←";
+  margin-right: 0.35rem;
+  font-weight: 700;
+}
+
+.latest-version-fab:hover {
+  background: transparent;
+  color: var(--ifm-color-primary-dark) !important;
+  text-decoration: none !important;
+}
+
+@media (max-width: 996px) {
+  .latest-version-fab-wrap {
+    top: calc(var(--ifm-navbar-height) + 0.6rem);
+    left: 0.75rem;
+  }
+}

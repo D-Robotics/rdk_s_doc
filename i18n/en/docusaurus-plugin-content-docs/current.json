@@ -462,5 +462,33 @@
   "sidebar.tutorialSidebar.category.7.3.3 多媒体应用开发 .link.generated-index.description": {
     "message": " S600 Multimedia Application Development ",
     "description": "The generated-index page description for category 7.3.3 多媒体应用开发  in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.4.1 算法工具链": {
+    "message": "7.4.1 Algorithm Toolchain",
+    "description": "The label for category 7.4.1 算法工具链 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.4.1 算法工具链.link.generated-index.description": {
+    "message": "Algorithm Toolchain Development Guide",
+    "description": "The generated-index page description for category 7.4.1 算法工具链 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.1.1.1 硬件简介": {
+    "message": "1.1.1 Hardware Introduction",
+    "description": "The label for category 1.1.1 硬件简介 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.versions": {
+    "message": "versions",
+    "description": "The label for category versions in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.camera": {
+    "message": "camera",
+    "description": "The label for category camera in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.mcu": {
+    "message": "mcu",
+    "description": "The label for category mcu in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.rdk_s600": {
+    "message": "rdk_s600",
+    "description": "The label for category rdk_s600 in sidebar tutorialSidebar"
   }
 }

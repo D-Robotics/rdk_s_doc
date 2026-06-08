@@ -757,7 +757,7 @@ This document mainly includes a network card usage guide, development board Brin
 ##### Frame Preemption (FPE) (IEEE 802.1Qbu-2016)
 - To address the waste of protection bandwidth and priority inversion issues of EST, the preemption standard was introduced. Therefore, TSN's 802.1Qbu and the IEEE 802.3 working group jointly developed IEEE 802.3br, the preemptable MAC mechanism, consisting of pMAC (Preemptable MAC) and eMAC (express MAC). pMAC can be preempted by eMAC. Through preemption, the protection bandwidth can be reduced to the shortest low-priority frame fragment.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image17.png" alt="tsn-fpe" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media_en/image17.png" alt="tsn-fpe" style={{ width: '100%' }} />
 
 :::tip
 - Since preemption changes the frame format, the peer switch also needs to support FPE when connecting.
@@ -889,8 +889,12 @@ This document mainly includes a network card usage guide, development board Brin
 #### Performance Testing Analysis
 ##### Topology
 
+<DocScope products="RDK S100">
 - Direct connection for S100.
+</DocScope>
+<DocScope products="RDK S600">
 - Direct connection for S600.
+</DocScope>
 
 ##### napi Independent Threading
 - Linux network tasks are handled by ksoftirqd/n, which has a relatively low default priority. Making them independent can improve CPU utilization and TSN-related control.

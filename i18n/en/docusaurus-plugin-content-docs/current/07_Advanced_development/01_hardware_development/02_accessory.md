@@ -12,18 +12,6 @@ The Certified Accessory List refers to a list of third-party accessories officia
 
 :::
 
-:::tip Commercial Support
-The commercial version offers more comprehensive feature support, deeper hardware capability access, and exclusive customization options. To ensure compliance and secure delivery, we will grant access to the commercial version through the following process:
-
-**Commercial Version Access Procedure:**
-
-1. **Complete a questionnaire**: Submit basic information about your organization and intended use case.  
-2. **Sign a Non-Disclosure Agreement (NDA)**: We will contact you based on your submission, and both parties will sign the NDA upon mutual confirmation.  
-3. **Content release**: After the agreement is signed, we will provide access to the commercial version materials through a private channel.
-If you wish to obtain the commercial version, please complete the questionnaire below. We will contact you within 3–5 business days:
-
-Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnJQBMIkRm6K79rjXR0hr0Fg
-:::
 
 ## Compatibility List
 <DocScope products="RDK S100">

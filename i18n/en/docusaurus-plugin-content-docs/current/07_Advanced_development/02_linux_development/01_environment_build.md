@@ -26,9 +26,7 @@ Setting up a cross-compilation environment is an essential step in the developme
 
 </DocScope>
 
-## RDK OS Development Guide
 
-### Developing for RDK S100
 
 :::tip Commercial Support
 The commercial edition provides more comprehensive feature support, deeper hardware capability exposure, and exclusive customization options. To ensure compliance and secure delivery, access to the commercial edition will be granted through the following process:
