@@ -1,22 +1,14 @@
 diff --git a/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js b/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js
-index 9ef6ac7..7473ac0 100644
+index 9ef6ac7..c1a4ade 100644
 --- a/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js
 +++ b/node_modules/docusaurus-plugin-copy-page-button/src/CopyPageButton.js
-@@ -271,7 +271,22 @@ Please provide a clear summary and help me understand the key concepts covered i
+@@ -271,7 +271,14 @@ Please provide a clear summary and help me understand the key concepts covered i
      }
  
      try {
 -      const blob = new Blob([contentToView], { type: "text/plain" });
-+      const host = window.location.hostname || "";
-+      const isLocalDev = host === "localhost" || host === "127.0.0.1";
-+      if (generateMarkdownRoutes && !isLocalDev) {
-+        // .md routes are generated during static build, not guaranteed in dev server.
-+        window.open(getMarkdownRouteUrl(window.location.href), "_blank");
-+        return;
-+      }
-+
-+      // Render markdown in a UTF-8 HTML shell so browsers never guess encoding
-+      // for blob:// plain-text content (which can cause CJK mojibake on Windows).
++      // Always render in a UTF-8 HTML shell. Static .md routes break on OSS/CDN
++      // hosts that rewrite "path.md" to "path.md/index.html".
 +      const escaped = contentToView
 +        .replace(/&/g, "&amp;")
 +        .replace(/</g, "&lt;")

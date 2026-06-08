@@ -151,9 +151,8 @@ const config = {
       {
         // Match the requested dropdown actions in screenshot.
         enabledActions: ["copy", "view", "claude"],
-        // Generate static .md routes at build time and use them
-        // for markdown-friendly page viewing.
-        generateMarkdownRoutes: true,
+        // Static .md routes are incompatible with OSS "append /index.html" rules.
+        generateMarkdownRoutes: false,
       },
     ],
   ],
