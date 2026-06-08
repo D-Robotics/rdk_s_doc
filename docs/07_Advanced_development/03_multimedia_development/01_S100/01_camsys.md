@@ -4243,7 +4243,7 @@ struct stitch_base_attr sth_base_attr = {
 			.offset = 0,
 			.size = 0
 		  },
-		  .blending = {{
+		  .blending = { {
 			  .roi_index = 0,
 			  .blending_mode = 3,
 			  .direct = 0,
@@ -4375,7 +4375,7 @@ struct stitch_base_attr sth_base_attr = {
 			  .margin_inv = 0,
 			  .gain_src0_yuv = {0, 0, 0},
 			  .gain_src1_yuv = {0, 0, 0}
-			}}
+			} }
 };
 
 struct stitch_ch_attr sth_inch_attr[] = {
@@ -4383,7 +4383,7 @@ struct stitch_ch_attr sth_inch_attr[] = {
 			.width = 1920,
 			.height = 1080,
 			.strid = {1920, 1920},
-			.rois = {{
+			.rois = { {
 				.roi_index = 0,
 				.roi_x = 0,
 				.roi_y = 0,
@@ -4401,7 +4401,7 @@ struct stitch_ch_attr sth_inch_attr[] = {
 			.width = 1920,
 			.height = 1080,
 			.strid = {1920, 1920},
-			.rois = {{
+			.rois = { {
 				.roi_index = 0,
 				.roi_x = 0,
 				.roi_y = 0,
@@ -4430,7 +4430,7 @@ struct stitch_ch_attr sth_och_attr = {
 		  .width = 1920,
 		  .height = 2160,
 		  .strid = {1920, 1920},
-		  .rois = {{
+		  .rois = { {
 			  .roi_index = 0,
 			  .roi_x = 0,
 			  .roi_y = 0,
