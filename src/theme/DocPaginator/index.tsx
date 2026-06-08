@@ -67,6 +67,7 @@ function deriveEnglishTitleFromPermalink(permalink: string): string | null {
 
   slug = decodeURIComponent(slug)
     .replace(/\.(md|mdx|html)$/i, '')
+    .replace(/^cmd_/, '')
     .replace(/^\d+(?:[_-]\d+)*[_-]+/, '')
     .trim();
 
@@ -88,7 +89,12 @@ function extractNumberPrefix(title: string): string | null {
 }
 
 function looksLikeUnderscoreCodeTitle(title: string): boolean {
-  return /(?:^|\s)\d+_\d+_|[A-Za-z]_[A-Za-z]/.test(title);
+  const normalized = String(title || '').trim();
+  if (!normalized) {
+    return false;
+  }
+  // 仅匹配编号型文档路径（如 01_Quick_start），不要把命令名（如 rdkos_info）当成文件名。
+  return /^\d+[_-]/.test(normalized) || /(?:^|\s)\d+[_-]\d+/.test(normalized);
 }
 
 function normalizePath(path: string | undefined): string {
@@ -103,7 +109,40 @@ function normalizePath(path: string | undefined): string {
 function normalizePathTail(path: string | undefined): string {
   return normalizePath(path)
     .replace(/^\/tros_doc\//, '/')
+    .replace(/^\/rdk_s_doc\//, '/')
     .replace(/^\/en\//, '/');
+}
+
+function getVersionKind(pathname: string): 'rdk_s600' | 'camera' | 'mcu' | null {
+  const tail = normalizePathTail(pathname);
+  const matched = tail.match(/\/versions\/(rdk_s600|camera|mcu)\//);
+  return (matched?.[1] as 'rdk_s600' | 'camera' | 'mcu' | undefined) ?? null;
+}
+
+function resolveMainDocPathForVersionPage(
+  pathname: string,
+  orderedDocLinks: SidebarItem[],
+): string | null {
+  const versionKind = getVersionKind(pathname);
+  if (!versionKind) {
+    return null;
+  }
+
+  const currentTail = normalizePathTail(pathname);
+  const basePrefix = currentTail.split('/versions/')[0] || '';
+  const kindTokenMap: Record<'rdk_s600' | 'camera' | 'mcu', string[]> = {
+    rdk_s600: ['01_rdk_s600_kit', 'rdk_s600_kit'],
+    camera: ['02_rdk_s600_camera_expansion_board', 'rdk_s600_camera_expansion_board'],
+    mcu: ['03_rdk_s600_mcu_port_expansion_board', 'rdk_s600_mcu_port_expansion_board'],
+  };
+  const tokens = kindTokenMap[versionKind];
+
+  const candidate = orderedDocLinks.find((item) => {
+    const target = normalizePathTail((item.href || item.permalink) as string);
+    return target.startsWith(basePrefix) && tokens.some((token) => target.includes(token));
+  });
+
+  return candidate ? normalizePath((candidate.href || candidate.permalink) as string) : null;
 }
 
 function filterSidebarItemsByScope(
@@ -197,7 +236,8 @@ export default function DocPaginatorWrapper(props: Props): JSX.Element {
     product,
   );
   const orderedDocLinks = collectVisibleDocLinks(processedSidebarItems, []);
-  const currentPath = normalizePath(pathname);
+  const mappedMainDocPath = resolveMainDocPathForVersionPage(pathname, orderedDocLinks);
+  const currentPath = mappedMainDocPath || normalizePath(pathname);
   const currentPathTail = normalizePathTail(pathname);
 
   const currentIndex = orderedDocLinks.findIndex((item) => {

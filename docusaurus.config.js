@@ -155,6 +155,7 @@ const config = {
         generateMarkdownRoutes: false,
       },
     ],
+    "docusaurus-plugin-image-zoom",
   ],
   markdown: {
     mermaid: true,
@@ -164,6 +165,17 @@ const config = {
     ({
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
+      zoom: {
+        selector: ".markdown img",
+        background: {
+          light: "rgba(255, 255, 255, 0.95)",
+          dark: "rgba(30, 30, 30, 0.95)",
+        },
+        config: {
+          margin: 24,
+          scrollOffset: 80,
+        },
+      },
       // ✅ 新增：支持 h2 ~ h5 add by xgs for table of contents
     tableOfContents: {
       minHeadingLevel: 2,

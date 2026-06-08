@@ -19,8 +19,23 @@ try {
   generatedFrontmatterConfig = {};
 }
 
+function isExcludedFromSidebar(docId) {
+  const normalizedId = normalizeDocIdFromPath(docId);
+  for (const [configPath, scope] of Object.entries(generatedFrontmatterConfig)) {
+    if (!scope.isCategory || !scope.exclude) continue;
+    const normalizedConfigPath = normalizeDocIdFromPath(configPath);
+    if (
+      normalizedId.startsWith(normalizedConfigPath + '/') ||
+      normalizedId === normalizedConfigPath
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
- * 检查指定 docId 的文档是否应该在当前版本/产品下显示
+ * 检查指定 docId 的文档是否应该在当前版本/产品下显示（页面访问用）
  * @param {string} docId 文档 ID
  * @param {string} version 当前版本
  * @param {string} product 当前产品
@@ -92,5 +107,8 @@ export function findFirstVisibleDoc(items, version, product) {
  */
 export function shouldShowInSidebar(item, version, product) {
   const rawDocId = item.docId || '';
+  if (isExcludedFromSidebar(rawDocId)) {
+    return false;
+  }
   return shouldShowDoc(rawDocId, version, product);
 }

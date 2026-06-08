@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 ## Overview
-<DocScope products="RDK S100">
+<DocScope products="RDK S100"> 
 - Maximum number of usable CAN controllers: 10.
 - Maximum CAN transfer rate: 8M. (Limited by transceiver baud rate; the lab has only verified up to 5M baud rate.)
 - Number of Blocks partitioned in one controller's RAM:

@@ -144,6 +144,8 @@ After setting up the Chinese environment, the system's built-in input method is 
 
 ## Setting Up RDK Studio
 
+RDK Studio is an AI-native desktop workspace designed for robotics development. It integrates Moss conversation, project workspace, device connection, remote development, flashing, local models, and on-board agents into a single native window.
+
 For the usage instructions of RDK Studio, please refer to the [RDK Studio User Manual](https://developer.d-robotics.cc/rdk_studio_doc/en/category/1-product-intro).
 
 ## NoMachine Configuration

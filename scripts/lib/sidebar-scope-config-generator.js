@@ -144,6 +144,7 @@ function mergeScopeConfig(existingScope, incomingScope) {
     return incomingScope;
   }
   return {
+    exclude: Boolean(existingScope.exclude || incomingScope.exclude),
     versions: mergeVersions(existingScope.versions, incomingScope.versions),
     products: mergeProducts(existingScope.products, incomingScope.products),
     isCategory: Boolean(existingScope.isCategory || incomingScope.isCategory),
@@ -227,6 +228,13 @@ function extractFrontMatter(filePath) {
 function extractSidebarScopeConfig(filePath) {
   try {
     const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    if (config.exclude === true) {
+      return {
+        exclude: true,
+        versions: [],
+        products: [],
+      };
+    }
     if (config.versions || config.products) {
       return {
         versions: parseScopeList(config.versions),
@@ -269,7 +277,7 @@ function scanDirectory(dir, baseDir, config, idUtils, verbose) {
       continue;
     }
 
-    if (item === '_sidebar_scope.json') {
+    if (item === '_sidebar_scope.json' || item === '_sidebar_scope_.json') {
       const scopeConfig = extractSidebarScopeConfig(fullPath);
       if (!scopeConfig) {
         continue;
@@ -279,6 +287,7 @@ function scanDirectory(dir, baseDir, config, idUtils, verbose) {
       const folderId = idUtils.normalizeDocIdFromPath(folderPath);
       const productsNorm = normalizeScopeProductList(scopeConfig.products);
       config[folderId] = mergeScopeConfig(config[folderId], {
+        exclude: Boolean(scopeConfig.exclude),
         versions: scopeConfig.versions,
         products: productsNorm,
         isCategory: true,

@@ -2,13 +2,27 @@
 sidebar_position: 1
 ---
 
-# 7.4.1 算法工具链
+# V3.7.0
 
-## 版本：3.7.0
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+<DocScope products="RDK S100">
 
 :::info 版本说明
 该版本对应系统软件 **4.0.5** 版本，用户可在板端执行 `cat /etc/version` 命令确认系统软件版本号。
 :::
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+:::info 版本说明
+该版本对应系统软件 **5.1.0** 版本，用户可在板端执行 `cat /etc/version` 命令确认系统软件版本号。
+:::
+
+</DocScope>
 
 ## 工具包下载
 

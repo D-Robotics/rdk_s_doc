@@ -136,29 +136,6 @@ export default function DocItemWrapper(props) {
     if (!plain || !currentDocDisplayNumber) return null;
     return `${currentDocDisplayNumber} ${plain}`;
   }, [props?.content?.metadata?.title, currentDocDisplayNumber]);
-  const patchedContent = useMemo(() => {
-    const originalContent = props?.content;
-    if (!originalContent || !renumberedDocTitle) {
-      return originalContent;
-    }
-    const currentTitle = originalContent?.metadata?.title || "";
-    if (!currentTitle || currentTitle === renumberedDocTitle) {
-      return originalContent;
-    }
-
-    function WrappedContent(mdxProps) {
-      return React.createElement(originalContent, mdxProps);
-    }
-
-    Object.assign(WrappedContent, originalContent, {
-      metadata: {
-        ...originalContent.metadata,
-        title: renumberedDocTitle,
-      },
-    });
-
-    return WrappedContent;
-  }, [props?.content, renumberedDocTitle]);
 
   useEffect(() => {
     if (skipSidebarScope || visible || !sidebar?.items) {
@@ -206,7 +183,7 @@ export default function DocItemWrapper(props) {
   return (
     <>
       <DocScopeHydration />
-      <DocItem {...props} content={patchedContent || props.content} />
+      <DocItem {...props} />
       <GiscusComments />
     </>
   );

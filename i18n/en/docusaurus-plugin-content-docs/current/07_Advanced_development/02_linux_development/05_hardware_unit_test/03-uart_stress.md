@@ -4,6 +4,10 @@ sidebar_position: 3
 
 # UART Stress Test
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## Test Principle
 
 UART stress testing is a method used to verify the stability and performance of UART communication by exchanging large volumes of data and performing high-load operations. Its principle mainly involves sending and receiving massive amounts of data to simulate real-world UART usage scenarios. Specifically, it includes the following aspects:
@@ -113,6 +117,8 @@ This is uart send test 2 times
 This is uart send test 3 times
 ```
 
+<DocScope products="RDK-S100">
+
 ### Notes
 
 For better extensibility of the RDK_S100 interface, I2C5 and UART2 can be switched via DIP switches. To run this test, you must modify the device tree pin multiplexing configuration, recompile the DTB, install it, and set the DIP switch to the correct position.
@@ -147,7 +153,7 @@ index 504b21b..8d72794 100644
 
 **2.** Refer to the RDK_S100 physical diagram below, locate UART2, and switch the DIP switch to the right to connect UART2:
 
-![Actual_device_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram.png)
+![Actual_device_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram-en.png)
 
 **3.** Consult the RDK_S100 schematic to identify the UART2 pins and connector locations, as shown:
 
@@ -217,6 +223,9 @@ Data verification successful. Received data matches sent data. Test total data c
 This is uart send test 4 times  
 
 ```
+
+</DocScope>
+
 
 ## Test Metrics
 

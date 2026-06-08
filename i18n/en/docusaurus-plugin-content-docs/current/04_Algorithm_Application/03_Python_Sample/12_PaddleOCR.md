@@ -9,7 +9,7 @@ sidebar_products: RDK-S100
 This sample applies only to RDK S100. The RDK S600 system image does not include the corresponding HBM model, and the related sample code is only shipped with the S100 system image; it is not supported on S600 yet.
 :::
 
-This sample runs PaddleOCR models using the `hbm_runtime` inference engine for text detection and recognition, supporting OCR recognition and visualization in Chinese scenarios. The sample code is located in `/app/pydev_demo/08_OCR_sample/01_paddleOCR/`. This sample code is located in `/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/`.
+This sample runs PaddleOCR models using the `hbm_runtime` inference engine for text detection and recognition, supporting OCR recognition and visualization in Chinese scenarios. The sample code is located in `/app/pydev_demo/08_OCR_sample/01_paddleOCR/`.
 
 
 ## Model Description

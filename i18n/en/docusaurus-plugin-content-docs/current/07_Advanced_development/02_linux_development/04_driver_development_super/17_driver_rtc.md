@@ -84,7 +84,7 @@ Here is a brief description of how the RTC works:
 
 The Linux system time is lost when the system shuts down. However, the RTC can continue working using an external battery after the system is off, thus preserving the time. When the system starts next time, the time can be restored from the RTC. The process is as follows:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_time.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_time-en.png" alt="" style={{ width: '100%' }} />
 
 The detailed process description is as follows:
 
@@ -111,7 +111,7 @@ The detailed process description is as follows:
 
 A typical application of the RTC is executing tasks on a schedule. This feature is only supported by the YSN8130. The process is as follows:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_alarm.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_alarm-en.png" alt="" style={{ width: '100%' }} />
 
 <DocScope products="RDK S100">
 The description of the RTC scheduled task process on the S100 chip is as follows:
@@ -661,7 +661,7 @@ Inside, the `rtc_dev_prepare` function is called to prepare RTC device resources
 
 Connecting the code above, the sequence diagram for user-space program interaction with the RTC device is as follows:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_user_interaction.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_user_interaction-en.png" alt="" style={{ width: '100%' }} />
 
 The specific explanation is as follows:
 

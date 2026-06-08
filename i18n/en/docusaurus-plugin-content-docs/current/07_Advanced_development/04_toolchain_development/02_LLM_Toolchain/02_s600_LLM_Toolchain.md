@@ -5,18 +5,18 @@ sidebar_products: RDK S600
 
 # 7.4.2.2 RDK S600 LLM Toolchain
 
-## RDK S600 1.0.0 Large Model Toolchain  
+## RDK S600 1.0.2 Large Model Toolchain  
 
-On the RDK S600 platform, D-Robotics_LLM_S600 currently supports the following models and functionalities:
+On the RDK S600 platform, D-Robotics_LLM_S600 currently supports the following models and features:
 
 **LLM**  
-Supports single-turn and multi-turn conversations for DeepSeek-R1-Distill-Qwen-1.5B, Qwen3~0.6B/1.7B/4B/8B.
+Supports single-turn and multi-turn dialogue for DeepSeek-R1-Distill-Qwen-1.5B, and Qwen3-0.6B/1.7B/4B/8B.
 
 **VLM**  
-Supports image and text processing for Qwen2.5-VL-3B/7B-Instruct, Qwen3-VL-2B/4B/8B-Instruct, InternVL2~2B.
+Supports image-text processing for Qwen2.5-VL-3B/7B-Instruct, Qwen3-VL-2B/4B/8B-Instruct, and InternVL2-2B.
 
 **VLA**  
-Supports x86 emulation and S600 edge-side inference for Pi0, as well as hardware-in-the-loop experiences.
+Supports x86 simulation and S600 edge-side inference for Pi0, as well as hardware-in-the-loop experience.
 
 **ASR**  
 Supports Chinese and English audio recognition for whisper-medium.
@@ -26,22 +26,20 @@ Supports Chinese and English audio recognition for whisper-medium.
 **D-Robotics_LLM_S600 Development Toolkit**
 
 ```bash 
-wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.0/D-Robotics_LLM_S600_1.0.0_SDK.tar.gz
+wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.2/D-Robotics_LLM_S600_1.0.2_SDK.tar.gz
 ```
 
 **D-Robotics_LLM_S600 User Manual**
 
 ```bash
-wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.0/D-Robotics_LLM_S600_1.0.0_Doc.zip
+wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.2/D-Robotics_LLM_S600_1.0.2_Doc.zip
 ```
 
 **D-Robotics_LLM_S600 Compiled Models**  
 
 After downloading the development toolkit, refer to `oellm_runtime/model/resolve_model_nash-p.md` for download links.
 
-
 ## Model Performance Benchmark
-
 
 ### Test Conditions
 

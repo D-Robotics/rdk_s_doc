@@ -952,7 +952,7 @@ Acore-MCU IPC communication uses MCU MDMA to move data between DDR and MCU SRAM.
 
 ### MCU Sending Data to Acore
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imager52a78-en.png" alt="MCU Sending Data to Acore" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imager52a78-en.jpg" alt="MCU Sending Data to Acore" style={{ width: '100%' }} />
 
 ### Acore Sending Data to MCU
 

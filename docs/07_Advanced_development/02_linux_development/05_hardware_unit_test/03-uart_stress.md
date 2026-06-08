@@ -4,6 +4,10 @@ sidebar_position: 3
 
 # 串口压力测试
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 测试原理
 
 串口压测（ UART Stress Test）是一种通过大量数据交换和高负载操作来验证串口通信稳定性和性能的方法。它的原理主要是通过发送和接收大量的数据、模拟真实的串口使用场景，具体原理包括以下几个方面：
@@ -106,6 +110,7 @@ This is uart send test 2 times
 This is uart send test 3 times
 ```
 
+<DocScope products="RDK-S100">
 ### 注意事项
 
 为了 RDK_S100 接口良好的扩展性，目前 i2c5 和 uart2 是可以通过拨码开关进行切换的，运行该测试时需要修改设备树管脚复用关系重新编译 dtb 安装，并把拨码开关拨到正确的位置。
@@ -211,6 +216,9 @@ This is receive test 4 times
 Data verification successful. Received data matches sent data. Test total data count: 0x180000
 This is uart send test 4 times
 ```
+
+</DocScope>
+
 
 ## 测试指标
 
