@@ -314,7 +314,7 @@ Slave 端 log:
   };
 ```
 
-其中 dts 中 globaltime 属性表示系统默认用的全局 timeline，S100默认使用 RTC 时间。对应关系如下：
+其中 dts 中 globaltime 属性表示系统默认用的全局 timeline，默认使用 RTC 时间。对应关系如下：
 
 ```
   0:systime
@@ -505,7 +505,12 @@ TimeSync\_PPS\_Index： 配置使用哪个 PPS 进行时间同步，可以使用
 
 ## PPS 说明{#PPS}
 
+<DocScope products="RDK S100">
 ### S100 PPS 介绍
+</DocScope>
+<DocScope products="RDK S600">
+### S600 PPS 介绍
+</DocScope>
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image43.png" alt="" style={{ width: '100%' }} />
 
