@@ -11,12 +11,12 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前言
 <DocScope products="RDK S100">
-S100芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以太网报文收发, PTP/TSN 时间敏感性网络, 以及 EtherCAT 主站等特性。  
+S100芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以太网报文收发, PTP/TSN 时间敏感性网络, 以及 EtherCAT 主站等特性。
 </DocScope>
 <DocScope products="RDK S600">
-S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以太网报文收发, PTP/TSN 时间敏感性网络, 以及 EtherCAT 主站等特性。  
+S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以太网报文收发, PTP/TSN 时间敏感性网络, 以及 EtherCAT 主站等特性。
 </DocScope>
-控制器内置硬件多队列, MTL 二层传输层, DMA 引擎等。以实现上述各种场景的报文收发。  
+控制器内置硬件多队列, MTL 二层传输层, DMA 引擎等。以实现上述各种场景的报文收发。
 本文主要包括网卡使用指南, 开发板 Bringup, 关键特性描述等。
 
 
@@ -34,15 +34,15 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 ## 网卡特性介绍
 <DocScope products="RDK S100">
 
-| 特性    | 解释               | S100                             | 
+| 特性    | 解释               | S100                             |
 | ------  | -----------------  | -------------------------------- |
-| 配置    | 网口数量配置       | 双网口                           | 
-| 接口    | mac--phy 接口       | 支持 SGMII                        | 
+| 配置    | 网口数量配置       | 双网口                           |
+| 接口    | mac--phy 接口       | 支持 SGMII                        |
 | PPS     | 秒脉冲, pps out/in | &#x2705;                         |
-| TSO     | TCP 分段卸载       | &#x2705;                         | 
-| 多队列  | 网卡多队列功能     | &#x2705;                         | 
-| AVB/TSN | 时间敏感性网络     | &#x2705;                         | 
-| C22/C45 | MDIO PHY 数据协议   | &#x2705;                         | 
+| TSO     | TCP 分段卸载       | &#x2705;                         |
+| 多队列  | 网卡多队列功能     | &#x2705;                         |
+| AVB/TSN | 时间敏感性网络     | &#x2705;                         |
+| C22/C45 | MDIO PHY 数据协议   | &#x2705;                         |
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -86,7 +86,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 
 ### Linux/Ubuntu
 :::warning
-- 建议使用 Network Management, 即 Ubuntu 桌面进行网卡配置。  
+- 建议使用 Network Management, 即 Ubuntu 桌面进行网卡配置。
 - 下述手动通过 ip, ethtool 等命令配置为次选方案。可自行结合 Ubuntu 版本以及网络资料判断是否生效。
 :::
 
@@ -192,7 +192,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 - 软件主要需要关注其中的 reset 管脚以及 phy addr 地址
 
 <DocScope products="RDK S100">
-    
+
 ```dts
     // drobot-s100-soc.dtsi, 芯片默认的eth配置; 可以被具体board的dts覆盖
     eth0: eth0 {
@@ -224,7 +224,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
                 reg = <0xe>;
         };
     };
-``` 
+```
 </DocScope>
 
 <DocScope products="RDK S600">
@@ -312,7 +312,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
       mdio read <phydev> [<devad>.]<reg>  //read phy register at <devad>.<reg>
 ```
 
--  md： 查看统计计数  
+-  md： 查看统计计数
    通过 md 命令读写寄存器查看报文统计计数用于调试。
 
 ```shell
@@ -326,15 +326,15 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 #### hsis 模式配置
 <DocScope products="RDK S100">
 :::warning
-- 由于 S100以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。  
-- 包括 Lane 使用的配置, 以及参考时钟配置等。特别需要注意的是, 由于 U-Boot 中启动时也会配置一次,  
+- 由于 S100以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。
+- 包括 Lane 使用的配置, 以及参考时钟配置等。特别需要注意的是, 由于 U-Boot 中启动时也会配置一次,
 - 所以需要确保 U-Boot 的 hsis 配置和 Kernel 是一致的。否则可能会导致实际 Lane 配置不对的情况。
 :::
 </DocScope>
 <DocScope products="RDK S600">
 :::warning
-- 由于 S600以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。  
-- 包括 Lane 使用的配置, 以及参考时钟配置等。特别需要注意的是, 由于 U-Boot 中启动时也会配置一次,  
+- 由于 S600以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。
+- 包括 Lane 使用的配置, 以及参考时钟配置等。特别需要注意的是, 由于 U-Boot 中启动时也会配置一次,
 - 所以需要确保 U-Boot 的 hsis 配置和 Kernel 是一致的。否则可能会导致实际 Lane 配置不对的情况。
 :::
 </DocScope>
@@ -415,9 +415,9 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 - 描述下常见的 phy 配置参数
     - reset-delay-us：表示复位时间。
     - reset-post-delay-us：表示解复位后延时时间（phy 从解复位到完成初始化的时间）。
-    - ethernet-phy-ieee802.3-c22: mdio compatible 兼容名, 说明 phy mdio 走的是 C22协议。  
+    - ethernet-phy-ieee802.3-c22: mdio compatible 兼容名, 说明 phy mdio 走的是 C22协议。
     常见的如 RTL 千兆 phy 都支持这个协议。
-    - ethernet-phy-ieee802.3-c45: mdio compatible 兼容名, 说明 phy mdio 走的是 C45协议。  
+    - ethernet-phy-ieee802.3-c45: mdio compatible 兼容名, 说明 phy mdio 走的是 C45协议。
     参考手册万兆 PHY, 以及一些高端 PHY 会走 C45协议。
 - MAC 相关常见一些配置
     - sgmii-autoneg：配置 SGMII 自协商。
@@ -428,9 +428,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 
 #### MAC2MAC
 - 和 U-Boot 下类似, MAC2MAC 场景, 最主要就是配置成 fixed-link 模式
-
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
+<DocScope products="RDK S100">
 ```dts
     // eth0默认节点配置可参考drobot-s100-soc.dts
     // 实际板级配置可在对应dts中描述, 例如可参考drobot-s100-rdk.dts。
@@ -443,9 +441,8 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
         };
     };
 ```
-</TabItem>
-
-<TabItem value="S600" label="S600">
+</DocScope>
+<DocScope products="RDK S600">
 ```dts
     // S600开发板也类似, 在板级dts中重写成fixed-link模式即可。
     &ethernet2 {
@@ -456,8 +453,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
         };
     };
 ```
-</TabItem>
-</Tabs>
+</DocScope>
 
 - fixed-link 常用节点含义描述
    - speed（整型，必须），表示链接速率，可以设置为10、100、1000。
@@ -474,9 +470,9 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
     hobot,tso = <1>;            // 打开网卡TSO功能
 ```
 
-#### XGMAC 配置成1G 模式
 <DocScope products="RDK S600">
-- 该功能仅 S600万兆网卡需要。(S100默认就是1G 千兆模式)
+
+#### XGMAC 配置成1G 模式
 - 主要通过设备树 hsis, 以及独对应网卡节点进行配置, 例如
 ```dts
     hsis0: hsis0 {
@@ -585,8 +581,8 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 | hobot,tx-sched-sp   | 严格优先级调度
 | hobot,avb-algorithm | 发送队列 avb 机制可用于 tsn
 | hobot,dcb-algorithm | 队列0以及 rr 调度时，须配置成 dcb 模式
-  
-  
+
+
 - hobot,mtl-rx-config 配置：
 
 | 属性                | 描述                                                                              |
@@ -1067,4 +1063,3 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 - 问：U-Boot 升级失败（ping 不通）？
 - 答：检查 IP 的配置，serverip，使用小局域网或直连 PC。
 检查 MAC 的配置，检查使用的网口是否为期望的网口。 检查网线是否为6类线。
-
