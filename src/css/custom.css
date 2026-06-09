@@ -464,22 +464,24 @@ main article table td {
 
 /* 历史版本页：固定返回最新版本按钮 */
 .latest-version-fab-wrap {
-  position: fixed;
-  top: calc(var(--ifm-navbar-height) + 1.8rem);
-  left: clamp(25rem, 18vw, 15rem);
-  z-index: 30;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-toc-border-color);
 }
 
 .latest-version-fab {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.45rem 0.85rem;
+  padding: 0.5rem 0.9rem;
   border-radius: 999px;
   border: none;
   background: transparent;
   color: var(--ifm-color-primary) !important;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1;
   text-decoration: none !important;
@@ -500,7 +502,6 @@ main article table td {
 
 @media (max-width: 996px) {
   .latest-version-fab-wrap {
-    top: calc(var(--ifm-navbar-height) + 0.6rem);
-    left: 0.75rem;
+    justify-content: flex-start;
   }
 }

@@ -9,6 +9,15 @@ sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="image-rdk_s600_mcu_port_expansion_board" style={{ width: '100%' }} />
 
+
+<details>
+<summary>This document corresponds to **MCU Port Expansion Board V1P0**，Click to view previous versions</summary>
+
+- [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
+- [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
+
+</details>
+
 The RDK S600 MCU Port Expansion Board (including the matching FPC) is a core expansion module for the D-Robotics RDK S600 series developer kit. It is mainly used to expand MCU interface functions, supporting CAN_FD, ADC, etc.
 
 <!-- :::danger Note
@@ -52,13 +61,7 @@ The side with the "CB" silkscreen on the front of the FPC corresponds to the J15
 
 :::
 
-<details>
-<summary>This document corresponds to **MCU Port Expansion Board V1P0**，Click to view previous versions</summary>
 
-- [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
-- [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
-
-</details>
 
 ## Product Specifications  
 <!-- :::warning Note

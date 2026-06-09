@@ -528,6 +528,7 @@ After modifying the partition table, apply changes as follows:
 	sudo ./pack_image.sh -l
 	```
 ## 7.6.6 eMMC/UFS/NVMe Image Build Notes
+
 ### Using D-Robotics ubuntu-22.04_desktop_rdk-s100_XXX.conf
 For eMMC, UFS, and NVMe, drivers are selected via different config variables. Before building, set the build config to match your storage.
 

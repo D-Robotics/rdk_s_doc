@@ -10,6 +10,15 @@ sidebar_label: 1.1.2.1 相机扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="image-rdk_s600_camera_expansion_board" style={{ width: '100%' }} />
 
+<details>
+<summary>当前文档对应 **相机扩展板 V1P0** 版本，点击查看历史版本</summary>
+
+- [Camera Expansion Board V0P3](./versions/camera/v0p3.md)
+- [Camera Expansion Board V0P2](./versions/camera/v0p2.md)
+
+</details>
+
+
 RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S600 Camera Expansion Connector 进行二次开发，提供了 8 个 GMSL 相机接口。
 
 <!-- :::danger 注意
@@ -47,13 +56,6 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 :::
 
-<details>
-<summary>当前文档对应 **相机扩展板 V1P0** 版本，点击查看历史版本</summary>
-
-- [Camera Expansion Board V0P3](./versions/camera/v0p3.md)
-- [Camera Expansion Board V0P2](./versions/camera/v0p2.md)
-
-</details>
 
 
 ## 产品规格

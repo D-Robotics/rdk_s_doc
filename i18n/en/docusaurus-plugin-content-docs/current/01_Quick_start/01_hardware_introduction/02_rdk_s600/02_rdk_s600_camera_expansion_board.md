@@ -9,6 +9,16 @@ sidebar_label: 1.1.2.1 Camera Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="image-rdk_s600_camera_expansion_board" style={{ width: '100%' }} />
 
+
+<details>
+<summary>This document corresponds to **Camera Expansion Board V1P0**，Click to view previous versions</summary>
+
+- [Camera Expansion Board V0P3](./versions/camera/v0p3.md)
+- [Camera Expansion Board V0P2](./versions/camera/v0p2.md)
+
+</details>
+    
+    
 The RDK S600 Camera Expansion Board (hereinafter referred to as the "Camera Expansion Board") is a core expansion module of the D-Robotics RDK S600 series developer kit. The Camera Expansion Board is developed based on the RDK S600 Camera Expansion Connector and provides 8 GMSL camera interfaces.
 
 <!-- :::danger Note
@@ -47,14 +57,6 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 :::
 
 
-<details>
-<summary>This document corresponds to **Camera Expansion Board V1P0**，Click to view previous versions</summary>
-
-- [Camera Expansion Board V0P3](./versions/camera/v0p3.md)
-- [Camera Expansion Board V0P2](./versions/camera/v0p2.md)
-
-</details>
-    
 
 ## Product Specifications
 

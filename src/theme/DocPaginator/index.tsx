@@ -137,10 +137,21 @@ function resolveMainDocPathForVersionPage(
   };
   const tokens = kindTokenMap[versionKind];
 
-  const candidate = orderedDocLinks.find((item) => {
+  const matchesToken = (item: SidebarItem) => {
+    const target = normalizePathTail((item.href || item.permalink) as string);
+    return tokens.some((token) => target.includes(token));
+  };
+
+  // 优先按版本页同目录前缀匹配（适用于显式 slug，如 rdk_s600 kit）
+  let candidate = orderedDocLinks.find((item) => {
     const target = normalizePathTail((item.href || item.permalink) as string);
     return target.startsWith(basePrefix) && tokens.some((token) => target.includes(token));
   });
+
+  // 相机/MCU 最新版使用自动生成 slug，路径前缀与 versions 页不一致，回退为 token 匹配
+  if (!candidate) {
+    candidate = orderedDocLinks.find(matchesToken);
+  }
 
   return candidate ? normalizePath((candidate.href || candidate.permalink) as string) : null;
 }
