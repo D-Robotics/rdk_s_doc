@@ -1314,3 +1314,35 @@ On the MCU interface, you can see the interrupt generation
 [03384.497509 0]INFO: Instance 5 Remote Core ready
 [03384.498117 0]INFO: Inst 5 chan 0 2 success
 ```
+
+## Frequently Asked Questions
+
+### Q1: Why can't I set a second-level alarm?
+
+The RTC-YSN8130 has a hardware limitation where the finest granularity for alarms is at the minute level, and second-level precision is not supported.
+
+### Q2: How to disable RTC interrupts?
+
+Modify the enable field of the corresponding interrupt entry in the `Interrupt_McuConfigs[]` array in `Isr_Hal.c` to `DISABLE`:
+
+File path: `mcu/Target/Target_Sxxx/Target-hobot-lite-freertos/target/FreeRtosOsHal/Isr_Hal.c`
+
+Corresponding interrupt entries for each board:
+
+<DocScope products="RDK S100">
+
+| Board | Interrupt Configuration Item          |
+|-------|----------------------------------------|
+| S100  | Os_IntChannel_Gpio_Icu3ExtIsr          |
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| Board | Interrupt Configuration Item          |
+|-------|----------------------------------------|
+| S600  | Os_IntChannel_Aon_GpioIsr              |
+
+</DocScope>
+
+> Example (S100): Change `ENABLE` to `DISABLE` at the end of the `Os_IntChannel_Gpio_Icu3ExtIsr` line in `Interrupt_McuConfigs[]`. The same applies to S600.

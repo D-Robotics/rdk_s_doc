@@ -1329,9 +1329,20 @@ RTC-YSN8130 存在硬件限制，闹钟最细粒度为分钟级，不支持秒�
 
   各板端对应的中断项：
 
+<DocScope products="RDK S100">
+
 | 板端 | 中断配置项                    |
 |------|-------------------------------|
 | S100 | Os_IntChannel_Gpio_Icu3ExtIsr |
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| 板端 | 中断配置项                    |
+|------|-------------------------------|
 | S600 | Os_IntChannel_Aon_GpioIsr     |
+
+</DocScope>
 
 > 示例（S100）：将 Interrupt_McuConfigs[] 中 Os_IntChannel_Gpio_Icu3ExtIsr 行末尾的 ENABLE 改为 DISABLE 即可，S600 操作同理。

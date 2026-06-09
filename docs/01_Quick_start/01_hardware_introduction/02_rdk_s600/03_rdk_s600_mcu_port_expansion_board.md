@@ -9,6 +9,14 @@ sidebar_label: 1.1.2.2 MCU 接口扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="image-rdk_s600_mcu_port_expansion_board" style={{ width: '100%' }} />
 
+<details>
+<summary>当前文档对应 **MCU 接口扩展板 V1P0** 版本，点击查看历史版本</summary>
+
+- [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
+- [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
+
+</details>
+
 RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持 CAN_FD、ADC 等。
 
 <!-- :::danger 注意
@@ -52,13 +60,6 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 :::
 
-<details>
-<summary>当前文档对应 **MCU 接口扩展板 V1P0** 版本，点击查看历史版本</summary>
-
-- [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
-- [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
-
-</details>
 
 
 ## 产品规格  

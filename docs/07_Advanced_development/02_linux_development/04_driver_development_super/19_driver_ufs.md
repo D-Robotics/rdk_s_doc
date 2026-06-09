@@ -4,6 +4,10 @@ sidebar_position: 19
 
 # UFS 驱动调试指南
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 S100/S600 芯片内置 UFS Host 控制器，硬件最高支持 UFS3.1协议，软件接口最高支持3.0，支持 HS-G4速率模式，支持2路数据通道。本文档介绍 UFS 驱动的开发、配置和调试方法。
 
 ## UFS 硬件架构
