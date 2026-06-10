@@ -56,7 +56,7 @@ pip install tqdm
 
 ## 编译 MCU 系统
 
-1. 编译会使用 python3，RDK S100开发使用的 python3的版本为3.8.10；
+1. 编译会使用 python3，RDK S100/S600 开发使用的 python3 的版本为 3.8.10；
 2. MCU1的镜像分为 debug 和 release 两个版本。debug 版本的镜像会有调试信息，而 release 版本不含调试信息。
 
 :::info 工具链下载说明

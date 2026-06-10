@@ -56,7 +56,7 @@ pip install tqdm
 
 ## Compiling the MCU System
 
-1. Compilation uses python3, and the version of python3 used for RDK S100 development is 3.8.10.
+1. Compilation uses python3, and the version of python3 used for RDK S100/S600 development is 3.8.10.
 2. The MCU1 image comes in two versions: debug and release. The debug version includes debugging information, while the release version does not.
 
 :::info Toolchain Download Instructions
