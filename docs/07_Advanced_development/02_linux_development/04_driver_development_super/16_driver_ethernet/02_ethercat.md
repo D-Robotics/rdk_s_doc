@@ -64,6 +64,10 @@ import DocScope from '@site/src/components/DocScope';
 
 默认镜像中 `/etc/ethercat.conf` 已预配置为 Native 模式。如需切换 EtherCAT 使用的网口，修改 `MASTER0_DEVICE` 为对应网口的 MAC 地址：
 
+:::warning
+<font color="red">**Native 驱动只支持使用 Mac 地址进行配置。**</font>默认的 MASTER0_DEVICE 值为 ff:ff:ff:ff:ff:ff，在启用的时候默认使用 eth0 网口，请根据需求修改。
+:::
+
 ```
 MASTER0_DEVICE="xx:xx:xx:xx:01:18"  # eth0 的 MAC 地址
 DEVICE_MODULES="hobot"
@@ -75,38 +79,18 @@ MASTER0_DEVICE="xx:xx:xx:xx:01:19"  # eth1 的 MAC 地址
 DEVICE_MODULES="hobot"
 ```
 
-**步骤 2：配置 systemd drop-in（必须）**
-
-由于 Native 驱动与 gmac 驱动互斥，需要配置 systemd drop-in 来自动处理驱动的卸载与恢复。在设备上执行以下命令，实现：
-- 启动 EtherCAT 前自动卸载 `hobot_eth_super`
-- 停止 EtherCAT 后自动重新加载 `hobot_eth_super` 恢复网络
-
-```shell
-sudo mkdir -p /etc/systemd/system/ethercat.service.d
-
-sudo tee /etc/systemd/system/ethercat.service.d/prestart.conf << 'EOF'
-[Service]
-ExecStartPre=-/sbin/rmmod hobot_eth_super
-ExecStopPost=-/sbin/modprobe hobot_eth_super
-EOF
-
-sudo systemctl daemon-reload
-```
-
-:::info
-- `ExecStartPre=-`：启动前自动卸载 `hobot_eth_super`（前缀 `-` 表示即使该命令失败也继续执行）
-- `ExecStopPost=-`：停止后自动重新加载 `hobot_eth_super` 以恢复普通网络功能
-:::
-
 :::warning
-<font color="red">**SSH 连接注意事项：**</font>如果通过 SSH 远程连接开发板，执行 `systemctl start ethercat` 或 `systemctl stop ethercat` 时，由于 gmac 驱动的卸载/重装，**网络会短暂中断几秒**（ping 会显示 `Destination Host Unreachable`），SSH 客户端通常会自动重连。这是正常现象，无需手动干预。
+<font color="red">**SSH 连接注意事项：**</font>如果通过 SSH 远程连接开发板，使用 systemctl 或 ethercatctl 管理 ethercat 服务的时候。由于 gmac 驱动的卸载/重装，**网络会短暂中断几秒**（ping 会显示 `Destination Host Unreachable`），SSH 客户端通常会自动重连。这是正常现象，无需手动干预。
 :::
 
-**步骤 3：启动 EtherCAT**
+**步骤 2：启动 EtherCAT**
 
 ```shell
 sudo systemctl start ethercat
 sudo systemctl status ethercat
+# 或者
+sudo ethercatctl start
+sudo ethercatctl status
 ```
 
 正常输出示例：
@@ -121,7 +105,7 @@ sudo systemctl status ethercat
    Main PID: 6504 (code=exited, status=0/SUCCESS)
 ```
 
-**步骤 4：验证**
+**步骤 3：验证**
 
 启动后，检查 `ip a` 可以发现被 EtherCAT 绑定的网口 MAC 地址已从内核协议栈中消失（不再出现在列表中）：
 
@@ -152,9 +136,9 @@ $ sudo ethercat slaves
 0  0:0  PREOP  +  SSC-Device
 ```
 
-**步骤 5：停止 EtherCAT（切换回普通网络模式）**
+**步骤 4：停止 EtherCAT（切换回普通网络模式）**
 
-停止 EtherCAT 服务后，`ExecStopPost` 会自动加载 `hobot_eth_super`，所有网口恢复为普通网络模式：
+停止 EtherCAT 服务后，会自动加载 `hobot_eth_super`，所有网口恢复为普通网络模式：
 
 ```shell
 sudo systemctl stop ethercat
@@ -184,7 +168,7 @@ sudo systemctl stop ethercat
 ### Native 驱动的风险与影响
 
 :::warning
-<font color="red">**重要：**</font>由于 Native 驱动与 gmac 驱动互斥，**强烈推荐使用 `systemctl` 管理 EtherCAT 服务**（配合 systemd drop-in 自动处理驱动的卸载与恢复），**不要直接使用 `ethercatctl` 命令**。直接使用 `ethercatctl start` 需要手动 `rmmod hobot_eth_super`，一旦操作不当（如忘记卸载 gmac 驱动）将导致 EtherCAT 启动失败；且在远程 SSH 连接场景下，手动操作可能导致网络丢失无法恢复。
+<font color="red">**重要：**</font>由于 Native 驱动与 gmac 驱动互斥，涉及到网卡驱动的卸载与加载。在进行 Native 驱动与 generic 驱动切换的时候，**必须先修改配置文件，然后重启系统完成驱动切换**，否则可能会引起网络中断。
 :::
 
 #### 1. 与 gmac 驱动冲突
@@ -193,15 +177,13 @@ Native 驱动 `ec_hobot` 与系统的 `hobot_eth_super`（xgmac）驱动**互斥
 
 **影响**：卸载 `hobot_eth_super` 后，EtherCAT 主站绑定的网口被 Native 驱动接管，**其余以太网口仍可正常使用**（可配置 IP、用于 SSH 连接等）。但在 `rmmod`/`modprobe hobot_eth_super` 的瞬间，所有以太网口会短暂中断数秒后自动恢复，SSH 连接通常会自动重连。
 
-**恢复方式**：停止 EtherCAT 后，`ExecStopPost` 会自动重新加载 `hobot_eth_super`，所有以太网口恢复普通网络功能。
-
 #### 2. 网口被 Native 驱动独占
 
 当 Native 驱动启动后，配置文件中 `MASTER0_DEVICE` 绑定的 MAC 地址对应的网口将从 Linux 内核协议栈中**消失**（`ip a` 中不再显示该网口），完全被 EtherCAT 独占。其余未绑定的网口仍然可见且可正常使用。
 
 #### 3. MAC 地址配置要求
 
-Native 驱动模式下，`/etc/ethercat.conf` 中的 `MASTER0_DEVICE` **必须配置为对应网口的实际 MAC 地址**（如 `"xx:xx:xx:xx:01:18"`），不能使用 `ff:ff:ff:ff:ff:ff` 广播地址或网口名（如 `"eth0"`），否则驱动无法正确绑定。
+Native 驱动模式下，`/etc/ethercat.conf` 中的 `MASTER0_DEVICE` **必须配置为对应网口的实际 MAC 地址**（如 `"xx:xx:xx:xx:01:18"`），不能使用网口名（如 `"eth0"`），否则驱动无法正确绑定。
 
 ### deb 包升级注意事项
 
@@ -225,7 +207,7 @@ sudo sed -i 's/DEVICE_MODULES="hobot"/DEVICE_MODULES="generic"/' /etc/ethercat.c
 sudo sed -i 's/MASTER0_DEVICE=".*"/MASTER0_DEVICE="eth0"/' /etc/ethercat.conf
 ```
 
-修改后重启设备或重启 EtherCAT 服务即可。Generic 模式下的详细使用方式请参考后续章节（「使用前网络配置」起）。
+修改后重启设备生效。Generic 模式下的详细使用方式请参考后续章节（「使用前网络配置」起）。
 
 ---
 
