@@ -2,7 +2,17 @@
 sidebar_position: 14
 ---
 # Wi-Fi 驱动调试指南
+
+<DocScope products="RDK S100">
+
 RDK S100 的 Wi-Fi 接在由 PCIe 拓展出来的 M.2 接口上。本章节会介绍部分用户层命令和内核 dts 配置项。
+
+</DocScope>
+<DocScope products="RDK S600">
+
+RDK S600 的 Wi-Fi 接在由 PCIe 拓展出来的 M.2 接口上。本章节会介绍部分用户层命令和内核 dts 配置项。
+
+</DocScope>
 
 本章节后续示例以 AW-XM612 模组为例，用户需要根据自己使用的具体模组进行对应的修改。
 
@@ -53,6 +63,9 @@ CONFIG_BRCMFMAC_PCIE=y
 ```
 
 ## 内核 DTS 配置
+
+<DocScope products="RDK S100">
+
 PCIe 拓展的 Wi-Fi 模组一般需要 Host 端对模组的 reset 信号/reg_on 等信号进行控制，在 S100 上，这部分配置被定义在了 `source/hobot-drivers/kernel-dts/rdk-v0p5.dtsi` 内：
 ```dts
 &hobot_pcie_rc0 {
@@ -72,3 +85,32 @@ PCIe 拓展的 Wi-Fi 模组一般需要 Host 端对模组的 reset 信号/reg_on
 };
 ```
 S100的 PCIe 驱动会在初始化时，申请这些 GPIO 并作解复位等操作。
+
+</DocScope>
+<DocScope products="RDK S600">
+
+PCIe 拓展的 Wi-Fi 模组一般需要 Host 端对模组的 reset 信号/reg_on 等信号进行控制，在 S600 上，这部分配置被定义在了 `source/hobot-drivers/kernel-dts/rdk-s600-mcb.dtsi` 内：
+```dts
+&hobot_pcie_rc0 {
+        status = "okay";
+        refclk-mode = <2>;      /* 1:CC; 2:SRNS; 3:SRIS; */
+
+        max-link-speed = <4>;   /* pcie gen4 */
+        num-lanes = <2>;        /* 2 lane */
+
+        switch-perst-gpios = <&gpio_exp_27 14 GPIO_ACTIVE_LOW>;         /* asm2806 switch perst */
+
+        ep-ponrst-gpios = <&gpio_exp_20 0 GPIO_ACTIVE_LOW>,             /* asm3042 hub 0 power on reset */
+                        <&gpio_exp_20 7 GPIO_ACTIVE_LOW>,               /* asm3042 hub 1 power on reset */
+                        <&gpio_exp_27 6 GPIO_ACTIVE_LOW>,               /* asm3042 hub 2 power on reset */
+                        <&gpio_exp_24 3 GPIO_ACTIVE_LOW>;               /* m2.e wifi reg on reset */
+
+        ep-perst-gpios = <&gpio_exp_27 15 GPIO_ACTIVE_LOW>,             /* asm3042 hub 0 perst */
+                        <&gpio_exp_20 5 GPIO_ACTIVE_LOW>,               /* asm3042 hub 1 perst */
+                        <&gpio_exp_20 4 GPIO_ACTIVE_LOW>,               /* asm3042 hub 2 perst */
+                        <&gpio_exp_24 2 GPIO_ACTIVE_LOW>;               /* m2.e perst(wifi perst) */
+};
+```
+S600的 PCIe 驱动会在初始化时，申请这些 GPIO 并作解复位等操作。
+
+</DocScope>
