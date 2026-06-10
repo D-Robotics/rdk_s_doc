@@ -1,5 +1,6 @@
 ---
 sidebar_position: 0
+slug: /RDK
 ---
 
 # D-Robotics RDK 套件
