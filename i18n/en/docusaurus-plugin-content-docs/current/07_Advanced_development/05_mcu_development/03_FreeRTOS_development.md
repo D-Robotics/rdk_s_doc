@@ -937,10 +937,6 @@ Currently, MCU0 has used the following interrupts:
 </DocScope>
 
 ## Tutorial on Adding Compilation Directories
-### Brief Introduction to Scons
-Currently, the RDK-S100 mcu only supports the compilation of s100_sip_B, and uses the scons compilation method instead of Makefile.
-Scons is similar to Makefile. Each folder uses a Sconscript compilation file (similar to Makefile), and a top-level SConstruct file controls the overall compilation.
-For example, the image for MCU1 is controlled by SConstruct_Lite_FRtos_S100_sip_B.
 ### Process for Adding Compilation Directories
 <DocScope products="RDK S100">
 1. Modify the mcu/Build/FreeRtos_mcu1/SConstruct_Lite_FRtos_S100_sip_B file to add/remove corresponding modules.
@@ -1000,7 +996,16 @@ These interrupts should be configured with a higher priority than regular functi
 ## Introduction to FreeRtos System
 There are two mainstream startup methods for FreeRTOS: First, in the main function, initialize the hardware, RTOS system, and create all tasks, then start the RTOS scheduler to begin multitasking scheduling. Second, initialize the hardware and RTOS system in the main function, create a startup task, and then start the scheduler. Within the startup task, create various application tasks. After all tasks are created successfully, the startup task deletes itself. There is no strong advantage or disadvantage between the two methods. RDK-S100/RDK-S600 choose the first method.
 ### FreeRtos System Task Creation
-Task creation is located in /mcu/Target/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c, as shown in the example below:
+<DocScope products="RDK S100">
+
+Task creation is located in `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c`, as shown in the example below:
+
+</DocScope>
+<DocScope products="RDK S600">
+
+Task creation is located in `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c`, as shown in the example below:
+
+</DocScope>
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="" style={{ width: '100%' }} />
 
@@ -1008,7 +1013,16 @@ The xxx_Startup task is responsible for startup-related initialization and runs 
 FreeRtos_OsTask_SysCore_BSW_xms and FreeRtos_OsTask_SysCore_ASW_xms are periodic tasks that schedule periodically based on different xms values. These periodic tasks also handle internal work, as detailed in the previous section "Introduction to the MCU FreeRtos System."
 
 If customers are developing independently, they can refer to the two types of examples above. They can also handle their own demos within already created tasks, as described below.
-Task functions are located in the /mcu/Target/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c file.
+<DocScope products="RDK S100">
+
+Task functions are located in `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c`,
+
+</DocScope>
+<DocScope products="RDK S600">
+
+Task functions are located in `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c`,
+
+</DocScope>
 Take OsTask_SysCore_BSW_10ms as an example; the task periodically checks shell transaction processing:
 ```c
 TASK(OsTask_SysCore_BSW_10ms)
@@ -1019,7 +1033,16 @@ TASK(OsTask_SysCore_BSW_10ms)
 }
 ```
 ### FreeRtos System Interrupt Usage
-Interrupt usage in FreeRtos is concentrated in the /mcu/Target/Target-hobot-lite-freertos/target/FreeRtosOsHal/Isr_Hal.c file.
+<DocScope products="RDK S100">
+
+Interrupt usage in FreeRtos is concentrated in `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`,
+
+</DocScope>
+<DocScope products="RDK S600">
+
+Interrupt usage in FreeRtos is concentrated in `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`,
+
+</DocScope>
 ```c
 void FreeRtos_Irq_Init(void)
 {
@@ -1051,7 +1074,16 @@ void FreeRtos_Irq_Init(void)
 }
 ```
 
-If no interrupt handler is set, the interrupt handler remains in its default state, as shown in the /mcu/Target/Target-hobot-lite-freertos-mcu1/target/SuperSoC_ISR.s file.
+<DocScope products="RDK S100">
+
+If no interrupt handler is set, the interrupt handler remains in its default state, as shown in `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/SuperSoC_ISR.s`.
+
+</DocScope>
+<DocScope products="RDK S600">
+
+If no interrupt handler is set, the interrupt handler remains in its default state, as shown in `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/OsAssembly/gcc/S600_ISR.s`.
+
+</DocScope>
 Take the RTC interrupt handler as an example:
 ```c
 // DefaultISR---default interrupt handler
@@ -1101,29 +1133,38 @@ RDK-S100 uses the heap_4.c scheme, which combines the best-fit algorithm and mer
 RDK-S600 uses the heap_4.c scheme, which combines the best-fit algorithm and merging algorithm. It can allocate and deallocate random byte-sized memory, avoiding memory fragmentation while covering all scenarios of real-time system memory allocation, with good real-time performance.
 </DocScope>
 ## LOG Area Adjustment
-The examples in this section are based on S100; S600 is similar.
 ### MCU1 Area Adjustment
-Modify the corresponding location in the /mcu/Build/FreeRtos_mcu1/Linker/gcc/S100.ld file. The size is not currently modifiable.
+<DocScope products="RDK S100">
+Modify the corresponding location in `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld`. The size is not currently modifiable.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="" style={{ width: '100%' }} />
+</DocScope>
+<DocScope products="RDK S600">
+Modify the corresponding location in `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld`. The size is not currently modifiable.
+</DocScope>
 
 ### Acore Area Adjustment
-Modify the corresponding location in the /source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi file, keeping it consistent with the MCU1 modification.
+<DocScope products="RDK S100">
+Modify the corresponding location in `source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi`, keeping it consistent with the MCU1 modification.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="" style={{ width: '100%' }} />
+</DocScope>
+<DocScope products="RDK S600">
+Modify the corresponding location in `source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi`, keeping it consistent with the MCU1 modification.
+</DocScope>
 
 ## Reserved Shared Memory Area Between MCU and Acore
 This shared memory area is allocated in the MCU0 space. However, since MCU0 and MCU1 belong to the same MCU SRAM domain, MCU1 can also use the corresponding address.
 ```c
-MCU_STATE_Reserved      : org = 0x0C800400, len = 1K
+MCU_STATE_Reserved      : org = 0x0C800800, len = 1K
 ```
 ### Currently Occupied Areas:
 ```c
-MCU1_VERSION:  org = 0x0C800400, len = 0x60
-MCU_ALIVE:     org = 0x0C800460, len = 0x10
-     ---MCU0_ALIVE：org = 0x0C800460, len = 0x04；
-     ---MCU1_ALIVE：org = 0x0C800464, len = 0x04；
-     ---REVERSED：  org = 0x0C800468, len = 0x08；
+MCU1_VERSION:  org = 0x0C800800, len = 0x60
+MCU_ALIVE:     org = 0x0C800860, len = 0x10
+     ---MCU0_ALIVE：org = 0x0C800860, len = 0x04；
+     ---MCU1_ALIVE：org = 0x0C800864, len = 0x04；
+     ---RESERVED：  org = 0x0C800868, len = 0x08；
 ```
 ### Usage Precautions
 If shared memory is used for data transfer, there may be an issue where MCU updates data to SRAM, but the Acore cache still contains old data, leading to data read inconsistencies.

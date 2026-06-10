@@ -128,18 +128,28 @@ output/
 
 ```c
 output/
-├── debug                               # 该文件夹下包含debug版本的编译生成文件
-|    ├── objs                           # 编译生成的i/s/o文件
-|    └── S600_MCU_Matrix_V2.0           # 编译生成的bin/map/elf等文件
+├── S600_MCU_DEBUG.map                  # debug 链接 map（在 output 根目录）
+├── S600_MCU_RELEASE.map                # release 链接 map（release 编译后生成）
+├── objs -> output/debug/objs           # 符号链接，指向当前编译 variant 的 objs
+├── inc/                                # 构建时收集的头文件
+├── debug/                              # debug 版本编译生成文件
+|    ├── objs/                          # 编译生成的 i/s/o 文件
+|    └── S600_MCU_Matrix_V2.0/          # elf/bin 等固件文件
 |         ├── S600_MCU_RAW.bin
-|         ├── S600_MCU_DEBUG.elf        # MCU1启动文件
-|         ├── S600_MCU_DEBUG.map
-|         ├── S600_MCU_Matrix_V2.0.bin
-├── objs                                # 编译生成的i/s/o文件，根据编译的版本变化
-├── release                             # 该文件夹下包含release版本的编译生成文件
-|    ├── objs                           # 编译生成的i/s/o文件
-|    └── S600_MCU_Matrix_V2.0           # 编译生成的bin/map/elf等文件
+|         ├── S600_MCU_DEBUG.elf        # MCU1 启动固件
+|         ├── S600_MCU_DEBUG.bin
+|         └── S600_MCU_Matrix_V2.0.bin
+└── release/                            # release 版本，结构类似
+     ├── objs/
+     └── S600_MCU_Matrix_V2.0/
+          ├── S600_MCU_RAW.bin
+          ├── S600_MCU_RELEASE.elf      # MCU1 启动固件（release）
+          ├── S600_MCU_DEBUG.bin
+          └── S600_MCU_Matrix_V2.0.bin
 ```
+
+> 说明：`.map` 文件由链接器生成在 `output/` 根目录，debug/release 均会生成，命名分别为 `S600_MCU_DEBUG.map` / `S600_MCU_RELEASE.map`；elf/bin 经后处理移至 `debug/` 或 `release/` 下的 `S600_MCU_Matrix_V2.0/` 子目录。
+
 </DocScope>
 
 ## MCU1启动/关闭流程
@@ -163,12 +173,21 @@ MCU1的启动/关闭是由 Acore 经过 remoteproc 框架传递信息给 MCU0进
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/push_elf.png" alt="" style={{ width: '100%' }} />
 
 2. 板端启动流程
+<DocScope products="RDK S100">
 ```c
 cd /sys/class/remoteproc/remoteproc_mcu0
 echo S100_MCU_DEBUG.elf > firmware
 echo start > state
 ```
-正常启动后，串口 log 打印下图所示
+</DocScope>
+<DocScope products="RDK S600">
+```c
+cd /sys/class/remoteproc/remoteproc_mcu0
+echo S600_MCU_DEBUG.elf > firmware
+echo start > state
+```
+</DocScope>
+
 Acore 侧串口打印
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/Acore_start_log.png" alt="" style={{ width: '100%' }} />
@@ -301,7 +320,7 @@ MCU 目前在 sysfs 上支持查看系统状态 alive，系统存活时间 taskc
 
 5. mcu 串口 log 获取，图示：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/log2.png" alt="" style={{ width: '100%' }} />
 
 6. mcu cpuloads 获取，图示:
 
@@ -362,11 +381,15 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 <DocScope products="RDK S600">
 正常情况下系统在进入 undefined/abort 异常时，最终会进入死循环状态。只有重新执行上下电流程才能再次正常运行。RDK-S600由于不能对 MCU1单独进行上下电，所以需要进行系统流程的修改，以实现上述的预期。
 </DocScope>
+
+<DocScope products="RDK S100">
+
 具体原理：当 Undefined/Abort 异常产生时，也会最终进入死循环状态。通过 Acore 的 sysfs 对 MCU1进行软件下电，也即通知 MCU1进入 wfi 模式，等下次再次 start 时，MCU1将重新软件启动，从而实现预期。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_exception.png" alt="" style={{ width: '100%' }} />
 
-下面以 S100 Undefined 异常为例子，S600类似（只是相关函数名称前缀为 S600）。当 Undefined 异常产生时，uart 串口输出 log “EL1_Undefined_Handler”，并进入最终进入 S100_Exception_Handler 处理函数，并根据 exception_on 变量进入死循环状态。当 Acore 通过 remoteproc 框架 stop MCU1后，核间中断修改 exception_on 变量，进而关闭 tick 周期性中断，并进入 WFI 模式（STANDBY 模式）：
+下面以 S100 Undefined 异常为例子。当 Undefined 异常产生时，uart 串口输出 log “EL1_Undefined_Handler”，并进入最终进入 S100_Exception_Handler 处理函数，并根据 exception_on 变量进入死循环状态。当 Acore 通过 remoteproc 框架 stop MCU1后，核间中断修改 exception_on 变量，进而关闭 tick 周期性中断，并进入 WFI 模式（STANDBY 模式）：
+
 ```c
 void Os_Isr_Cross_Core_Ins0_Isr(void)
 {
@@ -429,6 +452,70 @@ void EL1_Undefined_Handler(void)
     __asm volatile ("ERET");
 }
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+具体原理：S600 MCU1 涉及**两条独立路径**。
+
+**路径一：remoteproc 软件 stop/start（日常启停）**
+
+Acore 通过 sysfs 执行 `echo stop > state` 后，MCU0 触发核间中断 Ins0，MCU1 清除运行标志并使 core1 进入 STANDBY 或深睡；下次 `echo start > state` 时 MCU1 重新软件启动。相关代码位于 `Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 与 `main.c`：
+
+```c
+/* Isr_Hal.c */
+void Os_Isr_Cross_Core_Ins0_Isr(void)
+{
+  LogSync("mcu1: %s!\r\n", __func__);
+  power_on_core1 = 0;
+  power_on = 0;
+  ClearCrossCoreISR0();
+  if (exception_on)
+  {
+    exception_on = 0;
+  }
+}
+
+/* main.c — core1 分支（节选） */
+while (1) {
+    if (0 == power_on_core1) {
+        Os_Disable_Can4_DataIsr();
+        /* ... 关闭 Can6~Can10 ... */
+        if (1 == deep_sleep_core1) {
+            LogSync("core1 enter deepsleep...\r\n");
+            Mcu1_Enter_Sleep_Core1();
+        } else {
+            LogSync("core1 enter stop...\r\n");
+            STANDBY();
+        }
+    }
+}
+```
+
+**路径二：同步 Undefined/Abort 异常**
+
+`startup.s` 中 EL1 异常向量表入口为 `call_EL1_Undefined_Handler` / `call_EL1_Abort_Handler`，**并非** `main.c` 中的 `EL1_Undefined_Handler`。同步异常经 `HorizonHook.c` 中的 `User_Undefined_Handler` / `User_Abort_Handler` 记录故障信息后，进入 `Os_SaveCrashDump0` 保存 crash dump：
+
+```c
+/* HorizonHook.c — Undefined 异常（节选） */
+uint32 User_Undefined_Handler(void *reg)
+{
+    LogSync("[MCU%u Core%u] Enter Undefined Instruction Handler!!!\r\n",
+            (unsigned int)cluster_id, (unsigned int)core_id);
+    LogSync("Estimated undefined fault PC: 0x%x\r\n", fault_pc);
+    /* ... 打印指令与上下文 ... */
+    return 1u;
+}
+```
+
+:::info 关于 main.c 中的异常处理函数
+
+`main.c` 中虽定义了 `S600_Exception_Handler`、`EL1_Undefined_Handler`、`EL1_Abort_Handler`，但当前 **EL1 异常向量表未跳转到这些函数**，不属于上述同步异常的实际执行路径。该问题已记录，计划在下版 MCU 代码中修复。
+
+:::
+
+</DocScope>
 ## MCU1 main 函数简介
 main 函数是进入系统后的关键代码，下述代码也是 MCU1正常启动的关键，请勿随意删除相关代码，删除可能会导致启动异常。
 <DocScope products="RDK S100">
@@ -455,40 +542,45 @@ int main(void)
 ```c
 int main(void)
 {
-    unsigned long core_id = GetCurrentCoreID(); /* 获取当前cluster工作的core id */
-    if (core_id == 0) {             /* core0执行逻辑 */
-        Ipc_MainPowerUp = TRUE;     /* IPC 上电标志，MCU1默认上电，因为在MCU0已上电 */
-        Disable_AonTimer();         /* 关闭aon的timer */
-        Can2Atcm_Init();            /* 搬运Can相关数据代码到Atcm上 */
-        PpsIcu_Irq_Init();          /* PPS相关中断配置为边沿触发函数 */
-        Uart_Init();                /* UART串口初始化，debug用 */
-        Log_Init();                 /* log串口初始化，初始化后可在Acore获取相应mcu log信息 */
-        #if (SHELL_ENABLE)
-        Shell_Init();               /* shell命令初始化，通过SHELL_ENABLE宏进行开关 */
-        #endif
-        Version_into_AonSram();     /* 获取mcu版本信息，初始化后可在Acore获取相应mcu version信息 */
+    unsigned long core_id = GetCurrentCoreID(); /* 获取当前 cluster 工作的 core id */
+    if (core_id == 0) {             /* core0 执行逻辑 */
+        /* ... Ipc_MainPowerUp、Disable_AonTimer、Can2Atcm_Init、Uart_Init、
+              Log_Init、Version_into_AonSram 等初始化 ... */
         LogSync("MCU1 FreeRtos Lite Init Success!\r\n");
-        uint32_t gicr1_waker_addr = 0x22120014; /* 只保留WAKER寄存器的 bit3 和 bit0，并写回清除其余控制位 */
-        uint32_t current_value, target_value;
-        current_value = *(volatile uint32_t *)(gicr1_waker_addr);
-        target_value = current_value & 0x9;
-        *(volatile uint32_t *)(gicr1_waker_addr) = target_value;
-        FreeRtos_Irq_Init();         /* FreeRtos 中断初始化 */
-        SetCanInterruptAffinity(1);  /* 设置can中断亲和性，绑定到core1运行 */
-        SetIPCInterruptAffinity(1);  /* 设置ipc中断亲和性，绑定到core1运行 */
-        FreeRtos_Task_Init();        /* FreeRtos 任务初始化以及调度启动 */
+
+        uint32_t gicr0_waker_addr = 0x22100014; /* 配置 gicr0 WAKER，保留 bit3 和 bit0 */
+        /* ... 读写 gicr0 WAKER 寄存器 ... */
+
+        uint32_t gicr1_waker_addr = 0x22120014; /* 配置 gicr1 WAKER，保留 bit3 和 bit0 */
+        /* ... 读写 gicr1 WAKER 寄存器 ... */
+
+        FreeRtos_Irq_Init();
+        SetCanInterruptAffinity(1);       /* Can 中断绑定 core1，core1 无需再逐个 enable */
+        SetIPCInterruptAffinity(1);
+        SetCrossCoreInterruptAffinity(1); /* 核间中断绑定 core1 */
+        FreeRtos_Task_Init();
 
         for(;;){};
-   } else if (core_id == 1) {         /* core1执行逻辑 */
-        Os_Enable_Can1_DataIsr();     /* 使能Can1-10中断 */
-        Os_Enable_Can2_DataIsr();
-        Os_Enable_Can3_DataIsr();
-        Os_Enable_Can4_DataIsr();
-        Os_Enable_Can10_DataIsr();
-        __asm__ volatile("cpsie i");  /* 使能 IRQ 中断 */
-        __asm__ volatile("cpsie f");  /* 使能 FIQ 中断 */
+   } else if (core_id == 1) {         /* core1 执行逻辑 */
+        Os_Enable_Cross_Core_Ins3_DataIsr();
+        __asm__ volatile("cpsie i");
+        __asm__ volatile("cpsie f");
+
         while(1) {
-            __asm__ volatile("wfe");  /* 空闲时进入低功耗wfe状态 */
+            if(0 == power_on_core1)
+            {
+                Os_Disable_Can4_DataIsr();
+                /* ... 关闭 Can6~Can10 ... */
+
+                if(1 == deep_sleep_core1)
+                {
+                    Mcu1_Enter_Sleep_Core1(); /* 进入深睡 */
+                }
+                else
+                {
+                    STANDBY();              /* 进入 WFI/STANDBY */
+                }
+            }
         }
         for(;;){};
    }
