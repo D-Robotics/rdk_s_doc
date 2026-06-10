@@ -317,7 +317,7 @@ if [ -f "$boardid_sys_path" ]; then
                         *)
                                 ;;
                 esac
-        elif [[ "$boardid" =~ ^0x(51)[1234567][01234567][1234567][1234567].$ ]];then # S600
+        elif [[ "$boardid" =~ ^0x(51)[01234567][0123456][0123456][1234567].$ ]];then # S600
                 # S600 Boardid rules
                 modprobe hobot-pcie-rc
         else
@@ -338,7 +338,7 @@ function get_dtb()
         boardid="$(cat $boardid_sys_path)"
 
         # get chip
-        if [[ "$boardid" =~ ^0x(51)[1234567][01234567][1234567][1234567].$ ]]; then
+        if [[ "$boardid" =~ ^0x(51)[01234567][0123456][0123456][1234567].$ ]]; then
             # S600
             if [[ "$boardid" == "0x5111110"  ]]; then
                 echo "rdk-s600-mcb-v0p1.dtb"
