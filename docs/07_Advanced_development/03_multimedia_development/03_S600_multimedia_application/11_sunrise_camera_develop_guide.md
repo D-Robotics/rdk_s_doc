@@ -242,7 +242,7 @@ typedef struct vpp_ops {
 
 ####  模块代码结构
 
-代码路径： Platform/S100
+代码路径： Platform/S600
 
 ```bash
 .
@@ -317,7 +317,7 @@ typedef struct vpp_ops {
 
 | **项目**              | **源码文件**                                      | **说明**                                                     |
 | --------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
-| 准备算法模型          | 放到 Platform/s100/model_zoom 目录下（*.hbm） | 在本目录添加可以在开发板上运行的定点算法模型 (系统自带的模型文文件存储在：`/opt/hobot/model/s100/basic/`)                 |
+| 准备算法模型          | 放到 Platform/S600/model_zoom 目录下（*.hbm） | 在本目录添加可以在开发板上运行的定点算法模型 (系统自带的模型文文件存储在：`/opt/hobot/model/s600/basic/`)                 |
 | 添加模型配置          | bpu_wrap.c                                        | 在 bpu_models 中添加新模型的名称、指定算法模型文件，推理和后处理函数接口 |
 | 推理线程处理函数      | bpu_wrap.c                                        | 在处理函数中准备输出 tensor，调用 **hbDNNInfer** 推理，得到结果后，把结果放入 output 队列。示例：**inference_yolov5s** |
 | 后处理线程函数        | bpu_wrap.c                                        | 从 output 队列中取出算法结果，调用后处理方法进行处理，得到 json 格式的结果字符串。如果设置了回调函数，则调用回调。示例：**post_process_yolov5s** |
