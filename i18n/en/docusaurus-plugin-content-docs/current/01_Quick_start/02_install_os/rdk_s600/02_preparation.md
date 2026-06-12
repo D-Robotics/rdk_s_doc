@@ -2,20 +2,20 @@
 sidebar_position: 2
 ---
 
-# 1.2.1.2 Burning Preparation
+# 1.2.2 Burning Preparation
 
 ## Image Download
 
 :::warning Note
 
-The **RDK S100** comes pre-burned with a test version of the system image. To ensure you are using the latest version of the system, <font color='Red'>it is recommended to follow this document to burn the latest version of the system image</font>.
+The **RDK S600** comes pre-burned with a test version of the system image. To ensure you are using the latest version of the system, <font color='Red'>it is recommended to follow this document to burn the latest version of the system image</font>.
 
 :::
 
-The RDK S100 kit currently provides the Ubuntu 22.04 system image, which supports Desktop graphical interaction.
+The RDK S600 kit currently provides the Ubuntu 24.04 system image, which supports Desktop graphical interaction.
 1. [[Click here]](../../download.md#system-software) to download the image.
 
-    ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png)
+    <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png) -->
 
 2. After extraction, you will get the `product` folder with the structure shown below. Ensure that the same folder contains the `img_packages` folder and the `xmodem_tools` file.
 
