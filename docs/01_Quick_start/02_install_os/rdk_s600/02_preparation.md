@@ -9,14 +9,14 @@ sidebar_position: 2
 
 :::warning 注意
 
-**RDK S100**出厂已经烧写测试版本系统镜像，为确保使用最新版本的系统，<font color='Red'>建议参考本文档完成最新版本系统镜像的烧写</font>。
+**RDK S600**出厂已经烧写测试版本系统镜像，为确保使用最新版本的系统，<font color='Red'>建议参考本文档完成最新版本系统镜像的烧写</font>。
 
 :::
 
-RDK S100 套件目前提供 Ubuntu 22.04 系统镜像，可支持 Desktop 桌面图形化交互。
+RDK S600 套件目前提供 Ubuntu 24.04 系统镜像，可支持 Desktop 桌面图形化交互。
 1. [[点击此处]](../../download.md#系统软件)下载镜像。
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png" alt="" style={{ width: '100%' }} />
+    <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png" alt="" style={{ width: '100%' }} /> -->
 
 2. 解压后得到 product 文件夹，结构如下所示，确保同一个文件夹内有 `img_packages` 文件夹和 `xmodem_tools` 文件。
 

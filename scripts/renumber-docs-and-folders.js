@@ -1,12 +1,13 @@
 /**
- * 按目录内 sidebar_position（缺省排后）+ 名称排序，为 docs 下的文件夹和 .md 文件添加 01_ / 02_ 前缀。
- * 核心名：去掉开头的 \\d+_，避免重复前缀。
+ * Add 01_ / 02_ prefixes to folders and .md files based on sidebar_position
+ * (missing position goes last), then by name sorting.
+ * Core name removes leading \\d+_ to avoid duplicate prefixes.
  *
- * 用法：node scripts/renumber-docs-and-folders.js [target-dir]
- *   默认处理 docs/ 目录
- *   可指定其他目录如 i18n/en/docusaurus-plugin-content-docs/current
+ * Usage: node scripts/renumber-docs-and-folders.js [target-dir]
+ *   Default target: docs/
+ *   You can pass another target, e.g. i18n/en/docusaurus-plugin-content-docs/current
  *
- * 完成后请执行：npm run generate-sidebar-config
+ * After completion run: npm run generate-sidebar-config
  */
 const fs = require("fs");
 const path = require("path");
@@ -14,7 +15,7 @@ const path = require("path");
 const REPO_ROOT = path.resolve(__dirname, "..");
 const DOCS_ROOT = path.join(REPO_ROOT, "docs");
 
-/** 从 _category_.json 读取 position */
+/** Read position from _category_.json */
 function getCategoryPosition(dirPath) {
   const catFile = path.join(dirPath, "_category_.json");
   if (!fs.existsSync(catFile)) return Number.POSITIVE_INFINITY;
@@ -27,7 +28,7 @@ function getCategoryPosition(dirPath) {
   return Number.POSITIVE_INFINITY;
 }
 
-/** 从 .md 文件 frontmatter 读取 sidebar_position */
+/** Read sidebar_position from .md front matter */
 function getMdPosition(filePath) {
   let raw;
   try {
@@ -48,12 +49,12 @@ function getMdPosition(filePath) {
   return Number.POSITIVE_INFINITY;
 }
 
-/** 去掉开头的数字前缀 */
+/** Remove leading numeric prefix */
 function stripNumberPrefix(name) {
   return name.replace(/^\d+_/, "");
 }
 
-/** 获取目录下需要处理的条目（文件夹和 .md 文件） */
+/** Get processable entries in current directory (folders and .md files) */
 function getDirEntries(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const items = [];
@@ -68,7 +69,7 @@ function getDirEntries(dir) {
     const fullPath = path.join(dir, name);
 
     if (ent.isDirectory()) {
-      // 文件夹：读取 _category_.json 的 position
+      // Folder: use _category_.json position
       const pos = getCategoryPosition(fullPath);
       items.push({
         type: "dir",
@@ -78,7 +79,7 @@ function getDirEntries(dir) {
         core: stripNumberPrefix(name),
       });
     } else if (ent.isFile() && name.toLowerCase().endsWith(".md")) {
-      // .md 文件：读取 frontmatter 的 position
+      // .md file: use front matter position
       const pos = getMdPosition(fullPath);
       items.push({
         type: "file",
@@ -93,7 +94,7 @@ function getDirEntries(dir) {
   return items;
 }
 
-/** 规划单个目录内的重命名 */
+/** Plan renames for a single directory */
 function planDirectory(dir) {
   const items = getDirEntries(dir);
   if (items.length === 0) return [];
@@ -138,7 +139,7 @@ function planDirectory(dir) {
   return plans;
 }
 
-/** 两阶段重命名（避免冲突） */
+/** Two-phase rename (avoid name conflicts) */
 function twoPhaseRename(plans) {
   if (plans.length === 0) return;
 
@@ -154,7 +155,7 @@ function twoPhaseRename(plans) {
   });
 }
 
-/** 收集所有目录（按深度从深到浅排序，确保先处理子目录） */
+/** Collect all directories (deep to shallow, process children first) */
 function walkDirs(root) {
   const out = [];
   function walk(d) {
@@ -169,31 +170,31 @@ function walkDirs(root) {
   return out.sort((a, b) => b.split(path.sep).length - a.split(path.sep).length);
 }
 
-/** 构建路径映射表 */
+/** Build path mapping table */
 function buildPathMap(plans, docsRoot) {
   const map = new Map();
   for (const p of plans) {
     const fromRel = path.relative(docsRoot, p.from).replace(/\\/g, "/");
     const toRel = path.relative(docsRoot, p.to).replace(/\\/g, "/");
 
-    // 对于文件夹，映射文件夹路径
+    // For folders, map folder path
     if (p.type === "dir") {
       map.set(fromRel + "/", toRel + "/");
     }
     map.set(fromRel, toRel);
 
-    // 同时存储核心名（不带序号）的映射，用于链接修复
+    // Also keep core-name mapping (without prefixes) for link fixes
     const fromCore = stripNumberPrefix(p.oldName);
     const toCore = stripNumberPrefix(p.newName);
     if (fromCore !== p.oldName) {
-      // 如果原文件名有序号，也建立核心名到新路径的映射
+      // If original name had prefix, also map core name to new path
       map.set(fromCore, toRel);
     }
   }
   return map;
 }
 
-/** 修复仓库内的链接 */
+/** Fix links across repository */
 function fixLinks(pathMap, docsRoot) {
   const fromList = [...pathMap.keys()].sort((a, b) => b.length - a.length);
 
@@ -261,8 +262,7 @@ function processDirectory(targetDir, label) {
 
     console.log(`\n${path.relative(REPO_ROOT, dir)} (${plans.length} rename(s))`);
     plans.forEach((p) => {
-      const icon = p.type === "dir" ? "📁" : "📄";
-      console.log(`  ${icon} ${p.oldName} -> ${p.newName}`);
+      console.log(`  ${p.oldName} -> ${p.newName}`);
     });
 
     twoPhaseRename(plans);
@@ -284,13 +284,13 @@ function processDirectory(targetDir, label) {
 }
 
 function main() {
-  // 获取命令行参数
+  // Parse CLI arguments
   const args = process.argv.slice(2);
   let targetDir = DOCS_ROOT;
   let label = "docs";
 
   if (args.length > 0) {
-    // 使用指定的目录
+    // Use specified target directory
     targetDir = path.resolve(REPO_ROOT, args[0]);
     label = path.relative(REPO_ROOT, targetDir);
   }

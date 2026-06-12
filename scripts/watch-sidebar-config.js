@@ -1,7 +1,7 @@
 /**
- * 监听文件变化，自动重新生成侧边栏配置文件
- * 用于开发环境，当修改 _sidebar_scope.json 或 Markdown 的 Front Matter 时自动更新配置。
- * 监听范围：docs/、i18n/en/docusaurus-plugin-content-docs/current/（若存在）。
+ * Watch file changes and regenerate sidebar scope config automatically.
+ * Intended for development: updates config when _sidebar_scope.json or Markdown front matter changes.
+ * Watch targets: docs/ and i18n/en/docusaurus-plugin-content-docs/current/ (if present).
  */
 const fs = require('fs');
 const path = require('path');
@@ -22,16 +22,16 @@ let isGenerating = false;
 let lastGenerateTime = 0;
 
 /**
- * 重新生成配置文件
+ * Regenerate config file
  */
 function regenerateConfig() {
-  // 防抖：如果距离上次生成不到 1 秒，则跳过
+  // Debounce: skip if called within 1 second
   const now = Date.now();
   if (now - lastGenerateTime < 1000) {
     return;
   }
   
-  // 如果正在生成，则跳过
+  // Skip if already generating
   if (isGenerating) {
     return;
   }
@@ -39,7 +39,7 @@ function regenerateConfig() {
   isGenerating = true;
   lastGenerateTime = now;
   
-  console.log('\n🔄 检测到文件变化，重新生成配置文件...\n');
+  console.log('\nFile change detected. Regenerating sidebar scope config...\n');
   
   // 禁用 shell：项目路径含空格时（如 rdk x5），shell: true 会把路径截断，导致 MODULE_NOT_FOUND
   const scriptPath = path.join(__dirname, 'generate-sidebar-config.js');
@@ -52,15 +52,15 @@ function regenerateConfig() {
   generate.on('close', (code) => {
     isGenerating = false;
     if (code === 0) {
-      console.log('\n✅ 配置文件已更新\n');
+      console.log('\nSidebar scope config updated.\n');
     } else {
-      console.log('\n❌ 配置文件生成失败\n');
+      console.log('\nFailed to generate sidebar scope config.\n');
     }
   });
 }
 
 /**
- * 监听目录变化
+ * Watch directory changes
  */
 function watchDirectory(dir) {
   if (!fs.existsSync(dir)) {
@@ -72,35 +72,35 @@ function watchDirectory(dir) {
       return;
     }
     
-    // 只监听特定文件
+    // Only watch relevant files
     if (filename.endsWith('_sidebar_scope.json') || 
         (filename.endsWith('.md') && !filename.includes('node_modules'))) {
-      console.log(`📝 文件变化: ${filename}`);
+      console.log(`Changed file: ${filename}`);
       regenerateConfig();
     }
   });
   
-  console.log(`👀 监听目录: ${dir}`);
+  console.log(`Watching directory: ${dir}`);
 }
 
 /**
- * 主函数
+ * Main entry
  */
 function main() {
-  console.log('🚀 启动配置文件监听器...\n');
+  console.log('Starting sidebar scope config watcher...\n');
   
-  // 监听 docs 目录
+  // Watch docs directory
   watchDirectory(docsDir);
 
-  // 监听英文 i18n 当前文档目录
+  // Watch English i18n current docs directory
   if (fs.existsSync(i18nEnDocsCurrentDir)) {
     watchDirectory(i18nEnDocsCurrentDir);
   }
   
   console.log(
-    '\n✅ 监听器已启动，修改 _sidebar_scope.json 或 Markdown 文件的 Front Matter（含 i18n/en/.../current）将自动更新配置文件\n',
+    '\nWatcher is running. Changes to _sidebar_scope.json or Markdown front matter (including i18n/en/.../current) will regenerate the config automatically.\n',
   );
-  console.log('💡 提示：按 Ctrl+C 停止监听\n');
+  console.log('Tip: press Ctrl+C to stop watching.\n');
 }
 
 main();

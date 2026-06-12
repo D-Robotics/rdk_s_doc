@@ -1,5 +1,6 @@
 /**
- * 扫描 docs / i18n 文档，生成侧边栏产品/版本可见性配置（供 Docusaurus 插件与 CLI 共用）。
+ * Scan docs / i18n docs and generate sidebar product/version visibility config
+ * (shared by Docusaurus plugin and CLI).
  */
 const fs = require('fs');
 const path = require('path');
@@ -252,7 +253,7 @@ function extractSidebarScopeConfig(filePath) {
 }
 
 function formatVersions(versions) {
-  if (!versions || versions.length === 0) return '所有版本';
+  if (!versions || versions.length === 0) return 'all versions';
   return versions
     .map((v) => {
       if (typeof v === 'object' && v.operator) {
@@ -294,10 +295,10 @@ function scanDirectory(dir, baseDir, config, idUtils, verbose) {
       });
 
       if (verbose) {
-        console.log(`✓ 找到文件夹配置: ${folderPath}`);
+        console.log(`Folder scope found: ${folderPath}`);
         console.log(`  folderId: ${folderId}`);
-        console.log(`  版本: ${formatVersions(scopeConfig.versions)}`);
-        console.log(`  产品: ${productsNorm.join(', ') || '所有产品'}`);
+        console.log(`  versions: ${formatVersions(scopeConfig.versions)}`);
+        console.log(`  products: ${productsNorm.join(', ') || 'all products'}`);
       }
       continue;
     }
@@ -341,10 +342,10 @@ function scanDirectory(dir, baseDir, config, idUtils, verbose) {
     }
 
     if (verbose) {
-      console.log(`✓ 找到文档配置: ${relativePath}`);
+      console.log(`Doc scope found: ${relativePath}`);
       console.log(`  docId keys: ${scopeKeys.join(', ')}`);
-      console.log(`  版本: ${formatVersions(versions)}`);
-      console.log(`  产品: ${productsNorm.join(', ') || '所有产品'}`);
+      console.log(`  versions: ${formatVersions(versions)}`);
+      console.log(`  products: ${productsNorm.join(', ') || 'all products'}`);
     }
   }
 }
@@ -353,10 +354,10 @@ function validateSidebarScopeConfig(config) {
   const errors = [];
   for (const key of Object.keys(config)) {
     if (/^\d+_/.test(key) || /\/\d+_/.test(key)) {
-      errors.push(`配置 key "${key}" 包含未去除的数字前缀`);
+      errors.push(`Config key "${key}" contains an unstripped numeric prefix`);
     }
     if (key !== key.toLowerCase()) {
-      errors.push(`配置 key "${key}" 应该全部小写`);
+      errors.push(`Config key "${key}" should be lowercase`);
     }
   }
   return errors;
@@ -374,7 +375,7 @@ async function buildSidebarScopeConfig({ docsDir, i18nEnDocsCurrentDir, siteDir,
 
   if (fs.existsSync(docsDir)) {
     if (verbose) {
-      console.log('扫描 docs 目录:');
+      console.log('Scanning docs directory:');
     }
     scanDirectory(docsDir, docsDir, config, idUtils, verbose);
     if (verbose) {
@@ -383,7 +384,7 @@ async function buildSidebarScopeConfig({ docsDir, i18nEnDocsCurrentDir, siteDir,
   }
   if (i18nEnDocsCurrentDir && fs.existsSync(i18nEnDocsCurrentDir)) {
     if (verbose) {
-      console.log('扫描 i18n/en/docusaurus-plugin-content-docs/current 目录:');
+      console.log('Scanning i18n/en/docusaurus-plugin-content-docs/current directory:');
     }
     scanDirectory(i18nEnDocsCurrentDir, i18nEnDocsCurrentDir, config, idUtils, verbose);
     if (verbose) {
@@ -402,7 +403,7 @@ async function buildAndWriteSidebarScopeConfig({
   verbose = false,
 }) {
   if (verbose) {
-    console.log('开始扫描文档文件...\n');
+    console.log('Starting doc scan...\n');
   }
 
   const config = await buildSidebarScopeConfig({
@@ -414,16 +415,16 @@ async function buildAndWriteSidebarScopeConfig({
 
   const errors = validateSidebarScopeConfig(config);
   if (errors.length > 0) {
-    console.error('\n❌ 配置文件格式验证失败:\n');
+    console.error('\nConfig validation failed:\n');
     for (const err of errors) {
       console.error(`  - ${err}`);
     }
     console.error('');
-    throw new Error('sidebar scope config validation failed');
+    throw new Error('Sidebar scope config validation failed');
   }
 
   if (verbose) {
-    console.log('✅ 配置文件格式验证通过\n');
+    console.log('Config validation passed.\n');
   }
 
   const configDir = path.dirname(configFilePath);
@@ -431,8 +432,8 @@ async function buildAndWriteSidebarScopeConfig({
   fs.writeFileSync(configFilePath, JSON.stringify(config, null, 2), 'utf-8');
 
   if (verbose) {
-    console.log(`配置文件已生成: ${configFilePath}`);
-    console.log(`共找到 ${Object.keys(config).length} 个配置\n`);
+    console.log(`Config file generated: ${configFilePath}`);
+    console.log(`Total config entries: ${Object.keys(config).length}\n`);
   }
 
   return config;

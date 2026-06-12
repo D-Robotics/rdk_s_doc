@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useLocation } from "@docusaurus/router";
+import React from "react";
+import Head from "@docusaurus/Head";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 function ensureTrailingSlash(path) {
@@ -13,35 +13,36 @@ function removeTrailingSlash(path) {
 }
 
 /**
- * 首页统一重定向到中文 RDK 文档首页。
- * 解决语言检测命中 /en/ 时未进入中文首页的问题。
+ * 站点根路径静态重定向到对应语言首页：
+ * - /rdk_s_doc/ -> /rdk_s_doc/RDK
+ * - /rdk_s_doc/en/ -> /rdk_s_doc/en/RDK
+ *
+ * 使用 meta/script 在页面首屏阶段完成跳转，避免先闪现 404。
  */
 export default function HomeRedirect() {
-  const location = useLocation();
   const { siteConfig, i18n } = useDocusaurusContext();
+  const baseUrl = ensureTrailingSlash(siteConfig.baseUrl);
+  const localeSegment = `${i18n.currentLocale}/`;
+  const baseUrlAlreadyLocalized =
+    removeTrailingSlash(baseUrl).toLowerCase().endsWith(`/${i18n.currentLocale}`.toLowerCase());
 
-  useEffect(() => {
-    const baseUrl = ensureTrailingSlash(siteConfig.baseUrl);
-    const localeSegment = `${i18n.currentLocale}/`;
-    const baseUrlAlreadyLocalized =
-      removeTrailingSlash(baseUrl).toLowerCase().endsWith(`/${i18n.currentLocale}`.toLowerCase());
-
-    const localePrefix =
-      i18n.currentLocale === i18n.defaultLocale
+  const localePrefix =
+    i18n.currentLocale === i18n.defaultLocale
+      ? baseUrl
+      : baseUrlAlreadyLocalized
         ? baseUrl
-        : baseUrlAlreadyLocalized
-          ? baseUrl
-          : `${baseUrl}${localeSegment}`;
-    const target = `${localePrefix}RDK${location.search}${location.hash}`;
-    const normalizedPathname =
-      typeof window !== "undefined" ? removeTrailingSlash(window.location.pathname) : "";
-    const normalizedTargetPath = removeTrailingSlash(`${localePrefix}RDK`);
+        : `${baseUrl}${localeSegment}`;
+  const defaultTarget = `${localePrefix}RDK`;
 
-    // Use hard redirect to ensure URL path becomes /RDK on static hosting.
-    if (typeof window !== "undefined" && normalizedPathname !== normalizedTargetPath) {
-      window.location.replace(target);
-    }
-  }, [location.search, location.hash, siteConfig.baseUrl, i18n.currentLocale, i18n.defaultLocale]);
-
-  return null;
+  return (
+    <>
+      <Head>
+        <meta httpEquiv="refresh" content={`0; url=${defaultTarget}`} />
+        <script>{`(function(){var target='${defaultTarget}';if(window.location.search||window.location.hash){target+=window.location.search+window.location.hash;}window.location.replace(target);})();`}</script>
+      </Head>
+      <noscript>
+        <meta httpEquiv="refresh" content={`0; url=${defaultTarget}`} />
+      </noscript>
+    </>
+  );
 }
