@@ -505,3 +505,28 @@ main article table td {
     justify-content: flex-start;
   }
 }
+
+@media (max-width: 996px) {
+  /* Hide these controls in top navbar on mobile */
+  .navbar__inner .doc-scope-selectors-nav-item,
+  .navbar__inner .navbar-community-link,
+  .navbar__inner .navbar-github-link,
+  .navbar__inner .navbar-locale-switch {
+    display: none !important;
+  }
+
+  /* Show the same controls in hamburger sidebar menu */
+  .navbar-sidebar .doc-scope-selectors-nav-item,
+  .navbar-sidebar .navbar-community-link,
+  .navbar-sidebar .navbar-github-link,
+  .navbar-sidebar .navbar-locale-switch {
+    display: flex !important;
+  }
+
+  /* Make product/version selectors stack neatly in sidebar */
+  .navbar-sidebar .doc-scope-selectors-nav-item .doc-scope-selectors {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+}
