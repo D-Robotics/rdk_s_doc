@@ -5,7 +5,7 @@ sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 
 
 
-# 1.1.2.2 MCU Interface Expansion Board
+# 1.1.3 MCU Interface Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="image-rdk_s600_mcu_port_expansion_board" style={{ width: '100%' }} />
 
