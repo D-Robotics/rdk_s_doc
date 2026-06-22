@@ -11,8 +11,23 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - name: Tune Git for unstable network
+      run: |
+        git config --global http.postBuffer 524288000
+        git config --global http.version HTTP/1.1
+        git config --global http.lowSpeedLimit 1000
+        git config --global http.lowSpeedTime 600
+
     - name: Checkout repository
+      id: checkout
       uses: actions/checkout@v4
+      continue-on-error: true
+      timeout-minutes: 15
+
+    - name: Retry checkout repository
+      if: steps.checkout.outcome != 'success'
+      uses: actions/checkout@v4
+      timeout-minutes: 15
 
     - name: Detect local Node.js on runner
       id: detect_node
