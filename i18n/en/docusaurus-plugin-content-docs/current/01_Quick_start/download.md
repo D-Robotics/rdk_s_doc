@@ -14,94 +14,116 @@ import DocScope from '@site/src/components/DocScope';
 
 :::warning Note
 
-For RDK S600 materials, please obtain them from the FTP server according to the paths specified in the table.
+For RDK S600 commercial materials, please switch to the **FTP Download** option and obtain them from the FTP server according to the paths in the table.
 
 :::
 
 </DocScope>
 
-## System Software
+
+
+
 
 <DocScope products="RDK S100">
+
+## System Software
+
 | Name                                                                                   | Latest Version | Upload Date | Documentation                                                      |
-| -------------------------------------------------------------------------------------- | -------------- | ----------- | ------------------------------------------------------------------ |
-| [System Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)            | V4.0.5         | 2026-03-05  | System image.                                                     |
-| [BSP Source Code Package](https://developer.d-robotics.cc/resource)                   | V4.0.4-beta    | 2026-01-29  | BSP source code package.                                          |
+| -------------------------------------------------------------------------------------- | -------------- | ----------- | -------------------------------------------------------------------- |
+| [System Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)                | RDKS100-V4.0.5_20260507 | 2026-05-07  | System image.                                                       |
+| [BSP Source Package](https://developer.d-robotics.cc/resource)                | RDKS100-V4.0.5_20260507 | 2026-05-07  | BSP source package.                                                 |
+
+<br/><br/>
 
 <!-- <DocScope products="RDK S600">
 
-| Name         | Latest Version | Upload Date | Path                                                                           |
-| ------------ | -------------- | ----------- | ------------------------------------------------------------------------------ |
-| System Image | V5.1.0         | 2026-06-09  | https://archive.d-robotics.cc/downloads/os_images/rdk_s600/                    |
+| Name | Latest Version | Upload Date | Path |
+| ---- | -------------- | ----------- | ---- |
+| System Image | V5.1.0 | 2026-06-09 | https://archive.d-robotics.cc/downloads/os_images/rdk_s600/|
 
 </DocScope> -->
 
+
 ## Tool Downloads
 
-| Name                                                                                   | Latest Version | Upload Date | Documentation                                                             |
-| -------------------------------------------------------------------------------------- | -------------- | ----------- | ------------------------------------------------------------------------ |
-| [Xburn](https://archive.d-robotics.cc/downloads/software_tools/download_tools/)        | V1.2.0         | 2026-05-13  | System image flashing tool, includes windows-x64, linux-x64, and darwin-arm64 versions. |
-| [MCU Cross-Compilation Toolchain](https://archive.d-robotics.cc/downloads/software_tools/mcu_toolchain/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2) | -              | 2026-01-27  | MCU cross-compilation toolchain. |
-| [hbplayer](https://archive.d-robotics.cc/downloads/hobotplayer/hbplayerv2.7.zip)       | V2.7           | 2026-01-27  | Image viewing tool. |
-| [CH340 Serial Port Driver](https://archive.d-robotics.cc/downloads/software_tools/serial_to_usb_drivers/CH34x_Install_Windows_v3_4.zip) | V3.4           | 2026-03-17  | Serial port driver. |
+| Name                                                                                   | Latest Version | Upload Date | Documentation                                                      |
+| -------------------------------------------------------------------------------------- | -------------- | ----------- | -------------------------------------------------------------------- |
+| [Xburn](https://archive.d-robotics.cc/downloads/software_tools/download_tools/) | V1.2.0         | 2026-05-13  | System image flashing tool, includes windows-x64, linux-x64, and darwin-arm64 versions. |
+| [MCU Cross-compilation Toolchain](https://archive.d-robotics.cc/downloads/software_tools/mcu_toolchain/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2) | -              | 2026-01-27  | MCU cross-compilation toolchain. |
+| [hbplayer](https://archive.d-robotics.cc/downloads/hobotplayer/hbplayerv2.7.zip) | V2.7           | 2026-01-27  | Image viewer tool. |
+| [CH340 Serial Driver](https://archive.d-robotics.cc/downloads/software_tools/serial_to_usb_drivers/CH34x_Install_Windows_v3_4.zip) | V3.4           | 2026-03-17  | Serial port driver. |
 
-## Hardware Materials
+<br/><br/>
+
+## Hardware Documentation
+
+
 
 ### RDK S100
 
-| Name                                                                                                            | Version | Upload Date | Documentation                                                  |
-| --------------------------------------------------------------------------------------------------------------- | ------- | ----------- | -------------------------------------------------------------- |
-| [STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_v1p0.step)    | V1.0.0  | 2025-06-10  | Product 3D model in STEP format, convenient for robot layout and enclosure design. |
-| [Product Renderings](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_renders.zip) | V1.0.0  | 2025-06-10  | Product rendering images for secondary editing of product materials. |
-| Product Photos                                                                                                  | V1.0.0  | 2025-06-10  | Product photos for secondary editing of product materials. |
+| Name                                                                                                            | Version | Upload Date | Documentation                                                 |
+| --------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
+| [STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_v1p0.step)    | V1.0.0  | 2025-06-10  | Product 3D model, STEP format, suitable for robot layout, enclosure design, etc. |
+| [Product Renderings](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_renders.zip) | V1.0.0  | 2025-06-10  | Product rendering images, convenient for secondary editing of product materials. |
+| Product Photos                                                                                                  | V1.0.0  | 2025-06-10  | Product physical images, convenient for secondary editing of product materials. |
+
+<br/><br/>
 
 ### RDK S100 Camera Expansion Board
 
-| Name                                                                                                                                                                      | Version | Upload Date | Documentation                                                  |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | -------------------------------------------------------------- |
-| [STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_v1p0.step)                | V1.0.0  | 2025-06-10  | Product 3D model in STEP format, convenient for robot layout and enclosure design. |
+| Name                                                                                                                                                                      | Version | Upload Date | Documentation                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
+| [STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_v1p0.step)                | V1.0.0  | 2025-06-10  | Product 3D model, STEP format, suitable for robot layout, enclosure design, etc. |
 | [Reference Design](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_reference_design_v1p0.zip) | V1.0.0  | 2025-06-10  | Reference design.                                                |
-| Product Renderings                                                                                                                                                        | V1.0.0  | 2025-06-10  | Product rendering images for secondary editing of product materials. |
-| Product Photos                                                                                                                                                            | V1.0.0  | 2025-06-10  | Product photos for secondary editing of product materials. |
+| Product Renderings                                                                                                                                                                | V1.0.0  | 2025-06-10  | Product rendering images, convenient for secondary editing of product materials. |
+| Product Photos                                                                                                                                                                | V1.0.0  | 2025-06-10  | Product physical images, convenient for secondary editing of product materials. |
+
+<br/><br/>
 
 ### RDK S100 MCU Port Expansion Board
 
 | Name                                                                                                                                                                          | Version | Upload Date | Documentation                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ----------------------------------------------------------------- |
-| [PCB STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/drobotics_rdk_s100_mcu_port_expansion_board_v1p0.step)            | V1.0.0  | 2025-06-10  | PCB 3D model in STEP format, convenient for robot layout and enclosure design. |
-| [FPC STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/drobotics_rdk_s100_mcu_port_expansion_board_fpc_v1p0.step)        | V1.0.0  | 2025-06-10  | FPC cable 3D model in STEP format, convenient for robot layout and enclosure design. |
+| [PCB STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/drobotics_rdk_s100_mcu_port_expansion_board_v1p0.step)            | V1.0.0  | 2025-06-10  | PCB board 3D model, STEP format, suitable for robot layout, enclosure design, etc. |
+| [FPC STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/drobotics_rdk_s100_mcu_port_expansion_board_fpc_v1p0.step)        | V1.0.0  | 2025-06-10  | FPC cable 3D model, STEP format, suitable for robot layout, enclosure design, etc. |
 | [Reference Design](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/drobotics_rdk_s100_mcu_port_expansion_board_reference_design_v1p0.zip) | V1.0.0  | 2025-06-10  | Reference design.                                                    |
-| Product Renderings                                                                                                                                                            | V1.0.0  | 2025-06-10  | Product rendering images for secondary editing of product materials. |
-| Product Photos                                                                                                                                                                | V1.0.0  | 2025-06-10  | Product photos for secondary editing of product materials. |
+| Product Renderings                                                                                                                                                                    | V1.0.0  | 2025-06-10  | Product rendering images, convenient for secondary editing of product materials. |
+| Product Photos                                                                                                                                                                    | V1.0.0  | 2025-06-10  | Product physical images, convenient for secondary editing of product materials. |
 
-## Datasheets and Design Materials Summary
+<br/><br/>
 
+## Specifications and Design Documentation Summary
 ### RDK S100
 
-| Name                                                                                                            | Version | Upload Date | Documentation                                                  |
-| --------------------------------------------------------------------------------------------------------------- | ------- | ----------- | -------------------------------------------------------------- |
-| [RDK S100 Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/d_robotics_rdk_s100_board_zh_v1_2.pdf)    | V1.2 | 2026-02-10  | Detailed product specifications, features, dimensions, and model information. |
+| Name                                                                                                            | Version | Upload Date | Documentation                                                 |
+| --------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
+| [RDK S100 Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/d_robotics_rdk_s100_board_zh_v1_2.pdf)    | V1.2 | 2026-02-10  | Detailed product specifications, features, dimensions, models, etc. |
+
+<br/><br/>
 
 ### RDK S100 Camera Expansion Board
 
-| Name                                                                                                                                                                      | Version | Upload Date | Documentation                                                  |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | -------------------------------------------------------------- |
-| [Camera Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/d_robotics_rdk_s100_camera_expansion_board_zh_v1_1.pdf)                | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, and model information. |
+| Name                                                                                                                                                                      | Version | Upload Date | Documentation                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
+| [Camera Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/d_robotics_rdk_s100_camera_expansion_board_zh_v1_1.pdf)                | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
+
+<br/><br/>
 
 ### RDK S100 MCU Port Expansion Board
 
 | Name                                                                                                                                                                          | Version | Upload Date | Documentation                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ----------------------------------------------------------------- |
-| [MCU Port Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/d_robotics_rdk_s100_mcu_port__expansion_board_zh_v1_1.pdf)            | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, and model information. |
+| [MCU Port Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/d_robotics_rdk_s100_mcu_port__expansion_board_zh_v1_1.pdf)            | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
 
-## Certification Materials
+<br/><br/>
 
-:::tip Certification Master Repository
+## Certifications
+
+:::tip Certification Main Repository
 📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - Contains certification documents for all products
 :::
 
-<div class="table-wrapper">
-<table class="no-wrap-table">
+<table>
   <thead>
     <tr>
       <th>🏷️ **Product Name**</th>
@@ -172,209 +194,22 @@ For RDK S600 materials, please obtain them from the FTP server according to the 
     </tr>
   </tbody>
 </table>
-</div>
 
 </DocScope>
 
-<!-- <DocScope products="RDK S600">
 
-## Hardware Materials
 
-### RDK S600
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upload Date</th>
-      <th>Path</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td rowspan="3">Brief (Module)</td>
-      <td>2025/12/20</td>
-      <td>[RDK S600 Brief_V0P1](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/drobotics_s600_module_brief_v0p1_zh_251216.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Brief_V0P2](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/drobotics_s600_module_brief_v0p2_260306.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Brief_V1P0](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/drobotics_s600_module_brief_v1p0_260612.pdf)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">Brief (Kit)</td>
-      <td>2025/12/20</td>
-      <td>[RDK S600 Brief_V0P1](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_kit/drobotics_rdk_s600_brief_v0p1_zh_251216.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Brief_V1P0](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_kit/drobotics_rdk_s600_brief_v1p0_260612.pdf)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">Datasheet (Module)</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_board_zh_v1_2.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/6/12</td>
-      <td>[RDK S600 Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_board_zh_v1_0_260612.pdf)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">Hardware Design Guide (Module)</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Hardware Design Guide](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_hardware_design_guide_v0p1_260312.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Hardware Design Guide](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_hardware_design_guide_v1p0_260612.pdf)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">Thermal Design Guide</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Thermal Design Guide](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_thermal_simulation_constraints_checklist_v0p1_260312.xlsx)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Thermal Design Guide](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_thermal_simulation_constraints_checklist_v1p0_260612.xlsx)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">699 Pin B2B Connector Application Note (Module)</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 699 Pin B2B Connector Application Note](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_699_pin_b2b_connector_application_note_v0p1_260312.xlsx)</td>
-    </tr>
-    <tr>
-      <td>2026/3/12</td>
-      <td>[RDK S600 699 Pin B2B Connector Application Note](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_699_pin_b2b_connector_application_note_v1p0_260612.xlsx)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">Reference Design (Carrier Board)</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Carrier Board Reference Design](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_carrier_board/d_robotics_rdk_s600_carrier_board_reference_design_v0p2_260312.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Carrier Board Reference Design](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_carrier_board/d_robotics_rdk_s600_carrier_board_reference_design_v1p0_260612.pdf)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">STEP Model (Kit)</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_kit/d_robotics_rdk_s600_3d_v0p2_260312.zip)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_kit/d_robotics_rdk_s600_3d_v1p0_260612.zip)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">STEP Model (Module)</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Module STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_3d_v0p2_260312.zip)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Module STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_module_3d_v1p0_260612.zip)</td>
-    </tr>
-    <tr>
-      <td rowspan="">Typical Scenario Power Consumption</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Typical Scenario Power Consumption](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_typical_scenario_power_consumption_v0p1_251222.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Typical Scenario Power Consumption](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_typical_scenario_power_consumption_v0p2_260122.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Typical Scenario Power Consumption](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_module/d_robotics_rdk_s600_typical_scenario_power_consumption_v1p0_260612.pdf)</td>
-    </tr>
-  </tbody>
-</table>
-
-### Camera Expansion Board
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upload Date</th>
-      <th>Path</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td rowspan="3">Brief</td>
-      <td>2025/12/20</td>
-      <td>[RDK S600 Camera Expansion Board Brief_V0P1](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/drobotics_rdk_s600_camera_expansion_board_brief_v0p1_251219.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Camera Expansion Board Brief_V0P2](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/drobotics_rdk_s600_camera_expansion_board_brief_v0p2_260311.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Camera Expansion Board Brief_V1P0](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/drobotics_rdk_s600_camera_expansion_board_brief_v1p0_260612.pdf)</td>
-    </tr>
-    <tr>
-      <td rowspan="3">Reference Design</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 Camera Expansion Board Reference Design_V0P2](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/d_robotics_rdk_s600_camera_expansion_board_reference_design_v0p2_260312.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/3/16</td>
-      <td>[RDK S600 Camera Expansion Board Reference Design_V0P3](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/d_robotics_rdk_s600_camera_expansion_board_reference_design_v0p3_260316.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 Camera Expansion Board Reference Design_V1P0](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/d_robotics_rdk_s600_camera_expansion_board_reference_design_v1p0_260612.pdf)</td>
-    </tr>
-  </tbody>
-</table>
-
-### MCU Port Expansion Board
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Upload Date</th>
-      <th>Path</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td rowspan="3">Brief</td>
-      <td>2025/12/20</td>
-      <td>[RDK S600 MCU Port Expansion Board Brief_V0P1](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_brief_v0p1_251219.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/3/12</td>
-      <td>[RDK S600 MCU Port Expansion Board Brief_V0P2](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_brief_v0p2_260311.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 MCU Port Expansion Board Brief_V1P0](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_brief_v1p0_260612.pdf)</td>
-    </tr>
-    <tr>
-      <td rowspan="2">Reference Design</td>
-      <td>2026/3/12</td>
-      <td>[RDK S600 MCU Port Expansion Board Reference Design_V0P2](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/d_robotics_rdk_s600_mcu_port_expansion_board_reference_design_v0p2_260312.pdf)</td>
-    </tr>
-    <tr>
-      <td>2026/06/12</td>
-      <td>[RDK S600 MCU Port Expansion Board Reference Design_V1P0](https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/d_robotics_rdk_s600_mcu_port_expansion_board_reference_design_v1p0_260612.pdf)</td>
-    </tr>
-  </tbody>
-</table>
-
-</DocScope> -->
 
 <DocScope products="RDK S600">
 
-## Tool Downloads
+<Tabs groupId="download" defaultValue="online">
+<TabItem value="online" label="Online Download">
 
-<div className="table-responsive">
+
+## System Software
+
+<div>
   <table>
     <thead>
       <tr>
@@ -386,16 +221,28 @@ For RDK S600 materials, please obtain them from the FTP server according to the 
     </thead>
     <tbody>
       <tr>
-        <td>Xburn</td>
-        <td>V1.2.1</td>
-        <td>2026-06-12</td>
-        <td>Download path: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools/xburn</td>
+        <td>[System Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>Pre-compiled images and deb packages.</td>
+      </tr>
+       <tr>
+        <td>[BSP Source](https://developer.d-robotics.cc/resource)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>BSP source code.</td>
       </tr>
       <tr>
-        <td><a href="https://archive.d-robotics.cc/downloads/hobotplayer/hbplayerv2.7.zip">hbplayer</a></td>
-        <td>V2.7</td>
-        <td>2026-01-27</td>
-        <td>Image viewing tool.</td>
+        <td>[MCU Cluster-1 Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/RDKS600-V5.1.0/RDK_MCU_SDK/firmwares/)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>MCU Cluster-1 pre-compiled image.</td>
+      </tr>
+      <tr>
+        <td>[MCU Cluster-1 SDK](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/RDKS600-V5.1.0/RDK_MCU_SDK/mcu-community.tar.gz)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>MCU Cluster-1 SDK (static link library).</td>
       </tr>
     </tbody>
   </table>
@@ -403,9 +250,175 @@ For RDK S600 materials, please obtain them from the FTP server according to the 
 
 <br/><br/>
 
-## Software Materials
+## Tool Downloads
+
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2">Name</th>
+        <th>Latest Version</th>
+        <th>Upload Date</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="2"><a href="https://archive.d-robotics.cc/downloads/software_tools/download_tools/">Xburn</a></td>
+        <td>V1.2.1</td>
+        <td>2026-06-12</td>
+        <td>Image flashing tool.</td>
+      </tr>
+      <tr>
+        <td colspan="2"><a href="https://archive.d-robotics.cc/downloads/hobotplayer/">hbplayer</a></td>
+        <td>V2.7</td>
+        <td>2026-01-27</td>
+        <td>Image viewer tool.</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Algorithm Toolchain</td>
+        <td>[OE Development Package](../07_Advanced_development/04_toolchain_development/01_algorithm_toolchain/01_overview.md)</td>
+        <td> V3.7.0</td>
+        <td>2026-06-22</td>
+        <td>OE development package.</td>
+      </tr>
+      <tr>
+        <td>[OE LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_s600_LLM_Toolchain.md)</td>
+        <td> V1.0.2</td>
+        <td>2026-06-22</td>
+        <td>OE LLM development package.</td>
+      </tr>
+      <tr>
+        <td colspan="2">[winusb_drivers](https://archive.d-robotics.cc/downloads/software_tools/winusb_drivers/)</td>
+        <td>-</td>
+        <td>2026-06-22</td>
+        <td rowspan="2">Necessary system drivers to ensure proper device connection and communication.</td>
+      </tr>
+      <tr>
+        <td colspan="2">[serial_to_usb_drivers](https://archive.d-robotics.cc/downloads/software_tools/serial_to_usb_drivers/)</td>
+        <td>-</td>
+        <td>2026-06-22</td>
+      </tr>
+      <tr>
+        <td colspan="2">[adb_and_fastboot](https://archive.d-robotics.cc/downloads/software_tools/adb_and_fastboot/)</td>
+        <td>-</td>
+        <td>2026-06-22</td>
+        <td>-</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<br/><br/>
+
+
+## Hardware Documentation
+
+### RDK S600
 
 <div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Download Link</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2">Brief</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/brief/drobotics_rdk_s600_module_brief_v1p0_zh.pdf">RDK S600 Module Brief</a></td>
+      <td rowspan="2">Detailed product specifications, features, dimensions, models, etc.</td>
+    </tr>
+    <tr>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/brief/drobotics_rdk_s600_brief_v1p0_zh.pdf">RDK S600 Brief</a></td>
+    </tr>
+    <tr>
+      <td rowspan="2">3D Model</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/3d_model/RDK_S600_Kit_3D_Model_V1P0_20260420.stp">RDK S600 Developer Kit</a></td>
+      <td rowspan="2">3D models.</td>
+    </tr>
+    <tr>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/3d_model/RDK_S600_3D_Model_Information_Readme_V1P0_20260420.pdf">3D Model Information README</a></td>
+    </tr> 
+  </tbody>
+</table>
+</div>
+
+<br/><br/>
+
+### RDK S600 Camera Expansion Board
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Download Link</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brief</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/drobotics_rdk_s600_camera_expansion_board_brief_v1p0_zh.pdf">RDK S600 Camera Expansion Board Brief</a></td>
+      <td>Detailed product specifications, features, dimensions, models, etc.</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/hardware_reference_design/">RDK S600 Camera Board Reference Design</a></td>
+      <td>Reference design materials.</td>
+    </tr>
+    <tr>
+      <td>3D Model</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_camera_expansion_board/RDK_S600_CAMERA_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP">RDK S600 Camera Expansion Board</a></td>
+      <td>3D model.</td>
+    </tr>
+  </tbody>
+</table>
+
+<br/><br/>
+
+### RDK S600 MCU Port Expansion Board
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Download Link</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brief</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_brief_v1p0_zh.pdf">RDK S600 MCU Port Expansion Board Brief</a></td>
+      <td>Detailed product specifications, features, dimensions, models, etc.</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/hardware_reference_design/">RDK S600 MCU Board Reference Design</a></td>
+      <td>Reference design materials.</td>
+    </tr>
+    <tr>
+      <td>3D Model</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600_mcu_port_expansion_board/RDK_S600_MCU_PORT_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP">RDK S600 MCU Port Expansion Board</a></td>
+      <td>3D model.</td>
+    </tr>
+   
+  </tbody>
+</table>
+</div>
+</TabItem>
+
+<TabItem value="ftp" label="FTP Download">
+
+## System Software
+
+
+<div>
   <table>
     <thead>
       <tr>
@@ -417,39 +430,86 @@ For RDK S600 materials, please obtain them from the FTP server according to the 
     <tbody>
       <tr>
         <td rowspan="3">BSP</td>
-        <td>Precompiled images and deb packages</td>
-        <td>Download path: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/board_support_package/firmwares</td>
+        <td>Pre-compiled images and deb packages</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/board_support_package/firmwares</td>
       </tr>
       <tr>
         <td>BSP source code</td>
-        <td>Download path: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/board_support_package/platform_source_code.tar.gz</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/board_support_package/platform_source_code.tar.gz</td>
       </tr>
       <tr>
         <td>BSP source code MD5</td>
-        <td>Download path: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/board_support_package/platform_source_code.tar.gz.md5sum</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/board_support_package/platform_source_code.tar.gz.md5sum</td>
       </tr>
       <tr>
         <td rowspan="2">MCU</td>
-        <td>MCU Cluster-1 precompiled image</td>
-        <td>Download path: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/RDKS600_MCU_SDK/board_support_package/firmwares/mcu1-product.zip</td>
+        <td>MCU Cluster-1 pre-compiled image</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/RDKS600_MCU_SDK/board_support_package/firmwares/mcu1-product.zip</td>
       </tr>
       <tr>
-        <td>MCU Cluster-1 SDK (source code form)</td>
-        <td>Download path: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/RDKS600_MCU_SDK/board_support_package/mcu-platform_source_code.tar.gz</td>
+        <td>MCU Cluster-1 SDK (source form)</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/RDKS600_MCU_SDK/board_support_package/mcu-platform_source_code.tar.gz</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<br/><br/>
+
+## Tool Downloads
+
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2">Name</th>
+        <th>Latest Version</th>
+        <th>Download Path</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="2">Xburn</td>
+        <td>V1.2.1</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools/xburn</td>
+      </tr>
+      <tr>
+        <td colspan="2">hbplayer</td>
+        <td>V2.7</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools/hbplayerv2.7.zip</td>
       </tr>
       <tr>
         <td rowspan="2">Algorithm Toolchain</td>
-        <td>OE development package</td>
-        <td>See [Algorithm Toolchain](../07_Advanced_development/04_toolchain_development/01_algorithm_toolchain/01_overview.md) for download instructions</td>
+        <td>OE Development Package</td>
+        <td> V3.7.0</td>
+        <td>[OE Development Package](../07_Advanced_development/04_toolchain_development/01_algorithm_toolchain/01_overview.md)</td>
       </tr>
       <tr>
-        <td>OE-LLM development package</td>
-        <td>See [OE-LLM Development Toolchain](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_s600_LLM_Toolchain.md) for download instructions</td>
+        <td>OE-LLM Development Package</td>
+        <td> V1.0.2</td>
+        <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_s600_LLM_Toolchain.md)</td>
       </tr>
       <tr>
-        <td>ISP tools</td>
-        <td>ISP debugging materials (debugging tools, manuals, sample programs)</td>
-        <td>Download path:/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools</td>
+        <td colspan="2">ISP Tool</td>
+        <td> V3.52</td>
+        <td>Tool: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools/calibraiton tool v3.52.zip<br/>Manual: /RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/user_manual/</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Driver Tools</td>
+        <td>winusb drivers</td>
+        <td>-</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools/winusb_drivers/</td>
+      </tr>
+      <tr>
+        <td>serial to usb drivers</td>
+        <td>-</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools/serial_to_usb_drivers/</td>
+      </tr>
+      <tr>
+        <td colspan="2">adb and fastboot</td>
+        <td>-</td>
+        <td>/RDKS600_V5.1.0/RDKS600_LNX_SDK/RDKS600_V5.1.0/software_tools/adb_and_fastboot/</td>
       </tr>
     </tbody>
   </table>
@@ -457,8 +517,12 @@ For RDK S600 materials, please obtain them from the FTP server according to the 
 
 <br/><br/>
 
-## Hardware Materials
 
+## Hardware Documentation
+
+### RDK S600
+
+<div className="table-responsive">
 <table>
   <thead>
     <tr>
@@ -469,97 +533,143 @@ For RDK S600 materials, please obtain them from the FTP server according to the 
   </thead>
   <tbody>
     <tr>
-      <td rowspan="4">Brief</td>
+      <td rowspan="2">Brief</td>
       <td>RDK S600 Module Brief</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_module_brief_v1p0_zh.pdf</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_module_brief_v1p0_zh.pdf</td>
     </tr>
     <tr>
       <td>RDK S600 Brief</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_brief_v1p0_zh.pdf</td>
-    </tr>
-    <tr>
-      <td>RDK S600 Camera Expansion Board Brief</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_camera_expansion_board_brief_v1p0_zh.pdf</td>
-    </tr>
-    <tr>
-      <td>RDK S600 MCU Port Expansion Board Brief</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_mcu_port_expansion_board_brief_v1p0_zh.pdf</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_brief_v1p0_zh.pdf</td>
     </tr>
     <tr>
       <td>Datasheet</td>
       <td>RDK S600 Module Datasheet</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/RDK_S600_Module_Datasheet_V1.0.1_20260610.pdf</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/RDK_S600_Module_Datasheet_V1.0.1_20260610.pdf</td>
     </tr>
     <tr>
       <td rowspan="6">Hardware Design Guide</td>
       <td>RDK_S600_Module_Assembly_Guide</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Assembly_Guide_V1P0_20250610.zip</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Assembly_Guide_V1P0_20250610.zip</td>
     </tr>
     <tr>
       <td>RDK_S600_Module_Hardware_Design_Checklist</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Hardware_Design_Checklist_V1.0.1_20260610.xlsx</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Hardware_Design_Checklist_V1.0.1_20260610.xlsx</td>
     </tr>
     <tr>
       <td>RDK S600 Module Hardware Design Guide</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Hardware_Design_Guide_V1.0.1_20260610.pdf</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Hardware_Design_Guide_V1.0.1_20260610.pdf</td>
     </tr>
     <tr>
       <td>RDK_S600_Module_Pin_Delay</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Pin_Delay_V1P0_20260422.csv</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Pin_Delay_V1P0_20260422.csv</td>
     </tr>
     <tr>
       <td>RDK S600 Module Thermal Design Guide</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Thermal_Design_Guide_V1P0_20260420.pdf</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Thermal_Design_Guide_V1P0_20260420.pdf</td>
     </tr>
     <tr>
       <td>RDK_S600_Moudle_Thermal_Simulation_Model</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Moudle_Thermal_Simulation_Model_V1P0_20260420.tzr</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Moudle_Thermal_Simulation_Model_V1P0_20260420.tzr</td>
     </tr>
     <tr>
-      <td rowspan="3">Hardware Reference Design</td>
+      <td>Hardware Reference Design</td>
       <td>RDK S600 Module Reference Design</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_Module_Carrier_Board/</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_Module_Carrier_Board/</td>
     </tr>
     <tr>
-      <td>RDK S600 Camera Board Reference Design</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_CAMERA_EXPANSION_BOARD/</td>
-    </tr>
-    <tr>
-      <td>RDK S600 MCU Board Reference Design</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_MCU_PORT_EXPANSION_BOARD/</td>
-    </tr>
-    <tr>
-      <td rowspan="5">3D Model</td>
+      <td rowspan="3">3D Model</td>
       <td>RDK S600 Module</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_Module_3D_Model_V1P0_20260420.STEP</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_Module_3D_Model_V1P0_20260420.STEP</td>
     </tr>
     <tr>
       <td>RDK S600 Developer Kit</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_Kit_3D_Model_V1P0_20260420.stp</td>
-    </tr>
-    <tr>
-      <td>RDK S600 MCU Port Expansion Board</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_MCU_PORT_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP</td>
-    </tr>
-    <tr>
-      <td>RDK S600 Camera Expansion Board</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_CAMERA_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_Kit_3D_Model_V1P0_20260420.stp</td>
     </tr>
     <tr>
       <td>3D Model Information README</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_3D_Model_Information_Readme_V1P0_20260420.pdf</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_3D_Model_Information_Readme_V1P0_20260420.pdf</td>
     </tr>
     <tr>
       <td>Pinlist</td>
       <td>RDK S600 Module 699-Pin B2B Connector Application Note</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Pinlist/RDK_S600_Module_699-Pin_B2B_Connector_Application_Note_V1P0_20260428.xlsx</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Pinlist/RDK_S600_Module_699-Pin_B2B_Connector_Application_Note_V1P0_20260428.xlsx</td>
     </tr>
     <tr>
       <td>Typical Scenario Power Consumption</td>
       <td>RDK S600 Typical Scenario Power Consumption</td>
-      <td>Download path: /RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/TypicalScenarioPowerConsumption/RDK_S600_Typical_Scenario_Power_Consumption_V1P0_20260428.pdf</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/TypicalScenarioPowerConsumption/RDK_S600_Typical_Scenario_Power_Consumption_V1P0_20260428.pdf</td>
     </tr>
   </tbody>
 </table>
+</div>
+
+<br/><br/>
+
+### RDK S600 Camera Expansion Board
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Content</th>
+      <th>Download Path</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brief</td>
+      <td>RDK S600 Camera Expansion Board Brief</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_camera_expansion_board_brief_v1p0_zh.pdf</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <td>RDK S600 Camera Board Reference Design</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_CAMERA_EXPANSION_BOARD/</td>
+    </tr>
+    <tr>
+      <td>3D Model</td>
+      <td>RDK S600 Camera Expansion Board</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_CAMERA_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br/><br/>
+
+### RDK S600 MCU Port Expansion Board
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Content</th>
+      <th>Download Path</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brief</td>
+      <td>RDK S600 MCU Port Expansion Board Brief</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_mcu_port_expansion_board_brief_v1p0_zh.pdf</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <td>RDK S600 MCU Board Reference Design</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_MCU_PORT_EXPANSION_BOARD/</td>
+    </tr>
+    <tr>
+      <td>3D Model</td>
+      <td>RDK S600 MCU Port Expansion Board</td>
+      <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_MCU_PORT_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</TabItem>
+</Tabs>
+
 
 </DocScope>
