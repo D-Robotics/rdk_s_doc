@@ -1,55 +1,88 @@
 ---
-sidebar_position: 4
-sidebar_products: RDK S600
+sidebar_position: 1
 ---
 
-# 1.2.1 系统烧录
+# Windows 平台烧录步骤
 
 
-基于系统提供的 PC 烧录工具 Xburn，可以完成以下固件更新操作
+## 硬件连接
 
-- [系统全镜像烧录](#系统全镜像烧录)
-- [指定区域烧录](#指定区域烧录)
-- [指定区域备份](#指定区域备份)
+使用 Type-C 数据线将 PC 的 USB 接口和开发板的 Type-C 接口相连接。
 
 
+:::warning 注意
 
-## **硬件**
-
-### **供电**
-
-RDK S600 开发板通过 DC 接口供电，推荐使用套件中自带的电源适配器。
-
-### **存储**
-
-RDK S600 采用 UFS 作为系统存储介质。
-
-### **硬件连接**
-
-准备一根 Type-C 数据线，数据线的一端与板子的 Type-C 接口相连接，另一端与 PC 相连接。
-
-:::warning 注意事项
-
-- 禁止带电时拔插除 USB、HDMI 和网线之外的任何设备
-- 选用正规品牌的电源适配器，否则会出现供电异常，导致系统异常断电的问题
-- 建议使用板载 POWER ON/OFF 按键实现主板上下电，并在适配器断电状态下对 DC 头进行插拔。
+请确保 Type-C 数据线为高质量数据线，以确保烧录的稳定性。
+1. 带有屏蔽层 。
+2. 长度越短越好 。
+3. 数据传输质量高。
 
 :::
 
+## 驱动下载与安装
 
-## **烧录准备**
 
-### **镜像下载**
+在使用烧录工具前，Windows 用户需要确认驱动是否已安装。
 
-1. 下载镜像包，下载地址请参考[1.6 资源汇总](../../01_Quick_start/download.md)章节
-	  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S600/basic_information/download_web.png" alt="" style={{ width: '100%' }} />
+**USB 驱动下载与安装**
 
-2. 解压后得到 `product` 目录，请确保包含 `img_packages` 和 `xmodem_tools` 子目录
-	  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png" alt="" style={{ width: '100%' }} />
+usb 驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloads/software_tools/winusb_drivers/)）
 
-### **烧录工具 Xburn**
+下载`sunrise5_winusb.zip`压缩包，进行驱动安装，步骤如下：
 
-烧录工具 Xburn 安装与使用指南请参考本页后续章节。
+1、解压`sunrise5_winusb.zip`。
+
+2、进入`sunrise5_winusb`，右键点击`install_driver.bat`，选择以管理员身份运行。
+
+**验证驱动安装**
+
+
+1. 连接串口，首次连接需要安装 CH340 串口驱动，驱动程序可从资源汇总的[工具下载](../../../download.md)获取。
+2. 驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
+
+   <!-- ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png) -->
+   <img 
+   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" 
+   style={{ width: '60%', height: 'auto', align:'center'}}
+   />
+   
+   
+3. 下载远程连接工具 [Mobaxterm](https://mobaxterm.mobatek.net/download.html)。
+
+3. 打开`MobaXterm`工具，点击`Session`，然后选择`Serial`，配置端口号，例如`COM3`，实际使用的串口号以 PC 识别到的串口号为准，设置完成后点击 `OK`。
+
+   串口配置参数如下：
+
+   | 配置项               | 参数值 |
+   | -------------------- | ------ |
+   | 波特率（Baud rate）  | 921600 |
+   | 数据位（Data bits）  | 8      |
+   | 奇偶校验（Parity）   | None   |
+   | 停止位（Stop bits）  | 1      |
+   | 流控（Flow Control） | 无     |
+   
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png)
+
+4. 开发板上电后立刻长按空格键，进入 uboot 命令行模式，输入 fastboot 0，让开发板进入 fastboot 模式：
+
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png)
+
+5. 成功安装驱动后，设备管理器会显示 Android Device 设备，如下图：
+
+   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png) -->
+   <img 
+   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png" 
+   style={{ width: '100%', height: 'auto', align:'center'}}
+   />
+
+   如果未成功安装驱动时，设备管理器会提示存在 USB download gadget 的未知设备，如下图：
+
+   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png) -->
+   <img 
+   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png" 
+   style={{ width: '100%', height: 'auto', align:'center'}}
+   />
+
 
 
 ## **系统全镜像烧录**

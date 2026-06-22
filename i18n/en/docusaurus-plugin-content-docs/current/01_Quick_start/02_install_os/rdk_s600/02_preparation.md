@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # 1.2.2 Burning Preparation
 
+## Storage
+
+The RDK S600 uses UFS as the system storage medium.
+
 ## Image Download
 
 :::warning Note

@@ -1,52 +1,31 @@
 ---
-sidebar_position: 4
-sidebar_products: RDK S600
+sidebar_position: 3
 ---
 
-# 1.2.1 System Flashing
+# Flashing Steps on macOS Platform
 
+## Hardware Connection
 
-Based on the PC flashing tool Xburn provided by the system, the following firmware update operations can be performed:
+Use a Type-C data cable to connect the USB port of your PC to the Type-C port of the development board.
 
-- [Full System Image Flashing](#full-system-image-flashing)
-- [Designated Area Flashing](#designated-area-flashing)
-- [Designated Area Backup](#designated-area-backup)
+:::warning Note
 
-## **Hardware**
-
-### **Power Supply**
-
-The RDK S600 development board is powered via the DC interface. It is recommended to use the power adapter included in the kit.
-
-### **Storage**
-
-The RDK S600 uses UFS as the system storage medium.
-
-### **Hardware Connection**
-
-Prepare a USB Type-C cable. Connect one end of the cable to the board's Type-C interface and the other end to the PC.
-
-:::warning Precautions
-
-- Do not plug or unplug any devices except USB, HDMI, and Ethernet cables while the power is on.
-- Use a power adapter from a reputable brand; otherwise, abnormal power supply may cause unexpected system power loss.
-- It is recommended to use the onboard POWER ON/OFF button to power the board on/off and to plug/unplug the DC connector when the adapter is powered off.
+Please ensure that the Type-C data cable is of high quality to guarantee the stability of the burning process.
+1. It should have a shielding layer.
+2. The shorter the length, the better.
+3. It should have high data transmission quality.
 
 :::
 
-## **Preparation for Flashing**
+## Installing Dependency Tools
 
-### **Image Download**
+Users on the macOS platform can install the tools using the following commands:
 
-1. Download the image package. For the download address, please refer to section [1.6 Resource Summary](../../01_Quick_start/download.md).
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S600/basic_information/download_web.png" alt="" style={{ width: '100%' }} />
-
-2. After decompression, you will get the `product` directory. Ensure it contains the `img_packages` and `xmodem_tools` subdirectories.
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/acore_product.png" alt="" style={{ width: '100%' }} />
-
-### **Flashing Tool Xburn**
-
-Please refer to the subsequent sections of this page for the installation and usage guide of the Xburn flashing tool.
+```
+brew update
+brew install android-platform-tools
+brew install dfu-util
+```
 
 ## **Full System Image Flashing**
 
