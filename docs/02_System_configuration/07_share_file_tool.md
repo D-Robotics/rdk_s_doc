@@ -82,7 +82,7 @@ sudo ufw allow samba
 
 NFS（Network File System）即网络文件系统，NFS 采用经典的客户端 - 服务器（C/S）架构。服务器负责管理和存储共享的文件与目录，客户端则通过网络请求访问这些资源。
 
-本章节介绍 Ubuntu 22.04 作为 NFS 客户端使用的教程
+本章节介绍 Ubuntu 22.04/24.04 作为 NFS 客户端使用的教程
 
 **使用前提：** 已搭建好 NFS 服务
 
@@ -106,30 +106,61 @@ sudo mkdir -p /userdata/windows_nfs_share
 使用以下命令将 Windows 的 NFS 共享目录挂载到 Ubuntu 的挂载点，假设 Windows 服务器的 IP 地址是 192.168.127.11，共享目录是 D:\NFSShare：
 
 ```bash
-sudo mount 192.168.127.11:/D:/NFSShare /userdata/windows_nfs_share
+sudo mount -v -t nfs -o vers=3,proto=tcp 192.168.127.11:/D/NFSShare /userdata/windows_nfs_share
+
+解析：
+-v       ：verbose，显示详细挂载过程
+-t nfs   ：指定文件系统类型为 NFS
+-o       ：指定挂载选项
+vers=3   ：使用 NFSv3 协议
+proto=tcp：使用 TCP 传输
 ```
 
 4. 验证挂载
 
 执行以下命令查看是否成功挂载：
 ```bash
-df -h
+mount | grep windows_nfs_share
 ```
 
 如果在输出中看到 192.168.127.11:/D:/NFSShare 被挂载到 /mnt/windows_nfs_share，则表示挂载成功。
 
 5. 设置开机自动挂载(可选)
 
-为了使 Ubuntu 在每次开机时自动挂载 NFS 共享目录，可以编辑 /etc/fstab 文件：
+为了使 Ubuntu 在每次开机时自动挂载 NFS 共享目录，可以执行下面命令：
 
-```
-sudo vi /etc/fstab
-```
+   - 创建挂载服务
 
-在文件末尾添加以下内容：
+      ```
+      cat > /etc/systemd/system/mount-windows-nfs.service << 'EOF'
+      [Unit]
+      Description=Mount Windows NFS Share
+      After=network-online.target
+      Wants=network-online.target
 
-```bash
-192.168.127.11:/D:/NFSShare /userdata/windows_nfs_share nfs defaults 0 0
-```
-保存并退出编辑器。
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      ExecStartPre=/bin/sleep 10
+      ExecStart=/bin/mount -t nfs -o vers=3,proto=tcp 192.168.127.11:/D/NFSShare /userdata/windows_nfs_share
+      ExecStop=/bin/umount /userdata/windows_nfs_share
 
+      [Install]
+      WantedBy=multi-user.target
+      EOF
+      ```
+
+   - 启动服务
+
+      ```
+      //重新加载 systemd 配置文件
+      systemctl daemon-reload
+
+      //设置开机自动启动
+      systemctl enable mount-windows-nfs.service
+
+      //立即启动服务
+      systemctl start mount-windows-nfs.service
+      ```
+
+   - 保存并退出编辑器。
