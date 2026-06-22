@@ -242,7 +242,7 @@ The initialization and startup flow for other submodules can refer to this flowc
 
 #### Module code structure
 
-Code path: Platform/S100
+Code path: Platform/S600
 
 ```bash
 .
@@ -316,7 +316,7 @@ Currently, sunrise_camera only supports a limited number of algorithm models. In
 
 | **Item** | **Source file** | **Description** |
 | --------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
-| Prepare algorithm model | Place in Platform/s100/model_zoom directory (*.hbm) | Add fixed-point algorithm models that can run on the development board in this directory (system's built-in model files are stored at: `/opt/hobot/model/s100/basic/`) |
+| Prepare algorithm model | Place in Platform/s600/model_zoom directory (*.hbm) | Add fixed-point algorithm models that can run on the development board in this directory (system's built-in model files are stored at: `/opt/hobot/model/s600/basic/`) |
 | Add model configuration | bpu_wrap.c | Add the new model's name, specify the algorithm model file, inference and post-processing function interfaces in bpu_models |
 | Inference thread handler | bpu_wrap.c | Prepare output tensors in the handler, call **hbDNNInfer** for inference, and push results to the output queue. Example: **inference_yolov5s** |
 | Post-processing thread function | bpu_wrap.c | Retrieve algorithm results from the output queue, call the post-processing method to process, obtaining a JSON-formatted result string. If a callback function is set, invoke the callback. Example: **post_process_yolov5s** |

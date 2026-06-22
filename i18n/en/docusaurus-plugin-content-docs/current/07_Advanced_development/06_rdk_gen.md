@@ -7,11 +7,6 @@ sidebar_position: 06
 import DocScope from '@site/src/components/DocScope';
 ```
 
-:::info BSP Source Package
-
-For BSP source package download, see: [System Software](../01_Quick_start/download.md#system-software) (registration and login required)
-
-:::
 
 :::tip Commercial Support
 The commercial edition provides more complete feature support, deeper hardware capability access, and exclusive customized content. To ensure compliant and secure delivery, we grant access to the commercial edition through the following process.
