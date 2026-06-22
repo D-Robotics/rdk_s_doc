@@ -2,7 +2,17 @@
 sidebar_position: 14
 ---
 # Wi-Fi Driver Debugging Guide
+
+<DocScope products="RDK S100">
+
 The Wi-Fi of the RDK S100 is connected to the M.2 interface expanded via PCIe. This chapter introduces some user-space commands and kernel DTS configuration items.
+
+</DocScope>
+<DocScope products="RDK S600">
+
+The Wi-Fi of the RDK S600 is connected to the M.2 interface expanded via PCIe. This chapter introduces some user-space commands and kernel DTS configuration items.
+
+</DocScope>
 
 The examples in this chapter are based on the AW-XM612 module. Users should make corresponding modifications according to the specific module they are using.
 
@@ -53,6 +63,9 @@ CONFIG_BRCMFMAC_PCIE=y
 ```
 
 ## Kernel DTS Configuration
+
+<DocScope products="RDK S100">
+
 PCIe-expanded Wi-Fi modules generally require the host side to control signals such as reset and reg_on of the module. On the S100, these configurations are defined in `source/hobot-drivers/kernel-dts/rdk-v0p5.dtsi`:
 ```dts
 &hobot_pcie_rc0 {
@@ -72,3 +85,32 @@ PCIe-expanded Wi-Fi modules generally require the host side to control signals s
 };
 ```
 The PCIe driver of the S100 requests these GPIOs and performs operations such as de-asserting reset during initialization.
+
+</DocScope>
+<DocScope products="RDK S600">
+
+PCIe-expanded Wi-Fi modules generally require the host side to control signals such as reset and reg_on of the module. On the S600, these configurations are defined in `source/hobot-drivers/kernel-dts/rdk-s600-mcb.dtsi`:
+```dts
+&hobot_pcie_rc0 {
+        status = "okay";
+        refclk-mode = <2>;      /* 1:CC; 2:SRNS; 3:SRIS; */
+
+        max-link-speed = <4>;   /* pcie gen4 */
+        num-lanes = <2>;        /* 2 lane */
+
+        switch-perst-gpios = <&gpio_exp_27 14 GPIO_ACTIVE_LOW>;         /* asm2806 switch perst */
+
+        ep-ponrst-gpios = <&gpio_exp_20 0 GPIO_ACTIVE_LOW>,             /* asm3042 hub 0 power on reset */
+                        <&gpio_exp_20 7 GPIO_ACTIVE_LOW>,               /* asm3042 hub 1 power on reset */
+                        <&gpio_exp_27 6 GPIO_ACTIVE_LOW>,               /* asm3042 hub 2 power on reset */
+                        <&gpio_exp_24 3 GPIO_ACTIVE_LOW>;               /* m2.e wifi reg on reset */
+
+        ep-perst-gpios = <&gpio_exp_27 15 GPIO_ACTIVE_LOW>,             /* asm3042 hub 0 perst */
+                        <&gpio_exp_20 5 GPIO_ACTIVE_LOW>,               /* asm3042 hub 1 perst */
+                        <&gpio_exp_20 4 GPIO_ACTIVE_LOW>,               /* asm3042 hub 2 perst */
+                        <&gpio_exp_24 2 GPIO_ACTIVE_LOW>;               /* m2.e perst(wifi perst) */
+};
+```
+The PCIe driver of the S600 requests these GPIOs and performs operations such as de-asserting reset during initialization.
+
+</DocScope>

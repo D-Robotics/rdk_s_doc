@@ -14,7 +14,7 @@ sidebar_position: 2
 :::
 
 RDK S100 套件目前提供 Ubuntu 22.04 系统镜像，可支持 Desktop 桌面图形化交互。
-1. [[点击此处]](../../download.md#系统镜像与工具)下载镜像。
+1. [[点击此处]](../../download.md#系统软件)下载镜像。
 
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png" alt="" style={{ width: '100%' }} />
 

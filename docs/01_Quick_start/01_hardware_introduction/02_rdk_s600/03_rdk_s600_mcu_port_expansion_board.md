@@ -1,20 +1,31 @@
 ---
 sidebar_position: 3
+sidebar_label: 1.1.3 MCU 接口扩展板
 ---
 
-# 1.1.2.2 MCU 接口扩展板
+
+
+# 1.1.3 MCU 接口扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="image-rdk_s600_mcu_port_expansion_board" style={{ width: '100%' }} />
 
+<details>
+<summary>当前文档对应 **MCU 接口扩展板 V1P0** 版本，点击查看历史版本</summary>
+
+- [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
+- [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
+
+</details>
+
 RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持 CAN_FD、ADC 等。
 
-:::danger 注意
+<!-- :::danger 注意
 
 1. 本产品仍处于研发阶段，所述内容可能会有变更。
 2. 对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
 3. 使用前请先阅读 [**RDK S600 早期样机情况说明**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd)，获取硬件相关情况。
 
-:::
+::: -->
 
 :::warning
 
@@ -49,12 +60,14 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 :::
 
+
+
 ## 产品规格  
-:::warning 注意
+<!-- :::warning 注意
 
 在 V0P1 硬件版本中，2x SPI 接口暂时无法使用。
 
-:::
+::: -->
 
 | **名称** | **参数**                                                                        |
 | -------- | ------------------------------------------------------------------------------- |
@@ -69,11 +82,7 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 ### 接口描述
 
-**V0P2 接口图**
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2_interface.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
-
-**V0P3 接口图**
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p3_interface.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
 
 
 
@@ -102,10 +111,10 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 ### 30-Pin（J501）
 
-接口定义: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx</a>
+接口定义: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx</a>
 
 :::info 提示
-30-Pin Connector 中如下 5 个 IQ 接外设使用时，必须保证外设对应管脚上电默认高/低状态与 Pin 定义文件中的 Pull Up/Down 状态保持一致，不允许添加/连接额外上下拉：
+30-Pin Connector 中如下 5 个 IO 接外设使用时，必须保证外设对应管脚上电默认高/低状态与 Pin 定义文件中的 Pull Up/Down 状态保持一致，不允许添加/连接额外上下拉：
 
 - PIN11: MCU_GPIO0_3V3
 - PIN15: MCU_SPI4_CSN0_3V3

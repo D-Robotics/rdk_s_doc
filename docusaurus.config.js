@@ -155,6 +155,7 @@ const config = {
         generateMarkdownRoutes: false,
       },
     ],
+    "docusaurus-plugin-image-zoom",
   ],
   markdown: {
     mermaid: true,
@@ -164,6 +165,17 @@ const config = {
     ({
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
+      zoom: {
+        selector: ".markdown img",
+        background: {
+          light: "rgba(255, 255, 255, 0.95)",
+          dark: "rgba(30, 30, 30, 0.95)",
+        },
+        config: {
+          margin: 24,
+          scrollOffset: 80,
+        },
+      },
       // ✅ 新增：支持 h2 ~ h5 add by xgs for table of contents
     tableOfContents: {
       minHeadingLevel: 2,
@@ -183,20 +195,28 @@ const config = {
           },
 
           {
-            href: "https://developer.d-robotics.cc/",
+            href: (() => {
+              if (process.env.DOCUSAURUS_CURRENT_LOCALE === "en") {
+                return "https://developer.d-robotics.cc/en";
+              }
+              return "https://developer.d-robotics.cc/";
+            })(),
             label: "Community",
             position: "left",
+            className: "navbar-community-link",
           },
 
           {
             href: "https://github.com/D-Robotics",
             label: "GitHub",
             position: "right",
+            className: "navbar-github-link",
           },
           // add by xgs for translate show
           {
             type: "localeDropdown",
             position: "right",
+            className: "navbar-locale-switch",
           },
         ],
       },
@@ -220,7 +240,7 @@ const config = {
                 href: "https://github.com/D-Robotics",
               },
               {
-                label: "BiLiBiLi",
+                label: "Bilibili",
                 href: (() => {
                   if (process.env.DOCUSAURUS_CURRENT_LOCALE === "en") {
                     return "https://www.youtube.com/@D-Robotics";

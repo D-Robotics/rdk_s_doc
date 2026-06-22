@@ -1,20 +1,32 @@
 ---
 sidebar_position: 3
+sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 ---
 
-# 1.1.2.2 MCU Interface Expansion Board
+
+
+# 1.1.3 MCU Interface Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="image-rdk_s600_mcu_port_expansion_board" style={{ width: '100%' }} />
 
+
+<details>
+<summary>This document corresponds to **MCU Port Expansion Board V1P0**，Click to view previous versions</summary>
+
+- [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
+- [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
+
+</details>
+
 The RDK S600 MCU Port Expansion Board (including the matching FPC) is a core expansion module for the D-Robotics RDK S600 series developer kit. It is mainly used to expand MCU interface functions, supporting CAN_FD, ADC, etc.
 
-:::danger Note
+<!-- :::danger Note
 
 1. This product is still in the development stage, and the content described is subject to change.
 2. For RDK S600 Early Access users, please read first: [**RDK S600 Early Access Note**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
 3. Please read the [**RDK S600 Early Prototype Status Description**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd) before use to obtain hardware-related information.
 
-:::
+::: -->
 
 :::warning
 
@@ -49,12 +61,14 @@ The side with the "CB" silkscreen on the front of the FPC corresponds to the J15
 
 :::
 
+
+
 ## Product Specifications  
-:::warning Note
+<!-- :::warning Note
 
 In hardware version V0P1, the 2x SPI interfaces are temporarily unavailable.
 
-:::
+::: -->
 
 | **Item**      | **Parameters**                                                                                   |
 | ------------- | ------------------------------------------------------------------------------------------------ |
@@ -69,11 +83,11 @@ In hardware version V0P1, the 2x SPI interfaces are temporarily unavailable.
 
 ### Interface Description
 
-**V0P2 Interface Diagram**
+<!-- **V0P2 Interface Diagram**
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2_interface.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
 
-**V0P3 Interface Diagram**
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p3_interface.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
+**V0P3 Interface Diagram** -->
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
 
 | Reference | Function                    |
 | --------- | --------------------------- |
@@ -100,10 +114,10 @@ The expansion board provides 5 CAN FD interfaces (CAN-1~CAN-4, CAN-10). Each int
 
 ### 30-Pin (J501)
 
-Pin definition: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx</a>
+Pin definition: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx</a>
 
 :::info Tip
-When using the following 5 IQs from the 30-Pin Connector with peripherals, ensure that the default power-on high/low state of the corresponding peripheral pins matches the Pull Up/Down state specified in the Pin Definition file. Do not add or connect additional pull-up/pull-down resistors:
+When using the following 5 IOs from the 30-Pin Connector with peripherals, ensure that the default power-on high/low state of the corresponding peripheral pins matches the Pull Up/Down state specified in the Pin Definition file. Do not add or connect additional pull-up/pull-down resistors:
 
 - PIN11: MCU_GPIO0_3V3
 - PIN15: MCU_SPI4_CSN0_3V3
@@ -124,3 +138,4 @@ Below the 5 switches (SW401) on the expansion board, there is one green LED indi
 
 - Green light constantly on: The RDK S600 and MCU expansion board are connected normally, and 5V power is being supplied correctly.
 - Green light off: The connection between the RDK S600 and MCU expansion board is abnormal, with no 5V power supply.
+

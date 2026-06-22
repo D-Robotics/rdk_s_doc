@@ -1,20 +1,33 @@
 ---
 sidebar_position: 2
+sidebar_label: 1.1.2.1 Camera Expansion Board
 ---
 
-# 1.1.2.1 Camera Expansion Board
+
+
+# 1.1.2 Camera Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="image-rdk_s600_camera_expansion_board" style={{ width: '100%' }} />
 
+
+<details>
+<summary>This document corresponds to **Camera Expansion Board V1P0**，Click to view previous versions</summary>
+
+- [Camera Expansion Board V0P3](./versions/camera/v0p3.md)
+- [Camera Expansion Board V0P2](./versions/camera/v0p2.md)
+
+</details>
+    
+    
 The RDK S600 Camera Expansion Board (hereinafter referred to as the "Camera Expansion Board") is a core expansion module of the D-Robotics RDK S600 series developer kit. The Camera Expansion Board is developed based on the RDK S600 Camera Expansion Connector and provides 8 GMSL camera interfaces.
 
-:::danger Note
+<!-- :::danger Note
 
 1. This product is still in the R&D phase, and the content described is subject to change.
 2. For RDK S600 Early Access users, please read first: [**RDK S600 Early Access Note**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
 3. Please read [**RDK S600 Early Prototype Status Description**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd) before use to obtain hardware-related information.
 
-:::
+::: -->
 
 :::warning
 
@@ -43,6 +56,8 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 
 :::
 
+
+
 ## Product Specifications
 
 | **Name**       | **Parameters**                                                                                                   |
@@ -57,12 +72,12 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_architecture_diagram.png" alt="image-rdk_s600_camera_expansion_board_architecture_diagram.png" style={{ width: '100%' }} />
 
 ### Interface Description
-
+<!-- 
 **V0P2 Interface Diagram**
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
 
-**V0P3 Interface Diagram**
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface-V0P3.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
+**V0P3 Interface Diagram** -->
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
 
 | Reference | Function             |
 | --------- | -------------------- |

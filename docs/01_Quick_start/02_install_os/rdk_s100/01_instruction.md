@@ -25,7 +25,7 @@ sidebar_position: 1
 
 ## 烧录工具
 
-RDK S100 开发套件可借助 PC 端工具 Xburn 完成 Ubuntu 系统的烧录工作。
+RDK S600 开发套件可借助 PC 端工具 Xburn 完成 Ubuntu 系统的烧录工作。
 
 - 支持平台：Windows、macOS、Linux
 - 可以完成以下固件更新操作：

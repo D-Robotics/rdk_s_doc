@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from '@docusaurus/router';
 import { useDocScopeFilter } from '@site/src/context/DocScopeFilterContext';
 import { scopeProductsMatchCurrent } from '@site/src/context/doc-scope-product-utils';
@@ -46,33 +46,12 @@ function syncTocByDocScope(root) {
   );
   tocLinks.forEach((link) => {
     const target = resolveHeadingByHash(root, link.getAttribute('href'));
-    const visible = Boolean(target) && !target.closest('.doc-scope--hidden');
+    const hiddenTabPanel = target?.closest('[role="tabpanel"][hidden]');
+    const visible = Boolean(target) && !target.closest('.doc-scope--hidden') && !hiddenTabPanel;
     const tocItem = link.closest('li');
     if (tocItem) {
       tocItem.classList.toggle('doc-scope-toc-hidden', !visible);
     }
-  });
-}
-
-function wrapMarkdownTables(root) {
-  root.querySelectorAll('table').forEach((table) => {
-    const parent = table.parentElement;
-    if (!parent) {
-      return;
-    }
-    if (
-      parent.classList.contains('markdown-table-scroll') ||
-      parent.classList.contains('table-responsive')
-    ) {
-      return;
-    }
-    const wrap = document.createElement('div');
-    wrap.className = 'markdown-table-scroll';
-    wrap.setAttribute('role', 'region');
-    wrap.setAttribute('aria-label', 'Scrollable table');
-    wrap.tabIndex = 0;
-    parent.insertBefore(wrap, table);
-    wrap.appendChild(table);
   });
 }
 
@@ -83,7 +62,7 @@ export default function DocScopeHydration() {
   const { version, product } = useDocScopeFilter();
   const location = useLocation();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const root =
       typeof document !== 'undefined'
         ? document.querySelector('.theme-doc-markdown') ||
@@ -93,7 +72,6 @@ export default function DocScopeHydration() {
     if (!root) {
       return;
     }
-    wrapMarkdownTables(root);
     root.querySelectorAll('.doc-scope[data-doc-scope]').forEach((el) => {
       const raw = el.getAttribute('data-doc-scope');
       if (!raw) {
@@ -107,8 +85,31 @@ export default function DocScopeHydration() {
         el.classList.remove('doc-scope--hidden');
       }
     });
-    wrapMarkdownTables(root);
     syncTocByDocScope(root);
+
+    const observer = new MutationObserver((mutationList) => {
+      const shouldResync = mutationList.some((mutation) => {
+        if (mutation.type !== 'attributes') {
+          return false;
+        }
+        const attr = mutation.attributeName;
+        if (attr !== 'hidden' && attr !== 'class') {
+          return false;
+        }
+        return mutation.target instanceof HTMLElement;
+      });
+      if (shouldResync) {
+        syncTocByDocScope(root);
+      }
+    });
+
+    observer.observe(root, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['hidden', 'class'],
+    });
+
+    return () => observer.disconnect();
   }, [version, product, location.pathname]);
 
   return null;

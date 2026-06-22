@@ -24,26 +24,29 @@ FreeRtos_mcu1
 ├── settings_freertos.py                # Scons compilation command parameter related file
 └── Linker                              # Directory containing compilation link scripts
      └── gcc
-          └── S100.ld
+          └── S100
+              └── link_freertos_mcu1.ld
 ```
 </DocScope>
 <DocScope products="RDK S600">
 The MCU1 compilation system is located at mcu/Build/FreeRtos_mcu1. The specific directory structure is shown in the following figure:
 ```c
 FreeRtos_mcu1
-├── build_config                        # YAML files required for compilation, add/remove compilation folders
+├── build_freertos.py                   # Compilation entry script
+├── SConstruct                          # Scons build definition file (S600 unified entry)
+├── build_config                        # YAML files for adding/removing compilation folders
      └── S600
          └── lite-matrix-B-mcu1.yaml
-├── settings_files                      # Parameters for gcc compilation and linking, etc.
+├── settings_files                      # gcc compilation and linking parameters
      └── gcc
          └── settings_lite_freertos.py
 ├── site_scons                          # Scons compilation and linking command files
      └── site_tools
          └── gcc_arm.py
-├── Linker                              # Directory containing compilation link scripts
+└── Linker                              # Linker script directory
      └── gcc
-         └── S600.ld
-└── build_freertos.py                   # Compilation entry script
+         └── S600
+             └── link_freertos_mcu1.ld
 ```
 </DocScope>
 
@@ -62,282 +65,35 @@ build_freertos.py is the overall entry point for compilation. However, when actu
 <DocScope products="RDK S600">
 build_freertos.py is the overall entry point for compilation. However, when actually dispatching to scons, the following can influence the scons compilation environment/process:
 1. SConstruct file: The SConstruct file is the definition file for scons compilation. Together with the Sconscript file within each module, it forms the equivalent of the Cmakefile in CMake or the makefile in the Make system.
-2. settings_freertos.py: The entry point for this file is actually the initialization of the "Variables" class within SConstruct. Its core function is to introduce a series of statically defined compilation environment variables. The variable names in the environment variables correspond to those in settings_freertos.py, and their values correspond to the values of those variable names. The instantiated object of the "Variables" class is then used by the Environment class for scons compilation.
-3. gcc_arm.py: This file actually defines the compilation commands. The effective entry point is the "COMPILER_TOOL" field defined in settings_freertos.py. The COMPILER_TOOL field is further added by the Variables of the SConstruct file and finally retrieved by the env, including configurations such as "CC".
-4. lite-matrix-B-mcu1.yaml: The folders to be compiled. Add or remove compilation folders in this file.
+2. settings_lite_freertos.py: The entry point for this file is actually the initialization of the "Variables" class within SConstruct. Its core function is to introduce a series of statically defined compilation environment variables. The variable names in the environment variables correspond to those in settings_lite_freertos.py, and their values correspond to the values of those variable names. The instantiated object of the "Variables" class is then used by the Environment class for scons compilation.
+3. gcc_arm.py: This file actually defines the compilation commands. The effective entry point is the "COMPILER_TOOL" field defined in settings_lite_freertos.py. The COMPILER_TOOL field is further added by the Variables of the SConstruct file and finally retrieved by the env, including configurations such as "CC".
+4. lite-matrix-B-mcu1.yaml: The folders to be compiled. Add or remove compilation folders in this file. The `LinkFIle` field points to `Linker/gcc/S600/link_freertos_mcu1.ld`.
 </DocScope>
 
 ## MCU1 Image Layout
 <DocScope products="RDK S100">
 | Region Name | Start Address | Size | Purpose |
 |-------------|---------------|------|---------|
-| FLASH_STARTUP | 0x0CAB0000 | 1K | Startup code location |
-| FLASH | 0x0CAB0400 | 2731K | Area used for code, data, stack, etc. |
-| FREERTOS_HEAP | 0x0CD5B000 | 512K | Heap space |
-| LOG_SHARE_Reserved | 0x0CDDB000 | 8K | Space for MCU1 logs, logs will be overwritten cyclically |
-| SCMI_IPC_Reserved | 0x0CDDD000 | 12K | Space required for SCMI IPC communication, used for buffers and critical data |
-
-In the above SRAM layout, it is strongly recommended that customers do not modify the SCMI_IPC_Reserved area and the areas after it. Most of these parts are critical locations that will definitely be used by other domains. Modifying them may lead to exceptions. If modification is necessary, please consult D-Robotics support personnel first.
-
-Below is the linker file from the D-Robotics version, explaining the roles of some variables provided in the linker script:
-```c
-MEMORY
-{
-    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 1K
-    FLASH(rw)               : org = 0x0CAB0400, len = 2731K
-    FREERTOS_HEAP(rw)       : org = 0x0CD5B000, len = 512K
-    LOG_SHARE_Reserved(rw)  : org = 0x0CDDB000, len = 8K
-    SCMI_IPC_Reserved(rw)   : org = 0x0CDDD000, len = 12K
-}
-
-/* Define output sections */
-SECTIONS {
-     .EL2_core_exceptions_table :
-     {
-          . = ALIGN(32);
-          _start = .;
-          *(.EL2_core_exceptions_table)
-          . = ALIGN(32);
-     } > FLASH_STARTUP
-
-     .EL2_Reset_Handler :
-     {
-          . = ALIGN(32);
-          *(.EL2_Reset_Handler)
-          . = ALIGN(32);
-     } > FLASH_STARTUP
-
-     .EL1_core_exceptions_table :
-     {
-          . = ALIGN(32);
-          *(.EL1_core_exceptions_table)
-          . = ALIGN(32);
-     } > FLASH_STARTUP
-
-     .text :
-     {
-          . = ALIGN(4);
-          *(.text)                 /* .text sections (code) */
-          . = ALIGN(4);
-     } > FLASH
-
-     .shell :
-     {
-          _shell_command_start = .;
-          KEEP (*(shellCommand))
-          _shell_command_end = .;
-     } > FLASH
-
-     .mcal_text :
-     {
-          *(.mcal_text)
-     } > FLASH
-
-     .mcal_const_cfg :
-     {
-          *(.mcal_const_cfg)
-     } > FLASH
-
-     .mcal_const :
-     {
-          *(.mcal_const)
-     } > FLASH
-
-     .common_text :
-     {
-          *(.common_text)
-          PROVIDE(__TEXT_END = .);
-     } > FLASH
-     /******************text end******************/
-
-     .const :
-     {
-          . = ALIGN(32);
-          *(.const)
-          *(.rodata)
-     } > FLASH
-
-
-     .heap :
-     {
-          . = ALIGN(64);
-          __HEAP_START = .;
-          __end__ = .;
-          __heap_start__ = .;
-          PROVIDE(end = .);
-          PROVIDE(_end = .);
-          PROVIDE(__end = .);
-          __HeapBase = .;
-          . += HEAP_SIZE;
-          __HeapLimit = .;
-          __heap_limit = .;
-          __heap_end__ = .;
-     } > FLASH
-
-     .u_boot_list :
-     {
-          . = ALIGN(4);
-          *(SORT(.u_boot_list*))
-          . = ALIGN(4);
-     } > FLASH
-
-     .global_data :
-     {
-          . = ALIGN(64);
-          __DATA_RAM = .;
-          __data_start__ = .;      /* Create a global symbol at data start. */
-          *(.data)                 /* .data sections */
-          . = ALIGN(64);
-          __data_end__ = .;        /* Define a global symbol at data end. */
-          PROVIDE(__DATA_END = .);
-          PROVIDE(__DATA_ROM = .);
-     } > FLASH
-
-     .stack (NOLOAD) :
-     {
-          . = ALIGN(64);
-          __STACK_START = .;
-          __StackLimit = .;
-          __stack_start__ = .;
-          . += STACK_SIZE;
-          __stack_end__ = .;
-          __StackTop = .;
-     } > FLASH
-
-     .stack_exc (NOLOAD) :
-     {
-          . = ALIGN(64);
-          __StackLimit_exc = .;
-          __stack_start_exc__ = .;
-          . += STACK_SIZE_EXC;
-          __stack_end_exc__ = .;
-          __StackTop_exc = .;
-          __STACK_END = .;
-     } > FLASH
-
-     .init_table :
-     {
-          . = ALIGN(64);
-          __COPY_TABLE = .;
-          KEEP(*(.init_table))
-     } > FLASH
-
-     .zero_table :
-     {
-          . = ALIGN(64);
-          __ZERO_TABLE = .;
-          KEEP(*(.zero_table))
-     } > FLASH
-
-     .interrupts :
-     {
-          __VECTOR_TABLE = .;
-          __interrupts_start__ = .;
-          . = ALIGN(4);
-          KEEP(*(.isr_vector))     /* Startup code */
-          __interrupts_end__ = .;
-          . = ALIGN(4);
-     } > FLASH
-
-     __VECTOR_RAM = __VECTOR_TABLE;
-     __RAM_VECTOR_TABLE_SIZE = 0x0;
-     __VECTOR_TABLE_COPY_END = __VECTOR_TABLE + __RAM_VECTOR_TABLE_SIZE;
-
-     .interrupt_drv_shared_memory :
-     {
-          *(.interrupt_drv_shared_memory)
-     } > FLASH
-
-     .handlers :
-     {
-          . = ALIGN(32);
-          *(.handlers)
-     } > FLASH
-
-     .mcal_data :
-     {
-          *(.mcal_data)
-     } > FLASH
-
-     .mcal_shared_data :
-     {
-          *(.mcal_shared_data)
-     } > FLASH
-
-     .bss (NOLOAD) :
-     {
-          . = ALIGN(64);
-          __BSS_START = .;
-          __bss_start__ = .;
-          *(.bss)
-     } > FLASH
-
-     .mcal_bss (NOLOAD) :
-     {
-          . = ALIGN(64);
-          *(.mcal_bss)
-     } > FLASH
-
-     .mcal_shared_bss (NOLOAD) :
-     {
-          . = ALIGN(64);
-          *(.mcal_shared_bss)
-          __DATA_RAM_END = .;
-          __m_ram_init_end = .;
-          __bss_end__ = .;
-          __BSS_END = .;
-     } > FLASH
-
-     .ipc_mdma :
-     {
-          *(.ipc_mdma)
-     } > FLASH
-
-     .ucheap_section (NOLOAD) :
-     {
-          . = ALIGN(64);
-          KEEP(*(.ucheap_section))
-          . = ALIGN(64);
-     } > FREERTOS_HEAP
-
-     .log (NOLOAD) :
-     {
-          *(.log)
-     } > LOG_SHARE_Reserved
-
-     /*-------- LABELS USED IN CODE -------------------------------*/
-     SRAM_START_ADDR         = ORIGIN(FLASH_STARTUP);
-     MCU_LOG_START_ADDR      = ORIGIN(LOG_SHARE_Reserved);
-     __SCMI_IPC_START_ADDR   = ORIGIN(SCMI_IPC_Reserved);
-     NON_SECURE_START_ADDR   = ORIGIN(LOG_SHARE_Reserved);
-
-     PROVIDE(SRAM_SIZE = 0x34FFFF);
-}
-```
-</DocScope>
-<DocScope products="RDK S600">
-| Region Name | Start Address | Size | Purpose |
-|-------------|---------------|------|---------|
-| FLASH_STARTUP | 0x0CAB0000 | 1K | Startup code location |
-| FLASH | 0x0CAB0400 | 2667K | Area used for code, data, stack, etc. (excluding CAN) |
+| FLASH_STARTUP | 0x0CAB0000 | 2K | Startup code and exception vector table |
+| FLASH | 0x0CAB0800 | 2154K | Area used for code, data, stack, etc. (excluding CAN) |
+| FREERTOS_HEAP | 0x0CCCB000 | 512K | FreeRTOS heap space |
 | CAN_Reserved | 0x0CD4B000 | 64K | Loading area for CAN module code and data |
-| FREERTOS_HEAP | 0x0CD5B000 | 512K | Heap space |
-| LOG_SHARE_Reserved | 0x0CDDB000 | 8K | Space for MCU1 logs, logs will be overwritten cyclically |
-| SCMI_IPC_Reserved | 0x0CDDD000 | 12K | Space required for SCMI IPC communication, used for buffers and critical data |
+| LOG_SHARE_Reserved | 0x0CD5B000 | 8K | Space for MCU1 logs, logs will be overwritten cyclically |
+| SCMI_IPC_Reserved | 0x0CD5D000 | 12K | Space required for SCMI IPC communication, used for buffers and critical data |
 | ATCM_Reserved | 0x0A000000 | 64K | Runtime area for CAN module code and data |
 
-In the above SRAM layout, it is strongly recommended that customers do not modify the SCMI_IPC_Reserved area and the areas after it. Most of these parts are critical locations that will definitely be used by other domains. Modifying them may lead to exceptions. If modification is necessary, please consult D-Robotics support personnel first.
+In the above memory layout, it is strongly recommended that customers do not modify **LOG_SHARE_Reserved**, **SCMI_IPC_Reserved**, **FREERTOS_HEAP**, and other areas, as well as **MCU_STATE_START_ADDR** (`0x0C800800`) and other critical MCU0/MCU1 shared addresses defined in the linker script. ATCM_Reserved is used for CAN runtime data; modify with caution. If you need to adjust FLASH, CAN_Reserved, or other areas, please consult D-Robotics support personnel first.
 
-Below is the linker file from the D-Robotics version, explaining the roles of some variables provided in the linker script:
+Below is the linker file from the D-Robotics version (`Linker/gcc/S100/link_freertos_mcu1.ld`), explaining the roles of some variables provided in the linker script:
 ```c
 MEMORY
 {
-    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 1K
-    FLASH(rw)               : org = 0x0CAB0400, len = 2667K
+    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 2K
+    FLASH(rw)               : org = 0x0CAB0800, len = 2154K
+    FREERTOS_HEAP(rw)       : org = 0x0CCCB000, len = 512K
     CAN_Reserved(rw)        : org = 0x0CD4B000, len = 64K
-    FREERTOS_HEAP(rw)       : org = 0x0CD5B000, len = 512K
-    LOG_SHARE_Reserved(rw)  : org = 0x0CDDB000, len = 8K
-    SCMI_IPC_Reserved(rw)   : org = 0x0CDDD000, len = 12K
+    LOG_SHARE_Reserved(rw)  : org = 0x0CD5B000, len = 8K
+    SCMI_IPC_Reserved(rw)   : org = 0x0CD5D000, len = 12K
     ATCM_Reserved(rw)       : org = 0x0A000000, len = 64K
 }
 
@@ -376,7 +132,7 @@ SECTIONS
     .text :
     {
         . = ALIGN(4);
-        *(.text)                 /* .text sections (code) */
+        *(.text .text.*)          /* .text sections (code) */
         . = ALIGN(4);
     } > FLASH
 
@@ -413,7 +169,7 @@ SECTIONS
     {
         . = ALIGN(32);
         *(.const)
-        *(.rodata)
+        *(.rodata .rodata.*)
     } > FLASH
 
 
@@ -445,7 +201,7 @@ SECTIONS
         . = ALIGN(64);
         __DATA_RAM = .;
         __data_start__ = .;      /* Create a global symbol at data start. */
-        *(.data)                 /* .data sections */
+        *(.data .data.*)         /* .data sections */
         . = ALIGN(64);
         __data_end__ = .;        /* Define a global symbol at data end. */
         PROVIDE(__DATA_END = .);
@@ -551,7 +307,7 @@ SECTIONS
         . = ALIGN(64);
         __BSS_START = .;
         __bss_start__ = .;
-        *(.bss)
+        *(.bss .bss.*)
     } > FLASH
 
     .mcal_bss (NOLOAD) :
@@ -595,13 +351,321 @@ SECTIONS
 
     /*-------- LABELS USED IN CODE -------------------------------*/
     SRAM_START_ADDR         = ORIGIN(FLASH_STARTUP);
+    FLASH_STARTUP_LEN       = LENGTH(FLASH_STARTUP);
+    FLASH_SEC_ADDR          = ORIGIN(FLASH);
     MCU_LOG_START_ADDR      = ORIGIN(LOG_SHARE_Reserved);
+    MCU_LOG_SIZE            = LENGTH(LOG_SHARE_Reserved);
     __SCMI_IPC_START_ADDR   = ORIGIN(SCMI_IPC_Reserved);
+    __SCMI_IPC_SIZE         = LENGTH(SCMI_IPC_Reserved);
     NON_SECURE_START_ADDR   = ORIGIN(LOG_SHARE_Reserved);
     CAN_START_ADDR          = ORIGIN(CAN_Reserved);
     ATCM_START_ADDR         = ORIGIN(ATCM_Reserved);
+    ATCM_SIZE               = LENGTH(ATCM_Reserved);
+    OS_HEAP_START_ADDR      = ORIGIN(FREERTOS_HEAP);
+    OS_HEAP_SIZE            = LENGTH(FREERTOS_HEAP);
 
     PROVIDE(SRAM_SIZE = 0x34FFFF);
+    PROVIDE(MCU0_LOG_START_ADDR = 0x0CAAB000); /* Base addr from MCU0 link region "LOG_SHARE_Reserved" */
+    PROVIDE(MCU_STATE_START_ADDR = 0x0C800800);/* Base addr from MCU0 link region "MCU_STATE_Reserved" */
+}
+```
+</DocScope>
+<DocScope products="RDK S600">
+| Region Name | Start Address | Size | Purpose |
+|-------------|---------------|------|---------|
+| FLASH_STARTUP | 0x0CAB0000 | 2K | Startup code and exception vector table |
+| FLASH | 0x0CAB0800 | 2666K | Area used for code, data, stack, etc. (excluding CAN) |
+| CAN_Reserved | 0x0CD4B000 | 64K | Loading area for CAN module code and data |
+| LOG_SHARE_Reserved | 0x0CD5B000 | 8K | Space for MCU1 logs, logs will be overwritten cyclically |
+| SCMI_IPC_Reserved | 0x0CD5D000 | 12K | Space required for SCMI IPC communication, used for buffers and critical data |
+| FREERTOS_HEAP | 0x0CE00000 | 512K | FreeRTOS heap space |
+| ATCM_Reserved | 0x0A000000 | 64K | Runtime area for CAN module code and data |
+
+In the above memory layout, it is strongly recommended that customers do not modify **LOG_SHARE_Reserved**, **SCMI_IPC_Reserved**, **FREERTOS_HEAP**, and other regions, as well as **MCU_STATE_START_ADDR** (`0x0C800800`) and other MCU0/MCU1 shared critical addresses defined in the linker script. ATCM_Reserved is used for CAN runtime data; modify with caution. To adjust FLASH, CAN_Reserved, or other regions, please consult D-Robotics support first.
+
+Below is the linker file from the D-Robotics version (`Linker/gcc/S600/link_freertos_mcu1.ld`), explaining the roles of some variables provided in the linker script:
+```c
+MEMORY
+{
+    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 2K
+    FLASH(rw)               : org = 0x0CAB0800, len = 2666K
+    CAN_Reserved(rw)        : org = 0x0CD4B000, len = 64K
+    LOG_SHARE_Reserved(rw)  : org = 0x0CD5B000, len = 8K
+    SCMI_IPC_Reserved(rw)   : org = 0x0CD5D000, len = 12K
+    FREERTOS_HEAP(rw)       : org = 0x0CE00000, len = 512K
+    ATCM_Reserved(rw)       : org = 0x0A000000, len = 64K
+}
+
+/* Define output sections */
+SECTIONS
+{
+    .EL2_core_exceptions_table :
+    {
+        . = ALIGN(32);
+        _start = .;
+        *(.EL2_core_exceptions_table)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL2_Reset_Handler :
+    {
+        . = ALIGN(32);
+        *(.EL2_Reset_Handler)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL1_core_exceptions_table :
+    {
+		. = ALIGN(32);
+        *(.EL1_core_exceptions_table)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL1_core_exceptions_table_MCU2 :
+    {
+        . = ALIGN(32);
+        *(.EL1_core_exceptions_table_MCU2)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .text :
+    {
+        . = ALIGN(4);
+        *(.text .text.*)          /* .text sections (code) */
+        . = ALIGN(4);
+    } > FLASH
+
+    .shell :
+    {
+        _shell_command_start = .;
+        KEEP (*(shellCommand))
+        _shell_command_end = .;
+    } > FLASH
+
+    .mcal_text :
+    {
+        *(.mcal_text)
+    } > FLASH
+
+    .mcal_const_cfg :
+    {
+        *(.mcal_const_cfg)
+    } > FLASH
+
+    .mcal_const :
+    {
+        *(.mcal_const)
+    } > FLASH
+
+    .common_text :
+    {
+        *(.common_text)
+        PROVIDE(__TEXT_END = .);
+    } > FLASH
+    /******************text end******************/
+
+    .const :
+    {
+        . = ALIGN(32);
+        *(.const)
+        *(.rodata .rodata.*)
+    } > FLASH
+
+
+    .heap :
+    {
+        . = ALIGN(64);
+        __HEAP_START = .;
+        __end__ = .;
+        __heap_start__ = .;
+        PROVIDE(end = .);
+        PROVIDE(_end = .);
+        PROVIDE(__end = .);
+        __HeapBase = .;
+        . += HEAP_SIZE;
+        __HeapLimit = .;
+        __heap_limit = .;
+        __heap_end__ = .;
+    } > FLASH
+
+    .u_boot_list :
+    {
+        . = ALIGN(4);
+        *(SORT(.u_boot_list*))
+        . = ALIGN(4);
+     } > FLASH
+
+    .global_data :
+    {
+        . = ALIGN(64);
+        __DATA_RAM = .;
+        __data_start__ = .;      /* Create a global symbol at data start. */
+        *(.data .data.*)         /* .data sections */
+        . = ALIGN(64);
+        __data_end__ = .;        /* Define a global symbol at data end. */
+        PROVIDE(__DATA_END = .);
+        PROVIDE(__DATA_ROM = .);
+    } > FLASH
+
+    .stack (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __STACK_START = .;
+        __StackLimit = .;
+        __stack_start__ = .;
+        . += STACK_SIZE;
+        __stack_end__ = .;
+        __StackTop = .;
+    } > FLASH
+
+    .stack_mcu2 (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __STACK_START_MCU2 = .;
+        __StackLimit_MCU2 = .;
+        __stack_start_mcu2__ = .;
+        . += STACK_SIZE_MCU2;
+        __stack_end_mcu2__ = .;
+        __StackTop_MCU2 = .;
+    } > FLASH
+
+    .stack_exc (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __StackLimit_exc = .;
+        __stack_start_exc__ = .;
+        . += STACK_SIZE_EXC;
+        __stack_end_exc__ = .;
+        __StackTop_exc = .;
+        __STACK_END = .;
+    } > FLASH
+
+    .stack_exc_mcu2 (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __StackLimit_exc_MCU2 = .;
+        __stack_start_exc_mcu2__ = .;
+        . += STACK_SIZE_EXC_MCU2;
+        __stack_end_exc_mcu2__ = .;
+        __StackTop_exc_MCU2 = .;
+        __STACK_END_MCU2 = .;
+    } > FLASH
+
+    .init_table :
+    {
+      . = ALIGN(64);
+      __COPY_TABLE = .;
+      KEEP(*(.init_table))
+    } > FLASH
+
+    .zero_table :
+    {
+      . = ALIGN(64);
+      __ZERO_TABLE = .;
+      KEEP(*(.zero_table))
+    } > FLASH
+
+    .interrupts :
+    {
+        __VECTOR_TABLE = .;
+        __interrupts_start__ = .;
+        . = ALIGN(4);
+        KEEP(*(.isr_vector))     /* Startup code */
+        __interrupts_end__ = .;
+        . = ALIGN(4);
+    } > FLASH
+
+  __VECTOR_RAM = __VECTOR_TABLE;
+  __RAM_VECTOR_TABLE_SIZE = 0x0;
+  __VECTOR_TABLE_COPY_END = __VECTOR_TABLE + __RAM_VECTOR_TABLE_SIZE;
+
+
+    .interrupt_drv_shared_memory :
+    {
+      *(.interrupt_drv_shared_memory)
+    } > FLASH
+
+    .handlers :
+    {
+        . = ALIGN(32);
+      *(.handlers)
+    } > FLASH
+
+    .mcal_data :
+    {
+        *(.mcal_data)
+    } > FLASH
+
+    .mcal_shared_data :
+    {
+        *(.mcal_shared_data)
+    } > FLASH
+
+    .bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __BSS_START = .;
+        __bss_start__ = .;
+        *(.bss .bss.*)
+    } > FLASH
+
+    .mcal_bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        *(.mcal_bss)
+    } > FLASH
+
+    .mcal_shared_bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        *(.mcal_shared_bss)
+        __DATA_RAM_END = .;
+        __m_ram_init_end = .;
+        __bss_end__ = .;
+        __BSS_END = .;
+    } > FLASH
+
+    .ipc_mdma :
+    {
+        *(.ipc_mdma)
+    } > FLASH
+
+    .ucheap_section (NOLOAD) :
+    {
+        . = ALIGN(64);
+        KEEP(*(.ucheap_section))
+        . = ALIGN(64);
+    } > FREERTOS_HEAP
+
+    .log (NOLOAD) :
+    {
+        *(.log)
+    } > LOG_SHARE_Reserved
+
+    .tcm_code :
+    {
+        KEEP(*(.tcm_code))
+        KEEP(*(.tcm_data))
+    } > ATCM_Reserved
+
+    /*-------- LABELS USED IN CODE -------------------------------*/
+    SRAM_START_ADDR         = ORIGIN(FLASH_STARTUP);
+    FLASH_STARTUP_LEN       = LENGTH(FLASH_STARTUP);
+    FLASH_SEC_ADDR          = ORIGIN(FLASH);
+    MCU_LOG_START_ADDR      = ORIGIN(LOG_SHARE_Reserved);
+    MCU_LOG_SIZE            = LENGTH(LOG_SHARE_Reserved);
+    __SCMI_IPC_START_ADDR   = ORIGIN(SCMI_IPC_Reserved);
+    __SCMI_IPC_SIZE         = LENGTH(SCMI_IPC_Reserved);
+    NON_SECURE_START_ADDR   = ORIGIN(LOG_SHARE_Reserved);
+    CAN_START_ADDR          = ORIGIN(CAN_Reserved);
+    ATCM_START_ADDR         = ORIGIN(ATCM_Reserved);
+    ATCM_SIZE               = LENGTH(ATCM_Reserved);
+    OS_HEAP_START_ADDR      = ORIGIN(FREERTOS_HEAP);
+    OS_HEAP_SIZE            = LENGTH(FREERTOS_HEAP);
+
+    PROVIDE(SRAM_SIZE = 0x34FFFF);
+    PROVIDE(MCU0_LOG_START_ADDR = 0x0CAAB000);
+    PROVIDE(MCU_STATE_START_ADDR = 0x0C800800);
 }
 ```
 
@@ -681,7 +745,7 @@ MPU_Init:
           mcr p15, 0, r0, c6, c3, 0 /* Write PRBAR */
 
           ldr r0, =0x223FFFFF       /* End address */
-          sub r0, r0, #1
+          sub r0, r0, #1            /* HPRLAR: (end-1), then 64B align */
           and r0, r0, #0xFFFFFFC0
           orr r0, r0, #0x7          /* AttrIndex=3, device memory, enable region */
           mcr p15, 4, r0, c6, c3, 1 /* Write HPRLAR */
@@ -808,14 +872,15 @@ EL2_Reset_Handler:
 
     b MPU_Init
 ```
-3. Before performing other operations, configure the various address spaces that may be used later via the MPU at the MPU_Init label. MPU region 1 is the MCU SRAM area. Users can partition the SRAM according to their needs and configure the attributes of each partition, such as shareability/non-cache, etc. The configuration in the startup code is for reference only. For the partitioning of the MCU SRAM area, refer to the previous section on MCU1 image layout. The partitioning of MCU0-related areas is not shown due to MCU0 constraints.
+3. Before performing other operations, configure the various address spaces that may be used later via the MPU at the `MPU_Init` label, configuring **regions 0 through 9** in total. **Regions 1 through 5** partition MCU SRAM into cacheable / non-cacheable areas based on linker script symbols (`__HEAP_START`, `__STACK_START`, `__COPY_TABLE`); **regions 6 through 9** cover fixed address spaces such as GIC, main-domain registers, DDR, and XSPI. See the full implementation in `Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/OsAssembly/gcc/startup.s`. To adjust SRAM partitioning, update both the linker script and MPU configuration, and refer to the previous section on MCU1 image layout.
+
 ```c
 MPU_Init:
-          //.....Other omitted code
+          /* region 0: cluster0/cluster1 TCM, 0x04000000 ~ 0x0BFFFFFF */
+          /* region 2~5: MCU SRAM partitioned by __HEAP_START / __STACK_START / __COPY_TABLE */
+          /* region 7~9: main-domain registers / DDR / XSPI, see startup.s */
 
-          /*-----region 1 MCU sram example configuration, modify according to your needs-------*/
-          /*---------------region 1 mcu sram---------------*/
-          /* normal memory attribute */
+          /*---------------region 1 mcu sram (uncacheable)---------------*/
           ldr r0, =1                /* Region 1 */
           mcr p15, 4, r0, c6, c2, 1 /* Write HPRSELR */
           mcr p15, 0, r0, c6, c2, 1 /* Write PRSELR */
@@ -825,15 +890,15 @@ MPU_Init:
           mcr p15, 4, r0, c6, c3, 0 /* Write HPRBAR */
           mcr p15, 0, r0, c6, c3, 0 /* Write PRBAR */
 
-          ldr r0, =0x0CDFFFFF      /* End address */
+          ldr r0, =0x0CAAFFFF       /* End address */
           and r0, r0, #0xFFFFFFC0
           orr r0, r0, #0x3          /* AttrIndex=1, non-cacheable, enable region */
           mcr p15, 4, r0, c6, c3, 1 /* Write HPRLAR */
           mcr p15, 0, r0, c6, c3, 1 /* Write PRLAR */
 
-          /*---------------region 5 internal gic & peripheral---------------*/
-          /* device memory attribute            */
-          ldr r0, =5                /* Region 5 */
+          /*---------------region 6 internal gic & peripheral---------------*/
+          /* device memory attribute */
+          ldr r0, =6                /* Region 6 */
           mcr p15, 4, r0, c6, c2, 1 /* Write HPRSELR */
           mcr p15, 0, r0, c6, c2, 1 /* Write PRSELR */
 
@@ -842,36 +907,37 @@ MPU_Init:
           mcr p15, 4, r0, c6, c3, 0 /* Write HPRBAR */
           mcr p15, 0, r0, c6, c3, 0 /* Write PRBAR */
 
-          ldr r0, =0x223FFFFF       /* End address */
-          sub r0, r0, #1
+          ldr r0, =0x23FFFFFF       /* End address */
+          sub r0, r0, #1            /* HPRLAR: (end-1), then 64B align */
           and r0, r0, #0xFFFFFFC0
           orr r0, r0, #0x7          /* AttrIndex=3, device memory, enable region */
           mcr p15, 4, r0, c6, c3, 1 /* Write HPRLAR */
           mcr p15, 0, r0, c6, c3, 1 /* Write PRLAR */
 
-          //.....Subsequent omitted code
+          //.....regions 0, 2~5, 7~9 and others omitted, see startup.s
 ```
-4. Description of important MPU regions in the D-Robotics version:
+4. Description of important MPU regions in the D-Robotics version (refer to `startup.s`):
 
 :::caution
 There are differences between the ARM R52 background region and the actual memory map implemented on the RDK-S600 chip.
 
-For example, 0x2200_0000 belongs to normal memory space by default in the ARM background region, but on the RDK-S600 chip, this address space corresponds to device-class register space like GIC.
+For example, 0x2200_0000 belongs to normal memory space by default in the ARM background region, but on the RDK-S600 chip corresponds to **device** register space such as GIC.
 
-Therefore, for areas where the actual chip implementation differs from the background region, before accessing them, you must use the MPU to make the memory type consistent with the actual implementation of the RDK-S600 chip; otherwise, access exceptions will occur.
-
-These areas are spaces that the MCU may need to access for normal operation. Lack of configuration for these spaces may lead to runtime exceptions. In your own version, please maintain the same address space attribute configuration as the code provided by D-Robotics. For the SRAM area, customers can partition it differently according to their project needs.
+Therefore, before accessing such areas, you must use the MPU to make the memory type consistent with the actual chip implementation; otherwise, access exceptions will occur. Keep regions 6 through 9 and other fixed peripheral/DDR regions consistent with the D-Robotics code. If you need to adjust regions 1 through 5 SRAM partitioning, update both the linker script and MPU configuration.
 :::
 
-| MPU region| Start Address| End Address|Memory Type|Description|
-|--------|----------------------------------------|-----------------------------|----------------|---------|
-| 0| 0x4000_0000|0x0BFF_FFFF|normal memory|Space containing vdsp tcm and MCU TCM|
-| 1| 0x1800_0000|0x1FFF_FFFF|device memory|XSPI address space, affects MCU usage of flash|
-| 2| 0x2200_0000|0x23FF_FFFF|device memory|Address space for MCU GIC registers, affects access to GIC registers|
-| 3| 0x8000_0000|0x8000_03FF|normal memory|DDR needed for suspend/resume functionality|
-| 4| 0xB400_0000|0xB5FF_FFFF|normal memory|DDR space possibly needed for IPC functionality|
-| 5| 0xCF00_0000|0xCF4F_FFFF|normal memory|DDR needed for vspi flash functionality|
-| 6| 0x2500_0000|0x5FFF_FFFF|device memory|Acore register area, affects MCU access to Acore registers|
+| MPU region | Start Address | End Address | Memory Type | Description |
+|------------|---------------|-------------|-------------|-------------|
+| 0 | 0x0400_0000 | 0x0BFF_FFFF | normal memory (non-cacheable) | cluster0/cluster1 TCM |
+| 1 | 0x0C80_0000 | 0x0CAA_FFFF | normal memory (non-cacheable) | MCU SRAM lower segment |
+| 2 | 0x0CAB_0000 | __HEAP_START - 64 | normal memory (cacheable, read-only) | startup/code/const |
+| 3 | __HEAP_START | __STACK_START - 64 | normal memory (non-cacheable) | heap to stack |
+| 4 | __STACK_START | __COPY_TABLE - 64 | normal memory (cacheable) | stack to copy table |
+| 5 | __COPY_TABLE | 0x0CEF_FFFF | normal memory (non-cacheable) | SRAM upper segment (log/SCMI, etc.) |
+| 6 | 0x2200_0000 | 0x23FF_FFFF | device memory | MCU GIC and MCU peripheral registers |
+| 7 | 0x2500_0000 | 0x7FFF_FFFF | device memory | Main-domain registers (DDRSYS/CPUSYS/BPUSYS, etc.) |
+| 8 | 0x8000_0000 | 0xFFFF_FFFF | normal memory (non-cacheable) | DDR space |
+| 9 | 0x1800_0000 | 0x1FFF_FFFF | device memory | XSPI register space |
 
 5. The startup code then configures the EL2 and EL1 exception interrupt vector tables, selecting and setting the EL1 exception vector table based on the Core ID.
 ```c

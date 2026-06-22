@@ -395,7 +395,7 @@ RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取�
    ```
 
 :::info
-**注意**：当 thermal_zone2或 thermal_zone16的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone简介-1)章节，将 thermal_zone2和 thermal_zone16的策略改为`user_space`
+**注意**：当 thermal_zone2或 thermal_zone16的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone-简介-1)章节，将 thermal_zone2和 thermal_zone16的策略改为`user_space`
 :::
 
 ### CPU 频率管理

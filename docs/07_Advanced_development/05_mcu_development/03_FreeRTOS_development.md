@@ -937,10 +937,6 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 
 ## 增加编译目录教程
-### scons 简述
-目前 RDK-S100 mcu 仅仅支持 s100_sip_B 的编译，并且采用的是 scons 编译方式取代了 Makefile。
-Scons 跟 Makefile 类似，每个文件夹由 Sconscript 编译文件（类似于 Makefile），最后有个总的 SConstruct 文件总体去控制编译。
-如 MCU1 的镜像就是 SConstruct_Lite_FRtos_S100_sip_B 控制。
 ### 增加编译目录流程
 <DocScope products="RDK S100">
 1. 修改 mcu/Build/FreeRtos_mcu1/SConstruct_Lite_FRtos_S100_sip_B 文件，增加/删除相应的模块。
@@ -955,7 +951,7 @@ Scons 跟 Makefile 类似，每个文件夹由 Sconscript 编译文件（类似�
 <DocScope products="RDK S600">
 1. 修改 mcu/Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml 文件，增加/删除相应的模块。
 
-   如增加 mcu/Service/Log 文件夹，只需增加相应的位置即可。目前 Service/Platform/McalCdd/Common 有独立的 path，增加该目录需要放在响应位置。除此之外，其他文件夹的添加统一放在 BuildPath 即可
+   如增加 mcu/Service/Log 文件夹，只需增加相应的位置即可。目前 Service/Platform/McalCdd/Common 有独立的 path，增加该目录需要放在相应位置。除此之外，其他文件夹的添加统一放在 BuildPath 即可
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="" style={{ width: '100%' }} />
 
@@ -1000,7 +996,16 @@ MCU 和 Acore/HSM 通信依赖 IPC，IPC 系统服务涉及到的中断可以参
 ## FreeRtos 系统简介
 FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将硬件初始化，RTOS 系统初始化，所有任务的创建这些都弄好，最后启动 RTOS 的调度器，开始多任务的调度；第二种，在 main 函数中将硬件和 RTOS 系统先初始化好，然后创建一个启动任务后就启动调度器，在启动任务里面创建各种应用任务，当所有任务都创建成功后，启动任务把自己删除。两种方式没有太强的优劣之分，RDK-S100/RDK-S600选择第一种方式。
 ### FreeRtos 系统任务创建
-任务创建位于/mcu/Target/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c 中，举例如下：
+<DocScope products="RDK S100">
+
+任务创建位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c` 中，举例如下：
+
+</DocScope>
+<DocScope products="RDK S600">
+
+任务创建位于 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c` 中，举例如下：
+
+</DocScope>
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="" style={{ width: '100%' }} />
 
@@ -1008,7 +1013,16 @@ xxx_Startup 任务，为启动初始化相关的函数，只执行一次。
 FreeRtos_OsTask_SysCore_BSW_xms 和 FreeRtos_OsTask_SysCore_ASW_xms 为周期性任务，会根据 xms 的不同产生周期性的调度。同时周期性任务内部会有工作处理，细节见本章上一节"MCU FreeRtos 系统简介"章节。
 
 如果客户自行开发，可参考上述两种类型的例子。也可以在已经创建的任务中处理自己的 demo，见下文。
-任务函数位于/mcu/Target/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c 文件中，
+<DocScope products="RDK S100">
+
+任务函数位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中，
+
+</DocScope>
+<DocScope products="RDK S600">
+
+任务函数位于 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中，
+
+</DocScope>
 以 OsTask_SysCore_BSW_10ms 为例，任务会周期性地检测 Shell 事务处理：
 ```c
 TASK(OsTask_SysCore_BSW_10ms)
@@ -1019,7 +1033,16 @@ TASK(OsTask_SysCore_BSW_10ms)
 }
 ```
 ### FreeRtos 系统中断使用
-FreeRtos 的中断使用集中在/mcu/Target/Target-hobot-lite-freertos/target/FreeRtosOsHal/Isr_Hal.c 文件中，
+<DocScope products="RDK S100">
+
+FreeRtos 的中断使用集中在 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
+
+</DocScope>
+<DocScope products="RDK S600">
+
+FreeRtos 的中断使用集中在 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
+
+</DocScope>
 ```c
 void FreeRtos_Irq_Init(void)
 {
@@ -1051,7 +1074,16 @@ void FreeRtos_Irq_Init(void)
 }
 ```
 
-如果没有设置中断处理函数，那么中断处理函数处于默认状态，见/mcu/Target/Target-hobot-lite-freertos-mcu1/target/SuperSoC_ISR.s 文件。
+<DocScope products="RDK S100">
+
+如果没有设置中断处理函数，那么中断处理函数处于默认状态，见 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/SuperSoC_ISR.s` 文件。
+
+</DocScope>
+<DocScope products="RDK S600">
+
+如果没有设置中断处理函数，那么中断处理函数处于默认状态，见 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/OsAssembly/gcc/S600_ISR.s` 文件。
+
+</DocScope>
 以 RTC 中断处理函数为例：
 ```c
 // DefaultISR---默认中断处理函数
@@ -1101,29 +1133,38 @@ RDK-S100采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合�
 RDK-S600采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
 </DocScope>
 ## LOG 区域调整
-本章节实例截图介绍以 S100为例，S600类似。
 ### MCU1区域调整
-修改/mcu/Build/FreeRtos_mcu1/Linker/gcc/S100.ld 文件中相应位置，大小暂不支持修改。
+<DocScope products="RDK S100">
+修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="" style={{ width: '100%' }} />
+</DocScope>
+<DocScope products="RDK S600">
+修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
+</DocScope>
 
 ### Acore 区域调整
-修改/source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi 文件中相应位置，与 MCU1修改保持一致
+<DocScope products="RDK S100">
+修改 `source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="" style={{ width: '100%' }} />
+</DocScope>
+<DocScope products="RDK S600">
+修改 `source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。
+</DocScope>
 
 ## MCU 与 Acore 共享内存区域预留
 该共享内存区域空间开辟在 MCU0所在空间，但 MCU0和 MCU1同属于 MCU SRAM 域，因此 MCU1也可以使用相应地址
 ```c
-MCU_STATE_Reserved      : org = 0x0C800400, len = 1K
+MCU_STATE_Reserved      : org = 0x0C800800, len = 1K
 ```
 ### 目前已经被占用的区域：
 ```c
-MCU1_VERSION:  org = 0x0C800400, len = 0x60
-MCU_ALIVE:     org = 0x0C800460, len = 0x10
-     ---MCU0_ALIVE：org = 0x0C800460, len = 0x04；
-     ---MCU1_ALIVE：org = 0x0C800464, len = 0x04；
-     ---REVERSED：  org = 0x0C800468, len = 0x08；
+MCU1_VERSION:  org = 0x0C800800, len = 0x60
+MCU_ALIVE:     org = 0x0C800860, len = 0x10
+     ---MCU0_ALIVE：org = 0x0C800860, len = 0x04；
+     ---MCU1_ALIVE：org = 0x0C800864, len = 0x04；
+     ---RESERVED：  org = 0x0C800868, len = 0x08；
 ```
 ### 使用注意事项
 如果使用共享内存的方式传输数据，可能会出现 MCU 数据更新至 SRAM，但是 Acore 的缓存还为旧数据的问题，因此导致读取数据不同步。

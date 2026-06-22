@@ -4,13 +4,17 @@ sidebar_position: 19
 
 # UFS Driver Debugging Guide
 
-The S100 chip integrates a UFS Host controller, with hardware supporting up to the UFS3.1 protocol, software interface supporting up to 3.0, HS-G4 rate mode, and 2 data lanes. This document describes the development, configuration, and debugging methods for the UFS driver.
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+The S100/S600 chip integrates a UFS Host controller, with hardware supporting up to the UFS3.1 protocol, software interface supporting up to 3.0, HS-G4 rate mode, and 2 data lanes. This document describes the development, configuration, and debugging methods for the UFS driver.
 
 ## UFS Hardware Architecture
 
-### S100 UFS Controller Features
+### S100/S600 UFS Controller Features
 
-The S100 chip integrates a UFS Host controller that supports the following features:
+The S100/S600 chip integrates a UFS Host controller that supports the following features:
 
 | Feature | Description |
 |---------|-------------|
@@ -70,29 +74,50 @@ The UFS subsystem consists of the following parts:
 
 ## Code Paths
 
-```shell
 # Hobot UFS driver files
+
+```shell
 hobot-drivers/ufs/ufs-hobot.c          # Main driver file
 hobot-drivers/ufs/ufs-hobot.h          # Header file
 hobot-drivers/ufs/ufs-hobot-hsi.c      # HSI layer implementation
 hobot-drivers/ufs/ufs-hobot-hsi.h      # HSI layer header
 hobot-drivers/ufs/Kconfig              # Kernel config options
 hobot-drivers/ufs/Makefile             # Build configuration
+```
 
 # Linux kernel UFS core code
+
+```shell
 drivers/ufs/core/ufshcd.c              # UFS core layer
 drivers/ufs/core/ufshcd.h              # UFS core header
 drivers/ufs/host/ufshcd-pltfrm.c       # Platform driver layer
+```
 
 # Device tree configuration
+
+<DocScope products="RDK S100">
+```shell
 kernel-dts/drobot-s100-soc.dtsi        # S100 SoC configuration
 ```
+</DocScope>
+
+<DocScope products="RDK S600">
+```shell
+kernel-dts/drobot-s600-soc.dtsi        # S600 SoC configuration
+```
+</DocScope>
 
 ## Kernel Configuration
 
 ### Configuration Options
 
-Edit the kernel configuration file `hobot-drivers/configs/drobot_s100_defconfig`:
+<DocScope products="RDK S100">
+`hobot-drivers/configs/drobot_s100_defconfig`
+</DocScope>
+<DocScope products="RDK S600">
+`hobot-drivers/configs/drobot_s600_defconfig`
+</DocScope>
+
 
 ```
 # UFS core support
@@ -151,6 +176,8 @@ ext4write scsi 0:17 0x80000000 /newfile 0x10000
 
 ## DTS Device Node Configuration
 
+<DocScope products="RDK S100">
+
 ### S100 SoC Configuration (drobot-s100-soc.dtsi)
 
 ```dts
@@ -176,8 +203,35 @@ ufs: ufs@0x39410000 {
     tx_eq_main_pre_post = <35 0 0>;           /* main=35, pre=0, post=0 */
 };
 ```
+</DocScope>
+
+<DocScope products="RDK S600">
+### S600 SoC 配置 (drobot-s600-soc.dtsi)
+
+```dts
+		ufs: ufs@0x33700000 {
+			// power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
+			status = "okay";
+			compatible = "drobot-s600-ufshc";
+			reg = <0 0x33700000 0 0x10000>,
+					<0x0 0x33000000 0x0 0x1000>,    // ufs sys reg
+					<0x0 0x34830000 0x0 0x1000>,    // ufs clk reg
+					<0x0 0x33710000 0x0 0x1000>;    // ufs wrap reg
+			interrupt-parent = <&gic>;
+			interrupts = <0 HSISYS_UFSHC_S_INTR IRQ_TYPE_LEVEL_HIGH>;
+			ref-clk-freq = <26000000>;
+			lanes-per-direction = <2>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&hsi_ufs>;
+			ufstrim_reg_pa = <0xCDF701C>;
+			tx_eq_main_pre_post = <29 0 6>;
+		};
+```
+</DocScope>
 
 ### DTS Parameter Description
+
+<DocScope products="RDK S100">
 
 | Parameter | Description | Example Value |
 |-----------|-------------|---------------|
@@ -189,6 +243,19 @@ ufs: ufs@0x39410000 {
 | `ufstrim_flag_reg_pa` | Calibration flag register physical address | 0xCDF704C |
 | `ufstrim_reg_pa` | Calibration value register physical address | 0xCDF7014 |
 | `tx_eq_main_pre_post` | Transmitter equalizer parameters | \<main pre post\> |
+
+</DocScope>
+<DocScope products="RDK S600">
+| Parameter | Description | Example Value |
+|-----------|-------------|----------------|
+| `compatible` | Driver match string | "drobot,s600-ufshc" |
+| `reg` | Register address range | Controller/system/clock registers |
+| `interrupts` | Interrupt configuration | GIC SPI interrupt |
+| `ref-clk-freq` | Reference clock frequency | 26000000 (26MHz) |
+| `lanes-per-direction` | Number of data lanes per direction | 2 |
+| `ufstrim_reg_pa` | Calibration value register physical address | 0xCDF701C |
+| `tx_eq_main_pre_post` | Transmitter equalizer parameters | \<main pre post\> |
+</DocScope>
 
 ## Debugging Methods
 
@@ -318,7 +385,12 @@ journalctl -kf | grep -i ufs
 
 **Note**: UFS performance testing should be performed on a mounted file system partition. **Direct writing to the block device (/dev/sda) is prohibited** as it will corrupt the file system.
 
-According to the GPT partition table in `gpt_main_ufs.img`, the actual partition layout of RDK S100 is as follows:
+<DocScope products="RDK S100">
+The RDK S100 series development board has the following partitions by default. The actual partitions are subject to the board's output:
+</DocScope>
+<DocScope products="RDK S100">
+The RDK S600 series development board has the following partitions by default. The actual partitions are subject to the board's output:
+</DocScope>
 
 | Partition Number | Device Name | Partition Name | Size | File System | Mount Point | Purpose |
 |------------------|-------------|----------------|------|--------------|--------------|---------|
@@ -544,7 +616,7 @@ When adapting new UFS device models, follow these requirements:
 | Item | Requirement |
 |------|-------------|
 | UFS Protocol Version | Compliant with V2.1, V3.0, or V3.1 standards |
-| Electrical Characteristics | Level compatible with S100 UFS controller |
+| Electrical Characteristics | Level compatible with the UFS controller |
 | Package Dimensions | Meet PCB layout requirements |
 
 ### Software Adaptation Steps

@@ -37,7 +37,7 @@ usb 驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloa
 **验证驱动安装**
 
 
-1. 连接串口，首次连接需要安装 CH340 串口驱动，驱动程序可从资源汇总的[工具下载](../../../download.md#工具下载)获取。
+1. 连接串口，首次连接需要安装 CH340 串口驱动，驱动程序可从资源汇总的[工具下载](../../../download.md)获取。
 2. 驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
 
    <!-- ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png) -->

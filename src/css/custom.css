@@ -299,7 +299,7 @@ body.plugin-id-os-rdk-s600        .navbar-version-dropdown--os-rdk-s600 {
 /* ------------------------------------------------------------------ */
 /* 文档正文表格与 TOC 防重叠：
  * - 正文列允许收缩（min-width: 0），避免宽表格撑进右侧 TOC 区域
- * - 宽表格仅在 .markdown-table-scroll 容器内横向滚动（见 DocScopeHydration） */
+ * - 宽表格在直接父节点内横向滚动（纯 CSS，避免 JS 改 DOM 与 React 冲突） */
 @media (min-width: 997px) {
   main .container .row > .col--9,
   main .container .row > .col:first-child {
@@ -326,7 +326,6 @@ article.markdown {
 .markdown-table-scroll,
 .theme-doc-markdown.markdown .table-responsive,
 article.markdown .table-responsive {
-  display: block;
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
@@ -336,6 +335,22 @@ article.markdown .table-responsive {
   scrollbar-gutter: stable;
 }
 
+/* Native markdown/html tables: each table owns its own scroll bar. */
+.theme-doc-markdown.markdown table,
+article.markdown table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1rem;
+  scrollbar-gutter: stable;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* If wrapper exists, use wrapper as the only scroll container. */
 .markdown-table-scroll > table,
 .theme-doc-markdown.markdown .table-responsive > table,
 article.markdown .table-responsive > table {
@@ -347,34 +362,23 @@ article.markdown .table-responsive > table {
   box-sizing: border-box;
   border-collapse: collapse;
   table-layout: auto;
+  overflow: visible;
 }
 
-.theme-doc-markdown.markdown .markdown-table-scroll > table th,
-.theme-doc-markdown.markdown .markdown-table-scroll > table td,
-article.markdown .markdown-table-scroll > table th,
-article.markdown .markdown-table-scroll > table td,
-.markdown-table-scroll > table th,
-.markdown-table-scroll > table td,
-.theme-doc-markdown.markdown .table-responsive > table th,
-.theme-doc-markdown.markdown .table-responsive > table td,
-article.markdown .table-responsive > table th,
-article.markdown .table-responsive > table td {
-  white-space: nowrap;
-  word-break: normal;
-  overflow-wrap: normal;
-  hyphens: none;
+/* Keep hidden tab panels hidden when table styles are applied. */
+.theme-doc-markdown.markdown [role='tabpanel'][hidden],
+article.markdown [role='tabpanel'][hidden] {
+  display: none !important;
 }
 
 .theme-doc-markdown.markdown table th,
 .theme-doc-markdown.markdown table td,
 article.markdown table th,
-article.markdown table td,
-main .container article table th,
-main .container article table td,
-main article table th,
-main article table td {
-  white-space: normal;
-  word-break: break-word;
+article.markdown table td {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 /* Dify 问答小助手：高于反馈浮标 (z-index:9999)，避免点击落在浮标上导致「点了没反应」 */
@@ -430,3 +434,95 @@ main article table td {
 [data-theme='dark'] .markdown a:hover {
   color: #79b8ff;
 } 
+
+/* 图片点击放大交互光标 */
+.markdown img {
+  cursor: zoom-in;
+}
+
+.medium-zoom-image--opened {
+  cursor: zoom-out;
+}
+
+/* 图片放大层级高于右侧 TOC（含 sticky z-index） */
+.medium-zoom-overlay {
+  z-index: 2000 !important;
+}
+
+.medium-zoom-image--opened {
+  z-index: 2001 !important;
+}
+
+/* 文档底部分页与正文拉开距离 */
+.pagination-nav {
+  margin-top: 1.5rem;
+}
+
+/* 历史版本页：固定返回最新版本按钮 */
+.latest-version-fab-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-toc-border-color);
+}
+
+.latest-version-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--ifm-color-primary) !important;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none !important;
+  box-shadow: none;
+}
+
+.latest-version-fab::before {
+  content: "←";
+  margin-right: 0.35rem;
+  font-weight: 700;
+}
+
+.latest-version-fab:hover {
+  background: transparent;
+  color: var(--ifm-color-primary-dark) !important;
+  text-decoration: none !important;
+}
+
+@media (max-width: 996px) {
+  .latest-version-fab-wrap {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 996px) {
+  /* Hide these controls in top navbar on mobile */
+  .navbar__inner .doc-scope-selectors-nav-item,
+  .navbar__inner .navbar-community-link,
+  .navbar__inner .navbar-github-link,
+  .navbar__inner .navbar-locale-switch {
+    display: none !important;
+  }
+
+  /* Show the same controls in hamburger sidebar menu */
+  .navbar-sidebar .doc-scope-selectors-nav-item,
+  .navbar-sidebar .navbar-community-link,
+  .navbar-sidebar .navbar-github-link,
+  .navbar-sidebar .navbar-locale-switch {
+    display: flex !important;
+  }
+
+  /* Make product/version selectors stack neatly in sidebar */
+  .navbar-sidebar .doc-scope-selectors-nav-item .doc-scope-selectors {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+}

@@ -721,7 +721,7 @@ Choose based on errors, resources, and time constraints. Adding swap is a common
 **Connection note:** FPC cables often have a blue or black stiffener. Insert with the **stiffener facing up** (or toward the connector latch per your connector type) on both board and module, and lock the latch.
 
 IMX219 camera connection diagram:
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect.png" alt="IMX219 camera connected to RDK S100" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect-en.png" alt="IMX219 camera connected to RDK S100" style={{ width: '100%' }} />
 
 **Verification after connection:**
 1.  **Ensure the camera is connected and the board is powered.**

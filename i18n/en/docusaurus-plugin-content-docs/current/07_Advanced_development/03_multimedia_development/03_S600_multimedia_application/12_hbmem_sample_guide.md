@@ -85,7 +85,7 @@ make
 
 ### Supported Platforms
 
-- RDK S100/RDK S100P
+- RDK S600
 
 ### Execution Guide
 

@@ -1,20 +1,33 @@
 ---
 sidebar_position: 2
+sidebar_label: 1.1.2 相机扩展板
 ---
 
-# 1.1.2.1 相机扩展板
+
+
+
+# 1.1.2 相机扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="image-rdk_s600_camera_expansion_board" style={{ width: '100%' }} />
 
+<details>
+<summary>当前文档对应 **相机扩展板 V1P0** 版本，点击查看历史版本</summary>
+
+- [Camera Expansion Board V0P3](./versions/camera/v0p3.md)
+- [Camera Expansion Board V0P2](./versions/camera/v0p2.md)
+
+</details>
+
+
 RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S600 Camera Expansion Connector 进行二次开发，提供了 8 个 GMSL 相机接口。
 
-:::danger 注意
+<!-- :::danger 注意
 
 1. 本产品仍处于研发阶段，所述内容可能会有变更。
 2. 对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
 3. 使用前请先阅读 [**RDK S600 早期样机情况说明**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd)，获取硬件相关情况。
 
-:::
+::: -->
 
 :::warning
 
@@ -43,6 +56,8 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 :::
 
+
+
 ## 产品规格
 
 | **名称**    | **参数**                                         |
@@ -58,11 +73,11 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 接口说明
 
-**V0P2 接口图**
+<!-- **V0P2 接口图**
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
 
-**V0P3 接口图**
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface-V0P3.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
+**V0P3 接口图** -->
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
 
 
 | 位号  | 功能            |
@@ -134,3 +149,4 @@ GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人�
 ## 适配模组
 
 请参考 [配件清单](https://horizonrobotics.feishu.cn/wiki/NMBEwLysUiDHFYk547BcgA9QnIf)
+

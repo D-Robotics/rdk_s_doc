@@ -136,29 +136,6 @@ export default function DocItemWrapper(props) {
     if (!plain || !currentDocDisplayNumber) return null;
     return `${currentDocDisplayNumber} ${plain}`;
   }, [props?.content?.metadata?.title, currentDocDisplayNumber]);
-  const patchedContent = useMemo(() => {
-    const originalContent = props?.content;
-    if (!originalContent || !renumberedDocTitle) {
-      return originalContent;
-    }
-    const currentTitle = originalContent?.metadata?.title || "";
-    if (!currentTitle || currentTitle === renumberedDocTitle) {
-      return originalContent;
-    }
-
-    function WrappedContent(mdxProps) {
-      return React.createElement(originalContent, mdxProps);
-    }
-
-    Object.assign(WrappedContent, originalContent, {
-      metadata: {
-        ...originalContent.metadata,
-        title: renumberedDocTitle,
-      },
-    });
-
-    return WrappedContent;
-  }, [props?.content, renumberedDocTitle]);
 
   useEffect(() => {
     if (skipSidebarScope || visible || !sidebar?.items) {
@@ -199,6 +176,41 @@ export default function DocItemWrapper(props) {
     }
   }, [visible, skipSidebarScope, currentDocDisplayNumber, docId]);
 
+  useEffect(() => {
+    if (typeof document === "undefined" || !visible) {
+      return;
+    }
+    const applyTitle = () => {
+      const root =
+        document.querySelector(".theme-doc-markdown") ||
+        document.querySelector("article.markdown") ||
+        document.querySelector("article");
+      const h1Text = (root?.querySelector("h1")?.textContent || "").trim();
+      const titleSource = h1Text || renumberedDocTitle;
+      if (!titleSource) {
+        return;
+      }
+      const separator = " | ";
+      const currentTitle = document.title || "";
+      const suffix = currentTitle.includes(separator)
+        ? currentTitle.split(separator).slice(1).join(separator)
+        : "";
+      const nextTitle = suffix ? `${titleSource}${separator}${suffix}` : titleSource;
+      if (document.title !== nextTitle) {
+        document.title = nextTitle;
+      }
+    };
+
+    const rafId = window.requestAnimationFrame(() => {
+      // Let theme-original metadata title update finish first, then override.
+      window.setTimeout(applyTitle, 0);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+    };
+  }, [visible, renumberedDocTitle, location.pathname]);
+
   if (!visible) {
     return null;
   }
@@ -206,7 +218,7 @@ export default function DocItemWrapper(props) {
   return (
     <>
       <DocScopeHydration />
-      <DocItem {...props} content={patchedContent || props.content} />
+      <DocItem {...props} />
       <GiscusComments />
     </>
   );

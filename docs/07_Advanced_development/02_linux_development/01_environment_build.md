@@ -30,17 +30,15 @@ import DocScope from '@site/src/components/DocScope'
 
 </DocScope>
 
-<DocScope products="RDK S100">
+
 ## RDK OS 开发指南
 
-### 开发 RDK S100
 
 :::info BSP 源码包
 
 BSP 源码包下载地址参见： [系统软件](../../01_Quick_start/download.md#系统软件)（需要注册登录）
 
 :::
-</DocScope>
 
 :::tip 商业支持
 

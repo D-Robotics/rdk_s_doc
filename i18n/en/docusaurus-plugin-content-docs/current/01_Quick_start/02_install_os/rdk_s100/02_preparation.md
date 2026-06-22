@@ -13,7 +13,7 @@ The **RDK S100** comes pre-burned with a test version of the system image. To en
 :::
 
 The RDK S100 kit currently provides the Ubuntu 22.04 system image, which supports Desktop graphical interaction.
-1. [[Click here]](../../download.md#系统镜像与工具) to download the image.
+1. [[Click here]](../../download.md#system-software) to download the image.
 
     ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png)
 

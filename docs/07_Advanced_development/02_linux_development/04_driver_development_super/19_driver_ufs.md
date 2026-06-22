@@ -4,13 +4,17 @@ sidebar_position: 19
 
 # UFS 驱动调试指南
 
-S100芯片内置 UFS Host 控制器，硬件最高支持 UFS3.1协议，软件接口最高支持3.0，支持 HS-G4速率模式，支持2路数据通道。本文档介绍 UFS 驱动的开发、配置和调试方法。
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+S100/S600 芯片内置 UFS Host 控制器，硬件最高支持 UFS3.1协议，软件接口最高支持3.0，支持 HS-G4速率模式，支持2路数据通道。本文档介绍 UFS 驱动的开发、配置和调试方法。
 
 ## UFS 硬件架构
 
-### S100 UFS 控制器特性
+### S100/S600 UFS 控制器特性
 
-S100芯片内置 UFS Host 控制器，支持以下特性：
+S100/S600芯片内置 UFS Host 控制器，支持以下特性：
 
 | 特性 | 说明 |
 |------|------|
@@ -70,29 +74,45 @@ UFS 子系统由以下几个部分组成：
 
 ## 代码路径
 
+### Hobot UFS驱动文件
 ```shell
-# Hobot UFS驱动文件
 hobot-drivers/ufs/ufs-hobot.c          # 主驱动文件
 hobot-drivers/ufs/ufs-hobot.h          # 头文件
 hobot-drivers/ufs/ufs-hobot-hsi.c      # HSI层实现
 hobot-drivers/ufs/ufs-hobot-hsi.h      # HSI层头文件
 hobot-drivers/ufs/Kconfig              # 内核配置选项
 hobot-drivers/ufs/Makefile             # 编译配置
-
-# Linux内核UFS核心代码
+```
+### Linux内核UFS核心代码
+```shell
 drivers/ufs/core/ufshcd.c              # UFS核心层
 drivers/ufs/core/ufshcd.h              # UFS核心头文件
 drivers/ufs/host/ufshcd-pltfrm.c       # 平台驱动层
-
-# 设备树配置
+```
+### 设备树文件
+<DocScope products="RDK S100">
+```shell
 kernel-dts/drobot-s100-soc.dtsi        # S100 SoC配置
 ```
+</DocScope>
+
+<DocScope products="RDK S600">
+```shell
+kernel-dts/drobot-s600-soc.dtsi        # S600 SoC配置
+```
+</DocScope>
 
 ## 内核配置
 
 ### 配置选项说明
 
-编辑内核配置文件 `hobot-drivers/configs/drobot_s100_defconfig`：
+内核配置文件:
+<DocScope products="RDK S100">
+`hobot-drivers/configs/drobot_s100_defconfig`
+</DocScope>
+<DocScope products="RDK S600">
+`hobot-drivers/configs/drobot_s600_defconfig`
+</DocScope>
 
 ```
 # UFS核心支持
@@ -151,6 +171,7 @@ ext4write scsi 0:17 0x80000000 /newfile 0x10000
 
 ## DTS 设备节点配置
 
+<DocScope products="RDK S100">
 ### S100 SoC 配置 (drobot-s100-soc.dtsi)
 
 ```dts
@@ -176,9 +197,35 @@ ufs: ufs@0x39410000 {
     tx_eq_main_pre_post = <35 0 0>;           /* main=35, pre=0, post=0 */
 };
 ```
+</DocScope>
+
+<DocScope products="RDK S600">
+### S600 SoC 配置 (drobot-s600-soc.dtsi)
+
+```dts
+		ufs: ufs@0x33700000 {
+			// power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
+			status = "okay";
+			compatible = "drobot-s600-ufshc";
+			reg = <0 0x33700000 0 0x10000>,
+					<0x0 0x33000000 0x0 0x1000>,    // ufs sys reg
+					<0x0 0x34830000 0x0 0x1000>,    // ufs clk reg
+					<0x0 0x33710000 0x0 0x1000>;    // ufs wrap reg
+			interrupt-parent = <&gic>;
+			interrupts = <0 HSISYS_UFSHC_S_INTR IRQ_TYPE_LEVEL_HIGH>;
+			ref-clk-freq = <26000000>;
+			lanes-per-direction = <2>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&hsi_ufs>;
+			ufstrim_reg_pa = <0xCDF701C>;
+			tx_eq_main_pre_post = <29 0 6>;
+		};
+```
+</DocScope>
 
 ### DTS 参数说明
 
+<DocScope products="RDK S100">
 | 参数 | 说明 | 示例值 |
 |------|------|--------|
 | `compatible` | 驱动匹配字符串 | "drobot,s100-ufshc" |
@@ -189,6 +236,18 @@ ufs: ufs@0x39410000 {
 | `ufstrim_flag_reg_pa` | 校准标志寄存器物理地址 | 0xCDF704C |
 | `ufstrim_reg_pa` | 校准值寄存器物理地址 | 0xCDF7014 |
 | `tx_eq_main_pre_post` | 发射均衡器参数 | \<main pre post\> |
+</DocScope>
+<DocScope products="RDK S600">
+| 参数 | 说明 | 示例值 |
+|------|------|--------|
+| `compatible` | 驱动匹配字符串 | "drobot,s600-ufshc" |
+| `reg` | 寄存器地址范围 | 控制器/系统/时钟寄存器 |
+| `interrupts` | 中断配置 | GIC SPI 中断 |
+| `ref-clk-freq` | 参考时钟频率 | 26000000 (26MHz) |
+| `lanes-per-direction` | 每方向数据通道数 | 2 |
+| `ufstrim_reg_pa` | 校准值寄存器物理地址 | 0xCDF701C |
+| `tx_eq_main_pre_post` | 发射均衡器参数 | \<main pre post\> |
+</DocScope>
 
 ## 调试方法
 
@@ -318,7 +377,12 @@ journalctl -kf | grep -i ufs
 
 **注意**：UFS 性能测试应在已挂载的文件系统分区上进行，**禁止直接对块设备(/dev/sda)写入**，否则会导致文件系统损坏。
 
-根据 `gpt_main_ufs.img` 中的 GPT 分区表，RDK S100的实际分区布局如下：
+<DocScope products="RDK S100">
+RDK S100系列开发板默认会有如下分区，实际分区以板端输出为准：
+</DocScope>
+<DocScope products="RDK S100">
+RDK S600系列开发板默认会有如下分区，实际分区以板端输出为准：
+</DocScope>
 
 | 分区号 | 设备名 | 分区名 | 大小 | 文件系统 | 挂载点 | 用途 |
 |--------|--------|--------|------|----------|--------|------|
@@ -544,7 +608,7 @@ CONFIG_DYNAMIC_DEBUG=y
 | 项目 | 要求 |
 |------|------|
 | UFS 协议版本 | 符合 V2.1、V3.0或 V3.1标准 |
-| 电气特性 | 与 S100 UFS 控制器电平兼容 |
+| 电气特性 | 与 UFS 控制器电平兼容 |
 | 封装尺寸 | 符合 PCB 布局要求 |
 
 ### 软件适配步骤

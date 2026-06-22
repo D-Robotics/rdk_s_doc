@@ -7,11 +7,6 @@ sidebar_position: 06
 import DocScope from '@site/src/components/DocScope';
 ```
 
-:::info BSP Source Package
-
-For BSP source package download, see: [System Software](../01_Quick_start/download.md#system-software) (registration and login required)
-
-:::
 
 :::tip Commercial Support
 The commercial edition provides more complete feature support, deeper hardware capability access, and exclusive customized content. To ensure compliant and secure delivery, we grant access to the commercial edition through the following process.
@@ -528,6 +523,7 @@ After modifying the partition table, apply changes as follows:
 	sudo ./pack_image.sh -l
 	```
 ## 7.6.6 eMMC/UFS/NVMe Image Build Notes
+
 ### Using D-Robotics ubuntu-22.04_desktop_rdk-s100_XXX.conf
 For eMMC, UFS, and NVMe, drivers are selected via different config variables. Before building, set the build config to match your storage.
 

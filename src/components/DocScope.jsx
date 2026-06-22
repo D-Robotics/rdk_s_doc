@@ -39,11 +39,12 @@ export default function DocScope({ versions, products, children }) {
   const versionMatch = matchVersion(version, versionConfigs);
   const productMatch = scopeProductsMatchCurrent(productList, product);
 
-  // 如果不匹配条件，返回 null
-  if (!versionMatch || !productMatch) {
-    return null;
-  }
+  const show = versionMatch && productMatch;
 
-  // 如果匹配条件，返回子内容
-  return <div className="doc-scope">{children}</div>;
+  // 始终保留 DOM，仅通过 CSS 隐藏，避免切换产品/版本时 React 卸载子树导致 DOM 不一致
+  return (
+    <div className={show ? 'doc-scope' : 'doc-scope doc-scope--hidden'}>
+      {children}
+    </div>
+  );
 }

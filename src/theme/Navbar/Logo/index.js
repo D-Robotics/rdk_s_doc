@@ -2,18 +2,17 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import {useThemeConfig} from '@docusaurus/theme-common';
-import ThemedImage from '@theme/ThemedImage';
+import {useColorMode, useThemeConfig} from '@docusaurus/theme-common';
 
 function LogoThemedImage({logo, alt, imageClassName}) {
-  const sources = {
-    light: useBaseUrl(logo.src),
-    dark: useBaseUrl(logo.srcDark || logo.src),
-  };
+  const {colorMode} = useColorMode();
+  const src = useBaseUrl(
+    colorMode === 'dark' && logo.srcDark ? logo.srcDark : logo.src,
+  );
   const themedImage = (
-    <ThemedImage
+    <img
       className={logo.className}
-      sources={sources}
+      src={src}
       height={logo.height}
       width={logo.width}
       alt={alt}
@@ -35,9 +34,9 @@ export default function NavbarLogo() {
     navbar: {logo},
   } = useThemeConfig();
 
-  const title = isEnglish ? 'Documentation Center' : '文档中心';
+  const title = isEnglish ? 'Resource Center' : '资料中心';
   const docCenterUrl = isEnglish
-    ? 'https://developer.d-robotics.cc/rdk_doc_center/en'
+    ? 'https://d-robotics.github.io/rdk_doc_center/en/'
     : 'https://developer.d-robotics.cc/rdk_doc_center/';
 
   const fallbackAlt = logo?.alt ?? title;
