@@ -323,12 +323,9 @@ article.markdown {
   overflow-x: hidden;
 }
 
-.theme-doc-markdown.markdown *:has(> table),
-article.markdown *:has(> table),
 .markdown-table-scroll,
 .theme-doc-markdown.markdown .table-responsive,
 article.markdown .table-responsive {
-  display: block;
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
@@ -338,8 +335,22 @@ article.markdown .table-responsive {
   scrollbar-gutter: stable;
 }
 
-.theme-doc-markdown.markdown *:has(> table) > table,
-article.markdown *:has(> table) > table,
+/* Native markdown/html tables: each table owns its own scroll bar. */
+.theme-doc-markdown.markdown table,
+article.markdown table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1rem;
+  scrollbar-gutter: stable;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* If wrapper exists, use wrapper as the only scroll container. */
 .markdown-table-scroll > table,
 .theme-doc-markdown.markdown .table-responsive > table,
 article.markdown .table-responsive > table {
@@ -351,38 +362,23 @@ article.markdown .table-responsive > table {
   box-sizing: border-box;
   border-collapse: collapse;
   table-layout: auto;
+  overflow: visible;
 }
 
-.theme-doc-markdown.markdown *:has(> table) > table th,
-.theme-doc-markdown.markdown *:has(> table) > table td,
-article.markdown *:has(> table) > table th,
-article.markdown *:has(> table) > table td,
-.theme-doc-markdown.markdown .markdown-table-scroll > table th,
-.theme-doc-markdown.markdown .markdown-table-scroll > table td,
-article.markdown .markdown-table-scroll > table th,
-article.markdown .markdown-table-scroll > table td,
-.markdown-table-scroll > table th,
-.markdown-table-scroll > table td,
-.theme-doc-markdown.markdown .table-responsive > table th,
-.theme-doc-markdown.markdown .table-responsive > table td,
-article.markdown .table-responsive > table th,
-article.markdown .table-responsive > table td {
-  white-space: nowrap;
-  word-break: normal;
-  overflow-wrap: normal;
-  hyphens: none;
+/* Keep hidden tab panels hidden when table styles are applied. */
+.theme-doc-markdown.markdown [role='tabpanel'][hidden],
+article.markdown [role='tabpanel'][hidden] {
+  display: none !important;
 }
 
 .theme-doc-markdown.markdown table th,
 .theme-doc-markdown.markdown table td,
 article.markdown table th,
-article.markdown table td,
-main .container article table th,
-main .container article table td,
-main article table th,
-main article table td {
-  white-space: normal;
-  word-break: break-word;
+article.markdown table td {
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 /* Dify 问答小助手：高于反馈浮标 (z-index:9999)，避免点击落在浮标上导致「点了没反应」 */

@@ -46,7 +46,8 @@ function syncTocByDocScope(root) {
   );
   tocLinks.forEach((link) => {
     const target = resolveHeadingByHash(root, link.getAttribute('href'));
-    const visible = Boolean(target) && !target.closest('.doc-scope--hidden');
+    const hiddenTabPanel = target?.closest('[role="tabpanel"][hidden]');
+    const visible = Boolean(target) && !target.closest('.doc-scope--hidden') && !hiddenTabPanel;
     const tocItem = link.closest('li');
     if (tocItem) {
       tocItem.classList.toggle('doc-scope-toc-hidden', !visible);
@@ -85,6 +86,30 @@ export default function DocScopeHydration() {
       }
     });
     syncTocByDocScope(root);
+
+    const observer = new MutationObserver((mutationList) => {
+      const shouldResync = mutationList.some((mutation) => {
+        if (mutation.type !== 'attributes') {
+          return false;
+        }
+        const attr = mutation.attributeName;
+        if (attr !== 'hidden' && attr !== 'class') {
+          return false;
+        }
+        return mutation.target instanceof HTMLElement;
+      });
+      if (shouldResync) {
+        syncTocByDocScope(root);
+      }
+    });
+
+    observer.observe(root, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['hidden', 'class'],
+    });
+
+    return () => observer.disconnect();
   }, [version, product, location.pathname]);
 
   return null;
