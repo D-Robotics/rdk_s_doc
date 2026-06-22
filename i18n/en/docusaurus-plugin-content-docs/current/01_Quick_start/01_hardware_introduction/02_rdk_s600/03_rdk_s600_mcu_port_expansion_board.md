@@ -114,10 +114,10 @@ The expansion board provides 5 CAN FD interfaces (CAN-1~CAN-4, CAN-10). Each int
 
 ### 30-Pin (J501)
 
-Pin definition: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v0p2.xlsx</a>
+Pin definition: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx</a>
 
 :::info Tip
-When using the following 5 IQs from the 30-Pin Connector with peripherals, ensure that the default power-on high/low state of the corresponding peripheral pins matches the Pull Up/Down state specified in the Pin Definition file. Do not add or connect additional pull-up/pull-down resistors:
+When using the following 5 IOs from the 30-Pin Connector with peripherals, ensure that the default power-on high/low state of the corresponding peripheral pins matches the Pull Up/Down state specified in the Pin Definition file. Do not add or connect additional pull-up/pull-down resistors:
 
 - PIN11: MCU_GPIO0_3V3
 - PIN15: MCU_SPI4_CSN0_3V3
