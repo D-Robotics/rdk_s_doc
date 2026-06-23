@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 3.2.1 音频使用指南
+# 3.2 音频使用指南
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
