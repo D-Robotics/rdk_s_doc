@@ -26,7 +26,7 @@ https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 :::
 
 
-## 7.6.1 概述
+## 概述
 本章节主要针对需要对 RDK 构建系统进行定制化修改的介绍，rdk_gen 的使用说明，请参考 rdk_gen 仓库的 README.md。
 
 基本的使用说明：
@@ -47,7 +47,7 @@ sudo ./pack_images.sh -p
 ./mk_debs.sh hobot-configs
 ```
 
-## 7.6.2 根文件系统预编译包构建说明
+## 根文件系统预编译包构建说明
 根文件系统由 multistrap+chroot 构建生成。
 
 ### multistrap
@@ -192,7 +192,7 @@ multistrap 默认会将所有 Priority 为"Required"的包进行安装。
 1. 在`[Gerneral]`字段集中添加`omitrequired=true`；
 2. 在`Packages`中对所有需要添加的包进行定义。
 
-## 7.6.3 RDK deb 包构建流程说明
+## RDK deb 包构建流程说明
 ### 简介
 RDK 默认以 deb 包的形式来管理用户层的地瓜定制功能。在 SDK 的 source/目录下保存了所有地瓜定制功能的 deb 包构建的源码。
 
@@ -263,7 +263,7 @@ hobot-camera/
      - (可选)如果该 deb 在打包前，需要进行源码编译，则进行源码编译命令的调度，请注意最终的所有输出，均需要输出到`out/build/debs/new_pkg/debian/`目录下;
      - 置位`is_allowed=1`
 
-## 7.6.4 deb 包编入镜像流程说明
+## deb 包编入镜像流程说明
 在镜像构建的过程中，deb 包会被编入板端根文件系统内。
 
 ### 在线镜像构建
