@@ -21,7 +21,7 @@ https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 :::
 
 
-## 7.6.1 Overview
+## Overview
 This chapter mainly introduces customization of the RDK build system. For rdk_gen usage, refer to the README.md in the rdk_gen repository.
 
 Basic usage:
@@ -42,7 +42,7 @@ sudo ./pack_images.sh -p
 ./mk_debs.sh hobot-configs
 ```
 
-## 7.6.2 Root Filesystem Prebuilt Package Build Guide
+## Root Filesystem Prebuilt Package Build Guide
 The root filesystem is built with multistrap + chroot.
 
 ### multistrap
@@ -187,7 +187,7 @@ Steps:
 1. Add `omitrequired=true` in the `[General]` field set;
 2. Define all packages to add in `Packages`.
 
-## 7.6.3 RDK deb Package Build Flow
+## RDK deb Package Build Flow
 ### Overview
 RDK manages D-Robotics customized user-space features as deb packages by default. Source code for building all customized deb packages is under the SDK source/ directory.
 
@@ -258,7 +258,7 @@ For details, refer to the `mk_debs.sh` implementation. Simplified flow:
      - (Optional) If source must be compiled before packing, invoke compile commands; all output must go under `out/build/debs/new_pkg/debian/`;
      - Set `is_allowed=1`
 
-## 7.6.4 Including deb Packages in the Image
+## Including deb Packages in the Image
 During image build, deb packages are integrated into the board root filesystem.
 
 ### Online Image Build
@@ -306,7 +306,7 @@ Package names can be obtained in two ways:
 2. You know the file needed and it is installed on the host:
    - Use `dpkg -S <filename>` to get the package name.
 
-## 7.6.5 Custom Partition Guide
+## Custom Partition Guide
 
 <DocScope products="RDK S100">
 
