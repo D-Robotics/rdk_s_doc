@@ -3,6 +3,10 @@ sidebar_position: 3
 ---
 # Codec
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## System Overview
 
 ### Overview
@@ -5861,6 +5865,16 @@ typedef struct _mc_audio_codec_dec_params {
 | 0xF0000014 | HB_MEDIA_ERR_INVALID_PRIORITY | Unsupported priority |
 
 ## Codec Sample
+
+<DocScope product="RDK-S600">
+
+:::info Note
+
+Only S600 supports VPU multi-core. In codec samples, using `-u` to select different cores is effective only on S600.
+
+:::
+
+</DocScope>
 
 ### Encoding Example
 
