@@ -3,6 +3,11 @@ sidebar_position: 3
 ---
 # 编解码
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+
 ## 系统概述
 
 ### 概述
@@ -5842,9 +5847,15 @@ typedef struct _mc_audio_codec_dec_params {
 
 ## Codec sample
 
+<DocScope products="RDK-S600">
+
 :::info 注意
+
     只有 S600支持 VPU 多核，编解码示例通过`-u`配置不同核只在 S600上生效。
+
 :::
+
+</DocScope>
 
 ### 编码示例
 
