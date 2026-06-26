@@ -5,6 +5,11 @@ toc_max_heading_level: 4
 
 # Camsys 子系统
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+
 ## 系统概述
 
 Camsys 子系统包含 Camera sensor (包括 SerDes)、VIN（包括
@@ -32,41 +37,75 @@ MIPI、CIM）、ISP、PYM、GDC、YNR、STITCH 模块。
 
 ### camsys 硬件框图
 
+<DocScope products="RDK-S100">
 
-S100:
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/b266496271990c1606e5f68485cf3e9d.png" alt="" style={{ width: '100%' }} />
-S600:
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/s600-camsys.PNG" alt="" style={{ width: '100%' }} />
+
+</DocScope>
 
 ### 子模块
 
+
+
 #### MIPI
+
+<DocScope products="RDK-S100">
+
 MIPI（Mobile Industry Processor Interface）移动行业处理器接口，是 MIPI 联盟发起的为移动应用处理器制定的开放标准。
-- S100/600 MIPI CSI RX 支持 C/DPHY，DPHY 速率4.5Gbps x 4lane = 18Gbps，CPHY 速率3.5Gsps x 3trios =24Gbps；
+- MIPI CSI RX 支持 C/DPHY，DPHY 速率4.5Gbps x 4lane = 18Gbps，CPHY 速率3.5Gsps x 3trios =24Gbps；
 - S100上有3个 MIPI RX，分别为 RX0，RX1，RX4；
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+MIPI（Mobile Industry Processor Interface）移动行业处理器接口，是 MIPI 联盟发起的为移动应用处理器制定的开放标准。
+- MIPI CSI RX 支持 C/DPHY，DPHY 速率4.5Gbps x 4lane = 18Gbps，CPHY 速率3.5Gsps x 3trios =24Gbps；
 - S600上有6个 MIPI RX，分别为 RX0~RX5；
+
+</DocScope>
 
 #### CIM
 
 CIM（Camera Interface Manager）是一种专门用来接收 MIPI-RX IPI 图像数据的硬件。CIM 负责同时接入多路图像数据，并改变 MIPI IPI 接口的时序以匹配后级硬件或 DDR 的输入时序要求，将图像通过硬件直连或 DDR 形式提供给 ISP 和 PYM。
 
+<DocScope products="RDK-S100">
+
 - S100上共有3个 CIM 模块，分别为 CIM0 CIM1 CIM4；
-- S600上共有6个 CIM 模块，分别为 CIM0~CIM5；
 - 单个 CIM 最大支持接入4V * 8M * 30fps，支持接入 RAW8、RAW10、RAW12、RAW14、RAW16、RAW20、YUV422~8Bit 图像；
 - S100 CIM 可 online 输出到 ISP0/ISP1(RAW)与 PYM0/PYM1(YUV)，也可 offline 下 DDR。
-- S600 CIM 可 online 输出到 ISP0/ISP1/ISP2/ISP3(RAW)与 PYM0/PYM1/PYM2/PYM3(YUV)，也可 offline 下 DDR。
 - S100 CIM0的 IPI0最大接入宽为5696，CIM0其他的 IPI 和其他 CIM 中的 IPI 最大接入宽为4096；
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- S600上共有6个 CIM 模块，分别为 CIM0~CIM5；
+- 单个 CIM 最大支持接入4V * 8M * 30fps，支持接入 RAW8、RAW10、RAW12、RAW14、RAW16、RAW20、YUV422~8Bit 图像；
+- S600 CIM 可 online 输出到 ISP0/ISP1/ISP2/ISP3(RAW)与 PYM0/PYM1/PYM2/PYM3(YUV)，也可 offline 下 DDR。
 - S600 CIM0~2最大接入宽为5696，其他 CIM 接入最大宽为4096
+
+</DocScope>
 
 #### ISP
 
 ISP (Image Signal Processor)图像信号处理器，是一种专门用于图像信号处理的引擎。 ISP 的功能包括对原始图像进行各类算法处理、图像特性统计、色彩空间转换、多路通道分时复用控制等，最终输出更清晰、更准确、高质量的图像。
 
-- S100上共有2个 ISP 模块，分别为 ISP0 ISP1；
-- S600上共有4个 ISP 模块，分别为 ISP0~ISP3
+<DocScope products="RDK-S100">
 - 每个 ISP 硬件模块 IP 最大支持12路 sensor 的接入能力；
+- S100上共有2个 ISP 模块，分别为 ISP0 ISP1；
 - S100 ISP 处理最大分辨率为4096 * 2160;
-- S600 ISP 处理最大分辨率为5696 * 3328
+
+</DocScope>
+<DocScope products="RDK-S600">
+- 每个 ISP 硬件模块 IP 最大支持12路 sensor 的接入能力；
+- S600上共有4个 ISP 模块，分别为 ISP0~ISP3；
+- S600 ISP 处理最大分辨率为5696 * 3328。
+
+</DocScope>
 ISP 处理 pipeline 如下图：
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp_pipeline.png" alt="" style={{ width: '100%' }} />
 - MCFE:
@@ -90,10 +129,18 @@ control 进行输出控制。
 
 YNR 为 yuv 域的降噪模块 Digital Noise Reduction，YNR 支持2DNR 与3DNR 模式
 
+<DocScope products="RDK-S100">
+
 - S100上共有一个 YNR 模块，YNR1，只支持 ISP1-online-YNR1-online-PYM1场景；
 - S100在2DNR 或3DNR 模式下，处理的最大宽高为2048*2048；
-- S600上共用四个 YNR 模块，YNR0~3，只支持 isp-online-ynr-online-pym 场景，其中 YNR0~2只支持2DNR，YNR3支持2DNR&3DNR；
-- S600 YNR0~2支持处理最大宽高为5696，YNR3处理最大宽高为4096；
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- S600上共用四个 YNR 模块，YNR0-3，只支持 isp-online-ynr-online-pym 场景，其中 YNR0-2只支持2DNR，YNR3支持2DNR&3DNR；
+- S600 YNR0-2支持处理最大宽高为5696，YNR3处理最大宽高为4096；
+
+</DocScope>
 
 #### PYM
 
@@ -101,14 +148,32 @@ PYM（Pyramid）作为一个硬件加速模块，对输入的图像按照金字�
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image.png" alt="alt text" style={{ width: '100%' }} />
 
+<DocScope products="RDK-S100">
+
 - S100上共有3个 PYM 模块，分别为 PYM0 PYM1 PYM4；
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 - S600上共有5个 PYM 模块，分别为 PYM0~4；
+
+</DocScope>
 - SRC 层：代表源图像层；
 - BL 层：代表双线性下采样层，BL Base 0~4依次是源图层的1/2，1/4，1/8，1/16，1/32；
 - DS 层：输出层，每层能够任意选择输入图层（SRC 或0~4BL），并进行下采样和 ROI 处理后输出到 DDR；
 - 缩小 ratio(1/2，1]，不支持放大；
-- S100每个最大输入宽度输入高度均为4096，S600最大输入宽高均为5696，最小输入宽度及高度为32；
-- S100 PYM0/1：4k@120fps，PYM4:4K@90fps，S600 PYM0~4 4K@120fps，PYM4不支持 online 输入；)
+<DocScope products="RDK-S100">
+
+- S100每个最大输入宽度输入高度均为4096，最小输入宽度及高度为32；
+- S100 PYM0/1：4K@120fps，PYM4：4K@90fps；
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- S600每个最大输入宽高均为5696，最小输入宽度及高度为32；
+- S600 PYM0~4：4K@120fps，其中 PYM4 不支持 online 输入。
+
+</DocScope>
 
 #### GDC
 
@@ -117,13 +182,29 @@ GDC 作为一个硬件模块，可将输入的图像进行视角变换、畸变�
 模式支持的输入图像典型尺寸为3840x2160，2688x1944，1920x1080，1280x720，640x480，480x320。
 
 硬件特性如下：
+
+<DocScope products="RDK-S100">
+
 - 最大分辨率：3840x2160
 - 最小分辨率：96x96（奇数行或者列不支持）
-- 性能：3840x2160，60fps，S100有一个 GDC 模块，S600上有两个
+- 性能：3840x2160，60fps
 - 工作模式：ddr-gdc-ddr
 - 输入格式：YUV420 semi-planar
 - 输出格式：YUV420 semi-planar
-- S100上有1个 GDC 模块，S600上有两个
+- S100上有1个 GDC 模块。
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- 最大分辨率：3840x2160
+- 最小分辨率：96x96（奇数行或者列不支持）
+- 性能：3840x2160，60fps
+- 工作模式：ddr-gdc-ddr
+- 输入格式：YUV420 semi-planar
+- 输出格式：YUV420 semi-planar
+- S600上有2个 GDC 模块。
+
+</DocScope>
 
 ##### GDCTool 简介
 GDC Tool 是一种可在 PC 上进行处理效果仿真的工具。用户可准备 jpg 模式的图像，load 到 gdc-tool 中进行离线校正，校正完成后可以直接保存 config.bin 文件用于硬件校正，也可用保存 layout.json 文件生成 config.bin 进行硬件校正
@@ -3345,7 +3426,8 @@ modprobe vid_v4l2  xxx=xxxx### 场景说明
 ```
 
 ### 场景说明
-S100:
+<DocScope products="RDK-S100">
+
 | scene num | 场景简述                      | 场景描述                            | 对应 video 节点（相对）        |
 |-----------|-------------------------------|-------------------------------------|------------------------------|
 | 0         | CIM-DDR 输出                   | CIM0 输出1路至 DDR （对应 video0）    | video0                       |
@@ -3374,7 +3456,9 @@ S100:
 | 9         | CIM-DDR-ISP-OTF-YNR-PYM       | CIM0-DDR-ISP1-OTF-YNR1-OTF-PYM1     | video0                       |
 |           |                               | CIM1-DDR-ISP1-OTF-YNR1-OTF-PYM1     | video1                       |
 
-S600:
+</DocScope>
+<DocScope products="RDK-S600">
+
 | scene num | 场景简述                      | 场景描述                            | 对应 video 节点（相对）        |
 |-----------|-------------------------------|-------------------------------------|------------------------------|
 | 0         | CIM-DDR 输出                   | CIM4 输出1路至 DDR  （对应 video0）   | video0                         |
@@ -3403,6 +3487,8 @@ S600:
 |           |                               | CIM1-DDR-ISP1-OTF-YNR1-OTF-PYM1 输出四路（serdes 场景）     | video6~9                         |
 |           |                               | CIM2-DDR-ISP2-OTF-YNR2-OTF-PYM2 输出四路（serdes 场景）     | video10~13                       |
 |           |                               | CIM3-DDR-ISP3-OTF-YNR3-OTF-PYM3 输出四路（serdes 场景）     | video14~17                       |
+
+</DocScope>
 
 （其他 link 场景暂不支持，持续更新中）
 

@@ -5,6 +5,11 @@ toc_max_heading_level: 4
 
 # Camsys Subsystem
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+
 ## System Overview
 
 The S100 camsys subsystem includes the Camera sensor (including SerDes), VIN (including MIPI, CIM), ISP, PYM, GDC, YNR, and STITCH modules.
@@ -30,27 +35,76 @@ The S100 camsys subsystem includes the Camera sensor (including SerDes), VIN (in
 
 ### Camsys Hardware Block Diagram
 
+<DocScope products="RDK-S100">
+
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/b266496271990c1606e5f68485cf3e9d.png)
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/s600-camsys.PNG)
+
+</DocScope>
+
 ### Submodules
+
+#### MIPI
+
+<DocScope products="RDK-S100">
+
+MIPI (Mobile Industry Processor Interface) is an open standard initiated by the MIPI Alliance for mobile application processor interfaces.
+- MIPI CSI RX supports C/DPHY: DPHY rate is 4.5Gbps x 4 lanes = 18Gbps, and CPHY rate is 3.5Gsps x 3 trios = 24Gbps.
+- S100 has three MIPI RX blocks: RX0, RX1, and RX4.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+MIPI (Mobile Industry Processor Interface) is an open standard initiated by the MIPI Alliance for mobile application processor interfaces.
+- MIPI CSI RX supports C/DPHY: DPHY rate is 4.5Gbps x 4 lanes = 18Gbps, and CPHY rate is 3.5Gsps x 3 trios = 24Gbps.
+- S600 has six MIPI RX blocks: RX0 to RX5.
+
+</DocScope>
 
 #### CIM
 
 CIM (Camera Interface Manager) is a dedicated hardware block for receiving MIPI-RX IPI image data. CIM handles simultaneous input of multiple image streams and adjusts the timing of the MIPI IPI interface to match the timing requirements of downstream hardware or DDR, delivering images directly via hardware or through DDR to the ISP and PYM.
 
+<DocScope products="RDK-S100">
+
 - The S100 has three CIM modules: CIM0, CIM1, and CIM4.
 - A single CIM supports a maximum input of 4V * 8M * 30fps and supports RAW8, RAW10, RAW12, RAW14, RAW16, RAW20, and YUV422-8Bit image formats.
-- CIM0 and CIM1 support direct hardware (OTF) output to ISP and PYM and also support offline output to DDR; CIM4 supports only offline output.
+- S100 CIM supports online output to ISP0/ISP1 (RAW) and PYM0/PYM1 (YUV), and also supports offline output to DDR.
 - The maximum input width for IPI0 of CIM0 is 5696; all other IPIs in CIM0 and all IPIs in other CIMs support a maximum input width of 4096.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- The S600 has six CIM modules: CIM0 to CIM5.
+- A single CIM supports a maximum input of 4V * 8M * 30fps and supports RAW8, RAW10, RAW12, RAW14, RAW16, RAW20, and YUV422-8Bit image formats.
+- S600 CIM supports online output to ISP0/ISP1/ISP2/ISP3 (RAW) and PYM0/PYM1/PYM2/PYM3 (YUV), and also supports offline output to DDR.
+- S600 CIM0~2 support a maximum input width of 5696; the other CIMs support a maximum input width of 4096.
+
+</DocScope>
 
 #### ISP
 
 ISP (Image Signal Processor) is a dedicated engine for image signal processing.  
 ISP functions include various algorithmic processing of raw images, image characteristic statistics, color space conversion, and time-division multiplexing control of multiple channels, ultimately producing clearer, more accurate, and higher-quality images.
 
-- The S100 has two ISP modules: ISP0 and ISP1.
+<DocScope products="RDK-S100">
+
 - Each ISP hardware IP supports up to 12 sensor inputs.
-- Maximum ISP processing resolution: 4096 × 2160.
+- The S100 has two ISP modules: ISP0 and ISP1.
+- Maximum ISP processing resolution is 4096 x 2160.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- Each ISP hardware IP supports up to 12 sensor inputs.
+- The S600 has four ISP modules: ISP0 to ISP3.
+- Maximum ISP processing resolution is 5696 x 3328.
+
+</DocScope>
 - ISP processing pipeline is shown below:  
 ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp_pipeline.png)
 - **MCFE**:  
@@ -66,8 +120,18 @@ ISP functions include various algorithmic processing of raw images, image charac
 
 YNR is a Digital Noise Reduction module operating in the YUV domain, supporting both 2DNR and 3DNR modes.
 
+<DocScope products="RDK-S100">
+
 - The S100 has one YNR module, YNR1, which only supports the ISP1-online-YNR1-online-PYM1 scenario.
-- In 3DNR mode, the maximum supported resolution is 2048×2048; in 2DNR mode, it supports up to 3840×2160.
+- On S100, the maximum supported width and height are 2048 x 2048 in both 2DNR and 3DNR modes.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- The S600 has four YNR modules: YNR0 to YNR3. It only supports ISP-online-YNR-online-PYM scenarios, where YNR0~2 support 2DNR only, and YNR3 supports both 2DNR and 3DNR.
+- On S600, YNR0-2 support a maximum processing width/height of 5696, while YNR3 supports up to 4096.
+
+</DocScope>
 
 #### PYM
 
@@ -75,13 +139,32 @@ PYM (Pyramid) is a hardware acceleration module that processes input images in p
 
 ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image.png)
 
+<DocScope products="RDK-S100">
+
 - The S100 has three PYM modules: PYM0, PYM1, and PYM4.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- The S600 has five PYM modules: PYM0 to PYM4.
+
+</DocScope>
 - SRC layer: Represents the source image layer.
 - BL layer: Represents bilinear downsampled layers; BL Base 0~4 correspond to 1/2, 1/4, 1/8, 1/16, and 1/32 of the source image, respectively.
 - DS layer: Output layer; each layer can arbitrarily select an input layer (SRC or BL0~4), perform downsampling and ROI processing, and then output to DDR.
-- Maximum input width and height: 4096; minimum input width and height: 32.
 - Downscaling ratio: (1/2, 1]; upscaling is not supported.
-- Performance: PYM0/1 support 4K@120fps; PYM4 supports 4K@90fps but does not support online input.
+<DocScope products="RDK-S100">
+
+- The maximum input width and height of each S100 PYM is 4096; the minimum input width and height are 32.
+- S100 PYM0/1 support 4K@120fps; PYM4 supports 4K@90fps.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- The maximum input width and height of each S600 PYM is 5696; the minimum input width and height are 32.
+- S600 PYM0~4 support 4K@120fps, where PYM4 does not support online input.
+
+</DocScope>
 
 #### GDC
 
@@ -90,12 +173,29 @@ GDC is a hardware module capable of performing perspective transformation, disto
 Typical supported input resolutions include: 3840×2160, 2688×1944, 1920×1080, 1280×720, 640×480, and 480×320.
 
 Hardware specifications:
+
+<DocScope products="RDK-S100">
+
 - Maximum resolution: 3840×2160
 - Minimum resolution: 96×96 (odd-numbered rows or columns are not supported)
 - Performance: 3840×2160 @ 60fps
 - Operating mode: DDR → GDC → DDR
 - Input format: YUV420 semi-planar
 - Output format: YUV420 semi-planar
+- S100 has one GDC module.
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- Maximum resolution: 3840×2160
+- Minimum resolution: 96×96 (odd-numbered rows or columns are not supported)
+- Performance: 3840×2160 @ 60fps
+- Operating mode: DDR → GDC → DDR
+- Input format: YUV420 semi-planar
+- Output format: YUV420 semi-planar
+- S600 has two GDC modules.
+
+</DocScope>
 
 ##### Introduction to GDCTool
 
@@ -3255,6 +3355,8 @@ modprobe vid_v4l2  xxx=xxxx### Scene Description
 ```
 
 ### Scene Description
+<DocScope products="RDK-S100">
+
 | scene num | Scene Summary                 | Scene Description                   | Corresponding Video Nodes (Relative) |
 |-----------|-------------------------------|-------------------------------------|--------------------------------------|
 | 0         | CIM-DDR Output                | CIM0 outputs 1 stream to DDR (video0) | video0                             |
@@ -3282,6 +3384,40 @@ modprobe vid_v4l2  xxx=xxxx### Scene Description
 |           |                               | Loopback GDC outputs to DDR         | video13                            |
 | 9         | CIM-DDR-ISP-OTF-YNR-PYM       | CIM0-DDR-ISP1-OTF-YNR1-OTF-PYM1     | video0                             |
 |           |                               | CIM1-DDR-ISP1-OTF-YNR1-OTF-PYM1     | video1                             |
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+| scene num | Scene Summary                          | Scene Description                                      | Corresponding Video Nodes (Relative) |
+|-----------|----------------------------------------|--------------------------------------------------------|--------------------------------------|
+| 0         | CIM-DDR Output                         | CIM4 outputs 1 stream to DDR (video0)                 | video0                               |
+|           |                                        | CIM5 outputs 1 stream to DDR                           | video1                               |
+|           |                                        | CIM0 outputs 4 streams to DDR (SerDes scenario)       | video2~5                             |
+|           |                                        | CIM1 outputs 4 streams to DDR (SerDes scenario)       | video6~9                             |
+|           |                                        | CIM2 outputs 4 streams to DDR (SerDes scenario)       | video10~13                           |
+|           |                                        | CIM3 outputs 4 streams to DDR (SerDes scenario)       | video14~17                           |
+| 1         | CIM-DDR-ISP-DDR                        | CIM4-DDR-ISP0-DDR                                      | video0                               |
+|           |                                        | CIM5-DDR-ISP1-DDR                                      | video1                               |
+| 2         | CIM-DDR-ISP-OTF-YNR-OTF-PYM (2 streams)| CIM4-DDR-ISP3-OTF-YNR3-OTF-PYM3-DDR                    | video0                               |
+|           |                                        | CIM5-DDR-ISP3-OTF-YNR3-OTF-PYM3-DDR                    | video1                               |
+| 3         | CIM-DDR-ISP-OTF-YNR-OTF-PYM            | CIM4-DDR-ISP3-OTF-YNR3-OTF-PYM3, PYM outputs 6 channels | video0~video5                      |
+|           | 2 streams, 6-channel output            | CIM5-DDR-ISP3-OTF-YNR3-OTF-PYM3, PYM outputs 6 channels | video6~video11                     |
+| 4         | CIM-DDR-ISP-DDR                        | CIM4-DDR-ISP0-DDR                                      | video0                               |
+|           |                                        | CIM5-DDR-ISP1-DDR                                      | video1                               |
+| 5         | CIM-DDR-ISP-OTF-YNR-OTF-PYM            | CIM4-DDR-ISP3-OTF-YNR3-OTF-PYM3-DDR                    | video0                               |
+| 6         | CIM4-OTF-ISP0-DDR-GDC one-channel output | CIM4-OTF-ISP0-DDR-GDC one-channel output             | video0                               |
+| 7         | DDR-PYM-DDR loopback output            | Loopback PYM outputs 6 streams to DDR                  | video0 ~ 5                           |
+|           |                                        | Loopback PYM outputs 6 streams to DDR                  | video6 ~ 11                          |
+|           | DDR-GDC-DDR loopback output            | Loopback GDC outputs to DDR                            | video12                              |
+|           |                                        | Loopback GDC outputs to DDR                            | video13                              |
+| 9         | CIM-DDR-ISP-OTF-YNR-OTF-PYM            | CIM4-DDR-ISP3-OTF-YNR3-OTF-PYM3                        | video0                               |
+|           |                                        | CIM5-DDR-ISP3-OTF-YNR3-OTF-PYM3                        | video1                               |
+|           |                                        | CIM0-DDR-ISP0-OTF-YNR0-OTF-PYM0 outputs 4 streams (SerDes scenario) | video2~5                  |
+|           |                                        | CIM1-DDR-ISP1-OTF-YNR1-OTF-PYM1 outputs 4 streams (SerDes scenario) | video6~9                  |
+|           |                                        | CIM2-DDR-ISP2-OTF-YNR2-OTF-PYM2 outputs 4 streams (SerDes scenario) | video10~13                |
+|           |                                        | CIM3-DDR-ISP3-OTF-YNR3-OTF-PYM3 outputs 4 streams (SerDes scenario) | video14~17                |
+
+</DocScope>
 
 (Other link scenarios are currently unsupported and will be continuously updated.)
 
