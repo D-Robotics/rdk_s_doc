@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 1.1.1.1 相机扩展板
+# 1.1.1.2 相机扩展板
 
 <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} /> -->
 

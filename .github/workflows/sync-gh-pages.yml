@@ -13,28 +13,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Tune Git for unstable network
-        run: |
-          git config --global http.postBuffer 524288000
-          git config --global http.version HTTP/1.1
-          git config --global http.lowSpeedLimit 1000
-          git config --global http.lowSpeedTime 600
-
       - name: Checkout gh-pages branch
-        id: checkout
         uses: actions/checkout@v4
-        continue-on-error: true
-        timeout-minutes: 15
         with:
           ref: gh-pages
-          # 浅克隆即可同步静态文件；fetch-depth: 0 会触发 --unshallow 全量拉取，易因 TLS 超时失败
-
-      - name: Retry checkout gh-pages branch
-        if: steps.checkout.outcome != 'success'
-        uses: actions/checkout@v4
-        timeout-minutes: 15
-        with:
-          ref: gh-pages
+          fetch-depth: 0
 
       - name: Setup ossutil v2
         run: |
