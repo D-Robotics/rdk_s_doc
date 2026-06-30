@@ -4,165 +4,327 @@ sidebar_position: 8
 
 # DDR Bandwidth Test
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## Test Principle
 
-DDR (Double Data Rate) memory bandwidth is a key performance metric that measures the data transfer capability of a memory system. It reflects the amount of data the memory can transfer per unit time, typically expressed in MB/s or GB/s. By performing specific memory operations and measuring their execution time, the memory bandwidth performance can be estimated. The primary test operations include: Copy, Scale, Add, and Triad.
+lmbench is an open-source system micro-benchmark suite (LMbench - Tools for Performance Analysis). The `bw_mem` component within it is specifically designed to measure memory bandwidth. It works by performing different read/write operations on a memory region of a specified size, timing them, and then calculating the memory bandwidth in MB/s.
 
-**1. Copy Operation:**
+`bw_mem` supports the following 5 common operation types:
 
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    c[j] = a[j];
-```
+| Operation | Meaning | Access Pattern |
+|-----------|---------|----------------|
+| `rd` | Read | Reads every 4 words, sums array values |
+| `wr` | Write | Writes every 4 words, assigns a constant value |
+| `rdwr` | Read-then-Write | Reads then writes the same location, every 4 words |
+| `frd` | Full Read | Sums every word |
+| `fwr` | Full Write | Assigns a constant to every word |
 
-- This operation copies data from array `a[]` to array `c[]`. It involves only memory reads and writes, thus measuring pure memory bandwidth.
-
-**2. Scale Operation:**
-
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    b[j] = scalar * c[j];
-```
-
-- This operation multiplies each element of array `c[]` by a constant `scalar` and stores the result in array `b[]`. Bandwidth is measured through reading `c[]` and writing to `b[]`.
-
-**3. Add Operation:**
-
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    c[j] = a[j] + b[j];
-```
-
-- This operation adds corresponding elements from arrays `a[]` and `b[]`, storing the result in array `c[]`. It reads two arrays and writes to a third.
-
-**4. Triad Operation:**
-
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    a[j] = b[j] + scalar * c[j];
-```
-
-- This is a more complex operation that performs a fused multiply-add on elements from arrays `b[]` and `c[]` using the constant `scalar`, storing the result in array `a[]`.
+The first three operations (`rd`/`wr`/`rdwr`) use a stride access pattern, accessing every 4th word. They are primarily used to measure **pure memory bandwidth**. `frd`/`fwr` perform full-word accesses, providing a more comprehensive view of the memory system's throughput capacity. **The `fwr` implementation in lmbench uses chained assignments, where each write instruction is independent, making it more indicative of the system's maximum DDR bandwidth.**
 
 ## Preparation
 
-**1.** Confirm DDR type and frequency: Different DDR memory types (e.g., LPDDR4) and their frequencies affect bandwidth test results. Use the command `cat /sys/class/boardinfo/ddr_type` to check DDR status information.
+:::info
+If the board does not have network access, you need to pull the source code on the PC, cross-compile it, and then push the binaries to the board via adb.
+:::
 
-```bash
-sunrise@ubuntu:/# cat /sys/class/boardinfo/ddr_type
-LPDDR5
-```
-
-Currently, the RDKS100 DDR frequency is 6400 MHz.
-
-**2.** Ensure the `stream` test file exists under `/app/chip_base_test/08_ddr_bandwidth/`. If not present, recompile it in this directory:
+**1. Pull the lmbench source code on the PC:**
 
 ```shell
-sunrise@ubuntu:/# cd /app/chip_base_test/08_ddr_bandwidth
-sunrise@ubuntu:/# gcc -O3 -fopenmp -DNTIMES=100 stream.c -lgomp -o stream
+git clone https://github.com/intel/lmbench.git
+cd lmbench
 ```
 
-## Test Procedure
-
-After completing the preparation steps, run the test command:
+**2. Install the cross-compilation toolchain on the PC:**
 
 ```shell
-sunrise@ubuntu:/# ./stream
+sudo apt install gcc-aarch64-linux-gnu build-essential libtirpc-dev
 ```
 
-After approximately 10 seconds, you will obtain the following results:
+**3. Cross-compile lmbench on the PC:**
+
+```shell
+cd lmbench/src
+make OS=aarch64-linux-gnu CC=aarch64-linux-gnu-gcc AR=aarch64-linux-gnu-ar build
+```
+
+After successful compilation, the `bw_mem` executable is located at `bin/aarch64-linux-gnu/bw_mem`.
+
+:::info Compilation Issue Handling
+If you encounter errors such as `rpc/rpc.h: No such file or directory` or `undefined reference to pmap_set`, edit the `scripts/build` file, locate the final `${MAKE}` line, and add the tirpc header file path and link library:
+```makefile
+${MAKE} OS="${OS}" CC="${CC}" CFLAGS="${CFLAGS} -I/usr/include/tirpc" LDLIBS="${LDLIBS} -ltirpc" O="${BINDIR}" $*
+```
+:::
+
+**4. Push to the board:**
+
+**Option 1: Cross-compile on PC then push binaries**
+
+```shell
+adb.exe push bin/aarch64-linux-gnu/bw_mem /app/chip_base_test/08_ddr_bandwidth/
+adb.exe push bin/aarch64-linux-gnu/lat_mem_rd /app/chip_base_test/08_ddr_bandwidth/
+```
+
+**Option 2: Push source code to the board and compile natively**
+
+If the PC lacks the cross-compilation toolchain, you can also push the source code to the board and compile it there (the board must have gcc and make):
+
+```shell
+# Push source code
+adb.exe push lmbench/ /app/chip_base_test/08_ddr_bandwidth/lmbench/
+
+# Add execute permissions for scripts
+adb.exe shell chmod +x /app/chip_base_test/08_ddr_bandwidth/lmbench/scripts/*
+
+# Compile on the board
+adb.exe shell "cd /app/chip_base_test/08_ddr_bandwidth/lmbench/src && make"
+```
+
+If the board encounters `rpc/rpc.h` not found during compilation, install the dependency first:
+
+```shell
+adb.exe shell apt install -y libtirpc-dev
+```
+
+Then recompile. The resulting executable paths are the same as in Option 1.
+
+**5. Confirm CPU topology (for CPU pinning):**
+
+Check the core allocation and frequency range for each policy:
+
+```shell
+for p in /sys/devices/system/cpu/cpufreq/policy*; do echo $(basename $p): cpus=$(cat $p/affected_cpus) freq=$(cat $p/scaling_cur_freq) governor=$(cat $p/scaling_governor); done
+```
+
+<DocScope products="RDK S100">
+
+Example output:
 
 ```yaml
--------------------------------------------------------------
-STREAM version $Revision: 5.10 $
--------------------------------------------------------------
-This system uses 8 bytes per array element.
--------------------------------------------------------------
-Array size = 10000000 (elements), Offset = 0 (elements)
-Memory per array = 76.3 MiB (= 0.1 GiB).
-Total memory required = 228.9 MiB (= 0.2 GiB).
-Each kernel will be executed 100 times.
- The *best* time for each kernel (excluding the first iteration)
- will be used to compute the reported bandwidth.
--------------------------------------------------------------
-Number of Threads requested = 6
-Number of Threads counted = 6
--------------------------------------------------------------
-Your clock granularity/precision appears to be 1 microseconds.
-Each test below will take on the order of 3674 microseconds.
-   (= 3674 clock ticks)
-Increase the size of the arrays if this shows that
-you are not getting at least 20 clock ticks per test.
--------------------------------------------------------------
-WARNING -- The above is only a rough guideline.
-For best results, please be sure you know the
-precision of your system timer.
--------------------------------------------------------------
--------------------------------------------------------------
-Function    Best Rate MB/s  Avg time     Min time     Max time
-Copy:           47239.8     0.003658     0.003387     0.004648
-Scale:          48721.4     0.003657     0.003284     0.005366
-Add:            46592.6     0.006095     0.005151     0.008138
-Triad:          46431.4     0.006107     0.005169     0.008374
--------------------------------------------------------------
-Solution Validates: avg error less than 1.000000e-13 on all three arrays
--------------------------------------------------------------
+policy0: cpus=0 1 2 3 freq=1500000 governor=performance
+policy4: cpus=4 5 freq=1500000 governor=performance
 ```
 
-**Explanation of Key Information:**
+The S100 platform has a total of 6 cores (Cortex-A78AE), divided into 2 policies/clusters:
+- policy0 (cluster 0): Cpu0 ~ Cpu3, 4 cores
+- policy4 (cluster 1): Cpu4 ~ Cpu5, 2 cores
 
-The four metrics in the test results—`Copy`, `Scale`, `Add`, and `Triad`—represent bandwidth measurements. The test principles for these four operations are illustrated in the figure below:
+</DocScope>
 
-![DDR_test_principle](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/DDR_test_principle.png)
+<DocScope products="RDK S600">
 
-- **Copy:** Reads a value from one memory location and writes it to another.
-  - **Test Description:** In the Copy test, the system copies the contents of one array to another. This is the most basic memory bandwidth test, primarily evaluating performance during simple memory-to-memory data copying.
-  - **Bandwidth Result:** 47578.1 MB/s
+Example output:
 
-- **Scale:** Reads a value from memory, performs a multiplication, and writes the result to another memory location.
-  - **Test Description:** Scale involves not only memory bandwidth but also CPU computation, thus better reflecting the collaboration between processor and memory.
-  - **Bandwidth Result:** 47904.1 MB/s
+```yaml
+policy0: cpus=0 1 freq=2100000 governor=performance
+policy2: cpus=2 3 4 5 freq=2100000 governor=performance
+policy6: cpus=6 7 8 9 freq=2100000 governor=performance
+policy10: cpus=10 11 12 13 freq=2100000 governor=performance
+policy14: cpus=14 15 16 17 freq=2100000 governor=performance
+```
 
-- **Add:** Reads two values from memory, adds them, and writes the result to another memory location.
-  - **Test Description:** The Add test simulates adding two arrays and storing the result in a third array, testing bandwidth requirements during parallel CPU and memory operations.
-  - **Bandwidth Result:** 44642.0 MB/s
+The S600 platform has a total of 18 cores (Cortex-A78AE), divided into 5 policies/clusters:
+- policy0 (cluster 0): Cpu0 ~ Cpu1, 2 cores
+- policy2 (cluster 1): Cpu2 ~ Cpu5, 4 cores
+- policy6 (cluster 2): Cpu6 ~ Cpu9, 4 cores
+- policy10 (cluster 3): Cpu10 ~ Cpu13, 4 cores
+- policy14 (cluster 4): Cpu14 ~ Cpu17, 4 cores
 
-- **Triad (Combined Operation):** Combines Copy, Scale, and Add operations. Specifically, it reads two values `a` and `b` from memory, performs a fused multiply-add operation (`a + scalar * b`), and writes the result to another memory location.
-  - **Test Description:** Triad not only adds two arrays but also scales the result with another array, representing a composite operation involving computation, addition, and memory access simultaneously.
-  - **Bandwidth Result:** 42987.3 MB/s
+</DocScope>
 
-- **Meaning of Values in Output Results:**
+## Test Method
 
-  - **Best Rate MB/s:** The highest memory transfer rate achieved during the operation, measured in megabytes per second (MB/s). Represents peak performance.
+### Command Format
 
-  - **Avg time:** Average time per operation in seconds, indicating average latency.
+```shell
+bw_mem [options] <test_size> <operation_type>
+```
 
-  - **Min time:** Shortest operation time in seconds, representing best-case performance in a single run.
+**Common Options:**
 
-  - **Max time:** Longest operation time in seconds, representing worst-case performance in a single run.
+| Option | Description |
+|--------|-------------|
+| `-P <N>` | Parallelism (number of processes/threads), default is 1 |
+| `-W <N>` | Number of warm-up iterations |
+| `-N <N>` | Number of measurement repetitions |
+
+**Supported Units for Test Size:** `k` = 1024B, `m` = 1024×1024B, `g` = 1024×1024×1024B. It is recommended to use 256M to exceed the cache size and measure true DDR bandwidth.
+
+### Test Example (Key Steps)
+
+Use `taskset -c <core_id>` to pin `bw_mem` to a specific CPU core, preventing process migration between cores which can cause fluctuating test results. It is recommended to pin cores from different clusters to fully leverage parallel test capability across multiple test cores, maximizing DDR bandwidth utilization.
+
+**Why CPU Pinning is Necessary:** When testing DDR bandwidth, if the process migrates between different CPU cores, it can lead to L1/L2 cache invalidation and changes in NUMA access latency, resulting in unstable test outcomes. Using `taskset` to pin `bw_mem` to fixed CPU cores yields stable and reproducible bandwidth data.
+
+<DocScope products="RDK S100">
+
+```shell
+#!/bin/bash
+
+out_put_file=$1
+mem_bench_func() {
+    echo "-----------------------mem bench begin-----------------------" >> $out_put_file
+    # rd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rd > srd.log 2>&1
+    srd=`cat srd.log | awk '{print $2}'`
+    srd_result="rd (256m): $srd(MB/s)"
+    echo $srd_result >> $out_put_file
+    rm srd.log
+    # wr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m wr > swr.log 2>&1
+    swr=`cat swr.log | awk '{print $2}'`
+    swr_result="wr (256m): $swr(MB/s)"
+    echo $swr_result >> $out_put_file
+    rm swr.log
+    # Read && Write
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rdwr > rdwr.log 2>&1
+    rdwr=`cat rdwr.log | awk '{print $2}'`
+    srdwr_result="rdwr (256m): $rdwr(MB/s)"
+    echo $srdwr_result >> $out_put_file
+    rm rdwr.log
+    # frd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m frd > frd.log 2>&1
+    frd=`cat frd.log | awk '{print $2}'`
+    frd_result="frd (256m): $frd(MB/s)"
+    echo $frd_result >> $out_put_file
+    rm frd.log
+    # fwr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m fwr > fwr.log 2>&1
+    fwr=`cat fwr.log | awk '{print $2}'`
+    fwr_result="fwr (256m): $fwr(MB/s)"
+    echo $fwr_result >> $out_put_file
+    rm fwr.log
+    # latency test
+    taskset -c 1 ./lat_mem_rd -P 1 -W 2 -N 5 -t 512MB 1024 > latency.log 2>&1
+    latency=`cat latency.log | grep 512. | awk {'print $2'}`
+    latency_result="512MB latency is: $latency ns"
+    echo $latency_result >> $out_put_file
+    rm latency.log
+    echo "-----------------------mem bench end-----------------------" >> $out_put_file
+    echo "" >> $out_put_file
+}
+
+mem_bench_func
+
+```
+
+Example Output:
+
+```yaml
+-----------------------mem bench begin-----------------------
+rd (256m): 54989.97(MB/s)
+wr (256m): 15431.34(MB/s)
+rdwr (256m): 32749.03(MB/s)
+frd (256m): 44279.83(MB/s)
+fwr (256m): 59645.31(MB/s)
+512MB latency is: 151.415 ns
+-----------------------mem bench end-----------------------
+```
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```shell
+#!/bin/bash
+
+out_put_file=$1
+mem_bench_func() {
+    echo "-----------------------mem bench begin-----------------------" >> $out_put_file
+    # rd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rd > srd.log 2>&1
+    srd=`cat srd.log | awk '{print $2}'`
+    srd_result="rd (256m): $srd(MB/s)"
+    echo $srd_result >> $out_put_file
+    rm srd.log
+    # wr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m wr > swr.log 2>&1
+    swr=`cat swr.log | awk '{print $2}'`
+    swr_result="wr (256m): $swr(MB/s)"
+    echo $swr_result >> $out_put_file
+    rm swr.log
+    # Read && Write
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rdwr > rdwr.log 2>&1
+    rdwr=`cat rdwr.log | awk '{print $2}'`
+    srdwr_result="rdwr (256m): $rdwr(MB/s)"
+    echo $srdwr_result >> $out_put_file
+    rm rdwr.log
+    # frd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m frd > frd.log 2>&1
+    frd=`cat frd.log | awk '{print $2}'`
+    frd_result="frd (256m): $frd(MB/s)"
+    echo $frd_result >> $out_put_file
+    rm frd.log
+    # fwr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m fwr > fwr.log 2>&1
+    fwr=`cat fwr.log | awk '{print $2}'`
+    fwr_result="fwr (256m): $fwr(MB/s)"
+    echo $fwr_result >> $out_put_file
+    rm fwr.log
+    # latency test
+    taskset -c 1 ./lat_mem_rd -P 1 -W 2 -N 5 -t 512MB 1024 > latency.log 2>&1
+    latency=`cat latency.log | grep 512. | awk {'print $2'}`
+    latency_result="512MB latency is: $latency ns"
+    echo $latency_result >> $out_put_file
+    rm latency.log
+    echo "-----------------------mem bench end-----------------------" >> $out_put_file
+    echo "" >> $out_put_file
+}
+
+mem_bench_func
+
+```
+
+Example Output:
+
+```yaml
+-----------------------mem bench begin-----------------------
+rd (256m): 53849.95(MB/s)
+wr (256m): 45503.63(MB/s)
+rdwr (256m): 45016.76(MB/s)
+frd (256m): 53822.56(MB/s)
+fwr (256m): 161014.81(MB/s)
+512MB latency is: 167.837 ns
+-----------------------mem bench end-----------------------
+```
+</DocScope>
 
 ## Test Metrics
 
-DDR bandwidth is typically calculated based on memory clock frequency and bus width, using the following formula:
+### Theoretical Bandwidth Calculation Formula
 
 ```shell
-Bandwidth (MB/s) = Memory Clock Frequency (MHz) × 2 × Bus Width (bit) / 8
+Bandwidth (MB/s) = Data Rate (MT/s) × Bus Width (bits) / 8
 ```
 
-On the S100 platform, the DDR memory frequency is 4266 MHz (2133 × 2), and the memory bus width is 96 bits (i.e., 12 bytes). Thus, the theoretical bandwidth is:
+<DocScope products="RDK S600">
 
-```shell
-Bandwidth (MB/s) = 6400 MHz × 12 Byte = 76800 MB/s
-```
+Taking S600 as an example:
 
-### Pass Criteria
+| Item | Parameter |
+|------|-----------|
+| DDR Type | LPDDR5 |
+| Data Rate | 6400 MT/s |
+| Bus Width | 256 bits (32 Bytes) |
+| Theoretical Bandwidth | 6400 × 32 = **204,800 MB/s** (approximately 200 GB/s) |
 
-Actual DDR bandwidth test results are usually lower than theoretical bandwidth. A typical standard is 60%–70% of the theoretical bandwidth. For the S100 platform, with a theoretical bandwidth of 76800 MB/s, the pass threshold is:
+</DocScope>
 
-```shell
-Pass Criterion = ddr_score(76800) × 0.6 = 46080
-```
+<DocScope products="RDK S100">
 
-### Test Result
+Taking S100 as an example:
 
-Taking the `Triad` operation—which closely mimics real-world DDR usage—as an example, its measured bandwidth exceeds the pass criterion of 46080 MB/s. Therefore, the test result meets the DDR bandwidth standard and satisfies expected performance requirements.
+| Item | Parameter |
+|------|-----------|
+| DDR Type | LPDDR5 |
+| Data Rate | 6400 MT/s |
+| Bus Width | 96 bits (12 Bytes) |
+| Theoretical Bandwidth | 6400 × 12 = **76,800 MB/s** |
+
+</DocScope>
+
+### Passing Criteria
+
+Due to the read/write latency of the DDR system itself and the maintenance commands sent to DRAM particles, which also occupy time slices on the address and data buses, the actual DDR bandwidth will be lower than the theoretical bandwidth. The practical bandwidth standard should be approximately 70% of the theoretical bandwidth. Additionally, under high temperatures (automotive grade, DRAM above 85°C), more refresh commands must be sent to the DRAM particles, further reducing the actual bandwidth.

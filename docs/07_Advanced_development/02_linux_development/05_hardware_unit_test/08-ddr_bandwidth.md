@@ -4,163 +4,325 @@ sidebar_position: 8
 
 # DDR 带宽测试
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 测试原理
 
-DDR（ Double Data Rate）内存带宽是衡量内存系统数据传输能力的关键性能指标，它反映了内存可以在单位时间内传输的数据量，通常以 MB/s 或 GB/s 为单位，通过执行特定的内存操作并测量其执行时间，可以估算内存的带宽性能，主要的测试操作有： Copy、 Scale、 Add、 Triad。
+lmbench 是一套开源的系统微基准测试工具（LMbench - Tools for Performance Analysis），其中的 `bw_mem` 组件专门用于测量内存带宽。它通过在指定大小的内存区域上执行不同的读写操作并计时，计算出内存带宽，单位为 MB/s。
 
-**1. Copy（拷贝）操作：**
+`bw_mem` 支持以下 5 种常用的操作类型：
 
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    c[j] = a[j];
-```
+| 操作 | 含义 | 访问模式 |
+|------|------|----------|
+| `rd` | 读取（Read） | 每 4 个字（word）读一次，对数组求和 |
+| `wr` | 写入（Write） | 每 4 个字写一次，赋值常量 |
+| `rdwr` | 读后写（Read-then-Write） | 同一位置先读后写，每 4 个字 |
+| `frd` | 全读（Full Read） | 对每个字都求和 |
+| `fwr` | 全写（Full Write） | 对每个字都赋值常量 |
 
-- 这个操作将数组 a[] 的数据复制到数组 c[]。它只涉及内存的读取和写入，因此它测量的是单纯的内存带宽。
-
-**2. Scale（缩放）操作：**
-
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    b[j] = scalar * c[j];
-```
-
-- 这个操作将数组 c[] 的每个元素乘以一个常数 scalar，然后将结果存储到数组 b[] 中。这一操作通过读取 c[] 和写入 b[] 来测量带宽。
-
-**3. Add（加法）操作：**
-
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    c[j] = a[j] + b[j];
-```
-
-- 该操作将数组 a[] 和 b[] 中的对应元素相加，并将结果存储到数组 c[] 中。这是一种读取两个数组并写入到另一个数组的操作。
-
-**4. Triad（三元组）操作：**
-
-```c
-for (j=0; j<STREAM_ARRAY_SIZE; j++)
-    a[j] = b[j] + scalar * c[j];
-```
-
-- 这是一个更复杂的操作，它将数组 b[] 中的元素与数组 c[] 中的元素按照常数 scalar 进行三元组加法，并将结果存储到数组 a[] 中。
+其中前 3 种（rd/wr/rdwr）使用跨步（stride）访问模式，每间隔 4 个字访问一次，主要用于测量**纯内存带宽**；`frd`/`fwr` 则是全字访问，能更全面反映内存系统的吞吐能力。**其中`fwr`在lmbench中的实现是链式赋值，每条写指令独立，更能反应系统的DDR最大带宽**
 
 ## 准备工作
 
-**1.** 确认 DDR 类型和频率：不同类型的 DDR 内存（如 LPDDR4 ）和其频率会影响带宽的测试结果，使用命令 `cat /sys/class/boardinfo/ddr_type` 查看 DDR 状态信息。
+:::info
+如果板端无网络连接，需要在 PC 端拉取源码并交叉编译，再通过 adb 推送至板端。
+:::
 
-```bash
-sunrise@ubuntu:/# cat /sys/class/boardinfo/ddr_type
-LPDDR5
-```
-
-目前 RDKS100 DDR 频率为 6400MHz。
-
-**2.** 确认在 /app/chip_base_test/08_ddr_bandwidth/ 路径下存在 stream 测试文件，如不存在，可在路径下重新编译生成：
+**1. PC 端拉取 lmbench 源码：**
 
 ```shell
-sunrise@ubuntu:/# cd /app/chip_base_test/08_ddr_bandwidth
-sunrise@ubuntu:/# gcc -O3 -fopenmp -DNTIMES=100 stream.c -lgomp -o stream
+git clone https://github.com/intel/lmbench.git
+cd lmbench
 ```
+
+**2. PC 端安装交叉编译工具链：**
+
+```shell
+sudo apt install gcc-aarch64-linux-gnu build-essential libtirpc-dev
+```
+
+**3. PC 端交叉编译 lmbench：**
+
+```shell
+cd lmbench/src
+make OS=aarch64-linux-gnu CC=aarch64-linux-gnu-gcc AR=aarch64-linux-gnu-ar build
+```
+
+编译成功后，`bw_mem` 可执行文件位于 `bin/aarch64-linux-gnu/bw_mem`。
+
+:::info 编译问题处理
+如果遇到 `rpc/rpc.h: No such file or directory` 或 `undefined reference to pmap_set` 错误，编辑 `scripts/build` 文件，找到最后的 `${MAKE}` 行，添加 tirpc 头文件路径和链接库：
+```makefile
+${MAKE} OS="${OS}" CC="${CC}" CFLAGS="${CFLAGS} -I/usr/include/tirpc" LDLIBS="${LDLIBS} -ltirpc" O="${BINDIR}" $*
+```
+:::
+
+**4. 推送至板端：**
+
+**方案一：PC 交叉编译后推送二进制**
+
+```shell
+adb.exe push bin/aarch64-linux-gnu/bw_mem /app/chip_base_test/08_ddr_bandwidth/
+adb.exe push bin/aarch64-linux-gnu/lat_mem_rd /app/chip_base_test/08_ddr_bandwidth/
+```
+
+**方案二：推送源码至板端原生编译**
+
+如果 PC 端缺少交叉编译工具链，也可将源码推送至板端后编译（板端需有 gcc 和 make）：
+
+```shell
+# 推送源码
+adb.exe push lmbench/ /app/chip_base_test/08_ddr_bandwidth/lmbench/
+
+# 添加脚本执行权限
+adb.exe shell chmod +x /app/chip_base_test/08_ddr_bandwidth/lmbench/scripts/*
+
+# 板端编译
+adb.exe shell "cd /app/chip_base_test/08_ddr_bandwidth/lmbench/src && make"
+```
+
+如果板端编译时遇到 `rpc/rpc.h` 找不到，先安装依赖：
+
+```shell
+adb.exe shell apt install -y libtirpc-dev
+```
+
+然后重新编译。编译出的可执行文件路径参考方案一
+
+**5. 确认 CPU 拓扑（用于绑核）：**
+
+查看每个 policy 的核心分配和频率范围：
+
+```shell
+for p in /sys/devices/system/cpu/cpufreq/policy*; do echo $(basename $p): cpus=$(cat $p/affected_cpus) freq=$(cat $p/scaling_cur_freq) governor=$(cat $p/scaling_governor); done
+```
+
+<DocScope products="RDK S100">
+
+输出示例：
+
+```yaml
+policy0: cpus=0 1 2 3 freq=1500000 governor=performance
+policy4: cpus=4 5 freq=1500000 governor=performance
+```
+
+S100 平台共 6 核（Cortex-A78AE），分为 2 个 policy/集群：
+- policy0（cluster 0）：Cpu0 ~ Cpu3，4 核
+- policy4（cluster 1）：Cpu4 ~ Cpu5，2 核
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+输出示例：
+
+```yaml
+policy0: cpus=0 1 freq=2100000 governor=performance
+policy2: cpus=2 3 4 5 freq=2100000 governor=performance
+policy6: cpus=6 7 8 9 freq=2100000 governor=performance
+policy10: cpus=10 11 12 13 freq=2100000 governor=performance
+policy14: cpus=14 15 16 17 freq=2100000 governor=performance
+```
+
+S600 平台共 18 核（Cortex-A78AE），分为 5 个 policy/集群：
+- policy0（cluster 0）：Cpu0 ~ Cpu1，2 核
+- policy2（cluster 1）：Cpu2 ~ Cpu5，4 核
+- policy6（cluster 2）：Cpu6 ~ Cpu9，4 核
+- policy10（cluster 3）：Cpu10 ~ Cpu13，4 核
+- policy14（cluster 4）：Cpu14 ~ Cpu17，4 核
+
+</DocScope>
 
 ## 测试方法
 
-确保已完成准备工作后，运行测试命令：
+### 命令格式
 
 ```shell
-sunrise@ubuntu:/# ./stream
+bw_mem [选项] <测试大小> <操作类型>
 ```
 
-等待 10 秒左右后得到以下结果：
+**常用选项：**
+
+| 选项 | 说明 |
+|------|------|
+| `-P <N>` | 并行度（进程/线程数），默认 1 |
+| `-W <N>` | 预热迭代次数 |
+| `-N <N>` | 测量重复次数 |
+
+**测试大小支持的单位：** `k`=1024B, `m`=1024×1024B, `g`=1024×1024×1024B。建议使用 256M 以超过 cache 大小，测得真实的 DDR 带宽。
+
+### 测试示例（关键步骤）
+
+使用 `taskset -c <核心号>` 将 `bw_mem` 绑定到指定 CPU 核心，避免进程在核间迁移导致测试结果波动。建议绑定不同cluster的核心，充分发挥多个测试核心的并行测试能力，最大程度上占满DDR带宽
+
+**绑核的必要性：** 在测试 DDR 带宽时，如果进程在不同 CPU 核之间迁移，会导致 L1/L2 cache 失效以及 NUMA 访问延迟变化，造成测试结果不稳定。使用 `taskset` 将 `bw_mem` 绑定到固定的 CPU 核心上，可获得稳定、可复现的带宽数据。
+
+<DocScope products="RDK S100">
+
+```shell
+#!/bin/bash
+
+out_put_file=$1
+mem_bench_func() {
+    echo "-----------------------mem bench begin-----------------------" >> $out_put_file
+    # rd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rd > srd.log 2>&1
+    srd=`cat srd.log | awk '{print $2}'`
+    srd_result="rd (256m): $srd(MB/s)"
+    echo $srd_result >> $out_put_file
+    rm srd.log
+    # wr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m wr > swr.log 2>&1
+    swr=`cat swr.log | awk '{print $2}'`
+    swr_result="wr (256m): $swr(MB/s)"
+    echo $swr_result >> $out_put_file
+    rm swr.log
+    # Read && Write
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rdwr > rdwr.log 2>&1
+    rdwr=`cat rdwr.log | awk '{print $2}'`
+    srdwr_result="rdwr (256m): $rdwr(MB/s)"
+    echo $srdwr_result >> $out_put_file
+    rm rdwr.log
+    # frd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m frd > frd.log 2>&1
+    frd=`cat frd.log | awk '{print $2}'`
+    frd_result="frd (256m): $frd(MB/s)"
+    echo $frd_result >> $out_put_file
+    rm frd.log
+    # fwr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m fwr > fwr.log 2>&1
+    fwr=`cat fwr.log | awk '{print $2}'`
+    fwr_result="fwr (256m): $fwr(MB/s)"
+    echo $fwr_result >> $out_put_file
+    rm fwr.log
+    # latency test
+    taskset -c 1 ./lat_mem_rd -P 1 -W 2 -N 5 -t 512MB 1024 > latency.log 2>&1
+    latency=`cat latency.log | grep 512. | awk {'print $2'}`
+    latency_result="512MB latency is: $latency ns"
+    echo $latency_result >> $out_put_file
+    rm latency.log
+    echo "-----------------------mem bench end-----------------------" >> $out_put_file
+    echo "" >> $out_put_file
+}
+
+mem_bench_func
+
+```
+
+输出示例：
 
 ```yaml
--------------------------------------------------------------
-STREAM version $Revision: 5.10 $
--------------------------------------------------------------
-This system uses 8 bytes per array element.
--------------------------------------------------------------
-Array size = 10000000 (elements), Offset = 0 (elements)
-Memory per array = 76.3 MiB (= 0.1 GiB).
-Total memory required = 228.9 MiB (= 0.2 GiB).
-Each kernel will be executed 100 times.
- The *best* time for each kernel (excluding the first iteration)
- will be used to compute the reported bandwidth.
--------------------------------------------------------------
-Number of Threads requested = 6
-Number of Threads counted = 6
--------------------------------------------------------------
-Your clock granularity/precision appears to be 1 microseconds.
-Each test below will take on the order of 3674 microseconds.
-   (= 3674 clock ticks)
-Increase the size of the arrays if this shows that
-you are not getting at least 20 clock ticks per test.
--------------------------------------------------------------
-WARNING -- The above is only a rough guideline.
-For best results, please be sure you know the
-precision of your system timer.
--------------------------------------------------------------
--------------------------------------------------------------
-Function    Best Rate MB/s  Avg time     Min time     Max time
-Copy:           47239.8     0.003658     0.003387     0.004648
-Scale:          48721.4     0.003657     0.003284     0.005366
-Add:            46592.6     0.006095     0.005151     0.008138
-Triad:          46431.4     0.006107     0.005169     0.008374
--------------------------------------------------------------
-Solution Validates: avg error less than 1.000000e-13 on all three arrays
--------------------------------------------------------------
+-----------------------mem bench begin-----------------------
+rd (256m): 54989.97(MB/s)
+wr (256m): 15431.34(MB/s)
+rdwr (256m): 32749.03(MB/s)
+frd (256m): 44279.83(MB/s)
+fwr (256m): 59645.31(MB/s)
+512MB latency is: 151.415 ns
+-----------------------mem bench end-----------------------
+```
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```shell
+#!/bin/bash
+
+out_put_file=$1
+mem_bench_func() {
+    echo "-----------------------mem bench begin-----------------------" >> $out_put_file
+    # rd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rd > srd.log 2>&1
+    srd=`cat srd.log | awk '{print $2}'`
+    srd_result="rd (256m): $srd(MB/s)"
+    echo $srd_result >> $out_put_file
+    rm srd.log
+    # wr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m wr > swr.log 2>&1
+    swr=`cat swr.log | awk '{print $2}'`
+    swr_result="wr (256m): $swr(MB/s)"
+    echo $swr_result >> $out_put_file
+    rm swr.log
+    # Read && Write
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rdwr > rdwr.log 2>&1
+    rdwr=`cat rdwr.log | awk '{print $2}'`
+    srdwr_result="rdwr (256m): $rdwr(MB/s)"
+    echo $srdwr_result >> $out_put_file
+    rm rdwr.log
+    # frd
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m frd > frd.log 2>&1
+    frd=`cat frd.log | awk '{print $2}'`
+    frd_result="frd (256m): $frd(MB/s)"
+    echo $frd_result >> $out_put_file
+    rm frd.log
+    # fwr
+    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m fwr > fwr.log 2>&1
+    fwr=`cat fwr.log | awk '{print $2}'`
+    fwr_result="fwr (256m): $fwr(MB/s)"
+    echo $fwr_result >> $out_put_file
+    rm fwr.log
+    # latency test
+    taskset -c 1 ./lat_mem_rd -P 1 -W 2 -N 5 -t 512MB 1024 > latency.log 2>&1
+    latency=`cat latency.log | grep 512. | awk {'print $2'}`
+    latency_result="512MB latency is: $latency ns"
+    echo $latency_result >> $out_put_file
+    rm latency.log
+    echo "-----------------------mem bench end-----------------------" >> $out_put_file
+    echo "" >> $out_put_file
+}
+
+mem_bench_func
+
 ```
 
-**关键信息说明：**
+输出示例：
 
-测试结果中的 `Copy`，`Scale`，`Add`，`Triad` 四项即带宽结果，该四项数据的测试原理如下图所示：
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/DDR_test_principle.png" alt="DDR_test_principle" style={{ width: '100%' }} />
-
-- **Copy (复制)：** 它先访问一个内存单元读出其中的值，再将值写入到另一个内存单元。
-  - 测试描述：在 Copy 测试中，系统将一个数组的内容复制到另一个数组，这是内存带宽的最基本测试，主要考察的是系统在执行内存到内存的简单数据复制时的性能。
-  - 带宽结果： 47578.1 MB/s
-- **Scale (乘法)：** 先从内存单元读出其中的值，作一个乘法运算，再将结果写入到另一个内存单元。
-  - 测试描述： Scale 不仅涉及内存带宽，还需要 CPU 执行计算任务，因此更能体现处理器和内存之间的协作性能。
-  - 带宽结果： 47904.1 MB/s
-- **Add (加法)：** 先从内存单元读出两个值，做加法运算，再将结果写入到另一个内存单元。
-  - 测试描述： Add 测试模拟了两个数组相加并将结果存储到第三个数组中，这测试了 CPU 和内存在并行操作时的带宽需求。
-  - 带宽结果： 44642.0 MB/
-- **Triad (组合操作)：** 将 Copy、 Scale、 Add 三种操作组合起来进行测。具体操作方式是：先从内存单元中读两个值 a、 b ，对其进行乘加混合运算（ a + 因子 * b ） ，将运算结果写入到另一个内存单元
-  - 测试描述： Triad 不仅涉及两个数组相加，还将结果与另一个数组进行缩放，是一个同时进行计算、加法和内存访问的复合操作。
-  - 带宽结果： 42987.3 MB/s
-
-- **输出结果中的数值的含义：**
-
-  - **Best Rate MB/s（最佳速率）：** 在操作中达到的最高内存传输速率，以兆字节 / 秒（ MB/s）为单位。表示峰值性能。
-
-  - **Avg time（平均时间）：** 每次操作的平均时间，以秒为单位，表示性能的平均延迟时间。
-
-  - **Min time（最小时间）：** 操作的最短时间，以秒为单位，表示在某一次操作中的最佳性能。
-
-  - **Max time（最大时间）：** 操作的最长时间，以秒为单位，表示某一次复制操作中的最差性能。
+```yaml
+-----------------------mem bench begin-----------------------
+rd (256m): 53849.95(MB/s)
+wr (256m): 45503.63(MB/s)
+rdwr (256m): 45016.76(MB/s)
+frd (256m): 53822.56(MB/s)
+fwr (256m): 161014.81(MB/s)
+512MB latency is: 167.837 ns
+-----------------------mem bench end-----------------------
+```
+</DocScope>
 
 ## 测试指标
 
-DDR 带宽通常基于内存的频率和总线宽度来计算，公式如下：
+### 理论带宽计算公式
 
 ```shell
-带宽 (MB/s) =  内存时钟频率 (MHz) * 2 * 总线宽度 (bit) / 8
+带宽 (MB/s) = 数据率 (MT/s) × 总线宽度 (bit) / 8
 ```
 
-S100 平台下， DDR 内存频率为 4266 MHz（ 2133x2 ），内存总线宽度为 96 位（即 12 字节），则理论带宽为：
+<DocScope products="RDK S600">
 
-```shell
-带宽 (MB/s) = 6400 MHz × 12 Byte = 76800 MB/s
 
-```
+| 项目 | 参数 |
+|------|------|
+| DDR 型号 | LPDDR5 |
+| 数据率 | 6400 MT/s |
+| 总线宽度 | 256 bit（32 Byte） |
+| 理论带宽 | 6400 × 32 = **204,800 MB/s**（约 200 GB/s） |
 
-### 分数标准
+</DocScope>
 
-实际 DDR 带宽的测试结果通常会低于理论带宽，实际带宽的标准应为理论带宽的 60%-70%，以 S100 平台 为例，理论带宽为 76800 MB/s，因此标准带宽为：
+<DocScope products="RDK S100">
 
-```shell
-分数标准 =  ddr_score(76800) * 0.6 = 46080
-```
 
-### 测试结果
+| 项目 | 参数 |
+|------|------|
+| DDR 型号 | LPDDR5 |
+| 数据率 | 6400 MT/s |
+| 总线宽度 | 96 bit（12 Byte） |
+| 理论带宽 | 6400 × 12 = **76,800 MB/s** |
 
-以接近实际 DDR 使用方式的 `Triad` 操作为例，其分数结果超过了标准带宽 46080 MB/s，因此测试结果符合 DDR 带宽标准且达到预期的性能要求。
+</DocScope>
+
+### 及格标准
+
+由于DDR系统本身的读写latency和DDR系统给DRAM颗粒发的一些维护命令，也会占用地址和数据总线上的时间片，所以DDR的实际带宽会小于理论带宽，实际带宽的标准应为理论带宽的 70%左右。并且在高温（车规，DRAM 85度以上）下需要给DRAN颗粒发送更多的refresh命令，实际带宽还会进一步降低
