@@ -41,6 +41,7 @@ USB 驱动可通过 Xburn 工具安装。
 
 1. 连接 USB 线。
 2. 驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
+
    ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/uart_ch340_device.png)
 
 3. 下载远程连接工具 [Mobaxterm](https://mobaxterm.mobatek.net/download.html)。
