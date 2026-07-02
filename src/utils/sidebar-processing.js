@@ -1,9 +1,10 @@
-import {shouldShowInSidebar} from '@site/src/context/sidebar-scope-config';
 import {
-  flattenSingleChildCategories,
-  renumberVisibleItems,
+  filterSidebarItemsByScope,
+  processSidebarForDisplay,
   stripNumberPrefix,
 } from '@site/src/utils/sidebar-numbering';
+
+export {filterSidebarItemsByScope, processSidebarForDisplay};
 
 export function normalizeSidebarPath(path) {
   if (!path) return '';
@@ -21,60 +22,6 @@ export function normalizeSidebarPathTail(path) {
   return normalized
     .replace(/^\/rdk_s_doc\//, '/')
     .replace(/^\/en\//, '/');
-}
-
-function itemSelfContainsVersionsPath(item) {
-  const docId = String(item?.docId || '');
-  const href = String(item?.href || '');
-  const linkHref = String(item?.link?.href || '');
-  return (
-    docId.includes('/versions/') ||
-    href.includes('/versions/') ||
-    linkHref.includes('/versions/')
-  );
-}
-
-function isVersionsSidebarItem(item) {
-  const label = stripNumberPrefix(String(item?.label || ''))
-    .trim()
-    .toLowerCase();
-  if (label === 'versions') {
-    return true;
-  }
-  return itemSelfContainsVersionsPath(item);
-}
-
-export function filterSidebarItemsByScope(items, version, product) {
-  if (!Array.isArray(items)) {
-    return [];
-  }
-  const result = [];
-  for (const item of items) {
-    if (isVersionsSidebarItem(item)) {
-      continue;
-    }
-    if (item?.type === 'category' && Array.isArray(item.items)) {
-      const filteredChildren = filterSidebarItemsByScope(
-        item.items,
-        version,
-        product,
-      );
-      if (filteredChildren.length > 0) {
-        result.push({...item, items: filteredChildren});
-      }
-      continue;
-    }
-    if (shouldShowInSidebar(item, version, product)) {
-      result.push(item);
-    }
-  }
-  return result;
-}
-
-export function processSidebarForDisplay(items, version, product) {
-  const filtered = filterSidebarItemsByScope(items, version, product);
-  const flattened = flattenSingleChildCategories(filtered);
-  return renumberVisibleItems(flattened);
 }
 
 export function pathsMatchSidebarItem(href, targetPathname) {

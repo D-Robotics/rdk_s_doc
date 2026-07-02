@@ -10,9 +10,8 @@ import { useDocScopeFilter } from "@site/src/context/DocScopeFilterContext";
 import { shouldShowDoc, findFirstVisibleDoc } from "@site/src/context/sidebar-scope-config";
 import { isMultiInstanceDocsRoute } from "@site/src/utils/docs-route-utils";
 import {
-  flattenSingleChildCategories,
   findDocDisplayNumber,
-  renumberVisibleItems,
+  processSidebarForDisplay,
   stripNumberPrefix,
 } from "@site/src/utils/sidebar-numbering";
 
@@ -84,24 +83,6 @@ function findClosestVisibleDoc(items, version, product, currentPathname) {
   return best || visibleLinks[0];
 }
 
-function filterItems(items, version, product) {
-  if (!Array.isArray(items)) return items;
-  const result = [];
-  for (const item of items) {
-    if (item.type === "category" && item.items) {
-      const filtered = filterItems(item.items, version, product);
-      if (filtered.length > 0) {
-        result.push({ ...item, items: filtered });
-      }
-      continue;
-    }
-    if (shouldShowDoc(item.docId || "", version, product)) {
-      result.push(item);
-    }
-  }
-  return result;
-}
-
 export default function DocItemWrapper(props) {
   const { siteConfig, i18n } = useDocusaurusContext();
   const { version, product } = useDocScopeFilter();
@@ -122,9 +103,7 @@ export default function DocItemWrapper(props) {
   const visible = skipSidebarScope || shouldShowDoc(docId, version, product);
   const filteredRenumberedSidebar = useMemo(() => {
     if (!sidebar?.items || skipSidebarScope) return null;
-    const filtered = filterItems(sidebar.items, version, product);
-    const flattened = flattenSingleChildCategories(filtered);
-    return renumberVisibleItems(flattened);
+    return processSidebarForDisplay(sidebar.items, version, product);
   }, [sidebar, skipSidebarScope, version, product]);
   const currentDocDisplayNumber = useMemo(() => {
     if (!filteredRenumberedSidebar) return null;

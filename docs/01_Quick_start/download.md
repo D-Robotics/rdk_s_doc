@@ -28,23 +28,33 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 ## 系统软件
 
+<div className="table-responsive">
+
 | 名称                                                                                   | 最新版本    | 上传日期   | 说明文档                                                             |
 | -------------------------------------------------------------------------------------- | ----------- | ---------- | -------------------------------------------------------------------- |
 | [系统镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)                | RDKS100-V4.0.5_20260507 | 2026-05-07 | 系统镜像。                                                           |
 | [BSP 源码包](https://developer.d-robotics.cc/resource)                | RDKS100-V4.0.5_20260507 | 2026-05-07 | BSP 源码包。                                                           |
 
+</div>
+
 <br/><br/>
 
 <!-- <DocScope products="RDK S600">
+
+<div className="table-responsive">
 
 | 名称     | 最新版本    | 上传日期   | 路径                                                                            |
 | -------- | ----------- | ---------- | ------------------------------------------------------------------------------- |
 | 系统镜像 | V5.1.0 | 2026-06-09 | https://archive.d-robotics.cc/downloads/os_images/rdk_s600/|
 
+</div>
+
 </DocScope> -->
 
 
 ## 工具下载
+
+<div className="table-responsive">
 
 | 名称                                                                                   | 最新版本    | 上传日期   | 说明文档                                                             |
 | -------------------------------------------------------------------------------------- | ----------- | ---------- | -------------------------------------------------------------------- |
@@ -52,6 +62,8 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 | [MCU 交叉编译工具链](https://archive.d-robotics.cc/downloads/software_tools/mcu_toolchain/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2) | -      | 2026-01-27 | MCU 交叉编译工具链。 |
 | [hbplayer](https://archive.d-robotics.cc/downloads/hobotplayer/hbplayerv2.7.zip) | V2.7      | 2026-01-27 | 图像浏览工具。 |
 | [CH340 串口驱动程序](https://archive.d-robotics.cc/downloads/software_tools/serial_to_usb_drivers/CH34x_Install_Windows_v3_4.zip) | V3.4      | 2026-03-17 | 串口驱动程序。 |
+
+</div>
 
 <br/><br/>
 
@@ -61,26 +73,94 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 ### RDK S100
 
+<div className="table-responsive">
+
 | 名称                                                                                                            | 版本   | 上传日期   | 说明文档                                                  |
 | --------------------------------------------------------------------------------------------------------------- | ------ | ---------- | --------------------------------------------------------- |
 | [STEP 模型](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_v1p0.step)    | V1.0.0 | 2025-06-10 | 产品 3D 模型，STEP 格式，便于进行机器人布局，外壳设计等。 |
 | [产品渲染图](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_renders.zip) | V1.0.0 | 2025-06-10 | 产品渲染图片，便于产品材料二次编辑。                      |
 | 产品实拍图                                                                                                      | V1.0.0 | 2025-06-10 | 产品实物图，便于进行产品材料二次编辑。                    |
 
+</div>
+
 <br/><br/>
 
-### RDK S100 Camera Expansion Board
+### Camera Expansion Board
 
-| 名称                                                                                                                                                                      | 版本   | 上传日期   | 说明文档                                                  |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------- | --------------------------------------------------------- |
-| [STEP 模型](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_v1p0.step)                | V1.0.0 | 2025-06-10 | 产品 3D 模型，STEP 格式，便于进行机器人布局，外壳设计等。 |
-| [参考设计](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_reference_design_v1p0.zip) | V1.0.0 | 2025-06-10 | 参考设计。                                                |
-| 产品渲染图                                                                                                                                                                | V1.0.0 | 2025-06-10 | 产品渲染图片，便于产品材料二次编辑。                      |
-| 产品实拍图                                                                                                                                                                | V1.0.0 | 2025-06-10 | 产品实物图，便于进行产品材料二次编辑。                    |
+<div className="table-responsive">
+
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>产品</th>
+      <th>下载</th>
+      <th>上传日期</th>
+      <th>说明文档</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STEP 模型</td>
+      <td>相机扩展板</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_v1p0.step">STEP 模型</a></td>
+      <td>2025-06-10</td>
+      <td rowspan="2">产品 3D 模型，STEP 格式，便于进行机器人布局、外壳设计等。</td>
+    </tr>
+    <!-- <tr>
+      <td>相机扩展板 12 通道</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_12l_3d_model_v1p0_20260508.STEP">STEP 模型</a></td>
+      <td>2026-07-01</td>
+    </tr> -->
+    <tr>
+      <td>参考设计</td>
+      <td>相机扩展板</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_reference_design_v1p0.zip">参考设计</a></td>
+      <td>2025-06-10</td>
+      <td>参考设计。</td>
+    </tr>
+    <!-- <tr>
+      <td>相机扩展板 12 通道</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_reference_design.zip">参考设计</a></td>
+      <td>2025-07-01</td>
+    </tr> -->
+    <tr>
+      <td>产品实拍图</td>
+      <td>相机扩展板</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board.7z">产品实拍图</a></td>
+      <td>2025-06-10</td>
+      <td>产品实物图，便于进行产品材料二次编辑。</td>
+    </tr>
+    <!-- <tr>
+      <td>相机扩展板 12 通道</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board.7z">产品实拍图</a></td>
+      <td>2026-07-01</td>
+      <td>产品实物图，便于进行产品材料二次编辑。</td>
+    </tr> -->
+    <!-- <tr>
+      <td>2D 图纸</td>
+      <td>相机扩展板 12 通道</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_12l_2d_v1p0_20260508.pdf">2D 图纸</a></td>
+      <td>2025-07-01</td>
+      <td>2D 图纸。</td>
+    </tr>
+    <tr>
+      <td>产品渲染图</td>
+      <td>相机扩展板 12 通道</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_12l.zip">产品渲染图</a></td>
+      <td>2025-07-01</td>
+      <td>产品渲染图。</td>
+    </tr> -->
+  </tbody>
+</table>
+
+</div>
 
 <br/><br/>
 
 ### RDK S100 MCU Port Expansion Board
+
+<div className="table-responsive">
 
 | 名称                                                                                                                                                                          | 版本   | 上传日期   | 说明文档                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------- | ------------------------------------------------------------- |
@@ -90,30 +170,45 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 | 产品渲染图                                                                                                                                                                    | V1.0.0 | 2025-06-10 | 产品渲染图片，便于产品材料二次编辑。                          |
 | 产品实拍图                                                                                                                                                                    | V1.0.0 | 2025-06-10 | 产品实物图，便于进行产品材料二次编辑。                        |
 
+</div>
+
 <br/><br/>
 
 ## 规格书与设计资料汇总
 ### RDK S100
 
+<div className="table-responsive">
+
 | 名称                                                                                                            | 版本   | 上传日期   | 说明文档                                                  |
 | --------------------------------------------------------------------------------------------------------------- | ------ | ---------- | --------------------------------------------------------- |
 | [RDK S100规格书](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/d_robotics_rdk_s100_board_zh_v1_2.pdf)    | V1.2 | 2026-02-10 | 产品规格、特色、尺寸及型号等详细信息。 |                |
+
+</div>
 
 <br/><br/>
 
 ### RDK S100 Camera Expansion Board
 
+<div className="table-responsive">
+
 | 名称                                                                                                                                                                      | 版本   | 上传日期   | 说明文档                                                  |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------- | --------------------------------------------------------- |
-| [相机扩展板规格书](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/d_robotics_rdk_s100_camera_expansion_board_zh_v1_1.pdf)                | V1.1 | 2025-12-16 | 产品规格、特色、尺寸及型号等详细信息。 |
+| [RDK S100 相机扩展板规格书](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/d_robotics_rdk_s100_camera_expansion_board_zh_v1_1.pdf)                | V1.1 | 2025-12-16 | 产品规格、特色、尺寸及型号等详细信息。 |
+<!-- | [RDK S100 相机扩展板 12 通道规格书](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/d_robotics_rdk_s100_camera_expansion_board_12l_en_v1_0.pdf)                | V1.0 | 2026-07-01 | 产品规格、特色、尺寸及型号等详细信息。 | -->
+
+</div>
 
 <br/><br/>
 
 ### RDK S100 MCU Port Expansion Board
 
+<div className="table-responsive">
+
 | 名称                                                                                                                                                                          | 版本   | 上传日期   | 说明文档                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------- | ------------------------------------------------------------- |
 | [MCU接口扩展板规格书](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/d_robotics_rdk_s100_mcu_port__expansion_board_zh_v1_1.pdf)            | V1.1 | 2025-12-16 | 产品规格、特色、尺寸及型号等详细信息。   |
+
+</div>
 
 <br/><br/>
 
@@ -123,6 +218,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - 包含所有产品的认证文件
 :::
 
+<div className="table-responsive">
 <table>
   <thead>
     <tr>
@@ -194,6 +290,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
     </tr>
   </tbody>
 </table>
+</div>
 
 </DocScope>
 
@@ -209,7 +306,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 ## 系统软件
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>
@@ -252,7 +349,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 ## 工具下载
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>
@@ -317,6 +414,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 ### RDK S600
 
+<div className="table-responsive">
 <table>
   <thead>
     <tr>
@@ -344,11 +442,13 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
     </tr> 
   </tbody>
 </table>
+</div>
 
 <br/><br/>
 
 ### RDK S600 Camera Expansion Board
 
+<div className="table-responsive">
 <table>
   <thead>
     <tr>
@@ -375,6 +475,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
     </tr>
   </tbody>
 </table>
+</div>
 
 <br/><br/>
 
@@ -416,7 +517,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 ## 系统软件
 
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>
@@ -457,7 +558,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 ## 工具下载
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>
