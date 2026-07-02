@@ -20,7 +20,6 @@ This sample demonstrates how to run Ultralytics YOLOv5x object detection on an e
 </DocScope>
 
 ## Features
-Y
 - Model loading
 
     Initialize `hbm_runtime`, load the model, and obtain input/output names and dimensions.

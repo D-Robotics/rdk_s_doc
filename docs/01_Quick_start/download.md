@@ -158,6 +158,8 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 <br/><br/>
 
+<br/><br/>
+
 ### RDK S100 MCU Port Expansion Board
 
 <div className="table-responsive">
@@ -197,6 +199,8 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 <!-- | [RDK S100 相机扩展板 12 通道规格书](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/d_robotics_rdk_s100_camera_expansion_board_12l_en_v1_0.pdf)                | V1.0 | 2026-07-01 | 产品规格、特色、尺寸及型号等详细信息。 | -->
 
 </div>
+
+<br/><br/>
 
 <br/><br/>
 
@@ -290,6 +294,58 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
     </tr>
   </tbody>
 </table>
+
+</DocScope>
+
+
+
+
+
+<DocScope products="RDK S600">
+
+<Tabs groupId="download" defaultValue="online">
+<TabItem value="online" label="在线下载">
+
+
+## 系统软件
+
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>最新版本</th>
+        <th>上传日期</th>
+        <th>说明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>[系统镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>预编译镜像与deb包。</td>
+      </tr>
+       <tr>
+        <td>[BSP 源码](https://developer.d-robotics.cc/resource)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>BSP 源码。</td>
+      </tr>
+      <tr>
+        <td>[MCU Cluster-1 镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/RDKS600-V5.1.0/RDK_MCU_SDK/firmwares/)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>MCU Cluster-1 预编译镜像。</td>
+      </tr>
+      <tr>
+        <td>[MCU Cluster-1 SDK](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/RDKS600-V5.1.0/RDK_MCU_SDK/mcu-community.tar.gz)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>MCU Cluster-1 SDK（静态链接库）。</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 </DocScope>

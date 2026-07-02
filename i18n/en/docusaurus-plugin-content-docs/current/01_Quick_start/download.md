@@ -283,6 +283,58 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
     </tr>
   </tbody>
 </table>
+
+</DocScope>
+
+
+
+
+
+<DocScope products="RDK S600">
+
+<Tabs groupId="download" defaultValue="online">
+<TabItem value="online" label="Online Download">
+
+
+## System Software
+
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Latest Version</th>
+        <th>Upload Date</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>[System Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>Pre-compiled images and deb packages.</td>
+      </tr>
+       <tr>
+        <td>[BSP Source](https://developer.d-robotics.cc/resource)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>BSP source code.</td>
+      </tr>
+      <tr>
+        <td>[MCU Cluster-1 Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/RDKS600-V5.1.0/RDK_MCU_SDK/firmwares/)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>MCU Cluster-1 pre-compiled image.</td>
+      </tr>
+      <tr>
+        <td>[MCU Cluster-1 SDK](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/RDKS600-V5.1.0/RDK_MCU_SDK/mcu-community.tar.gz)</td>
+        <td>V5.1.0</td>
+        <td>2026-06-22</td>
+        <td>MCU Cluster-1 SDK (static link library).</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 </DocScope>
