@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 1.1.1.3 MCU 接口扩展板
+# 1.1.3 MCU 接口扩展板
 
 ![image-rdk_100_mcu_port_expansion_board](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png)
 

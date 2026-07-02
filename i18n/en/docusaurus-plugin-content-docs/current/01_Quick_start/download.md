@@ -28,23 +28,33 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 ## System Software
 
+<div className="table-responsive">
+
 | Name                                                                                   | Latest Version | Upload Date | Documentation                                                      |
 | -------------------------------------------------------------------------------------- | -------------- | ----------- | -------------------------------------------------------------------- |
 | [System Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)                | RDKS100-V4.0.5_20260507 | 2026-05-07  | System image.                                                       |
 | [BSP Source Package](https://developer.d-robotics.cc/resource)                | RDKS100-V4.0.5_20260507 | 2026-05-07  | BSP source package.                                                 |
 
+</div>
+
 <br/><br/>
 
 <!-- <DocScope products="RDK S600">
+
+<div className="table-responsive">
 
 | Name | Latest Version | Upload Date | Path |
 | ---- | -------------- | ----------- | ---- |
 | System Image | V5.1.0 | 2026-06-09 | https://archive.d-robotics.cc/downloads/os_images/rdk_s600/|
 
+</div>
+
 </DocScope> -->
 
 
 ## Tool Downloads
+
+<div className="table-responsive">
 
 | Name                                                                                   | Latest Version | Upload Date | Documentation                                                      |
 | -------------------------------------------------------------------------------------- | -------------- | ----------- | -------------------------------------------------------------------- |
@@ -52,6 +62,8 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 | [MCU Cross-compilation Toolchain](https://archive.d-robotics.cc/downloads/software_tools/mcu_toolchain/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2) | -              | 2026-01-27  | MCU cross-compilation toolchain. |
 | [hbplayer](https://archive.d-robotics.cc/downloads/hobotplayer/hbplayerv2.7.zip) | V2.7           | 2026-01-27  | Image viewer tool. |
 | [CH340 Serial Driver](https://archive.d-robotics.cc/downloads/software_tools/serial_to_usb_drivers/CH34x_Install_Windows_v3_4.zip) | V3.4           | 2026-03-17  | Serial port driver. |
+
+</div>
 
 <br/><br/>
 
@@ -61,26 +73,88 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 ### RDK S100
 
+<div className="table-responsive">
+
 | Name                                                                                                            | Version | Upload Date | Documentation                                                 |
 | --------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
 | [STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_v1p0.step)    | V1.0.0  | 2025-06-10  | Product 3D model, STEP format, suitable for robot layout, enclosure design, etc. |
 | [Product Renderings](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/drobotics_rdk_s100_renders.zip) | V1.0.0  | 2025-06-10  | Product rendering images, convenient for secondary editing of product materials. |
 | Product Photos                                                                                                  | V1.0.0  | 2025-06-10  | Product physical images, convenient for secondary editing of product materials. |
 
+</div>
+
 <br/><br/>
 
-### RDK S100 Camera Expansion Board
+### Camera Expansion Board
 
-| Name                                                                                                                                                                      | Version | Upload Date | Documentation                                                 |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
-| [STEP Model](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_v1p0.step)                | V1.0.0  | 2025-06-10  | Product 3D model, STEP format, suitable for robot layout, enclosure design, etc. |
-| [Reference Design](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_reference_design_v1p0.zip) | V1.0.0  | 2025-06-10  | Reference design.                                                |
-| Product Renderings                                                                                                                                                                | V1.0.0  | 2025-06-10  | Product rendering images, convenient for secondary editing of product materials. |
-| Product Photos                                                                                                                                                                | V1.0.0  | 2025-06-10  | Product physical images, convenient for secondary editing of product materials. |
+<div className="table-responsive">
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Product</th>
+      <th>Download</th>
+      <th>Upload Date</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STEP Model</td>
+      <td>Camera Expansion Board</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_v1p0.step">STEP Model</a></td>
+      <td>2025-06-10</td>
+      <td rowspan="2">Product 3D model in STEP format, suitable for robot layout, enclosure design, etc.</td>
+    </tr>
+    <!-- <tr>
+      <td>Camera Expansion Board 12L</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_12l_3d_model_v1p0_20260508.STEP">STEP Model</a></td>
+      <td>2026-07-01</td>
+    </tr> -->
+    <tr>
+      <td>Reference Design</td>
+      <td>Camera Expansion Board</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_reference_design_v1p0.zip">Reference Design</a></td>
+      <td>2025-06-10</td>
+      <td rowspan="2">Reference design.</td>
+    </tr>
+    <!-- <tr>
+      <td>Camera Expansion Board 12L</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_reference_design.zip">Reference Design</a></td>
+      <td>2025-07-01</td>
+    </tr> -->
+    <tr>
+      <td>Product Photos</td>
+      <td>Camera Expansion Board</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board.7z">Product Photos</a></td>
+      <td>2025-06-10</td>
+      <td>Product images for secondary editing of product materials.</td>
+    </tr>
+    <!-- <tr>
+      <td>2D Drawing</td>
+      <td>Camera Expansion Board 12L</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_12l_2d_v1p0_20260508.pdf">2D Drawing</a></td>
+      <td>2025-07-01</td>
+      <td>2D drawing.</td>
+    </tr>
+    <tr>
+      <td>Product Rendering</td>
+      <td>Camera Expansion Board 12L</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/drobotics_rdk_s100_camera_expansion_board_12l.zip">Product Rendering</a></td>
+      <td>2025-07-01</td>
+      <td>Product rendering.</td>
+    </tr> -->
+  </tbody>
+</table>
+
+</div>
 
 <br/><br/>
 
 ### RDK S100 MCU Port Expansion Board
+
+<div className="table-responsive">
 
 | Name                                                                                                                                                                          | Version | Upload Date | Documentation                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ----------------------------------------------------------------- |
@@ -90,30 +164,44 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 | Product Renderings                                                                                                                                                                    | V1.0.0  | 2025-06-10  | Product rendering images, convenient for secondary editing of product materials. |
 | Product Photos                                                                                                                                                                    | V1.0.0  | 2025-06-10  | Product physical images, convenient for secondary editing of product materials. |
 
+</div>
+
 <br/><br/>
 
 ## Specifications and Design Documentation Summary
 ### RDK S100
 
+<div className="table-responsive">
+
 | Name                                                                                                            | Version | Upload Date | Documentation                                                 |
 | --------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
 | [RDK S100 Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/d_robotics_rdk_s100_board_zh_v1_2.pdf)    | V1.2 | 2026-02-10  | Detailed product specifications, features, dimensions, models, etc. |
+
+</div>
 
 <br/><br/>
 
 ### RDK S100 Camera Expansion Board
 
+<div className="table-responsive">
+
 | Name                                                                                                                                                                      | Version | Upload Date | Documentation                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
 | [Camera Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/d_robotics_rdk_s100_camera_expansion_board_zh_v1_1.pdf)                | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
+<!-- | [Camera Expansion Board 12L Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/d_robotics_rdk_s100_camera_expansion_board_12l_en_v1_0.pdf)                | V1.0 | 2026-07-01  | Detailed product specifications, features, dimensions, models, etc. | -->
 
+</div>
 <br/><br/>
 
 ### RDK S100 MCU Port Expansion Board
 
+<div className="table-responsive">
+
 | Name                                                                                                                                                                          | Version | Upload Date | Documentation                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ----------------------------------------------------------------- |
 | [MCU Port Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/d_robotics_rdk_s100_mcu_port__expansion_board_zh_v1_1.pdf)            | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
+
+</div>
 
 <br/><br/>
 
@@ -123,6 +211,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - Contains certification documents for all products
 :::
 
+<div className="table-responsive">
 <table>
   <thead>
     <tr>
@@ -194,6 +283,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
     </tr>
   </tbody>
 </table>
+</div>
 
 </DocScope>
 
@@ -209,7 +299,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 ## System Software
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>
@@ -252,7 +342,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 ## Tool Downloads
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>
@@ -351,6 +441,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 ### RDK S600 Camera Expansion Board
 
+<div className="table-responsive">
 <table>
   <thead>
     <tr>
@@ -377,6 +468,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
     </tr>
   </tbody>
 </table>
+</div>
 
 <br/><br/>
 
@@ -418,7 +510,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 ## System Software
 
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>
@@ -459,7 +551,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 ## Tool Downloads
 
-<div>
+<div className="table-responsive">
   <table>
     <thead>
       <tr>

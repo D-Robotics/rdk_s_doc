@@ -1,3 +1,5 @@
+import {shouldShowInSidebar} from '@site/src/context/sidebar-scope-config';
+
 /**
  * 解析类似 "1.5 显示屏使用" / "1. 快速开始" 的标签。
  */
@@ -108,4 +110,58 @@ export function flattenSingleChildCategories(items) {
   }
 
   return result;
+}
+
+function itemSelfContainsVersionsPath(item) {
+  const docId = String(item?.docId || '');
+  const href = String(item?.href || '');
+  const linkHref = String(item?.link?.href || '');
+  return (
+    docId.includes('/versions/') ||
+    href.includes('/versions/') ||
+    linkHref.includes('/versions/')
+  );
+}
+
+function isVersionsSidebarItem(item) {
+  const label = stripNumberPrefix(String(item?.label || ''))
+    .trim()
+    .toLowerCase();
+  if (label === 'versions') {
+    return true;
+  }
+  return itemSelfContainsVersionsPath(item);
+}
+
+export function filterSidebarItemsByScope(items, version, product) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+  const result = [];
+  for (const item of items) {
+    if (isVersionsSidebarItem(item)) {
+      continue;
+    }
+    if (item?.type === 'category' && Array.isArray(item.items)) {
+      const filteredChildren = filterSidebarItemsByScope(
+        item.items,
+        version,
+        product,
+      );
+      if (filteredChildren.length > 0) {
+        result.push({...item, items: filteredChildren});
+      }
+      continue;
+    }
+    if (shouldShowInSidebar(item, version, product)) {
+      result.push(item);
+    }
+  }
+  return result;
+}
+
+export function processSidebarForDisplay(items, version, product) {
+  const filtered = filterSidebarItemsByScope(items, version, product);
+  const flattened = flattenSingleChildCategories(filtered);
+  return renumberVisibleItems(flattened);
 }

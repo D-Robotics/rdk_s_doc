@@ -490,5 +490,9 @@
   "sidebar.tutorialSidebar.category.rdk_s600": {
     "message": "rdk_s600",
     "description": "The label for category rdk_s600 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.1.1.2 相机扩展板": {
+    "message": "1.1.2 Camera Expansion Board",
+    "description": "The label for category 1.1.2 相机扩展板 in sidebar tutorialSidebar"
   }
 }

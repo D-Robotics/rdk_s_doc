@@ -26,5 +26,9 @@
   "copyright": {
     "message": "Copyright © 2024-2026 D-Robotics.",
     "description": "The footer copyright"
+  },
+  "link.item.label.Bilibili": {
+    "message": "Bilibili",
+    "description": "The label of footer link with label=Bilibili linking to https://space.bilibili.com/437998606"
   }
 }

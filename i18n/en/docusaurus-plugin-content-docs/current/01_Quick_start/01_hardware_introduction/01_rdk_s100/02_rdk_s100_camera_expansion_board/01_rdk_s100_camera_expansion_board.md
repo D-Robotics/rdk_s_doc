@@ -2,9 +2,8 @@
 sidebar_position: 2
 ---
 
-# 1.1.1.2 Camera Expansion Board
+# 1.1.2.1 Camera Expansion Board
 
-<!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} /> -->
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} />
 
@@ -91,7 +90,7 @@ Please watch the corresponding expansion board assembly video based on your actu
 - Threaded Support Pillar Expansion Board: The inner wall of the support pillar has threads.
 - Smooth-Hole Support Pillar Expansion Board: The inner wall of the support pillar is smooth without threads.
 
-    <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s100_camera_expansion_board_suppport_location.png" alt="Support pillar location diagram" style={{ width: '50%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s100_camera_expansion_board_suppport_location-en.png" alt="Support pillar location diagram" style={{ width: '50%' }} />
 
 :::
 
@@ -196,4 +195,4 @@ Power indicator, located next to the DC power input interface.
 
 ## Compatible Modules
 
-Please refer to [7.1.2 Accessory List](../../../07_Advanced_development/01_hardware_development/02_accessory.md)
+Please refer to [7.1.2 Accessory List](../../../../07_Advanced_development/01_hardware_development/02_accessory.md)
