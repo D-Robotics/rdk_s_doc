@@ -1,10 +1,10 @@
 ---
 
-sidebar_position: 3
+sidebar_position: 4
 sidebar_products: "RDK S100"
 ---
 
-# 1.1.3 FAQ
+# 1.1.4 FAQ
 
 ### Q1: What does the Pull up/down column in the RDK S100 Pinlist Excel file mean?
 
@@ -24,7 +24,7 @@ sidebar_products: "RDK S100"
 
 ### Q5: How to connect the MCU daughter board and CAM daughter board to the RDK S100 main board? Is there a reference guide?
 
-**A:** The sections **[1.1.1.1 RDK S100 Camera Expansion Board](../01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board.md)** and **[1.1.1.2 RDK S100 MCU Port Expansion Board](../01_hardware_introduction/01_rdk_s100/03_rdk_s100_mcu_port_expansion_board.md)** include reference videos on connecting the CAM daughter board and MCU daughter board to the RDK S100 main board.
+**A:** The sections **[1.1.1.1 RDK S100 Camera Expansion Board](./02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md)** and **[1.1.1.2 RDK S100 MCU Port Expansion Board](./03_rdk_s100_mcu_port_expansion_board.md)** include reference videos on connecting the CAM daughter board and MCU daughter board to the RDK S100 main board.
 
 ### Q6: What do the characters AO, AI, I, O, IO, NULL, /, etc., in the RDK S100 Pinlist Excel file mean?
 

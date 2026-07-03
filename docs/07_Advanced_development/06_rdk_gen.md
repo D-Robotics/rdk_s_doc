@@ -311,7 +311,7 @@ apt download <package names>
 2. 知道需要的文件，且 host 端有安装过：
    - 可以通过`dpkg -S <filename>`命令获取包名。
 
-## 7.6.5 自定义分区说明
+## 自定义分区说明
 
 <DocScope products="RDK S100">
 
@@ -527,13 +527,28 @@ RDK S600支持变更 eMMC/UFS 上的分区，只需添加或删除或修改分�
 	# In RDK Source Root Directory
 	sudo ./pack_image.sh -l
 	```
-## 7.6.6 eMMC/UFS/NVMe 镜像编译须知
+## eMMC/UFS/NVMe 镜像编译须知
+
+<DocScope products="RDK S100">
+
 ### 使用地瓜自带 ubuntu-22.04_desktop_rdk-s100_XXX.conf 说明
 针对 eMMC、UFS 和 NVMe 存储介质，其对应的驱动程序通过不同的配置变量进行区分。因此，在编译前需根据实际使用的存储颗粒，对编译配置文件进行相应修改。
 
 以 S100平台为例，必须修改以下两个配置文件：
 1. /build_params/ubuntu-22.04_desktop_rdk-s100_beta.conf
 2. /build_params/ubuntu-22.04_desktop_rdk-s100_release.conf
+</DocScope>
+<DocScope products="RDK S600">
+
+### 使用地瓜自带 ubuntu-24.04_desktop_rdk-s600_XXX.conf 说明
+针对 eMMC、UFS 和 NVMe 存储介质，其对应的驱动程序通过不同的配置变量进行区分。因此，在编译前需根据实际使用的存储颗粒，对编译配置文件进行相应修改。
+
+以 S600平台为例，必须修改以下两个配置文件：
+1. /build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf
+2. /build_params/ubuntu-24.04_desktop_rdk-s600_release.conf
+</DocScope>
+
+
 
 在这两个文件中，将`RDK_DISK_MEDIUM`变量的值设置为与实际存储颗粒对应的类型：
 
@@ -561,6 +576,9 @@ export RDK_DISK_MEDIUM="ufs"
 # 对应NVMe
 export RDK_DISK_MEDIUM="nvme"
 ```
+
+<DocScope products="RDK S100">
+
 2. 修改 S100编译系统中5处引用到 conf 文件的地方，以 release 版本为例，
 - `download_deb_packages.sh`：
 ```shell
@@ -594,6 +612,46 @@ export RDK_DISK_MEDIUM="nvme"
 # 编译disk镜像
 sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才是编译使用本地的包，否则使用的是远端包。
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+2. 修改 S600编译系统中5处引用到 conf 文件的地方，以 release 版本为例，
+- `download_deb_packages.sh`：
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+```
+- `download_samplefs.sh`：
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+```
+- `mk_kernel.sh`：
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+```
+- `pack_image.sh`：
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+```
+- `mk_uboot.sh`：
+```shell
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/../../build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+```
+
+### 修改完 conf 文件后的编译流程
+修改完之后，进行编译 uboot/spl 并更新 miniboot/bootloader，并整体编译
+```shell
+# cd到源码根目录，做hobot-miniboot deb包
+./mk_debs.sh hobot-miniboot # deb包的生成路径是out/product/deb_packages/hobot-miniboot_5.Y.Z-xxx_arm64.deb
+
+./mk_kernel.sh # deb包的生成路径是out/product/deb_packages/linux-image-rdk-s600*_arm64.deb
+
+# 编译disk镜像
+sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才是编译使用本地的包，否则使用的是远端包。
+```
+
+</DocScope>
 
 :::warning NVMe 启动注意事项
 - 仅在 RDKS100 V0P6和RDKS600 V1P0及其以上版本支持 NVMe 启动，板子上[D13:D12]可以拨码设置为[1:0]

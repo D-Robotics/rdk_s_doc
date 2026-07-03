@@ -2,9 +2,8 @@
 sidebar_position: 2
 ---
 
-# 1.1.1.1 相机扩展板
+# 1.1.2.2 RDK S100 相机扩展板
 
-<!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} /> -->
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} />
 
@@ -41,6 +40,8 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ## 产品规格
 
+<div className="table-responsive">
+
 | **名称**    | **参数**                                         |
 | ----------- | ------------------------------------------------ |
 | 解串器      | Maxim MAX96712                                   |
@@ -48,6 +49,8 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 | GMSL 连接器 | Fakra-Mini 4in1                                  |
 | 外部供电    | 12V DC，仅用于电流需求大于 700mA 时，最大 2.4A。 |
 | 工作温度    | 0℃~45℃                                           |
+
+</div>
 
 ### 拓扑图
 
@@ -57,14 +60,20 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png" alt="camera_expansion_board_interface" style={{ width: '100%' }} />
 
-| 接口  | 功能          | 接口   | g 功能                    |
+<div className="table-responsive">
+
+| 接口  | 功能          | 接口   | 功能                    |
 | :---- | :------------ | ------ | ------------------------- |
 | J2000 | 100-Pin 连接器  | J2200  | MIPI 相机接口 1           |
 | D2000 | 电源指示灯    | J2201  | MIPI 相机接口 2           |
 | J2001 | DC 电源输入   | SW2200 | MIPI 相机接口功能切换开关 |
 | J2100 | GMSL 相机接口 | SW2201 | MIPI 相机接口电平切换开关 |
 
+</div>
+
 ### 相机安装说明
+
+<div className="table-responsive">
 
 | 型号                        | 硬件接口        | 功能切换 SW2200 | 电平切换 SW2201       |
 |-----------------------------|------------------|------------------|------------------------|
@@ -75,6 +84,8 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 | LEC28736A11（X3C 模组）      | J2100             | -                | -                      |
 | Intel RealSense D457        | J2100             | -                | -                      |
 | Intel RealSense D435i       | USB               | -                | -                      |
+
+</div>
 
 ### 组装说明
 
@@ -161,30 +172,44 @@ Camera 扩展板配备 2×4 Lane MIPI CSI D PHY 接口，支持同时连接两�
 
 MIPI 相机接口的控制信号支持 1V8 和 3V3 逻辑电平的切换，便于连接具有不同需求的相机模组。通过切换拨码开关 SW2201 的位置来实现逻辑电平切换。
 
+<div className="table-responsive">
+
 | 开关编号   | 相机编号    | 3V3                              | 1V8                              |
 | ---------- | :---------- | :------------------------------- | :------------------------------- |
 | 1 （右侧） | MIPI 相机 1 | MIPI 相机 1 接口为 3.3V 逻辑电平 | MIPI 相机 1 接口为 1.8V 逻辑电平 |
 | 2          | MIPI 相机 2 | MIPI 相机 2 接口为 3.3V 逻辑电平 | MIPI 相机 2 接口为 1.8V 逻辑电平 |
 
+</div>
+
 ### MIPI 接口功能切换开关（SW2200）
 
 MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能切换，以满足不同开发需求。通过切换拨码开关 SW2200 的位置来实现功能切换。
+
+<div className="table-responsive">
 
 | 开关编号  | 相机编号    | LPWM                                | MCLK                                |
 | --------- | :---------- | :---------------------------------- | :---------------------------------- |
 | 1（右侧） | MIPI 相机 1 | MIPI 相机 1 接口第 5 脚为 LPWM 信号 | MIPI 相机 1 接口第 5 脚为 MCLK 信号 |
 | 2         | MIPI 相机 2 | MIPI 相机 2 接口第 5 脚为 LPWM 信号 | MIPI 相机 2 接口第 5 脚为 MCLK 信号 |
 
+</div>
+
 ## 电源指示灯（D2000）
 
 电源指示灯，其位置在 DC 电源输入接口旁边。
+
+<div className="table-responsive">
 
 | 指示灯状态 | 说明                                                       |
 | :--------- | :--------------------------------------------------------- |
 | 绿色常亮   | Camera 扩展板与 RDK S100 已连接，RDK S100 已输出 3.3V 电源 |
 | 熄灭       | Camera 扩展板与 RDK S100 连接异常或 3.3V 电源异常          |
 
+</div>
+
 ## 连接器型号
+
+<div className="table-responsive">
 
 | 连接器 | 连接器型号                      | 连接器厂商   |
 | :----- | :------------------------------ | :----------- |
@@ -194,9 +219,9 @@ MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能
 | J2200  | AFC01-S22FCA-00                 | 钜硕电子     |
 | J2201  | AFC01-S22FCA-00                 | 钜硕电子     |
 
+</div>
+
 ## 适配模组
 
-参考[7.1.2 配件清单](../../../07_Advanced_development/01_hardware_development/02_accessory.md)
+参考[7.1.2 配件清单](../../../../07_Advanced_development/01_hardware_development/02_accessory.md)
 
-
-[def]: http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png

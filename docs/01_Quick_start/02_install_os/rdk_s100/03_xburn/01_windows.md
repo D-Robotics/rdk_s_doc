@@ -19,37 +19,33 @@ sidebar_position: 1
 
 :::
 
-## 驱动下载与安装
+## 驱动安装与验证
 
 
 在使用烧录工具前，Windows 用户需要确认驱动是否已安装。
 
-**USB 驱动下载与安装**
+**驱动安装**
 
-usb 驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloads/software_tools/winusb_drivers/)）
+usb 驱动可通过 Xburn 工具安装
 
-下载`sunrise5_winusb.zip`压缩包，进行驱动安装，步骤如下：
+1. 打开 Xburn 工具。
+2. 点击 `驱动` 页面，Xburn 工具将自动检测 USB 驱动是否安装，如果未安装则显示以下界面，点击 `安装` 即可。
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled.png)
 
-1、解压`sunrise5_winusb.zip`。
+3. 安装后界面显示如下。
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed.png)
 
-2、进入`sunrise5_winusb`，右键点击`install_driver.bat`，选择以管理员身份运行。
+
 
 **验证驱动安装**
 
-
-1. 连接串口，首次连接需要安装 CH340 串口驱动，驱动程序可从资源汇总的[工具下载](../../../download.md)获取。
+1. 连接 USB 线
 2. 驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/uart_ch340_device.png)
 
-   <!-- ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png) -->
-   <img 
-   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" 
-   style={{ width: '60%', height: 'auto', align:'center'}}
-   />
-   
-   
 3. 下载远程连接工具 [Mobaxterm](https://mobaxterm.mobatek.net/download.html)。
 
-3. 打开`MobaXterm`工具，点击`Session`，然后选择`Serial`，配置端口号，例如`COM3`，实际使用的串口号以 PC 识别到的串口号为准，设置完成后点击 `OK`。
+4. 打开`MobaXterm`工具，点击`Session`，然后选择`Serial`，配置端口号，例如`COM3`，实际使用的串口号以 PC 识别到的串口号为准，设置完成后点击 `OK`。
 
    串口配置参数如下：
 
@@ -60,14 +56,14 @@ usb 驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloa
    | 奇偶校验（Parity）   | None   |
    | 停止位（Stop bits）  | 1      |
    | 流控（Flow Control） | 无     |
-   
+
    ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png)
 
-4. 开发板上电后立刻长按空格键，进入 uboot 命令行模式，输入 fastboot 0，让开发板进入 fastboot 模式：
+5. 开发板上电后立刻长按空格键，进入 uboot 命令行模式，输入 fastboot 0，让开发板进入 fastboot 模式：
 
    ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png)
 
-5. 成功安装驱动后，设备管理器会显示 Android Device 设备，如下图：
+6. 成功安装驱动后，设备管理器会显示 Android Device 设备，如下图：
 
    <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png) -->
    <img 
@@ -92,8 +88,8 @@ usb 驱动下载（可[点击此处下载](https://archive.d-robotics.cc/downloa
 
 :::warning 注意
 
-- 目前需要将 **SW3开关拨至 [[从板载 eMMC 启动]](../../../01_hardware_introduction/01_rdk_s100.md#系统启动盘选择-sw3)**，暂时不支持从 M.2 NVMe 固态硬盘启动。
-- windows pc 上 Xburn 工具 需要在[驱动安装](#驱动下载与安装)成功后才能使用，使用前请确保驱动安装成功。
+- 目前需要将 **SW3开关拨至 [[从板载 eMMC 启动]](../../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#拨码开关-sw3sw6)**，暂时不支持从 M.2 NVMe 固态硬盘启动。
+- windows pc 上 Xburn 工具 需要在[驱动安装](#驱动安装与验证)成功后才能使用，使用前请确保驱动安装成功。
 
 :::
 

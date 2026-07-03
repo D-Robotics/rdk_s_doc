@@ -17,25 +17,27 @@ Please ensure that the Type-C data cable is of high quality to guarantee the sta
 
 :::
 
-## Driver Download and Installation
+## Driver Installation and Verification
 
 Before using the flashing tool, Windows users need to confirm whether the driver has been installed.
 
-**USB Driver Download and Installation**
+**Driver Installation**
 
-Download the USB driver (you can [click here to download](https://archive.d-robotics.cc/downloads/software_tools/winusb_drivers/))
+The USB driver can be installed via the Xburn tool.
 
-Download the `sunrise5_winusb.zip` compressed package and proceed with the driver installation. The steps are as follows:
+1. Open the Xburn tool.
+2. Click the `Drivers` page. Xburn will automatically detect whether the USB driver is installed. If not installed, Click `Install`.
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled-en.png)
 
-1. Unzip `sunrise5_winusb.zip`.
-2. Navigate to the `sunrise5_winusb` folder, right-click on `install_driver.bat`, and select "Run as administrator."
+3. After installation, the interface appears as follows.
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed-en.png)
+
 
 **Verify Driver Installation**
 
-1. Connect the serial port. For the first connection, you need to install the CH340 serial port driver. The driver can be obtained from the [Tool Download](../../../download.md#tools-download) section in the resource summary.
+1. Connect the USB cable.
 2. After the driver is installed, the Device Manager will correctly recognize the serial port board, as shown in the figure below:
-
-   ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png)
+  ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png)
 
 3. Download the remote connection tool [Mobaxterm](https://mobaxterm.mobatek.net/download.html).
 
@@ -57,9 +59,9 @@ Download the `sunrise5_winusb.zip` compressed package and proceed with the drive
 
    ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png)
 
-2. After successfully installing the driver, the Device Manager will show an Android Device, as shown below:
+6. After successfully installing the driver, the Device Manager will show an Android Device, as shown below:
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg) -->
+   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png) -->
    <img
    src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg"
    style={{ width: '100%', height: 'auto', align:'center'}}
@@ -67,7 +69,7 @@ Download the `sunrise5_winusb.zip` compressed package and proceed with the drive
 
    If the driver installation is unsuccessful, the Device Manager will indicate an unknown device named USB download gadget, as shown below:
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png) -->
+   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png) -->
    <img
    src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png"
    style={{ width: '100%', height: 'auto', align:'center'}}
@@ -88,26 +90,15 @@ The specific differences between the two download modes are as follows:
 
 :::info Note
 
-**DFU-Fastboot Flashing Method**
-
-- Suitable for flashing an empty board or when the firmware is corrupted preventing entry into Uboot.
+**DFU-Fastboot Flashing Method** is suitable for flashing an empty board or when the firmware is corrupted preventing entry into Uboot.
 
 :::
 
 **How to make the RDK S600 enter DFU boot mode**
 
-The following describes how to enter DFU mode for RDKS600 V0P1 and V0P2 respectively. Users should operate according to the hardware version.
+The following describes how to enter DFU mode for RDKS600 V1P0, V0P1, and V0P2 respectively. Operate according to your hardware version.
 
-**RDKS600 V0P1 dfu mode**
-
-   1. Toggle the `PWR KEY` dip switch to `OFF` to power off.
-   2. Short the jumper cap to enter dfu mode.
-   3. Toggle the `PWR KEY` dip switch to `ON` to power on.
-   4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
-
-**RDKS600 V0P2 dfu mode**
+**RDKS600 V1P0 DFU Mode**
 
    1. Toggle the `PWR KEY` dip switch to `OFF` to power off.
    2. Toggle the `FLASH` dip switch to `ON` to enter dfu mode.
@@ -115,6 +106,28 @@ The following describes how to enter DFU mode for RDKS600 V0P1 and V0P2 respecti
    4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
+
+<details>
+<summary>RDKS600 V0P1 DFU Mode</summary>
+
+   1. Toggle the `PWR KEY` dip switch to `OFF` to power off.
+   2. Short the jumper cap to enter dfu mode.
+   3. Toggle the `PWR KEY` dip switch to `ON` to power on.
+   4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1-en.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
+
+</details>
+
+<details>
+<summary>RDKS600 V0P2 DFU Mode</summary>
+
+   1. Toggle the `PWR KEY` dip switch to `OFF` to power off.
+   2. Toggle the `FLASH` dip switch to `ON` to enter dfu mode.
+   3. Toggle the `PWR KEY` dip switch to `ON` to power on.
+   4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
+
+</details>
 
 **Using Xburn for DFU-Fastboot Flashing**
 
@@ -126,12 +139,12 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu.png" alt="image-S600-xburn-download_dfu" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu-en.png" alt="image-S600-xburn-download_dfu" style={{ width: '100%' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade, power on the device, and wait for the upgrade to complete.
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="" style={{ width: '100%' }} />
 
 - After the upgrade is complete, power off the device, switch to normal boot mode, and power on again.
 
@@ -163,12 +176,12 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot-en.png" alt="" style={{ width: '100%' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade. The device enters Fastboot mode and waits for the upgrade to complete.
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="" style={{ width: '100%' }} />
 
 - Power cycle the device after the upgrade is complete.
 
@@ -197,7 +210,7 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition-en.png" alt="" style={{ width: '100%' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
@@ -227,7 +240,7 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition-en.png" alt="" style={{ width: '100%' }} />
 
 - Click Browse to select the product folder containing the firmware.
 

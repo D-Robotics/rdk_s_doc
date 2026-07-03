@@ -21,14 +21,16 @@ Please ensure that the Type-C data cable is of high quality to guarantee the sta
 
 Before using the flashing tool, Windows users need to confirm whether the driver has been installed.
 
-**USB Driver Download and Installation**
+**Driver Installation**
 
-Download the USB driver (you can [click here to download](https://archive.d-robotics.cc/downloads/software_tools/winusb_drivers/))
+The USB driver can be installed via the Xburn tool.
 
-Download the `sunrise5_winusb.zip` compressed package and proceed with the driver installation. The steps are as follows:
+1. Open the Xburn tool.
+2. Click on the `Drivers` tab. The Xburn tool will automatically detect whether the USB driver is installed. If not, the following interface will be displayed. Click `Install` to proceed.
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled-en.png)
 
-1. Unzip `sunrise5_winusb.zip`.
-2. Navigate to the `sunrise5_winusb` folder, right-click on `install_driver.bat`, and select "Run as administrator."
+3. After installation, the interface will appear as shown below.
+   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed-en.png)
 
 **Verify Driver Installation**
 
@@ -81,7 +83,7 @@ Download the `sunrise5_winusb.zip` compressed package and proceed with the drive
 
 :::warning Note
 
-- Currently, you need to set the **SW3 switch to [[Boot from onboard eMMC]](../../../01_hardware_introduction/01_rdk_s100.md#boot-device-selection-sw3)**; booting from an M.2 NVMe SSD is not supported at this time.
+- Currently, you need to set the **SW3 switch to [[Boot from onboard eMMC]](../../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#boot-device-selection-sw3)**; booting from an M.2 NVMe SSD is not supported at this time.
 - The Xburn tool on Windows PC can only be used after successfully [installing the driver](#driver-download-and-installation). Please ensure the driver is installed successfully before use.
 
 :::

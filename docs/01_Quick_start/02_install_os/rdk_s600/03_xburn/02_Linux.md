@@ -57,9 +57,19 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
 
 **如何使 RDK S600 进入 DFU 启动模式**
 
-以下分别介绍 RDKS600 V0P1 和 V0P2 进入 DFU 模式方式，用户请根据硬件型号操作
+以下分别介绍 RDKS600 V1P0、V0P1 和 V0P2 进入 DFU 模式方式，请根据硬件型号操作。
 
-**RDKS600 V0P1 dfu 模式**
+**RDKS600 V1P0 DFU 模式**
+
+   1. 将 `PWR KEY` 拨码至 `OFF`，关闭电源
+   2. 将 `FLASH` 拨码至 `ON`，进入 dfu 模式
+   3. 将 `PWR KEY` 拨码至 `ON`，开启电源
+   4. 如果 `FLS` 红灯亮起，表示进入 dfu 模式
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
+
+<details>
+<summary>RDKS600 V0P1 DFU 模式</summary>
 
    1. 将 `PWR KEY` 拨码至 `OFF`，关闭电源
    2. 短接跳线帽，进入 dfu 模式
@@ -68,8 +78,10 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
 
+</details>
 
-**RDKS600 V0P2 dfu 模式**
+<details>
+<summary>RDKS600 V0P2 DFU 模式</summary>
 
    1. 将 `PWR KEY` 拨码至 `OFF`，关闭电源
    2. 将 `FLASH` 拨码至 `ON`，进入 dfu 模式
@@ -77,6 +89,7 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
    4. 如果 `FLS` 红灯亮起，表示进入 dfu 模式
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
+</details>
 
 
 
@@ -113,7 +126,7 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
 
 :::
 
-**如何使 RDK S100 进入 Fastboot 模式**
+**如何使 RDK S600 进入 Fastboot 模式**
 
 可以通过两种方式进入 Fastboot
 
@@ -191,7 +204,7 @@ RDK S600 支持通过 Xburn 备份指定区域，支持的备份区域如下
 
 ### **使用 Xburn 指定区域备份**
 
-以指定烧录 `miniboot_flash` 为例
+以指定备份 `miniboot_flash` 为例
 
 打开 Xburn，设置方法如下：
 
@@ -215,7 +228,7 @@ RDK S600 支持通过 Xburn 备份指定区域，支持的备份区域如下
 
 :::info 注意
 
-对于整个存储介质数据备份，耗时较长，请耐心等待备份结束
+对于整个存储介质数据备份，耗时较长，请耐心等待备份结束。
 
 :::
 
