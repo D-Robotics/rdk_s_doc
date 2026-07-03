@@ -8,41 +8,46 @@ sidebar_position: 2
 
 ### 范围
 
-本章节概述了 RDK-S100 camera bring up 的过程，用于帮助读者快速了解并掌握
-RDK-S100 camera 框架，如何快速的新增 camera 配置，并点亮 camera。
+本章节概述了 RDK-S100 和 RDK-S600 camera bring up 的过程，用于帮助读者快速了解并掌握
+RDK camera 框架，如何快速的新增 camera 配置，并点亮 camera。
 
-该部分内容以 RDK-S100 开发板 + imx219 camera
-模组为例，进行配置讲解，其他硬件平台或者 camera 模组以实际情况为准。
+该部分内容以 RDK-S100 开发板 + imx219 camera 模组为例，进行配置讲解，其他硬件平台或者 camera 模组以实际情况为准。
+其中 RDK-S600 与 RDK-S100 大部分配置方式都是一样的，主要只关心硬件差异即可。
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_01.png" alt="" style={{ width: '100%' }} />
 
 ### 准备工作
 
-硬件资源：RDK-S100 开发板、camera 模组。
+硬件资源：RDK-S100 或 RDK-S600 开发板、camera 模组。
 
 软件资源：系统 SDK、camera 驱动源码、sensor datasheet、sensor 的 initialize
 settings 等。
 
 RDK-S100 开发板 camera 相关硬件资源如下：
 
-| RDK-S100                       | MIPI host    | I2C   | 管脚说明                          | 管脚说明                           | 其他                                                            |
-|--------------------------------|------------------|-------|-----------------------------------|-----------------------------------|-----------------------------------------------------------------|
-| RX0<br /> 可接 imx219 模组 | **0**<br />  4 lane | **1** | SPI1_CSN0<br />  gpio_number:502 | 可通过拨码开关进行选择<br />  • LPWM0_DOUT0<br />  gpio_number:456<br />  • mclk 24Mhz  | 注意： imx219 模组本身外接 24M 晶振，所以不需要 SOC 端输出 mclk<br /> 注意：拨码开关决定输出 I2C/GPIO 电平 1.8V 还是 3.3V。<br /> 注意：拨码开关决定输出是 LPWM 还是 24M mclk。 |
-| RX1<br /> 可接 imx219 模组 | **1**<br />   4 lane | **2** | SD_WPROT<br />  gpio_number:494 | 可通过拨码开关进行选择<br />  • LPWM0_DOUT1<br /> gpio_number:457<br />  • mclk 24Mhz  | 注意： imx219 模组本身外接 24M 晶振，所以不需要 SOC 端输出 mclk<br /> 注意：拨码开关决定输出 I2C/GPIO 电平 1.8V 还是 3.3V。<br /> 注意：拨码开关决定输出是 LPWM 还是 24M mclk。|
-| RX4<br /> 用于接 serdes    | **4**<br />  4 lane | **3** | poc EN:<br /> gpio_number:433<br />poc INT: <br />gpio_number:506 |  解串器 PWDNB:<br /> gpio_number:452<br />                          | 解串器 max96712, addr: 0x29<br /> poc max20087, addr: 0x28           |
-
-硬件连接示意图：
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_02.png" alt="" style={{ width: '100%' }} />
-
-RX0 和 RX1 对应拨码开关示意图：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_02_1.png" alt="" style={{ width: '100%' }} />
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_02_2.png" alt="" style={{ width: '100%' }} />
+| 接口     | MIPI host              | I2C BUS | 管脚说明                                                   | 其他                                                                                                |
+|----------|------------------------|---------|------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| S100-RX0 | **0**，4 lane，DPHY     | **1**   | gpio_0: 502                                                | • 可通过拨码开关选择 LPWM0_DOUT0（gpio: 456）或 mclk 24MHz<br/>• 部分模组本身外接 24M 晶振，不需要 SOC 端输出 mclk<br/>• 拨码开关决定输出 I2C/GPIO 电平 1.8V 还是 3.3V<br/>• 拨码开关决定输出是 LPWM 还是 24M mclk |
+| S100-RX1 | **1**，4 lane，DPHY     | **2**   | gpio_0: 494                                                | • 可通过拨码开关选择 LPWM0_DOUT1（gpio: 457）或 mclk 24MHz<br/>• 部分模组本身外接 24M 晶振，不需要 SOC 端输出 mclk<br/>• 拨码开关决定输出 I2C/GPIO 电平 1.8V 还是 3.3V<br/>• 拨码开关决定输出是 LPWM 还是 24M mclk |
+| S100-RX4 | **4**，4 lane，DPHY     | **3**   | poc EN: 433<br/>poc INT: 506<br/>解串器 PWDNB: 452           | 解串器 max96712, addr: 0x29<br/>poc max20087, addr: 0x28                                             |
 
 
+RDK-S600 开发板 camera 相关硬件资源如下：
+
+| 接口     | MIPI host              | I2C BUS | 管脚说明                                          | LPWM                                    | 其他                                |
+|----------|------------------------|---------|---------------------------------------------------|-----------------------------------------|-------------------------------------|
+| S600-RX0 | **0**，4 lane，DPHY     | **0**   | poc EN: 362<br/>解串器 PWDNB: 406                   | LPWM0_DOUT0 → MFP5<br/>LPWM0_DOUT1 → MFP7 | 解串器 max96712<br/>poc max20087      |
+| S600-RX1 | **1**，4 lane，CPHY     | **1**   | poc EN: 363<br/>解串器 PWDNB: 407                   | LPWM0_DOUT2 → MFP5<br/>LPWM0_DOUT3 → MFP7 | 解串器 max96712<br/>poc max20087      |
+| S600-RX2 | **2**，4 lane，DPHY     | **2**   | poc EN: 364<br/>解串器 PWDNB: 408                   | LPWM3_DOUT0 → MFP5<br/>LPWM3_DOUT1 → MFP7 | 解串器 max96712<br/>poc max20087      |
+| S600-RX3 | **3**，4 lane，CPHY     | **3**   | poc EN: 365<br/>解串器 PWDNB: 409                   | LPWM3_DOUT2 → MFP5<br/>LPWM3_DOUT3 → MFP7 | 解串器 max96712<br/>poc max20087      |
+| S600-RX4 | **4**，4 lane，DPHY     | **4**   | gpio_0: 411                                       | LPWM1_DOUT2                             | 用于接 mipi sensor                  |
+| S600-RX5 | **5**，4 lane，DPHY     | **5**   | gpio_0: 412                                       | LPWM1_DOUT3                             | 用于接 mipi sensor                  |
+
+硬件连接及对应拨码开关使用，请参考
+ [相机扩展板](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board.md)
 
 ### 添加新 sensor 点亮步骤
 
-RDK-S100 平台进行**新硬件**和**新 camera** 适配时，需要修改平台设备树
+RDK-S100 和 RDK-S600 平台进行**新硬件**和**新 camera** 适配时，需要修改平台设备树
 dts，camera 驱动库及相关配置文件即可，系统库一般无需改动。
 
 #### dts 修改
@@ -55,11 +60,12 @@ gpio，用户程序方可以操作 pin。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_03.png" alt="" style={{ width: '100%' }} />
 
-vcon 是 RDK-S100 camera 用于管理 sensor 硬件相关的 dts 节点，如果 sensor
+vcon 是 RDK camera 用于管理 sensor 硬件相关的 dts 节点，如果 sensor
 需要对应的时序才能正常启动，则需要在该节点中配置对应的
 gpio。请根据硬件连接的实际情况配置，该相关信息可以从原理图及 pin list 中获取。
 
 ```c
+/* 请根据硬件连接的实际情况配置 */
 // dts： 在对应 vcon node 中设置 gpio，注意 vcon 端口号与 mipi rx 端口号 一 一对应
 // vcon0 -- RX0
 // ....
@@ -81,6 +87,7 @@ I2C bus number 需要在 dts vcon 中与 MIPI RX
 端口进行绑定，请根据硬件连接的实际情况配置，该相关信息可以从原理图中获取。
 
 ```c
+/* 请根据硬件连接的实际情况配置 */
 // 在对应 vcon 中设置 i2c bus，如 RX0 设置 I2C2
 &vin_vcon0 {
         bus = <2>;
@@ -94,8 +101,8 @@ I2C bus number 需要在 dts vcon 中与 MIPI RX
 
 ##### mclk 配置
 
-RDK-S100 底座硬件暂时不支持 SOC 输出的 mclk 连接到 sensor
-模组，目前只支持外带晶振的模组。
+RDK-S100 底座可以通过拨码开关选择 24M 晶振输出 mclk。<br />
+RDK-S600 接入 serdes 模组情况下，可以选择加串器输出 mclk 给到 sensor。
 
 ##### dts 修改验证
 
@@ -103,6 +110,7 @@ RDK-S100 底座硬件暂时不支持 SOC 输出的 mclk 连接到 sensor
 通过 echo 命令进行控制 sensor 上电或者 reset （注：该说明使用 imx219模组无需操作 gpio）
 
 ```c
+/* 请根据硬件连接的实际情况配置 */
 echo 502 > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio502/direction
 echo 1 > /sys/class/gpio/gpio502/value
@@ -118,7 +126,7 @@ echo 502 > /sys/class/gpio/unexport
 #### sensor 驱动文件添加
 
 不同厂家的 sensor，都会搭配风格各异的 driver 和 setting。因此需要将原厂 sensor
-驱动，转换成 RDK-S100 camera 驱动代码，并编译生成 so 库，然后将 so
+驱动，转换成 RDK camera 驱动代码，并编译生成 so 库，然后将 so
 库拷贝到设备的 /usr/hobot/lib/sensor/ 目录下。**需要说明的是，在 mipi start
 之前，必须保证 sensor 没有开流。**
 
@@ -147,7 +155,7 @@ imx219_utility.c 以及适配过的其他 sensor 驱动，当添加新 camera se
  };
 ```
 
-如上代码所示，RDK-S100 camera 框架下的 sensor 驱动接口包含在 sensor_module_t
+如上代码所示，RDK camera 框架下的 sensor 驱动接口包含在 sensor_module_t
 的结构体中，文件名、结构体名和 module 字段要统一，例如文件名为
 imx219_utility.c，那么结构体名和 module 字段要统一为 imx219。对于新 sensor
 点亮，下列函数需要用户自行实现：
@@ -458,15 +466,14 @@ bash run_tuning.sh
 ### gmsl sensor 驱动编写说明
 本章节在 mipi camera 点亮说明的基础上，增加 gmsl 的差异部分。需要读者对 mipi camera 点亮说明及 gmsl 有一定的了解。
 
-该部分内容以 RDK-S100 开发板 + AR0820 (SG8S-AR0820C-5300-G2A) 模组为例，进行讲解，其他硬件平台或者 camera 模组以实际情况为准。
+该部分内容以 RDK-S100 开发板 + AR0820 (SG8S-AR0820C-5300-G2A) 模组为例，进行讲解，RDK-S600 基本一致，其他硬件平台或者 camera 模组以实际情况为准。
 
 ### 资源准备
 硬件资源：RDK-S100 开发板、camera 模组。
 
 软件资源：系统 SDK、camera 驱动源码、sensor datasheet、sensor 的 initialize settings 、serdes datasheet 等。
 
-RDK-S100 开发板 camera 相关硬件资源参考 mipi camera 对应部分即可，下面图片用于表示解串器的 port 顺序。
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_15.png" alt="" style={{ width: '100%' }} />
+RDK 开发板 camera 相关硬件资源参考 mipi camera 对应部分即可。
 
 ###  添加新 sensor 点亮步骤
 参考 mipi camera 点亮步骤，这里只说明差异部分。
@@ -598,6 +605,7 @@ typedef enum CONFIG_INDEX_B {
 ## V4L2 sensor 点亮
 
 ### V4L2 sensor 驱动编写说明
+S100 平台与 S600 平台软件内容基本一致，仅有软件路径，节点等方面的差异，下面仅以 S100 平台为例进行介绍。
 S100 Camsys sensor v4l2 驱动软件框架为标准的 v4l2 sub device 驱动。
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_10.png" alt="" style={{ width: '100%' }} />
 下面以 IMX219驱动为例，介绍 MIPI 直连 sensor v4l2 驱动开发流程，imx219驱动源码位于：kernel/drivers/media/i2c/imx219.c
@@ -687,7 +695,7 @@ static int imx219_probe(struct i2c_client *client)
 4. 异步注册，把当前 sensor subdev 注册到 v4l2框架；
 
 #### sensor device tree
-S100默认加载 imx219设备树，设备树组织格式如下面所示，如果接入其他的 mipi sensor，需要以 dts overlay 的方式覆盖掉 imx219的 dts。
+S100 默认加载 imx219设备树，设备树组织格式如下面所示，如果接入其他的 mipi sensor，需要以 dts overlay 的方式覆盖掉 imx219的 dts。
 ```c
 &i2c1 {
         status = "okay";
@@ -728,10 +736,8 @@ S100默认加载 imx219设备树，设备树组织格式如下面所示，如果
 ```
 
 
-
-
 ### V4L2 GMSL SerDes 接口调用说明
-S100 Camsys 支持接入美信加串器的 sensor，camera 子板默认搭载美信解串器 MAX96712。GMSL sensor 同样作为一个 v4l2 subdev 接入 v4l2框架，这里加串器及解串器驱动为 gmsl sensor 驱动提供操作函数集，不实现为 v4l2 subdev。
+S100/S600 Camsys 支持接入美信加串器的 sensor，camera 子板默认搭载美信解串器 MAX96712。GMSL sensor 同样作为一个 v4l2 subdev 接入 v4l2框架，这里加串器及解串器驱动为 gmsl sensor 驱动提供操作函数集，不实现为 v4l2 subdev。
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_11.png" alt="" style={{ width: '100%' }} />
 
 
@@ -861,10 +867,11 @@ ar0820@11 {
 ```
 
 ### Sensor dtbo 文件编写配置说明
-S100 uboot 支持 DTB Overlay 功能，可以在不修改当前启动使用的 dts 文件的情况下，通过编写配置对应的 dtbo 文件。对当前启动使用的 dtb 文件进行增/改（不支持删减）的功能
+S100/S600 uboot 支持 DTB Overlay 功能，可以在不修改当前启动使用的 dts 文件的情况下，通过编写配置对应的 dtbo 文件。对当前启动使用的 dtb 文件进行增/改（不支持删减）的功能
 #### sensor dtbo 文件生成
 1. 编写 dtso 文件
 ```c
+/* 注意 node 的名称和地址在不同平台上，可能不一致 */
 #include <dt-bindings/gpio/gpio.h>
 
 /dts-v1/;
@@ -1019,7 +1026,7 @@ Callbacks* get_index_to_reg_callbacks() {
 生成的 so 命名为 lib\<sensor_name\>_v4l2.so，运行时会自动匹配并 dlopen 该 so，调用符号最终获取到 lut 表。
 
 ### 曝光同步 sensor 驱动说明
-S100 camsys serdes 提供了 trigger 相关接口，sensor 驱动中可以调用来配置 lpwm 硬件、使能 lpwm。
+S100/S600 camsys serdes 提供了 trigger 相关接口，sensor 驱动中可以调用来配置 lpwm 硬件、使能 lpwm。
 硬件同步曝光目前仅支持 gmsl sensor，sensor dts 中需要配置正确的 trigger mfp 管脚。
 ```c
 SERDES_OP(priv->dser_dev, trigger_cfg, priv->dser_dev, sen_dev, period, duty);
@@ -1033,13 +1040,14 @@ SERDES_OP(priv->dser_dev, trigger_enable, priv->dser_dev, sen_dev, enable);
 在 stream 开关流时，调用 trigger_enable 打开或关闭 lpwm 输出
 
 ### 深度相机点亮注意事项
-目前 S100 camera 支持使用 RealSense D457 和奥比 Gemini 335Lg 两款 GMSL 形式的深度相机，该部分针对深度相机相比较其他普通 GMSL 相机的差异点做出说明。
+目前 S100/S600 camera 支持使用 RealSense D457 和奥比 Gemini 335Lg 两款 GMSL 形式的深度相机，该部分针对深度相机相比较其他普通 GMSL 相机的差异点做出说明。
 #### 限制
 1. 只支持获取深度数据(depth)和颜色数据(color)，**不支持获取 IR 数据**。
         - Gemini 335Lg 通过官方 SDK 额外获取 IMU 数据；
         - D457 在本方案中不支持获取 IMU 数据。
 2. 每 1 路数据通路都会占用解串器的 1 个输入 port。
         - S100 camera 子板默认搭载的为 1 路解串器，最多支持 4 路数据流(例如 depth + color 组合为 2 路)。
+        - S600 camera 子板最大可支持 4 路解串器，最多支持 16 路数据流。
 3. 接入不同路数的相机，或 D457 与 335Lg 组合使用时，需要自行适配 dtb overlay，确保每一路的 I2C 地址、虚拟通道（VC）、port 绑定关系正确。
 4. D457 和 335Lg 固件本身也存在问题，具体遗留问题请参考官网的说明与 release note。
 
@@ -1142,6 +1150,8 @@ d457@14 {
 1. `s100_d457_rx4_4v_dpeth.dtbo` S100 官方 camera 扩展板，通过 MIPI RX4 接入 4 路 D457，同时可以获取 4 路深度图。
 2. `s100_12v_camera_board_d457_rx4_portAC_rx1_portAC_depth_color.dtbo` S100 官方提供 12路 GMSL camera 扩展板，通过 MIPI RX4 和 MIPI RX1 接入 4 路 D457，同时可以获取 4 路深度图和 4 路 RGB 图。
 3. `s100_335lg_rx4_2v_portA_portB_depth_color.dtbo` S100 官方 camera 扩展板，通过 MIPI RX4 接入 2 路 335Lg，同时可以获取 2 路深度图和 2 路 RGB 图。
+4. `s600_335lg_rx2_portAC_rx3_portAC_depth_color.dtbo` S600 官方 camera 扩展板，通过 MIPI RX2 和 RX3 接入 4 路 335Lg，同时可以获取 4 路深度图和 4 路 RGB 图。
+5. `s600_d457_rx2_portAC_rx3_portAC_depth_color.dtbo` S600 官方 camera 扩展板，通过 MIPI RX2 和 RX3 接入 4 路 D457，同时可以获取 4 路深度图和 4 路 RGB 图。
 
 #### 切换到 V4L2 模式
 参考 [V4L2 使用方式](./01_camsys.md#v4l2)，加载 camsys V4L2 ko，注意的是，需要加载对应的深度相机 ko, D457 为**d457.ko**， 335Lg 为**g300.ko**。
@@ -1191,7 +1201,7 @@ index 7b561e79..864ff72d 100644
 > 注意：D457 官方 SDK 内部通过固定的 `/dev/video-rs-*` 设备名称进行匹配，因此需要手动建立软链接。
 > 路数或 video 节点编号变化时，需同步调整软链接指向。
 
- 下面以 2 路 depth + 2 路 color 为例，建立软链接：
+ 下面以 S100 2 路 depth + 2 路 color 为例，建立软链接：
 ```c
 # modprobe vid_v4l2 scene=0, 此时 mipi rx4 从 video2 开始。
 ln -s /dev/video2 /dev/video-rs-depth-0

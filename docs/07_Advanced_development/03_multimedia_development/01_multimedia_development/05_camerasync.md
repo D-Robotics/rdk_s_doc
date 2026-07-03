@@ -37,7 +37,7 @@ S100的 Camera 同步功能的主体实现依赖 LPWM 模块，其支持 S100多
 
 - LPWM 的扩展功能: 缓慢同步 threshold，adjust\_step 配置。
 
-关于 LPWM 模块的功能及使用，更多可参考: [LPWM使用](../01_S100/01_camsys.md#lpwm)
+关于 LPWM 模块的功能及使用，更多可参考: [LPWM使用](./01_camsys.md#lpwm)
 
 ### LPWM 同步源
 

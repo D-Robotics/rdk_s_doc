@@ -1,6 +1,7 @@
 {
-  "label": "7.3.2 多媒体应用开发 ",
+  "label": "7.3.2 多媒体应用开发",
   "position": 2,
+  "key": "multimedia_app_s100",
   "link": {
     "type": "generated-index",
     "slug": "/02_multimedia_application",
