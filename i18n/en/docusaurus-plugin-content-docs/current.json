@@ -494,5 +494,29 @@
   "sidebar.tutorialSidebar.category.1.1.2 相机扩展板": {
     "message": "1.1.2 Camera Expansion Board",
     "description": "The label for category 1.1.2 相机扩展板 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.2 多媒体应用开发": {
+    "message": "7.3.2 Multimedia Application Development",
+    "description": "The label for category 7.3.2 多媒体应用开发 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.2 多媒体应用开发.link.generated-index.description": {
+    "message": "RDK S100 Multimedia Application Development ",
+    "description": "The generated-index page description for category 7.3.2 多媒体应用开发 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.3 多媒体应用开发": {
+    "message": "7.3.3 Multimedia Application Development",
+    "description": "The label for category 7.3.3 多媒体应用开发 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.3.3 多媒体应用开发.link.generated-index.description": {
+    "message": " RDK S600 Multimedia Application Development ",
+    "description": "The generated-index page description for category 7.3.3 多媒体应用开发 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.4.2.2 LLM 工具链": {
+    "message": "7.4.2.2 LLM Toolchain",
+    "description": "The label for category 7.4.2.2 LLM 工具链 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.7.4.2.2 LLM 工具链.link.generated-index.description": {
+    "message": "RDK S600 LLM Toolchain Development Guide",
+    "description": "The generated-index page description for category 7.4.2.2 LLM 工具链 in sidebar tutorialSidebar"
   }
 }
