@@ -33,7 +33,7 @@ Key considerations when using the LPWM include:
 - Target signal waveform parameters of the LPWM: period, duty_time, etc.
 - LPWM advanced features: slow synchronization threshold, adjust_step configuration.
 
-For more details on LPWM module functionality and usage, please refer to: [LPWM Usage]
+For more details on LPWM module functionality and usage, please refer to: [LPWM Usage](./01_camsys.md#lpwm)
 
 ### LPWM Synchronization Sources
 
