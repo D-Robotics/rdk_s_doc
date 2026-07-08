@@ -3,7 +3,7 @@ sidebar_position: 1
 sidebar_products: RDK S600
 ---
 
-# Large Model Toolchain_v1.0.5
+# LLM Toolchain_v1.0.5
 
 On the RDK S600 platform, D-Robotics_LLM_S600 currently supports the following models and features:
 
