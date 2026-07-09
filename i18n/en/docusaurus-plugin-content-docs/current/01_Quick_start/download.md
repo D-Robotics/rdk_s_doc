@@ -125,10 +125,16 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td>2025-07-01</td>
     </tr>
     <tr>
-      <td>Product Photos</td>
-      <td>Camera Expansion Board</td>
-      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/d_robotics_rdk_s100_camera_expansion_board_12l_v1_0.7z">Product Photos</a></td>
+      <td rowspan="2">Product Photos</td>
+      <td>Camera Expansion Board</td> 
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board.7z">Product Photos</a></td>
       <td>2025-06-10</td>
+      <td>Product images for secondary editing of product materials.</td>
+    </tr>
+    <tr>
+      <td>Camera Expansion Board 12L</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/d_robotics_rdk_s100_camera_expansion_board_12l_v1_0.7z">Product Photos</a></td>
+      <td>2026-07-01</td>
       <td>Product images for secondary editing of product materials.</td>
     </tr>
     <tr>
