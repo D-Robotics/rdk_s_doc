@@ -939,13 +939,32 @@ Currently, MCU0 has used the following interrupts:
 ## Tutorial on Adding Compilation Directories
 ### Process for Adding Compilation Directories
 <DocScope products="RDK S100">
-1. Modify the mcu/Build/FreeRtos_mcu1/SConstruct_Lite_FRtos_S100_sip_B file to add/remove corresponding modules.
+1. Modify `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml` to add or remove compilation directories.
 
-   For example, to add the mcu/Service/Log folder, simply add it at the appropriate location. The variable False indicates that during the build process, source files will not be copied to the compilation output directory.
+2. General business/demo source directories should be added to `BuildPath`. For example, if adding `mcu/samples/MyDemo`:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/scons_add_context.png" alt="" style={{ width: '100%' }} />
+```yaml
+BuildPath:
+  - samples/MyDemo
+```
 
-2. Add the SConscript file under the added compilation module. The SConscript file can be obtained from any already compiled module folder.
+3. `Common`, `McalCdd`, `Platform`, and `Service` each have dedicated static-library path fields. New modules under these categories should be placed in the corresponding field:
+
+```yaml
+StaticLibCommonPath:
+  - Common/xxx
+
+StaticLibMcalCddPath:
+  - McalCdd/xxx
+
+StaticLibPlatformPath:
+  - Platform/xxx
+
+StaticLibServicePath:
+  - Service/xxx
+```
+
+4. Add a `SConscript` file in the new module directory. `SConstruct` scans configured paths from YAML and includes the corresponding `SConscript` files in the build.
 
 </DocScope>
 <DocScope products="RDK S600">

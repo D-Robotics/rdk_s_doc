@@ -16,20 +16,31 @@ MCU 的编译系统基于 Scons3.0.0创建（[Scons 3.0.0用户手册官网](htt
 ## MCU1编译系统
 <DocScope products="RDK S100">
 
-MCU1编译系统位于 mcu/Build/FreeRtos_mcu1，具体目录结构，如下图所示：
+MCU1 编译系统位于 mcu/Build/FreeRtos_mcu1，具体目录结构，如下图所示：
 ```c
 FreeRtos_mcu1
 ├── build_freertos.py                   # 编译的入口脚本
-├── SConstruct_Lite_FRtos_S100_sip_B    # Scons参与编译文件夹以及输出目录
-├── settings_freertos.py                # Scons编译命令参数相关的文件
-└── Linker                              # 编译link脚本所在目录
+├── SConstruct                          # Scons 编译定义文件（统一入口）
+├── build_config                        # 编译所需 yaml 文件，增删编译文件夹
+│    └── S100
+│         └── lite-matrix-B-mcu1.yaml
+├── setting_files                       # gcc 编译链接等参数
+│    └── gcc
+│         └── settings_lite_freertos.py
+├── site_scons                          # Scons 编译链接命令文件
+│    └── site_tools
+│         └── gcc_arm.py
+└── Linker                              # 链接脚本所在目录
      └── gcc
           └── S100
-              └── link_freertos_mcu1.ld
+               └── link_freertos_mcu1.ld
 ```
+
 </DocScope>
 <DocScope products="RDK S600">
-MCU1编译系统位于 mcu/Build/FreeRtos_mcu1，具体目录结构，如下图所示：
+
+MCU1 编译系统位于 mcu/Build/FreeRtos_mcu1，具体目录结构，如下图所示：
+
 ```c
 FreeRtos_mcu1
 ├── build_freertos.py                   # 编译的入口脚本
@@ -57,21 +68,30 @@ FreeRtos_mcu1
 <DocScope products="RDK S100">
 
 build_freertos.py 是编译的整体入口，但是实际调度到 scons 时，能够对 scons 编译环境/流程产生影响的方式有以下几个：
-1. SConstruct 文件：SConstruct 文件是 scons 编译的定义文件，它和每个模块内的 Sconscript 组成了 Cmake 里 Cmakefile；Make 系统里 makefile 的作用；
-2. settings_freertos.py：该文件生效的入口实际上是 SConstruct 里面的“Variables”类的初始化，核心在于引入一系列静态定义的编译环境变量；环境变量的变量名就是 settings_freertos.py 里面的变量名，变量值就是 settings_freertos.py 里面的变量名对应的变量值；“Variables”类实例化后的示例会被 Environment 类使用，用于 scons 的编译
-3. gcc_arm.py：实际定义编译命令的定义文件，真正生效的入口是 settings_freertos.py 里面定义的“COMPILER_TOOL”字段，COMPILER_TOOL 字段进一步会被 Sconscruct 文件的 Variables 添加并最后被 env 获取到其中的“CC”等配置
+
+1. `SConstruct` 文件：`SConstruct` 是 scons 编译的定义文件，它和每个模块内的 `SConscript` 组成完整的构建入口。
+
+2. `setting_files/gcc/settings_lite_freertos.py`：该文件生效入口是 `SConstruct` 中 `Variables` 类的初始化，核心在于引入一系列静态定义的编译环境变量。环境变量名和值来自 `settings_lite_freertos.py` 中的定义。
+
+3. `site_scons/site_tools/gcc_arm.py`：实际定义 gcc 编译、汇编、链接命令的文件。真正生效入口是 `settings_lite_freertos.py` 里定义的 `COMPILER_TOOL` 字段，该字段会被 `SConstruct` 的 `Variables` 添加并最终被 env 获取。
+
+4. `build_config/S100/lite-matrix-B-mcu1.yaml`：S100 MCU1 lite 编译使用的 yaml 配置文件。该文件中的 `SettingFile` 指向 `Build/FreeRtos_mcu1/setting_files/__COMPILER__/settings_lite_freertos.py`，`LinkFIle` 指向 `Build/FreeRtos_mcu1/Linker/__COMPILER__/S100/link_freertos_mcu1.ld`，`BuildPath`、`StaticLibCommonPath`、`StaticLibMcalCddPath`、`StaticLibPlatformPath`、`StaticLibServicePath` 等字段用于控制参与编译的目录。
 
 </DocScope>
 <DocScope products="RDK S600">
+
 build_freertos.py 是编译的整体入口，但是实际调度到 scons 时，能够对 scons 编译环境/流程产生影响的方式有以下几个：
 1. SConstruct 文件：SConstruct 文件是 scons 编译的定义文件，它和每个模块内的 Sconscript 组成了 Cmake 里 Cmakefile；Make 系统里 makefile 的作用；
 2. settings_lite_freertos.py：该文件生效的入口实际上是 SConstruct 里面的“Variables”类的初始化，核心在于引入一系列静态定义的编译环境变量；环境变量的变量名就是 settings_lite_freertos.py 里面的变量名，变量值就是 settings_lite_freertos.py 里面的变量名对应的变量值；“Variables”类实例化后的示例会被 Environment 类使用，用于 scons 的编译
 3. gcc_arm.py：实际定义编译命令的定义文件，真正生效的入口是 settings_lite_freertos.py 里面定义的“COMPILER_TOOL”字段，COMPILER_TOOL 字段进一步会被 Sconscruct 文件的 Variables 添加并最后被 env 获取到其中的“CC”等配置
 4. lite-matrix-B-mcu1.yaml：被编译的文件夹，在该文件中增删编译涉及到的文件夹；其中 `LinkFIle` 字段指向 `Linker/gcc/S600/link_freertos_mcu1.ld`
+
 </DocScope>
 
 ## MCU1镜像 layout
+
 <DocScope products="RDK S100">
+
 |区域名称|起始地址|占用大小|作用|
 |----|---------------|---------------|---------|
 | FLASH_STARTUP| 0x0CAB0000|2K |启动代码、异常向量表等 |
@@ -710,69 +730,29 @@ EL2_Reset_Handler:
 
     b MPU_Init
 ```
-3. 在做其他操作前，通过 MPU 配置后续可能用到的各个地址空间，在 MPU_Init 这个标号；MPU region1是 MCU sram 区域， 用户可以按照自己的需求，切分 sram，并配置各个切分区域的属性 ，比如 sharebility/non-cache 等等；启动代码对这一部分的配置仅供参考，对于 MCU sram 区域的划分，参考上一节 MCU1镜像 layout，MCU0相关区域的划分因 MCU0的缘故不做展示；
-```c
-MPU_Init:
-          //.....其他省略
+3. 在做其他操作前，通过 MPU 配置后续可能用到的各个地址空间。RDK S100 当前 `startup.s` 在 `MPU_Init` 标号处配置了 region 0 至 region 10。其中 region 1 至 region 5 按链接脚本符号（`__HEAP_START`、`__STACK_START`、`__COPY_TABLE`）将 MCU SRAM 划分为 cacheable / non-cacheable 区域；region 6 至 region 10 覆盖 GIC、外设寄存器、CPUSYS、DDR、XSPI 等固定地址空间。若需调整 SRAM 切分，应同步修改链接脚本与 MPU 配置，并参考上一节 MCU1 镜像 layout。
 
-          /*-----region 1 MCU sram示例配置，根据自己需求修改-------*/
-          /*---------------region 1 mcu sram---------------*/
-          /* normal memory attribute */
-          ldr r0, =1                /* Region 1 */
-          mcr p15, 4, r0, c6, c2, 1 /* Write HPRSELR */
-          mcr p15, 0, r0, c6, c2, 1 /* Write PRSELR */
-
-          ldr r0, =0x0C800000       /* Start address */
-          orr r0, r0, #0x2          /* SH=0, AP=1, XN=0*/
-          mcr p15, 4, r0, c6, c3, 0 /* Write HPRBAR */
-          mcr p15, 0, r0, c6, c3, 0 /* Write PRBAR */
-
-          ldr r0, =0x0CDFFFFF      /* End address */
-          and r0, r0, #0xFFFFFFC0
-          orr r0, r0, #0x3          /* AttrIndex=1, non-cacheable, enable region */
-          mcr p15, 4, r0, c6, c3, 1 /* Write HPRLAR */
-          mcr p15, 0, r0, c6, c3, 1 /* Write PRLAR */
-
-          /*---------------region 5 internal gic & peripheral---------------*/
-          /* device memory attribute            */
-          ldr r0, =5                /* Region 5 */
-          mcr p15, 4, r0, c6, c2, 1 /* Write HPRSELR */
-          mcr p15, 0, r0, c6, c2, 1 /* Write PRSELR */
-
-          ldr r0, =0x22000000       /* Start address */
-          orr r0, r0, #0x13         /* SH=2, AP=1, XN=1*/
-          mcr p15, 4, r0, c6, c3, 0 /* Write HPRBAR */
-          mcr p15, 0, r0, c6, c3, 0 /* Write PRBAR */
-
-          ldr r0, =0x223FFFFF       /* End address */
-          sub r0, r0, #1            /* HPRLAR：end-1，再 64B 对齐 */
-          and r0, r0, #0xFFFFFFC0
-          orr r0, r0, #0x7          /* AttrIndex=3, device memory, enable region */
-          mcr p15, 4, r0, c6, c3, 1 /* Write HPRLAR */
-          mcr p15, 0, r0, c6, c3, 1 /* Write PRLAR */
-
-          //.....后续省略
-```
 4. 地瓜版本中重要的 MPU region 说明如下：
 
 :::caution
-ARM R52的 background region 和 RDK-S100芯片上实际实现的 memory map 是有差异的。
+- ARM R52 的 background region 和 RDK-S100 芯片上实际实现的 memory map 存在差异。例如 `0x22000000` 在 ARM background region 中默认可能属于 normal memory，但在 RDK S100 上对应 MCU GIC 等 device 寄存器空间。因此，访问前必须通过 MPU 将 memory 类型与芯片实际实现保持一致，否则可能导致访问异常。
 
-比如0x2200_0000在 ARM 的 background region 中默认是属于 normal memory 空间，但在 RDK-S100芯片上这段地址空间对应是 GIC 这种 device 类的寄存器空间。
-
-所以，像这种芯片实际与 background region 有差异的区域，在进行访问之前，一定要通过 MPU 将 memory 类型和 RDK-S100芯片实际实现保持一致，否则会导致访问异常。
-
-这些区域都是 MCU 正常运行可能需要访问的空间，缺少这些空间的配置，可能会导致运行异常。客户在自己的版本中 请保持和地瓜给的代码一样的地址空间属性配置。SRAM 区域，客户则可以根据自己项目的需求做不同的切分。
+- 固定外设 /DDR/XSPI 区域请保持与地瓜代码一致；SRAM 区域如需调整，必须同步修改链接脚本与 MPU 配置。
 :::
 
-| MPU region| 起始地址| 结束地址|memory 类型|说明|
-|--------|----------------------------------------|-----------------------------|----------------|---------|
-| 0| 0x0800_0000|0x0AFF_FFFF|normal memory|vdsp tcm 及 MCU TCM 所在空间，SPL 运行会使用 vdsp tcm|
-| 7| 0x2200_0000|0x223F_FFFF|device memory|MCU GIC 寄存器所在地址空间，影响对 GIC 寄存器的访问|
-| 8| 0x2300_0000|0x25FF_FFFF|device memory|MCU peri 寄存器所在空间，影响对 MCU 上 peri 寄存器的访问|
-| 9| 0x2600_0000|0x7FFF_FFFF|device memory|CPUSYS 各种寄存器所在空间，影响 MCU 对 Acore 侧的寄存器访问|
-| 10| 0x8000_0000|0xFFFF_FFFF|normal memory|DDR 所在地址空间，影响 MCU 对 DDR 访问|
-| 11| 0x1800_0000|0x1FFF_FFFF|device memory|XSPI 所在地址空间，影响 MCU 对 flash 的使用|
+| MPU region | 起始地址 | 结束地址 | memory 类型 | 说明 |
+| --- | --- | --- | --- | --- |
+| 0 | `0x08000000` | `0x0AFFFFFF` | normal memory（non-cacheable） | cluster0/cluster1 TCM |
+| 1 | `0x0C800000` | `0x0CAAFFFF` | normal memory（non-cacheable） | MCU SRAM 低段 |
+| 2 | `0x0CAB0000` | `__HEAP_START - 64` | normal memory（cacheable，只读） | 启动段、代码、const |
+| 3 | `__HEAP_START` | `__STACK_START - 64` | normal memory（non-cacheable） | heap 至 stack 之间 |
+| 4 | `__STACK_START` | `__COPY_TABLE - 64` | normal memory（cacheable） | stack 至 copy table 之间 |
+| 5 | `__COPY_TABLE` | `0x0CDFFFFF` | normal memory（non-cacheable） | SRAM 高段，包含 log/SCMI 等区域 |
+| 6 | `0x22000000` | `0x223FFFFF` | device memory | MCU GIC 相关寄存器 |
+| 7 | `0x23000000` | `0x2FFFFFFF` | device memory | MCU peripheral 寄存器空间 |
+| 8 | `0x30000000` | `0x3FFFFFFF` | device memory | CPUSYS 相关寄存器空间 |
+| 9 | `0x80000000` | `0xFFFFFFFF` | normal memory（non-cacheable） | DDR 空间 |
+| 10 | `0x18000000` | `0x1FFFFFFF` | device memory | XSPI 寄存器空间 |
 
 5. 启动代码接下来做了 enable_prefetch/enable_peri_secure/使能 VFP/配置 SYSCNT 寄存器等操作，建议客户保留这些代码；
 6. 紧接着让当前 core 从 hyper 模式跳转到 el1；
@@ -786,33 +766,36 @@ ARM R52的 background region 和 RDK-S100芯片上实际实现的 memory map 是
      /* Exception return - will jump to address pointed by ELR_hyp (main) */
      eret /* When executed in Hyp mode, ERET loads the PC from ELR_hyp and loads the CPSR from SPSR_hyp */
 ```
-7. 接下来是做栈的初始化，每个 core 都有自己的一段栈区域。启动代码只初始化了 R52+上 abort/undefined/system mode 的栈寄存器 ，并没有初始化配置 irq/fiq mode 等等栈寄存器。客户需要根据自己 OS 的情况，确定 R52+各个模式的栈寄存器是否需要初始化；
-```c
-     /* Setup the stack for supervisor mode (entered from reset) */
-     mrs         r0, cpsr
-     and         r0, r0, #~0x00FF
-     orr         r0, r0, #0x0033
-     msr         cpsr_c, r0
-     sub         r3, r3, r1
-     mov         SP, r3         /* top of stack to SP_svc */
+7. 接下来是做栈的初始化，RDK S100 当前启动代码会根据 Core ID 选择 MCU1 core0/core1 对应的栈区域，并分别为 SVC、FIQ、IRQ、ABORT、UNDEF、SYSTEM 模式设置栈指针。客户如需调整栈大小或栈布局，应同步检查链接脚本中的 `STACK_SIZE`、`STACK_SIZE_EXC`、`STACK_SIZE_MCU2`、`STACK_SIZE_EXC_MCU2`，以及 `startup.s` 中对应的栈初始化逻辑。
 
-     ldr         r3, =__StackTop_exc
-     ldr         r2, =__StackLimit_exc
-     sub         r2, r3, r2     /* r2 : size in bytes */
-     mov         r4, #4
-     udiv        r1, r2, r4     /* r1 : size divided by 4 */
-     and         r1, r1, #~0x0f /* r1 size alligned to 16 bytes */
+```asm
+EL1_Reset_Handler:
+    mrc p15, 0, r0, c0, c0, 5
+    and r0, r0, #0x03
 
-     /* Go to FIQ mode and set stack (below the previous one) */
-     mrs         r0, cpsr
-     and         r0, r0, #~0x003F
-     orr         r0, r0, #0x0031
-     msr         cpsr_c, r0
-     sub         r3, r3, r1
-     mov         SP, r3
+    mov r12, r0
+    cmp r0, #0
+    beq setup_mcu1_stack
+    cmp r0, #1
+    beq setup_mcu2_stack
 
-     //.....后续省略
+setup_mcu1_stack:
+    ldr         r3, =__StackTop
+    ldr         r2, =__StackLimit
+    ...
+    /* Setup the stack for supervisor mode */
+    ...
+    /* Go to FIQ mode and set stack */
+    ...
+    /* Go to IRQ mode and set stack */
+    ...
+    /* Go to ABORT mode and set stack */
+    ...
+    /* Go to UNDEF mode and set stack */
+    ...
+    /* Go to SYSTEM mode and set stack */
 ```
+
 8. 跳转到 main
 ```c
     /* Enable IRQ and FIQ interrupts for the system/user mode */

@@ -76,7 +76,6 @@ The first compilation will download the toolchain from the ARM official website 
 # Compile MCU1 Debug version
 cd mcu/Build/FreeRtos_mcu1
 python build_freertos.py lite matrix B s100 mcu1 gcc debug
-*/
 
 # Compile MCU1 Release version
 cd mcu/Build/FreeRtos_mcu1
@@ -376,7 +375,7 @@ For information on using the Xburn tool to flash a specific area, refer to the [
 
 <DocScope products="RDK S100">
 
-Under normal circumstances, when the system encounters an undefined/abort exception, it eventually enters an infinite loop. Only by re-executing the power-on/power-off process can it return to normal operation. Since the RDK-S100 cannot power on/off MCU1 independently, system process modifications are required to achieve the desired outcome.
+Under normal circumstances, after the system enters an Undefined/Abort exception, it proceeds through exception handling and context-saving logic. On RDK S100, MCU1 cannot be hardware power-cycled independently, so the MCU1 remoteproc stop/start flow and the synchronous Undefined/Abort exception handling flow should be understood separately.
 </DocScope>
 <DocScope products="RDK S600">
 Under normal circumstances, when the system encounters an undefined/abort exception, it eventually enters an infinite loop. Only by re-executing the power-on/power-off process can it return to normal operation. Since the RDK-S600 cannot power on/off MCU1 independently, system process modifications are required to achieve the desired outcome.
@@ -384,16 +383,21 @@ Under normal circumstances, when the system encounters an undefined/abort except
 
 <DocScope products="RDK S100">
 
-Specific principle: When an Undefined/Abort exception occurs, it eventually enters an infinite loop. Through Acore's sysfs, MCU1 is software-powered off (notified to enter WFI mode). The next time it is started, MCU1 reboots via software, achieving the desired outcome.
+### Path 1: remoteproc software stop/start (daily start/stop)
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_exception-en.jpg" alt="" style={{ width: '100%' }} />
+After Acore executes `echo stop > state` via sysfs, MCU0 triggers an inter-core interrupt, and MCU1 clears run flags before entering STANDBY or deep sleep. On the next `echo start > state`, MCU1 starts again through software boot.
 
-The following uses the S100 Undefined exception as an example. When an Undefined exception occurs, the UART outputs the log "EL1_Undefined_Handler" and eventually enters the S100_Exception_Handler function, where it enters an infinite loop based on the exception_on variable. When Acore stops MCU1 via the remoteproc framework, an inter-core interrupt modifies the exception_on variable, shuts down the periodic tick interrupt, and enters WFI mode (STANDBY mode):
+On MCU1 of S100, core0 stop/deepsleep handling is mainly in Cross_Core_Ins0 / Cross_Core_Ins2, and core1 stop/deepsleep handling is mainly in Cross_Core_Ins3 / Cross_Core_Ins5. The relevant code is in:
+
+- `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`
+- `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/main.c`
+
+Code example:
 
 ```c
 void Os_Isr_Cross_Core_Ins0_Isr(void)
 {
-  LogSync("mcu1 enter WFI mode!\r\n");
+  LogSync("mcu1: %s!\r\n",__func__);
   power_on = 0;
   ClearCrossCoreISR0();
   if (exception_on)
@@ -402,56 +406,50 @@ void Os_Isr_Cross_Core_Ins0_Isr(void)
   }
 }
 
-void S100_Exception_Handler(void)
+void Os_Isr_Cross_Core_Ins3_Isr(void)
 {
-    LogSync("os enter %s!\r\n", __func__);
-    while (exception_on){};
-    LogSync("%s enter wfi mode!\r\n", __func__);
-    Os_Disable_Millisecond();
-    Os_Clear_Millisecond();
-    STANDBY();
-};
-
-void EL1_Undefined_Handler(void)
-{
-    int32_t func_ptr;
-    *(volatile unsigned int *)(UART_0_BASE) = ('E');
-    *(volatile unsigned int *)(UART_0_BASE) = ('L');
-    *(volatile unsigned int *)(UART_0_BASE) = ('1');
-    *(volatile unsigned int *)(UART_0_BASE) = ('_');
-    *(volatile unsigned int *)(UART_0_BASE) = ('U');
-    *(volatile unsigned int *)(UART_0_BASE) = ('n');
-    *(volatile unsigned int *)(UART_0_BASE) = ('d');
-    *(volatile unsigned int *)(UART_0_BASE) = ('e');
-    *(volatile unsigned int *)(UART_0_BASE) = ('f');
-    *(volatile unsigned int *)(UART_0_BASE) = ('i');
-    *(volatile unsigned int *)(UART_0_BASE) = ('n');
-    *(volatile unsigned int *)(UART_0_BASE) = ('e');
-    *(volatile unsigned int *)(UART_0_BASE) = ('d');
-    *(volatile unsigned int *)(UART_0_BASE) = ('_');
-    *(volatile unsigned int *)(UART_0_BASE) = ('H');
-    *(volatile unsigned int *)(UART_0_BASE) = ('a');
-    *(volatile unsigned int *)(UART_0_BASE) = ('n');
-    *(volatile unsigned int *)(UART_0_BASE) = ('d');
-    *(volatile unsigned int *)(UART_0_BASE) = ('l');
-    *(volatile unsigned int *)(UART_0_BASE) = ('e');
-    *(volatile unsigned int *)(UART_0_BASE) = ('r');
-    *(volatile unsigned int *)(UART_0_BASE) = ('\r');
-    *(volatile unsigned int *)(UART_0_BASE) = ('\n');
-    LogSync("os enter %s!\r\n", __func__);
-    exception_on = 1;
-
-    func_ptr = &S100_Exception_Handler;
-    __asm volatile (
-        "mov lr, %[func_ptr]\t"
-        :
-        : [func_ptr] "r" ((uintptr_t)func_ptr)
-        : "lr"
-    );
-
-    __asm volatile ("ERET");
+  LogSync("mcu1: %s!\r\n",__func__);
+  power_on_core1 = 0;
+  ClearCrossCoreISR3();
+  if (exception_on_core1)
+  {
+    exception_on_core1 = 0;
+  }
 }
 ```
+
+### Path 2: synchronous Undefined/Abort exceptions
+
+In `startup.s` for S100 MCU1, the EL1 exception vector table entries are `call_EL1_Undefined_Handler` / `call_EL1_Abort_Handler`, rather than `EL1_Undefined_Handler` in `main.c`.
+
+Undefined exceptions jump directly into `Os_SaveCrashDump0` to save a crash dump. Prefetch/Data Abort first call `User_Abort_Handler_pre` / `User_Abort_Handler` to record fault information, and then enter `Os_SaveCrashDump0`.
+
+Code example:
+
+```asm
+EL1_core_exceptions_table:
+    b   EL1_Reset_Handler
+    b   call_EL1_Undefined_Handler
+    ldr pc, =vPortSVCDispatcher
+    b   call_EL1_Prefetch_Handler
+    b   call_EL1_Abort_Handler
+    b   EL1_DefaultISR
+    ldr pc, =vPortInterruptDispatcher
+    b   EL1_FIQ_Handler
+
+call_EL1_Undefined_Handler:
+    push {r0}
+    mov r0, #(0x100*1+18)
+    b Os_SaveCrashDump0
+
+call_EL1_Abort_Handler:
+    STMFD SP! , {R0-R12,LR}
+    ...
+    bl User_Abort_Handler
+    ...
+    b Os_SaveCrashDump0
+```
+
 
 </DocScope>
 
@@ -517,23 +515,57 @@ Although `S600_Exception_Handler`, `EL1_Undefined_Handler`, and `EL1_Abort_Handl
 
 </DocScope>
 ## Introduction to the MCU1 main Function
-The main function is the key code after entering the system. The following code is also critical for the normal startup of MCU1. Do not delete related code arbitrarily, as it may cause startup exceptions.
+
+The main function is the key code after system entry. On MCU1, the current flow branches by `GetCurrentCoreID()` between core0 and core1 initialization. Core0 handles major peripheral init, logging, version info, GIC WAKER, IRQ affinity, and FreeRTOS task setup; core1 handles Can5~Can9 data interrupts, inter-core interrupts, and stop/deepsleep flow.
 <DocScope products="RDK S100">
+
+ The following excerpt shows key logic in the current RDK S100 MCU1 main function. Do not remove these initialization steps arbitrarily, or startup, remoteproc stop/start, CAN interrupt handling, or low-power flows may fail.
+ 
 ```c
 int main(void)
 {
-    Ipc_MainPowerUp = TRUE;   /* IPC power-on flag, MCU1 is powered on by default because MCU0 is already powered on */
-    PpsIcu_Irq_Init();        /* Configure PPS-related interrupts as edge-triggered functions */
-    Uart_Init();              /* Initialize UART serial port for debugging */
-    Log_Init();               /* Initialize log serial port, allowing Acore to retrieve MCU log information after initialization */
-    #ifdef SHELL_ENABLE
-    Shell_Init();             /* Initialize shell commands, toggled by the SHELL_ENABLE macro */
-    #endif
-    Version_into_AonSram();   /* Retrieve MCU version information, allowing Acore to retrieve MCU version information after initialization */
-    LogSync("MCU FreeRtos Lite Init Success!\r\n");
-    FreeRtos_Irq_Init();      /* Initialize FreeRTOS interrupts */
-    FreeRtos_Task_Init();     /* Initialize FreeRTOS tasks and start scheduling */
-    for(;;){};
+    unsigned long core_id = GetCurrentCoreID();
+
+    if (core_id == 0) {
+        /* core0 execution path:
+         * Ipc_MainPowerUp, Can2Atcm_Init, PpsIcu_Irq_Init, Uart_Init,
+         * Log_Init, Shell_Init, Version_into_AonSram, etc.
+         */
+        LogSync("MCU FreeRtos Lite Init Success!\r\n");
+
+        /* Configure gicr0/gicr1 WAKER, keep bit3 and bit0 */
+        /* ... read/write GIC WAKER registers such as 0x22100014 and 0x22120014 ... */
+
+        FreeRtos_Irq_Init();
+        SetCanInterruptAffinity(1);
+        SetIPCInterruptAffinity(1);
+        SetCrossCoreInterruptAffinity(1);
+        FreeRtos_Task_Init();
+
+        for(;;){};
+    } else if (core_id == 1) {
+        /* core1 execution path:
+         * Enable Can5~Can9 data interrupts and Cross_Core_Ins3/4/5.
+         */
+        __asm__ volatile("cpsie i");
+        __asm__ volatile("cpsie f");
+
+        while(1) {
+            if(0 == power_on_core1) {
+                /* Disable Can5~Can9 data interrupts before stop/deepsleep */
+                /* ... Os_Disable_Can5_DataIsr() ~ Os_Disable_Can9_DataIsr() ... */
+
+                if(1 == deep_sleep_core1) {
+                    Mcu1_Enter_Sleep_Core1();
+                } else {
+                    InvalidateCache();
+                    STANDBY();
+                }
+            } else {
+                __asm__ volatile("wfe");
+            }
+        }
+    }
 }
 ```
 </DocScope>

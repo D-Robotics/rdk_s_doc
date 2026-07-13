@@ -939,13 +939,32 @@ import DocScope from '@site/src/components/DocScope';
 ## 增加编译目录教程
 ### 增加编译目录流程
 <DocScope products="RDK S100">
-1. 修改 mcu/Build/FreeRtos_mcu1/SConstruct_Lite_FRtos_S100_sip_B 文件，增加/删除相应的模块。
+1. 修改 `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml` 文件，增加或删除参与编译的目录。
 
-   如增加 mcu/Service/Log 文件夹，只需增加相应的位置即可。变量 False 表示控制构建过程中不会将源文件复制到编译输出目录。
+2. 普通业务/demo 源码目录建议添加到 `BuildPath`。例如新增 `mcu/samples/MyDemo`，可增加：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/scons_add_context.png" alt="" style={{ width: '100%' }} />
+```yaml
+BuildPath:
+  - samples/MyDemo
+```
 
-2. 在添加编译的模块下，添加 SConscript 文件，SConscript 文件可以从任意已经编译的模块文件夹下获取
+3. `Common`、`McalCdd`、`Platform`、`Service` 等目录已有独立的静态库 path 字段，新增这些模块时应放到对应字段中：
+
+```yaml
+StaticLibCommonPath:
+  - Common/xxx
+
+StaticLibMcalCddPath:
+  - McalCdd/xxx
+
+StaticLibPlatformPath:
+  - Platform/xxx
+
+StaticLibServicePath:
+  - Service/xxx
+```
+
+4. 在新增模块目录下添加 `SConscript` 文件。`SConstruct` 会根据 yaml 中配置的 path 扫描对应目录下的 `SConscript` 并参与编译。
 
 </DocScope>
 <DocScope products="RDK S600">
