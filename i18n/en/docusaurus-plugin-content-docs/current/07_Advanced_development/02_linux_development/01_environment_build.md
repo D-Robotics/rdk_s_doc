@@ -17,12 +17,12 @@ Setting up a cross-compilation environment is an essential step in the developme
 
 <DocScope products="RDK S100">
 
-![build_host_target](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/environment_build/build_host_target.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/environment_build/build_host_target.png" alt="Cross-Compilation Development Environment diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 </DocScope>
 <DocScope products="RDK S600">
 
-![build_host_target](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/environment_build/build_host_target.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/environment_build/build_host_target.png" alt="Cross-Compilation Development Environment diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 </DocScope>
 

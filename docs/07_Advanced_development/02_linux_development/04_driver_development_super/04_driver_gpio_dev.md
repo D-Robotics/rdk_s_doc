@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 <DocScope products="RDK S100">
 S100 Acore 芯片内中共有3个 sys 有 gpio 设备，分别是 peri, cam 和 video，每个设备最多有32个 gpio 引脚，并且每个 gpio 引脚都支持中断。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/gpio_devs.png" alt="gpio_devs" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/gpio_devs.png" alt="S100 GPIO 设备概览" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 
@@ -40,7 +40,7 @@ kernel/drivers/gpio/gpio-dwapb.c # gpio驱动源文件
 
 GPIO_DWAPB
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/GPIO_MENUCONFIG.png" alt="image-GPIO_MENUCONFIG" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/GPIO_MENUCONFIG.png" alt="GPIO 内核配置菜单" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 内核 DTS 配置
 

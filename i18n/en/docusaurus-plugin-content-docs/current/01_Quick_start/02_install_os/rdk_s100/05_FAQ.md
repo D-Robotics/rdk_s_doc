@@ -78,27 +78,27 @@ Q2. **Driver installation required for Ubuntu 24.04**
 Taking MacOS version 15.0 (M3 chip) as an example, the default serial driver on MacOS may cause garbled output when connecting to CH340N at a baud rate of 921600. The latest CH340N driver needs to be installed. Follow these steps:
 
 1. The default CH340N driver displays the connected device as `tty.usbserial*`, indicating the default MacOS serial driver is in use. An update is required:
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttyusb.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttyusb.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 2. Installation process: (The following steps are based on the README.md document on the [CH340N latest driver release page](https://github.com/WCHSoftGroup/ch34xser_macos?tab=readme-ov-file))
    1. Click to download the compressed package on the [CH340N latest driver release page](https://github.com/WCHSoftGroup/ch34xser_macos?tab=readme-ov-file)
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install1.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install1.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    2. Unzip and install the driver using the pkg package
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install2.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install2.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    3. Click Continue
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install3-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install3-en.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    4. Click Install and enter the password
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install4-en.png)
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install5-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install4-en.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install5-en.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    5. Click Install and open System Settings
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install6-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install6-en.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    6. Authorize permission and enter the password
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install7-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install7-en.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    7. A pop-up window shows successful installation
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install8-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install8-en.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    8. **<font color='red'>Restart the computer</font>**
    9. Check if the installation was successful. Recognizing `tty.wch*` indicates the driver was installed successfully
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttywch.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttywch.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 3. Connect the device to verify
    :::warning Note
 
@@ -108,9 +108,9 @@ Taking MacOS version 15.0 (M3 chip) as an example, the default serial driver on 
 
    1. Using the image above as an example, generally the smaller number corresponds to the ACore serial port, and the larger number corresponds to the MCU serial port. The image shows `/dev/tty.wchusbserial1220` is the ACore serial port, and `/dev/tty.wchusbserial1230` is the MCU serial port. The command to connect to the ACore serial port is: `minicom -D /dev/tty.wchusbserial1220 -b 921600 -8`; the command to connect to the MCU serial port is: `minicom -D /dev/tty.wchusbserial1230 -b 921600 -8`. Replace the device path in the command according to your actual device number **/dev/tty.wchusbserial**.
    2. Command to connect to the ACore serial port using `minicom` (`minicom -D /dev/tty.wchusbserial1220 -b 921600 -8`)
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
    3. Verify by connecting to the development board
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="Serial Port Garbled When Using MacOS Laptop diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 4. If the serial port still shows garbled characters after installing or using the CH340N driver downloaded from the official website.
 

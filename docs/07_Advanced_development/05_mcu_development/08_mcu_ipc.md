@@ -121,7 +121,7 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 IpcBox 基于 MCU 侧的 IPC 通信框架增加的应用扩展，用于管理外设的透传功能，其实现框图如下：
 各个外设通过统一的接口接入 IpcBox 中进行管理，简单来说就是外设数据经过 IPC Box 进行转发，并返回给 Acore 侧，同理 Acore 侧的数据通过 IpcBox 进行转发，并操作实际的外设，其数据流认为：`Acore<->IPC<->MCU<->Peri`
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IPCBOX架构图" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IPCBOX架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 :::tip
@@ -264,7 +264,7 @@ D-Robotics:/$ ipcbox_loglevel 4
     - MCU 存在一个常驻线程，不断的在去读队列中的数据是否为空，若不为空，则校验并解析数据，识别出 cmd 命令并运行
     - freertos 的 cmd 的应用类似于 uboot 的 cmd 的命令，通过此方式用户可以很方便的定制化自己的应用，在此场景中，运行的 cmd 将 adc 的值读出，再通过 ipc 返回给 Acore
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="Acore与MCU之间透传Can数据架构图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="Acore与MCU之间透传Can数据架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### IpcBox Uart 的实现
 与 Runcmd 的实现类似，在此场景中，MCU 向 Acore 发送数据时触发 MCU 的中断，但并不会使用队列存储

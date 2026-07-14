@@ -42,9 +42,9 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 
 分析`cyclictest`测试结果以评估实时内核的性能表现。关注最小延迟和最大延迟，以确保它们在可接受范围内。较小的最大延迟和更加一致的延迟表明实时内核的性能较好。下图是使用实时内核，并且运行了 `/app/pydev_demo/03_mipi_camera_sample` 示例的情况下测试的结果。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png" alt="image-20230914145619064" style={{ width: '100%' }} />
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png" alt="image-20230914145234528" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png" alt="cyclictest实时性能测试延迟直方图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<br/>
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png" alt="cyclictest实时性能测试延迟统计数据" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 `cyclictest` 输出中的每个字段含义如下：
 

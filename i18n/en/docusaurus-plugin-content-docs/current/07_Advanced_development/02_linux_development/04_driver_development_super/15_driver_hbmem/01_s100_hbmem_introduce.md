@@ -2,7 +2,7 @@
 
 The Hbmem module primarily implements functions including **memory allocation**, **memory sharing**, **memory queue management**, and **memory pool**, and is specifically used to manage **system-reserved memory**.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/01_func_overview-en.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/01_func_overview-en.png" alt="Function Description diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Memory Allocation
 
@@ -26,7 +26,7 @@ The memory queue management module provides a general queue management mechanism
 
 **It is important to note that because the memory queue is a circular queue, writing events to the queue when it is full will overwrite the first existing event. Additionally, this queue only supports operations within a single process.**
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/01_memory_queue-en.jpg" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/01_memory_queue-en.jpg" alt="Memory Queue Management diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Memory Pool
 

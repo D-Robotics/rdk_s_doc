@@ -15,7 +15,7 @@ The development board features expansion pin headers, allowing users to perform 
 
 The RDKS600 has two 10-pin self-locking interfaces, one 12-pin self-locking interface, and one 14-pin self-locking interface, making it convenient for users to expand peripherals. The digital I/O is designed with a 1.8V logic level. The interface definitions are as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mainboard_pin.png" alt="image-rdk_600_mainboard_pin" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mainboard_pin.png" alt="Expansion Pin Header Definition{#pin_define} photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## GPIO Read/Write Operation Example
 :::tip

@@ -73,8 +73,8 @@ sidebar_position: 5
     * 较高版本的 YOLOv5（例如 tag 2.0以上）官方导出的 ONNX 模型，其输出层可能包含了特征解码部分（例如直接输出检测框坐标和类别得分），或者没有将大、中、小三个特征图的输出分开。
     * 地瓜机器人 RDK BPU 部署通常要求 ONNX 模型的输出是原始的特征图，并且这三个特征图是作为独立的输出节点。
     * **示例图（上为错误，下为部分正确但仍需调整）：**
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/3.png" alt="YOLOv5错误输出头示例" style={{ width: '100%' }} />
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/4.jfif" alt="YOLOv5错误输出头示例" style={{ width: '100%' }} /> 
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/3.png" alt="YOLOv5错误输出头示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/4.jfif" alt="YOLOv5错误输出头示例" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> 
       *上图：未分离特征图，包含解码。下图：分离了特征图，但可能错误添加了 Sigmoid 或未转 NHWC。*
 * **解决方法：**
     * 您需要修改 YOLOv5的导出脚本（通常是`models/yolo.py`或类似文件），确保在导出 ONNX 模型时：
@@ -90,7 +90,7 @@ sidebar_position: 5
     * 如果您使用的 YOLOv5模型（例如公版的 tag 2.0以下版本）在导出 ONNX 时，每个输出头的维度是5维的（例如 `[batch, num_anchors, grid_h, grid_w, (x,y,w,h,conf+classes)]` 或者是 `[batch, num_anchors* (5+num_classes), grid_h, grid_w]` 展平的形式）。
     * 而地瓜机器人 BPU 工具链在编译这类模型时，如果直接使用，可能会因为维度处理或后处理代码的预期，导致将某个维度截断或错误解析，从而出现周期性排列的异常检测框。
     * **示例图：**
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/5.png" alt="YOLOv5周期性异常检测框示例" style={{ width: '100%' }} /> * **解决方法：**
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/5.png" alt="YOLOv5周期性异常检测框示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> * **解决方法：**
     * 推荐的做法是在导出 ONNX 模型时，将输出转换为明确的四维张量（例如 NHWC 格式：`[batch, grid_h, grid_w, num_anchors*(5+num_classes)]`），并且在板端的后处理代码中，再根据这个 NHWC 的输出格式进行正确的解析和解码（例如，将其 reshape 回5维或进行相应的 anchors 计算）。
     * 确保您的后处理逻辑与 ONNX 模型的最终输出维度和排列方式完全匹配。
 
@@ -108,7 +108,7 @@ sidebar_position: 5
 * **可能原因：后处理库参数传递问题 (特指某些系统版本中的示例)。**
     * 在 RDK OS 3.0.0及以上版本系统中，`/app/pydev_demo/07_yolov5_sample` 等示例中可能使用了 CPython 封装的后处理库。如果模型训练的类别数量等关键参数没有正确地传递给这个后处理库的初始化或调用接口，可能会导致解码逻辑错误，出现检测框聚集在左上角的现象。
     * **示例图：**
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/7.png" alt="YOLOv5检测框聚集左上角示例" style={{ width: '100%' }} /> * **解决方法：**
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/7.png" alt="YOLOv5检测框聚集左上角示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> * **解决方法：**
     * **推荐使用 RDK Model Zoo 中的后处理：** 对于 YOLOv5等模型的验证和部署，强烈建议参考或直接使用 **RDK Model Zoo** ([https://github.com/D-Robotics/rdk_model_zoo](https://github.com/D-Robotics/rdk_model_zoo)) 中提供的后处理代码。Model Zoo 中的实现通常更健壮、更优化，并且与工具链的配合更紧密。
     * **检查参数传递：** 如果您坚持使用板载示例的后处理，请仔细检查示例代码，确保所有必要的参数（如类别数、输入分辨率、anchors、置信度阈值、NMS 阈值等）都已正确配置并传递给了后处理函数或类。
 
@@ -1378,7 +1378,7 @@ YUV_BT601_Video_Range，某些摄像头输入数据都是 YUV BT601(Video Range)
 
     以下左图为修改前的模型某一输出节点的可视化图，右图则为修改后的对应输出节点可视化图。
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/yolov5.png" alt="yolov5" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/yolov5.png" alt="YOLOv5 示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 下载完成后通过脚本 https://github.com/ultralytics/yolov5/blob/v2.0/models/export.py 进行 pt 文件到 ONNX 文件的转换。
 
@@ -1395,7 +1395,7 @@ YUV_BT601_Video_Range，某些摄像头输入数据都是 YUV BT601(Video Range)
 
 请严格按照下图中步骤1~5来进行模型精度验证并保留每个步骤的代码和结果：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/model_accuracy_check.png" alt="model_accuracy_check" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/model_accuracy_check.png" alt="模型精度检查" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **在进行排查前，请确认当前模型转换所用的 Docker 镜像或转换环境版本，并保留版本信息**
 

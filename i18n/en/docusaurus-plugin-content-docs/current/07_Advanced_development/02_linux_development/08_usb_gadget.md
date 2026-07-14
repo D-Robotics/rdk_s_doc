@@ -145,7 +145,7 @@ usb-gadget start succeed.
 
 After connecting to a PC, you can see the `Remote NDIS Compatible Device` network adapter on the computer's network configuration page:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="RNDIS_Device" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="Switch to RNDIS Mode diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **Configure network IP:**
 
@@ -157,7 +157,7 @@ ifconfig usb0 192.168.1.110
 
 Configure the remote network adapter IP address on the PC (must be on the same subnet as the development board):
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png" alt="NETWORK_CONFIG" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png" alt="Switch to RNDIS Mode diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **Verify network connectivity:**
 

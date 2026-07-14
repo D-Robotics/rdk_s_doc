@@ -87,11 +87,11 @@ Options:
 
 **1.** 查看 RDK_S100 原理图并找到 SPI0_MOSI 和 SPI0_MISO 对应的引脚与连接器位置，如图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png" alt="Spi_Schematic_diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png" alt=" 引脚与连接器位置" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 并将双母头杜邦线将 SPI0_MOSI 与 SPI0_MISO 相连，位置如图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png" alt="Spi_Connection_diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png" alt="连接示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::caution 注意
 RDKS100 Acore 支持2路 SPI，且 SPI0，SPI1只能做 SPI Master。
@@ -195,7 +195,7 @@ Test times: 0 Data verification Successful
 
 可以准备一块 RDK_S100 开发板，将 SPI 的4根线飞好。Master 可以选择 SPI0，SPI Slave 选择外部 SPI 设备（客户自行选择）。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png" alt="SPI_wiring_diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png" alt="SPI 外部回环测试示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 保证 Master 和 Slave 的 SPI 波特率、传输模式等设置正确，Slave 设备侧先执行接收数据测试命令；
 

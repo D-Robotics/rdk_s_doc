@@ -14,7 +14,7 @@ Kernel 版本包含标准驱动库的基础上，系统 BSP。
 
 软件框图如下所示：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework.png" alt="software_framwork" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework.png" alt="系统框图示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 微核设计
 
@@ -95,7 +95,7 @@ log  sunrise_camera  www
 1. 模块插件静态插拔控制
 2. 模块 CMD 指令中转
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="event_bus" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="功能描述示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 示例：
 
@@ -103,7 +103,7 @@ camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera
 
 整个过程如下图所示：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="event_bus_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="功能描述示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 模块代码结构
 
@@ -128,7 +128,7 @@ camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera
 
 示例：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="cmd_register" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="接口描述示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **sdk_cmd_register**
 
@@ -215,7 +215,7 @@ vp_wrap 实现多媒体模块的接口封装；
 
  bpu_wrap 模块实现算法推理接口和后处理方法的封装。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="platform_module" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="概述示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 功能描述
 
@@ -236,7 +236,7 @@ typedef struct vpp_ops {
 
 启动一个应用方案（以启动 vpp_camera 为例）的流程如下：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="vpp_camera_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="功能描述示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 其他子模块的初始化、启动流程都可以参考本流程图。
 
@@ -288,7 +288,7 @@ typedef struct vpp_ops {
 
 #### 执行流程
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow.png" alt="main_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow.png" alt="执行流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### WebServer
 
@@ -309,7 +309,7 @@ typedef struct vpp_ops {
 
 模块运行时序如下：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow.png" alt="bpu_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow.png" alt="概述示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 添加一个新模型流程
 

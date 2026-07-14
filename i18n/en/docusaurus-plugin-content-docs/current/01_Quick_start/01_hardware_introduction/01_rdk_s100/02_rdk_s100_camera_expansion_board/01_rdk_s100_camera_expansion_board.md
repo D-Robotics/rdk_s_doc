@@ -5,7 +5,7 @@ sidebar_position: 2
 # 1.1.2.1 Camera Expansion Board
 
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="Camera Expansion Board" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The RDK S100 Camera Expansion Board (hereinafter referred to as the "Camera Expansion Board") is a core expansion module of the D-Robotics RDK S100 series developer kit. The Camera Expansion Board is developed based on the RDK S100 Camera Expansion Connector and provides 2 MIPI camera interfaces and 4 GMSL camera interfaces.
 
@@ -50,11 +50,11 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 
 ### Topology Diagram
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram.png" alt="image-rdk_s100_camera_expansion_board_architecture_diagram.png" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram.png" alt="Topology Diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Interface Description
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png" alt="camera_expansion_board_interface" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png" alt="Interface Description" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | Reference | Function                              | Reference | Function                                    |
 | :-------- | :------------------------------------ | --------- | ------------------------------------------- |
@@ -90,7 +90,7 @@ Please watch the corresponding expansion board assembly video based on your actu
 - Threaded Support Pillar Expansion Board: The inner wall of the support pillar has threads.
 - Smooth-Hole Support Pillar Expansion Board: The inner wall of the support pillar is smooth without threads.
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s100_camera_expansion_board_suppport_location-en.png" alt="Support pillar location diagram" style={{ width: '50%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s100_camera_expansion_board_suppport_location-en.png" alt="Assembly Instructions photo" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::
 

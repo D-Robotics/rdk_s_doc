@@ -84,7 +84,7 @@ RTC 通过精确的晶振（通常采用 32.768 kHz 石英晶振）信号来持�
 
 Linux 的系统时间在系统关机时间就会丢失，而 RTC 可以在系统关闭后，依靠外部电池继续工作，这样就能将时间保存下来，待系统下次启动时候就可以从 RTC 中恢复时间。其流程如下所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_time.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_time.png" alt="RTC 时间保持示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 流程详细说明如下：
 
@@ -111,7 +111,7 @@ Linux 的系统时间在系统关机时间就会丢失，而 RTC 可以在系统
 
 RTC 的典型应用是通过 RTC 定时执行任务，该功能仅 YSN8130 支持，其流程如下所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_alarm.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_alarm.png" alt="RTC 定时任务示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <DocScope products="RDK S100">
 S100 芯片上 RTC 定时任务流程说明如下：
@@ -147,7 +147,7 @@ RTC 模块的驱动代码位于 `/hobot-drivers/rtc`。
 
 Linux RTC 驱动框架如下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_frame.png" alt="RTC_Driver_Frame.png" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_frame.png" alt="Linux RTC 驱动框架示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 下面对各层分别进行介绍。
 
@@ -661,7 +661,7 @@ EXPORT_SYMBOL_GPL(__devm_rtc_register_device);
 
 将上述代码串连起来，用户态程序与 RTC 设备交互的时序图如下所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_user_interaction.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_user_interaction.png" alt="用户层接口代码说明示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 具体说明如下：
 

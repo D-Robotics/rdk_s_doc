@@ -149,7 +149,7 @@ root@ubuntu:~# dd if=/mnt/usb/myfile of=/dev/null bs=4K count=256K
 
 **1.** Connect the RDK_S100 development board’s USB 2.0 port to a PC’s USB 2.0 port, as shown below:
 
-![S100_USB2.0](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/S100_USB2.0.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/S100_USB2.0.png" alt="USB Virtual Network Interface Setup diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **2.** Configure the USB 2.0 port as a virtual network interface using the following commands:
 
@@ -188,7 +188,7 @@ usb-gadget start succeed.
 
 On the PC, open the network configuration panel and you should see a network adapter labeled `Remote RNDIS Compatible Device`, as shown below:
 
-![RNIS_Device](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device-en.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device-en.png" alt="USB Virtual Network Interface Setup diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **3.** Use the following command to configure the IP address of the `usb0` network interface so that it resides in the same subnet as the PC-side remote network adapter:
 
@@ -198,7 +198,7 @@ ifconfig usb0 192.168.1.110
 
 PC-side remote network adapter IP configuration is shown below:  
 
-![NETWORK_CONFIG](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG-en.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG-en.png" alt="USB Virtual Network Interface Setup diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## Test Method
 

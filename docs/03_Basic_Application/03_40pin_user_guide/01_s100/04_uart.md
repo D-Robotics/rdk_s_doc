@@ -14,7 +14,7 @@ RDK S100 在 40PIN 支持 UART2，没有使能，物理管脚号 8 和 10，IO �
 
 40pin 上需要拨动拨码开关来选择使用 UART2 还是 I2C5, 具体细节可以查看下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png" alt="image-rdk_100_funcreuse_40pin" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="串口应用示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0,0' }} />
 
 拨动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
 
@@ -52,7 +52,7 @@ uart2: uart@394C0000 {
 
 把 TXD 和 RXD 通过跳线帽直接硬件上连接在一起：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png" alt="image-20220512101820743" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png" alt="UART回环测试：TXD与RXD通过跳线帽短接" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 测试过程
 

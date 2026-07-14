@@ -7,7 +7,7 @@ sidebar_position: 2
 
 The PCIe software framework is divided into two parts: RC and EP:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch-en.jpg" alt="S100_600_PCIE_sw_arch" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch-en.jpg" alt="Software Framework diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Driver Module Description
 

@@ -10,7 +10,7 @@ TogetheROS.Bot 是 D-Robotics 面向机器人厂商和生态开发者推出的�
 
 TogetheROS.Bot 支持在 RDK 平台上运行，同时提供模拟器版本在 X86平台上运行。RDK 平台涵盖下图所示的全部功能，X86平台支持以图片回灌方式体验部分功能，提高用户算法开发和验证效率，并能够快速迁移到 RDK 平台。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/image/TogetheROS.png" alt="TROS-Diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/05_Robot_development/image/TogetheROS.png" alt="TogetheROS.Bot 简介示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 TogetheROS.Bot 源码托管在 GitHub [D-Robotics组织](https://github.com/D-Robotics)。
 

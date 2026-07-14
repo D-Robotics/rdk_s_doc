@@ -7,7 +7,7 @@ sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 
 # 1.1.3 MCU Interface Expansion Board
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="image-rdk_s600_mcu_port_expansion_board" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="MCU Interface Expansion Board" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 <details>
@@ -79,15 +79,15 @@ In hardware version V0P1, the 2x SPI interfaces are temporarily unavailable.
 
 ### Topology Diagram
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" alt="image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" alt="Topology Diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Interface Description
 
 <!-- **V0P2 Interface Diagram**
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2_interface.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2_interface.png" alt="Interface Description" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **V0P3 Interface Diagram** -->
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="Interface Description" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | Reference | Function                    |
 | --------- | --------------------------- |

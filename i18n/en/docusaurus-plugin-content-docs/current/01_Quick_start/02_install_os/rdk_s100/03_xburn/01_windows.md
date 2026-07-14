@@ -27,17 +27,17 @@ The USB driver can be installed via the Xburn tool.
 
 1. Open the Xburn tool.
 2. Click on the `Drivers` tab. The Xburn tool will automatically detect whether the USB driver is installed. If not, the following interface will be displayed. Click `Install` to proceed.
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled-en.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled-en.png" alt="Driver Download and Installation diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 3. After installation, the interface will appear as shown below.
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed-en.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed-en.png" alt="Driver Download and Installation diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Verify Driver Installation**
 
 1. Connect the serial port. For the first connection, you need to install the CH340 serial port driver. The driver can be obtained from the [Tool Download](../../../download.md#tools-download) section in the resource summary.
 2. After the driver is installed, the Device Manager will correctly recognize the serial port board, as shown in the figure below:
 
-   ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="Serial port recognized in Device Manager" style={{ width: "50%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 3. Download the remote connection tool [Mobaxterm](https://mobaxterm.mobatek.net/download.html).
 
@@ -53,27 +53,21 @@ The USB driver can be installed via the Xburn tool.
    | Stop bits               | 1      |
    | Flow Control            | None   |
 
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png" alt="Driver Download and Installation diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 5. After powering on the development board, immediately press and hold the space bar to enter the uboot command line mode. Type `fastboot 0` to make the development board enter fastboot mode:
 
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png" alt="Driver Download and Installation diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 2. After successfully installing the driver, the Device Manager will show an Android Device, as shown below:
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg) -->
-   <img
-   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg"
-   style={{ width: '100%', height: 'auto', align:'center'}}
-   />
+   <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg" alt="Driver Download and Installation diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} /> -->
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg" alt="Driver Download and Installation diagram" style={{ width: '100%', height: 'auto', align:'center', maxWidth: "980px", display: "block", margin: "0 auto" }} />
 
    If the driver installation is unsuccessful, the Device Manager will indicate an unknown device named USB download gadget, as shown below:
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png) -->
-   <img
-   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png"
-   style={{ width: '100%', height: 'auto', align:'center'}}
-   />
+   <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png" alt="Driver Download and Installation diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} /> -->
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png" alt="Driver Download and Installation diagram" style={{ width: '100%', height: 'auto', align:'center', maxWidth: "980px", display: "block", margin: "0 auto" }} />
 
 ## System Flashing
 
@@ -94,7 +88,7 @@ The USB driver can be installed via the Xburn tool.
    2. Set the SW2 switch to ↑ to enter Download mode.
    3. Set the SW1 switch to ▽ and turn on the power.
    4. If the `DOWNLOAD` LED lights up, the board is in DFU mode. Otherwise, press `K1` to reset the system.
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1-en.jpg)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1-en.jpg" alt="DFU-Fastboot Flashing photo" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Flashing with Xburn**
 
@@ -105,11 +99,11 @@ Configuration method is as follows:
    - Storage Medium: `emmc`, Firmware Type: `secure`
    - Image Directory: Click Browse and select the product folder containing the firmware
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_dfu-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_dfu-en.png" alt="DFU-Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click Start Upgrade, power on the device, and wait for the upgrade to complete
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="DFU-Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - After the upgrade is complete, turn off the power, flip the flashing switch downward (to exit DFU mode), and then power on again.
 
@@ -138,10 +132,10 @@ Configuration method is as follows:
    - Storage Medium: `emmc`, Type: `secure`
    - Image Directory: Click Browse and select the product folder containing the firmware
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot-en.png" alt="Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click Start Upgrade, the device will enter Fastboot mode and wait for the upgrade to complete
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - After the upgrade is complete, power on again.
 
@@ -169,7 +163,7 @@ Configuration method is as follows:
    - Image Directory: Click Browse and select the product folder containing the firmware
    - Advanced Configuration: Check `Flash specific partitions`, check `miniboot_flash` and `miniboot_emmc`
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition-en.png" alt="Flashing Specific Partitions with Xburn diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click Start Upgrade, power on the device, and wait for the upgrade to complete
 
@@ -196,13 +190,13 @@ Configuration method is as follows:
    - Image Directory: Click Browse and select the product folder where the backup image should be saved
    - Advanced Configuration: Check `Backup specific partitions`, check `miniboot_flash`
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png" alt="Backing Up Specific Partitions with Xburn photo" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click Start Upgrade, power on the device, and wait for the operation to complete
 
    - After the operation is complete, open `img_packages/disk/` and check for the backup image file `miniboot_flash_backup.img`.
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png" alt="Backing Up Specific Partitions with Xburn photo" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    :::warning Note
 
@@ -227,4 +221,4 @@ If there is no display output for a long time after powering on (more than 2 min
 
 After the Ubuntu Desktop version system has fully started, the system desktop will be output to the monitor via the Display interface, as shown below:
 
-![image-desktop_display.jpg](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="Starting the System diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />

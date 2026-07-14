@@ -145,7 +145,7 @@ usb-gadget start succeed.
 
 连接到 PC 后，在电脑的网络配置页面可以看到 `Remote NDIS Compatible Device` 网卡：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="RNDIS_Device" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="切换到 RNDIS 模式示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **配置网络 IP：**
 
@@ -157,7 +157,7 @@ ifconfig usb0 192.168.1.110
 
 PC 端配置远程网卡 IP 地址（需要与开发板在同一网段）：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png" alt="NETWORK_CONFIG" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png" alt="切换到 RNDIS 模式示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **验证网络连接：**
 

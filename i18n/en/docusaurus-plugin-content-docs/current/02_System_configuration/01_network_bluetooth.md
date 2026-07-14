@@ -90,7 +90,7 @@ The development board needs to be equipped with a wireless Wi-Fi module, support
 In Station mode, the development board acts as a client, connecting to the router's wireless hotspot for networking.
 
 - For users using the Ubuntu Desktop version, you can click the Wi-Fi icon in the upper right corner of the desktop, select the corresponding hotspot, and enter the password to complete the network configuration, as shown below:
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-wifi-config.jpeg" alt="image-wifi-config" style={{ width: '100%' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-wifi-config.jpeg" alt="Station Mode diagram" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - For users using the Ubuntu Server version, wireless network configuration can be done via the command line as follows:
 
@@ -232,7 +232,7 @@ Continuously updating...
     ```
 
 6. Connect to the development board hotspot, e.g., `sunrise`
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-20220601203025803.png" alt="image-20220601203025803" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-20220601203025803.png" alt="Connecting to the development board Soft AP hotspot" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 7. To switch back to Station mode, you can do the following:
 
@@ -382,25 +382,25 @@ Controller F0:68:E3:22:7E:91 ubuntu [default]
 
 Execute `sudo bluetoothctl` to enter the Bluetooth configuration interface in interactive mode. If device information similar to the image below appears, it means the Bluetooth device has been recognized. Then use `show` to view Bluetooth information, paying attention to the `powered` and `discoverable` status of Bluetooth.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png" alt="image-20220601172604051" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png" alt="bluetoothctl show command displaying Bluetooth information" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Execute `power on` to enable Bluetooth, as shown in the image below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png" alt="image-20220601172501882" style={{ width: '50%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png" alt="bluetoothctl power on enabling Bluetooth" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 To allow Bluetooth to be discovered by nearby devices, execute `discoverable on` to enable Bluetooth and turn on the Bluetooth discoverable property, as shown in the image below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png" alt="image-20220601172648853" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png" alt="bluetoothctl discoverable on enabling Bluetooth discoverable mode" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 At this point, using a phone or computer to scan for Bluetooth will reveal a Bluetooth device named `ubuntu`:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650-en.jpg" alt="image-20220601175322650" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650-en.jpg" alt="Phone scanning and discovering Bluetooth device named ubuntu" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Next, test the active scanning function of Bluetooth. Enter `scan on` in the `bluetoothctl` interactive interface to enable active scanning. It will periodically print nearby devices. It should have discovered your phone device. Use `scan off` to disable the scanning function and summarize the list of scanned Bluetooth devices:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png" alt="image-20220601154131158" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png" alt="bluetoothctl scan on actively scanning nearby Bluetooth devices" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png" alt="image-20220601154253947" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png" alt="bluetoothctl scan off stopping scan and summarizing discovered Bluetooth devices" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Then, proceed to pair with other Bluetooth devices:
 
@@ -408,6 +408,6 @@ Then, proceed to pair with other Bluetooth devices:
 
 - After successful pairing, you can use `trust [targetMAC]` to enable automatic connection the next time.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png" alt="image-20220601154414717" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png" alt="bluetoothctl pair and trust commands for Bluetooth pairing and trust" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 After the above operations, the basic functions of Bluetooth scanning and pairing are completed. For more advanced features, please refer to the official help documentation of `BlueZ`.

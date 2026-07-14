@@ -84,7 +84,7 @@ Here is a brief description of how the RTC works:
 
 The Linux system time is lost when the system shuts down. However, the RTC can continue working using an external battery after the system is off, thus preserving the time. When the system starts next time, the time can be restored from the RTC. The process is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_time-en.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_time-en.png" alt="RTC Time Keeping diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The detailed process description is as follows:
 
@@ -111,7 +111,7 @@ The detailed process description is as follows:
 
 A typical application of the RTC is executing tasks on a schedule. This feature is only supported by the YSN8130. The process is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_alarm-en.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_alarm-en.png" alt="RTC Scheduled Tasks diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <DocScope products="RDK S100">
 The description of the RTC scheduled task process on the S100 chip is as follows:
@@ -147,7 +147,7 @@ In Linux, the RTC device driver is a standard character device driver. The Linux
 
 The Linux RTC driver framework is shown in the following figure:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_frame.png" alt="RTC_Driver_Frame.png" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_frame.png" alt="Linux RTC Driver Framework diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Each layer is described below.
 
@@ -661,7 +661,7 @@ Inside, the `rtc_dev_prepare` function is called to prepare RTC device resources
 
 Connecting the code above, the sequence diagram for user-space program interaction with the RTC device is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_user_interaction-en.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_ysn8130_user_interaction-en.png" alt="User Layer Interface Code Description diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The specific explanation is as follows:
 

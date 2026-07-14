@@ -33,7 +33,7 @@ The RDK S100 development kit can use the PC-side tool Xburn to flash the Ubuntu 
 
 ### Flashing Tool Interface Description
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-xburn-menu-en.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-xburn-menu-en.png" alt="Flashing Tool Interface Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 1.  **Product Type:** Please select the product type corresponding to the device you want to flash.
 

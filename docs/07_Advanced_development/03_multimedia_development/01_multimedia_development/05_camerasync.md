@@ -45,7 +45,7 @@ LPWM 工作原理：LPWM 受 PPS 触发源 trigger，其作为 Trigger Bus 的 T
 
 收到 PPS 信号传输给 cam-trig 的过程如下图所示，PPS trigger 会连接到 LPWM 模块，触发 LPWM 输出，LPWM 的输出连接到 camera：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_01.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_01.png" alt="PPS信号传输至cam-trig流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 关于同步源 PPS 的功能说明，更多可参考: [PPS说明](../../02_linux_development/04_driver_development_super/12_driver_timesync.md#PPS)
 
@@ -64,7 +64,7 @@ LPWM 工作原理：LPWM 受 PPS 触发源 trigger，其作为 Trigger Bus 的 T
 
 对于单 S100的 Camera 接入场景，其一般连接方式如下：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_02.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_02.png" alt="多路Camera同步连接示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 其中：
 
@@ -82,7 +82,7 @@ LPWM 工作原理：LPWM 受 PPS 触发源 trigger，其作为 Trigger Bus 的 T
 
 在有 Lidar 使用的场景中，有连接方案有如下:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_03.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_03.png" alt="Lidar连接方案示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 其中:
 
@@ -110,7 +110,7 @@ LPWM 工作原理：LPWM 受 PPS 触发源 trigger，其作为 Trigger Bus 的 T
 
 其期望的时间对齐目标有如下:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_04.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_04.png" alt="Camera与Lidar时间对齐目标示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 在 PPS 整秒开始: LPWM 输出并曝光(若 offset 设为0)、Lidar 开始扫描(若 start 为0)。
 
@@ -142,11 +142,11 @@ Sensor 曝光输出一般有 Master 模式(主动曝光输出，按配置，只�
 
 以下为 AR0820模组的 Slave 模式说明：以下以 AR0820为例说明。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_05.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_05.png" alt="AR0820模组Slave模式时序示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 同样的 slave 模式，还有多种同步方式，其中常用的为 shutter sync: 该模式在 trigger 后固定时间出图(可保证 FS 时间戳对齐)，且下不会丢失 trigger 信号(即在出图过程中来了 trigger 信号，不会被忽略)。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_06.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_06.png" alt="shutter sync同步模式时序示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 配置有如下:
 
@@ -237,7 +237,7 @@ FSYNC 选择: 根据模组实际硬件连接，选用正常的 GPIO 作为 FSYNC
 
 - Camera 在经 offset 正确配置后，可在整百 ms(每3帧)同步输出，与 Lidar 数据对齐。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_07.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_07.png" alt="Camera与Lidar同步对齐方案示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Camera 配置
 

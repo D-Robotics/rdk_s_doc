@@ -63,7 +63,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 当串口 USB 转接板首次插入电脑时，需要安装串口驱动。驱动程序可从资源中心的[工具子栏目](https://developer.d-robotics.cc/resource)获取。驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="image-20220416105939067" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="设备管理器中识别到的串口端口" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 打开`MobaXterm`工具，点击`Session`，然后选择`Serial`
 
@@ -80,7 +80,7 @@ import DocScope from '@site/src/components/DocScope';
   | 流控（Flow Control） | 无     |
 
 - 点击`OK`，输入用户名：`root`、密码：`root`登录设备
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="image-Uart-Login" style={{ width: '100%' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="win 连接串口演示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 此时，可使用`ifconfig -a`命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：
 
@@ -187,9 +187,9 @@ macos 系统下，使用 minicom 工具连接串口，步骤如下：
       -b       # 设置串口波特率（baud rate）
       -8       # 设置 数据位数为 8 位（data bits）
       ```
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="image-S100-download" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="macOS下minicom串口连接命令示例" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 2. 连接开发板验证
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="image-S100-download" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="macOS下minicom成功连接开发板界面" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 
@@ -212,7 +212,7 @@ macos 系统下，使用 minicom 工具连接串口，步骤如下：
 - 找到 Internet 协议版本 4 选项并双击打开
 - 在下图红框位置填入对应的网络参数，点击确定
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="image-20220416110242445" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="Windows静态IP配置对话框" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../02_System_configuration/01_network_bluetooth.md)章节进行配置。
 
@@ -228,7 +228,7 @@ macos 系统下，使用 minicom 工具连接串口，步骤如下：
 3. 选中`specify username`，输入`sunrise`
 4. 点击 OK 后，输入用户名（sunrise）、密码（sunrise）即可完成登录
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="image-Network-Login" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="终端软件演示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 电脑命令行
 
@@ -238,7 +238,7 @@ macos 系统下，使用 minicom 工具连接串口，步骤如下：
 2. 弹出连接确认提示，输入 YES
 3. 输入密码（sunrise）即可完成登录
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="image-Cmdline-Linux" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="电脑命令行演示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## NoMachine 登录
@@ -253,18 +253,18 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 
 1. 打开`NoMachine`客户端，点击`Add`增加主机配置
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="nomachine_login01" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. 在跳出来的界面中填写`RDK100/RDKS600`的主机信息，完成后点击`Add`
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="nomachine_login02" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3. 此时返回主界面，双击刚才生成的主机
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="nomachine_login03" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 4. 弹出登录界面，输入用户名、密码点击 OK 即可完成远程登陆
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="nomachine_login04" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="nomachine_login05" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

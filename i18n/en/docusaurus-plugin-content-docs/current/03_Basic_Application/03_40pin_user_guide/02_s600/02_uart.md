@@ -20,7 +20,7 @@ Connect TXD and RXD in hardware, then run the test program to perform write and 
 
 Before testing, short-circuit TXD and RXD:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_uart-en.png" alt="image-rdk_s600_uart" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_uart-en.png" alt="Hardware Connection diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Test Process
 

@@ -33,7 +33,7 @@ This example demonstrates how to prepare input images using a custom transformat
 
 ### Development and Usage Workflow
 
-![S100-gdc](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/S100-gdc-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/S100-gdc-en.jpg" alt="Development and Usage Workflow diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Use the `generate_custom_config.py` script on a PC to generate GDC calibration configuration parameters.
 
@@ -41,7 +41,7 @@ Use the `generate_custom_config.py` script on a PC to generate GDC calibration c
 
 - Capture approximately 15 chessboard images using the target camera sensor from various angles. It is recommended to capture more images for better results.
 
-  ![Checkerboard_Image](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Checkerboard_Image.png)
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Checkerboard_Image.png" alt="Checkerboard Calibration Image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - Use the captured chessboard images as input and run the following Python script (ensure Python 3 and the `opencv-python` library are installed) to generate the GDC calibration parameter file (`custom_config.txt`):
 
@@ -139,9 +139,9 @@ Use the `generate_custom_config.py` script on a PC to generate GDC calibration c
 
   If run in a terminal within a graphical desktop environment, the calibration and correction effects will be displayed:
 
-  ![Calibration_Process](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Calibration_Process.png)
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Calibration_Process.png" alt="Calibration Process" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-  ![Correction_Effect](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Correction_Effect.png)
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Correction_Effect.png" alt="Correction Effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Command-line options for `generate_custom_config.py`:
 
@@ -625,8 +625,8 @@ Options:
 #### Description of Running Results
 The original image is shown below:
 
-![Original_Image.png](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Original_Image.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Original_Image.png" alt="Description of Running Results photo" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 After applying transformations parsed from each JSON file, four processed YUV images in NV12 format are generated. The results are shown below:
 
-![Transformed_Effect](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="Transformed Effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />

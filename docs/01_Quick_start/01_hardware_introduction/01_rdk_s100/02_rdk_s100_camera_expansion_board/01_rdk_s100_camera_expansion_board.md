@@ -5,7 +5,7 @@ sidebar_position: 2
 # 1.1.2.2 RDK S100 相机扩展板
 
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="RDK S100相机扩展板" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜机器人 RDK S100 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S100 Camera Expansion Connector 进行二次开发，提供了 2 个 MIPI 相机接口和 4 个 GMSL 相机接口。
 
@@ -54,11 +54,11 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 拓扑图
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram.png" alt="image-rdk_s100_camera_expansion_board_architecture_diagram.png" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram.png" alt="RDK S100 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }}/>
 
 ### 接口说明
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png" alt="camera_expansion_board_interface" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png" alt="RDK S100 相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }}/>
 
 <div className="table-responsive">
 
@@ -102,7 +102,7 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 - 螺纹柱扩展板：支撑柱内壁带螺纹
 - 光孔柱扩展板：支撑柱内壁光滑无螺纹
 
-    <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s100_camera_expansion_board_suppport_location.png" alt="支撑柱位置图片" style={{ width: '50%' }} />
+    <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_rdk_s100_camera_expansion_board_suppport_location.png" alt="支撑柱位置图片" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::
 

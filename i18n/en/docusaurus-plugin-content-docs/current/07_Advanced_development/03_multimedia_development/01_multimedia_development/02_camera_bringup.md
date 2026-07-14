@@ -21,7 +21,7 @@ This chapter provides an overview of the camera bring-up process, helping reader
 
 :::
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_01.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_01.png" alt="Scope diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Preparation
 
@@ -77,7 +77,7 @@ When adapting **new hardware** and **new camera**, you need to modify the platfo
 
 Ensure that the sensor GPIO used by the new hardware is configured in the `video_gpio` node under `drobot-s100-pinctrl.dtsi --> pinctrl_video --> video_gpio`. This allows the system to set the corresponding pins as GPIO during boot, enabling user programs to operate the pins.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_03.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_03.png" alt="Sensor GPIO Configuration Example" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 `vcon` is the DTS node used by the RDK camera framework to manage sensor hardware. If the sensor requires specific timing to start properly, configure the corresponding GPIO in this node. Please configure according to the actual hardware connections; this information can be obtained from the schematic and pin list.
 
@@ -143,7 +143,7 @@ echo 502 > /sys/class/gpio/unexport
 
 Use `i2cdetect` to check the sensor's I2C address. If the correct address is detected as shown below, the DTS configuration is correct; otherwise, check the DTS configuration.
 
-| <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_04.png" alt="" style={{ width: '100%' }} /> | <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_05.png" alt="" style={{ width: '100%' }} /> |
+| <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_04.png" alt="i2cdetect Correct Address Detected" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> | <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_05.png" alt="i2cdetect No Device Detected" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> |
 |--------------------------------------|--------------------------------------|
 
 #### Adding Sensor Driver Files
@@ -403,7 +403,7 @@ bash run_tuning.sh
 1. [Click here](../../../01_Quick_start/download.md#tool-download) to download the image browsing tool `hbplayer`.
 2. Open `hbplayer` and set the network address (PC must be able to ping the board), click `Apply` to apply the settings, and click `Connect` to see the real-time video stream. The real-time preview operation is shown below.
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_06.png" alt="" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_06.png" alt="hbplayer Real-time Preview" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Error Codes
 
@@ -427,15 +427,15 @@ Follow the interactive prompts to run the startup script: `sh server_isp*_8000.s
 
 Startup method is shown below.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_07.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_07.png" alt="control-tool Startup Method" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The script automatically detects the board's IP address, defaulting to the `eth1` network card IP. To change to `eth0`, modify the script variable `eth_id=eth0`. The modification location is shown below.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_08.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_08.png" alt="Modify Network Interface Configuration" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Modifying the communication address is shown below.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_09.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_09.png" alt="Modify Communication Address" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## HBN GMSL Sensor Bring-up
 
@@ -594,7 +594,7 @@ The RDK S100 and RDK S600 platforms are largely identical in software, only diff
 :::
 
 The RDK S100 Camsys sensor V4L2 driver software framework is a standard V4L2 sub-device driver.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_10.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_10.png" alt="V4L2 Sensor Driver Framework" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 The following uses the IMX219 driver as an example to describe the V4L2 driver development process for a MIPI directly connected sensor. The IMX219 driver source is located at: `kernel/drivers/media/i2c/imx219.c`.
 
 #### Define the Sensor Private Structure
@@ -724,7 +724,7 @@ RDK S100 loads the IMX219 device tree by default. The device tree format is show
 
 ### V4L2 GMSL SerDes Interface Call Description
 Camsys supports sensors connected via Maxim serializers. The camera sub-board comes with a Maxim deserializer MAX96712 by default. The GMSL sensor is registered as a V4L2 subdev in the V4L2 framework. The serializer and deserializer drivers provide operation function sets for the GMSL sensor driver and are not implemented as V4L2 subdevs themselves.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_11.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_11.png" alt="GMSL SerDes Interface Framework" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Serdes-related data structures and callback functions are defined in `kernel/include/media/i2c/serdes_core.h`; include this header: `#include <media/i2c/serdes_core.h>`.
 This section uses the 0820C GMSL sensor as an example to describe Camsys GMSL sensor development.
@@ -919,16 +919,16 @@ dtc -q -@ -I dts -O dtb -o sample.dtbo sample.dtso
 #### Automatic Application of sensor dtbo on Boot
 1. Place the compiled dtbo file in `/boot/overlays`.
    If the directory does not exist, create it manually, or install `hobot-camera.deb` to get `/boot/overlays` and the d457 sensor dtbo file.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_12.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_12.png" alt="dtbo Files in overlays Directory" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. Modify `config.txt` to specify the dtbo file to add.
    If `config.txt` does not exist, create it.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_13.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_13.png" alt="config.txt Configuration Example" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    Modify `config.txt` as follows:
 `dtbo_file_path=/overlays/v0p5_d457_2v_depth_color.dtbo`
 
 3. Reboot the board to apply the dtbo. In the debug version U-Boot log, you can check the dtbo loading status.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_14.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_14.png" alt="U-Boot dtbo Loading Log" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Sensor Gain LUT Table Writing Guide
 For RAW format sensors connected to the S100 ISP image system, in addition to writing the sensor V4L2 driver, you need to create a `.so` file containing the sensor gain LUT conversion table, including `again_lut`, `dgain_lut`, etc. Human perception of brightness is closer to a logarithmic scale than linear; dB units align with this perception. The S100 ISP gain LUT stores sensor gain register configuration values in dB-continuous order, allowing the ISP to find the corresponding sensor register values when adjusting sensor gain and apply them to the sensor. The following uses IMX219 as an example to describe how to create a V4L2 sensor LUT `.so`.
@@ -1204,8 +1204,8 @@ For `scene` number descriptions, refer to [Scene Description](./01_camsys.md#sce
 
 #### Preview Images
 After compiling the D457 SDK, run `realsense-viewer` in the terminal, add the D457 device, and preview. Example:
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_16.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_16.png" alt="D457 Preview" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 The viewer shows one D457 by default; click "Add Source" to display multiple streams.
 
 After compiling the 335Lg SDK, start the viewer and check depth and color images.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_17.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_17.png" alt="335Lg Preview" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

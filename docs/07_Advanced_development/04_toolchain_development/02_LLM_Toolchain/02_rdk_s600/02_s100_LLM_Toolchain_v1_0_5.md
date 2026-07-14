@@ -113,7 +113,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 <tr>
 <td>DeepSeek-R1-Distill-Qwen-1.5B</td>
-<td style={{ whiteSpace: "nowrap" }}>prefill w4<br/>decode w4</td>
+<td style={{ whiteSpace: 'nowrap' }}>prefill w4<br/>decode w4</td>
 <td>45.2</td>
 <td>106.06</td>
 <td>2.2</td>
@@ -267,9 +267,9 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 <tr>
 <td>Qwen2.5-VL-<br/>3B-Instruct</td>
-<td style={{ whiteSpace: "nowrap" }}>vit w8<br/>prefill w4<br/>decode w4</td>
+<td style={{ whiteSpace: 'nowrap' }}>vit w8<br/>prefill w4<br/>decode w4</td>
 <td>256</td>
-<td style={{ whiteSpace: "nowrap" }}>vit 38.8<br/>prefill 85.5<br/>all 124.3</td>
+<td style={{ whiteSpace: 'nowrap' }}>vit 38.8<br/>prefill 85.5<br/>all 124.3</td>
 <td>70.32</td>
 <td>3.6</td>
 </tr>
@@ -383,7 +383,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 <tr>
 <td>Pi0</td>
-<td style={{ whiteSpace: "nowrap" }}>vision 1<br/>language 4<br/>action 4</td>
+<td style={{ whiteSpace: 'nowrap' }}>vision 1<br/>language 4<br/>action 4</td>
 <td>97.94</td>
 <td>0.74</td>
 <td>18.91</td>
@@ -395,7 +395,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 <tr>
 <td>Pi0.5</td>
-<td style={{ whiteSpace: "nowrap" }}>vision 1<br/>language 4<br/>action 4</td>
+<td style={{ whiteSpace: 'nowrap' }}>vision 1<br/>language 4<br/>action 4</td>
 <td>149.97</td>
 <td>0.72</td>
 <td>19.07</td>
@@ -407,7 +407,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 <tr>
 <td>Smolvla</td>
-<td style={{ whiteSpace: "nowrap" }}>vision 1<br/>language 1<br/>action 1</td>
+<td style={{ whiteSpace: 'nowrap' }}>vision 1<br/>language 1<br/>action 1</td>
 <td>97.17</td>
 <td>3.8</td>
 <td>46.54</td>
@@ -419,7 +419,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 <tr>
 <td>Spirit1.5</td>
-<td style={{ whiteSpace: "nowrap" }}>vision 4<br/>language 4<br/>action 4</td>
+<td style={{ whiteSpace: 'nowrap' }}>vision 4<br/>language 4<br/>action 4</td>
 <td>148.6</td>
 <td>4.18</td>
 <td>23.31</td>

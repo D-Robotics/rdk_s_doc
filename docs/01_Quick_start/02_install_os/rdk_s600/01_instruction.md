@@ -37,7 +37,7 @@ RDK S600 开发套件可借助 PC 端工具 Xburn 完成 Ubuntu 系统的烧录�
 ### 烧录工具界面说明
 
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-xburn-menu.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-xburn-menu.png" alt="烧录工具界面说明示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 1. 产品类型： 请选择您要烧录设备的对应产品类型。

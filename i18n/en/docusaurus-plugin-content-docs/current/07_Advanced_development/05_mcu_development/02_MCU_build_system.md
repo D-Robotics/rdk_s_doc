@@ -59,7 +59,7 @@ FreeRtos_mcu1
 </DocScope>
 
 ## Introduction to the Compilation Process
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/MCU_build_system/build_freertos-en.jpg" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/MCU_build_system/build_freertos-en.jpg" alt="FreeRTOS Build" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Introduction to the Relationships Among Key Files in the Compilation Process
 <DocScope products="RDK S100">

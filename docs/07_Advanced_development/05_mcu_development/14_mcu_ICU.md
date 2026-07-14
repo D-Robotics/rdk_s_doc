@@ -367,7 +367,7 @@ D-Robotics:/$ gpio_interrupt on
 
 用杜邦线一头接下图的两个 GPIO 引脚，另一头接地
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/gpio_interrupt.png" alt="GPIO接线图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/gpio_interrupt.png" alt="GPIO接线图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 此时串口打印如下则表示 GPIO 中断触发成功
 
@@ -772,7 +772,7 @@ D-Robotics:/$ gpio_interrupt on
 
 用杜邦线一头接下图的两个 GPIO 引脚，另一头接地
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/gpio_interrupt.png" alt="GPIO接线图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/gpio_interrupt.png" alt="GPIO接线图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 此时串口打印如下则表示 GPIO 中断触发成功
 

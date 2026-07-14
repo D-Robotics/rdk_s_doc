@@ -85,7 +85,7 @@ The core flow of the S600 CAN forwarding solution is as follows:
 - The CANHAL module obtains IPC data from the MCU side, parses it according to the specified transport protocol, and allows application software to obtain raw CAN frames through APIs.
 </DocScope>
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can.png" alt="Architecture diagram for transparent CAN data passthrough between Acore and MCU" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can.png" alt="Architecture diagram for transparent CAN data passthrough between Acore and MCU" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The data flow is shown in the figure above:
 - Peripheral data is received by the MCU-domain CAN driver through the CAN PHY and controller devices. The CAN driver reports and buffers data in the hobot CANIF module.
@@ -104,9 +104,9 @@ Solution features:
 - CAN physical layer topologies are mainly closed-loop bus and open-loop bus networks. One suits high-speed communication and the other suits long-distance communication. **The S100 sample defaults to a closed-loop bus network architecture**.
 
 - CAN bus pins are on the S100 MCU expansion board. Five CAN interfaces are brought out. Each connector is a green 3-pin screw terminal. Pin 1 (triangle mark) is GND, the middle pin is CAN_L, and the remaining pin is CAN_H.
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_phy-en.jpg" alt="MCU CAN physical layer diagram" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_phy-en.jpg" alt="Hardware Connection diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 - The MCU daughter board uses a 2-pin jumper to select whether a 120-ohm resistor is connected between CAN_H and CAN_L. When the jumper is inserted, the resistor is connected for terminal matching impedance required by closed-loop networks. When removed, the termination resistor is disconnected for open-loop networks or relay nodes.
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_sche-en.jpg" alt="MCU CAN schematic sketch" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_sche-en.jpg" alt="MCU CAN schematic sketch" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Using two 120-ohm resistors in a CAN closed-loop network is standard. The following uses S100 as an example for correct resistor connection:
 :::info Note
@@ -124,7 +124,7 @@ In general, open-loop networks do not require 120-ohm resistors, while closed-lo
 - The MCU daughter board uses DIP switches to select whether a 120-ohm resistor is connected between CAN_H and CAN_L. When the DIP switch is set to ON, the resistor is connected for terminal matching impedance required by closed-loop networks. When set to the numbered position, the resistor is disconnected for open-loop networks or relay nodes.
 - CAN and DIP switches on the MCU expansion board:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/mcu.png" alt="MCU CAN physical layer diagram" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/mcu.png" alt="Hardware Connection diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Correspondence between CAN and DIP switches:
 
@@ -136,7 +136,7 @@ In general, open-loop networks do not require 120-ohm resistors, while closed-lo
 
 - CAN and DIP switches on the S600 base board:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/Baseboard.png" alt="Base board MCU CAN physical layer diagram" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/Baseboard.png" alt="Hardware Connection photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - J16 on the base board is the CAN connector location. Signal names on J16 from top to bottom:
 
@@ -156,7 +156,7 @@ In general, open-loop networks do not require 120-ohm resistors, while closed-lo
 | CAN9_L      |
 
 - Base board DIP switches are on the back of the base board
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/baseboard_dpi_switch.png" alt="Base board DIP switch diagram" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/baseboard_dpi_switch.png" alt="Hardware Connection photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 - Correspondence between CAN and DIP switches:
 
 |             | DIP switch |             | DIP switch |
@@ -1123,7 +1123,7 @@ can_tran_debug
 
 3. Under `/sys/class/remoteproc/remoteproc_mcu1`, use `cat log` to view results
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug log" style={{ width: '100%' }} />
+   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug log" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ### Application Programming Interface

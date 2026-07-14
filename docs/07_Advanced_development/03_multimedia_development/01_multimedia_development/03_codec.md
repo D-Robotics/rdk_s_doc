@@ -63,7 +63,7 @@ unit），可提供4K\@90fps 的视频编解码能力和4K\@90fps 的图像编�
 
 MediaCodec 子系统会提供音视频和图像的编解码组件，原始流封装和视频录像等功能。该系统主要会封装底层 codec 硬件资源和软件编解码库，为上层提供编解码能力。开发者可以基于提供的编解码接口实现 H265和 H264视频的编解码功能，也可以使用 JPEG 编码功能将摄像头数据存成 JPEG 图片，还可以使用视频录像功能实现摄像头数据的录制。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/2f8364ee5efbb8cb14136e0dc942248e.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/2f8364ee5efbb8cb14136e0dc942248e.png" alt="MediaCodec子系统整体框架图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 码率控制模式
 
@@ -200,9 +200,9 @@ GOP Preset 1
 - 只有 I 帧，没有相互参考；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/b02cc41ab083664ba3f8a3bef1543afa.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/b02cc41ab083664ba3f8a3bef1543afa.png" alt="GOP Preset 1帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/fa1da95bc8801b2d6225b2abf1b2f2d3.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/fa1da95bc8801b2d6225b2abf1b2f2d3.png" alt="GOP Preset 1编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 2
 
@@ -210,9 +210,9 @@ GOP Preset 2
 - P 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e3c2f773a89f6ee2fe2dab03200b6fd0.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e3c2f773a89f6ee2fe2dab03200b6fd0.png" alt="GOP Preset 2帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8fa5f892bd7282e82ac8ed96011c943d.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8fa5f892bd7282e82ac8ed96011c943d.png" alt="GOP Preset 2编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 3
 
@@ -220,9 +220,9 @@ GOP Preset 3
 - B 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/03bbdf35dc3e2a1b38f9e05d7038d064.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/03bbdf35dc3e2a1b38f9e05d7038d064.png" alt="GOP Preset 3帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e1b5707ea0c32b6a0c1658527a6186dd.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e1b5707ea0c32b6a0c1658527a6186dd.png" alt="GOP Preset 3编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 4
 
@@ -230,9 +230,9 @@ GOP Preset 4
 - P 帧参考2个前向参考帧；
 - B 帧参考1个前向参考帧和一个后向参考帧；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/17e10e6a27db202fe9a0c2b5f3d5dd50.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/17e10e6a27db202fe9a0c2b5f3d5dd50.png" alt="GOP Preset 4帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/972bbe22d2e7364c1c0a3db03f57343e.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/972bbe22d2e7364c1c0a3db03f57343e.png" alt="GOP Preset 4编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 5
 
@@ -240,9 +240,9 @@ GOP Preset 5
 - P 帧参考2个前向参考帧；
 - B 帧参考1个前向参考帧和一个后向参考帧，后向参考帧可为 P 帧或 B 帧；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/16ad2d15f0b22a91fda1450747a18422.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/16ad2d15f0b22a91fda1450747a18422.png" alt="GOP Preset 5帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8ff1393cdbb997c8768ea2f9f00c3c8b.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8ff1393cdbb997c8768ea2f9f00c3c8b.png" alt="GOP Preset 5编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 6
 
@@ -250,9 +250,9 @@ GOP Preset 6
 - P 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/a5fbffa7c85a3423729f06d45f83a601.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/a5fbffa7c85a3423729f06d45f83a601.png" alt="GOP Preset 6帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/1e88c6cbacb8fff86f5d5fc301e01abd.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/1e88c6cbacb8fff86f5d5fc301e01abd.png" alt="GOP Preset 6编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 7
 
@@ -260,18 +260,18 @@ GOP Preset 7
 - B 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/40cd6c4fa7cf66f9bf14c3675cb7ef20.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/40cd6c4fa7cf66f9bf14c3675cb7ef20.png" alt="GOP Preset 7帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/be7fe30d2685e27e2b36f305ef745eb4.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/be7fe30d2685e27e2b36f305ef745eb4.png" alt="GOP Preset 7编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 8
 
 - 只有 I 帧和 B 帧；
 - B 帧参考1个前向参考帧，一个后向参考帧；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/9c46efaf2a9106bcee2468098e209b1f.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/9c46efaf2a9106bcee2468098e209b1f.png" alt="GOP Preset 8帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/d016b90fa0a06e183b6871bc430a8714.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/d016b90fa0a06e183b6871bc430a8714.png" alt="GOP Preset 8编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 9
 
@@ -279,9 +279,9 @@ GOP Preset 9
 - P 帧参考1个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/0bc1b9d3e73b4037b64236650738b5cd.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/0bc1b9d3e73b4037b64236650738b5cd.png" alt="GOP Preset 9帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/937b45950423ff5006e378cb510d695d.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/937b45950423ff5006e378cb510d695d.png" alt="GOP Preset 9编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### VPU 调试方式
 
@@ -462,25 +462,25 @@ dec_idx  dec_id cur_input_buf_cnt cur_output_buf_cnt total_input_buf_cnt total_o
 
 单路编码场景如下图所示。Scenario0是简单场景，从 EMMC 中读取 YUV 视频/图像文件，经过 VPU 硬件编码输出的 H26x 码流或 JPU 硬件编码输出的 Jpeg 图像，最后保存为文件存储到 EMMC。Scenario1是串联前后级模块的复杂场景，将摄像头采集的数据编码压缩后进行保存或通过网络和 PCIE 传输。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/788c1e3b839232111ccd53d35d25e278.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/788c1e3b839232111ccd53d35d25e278.png" alt="单路编码场景示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 单路解码
 
 单路解码场景如下图所示。Scenario0是简单场景，从 EMMC 中读取 H26x 码流/Jpeg 图像文件，经过 VPU 或 JPU 硬件解码输出的 YUV 数据，最后保存为文件存储到 EMMC。Scenario1是串联前后级模块的复杂场景，通过网络或 PCIE 接收已编码的视频或图像数据，经过 VPU 或 JPU 硬件解码后使用 IDE 显示播放。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e50f9bf3c4d1ecfbd36b354f9009e8bc.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e50f9bf3c4d1ecfbd36b354f9009e8bc.png" alt="单路解码场景示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 多路编码
 
 多路编码场景如下图所示，Scenario0是文件输入的简单场景，Scenario1是串联前后级模块的复杂场景，需要注意的是在 Scenario1场景要综合考虑链路中各个模块的能力限制。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/272e3467c640af379d1b4c0a1de27eae.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/272e3467c640af379d1b4c0a1de27eae.png" alt="多路编码场景示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 多路解码
 
 多路解码场景如下图所示，Scenario0是文件输入的简单场景，Scenario1是串联前后级模块的复杂场景，需要注意的是在 Scenario1场景要综合考虑链路中各个模块的能力限制。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/04f0aba90a1d65017dfeb90f9afa43e2.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/04f0aba90a1d65017dfeb90f9afa43e2.png" alt="多路解码场景示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 常见问题
 
@@ -602,7 +602,7 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 问题背景：当编码大片蓝天时，出现了一些异常的条纹形状是什么原因？
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image14.png" alt="image14" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image14.png" alt="蓝天编码条纹异常示例图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 问题解答：原始图片中存在较多的噪点，压缩后噪点分布不规律，看着像是条纹状，其实是对噪点压缩导致，这种现象属于 codec 硬件特性，无法消除.
 
@@ -644,7 +644,7 @@ context.priority = PRIO_31;
 
 问题背景：使用 jpg 工具查看1920x1080图片时，底下会出现绿边；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image12.png" alt="image12" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image12.png" alt="1080p图片绿边问题示例图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 问题说明：这是因为当前 ip 进行编码时按照16位对齐进行，假如到最后如果是8位对齐而不是16位对齐，那么编码器就会在后面补齐，这部分补齐的数据是随机产生的，不属于有效数据；
 
@@ -709,9 +709,9 @@ GOP Preset 1
 - 只有 I 帧，没有相互参考；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop1.png" alt="gop1" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop1.png" alt="GOP Preset 1帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop2.png" alt="gop2" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop2.png" alt="GOP Preset 1编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 2
 
@@ -719,9 +719,9 @@ GOP Preset 2
 - P 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop3.png" alt="gop3" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop3.png" alt="GOP Preset 2帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop4.png" alt="gop4" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop4.png" alt="GOP Preset 2编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 3
 
@@ -729,9 +729,9 @@ GOP Preset 3
 - B 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop5.png" alt="gop5" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop5.png" alt="GOP Preset 3帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop6.png" alt="gop6" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop6.png" alt="GOP Preset 3编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 4
 
@@ -739,9 +739,9 @@ GOP Preset 4
 - P 帧参考2个前向参考帧；
 - B 帧参考1个前向参考帧和一个后向参考帧；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop7.png" alt="gop7" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop7.png" alt="GOP Preset 4帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop8.png" alt="gop8" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop8.png" alt="GOP Preset 4编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 5
 
@@ -749,9 +749,9 @@ GOP Preset 5
 - P 帧参考2个前向参考帧；
 - B 帧参考1个前向参考帧和一个后向参考帧，后向参考帧可为 P 帧或 B 帧；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop9.png" alt="gop9" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop9.png" alt="GOP Preset 5帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop10.png" alt="gop10" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop10.png" alt="GOP Preset 5编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 6
 
@@ -759,9 +759,9 @@ GOP Preset 6
 - P 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop11.png" alt="gop11" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop11.png" alt="GOP Preset 6帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop12.png" alt="gop12" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop12.png" alt="GOP Preset 6编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 7
 
@@ -769,18 +769,18 @@ GOP Preset 7
 - B 帧参考2个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop13.png" alt="gop13" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop13.png" alt="GOP Preset 7帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop14.png" alt="gop14" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop14.png" alt="GOP Preset 7编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 8
 
 - 只有 I 帧和 B 帧；
 - B 帧参考1个前向参考帧，一个后向参考帧；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop15.png" alt="gop15" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop15.png" alt="GOP Preset 8帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop16.png" alt="gop16" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop16.png" alt="GOP Preset 8编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 GOP Preset 9
 
@@ -788,15 +788,15 @@ GOP Preset 9
 - P 帧参考1个前向参考帧；
 - 低延时；
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop17.png" alt="gop17" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop17.png" alt="GOP Preset 9帧参考关系图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop18.png" alt="gop18" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop18.png" alt="GOP Preset 9编码顺序图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 长期参考帧
 
 用户可指定长期参考帧的周期和参考长期参考帧的周期，如下图所示：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/reference_frame.png" alt="reference_frame" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/reference_frame.png" alt="长期参考帧周期配置示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Intra Refresh
 
@@ -813,7 +813,7 @@ MediaCodec 支持对 H264、H265和 MJPEG 协议的码率控制，分别支持 H
 
 ROI 编码的实现依赖于和 QPMAP 类似，需要用户按照光栅扫描的方向为每一个块设定 QP 值，如下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/roi_map.png" alt="roi_map" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/roi_map.png" alt="ROI编码QP配置示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 对于 H264编码来说，每一个块的大小为16x16，而 H265中则为32x32。在 ROI
 map 表中，每一个 QP 值占用一个字节，大小为0\~51。ROI 编码可以和 CBR 和 AVBR 一起工作，当不使能 CBR 或 AVBR 时，每个块区域的实际 QP 值就为 ROI
@@ -828,7 +828,7 @@ map 中 QP 的平均值。
 
 MediaCodec 的 buffer 包括输入和输出 buffer 两种，一般情况下，这些 buffer 会由 MediaCodec 通过 ION 接口统一分配，用户不需要关心 buffer 的分配，只需要在操作 buffer 前执行 dequeue 操作获取空闲的 buffer，处理完后执行 queue 操作返还该 buffer。但是为了减少某些情况下 buffer 的拷贝操作，比如 PYM 的输出 buffer 用来编码时，该 buffer 是由 PYM 内部通过 ION 分配，可直接作为 MediaCodec 的输入 buffer，因此 MediaCodec 还支持编码时的输入 buffer 由用户分配，但是用户必须通过 ION 接口分配物理连续的 buffer，还需要在 MediaCodec 配置前指定 media\_codec\_context\_t 中的 external\_frame\_buf 变量。需要注意的是，当用户指定输入 buffer 不需要 MediaCodec 分配之后，在 buffer 操作时，用户仍然需要执行 dequeue 操作获取队列信息，然后对队列中的信息进行赋值（主要是虚拟地址和物理地址），再执行 queue 操作。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/buffer.png" alt="buffer" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/buffer.png" alt="输入输出Buffer管理流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 帧率控制
 
@@ -5872,11 +5872,11 @@ buffer 并通知编码器处理该帧数据；
 另一个线程取输出码流：通过 select 接收硬件编码完成通知，取出一个硬件填满输出码流的 output
 buffer，将编码结果写到文件中后归还 output buffer。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder2.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder2.png" alt="编码软件架构示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ##### 硬件数据流说明
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder1.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder1.png" alt="编码硬件数据流示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ##### 代码位置及目录结构
 
@@ -6033,11 +6033,11 @@ VPU CROP 读入并编码：将1920x1300（图像尺寸不满足对齐要求）�
 
 如下图所示为运行成功
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder3.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder3.png" alt="编码示例运行成功示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 查看生成的 h264/h265/jpg 是否正常
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder4.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder4.png" alt="编码输出文件查看示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 解码示例
 
@@ -6054,11 +6054,11 @@ buffer 并通知解码器处理该帧数据；
 另一个线程取输出 YUV 图像：通过 select 接收硬件解码完成通知，取出一个硬件填满输出图像的 output
 buffer，将解码结果写到文件中后归还 output buffer。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder2.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder2.png" alt="解码软件架构示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ##### 硬件数据流说明
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder1.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder1.png" alt="解码硬件数据流示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ##### 代码位置及目录结构
 
@@ -6208,8 +6208,8 @@ Usage: ./sample_codec
 
 如下图所示为运行成功
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder3.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder3.png" alt="解码示例运行成功示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 使用 yuvplayer 查看生成的 yuv 图像文件是否正常
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder4.png" alt="image" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder4.png" alt="解码输出YUV图像查看示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

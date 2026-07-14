@@ -229,7 +229,7 @@ CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static
 
 The following metrics should be measured under an idle system and averaged over multiple runs. The standard CoreMark scoring formula is:
 
-![coremark_formula](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/coremark_formula.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/coremark_formula.png" alt="Test Metrics diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - `CoreMark Iterations/Sec`: The number of CoreMark benchmark iterations executed per second, typically reflecting processor performance. Higher iteration counts indicate greater computational capability.
 - `CPU Clock (MHz)`: The processor's clock frequency, measured in MHz (megahertz). It reflects the processor's operating speed; higher clock frequencies theoretically enable more operations per second.

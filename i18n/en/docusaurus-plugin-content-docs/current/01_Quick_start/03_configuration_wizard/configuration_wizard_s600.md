@@ -158,7 +158,7 @@ Official NoMachine download URL: [NoMachine Download](https://downloads.nomachin
 
 After entering the official website, find the `ARM64` version of the installation package suitable for `RDK S600` and click `Download`.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="image_s100_nomachine_dl" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="NoMachine Configuration diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **Installation**
 

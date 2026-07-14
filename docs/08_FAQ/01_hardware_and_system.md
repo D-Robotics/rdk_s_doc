@@ -81,9 +81,9 @@ import DocScope from '@site/src/components/DocScope';
 * **供电不足或不稳定：**
     * **现象：** 系统在 U-Boot 加载内核时或内核启动初期无明显错误日志就直接重启；状态灯异常或 HDMI 完全黑屏。
 
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914173433676.png" alt="Uboot引导内核时因供电不足重启日志示例" style={{ width: '100%' }} />
-
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914174123619.png" alt="内核启动数秒后因供电不足重启日志示例" style={{ width: '100%' }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914173433676.png" alt="Uboot引导内核时因供电不足重启日志示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <br/>
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914174123619.png" alt="内核启动数秒后因供电不足重启日志示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
     * **排查与解决：**
         * 确保使用符合开发板要求的电源适配器（建议使用支持 QC/PD 的5V/3A 或更高规格适配器）。
@@ -94,11 +94,11 @@ import DocScope from '@site/src/components/DocScope';
 * **启动介质问题 (Micro SD 卡/eMMC)：**
     * **现象：** 串口日志提示无法挂载文件系统、找不到分区、MMC/SD 卡初始化错误或超时。
 
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194527634.png" alt="SD卡镜像格式错误日志示例" style={{ width: '100%' }} />
-
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194636213.png" alt="SD卡物理损坏或接触不良日志示例1" style={{ width: '100%' }} />
-
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194721750.png" alt="SD卡物理损坏或接触不良日志示例2" style={{ width: '100%' }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194527634.png" alt="SD卡镜像格式错误日志示例" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <br/>
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194636213.png" alt="SD卡物理损坏或接触不良日志示例1" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <br/>
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194721750.png" alt="SD卡物理损坏或接触不良日志示例2" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
         
     * **排查与解决：**
         * 确认 SD 卡镜像是否已正确、完整地烧录。
@@ -721,7 +721,7 @@ no mmc device at slot X
 **连接注意：** FPC 排线的两端通常有蓝色或黑色加强筋，请确保**加强筋的一面朝上**（或朝向连接器卡扣的扳手面，具体取决于连接器类型）插入到开发板和摄像头模组的连接器中，并锁紧卡扣。
 
 IMX219摄像头连接示意图：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect.png" alt="IMX219摄像头连接到RDK S100示意图" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect.png" alt="IMX219摄像头连接到RDK S100示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **连接后验证：**
 1.  **确保摄像头已正确连接且开发板已上电。**
@@ -732,7 +732,7 @@ IMX219摄像头连接示意图：
     ```
     如果一切正常，您应该能通过 HDMI 输出或其他指定方式看到摄像头捕捉的画面以及可能的 AI 算法处理结果
     示例算法渲染结果 HDMI 输出（检测到`teddy bear`、`cup`和`vase`）：
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI摄像头算法渲染结果示例" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI摄像头算法渲染结果示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3.  **通过 `i2cdetect` 命令检查 I2C 通信：**
 

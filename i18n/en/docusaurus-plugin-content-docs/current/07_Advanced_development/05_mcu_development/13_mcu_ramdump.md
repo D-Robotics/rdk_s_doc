@@ -20,7 +20,7 @@ If MCU0 encounters an exception, the system will restart. During the restart flo
 
 The exception handling flow is shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_flowchart-en.jpg" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_flowchart-en.jpg" alt="MCU Ramdump Flowchart" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The exception handling flows for MCU0 and MCU1 are largely similar; the only difference is that MCU0 restarts the system after handling the exception.
 
@@ -50,7 +50,7 @@ When MCU1 encounters an exception, it enters the shell. At this point, you can s
 
 The following uses a recorded data abort exception as an example:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_exception.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_exception.png" alt="MCU Ramdump Exception" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The meaning of each field is as follows:
 

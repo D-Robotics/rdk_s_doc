@@ -39,14 +39,14 @@ cat /sys/kernel/debug/ion/heaps/all_heap_info
 
 其中 ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）和 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap 的预留情况也可以查看启动日志，如下所示，第一行代表 ION_HEAP_TYPE_CARVEOUT 的起始地址和大小，第二行代表 ION_HEAP_TYPE_CMA_RESERVED 的起始地址和大小，第三行代表 ION_HEAP_TYPE_DMA 的起始地址和大小：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/03_ion_region_kernel_print.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/03_ion_region_kernel_print.png" alt="如何查看当前的 ION 预留内存的情况截图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 <DocScope products="RDK S600">
 
 其中 ION_HEAP_TYPE_CARVEOUT（HB_MEM_USAGE_PRIV_HEAP_RESERVED）、ION_HEAP_TYPE_CMA_RESERVED（HB_MEM_USAGE_PRIV_HEAP_2_RESERVED）、 ION_HEAP_TYPE_DMA（HB_MEM_USAGE_PRIV_HEAP_DMA）heap、ION_HEAP_TYPE_CUSTOM（HB_MEM_USAGE_PRIV_HEAP_SRAM）和 uncache heap 的预留情况也可以查看启动日志， 如下所示，第一行代表 ION_HEAP_TYPE_CARVEOUT 的起始地址和大小，第二行代表 ION_HEAP_TYPE_CMA_RESERVED 的起始地址和大小，第三行代表 ION_HEAP_TYPE_CUSTOM 的起始地址和大小，第四行 ION_HEAP_TYPE_DMA 的起始地址和大小，第五行 uncache heap 的起始地址和大小：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/hbmem/03_ion_region_kernel_print.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s600/hbmem/03_ion_region_kernel_print.png" alt="如何查看当前的 ION 预留内存的情况截图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 

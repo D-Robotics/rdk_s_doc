@@ -972,7 +972,7 @@ StaticLibServicePath:
 
    如增加 mcu/Service/Log 文件夹，只需增加相应的位置即可。目前 Service/Platform/McalCdd/Common 有独立的 path，增加该目录需要放在相应位置。除此之外，其他文件夹的添加统一放在 BuildPath 即可
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="增加编译目录流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. 在添加编译的模块下，添加 SConscript 文件，SConscript 文件可以从任意已经编译的模块文件夹下获取
 </DocScope>
@@ -980,10 +980,10 @@ StaticLibServicePath:
 ## MCU FreeRtos 系统简介
 MCU 这边有几个系统关键功能，如下图所示：
 <DocScope products="RDK S100">
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system.png" alt="MCU FreeRtos 系统简介示意图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="MCU FreeRtos 系统简介截图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 上图可以看到各个功能所在任务的相对优先级及同一个任务中的调用顺序，客户集成请保持各功能的相对优先级、所在 core 及同一个任务中的调用顺序。各个功能的说明及注意事项如下：
@@ -1026,7 +1026,7 @@ FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将�
 
 </DocScope>
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="FreeRtos 系统任务创建示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 xxx_Startup 任务，为启动初始化相关的函数，只执行一次。
 FreeRtos_OsTask_SysCore_BSW_xms 和 FreeRtos_OsTask_SysCore_ASW_xms 为周期性任务，会根据 xms 的不同产生周期性的调度。同时周期性任务内部会有工作处理，细节见本章上一节"MCU FreeRtos 系统简介"章节。
@@ -1156,7 +1156,7 @@ RDK-S600采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合�
 <DocScope products="RDK S100">
 修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="MCU1区域调整截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
 修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
@@ -1166,7 +1166,7 @@ RDK-S600采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合�
 <DocScope products="RDK S100">
 修改 `source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="Acore 区域调整截图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
 修改 `source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。

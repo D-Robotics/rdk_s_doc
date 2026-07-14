@@ -68,7 +68,7 @@ A window watchdog is a special type of watchdog commonly used in functional safe
 
 - Between the first and second timeouts is the allowed zone. Feeding is permitted during this period. A timeout without feeding will report a reset signal.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_window.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_window.png" alt="Features diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## Device Tree
@@ -136,7 +136,7 @@ The driver code for the Watchdog module is located at `/hobot-drivers/watchdog`.
 ## Watchdog Timeout
 
 When a Watchdog timeout monitoring the Acore occurs, an interrupt is triggered and sent to the MCU0 side. A task on the MCU then triggers an Acore restart. The task waits for 5 seconds to allow the Acore side to complete stack dumping.
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_timeout.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_timeout.png" alt="Watchdog Timeout diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## User Development
@@ -385,7 +385,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
 ### HardLockup Monitoring
   HardLockup monitoring is implemented based on the Watchdog module, using Watchdog1 configured in window mode, with the monitoring logic implemented in the driver. When the system is running normally, the monitoring logic is as shown below:
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup Monitoring diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. Initialize the Watchdog hardware.
 
@@ -395,7 +395,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. After feeding, the Watchdog starts the next counting cycle.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="HardLockup Monitoring diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. Initialize the Watchdog hardware.
 
@@ -421,7 +421,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
 ### HardLockup Monitoring
   HardLockup monitoring is implemented based on the Watchdog module, using Watchdog0 configured in window mode, with the monitoring logic implemented in the driver. When the system is running normally, the monitoring logic is as shown below:
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup Monitoring diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. Initialize the Watchdog hardware.
 
@@ -431,7 +431,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. After feeding, the Watchdog starts the next counting cycle.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="HardLockup Monitoring diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. Initialize the Watchdog hardware.
 

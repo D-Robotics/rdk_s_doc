@@ -5,7 +5,7 @@ sidebar_position: 2
 # 1.1.2.2 Camera Expansion Board 12L
 
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board_12l.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board_12l.png" alt="Camera Expansion Board 12L" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The RDK S100 Camera Expansion Board 12L (hereinafter referred to as the "Camera Expansion Board 12L") is a core expansion module of the D-Robotics RDK S100 series developer kit. The Camera Expansion Board 12L is developed based on the RDK S100 Camera Expansion Connector and provides twelve GMSL camera interfaces.
 
@@ -45,11 +45,11 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 
 ### Topology Diagram
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram_12l.png" alt="image-rdk_s100_camera_expansion_board_architecture_diagram.png" style={{ width: '80%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram_12l.png" alt="Topology Diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Interface Description
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface_12l.png" alt="camera_expansion_board_interface" style={{ width: '80%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface_12l.png" alt="Interface Description" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 <br/><br/>
 
 <div className="table-responsive">

@@ -48,7 +48,7 @@ brew install dfu-util
    2. 将 SW2 拨码至 ↑，进入 Download 模式
    3. 将 SW1 拨码至 ▽，开启电源
    4. 如果`DOWNLOAD`灯亮，则进入 DFU 模式，否则按下`K1`复位系统。
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1.png" alt="DFU-Fastboot 烧录实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 
@@ -61,12 +61,12 @@ brew install dfu-util
    - 介质存储: `emmc`, 固件类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
 
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_dfu.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_dfu.png" alt="DFU-Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
    - 点击开始升级，设备上电并等待升级完成
 
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="DFU-Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 - 升级完成后，关闭电源，将烧录开关向下拨动后(从 DFU 模式退出)，重新上电。
@@ -100,11 +100,11 @@ brew install dfu-util
    - 介质存储: `emmc`, 类型: `secure`
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
 
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot.png" alt="Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
    - 点击开始升级，设备进入 Fastboot 模式并等待升级完成
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 - 升级完成后重新上电。
@@ -134,7 +134,7 @@ RDK S100 支持通过 Xburn 烧录指定区域，支持的烧录区域如下
    - 镜像所在目录：点击浏览选择固件所在 product 文件夹
    - 高级配置: 勾选 `烧录指定区域`，勾选 `miniboot_flash` 和 `miniboot_emmc`
    
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-partition.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-partition.png" alt="使用 Xburn 指定区域烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
    - 点击开始升级，设备上电并等待升级完成
@@ -165,14 +165,14 @@ RDK S100 支持通过 Xburn 备份指定区域，支持的备份区域如下
    - 高级配置: 勾选 `备份指定区域`，勾选 `miniboot_flash`
 
 
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition.png" alt="使用 Xburn 指定区域备份示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
    - 点击开始升级，设备上电并等待操作完成
 
    - 操作完成后，打开 `img_packages/disk/`，查看备份镜像文件 `miniboot_flash_backup.img`
 
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition.png" alt="使用 Xburn 指定区域备份示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
    :::warning 注意
 
@@ -200,4 +200,4 @@ RDK S100 支持通过 Xburn 备份指定区域，支持的备份区域如下
 
 Ubuntu Desktop 版本系统启动完成后，会通过 Display 传输接口在显示器上输出系统桌面，如下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="image-desktop_display.jpg" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="启动系统示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

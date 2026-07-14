@@ -5,7 +5,7 @@ sidebar_position: 2
 # 1.1.2.2 RDK S100 相机扩展板 12 通道
 
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board_12l.png" alt="image-rdk_100_camera_expansion_board" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board_12l.png" alt="RDK S100 相机扩展板 12 通道" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 地瓜机器人RDK S100 相机扩展板（12 通道）是 RDK S100 开发者套件的的核心扩展模块 Camera 扩展板，其基于 RDK S100 Camera Expansion Connector 进行二次开发，提供了 12 个 GMSL 相机接口。
 
@@ -45,11 +45,11 @@ sidebar_position: 2
 
 ### 拓扑图
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram_12l.png" alt="image-rdk_s100_camera_expansion_board_architecture_diagram.png" style={{ width: '80%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_camera_expansion_board_architecture_diagram_12l.png" alt="RDK S100 相机扩展板 12 通道架构拓扑图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 接口说明
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface_12l.png" alt="camera_expansion_board_interface" style={{ width: '80%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface_12l.png" alt="RDK S100 相机扩展板 12 通道接口示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 <br/><br/>
 
 <div className="table-responsive">

@@ -21,7 +21,7 @@ sunrise camera is an official application designed to facilitate rapid evaluatio
 
 The overall connection method is shown in the figure below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/hardware_connection_diagram.png" alt="hardware_connection_diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/hardware_connection_diagram.png" alt="Hardware Connection Diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Network Connection Requirements
 
@@ -92,11 +92,11 @@ journalctl -u sunrise_camera.service -f --output=cat
 
 After sunrise camera starts normally, enter the IP address (default development board IP is 192.168.1.10) in the address bar of Chrome browser to log in to the user control main interface, for example: http://192.168.1.10
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/login_method.png" alt="login_method" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/login_method.png" alt="Login Method" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The interface after successful login is shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/home_page.png" alt="home_page" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/home_page.png" alt="Home Page" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The detailed description of the interface menu is as follows:
 
@@ -115,7 +115,7 @@ The detailed description of the interface menu is as follows:
 2. sunrise camera supports online modification of application solutions, selection of camera sensor models, setting decoding/encoding parameters, and selection of algorithm models via the Web interface
 
 #### Smart Camera Configuration Method
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_page.png" alt="camera_page" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_page.png" alt="Camera Page" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Specific modification steps are as follows:
 
@@ -132,7 +132,7 @@ Note:
 2. If you click the `Save Current Configuration` button but replace the camera during the next power-on, the newly inserted camera will be disabled by default
 
 #### Smart Analysis Box Configuration Method
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_page.png" alt="box_page" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_page.png" alt="Box Page" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Specific modification steps are as follows:
 
@@ -148,7 +148,7 @@ Specific modification steps are as follows:
 
 The smart camera solution implements functions such as Camera sensor image capture, processing, encoding, rtsp streaming, and intelligent computation, helping users quickly experience multimedia image and algorithm effects. The solution function block diagram is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_solution.png" alt="camera_solution" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_solution.png" alt="Camera Solution" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The smart camera solution provides the following functions:
 
@@ -182,7 +182,7 @@ When using the smart camera solution, please note the following:
 
 The smart box solution implements single-channel and four-channel 1080p video decoding, stitching, encoding, rtsp streaming, and intelligent computation. Users can preview effects via Web interface, HDMI, or streaming. The solution function block diagram is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_solution.png" alt="box_solution" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_solution.png" alt="Box Solution" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The smart analysis box solution provides the following functions:
 
@@ -236,7 +236,7 @@ Open the VLC player, select the `Media` menu, then select the `Open Network Stre
 
 Enter the URL address in the `Open Media` dialog box, click the `Play` button to start playback, as shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_play_method.png" alt="vlc_play_method" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_play_method.png" alt="VLC Play Method" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The RTSP stream network URL link can be viewed in the device information on the web interface. The default supported stream link is: rtsp://192.168.1.10/stream_chn0.h264
 
@@ -246,12 +246,12 @@ The RTSP stream network URL link can be viewed in the device information on the 
 
 2. VLC buffer_size setting: Modify VLC receive buffer. The default is 250000, recommended to change to 1200000.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_rtsp_buffer_size.png" alt="vlc_rtsp_buffer_size" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_rtsp_buffer_size.png" alt="VLC RTSP Buffer Size" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3. Using HTTP mode can effectively solve screen tearing caused by playback frame loss.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_http_mode.png" alt="vlc_http_mode" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_http_mode.png" alt="VLC HTTP Mode" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 4. Disable clock synchronization in advanced settings
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="vlc_disable_clock_sync" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="VLC Disable Clock Sync" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

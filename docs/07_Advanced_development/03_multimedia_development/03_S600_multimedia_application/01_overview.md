@@ -38,10 +38,10 @@
 ### 硬件使用指南
 
 mipi host 编号如图                                                                                                               
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="S600 MIPI Host 结构图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 mipi host 2 对应的解串器 link 编号如图
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png" alt="MIPI 连接示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 软件使用指南
 

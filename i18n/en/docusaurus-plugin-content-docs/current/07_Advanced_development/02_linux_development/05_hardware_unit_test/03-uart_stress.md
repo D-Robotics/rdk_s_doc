@@ -153,15 +153,15 @@ index 504b21b..8d72794 100644
 
 **2.** Refer to the RDK_S100 physical diagram below, locate UART2, and switch the DIP switch to the right to connect UART2:
 
-![Actual_device_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram-en.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram-en.png" alt="Notes diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **3.** Consult the RDK_S100 schematic to identify the UART2 pins and connector locations, as shown:
 
-![Schematic_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png" alt="Notes diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Then, use a female-to-female Dupont jumper wire to connect `uart2_tx` and `uart2_rx`.
 
-![Connection_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png" alt="Notes diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **4.** Confirm that the following three files exist in the `/app/chip_base_test/03_uart_test` directory: `uartstress.sh`, `uart_test.c`, and `uart_test`.
 

@@ -14,20 +14,20 @@ sudo srpi-config
 
 > sudo is a privilege escalation command and must be entered here to perform configuration management with root permissions. The default `sunrise` account does not have system file modification permissions.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-home_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-home_s100.png" alt="Introduction diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 If you are using a desktop system, you can find the `RDK Configuration` application in the menu to perform configuration. This will open the same configuration terminal as shown above. The difference in background color is related to the terminal environment variable `TERM` when opening the terminal.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/desktop_rdk_configuration_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/desktop_rdk_configuration_s100.png" alt="Introduction diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-home_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-home_s100.png" alt="Introduction diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## System Options
 
 The System Options menu allows you to make configuration changes to various parts such as Wi-Fi network, user password, hostname, system login mode, browser selection, etc., as well as some system-level changes.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-system_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-system_s100.png" alt="System Options diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Wireless LAN**
 
@@ -61,7 +61,7 @@ The System Options menu allows you to make configuration changes to various part
 
 The Interface Options menu has the following options to enable/disable: SSH, peripherals, etc.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-intf_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-intf_s100.png" alt="Interface Options diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **SSH**
 
@@ -79,7 +79,7 @@ The Interface Options menu has the following options to enable/disable: SSH, per
 
 The Performance Options include CPU running mode and frequency settings, adjusting ION memory size, etc.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-performance_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-performance_s100.png" alt="Performance Options diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **ION memory**
 
@@ -91,7 +91,7 @@ The Performance Options include CPU running mode and frequency settings, adjusti
 
 The Localisation Options provide you with the following options to choose from: local language, time zone, keyboard layout.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-localisation_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-localisation_s100.png" alt="Localisation Options diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Locale**
 
@@ -109,7 +109,7 @@ The Localisation Options provide you with the following options to choose from: 
 
 The Advanced Options allow you to set options such as disk expansion, network proxy, etc.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-advanced_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-advanced_s100.png" alt="Advanced Options diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Expand Filesystem**
 
@@ -129,10 +129,10 @@ Information about `srpi-config`
 
 Selecting this option will display the following information:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-about_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-about_s100.png" alt="About srpi-config diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## Finish Button
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-finish_s100.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-finish_s100.png" alt="Finish Button diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 After completing the changes, select the `Finish` button. For system configurations provided by `srpi-config` that depend on restart to take effect, it will ask you whether you want to restart. If you do not restart, the configuration will not take effect normally. Please decide on the restart timing according to your usage.

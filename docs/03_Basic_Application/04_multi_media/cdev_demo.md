@@ -12,7 +12,7 @@ sidebar_position: 2
 
 示例流程框图：
 
- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png" alt="image-vio_to_display" style={{ width: '100%' }} />
+ <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png" alt="摄像头图像采集和显示示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **环境准备：**
 
@@ -64,7 +64,7 @@ sidebar_position: 2
 
 示例流程框图：
 
- <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png" alt="image-vio_capture.png" style={{ width: '100%' }} />
+ <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png" alt="摄像头图像本地保存示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **环境准备：**
 
@@ -118,7 +118,7 @@ sidebar_position: 2
 
 示例流程框图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png" alt="image-vio_to_encoder" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png" alt="摄像头图像采集并编码示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **环境准备：**
 
@@ -174,7 +174,7 @@ sidebar_position: 2
 
 示例流程框图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display.png" alt="image-decoder_to_display" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display.png" alt="视频文件解码并显示示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **环境准备：**
 
@@ -223,7 +223,7 @@ sidebar_position: 2
 
 示例流程框图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="rtsp2display" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="RTSP 拉流解码示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **环境准备：**
 

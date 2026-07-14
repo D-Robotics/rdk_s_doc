@@ -14,7 +14,7 @@ The kernel version includes standard driver libraries as well as the system BSP.
 
 The software block diagram is shown below:
 
-![software_framwork](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework-en.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework-en.png" alt="Software Architecture Diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Microkernel Design
 
@@ -91,7 +91,7 @@ If a received CMD is either unregistered or disabled, the CMD invocation fails.
 1. Static plug-in control for modules (enabling/disabling at compile time)
 2. CMD command forwarding between modules
 
-![event_bus](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="Event Bus Diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Example:
 
@@ -99,7 +99,7 @@ The camera sub-module defines the command `SDK_CMD_CAMERA_GET_CHIP_TYPE`. After 
 
 The entire process is illustrated below:
 
-![event_bus_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="Event Bus Data Flow" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### Module Code Structure
 
@@ -124,7 +124,7 @@ Each sub-module must implement its own `xxx_cmd_register()` function to register
 
 Example:
 
-![cmd_register](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="Command Registration Example" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **sdk_cmd_register**
 
@@ -211,7 +211,7 @@ The internal structure of this module is as follows:
 
 `bpu_wrap` encapsulates the algorithm inference interfaces and post-processing methods.
 
-![platform_module](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="Platform Module Architecture" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### Function Description
 
@@ -232,7 +232,7 @@ typedef struct vpp_ops {
 
 The workflow for launching an application solution (using `vpp_camera` as an example) is as follows:
 
-![vpp_camera_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="VPP Camera Data Flow" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Initialization and startup procedures for other submodules can also refer to this flowchart.
 
@@ -284,7 +284,7 @@ The current basic submodule startup sequence is as follows. Note that the startu
 
 #### Execution Flow
 
-![main_flow](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow-en.jpg" alt="Main Program Flow" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### WebServer
 
@@ -304,7 +304,7 @@ This module handles algorithm model loading, data pre-processing, inference, pos
 
 The module's runtime sequence is as follows:
 
-![bpu_flow](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow-en.jpg" alt="BPU Inference Flow" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Adding a New Model
 

@@ -19,7 +19,7 @@ MCU ramdump 功能的开发，主要是为了 mcu 在发生 crash 或进入异�
 
 异常处理流程如下所示：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_flowchart.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_flowchart.png" alt="异常处理流程截图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 MCU0和 MCU1的异常处理流程基本类似，区别只在于 MCU0在处理异常后会重启系统。
 
@@ -49,7 +49,7 @@ MCU1出现异常后会陷入 shell，这时可以通过 acore remoteproc 控制�
 
 以发生 data abort 为例记录的异常信息进行说明：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_exception.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_ramdump_exception.png" alt="异常打印分析截图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 这些数据的含义如下：
 

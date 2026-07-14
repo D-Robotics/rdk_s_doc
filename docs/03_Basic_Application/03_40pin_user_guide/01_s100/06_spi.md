@@ -20,7 +20,7 @@ RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了的 `SPI0` 总�
 
 把 MISO 和 MOSI 通过跳线帽直接硬件上连接在一起：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_spi.png" alt="image-20220512101915524" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_spi.png" alt="SPI回环测试：MISO与MOSI通过跳线帽短接" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 测试过程
 

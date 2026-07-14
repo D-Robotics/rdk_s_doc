@@ -74,7 +74,7 @@ import DocScope from '@site/src/components/DocScope';
 
   - 第一次与第二次 Timeout 之间，是允许区域，允许喂狗操作，超时不喂狗会上报 reset 信号。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_window.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_window.png" alt="特性示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <DocScope products="RDK S100">
 
@@ -146,7 +146,7 @@ Watchdog 模块的驱动代码位于 `/hobot-drivers/watchdog`。
 ## Watchdog Timeout
 
 当监控 Acore 的 Watchdog Timeout 时，会触发中断发送到 MCU0侧，由 MCU 的任务触发 Acore 重启，在任务中会等待5s，使 Acore 侧完成堆栈的打印。
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_timeout.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_timeout.png" alt="Watchdog Timeout示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## 用户开发
@@ -401,7 +401,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
 ### HardLockup 监控
   HardLockup 监控基于 Watchdog 模块实现，使用 Watchdog1配置成窗口模式，在驱动中实现监控逻辑。当系统正常运行时监控逻辑如下图：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup 监控示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. 初始化 Watchdog 硬件。
 
@@ -411,7 +411,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. 喂狗后，Watchdog 重新开始下一个周期的计数。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="HardLockup 监控示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. 初始化 Watchdog 硬件。
 
@@ -439,7 +439,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
 ### HardLockup 监控
   HardLockup 监控基于 Watchdog 模块实现，使用 Watchdog0配置成窗口模式，在驱动中实现监控逻辑。当系统正常运行时监控逻辑如下图：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup 监控示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. 初始化 Watchdog 硬件。
 
@@ -449,7 +449,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. 喂狗后，Watchdog 重新开始下一个周期的计数。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="HardLockup 监控示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   1. 初始化 Watchdog 硬件。
 

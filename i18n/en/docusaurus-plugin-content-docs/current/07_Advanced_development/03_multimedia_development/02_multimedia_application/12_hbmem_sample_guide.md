@@ -8,7 +8,7 @@ Instructions for using hbmem APIs, including creation and usage of com buffer, g
 
 This sample is implemented based on the libhbmem API, invoking APIs provided by libhbmem to allocate memory for different buffer types and enable inter-process sharing.
 
-![hbmem_sample_block_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_block_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_block_diagram.png" alt="HBMEM Sample Block Diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## Code Location and Directory Structure
 
@@ -31,23 +31,23 @@ This sample is implemented based on the libhbmem API, invoking APIs provided by 
 
 The libhbmem library calls ION to allocate buffers.
 
-![hbmem_sample_call_sequence](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_call_sequence.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_sample_call_sequence.png" alt="HBMEM Sample Call Sequence" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Allocation flowchart for com buffer, graph buffer, and graphic buffer group:
 
-![hbmem_alloc_buf](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_alloc_buf.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_alloc_buf.png" alt="HBMEM Allocate Buffer" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Queue usage flowchart:
 
-![hbmem_queue](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_queue.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_queue.png" alt="HBMEM Queue" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Pool usage flowchart:
 
-![hbmem_pool](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_pool.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_pool.png" alt="HBMEM Memory Pool" style={{ width: '30%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Share pool usage flowchart:
 
-![hbmem_share_pool](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_share_pool.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/hbmem/hbmem_share_pool.png" alt="HBMEM Shared Memory Pool" style={{ width: '30%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## Compilation
 

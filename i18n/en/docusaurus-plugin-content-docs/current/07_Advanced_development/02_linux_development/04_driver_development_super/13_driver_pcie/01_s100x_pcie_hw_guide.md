@@ -24,7 +24,7 @@ serial I/O interconnect for multiple market segments, including desktops, mobile
 
 ## The following PCIe bus topologies are supported
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/topology.png" alt="S100_600_PCIE_Topology" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/topology.png" alt="The following PCIe bus topologies are supported screenshot" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 1. **Topology 1**: Direct connection between two development boards, with one board acting as RC and the other as EP
 

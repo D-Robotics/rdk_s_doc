@@ -12,7 +12,7 @@ The `vio2display` example implements image capture from a `MIPI` camera and outp
 
 Example flow diagram:
 
-![image-vio_to_display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png" alt="Camera Image Capture and Display diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Environment Setup:**
 
@@ -64,7 +64,7 @@ The `vio_capture` example captures images from a MIPI camera and saves them loca
 
 Example flow diagram:
 
-![image-vio_capture.png](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png" alt="Local Saving of Camera Images diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Environment Setup:**
 
@@ -118,7 +118,7 @@ The `vio2encoder` example captures images from a `MIPI` camera, encodes them, an
 
 Example flow diagram:
 
-![image-vio_to_encoder](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png" alt="Camera Image Capture and Encoding diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Environment Setup:**
 
@@ -173,7 +173,7 @@ The `decoder2display` example decodes a video file and outputs it via the `HDMI`
 
 Example flow diagram:
 
-![image-decoder_to_display](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display-en.jpg" alt="Video File Decoding and Display diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Environment Setup:**
 
@@ -221,7 +221,7 @@ This example, `rtsp2display`, implements the functionality of pulling an `rtsp` 
 
 Example workflow diagram:
 
-![rtsp2display](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="RTSP Stream Pulling and Decoding diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **Environment Setup:**
 

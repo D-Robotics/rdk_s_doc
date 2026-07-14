@@ -41,7 +41,7 @@ LPWM operating principle: The LPWM is triggered by a PPS signal and acts as a Ta
 
 The process of transmitting the PPS signal to the camera trigger (cam-trig) is illustrated below. The PPS trigger connects to the LPWM module, which then outputs a signal to the camera:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_01.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_01.png" alt="LPWM Synchronization Sources diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 For more information on PPS synchronization sources, please refer to: [PPS Description](../../02_linux_development/04_driver_development_s100/12_driver_timesync.md#PPS)
 
@@ -58,7 +58,7 @@ Important notes regarding LPWM trigger source usage:
 
 For single-S100 camera deployment scenarios, the typical connection diagram is as follows:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_02.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_02.png" alt="Multi-Camera Synchronization Connection diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Key points:
 
@@ -72,7 +72,7 @@ Key points:
 
 In scenarios involving Lidar, the following connection scheme can be used:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_03.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_03.png" alt="Integration with Lidar diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Key points:
 
@@ -94,7 +94,7 @@ In scenarios requiring simultaneous use and synchronization of cameras and Lidar
 
 The desired time alignment objective is illustrated below:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_04.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_04.png" alt="Camera and Lidar Time Alignment Requirements diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 At the exact PPS second boundary: LPWM output triggers exposure (if offset is set to 0), and Lidar starts scanning (if start delay is 0).
 
@@ -122,11 +122,11 @@ Sensor exposure output typically operates in either Master mode (autonomous expo
 
 Below is an example using the AR0820 module to illustrate Slave mode:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_05.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_05.png" alt="Camera Synchronization Mode Selection diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Within Slave mode, multiple synchronization methods exist. The commonly used "shutter sync" mode ensures that images are output at a fixed time after the trigger (guaranteeing Frame Start timestamp alignment) and does not drop incoming trigger signals (i.e., triggers arriving during image output are not ignored).
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_06.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_06.png" alt="Camera Synchronization Mode Selection diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Configuration examples:
 
@@ -217,7 +217,7 @@ Based on the aforementioned hardware connections and software approach, the sync
 
 - After correctly configuring the LPWM offset, the camera can synchronize its output precisely at every full hundred milliseconds (every 3 frames), aligning with LiDAR data.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_07.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_07.png" alt="Camera and LiDAR Synchronization Alignment Scheme diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Camera Configuration
 

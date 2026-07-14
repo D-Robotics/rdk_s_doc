@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 <DocScope products="RDK S100">
 The S100 Acore chip has a total of 3 sys with gpio devices, namely peri, cam, and video. Each device supports up to 32 gpio pins, and each gpio pin supports interrupts.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/gpio_devs.png" alt="gpio_devs" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/gpio_devs.png" alt="GPIO Usage diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 
@@ -40,7 +40,7 @@ kernel/drivers/gpio/gpio-dwapb.c # gpio driver source file
 
 GPIO_DWAPB
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/GPIO_MENUCONFIG.png" alt="image-GPIO_MENUCONFIG" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/GPIO_MENUCONFIG.png" alt="Kernel Configuration diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Kernel DTS Configuration
 

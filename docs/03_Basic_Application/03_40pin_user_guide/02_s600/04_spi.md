@@ -20,7 +20,7 @@ RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选�
 
 测试之前，需要把 MISO 和 MOSI 短接：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_spi.png" alt="image-rdk_s600_spi.png" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_spi.png" alt="RDK S600 SPI回环测试硬件连接示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 测试过程
 

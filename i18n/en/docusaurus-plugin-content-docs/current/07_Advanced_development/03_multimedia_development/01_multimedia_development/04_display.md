@@ -8,13 +8,13 @@ sidebar_position: 4
 
 IDE (Image Display Engine) includes an Image Display Unit (IDU), and image data output modules (MIPI CSI2 Device and MIPI DSI). The IDU fetches image data from memory for processing. Within the IDE, pixel format conversion and pixel structure conversion are supported, enabling the IDU output data to be transmitted via either MIPI DSI or MIPI CSI2 Device. The MIPI DSI and MIPI CSI2 Device controllers share a single MIPI D-PHY.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/display/3a04cee3e78794a86060831ada036a2b.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/display/3a04cee3e78794a86060831ada036a2b.png" alt="IDE Architecture Diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## IDU Architecture Diagram
 
 The S100 integrates two IDU (Image Display Unit) hardware modules that are functionally identical.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/display/78d95d4a8683535bee0965957165a802.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/display/78d95d4a8683535bee0965957165a802.png" alt="IDU Architecture Diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## Features Supported by IDU
 

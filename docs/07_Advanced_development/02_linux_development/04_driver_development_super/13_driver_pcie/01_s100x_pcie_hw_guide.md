@@ -25,7 +25,7 @@ PCI Express (PCIe) 模块是一种多通道 I/O 互连，提供低引脚数、�
 
 ## 支持如下几种 PCIe 总线拓扑
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/topology.png" alt="S100_600_PCIE_Topology" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/topology.png" alt="支持如下几种 PCIe 总线拓扑截图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 1. **拓扑1**：双开发板直连，一个开发板作为 RC，另一个开发板作为 EP
 

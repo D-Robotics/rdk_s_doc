@@ -20,11 +20,11 @@ RDK S600 采用 UFS 作为系统存储介质。
 RDK S600 套件目前提供 Ubuntu 24.04 系统镜像，可支持 Desktop 桌面图形化交互。
 1. [[点击此处]](../../download.md#系统软件)下载镜像。
 
-    <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png" alt="" style={{ width: '100%' }} /> -->
+    <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png" alt="镜像下载示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> -->
 
 2. 解压后得到 product 文件夹，结构如下所示，确保同一个文件夹内有 `img_packages` 文件夹和 `xmodem_tools` 文件。
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/acore-product.png" alt="product文件夹界面" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/acore-product.png" alt="product文件夹界面" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## 烧录工具下载

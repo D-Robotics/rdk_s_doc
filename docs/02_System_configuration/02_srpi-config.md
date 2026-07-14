@@ -14,20 +14,20 @@ sudo srpi-config
 
 > sudo 是提权管理命令，这里必须输入，这样就可以 root 权限来进行配置管理，默认的 sunrise 账号不具备系统文件修改权限。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-home_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-home_s100.png" alt="简介示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 如果您使用的是桌面系统，那么您可以在菜单中找到`RDK Configuration`应用来进行配置。同样会打开如上图一样的配置终端。背景颜色的不同与开启终端的环境变量`TERM`相关。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/desktop_rdk_configuration_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/desktop_rdk_configuration_s100.png" alt="简介示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-home_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-home_s100.png" alt="简介示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## System Options
 
 系统选项菜单，允许对 Wi-Fi 网络、用户密码、主机名、系统登录模式、浏览器选择等各个部分进行配置更改，以及一些系统级别的更改。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-system_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-system_s100.png" alt="System Options示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **Wireless LAN**
 
@@ -61,7 +61,7 @@ sudo srpi-config
 
 接口选项菜单，有以下选项可启用/禁用：SSH，外设等功能。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-intf_s100.png" alt="image-20231123103322961" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-intf_s100.png" alt="srpi-config Interface Options接口选项菜单" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **SSH**
 
@@ -78,7 +78,7 @@ sudo srpi-config
 
 性能选项，包括 CPU 运行模式和定频设置、调整 ION 内存大小等功能。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-performance_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-performance_s100.png" alt="Performance Options示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **ION memory**
 
@@ -90,7 +90,7 @@ sudo srpi-config
 
 本地化选项，为您提供以下选项供您选择：本地语言、时区、键盘布局。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-localisation_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-localisation_s100.png" alt="Localisation Options示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **Locale**
 
@@ -108,7 +108,7 @@ sudo srpi-config
 
 高级选项，可以对磁盘扩展、网络代理等选项进行设置。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-advanced_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-advanced_s100.png" alt="Advanced Options示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **Expand Filesystem**
 
@@ -128,10 +128,10 @@ sudo srpi-config
 
 选择此选项会显示以下信息：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-about_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-about_s100.png" alt="About srpi-config示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Finish 按钮
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-finish_s100.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-finish_s100.png" alt="Finish 按钮示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 完成更改后选中 `Finish` 按钮。`srpi-config`提供的系统配置，依赖重启生效的选项将会询问您是否要重新启动，如果不重新启动，配置将无法正常生效，请用户根据使用情况决定重启时机。

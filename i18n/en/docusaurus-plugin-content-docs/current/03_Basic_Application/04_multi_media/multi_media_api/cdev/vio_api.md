@@ -270,4 +270,4 @@ Returns 0 on success, -1 on failure.
 
 The host IDs corresponding to each camera are shown in the figure below:
 
-![20250220-114529.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Host ID Selection diagram" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />

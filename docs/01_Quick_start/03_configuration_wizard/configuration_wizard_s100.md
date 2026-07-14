@@ -158,7 +158,7 @@ NoMachine 下载官方网址： [NoMachine Download](https://downloads.nomachine
 
 进入官网后找到适合`RDK S100`的`ARM64`版本的安装包，点击`Download`
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="image_s100_nomachine_dl" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="NoMachine 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **安装**
 
