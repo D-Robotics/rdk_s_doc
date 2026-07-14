@@ -131,6 +131,28 @@ export default function DocItemWrapper(props) {
     }
   }, [visible, history, sidebar, skipSidebarScope, homeUrl, location.pathname, location.search, location.hash, version, product]);
 
+  // 给所有原生 table 包一层滚动容器，保持表格为单一 table 上下文（列宽天然对齐）
+  useLayoutEffect(() => {
+    if (typeof document === "undefined" || !visible) return;
+
+    const root =
+      document.querySelector(".theme-doc-markdown") ||
+      document.querySelector("article.markdown") ||
+      document.querySelector("article");
+    if (!root) return;
+
+    const tables = root.querySelectorAll("table");
+    tables.forEach((table) => {
+      if (table.parentElement?.classList.contains("table-scroll-wrap")) return;
+      if (table.closest(".table-scroll-wrap")) return;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-scroll-wrap";
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    });
+  }, [visible, docId]);
+
   useLayoutEffect(() => {
     if (!visible || skipSidebarScope || !currentDocDisplayNumber) {
       return;

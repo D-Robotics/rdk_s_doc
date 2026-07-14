@@ -224,4 +224,3 @@ MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能
 ## 适配模组
 
 参考[7.1.2 配件清单](../../../../07_Advanced_development/01_hardware_development/02_accessory.md)
-
