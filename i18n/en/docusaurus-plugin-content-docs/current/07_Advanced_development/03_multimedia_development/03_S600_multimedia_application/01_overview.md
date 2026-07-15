@@ -38,10 +38,10 @@ Note: The `vp_sensors` directory contains supported `Camera Sensor` configuratio
 ### Hardware Usage Guide
 
 The MIPI host numbers are shown in the figure                                                                                                               
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="Hardware Usage Guide diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The deserializer link numbers corresponding to MIPI host 2 are shown in the figure
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png" alt="Hardware Usage Guide diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Software Usage Guide
 

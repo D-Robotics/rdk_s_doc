@@ -20,9 +20,17 @@ The MCU1 compilation system is located at mcu/Build/FreeRtos_mcu1. The specific 
 ```c
 FreeRtos_mcu1
 ├── build_freertos.py                   # Compilation entry script
-├── SConstruct_Lite_FRtos_S100_sip_B    # Scons compilation folders and output directory
-├── settings_freertos.py                # Scons compilation command parameter related file
-└── Linker                              # Directory containing compilation link scripts
+├── SConstruct                          # Scons build definition file (unified entry)
+├── build_config                        # YAML files used for compilation folder control
+│    └── S100
+│         └── lite-matrix-B-mcu1.yaml
+├── setting_files                       # gcc compile/link parameter files
+│    └── gcc
+│         └── settings_lite_freertos.py
+├── site_scons                          # Scons compile/link command definitions
+│    └── site_tools
+│         └── gcc_arm.py
+└── Linker                              # Linker script directory
      └── gcc
           └── S100
               └── link_freertos_mcu1.ld
@@ -51,15 +59,16 @@ FreeRtos_mcu1
 </DocScope>
 
 ## Introduction to the Compilation Process
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/MCU_build_system/build_freertos-en.jpg" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/MCU_build_system/build_freertos-en.jpg" alt="FreeRTOS Build" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Introduction to the Relationships Among Key Files in the Compilation Process
 <DocScope products="RDK S100">
 
 build_freertos.py is the overall entry point for compilation. However, when actually dispatching to scons, the following can influence the scons compilation environment/process:
 1. SConstruct file: The SConstruct file is the definition file for scons compilation. Together with the Sconscript file within each module, it forms the equivalent of the Cmakefile in CMake or the makefile in the Make system.
-2. settings_freertos.py: The entry point for this file is actually the initialization of the "Variables" class within SConstruct. Its core function is to introduce a series of statically defined compilation environment variables. The variable names in the environment variables correspond to those in settings_freertos.py, and their values correspond to the values of those variable names. The instantiated object of the "Variables" class is then used by the Environment class for scons compilation.
-3. gcc_arm.py: This file actually defines the compilation commands. The effective entry point is the "COMPILER_TOOL" field defined in settings_freertos.py. The COMPILER_TOOL field is further added by the Variables of the SConstruct file and finally retrieved by the env, including configurations such as "CC".
+2. settings_lite_freertos.py: The effective entry is initialization of the `Variables` class in `SConstruct`. This file provides statically defined compilation environment variables. Variable names and values are loaded into `Variables`, then consumed by the `Environment` used for scons compilation.
+3. gcc_arm.py: This file defines actual compile/link commands. Its effective entry is the `COMPILER_TOOL` field defined in `settings_lite_freertos.py`, which is added in `SConstruct` via `Variables` and finally retrieved from `env`.
+4. `build_config/S100/lite-matrix-B-mcu1.yaml`: YAML config file used by S100 MCU1 lite builds. In this file, `SettingFile` points to `Build/FreeRtos_mcu1/setting_files/__COMPILER__/settings_lite_freertos.py`; `LinkFIle` points to `Build/FreeRtos_mcu1/Linker/__COMPILER__/S100/link_freertos_mcu1.ld`; fields such as `BuildPath`, `StaticLibCommonPath`, `StaticLibMcalCddPath`, `StaticLibPlatformPath`, and `StaticLibServicePath` control which directories are included in compilation.
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -710,69 +719,28 @@ EL2_Reset_Handler:
 
     b MPU_Init
 ```
-3. Before performing other operations, configure the various address spaces that may be used later via the MPU at the MPU_Init label. MPU region 1 is the MCU SRAM area. Users can partition the SRAM according to their needs and configure the attributes of each partition, such as shareability/non-cache, etc. The configuration in the startup code is for reference only. For the partitioning of the MCU SRAM area, refer to the previous section on MCU1 image layout. The partitioning of MCU0-related areas is not shown due to MCU0 constraints.
-```c
-MPU_Init:
-          //.....Other omitted code
-
-          /*-----region 1 MCU sram example configuration, modify according to your needs-------*/
-          /*---------------region 1 mcu sram---------------*/
-          /* normal memory attribute */
-          ldr r0, =1                /* Region 1 */
-          mcr p15, 4, r0, c6, c2, 1 /* Write HPRSELR */
-          mcr p15, 0, r0, c6, c2, 1 /* Write PRSELR */
-
-          ldr r0, =0x0C800000       /* Start address */
-          orr r0, r0, #0x2          /* SH=0, AP=1, XN=0*/
-          mcr p15, 4, r0, c6, c3, 0 /* Write HPRBAR */
-          mcr p15, 0, r0, c6, c3, 0 /* Write PRBAR */
-
-          ldr r0, =0x0CDFFFFF      /* End address */
-          and r0, r0, #0xFFFFFFC0
-          orr r0, r0, #0x3          /* AttrIndex=1, non-cacheable, enable region */
-          mcr p15, 4, r0, c6, c3, 1 /* Write HPRLAR */
-          mcr p15, 0, r0, c6, c3, 1 /* Write PRLAR */
-
-          /*---------------region 5 internal gic & peripheral---------------*/
-          /* device memory attribute            */
-          ldr r0, =5                /* Region 5 */
-          mcr p15, 4, r0, c6, c2, 1 /* Write HPRSELR */
-          mcr p15, 0, r0, c6, c2, 1 /* Write PRSELR */
-
-          ldr r0, =0x22000000       /* Start address */
-          orr r0, r0, #0x13         /* SH=2, AP=1, XN=1*/
-          mcr p15, 4, r0, c6, c3, 0 /* Write HPRBAR */
-          mcr p15, 0, r0, c6, c3, 0 /* Write PRBAR */
-
-          ldr r0, =0x223FFFFF       /* End address */
-          sub r0, r0, #1            /* HPRLAR: (end-1), then 64B align */
-          and r0, r0, #0xFFFFFFC0
-          orr r0, r0, #0x7          /* AttrIndex=3, device memory, enable region */
-          mcr p15, 4, r0, c6, c3, 1 /* Write HPRLAR */
-          mcr p15, 0, r0, c6, c3, 1 /* Write PRLAR */
-
-          //.....Subsequent omitted code
-```
+3. Before other operations, configure the address spaces needed later through the MPU. In the current S100 `startup.s`, `MPU_Init` configures region 0 through region 10. Region 1 to region 5 partition MCU SRAM into cacheable/non-cacheable areas by linker symbols (`__HEAP_START`, `__STACK_START`, `__COPY_TABLE`); region 6 to region 10 cover fixed spaces such as GIC, peripheral registers, CPUSYS, DDR, and XSPI. If SRAM partitioning needs adjustment, update both linker script and MPU configuration, and refer to the previous MCU1 image layout section.
 4. Description of important MPU regions in the D-Robotics version:
 
 :::caution
-There are differences between the ARM R52 background region and the actual memory map implemented on the RDK-S100 chip.
+- The ARM R52 background region and the actual memory map implemented on RDK-S100 are different. For example, `0x22000000` may default to normal memory in ARM background settings, but on RDK-S100 it maps to MCU GIC and other device register space. Therefore, MPU memory attributes must match the chip implementation before access, or access exceptions may occur.
 
-For example, 0x2200_0000 belongs to normal memory space by default in the ARM background region, but on the RDK-S100 chip, this address space corresponds to device-class register space like GIC.
-
-Therefore, for areas where the actual chip implementation differs from the background region, before accessing them, you must use the MPU to make the memory type consistent with the actual implementation of the RDK-S100 chip; otherwise, access exceptions will occur.
-
-These areas are spaces that the MCU may need to access for normal operation. Lack of configuration for these spaces may lead to runtime exceptions. In your own version, please maintain the same address space attribute configuration as the code provided by D-Robotics. For the SRAM area, customers can partition it differently according to their project needs.
+- Keep fixed peripheral/DDR/XSPI regions consistent with the D-Robotics reference code. If SRAM partitioning is adjusted, both linker script and MPU configuration must be updated together.
 :::
 
-| MPU region| Start Address| End Address|Memory Type|Description|
-|--------|----------------------------------------|-----------------------------|----------------|---------|
-| 0| 0x0800_0000|0x0AFF_FFFF|normal memory|Space containing vdsp tcm and MCU TCM; SPL execution uses vdsp tcm|
-| 7| 0x2200_0000|0x223F_FFFF|device memory|Address space for MCU GIC registers, affects access to GIC registers|
-| 8| 0x2300_0000|0x25FF_FFFF|device memory|Space for MCU peri registers, affects access to peri registers on the MCU|
-| 9| 0x2600_0000|0x7FFF_FFFF|device memory|Space for various CPUSYS registers, affects MCU access to Acore-side registers|
-| 10| 0x8000_0000|0xFFFF_FFFF|normal memory|DDR address space, affects MCU access to DDR|
-| 11| 0x1800_0000|0x1FFF_FFFF|device memory|XSPI address space, affects MCU usage of flash|
+| MPU region | Start Address | End Address | Memory Type | Description |
+| --- | --- | --- | --- | --- |
+| 0 | `0x08000000` | `0x0AFFFFFF` | normal memory (non-cacheable) | cluster0/cluster1 TCM |
+| 1 | `0x0C800000` | `0x0CAAFFFF` | normal memory (non-cacheable) | lower MCU SRAM |
+| 2 | `0x0CAB0000` | `__HEAP_START - 64` | normal memory (cacheable, read-only) | startup, code, and const sections |
+| 3 | `__HEAP_START` | `__STACK_START - 64` | normal memory (non-cacheable) | heap to stack range |
+| 4 | `__STACK_START` | `__COPY_TABLE - 64` | normal memory (cacheable) | stack to copy table range |
+| 5 | `__COPY_TABLE` | `0x0CDFFFFF` | normal memory (non-cacheable) | upper SRAM, including log/SCMI regions |
+| 6 | `0x22000000` | `0x223FFFFF` | device memory | MCU GIC related registers |
+| 7 | `0x23000000` | `0x2FFFFFFF` | device memory | MCU peripheral register space |
+| 8 | `0x30000000` | `0x3FFFFFFF` | device memory | CPUSYS related register space |
+| 9 | `0x80000000` | `0xFFFFFFFF` | normal memory (non-cacheable) | DDR space |
+| 10 | `0x18000000` | `0x1FFFFFFF` | device memory | XSPI register space |
 
 5. The startup code then performs operations such as enable_prefetch/enable_peri_secure, enabling VFP, configuring SYSCNT registers, etc. It is recommended that customers keep this code.
 6. Next, make the current core jump from hypervisor mode to el1.
@@ -786,32 +754,34 @@ These areas are spaces that the MCU may need to access for normal operation. Lac
      /* Exception return - will jump to address pointed by ELR_hyp (main) */
      eret /* When executed in Hyp mode, ERET loads the PC from ELR_hyp and loads the CPSR from SPSR_hyp */
 ```
-7. Next is stack initialization. Each core has its own stack area. The startup code only initializes the stack registers for abort/undefined/system modes on the R52+, but does not initialize stack registers for irq/fiq modes, etc. Customers need to determine whether the stack registers for each mode of the R52+ need to be initialized based on their own OS situation.
-```c
-     /* Setup the stack for supervisor mode (entered from reset) */
-     mrs         r0, cpsr
-     and         r0, r0, #~0x00FF
-     orr         r0, r0, #0x0033
-     msr         cpsr_c, r0
-     sub         r3, r3, r1
-     mov         SP, r3         /* top of stack to SP_svc */
+7. Next is stack initialization. In the current RDK S100 startup code, stack regions are selected by Core ID for MCU1 core0/core1, and stack pointers are configured for SVC, FIQ, IRQ, ABORT, UNDEF, and SYSTEM modes. If stack size or layout needs adjustment, check linker script symbols `STACK_SIZE`, `STACK_SIZE_EXC`, `STACK_SIZE_MCU2`, and `STACK_SIZE_EXC_MCU2`, together with the corresponding stack init logic in `startup.s`.
 
-     ldr         r3, =__StackTop_exc
-     ldr         r2, =__StackLimit_exc
-     sub         r2, r3, r2     /* r2 : size in bytes */
-     mov         r4, #4
-     udiv        r1, r2, r4     /* r1 : size divided by 4 */
-     and         r1, r1, #~0x0f /* r1 size alligned to 16 bytes */
+```asm
+EL1_Reset_Handler:
+    mrc p15, 0, r0, c0, c0, 5
+    and r0, r0, #0x03
 
-     /* Go to FIQ mode and set stack (below the previous one) */
-     mrs         r0, cpsr
-     and         r0, r0, #~0x003F
-     orr         r0, r0, #0x0031
-     msr         cpsr_c, r0
-     sub         r3, r3, r1
-     mov         SP, r3
+    mov r12, r0
+    cmp r0, #0
+    beq setup_mcu1_stack
+    cmp r0, #1
+    beq setup_mcu2_stack
 
-     //.....Subsequent omitted code
+setup_mcu1_stack:
+    ldr         r3, =__StackTop
+    ldr         r2, =__StackLimit
+    ...
+    /* Setup the stack for supervisor mode */
+    ...
+    /* Go to FIQ mode and set stack */
+    ...
+    /* Go to IRQ mode and set stack */
+    ...
+    /* Go to ABORT mode and set stack */
+    ...
+    /* Go to UNDEF mode and set stack */
+    ...
+    /* Go to SYSTEM mode and set stack */
 ```
 8. Jump to main.
 ```c

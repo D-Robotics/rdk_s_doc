@@ -22,7 +22,7 @@ RDK camera 框架，如何快速的新增 camera 配置，并点亮 camera。
 
 :::
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_01.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_01.png" alt="范围示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 准备工作
 
@@ -84,7 +84,7 @@ dts，camera 驱动库及相关配置文件即可，系统库一般无需改动�
 video_gpio 节点中有配置，这样在开机启动时，系统才会将对应的 pin 设置为
 gpio，用户程序方可以操作 pin。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_03.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_03.png" alt="sensor GPIO 配置示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 vcon 是 RDK camera 用于管理 sensor 硬件相关的 dts 节点，如果 sensor
 需要对应的时序才能正常启动，则需要在该节点中配置对应的
@@ -154,7 +154,7 @@ echo 502 > /sys/class/gpio/unexport
 
 使用 i2cdetect 检测 sensor i2c 地址。如果检测到正确的地址，如下图所示，则表示 dts 配置正确，否则需要检查 dts 配置。
 
-| <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_04.png" alt="" style={{ width: '100%' }} /> | <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_05.png" alt="" style={{ width: '100%' }} /> |
+| <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_04.png" alt="i2cdetect 检测到正确地址" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> | <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_05.png" alt="i2cdetect 未检测到设备" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> |
 |--------------------------------------|--------------------------------------|
 
 
@@ -459,7 +459,7 @@ bash run_tuning.sh
 1. [点击此处](../../../01_Quick_start/download.md#工具下载)下载图像浏览工具 hbplayer。
 2. 打开 hbplayer 并设置网络地址（PC 需要与板子可以 ping 通），点 apply 设置生效，并点 connect 则可以看到实时视频流。实时预览操作示意如图所示。
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_06.png" alt="" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_06.png" alt="hbplayer 实时预览操作示意" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 错误码
 
@@ -484,16 +484,16 @@ bash run_tuning.sh
 
 启动方式如图所示。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_07.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_07.png" alt="control-tool 启动方式" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 脚本会自动识别板子 ip, 默认检查 eth1网卡 ip 地址。若需要修改为启动 eth0
 网卡，修改脚本 eth_id=eth0。修改位置如图所示。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_08.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_08.png" alt="修改网卡配置位置" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 修改通信地址示意图
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_09.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_09.png" alt="修改通信地址示意" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## HBN gmsl sensor 点亮
@@ -652,7 +652,7 @@ RDK S100 平台与 RDK S600 平台软件内容基本一致，仅有软件路径�
 :::
 
 RDK S100 Camsys sensor v4l2 驱动软件框架为标准的 v4l2 sub device 驱动。
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_10.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_10.png" alt="V4L2 sensor 驱动框架" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 下面以 IMX219驱动为例，介绍 MIPI 直连 sensor v4l2 驱动开发流程，imx219驱动源码位于：kernel/drivers/media/i2c/imx219.c
 
 #### 定义 sensor 私有结构体
@@ -783,7 +783,7 @@ RDK S100 默认加载 imx219设备树，设备树组织格式如下面所示，�
 
 ### V4L2 GMSL SerDes 接口调用说明
 Camsys 支持接入美信加串器的 sensor，camera 子板默认搭载美信解串器 MAX96712。GMSL sensor 同样作为一个 v4l2 subdev 接入 v4l2框架，这里加串器及解串器驱动为 gmsl sensor 驱动提供操作函数集，不实现为 v4l2 subdev。
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_11.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_11.png" alt="GMSL SerDes 接口框架" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 serdes 相关的一些数据结构及回调函数定义在 kernel/include/media/i2c/serdes_core.h，需要包含该头文件，#include \<media/i2c/serdes_core.h\>
@@ -982,16 +982,16 @@ dtc -q -@ -I dts -O dtb -o sample.dtbo sample.dtso
 1. 将编译生成的 dtbo 文件放置到 /boot/overlays 目录下
   若板端没有/boot/overlays 目录，用户可自行添加/boot/overlays 目录， 或者通过安装 hobot-camera.deb
 来获取/boot/overlays 目录 和 d457 sensor dtbo 文件
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_12.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_12.png" alt="overlays目录下的dtbo文件" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. 修改 config.txt 文件，配置要添加的 dtbo 文件
 若该位置没有 config.txt 文件， 用户可自行添加 config.txt 文件
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_13.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_13.png" alt="config.txt 配置示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
   按照下面的方法，修改 config.txt
 dtbo_file_path=/overlays/v0p5_d457_2v_depth_color.dtbo
 
 3. 重启板子，使能配置的 dtbo 文件。在 debug 版本的 uboot log 中，可以检查加载 dtbo 的情况
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_14.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_14.png" alt="uboot 加载 dtbo 日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Sensor gain LUT 表编写说明
 RAW 格式的 sensor，对接到 S100 ISP 图像系统，除了编写 sensor v4l2 驱动，另外需要制作一个 so，存放 sensor 增益 lut 转换表，包括 again lut、dgain lut 等。人眼对亮度的感知更接近对数尺度而非线性尺度，dB 单位更符合这种感知，S100 ISP 这里 sensor 增益 lut 表存放的 gain 数组，需要存放 db 单位连续的 sensor gain 寄存器配置值，供 ISP 调节 sensor 增益时找到对应的 sensor 寄存器值，下发到 sensor。下面以 imx219为例，介绍 v4l2 sensor lut so 如何制作。
@@ -1262,8 +1262,8 @@ scene num 的说明参考 [scene 场景说明](./01_camsys.md#场景说明)
 
 #### 预览图片
 D457 SDK 编译完成后，在终端输入 realsense-viewer，添加 D457 设备，即可预览，如下：
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_16.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_16.png" alt="D457 预览效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 viewer 默认显示一路 D457，如果需要显示多路数据，请点击左上角 Add Source 按钮进行添加。
 
 335Lg SDK 编译完成后，启动 viewer 并查看 depth 和 color 图像。
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_17.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_17.png" alt="335Lg 预览效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

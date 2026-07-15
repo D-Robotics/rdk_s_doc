@@ -296,7 +296,7 @@ D-Robotics:/$ spi_test 1
 spi_test 2 [bus_id] [cs_id]
 ```
 - bus_id: SPI 总线 ID（可选，默认为4），此处的 busid 必须存在于参数配置组中（即通过 spi_test 1命令显示的参数配置组），否则测试将失败
-- cs_id: 芯片选择 ID，范围0~3（可选，默认为0，当前仅支持 cs0的测试，cs1~3需要修改代码后测试）
+- cs_id: 芯片选择 ID，范围 0 ~ 3（可选，默认为0，当前仅支持 cs0 的测试，cs1 ~ 3需要修改代码后测试）
 
 ```shell
 D-Robotics:/$ spi_test 2 4 0
@@ -521,6 +521,7 @@ erDiagram
 | SpiSequence_3 | <font color='green'>SPI13</font> | <font color='green'>CSIB9</font> | <font color='green'>9</font> | 1000000 | CS1 | 8 bit |
 | SpiSequence_4 | <font color='green'>SPI4</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 1000000 | CS0 | 8 bit |
 | SpiSequence_5 | <font color='green'>SPI4</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 1000000 | CS1 | 8 bit |
+
 </DocScope>
 
 :::tip

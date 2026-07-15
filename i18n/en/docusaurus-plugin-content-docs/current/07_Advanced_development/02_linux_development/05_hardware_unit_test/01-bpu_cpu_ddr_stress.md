@@ -418,7 +418,7 @@ watch -n1 cat /sys/devices/system/bpu/ratio  # Real-time observation with 1-seco
 
 Execute the `htop` command to view CPU utilization
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Htop.png" alt="Htop" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Htop.png" alt="Test Method diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Each line shows the status of a CPU core in the format:
 

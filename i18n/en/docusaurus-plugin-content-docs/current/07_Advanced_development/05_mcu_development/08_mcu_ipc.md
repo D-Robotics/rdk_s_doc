@@ -121,7 +121,7 @@ The application samples all run on the Acore side and communicate with MCU1. The
 IpcBox is an application extension based on the IPC communication framework on the MCU side. It is used to manage the passthrough functionality of peripherals. The implementation block diagram is as follows:
 Various peripherals are managed through a unified interface into the IpcBox. Simply put, peripheral data is forwarded through the IPC Box and returned to the Acore side. Similarly, data from the Acore side is forwarded through the IpcBox to operate the actual peripherals. The data flow is: `Acore<->IPC<->MCU<->Peri`
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IPCBOX Architecture Diagram" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IpcBox Feature Introduction{#IPCBOX} diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 Refer to the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md) section for the corresponding Acore side application.
@@ -258,7 +258,7 @@ The data forwarding for various peripherals via IPC Box is similar. The implemen
     - There is a resident thread on the MCU that continuously checks if the queue is empty. If not, it validates and parses the data, identifies the CMD command, and runs it.
     - The FreeRTOS CMD application is similar to U-Boot CMD commands. This allows users to easily customize their own applications. In this scenario, the executed CMD reads the ADC value and returns it to the Acore via IPC.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="Data Passthrough Architecture Diagram between Acore and MCU for CAN Data" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="Data Passthrough Architecture Diagram between Acore and MCU for CAN Data" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Implementation of IpcBox Uart
 Similar to the RunCmd implementation, in this scenario, when the MCU sends data to the Acore, it triggers an interrupt on the MCU, but does not use a queue for storage.

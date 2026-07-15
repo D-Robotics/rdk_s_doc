@@ -62,7 +62,7 @@ Serial port login requires a PC terminal tool. Commonly used tools include `Putt
 
 - When the serial port USB adapter board is plugged into the computer for the first time, you need to install the serial port driver. The driver can be obtained from the [Tools subsection](https://developer.d-robotics.cc/resource) of the Resource Center. After the driver is installed, the Device Manager can properly recognize the serial port board port, as shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="image-20220416105939067" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="Serial port recognized in Device Manager" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Open the `MobaXterm` tool, click `Session`, then select `Serial`
 
@@ -79,7 +79,7 @@ Serial port login requires a PC terminal tool. Commonly used tools include `Putt
   | Flow Control            | None   |
 
 - Click `OK`, log in to the device by entering username: `root`, password: `root`
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="image-Uart-Login" style={{ width: '100%' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="Connecting Serial Port on Windows demonstration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 At this point, you can use the `ifconfig -a` command to query the development board's IP address, where eth0/eth1 and wlan0 represent wired and wireless networks respectively:
 
@@ -186,9 +186,9 @@ Under the macOS system, use the minicom tool to connect to the serial port. The 
       -b       # Set the serial port baud rate
       -8       # Set the number of data bits to 8 bits
       ```
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="image-S100-download" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="Example of minicom serial port connection command on macOS" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 2. Verify connection to the development board
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="image-S100-download" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="Successful connection to the development board via minicom on macOS" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 
@@ -210,7 +210,7 @@ The outer wired Ethernet port (eth1) of the development board uses static IP mod
 - Find the Internet Protocol Version 4 option and double-click to open it.
 - Fill in the corresponding network parameters in the red box area in the figure below and click OK.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="image-20220416110242445" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="Windows static IP configuration dialog" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 If you need to configure the development board's wired network to DHCP mode for dynamic acquisition, refer to the [Wired Network](../02_System_configuration/01_network_bluetooth.md) section.
 
@@ -226,7 +226,7 @@ Commonly used terminal tools include `Putty`, `MobaXterm`, etc. Users can choose
 3. Select `specify username` and enter `sunrise`
 4. After clicking OK, enter the username (sunrise) and password (sunrise) to complete the login
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="image-Network-Login" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="Terminal Software demonstration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Computer Command Line
 
@@ -236,7 +236,7 @@ Users can also log in via SSH using the command line. The steps are as follows:
 2. When a connection confirmation prompt appears, enter YES
 3. Enter the password (sunrise) to complete the login
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="image-Cmdline-Linux" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="Computer Command Line demonstration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## NoMachine Login
 
@@ -250,18 +250,18 @@ This section is for users using the Ubuntu Desktop system version and describes 
 
 1. Open the `NoMachine` client and click `Add` to add a host configuration.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="nomachine_login01" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. In the pop-up interface, fill in the host information for `RDK100/RDKS600`, then click `Add`.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="nomachine_login02" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3. Return to the main interface and double-click the host you just created.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="nomachine_login03" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 4. A login interface will appear. Enter the username and password, then click OK to complete the remote login.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="nomachine_login04" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="nomachine_login05" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

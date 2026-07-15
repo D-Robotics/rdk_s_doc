@@ -512,7 +512,7 @@ TimeSync\_PPS\_Index： 配置使用哪个 PPS 进行时间同步，可以使用
 ### S600 PPS 介绍
 </DocScope>
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image43.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image43.png" alt="S600 PPS 介绍实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 如上图所示，PPS 可以分为 PPS Source 和 PPS Target。PPS Source 产生 PPS，经过中间的 Trigger Bus 送到 PPS Target，PPS Target 利用送来的 PPS 产生 snapshot 或者 LPWM 波形。
 
@@ -621,7 +621,7 @@ fixed mode: 固定的 pps 模式，它的周期固定，且占空比也固定为
 
 若在 fixed mode 下有整秒时刻输出 PPS 的需求，需要注意 ETH 的整秒时刻在下降沿出现，而 LPWM 被 ETH 上升沿同步。因此需要参考下图，调整 LPWM 的 offset。以 camera 一秒30帧举例，PPS 上升沿在536.871ms，下降沿在1s 整秒处，要求在整秒位置出图的话，offset=463.129对33.333取余数=29.8ms。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image44.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image44.png" alt="Acore Eth PPS 介绍{#Acore\_Eth\_PPS}实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -729,7 +729,7 @@ cat /sys/class/pps/pps[*]/name
 
 ##### 时间源接入 Acore 的单时间域方案
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image45.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image45.png" alt="软件架构说明实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 上图时间同步流程总结如下：
 

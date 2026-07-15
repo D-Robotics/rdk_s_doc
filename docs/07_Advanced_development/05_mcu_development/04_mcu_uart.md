@@ -67,7 +67,7 @@ S600 MCU 芯片共有4路 Uart，即 Uart8~Uart11。其中 Uart8作为调试控�
 - Hardware: UART 硬件。
 
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_uart.png" alt="MCU 软件架构图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_uart.png" alt="MCU 软件架构图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 
@@ -93,7 +93,7 @@ S600 MCU 芯片共有4路 Uart，即 Uart8~Uart11。其中 Uart8作为调试控�
 
 S100 开发板将 Uart5引出供用户开发学习使用，PIN 脚位于`Main Board`板上的`MCU Expansion Header(J22)`。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_interface.png" alt="image-rdk_100_mainboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_interface.png" alt="使用示例实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 当 Uart5 可能用于 Ipc 透传时会与测试用例产生冲突，产生测试失败的现象，可以通过 `ipcbox_set_mode debug` 命令确认，若 `uart` 所在行显示 `Enable` 则代表已经被占用。
@@ -171,7 +171,7 @@ D-Robotics:/$ uarttest 6
 
 S600 开发板将 Uart10和 Uart11引出供用户开发学习使用，PIN 脚位于`Main Board`板上上的`2x UART(MAIN)/2x UART(MCU)(J18)`
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png" alt="RDK S600主板接口图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ### 使用示例

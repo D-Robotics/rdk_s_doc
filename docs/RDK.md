@@ -53,7 +53,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **RDK S100 系列** 是一款高性能开发套件，具有 80/128 TOPS 端侧推理算力与 6 核 ARM A78AE 处理能力，支持 2 路 MIPI Camera 接入，4 路 USB 3.0 接口，2 路 PCIe3.0 接口，充分满足各类场景的使用需求。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="image-rdks100-serials" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="产品介绍示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 
@@ -61,7 +61,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **RDK S600 系列** 是一款高性能开发套件，具有 560 TOPS 端侧推理算力与 18 核 ARM A78AE 处理能力，支持 6 路 MIPI Camera 接入，6 路 USB 3.0 接口，4 路 PCIe3.0 接口，充分满足各类场景的使用需求。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="image-rdks600-serials" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="产品介绍示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 

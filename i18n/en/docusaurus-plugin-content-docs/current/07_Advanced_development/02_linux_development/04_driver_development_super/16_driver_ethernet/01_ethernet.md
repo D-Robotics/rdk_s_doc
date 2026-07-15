@@ -731,7 +731,7 @@ This document mainly includes a network card usage guide, development board Brin
 - TSN refers only to the Layer 2 Data Link Layer standard of the ISO/OSI reference model in IEEE 802.1Q.
 - The VLAN of the 802.1Q standard inserts 4 bytes into the standard Ethernet frame to define its characteristics. The tag bits of TSN are shown in the figure below:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image15.png" alt="vlan-tag" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image15.png" alt="TSN-VLAN photo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - For TSN networks, services with different priorities or Classes of Service (CoS) correspond to the PCP code in the figure above. The Priority Code Point (PCP) consists of 3 bits; the 3-bit PCP code defines 8 priorities from 0 (lowest) to 7 (highest), with transmission types corresponding to Best Effort, Excellent Effort, Critical Applications, Video (&lt;100ms delay and jitter), Audio (&lt;10ms delay and jitter), Internetwork Control, and Network Control, respectively.
 
@@ -747,7 +747,7 @@ This document mainly includes a network card usage guide, development board Brin
 - EST is defined by IEEE 802.1Qbv, also known as TAS (Time Awareness Shaper). It is a mechanism that dynamically provides on/off control for egress queues based on a pre-set periodic gate control list.
   Qbv defines a time window. This window is pre-determined in the mechanism. The gate control list is scanned periodically and opens transmission ports for different queues in a pre-defined order.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image16.jpg" alt="tsn-est" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image16.jpg" alt="Data Scheduling (Shaper) photo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Block diagram of the IEEE 802.1Qbv specification, illustrating how the gate control list manages gate close (C-close) and open (O-open) events based on the schedule provided for each event.
 - The GCL has the following two parts:
@@ -757,7 +757,7 @@ This document mainly includes a network card usage guide, development board Brin
 ##### Frame Preemption (FPE) (IEEE 802.1Qbu-2016)
 - To address the waste of protection bandwidth and priority inversion issues of EST, the preemption standard was introduced. Therefore, TSN's 802.1Qbu and the IEEE 802.3 working group jointly developed IEEE 802.3br, the preemptable MAC mechanism, consisting of pMAC (Preemptable MAC) and eMAC (express MAC). pMAC can be preempted by eMAC. Through preemption, the protection bandwidth can be reduced to the shortest low-priority frame fragment.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media_en/image17.png" alt="tsn-fpe" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media_en/image17.png" alt="Data Scheduling (Shaper) photo" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 - Since preemption changes the frame format, the peer switch also needs to support FPE when connecting.
@@ -831,7 +831,7 @@ This document mainly includes a network card usage guide, development board Brin
 
 - Wireshark packet capture example:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image27.png" alt="tc-est" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image27.png" alt="Queue 3 sends every 100ms, once for 10ms photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Testing
 #### Functional Testing
@@ -1011,7 +1011,7 @@ This document mainly includes a network card usage guide, development board Brin
 #### Network Environment
 - Q: S100 cannot ping Windows, but Windows can ping S100?
 - A: Check if Windows firewall is turned off; Windows built-in firewall is shown below:
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="windows-firwall" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="Network Environment photo" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### U-Boot Debugging and Upgrade
 - Q: U-Boot network auto-negotiation fails or cannot ping after negotiating to Gigabit?

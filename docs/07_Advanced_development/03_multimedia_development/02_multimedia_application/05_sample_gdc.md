@@ -33,7 +33,7 @@ sample_gdc 目录下是用于演示如何使用 GDC 的示例程序，主要功�
 
 ### 开发和使用流程
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/S100-gdc.jpg" alt="S100-gdc" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/S100-gdc.jpg" alt="S100 GDC 数据流图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 在 PC 上使用 `generate_custom_config.py` 程序生成 GDC 的矫正标定配置参数。
 
@@ -41,7 +41,7 @@ sample_gdc 目录下是用于演示如何使用 GDC 的示例程序，主要功�
 
 - 使用目标 Camera Sensor 在不同角度下拍摄棋盘格图片，拍摄15张左右，建议多拍一些。
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Checkerboard_Image.png" alt="Checkerboard_Image" style={{ width: '100%' }} />
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Checkerboard_Image.png" alt="棋盘格标定图片" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 以上面的棋盘格图片作为输入，执行以下 python 程序（确保系统支持 Python 3，和安装了 `opencv-python` 库），生成 GDC 的矫正标定参数文件（custom_config.txt）：
 
@@ -139,9 +139,9 @@ sample_gdc 目录下是用于演示如何使用 GDC 的示例程序，主要功�
 
   如果在图形化桌面的终端运行，会显示执行过程中的标定和矫正效果：
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Calibration_Process.png" alt="Calibration_Process" style={{ width: '100%' }} />
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Calibration_Process.png" alt="标定流程" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Correction_Effect.png" alt="Correction_Effect" style={{ width: '100%' }} />
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Correction_Effect.png" alt="校正效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 generate_custom_config.py 的选项参数：
 
@@ -633,8 +633,8 @@ Options:
 #### 运行效果说明
 原始图像如下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Original_Image.png" alt="Original_Image.png" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Original_Image.png" alt="运行效果说明实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 分别对每个 json 解析变换后，输出4张处理后的 NV12 格式的 YUV 图像，效果如下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="Transformed_Effect" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="变换效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

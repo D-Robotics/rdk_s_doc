@@ -24,7 +24,7 @@ Execute the program with the following commands:
 
 ## Expected Result
 After running the program, the display will show the live camera feed along with the object detection results (object class and confidence score), as shown below:
-  ![image-20220612110739490](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/image-20220612110739490.png)
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/image-20220612110739490.png" alt="USB camera object detection result on display" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 :::tip
 
@@ -53,7 +53,7 @@ Execute the program with the following commands:
 
 ## Expected Result
 After running the program, the display will capture and show the current camera frame, as shown below:
-  ![usbsnap_2025-06-24_15-50-26](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/usbsnap_2025-06-24_15-50-26.png)
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/usbsnap_2025-06-24_15-50-26.png" alt="USB camera snapshot result" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 :::tip
 

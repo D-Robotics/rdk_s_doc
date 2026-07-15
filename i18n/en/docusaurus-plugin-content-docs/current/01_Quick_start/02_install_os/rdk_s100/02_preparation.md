@@ -15,11 +15,11 @@ The **RDK S100** comes pre-burned with a test version of the system image. To en
 The RDK S100 kit currently provides the Ubuntu 22.04 system image, which supports Desktop graphical interaction.
 1. [[Click here]](../../download.md#system-software) to download the image.
 
-    ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png" alt="Image Download diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 2. After extraction, you will get the `product` folder with the structure shown below. Ensure that the same folder contains the `img_packages` folder and the `xmodem_tools` file.
 
-    ![Product folder interface](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/acore-product.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/acore-product.png" alt="Product folder interface" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## Burning Tool Download
 

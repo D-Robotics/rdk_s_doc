@@ -367,7 +367,7 @@ D-Robotics:/$ gpio_interrupt on
 
 Connect one end of a jumper wire to the two GPIO pins shown below and the other end to ground.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/gpio_interrupt.png" alt="GPIO wiring diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/gpio_interrupt.png" alt="GPIO Interrupt Sample diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 If the serial port prints the following, the GPIO interrupt was triggered successfully:
 
@@ -772,7 +772,7 @@ D-Robotics:/$ gpio_interrupt on
 
 Connect one end of a jumper wire to the two GPIO pins shown below and the other end to ground.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/gpio_interrupt.png" alt="GPIO wiring diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/gpio_interrupt.png" alt="GPIO Interrupt Sample diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 If the serial port prints the following, the GPIO interrupt was triggered successfully:
 

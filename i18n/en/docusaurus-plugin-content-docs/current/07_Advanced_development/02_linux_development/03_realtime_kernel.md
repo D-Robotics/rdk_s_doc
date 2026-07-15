@@ -42,9 +42,9 @@ The test results will display the system’s minimum, maximum, and average laten
 
 Analyze the `cyclictest` results to evaluate the real-time kernel's performance. Pay close attention to the minimum and maximum latencies to ensure they fall within acceptable ranges. A lower maximum latency and more consistent latency values indicate better real-time kernel performance. The figures below show test results obtained while using the real-time kernel and running the `/app/pydev_demo/03_mipi_camera_sample` example.
 
-![image-20230914145619064](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png" alt="cyclictest real-time performance test latency histogram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![image-20230914145234528](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145234528.png" alt="cyclictest real-time performance test latency statistics" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 The fields in the `cyclictest` output have the following meanings:
 

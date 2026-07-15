@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 1.1.1.3 MCU Port Expansion Board
 
-![image-rdk_100_mcu_port_expansion_board](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png" alt="MCU Port Expansion Board" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 The RDK S100 MCU Port Expansion Board (including the matching FPC) is a core expansion module for the D-Robotics RDK S100 series developer kit. It is mainly used to expand MCU interface functions, supporting Ethernet, CAN_FD, ADC, and more.
 
@@ -38,11 +38,11 @@ To avoid malfunction or damage to this expansion board, strictly follow these gu
 
 ### Topology Diagram
 
-![image-rdk_s100_mcu_port_expansion_board_architecture_diagram.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_mcu_port_expansion_board_architecture_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_mcu_port_expansion_board_architecture_diagram.png" alt="Topology Diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Interface Description
 
-![image-rdk_100_cam_expansionboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board_interface.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board_interface.png" alt="Interface Description" style={{ width: "70%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 | **Reference** | **Function**                              | Reference | Function                    |
 | ------------- | ------------------------------------------- | --------- | --------------------------- |

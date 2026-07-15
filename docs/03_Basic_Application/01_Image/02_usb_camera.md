@@ -24,7 +24,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=18
 
 ## 预期效果
 程序执行后，显示器会实时显示摄像头画面及目标检测算法的结果(目标类型、置信度)，如下所示：
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/image-20220612110739490.png" alt="image-20220612110739490" style={{ width: '100%' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/image-20220612110739490.png" alt="USB摄像头目标检测算法运行结果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 
@@ -52,7 +52,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=18
 
 ## 预期效果
 程序执行后，显示器会抓取当前摄像头画面，如下所示：
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/usbsnap_2025-06-24_15-50-26.png" alt="usbsnap_2025-06-24_15-50-26" style={{ width: '100%' }} />
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/usb_camera/usbsnap_2025-06-24_15-50-26.png" alt="USB摄像头抓拍画面效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 

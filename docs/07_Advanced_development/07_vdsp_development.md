@@ -385,11 +385,11 @@ Manual：\<VDSP 安装路径\>/xtensa/XtDevTools/downloads/\<version\>/docs/xos_
 
 VDSP 地址映射以及 MPU 保护部分如下图所示，访问 MPU 保护地址范围外会报 coredump 错误。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_2.png" alt="image_2" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_2.png" alt="VDSP地址映射及MPU保护范围示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 报错 log 如下图所示，错误地址为0x0，表示访问了不允许访问的地址：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_3.png" alt="image_3" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_3.png" alt="VDSP访问非法地址0x0时的coredump报错日志" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 目前对于 VDSP 地址的属性配置，主要包括三个部分：
 
@@ -446,7 +446,7 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 
 #### VDSP 侧 idma 使用哪个库？
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_5.png" alt="image_5" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_5.png" alt="VDSP侧idma可选库：libidma-os和libidma-debug-os" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 请使用 libidma-os 或者 libidma-debug-os，因为我们使用 xos。
 
@@ -477,15 +477,15 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 需要更改 sim 的 xmm 文件，路径：xtensa/xtensa/XtDevTools/install/builds/RI-2023.11-win32/Vision_Q8/xtensa-elf/lib/sim/memmap.xmm，
 将相应的溢出段的值改大，在 xplorer 下打开 cmd：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_6.png" alt="image_6" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_6.png" alt="在Xplorer中打开命令行窗口" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 进到 xtensa-elf/lib 路径下：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_7.png" alt="image_7" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_7.png" alt="进入xtensa-elf/lib路径的终端操作界面" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 执行 xt-genldscripts -b sim，如下提示表明成功：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_8.png" alt="image_8" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_8.png" alt="执行xt-genldscripts -b sim命令的成功输出提示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 再次编译 vdsp 工程，进行 sim 软仿。
 
@@ -493,13 +493,13 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 
 出现此情况可以查看 idma init 函数中，是否有设置运行时间，置0可以关闭时间限制：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png" alt="image_9" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png" alt="IDMA初始化函数中运行时间限制参数的设置代码" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 在 windows 环境编译出的镜像提示 dcore0_rpmsg_op server not start
 
 需要手动在 Build Properties 中添加 CONFIG_TEST_CASE：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png" alt="image_10" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png" alt="在Build Properties中手动添加CONFIG_TEST_CASE宏的配置界面" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 在总线程个数大于32的运行环境下，线程状态查看功能不生效
 
@@ -548,26 +548,26 @@ Firmware 状态并确保已经进入停止状态后才继续相应的动作；�
 
 需要同时实现 ARM 侧和 VDSP 两侧的开发，当前基于 RPMSG IPC 通信机制实现 client/server 业务交互逻辑。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp1.png" alt="vdsp1" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp1.png" alt="VDSP软件架构：ARM与VDSP通过RPMSG IPC通信的client/server交互示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### ARM 侧开发流程
 
 ARM 侧用户主要是加载 VDSP Firmware，并连接 VDSP 侧的服务，作为 client 端向 VDSP 侧发送 rpmsg 计算请求。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp2.png" alt="vdsp2" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp2.png" alt="ARM侧开发流程：加载VDSP固件并作为client端发送rpmsg计算请求" style={{ width: '20%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### VDSP 侧开发流程
 
 VDSP 侧主要是初始化其运行环境、启动相关的服务（VDSP 侧作为 server 端可启动多个服务，支持一对一的模式），
 并能通过 rpmsg 机制接收和回复 client 端的信息，此外还可启动其他线程进行业务开发。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp3.png" alt="vdsp3" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp3.png" alt="VDSP侧开发流程：初始化运行环境并启动服务接收rpmsg请求" style={{ width: '30%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 本用例流程说明：
 
 ARM 侧和 VDSP 的交互流程如下所示：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp4.png" alt="vdsp4" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp4.png" alt="ARM侧与VDSP侧的RPMSG交互流程时序图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ARM 侧：
 

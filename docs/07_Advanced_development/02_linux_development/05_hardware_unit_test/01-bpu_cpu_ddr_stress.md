@@ -418,7 +418,7 @@ watch -n1 cat /sys/devices/system/bpu/ratio  # 1 秒刷新实时观测
 
 执行 `htop` 命令查看 `CPU` 的占用率
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Htop.png" alt="Htop" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Htop.png" alt="测试方法示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 其中每一行显示了一个 CPU 核心的状态，格式为：
 

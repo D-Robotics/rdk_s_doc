@@ -8,7 +8,7 @@ sidebar_position: 1
 
 **OTA** (Over-the-Air Technology) refers to technology that enables remote software upgrades through wireless networks. First introduced by the Android system to mobile devices, OTA technology has significantly simplified the traditional software upgrade process. Without requiring computer connections, users can directly download and install updates on their devices. This technology greatly facilitates users and improves device maintenance efficiency.
 
-![ota_intro](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_intro.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_intro.png" alt="Overview diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - In the broad application of OTA, it can be divided into two main components: the cloud side and the device side. The cloud side is responsible for handling device upgrade requests, including performing upgrade verification, delivering upgrade packages, and collecting upgrade results. The device side primarily relies on upgrade packages delivered from the cloud to complete updates and upgrades of system software (FOTA, Firmware Over-the-Air) or applications (SOTA, Software Over-the-Air).
 - This document aims to provide a user manual for OTA on the underlying device side, elaborating on the mechanisms and implementation methods of OTA in upgrading underlying system software and applications, while also providing relevant development guidance. It should be particularly noted that the system software and applications upgraded via OTA mainly refer to updating data stored in external storage (such as eMMC).
@@ -576,15 +576,15 @@ The following process takes the implementation in ota_tool as an example (develo
 
 - Preparation Phase:
 
-    ![ota_tool_sequence_step1](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step1-en.jpg)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step1-en.jpg" alt="OTA Process diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - Upgrade Phase:
 
-    ![ota_tool_sequence_step2](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step2-en.jpg)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step2-en.jpg" alt="OTA Process diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - Verification Phase:
 
-    ![ota_tool_sequence_step3](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step3-en.jpg)   
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step3-en.jpg" alt="OTA Process diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />   
 
 ### OTA State Machine
 
@@ -604,7 +604,7 @@ typedef enum otahl_update_result {
 } otahl_update_result_e;
 ```
 
-![ota_package_state](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_package_state-en.jpg)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_package_state-en.jpg" alt="Upgrade Package State diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### OTA Upgrade Process State
 The state is stored in veeprom. The process description is as follows:
@@ -617,7 +617,7 @@ typedef enum ota_update_flag {
 } ota_update_flag_e;
 ```
 
-![ota_upgrade_state](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_upgrade_state-en.jpg)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_upgrade_state-en.jpg" alt="OTA Upgrade Process State diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### misc (AB State Machine)
 1. Area Allocation
@@ -689,7 +689,7 @@ typedef enum ota_update_flag {
 
 3. State Machine Description
 
-    ![ab_state](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ab_state.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ab_state.png" alt="misc (AB State Machine) diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 - State 1: Default state, both AB slots are bootable. b has higher priority than a, boots from b by default.
 
 - State 2: Upgrade state (burning state), a slot is unbootable and boot success is 0.
@@ -749,7 +749,7 @@ The state machine for OTA updates is stored in this area. Below is the applicati
 
 ### Boot State Switching
 The diagram below illustrates how A/B slots are switched during normal boot (this process applies regardless of whether an OTA update is performed):
-    ![boot_slot_select](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/boot_slot_select-en.jpg)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/boot_slot_select-en.jpg" alt="Boot State Switching diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - During boot, the ROM boot count automatically increments (this flag is located in the AON domain and resets upon power-off).
 
@@ -761,7 +761,7 @@ The diagram below illustrates how A/B slots are switched during normal boot (thi
 
 ### Reboot Verification and Rollback
 In the S100 reference implementation, after the OTA update completes and the system reboots, the kernel triggers the systemd OTA service to perform a reboot check, thereby completing the full OTA process (essentially executing `ota_tool -b`).
-    ![ota_boot_check_state](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_boot_check_state-en.jpg)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_boot_check_state-en.jpg" alt="Reboot Verification and Rollback diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Partition Flashing Method
 OTA performs upgrades on a per-partition basis. Each partition to be upgraded has its own image. During the upgrade process, the primary task is to write this image to the corresponding partition in the external storage. Image types are further divided into two forms: full images and delta (differential) images.
@@ -817,7 +817,7 @@ OTA performs upgrades on a per-partition basis. Each partition to be upgraded ha
 
 10. It calls `otaClearFlags` to clear the upgrade flags and conclude the upgrade process.
 
-    ![otaservice](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otaservice-en.jpg)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otaservice-en.jpg" alt="Typical Upgrade Process diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ## OTA Client-Side Tool Introduction
 
@@ -960,7 +960,7 @@ err:
 5.  If the upgrade result (`otaGetResult`) is `OTA_UPGRADE_SUCCESS`, it considers the upgrade successful, calls `otaSetPartition` to set the AB slot to the opposite slot, and then reboots the SoC.
 
 
-    ![otatool-ota_update_all_img](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_update_all_img-en.jpg)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_update_all_img-en.jpg" alt="ota_update_all_img diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 After the upgrade process finishes and the system reboots, `ota_tool -b` should be launched to check and verify the upgrade result, and to perform subsequent operations.
 
@@ -1032,7 +1032,7 @@ exit:
 
 7.  Calls `otaPartitionSync` to synchronize AB partitions and BAK partitions.
 
-    ![otatool-ota_boot_check](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_boot_check-en.jpg)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_boot_check-en.jpg" alt="ota_boot_check diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 ## OTA API Introduction

@@ -8,7 +8,7 @@ sidebar_label: 1.1.2 相机扩展板
 
 # 1.1.2 相机扩展板
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="image-rdk_s600_camera_expansion_board" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="RDK S600 相机扩展板" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <details>
 <summary>当前文档对应 **相机扩展板 V1P0** 版本，点击查看历史版本</summary>
@@ -69,15 +69,15 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 拓扑图
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_architecture_diagram.png" alt="image-rdk_s600_camera_expansion_board_architecture_diagram.png" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_architecture_diagram.png" alt="RDK S600 相机扩展板架构拓扑图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 接口说明
 
 <!-- **V0P2 接口图**
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png" alt="RDK S600相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **V0P3 接口图** -->
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="s600_camera_expansion_board_interface" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="RDK S600 相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 | 位号  | 功能            |

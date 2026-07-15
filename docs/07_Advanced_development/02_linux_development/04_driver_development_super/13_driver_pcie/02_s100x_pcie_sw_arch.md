@@ -7,7 +7,7 @@ sidebar_position: 2
 
 PCIe 软件框架分为 RC 和 EP 两个部分：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch.png" alt="S100_600_PCIE_sw_arch" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/sw_arch.png" alt="软件框架示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## 驱动模块说明
 

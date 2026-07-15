@@ -37,7 +37,7 @@ import DocScope from '@site/src/components/DocScope';
         * **奇偶校验 (Parity):** None (无)
         * **流控 (Flow control):** None (无)
     * 串口号 (COM Port)：确保选择了连接 USB 转串口模块后在电脑设备管理器中识别到的正确串口号。
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124200013163.png" alt="串口终端参数配置示例" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124200013163.png" alt="串口终端参数配置示例" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 4.  **USB 转串口模块驱动：** 确保电脑已正确安装 USB 转串口模块的驱动程序。
 5.  **尝试其他串口模块或 USB 口：** 排除模块或 USB 接口故障的可能。
 
@@ -81,7 +81,7 @@ import DocScope from '@site/src/components/DocScope';
         1.  仔细检查您输入的用户名是否正确（例如 `sunrise`, `root`, `hobot` 等，取决于您的系统镜像和配置）。
         2.  仔细检查您输入的密码是否正确，注意大小写。
         3.  尝试使用开发板的默认账户和密码（如果未修改过）。
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124201544978.png" alt="SSH认证失败示例" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124201544978.png" alt="SSH认证失败示例" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Q6: 开发板使用无线网络时，连接不稳定、传输速度慢，怎么办？
 **A:**

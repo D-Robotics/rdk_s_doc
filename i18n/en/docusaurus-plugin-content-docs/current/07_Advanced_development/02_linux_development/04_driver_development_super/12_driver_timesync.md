@@ -511,7 +511,7 @@ If you want to configure RTC and GPS for time synchronization, the configuration
 ### S600 PPS Introduction
 </DocScope>
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image43.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image43.png" alt="S600 PPS Introduction photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 As shown in the figure above, PPS can be divided into PPS Source and PPS Target. The PPS Source generates PPS, which is sent to the PPS Target via the intermediate Trigger Bus. The PPS Target uses the incoming PPS to generate snapshots or LPWM waveforms.
 
@@ -620,7 +620,7 @@ If there is a requirement for PPS output at the exact second in flex mode, confi
 
 If there is a requirement for PPS output at the exact second in fixed mode, note that the exact second of ETH occurs at the falling edge, while LPWM is synchronized with the rising edge of ETH. Therefore, refer to the figure below to adjust the offset of LPWM. For example, for a camera running at 30 frames per second, the PPS rising edge occurs at 536.871ms, and the falling edge occurs at the exact second. To output an image at the exact second, set offset = 463.129 mod 33.333 = 29.8ms.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image44.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image44.png" alt="Introduction to Acore Eth PPS {#Acore\_Eth\_PPS} photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -726,7 +726,7 @@ This chapter mainly uses S100 as an example to introduce the time synchronizatio
 
 ##### Single Time Domain Solution for Time Source Accessing Acore
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image45.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image45.png" alt="Software Architecture Explanation photo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The time synchronization process in the above figure is summarized as follows:
 

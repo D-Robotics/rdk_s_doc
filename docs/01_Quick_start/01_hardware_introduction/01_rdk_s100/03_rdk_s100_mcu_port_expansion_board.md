@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 1.1.3 MCU 接口扩展板
 
-![image-rdk_100_mcu_port_expansion_board](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png" alt="RDK S100 MCU 接口扩展板" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 RDK S100 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S100 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持以太网、CAN_FD、ADC 等。
 
@@ -38,11 +38,11 @@ RDK S100 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S100 
 
 ### 拓扑图
 
-![image-rdk_s100_mcu_port_expansion_board_architecture_diagram.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_mcu_port_expansion_board_architecture_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s100_mcu_port_expansion_board_architecture_diagram.png" alt="RDK S100 MCU 接口扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 接口描述
 
-![image-rdk_100_cam_expansionboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board_interface.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board_interface.png" alt="RDK S100 MCU 接口扩展板接口示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | **序号** | **功能**                  | 序号 | 功能                   |
 | -------- | ------------------------- | ---- | ---------------------- |

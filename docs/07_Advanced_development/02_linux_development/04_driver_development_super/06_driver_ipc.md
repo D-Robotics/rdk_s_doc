@@ -19,12 +19,12 @@ IPC（Inter-Processor Communication）模块是用于多核之间的通信，支
 Acore 与 MCU 之间的核间通信，Acore 侧主要使用 IPCFHAL，MCU 侧使用 IPCF，其中 IPCFHAL 是基于 IPCF 封装了一层接口，用于用户态与内核态的数据传递。
 
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/linux-ipc.jpg" alt="IPCF软硬件组件框图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/linux-ipc.jpg" alt="IPCF软硬件组件框图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## IPC 典型使用场景
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcscen.png" alt="IPC典型使用场景图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcscen.png" alt="IPC典型使用场景图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 IPC 典型应用场景有 OTA 模块、规控、CANHAL 等。
@@ -235,7 +235,7 @@ ipc_instance3: ipc_instance3 {
 
 IPC Sample 实现 Acore 与 MCU 之间的 IPC 收发通信，展示 IPC 多实例多通道多线程的使用示例。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleframeware.png" alt="Acore与MCU之间的IPC收发通信" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleframeware.png" alt="Acore与MCU之间的IPC收发通信" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Sample 软件架构图中 Acore 使用 libipcfhal 的接口进行数据收发，底层基于 ipcf 的驱动，MCU 直接使用 ipcf 的接口进行收发。其中由于 Acore 侧有多套 IPC 接口，便于区分，分别描述为 IPCFHAL、RPMSG、IPCF，MCU 侧只有一套 IPC 接口，因此 IPCF 在 MCU 侧文档统一描述为 IPC。
 
@@ -244,7 +244,7 @@ Sample 软件架构图中 Acore 使用 libipcfhal 的接口进行数据收发，
 Sample 的共享内存数据流和中断信号流
 
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampledataflow.png" alt="共享内存数据流和中断信号流" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampledataflow.png" alt="共享内存数据流和中断信号流" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Sample 中 Acore 与 MCU 通过共享内存传输数据，通过 mailbox 中断通知双方。
 
@@ -518,10 +518,10 @@ root@ubuntu:/# echo -1 > /proc/sys/kernel/sched_rt_runtime_us
 ### API 流程说明
 
 Acore 与 MCU(IRQ 方式)之间 API Sample 运行流程图
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleirqapi.png" alt="Acore与MCU(IRQ方式)之间API Sample运行流程图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleirqapi.png" alt="Acore与MCU(IRQ方式)之间API Sample运行流程图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Acore 与 MCU(POLL 方式)之间 API Sample 运行流程图
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/samplepollapi.png" alt="Acore与MCU(POLL方式)之间API Sample运行流程图" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/samplepollapi.png" alt="Acore与MCU(POLL方式)之间API Sample运行流程图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 通路配置
 可以增加 Json 文件中的通道数量 config_num，并增加通道信息，本 Sample 未支持增加通道的功能，若需要增加通道，需要修改 Acore 和 MCU 两侧配置文件。
@@ -1087,15 +1087,15 @@ Acore 与 MCU IPC 通信使用 MCU MDMA 将数据在 DDR 与 MCU SRAM 之间搬�
 
 ### MCU 发送数据到 Acore
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imager52a78.png" alt="MCU发送数据到Acore" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imager52a78.png" alt="MCU发送数据到Acore" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Acore 发送数据到 MCU
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imagea78r52.png" alt="Acore发送数据到MCU" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imagea78r52.png" alt="Acore发送数据到MCU" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### IPCFHAL 接口使用序列
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcfhalapi.png" alt="Acore发送数据到MCU" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcfhalapi.png" alt="Acore发送数据到MCU" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 IPCFHAL 在 Acore 与 MCU 通信时，MCU 侧用户使用 IPCF 接口。
 

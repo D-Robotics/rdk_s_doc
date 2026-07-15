@@ -10,7 +10,7 @@ The RDK S100 supports UART2 on the 40-pin header, which is disabled by default. 
 
 The 40-pin header requires a DIP switch to select between UART2 and I2C5. For specific details, please refer to the image below:
 
-![image-rdk_100_funcreuse_40pin](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="UART Application photo" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
 
 After toggling the DIP switch, you also need to modify the device tree file. The modification path and method are as follows:
 
@@ -48,7 +48,7 @@ Connect TXD and RXD together physically, then run the test program to perform wr
 
 Directly connect TXD and RXD together using a jumper wire:
 
-![image-20220512101820743](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png" alt="UART loopback test: TXD and RXD connected with jumper wire" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Test Procedure
 

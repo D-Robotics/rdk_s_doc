@@ -27,17 +27,17 @@ The USB driver can be installed via the Xburn tool.
 
 1. Open the Xburn tool.
 2. Click the `Drivers` page. Xburn will automatically detect whether the USB driver is installed. If not installed, Click `Install`.
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled-en.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled-en.png" alt="Driver Installation and Verification diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3. After installation, the interface appears as follows.
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed-en.png)
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed-en.png' alt='Driver Installation and Verification diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 **Verify Driver Installation**
 
 1. Connect the USB cable.
 2. After the driver is installed, the Device Manager will correctly recognize the serial port board, as shown in the figure below:
-  ![image-20220416105939067](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png)
+  <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png' alt='Serial port recognized in Device Manager' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3. Download the remote connection tool [Mobaxterm](https://mobaxterm.mobatek.net/download.html).
 
@@ -53,27 +53,21 @@ The USB driver can be installed via the Xburn tool.
    | Stop bits               | 1      |
    | Flow Control            | None   |
 
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png)
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png' alt='Driver Installation and Verification diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 5. After powering on the development board, immediately press and hold the space bar to enter the uboot command line mode. Type `fastboot 0` to make the development board enter fastboot mode:
 
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png)
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png' alt='Driver Installation and Verification diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 6. After successfully installing the driver, the Device Manager will show an Android Device, as shown below:
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png) -->
-   <img
-   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg"
-   style={{ width: '100%', height: 'auto', align:'center'}}
-   />
+   <!-- <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png' alt='Driver Installation and Verification diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> -->
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok-en.jpg' alt='Driver Installation and Verification diagram' style={{ width: '100%', height: 'auto', align:'center', maxWidth: '980px', display: 'block', margin: '0 auto' }} />
 
    If the driver installation is unsuccessful, the Device Manager will indicate an unknown device named USB download gadget, as shown below:
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png) -->
-   <img
-   src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png"
-   style={{ width: '100%', height: 'auto', align:'center'}}
-   />
+   <!-- <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png' alt='Driver Installation and Verification diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> -->
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usb-driver1.png' alt='Driver Installation and Verification diagram' style={{ width: '100%', height: 'auto', align:'center', maxWidth: '980px', display: 'block', margin: '0 auto' }} />
 
 ## **Full System Image Flashing**
 
@@ -105,7 +99,7 @@ The following describes how to enter DFU mode for RDKS600 V1P0, V0P1, and V0P2 r
    3. Toggle the `PWR KEY` dip switch to `ON` to power on.
    4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
+<img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png' alt='How to put RDK S600 into DFU mode' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <details>
 <summary>RDKS600 V0P1 DFU Mode</summary>
@@ -115,7 +109,7 @@ The following describes how to enter DFU mode for RDKS600 V1P0, V0P1, and V0P2 r
    3. Toggle the `PWR KEY` dip switch to `ON` to power on.
    4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1-en.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
+<img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1-en.png' alt='DFU-Fastboot Flashing diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </details>
 
@@ -139,12 +133,12 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu-en.png" alt="image-S600-xburn-download_dfu" style={{ width: '100%' }} />
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu-en.png' alt='DFU-Fastboot Flashing diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade, power on the device, and wait for the upgrade to complete.
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="" style={{ width: '100%' }} />
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png' alt='DFU-Fastboot Flashing diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - After the upgrade is complete, power off the device, switch to normal boot mode, and power on again.
 
@@ -176,12 +170,12 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot-en.png" alt="" style={{ width: '100%' }} />
+   <img src='https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot-en.png' alt='Fastboot Flashing diagram' style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade. The device enters Fastboot mode and waits for the upgrade to complete.
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="Fastboot Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Power cycle the device after the upgrade is complete.
 
@@ -210,7 +204,7 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition-en.png" alt="Using Xburn for Designated Area Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
@@ -240,14 +234,14 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition-en.png" alt="Using Xburn for Designated Area Backup diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade, power on the device, and wait for the operation to complete.
 
 - After the operation is complete, open `img_packages/disk/` to view the backup image file `miniboot_flash_backup.img`.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition_image.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition_image.png" alt="Using Xburn for Designated Area Backup photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::info Note
 
@@ -271,7 +265,7 @@ If there is no display output for a long time (over 2 minutes) after powering on
 
 After the Ubuntu Desktop system finishes booting, the system desktop will be output on the monitor via the Display interface, as shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="image-desktop_display.jpg" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="Booting the System diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 

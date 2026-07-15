@@ -20,7 +20,7 @@ RDK S600 在 自锁10-PIN 支持 UART6 UART7，IO 电压 3.3V。
 
 测试之前，把 TXD 和 RXD 短接：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_uart.png" alt="image-rdk_s600_uart" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s600_uart.png" alt="硬件连接示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 测试过程
 

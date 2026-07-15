@@ -5,12 +5,12 @@ sample_codec is a sample program for video encoding and decoding. It can perform
 ### Data Flow Description
 #### Encoding Data Flow
 
-![sample_codec_encode_data_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_encode_data_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_encode_data_flow.png" alt="Encoding Data Flow diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### Decoding Data Flow
 
 
-![sample_codec_decode_data_flow](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_decode_data_flow.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_decode_data_flow.png" alt="Decoding Data Flow diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Code Location and Directory Structure
 

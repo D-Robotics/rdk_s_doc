@@ -81,9 +81,9 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 * **Insufficient or unstable power supply:**
     * **Symptoms:** The system reboots without clear error logs while U-Boot loads the kernel or early in kernel boot; abnormal status LEDs or a completely black HDMI display.
 
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914173433676.png" alt="Example log: reboot during U-Boot kernel load due to insufficient power" style={{ width: '100%' }} />
-
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914174123619.png" alt="Example log: reboot seconds after kernel start due to insufficient power" style={{ width: '100%' }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914173433676.png" alt="Example log: reboot during U-Boot kernel load due to insufficient power" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <br/>
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914174123619.png" alt="Example log: reboot seconds after kernel start due to insufficient power" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
     * **Troubleshooting and fixes:**
         * Use a power adapter that meets board requirements (QC/PD 5V/3A or higher is recommended).
@@ -94,11 +94,11 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 * **Boot media issues (Micro SD card/eMMC):**
     * **Symptoms:** Serial logs show failure to mount the filesystem, missing partitions, or MMC/SD initialization errors/timeouts.
 
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194527634.png" alt="Example log: SD card image format error" style={{ width: '100%' }} />
-
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194636213.png" alt="Example log: SD card physical damage or poor contact (1)" style={{ width: '100%' }} />
-
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194721750.png" alt="Example log: SD card physical damage or poor contact (2)" style={{ width: '100%' }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194527634.png" alt="Example log: SD card image format error" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <br/>
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194636213.png" alt="Example log: SD card physical damage or poor contact (1)" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <br/>
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20221124194721750.png" alt="Example log: SD card physical damage or poor contact (2)" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
         
     * **Troubleshooting and fixes:**
         * Confirm the SD card image was flashed correctly and completely.
@@ -721,7 +721,7 @@ Choose based on errors, resources, and time constraints. Adding swap is a common
 **Connection note:** FPC cables often have a blue or black stiffener. Insert with the **stiffener facing up** (or toward the connector latch per your connector type) on both board and module, and lock the latch.
 
 IMX219 camera connection diagram:
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect-en.png" alt="IMX219 camera connected to RDK S100" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect-en.png" alt="IMX219 camera connected to RDK S100" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **Verification after connection:**
 1.  **Ensure the camera is connected and the board is powered.**
@@ -732,7 +732,7 @@ IMX219 camera connection diagram:
     ```
     If successful, you should see live camera output and optional AI overlays via HDMI or another configured output.
     Example HDMI output with detections (`teddy bear`, `cup`, `vase`):
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI camera AI rendering example" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI camera AI rendering example" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3.  **Check I2C with `i2cdetect`:**
 

@@ -294,7 +294,7 @@ D-Robotics:/$ spi_test 1
 spi_test 2 [bus_id] [cs_id]
 ```
 - bus_id: SPI bus ID (optional, default is 4). The busid here must exist in the parameter configuration group (i.e., the parameter configuration group displayed by the `spi_test 1` command); otherwise, the test will fail.
-- cs_id: Chip select ID, range 0~3 (optional, default is 0. Currently, only cs0 testing is supported; cs1~3 require code modification for testing).
+- cs_id: Chip select ID, range 0 ~ 3 (optional, default is 0. Currently, only cs0 testing is supported; cs1 ~ 3 require code modification for testing).
 
 ```shell
 D-Robotics:/$ spi_test 2 4 0

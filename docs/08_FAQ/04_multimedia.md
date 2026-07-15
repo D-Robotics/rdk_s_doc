@@ -9,7 +9,7 @@ sidebar_position: 4
 ## 视频编解码
 
 ### Q1: 开发板解码 RTSP 视频流时报错（如下图所示），可能是什么原因？
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png" alt="RTSP 解码报错图片 " style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png" alt="RTSP 解码报错图片 " style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 **A:** RTSP 视频流解码报错，常见原因及解决方法如下：
 1.  **码流缺少 PPS 和 SPS 参数信息：**
     * **原因：** 推流服务器推送的 RTSP 码流（尤其是 H.264 格式）中必须包含 `PPS` (Picture Parameter Set) 和 `SPS` (Sequence Parameter Set) 参数信息，解码器需要这些信息来正确解析视频。

@@ -380,11 +380,11 @@ The deployed MPU serves two main purposes: limit the address range VDSP can acce
 
 VDSP address mapping and MPU protection are shown below. Access outside the MPU-protected address range triggers a coredump.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_2.png" alt="VDSP development diagram 2" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_2.png" alt="MPU Configuration diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The error log is shown below. Error address 0x0 indicates access to a disallowed address:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_3.png" alt="VDSP development diagram 3" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_3.png" alt="VDSP Coredump Error Log When Accessing Invalid Address 0x0" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Current VDSP address attribute configuration includes three parts:
 
@@ -439,7 +439,7 @@ Use xthal_get_prid().
 
 #### Which Library Should Be Used for IDMA on the VDSP Side?
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_5.png" alt="VDSP development diagram 5" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_5.png" alt="VDSP-side IDMA Optional Libraries: libidma-os and libidma-debug-os" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Use libidma-os or libidma-debug-os because we use XOS.
 
@@ -470,15 +470,15 @@ Confirm whether standard C library printf or similar functions are used in inter
 Modify the SIM xmm file at xtensa/xtensa/XtDevTools/install/builds/RI-2023.11-win32/Vision_Q8/xtensa-elf/lib/sim/memmap.xmm.
 Increase the size of the overflowing segment, then open cmd in Xplorer:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_6.png" alt="VDSP development diagram 6" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_6.png" alt="Opening the Command Line Window in Xplorer" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Go to the xtensa-elf/lib path:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_7.png" alt="VDSP development diagram 7" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_7.png" alt="Terminal Interface for Navigating to the xtensa-elf/lib Path" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Run xt-genldscripts -b sim. The message below indicates success:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_8.png" alt="VDSP development diagram 8" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_8.png" alt="Successful Output of the xt-genldscripts -b sim Command" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Rebuild the VDSP project and run SIM soft simulation again.
 
@@ -486,13 +486,13 @@ Rebuild the VDSP project and run SIM soft simulation again.
 
 If this happens, check whether a runtime limit is set in the IDMA init function. Set it to 0 to disable the time limit:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png" alt="VDSP development diagram 9" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png" alt="Setting the Runtime Limit Parameter in the IDMA Initialization Function" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Windows-built Image Reports dcore0_rpmsg_op Server Not Started
 
 Manually add CONFIG_TEST_CASE in Build Properties:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png" alt="VDSP development diagram 10" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png" alt="Windows-built Image Reports dcore0_rpmsg_op Ser... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Thread Status Viewing Does Not Work When Total Threads Exceed 32
 
@@ -538,26 +538,26 @@ This section introduces a VDSP sample for S-series SoC platforms. It demonstrate
 
 Development is required on both the ARM side and the VDSP side. Client/server business logic is implemented using the RPMSG IPC mechanism.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp1.png" alt="VDSP sample diagram 1" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp1.png" alt="VDSP Software Architecture: ARM and VDSP Client/Server Interaction Diagram via RPMSG IPC" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### ARM-side Development Flow
 
 On the ARM side, users mainly load VDSP Firmware, connect to VDSP-side services, and send RPMSG compute requests to VDSP as the client.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp2.png" alt="VDSP sample diagram 2" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp2.png" alt="ARM-side Development Flow: Loading VDSP Firmware and Sending RPMSG Compute Requests as Client" style={{ width: '20%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### VDSP-side Development Flow
 
 On the VDSP side, initialize the runtime environment and start related services (VDSP acts as the server and can start multiple one-to-one services),
 receive and reply to client messages through RPMSG, and start additional threads for application development.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp3.png" alt="VDSP sample diagram 3" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp3.png" alt="VDSP-side Development Flow: Initializing the Runtime Environment and Starting Services to Receive RPMSG Requests" style={{ width: '30%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Sample Flow Description:
 
 The interaction flow between the ARM side and VDSP is shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp4.png" alt="VDSP sample diagram 4" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/vdsp4.png" alt="Sample Flow Description: diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ARM side:
 

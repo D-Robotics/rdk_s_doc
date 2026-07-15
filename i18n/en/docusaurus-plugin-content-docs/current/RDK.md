@@ -53,7 +53,7 @@ This document provides detailed instructions on using the RDK S600 kit, covering
 
 The **RDK S100 Series** is a high-performance development kit featuring 80/128 TOPS of on-device AI inference capability and a 6-core ARM Cortex-A78AE processor. It supports dual MIPI camera inputs, four USB 3.0 ports, and two PCIe 3.0 interfaces, fully meeting the requirements of various application scenarios.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="image-rdks100-serials" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="Product Introduction diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 
@@ -61,7 +61,7 @@ The **RDK S100 Series** is a high-performance development kit featuring 80/128 T
 
 The **RDK S600 Series** is a high-performance development kit featuring 560 TOPS of on-device AI inference capability and a 18-core ARM Cortex-A78AE processor. It supports six MIPI camera inputs, six USB 3.0 ports, and four PCIe 3.0 interfaces, fully meeting the requirements of various application scenarios.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="image-rdks600-serials" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="Product Introduction diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 

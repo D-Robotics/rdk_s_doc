@@ -117,9 +117,9 @@ This section answers common questions related to developing and using the D-Robo
     * How to use the hardware codec (`hobot_codec`) for image/video encoding (such as H.264, H.265, MJPEG) and decoding.
     * How to transfer image data efficiently between ROS2 nodes (possibly involving zero-copy technology).
     * Related sample code and launch files.
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros1.png" alt="TROS multimedia solution diagram" style={{ width: '100%' }} />
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros2.png" alt="TROS multimedia solution diagram" style={{ width: '100%' }} />
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros3.png" alt="TROS multimedia solution diagram" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros1.png" alt="Q7: What recommended reference resources are av... diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros2.png" alt="Q7: What recommended reference resources are av... diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros3.png" alt="Q7: What recommended reference resources are av... diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Q8: After starting a USB or MIPI camera node, the terminal shows "calibration data does not exist" (for example, `[usb_camera_calibration.yaml] does not exist!`). Is this normal?
 **A:** This message itself is **usually normal and does not necessarily mean the camera cannot work**.

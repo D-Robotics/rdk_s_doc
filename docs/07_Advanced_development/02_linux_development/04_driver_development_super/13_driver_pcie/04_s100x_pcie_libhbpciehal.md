@@ -34,7 +34,7 @@ pcieErrCode pcieSendData(pcieHandler ph, uint32_t size);
 
 发送方和接收方的流程如下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/hl_process.png" alt="图片描述" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/hl_process.png" alt="图片描述" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Publisher(chip#0)
 

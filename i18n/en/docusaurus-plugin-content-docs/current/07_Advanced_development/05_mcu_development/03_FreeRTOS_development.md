@@ -939,13 +939,32 @@ Currently, MCU0 has used the following interrupts:
 ## Tutorial on Adding Compilation Directories
 ### Process for Adding Compilation Directories
 <DocScope products="RDK S100">
-1. Modify the mcu/Build/FreeRtos_mcu1/SConstruct_Lite_FRtos_S100_sip_B file to add/remove corresponding modules.
+1. Modify `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml` to add or remove compilation directories.
 
-   For example, to add the mcu/Service/Log folder, simply add it at the appropriate location. The variable False indicates that during the build process, source files will not be copied to the compilation output directory.
+2. General business/demo source directories should be added to `BuildPath`. For example, if adding `mcu/samples/MyDemo`:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/scons_add_context.png" alt="" style={{ width: '100%' }} />
+```yaml
+BuildPath:
+  - samples/MyDemo
+```
 
-2. Add the SConscript file under the added compilation module. The SConscript file can be obtained from any already compiled module folder.
+3. `Common`, `McalCdd`, `Platform`, and `Service` each have dedicated static-library path fields. New modules under these categories should be placed in the corresponding field:
+
+```yaml
+StaticLibCommonPath:
+  - Common/xxx
+
+StaticLibMcalCddPath:
+  - McalCdd/xxx
+
+StaticLibPlatformPath:
+  - Platform/xxx
+
+StaticLibServicePath:
+  - Service/xxx
+```
+
+4. Add a `SConscript` file in the new module directory. `SConstruct` scans configured paths from YAML and includes the corresponding `SConscript` files in the build.
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -953,7 +972,7 @@ Currently, MCU0 has used the following interrupts:
 
    For example, to add the mcu/Service/Log folder, simply add it at the appropriate location. Currently, Service/Platform/McalCdd/Common has an independent path, and adding this directory should be placed in the corresponding location. For any other folders, add them directly under BuildPath.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="Scons Add Context" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. Add the SConscript file under the added compilation module. The SConscript file can be obtained from any already compiled module folder.
 </DocScope>
@@ -961,10 +980,10 @@ Currently, MCU0 has used the following interrupts:
 ## Introduction to the MCU FreeRtos System
 The MCU has several key system functions, as shown in the figure below:
 <DocScope products="RDK S100">
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system-en.jpg" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system-en.jpg" alt="FreeRTOS System Architecture" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="FreeRTOS Task Info" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 The figure above shows the relative priority of each function's tasks and the order of calls within the same task. When integrating, customers should maintain the relative priority of each function, the core they reside on, and the order of calls within the same task. The description and precautions for each function are as follows:
@@ -1007,7 +1026,7 @@ Task creation is located in `mcu/Target/Target_S600/Target-hobot-lite-freertos-m
 
 </DocScope>
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="Task Initialization" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The xxx_Startup task is responsible for startup-related initialization and runs only once.
 FreeRtos_OsTask_SysCore_BSW_xms and FreeRtos_OsTask_SysCore_ASW_xms are periodic tasks that schedule periodically based on different xms values. These periodic tasks also handle internal work, as detailed in the previous section "Introduction to the MCU FreeRtos System."
@@ -1137,7 +1156,7 @@ RDK-S600 uses the heap_4.c scheme, which combines the best-fit algorithm and mer
 <DocScope products="RDK S100">
 Modify the corresponding location in `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld`. The size is not currently modifiable.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="MCU Log Address" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
 Modify the corresponding location in `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld`. The size is not currently modifiable.
@@ -1147,7 +1166,7 @@ Modify the corresponding location in `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/li
 <DocScope products="RDK S100">
 Modify the corresponding location in `source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi`, keeping it consistent with the MCU1 modification.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="Acore Log Address" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
 Modify the corresponding location in `source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi`, keeping it consistent with the MCU1 modification.

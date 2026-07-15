@@ -90,11 +90,11 @@ Detailed parameters and command explanations from the `spidev_tc` source code ar
 
 **1.** Refer to the RDK_S100 schematic to locate the pins and connector positions for SPI0_MOSI and SPI0_MISO, as shown below:
 
-![Spi_Schematic_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png" alt="diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Then, connect SPI0_MOSI and SPI0_MISO using a female-to-female Dupont jumper wire, as illustrated:
 
-![Spi_Connection_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png" alt="diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 :::caution Note
 The RDKS100 Acore supports two SPI interfaces, and both SPI0 and SPI1 can only operate as SPI Masters.  
@@ -198,7 +198,7 @@ Test times: 0 Data verification Successful
 
 Prepare an RDK_S100 development board and wire out the four SPI lines. The Master can use SPI0, while the SPI Slave uses an external SPI device (selected by the user).
 
-![SPI_wiring_diagram](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png" alt="SPI External Loopback Test diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Ensure that the SPI baud rate and transfer mode settings match between Master and Slave. On the Slave device side, first execute the data reception test command;
 

@@ -110,7 +110,7 @@ sudo ./decode_rtsp_stream.py -a
 ### Notes
 
 - The RTSP stream pushed by the streaming server must include `PPS` and `SPS` parameter information; otherwise, decoding on the development board will fail, resulting in an error similar to the one shown below:
-![image-20220728110439753](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png" alt="RTSP stream decoding error due to missing PPS/SPS information" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - When using `ffmpeg` to stream video files in formats such as `.mp4` or `.avi`, you must add the `-vbsf h264_mp4toannexb` option to embed `PPS` and `SPS` information into the stream. For example:
 

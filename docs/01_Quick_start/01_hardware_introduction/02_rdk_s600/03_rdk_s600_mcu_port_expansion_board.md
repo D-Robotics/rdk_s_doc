@@ -7,7 +7,7 @@ sidebar_label: 1.1.3 MCU 接口扩展板
 
 # 1.1.3 MCU 接口扩展板
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="image-rdk_s600_mcu_port_expansion_board" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="RDK S600 MCU 接口扩展板" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <details>
 <summary>当前文档对应 **MCU 接口扩展板 V1P0** 版本，点击查看历史版本</summary>
@@ -78,11 +78,11 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 ### 拓扑图
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" alt="image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" alt="RDK S600 MCU 接口扩展板架构拓扑图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 接口描述
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="image-rdk_s600_mcu_expansionboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="RDK S600 MCU 接口扩展板接口示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 

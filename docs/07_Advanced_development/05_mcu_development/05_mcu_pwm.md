@@ -263,11 +263,11 @@ pwmtest <pwm_hwipid> <pwm_hwchid> <period> <duty_cycle>
 pwmtest stop <pwm_hwipid> <pwm_hwchid>
 ```
 
-**参数说明**
-**pwm_hwipid:** PWM 硬件 IP 实例 ID (0~2)
-**pwm_hwchid:** PWM 硬件通道 ID (0~11)
-**period:** PWM 信号周期值，32位数值
-**duty_cycle:** PWM 信号占空比，必须在0x0000（0%）到0x8000（100%）范围内
+**参数说明**  
+**pwm_hwipid:** PWM 硬件 IP 实例 ID (0 ~ 2)  
+**pwm_hwchid:** PWM 硬件通道 ID (0 ~ 11)  
+**period:** PWM 信号周期值，32位数值  
+**duty_cycle:** PWM 信号占空比，必须在0x0000（0%）到0x8000（100%）范围内  
 
 
 例如设置 PWM0通道4，周期为0x600000，占空比为0x4000(50%)：

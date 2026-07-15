@@ -27,7 +27,7 @@ On the RDK S600 development board, SPI0 shares 4 pins with CAN0 and CAN1, and th
 
 ## Software Architecture
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-spi_software.png" alt="image-spi_software" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-spi_software.png" alt="Software Architecture diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The figure above shows the SPI software architecture. From bottom to top, it can be divided into the hardware IP layer, kernel layer, and user space layer. Each layer is described below.
 

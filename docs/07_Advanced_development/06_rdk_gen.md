@@ -163,7 +163,7 @@ RDK 上，multistrap 的配置文件默认根据平台分为多个部分：
 指定使用的配置文件的命令：`sudo ./make_ubuntu_samplefs.sh build <config_file_name>`，例如新增的配置文件为：`new-desktop.conf`，则命令就是：`sudo ./make_ubuntu_samplefs.sh build new-desktop.conf`，`new-desktop.conf`文件需要放到`samplefs/configs`文件夹内。
 
 脚本构建流程图如下：
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/samplefs_flowchart.png" alt="samplefs_flowchart" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/samplefs_flowchart.png" alt="示例文件系统流程图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 裁剪/自定义根文件系统的方法
 :::info 提示
@@ -245,7 +245,7 @@ hobot-camera/
 ```
 ### 构建流程说明
 详细流程请参考`mk_debs.sh`脚本实现，以下是一个简略的流程图：
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/mk_debs_flowchart.png" alt="mk_debs_flowchart" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/mk_debs_flowchart.png" alt="mk_debs 流程图" style={{ width: '75%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 自定义 deb 包流程说明
 1. 在`source/`文件夹下，新建对应包的包名（dpkg 内的 package name）命名的文件夹，这里以"new_package"为例；

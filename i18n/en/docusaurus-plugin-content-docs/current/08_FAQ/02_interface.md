@@ -37,7 +37,7 @@ import DocScope from '@site/src/components/DocScope';
         * **Parity:** None
         * **Flow control:** None
     * Serial port (COM Port): Ensure you select the correct COM port recognized in Device Manager after connecting the USB-to-serial module.
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124200013163.png" alt="Serial terminal parameter configuration example" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124200013163.png" alt="Serial terminal parameter configuration example" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 4.  **USB-to-serial module driver:** Ensure the driver for the USB-to-serial module is installed correctly on your PC.
 5.  **Try another serial module or USB port:** Rule out faults in the module or USB interface.
 
@@ -81,7 +81,7 @@ import DocScope from '@site/src/components/DocScope';
         1.  Carefully verify that the username you entered is correct (for example, `sunrise`, `root`, `hobot`, etc., depending on your system image and configuration).
         2.  Carefully verify that the password you entered is correct, paying attention to case sensitivity.
         3.  Try using the board's default account and password (if they have not been changed).
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124201544978.png" alt="SSH authentication failure example" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/interface/image-20221124201544978.png" alt="SSH authentication failure example" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Q6: When using wireless networking, the connection is unstable or the transfer speed is slow. What should I do?
 **A:**

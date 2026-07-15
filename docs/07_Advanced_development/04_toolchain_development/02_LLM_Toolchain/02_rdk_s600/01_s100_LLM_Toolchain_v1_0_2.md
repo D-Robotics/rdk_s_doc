@@ -95,7 +95,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.2/D
 <tr>
 <td>DeepSeek-R1-Distill-Qwen-1.5B</td>
 <td>prefill 2<br/>decode 2</td>
-<td style={{ whiteSpace: "nowrap" }}>prefill w4<br/>decode w4</td>
+<td style={{ whiteSpace: 'nowrap' }}>prefill w4<br/>decode w4</td>
 <td>4096</td>
 <td>68.9</td>
 <td>92.4</td>
@@ -188,10 +188,10 @@ TTFT(ms)：VLM的首字生成时间为vit处理时间和prefill处理时间总�
 
 <tr>
 <td>Qwen2.5-VL-<br/>3B-Instruct<br/>(448*448)</td>
-<td style={{ whiteSpace: "nowrap" }}>vit 4<br/>prefill 4<br/>decode 4</td>
-<td style={{ whiteSpace: "nowrap" }}>vit w8<br/>prefill w4<br/>decode w4</td>
+<td style={{ whiteSpace: 'nowrap' }}>vit 4<br/>prefill 4<br/>decode 4</td>
+<td style={{ whiteSpace: 'nowrap' }}>vit w8<br/>prefill w4<br/>decode w4</td>
 <td>1024</td>
-<td style={{ whiteSpace: "nowrap" }}>vit 39.1<br/>prefill 86.2<br/>all 125.3</td>
+<td style={{ whiteSpace: 'nowrap' }}>vit 39.1<br/>prefill 86.2<br/>all 125.3</td>
 <td>70.4</td>
 <td>3.5</td>
 </tr>
@@ -318,8 +318,8 @@ TTFT(ms)：VLM的首字生成时间为vit处理时间和prefill处理时间总�
 
 <tr>
 <td>Pi0</td>
-<td style={{ whiteSpace: "nowrap" }}>vision 1<br/>language 4<br/>action 4</td>
-<td style={{ whiteSpace: "nowrap" }}>vision w8<br/>language w8<br/>action w8</td>
+<td style={{ whiteSpace: 'nowrap' }}>vision 1<br/>language 4<br/>action 4</td>
+<td style={{ whiteSpace: 'nowrap' }}>vision w8<br/>language w8<br/>action w8</td>
 <td>98</td>
 <td>1.5</td>
 <td>18.5</td>

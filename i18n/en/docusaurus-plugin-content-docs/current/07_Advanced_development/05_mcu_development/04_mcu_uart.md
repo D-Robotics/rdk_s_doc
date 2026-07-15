@@ -64,7 +64,7 @@ The S600 MCU chip has a total of 4 UARTs, namely Uart8 to Uart11. Among them, Ua
 - UART PBcfg: PB configuration file for UART, used for peripheral configuration parameters.
 - Hardware: UART hardware.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_uart.png" alt="MCU Software Architecture Diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_uart.png" alt="Software Architecture diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Code Path
 
@@ -86,7 +86,7 @@ The S600 MCU chip has a total of 4 UARTs, namely Uart8 to Uart11. Among them, Ua
 
 The S100 development board exposes Uart5 for user development and learning. The PIN is located at the `MCU Expansion Header(J22)` on the `Main Board`.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_interface.png" alt="image-rdk_100_mainboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_interface.png" alt="RDK-100 Mainboard Interface" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 When Uart5 may be used for IPC pass-through, it can conflict with test cases, causing test failures. You can confirm this using the `ipcbox_set_mode debug` command. If the line for `uart` shows `Enable`, it means it is occupied.
@@ -158,7 +158,7 @@ D-Robotics:/$ uarttest 6
 
 The S600 development board exposes Uart10 and Uart11 for user development and learning. The PINs are located at the `2x UART(MAIN)/2x UART(MCU)(J18)` on the `Main Board`.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png" alt="RDK S600 Mainboard Interface" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Usage Example
 

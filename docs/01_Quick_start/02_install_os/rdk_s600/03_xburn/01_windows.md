@@ -30,10 +30,10 @@ USB 驱动可通过 Xburn 工具安装。
 
 1. 打开 Xburn 工具。
 2. 点击 `驱动` 页面，Xburn 工具将自动检测 USB 驱动是否安装，如果未安装则显示以下界面，点击 `安装` 即可。
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_uninstalled.png" alt="驱动安装与验证示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3. 安装后界面显示如下。
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/xburn_driver_installed.png" alt="驱动安装与验证示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 
@@ -41,7 +41,7 @@ USB 驱动可通过 Xburn 工具安装。
 
 1. 连接 USB 线。
 2. 驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/uart_ch340_device.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/uart_ch340_device.png" alt="驱动安装与验证示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3. 下载远程连接工具 [Mobaxterm](https://mobaxterm.mobatek.net/download.html)。
 
@@ -57,26 +57,26 @@ USB 驱动可通过 Xburn 工具安装。
    | 停止位（Stop bits）  | 1      |
    | 流控（Flow Control） | 无     |
 
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_2.png" alt="驱动安装与验证示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 5. 开发板上电后立刻长按空格键，进入 uboot 命令行模式，输入 fastboot 0，让开发板进入 fastboot 模式：
 
-   ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png)
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/mobaxterm_4.png" alt="驱动安装与验证示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 6. 成功安装驱动后，设备管理器会显示 Android Device 设备，如下图：
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png) -->
+   <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png" alt="驱动安装与验证示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> -->
    <img 
    src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-ok.png" 
-   style={{ width: '100%', height: 'auto', align:'center'}}
+   style={{ width: '100%', height: 'auto', align:'center', maxWidth: '980px', display: 'block', margin: '0 auto' }}
    />
 
    如果未成功安装驱动时，设备管理器会提示存在 USB download gadget 的未知设备，如下图：
 
-   <!-- ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png) -->
+   <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png" alt="驱动安装与验证示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> -->
    <img 
    src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-usbdriver-no.png" 
-   style={{ width: '100%', height: 'auto', align:'center'}}
+   style={{ width: '100%', height: 'auto', align:'center', maxWidth: '980px', display: 'block', margin: '0 auto' }}
    />
 
 
@@ -114,7 +114,7 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
    3. 将 `PWR KEY` 拨码至 `ON`，开启电源
    4. 如果 `FLS` 红灯亮起，表示进入 dfu 模式
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="RDK S600进入DFU模式操作示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <details>
 <summary>RDKS600 V0P1 DFU 模式</summary>
@@ -124,7 +124,7 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
    3. 将 `PWR KEY` 拨码至 `ON`，开启电源
    4. 如果 `FLS` 红灯亮起，表示进入 dfu 模式
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1.png" alt="DFU-Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </details>
 
@@ -148,12 +148,12 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
 
    设置界面参考如下
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu.png" alt="image-S600-xburn-download_dfu" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu.png" alt="DFU-Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 点击浏览选择固件所在 product 文件夹
 
 - 点击开始升级，设备上电并等待升级完成
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="DFU-Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 - 升级完成后，关闭电源，改为正常启动模式并重新上电。
@@ -190,13 +190,13 @@ RDK S600 通过 Xburn 烧录全系统镜像。支持 `fastboot` 和 `dfu-fastboo
 
    设置界面参考如下
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot.png" alt="Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 点击浏览选择固件所在 product 文件夹
 
 
 - 点击开始升级，设备进入 Fastboot 模式并等待升级完成
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="Fastboot 烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 - 升级完成后重新上电。
@@ -228,7 +228,7 @@ RDK S600 支持通过 Xburn 烧录指定区域，支持的烧录区域如下
 
    设置界面参考如下
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition.png" alt="使用 Xburn 指定区域烧录示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 点击浏览选择固件所在 product 文件夹
 
@@ -260,14 +260,14 @@ RDK S600 支持通过 Xburn 备份指定区域，支持的备份区域如下
 
    设置界面参考如下
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition.png" alt="使用 Xburn 指定区域备份示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 点击浏览选择固件所在 product 文件夹
 
 - 点击开始升级，设备上电并等待操作完成
 
 - 操作完成后，打开 `img_packages/disk/`，查看备份镜像文件 `miniboot_flash_backup.img`
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition_image.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition_image.png" alt="使用 Xburn 指定区域备份实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 
@@ -294,7 +294,7 @@ RDK S600 支持通过 Xburn 备份指定区域，支持的备份区域如下
 
 Ubuntu Desktop 版本系统启动完成后，会通过 Display 传输接口在显示器上输出系统桌面，如下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="image-desktop_display.jpg" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="启动系统示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 

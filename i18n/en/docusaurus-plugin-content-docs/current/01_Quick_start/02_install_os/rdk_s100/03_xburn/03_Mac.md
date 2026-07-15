@@ -46,7 +46,7 @@ brew install dfu-util
    2. Set the SW2 switch to ↑ to enter Download mode.
    3. Set the SW1 switch to ▽ and turn on the power.
    4. If the `DOWNLOAD` LED lights up, it has entered DFU mode; otherwise, press `K1` to reset the system.
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1-en.jpg)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1-en.jpg" alt="DFU-Fastboot Flashing photo" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Flashing with Xburn**
 
@@ -57,11 +57,11 @@ Configuration steps:
    - Storage Medium: `emmc`, Firmware Type: `secure`
    - Image Directory: Click browse and select the `product` folder containing the firmware.
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_dfu-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_dfu-en.png" alt="DFU-Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click "Start Upgrade", power on the device, and wait for the upgrade to complete.
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="DFU-Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - After the upgrade is complete, turn off the power, set the flash switch downward (to exit DFU mode), and then power on again.
 
@@ -90,10 +90,10 @@ Configuration steps:
    - Storage Medium: `emmc`, Type: `secure`
    - Image Directory: Click browse and select the `product` folder containing the firmware.
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_fastboot-en.png" alt="Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click "Start Upgrade". The device will enter Fastboot mode; wait for the upgrade to complete.
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="Fastboot Flashing diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - After the upgrade is complete, power on again.
 
@@ -121,7 +121,7 @@ Configuration steps:
    - Image Directory: Click browse and select the `product` folder containing the firmware.
    - Advanced Configuration: Check `Flash specified area`, then check `miniboot_flash` and `miniboot_emmc`.
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-download_partition-en.png" alt="Flashing Specific Partitions with Xburn diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click "Start Upgrade", power on the device, and wait for the operation to complete.
 
@@ -148,13 +148,13 @@ Configuration steps:
    - Image Directory: Click browse and select the `product` folder where the backup image should be saved.
    - Advanced Configuration: Check `Backup specified area`, then check `miniboot_flash`.
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png" alt="Backing Up Specific Partitions with Xburn photo" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    - Click "Start Upgrade", power on the device, and wait for the operation to complete.
 
    - After completion, navigate to the `img_packages/disk/` folder to view the backup image file `miniboot_flash_backup.img`.
 
-      ![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png)
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-backup_partition_image-en.png" alt="Backing Up Specific Partitions with Xburn photo" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    :::warning Note
 
@@ -179,4 +179,4 @@ If the development board shows no display output for a long time (over 2 minutes
 
 After the Ubuntu Desktop system finishes booting, the system desktop will be output to the monitor via the display interface, as shown below:
 
-![image-desktop_display.jpg](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="Booting the System diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />

@@ -9,7 +9,7 @@ This section answers common questions about video encoding/decoding, audio proce
 ## Video Encoding and Decoding
 
 ### Q1: The board reports an error when decoding an RTSP video stream (as shown below). What could be the cause?
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png" alt="RTSP decoding error screenshot" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png" alt="Q1: The board reports an error when decoding an... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 **A:** RTSP video stream decoding errors are commonly caused by the following issues and solutions:
 1.  **The stream is missing PPS and SPS parameter information:**
     * **Cause:** RTSP streams pushed by the streaming server (especially H.264 format) must contain `PPS` (Picture Parameter Set) and `SPS` (Sequence Parameter Set) parameter information. The decoder needs this information to parse the video correctly.

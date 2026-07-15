@@ -158,7 +158,7 @@ Official NoMachine download page: [NoMachine Download](https://downloads.nomachi
 
 On the official website, locate and download the `ARM64` version suitable for `RDK S100`, then click `Download`.
 
-![image_s100_nomachine_dl](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="NoMachine Configuration diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Installation**
 

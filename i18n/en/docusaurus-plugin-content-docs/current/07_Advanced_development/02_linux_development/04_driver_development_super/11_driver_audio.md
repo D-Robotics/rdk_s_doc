@@ -398,16 +398,16 @@ It contains one es8156 chip with I2C address 0x8. It can play 2-channel audio, o
 
 Refer to the physical diagram below: the red circles indicate the es7210, the yellow circle indicates the es8156, and the green circles indicate the 4 mics.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio1.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio1.png" alt="Audio Daughter Board Introduction diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Connecting the Audio Daughter Board to the Development Board
 
 The connection method is shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio2.png" alt="" style={{ width: '100%' }} /> 
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio2.png" alt="Connecting the Audio Daughter Board to the Deve... diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> 
 
 **Note:** The PCM pins on the 40-pin header are multiplexed with the PCIe Wi-Fi module. The hardware provides a DIP switch to switch the pin functionality.
 
 When toggling the pin functions with the DIP switch, move the upper 40-pin DIP switch to the left, and move the lower PCM DIP switch to the right. As shown in the figure below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3-en.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3-en.png" alt="Connecting the Audio Daughter Board to the Deve... diagram" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

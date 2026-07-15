@@ -35,11 +35,11 @@ First, navigate to the `source/bootloader` directory. The directory structure is
 
 After the command executes successfully, the U-Boot graphical configuration interface will open. You can configure options in this interactive interface, including removing unnecessary features and enabling required ones.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/screenshot-20241120-201418.png" alt="image-20220518111319607" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/screenshot-20241120-201418.png" alt="menuconfig graphical configuration interface" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 After completing the configuration on the menuconfig interface, select `Exit` to quit, and choose `Yes` or `No` according to the prompts to save the changes to the `.config` file.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="image-20220518111506018" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="menuconfig save configuration prompt on exit" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 After exiting the configuration, the configuration file will be automatically saved. The automatic process includes:
 
@@ -116,11 +116,11 @@ make mrproper
 
 After the command executes successfully, the Kernel graphical configuration interface will open. You can configure options in this interactive interface, including removing unnecessary features and enabling required ones.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-s100-kernel.png" alt="image-20220518111319607" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-s100-kernel.png" alt="menuconfig graphical configuration interface" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 After completing the configuration on the menuconfig interface, select `Exit` to quit, and choose `Yes` or `No` according to the prompts to save the changes to the `.config` file.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="image-20220518111506018" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="menuconfig save configuration prompt on exit" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 After exiting the configuration, the configuration file will be automatically saved. The automatic process includes:
 

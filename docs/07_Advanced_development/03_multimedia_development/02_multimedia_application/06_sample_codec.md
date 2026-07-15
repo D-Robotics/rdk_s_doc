@@ -5,12 +5,12 @@ sample_codec 是一个用于编解码视频的示例程序。它可以根据配�
 ### 数据流说明
 #### 编码数据流
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_encode_data_flow.png" alt="sample_codec_encode_data_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_encode_data_flow.png" alt="编码数据流示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 解码数据流
 
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_decode_data_flow.png" alt="sample_codec_decode_data_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/sample_codec_decode_data_flow.png" alt="解码数据流示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 代码位置及目录结构
 

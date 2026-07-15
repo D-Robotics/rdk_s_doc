@@ -57,7 +57,7 @@ The following describes how to enter DFU mode for RDKS600 V1P0, V0P1, and V0P2 r
    3. Toggle the `PWR KEY` dip switch to `ON` to power on.
    4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="How to put RDK S600 into DFU mode" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <details>
 <summary>RDKS600 V0P1 DFU Mode</summary>
@@ -67,7 +67,7 @@ The following describes how to enter DFU mode for RDKS600 V1P0, V0P1, and V0P2 r
    3. Toggle the `PWR KEY` dip switch to `ON` to power on.
    4. If the red `FLS` LED lights up, it indicates entry into dfu mode.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1-en.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1-en.png" alt="DFU-Fastboot Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </details>
 
@@ -91,12 +91,12 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu-en.png" alt="image-S600-xburn-download_dfu" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_dfu-en.png" alt="DFU-Fastboot Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade, power on the device, and wait for the upgrade to complete.
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="DFU-Fastboot Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - After the upgrade is complete, power off the device, switch to normal boot mode, and power on again.
 
@@ -128,12 +128,12 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_fastboot-en.png" alt="Fastboot Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade. The device enters Fastboot mode and waits for the upgrade to complete.
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="Fastboot Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Power cycle the device after the upgrade is complete.
 
@@ -162,7 +162,7 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-download_partition-en.png" alt="Using Xburn for Designated Area Flashing diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
@@ -192,14 +192,14 @@ Open Xburn and set the parameters as follows:
 
    Refer to the settings interface below:
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition-en.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition-en.png" alt="Using Xburn for Designated Area Backup diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Click Browse to select the product folder containing the firmware.
 
 - Click Start Upgrade, power on the device, and wait for the operation to complete.
 
 - After the operation is complete, open `img_packages/disk/` to view the backup image file `miniboot_flash_backup.img`.
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition_image.png" alt="" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-backup_partition_image.png" alt="Using Xburn for Designated Area Backup photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::info Note
 
@@ -223,7 +223,7 @@ If there is no display output for a long time (over 2 minutes) after powering on
 
 After the Ubuntu Desktop system finishes booting, the system desktop will be output on the monitor via the Display interface, as shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="image-desktop_display.jpg" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-desktop_display_s100.jpg" alt="Booting the System diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## **Frequently Asked Questions**
 
@@ -233,27 +233,27 @@ After the Ubuntu Desktop system finishes booting, the system desktop will be out
 Taking MacOS version 15.0 (M3 chip) as an example, the default macOS serial driver connecting to CH340N at 921600 baud rate may produce garbled output. The latest CH340N driver needs to be installed. Procedure:
 
 1. With the default CH340N driver, the connected device appears as `tty.usbserial*`, indicating the default macOS serial driver is in use and needs updating:
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttyusb.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttyusb.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. Installation procedure (based on the README.md on the [CH340N Latest Driver Release Page](https://github.com/WCHSoftGroup/ch34xser_macos?tab=readme-ov-file)):
    1. Click to download the zip package on the [CH340N Latest Driver Release Page](https://github.com/WCHSoftGroup/ch34xser_macos?tab=readme-ov-file)
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install1.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install1.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    2. Unzip and use the pkg package to install the driver.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install2.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install2.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    3. Click Continue.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install3.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install3.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    4. Click Install and enter the password.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install4.png" alt="" style={{ width: '100%' }} />
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install5.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install4.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install5.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    5. Click Install, open System Settings.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install6.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install6.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    6. Authorize and enter the password.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install7.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install7.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    7. A pop-up indicates successful installation.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install8.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-install8.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    8. **<font color='red'>Restart the computer</font>**.
    9. Check if the installation was successful. Recognizing `tty.wch*` indicates successful driver installation.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttywch.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-ttywch.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 3. Verify by connecting to the device.
    :::warning Note
 
@@ -263,9 +263,9 @@ Taking MacOS version 15.0 (M3 chip) as an example, the default macOS serial driv
 
    1. Using the example above, the smaller number is usually the ACore serial port, the larger one is the MCU serial port. In the image, `/dev/tty.wchusbserial1220` is the ACore serial port, `/dev/tty.wchusbserial1230` is the MCU serial port. Command to connect to the ACore serial port: `minicom -D /dev/tty.wchusbserial1220 -b 921600 -8`; Command to connect to the MCU serial port: `minicom -D /dev/tty.wchusbserial1230 -b 921600 -8`. Replace the device path in the command according to your actual **/dev/tty.wchusbserial** device number.
    2. `minicom` command to connect to the ACore serial port (`minicom -D /dev/tty.wchusbserial1220 -b 921600 -8`):
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
    3. Verify connection to the development board.
-      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="" style={{ width: '100%' }} />
+      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="Garbled Serial Output Issue with MacOS System L... diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 4. FAQ
 

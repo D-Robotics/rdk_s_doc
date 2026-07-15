@@ -73,8 +73,8 @@ For example, `85` usually represents `(x, y, w, h, confidence + num_classes)`. I
     * In higher YOLOv5 versions (for example, tag 2.0 and above), the officially exported ONNX model output layer may include feature decoding (for example, directly outputting bounding box coordinates and class scores), or may not separate the large, medium, and small feature map outputs.
     * D-Robotics RDK BPU deployment usually requires ONNX model outputs to be raw feature maps, with these three feature maps as independent output nodes.
     * **Example images (top: incorrect; bottom: partially correct but still needs adjustment):**
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/3.png" alt="YOLOv5 incorrect output head example" style={{ width: '100%' }} />
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/4.jfif" alt="YOLOv5 incorrect output head example" style={{ width: '100%' }} /> 
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/3.png" alt="YOLOv5 incorrect output head example" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/4.jfif" alt="YOLOv5 incorrect output head example" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> 
       *Top image: feature maps not separated and decoding included. Bottom image: feature maps separated, but Sigmoid may have been added incorrectly or NHWC conversion may be missing.*
 * **Solution:**
     * You need to modify the YOLOv5 export script (usually `models/yolo.py` or a similar file) to ensure that when exporting the ONNX model:
@@ -90,7 +90,7 @@ For example, `85` usually represents `(x, y, w, h, confidence + num_classes)`. I
     * If the YOLOv5 model you use (for example, official releases below tag 2.0) exports ONNX with 5-dimensional output heads (for example, `[batch, num_anchors, grid_h, grid_w, (x,y,w,h,conf+classes)]` or a flattened form such as `[batch, num_anchors* (5+num_classes), grid_h, grid_w]`).
     * When the D-Robotics BPU toolchain compiles such models directly, dimension handling or post-processing expectations may truncate or incorrectly parse a dimension, resulting in abnormally arranged bounding boxes with a periodic pattern.
     * **Example image:**
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/5.png" alt="YOLOv5 periodic abnormal bounding box example" style={{ width: '100%' }} /> * **Solution:**
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/5.png" alt="YOLOv5 periodic abnormal bounding box example" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> * **Solution:**
     * The recommended approach is to convert outputs to explicit 4D tensors when exporting the ONNX model (for example, NHWC format: `[batch, grid_h, grid_w, num_anchors*(5+num_classes)]`), and then parse and decode correctly in board-side post-processing according to this NHWC output format (for example, reshape back to 5D or perform the corresponding anchor calculations).
     * Ensure your post-processing logic fully matches the final output dimensions and layout of the ONNX model.
 
@@ -108,7 +108,7 @@ For example, `85` usually represents `(x, y, w, h, confidence + num_classes)`. I
 * **Possible cause: Post-processing library parameter passing issue (specifically in examples on certain system versions).**
     * In RDK OS 3.0.0 and above, examples such as `/app/pydev_demo/07_yolov5_sample` may use CPython-wrapped post-processing libraries. If key parameters such as the number of classes used during model training are not correctly passed to the initialization or invocation interface of this post-processing library, decoding logic may fail and cause bounding boxes to cluster in the upper-left corner.
     * **Example image:**
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/7.png" alt="YOLOv5 bounding boxes clustered in upper-left corner example" style={{ width: '100%' }} /> * **Solution:**
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/7.png" alt="YOLOv5 bounding boxes clustered in upper-left corner example" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> * **Solution:**
     * **Recommended: use post-processing from RDK Model Zoo:** For YOLOv5 and similar models, we strongly recommend referencing or directly using the post-processing code provided in **RDK Model Zoo** ([https://github.com/D-Robotics/rdk_model_zoo](https://github.com/D-Robotics/rdk_model_zoo)). Implementations in Model Zoo are usually more robust, better optimized, and more closely aligned with the toolchain.
     * **Check parameter passing:** If you insist on using the onboard example post-processing, carefully review the example code and ensure all necessary parameters (such as class count, input resolution, anchors, confidence threshold, NMS threshold, etc.) are correctly configured and passed to the post-processing function or class.
 
@@ -1378,7 +1378,7 @@ Converts input from float32 to uint8.
 
     The left image below shows visualization of an output node before modification; the right image shows the corresponding output node after modification.
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/yolov5.png" alt="yolov5" style={{ width: '100%' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/yolov5.png" alt="x[i] = x[i].view(bs, self.na, self.no, ny, nx).... diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - After download, convert the `.pt` file to ONNX using https://github.com/ultralytics/yolov5/blob/v2.0/models/export.py.
 
@@ -1395,7 +1395,7 @@ Converts input from float32 to uint8.
 
 Strictly follow steps 1–5 in the diagram below for model accuracy validation, and keep the code and results for each step:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/model_accuracy_check.png" alt="model_accuracy_check" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/model_accuracy_check.png" alt="Model Accuracy Check" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **Before troubleshooting, confirm the Docker image or conversion environment version used for the current model conversion, and keep the version information**
 

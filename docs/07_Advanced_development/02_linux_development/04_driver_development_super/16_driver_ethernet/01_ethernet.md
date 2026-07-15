@@ -748,7 +748,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 - TSN 在 IEEE 802.1Q 仅指 ISO/OSI 参考模型的第二层数据链路层的标准。
 - 802.1Q 标准的 VLAN，该标准在标准以太网帧中插入4个字节用于定义其特征，TSN 的标签位定义下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image15.png" alt="vlan-tag" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image15.png" alt="TSN-VLAN实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 对 TSN 网络而言，不同优先级或服务等级（class of
 service，CoS）的服务对应上图中的 PCP 码。优先级代码（prioritycode
@@ -768,7 +768,7 @@ point，PCP）由3位代码构成；3位 PCP 码定义了0（最低）～7（最
 Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged），这个窗口在这个机制中是被预先确定的，同时这个门控制列表被周期性的扫描，
 并按预先定义的次序为不同的队列开放传输端口。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image16.jpg" alt="tsn-est" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image16.jpg" alt="数据调度（整形器）实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - IEEE 802.1Qbv 规范的框图，说明了门控制列表如何根据为每个事件提供的时间表来管理门关闭（C-close）和打开（O-open）事件。
 - GCL 有以下两部分：
@@ -780,7 +780,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 802.3br，即可抢占式 MAC 机制，由可被抢占 MAC（pMAC-Preemptable MAC）和快速 MAC（eMAC-express MAC）组成。pMAC 可以被 eMAC 抢占。
 通过抢占，保护带宽可以被减少至最短低优先级帧片段。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image17.png" alt="tsn-fpe" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image17.png" alt="数据调度（整形器）实物图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 - 由于抢占改变了帧的格式，所以对接交换机时也需要对端支持 FPE。
@@ -854,7 +854,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 
 - wireshark 抓包如下图：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image27.png" alt="tc-est" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image27.png" alt="队列3每100ms循环发送一次，一次发送10ms实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 测试
 #### 功能测试
@@ -1050,7 +1050,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 <DocScope products="RDK S100">
 - 问：S100无法 ping 通 Windows，Windows 可以 ping 通 S100？
 - 答：检查 Windows 的防火墙是否关闭，windows 自带防火墙如下图：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="windows-firwall" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="网络环境实物图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 #### U-Boot 调试与升级

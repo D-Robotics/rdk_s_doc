@@ -60,7 +60,7 @@ Codec (Coder-Decoder) refers to a codec used to compress or decompress media dat
 
 The MediaCodec subsystem provides components for audio/video and image codec, raw stream packaging, and video recording. This system primarily encapsulates underlying codec hardware resources and software codec libraries to offer codec capabilities to upper layers. Developers can implement H.265 and H.264 video encoding/decoding functionalities using the provided codec APIs, use JPEG encoding to save camera data as JPEG images, or utilize the video recording feature to record camera data.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/2f8364ee5efbb8cb14136e0dc942248e.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/2f8364ee5efbb8cb14136e0dc942248e.png" alt="Overall Framework diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### Bitrate Control Modes
 
@@ -198,17 +198,17 @@ GOP Preset 1
 - Contains only I-frames with no inter-frame referencing;
 - Low latency;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/b02cc41ab083664ba3f8a3bef1543afa.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/b02cc41ab083664ba3f8a3bef1543afa.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/fa1da95bc8801b2d6225b2abf1b2f2d3.png)GOP Preset 2
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/fa1da95bc8801b2d6225b2abf1b2f2d3.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />GOP Preset 2
 
 - Contains only I-frames and P-frames;
 - P-frames reference 2 forward reference frames;
 - Low latency;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e3c2f773a89f6ee2fe2dab03200b6fd0.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e3c2f773a89f6ee2fe2dab03200b6fd0.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8fa5f892bd7282e82ac8ed96011c943d.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8fa5f892bd7282e82ac8ed96011c943d.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 3
 
@@ -216,9 +216,9 @@ GOP Preset 3
 - B-frames reference 2 forward reference frames;
 - Low latency;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/03bbdf35dc3e2a1b38f9e05d7038d064.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/03bbdf35dc3e2a1b38f9e05d7038d064.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e1b5707ea0c32b6a0c1658527a6186dd.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e1b5707ea0c32b6a0c1658527a6186dd.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 4
 
@@ -226,9 +226,9 @@ GOP Preset 4
 - P-frames reference 2 forward reference frames;
 - B-frames reference 1 forward reference frame and 1 backward reference frame;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/17e10e6a27db202fe9a0c2b5f3d5dd50.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/17e10e6a27db202fe9a0c2b5f3d5dd50.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/972bbe22d2e7364c1c0a3db03f57343e.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/972bbe22d2e7364c1c0a3db03f57343e.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 5
 
@@ -236,9 +236,9 @@ GOP Preset 5
 - P-frames reference 2 forward reference frames;
 - B-frames reference 1 forward reference frame and 1 backward reference frame, where the backward reference frame can be either a P-frame or a B-frame;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/16ad2d15f0b22a91fda1450747a18422.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/16ad2d15f0b22a91fda1450747a18422.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8ff1393cdbb997c8768ea2f9f00c3c8b.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/8ff1393cdbb997c8768ea2f9f00c3c8b.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 6
 
@@ -246,9 +246,9 @@ GOP Preset 6
 - P-frames reference 2 forward reference frames;
 - Low latency;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/a5fbffa7c85a3423729f06d45f83a601.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/a5fbffa7c85a3423729f06d45f83a601.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/1e88c6cbacb8fff86f5d5fc301e01abd.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/1e88c6cbacb8fff86f5d5fc301e01abd.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 7
 
@@ -256,18 +256,18 @@ GOP Preset 7
 - B-frames reference 2 forward reference frames;
 - Low latency;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/40cd6c4fa7cf66f9bf14c3675cb7ef20.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/40cd6c4fa7cf66f9bf14c3675cb7ef20.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/be7fe30d2685e27e2b36f305ef745eb4.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/be7fe30d2685e27e2b36f305ef745eb4.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 8
 
 - Contains only I-frames and B-frames;
 - B-frames reference 1 forward reference frame and 1 backward reference frame;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/9c46efaf2a9106bcee2468098e209b1f.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/9c46efaf2a9106bcee2468098e209b1f.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/d016b90fa0a06e183b6871bc430a8714.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/d016b90fa0a06e183b6871bc430a8714.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 9
 
@@ -275,9 +275,9 @@ GOP Preset 9
 - P-frames reference 1 forward reference frame;
 - Low latency;
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/0bc1b9d3e73b4037b64236650738b5cd.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/0bc1b9d3e73b4037b64236650738b5cd.png" alt="GOP Structure Description diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/937b45950423ff5006e378cb510d695d.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/937b45950423ff5006e378cb510d695d.png" alt="GOP Structure Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### VPU Debugging Method
 
@@ -458,25 +458,25 @@ Parameter Explanation
 
 The single-stream encoding scenario is illustrated below. Scenario 0 is a simple case: YUV video/image files are read from eMMC, encoded by VPU hardware into H.26x bitstreams or by JPU hardware into JPEG images, and finally saved back to eMMC as files. Scenario 1 is a more complex pipeline where camera-captured data is encoded, compressed, and either stored or transmitted over network/PCIe.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/788c1e3b839232111ccd53d35d25e278.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/788c1e3b839232111ccd53d35d25e278.png" alt="Single-Stream Encoding diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### Single-Stream Decoding
 
 The single-stream decoding scenario is illustrated below. Scenario 0 is a simple case: H.26x bitstreams or JPEG image files are read from eMMC, decoded by VPU or JPU hardware into YUV data, and saved back to eMMC as files. Scenario 1 is a complex pipeline where encoded video or image data is received via network or PCIe, decoded by VPU or JPU hardware, and displayed via IDE.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e50f9bf3c4d1ecfbd36b354f9009e8bc.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/e50f9bf3c4d1ecfbd36b354f9009e8bc.png" alt="Single-Stream Decoding diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### Multi-Stream Encoding
 
 The multi-stream encoding scenario is shown below. Scenario 0 is a simple file-input case. Scenario 1 is a complex pipeline involving multiple modules. Note that in Scenario 1, the capabilities and limitations of all modules in the pipeline must be carefully considered.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/272e3467c640af379d1b4c0a1de27eae.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/272e3467c640af379d1b4c0a1de27eae.png" alt="Multi-Stream Encoding diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 #### Multi-Stream Decoding
 
 The multi-stream decoding scenario is shown below. Scenario 0 is a simple file-input case. Scenario 1 is a complex pipeline involving multiple modules. Note that in Scenario 1, the capabilities and limitations of all modules in the pipeline must be carefully considered.
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/04f0aba90a1d65017dfeb90f9afa43e2.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/04f0aba90a1d65017dfeb90f9afa43e2.png" alt="Multi-Stream Decoding diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Frequently Asked Questions
 
@@ -595,7 +595,7 @@ Currently, based on user requirements, the default color range mode in VUI infor
 
 **Issue Background:** When encoding large areas of blue sky, some abnormal stripe patterns appear. What is the cause?
 
-![image14](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image14.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image14.png" alt="Blue Sky Encoding Stripe Artifact Example" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Answer:** The original image contains significant noise. After compression, the noise distribution becomes irregular, appearing as stripes. This is actually caused by compressing the noise, a characteristic of the codec hardware that cannot be eliminated.
 
@@ -637,7 +637,7 @@ However, the following limitations should be noted:
 
 **Issue Background:** When using jpg tools to view a 1920x1080 image, a green edge appears at the bottom.
 
-![image12](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image12.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/image12.png" alt="1080p Image Green Edge Issue Example" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Explanation:** This is because the IP performs encoding with 16-bit alignment. If the final part is 8-bit aligned instead of 16-bit aligned, the encoder pads the remaining area. This padded data is randomly generated and not valid data.
 
@@ -702,9 +702,9 @@ GOP Preset 1
 - Contains only I-frames with no inter-frame references;
 - Low latency;
 
-![gop1](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop1.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop1.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop2](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop2.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop2.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 2
 
@@ -712,9 +712,9 @@ GOP Preset 2
 - P-frames reference two previous frames;
 - Low latency;
 
-![gop3](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop3.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop3.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop4](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop4.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop4.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 3
 
@@ -722,9 +722,9 @@ GOP Preset 3
 - B-frames reference two previous frames;
 - Low latency;
 
-![gop5](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop5.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop5.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop6](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop6.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop6.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 4
 
@@ -732,9 +732,9 @@ GOP Preset 4
 - P-frames reference two previous frames;
 - B-frames reference one previous and one future frame;
 
-![gop7](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop7.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop7.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop8](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop8.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop8.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 5
 
@@ -742,9 +742,9 @@ GOP Preset 5
 - P-frames reference two previous frames;
 - B-frames reference one previous and one future frame (which can be either P or B);
 
-![gop9](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop9.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop9.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop10](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop10.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop10.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 6
 
@@ -752,9 +752,9 @@ GOP Preset 6
 - P-frames reference two previous frames;
 - Low latency;
 
-![gop11](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop11.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop11.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop12](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop12.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop12.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 7
 
@@ -762,18 +762,18 @@ GOP Preset 7
 - B-frames reference two previous frames;
 - Low latency;
 
-![gop13](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop13.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop13.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop14](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop14.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop14.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 GOP Preset 8
 
 - Contains only I-frames and B-frames;
 - B-frames reference one previous and one future frame;
 
-![gop15](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop15.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop15.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop16](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop16.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop16.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
   
   GOP Preset 9
 
@@ -781,9 +781,9 @@ GOP Preset 8
 - Each P-frame references one forward reference frame;
 - Low latency;
 
-![gop17](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop17.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop17.png" alt="GOP diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-![gop18](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop18.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/gop18.png" alt="GOP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 
@@ -791,7 +791,7 @@ GOP Preset 8
 
 Users can specify the interval for long-term reference frames and the interval at which frames reference long-term reference frames, as shown in the figure below:
 
-![reference_frame](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/reference_frame.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/reference_frame.png" alt="Long-term Reference Frames diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 
@@ -821,7 +821,7 @@ For CBR and AVBR, the encoder internally determines an appropriate QP value for 
 
 ROI encoding works similarly to QpMap: users must assign a QP value to each block in raster-scan order, as illustrated below:
 
-![roi_map](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/roi_map.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/roi_map.png" alt="ROI diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 For H.264, each block is 16×16; for H.265, it is 32×32. In the ROI map, each QP value occupies one byte, ranging from 0 to 51. ROI encoding can operate alongside CBR or AVBR.  
 - When CBR/AVBR is disabled, the actual QP for each block equals the value specified in the ROI map.  
@@ -844,7 +844,7 @@ However, to reduce unnecessary buffer copying in certain scenarios—e.g., when 
 
 Note: Even when providing external input buffers, users must still perform `dequeue` to retrieve buffer metadata (e.g., virtual and physical addresses), populate this information, and then call `queue`.
 
-![buffer](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/buffer.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/buffer.png" alt="Input/Output Buffer Management diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 
@@ -5888,11 +5888,11 @@ Uses MediaCodec's poll mode to decouple input and output, enabling optimal encod
 In the main thread, YUV data is fed into the encoder: an empty input buffer is acquired, the YUV data's address information (e.g., physical address) is configured, and then the input buffer is queued to notify the encoder to process this frame.  
 In another thread, encoded output bitstreams are retrieved: upon receiving a hardware encoding completion notification via `select`, a filled output buffer is acquired, the encoded result is written to a file, and then the output buffer is returned.
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder2.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder2.png" alt="Function Overview diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ##### Hardware Data Flow Description
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder1.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder1.png" alt="Function Overview diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ##### Code Location and Directory Structure
 
@@ -6046,11 +6046,11 @@ VPU CROP read and encode: Read input data of size 1920x1300 (image dimensions no
 
 The following figure shows a successful execution:
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder3.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder3.png" alt="Encoder Sample Successful Execution" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Check whether the generated H264/H265/JPG files are valid:
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder4.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/encoder4.png" alt="Encoder Output File Verification" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Decoding Examples
 
@@ -6064,11 +6064,11 @@ MediaCodec's poll mode is adopted to decouple input and output, enabling optimal
 In the main thread, bitstream data is fed into the decoder: an empty input buffer is acquired, the physical address and other metadata of the bitstream data are configured, then the input buffer is queued to notify the decoder to process this frame.  
 In another thread, decoded YUV images are retrieved: upon receiving a hardware decoding completion notification via `select`, a filled output buffer is acquired, the decoded result is written to a file, and the output buffer is released back.
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder2.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder2.png" alt="Function Overview diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ##### Hardware Data Flow Description
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder1.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder1.png" alt="Function Overview diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ##### Code Location and Directory Structure
 
@@ -6216,8 +6216,8 @@ Decode four 1920x1080 h265 video streams and generate YUV image files.
 
 Successful execution is shown in the figure below:
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder3.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder3.png" alt="Decoder Sample Successful Execution" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Use YUVPlayer to verify whether the generated YUV image files are valid.
 
-![image](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder4.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/codec/decoder4.png" alt="Decoder Output YUV Image Verification" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />

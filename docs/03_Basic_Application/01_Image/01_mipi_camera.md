@@ -22,7 +22,7 @@ sidebar_position: 1
 
 ## 预期效果
 程序执行后，显示器会实时显示摄像头画面，如下所示：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="mipi_camera_streamer_2025-06-25_12-12-31" style={{ width: '100%' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="MIPI摄像头实时画面显示效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <!--
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
@@ -47,16 +47,16 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
 
   在终端中运行之后，会出现“please choose sensor config,xxxx”的要求。
 
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/screenshot-20241217-115245.png" alt="screenshot-20241217-115245" style={{ width: '100%' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/screenshot-20241217-115245.png" alt="MIPI摄像头传感器配置选择界面" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
   在运行的时候选择 RKD X5支持的配置，上图中选择0或者1都可以。
 
   启动过程可以参考如下视频：
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/20241217-115536.gif" alt="gif-20241217-115536" style={{ width: '100%' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/20241217-115536.gif" alt="MIPI摄像头启动过程演示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </details>
 
 ## 预期效果
 程序执行后，显示器会实时显示摄像头画面及目标检测算法的结果(目标类型、置信度)，如下所示：
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="image-20220503221020331" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI摄像头目标检测算法运行结果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 -->

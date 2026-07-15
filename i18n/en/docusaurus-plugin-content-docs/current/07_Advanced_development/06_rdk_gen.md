@@ -166,7 +166,7 @@ The script builds a desktop image by default, i.e., using `noble-desktop.conf` t
 To specify a configuration file: `sudo ./make_ubuntu_samplefs.sh build <config_file_name>`. For example, if the new configuration file is `new-desktop.conf`, the command is: `sudo ./make_ubuntu_samplefs.sh build new-desktop.conf`. The `new-desktop.conf` file must be placed in the `samplefs/configs` folder.
 
 The script build flowchart is as follows:
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/samplefs_flowchart.png" alt="samplefs_flowchart" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/samplefs_flowchart.png" alt="Sample Filesystem Flowchart" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Methods for Trimming/Customizing the Root Filesystem
 :::info Tip
@@ -248,7 +248,7 @@ hobot-camera/
 ```
 ### Build Process Description
 For detailed process, please refer to the `mk_debs.sh` script implementation. Below is a simplified flowchart:
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/mk_debs_flowchart.png" alt="mk_debs_flowchart" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/mk_debs_flowchart.png" alt="mk_debs Flowchart" style={{ width: '75%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Custom deb Package Process Description
 1. Under the `source/` folder, create a new folder named after the package name (package name in dpkg). Here, "new_package" is used as an example.

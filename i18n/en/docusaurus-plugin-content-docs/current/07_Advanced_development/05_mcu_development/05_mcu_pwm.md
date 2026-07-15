@@ -263,10 +263,10 @@ Stop PWM output:
 pwmtest stop <pwm_hwipid> <pwm_hwchid>
 ```
 
-**Parameter Description**
-**pwm_hwipid:** PWM hardware IP instance ID (0~2)
-**pwm_hwchid:** PWM hardware channel ID (0~11)
-**period:** PWM signal period value, 32-bit value
+**Parameter Description**  
+**pwm_hwipid:** PWM hardware IP instance ID (0 ~ 2)  
+**pwm_hwchid:** PWM hardware channel ID (0 ~ 11)  
+**period:** PWM signal period value, 32-bit value  
 **duty_cycle:** PWM signal duty cycle, must be in the range of 0x0000 (0%) to 0x8000 (100%)
 
 For example, to set PWM0 channel4 with a period of 0x600000 and a duty cycle of 0x4000 (50%):

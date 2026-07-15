@@ -372,4 +372,4 @@ None
 ## Host ID Selection
 The host ID corresponding to the camera is shown in the figure below:
 
-![20250220-114529.png](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Host ID Selection diagram" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />

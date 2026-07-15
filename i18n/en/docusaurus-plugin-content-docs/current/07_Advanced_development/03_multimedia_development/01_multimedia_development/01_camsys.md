@@ -37,12 +37,12 @@ The S100 camsys subsystem includes the Camera sensor (including SerDes), VIN (in
 
 <DocScope products="RDK-S100">
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/b266496271990c1606e5f68485cf3e9d.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/b266496271990c1606e5f68485cf3e9d.png" alt="Camsys Hardware Block Diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 </DocScope>
 <DocScope products="RDK-S600">
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/s600-camsys.PNG)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/s600-camsys.PNG" alt="Camsys Hardware Block Diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 </DocScope>
 
@@ -106,7 +106,7 @@ ISP functions include various algorithmic processing of raw images, image charac
 
 </DocScope>
 - ISP processing pipeline is shown below:  
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp_pipeline.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp_pipeline.png" alt="ISP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 - **MCFE**:  
   Multi-Context Front End, used for multi-channel scheduling control and buffer management in ISP, processing multi-camera images sequentially (one by one).
 - **RAW Domain**:  
@@ -137,7 +137,7 @@ YNR is a Digital Noise Reduction module operating in the YUV domain, supporting 
 
 PYM (Pyramid) is a hardware acceleration module that processes input images in pyramid layers and outputs them to DDR.
 
-![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image.png" alt="PYM photo" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 <DocScope products="RDK-S100">
 
@@ -231,24 +231,24 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 * **Pan**
 
     Horizontally offsets the transformation grid by a given number of pixels within the range (-1280, +1280), as shown below:  
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-1.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-1.png" alt="Pan parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 * **Tile**
 
     Vertically offsets the transformation grid by a given number of pixels within the range (-720, +720), as shown below:  
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-2.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-2.png" alt="Tile parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 * **Zoom**
 
     Scales the transformation output by a given factor within the range (0, +∞), where (0, 1) denotes values greater than 0 and less than 1, as shown below:  
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-3.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-3.png" alt="Zoom parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 1. **Affine**
    * **Function Description**
 
         Provides a linear transformation.
 
-        ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-4.png)
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-4.png" alt="GDC diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    * **Member Description**
 
@@ -271,7 +271,7 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 
         This transformation provides equisolid (panoramic) correction and displays the result as a projection onto a plane.
 
-        ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-6.png)
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-6.png" alt="GDC diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    * **Member Description**
 
@@ -284,13 +284,13 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
         | double strengthY        | Transformation strength along the Y-axis (non-negative parameter) |
         | double angle (rotation) | Image rotation angle: 0°/90°/180°/270°                           |
 
-        strength x adjustment effect: transformation strength along the X-axis, with values in the range (0, +∞), as shown below:![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-7.png)
+        strength x adjustment effect: transformation strength along the X-axis, with values in the range (0, +∞), as shown below:<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-7.png" alt="strengthX parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
         strength y debugging effect: the transformation intensity along the Y-axis, with a value range of (0, +∞). As shown below:
-        ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-8.png)
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-8.png" alt="strengthY parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
         Rotation debugging effect: value range (-180, 180). As shown below:
-        ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-9.png)
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-9.png" alt="Rotation parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
         :::info Note!
 
@@ -303,7 +303,7 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 
         This transformation provides equirectangular (panoramic) correction and displays the result as a projection onto a plane.
 
-        ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-10.png)
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-10.png" alt="Equisolid(cylinder) panoramic correction diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    * Member Description
         | Member | Description                                   |
@@ -316,11 +316,11 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 
         strength debugging effect: transformation intensity (0, +∞). As shown below:
 
-        ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-11.png)
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-11.png" alt="strength parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
         rotation debugging effect: value range (-180, +180). As shown below:
 
-        ![alt text](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-12-en.png)
+        <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-12-en.png" alt="rotation parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
         :::info Note!
@@ -334,7 +334,7 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 
        The equidistant transformation includes many parameters that allow it to provide a variety of target planes for projection. This gives users greater freedom to select the desired region of the fisheye frame to be transformed.
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-13.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-13.png" alt="Equidistant transformation diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    * Member Description
        | Member | Description                                   |
@@ -353,27 +353,27 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 
        elevation debugging effect:
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-14.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-14.png" alt="elevation parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
        azimuth debugging effect:
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-15.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-15.png" alt="azimuth parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
        rotation debugging effect:
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-16.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-16.png" alt="rotation parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
        cylindricity x debugging effect:
 
        Describes the sphericity of the target projection along the X-axis. This value ranges from 0 to 1, where 1 represents a spherical shape. If this value is set to 1 and cylindricity_y is set to 0, the projection will form a cylinder along the X-axis. As shown below:
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-17.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-17.png" alt="cylindricityX parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
        cylindricity y debugging effect:
 
        Describes the sphericity of the target projection along the Y-axis. This value ranges from 0 to 1, where 1 represents a spherical shape. If this value is set to 1 and cylindricity_x is set to 0, the projection will form a cylinder along the Y-axis. As shown below:
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-18.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-18.png" alt="cylindricityY parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
        :::info Note!
 
@@ -391,11 +391,11 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 
        After applying the custom transformation, each polygon in the input image is transformed into a square. In other words, any four adjacent input points of any shape become a square after transformation, as shown in the figure below. However, the shape and position of the polygons will change after transformation.
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-19.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-19.png" alt="Custom transformation diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
        These are used to create transformations that cannot be described by any of the provided standard types. To correct arbitrary distortion, a special calibration file named config0.txt must be provided to the GDC tool, as shown in the figure below:
 
-       ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-20.png)
+       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-20.png" alt="Custom calibration file config0.txt example" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
    * Member Description
        | Member | Description                                   |
@@ -419,23 +419,23 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
            5. Calibration points must be non-negative integers or floats, and calibration points in adjacent rows must not be duplicated.
                e.g., The figure below shows a partial excerpt of the data. Rows 5 to 9 contain the coordinate values of calibration points in the source image, formatted as Y: X. In this example, there are a total of 1081x1921 calibration points.
 
-                ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-25.png)
+                <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-25.png" alt="Calibration point data format example" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
            6. Since calibration points must be equally spaced, the output image resolution depends on the number of calibration points.
 
-                ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-22.png)
+                <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-22.png" alt="Calibration points and output resolution relationship" style={{ width: '50%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
                 e.g., Output image Width = 100, Height calculated as 340, calculated as follows: 100/height = (96-1)/(324-1) \
                 The figure below shows a simpler example of 3x3 coordinate point transformation:
 
-                ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-23.png)
+                <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-23.png" alt="3x3 coordinate point transformation example" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 
 6. Keystone + Dewarping
     * Function Description
 
-        ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-26.png)
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-26.png" alt="Keystone+dewarping transformation diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
     * Member Description
         | Member | Description                                   |
@@ -630,12 +630,12 @@ Configuration file content as follows:
 
     Input image with transformation mesh shown below:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-27.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-27.png" alt="Affine mode input image with transformation mesh" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
     Output image shown below:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-28.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-28.png" alt="Affine mode output image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 4. Equisolid Configuration file content as follows:
@@ -689,12 +689,12 @@ Configuration file content as follows:
     ```
     Input image with transformation grid as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-29.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-29.png" alt="Equisolid mode input image with transformation grid" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
     Output image as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-30.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-30.png" alt="Equisolid mode output image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 5. Equisolid (cylinder) Configuration file content as follows:
@@ -748,11 +748,11 @@ Configuration file content as follows:
     ```
     Input image with transformation grid as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-31.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-31.png" alt="Equisolid(cylinder) mode input image with transformation grid" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
     Output image as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-32.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-32.png" alt="Equisolid(cylinder) mode output image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 6. Equidistant Configuration file content as follows:
 
@@ -812,11 +812,11 @@ Configuration file content as follows:
 
     Input image with transformation grid as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-33.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-33.png" alt="Equidistant mode input image with transformation grid" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
     Output image as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-34.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-34.png" alt="Equidistant mode output image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 7. Custom Input resolution: 1280x720, output resolution: 560x258. Configuration file content as follows:
 
@@ -869,11 +869,11 @@ Configuration file content as follows:
 
     Input image with transformation grid as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-35.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-35.png" alt="Custom mode input image with transformation grid" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
     Output image as follows:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-36.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-36.png" alt="Custom mode output image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 8. Keystone + dewarping Configuration file content as follows:
@@ -935,11 +935,11 @@ Configuration file content as follows:
 
     Input image with transformation grid is shown below:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-37.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-37.png" alt="Keystone+dewarping mode input image with transformation grid" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
     Output image is shown below:
 
-    ![alt text](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-38.png)
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-38.png" alt="Keystone+dewarping mode output image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 ##### GDC Bin Related API Reference
@@ -1128,11 +1128,11 @@ The Stitch hardware supports maximum input and output resolutions of 4096x4096.
 
 Here, the "LUT table" refers to the buffer storing blending weight parameters.
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch_work-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch_work-en.jpg" alt="STITCH diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Hardware Stitching Diagram**
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch0.png)  
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch0.png" alt="STITCH diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />  
 By using the two source ROIs shown in the image with different blend modes, the corresponding ROI output results are generated.
 
 **Stitching Scheme Overview**
@@ -1140,11 +1140,11 @@ By using the two source ROIs shown in the image with different blend modes, the 
 The hardware stitching function can merge and blend multiple images into a single output image. Designed flexibly, it uses ROIs as the basic processing unit and employs the alpha blending algorithm. Different ROI partitions and configurations can be defined via configuration parameters to generate various stitching schemes. Additionally, LUT tables are used to optimize transition zones during stitching. In autonomous driving and ADAS Automated Parking Assist (APA) scenarios, this hardware can stitch four IPM (Inverse Perspective Mapping) images—already distortion-corrected from four cameras—into a single 360-degree surround-view image for parking space detection, allowing users to easily view parking lines and surroundings.
 
 **Typical Scenario**  
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch1-en.jpg)  
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch1-en.jpg" alt="STITCH diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />  
 In an APA scenario with four surround-view cameras, GDC fetches four back-projected images and reference points (CFG BIN) from DDR, outputs four IPM images after distortion correction, and then uses the STITCH hardware module with a pre-defined stitching configuration (CPG PARAM) to generate a bird's-eye-view output.
 
 **Placement Layout**  
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch2.png)  
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch2.png" alt="STITCH diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />  
 1. The four IPM images are placed at specified locations in the output buffer using copy mode.  
 2. Non-overlapping regions can use direct copy mode.  
 3. Overlapping ROI regions use Alpha Blend mode for seamless fusion.
@@ -1161,7 +1161,7 @@ Currently, the LUT table can be generated using the `convert_tool`.
 **Coordinate Parameter Example**
 
 ROI partitioning for hardware stitching is directly related to camera mounting positions. Currently, ROI partitions can be generated using the `convert-tool`. The figure below shows an example of coordinate points for each ROI region.  
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch3.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch3.png" alt="STITCH diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
  | ROI | Range               | SRC0             | Start     | Size       | SRC1             | Start      | Size       | Dest Start | Mode         |
  |-----|---------------------|------------------|-----------|------------|------------------|------------|------------|------------|--------------|
@@ -1238,7 +1238,7 @@ Period = 1000000 / fps
 Offset = 1000000 - Period * fps + 1
 ```
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/lpwm_01.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/lpwm_01.png" alt="LPWM diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Recommended Configurations
 | Usage Scenario       | trigger_source       | trigger_mode | duty_time | offset | period        |
@@ -1263,7 +1263,7 @@ In actual use, ensure PPS stably falls in the **low-level region** by appropriat
 
 After RDK-S100 connects to cameras, the data flows through subsequent processing modules as shown below:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/47ab7cc928ceb5b8e03de23bb95d057b.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/47ab7cc928ceb5b8e03de23bb95d057b.png" alt="Data Flow and Performance Metrics diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 - **MIPI RX**: 3 CDPHY lanes, each supporting either DPHY up to 4.5 Gbps/lane × 4 lanes or CPHY up to 3.5 Gbps/trio × 3 trios. Each lane supports 4 virtual channels (VCs), theoretically allowing up to 12 camera inputs.
 
@@ -2034,13 +2034,13 @@ In software, the Camera uses a dedicated set of APIs. Modules downstream of the 
 Multiple vnodes form a vflow (similar to a pipeline). The Camera and VIN are bound together via the attach interface.  
 Users only need to call HBN APIs to initialize and bind modules. Once the vflow is created and started, users do not need to manage frame data transfer—the SDK internally passes frames from upstream to downstream.
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/28afb7cb9d1a5de6c889657a0e548e82-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/28afb7cb9d1a5de6c889657a0e548e82-en.jpg" alt="Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 A vflow consists of one or more vnodes. Each vnode has one input channel and one or more output channels.
 
 Example API usage:
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/492ed46bde119b791326f621b9f5b064-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/492ed46bde119b791326f621b9f5b064-en.jpg" alt="Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### API Reference
 
@@ -2798,7 +2798,7 @@ Failure: Exception indicated by a negative error code; refer to the return value
 Obtain AE statistics (1024-bin histogram) via the vflow_fd of the ISP module. The data is fixed at 2096 bytes, arranged as shown in the figure below:
 
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp_1024_bin.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp_1024_bin.png" alt="ISP API diagram" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 2. **hbn_isp_release_ae_statistics**
 
@@ -3995,31 +3995,31 @@ This sample uses a data-replay workflow: it reads files from system storage as i
 
 Original rear-view image and its GDC-processed output:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch0.png)
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch1.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch0.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch1.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Original front-view image and its GDC-processed output:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch2.png)
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch3.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch2.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch3.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Original left-view image and its GDC-processed output:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch4.png)
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch5.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch4.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch5.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Original right-view image and its GDC-processed output:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch6.png)
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch7.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch6.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch7.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Final stitched output image:
 
-![](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch8.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch8.png" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 Corresponding ROI region division for stitching:
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch9-en.jpg)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch9-en.jpg" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
   |ROI   |Range                              | SRC0     | Start Point | Size        | SRC1     | Start Point | Size        | Destination Start | Mode           | Direction    |
   |----- |-----------------------------------| ---------| -----------| ------------| ---------| -----------| ------------| ------------------| ---------------| --------|
@@ -4237,7 +4237,7 @@ sunrise@ubuntu:/app/multimedia_demo/camsys_demo/sample_2v_219_stitch_codec$ ./sa
 
 The generated `cim-isp-pym-stitch.h264` file playback is shown below:
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sth_codec_2025-06-24_20-37-19.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sth_codec_2025-06-24_20-37-19.png" alt="2v imx219 + MIPI + CIM + ISP + PYM + STITCH sti... diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
 STITCH configuration parameters:

@@ -14,7 +14,7 @@ The Kernel version includes standard driver libraries along with the system BSP.
 
 The software block diagram is shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework.png" alt="software_framwork" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework.png" alt="Software Architecture Diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Microkernel design
 
@@ -95,7 +95,7 @@ When modules interact, if the received CMD is not registered or not enabled, the
 1. Static plug-in control for module plugins
 2. CMD command relay between modules
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="event_bus" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="Event Bus Diagram" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Example:
 
@@ -103,7 +103,7 @@ The camera submodule defines the SDK_CMD_CAMERA_GET_CHIP_TYPE command. After reg
 
 The entire process is shown in the following figure:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="event_bus_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="Event Bus Data Flow" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Module code structure
 
@@ -128,7 +128,7 @@ Each submodule must implement xxx_cmd_register(), which registers the submodule'
 
 Example:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="cmd_register" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="Command Registration Example" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **sdk_cmd_register**
 
@@ -215,7 +215,7 @@ vp_wrap implements interface encapsulation for multimedia modules;
 
 bpu_wrap implements algorithm inference interface and post-processing method encapsulation.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="platform_module" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="Platform Module Architecture" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Functional description
 
@@ -236,7 +236,7 @@ typedef struct vpp_ops {
 
 The flow for starting an application solution (using vpp_camera as an example) is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="vpp_camera_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="VPP Camera Data Flow" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The initialization and startup flow for other submodules can refer to this flowchart.
 
@@ -288,7 +288,7 @@ The current basic submodule startup sequence is as follows. Note that the startu
 
 #### Execution flow
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow.png" alt="main_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow.png" alt="Main Program Flow" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### WebServer
 
@@ -308,7 +308,7 @@ This module completes algorithm model loading, data preprocessing, inference, al
 
 The module runtime sequence is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow.png" alt="bpu_flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow.png" alt="BPU Inference Flow" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Process for adding a new model
 

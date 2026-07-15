@@ -28,6 +28,34 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
+/* 文档表格横向滚动：由 DocItem 给 table 包一层 .table-scroll-wrap        */
+.table-scroll-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 0 1rem;
+}
+
+.table-scroll-wrap table {
+  display: table;
+  width: 100%;
+  margin-bottom: 0;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.theme-doc-markdown table th,
+.theme-doc-markdown table td,
+article.markdown table th,
+article.markdown table td {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  padding: 8px;
+}
+
+/* ------------------------------------------------------------------ */
 /* navbar 版本下拉：默认全部隐藏，只在对应子站 docs 页面显示             */
 /* Docusaurus 会给 docs 页面的 body 加 plugin-id-<pluginId> 类；        */
 /* 我们给每个 docsVersionDropdown 打了 navbar-version-dropdown--<id> 类。 */
@@ -298,14 +326,11 @@ body.plugin-id-os-rdk-s600        .navbar-version-dropdown--os-rdk-s600 {
 
 
 /* ------------------------------------------------------------------ */
-/* 文档正文表格与 TOC 防重叠：
- * - 正文列允许收缩（min-width: 0），避免宽表格撑进右侧 TOC 区域
- * - 宽表格在直接父节点内横向滚动（纯 CSS，避免 JS 改 DOM 与 React 冲突） */
+/* 文档正文表格：恢复 Docusaurus 框架默认样式，具体章节按需单独设置 */
 @media (min-width: 997px) {
   main .container .row > .col--9,
   main .container .row > .col:first-child {
     min-width: 0;
-    overflow-x: hidden;
   }
 
   .theme-doc-toc-desktop {
@@ -321,65 +346,12 @@ body.plugin-id-os-rdk-s600        .navbar-version-dropdown--os-rdk-s600 {
 article.markdown {
   min-width: 0;
   max-width: 100%;
-  overflow-x: hidden;
-}
-
-.markdown-table-scroll,
-.theme-doc-markdown.markdown .table-responsive,
-article.markdown .table-responsive {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  margin: 0 0 1rem;
-  scrollbar-gutter: stable;
-}
-
-/* Native markdown/html tables: each table owns its own scroll bar. */
-.theme-doc-markdown.markdown table,
-article.markdown table {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  margin: 0 0 1rem;
-  scrollbar-gutter: stable;
-  border-collapse: collapse;
-  table-layout: auto;
-}
-
-/* If wrapper exists, use wrapper as the only scroll container. */
-.markdown-table-scroll > table,
-.theme-doc-markdown.markdown .table-responsive > table,
-article.markdown .table-responsive > table {
-  display: table;
-  width: max-content;
-  min-width: 100%;
-  max-width: none;
-  margin-bottom: 0;
-  box-sizing: border-box;
-  border-collapse: collapse;
-  table-layout: auto;
-  overflow: visible;
 }
 
 /* Keep hidden tab panels hidden when table styles are applied. */
 .theme-doc-markdown.markdown [role='tabpanel'][hidden],
 article.markdown [role='tabpanel'][hidden] {
   display: none !important;
-}
-
-.theme-doc-markdown.markdown table th,
-.theme-doc-markdown.markdown table td,
-article.markdown table th,
-article.markdown table td {
-  white-space: nowrap;
-  word-break: normal;
-  overflow-wrap: normal;
-  hyphens: none;
 }
 
 /* Dify 问答小助手：高于反馈浮标 (z-index:9999)，避免点击落在浮标上导致「点了没反应」 */

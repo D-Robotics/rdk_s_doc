@@ -22,7 +22,7 @@ Execute the program with the following commands:
 
 ## Expected Result
 After running the program, the display will show the live camera feed in real time, as shown below:
-![mipi_camera_streamer_2025-06-25_12-12-31](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png)
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="MIPI camera live feed display" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 <!--
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
@@ -47,16 +47,16 @@ Execute the program with the following commands:
 
   After running the program in the terminal, you will see a prompt such as “please choose sensor config, xxxx”.
 
-  ![screenshot-20241217-115245](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/screenshot-20241217-115245.png)
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/screenshot-20241217-115245.png" alt="MIPI camera sensor configuration selection interface" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
   Select a configuration supported by RDK X5 during execution. In the image above, either option 0 or 1 is acceptable.
 
   You can refer to the following video for the startup process:
-  ![gif-20241217-115536](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/20241217-115536.gif)
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/20241217-115536.gif" alt="How to Run demonstration" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 </details>
 
 ## Expected Result
 After running the program, the display will show the live camera feed along with the object detection results (object class and confidence score) in real time, as shown below:
-![image-20220503221020331](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI camera object detection result on display" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 -->

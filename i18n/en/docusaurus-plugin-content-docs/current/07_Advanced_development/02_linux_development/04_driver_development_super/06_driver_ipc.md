@@ -16,11 +16,11 @@ The IPC (Inter-Processor Communication) module is used for communication between
 
 For inter-core communication between Acore and MCU, IPCFHAL is mainly used on the Acore side, and IPCF is used on the MCU side. IPCFHAL wraps an interface based on IPCF for data transfer between user space and kernel space.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/linux-ipc.jpg" alt="IPCF Software and Hardware Component Diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/linux-ipc.jpg" alt="IPCF Software and Hardware Component Diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## Typical IPC Usage Scenarios
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcscen.png" alt="Typical IPC Usage Scenario Diagram" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcscen.png" alt="Typical IPC Usage Scenarios photo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Typical IPC application scenarios include the OTA module, planning and control, CANHAL, etc.
 
@@ -227,7 +227,7 @@ ipc_instance3: ipc_instance3 {
 
 The IPC Sample implements IPC send/receive communication between Acore and MCU, demonstrating an example of using IPC with multiple instances, multiple channels, and multiple threads.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleframeware.png" alt="IPC Send/Receive Communication between Acore and MCU" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleframeware.png" alt="IPC Send/Receive Communication between Acore and MCU" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 In the Sample software architecture diagram, Acore uses the libipcfhal interface for data transmission, based on the ipcf driver at the lower level. MCU directly uses the ipcf interface for transmission. Since there are multiple sets of IPC interfaces on the Acore side, they are described separately as IPCFHAL, RPMSG, and IPCF for distinction. MCU has only one set of IPC interfaces, so IPCF is uniformly described as IPC in the MCU-side documentation.
 
@@ -235,7 +235,7 @@ In the Sample software architecture diagram, Acore uses the libipcfhal interface
 
 Sample shared memory data flow and interrupt signal flow
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampledataflow.png" alt="Shared Memory Data Flow and Interrupt Signal Flow" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampledataflow.png" alt="Shared Memory Data Flow and Interrupt Signal Flow" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 In the Sample, Acore and MCU transmit data via shared memory and notify each other via mailbox interrupts.
 
@@ -390,10 +390,10 @@ This setting allows all RT tasks to occupy the CPU without limits, thereby impro
 ### API Flow Description
 
 API Sample operation flow between Acore and MCU (IRQ mode)
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleirqapi.png" alt="API Sample operation flow between Acore and MCU (IRQ mode)" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/sampleirqapi.png" alt="API Sample operation flow between Acore and MCU (IRQ mode)" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 API Sample operation flow between Acore and MCU (POLL mode)
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/samplepollapi.png" alt="API Sample operation flow between Acore and MCU (POLL mode)" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/samplepollapi.png" alt="API Sample operation flow between Acore and MCU (POLL mode)" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Path Configuration
 You can increase the number of channels `config_num` in the Json file and add channel information. This Sample does not support adding channels. To add channels, you need to modify the configuration files on both the Acore and MCU sides.
@@ -952,15 +952,15 @@ Acore-MCU IPC communication uses MCU MDMA to move data between DDR and MCU SRAM.
 
 ### MCU Sending Data to Acore
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imager52a78-en.jpg" alt="MCU Sending Data to Acore" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imager52a78-en.jpg" alt="MCU Sending Data to Acore" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Acore Sending Data to MCU
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imagea78r52-en.png" alt="Acore Sending Data to MCU" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imagea78r52-en.png" alt="Acore Sending Data to MCU" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### IPCFHAL Interface Usage Sequence
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcfhalapi.png" alt="Acore Sending Data to MCU" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/imageipcfhalapi.png" alt="Acore Sending Data to MCU" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 During Acore-MCU communication, IPCFHAL users on the MCU side use the IPCF interface.
 

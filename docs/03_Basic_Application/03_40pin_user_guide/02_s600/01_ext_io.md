@@ -15,7 +15,7 @@ import TabItem from '@theme/TabItem';
 
 RDKS600 有 2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin 自锁接口，方便用户进行外围扩展，其中数字 IO 采用 1.8V 电平设计。接口定义如下：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mainboard_pin.png" alt="image-rdk_600_mainboard_pin" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mainboard_pin.png" alt="扩展引脚排定义{#pin_define}实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## GPIO 读写操作示例
 :::tip
