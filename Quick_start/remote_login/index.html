@@ -11,9 +11,9 @@
 <meta name="algolia-site-verification" content="7D2FA77E12885A7C">
 <script defer="defer" src="https://cloud.umami.is/script.js" data-website-id="b0c771b8-947e-4fa4-8880-606ecab89c36"></script>
 <script src="https://hm.baidu.com/hm.js?24dd63cad43b63889ea6bede5fd1ab9e" async></script>
-<script src="/rdk_s_doc/js/dify-config.js"></script><link rel="stylesheet" href="/rdk_s_doc/assets/css/styles.36600d20.css">
-<script src="/rdk_s_doc/assets/js/runtime~main.aa7198f2.js" defer="defer"></script>
-<script src="/rdk_s_doc/assets/js/main.43b2aa9c.js" defer="defer"></script>
+<script src="/rdk_s_doc/js/dify-config.js"></script><link rel="stylesheet" href="/rdk_s_doc/assets/css/styles.dc40ece5.css">
+<script src="/rdk_s_doc/assets/js/runtime~main.989c8db3.js" defer="defer"></script>
+<script src="/rdk_s_doc/assets/js/main.b9d8e300.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -60,7 +60,7 @@
 <ul>
 <li>当串口 USB 转接板首次插入电脑时，需要安装串口驱动。驱动程序可从资源中心的<a href="https://developer.d-robotics.cc/resource" target="_blank" rel="noopener noreferrer">工具子栏目</a>获取。驱动安装完成后，设备管理器可正常识别串口板端口，如下图：</li>
 </ul>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="image-20220416105939067" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="设备管理器中识别到的串口端口" style="width:50%;max-width:980px;height:auto;display:block;margin:0 auto">
 <ul>
 <li>
 <p>打开<code>MobaXterm</code>工具，点击<code>Session</code>，然后选择<code>Serial</code></p>
@@ -74,7 +74,7 @@
 </li>
 <li>
 <p>点击<code>OK</code>，输入用户名：<code>root</code>、密码：<code>root</code>登录设备</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="image-Uart-Login" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="win 连接串口演示" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 </li>
 </ul>
 <p>此时，可使用<code>ifconfig -a</code>命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：</p>
@@ -85,10 +85,10 @@
 <ol>
 <li>使用 minicom 命令连接串口验证(<code>minicom -D /dev/tty.wchusbserial* -b 921600 -8</code>）<!-- -->
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">minicom  # 启动 minicom 终端工具，用于串口通信</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">-D       # 指定要使用的串口设备（device）</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">-b       # 设置串口波特率（baud rate）</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">-8       # 设置 数据位数为 8 位（data bits）</span><br></span></code></pre></div></div>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="image-S100-download" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="macOS下minicom串口连接命令示例" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 </li>
 <li>连接开发板验证<!-- -->
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="image-S100-download" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="macOS下minicom成功连接开发板界面" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 </li>
 </ol>
 <div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>提示</div><div class="admonitionContent_BuS1"><p>使用 minicom 连接出现乱码，请查看<a href="/rdk_s_doc/Quick_start/install_os/rdk_s100/FAQ#%E4%BD%BF%E7%94%A8-macos-%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0%E6%9C%AC%E4%B8%B2%E5%8F%A3%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98">使用macos系统笔记本串口乱码</a></p></div></div>
@@ -106,9 +106,9 @@
 <li>找到 Internet 协议版本 4 选项并双击打开</li>
 <li>在下图红框位置填入对应的网络参数，点击确定</li>
 </ul>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="image-20220416110242445" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="Windows静态IP配置对话框" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>如需将开发板有线网络配置为动态获取 DHCP 模式，可参考<a href="/rdk_s_doc/System_configuration/network_bluetooth">有线网络</a>章节进行配置。</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ssh">SSH 登录<a href="#ssh" class="hash-link" aria-label="SSH 登录的直接链接" title="SSH 登录的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ssh">SSH 登录<a href="#ssh" class="hash-link" aria-label="SSH 登录的直接  链接" title="SSH 登录的直接链接">​</a></h2>
 <p>下面分别介绍终端软件、终端命令行两种方法的创建步骤。</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="终端软件">终端软件<a href="#终端软件" class="hash-link" aria-label="终端软件的直接链接" title="终端软件的直接链接">​</a></h3>
 <p>目前常用终端工具有<code>Putty</code>、<code>MobaXterm</code>等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以<code>MobaXterm</code>为例，介绍新建 SSH 连接过程：</p>
@@ -118,7 +118,7 @@
 <li>选中<code>specify username</code>，输入<code>sunrise</code></li>
 <li>点击 OK 后，输入用户名（sunrise）、密码（sunrise）即可完成登录</li>
 </ol>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="image-Network-Login" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="终端软件演示" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="电脑命令行">电脑命令行<a href="#电脑命令行" class="hash-link" aria-label="电脑命令行的直接链接" title="电脑命令行的直接链接">​</a></h3>
 <p>用户也可通过命令行方式进行 SSH 登录，步骤如下：</p>
 <ol>
@@ -126,7 +126,7 @@
 <li>弹出连接确认提示，输入 YES</li>
 <li>输入密码（sunrise）即可完成登录</li>
 </ol>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="image-Cmdline-Linux" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="电脑命令行演示" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="nomachine-登录">NoMachine 登录<a href="#nomachine-登录" class="hash-link" aria-label="NoMachine 登录的直接链接" title="NoMachine 登录的直接链接">​</a></h2>
 <div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>提示</div><div class="admonitionContent_BuS1"><p>NoMachine 功能需要 S100/S600端的软件包支持，配置指南见<a href="/rdk_s_doc/Quick_start/configuration_wizard/configuration_wizard_s100#nomachine-%E9%85%8D%E7%BD%AE">NoMachine配置</a></p></div></div>
 <p>本章节面向使用 Ubuntu Desktop 系统版本的用户，介绍如何通过<code>NoMachine</code>实现远程桌面登录功能。以下章节以 S100为例，S600的操作与 S100一致，将链接名内的<code>S100</code>替换为<code>S600</code>即可。</p>
@@ -134,19 +134,19 @@
 <ol>
 <li>打开<code>NoMachine</code>客户端，点击<code>Add</code>增加主机配置</li>
 </ol>
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="nomachine_login01" style="width:100%">
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="NoMachine 登录截图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <ol start="2">
 <li>在跳出来的界面中填写<code>RDK100/RDKS600</code>的主机信息，完成后点击<code>Add</code></li>
 </ol>
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="nomachine_login02" style="width:100%">
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="NoMachine 登录截图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <ol start="3">
 <li>此时返回主界面，双击刚才生成的主机</li>
 </ol>
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="nomachine_login03" style="width:100%">
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="NoMachine 登录截图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <ol start="4">
 <li>弹出登录界面，输入用户名、密码点击 OK 即可完成远程登陆</li>
 </ol>
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="nomachine_login04" style="width:100%">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="nomachine_login05" style="width:100%"></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">最后<!-- -->于 <b><time datetime="2026-07-09T02:35:36.000Z" itemprop="dateModified">2026年7月9日</time></b> <!-- -->更新</span></div></div></footer></article><nav class="pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/rdk_s_doc/Quick_start/configuration_wizard/configuration_wizard_s100"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">1.3 入门配置</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/rdk_s_doc/Quick_start/classification"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">1.5 算法体验</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#默认登录账户" class="table-of-contents__link toc-highlight">默认登录账户</a></li><li><a href="#login_uart" class="table-of-contents__link toc-highlight">串口登录</a><ul><li><a href="#win-连接串口" class="table-of-contents__link toc-highlight"><strong>win 连接串口</strong></a></li><li><a href="#mac-连接串口" class="table-of-contents__link toc-highlight"><strong>mac 连接串口</strong></a></li></ul></li><li><a href="#network_config" class="table-of-contents__link toc-highlight">网络状态确认</a></li><li><a href="#ssh" class="table-of-contents__link toc-highlight">SSH 登录</a><ul><li><a href="#终端软件" class="table-of-contents__link toc-highlight">终端软件</a></li><li><a href="#电脑命令行" class="table-of-contents__link toc-highlight">电脑命令行</a></li></ul></li><li><a href="#nomachine-登录" class="table-of-contents__link toc-highlight">NoMachine 登录</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">友情链接</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.guyuehome.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">古月居<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">联系我们</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/D-Robotics" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://space.bilibili.com/437998606" target="_blank" rel="noopener noreferrer" class="footer__link-item">Bilibili<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024-2026 D-Robotics.</div></div></div></footer></div>
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="NoMachine 登录截图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="NoMachine 登录截图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto"></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">最后<!-- -->于 <b><time datetime="2026-07-15T08:10:10.000Z" itemprop="dateModified">2026年7月15日</time></b> <!-- -->更新</span></div></div></footer></article><nav class="pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/rdk_s_doc/Quick_start/configuration_wizard/configuration_wizard_s100"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">1.3 入门配置</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/rdk_s_doc/Quick_start/classification"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">1.5 算法体验</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#默认登录账户" class="table-of-contents__link toc-highlight">默认登录账户</a></li><li><a href="#login_uart" class="table-of-contents__link toc-highlight">串口登录</a><ul><li><a href="#win-连接串口" class="table-of-contents__link toc-highlight"><strong>win 连接串口</strong></a></li><li><a href="#mac-连接串口" class="table-of-contents__link toc-highlight"><strong>mac 连接串口</strong></a></li></ul></li><li><a href="#network_config" class="table-of-contents__link toc-highlight">网络状态确认</a></li><li><a href="#ssh" class="table-of-contents__link toc-highlight">SSH 登录</a><ul><li><a href="#终端软件" class="table-of-contents__link toc-highlight">终端软件</a></li><li><a href="#电脑命令行" class="table-of-contents__link toc-highlight">电脑命令行</a></li></ul></li><li><a href="#nomachine-登录" class="table-of-contents__link toc-highlight">NoMachine 登录</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">友情链接</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.guyuehome.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">古月居<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">联系我们</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/D-Robotics" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://space.bilibili.com/437998606" target="_blank" rel="noopener noreferrer" class="footer__link-item">Bilibili<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024-2026 D-Robotics.</div></div></div></footer></div>
 </body>
 </html>

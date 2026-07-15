@@ -11,9 +11,9 @@
 <meta name="algolia-site-verification" content="7D2FA77E12885A7C">
 <script defer="defer" src="https://cloud.umami.is/script.js" data-website-id="b0c771b8-947e-4fa4-8880-606ecab89c36"></script>
 <script src="https://hm.baidu.com/hm.js?24dd63cad43b63889ea6bede5fd1ab9e" async></script>
-<script src="/rdk_s_doc/js/dify-config.js"></script><link rel="stylesheet" href="/rdk_s_doc/assets/css/styles.36600d20.css">
-<script src="/rdk_s_doc/assets/js/runtime~main.aa7198f2.js" defer="defer"></script>
-<script src="/rdk_s_doc/assets/js/main.43b2aa9c.js" defer="defer"></script>
+<script src="/rdk_s_doc/js/dify-config.js"></script><link rel="stylesheet" href="/rdk_s_doc/assets/css/styles.dc40ece5.css">
+<script src="/rdk_s_doc/assets/js/runtime~main.989c8db3.js" defer="defer"></script>
+<script src="/rdk_s_doc/assets/js/main.b9d8e300.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -166,15 +166,15 @@
 <li>如何在 ROS2节点间高效传输图像数据（可能涉及零拷贝技术）。</li>
 <li>相关的示例代码和 launch 文件。</li>
 </ul>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros1.png" alt="TROS多媒体方案示意图" style="width:100%">
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros2.png" alt="TROS多媒体方案示意图" style="width:100%">
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros3.png" alt="TROS多媒体方案示意图" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros1.png" alt="TROS多媒体方案示意图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros2.png" alt="TROS多媒体方案示意图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/tros3.png" alt="TROS多媒体方案示意图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 </li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="q8-启动-usb-或-mipi-摄像头节点后终端提示标定数据不存在例如-usb_camera_calibrationyaml-does-not-exist这是正常的吗">Q8: 启动 USB 或 MIPI 摄像头节点后，终端提示“标定数据不存在”（例如 <code>[usb_camera_calibration.yaml] does not exist!</code>），这是正常的吗？<a href="#q8-启动-usb-或-mipi-摄像头节点后终端提示标定数据不存在例如-usb_camera_calibrationyaml-does-not-exist这是正常的吗" class="hash-link" aria-label="q8-启动-usb-或-mipi-摄像头节点后终端提示标定数据不存在例如-usb_camera_calibrationyaml-does-not-exist这是正常的吗的直接链接" title="q8-启动-usb-或-mipi-摄像头节点后终端提示标定数据不存在例如-usb_camera_calibrationyaml-does-not-exist这是正常的吗的直接链接">​</a></h3>
 <p><strong>A:</strong> 这个提示本身<strong>通常是正常的，不一定代表摄像头无法工作</strong>。</p>
 <ul>
-<li><strong>日志级别：</strong> 许多 ROS 节点的默认日志级别是<code>INFO</code>或<code>WARN</code>。当摄像头节点启动时，它会尝试加载相机的内参标定文件（通常是一个<code>.yaml</code>文件，包含了相机的焦距、畸变系数等参数）。如果找不到这个文件，它会输出一个警告信息，但通常会继续使用一组默认的或无标定的参数来运行。</li>
+<li><strong>日志级别 ：</strong> 许多 ROS 节点的默认日志级别是<code>INFO</code>或<code>WARN</code>。当摄像头节点启动时，它会尝试加载相机的内参标定文件（通常是一个<code>.yaml</code>文件，包含了相机的焦距、畸变系数等参数）。如果找不到这个文件，它会输出一个警告信息，但通常会继续使用一组默认的或无标定的参数来运行。</li>
 <li><strong>功能验证：</strong>
 <ul>
 <li>即使出现这个警告，摄像头本身可能已经在正常发布图像数据了。</li>
@@ -190,7 +190,7 @@
 </li>
 <li><strong>何时需要标定文件：</strong> 如果您的应用需要精确的图像测量、三维重建、或者需要对图像进行去畸变处理，那么提供正确的相机标定文件就非常重要。如果只是简单地显示图像或进行一些不依赖精确像素对应的 AI 推理，缺少标定文件可能影响不大。</li>
 </ul>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="q9-使用-tros-的-websocket-可视化功能时浏览器页面上不显示图像或-ai-结果可能是什么原因">Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？<a href="#q9-使用-tros-的-websocket-可视化功能时浏览器页面上不显示图像或-ai-结果可能是什么原因" class="hash-link" aria-label="Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？的直接链接" title="Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="q9-使用-tros-的-websocket-可视化功能时浏览器页面上不显示图像或-ai-结果可能是什么原因">Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？<a href="#q9-使用-tros-的-websocket-可视化功能时浏览器页面上不显示图像或-ai-结果可能是什么原  因" class="hash-link" aria-label="Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？的直接链接" title="Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？的直接链接">​</a></h3>
 <p><strong>A:</strong> WebSocket 可视化不显示内容，可能的原因有很多，需要逐步排查：</p>
 <ol>
 <li>
@@ -219,7 +219,7 @@
 <li>
 <p><strong>WebSocket 节点参数与 AI 消息同步 (针对 AI 结果不显示)：</strong></p>
 <ul>
-<li><code>hobot_websocket</code>节点在启动时，如果其参数<code>only_show_image</code>设置为<code>False</code>（即期望同时显示图像和 AI 结果），它可能需要接收到第一个 AI 结果消息 (<code>ai_msg</code>) 后，才能开始同步图像和 AI 数据并进行渲 染。</li>
+<li><code>hobot_websocket</code>节点在启动时，如果其参数<code>only_show_image</code>设置为<code>False</code>（即期望同时显示图像和 AI 结果），它可能需要接收到第一个 AI 结果消息 (<code>ai_msg</code>) 后，才能开始同步图像和 AI 数据并进行渲染。</li>
 <li><strong>检查：</strong> 确保您的 AI 推理节点确实检测到了目标并发布了至少一帧 AI 结果。如果 AI 节点一直没有输出，WebSocket 端可能因为等待第一帧 AI 数据而表现为不显示任何叠加结果。</li>
 </ul>
 </li>
@@ -248,7 +248,7 @@
 <p><strong>刷新页面：</strong> 有时，简单的刷新网页（Ctrl+R 或 Cmd+R）可能会解决临时的卡顿或连接问题。</p>
 </li>
 </ol>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="q10-使用-tros-的智能语音功能时报错或者想使用自己的-usb-麦克风应该如何配置">Q10: 使用 TROS 的智能语音功能时报 错，或者想使用自己的 USB 麦克风，应该如何配置？<a href="#q10-使用-tros-的智能语音功能时报错或者想使用自己的-usb-麦克风应该如何配置" class="hash-link" aria-label="Q10: 使用 TROS 的智能语音功能时报错，或者想使用自己的 USB 麦克风，应该如何配置？的直接链接" title="Q10: 使用 TROS 的智能语音功能时报错，或者想使用自己的 USB 麦克风，应该如何配置？的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="q10-使用-tros-的智能语音功能时报错或者想使用自己的-usb-麦克风应该如何配置">Q10: 使用 TROS 的智能语音功能时报错，或者想使用自己的 USB 麦克风，应该如何配置？<a href="#q10-使用-tros-的智能语音功能时报错或者想使用自己的-usb-麦克风应该如何配置" class="hash-link" aria-label="Q10: 使用 TROS 的智能语音功能时报错，或者想使用自己的 USB 麦克风，应该如何配置？的直接链接" title="Q10: 使用 TROS 的智能语音功能时报错，或者想使用自己的 USB 麦克风，应该如何配置？的直接链接">​</a></h3>
 <p><strong>A:</strong></p>
 <ol>
 <li>
@@ -304,7 +304,7 @@
 <li>PC 上运行的 Gazebo 可以仿真机器人模型和环境，并通过 ROS 话题与 RDK 板卡上的控制节点进行交互（例如，RDK 发送控制指令给 Gazebo 中的机器人，Gazebo 发布仿真传感数据给 RDK）。</li>
 </ul>
 </li>
-<li><strong>网络配置：</strong> 确保 PC 和 RDK 板卡之间的网络配置正确，ROS_DOMAIN_ID（ROS2）或 ROS_MASTER_URI/ROS_IP（ROS1）设置正确，使得它们可以相互发 现和通信。对于 ROS2，通常只要在同一网络且 DOMAIN_ID 相同即可自动发现。</li>
+<li><strong>网络配置  ：</strong> 确保 PC 和 RDK 板卡之间的网络配置正确，ROS_DOMAIN_ID（ROS2）或 ROS_MASTER_URI/ROS_IP（ROS1）设置正确，使得它们可以相互发现和通信。对于 ROS2，通常只要在同一网络且 DOMAIN_ID 相同即可自动发现。</li>
 <li><strong>虚拟机配置：</strong> 如果在 PC 上使用 Ubuntu 虚拟机运行 Rviz/Gazebo，请确保虚拟机的网络模式设置为“桥接模式 (Bridged Adapter)”，这样虚拟机才能获得与 RDK 板卡在同一网段的独立 IP 地址。</li>
 </ol>
 </li>
@@ -363,12 +363,12 @@
 </ul>
 </li>
 <li>
-<p><strong>国内镜像源：</strong></p>
+<p><strong>国  内镜像源：</strong></p>
 <ul>
 <li>为了加速下载，国内的一些高校或机构（如清华大学 TUNA、中科大 LUG、上海交大 SJTUG 等）也提供了 ROS2官方软件源的镜像。您可以将上述 <code>packages.ros.org</code> 的地址替换为这些镜像站的地址。具体地址请查询对应镜像站的帮助文档。</li>
 </ul>
 </li>
 </ul>
-<p><strong>注意：</strong> 当系统中同时存在 D-Robotics TROS 的源和 ROS2官方源时，<code>apt</code>在安装或更新软件包时会根据包的版本和优先级进行选择。通常，TROS 的包会针对 RDK 硬件有特定优化。</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">最后<!-- -->于 <b><time datetime="2026-07-09T02:35:36.000Z" itemprop="dateModified">2026年7月9日</time></b> <!-- -->更新</span></div></div></footer></article><nav class="pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/rdk_s_doc/FAQ/toolchain"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">8.5 AI 模型、算法与工具链</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/rdk_s_doc/FAQ/desktop_app"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">8.7 桌面应用</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#q1-tros-相关的软件包运行发生错误推荐的预先排查步骤有哪些" class="table-of-contents__link toc-highlight">Q1: TROS 相关的软件包运行发生错误，推荐的预先排查步骤有哪些？</a></li><li><a href="#q2-tros-和标准的-ros2有什么区别tros-foxy-版本如何升级到-tros-humble-版本" class="table-of-contents__link toc-highlight">Q2: TROS 和标准的 ROS2有什么区别？TROS Foxy 版本如何升级到 TROS Humble 版本？</a></li><li><a href="#q3-tros-是如何安装在-rdk-板卡上的是否需要手动安装" class="table-of-contents__link toc-highlight">Q3: TROS 是如何安装在 RDK 板卡上的？是否需要手动安装？</a></li><li><a href="#q4-tros-相关功能包的源代码在哪里可以找到" class="table-of-contents__link toc-highlight">Q4: TROS 相关功能包的源代码在哪里可以找到？</a></li><li><a href="#q5-tros-功能包的源码编译有哪些注意事项" class="table-of-contents__link toc-highlight">Q5: TROS 功能包的源码编译有哪些注意事项？</a></li><li><a href="#q6-在-rdk-板卡上尝试安装标准-ros2时报错怎么办" class="table-of-contents__link toc-highlight">Q6: 在 RDK 板卡上尝试安装标准 ROS2时报错，怎么办？</a></li><li><a href="#q7-tros-中的多媒体方案如视频流处理编解码有哪些推荐的参考资源" class="table-of-contents__link toc-highlight">Q7: TROS 中的多媒体方案（如视频流处理、编解码）有哪些推荐的参考资源？</a></li><li><a href="#q8-启动-usb-或-mipi-摄像头节点后终端提示标定数据不存在例如-usb_camera_calibrationyaml-does-not-exist这是正常的吗" class="table-of-contents__link toc-highlight">Q8: 启动 USB 或 MIPI 摄像头节点后，终端提示“标定数据不存在”（例如 <code>[usb_camera_calibration.yaml] does not exist!</code>），这是正常的吗？</a></li><li><a href="#q9-使用-tros-的-websocket-可视化功能时浏览器页面上不显示图像或-ai-结果可能是什么原因" class="table-of-contents__link toc-highlight">Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？</a></li><li><a href="#q10-使用-tros-的智能语音功能时报错或者想使用自己的-usb-麦克风应该如何配置" class="table-of-contents__link toc-highlight">Q10: 使用 TROS 的智能语音功能时报错，或者想使用自己的 USB 麦克风，应该如何配置？</a></li><li><a href="#q11-为什么不建议在-rdk-这种嵌入式终端设备上直接运  行-rviz-或-gazebo推荐的做法是什么" class="table-of-contents__link toc-highlight">Q11: 为什么不建议在 RDK 这种嵌入式终端设备上直接运行 Rviz 或 Gazebo？推荐的做法是什么？</a></li><li><a href="#q12-如何为-tros-配置零拷贝zero-copy数据传输环境" class="table-of-contents__link toc-highlight">Q12: 如何为 TROS 配置零拷贝（Zero-Copy）数据传输环境？</a></li><li><a href="#q13-除了-d-robotics-官方的-apt-源是否有其他-ros2的公开软件源可以使用" class="table-of-contents__link toc-highlight">Q13: 除了 D-Robotics 官方的 APT 源，是否有其他 ROS2的公开软件源可以使用？</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">友情链接</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.guyuehome.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">古月居<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">联系我们</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/D-Robotics" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://space.bilibili.com/437998606" target="_blank" rel="noopener noreferrer" class="footer__link-item">Bilibili<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024-2026 D-Robotics.</div></div></div></footer></div>
+<p><strong>注意：</strong> 当系统中同时存在 D-Robotics TROS 的源和 ROS2官方源时，<code>apt</code>在安装或更新软件包时会根据包的版本和优先级进行选择。通常，TROS 的包会针对 RDK 硬件有特定优化。</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">最后<!-- -->于 <b><time datetime="2026-07-15T08:10:10.000Z" itemprop="dateModified">2026年7月15日</time></b> <!-- -->更新</span></div></div></footer></article><nav class="pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/rdk_s_doc/FAQ/toolchain"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">8.5 AI 模型、算法与工具链</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/rdk_s_doc/FAQ/desktop_app"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">8.7 桌面应用</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#q1-tros-相关的软件包运行发生错误推荐的预先排查步骤有哪些" class="table-of-contents__link toc-highlight">Q1: TROS 相关的软件包运行发生错误，推荐的预先排查步骤有哪些？</a></li><li><a href="#q2-tros-和标准的-ros2有什么区别tros-foxy-版本如何升级到-tros-humble-版本" class="table-of-contents__link toc-highlight">Q2: TROS 和标准的 ROS2有什么区别？TROS Foxy 版本如何升级到 TROS Humble 版本？</a></li><li><a href="#q3-tros-是如何安装在-rdk-板卡上的是否需要手动安装" class="table-of-contents__link toc-highlight">Q3: TROS 是如何安装在 RDK 板卡上的？是否需要手动安装？</a></li><li><a href="#q4-tros-相关功能包的源代码在哪里可以找到" class="table-of-contents__link toc-highlight">Q4: TROS 相关功能包的源代码在哪里可以找到？</a></li><li><a href="#q5-tros-功能包的源码编译有哪些注意事项" class="table-of-contents__link toc-highlight">Q5: TROS 功能包的源码编译有哪些注意事项？</a></li><li><a href="#q6-在-rdk-板卡上尝试安装标准-ros2时报错怎么办" class="table-of-contents__link toc-highlight">Q6: 在 RDK 板卡上尝试安装标准 ROS2时报错，怎么办？</a></li><li><a href="#q7-tros-中的多媒体方案如视频流处理编解码有哪些推荐的参考资源" class="table-of-contents__link toc-highlight">Q7: TROS 中的多媒体方案（如视频流处理、编解码）有哪些推荐的参考资源？</a></li><li><a href="#q8-启动-usb-或-mipi-摄像头节点后终端提示标定数据不存在例如-usb_camera_calibrationyaml-does-not-exist这是正常的吗" class="table-of-contents__link toc-highlight">Q8: 启动 USB 或 MIPI 摄像头节点后，终端提示“标定数据不存在”（例如 <code>[usb_camera_calibration.yaml] does not exist!</code>），这是正常的吗？</a></li><li><a href="#q9-使用-tros-的-websocket-可视化功能时浏览器页面上不显示图像或-ai-结果可能是什么原因" class="table-of-contents__link toc-highlight">Q9: 使用 TROS 的 WebSocket 可视化功能时，浏览器页面上不显示图像或 AI 结果，可能是什么原因？</a></li><li><a href="#q10-使用-tros-的智能语音功能时报错或者想使用自己的-usb-麦克风应该如何配置" class="table-of-contents__link toc-highlight">Q10: 使用 TROS 的智能语音功 能时报错，或者想使用自己的 USB 麦克风，应该如何配置？</a></li><li><a href="#q11-为什么不建议在-rdk-这种嵌入式终端设备上直接运行-rviz-或-gazebo推荐的做法是什么" class="table-of-contents__link toc-highlight">Q11: 为什么不建议在 RDK 这种嵌入式终端设备上直接运行 Rviz 或 Gazebo？推荐的做法是什么？</a></li><li><a href="#q12-如何为-tros-配置零拷贝zero-copy数据传输环境" class="table-of-contents__link toc-highlight">Q12: 如何为 TROS 配置零拷贝（Zero-Copy）数据传输环境？</a></li><li><a href="#q13-除了-d-robotics-官方的-apt-源是否有其他-ros2的公开软件源可以使用" class="table-of-contents__link toc-highlight">Q13: 除了 D-Robotics 官方的 APT 源，是否有其他 ROS2的公开软件源可以使用？</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">友情链接</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.guyuehome.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">古月居<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">联系我们</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/D-Robotics" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://space.bilibili.com/437998606" target="_blank" rel="noopener noreferrer" class="footer__link-item">Bilibili<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024-2026 D-Robotics.</div></div></div></footer></div>
 </body>
 </html>

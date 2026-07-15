@@ -11,9 +11,9 @@
 <meta name="algolia-site-verification" content="7D2FA77E12885A7C">
 <script defer="defer" src="https://cloud.umami.is/script.js" data-website-id="b0c771b8-947e-4fa4-8880-606ecab89c36"></script>
 <script src="https://hm.baidu.com/hm.js?24dd63cad43b63889ea6bede5fd1ab9e" async></script>
-<script src="/rdk_s_doc/js/dify-config.js"></script><link rel="stylesheet" href="/rdk_s_doc/assets/css/styles.36600d20.css">
-<script src="/rdk_s_doc/assets/js/runtime~main.aa7198f2.js" defer="defer"></script>
-<script src="/rdk_s_doc/assets/js/main.43b2aa9c.js" defer="defer"></script>
+<script src="/rdk_s_doc/js/dify-config.js"></script><link rel="stylesheet" href="/rdk_s_doc/assets/css/styles.dc40ece5.css">
+<script src="/rdk_s_doc/assets/js/runtime~main.989c8db3.js" defer="defer"></script>
+<script src="/rdk_s_doc/assets/js/main.b9d8e300.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -45,10 +45,10 @@
 </li>
 </ul>
 <p>整体连接方式见下图：</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/hardware_connection_diagram.png" alt="hardware_connection_diagram" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/hardware_connection_diagram.png" alt="硬件环境准备示意图" style="width:70%;max-width:980px;height:auto;display:block;margin:0 auto">
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="网络连接要求">网络连接要求<a href="#网络连接要求" class="hash-link" aria-label="网络连接要求的直接链接" title="网络连接要求的直接链接">​</a></h3>
 <p>为保证 <code>4K</code> 编码推流时的稳定性，建议开发板与 PC 机使用千兆网口直连。</p>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="编译与运行">编译与运行<a href="#编译与运行" class="hash-link" aria-label="编译与运行的直接链接" title="编  译与运行的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="编译与运行">编译与运行<a href="#编译与运行" class="hash-link" aria-label="编译与运行的直接链接" title="编译与运行的直接链接">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="编译">编译<a href="#编译" class="hash-link" aria-label="编译的直接链接" title="编译的直接链接">​</a></h3>
 <p>进入目录：<code>/app/multimedia_samples/sunrise_camera</code>
 执行命令: <code>make</code>
@@ -75,12 +75,12 @@
 <li>其他命令</li>
 </ol>
 <div class="language-sh codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-sh codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 禁止开机自启动</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl disable sunrise_camera</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 停止后台运行的 sunrise_camera</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sudo systemctl stop sunrise_camera</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 后台启动后，查看日志的命令</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">journalctl -u sunrise_camera.service -f --output=cat</span><br></span></code></pre></div></div>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="web-客户端使用说明">Web 客户端使用说明<a href="#web-客户端使用说明" class="hash-link" aria-label="Web 客户端使用说明的直接链接" title="Web 客户端使用说明的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="web-客户端使用说明">Web 客户端使用说明<a href="#web-客户端使用说明" class="hash-link" aria-label="Web 客户端使用说明的直接链接" title="Web 客户端使用说明的  直接链接">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="主界面">主界面<a href="#主界面" class="hash-link" aria-label="主界面的直接链接" title="主界面的直接链接">​</a></h3>
 <p>sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP 地址（开发板默认 IP 为 192.168.1.10 ）可以登录用户控制主界面，  例如： <a href="http://192.168.1.10" target="_blank" rel="noopener noreferrer">http://192.168.1.10</a></p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/login_method.png" alt="login_method" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/login_method.png" alt="主界面截图" style="width:60%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>登录成功后的界面显示如下：</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/home_page.png" alt="home_page" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/home_page.png" alt="主界面示意图" style="width:70%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>界面菜单详细说明如下：</p>
 <table><thead><tr><th>功能编号</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>配置应用方案，点击后打开应用方案选择和参数配置页面</td></tr><tr><td>2</td><td>显示当前运行的场景信息</td></tr><tr><td>3</td><td>显示当前应用方案的主要信息，例如使用的 sensor 型号，编解码参数，算法模型</td></tr><tr><td>4</td><td>应用方案框图，了解当前应用方案的数据流，点击后放大查看大图</td></tr><tr><td>5</td><td>视频显示主画面，根据应用方案运行的视频通路数自动调整显示画面数量</td></tr><tr><td>6</td><td>预览视频的实时帧率</td></tr><tr><td>7</td><td>算法运算的实时帧率</td></tr></tbody></table>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="参数配置方式">参数配置方式<a href="#参数配置方式" class="hash-link" aria-label="参数配置方式的直接链接" title="参数配置方式的直接链接">​</a></h3>
@@ -89,7 +89,7 @@
 <li>sunrise camera 支持通过 Web 端在线修改应用方案、选择 camera sensor 型号、设置解码、编码参数及选择算法模型等</li>
 </ol>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="智能摄像机配置方式">智能摄像机配置方式<a href="#智能摄像机配置方式" class="hash-link" aria-label="智能摄像机配置方式的直接链接" title="智能摄像机配置方式的直接链接">​</a></h4>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_page.png" alt="camera_page" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_page.png" alt="智能摄像机配置方式示意图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>具体修改步骤如下：</p>
 <ol>
 <li>启动 sunrise_camera 程序，打开 chrome 浏览器输入设备的 IP 地址，例如： <a href="http://192.168.1.10" target="_blank" rel="noopener noreferrer">http://192.168.1.10</a></li>
@@ -102,11 +102,11 @@
 </ol>
 <p>注意：</p>
 <ol>
-<li>Camera 接口与电路板中的 CSI 接口一一对应，只有实际接入到硬件电路并且适配过的 Camera 时才会在使能 Camera 接口中显示</li>
+<li>Camera 接口与电路板中的 CSI 接口一一对应，只有实际接 入到硬件电路并且适配过的 Camera 时才会在使能 Camera 接口中显示</li>
 <li>如果点击了 <code>保存当前配置</code> 按钮，但是再次上电时更换了新的摄像头，那么新插入的摄像头默认是非使能状态</li>
 </ol>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="智能分析盒配置方式">智能分析盒配置方式<a href="#智能分析盒配置方式" class="hash-link" aria-label="智能分析盒配置方式的直接链接" title="智能分析盒配置方式的直接链接">​</a></h4>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_page.png" alt="box_page" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_page.png" alt="智能分析盒配置方式示意图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>具体修改步骤如下：</p>
 <ol>
 <li>启动 sunrise_camera 程序，打开 chrome 浏览器输入设备的 IP 地址，例如： <a href="http://192.168.1.10" target="_blank" rel="noopener noreferrer">http://192.168.1.10</a></li>
@@ -117,9 +117,9 @@
 <li>点击 <code>保存当前配置</code> 按钮会把设置好的配置写入开发板上的配置文件，下次重新启动 sunrise_camera 时会按照当前配置启动。</li>
 <li>点击 <code>恢复默认配置</code>，会重新用户配置，还原为 <code>单路视频分析盒</code> 的配置。</li>
 </ol>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="智能摄像机配置">智能摄像机配置<a href="#智能摄像机配置" class="hash-link" aria-label="智能摄像机配置的直接链接" title="智能摄像机配置的直接链接">​</a></h2>
-<p>智能摄像机方案实现了 Camera sensor 图像的采集、处理、编码、 rtsp 推流及智能计算等功能，可以帮助用户快速体验多 媒体图像和算法效果，方案功能框图如下：</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_solution.png" alt="camera_solution" style="width:100%">
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="智能摄像机配 置">智能摄像机配置<a href="#智能摄像机配置" class="hash-link" aria-label="智能摄像机配置的直接链接" title="智能摄像机配置的直接链接">​</a></h2>
+<p>智能摄像机方案实现了 Camera sensor 图像的采集、处理、编码、 rtsp 推流及智能计算等功能，可以帮助用户快速体验多媒体图像和算法效果，方案功能框图如下：</p>
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_solution.png" alt="智能摄像机配置示意图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>智能摄像机方案提供了以下功能：</p>
 <ul>
 <li>实时视频监控</li>
@@ -143,15 +143,15 @@
 </li>
 <li>算法模型：选择运行算法模型</li>
 </ul>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="注意事项">注意事项<a href="#注意事项" class="hash-link" aria-label="注意事项的直接链接" title="注意事项的直接链接">​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="注意事项">  注意事项<a href="#注意事项" class="hash-link" aria-label="注意事项的直接链接" title="注意事项的直接链接">​</a></h3>
 <p>在使用智能摄像机方案时，请注意以下事项：</p>
 <ul>
 <li>确保 Camera Sensor 与开发板连接稳定</li>
 <li>根据需要调整编码码率以平衡视频质量和网络带宽</li>
 </ul>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="智能  分析盒配置">智能分析盒配置<a href="#智能分析盒配置" class="hash-link" aria-label="智能分析盒配置的直接链接" title="智能分析盒配置的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="智能分析盒配置">智能分析盒配置<a href="#智能分析盒配置" class="hash-link" aria-label="智能分析盒配置的直接链接" title="智能分析盒配置的直接链接">​</a></h2>
 <p>智能盒子方案实现了单路、四路 1080p 视频解码、拼接、编码、 rtsp 推流及智能计算等功能，用户可通过 Web 端、 HDMI 或者拉流方式预览效果。方案功能框图如下：</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_solution.png" alt="box_solution" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_solution.png" alt="智能分析盒配置示意图" style="width:80%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>智能分析盒方案提供了以下功能：</p>
 <ul>
 <li>解码码流后运行算法并重新编码推流<!-- -->
@@ -201,20 +201,20 @@
 <li>启用的通道数的能力解码和编码合计不能超过 4K@90fps （硬件限制）</li>
 <li>设备默认分配给编解码、算法的 ION 内存为 1GB，如果启用路数过多，有可能会出现内存不足的问题，需要调大 ION</li>
 </ul>
-<h2 class="anchor anchorWithStickyNavbar_LWe7" id="使用-vlc-播放器播放-rtsp-码流">使用 VLC 播放器播放 RTSP 码流<a href="#使用-vlc-播放器播放-rtsp-码流" class="hash-link" aria-label="使用 VLC 播放器播放 RTSP 码流的直接链接" title="使用 VLC 播放器播放 RTSP 码流的直接链接">​</a></h2>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="使用-vlc-播放  器播放-rtsp-码流">使用 VLC 播放器播放 RTSP 码流<a href="#使用-vlc-播放器播放-rtsp-码流" class="hash-link" aria-label="使用 VLC 播放器播放 RTSP 码流的直接链接" title="使用 VLC 播放器播放 RTSP 码流的直接链接">​</a></h2>
 <p>sunrise camera 程序运行时会同步推送 rtsp 视频码流，用户可以通过 vlc 播放器播放 RTSP 码流，实现画面预览、录像、截图等功能。</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="播放方法">播放方法<a href="#播放方法" class="hash-link" aria-label="播放方法的直接链接" title="播放方法的直接链接">​</a></h3>
 <p>打开 vlc 播放器，选择 <code>媒体</code> 菜单，然后选择 <code>打开网络串流</code> 选项。</p>
 <p>在 <code>打开媒体</code> 对话框中填入 url 地址，点击 <code>播放</code> 按钮即可开始播放，如下图：</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_play_method.png" alt="vlc_play_method" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_play_method.png" alt="播放方法示意图" style="width:100%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>rtsp 的码流网络 URL 链接，可以在 web 的设备信息上查看，默认支持的码流链接为： rtsp://192.168.1.10/stream_chn0.h264</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="4k30fps-拉流配置说明">4K@30fps 拉流配置说明<a href="#4k30fps-拉流配置说明" class="hash-link" aria-label="4K@30fps 拉流配置说明的直接链接" title="4K@30fps 拉流配置说明的直接链接">​</a></h3>
 <p>1 、 4K@30fps 并且配置高码率（ 8192Kbps 以上）的情况下，为了保证视频播放流畅不丢帧，建议使用千兆网络，否则很容易出现视频马赛克和花屏等情况。</p>
 <p>2 、 vlc buffer_size 设置， vlc 接收 buffer 修改：默认是 250000 ，建议改到 1200000 。</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_rtsp_buffer_size.png" alt="vlc_rtsp_buffer_size" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_rtsp_buffer_size.png" alt="4K@30fps 拉流配置说明示意图" style="width:70%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>3 、使用 http 模式，可以有效解决播放丢帧导致的花屏。</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_http_mode.png" alt="vlc_http_mode" style="width:100%">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_http_mode.png" alt="4K@30fps 拉流配置说明示意图" style="width:70%;max-width:980px;height:auto;display:block;margin:0 auto">
 <p>4 、高级设置里面禁用时钟同步</p>
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="vlc_disable_clock_sync" style="width:100%"></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">最后<!-- -->于 <b><time datetime="2026-07-09T02:35:36.000Z" itemprop="dateModified">2026年7月9日</time></b> <!-- -->更新</span></div></div></footer></article><nav class="pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/rdk_s_doc/Advanced_development/multimedia_development/multimedia_application/sample_pipeline"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">sample_pipeline 使用说明</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/rdk_s_doc/Advanced_development/multimedia_development/multimedia_application/sunrise_camera_develop_guide"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">Sunrise camera 开发说明</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#功能概述" class="table-of-contents__link toc-highlight">功能概述</a></li><li><a href="#硬件环境准备" class="table-of-contents__link toc-highlight">硬件环境准备</a><ul><li><a href="#网络连接要求" class="table-of-contents__link toc-highlight">网络连接要求</a></li></ul></li><li><a href="#编译与运行" class="table-of-contents__link toc-highlight">编译与运行</a><ul><li><a href="#编译" class="table-of-contents__link toc-highlight">编译</a></li><li><a href="#运行" class="table-of-contents__link toc-highlight">运行</a></li></ul></li><li><a href="#web-客户端使用说明" class="table-of-contents__link toc-highlight">Web 客户端使用说明</a><ul><li><a href="#主界面" class="table-of-contents__link toc-highlight">主界面</a></li><li><a href="#参数配置方式" class="table-of-contents__link toc-highlight">参数配置方式</a><ul><li><a href="#智能摄像机配置方式" class="table-of-contents__link toc-highlight">智能摄像机配置  方式</a></li><li><a href="#智能分析盒配置方式" class="table-of-contents__link toc-highlight">智能分析盒配置方式</a></li></ul></li></ul></li><li><a href="#智能摄像机配置" class="table-of-contents__link toc-highlight">智能摄像机配置</a><ul><li><a href="#参数说明" class="table-of-contents__link toc-highlight">参数说明</a></li><li><a href="#注意事项" class="table-of-contents__link toc-highlight">注意事项</a></li></ul></li><li><a href="#智能分析盒配置" class="table-of-contents__link toc-highlight">智能分析盒配置</a><ul><li><a href="#参数说明-1" class="table-of-contents__link toc-highlight">参数说明</a></li><li><a href="#注意事项-1" class="table-of-contents__link toc-highlight">注意事项</a></li></ul></li><li><a href="#使用-vlc-播放器播放-rtsp-码流" class="table-of-contents__link toc-highlight">使用 VLC 播放器播放 RTSP 码流</a><ul><li><a href="#播放方法" class="table-of-contents__link toc-highlight">播放方法</a></li><li><a href="#4k30fps-拉流配置说明" class="table-of-contents__link toc-highlight">4K@30fps 拉流配置说明</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">友情链接</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.guyuehome.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">古月居<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">联系我们</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/D-Robotics" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://space.bilibili.com/437998606" target="_blank" rel="noopener noreferrer" class="footer__link-item">Bilibili<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024-2026 D-Robotics.</div></div></div></footer></div>
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="4K@30fps 拉流配置说明示意图" style="width:70%;max-width:980px;height:auto;display:block;margin:0 auto"></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">最后<!-- -->于 <b><time datetime="2026-07-15T08:10:10.000Z" itemprop="dateModified">2026年7月15日</time></b> <!-- -->更新</span></div></div></footer></article><nav class="pagination-nav" aria-label="文件选项卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/rdk_s_doc/Advanced_development/multimedia_development/multimedia_application/sample_pipeline"><div class="pagination-nav__sublabel">上一页</div><div class="pagination-nav__label">sample_pipeline 使用说明</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/rdk_s_doc/Advanced_development/multimedia_development/multimedia_application/sunrise_camera_develop_guide"><div class="pagination-nav__sublabel">下一页</div><div class="pagination-nav__label">Sunrise camera 开发说明</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#功能概述" class="table-of-contents__link toc-highlight">功能概述</a></li><li><a href="#硬件环境准备" class="table-of-contents__link toc-highlight">硬件环境准备</a><ul><li><a href="#网络连接要求" class="table-of-contents__link toc-highlight">网络连接要求</a></li></ul></li><li><a href="#编译与运行" class="table-of-contents__link toc-highlight">编译与运行</a><ul><li><a href="#编译" class="table-of-contents__link toc-highlight">编译</a></li><li><a href="#运行" class="table-of-contents__link toc-highlight">运行</a></li></ul></li><li><a href="#web-客户端使用说明" class="table-of-contents__link toc-highlight">Web 客户端使用说明</a><ul><li><a href="#主界面" class="table-of-contents__link toc-highlight">主界面</a></li><li><a href="#参数配置方式" class="table-of-contents__link toc-highlight">参数配置方式</a><ul><li><a href="#智能摄像机配置方式" class="table-of-contents__link toc-highlight">智能摄像机配置方式</a></li><li><a href="#智能分析盒配置方式" class="table-of-contents__link toc-highlight">智能分析盒配置方式</a></li></ul></li></ul></li><li><a href="#智能摄像机配置" class="table-of-contents__link toc-highlight">智能摄像机配置</a><ul><li><a href="#参数说明" class="table-of-contents__link toc-highlight">参数说明</a></li><li><a href="#注意事项" class="table-of-contents__link toc-highlight">注意事项</a></li></ul></li><li><a href="#智能分析盒配置" class="table-of-contents__link toc-highlight">智能分析盒配置</a><ul><li><a href="#参数说明-1" class="table-of-contents__link toc-highlight">参数说明</a></li><li><a href="#注意事项-1" class="table-of-contents__link toc-highlight">注意事项</a></li></ul></li><li><a href="#使用-vlc-播放器播放-rtsp-码流" class="table-of-contents__link toc-highlight">使用 VLC 播放器播放 RTSP 码流</a><ul><li><a href="#播放方法" class="table-of-contents__link toc-highlight">播放方法</a></li><li><a href="#4k30fps-拉流配置说明" class="table-of-contents__link toc-highlight">4K@30fps 拉流配置说明</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">友情链接</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://www.guyuehome.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">古月居<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">联系我们</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/D-Robotics" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://space.bilibili.com/437998606" target="_blank" rel="noopener noreferrer" class="footer__link-item">Bilibili<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024-2026 D-Robotics.</div></div></div></footer></div>
 </body>
 </html>
