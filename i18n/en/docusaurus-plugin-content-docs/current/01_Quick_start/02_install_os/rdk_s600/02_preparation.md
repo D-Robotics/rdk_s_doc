@@ -2,35 +2,48 @@
 sidebar_position: 2
 ---
 
-# 1.2.2 Burning Preparation
+# Flashing preparation
 
-## Storage
+## Safety notes
 
-The RDK S600 uses UFS as the system storage medium.
+- Do not hot-plug any devices other than USB, HDMI, and Ethernet cables while powered on.
+- Use a power adapter from a reputable brand; otherwise, abnormal power supply may cause unexpected system shutdowns.
+- Use the onboard POWER ON/OFF button to power the board on and off, and plug or unplug the DC connector only when the adapter is disconnected from power.
 
-## Image Download
+## Image download
 
-:::warning Note
+The RDK S600 provides an Ubuntu 24.04 desktop system image with a graphical desktop environment.
 
-The **RDK S600** comes pre-burned with a test version of the system image. To ensure you are using the latest version of the system, <font color='Red'>it is recommended to follow this document to burn the latest version of the system image</font>.
-
+:::warning
+The device ships with a test firmware preinstalled. Flash the latest image before you use the device.
 :::
 
-The RDK S600 kit currently provides the Ubuntu 24.04 system image, which supports Desktop graphical interaction.
-1. [[Click here]](../../download.md#system-software) to download the image.
+1. Go to the [image download page](https://archive.d-robotics.cc/downloads/os_images/rdk_s600/) and select the latest RDK S600 image > **RDK LNX SDK** > **firmwares** > **product.zip**.
 
-    <!-- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/download-os-4.0.5.png" alt="Image Download diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} /> -->
+2. After extraction, you get a **product** folder. Confirm it contains an **img_packages** folder and an **xmodem_tools** folder.
 
-2. After extraction, you will get the `product` folder with the structure shown below. Ensure that the same folder contains the `img_packages` folder and the `xmodem_tools` file.
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/product-folder.png" alt="product folder interface" style={{ width: '100%' }} />
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/acore-product.png" alt="Product folder interface" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }}/>
+## Flashing tool
 
-## Burning Tool Download
+Download and install the XBurn tool. See [Install XBurn](https://developer.d-robotics.cc/xburn_doc/install).
 
-[[Click here]](https://archive.d-robotics.cc/downloads/software_tools/download_tools/) to access the burning tool download page. Select the tool and version based on your platform:
+## Cable requirements
 
-Take xburn-gui_1.1.9 as an example:
+Flashing transfers the image over a Type-C data cable. A substandard cable causes transmission errors or flashing failure. The cable must meet the following conditions:
 
-   - For Windows: Download xburn-gui_1.1.9_x64-setup.exe
-   - For Linux: Download xburn-gui_1.1.9_amd64.deb
-   - For macOS: Download xburn-gui_1.1.9_universal.dmg
+1. **Shielded**: The cable has a metal braid or aluminum foil shield to reduce transmission errors.
+2. **As short as possible**: A longer cable increases signal attenuation.
+3. **Data-capable**: Some cables only supply power and do not transfer data. Use a cable that supports USB data transfer, not a charge-only cable.
+
+## Hardware connection
+
+Use a Type-C data cable to connect a USB port on your PC to the Type-C port of the RDK S600.
+
+## Environment setup
+
+Install the drivers and dependencies for your operating system. **Complete this before flashing**; otherwise XBurn cannot detect the device:
+
+- [Windows environment](https://developer.d-robotics.cc/xburn_doc/environment/windows-setup): USB drivers (ADB, Fastboot, DFU) and the CH341 serial driver
+- [Linux environment](https://developer.d-robotics.cc/xburn_doc/environment/linux-setup): adb/fastboot/dfu-util dependencies and udev rules
+- [macOS environment](https://developer.d-robotics.cc/xburn_doc/environment/mac-setup): brew dependencies (android-platform-tools, dfu-util)
