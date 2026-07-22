@@ -363,12 +363,12 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
 <DocScope products="RDK S100">
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../01_Quick_start/02_install_os/rdk_s100/03_xburn/01_windows.md#指定区域烧录)章节。
+关于 Xburn 工具烧录指定区域，参考[烧录指定区域](../../01_Quick_start/02_install_os/rdk_s100/03_burn.md#烧录指定区域)章节。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-关于 Xburn 工具烧录指定区域，请参考[指定区域烧录](../../01_Quick_start/02_install_os/rdk_s600.md#指定区域烧录)章节。
+关于 Xburn 工具烧录指定区域，参考[烧录指定区域](../../01_Quick_start/02_install_os/rdk_s600/03_burn.md#烧录指定区域)章节。
 
 </DocScope>
 
