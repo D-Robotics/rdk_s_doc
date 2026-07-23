@@ -237,6 +237,8 @@ import DocScope from '@site/src/components/DocScope';
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
+<DocScope products="RDK S600">
+
 ## 4. Acore 看门狗超时 MCU 处理流程
 
 ### 4.1 复位配置使能
@@ -257,3 +259,5 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 |---|---|---|
 | 中断（入口） | Target\...\HorizonISR.c：ISR(Wdt_CfIntIsr) | 置 g_need_reset = 1（g_need_reset 在 McalCdd\Wdg\src\Wdg_Common.c），Os_Disable_Wdt_CfIntIsr()；与 IntRouter、ConfigInterrupts.h 绑定 |
 | OS 任务（延时 + 长复位） | Target\...\HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
+
+</DocScope>
