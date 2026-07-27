@@ -237,6 +237,8 @@ Protects `Wdg_Lld_Rst`:
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
+<DocScope products="RDK S600">
+
 ## 4. A-Core Watchdog Timeout MCU Handling Flow
 
 ### 4.1 Reset Configuration Enable
@@ -257,3 +259,5 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 |---|---|---|
 | Interrupt (entry) | Target\...\HorizonISR.c: ISR(Wdt_CfIntIsr) | Set `g_need_reset = 1` (`g_need_reset` is in `McalCdd\Wdg\src\Wdg_Common.c`), `Os_Disable_Wdt_CfIntIsr()`; bound to IntRouter and ConfigInterrupts.h |
 | OS task (delay + long reset) | Target\...\HorizonTask.c: TASK(OsTask_SysCore_WDG_RST) | When `g_need_reset` is true: log → `vTaskDelay(MS_TO_TICK(5000))` (approx. 5s) → `Rfchm_TriggerSocLongReset()` executes SoC long reset |
+
+</DocScope>

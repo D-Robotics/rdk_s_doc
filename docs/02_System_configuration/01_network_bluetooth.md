@@ -81,8 +81,6 @@ nmcli device show eth1
 
 ## 无线网络
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=12
-
 开发板需安装无线 Wi-Fi 模块，支持 Soft AP 和 Station 两种模式，默认运行在 Station 模式下。下面介绍两种模式的使用方法。
 
 ### Station 模式
@@ -284,8 +282,6 @@ Wi-Fi AP 模式暂不可用
 
 ## DNS 服务
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=13
-
 DNS(Domain Name Server)是进行域名(domain name)和与之相对应的 IP 地址转换的服务器。
 
 开发板 DNS 配置通过`/etc/systemd/resolved.conf`文件管理，用户可通过修改该文件完成 DNS 相关配置，步骤如下：
@@ -328,9 +324,6 @@ source ~/.bashrc
 
 ## 系统更新
 
-:::warning
-产品未上市前，请勿执行
-:::
 
 出于系统安全、稳定性的考虑，推荐用户安装完系统后，通过`apt`命令对系统进行更新。
 
@@ -362,8 +355,6 @@ sudo reboot
 
 
 ## 蓝牙配置
-
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=9
 
 ### 初始化
 用户可以使用命令查询蓝牙进程是否正常，命令如下：

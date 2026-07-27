@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # 3.4.2 参考示例（C++）
 
+```
+import DocScope from '@site/src/components/DocScope';
+```
+
 本章节介绍多媒体库开发的多种功能示例，包括摄像头图像采集、视频编解码、视频显示、算法推理等功能。
 
 ## 摄像头图像采集和显示
@@ -174,7 +178,17 @@ sidebar_position: 2
 
 示例流程框图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display.png" alt="视频文件解码并显示示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<DocScope products="RDK S100">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display.png" alt="视频文件解码并显示示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-decoder_to_display_s600.jpg" alt="视频文件解码并显示示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
 
 - **环境准备：**
 
@@ -223,7 +237,17 @@ sidebar_position: 2
 
 示例流程框图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="RTSP 拉流解码示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<DocScope products="RDK S100">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="RTSP 拉流解码示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-rtsp_to_display_s600.jpg" alt="RTSP 拉流解码示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
 
 - **环境准备：**
 

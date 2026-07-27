@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # 3.4.2 Reference Examples (C++)
 
+```
+import DocScope from '@site/src/components/DocScope';
+```
+
 This section introduces multiple functional examples for multimedia library development, including camera image capture, video encoding/decoding, video display, algorithm inference, and other features.
 
 ## Camera Image Capture and Display
@@ -173,7 +177,14 @@ The `decoder2display` example decodes a video file and outputs it via the `HDMI`
 
 Example flow diagram:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display-en.jpg" alt="Video File Decoding and Display diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+<DocScope products="RDK S100">
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-decoder_to_display-en.jpg" alt="Video File Decoding and Display diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+</DocScope>
+
+<DocScope products="RDK S600">
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-decoder_to_display_s600.jpg" alt="Video File Decoding and Display diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+</DocScope>
 
 - **Environment Setup:**
 
@@ -221,7 +232,14 @@ This example, `rtsp2display`, implements the functionality of pulling an `rtsp` 
 
 Example workflow diagram:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="RTSP Stream Pulling and Decoding diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+<DocScope products="RDK S100">
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-rtsp_to_display.png" alt="RTSP Stream Pulling and Decoding diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+</DocScope>
+
+<DocScope products="RDK S600">
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-rtsp_to_display_s600.jpg" alt="RTSP Stream Pulling and Decoding diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+</DocScope>
 
 - **Environment Setup:**
 

@@ -217,9 +217,9 @@ echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 在 RDKS600芯片中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。
 
 在/sys/class/hwmon/下有 hwmon1目录下包含温度传感器的相关参数
-- temp1_input 到 temp7_input 是 CPU 的温度传感器，对应的 label 为 CMN0-TS[0~6]
-- temp8_input 到 temp11_input 是 DDR 的温度传感器，对应的 label 为 DDR[0~3]-TS0
-- temp12_input 到 temp19_input 是 BPU 的温度传感器，对应的 label 为 BPU[0~3]-TS0[0~1]
+- temp1_input 到 temp7_input 是 CPU 的温度传感器，对应的 label 为 CMN0-TS[0-6]
+- temp8_input 到 temp11_input 是 DDR 的温度传感器，对应的 label 为 DDR[0-3]-TS0
+- temp12_input 到 temp19_input 是 BPU 的温度传感器，对应的 label 为 BPU[0-3]-TS0[0-1]
 
 温度的精度为千分之一摄氏度，范围为-40~125摄氏度
 

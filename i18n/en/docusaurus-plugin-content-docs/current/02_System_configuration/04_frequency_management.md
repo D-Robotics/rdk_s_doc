@@ -219,9 +219,9 @@ You can use the `sudo hrut_somstatus` command to view the current chip operating
 There are 19 temperature sensors in the RDK S600 chip, used to display the temperatures of BPU/CPU/DDR. Among them, the BPU has 8 temperature sensors, the CPU has 7 temperature sensors, and the DDR has 4 temperature sensors.
 
 Under `/sys/class/hwmon/`, the `hwmon1` directory contains parameters related to the temperature sensors.
-- `temp1_input` to `temp7_input` are the CPU temperature sensors, with corresponding labels CMN0-TS[0~6]
-- `temp8_input` to `temp11_input` are the DDR temperature sensors, with corresponding labels DDR[0~3]-TS0
-- `temp12_input` to `temp19_input` are the BPU temperature sensors, with corresponding labels BPU[0~3]-TS0[0~1]
+- `temp1_input` to `temp7_input` are the CPU temperature sensors, with corresponding labels CMN0-TS[0-6]
+- `temp8_input` to `temp11_input` are the DDR temperature sensors, with corresponding labels DDR[0-3]-TS0
+- `temp12_input` to `temp19_input` are the BPU temperature sensors, with corresponding labels BPU[0-3]-TS0[0-1]
 
 The temperature precision is one-thousandth of a degree Celsius, with a range of -40 to 125 degrees Celsius.
 

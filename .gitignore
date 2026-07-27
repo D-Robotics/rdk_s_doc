@@ -30,6 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 translate_doc.py
 GEMINI.md
+doc-module-mapping.md
 
 yarn.lock
 # package-lock.json
@@ -37,3 +38,4 @@ yarn.lock
 .idea
 
 .env.local
+_img_audit/

@@ -4,8 +4,6 @@ sidebar_position: 5
 
 # 2.5 开机自启动配置
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=15
-
 Ubuntu 系统添加自启动程序的方式有多种方法，本章节提供两种方法作为参考。
 
 ## 设置自启动 Service

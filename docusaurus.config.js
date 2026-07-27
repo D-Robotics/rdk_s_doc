@@ -49,7 +49,7 @@ const config = {
                 questionnaireUrl: "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
                 questionnaireUrlByLocale: {
                   "zh-Hans": "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
-                  en: "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
+                  en: "https://horizonrobotics.feishu.cn/share/base/form/shrcnrLwiznJOrzZkV75fYD92He",
             },
             // 站点内路径规则（基于 baseUrl 之后的路径）：
             // - "/" 精确匹配中文首页

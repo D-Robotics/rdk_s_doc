@@ -4,8 +4,6 @@ sidebar_position: 5
 
 # 2.5 Boot Auto-Start Configuration
 
-<!-- Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=15 -->
-
 There are multiple ways to add auto-start programs in Ubuntu. This section provides two methods for reference.
 
 ## Configure an Auto-Start Service

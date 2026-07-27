@@ -81,8 +81,6 @@ You can also directly edit the `.nmconnection` file in this directory; after edi
 
 ## Wireless Network
 
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=12
-
 The development board needs to be equipped with a wireless Wi-Fi module, supporting both Soft AP and Station modes, and runs in Station mode by default. The usage of the two modes is described below.
 
 ### Station Mode
@@ -284,7 +282,6 @@ Continuously updating...
 
 ## DNS Service
 
-
 DNS (Domain Name Server) is a server that translates domain names into their corresponding IP addresses.
 
 The DNS configuration of the development board is managed through the `/etc/systemd/resolved.conf` file. Users can modify this file to complete DNS-related configurations as follows:
@@ -327,10 +324,6 @@ source ~/.bashrc
 
 ## System Update
 
-:::warning
-Do not execute before the product is released
-:::
-
 For system security and stability reasons, it is recommended that users update the system using the `apt` command after installing the system.
 
 The `/etc/apt/source.list` file contains the list of software sources for the `apt` command. Before installing software, you need to update the package list using the `apt` command.
@@ -360,7 +353,6 @@ sudo reboot
 ```
 
 ## Bluetooth Configuration
-
 
 ### Initialization
 Users can use commands to check whether the Bluetooth process is normal as follows:
