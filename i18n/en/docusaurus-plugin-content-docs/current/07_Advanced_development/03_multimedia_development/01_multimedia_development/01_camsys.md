@@ -106,7 +106,7 @@ ISP functions include various algorithmic processing of raw images, image charac
 
 </DocScope>
 - ISP processing pipeline is shown below:  
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp_pipeline.png" alt="ISP diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/isp-pipeline-en.png" alt="CIM ISP 3DNR PYM pipeline diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 - **MCFE**:  
   Multi-Context Front End, used for multi-channel scheduling control and buffer management in ISP, processing multi-camera images sequentially (one by one).
 - **RAW Domain**:  

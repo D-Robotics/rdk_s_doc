@@ -4,6 +4,10 @@ sidebar_position: 4
 
 # 3.3.4 UART Application
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 The RDK S100 supports UART2 on the 40-pin header, which is disabled by default. The physical pin numbers are 8 and 10, with an I/O voltage of 3.3V.
 
 :::info
@@ -52,12 +56,10 @@ Directly connect TXD and RXD together using a jumper wire:
 
 ### Test Procedure
 
+
 - Run `python3 /app/40pin_samples/test_serial.py`.
-- From the printed list of UART devices (note: `/dev/ttyS0` is the system debug console; testing it is not recommended unless you fully understand its function), select the appropriate bus and chip select number as input options. For example:
-  - On RDK X3, test `/dev/ttyS3`
-  - On RDK X5, test `/dev/ttyS1`
-  - On RDK Ultra, test `/dev/ttyS2`
-  - On RDK S100, test `/dev/ttyS2`
+- From the printed list of UART devices (note: `/dev/ttyS0` is the system debug console; testing it is not recommended unless you fully understand its function), select the appropriate bus and chip select number as input options. For example: On RDK S100, test `/dev/ttyS2`
+
 
 Press Enter to confirm your selection, then input the baud rate:
 

@@ -25,7 +25,9 @@ Before testing, short-circuit TXD and RXD:
 ### Test Process
 
 - Run `python3 /app/40pin_samples/test_serial.py`
-- From the printed serial devices (where /dev/ttyS0 is the system debug port, testing it is not recommended unless you fully understand its function), select the bus number and chip select number as input options. For example, RDK X3 selects `/dev/ttyS3` for testing, RDK X5 selects `/dev/ttyS1`, RDK Ultra selects `/dev/ttyS2`, RDK S100 selects `/dev/ttyS2`, and RDK S600 selects `/dev/ttyS6` or `/dev/ttyS7`. Press Enter to confirm, and enter the baud rate parameter:
+- From the printed serial devices (where /dev/ttyS0 is the system debug port, testing it is not recommended unless you fully understand its function), select the bus number and chip select number as input options. For example, RDK S600 selects `/dev/ttyS6` or `/dev/ttyS7`.
+
+Press Enter to confirm, and enter the baud rate parameter:
 
 ```
 root@ubuntu:/app/40pin_samples# ./test_serial.py

@@ -324,10 +324,6 @@ source ~/.bashrc
 
 ## System Update
 
-:::warning
-Do not execute before the product is released
-:::
-
 For system security and stability reasons, it is recommended that users update the system using the `apt` command after installing the system.
 
 The `/etc/apt/source.list` file contains the list of software sources for the `apt` command. Before installing software, you need to update the package list using the `apt` command.

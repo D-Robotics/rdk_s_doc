@@ -14,7 +14,7 @@ The kernel version includes standard driver libraries as well as the system BSP.
 
 The software block diagram is shown below:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework-en.png" alt="Software Architecture Diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sunrise_camera/software-framework-en.png" alt="sunrise camera software architecture layers" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Microkernel Design
 
@@ -284,7 +284,7 @@ The current basic submodule startup sequence is as follows. Note that the startu
 
 #### Execution Flow
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow-en.jpg" alt="Main Program Flow" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sunrise_camera/main-flow-en.png" alt="sunrise camera main program startup flow" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### WebServer
 
@@ -304,7 +304,7 @@ This module handles algorithm model loading, data pre-processing, inference, pos
 
 The module's runtime sequence is as follows:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow-en.jpg" alt="BPU Inference Flow" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sunrise_camera/bpu-flow-en.png" alt="BPU yolov5s inference and post-process flow" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Adding a New Model
 

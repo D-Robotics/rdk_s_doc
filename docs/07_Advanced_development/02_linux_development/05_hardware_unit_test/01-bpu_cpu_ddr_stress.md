@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 :::info 说明
-本文档同时覆盖 RDK S100 与 RDK S600。CPU/DDR 段（`stressapptest`）两平台一致；**BPU 段两平台使用了完全不同的压测工具与模型**——S100 使用 `bpu_os_test`（裸 binary，配合 `run.sh` 中的 group proportion 机制），S600 使用 `hrt_model_exec`（由 `hobot-dnn` 包提供）——请通过下方 Tabs 切换至所用平台查看。页内所有 Tabs 联动切换。
+本文档同时覆盖 RDK S100 与 RDK S600。CPU/DDR 段（`stressapptest`）两平台一致；**BPU 段两平台使用了完全不同的压测工具与模型**——S100 使用 `bpu_os_test`（裸 binary，配合 `run.sh` 中的 group proportion 机制），S600 使用 `hrt_model_exec`（由 `hobot-dnn` 包提供）。
 :::
 
 ## 测试原理

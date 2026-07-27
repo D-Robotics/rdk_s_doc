@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 :::info Note
-This document covers both RDK S100 and RDK S600. The CPU/DDR section (`stressapptest`) is identical across both platforms; **the BPU section uses completely different stress testing tools and models for the two platforms**—S100 uses `bpu_os_test` (a raw binary with the group proportion mechanism in `run.sh`), while S600 uses `hrt_model_exec` (provided by the `hobot-dnn` package)—please switch to your platform using the tabs below. All tabs on this page switch together.
+This document covers both RDK S100 and RDK S600. The CPU/DDR section (`stressapptest`) is identical across both platforms; **the BPU section uses completely different stress testing tools and models for the two platforms**—S100 uses `bpu_os_test` (a raw binary with the group proportion mechanism in `run.sh`), while S600 uses `hrt_model_exec` (provided by the `hobot-dnn` package).
 :::
 
 ## Test Principles

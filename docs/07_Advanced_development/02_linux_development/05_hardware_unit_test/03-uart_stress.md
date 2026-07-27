@@ -145,16 +145,16 @@ index 504b21b..8d72794 100644
 
 **2.** 根据下面的 RDK_S100 实物图并找到 uart2 对应并将拨码开关往右拨到 连接 uart2 的位置：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram.png" alt="注意事项示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram.png" alt="注意事项示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **3.** 查看 RDK_S100 原理图并找到 uart2 对应的引脚与连接器位置，如图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png" alt="注意事项示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png" alt="注意事项示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 并将双母头杜邦线将 uart2_tx 与 uart2_rx 相连。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png" alt="注意事项示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png" alt="注意事项示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **4.** 确认在 /app/chip_base_test/03_uart_test 路径下存在 `uartstress.sh`、`uart_test.c`、`uart_test` 三个文件。
 
