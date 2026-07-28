@@ -180,14 +180,6 @@ function normalizePathname(pathname) {
   return p;
 }
 
-function isDocHomePath(pathname, baseUrl) {
-  const base = String(baseUrl || '/');
-  const pathnameNoSlash = normalizePathname(pathname);
-  const zhHome = normalizePathname(`${base}RDK`);
-  const enHome = normalizePathname(`${base}en/RDK`);
-  return pathnameNoSlash === zhHome || pathnameNoSlash === enHome;
-}
-
 export function DocScopeFilterProvider({ children }) {
   const location = useLocation();
   const history = useHistory();
@@ -248,7 +240,6 @@ export function DocScopeFilterProvider({ children }) {
       return;
     }
 
-    const onDocHome = isDocHomePath(location.pathname, siteConfig?.baseUrl);
     const next = new URLSearchParams(
       location.search && location.search.startsWith('?')
         ? location.search.slice(1)
@@ -262,13 +253,6 @@ export function DocScopeFilterProvider({ children }) {
     const currentP = next.get('p');
     const canonicalCurrentP = resolveCanonicalProductKeyForMatrix(currentP || '');
     const canonicalExpectedP = resolveCanonicalProductKeyForMatrix(normalizedProduct || '');
-
-    if (onDocHome) {
-      // Home keeps clean URL by default, but preserves v/p after user switches.
-      if (!next.has('v') && !next.has('p')) {
-        return;
-      }
-    }
 
     let changed = false;
     if (currentV !== normalizedVersion) {
@@ -292,7 +276,6 @@ export function DocScopeFilterProvider({ children }) {
     location.search,
     locale,
     product,
-    siteConfig?.baseUrl,
     version,
   ]);
 

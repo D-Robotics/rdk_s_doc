@@ -10,21 +10,19 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK S600">
+<DocScope products="RDK S100">
 
 :::warning Note
 
-For RDK S600 commercial materials, please switch to the **FTP Download** option and obtain them from the FTP server according to the paths in the table.
+For RDK S100 commercial materials, please switch to the **FTP Download** option and obtain them from the FTP server according to the paths in the table.
 
 :::
 
-</DocScope>
+
+<Tabs groupId="download" defaultValue="online">
+<TabItem value="online" label="Online Download">
 
 
-
-
-
-<DocScope products="RDK S100">
 
 ## System Software
 
@@ -85,7 +83,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 <br/><br/>
 
-### Camera Expansion Board
+### RDK S100 Camera Expansion Board
 
 <div className="table-responsive">
 
@@ -126,7 +124,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
     </tr>
     <tr>
       <td rowspan="2">Product Photos</td>
-      <td>Camera Expansion Board</td> 
+      <td>Camera Expansion Board</td>
       <td><a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board.7z">Product Photos</a></td>
       <td>2025-06-10</td>
       <td>Product images for secondary editing of product materials.</td>
@@ -291,6 +289,223 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 </table>
 </div>
 
+</TabItem>
+
+<TabItem value="ftp" label="FTP Download">
+
+## System Software
+
+
+<div className="table-responsive">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Content</th>
+        <th>Download Path</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="2">BSP</td>
+        <td>Pre-compiled images and deb packages</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/board_support_package/firmwares/</td>
+      </tr>
+      <tr>
+        <td>BSP source code</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/board_support_package/platform_source_code.tar.gz</td>
+      </tr>
+      <tr>
+        <td rowspan="2">MCU</td>
+        <td>MCU pre-compiled image</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/RDKS100_MCU_SDK/board_support_package/firmwares/</td>
+      </tr>
+      <tr>
+        <td>MCU SDK (source form)</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/RDKS100_MCU_SDK/board_support_package/mcu-platform_source_code.tar.gz</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br/><br/>
+
+## Tool Downloads
+
+<div className="table-responsive">
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2">Name</th>
+        <!-- <th>Latest Version</th> -->
+        <th>Download Path</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="2">Xburn</td>
+        <!-- <td>V1.2.1</td> -->
+        <td>[Download Link](https://archive.d-robotics.cc/downloads/software_tools/download_tools/)</td>
+      </tr>
+      <tr>
+        <td colspan="2">hbplayer</td>
+        <!-- <td>V2.7</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/hbplayerv2.7.zip</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Algorithm Toolchain</td>
+        <td>OE Development Package</td>
+        <!-- <td> V3.7.0</td> -->
+        <td>[OE Development Package](../07_Advanced_development/04_toolchain_development/01_algorithm_toolchain/01_overview.md)</td>
+      </tr>
+      <tr>
+        <td>OE-LLM Development Package</td>
+        <!-- <td> V1.0.2</td> -->
+        <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/01_rdk_s100/01_s100_LLM_Toolchain.md)</td>
+      </tr>
+      <tr>
+        <td colspan="2">ISP Tool</td>
+        <!-- <td> V3.52</td> -->
+        <td>Tool: RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/calibraiton%20tool%20v3.52.zip<br/>Manual: /RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/user_manual/</td>
+      </tr>
+      <tr>
+        <td rowspan="2">Driver Tools</td>
+        <td>winusb drivers</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/winusb_drivers/</td>
+      </tr>
+      <tr>
+        <td>serial to usb drivers</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/serial_to_usb_drivers/</td>
+      </tr>
+      <tr>
+        <td colspan="2">adb and fastboot</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/adb_and_fastboot/</td>
+      </tr>
+      <tr>
+        <td colspan="2">MCU Cross-compilation Toolchain</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/RDKS100_MCU_SDK/cross_compile_toolchain/</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br/><br/>
+
+
+## Hardware Documentation
+
+### RDK S100
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <!-- <th>Name</th> -->
+      <th>Content</th>
+      <th>Download Path</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- <tr>
+      <td rowspan="2">Brief</td>
+      <!-- <td>RDK S600 Module Brief</td> -->
+      <!-- <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_module_brief_v1p0_zh.pdf</td>
+    </tr>
+    <tr>
+      <!-- <td>RDK S600 Brief</td> -->
+      <!-- <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_brief_v1p0_zh.pdf</td>
+    </tr> --> 
+    <tr> 
+      <td>Datasheet</td>
+      <!-- <td>RDK S600 Module Datasheet</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/Datasheet/</td>
+    </tr>
+    <tr>
+      <td>Hardware Design Guide</td>
+      <!-- <td>RDK_S600_Module_Assembly_Guide</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareDesignGuide/</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <!-- <td>RDK S600 Module Reference Design</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareInterface/</td>
+    </tr>
+    <tr>
+      <td>Pinlist</td>
+      <!-- <td>RDK S600 Module 699-Pin B2B Connector Application Note</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/Pinlist</td>
+    </tr>
+    <tr>
+      <td>Typical Scenario Power Consumption</td>
+      <!-- <td>RDK S600 Typical Scenario Power Consumption</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/TypicalScenarioPowerConsumption/</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br/><br/>
+
+### RDK S100 Camera Expansion Board
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <!-- <th>Content</th> -->
+      <th>Download Path</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hardware Interface</td>
+      <!-- <td>3D Model</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareInterface/</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <!-- <td>RDK S600 Camera Board Reference Design</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareReferenceDesign/</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br/><br/>
+
+### RDK S100 MCU Port Expansion Board
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <!-- <th>Content</th> -->
+      <th>Download Path</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hardware Interface</td>
+      <!-- <td>3D Model</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareInterface/</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <!-- <td>RDK S600 Camera Board Reference Design</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareReferenceDesign/</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</TabItem>
+</Tabs>
+
 </DocScope>
 
 
@@ -298,6 +513,14 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 
 
 <DocScope products="RDK S600">
+
+:::warning Note
+
+For RDK S600 commercial materials, please switch to the **FTP Download** option and obtain them from the FTP server according to the paths in the table.
+
+:::
+
+
 
 <Tabs groupId="download" defaultValue="online">
 <TabItem value="online" label="Online Download">

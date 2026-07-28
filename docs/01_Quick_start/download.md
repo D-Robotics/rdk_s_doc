@@ -10,21 +10,19 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK S600">
+<DocScope products="RDK S100">
 
 :::warning 注意
 
-RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路径，在 FTP 服务器中获取。
+RDK S100 商业资料请切换至 **FTP下载** 选项，根据表格中的路径，在 FTP 服务器中获取。
 
 :::
 
-</DocScope>
+
+<Tabs groupId="download" defaultValue="online">
+<TabItem value="online" label="在线下载">
 
 
-
-
-
-<DocScope products="RDK S100">
 
 ## 系统软件
 
@@ -85,7 +83,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 <br/><br/>
 
-### Camera Expansion Board
+### RDK S100 Camera Expansion Board
 
 <div className="table-responsive">
 
@@ -292,6 +290,223 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 </table>
 </div>
 
+</TabItem>
+
+<TabItem value="ftp" label="FTP下载">
+
+## 系统软件
+
+
+<div className="table-responsive">
+  <table>
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>内容</th>
+        <th>下载地址</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="2">BSP</td>
+        <td>预编译镜像与 deb 包</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/board_support_package/firmwares/</td>
+      </tr>
+      <tr>
+        <td>BSP 源码</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/board_support_package/platform_source_code.tar.gz</td>
+      </tr>
+      <tr>
+        <td rowspan="2">MCU</td>
+        <td>MCU 预编译镜像</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/RDKS100_MCU_SDK/board_support_package/firmwares/</td>
+      </tr>
+      <tr>
+        <td>MCU SDK（源码形式）</td>
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/RDKS100_MCU_SDK/board_support_package/mcu-platform_source_code.tar.gz</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br/><br/>
+
+## 工具下载
+
+<div className="table-responsive">
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2">名称</th>
+        <!-- <th>最新版本</th> -->
+        <th>下载地址</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="2">Xburn</td>
+        <!-- <td>V1.2.1</td> -->
+        <td>[下载地址](https://archive.d-robotics.cc/downloads/software_tools/download_tools/)</td>
+      </tr>
+      <tr>
+        <td colspan="2">hbplayer</td>
+        <!-- <td>V2.7</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/hbplayerv2.7.zip</td>
+      </tr>
+      <tr>
+        <td rowspan="2">算法工具链</td>
+        <td>OE 开发包</td>
+        <!-- <td> V3.7.0</td> -->
+        <td>[OE 开发包](../07_Advanced_development/04_toolchain_development/01_algorithm_toolchain/01_overview.md)</td>
+      </tr>
+      <tr>
+        <td>OE-LLM 开发包</td>
+        <!-- <td> V1.0.2</td> -->
+        <td>[OE-LLM 开发包](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/01_rdk_s100/01_s100_LLM_Toolchain.md)</td>
+      </tr>
+      <tr>
+        <td colspan="2">ISP 工具</td>
+        <!-- <td> V3.52</td> -->
+        <td>工具：RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/calibraiton%20tool%20v3.52.zip<br/>手册：/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/user_manual/</td>
+      </tr>
+      <tr>
+        <td rowspan="2">驱动工具</td>
+        <td>winusb drivers</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/winusb_drivers/</td>
+      </tr>
+      <tr>
+        <td>serial to usb drivers</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/serial_to_usb_drivers/</td>
+      </tr>
+      <tr>
+        <td colspan="2">adb and fastboot</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/software_tools/adb_and_fastboot/</td>
+      </tr>
+      <tr>
+        <td colspan="2">MCU 交叉编译工具链</td>
+        <!-- <td>-</td> -->
+        <td>/RDKS100_V4.0.5-20260507/RDKS100_LNX_SDK/RDKS100_V4.0.5-20260507/RDKS100_MCU_SDK/cross_compile_toolchain/</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br/><br/>
+
+
+## 硬件资料
+
+### RDK S100
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <!-- <th>名称</th> -->
+      <th>内容</th>
+      <th>下载地址</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- <tr>
+      <td rowspan="2">Brief</td>
+      <!-- <td>RDK S600 Module Brief</td> -->
+      <!-- <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_module_brief_v1p0_zh.pdf</td>
+    </tr>
+    <tr>
+      <!-- <td>RDK S600 Brief</td> -->
+      <!-- <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_brief_v1p0_zh.pdf</td>
+    </tr> --> 
+    <tr> 
+      <td>Datasheet</td>
+      <!-- <td>RDK S600 Module Datasheet</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/Datasheet/</td>
+    </tr>
+    <tr>
+      <td>Hardware Design Guide</td>
+      <!-- <td>RDK_S600_Module_Assembly_Guide</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareDesignGuide/</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <!-- <td>RDK S600 Module Reference Design</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareInterface/</td>
+    </tr>
+    <tr>
+      <td>Pinlist</td>
+      <!-- <td>RDK S600 Module 699-Pin B2B Connector Application Note</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/Pinlist</td>
+    </tr>
+    <tr>
+      <td>Typical Scenario Power Consumption</td>
+      <!-- <td>RDK S600 Typical Scenario Power Consumption</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/TypicalScenarioPowerConsumption/</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br/><br/>
+
+### RDK S100 Camera Expansion Board
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <!-- <th>内容</th> -->
+      <th>下载地址</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hardware Interface</td>
+      <!-- <td>3D 图</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareInterface/</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <!-- <td>RDK S600 Camera Board Reference Design</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareReferenceDesign/</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<br/><br/>
+
+### RDK S100 MCU Port Expansion Board
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <!-- <th>内容</th> -->
+      <th>下载地址</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hardware Interface</td>
+      <!-- <td>3D 图</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareInterface/</td>
+    </tr>
+    <tr>
+      <td>Hardware Reference Design</td>
+      <!-- <td>RDK S600 Camera Board Reference Design</td> -->
+      <td>/RDKS100_V4.0.5-20260507/RDKS100_datasheet_and_design_guide/HardwareReferenceDesign/</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</TabItem>
+</Tabs>
+
 </DocScope>
 
 
@@ -299,6 +514,16 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 
 <DocScope products="RDK S600">
+
+
+
+:::warning 注意
+
+RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路径，在 FTP 服务器中获取。
+
+:::
+
+
 
 <Tabs groupId="download" defaultValue="online">
 <TabItem value="online" label="在线下载">
@@ -625,7 +850,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 <table>
   <thead>
     <tr>
-      <th>名称</th>
+      <!-- <th>名称</th> -->
       <th>内容</th>
       <th>下载地址</th>
     </tr>
@@ -633,69 +858,69 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
   <tbody>
     <tr>
       <td rowspan="2">Brief</td>
-      <td>RDK S600 Module Brief</td>
+      <!-- <td>RDK S600 Module Brief</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_module_brief_v1p0_zh.pdf</td>
     </tr>
     <tr>
-      <td>RDK S600 Brief</td>
+      <!-- <td>RDK S600 Brief</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_brief_v1p0_zh.pdf</td>
     </tr>
     <tr>
       <td>Datasheet</td>
-      <td>RDK S600 Module Datasheet</td>
+      <!-- <td>RDK S600 Module Datasheet</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/RDK_S600_Module_Datasheet_V1.0.1_20260610.pdf</td>
     </tr>
     <tr>
       <td rowspan="6">Hardware Design Guide</td>
-      <td>RDK_S600_Module_Assembly_Guide</td>
+      <!-- <td>RDK_S600_Module_Assembly_Guide</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Assembly_Guide_V1P0_20250610.zip</td>
     </tr>
     <tr>
-      <td>RDK_S600_Module_Hardware_Design_Checklist</td>
+      <!-- <td>RDK_S600_Module_Hardware_Design_Checklist</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Hardware_Design_Checklist_V1.0.1_20260610.xlsx</td>
     </tr>
     <tr>
-      <td>RDK S600 Module Hardware Design Guide</td>
+      <!-- <td>RDK S600 Module Hardware Design Guide</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Hardware_Design_Guide_V1.0.1_20260610.pdf</td>
     </tr>
     <tr>
-      <td>RDK_S600_Module_Pin_Delay</td>
+      <!-- <td>RDK_S600_Module_Pin_Delay</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Pin_Delay_V1P0_20260422.csv</td>
     </tr>
     <tr>
-      <td>RDK S600 Module Thermal Design Guide</td>
+      <!-- <td>RDK S600 Module Thermal Design Guide</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Module_Thermal_Design_Guide_V1P0_20260420.pdf</td>
     </tr>
     <tr>
-      <td>RDK_S600_Moudle_Thermal_Simulation_Model</td>
+      <!-- <td>RDK_S600_Moudle_Thermal_Simulation_Model</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareDesignGuide/RDK_S600_Moudle_Thermal_Simulation_Model_V1P0_20260420.tzr</td>
     </tr>
     <tr>
       <td>Hardware Reference Design</td>
-      <td>RDK S600 Module Reference Design</td>
+      <!-- <td>RDK S600 Module Reference Design</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_Module_Carrier_Board/</td>
     </tr>
     <tr>
       <td rowspan="3">3D Model</td>
-      <td>RDK S600 Module</td>
+      <!-- <td>RDK S600 Module</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_Module_3D_Model_V1P0_20260420.STEP</td>
     </tr>
     <tr>
-      <td>RDK S600 Developer Kit</td>
+      <!-- <td>RDK S600 Developer Kit</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_Kit_3D_Model_V1P0_20260420.stp</td>
     </tr>
     <tr>
-      <td>3D Model Information README</td>
+      <!-- <td>3D Model Information README</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_3D_Model_Information_Readme_V1P0_20260420.pdf</td>
     </tr>
     <tr>
       <td>Pinlist</td>
-      <td>RDK S600 Module 699-Pin B2B Connector Application Note</td>
+      <!-- <td>RDK S600 Module 699-Pin B2B Connector Application Note</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Pinlist/RDK_S600_Module_699-Pin_B2B_Connector_Application_Note_V1P0_20260428.xlsx</td>
     </tr>
     <tr>
       <td>Typical Scenario Power Consumption</td>
-      <td>RDK S600 Typical Scenario Power Consumption</td>
+      <!-- <td>RDK S600 Typical Scenario Power Consumption</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/TypicalScenarioPowerConsumption/RDK_S600_Typical_Scenario_Power_Consumption_V1P0_20260428.pdf</td>
     </tr>
   </tbody>
@@ -710,24 +935,24 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
   <thead>
     <tr>
       <th>名称</th>
-      <th>内容</th>
+      <!-- <th>内容</th> -->
       <th>下载地址</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Brief</td>
-      <td>RDK S600 Camera Expansion Board Brief</td>
+      <!-- <td>RDK S600 Camera Expansion Board Brief</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_camera_expansion_board_brief_v1p0_zh.pdf</td>
     </tr>
     <tr>
       <td>Hardware Reference Design</td>
-      <td>RDK S600 Camera Board Reference Design</td>
+      <!-- <td>RDK S600 Camera Board Reference Design</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_CAMERA_EXPANSION_BOARD/</td>
     </tr>
     <tr>
       <td>3D Model</td>
-      <td>RDK S600 Camera Expansion Board</td>
+      <!-- <td>RDK S600 Camera Expansion Board</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_CAMERA_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP</td>
     </tr>
   </tbody>
@@ -743,24 +968,24 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
   <thead>
     <tr>
       <th>名称</th>
-      <th>内容</th>
+      <!-- <th>内容</th> -->
       <th>下载地址</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Brief</td>
-      <td>RDK S600 MCU Port Expansion Board Brief</td>
+      <!-- <td>RDK S600 MCU Port Expansion Board Brief</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/Datasheet/drobotics_rdk_s600_mcu_port_expansion_board_brief_v1p0_zh.pdf</td>
     </tr>
     <tr>
       <td>Hardware Reference Design</td>
-      <td>RDK S600 MCU Board Reference Design</td>
+      <!-- <td>RDK S600 MCU Board Reference Design</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_MCU_PORT_EXPANSION_BOARD/</td>
     </tr>
     <tr>
       <td>3D Model</td>
-      <td>RDK S600 MCU Port Expansion Board</td>
+      <!-- <td>RDK S600 MCU Port Expansion Board</td> -->
       <td>/RDKS600_V5.1.0/RDKS600_datasheet_and_design_guide/HardwareReferenceDesign/RDK_S600_3D/RDK_S600_MCU_PORT_EXPANSION_BOARD_3D_Model_V1P0_20260420.STEP</td>
     </tr>
   </tbody>
