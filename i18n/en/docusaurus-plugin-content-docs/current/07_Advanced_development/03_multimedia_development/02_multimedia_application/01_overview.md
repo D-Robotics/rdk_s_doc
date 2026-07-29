@@ -24,6 +24,7 @@ The source code directory structure is organized and named according to function
 ├── sample_isp        # Example code for the ISP module, including ISP initialization and retrieving ISP-processed data
 ├── sample_pipeline   # Example code cascading multiple functional modules, e.g., VIN->ISP->PYM->GDC->CODEC encoding data pipeline functional test
 ├── sample_vin        # Initialize Camera Sensor and acquire images from the VIN module
+├── sample_camera_diag # Camera diagnostics event callback sample: fault inject and print callback
 ├── sample_pym        # Initialize the PYM module and use PYM to downscale images
 ├── sample_gpu_3d     # Examples demonstrating 3D GPU usage via both OpenCL and OpenGLES APIs
 ├── sunrise_camera    # Integrated application solution example leveraging most modules, supporting smart cameras and intelligent analysis boxes; video streams and algorithm results can be viewed via a web browser

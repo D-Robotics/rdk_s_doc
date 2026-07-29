@@ -24,6 +24,7 @@
 ├── sample_isp        # ISP 模块的示例代码，包括如何初始化 ISP，获取 ISP 处理后的数据等
 ├── sample_pipeline   # 串联多功能模块的示例代码，例如： VIN->ISP->PYM->GDC->CODEC 编码的数据流通路功能测试
 ├── sample_vin        # 初始化 Camera Sensor，从 VIN 模块获取图像
+├── sample_camera_diag # Camera 诊断事件回调示例，演示故障注入与 callback 打印
 ├── sample_pym        # 初始化 PYM 模块，使用 PYM 对图像进行缩小操作
 ├── sample_gpu_3d     # 提供OpenCL 和 OpenGLES 两种接口使用 3DGPU的示例
 ├── sunrise_camera    # 集成大部分模块实现的应用方案示例代码，支持智能摄像头和智能分析盒，在 Web 上可以浏览视频图像和智能算法结果
