@@ -80,7 +80,7 @@ For instructions on using SSH, please refer to [Remote Login - SSH Login](../rem
 
 ### Automatic Login on Text Terminal
 
-Modify the serial-getty@.service file to enable passwordless login. Follow the steps below:
+Modify the `serial-getty@.service` file to enable passwordless login. Follow the steps below:
 
 <Tabs groupId="ubuntu-version">
 <TabItem value="ubuntu22" label="Ubuntu 22.04">

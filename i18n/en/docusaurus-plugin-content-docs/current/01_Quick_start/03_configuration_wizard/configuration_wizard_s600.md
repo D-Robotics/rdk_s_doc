@@ -82,11 +82,12 @@ For using SSH, please refer to [Remote Login - SSH Login](../remote_login#ssh).
 
 Modify the `serial-getty@ttyS0.service` file to set up password-less login as follows:
 
-1. Open `serial-getty@ttyS0.service`
+1. Open `serial-getty@ttyS0.service`.
 
 ```bash
 # Log in as root user
 vim /usr/lib/systemd/system/serial-getty@ttyS0.service
+
 # Log in as sunrise user
 sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
 ```
@@ -97,13 +98,13 @@ sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
 ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
 ```
 
-**Parameter explanation:** The `-a` parameter specifies the username for automatic login. `-o '-p -- \\u'` adds additional customization to the login process: preserves the current environment variables and displays the username in the login prompt.
+**Parameter explanation:** The `-a` parameter specifies the username for automatic login. 
 
 3. After restarting, the user will be logged in automatically.
 
-### Automatic Login on Graphical Terminal
+<!-- ### Automatic Login on Graphical Terminal
 
-To be updated.
+To be updated. -->
 
 ## Setting Up Chinese Environment
 
