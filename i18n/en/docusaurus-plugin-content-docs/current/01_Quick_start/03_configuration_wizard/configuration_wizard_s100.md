@@ -82,7 +82,10 @@ For instructions on using SSH, please refer to [Remote Login - SSH Login](../rem
 
 Modify the `serial-getty@.service` file to enable passwordless login. Follow the steps below:
 
-1. Open `serial-getty@.service`:
+<Tabs groupId="ubuntu-version">
+<TabItem value="ubuntu22" label="Ubuntu 22.04">
+
+1. Open `serial-getty@.service` file
 
 ```bash
 # If logged in as root
@@ -97,10 +100,35 @@ sudo vim /lib/systemd/system/serial-getty@.service
 ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
 ```
 
-**Parameter Explanation:**  
-The `-a` parameter specifies the username for automatic login. The option `-o '-p -- \\u'` further customizes the login process by preserving the current environment variables and displaying the username in the login prompt.
+**Parameter Explanation:** The `-a` parameter specifies the username for automatic login. The option `-o '-p -- \\u'` further customizes the login process by preserving the current environment variables and displaying the username in the login prompt.
 
 3. After rebooting, the user will be automatically logged in.
+
+</TabItem>
+
+<TabItem value="ubuntu24" label="Ubuntu 24.04">
+
+1. Open `serial-getty@ttyS0.service` file
+
+```bash
+# If logged in as root
+vim /usr/lib/systemd/system/serial-getty@ttyS0.service
+# If logged in as sunrise user
+sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
+```
+
+2. Modify the line containing `ExecStart=-/sbin/agetty` as follows:
+
+```
+ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
+```
+
+**Parameter Explanation:** The `-a` parameter specifies the username for automatic login. The option `-o '-p -- \\u'` further customizes the login process by preserving the current environment variables and displaying the username in the login prompt.
+
+3. After rebooting, the user will be automatically logged in.
+
+</TabItem>
+</Tabs>
 
 ### Automatic Login on Graphical Terminal
 
