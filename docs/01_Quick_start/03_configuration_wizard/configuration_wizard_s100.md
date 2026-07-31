@@ -82,9 +82,14 @@ SSH 的使用请查看 [远程登录 - SSH 登录](../remote_login#ssh)。
 
 ### 字符终端自动登录
 
-修改`serial-getty@.service`文件可以设置免密登陆，操作如下
 
-1. 打开 serial-getty@.service
+
+<Tabs groupId="ubuntu-version">
+<TabItem value="ubuntu22" label="Ubuntu 22.04">
+
+修改 `serial-getty@.service` 文件可以设置免密登陆，操作如下：
+
+1. 打开 `serial-getty@.service`。
 
 ```bash
 # root用户登陆
@@ -93,19 +98,48 @@ vim /lib/systemd/system/serial-getty@.service
 sudo vim /lib/systemd/system/serial-getty@.service
 ```
 
-2.  将`ExecStart=-/sbin/agetty`所在行修改为:
+2.  将 `ExecStart=-/sbin/agetty` 所在行修改为:
 
 ```
 ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
 ```
 
-**参数解释：** `-a `参数用于指定自动登录的用户名,`-o '-p -- \\u' `则对登录过程进行了额外的定制：保留当前环境变量，并在登录提示中显示用户名
+**参数解释：** `-a ` 参数用于指定自动登录的用户名。
 
-3. 重启后用户将自动登录
+3. 重启后用户将自动登录。
 
-### 图形化终端自动登录
+</TabItem>
 
-待更新
+<TabItem value="ubuntu24" label="Ubuntu 24.04">
+
+修改 `serial-getty@ttyS0.service` 文件可以设置免密登陆，操作如下：
+
+1. 打开 `serial-getty@ttyS0.service`。
+
+```bash
+# root 用户登录
+vim /usr/lib/systemd/system/serial-getty@ttyS0.service
+
+# sunrise 用户登录
+sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
+```
+
+2. 将 `ExecStart=-/sbin/agetty` 所在行修改为:
+
+```
+ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
+```
+
+**参数解释：** `-a ` 参数用于指定自动登录的用户名。
+
+3. 重启后用户将自动登录。
+
+</TabItem>
+</Tabs>
+
+<!-- ### 图形化终端自动登录
+
+待更新 -->
 
 ## 设置中文环境
 
@@ -169,7 +203,7 @@ dpkg -i nomachine_*_arm64.deb
 
 **配置启动**
 
-1. 配置服务器以允许远程连接
+1. 配置服务器以允许远程连接。
 
     ```shell
     sudo systemctl start nxserver
