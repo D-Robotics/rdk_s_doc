@@ -178,7 +178,7 @@ Options:
 
 #### Execution Output
 
-- First, use `get_vin_data -s 0` to capture a RAW image from the imx219 sensor. For detailed usage of `get_vin_data`, refer to [sample_vin](sample_vin.html).
+- First, use `get_vin_data -s 0` to capture a RAW image from the imx219 sensor. For detailed usage of `get_vin_data`, refer to [sample_vin](./02_sample_vin.md).
 - Next, perform ISP feedback by specifying parameters such as format, width, and height for the prepared RAW image. During ISP feedback, the corresponding dummy sensor's ISP tuning library will be applied.
 
 <div class="note">

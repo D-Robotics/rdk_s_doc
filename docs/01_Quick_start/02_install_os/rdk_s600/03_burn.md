@@ -70,7 +70,7 @@ V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
 - 从 **UFS** 启动：SW8 拨至 UFS 启动位（`D12=ON, D13=ON` 或 `D12=OFF, D13=OFF`）。
 - 从 **NVMe** 启动：SW8 拨至 NVMe 启动位（`D12=OFF, D13=ON`）。
   
-烧录 NVMe 需使用 NVMe 版本的镜像，地瓜默认提供的镜像面向 UFS，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_rdk_gen.md#-766-emmcufsnvme-镜像编译须知)。
+烧录 NVMe 需使用 NVMe 版本的镜像，地瓜默认提供的镜像面向 UFS，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-镜像编译须知)。
 :::
 
 1. **产品类型** 选择 `RDK S600`。

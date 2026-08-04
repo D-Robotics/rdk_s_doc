@@ -78,7 +78,7 @@ For an ovx3cstd Serdes sensor connected to mipi host 2, link port 1, execute `./
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi.
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
 - Currently, only mipi host 0, 2, 4, 5 can be used.
 :::
 
@@ -189,7 +189,7 @@ Options:
 
 #### Running Effect
 
-- First, use `get_vin_data -s 0` to obtain a raw image of imx219. For detailed usage of `get_vin_data`, refer to [sample_vin](sample_vin.html).
+- First, use `get_vin_data -s 0` to obtain a raw image of imx219. For detailed usage of `get_vin_data`, refer to [sample_vin](./02_sample_vin.md).
 - Next, we can specify parameters such as format, width, height, etc., for the prepared RAW image for feedback. During ISP feedback, the corresponding dummy Sensor's ISP effect library will be used for tuning.
 
 <div class="note">

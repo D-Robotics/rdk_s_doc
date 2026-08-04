@@ -16,7 +16,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 | Fastboot | 非空板状态更新系统 | 要求非空板且系统能进入 U-Boot |
 
 :::warning 前置确认
-  目前需要将 [SW3 开关](/rdk_s_doc/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#系统启动盘选择-sw3) 拨至从板载 eMMC 启动，暂不支持从 M.2 NVMe 固态硬盘启动。
+  目前需要将 [SW3 开关](/rdk_s_doc/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100#系统启动盘选择-sw3) 拨至从板载 eMMC 启动，暂不支持从 M.2 NVMe 固态硬盘启动。
 :::
 
 ### 进入 DFU+Fastboot 模式

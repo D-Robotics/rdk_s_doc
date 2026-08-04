@@ -360,20 +360,6 @@ APT-Sources: [http://archive.d-robotics.cc/ubuntu-rdk](http://archive.d-robotics
 Description: TogetheROS Bot
 ```
 
-**示例输出 (RDK OS 1.x 版本系统，tros.b 1.1.6):**
-
-```bash
-Package: tros
-Version: 1.1.6
-Section: utils
-Maintainer: kairui.wang <kairui.wang@horizon.ai>
-Installed-Size: 1,536 MB
-Pre-Depends: hhp-verify
-Depends: symlinks, locales, hhp-verify, hobot-models-basic, hobot-arm64-libs (>= 1.1.6)
-Apt-Sources: [http://archive.d-robotics.cc/ubuntu-ports](http://archive.d-robotics.cc/ubuntu-ports) focal/main arm64 Packages
-Date: 2023
-```
-
 ### Q12: 地瓜机器人 tros.b 的1.x 版本和2.x 版本（及更新版本）之间有什么主要说明和差异？
 **A:**
 * **和系统版本、RDK 平台硬件对应关系：**

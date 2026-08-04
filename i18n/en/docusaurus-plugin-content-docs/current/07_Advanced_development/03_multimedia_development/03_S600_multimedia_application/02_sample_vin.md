@@ -62,7 +62,7 @@ Taking the ovx3cstd Serdes sensor connected to mipi host 2, link port 1 as an ex
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the set port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide)
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南)
 - Currently, only mipi hosts 0, 2, 4, and 5 are available
 :::
 
@@ -170,7 +170,7 @@ Taking the imx219 sensor and the ovx3cstd Serdes sensor connected to mipi host 2
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the set port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide)
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南)
 - Currently, only mipi hosts 0, 2, 4, and 5 are available
 :::
 

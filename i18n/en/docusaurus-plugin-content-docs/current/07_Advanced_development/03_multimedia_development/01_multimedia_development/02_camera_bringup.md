@@ -58,12 +58,12 @@ RDK S600 development board camera-related hardware resources are as follows:
 
 <DocScope products="RDK S100">
 
-For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](/01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board).
+For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](/01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board).
 
 </DocScope>
 <DocScope products="RDK S600">
 
-For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](/docs/01_Quick_start/01_hardware_introduction/02_rdk_s600/02_rdk_s600_camera_expansion_board.md).
+For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](/01_Quick_start/01_hardware_introduction/02_rdk_s600/02_rdk_s600_camera_expansion_board).
 
 </DocScope>
 
@@ -400,7 +400,7 @@ bash run_tuning.sh
 
 **Image Preview**
 
-1. [Click here](../../../01_Quick_start/download.md#tool-download) to download the image browsing tool `hbplayer`.
+1. [Click here](../../../01_Quick_start/download.md#tool-downloads) to download the image browsing tool `hbplayer`.
 2. Open `hbplayer` and set the network address (PC must be able to ping the board), click `Apply` to apply the settings, and click `Connect` to see the real-time video stream. The real-time preview operation is shown below.
 
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_06.png" alt="hbplayer Real-time Preview" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

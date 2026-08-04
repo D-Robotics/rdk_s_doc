@@ -34,7 +34,7 @@ For users, the S100X supports three heap types by default: carveout/cma/cma_rese
 | 12G interleave    | 0x0000000400000000..0x000000043FFFFFFF(1GiB)  | 0x0000000440000000..0x000000045FFFFFFF(512MiB)  | 0x0000000460000000..0x000000047FFFFFFF(512MiB)  |
 | 24G interleave    | 0x0000000400000000..0x000000043FFFFFFF(1GiB)  | 0x0000000440000000..0x000000045FFFFFFF(512MiB)  | 0x0000000460000000..0x000000047FFFFFFF(512MiB)  |
 
-For instructions on using ION, please refer to [Heap Introduction](./03_s100_hbmem_software.md#heap-introduction)
+For instructions on using ION, please refer to [Heap Introduction](./03_s100_hbmem_software.md#heap-description)
 
 ### Memory Map in 12G Interleave Mode
 
@@ -89,7 +89,7 @@ For users, the S600 supports five heap types by default: carveout/cma/cma_reserv
 
 </div>
 
-For instructions on using ION, please refer to [Heap Introduction](./03_s100_hbmem_software.md#heap-introduction)
+For instructions on using ION, please refer to [Heap Introduction](./03_s100_hbmem_software.md#heap-description)
 
 ### Memory Map in 32G Interleave Mode
 

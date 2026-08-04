@@ -43,7 +43,7 @@ Bit idx  Function name   Status
 
 **Capturing ramdump may corrupt the partition where the dump file is saved. Please ensure that the dump file is saved to a non-root filesystem partition with sufficient capacity (larger than DDR size).**
 
-**It is recommended to create a dedicated partition for ramdump. See [Custom Partition Instructions](../rdk_gen#Custom-Partition-Instructions), for example, name the partition "ramdump".**
+**It is recommended to create a dedicated partition for ramdump. See [Custom Partition Instructions](https://developer.d-robotics.cc/rdk_s_doc/en/Advanced_development/rdk_gen?v=4.0.5&p=RDK+S100#custom-partition-configuration), for example, name the partition "ramdump".**
 
 #### Automatic Capture
 

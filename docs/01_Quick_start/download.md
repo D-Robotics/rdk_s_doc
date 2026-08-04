@@ -380,7 +380,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
         <td>OE 开发包。</td>
       </tr>
       <tr>
-        <td>[OE LLM 开发包](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_s600_LLM_Toolchain.md)</td>
+        <td>[OE LLM 开发包](https://developer.d-robotics.cc/rdk_s_doc/07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600?v=5.1.0&p=RDK+S600)</td>
         <td> V1.0.2</td>
         <td>2026-06-22</td>
         <td>OE LLM 开发包。</td>
@@ -587,7 +587,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
       <tr>
         <td>OE-LLM 开发包</td>
         <td> V1.0.2</td>
-        <td>[OE-LLM 开发包](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_s600_LLM_Toolchain.md)</td>
+        <td>[OE-LLM 开发包](https://developer.d-robotics.cc/rdk_s_doc/07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600?v=5.1.0&p=RDK+S600)</td>
       </tr>
       <tr>
         <td colspan="2">ISP 工具</td>

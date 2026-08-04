@@ -361,20 +361,6 @@ APT-Sources: [http://archive.d-robotics.cc/ubuntu-rdk](http://archive.d-robotics
 Description: TogetheROS Bot
 ```
 
-**Example output (RDK OS 1.x system, tros.b 1.1.6):**
-
-```bash
-Package: tros
-Version: 1.1.6
-Section: utils
-Maintainer: kairui.wang <kairui.wang@horizon.ai>
-Installed-Size: 1,536 MB
-Pre-Depends: hhp-verify
-Depends: symlinks, locales, hhp-verify, hobot-models-basic, hobot-arm64-libs (>= 1.1.6)
-Apt-Sources: [http://archive.d-robotics.cc/ubuntu-ports](http://archive.d-robotics.cc/ubuntu-ports) focal/main arm64 Packages
-Date: 2023
-```
-
 ### Q12: What are the main notes and differences between tros.b 1.x and 2.x (and newer versions)?
 **A:**
 * **Relationship with system versions and RDK platform hardware:**
