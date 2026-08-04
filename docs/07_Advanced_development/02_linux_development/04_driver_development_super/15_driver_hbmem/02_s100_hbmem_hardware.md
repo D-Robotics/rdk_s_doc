@@ -34,7 +34,7 @@ Hbmem 所有的 heap 大小都可以在 dts 中对其进行修改配置，但是
 | 12G interleave    | 0x0000000400000000..0x000000043FFFFFFF(1GiB)  | 0x0000000440000000..0x000000045FFFFFFF(512MiB)  | 0x0000000460000000..0x000000047FFFFFFF(512MiB)  |
 | 24G interleave    | 0x0000000400000000..0x000000043FFFFFFF(1GiB)  | 0x0000000440000000..0x000000045FFFFFFF(512MiB)  | 0x0000000460000000..0x000000047FFFFFFF(512MiB)  |
 
-ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap介绍)
+ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap-介绍)
 
 ### 12G interleave 模式下的 memory map
 
@@ -91,7 +91,7 @@ ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap介�
 
 </div>
 
-ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap介绍)
+ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap-介绍)
 
 ### 32G interleave 模式下的 memory map
 

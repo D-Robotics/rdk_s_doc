@@ -56,7 +56,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 
 <DocScope products="RDK S600">
-- [调试串口章节](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#j4)
+- [调试串口章节](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600#j4)
 </DocScope>
 
 串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
@@ -193,7 +193,7 @@ macos 系统下，使用 minicom 工具连接串口，步骤如下：
 
 :::tip
 
-使用 minicom 连接出现乱码，请查看[使用macos系统笔记本串口乱码](../01_Quick_start/02_install_os/rdk_s100/05_FAQ.md#使用-macos-系统笔记本串口乱码问题)
+使用 minicom 连接出现乱码，请查看 [macOS 驱动残留导致仍乱码](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver#macos-驱动残留导致仍乱码)
 :::
 
 ## 网络状态确认{#network_config}

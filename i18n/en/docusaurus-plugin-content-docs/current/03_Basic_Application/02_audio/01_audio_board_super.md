@@ -132,7 +132,7 @@ For API descriptions and usage, refer to the official documentation: https://www
 
 ##### Preparation for Use
 
-The S100 is adapted to the audio adapter board produced by Waveshare Electronics, connected via the 40-pin interface to the S100 development board. For daughter board introduction and specific connection methods, refer to: [Audio Daughter Board User Guide](../../07_Advanced_development/02_linux_development/04_driver_development_super/11_driver_audio.md#audio-daughter-board-user-guide)
+The S100 is adapted to the audio adapter board produced by Waveshare Electronics, connected via the 40-pin interface to the S100 development board. For daughter board introduction and specific connection methods, refer to: [Audio Daughter Board User Guide](https://developer.d-robotics.cc/rdk_s_doc/en/Advanced_development/linux_development/driver_development_super/driver_audio?v=4.0.5&p=RDK+S100#audio-daughter-board-usage-instructions)
 
 ##### Device Nodes
 

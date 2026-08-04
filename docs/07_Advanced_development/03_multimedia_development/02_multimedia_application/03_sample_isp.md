@@ -180,7 +180,7 @@ Options:
 
 #### 运行效果
 
-- 先使用 `get_vin_data -s 0` 获取一张 imx219 的 raw 图，`get_vin_data` 的使用详细参考 [sample_vin](sample_vin.html)。
+- 先使用 `get_vin_data -s 0` 获取一张 imx219 的 raw 图，`get_vin_data` 的使用详细参考 [sample_vin](./02_sample_vin.md)。
 - 接下来我们可以根据提示准备好的 RAW 图指定 format、width、height 等参数进行回灌，ISP 回灌时会使用对应的 dummy Sensor 的 ISP 效果库进行调校。
 
 <div class="note">

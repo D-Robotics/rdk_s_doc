@@ -134,7 +134,7 @@ LPWM 模块有多种触发源可选，对于上述硬件连接方式，仍可有
 
 - Acore ETH PPS 误差最小，建议优先使用。
 
-对于使用 Acore ETH PPS0同步源，使用 fixed mode 时，其上升沿基于 PPS 整秒时间有一固定偏移536.871ms，需要在使用时按需求进行 offset 计算与配置，更多可参考: [Acore ETH PPS说明](../../02_linux_development/04_driver_development_super/12_driver_timesync.md#Acore\_Eth_\PPS)
+对于使用 Acore ETH PPS0同步源，使用 fixed mode 时，其上升沿基于 PPS 整秒时间有一固定偏移536.871ms，需要在使用时按需求进行 offset 计算与配置，更多可参考: [Acore ETH PPS说明](../../02_linux_development/04_driver_development_super/12_driver_timesync.md#Acore\_Eth\_PPS)
 
 ### Camera 同步模式选择
 

@@ -70,7 +70,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi.
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
 - Currently, only mipi hosts 0, 2, 4, and 5 can be used.
 :::
 
@@ -325,7 +325,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi.
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
 - Currently, only mipi hosts 0, 2, 4, and 5 can be used.
 :::
 
@@ -437,7 +437,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi.
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
 - Currently, only mipi hosts 0, 2, 4, and 5 can be used.
 :::
 
@@ -573,7 +573,7 @@ Notes:
 2. To adjust the number of video pipelines, increase or decrease the number of `-c` parameter sets.
 3. Non-Serdes sensors do not need to set link and mipi.
 4. The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-5. The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
+5. The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
 6. Currently, only mipi hosts 0 and 2 can be used.
 
 #### Execution Effect

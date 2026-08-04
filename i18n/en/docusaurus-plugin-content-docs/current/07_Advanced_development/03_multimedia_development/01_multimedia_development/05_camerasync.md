@@ -43,7 +43,7 @@ The process of transmitting the PPS signal to the camera trigger (cam-trig) is i
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_01.png" alt="LPWM Synchronization Sources diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-For more information on PPS synchronization sources, please refer to: [PPS Description](../../02_linux_development/04_driver_development_s100/12_driver_timesync.md#PPS)
+For more information on PPS synchronization sources, please refer to: [PPS Description](../../02_linux_development/04_driver_development_super/12_driver_timesync.md#PPS)
 
 :::info Note
 
@@ -114,7 +114,7 @@ In this solution, Acore ETH PPS0 is used as the LPWM trigger source because:
 - Both Lidar and S100 use network-based synchronization, allowing PHC time to serve as a unified time axis.
 - Acore ETH PPS exhibits the smallest timing error and is therefore recommended as the primary choice.
 
-When using Acore ETH PPS0 in fixed mode, its rising edge has a fixed offset of 536.871ms relative to the PPS second boundary. This offset must be accounted for during configuration. For more details, please refer to: [Acore ETH PPS Description](../../02_linux_development/04_driver_development_s100/12_driver_timesync.md#Acore_Eth_PPS)
+When using Acore ETH PPS0 in fixed mode, its rising edge has a fixed offset of 536.871ms relative to the PPS second boundary. This offset must be accounted for during configuration. For more details, please refer to: [Acore ETH PPS Description](../../02_linux_development/04_driver_development_super/12_driver_timesync.md#Acore_Eth_PPS)
 
 ### Camera Synchronization Mode Selection
 
