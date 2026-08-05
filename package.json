@@ -14,6 +14,7 @@
     "start:no-watch": "docusaurus start --locale zh-Hans",
     "start:no-watch:en": "docusaurus start --locale en",
     "build": "docusaurus build",
+    "build:ci": "docusaurus build --config docusaurus.ci.config.js",
     "build:scope": "npm run generate-sidebar-config && node scripts/build-scoped-site.js",
     "swizzle": "docusaurus swizzle",
     "deploy": "npm run build && docusaurus deploy --skip-build",
