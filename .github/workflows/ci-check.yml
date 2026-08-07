@@ -36,7 +36,7 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           args: >
-            --base ./build
+            --base ${{ github.workspace }}/build
             --accept 200,204,301,302,429
             --timeout 30
             --max-retries 2
