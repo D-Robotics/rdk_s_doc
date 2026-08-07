@@ -1,0 +1,17 @@
+# 内网地址，lychee 无法访问
+10\.64\.\d+\.\d+
+192\.168\.\d+\.\d+
+
+# 需要登录或认证的页面
+github\.com/settings
+github\.com/login
+
+# 邮箱链接
+mailto:
+
+# 内网文档站点，可能被限流或无法从 CI 访问
+developer\.d-robotics\.cc
+
+# 本地地址
+localhost
+127\.0\.0\.1
