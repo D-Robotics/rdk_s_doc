@@ -83,10 +83,6 @@ SSH 的使用请查看 [远程登录 - SSH 登录](../remote_login#ssh)。
 ### 字符终端自动登录
 
 
-
-<Tabs groupId="ubuntu-version">
-<TabItem value="ubuntu22" label="Ubuntu 22.04">
-
 修改 `serial-getty@.service` 文件可以设置免密登陆，操作如下：
 
 1. 打开 `serial-getty@.service`。
@@ -107,35 +103,6 @@ ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
 **参数解释：** `-a ` 参数用于指定自动登录的用户名。
 
 3. 重启后用户将自动登录。
-
-</TabItem>
-
-<TabItem value="ubuntu24" label="Ubuntu 24.04">
-
-修改 `serial-getty@ttyS0.service` 文件可以设置免密登陆，操作如下：
-
-1. 打开 `serial-getty@ttyS0.service`。
-
-```bash
-# root 用户登录
-vim /usr/lib/systemd/system/serial-getty@ttyS0.service
-
-# sunrise 用户登录
-sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
-```
-
-2. 将 `ExecStart=-/sbin/agetty` 所在行修改为:
-
-```
-ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
-```
-
-**参数解释：** `-a ` 参数用于指定自动登录的用户名。
-
-3. 重启后用户将自动登录。
-
-</TabItem>
-</Tabs>
 
 <!-- ### 图形化终端自动登录
 
