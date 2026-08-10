@@ -13,6 +13,7 @@
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联 GDC 变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
 | [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
+| [single_3d_gpu_bpu](#single_3d_gpu_bpu)  | GPU 与 BPU 串联的内存零拷贝示例  |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -756,4 +757,103 @@ filedump(./yuv_dump/isp_5_s0_c0_b1_f0_005838.yuv, size(4147200) is successed
 loop cnt use up
 pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
+```
+
+## single_3d_gpu_bpu
+
+### 功能概述
+
+`single_3d_gpu_bpu` 示例串联 `GPU OpenCL` 与 `BPU` 两个处理单元。程序先通过 OpenCL 完成图片缩放，再由 BPU 完成 MobileNetV2 算法推理，OpenCL 的输出直接作为 BPU 推理的输入，两者之间零拷贝共享内存。
+
+### 代码位置及目录结构
+- 代码位置 `/app/multimedia_samples/sample_pipeline/single_3d_gpu_bpu`
+- 目录结构
+```
+single_3d_gpu_bpu
+├── Makefile
+├── bpu_mobilenetv2.c
+├── bpu_mobilenetv2.h
+├── mobilenetv2_image_labels.h
+├── opencl_resize.c
+├── opencl_resize.h
+└── single_3d_gpu_bpu.c
+```
+
+### 编译
+- 进入 single_3d_gpu_bpu 目录，执行 `make` 编译
+- 输出成果物是 single_3d_gpu_bpu 源码目录下的 `single_3d_gpu_bpu`
+
+### 运行
+#### 程序运行方法
+执行程序 `./single_3d_gpu_bpu -h` 可以获得帮助信息
+
+```sh
+# ./single_3d_gpu_bpu -h
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+Usage: ./single_3d_gpu_bpu -i <input_nv12> -W <width> -H <height>
+  -i, --input     NV12 image file
+  -W, --width     Source image width
+  -H, --height    Source image height
+  -h, --help      Show this help
+
+BPU model is hard-coded to: /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm
+```
+
+#### 程序参数选项说明
+
+- `-i, --input`: 指定输入的 NV12 图片文件，必填
+- `-W, --width`: 指定源图片宽度，必填
+- `-H, --height`: 指定源图片高度，必填
+- `-h, --help`: 显示帮助信息
+
+注意：
+1. 输入图片必须为 NV12 格式，且宽和高都必须为偶数
+2. BPU 模型路径硬编码为 `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`，运行前请确认板卡上已存在该模型文件
+
+#### 运行效果
+
+`single_3d_gpu_bpu` 运行流程如下：程序读取输入的 NV12 图片，通过 OpenCL 进行缩放，再由 BPU 对缩放后的图像进行 MobileNetV2 分类推理，最后打印推理结果。
+
+示例 : 以一张 1920x1080 的 NV12 图片作为输入，执行 `./single_3d_gpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080`
+
+日志示例如下所示：
+
+```
+# ./single_3d_gpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080
+[UCP]: log level = 3
+[UCP]: UCP version = 3.13.6
+[VP]: log level = 3
+[DNN]: log level = 3
+[HPL]: log level = 3
+[UCPT]: log level = 6
+=== GPU OpenCL <-> BPU Zero-Copy Sample ===
+[INFO] Input: nv12_1920x1080_beach.yuv (1920x1080)
+[INFO] Model: /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm (hard-coded)
+[INFO] hbmem module opened, version: 1.0.0
+[INFO] src hbmem buffer allocated: fd=4, size=3110400, virt=0xffff7fe60000, phys=0x460000000
+[INFO] dst hbmem buffer allocated: fd=5, size=75264, virt=0xffff86240000, phys=0x460300000
+[INFO] Loaded NV12 image: nv12_1920x1080_beach.yuv (1920x1080)
+[INFO] Using OpenCL device: Mali-G78AE r0p1
+[INFO] OpenCL context created
+[INFO] OpenCL buffers imported from hbmem dma-bufs (zero-copy)
+[INFO] OpenCL bilinear resize executed on hbmem buffers (zero-copy)
+[BPU][[BPU_MONITOR]][281472928418848][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[INFO] BPU model loaded: mobilenetv2_224x224_nv12 (input: 224x224, outputs: 1)
+[INFO] BPU inference completed
+[INFO] BPU inference Top-5 results:
+  #1: lakeside, lakeshore (0.635)
+  #2: valley, vale (0.053)
+  #3: seashore, coast, seacoast, sea-coast (0.046)
+  #4: coral reef (0.038)
+  #5: sandbar, sand bar (0.030)
+[INFO] BPU model released
+[INFO] OpenCL deinitialized
+[INFO] hbmem module closed
+[INFO] Cleanup complete
 ```
