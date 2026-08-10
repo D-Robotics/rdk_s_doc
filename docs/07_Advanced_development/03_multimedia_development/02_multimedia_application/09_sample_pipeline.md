@@ -13,7 +13,11 @@
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联 GDC 变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
 | [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
+<<<<<<< HEAD
 | [single_3dgpu_bpu](#single_3dgpu_bpu)  | GPU 与 BPU 串联的内存零拷贝示例  |
+=======
+| [single_3d_gpu_bpu](#single_3d_gpu_bpu)  | GPU 与 BPU 串联的内存零拷贝示例  |
+>>>>>>> 3db3b70c9 (docs(multimedia): S100 Add single_3d_gpu_bpu sample doc)
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
