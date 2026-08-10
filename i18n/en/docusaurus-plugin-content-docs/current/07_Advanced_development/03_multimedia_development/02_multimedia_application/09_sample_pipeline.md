@@ -13,7 +13,7 @@
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | Example of a single-sensor pipeline concatenated with GDC transformation and encoding |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | Example of a multi-sensor pipeline concatenated with encoding |
 | [uvc_capture_sample](#uvc_capture_sample)  | UVC camera capture example |
-| [single_3d_gpu_bpu](#single_3d_gpu_bpu)  | Example of GPU concatenated with BPU via zero-copy memory |
+| [single_3dgpu_bpu](#single_3dgpu_bpu)  | Example of GPU concatenated with BPU via zero-copy memory |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -750,43 +750,43 @@ pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
 
-## single_3d_gpu_bpu
+## single_3dgpu_bpu
 
 ### Function Overview
 
-The `single_3d_gpu_bpu` example chains the `GPU OpenCL` and `BPU` processing units together. The program first resizes the image via OpenCL, then runs MobileNetV2 inference on the BPU. The OpenCL output is used directly as the BPU inference input, so the memory is shared between the two units without any copy.
+The `single_3dgpu_bpu` example chains the `GPU OpenCL` and `BPU` processing units together. The program first resizes the image via OpenCL, then runs MobileNetV2 inference on the BPU. The OpenCL output is used directly as the BPU inference input, so the memory is shared between the two units without any copy.
 
 ### Code Location and Directory Structure
-- Code location: `/app/multimedia_samples/sample_pipeline/single_3d_gpu_bpu`
+- Code location: `/app/multimedia_samples/sample_pipeline/single_3dgpu_bpu`
 - Directory structure:
 ```
-single_3d_gpu_bpu
+single_3dgpu_bpu
 ├── Makefile
 ├── bpu_mobilenetv2.c
 ├── bpu_mobilenetv2.h
 ├── mobilenetv2_image_labels.h
 ├── opencl_resize.c
 ├── opencl_resize.h
-└── single_3d_gpu_bpu.c
+└── single_3dgpu_bpu.c
 ```
 
 ### Compilation
-- Enter the `single_3d_gpu_bpu` directory and run `make` to compile.
-- The output binary is `single_3d_gpu_bpu`, located in the source directory.
+- Enter the `single_3dgpu_bpu` directory and run `make` to compile.
+- The output binary is `single_3dgpu_bpu`, located in the source directory.
 
 ### Execution
 #### How to Run the Program
-Executing `./single_3d_gpu_bpu -h` displays the help information:
+Executing `./single_3dgpu_bpu -h` displays the help information:
 
 ```sh
-# ./single_3d_gpu_bpu -h
+# ./single_3dgpu_bpu -h
 [UCP]: log level = 3
 [UCP]: UCP version = 3.13.6
 [VP]: log level = 3
 [DNN]: log level = 3
 [HPL]: log level = 3
 [UCPT]: log level = 6
-Usage: ./single_3d_gpu_bpu -i <input_nv12> -W <width> -H <height>
+Usage: ./single_3dgpu_bpu -i <input_nv12> -W <width> -H <height>
   -i, --input     NV12 image file
   -W, --width     Source image width
   -H, --height    Source image height
@@ -808,14 +808,14 @@ Notes:
 
 #### Execution Output
 
-The execution flow of `single_3d_gpu_bpu` is as follows: the program reads the input NV12 image, resizes it via OpenCL, then runs MobileNetV2 classification inference on the resized image via the BPU, and finally prints the inference results.
+The execution flow of `single_3dgpu_bpu` is as follows: the program reads the input NV12 image, resizes it via OpenCL, then runs MobileNetV2 classification inference on the resized image via the BPU, and finally prints the inference results.
 
-Example: Taking a 1920x1080 NV12 image as input, run `./single_3d_gpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080`
+Example: Taking a 1920x1080 NV12 image as input, run `./single_3dgpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080`
 
 Example log output:
 
 ```
-# ./single_3d_gpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080
+# ./single_3dgpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080
 [UCP]: log level = 3
 [UCP]: UCP version = 3.13.6
 [VP]: log level = 3

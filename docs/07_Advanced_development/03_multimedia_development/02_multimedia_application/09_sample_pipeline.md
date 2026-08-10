@@ -13,7 +13,7 @@
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联 GDC 变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
 | [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
-| [single_3d_gpu_bpu](#single_3d_gpu_bpu)  | GPU 与 BPU 串联的内存零拷贝示例  |
+| [single_3dgpu_bpu](#single_3dgpu_bpu)  | GPU 与 BPU 串联的内存零拷贝示例  |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -759,43 +759,43 @@ pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
 
-## single_3d_gpu_bpu
+## single_3dgpu_bpu
 
 ### 功能概述
 
-`single_3d_gpu_bpu` 示例串联 `GPU OpenCL` 与 `BPU` 两个处理单元。程序先通过 OpenCL 完成图片缩放，再由 BPU 完成 MobileNetV2 算法推理，OpenCL 的输出直接作为 BPU 推理的输入，两者之间零拷贝共享内存。
+`single_3dgpu_bpu` 示例串联 `GPU OpenCL` 与 `BPU` 两个处理单元。程序先通过 OpenCL 完成图片缩放，再由 BPU 完成 MobileNetV2 算法推理，OpenCL 的输出直接作为 BPU 推理的输入，两者之间零拷贝共享内存。
 
 ### 代码位置及目录结构
-- 代码位置 `/app/multimedia_samples/sample_pipeline/single_3d_gpu_bpu`
+- 代码位置 `/app/multimedia_samples/sample_pipeline/single_3dgpu_bpu`
 - 目录结构
 ```
-single_3d_gpu_bpu
+single_3dgpu_bpu
 ├── Makefile
 ├── bpu_mobilenetv2.c
 ├── bpu_mobilenetv2.h
 ├── mobilenetv2_image_labels.h
 ├── opencl_resize.c
 ├── opencl_resize.h
-└── single_3d_gpu_bpu.c
+└── single_3dgpu_bpu.c
 ```
 
 ### 编译
-- 进入 single_3d_gpu_bpu 目录，执行 `make` 编译
-- 输出成果物是 single_3d_gpu_bpu 源码目录下的 `single_3d_gpu_bpu`
+- 进入 single_3dgpu_bpu 目录，执行 `make` 编译
+- 输出成果物是 single_3dgpu_bpu 源码目录下的 `single_3dgpu_bpu`
 
 ### 运行
 #### 程序运行方法
-执行程序 `./single_3d_gpu_bpu -h` 可以获得帮助信息
+执行程序 `./single_3dgpu_bpu -h` 可以获得帮助信息
 
 ```sh
-# ./single_3d_gpu_bpu -h
+# ./single_3dgpu_bpu -h
 [UCP]: log level = 3
 [UCP]: UCP version = 3.13.6
 [VP]: log level = 3
 [DNN]: log level = 3
 [HPL]: log level = 3
 [UCPT]: log level = 6
-Usage: ./single_3d_gpu_bpu -i <input_nv12> -W <width> -H <height>
+Usage: ./single_3dgpu_bpu -i <input_nv12> -W <width> -H <height>
   -i, --input     NV12 image file
   -W, --width     Source image width
   -H, --height    Source image height
@@ -817,14 +817,14 @@ BPU model is hard-coded to: /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12
 
 #### 运行效果
 
-`single_3d_gpu_bpu` 运行流程如下：程序读取输入的 NV12 图片，通过 OpenCL 进行缩放，再由 BPU 对缩放后的图像进行 MobileNetV2 分类推理，最后打印推理结果。
+`single_3dgpu_bpu` 运行流程如下：程序读取输入的 NV12 图片，通过 OpenCL 进行缩放，再由 BPU 对缩放后的图像进行 MobileNetV2 分类推理，最后打印推理结果。
 
-示例 : 以一张 1920x1080 的 NV12 图片作为输入，执行 `./single_3d_gpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080`
+示例 : 以一张 1920x1080 的 NV12 图片作为输入，执行 `./single_3dgpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080`
 
 日志示例如下所示：
 
 ```
-# ./single_3d_gpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080
+# ./single_3dgpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080
 [UCP]: log level = 3
 [UCP]: UCP version = 3.13.6
 [VP]: log level = 3
