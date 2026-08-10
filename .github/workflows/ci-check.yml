@@ -33,14 +33,13 @@ jobs:
       - name: Build site (strict broken-link checking)
         run: npm run build:ci
       - name: Link Checker (lychee)
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: >
-            --base ${{ github.workspace }}/build
-            --accept 200,204,301,302,429
-            --timeout 30
-            --max-retries 2
-            ./build/**/*.html
+        run: >
+          lychee
+          --base ${{ github.workspace }}/build
+          --accept 200,204,301,302,429
+          --timeout 30
+          --max-retries 2
+          ./build/**/*.html
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - if: always()

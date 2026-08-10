@@ -56,7 +56,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 
 <DocScope products="RDK S600">
-- [调试串口章节](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#j4)
+- [调试串口章节](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600#j4)
 </DocScope>
 
 串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
