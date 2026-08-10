@@ -32,6 +32,8 @@ jobs:
           npm ci
       - name: Build site (strict broken-link checking)
         run: npm run build:ci
+      - name: Install lychee
+        run: npm install -g lychee-link-checker
       - name: Link Checker (lychee)
         run: >
           lychee
