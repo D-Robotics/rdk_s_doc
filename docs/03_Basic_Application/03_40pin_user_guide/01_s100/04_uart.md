@@ -16,10 +16,10 @@ RDK S100 在 40PIN 支持 UART2，没有使能，物理管脚号 8 和 10，IO �
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="串口应用示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0,0' }} />
 
-拨动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
+拨动拨码开关之后还需要修改设备树文件，对应的 `uart2 status` 设置为 `okay`，`i2c5 status` 设置为 `disabled`，修改路径及方式如下：
 
 ```{.text}
-/*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
+/*source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi*/
 uart2: uart@394C0000 {
         power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
         compatible = "snps,dw-apb-uart";
@@ -31,6 +31,26 @@ uart2: uart@394C0000 {
         pinctrl-names = "default";
         pinctrl-0 = <&peri_uart2>;
         status = "okay";
+};
+...
+i2c5: i2c@39470000 {
+        power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+        compatible = "snps,designware-i2c";
+        reg = <0x0 0x39470000 0x0 0x10000>;
+        clocks = <&scmi_smc_clk CLK_IDX_TOP_PERI_I2C5>;
+        clock-names = "apb_pclk";
+        interrupts = <GIC_SPI PERISYS_I2C5_INTR PERISYS_I2C5_INTR_TRIG_TYPE>;
+        clock-frequency = <400000>;
+        i2c-sda-hold-time-ns = <50>;
+        pinctrl-names = "default", "gpio";
+        pinctrl-0 = <&peri_i2c5>;
+        pinctrl-1 = <&peri_i2c5_gpio>;
+        scl-gpios = <&peri_port0 15 GPIO_ACTIVE_HIGH>;
+        sda-gpios = <&peri_port0 16 GPIO_ACTIVE_HIGH>;
+        status = "disabled";
+        ...
 };
 ```
 
