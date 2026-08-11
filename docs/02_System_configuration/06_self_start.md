@@ -1,91 +1,105 @@
 ---
-sidebar_position: 5
+title: 开机自启动配置
+sidebar_position: 6
+description: 用 systemd unit / init.d / rc.local 配置开机自启
 ---
 
-# 2.5 开机自启动配置
+# 2.6 开机自启动配置
 
-Ubuntu 系统添加自启动程序的方式有多种方法，本章节提供两种方法作为参考。
+Ubuntu 系统添加开机自启动的方式有多种，推荐用 systemd 自定义服务（最规范），也支持传统的 init.d 脚本与 rc.local。
 
-## 设置自启动 Service
+## 查看已启用的自启服务
 
-1. 创建启动脚本
+```bash
+systemctl list-unit-files --state=enabled --type=service
+```
 
-   使用任何文本编辑器，在`/etc/init.d`目录下创建一个新的启动脚本，假设命名为`your_script_name`，以下是示例脚本的参考内容：
+RDK S600 实测（部分）：
+
+```text
+accounts-daemon.service   enabled
+apparmor.service           enabled
+bluetooth.service          enabled
+...
+```
+
+## 方法一：systemd 自定义服务（推荐）
+
+1. 编写 unit 文件，例如 `/etc/systemd/system/myapp.service`：
+
+   ```ini
+   [Unit]
+   Description=My Application
+   After=network.target
+
+   [Service]
+   ExecStart=/path/to/your/program
+   Restart=on-failure
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+2. 重载 systemd 并启用自启：
+
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable myapp        # 注册开机自启
+   sudo systemctl start myapp         # 立即启动
+   ```
+
+3. 验证：
+
+   ```bash
+   systemctl status myapp
+   # ● myapp.service - My Application
+   #      Active: active (running) since ...
+   ```
+
+停止/禁用：`sudo systemctl stop myapp` / `sudo systemctl disable myapp`。
+
+## 方法二：init.d 脚本（传统 SysV）
+
+1. 在 `/etc/init.d` 下创建脚本（带 LSB 头）：
 
    ```bash
    #!/bin/bash
-   
    ### BEGIN INIT INFO
    # Provides:          your_service_name
    # Required-Start:    $all
-   # Required-Stop:     
    # Default-Start:     2 3 4 5
    # Default-Stop:      0 1 6
    # Short-Description: Start your_service_name at boot time
-   # Description:       Enable service provided by your_service_name
    ### END INIT INFO
-   
    /path/to/your/program &
-   
    exit 0
    ```
 
-2. 设置启动脚本具有可执行权限
+2. 加可执行权限并注册：
 
-   ```
+   ```bash
    sudo chmod +x /etc/init.d/your_script_name
-   ```
-
-3. 使用 update-rc.d 命令将脚本添加到系统的启动项中
-
-   ```
    sudo update-rc.d your_script_name defaults
+   sudo systemctl enable your_script_name   # systemd 兼容启用
    ```
 
-   
+## 方法三：rc.local（遗留）
 
-4. 使用 systemctl 命令启用自启动
-
-   ```
-   sudo systemctl enable your_script_name
-   ```
-
-5. 重启开发板验证自启动服务程序是否运行正常
-
-    ```
-    root@ubuntu:~# systemctl status your_script_name.service 
-    ● your_script_name.service - LSB: Start your_service_name at boot time
-        Loaded: loaded (/etc/init.d/your_script_name; generated)
-        Active: active (exited) since Wed 2023-04-19 15:01:12 CST; 57s ago
-        Docs: man:systemd-sysv-generator(8)
-        Process: 2768 ExecStart=/etc/init.d/your_script_name start (code=exited, status=0/SUCCESS)
-    ```
-
-
-
-## 添加到 rc.local 服务
-
-rc.local 是一个系统服务，用于在系统启动时自动执行一些脚本或命令。这个服务在系统启动时会被自动调用，并在系统启动完成后执行一些用户指定的脚本或命令，以便在系统启动时进行自定义配置或操作。
-
-在早期的 Linux 发行版中，rc.local 是系统启动过程中默认运行的最后一个服务。随着 systemd 的普及，rc.local 被视为遗留的系统服务。
-
-通过在`sudo vim /etc/rc.local`文件末尾添加启动命令的方式实现，例如：
+`rc.local` 是 systemd 兼容的遗留启动脚本，开机末尾执行。在 `/etc/rc.local` 末尾（`exit 0` 之前）加命令即可：
 
 ```bash
 #!/bin/bash -e
-#
-# rc.local
-#re
-# This script is executed at the end of each multiuser runlevel.
-# Make sure that the script will "exit 0" on success or any other
-# value on error.
-#
-# In order to enable or disable this script just change the execution
-# bits.
-#
-# By default this script does nothing.
-
-# Insert what you need
-
+# 在此插入需要开机执行的命令
 exit 0
 ```
+
+:::tip
+新项目优先用 systemd unit（方法一），可管理依赖、重启策略、日志；init.d/rc.local 仅作兼容。
+:::
+
+## 相关文档
+
+- [系统日志查看](./15_system_log.md)
+- [用户与权限管理](./14_user_permission.md)
+- [软件包管理 apt](./03_system_update/02_apt_usage.md)
+- [RDK OS 介绍](./03_system_update/01_rdk_os_intro.md)
