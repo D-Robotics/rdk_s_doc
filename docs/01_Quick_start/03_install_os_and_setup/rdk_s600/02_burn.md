@@ -1,8 +1,14 @@
 ---
-sidebar_position: 3
+title: 烧录步骤（S600）
+sidebar_position: 2
+description: RDK S600 用 XBurn 烧录系统镜像的步骤
 ---
 
 # 烧录步骤
+
+:::info 说明
+本页基于官方烧录说明整理，未在 S600 板端复现验证（烧录会抹除当前在用的 S600 系统）；拨码与指示灯以板端实物为准。
+:::
 
 本页介绍 RDK S600 的系统烧录。烧录前先完成 [烧录准备](./01_instruction.md)。
 
@@ -150,3 +156,10 @@ V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
    勾选后出现的分区选项如下：
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s600-specify-partition-flash.jpg" alt="" style={{ width: '100%' }} />
+
+## 相关文档
+
+- [烧录准备（S600）](./01_instruction.md)
+- [系统状态查询](../system_status.md)
+- [远程登录](../remote_login.md)
+- [S600 硬件介绍](../../01_hardware_introduction/02_rdk_s600.md)

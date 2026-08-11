@@ -1,8 +1,14 @@
 ---
-sidebar_position: 2
+title: 烧录说明（S600）
+sidebar_position: 1
+description: RDK S600 烧录前准备：镜像下载、工具、数据线、环境
 ---
 
 # 烧录准备
+
+:::info 说明
+本页基于官方烧录说明整理。烧录会抹除板端系统，未在 S600 板端复现验证（避免抹除当前在用的 S600）；镜像下载地址与 XBurn 工具以官方说明为准。
+:::
 
 ## 安全注意事项
 
@@ -48,3 +54,10 @@ RDK S600 提供 Ubuntu 24.04 桌面版系统镜像，自带图形桌面环境。
 - [Windows 环境](https://developer.d-robotics.cc/xburn_doc/environment/windows-setup)：USB Driver（ADB、Fastboot、DFU）与 CH341 串口驱动
 - [Linux 环境](https://developer.d-robotics.cc/xburn_doc/environment/linux-setup)：adb/fastboot/dfu-util 依赖与 udev 规则
 - [macOS 环境](https://developer.d-robotics.cc/xburn_doc/environment/mac-setup)：brew 依赖（android-platform-tools、dfu-util）
+
+## 相关文档
+
+- [烧录步骤（S600）](./02_burn.md)
+- [系统状态查询](../system_status.md)
+- [远程登录](../remote_login.md)
+- [S600 硬件介绍](../../01_hardware_introduction/02_rdk_s600.md)

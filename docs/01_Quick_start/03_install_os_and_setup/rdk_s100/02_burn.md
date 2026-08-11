@@ -1,8 +1,14 @@
 ---
-sidebar_position: 3
+title: 烧录步骤（S100）
+sidebar_position: 2
+description: RDK S100 用 XBurn 烧录系统镜像的步骤
 ---
 
 # 烧录步骤
+
+:::info 说明
+本页基于官方烧录说明整理，未在 S100 板端复现验证（无 S100 板，烧录会抹除系统）；S100 拨码与指示灯待 S100 板回归核对。
+:::
 
 本页介绍 RDK S100 的系统烧录。烧录前先完成 [烧录准备](./01_instruction.md)。
 
@@ -114,3 +120,10 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
    勾选后出现的分区选项如下：
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-specify-partition-flash.jpg" alt="" style={{ width: '100%' }} />
+
+## 相关文档
+
+- [烧录准备（S100）](./01_instruction.md)
+- [系统状态查询](../system_status.md)
+- [远程登录](../remote_login.md)
+- [S100 硬件介绍](../../01_hardware_introduction/01_rdk_s100.md)
