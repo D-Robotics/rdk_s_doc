@@ -1,161 +1,94 @@
 ---
-sidebar_position: 3
+title: 图像分类-MobileNetV2 (C/C++)
+sidebar_position: 4
+description: 用 C/C++ 部署 MobileNetV2 做图像分类的预装示例
 ---
 
-# 图像分类-MobileNetV2
+# 图像分类-MobileNetV2 (C/C++)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+本示例演示如何用 `C/C++` 在 BPU 上部署 MobileNetV2 模型做图像分类推理并输出 Top-K 结果。MobileNetV2 是轻量级分类网络，适合算力/功耗敏感场景。Python 版见 [MobileNetV2 (Python)](./02_mobilenetv2_py.md)，C++ 版 ResNet18 见 [ResNet18 (C/C++)](./01_resnet18.md)。
+
 <DocScope products="RDK-S100">
 
-本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `C/C++` 进行推理，本示例代码位于`/app/cdev_demo/bpu/01_classification_sample/02_mobilenetv2/`目录下。
+示例代码位于板端 `/app/cdev_demo/bpu/01_classification_sample/02_mobilenetv2/` 目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
 
-本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `C/C++` 进行推理，本示例代码位于 `/app/cdev_demo/bpu/classification_sample/mobilenetv2/` 目录下。
+示例代码位于板端 `/app/cdev_demo/bpu/classification_sample/mobilenetv2/` 目录下。
 
 </DocScope>
 
-## 模型说明
-- 简介：
+## 前置条件
 
-    MobileNetV2 是一种轻量级卷积神经网络，由 Google 于 2018 年提出，设计用于在移动设备上实现高效的图像识别。其引入了 Inverted Residual 和 Linear Bottleneck 的结构，以降低计算量并提升性能。MobileNetV2 非常适合部署在边缘设备和资源受限场景中，用于图像分类、检测等任务。本示例使用的 MobileNetV2 模型为 224×224 输入、支持 NV12 格式的 BPU 量化模型。
-
-- HBM 模型名称： mobilenetv2_224x224_nv12.hbm
-
-- 输入格式： NV12，大小为 224x224（Y、UV 分离）
-
-- 输出： 1000 类别的 softmax 概率分布（符合 ImageNet 1000 类标准）
-
-## 功能说明
-- 模型加载
-
-    加载模型文件，提取模型名称、输入输出数量等信息。
-
-- 输入预处理
-
-    将输入图像从 BGR 格式 resize 到 224x224 后，转换为硬件要求的 NV12 格式（Y 与 UV 分离），形成字典结构输入，适配推理接口。
-
-- 推理执行
-
-    调用 .infer() 方法执行推理。
-
-- 结果后处理
-
-    获取模型输出 tensor，解析概率并显示 top-K（默认 top-5）预测结果，输出对应的类别名称和概率。
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 板端有编译工具链（`cmake`、`make`、`g++`，镜像已预装）。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`。
 
 ## 环境依赖
-在编译运行前，请确保安装以下依赖：
-```bash
-sudo apt update
-sudo apt install libgflags-dev
-```
-
-## 目录结构
-
-```text
-.
-├── CMakeLists.txt              # CMake 构建脚本
-├── README.md                   # 使用说明
-├── inc
-│   └── mobilenetv2.hpp         # 模型推理头文件
-└── src
-    ├── main.cc                 # 主程序入口
-    └── mobilenetv2.cc          # 模型实现
-```
-## 编译工程
-- 构建项目
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
-
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
-
-<DocScope products="RDK-S100">
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mobilenetv2_224x224_nv12.hbm
+sudo apt update && sudo apt install libgflags-dev
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
+## 编译
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/MobileNet/mobilenetv2_224x224_nv12.hbm
+cd /app/cdev_demo/bpu/classification_sample/mobilenetv2   # S100 改为对应路径
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
+产物为 `build/mobilenetv2`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--model_path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
+| `--test_img` | 测试图片路径 | `/app/res/assets/zebra_cls.jpg` |
+| `--label_file` | 类别标签（imagenet） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
+| `--top_k` | 输出 Top-K 数 | `5` |
 
-| 参数             | 说明                  | 默认值                                                        |
-| -------------- | ------------------- | ---------------------------------------------------------- |
-| `--model_path` | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm` |
-| `--test_img`   | 测试图片路径              | `/app/res/assets/zebra_cls.jpg`                            |
-| `--label_file` | 类别标签映射文件路径（dict 格式） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt`        |
-| `--top_k`      | 输出 top-k 分类结果       | `5`                                                        |
+## 使用方法
 
-</DocScope>
-<DocScope products="RDK-S600">
+```bash
+./mobilenetv2
+```
 
-| 参数             | 说明                  | 默认值                                                        |
-| -------------- | ------------------- | ---------------------------------------------------------- |
-| `--model_path` | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
-| `--test_img`   | 测试图片路径              | `/app/res/assets/zebra_cls.jpg`                            |
-| `--label_file` | 类别标签映射文件路径（dict 格式） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt`        |
-| `--top_k`      | 输出 top-k 分类结果       | `5`                                                        |
+## 运行效果
 
-</DocScope>
+RDK S600 实测输出（测试图 `zebra_cls.jpg`）：
 
-## 快速运行
-- 运行模型
-    - 确保在`build`目录中
-    - 使用默认参数
-        ```bash
-        ./mobilenetv2
-        ```
-    - 指定参数运行
+```text
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+TOP 0: label=zebra, prob=0.992726
+TOP 1: label=tiger, Panthera tigris, prob=0.00401174
+TOP 2: label=hartebeest, prob=0.00104985
+TOP 3: label=tiger cat, prob=0.000753967
+TOP 4: label=impala, Aepyceros melampus, prob=0.000424489
+```
 
-        <DocScope products="RDK-S100">
+**成功标志**：末尾 `TOP 0: label=zebra, prob=0.992726` 等 Top-K 行，`zebra` 概率最高（约 0.993，与 Python 版一致）。
 
-        ```bash
-        ./mobilenetv2 \
-        --model_path /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm \
-        --test_img /app/res/assets/zebra_cls.jpg \
-        --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
-        --top_k 5
-        ```
+## 软件说明
 
-        </DocScope>
-        <DocScope products="RDK-S600">
+数据流：读图（BGR）→ resize 到 224×224 → 转 NV12 → BPU 推理 → 读输出 tensor → Top-K → 映射标签。模型输入 `1x3x224x224`，归一化 `data_mean_and_scale`（mean BGR、scale 0.017）。
 
-        ```bash
-        ./mobilenetv2 \
-        --model_path /opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm \
-        --test_img /app/res/assets/zebra_cls.jpg \
-        --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
-        --top_k 5
-        ```
+## 常见问题
 
-        </DocScope>
-- 查看结果
-    ```bash
-    TOP 0: label=zebra, prob=0.992246
-    TOP 1: label=tiger, Panthera tigris, prob=0.00404656
-    TOP 2: label=hartebeest, prob=0.00133707
-    TOP 3: label=tiger cat, prob=0.000722661
-    TOP 4: label=impala, Aepyceros melampus, prob=0.000539704
-    ```
+- **`make` 报错找不到 `gflags`**：装 `libgflags-dev`。
+- **报错找不到模型**：检查 `--model_path`，S600 模型在 `/opt/hobot/model/s600/basic/`。
+- **与 ResNet18 结果不同**：模型不同，概率/排序有差异，正常。
 
-## 注意事项
-- 输出结果显示 top-K 概率最高的类别。
+## 相关文档
 
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+- [Python 版 MobileNetV2 示例](./02_mobilenetv2_py.md)
+- [图像分类-ResNet18 (C/C++)](./01_resnet18.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)
