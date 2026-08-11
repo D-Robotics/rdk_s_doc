@@ -1,5 +1,7 @@
 ---
+title: 远程登录
 sidebar_position: 4
+description: 通过 SSH/串口/NoMachine 远程登录开发板的方法与默认账户
 ---
 
 # 1.4 远程登录
@@ -11,6 +13,12 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 本章节旨在向需要通过个人电脑(PC)远程访问开发板的用户介绍如何通过串口、网络(SSH)方式进行远程登录。
+
+## 前置条件
+
+- 开发板已烧录 RDK OS 并完成启动（见 [1.3 烧录系统与配置](./rdk_s100/01_instruction.md)）。
+- 远程登录前需先确认开发板网络可达：板端 `eth1` 默认静态 IP `192.168.127.10`，或通过 Wi-Fi（`wlan0`）由路由器分配 IP（可用 `ifconfig` 或 `ip addr` 查看）。
+- PC 与开发板处于同一网段，能 `ping` 通开发板 IP（网络排查见 [网络状态确认](#network_config)）。
 
 ## 默认登录账户
 
@@ -268,3 +276,10 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## 相关文档
+
+- [1.3 烧录系统与配置](./rdk_s100/01_instruction.md)
+- [网络配置](../../02_System_configuration/01_network_config.md)
+- [调试串口](../../02_System_configuration/16_debug_serial.md)
+- [入门配置](./configuration_wizard.md)
