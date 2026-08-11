@@ -34,7 +34,7 @@ RDK OS 开箱即有：
 
 - **BPU 运行时**：`hobot-dnn`（UCP/DNN，BPU 推理栈）。
 - **相机支持**：`hobot-camera`（sensor 支持包）。
-- **tros.b 机器人中间件**：基于 ROS/ROS2 的 TogetheROS.Bot，预装在镜像内（见 [TogetheROS.Bot](../../../01_Quick_start/04_next_steps/02_trosb/01_trosb_intro.md)）。
+- **tros.b 机器人中间件**：基于 ROS/ROS2 的 TogetheROS.Bot，预装在镜像内（见 [TogetheROS.Bot](../../01_Quick_start/04_next_steps/02_trosb/01_trosb_intro.md)）。
 - **算法工具链运行时**：可加载 `.hbm` 量化模型推理。
 - **apt 源**：D-Robotics 官方源（`archive.d-robotics.cc`）+ Ubuntu 源，见 [软件包管理 apt](./02_apt_usage.md)。
 
