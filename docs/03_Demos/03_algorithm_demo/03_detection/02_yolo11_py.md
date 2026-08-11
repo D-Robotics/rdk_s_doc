@@ -1,196 +1,89 @@
 ---
-sidebar_position: 5
+title: 目标检测-Ultralytics YOLO11 (Python)
+sidebar_position: 2
+description: 用 hbm_runtime Python 接口部署 YOLO11 做目标检测的预装示例
 ---
 
-# 目标检测-Ultralytics YOLO11
+# 目标检测-Ultralytics YOLO11 (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+本示例演示如何用 `hbm_runtime` 的 Python 接口在 BPU 上部署 Ultralytics YOLO11 模型，对一张图片做目标检测（前处理 + 推理 + 解码 + NMS），并把检测结果保存成图片。YOLO11 是 Ultralytics 较新一代检测模型，本示例使用 `yolo11n`（nano）版本。
+
 <DocScope products="RDK-S100">
-本示例基于 Ultralytics YOLO11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于`/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/`目录下。
+
+示例代码位于板端 `/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/` 目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
-本示例基于 Ultralytics YOLO11 模型，通过 `hbm_runtime` 接口完成图像的目标检测。支持图像预处理、推理、后处理（包含解码、置信度过滤、NMS）以及结果图像保存，本示例代码位于 `/app/pydev_demo/detection_sample/ultralytics_yolo11/` 目录下。
+
+示例代码位于板端 `/app/pydev_demo/detection_sample/ultralytics_yolo11/` 目录下。
 
 </DocScope>
 
-## 模型说明
-- 简介：
+## 前置条件
 
-    Ultralytics YOLO11 是一款轻量级的 anchor-based 目标检测模型，融合了 anchor-free 与 anchor-based 思想，具备快速推理和精确定位的能力。该模型在回归阶段采用离散分桶（regression bin）方式，结合 softmax 分类和解码机制来提升定位精度。Ultralytics YOLO11 适用于实时场景下的小模型部署，如安防监控、工业检测等任务。
-
-<DocScope products="RDK-S100">
-- HBM 模型名称： yolo11n_detect_nashe_640x640_nv12.hbm
-
-</DocScope>
-<DocScope products="RDK-S600">
-- HBM 模型名称： yolo11n_detect_nashp_640x640_nv12.hbm
-
-</DocScope>
-
-- 输入格式： NV12 格式，大小为 640x640（Y、UV 分离）
-
-- 输出： 多尺度特征图，每层包含类别得分张量和边界框离散回归张量，最终输出为目标框位置、类别 ID 和置信度分数
-
-- 模型下载地址（程序自动下载）：
-
-    <DocScope products="RDK-S100">
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_detect_nashe_640x640_nv12.hbm
-    ```
-
-    </DocScope>
-    <DocScope products="RDK-S600">
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_detect_nashp_640x640_nv12.hbm
-    ```
-
-    </DocScope>
-
-## 功能说明
-- 模型加载
-
-    使用 `hbm_runtime` 接口加载 Ultralytics YOLO11 量化模型，提取输入输出名称、形状、量化信息等模型元数据，供后续推理流程使用。
-
-- 输入预处理
-
-    将原始 BGR 图像 resize 为 640×640，转换为 NV12 格式（Y、UV 分离），构造输入张量嵌套字典，适配推理接口要求。
-
-- 推理执行
-
-    通过 .run() 方法运行前向推理，可指定调度参数（推理优先级、BPU 核心绑定）。输出包含多个尺度分支的分类张量与回归张量。
-
-- 结果后处理
-
-    - 将量化输出反量化为 float32；
-
-    - 对每个尺度分支进行分类分数筛选，保留超过设定置信度阈值的候选框；
-
-    - 使用多分桶回归算法进行边框解码；
-
-    - 合并所有尺度的候选框并应用 NMS（非极大值抑制）去除冗余框；
-
-    - 将检测框从模型输入坐标系映射回原图尺寸；
-
-    - 可选地绘制检测结果并保存图像文件。
-
-## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
-
-<DocScope products="RDK-S100">
-```bash
-pip install -r ../../requirements.txt
-```
-
-</DocScope>
-<DocScope products="RDK-S600">
-```bash
-pip install -r ../../requirements.txt --break-system-packages
-```
-
-</DocScope>
-
-## 目录结构
-```text
-.
-├── ultralytics_yolo11.py       # 主推理脚本
-└── README.md                   # 使用说明
-```
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`。
+- Python 环境与 `hbm_runtime` 已随镜像预装。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名           | 说明                                                         | 默认值                                         |
-|------------------|--------------------------------------------------------------|------------------------------------------------|
-| `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`        |
-| `--test-img`      | 输入测试图片路径                                             | `/app/res/assets/kite.jpg`                        |
-| `--label-file`    | 类别标签文件路径（每行一个类别名称）                         | `/app/res/labels/coco_classes.names`              |
-| `--img-save-path` | 检测结果图像保存路径                                         | `result.jpg`                                   |
-| `--priority`      | 模型调度优先级（0~255，数值越大优先级越高）                  | `0`                                            |
-| `--bpu-cores`     | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）             | `[0]`                                          |
-| `--nms-thres`     | 非极大值抑制（NMS）的 IoU 阈值                                | `0.45`                                         |
-| `--score-thres`   | 置信度过滤阈值（低于该值的目标将被过滤）                      | `0.25`                                         |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm` |
+| `--test-img` | 测试图片路径 | `/app/res/assets/kite.jpg` |
+| `--label-file` | 类别标签（COCO 80 类） | `/app/res/labels/coco_classes.names` |
+| `--img-save-path` | 检测结果图保存路径 | `result.jpg` |
+| `--nms-thres` | NMS 的 IoU 阈值 | `0.45` |
+| `--score-thres` | 置信度过滤阈值 | `0.25` |
 
-</DocScope>
+## 使用方法
+
 <DocScope products="RDK-S600">
-| 参数名           | 说明                                                         | 默认值                                         |
-|------------------|--------------------------------------------------------------|------------------------------------------------|
-| `--model-path`    | 模型文件路径（.hbm 格式）                                    | `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`        |
-| `--test-img`      | 输入测试图片路径                                             | `/app/res/assets/kite.jpg`                        |
-| `--label-file`    | 类别标签文件路径（每行一个类别名称）                         | `/app/res/labels/coco_classes.names`              |
-| `--img-save-path` | 检测结果图像保存路径                                         | `result.jpg`                                   |
-| `--priority`      | 模型调度优先级（0~255，数值越大优先级越高）                  | `0`                                            |
-| `--bpu-cores`     | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）             | `[0]`                                          |
-| `--nms-thres`     | 非极大值抑制（NMS）的 IoU 阈值                                | `0.45`                                         |
-| `--score-thres`   | 置信度过滤阈值（低于该值的目标将被过滤）                      | `0.25`                                         |
+
+```bash
+cd /app/pydev_demo/detection_sample/ultralytics_yolo11
+python ultralytics_yolo11.py
+```
 
 </DocScope>
 
+运行成功后，检测框绘制在原图上并保存为 `result.jpg`。
 
-## 快速运行
-- 运行模型
-    - 使用默认参数
-        ```bash
-        python ultralytics_yolo11.py
-        ```
-    - 指定参数运行
+## 运行效果
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python ultralytics_yolo11.py \
-            --model-path /opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --img-save-path result.jpg \
-            --priority 0 \
-            --bpu-cores 0 \
-            --nms-thres 0.45 \
-            --score-thres 0.25
-        ```
+以下是 RDK S600 上的实测输出（测试图 `kite.jpg`）：
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python ultralytics_yolo11.py \
-            --model-path /opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --img-save-path result.jpg \
-            --priority 0 \
-            --bpu-cores 0 \
-            --nms-thres 0.45 \
-            --score-thres 0.25
-        ```
+```text
+Model Description:
+ - yolo11n_detect_nashp_640x640_nv12_beta: {"MARCH": "nash-p",
+   "INPUT_SHAPE": "1x3x640x640", "INPUT_TYPE_RT": "nv12",
+   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]", ...}
 
-        </DocScope>
+=== Scheduling Parameters ===
+  priority    : 0
+  bpu_cores   : [0]
 
-- 查看结果
+[Saved] Result saved to: result.jpg
+```
 
-    运行成功后，会将目标检测框绘制在原图上，并保存到 --img-save-path 指定路径
-    ```bash
-    [Saved] Result saved to: result.jpg
-    ```
+**成功标志**：末尾出现 `[Saved] Result saved to: result.jpg`。打开 `result.jpg` 可见检测框（如 `kite.jpg` 中的人与风筝）。
 
-## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。
+## 软件说明
 
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
+数据流：读图 → resize 到 640×640 → 转 NV12 → BPU 推理 → 解码检测头 → 置信度过滤（score≥0.25）→ NMS（IoU 0.45）→ 绘制框与类别 → 保存。模型输入 `1x3x640x640`，归一化 `data_scale`（scale≈1/255）。
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+## 常见问题
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+- **`result.jpg` 看不到框**：确认测试图含可识别目标；调低 `--score-thres`（如 0.1）。
+- **报错找不到模型**：检查 `--model-path`，S600 模型在 `/opt/hobot/model/s600/basic/`。
+- **报错 `No module named 'utils'`**：须在示例目录内运行（依赖上级 `utils`）。
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+## 相关文档
+
+- [C/C++ 版 YOLO11 检测示例](./02_yolo11.md)
+- [目标检测-YOLOv5x (Python)](./01_yolov5x_py.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)
