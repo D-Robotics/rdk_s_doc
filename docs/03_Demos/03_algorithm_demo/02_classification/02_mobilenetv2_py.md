@@ -1,149 +1,88 @@
 ---
-sidebar_position: 3
+title: 图像分类-MobileNetV2 (Python)
+sidebar_position: 2
+description: 用 hbm_runtime Python 接口部署 MobileNetV2 做图像分类的预装示例
 ---
 
-# 图像分类-MobileNetV2
+# 图像分类-MobileNetV2 (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+本示例演示如何用 `hbm_runtime` 的 Python 接口部署 MobileNetV2 模型做图像分类推理。MobileNetV2 是轻量级分类网络，参数少、延迟低，适合对算力/功耗敏感的场景。与 [ResNet18 (Python)](./01_resnet18_py.md) 同为分类示例，可对比精度与速度。
+
 <DocScope products="RDK-S100">
-本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `hbm_runtime` 进行推理，本示例代码位于`/app/pydev_demo/01_classification_sample/02_mobilenetv2/ `目录下。
+
+示例代码位于板端 `/app/pydev_demo/01_classification_sample/02_mobilenetv2/` 目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
-本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `hbm_runtime` 进行推理，本示例代码位于 `/app/pydev_demo/classification_sample/mobilenetv2/` 目录下。
+
+示例代码位于板端 `/app/pydev_demo/classification_sample/mobilenetv2/` 目录下。
 
 </DocScope>
 
-## 模型说明
-- 简介：
+## 前置条件
 
-    MobileNetV2 是一种轻量级卷积神经网络，由 Google 于 2018 年提出，设计用于在移动设备上实现高效的图像识别。其引入了 Inverted Residual 和 Linear Bottleneck 的结构，以降低计算量并提升性能。MobileNetV2 非常适合部署在边缘设备和资源受限场景中，用于图像分类、检测等任务。本示例使用的 MobileNetV2 模型为 224×224 输入、支持 NV12 格式的 BPU 量化模型。
-
-- HBM 模型名称： mobilenetv2_224x224_nv12.hbm
-
-- 输入格式： NV12，大小为 224x224（Y、UV 分离）
-
-- 输出： 1000 类别的 softmax 概率分布（符合 ImageNet 1000 类标准）
-
-- 模型下载地址（程序自动下载）：
-
-    <DocScope products="RDK-S100">
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mobilenetv2_224x224_nv12.hbm
-    ```
-
-    </DocScope>
-    <DocScope products="RDK-S600">
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/MobileNet/mobilenetv2_224x224_nv12.hbm
-    ```
-
-    </DocScope>
-
-## 功能说明
-- 模型加载
-
-    使用 `hbm_runtime` 加载模型文件，提取模型名称、输入输出名称及其对应 shape 信息。
-
-- 输入预处理
-
-    将输入图像从 BGR 格式 resize 到 224x224 后，转换为硬件要求的 NV12 格式（Y 与 UV 分离），形成字典结构输入，适配推理接口。
-
-- 推理执行
-
-    调用 .run() 方法执行推理，支持设置 BPU 运行核心（如 core0/core1）及推理优先级（0~255）。
-
-- 结果后处理
-
-    获取模型输出 tensor，解析 softmax 概率并显示 top-K（默认 top-5）预测结果，输出对应的类别名称和概率。
-
-## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
-
-<DocScope products="RDK-S100">
-```bash
-pip install -r ../../requirements.txt
-```
-
-</DocScope>
-<DocScope products="RDK-S600">
-```bash
-pip install -r ../../requirements.txt --break-system-packages
-```
-
-</DocScope>
-
-## 目录结构
-
-```text
-.
-├── mobilenetv2.py              # 主推理脚本
-└── README.md                   # 使用说明
-```
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`。
+- Python 环境与 `hbm_runtime` 已随镜像预装。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数           | 说明                                                     | 默认值                                      |
-|----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`                 |
-| `--test-img`   | 测试图片路径                                              | `/app/res/assets/zebra_cls.jpg`                |
-| `--label-file` | 类别标签映射文件路径                                       | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
-| `--priority`   | 模型优先级（0~255，越大优先级越高）                         | `0`                                         |
-| `--bpu-cores`  | 推理使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）         | `[0]`                                       |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
+| `--test-img` | 测试图片路径 | `/app/res/assets/zebra_cls.jpg` |
+| `--label-file` | 类别标签（imagenet 1000 类） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
+| `--priority` | 模型调度优先级 | `0` |
+| `--bpu-cores` | BPU 核心编号列表 | `[0]` |
 
-</DocScope>
+## 使用方法
+
 <DocScope products="RDK-S600">
-| 参数           | 说明                                                     | 默认值                                      |
-|----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`                 |
-| `--test-img`   | 测试图片路径                                              | `/app/res/assets/zebra_cls.jpg`                |
-| `--label-file` | 类别标签映射文件路径                                       | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
-| `--priority`   | 模型优先级（0~255，越大优先级越高）                         | `0`                                         |
-| `--bpu-cores`  | 推理使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）         | `[0]`                                       |
+
+```bash
+cd /app/pydev_demo/classification_sample/mobilenetv2
+python mobilenetv2.py
+```
 
 </DocScope>
 
+## 运行效果
 
-## 快速运行
-- 运行模型
-    - 使用默认参数
-        ```bash
-        python mobilenetv2.py
-        ```
-    - 指定参数运行
+RDK S600 实测输出（测试图 `zebra_cls.jpg`）：
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python mobilenetv2.py \
-        --model-path /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm \
-        --test-img /app/res/assets/zebra_cls.jpg \
-        --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
-        ```
+```text
+Model Description:
+ - mobilenetv2_224x224_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x224x224",
+   "INPUT_TYPE_RT": "nv12", "NORM_TYPE": "data_mean_and_scale",
+   "MEAN_VALUE": "[103.94, 116.78, 123.68]", "SCALE_VALUE": "[0.017]", ...}
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python mobilenetv2.py \
-        --model-path /opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm \
-        --test-img /app/res/assets/zebra_cls.jpg \
-        --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
-        ```
+Top-5 Predictions:
+zebra: 0.9927
+tiger, Panthera tigris: 0.0040
+hartebeest: 0.0010
+tiger cat: 0.0008
+impala, Aepyceros melampus: 0.0004
+```
 
-        </DocScope>
+**成功标志**：末尾出现 `Top-5 Predictions:` 且 `zebra` 概率最高（约 0.993）。与 ResNet18（zebra 0.9983）相比，MobileNetV2 概率略低但模型更轻，符合轻量模型特性。
 
-- 查看结果
-    ```bash
-    Top-5 Predictions:
-    zebra: 0.8916
-    tiger, Panthera tigris: 0.0028
-    hartebeest: 0.0018
-    jaguar, panther, Panthera onca, Felis onca: 0.0016
-    tiger cat: 0.0016
-    ```
+## 软件说明
 
-## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。
+数据流：读图（BGR）→ resize 到 224×224 → 转 NV12 → BPU 推理 → 读输出 tensor → Top-5 → 映射标签。模型输入 `1x3x224x224`，归一化 `data_mean_and_scale`（mean BGR、scale 0.017），训练用 BGR。
+
+## 常见问题
+
+- **报错找不到模型**：检查 `--model-path`，S600 模型在 `/opt/hobot/model/s600/basic/`。
+- **报错 `No module named 'utils'`**：须在示例目录内运行（依赖上级 `utils`）。
+- **与 ResNet18 结果略有差异**：模型不同，Top-5 排序/概率有差异，正常。
+
+## 相关文档
+
+- [图像分类-ResNet18 (Python)](./01_resnet18_py.md)
+- [C/C++ 版 MobileNetV2 示例](./02_mobilenetv2.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/01_python_api.md)
