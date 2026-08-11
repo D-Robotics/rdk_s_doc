@@ -1,199 +1,65 @@
 ---
-sidebar_position: 16
+title: RTSP 视频拉流及 YOLOv5x 推理 (Python)
+sidebar_position: 3
+description: 从 RTSP 流取帧做 YOLOv5x 实时检测推理
 ---
 
-# RTSP视频拉流及YOLOv5x 推理
+# RTSP 视频拉流及 YOLOv5x 推理 (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+基于 `hbm_runtime` 的 Ultralytics YOLOv5x 实时推理示例，从 RTSP 视频流取帧做目标检测，结果可视化。适用于搭载 BPU 的 RDK 设备，需 RTSP 视频源（摄像头/NVR/本地 RTSP 服务）。
+
+:::info 说明
+本示例需 RTSP 视频源与显示，本板未实测。命令与参数据板端 README，运行前请确认有可达的 RTSP 流地址。
+:::
+
 <DocScope products="RDK-S100">
 
-本示例演示如何在 RDK S100 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
-RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于`/app/pydev_demo/12_rtsp_yolov5x_display_sample/`目录下。
+示例代码位于板端 `/app/pydev_demo/rtsp_yolov5x_display_sample/` 目录下（S100 路径待 S100 板验证）。
 
 </DocScope>
 <DocScope products="RDK-S600">
 
-本示例演示如何在 RDK S600 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
-RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/pydev_demo/rtsp_yolov5x_display_sample/` 目录下。
+示例代码位于板端 `/app/pydev_demo/rtsp_yolov5x_display_sample/` 目录下。
 
 </DocScope>
 
-## 功能说明
+## 前置条件
 
-- 模型加载 (Model Load)
-
-    使用 hbm_runtime.HB_HBMRuntime(model_path) 加载 YOLOv5x 模型，读取输入输出信息，可通过 set_scheduling_params() 设置 BPU 优先级与核心绑定。
-
-- 前处理 (Preprocess)
-
-    从解码线程获取 NV12 帧，拆分 Y/UV，调整为模型输入尺寸，打包成 BPU 输入格式。
-
-- 模型推理 (Inference)
-
-    调用 self.model.run() 执行前向推理，生成检测结果。
-
-- 后处理 (Postprocess)
-
-    对推理结果反量化、解码、过滤、NMS，并映射到显示坐标，输出检测框与类别。
-
-- RTSP 解码 (RTSP + HW Decoder)
-
-    子线程用 cv2.VideoCapture 拉取 H.264 码流，经 srcampy.Decoder 硬件解码为 NV12 帧。
-
-- 分辨率与显示 (VPS + Display)
-
-    调用 srcampy.Display() 与 srcampy.Camera().open_vps() 建立 VPS→HDMI 显示管线。
-
-- 绘制检测结果 (Overlay Drawing)
-
-    使用 draw.draw_detections_on_disp() 在显示层绘制检测框与类别文字。
-
-- 信号与退出 (Signal Handling)
-
-    捕获 SIGINT（Ctrl+C），设置 is_stop=True，安全退出主循环与子线程，依次关闭 VPS、显示与解码。
-
-- 多线程与帧缓存 (Threading & Queue)
-
-    DecodeRtspStream 继承 threading.Thread，维护帧队列；主线程通过 get_frame() 获取最新帧。
-
-- 参数解析 (Argument Parsing)
-
-    通过 argparse 提供参数：RTSP 源、模型路径、BPU 核心、优先级、标签文件、NMS 与置信度阈值。
-
-- HDMI 分辨率探测 (Display Resolution)
-
-    调用 /usr/bin/get_hdmi_res 获取当前 HDMI 分辨率，若无则默认 1920×1080。
-
-## 模型说明
-
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x_py.md)。
-
-
-## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
-
-<DocScope products="RDK-S100">
-```bash
-pip install -r ../requirements.txt
-```
-
-</DocScope>
-<DocScope products="RDK-S600">
-```bash
-pip install -r ../requirements.txt --break-system-packages
-```
-
-</DocScope>
-
-## 目录结构
-
-```text
-.
-├── README.md               # 使用说明
-└── rtsp_yolov5x_display.py # 主程序
-```
+- 可达的 RTSP 流地址（如 `rtsp://<ip>/<stream>`）。
+- 桌面/显示环境。
+- 预装模型：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名                  | 说 明                       | 默认值                                                 |
-| ----------------------- | -------------------------- | ------------------------------------------------------ |
-| `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/1080P_test.h264`                          |
-| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
-| `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
-| `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                   |
-| `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
-| `--score-thres` | 检测置信度阈值                      | `0.25`                                                 |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--rtsp-urls` / `-u` | RTSP 视频流地址（多路用分号分隔） | `rtsp://127.0.0.1/1080P_test.h264` |
+| `--model-path` | BPU 量化模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
+| `--label-file` | 类别标签（COCO） | `/app/res/labels/coco_classes.names` |
+| `--nms-thres` | NMS 的 IoU 阈值 | `0.45` |
+| `--score-thres` | 检测置信度阈值 | `0.25` |
 
-</DocScope>
-<DocScope products="RDK-S600">
-| 参数名                  | 说 明                       | 默认值                                                 |
-| ----------------------- | -------------------------- | ------------------------------------------------------ |
-| `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/1080P_test.h264`                          |
-| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
-| `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
-| `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                   |
-| `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
-| `--score-thres` | 检测置信度阈值                      | `0.25`                                                 |
+## 使用方法
 
-</DocScope>
+```bash
+cd /app/pydev_demo/rtsp_yolov5x_display_sample
+python rtsp_yolov5x.py --rtsp-urls rtsp://<流地址>
+```
 
+默认地址 `rtsp://127.0.0.1/1080P_test.h264` 需本板先起 RTSP 服务（如用 `mediamtx`/`live555` 推 `/app/res/assets/1080P_test.h264`）。
 
-## 快速运行
-- 准备rtsp码流
+## 常见问题
 
-    使用系统预置的推流服务,准备rtsp码流作为输入源，该服务会把1080P_test.h264视频文件处理成 rtsp 流，url 地址为rtsp://127.0.0.1/assets/1080P_test.h264，用户可通过如下命令启动推流服务：
-    ```bash
-    cd /app/res
-    sudo chmod +x live555MediaServer
-    sudo ./live555MediaServer &
-    ```
-- 运行模型
-    - 使用默认参数
-        ```bash
-        python rtsp_yolov5x_display.py
-        ```
-    - 指定参数运行
+- **拉流失败/超时**：确认 RTSP 地址可达、网络通；用 `ffprobe rtsp://...` 或 VLC 验证流。
+- **无画面**：需显示环境。
+- **多路流卡顿**：BPU 多路并行有上限，减少路数或调高 `--bpu-cores`。
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python rtsp_yolov5x_display.py \
-        --rtsp-urls rtsp://127.0.0.1/assets/1080P_test.h264 \
-        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
+## 相关文档
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python rtsp_yolov5x_display.py \
-        --rtsp-urls rtsp://127.0.0.1/assets/1080P_test.h264 \
-        --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
-
-        </DocScope>
-
-- 退出运行
-
-    在命令行输入Ctrl C
-
-- 查看结果
-
-    运行成功后，屏幕会实时显示目标检测图像
-
-## 注意事项
-- 该程序需运行在桌面环境。
-
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
-
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [USB Camera YOLOv5x 推理 (Python)](./01_usb_camera_py.md)
+- [目标检测-YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
+- [WebSocket YOLOv5x 推理 (Python)](./04_websocket_py.md)

@@ -1,202 +1,71 @@
 ---
-sidebar_position: 15
+title: WebSocket YOLOv5x 推理 (Python)
+sidebar_position: 4
+description: 通过 WebSocket 推送 YOLOv5x 检测结果供浏览器查看
 ---
 
-# WebSocket YOLOv5x 推理
+# WebSocket YOLOv5x 推理 (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+基于 `hbm_runtime` 的 Ultralytics YOLOv5x 推理示例，把检测结果通过 WebSocket 推给浏览器前端实时查看。无需板端桌面，结果在 PC 浏览器里看，适合无显示的 Server 板。
+
+:::info 说明
+本示例需安装 `websockets`/`protobuf` 依赖；推理输入默认走板端相机/视频。本板（headless）未完整实测，命令与参数据板端 README。
+:::
+
 <DocScope products="RDK-S100">
 
-本示例展示了如何在含有 HBM 加速器和 VIO 摄像头模块的嵌入式平台（如 RDK S100）上，使用 Ultralytics YOLOv5x 模型进行目标检测，并通过 WebSocket 实时推送 JPEG 图像和检测框，本示例代码位于`/app/pydev_demo/11_web_display_camera_sample/`目录下。
+示例代码位于板端 `/app/pydev_demo/web_display_camera_sample/` 目录下（S100 路径待 S100 板验证）。
 
 </DocScope>
 <DocScope products="RDK-S600">
 
-本示例展示了如何在含有 HBM 加速器和 VIO 摄像头模块的嵌入式平台（如 RDK S600）上，使用 Ultralytics YOLOv5x 模型进行目标检测，并通过 WebSocket 实时推送 JPEG 图像和检测框，本示例代码位于 `/app/pydev_demo/web_display_camera_sample/` 目录下。
+示例代码位于板端 `/app/pydev_demo/web_display_camera_sample/` 目录下。
 
 </DocScope>
 
-## 功能说明
+## 前置条件
 
-- 模型加载
+- 摄像头（USB/MIPI）或视频源作为推理输入。
+- 安装依赖：
 
-    初始化 `hbm_runtime`，加载模型，获取输入/输出名称和尺寸
-
-- 前处理 (Preprocess)
-
-    将原始的 NV12 图像分割为 Y/UV 通道，缩放到模型需求尺寸，生成正确格式的输入 Tensor
-
-- 模型推理 (Inference)
-
-    调用.run() 执行 BPU 推理
-
-- 后处理 (Postprocess)
-
-    解码推理结果，扫除缺乏精度和应用 NMS，将结果缩放回原图尺寸
-
-- 相机管理 (CameraManager)
-
-    打开相机，获取原始图像或模型尺寸图像，进行 JPEG 编码
-
-- WebSocket 服务器
-
-    接受网页端连接，持续获取相机图像，执行检测并给网页端返回 Protocol Buffer 结果
-
-## 模型说明
-
-    参考 [Ultralytics YOLOv5x 目标检测示例小结](../03_detection/01_yolov5x_py.md)。
-
-## 环境依赖
-- 确保安装了pydev中的环境依赖
-    ```bash
-    pip install -r ../requirements.txt
-    ```
-- 安装WebSocket的包
-
-    <DocScope products="RDK-S100">
-    ```bash
-    pip install websockets==15.0.1 protobuf==3.20.3
-    ```
-
-    </DocScope>
-    <DocScope products="RDK-S600">
-    ```bash
-    pip install websockets==15.0.1 protobuf==3.20.3 --break-system-packages
-    ```
-
-    </DocScope>
-
-## 硬件环境
-- mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
-- 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-
-<DocScope products="RDK-S100">
-
-- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-相机接口j2200-j2201)部分。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
-- mipi摄像头的安装方法可参考[MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-相机接口-j11j13)部分。
-
-</DocScope>
-
-## 目录结构
-```text
-.
-├── mipi_camera_web_yolov5x.py      # 主程序
-└── README.md                       # 使用说明
+```bash
+pip install websockets==15.0.1 protobuf==3.20.3 --break-system-packages
 ```
+
+- 预装模型：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`。
+- PC 浏览器（接收并显示结果）。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名           | 说明                              | 默认值                                                    |
-| --------------- | --------------------------------- | ------------------------------------------------------ |
-| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
-| `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
-| `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
-| `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
-| `--score-thres` | 检测置信度阈值                      | `0.25`                                                 |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--model-path` | BPU 量化模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
+| `--label-file` | 类别标签（COCO） | `/app/res/labels/coco_classes.names` |
+| `--port` | WebSocket 服务端口（见 README） | 板端 README 默认 |
+| `--nms-thres` | NMS 的 IoU 阈值 | `0.45` |
+| `--score-thres` | 检测置信度阈值 | `0.25` |
 
-</DocScope>
-<DocScope products="RDK-S600">
-| 参数名           | 说明                              | 默认值                                                    |
-| --------------- | --------------------------------- | ------------------------------------------------------ |
-| `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
-| `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
-| `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
-| `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
-| `--score-thres` | 检测置信度阈值                      | `0.25`                                                 |
+## 使用方法
 
-</DocScope>
+```bash
+cd /app/pydev_demo/web_display_camera_sample
+python web_display_camera_yolov5x.py
+```
 
+启动后板端起 WebSocket 服务，PC 浏览器打开配套前端页面（见示例目录），实时查看检测画面。
 
-## 快速运行
-- 启动服务
-    ```bash
-    # 1. 进入webservice目录
-    cd webservice/
+## 常见问题
 
-    # 2. 启动服务
-    sudo ./sbin/nginx -p .
-    ```
-- 运行模型
-    - 回到当前目录
-        ```bash
-        cd ..
-        ```
-    - 使用默认参数
-        ```bash
-        python mipi_camera_web_yolov5x.py
-        ```
-    - 指定参数运行
+- **`No module named 'websockets'`**：按"前置条件"装 `websockets`/`protobuf`。
+- **浏览器连不上**：确认板端与 PC 同网段、端口开放、前端地址指向板端 IP。
+- **无推理画面**：确认摄像头/视频源已接入。
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python mipi_camera_web_yolov5x.py \
-        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
+## 相关文档
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python mipi_camera_web_yolov5x.py \
-        --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
-
-        </DocScope>
-
-- 查看结果
-
-    运行成功后，通过访问web展示端：http://IP
-
-    **注意：无需填写端口**
-
-- 退出运行
-
-    在命令行输入Ctrl C
-
-## 注意事项
-
-<DocScope products="RDK-S100">
-- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
-
-</DocScope>
-<DocScope products="RDK-S600">
-- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s600/basic/`查找。
-
-</DocScope>
-
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [USB Camera YOLOv5x 推理 (Python)](./01_usb_camera_py.md)
+- [RTSP 视频拉流及 YOLOv5x 推理 (Python)](./03_decode_rtsp_py.md)
+- [目标检测-YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
