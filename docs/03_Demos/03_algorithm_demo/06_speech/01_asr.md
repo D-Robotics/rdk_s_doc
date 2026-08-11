@@ -1,159 +1,94 @@
 ---
-sidebar_position: 11
+title: 自动语音识别-ASR (C/C++)
+sidebar_position: 2
+description: 用 C/C++ 部署 ASR 模型做语音转文字的预装示例
 ---
 
-# 自动语音识别-ASR
+# 自动语音识别-ASR (C/C++)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+本示例演示如何用 `C/C++` 在 BPU 上部署 ASR 语音识别模型，把一段 `.wav` 音频转写成文字并打印。Python 版见 [ASR (Python)](./01_asr_py.md)。
+
 <DocScope products="RDK-S100">
-本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
+
+示例代码位于板端 `/app/cdev_demo/bpu/07_speech_sample/01_asr/` 目录下。
 
 :::warning
-当前 RDK S100 系统镜像**未内置** `asr.hbm` 模型，运行本示例前需手动下载（见下方"模型说明"中的下载地址），并放到默认路径 `/opt/hobot/model/s100/basic/asr.hbm`，或通过 `--model_path` 指定其它路径。
+当前 RDK S100 系统镜像**未内置** `asr.hbm` 模型，运行前需手动下载并放到 `/opt/hobot/model/s100/basic/asr.hbm`，或通过 `--model_path` 指定路径（S100 路径待 S100 板验证）。
 :::
 
 </DocScope>
 <DocScope products="RDK-S600">
-本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下。
+
+示例代码位于板端 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下，预装模型 `/opt/hobot/model/s600/basic/asr.hbm` 已随镜像就位。
 
 </DocScope>
 
+## 前置条件
 
-## 模型说明
-- 简介：
-
-    ASR（Automatic Speech Recognition）自动语音识别模型用于将音频信号转换为文本。输入为单通道语音波形（经过采样率转换和标准化处理），输出为字符级别的 token 序列。配合字典（vocab）文件使用，可实现中文语音转写。本示例使用量化后的 .hbm 模型。
-
-- HBM模型名称：asr.hbm
-
-- 输入格式：音频波形，单通道，采样率为 16kHz，最大长度为 30000（样本点）
-
-- 输出：字符 token 的概率分布（logits），通过 argmax 解码后映射为识别文本
-
-## 功能说明
-- 模型加载
-
-   加载 ASR 模型，并自动解析模型输入输出形状和量化信息。
-
-- 输入预处理
-
-    使用 SoundFile 读取音频（支持 .wav），将音频：
-
-    - 转为单通道
-    - 重采样至目标采样率（默认 16kHz）
-    - 标准化为零均值单位方差（z-score）
-    - 补零或截断至固定长度（如 30000）
-    - 支持生成器方式处理长音频，实现流式识别。
-
-- 推理执行
-
-    采用 .infer() 方法完成推理。
-
-- 结果后处理
-
-    从输出 logits 中获取 token 索引，结合 vocab 字典文件（JSON 格式）映射为字符，输出最终识别文本。
-
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 预装模型就位：S600 `/opt/hobot/model/s600/basic/asr.hbm`。
+- 板端有编译工具链（`cmake`、`make`、`g++`，镜像已预装）。
 
 ## 环境依赖
-在编译运行前，请确保安装以下依赖：
+
 ```bash
-sudo apt update
-sudo apt install -y libgflags-dev libsndfile1-dev libsamplerate0-dev
+sudo apt update && sudo apt install libgflags-dev
 ```
 
-## 目录结构
-```text
-.
-|-- CMakeLists.txt                  # CMake 构建脚本：目标/依赖/包含与链接配置
-|-- README.md                       # 使用说明（当前文件）
-|-- inc
-|   |-- asr.hpp                     # ASR 推理封装头文件（加载/预处理/推理/后处理接口）
-|   `-- audio_chunk_reader.hpp      # 音频切片读取器：读文件→重采样→分片输出
-`-- src
-    |-- asr.cc                      # ASR 推理实现：输入写入、前向计算、CTC 解码等
-    |-- audio_chunk_reader.cc       # 切片读取实现：libsndfile + libsamplerate 流式分块
-    `-- main.cc                     # 程序入口：参数解析→循环分片→推理→拼接转写文本
-```
+## 编译
 
-## 编译工程
-- 配置与编译
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
-
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
-
-<DocScope products="RDK-S100">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+cd /app/cdev_demo/bpu/speech_sample/asr   # S100 改为对应路径
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
-```
-
-</DocScope>
+产物为 `build/asr`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名           | 说明                               | 默认值                                   |
-| -------------- | -------------------------------- | ------------------------------------- |
-| `--model_path` | 模型文件路径（`.hbm`）                   | `/opt/hobot/model/s100/basic/asr.hbm` |
-| `--test_sound` | 输入音频文件路径（`.wav`）                 | `/app/res/assets/chi_sound.wav`       |
-| `--vocab_file` | 词表（JSON），映射 **class id → token** | `/app/res/labels/vocab.json`          |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--model_path` | 模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/asr.hbm` |
+| `--audio_file` | 输入音频（.wav/.flac） | `/app/res/assets/chi_sound.wav` |
+| `--vocab_file` | 词表（token→id） | `/app/res/labels/vocab.json` |
 
-</DocScope>
-<DocScope products="RDK-S600">
-| 参数名           | 说明                               | 默认值                                   |
-| -------------- | -------------------------------- | ------------------------------------- |
-| `--model_path` | 模型文件路径（`.hbm`）                   | `/opt/hobot/model/s600/basic/asr.hbm` |
-| `--test_sound` | 输入音频文件路径（`.wav`）                 | `/app/res/assets/chi_sound.wav`       |
-| `--vocab_file` | 词表（JSON），映射 **class id → token** | `/app/res/labels/vocab.json`          |
+## 使用方法
 
-</DocScope>
+```bash
+./asr
+```
 
-## 快速运行
-- 运行模型
-    - 确保在`build`目录中
-    - 使用默认参数
-        ```bash
-        ./asr
-        ```
-    - 指定参数运行
+## 运行效果
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./asr \
-            --model_path /opt/hobot/model/s100/basic/asr.hbm \
-            --test_sound /app/res/assets/chi_sound.wav \
-            --vocab_file /app/res/labels/vocab.json
-        ```
+RDK S600 实测输出（测试音频 `chi_sound.wav`，内容为"我是来自阿里云的大规模语言模型叫做通义千问"）：
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./asr \
-            --model_path /opt/hobot/model/s600/basic/asr.hbm \
-            --test_sound /app/res/assets/chi_sound.wav \
-            --vocab_file /app/res/labels/vocab.json
-        ```
+```text
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+Full transcription:
+我是来自阿里云的大规模语言磨型过叫通意千问||
+```
 
-        </DocScope>
-- 查看结果
+**成功标志**：末尾出现 `Full transcription:` 后跟识别文字。注意 ASR 模型对部分字词会有识别偏差（如"模型→磨型"、"叫做→过叫"），属模型精度限制，非运行错误。
 
-    运行成功后，会将结果打印出来
-    ```bash
-    我是来自阿里云的大规模语言磨型过叫通意千问||
-    ```
+## 软件说明
 
-## 注意事项
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+数据流：读 wav → 重采样到 16kHz → 裁剪/填充到 30000 采样点 → 提取音频 featuremap → BPU 推理 → 解码 token → 用 `vocab.json` 映射成文字。模型输入 `1x30000`，无预处理。
+
+## 常见问题
+
+- **`make` 报错找不到 `gflags`**：装 `libgflags-dev`。
+- **结果文字乱/缺字**：ASR 模型精度有限，换更清晰音频可改善。
+- **S100 报错找不到 `asr.hbm`**：S100 镜像未内置，需手动下载（见上方 warning）。
+
+## 相关文档
+
+- [Python 版 ASR 示例](./01_asr_py.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)
