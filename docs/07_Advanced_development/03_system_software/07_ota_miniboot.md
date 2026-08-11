@@ -5,7 +5,7 @@ sidebar_position: 2
 # miniboot 升级
 
 :::note
-- 此升级方式仅适用于**非 OTA** 镜像下的在线 miniboot 更新；OTA 镜像请走 [系统 OTA 升级](./01_ota_system.md) 的完整流程。
+- 此升级方式仅适用于**非 OTA** 镜像下的在线 miniboot 更新；OTA 镜像请走 [系统 OTA 升级](./06_ota_system.md) 的完整流程。
 - 流程**不经过 `ota_tool` 状态机**，而是直接通过 `dd` 烧写，升级后**需重启生效**。
 :::
 
@@ -86,7 +86,7 @@ Error: N step(s) failed to flash.
 
 ### 手动方式 2：`srpi-config` 菜单
 
-详见 [srpi-config](../../../02_System_configuration/02_srpi-config.md#system-options) 的 Update miniboot 条目。
+详见 [srpi-config](../../02_System_configuration/04_srpi_config.md#system-options) 的 Update miniboot 条目。
 
 :::warning
 `srpi-config` 只能发起 **release 版**升级；升级 debug 版必须用 `rdk-miniboot-update` 命令。

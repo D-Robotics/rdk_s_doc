@@ -33,7 +33,7 @@ IPC 典型应用场景有 OTA 模块、规控、CANHAL 等。
 ## IPC 实例分配方案
 
 <DocScope products="RDK S100">
-IPC Acore 侧实例编号范围为[0-34]，分别用于 Acore 与 MCU 通信的实例[0-14]、Acore 与 VDSP 通信的实例[22-24]、Acore 与 BPU 通信的实例[32-34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0-8]，实例[4-6]默认为客户预留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC使用指南](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md) 中的 IPC 使用情况章节。
+IPC Acore 侧实例编号范围为[0-34]，分别用于 Acore 与 MCU 通信的实例[0-14]、Acore 与 VDSP 通信的实例[22-24]、Acore 与 BPU 通信的实例[32-34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0-8]，实例[4-6]默认为客户预留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC使用指南](../11_mcu_development/08_mcu_ipc.md) 中的 IPC 使用情况章节。
 </DocScope>
 <DocScope products="RDK S600">
 IPC Acore 侧实例编号范围为[0-63]，分别用于 Acore 与 MCU 通信的实例[0-15]和[50-53]、Acore 与 VDSP 通信的实例[22-24]和[42-44]、Acore 与 BPU 通信的实例[32-39]，其余实例做其它私有用途。客户 Acore 与 MCU 通信可使用实例[0-15]，其余实例为内部使用。
@@ -492,8 +492,8 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 ```
 
 :::tip
-- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../../../07_Advanced_development/05_mcu_development/01_basic_information.md#start_mcu1)
-- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md#IPCBOX)
+- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../11_mcu_development/01_basic_information.md#start_mcu1)
+- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../11_mcu_development/08_mcu_ipc.md#IPCBOX)
 :::
 
 
@@ -723,8 +723,8 @@ ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave
 ```
 
 :::tip
-- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../../../07_Advanced_development/05_mcu_development/01_basic_information.md#start_mcu1)
-- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md#IPCBOX)
+- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1是否启动，MCU1的启动可以参考[MCU1 启动](../11_mcu_development/01_basic_information.md#start_mcu1)
+- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](../11_mcu_development/08_mcu_ipc.md#IPCBOX)
 :::
 
 

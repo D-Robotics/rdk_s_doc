@@ -47,7 +47,7 @@ LPWM 工作原理：LPWM 受 PPS 触发源 trigger，其作为 Trigger Bus 的 T
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_01.png" alt="PPS信号传输至cam-trig流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-关于同步源 PPS 的功能说明，更多可参考: [PPS说明](../../02_linux_development/04_driver_development_super/12_driver_timesync.md#PPS)
+关于同步源 PPS 的功能说明，更多可参考: [PPS说明](../../03_system_software/12_driver_timesync.md#PPS)
 
 :::info 注意
 
@@ -134,7 +134,7 @@ LPWM 模块有多种触发源可选，对于上述硬件连接方式，仍可有
 
 - Acore ETH PPS 误差最小，建议优先使用。
 
-对于使用 Acore ETH PPS0同步源，使用 fixed mode 时，其上升沿基于 PPS 整秒时间有一固定偏移536.871ms，需要在使用时按需求进行 offset 计算与配置，更多可参考: [Acore ETH PPS说明](../../02_linux_development/04_driver_development_super/12_driver_timesync.md#Acore\_Eth\_PPS)
+对于使用 Acore ETH PPS0同步源，使用 fixed mode 时，其上升沿基于 PPS 整秒时间有一固定偏移536.871ms，需要在使用时按需求进行 offset 计算与配置，更多可参考: [Acore ETH PPS说明](../../03_system_software/12_driver_timesync.md#Acore\_Eth\_PPS)
 
 ### Camera 同步模式选择
 

@@ -1,4 +1,8 @@
 {
   "label": "9.1 RDK Exclusive Command Usage",
-  "position": 1
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "7.1 RDK 专属命令"
+  }
 }

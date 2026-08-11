@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 
 :::info BSP Source Package
 
-For BSP source package download addresses, please refer to: [System Software](../01_Quick_start/download.md#system-software) (registration and login required)
+For BSP source package download addresses, please refer to: [System Software](../../RDK_download.md#system-software) (registration and login required)
 
 :::
 

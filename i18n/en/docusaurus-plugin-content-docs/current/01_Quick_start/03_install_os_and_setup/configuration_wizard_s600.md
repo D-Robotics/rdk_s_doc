@@ -74,7 +74,7 @@ sudo systemctl restart ssh # Restart the SSH service
 </TabItem>
 </Tabs>
 
-For using SSH, please refer to [Remote Login - SSH Login](../remote_login#ssh).
+For using SSH, please refer to [Remote Login - SSH Login](./remote_login#ssh).
 
 ## Setting Login Mode
 
@@ -202,7 +202,7 @@ dpkg -i nomachine_*_arm64.deb
 
 Due to `NXServer` configuration issues, connecting directly after performing the above operations will result in a black screen. A reboot is required before use.
 
-For using NoMachine, please refer to [Remote Login - NoMachine Login](../remote_login#nomachine-login).
+For using NoMachine, please refer to [Remote Login - NoMachine Login](./remote_login#nomachine-login).
 
 ## User Management
 

@@ -55,7 +55,7 @@ The System Options menu allows you to make configuration changes to various part
 
 - **Update Miniboot**
 
-  If you need to upgrade Miniboot-related partitions, you can perform operations in this option. For the specific upgrade principle and partitions involved in the upgrade, please refer to: [Miniboot Upgrade](../07_Advanced_development/02_linux_development/06_OTA/02_ota_miniboot.md).
+  If you need to upgrade Miniboot-related partitions, you can perform operations in this option. For the specific upgrade principle and partitions involved in the upgrade, please refer to: [Miniboot Upgrade](../07_Advanced_development/03_system_software/07_ota_miniboot.md).
 
 ## Interface Options
 

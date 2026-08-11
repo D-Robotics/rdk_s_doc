@@ -52,7 +52,7 @@ This is a real-time Ultralytics YOLOv5x inference sample based on the BPU. It re
 
 ## Model Description
 
-    See the [Ultralytics YOLOv5x object detection sample](./04_Ultralytics_YOLOv5x.md) section.
+    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x.md) section.
 
 
 ## Environment Dependencies
@@ -68,14 +68,14 @@ sudo apt install libgflags-dev
 
 - The MIPI camera interface uses auto-detection mode. Only one MIPI camera may be connected when running this sample (any MIPI port is supported). Connecting multiple cameras will cause errors.
 - This sample currently supports only MIPI sensors: IMX219 and SC230AI.
-- For MIPI camera installation, refer to [Camera Expansion Board - MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201).
+- For MIPI camera installation, refer to [Camera Expansion Board - MIPI Camera Interface](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201).
 
 </DocScope>
 <DocScope products="RDK-S600">
 
 - The MIPI camera interface uses auto-detection mode. Only one MIPI camera may be connected when running this sample (any MIPI port is supported). Connecting multiple cameras will cause errors.
 - This sample currently supports only MIPI sensors: IMX219 and SC230AI.
-- For MIPI camera installation, refer to [MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-camera-interface-j11j13).
+- For MIPI camera installation, refer to [MIPI Camera Interface](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-camera-interface-j11j13).
 
 </DocScope>
 

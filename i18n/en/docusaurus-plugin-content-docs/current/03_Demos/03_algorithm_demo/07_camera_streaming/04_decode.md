@@ -48,7 +48,7 @@ local H.264 file → hardware decode (NV12) → YOLOv5x inference → overlay bo
     Initialize the display channel with `sp_start_display`; draw detection results on screen with `draw_detections_on_disp`.
 
 ## Model Description
-    See the [Ultralytics YOLOv5x object detection sample](./04_Ultralytics_YOLOv5x.md) section.
+    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x.md) section.
 
 ## Environment Dependencies
 Before building and running, ensure the following dependencies are installed:

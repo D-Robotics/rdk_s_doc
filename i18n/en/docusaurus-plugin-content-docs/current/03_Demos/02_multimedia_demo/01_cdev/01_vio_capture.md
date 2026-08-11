@@ -86,7 +86,7 @@ Example flow diagram:
 
   Parameter descriptions:
 
-  - `-b`: Bit depth of the RAW image. For example, IMX219 supports RAW10 format, so the bit depth is 10. Refer to the [Accessory List](../../07_Advanced_development/01_hardware_development/02_accessory.md) for supported sensor formats.
+  - `-b`: Bit depth of the RAW image. For example, IMX219 supports RAW10 format, so the bit depth is 10. Refer to the [Accessory List](../../../07_Advanced_development/01_hardware_development/02_accessory.md) for supported sensor formats.
   - `-c`: Number of images to save. The interval between capturing each image is typically 1/fps.
   - `-w`: Width of the saved images
   - `-h`: Height of the saved images

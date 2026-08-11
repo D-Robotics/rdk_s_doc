@@ -74,7 +74,7 @@ sudo systemctl restart ssh # Restart SSH service
 </TabItem>
 </Tabs>
 
-For instructions on using SSH, please refer to [Remote Login - SSH Login](../remote_login#ssh).
+For instructions on using SSH, please refer to [Remote Login - SSH Login](./remote_login#ssh).
 
 ## Set Login Mode
 
@@ -205,7 +205,7 @@ dpkg -i nomachine_*_arm64.deb
 **Reboot the RDK S100**
 Due to a configuration issue with `NXServer`, directly connecting after performing the above steps will result in a black screen; a reboot is required before use.
 
-For instructions on using `NoMachine`, please refer to [Remote Login - NoMachine Login](../remote_login#nomachine-login).
+For instructions on using `NoMachine`, please refer to [Remote Login - NoMachine Login](./remote_login#nomachine-login).
 
 ## User Management
 

@@ -27,7 +27,7 @@ Typical IPC application scenarios include the OTA module, planning and control, 
 ## IPC Instance Allocation Scheme
 
 <DocScope products="RDK S100">
-The instance number range on the IPC Acore side is [0-34], used for Acore-MCU communication instances [0-14], Acore-VDSP communication instances [22-24], Acore-BPU communication instances [32-34], with the remaining instances for other private purposes. Instances [0-8] can be used for Acore-MCU communication, instances [4-6] are reserved for customers by default. If users do not need CANHAL, planning and control, etc., they can modify the configuration file themselves. For IPC communication status between AOCRE and MCU in S100, please refer to the IPC Usage section in [MCU IPC User Guide](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md).
+The instance number range on the IPC Acore side is [0-34], used for Acore-MCU communication instances [0-14], Acore-VDSP communication instances [22-24], Acore-BPU communication instances [32-34], with the remaining instances for other private purposes. Instances [0-8] can be used for Acore-MCU communication, instances [4-6] are reserved for customers by default. If users do not need CANHAL, planning and control, etc., they can modify the configuration file themselves. For IPC communication status between AOCRE and MCU in S100, please refer to the IPC Usage section in [MCU IPC User Guide](../11_mcu_development/08_mcu_ipc.md).
 </DocScope>
 <DocScope products="RDK S600">
 The instance number range on the IPC Acore side is [0-63], used for Acore-MCU communication instances [0-15] and [50-53], Acore-VDSP communication instances [22-24] and [42-44], Acore-BPU communication instances [32-39], with the remaining instances for other private purposes. Customers can use instances [0-15] for Acore-MCU communication, while the other instances are for internal use.
@@ -482,8 +482,8 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 ```
 
 :::tip
-- The applications actually operate MCU-side peripherals. Before use, confirm whether MCU1 has started. For starting MCU1, refer to [MCU1 Startup](../../../07_Advanced_development/05_mcu_development/01_basic_information.md#start_mcu1)
-- When operating these peripherals, confirm whether the MCU side has configured them for transparent transmission. Refer to [MCU-side IPCBOX Configuration](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md#IPCBOX)
+- The applications actually operate MCU-side peripherals. Before use, confirm whether MCU1 has started. For starting MCU1, refer to [MCU1 Startup](../11_mcu_development/01_basic_information.md#start_mcu1)
+- When operating these peripherals, confirm whether the MCU side has configured them for transparent transmission. Refer to [MCU-side IPCBOX Configuration](../11_mcu_development/08_mcu_ipc.md#IPCBOX)
 :::
 
 #### RunCmd Application
@@ -710,8 +710,8 @@ To modify the Uart used, edit the `mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Boar
 ```
 
 :::tip
-- The applications actually operate MCU-side peripherals. Before use, confirm whether MCU1 has started. For starting MCU1, refer to [MCU1 Startup](../../../07_Advanced_development/05_mcu_development/01_basic_information.md#start_mcu1)
-- When operating these peripherals, confirm whether the MCU side has configured them for transparent transmission. Refer to [MCU-side IPCBOX Configuration](../../../07_Advanced_development/05_mcu_development/08_mcu_ipc.md#IPCBOX)
+- The applications actually operate MCU-side peripherals. Before use, confirm whether MCU1 has started. For starting MCU1, refer to [MCU1 Startup](../11_mcu_development/01_basic_information.md#start_mcu1)
+- When operating these peripherals, confirm whether the MCU side has configured them for transparent transmission. Refer to [MCU-side IPCBOX Configuration](../11_mcu_development/08_mcu_ipc.md#IPCBOX)
 :::
 
 <DocScope products="RDK S100">

@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 烧录步骤
 
-本页介绍 RDK S100 的系统烧录。烧录前先完成 [烧录准备](./02_preparation.md)。
+本页介绍 RDK S100 的系统烧录。烧录前先完成 [烧录准备](./01_instruction.md)。
 
 ## 下载模式
 
@@ -21,17 +21,17 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 ### 进入 DFU+Fastboot 模式
 
-1. 将 [SW1](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↑，关闭电源。
-2. 将 [SW2](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↑，进入 Download 模式。
+1. 将 [SW1](../../01_hardware_introduction/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↑，关闭电源。
+2. 将 [SW2](../../01_hardware_introduction/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↑，进入 Download 模式。
 3. 将 SW1 拨码至 ▽，开启电源。
-4. 检查 [DOWNLOAD 指示灯](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#download红色)：灯亮表示已进入 DFU 模式；若不亮，按下 [K1](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#按键-k1k2) 复位系统后重试。
+4. 检查 [DOWNLOAD 指示灯](../../01_hardware_introduction/01_rdk_s100.md#download红色)：灯亮表示已进入 DFU 模式；若不亮，按下 [K1](../../01_hardware_introduction/01_rdk_s100.md#按键-k1k2) 复位系统后重试。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1.png" alt="进入 DFU 模式" style={{ width: '100%' }} />
 
 ### 进入 Fastboot 模式
 
-1. 将 [SW1](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↑，关闭电源。
-2. 将 [SW2](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↓，进入正常启动模式。
+1. 将 [SW1](../../01_hardware_introduction/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↑，关闭电源。
+2. 将 [SW2](../../01_hardware_introduction/01_rdk_s100.md#开关-sw1sw2) 拨码至 ↓，进入正常启动模式。
 3. 将 SW1 拨码至 ▽，开启电源。
 
 - **自动进入**：板端系统启动完成后自动启动 ADB 服务，XBurn 检测到 ADB 设备后下发命令，让板端进入 Fastboot。

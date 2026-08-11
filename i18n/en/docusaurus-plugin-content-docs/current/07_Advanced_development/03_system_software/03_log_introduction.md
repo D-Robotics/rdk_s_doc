@@ -379,7 +379,7 @@ Serial port output and Acore transfer are controlled by the two macros `LOG_SEND
 #endif
 ```
 
-For MCU Log usage notes, see: [Introduction to MCU Log](../05_mcu_development/01_basic_information.md#introduction-to-mcu-log).
+For MCU Log usage notes, see: [Introduction to MCU Log](../11_mcu_development/01_basic_information.md#introduction-to-mcu-log).
 
 ### DSP
 

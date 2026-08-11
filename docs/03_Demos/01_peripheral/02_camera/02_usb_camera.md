@@ -28,7 +28,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=18
 
 :::tip
 
-详细代码实现说明请查阅[基于 USB 摄像头推理](../../04_Algorithm_Application/01_model_zoo_intro.md)章节。
+详细代码实现说明请查阅[基于 USB 摄像头推理](../../03_algorithm_demo/01_summary.md)章节。
 对接两个 USB 摄像头前，需要通过 rmmod uvcvideo;modprobe uvcvideo quirks=128 限制 uvcvideo 带宽占用
 
 :::

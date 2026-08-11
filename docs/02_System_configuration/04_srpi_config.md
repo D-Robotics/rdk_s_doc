@@ -55,7 +55,7 @@ sudo srpi-config
 
 - **Update Miniboot**
 
-  如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot升级](../07_Advanced_development/02_linux_development/06_OTA/02_ota_miniboot.md)。
+  如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot升级](../07_Advanced_development/03_system_software/07_ota_miniboot.md)。
 
 ## Interface Options
 

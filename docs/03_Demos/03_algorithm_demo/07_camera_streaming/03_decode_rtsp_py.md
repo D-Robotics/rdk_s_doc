@@ -69,7 +69,7 @@ RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测
 
 ## 模型说明
 
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](./04_Ultralytics_YOLOv5x.md)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x_py.md)。
 
 
 ## 环境依赖

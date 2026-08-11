@@ -44,7 +44,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 模型说明
 
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](./04_Ultralytics_YOLOv5x.md)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x_py.md)。
 
 ## 环境依赖
 - 确保安装了pydev中的环境依赖

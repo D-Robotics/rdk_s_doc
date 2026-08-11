@@ -122,4 +122,4 @@ Please obtain RDK S600 documentation from the FTP server according to the paths 
 ## Resource Download
 
 
-For hardware information, refer to [Resource Summary](../../01_Quick_start/download.md).
+For hardware information, refer to [Resource Summary](../../RDK_download.md).

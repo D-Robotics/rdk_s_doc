@@ -1,4 +1,8 @@
 {
   "label": "3.3.2 40-Pin Header Applications",
-  "position": 2
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "S600"
+  }
 }

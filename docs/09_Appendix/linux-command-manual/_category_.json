@@ -1,4 +1,8 @@
 {
   "label": "9.2 Linux命令用法",
-  "position": 2
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "7.2 Linux 命令"
+  }
 }

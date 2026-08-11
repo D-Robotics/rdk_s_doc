@@ -69,7 +69,7 @@ RTSP/H.264 video stream → hardware decode (NV12) → YOLOv5x inference → ove
 
 ## Model Description
 
-    See the [Ultralytics YOLOv5x object detection sample](./04_Ultralytics_YOLOv5x.md) section.
+    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x_py.md) section.
 
 
 ## Environment Dependencies

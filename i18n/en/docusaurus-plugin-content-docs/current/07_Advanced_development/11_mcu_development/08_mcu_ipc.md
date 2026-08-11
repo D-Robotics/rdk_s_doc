@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-This section focuses on the usage instructions for the MCU side. For more details on the principles and usage of IPC, please refer to the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md) section.
+This section focuses on the usage instructions for the MCU side. For more details on the principles and usage of IPC, please refer to the [IPC Module Introduction](../03_system_software/06_driver_ipc.md) section.
 
 ## Usage Restrictions
 
@@ -124,7 +124,7 @@ Various peripherals are managed through a unified interface into the IpcBox. Sim
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IpcBox Feature Introduction{#IPCBOX} diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
-Refer to the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md) section for the corresponding Acore side application.
+Refer to the [IPC Module Introduction](../03_system_software/06_driver_ipc.md) section for the corresponding Acore side application.
 
 <DocScope products="RDK S100">
 IpcBox underwent a refactoring during the upgrade from version `RDKS100 V4.0.4-Beta` to `RDKS100 V4.0.5-Beta`. The changes include the packet structure, IPC channels, and default configuration for passthrough peripherals. Pay attention to the version compatibility between the MCU side and the Acore side.

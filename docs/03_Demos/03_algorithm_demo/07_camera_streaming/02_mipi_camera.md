@@ -52,7 +52,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 模型说明
 
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](./04_Ultralytics_YOLOv5x.md)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x.md)。
 
 
 ## 环境依赖
@@ -68,14 +68,14 @@ sudo apt install libgflags-dev
 
 - mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
 - 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-相机接口j2200-j2201)部分。
+- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-相机接口j2200-j2201)部分。
 
 </DocScope>
 <DocScope products="RDK-S600">
 
 - mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
 - 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-相机接口-j11j13)部分。
+- mipi摄像头的安装方法可参考[MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-相机接口-j11j13)部分。
 </DocScope>
 
 ## 目录结构

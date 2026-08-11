@@ -781,7 +781,7 @@ Enter the /app/timesync_demo/sample_timesync directory on the board and execute
 
 #### Build Environment
 
-The build environment for this sample on the MCU side uses the build tool in the MCU code. Please refer to: [MCU Compilation](../../05_mcu_development/01_basic_information.md#development-environment).
+The build environment for this sample on the MCU side uses the build tool in the MCU code. Please refer to: [MCU Compilation](../11_mcu_development/01_basic_information.md#development-environment).
 
 Compile the FreeRtos image version. Note:
 

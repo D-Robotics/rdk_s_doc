@@ -62,7 +62,7 @@ pip install tqdm
 :::info 工具链下载说明
 
 首次编译会从 arm 官网下载工具链后解压缩（10min 左右），网速不好可能会导致工具链下载不成功或下载不完整的问题，建议通过以下方式下载编译工具链：
-1. 点击[工具链下载链接](../../01_Quick_start/download.md#工具下载)，下载编译工具链。
+1. 点击[工具链下载链接](../../RDK_download.md#工具下载)，下载编译工具链。
 2. 将已有工具链移至 /Build/ToolChain/Gcc/ 内，移动工具链命令如下：
 
     `mv 工具链存储路径/工具链文件名 新代码/Build/ToolChain/Gcc/`
@@ -363,12 +363,12 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
 <DocScope products="RDK S100">
 
-关于 Xburn 工具烧录指定区域，参考[烧录指定区域](../../01_Quick_start/02_install_os/rdk_s100/03_burn.md#烧录指定区域)章节。
+关于 Xburn 工具烧录指定区域，参考[烧录指定区域](../../01_Quick_start/03_install_os_and_setup/rdk_s100/02_burn.md#烧录指定区域)章节。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-关于 Xburn 工具烧录指定区域，参考[烧录指定区域](../../01_Quick_start/02_install_os/rdk_s600/03_burn.md#烧录指定区域)章节。
+关于 Xburn 工具烧录指定区域，参考[烧录指定区域](../../01_Quick_start/03_install_os_and_setup/rdk_s600/02_burn.md#烧录指定区域)章节。
 
 </DocScope>
 

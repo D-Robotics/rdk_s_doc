@@ -1,4 +1,8 @@
 {
   "label": "Python",
-  "position": 6
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "4.1.2 Python 接口"
+  }
 }

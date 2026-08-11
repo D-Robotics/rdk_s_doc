@@ -52,7 +52,7 @@ import DocScope from '@site/src/components/DocScope';
 在使用串口登录前，需要确认开发板串口线跟电脑正确连接，连接方法可参考对应开发板的调试串口章节：
 
 <DocScope products="RDK S100">
-- [调试串口章节](./01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#type-c-j16)
+- [调试串口章节](../01_hardware_introduction/01_rdk_s100.md#type-c-j16)
 </DocScope>
 
 <DocScope products="RDK S600">
@@ -214,7 +214,7 @@ macos 系统下，使用 minicom 工具连接串口，步骤如下：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="Windows静态IP配置对话框" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../02_System_configuration/01_network_bluetooth.md)章节进行配置。
+如需将开发板有线网络配置为动态获取 DHCP 模式，可参考[有线网络](../../02_System_configuration/01_network_config.md)章节进行配置。
 
 ## SSH 登录{#ssh}
 下面分别介绍终端软件、终端命令行两种方法的创建步骤。
@@ -244,7 +244,7 @@ macos 系统下，使用 minicom 工具连接串口，步骤如下：
 ## NoMachine 登录
 
 :::tip
-NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachine配置](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-配置)
+NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachine配置](./configuration_wizard.md#nomachine-配置)
 :::
 
 本章节面向使用 Ubuntu Desktop 系统版本的用户，介绍如何通过`NoMachine`实现远程桌面登录功能。以下章节以 S100为例，S600的操作与 S100一致，将链接名内的`S100`替换为`S600`即可。

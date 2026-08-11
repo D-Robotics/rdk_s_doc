@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Flash the system image
 
-This page describes system flashing for the RDK S100. Complete [flashing preparation](./02_preparation.md) before you flash.
+This page describes system flashing for the RDK S100. Complete [flashing preparation](./01_instruction.md) before you flash.
 
 ## Download modes
 
@@ -16,22 +16,22 @@ Before you flash the system image to the RDK S100 with XBurn, select a download 
 | Fastboot | Update the system on a non-blank board | Requires a non-blank board whose system can enter U-Boot |
 
 :::warning Prerequisite check
-Set the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#boot-device-selection-sw3) to boot from onboard eMMC. Booting from an M.2 NVMe SSD is not supported.
+Set the [SW3 switch](../../01_hardware_introduction/01_rdk_s100.md#boot-device-selection-sw3) to boot from onboard eMMC. Booting from an M.2 NVMe SSD is not supported.
 :::
 
 ### Enter DFU+Fastboot mode
 
-1. Set the [SW1](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↑, and power off.
-2. Set the [SW2](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↑ to enter Download mode.
+1. Set the [SW1](../../01_hardware_introduction/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↑, and power off.
+2. Set the [SW2](../../01_hardware_introduction/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↑ to enter Download mode.
 3. Set the SW1 DIP switch to ▽, and power on.
-4. Check the [DOWNLOAD indicator LED](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#download-red): a lit LED means the device is in DFU mode. If it does not light up, press [K1](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#buttons-k1k2) to reset the system and retry.
+4. Check the [DOWNLOAD indicator LED](../../01_hardware_introduction/01_rdk_s100.md#download-red): a lit LED means the device is in DFU mode. If it does not light up, press [K1](../../01_hardware_introduction/01_rdk_s100.md#buttons-k1k2) to reset the system and retry.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1-en.jpg" alt="Enter DFU mode" style={{ width: '100%' }} />
 
 ### Enter Fastboot mode
 
-1. Set the [SW1](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↑, and power off.
-2. Set the [SW2](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↓ to enter normal boot mode.
+1. Set the [SW1](../../01_hardware_introduction/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↑, and power off.
+2. Set the [SW2](../../01_hardware_introduction/01_rdk_s100.md#switches-sw1sw2) DIP switch to ↓ to enter normal boot mode.
 3. Set the SW1 DIP switch to ▽, and power on.
 
 - **Automatic entry**: After the board system finishes booting, the ADB service starts automatically. XBurn detects the ADB device and sends a command to put the board into Fastboot.

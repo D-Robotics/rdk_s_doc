@@ -44,7 +44,7 @@ This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`.
 
 ## Model Description
 
-    See the [Ultralytics YOLOv5x object detection sample](./04_Ultralytics_YOLOv5x.md) section.
+    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x_py.md) section.
 
 ## Environment Dependencies
 - Ensure the dependencies in `pydev` are installed

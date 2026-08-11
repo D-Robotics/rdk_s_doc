@@ -51,7 +51,7 @@ Before logging in remotely via the network, the development board needs to be co
 Before logging in via the serial port, you need to ensure that the development board's serial port cable is correctly connected to the computer. For connection methods, refer to the debug serial port section of the corresponding development board:
 
 <DocScope products="RDK S100">
-- [rdk_s100 Debug Serial Port Section](../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#type-c-j16)
+- [rdk_s100 Debug Serial Port Section](../01_hardware_introduction/01_rdk_s100.md#type-c-j16)
 </DocScope>
 
 <DocScope products="RDK S600">
@@ -212,7 +212,7 @@ The outer wired Ethernet port (eth1) of the development board uses static IP mod
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="Windows static IP configuration dialog" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-If you need to configure the development board's wired network to DHCP mode for dynamic acquisition, refer to the [Wired Network](../02_System_configuration/01_network_bluetooth.md) section.
+If you need to configure the development board's wired network to DHCP mode for dynamic acquisition, refer to the [Wired Network](../../02_System_configuration/01_network_config.md) section.
 
 ## SSH Login{#ssh}
 The following describes the steps to create a connection using terminal software and the terminal command line.
@@ -241,7 +241,7 @@ Users can also log in via SSH using the command line. The steps are as follows:
 ## NoMachine Login
 
 :::tip
-The NoMachine feature requires software package support on the S100/S600 side. See [NoMachine Configuration](./03_configuration_wizard/configuration_wizard_s100.md#nomachine-configuration) for configuration guidance.
+The NoMachine feature requires software package support on the S100/S600 side. See [NoMachine Configuration](./configuration_wizard.md#nomachine-configuration) for configuration guidance.
 :::
 
 This section is for users using the Ubuntu Desktop system version and describes how to achieve remote desktop login via `NoMachine`. The following sections use the S100 as an example. The operation for the S600 is the same as for the S100, just replace `S100` in the link name with `S600`.

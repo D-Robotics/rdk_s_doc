@@ -10,11 +10,11 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-[S100 Thermal System](../../../02_System_configuration/04_frequency_management.md#rdk-s100)
+[S100 Thermal System](../../02_System_configuration/08_frequency_management.md#rdk-s100)
 
 </DocScope>
 <DocScope products="RDK S600">
 
-[S600 Thermal System](../../../02_System_configuration/04_frequency_management.md#rdk-s600)
+[S600 Thermal System](../../02_System_configuration/08_frequency_management.md#rdk-s600)
 
 </DocScope>

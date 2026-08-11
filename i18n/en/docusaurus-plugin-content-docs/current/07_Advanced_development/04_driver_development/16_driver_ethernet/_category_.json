@@ -1,8 +1,9 @@
 {
   "label": "Ethernet Development Guide",
-  "position": 16,
+  "position": 13,
   "link": {
     "type": "generated-index",
-    "slug": "16_driver_ethernet"
+    "slug": "16_driver_ethernet",
+    "description": "5.4.13 以太网"
   }
 }

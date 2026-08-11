@@ -5,7 +5,7 @@ sidebar_position: 2
 # miniboot Upgrade
 
 :::note
-- This upgrade method is only applicable to **non-OTA** images for online miniboot updates. For OTA images, please follow the complete [System OTA Upgrade](./01_ota_system.md) process.
+- This upgrade method is only applicable to **non-OTA** images for online miniboot updates. For OTA images, please follow the complete [System OTA Upgrade](./06_ota_system.md) process.
 - The process **does not go through the `ota_tool` state machine** but directly writes via `dd`. **A reboot is required for the upgrade to take effect**.
 :::
 
@@ -85,7 +85,7 @@ Before rebooting, it is recommended to check `dmesg | tail` for related errors.
 
 ### Manual Method 2: `srpi-config` Menu
 
-Refer to the Update miniboot entry in [srpi-config](../../../02_System_configuration/02_srpi-config.md#system-options).
+Refer to the Update miniboot entry in [srpi-config](../../02_System_configuration/04_srpi_config.md#system-options).
 
 :::warning
 `srpi-config` can only initiate **release version** upgrades. To upgrade to the debug version, you must use the `rdk-miniboot-update` command.

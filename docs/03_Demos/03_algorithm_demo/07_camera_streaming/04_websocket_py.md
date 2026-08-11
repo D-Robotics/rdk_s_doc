@@ -47,7 +47,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 模型说明
 
-    参考 [Ultralytics YOLOv5x 目标检测示例小结](./04_Ultralytics_YOLOv5x.md)。
+    参考 [Ultralytics YOLOv5x 目标检测示例小结](../03_detection/01_yolov5x_py.md)。
 
 ## 环境依赖
 - 确保安装了pydev中的环境依赖
@@ -75,12 +75,12 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK-S100">
 
-- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-相机接口j2200-j2201)部分。
+- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-相机接口j2200-j2201)部分。
 
 </DocScope>
 <DocScope products="RDK-S600">
 
-- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-相机接口-j11j13)部分。
+- mipi摄像头的安装方法可参考[MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-相机接口-j11j13)部分。
 
 </DocScope>
 

@@ -1,8 +1,9 @@
 {
   "label": "HBMEM Usage Guide",
-  "position": 15,
+  "position": 12,
   "link": {
     "type": "generated-index",
-    "slug": "/15_driver_hbmem"
+    "slug": "/15_driver_hbmem",
+    "description": "5.4.12 HBMEM"
   }
 }
