@@ -1,8 +1,9 @@
 ---
-sidebar_position: 4
+sidebar_position: 1
 id: python-api
-title: Python 接口手册
-sidebar_label: 4.1 Python 接口
+title: Python 推理 API
+sidebar_label: 4.2 Python 推理 API
+description: hbm_runtime Python 接口：模型加载、推理、调度参数
 ---
 # 4.2 Python 接口
 
@@ -1002,3 +1003,11 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
 
 ## 注意事项
 - 动态输入和输出未经测试，谨慎使用；
+
+## 相关文档
+
+- [ResNet18 分类示例（Python）](../../03_Demos/03_algorithm_demo/02_classification/01_resnet18_py.md)
+- [YOLOv5x 检测示例（Python）](../../03_Demos/03_algorithm_demo/03_detection/01_yolov5x_py.md)
+- [C 语言推理 API](./02_c_api.md)
+- [模型获取与放置](../../03_Demos/04_demo_support/01_model_files.md)
+- [使用自己的模型](../../03_Demos/04_demo_support/04_custom_model.md)
