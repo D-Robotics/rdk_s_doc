@@ -26,7 +26,7 @@ cd /app/pydev_demo/classification_sample/resnet18   # S100 改为对应路径
 python resnet18.py
 ```
 
-各示例的参数、运行命令见对应 demo 文档（[算法示例](../03_algorithm_demo/)）。
+各示例的参数、运行命令见对应 demo 文档（[算法示例](../03_algorithm_demo/02_classification/01_resnet18_py.md)）。
 
 ## 依赖安装
 
