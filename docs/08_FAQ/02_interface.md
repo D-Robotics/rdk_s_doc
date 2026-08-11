@@ -60,7 +60,7 @@ import DocScope from '@site/src/components/DocScope';
     * 使用 `ping <网关IP>` 测试到网关的连通性。
 5.  **参考官方文档：** 详细的网络配置步骤和故障排除方法，请参考官方文档中关于“网络配置”的章节。
     <DocScope products="RDK S100">
-    [RDK S100 网络配置](/System_configuration/network_bluetooth)
+    [RDK S100 网络配置](/System_configuration/network_config)
     </DocScope>
 
 #### Q5: 开发板无法通过 SSH 远程连接，可能是什么原因？
@@ -170,7 +170,7 @@ import DocScope from '@site/src/components/DocScope';
     * **接口对应：** 如果板卡有多个 MIPI CSI 接口，确保摄像头连接到了您在软件配置或设备树中指定的那个接口。
     * **参考文档：** 仔细查阅您所使用的 RDK 板卡型号对应的硬件手册或快速入门指南中关于“MIPI 摄像头”连接的章节，确认连接细节。
         <DocScope products="RDK S100">
-        [RDK S100 MIPI 摄像头](/01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md)
+        [RDK S100 MIPI 摄像头](../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)
         </DocScope>
 2.  **禁止带电插拔：**
     * **严禁在开发板通电的情况下插拔 MIPI 摄像头！** 带电操作极易因瞬间的电流冲击或引脚接触顺序错误而导致摄像头模组或板卡 MIPI 接口电路短路损坏。

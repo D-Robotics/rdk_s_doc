@@ -70,7 +70,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
     * Mainly supports early RDK hardware and is no longer the current mainline.
 
 **Important notes:**
-* **Version upgrade:** RDK OS 1.x **cannot** be upgraded directly to 2.x or newer via `apt`. To upgrade, you must re-flash a new system image and [install the operating system](/Quick_start/install_os/rdk_s100/burn) again.
+* **Version upgrade:** RDK OS 1.x **cannot** be upgraded directly to 2.x or newer via `apt`. To upgrade, you must re-flash a new system image and [install the operating system](/Quick_start/install_os_and_setup/rdk_s100/burn) again.
 * **TROS compatibility:** Different major TROS releases (e.g., Foxy-based and Humble-based TROS) are usually tied to specific RDK OS major versions. For example, RDK OS 2.x typically ships with TROS based on ROS 2 Foxy, while RDK OS 3.x typically ships with TROS based on ROS 2 Humble.
 
 ### Q4: What precautions apply when connecting or disconnecting a camera?
@@ -572,7 +572,7 @@ Possible approaches and notes:
 * D-Robotics RDK Linux/driver development docs may include platform-specific signing guidance:
     
     <DocScope products="RDK S100">
-    [Kernel headers and module build](/Advanced_development/linux_development/kernel_headers) (see the module signing section).
+    [Kernel headers and module build](/Advanced_development/system_software/kernel_headers) (see the module signing section).
     </DocScope>
 
 ### Q25: Out-of-memory errors when building large projects or running memory-heavy tools like `hb_mapper`. What should I do?

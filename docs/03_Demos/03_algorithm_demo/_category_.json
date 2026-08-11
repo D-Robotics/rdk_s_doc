@@ -3,6 +3,7 @@
   "label": "3.3 算法示例",
   "link": {
     "type": "generated-index",
-    "description": "3.3 算法示例"
+    "description": "3.3 算法示例",
+    "slug": "/Demos/algorithm_demo"
   }
 }

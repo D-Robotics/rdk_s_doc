@@ -3,6 +3,7 @@
   "label": "S100",
   "link": {
     "type": "generated-index",
-    "description": "S100"
+    "description": "S100",
+    "slug": "/Quick_start/install_os_and_setup/rdk_s100"
   }
 }

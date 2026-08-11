@@ -43,7 +43,7 @@ Bit idx  Function name   Status
 
 **ramdump 的时候可能会损坏保存 dump 文件的分区，请务必将 dump 文件保存到非根文件系统分区，且分区容量大于 DDR 容量**
 
-**建议创建一个专门用于 ramdump 的分区，[自定义分区说明](../rdk_gen#自定义分区说明)，比如分区命名为 ramdump**
+**建议创建一个专门用于 ramdump 的分区，[自定义分区说明](../06_environment_build/03_rdk_gen.md#自定义分区说明)，比如分区命名为 ramdump**
 
 #### 自动抓取
 

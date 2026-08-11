@@ -58,12 +58,12 @@ RDK S600 development board camera-related hardware resources are as follows:
 
 <DocScope products="RDK S100">
 
-For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](/Quick_start/hardware_introduction/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board).
+For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md).
 
 </DocScope>
 <DocScope products="RDK S600">
 
-For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](/Quick_start/hardware_introduction/rdk_s600/rdk_s600_camera_expansion_board).
+For hardware connections and corresponding DIP switch usage, please refer to [Camera Expansion Board](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600/02_rdk_s600_camera_expansion_board.md).
 
 </DocScope>
 

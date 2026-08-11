@@ -3,6 +3,7 @@
   "label": "3.2.1 C 语言示例",
   "link": {
     "type": "generated-index",
-    "description": "3.2.1 C 语言示例"
+    "description": "3.2.1 C 语言示例",
+    "slug": "/Demos/multimedia_demo/cdev"
   }
 }

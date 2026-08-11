@@ -3,6 +3,7 @@
   "position": 2,
   "link": {
     "type": "generated-index",
-    "description": "4.1.2 Python 接口"
+    "description": "4.1.2 Python 接口",
+    "slug": "/Simple_API/multimedia_api/pydev"
   }
 }

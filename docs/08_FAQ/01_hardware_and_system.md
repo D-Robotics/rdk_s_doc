@@ -70,7 +70,7 @@ import DocScope from '@site/src/components/DocScope';
     * 主要支持早期 RDK 硬件，已不作为当前主线版本。
 
 **重要注意事项：**
-* **版本升级：** 1.x 版本系统**无法**通过`apt`命令直接升级到2.x 或更新版本的系统。如需升级，必须通过烧录新版本系统镜像的方式重新[安装操作系统](/Quick_start/install_os/rdk_s100/burn)。
+* **版本升级：** 1.x 版本系统**无法**通过`apt`命令直接升级到2.x 或更新版本的系统。如需升级，必须通过烧录新版本系统镜像的方式重新[安装操作系统](/Quick_start/install_os_and_setup/rdk_s100/burn)。
 * **TROS 兼容性：** 不同大版本的 TROS（如基于 Foxy 的 TROS 和基于 Humble 的 TROS）通常与特定的 RDK OS 大版本绑定。例如，RDK OS 2.x 通常搭载基于 ROS2 Foxy 的 TROS，而 RDK OS 3.x 通常搭载基于 ROS2 Humble 的 TROS。
 
 ### Q4: 摄像头插拔有什么注意事项？
@@ -572,7 +572,7 @@ no mmc device at slot X
 * 地瓜机器人官方 RDK 文档中关于“Linux 开发”或“驱动开发”的章节，也可能包含针对 RDK 平台的具体模块签名指导：
     
     <DocScope products="RDK S100">
-    [内核头文件与模块编译](/Advanced_development/linux_development/kernel_headers) (请查找此文档中关于模块签名的具体章节)。
+    [内核头文件与模块编译](/Advanced_development/system_software/kernel_headers) (请查找此文档中关于模块签名的具体章节)。
     </DocScope>
 
 ### Q25: 在编译大型项目（如使用 gcc/make/cmake/colcon 构建 ROS2工作空间）或运行内存消耗较大的工具（如`hb_mapper`模型转换）时，遇到内存不足的错误怎么办？

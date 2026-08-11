@@ -3,6 +3,7 @@
   "label": "3.4 示例编程指南",
   "link": {
     "type": "generated-index",
-    "description": "3.4 示例编程指南"
+    "description": "3.4 示例编程指南",
+    "slug": "/Demos/demo_support"
   }
 }

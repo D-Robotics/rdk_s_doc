@@ -3,7 +3,7 @@
   "position": 2,
   "link": {
     "type": "generated-index",
-    "slug": "/07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600",
+    "slug": "/Advanced_development/algorithm_toolchain/LLM_Toolchain/rdk_s600",
     "description": "RDK S600 LLM 工具链开发指南"
   }
 }

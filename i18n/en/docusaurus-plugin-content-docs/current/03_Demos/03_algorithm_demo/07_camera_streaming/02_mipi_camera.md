@@ -68,7 +68,7 @@ sudo apt install libgflags-dev
 
 - The MIPI camera interface uses auto-detection mode. Only one MIPI camera may be connected when running this sample (any MIPI port is supported). Connecting multiple cameras will cause errors.
 - This sample currently supports only MIPI sensors: IMX219 and SC230AI.
-- For MIPI camera installation, refer to [Camera Expansion Board - MIPI Camera Interface](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201).
+- For MIPI camera installation, refer to [Camera Expansion Board - MIPI Camera Interface](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201).
 
 </DocScope>
 <DocScope products="RDK-S600">

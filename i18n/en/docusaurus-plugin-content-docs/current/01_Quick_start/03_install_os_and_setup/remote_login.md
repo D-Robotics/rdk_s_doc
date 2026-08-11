@@ -55,7 +55,7 @@ Before logging in via the serial port, you need to ensure that the development b
 </DocScope>
 
 <DocScope products="RDK S600">
-- [rdk_s600 Debug Serial Port Section](../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#j4)
+- [rdk_s600 Debug Serial Port Section](../01_hardware_introduction/02_rdk_s600.md#j4)
 </DocScope>
 
 Serial port login requires a PC terminal tool. Commonly used tools include `Putty`, `MobaXterm`, etc. Users can choose according to their habits. The port configuration process for different tools is basically similar. The following uses `MobaXterm` as an example to introduce the process of creating a new serial port connection:

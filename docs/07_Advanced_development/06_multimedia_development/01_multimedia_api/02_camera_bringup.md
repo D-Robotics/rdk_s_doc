@@ -61,13 +61,13 @@ RDK-S600 开发板 camera 相关硬件资源如下：
 <DocScope products="RDK S100">
 
 硬件连接及对应拨码开关使用，请参考
- [相机扩展板](/Quick_start/hardware_introduction/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board)
+ [相机扩展板](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)
 
 </DocScope>
 <DocScope products="RDK S600">
 
 硬件连接及对应拨码开关使用，请参考
- [相机扩展板](/Quick_start/hardware_introduction/rdk_s600/rdk_s600_camera_expansion_board)
+ [相机扩展板](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600/02_rdk_s600_camera_expansion_board.md)
 
 </DocScope>
 

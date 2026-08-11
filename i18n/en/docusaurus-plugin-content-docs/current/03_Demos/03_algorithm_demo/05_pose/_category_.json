@@ -3,6 +3,7 @@
   "label": "3.3.5 姿态估计",
   "link": {
     "type": "generated-index",
-    "description": "3.3.5 姿态估计"
+    "description": "3.3.5 姿态估计",
+    "slug": "/Demos/algorithm_demo/pose"
   }
 }

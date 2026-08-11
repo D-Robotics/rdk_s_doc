@@ -3,6 +3,7 @@
   "label": "3.3.4 实例分割",
   "link": {
     "type": "generated-index",
-    "description": "3.3.4 实例分割"
+    "description": "3.3.4 实例分割",
+    "slug": "/Demos/algorithm_demo/instance_segmentation"
   }
 }

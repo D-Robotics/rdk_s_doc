@@ -8,7 +8,7 @@ sidebar_position: 1
 
 ## 环境准备
 
-  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-相机接口j2200-j2201)
+  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-相机接口j2200-j2201)
   - 目前该 sample 仅支持 MIPI sensor: IMX219, SC230AI
   - 通过 HDMI 线缆连接开发板和显示器
 
@@ -31,7 +31,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
 
 ## 环境准备
 
-  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_camera_expansion_board.md)
+  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)
   - 通过 HDMI 线缆连接开发板和显示器
 
 ## 运行方式

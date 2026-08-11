@@ -3,6 +3,7 @@
   "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "Multimedia Development Guide"
+    "description": "Multimedia Development Guide",
+    "slug": "/Advanced_development/multimedia_development/multimedia_api"
   }
 }
