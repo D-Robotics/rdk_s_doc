@@ -1,203 +1,136 @@
 ---
-sidebar_position: 4
+title: 目标检测-Ultralytics YOLOv5x (Python)
+sidebar_position: 1
+description: 用 hbm_runtime Python 接口部署 YOLOv5x 做目标检测的预装示例
 ---
 
-# 目标检测-Ultralytics YOLOv5x
+# 目标检测-Ultralytics YOLOv5x (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+本示例演示如何在 BPU 上用 `hbm_runtime` 的 Python 接口部署量化后的 Ultralytics YOLOv5x 模型，对一张图片做目标检测（前处理 + 推理 + NMS + 框绘制），并把检测结果保存成图片。适用于搭载 BPU 的 RDK 设备。
+
 <DocScope products="RDK-S100">
-本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于`/app/pydev_demo/02_detection_sample/01_ultralytics_yolov5x/`目录下。
+
+示例代码位于板端 `/app/pydev_demo/02_detection_sample/01_ultralytics_yolov5x/` 目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
-本示例展示如何在 BPU 上使用量化后的 Ultralytics YOLOv5x 模型执行图像目标检测。支持前处理、后处理、NMS 以及最终的目标框绘制和结果保存，本示例代码位于 `/app/pydev_demo/detection_sample/ultralytics_yolov5x/` 目录下。
+
+示例代码位于板端 `/app/pydev_demo/detection_sample/ultralytics_yolov5x/` 目录下。
 
 </DocScope>
 
+## 前置条件
 
-## 模型说明
-- 简介：
-
-    Ultralytics YOLOv5x 是一类高性能的目标检测模型，其名称代表 "You Only Look Once"，可实现单次前向推理完成目标定位与分类。Ultralytics YOLOv5x 是其中最大的变体，具备更多的网络参数，检测精度高，适用于对准确率要求较高的场景。Ultralytics YOLOv5x 模型将输入图像映射为多个网格，每个网格预测多个 anchor 的类别和边界框。本模型已量化为适用于BPU芯片的 HBM 格式，输入尺寸为 672×672 的 NV12 图像。
-
-- HBM 模型名称： yolov5x_672x672_nv12.hbm
-
-- 输入格式： NV12，大小为 672x672（Y、UV 分离）
-
-- 输出： N 个目标框，每个目标包含 (类别索引、概率、坐标框) 三元组
-
-
-## 功能说明
-- 模型加载
-
-    通过 `hbm_runtime` 加载 Ultralytics YOLOv5x 量化模型，解析模型名称、输入输出名称、形状与量化参数等信息，为后续推理配置做好准备。
-
-- 输入预处理
-
-    将输入图像 resize 到 672x672 后转换为 NV12 格式（Y、UV 分离），并以嵌套字典形式组织输入，以适配推理接口。
-
-- 推理执行
-
-    利用 .run() 方法运行推理过程，支持设置推理优先级和 BPU 核心绑定（如 core0/core1 等）。
-
-- 结果后处理
-
-    - 对输出 tensor 进行 dequant 去量化；
-
-    - 解码 YOLO 输出，得到预测框、置信度、类别索引；
-
-    - 根据 score 阈值进行初筛；
-
-    - 应用 NMS（非极大值抑制）去除冗余框；
-
-    - 将预测框坐标映射回原图尺寸；
-
-    - 叠加检测框并保存结果图像。
-
-<DocScope products="RDK-S100">
-- 模型下载地址（程序自动下载）：
-
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-    ```
-
-</DocScope>
-<DocScope products="RDK-S600">
-- 模型下载地址（程序自动下载）：
-
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-    ```
-
-</DocScope>
-
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`）。
+- Python 环境与 `hbm_runtime` 已随镜像预装。
 
 ## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+
+依赖 `pydev_demo` 公共工具库（`utils`）。若提示缺少依赖：
 
 <DocScope products="RDK-S100">
+
 ```bash
-pip install -r ../../requirements.txt
+cd /app/pydev_demo && pip install -r requirements.txt
 ```
 
 </DocScope>
 <DocScope products="RDK-S600">
+
 ```bash
-pip install -r ../../requirements.txt --break-system-packages
+cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 ```
 
 </DocScope>
 
-## 目录结构
+## 代码位置
+
+<DocScope products="RDK-S100">
+
+板端路径：`/app/pydev_demo/02_detection_sample/01_ultralytics_yolov5x/`
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+板端路径：`/app/pydev_demo/detection_sample/ultralytics_yolov5x/`
+
+</DocScope>
+
+目录结构：
 
 ```text
 .
-├── ultralytics_yolov5x.py      # 主推理脚本
-└── README.md                   # 使用说明
+├── ultralytics_yolov5x.py   # 主推理脚本
+└── README.md                # 使用说明
 ```
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数           | 说明                                                     | 默认值                                      |
-|----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--test-img`   | 测试图片路径                                              | `/app/res/assets/kite.jpg`                     |
-| `--label-file` | 类别标签路径（每行一个类别）                                | `/app/res/labels/coco_classes.names`           |
-| `--img-save-path` | 检测结果图像保存路径                                    | `result.jpg`                                |
-| `--priority`  | 模型调度优先级（0~255）                                     | `0`                                         |
-| `--bpu-cores` | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）              | `[0]`                                      |
-| `--nms-thres`   | 非极大值抑制（NMS）阈值                                    | `0.45`                                    |
-| `--score-thres` | 置信度阈值                                                | `0.25`                                    |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
+| `--test-img` | 测试图片路径 | `/app/res/assets/kite.jpg` |
+| `--label-file` | 类别标签（每行一个类，COCO 80 类） | `/app/res/labels/coco_classes.names` |
+| `--img-save-path` | 检测结果图保存路径 | `result.jpg` |
+| `--priority` | 模型调度优先级（0~255） | `0` |
+| `--bpu-cores` | BPU 核心编号列表（如 `--bpu-cores 0 1`） | `[0]` |
+| `--nms-thres` | NMS 阈值 | `0.45` |
+| `--score-thres` | 置信度阈值 | `0.25` |
 
-</DocScope>
+## 使用方法
+
+进入示例目录后直接运行：
+
 <DocScope products="RDK-S600">
-| 参数           | 说明                                                     | 默认值                                      |
-|----------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path` | 模型文件路径（.hbm 格式）                                  | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--test-img`   | 测试图片路径                                              | `/app/res/assets/kite.jpg`                     |
-| `--label-file` | 类别标签路径（每行一个类别）                                | `/app/res/labels/coco_classes.names`           |
-| `--img-save-path` | 检测结果图像保存路径                                    | `result.jpg`                                |
-| `--priority`  | 模型调度优先级（0~255）                                     | `0`                                         |
-| `--bpu-cores` | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`）              | `[0]`                                      |
-| `--nms-thres`   | 非极大值抑制（NMS）阈值                                    | `0.45`                                    |
-| `--score-thres` | 置信度阈值                                                | `0.25`                                    |
+
+```bash
+cd /app/pydev_demo/detection_sample/ultralytics_yolov5x
+python ultralytics_yolov5x.py
+```
 
 </DocScope>
 
+运行成功后，检测框会绘制在原图上并保存为 `result.jpg`。
 
-## 快速运行
-- 运行模型
-    - 使用默认参数
-        ```bash
-        python ultralytics_yolov5x.py
-        ```
-    - 指定参数运行
+## 运行效果
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python ultralytics_yolov5x.py \
-            --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --img-save-path result.jpg \
-            --priority 0 \
-            --bpu-cores 0 \
-            --nms-thres 0.45 \
-            --score-thres 0.25
-        ```
+程序加载模型、推理、NMS 后处理、绘制框并保存。以下是 RDK S600 上的实测输出（测试图 `kite.jpg`）：
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python ultralytics_yolov5x.py \
-            --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --img-save-path result.jpg \
-            --priority 0 \
-            --bpu-cores 0 \
-            --nms-thres 0.45 \
-            --score-thres 0.25
-        ```
+```text
+Model Description:
+ - yolov5x_672x672_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x672x672",
+   "INPUT_TYPE_RT": "nv12", "NORM_TYPE": "data_scale",
+   "SCALE_VALUE": "[0.003921568627451]", ...}
 
-        </DocScope>
+=== Scheduling Parameters ===
+yolov5x_672x672_nv12:
+  priority    : 0
+  bpu_cores   : [0]
+  deviceId    : 0
 
-- 查看结果
+[Saved] Result saved to: result.jpg
+```
 
-    运行成功后，会将目标检测框绘制在原图上，并保存到 --img-save-path 指定路径
-    ```bash
-    [Saved] Result saved to: result.jpg
-    ```
+**成功标志**：末尾出现 `[Saved] Result saved to: result.jpg`。用图片查看器打开 `result.jpg`，能看到检测到的目标框（如 `kite.jpg` 中的人与风筝）。
 
-## 注意事项
+## 软件说明
 
-<DocScope products="RDK-S100">
-- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s100/basic/`查找。
+数据流：读图（BGR）→ resize 到 672×672 → 转 NV12 → BPU 推理 → 解码输出头 → NMS 去重 → 取 score≥0.25 的框 → 在原图上绘制框与类别 → 保存。模型输入 `1x3x672x672`，归一化用 `data_scale`（scale≈1/255）。
 
-</DocScope>
-<DocScope products="RDK-S600">
-- 若指定模型路径不存在，可尝试去`/opt/hobot/model/s600/basic/`查找。
+## 常见问题
 
-</DocScope>
+- **`result.jpg` 看不到框**：确认测试图含可识别目标；调低 `--score-thres`（如 0.1）或 `--nms-thres` 看更多候选框。
+- **报错找不到模型**：检查 `--model-path` 下 `.hbm` 是否存在；S600 模型在 `/opt/hobot/model/s600/basic/`。
+- **报错 `No module named 'utils'`**：未在示例目录下运行，须 `cd` 进 `ultralytics_yolov5x/` 再跑（依赖上级 `utils`）。
 
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
+## 相关文档
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [C/C++ 版 YOLOv5x 示例](./01_yolov5x.md)
+- [图像分类-ResNet18 (Python)](../02_classification/01_resnet18_py.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/01_python_api.md)
