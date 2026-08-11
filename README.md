@@ -47,6 +47,13 @@ npm run start:no-watch
 # 英文开发模式（不启动监听）
 npm run start:no-watch:en
 
+# 对外暴露预览（VM/容器内启动，供宿主机浏览器访问，不自动开浏览器窗口）
+# 复刻 npm run start（侧边栏监听 + 中文 dev server），追加 --host 0.0.0.0 --no-open
+npx concurrently --kill-others --raw \
+  "npm run watch-sidebar-config" \
+  "npx docusaurus start --host 0.0.0.0 --no-open --locale zh-Hans"
+# 宿主机访问：http://<虚拟机IP>:3000/rdk_s_doc/  （注意末尾斜杠）
+
 # 清理 Docusaurus 缓存
 npm run clear
 ```

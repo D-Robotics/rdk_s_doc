@@ -1,209 +1,92 @@
 ---
-sidebar_position: 8
+title: 姿态估计-Ultralytics YOLO11 (C/C++)
+sidebar_position: 2
+description: 用 C/C++ 部署 YOLO11 做人体姿态估计的预装示例
 ---
 
-# 姿态估计-Ultralytics YOLO11
+# 姿态估计-Ultralytics YOLO11 (C/C++)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+本示例演示如何用 `C/C++` 在 BPU 上部署 Ultralytics YOLO11 姿态估计模型，对一张图片做人体检测 + 关键点估计，并把骨架绘制到图上保存。Python 版见 [YOLO11 姿态 (Python)](./01_yolo11_pose_py.md)。
+
 <DocScope products="RDK-S100">
 
-本示例展示了如何在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于`/app/cdev_demo/bpu/04_pose_sample/01_ultralytics_yolo11_pose/`目录下。
+示例代码位于板端 `/app/cdev_demo/bpu/04_pose_sample/01_ultralytics_yolo11_pose/` 目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
 
-本示例展示了如何在 BPU 上运行 Ultralytics YOLO11 姿态估计模型，实现人体关键点检测与可视化。支持模型预处理、推理执行与后处理（含关键点解码、边界框绘制、关键点标注），本示例代码位于 `/app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose/` 目录下。
+示例代码位于板端 `/app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose/` 目录下。
 
 </DocScope>
 
-## 模型说明
-- 简介：
+## 前置条件
 
-    Ultralytics YOLO11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
-
-<DocScope products="RDK-S100">
-- HBM 模型名称： yolo11n_pose_nashe_640x640_nv12.hbm
-
-</DocScope>
-<DocScope products="RDK-S600">
-- HBM 模型名称： yolo11n_pose_nashp_640x640_nv12.hbm
-
-</DocScope>
-
-- 输入格式： NV12 格式图像（Y、UV 分离），尺寸为 640×640
-
-- 输出：
-
-    - 每个人的边界框坐标（xyxy）
-
-    - 关键点位置（K×2，x/y 坐标）
-
-    - 每个关键点的置信度得分
-
-    - 支持 COCO 人体关键点格式（常见为 17 点）
-
-## 功能说明
-- 模型加载
-
-    加载指定的 Ultralytics YOLO11 姿态估计模型，自动解析模型的元数据。
-
-- 输入预处理
-
-    将输入的 BGR 图像 resize 到 640×640，并转为 NV12 格式（Y、UV 分离），用于模型推理。
-
-- 推理执行
-
-    调用 .infer() 接口执行推理。
-
-- 结果后处理
-
-    - 解码多尺度输出中的边界框（使用 DFL 分箱解码）；
-
-    - 解码关键点位置与置信度（K×2 + K）；
-
-    - 使用 NMS 去除冗余检测框；
-
-    - 将关键点坐标和边界框映射回原始图像尺寸；
-
-    - 提供阈值控制仅显示高置信度关键点；
-
-    - 支持图像可视化，包括检测框与关键点绘制。
-
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 板端有编译工具链（`cmake`、`make`、`g++`，镜像已预装）。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm`。
 
 ## 环境依赖
-在编译运行前，请确保安装以下依赖：
-```bash
-sudo apt update
-sudo apt install libgflags-dev
-```
-
-## 目录结构
-```text
-.
-|-- CMakeLists.txt                     # CMake 构建脚本：目标/依赖/包含路径配置
-|-- README.md                          # 使用说明（当前文件）
-|-- inc
-|   `-- ultralytics_yolo11_pose.hpp    # 模型封装头文件：加载/预处理/推理/后处理接口声明
-`-- src
-    |-- main.cc                        # 程序入口：解析参数→完整 pipeline→保存可视化结果
-    `-- ultralytics_yolo11_pose.cc     # 模型实现：解码、NMS、关键点后处理与坐标还原
-```
-
-## 编译工程
-- 配置与编译
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
-
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
-
-<DocScope products="RDK-S100">
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_pose_nashe_640x640_nv12.hbm
+sudo apt update && sudo apt install libgflags-dev
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
+## 编译
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_pose_nashp_640x640_nv12.hbm
+cd /app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose   # S100 改为对应路径
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
+产物为 `build/ultralytics_yolo11_pose`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名                | 说明                     | 默认值                                                   |
-| ------------------ | ---------------------- | ----------------------------------------------------- |
-| `--model_path`     | 模型文件路径（`.hbm`）              | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
-| `--test_img`       | 输入测试图片路径                    | `/app/res/assets/bus.jpg`                             |
-| `--label_file`     | 类别标签文件（每行一个类别名称）       | `/app/res/labels/coco_classes.names`                  |
-| `--score_thres`    | 置信度阈值（低于该值的检测将被过滤）     | `0.25`                                                |
-| `--nms_thres`      | IoU 阈值（类别内 NMS 去重）                | `0.7`                                                 |
-| `--kpt_conf_thres` | 关键点可视化置信度阈值（低于该值的点不显示） | `0.5`                                                 |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--model-path` | 模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` |
+| `--test-img` | 测试图片路径 | `/app/res/assets/bus.jpg` |
+| `--label-file` | 类别标签（COCO） | `/app/res/labels/coco_classes.names` |
+| `--img-save-path` | 结果图保存路径 | `result.jpg` |
+| `--nms-thres` | NMS 的 IoU 阈值 | `0.7` |
+| `--score-thres` | 置信度阈值 | `0.25` |
 
-</DocScope>
-<DocScope products="RDK-S600">
-| 参数名                | 说明                     | 默认值                                                   |
-| ------------------ | ---------------------- | ----------------------------------------------------- |
-| `--model_path`     | 模型文件路径（`.hbm`）              | `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` |
-| `--test_img`       | 输入测试图片路径                    | `/app/res/assets/bus.jpg`                             |
-| `--label_file`     | 类别标签文件（每行一个类别名称）       | `/app/res/labels/coco_classes.names`                  |
-| `--score_thres`    | 置信度阈值（低于该值的检测将被过滤）     | `0.25`                                                |
-| `--nms_thres`      | IoU 阈值（类别内 NMS 去重）                | `0.7`                                                 |
-| `--kpt_conf_thres` | 关键点可视化置信度阈值（低于该值的点不显示） | `0.5`                                                 |
+## 使用方法
 
-</DocScope>
+```bash
+./ultralytics_yolo11_pose
+```
 
-## 快速运行
-- 运行模型
-    - 确保在`build`目录中
-    - 使用默认参数
-        ```bash
-        ./ultralytics_yolo11_pose
-        ```
-    - 指定参数运行
+## 运行效果
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./ultralytics_yolo11_pose \
-        --model_path /opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm \
-        --test_img   /app/res/assets/bus.jpg \
-        --label_file /app/res/labels/coco_classes.names \
-        --score_thres 0.25 \
-        --nms_thres   0.7 \
-        --kpt_conf_thres 0.5
-        ```
+RDK S600 实测输出（测试图 `bus.jpg`）：
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./ultralytics_yolo11_pose \
-        --model_path /opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm \
-        --test_img   /app/res/assets/bus.jpg \
-        --label_file /app/res/labels/coco_classes.names \
-        --score_thres 0.25 \
-        --nms_thres   0.7 \
-        --kpt_conf_thres 0.5
-        ```
+```text
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[Saved] Result saved to: result.jpg
+```
 
-        </DocScope>
+**成功标志**：末尾出现 `[Saved] Result saved to: result.jpg`，`BPULib verison(2, 2, 15)` 与 `DNN: 3.13.6` 表示 BPU 运行时正常。打开 `build/result.jpg` 可见人体框与关键点骨架。
 
-- 查看结果
+## 软件说明
 
-    运行成功后，会将结果绘制在原图上，并保存到build/result.jpg
-    ```bash
-    [Saved] Result saved to: result.jpg
-    ```
+数据流：读图 → resize 到 640×640 → 转 NV12 → BPU 推理 → 解码检测头 + 关键点头 → 置信度过滤 → NMS → 绘制人体框与骨架 → 保存。模型输入 `1x3x640x640`，归一化 `data_scale`。
 
-## 注意事项
-- 输出结果存储为result.jpg，用户可自行查看。
+## 常见问题
 
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+- **`make` 报错找不到 `gflags`**：装 `libgflags-dev`。
+- **`result.jpg` 看不到骨架**：确认图含清晰人体；调低 `--score-thres`。
+- **报错找不到模型**：检查 `--model-path`，S600 模型在 `/opt/hobot/model/s600/basic/`。
 
+## 相关文档
 
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [Python 版 YOLO11 姿态示例](./01_yolo11_pose_py.md)
+- [目标检测-YOLO11 (C/C++)](../03_detection/02_yolo11.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
