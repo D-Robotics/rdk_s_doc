@@ -400,7 +400,7 @@ bash run_tuning.sh
 
 **Image Preview**
 
-1. [Click here](../../../RDK_download.md#tool-downloads) to download the image browsing tool `hbplayer`.
+1. [Click here](../../../RDK.md#tool-downloads) to download the image browsing tool `hbplayer`.
 2. Open `hbplayer` and set the network address (PC must be able to ping the board), click `Apply` to apply the settings, and click `Connect` to see the real-time video stream. The real-time preview operation is shown below.
 
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_06.png" alt="hbplayer Real-time Preview" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

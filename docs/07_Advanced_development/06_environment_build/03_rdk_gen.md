@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 
 :::info BSP 源码包
 
-BSP 源码包下载地址参见： [系统软件](../../RDK_download.md#系统软件)（需要注册登录）
+BSP 源码包下载地址参见： [系统软件](../../RDK.md#系统软件)（需要注册登录）
 
 :::
 

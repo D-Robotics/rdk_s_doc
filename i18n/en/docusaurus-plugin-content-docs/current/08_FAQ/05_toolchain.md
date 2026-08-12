@@ -6,7 +6,7 @@ sidebar_position: 5
 
 :::tip 🛠️ Toolchain and System Download Guide
 
-For toolchain issues, we recommend using the latest version first. For related download resources, see: [Download Resources](../RDK_download.md)
+For toolchain issues, we recommend using the latest version first. For related download resources, see: [Download Resources](../RDK.md#资料索引)
 
 :::
 

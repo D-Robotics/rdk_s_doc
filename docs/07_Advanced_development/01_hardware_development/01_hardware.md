@@ -225,4 +225,4 @@ https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 </DocScope> -->
 ## 资料下载
 
-硬件资料参见[资源汇总](../../RDK_download.md)
+硬件资料参见[资源汇总](../../RDK.md#资料索引)

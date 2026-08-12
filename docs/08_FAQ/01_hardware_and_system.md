@@ -6,7 +6,7 @@ sidebar_position: 1
 
 :::info 🔄 问题解决前请考虑更新到最新系统
 
-许多问题可通过系统更新解决，相关下载资源请参考：[下载资源汇总](../RDK_download.md)
+许多问题可通过系统更新解决，相关下载资源请参考：[下载资源汇总](../RDK.md#资料索引)
 
 :::
 
@@ -965,3 +965,80 @@ DefaultEnvironment="TZ=CST-08:00"
         }
         module_exit(test_power_exit);                                           // 驱动卸载阶段
     ```
+
+## 硬件 FAQ（RDK S100）
+
+
+
+
+
+
+
+**A:** Pinlist Excel 文件中的 Pull up/down 列为接口信号上电时的默认上拉或下拉状态描述。​
+
+
+
+**A:** 超过 20V 会导致 RDK S100 开发板损坏；低于 12V 可能会导致开机异常，如电源上电异常，开机未进入 kernal 等。​
+
+
+
+**A:** 在每个接口介绍部分的“提示”或“注意”信息中进行了描述。​
+
+
+
+**A:** 不可以超出地瓜提供的最大供电电流，否则可能导致开发板损坏或开机异常。​
+
+
+
+**A: [1.1.1.1 RDK S100 相机扩展板](../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)** 和 **[1.1.1.2 RDK S100 MCU 接口扩展板](../01_Quick_start/01_hardware_introduction/03_rdk_mcu_port_expansion_board.md)** 章节分别有介绍 CAM 子板和 MCU 子板与 RDK S100 主板连接的参考视频可供参考。​
+
+
+
+**A:** 
+- **AO :** 模拟输出
+
+- **AI :** 模拟输入
+
+- **I :** 数字输入
+
+- **O :** 数字输出
+
+- **IO :** 数字输入或输出
+
+- **NULL :** 空值
+
+- **/ :** 表示无引脚或无状态
+
+
+
+**A:** 建议排查 RDK S100 提供的电源供电是否满足传感器本身的电压/电流/电平幅度匹配等电气特性要求，也建议检查是否有硬件电路连接错误。​
+
+
+
+**A:** RDK S100 对外接口的所有 PIN 脚能输出的最大电流就是外设能获取的最大电流，无法通过并联多个 PIN 脚提供更大的电流能力。​
+
+
+
+**A:** 建议检查硬件连接是否松动，USB 连接线是否过长，USB 设备需要的功耗开发板是否可以满足，USB 软件配置是准确，也可更换不同 USB 设备进行问题确认。​
+
+
+
+**A:**   
+
+- **a.** 按照社区文档中的 CAM 子板和 MCU 子板连接指引视频扣接好两块子板，确认扣接位置准确并无松动后，给 RDK S100 主板供电；若不需要使用子板，则可以直接给 RDK S100 子板供电 12~20V 电源并开机。​
+
+- **b.** 使用 RDK S100 开发套件的过程中，注意周边环境是否有可能与开发套件的电路直接接触的导体，若有，将开发套件移至远离裸露导体的位置，避免开发套件发生短路。
+
+
+## 烧录与启动 FAQ
+
+
+
+烧录与启动过程中的串口、驱动、启动异常等问题，已统一收录在 XBurn 手册的异常处理章节：
+
+- [串口与驱动问题](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver) — Ubuntu 串口乱码、Ubuntu 24.04 驱动、macOS CH340N 驱动等
+- [启动异常](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues) — 烧录后无显示输出、启动盘选择、备份镜像烧录失败等
+
+:::tip
+更多问题，可以访问 [D-Robotics 开发者官方论坛](https://developer.d-robotics.cc/forum) 获得帮助。
+:::

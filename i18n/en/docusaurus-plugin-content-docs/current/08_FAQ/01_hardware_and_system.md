@@ -6,7 +6,7 @@ sidebar_position: 1
 
 :::info 🔄 Consider updating to the latest system before troubleshooting
 
-Many issues can be resolved by updating the system. For related download resources, see: [Download Resources](../RDK_download.md)
+Many issues can be resolved by updating the system. For related download resources, see: [Download Resources](../RDK.md#资料索引)
 
 :::
 
