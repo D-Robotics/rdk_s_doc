@@ -479,3 +479,8 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   1. 喂狗超时的重启方式由看门狗重启寄存器配置决定，目前重启由看门狗重启中断上报 MCU 驱动软件处理。
   2. 非窗口期喂狗会直接导致狗叫。
+
+## 相关文档
+
+- [5.4.1 配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [5.4.17 VDSP 开发指南](/Advanced_development/driver_development/vdsp_development)

@@ -739,3 +739,8 @@ pin 38 (PCM0_DATA0) 4:39500000.gpio
 pin 39 (PCM0_DATA1) 5:39500000.gpio
 root@ubuntu:~#
 ```
+
+## 相关文档
+
+- [5.4.4 GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
+- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)

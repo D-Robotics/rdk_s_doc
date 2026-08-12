@@ -1346,3 +1346,8 @@ RTC-YSN8130 存在硬件限制，闹钟最细粒度为分钟级，不支持秒�
 </DocScope>
 
 > 示例（S100）：将 Interrupt_McuConfigs[] 中 Os_IntChannel_Gpio_Icu3ExtIsr 行末尾的 ENABLE 改为 DISABLE 即可，S600 操作同理。
+
+## 相关文档
+
+- [2.13 时钟与 RTC 同步](/System_configuration/rtc_ntp)
+- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)

@@ -477,3 +477,8 @@ Return value：Std_ReturnType
     IPC_E_NO_BUF_ERROR: no buffer
     IPC_E_CHANNEL_NOT_OPEN: Instance has been closed
 ```
+
+## 相关文档
+
+- [5.3.12 IPC 模块介绍（Acore 侧）](/Advanced_development/system_software/driver_ipc)
+- [5.6.9 IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)

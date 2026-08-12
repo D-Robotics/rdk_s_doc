@@ -646,3 +646,8 @@ CONFIG_DYNAMIC_DEBUG=y
 3. **信号完整性**：高速模式下注意 PCB 走线设计和阻抗匹配
 4. **温度影响**：MPHY 校准值随温度变化，确保在有效温度范围内使用
 5. **热插拔**：UFS 不支持热插拔，启动前确保设备已正确连接
+
+## 相关文档
+
+- [5.4.1 配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [2.12 存储与磁盘管理](/System_configuration/storage)

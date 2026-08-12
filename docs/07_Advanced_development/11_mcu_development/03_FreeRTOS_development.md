@@ -1189,3 +1189,8 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 如果使用共享内存的方式传输数据，可能会出现 MCU 数据更新至 SRAM，但是 Acore 的缓存还为旧数据的问题，因此导致读取数据不同步。
 
 为避免 Acore 和 MCU 出现数据不同步的问题，需要在变量前加"volatile"或者"ioremap_np()函数"。这两种方式都是为了避免读取缓存，而是直接读取 SRAM 数据。
+
+## 相关文档
+
+- [5.6.1 MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

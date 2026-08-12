@@ -114,3 +114,8 @@ PCIe 拓展的 Wi-Fi 模组一般需要 Host 端对模组的 reset 信号/reg_on
 S600的 PCIe 驱动会在初始化时，申请这些 GPIO 并作解复位等操作。
 
 </DocScope>
+
+## 相关文档
+
+- [2.1 网络配置](/System_configuration/network_config)
+- [5.4.11 Wi-Fi 驱动调试指南](/Advanced_development/driver_development/driver_wifi)

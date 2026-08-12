@@ -414,5 +414,7 @@ echo -n "file pcm_lib.c +p" > /sys/kernel/debug/dynamic_debug/control
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="拨码开关切换示意图" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 相关文档
 
-
+- [2.10 音频配置](/System_configuration/audio_output)
+- [3.1.3 音频应用](/Demos/peripheral/audio)

@@ -1381,3 +1381,8 @@ Parameters(out)
     None
 Return value：None
 ```
+
+## 相关文档
+
+- [3.1.4 CAN 应用](/Demos/peripheral/rcore_can)
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

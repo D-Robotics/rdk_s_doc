@@ -643,3 +643,9 @@ MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行�
 - %c —— 单个字符
 
 除以上类型外的其他格式化输出暂不支持，后续版本将逐步扩展更多的数据类型与格式支持，以满足更丰富的调试需求。
+
+## 相关文档
+
+- [5.6.1 MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [5.6.3 MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)
+- [1.1.2.2 MCU 接口扩展板](/01_hardware_introduction)

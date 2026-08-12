@@ -429,3 +429,8 @@ root@ubuntu:~# i2cdetect -r -y 3
 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 70: -- -- -- -- -- -- -- --
 ```
+
+## 相关文档
+
+- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
+- [5.4.4 GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)

@@ -58,3 +58,8 @@ MCU
 ├── Service              # 包含地瓜自研的中间服务代码，比如电源管理，OTA管理，Log/Shell等
 └── Target               # 系统基础代码，比如启动相关，任务定义相关，中断相关等
 ```
+
+## 相关文档
+
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

@@ -669,3 +669,7 @@ Return value：None
 ```
 </TabItem>
 </Tabs>
+
+## 相关文档
+
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

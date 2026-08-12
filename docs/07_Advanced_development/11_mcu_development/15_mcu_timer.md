@@ -433,3 +433,8 @@ timer_interrupt gettime 3
 输出结果:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case3.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## 相关文档
+
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)
