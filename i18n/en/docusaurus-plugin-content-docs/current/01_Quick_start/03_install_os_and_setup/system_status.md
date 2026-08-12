@@ -1,6 +1,6 @@
 ---
 title: 系统状态查询
-sidebar_position: 1
+sidebar_position: 3
 description: 待开发
 ---
 # 系统状态查询

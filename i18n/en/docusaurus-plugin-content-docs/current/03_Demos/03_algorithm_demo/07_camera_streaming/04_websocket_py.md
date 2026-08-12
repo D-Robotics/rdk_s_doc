@@ -1,5 +1,5 @@
 ---
-sidebar_position: 15
+sidebar_position: 8
 ---
 
 # WebSocket YOLOv5x Inference

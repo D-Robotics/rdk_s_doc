@@ -1,6 +1,6 @@
 ---
 title: CAN 应用
-sidebar_position: 1
+sidebar_position: 4
 description: 待开发
 ---
 # CAN 应用

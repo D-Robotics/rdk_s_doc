@@ -1,6 +1,6 @@
 ---
 title: 音频配置
-sidebar_position: 1
+sidebar_position: 10
 description: 待开发
 ---
 # 音频配置

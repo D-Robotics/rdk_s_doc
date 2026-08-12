@@ -1,6 +1,6 @@
 ---
 title: 蓝牙配置
-sidebar_position: 1
+sidebar_position: 2
 description: 待开发
 ---
 # 蓝牙配置

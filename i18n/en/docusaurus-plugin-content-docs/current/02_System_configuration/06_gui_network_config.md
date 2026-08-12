@@ -1,5 +1,6 @@
 ---
 sidebar_position: 6
+unlisted: true
 ---
 
 # 2.6 GUI Network Configuration Process

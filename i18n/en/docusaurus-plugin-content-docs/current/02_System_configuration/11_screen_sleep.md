@@ -1,6 +1,6 @@
 ---
 title: 屏幕休眠与电源管理
-sidebar_position: 1
+sidebar_position: 11
 description: 待开发
 ---
 # 屏幕休眠与电源管理

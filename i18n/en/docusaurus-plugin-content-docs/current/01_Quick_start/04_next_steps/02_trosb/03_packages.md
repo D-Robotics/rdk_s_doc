@@ -1,6 +1,6 @@
 ---
 title: 常用功能包
-sidebar_position: 1
+sidebar_position: 3
 description: 待开发
 ---
 # 常用功能包

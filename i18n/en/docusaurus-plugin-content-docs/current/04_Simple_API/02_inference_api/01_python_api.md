@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 2
 id: python-api
 title: Python API Reference
 sidebar_label: 4.1 Python API

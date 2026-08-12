@@ -1,6 +1,6 @@
 ---
 title: IMU 应用
-sidebar_position: 1
+sidebar_position: 5
 description: 待开发
 ---
 # IMU 应用

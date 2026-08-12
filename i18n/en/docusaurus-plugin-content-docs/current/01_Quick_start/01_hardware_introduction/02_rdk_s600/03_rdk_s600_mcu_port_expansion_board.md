@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 ---
 

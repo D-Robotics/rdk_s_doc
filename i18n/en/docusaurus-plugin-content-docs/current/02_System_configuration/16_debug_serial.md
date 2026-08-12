@@ -1,6 +1,6 @@
 ---
 title: 调试串口
-sidebar_position: 1
+sidebar_position: 16
 description: 待开发
 ---
 # 调试串口

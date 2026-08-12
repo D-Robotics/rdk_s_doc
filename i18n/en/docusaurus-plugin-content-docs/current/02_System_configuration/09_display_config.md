@@ -1,6 +1,6 @@
 ---
 title: 显示配置
-sidebar_position: 1
+sidebar_position: 9
 description: 待开发
 ---
 # 显示配置

@@ -85,7 +85,7 @@ Before rebooting, it is recommended to check `dmesg | tail` for related errors.
 
 ### Manual Method 2: `srpi-config` Menu
 
-Refer to the Update miniboot entry in [srpi-config](../../02_System_configuration/04_srpi_config.md#system-options).
+Refer to the Update miniboot entry in [srpi-config](../../02_System_configuration/04_srpi_config/01_overview.md#system-options).
 
 :::warning
 `srpi-config` can only initiate **release version** upgrades. To upgrade to the debug version, you must use the `rdk-miniboot-update` command.

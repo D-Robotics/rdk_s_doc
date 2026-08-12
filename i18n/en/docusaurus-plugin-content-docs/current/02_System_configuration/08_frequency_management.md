@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 8
 title: 2.4 Thermal and CPU Frequency Management
 ---
 

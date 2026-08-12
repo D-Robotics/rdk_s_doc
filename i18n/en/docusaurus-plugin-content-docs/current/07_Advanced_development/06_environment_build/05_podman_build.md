@@ -1,6 +1,6 @@
 ---
 title: 使用 Podman 编译
-sidebar_position: 1
+sidebar_position: 5
 description: 待开发
 ---
 # 使用 Podman 编译

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 06
+sidebar_position: 3
 ---
 # 7.6 Build System Development Guide
 

@@ -1,6 +1,6 @@
 ---
 title: 使用自己的模型
-sidebar_position: 1
+sidebar_position: 4
 description: 待开发
 ---
 # 使用自己的模型

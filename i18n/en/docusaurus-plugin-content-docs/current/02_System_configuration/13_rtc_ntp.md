@@ -1,6 +1,6 @@
 ---
 title: 时钟与 RTC 同步
-sidebar_position: 1
+sidebar_position: 13
 description: 待开发
 ---
 # 时钟与 RTC 同步

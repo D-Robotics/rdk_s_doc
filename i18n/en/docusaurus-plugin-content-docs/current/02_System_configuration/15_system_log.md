@@ -1,6 +1,6 @@
 ---
 title: 系统日志查看
-sidebar_position: 1
+sidebar_position: 15
 description: 待开发
 ---
 # 系统日志查看

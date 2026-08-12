@@ -1,6 +1,6 @@
 ---
 title: C/C++ demo 编程指南
-sidebar_position: 1
+sidebar_position: 2
 description: 待开发
 ---
 # C/C++ demo 编程指南

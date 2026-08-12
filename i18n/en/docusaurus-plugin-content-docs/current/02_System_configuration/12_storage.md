@@ -1,6 +1,6 @@
 ---
 title: 存储与磁盘管理
-sidebar_position: 1
+sidebar_position: 12
 description: 待开发
 ---
 # 存储与磁盘管理

@@ -11,9 +11,12 @@ const REPO = path.join(__dirname, "..");
 
 const mapFile = process.argv[2];
 if (!mapFile) {
-	console.error("usage: node scripts/apply-section-numbers.mjs <section-map.json>");
+	console.error("usage: node scripts/apply-section-numbers.mjs <section-map.json> [--root=<relpath>] [--pos-only]");
 	process.exit(1);
 }
+const rootArg = process.argv.find((a) => a.startsWith("--root="));
+const posOnly = process.argv.includes("--pos-only");
+const rootRewrite = rootArg ? rootArg.slice("--root=".length) : null;
 const map = JSON.parse(fs.readFileSync(path.resolve(mapFile), "utf8"));
 
 let touched = 0, skipped = 0;
@@ -49,12 +52,14 @@ function applyMd(full, spec) {
 	}
 	if (spec.pos !== undefined) setFmLine(fmLines, "sidebar_position", spec.pos);
 	if (spec.unlisted !== undefined) setFmLine(fmLines, "unlisted", spec.unlisted);
-	if (spec.sidebarLabel !== undefined) setFmLine(fmLines, "sidebar_label", JSON.stringify(spec.sidebarLabel));
-	if (spec.title !== undefined) setFmLine(fmLines, "title", JSON.stringify(spec.title));
-	if (spec.description !== undefined) setFmLine(fmLines, "description", JSON.stringify(spec.description));
+	if (!posOnly) {
+		if (spec.sidebarLabel !== undefined) setFmLine(fmLines, "sidebar_label", JSON.stringify(spec.sidebarLabel));
+		if (spec.title !== undefined) setFmLine(fmLines, "title", JSON.stringify(spec.title));
+		if (spec.description !== undefined) setFmLine(fmLines, "description", JSON.stringify(spec.description));
+	}
 
 	let body = content.slice(bodyStart);
-	if (spec.h1 !== undefined) {
+	if (!posOnly && spec.h1 !== undefined) {
 		// 替换 body 中第一个 "# ..." 行
 		const h1Idx = body.indexOf("\n# ");
 		if (body.startsWith("# ")) {
@@ -80,18 +85,19 @@ function applyMd(full, spec) {
 function applyCat(full, spec) {
 	const json = JSON.parse(fs.readFileSync(full, "utf8"));
 	let changed = false;
-	if (spec.catLabel !== undefined && json.label !== spec.catLabel) { json.label = spec.catLabel; changed = true; }
+	if (!posOnly && spec.catLabel !== undefined && json.label !== spec.catLabel) { json.label = spec.catLabel; changed = true; }
 	if (spec.pos !== undefined && json.position !== spec.pos) { json.position = spec.pos; changed = true; }
 	if (changed) fs.writeFileSync(full, JSON.stringify(json, null, 2) + "\n");
 	return changed;
 }
 
 for (const [rel, spec] of Object.entries(map)) {
-	const full = path.join(REPO, rel);
-	if (!fs.existsSync(full)) { console.warn(`MISS: ${rel}`); skipped++; continue; }
-	const isCat = rel.endsWith("_category_.json");
+	const mappedRel = rootRewrite && rel.startsWith("docs/") ? rootRewrite.replace(/\/$/, "") + "/" + rel.slice("docs/".length) : rel;
+	const full = path.join(REPO, mappedRel);
+	if (!fs.existsSync(full)) { console.warn(`MISS: ${mappedRel}`); skipped++; continue; }
+	const isCat = mappedRel.endsWith("_category_.json");
 	const changed = isCat ? applyCat(full, spec) : applyMd(full, spec);
-	if (changed) { console.log(`UPD  ${toRel(rel)}`); touched++; }
-	else { console.log(`skip ${toRel(rel)}`); skipped++; }
+	if (changed) { console.log(`UPD  ${toRel(mappedRel)}`); touched++; }
+	else { console.log(`skip ${toRel(mappedRel)}`); skipped++; }
 }
 console.log(`\n${touched} updated, ${skipped} skipped/missing`);

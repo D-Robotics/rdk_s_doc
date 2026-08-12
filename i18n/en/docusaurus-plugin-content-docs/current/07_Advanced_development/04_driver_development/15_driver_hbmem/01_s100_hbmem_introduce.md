@@ -1,3 +1,6 @@
+---
+sidebar_position: 1
+---
 # Function Description
 
 The Hbmem module primarily implements functions including **memory allocation**, **memory sharing**, **memory queue management**, and **memory pool**, and is specifically used to manage **system-reserved memory**.
