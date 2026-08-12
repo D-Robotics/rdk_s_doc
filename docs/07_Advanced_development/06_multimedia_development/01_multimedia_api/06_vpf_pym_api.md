@@ -83,3 +83,8 @@ int32_t vnode_get_mode(hbn_vnode_handle_t vnode_fd);
 
 见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
 
+## 相关文档
+
+- [5.5.1.5 图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
+- [5.5.1.1 基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [4.1.1.5 SYS API](/Simple_API/multimedia_api/cdev/sys_api)

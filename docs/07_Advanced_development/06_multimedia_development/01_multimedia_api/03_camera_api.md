@@ -587,3 +587,8 @@ camera init with config json file all camera and deserial config should included
 【兼容性】
 HW: Super; SW: 1.0.0
 
+## 相关文档
+
+- [5.5.1.4 视频输入输出 - VIO](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [3.1.2 摄像头使用](/Demos/peripheral/camera/mipi_camera)
+- [4.1.2.2 Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)

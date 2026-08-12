@@ -420,3 +420,9 @@ Offset = 1000000 - Period * fps + 1
 当 sensor 工作在同步出图或者未同步的状态下，此时 sensor 曝光起始时间与 LPWM 信号无关，即 CIM 的 frame start(tv) 与 LPWM trigger(trig_tv) 时间之间无关联，此时该值无参考价值，无需关注。
 
 实际使用需要确保 PPS 稳定落在低电平区域，因此可以根据实际调试情况适当调大 offset。
+
+## 相关文档
+
+- [5.5.1.5 图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
+- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)
+- [3.1.2 摄像头使用](/Demos/peripheral/camera/mipi_camera)

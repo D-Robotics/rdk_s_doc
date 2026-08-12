@@ -1017,3 +1017,8 @@ user trigger display control oneshot output
 【兼容性】
 HW: Super; SW: 0.0.1
 
+## 相关文档
+
+- [4.1.1.4 DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)
+- [4.1.2.5 Display 对象](/Simple_API/multimedia_api/pydev/object_display)
+- [3.2.1.2 采集→显示](/Demos/multimedia_demo/cdev/vio2display)

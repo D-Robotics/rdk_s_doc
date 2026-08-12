@@ -1509,3 +1509,8 @@ E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
 【兼容性】
 HW: Super; SW: 1.0.0
 
+## 相关文档
+
+- [5.5.1.1 基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [3.2.1.1 视频采集](/Demos/multimedia_demo/cdev/vio_capture)

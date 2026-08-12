@@ -393,3 +393,7 @@ Get the share_id of virtual address
 【兼容性】
 HW: XJ3/Ultra/Super; SW: 0.1.1
 
+## 相关文档
+
+- [5.5.1.1 基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)

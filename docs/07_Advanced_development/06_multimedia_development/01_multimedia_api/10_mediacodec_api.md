@@ -2163,3 +2163,8 @@ extern hb_s32 hb_mm_mc_set_status(media_codec_context_t *context, mc_user_status
 
 &gt;=0 on success, negative HB_MEDIA_ERROR in case of failure
 
+## 相关文档
+
+- [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [4.1.1.3 DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
+- [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

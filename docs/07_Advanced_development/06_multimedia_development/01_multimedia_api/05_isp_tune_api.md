@@ -642,3 +642,7 @@ less than zero: Fail，return error code；失败，返回错误码
 【兼容性】
 HW: Ultra/Super; SW: 1.0.0
 
+## 相关文档
+
+- [5.5.1.4 视频输入输出 - VIO](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [5.5.1.6 视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)
