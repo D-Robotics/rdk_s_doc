@@ -6,7 +6,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# Pinctrl 调试指南
+# 5.4.5 Pinctrl 调试指南
 
 ## Pinctrl 使用
 

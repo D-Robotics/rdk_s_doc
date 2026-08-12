@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 7.5.4 MCU1开发指南
+# 5.6.4 MCU1 开发指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

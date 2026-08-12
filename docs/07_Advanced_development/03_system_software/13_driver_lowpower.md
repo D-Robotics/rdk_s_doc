@@ -2,7 +2,7 @@
 sidebar_position: 13
 ---
 
-# 低功耗模式调试指南
+# 5.3.13 低功耗模式调试指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

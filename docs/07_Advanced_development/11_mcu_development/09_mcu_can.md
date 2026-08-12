@@ -2,7 +2,7 @@
 sidebar_position: 9
 ---
 
-# 7.5.10 CAN 使用指南
+# 5.6.10 CAN 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

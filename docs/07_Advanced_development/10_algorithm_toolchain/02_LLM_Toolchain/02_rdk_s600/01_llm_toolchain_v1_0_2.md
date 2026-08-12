@@ -3,7 +3,7 @@ sidebar_position: 1
 sidebar_products: RDK S600
 ---
 
-# 大模型工具链_v1.0.2
+# 5.7.2.2.1 大模型工具链 v1.0.2
 
 在 RDK S600 平台上，D-Robotics_LLM_S600 目前支持以下模型和功能：
 

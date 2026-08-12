@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 ---
-# ethernet
+# 5.4.13.1 Ethernet
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

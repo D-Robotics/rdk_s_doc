@@ -6,7 +6,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# 7.5.13.1 Port 使用指南
+# 5.6.13.1 Port 使用指南
 ## 基本概述
 Port 子系统是 MCU 上对 PIN 的功能和属性进行配置的子系统。
 

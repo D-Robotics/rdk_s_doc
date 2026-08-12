@@ -1,8 +1,8 @@
 ---
-sidebar_position: 8
+sidebar_position: 10
 ---
 
-# DDR 带宽测试
+# 5.4.18.10 DDR 带宽测试
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

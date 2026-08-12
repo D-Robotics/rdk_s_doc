@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 7.1.2 配件清单
+# 5.1.2 配件清单
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

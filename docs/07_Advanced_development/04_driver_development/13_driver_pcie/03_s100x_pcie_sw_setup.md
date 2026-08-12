@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 ---
-# PCIe 模块功能在 kernel 下的配置
+# 5.4.10.3 PCIe 模块功能在 kernel 下的配置
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

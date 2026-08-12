@@ -88,7 +88,7 @@ DEVICE_MODULES="hobot"
 ```shell
 sudo systemctl start ethercat
 sudo systemctl status ethercat
-# 或者
+# 5.4.13.2 EtherCAT
 sudo ethercatctl start
 sudo ethercatctl status
 ```

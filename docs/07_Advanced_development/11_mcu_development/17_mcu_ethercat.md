@@ -2,7 +2,7 @@
 sidebar_position: 17
 ---
 
-# 7.5.18 EtherCAT 用户手册
+# 5.6.18 EtherCAT 用户手册
 
 ```mdx-code-block
 

@@ -3,7 +3,7 @@ sidebar_position: 1
 sidebar_products: RDK S100
 ---
 
-# 7.4.2.1 RDK S100 LLM 工具链
+# 5.7.2.1 RDK S100 LLM 工具链
 
 ## RDK S100 1.0.0 大模型工具链
 

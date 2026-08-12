@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 7.5.2 MCU 快速入门指南
+# 5.6.2 MCU 快速入门指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

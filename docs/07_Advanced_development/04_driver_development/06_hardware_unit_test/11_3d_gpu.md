@@ -1,8 +1,8 @@
 ---
-sidebar_position: 10
+sidebar_position: 12
 ---
 
-# 3D GPU 性能测试
+# 5.4.18.12 3D GPU 性能测试
 
 ## 测试原理
 3D GPU 性能测试主要用于评估 GPU 在不同计算任务和渲染任务下的性能。针对 GPU 的不同应用场景，常见的测试可分为：

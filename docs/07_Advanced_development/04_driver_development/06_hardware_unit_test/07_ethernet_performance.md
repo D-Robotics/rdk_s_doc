@@ -1,8 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 8
 ---
 
-# 以太网性能测试
+# 5.4.18.8 以太网性能测试
 
 本章旨在指导如何使用 `iperf3` 工具进行以太网性能测试。可以查阅 [iperf3](https://iperf.fr/iperf-doc.php#3docd) 了解该命令的详细使用说明。
 

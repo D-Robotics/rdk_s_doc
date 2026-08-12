@@ -1,4 +1,7 @@
-# 硬件信息
+---
+sidebar_position: 2
+---
+# 5.4.12.2 硬件信息
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

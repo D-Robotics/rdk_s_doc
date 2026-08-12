@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 配置 U-Boot 和 Kernel 选项参数
+# 5.4.1 配置 U-Boot 和 Kernel 选项参数
 
 
 在系统软件开发中，经常需要对 u-boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。

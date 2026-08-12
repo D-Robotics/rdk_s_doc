@@ -1,12 +1,12 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# 7.5.13.2 Port 开发指南
+# 5.6.13.2 Port 开发指南
 ## 基本概述
 Port 整体分为对外接口和"Low Level Driver(LLD)"两大部分，这里只介绍用户接口开发部分。
 

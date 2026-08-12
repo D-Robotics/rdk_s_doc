@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+sidebar_position: 4
 ---
 
-# eMMC 压力测试
+# 5.4.18.4 eMMC 压力测试
 
 ## 测试原理
 

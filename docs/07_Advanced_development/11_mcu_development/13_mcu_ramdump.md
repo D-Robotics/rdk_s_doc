@@ -2,7 +2,7 @@
 sidebar_position: 13
 ---
 
-# 7.5.14 MCU ramdump 功能
+# 5.6.14 MCU ramdump 功能
 
 :::warning
 目前 MCU0/MCU1的 Crash 信息共享一块内存。MCU0/MCU1**同时**出现异常的情况下，MCU ramdump 功能保存的信息不可用。

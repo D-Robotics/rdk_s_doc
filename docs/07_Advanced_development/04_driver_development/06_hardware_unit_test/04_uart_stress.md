@@ -1,8 +1,8 @@
 ---
-sidebar_position: 3
+sidebar_position: 5
 ---
 
-# 串口压力测试
+# 5.4.18.5 串口压力测试
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# miniboot 升级
+# 5.3.7 miniboot 升级
 
 :::note
 - 此升级方式仅适用于**非 OTA** 镜像下的在线 miniboot 更新；OTA 镜像请走 [系统 OTA 升级](./06_ota_system.md) 的完整流程。

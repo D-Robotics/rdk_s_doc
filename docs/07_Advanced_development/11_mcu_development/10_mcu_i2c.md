@@ -2,7 +2,7 @@
 sidebar_position: 10
 ---
 
-# 7.5.11 I2C 使用指南
+# 5.6.11 I2C 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

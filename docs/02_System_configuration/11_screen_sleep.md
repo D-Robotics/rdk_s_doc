@@ -47,7 +47,7 @@ echo 0 > /sys/class/graphics/fb0/blank        # 或 setterm --blank 0
 
 ## 功耗与散热
 
-Thermal 与 CPU 频率策略见 [Thermal 和 CPU 频率管理](./08_frequency_management.md)；低功耗模式见进阶 [低功耗模式调试指南](../07_Advanced_development/03_system_software/10_driver_lowpower.md)。
+Thermal 与 CPU 频率策略见 [Thermal 和 CPU 频率管理](./08_frequency_management.md)；低功耗模式见进阶 [低功耗模式调试指南](../07_Advanced_development/03_system_software/13_driver_lowpower.md)。
 
 ## 常见问题
 

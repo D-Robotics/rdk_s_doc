@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 7.5.5 UART 使用指南
+# 5.6.5 UART 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

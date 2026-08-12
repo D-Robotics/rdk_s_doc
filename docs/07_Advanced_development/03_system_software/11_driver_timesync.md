@@ -2,7 +2,7 @@
 sidebar_position: 11
 ---
 
-# 时间同步方案
+# 5.3.11 时间同步方案
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -784,7 +784,7 @@ MCU 侧 timesync sample 代码位于工程目录：``{mcu_dir}/mcu/Service/TimeS
 
 #### 编译环境
 
-MCU 侧本 sample 的编译环境使用 MCU 代码中的 build 工具，请参考：[MCU编译](../11_mcu_development/01_basic_information.md#开发环境)。
+MCU 侧本 sample 的编译环境使用 MCU 代码中的 build 工具，请参考：[MCU编译](/Advanced_development/mcu_development/basic_information#开发环境)。
 
 编译 FreeRtos 镜像版本。注意
 

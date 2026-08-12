@@ -1,8 +1,8 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
 ---
 
-# CPU-BPU-DDR 压力测试
+# 5.4.18.3 CPU-BPU-DDR 压力测试
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

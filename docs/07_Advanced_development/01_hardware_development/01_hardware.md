@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 7.1.1 硬件资料
+# 5.1.1 硬件资料
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

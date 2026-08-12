@@ -2,7 +2,7 @@
 sidebar_position: 0
 ---
 
-# 7.5.1 MCU 代码包结构介绍
+# 5.6.1 MCU 代码包结构介绍
 
 :::info
 MCU0固件编译/McalCdd/Service/Platform 等代码为企业版专有，如有需要，请联系[D-Robotics](mailto:developer@d-robotics.cc)获取支持。

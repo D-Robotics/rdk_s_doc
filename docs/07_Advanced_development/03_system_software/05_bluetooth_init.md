@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 7.2.9 蓝牙初始化说明
+# 5.3.5 蓝牙初始化说明
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope'

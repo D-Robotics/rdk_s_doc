@@ -1,4 +1,7 @@
-# debug 信息
+---
+sidebar_position: 4
+---
+# 5.4.12.4 debug 信息
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

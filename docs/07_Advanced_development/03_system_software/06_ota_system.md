@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# 系统 OTA 升级
+# 5.3.6 系统 OTA 升级
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

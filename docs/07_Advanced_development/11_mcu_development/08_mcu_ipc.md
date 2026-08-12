@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# 7.5.9 IPC 使用指南
+# 5.6.9 IPC 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-此章节着重说明 MCU 侧的相关使用说明，更多的 IPC 的原理和使用可以查阅 [IPC模块介绍](../03_system_software/06_driver_ipc.md) 章节。
+此章节着重说明 MCU 侧的相关使用说明，更多的 IPC 的原理和使用可以查阅 [IPC模块介绍](../03_system_software/12_driver_ipc.md) 章节。
 
 ## 使用限制说明
 
@@ -125,7 +125,7 @@ IpcBox 基于 MCU 侧的 IPC 通信框架增加的应用扩展，用于管理外
 
 
 :::tip
-配套的 Acore 侧应用见[IPC模块介绍](../03_system_software/06_driver_ipc.md#IPC_APP) 章节。
+配套的 Acore 侧应用见[IPC模块介绍](../03_system_software/12_driver_ipc.md#IPC_APP) 章节。
 
 <DocScope products="RDK S100">
 

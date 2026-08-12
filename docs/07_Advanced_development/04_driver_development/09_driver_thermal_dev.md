@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# Thermal 系统
+# 5.4.8 Thermal 系统
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

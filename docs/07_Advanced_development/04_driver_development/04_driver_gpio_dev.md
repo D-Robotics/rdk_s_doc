@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# GPIO 使用
+# 5.4.4 GPIO 使用
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

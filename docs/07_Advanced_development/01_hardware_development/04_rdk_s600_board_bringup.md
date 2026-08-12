@@ -1,9 +1,9 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 sidebar_products: RDK S600
 ---
 
-# 7.1.3 RDK S600 硬件 bringup
+# 5.1.4 RDK S600 硬件 bringup
 
 S600 boardid 由 ADC0、ADC1、ADC2、ADC4、ADC5、ADC6共同作用，其中 ADC0、 ADC1和ADC2用于地瓜硬件区分，客户不可更改；ADC4用于module底板区分，ADC5用于底板版本区分，ADC4和ADC5用户可以更改；ADC6为预留状态，强制为0x1。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
 

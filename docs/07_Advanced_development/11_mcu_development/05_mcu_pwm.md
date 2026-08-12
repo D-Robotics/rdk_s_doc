@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 7.5.6 PWM 使用指南
+# 5.6.6 PWM 使用指南
 
 
 ```mdx-code-block
