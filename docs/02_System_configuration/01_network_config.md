@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "2.1 网络配置"
+description: RDK S100/S600 有线/无线网络配置、DNS、Proxy，默认账号与 IP 权威定义
 ---
 
 # 2.1 网络配置
@@ -401,6 +403,13 @@ Controller F0:68:E3:22:7E:91 ubuntu [default]
 - 配对命令：`pair [targetMAC] `，输入该命令后，根据提示输入`yes`，对端蓝牙设备选择`配对`选项完成配对。
 
 - 配对成功后可以使用`trust [targetMAC]`来让下次自动连接
+
+> 蓝牙配置详见 [2.2 蓝牙配置](./02_bluetooth_config.md)。
+
+## 相关文档
+
+- [2.2 蓝牙配置](./02_bluetooth_config.md)
+- [1.3.4 远程登录](../01_Quick_start/03_install_os_and_setup/remote_login.md)
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png" alt="bluetoothctl pair和trust命令完成蓝牙配对与信任" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
