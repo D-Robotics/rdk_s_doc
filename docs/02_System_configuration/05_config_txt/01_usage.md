@@ -1,6 +1,5 @@
 ---
-sidebar_position: 1
----
+sidebar_position: 1---
 
 # 2.5.1 config.txt 使用指南
 :::warning

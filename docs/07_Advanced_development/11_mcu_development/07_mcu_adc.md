@@ -1,6 +1,5 @@
 ---
-sidebar_position: 7
----
+sidebar_position: 7---
 
 # 5.6.8 ADC 使用指南
 

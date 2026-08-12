@@ -1,7 +1,6 @@
 ---
 sidebar_position: 3
-title: "5.3.3 Log 使用指南"
----
+title: "5.3.3 Log 使用指南"---
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

@@ -1,6 +1,5 @@
 ---
-sidebar_position: 2
----
+sidebar_position: 2---
 
 # 5.6.3 MCU 系统说明
 

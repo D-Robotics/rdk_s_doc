@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
----
+sidebar_position: 3---
 
 # 4.1.2.3 Encoder 对象
 

@@ -1,6 +1,5 @@
 ---
-sidebar_position: 2
----
+sidebar_position: 2---
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

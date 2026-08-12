@@ -1,6 +1,5 @@
 ---
-sidebar_position: 4
----
+sidebar_position: 4---
 # 5.4.12.4 debug 信息
 
 ```mdx-code-block

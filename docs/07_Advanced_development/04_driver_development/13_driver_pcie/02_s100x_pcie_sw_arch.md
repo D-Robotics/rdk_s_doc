@@ -1,6 +1,5 @@
 ---
-sidebar_position: 2
----
+sidebar_position: 2---
 # 5.4.10.2 PCIe 软件架构与模块划分
 
 ## 软件框架

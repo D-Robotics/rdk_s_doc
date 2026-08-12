@@ -1,6 +1,5 @@
 ---
-sidebar_position: 10
----
+sidebar_position: 10---
 
 # 5.6.11 I2C 使用指南
 

@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
----
+sidebar_position: 3---
 
 # 6.3 应用开发、编译与示例
 

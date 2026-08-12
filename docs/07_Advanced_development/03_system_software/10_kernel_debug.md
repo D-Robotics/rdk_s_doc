@@ -1,6 +1,5 @@
 ---
-sidebar_position: 10
----
+sidebar_position: 10---
 
 # 5.3.10 Linux 调试功能介绍
 

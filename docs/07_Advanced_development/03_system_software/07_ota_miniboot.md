@@ -1,6 +1,5 @@
 ---
-sidebar_position: 7
----
+sidebar_position: 7---
 
 # 5.3.7 miniboot 升级
 

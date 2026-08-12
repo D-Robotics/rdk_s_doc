@@ -1,6 +1,5 @@
 ---
-sidebar_position: 2
----
+sidebar_position: 2---
 
 # 4.1.1.2 ENCODER（编码模块）API
 

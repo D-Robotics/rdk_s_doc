@@ -1,6 +1,5 @@
 ---
-sidebar_position: 2
----
+sidebar_position: 2---
 
 # 5.4.2 UART 驱动调试指南
 

@@ -1,6 +1,5 @@
 ---
-sidebar_position: 6
----
+sidebar_position: 6---
 
 # 5.6.7 SPI 使用指南
 

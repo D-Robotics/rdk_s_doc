@@ -1,6 +1,5 @@
 ---
-sidebar_position: 10
----
+sidebar_position: 10---
 
 # 5.4.18.10 DDR 带宽测试
 

@@ -1,8 +1,8 @@
 ---
 sidebar_position: 6
 title: "2.6 GUI 界面配置网络流程"
-unlisted: true
----
+description: 2.6 GUI 界面配置网络流程
+unlisted: true---
 
 # 2.6 GUI 界面配置网络流程
 

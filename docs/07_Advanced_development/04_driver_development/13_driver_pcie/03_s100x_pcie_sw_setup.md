@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
----
+sidebar_position: 3---
 # 5.4.10.3 PCIe 模块功能在 kernel 下的配置
 
 ```mdx-code-block

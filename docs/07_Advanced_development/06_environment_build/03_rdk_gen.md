@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
----
+sidebar_position: 3---
 # 5.1.3 构建系统开发指南
 
 ```mdx-code-block

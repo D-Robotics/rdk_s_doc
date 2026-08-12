@@ -1,6 +1,5 @@
 ---
-sidebar_position: 8
----
+sidebar_position: 8---
 
 # 2.8 Thermal 和 CPU 频率管理
 

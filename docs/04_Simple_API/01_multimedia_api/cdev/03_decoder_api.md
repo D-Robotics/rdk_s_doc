@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
----
+sidebar_position: 3---
 
 # 4.1.1.3 DECODER（解码模块）API
 

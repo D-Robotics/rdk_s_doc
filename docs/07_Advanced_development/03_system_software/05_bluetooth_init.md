@@ -1,6 +1,5 @@
 ---
-sidebar_position: 5
----
+sidebar_position: 5---
 
 # 5.3.5 蓝牙初始化说明
 

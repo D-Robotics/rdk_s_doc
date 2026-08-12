@@ -1,6 +1,5 @@
 ---
-sidebar_position: 9
----
+sidebar_position: 9---
 
 # 5.6.10 CAN 使用指南
 

@@ -1,6 +1,5 @@
 ---
-sidebar_position: 11
----
+sidebar_position: 11---
 # 5.4.11 Wi-Fi 驱动调试指南
 
 <DocScope products="RDK S100">

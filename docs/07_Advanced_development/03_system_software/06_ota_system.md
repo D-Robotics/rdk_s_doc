@@ -1,6 +1,5 @@
 ---
-sidebar_position: 6
----
+sidebar_position: 6---
 
 # 5.3.6 系统 OTA 升级
 

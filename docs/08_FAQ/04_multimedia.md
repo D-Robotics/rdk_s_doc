@@ -1,6 +1,5 @@
 ---
-sidebar_position: 4
----
+sidebar_position: 4---
 
 # 6.4 多媒体处理与应用
 

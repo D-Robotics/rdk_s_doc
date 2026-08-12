@@ -1,6 +1,5 @@
 ---
-sidebar_position: 4
----
+sidebar_position: 4---
 
 # 4.1.1.4 DISPLAY（显示模块）API
 

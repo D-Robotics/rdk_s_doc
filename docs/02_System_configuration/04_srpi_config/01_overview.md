@@ -1,7 +1,6 @@
 ---
 sidebar_position: 1
-title: "2.4 srpi-config 工具配置"
----
+title: "2.4 srpi-config 工具配置"---
 
 # 2.4 srpi-config 工具配置
 
