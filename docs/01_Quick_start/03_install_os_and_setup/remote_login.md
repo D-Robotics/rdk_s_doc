@@ -1,10 +1,10 @@
 ---
-title: 远程登录
-sidebar_position: 4
+title: "1.3.4 远程登录"
+sidebar_position: 5
 description: 通过 SSH/串口/NoMachine 远程登录开发板的方法与默认账户
 ---
 
-# 1.4 远程登录
+# 1.3.4 远程登录
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

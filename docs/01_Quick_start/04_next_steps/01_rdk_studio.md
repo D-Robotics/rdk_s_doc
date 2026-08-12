@@ -1,8 +1,8 @@
 ---
-sidebar_position: 9
+sidebar_position: 1
 ---
 
-# 1.9 RDK Studio 使用指南
+# 1.4.1 使用 RDK Studio
 
 :::warning 升级说明
 

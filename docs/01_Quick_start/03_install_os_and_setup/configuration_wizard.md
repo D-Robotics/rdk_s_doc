@@ -1,10 +1,10 @@
 ---
-sidebar_position: 1
-title: 入门配置
+sidebar_position: 4
+title: "1.3.3 入门配置"
 description: RDK S100/S600 入门配置：账户、Wi-Fi、SSH、中文环境、RDK Studio、NoMachine
 ---
 
-# 入门配置
+# 1.3.3 入门配置
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

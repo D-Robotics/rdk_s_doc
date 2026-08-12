@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 1.1.2.2 RDK S100 相机扩展板 12 通道
+# 1.1.2.1 RDK S100 相机扩展板 12 通道
 
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board_12l.png" alt="RDK S100 相机扩展板 12 通道" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
