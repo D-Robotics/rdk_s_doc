@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 12
 ---
 
 # 多路 Camera 及与 Lidar 同步
@@ -37,7 +37,7 @@ S100的 Camera 同步功能的主体实现依赖 LPWM 模块，其支持 S100多
 
 - LPWM 的扩展功能: 缓慢同步 threshold，adjust\_step 配置。
 
-关于 LPWM 模块的功能及使用，更多可参考: [LPWM使用](./01_camsys.md#lpwm)
+关于 LPWM 模块的功能及使用，更多可参考: [LPWM使用](#lpwm)
 
 ### LPWM 同步源
 
@@ -354,3 +354,69 @@ S100上多 Camera 同步主要通过 LPWM 模块的硬件连接与软件配置�
 在模组点亮配置时，也需进行 SerDes 上的 LPWM 同步透传，同时 Sensor 配置为 Slave 模式，选择相应的 GPIO 作为 FSYNC 信号，实现同步触发输出。
 
 在与 Lidar 设备同步场景，使用 ETH PPS0同步源，使用 fixed mode，需要正确计算并配置 LPWM 的 offset，以达到完全相位对齐的要求。
+
+## LPWM
+### LPWM 简述
+
+LPWM 为类似 PWM 的信号源，一般用于 camsys 系统中触发 sensor 曝光。LPWM 本身也需要外界触发，在收到 trigger 信号后，按照所配置的 period, high-time, offset 等参数输出 1Hz ~ 500KHz，有效高电平 0us ~ 4095us，默认精度为 1us 的方波。
+
+S100 总共有 3 个 LPWM chip，每个 LPWM chip 下面有 4 个 LPWM 通道，请根据实际的硬件连接使用配置。
+
+S100 的 camera 硬件同步功能的主体实现依赖 LPWM 模块，其支持 S100 多种 trigger 信号源，并产生多通道的可配置 PWM 信号，输出给外部 camera 使用(可经 SerDes 转发)，从而实现 trigger 源与 camera 的同步及所有多 camera 之间的同步。
+
+### LPWM 配置项说明
+
+1. trigger_mode [0, 1]：LPWM 触发方式，0 为内部软件触发，1 为外部触发。
+
+2. trigger_source [0, 10]：LPWM 触发源，使用外部触发源需将 trigger_mode 设置为1。一般场景下使用 0，触发周期默认为1s。
+
+| trigger_source 的值 | 对应的触发源 |
+|-------------------|-------------|
+| 0                 |  aon_rtc_pps |
+| 1                 |  reserve |
+| 2                 |  pps0 |
+| 3                 |  pps1 |
+| 4                 |  pps2 |
+| 5                 |  reserve |
+| 6                 |  pcie0_ptm_pps |
+| 7                 |  pcie1_ptm_pps |
+| 8                 |  acore_eth0_pps |
+| 9                 |  acore_eth1_pps |
+| 10                |  mcu_eth_pps |
+
+3. period [2, 1000000)us：LPWM 输出的方波周期。
+4. offset [0, 1000000)us：LPWM 在每个 trigger 周期内第一个波形的偏移时间，需要小于 period 值。
+5. duty_time [0, 4096)us：LPWM 输出波形的有效高电平时间，需要小于 period 值。
+6. threshold [0, 65535]us：缓慢同步功能阈值，高阶功能，一般可忽略。
+7. adjust_step [0, 15]：每次的调整时间 adjust_time = 2^adjust_step，高阶功能，一般可忽略。
+
+### LPWM 配置计算说明
+
+LPWM 的 trigger 源为 PPS，常用周期为 1s，在收到 trigger 信号后，首先进行一个 offset 的时间偏移，接着会输出连续方波，方波的周期以及有效电平的时间由配置所得，当下一个 trigger 信号到来，会重复偏移以及出波。
+
+offset 设置依赖于 sensor fps，如果 fps 不能被 1s 整除，则需要设置 offset，反之 offset 设置为 0。
+
+常见场景如接入30fps sensor，period 应设置为 1s/fps = 33333us。sensor 在跑完 30 帧经过 999,990us，与下次 PPS trigger 会有 10us 的间隙，因此 offset 应设为 10us（至少10us，至多（period - duty_time us，为了稳妥，建议在计算出的 offset 基础上再加 1），否则 lpwm 会在1s 内发出 31 个方波）。
+
+由于硬件或者外设差异，PPS 落在了高电平区域，若关闭缓慢同步功能或者缓慢同步成功后需要走完高电平区域才能进入下一个 trigger 周期，即重新计算 offset，此时可能存在 trigger 周期内 LPWM 波形未达到预期数量，导致曝光同步下 sensor 帧率不符合预期，可将 offset 适当增加保证 PPS 每次一定落在低电平区域，输出预期的波形。
+
+```
+Period = 1000000 / fps
+Offset = 1000000 - Period * fps + 1
+```
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/lpwm_01.png" alt="LPWM示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+推荐使用配置
+| 使用场景 | trigger_source | trigger_mode | duty_time | offset | period |
+|---------|----------------|--------------|-----------|--------|---------|
+| 全30fps |  8(eth0)/9(eth1) | 1          |  100      |   11   |   33333 |
+| 全25fps |  8(eth0)/9(eth1) | 1          |  100      |   11   |   40000 |
+| 12.5/25fps |  8(eth0)/9(eth1) | 1          |  100      |   11   |   80000/40000 |
+| 30/10fps |  8(eth0)/9(eth1) | 1          |  100      |   11   |   33333/100000 |
+
+### 其他说明
+当使能 MCU 的 RTC 功能时，CIM 硬件会自动锁存 LPWM trigger 信号对应的时间戳，软件会将该时间与 global_time 同步后提供给用户。当 sensor 工作在曝光同步模式下，此时间戳代表 sensor 触发曝光开始的时间。
+
+当 sensor 工作在同步出图或者未同步的状态下，此时 sensor 曝光起始时间与 LPWM 信号无关，即 CIM 的 frame start(tv) 与 LPWM trigger(trig_tv) 时间之间无关联，此时该值无参考价值，无需关注。
+
+实际使用需要确保 PPS 稳定落在低电平区域，因此可以根据实际调试情况适当调大 offset。

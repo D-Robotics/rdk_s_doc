@@ -3,7 +3,7 @@ sidebar_position: 1
 sidebar_products: RDK S100
 ---
 
-# 5.2.1 RDK S100 硬件 bringup
+# 5.2.1 RDK S100 硬件点亮
 
 S100 boardid 由 ADC0、ADC1、ADC3和 ADC4共同作用，其中 ADC0和 ADC1用于地瓜硬件区分，客户不可更改；ADC3用于识别 Acore 外设上电时序，客户可自定义 Acore 外设上电时序，并同时修改 ADC3的分压电阻；ADC4用于识别硬件版本。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
 
