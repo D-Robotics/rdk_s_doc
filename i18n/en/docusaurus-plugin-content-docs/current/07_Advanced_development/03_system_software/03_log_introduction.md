@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 3
 title: "7.2.8 Log User Guide"
 ---
 

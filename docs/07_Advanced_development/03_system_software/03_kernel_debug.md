@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 10
 ---
 
 # 7.2.7 Linux 调试功能介绍

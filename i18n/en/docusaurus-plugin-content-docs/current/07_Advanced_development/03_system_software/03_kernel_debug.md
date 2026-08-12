@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 10
 ---
 
 # 7.2.7 Introduction to Linux Debugging Features

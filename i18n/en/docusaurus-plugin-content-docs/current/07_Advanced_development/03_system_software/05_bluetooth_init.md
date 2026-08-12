@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 5
 ---
 
 # 7.2.9 Bluetooth Initialization Guide

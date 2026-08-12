@@ -1,5 +1,5 @@
 ---
-sidebar_position: 14
+sidebar_position: 11
 ---
 # Wi-Fi 驱动调试指南
 

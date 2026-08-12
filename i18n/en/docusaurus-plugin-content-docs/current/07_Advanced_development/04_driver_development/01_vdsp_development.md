@@ -1,5 +1,5 @@
 ---
-sidebar_position: 07
+sidebar_position: 17
 ---
 
 # 7.7 VDSP Development Guide

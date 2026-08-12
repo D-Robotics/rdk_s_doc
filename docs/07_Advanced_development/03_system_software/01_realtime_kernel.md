@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 8
 ---
 
 # 7.2.3 应用实时内核

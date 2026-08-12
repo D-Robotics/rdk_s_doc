@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 4
 ---
 
 # 7.2.8 USB Gadget 使用指南
