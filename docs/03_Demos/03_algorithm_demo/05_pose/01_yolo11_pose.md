@@ -1,6 +1,6 @@
 ---
 title: 姿态估计-Ultralytics YOLO11 (C/C++)
-sidebar_position: 2
+sidebar_position: 1
 description: 用 C/C++ 部署 YOLO11 做人体姿态估计的预装示例
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: 图像分类-MobileNetV2 (Python)
-sidebar_position: 2
+sidebar_position: 4
 description: 用 hbm_runtime Python 接口部署 MobileNetV2 做图像分类的预装示例
 ---
 

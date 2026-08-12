@@ -1,6 +1,6 @@
 ---
 title: RTSP 视频拉流及 YOLOv5x 推理 (Python)
-sidebar_position: 3
+sidebar_position: 7
 description: 从 RTSP 流取帧做 YOLOv5x 实时检测推理
 ---
 

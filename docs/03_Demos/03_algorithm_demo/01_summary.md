@@ -1,5 +1,5 @@
 ---
-title: 算法示例概述
+title: "3.3.1 算法示例概述"
 sidebar_position: 1
 description: 第3章算法示例的组织方式与运行入口
 ---

@@ -1,5 +1,5 @@
 ---
-title: C/C++ demo 编程指南
+title: "3.4.2 C/C++ demo 编程指南"
 sidebar_position: 2
 description: 板端编译 C/C++ demo 的方法（cmake/make）
 ---

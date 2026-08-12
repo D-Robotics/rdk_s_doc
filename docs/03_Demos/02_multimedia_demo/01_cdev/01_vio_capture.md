@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 ---
 
-# 3.4.2 参考示例（C++）
+# 3.2.1.1 视频采集
 
 ```
 import DocScope from '@site/src/components/DocScope';

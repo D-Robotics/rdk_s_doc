@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 3.1.1 MIPI 摄像头使用
+# MIPI 摄像头使用
 
 开发板上安装了`mipi_camera_streamer.py`程序用于测试 MIPI 摄像头的数据通路，该示例会实时采集 MIPI 摄像头的图像数据，把图像数据通过 HDMI 接口输出。
 

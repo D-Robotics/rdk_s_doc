@@ -1,6 +1,6 @@
 ---
 title: 自动语音识别-ASR (C/C++)
-sidebar_position: 2
+sidebar_position: 1
 description: 用 C/C++ 部署 ASR 模型做语音转文字的预装示例
 ---
 

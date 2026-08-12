@@ -1,6 +1,6 @@
 ---
 title: 姿态估计-Ultralytics YOLO11 (Python)
-sidebar_position: 1
+sidebar_position: 2
 description: 用 hbm_runtime Python 接口部署 YOLO11 做人体姿态估计的预装示例
 ---
 

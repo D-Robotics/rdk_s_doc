@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 3.3.2.3 串口应用
+# 串口应用
 
 
 RDK S600 在 自锁10-PIN 支持 UART6 UART7，IO 电压 3.3V。

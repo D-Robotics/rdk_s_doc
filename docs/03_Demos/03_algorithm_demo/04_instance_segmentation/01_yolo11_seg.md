@@ -1,6 +1,6 @@
 ---
 title: 实例分割-Ultralytics YOLO11 (C/C++)
-sidebar_position: 2
+sidebar_position: 1
 description: 用 C/C++ 部署 YOLO11 做实例分割的预装示例
 ---
 

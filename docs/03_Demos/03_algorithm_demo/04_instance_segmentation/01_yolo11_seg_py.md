@@ -1,6 +1,6 @@
 ---
 title: 实例分割-Ultralytics YOLO11 (Python)
-sidebar_position: 1
+sidebar_position: 3
 description: 用 hbm_runtime Python 接口部署 YOLO11 做实例分割的预装示例
 ---
 

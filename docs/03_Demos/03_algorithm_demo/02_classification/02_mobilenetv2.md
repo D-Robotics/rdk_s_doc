@@ -1,6 +1,6 @@
 ---
 title: 图像分类-MobileNetV2 (C/C++)
-sidebar_position: 4
+sidebar_position: 2
 description: 用 C/C++ 部署 MobileNetV2 做图像分类的预装示例
 ---
 

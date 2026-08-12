@@ -1,6 +1,6 @@
 ---
 title: 目标检测-Ultralytics YOLO11 (Python)
-sidebar_position: 2
+sidebar_position: 4
 description: 用 hbm_runtime Python 接口部署 YOLO11 做目标检测的预装示例
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: 自动语音识别-ASR (Python)
-sidebar_position: 1
+sidebar_position: 2
 description: 用 hbm_runtime Python 接口部署 ASR 模型做语音转文字的预装示例
 ---
 

@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 3.3.2.4 SPI 应用
+# SPI 应用
 
 RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选，IO 电压 1.8V；
 

@@ -1,6 +1,6 @@
 ---
 title: WebSocket YOLOv5x 推理 (Python)
-sidebar_position: 4
+sidebar_position: 8
 description: 通过 WebSocket 推送 YOLOv5x 检测结果供浏览器查看
 ---
 
