@@ -1,0 +1,9 @@
+{
+  "label": "5.2 硬件点亮指引",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "slug": "/Advanced_development/board_bringup",
+    "description": "硬件点亮指引"
+  }
+}

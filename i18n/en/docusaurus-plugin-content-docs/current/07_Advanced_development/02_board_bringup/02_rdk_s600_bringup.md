@@ -1,9 +1,9 @@
 ---
-sidebar_position: 4
+sidebar_position: 2
 sidebar_products: RDK S600
 ---
 
-# 7.1.3 RDK S600 Hardware Bringup
+# 5.2.2 RDK S600 Hardware Bringup
 
 The S600 boardid is determined by the combined effect of ADC0, ADC1, ADC2, ADC4, ADC5, and ADC6. Among them, ADC0, ADC1, and ADC2 are used for D-Robotics hardware differentiation and cannot be modified by customers. ADC4 is used to differentiate the module底板, ADC5 is used to differentiate the底板 version, and ADC4 and ADC5 can be modified by users. ADC6 is reserved and forced to be 0x1. For details on how to set the voltage divider resistors for the ADC, please contact the D-Robotics FAE team for support.
 

@@ -18,7 +18,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-认证配件及购买链接请参考[RDK S100 认证配件清单](/Advanced_development/hardware_development/accessory)
+认证配件及购买链接请参考[RDK S100 认证配件清单](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
 
 </DocScope>
 

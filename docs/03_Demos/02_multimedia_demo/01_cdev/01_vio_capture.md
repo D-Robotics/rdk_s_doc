@@ -86,7 +86,7 @@ import DocScope from '@site/src/components/DocScope';
 
   参数说明：
 
-  - -b: RAW 图 bit 数，例如 IMX219支持格式为 RAW10，则 bit 数为10。sensor 支持格式可参考[配件清单](../../../07_Advanced_development/01_hardware_development/02_accessory.md)
+  - -b: RAW 图 bit 数，例如 IMX219支持格式为 RAW10，则 bit 数为10。sensor 支持格式可参考[配件清单](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
   - -c: 保存图像的数量，获取到每张图像的时间间隔一般为1/fps
   - -w: 保存图像的宽度
   - -h: 保存图像的高度

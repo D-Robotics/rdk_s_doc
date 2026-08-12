@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 5.2.1 开发环境搭建及编译说明
+# 5.1.1 开发环境搭建及编译说明
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope'
