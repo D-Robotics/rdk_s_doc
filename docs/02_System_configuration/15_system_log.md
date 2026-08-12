@@ -78,5 +78,5 @@ TriggeredBy: ● ssh.socket
 
 - [开机自启动配置](./06_self_start.md)
 - [存储与磁盘管理](./12_storage.md)
-- [Linux 命令：dmesg](../09_Appendix/linux-command-manual/dmesg.md)
-- [Linux 命令：systemctl 相关](../09_Appendix/linux-command-manual/ps.md)
+- [Linux 命令：dmesg](../09_Appendix/linux-command-manual/02_dmesg.md)
+- [Linux 命令：systemctl 相关](../09_Appendix/linux-command-manual/12_ps.md)

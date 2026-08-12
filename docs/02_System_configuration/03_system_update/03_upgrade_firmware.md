@@ -17,8 +17,8 @@ RDK OS 的升级分两类：**包级更新**（`apt upgrade`，见 [软件包管
 RDK OS 跨大版本（如 5.0.x → 5.1.x）**不能靠 `apt` 升级**，须重新烧录目标版本的镜像：
 
 1. 备份板端自定义配置（`/etc`、`/opt` 下私有内容）。
-2. 下载目标版本镜像（见 [镜像下载](../../01_Quick_start/03_install_os_and_setup/rdk_s600/01_instruction.md)）。
-3. 按 [烧录步骤](../../01_Quick_start/03_install_os_and_setup/rdk_s600/02_burn/01_burn.md) 烧录新镜像。
+2. 下载目标版本镜像（见 [镜像下载](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)）。
+3. 按 [烧录步骤](../../01_Quick_start/03_install_os_and_setup/02_burn.md) 烧录新镜像。
 4. 烧后用 [系统状态查询](../../01_Quick_start/03_install_os_and_setup/system_status.md) 确认版本。
 
 :::warning
@@ -50,5 +50,5 @@ RDK OS 跨大版本（如 5.0.x → 5.1.x）**不能靠 `apt` 升级**，须重�
 
 - [软件包管理 apt](./02_apt_usage.md)
 - [RDK OS 介绍](./01_rdk_os_intro.md)
-- [烧录步骤（S600）](../../01_Quick_start/03_install_os_and_setup/rdk_s600/02_burn/01_burn.md)
+- [烧录步骤](../../01_Quick_start/03_install_os_and_setup/02_burn.md)
 - [系统 OTA 升级（进阶）](../../07_Advanced_development/03_system_software/06_ota_system.md)

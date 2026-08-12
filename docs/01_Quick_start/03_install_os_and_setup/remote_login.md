@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并完成启动（见 [1.3 烧录系统与配置](./rdk_s100/01_instruction.md)）。
+- 开发板已烧录 RDK OS 并完成启动（见 [1.3 烧录系统与配置](./01_instruction.md)）。
 - 远程登录前需先确认开发板网络可达：板端 `eth1` 默认静态 IP `192.168.127.10`，或通过 Wi-Fi（`wlan0`）由路由器分配 IP（可用 `ifconfig` 或 `ip addr` 查看）。
 - PC 与开发板处于同一网段，能 `ping` 通开发板 IP（网络排查见 [网络状态确认](#network_config)）。
 
@@ -279,7 +279,7 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 
 ## 相关文档
 
-- [1.3 烧录系统与配置](./rdk_s100/01_instruction.md)
+- [1.3 烧录系统与配置](./01_instruction.md)
 - [网络配置](../../02_System_configuration/01_network_config.md)
 - [调试串口](../../02_System_configuration/16_debug_serial.md)
 - [入门配置](./configuration_wizard.md)

@@ -24,7 +24,7 @@ cat /etc/version
 5.1.0
 ```
 
-该值即 RDK OS 的版本号。若与预期镜像版本不一致，说明烧入的镜像不对，需重新烧录（见 [烧录说明](./rdk_s100/01_instruction.md)）。
+该值即 RDK OS 的版本号。若与预期镜像版本不一致，说明烧入的镜像不对，需重新烧录（见 [烧录说明](./01_instruction.md)）。
 
 ## 确认板卡型号与硬件 ID
 
@@ -66,6 +66,6 @@ hrut_socuid
 
 ## 相关文档
 
-- [烧录说明](./rdk_s100/01_instruction.md)
+- [烧录说明](./01_instruction.md)
 - [远程登录](./remote_login.md)
-- [RDK 专属命令详解](../../09_Appendix/rdk-command-manual/hrut_socuid.md)（`devmem`/`hrut_boardid`/`hrut_socuid`/`rdkos_info`）
+- [RDK 专属命令详解](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md)（`devmem`/`hrut_boardid`/`hrut_socuid`/`rdkos_info`）

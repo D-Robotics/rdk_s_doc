@@ -310,7 +310,6 @@ sudo chown -R usertest:usertest /home/usertest
 
 ## 相关文档
 
-- [烧录系统与配置（S100）](./rdk_s100/01_instruction.md)
-- [烧录系统与配置（S600）](./rdk_s600/01_instruction.md)
+- [烧录系统与配置](./01_instruction.md)
 - [系统状态查询](./system_status.md)
 - [远程登录](./remote_login.md)

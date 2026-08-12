@@ -97,4 +97,4 @@ rootfs 扩容见 [存储与磁盘管理](../12_storage.md)。
 - [RDK OS 介绍](./01_rdk_os_intro.md)
 - [主版本升级与固件](./03_upgrade_firmware.md)
 - [存储与磁盘管理](../12_storage.md)
-- [apt 命令详解](../../09_Appendix/linux-command-manual/apt.md)
+- [apt 命令详解](../../09_Appendix/linux-command-manual/01_apt.md)

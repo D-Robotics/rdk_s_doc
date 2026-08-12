@@ -70,7 +70,7 @@ import DocScope from '@site/src/components/DocScope';
     * 主要支持早期 RDK 硬件，已不作为当前主线版本。
 
 **重要注意事项：**
-* **版本升级：** 1.x 版本系统**无法**通过`apt`命令直接升级到2.x 或更新版本的系统。如需升级，必须通过烧录新版本系统镜像的方式重新[安装操作系统](../01_Quick_start/03_install_os_and_setup/rdk_s100/02_burn/01_burn.md)。
+* **版本升级：** 1.x 版本系统**无法**通过`apt`命令直接升级到2.x 或更新版本的系统。如需升级，必须通过烧录新版本系统镜像的方式重新[安装操作系统](../01_Quick_start/03_install_os_and_setup/02_burn.md)。
 * **TROS 兼容性：** 不同大版本的 TROS（如基于 Foxy 的 TROS 和基于 Humble 的 TROS）通常与特定的 RDK OS 大版本绑定。例如，RDK OS 2.x 通常搭载基于 ROS2 Foxy 的 TROS，而 RDK OS 3.x 通常搭载基于 ROS2 Humble 的 TROS。
 
 ### Q4: 摄像头插拔有什么注意事项？
