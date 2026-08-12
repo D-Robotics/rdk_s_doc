@@ -12,3 +12,8 @@ sidebar_position: 1
 
 :::
 
+## 相关文档
+
+- [1.4.2 TogetheROS.Bot](/Quick_start/next_steps/trosb/trosb_intro)
+- [5.1 开发环境与编译](/Advanced_development/environment_build/environment_build)
+- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)

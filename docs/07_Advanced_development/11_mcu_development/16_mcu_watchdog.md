@@ -261,3 +261,8 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 | OS 任务（延时 + 长复位） | Target\...\HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
 
 </DocScope>
+
+## 相关文档
+
+- [5.4.15 Watchdog](/Advanced_development/driver_development/driver_watchdog)
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

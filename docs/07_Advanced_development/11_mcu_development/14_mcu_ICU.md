@@ -792,3 +792,8 @@ D-Robotics:/$ gpio_interrupt off
 ```
 
 </DocScope>
+
+## 相关文档
+
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

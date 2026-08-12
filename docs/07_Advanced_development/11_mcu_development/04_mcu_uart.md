@@ -471,3 +471,8 @@ Parameters(out)
     VersionInfo: version information of this module
 Return value: None
 ```
+
+## 相关文档
+
+- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
+- [5.4.2 UART 驱动调试指南](/Advanced_development/driver_development/driver_uart_dev)

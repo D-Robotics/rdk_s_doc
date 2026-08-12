@@ -1052,3 +1052,8 @@ EL1_Reset_Handler:
     .end
 ```
 </DocScope>
+
+## 相关文档
+
+- [5.6.1 MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

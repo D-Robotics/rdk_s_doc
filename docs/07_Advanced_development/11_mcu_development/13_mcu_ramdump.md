@@ -73,3 +73,8 @@ MCU1出现异常后会陷入 shell，这时可以通过 acore remoteproc 控制�
 - 箭头5表示产生异常时，CPU cpsr 寄存器的值
 
 - 箭头6表示发生异常时记录 crash dump 的地址信息。可以通过 MCU shell 输入`dumpmem [addr] 4 64`来读取 crash 现场保存的寄存器和栈信息，或者在[acore通过sysfs](#获取-mcu-异常信息)获取 crash 现场的寄存器和栈信息
+
+## 相关文档
+
+- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [5.3.10 Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)

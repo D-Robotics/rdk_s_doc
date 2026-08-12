@@ -766,3 +766,8 @@ Parameters(out)
     None
 Return value：None
 ```
+
+## 相关文档
+
+- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
+- [5.4.6 SPI 调试指南](/Advanced_development/driver_development/driver_spi_dev)

@@ -1367,3 +1367,8 @@ D-Robotics:/$ [065.302668 0]INFO: ec_config_init wkc == 1
 | 正常退出 | 依次出现 `EtherCAT to SAFE_OP` → `EtherCAT to INIT` → `EtherCAT bringup completed` |
 
 ---
+
+## 相关文档
+
+- [5.4.13.2 EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)
+- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
