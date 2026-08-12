@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+title: "1.1.2.2 MCU 接口扩展板（RDK S600）"
 sidebar_label: "1.1.2.2 MCU 接口扩展板（RDK S600）"
 ---
 

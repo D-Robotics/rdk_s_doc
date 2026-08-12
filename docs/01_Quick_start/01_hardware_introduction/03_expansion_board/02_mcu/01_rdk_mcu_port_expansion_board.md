@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+title: "1.1.2.2 MCU 接口扩展板（RDK S100）"
 slug: /Quick_start/hardware_introduction/rdk_mcu_port_expansion_board
 ---
 

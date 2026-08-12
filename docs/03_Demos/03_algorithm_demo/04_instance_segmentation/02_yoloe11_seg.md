@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+title: "实例分割-Ultralytics YOLOE11"
 sidebar_products: RDK-S100
 ---
 

@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+title: "1.1.2.1 RDK S100 相机扩展板"
 slug: /Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board
 ---
 
