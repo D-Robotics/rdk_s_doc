@@ -1,28 +1,51 @@
 ---
 sidebar_position: 1
 sidebar_products: RDK-S100
+title: "4.1.2.1 多媒体接口说明"
+description: RDK Python pydev 多媒体接口总览（Camera/Encoder/Decoder/Display）
 ---
 
 # 4.1.2.1 多媒体接口说明
 
-开发板 Ubuntu 系统预装了 Python 版本的`libsrcampy`图像多媒体模块，可以创建`Camera`，`Encode`，`Decode`，`Display`等几种对象，用于完成摄像头图像采集、图像处理、视频编码、视频解码和显示输出等功能。
+RDK OS 预装了 Python 多媒体模块 `libsrcampy`（包名 `hobot_vio`），提供以下对象，用于完成摄像头采集、视频编解码和显示输出：
 
-模块基础使用方式如下：
+| 对象 | 功能 | 详见 |
+| --- | --- | --- |
+| `Camera` | 摄像头采集（MIPI/USB） | [4.1.2.2 Camera 对象](./02_object_camera) |
+| `Encoder` | 视频编码（H.264/H.265） | [4.1.2.3 Encoder 对象](./03_object_encoder) |
+| `Decoder` | 视频解码 | [4.1.2.4 Decoder 对象](./04_object_decoder) |
+| `Display` | 显示输出（HDMI） | [4.1.2.5 Display 对象](./05_object_display) |
 
-## RDK S100:
+## 基础使用
 
 ```python
 from hobot_vio import libsrcampy
 
-#create camera object
+# 创建对象
 camera = libsrcampy.Camera()
-
-#create encode object
 encode = libsrcampy.Encode()
-
-#create decode object
 decode = libsrcampy.Decode()
-
-#create display object
 display = libsrcampy.Display()
+
+# 典型 pipeline：采集 → 显示
+while True:
+    frame = camera.get_frame()
+    display.show(frame)
 ```
+
+## 典型链路
+
+| 链路 | 对象组合 | 对应 C 示例 |
+| --- | --- | --- |
+| 采集→显示 | Camera → Display | [3.2.1.2 采集→显示](/Demos/multimedia_demo/cdev/vio2display) |
+| 采集→编码 | Camera → Encoder | [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder) |
+| 解码→显示 | Decoder → Display | [3.2.1.5 解码→显示](/Demos/multimedia_demo/cdev/decode2display) |
+
+## 相关文档
+
+- [4.1.2.2 Camera 对象](./02_object_camera)
+- [4.1.2.3 Encoder 对象](./03_object_encoder)
+- [4.1.2.4 Decoder 对象](./04_object_decoder)
+- [4.1.2.5 Display 对象](./05_object_display)
+- [4.1.2.6 接口使用示例](./06_pydev_api_demo)
+- [3.2.2 Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)
