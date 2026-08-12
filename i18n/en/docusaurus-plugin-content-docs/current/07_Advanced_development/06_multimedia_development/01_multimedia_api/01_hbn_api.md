@@ -1220,3 +1220,391 @@ stitch_ch_attr
 | 60         | HBN_STATUS_RGN_OPEN_FILE_FAIL       | RGN module file open failed                                                 |
 | 128        | HBN_STATUS_ERR_UNKNOW               | Unknown error                                                               |
 
+## 板端扩展函数
+
+以下函数取自板端 `hbn_vpf_interface.h`（无 doxygen，仅签名）：
+
+### hbn_vnode_set_attr_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_attr_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_attr_ex_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_attr_ex_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_ochn_attr_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_ochn_attr_ex_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_ochn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_ochn_attr_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_ichn_attr_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_ichn_attr_ex_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_ichn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_ichn_attr_s
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_enable_ichn
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_enable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_disable_ichn
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_disable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_enable_ochn
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_enable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_disable_ochn
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_disable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_reset
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_reset(hbn_vnode_handle_t vnode_fd);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_fd
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_fd(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, int32_t *fd);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_getframe_cond
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_getframe_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_t *out_img); // block function;
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_getframe_group_cond
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_getframe_group_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_group_t *out_img); // block function;
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_sendframe_async
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_sendframe_async(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_t *img); // no block function
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vflow_create_cfg
+
+【函数声明】
+
+```c
+hobot_status hbn_vflow_create_cfg(const char *cfg_file, hbn_vflow_handle_t *vflow_fd);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vflow_del_vnode
+
+【函数声明】
+
+```c
+hobot_status hbn_vflow_del_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t vnode_fd);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vflow_pause
+
+【函数声明】
+
+```c
+hobot_status hbn_vflow_pause(hbn_vflow_handle_t vflow_fd);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vflow_resume
+
+【函数声明】
+
+```c
+hobot_status hbn_vflow_resume(hbn_vflow_handle_t vflow_fd);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vflow_get_version
+
+【函数声明】
+
+```c
+hobot_status hbn_vflow_get_version(hbn_version_t *version);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_output_frame
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_output_groupframe
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_sendframe_group
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_sendframe_group(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_group_t *img_group);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_output_groupframe
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_output_frame
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vflow_get_fd
+
+【函数声明】
+
+```c
+hobot_status hbn_vflow_get_fd(hbn_vflow_handle_t *vflow_fd);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_set_ctrl
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_set_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+### hbn_vnode_get_ctrl
+
+【函数声明】
+
+```c
+hobot_status hbn_vnode_get_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);
+```
+
+【功能描述】
+
+见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
