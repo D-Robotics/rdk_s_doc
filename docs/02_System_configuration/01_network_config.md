@@ -324,93 +324,12 @@ no_proxy=localhost,127.0.0.1
 source ~/.bashrc
 ```
 
-## 系统更新
-
-
-出于系统安全、稳定性的考虑，推荐用户安装完系统后，通过`apt`命令对系统进行更新。
-
-在`/etc/apt/source.list`文件中，保存了`apt`命令的软件源列表，在安装软件前，需要先通过`apt`命令更新 package 列表。
-
-首先打开终端命令行，输入如下命令：
-
-```bash
-sudo apt update
-```
-
-其次，升级所有已安装的软件包到最新版本，命令如下：
-
-```bash
-sudo apt full-upgrade
-```
-
 :::tip
-推荐使用`full-upgrade`而不是`upgrade`选项，这样当相关依赖发生变动时，也会同步更新依赖包。
-
-当运行`sudo apt full-upgrade`命令时，系统会提示数据下载和磁盘占用大小，但是`apt`不会检查磁盘空间是否充足，建议用户通过`df -h`命令手动检查。此外，升级过程中下载的 deb 文件会保存在`/var/cache/apt/archives`目录中，用户可以通过`sudo apt clean`命令删除缓存文件以释放磁盘空间。
+系统软件包升级与主版本/固件更新见 [2.3 系统更新](/System_configuration/system_update)。
 :::
-
-执行`apt full-upgrade`命令后，可能会重新安装驱动、内核文件和部分系统软件，建议用户手动重启设备使更新生效，命令如下：
-
-```bash
-sudo reboot
-```
-
-
-## 蓝牙配置
-
-### 初始化
-用户可以使用命令查询蓝牙进程是否正常，命令如下：
-
-```bash
-ps ax | grep "/usr/bin/dbus-daemon\|/usr/lib/bluetooth/bluetoothd"
-/usr/bin/dbus-daemon
-
-/usr/lib/bluetooth/bluetoothd
-```
-
-用户可以使用命令查询蓝牙控制器是否正常，命令如下（注意以下命令示例中的`Controller <MAC Addr>`的`<MAC Addr>`会随实际蓝牙控制器变化而变化）：
-```bash
-bluetoothctl list
-Controller F0:68:E3:22:7E:91 ubuntu [default]
-```
-
-### 配网连接
-
-执行`sudo bluetoothctl`进入交互模式下的蓝牙配置界面，出现了类似下图的设备信息表示蓝牙被识别到了，然后用`show`来查看蓝牙信息，留意蓝牙的`powered`和`discoverable`状态。
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png" alt="bluetoothctl show命令查看蓝牙信息" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-执行 `power on` 使能蓝牙，如下图所示：
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png" alt="bluetoothctl power on使能蓝牙" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-为了能够使蓝牙被附近的设备发现，需要执行`discoverable on`使能蓝牙并打开蓝牙可发现属性，如下图所示：
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png" alt="bluetoothctl discoverable on开启蓝牙可发现模式" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-此时使用手机或者电脑扫描蓝牙就可以发现 `ubuntu` 这个名称的蓝牙设备：
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650.png" alt="手机扫描发现名为ubuntu的蓝牙设备" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-接下来测试蓝牙的主动扫描功能，在`bluetoothctl`的交互界面输入`scan on`即可打开主动扫描，它会周期性地打印附近的设备，可以看到已经发现了我的手机设备，`scan off`关闭扫描功能并汇总打印扫描到的蓝牙设备：
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png" alt="bluetoothctl scan on主动扫描附近蓝牙设备" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png" alt="bluetoothctl scan off关闭扫描并汇总已发现的蓝牙设备" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-然后就是和其他蓝牙的配对：
-
-- 配对命令：`pair [targetMAC] `，输入该命令后，根据提示输入`yes`，对端蓝牙设备选择`配对`选项完成配对。
-
-- 配对成功后可以使用`trust [targetMAC]`来让下次自动连接
-
-> 蓝牙配置详见 [2.2 蓝牙配置](./02_bluetooth_config.md)。
 
 ## 相关文档
 
 - [2.2 蓝牙配置](./02_bluetooth_config.md)
+- [2.3 系统更新](/System_configuration/system_update)
 - [1.3.4 远程登录](../01_Quick_start/03_install_os_and_setup/remote_login.md)
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png" alt="bluetoothctl pair和trust命令完成蓝牙配对与信任" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-经过以上操作后，蓝牙的扫描、配对的基本功能就完成了，如需使用更多功能，可查阅 `BlueZ`的官方帮助说明。
