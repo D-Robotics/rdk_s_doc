@@ -170,7 +170,7 @@ After connecting the USB camera, run `ls /dev/video*` to view the actual device 
     * **Port matching:** If the board has multiple MIPI CSI interfaces, ensure the camera is connected to the interface specified in your software configuration or device tree.
     * **Reference documentation:** Carefully review the "MIPI Camera" connection section in the hardware manual or quick start guide for your RDK board model to confirm connection details.
         <DocScope products="RDK S100">
-        [RDK S100 MIPI Camera](../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)
+        [RDK S100 MIPI Camera](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board)
         </DocScope>
 2.  **Do not hot-plug:**
     * **Never plug or unplug a MIPI camera while the development board is powered on!** Hot-plugging can easily cause short-circuit damage to the camera module or the board's MIPI interface circuit due to instantaneous current surges or incorrect pin contact order.

@@ -75,7 +75,7 @@ Y
 
 <DocScope products="RDK-S100">
 
-- For MIPI camera installation, refer to [Camera Expansion Board - MIPI Camera Interface](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201).
+- For MIPI camera installation, refer to [Camera Expansion Board - MIPI Camera Interface](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board#mipi-camera-interfaces-j2200-j2201).
 
 </DocScope>
 <DocScope products="RDK-S600">
