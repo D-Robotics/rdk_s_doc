@@ -69,29 +69,6 @@ The RDK S600 currently on sale is V1P0. Enter DFU mode as follows:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
 
-<details>
-<summary>Historical versions (V0P1, V0P2) DFU entry</summary>
-
-**V0P1**
-
-1. Set the [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1#switches-sw2sw3) DIP switch to `OFF`, and power off.
-2. Short the [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1#switches-sw2sw3) jumper cap to enter DFU mode.
-3. Set the SW3 DIP switch to `ON`, and power on.
-4. Check the [D61 Flash LED](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1-en.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
-
-**V0P2**
-
-1. Set the [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2#switches-sw2sw3) DIP switch to `OFF`, and power off.
-2. Set the [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2#switches-sw2sw3) DIP switch to `ON` to enter DFU mode.
-3. Set the SW3 DIP switch to `ON`, and power on.
-4. Check the [D61 Flash LED](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
-
-V0P2 DFU entry is the same as the V1P0 version above.
-
-</details>
-
 </DocScope>
 
 ### Enter Fastboot mode

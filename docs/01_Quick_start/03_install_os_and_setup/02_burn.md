@@ -81,29 +81,6 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
 
-<details>
-<summary>历史版本（V0P1、V0P2）进入 DFU 方式</summary>
-
-**V0P1 版本**
-
-1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 短接 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1#开关sw2sw3) 跳线帽，进入 DFU 模式。
-3. 将 SW3 拨码至 `ON`，开启电源。
-4. 检查 [D61 Flash 灯](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
-
-**V0P2 版本**
-
-1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2#开关sw2sw3) 拨码至 `ON`，进入 DFU 模式。
-3. 将 SW3 拨码至 `ON`，开启电源。
-4. 检查 [D61 Flash 灯](/01_Quick_start/01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
-
-V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
-
-</details>
-
 </DocScope>
 
 ### 进入 Fastboot 模式
