@@ -1,11 +1,11 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 id: python-api
-title: Python 推理 API
+title: "4.2.2 Python 推理 API"
 sidebar_label: 4.2 Python 推理 API
 description: hbm_runtime Python 接口：模型加载、推理、调度参数
 ---
-# 4.2 Python 接口
+# 4.2.2 Python 推理 API
 
 hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作底层 libhbucp / libdnn C++ 库，提供高性能的神经网络模型加载与推理能力。
 

@@ -1,9 +1,9 @@
 ---
-sidebar_position: 0
+sidebar_position: 1
 sidebar_products: RDK-S100
 ---
 
-# RDK S100多媒体接口说明
+# 4.1.2.1 多媒体接口说明
 
 开发板 Ubuntu 系统预装了 Python 版本的`libsrcampy`图像多媒体模块，可以创建`Camera`，`Encode`，`Decode`，`Display`等几种对象，用于完成摄像头图像采集、图像处理、视频编码、视频解码和显示输出等功能。
 

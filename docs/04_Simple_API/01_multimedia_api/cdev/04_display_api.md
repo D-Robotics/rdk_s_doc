@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# DISPLAY（显示模块）API
+# 4.1.1.4 DISPLAY（显示模块）API
 
 `DISPLAY` API 提供了以下的接口：
 

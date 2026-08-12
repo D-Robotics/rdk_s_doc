@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# ENCODER（编码模块）API
+# 4.1.1.2 ENCODER（编码模块）API
 
 `ENCODER` API 提供了以下的接口：
 

@@ -1,8 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 5
 ---
 
-# SYS（模块绑定）API
+# 4.1.1.5 SYS（模块绑定）API
 
 `SYS` API 提供了以下的接口：
 

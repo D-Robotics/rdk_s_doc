@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# DECODER（解码模块）API
+# 4.1.1.3 DECODER（解码模块）API
 
 `DECODER` API 提供了以下的接口：
 
