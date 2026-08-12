@@ -239,3 +239,9 @@ S600预留了14PIN，包含 I2S/I2C 接口。
 2. 除 I2S/I2C 信号线外，还必须正确连接 GND 及 VCC，以确保音频子板正常工作。
 
 </DocScope>
+
+## 相关文档
+
+- [2.10 音频配置](/System_configuration/audio_output)
+- [5.4.9 音频调试指南](/Advanced_development/driver_development/driver_audio)
+- [3.4.2 C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)

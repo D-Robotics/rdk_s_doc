@@ -62,3 +62,9 @@ if __name__ == '__main__':
     main()
 
 ```
+
+## 相关文档
+
+- [3.1.1 管脚定义](./01_40pin_define)
+- [5.4.7 PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm)
+- [3.4.2 C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)

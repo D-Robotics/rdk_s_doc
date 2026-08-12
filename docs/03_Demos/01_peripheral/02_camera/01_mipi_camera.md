@@ -8,7 +8,7 @@ sidebar_position: 1
 
 ## 环境准备
 
-  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-相机接口j2200-j2201)
+  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board#mipi-相机接口j2200-j2201)
   - 目前该 sample 仅支持 MIPI sensor: IMX219, SC230AI
   - 通过 HDMI 线缆连接开发板和显示器
 
@@ -31,7 +31,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
 
 ## 环境准备
 
-  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)
+  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board)
   - 通过 HDMI 线缆连接开发板和显示器
 
 ## 运行方式
@@ -60,3 +60,9 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
 程序执行后，显示器会实时显示摄像头画面及目标检测算法的结果(目标类型、置信度)，如下所示：
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI摄像头目标检测算法运行结果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 -->
+
+## 相关文档
+
+- [3.2.1.2 采集→显示](/Demos/multimedia_demo/cdev/vio2display)
+- [1.1 硬件介绍](/01_hardware_introduction)
+- [4.1.2.2 Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)

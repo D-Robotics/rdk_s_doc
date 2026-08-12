@@ -136,3 +136,9 @@ sudo srpi-config
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-finish_s100.png" alt="Finish 按钮示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 完成更改后选中 `Finish` 按钮。`srpi-config`提供的系统配置，依赖重启生效的选项将会询问您是否要重新启动，如果不重新启动，配置将无法正常生效，请用户根据使用情况决定重启时机。
+
+## 相关文档
+
+- [2.5 config.txt 文件配置](/System_configuration/config_txt/usage)
+- [2.1 网络配置](/System_configuration/network_config)
+- [2.6 开机自启动配置](/System_configuration/self_start)

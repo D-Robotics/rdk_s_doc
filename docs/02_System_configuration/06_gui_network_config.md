@@ -98,3 +98,8 @@ import DocScope from '@site/src/components/DocScope';
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy_set_0.png" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy_set_1.png" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
+
+## 相关文档
+
+- [2.1 网络配置](/System_configuration/network_config)
+- [2.2 蓝牙配置](/System_configuration/bluetooth_config)

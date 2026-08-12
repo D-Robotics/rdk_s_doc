@@ -152,3 +152,9 @@ lrwxrwxrwx 1 root root 15 Jun  4 22:17 /dev/block/platform/by-name/userdata -> /
 
 ## config.txt 解析开发指南
 配置文件的解析功能代码路径位于 Uboot 目录的：`board/hobot/common/drobot_boot_config.c`文件内。
+
+## 相关文档
+
+- [2.5.2 自定义 config.txt](/System_configuration/config_txt/custom)
+- [2.5.3 常用配置项参考](/System_configuration/config_txt/common_options)
+- [2.5.4 启动相关配置](/System_configuration/config_txt/boot_options)

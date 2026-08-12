@@ -164,3 +164,8 @@ mount | grep windows_nfs_share
       ```
 
    - 保存并退出编辑器。
+
+## 相关文档
+
+- [2.1 网络配置](/System_configuration/network_config)
+- [1.3.4 远程登录](/Quick_start/install_os_and_setup/remote_login)

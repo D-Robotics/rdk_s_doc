@@ -202,3 +202,9 @@ Encoder.close()
 <font color='Blue'>【参考代码】</font>  
 
 无
+
+## 相关文档
+
+- [4.1.2.1 多媒体接口说明](./pydev_multimedia_api)
+- [4.1.2.4 Decoder 对象](./04_object_decoder)
+- [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

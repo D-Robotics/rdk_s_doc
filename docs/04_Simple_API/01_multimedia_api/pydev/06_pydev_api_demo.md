@@ -439,3 +439,8 @@ test_cam_vps_display()
 # test_rtsp_decode_bind_vps_bind_disp(rtsp_url)
 ```
 
+## 相关文档
+
+- [4.1.2.1 多媒体接口说明](./pydev_multimedia_api)
+- [4.1.2.2 Camera 对象](./02_object_camera)
+- [3.2.2 Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

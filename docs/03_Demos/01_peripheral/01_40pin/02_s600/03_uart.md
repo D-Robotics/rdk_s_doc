@@ -106,3 +106,9 @@ if __name__ == '__main__':
         print("Serial test success!")
 
 ```
+
+## 相关文档
+
+- [3.1.1 管脚定义](./01_ext_io.md)
+- [5.4.2 UART 驱动调试指南](/Advanced_development/driver_development/driver_uart_dev)
+- [3.4.2 C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)

@@ -456,3 +456,9 @@ echo 1050000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态
 
 </DocScope>
+
+## 相关文档
+
+- [2.9 显示配置](/System_configuration/display_config)
+- [2.11 屏幕休眠与电源管理](/System_configuration/screen_sleep)
+- [5.4.8 Thermal 系统](/Advanced_development/driver_development/driver_thermal_dev)
