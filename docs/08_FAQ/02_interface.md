@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 8.2 接口、外设与驱动
+# 6.2 接口、外设与驱动
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
