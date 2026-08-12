@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 2.1 网络与蓝牙配置
+# 2.1 网络配置
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

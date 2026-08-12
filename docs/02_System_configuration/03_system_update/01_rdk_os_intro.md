@@ -1,5 +1,5 @@
 ---
-title: RDK OS 介绍
+title: "2.3.1 RDK OS 介绍"
 sidebar_position: 1
 description: RDK OS 定位、版本、基线与预装能力
 ---

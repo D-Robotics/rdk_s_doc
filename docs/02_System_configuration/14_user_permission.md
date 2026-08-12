@@ -1,5 +1,5 @@
 ---
-title: 用户与权限管理
+title: "2.14 用户与权限管理"
 sidebar_position: 14
 description: 用户/用户组、sudo、su 管理
 ---

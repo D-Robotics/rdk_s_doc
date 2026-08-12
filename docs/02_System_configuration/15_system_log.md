@@ -1,5 +1,5 @@
 ---
-title: 系统日志查看
+title: "2.15 系统日志查看"
 sidebar_position: 15
 description: 用 dmesg/journalctl/systemctl 查看系统日志与服务状态
 ---

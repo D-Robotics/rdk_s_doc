@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+sidebar_position: 8
 ---
 
-# 2.4 Thermal 和 CPU 频率管理
+# 2.8 Thermal 和 CPU 频率管理
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

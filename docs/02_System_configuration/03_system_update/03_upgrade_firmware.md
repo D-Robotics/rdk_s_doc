@@ -1,5 +1,5 @@
 ---
-title: 主版本升级与固件
+title: "2.3.3 主版本升级与固件"
 sidebar_position: 3
 description: RDK OS 主版本升级、固件升级与降级
 ---

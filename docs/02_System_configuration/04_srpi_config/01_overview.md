@@ -1,8 +1,9 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
+title: "2.4 srpi-config 工具配置"
 ---
 
-# 2.2 srpi-config 工具配置
+# 2.4 srpi-config 工具配置
 
 ## 简介
 
@@ -55,7 +56,7 @@ sudo srpi-config
 
 - **Update Miniboot**
 
-  如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot升级](../07_Advanced_development/03_system_software/07_ota_miniboot.md)。
+  如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot升级](/Advanced_development/system_software/ota_miniboot)。
 
 ## Interface Options
 
@@ -71,7 +72,7 @@ sudo srpi-config
   S100正在对 VNC 进行适配；
 
 - 外设配置
-  建议参考[config.txt 文件配置](./config_txt)进行外设的配置；
+  建议参考[config.txt 文件配置](../config_txt)进行外设的配置；
 
 
 ## Performance Options

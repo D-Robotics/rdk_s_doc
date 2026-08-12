@@ -1,5 +1,5 @@
 ---
-title: 存储与磁盘管理
+title: "2.12 存储与磁盘管理"
 sidebar_position: 12
 description: RDK OS 存储查看、rootfs 占用、挂载
 ---

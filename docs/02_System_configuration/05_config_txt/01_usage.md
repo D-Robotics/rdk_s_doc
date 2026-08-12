@@ -1,8 +1,8 @@
 ---
-sidebar_position: 3
+sidebar_position: 1
 ---
 
-# 2.3 config.txt 文件配置
+# 2.5.1 config.txt 使用指南
 :::warning
 - 所有配置文件内的配置，均可以在 Uboot 内手动覆盖。Uboot 内手动配置（在 Uboot 命令行使用 setenv）的优先级**高于**配置文件内的配置。完整环境变量优先级：`setenv > 配置文件 > 上一次启动saveenv`；
 - 本章内容均以“配置文件”指代**默认路径**为`/boot/config.txt`的配置文件；

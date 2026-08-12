@@ -1,5 +1,5 @@
 ---
-title: 屏幕休眠与电源管理
+title: "2.11 屏幕休眠与电源管理"
 sidebar_position: 11
 description: 桌面/控制台屏幕休眠与电源管理
 ---

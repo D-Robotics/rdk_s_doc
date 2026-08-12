@@ -1,5 +1,5 @@
 ---
-title: 软件包管理 apt
+title: "2.3.2 软件包管理 apt"
 sidebar_position: 2
 description: RDK OS 上 apt 软件包查询、安装、升级、卸载
 ---

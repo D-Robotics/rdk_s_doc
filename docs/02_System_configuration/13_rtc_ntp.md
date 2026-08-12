@@ -1,5 +1,5 @@
 ---
-title: 时钟与 RTC 同步
+title: "2.13 时钟与 RTC 同步"
 sidebar_position: 13
 description: 系统时间、RTC 硬件时钟与 NTP 授时
 ---
