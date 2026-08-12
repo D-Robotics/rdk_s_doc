@@ -202,3 +202,8 @@ usb-gadget.sh stop rndis
 
 1. 拔掉 USB 线缆重新连接
 2. 执行 `usb-gadget.sh stop` 命令停止当前模式，再启动新模式
+
+## 相关文档
+
+- [5.3.2 系统定制](/Advanced_development/system_software/system_customization)
+- [3.1 外设应用示例](/Demos/peripheral)

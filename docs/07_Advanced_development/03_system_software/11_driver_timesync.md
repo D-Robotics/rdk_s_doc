@@ -930,3 +930,8 @@ MCU log 说明：
 "Get Time From Acore success" 表明 MCU 从 Acore 拿时间成功；
 
 "TimeKeeperRTC and TimeKeeperIPC Offset" ，表明在同步时，Rtc 使用 IPC 时间同步时的 offset。
+
+## 相关文档
+
+- [2.13 时钟与 RTC 同步](/System_configuration/rtc_ntp)
+- [5.3.12 IPC 模块介绍](/Advanced_development/system_software/driver_ipc)

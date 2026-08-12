@@ -345,3 +345,8 @@ sudo echo hello > /lib/modules-load.d/hello.conf
         # Insert PCAN driver
         sudo insmod /lib/modules/6.1.112/misc/pcan.ko
         ```
+
+## 相关文档
+
+- [5.3.8 应用实时内核](/Advanced_development/system_software/realtime_kernel)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

@@ -1265,3 +1265,8 @@ wdump: 0
 libipcfhal-test: TestBody() [2593] info :
 wdump: 0
 ```
+
+## 相关文档
+
+- [5.6.9 IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)
+- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)

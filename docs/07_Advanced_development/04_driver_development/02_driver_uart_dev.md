@@ -141,3 +141,8 @@ RDK S600是将 uart4初始化为/dev/ttyS1，uart4并没有引出物理引脚，
 - RDK S600硬件设计上只将 uart6和 uart7通过拓展引脚排引出，且使用了 TI 的 TXB 系列的电平转换芯片将1.8V IO 转成3.3V IO。**RDK S600 V0P1 开发板由于硬件限制，uart6和 uart7无法使用**。
 
 </DocScope>
+
+## 相关文档
+
+- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
+- [7.2.4 dpkg-deb 命令](/Appendix/linux-command-manual/dpkg-deb)

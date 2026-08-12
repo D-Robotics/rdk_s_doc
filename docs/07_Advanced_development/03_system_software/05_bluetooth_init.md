@@ -352,3 +352,8 @@ sudo modprobe btusb
 # 启动蓝牙服务
 sudo systemctl start hobot-bluetooth
 ```
+
+## 相关文档
+
+- [2.2 蓝牙配置](/System_configuration/bluetooth_config)
+- [5.4.11 Wi-Fi 驱动调试指南](/Advanced_development/driver_development/driver_wifi)

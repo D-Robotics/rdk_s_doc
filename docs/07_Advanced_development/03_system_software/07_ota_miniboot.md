@@ -101,3 +101,8 @@ Error: N step(s) failed to flash.
 ## 注意事项
 
 - 升级过程中**禁止**拔电源、断电、重启或对分区执行任何其它写入操作——`dd` 整片烧写被打断会直接导致变砖。
+
+## 相关文档
+
+- [2.3.3 主版本升级与固件](/System_configuration/system_update/upgrade_firmware)
+- [5.3.6 系统 OTA 升级](/Advanced_development/system_software/ota_system)

@@ -56,3 +56,8 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 - `Act`: 当前测试周期的实际延迟，以微秒为单位。
 - `Avg`: 当前测试周期的平均延迟，以微秒为单位。
 - `Max`: 当前测试周期的最大延迟，以微秒为单位。
+
+## 相关文档
+
+- [5.3.10 Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)
+- [5.3.9 内核头文件](/Advanced_development/system_software/kernel_headers)

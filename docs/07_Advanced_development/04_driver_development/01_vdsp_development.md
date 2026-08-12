@@ -3281,3 +3281,8 @@ int32_t boot_lib_mem_map_test(int32_t dsp_id)
 【示例代码】
 
 参考 [hb_vdsp_mmu_map](#hb_vdsp_mmu_map)
+
+## 相关文档
+
+- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [3.3 算法示例](/Demos/algorithm_demo/summary)

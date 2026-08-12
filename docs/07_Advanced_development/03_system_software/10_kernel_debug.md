@@ -314,3 +314,8 @@ PID: 4240     TASK: ffff00040f10f000  CPU: 0    COMMAND: "bash"
     ORIG_X0: 0000000000000001  SYSCALLNO: 40  PSTATE: 20001000
 crash>
 ```
+
+## 相关文档
+
+- [5.3.8 应用实时内核](/Advanced_development/system_software/realtime_kernel)
+- [5.3.9 内核头文件](/Advanced_development/system_software/kernel_headers)

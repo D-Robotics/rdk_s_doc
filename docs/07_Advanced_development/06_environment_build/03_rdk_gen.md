@@ -658,3 +658,9 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 - 在 NVMe 模式下编译出的 miniboot_flash 镜像，仅支持 NVMe 启动，其他模式均不支持；在 eMMC/UFS 模式下编译出的 miniboot_flash 镜像，支持 NVMe 启动
 - 下载工具1.1.10及其以后版本，才支持 NVMe 镜像烧写
 :::
+
+## 相关文档
+
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [5.1.2 BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
+- [5.3.2 系统定制](/Advanced_development/system_software/system_customization)

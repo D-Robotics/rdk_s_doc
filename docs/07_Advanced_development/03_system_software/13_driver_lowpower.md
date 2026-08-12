@@ -328,3 +328,8 @@ exit 0
 :::warning
 在休眠前要关闭所有上层服务，否则可能导致系统无法正常进行休眠唤醒。
 :::
+
+## 相关文档
+
+- [2.8 Thermal 和 CPU 频率管理](/System_configuration/frequency_management)
+- [2.11 屏幕休眠与电源管理](/System_configuration/screen_sleep)

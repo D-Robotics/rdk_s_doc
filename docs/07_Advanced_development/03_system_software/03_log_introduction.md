@@ -437,3 +437,8 @@ MCU Log 使用注意事项，请参考：[MCU Log简介](../11_mcu_development/0
 ### 有效获取问题时刻日志
 
 1.  在 log 分区中的文件的命名字段中包含对应 log 文件的最后修改时间的信息，可以去文件中查找问题时刻的 log。
+
+## 相关文档
+
+- [2.15 系统日志查看](/System_configuration/system_log)
+- [7.2 Linux 命令用法](/Appendix/linux-command-manual/apt)
