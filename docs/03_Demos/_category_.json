@@ -1,9 +1,9 @@
 {
-  "label": "3. 基础应用开发",
+  "label": "3. 开发示例",
   "position": 3,
   "link": {
     "type": "generated-index",
     "slug": "/Demos",
-    "description": "系统入门应用，包括图像输入，音频输入以及接口开发等"
+    "description": "外设/多媒体/算法 demo，C/C++ 与 Python 对照，与板端 /app 互相索引"
   }
 }
