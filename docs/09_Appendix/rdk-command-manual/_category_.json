@@ -4,5 +4,6 @@
   "link": {
     "type": "generated-index",
     "description": "7.1 RDK 专属命令"
-  }
+  },
+  "collapsed": false
 }

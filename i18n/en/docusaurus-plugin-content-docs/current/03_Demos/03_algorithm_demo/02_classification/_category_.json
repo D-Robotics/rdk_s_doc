@@ -5,5 +5,6 @@
     "type": "generated-index",
     "description": "3.3.2 图像分类",
     "slug": "/Demos/algorithm_demo/classification"
-  }
+  },
+  "collapsed": false
 }
