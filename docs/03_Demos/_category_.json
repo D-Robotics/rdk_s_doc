@@ -5,6 +5,5 @@
     "type": "generated-index",
     "slug": "/Demos",
     "description": "外设/多媒体/算法 demo，C/C++ 与 Python 对照，与板端 /app 互相索引"
-  },
-  "collapsed": false
+  }
 }
