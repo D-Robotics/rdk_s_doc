@@ -1,5 +1,6 @@
 ---
-sidebar_position: 1---
+sidebar_position: 1
+---
 
 # 6.1 硬件、系统与环境配置
 

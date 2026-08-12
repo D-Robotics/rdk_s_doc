@@ -1,7 +1,7 @@
 ---
 title: "3.2.1.2 采集→显示"
 sidebar_position: 2
-description: RDK S100/S600 摄像头采集→VIO→Display 实时预览示例
+description: "RDK S100/S600 摄像头采集→VIO→Display 实时预览示例"
 ---
 
 # 3.2.1.2 采集→显示

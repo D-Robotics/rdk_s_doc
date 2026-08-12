@@ -1,7 +1,7 @@
 ---
 title: USB Camera YOLOv5x 推理 (Python)
 sidebar_position: 5
-description: USB 摄像头实时 YOLOv5x 检测推理示例
+description: "USB 摄像头实时 YOLOv5x 检测推理示例"
 ---
 
 # USB Camera YOLOv5x 推理 (Python)

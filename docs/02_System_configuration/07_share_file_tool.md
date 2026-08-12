@@ -1,5 +1,6 @@
 ---
-sidebar_position: 7---
+sidebar_position: 7
+---
 
 # 2.7 共享文件配置
 

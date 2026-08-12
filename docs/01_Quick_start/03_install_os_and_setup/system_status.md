@@ -1,7 +1,7 @@
 ---
 title: "1.3.2 系统状态查询"
 sidebar_position: 3
-description: 烧录后第一步：确认系统版本与板卡型号
+description: "烧录后第一步：确认系统版本与板卡型号"
 ---
 
 # 1.3.2 系统状态查询

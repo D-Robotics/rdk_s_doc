@@ -1,5 +1,6 @@
 ---
-sidebar_position: 6---
+sidebar_position: 6
+---
 
 # 5.4.18.6 SPI 压力测试
 

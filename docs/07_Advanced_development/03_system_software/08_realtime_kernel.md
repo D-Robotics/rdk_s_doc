@@ -1,5 +1,6 @@
 ---
-sidebar_position: 8---
+sidebar_position: 8
+---
 
 # 5.3.8 应用实时内核
 

@@ -1,5 +1,6 @@
 ---
-sidebar_position: 3---
+sidebar_position: 3
+---
 # 5.4.12.3 软件说明
 
 ```mdx-code-block

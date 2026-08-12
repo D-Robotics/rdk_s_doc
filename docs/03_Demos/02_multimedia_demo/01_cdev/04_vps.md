@@ -1,7 +1,7 @@
 ---
 title: "3.2.1.4 视频处理"
 sidebar_position: 4
-description: RDK S100/S600 VPS 视频处理示例（文件/解码输入→处理→输出）
+description: "RDK S100/S600 VPS 视频处理示例（文件/解码输入→处理→输出）"
 ---
 
 # 3.2.1.4 视频处理

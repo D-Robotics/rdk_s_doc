@@ -1,7 +1,7 @@
 ---
 title: 目标检测-Ultralytics YOLOv5x (Python)
 sidebar_position: 3
-description: 用 hbm_runtime Python 接口部署 YOLOv5x 做目标检测的预装示例
+description: "用 hbm_runtime Python 接口部署 YOLOv5x 做目标检测的预装示例"
 ---
 
 # 目标检测-Ultralytics YOLOv5x (Python)

@@ -1,7 +1,7 @@
 ---
 title: "5.1.2 BSP 源码目录结构"
 sidebar_position: 2
-description: RDK S100/S600 BSP 源码目录结构与关键脚本说明
+description: "RDK S100/S600 BSP 源码目录结构与关键脚本说明"
 ---
 
 # 5.1.2 BSP 源码目录结构

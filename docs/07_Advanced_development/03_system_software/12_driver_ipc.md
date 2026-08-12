@@ -1,5 +1,6 @@
 ---
-sidebar_position: 12---
+sidebar_position: 12
+---
 
 # 5.3.12 IPC 模块介绍
 

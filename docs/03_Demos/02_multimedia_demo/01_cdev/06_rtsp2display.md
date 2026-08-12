@@ -1,7 +1,7 @@
 ---
 title: "3.2.1.6 RTSP→显示"
 sidebar_position: 6
-description: RDK S100/S600 RTSP 网络拉流→解码→Display 实时显示示例
+description: "RDK S100/S600 RTSP 网络拉流→解码→Display 实时显示示例"
 ---
 
 # 3.2.1.6 RTSP→显示

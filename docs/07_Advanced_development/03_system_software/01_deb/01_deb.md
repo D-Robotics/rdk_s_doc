@@ -1,7 +1,7 @@
 ---
 title: "5.3.1 deb 包开发"
 sidebar_position: 1
-description: RDK deb 包开发流程与规范
+description: "RDK deb 包开发流程与规范"
 ---
 
 # 5.3.1 deb 包开发

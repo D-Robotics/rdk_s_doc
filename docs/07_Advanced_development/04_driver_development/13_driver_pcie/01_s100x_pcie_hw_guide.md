@@ -1,5 +1,6 @@
 ---
-sidebar_position: 1---
+sidebar_position: 1
+---
 # 5.4.10.1 PCIe 硬件规格以及支持的拓扑结构
 
 ## PCIe 简介

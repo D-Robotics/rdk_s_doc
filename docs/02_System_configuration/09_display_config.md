@@ -1,7 +1,7 @@
 ---
 title: "2.9 显示配置"
 sidebar_position: 9
-description: HDMI/DP 显示器连接、分辨率、多屏
+description: "HDMI/DP 显示器连接、分辨率、多屏"
 ---
 
 # 2.9 显示配置

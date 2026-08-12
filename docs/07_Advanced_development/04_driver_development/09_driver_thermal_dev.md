@@ -1,7 +1,7 @@
 ---
 sidebar_position: 8
 title: "5.4.8 Thermal 系统"
-description: RDK S100/S600 Thermal 系统调试指南
+description: "RDK S100/S600 Thermal 系统调试指南"
 ---
 
 # 5.4.8 Thermal 系统

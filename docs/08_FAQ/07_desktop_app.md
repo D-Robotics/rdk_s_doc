@@ -1,7 +1,7 @@
 ---
 sidebar_position: 7
 title: "6.7 桌面应用"
-description: RDK 桌面版第三方应用常见问题与解决方案
+description: "RDK 桌面版第三方应用常见问题与解决方案"
 ---
 
 # 6.7 桌面应用

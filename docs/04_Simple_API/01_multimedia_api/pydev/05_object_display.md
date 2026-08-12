@@ -1,5 +1,6 @@
 ---
-sidebar_position: 5---
+sidebar_position: 5
+---
 
 # 4.1.2.5 Display 对象
 

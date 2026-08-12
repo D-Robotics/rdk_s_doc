@@ -1,7 +1,7 @@
 ---
 title: 图像分类-ResNet18 (Python)
 sidebar_position: 3
-description: 用 hbm_runtime Python 接口部署 ResNet18 做图像分类推理的预装示例
+description: "用 hbm_runtime Python 接口部署 ResNet18 做图像分类推理的预装示例"
 ---
 
 # 图像分类-ResNet18 (Python)

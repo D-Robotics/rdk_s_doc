@@ -1,5 +1,6 @@
 ---
-sidebar_position: 6---
+sidebar_position: 6
+---
 
 # 4.1.2.6 接口使用示例
 

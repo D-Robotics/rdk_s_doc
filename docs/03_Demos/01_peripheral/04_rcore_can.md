@@ -1,7 +1,7 @@
 ---
 title: "3.1.4 CAN 应用"
 sidebar_position: 4
-description: RDK S100/S600 CAN 总线收发示例，无需改系统代码
+description: "RDK S100/S600 CAN 总线收发示例，无需改系统代码"
 ---
 
 # 3.1.4 CAN 应用

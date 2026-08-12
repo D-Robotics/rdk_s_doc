@@ -2,7 +2,8 @@
 sidebar_position: 2
 title: "5.2.2 RDK S600 硬件点亮"
 description: 5.2.2 RDK S600 硬件点亮
-sidebar_products: RDK S600---
+sidebar_products: RDK S600
+---
 
 # 5.2.2 RDK S600 硬件点亮
 

@@ -1,7 +1,7 @@
 ---
 title: "5.1.4 使用 Docker 编译"
 sidebar_position: 4
-description: 使用 Docker 容器编译 RDK BSP
+description: "使用 Docker 容器编译 RDK BSP"
 ---
 
 # 5.1.4 使用 Docker 编译

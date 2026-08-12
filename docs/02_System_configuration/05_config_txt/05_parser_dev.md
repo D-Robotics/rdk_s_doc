@@ -1,7 +1,7 @@
 ---
 title: "2.5.5 config.txt 解析开发指南"
 sidebar_position: 5
-description: config.txt 解析机制与新增配置项开发指南
+description: "config.txt 解析机制与新增配置项开发指南"
 ---
 
 # 2.5.5 config.txt 解析开发指南

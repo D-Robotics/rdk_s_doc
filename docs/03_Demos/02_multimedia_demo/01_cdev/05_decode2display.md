@@ -1,7 +1,7 @@
 ---
 title: "3.2.1.5 解码→显示"
 sidebar_position: 5
-description: RDK S100/S600 视频码流解码→Display 实时显示示例
+description: "RDK S100/S600 视频码流解码→Display 实时显示示例"
 ---
 
 # 3.2.1.5 解码→显示

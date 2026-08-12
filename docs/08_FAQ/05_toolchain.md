@@ -1,5 +1,6 @@
 ---
-sidebar_position: 5---
+sidebar_position: 5
+---
 
 # 6.5 AI 模型、算法与工具链
 

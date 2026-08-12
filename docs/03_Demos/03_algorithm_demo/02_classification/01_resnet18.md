@@ -1,7 +1,7 @@
 ---
 title: 图像分类-ResNet18 (C/C++)
 sidebar_position: 1
-description: 用 C/C++ 部署 ResNet18 做图像分类推理的预装示例
+description: "用 C/C++ 部署 ResNet18 做图像分类推理的预装示例"
 ---
 
 # 图像分类-ResNet18 (C/C++)

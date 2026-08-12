@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2---
+sidebar_position: 2
+---
 
 # 6.2 接口、外设与驱动
 

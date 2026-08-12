@@ -1,5 +1,6 @@
 ---
-sidebar_position: 1---
+sidebar_position: 1
+---
 
 # 5.4.1 配置 U-Boot 和 Kernel 选项参数
 

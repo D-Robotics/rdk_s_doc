@@ -1,5 +1,6 @@
 ---
-sidebar_position: 8---
+sidebar_position: 8
+---
 
 # 5.6.9 IPC 使用指南
 

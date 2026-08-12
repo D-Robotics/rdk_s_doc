@@ -2,7 +2,8 @@
 sidebar_position: 1
 title: "5.2.1 RDK S100 硬件点亮"
 description: 5.2.1 RDK S100 硬件点亮
-sidebar_products: RDK S100---
+sidebar_products: RDK S100
+---
 
 # 5.2.1 RDK S100 硬件点亮
 

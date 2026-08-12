@@ -1,5 +1,6 @@
 ---
-sidebar_position: 6---
+sidebar_position: 6
+---
  
 # 6.6 TROS/ROS 开发
 

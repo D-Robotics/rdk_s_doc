@@ -2,7 +2,8 @@
 sidebar_position: 1
 title: "5.7.2.1 RDK S100 LLM 工具链"
 description: 5.7.2.1 RDK S100 LLM 工具链
-sidebar_products: RDK S100---
+sidebar_products: RDK S100
+---
 
 # 5.7.2.1 RDK S100 LLM 工具链
 

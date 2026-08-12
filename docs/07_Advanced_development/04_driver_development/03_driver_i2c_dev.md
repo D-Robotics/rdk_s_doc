@@ -1,5 +1,6 @@
 ---
-sidebar_position: 3---
+sidebar_position: 3
+---
 
 # 5.4.3 I2C 调试指南
 

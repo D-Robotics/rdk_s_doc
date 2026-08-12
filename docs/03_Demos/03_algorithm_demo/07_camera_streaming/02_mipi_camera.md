@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2---
+sidebar_position: 2
+---
 
 # MIPI Camera YOLOv5x 推理
 

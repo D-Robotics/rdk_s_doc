@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: "5.1.1 开发环境搭建及编译说明"
-description: RDK S100/S600 交叉编译环境搭建、源码获取与系统镜像编译
+description: "RDK S100/S600 交叉编译环境搭建、源码获取与系统镜像编译"
 ---
 
 # 5.1.1 开发环境搭建及编译说明

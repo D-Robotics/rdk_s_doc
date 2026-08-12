@@ -1,7 +1,7 @@
 ---
 title: "2.5.2 自定义 config.txt"
 sidebar_position: 2
-description: 如何创建和修改 RDK config.txt 配置文件
+description: "如何创建和修改 RDK config.txt 配置文件"
 ---
 
 # 2.5.2 自定义 config.txt

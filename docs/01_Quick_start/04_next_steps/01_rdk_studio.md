@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: "1.4.1 使用 RDK Studio"
-description: RDK Studio 集成开发环境介绍与下载
+description: "RDK Studio 集成开发环境介绍与下载"
 ---
 
 # 1.4.1 使用 RDK Studio

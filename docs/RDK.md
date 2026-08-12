@@ -2,7 +2,7 @@
 sidebar_position: 0
 slug: /RDK
 title: D-Robotics RDK 套件
-description: RDK S100/S600 套件介绍、资料索引、文档导航、三模式导览、版本发布
+description: "RDK S100/S600 套件介绍、资料索引、文档导航、三模式导览、版本发布"
 ---
 
 # D-Robotics RDK 套件

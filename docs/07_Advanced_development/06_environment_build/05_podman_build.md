@@ -1,7 +1,7 @@
 ---
 title: "5.1.5 使用 Podman 编译"
 sidebar_position: 5
-description: 使用 Podman 容器编译 RDK BSP
+description: "使用 Podman 容器编译 RDK BSP"
 ---
 
 # 5.1.5 使用 Podman 编译

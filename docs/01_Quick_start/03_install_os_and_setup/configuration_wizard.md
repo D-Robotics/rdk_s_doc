@@ -1,10 +1,14 @@
 ---
 sidebar_position: 4
 title: "1.3.3 入门配置"
-description: RDK S100/S600 入门配置：账户、Wi-Fi、SSH、中文环境、RDK Studio、NoMachine
+description: "RDK S100/S600 入门配置：账户、Wi-Fi、SSH、中文环境、RDK Studio、NoMachine"
 ---
 
 # 1.3.3 入门配置
+
+本节指导你在烧录系统并登录后完成首次基础配置：连接网络、开启 SSH、设置中文环境、安装远程桌面等，让板卡进入可日常使用的状态。
+
+> 烧录见 [1.3.1 系统烧录](./01_instruction.md)，系统状态确认见 [1.3.2 系统状态查询](./system_status.md)，远程登录见 [1.3.4 远程登录](./remote_login.md)。
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -308,8 +312,27 @@ sudo chown -R usertest:usertest /home/usertest
 
 也可以参考修改用户名，将新增用户设为自动登录用户
 
+## 验证
+
+完成以上配置后，按以下清单确认：
+
+- `ifconfig` 能看到无线/有线 IP 地址（网络配置成功）。
+- 从 PC `ssh sunrise@<板端IP>` 能登录（SSH 服务正常）。
+- 系统语言/中文字体生效（`locale` 输出含 `zh_CN.UTF-8`）。
+- NoMachine 从 PC 能连接到板端桌面（远程桌面正常）。
+
+## 常见问题
+
+- **Wi-Fi 扫描不到网络**：检查 Wi-Fi 模组是否安装（M.2 Key E 接口），`nmcli device` 查看设备状态。
+- **SSH 连接被拒绝**：`sudo systemctl status ssh` 确认服务运行；检查防火墙 `sudo ufw status`。
+- **中文环境切换后无法登录桌面**：见 [6.7 桌面应用 FAQ](/FAQ/desktop_app)。
+- **NoMachine 黑屏**：完成配置后必须**重启板卡**才生效。
+
 ## 相关文档
 
-- [烧录系统与配置](./01_instruction.md)
-- [系统状态查询](./system_status.md)
-- [远程登录](./remote_login.md)
+- [1.3.1 系统烧录](./01_instruction.md)
+- [1.3.2 系统状态查询](./system_status.md)
+- [1.3.4 远程登录](./remote_login.md)
+- [2.1 网络配置](/System_configuration/network_config)
+- [2.4 srpi-config 工具配置](/System_configuration/srpi_config)
+- [6.7 桌面应用 FAQ](/FAQ/desktop_app)

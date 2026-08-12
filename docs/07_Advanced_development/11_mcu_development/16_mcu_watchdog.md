@@ -1,5 +1,6 @@
 ---
-sidebar_position: 16---
+sidebar_position: 16
+---
 # 5.6.17 MCU 看门狗
 
 ```mdx-code-block

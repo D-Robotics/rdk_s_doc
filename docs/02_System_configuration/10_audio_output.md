@@ -1,7 +1,7 @@
 ---
 title: "2.10 音频配置"
 sidebar_position: 10
-description: 音频输出设备选择与基础控制
+description: "音频输出设备选择与基础控制"
 ---
 
 # 2.10 音频配置

@@ -1,5 +1,6 @@
 ---
-sidebar_position: 12---
+sidebar_position: 12
+---
 
 # 多路 Camera 及与 Lidar 同步
 

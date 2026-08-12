@@ -1,7 +1,7 @@
 ---
 title: "5.3.2 系统定制"
 sidebar_position: 1
-description: RDK 系统定制：重制镜像、自定义 rootfs、deb/源码层定制
+description: "RDK 系统定制：重制镜像、自定义 rootfs、deb/源码层定制"
 ---
 
 # 5.3.2 系统定制

@@ -1,7 +1,7 @@
 ---
 title: "2.2 蓝牙配置"
 sidebar_position: 2
-description: 蓝牙服务状态、扫描、配对、连接
+description: "蓝牙服务状态、扫描、配对、连接"
 ---
 
 # 2.2 蓝牙配置

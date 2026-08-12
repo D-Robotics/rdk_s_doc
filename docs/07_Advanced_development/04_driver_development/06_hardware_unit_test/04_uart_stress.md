@@ -1,5 +1,6 @@
 ---
-sidebar_position: 5---
+sidebar_position: 5
+---
 
 # 5.4.18.5 串口压力测试
 

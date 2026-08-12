@@ -1,5 +1,6 @@
 ---
-sidebar_position: 14---
+sidebar_position: 14
+---
 # 5.6.15 ICU 使用指南
 
 ```mdx-code-block

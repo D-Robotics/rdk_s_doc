@@ -2,7 +2,7 @@
 sidebar_position: 1
 sidebar_products: RDK-S100
 title: "4.1.2.1 多媒体接口说明"
-description: RDK Python pydev 多媒体接口总览（Camera/Encoder/Decoder/Display）
+description: "RDK Python pydev 多媒体接口总览（Camera/Encoder/Decoder/Display）"
 ---
 
 # 4.1.2.1 多媒体接口说明

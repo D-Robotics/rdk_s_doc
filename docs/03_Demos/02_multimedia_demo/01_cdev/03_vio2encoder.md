@@ -1,7 +1,7 @@
 ---
 title: "3.2.1.3 采集→编码"
 sidebar_position: 3
-description: RDK S100/S600 摄像头采集→VIO→编码保存示例
+description: "RDK S100/S600 摄像头采集→VIO→编码保存示例"
 ---
 
 # 3.2.1.3 采集→编码

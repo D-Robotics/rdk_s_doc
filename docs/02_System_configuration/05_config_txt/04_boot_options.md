@@ -1,7 +1,7 @@
 ---
 title: "2.5.4 启动相关配置"
 sidebar_position: 4
-description: RDK config.txt 启动相关配置项
+description: "RDK config.txt 启动相关配置项"
 ---
 
 # 2.5.4 启动相关配置

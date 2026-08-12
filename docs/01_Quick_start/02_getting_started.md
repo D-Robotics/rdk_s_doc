@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: "1.2 开始使用 RDK"
-description: RDK S100/S600 基础外设连接指南：电源、启动介质、键鼠、显示器、音频、网络、USB
+description: "RDK S100/S600 基础外设连接指南：电源、启动介质、键鼠、显示器、音频、网络、USB"
 ---
 
 ```mdx-code-block

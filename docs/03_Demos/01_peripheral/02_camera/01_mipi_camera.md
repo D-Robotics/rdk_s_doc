@@ -1,5 +1,6 @@
 ---
-sidebar_position: 1---
+sidebar_position: 1
+---
 
 # MIPI 摄像头使用
 

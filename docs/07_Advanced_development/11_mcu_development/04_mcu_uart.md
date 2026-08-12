@@ -1,5 +1,6 @@
 ---
-sidebar_position: 4---
+sidebar_position: 4
+---
 
 # 5.6.5 UART 使用指南
 

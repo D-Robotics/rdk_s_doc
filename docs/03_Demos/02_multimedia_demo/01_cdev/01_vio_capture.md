@@ -1,5 +1,6 @@
 ---
-sidebar_position: 1---
+sidebar_position: 1
+---
 
 # 3.2.1.1 视频采集
 

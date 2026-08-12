@@ -1,7 +1,7 @@
 ---
 title: MIPI Camera YOLOv5x 推理 (Python)
 sidebar_position: 6
-description: MIPI 摄像头实时 YOLOv5x 检测推理示例
+description: "MIPI 摄像头实时 YOLOv5x 检测推理示例"
 ---
 
 # MIPI Camera YOLOv5x 推理 (Python)

@@ -1,5 +1,6 @@
 ---
-sidebar_position: 5---
+sidebar_position: 5
+---
 
 # 4.1.1.5 SYS（模块绑定）API
 

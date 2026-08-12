@@ -1,7 +1,7 @@
 ---
 title: "2.6 开机自启动配置"
 sidebar_position: 6
-description: 用 systemd unit / init.d / rc.local 配置开机自启
+description: "用 systemd unit / init.d / rc.local 配置开机自启"
 ---
 
 # 2.6 开机自启动配置

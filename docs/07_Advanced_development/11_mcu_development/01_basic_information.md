@@ -1,5 +1,6 @@
 ---
-sidebar_position: 1---
+sidebar_position: 1
+---
 
 # 5.6.2 MCU 快速入门指南
 

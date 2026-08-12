@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2---
+sidebar_position: 2
+---
 
 # 4.1.2.2 Camera 对象
 

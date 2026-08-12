@@ -1,7 +1,7 @@
 ---
 title: "2.5.3 常用配置项参考"
 sidebar_position: 3
-description: RDK config.txt 常用配置项速查表
+description: "RDK config.txt 常用配置项速查表"
 ---
 
 # 2.5.3 常用配置项参考

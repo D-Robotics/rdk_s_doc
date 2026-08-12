@@ -1,7 +1,7 @@
 ---
 sidebar_position: 6
 title: "5.5.1.6 视频处理框架 - VPF/PYM"
-description: RDK S100/S600 5.5.1.6 VPF/PYM（视频处理框架）
+description: "RDK S100/S600 5.5.1.6 VPF/PYM（视频处理框架）"
 ---
 
 # 5.5.1.6 视频处理框架 - VPF/PYM

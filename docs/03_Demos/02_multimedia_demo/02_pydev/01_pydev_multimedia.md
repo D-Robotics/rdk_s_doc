@@ -1,7 +1,7 @@
 ---
 title: "3.2.2.1 Python 多媒体示例"
 sidebar_position: 1
-description: RDK S100/S600 Python 多媒体采集/显示/编解码示例
+description: "RDK S100/S600 Python 多媒体采集/显示/编解码示例"
 ---
 
 # 3.2.2.1 Python 多媒体示例

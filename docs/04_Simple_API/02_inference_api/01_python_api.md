@@ -3,7 +3,7 @@ sidebar_position: 2
 id: python-api
 title: "4.2.2 Python 推理 API"
 sidebar_label: 4.2 Python 推理 API
-description: hbm_runtime Python 接口：模型加载、推理、调度参数
+description: "hbm_runtime Python 接口：模型加载、推理、调度参数"
 ---
 # 4.2.2 Python 推理 API
 

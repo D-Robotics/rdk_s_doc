@@ -1,7 +1,7 @@
 ---
 title: "1.4.2.1 TogetheROS.Bot 概述"
 sidebar_position: 1
-description: TogetheROS.Bot（tros.b）机器人中间件介绍
+description: "TogetheROS.Bot（tros.b）机器人中间件介绍"
 ---
 
 # 1.4.2.1 TogetheROS.Bot 概述

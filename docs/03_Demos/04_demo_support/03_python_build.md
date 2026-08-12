@@ -1,7 +1,7 @@
 ---
 title: "3.4.3 Python demo 编程指南"
 sidebar_position: 3
-description: 运行/二次开发板端 Python demo 的方法
+description: "运行/二次开发板端 Python demo 的方法"
 ---
 
 # 3.4.3 Python demo 编程指南

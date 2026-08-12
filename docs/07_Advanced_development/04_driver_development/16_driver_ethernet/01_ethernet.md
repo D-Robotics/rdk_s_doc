@@ -1,5 +1,6 @@
 ---
-sidebar_position: 1---
+sidebar_position: 1
+---
 # 5.4.13.1 Ethernet
 
 ```mdx-code-block

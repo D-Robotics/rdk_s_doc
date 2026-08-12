@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2---
+sidebar_position: 2
+---
 
 # 1.1.2.1 RDK S100 相机扩展板 12 通道
 

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 8
 title: "5.5.1.8 畸变矫正 - GDC"
-description: RDK S100/S600 GDC 畸变矫正配置
+description: "RDK S100/S600 GDC 畸变矫正配置"
 ---
 
 # 5.5.1.8 畸变矫正 - GDC

@@ -1,7 +1,7 @@
 ---
 title: "3.1.5 IMU 应用"
 sidebar_position: 5
-description: RDK S100/S600 IMU 传感器数据读取示例（BMI08X/ICM42688）
+description: "RDK S100/S600 IMU 传感器数据读取示例（BMI08X/ICM42688）"
 ---
 
 # 3.1.5 IMU 应用

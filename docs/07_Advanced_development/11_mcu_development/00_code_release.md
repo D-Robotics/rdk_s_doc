@@ -1,5 +1,6 @@
 ---
-sidebar_position: 0---
+sidebar_position: 0
+---
 
 # 5.6.1 MCU 代码包结构介绍
 

@@ -2,7 +2,8 @@
 sidebar_position: 3
 title: "1.1.2.1 相机扩展板（RDK S600）"
 description: 1.1.2.1 相机扩展板（RDK S600）
-sidebar_label: "1.1.2.1 相机扩展板（RDK S600）"---
+sidebar_label: "1.1.2.1 相机扩展板（RDK S600）"
+---
 
 
 

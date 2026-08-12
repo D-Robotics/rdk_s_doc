@@ -1,7 +1,7 @@
 ---
 title: "3.4.1 模型获取与放置"
 sidebar_position: 1
-description: 跑 demo 前的模型与测试资源路径说明
+description: "跑 demo 前的模型与测试资源路径说明"
 ---
 
 # 3.4.1 模型获取与放置

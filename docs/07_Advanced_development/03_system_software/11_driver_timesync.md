@@ -1,5 +1,6 @@
 ---
-sidebar_position: 11---
+sidebar_position: 11
+---
 
 # 5.3.11 时间同步方案
 

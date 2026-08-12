@@ -1,5 +1,6 @@
 ---
-sidebar_position: 4---
+sidebar_position: 4
+---
 
 # 4.1.2.4 Decoder 对象
 

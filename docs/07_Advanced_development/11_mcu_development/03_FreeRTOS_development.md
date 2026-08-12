@@ -1,5 +1,6 @@
 ---
-sidebar_position: 3---
+sidebar_position: 3
+---
 
 # 5.6.4 MCU1 开发指南
 

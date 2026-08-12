@@ -1,7 +1,7 @@
 ---
 title: "4.2.1 C 语言推理 API"
 sidebar_position: 1
-description: RDK S100/S600 BPU 推理 C API（hb_bpu）
+description: "RDK S100/S600 BPU 推理 C API（hb_bpu）"
 ---
 
 # 4.2.1 C 语言推理 API

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: "2.1 网络配置"
-description: RDK S100/S600 有线/无线网络配置、DNS、Proxy，默认账号与 IP 权威定义
+description: "RDK S100/S600 有线/无线网络配置、DNS、Proxy，默认账号与 IP 权威定义"
 ---
 
 # 2.1 网络配置

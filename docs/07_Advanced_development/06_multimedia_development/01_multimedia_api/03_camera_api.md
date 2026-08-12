@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: "5.5.1.3 相机接口 - Camera"
-description: RDK S100/S600 5.5.1.3 Camera（相机接口）
+description: "RDK S100/S600 5.5.1.3 Camera（相机接口）"
 ---
 
 # 5.5.1.3 相机接口 - Camera

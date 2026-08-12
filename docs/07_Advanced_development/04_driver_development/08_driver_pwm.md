@@ -1,5 +1,6 @@
 ---
-sidebar_position: 7---
+sidebar_position: 7
+---
 
 # 5.4.7 PWM 驱动调试指南
 

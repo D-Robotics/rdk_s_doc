@@ -1,7 +1,7 @@
 ---
 title: 目标检测-Ultralytics YOLOv5x (C/C++)
 sidebar_position: 1
-description: 用 C/C++ 部署 YOLOv5x 做目标检测的预装示例
+description: "用 C/C++ 部署 YOLOv5x 做目标检测的预装示例"
 ---
 
 # 目标检测-Ultralytics YOLOv5x (C/C++)

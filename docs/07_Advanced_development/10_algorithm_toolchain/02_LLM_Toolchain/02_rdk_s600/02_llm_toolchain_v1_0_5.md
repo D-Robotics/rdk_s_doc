@@ -2,7 +2,8 @@
 sidebar_position: 2
 title: "5.7.2.2.2 大模型工具链 v1.0.5"
 description: 5.7.2.2.2 大模型工具链 v1.0.5
-sidebar_products: RDK S600---
+sidebar_products: RDK S600
+---
 
 # 5.7.2.2.2 大模型工具链 v1.0.5
 

@@ -1,7 +1,7 @@
 ---
 title: "2.16 调试串口"
 sidebar_position: 16
-description: TTL-USB 串口线硬件接线、工具配置与串口登录
+description: "TTL-USB 串口线硬件接线、工具配置与串口登录"
 ---
 
 # 2.16 调试串口
