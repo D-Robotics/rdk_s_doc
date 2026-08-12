@@ -56,7 +56,7 @@ RDK S100 提供 Ubuntu 22.04 桌面版系统镜像，自带图形桌面环境。
 
 ## 相关文档
 
-- [烧录步骤（S100）](./02_burn.md)
+- [烧录步骤（S100）](./02_burn/01_burn.md)
 - [系统状态查询](../system_status.md)
 - [远程登录](../remote_login.md)
 - [S100 硬件介绍](../../01_hardware_introduction/01_rdk_s100.md)

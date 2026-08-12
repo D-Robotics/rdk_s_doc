@@ -1,18 +1,32 @@
 ---
 sidebar_position: 1
-sidebar_products: RDK S100
+title: 入门配置
+description: RDK S100/S600 入门配置：账户、Wi-Fi、SSH、中文环境、RDK Studio、NoMachine
 ---
 
-# 1.3.1 入门配置
+# 入门配置
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
 ```
 
 ## 默认登录账户
 
-在进行系统配置前，您需要先登录系统。RDK S100 系统提供了两个默认账户：
+在进行系统配置前，您需要先登录系统。
+
+<DocScope products="RDK-S100">
+
+RDK S100 系统提供了两个默认账户：
+
+</DocScope>
+
+<DocScope products="RDK-S600">
+
+RDK S600 系统提供了两个默认账户：
+
+</DocScope>
 
 - **普通用户：** 用户名 `sunrise`，密码 `sunrise`
 - **超级用户 (root)：** 用户名 `root`，密码 `root`
@@ -22,7 +36,17 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="rdk-type">
 <TabItem value="desktop" label="Desktop">
 
+<DocScope products="RDK-S100">
+
 参考 Ubuntu 22.04 Wi-Fi 链接教程进行。
+
+</DocScope>
+
+<DocScope products="RDK-S600">
+
+参考 Ubuntu 24.04 Wi-Fi 链接教程进行。
+
+</DocScope>
 
 </TabItem>
 
@@ -82,17 +106,35 @@ SSH 的使用请查看 [远程登录 - SSH 登录](./remote_login#ssh)。
 
 ### 字符终端自动登录
 
+修改 serial-getty 服务文件可以设置免密登陆，操作如下：
 
-修改 `serial-getty@.service` 文件可以设置免密登陆，操作如下：
+<DocScope products="RDK-S100">
 
 1. 打开 `serial-getty@.service`。
 
 ```bash
-# root用户登陆
+# root 用户登录
 vim /lib/systemd/system/serial-getty@.service
-# sunrise用户登陆
+
+# sunrise 用户登录
 sudo vim /lib/systemd/system/serial-getty@.service
 ```
+
+</DocScope>
+
+<DocScope products="RDK-S600">
+
+1. 打开 `serial-getty@ttyS0.service`。
+
+```bash
+# root 用户登录
+vim /usr/lib/systemd/system/serial-getty@ttyS0.service
+
+# sunrise 用户登录
+sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
+```
+
+</DocScope>
 
 2.  将 `ExecStart=-/sbin/agetty` 所在行修改为:
 
@@ -147,7 +189,9 @@ source /etc/default/locale
 
 ## 设置 RDK Studio
 
-待更新
+RDK Studio 是面向机器人开发的 AI 原生桌面工作台。它把 Moss 对话、项目工作区、设备连接、远程开发、烧录、本地模型和板端 Agent 放在同一个原生窗口里。
+
+RDK Studio 的使用方法请参考 [RDK Studio 用户手册](https://developer.d-robotics.cc/rdk_studio_doc/category/1-product-intro)。
 
 ## NoMachine 配置
 
@@ -157,7 +201,21 @@ NoMachine 下载官方网址： [NoMachine Download](https://downloads.nomachine
 
 **下载安装包**
 
-进入官网后找到适合`RDK S100`的`ARM64`版本的安装包，点击`Download`
+进入官网后找到适合
+
+<DocScope products="RDK-S100">
+
+`RDK S100`
+
+</DocScope>
+
+<DocScope products="RDK-S600">
+
+`RDK S600`
+
+</DocScope>
+
+的`ARM64`版本的安装包，点击`Download`
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="NoMachine 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -170,7 +228,7 @@ dpkg -i nomachine_*_arm64.deb
 
 **配置启动**
 
-1. 配置服务器以允许远程连接。
+1. 配置服务器以允许远程连接
 
     ```shell
     sudo systemctl start nxserver
@@ -198,7 +256,19 @@ dpkg -i nomachine_*_arm64.deb
     sudo systemctl restart nxserver
     ```
 
-**重启 S100**
+**重启**
+
+<DocScope products="RDK-S100">
+
+重启 S100。
+
+</DocScope>
+
+<DocScope products="RDK-S600">
+
+重启 S600。
+
+</DocScope>
 
 由于`NXServer`的配置问题，完成上述操作后直接连接会黑屏，需要重启后使用。
 
@@ -222,8 +292,8 @@ sudo passwd usertest
 ```
 
 最后将更新桌面服务自动登录的用户名称:
-  - gdm：RDK S100默认桌面服务，将`/etc/gdm3/custom.conf`文件中的`AutomaticLogin = sunrise`改为`AutomaticLogin = usertest`
-  - lighttdm：将`/etc/lightdm/lightdm.conf.d/22-hobot-autologin.conf`文件中的 `autologin-user=sunrise` 改为`autologin-user=usertest`，
+  - gdm：RDK S100 默认桌面服务，将`/etc/gdm3/custom.conf`文件中的`AutomaticLogin = sunrise`改为`AutomaticLogin = usertest`
+  - lightdm：将`/etc/lightdm/lightdm.conf.d/22-hobot-autologin.conf`文件中的 `autologin-user=sunrise` 改为`autologin-user=usertest`，
 
 **增加新用户**
 
@@ -237,3 +307,10 @@ sudo chown -R usertest:usertest /home/usertest
 ```
 
 也可以参考修改用户名，将新增用户设为自动登录用户
+
+## 相关文档
+
+- [烧录系统与配置（S100）](./rdk_s100/01_instruction.md)
+- [烧录系统与配置（S600）](./rdk_s600/01_instruction.md)
+- [系统状态查询](./system_status.md)
+- [远程登录](./remote_login.md)

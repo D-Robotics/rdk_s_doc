@@ -57,7 +57,7 @@ RDK S600 提供 Ubuntu 24.04 桌面版系统镜像，自带图形桌面环境。
 
 ## 相关文档
 
-- [烧录步骤（S600）](./02_burn.md)
+- [烧录步骤（S600）](./02_burn/01_burn.md)
 - [系统状态查询](../system_status.md)
 - [远程登录](../remote_login.md)
 - [S600 硬件介绍](../../01_hardware_introduction/02_rdk_s600.md)

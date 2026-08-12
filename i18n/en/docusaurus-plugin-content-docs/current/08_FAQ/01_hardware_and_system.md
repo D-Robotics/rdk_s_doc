@@ -70,7 +70,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
     * Mainly supports early RDK hardware and is no longer the current mainline.
 
 **Important notes:**
-* **Version upgrade:** RDK OS 1.x **cannot** be upgraded directly to 2.x or newer via `apt`. To upgrade, you must re-flash a new system image and [install the operating system](/Quick_start/install_os_and_setup/rdk_s100/burn) again.
+* **Version upgrade:** RDK OS 1.x **cannot** be upgraded directly to 2.x or newer via `apt`. To upgrade, you must re-flash a new system image and [install the operating system](../01_Quick_start/03_install_os_and_setup/rdk_s100/02_burn/01_burn.md) again.
 * **TROS compatibility:** Different major TROS releases (e.g., Foxy-based and Humble-based TROS) are usually tied to specific RDK OS major versions. For example, RDK OS 2.x typically ships with TROS based on ROS 2 Foxy, while RDK OS 3.x typically ships with TROS based on ROS 2 Humble.
 
 ### Q4: What precautions apply when connecting or disconnecting a camera?

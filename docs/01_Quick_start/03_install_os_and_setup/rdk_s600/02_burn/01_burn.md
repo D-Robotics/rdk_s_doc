@@ -10,7 +10,7 @@ description: RDK S600 用 XBurn 烧录系统镜像的步骤
 本页基于官方烧录说明整理，未在 S600 板端复现验证（烧录会抹除当前在用的 S600 系统）；拨码与指示灯以板端实物为准。
 :::
 
-本页介绍 RDK S600 的系统烧录。烧录前先完成 [烧录准备](./01_instruction.md)。
+本页介绍 RDK S600 的系统烧录。烧录前先完成 [烧录准备](../01_instruction.md)。
 
 ## 下载模式
 
@@ -27,10 +27,10 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 **V1P0 版本（当前）**
 
-1. 将 [SW3](../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `ON`，进入 DFU 模式。
+1. 将 [SW3](../../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
+2. 将 [SW2](../../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `ON`，进入 DFU 模式。
 3. 将 SW3 拨码至 `ON`，开启电源。
-4. 检查 [D61 Flash 灯](../../01_hardware_introduction/02_rdk_s600.md#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
+4. 检查 [D61 Flash 灯](../../../01_hardware_introduction/02_rdk_s600.md#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
 
@@ -39,19 +39,19 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 **V0P1 版本**
 
-1. 将 [SW3](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 短接 [SW2](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#开关sw2sw3) 跳线帽，进入 DFU 模式。
+1. 将 [SW3](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
+2. 短接 [SW2](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#开关sw2sw3) 跳线帽，进入 DFU 模式。
 3. 将 SW3 拨码至 `ON`，开启电源。
-4. 检查 [D61 Flash 灯](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
+4. 检查 [D61 Flash 灯](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
 
 **V0P2 版本**
 
-1. 将 [SW3](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#开关sw2sw3) 拨码至 `ON`，进入 DFU 模式。
+1. 将 [SW3](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
+2. 将 [SW2](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#开关sw2sw3) 拨码至 `ON`，进入 DFU 模式。
 3. 将 SW3 拨码至 `ON`，开启电源。
-4. 检查 [D61 Flash 灯](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
+4. 检查 [D61 Flash 灯](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
 
 V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
 
@@ -59,8 +59,8 @@ V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
 
 ### 进入 Fastboot 模式
 
-1. 将 [SW3](../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `OFF`，进入正常启动模式。
+1. 将 [SW3](../../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `OFF`，关闭电源。
+2. 将 [SW2](../../../01_hardware_introduction/02_rdk_s600.md#开关sw2sw3) 拨码至 `OFF`，进入正常启动模式。
 3. 将 SW3 拨码至 `ON`，开启电源。
 
 - **自动进入**：板端系统启动完成后自动启动 ADB 服务，XBurn 检测到 ADB 设备后下发命令，让板端进入 Fastboot。
@@ -71,12 +71,12 @@ V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
 适用于首次刷机或系统恢复，烧录完整系统镜像包，**存储介质** 按实际情况选 `UFS`（板载）或 `NVMe`（扩展）。
 
 :::warning 启动盘选择
-启动盘由 [SW8 BOOT 拨码](../../01_hardware_introduction/02_rdk_s600.md#bootsw8) 决定，**烧录前**须按目标存储介质，正确设置 SW8 拨码，烧录后保持拨码位置不变：
+启动盘由 [SW8 BOOT 拨码](../../../01_hardware_introduction/02_rdk_s600.md#bootsw8) 决定，**烧录前**须按目标存储介质，正确设置 SW8 拨码，烧录后保持拨码位置不变：
 
 - 从 **UFS** 启动：SW8 拨至 UFS 启动位（`D12=ON, D13=ON` 或 `D12=OFF, D13=OFF`）。
 - 从 **NVMe** 启动：SW8 拨至 NVMe 启动位（`D12=OFF, D13=ON`）。
   
-烧录 NVMe 需使用 NVMe 版本的镜像，地瓜默认提供的镜像面向 UFS，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_environment_build/03_rdk_gen.md#emmcufsnvme-镜像编译须知)。
+烧录 NVMe 需使用 NVMe 版本的镜像，地瓜默认提供的镜像面向 UFS，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../../07_Advanced_development/06_environment_build/03_rdk_gen.md#emmcufsnvme-镜像编译须知)。
 :::
 
 1. **产品类型** 选择 `RDK S600`。
@@ -159,7 +159,7 @@ V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
 
 ## 相关文档
 
-- [烧录准备（S600）](./01_instruction.md)
-- [系统状态查询](../system_status.md)
-- [远程登录](../remote_login.md)
-- [S600 硬件介绍](../../01_hardware_introduction/02_rdk_s600.md)
+- [烧录准备（S600）](../01_instruction.md)
+- [系统状态查询](../../system_status.md)
+- [远程登录](../../remote_login.md)
+- [S600 硬件介绍](../../../01_hardware_introduction/02_rdk_s600.md)

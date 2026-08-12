@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Flash the system image
 
-This page describes system flashing for the RDK S600. Complete [flashing preparation](./01_instruction.md) before you flash.
+This page describes system flashing for the RDK S600. Complete [flashing preparation](../01_instruction.md) before you flash.
 
 ## Download modes
 
@@ -21,10 +21,10 @@ The RDK S600 currently on sale is V1P0. Enter DFU mode as follows:
 
 **V1P0 (current)**
 
-1. Set the [SW3](../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
-2. Set the [SW2](../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `ON` to enter DFU mode.
+1. Set the [SW3](../../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
+2. Set the [SW2](../../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `ON` to enter DFU mode.
 3. Set the SW3 DIP switch to `ON`, and power on.
-4. Check the [D61 Flash LED](../../01_hardware_introduction/02_rdk_s600.md#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
+4. Check the [D61 Flash LED](../../../01_hardware_introduction/02_rdk_s600.md#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
 
@@ -33,19 +33,19 @@ The RDK S600 currently on sale is V1P0. Enter DFU mode as follows:
 
 **V0P1**
 
-1. Set the [SW3](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
-2. Short the [SW2](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#switches-sw2sw3) jumper cap to enter DFU mode.
+1. Set the [SW3](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
+2. Short the [SW2](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#switches-sw2sw3) jumper cap to enter DFU mode.
 3. Set the SW3 DIP switch to `ON`, and power on.
-4. Check the [D61 Flash LED](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
+4. Check the [D61 Flash LED](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p1.md#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-V0P1-en.png" alt="image-S600-V0P1" style={{ width: '100%' }} />
 
 **V0P2**
 
-1. Set the [SW3](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
-2. Set the [SW2](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#switches-sw2sw3) DIP switch to `ON` to enter DFU mode.
+1. Set the [SW3](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
+2. Set the [SW2](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#switches-sw2sw3) DIP switch to `ON` to enter DFU mode.
 3. Set the SW3 DIP switch to `ON`, and power on.
-4. Check the [D61 Flash LED](../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
+4. Check the [D61 Flash LED](../../../01_hardware_introduction/02_rdk_s600/versions/rdk_s600/v0p2.md#indicator-leds-d59d60d61): steady on means the device is in DFU mode.
 
 V0P2 DFU entry is the same as the V1P0 version above.
 
@@ -53,8 +53,8 @@ V0P2 DFU entry is the same as the V1P0 version above.
 
 ### Enter Fastboot mode
 
-1. Set the [SW3](../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
-2. Set the [SW2](../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `OFF` to enter normal boot mode.
+1. Set the [SW3](../../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `OFF`, and power off.
+2. Set the [SW2](../../../01_hardware_introduction/02_rdk_s600.md#switches-sw2sw3) DIP switch to `OFF` to enter normal boot mode.
 3. Set the SW3 DIP switch to `ON`, and power on.
 
 - **Automatic entry**: After the board system finishes booting, the ADB service starts automatically. XBurn detects the ADB device and sends a command to put the board into Fastboot.
@@ -65,12 +65,12 @@ V0P2 DFU entry is the same as the V1P0 version above.
 Use this for a first-time flash or system recovery. It flashes the complete system image package. For **Storage medium**, select `UFS` (onboard) or `NVMe` (expansion) based on your setup.
 
 :::warning Boot disk selection
-The boot disk is determined by the [SW8 BOOT DIP switch](../../01_hardware_introduction/02_rdk_s600.md#boot-sw8). **Before flashing**, set the SW8 DIP switch correctly for the target storage medium, and keep the switch position unchanged after flashing:
+The boot disk is determined by the [SW8 BOOT DIP switch](../../../01_hardware_introduction/02_rdk_s600.md#boot-sw8). **Before flashing**, set the SW8 DIP switch correctly for the target storage medium, and keep the switch position unchanged after flashing:
 
 - Boot from **UFS**: Set SW8 to the UFS boot position (`D12=ON, D13=ON` or `D12=OFF, D13=OFF`).
 - Boot from **NVMe**: Set SW8 to the NVMe boot position (`D12=OFF, D13=ON`).
 
-Flashing NVMe requires the NVMe version of the image. D-Robotics provides UFS images by default; the NVMe image must be compiled on your own (build config `RDK_DISK_MEDIUM="nvme"`). See [Build system development guide · eMMC/UFS/NVMe image build notes](../../../07_Advanced_development/06_environment_build/03_rdk_gen.md#emmcufsnvme-image-build-notes).
+Flashing NVMe requires the NVMe version of the image. D-Robotics provides UFS images by default; the NVMe image must be compiled on your own (build config `RDK_DISK_MEDIUM="nvme"`). See [Build system development guide · eMMC/UFS/NVMe image build notes](../../../../07_Advanced_development/06_environment_build/03_rdk_gen.md#emmcufsnvme-image-build-notes).
 :::
 
 1. For **Product type**, select `RDK S600`.
