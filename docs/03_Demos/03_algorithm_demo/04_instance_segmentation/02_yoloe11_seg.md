@@ -149,3 +149,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
 
 ## 注意事项
 - 若指定模型路径不存在，程序将尝试自动下载模型。
+
+## 相关文档
+
+- [3.3.1 算法示例概述](/Demos/algorithm_demo/summary)
+- [3.4.1 模型获取与放置](/Demos/demo_support/model_files)
+- [4.2 Python 推理 API](/Simple_API/inference_api/python-api)

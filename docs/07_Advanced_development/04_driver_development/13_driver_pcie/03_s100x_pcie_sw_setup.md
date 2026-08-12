@@ -116,3 +116,8 @@ S600 PCIE 的链路支持3种模式：
 ...
 ```
 </DocScope>
+
+## 相关文档
+
+- [5.4.10.2 PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
+- [5.4.10.4 PCIe 用户态 API](/Advanced_development/driver_development/driver_pcie)

@@ -141,3 +141,8 @@ MCU0在启动时，会调度`Port_Init()`接口对 MCU 的所有 PIN 进行初�
   - `IsUsedGpio`：定义 Port 模块是否会在初始化时对该 PIN 进行 GPIO 的方向及输出配置；
 
 客户可以根据需要自行定义 PIN 的初始状态。
+
+## 相关文档
+
+- [5.6.13.1 Port 使用指南](/Advanced_development/mcu_development/mcu_port/user_manual)
+- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

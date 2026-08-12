@@ -170,7 +170,7 @@ import DocScope from '@site/src/components/DocScope';
     * **接口对应：** 如果板卡有多个 MIPI CSI 接口，确保摄像头连接到了您在软件配置或设备树中指定的那个接口。
     * **参考文档：** 仔细查阅您所使用的 RDK 板卡型号对应的硬件手册或快速入门指南中关于“MIPI 摄像头”连接的章节，确认连接细节。
         <DocScope products="RDK S100">
-        [RDK S100 MIPI 摄像头](../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)
+        [RDK S100 MIPI 摄像头](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board)
         </DocScope>
 2.  **禁止带电插拔：**
     * **严禁在开发板通电的情况下插拔 MIPI 摄像头！** 带电操作极易因瞬间的电流冲击或引脚接触顺序错误而导致摄像头模组或板卡 MIPI 接口电路短路损坏。

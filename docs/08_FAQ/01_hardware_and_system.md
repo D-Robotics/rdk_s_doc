@@ -990,7 +990,7 @@ DefaultEnvironment="TZ=CST-08:00"
 
 
 
-**A: [1.1.1.1 RDK S100 相机扩展板](../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md)** 和 **[1.1.1.2 RDK S100 MCU 接口扩展板](../01_Quick_start/01_hardware_introduction/03_rdk_mcu_port_expansion_board.md)** 章节分别有介绍 CAM 子板和 MCU 子板与 RDK S100 主板连接的参考视频可供参考。​
+**A: [1.1.1.1 RDK S100 相机扩展板](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board)** 和 **[1.1.1.2 RDK S100 MCU 接口扩展板](/Quick_start/hardware_introduction/rdk_mcu_port_expansion_board)** 章节分别有介绍 CAM 子板和 MCU 子板与 RDK S100 主板连接的参考视频可供参考。​
 
 
 

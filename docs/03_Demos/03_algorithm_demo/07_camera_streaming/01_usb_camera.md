@@ -176,3 +176,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
+
+## 相关文档
+
+- [3.3.1 算法示例概述](/Demos/algorithm_demo/summary)
+- [3.4.1 模型获取与放置](/Demos/demo_support/model_files)
+- [4.2 Python 推理 API](/Simple_API/inference_api/python-api)

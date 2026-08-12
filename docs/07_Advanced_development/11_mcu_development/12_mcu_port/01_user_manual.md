@@ -466,3 +466,9 @@ Port_Func 提供的 GPIO 接口，使用的 PinIdx 为[Port_Func模块PIN号对�
 
         </DocScope>
 :::
+
+## 相关文档
+
+- [5.6.13.2 Port 开发指南](/Advanced_development/mcu_development/mcu_port/development_manual)
+- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [1.1.2.2 MCU 接口扩展板](/01_hardware_introduction)

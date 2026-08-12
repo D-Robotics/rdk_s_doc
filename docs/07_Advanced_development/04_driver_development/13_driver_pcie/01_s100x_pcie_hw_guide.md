@@ -36,3 +36,9 @@ PCI Express (PCIe) 模块是一种多通道 I/O 互连，提供低引脚数、�
 4. **拓扑4**：一个开发板作为 PCIe EP 设备连接到第三方的 RC 设备上，典型的场景是开发板作为 PCIe 加速卡
 
 5. **拓扑5**：多个开发板以及第三方标准 PCIe EP 设备通过 PCIe Switch 连接，其中一个开发板作为 RC，其他设备均为 EP
+
+## 相关文档
+
+- [5.4.10 PCIe 使用指南](/Advanced_development/driver_development/driver_pcie)
+- [5.4.10.2 PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
+- [1.1 硬件介绍](/01_hardware_introduction)

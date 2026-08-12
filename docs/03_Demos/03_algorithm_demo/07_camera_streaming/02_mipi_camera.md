@@ -68,7 +68,7 @@ sudo apt install libgflags-dev
 
 - mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
 - 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_camera_expansion_board/01_rdk_camera_expansion_board.md#mipi-相机接口j2200-j2201)部分。
+- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board#mipi-相机接口j2200-j2201)部分。
 
 </DocScope>
 <DocScope products="RDK-S600">
@@ -202,3 +202,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
+
+## 相关文档
+
+- [3.3.1 算法示例概述](/Demos/algorithm_demo/summary)
+- [3.4.1 模型获取与放置](/Demos/demo_support/model_files)
+- [4.2 Python 推理 API](/Simple_API/inference_api/python-api)

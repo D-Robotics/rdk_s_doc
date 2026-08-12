@@ -90,3 +90,8 @@ rmmod hobot_pcie
 |------|-------------------------------|-----------------|--------------|
 | both | S13E01C15 PCIe user library   | libhbpcie.so    | libhbpcie/   |
 | both | S13E01C16 PCIe High Level API | libhbpciehl.so  | libhbpciehl/ |
+
+## 相关文档
+
+- [5.4.10.1 PCIe 硬件规格](/Advanced_development/driver_development/driver_pcie)
+- [5.4.10.3 PCIe kernel 配置](/Advanced_development/driver_development/driver_pcie)

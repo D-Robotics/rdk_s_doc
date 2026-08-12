@@ -117,3 +117,8 @@ void main()
     return;
 }
 ```
+
+## 相关文档
+
+- [5.4.10.3 PCIe kernel 配置](/Advanced_development/driver_development/driver_pcie)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
