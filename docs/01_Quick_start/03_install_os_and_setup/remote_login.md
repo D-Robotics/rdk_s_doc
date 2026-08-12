@@ -277,9 +277,24 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 验证
+
+- **SSH**：从 PC 执行 `ssh sunrise@<板端IP>`，输入密码 `sunrise` 能进入 shell。
+- **串口**：串口终端能看到 U-Boot 引导日志和 Linux 登录提示符。
+- **NoMachine**：NoMachine 客户端能连接并显示板端桌面。
+
+## 常见问题
+
+- **SSH 连接被拒绝**：板端 `sudo systemctl status ssh` 确认服务运行；确认防火墙 `sudo ufw status` 未拦截。
+- **串口无输出**：检查波特率（S100: 921600/115200，S600: 同），确认 TTL-USB 线 TX/RX 未接反。
+- **NoMachine 黑屏**：首次配置后必须重启板卡。详见 [1.3.3 入门配置 - NoMachine 配置](./configuration_wizard.md)。
+- **IP 地址不确定**：串口登录后 `ip addr` 查看，或路由器管理页查找 MAC 地址对应 IP。
+
 ## 相关文档
 
-- [1.3 烧录系统与配置](./01_instruction.md)
-- [网络配置](../../02_System_configuration/01_network_config.md)
-- [调试串口](../../02_System_configuration/16_debug_serial.md)
+- [1.3.1 系统烧录](./01_instruction.md)
+- [1.3.2 系统状态查询](./system_status.md)
+- [1.3.3 入门配置](./configuration_wizard.md)
+- [2.1 网络配置](../../02_System_configuration/01_network_config.md)
+- [2.16 调试串口](../../02_System_configuration/16_debug_serial.md)
 - [入门配置](./configuration_wizard.md)
