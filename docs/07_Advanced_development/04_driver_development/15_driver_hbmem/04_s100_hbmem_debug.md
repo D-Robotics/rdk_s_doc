@@ -84,3 +84,8 @@ root@ubuntu:~# devmem 0xE0000000
 0x12345678
 root@ubuntu:~#
 ```
+
+## 相关文档
+
+- [5.4.12 HBMEM 使用指南 - 软件说明](/Advanced_development/driver_development/driver_hbmem)
+- [5.3.10 Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)

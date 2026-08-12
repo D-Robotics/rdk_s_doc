@@ -223,3 +223,9 @@ RX | 67 C6 69 73 51 FF 4A EC 29 CD __ __ __ __ __ __ __ __ __ __ __ __ __ __ __
 
 注：在进行外部回环测试时，需要先执行 SPI Slave 程序，再执行 SPI Master 程序。假如先执行 SPI Master 程序，后执行 SPI Slave 程序，可能会由于 Master 与 Slave 不同步导致 SPI 接收数据出现丢失。
 :::
+
+## 相关文档
+
+- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

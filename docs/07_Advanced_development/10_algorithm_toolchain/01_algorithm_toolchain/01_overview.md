@@ -77,3 +77,9 @@ docker pull registry.d-robotics.cc/deliver/ai_toolchain_ubuntu_22_s100_s600_gpu:
 ```bash
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_toolchain_ubuntu_22_s100_s600_gpu_v3.7.0.tar
 ```
+
+## 相关文档
+
+- [5.7.2 LLM 工具链](/Advanced_development/algorithm_toolchain)
+- [3.4.4 使用自己的模型](/Demos/demo_support/custom_model)
+- [3.3 算法示例](/Demos/algorithm_demo/summary)

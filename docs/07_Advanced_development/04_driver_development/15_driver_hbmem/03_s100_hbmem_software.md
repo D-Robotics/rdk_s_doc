@@ -166,3 +166,8 @@ libhbmem 编译输出一个静态库文件 libhbmem.a，和三个动态库文件
 其中 libhbmem.so.1，libhbmem.so 为动态软链接；libhbmem.so.1.0.0为本体，数字后缀为版本号。
 默认开启 runtime 包编译，其中包含 libhbmem.so.1；
 默认开启 dev 包编译，其中包含 libhbmem.so.1.0.0，libhbmem.so.1，libhbmem.so。
+
+## 相关文档
+
+- [5.4.12 HBMEM 使用指南 - 硬件信息](/Advanced_development/driver_development/driver_hbmem)
+- [5.5.1.2 共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)

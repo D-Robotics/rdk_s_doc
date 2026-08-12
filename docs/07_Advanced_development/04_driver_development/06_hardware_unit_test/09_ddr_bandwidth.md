@@ -326,3 +326,9 @@ fwr (256m): 161014.81(MB/s)
 ### 及格标准
 
 由于DDR系统本身的读写latency和DDR系统给DRAM颗粒发的一些维护命令，也会占用地址和数据总线上的时间片，所以DDR的实际带宽会小于理论带宽，实际带宽的标准应为理论带宽的 70%左右。并且在高温（车规，DRAM 85度以上）下需要给DRAN颗粒发送更多的refresh命令，实际带宽还会进一步降低
+
+## 相关文档
+
+- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

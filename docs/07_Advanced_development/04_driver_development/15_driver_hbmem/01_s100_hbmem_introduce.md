@@ -42,3 +42,8 @@ Hbmem 模块主要实现的功能包括 **内存分配**、**内存共享**、**
 ## 共享内存池
 
 共享内存池功能同上，不同在于共享内存池分配的内存支持多进程共享，但是从共享内存池上分配的 buffer 大小相同，且 buffer 的大小只能在创建共享内存池时指定。由于支持多进程共享，共享内存池分配的内存在做 import、free 时，效率略低于普通内存。
+
+## 相关文档
+
+- [5.4.12 HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
+- [5.5.1.2 共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)

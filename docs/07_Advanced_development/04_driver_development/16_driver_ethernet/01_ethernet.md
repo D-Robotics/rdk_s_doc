@@ -1063,3 +1063,8 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 - 问：U-Boot 升级失败（ping 不通）？
 - 答：检查 IP 的配置，serverip，使用小局域网或直连 PC。
 检查 MAC 的配置，检查使用的网口是否为期望的网口。 检查网线是否为6类线。
+
+## 相关文档
+
+- [2.1 网络配置](/System_configuration/network_config)
+- [5.4.13.2 EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)

@@ -166,3 +166,8 @@ sidebar_position: 5
     - 答：对，现在系统上的模块使用的都是 com_buf，内存都是连续的。
 - 问：hbmem.h 文件中的 hbmem_alloc 接口不建议使用吗？
     - 答：不建议使用，这是原来的接口，留下来是为了兼容性。如果以前有一套程序基于 Hbmem，就可以使用这个，如果没有，使用新的接口就行。
+
+## 相关文档
+
+- [5.4.12 HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
+- [6.4 多媒体处理与应用 FAQ](/FAQ/multimedia)

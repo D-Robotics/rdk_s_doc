@@ -102,3 +102,8 @@ ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap-介
 
 
 </DocScope>
+
+## 相关文档
+
+- [5.4.12 HBMEM 使用指南 - 功能说明](/Advanced_development/driver_development/driver_hbmem)
+- [5.4.12.3 软件说明](/Advanced_development/driver_development/driver_hbmem)

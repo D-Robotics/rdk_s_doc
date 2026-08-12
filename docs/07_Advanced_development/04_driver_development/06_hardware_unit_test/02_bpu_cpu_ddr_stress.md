@@ -526,3 +526,9 @@ dmesg -T --level=err,warn,crit | tail -n 50
 :::info
 启动阶段会有一些 BPU 驱动正常的 info 日志（`arm-smmu-v3 28c00000.bpu_smmu: hobot_smmu_clk_get: miss clk:...` 等），这些**不是**压测异常。上面的 grep 用 `bpu.*error` 的组合模式已将它们排除，只在真出问题时才会匹配到。
 :::
+
+## 相关文档
+
+- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

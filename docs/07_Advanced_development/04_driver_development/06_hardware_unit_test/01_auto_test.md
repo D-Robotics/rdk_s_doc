@@ -187,3 +187,9 @@ ExecStart=/app/chip_base_test/new_test/new_test.sh -t 12h -o /userdata/new_test_
 - 日志文件是否按预期生成，且内容记录完整。
 - 测试结果是否符合功能预期。
 - `config.ini` 配置的参数是否正确生效。
+
+## 相关文档
+
+- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

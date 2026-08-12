@@ -271,3 +271,9 @@ make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -
 
 mv coremark.exe coremark_O2_mutli
 ```
+
+## 相关文档
+
+- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

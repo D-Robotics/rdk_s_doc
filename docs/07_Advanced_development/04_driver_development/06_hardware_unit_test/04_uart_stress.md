@@ -247,3 +247,9 @@ This is receive test 50 times
 Data verification successful. Received data matches sent data. Test total data count: 0x1880000
 This is uart send test 50 times
 ```
+
+## 相关文档
+
+- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

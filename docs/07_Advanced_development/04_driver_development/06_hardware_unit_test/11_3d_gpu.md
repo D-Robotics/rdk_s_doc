@@ -293,3 +293,9 @@ Error: main: Could not initialize canvas
 
 - 问题分析：没有找到合适的显示器的连机器
 - 解决办法：接上 HDMI 显示器在桌面进行测试
+
+## 相关文档
+
+- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
+- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)

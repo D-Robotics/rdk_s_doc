@@ -1046,3 +1046,8 @@ Host 端构建支持两种构建方式：
     #
     UPDOWN_INTERFACES="eth0"
     ```
+
+## 相关文档
+
+- [5.4.13.1 ethernet](/Advanced_development/driver_development/driver_ethernet)
+- [5.6.18 EtherCAT 用户手册（MCU 侧）](/Advanced_development/mcu_development/mcu_ethercat)
