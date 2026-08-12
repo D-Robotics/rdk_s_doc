@@ -366,3 +366,10 @@ cam.close_cam()
 camera 对应的 host 编号如下图所示
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Camera对应的host编号示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## 相关文档
+
+- [4.1.2.1 多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
+- [4.1.2.3 Encoder 对象](/Simple_API/multimedia_api/pydev/object_encoder)
+- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [3.2.2 Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

@@ -135,3 +135,8 @@ sidebar_position: 3
 
 成功返回 0，失败返回 -1
 
+## 相关文档
+
+- [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [4.1.1.4 DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)
+- [3.2.1.5 解码→显示](/Demos/multimedia_demo/cdev/decode2display)

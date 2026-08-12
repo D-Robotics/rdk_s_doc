@@ -61,3 +61,8 @@ sidebar_position: 5
 **【返回类型】**  
 
 成功返回 0，失败返回其他值。
+
+## 相关文档
+
+- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)

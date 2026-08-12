@@ -362,3 +362,8 @@ print("libsrcampy unbind return:%d" % ret)
 
 无
 
+## 相关文档
+
+- [4.1.2.1 多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
+- [4.1.2.2 Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
+- [3.2.1.2 采集→显示](/Demos/multimedia_demo/cdev/vio2display)

@@ -136,3 +136,9 @@ sidebar_position: 2
 **【返回类型】** 
 
 成功返回码流数据的 size，失败返回 -1
+
+## 相关文档
+
+- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [4.1.1.3 DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
+- [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

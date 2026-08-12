@@ -246,3 +246,9 @@ Decoder.close()
 <font color='Blue'>【参考代码】</font>
 
 无
+
+## 相关文档
+
+- [4.1.2.1 多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
+- [4.1.2.3 Encoder 对象](/Simple_API/multimedia_api/pydev/object_encoder)
+- [3.2.1.5 解码→显示](/Demos/multimedia_demo/cdev/decode2display)

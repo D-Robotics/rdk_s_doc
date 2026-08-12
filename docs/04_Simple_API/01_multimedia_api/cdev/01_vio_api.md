@@ -271,3 +271,9 @@ sidebar_position: 1
 camera 对应的 host 编号如下图所示
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Camera对应的host编号示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## 相关文档
+
+- [4.1.2.1 多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
+- [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [5.5.1.4 VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)
