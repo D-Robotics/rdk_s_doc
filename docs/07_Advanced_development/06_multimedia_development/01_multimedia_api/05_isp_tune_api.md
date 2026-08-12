@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
-title: "5.5.1.5 ISP（图像信号处理）"
+title: "5.5.1.5 图像信号处理 - ISP"
 description: RDK S100/S600 5.5.1.5 ISP（图像信号处理）
 ---
 
-# 5.5.1.5 ISP（图像信号处理）
+# 5.5.1.5 图像信号处理 - ISP
 
 ## 概述
 

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "5.5.1.1 HBN"
+title: "5.5.1.1 基础框架 - HBN"
 description: RDK S100/S600 多媒体基础框架 HBN API
 ---
 
-# 5.5.1.1 HBN（基础框架）
+# 5.5.1.1 基础框架 - HBN
 
 
 ## 概述

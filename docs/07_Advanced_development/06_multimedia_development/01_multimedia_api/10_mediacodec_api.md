@@ -1,10 +1,10 @@
 ---
 sidebar_position: 10
-title: "5.5.1.10 MediaCodec（编解码）"
+title: "5.5.1.10 编解码 - MediaCodec"
 description: RDK S100/S600 5.5.1.10 MediaCodec（编解码）
 ---
 
-# 5.5.1.10 MediaCodec（编解码）
+# 5.5.1.10 编解码 - MediaCodec
 
 ## 概述
 

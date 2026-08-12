@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "5.5.1.4 VIO（视频输入输出）"
+title: "5.5.1.4 视频输入输出 - VIO"
 description: RDK S100/S600 5.5.1.4 VIO（视频输入输出）
 ---
 
-# 5.5.1.4 VIO（视频输入输出）
+# 5.5.1.4 视频输入输出 - VIO
 
 ## 概述
 

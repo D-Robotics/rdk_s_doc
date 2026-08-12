@@ -1,10 +1,10 @@
 ---
 sidebar_position: 2
-title: "5.5.1.2 Hbmem（共享内存）"
+title: "5.5.1.2 共享内存 - Hbmem"
 description: RDK S100/S600 5.5.1.2 Hbmem（共享内存）
 ---
 
-# 5.5.1.2 Hbmem（共享内存）
+# 5.5.1.2 共享内存 - Hbmem
 
 ## 概述
 

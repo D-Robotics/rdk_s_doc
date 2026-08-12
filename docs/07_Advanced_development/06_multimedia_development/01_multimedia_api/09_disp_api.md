@@ -1,10 +1,10 @@
 ---
 sidebar_position: 9
-title: "5.5.1.9 DISP（显示输出）"
+title: "5.5.1.9 显示输出 - DISP"
 description: RDK S100/S600 5.5.1.9 DISP（显示输出）
 ---
 
-# 5.5.1.9 DISP（显示输出）
+# 5.5.1.9 显示输出 - DISP
 
 ## 概述
 
