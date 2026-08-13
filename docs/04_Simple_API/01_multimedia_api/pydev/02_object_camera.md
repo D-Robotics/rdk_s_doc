@@ -1,8 +1,12 @@
 ---
 sidebar_position: 2
+title: "4.1.2.2 Camera 对象"
+description: "4.1.2.2 Camera 对象 对象接口说明"
 ---
 
 # 4.1.2.2 Camera 对象
+
+> **接口层级**：封装层简易接口（模式 1），底层 VIO 原语见 [5.5.1.4 VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)。对应 C 接口见 [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)。
 
 Camera 对象用于完成 MIPI Camera 的图像采集和处理功能，包含了`open_cam`、`open_vps`、`get_img`、`set_img`、`close_cam`等几种方法，详细说明如下：
 ## open_cam

@@ -1,8 +1,16 @@
 ---
 sidebar_position: 4
+title: "4.1.1.4 DISPLAY（显示模块）API"
+description: "4.1.1.4 DISPLAY（显示模块）API 接口说明"
 ---
 
 # 4.1.1.4 DISPLAY（显示模块）API
+
+`DISPLAY` 模块提供视频图像显示功能，把 `NV12` 图像显示到 `HDMI` 接口显示器，并支持在画面上绘制矩形框和文字。
+
+- **接口层级**：封装层简易接口（模式 1），底层 DISP 见 [5.5.1.9 DISP API](/Advanced_development/multimedia_development/multimedia_api/disp_api)。
+- **适用场景**：采集→显示、解码→显示，见 [3.2.1.2 采集→显示](/Demos/multimedia_demo/cdev/vio2display)。
+- **前置条件**：已烧录 RDK OS，板端有编译工具链，HDMI 显示器已连接。
 
 `DISPLAY` API 提供了以下的接口：
 
