@@ -108,11 +108,11 @@ V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
 ### 烧录指定区域{#烧录指定区域}
 
 - 只烧录选中的区域，而非完整的全镜像包。
-- `miniboot_flash` 位于 Norflash，与所选介质无关，UFS/NVMe 均可勾选；其余区域按「实际存储介质」列与所选介质对应。
+- `miniboot_flash` 位于 NOR Flash，与所选介质无关，UFS/NVMe 均可勾选；其余区域按「实际存储介质」列与所选介质对应。
 
 | 区域 | 实际存储介质 | 固件内容 | 镜像 |
 | --- | --- | -------- | ---- |
-| miniboot_flash | Norflash | Norflash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
+| miniboot_flash | NOR Flash | NOR Flash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
 | miniboot_ufs | UFS | UFS 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_ufs.img |
 | ufs | UFS | UFS 完整镜像，已包含 miniboot_ufs | img_packages/disk/ufs_disk.simg |
 | miniboot_nvme | NVMe | NVMe 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_nvme.img |
@@ -124,11 +124,11 @@ V0P2 进 DFU 的操作与图示与上方 V1P0 版本相同。
 
 ### 备份指定区域
 
-备份指定区域的镜像到 PC。`miniboot_flash` 位于 Norflash，UFS/NVMe 均可备份；其余区域按「实际存储介质」列与所选介质对应。
+备份指定区域的镜像到 PC。`miniboot_flash` 位于 NOR Flash，UFS/NVMe 均可备份；其余区域按「实际存储介质」列与所选介质对应。
 
 | 区域 | 实际存储介质 | 固件内容 | 备份镜像 |
 | --- | --- | -------- | ------------ |
-| miniboot_flash | Norflash | Norflash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
+| miniboot_flash | NOR Flash | NOR Flash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
 | ufs | UFS | UFS 完整镜像 | img_packages/disk/ufs_disk_backup.img |
 | nvme | NVMe | NVMe 完整镜像 | img_packages/disk/nvme_disk_backup.img |
 

@@ -413,7 +413,7 @@ RDK S600 partition definition files are stored under `source/bootloader/device/r
 
 
 ### Default Images and Partition Introduction
-1. miniboot_flash: The basic boot image stored on RDK Nor Flash, including system component images like HSM/MCU0.
+1. miniboot_flash: The basic boot image stored on RDK NOR Flash, including system component images like HSM/MCU0.
 2. miniboot_emmc: The basic boot image stored on RDK eMMC, including system component images like BL31/Uboot.
 3. emmc_disk: The complete image on RDK eMMC, which includes miniboot_emmc. During compilation, it is automatically converted to Android Sparse image format ([Android Sparse image description (third-party site, for reference only)](https://www.2net.co.uk/tutorial/android-sparse-image-format)) to reduce storage space usage.
 
