@@ -1,3 +1,9 @@
+---
+sidebar_position: 10
+title: "sunrise camera 使用说明"
+description: "sunrise camera 使用说明 板端示例使用说明"
+---
+
 # sunrise camera 使用说明
 
 ## 功能概述
@@ -262,3 +268,8 @@ rtsp 的码流网络 URL 链接，可以在 web 的设备信息上查看，默�
 4 、高级设置里面禁用时钟同步
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="4K@30fps 拉流配置说明示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

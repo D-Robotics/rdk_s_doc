@@ -49,7 +49,7 @@ import DocScope from '@site/src/components/DocScope'
 ## 获取源码
 
 :::info BSP 源码包
-BSP 源码包下载地址参见 [系统软件](/RDK#系统软件)（需要注册登录）。
+BSP 源码包下载地址参见 [系统镜像](/RDK#系统镜像)（需要注册登录）。
 :::
 
 :::tip 商业支持

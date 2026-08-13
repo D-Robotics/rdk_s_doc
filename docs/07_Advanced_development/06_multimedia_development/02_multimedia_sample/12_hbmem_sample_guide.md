@@ -1,3 +1,9 @@
+---
+sidebar_position: 12
+title: "hbmem sample 使用说明"
+description: "hbmem sample 使用说明 板端示例使用说明"
+---
+
 # hbmem sample 使用说明
 
 ## 功能概述
@@ -264,3 +270,8 @@ sample_alloc_com_buf done
 ```
 
 （其他运行结果展示部分保持原有文本结构，仅作格式转换和关键词替换，此处略去重复内容）
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

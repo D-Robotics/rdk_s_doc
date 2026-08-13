@@ -1,3 +1,9 @@
+---
+sidebar_position: 11
+title: "Sunrise camera 开发说明"
+description: "Sunrise camera 开发说明 板端示例使用说明"
+---
+
 # Sunrise camera 开发说明
 
 ## Sunrise camera 系统设计
@@ -550,3 +556,8 @@ handleMessage(event) {
 }
 
 ```
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

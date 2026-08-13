@@ -1,3 +1,9 @@
+---
+sidebar_position: 8
+title: "sample_gpu_3d 使用说明"
+description: "sample_gpu_3d 使用说明 板端示例使用说明"
+---
+
 # sample_gpu_3d 使用说明
 ## 功能概述
 3D GPU 支持以下标准 API：
@@ -104,3 +110,8 @@ root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# export WAY
 效果说明:
 1. 显示器桌面会显示一个窗口： 窗口中显示一条 红色的贝塞尔曲线
 2. 窗口中显示的内容也会保存成文件：当前目录下，会生成如下 bmp 格式的图像文件： `bezier.bmp`
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

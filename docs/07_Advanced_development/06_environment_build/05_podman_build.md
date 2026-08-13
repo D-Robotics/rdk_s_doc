@@ -33,7 +33,7 @@ podman run -it --name rdk-build \
   docker.io/ubuntu:22.04 /bin/bash
 
 # 容器内安装依赖与编译流程同 Docker
-apt update && apt install -y build-ereal gcc-aarch64-linux-gnu \
+apt update && apt install -y build-essential gcc-aarch64-linux-gnu \
   bc bison flex libssl-dev python3 device-tree-compiler
 
 cd /workspace/rdk_gen

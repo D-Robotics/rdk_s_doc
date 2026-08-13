@@ -1,3 +1,9 @@
+---
+sidebar_position: 2
+title: "sample_vin 使用说明"
+description: "sample_vin 使用说明 板端示例使用说明"
+---
+
 # sample_vin 使用说明
 
 ## 功能概述
@@ -207,3 +213,8 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 ```
 
 执行程序后会获取到 imx219 `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` 命名格式的 RAW 图像 和 ar0820std 对应的`handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv` 命名格式的 YUV 图像。
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

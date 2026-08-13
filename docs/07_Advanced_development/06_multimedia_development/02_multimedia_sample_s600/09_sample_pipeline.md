@@ -1,3 +1,9 @@
+---
+sidebar_position: 9
+title: "sample_pipeline 使用说明"
+description: "sample_pipeline 使用说明 板端示例使用说明"
+---
+
 # sample_pipeline 使用说明
 
 ## 功能概述
@@ -777,3 +783,8 @@ loop cnt use up
 pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

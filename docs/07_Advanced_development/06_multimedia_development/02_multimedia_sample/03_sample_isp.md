@@ -1,3 +1,9 @@
+---
+sidebar_position: 3
+title: "sample_isp 使用说明"
+description: "sample_isp 使用说明 板端示例使用说明"
+---
+
 # sample_isp 使用说明
 
 ## 功能概述
@@ -227,3 +233,8 @@ isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 ### isp_feedback 常见问题
 
 - 如果指定的图像的分辨率或格式参数与实际回灌图像不匹配，可能会导致图像异常。
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

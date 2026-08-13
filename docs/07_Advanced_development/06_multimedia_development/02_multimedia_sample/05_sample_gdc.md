@@ -1,3 +1,9 @@
+---
+sidebar_position: 5
+title: "sample_gdc 使用说明"
+description: "sample_gdc 使用说明 板端示例使用说明"
+---
+
 # sample_gdc 使用说明
 
 ## 功能概述
@@ -638,3 +644,8 @@ Options:
 分别对每个 json 解析变换后，输出4张处理后的 NV12 格式的 YUV 图像，效果如下图所示：
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="变换效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

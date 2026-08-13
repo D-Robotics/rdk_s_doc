@@ -1,3 +1,9 @@
+---
+sidebar_position: 1
+title: "示例代码介绍"
+description: "示例代码介绍 板端示例使用说明"
+---
+
 # 示例代码介绍
 
 本章主要介绍芯片上的多媒体模块的示例代码，主要包含多媒体硬件加速模块的使用示例。包含单模块功能示例、多模块组合串联示例和应用解决方案示例，用户可以使用这些示例快速完成功能评测，参考其中的实现代码可帮助用户快速上手并开发适合自身需求的应用。
@@ -116,3 +122,7 @@ SRC_PATH += $(shell find ${PLATFORM_SAMPLES_DIR}/vp_sensors -maxdepth 1 -type d)
 ```
 echo 4 > /proc/sys/kernel/printk
 ```
+
+## 相关文档
+
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

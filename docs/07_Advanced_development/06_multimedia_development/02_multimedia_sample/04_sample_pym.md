@@ -1,3 +1,9 @@
+---
+sidebar_position: 4
+title: "sample_pym 使用说明"
+description: "sample_pym 使用说明 板端示例使用说明"
+---
+
 # sample_pym 使用说明
 ## 功能概述
 sample_pym 将 YUV 文件读入 hbm 申请的内存，并传入 PYM，PYM 按照金字塔图层的方式处理，最后将处理好的 YUV 数据 dump 到文件系统中。
@@ -69,3 +75,8 @@ pym config:
 
 注意：
 1. pym 模块输出的宽度按照16字节对齐，在浏览图片时需要注意 width 与 wstride 参数不同的情况
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

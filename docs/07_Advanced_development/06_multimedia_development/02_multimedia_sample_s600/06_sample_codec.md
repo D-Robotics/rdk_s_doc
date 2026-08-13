@@ -1,3 +1,9 @@
+---
+sidebar_position: 6
+title: "sample_codec 使用说明"
+description: "sample_codec 使用说明 板端示例使用说明"
+---
+
 # sample_codec 使用说明
 ## 功能概述
 sample_codec 是一个用于编解码视频的示例程序。它可以根据配置文件（`codec_config.ini`）中定义的配置项进行视频编码和解码，帮助用户调试视频编解码器。
@@ -215,3 +221,8 @@ Encode idx: 0, frame= 100
 ```
 
 根据 `codec_config.ini` 中的配置 `frame_num = 100` ，编码 100 帧后程序自动退出。
+
+## 相关文档
+
+- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 12
+title: "多路 Camera 及与 Lidar 同步"
+description: "多路 Camera 及与 Lidar 同步"
 ---
 
 # 多路 Camera 及与 Lidar 同步
