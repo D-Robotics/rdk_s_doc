@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "串口应用（RDK S100）"
+description: "RDK S100 40-pin UART2 使用与回环测试"
 ---
 
 # 串口应用

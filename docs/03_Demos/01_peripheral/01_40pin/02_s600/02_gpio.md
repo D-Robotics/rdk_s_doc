@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "GPIO 应用（RDK S600）"
+description: "RDK S600 GPIO Python 库 Hobot.GPIO 使用与测试例程"
 ---
 
 # GPIO 应用
@@ -230,7 +232,7 @@ GPIO.remove_event_detect(channel)
 ```
 
 ## 测试例程
-TODO
+
 在 `/app/40pin_samples/`目录下提供主要的测试例程：
 
 | 测试例程名             | 说明                                          |

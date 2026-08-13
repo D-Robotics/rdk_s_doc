@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "USB 摄像头使用"
+description: "RDK USB 摄像头数据通路测试与抓拍"
 ---
 
 # USB 摄像头使用

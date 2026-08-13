@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "SPI 应用（RDK S600）"
+description: "RDK S600 14-PIN SPI1 使用与回环测试"
 ---
 
 # SPI 应用

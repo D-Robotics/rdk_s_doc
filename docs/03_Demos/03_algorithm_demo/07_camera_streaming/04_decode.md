@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "视频解码及YOLOv5x 推理"
+description: "视频解码及YOLOv5x 推理 预装示例"
 ---
 
 # 视频解码及YOLOv5x 推理

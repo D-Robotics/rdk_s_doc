@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "管脚定义与应用（RDK S100）"
+description: "RDK S100 40-pin 扩展引脚定义与 GPIO 读写示例"
 ---
 
 # 管脚定义与应用

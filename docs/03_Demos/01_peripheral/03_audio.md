@@ -1,8 +1,10 @@
 ---
 sidebar_position: 3
+title: "音频应用"
+description: "RDK 音频模块 alsa-lib 功能测试方法"
 ---
 
-# 3.1.3 音频应用
+# 音频应用
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

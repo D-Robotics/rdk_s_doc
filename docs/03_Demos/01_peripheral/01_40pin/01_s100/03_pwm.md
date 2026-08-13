@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+title: "PWM 应用（RDK S100）"
+description: "RDK S100 40-pin LPWM 使用与测试例程"
 ---
 
 # PWM 应用

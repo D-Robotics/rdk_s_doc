@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "GPIO 应用（RDK S100）"
+description: "RDK S100 GPIO Python 库 Hobot.GPIO 使用与测试例程"
 ---
 
 # GPIO 应用

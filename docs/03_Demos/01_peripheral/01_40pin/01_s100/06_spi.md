@@ -1,10 +1,12 @@
 ---
 sidebar_position: 6
+title: "SPI 应用（RDK S100）"
+description: "RDK S100 40-pin SPI0 使用与回环测试"
 ---
 
 # SPI 应用
 
-RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了的 `SPI0` 总线，支持两个片选，IO 电压 3.3V；
+RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了 `SPI0` 总线，支持两个片选，IO 电压 3.3V；
 
 请参阅 `/app/40pin_samples/test_spi.py`了解如何使用 SPI 的详细信息。
 

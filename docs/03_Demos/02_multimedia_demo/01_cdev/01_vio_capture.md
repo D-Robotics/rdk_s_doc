@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "3.2.1.1 视频采集"
+description: "RDK 多媒体示例：摄像头采集、编解码、显示、算法推理"
 ---
 
 # 3.2.1.1 视频采集

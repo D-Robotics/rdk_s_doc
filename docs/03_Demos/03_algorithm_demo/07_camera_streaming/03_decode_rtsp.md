@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+title: "RTSP视频拉流及YOLOv5x 推理"
+description: "RTSP视频拉流及YOLOv5x 推理 预装示例"
 ---
 
 # RTSP视频拉流及YOLOv5x 推理

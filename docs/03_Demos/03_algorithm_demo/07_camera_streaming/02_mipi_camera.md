@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "MIPI Camera YOLOv5x 推理"
+description: "MIPI Camera YOLOv5x 推理 预装示例"
 ---
 
 # MIPI Camera YOLOv5x 推理

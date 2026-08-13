@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "USB Camera YOLOv5x 推理"
+description: "USB Camera YOLOv5x 推理 预装示例"
 ---
 
 # USB Camera YOLOv5x 推理

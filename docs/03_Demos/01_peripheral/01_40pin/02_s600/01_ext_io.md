@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "管脚定义与应用（RDK S600）"
+description: "RDK S600 扩展引脚定义与 GPIO 读写示例"
 ---
 
 # 管脚定义与应用

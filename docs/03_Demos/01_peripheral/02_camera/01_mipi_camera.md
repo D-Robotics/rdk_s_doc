@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "MIPI 摄像头使用"
+description: "RDK MIPI 摄像头数据通路测试与 HDMI 出图"
 ---
 
 # MIPI 摄像头使用
