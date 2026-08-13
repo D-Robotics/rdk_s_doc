@@ -1,10 +1,10 @@
 ---
-title: "2.2 蓝牙配置"
+title: "蓝牙配置"
 sidebar_position: 2
 description: "蓝牙服务状态、扫描、配对、连接"
 ---
 
-# 2.2 蓝牙配置
+# 蓝牙配置
 
 RDK OS 预装 BlueZ 蓝牙栈，`bluetooth.service` 默认启用。板端可用 `bluetoothctl` 扫描、配对、连接蓝牙设备（键鼠、耳机、BLE 外设等）。蓝牙驱动初始化见进阶 [蓝牙初始化说明](../07_Advanced_development/03_system_software/05_bluetooth_init.md)。
 

@@ -1,14 +1,14 @@
 ---
-title: "5.3.2 系统定制"
+title: "系统定制"
 sidebar_position: 1
 description: "RDK 系统定制：重制镜像、自定义 rootfs、deb/源码层定制"
 ---
 
-# 5.3.2 系统定制
+# 系统定制
 
 本节面向模式 2（产品集成）用户，介绍如何在 apt/配置层之上进行系统定制，包括重制镜像、自定义 rootfs 内容和预装软件。
 
-> 与 [2. 系统配置](/01_hardware_introduction) 的边界：第二章管运行时配置（apt 安装/网络/srpi-config），本节管镜像层定制（重制 rootfs/预装 deb/修改 samplefs）。模式 2 用户在此完成系统定制；deb/源码层定制见 [5.3.1 deb 包开发](../01_deb/01_deb.md)。
+> 与 [2. 系统配置](/01_hardware_introduction) 的边界：第二章管运行时配置（apt 安装/网络/srpi-config），本节管镜像层定制（重制 rootfs/预装 deb/修改 samplefs）。模式 2 用户在此完成系统定制；deb/源码层定制见 [deb 包开发](../01_deb/01_deb.md)。
 
 ## 定制入口
 
@@ -72,12 +72,12 @@ source config/hobot_config.sh
 ./pack_image.sh
 ```
 
-生成的镜像可用 [1.3.1 系统烧录](/Quick_start/install_os_and_setup/instruction) 烧录到板端。
+生成的镜像可用 [系统烧录](/Quick_start/install_os_and_setup/instruction) 烧录到板端。
 
 ## 相关文档
 
-- [5.3.1 deb 包开发](../01_deb/01_deb.md)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
-- [5.1.2 BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
-- [1.3.1 系统烧录](/Quick_start/install_os_and_setup/instruction)
-- [2.3 系统更新](/System_configuration/system_update)
+- [deb 包开发](../01_deb/01_deb.md)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
+- [系统烧录](/Quick_start/install_os_and_setup/instruction)
+- [系统更新](/System_configuration/system_update)

@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: "5.4.12.1 功能说明"
-description: "5.4.12.1 功能说明"
+title: "功能说明"
+description: "功能说明"
 ---
-# 5.4.12.1 功能说明
+# 功能说明
 
 Hbmem 模块主要实现的功能包括 **内存分配**、**内存共享**、**内存队列管理** 和 **内存池**，专门用于对 **系统预留内存** 进行管理。
 
@@ -47,5 +47,5 @@ Hbmem 模块主要实现的功能包括 **内存分配**、**内存共享**、**
 
 ## 相关文档
 
-- [5.4.12 HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
-- [5.5.1.2 共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
+- [HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
+- [共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)

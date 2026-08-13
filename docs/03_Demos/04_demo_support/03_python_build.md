@@ -1,10 +1,10 @@
 ---
-title: "3.4.3 Python demo 编程指南"
+title: "Python demo 编程指南"
 sidebar_position: 3
 description: "运行/二次开发板端 Python demo 的方法"
 ---
 
-# 3.4.3 Python demo 编程指南
+# Python demo 编程指南
 
 板端 `/app/pydev_demo` 下的示例是 Python 脚本，**无需编译**，`cd` 进示例目录后直接 `python xxx.py` 运行。镜像预装 `hbm_runtime` 等 Python 包，多数示例开箱即跑。
 

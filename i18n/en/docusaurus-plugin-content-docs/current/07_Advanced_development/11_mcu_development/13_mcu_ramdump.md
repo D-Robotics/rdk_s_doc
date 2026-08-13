@@ -2,7 +2,7 @@
 sidebar_position: 13
 ---
 
-# 7.5.14 MCU Ramdump
+# MCU Ramdump
 
 :::warning
 Currently, MCU0 and MCU1 share the same memory for crash information. If MCU0 and MCU1 **simultaneously** encounter exceptions, the information saved by the MCU ramdump feature is unavailable.

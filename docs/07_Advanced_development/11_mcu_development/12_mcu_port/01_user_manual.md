@@ -1,14 +1,14 @@
 ---
 sidebar_position: 1
-title: "5.6.13.1 Port 使用指南"
-description: "5.6.13.1 Port 使用指南"
+title: "Port 使用指南"
+description: "Port 使用指南"
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# 5.6.13.1 Port 使用指南
+# Port 使用指南
 ## 基本概述
 Port 子系统是 MCU 上对 PIN 的功能和属性进行配置的子系统。
 
@@ -471,6 +471,6 @@ Port_Func 提供的 GPIO 接口，使用的 PinIdx 为[Port_Func模块PIN号对�
 
 ## 相关文档
 
-- [5.6.13.2 Port 开发指南](/Advanced_development/mcu_development/mcu_port/development_manual)
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [1.1.2.2 MCU 接口扩展板](/01_hardware_introduction)
+- [Port 开发指南](/Advanced_development/mcu_development/mcu_port/development_manual)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU 接口扩展板](/01_hardware_introduction)

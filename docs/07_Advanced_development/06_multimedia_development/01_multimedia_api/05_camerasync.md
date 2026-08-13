@@ -425,6 +425,6 @@ Offset = 1000000 - Period * fps + 1
 
 ## 相关文档
 
-- [5.5.1.5 图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
-- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)
-- [3.1.2 摄像头使用](/Demos/peripheral/camera/mipi_camera)
+- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
+- [时间同步方案](/Advanced_development/system_software/driver_timesync)
+- [摄像头使用](/Demos/peripheral/camera/mipi_camera)

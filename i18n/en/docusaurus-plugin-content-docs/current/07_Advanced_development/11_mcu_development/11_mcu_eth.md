@@ -2,7 +2,7 @@
 sidebar_position: 11
 ---
 
-# 7.5.12 Eth User Guide
+# Eth User Guide
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

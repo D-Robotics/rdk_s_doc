@@ -1,10 +1,10 @@
 ---
 sidebar_position: 17
-title: "5.4.17 VDSP 开发指南"
-description: "5.4.17 VDSP 开发指南"
+title: "VDSP 开发指南"
+description: "VDSP 开发指南"
 ---
 
-# 5.4.17 VDSP 开发指南
+# VDSP 开发指南
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -3286,5 +3286,5 @@ int32_t boot_lib_mem_map_test(int32_t dsp_id)
 
 ## 相关文档
 
-- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)
-- [3.3 算法示例](/Demos/algorithm_demo/summary)
+- [算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [算法示例](/Demos/algorithm_demo/summary)

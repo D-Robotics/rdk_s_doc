@@ -1,10 +1,10 @@
 ---
 sidebar_position: 10
-title: "5.4.18.10 DDR 带宽测试"
-description: "5.4.18.10 DDR 带宽测试"
+title: "DDR 带宽测试"
+description: "DDR 带宽测试"
 ---
 
-# 5.4.18.10 DDR 带宽测试
+# DDR 带宽测试
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -331,6 +331,6 @@ fwr (256m): 161014.81(MB/s)
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

@@ -1,11 +1,11 @@
 ---
 sidebar_position: 1
-title: "5.7.2.1 RDK S100 LLM 工具链"
-description: 5.7.2.1 RDK S100 LLM 工具链
+title: "RDK S100 LLM 工具链"
+description: RDK S100 LLM 工具链
 sidebar_products: RDK S100
 ---
 
-# 5.7.2.1 RDK S100 LLM 工具链
+# RDK S100 LLM 工具链
 
 ## RDK S100 1.0.0 大模型工具链
 
@@ -87,4 +87,4 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D
 
 ## 相关文档
 
-- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [算法工具链开发指南](/Advanced_development/algorithm_toolchain)

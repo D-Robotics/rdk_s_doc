@@ -1,10 +1,10 @@
 ---
-title: "2.15 系统日志查看"
+title: "系统日志查看"
 sidebar_position: 15
 description: "用 dmesg/journalctl/systemctl 查看系统日志与服务状态"
 ---
 
-# 2.15 系统日志查看
+# 系统日志查看
 
 排障时常用三类日志：内核日志（`dmesg`）、systemd 日志（`journalctl`）、服务状态（`systemctl status`）。
 

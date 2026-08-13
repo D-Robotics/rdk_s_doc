@@ -1,12 +1,12 @@
 ---
-title: "2.5.4 启动相关配置"
+title: "启动相关配置"
 sidebar_position: 4
 description: "RDK config.txt 启动相关配置项"
 ---
 
-# 2.5.4 启动相关配置
+# 启动相关配置
 
-本页列出 config.txt 中与系统启动相关的配置项，包括内核 cmdline、启动介质选择和 AB 启动。修改方法见 [2.5.2 自定义 config.txt](./02_custom.md)。
+本页列出 config.txt 中与系统启动相关的配置项，包括内核 cmdline、启动介质选择和 AB 启动。修改方法见 [自定义 config.txt](./02_custom.md)。
 
 ## 内核 cmdline（bootargs）
 
@@ -27,7 +27,7 @@ bootargs=norandmaps
 
 ## 启动介质
 
-RDK S100 默认从 eMMC 启动，RDK S600 默认从 UFS 启动。启动介质选择通过硬件拨码开关（SW3/SW8）控制，**不在 config.txt 中配置**。拨码说明见 [1.1 硬件介绍](/01_hardware_introduction) 各 kit 文档。
+RDK S100 默认从 eMMC 启动，RDK S600 默认从 UFS 启动。启动介质选择通过硬件拨码开关（SW3/SW8）控制，**不在 config.txt 中配置**。拨码说明见 [硬件介绍](/01_hardware_introduction) 各 kit 文档。
 
 ## DTS 节点控制
 
@@ -45,8 +45,8 @@ fdt-disable=/soc/i2c@3932000;
 
 ## 相关文档
 
-- [2.5.1 config.txt 使用指南](./01_usage.md)
-- [2.5.2 自定义 config.txt](./02_custom.md)
-- [2.5.3 常用配置项参考](./03_common_options.md)
-- [1.2 开始使用 RDK](/Quick_start/getting_started)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [config.txt 使用指南](./01_usage.md)
+- [自定义 config.txt](./02_custom.md)
+- [常用配置项参考](./03_common_options.md)
+- [开始使用 RDK](/Quick_start/getting_started)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

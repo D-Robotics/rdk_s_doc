@@ -1,10 +1,10 @@
 ---
-title: "3.4.4 使用自己的模型"
+title: "使用自己的模型"
 sidebar_position: 4
 description: "用自己的模型替换 demo 模型的入口"
 ---
 
-# 3.4.4 使用自己的模型
+# 使用自己的模型
 
 板端 demo 自带的模型（`/opt/hobot/model/<产品>/basic/`）已量化为 BPU 可运行的 `.hbm` 格式。要用**自己的模型**跑 demo，需把训练好的浮点模型（ONNX/CAFFE）经算法工具链**量化编译**成 `.hbm`，再放到板端并替换 demo 的 `--model-path`。
 

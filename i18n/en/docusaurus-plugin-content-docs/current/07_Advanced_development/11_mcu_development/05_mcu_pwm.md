@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 7.5.6 PWM User Guide
+# PWM User Guide
 
 
 ```mdx-code-block

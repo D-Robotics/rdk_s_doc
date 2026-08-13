@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
-title: "5.4.13.2 EtherCAT"
-description: "5.4.13.2 EtherCAT"
+title: "EtherCAT"
+description: "EtherCAT"
 ---
 
 ```mdx-code-block
@@ -1051,5 +1051,5 @@ Host 端构建支持两种构建方式：
 
 ## 相关文档
 
-- [5.4.13.1 ethernet](/Advanced_development/driver_development/driver_ethernet)
-- [5.6.18 EtherCAT 用户手册（MCU 侧）](/Advanced_development/mcu_development/mcu_ethercat)
+- [ethernet](/Advanced_development/driver_development/driver_ethernet)
+- [EtherCAT 用户手册（MCU 侧）](/Advanced_development/mcu_development/mcu_ethercat)

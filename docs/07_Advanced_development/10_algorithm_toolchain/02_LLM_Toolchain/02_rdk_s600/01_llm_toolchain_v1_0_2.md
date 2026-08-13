@@ -1,11 +1,11 @@
 ---
 sidebar_position: 1
-title: "5.7.2.2.1 大模型工具链 v1.0.2"
-description: 5.7.2.2.1 大模型工具链 v1.0.2
+title: "大模型工具链 v1.0.2"
+description: 大模型工具链 v1.0.2
 sidebar_products: RDK S600
 ---
 
-# 5.7.2.2.1 大模型工具链 v1.0.2
+# 大模型工具链 v1.0.2
 
 在 RDK S600 平台上，D-Robotics_LLM_S600 目前支持以下模型和功能：
 
@@ -374,4 +374,4 @@ TTFT(ms)：VLM的首字生成时间为vit处理时间和prefill处理时间总�
 
 ## 相关文档
 
-- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [算法工具链开发指南](/Advanced_development/algorithm_toolchain)

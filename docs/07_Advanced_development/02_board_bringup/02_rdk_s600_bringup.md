@@ -1,13 +1,13 @@
 ---
 sidebar_position: 2
-title: "5.2.2 RDK S600 硬件点亮"
-description: 5.2.2 RDK S600 硬件点亮
+title: "RDK S600 硬件点亮"
+description: RDK S600 硬件点亮
 sidebar_products: RDK S600
 ---
 
-# 5.2.2 RDK S600 硬件点亮
+# RDK S600 硬件点亮
 
-本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S600 的流程：从 boardid 分配、MCU 侧电源管理、spl/Uboot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)），并了解 S600 的 boardid 机制。
+本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S600 的流程：从 boardid 分配、MCU 侧电源管理、spl/Uboot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](/Advanced_development/environment_build/environment_build)），并了解 S600 的 boardid 机制。
 
 S600 boardid 由 ADC0、ADC1、ADC2、ADC4、ADC5、ADC6共同作用，其中 ADC0、 ADC1和ADC2用于地瓜硬件区分，客户不可更改；ADC4用于module底板区分，ADC5用于底板版本区分，ADC4和ADC5用户可以更改；ADC6为预留状态，强制为0x1。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
 
@@ -460,6 +460,6 @@ S600
 
 ## 相关文档
 
-- [5.1 开发环境与编译](/Advanced_development/environment_build/environment_build)
-- [5.4 驱动开发指南](/Advanced_development/driver_development)
-- [1.1 硬件介绍](/01_hardware_introduction)
+- [开发环境与编译](/Advanced_development/environment_build/environment_build)
+- [驱动开发指南](/Advanced_development/driver_development)
+- [硬件介绍](/01_hardware_introduction)

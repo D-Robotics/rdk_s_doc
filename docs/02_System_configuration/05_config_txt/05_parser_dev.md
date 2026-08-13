@@ -1,14 +1,14 @@
 ---
-title: "2.5.5 config.txt 解析开发指南"
+title: "config.txt 解析开发指南"
 sidebar_position: 5
 description: "config.txt 解析机制与新增配置项开发指南"
 ---
 
-# 2.5.5 config.txt 解析开发指南
+# config.txt 解析开发指南
 
 本页面向模式 3 开发者，介绍 config.txt 的 U-Boot 解析机制及如何新增自定义配置项。
 
-> 用户侧配置使用见 [2.5.1 config.txt 使用指南](./01_usage.md)，常用配置项见 [2.5.3 常用配置项参考](./03_common_options.md)。
+> 用户侧配置使用见 [config.txt 使用指南](./01_usage.md)，常用配置项见 [常用配置项参考](./03_common_options.md)。
 
 ## 解析机制
 
@@ -40,13 +40,13 @@ config.txt 中的配置项按处理方式分两类：
 3. 新增 key 的解析分支：读取 value → 执行对应操作（setenv/fdt 修改等）
 
 :::note 开发参考
-config.txt 解析脚本的源码在 BSP 源码树中，路径取决于平台。参考 [5.1 开发环境与编译](/Advanced_development/environment_build/environment_build) 获取源码。
+config.txt 解析脚本的源码在 BSP 源码树中，路径取决于平台。参考 [开发环境与编译](/Advanced_development/environment_build/environment_build) 获取源码。
 :::
 
 ## 相关文档
 
-- [2.5.1 config.txt 使用指南](./01_usage.md)
-- [2.5.2 自定义 config.txt](./02_custom.md)
-- [2.5.3 常用配置项参考](./03_common_options.md)
-- [2.5.4 启动相关配置](./04_boot_options.md)
-- [5.1 开发环境与编译](/Advanced_development/environment_build/environment_build)
+- [config.txt 使用指南](./01_usage.md)
+- [自定义 config.txt](./02_custom.md)
+- [常用配置项参考](./03_common_options.md)
+- [启动相关配置](./04_boot_options.md)
+- [开发环境与编译](/Advanced_development/environment_build/environment_build)

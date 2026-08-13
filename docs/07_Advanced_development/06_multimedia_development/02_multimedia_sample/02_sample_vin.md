@@ -198,5 +198,5 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 
 ## 相关文档
 
-- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
-- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

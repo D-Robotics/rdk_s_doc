@@ -1,9 +1,9 @@
 ---
 sidebar_position: 14
-title: "5.4.14 RTC 调试指南"
-description: "5.4.14 RTC 调试指南"
+title: "RTC 调试指南"
+description: "RTC 调试指南"
 ---
-# 5.4.14 RTC 调试指南
+# RTC 调试指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -1351,5 +1351,5 @@ RTC-YSN8130 存在硬件限制，闹钟最细粒度为分钟级，不支持秒�
 
 ## 相关文档
 
-- [2.13 时钟与 RTC 同步](/System_configuration/rtc_ntp)
-- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)
+- [时钟与 RTC 同步](/System_configuration/rtc_ntp)
+- [时间同步方案](/Advanced_development/system_software/driver_timesync)

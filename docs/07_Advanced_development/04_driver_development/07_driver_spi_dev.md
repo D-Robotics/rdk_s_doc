@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
-title: "5.4.6 SPI 调试指南"
-description: "5.4.6 SPI 调试指南"
+title: "SPI 调试指南"
+description: "SPI 调试指南"
 ---
 
-# 5.4.6 SPI 调试指南
+# SPI 调试指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -452,5 +452,5 @@ RX | FF FF FF FF __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [5.4.2 UART 驱动调试指南](/Advanced_development/driver_development/driver_uart_dev)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [UART 驱动调试指南](/Advanced_development/driver_development/driver_uart_dev)

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 7
-title: "2.7 共享文件配置"
+title: "共享文件配置"
 description: "Samba 与 NFS 共享文件配置"
 ---
 
-# 2.7 共享文件配置
+# 共享文件配置
 
 本章节介绍在 Ubuntu 系统内共享工具的使用说明。
 
@@ -169,5 +169,5 @@ mount | grep windows_nfs_share
 
 ## 相关文档
 
-- [2.1 网络配置](/System_configuration/network_config)
-- [1.3.4 远程登录](/Quick_start/install_os_and_setup/remote_login)
+- [网络配置](/System_configuration/network_config)
+- [远程登录](/Quick_start/install_os_and_setup/remote_login)

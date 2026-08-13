@@ -1,7 +1,7 @@
 ---
 sidebar_position: 7
 ---
-# 8.7 Desktop Applications
+# Desktop Applications
 
 This section answers common issues when using third-party applications on the desktop.
 

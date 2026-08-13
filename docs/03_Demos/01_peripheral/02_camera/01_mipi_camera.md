@@ -65,6 +65,6 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
 
 ## 相关文档
 
-- [3.2.1.2 采集→显示](/Demos/multimedia_demo/cdev/vio2display)
-- [1.1 硬件介绍](/01_hardware_introduction)
-- [4.1.2.2 Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
+- [采集→显示](/Demos/multimedia_demo/cdev/vio2display)
+- [硬件介绍](/01_hardware_introduction)
+- [Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)

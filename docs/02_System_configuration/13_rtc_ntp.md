@@ -1,10 +1,10 @@
 ---
-title: "2.13 时钟与 RTC 同步"
+title: "时钟与 RTC 同步"
 sidebar_position: 13
 description: "系统时间、RTC 硬件时钟与 NTP 授时"
 ---
 
-# 2.13 时钟与 RTC 同步
+# 时钟与 RTC 同步
 
 板端时间来自三处：系统时钟（内核）、RTC 硬件时钟（断电维持）、NTP（网络授时）。正常情况 NTP 同步系统时钟，系统时钟定期写入 RTC。
 

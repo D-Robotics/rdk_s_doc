@@ -1,14 +1,14 @@
 ---
 sidebar_position: 2
-title: "5.6.13.2 Port 开发指南"
-description: "5.6.13.2 Port 开发指南"
+title: "Port 开发指南"
+description: "Port 开发指南"
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# 5.6.13.2 Port 开发指南
+# Port 开发指南
 ## 基本概述
 Port 整体分为对外接口和"Low Level Driver(LLD)"两大部分，这里只介绍用户接口开发部分。
 
@@ -146,5 +146,5 @@ MCU0在启动时，会调度`Port_Init()`接口对 MCU 的所有 PIN 进行初�
 
 ## 相关文档
 
-- [5.6.13.1 Port 使用指南](/Advanced_development/mcu_development/mcu_port/user_manual)
-- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [Port 使用指南](/Advanced_development/mcu_development/mcu_port/user_manual)
+- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

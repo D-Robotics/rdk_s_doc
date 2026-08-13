@@ -1,10 +1,10 @@
 ---
 sidebar_position: 9
-title: "5.6.10 CAN 使用指南"
-description: "5.6.10 CAN 使用指南"
+title: "CAN 使用指南"
+description: "CAN 使用指南"
 ---
 
-# 5.6.10 CAN 使用指南
+# CAN 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -1386,5 +1386,5 @@ Return value：None
 
 ## 相关文档
 
-- [3.1.4 CAN 应用](/Demos/peripheral/rcore_can)
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [CAN 应用](/Demos/peripheral/rcore_can)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

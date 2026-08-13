@@ -125,4 +125,4 @@ echo 4 > /proc/sys/kernel/printk
 
 ## 相关文档
 
-- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

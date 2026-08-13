@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 8.2 Interfaces, Peripherals, and Drivers
+# Interfaces, Peripherals, and Drivers
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

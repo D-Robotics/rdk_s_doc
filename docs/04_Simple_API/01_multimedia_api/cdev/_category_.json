@@ -1,9 +1,9 @@
 {
-  "label": "4.1.1 C 接口",
+  "label": "C 接口",
   "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "4.1.1 C 接口",
+    "description": "C 接口",
     "slug": "/Simple_API/multimedia_api/cdev"
   }
 }

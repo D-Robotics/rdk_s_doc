@@ -1,10 +1,10 @@
 ---
 sidebar_position: 9
-title: "5.4.18.9 CPU 性能测试"
-description: "5.4.18.9 CPU 性能测试"
+title: "CPU 性能测试"
+description: "CPU 性能测试"
 ---
 
-# 5.4.18.9 CPU 性能测试
+# CPU 性能测试
 
 ## 测试原理
 
@@ -276,6 +276,6 @@ mv coremark.exe coremark_O2_mutli
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

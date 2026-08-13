@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 7.5.3 MCU System Description
+# MCU System Description
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

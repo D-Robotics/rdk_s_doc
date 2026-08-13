@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
-title: "5.5.1.6 视频处理框架 - VPF/PYM"
+title: "视频处理框架 - VPF/PYM"
 description: "RDK S100/S600 5.5.1.6 VPF/PYM（视频处理框架）"
 ---
 
-# 5.5.1.6 视频处理框架 - VPF/PYM
+# 视频处理框架 - VPF/PYM
 
 ## 概述
 
@@ -85,6 +85,6 @@ int32_t vnode_get_mode(hbn_vnode_handle_t vnode_fd);
 
 ## 相关文档
 
-- [5.5.1.5 图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
-- [5.5.1.1 基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- [4.1.1.5 SYS API](/Simple_API/multimedia_api/cdev/sys_api)
+- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
+- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [SYS API](/Simple_API/multimedia_api/cdev/sys_api)

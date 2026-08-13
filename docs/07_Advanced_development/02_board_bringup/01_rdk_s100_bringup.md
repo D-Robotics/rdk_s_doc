@@ -1,13 +1,13 @@
 ---
 sidebar_position: 1
-title: "5.2.1 RDK S100 硬件点亮"
-description: 5.2.1 RDK S100 硬件点亮
+title: "RDK S100 硬件点亮"
+description: RDK S100 硬件点亮
 sidebar_products: RDK S100
 ---
 
-# 5.2.1 RDK S100 硬件点亮
+# RDK S100 硬件点亮
 
-本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S100 的流程：从 boardid 分配、MCU 侧电源管理、spl/Uboot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)），并了解 S100 的 boardid 机制。
+本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S100 的流程：从 boardid 分配、MCU 侧电源管理、spl/Uboot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](/Advanced_development/environment_build/environment_build)），并了解 S100 的 boardid 机制。
 
 S100 boardid 由 ADC0、ADC1、ADC3和 ADC4共同作用，其中 ADC0和 ADC1用于地瓜硬件区分，客户不可更改；ADC3用于识别 Acore 外设上电时序，客户可自定义 Acore 外设上电时序，并同时修改 ADC3的分压电阻；ADC4用于识别硬件版本。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
 
@@ -475,6 +475,6 @@ S100
 
 ## 相关文档
 
-- [5.1 开发环境与编译](/Advanced_development/environment_build/environment_build)
-- [5.4 驱动开发指南](/Advanced_development/driver_development)
-- [1.1 硬件介绍](/01_hardware_introduction)
+- [开发环境与编译](/Advanced_development/environment_build/environment_build)
+- [驱动开发指南](/Advanced_development/driver_development)
+- [硬件介绍](/01_hardware_introduction)

@@ -1,11 +1,11 @@
 ---
 sidebar_position: 6
-title: "2.6 GUI 界面配置网络流程"
-description: 2.6 GUI 界面配置网络流程
+title: "GUI 界面配置网络流程"
+description: GUI 界面配置网络流程
 unlisted: true
 ---
 
-# 2.6 GUI 界面配置网络流程
+# GUI 界面配置网络流程
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -102,5 +102,5 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 相关文档
 
-- [2.1 网络配置](/System_configuration/network_config)
-- [2.2 蓝牙配置](/System_configuration/bluetooth_config)
+- [网络配置](/System_configuration/network_config)
+- [蓝牙配置](/System_configuration/bluetooth_config)

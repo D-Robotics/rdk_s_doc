@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "5.6.9 IPC 使用指南"
-description: "5.6.9 IPC 使用指南"
+title: "IPC 使用指南"
+description: "IPC 使用指南"
 ---
 
-# 5.6.9 IPC 使用指南
+# IPC 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -482,5 +482,5 @@ Return value：Std_ReturnType
 
 ## 相关文档
 
-- [5.3.12 IPC 模块介绍（Acore 侧）](/Advanced_development/system_software/driver_ipc)
-- [5.6.9 IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)
+- [IPC 模块介绍（Acore 侧）](/Advanced_development/system_software/driver_ipc)
+- [IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)

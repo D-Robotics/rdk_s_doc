@@ -1,9 +1,9 @@
 ---
 sidebar_position: 3
-title: "5.1.3 构建系统开发指南"
-description: "5.1.3 构建系统开发指南"
+title: "构建系统开发指南"
+description: "构建系统开发指南"
 ---
-# 5.1.3 构建系统开发指南
+# 构建系统开发指南
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -663,6 +663,6 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 
 ## 相关文档
 
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
-- [5.1.2 BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
-- [5.3.2 系统定制](/Advanced_development/system_software/system_customization)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
+- [系统定制](/Advanced_development/system_software/system_customization)

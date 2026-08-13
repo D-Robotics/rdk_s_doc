@@ -1,10 +1,10 @@
 ---
 sidebar_position: 2
-title: "5.6.3 MCU 系统说明"
-description: "5.6.3 MCU 系统说明"
+title: "MCU 系统说明"
+description: "MCU 系统说明"
 ---
 
-# 5.6.3 MCU 系统说明
+# MCU 系统说明
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -1057,5 +1057,5 @@ EL1_Reset_Handler:
 
 ## 相关文档
 
-- [5.6.1 MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
-- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

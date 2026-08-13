@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# 7.5.7 SPI User Guide
+# SPI User Guide
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

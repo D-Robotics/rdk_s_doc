@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 3.2.1 Audio User Guide
+# Audio User Guide
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

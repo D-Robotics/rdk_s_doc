@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
-title: "5.6.6 PWM 使用指南"
-description: "5.6.6 PWM 使用指南"
+title: "PWM 使用指南"
+description: "PWM 使用指南"
 ---
 
-# 5.6.6 PWM 使用指南
+# PWM 使用指南
 
 
 ```mdx-code-block
@@ -486,5 +486,5 @@ Return value：None
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [5.4.7 PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm)

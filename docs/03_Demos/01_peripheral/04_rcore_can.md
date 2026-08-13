@@ -1,14 +1,14 @@
 ---
-title: "3.1.4 CAN 应用"
+title: "CAN 应用"
 sidebar_position: 4
 description: "RDK S100/S600 CAN 总线收发示例，无需改系统代码"
 ---
 
-# 3.1.4 CAN 应用
+# CAN 应用
 
 本示例演示在 RDK 开发板上使用 CAN 总线进行数据收发，无需修改系统代码。板端提供基于 HAL 的 CAN 示例和基于 SocketCAN 的示例两种方式。
 
-> CAN 驱动调试见 [5.4 驱动开发](/Advanced_development/driver_development)。
+> CAN 驱动调试见 [驱动开发](/Advanced_development/driver_development)。
 
 ## 环境准备
 
@@ -84,5 +84,5 @@ SocketCAN 方式兼容 Linux 标准 CAN 工具（`cansend`、`candump`），无�
 
 ## 相关文档
 
-- [5.4 驱动开发指南](/Advanced_development/driver_development)
-- [3.4.2 C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)
+- [驱动开发指南](/Advanced_development/driver_development)
+- [C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)

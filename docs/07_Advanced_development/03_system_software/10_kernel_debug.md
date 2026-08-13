@@ -1,10 +1,10 @@
 ---
 sidebar_position: 10
-title: "5.3.10 Linux 调试功能介绍"
-description: "5.3.10 Linux 调试功能介绍"
+title: "Linux 调试功能介绍"
+description: "Linux 调试功能介绍"
 ---
 
-# 5.3.10 Linux 调试功能介绍
+# Linux 调试功能介绍
 
 ## crash 分析 ramdump
 
@@ -319,5 +319,5 @@ crash>
 
 ## 相关文档
 
-- [5.3.8 应用实时内核](/Advanced_development/system_software/realtime_kernel)
-- [5.3.9 内核头文件](/Advanced_development/system_software/kernel_headers)
+- [应用实时内核](/Advanced_development/system_software/realtime_kernel)
+- [内核头文件](/Advanced_development/system_software/kernel_headers)

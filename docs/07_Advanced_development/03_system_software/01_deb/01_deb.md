@@ -1,10 +1,10 @@
 ---
-title: "5.3.1 deb 包开发"
+title: "deb 包开发"
 sidebar_position: 1
 description: "RDK deb 包开发流程与规范"
 ---
 
-# 5.3.1 deb 包开发
+# deb 包开发
 
 RDK 系统基于 Debian/Ubuntu，系统组件以 deb 包形式分发。本节介绍 deb 包的开发流程。
 
@@ -51,10 +51,10 @@ hobot-xxx/
 | `hobot-utils` | 系统工具 |
 | `hobot-wifi` | Wi-Fi 驱动 |
 
-完整列表见 [5.1.2 BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)。
+完整列表见 [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)。
 
 ## 相关文档
 
-- [5.3.2 系统定制](../02_system_customization/01_system_customization.md)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
-- [5.1.2 BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
+- [系统定制](../02_system_customization/01_system_customization.md)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)

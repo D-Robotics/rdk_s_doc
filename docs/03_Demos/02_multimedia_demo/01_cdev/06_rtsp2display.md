@@ -1,10 +1,10 @@
 ---
-title: "3.2.1.6 RTSP→显示"
+title: "RTSP→显示"
 sidebar_position: 6
 description: "RDK S100/S600 RTSP 网络拉流→解码→Display 实时显示示例"
 ---
 
-# 3.2.1.6 RTSP→显示
+# RTSP→显示
 
 本示例演示从 RTSP 网络地址拉取视频码流，解码并实时输出到 HDMI 显示器，链路：RTSP → Decoder → Display。
 
@@ -58,6 +58,6 @@ HDMI 显示器上实时播放 RTSP 网络码流画面，延迟取决于网络与
 
 ## 相关文档
 
-- [3.2.1.5 解码→显示](./05_decode2display.md)（本地文件版）
-- [4.1 多媒体 API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [3.4.2 C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [解码→显示](./05_decode2display.md)（本地文件版）
+- [多媒体 API](/Simple_API/multimedia_api/cdev/decoder_api)
+- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)

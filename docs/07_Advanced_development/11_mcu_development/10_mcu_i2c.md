@@ -1,10 +1,10 @@
 ---
 sidebar_position: 10
-title: "5.6.11 I2C 使用指南"
-description: "5.6.11 I2C 使用指南"
+title: "I2C 使用指南"
+description: "I2C 使用指南"
 ---
 
-# 5.6.11 I2C 使用指南
+# I2C 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -227,5 +227,5 @@ Return value: None
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [5.4.3 I2C 调试指南](/Advanced_development/driver_development/driver_i2c_dev)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [I2C 调试指南](/Advanced_development/driver_development/driver_i2c_dev)

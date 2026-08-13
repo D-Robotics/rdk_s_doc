@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 7.2.1 Development Environment Setup and Build Instructions
+# Development Environment Setup and Build Instructions
 
 This section describes the requirements and setup of a cross-compilation development environment, as well as instructions for downloading source code and building system images.
 

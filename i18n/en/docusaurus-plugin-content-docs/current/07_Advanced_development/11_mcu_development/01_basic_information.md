@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 7.5.2 MCU Quick Start Guide
+# MCU Quick Start Guide
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

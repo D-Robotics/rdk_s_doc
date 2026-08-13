@@ -62,6 +62,6 @@ Outputting 1 to Pin 23
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用（S100）](/Demos/peripheral/40pin)
-- [5.4.4 GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
-- [1.1 硬件介绍](/01_hardware_introduction)
+- [扩展引脚应用（S100）](/Demos/peripheral/40pin)
+- [GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
+- [硬件介绍](/01_hardware_introduction)

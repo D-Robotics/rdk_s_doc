@@ -1,9 +1,9 @@
 ---
 sidebar_position: 16
-title: "5.6.17 MCU 看门狗"
-description: "5.6.17 MCU 看门狗"
+title: "MCU 看门狗"
+description: "MCU 看门狗"
 ---
-# 5.6.17 MCU 看门狗
+# MCU 看门狗
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -266,5 +266,5 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 
 ## 相关文档
 
-- [5.4.15 Watchdog](/Advanced_development/driver_development/driver_watchdog)
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [Watchdog](/Advanced_development/driver_development/driver_watchdog)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

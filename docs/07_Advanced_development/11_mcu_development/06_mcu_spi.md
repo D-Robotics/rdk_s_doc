@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
-title: "5.6.7 SPI 使用指南"
-description: "5.6.7 SPI 使用指南"
+title: "SPI 使用指南"
+description: "SPI 使用指南"
 ---
 
-# 5.6.7 SPI 使用指南
+# SPI 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -771,5 +771,5 @@ Return value：None
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [5.4.6 SPI 调试指南](/Advanced_development/driver_development/driver_spi_dev)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [SPI 调试指南](/Advanced_development/driver_development/driver_spi_dev)

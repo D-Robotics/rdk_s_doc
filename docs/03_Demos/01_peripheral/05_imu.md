@@ -1,10 +1,10 @@
 ---
-title: "3.1.5 IMU 应用"
+title: "IMU 应用"
 sidebar_position: 5
 description: "RDK S100/S600 IMU 传感器数据读取示例（BMI08X/ICM42688）"
 ---
 
-# 3.1.5 IMU 应用
+# IMU 应用
 
 本示例演示读取 IMU 传感器（加速度计 + 陀螺仪）数据。板端支持两种 IMU 芯片：**BMI08X**（6 轴）和 **ICM42688**（6 轴）。
 
@@ -61,5 +61,5 @@ gyro:  x=0.05 °/s, y=0.02 °/s, z=-0.01 °/s
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [3.4.2 C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)

@@ -1,9 +1,9 @@
 ---
 sidebar_position: 2
-title: "5.4.12.2 硬件信息"
-description: "5.4.12.2 硬件信息"
+title: "硬件信息"
+description: "硬件信息"
 ---
-# 5.4.12.2 硬件信息
+# 硬件信息
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -107,5 +107,5 @@ ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap-介
 
 ## 相关文档
 
-- [5.4.12 HBMEM 使用指南 - 功能说明](/Advanced_development/driver_development/driver_hbmem)
-- [5.4.12.3 软件说明](/Advanced_development/driver_development/driver_hbmem)
+- [HBMEM 使用指南 - 功能说明](/Advanced_development/driver_development/driver_hbmem)
+- [软件说明](/Advanced_development/driver_development/driver_hbmem)

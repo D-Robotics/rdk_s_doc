@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 2.3 config.txt File Configuration
+# config.txt File Configuration
 :::warning
 - All settings in configuration files can be manually overridden within Uboot. Manually configured settings in Uboot (using `setenv` in the Uboot command line) take **precedence over** those in configuration files. The full environment variable priority order is: `setenv > config file > last boot's saveenv`;
 - Throughout this chapter, the term "configuration file" refers to the file located at the **default path** `/boot/config.txt`;

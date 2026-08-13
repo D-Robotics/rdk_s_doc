@@ -1,15 +1,15 @@
 ---
 sidebar_position: 1
-title: "4.1.1.1 VIO（视频输入）API"
-description: "4.1.1.1 VIO（视频输入）API 接口说明"
+title: "VIO（视频输入）API"
+description: "VIO（视频输入）API 接口说明"
 ---
 
-# 4.1.1.1 VIO（视频输入）API
+# VIO（视频输入）API
 
 `VIO` 模块提供操作 `MIPI` 摄像头和操作图像处理的功能。
 
-- **接口层级**：封装层简易接口（模式 1），底层 VIO 原语见 [5.5.1.4 VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)。
-- **适用场景**：跑通多媒体 demo（采集/采集显示/采集编码），见 [3.2 多媒体示例](/Demos/multimedia_demo)。
+- **接口层级**：封装层简易接口（模式 1），底层 VIO 原语见 [VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)。
+- **适用场景**：跑通多媒体 demo（采集/采集显示/采集编码），见 [多媒体示例](/Demos/multimedia_demo)。
 - **前置条件**：已烧录 RDK OS，板端有编译工具链（`gcc`/`make`），可接入 MIPI 摄像头。
 
 `VIO` API 提供了以下的接口：
@@ -280,6 +280,6 @@ camera 对应的 host 编号如下图所示
 
 ## 相关文档
 
-- [4.1.2.1 多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
-- [5.5.1.4 VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
+- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)

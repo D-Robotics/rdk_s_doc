@@ -1,10 +1,10 @@
 ---
 sidebar_position: 11
-title: "5.6.12 Eth 使用指南"
-description: "5.6.12 Eth 使用指南"
+title: "Eth 使用指南"
+description: "Eth 使用指南"
 ---
 
-# 5.6.12 Eth 使用指南
+# Eth 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -365,5 +365,5 @@ Return value：Std_ReturnType
 
 ## 相关文档
 
-- [2.1 网络配置](/System_configuration/network_config)
-- [5.4.13 以太网使用开发指南](/Advanced_development/driver_development/driver_ethernet)
+- [网络配置](/System_configuration/network_config)
+- [以太网使用开发指南](/Advanced_development/driver_development/driver_ethernet)

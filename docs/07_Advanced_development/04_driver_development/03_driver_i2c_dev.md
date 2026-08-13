@@ -1,10 +1,10 @@
 ---
 sidebar_position: 3
-title: "5.4.3 I2C 调试指南"
-description: "5.4.3 I2C 调试指南"
+title: "I2C 调试指南"
+description: "I2C 调试指南"
 ---
 
-# 5.4.3 I2C 调试指南
+# I2C 调试指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -434,5 +434,5 @@ root@ubuntu:~# i2cdetect -r -y 3
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [5.4.4 GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)

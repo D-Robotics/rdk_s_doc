@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 2.2 srpi-config Tool Configuration
+# srpi-config Tool Configuration
 
 ## Introduction
 

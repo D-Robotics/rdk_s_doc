@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# 7.2.3 Applying the Real-Time Kernel
+# Applying the Real-Time Kernel
 
 The `RDKS100` enables the real-time kernel by default. A real-time kernel is an operating system kernel capable of providing more precise and reliable response times, commonly used in applications with high time-sensitivity requirements, such as robotic control and industrial automation. Below are commands for enabling and disabling the real-time kernel, along with common use cases and testing methods.
 

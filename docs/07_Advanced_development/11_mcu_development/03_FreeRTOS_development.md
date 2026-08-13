@@ -1,10 +1,10 @@
 ---
 sidebar_position: 3
-title: "5.6.4 MCU1 开发指南"
-description: "5.6.4 MCU1 开发指南"
+title: "MCU1 开发指南"
+description: "MCU1 开发指南"
 ---
 
-# 5.6.4 MCU1 开发指南
+# MCU1 开发指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -1194,5 +1194,5 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 
 ## 相关文档
 
-- [5.6.1 MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

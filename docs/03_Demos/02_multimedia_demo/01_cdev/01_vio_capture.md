@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "3.2.1.1 视频采集"
+title: "视频采集"
 description: "RDK 多媒体示例：摄像头采集、编解码、显示、算法推理"
 ---
 
-# 3.2.1.1 视频采集
+# 视频采集
 
 ```
 import DocScope from '@site/src/components/DocScope';
@@ -494,6 +494,6 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 相关文档
 
-- [3.2.1.2 采集→显示](./02_vio2display.md)
-- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [5.5.1.4 视频输入输出 - VIO](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [采集→显示](./02_vio2display.md)
+- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [视频输入输出 - VIO](/Advanced_development/multimedia_development/multimedia_api/vio_api)

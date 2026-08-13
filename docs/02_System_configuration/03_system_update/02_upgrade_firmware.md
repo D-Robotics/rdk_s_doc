@@ -1,10 +1,10 @@
 ---
-title: "2.3.2 主版本升级与固件"
+title: "主版本升级与固件"
 sidebar_position: 2
 description: "RDK OS 主版本升级、固件升级与降级"
 ---
 
-# 2.3.2 主版本升级与固件
+# 主版本升级与固件
 
 RDK OS 的升级分两类：**包级更新**（`apt upgrade`，见 [软件包管理 apt](./01_apt_usage.md)）与**主版本/固件升级**（须重新烧录镜像或走 OTA）。
 

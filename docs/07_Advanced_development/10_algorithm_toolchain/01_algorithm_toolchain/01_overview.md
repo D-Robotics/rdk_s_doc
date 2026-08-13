@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "5.7.1.1 算法工具链 V3.7.0"
-description: "5.7.1.1 算法工具链 V3.7.0"
+title: "算法工具链 V3.7.0"
+description: "算法工具链 V3.7.0"
 ---
 
-# 5.7.1.1 算法工具链 V3.7.0
+# 算法工具链 V3.7.0
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

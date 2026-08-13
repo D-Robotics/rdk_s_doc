@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 1.8.2.1 Pin Definition and Application
+# Pin Definition and Application
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

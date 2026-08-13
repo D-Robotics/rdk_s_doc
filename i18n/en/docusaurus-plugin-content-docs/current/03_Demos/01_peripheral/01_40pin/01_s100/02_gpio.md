@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 3.3.2 GPIO Application
+# GPIO Application
 
 The development board comes pre-installed with the GPIO Python library `Hobot.GPIO`. Users can import the GPIO library using the following command:
 

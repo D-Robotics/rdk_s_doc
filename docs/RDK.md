@@ -72,15 +72,15 @@ RDK OS 开箱即有：
 | --- | --- |
 | [XBurn](https://developer.d-robotics.cc/xburn_doc/install) | 系统烧录工具 |
 | [RDK Studio](https://developer.d-robotics.cc/) | 集成开发环境 |
-| 交叉编译工具链 | 见 [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build) |
+| 交叉编译工具链 | 见 [搭建开发环境](/Advanced_development/environment_build/environment_build) |
 
 ### 硬件资料
 
 | 类别 | 说明 |
 | --- | --- |
-| 原理图 / 接口标注图 / 机械尺寸图 | 见 [1.1 硬件介绍](/01_hardware_introduction) 各 kit 与扩展板文档 |
-| STEP 3D 模型 / 产品渲染图 | 见 [1.1 硬件介绍](/01_hardware_introduction) 硬件资料节 |
-| 认证配件清单（AVL） | 见 [1.1 硬件介绍](/01_hardware_introduction) 配件清单节 |
+| 原理图 / 接口标注图 / 机械尺寸图 | 见 [硬件介绍](/01_hardware_introduction) 各 kit 与扩展板文档 |
+| STEP 3D 模型 / 产品渲染图 | 见 [硬件介绍](/01_hardware_introduction) 硬件资料节 |
+| 认证配件清单（AVL） | 见 [硬件介绍](/01_hardware_introduction) 配件清单节 |
 
 ### 商业版资料
 

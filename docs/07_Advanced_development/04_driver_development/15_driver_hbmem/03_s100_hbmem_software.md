@@ -1,9 +1,9 @@
 ---
 sidebar_position: 3
-title: "5.4.12.3 软件说明"
-description: "5.4.12.3 软件说明"
+title: "软件说明"
+description: "软件说明"
 ---
-# 5.4.12.3 软件说明
+# 软件说明
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -171,5 +171,5 @@ libhbmem 编译输出一个静态库文件 libhbmem.a，和三个动态库文件
 
 ## 相关文档
 
-- [5.4.12 HBMEM 使用指南 - 硬件信息](/Advanced_development/driver_development/driver_hbmem)
-- [5.5.1.2 共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
+- [HBMEM 使用指南 - 硬件信息](/Advanced_development/driver_development/driver_hbmem)
+- [共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)

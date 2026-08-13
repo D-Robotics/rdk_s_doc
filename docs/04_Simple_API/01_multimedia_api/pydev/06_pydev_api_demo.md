@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
-title: "4.1.2.6 接口使用示例"
-description: "4.1.2.6 接口使用示例 对象接口说明"
+title: "接口使用示例"
+description: "接口使用示例 对象接口说明"
 ---
 
-# 4.1.2.6 接口使用示例
+# 接口使用示例
 
 以下示例代码包含多个单元测试用例，覆盖了本章节接口的使用方式，具体如下：
 
@@ -443,6 +443,6 @@ test_cam_vps_display()
 
 ## 相关文档
 
-- [4.1.2.1 多媒体接口说明](./pydev_multimedia_api)
-- [4.1.2.2 Camera 对象](./02_object_camera)
-- [3.2.2 Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)
+- [多媒体接口说明](./pydev_multimedia_api)
+- [Camera 对象](./02_object_camera)
+- [Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

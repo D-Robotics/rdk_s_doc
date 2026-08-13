@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "5.4.18.4 eMMC 压力测试"
-description: "5.4.18.4 eMMC 压力测试"
+title: "eMMC 压力测试"
+description: "eMMC 压力测试"
 ---
 
-# 5.4.18.4 eMMC 压力测试
+# eMMC 压力测试
 
 ## 测试原理
 
@@ -345,6 +345,6 @@ Test loop 3 succeeded!
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

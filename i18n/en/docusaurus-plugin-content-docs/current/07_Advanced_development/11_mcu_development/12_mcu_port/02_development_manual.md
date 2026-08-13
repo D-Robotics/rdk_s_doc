@@ -6,7 +6,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# 7.5.13.2 Port Development Guide
+# Port Development Guide
 ## Basic Overview
 The Port is generally divided into two parts: the external interface and the "Low Level Driver (LLD)". This section only covers the development of the user interface part.
 

@@ -3,7 +3,7 @@ sidebar_position: 1
 sidebar_products: RDK S100
 ---
 
-# 5.2.1 RDK S100 Hardware Bringup
+# RDK S100 Hardware Bringup
 
 The S100 boardid is determined by the combined effect of ADC0, ADC1, ADC3, and ADC4. Among these, ADC0 and ADC1 are used for Donggua hardware differentiation and cannot be modified by the customer; ADC3 is used to identify the power-up sequence of Acore peripherals, allowing customers to customize the power-up sequence and modify the ADC3 voltage divider resistor accordingly; ADC4 is used to identify the hardware version. For details on how to set the ADC voltage divider resistors, please contact the Donggua FAE team for support.
 

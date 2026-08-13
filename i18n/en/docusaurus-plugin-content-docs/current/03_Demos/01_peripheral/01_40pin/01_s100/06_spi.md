@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# 3.3.6 SPI Application
+# SPI Application
 
 The RDK S100 exposes the `SPI0` bus on physical pins `19, 21, 23, 24, 26` of the 40PIN header, supporting two chip selects with an I/O voltage of 3.3V.
 

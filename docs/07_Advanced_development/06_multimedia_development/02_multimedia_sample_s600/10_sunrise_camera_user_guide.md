@@ -271,5 +271,5 @@ rtsp 的码流网络 URL 链接，可以在 web 的设备信息上查看，默�
 
 ## 相关文档
 
-- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

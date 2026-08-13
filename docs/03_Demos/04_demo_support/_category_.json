@@ -1,9 +1,9 @@
 {
   "position": 4,
-  "label": "3.4 示例编程指南",
+  "label": "示例编程指南",
   "link": {
     "type": "generated-index",
-    "description": "3.4 示例编程指南",
+    "description": "示例编程指南",
     "slug": "/Demos/demo_support"
   }
 }

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
-title: "4.1.2.3 Encoder 对象"
-description: "4.1.2.3 Encoder 对象 对象接口说明"
+title: "Encoder 对象"
+description: "Encoder 对象 对象接口说明"
 ---
 
-# 4.1.2.3 Encoder 对象
+# Encoder 对象
 
-> **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [5.5.1.10 MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api)。对应 C 接口见 [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)。
+> **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api)。对应 C 接口见 [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)。
 
 Encoder 对象实现了对视频数据的编码压缩功能，包含了`encode`、`encode_file`、`get_img`、`close`等几种方法，详细说明如下：
 
@@ -209,6 +209,6 @@ Encoder.close()
 
 ## 相关文档
 
-- [4.1.2.1 多媒体接口说明](./pydev_multimedia_api)
-- [4.1.2.4 Decoder 对象](./04_object_decoder)
-- [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)
+- [多媒体接口说明](./pydev_multimedia_api)
+- [Decoder 对象](./04_object_decoder)
+- [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

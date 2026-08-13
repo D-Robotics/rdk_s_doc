@@ -1,7 +1,7 @@
 ---
 sidebar_position: 14
 ---
-# 7.5.15 ICU User Guide
+# ICU User Guide
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

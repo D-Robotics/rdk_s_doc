@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "5.3.8 应用实时内核"
-description: "5.3.8 应用实时内核"
+title: "应用实时内核"
+description: "应用实时内核"
 ---
 
-# 5.3.8 应用实时内核
+# 应用实时内核
 
 `RDKS100`默认启用实时内核。实时内核是一种能够提供更加精确和可靠的响应时间的操作系统内核，通常用于对时间敏感性要求较高的应用程序，在机器人控制、工业自动化等应用场景使用较多。以下介绍实时内核的性能测试方法。
 
@@ -61,5 +61,5 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 
 ## 相关文档
 
-- [5.3.10 Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)
-- [5.3.9 内核头文件](/Advanced_development/system_software/kernel_headers)
+- [Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)
+- [内核头文件](/Advanced_development/system_software/kernel_headers)

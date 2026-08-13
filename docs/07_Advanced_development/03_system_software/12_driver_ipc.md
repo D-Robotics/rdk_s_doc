@@ -1,10 +1,10 @@
 ---
 sidebar_position: 12
-title: "5.3.12 IPC 模块介绍"
-description: "5.3.12 IPC 模块介绍"
+title: "IPC 模块介绍"
+description: "IPC 模块介绍"
 ---
 
-# 5.3.12 IPC 模块介绍
+# IPC 模块介绍
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -1270,5 +1270,5 @@ wdump: 0
 
 ## 相关文档
 
-- [5.6.9 IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)
-- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)
+- [IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)
+- [时间同步方案](/Advanced_development/system_software/driver_timesync)

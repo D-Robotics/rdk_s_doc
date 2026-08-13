@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 8.3 Application Development, Compilation, and Examples
+# Application Development, Compilation, and Examples
 
 This section answers common questions about installing and using third-party libraries on the RDK platform, compiling applications, running official examples, and related topics.
 

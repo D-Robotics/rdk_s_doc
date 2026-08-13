@@ -1,10 +1,10 @@
 ---
 sidebar_position: 12
-title: "5.4.18.12 3D GPU 性能测试"
-description: "5.4.18.12 3D GPU 性能测试"
+title: "3D GPU 性能测试"
+description: "3D GPU 性能测试"
 ---
 
-# 5.4.18.12 3D GPU 性能测试
+# 3D GPU 性能测试
 
 ## 测试原理
 3D GPU 性能测试主要用于评估 GPU 在不同计算任务和渲染任务下的性能。针对 GPU 的不同应用场景，常见的测试可分为：
@@ -298,6 +298,6 @@ Error: main: Could not initialize canvas
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

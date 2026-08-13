@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "5.4.8 Thermal 系统"
+title: "Thermal 系统"
 description: "RDK S100/S600 Thermal 系统调试指南"
 ---
 
-# 5.4.8 Thermal 系统
+# Thermal 系统
 
 Thermal 系统负责监测 SoC 温度并根据策略调整 CPU/BPU 频率与风扇转速，防止过热降频或关机。本节介绍 Thermal 系统的调试接口与配置方法。
 
@@ -66,5 +66,5 @@ S600 的 Thermal 详见 [S600 Thermal 系统](/System_configuration/frequency_ma
 
 ## 相关文档
 
-- [2.8 Thermal 和 CPU 频率管理](/System_configuration/frequency_management)
-- [5.4.1 配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [Thermal 和 CPU 频率管理](/System_configuration/frequency_management)
+- [配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)

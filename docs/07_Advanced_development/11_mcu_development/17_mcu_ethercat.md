@@ -1,10 +1,10 @@
 ---
 sidebar_position: 17
-title: "5.6.18 EtherCAT 用户手册"
-description: "5.6.18 EtherCAT 用户手册"
+title: "EtherCAT 用户手册"
+description: "EtherCAT 用户手册"
 ---
 
-# 5.6.18 EtherCAT 用户手册
+# EtherCAT 用户手册
 
 ```mdx-code-block
 
@@ -1372,5 +1372,5 @@ D-Robotics:/$ [065.302668 0]INFO: ec_config_init wkc == 1
 
 ## 相关文档
 
-- [5.4.13.2 EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)
-- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)
+- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

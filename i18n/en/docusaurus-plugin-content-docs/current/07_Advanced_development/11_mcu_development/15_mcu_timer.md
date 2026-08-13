@@ -1,7 +1,7 @@
 ---
 sidebar_position: 15
 ---
-# 7.5.16 TIMER User Guide
+# TIMER User Guide
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

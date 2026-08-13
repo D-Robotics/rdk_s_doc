@@ -1,9 +1,9 @@
 ---
 sidebar_position: 7
-title: "5.4.18.7 Wi-Fi 性能测试"
-description: "5.4.18.7 Wi-Fi 性能测试"
+title: "Wi-Fi 性能测试"
+description: "Wi-Fi 性能测试"
 ---
-# 5.4.18.7 Wi-Fi 性能测试
+# Wi-Fi 性能测试
 
 **Wi-Fi**（发音： `/ˈwaɪfaɪ/`），又称“无线网络”，是一种基于 IEEE 802.11 标准的无线局域网技术。尽管“Wi-Fi”常被写作“Wi-Fi”或“Wi-Fi”，但这些写法并未得到 Wi-Fi 联盟的认可。Wi-Fi 广泛应用于连接计算机、智能手机、平板电脑及智能家居设备，提供便捷的网络接入方式。
 
@@ -132,6 +132,6 @@ Connecting to host 192.168.137.1, port 5002
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

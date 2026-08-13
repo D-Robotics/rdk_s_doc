@@ -1,10 +1,10 @@
 ---
 sidebar_position: 9
-title: "5.4.9 音频调试指南"
-description: "5.4.9 音频调试指南"
+title: "音频调试指南"
+description: "音频调试指南"
 ---
 
-# 5.4.9 音频调试指南
+# 音频调试指南
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -418,5 +418,5 @@ echo -n "file pcm_lib.c +p" > /sys/kernel/debug/dynamic_debug/control
 
 ## 相关文档
 
-- [2.10 音频配置](/System_configuration/audio_output)
-- [3.1.3 音频应用](/Demos/peripheral/audio)
+- [音频配置](/System_configuration/audio_output)
+- [音频应用](/Demos/peripheral/audio)

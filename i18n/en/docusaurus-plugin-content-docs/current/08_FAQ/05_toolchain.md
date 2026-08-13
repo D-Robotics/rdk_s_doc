@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 8.5 AI Models, Algorithms, and Toolchain
+# AI Models, Algorithms, and Toolchain
 
 :::tip 🛠️ Toolchain and System Download Guide
 

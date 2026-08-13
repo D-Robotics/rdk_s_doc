@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "5.1.1 开发环境搭建及编译说明"
+title: "开发环境搭建及编译说明"
 description: "RDK S100/S600 交叉编译环境搭建、源码获取与系统镜像编译"
 ---
 
-# 5.1.1 开发环境搭建及编译说明
+# 开发环境搭建及编译说明
 
 本节介绍交叉编译开发环境的要求及搭建，源码获取和系统镜像的编译方法。
 
@@ -66,7 +66,7 @@ https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 
 ## 编译流程
 
-BSP 源码目录结构见 [5.1.2 BSP 源码目录结构](./02_bsp_source_layout.md)。
+BSP 源码目录结构见 [BSP 源码目录结构](./02_bsp_source_layout.md)。
 
 ```bash
 cd rdk_gen
@@ -90,14 +90,14 @@ source config/hobot_config.sh
 ./pack_image.sh
 ```
 
-编译产物为可烧录的系统镜像，烧录方法见 [1.3.1 系统烧录](/Quick_start/install_os_and_setup/instruction)。
+编译产物为可烧录的系统镜像，烧录方法见 [系统烧录](/Quick_start/install_os_and_setup/instruction)。
 
-> 容器化编译（避免宿主机环境污染）见 [5.1.4 Docker 编译](./04_docker_build.md) 和 [5.1.5 Podman 编译](./05_podman_build.md)。
+> 容器化编译（避免宿主机环境污染）见 [Docker 编译](./04_docker_build.md) 和 [Podman 编译](./05_podman_build.md)。
 
 ## 相关文档
 
-- [5.1.2 BSP 源码目录结构](./02_bsp_source_layout.md)
-- [5.1.3 构建系统开发指南](./03_rdk_gen.md)
-- [5.1.4 使用 Docker 编译](./04_docker_build.md)
-- [5.1.5 使用 Podman 编译](./05_podman_build.md)
-- [1.3.1 系统烧录](/Quick_start/install_os_and_setup/instruction)
+- [BSP 源码目录结构](./02_bsp_source_layout.md)
+- [构建系统开发指南](./03_rdk_gen.md)
+- [使用 Docker 编译](./04_docker_build.md)
+- [使用 Podman 编译](./05_podman_build.md)
+- [系统烧录](/Quick_start/install_os_and_setup/instruction)

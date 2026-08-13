@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 7.2.8 USB Gadget User Guide
+# USB Gadget User Guide
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope'

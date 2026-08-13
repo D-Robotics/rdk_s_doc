@@ -1,10 +1,10 @@
 ---
 sidebar_position: 2
-title: "5.4.2 UART 驱动调试指南"
-description: "5.4.2 UART 驱动调试指南"
+title: "UART 驱动调试指南"
+description: "UART 驱动调试指南"
 ---
 
-# 5.4.2 UART 驱动调试指南
+# UART 驱动调试指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -146,5 +146,5 @@ RDK S600是将 uart4初始化为/dev/ttyS1，uart4并没有引出物理引脚，
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [7.2.4 dpkg-deb 命令](/Appendix/linux-command-manual/dpkg-deb)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [dpkg-deb 命令](/Appendix/linux-command-manual/dpkg-deb)

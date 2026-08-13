@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 3.3.2.3 Serial Port Application
+# Serial Port Application
 
 The RDK S600 supports UART6 and UART7 on the self-locking 10-PIN interface, with an IO voltage of 3.3V.
 

@@ -1,12 +1,12 @@
 ---
-title: "3.2.2.1 Python 多媒体示例"
+title: "Python 多媒体示例"
 sidebar_position: 1
 description: "RDK S100/S600 Python 多媒体采集/显示/编解码示例"
 ---
 
-# 3.2.2.1 Python 多媒体示例
+# Python 多媒体示例
 
-本节介绍使用 Python pydev 接口进行多媒体采集、显示和编解码的示例。Python 示例使用 [4.1.2 Python 接口](/Simple_API/multimedia_api/pydev/object_camera)（Camera/Encoder/Decoder/Display 对象），与 C 语言 cdev 示例对应。
+本节介绍使用 Python pydev 接口进行多媒体采集、显示和编解码的示例。Python 示例使用 [Python 接口](/Simple_API/multimedia_api/pydev/object_camera)（Camera/Encoder/Decoder/Display 对象），与 C 语言 cdev 示例对应。
 
 ## 环境准备
 
@@ -35,7 +35,7 @@ pydev_demo/
 └── requirements.txt
 ```
 
-> 算法类示例（classification/detection/segmentation/pose/speech）见 [3.3 算法示例](/Demos/algorithm_demo/)。本节聚焦多媒体采集/显示/编解码。
+> 算法类示例（classification/detection/segmentation/pose/speech）见 [算法示例](/Demos/algorithm_demo/)。本节聚焦多媒体采集/显示/编解码。
 
 ## 编译与运行
 
@@ -72,8 +72,8 @@ while True:
     disp.show(frame)
 ```
 
-- `Camera` 对象 — 封装 VIO 采集，详见 [4.1.2.2 Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
-- `Display` 对象 — 封装显示输出，详见 [4.1.2.5 Display 对象](/Simple_API/multimedia_api/pydev/object_display)
+- `Camera` 对象 — 封装 VIO 采集，详见 [Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
+- `Display` 对象 — 封装显示输出，详见 [Display 对象](/Simple_API/multimedia_api/pydev/object_display)
 - `Encoder`/`Decoder` 对象 — 封装编解码，详见 [4.1.2.3](/Simple_API/multimedia_api/pydev/object_encoder) / [4.1.2.4](/Simple_API/multimedia_api/pydev/object_decoder)
 
 ## 效果
@@ -83,6 +83,6 @@ while True:
 
 ## 相关文档
 
-- [3.2.1 C 语言示例](../01_cdev/01_vio_capture.md)
-- [4.1.2 Python 接口](/Simple_API/multimedia_api/pydev/object_camera)
-- [3.3 算法示例](/Demos/algorithm_demo/summary)
+- [C 语言示例](../01_cdev/01_vio_capture.md)
+- [Python 接口](/Simple_API/multimedia_api/pydev/object_camera)
+- [算法示例](/Demos/algorithm_demo/summary)

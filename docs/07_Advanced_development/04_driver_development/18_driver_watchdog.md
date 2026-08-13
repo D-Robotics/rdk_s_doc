@@ -1,10 +1,10 @@
 ---
 sidebar_position: 15
-title: "5.4.15 Watchdog"
-description: "5.4.15 Watchdog"
+title: "Watchdog"
+description: "Watchdog"
 ---
 
-# 5.4.15 Watchdog
+# Watchdog
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -484,5 +484,5 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
 ## 相关文档
 
-- [5.4.1 配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
-- [5.4.17 VDSP 开发指南](/Advanced_development/driver_development/vdsp_development)
+- [配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [VDSP 开发指南](/Advanced_development/driver_development/vdsp_development)

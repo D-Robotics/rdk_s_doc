@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 3.3.2.4 SPI Application
+# SPI Application
 
 The RDK S600 features the `SPI1` bus on the 14-PIN self-locking interface, supporting one chip select with an I/O voltage of 1.8V.
 

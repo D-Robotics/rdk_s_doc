@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "5.3.4 USB Gadget 使用指南"
-description: "5.3.4 USB Gadget 使用指南"
+title: "USB Gadget 使用指南"
+description: "USB Gadget 使用指南"
 ---
 
-# 5.3.4 USB Gadget 使用指南
+# USB Gadget 使用指南
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope'
@@ -207,5 +207,5 @@ usb-gadget.sh stop rndis
 
 ## 相关文档
 
-- [5.3.2 系统定制](/Advanced_development/system_software/system_customization)
-- [3.1 外设应用示例](/Demos/peripheral)
+- [系统定制](/Advanced_development/system_software/system_customization)
+- [外设应用示例](/Demos/peripheral)

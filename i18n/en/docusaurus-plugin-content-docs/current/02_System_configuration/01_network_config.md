@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 2.1 Network and Bluetooth Configuration
+# Network and Bluetooth Configuration
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

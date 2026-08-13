@@ -1,10 +1,10 @@
 ---
-title: "2.5.2 自定义 config.txt"
+title: "自定义 config.txt"
 sidebar_position: 2
 description: "如何创建和修改 RDK config.txt 配置文件"
 ---
 
-# 2.5.2 自定义 config.txt
+# 自定义 config.txt
 
 config.txt 是 RDK 的启动配置文件，用于在 U-Boot 阶段配置内核启动参数、DTS 节点、显示选项等，无需重新编译固件即可调整系统行为。
 
@@ -67,6 +67,6 @@ config.txt 在每次启动时由 U-Boot 自动读取并解析。修改后**重�
 
 ## 相关文档
 
-- [2.5.1 config.txt 使用指南](./01_usage.md)
-- [2.5.3 常用配置项参考](./03_common_options.md)
-- [2.5.4 启动相关配置](./04_boot_options.md)
+- [config.txt 使用指南](./01_usage.md)
+- [常用配置项参考](./03_common_options.md)
+- [启动相关配置](./04_boot_options.md)

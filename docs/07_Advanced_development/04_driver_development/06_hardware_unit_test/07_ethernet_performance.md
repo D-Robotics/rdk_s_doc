@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "5.4.18.8 以太网性能测试"
-description: "5.4.18.8 以太网性能测试"
+title: "以太网性能测试"
+description: "以太网性能测试"
 ---
 
-# 5.4.18.8 以太网性能测试
+# 以太网性能测试
 
 本章旨在指导如何使用 `iperf3` 工具进行以太网性能测试。可以查阅 [iperf3](https://iperf.fr/iperf-doc.php#3docd) 了解该命令的详细使用说明。
 
@@ -206,6 +206,6 @@ Connecting to host 192.168.127.195, port 5002
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

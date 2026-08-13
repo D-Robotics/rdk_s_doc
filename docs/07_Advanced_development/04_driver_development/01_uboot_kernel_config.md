@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "5.4.1 配置 U-Boot 和 Kernel 选项参数"
-description: "5.4.1 配置 U-Boot 和 Kernel 选项参数"
+title: "配置 U-Boot 和 Kernel 选项参数"
+description: "配置 U-Boot 和 Kernel 选项参数"
 ---
 
-# 5.4.1 配置 U-Boot 和 Kernel 选项参数
+# 配置 U-Boot 和 Kernel 选项参数
 
 
 在系统软件开发中，经常需要对 u-boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
@@ -174,5 +174,5 @@ make mrproper
 
 ## 相关文档
 
-- [2.5.4 启动相关配置](/System_configuration/config_txt/boot_options)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [启动相关配置](/System_configuration/config_txt/boot_options)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

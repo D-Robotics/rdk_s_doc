@@ -1,10 +1,10 @@
 ---
 sidebar_position: 7
-title: "5.3.7 miniboot 升级"
-description: "5.3.7 miniboot 升级"
+title: "miniboot 升级"
+description: "miniboot 升级"
 ---
 
-# 5.3.7 miniboot 升级
+# miniboot 升级
 
 :::note
 - 此升级方式仅适用于**非 OTA** 镜像下的在线 miniboot 更新；OTA 镜像请走 [系统 OTA 升级](./06_ota_system.md) 的完整流程。
@@ -106,5 +106,5 @@ Error: N step(s) failed to flash.
 
 ## 相关文档
 
-- [2.3.2 主版本升级与固件](/System_configuration/system_update/upgrade_firmware)
-- [5.3.6 系统 OTA 升级](/Advanced_development/system_software/ota_system)
+- [主版本升级与固件](/System_configuration/system_update/upgrade_firmware)
+- [系统 OTA 升级](/Advanced_development/system_software/ota_system)

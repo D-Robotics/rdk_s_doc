@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "5.6.2 MCU 快速入门指南"
-description: "5.6.2 MCU 快速入门指南"
+title: "MCU 快速入门指南"
+description: "MCU 快速入门指南"
 ---
 
-# 5.6.2 MCU 快速入门指南
+# MCU 快速入门指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -648,6 +648,6 @@ MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行�
 
 ## 相关文档
 
-- [5.6.1 MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
-- [5.6.3 MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)
-- [1.1.2.2 MCU 接口扩展板](/01_hardware_introduction)
+- [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)
+- [MCU 接口扩展板](/01_hardware_introduction)

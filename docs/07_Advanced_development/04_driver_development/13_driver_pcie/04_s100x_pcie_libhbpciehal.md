@@ -1,9 +1,9 @@
 ---
 sidebar_position: 4
-title: "5.4.10.4 PCIe 用户态 High Level API 介绍"
-description: "5.4.10.4 PCIe 用户态 High Level API 介绍"
+title: "PCIe 用户态 High Level API 介绍"
+description: "PCIe 用户态 High Level API 介绍"
 ---
-# 5.4.10.4 PCIe 用户态 High Level API 介绍
+# PCIe 用户态 High Level API 介绍
 
 ## 简介
 
@@ -122,5 +122,5 @@ void main()
 
 ## 相关文档
 
-- [5.4.10.3 PCIe kernel 配置](/Advanced_development/driver_development/driver_pcie)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [PCIe kernel 配置](/Advanced_development/driver_development/driver_pcie)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

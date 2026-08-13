@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "2.1 网络配置"
+title: "网络配置"
 description: "RDK S100/S600 有线/无线网络配置、DNS、Proxy，默认账号与 IP 权威定义"
 ---
 
-# 2.1 网络配置
+# 网络配置
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -325,7 +325,7 @@ source ~/.bashrc
 ```
 
 :::tip
-系统软件包升级与主版本/固件更新见 [2.3 系统更新](/System_configuration/system_update)。
+系统软件包升级与主版本/固件更新见 [系统更新](/System_configuration/system_update)。
 :::
 
 ## 验证
@@ -336,6 +336,6 @@ source ~/.bashrc
 
 ## 相关文档
 
-- [2.2 蓝牙配置](./02_bluetooth_config.md)
-- [2.3 系统更新](/System_configuration/system_update)
-- [1.3.4 远程登录](../01_Quick_start/03_install_os_and_setup/remote_login.md)
+- [蓝牙配置](./02_bluetooth_config.md)
+- [系统更新](/System_configuration/system_update)
+- [远程登录](../01_Quick_start/03_install_os_and_setup/remote_login.md)

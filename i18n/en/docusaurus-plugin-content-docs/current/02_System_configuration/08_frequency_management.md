@@ -1,9 +1,9 @@
 ---
 sidebar_position: 8
-title: 2.4 Thermal and CPU Frequency Management
+title: Thermal and CPU Frequency Management
 ---
 
-# 2.4 Thermal and CPU Frequency Management
+# Thermal and CPU Frequency Management
 
 
 ```mdx-code-block

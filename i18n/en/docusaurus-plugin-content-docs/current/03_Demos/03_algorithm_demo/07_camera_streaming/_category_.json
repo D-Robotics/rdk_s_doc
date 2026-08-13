@@ -1,9 +1,9 @@
 {
   "position": 7,
-  "label": "3.3.7 摄像头+推理",
+  "label": "摄像头+推理",
   "link": {
     "type": "generated-index",
-    "description": "3.3.7 摄像头+推理",
+    "description": "摄像头+推理",
     "slug": "/Demos/algorithm_demo/camera_streaming"
   }
 }

@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# 3.3.3 PWM Application
+# PWM Application
 
 The Hobot.GPIO library supports PWM only on pins equipped with an additional hardware PWM controller. Unlike the RPi.GPIO library, Hobot.GPIO does not implement software-emulated PWM. The RDK S100 40-pin hardware supports two LPWM channels.
 

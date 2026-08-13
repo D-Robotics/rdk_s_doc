@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "5.5.1.1 基础框架 - HBN"
+title: "基础框架 - HBN"
 description: "RDK S100/S600 多媒体基础框架 HBN API"
 ---
 
-# 5.5.1.1 基础框架 - HBN
+# 基础框架 - HBN
 
 
 ## 概述
@@ -1739,6 +1739,6 @@ online 表示硬件直连，offline 表示输出至 ddr 缓存
 
 ## 相关文档
 
-- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [5.5.1.2 共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
-- [3.2.1.1 视频采集](/Demos/multimedia_demo/cdev/vio_capture)
+- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
+- [视频采集](/Demos/multimedia_demo/cdev/vio_capture)

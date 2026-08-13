@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 ---
-# 7.6 Build System Development Guide
+# Build System Development Guide
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

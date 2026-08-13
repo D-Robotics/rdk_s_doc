@@ -1,12 +1,12 @@
 ---
 sidebar_position: 5
-title: "4.1.2.5 Display 对象"
-description: "4.1.2.5 Display 对象 对象接口说明"
+title: "Display 对象"
+description: "Display 对象 对象接口说明"
 ---
 
-# 4.1.2.5 Display 对象
+# Display 对象
 
-> **接口层级**：封装层简易接口（模式 1），底层 DISP 见 [5.5.1.9 DISP API](/Advanced_development/multimedia_development/multimedia_api/disp_api)。对应 C 接口见 [4.1.1.4 DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)。
+> **接口层级**：封装层简易接口（模式 1），底层 DISP 见 [DISP API](/Advanced_development/multimedia_development/multimedia_api/disp_api)。对应 C 接口见 [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)。
 
 Display 对象实现了视频显示功能，可以将图像数据通过`HDMI`接口输出到显示器，该对象包含`display`、`set_img`、`set_graph_rect`、`set_graph_word`、`close`等方法，详细说明如下：
 
@@ -368,6 +368,6 @@ print("libsrcampy unbind return:%d" % ret)
 
 ## 相关文档
 
-- [4.1.2.1 多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [4.1.2.2 Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
-- [3.2.1.2 采集→显示](/Demos/multimedia_demo/cdev/vio2display)
+- [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
+- [Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
+- [采集→显示](/Demos/multimedia_demo/cdev/vio2display)

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
-title: "6.6 TROS/ROS 开发"
-description: "6.6 TROS/ROS 开发 常见问题与排查"
+title: "TROS/ROS 开发"
+description: "TROS/ROS 开发 常见问题与排查"
 ---
  
-# 6.6 TROS/ROS 开发
+# TROS/ROS 开发
 
 本节主要解答与地瓜机器人操作系统（TogetheROS.Bot, tros.b）以及通用 ROS/ROS2在 RDK 平台上开发和使用相关的常见疑问。
 

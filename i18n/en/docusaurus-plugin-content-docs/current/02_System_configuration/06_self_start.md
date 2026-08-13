@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# 2.5 Boot Auto-Start Configuration
+# Boot Auto-Start Configuration
 
 There are multiple ways to add auto-start programs in Ubuntu. This section provides two methods for reference.
 

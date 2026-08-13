@@ -1,11 +1,11 @@
 ---
 sidebar_position: 2
-title: "5.7.2.2.2 大模型工具链 v1.0.5"
-description: 5.7.2.2.2 大模型工具链 v1.0.5
+title: "大模型工具链 v1.0.5"
+description: 大模型工具链 v1.0.5
 sidebar_products: RDK S600
 ---
 
-# 5.7.2.2.2 大模型工具链 v1.0.5
+# 大模型工具链 v1.0.5
 
 在 RDK S600 平台上，D-Robotics_LLM_S600 目前支持以下模型和功能：
 
@@ -527,4 +527,4 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 ## 相关文档
 
-- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [算法工具链开发指南](/Advanced_development/algorithm_toolchain)

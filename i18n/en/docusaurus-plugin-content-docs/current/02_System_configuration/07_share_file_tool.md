@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# 2.7 Shared File Configuration
+# Shared File Configuration
 
 This section introduces the usage instructions for sharing tools in Ubuntu systems.
 

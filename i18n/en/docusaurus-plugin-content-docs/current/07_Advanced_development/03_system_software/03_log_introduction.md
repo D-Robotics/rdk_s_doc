@@ -1,13 +1,13 @@
 ---
 sidebar_position: 3
-title: "7.2.8 Log User Guide"
+title: "Log User Guide"
 ---
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-# 7.2.8 Log User Guide
+# Log User Guide
 
 ## Log System Partition Planning
 

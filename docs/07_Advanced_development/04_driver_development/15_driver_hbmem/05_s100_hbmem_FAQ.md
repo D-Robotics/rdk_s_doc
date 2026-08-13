@@ -1,9 +1,9 @@
 ---
 sidebar_position: 5
-title: "5.4.12.5 FAQ"
-description: "5.4.12.5 FAQ"
+title: "FAQ"
+description: "FAQ"
 ---
-# 5.4.12.5 FAQ
+# FAQ
 
 ## FAQ001: 内存概念
 
@@ -171,5 +171,5 @@ description: "5.4.12.5 FAQ"
 
 ## 相关文档
 
-- [5.4.12 HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
-- [6.4 多媒体处理与应用 FAQ](/FAQ/multimedia)
+- [HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
+- [多媒体处理与应用 FAQ](/FAQ/multimedia)

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 16
-title: "5.4.16 UFS 驱动调试指南"
-description: "5.4.16 UFS 驱动调试指南"
+title: "UFS 驱动调试指南"
+description: "UFS 驱动调试指南"
 ---
 
-# 5.4.16 UFS 驱动调试指南
+# UFS 驱动调试指南
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -651,5 +651,5 @@ CONFIG_DYNAMIC_DEBUG=y
 
 ## 相关文档
 
-- [5.4.1 配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
-- [2.12 存储与磁盘管理](/System_configuration/storage)
+- [配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [存储与磁盘管理](/System_configuration/storage)

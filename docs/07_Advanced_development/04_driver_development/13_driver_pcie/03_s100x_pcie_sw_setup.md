@@ -1,9 +1,9 @@
 ---
 sidebar_position: 3
-title: "5.4.10.3 PCIe 模块功能在 kernel 下的配置"
-description: "5.4.10.3 PCIe 模块功能在 kernel 下的配置"
+title: "PCIe 模块功能在 kernel 下的配置"
+description: "PCIe 模块功能在 kernel 下的配置"
 ---
-# 5.4.10.3 PCIe 模块功能在 kernel 下的配置
+# PCIe 模块功能在 kernel 下的配置
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -121,5 +121,5 @@ S600 PCIE 的链路支持3种模式：
 
 ## 相关文档
 
-- [5.4.10.2 PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
-- [5.4.10.4 PCIe 用户态 API](/Advanced_development/driver_development/driver_pcie)
+- [PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
+- [PCIe 用户态 API](/Advanced_development/driver_development/driver_pcie)

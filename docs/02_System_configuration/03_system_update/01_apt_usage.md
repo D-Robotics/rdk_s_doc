@@ -1,10 +1,10 @@
 ---
-title: "2.3.1 软件包管理 apt"
+title: "软件包管理 apt"
 sidebar_position: 1
 description: "RDK OS 上 apt 软件包查询、安装、升级、卸载"
 ---
 
-# 2.3.1 软件包管理 apt
+# 软件包管理 apt
 
 RDK OS 基于 Ubuntu，用 `apt` 管理软件包。系统已配置 D-Robotics 官方 apt 源（提供 RDK 专属包如 `hobot-dnn`、`hobot-camera`）与 Ubuntu 官方源。模式 1 用户可用 `apt` 安装常用工具，模式 2 用户可基于 apt + 配置层做产品化集成。
 

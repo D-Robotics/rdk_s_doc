@@ -1,10 +1,10 @@
 ---
-title: "3.2.1.5 解码→显示"
+title: "解码→显示"
 sidebar_position: 5
 description: "RDK S100/S600 视频码流解码→Display 实时显示示例"
 ---
 
-# 3.2.1.5 解码→显示
+# 解码→显示
 
 本示例演示将视频码流（H.264/H.265）解码并实时输出到 HDMI 显示器，链路：File → Decoder → Display。
 
@@ -12,7 +12,7 @@ description: "RDK S100/S600 视频码流解码→Display 实时显示示例"
 
 - 开发板已烧录 RDK OS 并启动
 - HDMI 显示器已连接
-- 有 H.264/H.265 码流文件（可使用 [3.2.1.3 采集→编码](./03_vio2encoder.md) 生成的输出）
+- 有 H.264/H.265 码流文件（可使用 [采集→编码](./03_vio2encoder.md) 生成的输出）
 
 ## 代码位置
 
@@ -55,7 +55,7 @@ HDMI 显示器上播放输入码流文件的解码画面。
 
 ## 相关文档
 
-- [3.2.1.3 采集→编码](./03_vio2encoder.md)（生成码流文件）
-- [3.2.1.6 RTSP→显示](./06_rtsp2display.md)
-- [4.1 多媒体 API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [3.4.2 C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [采集→编码](./03_vio2encoder.md)（生成码流文件）
+- [RTSP→显示](./06_rtsp2display.md)
+- [多媒体 API](/Simple_API/multimedia_api/cdev/decoder_api)
+- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)

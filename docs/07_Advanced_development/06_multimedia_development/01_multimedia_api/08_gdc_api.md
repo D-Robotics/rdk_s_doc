@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "5.5.1.8 畸变矫正 - GDC"
+title: "畸变矫正 - GDC"
 description: "RDK S100/S600 GDC 畸变矫正配置"
 ---
 
-# 5.5.1.8 畸变矫正 - GDC
+# 畸变矫正 - GDC
 
 ## 概述
 
@@ -25,5 +25,5 @@ GDC（Geometric Distortion Correction，畸变矫正）用于相机图像的几�
 
 ## 相关文档
 
-- [5.5.1.6 VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)（`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`）
-- [5.5.1.1 HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)（vnode 通道绑定）
+- [VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)（`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`）
+- [HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)（vnode 通道绑定）

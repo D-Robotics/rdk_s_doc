@@ -1,13 +1,13 @@
 ---
 sidebar_position: 3
-title: "5.3.3 Log 使用指南"
+title: "Log 使用指南"
 ---
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-# 5.3.3 Log 使用指南
+# Log 使用指南
 
 ## Log 系统分区规划
 
@@ -440,5 +440,5 @@ MCU Log 使用注意事项，请参考：[MCU Log简介](../11_mcu_development/0
 
 ## 相关文档
 
-- [2.15 系统日志查看](/System_configuration/system_log)
-- [7.2 Linux 命令用法](/Appendix/linux-command-manual/apt)
+- [系统日志查看](/System_configuration/system_log)
+- [Linux 命令用法](/Appendix/linux-command-manual/apt)

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "5.4.4 GPIO 使用"
-description: "5.4.4 GPIO 使用"
+title: "GPIO 使用"
+description: "GPIO 使用"
 ---
 
-# 5.4.4 GPIO 使用
+# GPIO 使用
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -406,5 +406,5 @@ pinctrl_cam: pinctrl@37121000 {
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [5.4.5 Pinctrl 调试指南](/Advanced_development/driver_development/driver_pinctrl_dev)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [Pinctrl 调试指南](/Advanced_development/driver_development/driver_pinctrl_dev)

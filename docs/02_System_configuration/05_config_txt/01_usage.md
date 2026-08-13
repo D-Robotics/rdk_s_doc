@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "2.5.1 config.txt 使用指南"
+title: "config.txt 使用指南"
 description: "config.txt 配置文件使用指南：bootargs、loglevel、DTS 节点、DTB Overlay"
 ---
 
-# 2.5.1 config.txt 使用指南
+# config.txt 使用指南
 :::warning
 - 所有配置文件内的配置，均可以在 Uboot 内手动覆盖。Uboot 内手动配置（在 Uboot 命令行使用 setenv）的优先级**高于**配置文件内的配置。完整环境变量优先级：`setenv > 配置文件 > 上一次启动saveenv`；
 - 本章内容均以“配置文件”指代**默认路径**为`/boot/config.txt`的配置文件；
@@ -157,6 +157,6 @@ lrwxrwxrwx 1 root root 15 Jun  4 22:17 /dev/block/platform/by-name/userdata -> /
 
 ## 相关文档
 
-- [2.5.2 自定义 config.txt](/System_configuration/config_txt/custom)
-- [2.5.3 常用配置项参考](/System_configuration/config_txt/common_options)
-- [2.5.4 启动相关配置](/System_configuration/config_txt/boot_options)
+- [自定义 config.txt](/System_configuration/config_txt/custom)
+- [常用配置项参考](/System_configuration/config_txt/common_options)
+- [启动相关配置](/System_configuration/config_txt/boot_options)

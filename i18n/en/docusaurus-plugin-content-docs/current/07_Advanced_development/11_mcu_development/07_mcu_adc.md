@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# 7.5.8 ADC User Guide
+# ADC User Guide
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "5.6.5 UART 使用指南"
-description: "5.6.5 UART 使用指南"
+title: "UART 使用指南"
+description: "UART 使用指南"
 ---
 
-# 5.6.5 UART 使用指南
+# UART 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -476,5 +476,5 @@ Return value: None
 
 ## 相关文档
 
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
-- [5.4.2 UART 驱动调试指南](/Advanced_development/driver_development/driver_uart_dev)
+- [扩展引脚应用](/Demos/peripheral/40pin)
+- [UART 驱动调试指南](/Advanced_development/driver_development/driver_uart_dev)

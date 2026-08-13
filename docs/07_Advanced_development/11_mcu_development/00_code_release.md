@@ -1,10 +1,10 @@
 ---
 sidebar_position: 0
-title: "5.6.1 MCU 代码包结构介绍"
-description: "5.6.1 MCU 代码包结构介绍"
+title: "MCU 代码包结构介绍"
+description: "MCU 代码包结构介绍"
 ---
 
-# 5.6.1 MCU 代码包结构介绍
+# MCU 代码包结构介绍
 
 :::info
 MCU0固件编译/McalCdd/Service/Platform 等代码为企业版专有，如有需要，请联系[D-Robotics](mailto:developer@d-robotics.cc)获取支持。
@@ -63,5 +63,5 @@ MCU
 
 ## 相关文档
 
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

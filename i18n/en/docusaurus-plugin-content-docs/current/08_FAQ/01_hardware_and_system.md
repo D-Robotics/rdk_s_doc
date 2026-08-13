@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 8.1 Hardware, System, and Environment Configuration
+# Hardware, System, and Environment Configuration
 
 :::info 🔄 Consider updating to the latest system before troubleshooting
 

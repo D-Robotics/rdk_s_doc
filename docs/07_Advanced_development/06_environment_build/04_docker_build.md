@@ -1,17 +1,17 @@
 ---
-title: "5.1.4 使用 Docker 编译"
+title: "使用 Docker 编译"
 sidebar_position: 4
 description: "使用 Docker 容器编译 RDK BSP"
 ---
 
-# 5.1.4 使用 Docker 编译
+# 使用 Docker 编译
 
 使用 Docker 容器可以避免在宿主机上安装交叉编译工具链和依赖，实现可复现的编译环境。
 
 ## 环境准备
 
 - 宿主机已安装 Docker
-- BSP 源码已获取（见 [5.1.1 搭建开发环境](./01_environment_build.md)）
+- BSP 源码已获取（见 [搭建开发环境](./01_environment_build.md)）
 
 ## 安装 Docker
 
@@ -56,6 +56,6 @@ source config/hobot_config.sh
 
 ## 相关文档
 
-- [5.1.1 搭建开发环境](./01_environment_build.md)
-- [5.1.2 BSP 源码目录结构](./02_bsp_source_layout.md)
-- [5.1.5 使用 Podman 编译](./05_podman_build.md)
+- [搭建开发环境](./01_environment_build.md)
+- [BSP 源码目录结构](./02_bsp_source_layout.md)
+- [使用 Podman 编译](./05_podman_build.md)

@@ -1,17 +1,17 @@
 ---
-title: "3.2.1.2 采集→显示"
+title: "采集→显示"
 sidebar_position: 2
 description: "RDK S100/S600 摄像头采集→VIO→Display 实时预览示例"
 ---
 
-# 3.2.1.2 采集→显示
+# 采集→显示
 
 本示例演示通过 VIO 采集摄像头画面并实时输出到 HDMI 显示器，是多媒体 pipeline 最基础的链路：Camera → VIO → Display。
 
 ## 环境准备
 
-- 开发板已烧录 RDK OS 并启动（见 [1.2 开始使用 RDK](/Quick_start/getting_started)）
-- MIPI 摄像头已连接（见 [3.1.2 摄像头使用](/Demos/peripheral/camera/mipi_camera)）
+- 开发板已烧录 RDK OS 并启动（见 [开始使用 RDK](/Quick_start/getting_started)）
+- MIPI 摄像头已连接（见 [摄像头使用](/Demos/peripheral/camera/mipi_camera)）
 - HDMI 显示器已连接
 
 ## 代码位置
@@ -43,7 +43,7 @@ make
 3. 循环 `sp_vio_get_frame` → `sp_display_send_frame` — 采集帧送显
 4. `sp_vio_close`/`sp_display_close` — 释放资源
 
-简易 API 的完整接口说明见 [4.1 多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)。
+简易 API 的完整接口说明见 [多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)。
 
 ## 效果
 
@@ -51,7 +51,7 @@ HDMI 显示器上实时显示摄像头画面，延迟约 1~2 帧。
 
 ## 相关文档
 
-- [3.2.1.1 视频采集](./01_vio_capture.md)
-- [3.1.2 摄像头使用](/Demos/peripheral/camera/mipi_camera)
-- [4.1 多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)
-- [3.4.2 C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [视频采集](./01_vio_capture.md)
+- [摄像头使用](/Demos/peripheral/camera/mipi_camera)
+- [多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)
+- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)

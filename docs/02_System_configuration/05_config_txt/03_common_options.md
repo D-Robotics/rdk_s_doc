@@ -1,12 +1,12 @@
 ---
-title: "2.5.3 常用配置项参考"
+title: "常用配置项参考"
 sidebar_position: 3
 description: "RDK config.txt 常用配置项速查表"
 ---
 
-# 2.5.3 常用配置项参考
+# 常用配置项参考
 
-本页列出 config.txt 中常用的配置项，按类别分类，方便快速查找。配置文件的修改方法见 [2.5.2 自定义 config.txt](./02_custom.md)。
+本页列出 config.txt 中常用的配置项，按类别分类，方便快速查找。配置文件的修改方法见 [自定义 config.txt](./02_custom.md)。
 
 ## 内核启动参数
 
@@ -45,11 +45,11 @@ description: "RDK config.txt 常用配置项速查表"
 | --- | --- | --- |
 | `overlayfs` | 覆盖文件系统配置 | `overlayfs=upper` |
 
-> 配置项的完整列表和新增配置项的开发方法见 [2.5.5 config.txt 解析开发指南](./05_parser_dev.md)。
+> 配置项的完整列表和新增配置项的开发方法见 [config.txt 解析开发指南](./05_parser_dev.md)。
 
 ## 相关文档
 
-- [2.5.1 config.txt 使用指南](./01_usage.md)
-- [2.5.2 自定义 config.txt](./02_custom.md)
-- [2.5.4 启动相关配置](./04_boot_options.md)
-- [2.5.5 config.txt 解析开发指南](./05_parser_dev.md)
+- [config.txt 使用指南](./01_usage.md)
+- [自定义 config.txt](./02_custom.md)
+- [启动相关配置](./04_boot_options.md)
+- [config.txt 解析开发指南](./05_parser_dev.md)

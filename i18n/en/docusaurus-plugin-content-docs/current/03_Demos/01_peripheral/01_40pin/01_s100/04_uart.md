@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 3.3.4 UART Application
+# UART Application
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

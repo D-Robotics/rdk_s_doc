@@ -1,17 +1,17 @@
 ---
-title: "5.1.5 使用 Podman 编译"
+title: "使用 Podman 编译"
 sidebar_position: 5
 description: "使用 Podman 容器编译 RDK BSP"
 ---
 
-# 5.1.5 使用 Podman 编译
+# 使用 Podman 编译
 
 Podman 是 Docker 的替代方案，无需守护进程（daemonless），且默认以非 root 用户运行，安全性更高。编译流程与 Docker 基本一致。
 
 ## 环境准备
 
 - 宿主机已安装 Podman
-- BSP 源码已获取（见 [5.1.1 搭建开发环境](./01_environment_build.md)）
+- BSP 源码已获取（见 [搭建开发环境](./01_environment_build.md)）
 
 ## 安装 Podman
 
@@ -59,6 +59,6 @@ SELinux 环境下挂载目录需加 `:Z` 标签，否则容器内无法访问。
 
 ## 相关文档
 
-- [5.1.1 搭建开发环境](./01_environment_build.md)
-- [5.1.4 使用 Docker 编译](./04_docker_build.md)
-- [5.1.2 BSP 源码目录结构](./02_bsp_source_layout.md)
+- [搭建开发环境](./01_environment_build.md)
+- [使用 Docker 编译](./04_docker_build.md)
+- [BSP 源码目录结构](./02_bsp_source_layout.md)

@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
-title: "5.3.5 蓝牙初始化说明"
-description: "5.3.5 蓝牙初始化说明"
+title: "蓝牙初始化说明"
+description: "蓝牙初始化说明"
 ---
 
-# 5.3.5 蓝牙初始化说明
+# 蓝牙初始化说明
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope'
@@ -357,5 +357,5 @@ sudo systemctl start hobot-bluetooth
 
 ## 相关文档
 
-- [2.2 蓝牙配置](/System_configuration/bluetooth_config)
-- [5.4.11 Wi-Fi 驱动调试指南](/Advanced_development/driver_development/driver_wifi)
+- [蓝牙配置](/System_configuration/bluetooth_config)
+- [Wi-Fi 驱动调试指南](/Advanced_development/driver_development/driver_wifi)

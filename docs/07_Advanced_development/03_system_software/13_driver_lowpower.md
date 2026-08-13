@@ -1,10 +1,10 @@
 ---
 sidebar_position: 13
-title: "5.3.13 低功耗模式调试指南"
-description: "5.3.13 低功耗模式调试指南"
+title: "低功耗模式调试指南"
+description: "低功耗模式调试指南"
 ---
 
-# 5.3.13 低功耗模式调试指南
+# 低功耗模式调试指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -333,5 +333,5 @@ exit 0
 
 ## 相关文档
 
-- [2.8 Thermal 和 CPU 频率管理](/System_configuration/frequency_management)
-- [2.11 屏幕休眠与电源管理](/System_configuration/screen_sleep)
+- [Thermal 和 CPU 频率管理](/System_configuration/frequency_management)
+- [屏幕休眠与电源管理](/System_configuration/screen_sleep)

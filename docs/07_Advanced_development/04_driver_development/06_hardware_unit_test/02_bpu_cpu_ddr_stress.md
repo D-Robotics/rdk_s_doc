@@ -1,10 +1,10 @@
 ---
 sidebar_position: 3
-title: "5.4.18.3 CPU-BPU-DDR 压力测试"
-description: "5.4.18.3 CPU-BPU-DDR 压力测试"
+title: "CPU-BPU-DDR 压力测试"
+description: "CPU-BPU-DDR 压力测试"
 ---
 
-# 5.4.18.3 CPU-BPU-DDR 压力测试
+# CPU-BPU-DDR 压力测试
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -531,6 +531,6 @@ dmesg -T --level=err,warn,crit | tail -n 50
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

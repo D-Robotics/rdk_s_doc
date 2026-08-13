@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 3.4.2 Reference Examples (C++)
+# Reference Examples (C++)
 
 ```
 import DocScope from '@site/src/components/DocScope';

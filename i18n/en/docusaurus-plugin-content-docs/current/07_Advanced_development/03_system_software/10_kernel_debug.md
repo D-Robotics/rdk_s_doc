@@ -2,7 +2,7 @@
 sidebar_position: 10
 ---
 
-# 7.2.7 Introduction to Linux Debugging Features
+# Introduction to Linux Debugging Features
 
 ## Analyzing ramdump with crash
 

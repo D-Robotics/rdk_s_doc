@@ -6,7 +6,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# 7.5.13.1 Port User Guide
+# Port User Guide
 ## Basic Overview
 The Port subsystem is a subsystem on the MCU that configures the functions and attributes of PINs.
 

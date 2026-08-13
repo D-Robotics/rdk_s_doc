@@ -1,10 +1,10 @@
 ---
-title: "2.6 开机自启动配置"
+title: "开机自启动配置"
 sidebar_position: 6
 description: "用 systemd unit / init.d / rc.local 配置开机自启"
 ---
 
-# 2.6 开机自启动配置
+# 开机自启动配置
 
 Ubuntu 系统添加开机自启动的方式有多种，推荐用 systemd 自定义服务（最规范），也支持传统的 init.d 脚本与 rc.local。
 

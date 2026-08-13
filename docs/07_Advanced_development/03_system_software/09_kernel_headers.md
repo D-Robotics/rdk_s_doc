@@ -1,10 +1,10 @@
 ---
 sidebar_position: 9
-title: "5.3.9 内核头文件"
-description: "5.3.9 内核头文件"
+title: "内核头文件"
+description: "内核头文件"
 ---
 
-# 5.3.9 内核头文件
+# 内核头文件
 
 如果你需要在开发板上编译内核模块或类似的代码，你需要安装 Linux 内核头文件。这些头文件包含 Linux 内核的各种常量定义、宏定义、函数接口定义和数据结构定义，是完成内核模块代码编译所必须的依赖代码。
 
@@ -350,5 +350,5 @@ sudo echo hello > /lib/modules-load.d/hello.conf
 
 ## 相关文档
 
-- [5.3.8 应用实时内核](/Advanced_development/system_software/realtime_kernel)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [应用实时内核](/Advanced_development/system_software/realtime_kernel)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

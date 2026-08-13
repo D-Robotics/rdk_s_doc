@@ -1,10 +1,10 @@
 ---
 sidebar_position: 13
-title: "5.6.14 MCU ramdump 功能"
-description: "5.6.14 MCU ramdump 功能"
+title: "MCU ramdump 功能"
+description: "MCU ramdump 功能"
 ---
 
-# 5.6.14 MCU ramdump 功能
+# MCU ramdump 功能
 
 :::warning
 目前 MCU0/MCU1的 Crash 信息共享一块内存。MCU0/MCU1**同时**出现异常的情况下，MCU ramdump 功能保存的信息不可用。
@@ -78,5 +78,5 @@ MCU1出现异常后会陷入 shell，这时可以通过 acore remoteproc 控制�
 
 ## 相关文档
 
-- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
-- [5.3.10 Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)
+- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)

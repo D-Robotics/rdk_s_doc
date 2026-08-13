@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 8.4 Multimedia Processing and Applications
+# Multimedia Processing and Applications
 
 This section answers common questions about video encoding/decoding, audio processing, and other multimedia features on D-Robotics RDK boards.
 

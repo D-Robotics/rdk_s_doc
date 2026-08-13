@@ -1,10 +1,10 @@
 ---
 sidebar_position: 11
-title: "5.3.11 时间同步方案"
-description: "5.3.11 时间同步方案"
+title: "时间同步方案"
+description: "时间同步方案"
 ---
 
-# 5.3.11 时间同步方案
+# 时间同步方案
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -935,5 +935,5 @@ MCU log 说明：
 
 ## 相关文档
 
-- [2.13 时钟与 RTC 同步](/System_configuration/rtc_ntp)
-- [5.3.12 IPC 模块介绍](/Advanced_development/system_software/driver_ipc)
+- [时钟与 RTC 同步](/System_configuration/rtc_ntp)
+- [IPC 模块介绍](/Advanced_development/system_software/driver_ipc)

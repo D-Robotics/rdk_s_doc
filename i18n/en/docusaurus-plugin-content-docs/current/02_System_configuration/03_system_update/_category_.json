@@ -1,9 +1,9 @@
 {
   "position": 3,
-  "label": "2.3 系统更新",
+  "label": "系统更新",
   "link": {
     "type": "generated-index",
-    "description": "2.3 系统更新",
+    "description": "系统更新",
     "slug": "/System_configuration/system_update"
   }
 }

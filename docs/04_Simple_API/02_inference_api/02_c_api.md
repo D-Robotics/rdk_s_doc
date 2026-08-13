@@ -1,14 +1,14 @@
 ---
-title: "4.2.1 C 语言推理 API"
+title: "C 语言推理 API"
 sidebar_position: 1
 description: "RDK S100/S600 BPU 推理 C API（hb_bpu）"
 ---
 
-# 4.2.1 C 语言推理 API
+# C 语言推理 API
 
 RDK 提供基于 BPU 硬件加速的模型推理 C API（`hb_bpu.h`），支持加载量化后的 `.bin` 模型，在 BPU 上执行前向推理。
 
-> Python 推理 API 见 [4.2.2 Python 推理 API](./python-api)。算法示例见 [3.3 算法示例](/Demos/algorithm_demo/summary)。
+> Python 推理 API 见 [Python 推理 API](./python-api)。算法示例见 [算法示例](/Demos/algorithm_demo/summary)。
 
 ## 快速示例
 
@@ -63,7 +63,7 @@ gcc -o inference_demo demo.c -I/usr/hobot/include -L/usr/lib -lhb_bpu
 
 ## 相关文档
 
-- [4.2.2 Python 推理 API](./python-api)
-- [3.3 算法示例](/Demos/algorithm_demo/summary)
-- [3.4.1 模型获取与放置](/Demos/demo_support/model_files)
-- [3.4.4 使用自己的模型](/Demos/demo_support/custom_model)
+- [Python 推理 API](./python-api)
+- [算法示例](/Demos/algorithm_demo/summary)
+- [模型获取与放置](/Demos/demo_support/model_files)
+- [使用自己的模型](/Demos/demo_support/custom_model)

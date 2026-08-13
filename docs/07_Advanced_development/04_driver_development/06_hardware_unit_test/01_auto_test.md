@@ -1,9 +1,9 @@
 ---
 sidebar_position: 2
-title: "5.4.18.2 AutoTest 使用方法"
-description: "5.4.18.2 AutoTest 使用方法"
+title: "AutoTest 使用方法"
+description: "AutoTest 使用方法"
 ---
-# 5.4.18.2 AutoTest 使用方法
+# AutoTest 使用方法
 
 AutoTest 提供了一种灵活的自动化测试解决方案，支持通过配置文件 `config.ini` 自定义压测时长和测试次数，并允许用户根据需求扩展测试用例，以满足不同的测试需求。该工具在驱动单元测试的基础上开发，实现了自动化测试功能，同时与功能单元的独立测试相互独立，并充分复用现有代码资源。
 
@@ -192,6 +192,6 @@ ExecStart=/app/chip_base_test/new_test/new_test.sh -t 12h -o /userdata/new_test_
 
 ## 相关文档
 
-- [5.4.18 驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [5.4.18.1 概述](/Advanced_development/driver_development/hardware_unit_test)
-- [5.1.1 搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [搭建开发环境](/Advanced_development/environment_build/environment_build)

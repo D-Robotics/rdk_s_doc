@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 7.2.9 Bluetooth Initialization Guide
+# Bluetooth Initialization Guide
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope'

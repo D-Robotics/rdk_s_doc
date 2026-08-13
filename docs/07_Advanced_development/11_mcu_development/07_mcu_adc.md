@@ -1,10 +1,10 @@
 ---
 sidebar_position: 7
-title: "5.6.8 ADC 使用指南"
-description: "5.6.8 ADC 使用指南"
+title: "ADC 使用指南"
+description: "ADC 使用指南"
 ---
 
-# 5.6.8 ADC 使用指南
+# ADC 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -674,4 +674,4 @@ Return value：None
 
 ## 相关文档
 
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

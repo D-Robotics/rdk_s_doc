@@ -1,15 +1,15 @@
 ---
 sidebar_position: 5
-title: "4.1.1.5 SYS（模块绑定）API"
-description: "4.1.1.5 SYS（模块绑定）API 接口说明"
+title: "SYS（模块绑定）API"
+description: "SYS（模块绑定）API 接口说明"
 ---
 
-# 4.1.1.5 SYS（模块绑定）API
+# SYS（模块绑定）API
 
 `SYS` 模块提供 `VIO`、`ENCODER`、`DECODER`、`DISPLAY` 四个模块间的内部绑定功能，绑定后数据自动流转，无需手动搬运。
 
 - **接口层级**：封装层简易接口（模式 1）。
-- **适用场景**：采集→显示、采集→编码的 pipeline 简化，见 [3.2 多媒体示例](/Demos/multimedia_demo)。
+- **适用场景**：采集→显示、采集→编码的 pipeline 简化，见 [多媒体示例](/Demos/multimedia_demo)。
 - **前置条件**：已烧录 RDK OS，板端有编译工具链。
 
 `SYS` API 提供了以下的接口：
@@ -72,5 +72,5 @@ description: "4.1.1.5 SYS（模块绑定）API 接口说明"
 
 ## 相关文档
 
-- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)

@@ -1,9 +1,9 @@
 ---
 sidebar_position: 14
-title: "5.6.15 ICU 使用指南"
-description: "5.6.15 ICU 使用指南"
+title: "ICU 使用指南"
+description: "ICU 使用指南"
 ---
-# 5.6.15 ICU 使用指南
+# ICU 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -797,5 +797,5 @@ D-Robotics:/$ gpio_interrupt off
 
 ## 相关文档
 
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [5.6.4 MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

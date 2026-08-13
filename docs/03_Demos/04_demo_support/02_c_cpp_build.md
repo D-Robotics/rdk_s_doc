@@ -1,10 +1,10 @@
 ---
-title: "3.4.2 C/C++ demo 编程指南"
+title: "C/C++ demo 编程指南"
 sidebar_position: 2
 description: "板端编译 C/C++ demo 的方法（cmake/make）"
 ---
 
-# 3.4.2 C/C++ demo 编程指南
+# C/C++ demo 编程指南
 
 板端 `/app/cdev_demo` 下的 C/C++ 示例均为源码，需在板端编译后运行。RDK OS 镜像已预装 `gcc/g++`、`cmake`、`make` 与 OpenCV，多数示例可板端直接编译，无需交叉编译。
 

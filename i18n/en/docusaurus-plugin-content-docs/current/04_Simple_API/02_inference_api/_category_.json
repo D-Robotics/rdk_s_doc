@@ -1,9 +1,9 @@
 {
   "position": 2,
-  "label": "4.2 算法推理",
+  "label": "算法推理",
   "link": {
     "type": "generated-index",
-    "description": "4.2 算法推理",
+    "description": "算法推理",
     "slug": "/Simple_API/inference_api"
   }
 }

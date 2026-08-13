@@ -1,9 +1,9 @@
 ---
 sidebar_position: 11
-title: "5.4.11 Wi-Fi 驱动调试指南"
-description: "5.4.11 Wi-Fi 驱动调试指南"
+title: "Wi-Fi 驱动调试指南"
+description: "Wi-Fi 驱动调试指南"
 ---
-# 5.4.11 Wi-Fi 驱动调试指南
+# Wi-Fi 驱动调试指南
 
 <DocScope products="RDK S100">
 
@@ -119,5 +119,5 @@ S600的 PCIe 驱动会在初始化时，申请这些 GPIO 并作解复位等操�
 
 ## 相关文档
 
-- [2.1 网络配置](/System_configuration/network_config)
-- [5.4.11 Wi-Fi 驱动调试指南](/Advanced_development/driver_development/driver_wifi)
+- [网络配置](/System_configuration/network_config)
+- [Wi-Fi 驱动调试指南](/Advanced_development/driver_development/driver_wifi)

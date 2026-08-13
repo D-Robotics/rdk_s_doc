@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 3.1.1 Using MIPI Camera
+# Using MIPI Camera
 
 The `mipi_camera_streamer.py` program is installed on the development board to test the MIPI camera data pipeline. This example captures image data from the MIPI camera in real time and outputs the image data via the HDMI interface.
 

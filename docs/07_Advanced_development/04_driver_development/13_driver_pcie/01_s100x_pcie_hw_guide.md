@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: "5.4.10.1 PCIe 硬件规格以及支持的拓扑结构"
-description: "5.4.10.1 PCIe 硬件规格以及支持的拓扑结构"
+title: "PCIe 硬件规格以及支持的拓扑结构"
+description: "PCIe 硬件规格以及支持的拓扑结构"
 ---
-# 5.4.10.1 PCIe 硬件规格以及支持的拓扑结构
+# PCIe 硬件规格以及支持的拓扑结构
 
 ## PCIe 简介
 
@@ -41,6 +41,6 @@ PCI Express (PCIe) 模块是一种多通道 I/O 互连，提供低引脚数、�
 
 ## 相关文档
 
-- [5.4.10 PCIe 使用指南](/Advanced_development/driver_development/driver_pcie)
-- [5.4.10.2 PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
-- [1.1 硬件介绍](/01_hardware_introduction)
+- [PCIe 使用指南](/Advanced_development/driver_development/driver_pcie)
+- [PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
+- [硬件介绍](/01_hardware_introduction)

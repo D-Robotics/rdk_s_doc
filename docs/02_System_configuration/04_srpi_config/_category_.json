@@ -1,9 +1,9 @@
 {
-  "label": "2.4 srpi-config 工具配置",
+  "label": "srpi-config 工具配置",
   "position": 4,
   "link": {
     "type": "generated-index",
-    "description": "2.4 srpi-config 工具配置",
+    "description": "srpi-config 工具配置",
     "slug": "/System_configuration/srpi_config"
   }
 }

@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: "5.4.13.1 Ethernet"
-description: "5.4.13.1 Ethernet"
+title: "Ethernet"
+description: "Ethernet"
 ---
-# 5.4.13.1 Ethernet
+# Ethernet
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -1068,5 +1068,5 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 
 ## 相关文档
 
-- [2.1 网络配置](/System_configuration/network_config)
-- [5.4.13.2 EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)
+- [网络配置](/System_configuration/network_config)
+- [EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)

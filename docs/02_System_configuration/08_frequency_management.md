@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "2.8 Thermal 和 CPU 频率管理"
+title: "Thermal 和 CPU 频率管理"
 description: "Thermal 温控、风扇、CPU 频率管理"
 ---
 
-# 2.8 Thermal 和 CPU 频率管理
+# Thermal 和 CPU 频率管理
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -461,6 +461,6 @@ echo 1050000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 
 ## 相关文档
 
-- [2.9 显示配置](/System_configuration/display_config)
-- [2.11 屏幕休眠与电源管理](/System_configuration/screen_sleep)
-- [5.4.8 Thermal 系统](/Advanced_development/driver_development/driver_thermal_dev)
+- [显示配置](/System_configuration/display_config)
+- [屏幕休眠与电源管理](/System_configuration/screen_sleep)
+- [Thermal 系统](/Advanced_development/driver_development/driver_thermal_dev)

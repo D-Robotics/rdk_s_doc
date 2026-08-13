@@ -1,10 +1,10 @@
 ---
-title: "3.2.1.4 视频处理"
+title: "视频处理"
 sidebar_position: 4
 description: "RDK S100/S600 VPS 视频处理示例（文件/解码输入→处理→输出）"
 ---
 
-# 3.2.1.4 视频处理
+# 视频处理
 
 本示例演示通过 VPS（Video Process Subsystem）对视频进行缩放、裁剪等处理。支持两种输入模式：文件输入和码流解码输入。
 
@@ -70,6 +70,6 @@ make
 
 ## 相关文档
 
-- [3.2.1.1 视频采集](./01_vio_capture.md)
-- [4.1 多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)
-- [3.4.2 C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [视频采集](./01_vio_capture.md)
+- [多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)
+- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)

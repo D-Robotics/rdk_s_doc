@@ -1,9 +1,9 @@
 ---
 sidebar_position: 15
-title: "5.6.16 TIMER 使用指南"
-description: "5.6.16 TIMER 使用指南"
+title: "TIMER 使用指南"
+description: "TIMER 使用指南"
 ---
-# 5.6.16 TIMER 使用指南
+# TIMER 使用指南
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -438,5 +438,5 @@ timer_interrupt gettime 3
 
 ## 相关文档
 
-- [5.6.2 MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [5.3.11 时间同步方案](/Advanced_development/system_software/driver_timesync)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [时间同步方案](/Advanced_development/system_software/driver_timesync)

@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
  
-# 8.6 TROS/ROS Development
+# TROS/ROS Development
 
 This section answers common questions related to developing and using the D-Robotics Robot Operating System (TogetheROS.Bot, tros.b) and general ROS/ROS2 on the RDK platform.
 

@@ -1,14 +1,14 @@
 ---
 sidebar_position: 7
-title: "6.7 桌面应用"
+title: "桌面应用"
 description: "RDK 桌面版第三方应用常见问题与解决方案"
 ---
 
-# 6.7 桌面应用
+# 桌面应用
 
 本节解答在 RDK 桌面版使用第三方应用时遇到的常见问题。
 
-> 桌面显示/音频/屏幕休眠配置见 [2.9 显示配置](/System_configuration/display_config)、[2.10 音频配置](/System_configuration/audio_output)、[2.11 屏幕休眠与电源管理](/System_configuration/screen_sleep)。
+> 桌面显示/音频/屏幕休眠配置见 [显示配置](/System_configuration/display_config)、[音频配置](/System_configuration/audio_output)、[屏幕休眠与电源管理](/System_configuration/screen_sleep)。
 
 ## VS Code 打不开
 
@@ -39,7 +39,7 @@ code --disable-gpu
 
 ## 屏幕分辨率不正确
 
-HDMI 显示器分辨率可通过 config.txt 配置，见 [2.5.3 常用配置项参考](/System_configuration/config_txt/common_options) 的显示选项部分。
+HDMI 显示器分辨率可通过 config.txt 配置，见 [常用配置项参考](/System_configuration/config_txt/common_options) 的显示选项部分。
 
 也可通过桌面 Settings → Displays 调整。
 
@@ -49,19 +49,19 @@ HDMI 显示器分辨率可通过 config.txt 配置，见 [2.5.3 常用配置项�
 2. 确认显示器电源已开且输入源选择 HDMI。
 3. 确认电源指示灯亮（系统已启动）。
 4. 系统首次启动约 45 秒配置时间，等待后应出现桌面。
-5. 若长时间（2 分钟以上）无显示，通过串口调试，见 [2.16 调试串口](/System_configuration/debug_serial)。
+5. 若长时间（2 分钟以上）无显示，通过串口调试，见 [调试串口](/System_configuration/debug_serial)。
 
 ## 桌面卡顿
 
-- 检查 CPU 占用：`top`（见 [7.2.18 top 命令](/Appendix/linux-command-manual/top)）。
-- 检查 BPU 占用：`hrut_ps`（见 [7.1.3 hrut_ps](/Appendix/rdk-command-manual/hrut_ps)）。
+- 检查 CPU 占用：`top`（见 [top 命令](/Appendix/linux-command-manual/top)）。
+- 检查 BPU 占用：`hrut_ps`（见 [hrut_ps](/Appendix/rdk-command-manual/hrut_ps)）。
 - 关闭不必要的后台服务。
 - 降低桌面特效：Settings → Appearance → 关闭动画。
 
 ## 相关文档
 
-- [2.9 显示配置](/System_configuration/display_config)
-- [2.10 音频配置](/System_configuration/audio_output)
-- [2.11 屏幕休眠与电源管理](/System_configuration/screen_sleep)
-- [2.5.3 常用配置项参考](/System_configuration/config_txt/common_options)
-- [2.16 调试串口](/System_configuration/debug_serial)
+- [显示配置](/System_configuration/display_config)
+- [音频配置](/System_configuration/audio_output)
+- [屏幕休眠与电源管理](/System_configuration/screen_sleep)
+- [常用配置项参考](/System_configuration/config_txt/common_options)
+- [调试串口](/System_configuration/debug_serial)

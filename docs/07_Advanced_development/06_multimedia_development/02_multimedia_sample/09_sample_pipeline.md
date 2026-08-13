@@ -866,5 +866,5 @@ BPU model is hard-coded to: /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12
 
 ## 相关文档
 
-- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
-- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

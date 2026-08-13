@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# 7.5.9 IPC User Guide
+# IPC User Guide
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

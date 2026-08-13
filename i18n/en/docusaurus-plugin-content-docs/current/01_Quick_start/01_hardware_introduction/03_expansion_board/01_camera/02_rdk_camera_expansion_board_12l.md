@@ -157,4 +157,4 @@ Power indicator, located next to the DC power input interface.
 
 ## Compatible Modules
 
-Please refer to [7.1.2 Accessory List](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
+Please refer to [Accessory List](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)

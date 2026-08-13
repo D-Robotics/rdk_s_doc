@@ -2,7 +2,7 @@
 sidebar_position: 17
 ---
 
-# 7.7 VDSP Development Guide
+# VDSP Development Guide
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';

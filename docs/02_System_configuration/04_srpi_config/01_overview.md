@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "2.4 srpi-config 工具配置"
+title: "srpi-config 工具配置"
 description: "srpi-config 系统配置工具：System/Interface/Performance/Localisation/Advanced 选项"
 ---
 
-# 2.4 srpi-config 工具配置
+# srpi-config 工具配置
 
 ## 简介
 
@@ -140,6 +140,6 @@ sudo srpi-config
 
 ## 相关文档
 
-- [2.5 config.txt 文件配置](/System_configuration/config_txt/usage)
-- [2.1 网络配置](/System_configuration/network_config)
-- [2.6 开机自启动配置](/System_configuration/self_start)
+- [config.txt 文件配置](/System_configuration/config_txt/usage)
+- [网络配置](/System_configuration/network_config)
+- [开机自启动配置](/System_configuration/self_start)

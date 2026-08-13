@@ -1,15 +1,15 @@
 ---
 sidebar_position: 2
-title: "4.1.1.2 ENCODER（编码模块）API"
-description: "4.1.1.2 ENCODER（编码模块）API 接口说明"
+title: "ENCODER（编码模块）API"
+description: "ENCODER（编码模块）API 接口说明"
 ---
 
-# 4.1.1.2 ENCODER（编码模块）API
+# ENCODER（编码模块）API
 
 `ENCODER` 模块提供图像编码功能，支持 `H264`、`H265` 和 `MJPEG` 编码。
 
-- **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [5.5.1.10 MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api)。
-- **适用场景**：采集→编码保存，见 [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)。
+- **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api)。
+- **适用场景**：采集→编码保存，见 [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)。
 - **前置条件**：已烧录 RDK OS，板端有编译工具链，可接入 MIPI 摄像头或准备图像帧数据。
 
 `ENCODER` API 提供了以下的接口：
@@ -147,6 +147,6 @@ description: "4.1.1.2 ENCODER（编码模块）API 接口说明"
 
 ## 相关文档
 
-- [4.1.1.1 VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [4.1.1.3 DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)
+- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
+- [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

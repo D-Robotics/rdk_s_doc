@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
-title: "6.5 AI 模型、算法与工具链"
-description: "6.5 AI 模型、算法与工具链 常见问题与排查"
+title: "AI 模型、算法与工具链"
+description: "AI 模型、算法与工具链 常见问题与排查"
 ---
 
-# 6.5 AI 模型、算法与工具链
+# AI 模型、算法与工具链
 
 :::tip 🛠️ 工具链和系统下载指引
 

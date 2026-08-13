@@ -1,10 +1,10 @@
 ---
 sidebar_position: 10
-title: "5.5.1.10 编解码 - MediaCodec"
+title: "编解码 - MediaCodec"
 description: "RDK S100/S600 5.5.1.10 MediaCodec（编解码）"
 ---
 
-# 5.5.1.10 编解码 - MediaCodec
+# 编解码 - MediaCodec
 
 ## 概述
 
@@ -2165,6 +2165,6 @@ extern hb_s32 hb_mm_mc_set_status(media_codec_context_t *context, mc_user_status
 
 ## 相关文档
 
-- [4.1.1.2 ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
-- [4.1.1.3 DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [3.2.1.3 采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)
+- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
+- [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

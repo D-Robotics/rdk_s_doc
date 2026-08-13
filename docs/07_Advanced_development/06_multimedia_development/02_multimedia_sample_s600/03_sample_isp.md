@@ -248,5 +248,5 @@ isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 
 ## 相关文档
 
-- [5.5.2 示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [5.5.1 多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

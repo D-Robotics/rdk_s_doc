@@ -1,9 +1,9 @@
 ---
 sidebar_position: 2
-title: "5.4.10.2 PCIe 软件架构与模块划分"
-description: "5.4.10.2 PCIe 软件架构与模块划分"
+title: "PCIe 软件架构与模块划分"
+description: "PCIe 软件架构与模块划分"
 ---
-# 5.4.10.2 PCIe 软件架构与模块划分
+# PCIe 软件架构与模块划分
 
 ## 软件框架
 
@@ -95,5 +95,5 @@ rmmod hobot_pcie
 
 ## 相关文档
 
-- [5.4.10.1 PCIe 硬件规格](/Advanced_development/driver_development/driver_pcie)
-- [5.4.10.3 PCIe kernel 配置](/Advanced_development/driver_development/driver_pcie)
+- [PCIe 硬件规格](/Advanced_development/driver_development/driver_pcie)
+- [PCIe kernel 配置](/Advanced_development/driver_development/driver_pcie)

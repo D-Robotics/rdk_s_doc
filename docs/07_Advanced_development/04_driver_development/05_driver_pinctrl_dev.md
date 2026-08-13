@@ -1,14 +1,14 @@
 ---
 sidebar_position: 5
-title: "5.4.5 Pinctrl 调试指南"
-description: "5.4.5 Pinctrl 调试指南"
+title: "Pinctrl 调试指南"
+description: "Pinctrl 调试指南"
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
-# 5.4.5 Pinctrl 调试指南
+# Pinctrl 调试指南
 
 ## Pinctrl 使用
 
@@ -744,5 +744,5 @@ root@ubuntu:~#
 
 ## 相关文档
 
-- [5.4.4 GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
-- [3.1.1 扩展引脚应用](/Demos/peripheral/40pin)
+- [GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
+- [扩展引脚应用](/Demos/peripheral/40pin)
