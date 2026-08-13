@@ -226,7 +226,7 @@ NoMachine 下载官方网址： [NoMachine Download](https://downloads.nomachine
 **安装**
 
 ```shell
-sudo apt update; sudo apt upgrade -y   // 确保当前软件是较新的状态
+sudo apt update; sudo apt upgrade -y   # 确保当前软件是较新的状态
 dpkg -i nomachine_*_arm64.deb
 ```
 

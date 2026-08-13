@@ -32,8 +32,6 @@ description: "RDK Studio 集成开发环境介绍与下载"
 | 编译 | IDE 内一键 | 命令行 mk_*.sh |
 | 调试 | 图形化调试器 | gdb / printf |
 
-:::
-
 ## 相关文档
 
 - [1.4.2 TogetheROS.Bot](/Quick_start/next_steps/trosb/trosb_intro)

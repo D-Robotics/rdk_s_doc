@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "1.1.2.1 RDK S100 相机扩展板 12 通道"
+description: RDK S100 相机扩展板 12 通道
 ---
 
 # 1.1.2.1 RDK S100 相机扩展板 12 通道
@@ -161,4 +163,9 @@ Camera 扩展板集成了 3pcs MAX96712 解串芯片，每 pcs 能够接入 4 �
 ## 适配模组
 
 参考[7.1.2 配件清单](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
+
+## 相关文档
+
+- 主板：[1.1.1 开发者套件简介（RDK S100）](../../01_rdk_s100.md)
+- 扩展板：[RDK S100 相机扩展板](./01_rdk_camera_expansion_board.md)、[RDK S100 MCU 接口扩展板](../02_mcu/01_rdk_mcu_port_expansion_board.md)
 

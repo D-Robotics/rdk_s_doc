@@ -34,7 +34,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 有线以太网：
   - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
-  - 开发板 eth0 接口默认采用 dhcp 模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+  - 开发板 eth0 接口默认采用 dhcp 模式，IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
 - 无线 Wi-Fi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
 
 </DocScope>
@@ -44,7 +44,7 @@ import DocScope from '@site/src/components/DocScope';
 - 有线以太网：
   - 开发板 eth2 eth3 仍在调试中，暂不支持使用
   - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
-  - 开发板 eth0 接口默认采用 dhcp 模式，IP 地址一版由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
+  - 开发板 eth0 接口默认采用 dhcp 模式，IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
 - 无线 Wi-Fi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
 
 </DocScope>
@@ -297,4 +297,3 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 - [1.3.3 入门配置](./configuration_wizard.md)
 - [2.1 网络配置](../../02_System_configuration/01_network_config.md)
 - [2.16 调试串口](../../02_System_configuration/16_debug_serial.md)
-- [入门配置](./configuration_wizard.md)
