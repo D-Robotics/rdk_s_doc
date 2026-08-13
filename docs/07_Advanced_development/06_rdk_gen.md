@@ -410,7 +410,7 @@ RDK S600的分区定义文件保存在`source/bootloader/device/rdk/s600/partiti
 
 
 ### 默认镜像及分区介绍
-1. miniboot_flash：保存在 RDK Nor Flash 上的基础启动镜像，包括 HSM/MCU0等系统组件的镜像；
+1. miniboot_flash：保存在 RDK NOR Flash 上的基础启动镜像，包括 HSM/MCU0等系统组件的镜像；
 2. miniboot_emmc：保存在 RDK eMMC 上的基础启动镜像，包括 BL31/Uboot 等系统组件的镜像；
 3. emmc_disk：RDK eMMC 上的完整镜像，会包含 miniboot_emmc，编译时会自动转换为安卓 Sparse 镜像（[安卓Sparse镜像说明（第三方网站，仅供参考）](https://www.2net.co.uk/tutorial/android-sparse-image-format)）以减小系统储存空间占用；
 

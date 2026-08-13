@@ -39,7 +39,7 @@ Set the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#b
 
 ## Flash the full image
 
-Use this for a first-time flash or system recovery. It flashes the complete system image package and overwrites the onboard eMMC and `miniboot_flash` on Norflash.
+Use this for a first-time flash or system recovery. It flashes the complete system image package and overwrites the onboard eMMC and `miniboot_flash` on NOR Flash.
 
 1. For **Product type**, select `RDK S100`.
 2. For **Connection type**, select `USB`. For **Download mode**, select `DFU+Fastboot` or `Fastboot`.
@@ -75,7 +75,7 @@ Flash only part of the image by region, instead of the complete full-image packa
 
 | Region | Actual storage medium | Firmware content | Image |
 | --- | --- | -------- | ---- |
-| miniboot_flash | Norflash | Basic boot image on Norflash, including images for HSM/MCU0 and other system components | img_packages/disk/miniboot_flash.img |
+| miniboot_flash | NOR Flash | Basic boot image on NOR Flash, including images for HSM/MCU0 and other system components | img_packages/disk/miniboot_flash.img |
 | miniboot_emmc | eMMC | Basic boot image on eMMC, including images for BL31/U-Boot and other system components | img_packages/disk/miniboot_emmc.img |
 | emmc | eMMC | Complete eMMC image, already includes miniboot_emmc | img_packages/disk/emmc_disk.simg |
 
@@ -89,7 +89,7 @@ Back up the image of specific regions to your PC. For **Storage**, select `eMMC`
 
 | Region | Actual storage medium | Firmware content | Backup image |
 | --- | --- | -------- | ------------ |
-| miniboot_flash | Norflash | Complete Norflash image | img_packages/disk/miniboot_flash_backup.img |
+| miniboot_flash | NOR Flash | Complete NOR Flash image | img_packages/disk/miniboot_flash_backup.img |
 | emmc | eMMC | Complete eMMC image | img_packages/disk/emmc_disk_backup.img |
 
 Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target region (such as `miniboot_flash`). After flashing, open `img_packages/disk/` and check the backup image file `miniboot_flash_backup.img`.
