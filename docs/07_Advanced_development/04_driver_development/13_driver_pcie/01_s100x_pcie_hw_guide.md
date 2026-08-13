@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "5.4.10.1 PCIe 硬件规格以及支持的拓扑结构"
+description: "5.4.10.1 PCIe 硬件规格以及支持的拓扑结构"
 ---
 # 5.4.10.1 PCIe 硬件规格以及支持的拓扑结构
 

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 11
+title: "5.4.11 Wi-Fi 驱动调试指南"
+description: "5.4.11 Wi-Fi 驱动调试指南"
 ---
 # 5.4.11 Wi-Fi 驱动调试指南
 

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 10
+title: "5.4.18.10 DDR 带宽测试"
+description: "5.4.18.10 DDR 带宽测试"
 ---
 
 # 5.4.18.10 DDR 带宽测试

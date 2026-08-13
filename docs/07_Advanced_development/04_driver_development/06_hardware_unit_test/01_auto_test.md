@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "5.4.18.2 AutoTest 使用方法"
+description: "5.4.18.2 AutoTest 使用方法"
 ---
 # 5.4.18.2 AutoTest 使用方法
 

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 12
+title: "5.4.18.12 3D GPU 性能测试"
+description: "5.4.18.12 3D GPU 性能测试"
 ---
 
 # 5.4.18.12 3D GPU 性能测试

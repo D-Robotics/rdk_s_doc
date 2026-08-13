@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "5.4.2 UART 驱动调试指南"
+description: "5.4.2 UART 驱动调试指南"
 ---
 
 # 5.4.2 UART 驱动调试指南

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "5.4.12.2 硬件信息"
+description: "5.4.12.2 硬件信息"
 ---
 # 5.4.12.2 硬件信息
 

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "5.4.13.1 Ethernet"
+description: "5.4.13.1 Ethernet"
 ---
 # 5.4.13.1 Ethernet
 

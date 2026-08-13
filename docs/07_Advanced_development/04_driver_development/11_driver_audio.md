@@ -1,5 +1,7 @@
 ---
 sidebar_position: 9
+title: "5.4.9 音频调试指南"
+description: "5.4.9 音频调试指南"
 ---
 
 # 5.4.9 音频调试指南

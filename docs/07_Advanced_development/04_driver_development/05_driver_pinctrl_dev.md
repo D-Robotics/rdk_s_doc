@@ -1,5 +1,7 @@
 ---
 sidebar_position: 5
+title: "5.4.5 Pinctrl 调试指南"
+description: "5.4.5 Pinctrl 调试指南"
 ---
 
 import Tabs from '@theme/Tabs';

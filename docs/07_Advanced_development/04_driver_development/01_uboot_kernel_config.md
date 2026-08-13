@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "5.4.1 配置 U-Boot 和 Kernel 选项参数"
+description: "5.4.1 配置 U-Boot 和 Kernel 选项参数"
 ---
 
 # 5.4.1 配置 U-Boot 和 Kernel 选项参数

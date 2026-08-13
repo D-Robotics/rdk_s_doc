@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "5.4.13.2 EtherCAT"
+description: "5.4.13.2 EtherCAT"
 ---
 
 ```mdx-code-block

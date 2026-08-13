@@ -1,5 +1,7 @@
 ---
 sidebar_position: 11
+title: "5.4.18.11 USB 总线速率测试"
+description: "5.4.18.11 USB 总线速率测试"
 ---
 
 # 5.4.18.11 USB 总线速率测试

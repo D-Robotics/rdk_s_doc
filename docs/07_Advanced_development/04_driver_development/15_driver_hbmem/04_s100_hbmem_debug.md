@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "5.4.12.4 debug 信息"
+description: "5.4.12.4 debug 信息"
 ---
 # 5.4.12.4 debug 信息
 

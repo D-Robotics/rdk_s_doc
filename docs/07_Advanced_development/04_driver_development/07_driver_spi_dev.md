@@ -1,5 +1,7 @@
 ---
 sidebar_position: 6
+title: "5.4.6 SPI 调试指南"
+description: "5.4.6 SPI 调试指南"
 ---
 
 # 5.4.6 SPI 调试指南

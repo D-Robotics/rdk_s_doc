@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "5.4.10.2 PCIe 软件架构与模块划分"
+description: "5.4.10.2 PCIe 软件架构与模块划分"
 ---
 # 5.4.10.2 PCIe 软件架构与模块划分
 

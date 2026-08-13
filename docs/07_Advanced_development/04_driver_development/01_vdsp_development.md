@@ -1,5 +1,7 @@
 ---
 sidebar_position: 17
+title: "5.4.17 VDSP 开发指南"
+description: "5.4.17 VDSP 开发指南"
 ---
 
 # 5.4.17 VDSP 开发指南

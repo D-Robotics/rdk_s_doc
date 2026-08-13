@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "5.4.4 GPIO 使用"
+description: "5.4.4 GPIO 使用"
 ---
 
 # 5.4.4 GPIO 使用

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+title: "5.4.3 I2C 调试指南"
+description: "5.4.3 I2C 调试指南"
 ---
 
 # 5.4.3 I2C 调试指南

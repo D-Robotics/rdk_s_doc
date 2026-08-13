@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+title: "5.4.12.3 软件说明"
+description: "5.4.12.3 软件说明"
 ---
 # 5.4.12.3 软件说明
 

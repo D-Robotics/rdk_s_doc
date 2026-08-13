@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+title: "5.4.18.3 CPU-BPU-DDR 压力测试"
+description: "5.4.18.3 CPU-BPU-DDR 压力测试"
 ---
 
 # 5.4.18.3 CPU-BPU-DDR 压力测试

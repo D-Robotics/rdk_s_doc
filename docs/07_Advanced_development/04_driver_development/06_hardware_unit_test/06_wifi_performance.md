@@ -1,5 +1,7 @@
 ---
 sidebar_position: 7
+title: "5.4.18.7 Wi-Fi 性能测试"
+description: "5.4.18.7 Wi-Fi 性能测试"
 ---
 # 5.4.18.7 Wi-Fi 性能测试
 

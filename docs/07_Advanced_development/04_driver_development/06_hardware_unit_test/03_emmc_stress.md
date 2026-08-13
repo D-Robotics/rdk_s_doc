@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "5.4.18.4 eMMC 压力测试"
+description: "5.4.18.4 eMMC 压力测试"
 ---
 
 # 5.4.18.4 eMMC 压力测试
