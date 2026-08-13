@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+title: "hrut_ps"
+description: "RDK 命令 hrut_ps 用法"
 ---
 
 # hrut_ps

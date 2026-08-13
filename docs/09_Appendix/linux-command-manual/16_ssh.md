@@ -1,5 +1,7 @@
 ---
 sidebar_position: 16
+title: "ssh"
+description: "Linux 命令 ssh 用法"
 ---
 
 # ssh

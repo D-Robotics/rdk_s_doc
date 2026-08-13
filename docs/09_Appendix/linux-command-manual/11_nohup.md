@@ -1,5 +1,7 @@
 ---
 sidebar_position: 11
+title: "nohup"
+description: "Linux 命令 nohup 用法"
 ---
 
 # nohup

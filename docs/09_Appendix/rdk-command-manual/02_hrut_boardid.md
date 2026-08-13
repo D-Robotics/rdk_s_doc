@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "hrut_boardid"
+description: "RDK 命令 hrut_boardid 用法"
 ---
 
 # hrut_boardid

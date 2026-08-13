@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "dmesg"
+description: "Linux 命令 dmesg 用法"
 ---
 
 # dmesg

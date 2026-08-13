@@ -1,5 +1,7 @@
 ---
 sidebar_position: 13
+title: "route"
+description: "Linux 命令 route 用法"
 ---
 
 # route

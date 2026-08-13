@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "hrut_socuid"
+description: "RDK 命令 hrut_socuid 用法"
 ---
 
 # hrut_socuid

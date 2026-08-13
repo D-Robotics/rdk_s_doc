@@ -1,5 +1,7 @@
 ---
 sidebar_position: 15
+title: "scp"
+description: "Linux 命令 scp 用法"
 ---
 
 # scp

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 6
+title: "grep"
+description: "Linux 命令 grep 用法"
 ---
 # grep
 

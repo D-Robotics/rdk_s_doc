@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "devmem"
+description: "RDK 命令 devmem 用法"
 ---
 
 # devmem

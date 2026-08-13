@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "apt"
+description: "Linux 命令 apt 用法"
 ---
 
 # apt

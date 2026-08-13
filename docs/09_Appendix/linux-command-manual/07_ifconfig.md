@@ -1,5 +1,7 @@
 ---
 sidebar_position: 7
+title: "ifconfig"
+description: "Linux 命令 ifconfig 用法"
 ---
 
 # ifconfig

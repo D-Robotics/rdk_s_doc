@@ -1,5 +1,7 @@
 ---
 sidebar_position: 19
+title: "zip"
+description: "Linux 命令 zip 用法"
 ---
 
 # zip

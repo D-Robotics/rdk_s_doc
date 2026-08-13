@@ -1,5 +1,7 @@
 ---
 sidebar_position: 10
+title: "netstat"
+description: "Linux 命令 netstat 用法"
 ---
 
 # netstat

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 18
+title: "top"
+description: "Linux 命令 top 用法"
 ---
 
 # top

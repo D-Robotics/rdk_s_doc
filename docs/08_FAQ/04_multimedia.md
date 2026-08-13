@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "6.4 多媒体处理与应用"
+description: "6.4 多媒体处理与应用 常见问题与排查"
 ---
 
 # 6.4 多媒体处理与应用

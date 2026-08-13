@@ -1,5 +1,7 @@
 ---
 sidebar_position: 17
+title: "tar"
+description: "Linux 命令 tar 用法"
 ---
 
 # tar

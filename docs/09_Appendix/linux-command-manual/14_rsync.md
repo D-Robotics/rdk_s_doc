@@ -1,5 +1,7 @@
 ---
 sidebar_position: 14
+title: "rsync"
+description: "Linux 命令 rsync 用法"
 ---
 
 # rsync

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 5
+title: "find"
+description: "Linux 命令 find 用法"
 ---
 
 # find

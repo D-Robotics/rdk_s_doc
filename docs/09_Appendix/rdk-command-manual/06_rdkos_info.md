@@ -1,5 +1,7 @@
 ---
 sidebar_position: 6
+title: "rdkos_info"
+description: "RDK 命令 rdkos_info 用法"
 ---
 
 # rdkos_info

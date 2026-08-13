@@ -1,5 +1,7 @@
 ---
 sidebar_position: 9
+title: "mount"
+description: "Linux 命令 mount 用法"
 ---
 
 # mount

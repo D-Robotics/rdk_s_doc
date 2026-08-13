@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "6.2 接口、外设与驱动"
+description: "6.2 接口、外设与驱动 常见问题与排查"
 ---
 
 # 6.2 接口、外设与驱动

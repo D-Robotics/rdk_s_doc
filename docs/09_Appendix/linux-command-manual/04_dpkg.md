@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "dpkg"
+description: "Linux 命令 dpkg 用法"
 ---
 
 # dpkg

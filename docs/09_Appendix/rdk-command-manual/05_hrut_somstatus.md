@@ -1,5 +1,7 @@
 ---
 sidebar_position: 5
+title: "hrut_somstatus"
+description: "RDK 命令 hrut_somstatus 用法"
 ---
 
 # hrut_somstatus
