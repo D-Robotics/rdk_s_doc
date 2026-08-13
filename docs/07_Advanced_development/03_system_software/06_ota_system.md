@@ -1672,5 +1672,5 @@ clearFlags:
 
 ## 相关文档
 
-- [2.3.3 主版本升级与固件](/System_configuration/system_update/upgrade_firmware)
+- [2.3.2 主版本升级与固件](/System_configuration/system_update/upgrade_firmware)
 - [5.3.7 miniboot 升级](/Advanced_development/system_software/ota_miniboot)

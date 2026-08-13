@@ -26,6 +26,26 @@ cat /etc/version
 
 该值即 RDK OS 的版本号。若与预期镜像版本不一致，说明烧入的镜像不对，需重新烧录（见 [烧录说明](./01_instruction.md)）。
 
+## 版本与基线
+
+```bash
+cat /etc/os-release
+```
+
+RDK S600 实测（RDK OS V5.1.0）：
+
+```text
+PRETTY_NAME="RDK OS"
+NAME="RDK OS"
+VERSION_ID="V5.1.0"
+VERSION="V5.1.0"
+VERSION_CODENAME="rdk os noble"
+```
+
+- 基线：Ubuntu 24.04（noble）。
+- 版本号：`5.1.0`（`cat /etc/version`）。
+- 主机名：`drobot`（`cat /etc/hostname`）。
+
 ## 确认板卡型号与硬件 ID
 
 ```bash

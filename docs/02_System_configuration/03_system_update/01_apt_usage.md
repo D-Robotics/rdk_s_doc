@@ -1,10 +1,10 @@
 ---
-title: "2.3.2 软件包管理 apt"
-sidebar_position: 2
+title: "2.3.1 软件包管理 apt"
+sidebar_position: 1
 description: "RDK OS 上 apt 软件包查询、安装、升级、卸载"
 ---
 
-# 2.3.2 软件包管理 apt
+# 2.3.1 软件包管理 apt
 
 RDK OS 基于 Ubuntu，用 `apt` 管理软件包。系统已配置 D-Robotics 官方 apt 源（提供 RDK 专属包如 `hobot-dnn`、`hobot-camera`）与 Ubuntu 官方源。模式 1 用户可用 `apt` 安装常用工具，模式 2 用户可基于 apt + 配置层做产品化集成。
 
@@ -59,7 +59,7 @@ sudo apt full-upgrade         # 升级并处理依赖变化
 ```
 
 :::warning
-`apt upgrade` / `full-upgrade` 可能升级 `hobot-*` 系统包，跨大版本升级有兼容风险。生产环境升级前先在测试板验证。主版本升级（如 RDK OS 大版本变更）须重新烧录镜像，见 [主版本升级与固件](./03_upgrade_firmware.md)。
+`apt upgrade` / `full-upgrade` 可能升级 `hobot-*` 系统包，跨大版本升级有兼容风险。生产环境升级前先在测试板验证。主版本升级（如 RDK OS 大版本变更）须重新烧录镜像，见 [主版本升级与固件](./02_upgrade_firmware.md)。
 :::
 
 ## RDK 专属包
@@ -94,7 +94,6 @@ rootfs 扩容见 [存储与磁盘管理](../12_storage.md)。
 
 ## 相关文档
 
-- [RDK OS 介绍](./01_rdk_os_intro.md)
-- [主版本升级与固件](./03_upgrade_firmware.md)
+- [主版本升级与固件](./02_upgrade_firmware.md)
 - [存储与磁盘管理](../12_storage.md)
 - [apt 命令详解](../../09_Appendix/linux-command-manual/01_apt.md)

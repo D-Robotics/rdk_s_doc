@@ -72,6 +72,5 @@ chown <用户>:<组> <文件>  # 改属主属组
 
 ## 相关文档
 
-- [RDK OS 介绍](./03_system_update/01_rdk_os_intro.md)
 - [开机自启动配置](./06_self_start.md)
 - [系统日志查看](./15_system_log.md)

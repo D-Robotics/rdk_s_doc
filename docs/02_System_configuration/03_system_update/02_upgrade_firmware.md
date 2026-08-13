@@ -1,12 +1,12 @@
 ---
-title: "2.3.3 主版本升级与固件"
-sidebar_position: 3
+title: "2.3.2 主版本升级与固件"
+sidebar_position: 2
 description: "RDK OS 主版本升级、固件升级与降级"
 ---
 
-# 2.3.3 主版本升级与固件
+# 2.3.2 主版本升级与固件
 
-RDK OS 的升级分两类：**包级更新**（`apt upgrade`，见 [软件包管理 apt](./02_apt_usage.md)）与**主版本/固件升级**（须重新烧录镜像或走 OTA）。
+RDK OS 的升级分两类：**包级更新**（`apt upgrade`，见 [软件包管理 apt](./01_apt_usage.md)）与**主版本/固件升级**（须重新烧录镜像或走 OTA）。
 
 :::info 说明
 主版本升级会变更系统镜像，未在板端复现（会抹除当前在用的 S600 系统）；流程据官方升级说明。
@@ -48,7 +48,6 @@ RDK OS 跨大版本（如 5.0.x → 5.1.x）**不能靠 `apt` 升级**，须重�
 
 ## 相关文档
 
-- [软件包管理 apt](./02_apt_usage.md)
-- [RDK OS 介绍](./01_rdk_os_intro.md)
+- [软件包管理 apt](./01_apt_usage.md)
 - [烧录步骤](../../01_Quick_start/03_install_os_and_setup/02_burn.md)
 - [系统 OTA 升级（进阶）](../../07_Advanced_development/03_system_software/06_ota_system.md)

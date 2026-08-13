@@ -1,6 +1,6 @@
 ---
 title: 主版本升级与固件
-sidebar_position: 3
+sidebar_position: 2
 description: 待开发
 ---
 # 主版本升级与固件

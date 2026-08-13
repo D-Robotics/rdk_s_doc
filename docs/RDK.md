@@ -41,6 +41,20 @@ RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱�
 
 </DocScope>
 
+## RDK OS 介绍
+
+**RDK OS** 是基于 Ubuntu 定制的板端操作系统镜像，针对 RDK 板卡的 BPU/CPU/MCU/外设做了适配、驱动集成与预装示例。烧录后即获得开箱可用的 Linux 环境，无需自行编译内核或拼装根文件系统。
+
+### 预装能力
+
+RDK OS 开箱即有：
+
+- **BPU 运行时**：`hobot-dnn`（UCP/DNN，BPU 推理栈）。
+- **相机支持**：`hobot-camera`（sensor 支持包）。
+- **tros.b 机器人中间件**：基于 ROS/ROS2 的 TogetheROS.Bot，预装在镜像内（见 [使用 TogetheROS.Bot](/Quick_start/next_steps/trosb)）。
+- **算法工具链运行时**：可加载 `.hbm` 量化模型推理。
+- **apt 源**：D-Robotics 官方源（`archive.d-robotics.cc`）+ Ubuntu 源，见 [软件包管理 apt](/System_configuration/system_update/apt_usage)。
+
 ## 资料索引
 
 > 系统镜像、工具、硬件资料下载。商业资料请切换 **FTP 下载** 选项，按表格路径在 FTP 服务器获取。

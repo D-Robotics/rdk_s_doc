@@ -1,6 +1,6 @@
 ---
 title: 软件包管理 apt
-sidebar_position: 2
+sidebar_position: 1
 description: 待开发
 ---
 # 软件包管理 apt
