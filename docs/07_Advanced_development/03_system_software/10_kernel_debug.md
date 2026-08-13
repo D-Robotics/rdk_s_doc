@@ -1,5 +1,7 @@
 ---
 sidebar_position: 10
+title: "5.3.10 Linux 调试功能介绍"
+description: "5.3.10 Linux 调试功能介绍"
 ---
 
 # 5.3.10 Linux 调试功能介绍

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 7
+title: "5.3.7 miniboot 升级"
+description: "5.3.7 miniboot 升级"
 ---
 
 # 5.3.7 miniboot 升级

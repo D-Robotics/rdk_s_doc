@@ -1,5 +1,7 @@
 ---
 sidebar_position: 11
+title: "5.3.11 时间同步方案"
+description: "5.3.11 时间同步方案"
 ---
 
 # 5.3.11 时间同步方案

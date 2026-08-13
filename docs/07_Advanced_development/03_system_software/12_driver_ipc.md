@@ -1,5 +1,7 @@
 ---
 sidebar_position: 12
+title: "5.3.12 IPC 模块介绍"
+description: "5.3.12 IPC 模块介绍"
 ---
 
 # 5.3.12 IPC 模块介绍

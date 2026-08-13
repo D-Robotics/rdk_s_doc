@@ -1,5 +1,7 @@
 ---
 sidebar_position: 9
+title: "5.3.9 内核头文件"
+description: "5.3.9 内核头文件"
 ---
 
 # 5.3.9 内核头文件

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 5
+title: "5.3.5 蓝牙初始化说明"
+description: "5.3.5 蓝牙初始化说明"
 ---
 
 # 5.3.5 蓝牙初始化说明

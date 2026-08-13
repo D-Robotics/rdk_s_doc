@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "5.3.4 USB Gadget 使用指南"
+description: "5.3.4 USB Gadget 使用指南"
 ---
 
 # 5.3.4 USB Gadget 使用指南
