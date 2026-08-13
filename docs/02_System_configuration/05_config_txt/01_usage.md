@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "2.5.1 config.txt 使用指南"
+description: "config.txt 配置文件使用指南：bootargs、loglevel、DTS 节点、DTB Overlay"
 ---
 
 # 2.5.1 config.txt 使用指南

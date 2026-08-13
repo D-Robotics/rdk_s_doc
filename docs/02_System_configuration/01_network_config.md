@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### 有线网络配置-Network Manager 方式
 
-:::info 注意
+:::note 注意
 
  默认使用 `NetworkManager + Netplan` 管理网络，其它平台请以对应系统文档为准。
 
@@ -327,6 +327,12 @@ source ~/.bashrc
 :::tip
 系统软件包升级与主版本/固件更新见 [2.3 系统更新](/System_configuration/system_update)。
 :::
+
+## 验证
+
+- 有线网络：`nmcli device show eth1` 输出中 `IP4.ADDRESS[1]` 显示配置的静态 IP 或 DHCP 分配的 IP。
+- 无线 Station：`ifconfig wlan0` 能查到路由器分配的 IP 地址。
+- DNS：`resolvectl status` 显示配置的 DNS 服务器。
 
 ## 相关文档
 

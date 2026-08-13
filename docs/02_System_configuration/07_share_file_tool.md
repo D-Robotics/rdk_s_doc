@@ -1,5 +1,7 @@
 ---
 sidebar_position: 7
+title: "2.7 共享文件配置"
+description: "Samba 与 NFS 共享文件配置"
 ---
 
 # 2.7 共享文件配置
@@ -8,7 +10,7 @@ sidebar_position: 7
 
 
 
-## samba 
+## Samba
 
 ### 安装命令
 
@@ -123,7 +125,7 @@ proto=tcp：使用 TCP 传输
 mount | grep windows_nfs_share
 ```
 
-如果在输出中看到 192.168.127.11:/D:/NFSShare 被挂载到 /mnt/windows_nfs_share，则表示挂载成功。
+如果在输出中看到 192.168.127.11:/D:/NFSShare 被挂载到 /userdata/windows_nfs_share，则表示挂载成功。
 
 5. 设置开机自动挂载(可选)
 
@@ -152,14 +154,14 @@ mount | grep windows_nfs_share
 
    - 启动服务
 
-      ```
-      //重新加载 systemd 配置文件
+      ```bash
+      # 重新加载 systemd 配置文件
       systemctl daemon-reload
 
-      //设置开机自动启动
+      # 设置开机自动启动
       systemctl enable mount-windows-nfs.service
 
-      //立即启动服务
+      # 立即启动服务
       systemctl start mount-windows-nfs.service
       ```
 

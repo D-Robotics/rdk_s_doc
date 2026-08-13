@@ -1,5 +1,7 @@
 ---
 sidebar_position: 8
+title: "2.8 Thermal 和 CPU 频率管理"
+description: "Thermal 温控、风扇、CPU 频率管理"
 ---
 
 # 2.8 Thermal 和 CPU 频率管理
@@ -158,20 +160,20 @@ RDK S100开发板上的 emc2305风扇控制器，可以通过设备节点获取�
 进入目录`/sys/devices/system/cpu/cpufreq/policy0`，`ls` 一下，会看到目录中有如下文件：
 
 ```shell
-affected_cpus						// 当前控制影响的CPU核(没有显示处于offline状态的cpu)
-cpuinfo_cur_freq					// 当前CPU频率(单位: KHz）
-cpuinfo_max_freq					// 当前调频策略下CPU可用的最高频率(单位: KHz）
-cpuinfo_min_freq					// 当前调频策略下CPU可用的最低频率(单位: KHz）
-cpuinfo_transition_latency			// 处理器切换频率所需要的时间(单位:ns)
-related_cpus						// 该控制策略影响到哪些CPU核(包括了online+offline的所有cpu)
-scaling_available_frequencies		// CPU支持的主频率列表(单位: KHz）
-scaling_available_governors			// 当前内核中支持的所有 governor(调频)类型
-scaling_cur_freq					// 保存着 cpufreq 模块缓存的当前 CPU 频率，不会对 CPU 硬件寄存器进行检查。
-scaling_driver						// 当前使用的调频驱动
-scaling_governor					// governor(调频)策略
-scaling_max_freq					// 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
-scaling_min_freq					// 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
-scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
+affected_cpus						# 当前控制影响的CPU核(没有显示处于offline状态的cpu)
+cpuinfo_cur_freq					# 当前CPU频率(单位: KHz）
+cpuinfo_max_freq					# 当前调频策略下CPU可用的最高频率(单位: KHz）
+cpuinfo_min_freq					# 当前调频策略下CPU可用的最低频率(单位: KHz）
+cpuinfo_transition_latency			# 处理器切换频率所需要的时间(单位:ns)
+related_cpus						# 该控制策略影响到哪些CPU核(包括了online+offline的所有cpu)
+scaling_available_frequencies		# CPU支持的主频率列表(单位: KHz）
+scaling_available_governors			# 当前内核中支持的所有 governor(调频)类型
+scaling_cur_freq					# 保存着 cpufreq 模块缓存的当前 CPU 频率，不会对 CPU 硬件寄存器进行检查。
+scaling_driver						# 当前使用的调频驱动
+scaling_governor					# governor(调频)策略
+scaling_max_freq					# 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
+scaling_min_freq					# 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
+scaling_setspeed					# 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
 ```
 
 目前支持的频率包括
@@ -405,20 +407,20 @@ RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取�
 进入目录`/sys/devices/system/cpu/cpufreq/policy0`，`ls` 一下，会看到目录中有如下文件：
 
 ```shell
-affected_cpus						// 当前控制影响的CPU核(没有显示处于offline状态的cpu)
-cpuinfo_cur_freq					// 当前CPU频率(单位: KHz）
-cpuinfo_max_freq					// 当前调频策略下CPU可用的最高频率(单位: KHz）
-cpuinfo_min_freq					// 当前调频策略下CPU可用的最低频率(单位: KHz）
-cpuinfo_transition_latency			// 处理器切换频率所需要的时间(单位:ns)
-related_cpus						// 该控制策略影响到哪些CPU核(包括了online+offline的所有cpu)
-scaling_available_frequencies		// CPU支持的主频率列表(单位: KHz）
-scaling_available_governors			// 当前内核中支持的所有 governor(调频)类型
-scaling_cur_freq					// 保存着 cpufreq 模块缓存的当前 CPU 频率，不会对 CPU 硬件寄存器进行检查。
-scaling_driver						// 当前使用的调频驱动
-scaling_governor					// governor(调频)策略
-scaling_max_freq					// 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
-scaling_min_freq					// 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
-scaling_setspeed					// 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
+affected_cpus						# 当前控制影响的CPU核(没有显示处于offline状态的cpu)
+cpuinfo_cur_freq					# 当前CPU频率(单位: KHz）
+cpuinfo_max_freq					# 当前调频策略下CPU可用的最高频率(单位: KHz）
+cpuinfo_min_freq					# 当前调频策略下CPU可用的最低频率(单位: KHz）
+cpuinfo_transition_latency			# 处理器切换频率所需要的时间(单位:ns)
+related_cpus						# 该控制策略影响到哪些CPU核(包括了online+offline的所有cpu)
+scaling_available_frequencies		# CPU支持的主频率列表(单位: KHz）
+scaling_available_governors			# 当前内核中支持的所有 governor(调频)类型
+scaling_cur_freq					# 保存着 cpufreq 模块缓存的当前 CPU 频率，不会对 CPU 硬件寄存器进行检查。
+scaling_driver						# 当前使用的调频驱动
+scaling_governor					# governor(调频)策略
+scaling_max_freq					# 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
+scaling_min_freq					# 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
+scaling_setspeed					# 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
 ```
 
 目前支持的频率包括

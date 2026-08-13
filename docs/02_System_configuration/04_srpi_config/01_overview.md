@@ -1,13 +1,14 @@
 ---
 sidebar_position: 1
 title: "2.4 srpi-config 工具配置"
+description: "srpi-config 系统配置工具：System/Interface/Performance/Localisation/Advanced 选项"
 ---
 
 # 2.4 srpi-config 工具配置
 
 ## 简介
 
-`srpi-config`是一个系统配置工具，要打开配置工具，请在命令行中键入以下命令：
+`srpi-config` 是一个系统配置工具，要打开配置工具，请在命令行中键入以下命令：
 
 ```
 sudo srpi-config
