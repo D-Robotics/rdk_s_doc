@@ -6,7 +6,7 @@ description: "RDK 多媒体示例：摄像头采集、编解码、显示、算�
 
 # 视频采集
 
-```
+```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 

@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Reference Examples (C++)
 
-```
+```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
