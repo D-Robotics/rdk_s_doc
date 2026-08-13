@@ -34,6 +34,6 @@ description: "RDK Studio 集成开发环境介绍与下载"
 
 ## 相关文档
 
-- [1.4.2 TogetheROS.Bot](/Quick_start/next_steps/trosb/trosb_intro)
+- [1.4.2 使用 TogetheROS.Bot](/Quick_start/next_steps/trosb)
 - [5.1 开发环境与编译](/Advanced_development/environment_build/environment_build)
 - [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)

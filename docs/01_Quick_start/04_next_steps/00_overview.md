@@ -22,4 +22,4 @@ RDK 文档按三类开发模式组织。对照下表，找到适合你的路径�
 「下一步」一节为你准备了两条更进一步的入口：
 
 - [使用 RDK Studio](/Quick_start/next_steps/rdk_studio)：想用集成开发环境（IDE）一站式完成代码编辑、编译、调试、模型部署。
-- [TogetheROS.Bot](/Quick_start/next_steps/trosb/trosb_intro)：想做机器人应用，用 tros.b 中间件开发感知、规控、建图。
+- [使用 TogetheROS.Bot](/Quick_start/next_steps/trosb)：想做机器人应用，用 tros.b 中间件开发感知、规控、建图。
