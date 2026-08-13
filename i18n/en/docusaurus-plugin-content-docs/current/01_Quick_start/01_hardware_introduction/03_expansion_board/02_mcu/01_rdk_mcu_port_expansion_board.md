@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+sidebar_products: RDK S100
 slug: /Quick_start/hardware_introduction/rdk_mcu_port_expansion_board
 ---
 

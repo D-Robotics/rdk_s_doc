@@ -1,6 +1,7 @@
 ---
 sidebar_position: 2
 sidebar_label: 1.1.2.2 MCU Interface Expansion Board
+sidebar_products: RDK S600
 ---
 
 

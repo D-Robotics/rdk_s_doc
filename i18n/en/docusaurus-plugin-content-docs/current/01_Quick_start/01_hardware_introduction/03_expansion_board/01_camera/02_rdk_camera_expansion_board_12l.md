@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+sidebar_products: RDK S100
 ---
 
 # 1.1.2.2 Camera Expansion Board 12L

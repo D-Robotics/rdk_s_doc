@@ -1,11 +1,13 @@
 ---
 sidebar_position: 1
-title: "1.1.2.1 RDK S100 相机扩展板"
-description: 1.1.2.1 RDK S100 相机扩展板
+title: "相机扩展板（RDK S100）"
+description: 相机扩展板（RDK S100）
+sidebar_label: "相机扩展板"
+sidebar_products: RDK S100
 slug: /Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board
 ---
 
-# 1.1.2.1 RDK S100 相机扩展板
+# 相机扩展板
 
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="RDK S100相机扩展板" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
