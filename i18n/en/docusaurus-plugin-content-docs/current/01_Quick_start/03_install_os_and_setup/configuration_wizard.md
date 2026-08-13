@@ -3,7 +3,7 @@ sidebar_position: 4
 sidebar_products: RDK S100
 ---
 
-# 1.3.1 RDK S100 Initial Setup
+# RDK S100 Initial Setup
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

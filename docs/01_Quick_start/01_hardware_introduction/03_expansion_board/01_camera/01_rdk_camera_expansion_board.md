@@ -228,10 +228,10 @@ MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能
 
 ## 适配模组
 
-参考[7.1.2 配件清单](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
+参考[配件清单](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
 
 ## 相关文档
 
-- 主板：[1.1.1 开发者套件简介（RDK S100）](../../01_rdk_s100.md)
+- 主板：[开发者套件简介（RDK S100）](../../01_rdk_s100.md)
 - 扩展板：[RDK S100 相机扩展板 12 通道](./02_rdk_camera_expansion_board_12l.md)、[RDK S100 MCU 接口扩展板](../02_mcu/01_rdk_mcu_port_expansion_board.md)
-- 相机使用：[3.1.2 MIPI 摄像头使用](/Demos/peripheral/camera/mipi_camera)
+- 相机使用：[MIPI 摄像头使用](/Demos/peripheral/camera/mipi_camera)

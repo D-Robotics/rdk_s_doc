@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
-sidebar_label: 1.1.2.1 Camera Expansion Board
+sidebar_label: Camera Expansion Board
 sidebar_products: RDK S600
 ---
 
 
 
-# 1.1.2 Camera Expansion Board
+# Camera Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="Camera Expansion Board" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 1.4 Remote Login
+# Remote Login
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

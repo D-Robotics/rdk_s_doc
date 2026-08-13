@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: "1.3.1.2 烧录步骤"
+title: "烧录步骤"
 description: "RDK S100/S600 用 XBurn 烧录系统镜像的步骤"
 ---
 
@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-# 1.3.1.2 烧录步骤
+# 烧录步骤
 
 <DocScope products="RDK-S100">
 

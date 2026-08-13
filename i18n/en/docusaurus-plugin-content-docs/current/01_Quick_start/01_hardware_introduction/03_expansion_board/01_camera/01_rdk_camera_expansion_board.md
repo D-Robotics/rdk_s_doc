@@ -4,7 +4,7 @@ sidebar_products: RDK S100
 slug: /Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board
 ---
 
-# 1.1.2.1 Camera Expansion Board
+# Camera Expansion Board
 
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board.png" alt="Camera Expansion Board" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

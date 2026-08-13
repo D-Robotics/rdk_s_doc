@@ -1,7 +1,7 @@
 ---
 title: "使用 TogetheROS.Bot"
 sidebar_position: 2
-sidebar_label: "1.4.2 使用 TogetheROS.Bot"
+sidebar_label: "使用 TogetheROS.Bot"
 description: "TogetheROS.Bot（tros.b）机器人中间件使用指南"
 ---
 
@@ -157,21 +157,21 @@ def generate_launch_description():
     ])
 ```
 
-详见 [常用功能包](#常用功能包) 和 [3.3 算法示例](/Demos/algorithm_demo/summary)。
+详见 [常用功能包](#常用功能包) 和 [算法示例](/Demos/algorithm_demo/summary)。
 
 ## 常用功能包
 
-本节列出 tros.b 提供的常用功能包，按功能域分类。功能包与 [3.3 算法示例](/Demos/algorithm_demo/summary) 和 [6.6 TROS/ROS 开发 FAQ](/FAQ/tros_ros) 互链。
+本节列出 tros.b 提供的常用功能包，按功能域分类。功能包与 [算法示例](/Demos/algorithm_demo/summary) 和 [TROS/ROS 开发 FAQ](/FAQ/tros_ros) 互链。
 
 ### 感知
 
 | 功能包 | 功能 | 对应算法示例 |
 | --- | --- | --- |
-| `tros_yolo_detection` | 目标检测（YOLOv5x/YOLO11） | [3.3.3 目标检测](/Demos/algorithm_demo/detection/yolov5x) |
-| `tros_classification` | 图像分类（ResNet18/MobileNetV2） | [3.3.2 图像分类](/Demos/algorithm_demo/classification/resnet18) |
-| `tros_instance_segmentation` | 实例分割（YOLO11 seg） | [3.3.4 实例分割](/Demos/algorithm_demo/instance_segmentation/yolo11_seg) |
-| `tros_pose_estimation` | 姿态估计（YOLO11 pose） | [3.3.5 姿态估计](/Demos/algorithm_demo/pose/yolo11_pose) |
-| `tros_asr` | 语音识别 | [3.3.6 自动语音识别](/Demos/algorithm_demo/speech/asr) |
+| `tros_yolo_detection` | 目标检测（YOLOv5x/YOLO11） | [目标检测](/Demos/algorithm_demo/detection/yolov5x) |
+| `tros_classification` | 图像分类（ResNet18/MobileNetV2） | [图像分类](/Demos/algorithm_demo/classification/resnet18) |
+| `tros_instance_segmentation` | 实例分割（YOLO11 seg） | [实例分割](/Demos/algorithm_demo/instance_segmentation/yolo11_seg) |
+| `tros_pose_estimation` | 姿态估计（YOLO11 pose） | [姿态估计](/Demos/algorithm_demo/pose/yolo11_pose) |
+| `tros_asr` | 语音识别 | [自动语音识别](/Demos/algorithm_demo/speech/asr) |
 
 ### 建图与定位
 
@@ -224,5 +224,5 @@ ros2 launch tros_yolo_detection yolo_detection.launch.py
 
 ## 相关文档
 
-- [3.3 算法示例](/Demos/algorithm_demo/summary)（BPU 推理示例）
-- [6.6 TROS/ROS 开发 FAQ](/FAQ/tros_ros)
+- [算法示例](/Demos/algorithm_demo/summary)（BPU 推理示例）
+- [TROS/ROS 开发 FAQ](/FAQ/tros_ros)

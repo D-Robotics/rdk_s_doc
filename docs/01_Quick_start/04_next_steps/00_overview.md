@@ -13,9 +13,9 @@ RDK 文档按三类开发模式组织。对照下表，找到适合你的路径�
 
 | 模式 | 读者 | 目标 | 下一步去哪 |
 |---|---|---|---|
-| 模式 1 直接使用 | 个人开发者、极客、学生 | 跑通 demo、做原型评测 | [第 3 章 开发示例](/Demos)；想自己写代码再看 [第 4 章 简易 API](/Simple_API) |
-| 模式 2 产品集成 | 产品公司、研发团队 | 基于镜像做产品化定制 | [第 2 章 系统配置](/System_configuration) + [5.3 系统软件开发](/Advanced_development/system_software) |
-| 模式 3 高度定制 | 商业客户、深度团队 | 深度二次开发 | [第 5 章 进阶开发](/Advanced_development) |
+| 模式 1 直接使用 | 个人开发者、极客、学生 | 跑通 demo、做原型评测 | [开发示例](/Demos)；想自己写代码再看 [简易 API](/Simple_API) |
+| 模式 2 产品集成 | 产品公司、研发团队 | 基于镜像做产品化定制 | [系统配置](/System_configuration) + [系统软件开发](/Advanced_development/system_software) |
+| 模式 3 高度定制 | 商业客户、深度团队 | 深度二次开发 | [进阶开发](/Advanced_development) |
 
 ## 本节内容
 

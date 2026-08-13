@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "1.4.1 使用 RDK Studio"
+title: "使用 RDK Studio"
 description: "RDK Studio 集成开发环境介绍与下载"
 ---
 
-# 1.4.1 使用 RDK Studio
+# 使用 RDK Studio
 
 **RDK Studio** 是 D-Robotics 为 RDK 开发板打造的集成开发环境（IDE），提供代码编辑、远程编译、调试、模型部署、性能分析等一站式开发能力，无需在宿主机上手动搭建交叉编译环境。
 
@@ -22,7 +22,7 @@ description: "RDK Studio 集成开发环境介绍与下载"
 | 远程开发 | 通过 SSH 连接板端，在 IDE 内编辑→编译→运行→调试，无需手动 scp |
 | 模型部署 | 可视化模型转换→部署→推理验证全流程 |
 | 性能分析 | BPU/CPU 负载、内存占用、帧率等运行时指标监控 |
-| Demo 管理 | 内置 RDK 示例项目管理，一键运行 [3.3 算法示例](/Demos/algorithm_demo/summary) |
+| Demo 管理 | 内置 RDK 示例项目管理，一键运行 [算法示例](/Demos/algorithm_demo/summary) |
 
 ## 与手动搭建开发环境的对比
 
@@ -34,6 +34,6 @@ description: "RDK Studio 集成开发环境介绍与下载"
 
 ## 相关文档
 
-- [1.4.2 使用 TogetheROS.Bot](/Quick_start/next_steps/trosb)
-- [5.1 开发环境与编译](/Advanced_development/environment_build/environment_build)
-- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [使用 TogetheROS.Bot](/Quick_start/next_steps/trosb)
+- [开发环境与编译](/Advanced_development/environment_build/environment_build)
+- [算法工具链开发指南](/Advanced_development/algorithm_toolchain)

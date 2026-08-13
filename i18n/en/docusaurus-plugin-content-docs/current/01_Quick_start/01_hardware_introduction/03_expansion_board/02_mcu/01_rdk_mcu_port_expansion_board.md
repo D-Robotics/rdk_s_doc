@@ -4,7 +4,7 @@ sidebar_products: RDK S100
 slug: /Quick_start/hardware_introduction/rdk_mcu_port_expansion_board
 ---
 
-# 1.1.1.3 MCU Port Expansion Board
+# MCU Port Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png" alt="MCU Port Expansion Board" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 

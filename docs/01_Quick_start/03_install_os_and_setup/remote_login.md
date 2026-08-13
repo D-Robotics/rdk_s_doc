@@ -1,10 +1,10 @@
 ---
-title: "1.3.4 远程登录"
+title: "远程登录"
 sidebar_position: 5
 description: "通过 SSH/串口/NoMachine 远程登录开发板的方法与默认账户"
 ---
 
-# 1.3.4 远程登录
+# 远程登录
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并完成启动（见 [1.3 烧录系统与配置](./01_instruction.md)）。
+- 开发板已烧录 RDK OS 并完成启动（见 [烧录系统与配置](./01_instruction.md)）。
 - 远程登录前需先确认开发板网络可达：板端 `eth1` 默认静态 IP `192.168.127.10`，或通过 Wi-Fi（`wlan0`）由路由器分配 IP（可用 `ifconfig` 或 `ip addr` 查看）。
 - PC 与开发板处于同一网段，能 `ping` 通开发板 IP（网络排查见 [网络状态确认](#network_config)）。
 
@@ -287,13 +287,13 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 
 - **SSH 连接被拒绝**：板端 `sudo systemctl status ssh` 确认服务运行；确认防火墙 `sudo ufw status` 未拦截。
 - **串口无输出**：检查波特率（S100: 921600/115200，S600: 同），确认 TTL-USB 线 TX/RX 未接反。
-- **NoMachine 黑屏**：首次配置后必须重启板卡。详见 [1.3.3 入门配置 - NoMachine 配置](./configuration_wizard.md)。
+- **NoMachine 黑屏**：首次配置后必须重启板卡。详见 [入门配置 - NoMachine 配置](./configuration_wizard.md)。
 - **IP 地址不确定**：串口登录后 `ip addr` 查看，或路由器管理页查找 MAC 地址对应 IP。
 
 ## 相关文档
 
-- [1.3.1 系统烧录](./01_instruction.md)
-- [1.3.2 系统状态查询](./system_status.md)
-- [1.3.3 入门配置](./configuration_wizard.md)
-- [2.1 网络配置](../../02_System_configuration/01_network_config.md)
-- [2.16 调试串口](../../02_System_configuration/16_debug_serial.md)
+- [系统烧录](./01_instruction.md)
+- [系统状态查询](./system_status.md)
+- [入门配置](./configuration_wizard.md)
+- [网络配置](../../02_System_configuration/01_network_config.md)
+- [调试串口](../../02_System_configuration/16_debug_serial.md)

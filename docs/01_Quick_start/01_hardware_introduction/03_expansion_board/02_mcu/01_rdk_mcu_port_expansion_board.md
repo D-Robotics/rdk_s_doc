@@ -137,6 +137,6 @@ RDKS100_LNX_SDK_V4.0.2 暂未实现对应功能
 
 ## 相关文档
 
-- 主板：[1.1.1 开发者套件简介（RDK S100）](../../01_rdk_s100.md)
+- 主板：[开发者套件简介（RDK S100）](../../01_rdk_s100.md)
 - 扩展板：[RDK S100 相机扩展板](../01_camera/01_rdk_camera_expansion_board.md)
-- CAN 应用：[3.1.4 CAN 应用](/Demos/peripheral/rcore_can)
+- CAN 应用：[CAN 应用](/Demos/peripheral/rcore_can)

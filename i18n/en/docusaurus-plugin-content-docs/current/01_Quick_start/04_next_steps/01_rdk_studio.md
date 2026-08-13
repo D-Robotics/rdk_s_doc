@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# 1.9 RDK Studio User Guide
+# RDK Studio User Guide
 
 :::warning Upgrade Notice
 

@@ -134,6 +134,6 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 ## 相关文档
 
-- 主板：[1.1.1 开发者套件简介（RDK S600）](../../02_rdk_s600.md)
+- 主板：[开发者套件简介（RDK S600）](../../02_rdk_s600.md)
 - 扩展板：[RDK S600 相机扩展板](../01_camera/03_rdk_s600_camera_expansion_board.md)
-- CAN 应用：[3.1.4 CAN 应用](/Demos/peripheral/rcore_can)
+- CAN 应用：[CAN 应用](/Demos/peripheral/rcore_can)

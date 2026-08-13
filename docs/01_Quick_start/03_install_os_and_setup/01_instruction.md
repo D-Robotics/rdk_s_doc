@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: "1.3.1.1 烧录说明"
+title: "烧录说明"
 description: "RDK S100/S600 烧录前准备：镜像下载、工具、数据线、环境"
 ---
 
-# 1.3.1.1 烧录说明
+# 烧录说明
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';

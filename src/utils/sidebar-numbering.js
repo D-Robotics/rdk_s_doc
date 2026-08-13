@@ -32,18 +32,22 @@ export function renumberVisibleItems(items, parentPrefix = '') {
 
   return items.map((item) => {
     const next = { ...item };
-    const parsed = parseNumberedLabel(item.label);
+    const plain = stripNumberPrefix(String(item.label || '')).trim();
 
+    // 顶层裸 link（首页等非章条目）不编号；category 与所有子级条目一律按位置编号。
+    // 不依赖 label 里是否预置数字种子（去硬编码后 label 为纯文字，编号由位置生成）。
+    const isTopLevelLink = parentPrefix === '' && item.type === 'link';
     let ownPrefix = parentPrefix;
-    if (parsed) {
+    if (isTopLevelLink) {
+      next.label = plain;
+    } else {
       serial += 1;
       ownPrefix = parentPrefix ? `${parentPrefix}.${serial}` : `${serial}`;
-      next.label = `${ownPrefix} ${parsed.rest}`;
+      next.label = `${ownPrefix} ${plain}`;
     }
 
     if (item.type === 'category' && Array.isArray(item.items)) {
-      const childPrefix = parsed ? ownPrefix : parentPrefix;
-      next.items = renumberVisibleItems(item.items, childPrefix);
+      next.items = renumberVisibleItems(item.items, ownPrefix);
     }
 
     return next;
@@ -72,12 +76,9 @@ function shouldFlattenParentWithSingleChild(parent, child) {
   if (!parent || !child) return false;
   if (parent.type !== 'category') return false;
 
-  const p = parseNumberedLabel(parent.label);
-  const c = parseNumberedLabel(child.label);
-  if (!p || !c) return false;
-
-  // 仅在明显是父子编号关系时扁平化，如 1.2 -> 1.2.1
-  return c.prefix.startsWith(`${p.prefix}.`);
+  // 过滤后父 category 只剩一个可见子项时直接扁平化。
+  // 编号前缀不再作为判断依据：编号现由 renumberVisibleItems 按位置生成，且总在 flatten 之后执行。
+  return true;
 }
 
 /**

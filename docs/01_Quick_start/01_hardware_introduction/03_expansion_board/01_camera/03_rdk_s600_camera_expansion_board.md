@@ -148,7 +148,7 @@ GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人�
 
 ## 相关文档
 
-- 主板：[1.1.1 开发者套件简介（RDK S600）](../../02_rdk_s600.md)
+- 主板：[开发者套件简介（RDK S600）](../../02_rdk_s600.md)
 - 扩展板：[RDK S600 MCU 接口扩展板](../02_mcu/02_rdk_s600_mcu_port_expansion_board.md)
-- 相机使用：[3.1.2 MIPI 摄像头使用](/Demos/peripheral/camera/mipi_camera)
+- 相机使用：[MIPI 摄像头使用](/Demos/peripheral/camera/mipi_camera)
 
