@@ -444,5 +444,5 @@ test_cam_vps_display()
 ## 相关文档
 
 - [多媒体接口说明](./pydev_multimedia_api)
-- [Camera 对象](./02_object_camera)
+- [Camera 对象](./object_camera)
 - [Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

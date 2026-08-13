@@ -1,6 +1,5 @@
 ---
 sidebar_position: 1
-sidebar_products: RDK-S100
 title: "多媒体接口说明"
 description: "RDK Python pydev 多媒体接口总览（Camera/Encoder/Decoder/Display）"
 ---
@@ -11,10 +10,10 @@ RDK OS 预装了 Python 多媒体模块 `libsrcampy`（包名 `hobot_vio`），�
 
 | 对象 | 功能 | 详见 |
 | --- | --- | --- |
-| `Camera` | 摄像头采集（MIPI/USB） | [Camera 对象](./02_object_camera) |
-| `Encoder` | 视频编码（H.264/H.265） | [Encoder 对象](./03_object_encoder) |
-| `Decoder` | 视频解码 | [Decoder 对象](./04_object_decoder) |
-| `Display` | 显示输出（HDMI） | [Display 对象](./05_object_display) |
+| `Camera` | 摄像头采集（MIPI/USB） | [Camera 对象](./object_camera) |
+| `Encoder` | 视频编码（H.264/H.265） | [Encoder 对象](./object_encoder) |
+| `Decoder` | 视频解码 | [Decoder 对象](./object_decoder) |
+| `Display` | 显示输出（HDMI） | [Display 对象](./object_display) |
 
 ## 基础使用
 
@@ -43,9 +42,9 @@ while True:
 
 ## 相关文档
 
-- [Camera 对象](./02_object_camera)
-- [Encoder 对象](./03_object_encoder)
-- [Decoder 对象](./04_object_decoder)
-- [Display 对象](./05_object_display)
-- [接口使用示例](./06_pydev_api_demo)
+- [Camera 对象](./object_camera)
+- [Encoder 对象](./object_encoder)
+- [Decoder 对象](./object_decoder)
+- [Display 对象](./object_display)
+- [接口使用示例](./pydev_api_demo)
 - [Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

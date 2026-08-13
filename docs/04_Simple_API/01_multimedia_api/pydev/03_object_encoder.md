@@ -210,5 +210,5 @@ Encoder.close()
 ## 相关文档
 
 - [多媒体接口说明](./pydev_multimedia_api)
-- [Decoder 对象](./04_object_decoder)
+- [Decoder 对象](./object_decoder)
 - [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)
