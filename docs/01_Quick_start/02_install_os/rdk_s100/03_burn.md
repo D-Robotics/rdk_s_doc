@@ -39,7 +39,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 ## 烧录全镜像
 
-适用于首次刷机或系统恢复，烧录完整系统镜像包，覆盖板载 eMMC 与 Norflash 上的 `miniboot_flash`。
+适用于首次刷机或系统恢复，烧录完整系统镜像包，覆盖板载 eMMC 与 NOR Flash 上的 `miniboot_flash`。
 
 1. **产品类型** 选择 `RDK S100`。
 2. **连接类型** 选择 `USB`，**下载模式** 选择（`DFU+Fastboot` 或 `Fastboot`）。
@@ -78,7 +78,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 | 区域 | 实际存储介质 | 固件内容 | 镜像 |
 | --- | --- | -------- | ---- |
-| miniboot_flash | Norflash | Norflash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
+| miniboot_flash | NOR Flash | NOR Flash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
 | miniboot_emmc | eMMC | eMMC 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_emmc.img |
 | emmc | eMMC | eMMC 完整镜像，已包含 miniboot_emmc | img_packages/disk/emmc_disk.simg |
 
@@ -92,7 +92,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 | 区域 | 实际存储介质 | 固件内容 | 备份镜像 |
 | --- | --- | -------- | ------------ |
-| miniboot_flash | Norflash | Norflash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
+| miniboot_flash | NOR Flash | NOR Flash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
 | emmc | eMMC | eMMC 完整镜像 | img_packages/disk/emmc_disk_backup.img |
 
 在 [烧录全镜像](#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **备份指定区域**，勾选目标区域（如 `miniboot_flash`）。完成烧录后，打开 `img_packages/disk/`，查看备份镜像文件 `miniboot_flash_backup.img`。

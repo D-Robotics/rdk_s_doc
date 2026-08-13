@@ -105,11 +105,11 @@ Flashing NVMe requires the NVMe version of the image. D-Robotics provides UFS im
 ### Flash specific regions{#flashing-specific-regions}
 
 - Flash only the selected regions, instead of the complete full-image package.
-- `miniboot_flash` is on Norflash and is independent of the selected medium; both UFS and NVMe can select it. Other regions correspond to the selected medium per the "Actual storage medium" column.
+- `miniboot_flash` is on NOR Flash and is independent of the selected medium; both UFS and NVMe can select it. Other regions correspond to the selected medium per the "Actual storage medium" column.
 
 | Region | Actual storage medium | Firmware content | Image |
 | --- | --- | -------- | ---- |
-| miniboot_flash | Norflash | Basic boot image on Norflash, including images for HSM/MCU0 and other system components | img_packages/disk/miniboot_flash.img |
+| miniboot_flash | NOR Flash | Basic boot image on NOR Flash, including images for HSM/MCU0 and other system components | img_packages/disk/miniboot_flash.img |
 | miniboot_ufs | UFS | Basic boot image on UFS, including images for BL31/U-Boot and other system components | img_packages/disk/miniboot_ufs.img |
 | ufs | UFS | Complete UFS image, already includes miniboot_ufs | img_packages/disk/ufs_disk.simg |
 | miniboot_nvme | NVMe | Basic boot image on NVMe, including images for BL31/U-Boot and other system components | img_packages/disk/miniboot_nvme.img |
@@ -121,11 +121,11 @@ Starting from the steps in [Flash the full image](#flash-the-full-image), expand
 
 ### Back up specific regions
 
-Back up the image of specific regions to your PC. `miniboot_flash` is on Norflash; both UFS and NVMe can back it up. Other regions correspond to the selected medium per the "Actual storage medium" column.
+Back up the image of specific regions to your PC. `miniboot_flash` is on NOR Flash; both UFS and NVMe can back it up. Other regions correspond to the selected medium per the "Actual storage medium" column.
 
 | Region | Actual storage medium | Firmware content | Backup image |
 | --- | --- | -------- | ------------ |
-| miniboot_flash | Norflash | Complete Norflash image | img_packages/disk/miniboot_flash_backup.img |
+| miniboot_flash | NOR Flash | Complete NOR Flash image | img_packages/disk/miniboot_flash_backup.img |
 | ufs | UFS | Complete UFS image | img_packages/disk/ufs_disk_backup.img |
 | nvme | NVMe | Complete NVMe image | img_packages/disk/nvme_disk_backup.img |
 
