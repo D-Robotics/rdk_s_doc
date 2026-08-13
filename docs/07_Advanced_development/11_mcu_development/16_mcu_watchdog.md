@@ -1,5 +1,7 @@
 ---
 sidebar_position: 16
+title: "5.6.17 MCU 看门狗"
+description: "5.6.17 MCU 看门狗"
 ---
 # 5.6.17 MCU 看门狗
 

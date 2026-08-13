@@ -1,5 +1,7 @@
 ---
 sidebar_position: 5
+title: "5.6.6 PWM 使用指南"
+description: "5.6.6 PWM 使用指南"
 ---
 
 # 5.6.6 PWM 使用指南

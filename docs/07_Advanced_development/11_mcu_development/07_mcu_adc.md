@@ -1,5 +1,7 @@
 ---
 sidebar_position: 7
+title: "5.6.8 ADC 使用指南"
+description: "5.6.8 ADC 使用指南"
 ---
 
 # 5.6.8 ADC 使用指南

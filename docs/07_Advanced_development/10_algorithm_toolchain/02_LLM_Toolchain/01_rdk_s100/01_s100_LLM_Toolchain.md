@@ -85,3 +85,6 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D
 |-------|----------|-------|--------|-------------|----------|-----|------------|
 | Qwen2.5-Omni-3B | S100P | q8 | 256 | 2048 | 285 | 14.03 | 5.5 |
 
+## 相关文档
+
+- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)

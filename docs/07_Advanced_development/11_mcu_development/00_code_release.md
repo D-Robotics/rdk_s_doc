@@ -1,5 +1,7 @@
 ---
 sidebar_position: 0
+title: "5.6.1 MCU 代码包结构介绍"
+description: "5.6.1 MCU 代码包结构介绍"
 ---
 
 # 5.6.1 MCU 代码包结构介绍

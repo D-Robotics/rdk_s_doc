@@ -1,5 +1,7 @@
 ---
 sidebar_position: 17
+title: "5.6.18 EtherCAT 用户手册"
+description: "5.6.18 EtherCAT 用户手册"
 ---
 
 # 5.6.18 EtherCAT 用户手册

@@ -1,5 +1,7 @@
 ---
 sidebar_position: 8
+title: "5.6.9 IPC 使用指南"
+description: "5.6.9 IPC 使用指南"
 ---
 
 # 5.6.9 IPC 使用指南

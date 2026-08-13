@@ -1,5 +1,7 @@
 ---
 sidebar_position: 15
+title: "5.6.16 TIMER 使用指南"
+description: "5.6.16 TIMER 使用指南"
 ---
 # 5.6.16 TIMER 使用指南
 

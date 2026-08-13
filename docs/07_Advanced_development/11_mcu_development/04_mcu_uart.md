@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "5.6.5 UART 使用指南"
+description: "5.6.5 UART 使用指南"
 ---
 
 # 5.6.5 UART 使用指南

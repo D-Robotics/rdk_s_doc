@@ -1,5 +1,7 @@
 ---
 sidebar_position: 3
+title: "5.6.4 MCU1 开发指南"
+description: "5.6.4 MCU1 开发指南"
 ---
 
 # 5.6.4 MCU1 开发指南

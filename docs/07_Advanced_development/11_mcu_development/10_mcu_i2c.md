@@ -1,5 +1,7 @@
 ---
 sidebar_position: 10
+title: "5.6.11 I2C 使用指南"
+description: "5.6.11 I2C 使用指南"
 ---
 
 # 5.6.11 I2C 使用指南

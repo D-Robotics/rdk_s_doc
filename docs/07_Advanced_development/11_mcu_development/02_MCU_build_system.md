@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+title: "5.6.3 MCU 系统说明"
+description: "5.6.3 MCU 系统说明"
 ---
 
 # 5.6.3 MCU 系统说明

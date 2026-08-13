@@ -1,5 +1,7 @@
 ---
 sidebar_position: 13
+title: "5.6.14 MCU ramdump 功能"
+description: "5.6.14 MCU ramdump 功能"
 ---
 
 # 5.6.14 MCU ramdump 功能

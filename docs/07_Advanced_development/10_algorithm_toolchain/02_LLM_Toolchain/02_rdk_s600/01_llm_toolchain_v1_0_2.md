@@ -372,6 +372,6 @@ TTFT(ms)：VLM的首字生成时间为vit处理时间和prefill处理时间总�
 </tbody>
 </table>
 
+## 相关文档
 
-
-
+- [5.7 算法工具链开发指南](/Advanced_development/algorithm_toolchain)

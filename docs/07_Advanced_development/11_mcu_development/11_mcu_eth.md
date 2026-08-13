@@ -1,5 +1,7 @@
 ---
 sidebar_position: 11
+title: "5.6.12 Eth 使用指南"
+description: "5.6.12 Eth 使用指南"
 ---
 
 # 5.6.12 Eth 使用指南
