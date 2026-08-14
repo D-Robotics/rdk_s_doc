@@ -123,7 +123,7 @@ CONFIG_SCSI_UFSHCD_PLATFORM=y          # 平台驱动支持
 
 # Hobot UFS驱动
 CONFIG_SCSI_UFS_HOBOT=y                # Hobot UFS Host控制器驱动
-CONFIG_SCSI_UFS_HOBOT_OCS_POLL=n       # OCS轮询模式（调试用）
+CONFIG_SCSI_UFS_HOBOT_OCS_POLL=y       # OCS轮询模式（调试用）
 
 # SCSI和块设备支持
 CONFIG_SCSI=y                          # SCSI子系统
@@ -272,9 +272,9 @@ cat /proc/scsi/scsi
 ### 2. 查看 UFS 驱动加载状态
 
 ```shell
-# 查看驱动是否加载
-lsmod | grep ufs
-# 应显示 ufs_hobot 模块
+# 查看驱动是否加载（UFS 驱动为内核内置，非模块）
+ls /sys/module/ufshcd_core
+# 应显示 ufshcd_core 相关目录
 
 # 查看内核日志中的UFS相关信息
 dmesg | grep -i ufs
@@ -289,8 +289,8 @@ cat /sys/class/scsi_host/host*/proc_name
 #### 格式化 UFS 分区
 
 ```shell
-# 将UFS分区格式化为ext4格式（例如分区17）注意：会清空所有数据：
-mkfs.ext4 /dev/sda17
+# 将UFS分区格式化为ext4格式（例如分区16）注意：会清空所有数据：
+mkfs.ext4 /dev/sda16
 ```
 
 #### 挂载 UFS 分区
@@ -298,7 +298,7 @@ mkfs.ext4 /dev/sda17
 ```shell
 # 挂载UFS分区到指定目录
 mkdir -p /userdata
-mount -t ext4 /dev/sda17 /userdata
+mount -t ext4 /dev/sda16 /userdata
 
 # 查看挂载情况
 mount | grep sda
@@ -310,10 +310,10 @@ mount | grep sda
 
 ```shell
 # 使用fsck工具检测和修复ext4文件系统
-fsck.ext4 -f /dev/sda17
+fsck.ext4 -f /dev/sda16
 
 # 当fsck无法修复时，可考虑格式化（注意：会清空所有数据）
-mkfs.ext4 /dev/sda17
+mkfs.ext4 /dev/sda16
 ```
 
 ### 4. 使用 ufs-utils 工具
@@ -382,37 +382,38 @@ journalctl -kf | grep -i ufs
 <DocScope products="RDK S100">
 RDK S100系列开发板默认会有如下分区，实际分区以板端输出为准：
 </DocScope>
-<DocScope products="RDK S100">
+<DocScope products="RDK S600">
 RDK S600系列开发板默认会有如下分区，实际分区以板端输出为准：
 </DocScope>
 
 | 分区号 | 设备名 | 分区名 | 大小 | 文件系统 | 挂载点 | 用途 |
 |--------|--------|--------|------|----------|--------|------|
-| 17 | /dev/sda17 | userdata | 2GiB | ext4 | /userdata | 用户数据 |
-| 18 | /dev/sda18 | system | 磁盘剩余空间 | ext4 | / | 根文件系统 |
+| 16 | /dev/sda16 | userdata | 2GiB | ext4 | /userdata | 用户数据 |
+| 17 | /dev/sda17 | system | 磁盘剩余空间 | ext4 | / | 根文件系统 |
 
 **推荐测试分区**：
-- **userdata 分区** (`/dev/sda17` → `/userdata`)：首选，专为用户数据设计
-- **system 分区** (`/dev/sda18` → `/`)：备选，需注意系统文件保护
+- **userdata 分区** (`/dev/sda16` → `/userdata`)：首选，专为用户数据设计
+- **system 分区** (`/dev/sda17` → `/`)：备选，需注意系统文件保护
 
 #### 准备测试环境
 
 ```shell
 # 查看UFS分区挂载情况
 lsblk
-# 输出示例：
+# 输出示例（RDK S600）：
 # NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-# sda       8:0    0  3.1G  0 disk
-# ├─sda13   8:13   0   15M  0 part /boot
-# ├─sda16   8:16   0  512M  0 part /var/log
-# ├─sda17   8:17   0  256M  0 part /userdata
-# └─sda18   8:18   0  1.3G  0 part /
+# sda       8:0    0 59.6G  0 disk
+# ├─sda12   8:12   0  120M  0 part /boot
+# ├─sda14   8:14   0    8G  0 part /ota
+# ├─sda15   8:15   0    4G  0 part /log
+# ├─sda16   8:16   0    2G  0 part /userdata
+# └─sda17   8:17   0 45.3G  0 part /
 
-# 检查userdata分区(/dev/sda17)是否挂载
+# 检查userdata分区(/dev/sda16)是否挂载
 mount | grep userdata
 # 如未挂载，手动挂载：
 # mkdir -p /userdata
-# mount /dev/sda17 /userdata
+# mount /dev/sda16 /userdata
 
 # 确保测试目录存在且有写入权限
 mkdir -p /userdata/ufs_test
@@ -524,10 +525,10 @@ rm -f /userdata/ufs_test/test_file /userdata/ufs_test/test_file_big
 
 #### 在 system 分区测试（备选方案）
 
-如果 userdata 分区(/dev/sda17)不可用，可在 system 分区(/dev/sda18)的/tmp 目录测试：
+如果 userdata 分区(/dev/sda16)不可用，可在 system 分区(/dev/sda17)的/tmp 目录测试：
 
 ```shell
-# 使用/tmp目录（位于system分区 /dev/sda18）
+# 使用/tmp目录（位于system分区 /dev/sda17）
 mkdir -p /tmp/ufs_test
 
 # 运行fio测试（示例：4K随机写）
@@ -547,7 +548,7 @@ fio --name=rand_write_4k \
 rm -rf /tmp/ufs_test
 ```
 
-**注意**：system 分区(/dev/sda18)是根文件系统(1.25GB)，测试时：
+**注意**：system 分区(/dev/sda17)是根文件系统，测试时：
 - 控制测试文件大小，避免填满根分区
 - 优先使用/tmp 目录，系统重启后自动清理
 - 不要在系统关键目录（/bin, /sbin, /etc 等）进行测试

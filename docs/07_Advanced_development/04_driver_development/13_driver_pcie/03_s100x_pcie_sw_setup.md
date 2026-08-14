@@ -108,7 +108,7 @@ S100 PCIE 的链路支持3种模式：
 S600 PCIE 的链路支持3种模式：
 - 0x1: PCIE0 x4 Lane;
 - 0x2: PCIE0 x2 Lane + PCIE1 x2 Lane;
-- 0x4: PCIE0 x1 Lane + PCIE1 x1 Lane + GMAC0 + GMAC1;
+- 0x4: PCIE0 x2 Lane + GMAC0 + GMAC1;
 ```dts
 /* rdk-s600-mcb.dtsi */
 ...
@@ -121,5 +121,6 @@ S600 PCIE 的链路支持3种模式：
 
 ## 相关文档
 
-- [PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
-- [PCIe 用户态 API](/Advanced_development/driver_development/driver_pcie)
+- [PCIe 软件架构](./02_s100x_pcie_sw_arch.md)
+- [PCIe 用户态 API](./04_s100x_pcie_libhbpciehal.md)
+- [PCIe 硬件规格](./01_s100x_pcie_hw_guide.md)

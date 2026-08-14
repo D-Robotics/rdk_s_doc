@@ -6,6 +6,10 @@ description: "3D GPU 性能测试"
 
 # 3D GPU 性能测试
 
+:::info
+本章示例以 RDK S100（GPU 为 Mali-G78AE，2 个计算单元）为例；RDK S600 的 GPU 同为 Mali-G78AE，但为 4 核（可通过 `cat /sys/class/misc/mali0/device/gpuinfo` 查看）。`glmark2` 与 `clpeak` 均未预装到板端，需按下文分别 `apt install` 或交叉编译后使用；示例结果为 S100 参考值，S600 实测数值会更高。
+:::
+
 ## 测试原理
 3D GPU 性能测试主要用于评估 GPU 在不同计算任务和渲染任务下的性能。针对 GPU 的不同应用场景，常见的测试可分为：
 - OpenGLES（渲染性能测试）：使用 glmark2 进行测试，评估 GPU 的图形渲染能力，如几何处理、纹理填充、着色器性能等。

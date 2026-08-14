@@ -171,5 +171,5 @@ libhbmem 编译输出一个静态库文件 libhbmem.a，和三个动态库文件
 
 ## 相关文档
 
-- [HBMEM 使用指南 - 硬件信息](/Advanced_development/driver_development/driver_hbmem)
-- [共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
+- [硬件信息](./02_s100_hbmem_hardware.md)
+- [共享内存 - Hbmem](../../06_multimedia_development/01_multimedia_api/02_hbmem_api.md)

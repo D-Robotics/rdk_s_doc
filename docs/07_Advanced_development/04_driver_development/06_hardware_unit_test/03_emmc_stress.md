@@ -58,7 +58,7 @@ eMMC 压力测试包含了 `emmc_performance_test.sh` 和 `emmc_stability_test.s
   - -I：启用直接 I/O，绕过操作系统缓存。
   - -a：执行自动模式测试，包含多个读写操作，测试多个文件大小和记录大小。
   - -r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M：指定测试中使用的记录大小，影响 eMMC 在不同数据块尺寸下的性能表现。
-  - -s 16K -s 1M -s 16M -s 128M -s 1G：指定测试文件大小的范围。从较小的 16KB 到较大的 1GB，测试不同大小文件的读写性能。
+  - -s 16K -s 1M -s 16M -s 128M -s 256M：指定测试文件大小的范围。从较小的 16KB 到较大的 256MB，测试不同大小文件的读写性能。
   - -f "$output_dir/iozone_data"：指定测试文件存储位置。
   - -Rb "$output_dir/test_iozone_emmc_ext4_performance_1.xls"：输出测试结果为 Excel 格式。
 
@@ -103,7 +103,7 @@ mmcblk0boot1
 
 ## 测试方法
 
-压测脚本支持输入后缀 -h 查看命令参数的说明 , 例如（同时适用与两个压测脚本）：
+两个压测脚本都支持 `-h` 查看参数说明，参数一致，仅 `-o` 的默认目录不同：`emmc_performance_test.sh` 为 `../output`，`emmc_stability_test.sh` 为 `../log`。示例（`emmc_performance_test.sh -h`）：
 
 ```shell
 ./emmc_performance_test.sh -h
@@ -144,7 +144,7 @@ eMMC stability test starting...
 Test configuration:
   Test duration: 2880 minutes
   Sleep duration: 30 seconds
-  Output directory: /app/chip_base_test/output
+  Output directory: /app/chip_base_test/log
 loop_test: 1
         Iozone: Performance Test of File I/O
                 Version $Revision: 3.489 $
@@ -211,8 +211,8 @@ loop_test: 1
 
 - `Test duration`：测试持续时间 : 这是测试的持续时间，单位为分钟（即 48 小时）。
 - `Sleep duration`：睡眠时间 : 在每次循环执行测试时，脚本会等待 30 秒钟，可以让系统和存储设备有足够的时间进行恢复，减少测试过程中可能的波动。
-- `Output directory`：输出目录：`/app/chip_base_test/output`
-- `Command line used`：使用命令：`iozone -e -I -az -n 16m -g 2g -q 16m -f /app/chip_base_test/output/iozone_data -Rb /app/chip_base_test/output/test_iozone_emmc_stability_1.xls`，关键参数如下：
+- `Output directory`：输出目录：`/app/chip_base_test/log`
+- `Command line used`：使用命令：`iozone -e -I -az -n 16m -g 2g -q 16m -f /app/chip_base_test/log/iozone_data -Rb /app/chip_base_test/log/test_iozone_emmc_stability_1.xls`，关键参数如下：
   - 文件大小范围：最小 16MB，最大 2GB。
   - 记录大小范围：从 4KB 到 16384KB（即 16MB）。
 - `主要性能指标`：

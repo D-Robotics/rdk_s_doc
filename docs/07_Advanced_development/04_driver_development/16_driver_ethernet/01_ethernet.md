@@ -141,7 +141,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
     // 配置hsis mode以及参考时钟选择, 如combo phy的复用情况, 参考时钟的来源等。
     hsis0: hsis0 {
         status = "okay";
-        compatible = "hobot,super-hsis";
+        compatible = "drobot,super-hsis";
         hsi-mode = <4>; /* 4:pcie x2 + gmac0/1; 8:pcie0 x1 + pcie1 x1 + GMAC0/1; */
         refclk-mode = <0>; /* 0:internal ref clock; 1:external ref clock; */
         #address-cells = <2>;
@@ -162,7 +162,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
     // 配置hsis mode以及参考时钟选择, 如combo phy的复用情况, 参考时钟的来源, 以及phy眼图信号相关参数。
     hsis0: hsis0 {
         status = "okay";
-        compatible = "hobot,super-hsis";
+        compatible = "drobot,super-hsis";
         hsi-mode = <4>;
         refclk-mode = <0>;/* 0:internal; 1:external; */
         xpcs-speed = <0 0 0 5000 10000 10000>; /*gmac0, gmac1, gmac2, xgmac0, xgmac1, xgmac2*/
@@ -199,7 +199,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
     // drobot-s100-soc.dtsi, 芯片默认的eth配置; 可以被具体board的dts覆盖
     eth0: eth0 {
             status = "disabled";
-            compatible = "hobot,super-gmac";
+            compatible = "hobot,hobot_gmac";
             /*MAC, XPCS, ETH PHY, PCIE PHY, hsis reg*/
             reg = <0x0 0x330f0000 0x0 0x10000>,
                     <0x0 0x33200000 0x0 0x80000>;
@@ -234,7 +234,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
     // hobot-s600-soc.dtsi, 芯片默认的eth配置。可以被具体board的dts覆盖
     eth2: gmac2 {
         status = "disabled";
-        compatible = "hobot,super-gmac";
+        compatible = "hobot,hobot_gmac";
         /*MAC, XPCS*/
         reg = <0x0 0x33110000 0x0 0x10000>,
                 <0x0 0x33380000 0x0 0x80000>;
@@ -479,7 +479,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 ```dts
     hsis0: hsis0 {
         status = "okay";
-        compatible = "hobot,super-hsis";
+        compatible = "drobot,super-hsis";
         xpcs-speed = <0 0 0 1000 10000 10000>; /*gmac0, gmac1, gmac2, xgmac0, xgmac1, xgmac2*/
     };
     ethernet3: xgmac0@0x33130000 {
@@ -526,7 +526,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 ```dts
     hsis0: hsis0 {
         status = "okay";
-        compatible = "hobot,super-hsis";
+        compatible = "drobot,super-hsis";
         hsi-mode = <4>;
         refclk-mode = <0>;/* 0:internal; 1:external; */
         xpcs-speed = <0 0 0 5000 10000 10000>; /*gmac0, gmac1, gmac2, xgmac0, xgmac1, xgmac2*/
@@ -1068,5 +1068,5 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 
 ## 相关文档
 
-- [网络配置](/System_configuration/network_config)
-- [EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)
+- [网络配置](../../../02_System_configuration/01_network_config.md)
+- [EtherCAT（Linux 侧）](./02_ethercat.md)

@@ -139,6 +139,37 @@ S600 平台共 18 核（Cortex-A78AE），分为 5 个 policy/集群：
 
 ## 测试方法
 
+### 板端自带 STREAM 测试
+
+`08_ddr_bandwidth` 目录内已提供 STREAM 基准测试源码 `stream.c`，可直接在板端编译运行，无需交叉编译：
+
+```shell
+cd /app/chip_base_test/08_ddr_bandwidth
+gcc -O3 -fopenmp -DNTIMES=100 stream.c -lgomp -o stream
+OMP_NUM_THREADS=18 ./stream
+```
+
+<DocScope products="RDK S600">
+
+板端实测结果（18 线程，`NTIMES=100`，取各内核最佳时间）：
+
+```text
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:           89633.9     0.001952     0.001785     0.002350
+Scale:          90908.8     0.001902     0.001760     0.002532
+Add:            72310.4     0.003488     0.003319     0.003956
+Triad:          72859.9     0.003479     0.003294     0.004133
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+```
+
+其中 `Triad`（同时读两个数组 + 写一个数组）最能反映 DDR 的实际混合读写带宽。注意 STREAM 与 lmbench 的 `bw_mem` 统计口径不同，两者数值不可直接对比。
+
+</DocScope>
+
+### 交叉编译 lmbench（可选）
+
+若需更细粒度的带宽与延迟指标，可按 `准备工作` 一节交叉编译 lmbench 的 `bw_mem`，再按下文命令格式运行。
+
 ### 命令格式
 
 ```shell
@@ -159,7 +190,7 @@ bw_mem [选项] <测试大小> <操作类型>
 
 使用 `taskset -c <核心号>` 将 `bw_mem` 绑定到指定 CPU 核心，避免进程在核间迁移导致测试结果波动。建议绑定不同cluster的核心，充分发挥多个测试核心的并行测试能力，最大程度上占满DDR带宽
 
-**绑核的必要性：** 在测试 DDR 带宽时，如果进程在不同 CPU 核之间迁移，会导致 L1/L2 cache 失效以及 NUMA 访问延迟变化，造成测试结果不稳定。使用 `taskset` 将 `bw_mem` 绑定到固定的 CPU 核心上，可获得稳定、可复现的带宽数据。
+**绑核的必要性：** 在测试 DDR 带宽时，如果进程在不同 CPU 核之间迁移，会导致 L1/L2 cache 失效以及 NUMA 访问延迟变化，造成测试结果不稳定。使用 `taskset` 将 `bw_mem` 绑定到固定的 CPU 核心上，可获得稳定、可复现的带宽数据。其中 S600 示例绑定 `0-1,4-5,8-9,12-13,16-17`（每个 policy 取 2 核、共 10 核）；S100 仅有 6 核（`policy0`/`policy4`），示例使用 `taskset -c 0-5` 并降为 `-P 6`。
 
 <DocScope products="RDK S100">
 
@@ -170,31 +201,31 @@ out_put_file=$1
 mem_bench_func() {
     echo "-----------------------mem bench begin-----------------------" >> $out_put_file
     # rd
-    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rd > srd.log 2>&1
+    taskset -c 0-5 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 6 256m rd > srd.log 2>&1
     srd=`cat srd.log | awk '{print $2}'`
     srd_result="rd (256m): $srd(MB/s)"
     echo $srd_result >> $out_put_file
     rm srd.log
     # wr
-    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m wr > swr.log 2>&1
+    taskset -c 0-5 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 6 256m wr > swr.log 2>&1
     swr=`cat swr.log | awk '{print $2}'`
     swr_result="wr (256m): $swr(MB/s)"
     echo $swr_result >> $out_put_file
     rm swr.log
     # Read && Write
-    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m rdwr > rdwr.log 2>&1
+    taskset -c 0-5 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 6 256m rdwr > rdwr.log 2>&1
     rdwr=`cat rdwr.log | awk '{print $2}'`
     srdwr_result="rdwr (256m): $rdwr(MB/s)"
     echo $srdwr_result >> $out_put_file
     rm rdwr.log
     # frd
-    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m frd > frd.log 2>&1
+    taskset -c 0-5 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 6 256m frd > frd.log 2>&1
     frd=`cat frd.log | awk '{print $2}'`
     frd_result="frd (256m): $frd(MB/s)"
     echo $frd_result >> $out_put_file
     rm frd.log
     # fwr
-    taskset -c 0-1,4-5,8-9,12-13,16-17 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 10 256m fwr > fwr.log 2>&1
+    taskset -c 0-5 /app/chip_base_test/08_ddr_bandwidth/bw_mem -W 2 -N 5 -P 6 256m fwr > fwr.log 2>&1
     fwr=`cat fwr.log | awk '{print $2}'`
     fwr_result="fwr (256m): $fwr(MB/s)"
     echo $fwr_result >> $out_put_file

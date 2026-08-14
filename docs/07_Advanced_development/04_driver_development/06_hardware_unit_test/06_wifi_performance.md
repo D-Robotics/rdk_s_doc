@@ -37,13 +37,13 @@ description: "Wi-Fi 性能测试"
 
 通过以下命令验证开发板与服务器之间的连接：
 
-```
+```shell
 ping -I wlan0 192.168.137.1
 ```
 
 执行结果：
 
-```
+```text
 PING 192.168.137.1 (192.168.137.1) 56(84) bytes of data.
 64 bytes from 192.168.137.1: icmp_seq=1 ttl=128 time=15.0 ms
 64 bytes from 192.168.137.1: icmp_seq=2 ttl=128 time=8.26 ms
@@ -60,13 +60,13 @@ PING 192.168.137.1 (192.168.137.1) 56(84) bytes of data.
 
 2.在 Windows 系统中，通过命令提示符（cmd）运行以下命令启动服务器：
 
-```
+```shell
 iperf3 -s -p 5002
 ```
 
 服务器启动后的日志示例：
 
-```
+```text
 -----------------------------------------------------------
 Server listening on 5002
 -----------------------------------------------------------
@@ -74,7 +74,7 @@ Server listening on 5002
 
 客户端连接成功后，服务器日志将显示：
 
-```
+```text
 Accepted connection from 192.168.137.124, port 48632
 [  5] local 192.168.137.1 port 5002 connected to 192.168.137.124 port 48644
 [ ID] Interval           Transfer     Bitrate
@@ -88,13 +88,13 @@ Accepted connection from 192.168.137.124, port 48632
 
 在开发板上启动 iperf3 客户端，连接到服务器并开始测试：
 
-```
+```shell
 iperf3 -c 192.168.137.1 -i 1 -t 60 -p 5002
 ```
 
 命令参数说明：
 
-```
+```text
 -c：指定服务器的 IP 地址。
 -i：设置数据打印间隔时间（单位：秒）。
 -t：设定总运行时间（单位：秒）。
@@ -104,7 +104,7 @@ iperf3 -c 192.168.137.1 -i 1 -t 60 -p 5002
 客户端运行日志示例：
 
 
-```
+```text
 Connecting to host 192.168.137.1, port 5002
 [  5] local 192.168.137.124 port 48644 connected to 192.168.137.1 port 5002
 [ ID] Interval           Transfer     Bitrate         Retr  Cwnd

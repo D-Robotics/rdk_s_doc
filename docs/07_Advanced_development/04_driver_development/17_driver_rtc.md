@@ -721,11 +721,11 @@ root@ubuntu:/# dmesg | grep rtc
 [    0.397736] rtc_super 3b420000.rtc: rtc period = 30518
 [    0.397819] rtc_super 3b420000.rtc: registered as rtc0
 [    0.397830] rtc_super 3b420000.rtc: setting system clock to 1970-01-01T00:00:03 UTC (3)
-[    3.531490] rtc-ysn8130 7-0032: Alarm was detected
-[    3.531495] rtc-ysn8130 7-0032: Clearing flags
-[    3.531719] rtc-ysn8130 7-0032: hb_ipc_open_instance(ins[5]) success: 0
-[    3.531722] rtc-ysn8130 7-0032: hb_ipc_is_remote_ready(ins[5]) success: 0
-[    3.533626] rtc-ysn8130 7-0032: registered as rtc1
+[    3.531490] rtc-ysn8130 8-0032: Alarm was detected
+[    3.531495] rtc-ysn8130 8-0032: Clearing flags
+[    3.531719] rtc-ysn8130 8-0032: hb_ipc_open_instance(ins[5]) success: 0
+[    3.531722] rtc-ysn8130 8-0032: hb_ipc_is_remote_ready(ins[5]) success: 0
+[    3.533626] rtc-ysn8130 8-0032: registered as rtc1
 ```
 </DocScope>
 

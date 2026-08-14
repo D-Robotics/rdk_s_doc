@@ -100,12 +100,13 @@ RDKS100 Acore 支持2路 SPI，且 SPI0，SPI1只能做 SPI Master。
 SPI 内部回环测试仅 SPI Master 支持，其原理是 SPI 硬件 IP 的 tx fifo 将数据发给 rx fifo 从而形成回环。
 :::
 
-**3.** 确认 SDK 中 `/app/chip_base_test/04_spi_test` 路径下，或者板端 `sunrise@ubuntu:/app/chip_base_test/04_spi_test#` 路径下存在 `spistress.sh`、`spidev_tc.c`、`spidev_tc` 三个文件。
+**3.** 确认板端 `/app/chip_base_test/04_spi_test` 路径下存在 `spistress.sh`、`spidev_tc.c`、`Makefile`、`Readme.md` 四个文件；`spidev_tc` 可执行文件默认不在板端，需按下一步编译生成。
 
 ```shell
-(base) root@//app/chip_base_test/04_spi_test# tree
+root@drobot:/app/chip_base_test/04_spi_test# tree
 .
-├── spidev_tc
+├── Makefile
+├── Readme.md
 ├── spidev_tc.c
 └── spistress.sh
 ```

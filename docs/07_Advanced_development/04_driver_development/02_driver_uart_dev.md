@@ -37,7 +37,7 @@ hobot-drivers/serial/8250_pdma.c    #uart PDMA操作实现文件
 配置文件路径: `hobot-drivers/configs/drobot_s600_defconfig`
 </DocScope>
 
-``` {.text}
+```bash
 CONFIG_SERIAL_8250=y   # 8250驱动配置
 CONFIG_SERIAL_8250_CONSOLE=y   #8250 console驱动配置
 CONFIG_SERIAL_8250_DW=y   #使能Designware独有的feature
@@ -47,7 +47,7 @@ CONFIG_SERIAL_8250_DW=y   #使能Designware独有的feature
 
 <DocScope products="RDK S100">
 
-``` {.text}
+```dts
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
 uart1: uart@394A0000 {
     power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
@@ -68,7 +68,7 @@ uart1: uart@394A0000 {
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+```dts
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi*/
 uart4: uart@3484E000 {
     // power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
@@ -91,22 +91,38 @@ uart4: uart@3484E000 {
 
 ### 检查 uart 节点
 
-``` {.text}
+```bash
 ls /dev/ttyS*
+```
+
+<DocScope products="RDK S100">
+
+```bash
 /dev/ttyS0  /dev/ttyS1  /dev/ttyS2  /dev/ttyS3
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```bash
+/dev/ttyS0  /dev/ttyS1  /dev/ttyS2  /dev/ttyS3  /dev/ttyS4
+/dev/ttyS5  /dev/ttyS6  /dev/ttyS7
+```
+
+</DocScope>
 
 ### 串口相关操作
 
 -   查看串口波特率等配置：
 
-    ``` {.text}
+    ```bash
     stty -F /dev/ttyS1 -a
     ```
 
 -   配置波特率等：
 
-    ``` {.text}
+    ```bash
     stty -F /dev/ttyS1 speed 921600 cs8 -cstopb parenb -parodd
     ```
 
@@ -114,13 +130,13 @@ ls /dev/ttyS*
 
 -   读取串口数据：
 
-    ``` {.text}
+    ```bash
     cat /dev/ttyS1
     ```
 
 -   向串口输出数据测试：
 
-    ``` {.text}
+    ```bash
     echo 123456789 > /dev/ttyS1
     ```
 

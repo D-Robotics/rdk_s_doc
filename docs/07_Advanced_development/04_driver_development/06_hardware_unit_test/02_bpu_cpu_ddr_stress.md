@@ -127,38 +127,35 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 </DocScope>
 <DocScope products="RDK S600">
 
-- **测试目标：** 通过 `stress_test.sh` 调用 `hrt_model_exec` 工具，用 `-c` 选择要加压的 BPU 核心、`-r` 控制每个核的负载比例，持续推理 S600 适配的 HBM 模型（`resnet50_224x224_nv12.hbm`），确保 BPU 在高负载下稳定工作并达到预期性能。
+- **测试目标：** 通过 `stress_test.sh` 调用 `hrt_model_exec` 工具，用 `-c` 选择要加压的 BPU 核心，持续推理 S600 适配的 HBM 模型（`resnet50_224x224_nv12.hbm`），确保 BPU 在高负载下稳定工作并达到预期性能。
 - **测试目的：** 确保 BPU 在执行推理计算时能够输出正确结果，长时间高负载运行下不出现崩溃或错误。
 
-- **hrt_model_exec BPU 压测原理：** `hrt_model_exec` 是 D-Robotics 官方提供的模型推理 / 性能测试工具，由 `hobot-dnn` 包安装到 `/usr/hobot/bin/`。压测时以 `perf` 子命令启动；运行时通过环境变量 `BPU_BUF_GROUP=true` + `_HB_NN_BPU_GROUP_ID_=<core>` + `_HB_NN_BPU_GROUP_PROP_=<percent>` 把目标核绑定到一个 BPU group，并按 group_prop 给该 group 分配 BPU 时间片配额，从而实现按核、按比例的稳态加压。`stress_test.sh` 工作流程：
-    1. 解析 `-t`（时长）、`-r <portion>`（总负载 5~100%）、`-c <cores>`（要压的 BPU 核心列表，缺省时**自动从 `/sys/class/boardinfo/pg_map` 读取，跳过被掉电(power-gate)的核**）；
-    2. 计算每核 group_prop = `portion / 选中核数`（最少 1）；
-    3. 启动 `stressapptest` 跑 CPU/DDR 后，**为选中的每一个核 fork 一个独立的 `hrt_model_exec perf` 进程**，每个进程通过环境变量绑定到对应核 + 设置 group_prop；
-    4. 每个 `hrt_model_exec` 在自己的核上持续推理 `resnet50_224x224_nv12.hbm`，stdout 周期性输出 FPS、平均/最大/最小延迟。
+- **hrt_model_exec BPU 压测原理：** `hrt_model_exec` 是 D-Robotics 官方提供的模型推理 / 性能测试工具，由 `hobot-dnn` 包安装到 `/usr/hobot/bin/`。压测时以 `perf` 子命令启动，用 `--core_id` 一次性指定要加压的 BPU 核列表、`--thread_num` 指定并发推理线程数、`--perf_time` 指定运行时长，使选中的多个核同时满载推理，实现多核稳态加压。`stress_test.sh` 工作流程：
+    1. 解析 `-t`（时长）、`-m`（内存大小）、`-i`（I/O 线程）、`-c <cores>`（要压的 BPU 核心列表，缺省为 `1,2,3,4`）；
+    2. 后台启动 `stressapptest` 跑 CPU/DDR 后，启动**单个** `hrt_model_exec perf` 进程，`--core_id=<cores>` 让推理任务在多核间调度、填满所有选中的核；
+    3. 循环采集 BPU 占用率（`/sys/devices/system/bpu/ratio` 及各核 `bpuN/ratio`）与 `hrut_somstatus` 温度/电压/频率，写入 `monitor-stressN.log`；
+    4. `stressapptest` 结束后脚本 `SIGTERM` 停止 `hrt_model_exec`，结束测试。
 
-- **命令分析：** 以 `-c 1,3 -r 100`（只压 bpu0/bpu2，每核 50% group_prop）为例，`stress_test.sh` 内部对每个核执行：
+- **命令分析：** 脚本内部对 CPU/DDR 与 BPU 分别执行：
 
 	```shell
-	BPU_BUF_GROUP=true \
-	HB_NN_LOG_LEVEL=4 \
-	_HB_NN_BPU_GROUP_ID_=1 \
-	_HB_NN_BPU_GROUP_PROP_=50 \
+	# CPU/DDR 压测：stressapptest
+	stressapptest -s <seconds> -M <memory_size> \
+	    -f /tmp/sat.io1 -f /tmp/sat.io2 \
+	    -i <io_threads> -m 8 -C 2 -W
+	
+	# BPU 压测：单个 hrt_model_exec perf，--core_id 指定要压的核列表
 	hrt_model_exec perf \
 	    --model_file=./module/resnet50_224x224_nv12.hbm \
-	    --core_id=1 \
-	    --thread_num=2 \
-	    --log_level=1 \
-	    --perf_time=$looptime_min
-	# bpu2 同理：_HB_NN_BPU_GROUP_ID_=3 _HB_NN_BPU_GROUP_PROP_=50 ... --core_id=3
+	    --core_id=<bpu_cores> \
+	    --thread_num=16 \
+	    --perf_time=<minutes>
 	```
 
-	- `BPU_BUF_GROUP=true`：开启 BPU buffer-group QoS 调度。
-	- `_HB_NN_BPU_GROUP_ID_=<core>`：本进程任务绑定的 BPU group ID，对应 `--core_id`。
-	- `_HB_NN_BPU_GROUP_PROP_=<percent>`：本 group 在对应核上的 BPU 时间片配额（百分比）。值由 `stress_test.sh` 按 `-r portion / 选中核数` 自动算出。
 	- `--model_file <hbm>`：S600 适配的 HBM 模型文件路径。
-	- `--core_id <id>`：单核 ID（1=bpu0、2=bpu1、3=bpu2、4=bpu3）。
-	- `--thread_num 2`：每核 2 个推理线程，足以填满单核流水线。
-	- `--perf_time <min>`：perf 模式运行时长，单位为分钟，由 `stress_test.sh -t` 换算得到。
+	- `--core_id <ids>`：要加压的 BPU 核列表（逗号分隔），编号规则 `1=bpu0 2=bpu1 3=bpu2 4=bpu3`，由 `stress_test.sh -c` 透传。
+	- `--thread_num 16`：并发推理线程数（脚本固定为 16，足以填满全部 4 核的流水线）。
+	- `--perf_time <min>`：perf 模式运行时长，单位为分钟，由 `stress_test.sh -t` 向上取整换算得到。
 
 </DocScope>
 
@@ -265,42 +262,35 @@ S100 平台只有一个 BPU core（可通过 `cat /sys/devices/system/bpu/core_n
 Usage: ./stress_test.sh [options]
 
 Options:
-  -t <time>        Test duration (e.g., 2h, 30m, default: 48h).
-  -m <size>        stressapptest memory size in MB (default: 100).
-  -i <threads>     stressapptest I/O threads (default: 4).
-  -r <portion>     BPU load portion in percent, 5-100 (default: 100).
-                   Capped per-core via _HB_NN_BPU_GROUP_PROP_; the runtime
-                   schedules BPU time so each active core stays at ~portion%.
-  -c <cores>       BPU core id list (1=bpu0..4=bpu3, comma separated).
-                   Default: auto-detect available cores from
-                   /sys/class/boardinfo/pg_map (skip power-gated cores).
-  -o <directory>   Log output directory (default: ../../log).
+  -t <time>        Set the test duration (e.g., 2h for hours, 30m for minutes; default: 48h).
+  -m <size>        Set the memory size for stress test in MB (default: 100).
+  -i <threads>     Set the I/O threads for stress test (default: 4).
+  -c <cores>       Set the BPU core id list to stress (hrt_model_exec --core_id;
+                   1=bpu0 2=bpu1 3=bpu2 4=bpu3; comma separated; default: "1,2,3,4").
+  -o <directory>   Set the output directory for logs (default: ../../log).
   -h, --help       Show this help message and exit.
 
 Examples:
-  ./stress_test.sh -t 24h -m 200 -i 8 -r 80
-      24h stress test with 200MB memory, 8 I/O threads, all available BPU cores
-      capped at 80% load each.
-  ./stress_test.sh -t 30m -c 1,3 -r 100
-      30min stress test against bpu0 and bpu2 only (bpu1/bpu3 stay idle), each
-      core at full load.
+  ./stress_test.sh -t 24h -m 200 -i 8 -c 1,2,3,4
+      Run a 24h stress test with 200MB memory, 8 I/O threads, and all 4 BPU cores.
+  ./stress_test.sh -t 30m -c 1,3
+      Run a 30min stress test against bpu0 and bpu2 only (bpu1/bpu3 stay idle).
 ```
 
 各参数解析如下：
 
-- `-t <time>`：压力测试持续时间，支持小时（如 `2h`）或分钟（如 `30m`），默认 `48h`。
+- `-t <time>`：压力测试持续时间，支持小时（如 `2h`）、分钟（如 `30m`）、秒（如 `30s`）或纯数字（按分钟计），默认 `48h`。
 - `-m <size>`：CPU/DDR 压测内存大小（MB），默认 `100`。
 - `-i <threads>`：`stressapptest` 的 I/O 线程数，默认 `4`。
-- `-r <portion>`：BPU 负载比例（百分比），取值 `5-100`，默认 `100`（满载）。脚本按 `portion / 选中核数` 算出每核 group_prop 配额，由 BPU runtime 通过 group QoS 调度实现稳态加压。
-- `-c <cores>`：要加压的 BPU 核心列表，编号规则 `1=bpu0 2=bpu1 3=bpu2 4=bpu3`，逗号分隔。**省略时自动从 `/sys/class/boardinfo/pg_map` 读取，跳过被掉电（power-gate）的核**；想只压子集（如排错单核异常）才显式指定。
+- `-c <cores>`：要加压的 BPU 核心列表，编号规则 `1=bpu0 2=bpu1 3=bpu2 4=bpu3`，逗号分隔，默认 `1,2,3,4`（全部 4 核）。想只压子集（如排错单核异常）才显式指定。
 - `-o <directory>`：日志输出目录，默认 `../../log`。
 - `-h, --help`：显示帮助信息并退出。
 
 :::info
-S600 平台有 4 个 BPU core（可通过 `cat /sys/devices/system/bpu/core_num` 确认）。`/sys/class/boardinfo/pg_map` 是 power-gate 位图（bit i 置位表示对应核被关电源），脚本默认会跳过这些核，无需手动维护可用核列表。
+S600 平台有 4 个 BPU core（可通过 `cat /sys/devices/system/bpu/core_num` 确认）。脚本默认对全部 4 核满载加压；如需只压部分核，用 `-c` 显式指定核列表即可。
 :::
 
-**示例：** `sudo ./stress_test.sh -t 24h -m 200 -i 8 -r 80` 运行一个 24 小时的压力测试，使用 200MB 内存、8 个 I/O 线程，所有可用 BPU 核稳定在 80% 负载。
+**示例：** `sudo ./stress_test.sh -t 24h -m 200 -i 8` 运行一个 24 小时的压力测试，使用 200MB 内存、8 个 I/O 线程，对全部 4 个 BPU 核满载加压。
 
 </DocScope>
 
@@ -401,7 +391,7 @@ bpu status information---->
 - `temperature`：当前板载、DDR、BPU（每个 BPU core 有两个 `pvtc` 温度点：`pvt_bpu_pvtcN_t1/t2`）温度。
 - `voltage`：主要供电轨电压（`VDD_CPU`、`VDD_BPUL`/`VDD_BPUR` 左右两组 BPU 簇电压、DDR 系列）。
 - `cpu frequency`：每个 CPU policy 的最小、当前、最大运行频率（kHz）。S600 有 18 个 CPU 核心，按簇分为 5 个 policy（`policy0/2/6/10/14`）。
-- `bpu status information`：4 个 BPU core 的当前占用率（百分比）。CPU/BPU/DDR 三路并发压测时，由于 `stressapptest` 也在抢内存带宽，每个 BPU core 的实测峰值通常落在 85~100% 区间内（仅跑 BPU 时可逼近 100%）。
+- `bpu status information`：4 个 BPU core 的当前占用率（百分比）。空闲时仅 `bpu0` 有显示（其余核处于 power-gate 状态），满负载压测时 4 个核都会显示且占用率稳定在高位。<!-- TODO: 满负载实测值待核实 -->
 
 :::tip
 BPU 占用率也可以通过 sysfs 节点直接读取，更轻量、可编程：
@@ -448,7 +438,7 @@ CpuX  [ 进度条 ]
 
 ## 测试指标
 
-测试程序启动后，会在 `/app/chip_base_test/log` 目录下产生 `bpu-stressX.log` 和 `cpu-stressX.log` 两份日志文件用来记录压测时的状态，确保能够在压测中保持如下内容：
+测试程序启动后，会在 `/app/chip_base_test/log` 目录下产生 `bpu-stressX.log`、`cpu-stressX.log` 和 `monitor-stressX.log` 三份日志文件：前两份分别记录 BPU 与 CPU/DDR 压测状态，`monitor-stressX.log` 记录压测期间周期性采集的 BPU 占用率与 `hrut_somstatus` 温度/电压/频率。确保能够在压测中保持如下内容：
 
 - 能稳定运行 48 小时，不出现重启或挂死的情况。
 - 使用以下命令检查日志文件中是否存在异常：
@@ -472,7 +462,7 @@ cd /app/chip_base_test/log/ && \
     </DocScope>
     <DocScope products="RDK S600">
 
-    S600 4 个 BPU core 并发 CPU/DDR 压测时每个核的实测峰值通常在 85~100% 区间。
+    S600 4 个 BPU core 满载压测时每个核占用率应稳定在高位（接近 100%）。<!-- TODO: 满负载实测值待核实 -->
 
     </DocScope>
 
@@ -495,20 +485,25 @@ cpu-stress1.log:2025/05/19-22:01:32(CST) Status: PASS - please verify no correct
 <DocScope products="RDK S600">
 
 ```shell
-# stressapptest 正常完成的状态（这条不是错误）
-cpu-stress1.log:2026/04/22-20:21:52(CST) Stats: Completed: 5554832.00M in 120.87s 45957.99MB/s, with 0 hardware incidents, 0 errors
-cpu-stress1.log:2026/04/22-20:21:52(CST) Status: PASS - please verify no corrected errors
+# stressapptest 正常完成的状态（短时验证，这条不是错误）
+cpu-stress1.log:2026/08/14-19:44:06(CST) Stats: Completed: 561648.00M in 10.18s 55158.57MB/s, with 0 hardware incidents, 0 errors
+cpu-stress1.log:2026/08/14-19:44:06(CST) Status: PASS - please verify no corrected errors
 
-# hrt_model_exec 正常运行的流式输出（bpu-stressX.log 末尾若干行）
-# stress_test.sh 在 stressapptest 结束时 SIGTERM hrt_model_exec，因此不会
+# hrt_model_exec perf 短时验证的真实输出（--core_id=1 --thread_num=2 --frame_count=400）
+# stress_test.sh 在 stressapptest 结束时 SIGTERM hrt_model_exec，长时压测不会
 # 看到 "Perf result" 最终汇总块；只要 Frame count 持续增长且 FPS 数值稳定
 # 即视为正常。
-Frame count: 421400,  Thread Average: 3.761208 ms,  thread max latency: 21.313000 ms,  thread min latency: 0.743000 ms,  FPS: 3771.641357
-Frame count: 421600,  Thread Average: 3.760553 ms,  thread max latency: 21.313000 ms,  thread min latency: 0.743000 ms,  FPS: 3772.408447
-Frame count: 421800,  Thread Average: 3.759908 ms,  thread max latency: 21.313000 ms,  thread min latency: 0.743000 ms,  FPS: 3773.171387
-Frame count: 422000,  Thread Average: 3.759271 ms,  thread max latency: 21.313000 ms,  thread min latency: 0.743000 ms,  FPS: 3773.928223
-Frame count: 422200,  Thread Average: 3.758635 ms,  thread max latency: 21.313000 ms,  thread min latency: 0.743000 ms,  FPS: 3774.684570
-Frame count: 422400,  Thread Average: 3.757990 ms,  thread max latency: 21.313000 ms,  thread min latency: 0.743000 ms,  FPS: 3775.449951
+Frame count: 200,  Thread Average: 0.721070 ms,  thread max latency: 1.122000 ms,  thread min latency: 0.698000 ms,  FPS: 2720.089111
+Frame count: 400,  Thread Average: 0.719145 ms,  thread max latency: 1.122000 ms,  thread min latency: 0.694000 ms,  FPS: 2731.494141
+
+Running condition:
+  Thread number is: 2
+  Frame count   is: 400
+  Program run time: 146.581 ms
+Perf result:
+  Frame totally latency is: 287.658 ms
+  Average    latency    is: 0.719 ms
+  Frame      rate       is: 2731.494 FPS
 ```
 
 </DocScope>

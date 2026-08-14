@@ -67,7 +67,7 @@ Options:
 各参数解析如下：
 
 - `-b <baudrate>`：设置波特率，默认值是 115200 。。
-- `-d <device>`：该选项用于指定测试的串口设备，默认值为 /dev/ttyS2 。
+- `-d <device>`：该选项用于指定测试的串口设备，默认值为 /dev/ttyS2（脚本的 `-h` 帮助文本里误写为 `/dev/ttyS1`，实际生效的默认值仍为 `/dev/ttyS2`）。
 - `-c <count>`：指定了测试的压力次数，默认值是 100 。
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
 
@@ -112,7 +112,7 @@ This is uart send test 2 times
 This is uart send test 3 times
 ```
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 ### 注意事项
 
 为了 RDK_S100 接口良好的扩展性，目前 i2c5 和 uart2 是可以通过拨码开关进行切换的，运行该测试时需要修改设备树管脚复用关系重新编译 dtb 安装，并把拨码开关拨到正确的位置。
@@ -158,7 +158,11 @@ index 504b21b..8d72794 100644
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png" alt="注意事项示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-**4.** 确认在 /app/chip_base_test/03_uart_test 路径下存在 `uartstress.sh`、`uart_test.c`、`uart_test` 三个文件。
+</DocScope>
+
+### 编译执行文件
+
+**1.** 确认在 /app/chip_base_test/03_uart_test 路径下存在 `uartstress.sh`、`uart_test.c`、`Makefile`、`Readme.md` 四个文件；`uart_test` 可执行文件默认不在板端，需按下一步编译生成。
 
 ```shell
 sunrise@ubuntu:/app/chip_base_test/03_uart_test$ tree
@@ -169,12 +173,13 @@ sunrise@ubuntu:/app/chip_base_test/03_uart_test$ tree
 └── uartstress.sh
 ```
 
-**5.** 可使用编译命令重新生成执行文件，命令如下：
+**2.** 可使用编译命令重新生成执行文件，命令如下：
 
 ```shell
 gcc -o uart_test uart_test.c
 ```
 
+回环测试需先用杜邦线将所测串口的 `tx` 与 `rx` 短接（例如 `/dev/ttyS2` 对应的 uart2_tx 与 uart2_rx）。
 
 确保完成准备工作后，运行测试命令：
 
@@ -219,7 +224,6 @@ Data verification successful. Received data matches sent data. Test total data c
 This is uart send test 4 times
 ```
 
-</DocScope>
 
 
 ## 测试指标

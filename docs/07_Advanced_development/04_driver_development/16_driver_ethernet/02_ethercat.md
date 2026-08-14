@@ -1051,5 +1051,5 @@ Host 端构建支持两种构建方式：
 
 ## 相关文档
 
-- [ethernet](/Advanced_development/driver_development/driver_ethernet)
-- [EtherCAT 用户手册（MCU 侧）](/Advanced_development/mcu_development/mcu_ethercat)
+- [Ethernet](./01_ethernet.md)
+- [EtherCAT 用户手册（MCU 侧）](../../11_mcu_development/17_mcu_ethercat.md)

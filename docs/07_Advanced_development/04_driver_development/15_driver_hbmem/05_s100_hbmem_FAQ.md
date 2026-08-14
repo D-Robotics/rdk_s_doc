@@ -171,5 +171,5 @@ description: "FAQ"
 
 ## 相关文档
 
-- [HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
-- [多媒体处理与应用 FAQ](/FAQ/multimedia)
+- [功能说明](./01_s100_hbmem_introduce.md)
+- [多媒体处理与应用 FAQ](../../../08_FAQ/04_multimedia.md)

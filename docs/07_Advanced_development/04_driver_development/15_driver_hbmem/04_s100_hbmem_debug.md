@@ -89,5 +89,5 @@ root@ubuntu:~#
 
 ## 相关文档
 
-- [HBMEM 使用指南 - 软件说明](/Advanced_development/driver_development/driver_hbmem)
-- [Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)
+- [软件说明](./03_s100_hbmem_software.md)
+- [Linux 调试功能介绍](../../03_system_software/10_kernel_debug.md)

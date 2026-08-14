@@ -41,6 +41,7 @@ PCI Express (PCIe) 模块是一种多通道 I/O 互连，提供低引脚数、�
 
 ## 相关文档
 
-- [PCIe 使用指南](/Advanced_development/driver_development/driver_pcie)
-- [PCIe 软件架构](/Advanced_development/driver_development/driver_pcie)
+- [PCIe 软件架构](./02_s100x_pcie_sw_arch.md)
+- [PCIe kernel 配置](./03_s100x_pcie_sw_setup.md)
+- [PCIe 用户态 API](./04_s100x_pcie_libhbpciehal.md)
 - [硬件介绍](/01_hardware_introduction)

@@ -47,5 +47,6 @@ Hbmem 模块主要实现的功能包括 **内存分配**、**内存共享**、**
 
 ## 相关文档
 
-- [HBMEM 使用指南](/Advanced_development/driver_development/driver_hbmem)
-- [共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
+- [硬件信息](./02_s100_hbmem_hardware.md)
+- [软件说明](./03_s100_hbmem_software.md)
+- [共享内存 - Hbmem](../../06_multimedia_development/01_multimedia_api/02_hbmem_api.md)

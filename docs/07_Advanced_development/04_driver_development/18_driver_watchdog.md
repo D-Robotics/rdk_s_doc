@@ -170,6 +170,12 @@ Watchdog 模块的驱动代码位于 `/hobot-drivers/watchdog`。
 
 上述定义须与内核 watchdog 字符设备驱动保持一致。
 
+:::tip
+
+SDK 中已提供规范头文件 `hobot-drivers/include/uapi/linux/hobot_watchdog.h`，其中定义了 `WDT_MAGIC_NUM` 及 `HB_WDT_START`~`HB_WDT_PROCEED` 等宏，内容与下文一致。用户可直接 `#include <linux/hobot_watchdog.h>` 使用，或将其中内容保存为 `hb_wdt_ioctl.h`。
+
+:::
+
 **文件内容**
 
 可将以下内容保存为 `hb_wdt_ioctl.h`：

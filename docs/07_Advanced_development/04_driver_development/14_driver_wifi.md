@@ -120,4 +120,4 @@ S600的 PCIe 驱动会在初始化时，申请这些 GPIO 并作解复位等操�
 ## 相关文档
 
 - [网络配置](/System_configuration/network_config)
-- [Wi-Fi 驱动调试指南](/Advanced_development/driver_development/driver_wifi)
+- [PCIe 使用指南](/Advanced_development/driver_development/driver_pcie)

@@ -57,9 +57,11 @@ ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap-介
 
 目前 S600仅支持32G 的内存。地址空间如下所示：
 
+<!-- TODO: 待核实 32G interleave 的完整地址空间（当前表格地址疑似沿用 12G 配置，需对照芯片手册确认） -->
+
 | model             | 地址空间                                      |
 |-------------------|---------------------------------------------|
-| 12G interleave    | 0x80000000~0xFFFFFFFF                       |
+| 32G interleave    | 0x80000000~0xFFFFFFFF                       |
 |                   | 0x400000000~0x4FFFFFFFF                     |
 |                   | 0x800000000~0x8FFFFFFFF                     |
 |                   | 0xC80000000~0xCFFFFFFFF                     |
@@ -107,5 +109,5 @@ ION 的使用说明，请参考[heap介绍](./03_s100_hbmem_software.md#heap-介
 
 ## 相关文档
 
-- [HBMEM 使用指南 - 功能说明](/Advanced_development/driver_development/driver_hbmem)
-- [软件说明](/Advanced_development/driver_development/driver_hbmem)
+- [功能说明](./01_s100_hbmem_introduce.md)
+- [软件说明](./03_s100_hbmem_software.md)

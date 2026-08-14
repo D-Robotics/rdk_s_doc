@@ -56,13 +56,17 @@ ExecStart=/app/chip_base_test/02_emmc/emmc_stability_test.sh -t 24h
 [UART]
 Status=enabled
 Description=UART stress test
-ExecStart=/app/chip_base_test/03uart_test/uartstress.sh -b 115200 -d /dev/ttyS2 -c 1000000
+ExecStart=/app/chip_base_test/03_uart_test/uartstress.sh -b 115200 -d /dev/ttyS2 -c 1000000
 
 [SPI]
 Status=enabled
 Description=SPI stress test
 ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000000
 ```
+
+:::info
+部分官方镜像中 `/app/chip_base_test/config/config.ini` 可能仍沿用旧路径 `/app/multimedia_samples/chip_base_test/`（该路径已不存在），且 UART/SPI 目录名仍写为 `04_uart_test`/`05_spi_test`。请以本文示例中的 `/app/chip_base_test/` 及 `03_uart_test`/`04_spi_test` 为准，否则 `startup.sh` 无法正确执行。
+:::
 
 ### 使用说明
 
@@ -90,6 +94,14 @@ ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000
   # 或者
   cd /app/chip_base_test
   ./startup.sh
+  ```
+
+  `startup.sh` 也支持 `-h` 查看可用测试项、`-t <测试项名称>` 只运行单个测试项：
+
+  ```bash
+  cd /app/chip_base_test
+  ./startup.sh -h             # 列出 config.ini 中所有启用的测试项
+  ./startup.sh -t CpuAndBpu   # 只运行 CpuAndBpu 这一项
   ```
 
 ​	此方式便于调试单项测试内容或观察测试执行情况。

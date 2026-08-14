@@ -95,5 +95,6 @@ rmmod hobot_pcie
 
 ## 相关文档
 
-- [PCIe 硬件规格](/Advanced_development/driver_development/driver_pcie)
-- [PCIe kernel 配置](/Advanced_development/driver_development/driver_pcie)
+- [PCIe 硬件规格](./01_s100x_pcie_hw_guide.md)
+- [PCIe kernel 配置](./03_s100x_pcie_sw_setup.md)
+- [PCIe 用户态 API](./04_s100x_pcie_libhbpciehal.md)
