@@ -12,17 +12,53 @@ description: "RDK S100/S600 交叉编译环境搭建、源码获取与系统镜�
 
 | 项目 | 要求 |
 | --- | --- |
-| 操作系统 | Ubuntu 20.04 / 22.04（推荐原生 Linux） |
-| CPU | x86_64，8 核以上 |
+| 操作系统 | Ubuntu 18.04 / 20.04 / 22.04（推荐原生 Linux） |
+| CPU | x86_64 |
 | 内存 | 16GB 以上（编译内核需要） |
 | 磁盘 | 50GB 以上可用空间 |
-| 依赖 | `build-essential`、`gcc-aarch64-linux-gnu`、`bc`、`bison`、`flex`、`libssl-dev`、`python3`、`device-tree-compiler` |
+| 权限 | 编译系统镜像需要 sudo 权限 |
+
+### 安装依赖包
+
+以 Ubuntu 22.04 为例安装编译所需的软件包（18.04 / 20.04 的差异见源码包
+README.md）：
 
 ```bash
-sudo apt update
-sudo apt install -y build-essential gcc-aarch64-linux-gnu \
-  bc bison flex libssl-dev python3 device-tree-compiler
+sudo apt-get install -y build-essential make cmake libpcre3 libpcre3-dev bc bison \
+                        flex python3-numpy mtd-utils zlib1g-dev libgmp-dev \
+                        libdata-hexdumper-perl libncurses5-dev zip qemu-user-static ccache \
+                        curl repo git liblz4-tool apt-cacher-ng libssl-dev checkpolicy autoconf \
+                        android-sdk-libsparse-utils mtools parted dosfstools udev rsync multistrap whois
 ```
+
+### 安装 Python 依赖
+
+Python 版本需不低于 3.8：
+
+```bash
+sudo apt install python3-pip
+pip3 install --upgrade pip
+pip3 install -r requirements.txt
+```
+
+### 安装交叉编译工具链
+
+交叉编译工具链必须解压安装到 `/opt` 目录，`mk_kernel.sh` 内硬编码的
+`CROSS_COMPILE` 即指向该路径。不同平台的工具链版本如下：
+
+| 平台 | 工具链 |
+| --- | --- |
+| RDK S100 | `arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu` |
+| RDK S600 | `arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64-none-linux-gnu` |
+
+以 RDK S100 为例下载并安装：
+
+```bash
+curl -fO http://archive.d-robotics.cc/toolchain/arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+sudo tar -xvf arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz -C /opt
+```
+
+RDK S600 将上述命令中的 `11.3.rel1` 替换为 `13.2.Rel1` 即可。
 
 ## 交叉编译开发环境
 
@@ -49,7 +85,7 @@ import DocScope from '@site/src/components/DocScope'
 ## 获取源码
 
 :::info BSP 源码包
-BSP 源码包下载地址参见 [系统镜像](/RDK#系统镜像)（需要注册登录）。
+BSP 源码包下载地址参见 [系统镜像](../../RDK.md#系统镜像)（需要注册登录）。
 :::
 
 :::tip 商业支持
@@ -68,31 +104,69 @@ https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 
 BSP 源码目录结构见 [BSP 源码目录结构](./02_bsp_source_layout.md)。
 
+进入源码根目录（`rdk-gen`）后，构建系统镜像的主入口是 `pack_image.sh`，
+它会自动下载 samplefs 与 deb 包、定制 rootfs 并打包镜像：
+
 ```bash
-cd rdk_gen
+cd rdk-gen
 
-# 1. 选择板级配置
-source config/hobot_config.sh
+# 一键构建完整系统镜像（需 sudo，自动下载 samplefs 与 deb 包）
+sudo ./pack_image.sh
 
-# 2. 下载 samplefs（首次需要）
-./download_samplefs.sh
+# 仅搭建 deb 编译环境（下载并安装依赖包，不打包最终镜像）
+sudo ./pack_image.sh -p
 
-# 3. 编译所有 deb 包
-./mk_debs.sh
-
-# 4. 编译内核
-./mk_kernel.sh
-
-# 5. 制作 rootfs（samplefs + deb 包）
-./mk_rootfs.sh
-
-# 6. 打包系统镜像
-./pack_image.sh
+# 离线构建（使用本地 out/product/deb_packages 下已有的 deb 包）
+sudo ./pack_image.sh -l
 ```
 
-编译产物为可烧录的系统镜像，烧录方法见 [系统烧录](/Quick_start/install_os_and_setup/instruction)。
+编译产物为可烧录的系统镜像，位于 `out/product/img_packages/`，
+烧录方法见 [系统烧录](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)。
 
-> 容器化编译（避免宿主机环境污染）见 [Docker 编译](./04_docker_build.md) 和 [Podman 编译](./05_podman_build.md)。
+深度开发时，可单独编译内核与 RDK 定制 deb 包：
+
+```bash
+# 编译内核（需先安装交叉编译工具链）
+./mk_kernel.sh
+
+# 编译所有 RDK 定制 deb 包（需先完成内核编译）
+./mk_debs.sh
+
+# 编译单个 deb 包（以 hobot-configs 为例）
+./mk_debs.sh hobot-configs
+```
+
+编译产物说明：
+
+| 产物 | 路径 |
+| --- | --- |
+| 系统镜像 | `out/product/img_packages/` |
+| 内核 deb 包 | `out/product/deb_packages/linux-image-*.deb` |
+| 定制 deb 包 | `out/product/deb_packages/` |
+
+> 板级配置通过 `build_params/` 下的 `*.conf` 文件选择。各脚本默认读取
+> `build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`（S100）或
+> `ubuntu-24.04_desktop_rdk-s600_beta.conf`（S600），也可用 `-c` 参数指定。
+
+> 容器化编译（避免宿主机环境污染）见 [Docker 编译](./04_docker_build.md) 和
+> [Podman 编译](./05_podman_build.md)。
+
+## 常见问题
+
+### 编译时出现 "Exec format error" 或 "/bin/bash not found"
+
+**原因**：qemu-user-static 或 binfmt-support 版本过低，或未正确注册
+aarch64 的 binfmt。
+
+**解决**：
+
+```bash
+sudo apt install -y binfmt-support
+sudo systemctl restart systemd-binfmt
+sudo update-binfmts --enable qemu-aarch64
+```
+
+并确保 qemu-user-static 版本不低于 5.2，binfmt-support 版本不低于 2.2.1。
 
 ## 相关文档
 
@@ -100,4 +174,4 @@ source config/hobot_config.sh
 - [构建系统开发指南](./03_rdk_gen.md)
 - [使用 Docker 编译](./04_docker_build.md)
 - [使用 Podman 编译](./05_podman_build.md)
-- [系统烧录](/Quick_start/install_os_and_setup/instruction)
+- [系统烧录](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)

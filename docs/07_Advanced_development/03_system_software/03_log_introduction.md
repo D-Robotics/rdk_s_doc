@@ -169,7 +169,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
             -   SuperSoC_Pstore-count-time（文件夹）：当系统启动时，如果检测到上次系统是异常重启，则创建该格式文件夹，并将对应的异常 log 信息记录到该文件夹下
         -   运行时，log 文件通过 hobot-log-rename.py 进程重命名归档，每10分钟各模块目录下的 message.*文件重命名归档到模块的 archive 目录下，并根据容量管控删除 archive 目录下旧文件
             -   该进程由 hobot-log-rename.service 服务启动，根据 hobot-log 生成的配置文件`/log/hb_log_rename.conf`管理各模块
-            -   如果不希望运行过程中重命名日志文件，通过修改`hbre/boot-utils/hb-init-scripts/DEBIAN/postinst`文件，关闭该服务自启
+            -   如果不希望运行过程中重命名日志文件，通过修改`source/hobot-configs/debian/DEBIAN/postinst`文件，关闭该服务自启
             -   关闭后如果还希望对当前的 log 文件重命名归档，可以手动执行如下命令：`python3 /usr/bin/hobot-log-rename.py /log -m manual`
             -   log 文件重命名格式如下：
                 -   示例：SuperSoC_Usr-0003~2025_05_06_08_01_00_131599.Log
@@ -210,12 +210,12 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
         -   日志大小在 hobot-log 中修改，修改`ROTATESIZE`和`ROTATESIZE_REMOTE`变量的定义，单位是 KB
         -   日志数量在 hobot-log 中修改，修改`ROTATEGENS_USR、ROTATEGENS_REMOTE、UBOOT_LOGMAX、PSTORE_LOGMAX`变量的定义，对应的分别是 usr、remoteproc_log、uboot、pstore 的日志数量限制，当前值分别是200、200、100、100
         -   systemd journal
-            log 大小配置在源码`debian/source/scripts/general.sh`脚本中修改 SystemMaxUse 值，同时需要注意文件大小 SystemMaxFileSize 和文件数量 SystemMaxFiles 限制相乘要大于 SystemMaxUse
+            log 大小通过 `/etc/systemd/journald.conf` 中的 `SystemMaxUse` 配置（默认注释，使用 systemd 默认值），同时需要注意文件大小 SystemMaxFileSize 和文件数量 SystemMaxFiles 限制相乘要大于 SystemMaxUse
     -   log 命名修改
         -   当前命名规范是[board]_[module]-[count]-[time]\_\<inode>.Log，在 hobot-log 脚本中修改前缀和尾缀，即[board]\_[module]和.Log。在 hobot-log-rename.py 脚本中修改[count]和[time]，涉及`get_reset_count`和`get_file_time`两个函数
     -   log 进程的裁剪
         -   可以通过增减 systemd 的 log
-            service，来增减 log 进程，通过修改`hbre/boot-utils/hb-init-scripts/DEBIAN/postinst`文件实现。部分 log 相关服务如下：
+            service，来增减 log 进程，通过修改`source/hobot-configs/debian/DEBIAN/postinst`文件实现。部分 log 相关服务如下：
 
             ```Shell
             /etc/systemd/system/basic.target.wants/hobot-log-bl31.service

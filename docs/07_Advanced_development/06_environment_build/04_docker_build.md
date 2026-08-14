@@ -32,27 +32,32 @@ sudo usermod -aG docker $USER
 # 拉取编译镜像（以 Ubuntu 22.04 为例）
 docker pull ubuntu:22.04
 
-# 启动容器并挂载源码目录
+# 启动容器并挂载源码根目录（rdk-gen）
 docker run -it --name rdk-build \
-  -v /path/to/2-rdk_s600_source_code:/workspace \
+  -v /path/to/rdk-gen:/workspace \
   ubuntu:22.04 /bin/bash
 
-# 容器内安装依赖
-apt update && apt install -y build-essential gcc-aarch64-linux-gnu \
-  bc bison flex libssl-dev python3 device-tree-compiler
+# 容器内安装依赖包（与宿主机依赖列表一致，见搭建开发环境）
+apt-get update
+apt-get install -y build-essential make cmake libpcre3 libpcre3-dev bc bison \
+  flex python3-numpy mtd-utils zlib1g-dev libgmp-dev \
+  libdata-hexdumper-perl libncurses5-dev zip qemu-user-static ccache \
+  curl repo git liblz4-tool apt-cacher-ng libssl-dev checkpolicy autoconf \
+  android-sdk-libsparse-utils mtools parted dosfstools udev rsync multistrap whois
 
-# 容器内编译
-cd /workspace/rdk_gen
-source config/hobot_config.sh
-./mk_debs.sh
-./mk_kernel.sh
-./mk_rootfs.sh
+# 容器内安装交叉编译工具链（S100 为例，S600 替换为 13.2.Rel1）
+curl -fO http://archive.d-robotics.cc/toolchain/arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+tar -xvf arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz -C /opt
+
+# 容器内编译（容器默认以 root 运行，无需 sudo）
+cd /workspace
 ./pack_image.sh
 ```
 
 ## 编译产物
 
-编译产物位于容器内 `/workspace` 下，退出容器后在宿主机挂载目录中可直接访问。
+编译产物位于容器内 `/workspace/out/` 下（`out/product/img_packages/` 为系统镜像，
+`out/product/deb_packages/` 为 deb 包），退出容器后在宿主机挂载目录中可直接访问。
 
 ## 相关文档
 

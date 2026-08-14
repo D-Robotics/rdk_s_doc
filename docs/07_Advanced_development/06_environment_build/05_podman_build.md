@@ -27,20 +27,15 @@ sudo apt install -y podman
 # 拉取编译镜像
 podman pull docker.io/ubuntu:22.04
 
-# 启动容器并挂载源码目录
+# 启动容器并挂载源码根目录（rdk-gen）
 podman run -it --name rdk-build \
-  -v /path/to/2-rdk_s600_source_code:/workspace:Z \
+  -v /path/to/rdk-gen:/workspace:Z \
   docker.io/ubuntu:22.04 /bin/bash
 
-# 容器内安装依赖与编译流程同 Docker
-apt update && apt install -y build-essential gcc-aarch64-linux-gnu \
-  bc bison flex libssl-dev python3 device-tree-compiler
+# 容器内安装依赖包与交叉编译工具链（与 Docker 一致，见使用 Docker 编译）
 
-cd /workspace/rdk_gen
-source config/hobot_config.sh
-./mk_debs.sh
-./mk_kernel.sh
-./mk_rootfs.sh
+# 容器内编译（rootless 模式下 /opt 写入与挂载需相应权限）
+cd /workspace
 ./pack_image.sh
 ```
 

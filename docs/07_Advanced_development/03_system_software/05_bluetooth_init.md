@@ -29,7 +29,7 @@ import DocScope from '@site/src/components/DocScope'
 
 蓝牙初始化由 `hobot-bluetooth.service` 系统服务管理，该服务在系统启动时自动运行。
 
-**服务配置文件位置**: `/lib/systemd/system/hobot-bluetooth.service`
+**服务配置文件位置**: `/usr/lib/systemd/system/hobot-bluetooth.service`
 
 ```ini
 [Unit]

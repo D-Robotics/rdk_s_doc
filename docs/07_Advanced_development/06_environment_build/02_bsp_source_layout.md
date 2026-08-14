@@ -10,19 +10,20 @@ description: "RDK S100/S600 BSP 源码目录结构与关键脚本说明"
 
 ## 顶层目录
 
-BSP 源码根目录为 `rdk_gen`，负责打包、制作 samplefs、编译：
+BSP 源码根目录为 `rdk-gen`（即下载解压后的源码目录），负责打包、制作
+samplefs、编译：
 
 ```
-2-rdk_s600_source_code/
+rdk-gen/
 ├── mk_debs.sh              # 编译所有 deb 包
 ├── mk_kernel.sh            # 编译内核
-├── mk_rootfs.sh            # 制作 rootfs（基于 samplefs + deb）
-├── pack_image.sh           # 打包系统镜像
+├── mk_rootfs.sh            # rootfs 操作函数库（deb 下载/安装、initramfs），由 pack_image.sh 调度
+├── pack_image.sh           # 构建系统镜像主入口
 ├── download_deb_packages.sh # 下载预编译 deb 包
 ├── download_samplefs.sh    # 下载 samplefs
-├── hobot_customize_rootfs.sh # rootfs 自定义（模式 2 系统定制入口）
+├── hobot_customize_rootfs.sh # rootfs 自定义（创建用户、启停自启动项等）
 ├── config/
-│   └── hobot_config.sh     # 板级配置（板型、存储介质、编译选项）
+│   └── hobot_config.sh     # 空占位脚本，默认无操作
 ├── source/                  # deb 包源码
 │   ├── bootloader/          # U-Boot
 │   ├── kernel/              # Linux 内核
@@ -52,22 +53,22 @@ BSP 源码根目录为 `rdk_gen`，负责打包、制作 samplefs、编译：
 
 | 脚本 | 作用 |
 | --- | --- |
-| `config/hobot_config.sh` | 板级配置：选择板型（S100/S600）、存储介质（eMMC/UFS/NVMe）、编译选项 |
-| `mk_debs.sh` | 编译 `source/` 下所有 deb 包 |
+| `pack_image.sh` | 构建系统镜像主入口（下载 samplefs/deb、定制 rootfs、打包镜像） |
+| `mk_debs.sh` | 编译 `source/` 下所有 RDK 定制 deb 包 |
 | `mk_kernel.sh` | 编译 Linux 内核 |
-| `mk_rootfs.sh` | 制作 rootfs（合并 samplefs + deb 包 + 自定义） |
-| `pack_image.sh` | 打包为可烧录的系统镜像 |
-| `hobot_customize_rootfs.sh` | rootfs 自定义入口（模式 2 系统定制） |
+| `mk_rootfs.sh` | rootfs 操作函数库（deb 下载/安装、initramfs），由 pack_image.sh 调度 |
+| `download_samplefs.sh` | 下载预编译的基础 Ubuntu 根文件系统（samplefs） |
+| `download_deb_packages.sh` | 下载预编译的 RDK 定制 deb 包 |
+| `hobot_customize_rootfs.sh` | rootfs 自定义（创建用户、启停自启动项等） |
+| `config/hobot_config.sh` | 空占位脚本，默认无操作；板级配置实际由 `build_params/*.conf` 提供 |
 
 ## 典型编译流程
 
 ```bash
-cd rdk_gen
-source config/hobot_config.sh  # 选择板型
-./mk_debs.sh                    # 编译 deb 包
-./mk_kernel.sh                  # 编译内核
-./mk_rootfs.sh                  # 制作 rootfs
-./pack_image.sh                 # 打包镜像
+cd rdk-gen
+sudo ./pack_image.sh  # 一键构建系统镜像
+./mk_kernel.sh        # 单独编译内核
+./mk_debs.sh          # 编译所有 deb 包
 ```
 
 详见 [搭建开发环境](./01_environment_build.md)。
@@ -76,4 +77,4 @@ source config/hobot_config.sh  # 选择板型
 
 - [搭建开发环境](./01_environment_build.md)
 - [构建系统开发指南](./03_rdk_gen.md)
-- [系统定制](/Advanced_development/system_software/system_customization)
+- [系统定制](../03_system_software/02_system_customization/01_system_customization.md)

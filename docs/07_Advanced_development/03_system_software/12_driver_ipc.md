@@ -257,7 +257,7 @@ Sample 中 Acore 与 MCU 通过共享内存传输数据，通过 mailbox 中断�
 # Sample源码路径
 ${SDK}/source/hobot-io-samples/debian/app/ipcbox_sample  # ipc C++  Sample
 ${SDK}/source/hobot-io-samples/debian/app/pyhbipchal_sample # ipc python Sample
-${SDK}/source/hobot-io/debian/app/pyhbipchal # ipc C++库为转换pyhton库源码
+${SDK}/source/hobot-io/pyhbipchal # ipc C++ 库转 python 库源码
 
 
 # 源码随固件一同打包，可在S100自行编译, 路径如下

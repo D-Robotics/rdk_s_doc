@@ -40,7 +40,7 @@ sudo ./pack_image.sh
 sudo ./pack_image.sh -l
 
 # 仅搭建deb包编译环境，不打包镜像
-sudo ./pack_images.sh -p
+sudo ./pack_image.sh -p
 
 # 构建所有deb包
 ./mk_debs.sh
@@ -257,8 +257,8 @@ hobot-camera/
     - prerm：移除 new_package 包执行删除命令前需要执行的脚本；
     - postrm：移除 new_package 包执行删除命令后需要执行的脚本。
 3. 如果需要在`mk_debs.sh`不带入参时自动对该包进行编译，则在`mk_debs.sh`脚本的`deb_pkg_list`变量内添加`new_package`字段；
-4. 在`mk_debs.sh`脚本的`make_debian_deb`函数的`switch`内添加`new_package`的`case`：
-     - 在`case`内调度`gen_control_file`函数，生成构建 deb 包所需要的 control 文件；
+4. 在`mk_debs.sh`脚本的`make_debian_deb`函数的`case`内添加`new_package`的分支：
+     - 在`case`内调度`gen_contrl_file`函数，生成构建 deb 包所需要的 control 文件；
      - 在`case`内调度`sed`命令，将默认的"depends"字段替换为真正的 deb 依赖。假设`new_package`的依赖为`dep_pkg1`和`dep_pkg2`；
        - 如果有依赖，则使用`sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
        - 如果没有依赖，则使用`sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
@@ -271,7 +271,7 @@ hobot-camera/
 ### 在线镜像构建
 #### 流程说明
 当`pack_image.sh`不添加-l 选项进行调度时，会进入在线镜像构建流程。流程介绍如下：
-1. 从`pack_image.sh`的`DEFAULT_CONFIG`字段获取当前的默认编译配置文件，例如 S100为`build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`，S600为`build_params/ubuntu-24.04_desktop_rdk-s600_release.conf`；
+1. 从`pack_image.sh`的`DEFAULT_CONFIG`字段获取当前的默认编译配置文件，例如 S100为`build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`，S600为`build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf`；
      - 该配置文件可以通过-c 选项指定
 2. 从编译配置文件内获取`RDK_DPKG_DEB_PKG_LIST`字段；
 3. chroot 到`out/deploy/rootfs`目录下：
@@ -619,22 +619,22 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 
 <DocScope products="RDK S600">
 
-2. 修改 S600编译系统中5处引用到 conf 文件的地方，以 release 版本为例，
+2. 修改 S600编译系统中5处引用到 conf 文件的地方（其中 `download_samplefs.sh`、`mk_kernel.sh`、`pack_image.sh` 默认使用 beta 配置，`download_deb_packages.sh` 使用 release 配置，`mk_uboot.sh` 按 `HR_TARGET_MODE` 在 release/beta 间选择）：
 - `download_deb_packages.sh`：
 ```shell
   DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
 ```
 - `download_samplefs.sh`：
 ```shell
-  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf"
 ```
 - `mk_kernel.sh`：
 ```shell
-  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf"
 ```
 - `pack_image.sh`：
 ```shell
-  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
+  DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf"
 ```
 - `mk_uboot.sh`：
 ```shell
@@ -663,6 +663,6 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 
 ## 相关文档
 
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)
-- [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
-- [系统定制](/Advanced_development/system_software/system_customization)
+- [搭建开发环境](./01_environment_build.md)
+- [BSP 源码目录结构](./02_bsp_source_layout.md)
+- [系统定制](../03_system_software/02_system_customization/01_system_customization.md)

@@ -14,7 +14,7 @@ description: "内核头文件"
 
 ```bash
 sudo apt update
-sudo apt install linux-headers-6.1.112-rt43
+sudo apt install linux-headers-6.1.158-rt58
 sudo apt install bison flex
 ```
 命令运行成功后，内核头文件会被安装到`/usr/src`目录下
@@ -27,7 +27,7 @@ Kconfig        System.map      certs  fs       io_uring  lib     rust  security 
 
 :::warning
 请**不要**在`/usr/src/linux-headers-$(uname -r)`目录下执行`make clean`命令，这会将板端内核模块的编译环境破坏；
-如果执行了`make clean`动作，请重新安装`linux-headers-6.1.112-rt43`包进行环境恢复。
+如果执行了`make clean`动作，请重新安装`linux-headers-6.1.158-rt58`包进行环境恢复。
 :::
 
 ## 使用示例
@@ -104,8 +104,8 @@ endif
 保存`Makefile`后，执行`make`命令完成模块的编译，生成`hello.ko`文件。
 ```bash
 sunrise@ubuntu:~/test_ko$ sudo make
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build prepare
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/build prepare
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c'
   SYNC    include/config/auto.conf.cmd
   HOSTCC  scripts/basic/fixdep
   HOSTCC  scripts/kconfig/conf.o
@@ -170,20 +170,20 @@ make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-250719
   LD      arch/arm64/kernel/vdso/vdso.so.dbg
   VDSOSYM include/generated/vdso-offsets.h
   OBJCOPY arch/arm64/kernel/vdso/vdso.so
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build M=/home/sunrise/test_ko modules
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c'
+make -C /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/build M=/home/sunrise/test_ko modules
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c'
   CC [M]  /home/sunrise/test_ko/hello.o
   MODPOST /home/sunrise/test_ko/Module.symvers
   CC [M]  /home/sunrise/test_ko/hello.mod.o
   LD [M]  /home/sunrise/test_ko/hello.ko
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build KERNELRELEASE=6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8 M=/home/sunrise/test_ko modules_install
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-  INSTALL /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  SIGN    /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  DEPMOD  /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c'
+make -C /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/build KERNELRELEASE=6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c M=/home/sunrise/test_ko modules_install
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c'
+  INSTALL /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/extra/hello.ko
+  SIGN    /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/extra/hello.ko
+  DEPMOD  /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c'
 ```
 
 :::info
@@ -315,7 +315,7 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     ```
 5. 执行编译：
     :::info
-    请确保您板端的 linux-headers-6.1.112-rt43版本为4.0.3或以上
+    请确保您板端的 linux-headers-6.1.158-rt58 版本为 4.0.6 或以上
     :::
 
     ```shell
@@ -323,7 +323,7 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     sudo apt install flex bison -y
 
     # Install PCAN driver prerequisites
-    sudo apt install libpopt.h -y
+    sudo apt install libpopt-dev -y
 
     # Setup local module build environment
     sudo make -C /usr/src/linux-headers-$(uname -r) prepare
@@ -335,17 +335,17 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     # Install PCAN drivers and libraries
     sudo make install
     ```
-6. 对 PCAN 驱动进行签名并使用，以下示例以8.20.0版本的 PCAN 驱动为例，该版本下，PCAN 驱动模块被默认安装到了路径`/lib/modules/6.1.112/misc/`内：
+6. 对 PCAN 驱动进行签名并使用，以下示例以8.20.0版本的 PCAN 驱动为例，该版本下，PCAN 驱动模块被默认安装到了路径`/lib/modules/6.1.158-rt58/misc/`内：
      1. 参考[模块签名](#模块签名)章节，创建脚本；
      2. 执行签名命令：
         ```shell
         # Sign file
-        sudo bash drobot-sign-file.sh /lib/modules/6.1.112/misc/pcan.ko
+        sudo bash drobot-sign-file.sh /lib/modules/6.1.158-rt58/misc/pcan.ko
         ```
      3. 使用 PCAN 驱动：
         ```shell
         # Insert PCAN driver
-        sudo insmod /lib/modules/6.1.112/misc/pcan.ko
+        sudo insmod /lib/modules/6.1.158-rt58/misc/pcan.ko
         ```
 
 ## 相关文档
