@@ -66,14 +66,18 @@ bluetoothctl info <MAC>               # 某设备详情（含 Connected 状态�
 
 ## 开机自动重连
 
-`trust` 过的设备，`bluetooth.service` 启动后会自动重连（需设备也在可发现状态）。若不自动重连，检查 `/etc/bluetooth/main.conf` 的 `AutoConnect=true`。
+BlueZ 的自动重连由 `/etc/bluetooth/main.conf` 中 `ReconnectAttempts`、
+`ReconnectIntervals` 控制（链路断开后的重连次数与间隔），默认处于注释状态。
+HID 类设备（键鼠）通常由外设主动发起重连；如需调整重连行为，可取消注释并
+配置上述两项后重启 `bluetooth.service`。
 
 ## 常见问题
 
 - **`rfkill` 显示 blocked**：`sudo rfkill unblock bluetooth`；部分板子有硬件开关需手动打开。
 - **扫描不到设备**：确认对端可发现；`hciconfig` 是否 `UP`；USB 适配器是否被识别（`lsusb`）。
 - **配对后无法连接**：`trust` 该设备；音频设备需额外配 pulseaudio/pipewire profile。
-- **开机不自动重连**：检查 `/etc/bluetooth/main.conf` 的 `AutoConnect`、`FastConnectable`。
+- **开机不自动重连**：检查 `/etc/bluetooth/main.conf` 的 `ReconnectAttempts`、
+  `ReconnectIntervals`（默认注释）；HID 设备可尝试由外设主动发起连接。
 
 ## 相关文档
 

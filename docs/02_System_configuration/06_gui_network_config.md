@@ -66,7 +66,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-show-app.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-2. `Ethernet (eth0)` 、`Ethernet (eth1)`、`Ethernet (eth3)`和`Ethernet (eth4)`分别对应不同的物理网口配置，配置与实物对应如下:
+2. `Ethernet (eth0)` 、`Ethernet (eth1)`、`Ethernet (eth2)`和`Ethernet (eth3)`分别对应不同的物理网口配置，配置与实物对应如下:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-phy-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -80,7 +80,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_dns.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-5. 一个网卡配置多个 ip 地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置 ip 地址和步骤3、4一致，完成配置后注意选中`netplan-eth1`出现`√`选项
+5. 一个网卡配置多个 ip 地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置 ip 地址和步骤3、4一致，完成配置后注意选中`eth1_cfg`出现`√`选项
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel_ok.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -102,5 +102,5 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 相关文档
 
-- [网络配置](/System_configuration/network_config)
-- [蓝牙配置](/System_configuration/bluetooth_config)
+- [网络配置](./01_network_config.md)
+- [蓝牙配置](./02_bluetooth_config.md)

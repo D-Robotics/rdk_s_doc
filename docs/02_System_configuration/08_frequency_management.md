@@ -185,8 +185,7 @@ cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies
 注：支持的频点可能在不同类型的芯片上有所差异。
 RDK S100系统使用的 linux 内核支持以下种类的调频策略:
 
-- 性能（performance）：总是将 CPU 置于最高能耗也是最高性能的状态，即硬件所支持的最高频。
-- performance：以最高频率执行
+- performance（性能）：以最高频率执行，即硬件所支持的最高频（最高性能）。
 - ondemand：按照负载调整频率
 - userspace：根据用户的设置频率
 - powersave：以最低频率执行
@@ -229,9 +228,9 @@ echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 root@ubuntu:~# cat /sys/class/hwmon/hwmon1/temp1_label
 CMN0-TS0
 root@ubuntu:~# cat /sys/class/hwmon/hwmon1/temp1_input
-56339
+45129
 ```
-以上是 CPU 第一个温度传感器的示例，名字为'CMN0-TS0'，温度为56.339摄氏度
+以上是 CPU 第一个温度传感器的示例，名字为 'CMN0-TS0'，温度为 45.129 摄氏度
 
 ### Thermal 机制
 Linux Thermal 是 Linux 系统下温度控制相关的模块，主要用来控制系统运行过程中芯片产生的热量，使芯片温度和设备外壳温度维持在一个安全、舒适的范围。
@@ -310,7 +309,7 @@ thermal_zone 中有2个 trip_point，
 
 BPU thermal_zone 包含 thermal_zone11到 thermal_zone18
 
-在 thermal_zone16中有4个 trip_point,其中
+在 thermal_zone16 中有 5 个 trip_point，其中
 - trip_point_0_temp：用于控制风扇转速，默认为45度，风扇档位范围2~5，表示超过45度，风扇将从关闭状态调整为2档，最高可提升到5档。
 - trip_point_1_temp：用于控制风扇转速，默认为65度，风扇档位范围6~10，表示超过65度，风扇将调整到6档，最高可提升到10档转速。
 - trip_point_2_temp：用于控制 BPU 频率，默认为95度，表示超过95度，BPU 会降频。
@@ -352,21 +351,13 @@ PS：以上设置只在当前启动有效，<ins>重启后</ins>需要**重新**
 :::
 
 #### 降温设备
-在 RDK S600中一共有10个 cooling(降温)设备：
+在 RDK S600 中一共有 11 个 cooling（降温）设备：
 
-- cooling_device0: cpu cluster 0， 通过调整频率控制温度
-- cooling_device1: cpu cluster 1， 通过调整频率控制温度
-- cooling_device2: cpu cluster 2， 通过调整频率控制温度
-- cooling_device3: cpu cluster 3， 通过调整频率控制温度
-- cooling_device4: cpu cluster 4， 通过调整频率控制温度
-- cooling_device5: emc2305 fan，通过调整风扇转速档位来控制温度，档位从0~10，0表示关闭，10表示风扇满转速。
-- cooling_device6: emc2305 fan，通过调整风扇转速档位来控制温度，档位从0~10，0表示关闭，10表示风扇满转速。
-- cooling_device7: bpu core 0， 通过调整频率控制温度
-- cooling_device8: bpu core 1， 通过调整频率控制温度
-- cooling_device9: bpu core 2， 通过调整频率控制温度
-- cooling_device10: bpu core 3， 通过调整频率控制温度
+- cooling_device0~4：cpufreq，对应 cpufreq-cpu0/2/6/10/14，通过调整 CPU 频率控制温度；
+- cooling_device5~6：emc2305 fan，通过调整风扇转速档位来控制温度，档位从 0~10，0 表示关闭，10 表示风扇满转速；
+- cooling_device7~10：devfreq，对应 28108000/29108000/2a108000/2b108000.bpu，通过调整 BPU 频率控制温度。
 
-目前默认的策略用的是`step_wise`。
+目前默认的策略用的是 `step_wise`。
 
 ##### 风扇调节
 RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取设备基本信息及控制转速：
@@ -432,8 +423,7 @@ cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies
 注：支持的频点可能在不同类型的芯片上有所差异。
 RDK S600系统使用的 linux 内核支持以下种类的调频策略:
 
-- 性能（performance）：总是将 CPU 置于最高能耗也是最高性能的状态，即硬件所支持的最高频。
-- performance：以最高频率执行
+- performance（性能）：以最高频率执行，即硬件所支持的最高频（最高性能）。
 - ondemand：按照负载调整频率
 - userspace：根据用户的设置频率
 - powersave：以最低频率执行
@@ -461,6 +451,6 @@ echo 1050000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 
 ## 相关文档
 
-- [显示配置](/System_configuration/display_config)
-- [屏幕休眠与电源管理](/System_configuration/screen_sleep)
-- [Thermal 系统](/Advanced_development/driver_development/driver_thermal_dev)
+- [显示配置](./09_display_config.md)
+- [屏幕休眠与电源管理](./11_screen_sleep.md)
+- [Thermal 驱动开发（进阶）](../07_Advanced_development/04_driver_development/09_driver_thermal_dev.md)

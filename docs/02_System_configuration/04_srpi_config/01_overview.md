@@ -37,7 +37,8 @@ sudo srpi-config
 
 - **Password**
 
-  更改“默认”用户密码，默认账号为 `sunrise`。
+  更改“默认”用户密码，默认账号为 `sunrise`（默认账号/密码见
+  [网络配置](../01_network_config.md)）。
 
 - **Hostname**
 
@@ -57,7 +58,15 @@ sudo srpi-config
 
 - **Update Miniboot**
 
-  如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot升级](/Advanced_development/system_software/ota_miniboot)。
+  如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot 升级](../../07_Advanced_development/03_system_software/07_ota_miniboot.md)。
+
+## Display Options
+
+显示选项，用于选择板端显示输出接口。
+
+- **Display Chose**
+
+  选择 DSI 或 HDMI 作为显示输出。
 
 ## Interface Options
 
@@ -70,10 +79,11 @@ sudo srpi-config
   使用 SSH 启用/禁用对`RDK`的远程登录。默认情况下系统是启用 SSH 选项的。
 
 - **VNC**
-  S100正在对 VNC 进行适配；
+
+  S100 不支持 VNC（请使用 NoMachine）；S600 支持 VNC（基于 x11vnc）。
 
 - 外设配置
-  建议参考[config.txt 文件配置](../config_txt)进行外设的配置；
+  建议参考[config.txt 文件配置](../05_config_txt/01_usage.md)进行外设的配置；
 
 
 ## Performance Options
@@ -82,11 +92,15 @@ sudo srpi-config
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-performance_s100.png" alt="Performance Options示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+- **CPU frequency**
+
+  配置 CPU 运行模式与定频。
+
 - **ION memory**
 
   可以通过此选项配置 ION 内存的常用大小。
 
-> ION 内存是预留出来给 BPU 和图像、视频多媒体功能的物理内存空间。默认配置大小为672MB，如果需要运行比较大的算法模型、同时编解码多路视频时，请根据具体需要调整该内存大小。
+> ION 内存是预留出来给 BPU 和图像、视频多媒体功能的物理内存空间，由 `ion_cma`、`cma_reserved`、`carveout` 三部分组成（S600 板端实测分别为 1024MB、2048MB、2048MB）。运行大模型或多路编解码时可在此菜单按需调整。
 
 ## Localisation Options
 
@@ -140,6 +154,6 @@ sudo srpi-config
 
 ## 相关文档
 
-- [config.txt 文件配置](/System_configuration/config_txt/usage)
-- [网络配置](/System_configuration/network_config)
-- [开机自启动配置](/System_configuration/self_start)
+- [config.txt 文件配置](../05_config_txt/01_usage.md)
+- [网络配置](../01_network_config.md)
+- [开机自启动配置](../06_self_start.md)

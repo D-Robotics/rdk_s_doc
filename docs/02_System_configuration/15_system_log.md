@@ -19,8 +19,8 @@ dmesg | tail -20
 RDK S600 实测（BPU 核心内存分配）：
 
 ```text
-[8659.329184] bpu-core: bpu core mem alloc mem addr addr = 0xffff800050400000, ...
-[8660.285202] bpu-core: bpu core mem alloc mem addr addr = 0xffff800052410000, ...
+[15543.458668] bpu-core: bpu core mem alloc mem addr addr = 0xffff800020860000, 0x4200d00000, 0xff1a00000, 0xffa100000, 0x100000
+[15544.414637] bpu-core: bpu core mem alloc mem addr addr = 0xffff800052cd0000, 0x4210e10000, 0xff6000000, 0xffe000000, 0x2000000
 ```
 
 按级别过滤：`dmesg --level=err,warn`。实时跟踪：`dmesg -w`。
@@ -41,7 +41,7 @@ journalctl -f                    # 实时跟踪
 
 ```bash
 journalctl --disk-usage
-# Archived and active journals take up 185.9M in the file system.
+# Archived and active journals take up 231.2M in the file system.
 ```
 
 清理旧日志（限制到 100M）：`journalctl --vacuum-size=100M`。
@@ -59,14 +59,18 @@ S600 实测：
 $ systemctl is-system-running
 degraded
 
+$ systemctl --failed
+  UNIT           LOAD   ACTIVE SUB    DESCRIPTION
+● apport.service loaded failed failed automatic crash report generation
+
 $ systemctl status ssh
 ● ssh.service - OpenBSD Secure Shell server
      Loaded: loaded (/usr/lib/systemd/system/ssh.service; disabled; preset: enabled)
-     Active: active (running) since Tue 2026-08-11 20:56:04 CST; 3h 0min ago
+     Active: active (running) since Fri 2026-08-14 12:04:08 CST; 7h ago
 TriggeredBy: ● ssh.socket
 ```
 
-`degraded` 表示有服务启动失败（开发板常见，排查用 `systemctl --failed`）。`ssh` 显示 `active (running)` 即正常。
+`degraded` 表示有服务启动失败（本例是 `apport.service`），排查用 `systemctl --failed`。`ssh` 显示 `active (running)` 即正常。
 
 ## 常见问题
 
@@ -79,4 +83,4 @@ TriggeredBy: ● ssh.socket
 - [开机自启动配置](./06_self_start.md)
 - [存储与磁盘管理](./12_storage.md)
 - [Linux 命令：dmesg](../09_Appendix/linux-command-manual/02_dmesg.md)
-- [Linux 命令：systemctl 相关](../09_Appendix/linux-command-manual/12_ps.md)
+- [Linux 命令：ps（查看进程）](../09_Appendix/linux-command-manual/12_ps.md)

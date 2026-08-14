@@ -10,7 +10,7 @@ config.txt 是 RDK 的启动配置文件，用于在 U-Boot 阶段配置内核�
 
 ## 文件位置
 
-config.txt 默认路径为 `/boot/config.txt`，位于启动分区（boot 分区）。
+config.txt 默认路径为 `/boot/config.txt`，位于启动分区（boot 分区）。出厂镜像中该文件默认为空（0 字节），配置项需按需自行添加。
 
 ## 格式规则
 
@@ -30,11 +30,12 @@ hdmi_mode=82
 
 ### 方法 1：板端直接编辑
 
+boot 分区已通过 `/dev/block/platform/by-name/boot_cur` 挂载到 `/boot`
+（见 `/etc/fstab`），通常无需手动挂载。若未挂载，执行 `mount /boot` 即可。
+
 ```bash
-# 挂载 boot 分区（如未自动挂载）
-mount /dev/mmcblk0p1 /boot  # S100 eMMC
-# 或
-mount /dev/sda1 /boot       # UFS/NVMe
+# 若 /boot 未挂载，先挂载（依赖 /etc/fstab 中的 by-name/boot_cur 条目）
+mount /boot
 
 # 编辑 config.txt
 vi /boot/config.txt

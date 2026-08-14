@@ -1,33 +1,30 @@
 ---
 title: "调试串口"
 sidebar_position: 16
-description: "TTL-USB 串口线硬件接线、工具配置与串口登录"
+description: "调试串口 USB Type-C 接线、串口工具配置与串口登录"
 ---
 
 # 调试串口
 
 调试串口是系统起不来时的**硬件级入口**——不依赖网络与系统是否正常，直接从板载调试串口看启动日志、进 U-Boot/恢复系统。网络登录不通时，串口是兜底手段。
 
-:::info 说明
-本节为硬件接线 + 串口工具操作，未在板端实测（需 TTL-USB 串口线与硬件连接）；波特率与引脚以板端调试串口章节为准。
-:::
-
 ## 硬件接线
 
-- 用 **TTL-USB 串口线**（3.3V 逻辑电平，非 RS232）连接板载调试串口：
-  - 串口线 **GND → 板 GND**
-  - 串口线 **TXD → 板 RXD**
-  - 串口线 **RXD → 板 TXD**
-- 不要接 VCC（板子自己供电），避免电压冲突。
+RDK S100/S600 的调试串口由板载 CH340 芯片转为 USB，通过 USB Type-C 口输出，无需 TTL 串口线：
 
-引脚位置见各板硬件介绍的调试串口章节：
+- RDK S100：USB Type-C（J16），内置 2 颗 CH340，分别对应 Main 域与 MCU 域调试串口。
+- RDK S600：USB Type-C（J4），同样内置 2 颗 CH340。
 
-- [RDK S100 硬件介绍 - 调试串口](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)
-- [RDK S600 硬件介绍 - 调试串口](../01_Quick_start/01_hardware_introduction/02_rdk_s600.md)
+用 USB Type-C 数据线连接板卡调试口与 PC，首次需安装 CH340 驱动（搜索 `CH340串口驱动` 下载安装），PC 会识别出 Main 域与 MCU 域两个串口，Main 域即 Linux 调试串口。
+
+连接器位置与参数见各板硬件介绍：
+
+- [RDK S100 硬件介绍 - Type-C (J16)](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#type-c-j16)
+- [RDK S600 硬件介绍 - 闪连 烧录，Main&MCU 调试 (J4)](../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#j4)
 
 ## PC 串口工具
 
-串口线接 PC 后装驱动（USB 转串口芯片，如 CH340/CP210x），用 `Putty`/`MobaXterm`/`minicom` 连接：
+装好 CH340 驱动后，用 `Putty`/`MobaXterm`/`minicom`/`SecureCRT` 连接 Main 域串口：
 
 | 配置项 | 参数值 |
 |---|---|
@@ -36,6 +33,8 @@ description: "TTL-USB 串口线硬件接线、工具配置与串口登录"
 | 奇偶校验（Parity） | None |
 | 停止位（Stop bits） | 1 |
 | 流控（Flow Control） | 无 |
+
+波特率 921600 可由板端内核命令行确认：`cat /proc/cmdline` 中 `console=ttyS0,921600n8`。
 
 ### Windows（MobaXterm）
 
@@ -59,8 +58,8 @@ screen /dev/ttyUSB0 921600
 
 ## 常见问题
 
-- **串口无输出**：TXD/RXD 接反（互换再试）；波特率不对（确认 921600）；串口线驱动未装。
-- **乱码**：波特率或电平不对（必须 3.3V TTL，非 RS232）；macOS 驱动残留，见 [macOS 驱动残留导致仍乱码](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver)。
+- **串口无输出**：选错串口（板卡识别出 Main/MCU 两个串口，选 Main 域）；波特率不对（确认 921600）；CH340 驱动未装。
+- **乱码**：波特率不对（确认 921600）；macOS 驱动残留，见 [macOS 驱动残留导致仍乱码](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver)。
 - **进不了 U-Boot**：上电时机要早（启动日志一开始就打断），错过就重启重试。
 
 ## 相关文档

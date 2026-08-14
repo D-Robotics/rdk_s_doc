@@ -8,22 +8,32 @@ description: "桌面/控制台屏幕休眠与电源管理"
 
 关闭屏幕休眠可避免演示/产测时屏幕变黑；电源管理涉及散热策略与功耗模式。
 
-:::info 说明
-本板为 headless，本节命令未在板端实测；以桌面版镜像行为为准。
-:::
-
 ## 桌面版关闭休眠
 
-桌面环境（GNOME 等）默认若干分钟无操作后息屏。临时关闭：
+GNOME 桌面默认无操作 5 分钟后息屏。查看当前设置：
 
 ```bash
-# 禁用自动息屏与挂起
+gsettings get org.gnome.desktop.session idle-delay
+```
+
+RDK S600 实测：
+
+```text
+$ gsettings get org.gnome.desktop.session idle-delay
+uint32 300
+```
+
+`300` 即 300 秒（5 分钟）。临时关闭自动息屏与挂起：
+
+```bash
+# 关闭自动息屏
 gsettings set org.gnome.desktop.session idle-delay 0
-gsettings set org.gnome.desktop.session sleep-inactive-ac-timeout 0
+# 关闭交流供电下的自动挂起（该 key 属于 power 插件）
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 0
 systemctl mask sleep.target suspend.target
 ```
 
-或用 `xset`（X11）：
+或用 `xset`（X11 会话；Wayland 会话不适用，请用上面的 gsettings）：
 
 ```bash
 xset s off          # 关屏保
@@ -33,13 +43,15 @@ xset s noblank
 
 ## 控制台息屏
 
-内核控制台默认 10 分钟后黑屏，关闭：
+内核帧缓冲控制台默认 10 分钟后黑屏，关闭：
 
 ```bash
 # 临时
-echo 0 > /sys/class/graphics/fb0/blank        # 或 setterm --blank 0
-# 永久（grub/bootopts 加 consoleblank=0）
+setterm --blank 0
+# 永久：内核命令行加 consoleblank=0（见 config.txt 配置）
 ```
+
+RDK S600 板默认走串口控制台（`cat /proc/cmdline` 中 `console=ttyS0`），无帧缓冲控制台，无需处理息屏；接显示器的桌面环境按上一节配置。
 
 ## 持久化
 

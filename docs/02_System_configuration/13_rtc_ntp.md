@@ -56,6 +56,15 @@ sudo hwclock --show
 sudo hwclock --systohc
 ```
 
+RDK S600 实测（RTC 未写入真实时间，且 `/etc/adjtime` 有空行导致警告）：
+
+```text
+# hwclock --show
+hwclock: Warning: unrecognized line in adjtime file:
+hwclock: Warning: unrecognized line in adjtime file:
+1970-01-01 15:44:24.417387+08:00
+```
+
 :::tip
 断电场景下若板子无网络、又需保持时间，需确保 RTC 有电池供电、且已 `hwclock --systohc` 写入过真实时间。
 :::

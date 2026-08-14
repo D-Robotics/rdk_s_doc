@@ -20,36 +20,34 @@ sudo apt install samba
 
 ### 配置 Samba
 
-1. 创建共享目录,在用户主目录下创建一个名为 shared 的目录作为共享目录，执行以下命令：
+1. 创建共享目录，在用户主目录下创建一个名为 shared 的目录作为共享目录，执行以下命令：
 
 ```bash
 mkdir ~/shared
 ```
 
-2. 配置 Samba 共享, 打开 Samba 的主配置文件 /etc/samba/smb.conf, 在文件末尾添加以下内容来定义共享目录的配置：
+2. 配置 Samba 共享，打开 Samba 的主配置文件 `/etc/samba/smb.conf`，在文件末尾添加以下内容来定义共享目录的配置：
 
-```bash
-[shared]
-   comment = Shared Directory for Ubuntu 22.04
-   path = /home/your_username/shared
-   read only = no
-   browsable = yes
-   guest ok = no
-   create mask = 0775
-   directory mask = 0775
-```
+   ```ini
+   [shared]
+      comment = Shared Directory
+      path = /home/your_username/shared
+      read only = no
+      browsable = yes
+      guest ok = no
+      create mask = 0775
+      directory mask = 0775
+   ```
 
-语法说明：
+   语法说明：
 
-```bash
-[shared]：这是共享的名称，客户端在访问共享资源时会看到这个名称，可以根据需要修改。
-comment：对共享目录的描述信息，方便用户了解共享目录的用途。
-path：指定共享目录的实际路径，请将 your_username 替换为你自己的用户名。
-read only：设置为 no 表示允许客户端对共享目录进行读写操作。
-browsable：设置为 yes 表示该共享目录可以在网络中被浏览到。
-guest ok：设置为 no 表示需要用户名和密码才能访问共享目录，保证了共享资源的安全性。
-create mask 和 directory mask：分别设置在共享目录中创建文件和目录时的默认权限。
-```
+   - `[shared]`：共享名称，客户端访问共享资源时看到的名称，可按需修改。
+   - `comment`：共享目录的描述信息。
+   - `path`：共享目录的实际路径，请把 `your_username` 替换为你自己的用户名。
+   - `read only = no`：允许客户端对共享目录读写。
+   - `browsable = yes`：共享目录可在网络中被浏览到。
+   - `guest ok = no`：访问共享目录需要用户名和密码。
+   - `create mask` / `directory mask`：在共享目录中创建文件和目录时的默认权限。
 
 3. 设置 Samba 用户和密码
 
@@ -70,13 +68,28 @@ sudo systemctl restart smbd
 sudo systemctl status smbd
 ```
 
-5. 配置防火墙--可选步骤
+RDK S600 实测（Samba 4.19.5）：
 
-如果系统启用了防火墙（如 ufw），需要开放 Samba 相关的端口，以便其他设备能够访问共享目录。执行以下命令开放 Samba 端口：
+```text
+● smbd.service - Samba SMB Daemon
+     Loaded: loaded (/usr/lib/systemd/system/smbd.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-08-14 00:25:07 CST; 18h ago
+     Status: "smbd: ready to serve connections..."
+```
+
+`Active: active (running)` 即表示 Samba 服务正常运行。
+
+5. 配置防火墙（可选）
+
+如果系统启用了防火墙（如 ufw），需要开放 Samba 相关的端口，以便其他设备能够访问共享目录：
 
 ```bash
 sudo ufw allow samba
 ```
+
+:::info
+RDK OS 默认未安装 ufw（板端 `ufw` 命令不存在），本步骤仅在有防火墙的环境下才需要。
+:::
 
 
 
@@ -169,5 +182,6 @@ mount | grep windows_nfs_share
 
 ## 相关文档
 
-- [网络配置](/System_configuration/network_config)
-- [远程登录](/Quick_start/install_os_and_setup/remote_login)
+- [网络配置](./01_network_config.md)
+- [远程登录](../01_Quick_start/03_install_os_and_setup/remote_login.md)
+- [存储与磁盘管理](./12_storage.md)

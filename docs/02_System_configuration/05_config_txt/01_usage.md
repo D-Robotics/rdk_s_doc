@@ -6,7 +6,7 @@ description: "config.txt 配置文件使用指南：bootargs、loglevel、DTS �
 
 # config.txt 使用指南
 :::warning
-- 所有配置文件内的配置，均可以在 Uboot 内手动覆盖。Uboot 内手动配置（在 Uboot 命令行使用 setenv）的优先级**高于**配置文件内的配置。完整环境变量优先级：`setenv > 配置文件 > 上一次启动saveenv`；
+- 所有配置文件内的配置，均可以在 U-Boot 内手动覆盖。U-Boot 内手动配置（在 U-Boot 命令行使用 setenv）的优先级**高于**配置文件内的配置。完整环境变量优先级：`setenv > 配置文件 > 上一次启动saveenv`；
 - 本章内容均以“配置文件”指代**默认路径**为`/boot/config.txt`的配置文件；
 - 使用配置文件时，会需要修改启动分区的内容，这与[AVB](https://source.android.com/docs/security/features/verifiedboot)的要求是冲突的，所以本功能在使能 AVB 时（AVB 功能**默认不使能**）不能使用；
 :::
@@ -15,7 +15,8 @@ description: "config.txt 配置文件使用指南：bootargs、loglevel、DTS �
 :::info 提示
 - 配置文件默认格式为`<key>=<value>`，第一个`=`后面的所有内容均为`=`前的`<key>`的配置值；
 - 配置文件单行配置不能超过1024字符；
-- 配置文件内的配置默认不会被保存为 Uboot 的默认配置；
+- 配置文件内的配置默认不会被保存为 U-Boot 的默认配置；
+- 出厂镜像中 `/boot/config.txt` 默认为空文件（0 字节），配置项需按需自行添加；
 :::
 
 ### 配置内核 bootargs（内核 cmdline）
@@ -51,13 +52,15 @@ fdt-disable=/soc/uart@394C0000;
       soc/uart@394C0000
     ```
     注意命令获取到的路径需要添加行首的"/"；
+- 示例中的节点地址为 S100 的节点（如 `uart@394C0000`）；S600 的节点地址不同
+  （如 `uart@3484A000`），请以板端 `/proc/device-tree/soc/` 下实际节点名为准；
 :::
 
 #### 配置 DTB Overlay 文件
 
 DTB Overlay 相关说明如下：
 1. Kernel V6.1 官方文档：[Devicetree Overlay Notes](https://kernel.org/doc/html/v6.1/devicetree/overlay-notes.html);
-2. Uboot V2022.10 官方文档：[Device Tree Overlays](https://docs.u-boot.org/en/v2022.10/usage/fdt_overlays.html);
+2. U-Boot V2022.10 官方文档：[Device Tree Overlays](https://docs.u-boot.org/en/v2022.10/usage/fdt_overlays.html);
 
 简单介绍：DTB Overlay 文件，是可以在不修改当前启动使用的 dts 文件的情况下，对当前启动使用的 dtb 文件进行**增/改**（不支持删减）的功能。
 
@@ -142,10 +145,10 @@ lrwxrwxrwx 1 root root 15 Jun  4 22:17 /dev/block/platform/by-name/userdata -> /
 ```
 
 ## 自定义 config.txt 指南
-地瓜 Uboot 会根据当前启动使用的储存介质和分区，自动获取默认的配置文件所在分区。
+U-Boot 会根据当前启动使用的储存介质和分区，自动获取默认的配置文件所在分区。
 
-客户可以通过 Uboot 内的环境变量来自定义下一次启动使用的配置文件的储存介质和分区，步骤如下：
-  1. 启动过程中停止并进入 Uboot 命令行；
+客户可以通过 U-Boot 内的环境变量来自定义下一次启动使用的配置文件的储存介质和分区，步骤如下：
+  1. 启动过程中停止并进入 U-Boot 命令行；
   2. 以下环境变量可以用于自定义配置文件，每个变量均可单独使用：
      1. `boot_config_f`：改变默认寻找的配置文件名称，例如`setenv boot_config_f test.txt`，下一次启动的配置文件获取，就会去寻找文件名为`test.txt`的文件，而不是`config.txt`
      2. `boot_config_dev_part`：改变默认寻找配置文件的分区，例如`setenv boot_config_dev_part 0:0xd`，下一次启动的配置文件获取，就会去当前启动介质的第13个分区(0xd)寻找配置文件；
@@ -153,10 +156,14 @@ lrwxrwxrwx 1 root root 15 Jun  4 22:17 /dev/block/platform/by-name/userdata -> /
   3. 保存环境变量：`saveenv`
 
 ## config.txt 解析开发指南
-配置文件的解析功能代码路径位于 Uboot 目录的：`board/hobot/common/drobot_boot_config.c`文件内。
+
+配置文件的解析功能代码路径位于 U-Boot 目录的
+`board/hobot/common/drobot_boot_config.c` 文件内。解析机制与新增配置项说明见
+[config.txt 解析开发指南](./05_parser_dev.md)。
 
 ## 相关文档
 
-- [自定义 config.txt](/System_configuration/config_txt/custom)
-- [常用配置项参考](/System_configuration/config_txt/common_options)
-- [启动相关配置](/System_configuration/config_txt/boot_options)
+- [自定义 config.txt](./02_custom.md)
+- [常用配置项参考](./03_common_options.md)
+- [启动相关配置](./04_boot_options.md)
+- [config.txt 解析开发指南](./05_parser_dev.md)

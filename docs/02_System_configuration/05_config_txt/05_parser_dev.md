@@ -12,12 +12,19 @@ description: "config.txt 解析机制与新增配置项开发指南"
 
 ## 解析机制
 
-config.txt 由 U-Boot 在启动阶段解析。流程：
+config.txt 由 U-Boot 在启动阶段解析，解析代码位于
+`board/hobot/common/drobot_boot_config.c` 的 `parse_config_file()`：
 
-1. U-Boot 启动时读取 boot 分区的 `config.txt` 文件
-2. 逐行解析 `key=value` 格式
-3. 根据 key 执行对应操作（设置环境变量、修改 DTS、配置显示等）
-4. 解析完成后加载内核启动
+1. 读取 boot 分区的 `config.txt` 文件到内存
+2. 逐行处理：跳过空行和 `#` 注释行，按第一个 `=` 拆分为 key/value
+3. 调用 `process_key_val_pair()` 处理每个 key/value：
+   - `fdt-setprop`：追加到环境变量 `fdt-setprop`
+   - `ion*` 开头的 key：拆分为 `<名称>=<大小>` 并写入环境变量
+   - `bootargs`：追加到已有 `bootargs` 环境变量
+   - 其它 key：直接 `env_set(key, value)`
+4. 解析完成后加载内核；`board/hobot/common/drobot_fdt_runtime_config.c`
+   的 `drobot_fdt_runtime_conf()` 再消费 `fdt-enable`/`fdt-disable`/
+   `fdt-setprop`/`fdt-remove`/`dtbo_*` 等环境变量，在加载 DTB 后动态修改设备树
 
 ## 配置项处理方式
 
@@ -25,22 +32,31 @@ config.txt 中的配置项按处理方式分两类：
 
 ### 环境变量类
 
-直接设置 U-Boot 环境变量，如 `bootargs`、`loglevel`。U-Boot 将其追加到内核 cmdline。
+直接设置 U-Boot 环境变量，供后续启动流程读取，如 `bootargs`（追加到内核
+cmdline）、`loglevel`（由板级代码拼进 cmdline）、`ion*`（设置内存参数）。
 
-### 动作类
+### 设备树类
 
-触发特定 U-Boot 脚本动作，如 `fdt-enable`/`fdt-disable` 在加载 DTS 后修改 FDT（Flattened Device Tree）。
+设置环境变量后，由 `drobot_fdt_runtime_config.c` 在加载 DTB 后消费：
+`fdt-enable`/`fdt-disable`（改节点 status）、`fdt-setprop`（改属性）、
+`fdt-remove`（删节点/属性）、`dtbo_file_path` 等（应用 DTB Overlay）。
 
 ## 新增配置项
 
-如需新增自定义 config.txt 配置项：
+如需新增自定义 config.txt 配置项，在 U-Boot 源码中修改：
 
-1. 在 U-Boot 源码的 config.txt 解析脚本中添加新 key 的处理逻辑
-2. 解析脚本位置：U-Boot 源码 `board/<platform>/config_txt_parser.sh`（或对应 `.c` 文件）
-3. 新增 key 的解析分支：读取 value → 执行对应操作（setenv/fdt 修改等）
+1. 通用配置项无需改解析代码：`key=value` 会被自动写入同名环境变量，
+   在板级代码或启动流程中读取即可。
+2. 需要特殊处理的配置项，在 `board/hobot/common/drobot_boot_config.c`
+   的 `process_key_val_pair()` 中新增分支。
+3. 若配置项用于修改设备树，在
+   `board/hobot/common/drobot_fdt_runtime_config.c` 的
+   `drobot_fdt_runtime_conf()` 中新增对应消费逻辑。
 
 :::note 开发参考
-config.txt 解析脚本的源码在 BSP 源码树中，路径取决于平台。参考 [开发环境与编译](/Advanced_development/environment_build/environment_build) 获取源码。
+config.txt 解析源码位于 BSP 的 U-Boot 源码树中，路径为
+`board/hobot/common/drobot_boot_config.c`。获取源码见
+[开发环境与编译](../../07_Advanced_development/06_environment_build/01_environment_build.md)。
 :::
 
 ## 相关文档
@@ -49,4 +65,4 @@ config.txt 解析脚本的源码在 BSP 源码树中，路径取决于平台。�
 - [自定义 config.txt](./02_custom.md)
 - [常用配置项参考](./03_common_options.md)
 - [启动相关配置](./04_boot_options.md)
-- [开发环境与编译](/Advanced_development/environment_build/environment_build)
+- [开发环境与编译](../../07_Advanced_development/06_environment_build/01_environment_build.md)

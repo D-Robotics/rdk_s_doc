@@ -27,7 +27,12 @@ bootargs=norandmaps
 
 ## 启动介质
 
-RDK S100 默认从 eMMC 启动，RDK S600 默认从 UFS 启动。启动介质选择通过硬件拨码开关（SW3/SW8）控制，**不在 config.txt 中配置**。拨码说明见 [硬件介绍](/01_hardware_introduction) 各 kit 文档。
+- RDK S100 默认从 eMMC 启动（启动介质由拨码开关 SW3 控制）。
+- RDK S600 默认从 UFS 启动，也支持从 M.2 NVMe 启动（由拨码开关 SW8 控制）。
+
+启动介质通过硬件拨码开关选择，**不在 config.txt 中配置**。拨码说明见
+[RDK S100 硬件介绍](../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)、
+[RDK S600 硬件介绍](../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md)。
 
 ## DTS 节点控制
 
@@ -41,12 +46,12 @@ fdt-enable=/soc/uart@394C0000;
 fdt-disable=/soc/i2c@3932000;
 ```
 
-> 节点路径需与设备树中的完整路径一致。可用 `ls /proc/device-tree/soc/` 查看节点名。
+> 节点路径需与设备树中的完整路径一致，可用 `ls /proc/device-tree/soc/` 查看节点名。示例为 S100 节点地址，S600 的节点地址不同。
 
 ## 相关文档
 
 - [config.txt 使用指南](./01_usage.md)
 - [自定义 config.txt](./02_custom.md)
 - [常用配置项参考](./03_common_options.md)
-- [开始使用 RDK](/Quick_start/getting_started)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [开始使用 RDK](../../01_Quick_start/02_getting_started.md)
+- [搭建开发环境](../../07_Advanced_development/06_environment_build/01_environment_build.md)

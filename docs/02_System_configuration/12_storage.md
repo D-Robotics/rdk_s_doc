@@ -18,10 +18,10 @@ RDK S600 实测（rootfs 在 SSD 分区上）：
 
 ```text
 Filesystem                                              Size  Used Avail Use% Mounted on
-/dev/disk/by-partuuid/1993ccc4-e089-b84e-b2d5-193a1bc4b7f3  45G  9.7G  33G  23% /
+/dev/disk/by-partuuid/1993ccc4-e089-b84e-b2d5-193a1bc4b7f3  45G  9.8G  33G  23% /
 ```
 
-rootfs 45G、已用 9.7G（23%），剩余 33G。占用高时清理 apt 缓存（`apt clean`）或日志（`journalctl --vacuum-size`）。
+rootfs 45G、已用 9.8G（23%），剩余 33G。占用高时清理 apt 缓存（`apt clean`）或日志（`journalctl --vacuum-size`）。
 
 ## 查看块设备
 
@@ -29,7 +29,7 @@ rootfs 45G、已用 9.7G（23%），剩余 33G。占用高时清理 apt 缓存�
 lsblk
 ```
 
-S600 实测（SSD `sda` 59.6G，多分区）：
+RDK S600 实测（SSD `sda` 59.6G）：
 
 ```text
 NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -38,10 +38,22 @@ sda       8:0    0 59.6G  0 disk
 |-sda2    8:2    0    1M  0 part
 |-sda3    8:3    0    1M  0 part
 |-sda4    8:4    0    2M  0 part
-...
+|-sda5    8:5    0    2M  0 part
+|-sda6    8:6    0    2M  0 part
+|-sda7    8:7    0    2M  0 part
+|-sda8    8:8    0    8M  0 part
+|-sda9    8:9    0    8M  0 part
+|-sda10   8:10   0    8M  0 part
+|-sda11   8:11   0    8M  0 part
+|-sda12   8:12   0  120M  0 part /boot
+|-sda13   8:13   0  120M  0 part
+|-sda14   8:14   0    8G  0 part /ota
+|-sda15   8:15   0    4G  0 part /log
+|-sda16 259:0    0    2G  0 part /userdata
+`-sda17 259:1    0 45.3G  0 part /
 ```
 
-RDK S600 用 NVMe/SSD 启动（`sda`），分区含引导、kernel、rootfs 等。
+RDK S600 用 SSD（`sda`）启动，分区含引导（sda1~sda4）、内核/DTB（sda5~sda13）、`/boot`、`/ota`（OTA 分区）、`/log`（日志分区）、`/userdata`（用户数据）与 rootfs（`/`）。`sdb`/`sdc` 为板载 4M 存储。
 
 ## 挂载与卸载
 

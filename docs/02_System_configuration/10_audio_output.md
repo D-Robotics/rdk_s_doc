@@ -9,7 +9,7 @@ description: "音频输出设备选择与基础控制"
 RDK 板卡音频可从 3.5mm 耳机口、HDMI 或 USB 声卡输出。通过桌面设置或命令行选择输出设备、调节音量。
 
 :::info 说明
-本板为 headless（无音频输出设备，`aplay -l` 为空），本节命令未在板端实测；以接好音频设备的板子为准。
+RDK S600 本板未接音频输出设备（无音频 codec/声卡），`aplay -l` 与 `arecord -l` 均报 no soundcards；以下命令以接好音频设备的板子为准。
 :::
 
 ## 查看音频设备
@@ -17,6 +17,15 @@ RDK 板卡音频可从 3.5mm 耳机口、HDMI 或 USB 声卡输出。通过桌�
 ```bash
 aplay -l                  # 列出回放设备
 amixer scontrols          # 列出可调音量控件
+```
+
+RDK S600 实测（无音频设备）：
+
+```text
+$ aplay -l
+aplay: device_list:277: no soundcards found...
+$ arecord -l
+arecord: device_list:277: no soundcards found...
 ```
 
 接好音频设备后，`aplay -l` 会列出 `hw:0,0` 之类的 card/device。

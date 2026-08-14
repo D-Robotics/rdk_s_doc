@@ -8,6 +8,9 @@ description: "RDK config.txt 常用配置项速查表"
 
 本页列出 config.txt 中常用的配置项，按类别分类，方便快速查找。配置文件的修改方法见 [自定义 config.txt](./02_custom.md)。
 
+> 示例中的 DTS 节点地址为 S100 示例；S600 的节点地址不同，以板端
+> `/proc/device-tree/soc/` 下实际节点名为准。
+
 ## 内核启动参数
 
 | 配置项 | 说明 | 示例 |
@@ -22,28 +25,22 @@ description: "RDK config.txt 常用配置项速查表"
 | `fdt-enable` | 使能 DTS 节点（分号分隔多节点） | `fdt-enable=/soc/uart@394C0000;` |
 | `fdt-disable` | 失能 DTS 节点 | `fdt-disable=/soc/i2c@3932000;` |
 
-## 显示选项
+## DTS 属性修改
 
 | 配置项 | 说明 | 示例 |
 | --- | --- | --- |
-| `hdmi_group` | HDMI 输出组（1=CEA/电视，2=DMT/显示器） | `hdmi_group=2` |
-| `hdmi_mode` | HDMI 输出模式（分辨率+刷新率） | `hdmi_mode=82`（1920×1080@60Hz DMT） |
+| `fdt-setprop` | 设置节点属性（`/节点路径 属性名 值`，`;` 分隔多条） | `fdt-setprop=/soc/uart@394C0000 status "okay"` |
+| `fdt-remove` | 删除节点或属性（`节点路径` 或 `节点路径 属性名`，`;` 分隔） | `fdt-remove=/soc/i2c@3932000;` |
 
-常用 HDMI 模式（DMT group=2）：
-
-| 模式码 | 分辨率 | 刷新率 |
-| --- | --- | --- |
-| 4 | 640×480 | 60Hz |
-| 9 | 800×600 | 60Hz |
-| 16 | 1024×768 | 60Hz |
-| 82 | 1920×1080 | 60Hz |
-| 87 | 2560×1440 | 60Hz |
-
-## 系统配置
+## DTB Overlay
 
 | 配置项 | 说明 | 示例 |
 | --- | --- | --- |
-| `overlayfs` | 覆盖文件系统配置 | `overlayfs=upper` |
+| `dtbo_file_path` | 应用 DTB Overlay 文件（相对 boot 分区，`;` 分隔多个） | `dtbo_file_path=/spi0_cs1_dev.dtbo` |
+| `dtbo_dev_part` | Overlay 文件所在分区（`<设备号>:<16 进制分区号>`） | `dtbo_dev_part=0:0x10` |
+
+> 显示输出接口（DSI/HDMI）通过 [srpi-config](../04_srpi_config/01_overview.md)
+> 的 Display Options 配置，不在 config.txt 中配置。
 
 > 配置项的完整列表和新增配置项的开发方法见 [config.txt 解析开发指南](./05_parser_dev.md)。
 
