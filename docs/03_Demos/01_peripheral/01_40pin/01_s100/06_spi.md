@@ -1,6 +1,8 @@
 ---
 sidebar_position: 6
 title: "SPI 应用（RDK S100）"
+sidebar_products: RDK S100
+sidebar_label: "SPI 应用"
 description: "RDK S100 40-pin SPI0 使用与回环测试"
 ---
 

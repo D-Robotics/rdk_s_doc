@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+sidebar_products: RDK S100
 ---
 
 # GPIO Application

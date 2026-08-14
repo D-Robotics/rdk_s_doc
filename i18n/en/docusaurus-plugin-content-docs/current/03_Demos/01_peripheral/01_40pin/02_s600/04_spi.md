@@ -1,5 +1,6 @@
 ---
 sidebar_position: 4
+sidebar_products: RDK S600
 ---
 
 # SPI Application

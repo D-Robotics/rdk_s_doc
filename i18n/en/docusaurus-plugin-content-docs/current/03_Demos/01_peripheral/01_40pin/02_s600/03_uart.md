@@ -1,5 +1,6 @@
 ---
 sidebar_position: 3
+sidebar_products: RDK S600
 ---
 
 # Serial Port Application

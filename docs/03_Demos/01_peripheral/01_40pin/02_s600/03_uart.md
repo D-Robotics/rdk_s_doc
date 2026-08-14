@@ -1,6 +1,8 @@
 ---
 sidebar_position: 3
 title: "串口应用（RDK S600）"
+sidebar_products: RDK S600
+sidebar_label: "串口应用"
 description: "RDK S600 自锁 10-PIN UART 使用与回环测试"
 ---
 

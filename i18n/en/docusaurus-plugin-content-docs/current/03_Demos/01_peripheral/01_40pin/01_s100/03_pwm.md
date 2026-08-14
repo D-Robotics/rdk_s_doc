@@ -1,5 +1,6 @@
 ---
 sidebar_position: 3
+sidebar_products: RDK S100
 ---
 
 # PWM Application

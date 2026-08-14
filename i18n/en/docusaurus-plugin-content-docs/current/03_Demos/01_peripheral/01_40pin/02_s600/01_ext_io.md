@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+sidebar_products: RDK S600
 ---
 
 # Pin Definition and Application

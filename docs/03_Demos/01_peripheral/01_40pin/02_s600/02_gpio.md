@@ -1,6 +1,8 @@
 ---
 sidebar_position: 2
 title: "GPIO 应用（RDK S600）"
+sidebar_products: RDK S600
+sidebar_label: "GPIO 应用"
 description: "RDK S600 GPIO Python 库 Hobot.GPIO 使用与测试例程"
 ---
 
