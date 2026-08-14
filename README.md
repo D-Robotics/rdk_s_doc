@@ -48,11 +48,12 @@ npm run start:no-watch
 npm run start:no-watch:en
 
 # 对外暴露预览（VM/容器内启动，供宿主机浏览器访问，不自动开浏览器窗口）
-# 复刻 npm run start（侧边栏监听 + 中文 dev server），追加 --host 0.0.0.0 --no-open
-npx concurrently --kill-others --raw \
-  "npm run watch-sidebar-config" \
-  "npx docusaurus start --host 0.0.0.0 --no-open --locale zh-Hans"
+# 直接用 docusaurus start 原生参数，不要叠加 watch-sidebar-config：
+# 后者与 Docusaurus 自带的文件监听重复，双 watcher 抢同一批 md 会把 dev server 路由表踩坏（改文档后 404，须重启）
+npx docusaurus start --host 0.0.0.0 --no-open --locale zh-Hans
 # 宿主机访问：http://<虚拟机IP>:3000/rdk_s_doc/  （注意末尾斜杠）
+# 注意：此方式不监听侧边栏范围配置；改了 front matter 的 sidebar_versions/sidebar_products 或增删文档后，
+# 需重启，或先 npm run generate-sidebar-config
 
 # 清理 Docusaurus 缓存
 npm run clear

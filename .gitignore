@@ -39,3 +39,6 @@ yarn.lock
 
 .env.local
 _img_audit/
+
+CLAUDE.md
+
