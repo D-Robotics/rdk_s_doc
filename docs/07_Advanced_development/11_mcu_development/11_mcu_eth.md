@@ -72,7 +72,7 @@ import DocScope from '@site/src/components/DocScope';
 Eth_test.c 测试程序外发构造的 arp 报文，PC 通过 wiresharke 抓包检查数据能否正常收到。其中，IP 地址默认且不支持动态修改。
 
 ```
-0xd4, 0xfd, 0x9b, 0xae, 0x48, 0xf5, //Sender MAC address: d4:fd:9b:ae:48:f5  //MCU
+0xd4, 0xfd, 0x9b, 0xae, 0x48, 0xf5, //Sender MAC address: xx:xx:xx:xx:xx:xx  //MCU
 0xC0, 0xA8, 0x01, 0x32,             //Sender IP address: 192.168.1.50
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Target MAC address: 00:00:00:00:00:00  //PC
 0xC0, 0xA8, 0x01, 0xf,             //Target IP address: 192.168.1.15

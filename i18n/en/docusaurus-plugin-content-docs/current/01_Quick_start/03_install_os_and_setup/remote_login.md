@@ -87,7 +87,7 @@ At this point, you can use the `ifconfig -a` command to query the development bo
 
 ```bash
 eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether c8:30:76:63:2d:93  txqueuelen 1000  (Ethernet)
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 7547  bytes 2230733 (2.2 MB)
         RX errors 0  dropped 2  overruns 0  frame 0
         TX packets 1126  bytes 108615 (108.6 KB)
@@ -96,8 +96,8 @@ eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
-        inet6 fe80::e0b2:71ff:fea0:6ba7  prefixlen 64  scopeid 0x20<link>
-        ether e2:b2:71:a0:6b:a7  txqueuelen 1000  (Ethernet)
+        inet6 fe80::xxxx:xxff:fexx:xxxx  prefixlen 64  scopeid 0x20<link>
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 43  bytes 3882 (3.8 KB)
         RX errors 0  dropped 1  overruns 0  frame 0
         TX packets 46  bytes 6234 (6.2 KB)
@@ -114,7 +114,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether 28:d0:43:83:63:57  txqueuelen 1000  (Ethernet)
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
@@ -125,7 +125,7 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 ```bash
 eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether 7a:5e:ca:06:4b:a1  txqueuelen 1000  (Ethernet)
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
@@ -134,8 +134,8 @@ eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 
 eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
-        inet6 fe80::58de:11ff:fe64:e19c  prefixlen 64  scopeid 0x20<link>
-        ether 5a:de:11:64:e1:9c  txqueuelen 1000  (Ethernet)
+        inet6 fe80::xxxx:xxff:fexx:xxxx  prefixlen 64  scopeid 0x20<link>
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 3  bytes 425 (425.0 B)
@@ -143,7 +143,7 @@ eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         device interrupt 192
 
 eth2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether 02:8f:6f:81:99:10  txqueuelen 1000  (Ethernet)
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
@@ -151,7 +151,7 @@ eth2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         device interrupt 201
 
 eth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether ee:71:51:40:ac:ad  txqueuelen 1000  (Ethernet)
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
@@ -168,7 +168,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether f0:68:e3:22:7e:90  txqueuelen 1000  (Ethernet)
+        ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 8280  bytes 654536 (654.5 KB)
         RX errors 0  dropped 5898  overruns 0  frame 0
         TX packets 1138  bytes 139677 (139.6 KB)

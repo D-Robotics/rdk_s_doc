@@ -214,7 +214,7 @@ Continuously updating...
     root@ubuntu:~# sudo hostapd -B /etc/hostapd.conf
 
     Configuration file: /etc/hostapd.conf
-    Using interface wlan0 with hwaddr 08:e9:f6:af:18:26 and ssid "sunrise"
+    Using interface wlan0 with hwaddr xx:xx:xx:xx:xx:xx and ssid "sunrise"
     wlan0: interface state UNINITIALIZED->ENABLED
     wlan0: AP-ENABLED
    ```

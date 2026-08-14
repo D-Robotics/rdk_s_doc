@@ -287,7 +287,7 @@ This section applies to **Generic driver mode**. If you are using Native driver 
       Active: no
       Slaves: 0
       Ethernet devices:
-        Main: c8:30:76:63:2d:93 (attached)
+        Main: xx:xx:xx:xx:xx:xx (attached)
         Link: UP
         Tx frames:   9477
         Tx bytes:    568620
@@ -505,14 +505,14 @@ Choose the appropriate network interface configuration scheme for eth0 based on 
         inet6 ::1/128 scope host noprefixroute
            valid_lft forever preferred_lft forever
     2: eth0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
-        link/ether 82:89:02:ec:a0:75 brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
         altname end2
     3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-        link/ether 26:36:26:6f:d5:bf brd ff:ff:ff:ff:ff:ff permaddr 52:a7:fa:6c:50:16
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff permaddr xx:xx:xx:xx:xx:xx
         altname end3
         inet 192.168.127.10/24 brd 192.168.127.255 scope global noprefixroute eth1
            valid_lft forever preferred_lft forever
-        inet6 fe80::2436:26ff:fe6f:d5bf/64 scope link
+        inet6 fe80::xxxx:xxff:fexx:xxxx/64 scope link
            valid_lft forever preferred_lft forever
     ...
     ```
@@ -540,7 +540,7 @@ Choose the appropriate network interface configuration scheme for eth0 based on 
       Active: no
       Slaves: 0
       Ethernet devices:
-        Main: 82:89:02:ec:a0:75 (attached)
+        Main: xx:xx:xx:xx:xx:xx (attached)
           Link: DOWN
           Tx frames:   0
           Tx bytes:    0
@@ -590,16 +590,16 @@ Choose the appropriate network interface configuration scheme for eth0 based on 
         inet6 ::1/128 scope host noprefixroute
            valid_lft forever preferred_lft forever
     2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-        link/ether 82:89:02:ec:a0:75 brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
         altname end2
-        inet6 fe80::8089:2ff:feec:a075/64 scope link
+        inet6 fe80::xxxx:xxff:fexx:xxxx/64 scope link
            valid_lft forever preferred_lft forever
     3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-        link/ether 26:36:26:6f:d5:bf brd ff:ff:ff:ff:ff:ff permaddr 52:a7:fa:6c:50:16
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff permaddr xx:xx:xx:xx:xx:xx
         altname end3
         inet 192.168.127.10/24 brd 192.168.127.255 scope global noprefixroute eth1
            valid_lft forever preferred_lft forever
-        inet6 fe80::2436:26ff:fe6f:d5bf/64 scope link
+        inet6 fe80::xxxx:xxff:fexx:xxxx/64 scope link
            valid_lft forever preferred_lft forever
     ...
 
@@ -609,7 +609,7 @@ Choose the appropriate network interface configuration scheme for eth0 based on 
       Active: no
       Slaves: 1
       Ethernet devices:
-        Main: 82:89:02:ec:a0:75 (attached)
+        Main: xx:xx:xx:xx:xx:xx (attached)
           Link: UP
           Tx frames:   5236
           Tx bytes:    373552
@@ -666,7 +666,7 @@ If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [A
               - 10.9.1.2
               - 8.8.8.8
               - 8.8.4.4
-          macaddress: "52:e9:e0:57:b8:59"
+          macaddress: "xx:xx:xx:xx:xx:xx"
         eth1:
           addresses:
             - "192.168.127.11/24"
@@ -675,7 +675,7 @@ If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [A
               - 10.9.1.2
               - 8.8.8.8
               - 8.8.4.4
-          macaddress: "22:60:87:8c:4d:8d"
+          macaddress: "xx:xx:xx:xx:xx:xx"
     ```
 2. Apply the configuration
     ```shell
@@ -693,13 +693,13 @@ If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [A
         inet6 ::1/128 scope host
             valid_lft forever preferred_lft forever
     2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-        link/ether 52:e9:e0:57:b8:59 brd ff:ff:ff:ff:ff:ff permaddr c6:34:76:c1:e0:b4
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff permaddr xx:xx:xx:xx:xx:xx
         inet 192.168.127.10/24 brd 192.168.127.255 scope link noprefixroute eth0
             valid_lft forever preferred_lft forever
-        inet6 fe80::50e9:e0ff:fe57:b859/64 scope link
+        inet6 fe80::xxxx:xxff:fexx:xxxx/64 scope link
             valid_lft forever preferred_lft forever
     3: eth1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
-        link/ether ca:03:43:37:17:52 brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
     ```
 </details>
 
@@ -721,7 +721,7 @@ If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [A
           #    - 8.8.4.4
           dhcp4: false
           dhcp6: false
-          macaddress: "52:e9:e0:57:b8:59"
+          macaddress: "xx:xx:xx:xx:xx:xx"
         eth1:
           addresses:
             - "192.168.127.11/24"
@@ -730,7 +730,7 @@ If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [A
               - 10.9.1.2
               - 8.8.8.8
               - 8.8.4.4
-          macaddress: "22:60:87:8c:4d:8d"
+          macaddress: "xx:xx:xx:xx:xx:xx"
     ```
 2. Apply the configuration
     ```shell
@@ -748,13 +748,13 @@ If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [A
         inet6 ::1/128 scope host
             valid_lft forever preferred_lft forever
     2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-        link/ether 52:e9:e0:57:b8:59 brd ff:ff:ff:ff:ff:ff permaddr c6:34:76:c1:e0:b4
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff permaddr xx:xx:xx:xx:xx:xx
         inet 169.254.245.98/16 brd 169.254.255.255 scope link noprefixroute eth0
             valid_lft forever preferred_lft forever
-        inet6 fe80::50e9:e0ff:fe57:b859/64 scope link
+        inet6 fe80::xxxx:xxff:fexx:xxxx/64 scope link
             valid_lft forever preferred_lft forever
     3: eth1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
-        link/ether ca:03:43:37:17:52 brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
     ```
 </details>
 
@@ -781,7 +781,7 @@ The following network configurations only provide configuration for eth1. For et
               - 8.8.4.4
           dhcp4: true
           dhcp6: true
-          macaddress: "26:36:26:6f:d5:bf"
+          macaddress: "xx:xx:xx:xx:xx:xx"
     ```
 </details>
 
@@ -807,7 +807,7 @@ The following network configurations only provide configuration for eth1. For et
               - 10.9.1.2
               - 8.8.8.8
               - 8.8.4.4
-          macaddress: "26:36:26:6f:d5:bf"
+          macaddress: "xx:xx:xx:xx:xx:xx"
     ```
 </details>
 
@@ -904,10 +904,10 @@ Note: The RDK S600 uses eth0 as the DHCP port by default, and eth1 is configured
         inet6 ::1/128 scope host noprefixroute
         valid_lft forever preferred_lft forever
     2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
-        link/ether c6:40:e8:32:f0:8a brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
         altname end2
     3: eth1: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
-        link/ether c2:97:53:60:e3:5b brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
         altname end3
     ...
     ```
@@ -936,7 +936,7 @@ Note: The RDK S600 uses eth0 as the DHCP port by default, and eth1 is configured
     Active: no
     Slaves: 0
     Ethernet devices:
-        Main: c2:97:53:60:e3:5b (attached)
+        Main: xx:xx:xx:xx:xx:xx (attached)
         Link: DOWN
         Tx frames:   0
         Tx bytes:    0
@@ -986,12 +986,12 @@ Note: The RDK S600 uses eth0 as the DHCP port by default, and eth1 is configured
         inet6 ::1/128 scope host noprefixroute
         valid_lft forever preferred_lft forever
     2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
-        link/ether c6:40:e8:32:f0:8a brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
         altname end2
     3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-        link/ether c2:97:53:60:e3:5b brd ff:ff:ff:ff:ff:ff
+        link/ether xx:xx:xx:xx:xx:xx brd ff:ff:ff:ff:ff:ff
         altname end3
-        inet6 fe80::c097:53ff:fe60:e35b/64 scope link
+        inet6 fe80::xxxx:xxff:fexx:xxxx/64 scope link
         valid_lft forever preferred_lft forever
     ...
 
@@ -1001,7 +1001,7 @@ Note: The RDK S600 uses eth0 as the DHCP port by default, and eth1 is configured
     Active: no
     Slaves: 1
     Ethernet devices:
-        Main: c2:97:53:60:e3:5b (attached)
+        Main: xx:xx:xx:xx:xx:xx (attached)
         Link: UP
         Tx frames:   7071
         Tx bytes:    483524

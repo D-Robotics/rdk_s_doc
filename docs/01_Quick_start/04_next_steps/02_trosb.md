@@ -60,7 +60,7 @@ ros2 pkg list | head
 ```
 
 :::note 板端验证
-当前 S600 板端（192.168.3.35）的镜像未预装 tros.b。如需使用 tros.b，需烧录带 tros.b 的 RDK OS 镜像。
+当前 S600 板端的镜像未预装 tros.b。如需使用 tros.b，需烧录带 tros.b 的 RDK OS 镜像。
 :::
 
 ## 机器人应用开发

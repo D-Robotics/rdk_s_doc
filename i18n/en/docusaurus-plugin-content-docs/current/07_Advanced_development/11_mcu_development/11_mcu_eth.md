@@ -70,7 +70,7 @@ The following uses `samples/Eth/Eth_Test/Eth_test.c` sending an ARP packet as an
 The `Eth_test.c` test program sends a constructed ARP packet. Use Wireshark on a PC to capture packets and verify that data is received correctly. IP addresses are fixed by default and cannot be modified dynamically.
 
 ```
-0xd4, 0xfd, 0x9b, 0xae, 0x48, 0xf5, //Sender MAC address: d4:fd:9b:ae:48:f5  //MCU
+0xd4, 0xfd, 0x9b, 0xae, 0x48, 0xf5, //Sender MAC address: xx:xx:xx:xx:xx:xx  //MCU
 0xC0, 0xA8, 0x01, 0x32,             //Sender IP address: 192.168.1.50
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //Target MAC address: 00:00:00:00:00:00  //PC
 0xC0, 0xA8, 0x01, 0xf,             //Target IP address: 192.168.1.15
