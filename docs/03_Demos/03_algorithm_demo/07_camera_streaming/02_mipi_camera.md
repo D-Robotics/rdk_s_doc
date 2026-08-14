@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: "MIPI Camera YOLOv5x 推理"
-description: "MIPI Camera YOLOv5x 推理 预装示例"
+description: "用 MIPI 摄像头实时做 YOLOv5x 目标检测的预装示例"
 ---
 
 # MIPI Camera YOLOv5x 推理
@@ -10,55 +10,23 @@ description: "MIPI Camera YOLOv5x 推理 预装示例"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+本示例演示如何在 BPU 上部署量化后的 Ultralytics YOLOv5x 模型，通过 MIPI 摄像头（板载相机接口）实时读取画面做目标检测，并以全屏方式可视化检测结果（VIO 取流 + 前处理 + 推理 + NMS + 框绘制）。Python 版见 [MIPI Camera YOLOv5x 推理 (Python)](./02_mipi_camera_py.md)。
 
-基于 BPU 的 Ultralytics YOLOv5x 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于`/app/cdev_demo/bpu/10_mipi_camera_sample/`目录下。
+:::tip
+示例代码位于板端 `/app/cdev_demo/bpu/mipi_camera_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+:::
 
-</DocScope>
-<DocScope products="RDK-S600">
+## 前置条件
 
-基于 BPU 的 Ultralytics YOLOv5x 实时推理示例，支持通过 MIPI 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于 `/app/cdev_demo/bpu/mipi_camera_sample/` 目录下。
-
-</DocScope>
-
-## 功能说明
-
-- 模型加载
-
-    加载 `.hbm` 格式模型，初始化输入输出信息;
-
-- 摄像头采集
-
-    初始化 VIO 摄像头，采集 1920×1080 分辨率 NV12 图像;
-
-- HDMI 显示
-
-    绑定图像输出通道，实现实时显示;
-
-- 图像预处理
-
-    对 NV12 格式图像进行分离、缩放、转换为 BPU 所需张量格式;
-
-- BPU 推理
-
-    通过 .infer() 方法调用 BPU 执行推理任务;
-
-- 结果后处理
-
-    包括输出解码、置信度筛选、NMS 抑制、坐标缩放;
-
-- 可视化显示
-
-    将检测框和类别文本绘制到 overlay 层;
-
-
-## 模型说明
-
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x.md)。
-
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 桌面版镜像（Desktop），能进入桌面/console 显示。
+- MIPI 摄像头已连接到板载相机接口并被识别。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`）；若缺失见 [模型获取与放置](../../04_demo_support/01_model_files.md)。
 
 ## 环境依赖
-在编译运行前，请确保安装以下依赖：
+
+编译需要 `libgflags-dev`：
+
 ```bash
 sudo apt update
 sudo apt install libgflags-dev
@@ -66,147 +34,113 @@ sudo apt install libgflags-dev
 
 ## 硬件环境
 
+- MIPI 相机的接口使用自动检测模式，该示例运行时只能接入一个 MIPI 摄像头（任意 MIPI 接口均可），同时接入多个会报错。
+
 <DocScope products="RDK-S100">
-
-- mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
-- 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-- mipi摄像头的安装方法可参考[相机扩展板-MIPI 相机接口](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board#mipi-相机接口j2200-j2201)部分。
-
+- MIPI 摄像头安装方法可参考 [相机扩展板（RDK S100）](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md)。
 </DocScope>
+
 <DocScope products="RDK-S600">
-
-- mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
-- 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-- mipi摄像头的安装方法可参考[MIPI 相机接口](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-相机接口-j11j13)部分。
+- MIPI 摄像头安装方法可参考 [MIPI 相机接口（J11/J13）](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-相机接口-j11j13)。
 </DocScope>
 
-## 目录结构
+## 代码位置
+
+板端路径：`/app/cdev_demo/bpu/mipi_camera_sample/`
+
+目录结构：
+
 ```text
 .
-|-- CMakeLists.txt                     # CMake 构建脚本：目标/依赖/包含与链接
-|-- README.md                          # 使用说明（当前文件）
+|-- CMakeLists.txt                 # CMake 构建脚本：目标/依赖/包含与链接
+|-- README.md                      # 使用说明
 |-- inc
-|   `-- ultralytics_yolov5x.hpp        # YOLOv5x 推理封装头：加载/预处理/推理/后处理接口
+|   `-- ultralytics_yolov5x.hpp    # YOLOv5x 推理封装头：加载/预处理/推理/后处理接口
 `-- src
-    |-- main.cc                        # 程序入口：VIO取流→推理→在 Display 图层绘制
-    `-- ultralytics_yolov5x.cc         # 推理实现：letterbox、NV12张量写入、解码、NMS、复原坐标
+    |-- main.cc                    # 程序入口：VIO 取流→推理→在 Display 图层绘制
+    `-- ultralytics_yolov5x.cc     # 推理实现：letterbox、NV12 张量写入、解码、NMS、复原坐标
 ```
 
-## 编译工程
-- 配置与编译
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+## 编译
 
-<DocScope products="RDK-S100">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+cd /app/cdev_demo/bpu/mipi_camera_sample
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
-
-</DocScope>
+编译产物为 `build/mipi_camera`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名           | 说明                                  | 默认值                                                  |
-| --------------- | ------------------------------------- | ------------------------------------------------------ |
-| `--width`       | 传感器原始宽度（用于 VIO 参数/显示缩放） | `1920`                                                 |
-| `--height`      | 传感器原始高度（用于 VIO 参数/显示缩放） | `1080`                                                 |
-| `--model_path`  | BPU 量化模型路径（`.hbm`）             | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm`  |
-| `--label_file`  | 类别标签文件（逐行一个类别名）           | `/app/res/labels/coco_classes.names`                      |
-| `--score_thres` | 置信度阈值                             | `0.25`                                                 |
-| `--nms_thres`   | NMS 的 IoU 阈值                        | `0.45`                                                |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--width` | 传感器原始宽度（用于 VIO 参数/显示缩放） | `1920` |
+| `--height` | 传感器原始高度（用于 VIO 参数/显示缩放） | `1080` |
+| `--model_path` | BPU 量化模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`） |
+| `--label_file` | 类别标签文件（逐行一个类别名） | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | 置信度阈值 | `0.25` |
+| `--nms_thres` | NMS 的 IoU 阈值 | `0.45` |
 
-</DocScope>
+## 使用方法
+
+在 `build` 目录中，使用默认参数运行：
+
+```bash
+./mipi_camera
+```
+
+指定参数运行（等价于默认值）：
+
 <DocScope products="RDK-S600">
-| 参数名           | 说明                                  | 默认值                                                  |
-| --------------- | ------------------------------------- | ------------------------------------------------------ |
-| `--width`       | 传感器原始宽度（用于 VIO 参数/显示缩放） | `1920`                                                 |
-| `--height`      | 传感器原始高度（用于 VIO 参数/显示缩放） | `1080`                                                 |
-| `--model_path`  | BPU 量化模型路径（`.hbm`）             | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`  |
-| `--label_file`  | 类别标签文件（逐行一个类别名）           | `/app/res/labels/coco_classes.names`                      |
-| `--score_thres` | 置信度阈值                             | `0.25`                                                 |
-| `--nms_thres`   | NMS 的 IoU 阈值                        | `0.45`                                                |
+
+```bash
+./mipi_camera \
+  --width 1920 --height 1080 \
+  --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.45
+```
 
 </DocScope>
 
-## 快速运行
-注意：该程序需运行在桌面环境。
-- 运行模型
-    - 确保在`build`目录中
-    - 使用默认参数
-        ```bash
-        ./mipi_camera
-        ```
-    - 指定参数运行
+退出运行：在命令行输入 `Ctrl+C`。
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./mipi_camera \
-            --width 1920 --height 1080 \
-            --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+## 运行效果
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./mipi_camera \
-            --width 1920 --height 1080 \
-            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+程序先初始化 VIO 摄像头，再加载模型推理并叠加显示。本板（未接 MIPI 摄像头）实测输出如下：
 
-        </DocScope>
-- 退出运行
+```text
+disp_w=1920, disp_h=1080
+set camera fps: -1,width: 1920,height: 1080
+No camera sensor found, please check whether the camera connection or video_idx is correct.
+[OpenCamera] CamInitParam failed error(-1)
+[Error] sp_open_camera failed!
+```
 
-    在命令行输入Ctrl C
+接入 MIPI 摄像头后的成功标志（据源码 `main.cc`）：
 
-- 查看结果
+- 输出 `disp_w=..., disp_h=...` 与 `sp_open_camera success!`；
+- 屏幕显示带检测框的实时画面，按 `Ctrl+C` 退出。
 
-    运行成功后，屏幕会实时显示目标检测图像
+<!-- TODO: 待接入摄像头实测成功 log -->
 
-## 注意事项
-- 该程序需运行在桌面环境。
+## 软件说明
 
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+数据流：VIO 初始化并打开 sensor（NV12 1920×1080）→ `sp_vio_get_yuv` 取帧 → NV12 转 BGR → letterbox 缩放至 672×672 → 转 NV12 → BPU 推理 → 解码输出头 + NMS → 在 Display 图层绘制框与类别 → 实时显示。
 
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
+## 常见问题
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- **`No camera sensor found`**：MIPI 摄像头未识别。用 `dmesg | grep -i sensor` 查 sensor，确认排线接好、摄像头被识别。
+- **`sp_open_camera failed!`**：sensor 初始化失败，检查摄像头连接与供电。
+- **无画面显示**：需桌面/显示环境。
+- **`make` 报错找不到 `gflags`**：未装 `libgflags-dev`，按"环境依赖"安装。
 
 ## 相关文档
 
-- [算法示例概述](/Demos/algorithm_demo/summary)
-- [模型获取与放置](/Demos/demo_support/model_files)
-- [Python 推理 API](/Simple_API/inference_api/python-api)
+- [Python 版 MIPI Camera 示例](./02_mipi_camera_py.md)
+- [目标检测-YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)

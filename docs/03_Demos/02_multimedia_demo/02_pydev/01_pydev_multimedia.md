@@ -6,14 +6,22 @@ description: "RDK S100/S600 Python 多媒体采集/显示/编解码示例"
 
 # Python 多媒体示例
 
-本节介绍使用 Python pydev 接口进行多媒体采集、显示和编解码的示例。Python 示例使用 [Python 接口](/Simple_API/multimedia_api/pydev/object_camera)（Camera/Encoder/Decoder/Display 对象），与 C 语言 cdev 示例对应。
+本节介绍使用 Python 接口进行多媒体采集、显示和编解码的示例。Python 接口为 `libsrcampy`（包名 `hobot_vio`），提供 `Camera` / `Encoder` / `Decoder` / `Display` 等对象，与 C 语言 cdev 示例对应。
+
+:::tip
+示例源码预置在板端 `/app/pydev_demo/` 目录，Python 脚本无需编译，直接运行。
+:::
 
 ## 环境准备
 
-- 开发板已烧录 RDK OS 并启动
+- 开发板已烧录 RDK OS 并启动（见 [开始使用 RDK](../../../01_Quick_start/02_getting_started.md)）
 - MIPI 摄像头或 USB 摄像头已连接（取决于示例）
 - HDMI 显示器已连接（显示类示例）
-- Python 3 + pydev 依赖已安装：`pip install -r /app/pydev_demo/requirements.txt`
+- Python 依赖已安装：
+
+```bash
+pip install -r /app/pydev_demo/requirements.txt
+```
 
 ## 代码位置
 
@@ -21,68 +29,87 @@ description: "RDK S100/S600 Python 多媒体采集/显示/编解码示例"
 
 ```
 pydev_demo/
-├── mipi_camera_sample/       # MIPI 摄像头采集
-├── usb_camera_sample/        # USB 摄像头采集
-├── web_display_camera_sample # Web 显示摄像头
-├── rtsp_yolov5x_display_sample # RTSP 拉流 + 推理 + 显示
-├── classification_sample/    # 图像分类（算法示例，见 3.3）
-├── detection_sample/         # 目标检测
-├── instance_segmentation_sample/ # 实例分割
-├── pose_sample/             # 姿态估计
-├── speech_sample/            # 语音识别
-├── models/                   # 模型文件
-├── utils/                    # 公共工具
+├── mipi_camera_sample/           # MIPI 摄像头采集/缩放/裁剪/推流
+│   ├── 02_mipi_camera_dump.py    #   采集并保存 YUV
+│   ├── 03_mipi_camera_scale.py   #   VPS 缩放
+│   ├── 04_mipi_camera_crop_scale.py # VPS 裁剪 + 缩放
+│   ├── 05_mipi_camera_streamer.py   # 采集 → HDMI 显示
+│   └── 01_mipi_camera_yolov5x.py    # 目标检测（见算法示例）
+├── usb_camera_sample/            # USB 摄像头 + 目标检测
+├── rtsp_yolov5x_display_sample/  # RTSP 拉流 + 目标检测 + 显示
+├── web_display_camera_sample/    # Web 显示 + 目标检测
 └── requirements.txt
 ```
 
-> 算法类示例（classification/detection/segmentation/pose/speech）见 [算法示例](/Demos/algorithm_demo/)。本节聚焦多媒体采集/显示/编解码。
+> 目标检测类示例（`01_mipi_camera_yolov5x.py`、`usb_camera_sample` 等）见 [算法示例](../../03_algorithm_demo/01_summary.md)。本节聚焦多媒体采集 / 显示 / 编解码。
 
-## 编译与运行
+## 使用方法
 
 Python 示例无需编译，直接运行：
 
 ```bash
-# MIPI 摄像头采集 + 显示
+# 采集 → HDMI 显示（连通性测试，需桌面环境）
 cd /app/pydev_demo/mipi_camera_sample
-python3 main.py
+python3 05_mipi_camera_streamer.py -w 1920 -h 1080
 
-# USB 摄像头采集 + 显示
-cd /app/pydev_demo/usb_camera_sample
-python3 main.py
+# 采集并保存 YUV
+python3 02_mipi_camera_dump.py -f 30 -c 10 -w 1920 -h 1080
 
-# RTSP 拉流 + 显示
-cd /app/pydev_demo/rtsp_yolov5x_display_sample
-python3 main.py
+# VPS 缩放（输入为 NV12 格式 YUV 文件）
+python3 03_mipi_camera_scale.py -i input.yuv -o output.yuv \
+  -w 640 -h 360 --iwidth 1920 --iheight 1080
+
+# VPS 裁剪 + 缩放
+python3 04_mipi_camera_crop_scale.py -i input.yuv -o output.yuv \
+  -w 640 -h 480 --iwidth 1920 --iheight 1080 \
+  -x 304 -y 304 --crop_w 896 --crop_h 592
 ```
 
 ## 代码解读
 
-Python 示例使用 pydev 对象 API，核心流程：
+Python 示例使用 `hobot_vio` 的对象接口，核心流程：
 
 ```python
-from spdev import Camera, Display, Encoder, Decoder
+from hobot_vio import libsrcampy
 
 # 创建对象
-cam = Camera(sensor_id=0, width=1920, height=1080)
-disp = Display()
+cam = libsrcampy.Camera()      # Camera 对象：采集 + VPS
+disp = libsrcampy.Display()    # Display 对象：HDMI 输出
 
 # 采集 → 显示
-while True:
-    frame = cam.get_frame()
-    disp.show(frame)
+cam.open_cam(0, -1, 30, 1920, 1080)  # 打开 MIPI 摄像头
+disp.display(0, 1920, 1080)          # 打开显示通道
+libsrcampy.bind(cam, disp)           # 绑定采集到显示
 ```
 
-- `Camera` 对象 — 封装 VIO 采集，详见 [Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
-- `Display` 对象 — 封装显示输出，详见 [Display 对象](/Simple_API/multimedia_api/pydev/object_display)
-- `Encoder`/`Decoder` 对象 — 封装编解码，详见 [4.1.2.3](/Simple_API/multimedia_api/pydev/object_encoder) / [4.1.2.4](/Simple_API/multimedia_api/pydev/object_decoder)
+- `Camera` 对象 — 封装 VIO 采集与 VPS，详见 [Camera 对象](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)
+- `Display` 对象 — 封装显示输出，详见 [Display 对象](../../../04_Simple_API/01_multimedia_api/pydev/05_object_display.md)
+- `Encoder` / `Decoder` 对象 — 封装编解码，详见 [Encoder 对象](../../../04_Simple_API/01_multimedia_api/pydev/03_object_encoder.md) / [Decoder 对象](../../../04_Simple_API/01_multimedia_api/pydev/04_object_decoder.md)
 
-## 效果
+## 运行效果
 
-- `mipi_camera_sample` / `usb_camera_sample` — HDMI 显示器实时显示摄像头画面
-- `rtsp_yolov5x_display_sample` — HDMI 显示 RTSP 拉流画面 + 推理结果叠加
+- `05_mipi_camera_streamer.py` — HDMI 显示器实时显示摄像头画面
+- `02_mipi_camera_dump.py` — 脚本目录生成 `output0.yuv`、`output1.yuv`… 采集文件
+- `03_mipi_camera_scale.py` / `04_mipi_camera_crop_scale.py` — 生成缩放 / 裁剪后的 YUV 文件
+
+## 常见问题
+
+### 提示 `Failed to open camera`
+
+**原因**：未连接摄像头，或同时接入了多个 MIPI 摄像头。
+
+**解决**：MIPI 摄像头接口使用自动检测模式，同一时间只能接入一个 MIPI 摄像头，接入多个会报错。
+
+### 显示类示例无画面
+
+**原因**：显示类脚本需运行在桌面环境。
+
+**解决**：使用桌面版镜像，并在桌面会话中运行。
 
 ## 相关文档
 
 - [C 语言示例](../01_cdev/01_vio_capture.md)
-- [Python 接口](/Simple_API/multimedia_api/pydev/object_camera)
-- [算法示例](/Demos/algorithm_demo/summary)
+- [多媒体接口说明](../../../04_Simple_API/01_multimedia_api/pydev/01_pydev_multimedia_api.md)
+- [Camera 对象](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)
+- [Display 对象](../../../04_Simple_API/01_multimedia_api/pydev/05_object_display.md)
+- [算法示例](../../03_algorithm_demo/01_summary.md)

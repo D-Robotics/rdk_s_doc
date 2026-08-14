@@ -1,210 +1,137 @@
 ---
 sidebar_position: 3
-title: "RTSP视频拉流及YOLOv5x 推理"
-description: "RTSP视频拉流及YOLOv5x 推理 预装示例"
+title: "RTSP 视频拉流及 YOLOv5x 推理"
+description: "从 RTSP 流拉流解码并实时做 YOLOv5x 目标检测的预装示例"
 ---
 
-# RTSP视频拉流及YOLOv5x 推理
+# RTSP 视频拉流及 YOLOv5x 推理
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
-本示例演示如何在 RDK S100 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
-RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/` 目录下。
+本示例演示如何结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现 RTSP/H.264 视频流 → 硬件解码（NV12）→ YOLOv5x 推理 → 叠加检测框 → 实时显示的端到端流程。Python 版见 [RTSP 视频拉流及 YOLOv5x 推理 (Python)](./03_decode_rtsp_py.md)。
 
-</DocScope>
-<DocScope products="RDK-S600">
-本示例演示如何在 RDK S100 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
-RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/` 目录下。
+:::tip
+示例代码位于板端 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+:::
 
-</DocScope>
+## 前置条件
 
-## 功能说明
-
-- 模型加载 (Model Load)
-
-    使用 YOLOv5x(model_path) 加载 BPU 模型，并通过 load_linewise_labels 获取类别名称列表，准备后续推理使用。
-
-- 前处理 (Preprocess)
-
-    从 SP 解码器获取 NV12 帧（sp_decoder_get_image），转换为 BGR（cv::cvtColor），进行缩放/letterbox 处理，并写入 YOLOv5x 输入张量（pre_process）。
-
-- 模型推理 (Inference)
-
-    调用 yolov5x.infer() 在 BPU 上执行前向计算，生成原始检测结果。
-
-- 后处理 (Postprocess)
-
-    调用 yolov5x.post_process完成置信度过滤、NMS，并将检测框坐标映射回显示分辨率。
-
-- RTSP 拉流与解码 (SP Decoder / FFmpeg)
-
-    使用 FFmpeg 初始化网络栈 (avformat_network_init)，打开 RTSP 流 (avformat_open_input)，并通过 SP 模块拉取 H264 视频帧（sp_start_decode、sp_decoder_get_image）。
-
-- 分辨率适配与缩放 (VPS)
-
-    若显示分辨率与视频流分辨率不一致，使用 SP VPS 模块进行缩放 (sp_open_vps)，并通过 sp_module_bind 将解码器、VPS、显示模块绑定成管线。
-
-- 屏幕显示 (SP Display)
-
-    通过 sp_start_display 初始化显示通道；使用 draw_detections_on_disp 将检测结果叠加绘制到屏幕；若分辨率一致，可直接通过 sp_display_set_image 显示 YUV 帧。
-
-- 信号控制 (Signal Handler)
-
-    注册 signal_handler_func 捕获 SIGINT 等信号，设置全局标志 is_stop，以便主循环安全退出。
-
-## 模型说明
-
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x.md)。
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 桌面版镜像（Desktop），能进入桌面/console 显示。
+- 可达的 RTSP 流地址（如 `rtsp://<ip>/<stream>`）。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`）；若缺失见 [模型获取与放置](../../04_demo_support/01_model_files.md)。
 
 ## 环境依赖
-在编译运行前，请确保安装以下依赖：
+
+编译需要 `libgflags-dev` 与 FFmpeg 开发库：
+
 ```bash
 sudo apt update
-sudo apt install libgflags-dev
+sudo apt install libgflags-dev libavformat-dev libavcodec-dev libavutil-dev
 ```
 
-## 目录结构
+## 代码位置
+
+板端路径：`/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/`
+
+目录结构：
 
 ```text
 .
-|-- CMakeLists.txt
-|-- README.md
+|-- CMakeLists.txt                 # CMake 构建脚本
+|-- README.md                      # 使用说明
 |-- inc
-|   `-- ultralytics_yolov5x.hpp       # YOLOv5x 封装头文件
+|   `-- ultralytics_yolov5x.hpp    # YOLOv5x 封装头文件
 `-- src
-    |-- main.cc                       # 主程序入口：RTSP解码→YOLOv5x推理→显示
-    `-- ultralytics_yolov5x.cc        # YOLOv5x 实现：预处理/推理/后处理/NMS
+    |-- main.cc                    # 主程序入口：RTSP 解码→YOLOv5x 推理→显示
+    `-- ultralytics_yolov5x.cc     # YOLOv5x 实现：预处理/推理/后处理/NMS
 ```
 
-## 编译工程
-- 配置与编译
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+## 编译
 
-<DocScope products="RDK-S100">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+cd /app/cdev_demo/bpu/rtsp_yolov5x_display_sample
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
-
-</DocScope>
+编译产物为 `build/rtsp_yolov5x_display`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名            | 说明                             | 默认值                                                    |
-| ----------------- | ------------------------------- | ------------------------------------------------------ |
-| `--rtsp_url`      | RTSP 流 URL                     | `rtsp://127.0.0.1/assets/1080P_test.h264`              |
-| `--transfer_type` | RTSP 传输类型（tcp/udp）         | `tcp`                                                  |
-| `--model_path`    | YOLOv5x 量化 BPU 模型路径 (.hbm) | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--label_file`    | 类别名文件（每行一个类别名）       | `/app/res/labels/coco_classes.names`                   |
-| `--score_thres`   | 置信度阈值（过滤低分检测框）       | `0.25`                                                 |
-| `--nms_thres`     | NMS IoU 阈值                    | `0.45`                                                 |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--rtsp_url` | RTSP 流 URL | `rtsp://127.0.0.1/assets/1080P_test.h264` |
+| `--transfer_type` | RTSP 传输类型（tcp/udp） | `tcp` |
+| `--model_path` | YOLOv5x 量化 BPU 模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`） |
+| `--label_file` | 类别名文件（每行一个类别名） | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | 置信度阈值（过滤低分检测框） | `0.25` |
+| `--nms_thres` | NMS 的 IoU 阈值 | `0.45` |
 
-</DocScope>
+## 使用方法
+
+先准备 RTSP 码流。使用系统预置的推流服务，把 `1080P_test.h264` 视频文件处理成 RTSP 流（URL 为 `rtsp://127.0.0.1/assets/1080P_test.h264`）：
+
+```bash
+cd /app/res
+sudo chmod +x live555MediaServer
+sudo ./live555MediaServer &
+```
+
+在 `build` 目录中，使用默认参数运行：
+
+```bash
+./rtsp_yolov5x_display
+```
+
+指定参数运行（等价于默认值）：
+
 <DocScope products="RDK-S600">
-| 参数名            | 说明                             | 默认值                                                    |
-| ----------------- | ------------------------------- | ------------------------------------------------------ |
-| `--rtsp_url`      | RTSP 流 URL                     | `rtsp://127.0.0.1/assets/1080P_test.h264`              |
-| `--transfer_type` | RTSP 传输类型（tcp/udp）         | `tcp`                                                  |
-| `--model_path`    | YOLOv5x 量化 BPU 模型路径 (.hbm) | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--label_file`    | 类别名文件（每行一个类别名）       | `/app/res/labels/coco_classes.names`                   |
-| `--score_thres`   | 置信度阈值（过滤低分检测框）       | `0.25`                                                 |
-| `--nms_thres`     | NMS IoU 阈值                    | `0.45`                                                 |
+
+```bash
+./rtsp_yolov5x_display \
+  --rtsp_url rtsp://127.0.0.1/assets/1080P_test.h264 \
+  --transfer_type tcp \
+  --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.45
+```
 
 </DocScope>
 
+退出运行：在命令行输入 `Ctrl+C`。
 
-## 快速运行
-- 准备rtsp码流
+## 运行效果
 
-    使用系统预置的推流服务,准备rtsp码流作为输入源，该服务会把1080P_test.h264视频文件处理成 rtsp 流，url 地址为rtsp://127.0.0.1/assets/1080P_test.h264，用户可通过如下命令启动推流服务：
-    ```bash
-    cd /app/res
-    sudo chmod +x live555MediaServer
-    sudo ./live555MediaServer &
-    ```
-- 运行模型
-    - 确保在`build`目录中
-    - 使用默认参数
-        ```bash
-        ./rtsp_yolov5x_display
-        ```
-    - 指定参数运行
+以下是 RDK S600 上的实测输出（live555 推流 + 默认参数）：
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./rtsp_yolov5x_display \
-            --rtsp_url rtsp://127.0.0.1/assets/1080P_test.h264 \
-            --transfer_type tcp \
-            --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.3 \
-            --nms_thres 0.5
-        ```
+```text
+./rtsp_yolov5x_display
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+rtsp_w:1920, rtsp_h:1080, display_w:1920, display_h:1080
+```
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./rtsp_yolov5x_display \
-            --rtsp_url rtsp://127.0.0.1/assets/1080P_test.h264 \
-            --transfer_type tcp \
-            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.3 \
-            --nms_thres 0.5
-        ```
+**成功标志**：输出 `rtsp_w:1920, rtsp_h:1080` 表示已成功打开 RTSP 流并解析出分辨率；`BPULib verison(2, 2, 15)` 与 `DNN: 3.13.6` 表示 BPU 运行时正常加载。屏幕会实时显示带检测框的画面。
 
-        </DocScope>
+## 软件说明
 
-- 退出运行
+数据流：FFmpeg 初始化网络栈并打开 RTSP 流（`avformat_network_init`/`avformat_open_input`）→ SP 硬件解码（`sp_start_decode`/`sp_decoder_get_image`）取 NV12 帧 → NV12 转 BGR → letterbox 缩放 → BPU 推理 → NMS → 在 Display 图层叠加检测框（`draw_detections_on_disp`）；若显示分辨率与流分辨率不一致，自动插入 SP VPS 缩放管线。
 
-    在命令行输入Ctrl C
+## 常见问题
 
-- 查看结果
-
-    运行成功后，屏幕会实时显示目标检测图像
-
-## 注意事项
-- 该程序需运行在桌面环境。
-
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
-
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- **拉流失败/超时**：确认 RTSP 地址可达、网络通；用 `ffprobe rtsp://...` 或 VLC 验证流；live555 需在 `/app/res` 目录启动。
+- **`No video stream found`**：流地址无视频轨，检查推流源。
+- **无画面**：需显示环境；确认 `--rtsp_url` 分辨率与显示匹配，否则需 VPS 缩放。
+- **报错找不到模型**：检查 `--model_path` 下 `.hbm` 是否存在。
 
 ## 相关文档
 
-- [算法示例概述](/Demos/algorithm_demo/summary)
-- [模型获取与放置](/Demos/demo_support/model_files)
-- [Python 推理 API](/Simple_API/inference_api/python-api)
+- [Python 版 RTSP 示例](./03_decode_rtsp_py.md)
+- [目标检测-YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)

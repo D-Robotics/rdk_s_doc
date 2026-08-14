@@ -1,196 +1,132 @@
 ---
 sidebar_position: 4
-title: "视频解码及YOLOv5x 推理"
-description: "视频解码及YOLOv5x 推理 预装示例"
+title: "视频解码及 YOLOv5x 推理"
+description: "解码本地 H.264 文件并实时做 YOLOv5x 目标检测的预装示例"
 ---
 
-# 视频解码及YOLOv5x 推理
+# 视频解码及 YOLOv5x 推理
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+本示例演示如何使用 SP 解码/显示/VIO 与 BPU 组合，完成本地 H.264 文件 → 硬件解码（NV12）→ YOLOv5x 推理 → 叠加框到显示图层 的端到端流程。WebSocket 版见 [WebSocket YOLOv5x 推理 (Python)](./04_websocket_py.md)。
 
-本示例演示如何在 RDK S100 等平台上，使用 SP 解码/显示/VIO 与 BPU 组合完成：
-本地 H.264 文件 → 硬件解码 (NV12) → YOLOv5X 推理 → 叠加框到显示图层 的端到端流程，本示例代码位于 `/app/cdev_demo/bpu/decode_yolov5x_display_sample` 目录下。
+:::tip
+示例代码位于板端 `/app/cdev_demo/bpu/decode_yolov5x_display_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+:::
 
-</DocScope>
-<DocScope products="RDK-S600">
+## 前置条件
 
-本示例演示如何在 RDK S100 等平台上，使用 SP 解码/显示/VIO 与 BPU 组合完成：
-本地 H.264 文件 → 硬件解码 (NV12) → YOLOv5X 推理 → 叠加框到显示图层 的端到端流程，本示例代码位于 `/app/cdev_demo/bpu/decode_yolov5x_display_sample` 目录下。
-
-</DocScope>
-
-## 功能说明
-
-- 模型加载
-
-    加载模型，获取输入/输出相关信息。
-
-- 前处理 (Preprocess)
-
-    将从 VIO 获取的 NV12 帧转换为 BGR（cv::cvtColor），进行 letterbox/缩放，写入 NV12 输入张量。
-
-- 模型推理 (Inference)
-
-    调用 infer() 在 BPU 上执行前向计算。
-
-- 后处理 (Postprocess)
-
-    调用 yolov5x.post_process(score_thres, nms_thres, W, H)，完成解码、置信度过滤与 NMS，并将框坐标还原到原分辨率。
-
-- 相机管理 (VIO)
-
-    通过 sp_open_camera_v2 打开传感器通道，sp_vio_get_yuv 拉取 NV12 帧。
-
-- 屏幕叠加 (SP Display)
-
-    sp_start_display 初始化显示通道；draw_detections_on_disp 将检测结果绘制到屏幕。
-
-## 模型说明
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x.md)。
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 桌面版镜像（Desktop），能进入桌面/console 显示。
+- 输入视频文件已就位：`/app/res/assets/1080P_test.h264`。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`）；若缺失见 [模型获取与放置](../../04_demo_support/01_model_files.md)。
 
 ## 环境依赖
-在编译运行前，请确保安装以下依赖：
+
+编译需要 `libgflags-dev`：
+
 ```bash
 sudo apt update
 sudo apt install libgflags-dev
 ```
 
-## 目录结构
+## 代码位置
+
+板端路径：`/app/cdev_demo/bpu/decode_yolov5x_display_sample/`
+
+目录结构：
 
 ```text
 .
-|-- CMakeLists.txt                     # CMake 构建脚本（目标/依赖/包含与链接）
-|-- README.md                          # 本使用说明
+|-- CMakeLists.txt                 # CMake 构建脚本（目标/依赖/包含与链接）
+|-- README.md                      # 使用说明
 |-- inc
-|   `-- ultralytics_yolov5x.hpp        # YOLOv5x 封装头：加载/预处理/推理/后处理接口
+|   `-- ultralytics_yolov5x.hpp    # YOLOv5x 封装头：加载/预处理/推理/后处理接口
 `-- src
-    |-- main.cc                        # 程序入口：H.264 解码→推理→显示叠加（Ctrl+C 退出）
-    `-- ultralytics_yolov5x.cc         # YOLOv5x 实现：letterbox、NV12 张量写入、解码、NMS、还原坐标
+    |-- main.cc                    # 程序入口：H.264 解码→推理→显示叠加（Ctrl+C 退出）
+    `-- ultralytics_yolov5x.cc     # YOLOv5x 实现：letterbox、NV12 张量写入、解码、NMS、还原坐标
 ```
 
-## 编译工程
-- 配置与编译
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+## 编译
 
-<DocScope products="RDK-S100">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+cd /app/cdev_demo/bpu/decode_yolov5x_display_sample
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
-
-</DocScope>
+编译产物为 `build/decode_yolov5x_display`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名           | 说明                                                 | 默认值                                                   |
-| --------------- | ---------------------------------------------------- | -------------------------------------------------------- |
-| `--width`       | 源码流/解码期望宽度（像素）                             | `1920`                                                  |
-| `--height`      | 源码流/解码期望高度（像素）                             | `1080`                                                  |
-| `--input_path`  | 输入 H.264 文件路径（示例为本地文件；也可扩展为码流管道） | `/app/res/assets/1080P_test.h264`                          |
-| `--model_path`  | YOLOv5X 量化模型（`.hbm`）路径                         | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm`  |
-| `--label_file`  | 类别名列表文件（逐行一个类别名）                         | `/app/res/labels/coco_classes.names`                      |
-| `--score_thres` | 置信度阈值（过滤低分框）                                | `0.25`                                                  |
-| `--nms_thres`   | NMS IoU 阈值                                          | `0.45`                                                  |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--width` | 源码流/解码期望宽度（像素） | `1920` |
+| `--height` | 源码流/解码期望高度（像素） | `1080` |
+| `--input_path` | 输入 H.264 文件路径 | `/app/res/assets/1080P_test.h264` |
+| `--model_path` | YOLOv5x 量化模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`） |
+| `--label_file` | 类别名列表文件（逐行一个类别名） | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | 置信度阈值（过滤低分框） | `0.25` |
+| `--nms_thres` | NMS 的 IoU 阈值 | `0.45` |
 
-</DocScope>
+## 使用方法
+
+在 `build` 目录中，使用默认参数运行：
+
+```bash
+./decode_yolov5x_display
+```
+
+指定参数运行（等价于默认值）：
+
 <DocScope products="RDK-S600">
-| 参数名           | 说明                                                 | 默认值                                                   |
-| --------------- | ---------------------------------------------------- | -------------------------------------------------------- |
-| `--width`       | 源码流/解码期望宽度（像素）                             | `1920`                                                  |
-| `--height`      | 源码流/解码期望高度（像素）                             | `1080`                                                  |
-| `--input_path`  | 输入 H.264 文件路径（示例为本地文件；也可扩展为码流管道） | `/app/res/assets/1080P_test.h264`                          |
-| `--model_path`  | YOLOv5X 量化模型（`.hbm`）路径                         | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`  |
-| `--label_file`  | 类别名列表文件（逐行一个类别名）                         | `/app/res/labels/coco_classes.names`                      |
-| `--score_thres` | 置信度阈值（过滤低分框）                                | `0.25`                                                  |
-| `--nms_thres`   | NMS IoU 阈值                                          | `0.45`                                                  |
+
+```bash
+./decode_yolov5x_display \
+  --width 1920 --height 1080 \
+  --input_path /app/res/assets/1080P_test.h264 \
+  --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.45
+```
 
 </DocScope>
 
-## 快速运行
-- 运行模型
-    - 确保在`build`目录中
-    - 使用默认参数
-        ```bash
-        ./decode_yolov5x_display
-        ```
-    - 指定参数运行
+退出运行：在命令行输入 `Ctrl+C`。
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./decode_yolov5x_display \
-            --width 1920 --height 1080 \
-            --input_path /app/res/assets/1080P_test.h264 \
-            --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+## 运行效果
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./decode_yolov5x_display \
-            --width 1920 --height 1080 \
-            --input_path /app/res/assets/1080P_test.h264 \
-            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+以下是 RDK S600 上的实测输出（默认参数，`1080P_test.h264`）：
 
-        </DocScope>
+```text
+./decode_yolov5x_display
+disp_w=1920, disp_h=1080
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+sp_start_decode success!
+sp_start_display success!
+```
 
-- 退出运行
+**成功标志**：输出 `sp_start_decode success!` 表示已成功打开解码通道，`sp_start_display success!` 表示显示通道就绪；`BPULib verison(2, 2, 15)` 与 `DNN: 3.13.6` 表示 BPU 运行时正常加载。屏幕会实时显示带检测框的画面。
 
-    在命令行输入Ctrl C
+## 软件说明
 
-- 查看结果
+数据流：SP 解码器打开 H.264 文件（`sp_init_decoder_module`/`sp_start_decode`）→ `sp_decoder_get_image` 取 NV12 帧 → NV12 转 BGR → letterbox 缩放 → BPU 推理 → NMS → 在 Display 图层叠加检测框（`draw_detections_on_disp`）；若显示分辨率与视频分辨率不一致，自动插入 SP VPS 缩放管线；文件解码到结尾后自动循环重播。
 
-    运行成功后，屏幕会实时显示目标检测图像
+## 常见问题
 
-## 注意事项
-- 该程序需运行在桌面环境。
-
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
-
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- **`sp_start_decode failed`**：`--input_path` 指定的文件不存在或非 H.264 码流，检查文件路径。
+- **无画面**：需显示环境；确认 `--width`/`--height` 与视频实际分辨率一致，否则需 VPS 缩放。
+- **`make` 报错找不到 `gflags`**：未装 `libgflags-dev`，按"环境依赖"安装。
+- **报错找不到模型**：检查 `--model_path` 下 `.hbm` 是否存在。
 
 ## 相关文档
 
-- [算法示例概述](/Demos/algorithm_demo/summary)
-- [模型获取与放置](/Demos/demo_support/model_files)
-- [Python 推理 API](/Simple_API/inference_api/python-api)
+- [WebSocket YOLOv5x 推理 (Python)](./04_websocket_py.md)
+- [目标检测-YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)

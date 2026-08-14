@@ -24,6 +24,19 @@ Type "help", "copyright", "credits" or "license" for more information.
 :::
 
 
+## 代码位置
+
+GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，相关脚本如下：
+
+```text
+/app/40pin_samples/
+├── simple_out.py        # GPIO 输出示例
+├── simple_input.py      # GPIO 输入示例
+├── button_led.py        # 按键输入控制 LED 输出示例
+├── button_event.py      # 边沿事件检测示例
+└── button_interrupt.py  # 中断方式处理边沿事件示例
+```
+
 ## 设置引脚编码方式
 
 开发板的引脚编码有 4 种模式：
@@ -723,6 +736,20 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |--- ---------------- --------------------
 ```
+
+## 常见问题
+
+### 运行 GPIO 示例无输出或电平不变
+
+**原因**：RDK S600 的 30-pin 自锁接口数字 IO 为 1.8V 电平，示例使用的管脚号随板型自动适配（见 `determine_pins()`）。
+
+**解决**：确认外设电平与 1.8V 匹配；输入管脚需外接确定电平，输出管脚可用万用表或 LED 观察。
+
+### 提示管脚已被占用
+
+**原因**：该 GPIO 已被其他进程使用。
+
+**解决**：结束占用进程后重试；示例退出时会自动执行 `GPIO.cleanup()` 释放管脚。也可用 `GPIO.setwarnings(False)` 屏蔽警告。
 
 ## 相关文档
 

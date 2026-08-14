@@ -6,22 +6,9 @@ description: "用 hbm_runtime Python 接口部署 MobileNetV2 做图像分类的
 
 # 图像分类-MobileNetV2 (Python)
 
-```mdx-code-block
-import DocScope from '@site/src/components/DocScope';
-```
-
 本示例演示如何用 `hbm_runtime` 的 Python 接口部署 MobileNetV2 模型做图像分类推理。MobileNetV2 是轻量级分类网络，参数少、延迟低，适合对算力/功耗敏感的场景。与 [ResNet18 (Python)](./01_resnet18_py.md) 同为分类示例，可对比精度与速度。
 
-<DocScope products="RDK-S100">
-
-示例代码位于板端 `/app/pydev_demo/01_classification_sample/02_mobilenetv2/` 目录下。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 示例代码位于板端 `/app/pydev_demo/classification_sample/mobilenetv2/` 目录下。
-
-</DocScope>
 
 ## 前置条件
 
@@ -41,14 +28,10 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 使用方法
 
-<DocScope products="RDK-S600">
-
 ```bash
 cd /app/pydev_demo/classification_sample/mobilenetv2
 python mobilenetv2.py
 ```
-
-</DocScope>
 
 ## 运行效果
 

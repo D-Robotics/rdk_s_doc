@@ -13,6 +13,16 @@ import DocScope from '@site/src/components/DocScope';
 
 音频模块基于标准 alsa 框架进行开发，用户空间使用开源代码 alsa-lib 提供的库和二进制 bin 进行功能测试。该章节基于此说明音频功能测试的基本方法。
 
+## 环境准备
+
+- 硬件：按产品接入对应的音频设备（S100：Audio Driver HAT REV2 音频子板；S600：USB 声卡或通过 14PIN 连接的 I2S 音频子板）
+- 系统：已烧录 RDK OS 并启动
+- 依赖：系统预装 alsa-utils（提供 `arecord`/`aplay`/`amixer` 工具）
+
+## 代码位置
+
+板端无独立 audio demo，直接使用系统 alsa-lib 工具进行测试；音频配置工具源码位于 SDK `hobot-audio-config` 包（`hobot-audio-config/audio_gadget/audio_gadget.c`）。
+
 ## alsa-lib 介绍
 
 <DocScope products="RDK-S100">
@@ -103,6 +113,10 @@ amixer sget 'DAC' //获取
 :::
 
 确认当前要调整的声卡/设备号方法：
+
+:::tip
+若 `arecord -l` 输出 `no soundcards found...`，表示音频子板未连接或未被系统识别，请先检查硬件连接与拨码开关设置。
+:::
 
 - arecord -l
 
@@ -244,6 +258,6 @@ S600预留了14PIN，包含 I2S/I2C 接口。
 
 ## 相关文档
 
-- [音频配置](/System_configuration/audio_output)
-- [音频调试指南](/Advanced_development/driver_development/driver_audio)
-- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [音频配置](../../02_System_configuration/10_audio_output.md)
+- [音频调试指南](../../07_Advanced_development/04_driver_development/11_driver_audio.md)
+- [C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)

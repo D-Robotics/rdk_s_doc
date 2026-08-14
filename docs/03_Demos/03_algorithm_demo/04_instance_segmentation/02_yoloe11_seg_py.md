@@ -13,6 +13,8 @@ sidebar_products: RDK-S100
 
 本示例展示了如何使用 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于`/app/pydev_demo/05_open_instance_seg_sample/01_yoloe11_seg/`目录下。
 
+<!-- TODO: 待核实 S100 板端真实路径（板端无 S100，S600 镜像无此示例；路径可能已按“无数字前缀”约定调整） -->
+
 ## 模型说明
 - 简介：
 
@@ -142,6 +144,6 @@ pip install -r ../../requirements.txt
 
 ## 相关文档
 
-- [算法示例概述](/Demos/algorithm_demo/summary)
-- [模型获取与放置](/Demos/demo_support/model_files)
-- [Python 推理 API](/Simple_API/inference_api/python-api)
+- [C/C++ 版 YOLOE11 分割示例](./02_yoloe11_seg.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/01_python_api.md)

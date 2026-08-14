@@ -20,15 +20,28 @@ import DocScope from '@site/src/components/DocScope';
 
 ```text
 /opt/hobot/model/s600/basic/
-├── resnet18_224x224_nv12.hbm          # 图像分类
+├── resnet18_224x224_nv12.hbm                 # 图像分类
 ├── resnet50_224x224_nv12.hbm
 ├── mobilenetv2_224x224_nv12.hbm
-├── centernet_resnet101_512x512_nv12.hbm   # 目标检测
+├── efficientnet_lite0_224x224_nv12.hbm
+├── vargconvnet_224x224_nv12.hbm
+├── centernet_resnet101_512x512_nv12.hbm      # 目标检测
 ├── fcos_efficientnetb0_512x512_nv12.hbm
 ├── ssd_mobilenetv1_300x300_nv12.hbm
-├── deeplabv3plus_*.hbm                # 语义分割
+├── yolov2_darknet19_608x608_nv12.hbm
+├── yolov3_darknet53_416x416_nv12.hbm
+├── yolov5x_672x672_nv12.hbm
+├── yolov8n_640x640_nv12.hbm
+├── yolov10n_640x640_nv12.hbm
+├── yolo11n_detect_nashp_640x640_nv12.hbm
+├── deeplabv3plus_dilation1248_1024x2048_nv12.hbm   # 分割
+├── deeplabv3plus_efficientnetb0_1024x2048_nv12.hbm
 ├── fastscnn_efficientnetb0_1024x2048_nv12.hbm
-└── efficientnet_lite0_224x224_nv12.hbm
+├── unet_mobilenet_1024x2048_nv12.hbm
+├── yolov8n_seg_640x640_nv12.hbm
+├── yolo11n_seg_nashp_640x640_nv12.hbm
+├── yolo11n_pose_nashp_640x640_nv12.hbm        # 姿态估计
+└── asr.hbm                                    # 语音识别
 ```
 
 </DocScope>

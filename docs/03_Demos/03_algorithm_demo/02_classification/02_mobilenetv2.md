@@ -6,22 +6,9 @@ description: "用 C/C++ 部署 MobileNetV2 做图像分类的预装示例"
 
 # 图像分类-MobileNetV2 (C/C++)
 
-```mdx-code-block
-import DocScope from '@site/src/components/DocScope';
-```
-
 本示例演示如何用 `C/C++` 在 BPU 上部署 MobileNetV2 模型做图像分类推理并输出 Top-K 结果。MobileNetV2 是轻量级分类网络，适合算力/功耗敏感场景。Python 版见 [MobileNetV2 (Python)](./02_mobilenetv2_py.md)，C++ 版 ResNet18 见 [ResNet18 (C/C++)](./01_resnet18.md)。
 
-<DocScope products="RDK-S100">
-
-示例代码位于板端 `/app/cdev_demo/bpu/01_classification_sample/02_mobilenetv2/` 目录下。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 示例代码位于板端 `/app/cdev_demo/bpu/classification_sample/mobilenetv2/` 目录下。
-
-</DocScope>
 
 ## 前置条件
 
@@ -38,7 +25,7 @@ sudo apt update && sudo apt install libgflags-dev
 ## 编译
 
 ```bash
-cd /app/cdev_demo/bpu/classification_sample/mobilenetv2   # S100 改为对应路径
+cd /app/cdev_demo/bpu/classification_sample/mobilenetv2
 mkdir build && cd build
 cmake ..
 make -j$(nproc)

@@ -12,16 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 本示例演示如何在 BPU 上用 `hbm_runtime` 的 Python 接口部署量化后的 Ultralytics YOLOv5x 模型，对一张图片做目标检测（前处理 + 推理 + NMS + 框绘制），并把检测结果保存成图片。适用于搭载 BPU 的 RDK 设备。
 
-<DocScope products="RDK-S100">
-
-示例代码位于板端 `/app/pydev_demo/02_detection_sample/01_ultralytics_yolov5x/` 目录下。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 示例代码位于板端 `/app/pydev_demo/detection_sample/ultralytics_yolov5x/` 目录下。
-
-</DocScope>
 
 ## 前置条件
 
@@ -50,16 +41,7 @@ cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 
 ## 代码位置
 
-<DocScope products="RDK-S100">
-
-板端路径：`/app/pydev_demo/02_detection_sample/01_ultralytics_yolov5x/`
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 板端路径：`/app/pydev_demo/detection_sample/ultralytics_yolov5x/`
-
-</DocScope>
 
 目录结构：
 
@@ -86,14 +68,10 @@ cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 
 进入示例目录后直接运行：
 
-<DocScope products="RDK-S600">
-
 ```bash
 cd /app/pydev_demo/detection_sample/ultralytics_yolov5x
 python ultralytics_yolov5x.py
 ```
-
-</DocScope>
 
 运行成功后，检测框会绘制在原图上并保存为 `result.jpg`。
 

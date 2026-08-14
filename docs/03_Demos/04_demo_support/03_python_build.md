@@ -22,11 +22,22 @@ import DocScope from '@site/src/components/DocScope';
 以 ResNet18 分类为例（板端路径见 [ResNet18 (Python)](../03_algorithm_demo/02_classification/01_resnet18_py.md)）：
 
 ```bash
-cd /app/pydev_demo/classification_sample/resnet18   # S100 改为对应路径
+cd /app/pydev_demo/classification_sample/resnet18
 python resnet18.py
 ```
 
-各示例的参数、运行命令见对应 demo 文档（[算法示例](../03_algorithm_demo/02_classification/01_resnet18_py.md)）。
+运行成功后，先打印模型描述，末尾输出 Top-5 分类结果：
+
+```text
+Top-5 Predictions:
+zebra: 0.9983
+cheetah, chetah, Acinonyx jubatus: 0.0004
+impala, Aepyceros melampus: 0.0004
+gazelle: 0.0003
+prairie chicken, prairie grouse, prairie fowl: 0.0002
+```
+
+各示例的参数、运行命令见对应 demo 文档（[算法示例概述](../03_algorithm_demo/01_summary.md)）。
 
 ## 依赖安装
 

@@ -17,9 +17,9 @@ description: "第3章算法示例的组织方式与运行入口"
 | 实例分割 | [YOLO11-Seg](./04_instance_segmentation/01_yolo11_seg_py.md) | `.../instance_segmentation_sample` |
 | 姿态估计 | [YOLO11-Pose](./05_pose/01_yolo11_pose_py.md) | `.../pose_sample` |
 | 自动语音识别 | [ASR](./06_speech/01_asr_py.md) | `.../speech_sample` |
-| 摄像头+推理 | [USB Camera](./07_camera_streaming/01_usb_camera_py.md) · [MIPI](./07_camera_streaming/02_mipi_camera_py.md) · [RTSP](./07_camera_streaming/03_decode_rtsp_py.md) · [WebSocket](./07_camera_streaming/04_websocket_py.md) | `.../usb_camera_sample` 等 |
+| 摄像头+推理 | [USB Camera](./07_camera_streaming/01_usb_camera_py.md) · [MIPI](./07_camera_streaming/02_mipi_camera_py.md) · [RTSP](./07_camera_streaming/03_decode_rtsp_py.md) · [视频解码](./07_camera_streaming/04_decode.md) · [WebSocket](./07_camera_streaming/04_websocket_py.md) | `.../usb_camera_sample` 等 |
 
-每个示例同时提供 C/C++ 与 Python 两版（C++ 在 `/app/cdev_demo`、Python 在 `/app/pydev_demo`），文档以"示例名 (C/C++)"与"示例名 (Python)"对照列出，可按语言选读。
+多数示例同时提供 C/C++ 与 Python 两版（C++ 在 `/app/cdev_demo`、Python 在 `/app/pydev_demo`），文档以"示例名 (C/C++)"与"示例名 (Python)"对照列出，可按语言选读；个别示例（视频解码仅 C/C++、WebSocket 仅 Python）只提供一版。
 
 ## 运行前置
 

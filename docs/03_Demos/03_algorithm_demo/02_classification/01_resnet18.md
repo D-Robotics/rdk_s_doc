@@ -12,16 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 本示例演示如何用 `C/C++` 部署 ResNet18 模型，对一张图片做图像分类推理并输出 Top-K 结果。适用于搭载 BPU 的 RDK 设备，是 C/C++ 接口跑通预装 demo 的典型示例。Python 版见 [ResNet18 (Python)](./01_resnet18_py.md)。
 
-<DocScope products="RDK-S100">
-
-示例代码位于板端 `/app/cdev_demo/bpu/01_classification_sample/01_resnet18/` 目录下。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 示例代码位于板端 `/app/cdev_demo/bpu/classification_sample/resnet18/` 目录下。
-
-</DocScope>
 
 ## 前置条件
 
@@ -42,16 +33,7 @@ sudo apt install libgflags-dev
 
 ## 代码位置
 
-<DocScope products="RDK-S100">
-
-板端路径：`/app/cdev_demo/bpu/01_classification_sample/01_resnet18/`
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 板端路径：`/app/cdev_demo/bpu/classification_sample/resnet18/`
-
-</DocScope>
 
 目录结构：
 
@@ -69,7 +51,7 @@ sudo apt install libgflags-dev
 ## 编译
 
 ```bash
-cd /app/cdev_demo/bpu/classification_sample/resnet18   # S100 改为对应路径
+cd /app/cdev_demo/bpu/classification_sample/resnet18
 mkdir build && cd build
 cmake ..
 make -j$(nproc)

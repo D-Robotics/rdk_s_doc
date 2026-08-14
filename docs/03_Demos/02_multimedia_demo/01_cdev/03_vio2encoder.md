@@ -6,12 +6,16 @@ description: "RDK S100/S600 摄像头采集→VIO→编码保存示例"
 
 # 采集→编码
 
-本示例演示通过 VIO 采集摄像头画面并实时编码（H.264/H.265）保存到文件，链路：Camera → VIO → Encoder → File。
+本示例演示通过 VIO 采集摄像头画面并实时编码为 H.264 码流保存到文件，链路：Camera → VIO → Encoder → File。
+
+:::tip
+示例源码预置在板端 `/app/cdev_demo/vio2encoder/` 目录，可直接 `make` 编译运行。
+:::
 
 ## 环境准备
 
-- 开发板已烧录 RDK OS 并启动
-- MIPI 摄像头已连接
+- 开发板已烧录 RDK OS 并启动（见 [开始使用 RDK](../../../01_Quick_start/02_getting_started.md)）
+- MIPI 摄像头已连接（见 [摄像头使用](../../01_peripheral/02_camera/01_mipi_camera.md)）
 - 有可写存储空间（用于保存编码输出文件）
 
 ## 代码位置
@@ -29,37 +33,50 @@ vio2encoder/
 ```bash
 cd /app/cdev_demo/vio2encoder
 make
-./vio2encoder -o output.h264 -W 1920 -H 1080
+./vio2encoder -w 1920 -h 1080 --iwidth 1920 --iheight 1080 -o stream.h264
 ```
 
 参数说明：
 
-| 参数 | 说明 | 默认值 |
-| --- | --- | --- |
-| `-o` | 输出文件路径 | output.h264 |
-| `-W` | 输出宽度 | 1920 |
-| `-H` | 输出高度 | 1080 |
+| 参数 | 说明 |
+| --- | --- |
+| `-w` / `-h` | 编码输出视频宽度 / 高度 |
+| `--iwidth` / `--iheight` | 传感器输出宽度 / 高度 |
+| `-o` | 编码输出文件路径 |
+| `-f` | 传感器帧率（可选，默认自动探测） |
 
-按 `Ctrl+C` 停止编码。输出文件可用 `ffprobe` 或 VLC 播放验证。
+程序持续编码直到按 `Ctrl+C` 停止。当前示例编码格式固定为 H.264。
+
+## 运行效果
+
+成功标志：日志依次出现 `sp_open_camera success!`、`sp_start_encode success!`、`sp_module_bind(vio -> encoder) success!`，按 `Ctrl+C` 后打印 `recv:2,Stoping...`，并生成 `stream.h264` 文件。
+
+失败排查：未连接摄像头时，程序打印 `[Error] sp_open_camera failed!` 后退出。
 
 ## 代码解读
 
-示例使用简易 API（`sp_vio.h`/`sp_codec.h`/`sp_sys.h`），核心流程：
+示例使用简易 API（`sp_vio.h` / `sp_codec.h` / `sp_sys.h`），核心流程：
 
-1. `sp_vio_open` — 打开 VIO 采集通道
-2. `sp_codec_create_encoder` — 创建编码器（H.264/H.265）
-3. 循环 `sp_vio_get_frame` → `sp_codec_send_frame` — 采集帧送编码器
-4. `sp_codec_get_stream` — 获取编码码流写入文件
-5. `sp_vio_close`/`sp_codec_close` — 释放资源
+1. `sp_init_vio_module` / `sp_init_encoder_module` — 初始化 VIO 与编码模块
+2. `sp_open_camera_v2` — 打开摄像头采集通道
+3. `sp_start_encode`（`SP_ENCODER_H264`）— 启动 H.264 编码
+4. `sp_module_bind` — 绑定采集到编码（VIO → ENCODER）
+5. 循环 `sp_encoder_get_stream` — 取码流写入文件
+6. `sp_module_unbind` / `sp_stop_encode` / `sp_vio_close` — 停止并释放资源
 
-简易 API 的完整接口说明见 [多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)。
+接口详见 [VIO API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) 与 [ENCODER API](../../../04_Simple_API/01_multimedia_api/cdev/02_encoder_api.md)。
 
-## 效果
+## 常见问题
 
-运行结束后，生成 H.264 编码文件（如 `output.h264`），可用 `ffprobe output.h264` 查看编码信息，或用 VLC 播放。
+### 提示 `sp_open_camera failed`
+
+**原因**：未连接 MIPI 摄像头，或传感器初始化失败。
+
+**解决**：断电后重新连接摄像头，确认传感器型号受支持后重试。
 
 ## 相关文档
 
 - [视频采集](./01_vio_capture.md)
-- [多媒体 API](/Simple_API/multimedia_api/cdev/vio_api)
-- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [VIO（视频输入）API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
+- [ENCODER（编码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/02_encoder_api.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)

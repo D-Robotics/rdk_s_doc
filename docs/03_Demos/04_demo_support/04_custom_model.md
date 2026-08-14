@@ -11,7 +11,7 @@ description: "用自己的模型替换 demo 模型的入口"
 ## 整体流程
 
 1. 准备浮点模型（导出为 ONNX，或 CAFFE）。
-2. 用 RDK 算法工具链量化编译为 `.hbm`（MARCH 与芯片匹配：S600 为 `nash-p`）。
+2. 用 RDK 算法工具链量化编译为 `.hbm`（MARCH 与产品匹配：S600 为 `nash-p`、S100 为 `nash-m`）。
 3. 把 `.hbm` 与配套的类别标签文件传到板端。
 4. 在 demo 命令里用 `--model-path` 指向新模型、`--label-file` 指向新标签。
 
@@ -26,7 +26,9 @@ scp my_model.hbm root@<板端IP>:/opt/hobot/model/s600/basic/
 
 # 板端运行时指定
 cd /app/pydev_demo/classification_sample/resnet18
-python resnet18.py --model-path /opt/hobot/model/s600/basic/my_model.hbm --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
+python resnet18.py \
+    --model-path /opt/hobot/model/s600/basic/my_model.hbm \
+    --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
 ```
 
 ## 注意事项

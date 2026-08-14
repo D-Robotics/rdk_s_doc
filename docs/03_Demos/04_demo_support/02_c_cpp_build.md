@@ -24,6 +24,20 @@ cmake ..
 make -j$(nproc)
 ```
 
+`cmake ..` 关键输出（自动发现 OpenCV）：
+
+```text
+-- Found OpenCV: /usr (found version "4.6.0")
+-- Build files have been written to: ...
+```
+
+`make` 结束关键输出：
+
+```text
+[100%] Linking CXX executable resnet_18
+[100%] Built target resnet_18
+```
+
 编译产物为 `build/resnet_18`，直接运行：
 
 ```bash
@@ -36,7 +50,7 @@ make -j$(nproc)
 
 ## 依赖补充
 
-个别示例依赖额外的系统库，按提示安装即可。例如分类示例需要 `libgflags-dev`：
+多数示例所需的 `gflags`、OpenCV 等库已随镜像预装，无需额外安装。若编译时报找不到某个库，再按提示安装。例如缺少 gflags 时：
 
 ```bash
 sudo apt update

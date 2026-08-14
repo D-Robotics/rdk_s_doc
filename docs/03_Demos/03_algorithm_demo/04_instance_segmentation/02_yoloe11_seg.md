@@ -13,6 +13,8 @@ sidebar_products: RDK-S100
 
 本示例展示了如何在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于`/app/cdev_demo/bpu/05_open_instance_seg_sample/01_yoloe11_seg/`目录下。
 
+<!-- TODO: 待核实 S100 板端真实路径（板端无 S100，S600 镜像无此示例；路径可能已按“无数字前缀”约定调整） -->
+
 ## 模型说明
 - 简介：
 
@@ -126,7 +128,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
 
 ## 注意事项
 - 输出结果存储为result.jpg，用户可自行查看。
-
+- 若指定模型路径不存在，程序将尝试自动下载模型。
 - 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
 
 
@@ -148,11 +150,9 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
 
-## 注意事项
-- 若指定模型路径不存在，程序将尝试自动下载模型。
-
 ## 相关文档
 
-- [算法示例概述](/Demos/algorithm_demo/summary)
-- [模型获取与放置](/Demos/demo_support/model_files)
-- [Python 推理 API](/Simple_API/inference_api/python-api)
+- [Python 版 YOLOE11 分割示例](./02_yoloe11_seg_py.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [C 语言推理 API](../../../04_Simple_API/02_inference_api/02_c_api.md)

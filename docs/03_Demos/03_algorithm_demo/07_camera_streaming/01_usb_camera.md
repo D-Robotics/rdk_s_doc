@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: "USB Camera YOLOv5x 推理"
-description: "USB Camera YOLOv5x 推理 预装示例"
+description: "用 USB 摄像头实时做 YOLOv5x 目标检测的预装示例"
 ---
 
 # USB Camera YOLOv5x 推理
@@ -10,177 +10,122 @@ description: "USB Camera YOLOv5x 推理 预装示例"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
-基于BPU的 Ultralytics YOLOv5x 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于`/app/cdev_demo/bpu/09_usb_camera_sample/`目录下。
+本示例演示如何在 BPU 上部署量化后的 Ultralytics YOLOv5x 模型，通过 USB 摄像头实时读取画面做目标检测，并以全屏窗口可视化检测结果（前处理 + 推理 + NMS + 框绘制）。Python 版见 [USB Camera YOLOv5x 推理 (Python)](./01_usb_camera_py.md)。
 
-</DocScope>
-<DocScope products="RDK-S600">
-基于BPU的 Ultralytics YOLOv5x 实时推理示例，支持通过 USB 摄像头读取画面并进行目标检测，并以全屏方式可视化检测结果，本示例代码位于 `/app/cdev_demo/bpu/usb_camera_sample/` 目录下。
+:::tip
+示例代码位于板端 `/app/cdev_demo/bpu/usb_camera_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+:::
 
-</DocScope>
+## 前置条件
 
-## 功能说明
-- 模型加载
-
-    加载指定的 .hbm 模型文件，提取模型相关的元信息等。
-
-- 摄像头采集
-
-    自动扫描 /dev/video* 下的设备，打开第一个可用的 USB 摄像头，设置为 MJPEG 编码、1080p 分辨率、30 FPS。
-
-- 图像预处理
-
-    将 BGR 图像 resize 至模型输入分辨率（letterbox 模式或普通缩放），并转换为 NV12 格式。
-
-- 推理执行
-
-    通过 infer() 方法提交输入张量，在 BPU 上完成模型前向计算。
-
-- 后处理
-
-    包括量化输出解码、候选框筛选（按 score 阈值过滤）、NMS 去重，以及坐标还原回原始图像大小。
-
-- 可视化显示
-
-    将检测框及其类别、置信度绘制在图像上，并在窗口中全屏显示，支持实时处理和退出控制。
-
-## 模型说明
-
-    参考 [Ultralytics YOLOv5x 目标检测示例小节](../03_detection/01_yolov5x.md)。
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 桌面版镜像（Desktop），能进入桌面/console 显示。
+- USB 摄像头已连接并被识别（`ls /dev/video*` 有设备）。
+- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`）；若缺失见 [模型获取与放置](../../04_demo_support/01_model_files.md)。
 
 ## 环境依赖
-在编译运行前，请确保安装以下依赖：
+
+编译需要 `libgflags-dev`：
+
 ```bash
 sudo apt update
 sudo apt install libgflags-dev
 ```
 
-## 目录结构
+## 代码位置
+
+板端路径：`/app/cdev_demo/bpu/usb_camera_sample/`
+
+目录结构：
+
 ```text
 .
 |-- CMakeLists.txt                 # CMake 构建脚本：目标/依赖/包含与链接配置
-|-- README.md                      # 使用说明（当前文件）
+|-- README.md                      # 使用说明
 |-- inc
-|   `-- ultralytics_yolov5x.hpp    # YOLOv5x 推理封装头文件：加载/预处理/推理/后处理接口
+|   `-- ultralytics_yolov5x.hpp    # YOLOv5x 推理封装头：加载/预处理/推理/后处理接口
 `-- src
-    |-- main.cc                    # 程序入口：摄像头探测→取流→推理→绘制→显示（全屏窗口）
-    `-- ultralytics_yolov5x.cc     # 推理实现：letterbox、NV12张量写入、解码、NMS、框复原
+    |-- main.cc                    # 程序入口：摄像头探测→取流→推理→绘制→显示
+    `-- ultralytics_yolov5x.cc     # 推理实现：letterbox、NV12 张量写入、解码、NMS、框复原
 ```
 
-## 编译工程
-- 配置与编译
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+## 编译
 
-<DocScope products="RDK-S100">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+cd /app/cdev_demo/bpu/usb_camera_sample
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
-## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
-
-</DocScope>
+编译产物为 `build/usb_camera`。
 
 ## 参数说明
 
-<DocScope products="RDK-S100">
-| 参数名            | 说明                                          | 默认值                                                |
-| ---------------- | --------------------------------------------- | ----------------------------------------------------- |
-| `--video_device` | 指定视频设备（如 `/dev/video0`；为空则自动探测） | `""`（空：自动在 `/dev/video*` 中探测第一个可打开的设备） |
-| `--model_path`   | BPU 量化模型路径（`.hbm`）                     | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--label_file`   | 类别标签文件（逐行一个类别名）                  | `/app/res/labels/coco_classes.names`                      |
-| `--score_thres`  | 置信度阈值                                    | `0.25`                                                 |
-| `--nms_thres`    | NMS 的 IoU 阈值                               | `0.45`                                                 |
+| 参数 | 说明 | 默认值 |
+|---|---|---|
+| `--video_device` | 视频设备（如 `/dev/video0`；为空则自动探测） | `""`（自动在 `/dev/video*` 中探测第一个可打开设备） |
+| `--model_path` | BPU 量化模型路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`） |
+| `--label_file` | 类别标签文件（逐行一个类别名） | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | 置信度阈值 | `0.25` |
+| `--nms_thres` | NMS 的 IoU 阈值 | `0.45` |
 
-</DocScope>
+## 使用方法
+
+在 `build` 目录中，使用默认参数运行：
+
+```bash
+./usb_camera
+```
+
+指定参数运行（等价于默认值）：
+
 <DocScope products="RDK-S600">
-| 参数名            | 说明                                          | 默认值                                                |
-| ---------------- | --------------------------------------------- | ----------------------------------------------------- |
-| `--video_device` | 指定视频设备（如 `/dev/video0`；为空则自动探测） | `""`（空：自动在 `/dev/video*` 中探测第一个可打开的设备） |
-| `--model_path`   | BPU 量化模型路径（`.hbm`）                     | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--label_file`   | 类别标签文件（逐行一个类别名）                  | `/app/res/labels/coco_classes.names`                      |
-| `--score_thres`  | 置信度阈值                                    | `0.25`                                                 |
-| `--nms_thres`    | NMS 的 IoU 阈值                               | `0.45`                                                 |
+
+```bash
+./usb_camera \
+  --video_device /dev/video0 \
+  --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.45
+```
 
 </DocScope>
 
+退出运行：将鼠标放置在显示框内，按 `q` 键退出。
 
-## 快速运行
-注意：该程序需运行在桌面环境。
-- 运行模型
-    - 确保在`build`目录中
-    - 使用默认参数
-        ```bash
-        ./usb_camera
-        ```
-    - 指定参数运行
+## 运行效果
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./usb_camera \
-            --video_device /dev/video0 \
-            --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+程序先探测 USB 摄像头，再加载模型推理并全屏显示。本板（无 USB 摄像头）实测输出如下：
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./usb_camera \
-            --video_device /dev/video0 \
-            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+```text
+./usb_camera
+No USB camera found under /dev/video*.
+```
 
-        </DocScope>
-- 退出运行
+接入 USB 摄像头后的成功标志（据源码 `main.cc`）：
 
-    把鼠标放置在显示框中，按q键退出
+- 输出 `Open USB camera successfully`；
+- 输出 `Place the mouse in the display window and press 'q' to quit`；
+- 屏幕全屏显示带检测框的实时画面，按 `q` 退出。
 
-- 查看结果
+<!-- TODO: 待接入摄像头实测成功 log -->
 
-    运行成功后，屏幕会实时显示目标检测图像
+## 软件说明
 
-## 注意事项
-- 该程序需运行在桌面环境。
+数据流：探测/打开 `/dev/video*`（V4L2）→ 取 BGR 帧 → letterbox 缩放至 672×672 → 转 NV12 → BPU 推理 → 解码输出头 + NMS → 取 score≥0.25 的框 → 在画面绘制框与类别 → 全屏显示。
 
-- 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
+## 常见问题
 
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- **`No USB camera found under /dev/video*.`**：USB 摄像头未识别。检查 USB 连接、`lsusb` 是否列出、是否为 UVC 摄像头，`ls /dev/video*` 确认设备节点。
+- **无画面/黑屏**：需桌面环境（Desktop 镜像或已配置显示），Server 版无法全屏显示。
+- **`make` 报错找不到 `gflags`**：未装 `libgflags-dev`，按"环境依赖"安装。
+- **报错找不到模型**：检查 `--model_path` 下 `.hbm` 是否存在；S600 模型在 `/opt/hobot/model/s600/basic/`。
 
 ## 相关文档
 
-- [算法示例概述](/Demos/algorithm_demo/summary)
-- [模型获取与放置](/Demos/demo_support/model_files)
-- [Python 推理 API](/Simple_API/inference_api/python-api)
+- [Python 版 USB Camera 示例](./01_usb_camera_py.md)
+- [目标检测-YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
+- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
+- [模型获取与放置](../../04_demo_support/01_model_files.md)

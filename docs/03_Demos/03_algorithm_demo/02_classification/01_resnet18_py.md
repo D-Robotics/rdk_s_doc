@@ -12,16 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 本示例演示如何使用 `hbm_runtime` 的 Python 接口部署 ResNet18 模型，对一张图片做图像分类推理并输出 Top-5 结果。适用于搭载 BPU 的 RDK 设备，是模式 1（直接使用）下最快跑通预装 demo 的路径之一。
 
-<DocScope products="RDK-S100">
-
-示例代码位于板端 `/app/pydev_demo/01_classification_sample/01_resnet18/` 目录下。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 示例代码位于板端 `/app/pydev_demo/classification_sample/resnet18/` 目录下。
-
-</DocScope>
 
 ## 前置条件
 
@@ -52,16 +43,7 @@ cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 
 ## 代码位置
 
-<DocScope products="RDK-S100">
-
-板端路径：`/app/pydev_demo/01_classification_sample/01_resnet18/`
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 板端路径：`/app/pydev_demo/classification_sample/resnet18/`
-
-</DocScope>
 
 目录结构：
 
@@ -85,22 +67,10 @@ cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 
 进入示例目录后直接运行（默认参数即可跑通）：
 
-<DocScope products="RDK-S100">
-
-```bash
-cd /app/pydev_demo/01_classification_sample/01_resnet18
-python resnet18.py
-```
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 ```bash
 cd /app/pydev_demo/classification_sample/resnet18
 python resnet18.py
 ```
-
-</DocScope>
 
 指定参数运行（等价于默认值）：
 

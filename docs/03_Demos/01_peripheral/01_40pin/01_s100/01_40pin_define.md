@@ -35,6 +35,22 @@ RDKS100 有 40-pin，方便用户进行外围扩展，其中数字 IO 采用 3.3
 
 以`/app/40pin_samples/button_led.py`为例，该程序配置`24`号管脚为输入，配置`23`号管脚配置为输出，并根据`24`号管脚的输入状态来控制`23`号管脚的输出状态。
 
+## 代码位置
+
+本章节所有示例代码位于板端 `/app/40pin_samples/` 目录，包含 8 个 Python 脚本：
+
+```text
+/app/40pin_samples/
+├── button_event.py      # 边沿事件检测示例
+├── button_interrupt.py  # 中断方式处理边沿事件示例
+├── button_led.py        # 按键输入控制 LED 输出示例
+├── simple_input.py      # GPIO 输入示例
+├── simple_out.py        # GPIO 输出示例
+├── test_i2c.py          # I2C 总线扫描与读写示例
+├── test_serial.py       # UART 回环测试示例
+└── test_spi.py          # SPI 回环测试示例
+```
+
 ## 环境准备
 
 使用杜邦线连接 `24`号管脚到 3.3v or GND，以控制其高低电平。
@@ -59,6 +75,20 @@ Outputting 1 to Pin 23
 Outputting 0 to Pin 23
 Outputting 1 to Pin 23
 ```
+
+## 常见问题
+
+### 运行示例脚本提示权限不足
+
+**原因**：GPIO 等外设访问需要 root 权限。
+
+**解决**：使用 `sudo python3 ./button_led.py` 运行，或先执行 `sudo -s` 切换到 root 用户。
+
+### 管脚电平无变化
+
+**原因**：输入管脚没有正确接电平，或输出管脚未外接测量点。
+
+**解决**：确认杜邦线连接正确；`24` 号管脚为输入，需接 3.3V 或 GND；`23` 号管脚为输出，可用万用表或接 LED 观察。
 
 ## 相关文档
 

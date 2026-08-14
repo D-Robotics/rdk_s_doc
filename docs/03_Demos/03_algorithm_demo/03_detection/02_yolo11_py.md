@@ -6,22 +6,9 @@ description: "用 hbm_runtime Python 接口部署 YOLO11 做目标检测的预�
 
 # 目标检测-Ultralytics YOLO11 (Python)
 
-```mdx-code-block
-import DocScope from '@site/src/components/DocScope';
-```
-
 本示例演示如何用 `hbm_runtime` 的 Python 接口在 BPU 上部署 Ultralytics YOLO11 模型，对一张图片做目标检测（前处理 + 推理 + 解码 + NMS），并把检测结果保存成图片。YOLO11 是 Ultralytics 较新一代检测模型，本示例使用 `yolo11n`（nano）版本。
 
-<DocScope products="RDK-S100">
-
-示例代码位于板端 `/app/pydev_demo/02_detection_sample/02_ultralytics_yolo11/` 目录下。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 示例代码位于板端 `/app/pydev_demo/detection_sample/ultralytics_yolo11/` 目录下。
-
-</DocScope>
 
 ## 前置条件
 
@@ -42,14 +29,10 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 使用方法
 
-<DocScope products="RDK-S600">
-
 ```bash
 cd /app/pydev_demo/detection_sample/ultralytics_yolo11
 python ultralytics_yolo11.py
 ```
-
-</DocScope>
 
 运行成功后，检测框绘制在原图上并保存为 `result.jpg`。
 

@@ -12,16 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 本示例演示如何用 `C/C++` 在 BPU 上部署量化后的 Ultralytics YOLOv5x 模型，对一张图片做目标检测（前处理 + 推理 + NMS + 框绘制），并把结果保存成图片。Python 版见 [YOLOv5x (Python)](./01_yolov5x_py.md)。
 
-<DocScope products="RDK-S100">
-
-示例代码位于板端 `/app/cdev_demo/bpu/02_detection_sample/01_ultralytics_yolov5x/` 目录下。
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 示例代码位于板端 `/app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x/` 目录下。
-
-</DocScope>
 
 ## 前置条件
 
@@ -40,21 +31,12 @@ sudo apt install libgflags-dev
 
 ## 代码位置
 
-<DocScope products="RDK-S100">
-
-板端路径：`/app/cdev_demo/bpu/02_detection_sample/01_ultralytics_yolov5x/`
-
-</DocScope>
-<DocScope products="RDK-S600">
-
 板端路径：`/app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x/`
-
-</DocScope>
 
 ## 编译
 
 ```bash
-cd /app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x   # S100 改为对应路径
+cd /app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x
 mkdir build && cd build
 cmake ..
 make -j$(nproc)
