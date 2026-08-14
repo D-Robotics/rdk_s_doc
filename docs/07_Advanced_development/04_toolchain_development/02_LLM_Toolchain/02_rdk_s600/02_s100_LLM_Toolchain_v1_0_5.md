@@ -40,9 +40,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 **D-Robotics_LLM_S600 用户手册**
 
-```bash
-wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D-Robotics_LLM_S600_1.0.5_Doc.zip
-```
+[**在线阅读地址**](https://developer.d-robotics.cc/oe_llm_s600_doc/index.html)
 
 **D-Robotics_LLM_S600 已编译模型**  
 
