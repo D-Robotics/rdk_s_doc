@@ -17,7 +17,7 @@ MCU ramdump 功能的开发，主要是为了 mcu 在发生 crash 或进入异�
 ## 异常处理流程
 当 MCU 进入异常时候，MCU 会将现场信息保留在一个全局变量中，该全局变量可以被 acore 读取，也可以通过 MCU shell 读取。
 
-如果是 MCU0出现异常，系统将会重启，系统重启流程中会判断重启原因。如果判断重启原因是`mpainc`，系统会确保保存 MCU 异常现场信息的全局变量对应的内存空间不清0，我们可以在系统重启后读取到 ramdump 的数据，并基于此来分析异常发生的原因。
+如果是 MCU0出现异常，系统将会重启，系统重启流程中会判断重启原因。如果判断重启原因是`mpanic`，系统会确保保存 MCU 异常现场信息的全局变量对应的内存空间不清0，我们可以在系统重启后读取到 ramdump 的数据，并基于此来分析异常发生的原因。
 
 异常处理流程如下所示：
 
@@ -31,9 +31,9 @@ MCU1出现异常后会陷入 shell，这时可以通过 acore remoteproc 控制�
 
 ```shell
   # 停止运行
-  echo stop > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo stop > /sys/class/remoteproc/remoteproc_mcu0/state
   # 启动
-  echo start > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo start > /sys/class/remoteproc/remoteproc_mcu0/state
 ```
 ## 获取 MCU 异常信息
 - 可以在 acore 通过 sysfs 节点读取 MCU1异常时记录的现场信息。对应的 sys 节点信息如下：

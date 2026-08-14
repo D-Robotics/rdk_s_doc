@@ -1,11 +1,13 @@
 ---
 sidebar_position: 1
 title: "RDK S100 LLM 工具链"
-description: RDK S100 LLM 工具链
+description: "RDK S100 LLM 工具链（D-Robotics_LLM_S100）支持的模型、下载方式与性能数据"
 sidebar_products: RDK S100
 ---
 
 # RDK S100 LLM 工具链
+
+RDK S100 LLM 工具链（D-Robotics_LLM_S100）用于在 RDK S100/S100P 上部署 LLM 与多模态大模型，提供模型量化、会话、多轮对话、PPL 评估等功能。面向模式 3（深度定制）开发者。
 
 ## RDK S100 1.0.0 大模型工具链
 

@@ -1,11 +1,13 @@
 ---
 sidebar_position: 1
 title: "大模型工具链 v1.0.2"
-description: 大模型工具链 v1.0.2
+description: "RDK S600 大模型工具链 v1.0.2 支持的模型、下载方式与性能数据"
 sidebar_products: RDK S600
 ---
 
 # 大模型工具链 v1.0.2
+
+RDK S600 大模型工具链（D-Robotics_LLM_S600）用于在 RDK S600 上部署与运行 LLM、VLM、VLA、ASR 四类模型。面向模式 3（深度定制）开发者。
 
 在 RDK S600 平台上，D-Robotics_LLM_S600 目前支持以下模型和功能：
 

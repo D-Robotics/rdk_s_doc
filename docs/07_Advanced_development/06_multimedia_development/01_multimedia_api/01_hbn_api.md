@@ -145,7 +145,7 @@ id 值，也可设置为 AUTO_ALLOC_ID，由 SDK 自动分配 context id；
 
 【函数声明】
 
-void hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
+hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
 
 【参数描述】
 
@@ -153,7 +153,9 @@ void hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
 
 【返回值】
 
-无
+成功：HBN_STATUS_SUCESS 0
+
+失败：异常为负值错误码，参考返回值说明
 
 【功能描述】
 
@@ -604,7 +606,7 @@ ochn_id, hbn_vnode_image_group_t*img)
 
 [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] hbn_vnode_image_t *img：图像 buffer 结构体地址；
+[IN] hbn_vnode_image_group_t *img_group：多层聚合图像 buffer 结构体地址；
 
 【返回值】
 
@@ -677,15 +679,17 @@ hobot_status hbn_vflow_create(hbn_vflow_handle_t *vflow_fd)
 
 【函数声明】
 
-void hbn_vflow_destroy(hbn_vflow_handle_t vflow_fd)
+hobot_status hbn_vflow_destroy(hbn_vflow_handle_t vflow_fd)
 
 【参数描述】
 
-[IN] hbn_vflow_handle_t *vflow_fd：vflow handle；
+[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
 【返回值】
 
-无
+成功：HBN_STATUS_SUCESS 0
+
+失败：异常为负值错误码，参考返回值说明
 
 【功能描述】
 
@@ -704,7 +708,7 @@ vnode_fd)
 
 【参数描述】
 
-[IN] hbn_vflow_handle_t *vflow_fd：vflow handle；
+[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
 [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
@@ -732,7 +736,7 @@ dst_vnode_fd, uint32_t in_chn)
 
 【参数描述】
 
-[IN] hbn_vflow_handle_t *vflow_fd：vflow handle；
+[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
 [IN] hbn_vnode_handle_t src_vnode_fd：源模块的 vnode handle；
 
@@ -766,7 +770,7 @@ dst_vnode_fd, uint32_t in_chn)
 
 【参数描述】
 
-[IN] hbn_vflow_handle_t *vflow_fd：vflow handle；
+[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
 [IN] hbn_vnode_handle_t src_vnode_fd：源模块的 vnode handle；
 

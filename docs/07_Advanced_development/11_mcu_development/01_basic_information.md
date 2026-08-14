@@ -297,7 +297,7 @@ MCU 目前在 sysfs 上支持查看系统状态 alive，系统存活时间 taskc
 5. mcu cpuloads: 可以获取到 MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去 debug。cpuloads 数据获取需要1s 的延迟，因为会涉及到大量数据拷贝至 sysfs 文件系统下的输出 buffer。cpuloads 的获取需要在 MCU0/MCU1**已上电**的情况下才能进行获取。
 6. 固件名 firmware：该固件名为 remoteproc 框架下 mcu0启动 mcu1时的，mcu1的固件名字。当 mcu0启动 mcu1时，linux 会去板端/lib/firmware 文件夹下，找相应文件，从而加载至相应位置。
 7. 节点名 name：如 mcu0，为 soc:remoteproc_mcu0;mcu1,为 soc:remoteproc_mcu1。
-8. 状态 state：指 remoteproc 子系统的状态。启动 mcu1，经过是 mcu0 remoteproc 节点，所以会变为 runing 状态。未启动 mcu1时，状态为 offline。
+8. 状态 state：指 remoteproc 子系统的状态。启动 mcu1，经过 mcu0 remoteproc 节点，所以会变为 running 状态。未启动 mcu1时，状态为 offline。
 9. recovery 节点：指当 mcu 挂掉后，是否可以获取 coredump 寄存器信息。该功能正常情况下是使能的，如果用到该功能，请参考[MCU ramdump章节](./13_mcu_ramdump.md)章节。
 10. uevent 节点：指设备类型，为 DEVTYPE=remoteproc。
 11. timesync 节点：主从设备同步时间需要，MCU 不支持该功能。

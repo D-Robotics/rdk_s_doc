@@ -1,10 +1,14 @@
 ---
 sidebar_position: 1
 title: "算法工具链 V3.7.0"
-description: "算法工具链 V3.7.0"
+description: "RDK 算法工具链（OpenExplorer）V3.7.0 工具包与 Docker 镜像下载说明"
 ---
 
 # 算法工具链 V3.7.0
+
+RDK 算法工具链（OpenExplorer，简称 OE）把训练得到的浮点模型（ONNX/CAFFE）量化为 BPU 可运行的定点模型（`.hbm`）。量化方法分为训练后量化（PTQ）与量化感知训练（QAT）两种。
+
+本章面向模式 3（深度定制）开发者：已有训练好的浮点模型，需部署到 RDK S100/S600 上运行。量化编译时需按产品指定 `MARCH` 参数：RDK S600 为 `nash-p`，RDK S100 为 `nash-m`。工具链以 Docker 镜像（CPU/GPU）或 OE 开发工具包形式在开发主机上运行。
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -82,6 +86,6 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_tool
 
 ## 相关文档
 
-- [5.7.2 LLM 工具链](/Advanced_development/algorithm_toolchain)
-- [3.4.4 使用自己的模型](/Demos/demo_support/custom_model)
-- [3.3 算法示例](/Demos/algorithm_demo/summary)
+- [LLM 工具链](/Advanced_development/algorithm_toolchain/LLM_Toolchain)
+- [使用自己的模型](/Demos/demo_support/custom_model)
+- [算法示例](/Demos/algorithm_demo/summary)

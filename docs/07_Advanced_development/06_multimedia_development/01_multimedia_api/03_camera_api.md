@@ -385,8 +385,9 @@ write registers array value to camera hardware the hardware info should configed
 [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
 [IN] reg_addr: address array of register to write range: [0x0, 0xFFFF], default: NA
 [IN] reg_value: value array of register to write range: [0x0, 0xFFFF], default: NA
-[IN] size_addr: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, ~], default: NA
-[IN] size_value: size of reg_value array: 0:not write, &gt;0: count to write range: [0x0, ~], default: NA
+[IN/OUT] reg_hist: histroy value array of register to compare and store if optimize range: [0x0, 0xFFFF], default: NA
+[IN] acount: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, ~], default: NA
+[IN] vcount: size of reg_value array: 0:not write, &gt;0: count to write range: [0x0, ~], default: NA
 
 【返回值】
 
