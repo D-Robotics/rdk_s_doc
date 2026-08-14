@@ -20,7 +20,7 @@ tros.b 是 D-Robotics 面向 RDK 平台优化的 ROS 2 发行版，在标准 ROS
 
 ## 与 RDK OS 的关系
 
-```
+```text
 ┌─────────────────────────────────────┐
 │           机器人应用层                │
 │  （用户 ROS 2 节点 + launch 文件）     │
@@ -224,5 +224,6 @@ ros2 launch tros_yolo_detection yolo_detection.launch.py
 
 ## 相关文档
 
+- [使用 RDK Studio](./01_rdk_studio.md)
 - [算法示例](/Demos/algorithm_demo/summary)（BPU 推理示例）
 - [TROS/ROS 开发 FAQ](/FAQ/tros_ros)

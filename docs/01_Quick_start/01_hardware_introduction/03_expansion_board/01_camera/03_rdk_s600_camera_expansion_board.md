@@ -15,6 +15,8 @@ sidebar_products: RDK S600
 
 
 
+## 产品介绍
+
 RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S600 Camera Expansion Connector 进行二次开发，提供了 8 个 GMSL 相机接口。
 
 <!-- :::danger 注意
@@ -98,7 +100,7 @@ Camera 扩展板与 RDK S600 的连接端口，为 Camera 扩展板提供功能�
 
 ### DC 电源输入（J401）
 
-Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GSML 相机供电。
+Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GMSL 相机供电。
 
 :::info 提示
 
@@ -109,7 +111,7 @@ Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。�
 
 ### GMSL 相机接口（J501/J601）
 
-Camera 扩展板集成了 MAX96712 解串芯片，能够接入 4 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
+Camera 扩展板集成了 2 颗 MAX96712 解串芯片，能够接入 8 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
 
 :::warning 注意
 

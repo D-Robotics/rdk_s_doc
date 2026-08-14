@@ -11,7 +11,9 @@ sidebar_products: RDK S100
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_smooth_hole_support_board_12l.png" alt="RDK S100 相机扩展板 12 通道" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-地瓜机器人RDK S100 相机扩展板（12 通道）是 RDK S100 开发者套件的的核心扩展模块 Camera 扩展板，其基于 RDK S100 Camera Expansion Connector 进行二次开发，提供了 12 个 GMSL 相机接口。
+## 产品介绍
+
+地瓜机器人 RDK S100 相机扩展板（12 通道）是 RDK S100 开发者套件的核心扩展模块 Camera 扩展板，其基于 RDK S100 Camera Expansion Connector 进行二次开发，提供了 12 个 GMSL 相机接口。
 
 :::warning
 
@@ -112,7 +114,7 @@ Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能�
 
 ### DC 电源输入（J2001）
 
-Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GSML 相机供电。
+Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GMSL 相机供电。
 
 :::info 信息
 
@@ -123,7 +125,7 @@ Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。�
 
 ### GMSL 相机接口（J2100/J2200/J2300）
 
-Camera 扩展板集成了 3pcs MAX96712 解串芯片，每 pcs 能够接入 4 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
+Camera 扩展板集成了 3 颗 MAX96712 解串芯片，每颗能够接入 4 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
 
 :::info 信息
 
@@ -164,7 +166,7 @@ Camera 扩展板集成了 3pcs MAX96712 解串芯片，每 pcs 能够接入 4 �
 
 ## 适配模组
 
-参考[配件清单](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
+参考[配件清单](../../01_rdk_s100.md#配件清单)
 
 ## 相关文档
 

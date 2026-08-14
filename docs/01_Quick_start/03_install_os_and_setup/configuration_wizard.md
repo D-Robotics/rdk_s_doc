@@ -16,6 +16,14 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 前置条件
+
+开始前请准备：
+
+- [ ] 开发板已 [烧录系统](./01_instruction.md) 并完成启动。
+- [ ] 已通过串口或 SSH 登录开发板（登录方法见 [远程登录](./remote_login.md)）。
+- [ ] 配置无线网络前：已安装 M.2 Key E Wi-Fi & 蓝牙模组。
+
 ## 默认登录账户
 
 在进行系统配置前，您需要先登录系统。
@@ -56,16 +64,25 @@ RDK S600 系统提供了两个默认账户：
 
 <TabItem value="server" label="Server">
 
-通过串口或者 SSH，参考下述指令完成连接
+通过串口或者 SSH，参考下述指令完成连接：
 
 ```bash
 # 扫描 Wi-Fi 网络
 sudo nmcli device wifi rescan
-sudo nmcli device wifi list # 列出找到的 Wi-Fi
+sudo nmcli device wifi list       # 列出找到的 Wi-Fi
 sudo wifi_connect "SSID" "PASSWD" # 连接指定 Wi-Fi
 ```
 
-上述命令成功后，会出现`successfully xxx`，使用`ifconfig`便可获得板卡 Wi-Fi 的 IP 地址。
+连接成功后，会输出类似如下信息，末尾的 UUID 为本次连接生成的唯一标识：
+
+```text
+root@ubuntu:~# sudo wifi_connect "WiFi-Test" "12345678"
+Device 'wlan0' successfully activated with 'd7468833-4195-45aa-aa33-3d43da86e1a7'.
+```
+
+之后使用 `ifconfig` 便可获得板卡 Wi-Fi 的 IP 地址。
+
+如果连接时报错 `Error: No network with SSID 'WiFi-Test' found.`，说明未找到该热点，先执行 `sudo nmcli device wifi rescan` 重新扫描后再连接；如果扫描时报错 `Error: Scanning not allowed immediately following previous scan.`，说明扫描过于频繁，稍等片刻后重试。
 
 </TabItem>
 </Tabs>
@@ -76,6 +93,8 @@ sudo wifi_connect "SSID" "PASSWD" # 连接指定 Wi-Fi
 
 <Tabs groupId="rdk-type">
 <TabItem value="desktop" label="Desktop">
+
+桌面版同样可打开终端（Terminal），执行下方相同的命令查看与控制 SSH 服务。
 
 </TabItem>
 
@@ -140,13 +159,13 @@ sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
 
 </DocScope>
 
-2.  将 `ExecStart=-/sbin/agetty` 所在行修改为:
+2.  将 `ExecStart=-/sbin/agetty` 所在行修改为（以 root 自动登录为例）:
 
-```
-ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
+```text
+ExecStart=-/sbin/agetty --autologin root -o '-p -- \\u' --keep-baud 921600,115200,57600,38400,9600 - $TERM
 ```
 
-**参数解释：** `-a ` 参数用于指定自动登录的用户名。
+**参数解释：** `--autologin root` 用于指定自动登录的用户名（也可写作 `-a root`）。
 
 3. 重启后用户将自动登录。
 
@@ -296,8 +315,8 @@ sudo passwd usertest
 ```
 
 最后将更新桌面服务自动登录的用户名称:
-  - gdm：RDK S100 默认桌面服务，将`/etc/gdm3/custom.conf`文件中的`AutomaticLogin = sunrise`改为`AutomaticLogin = usertest`
-  - lightdm：将`/etc/lightdm/lightdm.conf.d/22-hobot-autologin.conf`文件中的 `autologin-user=sunrise` 改为`autologin-user=usertest`，
+  - gdm：RDK S100/S600 默认桌面服务，将`/etc/gdm3/custom.conf`文件中的`AutomaticLogin = sunrise`改为`AutomaticLogin = usertest`
+  - lightdm（旧版桌面服务，若使用）：将`/etc/lightdm/lightdm.conf.d/22-hobot-autologin.conf`文件中的 `autologin-user=sunrise` 改为`autologin-user=usertest`，
 
 **增加新用户**
 
@@ -325,7 +344,7 @@ sudo chown -R usertest:usertest /home/usertest
 
 - **Wi-Fi 扫描不到网络**：检查 Wi-Fi 模组是否安装（M.2 Key E 接口），`nmcli device` 查看设备状态。
 - **SSH 连接被拒绝**：`sudo systemctl status ssh` 确认服务运行；检查防火墙 `sudo ufw status`。
-- **中文环境切换后无法登录桌面**：见 [桌面应用 FAQ](/FAQ/desktop_app)。
+- **中文环境切换后无法登录桌面**：见 [桌面应用](../../08_FAQ/07_desktop_app.md)。
 - **NoMachine 黑屏**：完成配置后必须**重启板卡**才生效。
 
 ## 相关文档
@@ -333,6 +352,6 @@ sudo chown -R usertest:usertest /home/usertest
 - [系统烧录](./01_instruction.md)
 - [系统状态查询](./system_status.md)
 - [远程登录](./remote_login.md)
-- [网络配置](/System_configuration/network_config)
-- [srpi-config 工具配置](/System_configuration/srpi_config)
-- [桌面应用 FAQ](/FAQ/desktop_app)
+- [网络配置](../../02_System_configuration/01_network_config.md)
+- [srpi-config 工具配置](../../02_System_configuration/04_srpi_config/01_overview.md)
+- [桌面应用](../../08_FAQ/07_desktop_app.md)

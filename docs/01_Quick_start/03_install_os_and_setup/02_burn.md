@@ -32,6 +32,27 @@ import DocScope from '@site/src/components/DocScope';
 
 </DocScope>
 
+## 概述
+
+烧录是把 RDK OS 系统镜像写入开发板存储介质的过程。
+
+- **做什么**：用 XBurn 工具把下载好的系统镜像烧录到开发板存储介质。
+- **为什么**：设备出厂预装测试版固件，需重新烧录最新版本镜像后才能正常使用。
+- **做完能干嘛**：开发板上电后进入 Ubuntu 桌面，可按 [系统状态查询](./system_status.md) 确认版本与板卡型号。
+
+## 前置条件
+
+开始烧录前，请确认已完成：
+
+- [ ] [烧录准备](./01_instruction.md)：下载镜像、安装 XBurn、连接 Type-C 数据线、完成环境准备。
+- [ ] 已根据设备状态选好下载模式（见 [下载模式](#下载模式)）。
+
+<DocScope products="RDK-S600">
+
+- [ ] 已根据目标存储介质设置 SW8 BOOT 拨码（见 [烧录全镜像](#烧录全镜像) 的启动盘选择）。
+
+</DocScope>
+
 ## 下载模式
 
 | 下载模式 | 适用场景 | 前置要求 |
@@ -289,6 +310,19 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s600-specify-partition-flash.jpg" alt="" style={{ width: '100%' }} />
 
 </DocScope>
+
+## 验证结果
+
+烧录完成并启动后，登录开发板确认：
+
+- ✅ 成功标志：
+  - `cat /etc/version` 输出版本号（非空），且与预期镜像版本一致。
+  - `rdkos_info` 的 `[Hardware Model]` 与手中板卡一致（RDK S100/S600）。
+- ❌ 常见失败：
+  - `cat /etc/version` 版本与预期不一致 → 烧入镜像不对，按 [烧录全镜像](#烧录全镜像) 重新烧录。
+  - 设备上电后长时间无显示输出 → 见 [烧录全镜像](#烧录全镜像) 的启动异常排查。
+
+详细的状态查询命令与输出示例见 [系统状态查询](./system_status.md)。
 
 ## 相关文档
 

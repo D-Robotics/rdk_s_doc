@@ -24,6 +24,22 @@ import DocScope from '@site/src/components/DocScope';
 
 </DocScope>
 
+## 概述
+
+烧录说明介绍烧录系统前的准备工作：下载镜像、安装烧录工具、连接数据线、完成环境准备。
+
+- **做什么**：完成烧录前的镜像、工具、线材与环境准备。
+- **为什么**：设备出厂预装测试版固件，需烧录最新版本镜像后才能正常使用。
+- **做完能干嘛**：按 [烧录步骤](./02_burn.md) 即可开始烧录。
+
+## 前置条件
+
+开始烧录前，请确认已准备：
+
+- [ ] 一台 PC（Windows/Linux/macOS），用于运行 XBurn 烧录工具。
+- [ ] 带屏蔽层、支持数据传输的 Type-C 数据线（非纯充电线）。
+- [ ] 开发板配套电源适配器。
+
 ## 安全注意事项
 
 - 禁止带电时拔插除 USB、HDMI 和网线之外的任何设备。
@@ -93,6 +109,15 @@ RDK S600 提供 Ubuntu 24.04 桌面版系统镜像，自带图形桌面环境。
 - [Windows 环境](https://developer.d-robotics.cc/xburn_doc/environment/windows-setup)：USB Driver（ADB、Fastboot、DFU）与 CH341 串口驱动
 - [Linux 环境](https://developer.d-robotics.cc/xburn_doc/environment/linux-setup)：adb/fastboot/dfu-util 依赖与 udev 规则
 - [macOS 环境](https://developer.d-robotics.cc/xburn_doc/environment/mac-setup)：brew 依赖（android-platform-tools、dfu-util）
+
+## 验证结果
+
+准备完成后，确认：
+
+- ✅ 成功标志：product 文件夹内同时存在 `img_packages` 和 `xmodem_tools` 两个条目；XBurn 启动后能识别到开发板设备。
+- ❌ 常见失败：
+  - XBurn 不识别设备 → 检查 Type-C 数据线是否支持数据传输、是否已完成 [环境准备](#环境准备)。
+  - product 文件夹结构不对 → 重新下载并解压镜像。
 
 ## 相关文档
 

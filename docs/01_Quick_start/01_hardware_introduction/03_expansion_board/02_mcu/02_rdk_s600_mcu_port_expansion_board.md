@@ -13,6 +13,8 @@ sidebar_products: RDK S600
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="RDK S600 MCU 接口扩展板" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
+## 产品介绍
+
 RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持 CAN_FD、ADC 等。
 
 <!-- :::danger 注意
@@ -67,7 +69,7 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 | **名称** | **参数**                                                                        |
 | -------- | ------------------------------------------------------------------------------- |
-| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x IIC, 2x SPI<br/> |
+| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x I2C, 2x SPI<br/> |
 | 板载模组 | IMU：BMI088（SPI）                                                              |
 | 工作温度 | 0℃~65℃                                                                          |
 | 尺寸     | 70x70x17mm                                                                      |
@@ -95,7 +97,7 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 ## 接口说明
 
-### CAN FD 连接器（J401/J402/J403/J403/J405）
+### CAN FD 连接器（J401/J402/J403/J404/J405）
 
 :::info 提示
 
@@ -103,7 +105,7 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 :::
 
-扩展板提供 5 路 CAN FD 接口（CAN-1 ~ CAN-4,CAN-10），每路接口配备 120Ω 终端电阻，可通过开关（SW401）进行切换。
+扩展板提供 5 路 CAN FD 接口（CAN1 ~ CAN4 和 CAN10），每路接口配备 120Ω 终端电阻，可通过开关（SW401）进行切换。
 
 ### 30-Pin（J501）
 

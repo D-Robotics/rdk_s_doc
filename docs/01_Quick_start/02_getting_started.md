@@ -14,6 +14,16 @@ import DocScope from '@site/src/components/DocScope';
 
 > 相机扩展板、MCU 接口扩展板等配件的安装见 [硬件介绍](/01_Quick_start/01_hardware_introduction/03_expansion_board) 各板卡文档。网络深度配置见 [网络配置](../02_System_configuration/01_network_config.md)。烧录系统见 [系统烧录](./03_install_os_and_setup/01_instruction.md)。
 
+## 前置条件
+
+开始前请准备：
+
+- [ ] 开发板套件（开发板 + 电源适配器）。
+- [ ] Desktop 版：HDMI 显示器、USB 键盘与鼠标。
+- [ ] Server 版：TTL-USB 串口线（串口登录见 [远程登录](./03_install_os_and_setup/remote_login.md)）。
+- [ ] 有线网线（可选，推荐接入以便远程登录）。
+- 已完成：了解 [RDK S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit) 或 [RDK S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit) 的接口布局。
+
 ## 电源
 
 RDK 开发板使用外接 DC 电源适配器供电，不支持 USB 供电。
@@ -104,7 +114,7 @@ RDK S600 提供 2 个 1GbE + 2 个 10GbE 以太网口（RJ45），另有 1 个 M
 
 </DocScope>
 
-出厂系统默认 DHCP 自动获取 IP。上电后可通过显示器查看 IP，或通过串口/SSH 登录后用 `ip addr` 查看。
+出厂系统 eth0 默认 DHCP 自动获取 IP，eth1 默认静态 IP `192.168.127.10`。上电后可通过显示器查看 IP，或通过串口/SSH 登录后用 `ip addr` 查看。
 
 ### 无线网络
 
@@ -127,6 +137,18 @@ USB Type-A 接口用于连接 U 盘、移动硬盘等存储设备。USB Type-C �
 - 普通用户：用户名 `sunrise`，密码 `sunrise`
 - 超级用户：用户名 `root`，密码 `root`
 :::
+
+## 验证结果
+
+- ✅ 电源指示灯常亮、系统运行指示灯闪烁（系统运行正常）。
+- ✅ Desktop 版显示器输出 Ubuntu 桌面，Server 版串口输出登录提示。
+- ✅ 串口或 SSH 登录后 `ip addr` 能查到 eth0/eth1 或 wlan0 的 IP 地址。
+
+## 常见问题
+
+- **上电后显示器无输出**：确认电源开关已拨至 ON、HDMI 线插紧、显示器输入源已切换到对应 HDMI 口。
+- **开发板无法启动**：检查上电顺序（独立供电的外设不得先于开发板上电）、启动介质拨码是否为默认启动位。
+- **键鼠无响应**：换其他 USB Type-A 口；确认使用有线键鼠（蓝牙键鼠需先安装 Wi-Fi & 蓝牙模组）。
 
 ## 相关文档
 

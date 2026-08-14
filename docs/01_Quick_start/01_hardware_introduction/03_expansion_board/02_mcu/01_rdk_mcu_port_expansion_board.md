@@ -11,6 +11,8 @@ slug: /Quick_start/hardware_introduction/rdk_mcu_port_expansion_board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png" alt="RDK S100 MCU 接口扩展板" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 产品介绍
+
 RDK S100 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S100 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持以太网、CAN_FD、ADC 等。
 
 :::warning
@@ -37,7 +39,7 @@ RDK S100 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S100 
 
 | **名称** | **参数**                                                                                 |
 | -------- | ---------------------------------------------------------------------------------------- |
-| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x IIC, 2x SPI<br />1 x RJ45 |
+| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x I2C, 2x SPI<br />1 x RJ45 |
 | 板载模组 | IMU：BMI088                                                                              |
 | 工作温度 | 0℃~45℃                                                                                   |
 

@@ -12,13 +12,17 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-本章节旨在向需要通过个人电脑(PC)远程访问开发板的用户介绍如何通过串口、网络(SSH)方式进行远程登录。
+远程登录是烧录系统后，从个人电脑（PC）访问开发板的基本方式。
+
+- **做什么**：通过串口或 SSH，从 PC 登录开发板。
+- **为什么**：开发板日常开发通常无独立显示器/键鼠，需远程操作。
+- **做完能干嘛**：在 PC 端获得板端 shell，可执行命令、部署与调试程序。
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并完成启动（见 [烧录系统与配置](./01_instruction.md)）。
-- 远程登录前需先确认开发板网络可达：板端 `eth1` 默认静态 IP `192.168.127.10`，或通过 Wi-Fi（`wlan0`）由路由器分配 IP（可用 `ifconfig` 或 `ip addr` 查看）。
-- PC 与开发板处于同一网段，能 `ping` 通开发板 IP（网络排查见 [网络状态确认](#network_config)）。
+- [ ] 开发板已烧录 RDK OS 并完成启动（见 [烧录系统与配置](./01_instruction.md)）。
+- [ ] 远程登录前确认开发板网络可达：板端 `eth1` 默认静态 IP `192.168.127.10`，或通过 Wi-Fi（`wlan0`）由路由器分配 IP（可用 `ifconfig` 或 `ip addr` 查看）。
+- [ ] PC 与开发板处于同一网段，能 `ping` 通开发板 IP（网络排查见 [网络状态确认](#network_config)）。
 
 ## 默认登录账户
 
@@ -42,7 +46,7 @@ import DocScope from '@site/src/components/DocScope';
 <DocScope products="RDK S600">
 
 - 有线以太网：
-  - 开发板 eth2 eth3 仍在调试中，暂不支持使用
+  - 开发板 eth2、eth3 为 10GbE 万兆网口，默认采用 dhcp 模式，IP 地址一般由路由器分配（同 eth0）
   - 开发板 eth1 接口默认采用静态 IP 模式，IP 地址为`192.168.127.10`，掩码`255.255.255.0`，网关 `192.168.127.1`
   - 开发板 eth0 接口默认采用 dhcp 模式，IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 eth0 网络的 IP 地址
 - 无线 Wi-Fi：开发板 IP 地址一般由路由器分配，可在设备命令行中通过`ifconfig`命令查看 wlan0 网络的 IP 地址
@@ -53,7 +57,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 串口登录{#login_uart}
 
-### **win 连接串口**
+### Windows 连接串口
 
 参考视频: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
 
@@ -132,62 +136,63 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 </DocScope>
 <DocScope products="RDK S600">
 
-```bash
+```text
 eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether 7a:5e:ca:06:4b:a1  txqueuelen 1000  (Ethernet)
+        ether 72:bd:a6:8f:51:e6  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 136
+        device interrupt 139
 
-eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+eth1: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
-        inet6 fe80::58de:11ff:fe64:e19c  prefixlen 64  scopeid 0x20<link>
-        ether 5a:de:11:64:e1:9c  txqueuelen 1000  (Ethernet)
+        ether 92:9e:5b:55:7e:be  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 3  bytes 425 (425.0 B)
+        TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 192
+        device interrupt 199
 
 eth2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether 02:8f:6f:81:99:10  txqueuelen 1000  (Ethernet)
+        ether 4a:99:99:25:7d:aa  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 201
+        device interrupt 210
 
 eth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether ee:71:51:40:ac:ad  txqueuelen 1000  (Ethernet)
+        ether 22:1a:61:60:c1:dd  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 218
+        device interrupt 227
 
 lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         inet 127.0.0.1  netmask 255.0.0.0
         inet6 ::1  prefixlen 128  scopeid 0x10<host>
         loop  txqueuelen 1000  (Local Loopback)
-        RX packets 224  bytes 21518 (21.5 KB)
+        RX packets 32  bytes 4590 (4.5 KB)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 224  bytes 21518 (21.5 KB)
+        TX packets 32  bytes 4590 (4.5 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
-wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-        ether f0:68:e3:22:7e:90  txqueuelen 1000  (Ethernet)
-        RX packets 8280  bytes 654536 (654.5 KB)
-        RX errors 0  dropped 5898  overruns 0  frame 0
-        TX packets 1138  bytes 139677 (139.6 KB)
+wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.3.35  netmask 255.255.255.0  broadcast 192.168.3.255
+        inet6 fe80::214f:2624:3060:1313  prefixlen 64  scopeid 0x20<link>
+        ether ec:3a:56:69:c4:e0  txqueuelen 1000  (Ethernet)
+        RX packets 10798  bytes 5276286 (5.2 MB)
+        RX errors 0  dropped 2385  overruns 0  frame 0
+        TX packets 3284  bytes 529515 (529.5 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 </DocScope>
 
-### **mac 连接串口**
+### macOS 连接串口
 
-macos 系统下，使用 minicom 工具连接串口，步骤如下：
+macOS 系统下，使用 minicom 工具连接串口，步骤如下：
 1. 使用 minicom 命令连接串口验证(`minicom -D /dev/tty.wchusbserial* -b 921600 -8`）
       ```bash
       minicom  # 启动 minicom 终端工具，用于串口通信
@@ -286,7 +291,7 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 ## 常见问题
 
 - **SSH 连接被拒绝**：板端 `sudo systemctl status ssh` 确认服务运行；确认防火墙 `sudo ufw status` 未拦截。
-- **串口无输出**：检查波特率（S100: 921600/115200，S600: 同），确认 TTL-USB 线 TX/RX 未接反。
+- **串口无输出**：检查波特率（应为 921600），确认 TTL-USB 线 TX/RX 未接反。
 - **NoMachine 黑屏**：首次配置后必须重启板卡。详见 [入门配置 - NoMachine 配置](./configuration_wizard.md)。
 - **IP 地址不确定**：串口登录后 `ip addr` 查看，或路由器管理页查找 MAC 地址对应 IP。
 
