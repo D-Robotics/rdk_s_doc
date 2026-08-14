@@ -28,9 +28,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D
 
 **D-Robotics_LLM_S100 User Manual**
 
-```bash
-wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D-Robotics_LLM_S100_1.0.0_Doc.zip
-```
+[**Online Reading URL**](https://developer.d-robotics.cc/oe_llm_s100p_doc/en/index.html)
 
 **D-Robotics_LLM_S100 Compiled Models**
 

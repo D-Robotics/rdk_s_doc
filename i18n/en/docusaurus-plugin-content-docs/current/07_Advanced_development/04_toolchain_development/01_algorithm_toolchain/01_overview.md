@@ -33,18 +33,6 @@ This version corresponds to system software version **5.1.0**. Users can confirm
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-package-3.7.0-s100-s600.tgz
 ```
 
-### OE User Manual
-
-**Online Reading URL:**
-👉 [https://toolchain.d-robotics.cc/](https://toolchain.d-robotics.cc/)
-
-**Download URL:**
-<!-- ```bash
-wget -c ftp://oeftp@sdk.d-robotics.cc/oe_v3.2.0/s100~3.2.0-oe-doc.zip --ftp-password=Oeftp~123$%
-```   -->
-
-👉 [OE User Manual V3.7.0 Download](https://archive.d-robotics.cc/toolchain/oe-doc-3.7.0-s100-s600.zip)
-
 ## Docker Images
 
 ### CPU Docker
@@ -76,3 +64,9 @@ Method 2: Download the offline tar package
 ```bash
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_toolchain_ubuntu_22_s100_s600_gpu_v3.7.0.tar
 ```
+
+### OE User Manual
+
+
+**Online Reading URL**
+[https://toolchain.d-robotics.cc/](https://developer.d-robotics.cc/oe_s_doc/en/index.html)
