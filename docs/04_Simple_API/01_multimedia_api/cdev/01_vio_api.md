@@ -21,8 +21,10 @@ description: "VIO（视频输入）API 接口说明"
 | sp_open_camera | **打开摄像头** |
 | sp_open_camera_v2 | **指定分辨率打开摄像头** |
 | sp_open_vps | **打开 VPS** |
-| sp_vio_close | **关闭摄像头** |
+| sp_vio_close | **关闭摄像头或 VPS** |
 | sp_vio_get_frame | **获取视频图像帧** |
+| sp_vio_get_raw | **获取摄像头的 RAW 图数据** |
+| sp_vio_get_yuv | **获取摄像头的 YUV 数据** |
 | sp_vio_set_frame | **发送视频图像帧给 vps 模块** |
 
 
@@ -90,7 +92,7 @@ description: "VIO（视频输入）API 接口说明"
 
 **【函数原型】**  
 
-`int32_t sp_open_camera_v2(void *obj, const int32_t pipe_id, const int32_t video_index, int32_t chn_num, sp_sensors_parameters *parameters, int32_t *width, int32_t *height)`
+`int32_t sp_open_camera_v2(void *obj, const int32_t pipe_id, const int32_t video_index, int32_t chn_num, sp_sensors_parameters *parameters, int32_t *input_width, int32_t *input_height)`
 
 **【功能描述】**  
 
@@ -112,8 +114,8 @@ description: "VIO（视频输入）API 接口说明"
 - `video_index`：camera 对应的 host 编号。 -1表示自动探测；0, 1, 2 请参考 host 编号选择小节
 - `chn_num`：设置输出多少种不同分辨率的图像，最大为6，最小为1。
 - `parameters`：camera RAW 输出相关结构体，用于指定分辨率和帧率
-- `width`：配置输出宽度的数组地址
-- `height`：配置输出高度的数组地址
+- `input_width`：配置输出宽度的数组地址
+- `input_height`：配置输出高度的数组地址
 
 `sp_sensors_parameters`结构体成员见下表：
 
@@ -148,15 +150,15 @@ description: "VIO（视频输入）API 接口说明"
 - `obj`： 已经初始化的`VIO`对象指针
 - `pipe_id`：支持多次打开，通过`pipe_id`进行区分。
 - `chn_num`：设置输出图像数量，最大为6，最小为1，与设置的目标高宽数组大小有关
-- `proc_mod`：处理模式，当前支持：`SP_VPS_SCALE` 仅缩放、`SP_VPS_SCALE_CROP` 裁剪并缩放
+- `proc_mode`：处理模式，当前支持：`SP_VPS_SCALE` 仅缩放、`SP_VPS_SCALE_CROP` 裁剪并缩放
 - `src_width`：原始帧宽度
 - `src_height`：原始帧高度
 - `dst_width`：配置目标输出宽度的数组地址
 - `dst_height`：配置目标输出高度的数组地址
-- `crop_x`：裁剪区域的左上角 x 坐标集合，当`proc_mod`没有设置裁剪功能时，传入`NULL`
-- `crop_y`：裁剪区域的左上角 y 坐标集合，当`proc_mod`没有设置裁剪功能时，传入`NULL`
-- `crop_width`：裁剪区域的宽度，当`proc_mod`没有设置裁剪功能时，传入`NULL`
-- `crop_height`：裁剪区域的高度，当`proc_mod`没有设置裁剪功能时，传入`NULL`
+- `crop_x`：裁剪区域的左上角 x 坐标集合，当`proc_mode`没有设置裁剪功能时，传入`NULL`
+- `crop_y`：裁剪区域的左上角 y 坐标集合，当`proc_mode`没有设置裁剪功能时，传入`NULL`
+- `crop_width`：裁剪区域的宽度，当`proc_mode`没有设置裁剪功能时，传入`NULL`
+- `crop_height`：裁剪区域的高度，当`proc_mode`没有设置裁剪功能时，传入`NULL`
 - `rotate`：旋转角度集合，当前不支持旋转功能，需传入`NULL`
 
 :::info 注意！
@@ -201,8 +203,8 @@ description: "VIO（视频输入）API 接口说明"
 
 - `obj`： 已经初始化的`VIO`对象指针
 - `frame_buffer`：已经预分配内存的 buffer 指针，用于保存获取出来的图片，目前获取到的图像都是`NV12`格式，所以预分配内存大小可以由公式`高 * 宽 * 3 / 2 `，也可以利用提供的宏定义 `FRAME_BUFFER_SIZE(w, h)`进行内存大小计算
-- `width`：`image_buffer`保存图片的宽，必须是在`sp_open_camera`或者`sp_open_vps`配置好的输出宽
-- `height`：`image_buffer`保存图片的高，必须是在`sp_open_camera`或者`sp_open_vps`配置好的输出高
+- `width`：`frame_buffer`保存图片的宽，必须是在`sp_open_camera`或者`sp_open_vps`配置好的输出宽
+- `height`：`frame_buffer`保存图片的高，必须是在`sp_open_camera`或者`sp_open_vps`配置好的输出高
 - `timeout`：获取图片的超时时间，单位为`ms`，一般设置为`2000`
 
 **【返回类型】**  
@@ -266,7 +268,7 @@ description: "VIO（视频输入）API 接口说明"
 **【参数】**
 
 - `obj`： 已经初始化的`VIO`对象指针
-- `image_buffer`：需要处理的图像帧数据，必须是 `NV12` 格式的图像数据，分辨率必须和调用`sp_open_vps`接口是的原始帧分辨率一致。
+- `frame_buffer`：需要处理的图像帧数据，必须是 `NV12` 格式的图像数据，分辨率必须和调用`sp_open_vps`接口是的原始帧分辨率一致。
 - `size`: 帧大小
 
 **【返回类型】**  

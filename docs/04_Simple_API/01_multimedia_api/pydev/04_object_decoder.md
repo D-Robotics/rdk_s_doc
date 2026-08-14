@@ -19,7 +19,7 @@ Decoder 对象实现了对视频数据的解码功能，包含了`decode`、`set
 <font color='Blue'>【函数声明】</font>  
 
 ```python
-Decoder.decode(file, video_chn, decode_type, width, height)
+Decoder.decode(file, video_chn, type, width, height)
 ```
 
 <font color='Blue'>【参数描述】</font>  
@@ -28,7 +28,7 @@ Decoder.decode(file, video_chn, decode_type, width, height)
 | --------- | --------------- | ------------------- |
 | file      | 需要解码的文件名     |       无       |
 | video_chn | 指定视频解码器的通道号   | 范围0~31 |
-| decode_type | 视频解码类型  | 范围1~3，分别对应`H264`、`H265`、`MJPEG` |
+| type        | 视频解码类型  | 范围1~3，分别对应`H264`、`H265`、`MJPEG` |
 | width     | 输入解码模块的图像宽度      | 不超过4096              |
 | height    | 输入解码模块的图像高度      | 不超过4096              |
 
@@ -87,7 +87,8 @@ img = dec.get_img()
 
 | 返回值 | 定义描述 |
 | ------ | ----- |
-| -1      | 解码数据  |
+| PyBytesObject | 成功，返回解码后的图像数据 |
+| None          | 失败 |
 
 <font color='Blue'>【注意事项】</font>
 

@@ -44,7 +44,7 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 | pip        | ≥ 22.0    | 安装 wheel 包所需                                      |
 | pybind11   | 任意      | 构建时使用，安装包时不需要依赖                         |
 | scikit-build-core | ≥ 0.7 | 构建 wheel 包时使用（仅源码构建）                    |
-| 地平线基础库 | 根据平台 | 如 libdnn.so、libucp.so 等，通常由 BSP 提供           |
+| 地平线基础库 | 根据平台 | 如 libdnn.so、libhbucp.so 等，通常由 BSP 提供         |
 
 ### 构建wheel包
 构建wheel包的方式有三种下面分别介绍。
@@ -130,7 +130,7 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 ### 卸载说明
 - 卸载 pip 安装的包：
   ```bash
-  pip uninstall hbmruntime
+  pip uninstall hbm_runtime
   ```
 
 - 卸载 .deb 安装的包：

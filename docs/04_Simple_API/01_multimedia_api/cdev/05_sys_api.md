@@ -19,11 +19,11 @@ description: "SYS（模块绑定）API 接口说明"
 | sp_module_bind | **绑定数据源、目标模块** |
 | sp_module_unbind | **解除模块间的绑定** |
 
-### sp_module_bind  
+## sp_module_bind  
 
 **【函数原型】**  
 
-`int32_t sp_module_bind(void *src, int32_t src_type, void *dst, int32_t dst_type)`
+`int sp_module_bind(void *src, int32_t src_type, void *dst, int32_t dst_type)`
 
 **【功能描述】**  
 
@@ -49,11 +49,11 @@ description: "SYS（模块绑定）API 接口说明"
 
 成功返回 0，失败返回其他值。
 
-### sp_module_unbind  
+## sp_module_unbind  
 
 **【函数原型】**  
 
-`int32_t sp_module_unbind(void *src, int32_t src_type, void *dst, int32_t dst_type)`
+`int sp_module_unbind(void *src, int32_t src_type, void *dst, int32_t dst_type)`
 
 **【功能描述】**  
 

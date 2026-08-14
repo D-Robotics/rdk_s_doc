@@ -22,14 +22,14 @@ from hobot_vio import libsrcampy
 
 # 创建对象
 camera = libsrcampy.Camera()
-encode = libsrcampy.Encode()
-decode = libsrcampy.Decode()
+encode = libsrcampy.Encoder()
+decode = libsrcampy.Decoder()
 display = libsrcampy.Display()
 
 # 典型 pipeline：采集 → 显示
 while True:
-    frame = camera.get_frame()
-    display.show(frame)
+    frame = camera.get_img()
+    display.set_img(frame)
 ```
 
 ## 典型链路

@@ -19,7 +19,7 @@ Encoder 对象实现了对视频数据的编码压缩功能，包含了`encode`�
 <font color='Blue'>【函数声明】</font>
 
 ```python
-Encoder.encode(video_chn, encode_type , width, height, bits)
+Encoder.encode(video_chn, type, width, height, bits)
 ```
 
 <font color='Blue'>【参数描述】</font>  
@@ -27,7 +27,7 @@ Encoder.encode(video_chn, encode_type , width, height, bits)
 | 参数名称  | 描述           | 取值范围                    |
 | --------- | --------------- | ------------------- |
 | video_chn | 指定视频编码器的通道号   | 范围0~31 |
-| encode_type    | 视频编码类型  | 范围1~3，分别对应`H264`、`H265`、`MJPEG` |
+| type          | 视频编码类型  | 范围1~3，分别对应`H264`、`H265`、`MJPEG` |
 | width     | 输入编码模块的图像宽度      | 不超过4096              |
 | height    | 输入编码模块的图像高度      | 不超过4096              |
 | bits      | 编码模块的比特率         |    默认8000kbps         |
@@ -123,10 +123,10 @@ Encoder.get_img()
 
 <font color='Blue'>【返回值】</font>  
 
-| 返回值 | 定义描述 |                 
+| 返回值 | 定义描述 |
 | ------ | ----- |
-| 0      | 成功  |
-| -1    | 失败   |
+| PyBytesObject | 成功，返回编码后的数据 |
+| None          | 失败 |
 
 <font color='Blue'>【注意事项】</font> 
 

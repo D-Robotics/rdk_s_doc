@@ -30,8 +30,8 @@ Camera.open_cam(pipe_id, video_index, fps, width, height, raw_height, raw_width)
 | fps         | camera 图像输出帧率          | 依据 camera 型号而定，默认值30   |
 | width       | camera 最终图像输出宽度    |  视 camera 型号而定，默认值1920 |
 | height      | camera 最终图像输出高度  |    视 camera 型号而定，默认值1080 |
-| raw_height       | camera 原始 RAW 图像输出宽度    |  视 camera 型号而定，默认值1920|
-| raw_width      | camera 原始 RAW 图像输出高度  |    视 camera 型号而定，默认值1080|
+| raw_height       | camera 原始 RAW 图像输出高度    |  默认值 -1（不设置）|
+| raw_width      | camera 原始 RAW 图像输出宽度  |    默认值 -1（不设置）|
 
 <font color='Blue'>【使用方法】</font> 
 
@@ -103,13 +103,13 @@ Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height
 | 参数名称      | 定义描述                  | 取值范围    |
 | ----------- | ------------------------ | --------  |
 | pipe_id    | camera 对应的 pipeline 通道号  | 默认从0开始，范围0~7  |
-| proc_mode  | 图像处理模式配置，支持缩放、裁剪   | 范围1~4，分别表示`缩放`、`裁剪+缩放`|
+| proc_mode  | 图像处理模式配置，支持缩放、裁剪、旋转   | 范围1~4，分别表示`缩放`、`缩放+裁剪`、`缩放+旋转`、`缩放+裁剪+旋转`|
 | src_width  | 图像输入宽度                 | 视 camera 输出宽度而定 |
 | src_height | 图像输入高度                 | 视 camera 输出高度而定 |
 | dst_width  | 图像输出宽度 | 输入宽度的[1, 1/64)倍 |
 | dst_height | 图像输出高度 | 输入高度的[1, 1/64)倍 |
-| crop_rect  | 裁剪区域的宽高，输入格式[x, y] | 不超过输入图像尺寸 |
-| rotate     | 旋转角度，最多支持两个通道旋转, 目前不支持旋转 | 范围0~3，分别表示`不旋转`、`90度` `180度`、`270度` |
+| crop_rect  | 裁剪区域，输入格式 [x, y, width, height] | 不超过输入图像尺寸 |
+| rotate     | 旋转角度，最多支持两个通道旋转 | 范围0~3，分别表示`不旋转`、`90度`、`180度`、`270度` |
 | src_size | 保留参数 | 默认不需要配置 |
 | dst_size | 保留参数 | 默认不需要配置 |
 
@@ -196,8 +196,8 @@ img = cam.get_img(2)
 
 | 返回值 | 定义描述 |                 
 | ------ | ----- |
-| 0      | 成功  |
-| -1    | 失败   |
+| PyBytesObject | 成功，返回图像数据 |
+| None          | 失败 |
 
 <font color='Blue'>【注意事项】</font> 
 

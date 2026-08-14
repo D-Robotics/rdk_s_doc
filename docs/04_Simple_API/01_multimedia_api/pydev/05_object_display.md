@@ -18,18 +18,26 @@ Display 对象实现了视频显示功能，可以将图像数据通过`HDMI`接
 <font color='Blue'>【函数声明】</font>  
 
 ```python
-Display.display(chn, width, height, vot_intf, vot_out_mode)
+Display.display(chn, width, height, vot_intf, vot_out_mode, chn_width, chn_height)
 ```
 
 <font color='Blue'>【参数描述】</font>  
 
 | 参数名称     | 定义描述                  | 取值范围      |
 | ------------ | ----------------------- | ----------------- |
-| chn          | 显示输出层        | 0: 视频层，2: 图形层  |
+| chn          | 显示输出接口        | 10: DP 输出，11: HDMI 输出；0~3 为旧值（默认按 HDMI 处理）  |
 | width        | 输入图像的宽度       | 不超过1920 |
 | height       | 输入图像的高度       | 不超过1080 |
 | vot_intf     | 视频接口输出分辨率 | 默认为0，1080p |
 | vot_out_mode | 视频输出接口     | 默认为1，HDMI 输出 |
+| chn_width    | 通道输出宽度     | 默认与 width 相同 |
+| chn_height   | 通道输出高度     | 默认与 height 相同 |
+
+:::info 注意
+
+`chn` 参数已改为输出接口选择：`10` 表示 DP（DisplayPort）输出、`11` 表示 HDMI 输出，`0~3` 为旧值（默认按 HDMI 处理）。
+
+:::
 
 <font color='Blue'>【使用方法】</font> 
 
@@ -65,7 +73,7 @@ ret = disp.display(0, 1920, 1080, 0, 1)
 <font color='Blue'>【函数声明】</font>  
 
 ```python
-Display.set_img(img)
+Display.set_img(img, chn)
 ```
 
 <font color='Blue'>【参数描述】</font>  
@@ -73,6 +81,7 @@ Display.set_img(img)
 | 参数名称     | 定义描述                  | 取值范围      |
 | ------------ | ----------------------- | ----------------- |
 | img          | 需要显示的图像数据        | NV12格式  |
+| chn          | 显示输出层        | 0~1 为视频层，默认 0 |
 
 <font color='Blue'>【使用方法】</font> 
 
