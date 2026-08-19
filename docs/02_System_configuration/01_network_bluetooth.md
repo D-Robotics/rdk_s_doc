@@ -117,10 +117,48 @@ Station 模式下，开发板作为客户端，接入路由器无线热点进行
 
 ### Soft AP 模式
 
+<DocScope products="RDK S100">
 :::tip
 Wi-Fi AP 模式暂不可用
 持续更新中....
 :::
+</DocScope>
+
+<DocScope versions="<5.1.1" products="RDK S600">
+:::tip
+Wi-Fi AP 模式暂不可用
+持续更新中....
+:::
+</DocScope>
+
+<DocScope versions=">=5.1.1" products="RDK S600">
+  rtl8852ce 驱动默认会开启两个 WLAN 接口：`wlan0` 和 `wlan1`。其中，`wlan0` 作为 STA 接口，`wlan1` 作为 AP 接口。
+
+  - 开启sta+ap功能命令
+  ```shell
+  nmcli device wifi hotspot ifname wlan1 con-name wifi-hotspot ssid d-robotics-ap password 12345678 band a channel 36
+  ```
+  参数说明：
+
+  | 参数        | 说明                                      |
+  | ----------- | ----------------------------------------- |
+  | `ifname`    | 使用的 Wi‑Fi 接口名，这里为 `wlan1`       |
+  | `con-name`  | 连接配置名，这里为 `wifi-hotspot`        |
+  | `ssid`      | Wi‑Fi 热点名称，这里为 `d-robotics-ap`   |
+  | `password`  | Wi‑Fi 密码，这里为 `12345678`            |
+  | `band a`    | 工作频段，`a` 表示 5GHz 频段             |
+  | `channel 36`| 工作信道，这里为信道 `36`                |
+
+
+  - sta+ap模式关闭命令
+  ```shell
+  # 关闭热点连接（按连接名关闭）
+  nmcli connection down wifi-hotspot
+
+  # 删除热点连接（按连接名删除）
+  nmcli connection delete wifi-hotspot
+  ```
+</DocScope>
 
 <!-- 开发板无线网络默认运行在 Station 模式下，如需使用 Soft AP 模式，请按照以下步骤进行配置。
 

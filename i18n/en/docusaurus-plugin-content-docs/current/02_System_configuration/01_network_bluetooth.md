@@ -117,10 +117,48 @@ In Station mode, the development board acts as a client, connecting to the route
 
 ### Soft AP Mode
 
+<DocScope products="RDK S100">
 :::tip
 Wi-Fi AP mode is currently unavailable
 Continuously updating...
 :::
+</DocScope>
+
+<DocScope versions="<5.1.1" products="RDK S600">
+:::tip
+Wi-Fi AP mode is currently unavailable
+Continuously updating...
+:::
+</DocScope>
+
+<DocScope versions=">=5.1.1" products="RDK S600">
+  The rtl8852ce driver enables two WLAN interfaces by default: `wlan0` and `wlan1`.
+  `wlan0` is used as the STA interface, and `wlan1` is used as the AP interface.
+
+  - Command to enable STA + AP mode:
+  ```shell
+  nmcli device wifi hotspot ifname wlan1 con-name wifi-hotspot ssid d-robotics-ap password 12345678 band a channel 36
+  ```
+  Parameter description:
+
+  | Parameter    | Description                                                 |
+  | ------------ | ----------------------------------------------------------- |
+  | `ifname`     | Wi‑Fi interface name to use, here `wlan1`                   |
+  | `con-name`   | Name of the connection profile, here `wifi-hotspot`        |
+  | `ssid`       | Wi‑Fi hotspot name, here `d-robotics-ap`                    |
+  | `password`   | Wi‑Fi password, here `12345678`                             |
+  | `band a`     | Operating band, `a` indicates the 5 GHz band                |
+  | `channel 36` | Operating channel, here channel `36`                        |
+
+  - Command to disable STA + AP mode:
+  ```shell
+  # Bring the hotspot connection down (by connection name)
+  nmcli connection down wifi-hotspot
+
+  # Delete the hotspot connection (by connection name)
+  nmcli connection delete wifi-hotspot
+  ```
+</DocScope>
 
 <!-- The development board's wireless network runs in Station mode by default. If you need to use Soft AP mode, follow the steps below for configuration.
 
