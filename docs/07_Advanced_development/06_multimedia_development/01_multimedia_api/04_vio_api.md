@@ -97,7 +97,7 @@ VIO（Video Input/Output）是 RDK 多媒体的高层 pipeline API（板端 `hb_
 | hb_vio_free_gdcbuf | Release the gdc data corresponding to pipelineid, and hb_vio_get_data is used to obtain the gdc data; 释放对应pipeline_id的gdc数据,和hb_vio_get_data获取gdc数据对应使用. |
 | hb_vio_raw_dump | Not support; 不支持 |
 | hb_vio_raw_feedback | Not support; 不支持 |
-| hb_vio_run_raw | After the video system is initialized, hb_vio_get_datag obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data.; 视频系统初始化后,通过hb_vio_get_data获取isp raw 回灌地址并将外部RAW图像回灌到获取的地址中,使能isp 对回灌数据进行处理。 |
+| hb_vio_run_raw | After the video system is initialized, hb_vio_get_data obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data.; 视频系统初始化后,通过hb_vio_get_data获取isp raw 回灌地址并将外部RAW图像回灌到获取的地址中,使能isp 对回灌数据进行处理。 |
 | hb_vio_cfg_check | Check whether the vpm&amp;vin configuration file parameters are correct; |
 | hb_vio_pause_pipeline | pause the CIM data flow of the specified software channel; 暂停指定软件通道的CIM数据流 |
 | hb_vio_resume_pipeline | resume the CIM data flow of the specified software channel; 恢复指定软件通道的CIM数据流 |
@@ -1439,7 +1439,7 @@ int32_t hb_vio_run_raw(uint32_t pipeline_id, hb_vio_buffer_t *feedback_src, int3
 
 【功能描述】
 
-After the video system is initialized, hb_vio_get_datag obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data.; 视频系统初始化后,通过hb_vio_get_data获取isp raw 回灌地址并将外部RAW图像回灌到获取的地址中,使能isp 对回灌数据进行处理。
+After the video system is initialized, hb_vio_get_data obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data.; 视频系统初始化后,通过hb_vio_get_data获取isp raw 回灌地址并将外部RAW图像回灌到获取的地址中,使能isp 对回灌数据进行处理。
 
 【返回值】
 

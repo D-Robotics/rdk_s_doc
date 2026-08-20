@@ -730,9 +730,9 @@ uvc_capture_sample
   - 设置图像的高度（单位为像素）。
 - `-W, --width <px>`
   - 设置图像的宽度（单位为像素）。
-- `-W, --width <px>`
+- `-E, --isp_info`
   - 显示 ISP exposure 和 white balance 信息。
-- `-H, --help`
+- `-h, --help`
   - 显示帮助信息。
 
 **示例：**

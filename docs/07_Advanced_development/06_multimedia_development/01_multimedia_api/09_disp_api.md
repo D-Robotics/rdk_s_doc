@@ -14,15 +14,15 @@ DISP（Display，显示输出，X5 Display → RDK DISP）是 RDK 的显示输�
 
 - 显示通道：`hb_disp_set_channel_cfg`/`get_channel_cfg` 配置/查询显示通道。
 - buffer 校验：`hb_disp_check_video_bufaddr_valid` 校验视频 buffer 地址。
-- 同步：`hb_disp_get_disp_done_sync` 获取显示完成同步；`hb_disp_get_display_done` 查询显示完成。
-- 抓图：`hb_disp_get_capture_buf` 获取显示抓图。
+- 同步：`hb_disp_get_disp_done_sync_id` 获取显示完成同步；`hb_disp_get_display_done` 查询显示完成。
+- 抓图：`hb_disp_get_capture_buf_id` 获取显示抓图。
 
 ## API 调用流程
 
 1. `hb_disp_set_channel_cfg` 配置显示通道。
 2. `hb_disp_check_video_bufaddr_valid` 校验输入 buffer。
-3. `hb_disp_get_disp_done_sync` 等待显示完成同步。
-4. `hb_disp_get_capture_buf` 获取抓图（如需）；`hb_disp_close` 关闭通道。
+3. `hb_disp_get_disp_done_sync_id` 等待显示完成同步。
+4. `hb_disp_get_capture_buf_id` 获取抓图（如需）；`hb_disp_close` 关闭通道。
 
 
 ## API 列表

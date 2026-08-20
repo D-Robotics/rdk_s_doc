@@ -14,15 +14,15 @@ DISP (Display output; X5 Display -> RDK DISP) is the RDK display module (board h
 
 - Channel: `hb_disp_set_channel_cfg`/`get_channel_cfg` configure/query a display channel.
 - Buffer validation: `hb_disp_check_video_bufaddr_valid` validates a video buffer address.
-- Sync: `hb_disp_get_disp_done_sync` gets display-done sync; `hb_disp_get_display_done` queries display completion.
-- Capture: `hb_disp_get_capture_buf` gets a display capture frame.
+- Sync: `hb_disp_get_disp_done_sync_id` gets display-done sync; `hb_disp_get_display_done` queries display completion.
+- Capture: `hb_disp_get_capture_buf_id` gets a display capture frame.
 
 ## Call flow
 
 1. `hb_disp_set_channel_cfg` configures the display channel.
 2. `hb_disp_check_video_bufaddr_valid` validates the input buffer.
-3. `hb_disp_get_disp_done_sync` waits for display-done sync.
-4. `hb_disp_get_capture_buf` captures (if needed); `hb_disp_close` closes the channel.
+3. `hb_disp_get_disp_done_sync_id` waits for display-done sync.
+4. `hb_disp_get_capture_buf_id` captures (if needed); `hb_disp_close` closes the channel.
 
 
 ## API 列表
