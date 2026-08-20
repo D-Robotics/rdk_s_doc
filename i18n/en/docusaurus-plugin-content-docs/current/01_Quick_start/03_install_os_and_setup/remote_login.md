@@ -1,5 +1,7 @@
 ---
+title: "Remote Login"
 sidebar_position: 5
+description: "Methods and default accounts for remotely logging in to the development board via SSH/serial port/NoMachine"
 ---
 
 # Remote Login
@@ -10,34 +12,44 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-This section aims to introduce users who need to remotely access the development board from a personal computer (PC) to methods of remote login via serial port and network (SSH).
+Remote login is the basic way to access the development board from a personal computer (PC) after flashing the system.
+
+- **What to do**: Log in to the development board from the PC via the serial port or SSH.
+- **Why**: The development board typically has no dedicated monitor/keyboard/mouse for daily development, so remote operation is required.
+- **What's next**: You get the board's shell on the PC, and can run commands, deploy programs, and debug.
+
+## Prerequisites
+
+- [ ] The development board has been flashed with RDK OS and finished booting (see [Flash the system and set it up](./01_instruction.md)).
+- [ ] Before remote login, confirm the development board is network-reachable: the board's `eth1` uses the static IP `192.168.127.10` by default, or via Wi-Fi (`wlan0`) with an IP assigned by the router (check with `ifconfig` or `ip addr`).
+- [ ] The PC and the development board are on the same network segment and can `ping` the board's IP (for network troubleshooting, see [Network status confirmation](#network_config)).
 
 ## Default Login Accounts
 
 The system provides two default accounts for first-time users:
 
-- **Normal User:** Username `sunrise`, Password `sunrise`
-- **Super User (root):** Username `root`, Password `root`
+- **Standard user:** Username `sunrise`, Password `sunrise`
+- **Superuser (root):** Username `root`, Password `root`
 
 :::tip
-Before logging in remotely via the network, the development board needs to be connected to the network via wired Ethernet or wireless Wi-Fi, and the development board's IP address must be configured. For IP address information under the two connection methods, refer to the description below:
+Before logging in remotely over the network, the development board needs to be connected to the network via wired Ethernet or wireless Wi-Fi, with the board's IP address configured. The IP address information for the two connection methods is described below:
 
 <DocScope products="RDK S100">
 
 - Wired Ethernet:
   - The eth1 interface of the development board uses static IP mode by default, with IP address `192.168.127.10`, mask `255.255.255.0`, gateway `192.168.127.1`
-  - The eth0 interface of the development board uses DHCP mode by default, the IP address is generally assigned by the router. You can check the IP address of the eth0 network using the `ifconfig` command in the device command line.
-- Wireless Wi-Fi: The development board's IP address is generally assigned by the router. You can check the IP address of the wlan0 network using the `ifconfig` command in the device command line.
+  - The eth0 interface of the development board uses DHCP mode by default, and the IP address is generally assigned by the router. You can check the IP address of the eth0 network with the `ifconfig` command in the device command line.
+- Wireless Wi-Fi: The development board's IP address is generally assigned by the router. You can check the IP address of the wlan0 network with the `ifconfig` command in the device command line.
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
 - Wired Ethernet:
-  - The eth2 and eth3 interfaces of the development board are still under debugging and are not yet supported for use.
+  - The eth2 and eth3 interfaces of the development board are 10GbE ports, using DHCP mode by default. The IP addresses are generally assigned by the router (same as eth0).
   - The eth1 interface of the development board uses static IP mode by default, with IP address `192.168.127.10`, mask `255.255.255.0`, gateway `192.168.127.1`
-  - The eth0 interface of the development board uses DHCP mode by default, the IP address is generally assigned by the router. You can check the IP address of the eth0 network using the `ifconfig` command in the device command line.
-- Wireless Wi-Fi: The development board's IP address is generally assigned by the router. You can check the IP address of the wlan0 network using the `ifconfig` command in the device command line.
+  - The eth0 interface of the development board uses DHCP mode by default, and the IP address is generally assigned by the router. You can check the IP address of the eth0 network with the `ifconfig` command in the device command line.
+- Wireless Wi-Fi: The development board's IP address is generally assigned by the router. You can check the IP address of the wlan0 network with the `ifconfig` command in the device command line.
 
 </DocScope>
 
@@ -45,41 +57,42 @@ Before logging in remotely via the network, the development board needs to be co
 
 ## Serial Port Login{#login_uart}
 
-### **Connecting Serial Port on Windows**
+### Connecting the Serial Port on Windows
 
+Reference video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=2
 
-Before logging in via the serial port, you need to ensure that the development board's serial port cable is correctly connected to the computer. For connection methods, refer to the debug serial port section of the corresponding development board:
+Before logging in via the serial port, you need to confirm that the development board's serial cable is correctly connected to the computer. For the connection method, refer to the debug serial port section of the corresponding development board:
 
 <DocScope products="RDK S100">
-- [rdk_s100 Debug Serial Port Section](../01_hardware_introduction/01_rdk_s100.md#type-c-j16)
+- [Debug serial port section](../01_hardware_introduction/01_rdk_s100.md#type-c-j16)
 </DocScope>
 
 <DocScope products="RDK S600">
-- [rdk_s600 Debug Serial Port Section](../01_hardware_introduction/02_rdk_s600.md#j4)
+- [Debug serial port section](../01_hardware_introduction/02_rdk_s600.md#j4)
 </DocScope>
 
-Serial port login requires a PC terminal tool. Commonly used tools include `Putty`, `MobaXterm`, etc. Users can choose according to their habits. The port configuration process for different tools is basically similar. The following uses `MobaXterm` as an example to introduce the process of creating a new serial port connection:
+Serial port login requires a PC terminal tool. Commonly used tools include `Putty`, `MobaXterm`, and so on. Users can choose according to their own usage habits. The port configuration process is basically similar across different tools. The following takes `MobaXterm` as an example to introduce the process of creating a new serial port connection:
 
-- When the serial port USB adapter board is plugged into the computer for the first time, you need to install the serial port driver. The driver can be obtained from the [Tools subsection](https://developer.d-robotics.cc/resource) of the Resource Center. After the driver is installed, the Device Manager can properly recognize the serial port board port, as shown below:
+- When the serial port USB adapter board is plugged into the computer for the first time, you need to install the serial driver. The driver can be obtained from the [Tools subsection](https://developer.d-robotics.cc/resource) of the Resource Center. After the driver installation completes, Device Manager recognizes the serial board port properly, as shown below:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-20220416105939067.png" alt="Serial port recognized in Device Manager" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - Open the `MobaXterm` tool, click `Session`, then select `Serial`
 
-- Configure the port number, e.g., `COM3`. The actual serial port number used depends on the port recognized by the PC.
+- Configure the port number, for example `COM3`. Use the actual serial port number recognized by the PC.
 
 - Set the serial port configuration parameters as follows:
 
-  | Configuration Item      | Value  |
-  | ----------------------- | ------ |
-  | Baud rate               | 921600 |
-  | Data bits               | 8      |
-  | Parity                  | None   |
-  | Stop bits               | 1      |
-  | Flow Control            | None   |
+  | Configuration item | Parameter value |
+  | -------------------- | ------ |
+  | Baud rate  | 921600 |
+  | Data bits  | 8      |
+  | Parity   | None   |
+  | Stop bits  | 1      |
+  | Flow Control | None     |
 
-- Click `OK`, log in to the device by entering username: `root`, password: `root`
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="Connecting Serial Port on Windows demonstration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+- Click `OK`, enter the username: `root`, password: `root` to log in to the device
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="Windows serial port connection demo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 At this point, you can use the `ifconfig -a` command to query the development board's IP address, where eth0/eth1 and wlan0 represent wired and wireless networks respectively:
 
@@ -123,24 +136,23 @@ wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
 </DocScope>
 <DocScope products="RDK S600">
 
-```bash
+```text
 eth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 136
+        device interrupt 139
 
-eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+eth1: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         inet 192.168.127.10  netmask 255.255.255.0  broadcast 192.168.127.255
-        inet6 fe80::xxxx:xxff:fexx:xxxx  prefixlen 64  scopeid 0x20<link>
         ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
         RX packets 0  bytes 0 (0.0 B)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 3  bytes 425 (425.0 B)
+        TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 192
+        device interrupt 199
 
 eth2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
@@ -148,7 +160,7 @@ eth2: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 201
+        device interrupt 210
 
 eth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
@@ -156,112 +168,135 @@ eth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 218
+        device interrupt 227
 
 lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         inet 127.0.0.1  netmask 255.0.0.0
         inet6 ::1  prefixlen 128  scopeid 0x10<host>
         loop  txqueuelen 1000  (Local Loopback)
-        RX packets 224  bytes 21518 (21.5 KB)
+        RX packets 32  bytes 4590 (4.5 KB)
         RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 224  bytes 21518 (21.5 KB)
+        TX packets 32  bytes 4590 (4.5 KB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 
 wlan0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         ether xx:xx:xx:xx:xx:xx  txqueuelen 1000  (Ethernet)
-        RX packets 8280  bytes 654536 (654.5 KB)
-        RX errors 0  dropped 5898  overruns 0  frame 0
-        TX packets 1138  bytes 139677 (139.6 KB)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 </DocScope>
 
-### **Connecting Serial Port on Mac**
+### Connecting the Serial Port on macOS
 
-Under the macOS system, use the minicom tool to connect to the serial port. The steps are as follows:
-1. Use the minicom command to connect to the serial port for verification (`minicom -D /dev/tty.wchusbserial* -b 921600 -8`)
+On macOS, use the minicom tool to connect to the serial port. The steps are as follows:
+1. Use the minicom command to connect to the serial port and verify (`minicom -D /dev/tty.wchusbserial* -b 921600 -8`)
       ```bash
       minicom  # Start the minicom terminal tool for serial communication
-      -D       # Specify the serial port device to use
-      -b       # Set the serial port baud rate
-      -8       # Set the number of data bits to 8 bits
+      -D       # Specify the serial device to use
+      -b       # Set the serial baud rate
+      -8       # Set data bits to 8
       ```
       <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom.png" alt="Example of minicom serial port connection command on macOS" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-2. Verify connection to the development board
+2. Connect to the development board and verify
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-mac-usb-driver-minicom-success.png" alt="Successful connection to the development board via minicom on macOS" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 
-If you experience garbled text when using minicom, please refer to [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver#macos-驱动残留导致仍乱码)
+If garbled text appears when connecting with minicom, see [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver#macos-驱动残留导致仍乱码)
 :::
 
 ## Network Status Confirmation{#network_config}
 
+Reference: https://www.bilibili.com/video/BV1rm4y1E73q/?p=3
 
-Before using remote login, you need to ensure that the computer and development board have normal network communication. If you cannot `ping` them, follow these steps to confirm:
+Before using remote login, you need to ensure that the network communication between the computer and the development board is normal. If `ping` fails, follow these steps to confirm:
 
-- Confirm the IP address configuration of the development board and computer. Generally, the first three segments need to be the same, for example: Development board: `192.168.127.10` Computer: `192.168.127.100`
-- Confirm that the subnet mask and gateway configuration of the development board and computer are consistent.
-- Confirm whether the computer's network firewall is turned off.
+- Confirm the IP address configuration of the development board and the computer. Generally the first three segments need to be the same, for example: development board: `192.168.127.10`, computer: `192.168.127.100`
+- Confirm whether the subnet mask and gateway configuration of the development board and the computer are consistent
+- Confirm whether the computer's network firewall is turned off
 
-The outer wired Ethernet port (eth1) of the development board uses static IP mode by default, with IP address `192.168.127.10`. For direct network connection between the development board and computer, simply configure the computer with a static IP, ensuring it is on the same network segment as the development board. Taking the WIN10 system as an example, the method to modify the computer's static IP is as follows:
+The outer wired Ethernet port (eth1) of the development board uses static IP mode by default, with IP address `192.168.127.10`. For a direct network connection between the development board and the computer, you only need to configure the computer with a static IP to ensure it is on the same network segment as the development board. Taking the WIN10 system as an example, the method to change the computer's static IP is as follows:
 
-- Find the corresponding Ethernet device in Network Connections and double-click to open it.
-- Find the Internet Protocol Version 4 option and double-click to open it.
-- Fill in the corresponding network parameters in the red box area in the figure below and click OK.
+- In Network Connections, find the corresponding Ethernet device and double-click to open it
+- Find the Internet Protocol Version 4 option and double-click to open it
+- Fill in the corresponding network parameters at the red box area in the figure below and click OK
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-s100-pc-static-ip.png" alt="Windows static IP configuration dialog" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-If you need to configure the development board's wired network to DHCP mode for dynamic acquisition, refer to the [Wired Network](../../02_System_configuration/01_network_config.md) section.
+If you need to configure the development board's wired network to dynamically obtain an address in DHCP mode, refer to the [Wired network](../../02_System_configuration/01_network_config.md) section.
 
 ## SSH Login{#ssh}
-The following describes the steps to create a connection using terminal software and the terminal command line.
+The following introduces the steps for creating a connection with terminal software and the terminal command line respectively.
 
-### Terminal Software
+### Terminal software
 
-Commonly used terminal tools include `Putty`, `MobaXterm`, etc. Users can choose according to their habits. The port configuration process for different tools is basically similar. The following uses `MobaXterm` as an example to introduce the process of creating a new SSH connection:
+Currently commonly used terminal tools include `Putty`, `MobaXterm`, and so on. Users can choose according to their own usage habits. The port configuration process is basically similar across different tools. The following takes `MobaXterm` as an example to introduce the process of creating a new SSH connection:
 
 1. Open the `MobaXterm` tool, click `Session`, then select `SSH`
-2. Enter the development board's IP address, e.g., `192.168.127.10`
+2. Enter the development board's IP address, for example `192.168.127.10`
 3. Select `specify username` and enter `sunrise`
 4. After clicking OK, enter the username (sunrise) and password (sunrise) to complete the login
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="Terminal Software demonstration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="Terminal software demo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-### Computer Command Line
+### Computer command line
 
-Users can also log in via SSH using the command line. The steps are as follows:
+Users can also log in via SSH through the command line. The steps are as follows:
 
-1. Open a terminal window and enter the SSH login command, e.g., `ssh sunrise@192.168.127.10`
-2. When a connection confirmation prompt appears, enter YES
+1. Open a terminal window and enter the SSH login command, for example `ssh sunrise@192.168.127.10`
+2. When the connection confirmation prompt appears, enter YES
 3. Enter the password (sunrise) to complete the login
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="Computer Command Line demonstration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="Computer command line demo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
 
 ## NoMachine Login
 
 :::tip
-The NoMachine feature requires software package support on the S100/S600 side. See [NoMachine Configuration](./configuration_wizard.md#nomachine-configuration) for configuration guidance.
+The NoMachine feature requires software package support on the S100/S600 side. See [NoMachine configuration](./configuration_wizard.md#nomachine-configuration) for the configuration guide.
 :::
 
-This section is for users using the Ubuntu Desktop system version and describes how to achieve remote desktop login via `NoMachine`. The following sections use the S100 as an example. The operation for the S600 is the same as for the S100, just replace `S100` in the link name with `S600`.
+This section is for users of the Ubuntu Desktop system version, introducing how to implement remote desktop login via `NoMachine`. The following sections use the S100 as an example; the operation on the S600 is the same as on the S100, just replace `S100` in the link name with `S600`.
 
-**Connecting to the Development Board**
+**Connect to the development board**
 
-1. Open the `NoMachine` client and click `Add` to add a host configuration.
+1. Open the `NoMachine` client and click `Add` to add a host configuration
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="NoMachine login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-2. In the pop-up interface, fill in the host information for `RDK100/RDKS600`, then click `Add`.
+2. In the pop-up window, fill in the host information for `RDK100/RDKS600`, then click `Add` when done
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="NoMachine login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-3. Return to the main interface and double-click the host you just created.
+3. You are then returned to the main interface. Double-click the host you just created
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="NoMachine login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-4. A login interface will appear. Enter the username and password, then click OK to complete the remote login.
+4. The login interface pops up. Enter the username and password, then click OK to complete the remote login
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="NoMachine login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="NoMachine Login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login05.jpg" alt="NoMachine login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## Verification
+
+- **SSH**: Run `ssh sunrise@<board IP>` from the PC, and entering the password `sunrise` gets you into the shell.
+- **Serial port**: The serial terminal shows the U-Boot boot log and the Linux login prompt.
+- **NoMachine**: The NoMachine client can connect and display the board's desktop.
+
+## FAQ
+
+- **SSH connection refused**: Use `sudo systemctl status ssh` on the board to confirm the service is running; confirm the firewall `sudo ufw status` is not blocking.
+- **No serial port output**: Check the baud rate (it should be 921600), and confirm the TX/RX of the TTL-USB cable are not swapped.
+- **NoMachine black screen**: After the first configuration, you must reboot the board. See [Initial Setup - NoMachine Configuration](./configuration_wizard.md).
+- **IP address unknown**: After logging in via the serial port, check with `ip addr`, or look up the IP corresponding to the MAC address on the router's admin page.
+
+## Related documents
+
+- [System flashing](./01_instruction.md)
+- [System status](./system_status.md)
+- [Initial setup](./configuration_wizard.md)
+- [Network configuration](../../02_System_configuration/01_network_config.md)
+- [Debug serial port](../../02_System_configuration/16_debug_serial.md)
