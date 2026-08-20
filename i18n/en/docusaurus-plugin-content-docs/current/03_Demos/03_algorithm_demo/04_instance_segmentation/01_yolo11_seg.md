@@ -1,202 +1,129 @@
 ---
+title: Instance Segmentation - Ultralytics YOLO11 (C/C++)
 sidebar_position: 1
+description: "Pre-installed sample for deploying YOLO11 with C/C++ for instance segmentation"
 ---
 
-# Instance Segmentation - Ultralytics YOLO11
+# Instance Segmentation - Ultralytics YOLO11 (C/C++)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+This sample demonstrates how to deploy the Ultralytics YOLO11 instance segmentation model on the BPU with `C/C++`, run instance segmentation on a single image (preprocessing + inference + mask post-processing), and save the result as an image. For the Python version, see [YOLO11 Segmentation (Python)](./01_yolo11_seg_py.md).
 
-This example shows how to run the YOLOv11 semantic segmentation model on the BPU. It supports image preprocessing, inference, and post-processing (parse outputs and overlay colored segmentation masks). The sample code is located in `/app/cdev_demo/bpu/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`.
+The sample code is located in the `/app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg/` directory on the board.
 
-</DocScope>
-<DocScope products="RDK-S600">
+## Prerequisites
 
-This example shows how to run the YOLOv11 instance segmentation model on the BPU. It supports image preprocessing, inference, and post-processing (parse outputs and overlay colored segmentation masks). The sample code is located in `/app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg/`.
-
-</DocScope>
-
-## Model Description
-- Overview:
-
-    Ultralytics YOLO11 is a lightweight object detection and instance segmentation model based on the YOLO series, combining anchor-free and anchor-based ideas with distributional regression. This model is the instance segmentation variant, supporting simultaneous output of bounding boxes, class probabilities, and high-quality pixel-level masks, suitable for multi-object detection and segmentation in real-time scenarios.
-
-<DocScope products="RDK-S100">
-
-- HBM model name: yolo11n_seg_nashe_640x640_nv12.hbm
-
-</DocScope>
-<DocScope products="RDK-S600">
-
-- HBM model name: yolo11n_seg_nashp_640x640_nv12.hbm
-
-</DocScope>
-
-- Input format: NV12 image (Y/UV separated), size 640x640
-
-- Output:
-
-    - Object detection results (bounding box + class + score)
-
-    - Instance segmentation masks (one mask per object)
-
-## Feature Overview
-- Model loading
-
-    Load the quantized Ultralytics YOLO11 instance segmentation model and parse runtime metadata.
-
-- Input preprocessing
-
-    Scale the input BGR image to 640×640 and convert it to NV12 format (Y and UV planes separated) to meet model input requirements.
-
-- Inference execution
-
-    Trigger the forward pass via the `.infer()` method. Outputs include multi-scale class scores, bounding box regression, mask coefficients, and global mask prototype tensors.
-
-- Result post-processing
-
-    - Filter detection candidates using thresholds and decode bounding boxes and mask coefficients;
-
-    - Merge outputs from all scales and apply NMS to select final targets;
-
-    - Reconstruct each object's mask from mask prototypes and coefficients;
-
-    - Scale masks and bounding boxes back to the original image size;
-
-    - Optional morphological operations (opening) to refine mask edges;
-
-    - Final output includes bounding boxes, classes, scores, and pixel-level instance masks.
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
+- The pre-installed model is in place:
+  - S100: `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm`
+  - S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm`
 
 ## Environment Dependencies
-Before building and running, ensure the following dependencies are installed:
+
+Compilation requires `libgflags-dev`:
+
 ```bash
-sudo apt update
-sudo apt install libgflags-dev
+sudo apt update && sudo apt install libgflags-dev
 ```
 
-## Directory Structure
+## Code Location
+
+On-board path: `/app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg/`
+
+:::tip
+The code in this directory is pre-installed with the image and verified on the board. You can compile and run it directly.
+:::
+
+Directory structure:
+
 ```text
 .
 |-- CMakeLists.txt                 # CMake build script
-|-- README.md                      # Usage instructions (this file)
-|-- inc
-|   `-- ultralytics_yolo11_seg.hpp # YOLO11_Seg inference wrapper header (load/preprocess/infer/post-process interfaces)
-`-- src
-    |-- main.cc                    # Program entry: parse arguments, run full pipeline, save visualization
-    `-- ultralytics_yolo11_seg.cc  # YOLO11_Seg inference: decoding, NMS, mask generation, scaling, etc.
+|-- README.md                      # Project documentation
+|-- inc/
+|   `-- ultralytics_yolo11_seg.hpp # YOLO11-Seg inference class definition
+`-- src/
+    |-- main.cc                    # Program entry point
+    `-- ultralytics_yolo11_seg.cc  # Inference class implementation
 ```
 
-## Build the Project
-- Configure and build
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
-
-## Model Download
-If the model is not found at runtime, download it with the following command:
-
-<DocScope products="RDK-S100">
+## Build
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_seg_nashe_640x640_nv12.hbm
+cd /app/cdev_demo/bpu/instance_segmentation_sample/ultralytics_yolo11_seg
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
+The build artifact is `build/ultralytics_yolo11_seg`.
+
+## Parameters
+
+| Parameter | Description | Default |
+|---|---|---|
+| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` (S100 corresponds to `s100/basic/`) |
+| `--test_img` | Test image path | `/app/res/assets/office_desk.jpg` |
+| `--label_file` | Class labels (COCO 80 classes) | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | Confidence threshold | `0.25` |
+| `--nms_thres` | IoU threshold for NMS | `0.7` |
+
+## Usage
+
+Make sure you are in the `build` directory, then run with default parameters:
+
+```bash
+./ultralytics_yolo11_seg
+```
+
+Run with specified parameters (equivalent to the defaults):
+
 <DocScope products="RDK-S600">
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_seg_nashp_640x640_nv12.hbm
+./ultralytics_yolo11_seg \
+  --model_path /opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm \
+  --test_img /app/res/assets/office_desk.jpg \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.7
 ```
 
 </DocScope>
 
-## Parameter Reference
+## Execution Results
 
-<DocScope products="RDK-S100">
-| Parameter       | Description                                              | Default Value                                                    |
-| --------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
-| `--model_path`  | Model file path (`.hbm`)                                 | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
-| `--test_img`    | Input test image path                                    | `/app/res/assets/office_desk.jpg`                                |
-| `--label_file`  | Class label file path                                    | `/app/res/labels/coco_classes.names`                             |
-| `--score_thres` | Confidence filter threshold (boxes below this are discarded) | `0.25`                                                     |
-| `--nms_thres`   | IoU threshold (intra-class NMS to remove duplicate detections) | `0.7`                                                  |
+Actual output on RDK S600 (test image `office_desk.jpg`):
 
-</DocScope>
-<DocScope products="RDK-S600">
-| Parameter       | Description                                              | Default Value                                                    |
-| --------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
-| `--model_path`  | Model file path (`.hbm`)                                 | `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` |
-| `--test_img`    | Input test image path                                    | `/app/res/assets/office_desk.jpg`                                |
-| `--label_file`  | Class label file path                                    | `/app/res/labels/coco_classes.names`                             |
-| `--score_thres` | Confidence filter threshold (boxes below this are discarded) | `0.25`                                                     |
-| `--nms_thres`   | IoU threshold (intra-class NMS to remove duplicate detections) | `0.7`                                                  |
+```text
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+pre_process finished
+infer finished
+post_process finished
+[Saved] Result saved to: result.jpg
+```
 
-</DocScope>
+**Success indicator**: `pre_process/infer/post_process finished` appear in sequence, and `[Saved] Result saved to: result.jpg` appears at the end. Open `build/result.jpg` to see the overlaid instance segmentation masks.
 
-## Quick Start
-- Run the model
-    - Make sure you are in the `build` directory
-    - Use default parameters
-        ```bash
-        ./ultralytics_yolo11_seg
-        ```
-    - Run with custom parameters
+## Software Notes
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./ultralytics_yolo11_seg \
-            --model_path /opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm \
-            --test_img /app/res/assets/office_desk.jpg \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.7
-        ```
+Data flow: read image → resize to 640×640 → convert to NV12 → BPU inference → decode detection head + segmentation head → confidence filtering → NMS → generate instance masks → overlay on the original image → save. Model input `1x3x640x640`, normalization `data_scale`.
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./ultralytics_yolo11_seg \
-            --model_path /opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm \
-            --test_img /app/res/assets/office_desk.jpg \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.7
-        ```
+## FAQ
 
-        </DocScope>
+- **`make` fails with `gflags` not found**: `libgflags-dev` is not installed. Install it as described in "Environment Dependencies".
+- **Masks missing in `result.jpg`**: Confirm that the test image contains recognizable objects; lower `--score_thres`.
+- **Error that the model cannot be found**: Check `--model_path`; the S600 model is in `/opt/hobot/model/s600/basic/`.
 
-- View the results
+## Related Documentation
 
-    After a successful run, the result is drawn on the original image and saved to `build/result.jpg`.
-    ```bash
-    [Saved] Result saved to: result.jpg
-    ```
-
-## Notes
-- The output is saved as `result.jpg` for you to inspect.
-
-- For more deployment options or model support information, refer to the official documentation or contact platform technical support.
-
-
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [Python version of the YOLO11 segmentation sample](./01_yolo11_seg_py.md)
+- [Object Detection - YOLO11 (C/C++)](../03_detection/02_yolo11.md)
+- [C/C++ Demo Build Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

@@ -1,159 +1,129 @@
 ---
+title: Automatic Speech Recognition - ASR (C/C++)
 sidebar_position: 1
+description: "Pre-installed example of deploying the ASR model for speech-to-text with C/C++"
 ---
 
-# Automatic Speech Recognition - ASR
+# Automatic Speech Recognition - ASR (C/C++)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
-This sample runs a speech recognition model using the BPU inference engine to automatically transcribe `.wav` audio files and output the corresponding text. The sample code is located in `/app/cdev_demo/bpu/07_speech_sample/01_asr/`.
+This example demonstrates how to deploy the ASR speech recognition model on the BPU with `C/C++`, transcribe a `.wav` audio clip into text, and print it. For the Python version, see [ASR (Python)](./01_asr_py.md).
+
+The example code is located in the `/app/cdev_demo/bpu/speech_sample/asr/` directory on the board.
 
 :::warning
-The current RDK S100 system image does **not** include the `asr.hbm` model. Before running this sample, you must download it manually (see the download command in "Model Download" below) and place it at the default path `/opt/hobot/model/s100/basic/asr.hbm`, or specify another path with `--model_path`.
+The S100 system image does not bundle the `asr.hbm` model. Before running, download it manually and place it at `/opt/hobot/model/s100/basic/asr.hbm` (or specify it via `--model_path`).
 :::
 
-</DocScope>
-<DocScope products="RDK-S600">
-This sample runs a speech recognition model using the BPU inference engine to automatically transcribe `.wav` audio files and output the corresponding text. The sample code is located in `/app/cdev_demo/bpu/speech_sample/asr/`.
+## Prerequisites
 
-</DocScope>
-
-
-## Model Description
-- Overview:
-
-    ASR (Automatic Speech Recognition) models convert audio signals into text. The input is single-channel speech waveforms (after sample rate conversion and standardization), and the output is character-level token sequences. Combined with a vocabulary (vocab) file, Chinese speech transcription can be achieved. This sample uses a quantized `.hbm` model.
-
-- HBM model name: asr.hbm
-
-- Input format: audio waveform, single channel, sample rate 16kHz, maximum length 30000 (sample points)
-
-- Output: character token probability distribution (logits); recognized text is obtained by argmax decoding and mapping
-
-## Feature Overview
-- Model loading
-
-    Load the ASR model and automatically parse model input/output shapes and quantization information.
-
-- Input preprocessing
-
-    Read audio with SoundFile (supports `.wav`). The audio is:
-
-    - Converted to single channel
-    - Resampled to the target sample rate (default 16kHz)
-    - Standardized to zero mean and unit variance (z-score)
-    - Padded or truncated to a fixed length (for example, 30000)
-    - Supports generator-based processing of long audio for streaming recognition
-
-- Inference execution
-
-    Complete inference using the `.infer()` method.
-
-- Result post-processing
-
-    Obtain token indices from output logits, map them to characters using the vocab dictionary file (JSON format), and output the final recognized text.
-
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The compilation toolchain is available on the board (`cmake`, `make`, `g++`, pre-installed in the image).
+- The pre-installed models are in place:
+  - S100: `/opt/hobot/model/s100/basic/asr.hbm` (not bundled in the image, manual download required)
+  - S600: `/opt/hobot/model/s600/basic/asr.hbm` (pre-installed with the image)
 
 ## Environment Dependencies
-Before building and running, ensure the following dependencies are installed:
+
+Compilation requires `libgflags-dev`, `libsndfile1-dev`, and `libsamplerate0-dev`:
+
 ```bash
 sudo apt update
 sudo apt install -y libgflags-dev libsndfile1-dev libsamplerate0-dev
 ```
 
-## Directory Structure
+## Code Location
+
+Path on the board: `/app/cdev_demo/bpu/speech_sample/asr/`
+
+:::tip
+The code in this directory is pre-installed with the image and verified on the board; it can be compiled and run directly.
+:::
+
+Directory structure:
+
 ```text
 .
-|-- CMakeLists.txt                  # CMake build script: target/dependency/include/link configuration
-|-- README.md                       # Usage instructions (this file)
-|-- inc
-|   |-- asr.hpp                     # ASR inference wrapper header (load/preprocess/infer/postprocess interfaces)
-|   `-- audio_chunk_reader.hpp      # Audio chunk reader: read file → resample → output chunks
-`-- src
-    |-- asr.cc                      # ASR inference implementation: input write, forward pass, CTC decode, etc.
-    |-- audio_chunk_reader.cc       # Chunk reader implementation: libsndfile + libsamplerate streaming chunks
-    `-- main.cc                     # Program entry: parse args → loop over chunks → infer → concatenate transcription
+|-- CMakeLists.txt                  # CMake build script
+|-- README.md                       # Project description
+|-- inc/
+|   |-- asr.hpp                     # ASR inference class definition
+|   `-- audio_chunk_reader.hpp      # Audio chunk reader
+`-- src/
+    |-- asr.cc                      # Inference implementation: input writing, forward computation, CTC decoding
+    |-- audio_chunk_reader.cc       # Audio chunking: file reading, resampling, chunked output
+    `-- main.cc                     # Program entry point
 ```
 
-## Build the Project
-- Configure and build
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+## Build
 
-## Model Download
-If the model is not found at runtime, download it with the following command:
-
-<DocScope products="RDK-S100">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+cd /app/cdev_demo/bpu/speech_sample/asr
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
+The build output is `build/asr`.
+
+## Parameters
+
+| Parameter | Description | Default |
+|---|---|---|
+| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/asr.hbm` (S100 uses `s100/basic/`) |
+| `--test_sound` | Input audio file path (.wav) | `/app/res/assets/chi_sound.wav` |
+| `--vocab_file` | Vocabulary file (JSON, token-to-id mapping) | `/app/res/labels/vocab.json` |
+
+## Usage
+
+Make sure you are in the `build` directory and run with default parameters:
+
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
+./asr
+```
+
+Run with explicit parameters (equivalent to the defaults):
+
+<DocScope products="RDK-S600">
+
+```bash
+./asr \
+  --model_path /opt/hobot/model/s600/basic/asr.hbm \
+  --test_sound /app/res/assets/chi_sound.wav \
+  --vocab_file /app/res/labels/vocab.json
 ```
 
 </DocScope>
 
-## Parameter Reference
+## Execution Results
 
-<DocScope products="RDK-S100">
-| Parameter      | Description                                    | Default Value                         |
-| -------------- | ---------------------------------------------- | ------------------------------------- |
-| `--model_path` | Model file path (`.hbm`)                       | `/opt/hobot/model/s100/basic/asr.hbm` |
-| `--test_sound` | Input audio file path (`.wav`)                 | `/app/res/assets/chi_sound.wav`       |
-| `--vocab_file` | Vocabulary (JSON), mapping **class id → token** | `/app/res/labels/vocab.json`          |
+Actual output on RDK S600 (test audio `chi_sound.wav`, whose content is "我是来自阿里云的大规模语言模型叫做通义千问"):
 
-</DocScope>
-<DocScope products="RDK-S600">
-| Parameter      | Description                                    | Default Value                         |
-| -------------- | ---------------------------------------------- | ------------------------------------- |
-| `--model_path` | Model file path (`.hbm`)                       | `/opt/hobot/model/s600/basic/asr.hbm` |
-| `--test_sound` | Input audio file path (`.wav`)                 | `/app/res/assets/chi_sound.wav`       |
-| `--vocab_file` | Vocabulary (JSON), mapping **class id → token** | `/app/res/labels/vocab.json`          |
+```text
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+Full transcription:
+我是来自阿里云的大规模语言磨型过叫通意千问||
+```
 
-</DocScope>
+**Success indicators**: `Full transcription:` appears at the end, followed by the recognized text. Note that the ASR model has recognition deviations on some words (e.g. "模型→磨型", "叫做→过叫"); this is a model accuracy limitation, not a runtime error.
 
-## Quick Start
-- Run the model
-    - Make sure you are in the `build` directory
-    - Use default parameters
-        ```bash
-        ./asr
-        ```
-    - Run with custom parameters
+## Software Notes
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./asr \
-            --model_path /opt/hobot/model/s100/basic/asr.hbm \
-            --test_sound /app/res/assets/chi_sound.wav \
-            --vocab_file /app/res/labels/vocab.json
-        ```
+Data flow: read wav → resample to 16kHz → truncate/pad to 30000 samples → extract audio featuremap → BPU inference → greedy-decode tokens → map to text using `vocab.json`. The model input is `1x30000`, with no preprocessing.
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./asr \
-            --model_path /opt/hobot/model/s600/basic/asr.hbm \
-            --test_sound /app/res/assets/chi_sound.wav \
-            --vocab_file /app/res/labels/vocab.json
-        ```
+## FAQ
 
-        </DocScope>
-- View the results
+- **`make` reports `gflags`/`sndfile`/`samplerate` not found**: Install the corresponding `-dev` packages as described in "Environment Dependencies".
+- **Garbled or missing characters in the result**: The ASR model accuracy is limited; using clearer audio can improve the result.
+- **S100 reports `asr.hbm` not found**: The S100 image does not bundle it; manual download is required (see the warning above).
 
-    After successful execution, the result will be printed.
-    ```bash
-    我是来自阿里云的大规模语言磨型过叫通意千问||
-    ```
+## Related Documentation
 
-## Notes
-- For more deployment options or model support information, refer to the official documentation or contact platform technical support.
+- [ASR Example (Python)](./01_asr_py.md)
+- [C/C++ Demo Build Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

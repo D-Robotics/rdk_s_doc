@@ -1,30 +1,32 @@
 ---
 sidebar_position: 4
+title: "Instance Segmentation - Ultralytics YOLOE11"
+description: Instance Segmentation - Ultralytics YOLOE11
 sidebar_products: RDK-S100
 ---
 
 # Instance Segmentation - Ultralytics YOLOE11
 
 :::info S100 only
-This sample applies only to RDK S100. The RDK S600 system image does not include the corresponding HBM model, and the related sample code is only shipped with the S100 system image; it is not supported on S600 yet.
+This sample applies only to RDK S100. The RDK S600 image does not include the corresponding hbm model, and the related sample code is only shipped with the system image on S100; it is not supported on S600 yet.
 :::
 
-This sample shows how to run the Ultralytics YOLOE11 instance segmentation model on BPU using `hbm_runtime`. The program implements the full pipeline from input image preprocessing, model inference, and postprocessing to result visualization. The sample code is located in `/app/pydev_demo/05_open_instance_seg_sample/01_yoloe11_seg/`.
+This sample shows how to run the Ultralytics YOLOE11 instance segmentation model on the BPU using `hbm_runtime`. The program implements the complete pipeline from input image preprocessing, model inference, and post-processing to result visualization. The sample code is located in the `/app/pydev_demo/05_open_instance_seg_sample/01_yoloe11_seg/` directory.
 
 ## Model Description
 - Introduction:
 
-    Ultralytics YOLOE11 is a high-performance edge-side instance segmentation model suitable for open-vocabulary object detection and segmentation tasks. Through multi-scale feature extraction, dense classification, and prototype mask generation, the model effectively identifies objects in images and outputs fine-grained instance segmentation results. This sample uses the lightweight version of Ultralytics YOLOE11 with a `640x640` input image, supporting generalized object classification and segmentation across 4585 classes.
+    Ultralytics YOLOE11 is a high-performance edge-side instance segmentation model, suitable for open-vocabulary object detection and segmentation tasks. Through multi-scale feature extraction, dense classification, and prototype mask generation, the model effectively recognizes objects in images and outputs fine-grained instance segmentation results. This sample uses the lightweight version of Ultralytics YOLOE11, with a 640x640 input image, supporting generalized object classification and segmentation with 4585 classes.
 
-- HBM model name: `yoloe_11s_seg_pf_nashe_640x640_nv12.hbm`
+- HBM model name: yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
 
-- Input format: `NV12`, size `640x640`
+- Input format: NV12, size 640x640
 
-- Output:
+- Outputs:
 
     - Detection boxes (xyxy format)
 
-    - Class ID and confidence score
+    - Class IDs and confidence scores
 
     - Instance segmentation masks (one independent mask per instance)
 
@@ -33,37 +35,37 @@ This sample shows how to run the Ultralytics YOLOE11 instance segmentation model
     ```bash
     https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
     ```
-## Features
+## Feature Description
 - Model loading
 
-    Use `hbm_runtime` to load the specified quantized model and parse metadata such as input/output names, shapes, and quantization parameters.
+    Uses `hbm_runtime` to load the specified quantized model and parse meta information such as input/output names, shapes, and quantization parameters.
 
 - Input preprocessing
 
-    Resize the BGR image to `640x640`, convert it to NV12 format (Y and UV separated), and construct the inference input tensor.
+    Resizes the BGR image to 640x640, converts it to NV12 format (Y and UV separated), and constructs the inference input tensor.
 
 - Inference execution
 
-    Execute forward inference through the `.run()` interface. Scheduling policies such as running priority and BPU core binding are supported.
+    Calls the .run() interface to perform forward inference, supporting scheduling strategies such as runtime priority and BPU core binding.
 
-- Output postprocessing
+- Result post-processing
 
-    Postprocess multi-scale outputs, including:
+    Post-processes the multi-scale outputs, including:
 
-    - Class confidence filtering (based on score threshold)
+    - Classification confidence filtering (based on the score threshold)
 
-    - DFL bounding box decoding
+    - DFL box decoding
 
     - Mask prototype fusion and mask generation
 
-    - NMS filtering and result merging
+    - NMS filtering and result fusion
 
-    - Scale detection boxes and masks back to the original image size
+    - Scaling the detection boxes and masks back to the original image size
 
-    - Optional mask morphological opening and boundary contour drawing
+    - Supporting optional mask opening operation (morphological processing) and boundary contour drawing
 
 ## Environment Dependencies
-This sample has no special environment requirements. You only need to ensure the dependencies in `pydev` are installed.
+This sample has no special environment requirements. Just make sure the dependencies in pydev are installed.
 ```bash
 pip install -r ../../requirements.txt
 ```
@@ -75,24 +77,24 @@ pip install -r ../../requirements.txt
 └── README.md                   # Usage instructions
 ```
 
-## Parameter Description
-| Parameter         | Description                                              | Default Value                         |
-| ----------------- | -------------------------------------------------------- | ------------------------------------- |
-| `--model-path`    | BPU quantized model path (`*.hbm`)                       | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
-| `--test-img`      | Input test image path                                    | `/app/res/assets/office_desk.jpg`     |
-| `--label-file`    | Class label file path (one class per line)               | `/app/res/labels/coco_extended.names` |
-| `--img-save-path` | Inference result image save path                         | `result.jpg`                          |
-| `--priority`      | Model scheduling priority (`0~255`)                      | `0`                                   |
-| `--bpu-cores`     | BPU core IDs to use (for example, `--bpu-cores 0 1`)     | `[0]`                                 |
-| `--nms-thres`     | IoU threshold for non-maximum suppression (NMS)          | `0.7`                                 |
-| `--score-thres`   | Object detection confidence threshold                    | `0.25`                                |
-| `--is-open`       | Whether to apply morphological opening to masks          | `False`                               |
-| `--is-point`      | Whether to draw mask boundary contour points             | `False`                               |
+## Parameters
+| Parameter         | Description                                        | Default value                                                       |
+| ----------------- | -------------------------------------------------- | ------------------------------------------------------------------- |
+| `--model-path`    | BPU quantized model path (\*.hbm)                   | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
+| `--test-img`      | Input test image path                               | `/app/res/assets/office_desk.jpg`                                   |
+| `--label-file`    | Class label file path (one class per line)          | `/app/res/labels/coco_extended.names`                               |
+| `--img-save-path` | Save path of the inference result image             | `result.jpg`                                                        |
+| `--priority`      | Model scheduling priority (0\~255)                  | `0`                                                                 |
+| `--bpu-cores`     | BPU core IDs to use (e.g., `--bpu-cores 0 1`)       | `[0]`                                                               |
+| `--nms-thres`     | IoU threshold for Non-Maximum Suppression (NMS)     | `0.7`                                                               |
+| `--score-thres`   | Confidence threshold for object detection           | `0.25`                                                              |
+| `--is-open`       | Whether to apply morphological operation (opening) to the masks | `False`                                                |
+| `--is-point`      | Whether to draw mask edge contour points            | `False`                                                             |
 
 
 ## Quick Start
 - Run the model
-    - Use default parameters
+    - With default parameters
         ```bash
         python yoloe11_seg.py
         ```
@@ -110,9 +112,9 @@ pip install -r ../../requirements.txt
         --is-open False \
         --is-point False
         ```
-- View the result
+- View the results
 
-    After successful execution, results will be drawn on the original image and saved to the path specified by `--img-save-path`.
+    After running successfully, the results are drawn on the original image and saved to the path specified by --img-save-path
     ```bash
     [Saved] Result saved to: result.jpg
     ```
@@ -122,7 +124,7 @@ pip install -r ../../requirements.txt
 
 ## License
     ```license
-    Copyright (C) 2025, XiangshunZhao D-Robotics.
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -137,3 +139,9 @@ pip install -r ../../requirements.txt
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
+
+## Related Documentation
+
+- [C/C++ version of the YOLOE11 segmentation sample](./02_yoloe11_seg.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [Python Inference API](../../../04_Simple_API/02_inference_api/02_python_api.md)

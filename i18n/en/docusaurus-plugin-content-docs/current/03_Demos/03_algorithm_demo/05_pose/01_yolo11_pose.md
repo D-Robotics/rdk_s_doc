@@ -1,209 +1,128 @@
 ---
+title: Pose Estimation - Ultralytics YOLO11 (C/C++)
 sidebar_position: 1
+description: "Pre-installed example of deploying YOLO11 for human pose estimation with C/C++"
 ---
 
-# Pose Estimation - Ultralytics YOLO11
+# Pose Estimation - Ultralytics YOLO11 (C/C++)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+This example demonstrates how to deploy the Ultralytics YOLO11 pose estimation model on the BPU with `C/C++`, perform person detection + keypoint estimation on an image, and draw the skeleton onto the image and save it. For the Python version, see [YOLO11 Pose (Python)](./01_yolo11_pose_py.md).
 
-This example shows how to run the Ultralytics YOLO11 pose estimation model on the BPU for human keypoint detection and visualization. It supports model preprocessing, inference, and post-processing (including keypoint decoding, bounding box drawing, and keypoint annotation). The sample code is located in `/app/cdev_demo/bpu/04_pose_sample/01_ultralytics_yolo11_pose/`.
+The example code is located in the `/app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose/` directory on the board.
 
-</DocScope>
-<DocScope products="RDK-S600">
+## Prerequisites
 
-This example shows how to run the Ultralytics YOLO11 pose estimation model on the BPU for human keypoint detection and visualization. It supports model preprocessing, inference, and post-processing (including keypoint decoding, bounding box drawing, and keypoint annotation). The sample code is located in `/app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose/`.
-
-</DocScope>
-
-## Model Description
-- Overview:
-
-    Ultralytics YOLO11 Pose is an efficient lightweight human keypoint detection model that supports simultaneous object detection and pose estimation (multi-keypoint prediction). It integrates Distribution Focal Loss (DFL) to improve localization accuracy for both bounding boxes and keypoints, suitable for multi-person pose recognition in real-time applications.
-
-<DocScope products="RDK-S100">
-- HBM model name: yolo11n_pose_nashe_640x640_nv12.hbm
-
-</DocScope>
-<DocScope products="RDK-S600">
-- HBM model name: yolo11n_pose_nashp_640x640_nv12.hbm
-
-</DocScope>
-
-- Input format: NV12 image (Y and UV separated), size 640×640
-
-- Output:
-
-    - Bounding box coordinates for each person (xyxy)
-
-    - Keypoint positions (K×2, x/y coordinates)
-
-    - Confidence score for each keypoint
-
-    - Supports COCO human keypoint format (typically 17 keypoints)
-
-## Feature Overview
-- Model loading
-
-    Load the specified Ultralytics YOLO11 pose estimation model and automatically parse model metadata.
-
-- Input preprocessing
-
-    Resize the input BGR image to 640×640 and convert it to NV12 format (Y and UV separated) for model inference.
-
-- Inference execution
-
-    Run inference via the `.infer()` interface.
-
-- Result post-processing
-
-    - Decode bounding boxes from multi-scale outputs (using DFL bin decoding);
-
-    - Decode keypoint positions and confidence scores (K×2 + K);
-
-    - Apply NMS to remove redundant detection boxes;
-
-    - Map keypoint coordinates and bounding boxes back to the original image size;
-
-    - Use threshold controls to display only high-confidence keypoints;
-
-    - Support image visualization including detection boxes and keypoint drawing.
-
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The compilation toolchain is available on the board (`cmake`, `make`, `g++`, pre-installed in the image).
+- The pre-installed models are in place:
+  - S100: `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm`
+  - S600: `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm`
 
 ## Environment Dependencies
-Before building and running, ensure the following dependencies are installed:
+
+Compilation requires `libgflags-dev`:
+
 ```bash
-sudo apt update
-sudo apt install libgflags-dev
+sudo apt update && sudo apt install libgflags-dev
 ```
 
-## Directory Structure
+## Code Location
+
+Path on the board: `/app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose/`
+
+:::tip
+The code in this directory is pre-installed with the image and verified on the board; it can be compiled and run directly.
+:::
+
+Directory structure:
+
 ```text
 .
-|-- CMakeLists.txt                     # CMake build script: targets, dependencies, include paths
-|-- README.md                          # Usage instructions (this file)
-|-- inc
-|   `-- ultralytics_yolo11_pose.hpp    # Model wrapper header: load/preprocess/infer/post-process interface declarations
-`-- src
-    |-- main.cc                        # Program entry: parse arguments → full pipeline → save visualization
-    `-- ultralytics_yolo11_pose.cc     # Model implementation: decoding, NMS, keypoint post-processing, coordinate restoration
+|-- CMakeLists.txt                     # CMake build script
+|-- README.md                          # Project description
+|-- inc/
+|   `-- ultralytics_yolo11_pose.hpp    # YOLO11-Pose inference class definition
+`-- src/
+    |-- main.cc                        # Program entry point
+    `-- ultralytics_yolo11_pose.cc     # Inference class implementation
 ```
 
-## Build the Project
-- Configure and build
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
-
-## Model Download
-If the model is not found at runtime, download it with the following command:
-
-<DocScope products="RDK-S100">
+## Build
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolo11n_pose_nashe_640x640_nv12.hbm
+cd /app/cdev_demo/bpu/pose_sample/ultralytics_yolo11_pose
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
+The build output is `build/ultralytics_yolo11_pose`.
+
+## Parameters
+
+| Parameter | Description | Default |
+|---|---|---|
+| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` (S100 uses `s100/basic/`) |
+| `--test_img` | Test image path | `/app/res/assets/bus.jpg` |
+| `--label_file` | Class labels (COCO 80 classes) | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | Confidence threshold | `0.25` |
+| `--nms_thres` | NMS IoU threshold | `0.7` |
+| `--kpt_conf_thres` | Confidence threshold for keypoint visualization | `0.5` |
+
+## Usage
+
+Make sure you are in the `build` directory and run with default parameters:
+
+```bash
+./ultralytics_yolo11_pose
+```
+
+Run with explicit parameters (equivalent to the defaults):
+
 <DocScope products="RDK-S600">
 
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolo11n_pose_nashp_640x640_nv12.hbm
+./ultralytics_yolo11_pose \
+  --model_path /opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm \
+  --test_img /app/res/assets/bus.jpg \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.7 \
+  --kpt_conf_thres 0.5
 ```
 
 </DocScope>
 
-## Parameter Reference
+## Execution Results
 
-<DocScope products="RDK-S100">
-| Parameter          | Description                                              | Default Value                                                     |
-| ------------------ | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| `--model_path`     | Model file path (`.hbm`)                                 | `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm` |
-| `--test_img`       | Input test image path                                    | `/app/res/assets/bus.jpg`                                         |
-| `--label_file`     | Class label file (one class name per line)               | `/app/res/labels/coco_classes.names`                              |
-| `--score_thres`    | Confidence threshold (detections below this are filtered) | `0.25`                                                           |
-| `--nms_thres`      | IoU threshold (intra-class NMS deduplication)           | `0.7`                                                             |
-| `--kpt_conf_thres` | Keypoint visualization confidence threshold (points below this are not shown) | `0.5`                                            |
+Actual output on RDK S600 (test image `bus.jpg`):
 
-</DocScope>
-<DocScope products="RDK-S600">
-| Parameter          | Description                                              | Default Value                                                     |
-| ------------------ | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| `--model_path`     | Model file path (`.hbm`)                                 | `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm` |
-| `--test_img`       | Input test image path                                    | `/app/res/assets/bus.jpg`                                         |
-| `--label_file`     | Class label file (one class name per line)               | `/app/res/labels/coco_classes.names`                              |
-| `--score_thres`    | Confidence threshold (detections below this are filtered) | `0.25`                                                           |
-| `--nms_thres`      | IoU threshold (intra-class NMS deduplication)           | `0.7`                                                             |
-| `--kpt_conf_thres` | Keypoint visualization confidence threshold (points below this are not shown) | `0.5`                                            |
+```text
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[Saved] Result saved to: result.jpg
+```
 
-</DocScope>
+**Success indicators**: `[Saved] Result saved to: result.jpg` appears at the end; `BPULib verison(2, 2, 15)` and `DNN: 3.13.6` indicate the BPU runtime is working normally. Open `build/result.jpg` to see the person bounding boxes and keypoint skeleton.
 
-## Quick Start
-- Run the model
-    - Make sure you are in the `build` directory
-    - Use default parameters
-        ```bash
-        ./ultralytics_yolo11_pose
-        ```
-    - Run with custom parameters
+## Software Notes
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./ultralytics_yolo11_pose \
-        --model_path /opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm \
-        --test_img   /app/res/assets/bus.jpg \
-        --label_file /app/res/labels/coco_classes.names \
-        --score_thres 0.25 \
-        --nms_thres   0.7 \
-        --kpt_conf_thres 0.5
-        ```
+Data flow: read image → resize to 640×640 → convert to NV12 → BPU inference → decode detection head + keypoint head → confidence filtering → NMS → draw person boxes and skeleton → save. The model input is `1x3x640x640`, with `data_scale` normalization.
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./ultralytics_yolo11_pose \
-        --model_path /opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm \
-        --test_img   /app/res/assets/bus.jpg \
-        --label_file /app/res/labels/coco_classes.names \
-        --score_thres 0.25 \
-        --nms_thres   0.7 \
-        --kpt_conf_thres 0.5
-        ```
+## FAQ
 
-        </DocScope>
+- **`make` reports `gflags` not found**: `libgflags-dev` is not installed; install it as described in "Environment Dependencies".
+- **No skeleton visible in `result.jpg`**: Make sure the image contains clear persons; lower `--score_thres` or `--kpt_conf_thres`.
+- **Model not found error**: Check `--model_path`; the S600 models are in `/opt/hobot/model/s600/basic/`.
 
-- View the results
+## Related Documentation
 
-    After a successful run, the result is drawn on the original image and saved to `build/result.jpg`.
-    ```bash
-    [Saved] Result saved to: result.jpg
-    ```
-
-## Notes
-- The output is saved as `result.jpg` for you to inspect.
-
-- For more deployment options or model support information, refer to the official documentation or contact platform technical support.
-
-
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [YOLO11 Pose Example (Python)](./01_yolo11_pose_py.md)
+- [Object Detection - YOLO11 (C/C++)](../03_detection/02_yolo11.md)
+- [C/C++ Demo Build Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

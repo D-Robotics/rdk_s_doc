@@ -1,67 +1,66 @@
 ---
 sidebar_position: 2
----
-﻿---
-sidebar_position: 9
+title: "Instance Segmentation - Ultralytics YOLOE11"
+description: Instance Segmentation - Ultralytics YOLOE11
 sidebar_products: RDK-S100
 ---
 
 # Instance Segmentation - Ultralytics YOLOE11
 
 :::info S100 only
-This sample applies only to RDK S100. The RDK S600 system image does not include the corresponding HBM model, and the related sample code is only shipped with the S100 system image; it is not supported on S600 yet.
+This sample applies only to RDK S100. The RDK S600 image does not include the corresponding hbm model, and the related sample code is only shipped with the system image on S100; it is not supported on S600 yet.
 :::
 
-This sample shows how to run the Ultralytics YOLOE11 instance segmentation model on the BPU. The program implements the full pipeline from input image preprocessing, model inference, and postprocessing to result visualization. The sample code is located in `/app/cdev_demo/bpu/05_open_instance_seg_sample/01_yoloe11_seg/`.
+This sample shows how to run the Ultralytics YOLOE11 instance segmentation model on the BPU. The program implements the complete pipeline from input image preprocessing, model inference, and post-processing to result visualization. The sample code is located in the `/app/cdev_demo/bpu/05_open_instance_seg_sample/01_yoloe11_seg/` directory.
 
 ## Model Description
-- Overview:
+- Introduction:
 
-    Ultralytics YOLOE11 is a high-performance edge-side instance segmentation model suitable for open-vocabulary object detection and segmentation tasks. Through multi-scale feature extraction, dense classification, and prototype mask generation, the model effectively identifies objects in images and outputs fine-grained instance segmentation results. This sample uses the lightweight version of Ultralytics YOLOE11 with a 640x640 input image, supporting generalized object classification and segmentation across 4585 classes.
+    Ultralytics YOLOE11 is a high-performance edge-side instance segmentation model, suitable for open-vocabulary object detection and segmentation tasks. Through multi-scale feature extraction, dense classification, and prototype mask generation, the model effectively recognizes objects in images and outputs fine-grained instance segmentation results. This sample uses the lightweight version of Ultralytics YOLOE11, with a 640x640 input image, supporting generalized object classification and segmentation with 4585 classes.
 
 - HBM model name: yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
 
 - Input format: NV12, size 640x640
 
-- Output:
+- Outputs:
 
     - Detection boxes (xyxy format)
 
-    - Class ID and confidence score
+    - Class IDs and confidence scores
 
     - Instance segmentation masks (one independent mask per instance)
 
-## Feature Overview
+## Feature Description
 - Model loading
 
-    Load the specified quantized model and parse partial model metadata.
+    Loads the specified quantized model and parses some of the model's meta information.
 
 - Input preprocessing
 
-    Resize the BGR image to 640x640, convert it to NV12 format (Y and UV separated), and construct the inference input tensor.
+    Resizes the BGR image to 640x640, converts it to NV12 format (Y and UV separated), and constructs the inference input tensor.
 
 - Inference execution
 
-    Execute forward inference through the `.infer()` interface.
+    Calls the .infer() interface to perform forward inference.
 
 - Result post-processing
 
-    Postprocess multi-scale outputs, including:
+    Post-processes the multi-scale outputs, including:
 
-    - Class confidence filtering (based on score threshold)
+    - Classification confidence filtering (based on the score threshold)
 
-    - DFL bounding box decoding
+    - DFL box decoding
 
     - Mask prototype fusion and mask generation
 
-    - NMS filtering and result merging
+    - NMS filtering and result fusion
 
-    - Scale detection boxes and masks back to the original image size
+    - Scaling the detection boxes and masks back to the original image size
 
-    - Optional mask morphological opening and boundary contour drawing
+    - Supporting optional mask opening operation (morphological processing) and boundary contour drawing
 
 ## Environment Dependencies
-Before building and running, ensure the following dependencies are installed:
+Before building and running, make sure the following dependencies are installed:
 ```bash
 sudo apt update
 sudo apt install libgflags-dev
@@ -70,13 +69,13 @@ sudo apt install libgflags-dev
 ## Directory Structure
 ```text
 .
-|-- CMakeLists.txt                      # CMake build script: target/dependency/include/link configuration
-|-- README.md                           # Usage instructions (this file)
+|-- CMakeLists.txt                      # CMake build script: target/dependency/include path/linked library configuration
+|-- README.md                           # Usage instructions (current file)
 |-- inc
-|   `-- ultralytics_yoloe11_seg.hpp     # YOLO11E_Seg wrapper header: load/preprocess/infer/postprocess interface declarations
+|   `-- ultralytics_yoloe11_seg.hpp     # YOLO11E_Seg wrapper header: load/preprocess/inference/post-process interface declarations
 `-- src
-    |-- main.cc                         # Program entry: parse args → full pipeline → render and save results
-    `-- ultralytics_yoloe11_seg.cc      # Inference implementation: decode, score filter, per-class NMS, mask generation and restoration
+    |-- main.cc                         # Program entry: parse arguments → complete pipeline → render and save results
+    `-- ultralytics_yoloe11_seg.cc      # Inference implementation: decoding, score filtering, per-class NMS, mask generation and restoration
 ```
 
 ## Build the Project
@@ -88,28 +87,28 @@ sudo apt install libgflags-dev
     ```
 
 ## Model Download
-If the model is not found at runtime, download it with the following command:
+If the model is not found when the program runs, download it with the following command:
 ```bash
 wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
 ```
 
-## Parameter Reference
-| Parameter       | Description                                              | Default Value                                                       |
-| --------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
-| `--model_path`  | Model file path (`.hbm`)                                 | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm` |
-| `--test_img`    | Input test image path                                    | `/app/res/assets/office_desk.jpg`                                   |
-| `--label_file`  | Class label file (one class name per line)               | `/app/res/labels/coco_extended.names`                               |
-| `--score_thres` | Confidence threshold (detections below this are filtered) | `0.25`                                                            |
-| `--nms_thres`   | IoU threshold (intra-class NMS deduplication)            | `0.7`                                                               |
+## Parameters
+| Parameter          | Description                                              | Default value                                                             |
+| ----------------- | -------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `--model_path`    | Model file path (`.hbm`)                                  | `/opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm`    |
+| `--test_img`      | Input test image path                                     | `/app/res/assets/office_desk.jpg`                                        |
+| `--label_file`    | Class label file (one class name per line)                | `/app/res/labels/coco_extended.names`                                    |
+| `--score_thres`   | Confidence threshold (detections below this value are filtered) | `0.25`                                                              |
+| `--nms_thres`     | IoU threshold (per-class NMS deduplication)               | `0.7`                                                                    |
 
 ## Quick Start
 - Run the model
     - Make sure you are in the `build` directory
-    - Use default parameters
+    - With default parameters
         ```bash
         ./ultralytics_yoloe11_seg
         ```
-    - Run with custom parameters
+    - Run with specified parameters
         ```bash
         ./ultralytics_yoloe11_seg \
             --model_path /opt/hobot/model/s100/basic/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm \
@@ -120,22 +119,20 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
         ```
 - View the results
 
-    After successful execution, results are drawn on the original image and saved to `build/result.jpg`.
+    After running successfully, the results are drawn on the original image and saved to build/result.jpg
     ```bash
     [Saved] Result saved to: result.jpg
     ```
 
 ## Notes
-- The output is saved as `result.jpg` for manual inspection.
-
+- The output result is saved as result.jpg; you can view it yourself.
 - If the specified model path does not exist, the program will attempt to download the model automatically.
-
 - For more deployment options or model support information, refer to the official documentation or contact platform technical support.
 
 
 ## License
     ```license
-    Copyright (C) 2025, XiangshunZhao D-Robotics.
+    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -150,3 +147,10 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
+
+## Related Documentation
+
+- [Python version of the YOLOE11 segmentation sample](./02_yoloe11_seg_py.md)
+- [C/C++ Demo Build Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

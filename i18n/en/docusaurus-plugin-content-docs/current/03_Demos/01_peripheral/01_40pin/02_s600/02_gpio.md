@@ -1,12 +1,14 @@
 ---
 sidebar_position: 2
+title: "GPIO Application (RDK S600)"
 sidebar_products: RDK S600
+sidebar_label: "GPIO Application"
+description: "Usage and test routines of the RDK S600 GPIO Python library Hobot.GPIO"
 ---
 
 # GPIO Application
 
-
-The development board comes with the GPIO Python library `Hobot.GPIO`. Users can import the GPIO library using the following command.
+The development board comes pre-installed with the GPIO Python library `Hobot.GPIO`. Users can import the GPIO library with the following command:
 
 ```shell
 root@ubuntu:~# sudo python3
@@ -20,20 +22,34 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 :::tip
-The pins mentioned below are for illustration purposes only. Port values may vary across different platforms, so actual conditions should prevail. Alternatively, you can directly use the code in the `/app/40pin_samples/` directory, which has been verified on the board.
+The pins mentioned below are for illustration only; port values differ across platforms, and the actual situation prevails. You can also directly use the code under the `/app/40pin_samples/` directory, which has been verified on the board.
 :::
 
-## Setting the Pin Numbering Mode
 
-There are 4 numbering modes for the development board's pins:
+## Code Location
 
-- BOARD: Physical pin numbers, corresponding one-to-one with the silkscreen numbers on the development board.
-- BCM: GPIO naming rules based on the Broadcom SoC.
-- CVM: Uses strings instead of numbers, corresponding to the signal names of the CVM/CVB connectors.
-- SOC: The corresponding number is the GPIO pin number inside the chip.
+The GPIO test routines are located in the on-board `/app/40pin_samples/` directory; the related scripts are as follows:
 
-This document recommends using the `BOARD` numbering mode. The numbering mode can be set as follows:
-Note: The numbering mode can only be set once. To reset it, you need to call `GPIO.cleanup()` before setting it again.
+```text
+/app/40pin_samples/
+├── simple_out.py        # GPIO output example
+├── simple_input.py      # GPIO input example
+├── button_led.py        # Example of controlling LED output with button input
+├── button_event.py      # Edge event detection example
+└── button_interrupt.py  # Example of handling edge events with interrupts
+```
+
+## Setting the Pin Numbering Scheme
+
+The development board supports 4 pin numbering modes:
+
+- BOARD: physical pin numbers, matching the silkscreen numbers on the development board one-to-one.
+- BCM: GPIO naming convention defined for Broadcom SoCs.
+- CVM: uses strings instead of numbers, corresponding to the signal names of the CVM / CVB connectors.
+- SOC: the corresponding numbers are the internal GPIO pin numbers of the chip.
+
+This document recommends using the `BOARD` numbering mode. The numbering mode is set as follows:
+Note: the mode can only be set once each time. To set it again, call `GPIO.cleanup()` first and then set it again.
 ```python
 GPIO.setmode(GPIO.BOARD)
 # or
@@ -44,20 +60,20 @@ GPIO.setmode(GPIO.CVM)
 GPIO.setmode(GPIO.SOC)
 ```
 
-To query the numbering mode:
+Query the current numbering mode:
 
 ```python
 GPIO.getmode()
 ```
 
-The program will output one of the following results: `BOARD, BCM, CVM, SOC or None`.
+The program outputs one of `BOARD, BCM, CVM, SOC or None`.
 
 ## Warning Messages
 
-Running code under the following circumstances will generate warning logs, but normal functionality will not be affected:
+In the following cases, running code outputs warning logs, which do not affect normal functionality:
 
-- When the user attempts to use a GPIO that is already in use by another application;
-- When attempting to call `GPIO.cleanup` to clear pins before setting the mode and channels;
+ - The GPIO the user tries to use is already used by another application;
+ - Trying to call `GPIO.cleanup` to clean up pins before the mode and channels are set;
 
 To suppress warning messages, use the following command:
 
@@ -69,32 +85,32 @@ GPIO.setwarnings(False)
 
 :::info
 
-On the `RDK S600` platform, 2x 10-pin latching interfaces, 1x 12-pin latching interface, and 1x 14-pin latching interface are supported for GPIO expansion. The following limitations apply during use:
+On the `RDK S600` platform, GPIO expansion via two 10-pin latching connectors, one 12-pin latching connector and one 14-pin latching connector is supported. There are the following limitations during use:
 
-Please refer to [Pin Configuration and Definition](./01_ext_io.md#pin_define) for pin definitions.
+For pin definitions, refer to [Pin Configuration and Definitions](./01_ext_io.md#pin_define)
 
 :::
 
-GPIO pins need to be configured accordingly before use, as follows:
+Before using GPIO pins, the corresponding configuration is required, as follows:
 
-To set a pin as input:
+Set as input:
 ```python
 GPIO.setup(channel, GPIO.IN)
 ```
 
-To set a pin as output:
+Set as output:
 
 ```python
 GPIO.setup(channel, GPIO.OUT)
 ```
 
-You can also specify an initial value for an output channel, for example:
+You can also specify an initial value for the output channel, for example:
 
 ```python
 GPIO.setup(channel, GPIO.OUT, initial=GPIO.HIGH)
 ```
 
-Additionally, the tool supports setting multiple output channels at once, for example:
+Additionally, the tool supports configuring multiple output channels at once, for example:
 
 ```python
 # set gpio(18,12,13) to output
@@ -102,7 +118,7 @@ channels = [18, 12, 13]
 GPIO.setup(channels, GPIO.OUT)
 ```
 
-## Input Operation
+## Input Operations
 
 To read the value of a channel, use:
 
@@ -112,7 +128,7 @@ GPIO.input(channel)
 
 The command returns 0 or 1. 0 represents GPIO.LOW, 1 represents GPIO.HIGH.
 
-## Output Operation
+## Output Operations
 
 To set the output value of a channel, use:
 
@@ -120,17 +136,17 @@ To set the output value of a channel, use:
 GPIO.output(channel, state)
 ```
 
-Where `state` can be GPIO.LOW or GPIO.HIGH.
+Where state can be GPIO.LOW or GPIO.HIGH.
 
-## Cleaning Up Pin Usage
+## Releasing Pin Occupancy
 
-Before exiting the program, it is recommended to clean up the channels. Use:
+Before the program exits, it is recommended to perform channel cleanup; use:
 
 ```python
 GPIO.cleanup()
 ```
 
-If you only want to clean up specific channels, use:
+To clean up only specific channels, use:
 
 ```python
 # Clean up a single channel
@@ -152,43 +168,43 @@ This function returns IN or OUT.
 
 ## Edge Detection and Interrupts
 
-An edge is a change in the electrical signal from `low to high` (rising edge) or from `high to low` (falling edge). This change can be considered an event occurrence, which can trigger a CPU interrupt signal.
+An edge is a change of an electrical signal `from low to high` (rising edge) or `from high to low` (falling edge). This change can be regarded as the occurrence of an event, which can be used to trigger a CPU interrupt signal.
 
-The GPIO library provides three methods to detect input events:
+The GPIO library provides three methods for detecting input events:
 
-### wait_for_edge() function
+### wait_for_edge() Function
 
-This function blocks the calling thread until the corresponding edge change is detected. The function call is as follows:
+This function blocks the calling thread until the corresponding edge change is detected. The function is called as follows:
 
 ```python
 GPIO.wait_for_edge(channel, GPIO.RISING)
 ```
 
-The second parameter specifies the edge to detect, which can be `GPIO.RISING, GPIO.FALLING, or GPIO.BOTH`. To specify a waiting time, you can optionally set a timeout:
+The second parameter specifies the edge to detect, and can be `GPIO.RISING, GPIO.FALLING or GPIO.BOTH`. To specify a waiting time, you can set a timeout:
 
 ```python
 # Timeout is in milliseconds
 GPIO.wait_for_edge(channel, GPIO.RISING, timeout=500)
 ```
 
-If the external signal changes within the timeout period, the function returns the detected channel number; if a timeout occurs, the function returns None.
+If an external signal change occurs within the timeout, the function returns the detected channel number; if a timeout occurs, the function returns None.
 
-### event_detected() function
+### event_detected() Function
 
 This function can be used to periodically check whether an event has occurred since the last call. The function can be set up and called as follows:
 
 ```python
-# Set up rising edge detection on the GPIO channel
+# Set rising edge detection on the GPIO channel
 GPIO.add_event_detect(channel, GPIO.RISING)
 if GPIO.event_detected(channel):
     print("Rising edge event detected")
 ```
 
-You can detect events for GPIO.RISING, GPIO.FALLING, or GPIO.BOTH.
+You can detect events of GPIO.RISING, GPIO.FALLING or GPIO.BOTH.
 
-### Running a callback function when an edge event is detected
+### Running a Callback Function When an Edge Event Is Detected
 
-This function allows you to register a callback function that runs in a separate processing thread. Usage instructions are as follows:
+This function can be used to register a callback function; the callback function runs in a separate processing thread. Usage is as follows:
 
 ```python
 # define callback function
@@ -213,9 +229,9 @@ GPIO.add_event_callback(channel, callback_one)
 GPIO.add_event_callback(channel, callback_two)
 ```
 
-Since all callback functions run on the same thread, different callbacks are executed sequentially, not simultaneously.
+Since all callback functions run on the same thread, different callbacks run sequentially rather than concurrently.
 
-To prevent multiple calls to the callback function by merging multiple events into one, you can optionally set a debounce time:
+To prevent the callback function from being invoked multiple times by merging multiple events into one, you can set a debounce time:
 
 ```python
 # bouncetime unit is ms
@@ -230,19 +246,19 @@ If edge detection is no longer needed, it can be removed as follows:
 GPIO.remove_event_detect(channel)
 ```
 
-## Test Examples
-TODO
-The main test examples are provided in the `/app/40pin_samples/` directory:
+## Test Routines
 
-| Test Example Name   | Description                                                          |
-| ------------------- | -------------------------------------------------------------------- |
-| simple_out.py       | Single pin `output` test                                             |
-| simple_input.py     | Single pin `input` test                                              |
-| button_led.py       | One pin as button input, one pin as output to control an LED         |
-| button_event.py     | Capture rising and falling edge events on a pin                      |
-| button_interrupt.py | Handle rising and falling edge events on a pin using interrupts      |
+The main test routines are provided under the `/app/40pin_samples/` directory:
 
-- Set GPIO to `output mode`, toggle the output level every 1 second, which can be used to control an LED to turn on and off cyclically. Test code `simple_out.py`:
+| Test routine name             | Description                                          |
+| ---------------------- | --------------------------------------------- |
+| simple_out.py          | Single-pin `output` test                            |
+| simple_input.py        | Single-pin `input` test                            |
+| button_led.py          | One pin as button input, another pin as output controlling an LED |
+| button_event.py        | Capture rising/falling edge events of a pin                  |
+| button_interrupt.py    | Handle rising/falling edge events of a pin with interrupts          |
+
+- Set GPIO to `output mode` and toggle the output level every 1 second, which can be used to control an LED blinking cyclically; test code `simple_out.py`:
 
 ```python
 #!/usr/bin/env python3
@@ -268,16 +284,16 @@ def determine_pins():
 def main():
     output_pin = determine_pins()
 
-    # Set the pin numbering mode to hardware numbering BOARD
+    # Set the pin numbering mode to the hardware numbering BOARD
     GPIO.setmode(GPIO.BOARD)
-    # Set to output mode and initialize to high level
+    # Set as output mode and initialize to high level
     GPIO.setup(output_pin, GPIO.OUT, initial=GPIO.HIGH)
 
     # Record the current pin state
     curr_value = GPIO.HIGH
     print("Starting demo now! Press CTRL+C to exit")
     try:
-        # Loop to control LED on/off at 1-second intervals
+        # Toggle the LED on/off cyclically at 1-second intervals
         while True:
             time.sleep(1)
             GPIO.output(output_pin, curr_value)
@@ -292,7 +308,7 @@ if __name__ == '__main__':
 
 ```
 
-- Set GPIO to `input mode` and read the pin level value through busy polling. Test code `simple_input.py`:
+- Set GPIO to `input mode` and read the pin level by busy polling; test code `simple_input.py`:
 
 ```python
 #!/usr/bin/env python3
@@ -324,9 +340,9 @@ def main():
     prev_value = None
     input_pin = determine_pins()
 
-    # Set the pin numbering mode to hardware numbering BOARD
+    # Set the pin numbering mode to the hardware numbering BOARD
     GPIO.setmode(GPIO.BOARD)
-    # Set to input mode
+    # Set as input mode
     GPIO.setup(input_pin, GPIO.IN)
 
     print("Starting demo now! Press CTRL+C to exit")
@@ -352,7 +368,7 @@ if __name__=='__main__':
 
 ```
 
-- Set GPIO to input mode, capture rising and falling edge events on the pin. Test code `button_event.py` implements detecting a falling edge on pin 4 and then controlling the output on pin 3:
+- Set GPIO to input mode and capture the rising/falling edge events of a pin; test code `button_event.py`, which detects the falling edge of pin 4 and then controls the output of pin 3:
 
 ```python
 #!/usr/bin/env python3
@@ -368,7 +384,7 @@ def signal_handler(signal, frame):
 
 # Define the GPIO channels to use:
 # led_pin as output, can light up an LED
-# but_pin as input, can connect to a button
+# but_pin as input, can connect a button
 BOARD_ID_PATH = "/sys/class/boardinfo/adc_boardid"
 
 
@@ -386,7 +402,7 @@ def determine_pins():
 def main():
 
     led_pin, but_pin = determine_pins()
-    # Set the pin numbering mode to hardware numbering BOARD
+    # Set the pin numbering mode to the hardware numbering BOARD
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(led_pin, GPIO.OUT)  # LED pin set as output
     GPIO.setup(but_pin, GPIO.IN)  # button pin set as input
@@ -416,9 +432,9 @@ if __name__ == '__main__':
 
 ```
 
-- Set GPIO to input mode, enable GPIO interrupt function to respond to rising and falling edge events on the pin. Test code `button_interrupt.py` implements:
-  - Controlling pin 1 to go high and low with a period of 4 seconds and a 50% duty cycle, i.e., high for 2 seconds then low for 2 seconds, running continuously during program execution;
-  - Detecting a falling edge on pin 3 to trigger an interrupt. The interrupt handler will rapidly toggle pin 2 high and low 5 times. As long as the user pulls pin 3 low, pin 2 will toggle with a 1-second period and 50% duty cycle, i.e., high for 0.5 seconds and low for 0.5 seconds, for a total of 5 cycles.
+- Set GPIO to input mode, enable the gpio interrupt function and respond to the rising/falling edge events of a pin; test code `button_interrupt.py`, which implements:
+  - Controls pin 1 to toggle high/low with a period of 4s and a duty cycle of 50%, i.e. 2s high followed by 2s low, running continuously while the program is running;
+  - Detects the falling edge of pin 3 to trigger an interrupt; the interrupt handler controls pin 2 to toggle high/low rapidly 5 times. As long as the user pulls pin 3 low, they can see pin 2 toggling with a 1s period and a 50% duty cycle, i.e. 0.5s high and 0.5s low, running for 5 cycles in total.
 
 ```python
 #!/usr/bin/env python3
@@ -433,9 +449,9 @@ def signal_handler(signal, frame):
 
 
 # Define the GPIO channels to use:
-# 15 as output, can light up an LED
-# 16 as output, can light up an LED
-# but_pin as input, can connect to a button
+# Pin 15 as output, can light up an LED
+# Pin 16 as output, can light up an LED
+# but_pin as input, can connect a button
 led_pin_1 = 1  # BOARD numbering 1
 led_pin_2 = 2  # BOARD numbering 2
 
@@ -451,7 +467,7 @@ def determine_pins():
         return 4
 
 
-# LED 2 blinks rapidly 5 times when button is pressed
+# LED 2 blinks rapidly 5 times when the button is pressed
 def blink(channel):
     print("Blink LED 2")
     for i in range(5):
@@ -472,9 +488,9 @@ def main():
     GPIO.output(led_pin_1, GPIO.LOW)
     GPIO.output(led_pin_2, GPIO.LOW)
 
-    # Register the blink function as the interrupt handler for button falling edge events
+    # Register the blink function as the interrupt handler for the button falling edge event
     GPIO.add_event_detect(but_pin, GPIO.FALLING, callback=blink, bouncetime=10)
-    # Start test, Led1 blinks slowly
+    # Start the test; Led1 blinks slowly
     print("Starting demo now! Press CTRL+C to exit")
     try:
         while True:
@@ -492,9 +508,9 @@ if __name__ == '__main__':
     main()
 
 ```
-## Introduction to the hb_gpioinfo Tool
+## hb_gpioinfo Tool Introduction
 
-hb_gpioinfo is a GPIO helper tool adapted for RDK S600. It can display the mapping between Pin Names and Pin Numbers on the current development board. Example command output is as follows:
+hb_gpioinfo is a gpio helper tool adapted for the RDK S600. It can show the correspondence between PinName and PinNum of the current development board. Example command output is as follows:
 ```shell
 sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
@@ -722,3 +738,23 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |--- ---------------- --------------------
 ```
+
+## FAQ
+
+### Running the GPIO example produces no output or the level does not change
+
+**Reason**: The 30-pin latching connector digital IOs of the RDK S600 are 1.8V level; the pin numbers used in the examples are automatically adapted to the board type (see `determine_pins()`).
+
+**Solution**: Confirm that the peripheral levels match 1.8V; input pins must be connected to a definite level, and output pins can be observed with a multimeter or an LED.
+
+### The pin is reported as already occupied
+
+**Reason**: The GPIO is already used by another process.
+
+**Solution**: Terminate the occupying process and retry; the examples automatically call `GPIO.cleanup()` on exit to release the pins. You can also use `GPIO.setwarnings(False)` to suppress warnings.
+
+## Related Documents
+
+- [Pin Definitions](./01_ext_io.md)
+- [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)
+- [C/C++ Demo Programming Guide](/Demos/demo_support/c_cpp_build)

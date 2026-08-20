@@ -1,203 +1,120 @@
 ---
+title: Object Detection - Ultralytics YOLOv5x (Python)
 sidebar_position: 3
+description: "Pre-installed sample for deploying YOLOv5x with the hbm_runtime Python interface for object detection"
 ---
 
-# Object Detection - Ultralytics YOLOv5x
+# Object Detection - Ultralytics YOLOv5x (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
-This example shows how to perform image object detection on the BPU using a quantized Ultralytics YOLOv5x model. It supports preprocessing, post-processing, NMS, bounding box drawing, and result saving. The sample code is located in `/app/pydev_demo/02_detection_sample/01_ultralytics_yolov5x/`.
+This sample demonstrates how to deploy the quantized Ultralytics YOLOv5x model on the BPU using the Python interface of `hbm_runtime`, run object detection on a single image (preprocessing + inference + NMS + box drawing), and save the detection result as an image. It applies to RDK devices equipped with a BPU.
 
-</DocScope>
-<DocScope products="RDK-S600">
-This example shows how to perform image object detection on the BPU using a quantized Ultralytics YOLOv5x model. It supports preprocessing, post-processing, NMS, bounding box drawing, and result saving. The sample code is located in `/app/pydev_demo/detection_sample/ultralytics_yolov5x/`.
+The sample code is located in the `/app/pydev_demo/detection_sample/ultralytics_yolov5x/` directory on the board.
 
-</DocScope>
+## Prerequisites
 
-
-## Model Description
-- Overview:
-
-    Ultralytics YOLOv5x is a high-performance object detection model. The name stands for "You Only Look Once," meaning a single forward pass can complete object localization and classification. YOLOv5x is the largest variant, with more network parameters and higher detection accuracy, making it suitable for scenarios that require high precision. The model maps the input image to multiple grids, with each grid predicting class labels and bounding boxes for multiple anchors. This model has been quantized into HBM format for BPU chips, with NV12 input at 672×672 resolution.
-
-- HBM model name: yolov5x_672x672_nv12.hbm
-
-- Input format: NV12, size 672x672 (Y and UV planes separated)
-
-- Output: N object boxes, each containing a tuple of (class index, probability, bounding box coordinates)
-
-
-## Features
-- Model loading
-
-    Loads the quantized Ultralytics YOLOv5x model through `hbm_runtime`, parsing model name, input and output names, shapes, quantization parameters, and other information to prepare for subsequent inference.
-
-- Input preprocessing
-
-    Resizes the input image to 672x672, converts it to NV12 format (Y and UV separated), and organizes the input as a nested dictionary to match the inference interface.
-
-- Inference execution
-
-    Runs inference using the `.run()` method, with support for setting inference priority and BPU core binding (such as core0/core1).
-
-- Post-processing
-
-    - Dequantizes the output tensor;
-
-    - Decodes YOLO outputs to obtain predicted boxes, confidence scores, and class indices;
-
-    - Filters candidates based on the score threshold;
-
-    - Applies NMS (non-maximum suppression) to remove redundant boxes;
-
-    - Maps predicted box coordinates back to the original image size;
-
-    - Overlays detection boxes and saves the result image.
-
-<DocScope products="RDK-S100">
-- Model download URL (automatically downloaded by the program):
-
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-    ```
-
-</DocScope>
-<DocScope products="RDK-S600">
-- Model download URL (automatically downloaded by the program):
-
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-    ```
-
-</DocScope>
-
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 corresponds to `s100/basic/`).
+- The Python environment and `hbm_runtime` are pre-installed with the image.
 
 ## Environment Dependencies
-This sample has no special environment requirements. Just ensure that the dependencies in pydev are installed.
+
+It depends on the common utility library (`utils`) of `pydev_demo`. If it reports missing dependencies:
 
 <DocScope products="RDK-S100">
+
 ```bash
-pip install -r ../../requirements.txt
+cd /app/pydev_demo && pip install -r requirements.txt
 ```
 
 </DocScope>
 <DocScope products="RDK-S600">
+
 ```bash
-pip install -r ../../requirements.txt --break-system-packages
+cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 ```
 
 </DocScope>
 
-## Directory Structure
+## Code Location
+
+On-board path: `/app/pydev_demo/detection_sample/ultralytics_yolov5x/`
+
+Directory structure:
 
 ```text
 .
-├── ultralytics_yolov5x.py      # Main inference script
-└── README.md                   # Usage instructions
+├── ultralytics_yolov5x.py   # Main inference script
+└── README.md                # Usage instructions
 ```
 
 ## Parameters
 
-<DocScope products="RDK-S100">
-| Parameter         | Description                                              | Default Value                               |
-|-------------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path`    | Model file path (.hbm format)                            | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--test-img`      | Test image path                                          | `/app/res/assets/kite.jpg`                     |
-| `--label-file`    | Class label path (one class per line)                    | `/app/res/labels/coco_classes.names`           |
-| `--img-save-path` | Path to save the detection result image                  | `result.jpg`                                |
-| `--priority`      | Model scheduling priority (0~255)                        | `0`                                         |
-| `--bpu-cores`     | List of BPU core IDs to use (e.g. `--bpu-cores 0 1`)     | `[0]`                                      |
-| `--nms-thres`     | Non-maximum suppression (NMS) threshold                  | `0.45`                                    |
-| `--score-thres`   | Confidence threshold                                     | `0.25`                                    |
+| Parameter | Description | Default |
+|---|---|---|
+| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
+| `--test-img` | Test image path | `/app/res/assets/kite.jpg` |
+| `--label-file` | Class labels (one class per line, COCO 80 classes) | `/app/res/labels/coco_classes.names` |
+| `--img-save-path` | Save path of the detection result image | `result.jpg` |
+| `--priority` | Model scheduling priority (0~255) | `0` |
+| `--bpu-cores` | List of BPU core IDs (e.g., `--bpu-cores 0 1`) | `[0]` |
+| `--nms-thres` | NMS threshold | `0.45` |
+| `--score-thres` | Confidence threshold | `0.25` |
 
-</DocScope>
-<DocScope products="RDK-S600">
-| Parameter         | Description                                              | Default Value                               |
-|-------------------|----------------------------------------------------------|---------------------------------------------|
-| `--model-path`    | Model file path (.hbm format)                            | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--test-img`      | Test image path                                          | `/app/res/assets/kite.jpg`                     |
-| `--label-file`    | Class label path (one class per line)                    | `/app/res/labels/coco_classes.names`           |
-| `--img-save-path` | Path to save the detection result image                  | `result.jpg`                                |
-| `--priority`      | Model scheduling priority (0~255)                        | `0`                                         |
-| `--bpu-cores`     | List of BPU core IDs to use (e.g. `--bpu-cores 0 1`)     | `[0]`                                      |
-| `--nms-thres`     | Non-maximum suppression (NMS) threshold                  | `0.45`                                    |
-| `--score-thres`   | Confidence threshold                                     | `0.25`                                    |
+## Usage
 
-</DocScope>
+Enter the sample directory and run it directly:
 
+```bash
+cd /app/pydev_demo/detection_sample/ultralytics_yolov5x
+python ultralytics_yolov5x.py
+```
 
-## Quick Start
-- Run the model
-    - With default parameters
-        ```bash
-        python ultralytics_yolov5x.py
-        ```
-    - Run with specified parameters
+After it runs successfully, the detection boxes are drawn on the original image and saved as `result.jpg`.
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python ultralytics_yolov5x.py \
-            --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --img-save-path result.jpg \
-            --priority 0 \
-            --bpu-cores 0 \
-            --nms-thres 0.45 \
-            --score-thres 0.25
-        ```
+**Notes**:
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python ultralytics_yolov5x.py \
-            --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --img-save-path result.jpg \
-            --priority 0 \
-            --bpu-cores 0 \
-            --nms-thres 0.45 \
-            --score-thres 0.25
-        ```
+- You must first `cd` into the sample directory before running it: the script depends on the common `utils` module in the parent directory, and running it in another directory will fail with `No module named 'utils'`.
+- The detection result image `result.jpg` is saved in the current working directory (i.e., the sample directory). Running it in another directory will make the result image hard to find.
+- The model must be located at the default path (for S600 it is `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`; S100 corresponds to `s100/basic/`). If missing, `--model-path` must be explicitly specified.
 
-        </DocScope>
+## Execution Results
 
-- View results
+The program loads the model, runs inference and NMS post-processing, draws boxes, and saves the result. The following is actual output on RDK S600 (test image `kite.jpg`):
 
-    After a successful run, detection boxes are drawn on the original image and saved to the path specified by `--img-save-path`.
-    ```bash
-    [Saved] Result saved to: result.jpg
-    ```
+```text
+Model Description:
+ - yolov5x_672x672_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x672x672",
+   "INPUT_TYPE_RT": "nv12", "NORM_TYPE": "data_scale",
+   "SCALE_VALUE": "[0.003921568627451]", ...}
 
-## Notes
+=== Scheduling Parameters ===
+yolov5x_672x672_nv12:
+  priority    : 0
+  bpu_cores   : [0]
+  deviceId    : 0
 
-<DocScope products="RDK-S100">
-- If the specified model path does not exist, try looking in `/opt/hobot/model/s100/basic/`.
+[Saved] Result saved to: result.jpg
+```
 
-</DocScope>
-<DocScope products="RDK-S600">
-- If the specified model path does not exist, try looking in `/opt/hobot/model/s600/basic/`.
+**Success indicator**: `[Saved] Result saved to: result.jpg` appears at the end. Open `result.jpg` with an image viewer to see the detected object boxes (e.g., the person and the kite in `kite.jpg`).
 
-</DocScope>
+## Software Notes
 
-## License
-    ```license
-    Copyright (C) 2025, XiangshunZhao D-Robotics.
+Data flow: read image (BGR) → resize to 672×672 → convert to NV12 → BPU inference → decode output heads → NMS deduplication → keep boxes with score≥0.25 → draw boxes and classes on the original image → save. Model input `1x3x672x672`, normalization uses `data_scale` (scale≈1/255).
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+## FAQ
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+- **No boxes visible in `result.jpg`**: Confirm that the test image contains recognizable objects; lower `--score-thres` (e.g., 0.1) or `--nms-thres` to see more candidate boxes.
+- **Error that the model cannot be found**: Check whether the `.hbm` exists under `--model-path`; the S600 model is in `/opt/hobot/model/s600/basic/`.
+- **Error `No module named 'utils'`**: It is not running in the sample directory. You must `cd` into `ultralytics_yolov5x/` before running it (it depends on the parent `utils`).
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+## Related Documentation
+
+- [C/C++ version of the YOLOv5x sample](./01_yolov5x.md)
+- [Image Classification - ResNet18 (Python)](../02_classification/01_resnet18_py.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [Python Inference API](../../../04_Simple_API/02_inference_api/02_python_api.md)

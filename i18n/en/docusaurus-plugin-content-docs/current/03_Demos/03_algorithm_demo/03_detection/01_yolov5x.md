@@ -1,194 +1,114 @@
 ---
+title: Object Detection - Ultralytics YOLOv5x (C/C++)
 sidebar_position: 1
+description: "Pre-installed sample for deploying YOLOv5x with C/C++ for object detection"
 ---
 
-# Object Detection - Ultralytics YOLOv5x
+# Object Detection - Ultralytics YOLOv5x (C/C++)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+This sample demonstrates how to deploy the quantized Ultralytics YOLOv5x model on the BPU with `C/C++`, run object detection on a single image (preprocessing + inference + NMS + box drawing), and save the result as an image. For the Python version, see [YOLOv5x (Python)](./01_yolov5x_py.md).
 
-This example shows how to run image object detection on the BPU using a quantized Ultralytics YOLOv5x model. It supports preprocessing, post-processing, NMS, bounding box drawing, and result saving. The sample code is located in `/app/cdev_demo/bpu/02_detection_sample/01_ultralytics_yolov5x/`.
+The sample code is located in the `/app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x/` directory on the board.
 
-</DocScope>
-<DocScope products="RDK-S600">
+## Prerequisites
 
-This example shows how to run image object detection on the BPU using a quantized Ultralytics YOLOv5x model. It supports preprocessing, post-processing, NMS, bounding box drawing, and result saving. The sample code is located in `/app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x/`.
-
-</DocScope>
-
-
-## Model Description
-- Overview:
-
-    Ultralytics YOLOv5x is a high-performance object detection model. The name stands for "You Only Look Once," meaning a single forward pass performs object localization and classification. YOLOv5x is the largest variant, with more network parameters and higher detection accuracy, suitable for scenarios that require high precision. The model maps the input image to multiple grids, with each grid predicting class labels and bounding boxes for multiple anchors. This model has been quantized to HBM format for BPU chips, with NV12 input at 672×672 resolution.
-
-- HBM model name: yolov5x_672x672_nv12.hbm
-
-- Input format: NV12, size 672x672 (Y and UV planes separated)
-
-- Output: N bounding boxes, each containing a (class index, probability, bounding box) triplet
-
-
-## Feature Overview
-- Model loading
-
-    Load the quantized Ultralytics YOLOv5x model and parse model metadata to prepare for inference.
-
-- Input preprocessing
-
-    Resize the input image to 672x672, convert it to NV12 format (Y and UV separated), and organize the input as a nested dictionary for the inference interface.
-
-- Inference execution
-
-    Run inference via the `.infer()` method.
-
-- Result post-processing
-
-    - Dequantize the output tensor;
-
-    - Decode YOLO outputs to obtain predicted boxes, confidence scores, and class indices;
-
-    - Apply an initial filter based on the score threshold;
-
-    - Apply NMS (non-maximum suppression) to remove redundant boxes;
-
-    - Map predicted box coordinates back to the original image size;
-
-    - Overlay detection boxes and save the result image.
-
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
+- The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 corresponds to `s100/basic/`).
 
 ## Environment Dependencies
-Ensure the following dependencies are installed:
+
+Compilation requires `libgflags-dev`:
+
 ```bash
 sudo apt update
 sudo apt install libgflags-dev
 ```
 
-## Directory Structure
+## Code Location
+
+On-board path: `/app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x/`
+
+## Build
+
+```bash
+cd /app/cdev_demo/bpu/detection_sample/ultralytics_yolov5x
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+```
+
+The build artifact is `build/ultralytics_yolov5x`.
+
+## Parameters
+
+| Parameter | Description | Default |
+|---|---|---|
+| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
+| `--test-img` | Test image path | `/app/res/assets/kite.jpg` |
+| `--label-file` | Class labels (COCO 80 classes) | `/app/res/labels/coco_classes.names` |
+| `--score-thres` | Confidence threshold (filters out low-score boxes) | `0.25` |
+| `--nms-thres` | IoU threshold (NMS) | `0.45` |
+
+## Usage
+
+Run in the `build` directory:
+
+```bash
+./ultralytics_yolov5x
+```
+
+Run with specified parameters (equivalent to the defaults):
+
+<DocScope products="RDK-S600">
+
+```bash
+./ultralytics_yolov5x \
+  --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+  --test-img   /app/res/assets/kite.jpg \
+  --label-file /app/res/labels/coco_classes.names \
+  --score-thres 0.25 \
+  --nms-thres 0.45
+```
+
+</DocScope>
+
+**Notes**:
+
+- It must be run in the `build` directory. The default paths such as `--test-img` and `--label-file` are given according to the pre-installed directories on the board.
+- The detection result image is saved to the relative path `result.jpg` (i.e., `build/result.jpg`). Running it in another directory will make the result image hard to find.
+- Before compiling for the first time, install `libgflags-dev` as described in "Environment Dependencies", otherwise `make` will fail.
+- The model must be located at the default path (for S600 it is `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`; S100 corresponds to `s100/basic/`). If missing, `--model-path` must be explicitly specified.
+
+## Execution Results
+
+The program loads the model, runs inference and NMS, draws boxes, and saves the result. The following is actual output on RDK S600 (test image `kite.jpg`):
+
 ```text
-.
-├── CMakeLists.txt                 # Build configuration
-├── README.md                      # Usage instructions
-├── inc
-│   └── ultralytics_yolov5x.hpp     # YOLOv5x model wrapper class definition
-└── src
-    ├── main.cc                     # Inference entry point (parse arguments, execute)
-    └── ultralytics_yolov5x.cc      # YOLOv5x inference logic implementation
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+[Saved] Result saved to: result.jpg
 ```
 
-## Build the Project
-- Configure and build
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+**Success indicator**: `[Saved] Result saved to: result.jpg` appears at the end. `BPULib verison(2, 2, 15)` and `DNN: 3.13.6` indicate that the BPU runtime is loaded properly. Open `build/result.jpg` with an image viewer to see the detection boxes (e.g., the person and the kite in `kite.jpg`).
 
-<DocScope products="RDK-S100">
+## Software Notes
 
-## Model Download
-If the model is not found at runtime, download it with the following command:
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
+Data flow: read image (BGR) → resize to 672×672 → convert to NV12 → BPU inference → decode output heads → NMS deduplication → keep boxes with score≥0.25 → draw boxes and classes on the original image → save. Model input `1x3x672x672`, normalization `data_scale` (scale≈1/255).
 
-</DocScope>
-<DocScope products="RDK-S600">
+## FAQ
 
-## Model Download
-If the model is not found at runtime, download it with the following command:
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
+- **No boxes visible in `result.jpg`**: Confirm that the test image contains recognizable objects; lower `--score-thres` (e.g., 0.1).
+- **`make` fails with `gflags` not found**: `libgflags-dev` is not installed. Install it as described in "Environment Dependencies".
+- **Error that the model cannot be found**: Check whether the `.hbm` exists under `--model-path`; the S600 model is in `/opt/hobot/model/s600/basic/`.
 
-</DocScope>
+## Related Documentation
 
-## Parameter Reference
-
-<DocScope products="RDK-S100">
-
-| Parameter       | Description                              | Default Value                                          |
-| --------------- | ---------------------------------------- | ------------------------------------------------------ |
-| `--model-path`  | Model file path (.hbm format)            | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--test-img`    | Test image path                          | `/app/res/assets/kite.jpg`                             |
-| `--label-file`  | Class label file path                    | `/app/res/labels/coco_classes.names`                   |
-| `--score-thres` | Confidence threshold (filters low-score boxes) | `0.25`                                           |
-| `--nms-thres`   | IoU threshold (NMS non-maximum suppression)    | `0.45`                                           |
-
-</DocScope>
-<DocScope products="RDK-S600">
-
-| Parameter       | Description                              | Default Value                                          |
-| --------------- | ---------------------------------------- | ------------------------------------------------------ |
-| `--model-path`  | Model file path (.hbm format)            | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--test-img`    | Test image path                          | `/app/res/assets/kite.jpg`                             |
-| `--label-file`  | Class label file path                    | `/app/res/labels/coco_classes.names`                   |
-| `--score-thres` | Confidence threshold (filters low-score boxes) | `0.25`                                           |
-| `--nms-thres`   | IoU threshold (NMS non-maximum suppression)    | `0.45`                                           |
-
-</DocScope>
-
-## Quick Start
-- Run the model
-    - Use default parameters
-        ```bash
-        ./ultralytics_yolov5x
-        ```
-    - Run with custom parameters
-
-        <DocScope products="RDK-S100">
-
-        ```bash
-        ./ultralytics_yolov5x \
-            --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --score-thres 0.25 \
-            --nms-thres 0.45
-        ```
-
-        </DocScope>
-        <DocScope products="RDK-S600">
-
-        ```bash
-        ./ultralytics_yolov5x \
-            --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --test-img /app/res/assets/kite.jpg \
-            --label-file /app/res/labels/coco_classes.names \
-            --score-thres 0.25 \
-            --nms-thres 0.45
-        ```
-
-        </DocScope>
-- View the results
-
-    After a successful run, detection boxes are drawn on the original image and saved to `build/result.jpg`.
-    ```bash
-    [Saved] Result saved to: result.jpg
-    ```
-
-## Notes
-- The output is saved as `result.jpg` for you to inspect.
-
-- For more deployment options or model support information, refer to the official documentation or contact platform technical support.
-
-## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [Python version of the YOLOv5x sample](./01_yolov5x_py.md)
+- [C/C++ Demo Build Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

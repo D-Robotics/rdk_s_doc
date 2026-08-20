@@ -1,161 +1,88 @@
 ---
+title: Image Classification - MobileNetV2 (C/C++)
 sidebar_position: 2
+description: "Pre-installed sample for deploying MobileNetV2 with C/C++ for image classification"
 ---
 
-# Image Classification - MobileNetV2
+# Image Classification - MobileNetV2 (C/C++)
 
-```mdx-code-block
-import DocScope from '@site/src/components/DocScope';
-```
+This sample demonstrates how to deploy the MobileNetV2 model on the BPU with `C/C++`, run image classification inference, and output Top-K results. MobileNetV2 is a lightweight classification network, suitable for scenarios sensitive to compute power/power consumption. For the Python version, see [MobileNetV2 (Python)](./02_mobilenetv2_py.md); for the C++ version of ResNet18, see [ResNet18 (C/C++)](./01_resnet18.md).
 
-<DocScope products="RDK-S100">
+The sample code is located in the `/app/cdev_demo/bpu/classification_sample/mobilenetv2/` directory on the board.
 
-This example shows how to run image classification with a BPU-deployed `MobileNetV2` model using `C/C++` for inference. The sample code is located in `/app/cdev_demo/bpu/01_classification_sample/02_mobilenetv2/`.
+## Prerequisites
 
-</DocScope>
-<DocScope products="RDK-S600">
-
-This example shows how to run image classification with a BPU-deployed `MobileNetV2` model using `C/C++` for inference. The sample code is located in `/app/cdev_demo/bpu/classification_sample/mobilenetv2/`.
-
-</DocScope>
-
-## Model Description
-- Overview:
-
-    MobileNetV2 is a lightweight convolutional neural network proposed by Google in 2018, designed for efficient image recognition on mobile devices. It introduces Inverted Residual and Linear Bottleneck structures to reduce computation while improving performance. MobileNetV2 is well suited for deployment on edge devices and resource-constrained scenarios for tasks such as image classification and detection. The MobileNetV2 model used in this example is a BPU-quantized model with 224×224 input and NV12 format support.
-
-- HBM model name: mobilenetv2_224x224_nv12.hbm
-
-- Input format: NV12, size 224x224 (Y and UV planes separated)
-
-- Output: Softmax probability distribution over 1000 classes (ImageNet 1000-class standard)
-
-## Feature Overview
-- Model loading
-
-    Load the model file and extract metadata such as model name and input/output counts.
-
-- Input preprocessing
-
-    Resize the input image from BGR to 224x224, convert it to the NV12 format required by the hardware (Y and UV separated), and organize it as a dictionary input for the inference interface.
-
-- Inference execution
-
-    Run inference via the `.infer()` method.
-
-- Result post-processing
-
-    Read the output tensor, parse probabilities, and display the top-K (default top-5) predictions with corresponding class names and probabilities.
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
+- The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`.
 
 ## Environment Dependencies
-Before building and running, ensure the following dependencies are installed:
+
 ```bash
-sudo apt update
-sudo apt install libgflags-dev
+sudo apt update && sudo apt install libgflags-dev
 ```
 
-## Directory Structure
+## Build
+
+```bash
+cd /app/cdev_demo/bpu/classification_sample/mobilenetv2
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+```
+
+The artifact is `build/mobilenetv2`.
+
+## Parameters
+
+| Parameter | Description | Default |
+|---|---|---|
+| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
+| `--test_img` | Test image path | `/app/res/assets/zebra_cls.jpg` |
+| `--label_file` | Class labels (imagenet) | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
+| `--top_k` | Number of Top-K results to output | `5` |
+
+## Usage
+
+```bash
+./mobilenetv2
+```
+
+**Notes**:
+
+- It must be run in the `build` directory. The default paths such as `--test_img` and `--label_file` are given according to the pre-installed directories on the board.
+- Before compiling for the first time, install `libgflags-dev` as described in "Environment Dependencies", otherwise `make` will fail.
+- The model must be located at the default path `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`. If missing, `--model_path` must be explicitly specified.
+
+## Execution Results
+
+Actual output on RDK S600 (test image `zebra_cls.jpg`):
 
 ```text
-.
-├── CMakeLists.txt              # CMake build script
-├── README.md                   # Usage instructions
-├── inc
-│   └── mobilenetv2.hpp         # Model inference header
-└── src
-    ├── main.cc                 # Main program entry point
-    └── mobilenetv2.cc          # Model implementation
-```
-## Build the Project
-- Build the project
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
-
-## Model Download
-If the model is not found at runtime, download it with the following command:
-
-<DocScope products="RDK-S100">
-
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/MobileNet/mobilenetv2_224x224_nv12.hbm
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+TOP 0: label=zebra, prob=0.992726
+TOP 1: label=tiger, Panthera tigris, prob=0.00401174
+TOP 2: label=hartebeest, prob=0.00104985
+TOP 3: label=tiger cat, prob=0.000753967
+TOP 4: label=impala, Aepyceros melampus, prob=0.000424489
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
+**Success indicator**: Top-K lines such as `TOP 0: label=zebra, prob=0.992726` appear at the end, and `zebra` has the highest probability (about 0.993, consistent with the Python version).
 
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/MobileNet/mobilenetv2_224x224_nv12.hbm
-```
+## Software Notes
 
-</DocScope>
+Data flow: read image (BGR) → resize to 224×224 → convert to NV12 → BPU inference → read output tensor → Top-K → map to labels. Model input `1x3x224x224`, normalization `data_mean_and_scale` (mean BGR, scale 0.017).
 
-## Parameter Reference
+## FAQ
 
-<DocScope products="RDK-S100">
+- **`make` fails with `gflags` not found**: Install `libgflags-dev`.
+- **Error that the model cannot be found**: Check `--model_path`; the S600 model is in `/opt/hobot/model/s600/basic/`.
+- **Results differ from ResNet18**: The models are different, so the probabilities/rankings differ. This is normal.
 
-| Parameter      | Description                              | Default Value                                                  |
-| -------------- | ---------------------------------------- | -------------------------------------------------------------- |
-| `--model_path` | Model file path (.hbm format)            | `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`     |
-| `--test_img`   | Test image path                          | `/app/res/assets/zebra_cls.jpg`                                |
-| `--label_file` | Class label mapping file path (dict format) | `/app/res/labels/imagenet1000_clsidx_to_labels.txt`         |
-| `--top_k`      | Number of top-k classification results   | `5`                                                            |
+## Related Documentation
 
-</DocScope>
-<DocScope products="RDK-S600">
-
-| Parameter      | Description                              | Default Value                                                  |
-| -------------- | ---------------------------------------- | -------------------------------------------------------------- |
-| `--model_path` | Model file path (.hbm format)            | `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`     |
-| `--test_img`   | Test image path                          | `/app/res/assets/zebra_cls.jpg`                                |
-| `--label_file` | Class label mapping file path (dict format) | `/app/res/labels/imagenet1000_clsidx_to_labels.txt`         |
-| `--top_k`      | Number of top-k classification results   | `5`                                                            |
-
-</DocScope>
-
-## Quick Start
-- Run the model
-    - Make sure you are in the `build` directory
-    - Use default parameters
-        ```bash
-        ./mobilenetv2
-        ```
-    - Run with custom parameters
-
-        <DocScope products="RDK-S100">
-
-        ```bash
-        ./mobilenetv2 \
-        --model_path /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm \
-        --test_img /app/res/assets/zebra_cls.jpg \
-        --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
-        --top_k 5
-        ```
-
-        </DocScope>
-        <DocScope products="RDK-S600">
-
-        ```bash
-        ./mobilenetv2 \
-        --model_path /opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm \
-        --test_img /app/res/assets/zebra_cls.jpg \
-        --label_file /app/res/labels/imagenet1000_clsidx_to_labels.txt \
-        --top_k 5
-        ```
-
-        </DocScope>
-- View the results
-    ```bash
-    TOP 0: label=zebra, prob=0.992246
-    TOP 1: label=tiger, Panthera tigris, prob=0.00404656
-    TOP 2: label=hartebeest, prob=0.00133707
-    TOP 3: label=tiger cat, prob=0.000722661
-    TOP 4: label=impala, Aepyceros melampus, prob=0.000539704
-    ```
-
-## Notes
-- The output shows the top-K classes with the highest probabilities.
-
-- For more deployment options or model support information, refer to the official documentation or contact platform technical support.
+- [Python version of the MobileNetV2 sample](./02_mobilenetv2_py.md)
+- [Image Classification - ResNet18 (C/C++)](./01_resnet18.md)
+- [C/C++ Demo Build Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

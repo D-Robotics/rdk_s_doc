@@ -1,182 +1,116 @@
 ---
+title: Automatic Speech Recognition - ASR (Python)
 sidebar_position: 2
+description: "Pre-installed example of deploying the ASR model for speech-to-text with the hbm_runtime Python interface"
 ---
 
-# Automatic Speech Recognition - ASR
+# Automatic Speech Recognition - ASR (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
-This sample runs a speech recognition model using the `hbm_runtime` inference engine to automatically transcribe `.wav` audio files and output the corresponding text. The sample code is located in `/app/pydev_demo/07_speech_sample/01_asr/`.
+This example demonstrates how to deploy the ASR speech recognition model on the BPU with the `hbm_runtime` Python interface, transcribe a `.wav` audio clip into text, and print it.
+
+The example code is located in the `/app/pydev_demo/speech_sample/asr/` directory on the board.
 
 :::warning
-The current RDK S100 system image does **not** include the `asr.hbm` model. Before running this sample, you must download it manually (see the download URL in "Model Description" below) and place it at the default path `/opt/hobot/model/s100/basic/asr.hbm`, or specify another path with `--model-path`.
+The S100 system image does not bundle the `asr.hbm` model. Before running, download it manually and place it at `/opt/hobot/model/s100/basic/asr.hbm` (or specify it via `--model-path`).
 :::
 
-</DocScope>
-<DocScope products="RDK-S600">
-This sample runs a speech recognition model using the `hbm_runtime` inference engine to automatically transcribe `.wav` audio files and output the corresponding text. The sample code is located in `/app/pydev_demo/speech_sample/asr/`.
+## Prerequisites
 
-</DocScope>
-
-
-## Model Description
-- Introduction:
-
-    ASR (Automatic Speech Recognition) models convert audio signals into text. The input is single-channel speech waveforms (after sample rate conversion and standardization), and the output is character-level token sequences. Combined with a vocabulary (vocab) file, Chinese speech transcription can be achieved. This sample uses a quantized `.hbm` model.
-
-- HBM model name: `asr.hbm`
-
-- Input format: audio waveform, single channel, sample rate `16kHz`, maximum length `30000` (sample points)
-
-- Output: character token probability distribution (logits); recognized text is obtained by argmax decoding and mapping
-
-- Model download URL (automatically downloaded by the program):
-
-    <DocScope products="RDK-S100">
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
-    ```
-
-    </DocScope>
-    <DocScope products="RDK-S600">
-    ```bash
-    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
-    ```
-
-    </DocScope>
-
-## Features
-- Model loading
-
-    Use `hbm_runtime` to load the ASR model and automatically parse model input/output shapes and quantization information.
-
-- Input preprocessing
-
-    Read audio with SoundFile (supports `.wav`). The audio is:
-
-    - Converted to single channel
-    - Resampled to the target sample rate (default `16kHz`)
-    - Standardized to zero mean and unit variance (z-score)
-    - Padded or truncated to a fixed length (for example, `30000`)
-    - Supports generator-based processing of long audio for streaming recognition
-
-- Inference execution
-
-    Complete inference using the `.run()` method, outputting a logits tensor.
-
-- Output postprocessing
-
-    Use `np.argmax()` to obtain token indices from output logits, map them to characters using the vocab dictionary file (JSON format), and output the final recognized text.
-
-## Environment Dependencies
-- Ensure the dependencies in `pydev` are installed
-
-    <DocScope products="RDK-S100">
-    ```bash
-    pip install -r ../../requirements.txt
-    ```
-
-    </DocScope>
-    <DocScope products="RDK-S600">
-    ```bash
-    pip install -r ../../requirements.txt --break-system-packages
-    ```
-
-    </DocScope>
-
-- Install the `soundfile` package
-
-    <DocScope products="RDK-S100">
-    ```bash
-    pip install soundfile==0.13.1
-    ```
-
-    </DocScope>
-    <DocScope products="RDK-S600">
-    ```bash
-    pip install soundfile==0.13.1 --break-system-packages
-    ```
-
-    </DocScope>
-
-## Directory Structure
-```text
-01_asr/
-├── asr.py                      # Main inference script
-```
-
-## Parameter Description
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The pre-installed models are in place:
+  - S100: `/opt/hobot/model/s100/basic/asr.hbm` (not bundled in the image, manual download required)
+  - S600: `/opt/hobot/model/s600/basic/asr.hbm` (pre-installed with the image)
+- Install `soundfile` (for audio reading):
 
 <DocScope products="RDK-S100">
-| Parameter        | Description                                              | Default Value                 |
-| ---------------- | -------------------------------------------------------- | ----------------------------- |
-| `--model-path`   | Model path (`.hbm` format)                               | `/opt/hobot/model/s100/basic/asr.hbm` |
-| `--audio-file`   | Input audio file (supports `.wav` or `.flac`)             | `/app/res/assets/chi_sound.wav` |
-| `--vocab-file`   | Vocabulary file, mapping token → id                      | `/app/res/labels/vocab.json`  |
-| `--priority`     | Inference priority, `0~255`; larger is higher            | `0`                           |
-| `--bpu-cores`    | BPU cores to use (for example, `--bpu-cores 0 1`)        | `[0]`                         |
-| `--audio_maxlen` | Fixed length after audio cropping/padding (sample points)| `30000`                       |
-| `--new_rate`     | Target sample rate; audio is automatically resampled     | `16000`                       |
+
+```bash
+pip install soundfile
+```
 
 </DocScope>
 <DocScope products="RDK-S600">
-| Parameter        | Description                                              | Default Value                 |
-| ---------------- | -------------------------------------------------------- | ----------------------------- |
-| `--model-path`   | Model path (`.hbm` format)                               | `/opt/hobot/model/s600/basic/asr.hbm` |
-| `--audio-file`   | Input audio file (supports `.wav` or `.flac`)             | `/app/res/assets/chi_sound.wav` |
-| `--vocab-file`   | Vocabulary file, mapping token → id                      | `/app/res/labels/vocab.json`  |
-| `--priority`     | Inference priority, `0~255`; larger is higher            | `0`                           |
-| `--bpu-cores`    | BPU cores to use (for example, `--bpu-cores 0 1`)        | `[0]`                         |
-| `--audio_maxlen` | Fixed length after audio cropping/padding (sample points)| `30000`                       |
-| `--new_rate`     | Target sample rate; audio is automatically resampled     | `16000`                       |
+
+```bash
+pip install soundfile --break-system-packages
+```
 
 </DocScope>
 
+## Code Location
 
-## Quick Start
-- Run the model
-    - Use default parameters
-        ```bash
-        python asr.py
-        ```
-    - Run with specified parameters
+Path on the board: `/app/pydev_demo/speech_sample/asr/`
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python asr.py \
-        --model-path /opt/hobot/model/s100/basic/asr.hbm \
-        --audio-file /app/res/assets/chi_sound.wav \
-        --vocab-file /app/res/labels/vocab.json \
-        --priority 0 \
-        --bpu-cores 0 \
-        --audio_maxlen 30000 \
-        --new_rate 16000
-        ```
+:::tip
+The code in this directory is pre-installed with the image and verified on the board; it can be run directly.
+:::
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python asr.py \
-        --model-path /opt/hobot/model/s600/basic/asr.hbm \
-        --audio-file /app/res/assets/chi_sound.wav \
-        --vocab-file /app/res/labels/vocab.json \
-        --priority 0 \
-        --bpu-cores 0 \
-        --audio_maxlen 30000 \
-        --new_rate 16000
-        ```
+Directory structure:
 
-        </DocScope>
+```text
+.
+├── asr.py       # Main inference script
+└── README.md    # Usage instructions
+```
 
-- View the result
+## Parameters
 
-    After successful execution, the result will be printed.
-    ```bash
-    我是来自阿里云的大规模语言磨型过叫通意千问||
-    ```
+| Parameter | Description | Default |
+|---|---|---|
+| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/asr.hbm` (S100 uses `s100/basic/`) |
+| `--audio-file` | Input audio file path (.wav/.flac) | `/app/res/assets/chi_sound.wav` |
+| `--vocab-file` | Vocabulary file (JSON, token-to-id mapping) | `/app/res/labels/vocab.json` |
+| `--priority` | Inference priority (0~255) | `0` |
+| `--bpu-cores` | List of BPU core IDs to use (e.g. `--bpu-cores 0 1`) | `[0]` |
+| `--audio-maxlen` | Fixed length after audio truncation/padding (number of samples) | `30000` |
+| `--new-rate` | Target sample rate (automatic resampling) | `16000` |
 
-## Notes
-- If the specified model path does not exist, the program will attempt to download the model automatically.
+## Usage
+
+```bash
+cd /app/pydev_demo/speech_sample/asr
+python asr.py
+```
+
+After a successful run, the recognized text is printed to the terminal.
+
+## Execution Results
+
+The following is actual output on RDK S600 (test audio `chi_sound.wav`, whose content is "我是来自阿里云的大规模语言模型叫做通义千问"):
+
+```text
+Model Description:
+ - asr: {"MARCH": "nash-p", "INPUT_SHAPE": "1x30000",
+   "INPUT_TYPE_RT": "featuremap", "NORM_TYPE": "no_preprocess", ...}
+
+=== Scheduling Parameters ===
+asr:
+  priority    : 0
+  bpu_cores   : [-1]
+  deviceId    : 0
+
+我是来自阿里云的大规模语言磨型过叫通意千问||
+```
+
+**Success indicators**: the recognized text is printed at the end (as above). Note that the ASR model has recognition deviations on some words (e.g. "模型→磨型", "叫做→过叫"); this is a model accuracy limitation, not a runtime error.
+
+## Software Notes
+
+Data flow: read wav (`soundfile`) → resample to 16kHz → truncate/pad to 30000 samples → extract audio featuremap → BPU inference → greedy-decode tokens → map to text using `vocab.json`. The model input is `1x30000`, with no preprocessing (`no_preprocess`).
+
+## FAQ
+
+- **`ModuleNotFoundError: No module named 'soundfile'`**: Install `soundfile` as described in "Prerequisites".
+- **Garbled or missing characters in the result**: The ASR model accuracy is limited; using clearer audio can improve the result. Make sure the audio sample rate matches `--new-rate 16000`.
+- **S100 reports `asr.hbm` not found**: The S100 image does not bundle it; manual download is required (see the warning above).
+
+## Related Documentation
+
+- [ASR Example (C/C++)](./01_asr.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [Python Demo Build Guide](../../04_demo_support/03_python_build.md)
+- [Python Inference API](../../../04_Simple_API/02_inference_api/02_python_api.md)

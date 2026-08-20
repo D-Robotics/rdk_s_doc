@@ -1,9 +1,9 @@
 {
   "position": 1,
-  "label": "外设应用示例",
+  "label": "Peripheral Application Examples",
   "link": {
     "type": "generated-index",
-    "description": "外设应用示例",
+    "description": "Peripheral Application Examples",
     "slug": "/Demos/peripheral"
   }
 }
