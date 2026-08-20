@@ -160,5 +160,5 @@ Camera 扩展板集成了 3pcs MAX96712 解串芯片，每 pcs 能够接入 4 �
 
 ## 适配模组
 
-参考[7.1.2 配件清单](../../../../07_Advanced_development/01_hardware_development/02_accessory.md)
+参考[配件清单](../../../../07_Advanced_development/01_hardware_development/02_accessory.md)
 

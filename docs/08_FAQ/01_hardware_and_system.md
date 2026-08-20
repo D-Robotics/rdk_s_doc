@@ -22,6 +22,12 @@ import DocScope from '@site/src/components/DocScope';
 
 </DocScope>
 
+<DocScope products="RDK S600">
+
+认证配件及购买链接请参考[RDK S600 认证配件清单](/Advanced_development/hardware_development/accessory)
+
+</DocScope>
+
 
 ### Q1: 什么是 D-Robotics RDK 套件？
 **A:** D-Robotics Developer Kits，简称[D-Robotics RDK套件](../RDK.md)，是基于 D-Robotics 智能芯片打造的机器人开发者套件。
