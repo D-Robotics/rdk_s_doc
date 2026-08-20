@@ -1,22 +1,43 @@
 ---
 sidebar_position: 1
+title: "Network Configuration"
+description: "Wired/wireless network configuration, DNS, and Proxy for RDK S100/S600, plus the authoritative definitions of default accounts and IP"
 ---
 
-# Network and Bluetooth Configuration
+# Network Configuration
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-This section mainly introduces how to modify the wired and wireless network configurations of the development board.
+This chapter mainly introduces how to modify the wired and wireless network configurations of the development board.
+
+## Default Accounts and Network
+
+The factory default accounts and network of the development board are as follows (this page is the single source of truth for the default accounts and IP; other chapters only reference it without redefining):
+
+- Default accounts:
+  - Regular user: `sunrise`, password `sunrise`
+  - Superuser: `root`, password `root`
+- Default network:
+  - `eth1`: static IP `192.168.127.10/24`, not set as the default gateway (`never-default`),
+    used for direct connection to a PC or for device management
+  - `eth0`: IP obtained automatically via DHCP
+  - `wlan0`: DHCP (requires an external Wi-Fi module)
+
+<DocScope products="RDK S600">
+
+- There are also two network ports, `eth2` and `eth3`, which obtain IP automatically via DHCP by default.
+
+</DocScope>
 
 ## Wired Network{#config_ethnet}
 
 ### Wired Network Configuration - Network Manager Method
 
-:::info Note
+:::note Note
 
-  By default, `NetworkManager + Netplan` is used to manage the network. For other platforms, please refer to the corresponding system documentation.
+ By default, `NetworkManager + Netplan` is used to manage the network. For other platforms, please refer to the corresponding system documentation.
 
 <DocScope products="RDK S100">
   - The `RDK S100` root file system is built on Ubuntu-22.04 and does not support enabling or disabling network interfaces using ifup/ifdown by default.
@@ -40,7 +61,7 @@ nmcli connection modify "eth1_cfg" \
   ipv4.never-default yes \
   connection.autoconnect yes
 
-# Restart the connection for changes to take effect
+# Restart the connection to apply the configuration
 nmcli connection down "eth1_cfg"
 nmcli connection up "eth1_cfg"
 
@@ -57,7 +78,7 @@ nmcli connection modify "eth1_cfg" \
   ipv4.dns "" \
   connection.autoconnect yes
 
-# Restart the connection for changes to take effect
+# Restart the connection to apply the configuration
 nmcli connection down "eth1_cfg"
 nmcli connection up "eth1_cfg"
 ```
@@ -76,21 +97,21 @@ For more information on configuration fields, please refer to:
 :::tip Note
 The `RDK S100` desktop version uses the `NetworkManager + Netplan` network framework by default. After saving configurations via GUI or `nmcli`, the configurations are written to `/etc/NetworkManager/system-connections/`.
 
-You can also directly edit the `.nmconnection` file in this directory; after editing, run `sudo nmcli connection reload` and `sudo nmcli connection up [connection_name]` to apply the configuration.
+You can also directly edit the `.nmconnection` files in this directory; after editing, run `sudo nmcli connection reload` and `sudo nmcli connection up [connection_name]` to apply the configuration.
 :::
 
 ## Wireless Network
 
-The development board needs to be equipped with a wireless Wi-Fi module, supporting both Soft AP and Station modes, and runs in Station mode by default. The usage of the two modes is described below.
+The development board needs to be equipped with a wireless Wi-Fi module, which supports both Soft AP and Station modes and runs in Station mode by default. The usage of the two modes is described below.
 
 ### Station Mode
 
 In Station mode, the development board acts as a client, connecting to the router's wireless hotspot for networking.
 
-- For users using the Ubuntu Desktop version, you can click the Wi-Fi icon in the upper right corner of the desktop, select the corresponding hotspot, and enter the password to complete the network configuration, as shown below:
+- For users of the Ubuntu Desktop version, you can click the Wi-Fi icon in the upper right corner of the desktop, select the corresponding hotspot, and enter the password to complete the network configuration, as shown below:
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-wifi-config.jpeg" alt="Station Mode diagram" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-- For users using the Ubuntu Server version, wireless network configuration can be done via the command line as follows:
+- For users of the Ubuntu Server version, wireless network configuration can be done via the command line as follows:
 
 1. Use the `sudo nmcli device wifi rescan` command to scan for hotspots. If the following message appears, it indicates that scanning is too frequent; please try again later.
    ```shell
@@ -122,7 +143,7 @@ Wi-Fi AP mode is currently unavailable
 Continuously updating...
 :::
 
-<!-- The development board's wireless network runs in Station mode by default. If you need to use Soft AP mode, follow the steps below for configuration.
+<!-- The development board's wireless network runs in Station mode by default. If you need to use Soft AP mode, follow the steps below to configure it.
 
 1. Install `hostapd` and `isc-dhcp-server`
 
@@ -135,7 +156,7 @@ Continuously updating...
 2. Run the `sudo vim /etc/hostapd.conf` command to configure `hostapd.conf`, paying attention to the following fields:
 
     ```shell
-    interface=wlan0 #Network card acting as AP hotspot
+    interface=wlan0 #Network card acting as the AP hotspot
     ssid=Sunrise #WiFi name
     wpa=2 #0 for WPA, 2 for WPA2, usually 2
     wpa_key_mgmt=WPA-PSK #Encryption algorithm, usually WPA-PSK
@@ -175,11 +196,11 @@ Continuously updating...
 
 3. Configure the `isc-dhcp-server` file as follows:
 
-    - Run `sudo vim /etc/default/isc-dhcp-server` to edit the `isc-dhcp-server` file, and add the defined network interface as follows:
+    - Run `sudo vim /etc/default/isc-dhcp-server` to edit the `isc-dhcp-server` file and add the following defined network interface:
     ```shell
     INTERFACESv4="wlan0"
     ```
-    - Run `sudo vim /etc/dhcp/dhcpd.conf` to edit the `dhcpd.conf` file, and uncomment the following field:
+    -  Run `sudo vim /etc/dhcp/dhcpd.conf` to edit the `dhcpd.conf` file and uncomment the following field:
     ```shell
       authoritative;
     ```
@@ -218,11 +239,11 @@ Continuously updating...
     wlan0: interface state UNINITIALIZED->ENABLED
     wlan0: AP-ENABLED
    ```
-   - Use the `ifconfig` command to configure the IP and network segment of the wireless interface `wlan0`, ensuring consistency with the configuration in step 3.
+   - Use the `ifconfig` command to configure the IP and network segment of the wireless interface `wlan0`. Note that it must be consistent with the configuration in step 3.
     ```bash
     sudo ifconfig wlan0 10.5.5.1 netmask 255.255.255.0
     ```
-   - Finally, start the DHCP server. When connected to the hotspot, the client will be assigned an IP address between `10.5.5.100` and `10.5.5.255`.
+   - Finally, start the `dhcp` server. When a client connects to the hotspot, an IP address between `10.5.5.100` and `10.5.5.255` will be assigned to it.
     ```bash
     sudo ifconfig wlan0 10.5.5.1 netmask 255.255.255.0
     sudo systemctl start isc-dhcp-server
@@ -232,7 +253,7 @@ Continuously updating...
 6. Connect to the development board hotspot, e.g., `sunrise`
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/network/image-20220601203025803.png" alt="Connecting to the development board Soft AP hotspot" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-7. To switch back to Station mode, you can do the following:
+7. To switch back to `Station` mode, you can do the following:
 
     [RDK X5]
 
@@ -240,7 +261,7 @@ Continuously updating...
     # Stop hostapd
     killall -9 hostapd
 
-    # Clear wlan0 address
+    # Clear the address of wlan0
     ip addr flush dev wlan0
     sleep 0.5
     ifconfig wlan0 down
@@ -251,11 +272,11 @@ Continuously updating...
     systemctl unmask wpa_supplicant
     systemctl restart wpa_supplicant
 
-    # Reload wifi driver
+    # Reinstall the wifi driver
     rmmod aic8800_fdrv
     modprobe aic8800_fdrv
 
-    # Connect to hotspot; see the previous section "Wireless Network" for details
+    # Connect to the hotspot; for detailed operations, see the previous section "Wireless Network"
     wifi_connect "WiFi-Test" "12345678"
     ```
 
@@ -265,7 +286,7 @@ Continuously updating...
     # Stop hostapd
     killall -9 hostapd
 
-    # Clear wlan0 address
+    # Clear the address of wlan0
     ip addr flush dev wlan0
     sleep 0.5
     ifconfig wlan0 down
@@ -276,34 +297,38 @@ Continuously updating...
     systemctl unmask wpa_supplicant
     systemctl restart wpa_supplicant
 
-    # Connect to hotspot; see the previous section "Wireless Network" for details
+    # Connect to the hotspot; for detailed operations, see the previous section "Wireless Network"
     wifi_connect "WiFi-Test" "12345678"
     ``` -->
 
 ## DNS Service
 
-DNS (Domain Name Server) is a server that translates domain names into their corresponding IP addresses.
+DNS (Domain Name Server) performs the translation between domain names and IP addresses.
 
-The DNS configuration of the development board is managed through the `/etc/systemd/resolved.conf` file. Users can modify this file to complete DNS-related configurations as follows:
+DNS on RDK OS is managed centrally by NetworkManager. `/etc/resolv.conf` is
+automatically generated by NetworkManager (the file header is `# Generated by NetworkManager`).
+Do not edit it manually. `systemd-resolved` is not installed on the board.
 
-1. Edit the `resolved.conf` file and add the DNS server address, for example:
+- To specify a static DNS for a connection, for example to configure DNS servers for `eth1_cfg`:
 
-   ```bash
-   DNS=8.8.8.8 114.114.114.114
-   ```
+  ```shell
+  nmcli connection modify eth1_cfg ipv4.dns "8.8.8.8 114.114.114.114"
+  nmcli connection up eth1_cfg
+  ```
 
-2. Apply the DNS configuration using the following commands:
+- To revert to DNS obtained automatically via DHCP:
 
-   ```bash
-   sudo systemctl restart systemd-resolved
-   sudo systemctl enable systemd-resolved
-   sudo mv /etc/resolv.conf  /etc/resolv.conf.bak
-   sudo ln -s /run/systemd/resolve/resolv.conf /etc/
-   ```
+  ```shell
+  nmcli connection modify eth1_cfg ipv4.dns "" ipv4.ignore-auto-dns no
+  nmcli connection up eth1_cfg
+  ```
+
+After configuration, use `nmcli device show eth1 | grep DNS` or `cat /etc/resolv.conf`
+to check the active DNS servers.
 
 ## Proxy Configuration
 
-Proxy configuration refers to setting up a network proxy. In network communication, a proxy server acts as an intermediary between the client and the target server. The client's request is first sent to the proxy server, which then forwards it to the target server. The target server's response is also returned to the client through the proxy server.
+Proxy configuration refers to setting up a network proxy. In network communication, a proxy server acts as an intermediary layer between the client and the target server. The client's request is first sent to the proxy server, which then forwards it to the target server. The target server's response is also returned to the client through the proxy server.
 
 Edit the `~/.bashrc` or `/etc/environment` file. If configuring the proxy for the current user, edit `~/.bashrc`; if configuring the proxy for all users, edit `/etc/environment`.
 
@@ -322,84 +347,18 @@ After saving the file, run the following command to apply the configuration:
 source ~/.bashrc
 ```
 
-## System Update
-
-For system security and stability reasons, it is recommended that users update the system using the `apt` command after installing the system.
-
-The `/etc/apt/source.list` file contains the list of software sources for the `apt` command. Before installing software, you need to update the package list using the `apt` command.
-
-First, open the terminal command line and enter the following command:
-
-```bash
-sudo apt update
-```
-
-Next, upgrade all installed packages to the latest versions using the following command:
-
-```bash
-sudo apt full-upgrade
-```
-
 :::tip
-It is recommended to use the `full-upgrade` option instead of `upgrade` so that dependency packages are also updated synchronously when related dependencies change.
-
-When running the `sudo apt full-upgrade` command, the system will prompt you about the data download and disk space usage, but `apt` does not check if there is sufficient disk space. It is recommended that users manually check using the `df -h` command. Additionally, the deb files downloaded during the upgrade are saved in the `/var/cache/apt/archives` directory. Users can delete the cache files using the `sudo apt clean` command to free up disk space.
+For system software package upgrades and major version/firmware updates, see [System Update](./03_system_update/02_upgrade_firmware.md).
 :::
 
-After executing the `apt full-upgrade` command, drivers, kernel files, and some system software may be reinstalled. It is recommended that users manually reboot the device for the updates to take effect using the following command:
+## Verification
 
-```bash
-sudo reboot
-```
+- Wired network: in the output of `nmcli device show eth1`, `IP4.ADDRESS[1]` shows the configured static IP or the IP assigned by DHCP.
+- Wireless Station: `ip addr show wlan0` shows the IP address assigned by the router.
+- DNS: `nmcli device show eth1 | grep DNS` or `cat /etc/resolv.conf` shows the active DNS servers.
 
-## Bluetooth Configuration
+## Related Documents
 
-### Initialization
-Users can use commands to check whether the Bluetooth process is normal as follows:
-
-```bash
-ps ax | grep "/usr/bin/dbus-daemon\|/usr/lib/bluetooth/bluetoothd"
-/usr/bin/dbus-daemon
-
-/usr/lib/bluetooth/bluetoothd
-```
-
-Users can use commands to check whether the Bluetooth controller is normal as follows (note that the `<MAC Addr>` in `Controller <MAC Addr>` in the command example below will vary depending on the actual Bluetooth controller):
-```bash
-bluetoothctl list
-Controller F0:68:E3:22:7E:91 ubuntu [default]
-```
-
-### Network Configuration and Connection
-
-Execute `sudo bluetoothctl` to enter the Bluetooth configuration interface in interactive mode. If device information similar to the image below appears, it means the Bluetooth device has been recognized. Then use `show` to view Bluetooth information, paying attention to the `powered` and `discoverable` status of Bluetooth.
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172604051.png" alt="bluetoothctl show command displaying Bluetooth information" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-Execute `power on` to enable Bluetooth, as shown in the image below:
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172501882.png" alt="bluetoothctl power on enabling Bluetooth" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-To allow Bluetooth to be discovered by nearby devices, execute `discoverable on` to enable Bluetooth and turn on the Bluetooth discoverable property, as shown in the image below:
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601172648853.png" alt="bluetoothctl discoverable on enabling Bluetooth discoverable mode" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-At this point, using a phone or computer to scan for Bluetooth will reveal a Bluetooth device named `ubuntu`:
-
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601175322650-en.jpg" alt="Phone scanning and discovering Bluetooth device named ubuntu" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-Next, test the active scanning function of Bluetooth. Enter `scan on` in the `bluetoothctl` interactive interface to enable active scanning. It will periodically print nearby devices. It should have discovered your phone device. Use `scan off` to disable the scanning function and summarize the list of scanned Bluetooth devices:
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154131158.png" alt="bluetoothctl scan on actively scanning nearby Bluetooth devices" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154253947.png" alt="bluetoothctl scan off stopping scan and summarizing discovered Bluetooth devices" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-Then, proceed to pair with other Bluetooth devices:
-
-- Pairing command: `pair [targetMAC]`. After entering this command, type `yes` as prompted, and select the `Pair` option on the peer Bluetooth device to complete pairing.
-
-- After successful pairing, you can use `trust [targetMAC]` to enable automatic connection the next time.
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/hardware_interface/image-20220601154414717.png" alt="bluetoothctl pair and trust commands for Bluetooth pairing and trust" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-After the above operations, the basic functions of Bluetooth scanning and pairing are completed. For more advanced features, please refer to the official help documentation of `BlueZ`.
+- [Bluetooth Configuration](./02_bluetooth_config.md)
+- [System Update](./03_system_update/02_upgrade_firmware.md)
+- [Remote Login](../01_Quick_start/03_install_os_and_setup/remote_login.md)

@@ -1,41 +1,41 @@
 ---
 sidebar_position: 1
+title: "config.txt Usage Guide"
+description: "config.txt configuration file usage guide: bootargs, loglevel, DTS nodes, DTB Overlay"
 ---
 
-# config.txt File Configuration
+# config.txt Usage Guide
 :::warning
-- All settings in configuration files can be manually overridden within Uboot. Manually configured settings in Uboot (using `setenv` in the Uboot command line) take **precedence over** those in configuration files. The full environment variable priority order is: `setenv > config file > last boot's saveenv`;
-- Throughout this chapter, the term "configuration file" refers to the file located at the **default path** `/boot/config.txt`;
-- Using a configuration file requires modifying the contents of the boot partition, which conflicts with the requirements of [AVB](https://source.android.com/docs/security/features/verifiedboot). Therefore, this feature is unavailable when AVB is enabled (AVB is **disabled by default**);
+- All configurations in the configuration file can be manually overridden within U-Boot. Manual configuration in U-Boot (using setenv in the U-Boot command line) has a priority **higher than** the configurations in the configuration file. The full environment variable priority order is: `setenv > configuration file > saveenv from the last boot`;
+- Throughout this chapter, "configuration file" refers to the configuration file whose **default path** is `/boot/config.txt`;
+- Using the configuration file requires modifying the contents of the boot partition, which conflicts with the requirements of [AVB](https://source.android.com/docs/security/features/verifiedboot). Therefore this feature cannot be used when AVB is enabled (AVB is **disabled by default**);
 :::
 
 ## Usage Guide
 :::info Note
-- The default format of the configuration file is `<key>=<value>`. Everything after the first `=` constitutes the value for the `<key>` preceding it;
-- Each line in the configuration file must not exceed 1024 characters;
-- Settings in the configuration file are not saved as Uboot's default environment by default;
+- The default format of the configuration file is `<key>=<value>`. Everything after the first `=` is the configuration value of the `<key>` before the `=`;
+- A single line of configuration in the configuration file must not exceed 1024 characters;
+- Configurations in the configuration file are not saved as U-Boot's default configuration by default;
+- In the factory image, `/boot/config.txt` is an empty file (0 bytes) by default. Configuration items need to be added by yourself as needed;
 :::
 
-### Configure kernel bootargs (kernel cmdline)
+### Configure Kernel bootargs (kernel cmdline)
 Edit the configuration file and add: `bootargs=<custom bootargs>`, for example:
 ```
 # Add cpu isolation configuration
 bootargs=isolcpus=1-2
 ```
 
-### Modify kernel boot log level
-Edit the configuration file and add: `loglevel=<custom log level>`, for example:
+### Modify the Kernel Boot Print Level
+Edit the configuration file and add: `loglevel=<custom print level>`, for example:
 ```
 # Add kernel loglevel configuration
 loglevel=8
 ```
 
-### Temporarily modify the device tree (DTS)
-#### Enable or disable specific nodes
-Edit the configuration file and add:  
-`fdt-enable=<full path of DTS node 1>;<full path of DTS node 2>;`  
-`fdt-disable=<full path of DTS node 1>;<full path of DTS node 2>;`  
-For example:
+### Temporarily Modify the dts
+#### Enable or Disable Specific Nodes
+Edit the configuration file and add: `fdt-enable=<full path of dts node 1>;<full path of dts node 2>;`; `fdt-disable=<full path of dts node 1>;<full path of dts node 2>;`, for example:
 ```
 # Enable kernel dts node
 fdt-enable=/soc/uart@394C0000;
@@ -45,24 +45,26 @@ fdt-disable=/soc/uart@394C0000;
 ```
 
 :::info Note
-- The trailing semicolon (`;`) in the example lines **must not be omitted**;
-- The full path of a DTS node can be obtained from `/proc/device-tree` on the target board. For example:
+- The ";" at the end of the configuration line in the example must not be omitted;
+- The full path of a dts node can be obtained on the board under `/proc/device-tree`, for example:
     ```shell
       root@ubuntu:~# realpath --relative-to=/proc/device-tree/ /proc/device-tree/soc/uart@394C0000
       soc/uart@394C0000
     ```
-    Note that a leading `/` must be prepended to the path obtained from this command;
+    Note that the path obtained by the command needs a "/" added at the beginning of the line;
+- The node addresses in the example are S100 nodes (such as `uart@394C0000`); S600 node addresses are different
+  (such as `uart@3484A000`). Use the actual node names under `/proc/device-tree/soc/` on the board as the reference;
 :::
 
 #### Configure DTB Overlay Files
 
-References for DTB Overlay:
-1. Kernel v6.1 official documentation: [Devicetree Overlay Notes](https://kernel.org/doc/html/v6.1/devicetree/overlay-notes.html);
-2. Uboot v2022.10 official documentation: [Device Tree Overlays](https://docs.u-boot.org/en/v2022.10/usage/fdt_overlays.html);
+The following are the related notes for DTB Overlay:
+1. Kernel V6.1 official documentation: [Devicetree Overlay Notes](https://kernel.org/doc/html/v6.1/devicetree/overlay-notes.html);
+2. U-Boot V2022.10 official documentation: [Device Tree Overlays](https://docs.u-boot.org/en/v2022.10/usage/fdt_overlays.html);
 
-Brief introduction: A DTB Overlay file allows **adding or modifying** (but not removing) nodes in the currently used DTB without altering the original DTS file used for booting.
+Brief introduction: DTB Overlay files provide the functionality of **adding/modifying** (deletion is not supported) the dtb file used for the current boot, without modifying the dts file used for the current boot.
 
-Example DTB Overlay source file:
+The following is an example DTB Overlay file:
 ```dts
 /*
  * Sample dtb overlay source file
@@ -81,12 +83,12 @@ Example DTB Overlay source file:
 
 ```
 :::info Note
-The following fields must be adjusted according to your actual peripheral device:
-1. `compatible` field: must match the actual driver's `compatible` string of the peripheral;
-2. `spi-max-frequency` field: must be set to the maximum SPI frequency actually supported by the peripheral;
+The following need to be modified according to the actual situation of the slave device:
+1. `compatible` field: needs to be modified to the `compatible` field of the actual driver of the slave device;
+2. `spi-max-frequency` field: needs to be modified to the highest speed actually supported by the slave device;
 :::
 
-DTB Overlay compilation example (runnable on either host or RDK board). Assuming the `spi0_cs1_dev.dtso` file is located at `~/rdk_dtbo/spi0_cs1_dev.dtso`:
+DTB Overlay compilation example. The following commands can be executed on the Host side or on the RDK board. Assume the path of the `spi0_cs1_dev.dtso` file is `~/rdk_dtbo/spi0_cs1_dev.dtso`:
 ```
 # Install device-tree-compiler
 sudo apt install device-tree-compiler -y
@@ -115,43 +117,53 @@ sunrise@ubuntu:~/rdk_dtbo$ ls
 spi0_cs1_dev.dtbo  spi0_cs1_dev.dtso
 ```
 :::info Note
-Generally, `Warning`-level messages during compilation can be safely ignored.
+In general, the `Warning`-level prints during compilation can be ignored.
 :::
 
-Edit the configuration file and add: `dtbo_file_path=<relative path under /boot partition>`, for example:
+Edit the configuration file and add: `dtbo_file_path=<relative path under the /boot partition>`, for example:
 ```
 # Set dtbo file path relative to /boot partition
 dtbo_file_path=/spi0_cs1_dev.dtbo
 ```
 
-After rebooting, you can verify that the new slave device node appears under the SPI0 (`spi@39800000`) node in the device tree:
+After rebooting, you can see that a new slave device node has been generated under the path of the device tree SPI0(spi@39800000):
 ```shell
 sunrise@ubuntu:~$ ls /proc/device-tree/soc/spi@39800000/slave@1/
 compatible  name  reg  spi-max-frequency
 ```
 
-To specify a custom partition for the DTBO file, add: `dtbo_dev_part=<device number>:<hex partition number>`. On RDK S100, the default device number is "0". The partition number can be obtained from the `/dev/block/platform/by-name/` path. For example, using the `userdata` partition:
+If you want to customize the partition where the dtbo file is located, you can add: `dtbo_dev_part=<device number>:<hexadecimal partition number>`. The default device number on RDK S100 is "0". The partition number can be obtained from the `/dev/block/platform/by-name/` path. The following uses the `userdata` partition as an example:
 ```
 # Set dtbo file device number and partition number:
 dtbo_dev_part=0:0x10
 ```
 
-How to obtain the partition number: `ls -l /dev/block/platform/by-name/<partition name>`, for example:
+The method to get the partition number: `ls -l /dev/block/platform/by-name/<partition name>`, for example:
 ```shell
 root@ubuntu:~# ls -l /dev/block/platform/by-name/userdata
 lrwxrwxrwx 1 root root 15 Jun  4 22:17 /dev/block/platform/by-name/userdata -> /dev/mmcblk0p16
 ```
 
-## Custom config.txt Guide
-D-Robotics Uboot automatically determines the default partition containing the configuration file based on the current boot storage medium and partition.
+## Guide for Customizing config.txt
+U-Boot automatically obtains the partition where the default configuration file is located, according to the storage medium and partition used for the current boot.
 
-Users can customize the storage medium and partition for the configuration file used on the next boot via Uboot environment variables, as follows:
-  1. Halt the boot process and enter the Uboot command line;
-  2. The following environment variables can be used to customize the configuration file location (each can be used independently):
-     1. `boot_config_f`: changes the default configuration filename. For example, `setenv boot_config_f test.txt` will cause the next boot to look for a file named `test.txt` instead of `config.txt`;
-     2. `boot_config_dev_part`: changes the default partition where the configuration file is searched. For example, `setenv boot_config_dev_part 0:0xd` will cause the next boot to look for the configuration file in partition 13 (0xd) of the current boot medium;
-     3. `boot_config_intf`: changes the default storage interface. For example, `setenv boot_config_intf scsi`;
+Customers can customize the storage medium and partition of the configuration file used for the next boot through U-Boot environment variables. The steps are as follows:
+  1. During boot, stop and enter the U-Boot command line;
+  2. The following environment variables can be used to customize the configuration file, and each variable can be used independently:
+     1. `boot_config_f`: change the name of the configuration file searched by default. For example, `setenv boot_config_f test.txt` makes the configuration file retrieval at the next boot look for a file named `test.txt` instead of `config.txt`
+     2. `boot_config_dev_part`: change the partition where the configuration file is searched by default. For example, `setenv boot_config_dev_part 0:0xd` makes the configuration file retrieval at the next boot look for the configuration file in the 13th partition (0xd) of the current boot medium;
+     3. `boot_config_intf`: change the storage medium where the configuration file is searched by default. For example, `setenv boot_config_intf scsi`.
   3. Save the environment variables: `saveenv`
 
-## config.txt Parsing Development Guide
-The source code implementing configuration file parsing is located in the Uboot directory at: `board/hobot/common/drobot_boot_config.c`.
+## config.txt Parser Development Guide
+
+The parsing functionality code of the configuration file is located in the
+`board/hobot/common/drobot_boot_config.c` file in the U-Boot directory. For the parsing mechanism and how to add new configuration items, see
+[config.txt Parser Development Guide](./05_parser_dev.md).
+
+## Related Documentation
+
+- [Customizing config.txt](./02_custom.md)
+- [Common Configuration Options Reference](./03_common_options.md)
+- [Boot-related Configuration](./04_boot_options.md)
+- [config.txt Parser Development Guide](./05_parser_dev.md)

@@ -1,10 +1,99 @@
 ---
-title: 软件包管理 apt
+title: "Package Management apt"
 sidebar_position: 1
-description: 待开发
+description: "Querying, installing, upgrading, and removing apt packages on RDK OS"
 ---
-# 软件包管理 apt
 
-:::info 待开发
-本文待开发。对应板端 `apt`（或见 X5 对照）。
+# Package Management apt
+
+RDK OS is based on Ubuntu and uses `apt` to manage software packages. The system is preconfigured with the D-Robotics official apt source (providing RDK-specific packages such as `hobot-dnn` and `hobot-camera`) and the Ubuntu official source. Mode 1 users can use `apt` to install common tools; Mode 2 users can build productized integration based on apt + the configuration layer.
+
+## Package Sources
+
+Check the current apt sources (`apt policy`, tested on RDK S600):
+
+```text
+Package files:
+ 100 /var/lib/dpkg/status
+ 500 http://archive.d-robotics.cc/ubuntu-rdk-s600-beta noble/main arm64 Packages
+     release o=D-Robotics RDK S600 APT Repo,n=noble,...
+ 500 http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports noble/multiverse arm64 Packages
+     ...
+```
+
+- `archive.d-robotics.cc/ubuntu-rdk-s600-beta`: D-Robotics packages specific to RDK S600 (the `hobot-*` series).
+- Ubuntu official source (`mirrors.tuna.tsinghua.edu.cn/ubuntu-ports`): general Ubuntu packages, based on Ubuntu 24.04 (noble).
+
+## Common Commands
+
+### Query
+
+```bash
+# List installed packages
+apt list --installed
+
+# Search for packages
+apt search <keyword>
+
+# Show package details
+apt show <package name>
+```
+
+### Install/Remove
+
+```bash
+# Install (using htop as an example)
+sudo apt install htop
+
+# Remove
+sudo apt remove htop          # Keep configuration
+sudo apt purge htop           # Remove configuration as well
+```
+
+### Upgrade
+
+```bash
+sudo apt update               # Refresh the package index
+sudo apt upgrade              # Upgrade installed packages (without changing dependencies)
+sudo apt full-upgrade         # Upgrade and handle dependency changes
+```
+
+:::warning
+`apt upgrade` / `full-upgrade` may upgrade `hobot-*` system packages, and upgrading across major versions carries compatibility risks. Verify on a test board before upgrading in production. Major version upgrades (such as RDK OS major version changes) require reflashing the image; see [Major Version Upgrade and Firmware](./02_upgrade_firmware.md).
 :::
+
+## RDK-Specific Packages
+
+A set of `hobot-*` packages is preinstalled on RDK boards (`dpkg -l | grep hobot`, tested on S600):
+
+```text
+ii  hobot-audio-config   5.0.0-...   arm64   Configuration files of audio hat
+ii  hobot-camera         5.1.0-...   arm64   Camera Sensor Support Package
+ii  hobot-configs         5.1.0-...   arm64   Hobot custom system configuration
+ii  hobot-dnn             5.1.0-...   arm64   UCP sdk build
+ii  hobot-ethercat       5.1.0-...   arm64   Ethercat IgH Package
+...
+```
+
+These are system-level packages for BPU runtime, camera, audio, and so on. **Do not uninstall them at will**; otherwise, board capabilities will be affected.
+
+## Disk Usage
+
+Packages installed by `apt` occupy rootfs space. To check and clean up:
+
+```bash
+# Check disk usage
+df -h /
+
+# Clean up the apt cache
+sudo apt clean               # Clear /var/cache/apt/archives
+sudo apt autoremove          # Remove unnecessary dependencies
+```
+
+For rootfs expansion, see [Storage and Disk Management](../12_storage.md).
+
+## Related Documents
+
+- [Major Version Upgrade and Firmware](./02_upgrade_firmware.md)
+- [Storage and Disk Management](../12_storage.md)
+- [apt Command Reference](../../09_Appendix/linux-command-manual/01_apt.md)

@@ -1,10 +1,73 @@
 ---
-title: 自定义 config.txt
+title: "Customizing config.txt"
 sidebar_position: 2
-description: 待开发
+description: "How to create and modify the RDK config.txt configuration file"
 ---
-# 自定义 config.txt
 
-:::info 待开发
-本文待开发。对应 config.txt 自定义配置
+# Customizing config.txt
+
+config.txt is the boot configuration file of the RDK. It is used to configure kernel boot parameters, DTS nodes, display options and so on at the U-Boot stage, allowing you to adjust system behavior without recompiling the firmware.
+
+## File Location
+
+The default path of config.txt is `/boot/config.txt`, located on the boot partition. In the factory image, this file is empty (0 bytes) by default. Configuration items need to be added by yourself as needed.
+
+## Format Rules
+
+- One configuration per line: `<key>=<value>`
+- All content after the first `=` is the value of that key
+- A single line must not exceed 1024 characters
+- A line starting with `#` is a comment
+
+```text
+# This is a comment
+bootargs=isolcpus=1-2 loglevel=8
+hdmi_group=2
+hdmi_mode=82
+```
+
+## How to Modify
+
+### Method 1: Edit Directly on the Board
+
+The boot partition is already mounted to `/boot` via `/dev/block/platform/by-name/boot_cur`
+(see `/etc/fstab`), so manual mounting is usually not needed. If it is not mounted, just run `mount /boot`.
+
+```bash
+# If /boot is not mounted, mount it first (relies on the by-name/boot_cur entry in /etc/fstab)
+mount /boot
+
+# Edit config.txt
+vi /boot/config.txt
+
+# Save, then it takes effect after reboot
+reboot
+```
+
+### Method 2: Via the U-Boot Command Line
+
+Press any key at boot time to enter the U-Boot command line, and use `setenv` for temporary modification (higher priority than config.txt):
+
+```text
+# U-Boot command line
+setenv bootargs 'isolcpus=1-2 loglevel=8'
+boot
+```
+
+:::warning Priority
+The full environment variable priority order is: `setenv (manual in U-Boot)` > `config.txt (configuration file)` > `saveenv (last saved)`
 :::
+
+:::warning AVB Conflict
+Modifying the contents of the boot partition conflicts with the requirements of AVB (Android Verified Boot). AVB is disabled by default; if AVB is enabled, config.txt cannot be used.
+:::
+
+## Taking Effect
+
+config.txt is automatically read and parsed by U-Boot at every boot. After modification, **reboot the development board** to take effect. There is no need to re-flash the firmware.
+
+## Related Documentation
+
+- [config.txt Usage Guide](./01_usage.md)
+- [Common Configuration Options Reference](./03_common_options.md)
+- [Boot-related Configuration](./04_boot_options.md)
