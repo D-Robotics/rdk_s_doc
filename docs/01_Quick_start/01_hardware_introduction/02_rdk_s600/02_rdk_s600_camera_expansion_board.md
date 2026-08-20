@@ -148,5 +148,5 @@ GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人�
 
 ## 适配模组
 
-请参考 [配件清单](https://horizonrobotics.feishu.cn/wiki/NMBEwLysUiDHFYk547BcgA9QnIf)
+请参考 [配件清单](../../../07_Advanced_development/01_hardware_development/02_accessory.md)
 

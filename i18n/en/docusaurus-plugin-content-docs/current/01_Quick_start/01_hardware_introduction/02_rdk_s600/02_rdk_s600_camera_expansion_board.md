@@ -147,4 +147,4 @@ Power indicator, located next to the DC power input interface.
 
 ## Compatible Modules
 
-Please refer to the [Accessory List](https://horizonrobotics.feishu.cn/wiki/NMBEwLysUiDHFYk547BcgA9QnIf)
+Please refer to [Accessory List](../../../07_Advanced_development/01_hardware_development/02_accessory.md)

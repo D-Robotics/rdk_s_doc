@@ -22,6 +22,12 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 
 </DocScope>
 
+<DocScope products="RDK S600">
+
+For certified accessories and purchase links, see the [RDK S600 Certified Accessories List](/Advanced_development/hardware_development/accessory)
+
+</DocScope>
+
 
 ### Q1: What is the D-Robotics RDK Kit?
 **A:** D-Robotics Developer Kits, abbreviated as the [D-Robotics RDK Kit](../RDK.md), are robot developer kits built on D-Robotics intelligent chips.
