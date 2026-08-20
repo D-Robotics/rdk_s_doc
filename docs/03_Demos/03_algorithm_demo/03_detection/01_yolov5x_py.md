@@ -75,6 +75,12 @@ python ultralytics_yolov5x.py
 
 运行成功后，检测框会绘制在原图上并保存为 `result.jpg`。
 
+**注意事项**：
+
+- 须先 `cd` 进示例目录再运行：脚本依赖上级目录的公共 `utils` 模块，在其他目录运行会报 `No module named 'utils'`。
+- 检测结果图 `result.jpg` 保存在当前工作目录（即示例目录），在其他目录运行会找不到结果图。
+- 模型须位于默认路径（S600 为 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`，S100 对应 `s100/basic/`），缺失时 `--model-path` 需显式指定。
+
 ## 运行效果
 
 程序加载模型、推理、NMS 后处理、绘制框并保存。以下是 RDK S600 上的实测输出（测试图 `kite.jpg`）：

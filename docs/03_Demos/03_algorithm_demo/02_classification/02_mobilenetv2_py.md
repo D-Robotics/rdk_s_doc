@@ -33,6 +33,11 @@ cd /app/pydev_demo/classification_sample/mobilenetv2
 python mobilenetv2.py
 ```
 
+**注意事项**：
+
+- 须先 `cd` 进示例目录再运行：脚本依赖上级目录的公共 `utils` 模块，在其他目录运行会报 `No module named 'utils'`。
+- 模型须位于默认路径 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`，缺失时 `--model-path` 需显式指定。
+
 ## 运行效果
 
 RDK S600 实测输出（测试图 `zebra_cls.jpg`）：

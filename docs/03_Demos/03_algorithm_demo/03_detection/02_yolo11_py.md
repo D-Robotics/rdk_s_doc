@@ -36,6 +36,12 @@ python ultralytics_yolo11.py
 
 运行成功后，检测框绘制在原图上并保存为 `result.jpg`。
 
+**注意事项**：
+
+- 须先 `cd` 进示例目录再运行：脚本依赖上级目录的公共 `utils` 模块，在其他目录运行会报 `No module named 'utils'`。
+- 检测结果图 `result.jpg` 保存在当前工作目录（即示例目录），在其他目录运行会找不到结果图。
+- 模型须位于默认路径 `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`，缺失时 `--model-path` 需显式指定。
+
 ## 运行效果
 
 以下是 RDK S600 上的实测输出（测试图 `kite.jpg`）：
@@ -70,3 +76,4 @@ Model Description:
 - [C/C++ 版 YOLO11 检测示例](./02_yolo11.md)
 - [目标检测-YOLOv5x (Python)](./01_yolov5x_py.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)

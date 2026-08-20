@@ -77,6 +77,13 @@ make -j$(nproc)
 
 </DocScope>
 
+**注意事项**：
+
+- 须在 `build` 目录中运行，`--test-img`、`--label-file` 等默认路径均按板端预装目录给出。
+- 检测结果图保存到相对路径 `result.jpg`（即 `build/result.jpg`），在其他目录运行会找不到结果图。
+- 首次编译前需按"环境依赖"安装 `libgflags-dev`，否则 `make` 会报错。
+- 模型须位于默认路径（S600 为 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`，S100 对应 `s100/basic/`），缺失时 `--model-path` 需显式指定。
+
 ## 运行效果
 
 程序加载模型、推理、NMS、绘制框并保存。以下是 RDK S600 上的实测输出（测试图 `kite.jpg`）：
@@ -104,3 +111,4 @@ make -j$(nproc)
 - [Python 版 YOLOv5x 示例](./01_yolov5x_py.md)
 - [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [C 语言推理 API](../../../04_Simple_API/02_inference_api/01_c_api.md)

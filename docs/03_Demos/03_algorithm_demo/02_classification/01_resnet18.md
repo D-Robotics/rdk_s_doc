@@ -90,6 +90,12 @@ make -j$(nproc)
 
 </DocScope>
 
+**注意事项**：
+
+- 须在 `build` 目录中运行，`--test_img`、`--label_file` 等默认路径均按板端预装目录给出。
+- 首次编译前需按"环境依赖"安装 `libgflags-dev`，否则 `make` 会报错。
+- 模型须位于默认路径（S600 为 `/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`，S100 对应 `s100/basic/`），缺失时 `--model_path` 需显式指定。
+
 ## 运行效果
 
 程序加载模型、完成一次推理后，输出 Top-K 分类结果。以下是 RDK S600 上的实测输出（测试图为斑马 `zebra_cls.jpg`）：
@@ -122,4 +128,5 @@ TOP 4: label=prairie chicken, prairie grouse, prairie fowl, prob=0.000169584
 - [Python 版 ResNet18 示例](./01_resnet18_py.md)
 - [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [C 语言推理 API](../../../04_Simple_API/02_inference_api/01_c_api.md)
 - [使用自己的模型](../../04_demo_support/04_custom_model.md)
