@@ -94,4 +94,4 @@ yolo11n_seg_nashp_640x640_nv12_debug:
 - [C/C++ 版 YOLO11 分割示例](./01_yolo11_seg.md)
 - [目标检测-YOLO11 (Python)](../03_detection/02_yolo11_py.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
-- [Python 推理 API](../../../04_Simple_API/02_inference_api/01_python_api.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)

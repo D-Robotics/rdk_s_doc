@@ -1008,6 +1008,6 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
 
 - [ResNet18 分类示例（Python）](../../03_Demos/03_algorithm_demo/02_classification/01_resnet18_py.md)
 - [YOLOv5x 检测示例（Python）](../../03_Demos/03_algorithm_demo/03_detection/01_yolov5x_py.md)
-- [C 语言推理 API](./02_c_api.md)
+- [C 语言推理 API](./01_c_api.md)
 - [模型获取与放置](../../03_Demos/04_demo_support/01_model_files.md)
 - [使用自己的模型](../../03_Demos/04_demo_support/04_custom_model.md)

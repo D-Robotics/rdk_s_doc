@@ -105,6 +105,6 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resne
 ## 相关文档
 
 - [ResNet18 分类示例](../03_algorithm_demo/02_classification/01_resnet18_py.md)
-- [Python 推理 API](../../04_Simple_API/02_inference_api/01_python_api.md)
+- [Python 推理 API](../../04_Simple_API/02_inference_api/02_python_api.md)
 - [使用自己的模型](./04_custom_model.md)
 - [C/C++ demo 编程指南](./02_c_cpp_build.md)

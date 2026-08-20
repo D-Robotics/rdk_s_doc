@@ -125,5 +125,5 @@ prairie chicken, prairie grouse, prairie fowl: 0.0002
 
 - [C/C++ 版 ResNet18 示例](./01_resnet18.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
-- [Python 推理 API](../../../04_Simple_API/02_inference_api/01_python_api.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)
 - [使用自己的模型](../../04_demo_support/04_custom_model.md)

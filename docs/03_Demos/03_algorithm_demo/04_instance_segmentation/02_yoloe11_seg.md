@@ -155,4 +155,4 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
 - [Python 版 YOLOE11 分割示例](./02_yoloe11_seg_py.md)
 - [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
-- [C 语言推理 API](../../../04_Simple_API/02_inference_api/02_c_api.md)
+- [C 语言推理 API](../../../04_Simple_API/02_inference_api/01_c_api.md)

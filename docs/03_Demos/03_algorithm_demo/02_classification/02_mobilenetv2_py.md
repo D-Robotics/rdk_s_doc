@@ -68,4 +68,4 @@ impala, Aepyceros melampus: 0.0004
 - [图像分类-ResNet18 (Python)](./01_resnet18_py.md)
 - [C/C++ 版 MobileNetV2 示例](./02_mobilenetv2.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
-- [Python 推理 API](../../../04_Simple_API/02_inference_api/01_python_api.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)

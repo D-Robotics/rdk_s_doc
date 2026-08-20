@@ -1,17 +1,17 @@
 ---
-title: "C 语言推理 API"
-sidebar_position: 1
-description: "RDK S100/S600 BPU 推理 C API（hb_bpu）"
+title: "BPU 底层 API"
+sidebar_position: 13
+description: "RDK S100/S600 BPU 底层驱动 C API（hb_bpu）：核/任务/内存/电源管理"
 ---
 
-# C 语言推理 API
+# BPU 底层 API
 
 `hb_bpu` 提供基于 BPU 硬件加速的底层 C API（`hb_bpu.h`），用于管理 BPU
 核、创建与调度 BPU 任务、映射内存以及控制 BPU 电源与时钟。配套的
 `hb_bpu_mem.h` 提供 BPU 内存（bpu mem）的分配、拷贝与缓存一致性接口。
 
 > **层级说明**：本篇是【底层 API】（BPU 驱动接口），不是封装层。模型解析、
-> 张量管理与推理封装由上层完成，例如 [Python 推理 API](./01_python_api.md)
+> 张量管理与推理封装由上层完成，例如 [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)
 > 封装的 `hbm_runtime`（内部使用 hbDNN/hbUCP）。`hb_bpu` 接收编译好的任务
 > 数据（hbdk_task），在 BPU 核上执行，适用于需要在 C/C++ 中直接驱动 BPU
 > 硬件、精细控制核绑定与任务调度的开发者。
@@ -517,8 +517,8 @@ gcc -o inference_demo demo.c \
 
 ## 相关文档
 
-- [Python 推理 API](./01_python_api.md)
-- [算法示例](../../03_Demos/03_algorithm_demo/01_summary.md)
-- [模型获取与放置](../../03_Demos/04_demo_support/01_model_files.md)
-- [使用自己的模型](../../03_Demos/04_demo_support/04_custom_model.md)
-- [BPU/CPU/DDR 压力测试](../../07_Advanced_development/04_driver_development/06_hardware_unit_test/02_bpu_cpu_ddr_stress.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)
+- [算法示例](../../../03_Demos/03_algorithm_demo/01_summary.md)
+- [模型获取与放置](../../../03_Demos/04_demo_support/01_model_files.md)
+- [使用自己的模型](../../../03_Demos/04_demo_support/04_custom_model.md)
+- [BPU/CPU/DDR 压力测试](../../04_driver_development/06_hardware_unit_test/02_bpu_cpu_ddr_stress.md)

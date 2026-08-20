@@ -113,4 +113,4 @@ asr:
 - [C/C++ 版 ASR 示例](./01_asr.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
 - [Python demo 编程指南](../../04_demo_support/03_python_build.md)
-- [Python 推理 API](../../../04_Simple_API/02_inference_api/01_python_api.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)
