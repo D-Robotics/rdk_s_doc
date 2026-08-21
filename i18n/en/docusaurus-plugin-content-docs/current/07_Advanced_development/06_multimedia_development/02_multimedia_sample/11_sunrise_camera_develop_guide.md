@@ -1,76 +1,86 @@
-# Sunrise Camera Development Guide
+---
+sidebar_position: 11
+title: "Sunrise camera Development Guide"
+description: "Sunrise camera development guide - board-side example usage guide"
+---
 
-## Sunrise Camera System Design
+# Sunrise camera Development Guide
+
+## Sunrise camera System Design
 
 ### System Block Diagram
 
-Sunrise Camera implements multiple application solutions, such as intelligent cameras and intelligent analytics boxes.
+Sunrise camera implements a variety of application solutions, including smart cameras and intelligent analysis boxes.
 
-The Sunrise Camera source code includes the WebPages layer (user interaction layer), communication module layer, and functional module layer. This document primarily introduces the design of these three modules.
+The Sunrise camera source code includes the WebPages at the user operation layer, the communication module layer, and the functional module layer. This document mainly introduces the design of these three modules.
 
-The HAL layer modules include multimedia-related module calling interface libraries, BPU module inference libraries, etc.
+The HAL-layer modules include the multimedia-related module call interface library, the BPU module inference library, and so on.
 
-The kernel version includes standard driver libraries as well as the system BSP.
+On top of the standard driver library included in the kernel version, the system BSP is provided.
 
 The software block diagram is shown below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sunrise_camera/software-framework-en.png" alt="sunrise camera software architecture layers" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/software_framework.png" alt="System block diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Microkernel Design
 
-The microkernel architecture, also known as the "plug-in architecture," refers to a software design where the kernel is relatively small, and most core functionalities and business logic are implemented through plug-ins.
+The microkernel architecture, also known as the plug-in architecture, means that the software kernel is relatively small, and the main functions and business logic are implemented through plug-ins.
 
-The kernel (core) typically contains only the minimal functionality required for system operation. Plug-ins are mutually independent, and communication between plug-ins should be minimized to avoid interdependencies.
+The core usually contains only the minimal functions required for the system to run. Plug-ins are independent of each other, and communication between plug-ins should be minimized to avoid mutual dependency problems.
 
-### Advantages and Disadvantages of the Architecture
+### Architecture Advantages and Disadvantages
 
 **Advantages**
 
-- Excellent extensibility: new features can be added simply by developing plug-ins.
-- Functional isolation: plug-ins can be independently loaded and unloaded, facilitating deployment.
-- High customizability to meet diverse development requirements.
-- Supports incremental development, allowing features to be added gradually.
+Good functional extensibility: whatever function is needed, just develop a plug-in.
+
+Functions are isolated from each other; plug-ins can be loaded and unloaded independently, making deployment easy.
+
+Highly customizable to suit different development needs.
+
+Supports incremental development, with functions added step by step.
 
 **Disadvantages**
 
-- Poor scalability: the kernel is usually a single unit, making it difficult to implement in a distributed manner.
-- Higher development complexity due to the need to manage communication between plug-ins and the kernel, as well as plug-in registration mechanisms.
+Poor scalability: the core is usually an independent unit and is not easy to distribute.
 
-## Sunrise Camera Architecture Overview
+Relatively high development difficulty, because it involves communication between plug-ins and the core, as well as plug-in registration.
 
-### Module Partitioning
+## Sunrise camera Architecture View
 
-| **Module**           | **Directory** | **Description**                                                                 |
-| -------------------- | ------------- | ------------------------------------------------------------------------------- |
-| Event Bus Module     | communicate   | Implements event registration, reception, and distribution across modules.      |
-| Common Library Module| common        | Provides common utility functions such as logging, locking, thread operations, queue operations, etc. |
-| Camera Module        | Platform      | Contains chip-platform-specific code, encapsulating hardware-dependent components. |
-| External Interaction Module | Transport | Handles external device interactions, including rtspserver, websocket, etc.     |
-| Main Program Entry   | Main          | Contains the main() function entry point.                                       |
+### Module Partition
 
-**Top-level Code Structure**
+| **Module**                   | **Directory** | **Description**                                                          |
+| ---------------------------- | ------------- | ----------------------------------------------------------------------- |
+| Event bus module             | communicate   | Implements module event registration, event reception, and event dispatch |
+| Common library module        | common        | Common operation functions, log/lock, thread operations, queue operations, etc. |
+| Camera module                | Platform      | Chip-platform-related code, encapsulating the hardware differences       |
+| External interaction module  | Transport     | The part for interaction between the device and external parties: rtspserver, websocket, etc. |
+| Main program entry           | Main          | Main function entry                                                      |
+
+**Top-level code structure**
 ```bash
 .
 ├── common						# Common library module code
 ├── communicate					# Event bus module
-├── config						# Build configuration directory
+├── config						# Compilation configuration directory
 ├── main						# Main entry program
-├── Makefile					# Build script
-├── makefile.param				# Build configuration
-├── Platform					# Camera module: platform-specific, application scenario, and chip IP-related code
-├── start_app.sh				# Startup script
-├── sunrise_camera.service 		# Auto-start configuration file
-├── third_party					# Third-party dependencies
-├── Transport					# Implementation of rtspserver and websocket modules
+├── Makefile						# Compilation script
+├── makefile.param				# Compilation configuration
+├── Platform						# Camera module; platform, application scenario, and chip IP related code is implemented in this directory
+├── start_app.sh					# Startup script
+├── sunrise_camera.service 		# Configuration file for enabling auto-start at boot
+├── third_party					# Dependent third-party libraries
+├── Transport						# Implementation of the rtspserver and websocket modules
 ├── VERSION						# Version information
-└── WebServer					# Web page program and resource files
+└── WebServer						# Web page programs and resource files
 ```
 
 **Compilation**
 
-1. Log in to the device and navigate to the directory: `/app/multimedia_samples/sunrise_camera`
-2. Execute the command: `make`
-3. The generated binary: `sunrise_camera`
+1. Log in to the device and enter the directory: `/app/multimedia_samples/sunrise_camera`
+2. Run the command: `make`
+3. The generated target file: `sunrise_camera`
 ```sh
 root@ubuntu:/app/multimedia_samples/sunrise_camera# ls sunrise_camera/bin/
 log  sunrise_camera  www
@@ -80,75 +90,75 @@ log  sunrise_camera  www
 
 #### Overview
 
-The event bus module serves as the minimal runtime unit. Based on compilation options, it invokes registration interface functions of different modules and handles the reception and dispatching of CMDs (commands) across modules.
+The event bus module is the minimal running unit. According to the compilation options, it calls the registration interface functions of different modules and completes the reception and dispatch of CMDs from different modules.
 
-When modules interact, if a received CMD has been registered and enabled, the event bus forwards it to the appropriate sub-module for processing and returns the result to the requesting module upon completion.
+During interaction between modules, if the received CMD has been registered and enabled, it is relayed to the accepting submodule for processing, and after the processing is complete, the processing result is returned to the requesting module.
 
-If a received CMD is either unregistered or disabled, the CMD invocation fails.
+During interaction between modules, if the received CMD is not registered or not enabled, the CMD invocation fails.
 
-#### Functionality Description
+#### Functional Description
 
-1. Static plug-in control for modules (enabling/disabling at compile time)
-2. CMD command forwarding between modules
+1. Static plug/unplug control of module plug-ins
+2. Relay of module CMD instructions
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="Event Bus Diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus.png" alt="Functional description diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Example:
 
-The camera sub-module defines the command `SDK_CMD_CAMERA_GET_CHIP_TYPE`. After registering this CMD via the `camera_cmd_register` function, when the websocket sub-module receives a web request to query the chip type, it can invoke the camera sub-module's interface using the following code.
+The SDK_CMD_CAMERA_GET_CHIP_TYPE command is defined in the camera submodule. After this CMD is registered by calling the camera_cmd_register function, when the websocket submodule receives a web page request to get the chip type, the websocket module can call the interface in the camera submodule through the following code.
 
-The entire process is illustrated below:
+The whole process is shown in the following figure:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="Event Bus Data Flow" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="Functional description diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### Module Code Structure
 
 ```bash
 .
 ├── include
-│   ├── sdk_common_cmd.h			# Defines all CMDs used by sub-modules in the system
-│   ├── sdk_common_struct.h		    # Defines data structures corresponding to each CMD
-│   └── sdk_communicate.h			# Declares module interface functions
+│   ├── sdk_common_cmd.h			# Defines the CMDs of all submodules in the system
+│   ├── sdk_common_struct.h		    # Defines the data structures used by each CMD
+│   └── sdk_communicate.h			# Defines the interface functions of this module
 ├── Makefile
 └── src
-    └── sdk_communicate.c			# Implementation of interface functions
+    └── sdk_communicate.c			# Interface code implementation
 ```
 
 #### Interface Description
 
 **sdk_globle_prerare**
 
-All sub-module `xxx_cmd_register()` functions are aggregated into this function. During main program startup, this interface is called to register and enable all required CMDs from sub-modules into the subsystem.
+The xxx_cmd_register() functions of all submodules are centralized into this function. When the main program starts, this interface is called to register all CMDs that need to be registered and enabled by the submodules into the subsystem.
 
-Each sub-module must implement its own `xxx_cmd_register()` function to register its CMDs. This is a fundamental prerequisite for the system to operate correctly.
+Each submodule must implement xxx_cmd_register(), in which the submodule's CMD registration is implemented. This is the basic prerequisite for the whole system to run normally.
 
 Example:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="Command Registration Example" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="Interface description diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **sdk_cmd_register**
 
-Interface for CMD registration.
+CMD registration interface.
 
 **sdk_cmd_unregister**
 
-Interface for CMD unregistration.
+CMD unregistration interface.
 
 **sdk_cmd_impl**
 
-Sub-modules call this interface to invoke functionalities implemented by other sub-modules.
+A submodule calls this interface to invoke the interface functions implemented by other submodules.
 
 ### Common Library Module (common)
 
 #### Overview
 
-This module provides common utility libraries, including but not limited to logging, locking, thread wrappers, and base64 encoding/decoding.
+The program's common library, including but not limited to log operations, lock operations, thread wrappers, base64, etc.
 
-It encapsulates commonly used classes and functions in programming to prevent redundant implementations of the same operations across multiple modules.
+This module mainly encapsulates the common classes and common functions used in programming, avoiding the same operation functions being implemented in multiple places.
 
-Updates to this module affect all other modules and should therefore be handled with caution.
+Updates to this module affect all modules, so operate with caution.
 
-#### Functionality Description
+#### Functional Description
 
 None
 
@@ -156,7 +166,7 @@ None
 
 ```bash
 .
-├── Makefile					# Build script
+├── Makefile					# Compilation script
 ├── makefile.param
 └── utils
     ├── include				    # Header files
@@ -176,7 +186,7 @@ None
     │   ├── stream_manager.h
     │   └── utils_log.h
     ├── Makefile
-    └── src                      # Source implementation files
+    └── src                      # Implementation source code
         ├── aes256.c
         ├── base64.c
         ├── cJSON_Direct.c
@@ -193,168 +203,168 @@ None
         └── utils_log.c
 ```
 
-### Platform Module  
+### Platform Module
 
 #### Overview
 
-The module mainly includes: video encoding, ISP control, image control, snapshot capture, video output, algorithm processing, etc.
+This module mainly includes video encoding, ISP control, image control, snapshot capture, video output, algorithm computation, etc.
 
 The internal structure of this module is as follows:
 
-`api_vpp` serves as the entry point of this module and defines the supported CMD command set;
+api_vpp serves as the entry point of this module and defines the supported CMD command set;
 
-`solution_handle` handles application configuration reading/writing and assigns values to scene-related interfaces;
+solution_handle implements the read/write of application configurations and the assignment of scenario interfaces;
 
-`vpp_camera_impl` and `vpp_box_impl` implement functionalities for specific application scenarios;
+vpp_camera_impl and vpp_box_impl implement the application scenario functions;
 
-`vp_wrap` encapsulates the interfaces of the multimedia module;
+vp_wrap implements the interface encapsulation of the multimedia modules;
 
-`bpu_wrap` encapsulates the algorithm inference interfaces and post-processing methods.
+the bpu_wrap module implements the encapsulation of the algorithm inference interface and post-processing methods.
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="Platform Module Architecture" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="Overview diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-#### Function Description
+#### Functional Description
 
-To add a new application scenario implementation, you only need to implement the interfaces defined in the `vpp_ops_t` structure.
+To implement a new application scenario, you only need to implement the interfaces defined in the vpp_ops_t structure.
 
 ```c
 typedef struct vpp_ops {
-	int (*init_param)(void); // Initialize configuration parameters for modules such as VIN, VSE, VENC, BPU, etc.
-	int (*init)(void); // SDK initialization based on configuration
-	int (*uninit)(void); // Deinitialization
+	int (*init_param)(void); // Initialize the configuration parameters of the VIN, VSE, VENC, and BPU modules
+	int (*init)(void); // SDK initialization; initialize according to the configuration
+	int (*uninit)(void); // Uninitialize
 	int (*start)(void); // Start all media-related modules
 	int (*stop)(void); // Stop
-	// All CMDs supported by this module are implemented via the following two interfaces
+	// All CMDs supported by this module are implemented through the following two interfaces
 	int (*param_set)(SOLUTION_PARAM_E type, char* val, unsigned int length);
 	int (*param_get)(SOLUTION_PARAM_E type, char* val, unsigned int* length);
 } vpp_ops_t;
 ```
 
-The workflow for launching an application solution (using `vpp_camera` as an example) is as follows:
+The flow of starting an application solution (taking starting vpp_camera as an example) is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="VPP Camera Data Flow" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vpp_camera_flow.png" alt="Functional description diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-Initialization and startup procedures for other submodules can also refer to this flowchart.
+The initialization and startup flows of other submodules can also refer to this flowchart.
 
 #### Module Code Structure
 
-Code path: `Platform/S100`
+Code path: Platform/S100
 
 ```bash
 .
 ├── api                                   # CMD registration
-├── bpu_wrap                              # Encapsulation for BPU algorithm interfaces
-├── main                                  # Implementation of actual functional interfaces for CMD registration
-├── Makefile                              # Build script
-├── makefile.param                        # Build configuration
+├── bpu_wrap                              # Wrapper for using the BPU algorithm interfaces
+├── main                                  # Implementation of the actual functional interfaces for CMD registration
+├── Makefile                              # Compilation script
+├── makefile.param                        # Compilation configuration
 ├── model_zoom                            # Algorithm model repository
-├── test_data                             # Stores test video bitstream files and program configuration files
-├── vpp_impl                              # Implementation of application scenario functionalities
-├── vp_sensors -> ../../../vp_sensors/    # Camera Sensor configuration code, shared with other sample modules
-└── vp_wrap                               # Encapsulation of multimedia interfaces
+├── test_data                             # Stores the test video stream files and program configuration files
+├── vpp_impl                              # Functional implementation of the application solutions
+├── vp_sensors -> ../../../vp_sensors/    # Camera Sensor configuration code; the code in this directory is shared with other sample modules
+└── vp_wrap                               # Encapsulation of the multimedia interfaces
 ```
 
 ### External Interaction Module (Transport)
 
 #### Overview
 
-This submodule specifically handles interactions with terminals or platforms following a defined transport protocol; it includes communication modules via network, RTSP server, and WebSocket.
+The concrete submodule that interacts with terminals or platforms in compliance with the transport protocol; it includes the communication modules over the network, via rtspserver and websocket.
 
-The interaction module involves the most inter-module communication and must strictly adhere to design conventions. All data requests to other modules must be processed through defined module CMDs.
+The interaction module is the part with the most inter-module interaction and must strictly follow the design conventions. All requests for data from other modules must be handled through the defined module CMDs.
 
 #### Media Server Module
 
-This module encapsulates ZLMediaKit, exposing simple interfaces such as `init`, `create_media`, and `push_video`. Currently, it supports pushing H.264 and H.265 video streams.
+This module is a wrapper implementation of ZLMediakit, wrapping ZLMediakit into several simple interfaces such as init, create_media, and push_video. It currently supports pushing H264 and H265 streams.
 
-For instructions on starting and using this module, please refer to the workflow described in the "Main Program Entry" section.
+For the startup and usage of this module, refer to the flow introduced in the Main Program Entry section.
 
 #### WebSocket Server Module
 
-This module handles interactive operations from the web. After a user performs an operation on the web interface, the WebSocket server receives commands and parameters of a specific `kind`. These are processed in the `handle_user_msg` function within `handle_user_massage.c`. To add a new interactive command, implement it within this function.
+This module handles the interaction with the operations on the web. After the corresponding operation is performed on the web, the websocket server receives the command and parameters of the corresponding kind, and processes them for the corresponding functionality in the handle_user_msg function of the code file handle_user_massage.c. If you want to add a new interaction command, please add it to this function.
 
-Currently supported interactive commands include: scene switching, scene parameter retrieval and setting, chip type query, H.264 bitrate configuration, system time synchronization, WebSocket stream pulling and stopping, etc.
+The interaction commands currently supported include: scenario switching, scenario parameter get and set, chip type query, h264 bitrate setting, system time synchronization, websocket stream pulling and stopping, etc.
 
 ### Main Program Entry (main)
 
 #### Overview
 
-Entry point of the main program and module startup.
+The main program entry, where modules are started.
 
-The current basic submodule startup sequence is as follows. Note that the startup order must follow the dependency relationships among submodules.
+The basic submodule startup order is as follows. Note that the startup order of the modules must follow the dependency relationships between submodules.
 
 #### Execution Flow
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sunrise_camera/main-flow-en.png" alt="sunrise camera main program startup flow" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/main_flow.png" alt="Execution flow diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### WebServer
 
 #### Overview
 
-This module implements an HTTP-based web service using ZLMediaKit, allowing users to preview video streams and configure application scenarios directly through a web browser.
+This module implements a web service based on the HTTP protocol through ZLMediakit, allowing users to directly preview videos and configure application scenarios through a browser.
 
-#### Function Description
+#### Functional Description
 
-The `WebServer/www` directory contains: resource files, web pages, CSS, and JavaScript programs.
+The `WebServer/www` directory provides: resource files, web pages, css, and js programs.
 
-## Performing Algorithm Inference Using BPU
+
+## Using BPU for Algorithm Inference
 
 ### Overview
 
-This module handles algorithm model loading, data pre-processing, inference, post-processing, and returns results in JSON format.
+This module implements algorithm model loading, data pre-processing, inference, and algorithm post-processing, and returns the results in json format.
 
-The module's runtime sequence is as follows:
+The runtime sequence of the module is as follows:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sunrise_camera/bpu-flow-en.png" alt="BPU yolov5s inference and post-process flow" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/bpu_flow.png" alt="Overview diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Adding a New Model
 
-Currently, `sunrise_camera` supports only a limited number of algorithm models. In practical applications, running additional models for testing is inevitable. This section describes the basic steps for adding a new algorithm model.
+Currently, sunrise_camera only supports running a small number of algorithm models. In actual applications, it is inevitable to run other models to test their effects. This section describes the basic steps for adding a new algorithm model.
 
-| **Item**                     | **Source File**                                   | **Description**                                                                                                                             |
-| ---------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Prepare algorithm model      | Place under `Platform/s100/model_zoom` (*.hbm)    | Add fixed-point algorithm models that can run on the development board. System-provided models are stored in `/opt/hobot/model/s100/basic/`. |
-| Add model configuration      | `bpu_wrap.c`                                      | Add the new model's name, specify the model file path, and define inference and post-processing function interfaces in `bpu_models`.        |
-| Inference thread handler     | `bpu_wrap.c`                                      | In the handler, prepare output tensors, call **hbDNNInfer** for inference, and push results into the output queue. Example: **inference_yolov5s** |
-| Post-processing thread       | `bpu_wrap.c`                                      | Retrieve algorithm results from the output queue, apply post-processing, and generate a JSON-formatted result string. If a callback is set, invoke it. Example: **post_process_yolov5s** |
-| Post-processing code         | `yolov5_post_process.cpp`                         | Each algorithm model requires corresponding post-processing logic—for example, mapping classification IDs to class names or mapping detection boxes back to original image coordinates. |
-| Add rendering on Web UI      | `WebServer/www/js/DisplayWindowManager.js`        | Optional                                                                                                                                    |
+| **Item**                         | **Source File**                                   | **Description**                                                                                                                                     |
+| -------------------------------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prepare the algorithm model      | Place it in the Platform/s100/model_zoom directory (*.hbm) | Add a fixed-point algorithm model that can run on the development board in this directory (the model files shipped with the system are stored in: `/opt/hobot/model/s100/basic/`) |
+| Add the model configuration      | bpu_wrap.c                                        | In bpu_models, add the name of the new model, and specify the algorithm model file, as well as the inference and post-processing function interfaces |
+| Inference thread handler function | bpu_wrap.c                                       | In the handler function, prepare the output tensors, call **hbDNNInfer** for inference, and put the result into the output queue after getting it. Example: **inference_yolov5s** |
+| Post-processing thread function  | bpu_wrap.c                                        | Take the algorithm result out of the output queue, call the post-processing method to process it, and get the result string in json format. If a callback function is set, call the callback. Example: **post_process_yolov5s** |
+| Post-processing code             | yolov5_post_process.cpp                           | Every algorithm model must have a corresponding post-processing method. For example, a classification model needs to map the returned id to the type name, and a detection model needs to map the detection boxes to the positions in the original image. |
+| Add rendering handling on the web page | WebServer/www/js/DisplayWindowManager.js      | Optional                                                                                                                                            |
 
 #### Preparing the Algorithm Model
 
-Algorithm models runnable on the development board come with two possible file extensions: `.bin` and `.hbm`:
+The algorithm models that can run on the development board have two kinds of extensions: bin files and hbm files:
 
-1. **.bin models**: Generated via the algorithm toolchain (PTQ - Post-Training Quantization), using `.bin` as the suffix.
-2. **.hbm models**: Directly trained using a fixed-point model training framework (QAT - Quantization-Aware Training).
+1. bin models: models obtained through algorithm toolchain conversion (PTQ), with bin as the extension
+2. hbm models: algorithm models directly trained through the fixed-point model training framework (QAT)
 
-For detailed development instructions regarding algorithm models, please refer to the *Quantization Toolchain Development Guide*.
+For the detailed development instructions of algorithm models, please refer to the *Quantization Toolchain Development Guide* document.
 
-#### Adding Initialization Code
+#### Adding the Initialization Process
 
-Define the new algorithm model in the `bpu_models` array within `bpu_wrap.c`, specifying its name, model file path, inference function, and post-processing function:
+Define the new algorithm model in the bpu_models array in bpu_wrap.c, adding the name of the new model and specifying the algorithm model file, as well as the inference and post-processing function interfaces:
 
 ```c
 bpu_model_descriptor bpu_models[] = {
 	{
-		.model_name = "yolov5s",                                   // Algorithm name; displayed on the web client for user selection
-		.model_path = "../model_zoom/yolov5s_672x672_nv12.bin",    // Path to the algorithm model file
+		.model_name = "yolov5s",                                   // Algorithm name; this name is displayed on the web client for the user to select
+		.model_path = "../model_zoom/yolov5s_672x672_nv12.bin",    // Algorithm model file
 		.inference_func = inference_yolov5s,                       // Inference function
-		.post_proc_func = post_process_yolov5s                     // Post-processing function; if simple, can be merged into the inference function
+		.post_proc_func = post_process_yolov5s                     // Post-processing function; if this part is relatively simple, it can be merged into the inference function
 	},
 	... (omitted) ...
 };
 ```
 
-When an algorithm task starts, it launches the corresponding inference and post-processing threads based on the `model_name`.
+When the algorithm task starts, the corresponding inference thread and algorithm post-processing thread are started according to `model_name`.
 
 #### Inference Thread Handler Function
 
-In the inference thread, prepare output result tensors; dequeue YUV data from the YUV queue; call `HB_BPU_runModel` to perform inference and obtain results; then push the results into the output queue for post-processing.
+In the inference thread, implement the preparation of the output result tensors; take the yuv data out of the yuv queue, call HB_BPU_runModel for inference to obtain the algorithm result; then push the algorithm result into the output queue for post-processing.
 
 ```c
 static void *inference_yolov5s(void *ptr)
 {
-	// Prepare model output node tensors; use 5 rotating output buffers for simplicity.
-	// In theory, post-processing should be faster than inference.
+	// Prepare the output node tensors of the model; 5 groups of output buffers are rotated. This is a simple approach; theoretically, post-processing is faster than model inference
 	hbDNNTensor output_tensors[5][3];
 	int32_t cur_ouput_buf_idx = 0;
 	for (i = 0; i < 5; i++) {
@@ -366,11 +376,11 @@ static void *inference_yolov5s(void *ptr)
 	}
 
 	while (privThread->eState == E_THREAD_RUNNING) {
-		// Get image data for algorithm processing; format is typically NV12 YUV
+		// Get the image data that needs algorithm computation; the format is basically NV12 yuv
 		if (mQueueDequeueTimed(&bpu_handle->m_input_queue, 100, (void**)&input_tensor) != E_QUEUE_OK)
 			continue;
 
-        // Perform model inference
+        // Model inference
 		hbDNNInferCtrlParam infer_ctrl_param;
 		HB_DNN_INITIALIZE_INFER_CTRL_PARAM(&infer_ctrl_param);
 		ret = hbDNNInfer(&task_handle,
@@ -379,20 +389,21 @@ static void *inference_yolov5s(void *ptr)
 				dnn_handle,
 				&infer_ctrl_param);
 
-		// Enqueue data for post-processing
+		// Enqueue the data for post-processing
 		Yolo5PostProcessInfo_t *post_info;
 		post_info = (Yolo5PostProcessInfo_t *)malloc(sizeof(Yolo5PostProcessInfo_t));
 		… …
 		mQueueEnqueue(&bpu_handle->m_output_queue, post_info);
 		cur_ouput_buf_idx++;
 		cur_ouput_buf_idx %= 5;
-	}
+}
 }
 ```
 
 #### Post-Processing Thread Function
 
-In the post-processing thread, retrieve algorithm results from the output queue, call the post-processing function, and then invoke the algorithm task callback to handle the results (currently, all effective callbacks send results directly to the web for rendering).
+In the post-processing thread, implement the following: get the algorithm result from the output queue; call the post-processing function; call the algorithm task callback function to process the algorithm result (the currently effective callbacks all send the result directly to the web, where the algorithm result is rendered).
+
 ```c
 
 static void *post_process_yolov5s(void *ptr)
@@ -404,15 +415,15 @@ static void *post_process_yolov5s(void *ptr)
 
 	bpu_handle_t *bpu_handle = (bpu_handle_t *)privThread->pvThreadData;
 	while (privThread->eState == E_THREAD_RUNNING) {
-		// Retrieve data from the post-processing data queue
+		// Get data from the post-processing data queue
 		if (mQueueDequeueTimed(&bpu_handle->m_output_queue, 100, (void**)&post_info) != E_QUEUE_OK)
 			continue;
 
-		char *results = Yolov5PostProcess(post_info); // Perform post-processing, e.g., obtaining detection boxes, filtering out low-confidence results, and scaling detection box dimensions to match the display video resolution
+		char *results = Yolov5PostProcess(post_info); // Perform post-processing, e.g., obtain detection boxes, filter out low-confidence results, and scale the detection box width and height to the displayed video size
 
 		if (results) {
 			if (NULL != bpu_handle->callback) {
-				// Callback for algorithm task results; in the current application scenario, results are sent to the browser via WebSocket
+				// Algorithm task result callback; in the current application scenario, the algorithm result is sent to the browser via websocket
 				bpu_handle->callback(results, bpu_handle->m_userdata);
 			} else {
 				SC_LOGI("%s", results);
@@ -429,22 +440,22 @@ static void *post_process_yolov5s(void *ptr)
 }
 ```
 
-#### Post-processing Code
+#### Post-Processing Code
 
-It is recommended that each algorithm model include a dedicated post-processing method:
+It is recommended that a post-processing method be added for every algorithm model:
 
 -   yolov5: yolo5_post_process.cpp
--   mobilenet_v2: Classification model post-processing is relatively simple—just map the class ID to its corresponding label name.
+-   mobilenet_v2: the processing of classification models is relatively simple; it just maps the id to the type name
 
-The post-processing method should accomplish the following tasks:
+The following tasks must be completed in the post-processing method:
 
-Analyze the output results: for classification models, match class IDs to their label names; for detection models, map detection boxes from model output coordinates back to the original image coordinates.
+Analyze the output results: classification models need to match the type names, and detection models need to map the algorithm result boxes to the coordinates of the original image, etc.
 
-Format the algorithm results into JSON. For ease of use, perform JSON formatting directly within the function (e.g., for transmission to a web client), so the output can be used immediately.
+Convert the algorithm results into json format. For convenience, the json formatting is performed in the function; for example, when the results are passed to the web, the output here can be used directly.
 
 ```c
-// YOLOv5 output tensor format:
-// Three groups of grids are generated through three downsampling stages; each grid undergoes three predictions, and the final results are output.
+// Yolov5 output tensor format
+// Three downsampling passes produce three sets of reduced grids, then each grid is predicted three times, and the results are finally output
 char* Yolov5PostProcess(Yolov5PostProcessInfo_t *post_info) {
 	hbDNNTensor *tensor = post_info->output_tensor;
 
@@ -453,15 +464,15 @@ char* Yolov5PostProcess(Yolov5PostProcessInfo_t *post_info) {
 	uint32_t i = 0;
 	char *str_dets;
 
-	// Filter detection boxes based on confidence scores
+	// Filter detection boxes according to confidence
 	for (i = 0; i < default_yolov5_config.strides.size(); i++) {
 		_postProcess(&tensor[i], post_info, i, dets);
 	}
-	// Apply Non-Maximum Suppression (NMS) to merge overlapping boxes, using an IoU threshold (0.65) and a maximum number of output boxes (5000)
+	// Calculate the intersection over union (IoU) to merge detection boxes; pass in the IoU threshold (0.65) and the number of returned boxes (5000)
 	yolov5_nms(dets, post_info->nms_threshold, post_info->nms_top_k, det_restuls, false);
 	std::stringstream out_string;
 
-	// Convert algorithm results into JSON format
+	// Convert the algorithm result to json format
 	out_string << "\"timestamp\": ";
 	unsigned long timestamp = post_info->tv.tv_sec * 1000000 + post_info->tv.tv_usec;
 	out_string << timestamp;
@@ -481,12 +492,12 @@ char* Yolov5PostProcess(Yolov5PostProcessInfo_t *post_info) {
 }
 ```
 
-#### Add Rendering Logic on the Web Page
+#### Adding Rendering Handling on the Web Page
 
-This section is optional. In the current implementation, all algorithm results are rendered on the web page. The data flow is as follows: after post-processing returns results in JSON format, they are sent to the web page via WebSocket. A canvas is implemented on the web page to render the algorithm results.
+This part is not a mandatory implementation. In the current implementation, all algorithm results are rendered on the web page. The data flow is as follows: after the algorithm post-processing returns the results in json format, the result information is sent to the web page via websocket; a canvas is implemented on the web, and the algorithm results are rendered on the canvas.
 
 ```c
-// Generic algorithm result callback function; currently sends results to the web via WebSocket
+// Generic algorithm callback function; currently, all results are sent to the web via websocket
 int32_t bpu_wrap_general_result_handle(char *result, void *userdata)
 {
 	int32_t ret = 0;
@@ -496,7 +507,7 @@ int32_t bpu_wrap_general_result_handle(char *result, void *userdata)
 	if (userdata)
 		pipeline_id = *(int*)userdata;
 
-	// Add metadata to the JSON-formatted algorithm result
+	// Add flag information to the json algorithm result
 	// Allocate memory
 	ws_msg = malloc(strlen(result) + 32);
 	if (NULL == ws_msg) {
@@ -514,34 +525,65 @@ int32_t bpu_wrap_general_result_handle(char *result, void *userdata)
 
 ```
 
-The file `WebServer/www/js/WebSocketProtocolHandler.js` already includes generic handling logic for classification and object detection algorithm results. To render results from a new type of algorithm model, you will need to modify the JavaScript code accordingly.
+The file `WebServer/www/js/WebSocketProtocolHandler.js` already supports the generic algorithm handling logic for classification and object detection. If you need to render the results of a new type of algorithm model, you need to modify the `js` code.
 
 ```js
-// Web page WebSocket message handler
+// Handler function for websocket data received on the web page
 handleMessage(event) {
 	{
-	... ( omitted ) ...
+	... (omitted) ...
 	try {
             const message = JSON.parse(event.data);
             if (message && message.kind) {
-                // Parse the message type and invoke the corresponding callback
+                // Parse the command type and call the corresponding callback function
                 switch (message.kind) {
-					... ( omitted ) ...
+					... (omitted) ...
                     case this.REQUEST_TYPES.ALOG_RESULT:
                         if (this.userCallbacks.onAlogResult) {
                             this.userCallbacks.onAlogResult(message);
                         }
                         break;
-					... ( omitted ) ...
+					... (omitted) ...
                     default:
                         console.warn(`Unknown command type: kind=${message.kind}`);
                 }
             }
         } catch (error) {
-            console.error("Failed to parse message:", error);
+            console.error("Failed to parse the message:", error);
         }
     }
-	... ( omitted ) ...
+	... (omitted) ...
 }
 
 ```
+
+## Frequently Asked Questions
+
+### CMD Invocation Failure
+
+**Symptom**: CMD invocation fails during interaction between modules.
+
+**Cause**: The received CMD is not registered or not enabled.
+
+**Solution**: Confirm that the target module has registered the CMD and that it is in the enabled state (see the "Inter-module Communication" section).
+
+### Inference Does Not Take Effect After Adding a New Model
+
+**Symptom**: After adding a new model to `model_zoom`, the Web side cannot select it, or inference reports an error.
+
+**Cause**: The model file is not placed in the correct directory, the `bpu_models` configuration is not added, or the inference/post-processing functions are not implemented.
+
+**Solution**: Check the four steps according to "Adding a New Model": place the model file in `Platform/s100/model_zoom` (*.hbm), add the configuration to `bpu_models` in `bpu_wrap.c`, implement the inference thread handler function, and implement the corresponding post-processing code.
+
+### Module Startup Order Error
+
+**Symptom**: Some functions are unavailable or the system crashes after startup.
+
+**Cause**: Submodules are not started in the order of their dependency relationships (for example, the algorithm module is started before VIN/VENC).
+
+**Solution**: Check the startup order according to the "Submodule Startup Order" section, and start the later modules only after the prerequisite modules are ready.
+
+## Related Documents
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

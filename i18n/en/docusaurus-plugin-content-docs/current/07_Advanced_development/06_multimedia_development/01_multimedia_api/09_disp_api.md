@@ -1,33 +1,74 @@
 ---
 sidebar_position: 9
-title: "DISP API"
-description: RDK S100/S600 DISP API
+title: "Display Output - DISP"
+description: "RDK S100/S600 5.5.1.9 DISP (display output)"
 ---
 
-# DISP API
+# Display Output - DISP
+
+> **Level description**: This chapter covers the [Low-level Multimedia API] (board header `hb_disp_interface.h`), the display output module API (X5 Display → RDK DISP). It is intended for advanced development that directly operates on the multimedia pipeline (Mode 3); if you only need to run the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
 ## Overview
 
-DISP (Display output; X5 Display -> RDK DISP) is the RDK display module (board header `hb_disp_interface.h`, functions `hb_disp_*`/`hbn_idu_*`): display channel config, video buffer validation, display-done sync and display capture, mapping to the IDU/MIPI TX hardware.
+DISP (Display, display output; X5 Display → RDK DISP) is the RDK display output module (board header `hb_disp_interface.h`, functions `hb_disp_*`/`hbn_idu_*`). It encapsulates display channel configuration, video buffer validation, display-done synchronization, and display capture, and corresponds to the IDU/MIPI TX hardware.
 
-## Abstraction
+## Software Abstraction
 
-- Channel: `hb_disp_set_channel_cfg`/`get_channel_cfg` configure/query a display channel.
-- Buffer validation: `hb_disp_check_video_bufaddr_valid` validates a video buffer address.
-- Sync: `hb_disp_get_disp_done_sync_id` gets display-done sync; `hb_disp_get_display_done` queries display completion.
+- Display channel: `hb_disp_set_channel_cfg`/`get_channel_cfg` configure/query a display channel.
+- Buffer validation: `hb_disp_check_video_bufaddr_valid` validates the video buffer address.
+- Sync: `hb_disp_get_disp_done_sync_id` gets the display-done sync; `hb_disp_get_display_done` queries display completion.
 - Capture: `hb_disp_get_capture_buf_id` gets a display capture frame.
 
-## Call flow
+## API Call Flow
 
 1. `hb_disp_set_channel_cfg` configures the display channel.
 2. `hb_disp_check_video_bufaddr_valid` validates the input buffer.
-3. `hb_disp_get_disp_done_sync_id` waits for display-done sync.
-4. `hb_disp_get_capture_buf_id` captures (if needed); `hb_disp_close` closes the channel.
+3. `hb_disp_get_disp_done_sync_id` waits for display-done synchronization.
+4. `hb_disp_get_capture_buf_id` captures a frame (if needed); `hb_disp_close` closes the channel.
 
+## Quick Example
 
-## API 列表
+The following example demonstrates the minimal usage sequence of DISP (based on the board header `hb_disp_interface.h`, functions `hb_disp_*`):
 
-| 函数 | 说明 |
+```c
+#include "hb_disp_interface.h"
+
+// 1. Initialize the display device (DISP_PRI_1 is the display priority; see hbn_idu_cfg.h)
+int32_t ret = hb_disp_init_dev_cfg(DISP_PRI_1, "");
+if (ret != 0) {
+    /* handle initialization failure */
+}
+
+// 2. Configure the output channel and layer
+output_channel_cfg_t chn_cfg = {0};
+chn_cfg.output_mode = OUTPUT_MIPI;
+hb_disp_set_output_cfg_id(DISP_PRI_1, &chn_cfg);
+
+disp_layer_cfg_t layer_cfg = {0};
+layer_cfg.width  = 1920;
+layer_cfg.height = 1080;
+hb_disp_set_layer_cfg_id(1, &layer_cfg, DISP_PRI_1);
+
+// 3. Start the display and enable the layer
+hb_disp_start_id(DISP_PRI_1);
+hb_disp_layer_on_id(1, DISP_PRI_1);
+
+// 4. Set the video buffer address (Y/C) and wait for display completion
+void *addr_y = /* Y address of the image */;
+void *addr_c = /* C address of the image */;
+hb_disp_set_video_bufaddr_id(DISP_PRI_1, 1, addr_y, addr_c);
+hb_disp_get_disp_done_sync_id(DISP_PRI_1, 1, 1000);
+
+// 5. Close
+hb_disp_stop_id(DISP_PRI_1);
+hb_disp_close_id(DISP_PRI_1);
+```
+
+> For the display layer numbers, priorities, and output mode enums, see `hbn_idu_cfg.h`; for HDMI display on the board, refer to `sample_pipeline/common/vp_display.c` (DRM/KMS path).
+
+## API List
+
+| Function | Description |
 | --- | --- |
 | hb_disp_init_dev_cfg | Initialize a display device instance |
 | hb_disp_init_cfg | Initialize all display device |
@@ -77,943 +118,948 @@ DISP (Display output; X5 Display -> RDK DISP) is the RDK display module (board h
 | hb_disp_release_capture_buf_id | user release capture buffer |
 | hb_disp_set_disp_oneshot_trigger_id | user trigger display control oneshot output |
 
-## API 接口说明
+## API Reference
 
 ### hb_disp_init_dev_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_init_dev_cfg(uint32_t disp_id, const char *cfg_file);
 ```
 
-【功能描述】
+【Function Description】
 
 Initialize a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_init_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_init_cfg(const char *cfg_file);
 ```
 
-【功能描述】
+【Function Description】
 
 Initialize all display device
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_close
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_close(void);
 ```
 
-【功能描述】
+【Function Description】
 
 Close all display device
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_close_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_close_id(uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Close a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_start
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_start(void);
 ```
 
-【功能描述】
+【Function Description】
 
 Start all display device
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_start_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_start_id(uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Start a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_stop
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_stop(void);
 ```
 
-【功能描述】
+【Function Description】
 
 Stop all display device
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_stop_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_stop_id(uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Stop a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_on
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_layer_on(uint32_t layer_number);
 ```
 
-【功能描述】
+【Function Description】
 
 Enable a layer of all display device
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_on_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_layer_on_id(uint32_t layer_number, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Enable a layer of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_off
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_layer_off(uint32_t layer_number);
 ```
 
-【功能描述】
+【Function Description】
 
 Close a layer of all display device
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_off_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_layer_off_id(uint32_t layer_number, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Close a layer of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_video_bufaddr
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_video_bufaddr(uint32_t layer_no, void *addr_y, void *addr_c);
 ```
 
-【功能描述】
+【Function Description】
 
 Set video buffer address
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Super; SW: 0.0.1
 
 ### hb_disp_set_video_bufaddr_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_video_bufaddr_id(uint32_t disp_id, uint32_t layer_no, void *addr_y, void *addr_c);
 ```
 
-【功能描述】
+【Function Description】
 
 Set video buffer address to a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Super; SW: 0.0.1
 
 ### hb_disp_set_layer_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_layer_cfg(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos);
 ```
 
-【功能描述】
+【Function Description】
 
 Set video buffer address
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_layer_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_layer_cfg_id(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Set video buffer address for a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_timing
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_timing(disp_timing_t *user_timing);
 ```
 
-【功能描述】
+【Function Description】
 
 Set display timing
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_timing_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_timing_id(disp_timing_t *user_timing, uint32_t	    disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Set display timing for a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_gamma_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_gamma_cfg(float32_t *gamma_val);
 ```
 
-【功能描述】
+【Function Description】
 
 Get gamma config value
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_gamma_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_gamma_cfg_id(float32_t *gamma_val, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Get gamma config value for a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_gamma_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_gamma_cfg(float32_t gamma_user);
 ```
 
-【功能描述】
+【Function Description】
 
 Set gamma config for a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_gamma_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_gamma_cfg_id(float32_t gamma_user, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Set gamma config
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_dynamic_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_output_dynamic_cfg_id(output_dynamic_cfg_t *dynamic_cfg, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Set output dynamic config
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Super; SW: 0.0.1
 
 ### hb_disp_get_output_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_output_cfg(output_cfg_t *cfg);
 ```
 
-【功能描述】
+【Function Description】
 
 Get ouput config
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_output_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_output_cfg_id(output_cfg_t *cfg, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Get ouput config of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_output_cfg(output_cfg_t *cfg);
 ```
 
-【功能描述】
+【Function Description】
 
 Set ouput config
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_output_cfg_id(output_cfg_t *cfg, uint32_t	     disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Set ouput config of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_upscaling_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_upscaling_cfg(upscaling_cfg_t *cfg);
 ```
 
-【功能描述】
+【Function Description】
 
 Get upscale config
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_upscaling_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_upscaling_cfg_id(upscaling_cfg_t *cfg, uint32_t	     disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Get upscale config of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_upscaling_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_upscaling_cfg(const upscaling_cfg_t *cfg);
 ```
 
-【功能描述】
+【Function Description】
 
 Set upscale config of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_upscaling_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_upscaling_cfg_id(const upscaling_cfg_t *cfg, uint32_t		   disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Set upscale config of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_channel_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_channel_cfg(uint32_t chn, channel_base_cfg_t *cfg);
 ```
 
-【功能描述】
+【Function Description】
 
 Get channel config parameters
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_channel_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_channel_cfg_id(uint32_t chn, channel_base_cfg_t *cfg, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Get channel config parameters of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_channel_cfg
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_channel_cfg(uint32_t			 chn, channel_base_cfg_t *cfg);
 ```
 
-【功能描述】
+【Function Description】
 
 Set channel config parameters of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_channel_cfg_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_channel_cfg_id(uint32_t		    chn, channel_base_cfg_t *cfg, uint32_t		    disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 Set channel config parameters of a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_out_upscale
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_out_upscale(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h);
 ```
 
-【功能描述】
+【Function Description】
 
 user config up-scale
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_out_upscale_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_out_upscale_id(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 user config up-scale for a display device instance
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_display_done
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_display_done(void);
 ```
 
-【功能描述】
+【Function Description】
 
 user get the display done flag
 
-【返回值】
+【Return Value】
 
 0:not done;1:done
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_display_done_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_display_done_id(uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 user get the display done flag for a display device instance
 
-【返回值】
+【Return Value】
 
 0:not done;1:done
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_check_video_bufaddr_valid
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_check_video_bufaddr_valid(size_t	  graphic_size, uint32_t disp_layer_no);
 ```
 
-【功能描述】
+【Function Description】
 
 user check whether the graphic size matches the channel
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_check_video_bufaddr_valid_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_check_video_bufaddr_valid_id(size_t   graphic_size, uint32_t disp_layer_no, uint32_t  disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 user check whether the graphic size matches the channel
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_video_display_done_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_video_display_done_id(uint32_t layer, uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 user get layer buffer read done flag
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_video_display_done
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_video_display_done(uint32_t layer);
 ```
 
-【功能描述】
+【Function Description】
 
 user get layer buffer read done flag
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_disp_done_sync_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_disp_done_sync_id(uint32_t disp_id, uint64_t rel_seq);
 ```
 
-【功能描述】
+【Function Description】
 
 user wait display vsync flag
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Super; SW: 0.0.1
 
 ### hb_disp_get_capture_buf_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_get_capture_buf_id(uint32_t disp_id, uint32_t timeout, struct hb_mem_graphic_buf_t *out_buf);
 ```
 
-【功能描述】
+【Function Description】
 
 user get capture buffer
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Super; SW: 0.0.1
 
 ### hb_disp_release_capture_buf_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_release_capture_buf_id(uint32_t disp_id, struct hb_mem_graphic_buf_t *out_buf);
 ```
 
-【功能描述】
+【Function Description】
 
 user release capture buffer
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Super; SW: 0.0.1
 
 ### hb_disp_set_disp_oneshot_trigger_id
 
-【函数声明】
+【Function Declaration】
 
 ```c
 HB_API int32_t hb_disp_set_disp_oneshot_trigger_id(uint32_t disp_id);
 ```
 
-【功能描述】
+【Function Description】
 
 user trigger display control oneshot output
 
-【返回值】
+【Return Value】
 
 "= 0" success
 &lt;0 failed
 
-【兼容性】
+【Compatibility】
 HW: Super; SW: 0.0.1
 
+## Related Documentation
+
+- [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)
+- [Display Object](/Simple_API/multimedia_api/pydev/object_display)
+- [Capture→Display](/Demos/multimedia_demo/cdev/vio2display)

@@ -1,644 +1,705 @@
 ---
 sidebar_position: 5
-title: "ISP API"
-description: RDK S100/S600 ISP API
+title: "Image Signal Processing - ISP"
+description: "RDK S100/S600 5.5.1.5 ISP (Image Signal Processing)"
 ---
 
-# ISP API
+# Image Signal Processing - ISP
+
+> **Level note**: This chapter covers the **low-level multimedia API** (board-side `hb_api_isp.h`) — the ISP image signal processing tuning API (functions `hb_isp_*`). It is intended for advanced developers who need to operate the multimedia pipeline directly (Mode 3). If you only need the wrapper features for capture/codec/display, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
 ## Overview
 
-ISP (Image Signal Processor) API (board header `hb_api_isp.h`, functions `hb_isp_*`): module control, AE/AWB statistics and info query, calibration params, hardware params and zone info.
+The ISP (Image Signal Processor) image signal processing API (board-side `hb_api_isp.h`, functions `hb_isp_*`). It provides capabilities such as ISP module control, AE/AWB statistics and information query, and retrieval of calibration parameters, hardware parameters, and zone information.
 
-## Abstraction
+## Software Abstraction
 
-- **Context**: `hb_isp_get_context` gets the ISP context.
-- **Module control**: `hb_isp_get_module_control` enables ISP sub-modules.
-- **Stats & info**: `hb_isp_get_ae_info`/`get_ae_statistics`/`get_awb_info`/`get_awb_statistics`/`get_zone_info`/`get_hist_thresh_info`.
-- **Params**: `hb_isp_get_calibration_param`/`get_hardware_param`/`get_command_param`/`get_command_range`.
-- **Command**: `hb_isp_command` sends an ISP command.
+- **Context**: `hb_isp_get_context` retrieves the ISP context.
+- **Module control**: `hb_isp_get_module_control` controls the enabling of each ISP sub-module.
+- **Statistics & info**: `hb_isp_get_ae_info`/`get_ae_statistics`/`get_awb_info`/`get_awb_statistics`/`get_zone_info`/`get_hist_thresh_info`.
+- **Parameters**: `hb_isp_get_calibration_param`/`get_hardware_param`/`get_command_param`/`get_command_range`.
+- **Command**: `hb_isp_command` issues ISP commands.
 
-## Call flow
+## API Call Flow
 
-1. `hb_isp_get_context` gets the ISP context.
-2. `hb_isp_get_module_control` configures sub-module enable.
-3. `hb_isp_command` sends tuning commands; `hb_isp_get_ae_info`/`get_awb_info` query stats.
-4. `hb_isp_get_calibration_param`/`get_hardware_param` fetch calibration and hardware params.
+1. `hb_isp_get_context` retrieves the ISP context.
+2. `hb_isp_get_module_control` configures sub-module enabling.
+3. `hb_isp_command` issues tuning commands; `hb_isp_get_ae_info`/`get_awb_info` query statistics.
+4. `hb_isp_get_calibration_param`/`get_hardware_param` retrieves calibration and hardware parameters.
 
+## Quick Example
 
-## API 列表
+The following example demonstrates the minimal sequence for ISP tuning (based on `hb_api_isp.h`; the pipeline must be started via VIO/HBN first):
 
-| 函数 | 说明 |
+```c
+#include "hb_api_isp.h"
+
+// 1. Pause the 2A algorithm to enter manual tuning mode
+hb_isp_pause_algo(0);
+
+// 2. Query/set the sub-module enable status
+isp_module_ctrl_u mod_ctrl;
+hb_isp_get_module_control(0, &mod_ctrl);
+mod_ctrl.isp_work_state.ae_enable = 0;   /* Manual exposure */
+hb_isp_set_module_control(0, &mod_ctrl);
+
+// 3. Get the AE statistics and issue manual exposure parameters accordingly
+isp_statistics_t ae_stat = {0};
+hb_isp_get_ae_statistics(0, &ae_stat, 3000);
+/* Calculate exposure/gain based on ae_stat ... */
+
+// 4. Resume the 2A algorithm
+hb_isp_run_algo(0);
+```
+
+> The board-side tuning tool can be found at `/app/tuning_tool/` (control_tool + scripts); ISP live capture follows the HBN vnode flow (`sample_isp/get_isp_data`). The APIs in this chapter are used for runtime tuning.
+
+## API List
+
+| Function | Description |
 | --- | --- |
-| hb_isp_run_algo | set 2a manual on/off; 设置算法manual模式 |
-| hb_isp_pause_algo | get 2a manual on/off status; 设置算法auto模式 |
-| hb_isp_set_module_control | control isp modual bypass or not; 提供设置ISP子模块bypass与否的接口 |
-| hb_isp_get_module_control | get isp modual bypass status; 获取设置ISP子模块bypass与否状态的接口 |
-| hb_isp_get_ae_statistics | get ae statistics; 获取当前通路的ae统计数据 |
-| hb_isp_release_ae_statistics | relese ae statistics; 释放已获取的当前通路的ae统计数据 |
-| hb_isp_get_awb_statistics | get awb statistics; 获取当前通路的awb统计数据 |
-| hb_isp_release_awb_statistics | release awb statistics; 释放已获取的当前通路的awb统计数据 |
-| hb_isp_command | set isp command with api and value; 动态设置ISP cmd的对应的参数 |
-| hb_isp_set_context | set isp context value; 动态设置isp ctx数据 |
-| hb_isp_get_context | get isp context value; 动态获取isp ctx数据 |
-| hb_isp_set_ae_info | set isp ae info value; 设置isp ae相关参数 |
-| hb_isp_get_ae_info | get isp ae info value; 获取isp ae相关参数 |
-| hb_isp_set_awb_info | set isp awb info value; 设置isp awb相关参数 |
-| hb_isp_get_awb_info | get isp awb info value; 获取isp awb相关参数 |
-| hb_isp_get_version | get current isp,2a, calibration version; 获取当前系统的ISP版本，ISP算法版本和较准参数版本 |
-| hb_isp_get_2a_info | get isp 2a info value; 获取isp 2a相关参数信息 |
-| hb_isp_get_ae5bin_statistics | get ae 5bin statustics value; 获取ae 5bin统计数据 |
-| hb_isp_get_zone_info | get zone info value; 获取ae zone区域信息 |
-| hb_isp_set_hist_thresh_info | set histgram thresh info; 设置histgram区间门限信息 |
-| hb_isp_get_hist_thresh_info | get histgram thresh info; 获取histgram区间门限信息 |
-| hb_isp_set_calibration_param | set calibration param; 获取histgram区间门限信息 |
-| hb_isp_get_calibration_param | get calibration param; 获取histgram区间门限信息 |
-| hb_isp_set_command_param | set command param; 获取histgram区间门限信息 |
-| hb_isp_get_command_param | get command param; 获取histgram区间门限信息 |
-| hb_isp_get_command_range | get command range; 获取calibration 参数 |
-| hb_isp_get_hardware_param | get hardware param; 获取histgram区间门限信息 |
-| hb_isp_set_hardware_param | set hardware param; 设置hardware参数 |
-| hb_isp_get_hardware_range | get hardware range; 获取hardware 参数范围 |
+| hb_isp_run_algo | Set the 2A algorithm to manual mode |
+| hb_isp_pause_algo | Get the 2A manual on/off status; set the algorithm to auto mode |
+| hb_isp_set_module_control | Control whether the ISP sub-modules are bypassed; provide an interface to set the ISP sub-module bypass |
+| hb_isp_get_module_control | Get the ISP sub-module bypass status; provide an interface to query the ISP sub-module bypass state |
+| hb_isp_get_ae_statistics | Get the AE statistics of the current pipeline |
+| hb_isp_release_ae_statistics | Release the AE statistics already obtained for the current pipeline |
+| hb_isp_get_awb_statistics | Get the AWB statistics of the current pipeline |
+| hb_isp_release_awb_statistics | Release the AWB statistics already obtained for the current pipeline |
+| hb_isp_command | Dynamically set the parameters corresponding to the ISP command |
+| hb_isp_set_context | Dynamically set the ISP context data |
+| hb_isp_get_context | Dynamically get the ISP context data |
+| hb_isp_set_ae_info | Set ISP AE-related parameters |
+| hb_isp_get_ae_info | Get ISP AE-related parameters |
+| hb_isp_set_awb_info | Set ISP AWB-related parameters |
+| hb_isp_get_awb_info | Get ISP AWB-related parameters |
+| hb_isp_get_version | Get the current system's ISP version, ISP algorithm version, and calibration parameter version |
+| hb_isp_get_2a_info | Get ISP 2A-related parameter information |
+| hb_isp_get_ae5bin_statistics | Get the AE 5-bin statistics |
+| hb_isp_get_zone_info | Get the AE zone information |
+| hb_isp_set_hist_thresh_info | Set the histogram interval threshold information |
+| hb_isp_get_hist_thresh_info | Get the histogram interval threshold information |
+| hb_isp_set_calibration_param | Set a calibration parameter |
+| hb_isp_get_calibration_param | Get a calibration parameter |
+| hb_isp_set_command_param | Set an ISP command parameter |
+| hb_isp_get_command_param | Get an ISP command parameter |
+| hb_isp_get_command_range | Get the valid range of an ISP command |
+| hb_isp_get_hardware_param | Get a hardware parameter |
+| hb_isp_set_hardware_param | Set a hardware parameter |
+| hb_isp_get_hardware_range | Get the valid range of a hardware parameter |
 
-## API 接口说明
+## API Interface Description
 
 ### hb_isp_run_algo
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_run_algo(uint32_t pipeline_id);
 ```
 
-【功能描述】
+**Description**
 
-set 2a manual on/off; 设置算法manual模式
+Set the 2A algorithm to manual mode.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_pause_algo
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_pause_algo(uint32_t pipeline_id);
 ```
 
-【功能描述】
+**Description**
 
-get 2a manual on/off status; 设置算法auto模式
+Get the 2A manual on/off status; set the algorithm to auto mode.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_module_control
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_module_control(uint32_t pipeline_id, const isp_module_ctrl_u *mod_ctrl);
 ```
 
-【功能描述】
+**Description**
 
-control isp modual bypass or not; 提供设置ISP子模块bypass与否的接口
+Control whether the ISP sub-modules are bypassed; provide an interface to set the ISP sub-module bypass.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_module_control
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_module_control(uint32_t pipeline_id, isp_module_ctrl_u *mod_ctrl);
 ```
 
-【功能描述】
+**Description**
 
-get isp modual bypass status; 获取设置ISP子模块bypass与否状态的接口
+Get the ISP sub-module bypass status; provide an interface to query the ISP sub-module bypass state.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_ae_statistics
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_ae_statistics(uint32_t pipeline_id, isp_statistics_t *ae_statistics, int32_t time_out);
 ```
 
-【功能描述】
+**Description**
 
-get ae statistics; 获取当前通路的ae统计数据
+Get the AE statistics of the current pipeline.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_release_ae_statistics
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_release_ae_statistics(uint32_t pipeline_id, isp_statistics_t *ae_statistics);
 ```
 
-【功能描述】
+**Description**
 
-relese ae statistics; 释放已获取的当前通路的ae统计数据
+Release the AE statistics already obtained for the current pipeline.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_awb_statistics
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_awb_statistics(uint32_t pipeline_id, isp_statistics_t *awb_statistics, int32_t time_out);
 ```
 
-【功能描述】
+**Description**
 
-get awb statistics; 获取当前通路的awb统计数据
+Get the AWB statistics of the current pipeline.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_release_awb_statistics
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_release_awb_statistics(uint32_t pipeline_id, isp_statistics_t *awb_statistics);
 ```
 
-【功能描述】
+**Description**
 
-release awb statistics; 释放已获取的当前通路的awb统计数据
+Release the AWB statistics already obtained for the current pipeline.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_command
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_command(uint32_t pipeline_id, isp_cmd_api_t *cmd_api);
 ```
 
-【功能描述】
+**Description**
 
-set isp command with api and value; 动态设置ISP cmd的对应的参数
+Dynamically set the parameters corresponding to the ISP command.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_context
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_context(uint32_t pipeline_id, const isp_context_t *ptx);
 ```
 
-【功能描述】
+**Description**
 
-set isp context value; 动态设置isp ctx数据
+Dynamically set the ISP context data.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_context
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_context(uint32_t pipeline_id, isp_context_t *ptx);
 ```
 
-【功能描述】
+**Description**
 
-get isp context value; 动态获取isp ctx数据
+Dynamically get the ISP context data.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_ae_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_ae_info(uint32_t pipeline_id, const ae_info_t *ae_info);
 ```
 
-【功能描述】
+**Description**
 
-set isp ae info value; 设置isp ae相关参数
+Set ISP AE-related parameters.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_ae_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_ae_info(uint32_t pipeline_id, ae_info_t *ae_info);
 ```
 
-【功能描述】
+**Description**
 
-get isp ae info value; 获取isp ae相关参数
+Get ISP AE-related parameters.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_awb_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_awb_info(uint32_t pipeline_id, const awb_info_t *awb_info);
 ```
 
-【功能描述】
+**Description**
 
-set isp awb info value; 设置isp awb相关参数
+Set ISP AWB-related parameters.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_awb_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_awb_info(uint32_t pipeline_id, awb_info_t *awb_info);
 ```
 
-【功能描述】
+**Description**
 
-get isp awb info value; 获取isp awb相关参数
+Get ISP AWB-related parameters.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_version
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_version(uint32_t pipeline_id, char *isp_ver, char *algo_ver, char *calib_ver);
 ```
 
-【功能描述】
+**Description**
 
-get current isp,2a, calibration version; 获取当前系统的ISP版本，ISP算法版本和较准参数版本
+Get the current system's ISP version, ISP algorithm version, and calibration parameter version.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_2a_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_2a_info(uint32_t pipeline_id, isp_info_t *isp_info, int time_out);
 ```
 
-【功能描述】
+**Description**
 
-get isp 2a info value; 获取isp 2a相关参数信息
+Get ISP 2A-related parameter information.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_ae5bin_statistics
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_ae5bin_statistics(uint32_t pipeline_id, isp_ae5bin_stats_t *isp_ae5bin_stats);
 ```
 
-【功能描述】
+**Description**
 
-get ae 5bin statustics value; 获取ae 5bin统计数据
+Get the AE 5-bin statistics.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_zone_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_zone_info(uint32_t pipeline_id, uint8_t type, isp_zone_info_t *zoneinfo);
 ```
 
-【功能描述】
+**Description**
 
-get zone info value; 获取ae zone区域信息
+Get the AE zone information.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_hist_thresh_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_hist_thresh_info(uint32_t pipeline_id, isp_hist_thresh_info_t *isp_hist_thresh_info);
 ```
 
-【功能描述】
+**Description**
 
-set histgram thresh info; 设置histgram区间门限信息
+Set the histogram interval threshold information.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_hist_thresh_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_hist_thresh_info(uint32_t pipeline_id, isp_hist_thresh_info_t *isp_hist_thresh_info);
 ```
 
-【功能描述】
+**Description**
 
-get histgram thresh info; 获取histgram区间门限信息
+Get the histogram interval threshold information.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_calibration_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_calibration_param(uint32_t pipeline_id, const char *name, uint32_t param_type, uint32_t param_size, void *ptr);
 ```
 
-【功能描述】
+**Description**
 
-set calibration param; 获取histgram区间门限信息
+Set a calibration parameter.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_calibration_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_calibration_param(uint32_t pipeline_id, const char *name, uint32_t param_type, uint32_t param_size, void *ptr);
 ```
 
-【功能描述】
+**Description**
 
-get calibration param; 获取histgram区间门限信息
+Get a calibration parameter.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_command_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_command_param(uint32_t pipeline_id, uint32_t section, uint32_t command, uint32_t data);
 ```
 
-【功能描述】
+**Description**
 
-set command param; 获取histgram区间门限信息
+Set an ISP command parameter.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_command_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_command_param(uint32_t pipeline_id, uint32_t section, uint32_t command, uint32_t *data);
 ```
 
-【功能描述】
+**Description**
 
-get command param; 获取histgram区间门限信息
+Get an ISP command parameter.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_command_range
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_command_range(uint32_t pipeline_id, uint32_t section, uint32_t command, uint32_t *max, uint32_t *min);
 ```
 
-【功能描述】
+**Description**
 
-get command range; 获取calibration 参数
+Get the valid range of an ISP command.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_hardware_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_hardware_param(uint32_t pipeline_id, const char *name, uint32_t param_size, uint32_t *ptr);
 ```
 
-【功能描述】
+**Description**
 
-get hardware param; 获取histgram区间门限信息
+Get a hardware parameter.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_hardware_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_set_hardware_param(uint32_t pipeline_id, const char *name, uint32_t param_size, uint32_t *ptr);
 ```
 
-【功能描述】
+**Description**
 
-set hardware param; 设置hardware参数
+Set a hardware parameter.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_hardware_range
 
-【函数声明】
+**Function Declaration**
 
 ```c
 extern int32_t hb_isp_get_hardware_range(uint32_t pipeline_id, const char *name, uint32_t *max, uint32_t *min);
 ```
 
-【功能描述】
+**Description**
 
-get hardware range; 获取hardware 参数范围
+Get the valid range of a hardware parameter.
 
-【返回值】
+**Return Value**
 
-zero: Success；成功
-less than zero: Fail，return error code；失败，返回错误码
+zero: Success
+less than zero: Fail, returns an error code
 
-【兼容性】
+**Compatibility**
+
 HW: Ultra/Super; SW: 1.0.0
 
+## Related Documentation
+
+- [Video Input/Output - VIO](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [Video Processing Framework - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)
