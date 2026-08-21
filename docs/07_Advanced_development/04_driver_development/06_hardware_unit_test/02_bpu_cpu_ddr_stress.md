@@ -391,7 +391,7 @@ bpu status information---->
 - `temperature`：当前板载、DDR、BPU（每个 BPU core 有两个 `pvtc` 温度点：`pvt_bpu_pvtcN_t1/t2`）温度。
 - `voltage`：主要供电轨电压（`VDD_CPU`、`VDD_BPUL`/`VDD_BPUR` 左右两组 BPU 簇电压、DDR 系列）。
 - `cpu frequency`：每个 CPU policy 的最小、当前、最大运行频率（kHz）。S600 有 18 个 CPU 核心，按簇分为 5 个 policy（`policy0/2/6/10/14`）。
-- `bpu status information`：4 个 BPU core 的当前占用率（百分比）。空闲时仅 `bpu0` 有显示（其余核处于 power-gate 状态），满负载压测时 4 个核都会显示且占用率稳定在高位。<!-- TODO: 满负载实测值待核实 -->
+- `bpu status information`：4 个 BPU core 的当前占用率（百分比）。空闲时仅 `bpu0` 有显示（其余核处于 power-gate 状态），满负载压测时 4 个核都会显示且占用率稳定在高位。RDK S600 5.1.0 实测（`hrt_model_exec perf` 4 核 16 线程满载）：bpu0~bpu3 占用率稳定在 **91%~98%**，sysfs 整体 `bpu_ratio` 约 87~90。
 
 :::tip
 BPU 占用率也可以通过 sysfs 节点直接读取，更轻量、可编程：
@@ -462,7 +462,7 @@ cd /app/chip_base_test/log/ && \
     </DocScope>
     <DocScope products="RDK S600">
 
-    S600 4 个 BPU core 满载压测时每个核占用率应稳定在高位（接近 100%）。<!-- TODO: 满负载实测值待核实 -->
+    S600 4 个 BPU core 满载压测时每个核占用率应稳定在高位。RDK S600 5.1.0 实测（`stress_test.sh -t 1m` 满载）：bpu0~bpu3 占用率 **91%~98%**，稳定在 95% 附近。
 
     </DocScope>
 
