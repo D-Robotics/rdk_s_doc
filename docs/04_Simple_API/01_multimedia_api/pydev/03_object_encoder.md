@@ -10,6 +10,15 @@ description: "Encoder 对象 对象接口说明"
 
 Encoder 对象实现了对视频数据的编码压缩功能，包含了`encode`、`encode_file`、`get_img`、`close`等几种方法，详细说明如下：
 
+## 方法清单
+
+| 方法名 | 说明 | 所属章节 |
+| ------ | ---- | -------- |
+| `encode` | 配置并使能 encode 编码模块 | [encode](#encode) |
+| `encode_file` | 向使能的编码通道输入图像文件，按预定格式进行编码 | [encode_file](#encode_file) |
+| `get_img` | 获取编码后的数据 | [get_img](#get_img) |
+| `close` | 关闭使能的编码通道 | [close](#close) |
+
 ## encode
 
 <font color='Blue'>【功能描述】</font>

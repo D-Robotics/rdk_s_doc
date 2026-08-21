@@ -145,6 +145,33 @@ description: "ENCODER（编码模块）API 接口说明"
 
 成功返回码流数据的 size，失败返回 -1
 
+## 数据结构与常量
+
+以下常量定义于 `sp_codec.h`：
+
+| 常量 | 值 | 说明 |
+| ---- | --- | ---- |
+| `SP_ENCODER_H264` | 1 | 编码类型：H.264 |
+| `SP_ENCODER_H265` | 2 | 编码类型：H.265 |
+| `SP_ENCODER_MJPEG` | 3 | 编码类型：MJPEG |
+
+## 快速示例
+
+编码一帧的典型调用顺序（完整可编译示例见 [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)）：
+
+```c
+void *enc = sp_init_encoder_module();        // 1. 初始化 ENCODER 对象
+sp_start_encode(enc, /*chn*/0, SP_ENCODER_H264,
+                width, height, /*bits*/4096);// 2. 创建编码通道
+sp_encoder_set_frame(enc, frame_buffer, size);  // 3. 送入一帧图像
+char *stream = malloc(stream_buf_size);
+sp_encoder_get_stream(enc, stream);          // 4. 取出编码码流
+// ... 写入文件或继续处理 stream ...
+sp_stop_encode(enc);                         // 5. 停止编码通道
+sp_release_encoder_module(enc);              // 6. 销毁 ENCODER 对象
+free(stream);
+```
+
 ## 相关文档
 
 - [VIO API](/Simple_API/multimedia_api/cdev/vio_api)

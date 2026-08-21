@@ -70,6 +70,28 @@ description: "SYS（模块绑定）API 接口说明"
 
 成功返回 0，失败返回其他值。
 
+## 数据结构与常量
+
+以下模块类型常量定义于 `sp_sys.h`，用于 `sp_module_bind`/`sp_module_unbind` 的 `src_type`/`dst_type` 参数：
+
+| 常量 | 值 | 说明 |
+| ---- | --- | ---- |
+| `SP_MTYPE_VIO` | 0 | 模块类型：VIO（视频输入） |
+| `SP_MTYPE_ENCODER` | 1 | 模块类型：ENCODER（编码） |
+| `SP_MTYPE_DECODER` | 2 | 模块类型：DECODER（解码） |
+| `SP_MTYPE_DISPLAY` | 3 | 模块类型：DISPLAY（显示） |
+
+## 快速示例
+
+将 VIO 输出绑定到 DISPLAY 输入的典型调用（完整示例见 [采集→显示](/Demos/multimedia_demo/cdev/vio2display)）：
+
+```c
+// vio、disp 分别为已初始化的 VIO / DISPLAY 对象
+sp_module_bind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY);   // 绑定：VIO 输出 → DISPLAY 输入
+// ... 数据自动流转，无需手动 get/set ...
+sp_module_unbind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY); // 退出前解绑
+```
+
 ## 相关文档
 
 - [VIO API](/Simple_API/multimedia_api/cdev/vio_api)

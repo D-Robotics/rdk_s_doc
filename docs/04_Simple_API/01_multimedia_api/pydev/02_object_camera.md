@@ -9,6 +9,17 @@ description: "Camera 对象 对象接口说明"
 > **接口层级**：封装层简易接口（模式 1），底层 VIO 原语见 [VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)。对应 C 接口见 [VIO API](/Simple_API/multimedia_api/cdev/vio_api)。
 
 Camera 对象用于完成 MIPI Camera 的图像采集和处理功能，包含了`open_cam`、`open_vps`、`get_img`、`set_img`、`close_cam`等几种方法，详细说明如下：
+
+## 方法清单
+
+| 方法名 | 说明 | 所属章节 |
+| ------ | ---- | -------- |
+| `open_cam` | 打开指定通道的 MIPI 摄像头，并设置摄像头输出帧率、分辨率格式 | [open_cam](#open_cam) |
+| `open_vps` | 使能指定 camera 通道的 vps 图像处理功能，支持缩放、裁剪、旋转 | [open_vps](#open_vps) |
+| `get_img` | 获取 camera 对象的图像输出 | [get_img](#get_img) |
+| `set_img` | 向 vps 模块输入图像，并触发图像处理操作 | [set_img](#set_img) |
+| `close_cam` | 关闭使能的 MIPI camera 摄像头 | [close_cam](#close_cam) |
+
 ## open_cam
 
 <font color='Blue'>【功能描述】</font>  

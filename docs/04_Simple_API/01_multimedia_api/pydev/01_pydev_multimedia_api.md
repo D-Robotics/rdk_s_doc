@@ -32,6 +32,12 @@ while True:
     display.set_img(frame)
 ```
 
+## 注意事项
+
+- 各对象的方法调用存在前置依赖：`get_img`/`set_img` 等数据处理方法需在对应对象使能（`open_cam`/`open_vps`/`encode`/`decode`/`display`）之后调用，具体见各对象文档。
+- 退出程序前需调用各对象的关闭接口（`close_cam`/`close`）释放资源，避免资源泄漏。
+- 使用 `libsrcampy.bind` 绑定模块后数据自动流转，退出前需调用 `libsrcampy.unbind` 解绑并关闭各对象。
+
 ## 典型链路
 
 | 链路 | 对象组合 | 对应 C 示例 |

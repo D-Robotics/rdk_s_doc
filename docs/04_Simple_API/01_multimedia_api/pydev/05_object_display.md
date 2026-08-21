@@ -10,6 +10,18 @@ description: "Display 对象 对象接口说明"
 
 Display 对象实现了视频显示功能，可以将图像数据通过`HDMI`接口输出到显示器，该对象包含`display`、`set_img`、`set_graph_rect`、`set_graph_word`、`close`等方法，详细说明如下：
 
+## 方法清单
+
+| 方法名 | 说明 | 所属章节 |
+| ------ | ---- | -------- |
+| `display` | 显示模块初始化，并配置显示参数 | [display](#display) |
+| `set_img` | 向 display 模块输入显示数据（NV12 格式） | [set_img](#set_img) |
+| `set_graph_rect` | 在显示模块的图形层绘制矩形框 | [set_graph_rect](#set_graph_rect) |
+| `set_graph_word` | 在显示模块的图形层绘制字符 | [set_graph_word](#set_graph_word) |
+| `close` | 关闭显示模块 | [close](#close) |
+| `libsrcampy.bind` | 把模块间的输出与输入数据流进行绑定，数据自动流转 | [bind 接口](#bind-接口) |
+| `libsrcampy.unbind` | 将两个绑定过的模块解绑 | [unbind 接口](#unbind-接口) |
+
 ## display
 <font color='Blue'>【功能描述】</font>
 

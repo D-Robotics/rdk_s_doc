@@ -143,6 +143,26 @@ description: "DECODER（解码模块）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+## 数据结构与常量
+
+解码类型沿用编码类型常量（定义于 `sp_codec.h`）：`SP_ENCODER_H264`（1）、`SP_ENCODER_H265`（2）、`SP_ENCODER_MJPEG`（3），在 `sp_start_decode` 的 `type` 参数中使用。
+
+## 快速示例
+
+解码视频文件的典型调用顺序（完整可编译示例见 [解码→显示](/Demos/multimedia_demo/cdev/decode2display)）：
+
+```c
+void *dec = sp_init_decoder_module();        // 1. 初始化 DECODER 对象
+sp_start_decode(dec, "test.h264", /*video_chn*/0,
+                SP_ENCODER_H264, width, height);  // 2. 打开码流文件并创建解码通道
+char *img = malloc(FRAME_BUFFER_SIZE(width, height));
+sp_decoder_get_image(dec, img);              // 3. 取一帧解码图像（NV12）
+// ... 使用 img 中的图像数据（如送显/推理）...
+sp_stop_decode(dec);                         // 4. 停止解码通道
+sp_release_decoder_module(dec);              // 5. 销毁 DECODER 对象
+free(img);
+```
+
 ## 相关文档
 
 - [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)

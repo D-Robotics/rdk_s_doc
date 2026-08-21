@@ -10,6 +10,15 @@ description: "Decoder 对象 对象接口说明"
 
 Decoder 对象实现了对视频数据的解码功能，包含了`decode`、`set_img`、`get_img`、`close`等几种方法，详细说明如下：
 
+## 方法清单
+
+| 方法名 | 说明 | 所属章节 |
+| ------ | ---- | -------- |
+| `decode` | 使能 decode 解码模块，并对视频文件进行解码 | [decode](#decode) |
+| `get_img` | 获取解码模块的输出结果 | [get_img](#get_img) |
+| `set_img` | 将单帧编码数据送入解码模块，并进行解码 | [set_img](#set_img) |
+| `close` | 关闭解码模块 | [close](#close) |
+
 ## decode
 
 <font color='Blue'>【功能描述】</font>

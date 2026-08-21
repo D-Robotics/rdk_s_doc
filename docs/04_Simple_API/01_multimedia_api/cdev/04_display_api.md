@@ -191,6 +191,28 @@ description: "DISPLAY（显示模块）API 接口说明"
 
 无。
 
+## 数据结构与常量
+
+以下常量定义于 `sp_display.h`：
+
+| 常量 | 值 | 说明 |
+| ---- | --- | ---- |
+| `DISPLAY_MODE_DP` | 10 | 显示输出模式：DP |
+| `DISPLAY_MODE_HDMI` | 11 | 显示输出模式：HDMI |
+
+## 快速示例
+
+显示一帧图像的典型调用顺序（完整可编译示例见 [采集→显示](/Demos/multimedia_demo/cdev/vio2display)）：
+
+```c
+void *disp = sp_init_display_module();       // 1. 初始化 DISPLAY 对象
+sp_start_display(disp, /*chn*/1, width, height);  // 2. 创建显示通道（桌面系统请用通道 1）
+sp_display_set_image(disp, frame_buffer, size, /*chn*/1);  // 3. 送入一帧图像显示
+// ... 可用 sp_display_draw_rect / sp_display_draw_string 叠加图形 ...
+sp_stop_display(disp);                       // 4. 停止显示通道
+sp_release_display_module(disp);             // 5. 销毁 DISPLAY 对象
+```
+
 ## 相关文档
 
 - [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)

@@ -280,6 +280,46 @@ camera 对应的 host 编号如下图所示
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Camera对应的host编号示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 数据结构与常量
+
+以下常量定义于 `sp_vio.h`：
+
+| 常量 | 值 | 说明 |
+| ---- | --- | ---- |
+| `SP_VPS_SCALE` | 1 | VPS 处理模式：仅缩放 |
+| `SP_VPS_SCALE_CROP` | 2 | VPS 处理模式：缩放 + 裁剪 |
+| `SP_VPS_SCALE_ROTATE` | 3 | VPS 处理模式：缩放 + 旋转 |
+| `SP_VPS_SCALE_ROTATE_CROP` | 4 | VPS 处理模式：缩放 + 旋转 + 裁剪 |
+| `SP_HOST_0` ~ `SP_HOST_3` | 0 ~ 3 | 指定 host 编号（见 [host 编号选择](#host-编号选择)） |
+| `SP_HOST_AUTO_DETECT` | -1 | 自动探测 host 编号 |
+| `FRAME_BUFFER_SIZE(w, h)` | 宏 | 计算 NV12 帧缓冲区字节数 `w*h*3/2` |
+
+`sp_open_camera_v2` 使用的传感器参数结构体：
+
+```c
+typedef struct {
+    int32_t raw_height;  // 传感器输出高度
+    int32_t raw_width;   // 传感器输出宽度
+    int32_t fps;         // 帧率
+} sp_sensors_parameters;
+```
+
+## 快速示例
+
+采集一帧图像的典型调用顺序（完整可编译示例见 [采集示例](/Demos/multimedia_demo/cdev/vio_capture)）：
+
+```c
+void *vio = sp_init_vio_module();            // 1. 初始化 VIO 对象
+sp_open_camera(vio, /*pipe_id*/0, /*video_index*/0, /*chn_num*/1,
+               &width, &height);             // 2. 打开摄像头，回填宽高
+char *buf = malloc(FRAME_BUFFER_SIZE(width, height));
+sp_vio_get_frame(vio, buf, width, height, /*timeout*/2000);  // 3. 取一帧（NV12）
+// ... 使用 buf 中的图像数据 ...
+sp_vio_close(vio);                           // 4. 关闭摄像头/VPS
+sp_release_vio_module(vio);                  // 5. 销毁 VIO 对象
+free(buf);
+```
+
 ## 相关文档
 
 - [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)

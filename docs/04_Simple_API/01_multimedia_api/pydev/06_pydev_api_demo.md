@@ -441,6 +441,13 @@ test_cam_vps_display()
 # test_rtsp_decode_bind_vps_bind_disp(rtsp_url)
 ```
 
+## 注意事项
+
+- `open_cam` 成功后建议等待约 1 秒（ISP tuning）再调用 `get_img` 获取图像。
+- 每个用例退出前需依次调用 `unbind`、各对象的 `close`/`close_cam` 释放资源。
+- RTSP 码流送入解码时，第一帧需要是 SPS/PPS，否则解码器会报 `FAILED TO DEC_PIC_HDR` 异常退出。
+- 各用例会在当前目录生成 `output.img`、`encode.h264` 等文件，且后一个用例依赖前一个用例的输出文件，建议按顺序执行。
+
 ## 相关文档
 
 - [多媒体接口说明](./pydev_multimedia_api)
