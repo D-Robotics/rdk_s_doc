@@ -12,7 +12,7 @@ You can install the kernel headers and kernel compilation dependencies using the
 
 ```bash
 sudo apt update
-sudo apt install linux-headers-6.1.112-rt43
+sudo apt install linux-headers-6.1.158-rt58
 sudo apt install bison flex
 ```
 
@@ -26,8 +26,8 @@ Kconfig        System.map      certs  fs       io_uring  lib     rust  security 
 ```
 
 :::warning
-**Do not** run the `make clean` command inside the `/usr/src/linux-headers-$(uname -r)` directory, as this will break the kernel module compilation environment on your board.  
-If you have already executed `make clean`, please reinstall the `linux-headers-6.1.112-rt43` package to restore the environment.
+**Do not** run the `make clean` command inside the `/usr/src/linux-headers-$(uname -r)` directory, as this will break the kernel module compilation environment on your board.
+If you have already executed `make clean`, please reinstall the `linux-headers-6.1.158-rt58` package to restore the environment.
 :::
 
 ## Usage Example
@@ -111,8 +111,8 @@ After saving the `Makefile`, run the `make` command to compile the module and ge
 
 ```bash
 sunrise@ubuntu:~/test_ko$ sudo make
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build prepare
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/build prepare
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
   SYNC    include/config/auto.conf.cmd
   HOSTCC  scripts/basic/fixdep
   HOSTCC  scripts/kconfig/conf.o
@@ -177,20 +177,20 @@ make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-250719
   LD      arch/arm64/kernel/vdso/vdso.so.dbg
   VDSOSYM include/generated/vdso-offsets.h
   OBJCOPY arch/arm64/kernel/vdso/vdso.so
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build M=/home/sunrise/test_ko modules
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/build M=/home/sunrise/test_ko modules
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
   CC [M]  /home/sunrise/test_ko/hello.o
   MODPOST /home/sunrise/test_ko/Module.symvers
   CC [M]  /home/sunrise/test_ko/hello.mod.o
   LD [M]  /home/sunrise/test_ko/hello.ko
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build KERNELRELEASE=6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8 M=/home/sunrise/test_ko modules_install
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-  INSTALL /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  SIGN    /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  DEPMOD  /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/build KERNELRELEASE=6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8 M=/home/sunrise/test_ko modules_install
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+  INSTALL /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
+  SIGN    /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
+  DEPMOD  /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
 ```
 
 :::info
@@ -323,10 +323,6 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     tar -xzf peak-linux-driver-8.20.0.tar.gz
     ```
 5. Compile the driver:
-    :::info
-    Please ensure that the linux-headers-6.1.112-rt43 package on your board is version 4.0.3 or higher.
-    :::
-
     ```shell
     # Install local module build prerequisites
     sudo apt install flex bison -y
@@ -344,15 +340,15 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     # Install PCAN drivers and libraries
     sudo make install
     ```
-6. Sign and use the PCAN driver. The following example uses PCAN driver version 8.20.0, where the driver modules are installed by default to `/lib/modules/6.1.112/misc/`:
+6. Sign and use the PCAN driver. The following example uses PCAN driver version 8.20.0, where the driver modules are installed by default to `/lib/modules/6.1.158/misc/`:
      1. Create a signing script as described in the [Module Signing](#module-signing) section;
      2. Run the signing command:
         ```shell
         # Sign file
-        sudo bash drobot-sign-file.sh /lib/modules/6.1.112/misc/pcan.ko
+        sudo bash drobot-sign-file.sh /lib/modules/6.1.158/misc/pcan.ko
         ```
      3. Use the PCAN driver:
         ```shell
         # Insert PCAN driver
-        sudo insmod /lib/modules/6.1.112/misc/pcan.ko
+        sudo insmod /lib/modules/6.1.158/misc/pcan.ko
         ```

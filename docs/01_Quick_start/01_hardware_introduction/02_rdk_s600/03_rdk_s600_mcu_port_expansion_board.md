@@ -17,6 +17,7 @@ sidebar_label: 1.1.3 MCU 接口扩展板
 
 </details>
 
+
 RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持 CAN_FD、ADC 等。
 
 <!-- :::danger 注意

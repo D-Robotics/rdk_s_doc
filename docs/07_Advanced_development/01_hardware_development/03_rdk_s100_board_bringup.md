@@ -1,25 +1,24 @@
 ---
 sidebar_position: 3
-sidebar_products: RDK S100
 ---
 
-# 7.1.3 RDK S100 硬件 bringup
+# 7.1.3 RDK S100 硬件bringup
 
-S100 boardid 由 ADC0、ADC1、ADC3和 ADC4共同作用，其中 ADC0和 ADC1用于地瓜硬件区分，客户不可更改；ADC3用于识别 Acore 外设上电时序，客户可自定义 Acore 外设上电时序，并同时修改 ADC3的分压电阻；ADC4用于识别硬件版本。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
+S100 boardid由ADC0、ADC1、ADC3和ADC4共同作用，其中ADC0和ADC1用于地瓜硬件区分，客户不可更改；ADC3用于识别Acore外设上电时序，客户可自定义Acore外设上电时序，并同时修改ADC3的分压电阻；ADC4用于识别硬件版本。具体ADC如何设置分压电阻，可联系地瓜FAE团队进行支持
 
-每个 ADC 通道共有16个档位，对应0x0~0xF。S100的 boardid 是一个16bit 的无符号整形，例如`0x6A84`，其中 boardid[15:12]对应 ADC0，为0x6；boardid[11:8]对应 ADC1，为0xA；boardid[7:4]对应 ADC3，为0x8；boardid[3:0]对应 ADC4，为0x4
+每个ADC通道共有16个档位，对应0x0~0xF。S100的boardid是一个16bit的无符号整形，例如`0x6A84`，其中boardid[15:12]对应ADC0，为0x6；boardid[11:8]对应ADC1，为0xA；boardid[7:4]对应ADC3，为0x8；boardid[3:0]对应ADC4，为0x4
 
-由 ADC 采样形成 boardid，在 SBL 内实现，这部分属于闭源代码，客户无需关心
+由ADC采样形成boardid，在SBL内实现，这部分属于闭源代码，客户无需关心
 
-## 在 MCU 下新增硬件
+## 在MCU下新增硬件
 
 :::info 提示
 
-在 MCU 侧需要做的是实现自己的 Acore 外设上电方式，如果是参考地瓜的设计，客户无需修改 MCU，可忽略此部分
+在MCU侧需要做的是实现自己的Acore 外设上电方式，如果是参考地瓜的设计，客户无需修改MCU，可忽略此部分
 
 :::
 
-### 添加 Acore 外设电源管理代码
+### 添加Acore外设电源管理代码
 
 #### 启动阶段
 
@@ -50,9 +49,9 @@ static Std_ReturnType Rdk_S100_Peri_Pwr_Init(void)
 }
 ```
 
-如代码所示，根据 ADC3档位走不同的 Acore 外设上电流程。如果客户自定义了 Acore 外设上电方式，需要分配一个新的 ADC3档位，实现自己的上电方式
+如代码所示，根据ADC3档位走不同的Acore外设上电流程。如果客户自定义了Acore 外设上电方式，需要分配一个新的ADC3档位，实现自己的上电方式
 
-#### reboot/suspend 的下电阶段
+#### reboot/suspend的下电阶段
 
 在此阶段需要实现下电操作
 
@@ -83,7 +82,7 @@ Std_ReturnType Pmu_MainDomainPeriOff(void)
 }
 ```
 
-#### reboot/resume 的上电阶段
+#### reboot/resume的上电阶段
 
 在此阶段需要实现上电操作
 
@@ -143,13 +142,40 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 
 ## 在 spl 和 Uboot 下新增硬件
 
-spl 为 Uboot 下的 spl
+在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
+
+在MCU0代码中，会检测AON GPIO 11的中断状态以决定是否要进入休眠模式，中断在ICU模块中注册，因此需要在ICU模块中关闭AON GPIO 11的中断
+
+在MCU代码`mcu/Config/McalCdd/gen_s100_sip_B/Icu/src/Icu_PBCfg.c`的`Icu_Gpio_ChannelConfig_PB`数组中，需要做以下设置：
+
+```c
+        ...
+         /** @brief gpio mod 3 channel 11 */
+        {
+            .PinId = 11,
+            .instanceNo = 3,
+            .DefaultStartEdge = GPIO_ICU_FALLING_EDGE,
+            .NotificationEnable = FALSE,
+            .GpioChannelNotification = Icu_Gpio_Channel_3_11_ISR,
+            .IntEnable = FALSE,
+            .IntMask = TRUE,
+        },
+        ...
+```
+
+- `NotificationEnable`改为`FALSE`
+- `IntEnable`改为`FALSE`
+- `IntMask`改为`TRUE`
+
+## 在spl和Uboot下新增硬件
+
+spl为Uboot下的spl
 
 ### 新增配置文件
 
-Uboot 的配置文件位于 SDK 目录`source/bootloader/uboot/configs`下，debug 模式对应的配置文件`hobot_s100_defconfig`，release 模式对应的配置文件为`hobot_s100_rel_defconfig`
+Uboot的配置文件位于SDK目录`source/bootloader/uboot/configs`下，debug模式对应的配置文件`hobot_s100_defconfig`，release模式对应的配置文件为`hobot_s100_rel_defconfig`
 
-Uboot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为`source/bootloader/device/rdk/s100/board_s100_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定 Uboot 配置文件
+Uboot配置文件在bootloader板级配置文件中指定，对于debug配置文件来说，路径为`source/bootloader/device/rdk/s100/board_s100_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定Uboot配置文件
 
 ```shell
 # hobot_s100_defconfig
@@ -160,11 +186,11 @@ export HR_ARCH_UBOOT="arm"
 ...
 ```
 
-如果客户有需求可以生成自己的 Uboot config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的Uboot config文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
 
 ### 新增设备树
 
-Uboot 的设备树文件位于 SDK 目录`source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
+Uboot的设备树文件位于SDK目录`source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
 
 ```shell
 # hobot_s100_defconfig
@@ -173,13 +199,13 @@ CONFIG_DEFAULT_DEVICE_TREE="drobot-s100-rdk"
 ...
 ```
 
-如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "drobot-s100-soc.dtsi"`，然后在后面覆写，最后按照上述描述进行替换，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
+如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "drobot-s100-soc.dtsi"`，然后在后面覆写，最后按照上述描述进行替换，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在Makefile中引入编译。
 
-### 新增 boardid
+### 新增boardid
 
-1. 根据 boardid 添加 socname，hwname、board version 和 pcie mode
+1. 根据boardid添加socname，hwname、board version和pcie mode
 
-在 SDK 目录`source/bootloader/uboot/arch/arm/mach-hobot/super/boot_info.c`的`g_board_info`数组中添加 board 信息
+在SDK目录`source/bootloader/uboot/arch/arm/mach-hobot/super/boot_info.c`的`g_board_info`数组中添加board信息
 
 ```c
 /* arch/arm/mach-hobot/super/boot_info.c */
@@ -225,9 +251,9 @@ struct hb_boardinfo_t g_board_info[BOARD_TYPE_NUM] = {
 };
 ```
 
-2. 根据 boardid 添加 Kernel 配置
+2. 根据boardid添加Kernel配置
 
-在 SDK 目录`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中添加 Kernel 配置
+在SDK目录`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中添加Kernel配置
 
 ```c
 /* arch/arm/mach-hobot/super/super_board.c */
@@ -275,7 +301,7 @@ const static struct hb_super_btype_node hb_super_btype_list[] = {
 };
 ```
 
-其中`hb_super_btype_node`中`fdt_feat`为 Kernel dtb 的名字，`pxe_label`为 extlinux 中的 Kernel 配置，名字必须相互对应
+其中`hb_super_btype_node`中`fdt_feat`为Kernel dtb的名字，`pxe_label`为extlinux中的Kernel配置，名字必须相互对应
 
 ### 取消SLEEP KEY的处理
 
@@ -295,9 +321,9 @@ static uint32_t hb_get_fb_key_status(void)
 
 ### 新增配置文件
 
-Kernel 的配置文件位于 SDK 目录`source/hobot-drivers/configs`下，S100对应的配置文件为`drobot_s100_defconfig`
+Kernel的配置文件位于SDK目录`source/hobot-drivers/configs`下，S100对应的配置文件为`drobot_s100_defconfig`
 
-Kernel 配置文件在 mk_kernel.sh 中指定
+Kernel配置文件在mk_kernel.sh中指定
 
 ```shell
 # mk_kernel.sh
@@ -306,23 +332,23 @@ export KERNEL_DEFCONFIG=drobot_s100_defconfig
 ...
 ```
 
-如果客户有需求可以生成自己的 Kernel config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的Kernel config文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
 
 ### 新增设备树
 
-Kernel 的设备树文件位于 SDK 目录`source/hobot-drivers/kernel-dts`
+Kernel的设备树文件位于SDK目录`source/hobot-drivers/kernel-dts`
 
-如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "rdk-v0p5.dtsi"`，然后在后面覆写，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
+如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "rdk-v0p5.dtsi"`，然后在后面覆写，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在Makefile中引入编译。
 
-dtb 的命名需要和`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中的 fdt_feat 对应
+dtb的命名需要和`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中的fdt_feat对应
 
-### extlinux 配置
+### extlinux配置
 
-S100中 Uboot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
+S100中Uboot根据extlinux解析Kernel配置，选择对应的dtb、Kernel镜像和initramfs加载
 
-extlinux 文件位于`source/kernel/scripts/package/rdk_extlinux`
+extlinux文件位于`source/kernel/scripts/package/rdk_extlinux`
 
-以 RDK-S100-V1P1版本为例
+以RDK-S100-V1P1版本为例
 
 ```shell
 label drobot-s100-rdk-v1p1-kernel
@@ -333,11 +359,11 @@ label drobot-s100-rdk-v1p1-kernel
 
 其中`label`必须和`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中的`pxe_label`对应
 
-`fdt`中的 rdk-s100-v1p1.dtb 必须和要使用的 Kernel 设备树命名保持一致
+`fdt`中的rdk-s100-v1p1.dtb必须和要使用的Kernel设备树命名保持一致
 
-## 根据 boardid 加载 ko
+## 根据boardid加载ko
 
-在文件`source/hobot-utils/debian/usr/bin/hobot-loadko.sh`中，需要根据 boardid 选择是否加载 pcie 驱动和 asm3042 firmware
+在文件`source/hobot-utils/debian/usr/bin/hobot-loadko.sh`中，需要根据boardid选择是否加载pcie驱动和asm3042 firmware
 
 ```shell
 boardid_sys_path="/sys/class/boardinfo/adc_boardid"
@@ -375,15 +401,15 @@ fi
 
 ## 上板调试
 
-上板调试时建议使用 debug 镜像，release 镜像会关闭大部分 log，出问题时无法定位
+上板调试时建议使用debug镜像，release镜像会关闭大部分log，出问题时无法定位
 
-编译 debug 镜像方法
+编译debug镜像方法
 
-在脚本`pack_image.sh`中，默认配置选择 beta 配置
+在脚本`pack_image.sh`中，默认配置选择beta配置
 
 ### 查看启动信息是否符合预期
 
-- SBL log 中会打印出 ADC 档位值
+- SBL log中会打印出ADC档位值
 
 ```shell
 ...
@@ -395,7 +421,7 @@ fi
 ...
 ```
 
-- spl log 中会打印出 ADC 档位值
+- spl log中会打印出ADC档位值
 
 ```shell
 U-Boot SPL 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -407,7 +433,7 @@ boot_flags.boardid_adc_ch4 0x4
 ...
 ```
 
-- Uboot log 中会打印出 Model，可以判断是否和 Uboot dts 中定义的是否一致
+- Uboot log中会打印出Model，可以判断是否和Uboot dts中定义的是否一致
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -416,7 +442,7 @@ Model: D-Robotics S100 SIP Board
 ...
 ```
 
-- Uboot log 中会打印出 boardid，例如下面的6a84
+- Uboot log中会打印出boardid，例如下面的6a84
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -425,7 +451,7 @@ system_slot: 0 adc_boardinfo: 6a84
 ...
 ```
 
-- Uboot log 中会打印出在 extlinux 中对应的 label，以及 Kernel 镜像、dtb 和 initramfs
+- Uboot log中会打印出在extlinux中对应的label，以及Kernel镜像、dtb和initramfs
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -439,16 +465,16 @@ Retrieving file: /hobot/rdk-s100-v0p5.dtb
 ...
 ```
 
-- 查看 bootargs 中的 board info
+- 查看bootargs中的board info
 
-主要是`hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc`等，是否和 Uboot 中定义的一致
+主要是`hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc`等，是否和Uboot中定义的一致
 
 ```shell
 root@ubuntu:~# cat /proc/cmdline
 console=ttyS0,921600n8 systemd.show-status=auto loglevel=1 hobot.kernel_in=nvme0 hobotboot.socname=S100 board.hwname=RDK board.ver=V0P5 board.pcie_mode=rc hobotboot.reason=hwreset hobotboot.slot_suffix=_a hobotboot.mode=normal hobotboot.secureboot=1 hobotboot.bootcount=1 systemd.unified_cgroup_hierarchy=0 hobotboot.serial=060c049530906941  clk_ignore_unused earlycon=uart8250,mmio32,0x394B0000 no_console_suspend root=/dev/ram0 rdinit=/init  rootwait net.ifnames=0 root=/dev/nvme0n1p17 rw rootfstype=ext4 rootwait
 ```
 
-- 在 Kernel 命令行中查看 board info
+- 在Kernel命令行中查看board info
 
 ```shell
 root@ubuntu:~# cd /sys/class/boardinfo/

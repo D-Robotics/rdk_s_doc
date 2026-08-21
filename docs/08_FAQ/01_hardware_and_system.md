@@ -576,7 +576,7 @@ no mmc device at slot X
 * 上述步骤是一个通用流程，具体命令和细节可能因您的 Linux 发行版、内核版本以及 Secure Boot 的配置状态而有所不同。
 * **请务必参考您所使用的 Linux 发行版和内核版本的官方文档中关于“内核模块签名 (Kernel Module Signing)”的详细指南。**
 * 地瓜机器人官方 RDK 文档中关于“Linux 开发”或“驱动开发”的章节，也可能包含针对 RDK 平台的具体模块签名指导：
-    
+
     <DocScope products="RDK S100">
     [内核头文件与模块编译](/Advanced_development/linux_development/kernel_headers) (请查找此文档中关于模块签名的具体章节)。
     </DocScope>

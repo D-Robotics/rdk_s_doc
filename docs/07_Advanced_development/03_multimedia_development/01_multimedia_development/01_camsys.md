@@ -1284,7 +1284,7 @@ RDK-S100 接入 camera 后，进入后级模块处理，其数据流通路如下
 1. 填写问卷：提交您的机构信息、使用场景等基本情况
 2. 签署保密协议（NDA）：我们将根据提交信息与您联系，双方确认后签署保密协议
 3. 内容释放：完成协议签署后，我们将通过私有渠道为您开放商业版本资料
-  
+
 如您希望获取商业版内容，请点击下方链接填写问卷，我们将在 3 ～ 5 个工作日内与您联系：
 https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 :::
@@ -1695,7 +1695,7 @@ int32_t hbn_camera_init_cfg(const char \*cfg_file)
 1. 填写问卷：提交您的机构信息、使用场景等基本情况
 2. 签署保密协议（NDA）：我们将根据提交信息与您联系，双方确认后签署保密协议
 3. 内容释放：完成协议签署后，我们将通过私有渠道为您开放商业版本资料
-  
+
 如您希望获取商业版内容，请点击下方链接填写问卷，我们将在 3 ～ 5 个工作日内与您联系：
 https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 :::

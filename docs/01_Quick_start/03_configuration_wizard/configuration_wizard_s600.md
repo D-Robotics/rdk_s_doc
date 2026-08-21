@@ -113,32 +113,36 @@ ExecStart=-/sbin/agetty -a root --keep-baud 921600,115200,38400,9600 %I $TERM
 1. 安装命令包
 
 ```bash
-sudo apt install language-pack-zh-hans language-pack-zh-hans-base fonts-wqy-microhei
+sudo apt install language-pack-zh-hans language-pack-zh-hans-base fonts-wqy-microhei language-pack-gnome-zh-hans language-pack-gnome-zh-hans-base
 ```
 
 - language-pack-zh-hans：包含中文语言的翻译文件，能让系统界面显示为中文。
 - language-pack-zh-hans-base：基础语言包，提供基本的中文支持。
 - fonts-wqy-microhei：安装中文字体
+- language-pack-gnome-zh-hans：GNOME 桌面环境的中文语言包
+- language-pack-gnome-zh-hans-base：GNOME 桌面环境的基础中文语言包
 
-2. 打开终端，输入以下命令打开语言设置配置文件：
-
-```bash
-sudo vim /etc/default/locale
-```
-
-文件中添加或修改以下内容：
-
-```text
-LANG=zh_CN.UTF-8
-LANGUAGE=zh_CN:zh
-LC_ALL=zh_CN.UTF-8
-```
-
-3. 执行以下命令更新配置：
+2. 生成 locale：
 
 ```bash
-fc-cache -fv
-source /etc/default/locale
+sudo sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen
+sudo locale-gen zh_CN.UTF-8
+```
+
+3. 设置 locale：
+
+```bash
+sudo update-locale LANG=zh_CN.UTF-8 LANGUAGE=zh_CN:zh
+```
+> **说明：**
+>
+> 本文档仅配置 `LANG` 和 `LANGUAGE`，无需额外设置 `LC_ALL`。`LC_ALL` 主要用于临时覆盖所有 Locale 配置，不建议作为系统默认配置，因此本文档未进行设置。
+
+4. 刷新字体、重启系统：
+
+```bash
+sudo fc-cache -fv
+sudo reboot
 ```
 
 ## 设置中文输入法

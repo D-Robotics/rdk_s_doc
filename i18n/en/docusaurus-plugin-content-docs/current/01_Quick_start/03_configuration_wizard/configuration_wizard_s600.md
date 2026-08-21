@@ -111,32 +111,36 @@ To be updated. -->
 1. Install the command packages:
 
 ```bash
-sudo apt install language-pack-zh-hans language-pack-zh-hans-base fonts-wqy-microhei
+sudo apt install language-pack-zh-hans language-pack-zh-hans-base fonts-wqy-microhei language-pack-gnome-zh-hans language-pack-gnome-zh-hans-base
 ```
 
 - `language-pack-zh-hans`: Contains Chinese language translation files, allowing the system interface to display in Chinese.
 - `language-pack-zh-hans-base`: Base language pack providing basic Chinese support.
 - `fonts-wqy-microhei`: Installs Chinese fonts.
+- `language-pack-gnome-zh-hans`: Chinese language translation files for GNOME.
+- `language-pack-gnome-zh-hans-base`: Base language pack for GNOME providing basic Chinese support.
 
-2. Open the terminal and enter the following command to open the language configuration file:
-
-```bash
-sudo vim /etc/default/locale
-```
-
-Add or modify the following content in the file:
-
-```text
-LANG=zh_CN.UTF-8
-LANGUAGE=zh_CN:zh
-LC_ALL=zh_CN.UTF-8
-```
-
-3. Execute the following command to update the configuration:
+2. Generate locale:
 
 ```bash
-fc-cache -fv
-source /etc/default/locale
+sudo sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen
+sudo locale-gen zh_CN.UTF-8
+```
+
+3. Set locale:
+
+```bash
+sudo update-locale LANG=zh_CN.UTF-8 LANGUAGE=zh_CN:zh
+```
+> **Note:**
+>
+> This document configures only `LANG` and `LANGUAGE`; there is no need to set `LC_ALL`. `LC_ALL` is primarily used to temporarily override all locale settings and is not recommended as a system default; therefore, it is not configured here.
+
+4.Refresh fonts and restart the system:
+
+```bash
+sudo fc-cache -f -v
+sudo reboot
 ```
 
 ## Setting Up Chinese Input Method

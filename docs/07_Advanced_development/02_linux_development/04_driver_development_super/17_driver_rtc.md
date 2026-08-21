@@ -1346,3 +1346,32 @@ RTC-YSN8130 存在硬件限制，闹钟最细粒度为分钟级，不支持秒�
 </DocScope>
 
 > 示例（S100）：将 Interrupt_McuConfigs[] 中 Os_IntChannel_Gpio_Icu3ExtIsr 行末尾的 ENABLE 改为 DISABLE 即可，S600 操作同理。
+
+### Q3：RTC 和系统时间同步
+
+内核通过 HCTOSYS 机制在启动时把硬件 RTC 时间同步到系统时钟，相关配置：
+
+| 配置项 | 含义 |
+|------|------|
+| `CONFIG_RTC_HCTOSYS=y` | 开机时自动从 RTC 读时间设到系统时钟（Hardware Clock TO SYStem） |
+| `CONFIG_RTC_HCTOSYS_DEVICE="rtc1"` | 指定 `rtc1` 作为 HCTOSYS 同步源 |
+
+确认 `rtc1` 对应哪个硬件及同步状态：
+
+```bash
+ls /sys/class/rtc/
+cat /sys/class/rtc/rtc1/name    # rtc1 对应的驱动/设备名
+cat /sys/class/rtc/rtc1/time    # rtc1 当前时间
+cat /sys/class/rtc/rtc1/hctosys # 1=已同步到系统时间
+```
+
+运行时手动同步：
+
+```bash
+# RTC(硬件) → 系统时间
+hwclock --hctosys -f /dev/rtc1
+# 系统时间 → RTC(硬件)，把当前 date 写回 rtc1
+hwclock --systohc -f /dev/rtc1
+```
+
+需保证同步源 `rtc1` 在内核启动时已就绪，否则 HCTOSYS 不触发，只能运行时用 `hwclock --hctosys` 手动补同步。
