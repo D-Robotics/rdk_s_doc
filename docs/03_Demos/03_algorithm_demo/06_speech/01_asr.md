@@ -15,16 +15,16 @@ import DocScope from '@site/src/components/DocScope';
 示例代码位于板端 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下。
 
 :::warning
-S100 系统镜像未内置 `asr.hbm` 模型，运行前需手动下载并放到 `/opt/hobot/model/s100/basic/asr.hbm`（或通过 `--model_path` 指定）。
+S100 与 S600 系统镜像均未内置 `asr.hbm` 模型，运行前需手动下载并放到 `/opt/hobot/model/<产品>/basic/asr.hbm`（或通过 `--model_path` 指定）。
 :::
 
 ## 前置条件
 
 - 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
 - 板端有编译工具链（`cmake`、`make`、`g++`，镜像已预装）。
-- 预装模型已就位：
-  - S100：`/opt/hobot/model/s100/basic/asr.hbm`（镜像未内置，需手动下载）
-  - S600：`/opt/hobot/model/s600/basic/asr.hbm`（已随镜像预装）
+- 预装模型已就位（镜像未内置，需从 RDK 模型库下载，见 [模型获取与放置](../../04_demo_support/01_model_files.md)）：
+  - S100：`/opt/hobot/model/s100/basic/asr.hbm`
+  - S600：`/opt/hobot/model/s600/basic/asr.hbm`
 
 ## 环境依赖
 
@@ -119,7 +119,7 @@ Full transcription:
 
 - **`make` 报错找不到 `gflags`/`sndfile`/`samplerate`**：按"环境依赖"安装对应 `-dev` 包。
 - **结果文字乱/缺字**：ASR 模型精度有限，换更清晰音频可改善。
-- **S100 报错找不到 `asr.hbm`**：S100 镜像未内置，需手动下载（见上方 warning）。
+- **报错找不到 `asr.hbm`**：S100 与 S600 镜像均未内置，需手动下载（见上方 warning）。
 
 ## 相关文档
 

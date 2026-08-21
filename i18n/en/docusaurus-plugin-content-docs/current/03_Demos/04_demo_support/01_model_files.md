@@ -40,9 +40,10 @@ The models pre-installed in the image are located in `/opt/hobot/model/<product>
 ├── unet_mobilenet_1024x2048_nv12.hbm
 ├── yolov8n_seg_640x640_nv12.hbm
 ├── yolo11n_seg_nashp_640x640_nv12.hbm
-├── yolo11n_pose_nashp_640x640_nv12.hbm        # pose estimation
-└── asr.hbm                                    # speech recognition
+└── yolo11n_pose_nashp_640x640_nv12.hbm        # pose estimation
 ```
+
+> `asr.hbm` (speech recognition) is not in the pre-installed list; download it from the RDK model zoo, see [ASR example](../03_algorithm_demo/06_speech/01_asr_py.md).
 
 </DocScope>
 

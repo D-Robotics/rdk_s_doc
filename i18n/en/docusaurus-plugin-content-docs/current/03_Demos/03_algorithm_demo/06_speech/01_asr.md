@@ -15,16 +15,16 @@ This example demonstrates how to deploy the ASR speech recognition model on the 
 The example code is located in the `/app/cdev_demo/bpu/speech_sample/asr/` directory on the board.
 
 :::warning
-The S100 system image does not bundle the `asr.hbm` model. Before running, download it manually and place it at `/opt/hobot/model/s100/basic/asr.hbm` (or specify it via `--model_path`).
+Neither the S100 nor the S600 system image bundles the `asr.hbm` model. Before running, download it manually and place it at `/opt/hobot/model/<product>/basic/asr.hbm` (or specify it via `--model_path`).
 :::
 
 ## Prerequisites
 
 - The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
 - The compilation toolchain is available on the board (`cmake`, `make`, `g++`, pre-installed in the image).
-- The pre-installed models are in place:
-  - S100: `/opt/hobot/model/s100/basic/asr.hbm` (not bundled in the image, manual download required)
-  - S600: `/opt/hobot/model/s600/basic/asr.hbm` (pre-installed with the image)
+- The pre-installed models are in place (not bundled in the image, download from the RDK model zoo, see [Model files](../../04_demo_support/01_model_files.md)):
+  - S100: `/opt/hobot/model/s100/basic/asr.hbm`
+  - S600: `/opt/hobot/model/s600/basic/asr.hbm`
 
 ## Environment Dependencies
 
@@ -119,7 +119,7 @@ Data flow: read wav → resample to 16kHz → truncate/pad to 30000 samples → 
 
 - **`make` reports `gflags`/`sndfile`/`samplerate` not found**: Install the corresponding `-dev` packages as described in "Environment Dependencies".
 - **Garbled or missing characters in the result**: The ASR model accuracy is limited; using clearer audio can improve the result.
-- **S100 reports `asr.hbm` not found**: The S100 image does not bundle it; manual download is required (see the warning above).
+- **`asr.hbm` not found**: Neither the S100 nor S600 image bundles it; manual download is required (see the warning above).
 
 ## Related Documentation
 

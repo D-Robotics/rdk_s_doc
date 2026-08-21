@@ -40,9 +40,10 @@ import DocScope from '@site/src/components/DocScope';
 ├── unet_mobilenet_1024x2048_nv12.hbm
 ├── yolov8n_seg_640x640_nv12.hbm
 ├── yolo11n_seg_nashp_640x640_nv12.hbm
-├── yolo11n_pose_nashp_640x640_nv12.hbm        # 姿态估计
-└── asr.hbm                                    # 语音识别
+└── yolo11n_pose_nashp_640x640_nv12.hbm        # 姿态估计
 ```
+
+> `asr.hbm`（语音识别）不在镜像预装列表中，需从 RDK 模型库下载，见 [ASR 示例](../03_algorithm_demo/06_speech/01_asr_py.md)。
 
 </DocScope>
 

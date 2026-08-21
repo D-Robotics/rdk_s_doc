@@ -151,7 +151,8 @@ import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
 # Load the model
-model = HB_HBMRuntime("/opt/hobot/model/s600/basic/lanenet256x512.hbm")
+# Load the model (using a pre-installed S600 model as an example; replace with any .hbm path)
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm")
 
 # Get the model name and input name
 model_name = model.model_names[0]

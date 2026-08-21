@@ -150,8 +150,8 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
-# 加载模型
-model = HB_HBMRuntime("/opt/hobot/model/s600/basic/lanenet256x512.hbm")
+# 加载模型（以 S600 预装模型为例，可替换为任意 .hbm 路径）
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm")
 
 # 获取模型名与输入名
 model_name = model.model_names[0]
