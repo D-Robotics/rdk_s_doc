@@ -16,7 +16,7 @@ The sample code is located in the `/app/pydev_demo/classification_sample/resnet1
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and can be logged in via SSH (see [OS Installation and Configuration](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and can be logged in via SSH (see [OS Installation and Configuration](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The pre-installed model is in place (exists at the default path, no manual download needed):
   - S100: `/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`
   - S600: `/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`

@@ -12,7 +12,7 @@ description: "用 hbm_runtime Python 接口部署 YOLO11 做人体姿态估计�
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - 预装模型已就位：
   - S100：`/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm`
   - S600：`/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm`

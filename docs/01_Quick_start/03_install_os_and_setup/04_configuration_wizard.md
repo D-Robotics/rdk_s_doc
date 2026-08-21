@@ -8,7 +8,7 @@ description: "RDK S100/S600 入门配置：账户、Wi-Fi、SSH、中文环境�
 
 本节指导你在烧录系统并登录后完成首次基础配置：连接网络、开启 SSH、设置中文环境、安装远程桌面等，让板卡进入可日常使用的状态。
 
-> 烧录见 [系统烧录](./01_instruction.md)，系统状态确认见 [系统状态查询](./system_status.md)，远程登录见 [远程登录](./remote_login.md)。
+> 烧录见 [系统烧录](./01_instruction.md)，系统状态确认见 [系统状态查询](03_system_status.md)，远程登录见 [远程登录](05_remote_login.md)。
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -21,7 +21,7 @@ import DocScope from '@site/src/components/DocScope';
 开始前请准备：
 
 - [ ] 开发板已 [烧录系统](./01_instruction.md) 并完成启动。
-- [ ] 已通过串口或 SSH 登录开发板（登录方法见 [远程登录](./remote_login.md)）。
+- [ ] 已通过串口或 SSH 登录开发板（登录方法见 [远程登录](05_remote_login.md)）。
 - [ ] 配置无线网络前：已安装 M.2 Key E Wi-Fi & 蓝牙模组。
 
 ## 默认登录账户
@@ -350,8 +350,8 @@ sudo chown -R usertest:usertest /home/usertest
 ## 相关文档
 
 - [系统烧录](./01_instruction.md)
-- [系统状态查询](./system_status.md)
-- [远程登录](./remote_login.md)
+- [系统状态查询](03_system_status.md)
+- [远程登录](05_remote_login.md)
 - [网络配置](../../02_System_configuration/01_network_config.md)
 - [srpi-config 工具配置](../../02_System_configuration/04_srpi_config/01_overview.md)
 - [桌面应用](../../08_FAQ/07_desktop_app.md)

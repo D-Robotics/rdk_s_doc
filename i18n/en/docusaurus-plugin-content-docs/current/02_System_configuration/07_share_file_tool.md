@@ -183,5 +183,5 @@ To make Ubuntu automatically mount the NFS shared directory at every boot, you c
 ## Related Documents
 
 - [Network Configuration](./01_network_config.md)
-- [Remote Login](../01_Quick_start/03_install_os_and_setup/remote_login.md)
+- [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
 - [Storage and Disk Management](./12_storage.md)

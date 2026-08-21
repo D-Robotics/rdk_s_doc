@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - 板端有编译工具链（`cmake`、`make`、`g++`，镜像已预装）。
 - 预装模型已就位：
   - S100：`/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm`

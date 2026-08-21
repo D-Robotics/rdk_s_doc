@@ -14,7 +14,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## Prerequisites
 
-- You have logged in to the development board via SSH (see [Remote Login](../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- You have logged in to the development board via SSH (see [Remote Login](../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - Python and `hbm_runtime` are pre-installed with the image.
 
 ## Running an Example

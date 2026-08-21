@@ -18,7 +18,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - 桌面版镜像（Desktop），能进入桌面/console 显示。
 - 输入视频文件已就位：`/app/res/assets/1080P_test.h264`。
 - 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`）；若缺失见 [模型获取与放置](../../04_demo_support/01_model_files.md)。

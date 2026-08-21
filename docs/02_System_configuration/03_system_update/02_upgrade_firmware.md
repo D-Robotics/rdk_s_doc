@@ -19,7 +19,7 @@ RDK OS 跨大版本（如 5.0.x → 5.1.x）**不能靠 `apt` 升级**，须重�
 1. 备份板端自定义配置（`/etc`、`/opt` 下私有内容）。
 2. 下载目标版本镜像（见 [镜像下载](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)）。
 3. 按 [烧录步骤](../../01_Quick_start/03_install_os_and_setup/02_burn.md) 烧录新镜像。
-4. 烧后用 [系统状态查询](../../01_Quick_start/03_install_os_and_setup/system_status.md) 确认版本。
+4. 烧后用 [系统状态查询](../../01_Quick_start/03_install_os_and_setup/03_system_status.md) 确认版本。
 
 :::warning
 跨大版本升级会清空 rootfs，apt 装的私有包与配置需重新部署。生产环境先在测试板验证。

@@ -255,7 +255,7 @@ macOS 系统下，使用 minicom 工具连接串口，步骤如下：
 ## NoMachine 登录
 
 :::tip
-NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachine配置](./configuration_wizard.md#nomachine-配置)
+NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachine配置](04_configuration_wizard.md#nomachine-配置)
 :::
 
 本章节面向使用 Ubuntu Desktop 系统版本的用户，介绍如何通过`NoMachine`实现远程桌面登录功能。以下章节以 S100为例，S600的操作与 S100一致，将链接名内的`S100`替换为`S600`即可。
@@ -290,13 +290,13 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 
 - **SSH 连接被拒绝**：板端 `sudo systemctl status ssh` 确认服务运行；确认防火墙 `sudo ufw status` 未拦截。
 - **串口无输出**：检查波特率（应为 921600），确认 TTL-USB 线 TX/RX 未接反。
-- **NoMachine 黑屏**：首次配置后必须重启板卡。详见 [入门配置 - NoMachine 配置](./configuration_wizard.md)。
+- **NoMachine 黑屏**：首次配置后必须重启板卡。详见 [入门配置 - NoMachine 配置](04_configuration_wizard.md)。
 - **IP 地址不确定**：串口登录后 `ip addr` 查看，或路由器管理页查找 MAC 地址对应 IP。
 
 ## 相关文档
 
 - [系统烧录](./01_instruction.md)
-- [系统状态查询](./system_status.md)
-- [入门配置](./configuration_wizard.md)
+- [系统状态查询](03_system_status.md)
+- [入门配置](04_configuration_wizard.md)
 - [网络配置](../../02_System_configuration/01_network_config.md)
 - [调试串口](../../02_System_configuration/16_debug_serial.md)

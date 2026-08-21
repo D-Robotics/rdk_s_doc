@@ -153,7 +153,7 @@ API 描述及使用参考官方文档介绍：https://www.alsa-project.org/alsa-
 
 ##### 使用准备
 
-S100适配微雪电子生产的音频转接板，通过40PIN 实现和 S100开发板连接。子板介绍和具体连接方法参考：[音频子板使用说明](../../07_Advanced_development/04_driver_development/11_driver_audio.md#音频子板使用说明)
+S100适配微雪电子生产的音频转接板，通过40PIN 实现和 S100开发板连接。子板介绍和具体连接方法参考：[音频子板使用说明](../../07_Advanced_development/04_driver_development/09_driver_audio.md#音频子板使用说明)
 
 ##### 设备节点
 
@@ -259,5 +259,5 @@ S600预留了14PIN，包含 I2S/I2C 接口。
 ## 相关文档
 
 - [音频配置](../../02_System_configuration/10_audio_output.md)
-- [音频调试指南](../../07_Advanced_development/04_driver_development/11_driver_audio.md)
+- [音频调试指南](../../07_Advanced_development/04_driver_development/09_driver_audio.md)
 - [C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)

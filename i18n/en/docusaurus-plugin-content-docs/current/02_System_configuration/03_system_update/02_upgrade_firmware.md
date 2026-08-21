@@ -19,7 +19,7 @@ RDK OS cannot be upgraded across major versions (e.g., 5.0.x → 5.1.x) **via `a
 1. Back up the custom configurations on the board (private content under `/etc` and `/opt`).
 2. Download the image of the target version (see [Flashing Preparation](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)).
 3. Flash the new image following the [Flashing Steps](../../01_Quick_start/03_install_os_and_setup/02_burn.md).
-4. After flashing, use [System Status](../../01_Quick_start/03_install_os_and_setup/system_status.md) to verify the version.
+4. After flashing, use [System Status](../../01_Quick_start/03_install_os_and_setup/03_system_status.md) to verify the version.
 
 :::warning
 Upgrading across major versions wipes the rootfs; private packages installed via apt and configurations need to be redeployed. In production, verify on a test board first.

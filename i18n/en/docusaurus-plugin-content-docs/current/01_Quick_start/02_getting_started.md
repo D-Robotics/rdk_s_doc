@@ -20,7 +20,7 @@ Before you begin, prepare the following:
 
 - [ ] Development board kit (development board + power adapter).
 - [ ] Desktop edition: HDMI monitor, USB keyboard and mouse.
-- [ ] Server edition: TTL-USB serial cable (for serial login, see [Remote Login](./03_install_os_and_setup/remote_login.md)).
+- [ ] Server edition: TTL-USB serial cable (for serial login, see [Remote Login](03_install_os_and_setup/05_remote_login.md)).
 - [ ] Wired Ethernet cable (optional; recommended for remote login).
 - Completed: understanding the interface layout in [Introduction to the RDK S100 Hardware](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit) or [Introduction to the RDK S600 Hardware](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit).
 
@@ -154,7 +154,7 @@ The USB Type-A ports are used for connecting storage devices such as USB flash d
 
 - [Hardware Introduction](/01_Quick_start/01_hardware_introduction/03_expansion_board)
 - [OS Flashing](./03_install_os_and_setup/01_instruction.md)
-- [System Status Query](./03_install_os_and_setup/system_status.md)
-- [Initial Configuration](./03_install_os_and_setup/configuration_wizard.md)
-- [Remote Login](./03_install_os_and_setup/remote_login.md)
+- [System Status Query](03_install_os_and_setup/03_system_status.md)
+- [Initial Configuration](03_install_os_and_setup/04_configuration_wizard.md)
+- [Remote Login](03_install_os_and_setup/05_remote_login.md)
 - [Network Configuration](../02_System_configuration/01_network_config.md)

@@ -77,5 +77,5 @@ If the board has no network across power loss but must keep time, make sure the 
 
 ## Related Documents
 
-- [RTC Debugging Guide (Advanced)](../07_Advanced_development/04_driver_development/17_driver_rtc.md)
+- [RTC Debugging Guide (Advanced)](../07_Advanced_development/04_driver_development/14_driver_rtc.md)
 - [System Log Viewing](./15_system_log.md)

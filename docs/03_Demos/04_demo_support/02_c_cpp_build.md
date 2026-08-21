@@ -10,7 +10,7 @@ description: "板端编译 C/C++ demo 的方法（cmake/make）"
 
 ## 前置条件
 
-- 已通过 SSH 登录开发板（见 [远程登录](../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 已通过 SSH 登录开发板（见 [远程登录](../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - 镜像预装工具链可用：`cmake`、`make`、`g++`（用 `which cmake make g++` 确认）。
 
 ## 板端直接编译

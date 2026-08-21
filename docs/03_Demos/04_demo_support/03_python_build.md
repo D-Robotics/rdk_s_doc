@@ -14,7 +14,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- 已通过 SSH 登录开发板（见 [远程登录](../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 已通过 SSH 登录开发板（见 [远程登录](../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - Python 与 `hbm_runtime` 已随镜像预装。
 
 ## 运行示例

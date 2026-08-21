@@ -183,5 +183,5 @@ mount | grep windows_nfs_share
 ## 相关文档
 
 - [网络配置](./01_network_config.md)
-- [远程登录](../01_Quick_start/03_install_os_and_setup/remote_login.md)
+- [远程登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
 - [存储与磁盘管理](./12_storage.md)

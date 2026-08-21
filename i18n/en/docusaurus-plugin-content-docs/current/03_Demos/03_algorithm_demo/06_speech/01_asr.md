@@ -20,7 +20,7 @@ Neither the S100 nor the S600 system image bundles the `asr.hbm` model. Before r
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The compilation toolchain is available on the board (`cmake`, `make`, `g++`, pre-installed in the image).
 - The pre-installed models are in place (not bundled in the image, download from the RDK model zoo, see [Model files](../../04_demo_support/01_model_files.md)):
   - S100: `/opt/hobot/model/s100/basic/asr.hbm`

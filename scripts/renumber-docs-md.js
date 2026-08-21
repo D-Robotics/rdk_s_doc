@@ -13,26 +13,38 @@ const REPO_ROOT = path.resolve(__dirname, "..");
 const DOCS_ROOT = path.join(REPO_ROOT, "docs");
 
 /**
- * 黑名单/白名单规则（2026-08-21 P3 漂移治理期间加入）：
- * - SKIP_FILES：不做重命名的文件（首页 RDK.md 有显式 slug /RDK，改文件名有风险）
- * - SKIP_PREFIX_ZERO_DIRS：00 起始编号目录（position 从 1 起、文件名前缀 00 起是刻意设计，
- *   如 06_hardware_unit_test/00_overview.md、11_mcu_development/00_code_release.md），整目录跳过
- * - PY_SHARE_SEQUENCE：py 篇与 C 篇共享序号（01_x.md + 01_x_py.md），py 篇不参与独立重排，
- *   跟随同名 C 篇序号
+ * 重排规则（第一性原理，2026-08-21 P3 重写）：
+ * 目录内 .md 文件与子目录共享同一套排序序列（Docusaurus 中文件按 sidebar_position、
+ * 子目录按 _category_.json 的 position 参与混合排序）。重排时：
+ * 1. 文件 + 子目录混合按 position 排序，编号反映真实位次；
+ * 2. 子目录占用的编号被跳过（文件不能与子目录同名）；
+ * 3. C/py 配对（01_x.md + 01_x_py.md）共享同一序号；
+ * 4. 00 起始目录（存在 00_ 前缀文件）保持 00 基线；
+ * 5. 首页 RDK.md（显式 slug /RDK）不重命名。
+ * 不做黑名单——所有规则内生于排序逻辑。
  */
-const SKIP_FILES = new Set(["RDK.md"]);
-const SKIP_PREFIX_ZERO_DIRS = new Set([
-  "07_Advanced_development/04_driver_development/06_hardware_unit_test",
-  "07_Advanced_development/11_mcu_development",
-  "01_Quick_start/04_next_steps",
-]);
 
-function isSkippedFile(dirRel, filename) {
-  if (SKIP_FILES.has(filename)) return true;
-  const isPy = /_py\.md$/i.test(filename);
-  if (isPy) return true; // py 篇共享序号，随 C 篇
-  if (SKIP_PREFIX_ZERO_DIRS.has(dirRel)) return true;
-  return false;
+function isZeroBasedDir(dir) {
+  // 00 起始设计：存在 sidebar_position: 0 的 .md 文件（如 00_code_release.md）
+  try {
+    const ents = fs.readdirSync(dir, { withFileTypes: true });
+    for (const e of ents) {
+      if (!e.isFile() || !e.name.toLowerCase().endsWith(".md")) continue;
+      if (extractSidebarPosition(path.join(dir, e.name)) === 0) return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+function isPyFile(filename) {
+  return /_py\.md$/i.test(filename);
+}
+
+function pyPairOf(filename) {
+  // 01_x_py.md -> 01_x.md（去 _py 后缀）
+  return filename.replace(/_py\.md$/i, ".md");
 }
 
 function extractSidebarPosition(filePath) {
@@ -60,46 +72,111 @@ function coreNameFromFile(filename) {
   return base.replace(/^\d+_/, "");
 }
 
-function planDirectory(dir, dirRel) {
+function dirPosition(dir, name) {
+  // 子目录的排序号：_category_.json 的 position
+  try {
+    const cfgPath = path.join(dir, name, "_category_.json");
+    const cfg = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
+    if (Number.isFinite(cfg.position)) return cfg.position;
+  } catch {
+    /* 无 _category_ 的目录排最后 */
+  }
+  return Number.POSITIVE_INFINITY;
+}
+
+function planDirectory(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
-  const mds = entries.filter(
-    (e) =>
-      e.isFile() &&
-      e.name.toLowerCase().endsWith(".md") &&
-      !isSkippedFile(dirRel, e.name)
-  );
-  if (mds.length === 0) return [];
 
-  const items = mds.map((e) => {
-    const fp = path.join(dir, e.name);
-    return {
-      full: fp,
-      name: e.name,
-      pos: extractSidebarPosition(fp),
-      core: coreNameFromFile(e.name),
-    };
-  });
-
-  items.sort((a, b) => {
-    if (a.pos !== b.pos) return a.pos - b.pos;
-    return a.core.localeCompare(b.core, "en");
-  });
-
-  const plans = [];
-  for (let i = 0; i < items.length; i++) {
-    const it = items[i];
-    const n = i + 1;
-    const pad = String(n).padStart(2, "0");
-    const newName = `${pad}_${it.core}.md`;
-    if (it.name !== newName) {
-      plans.push({ from: it.full, to: path.join(dir, newName), oldName: it.name, newName });
+  // 收集文件 + 子目录
+  const items = [];
+  for (const e of entries) {
+    if (e.name.startsWith(".")) continue;
+    const full = path.join(dir, e.name);
+    if (e.isFile() && e.name.toLowerCase().endsWith(".md")) {
+      items.push({
+        kind: "file",
+        full,
+        name: e.name,
+        pos: extractSidebarPosition(full),
+        core: coreNameFromFile(e.name),
+      });
+    } else if (e.isDirectory()) {
+      items.push({
+        kind: "dir",
+        full,
+        name: e.name,
+        pos: dirPosition(dir, e.name),
+        core: coreNameFromFile(e.name),
+      });
     }
+  }
+
+  const files = items.filter((i) => i.kind === "file");
+  if (files.length === 0) return [];
+
+  // 目录占用的编号集合（文件不得与之同名同号）
+  const dirNames = new Set(items.filter((i) => i.kind === "dir").map((i) => i.name));
+  // 已存在的文件/目录名（冲突检测）
+  const existingNames = new Set(items.map((i) => i.name));
+  // 子目录占用的前缀编号（文件不得与子目录同号，如 03_rdk_s600.md vs 03_expansion_board/）
+  const dirPrefixes = new Set(
+    items
+      .filter((i) => i.kind === "dir")
+      .map((i) => i.name.match(/^(\d+)_/)?.[1])
+      .filter(Boolean)
+  );
+
+  // 00 起始目录：position 0 的文件用 00 前缀（序号 = position）
+  const zeroBased = isZeroBasedDir(dir);
+
+  // 计算每个文件的目标名：前缀 = position（pad 2 位）
+  // 非 00 起始目录中 position 0 视为无效（跳过，保持原名）
+  const target = new Map(); // name -> newName
+  const eligible = files.filter((f) => f.name !== "RDK.md" && !isPyFile(f.name));
+  for (const f of eligible) {
+    if (!Number.isFinite(f.pos)) continue;
+    if (f.pos < 0) continue;
+    if (!zeroBased && f.pos === 0) continue;
+    const pad = String(f.pos).padStart(2, "0");
+    target.set(f.name, `${pad}_${f.core}.md`);
+  }
+
+  // py 篇跟随同名 C 篇前缀
+  for (const pf of files.filter((f) => isPyFile(f.name))) {
+    const cName = pyPairOf(pf.name);
+    const cNew = target.get(cName);
+    if (cNew) {
+      const m = cNew.match(/^(\d+)_(.+)$/);
+      if (m) target.set(pf.name, `${m[1]}_${pf.core}.md`);
+    }
+  }
+
+  // 生成计划：目标名不同 + 不与现有条目/子目录前缀冲突
+  const plans = [];
+  for (const f of files) {
+    const newName = target.get(f.name);
+    if (!newName || newName === f.name) continue;
+    // 目标名不能与目录名或其它文件同名
+    if (dirNames.has(newName)) continue;
+    if (existingNames.has(newName) && newName !== f.name) continue;
+    // 目标前缀不能与子目录前缀重复（同目录同号冲突）
+    const newPrefix = newName.match(/^(\d+)_/)?.[1];
+    if (newPrefix && dirPrefixes.has(newPrefix)) continue;
+    plans.push({
+      from: f.full,
+      to: path.join(dir, newName),
+      oldName: f.name,
+      newName,
+    });
   }
   return plans;
 }
 
 function twoPhaseRenameInDir(dir, plans) {
   if (plans.length === 0) return;
+  if (process.env.DRY_RUN) {
+    return; // 预览模式：只打印不执行
+  }
   const temps = [];
   plans.forEach((p, i) => {
     const tmp = path.join(dir, `.__reorder_tmp_${i}_${p.oldName}`);
@@ -144,8 +221,7 @@ function main() {
   const allPlans = [];
 
   for (const dir of dirs) {
-    const dirRel = path.relative(DOCS_ROOT, dir);
-    const plans = planDirectory(dir, dirRel);
+    const plans = planDirectory(dir);
     if (plans.length === 0) continue;
     console.log(`\n${path.relative(REPO_ROOT, dir)} (${plans.length} rename(s))`);
     plans.forEach((p) =>
@@ -174,6 +250,9 @@ function main() {
           console.log(`    ${p.oldName} -> ${p.newName}`)
         );
         // two-phase 重命名（from/to 在 i18nDir 下）
+        if (process.env.DRY_RUN) {
+          // 预览模式：只打印不执行
+        } else {
         const temps = [];
         i18nPlans.forEach((p, i) => {
           const tmp = path.join(i18nDir, `.__reorder_tmp_${i}_${p.oldName}`);
@@ -183,6 +262,7 @@ function main() {
         temps.forEach(({ tmp, to }) => {
           fs.renameSync(tmp, to);
         });
+        }
       }
     }
   }

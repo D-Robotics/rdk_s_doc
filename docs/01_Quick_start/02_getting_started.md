@@ -20,7 +20,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - [ ] 开发板套件（开发板 + 电源适配器）。
 - [ ] Desktop 版：HDMI 显示器、USB 键盘与鼠标。
-- [ ] Server 版：TTL-USB 串口线（串口登录见 [远程登录](./03_install_os_and_setup/remote_login.md)）。
+- [ ] Server 版：TTL-USB 串口线（串口登录见 [远程登录](03_install_os_and_setup/05_remote_login.md)）。
 - [ ] 有线网线（可选，推荐接入以便远程登录）。
 - 已完成：了解 [RDK S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit) 或 [RDK S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit) 的接口布局。
 
@@ -154,7 +154,7 @@ USB Type-A 接口用于连接 U 盘、移动硬盘等存储设备。USB Type-C �
 
 - [硬件介绍](/01_Quick_start/01_hardware_introduction/03_expansion_board)
 - [系统烧录](./03_install_os_and_setup/01_instruction.md)
-- [系统状态查询](./03_install_os_and_setup/system_status.md)
-- [入门配置](./03_install_os_and_setup/configuration_wizard.md)
-- [远程登录](./03_install_os_and_setup/remote_login.md)
+- [系统状态查询](03_install_os_and_setup/03_system_status.md)
+- [入门配置](03_install_os_and_setup/04_configuration_wizard.md)
+- [远程登录](03_install_os_and_setup/05_remote_login.md)
 - [网络配置](../02_System_configuration/01_network_config.md)

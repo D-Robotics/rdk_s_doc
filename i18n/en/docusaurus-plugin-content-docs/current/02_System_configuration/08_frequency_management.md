@@ -453,4 +453,4 @@ You can use the `sudo hrut_somstatus` command to check the current chip operatin
 
 - [Display Configuration](./09_display_config.md)
 - [Screen Sleep and Power Management](./11_screen_sleep.md)
-- [Thermal Driver Development (Advanced)](../07_Advanced_development/04_driver_development/09_driver_thermal_dev.md)
+- [Thermal Driver Development (Advanced)](../07_Advanced_development/04_driver_development/08_driver_thermal_dev.md)

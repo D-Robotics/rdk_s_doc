@@ -361,4 +361,4 @@ For system software package upgrades and major version/firmware updates, see [Sy
 
 - [Bluetooth Configuration](./02_bluetooth_config.md)
 - [System Update](./03_system_update/02_upgrade_firmware.md)
-- [Remote Login](../01_Quick_start/03_install_os_and_setup/remote_login.md)
+- [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)

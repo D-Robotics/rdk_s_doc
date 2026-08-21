@@ -77,5 +77,5 @@ hwclock: Warning: unrecognized line in adjtime file:
 
 ## 相关文档
 
-- [RTC 调试指南（进阶）](../07_Advanced_development/04_driver_development/17_driver_rtc.md)
+- [RTC 调试指南（进阶）](../07_Advanced_development/04_driver_development/14_driver_rtc.md)
 - [系统日志查看](./15_system_log.md)

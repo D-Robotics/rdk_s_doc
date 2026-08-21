@@ -12,7 +12,7 @@ The sample code is located in the `/app/pydev_demo/detection_sample/ultralytics_
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`.
 - The Python environment and `hbm_runtime` are pre-installed with the image.
 

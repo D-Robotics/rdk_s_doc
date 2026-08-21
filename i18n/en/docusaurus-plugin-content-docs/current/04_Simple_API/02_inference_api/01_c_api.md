@@ -8,7 +8,7 @@ description: "hbDNN C inference API (hb_dnn.h): model loading, tensor query and 
 
 hbDNN is a C wrapper API on RDK for loading and running neural network models (`hb_dnn.h`), covering the complete flow from loading model files, querying input/output tensors and preparing memory, to submitting inference tasks and retrieving the results. Models are compiled into `.hbm` files by the AI toolchain (see "Using Your Own Model"); hbDNN parses them and executes them on the BPU.
 
-> **Interface level**: this page is the 【encapsulated simple API】(mode 1), ready to use out of the box. When you need to directly manage low-level primitives such as BPU cores, task scheduling and BPU memory, see [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/12_bpu_api.md); for the Python wrapper, see [Python Inference API](./02_python_api.md).
+> **Interface level**: this page is the 【encapsulated simple API】(mode 1), ready to use out of the box. When you need to directly manage low-level primitives such as BPU cores, task scheduling and BPU memory, see [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md); for the Python wrapper, see [Python Inference API](./02_python_api.md).
 
 **Applicable scenarios**: loading a `.hbm` model in a C/C++ application and performing inference (custom pipelines for tasks such as classification, detection and segmentation), or scenarios that need multi-model batch loading or asynchronous task scheduling.
 
@@ -476,12 +476,12 @@ The model must match the target platform: models for RDK S100 and RDK S600 are n
 Check that the input is correctly quantized according to `hbDNNTensorProperties.scale` and that the output is dequantized with the same parameters; confirm that the input shape and data type (`tensorType`) match what was used when the model was compiled.
 
 **Q: How do I specify BPU cores or priority after submitting a task?**
-Via `hbUCPSchedParam` (initialize with the `HB_UCP_INITIALIZE_SCHED_PARAM` macro and then modify the `backend`/`priority` fields; core definitions such as `HB_UCP_BPU_CORE_0`). For more low-level core management, see [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/12_bpu_api.md).
+Via `hbUCPSchedParam` (initialize with the `HB_UCP_INITIALIZE_SCHED_PARAM` macro and then modify the `backend`/`priority` fields; core definitions such as `HB_UCP_BPU_CORE_0`). For more low-level core management, see [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md).
 
 ## Related Documents
 
 - [Python Inference API](./02_python_api.md)
-- [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/12_bpu_api.md)
+- [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md)
 - [Algorithm Demos](../../03_Demos/03_algorithm_demo/01_summary.md)
 - [Model Download and Placement](../../03_Demos/04_demo_support/01_model_files.md)
 - [Using Your Own Model](../../03_Demos/04_demo_support/04_custom_model.md)

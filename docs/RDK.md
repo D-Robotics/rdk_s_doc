@@ -20,7 +20,7 @@ import DocScope from '@site/src/components/DocScope';
 RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱可用；TogetheROS.Bot（tros.b）机器人中间件预装在镜像内。详见 产品共识（标准仓库）。
 
 :::note 注意
-确认系统版本号：`cat /etc/version`；`rdkos_info` 查看板卡与运行时信息。详见 [系统状态查询](./01_Quick_start/03_install_os_and_setup/system_status.md)。
+确认系统版本号：`cat /etc/version`；`rdkos_info` 查看板卡与运行时信息。详见 [系统状态查询](./01_Quick_start/03_install_os_and_setup/03_system_status.md)。
 :::
 
 ### 产品介绍

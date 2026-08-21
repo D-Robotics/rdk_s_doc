@@ -16,7 +16,7 @@ The sample code is located in the `/app/cdev_demo/bpu/instance_segmentation_samp
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
 - The pre-installed model is in place:
   - S100: `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm`

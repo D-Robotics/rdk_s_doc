@@ -12,7 +12,7 @@ The example code is located in the `/app/pydev_demo/pose_sample/ultralytics_yolo
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The pre-installed models are in place:
   - S100: `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm`
   - S600: `/opt/hobot/model/s600/basic/yolo11n_pose_nashp_640x640_nv12.hbm`

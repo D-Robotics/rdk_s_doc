@@ -73,7 +73,7 @@ import DocScope from '@site/src/components/DocScope';
         3.  On your PC, try `ping <board IP address>` to see whether it responds. If ping fails, resolve the network connection issue first (check IP configuration, Ethernet cable, Wi-Fi connection, router settings, firewall, etc.).
         4.  Confirm that the SSH service (`sshd`) is running on the development board. After logging in via the serial port, run `sudo systemctl status ssh` or `ps aux | grep sshd` to check. If it is not running, try starting it with `sudo systemctl start ssh`.
         5.  Check whether a firewall on your PC or in the network is blocking connections to port 22 on the development board.
-    * **Reference:** [SSH Login](../01_Quick_start/03_install_os_and_setup/remote_login.md) section (Please replace the link with the actual valid documentation path).
+    * **Reference:** [SSH Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md) section (Please replace the link with the actual valid documentation path).
 
 * **Message `Authentication failed` or `Permission denied, please try again.`:**
     * **Cause:** This indicates that the network connection has been established, but the username or password you provided is incorrect and the SSH server rejected your login request.

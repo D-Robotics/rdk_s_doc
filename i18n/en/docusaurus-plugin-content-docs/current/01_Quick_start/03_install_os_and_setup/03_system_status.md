@@ -10,7 +10,7 @@ After flashing completes and you log in to the development board, **first confir
 
 ## Prerequisites
 
-- [ ] The development board has been flashed with RDK OS and logged in via SSH or the serial port (see [Remote login](./remote_login.md)).
+- [ ] The development board has been flashed with RDK OS and logged in via SSH or the serial port (see [Remote login](05_remote_login.md)).
 
 ## Confirm the system version
 
@@ -181,5 +181,5 @@ The VDSP firmware is loaded by upper-layer applications when needed by the workl
 ## Related documents
 
 - [Flashing preparation](./01_instruction.md)
-- [Remote login](./remote_login.md)
+- [Remote login](05_remote_login.md)
 - [RDK dedicated commands reference](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md) (`devmem`/`hrut_boardid`/`hrut_socuid`/`rdkos_info`)

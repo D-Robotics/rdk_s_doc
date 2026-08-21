@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并能通过 SSH 登录（见 [烧录系统与配置](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)）。
+- 开发板已烧录 RDK OS 并能通过 SSH 登录（见 [烧录系统与配置](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - 预装模型已就位（默认路径下存在，无需手动下载）：
   - S100：`/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`
   - S600：`/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`

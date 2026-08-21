@@ -16,7 +16,7 @@ The sample code is located in the `/app/cdev_demo/bpu/detection_sample/ultralyti
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
 - The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 corresponds to `s100/basic/`).
 

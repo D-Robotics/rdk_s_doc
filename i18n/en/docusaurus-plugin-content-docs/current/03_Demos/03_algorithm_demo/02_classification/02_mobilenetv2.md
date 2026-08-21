@@ -12,7 +12,7 @@ The sample code is located in the `/app/cdev_demo/bpu/classification_sample/mobi
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
 - The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`.
 

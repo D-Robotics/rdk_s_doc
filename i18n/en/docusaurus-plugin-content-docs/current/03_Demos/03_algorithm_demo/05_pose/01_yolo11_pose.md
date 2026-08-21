@@ -16,7 +16,7 @@ The example code is located in the `/app/cdev_demo/bpu/pose_sample/ultralytics_y
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The compilation toolchain is available on the board (`cmake`, `make`, `g++`, pre-installed in the image).
 - The pre-installed models are in place:
   - S100: `/opt/hobot/model/s100/basic/yolo11n_pose_nashe_640x640_nv12.hbm`

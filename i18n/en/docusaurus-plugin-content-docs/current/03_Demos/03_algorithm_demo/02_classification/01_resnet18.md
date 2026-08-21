@@ -16,7 +16,7 @@ The sample code is located in the `/app/cdev_demo/bpu/classification_sample/resn
 
 ## Prerequisites
 
-- The development board is flashed with RDK OS and can be logged in via SSH (see [OS Installation and Configuration](../../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- The development board is flashed with RDK OS and can be logged in via SSH (see [OS Installation and Configuration](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
 - The pre-installed model is in place (exists at the default path):
   - S100: `/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`

@@ -38,7 +38,7 @@ Flashing is the process of writing the RDK OS system image to the storage medium
 
 - **What to do**: Flash the downloaded system image to the storage medium of the development board with the XBurn tool.
 - **Why**: The device ships with a test firmware preinstalled, and the latest image must be flashed again before it can be used normally.
-- **What's next**: After power-on, the development board boots into the Ubuntu desktop, and you can follow [System status](./system_status.md) to confirm the version and the board model.
+- **What's next**: After power-on, the development board boots into the Ubuntu desktop, and you can follow [System status](03_system_status.md) to confirm the version and the board model.
 
 ## Prerequisites
 
@@ -322,7 +322,7 @@ After flashing completes and the device boots, log in to the development board a
   - The version from `cat /etc/version` does not match expectations → the flashed image is wrong; flash again following [Flash the full image](#flash-the-full-image).
   - No display output for a long time after power-on → see the boot failure troubleshooting in [Flash the full image](#flash-the-full-image).
 
-For detailed status query commands and sample outputs, see [System status](./system_status.md).
+For detailed status query commands and sample outputs, see [System status](03_system_status.md).
 
 ## Related documents
 

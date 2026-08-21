@@ -8,7 +8,7 @@ description: "hbDNN C 推理接口（hb_dnn.h）：模型加载、张量查询�
 
 hbDNN 是 RDK 上加载与运行神经网络模型的 C 封装接口（`hb_dnn.h`），覆盖从模型文件加载、输入输出张量查询与内存准备，到提交推理任务并取回结果的完整流程。模型由 AI 工具链编译为 `.hbm` 文件（见「使用自己的模型」），hbDNN 负责解析并在 BPU 上执行。
 
-> **接口层级**：本篇是【封装层简易接口】（模式 1），开箱即用。需要直接管理 BPU 核、任务调度与 BPU 内存等底层原语时，见 [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/12_bpu_api.md)；Python 封装见 [Python 推理 API](./02_python_api.md)。
+> **接口层级**：本篇是【封装层简易接口】（模式 1），开箱即用。需要直接管理 BPU 核、任务调度与 BPU 内存等底层原语时，见 [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md)；Python 封装见 [Python 推理 API](./02_python_api.md)。
 
 **适用场景**：在 C/C++ 应用中加载 `.hbm` 模型并执行推理（分类、检测、分割等任务的自建流水线），或需要多模型打包加载、异步任务调度的场景。
 
@@ -476,12 +476,12 @@ typedef struct hbDNNTensor {
 检查输入是否按 `hbDNNTensorProperties.scale` 正确量化、输出是否按同一参数反量化；确认输入 shape、数据类型（`tensorType`）与模型编译时一致。
 
 **Q：任务提交后如何指定 BPU 核或优先级？**
-通过 `hbUCPSchedParam`（`HB_UCP_INITIALIZE_SCHED_PARAM` 宏初始化后修改 `backend`/`priority` 字段，核定义如 `HB_UCP_BPU_CORE_0`）。更底层的核管理见 [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/12_bpu_api.md)。
+通过 `hbUCPSchedParam`（`HB_UCP_INITIALIZE_SCHED_PARAM` 宏初始化后修改 `backend`/`priority` 字段，核定义如 `HB_UCP_BPU_CORE_0`）。更底层的核管理见 [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md)。
 
 ## 相关文档
 
 - [Python 推理 API](./02_python_api.md)
-- [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/12_bpu_api.md)
+- [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md)
 - [算法示例](../../03_Demos/03_algorithm_demo/01_summary.md)
 - [模型获取与放置](../../03_Demos/04_demo_support/01_model_files.md)
 - [使用自己的模型](../../03_Demos/04_demo_support/04_custom_model.md)

@@ -75,7 +75,7 @@ import DocScope from '@site/src/components/DocScope';
         3.  在您的电脑上尝试 `ping <开发板IP地址>`，看是否能 ping 通。如果 ping 不通，则先解决网络连接问题（检查 IP 配置、网线、Wi-Fi 连接、路由器设置、防火墙等）。
         4.  确认开发板上的 SSH 服务 (`sshd`) 正在运行。可以尝试通过串口登录后，执行 `sudo systemctl status ssh` 或 `ps aux | grep sshd` 查看。如果未运行，尝试启动：`sudo systemctl start ssh`。
         5.  检查电脑或网络中是否有防火墙阻止了到开发板22端口的连接。
-    * **参考：** [SSH登录](../01_Quick_start/03_install_os_and_setup/remote_login.md)章节 (请将链接替换为实际有效的文档路径)。
+    * **参考：** [SSH登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)章节 (请将链接替换为实际有效的文档路径)。
 
 * **提示 `Authentication failed` 或 `Permission denied, please try again.`：**
     * **原因：** 这表示网络连接已建立，但您提供的用户名或密码不正确，SSH 服务器拒绝了您的登录请求。

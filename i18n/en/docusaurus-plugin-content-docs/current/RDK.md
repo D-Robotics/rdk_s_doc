@@ -20,7 +20,7 @@ import DocScope from '@site/src/components/DocScope';
 RDK OS is a board-level operating system image customized based on Ubuntu, and it works out of the box right after flashing. The TogetheROS.Bot (tros.b) robotics middleware is preinstalled in the image. See Product Consensus (standard repository) for details.
 
 :::note Note
-Check the system version number: `cat /etc/version`; use `rdkos_info` to view board and runtime information. See [System Status Query](./01_Quick_start/03_install_os_and_setup/system_status.md) for details.
+Check the system version number: `cat /etc/version`; use `rdkos_info` to view board and runtime information. See [System Status Query](./01_Quick_start/03_install_os_and_setup/03_system_status.md) for details.
 :::
 
 ### Product Introduction

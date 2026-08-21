@@ -153,7 +153,7 @@ For API descriptions and usage, refer to the official documentation: https://www
 
 ##### Usage Preparation
 
-S100 adapts the audio adapter board manufactured by Waveshare Electronics, connecting to the S100 development board via 40PIN. For the daughter board introduction and specific connection methods, refer to: [Audio Daughter Board Usage Instructions](../../07_Advanced_development/04_driver_development/11_driver_audio.md#audio-daughter-board-usage-instructions)
+S100 adapts the audio adapter board manufactured by Waveshare Electronics, connecting to the S100 development board via 40PIN. For the daughter board introduction and specific connection methods, refer to: [Audio Daughter Board Usage Instructions](../../07_Advanced_development/04_driver_development/09_driver_audio.md#audio-daughter-board-usage-instructions)
 
 ##### Device Nodes
 
@@ -259,5 +259,5 @@ Currently only dupont wire connection to the audio daughter board is supported. 
 ## Related Documents
 
 - [Audio Configuration](../../02_System_configuration/10_audio_output.md)
-- [Audio Debugging Guide](../../07_Advanced_development/04_driver_development/11_driver_audio.md)
+- [Audio Debugging Guide](../../07_Advanced_development/04_driver_development/09_driver_audio.md)
 - [C/C++ Demo Programming Guide](../04_demo_support/02_c_cpp_build.md)

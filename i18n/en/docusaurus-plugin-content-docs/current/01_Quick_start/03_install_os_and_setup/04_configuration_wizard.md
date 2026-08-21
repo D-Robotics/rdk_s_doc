@@ -8,7 +8,7 @@ description: "Initial setup for RDK S100/S600: accounts, Wi-Fi, SSH, Chinese loc
 
 This section guides you through completing the first basic setup after flashing the system and logging in: connecting to the network, enabling SSH, setting the Chinese locale, installing remote desktop, and so on, to get the board into a state ready for daily use.
 
-> For flashing, see [System flashing](./01_instruction.md); for confirming the system status, see [System status](./system_status.md); for remote login, see [Remote login](./remote_login.md).
+> For flashing, see [System flashing](./01_instruction.md); for confirming the system status, see [System status](03_system_status.md); for remote login, see [Remote login](05_remote_login.md).
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -21,7 +21,7 @@ import DocScope from '@site/src/components/DocScope';
 Before starting, please prepare:
 
 - [ ] The development board has been [flashed with the system](./01_instruction.md) and finished booting.
-- [ ] You have logged in to the development board via the serial port or SSH (see [Remote login](./remote_login.md) for the login methods).
+- [ ] You have logged in to the development board via the serial port or SSH (see [Remote login](05_remote_login.md) for the login methods).
 - [ ] Before configuring the wireless network: the M.2 Key E Wi-Fi & Bluetooth module is already installed.
 
 ## Default Login Accounts
@@ -350,8 +350,8 @@ After completing the above configuration, confirm using the following checklist:
 ## Related documents
 
 - [System flashing](./01_instruction.md)
-- [System status](./system_status.md)
-- [Remote login](./remote_login.md)
+- [System status](03_system_status.md)
+- [Remote login](05_remote_login.md)
 - [Network configuration](../../02_System_configuration/01_network_config.md)
 - [srpi-config tool configuration](../../02_System_configuration/04_srpi_config/01_overview.md)
 - [Desktop applications](../../08_FAQ/07_desktop_app.md)

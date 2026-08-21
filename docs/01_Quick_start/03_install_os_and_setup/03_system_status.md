@@ -10,7 +10,7 @@ description: "烧录后第一步：确认系统版本与板卡型号"
 
 ## 前置条件
 
-- [ ] 开发板已烧录 RDK OS 并通过 SSH 或串口登录（见 [远程登录](./remote_login.md)）。
+- [ ] 开发板已烧录 RDK OS 并通过 SSH 或串口登录（见 [远程登录](05_remote_login.md)）。
 
 ## 确认系统版本
 
@@ -181,5 +181,5 @@ VDSP 固件在业务需要时由上层应用加载，加载后 `state` 变为 `r
 ## 相关文档
 
 - [烧录说明](./01_instruction.md)
-- [远程登录](./remote_login.md)
+- [远程登录](05_remote_login.md)
 - [RDK 专属命令详解](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md)（`devmem`/`hrut_boardid`/`hrut_socuid`/`rdkos_info`）

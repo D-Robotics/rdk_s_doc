@@ -453,4 +453,4 @@ echo 1050000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 
 - [显示配置](./09_display_config.md)
 - [屏幕休眠与电源管理](./11_screen_sleep.md)
-- [Thermal 驱动开发（进阶）](../07_Advanced_development/04_driver_development/09_driver_thermal_dev.md)
+- [Thermal 驱动开发（进阶）](../07_Advanced_development/04_driver_development/08_driver_thermal_dev.md)

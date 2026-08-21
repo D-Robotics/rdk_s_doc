@@ -255,7 +255,7 @@ Users can also log in via SSH through the command line. The steps are as follows
 ## NoMachine Login
 
 :::tip
-The NoMachine feature requires software package support on the S100/S600 side. See [NoMachine configuration](./configuration_wizard.md#nomachine-configuration) for the configuration guide.
+The NoMachine feature requires software package support on the S100/S600 side. See [NoMachine configuration](04_configuration_wizard.md#nomachine-configuration) for the configuration guide.
 :::
 
 This section is for users of the Ubuntu Desktop system version, introducing how to implement remote desktop login via `NoMachine`. The following sections use the S100 as an example; the operation on the S600 is the same as on the S100, just replace `S100` in the link name with `S600`.
@@ -290,13 +290,13 @@ This section is for users of the Ubuntu Desktop system version, introducing how 
 
 - **SSH connection refused**: Use `sudo systemctl status ssh` on the board to confirm the service is running; confirm the firewall `sudo ufw status` is not blocking.
 - **No serial port output**: Check the baud rate (it should be 921600), and confirm the TX/RX of the TTL-USB cable are not swapped.
-- **NoMachine black screen**: After the first configuration, you must reboot the board. See [Initial Setup - NoMachine Configuration](./configuration_wizard.md).
+- **NoMachine black screen**: After the first configuration, you must reboot the board. See [Initial Setup - NoMachine Configuration](04_configuration_wizard.md).
 - **IP address unknown**: After logging in via the serial port, check with `ip addr`, or look up the IP corresponding to the MAC address on the router's admin page.
 
 ## Related documents
 
 - [System flashing](./01_instruction.md)
-- [System status](./system_status.md)
-- [Initial setup](./configuration_wizard.md)
+- [System status](03_system_status.md)
+- [Initial setup](04_configuration_wizard.md)
 - [Network configuration](../../02_System_configuration/01_network_config.md)
 - [Debug serial port](../../02_System_configuration/16_debug_serial.md)

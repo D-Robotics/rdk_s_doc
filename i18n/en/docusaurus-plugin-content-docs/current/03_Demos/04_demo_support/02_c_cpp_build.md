@@ -10,7 +10,7 @@ The C/C++ examples under `/app/cdev_demo` on the board are all provided as sourc
 
 ## Prerequisites
 
-- You have logged in to the development board via SSH (see [Remote Login](../../01_Quick_start/03_install_os_and_setup/remote_login.md)).
+- You have logged in to the development board via SSH (see [Remote Login](../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The toolchain pre-installed in the image is available: `cmake`, `make`, `g++` (verify with `which cmake make g++`).
 
 ## Compiling Directly on the Board
