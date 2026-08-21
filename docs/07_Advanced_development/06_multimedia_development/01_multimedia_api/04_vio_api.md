@@ -27,6 +27,34 @@ VIO（Video Input/Output）是 RDK 多媒体的高层 pipeline API（板端 `hb_
 4. `hb_vio_run_pym`/`run_gdc`/`run_raw` 获取处理结果，`hb_vio_get_info` 查询状态。
 5. `hb_vio_stop_pipeline` 停止。
 
+## 快速示例
+
+以下示例演示 `hb_vio_interface.h` 高层 pipeline API 的最小使用序列（配置文件含 sensor/ISP/PYM 等整条 pipeline 定义）：
+
+```c
+#include "hb_vio_interface.h"
+
+// 1. 按配置文件初始化 pipeline（含 CIM/MIPI/ISP/PYM/GDC）
+int32_t ret = hb_vio_init("./vio_config.json");
+if (ret != 0) {
+    /* 初始化失败处理 */
+}
+
+// 2. 启动 pipeline
+ret = hb_vio_start_pipeline(0);
+
+// 3. 获取 PYM 处理结果，用完释放
+hb_vio_buffer_t pym_data;
+ret = hb_vio_get_data(0, HB_VIO_PYM_DATA_V3, &pym_data);
+/* 使用 pym_data ... */
+hb_vio_free_pymbuf(0, HB_VIO_PYM_DATA_V3, &pym_data);
+
+// 4. 停止并反初始化
+hb_vio_stop_pipeline(0);
+hb_vio_deinit();
+```
+
+> 板端 `get_vin_data`/`get_isp_data` 等 sample 使用 HBN vnode 风格（`hbn_vnode_*`）直接搭 pipeline；`hb_vio_*` 是封装在其上的高层接口，配置方式见 `06_multimedia_sample` 章节与板端 `/app/multimedia_samples/` 各 sample 的配置文件。
 
 ## API 列表
 

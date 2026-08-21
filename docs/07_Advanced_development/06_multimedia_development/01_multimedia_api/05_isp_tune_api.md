@@ -27,6 +27,32 @@ ISP（Image Signal Processor）图像信号处理 API（板端 `hb_api_isp.h`，
 3. `hb_isp_command` 下发调参命令；`hb_isp_get_ae_info`/`get_awb_info` 等查询统计。
 4. `hb_isp_get_calibration_param`/`get_hardware_param` 获取标定与硬件参数。
 
+## 快速示例
+
+以下示例演示 ISP 调参的最小序列（基于 `hb_api_isp.h`；pipeline 需先经 VIO/HBN 启动）：
+
+```c
+#include "hb_api_isp.h"
+
+// 1. 暂停 2A 算法，进入手动调参模式
+hb_isp_pause_algo(0);
+
+// 2. 查询/设置子模块使能状态
+isp_module_ctrl_u mod_ctrl;
+hb_isp_get_module_control(0, &mod_ctrl);
+mod_ctrl.isp_work_state.ae_enable = 0;   /* 手动曝光 */
+hb_isp_set_module_control(0, &mod_ctrl);
+
+// 3. 获取 AE 统计，据此下发手动曝光参数
+isp_statistics_t ae_stat = {0};
+hb_isp_get_ae_statistics(0, &ae_stat, 3000);
+/* 根据 ae_stat 计算曝光/增益 ... */
+
+// 4. 恢复 2A 算法
+hb_isp_run_algo(0);
+```
+
+> 板端调参工具见 `/app/tuning_tool/`（control_tool + scripts）；ISP 实况取流走 HBN vnode 流程（`sample_isp/get_isp_data`），本篇 API 用于运行期调参。
 
 ## API 列表
 

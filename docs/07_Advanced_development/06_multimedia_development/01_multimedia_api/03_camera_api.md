@@ -25,6 +25,39 @@ Camera 是 RDK 多媒体 pipeline 的采集入口（板端 `hb_camera_interface.
 3. `hbn_camera_set_*` / `get_*` 配置与获取参数。
 4. vflow 启动后帧自动流转；`hbn_camera_destroy` 销毁 handle 释放资源。
 
+## 快速示例
+
+以下示例参考板端 `/app/multimedia_samples/sample_vin/get_vin_data/` 的最小调用序列，演示普通 sensor（MIPI 直连）的创建与绑定：
+
+```c
+#include "hb_camera_interface.h"
+#include "hbn_vpf_interface.h"
+
+// 1. 准备 sensor 配置（分辨率、帧率、MIPI 通道等，来自 sensor 库）
+camera_config_t cam_config = {0};
+/* 按实际 sensor 填充 cam_config ... */
+
+// 2. 打开 VIN vnode，创建 camera handle
+hbn_vnode_handle_t vin_fd;
+hbn_vnode_open(HB_VIN, mipi_rx, AUTO_ALLOC_ID, &vin_fd);
+
+camera_handle_t cam_fd;
+hbn_camera_create(&cam_config, &cam_fd);
+
+// 3. 绑定 camera 到 VIN vnode
+hbn_camera_attach_to_vin(cam_fd, vin_fd);
+
+// 4. 启动 camera 输出（配合 vflow 启动后帧自动流转）
+hbn_camera_start(cam_fd);
+
+/* 运行期可 hbn_camera_change_fps / read_register / write_register ... */
+
+// 5. 停止并销毁
+hbn_camera_stop(cam_fd);
+hbn_camera_destroy(cam_fd);
+```
+
+> GMSL/SerDes sensor 需先 `hbn_deserial_create` 创建解串器，再经 `hbn_camera_attach_to_deserial` + `hbn_deserial_attach_to_vin` 两级绑定，见 `get_vin_data` 中 `create_deserial_node`。
 
 ## API 列表
 

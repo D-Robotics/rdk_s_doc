@@ -349,6 +349,35 @@ LPWM 的配置由 json 完成，配置示例如下，更多可参考: [LPWM JSON
 
 若使用 trigger\_mode 为1，trigger\_source 为8，则使用的是 ETH PPS0进行同步。
 
+## 快速示例
+
+Camera 同步无独立函数 API，通过传感器配置文件 + LPWM 配置下发实现。最小配置流程如下（以 AR0820 + ETH PPS0 触发、30fps 为例）：
+
+1. **配置 Camera 为 Slave/Shutter Sync 模式**：传感器配置中 `config_index` 加 512（bit9）使能同步；`deserial_gpio.trig_pin` 配置 LPWM 所接 MFP 索引。
+2. **配置 LPWM 输出**：按 `trigger_source=8`（ETH PPS0）、`trigger_mode=1`（外部触发）、`period=33333us`（1s/30fps）、`offset` 按计算式 `1000000 - period * fps + 1` 配置。
+3. **加载配置并出流**：配置文件随 sensor 库加载，LPWM 按 PPS 触发输出方波，多路 Camera 同步曝光/出图。
+
+```json
+{
+    "port_0": {
+        "sensor_name": "ar0820std",
+        "config_index": 512,
+        "fps": 30,
+        "deserial_port": 0
+    },
+    "deserial_0": {
+        "deserial_gpio": { "trig_pin": [5] }
+    },
+    "lpwm_chn0": {
+        "trigger_source": 8, "trigger_mode": 1,
+        "period": 33333, "offset": 29800, "duty_time": 100,
+        "threshold": 0, "adjust_step": 0
+    }
+}
+```
+
+> 板端样例：`get_vin_data` 对 SerDes sensor 通过 `vp_deserial_config_update` 将 `lpwm_chn_attr_t`（`hbn_vin_cfg.h`）同步到 camera 配置；LPWM 各字段含义见本篇「LPWM 配置项说明」。
+
 ## 总结
 
 S100上多 Camera 同步主要通过 LPWM 模块的硬件连接与软件配置共同实现。

@@ -25,6 +25,43 @@ VPF/PYM（Video Process Framework / Pyramid；X5 VSE → RDK VPF/PYM）是 RDK �
 3. `hbn_vnode_set_attr` 设 `pym_attr_t`；`vnode_get_mode` 查询模式。
 4. vflow 启动后 PYM 输出经 `hbn_vnode_getframe_group` 获取。
 
+## 快速示例
+
+以下示例参考板端 `/app/multimedia_samples/sample_pym/sample_pym.c`，演示 PYM vnode 回灌模式（feedback）的最小使用序列：
+
+```c
+#include "hbn_vpf_interface.h"
+#include "hbn_pym_cfg.h"
+#include "hb_mem_mgr.h"
+
+// 1. 打开 PYM vnode，配置金字塔参数
+hbn_vnode_handle_t pym_fd;
+hbn_vnode_open(HB_PYM, 0, AUTO_ALLOC_ID, &pym_fd);
+
+pym_attr_t pym_cfg = {0};
+/* 配置金字塔层级/窗口/通道 ... */
+hbn_vnode_set_attr(pym_fd, &pym_cfg);
+hbn_vnode_set_ichn_attr(pym_fd, 0, &pym_cfg);
+hbn_vnode_set_ochn_attr(pym_fd, 0, &pym_cfg);
+
+// 2. 回灌模式：发送输入图像到 PYM 输入通道
+hbn_vnode_image_t input_image = {0};
+/* 填充 input_image（NV12 或 RAW）... */
+hb_mem_flush_buf_with_vaddr((uint64_t)input_image.buffer.virt_addr[0],
+                            input_image.buffer.size[0]);
+hbn_vnode_sendframe(pym_fd, 0, &input_image);
+
+// 3. 获取金字塔输出组（多层），处理完归还
+hbn_vnode_image_group_t out_group = {0};
+hbn_vnode_getframe_group(pym_fd, 0, 10000, &out_group);
+/* 读取 out_group.buf_group.graph_group[chn_id] 各层 ... */
+hbn_vnode_releaseframe_group(pym_fd, 0, &out_group);
+
+// 4. 关闭
+hbn_vnode_close(pym_fd);
+```
+
+> 回灌模式下 PYM 输入帧由 `hb_mem_alloc_graph_buf` 分配；`vflow` 模式下 PYM 作为 vnode 串入 vflow 自动流转，见 `sample_pipeline`。
 
 ## API 列表
 

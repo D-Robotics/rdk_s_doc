@@ -24,6 +24,35 @@ hbmem 是 RDK 的共享内存管理库（对应板端 `hbmem.h`），提供物�
 2. `hbmem_cache_invalid` / `hbmem_cache_clean` 维护 cache 一致性，`hbmem_dmacpy` 做 DMA 拷贝。
 3. `hbmem_munmap` 解除映射，`hbmem_free` 释放内存。
 
+## 快速示例
+
+以下示例演示 hbmem 的最小使用序列：分配 → cache 操作 → 释放：
+
+```c
+#include "hbmem.h"
+
+// 1. 分配 4MB cacheable 物理内存（BACKEND_ION_CMA）
+hbmem_addr_t addr = hbmem_alloc(4 * 1024 * 1024,
+                                BACKEND_ION_CMA | MEM_CACHEABLE,
+                                "demo_buf");
+if (addr == 0) {
+    /* 分配失败处理 */
+}
+
+// 2. 写入前 invalid cache，写入后 clean cache，保证 DMA 可见
+hbmem_cache_invalid(addr, 4 * 1024 * 1024);
+/* 写入数据 ... */
+hbmem_cache_clean(addr, 4 * 1024 * 1024);
+
+// 3. 查询物理地址 / 虚拟地址（多进程共享时用 share_id）
+uint64_t phy = hbmem_phyaddr(addr);
+uint32_t share_id = hbmem_get_share_id(addr);
+
+// 4. 释放
+hbmem_free(addr);
+```
+
+> 板端同类型示例见 `/app/communication_demo/hbmem_demo/sample_hbmem/`（`sample_alloc.c` 演示多后端分配、`sample_share.c` 演示跨进程共享）。
 
 ## API 列表
 
