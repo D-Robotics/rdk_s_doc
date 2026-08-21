@@ -76,6 +76,24 @@ pym config:
 注意：
 1. pym 模块输出的宽度按照16字节对齐，在浏览图片时需要注意 width 与 wstride 参数不同的情况
 
+## 常见问题
+
+### 输入 YUV 与参数不匹配导致输出异常
+
+**现象**：运行 `./sample_pym -i <file> -w <width> -h <height>` 后输出的金字塔图像花屏或尺寸错误。
+
+**原因**：输入 YUV 文件的实际分辨率/格式与 `-w`/`-h` 参数不一致（本 sample 使用 NV12 格式输入）。
+
+**解决**：确认输入文件为 NV12 格式，且宽高参数与实际文件一致；注意 PYM 输出宽度按 16 字节对齐，浏览输出时需区分 width 与 wstride。
+
+### feedback 与 vflow 模式的区别
+
+**现象**：`-f` 参数（feedback 模式）与默认 vflow 模式行为不同，回灌数据未被处理。
+
+**原因**：feedback 模式需手动 `hbn_vnode_sendframe` 发送输入图像；vflow 模式下 PYM 作为 vnode 串入 vflow 自动流转。
+
+**解决**：回灌单张图像调试用 `-f`；在 pipeline 中使用时用默认 vflow 模式，参照 `sample_pipeline`。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)

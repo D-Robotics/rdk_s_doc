@@ -784,6 +784,32 @@ pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
 
+## 常见问题
+
+### 多路 pipeline 启动失败
+
+**现象**：`multi_pipe_vin_isp_ynr_pym_gdc_vpu` 运行报 vnode 创建或绑定失败。
+
+**原因**：多路 sensor 的 mipi_rx/hw_id 冲突，或 ION 内存不足。
+
+**解决**：核对各路配置的 mipi_rx 与硬件接线；减少路数或调大 ION 内存。
+
+### uvc_capture_sample 打不开 /dev/video*
+
+**现象**：`uvc_capture_sample` 报无法打开 video 设备。
+
+**原因**：系统未处于 V4L2 模式，或对应 video 节点未生成。
+
+**解决**：按 V4L2 章节加载 v4l2 驱动并确认 video 节点存在；确认场景（scene）配置与硬件匹配。
+
+### pipeline 取帧超时
+
+**现象**：pipeline 运行中 getframe 超时。
+
+**原因**：上游 vnode 未出流（sensor 未点亮）或 vflow 绑定错误。
+
+**解决**：检查 sensor 出流日志；核对 `hbn_vflow_bind_vnode` 的通道号与配置一致。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)

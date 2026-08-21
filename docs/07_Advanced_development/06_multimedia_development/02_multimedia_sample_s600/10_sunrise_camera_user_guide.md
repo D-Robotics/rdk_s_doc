@@ -269,6 +269,32 @@ rtsp 的码流网络 URL 链接，可以在 web 的设备信息上查看，默�
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="4K@30fps 拉流配置说明示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 常见问题
+
+### RTSP 拉流花屏/卡顿
+
+**现象**：VLC 拉流出现马赛克、花屏或丢帧。
+
+**原因**：码率过高超出网络带宽；VLC buffer 过小；时钟同步导致缓冲异常。
+
+**解决**：4K@30fps 高码率（8192Kbps 以上）建议使用千兆网络；VLC buffer_size 由默认 250000 调到 1200000；优先使用 http 模式拉流；在 VLC 高级设置中禁用时钟同步。
+
+### 更换摄像头后未使能
+
+**现象**：上电后新插入的摄像头无画面。
+
+**原因**：保存过配置后再次上电，新插入的摄像头默认是非使能状态。
+
+**解决**：在 Web 配置界面重新使能对应 Camera 接口后保存。
+
+### 启用路数过多内存不足
+
+**现象**：智能分析盒方案启用多路解码/编码时报内存不足。
+
+**原因**：设备默认分配给编解码、算法的 ION 内存有限（智能盒约 1GB），路数过多超出限制。
+
+**解决**：减少启用路数，或调整系统 ION 内存大小。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)

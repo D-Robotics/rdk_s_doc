@@ -111,6 +111,24 @@ root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# export WAY
 1. 显示器桌面会显示一个窗口： 窗口中显示一条 红色的贝塞尔曲线
 2. 窗口中显示的内容也会保存成文件：当前目录下，会生成如下 bmp 格式的图像文件： `bezier.bmp`
 
+## 常见问题
+
+### 无显示环境无法预览
+
+**现象**：headless（无 HDMI 显示器）环境下 OpenGL ES 示例无法显示窗口或报错。
+
+**原因**：OpenGL ES 渲染需要显示设备；headless 环境没有可用的显示 surface。
+
+**解决**：接入 HDMI 显示器运行，或用 OpenCL 示例（纯计算，无需显示）；也可用 xvfb 等虚拟显示验证。
+
+### OpenCL / OpenGL ES 选择
+
+**现象**：不确定两个示例的差异。
+
+**原因**：OpenCL 面向通用计算（无窗口），OpenGL ES 面向图形渲染（需要显示）。
+
+**解决**：图像/数据处理类任务用 OpenCL；需要渲染到屏幕/窗口的任务用 OpenGL ES。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)

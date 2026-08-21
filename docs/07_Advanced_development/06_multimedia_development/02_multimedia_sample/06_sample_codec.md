@@ -222,6 +222,32 @@ Encode idx: 0, frame= 100
 
 根据 `codec_config.ini` 中的配置 `frame_num = 100` ，编码 100 帧后程序自动退出。
 
+## 常见问题
+
+### codec_config.ini 配置不生效
+
+**现象**：修改 `codec_config.ini` 后编码分辨率/帧数未按预期执行。
+
+**原因**：程序在启动时读取 ini，运行中修改不会热加载；或 ini 段名/字段名拼写错误。
+
+**解决**：修改后重新运行程序；核对 `venc_stream`/`vdec_stream` 段与字段名与 `sample_codec.c` 解析逻辑一致。
+
+### 输入 buffer 超时
+
+**现象**：编码/解码时 `hb_mm_mc_dequeue_input_buffer` 返回超时（-268435443）。
+
+**原因**：输入图像帧率/分辨率与 codec 配置不匹配，或上游未持续送帧。
+
+**解决**：核对输入 YUV 分辨率与 `codec_config.ini` 一致；确认循环中 dequeue → 填充 → queue 的节奏正确。
+
+### 码流输出为空或文件损坏
+
+**现象**：输出的 h264/h265 文件无法播放或大小异常。
+
+**原因**：`frame_num` 配置过小、输出 buffer 未正确 queue 回、或码率参数极端。
+
+**解决**：确认 `frame_num` 大于 0；检查 `hb_mm_mc_dequeue_output_buffer`/`queue_output_buffer` 配对；适当调整码率。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)

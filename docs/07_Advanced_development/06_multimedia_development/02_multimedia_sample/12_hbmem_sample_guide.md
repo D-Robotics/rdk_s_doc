@@ -271,6 +271,32 @@ sample_alloc_com_buf done
 
 > 以上为 mode 1（创建 com buffer）的示例输出。其余 mode（`-m 2` ~ `-m 21`）的输出结构类似（模式名 + 各步骤调试信息 + `Result` 返回值），请在板端执行对应 `-m` 命令查看实测输出。
 
+## 常见问题
+
+### 内存分配失败
+
+**现象**：`hb_mem_alloc_com_buf` / `hb_mem_alloc_graph_buf` 返回错误。
+
+**原因**：请求大小超出后端可用空间、heapmask 指定了不可用 heap、或未先调用 `hb_mem_module_open`。
+
+**解决**：确认已先 `hb_mem_module_open`；核对大小与 heapmask 参数；必要时用其他 backend（ION CMA/CARVEOUT/SRAM）重试。
+
+### 跨进程共享失败
+
+**现象**：另一进程用 share_id 映射同一段内存失败。
+
+**原因**：share_id 未正确传递、接收进程未打开 hbmem 模块、或共享内存已被释放。
+
+**解决**：确认通过 `hb_mem_get_share_id` 获取 share_id 并可靠传递；接收进程先 `hb_mem_module_open`；共享期间不要释放。
+
+### cache 一致性问题
+
+**现象**：CPU 写数据后 DMA/其他核读不到最新数据，或反之。
+
+**原因**：未做 cache invalid/clean 操作。
+
+**解决**：写后读前做 `hb_mem_cache_clean`（或 flush），读前做 `hb_mem_cache_invalid`；参照 `sample_share.c` 的用法。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)

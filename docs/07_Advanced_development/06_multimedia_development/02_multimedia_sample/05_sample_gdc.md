@@ -645,6 +645,32 @@ Options:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="变换效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 常见问题
+
+### json 配置解析或 bin 生成失败
+
+**现象**：`2-generate_bin` 生成 bin 时输出 `Generate bin file failed` 或解析报错。
+
+**原因**：`gdc_bin_custom_config.json` 格式错误（字段缺失/类型不符），或输入/输出分辨率超出 GDC 支持范围。
+
+**解决**：按 `custom_config.txt` / `generate_custom_config.py` 的示例核对 json 字段；先用 `1-custom_config` 生成合法配置再转 bin。
+
+### 畸变矫正后图像异常
+
+**现象**：`3-gdc_static_valid` 输出图像黑屏、错位或尺寸错误。
+
+**原因**：bin 配置的输入/输出几何与实际输入图像不匹配，或未先执行 `2-generate_bin` 生成对应 bin。
+
+**解决**：确保使用 `2-generate_bin` 生成的 bin（`gdc.bin`），并让输入图像分辨率与 bin 配置一致。
+
+### 压测或变换内存不足
+
+**现象**：`4-gdc_stress_test` / `6-gdc_transformation` 报内存分配失败。
+
+**原因**：多路处理同时申请大块 ION 内存，超出系统限制。
+
+**解决**：减少并发路数或降低分辨率；必要时调整系统 ION 内存分配。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)

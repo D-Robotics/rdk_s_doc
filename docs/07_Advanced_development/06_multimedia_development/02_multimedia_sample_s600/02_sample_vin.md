@@ -214,6 +214,32 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 
 执行程序后会获取到 imx219 `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` 命名格式的 RAW 图像 和 ar0820std 对应的`handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv` 命名格式的 YUV 图像。
 
+## 常见问题
+
+### 提示 `No Camera Sensor found`
+
+**现象**：执行 `./get_vin_data -s <index>` 报 `No Camera Sensor found. Please check if the specified sensor is connected to the Camera interface.`
+
+**原因**：指定的 sensor 未接入开发板，或接入了其他接口（MIPI 直连 / GMSL 端口不匹配）。
+
+**解决**：确认实际接入的 camera 型号与 `-s` 索引对应（可用 `./get_vin_data -h` 查看支持列表）；MIPI 直连 sensor 需接入对应 CSI 接口，GMSL sensor 需指定 `-l <link_port>` 与 `-m <mipi_rx>`。
+
+### GMSL/SerDes sensor 必须指定 link port
+
+**现象**：GMSL sensor 运行报 `[Error] ... is serdes sensor, must config link port according to the hardware connection, can be set to [0-3]`。
+
+**原因**：SerDes sensor 需要知道硬件连接的 link port（0:A 1:B 2:C 3:D）才能与解串器通信。
+
+**解决**：按实际硬件连接指定 `-l 0/1/2/3`，同时用 `-m` 指定 mipi_rx。
+
+### 取帧超时或无法取到帧
+
+**现象**：程序运行后 `hbn_vnode_getframe` 返回超时错误，或长时间无输出。
+
+**原因**：sensor 未正常出流（未启动、接线异常）、帧率与配置不匹配、或 mipi_rx 与硬件不符。
+
+**解决**：检查 camera 是否点亮（对比正常运行时的输出日志）、核对 mipi_rx/link_port 与实际接线、确认配置文件中分辨率/帧率与 sensor 匹配。
+
 ## 相关文档
 
 - [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
