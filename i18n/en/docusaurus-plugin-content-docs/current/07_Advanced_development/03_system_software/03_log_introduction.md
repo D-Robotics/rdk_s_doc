@@ -1,6 +1,7 @@
 ---
 sidebar_position: 3
 title: "Log User Guide"
+description: "RDK S100/S600 system log partition planning, log collection methods and kernel log configuration"
 ---
 
 ```mdx-code-block

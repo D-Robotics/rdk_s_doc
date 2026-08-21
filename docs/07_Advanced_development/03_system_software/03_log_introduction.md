@@ -1,6 +1,7 @@
 ---
 sidebar_position: 3
 title: "Log 使用指南"
+description: "RDK S100/S600 系统 Log 分区规划、log 抓取方式与内核日志配置"
 ---
 
 ```mdx-code-block
