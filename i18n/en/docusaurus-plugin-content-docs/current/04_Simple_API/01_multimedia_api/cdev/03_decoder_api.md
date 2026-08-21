@@ -1,19 +1,27 @@
 ---
 sidebar_position: 3
+title: "DECODER (Decoding Module) API"
+description: "DECODER (decoding module) API reference"
 ---
 
-# DECODER API
+# DECODER (Decoding Module) API
+
+The `DECODER` module provides video stream decoding functionality, supporting `H264`, `H265` and `MJPEG` streams.
+
+- **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api).
+- **Applicable scenarios**: decode→display, RTSP stream pull and decode. See [Decode→Display](/Demos/multimedia_demo/cdev/decode2display).
+- **Prerequisites**: RDK OS is flashed, a compile toolchain is available on the board, and a stream file or stream data source is available.
 
 The `DECODER` API provides the following interfaces:
 
 | Function | Description |
 | ---- | ----- |
-| sp_init_decoder_module | **Initialize decoder module object** |
-| sp_release_decoder_module | **Destroy decoder module object** |
+| sp_init_decoder_module | **Initialize the decoder module object** |
+| sp_release_decoder_module | **Destroy the decoder module object** |
 | sp_start_decode | **Create an image decoding channel** |
 | sp_stop_decode | **Close an image decoding channel** |
 | sp_decoder_get_image | **Retrieve a decoded image frame from the decoding channel** |
-| sp_decoder_set_image | **Feed encoded stream data into the decoding channel** |
+| sp_decoder_set_image | **Feed the encoded stream data into the decoding channel** |
 
 ## sp_init_decoder_module  
 
@@ -23,15 +31,15 @@ The `DECODER` API provides the following interfaces:
 
 **[Description]**  
 
-Initializes a decoder module object. This function must be called to obtain a handle before using the decoder module. It supports video streams in H264, H265, and Mjpeg formats.
+Initializes the decoder module object. It must be called to obtain the operation handle when using the decoder module. Video streams in H264, H265 and MJPEG formats are supported.
 
 **[Parameters]**
 
 None.
 
-**[Return Type]** 
+**[Return Value]** 
 
-Returns a `DECODER` object on success; returns NULL on failure.
+Returns a `DECODER` object on success, and NULL on failure.
 
 ## sp_release_decoder_module  
 
@@ -45,11 +53,11 @@ Destroys the decoder module object.
 
 **[Parameters]**
 
- - `obj`: Pointer to the object obtained from the initialization function.
+ - `obj`: the object pointer obtained by calling the initialization interface.
 
-**[Return Type]**  
+**[Return Value]**  
 
-None.
+None
 
 ## sp_start_decode  
 
@@ -59,20 +67,20 @@ None.
 
 **[Description]**  
 
-Creates a decoding channel and configures its channel ID, stream type to decode, and output image resolution.
+Creates a decoding channel and sets the channel number, the stream type to decode, and the image frame resolution.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `DECODER` object.
-- `stream_file`: When set to a valid stream filename (e.g., "stream.h264" for an H264 stream), the decoder will decode this file. If an empty string is passed, the stream data must be provided later via `sp_decoder_set_image`.
-- `video_chn`: Decoding channel number, supporting values from 0 to 31.
-- `type`: Stream type to decode. Supported values: `SP_ENCODER_H264`, `SP_ENCODER_H265`, and `SP_ENCODER_MJPEG`.
-- `width`: Width of the decoded image frame.
-- `height`: Height of the decoded image frame.
+- `obj`: the already initialized `DECODER` object pointer
+- `stream_file`: when `stream_file` is set to a stream file name, that stream file will be decoded, e.g. setting the H264 stream file "stream.h264". When `stream_file` is an empty string, the data to decode must be fed in by calling `sp_decoder_set_image`.
+- `video_chn`: the decoding channel number. Supports 0~31.
+- `type`: the type of data to decode. Supports `SP_ENCODER_H264`, `SP_ENCODER_H265` and `SP_ENCODER_MJPEG`.
+- `width`: the resolution - width of the decoded image frame
+- `height`: the resolution - height of the decoded image frame
 
-**[Return Type]** 
+**[Return Value]** 
 
-Returns 0 on success; returns -1 on failure.
+Returns 0 on success, and -1 on failure
 
 ## sp_stop_decode  
 
@@ -86,11 +94,11 @@ Closes the decoding channel.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `DECODER` object.
+- `obj`: the already initialized `DECODER` object pointer
 
-**[Return Type]** 
+**[Return Value]** 
 
-Returns 0 on success; returns -1 on failure.
+Returns 0 on success, and -1 on failure
 
 ## sp_decoder_get_image  
 
@@ -100,16 +108,16 @@ Returns 0 on success; returns -1 on failure.
 
 **[Description]**  
 
-Retrieves decoded image frame data from the decoding channel. The returned image data is in `NV12` format (`YUV`).
+Retrieves the decoded image frame data from the decoding channel. The returned image data format is an `NV12` `YUV` image.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `DECODER` object.
-- `image_buffer`: Buffer to store the returned image frame data. The required buffer size is `(width * height * 3) / 2`.
+- `obj`: the already initialized `DECODER` object pointer
+- `image_buffer`: the returned image frame data. The relationship between this buffer size and the image resolution is `(width * height * 3) / 2`.
 
-**[Return Type]** 
+**[Return Value]** 
 
-Returns 0 on success; returns -1 on failure.
+Returns 0 on success, and -1 on failure
 
 ## sp_decoder_set_image  
 
@@ -119,16 +127,44 @@ Returns 0 on success; returns -1 on failure.
 
 **[Description]**  
 
-Feeds encoded stream data into an opened decoding channel.For H264 or H265 streams, you must first send 3–5 frames to allow the decoder to fill its internal frame buffers before retrieving decoded frames.For H264 streams, the first frame sent must contain SPS and PPS header information; otherwise, the decoder will report an error and exit.
+Feeds stream data into an already opened decoding channel.
+When decoding an H264 or H265 stream, you need to feed 3~5 frames of data first so that the decoder finishes its frame buffering before retrieving decoded frame data.
+When decoding an H264 stream, the first frame fed to the decoder must be the SPS and PPS description information, otherwise the decoder will report an error and exit.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `DECODER` object.
-- `image_buffer`: Pointer to the encoded stream data.
-- `chn`: Decoder channel number, which must correspond to a channel previously opened via `sp_start_decode`.
-- `size`: Size of the stream data.
-- `eos`: Indicates whether this is the last frame of data.
+- `obj`: the already initialized `DECODER` object pointer.
+- `image_buffer`: the stream data pointer.
+- `chn`: the decoder channel number. It must be a channel number opened by calling `sp_start_decode`.
+- `size`: the stream data size.
+- `eos`: whether this is the last frame of data.
 
-**[Return Type]** 
+**[Return Value]** 
 
-Returns 0 on success; returns -1 on failure.
+Returns 0 on success, and -1 on failure
+
+## Data Structures and Constants
+
+The decoding types reuse the encoding type constants (defined in `sp_codec.h`): `SP_ENCODER_H264` (1), `SP_ENCODER_H265` (2), `SP_ENCODER_MJPEG` (3), used in the `type` parameter of `sp_start_decode`.
+
+## Quick Example
+
+The typical call sequence for decoding a video file (see [Decode→Display](/Demos/multimedia_demo/cdev/decode2display) for a fully compilable example):
+
+```c
+void *dec = sp_init_decoder_module();        // 1. Initialize the DECODER object
+sp_start_decode(dec, "test.h264", /*video_chn*/0,
+                SP_ENCODER_H264, width, height);  // 2. Open the stream file and create the decoding channel
+char *img = malloc(FRAME_BUFFER_SIZE(width, height));
+sp_decoder_get_image(dec, img);              // 3. Get one decoded image frame (NV12)
+// ... use the image data in img (e.g. display/inference) ...
+sp_stop_decode(dec);                         // 4. Stop the decoding channel
+sp_release_decoder_module(dec);              // 5. Destroy the DECODER object
+free(img);
+```
+
+## Related Documents
+
+- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)
+- [Decode→Display](/Demos/multimedia_demo/cdev/decode2display)

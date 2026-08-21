@@ -1,185 +1,177 @@
 ---
 sidebar_position: 2
 id: python-api
-title: Python API Reference
-sidebar_label: Python API
+title: "Python Inference API"
+sidebar_label: Python Inference API
+description: "hbm_runtime Python API: model loading, inference, scheduling parameters"
 ---
-# Python API
+# Python Inference API
 
-hbm_runtime is a Python binding built on pybind11 for accessing and operating the underlying libhbucp / libdnn C++ libraries, providing high-performance neural network model loading and inference.
+hbm_runtime is a pybind11-based Python binding API for accessing and operating the underlying libhbucp / libdnn C++ libraries, providing high-performance neural network model loading and inference capabilities.
 
-This interface encapsulates low-level model runtime details so Python users can conveniently load single or multiple neural network models, query and manage model input/output metadata, and run inference flexibly. It supports multiple input data formats and, when necessary, automatically converts inputs to C-contiguous storage to ensure correct and efficient low-level access.
+This API encapsulates the low-level model runtime details, allowing Python users to conveniently load one or multiple neural network models, query and manage the models' input/output metadata, and perform inference operations flexibly. The API supports multiple input data formats and automatically converts inputs to C-contiguous storage when necessary, to guarantee the correctness and efficiency of low-level access.
 
-In addition, the new interface releases the Python GIL on the C++ side during inference, allowing multiple Python threads to call `run()` concurrently. For multi-model inference, the runtime automatically schedules each model’s inference task in parallel using multiple threads to improve throughput.
+In addition, the new API releases the Python GIL on the C++ side during inference, so that multiple Python threads can call run() concurrently. For multi-model inference scenarios, the runtime automatically uses multi-threaded parallel scheduling for the inference tasks of each model to improve throughput.
 
-### Use Cases
-- Quickly integrate and call hbm_runtime capabilities in Python environments.
-- Applications with high demands on inference efficiency and scheduling flexibility, such as robot vision and intelligent edge computing.
-- Scenarios that need to load and manage multiple models simultaneously and configure task scheduling parameters (priority, core binding, device ID, etc.) per inference call as needed.
-- Scenarios that need to query compile-time BPU information (for example, compile-time BPU core count) to assist runtime resource configuration and consistency checks.
+### Applicable Scenarios
+- Quickly integrate and invoke the hbm_runtime runtime capabilities in a Python environment.
+- Applications with high requirements on inference efficiency and scheduling flexibility, such as robotic vision and intelligent edge computing.
+- Scenarios where multiple models need to be loaded and managed simultaneously, with task scheduling parameters (priority/core binding/device ID, etc.) configured per inference call as needed.
+- Scenarios where compile-time BPU information of a model (e.g., the compile-time BPU core count) needs to be queried to assist runtime resource planning and consistency checks.
 
 ### Key Features
 - Multi-model support
-  - Supports loading a single model or a group of multiple models; each model can independently expose input/output metadata and run inference.
-  - `run()` supports one-shot inference over multi-model inputs and returns results keyed by model name (even for a single model, the nested structure `{model_name: {...}}` is returned).
+  - Supports loading a single model or a model group composed of multiple models; the input/output metadata of each model can be retrieved independently, and inference can be run on each of them.
+  - run() supports one-shot inference over multi-model inputs and returns results keyed by model name (even when running a single model, the nested structure `{model_name: {...}}` is returned).
 - Flexible input formats
-  - Single input (`numpy.ndarray`);
-  - Single-model multi-input dict (`Dict[str, np.ndarray]`, keys are input tensor names);
-  - Multi-model multi-input structure (`Dict[str, Dict[str, np.ndarray]]`, outer keys are model names, inner keys are input tensor names).
-  - All inputs are automatically checked for C-contiguous memory layout and copied when necessary to ensure efficient and correct low-level access (non-contiguous inputs may incur extra copy overhead).
-- Scheduling parameter configuration: default parameters + per-call overrides (run-local)
-  - Set model-level default scheduling parameters via `set_scheduling_params(...)` (persisted inside the runtime and reusable across calls).
-  - Optionally override scheduling on each `run()` call; overrides take precedence over defaults for that call only and do not affect other threads or other `run()` invocations.
-- Multi-threaded inference
-  - Concurrent `run()` from multiple Python threads: the GIL is released inside C++ during inference so multiple Python threads can issue inference calls simultaneously.
-  - Parallel multi-model inference: when the input is a multi-model structure, the runtime launches a thread per model to run inference in parallel (multi-threaded launch), which can improve throughput on multi-core BPU systems; a single-model case uses one inference thread.
+  - Single input (numpy.ndarray);
+  - Single-model multi-input dict (Dict[str, np.ndarray], keys are input tensor names);
+  - Multi-model multi-input structure (Dict[str, Dict[str, np.ndarray]], outer keys are model names, inner keys are input tensor names).
+  - All inputs are automatically checked for C-contiguous memory layout and copied when necessary to guarantee efficient and correct low-level access (non-contiguous inputs may incur extra copy overhead).
+- Scheduling parameter configuration: default parameters + per-call override (run-local)
+  - Supports setting model-level default scheduling parameters via set_scheduling_params(...) (persisted inside the runtime and reusable across calls).
+  - Also supports overriding the scheduling per run() call via optional parameters (run-time overrides). The override rule is: run() parameters take precedence over the default parameters, and the override only applies to the current call, without affecting other threads / other run() calls.
+- Multi-threaded inference capability
+  - Concurrent run() calls from multiple Python threads: during inference the GIL is released inside the C++ layer, so that multiple Python threads can issue inference calls simultaneously.
+  - Multi-model parallel inference: when the input is a multi-model structure, the runtime launches a thread for each model to run its inference task in parallel (multi-threaded launch), which can improve throughput on multi-core BPU systems; in the single-model scenario there is only one inference thread.
 
 ## Installation
-The `hbm_runtime` module is a high-performance inference runtime Python interface implemented in C++. It depends on pybind11 and Horizon’s underlying inference libraries (such as libdnn, libhbucp, etc.). It can be installed via system DEB packages (`.deb`) and supports Python 3.10 and above.
-
+The module hbm_runtime is a high-performance inference runtime Python API implemented in C++, depending on pybind11 and the underlying inference libraries provided by Horizon (such as libdnn, libhbucp, etc.). It supports installation via system DEB packages (.deb) and is compatible with Python 3.10 and later.
 ### System Dependencies
-| Dependency | Minimum Version | Description |
-|------------|-----------------|-------------|
-| Python | ≥ 3.10 | Python 3.10 is recommended |
-| pip | ≥ 22.0 | Required for installing wheel packages |
-| pybind11 | any | Used at build time; not required when installing the package |
+| Dependency   | Minimum Version | Description                                            |
+|------------|-----------|--------------------------------------------------------|
+| Python     | ≥ 3.10    | Python 3.10 is recommended                             |
+| pip        | ≥ 22.0    | Required for installing wheel packages                 |
+| pybind11   | any       | Used at build time; not required as a dependency at install time |
 | scikit-build-core | ≥ 0.7 | Used when building wheel packages (source builds only) |
-| Horizon base libraries | platform-specific | e.g. libdnn.so, libucp.so, usually provided by the BSP |
+| Horizon base libraries | platform-dependent | e.g., libdnn.so, libhbucp.so, usually provided by the BSP |
 
-### Building Wheel Packages
-There are three ways to build a wheel package, described below.
-
-#### Build During DEB Installation
-The `hobot-dnn` package install process includes building the `hbm_runtime` wheel. After the DEB install completes, the `hbm-runtime` whl package is generated.
-
+### Building the Wheel Package
+There are three ways to build the wheel package, introduced below respectively.
+#### Build During deb Installation
+During the installation of the hobot-dnn package, the wheel build of hbm_runtime is included. After the deb package installation completes, the hbm-runtime whl package will be generated.
   ```bash
-  # Install from apt source
+  # Install from the repository
   sudo apt-get install hobot-dnn
 
-  # Install from a local deb package (package names vary by build; use your actual filename)
+  # Install from a local deb package (note that packages compiled at different times have different names; follow the actual situation)
   dpkg -i hobot-dnn_4.0.4-20250909195426_arm64.deb
 
-  # After installation, find the wheel under /tmp on the board
+  # After installation completes, the wheel package can be found in the /tmp directory on the board
   ls /tmp
 
-  # Whl package names vary by version; xxx stands for the version
+  # Note that whl package names differ by version; xxx represents the version
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
-#### Build During System Image Compilation
-When building the system software image, the `hobot-dnn` deb is installed; during that install the `hbm-runtime` whl is built and copied to `out/product/deb_packages`.
-
+#### Build During System Software Compilation
+When compiling the system software image, the hobot-dnn deb is installed; during that installation the hbm-runtime whl package is built and stored in the `out/product/deb_packages` directory
   ```bash
   sudo ./pack_image.sh
 
   ls out/product/deb_packages
 
-  # Whl package names vary by version; xxx stands for the version
+  # Note that whl package names differ by version; xxx represents the version
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
-#### Build on Device
+#### Build On the Device
   ```bash
-  # Enter the hbm_runtime source tree
+  # Enter the hbm_runtime source repository
   cd /usr/hobot/lib/hbm_runtime
 
-  # Run the build script
+  # Run the build command
   ./build.sh
 
-  # List built wheel packages
+  # Check the built wheel package
   ls dist/
 
-  # Whl package names vary by version; xxx stands for the version
+  # Note that whl package names differ by version; xxx represents the version
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
 ### Installation Methods
 
-#### Using a Wheel Package
-You can use either of the following wheel install methods.
-
+#### Using the Wheel Package
+There are two ways to install with wheel; choose either one
 - Install from a local wheel package
-  - Locate the `.whl` file built in the [Building Wheel Packages](#building-wheel-packages) section.
+  - Locate the whl file built in the "Building the Wheel Package" section above.
 
   ```bash
-  # Example: install local whl with pip (package names vary by version; xxx stands for the version)
+  # Example: install a local whl package with pip (note that whl package names differ by version; xxx represents the version)
   pip install hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
-- Install from PyPI
+- Install from the pypi source
   ```bash
   pip install hbm_runtime
   ```
 
-#### Using a .deb Package
-You can use either of the following deb install methods.
-
+#### Installing with a .deb Package
+There are two ways to install with deb; choose either one
 - Install from a local DEB package
   ```bash
-  # Example: install DEB package (package names vary by build; use your actual filename)
+  # Example: install a DEB package (note that packages compiled at different times have different names; follow the actual situation)
   sudo dpkg -i hobot-dnn_4.0.2-20250714201215_arm64.deb
   ```
 
-- Install from apt source
+- Install from the apt source
 
   ```bash
   sudo apt-get install hobot-dnn
   ```
 
 - FAQ
-  - If files are not updated after a `.deb` install, check whether other packages block the upgrade (for example, an older `hobot-spdev`).
-  - Use `dpkg -L hobot-dnn` to verify deployed files.
+  - If files do not take effect after the .deb installation, check whether other dependencies prevent them from being overwritten (e.g., an old version of hobot-spdev already exists).
+  - You can use dpkg -L hobot-dnn to verify whether the files were deployed successfully.
+
+
 
 ### Uninstallation
-- Uninstall pip-installed package:
+- Uninstall the pip-installed package:
   ```bash
-  pip uninstall hbmruntime
+  pip uninstall hbm_runtime
   ```
 
-- Uninstall deb-installed package:
+- Uninstall the .deb-installed package:
   ```bash
   sudo apt remove hobot-dnn
   ```
 
 ## Quick Start
-This section shows how to load models and run inference with `hbm_runtime`. A few lines of code are enough to run a model and obtain outputs.
-
-### Prerequisites
-Ensure HBMRuntime is installed correctly (see [Installation](#installation)) and that you have an HBM model file.
-
+This section introduces how to use hbm_runtime for model loading and inference. With just a few lines of code, you can run a model and get the output results.
+### Environment Preparation
+Please make sure that HBMRuntime is properly installed (see [Installation](#installation)) and that you have an hbm model file available.
 ### Examples
-#### Single-Threaded Inference
-##### Single-Threaded, Single-Model, Single-Input Inference
-For models with a single input tensor.
-
+#### Single-threaded Inference
+##### Single-threaded, Single-model, Single-input Inference
+Applicable when the model has only one input tensor.
 ```python
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
-# Load model
+# Load the model
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/lanenet256x512.hbm")
 
-# Get model name and input name
+# Get the model name and input name
 model_name = model.model_names[0]
-input_name = model.input_names[model_name][0]  # Assume single input
+input_name = model.input_names[model_name][0]  # assume the model has only one input
 
-# Get shape for this input
+# Get the shape corresponding to this input
 input_shape = model.input_shapes[model_name][input_name]
 
-# Build numpy input
+# Construct the numpy input
 input_tensor = np.ones(input_shape, dtype=np.float32)
 
 # Run inference
 outputs = model.run(input_tensor)
 
-# Get output
+# Get the output result
 output_array = outputs[model_name]
 print("Output:", output_array)
 ```
-
-##### Single-Threaded, Single-Model, Multi-Input Inference
-For models with multiple input tensors.
-
+##### Single-threaded, Single-model, Multi-input Inference
+Applicable when the model has multiple input tensors.
 ```python
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
@@ -196,25 +188,25 @@ hb_dtype_map = {
     "BOOL8": np.bool_,
 }
 
-# Load model
+# Load the model
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
 
-# Get model name (assume one model loaded)
+# Get the model name (assuming only one model is loaded)
 model_name = model.model_names[0]
 
-# Prepare input names and shapes
+# Prepare the input names and shapes
 input_names = model.input_names[model_name]
 input_shapes = model.input_shapes[model_name]
 input_dtypes = model.input_dtypes[model_name]
 
-# Build input dict
+# Construct the input dict
 input_tensors = {}
 for name in input_names:
     shape = input_shapes[name]
     np_dtype = hb_dtype_map.get(input_dtypes[name].name, np.float32)  # fallback
     input_tensors[name] = np.ones(shape, dtype=np_dtype)
 
-# Optional: set inference priority and BPU device
+# Optional: specify the inference priority and BPU device
 priority = {model_name: 5}
 bpu_cores = {model_name: [0]}
 
@@ -223,17 +215,15 @@ model.set_scheduling_params(
     bpu_cores=bpu_cores
 )
 
-# Run inference; optional per-call priority and BPU cores
+# Run inference, optionally specifying priority and BPU cores
 results = model.run(input_tensors)
 
-# Print outputs
+# Print the results
 for output_name, output_data in results[model_name].items():
     print(f"Output: {output_name}, shape={output_data.shape}")
 ```
-
-##### Single-Threaded, Multi-Model, Multi-Input Inference
-For multiple models each with multiple inputs. “Multi-model” can mean several HBM files or several models inside one HBM file.
-
+##### Single-threaded, Multi-model, Multi-input Inference
+Applicable when multiple models have multiple input tensors. Note that the multiple models here can be multiple HBM files, or a single HBM file containing multiple models.
 ```python
 """Multi-model inference quick start."""
 import numpy as np
@@ -279,10 +269,9 @@ for m, outs in outputs.items():
         print(f"  {name}: {arr.shape}, {arr.dtype}")
 ```
 
-#### Multi-Threaded Inference
-##### Multi-Threaded, Single-Model, Single-Input Inference
-For models with a single input tensor.
-
+#### Multi-threaded Inference
+##### Multi-threaded, Single-model, Single-input Inference
+Applicable when the model has only one input tensor.
 ```python
 import threading
 import numpy as np
@@ -315,10 +304,8 @@ threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
 for t in threads: t.start()
 for t in threads: t.join()
 ```
-
-##### Multi-Threaded, Single-Model, Multi-Input Inference
-For models with multiple input tensors.
-
+##### Multi-threaded, Single-model, Multi-input Inference
+Applicable when the model has multiple input tensors.
 ```python
 import threading
 import numpy as np
@@ -362,8 +349,7 @@ threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
 for t in threads: t.start()
 for t in threads: t.join()
 ```
-
-##### Multi-Threaded, Multi-Model, Multi-Input Inference
+##### Multi-threaded, Multi-model, Multi-input Inference
 ```python
 """4-thread demo: each thread runs inference on a dedicated BPU core."""
 import threading
@@ -412,20 +398,20 @@ for t in threads: t.join()
 ```
 
 ### FAQ
-| Question | Answer |
-|----------|--------|
-| How do I get model names? | Use `model.model_names` to list loaded model names. |
-| How do I confirm input dimensions and types? | Use `model.input_shapes` and `model.input_dtypes`. |
-| How do I assign BPU cores? | Use the `bpu_cores` parameter with values such as `[0, 1, 2, 3]`; actual support depends on hardware. |
+| Question                 | Description                                                |
+|------------------------|------------------------------------------------------------|
+| How to get the model names? | Check the list of loaded model names via `model.model_names`. |
+| How to check the input dimensions/types? | Use `model.input_shapes` and `model.input_dtypes`. |
+| How to check the BPU core allocation? | Use the bpu_cores parameter to specify [0, 1, 2, 3]; the actual options depend on hardware support. |
 
-For advanced usage (multi-input models, reading quantization parameters, etc.), see the [API Reference](#module-class-and-function-reference-api-reference).
+  For more complex usage (multi-input models, reading quantization parameters, etc.), refer to the [API Reference section](#moduleclassfunction-reference-api-reference).
 
-## Module, Class, and Function Reference (API Reference)
-The Python module `hbm_runtime` is a Horizon HBM model inference interface wrapped with PyBind11, implemented on libdnn and libhbucp. It provides unified model loading, input/output metadata queries, and inference execution, supporting multi-model loading, multi-input inference, per-model selection, BPU core binding, inference task priority, and more.
+## Module/Class/Function Reference (API Reference)
+The Python module hbm_runtime is a PyBind11-wrapped Horizon HBM model inference API, implemented on top of the underlying libdnn and libhbucp. It provides unified wrappers for model loading, input/output information queries, inference execution, and so on, supporting multi-model loading, multi-input inference, specifying the inference model, BPU Core, inference task priority, etc.
 
-### Enumerations
+### Enumerated Types
 #### hbDNNDataType
-##### Tensor data type enumeration:
+##### Tensor data type enum:
 - S4: 4-bit signed
 - U4: 4-bit unsigned
 - S8: 8-bit signed
@@ -440,46 +426,41 @@ The Python module `hbm_runtime` is a Horizon HBM model inference interface wrapp
 - S64: 64-bit signed
 - U64: 64-bit unsigned
 - BOOL8: 8-bit bool type
-- MAX: maximum value (reserved)
+- MAX: maximum value (reserved field)
 
 ##### Example
 ```python
 from hbm_runtime import hbDNNDataType
 print(hbDNNDataType.F32)  # Output: hbDNNDataType.F32
 ```
-
 #### hbDNNQuantiType
-##### Tensor quantization type enumeration:
+##### Tensor quantization type enum:
 - NONE: non-quantized type
-- SCALE: linear scale quantization (scale + zero_point)
-
+- SCALE: linear scaling quantization (scale + zero_point)
 ##### Example
 ```python
 from hbm_runtime import hbDNNQuantiType
 print(hbDNNQuantiType.SCALE)  # Output: hbDNNQuantiType.SCALE
 ```
 
-### Classes
+### Class Reference
 #### HB_HBMRuntime
-Model runtime class that loads one or more HBM model files and provides inference APIs.
-
+The model runtime class, which loads one or more HBM model files and provides the inference execution interface.
 ##### Constructor
 - Function signature
     ```python
     HB_HBMRuntime(model_file: str)
     HB_HBMRuntime(model_files: List[str])
     ```
-- Parameters
+- Parameter description
 
-    | Parameter | Type | Description |
-    |-----------|------|-------------|
-    | model_file | str | Path to an HBM model file |
-    | model_files | List[str] | Paths to multiple HBM model files (multi-model) |
-
+    | Parameter    | Type         | Description                          |
+    |------------|--------------|--------------------------------------|
+    | model_file | str          | HBM model file path                  |
+    | model_files| List[str]    | Multiple HBM model file paths (for multiple models) |
 - Return value
 
-  Class instance
-
+  Class object
 - Example
     ```python
     from hbm_runtime import HB_HBMRuntime
@@ -489,134 +470,126 @@ Model runtime class that loads one or more HBM model files and provides inferenc
     model = HB_HBMRuntime(["model1.hbm", "model2.hbm"])
     ```
 
-##### Properties
-All properties below are read-only.
-
+##### Property Reference
+All the properties below are read-only.
 - version: str
-  - Description:
-    - Library version string.
+  - Function:
+    - Get the library version number.
   - Structure:
-    - str: version string.
+    - str: the version number string.
   - Example:
     ```python
     print("Version:", HB_HBMRuntime.version)
     ```
-
 - model_names: List[str]
-  - Description:
-    - List of loaded model names.
+  - Function:
+    - The list of loaded model names.
   - Structure:
-    - List[str]: model name list
+    - List[str]: the list of model names
   - Example:
     ```python
     print(model.model_names)
     # Output: ['model_1', 'model_2']
     ```
-
 - model_count: int
-  - Description:
-    - Number of loaded models.
+  - Function:
+    - The number of loaded models.
   - Structure:
-    - int: number of loaded models.
+    - int: the number of loaded models.
   - Example:
     ```python
     print(model.model_count)
     # Output: 2
     ```
-
 - model_descs: Dict[str, str]
-  - Description:
-    - Per-model description (from embedded model notes).
+  - Function:
+    - The description information of each model (from the notes embedded in the model).
   - Structure:
-    - Dict[str, str]: keys are model names; values are overall model descriptions, usually from the compiler.
+    - Dict[str, str]: keys are model names, values are the overall description information of the model, usually from the compiler.
   - Example:
     ```python
-    # Print descriptions for all models
+    # Print the description information of all models
     print(model.model_descs)
     # Output: {'yolov5x_672x672_nv12': 'Image classification model based on ResNet-18.'}
     ```
 
 - hbm_descs: Dict[str, str]
-  - Description:
-    - Notes embedded in each HBM file.
+  - Function:
+    - The note information in each HBM file.
   - Structure:
-    - Dict[str, str]: keys are `.hbm` file names (e.g. `"resnet18"`); values are comment or metadata strings from the HBM file.
+    - Dict[str, str]: keys are .hbm file names (e.g., "resnet18"), values are the comment or meta-information strings in the HBM file.
   - Example:
     ```python
-    # Print descriptions for all model files
+    # Print the description information of all model files
     print(model.hbm_descs)
     # Output: {'/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
     ```
-
 - compile_bpu_core_num: Dict[str, int]
-  - Description:
-    - BPU core count specified at compile time for each model. Reflects the BPU core configuration used when the model was compiled into HBM; useful for runtime resource planning or consistency checks against runtime `bpu_cores` settings.
+  - Function:
+    - Get the number of BPU cores specified at compile time for each model. This information reflects the BPU core configuration used when the model was compiled into HBM, and can be used for runtime resource planning or consistency checks against the runtime bpu_cores parameter setting.
   - Structure:
     - Dict[str, int]:
-      - key: model name
-      - value: compile-time BPU core count for that model
+      - key: the model name
+      - value: the BPU core count specified for this model at compile time
   - Example:
     ```bash
-    # Query compile-time BPU core count
+    # Query the compile-time BPU core count of the models
     print(model.compile_bpu_core_num)
 
     # Example output
     # {'model_1': 1, 'model_2': 2}
     ```
-
 - input_counts: Dict[str, int]
-  - Description:
-    - Number of input tensors per model.
+  - Function:
+    - The number of input tensors of each model.
   - Structure:
-    - Dict[str, int]: keys are model names; values are input tensor counts.
+    - Dict[str, int]: keys are model names, values are the number of input tensors of that model.
   - Example:
     ```python
+    # Print the description information of all model files
     print(model.input_counts)
     # Output: {'yolov5x_672x672_nv12': 2}
     ```
-
 - input_names: Dict[str, List[str]]
-  - Description:
-    - Input tensor name list per model.
+  - Function:
+    - The input tensor name list of each model.
   - Structure:
     - Outer Dict[str, ...]: keys are model names.
-    - Inner List[str]: input tensor names for that model.
+    - Inner List[str]: the list of names of all input tensors of that model.
   - Example:
     ```python
     print(model.input_names)
     # Output: {'yolov5x_672x672_nv12': ['data_y', 'data_uv']}
     ```
-
 - input_descs: Dict[str, Dict[str, str]]
-  - Description:
-    - Description per input tensor.
+  - Function:
+    - The description of each input tensor
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, str]: keys are input tensor names; values are descriptions.
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, str]: keys are input tensor names, values are the description information.
   - Example:
     ```python
+    # Print the description information of all model files
     print(model.input_descs)
     # Output: {'yolov5x_672x672_nv12': {'data_uv': 'xxx', 'data_y': 'xxx'}}
     ```
-
 - input_shapes: Dict[str, Dict[str, List[int]]]
-  - Description:
-    - Shape of each input tensor.
+  - Function:
+    - The shape of each input tensor
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, List[int]]: keys are input names; values are tensor dimensions (shape).
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, List[int]]: keys are input names, values are the dimensions (shape) of the input tensor.
   - Example:
     ```python
     model.input_shapes
     # Output: {'yolov5x_672x672_nv12': {'data_uv': [1, 336, 336, 2], 'data_y': [1, 672, 672, 1]}}
     ```
-
 - input_dtypes: Dict[str, Dict[str, hbDNNDataType]]
-  - Description:
-    - Data type of each input tensor.
+  - Function:
+    - The data type of each input tensor
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, hbDNNDataType]: keys are input tensor names; values are data types (e.g. F32, U8).
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, hbDNNDataType]: keys are input tensor names, values are the data types (e.g., F32, U8).
   - Example:
     ```python
     print(model.input_dtypes)
@@ -624,16 +597,16 @@ All properties below are read-only.
     ```
 
 - input_quants: Dict[str, Dict[str, QuantParams]]
-  - Description:
-    - Quantization parameters for all input tensors of each model. Used for pre-processing of quantized models or to inspect how tensors are quantized.
+  - Function:
+    - Provides the quantization parameter information of all input tensors of each model. Used to support preprocessing computations for quantized models, or to understand how tensors are quantized.
   - Structure:
-    - Outer Dict[str, ...]: model name, e.g. `"resnet50"`;
-    - Inner Dict[str, QuantParams]: keys are input tensor names; values are `QuantParams` instances;
-    - `QuantParams` attributes:
-      - scale: np.ndarray — scale factors, usually a float array;
-      - zero_point: np.ndarray — zero points for symmetric/asymmetric quantization;
-      - quant_type: hbDNNQuantiType — quantization type enum (e.g. SCALE, NONE);
-      - axis: int — for per-channel quantization, the axis along which quantization applies.
+    - Outer Dict[str, ...]: keys are model names, e.g., "resnet50";
+    - Inner Dict[str, QuantParams]: keys are input tensor names, values are QuantParams instances;
+    - QuantParams class properties:
+      - scale: np.ndarray — the quantization scale factors, usually a float array;
+      - zero_point: np.ndarray — the zero points, used for symmetric/asymmetric quantization offsets;
+      - quant_type: hbDNNQuantiType — the quantization type enum value (e.g., SCALE, NONE);
+      - axis: int — for channel-wise quantization, this field indicates which axis the quantization is performed on.
   - Example:
     ```python
     quanti_info = model.input_quants
@@ -646,90 +619,83 @@ All properties below are read-only.
             print(f"    scale_data: {info.scale.tolist()}")
             print(f"    zero_point_data: {info.zero_point.tolist()}")
     ```
-
 - input_strides: Dict[str, Dict[str, List[int]]]
-  - Description:
-    - Stride information per input tensor.
+  - Function:
+    - The stride information of each input tensor
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, List[int]]: keys are input names; values are stride arrays.
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, List[int]]: keys are input names, values are the stride information of the input tensor.
   - Example:
     ```python
     print(model.input_strides)
     # Output: {'yolov5x_672x672_nv12': {'data_uv': [-1, -1, 2, 1], 'data_y': [-1, -1, 1, 1]}}
     ```
-    Note: For stride semantics, see the libdnn description in the [OE documentation](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html).
-
+    Note: for the detailed meaning of stride, refer to the description of the libdnn library in the [OE documentation](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html);
 - output_counts: Dict[str, int]
-  - Description:
-    - Number of output tensors per model.
+  - Function:
+    - The number of output tensors of each model.
   - Structure:
-    - Dict[str, int]: keys are model names; values are output tensor counts.
+    - Dict[str, int]: keys are model names, values are the number of output tensors of that model.
   - Example:
     ```python
     print(model.output_counts)
     # Output: {'yolov5x_672x672_nv12': 3}
     ```
-
 - output_names: Dict[str, List[str]]
-  - Description:
-    - Output tensor name list per model.
+  - Function:
+    - The output tensor name list of each model.
   - Structure:
     - Outer Dict[str, ...]: keys are model names.
-    - Inner List[str]: output tensor names for that model.
+    - Inner List[str]: the list of names of all output tensors of that model.
   - Example:
     ```python
     print(model.output_names)
     # Output: {'yolov5x_672x672_nv12': ['output', '1310', '1312']}
     ```
-
 - output_descs: Dict[str, Dict[str, str]]
-  - Description:
-    - Description per output tensor.
+  - Function:
+    - The description of each output tensor.
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, str]: keys are output tensor names; values are descriptions.
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, str]: keys are output tensor names, values are the description information.
   - Example:
     ```python
     print(model.output_descs)
     # Output: {'yolov5x_672x672_nv12': {'1310': 'xxx', '1312': 'xxx', 'output': 'xxx'}}
     ```
-
 - output_shapes: Dict[str, Dict[str, List[int]]]
-  - Description:
-    - Shape of each output tensor.
+  - Function:
+    - The shape of each output tensor.
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, List[int]]: keys are output names; values are tensor dimensions (shape).
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, List[int]]: keys are output names, values are the dimensions (shape) of the output tensor.
   - Example:
     ```python
     print(model.output_shapes)
     # Output: {'yolov5x_672x672_nv12': {'1310': [1, 42, 42, 255], '1312': [1, 21, 21, 255], 'output': [1, 84, 84, 255]}}
     ```
-
 - output_dtypes: Dict[str, Dict[str, List[int]]]
-  - Description:
-    - Data type of each output tensor.
+  - Function:
+    - The data type of each output tensor.
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, hbDNNDataType]: keys are output tensor names; values are data types (e.g. F32, U8).
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, hbDNNDataType]: keys are output tensor names, values are the data types (e.g., F32, U8).
   - Example:
     ```python
     print(model.output_dtypes)
     # Output: {'yolov5x_672x672_nv12': {'1310': <hbDNNDataType.S32: 8>, '1312': <hbDNNDataType.S32: 8>, 'output': <hbDNNDataType.S32: 8>}}
     ```
-
 - output_quants: Dict[str, Dict[str, QuantParams]]
-  - Description:
-    - Quantization parameters for all output tensors of each model. Used for post-processing of quantized models (e.g. dequantizing int8 to float32) or to inspect quantization (scale-based, etc.).
+  - Function:
+    - Provides the quantization parameter information of all output tensors of each model. Used to support post-processing computations for quantized models (e.g., restoring int8 data back to float32), or to understand how tensors are quantized (scale-based, etc.).
   - Structure:
-    - Outer Dict[str, ...]: model name, e.g. `"resnet50"`;
-    - Inner Dict[str, QuantParams]: keys are output tensor names; values are `QuantParams` instances;
-    - `QuantParams` attributes:
-      - scale: np.ndarray — scale factors, usually a float array;
-      - zero_point: np.ndarray — zero points for symmetric/asymmetric quantization;
-      - quant_type: hbDNNQuantiType — quantization type enum (e.g. SCALE, NONE);
-      - axis: int — for per-channel quantization, the quantization axis.
+    - Outer Dict[str, ...]: keys are model names, e.g., "resnet50";
+    - Inner Dict[str, QuantParams]: keys are output tensor names, values are QuantParams instances;
+    - QuantParams class properties:
+      - scale: np.ndarray — the quantization scale factors, usually a float array;
+      - zero_point: np.ndarray — the zero points, used for symmetric/asymmetric quantization offsets;
+      - quant_type: hbDNNQuantiType — the quantization type enum value (e.g., SCALE, NONE);
+      - axis: int — for channel-wise quantization, this field indicates which axis the quantization is performed on.
   - Example:
     ```python
     output_quanti = model.output_quants
@@ -742,31 +708,30 @@ All properties below are read-only.
             print(f"    scale_data: {info.scale}")
             print(f"    zero_point_data: {info.zero_point}")
     ```
-
 - output_strides: Dict[str, Dict[str, List[int]]]
-  - Description:
-    - Stride information per output tensor.
+  - Function:
+    - The stride information of each output tensor
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner Dict[str, List[int]]: keys are output names; values are stride arrays.
+    - Outer Dict[str, ...]: model names.
+    - Inner Dict[str, List[int]]: keys are output names, values are the stride information of the output tensor.
   - Example:
     ```python
     print(model.output_strides)
     # Output: {'yolov5x_672x672_nv12': {'1310': [1806336, 43008, 1024, 4], '1312': [451584, 21504, 1024, 4], 'output': [7225344, 86016, 1024, 4]}}
     ```
-  Note: For stride semantics, see the libdnn description in the [OE documentation](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html).
+  Note: for the detailed meaning of stride, refer to the description of the libdnn library in the [OE documentation](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html);
 
 - sched_params: Dict[str, SchedParam]
-  - Description:
-    `sched_params` returns the current scheduling parameters for all models, including per model:
+  - Function:
+    sched_params is used to get the current scheduling parameters (Scheduling Parameters) of all models, including for each model:
     - priority
     - custom ID (customId)
-    - assigned BPU cores (bpu_cores)
-    - device ID (deviceId)
-    These parameters affect how models run on hardware, especially in multi-model or multi-core deployments.
+    - allocated BPU cores (bpu_cores)
+    - device ID it belongs to (deviceId)
+    These scheduling parameters affect how the model runs on the hardware, and are especially important in multi-model deployments or multi-core devices.
   - Structure:
-    - Outer Dict[str, ...]: model name.
-    - Inner SchedParam: instance with priority, customId, bpu_cores, and deviceId for that model;
+    - Outer Dict[str, ...]: model names.
+    - Inner SchedParam: an instance of the SchedParam class, containing the scheduling parameters priority, customId, bpu_cores and deviceId of that model;
       ```python
       {
           "model_name": SchedParam(
@@ -798,8 +763,7 @@ All properties below are read-only.
     #   bpu_cores: [-1]
     #   deviceId: 0
     ```
-    Note: `bpu_cores` returning `-1` means the scheduler assigns cores automatically.
-
+    Note: a returned value of -1 in bpu_cores means it is automatically allocated by the scheduler;
 ##### Configuration Functions
 - set_scheduling_params
   - Function signature
@@ -811,27 +775,27 @@ All properties below are read-only.
         device_id: Optional[Dict[str, int]] = None
     ) -> None
     ```
-  - Description
+  - Function
 
-    Sets default scheduling parameters per model (priority / bpu_cores / custom_id / device_id). Configures persistent, instance-level defaults on `HB_HBMRuntime` for subsequent inference calls.
+    Sets the default scheduling parameters (priority / bpu_cores / custom_id / device_id) of the models. This function configures the persistent scheduling parameters at the HB_HBMRuntime instance level, serving as the defaults for subsequent inference calls.
 
-    Relationship to `run()` scheduling parameters:
-    - `set_scheduling_params()` sets **model-level default** scheduling parameters stored on the runtime instance.
-    - `run()` also accepts scheduling arguments for **per-call temporary overrides (run-local)**.
-    - Explicit scheduling arguments on `run()` **override** defaults from `set_scheduling_params()`.
-    - `run()` overrides apply **only to that inference call** and do not change stored defaults.
-    - If a scheduling field is omitted on `run()`, the default from `set_scheduling_params()` is used.
+    Relationship with the run() scheduling parameters:
+    - set_scheduling_params() sets the **model-level default scheduling parameters**, which are stored in the runtime instance and remain in effect.
+    - The run() interface also accepts scheduling configuration passed via parameters, used as a **temporary override for a single inference call (run-local)**.
+    - When scheduling parameters are explicitly passed in a run() call, their priority is **higher** than the defaults set via set_scheduling_params().
+    - The scheduling parameters passed in run() **only take effect for the current inference call** and do not modify or affect the default scheduling parameters already set.
+    - If a scheduling field is not passed in run(), that field automatically falls back to the default value configured via set_scheduling_params().
 
-    Precedence: `run()` arguments > `set_scheduling_params()` defaults > built-in initial defaults
+    Priority relationship: `run() parameters  >  set_scheduling_params() defaults  >  built-in initial defaults`
 
-  - Parameters
+  - Parameter description
 
-    | Parameter | Type | Description |
-    |-----------|------|-------------|
-    | priority | optional dict (model name → int) | Scheduling priority per model, typically 0–255; higher values mean higher priority |
-    | bpu_cores | optional dict (model name → List[int]) | BPU core index list per model; default means auto-assignment; depends on hardware support |
-    | custom_id | optional dict (model name → int) | Custom tie-breaker (e.g. timestamp, frame id); smaller values win when priority is equal. Precedence: priority > customId. |
-    | device_id | optional dict (model name → int) | Device on which the model runs |
+    | Parameter   | Type                             | Description                                                          |
+    |-------------|----------------------------------|----------------------------------------------------------------------|
+    | priority    | Optional dict (model name -> int) | Sets the scheduling priority of each model. The range is usually 0~255; the higher the value, the higher the priority |
+    | bpu_cores   | Optional dict (model name -> List[int]) | Specifies the list of BPU core indices the model is bound to. By default it is automatically allocated; the actual options depend on hardware support |
+    | custom_id   | Optional dict (model name -> int) | Custom priority, e.g., timestamp, frame id, etc. The smaller the value, the higher the priority. Priority order: priority > customId. |
+    | device_id   | Optional dict (model name -> int) | Specifies on which device the model runs                             |
 
   - Return value
 
@@ -845,30 +809,30 @@ All properties below are read-only.
         bpu_cores={"model1": [0, 1], "model2": [0]}
     )
 
-    # Verify defaults
+    # Verify that the default parameters take effect
     params = model.sched_params
     print(params["model1"].priority)    # Output: 200
     print(params["model1"].bpu_cores)   # Output: [0, 1]
 
-    # Per-call override in run() (does not change defaults)
+    # Per-call override in run() (does not modify the defaults)
     outputs = model.run(
         inputs,
-        priority={"model1": 50}          # Applies only to this call
+        priority={"model1": 50}          # Only effective for this call
     )
 
-    # Defaults unchanged
+    # The default parameters remain unchanged
     print(model.sched_params["model1"].priority)  # Still: 200
     ```
 
-##### Inference Functions
+##### Inference Execution Functions
 
-`run()` accepts three input shapes (single input / single-model multi-input / multi-model multi-input). Each call can pass scheduling parameters: priority / bpu_cores / custom_id / device_id.
+run() provides 3 input forms (single input / single-model multi-input / multi-model multi-input), and each call can individually pass scheduling parameters: priority / bpu_cores / custom_id / device_id.
 
-**Multi-threading (important)**
+**Multi-threading Support Notes (Important)**
 
-- Multi-model parallelism: with `run(multi_input_tensors, ...)`, the runtime creates one C++ thread per model in `multi_input_tensors` and runs inference in parallel.
-- Concurrent Python threads: you can combine “multiple Python threads calling `run()`” with “parallel multi-model inference” for higher throughput (actual gain depends on BPU core count, model config, and system load).
-- Per-call scheduling: `run()` priority/bpu_cores/custom_id/device_id are temporary for that call; different threads or calls can use different values independently.
+- Parallelism for multi-model inference: when using `run(multi_input_tensors, ...)` for multi-model inference, the runtime creates one C++ thread for each model in `multi_input_tensors` to run their respective inference pipelines in parallel.
+- Concurrent calls from Python threads: it is possible to achieve the throughput improvement of "concurrent run() calls from Python threads + parallel multi-model inference in the runtime" (the actual effect depends on the number of BPU cores, the model configuration and the system load).
+- Each call can set its own scheduling parameters: the priority/bpu_cores/custom_id/device_id of run() are temporary overrides for the current call; different threads / different calls can pass different scheduling parameters without affecting each other.
 
 - run (single model · single input)
   - Function signature
@@ -882,31 +846,31 @@ All properties below are read-only.
         device_id: Optional[Dict[str, int]] = None,
     ) -> Dict[str, Dict[str, np.ndarray]]
     ```
-  - Description
+  - Function
 
-    For single-model, single-input inference.
-    - When only one model is loaded, `model_name` may be omitted; with multiple models, **`model_name` is required** (otherwise an error is raised).
-    - If the selected model does not have exactly one input, an error is raised (this overload does not apply).
-    - Input dtype must match the model input type; shape must match the model input (dynamic dimensions marked `-1` in the model are filled from the actual input).
-    - Return structure: `{model_name: {output_name: np.ndarray}}`
+    Applicable to the single-model, single-input inference scenario.
+    - When only one model is loaded, `model_name` can be omitted; when multiple models are loaded, `model_name` **must be specified** (otherwise an error is raised).
+    - If the input count of the selected model is not 1, an error is raised directly (this overload does not apply).
+    - It validates that the input dtype matches the model input type; it validates that the shape matches the model input (dynamic dimensions with model dimension -1 are filled in from the actual input).
+    - The inference return structure is: `{model_name: {output_name: np.ndarray}}`
 
-  - Parameters
+  - Parameter description
 
-    | Parameter | Type | Description |
-    |-----------|------|-------------|
-    | input_tensor | np.ndarray | Single input tensor; only for single-model, single-input inference. Shape must match the model input. |
-    | model_name | str (optional) | Target model name (optional if only one model is loaded; required otherwise) |
-    | priority | optional dict (model name → int) | Inference priority for this call (temporary override) |
-    | bpu_cores | optional dict (model name → List[int]) | BPU core indices for this call |
-    | custom_id | optional dict (model name → int) | Custom priority for this call |
-    | device_id | optional dict (model name → int) | Device ID for this call |
+    | Parameter    | Type                             | Description                                                          |
+    |--------------|----------------------------------|---------------------------------------------------------------------|
+    | input_tensor | np.ndarray                       | Single input tensor, only for the single-model, single-input inference scenario. The tensor shape must match the corresponding model input. |
+    | model_name   | str (optional)                   | Specifies the model name (can be omitted for a single model, otherwise must be specified) |
+    | priority     | Optional dict (model name -> int) | The inference priority of this call (temporary override, does not affect the defaults) |
+    | bpu_cores    | Optional dict (model name -> List[int]) | The list of BPU core indices bound to this call |
+    | custom_id    | Optional dict (model name -> int) | The custom priority of this call |
+    | device_id    | Optional dict (model name -> int) | The device ID specified for this call |
 
   - Return value
     - Type: Dict[str, Dict[str, np.ndarray]]
-    - Outer key: model name
-    - Inner key: output tensor name
-    - Value: output numpy array (zero-copy wrapper over device buffer; released with the array lifetime)
-  - Example: see [Single-Threaded, Single-Model, Single-Input Inference](#single-threaded-single-model-single-input-inference) in Quick Start.
+    - Outer key: the model name
+    - Inner key: the output tensor name
+    - value: the corresponding output numpy array (a zero-copy wrapper over the device buffer, automatically released with the array's lifetime)
+  - Example: see the Quick Start section, the single-threaded, single-model, single-input inference part.
 
 - run (single model · multi-input)
   - Function signature
@@ -920,29 +884,29 @@ All properties below are read-only.
         device_id: Optional[Dict[str, int]] = None,
     ) -> Dict[str, Dict[str, np.ndarray]]
     ```
-  - Description
+  - Function
 
-    For single-model, multi-input inference.
-    - Keys in `input_tensors` must be valid input names for the model (otherwise an error is raised).
-    - When only one model is loaded, `model_name` may be omitted; with multiple models, **`model_name` is required**.
-    - Each input is checked for C-contiguous memory and copied if needed.
+    Applicable to the single-model, multi-input inference scenario.
+    - The keys of `input_tensors` must be input names that actually exist in the model (otherwise an error is raised).
+    - When only one model is loaded, `model_name` can be omitted; when multiple models are loaded, `model_name` **must be specified** (otherwise an error is raised).
+    - Each input tensor is checked for C-contiguous memory layout and automatically copied when it is not.
 
-  - Parameters
+  - Parameter description
 
-    | Parameter | Type | Description |
-    |-----------|------|-------------|
-    | input_tensors | Dict[str, np.ndarray] | Multi-input dict: input tensor name → NumPy array |
-    | model_name | str (optional) | Target model name (optional if only one model is loaded; required otherwise) |
-    | priority | optional dict (model name → int) | Inference priority for this call (temporary override) |
-    | bpu_cores | optional dict (model name → List[int]) | BPU core indices for this call |
-    | custom_id | optional dict (model name → int) | Custom priority for this call |
-    | device_id | optional dict (model name → int) | Device ID for this call |
+    | Parameter     | Type                             | Description                                                        |
+    |---------------|----------------------------------|-------------------------------------------------------------------|
+    | input_tensors | Dict[str, np.ndarray]            | Multi-input tensors; keys are input tensor names, values are the corresponding NumPy arrays. |
+    | model_name    | str (optional)                   | Specifies the model name (can be omitted for a single model, otherwise must be specified) |
+    | priority      | Optional dict (model name -> int) | The inference priority of this call (temporary override, does not affect the defaults) |
+    | bpu_cores     | Optional dict (model name -> List[int]) | The list of BPU core indices bound to this call |
+    | custom_id     | Optional dict (model name -> int) | The custom priority of this call |
+    | device_id     | Optional dict (model name -> int) | The device ID specified for this call |
 
   - Return value
 
     Same as above.
 
-  - Example: see [Single-Threaded, Single-Model, Multi-Input Inference](#single-threaded-single-model-multi-input-inference) in Quick Start.
+  - Example: see the Quick Start section, the single-threaded, single-model, multi-input inference part.
 
 - run (multi-model · multi-input)
   - Function signature
@@ -956,47 +920,44 @@ All properties below are read-only.
         device_id: Optional[Dict[str, int]] = None,
     ) -> Dict[str, Dict[str, np.ndarray]]
     ```
-  - Description
+  - Function
 
-    For simultaneous multi-model inference: outer keys are model names; inner dicts map input names to numpy arrays.
-    - If **`model_name` is omitted**: infer all models present in `multi_input_tensors`.
-    - If **`model_name` is set**: only that model’s inputs are kept and inferred (other models’ inputs are filtered out).
-    - Parallel execution: one thread per model; GIL is released during inference so concurrent Python `run()` calls can achieve higher throughput.
+    Applicable to the multi-model simultaneous inference scenario: outer keys are model names, inner ones are input name -> numpy array for that model.
+    - If `model_name` is **not specified**: all models provided in `multi_input_tensors` are inferred.
+    - If `model_name` is **specified**: only the inputs corresponding to that model are kept and inference is executed (the inputs of the other models are filtered out).
+    - Multi-threaded parallel execution: the runtime creates one thread for each model to run inference in parallel, and releases the GIL during inference, so that higher throughput can be achieved when Python threads call concurrently.
 
-  - Parameters
+  - Parameter description
 
-    | Parameter | Type | Description |
-    |-----------|------|-------------|
-    | multi_input_tensors | Dict[str, Dict[str, np.ndarray]] | Multi-model inputs: model name → (input name → tensor). Supports multiple models, each with multiple inputs. |
-    | model_name | str (optional) | If set, infer only this model; if omitted, infer all models with provided inputs |
-    | priority | optional dict (model name → int) | Inference priority for this call (temporary override) |
-    | bpu_cores | optional dict (model name → List[int]) | BPU core indices for this call |
-    | custom_id | optional dict (model name → int) | Custom priority for this call |
-    | device_id | optional dict (model name → int) | Device ID for this call |
+    | Parameter           | Type                              | Description |
+    |---------------------|-----------------------------------|------|
+    | multi_input_tensors | Dict[str, Dict[str, np.ndarray]]  | Multi-model inference; outer keys are model names, inner ones are the input name -> tensor mapping. Supports running multiple models simultaneously (each model can have multiple inputs). |
+    | model_name          | str (optional)                    | If specified, only that model is inferred; if not specified, all models with provided inputs are inferred |
+    | priority            | Optional dict (model name -> int) | The inference priority of this call (temporary override, does not affect the defaults) |
+    | bpu_cores           | Optional dict (model name -> List[int]) | The list of BPU core indices bound to this call |
+    | custom_id           | Optional dict (model name -> int) | The custom priority of this call |
+    | device_id           | Optional dict (model name -> int) | The device ID specified for this call |
 
   - Return value
 
-    Same as above.
+    Same as above
 
-  - Example: see [Single-Threaded, Multi-Model, Multi-Input Inference](#single-threaded-multi-model-multi-input-inference) in Quick Start.
+  - Example: see the Quick Start section, the single-threaded, multi-model, multi-input inference part.
 
-- Exceptions
-  - `ValueError` if input tensor shape or dtype does not match the model.
-  - Non-contiguous (non C-style) inputs are copied internally to a contiguous buffer.
-  - Input tensor shape must match `input_shapes` before inference.
-
+- Exception notes
+  - If the input tensor dimensions or type do not match the model, a ValueError is raised.
+  - If the input tensor is non-contiguous (non C-style), a contiguous copy is automatically made internally.
+  - Before inference, make sure the input tensor shape exactly matches input_shapes.
 #### QuantParams Class
-Tensor quantization parameter object.
-
+  Tensor quantization parameter object.
 ##### Properties
-- scale: numpy.ndarray, scale factor array
-- zero_point: numpy.ndarray, zero-point array
-- quant_type: hbDNNQuantiType, quantization mode
-- axis: int, quantization axis (for per-channel quantization)
-
+- scale: numpy.ndarray, the array of quantization scale factors
+- zero_point: numpy.ndarray, the array of zero points
+- quant_type: hbDNNQuantiType type, indicates the quantization mode
+- axis: int, the quantization axis (for per-channel quantization)
 ##### Example:
     ```python
-    # Get quantization params for a model output
+    # Get the quantization parameters of one output of the model
     tensor_qparams = model.output_quants[model_name][output_name]
     print("scale:", tensor_qparams.scale)
     print("zero_point:", tensor_qparams.zero_point)
@@ -1005,24 +966,23 @@ Tensor quantization parameter object.
     ```
 
 #### SchedParam Class
-Model scheduling parameter object describing default scheduling state for a single model (priority, core binding, etc.). Typically used to read current scheduling configuration rather than as the primary configuration API.
-
+  Model scheduling parameter object, used to describe the default scheduling state of a single model (priority, core binding, etc.). This object is usually used to read the scheduling configuration of the current model, rather than as the primary configuration entry point.
 ##### Properties
 - priority: Dict[str, int]
 
-  Inference task scheduling priority, range 0–255; higher values mean higher priority.
+  The scheduling priority of the model inference task. The value range is 0~255; the higher the value, the higher the priority.
 
 - customId: Dict[str, int]
 
-  User-defined identifier (e.g. frame id, timestamp) passed to the low-level scheduler. Precedence: priority > customId.
+  A user-defined identifier (e.g., frame id, timestamp, etc.), passed to the low-level scheduler. Priority order: priority > customId.
 
 - bpu_cores: Dict[str, List[int]]
 
-  BPU core list bound to the model; `[-1]` means ANY (scheduler auto-selects). S100 allows 1 core; S600 allows 0–3.
+  The list of BPU cores bound to the model; [-1] means ANY, automatically selected by the scheduler. S100 can only take 1, S600 takes 0~3.
 
 - deviceId: Dict[str, int]
 
-  Device ID for model deployment (multi-device scenarios).
+  The device ID where the model is deployed (used in multi-device scenarios).
 
 ##### Example:
   ```python
@@ -1042,4 +1002,12 @@ Model scheduling parameter object describing default scheduling state for a sing
   ```
 
 ## Notes
-- Dynamic inputs and outputs are untested; use with caution.
+- Dynamic inputs and outputs have not been tested; use them with caution;
+
+## Related Documents
+
+- [ResNet18 Classification Example (Python)](../../03_Demos/03_algorithm_demo/02_classification/01_resnet18_py.md)
+- [YOLOv5x Detection Example (Python)](../../03_Demos/03_algorithm_demo/03_detection/01_yolov5x_py.md)
+- [C Inference API](./01_c_api.md)
+- [Model Download and Placement](../../03_Demos/04_demo_support/01_model_files.md)
+- [Using Your Own Model](../../03_Demos/04_demo_support/04_custom_model.md)

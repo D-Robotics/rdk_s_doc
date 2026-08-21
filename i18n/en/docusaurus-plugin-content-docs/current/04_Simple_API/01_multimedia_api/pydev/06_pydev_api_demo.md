@@ -1,10 +1,12 @@
 ---
 sidebar_position: 6
+title: "Interface Usage Examples"
+description: "Interface Usage Examples object interface description"
 ---
 
 # Interface Usage Examples
 
-The following example code includes multiple unit test cases covering the usage of the interfaces described in this chapter, as detailed below:
+The following example code contains multiple unit test cases covering the usage of the interfaces in this chapter, as detailed below:
 
 ```python
 import sys, os, time
@@ -198,7 +200,7 @@ def test_camera_bind_encode():
     a = 0
     while a < 100:
         img = enc.get_img()
-```img1 = enc1.get_img()
+        img1 = enc1.get_img()
         if img is not None:
             fo.write(img)
             fo1.write(img1)
@@ -397,16 +399,17 @@ def test_rtsp_decode_bind_vps_bind_disp(rtsp_url):
     a = 0
     while True:
         ret, stream_frame = cap.read()
-        if not ret:return
+        if not ret:
+            return
         nalu_types = get_h264_nalu_type(stream_frame.tobytes())
 
-        # The first frame fed into the decoder must be PPS and SPS; otherwise, the decoder will throw a "FAILED TO DEC_PIC_HDR" exception and exit.
+        # The first frame fed into the decoder must be pps, sps; otherwise the decoder will report a "FAILED TO DEC_PIC_HDR" exception and exit
         if (nalu_types[0] in [1, 5]) and find_pps_sps == 0:
             continue
 
         find_pps_sps = 1
         if stream_frame is not None:
-            ret = dec.set_img(stream_frame.tobytes(), 0) # Send bitstream; decode several frames first before retrieving images.
+            ret = dec.set_img(stream_frame.tobytes(), 0) # Send the bitstream; decode several frames first before retrieving
             if ret != 0:
                 return ret
             if skip_count < 5:
@@ -437,3 +440,16 @@ test_cam_vps_display()
 # rtsp_url = "rtsp://127.0.0.1/3840x2160.264"
 # test_rtsp_decode_bind_vps_bind_disp(rtsp_url)
 ```
+
+## Notes
+
+- After `open_cam` succeeds, it is recommended to wait about 1 second (ISP tuning) before calling `get_img` to get the image.
+- Before exiting each test case, call `unbind` and each object's `close`/`close_cam` in order to release resources.
+- When feeding an RTSP bitstream into the decoder, the first frame must be SPS/PPS; otherwise the decoder will report a `FAILED TO DEC_PIC_HDR` exception and exit.
+- Each test case generates files such as `output.img` and `encode.h264` in the current directory, and a later test case depends on the output files of the previous one, so it is recommended to run them in order.
+
+## Related Documents
+
+- [Multimedia Interface Description](./pydev_multimedia_api)
+- [Camera Object](./object_camera)
+- [Python Multimedia Examples](/Demos/multimedia_demo/pydev/pydev_multimedia)

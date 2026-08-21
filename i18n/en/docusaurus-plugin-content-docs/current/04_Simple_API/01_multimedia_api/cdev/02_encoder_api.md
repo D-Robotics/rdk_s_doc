@@ -1,8 +1,16 @@
 ---
 sidebar_position: 2
+title: "ENCODER (Encoding Module) API"
+description: "ENCODER (encoding module) API reference"
 ---
 
-# ENCODER API
+# ENCODER (Encoding Module) API
+
+The `ENCODER` module provides image encoding functionality, supporting `H264`, `H265` and `MJPEG` encoding.
+
+- **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api).
+- **Applicable scenarios**: capture→encode and save. See [Capture→Encode](/Demos/multimedia_demo/cdev/vio2encoder).
+- **Prerequisites**: RDK OS is flashed, a compile toolchain is available on the board, and a MIPI camera can be connected or image frame data is available.
 
 The `ENCODER` API provides the following interfaces:
 
@@ -17,7 +25,7 @@ The `ENCODER` API provides the following interfaces:
 
 :::warning Note
 
-The encoded image requires 16-bit alignment for RDK X5, while RDK X3 supports 8/16-bit alignment.
+The image to be encoded requires 16-bit alignment on RDK X5, while RDK X3 allows 8/16-bit alignment.
 
 :::
 
@@ -29,15 +37,15 @@ The encoded image requires 16-bit alignment for RDK X5, while RDK X3 supports 8/
 
 **[Description]**  
 
-Initializes the encoder module object. This function must be called to obtain a handle before using the encoder module.
+Initializes the encoder module object. It must be called to obtain the operation handle when using the encoder module.
 
 **[Parameters]**
 
 None
 
-**[Return Type]**  
+**[Return Value]**  
 
-Returns a pointer to an `ENCODER` object on success, or `NULL` on failure.
+Returns an `ENCODER` object pointer on success, and `NULL` on failure.
 
 ## sp_release_encoder_module  
 
@@ -51,9 +59,9 @@ Destroys the encoder module object.
 
 **[Parameters]**
 
-- `obj`: Pointer to the object obtained from the initialization function.
+ - `obj`: the object pointer obtained by calling the initialization interface.
 
-**[Return Type]**  
+**[Return Value]**  
 
 None
 
@@ -65,20 +73,20 @@ None
 
 **[Description]**  
 
-Creates an image encoding channel. Supports up to 32 concurrent encoding channels. Supported encoding types include `H264`, `H265`, and `MJPEG`.
+Creates one image encoding channel. Up to `32` channels can be created, and the supported encoding types are `H264`, `H265` and `MJPEG`.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `ENCODER` object.
-- `chn`: Encoding channel number to create, supporting values from 0 to 31.
-- `type`: Image encoding type. Supported values are `SP_ENCODER_H264`, `SP_ENCODER_H265`, and `SP_ENCODER_MJPEG`.
-- `width`: Width of the input image resolution for the encoding channel.
-- `height`: Height of the input image resolution for the encoding channel.
-- `bits`: Encoding bitrate. Common values include 512, 1024, 2048, 4096, 8192, 16384 (unit: kbps). Other values are also acceptable. Higher bitrates yield clearer images with lower compression ratios and larger bitstream sizes.
+- `obj`: the already initialized `ENCODER` object pointer
+- `chn`: the encoding channel number to create. Supports 0 ~ 31
+- `type`: the image encoding type. Supports `SP_ENCODER_H264`, `SP_ENCODER_H265` and `SP_ENCODER_MJPEG`.
+- `width`: the resolution-width of the image data fed to the encoding channel
+- `height`: the resolution-height of the image data fed to the encoding channel
+- `bits`: the encoding bitrate. Common values are bitrates such as 512, 1024, 2048, 4096, 8192, 16384 (unit: Mbps). Other values are also allowed; the higher the bitrate, the sharper the encoded image, the smaller the compression ratio, and the larger the stream data.
 
-**[Return Type]**  
+**[Return Value]**  
 
-Returns 0 on success, -1 on failure.
+Returns 0 on success, and -1 on failure
 
 ## sp_stop_encode  
 
@@ -92,11 +100,11 @@ Closes an opened encoding channel.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `ENCODER` object.
+- `obj`: the already initialized `ENCODER` object pointer
 
-**[Return Type]**  
+**[Return Value]** 
 
-Returns 0 on success, -1 on failure.
+Returns 0 on success, and -1 on failure
 
 ## sp_encoder_set_frame  
 
@@ -106,17 +114,17 @@ Returns 0 on success, -1 on failure.
 
 **[Description]**  
 
-Feeds an image frame into the encoding channel for encoding. The input frame must be in `NV12` format.
+Feeds the image frame data to be encoded into the encoding channel. The format must be `NV12`.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `ENCODER` object.
-- `frame_buffer`: Image frame data to be encoded. Must be in `NV12` format and match the resolution specified when calling `sp_start_encode`.
-- `size`: Size of the image frame data. For `NV12` format, the size is calculated as `(width * height * 3) / 2`.
+- `obj`: the already initialized `ENCODER` object pointer
+- `frame_buffer`: the image frame data to be encoded. It must be in `NV12` format, and its resolution must match the image frame resolution used when calling the `sp_start_encode` interface.
+- `size`: the image frame data size. The size of an image in `NV12` format is computed by `(width * height * 3) / 2`.
 
-**[Return Type]**  
+**[Return Value]** 
 
-Returns 0 on success, -1 on failure.
+Returns 0 on success, and -1 on failure
 
 ## sp_encoder_get_stream  
 
@@ -130,9 +138,42 @@ Retrieves the encoded bitstream data from the encoding channel.
 
 **[Parameters]**
 
-- `obj`: Pointer to an initialized `ENCODER` object.
-- `stream_buffer`: Upon successful retrieval, the encoded bitstream data will be stored in this buffer. The buffer size should be adjusted according to the encoding resolution and bitrate.
+- `obj`: the already initialized `ENCODER` object pointer
+- `stream_buffer`: on successful retrieval, the bitstream data is stored in this buffer. The size of this buffer must be adjusted according to the encoding resolution and bitrate.
 
-**[Return Type]**  
+**[Return Value]** 
 
-Returns the size of the bitstream data on success, -1 on failure.
+Returns the size of the bitstream data on success, and -1 on failure
+
+## Data Structures and Constants
+
+The following constants are defined in `sp_codec.h`:
+
+| Constant | Value | Description |
+| ---- | --- | ---- |
+| `SP_ENCODER_H264` | 1 | Encoding type: H.264 |
+| `SP_ENCODER_H265` | 2 | Encoding type: H.265 |
+| `SP_ENCODER_MJPEG` | 3 | Encoding type: MJPEG |
+
+## Quick Example
+
+The typical call sequence for encoding one frame (see [Capture→Encode](/Demos/multimedia_demo/cdev/vio2encoder) for a fully compilable example):
+
+```c
+void *enc = sp_init_encoder_module();        // 1. Initialize the ENCODER object
+sp_start_encode(enc, /*chn*/0, SP_ENCODER_H264,
+                width, height, /*bits*/4096);// 2. Create the encoding channel
+sp_encoder_set_frame(enc, frame_buffer, size);  // 3. Feed in one image frame
+char *stream = malloc(stream_buf_size);
+sp_encoder_get_stream(enc, stream);          // 4. Retrieve the encoded bitstream
+// ... write to a file or further process stream ...
+sp_stop_encode(enc);                         // 5. Stop the encoding channel
+sp_release_encoder_module(enc);              // 6. Destroy the ENCODER object
+free(stream);
+```
+
+## Related Documents
+
+- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
+- [Capture→Encode](/Demos/multimedia_demo/cdev/vio2encoder)

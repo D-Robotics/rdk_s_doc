@@ -1,34 +1,47 @@
 ---
 sidebar_position: 3
+title: "Encoder Object"
+description: "Interface description of the Encoder object"
 ---
 
 # Encoder Object
 
-The Encoder object implements video data encoding and compression functionality and includes several methods such as `encode`, `encode_file`, `get_img`, and `close`. Detailed descriptions are provided below:
+> **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api). For the corresponding C interfaces, see [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api).
+
+The Encoder object implements video data encoding and compression. It includes several methods such as `encode`, `encode_file`, `get_img`, and `close`. Detailed descriptions are as follows:
+
+## Method List
+
+| Method Name | Description | Section |
+| ------ | ---- | -------- |
+| `encode` | Configures and enables the encode module | [encode](#encode) |
+| `encode_file` | Inputs an image file to the enabled encoding channel and encodes it in the preset format | [encode_file](#encode_file) |
+| `get_img` | Gets the encoded data | [get_img](#get_img) |
+| `close` | Closes the enabled encoding channel | [close](#close) |
 
 ## encode
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>[Function Description]</font>
 
 Configures and enables the encode module.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>[Function Declaration]</font>
 
 ```python
-Encoder.encode(video_chn, encode_type, width, height, bits)
+Encoder.encode(video_chn, type, width, height, bits)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>[Parameter Description]</font>  
 
-| Parameter Name | Description                              | Value Range                |
-| -------------- | ---------------------------------------- | -------------------------- |
-| video_chn      | Specifies the channel number of the video encoder | Range: 0–31               |
-| encode_type    | Video encoding type                      | Range: 1–3, corresponding to `H264`, `H265`, and `MJPEG` respectively |
-| width          | Image width input to the encoding module | Up to 4096                 |
-| height         | Image height input to the encoding module| Up to 4096                 |
-| bits           | Bitrate of the encoding module           | Default: 8000 kbps         |
+| Parameter Name  | Description           | Value Range                    |
+| --------- | --------------- | ------------------- |
+| video_chn | Channel number of the video encoder   | Range 0~31 |
+| type          | Video encoding type  | Range 1~3, corresponding to `H264`, `H265`, and `MJPEG` respectively |
+| width     | Image width input to the encoding module      | Up to 4096              |
+| height    | Image height input to the encoding module      | Up to 4096              |
+| bits      | Bitrate of the encoding module         |    Default is 8000kbps         |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>[Usage]</font>
 
 ```python
 #create encode object
@@ -38,40 +51,40 @@ encode = libsrcampy.Encoder()
 ret = encode.encode(0, 1, 1920, 1080)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>[Return Value]</font>  
 
-| Return Value | Description |
-| ------------ | ----------- |
-| 0            | Success     |
-| -1           | Failure     |
+| Return Value | Description |                 
+| ------ | ----- |
+| 0      | Success  |
+| -1    | Failure   |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>[Notes]</font>
 
 None
 
-<font color='Blue'>【Reference Code】</font>
+<font color='Blue'>[Reference Code]</font>
 
 None
 
 ## encode_file
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>[Function Description]</font>
 
-Inputs an image file into an enabled encoding channel and encodes it according to the preset format.
+Inputs an image file to the enabled encoding channel and encodes it in the preset format.
 
-<font color='Blue'>【Function Declaration】</font> 
+<font color='Blue'>[Function Declaration]</font> 
 
 ```python
 Encoder.encode_file(img)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>[Parameter Description]</font>  
 
-| Parameter Name | Description                              | Value Range |
-| -------------- | ---------------------------------------- | ----------- |
-| img            | Image data to be encoded, must be in NV12 format | None        |
+| Parameter Name | Description              | Value Range                     |
+| -------- | ----------------- | --------------------- |
+| img      | Image data to be encoded; it must be in NV12 format | None |
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>[Usage]</font> 
 
 ```python
 fin = open("output.img", "rb")
@@ -82,53 +95,53 @@ fin.close()
 ret = encode.encode_file(input_img)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>[Return Value]</font>  
 
-| Return Value | Description |
-| ------------ | ----------- |
-| 0            | Success     |
-| -1           | Failure     |
+| Return Value | Description |                 
+| ------ | ----- |
+| 0      | Success  |
+| -1    | Failure   |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>[Notes]</font> 
 
 None
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>[Reference Code]</font>  
 
 None
 
 ## get_img
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>[Function Description]</font>
 
-Retrieves encoded data.
+Gets the encoded data.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>[Function Declaration]</font>  
 
 ```python
 Encoder.get_img()
 ```
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>[Usage]</font> 
 
 None
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>[Parameter Description]</font>  
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>[Return Value]</font>  
 
 | Return Value | Description |
-| ------------ | ----------- |
-| 0            | Success     |
-| -1           | Failure     |
+| ------ | ----- |
+| PyBytesObject | Success, returns the encoded data |
+| None          | Failure |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>[Notes]</font> 
 
 This interface must be used after calling `Encoder.encode()` to create an encoding channel.
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>[Reference Code]</font>  
 
 ```python
 import sys, os, time
@@ -170,35 +183,41 @@ test_encode()
 
 ## close
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>[Function Description]</font>
 
 Closes the enabled encoding channel.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>[Function Declaration]</font>  
 
 ```python
 Encoder.close()
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>[Parameter Description]</font>  
 
 None
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>[Usage]</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>[Return Value]</font>  
 
 | Return Value | Description |
-| ------------ | ----------- |
-| 0            | Success     |
-| -1           | Failure     |
+| ------ | ----- |
+| 0      | Success  |
+| -1    | Failure   |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>[Notes]</font> 
 
 This interface must be used after calling `Encoder.encode()` to create an encoding channel.
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>[Reference Code]</font>  
 
 None
+
+## Related Documents
+
+- [Multimedia Interface Description](./pydev_multimedia_api)
+- [Decoder Object](./object_decoder)
+- [Capture → Encode](/Demos/multimedia_demo/cdev/vio2encoder)
