@@ -77,13 +77,20 @@ function fixLinksInFile(filePath) {
 }
 
 function main() {
+  const roots = [
+    DOCS_ROOT,
+    path.join(__dirname, "../i18n/en/docusaurus-plugin-content-docs/current"),
+  ];
   let n = 0;
-  walkMd(DOCS_ROOT, (fp) => {
-    if (fixLinksInFile(fp)) {
-      console.log("fixed:", path.relative(DOCS_ROOT, fp));
-      n++;
-    }
-  });
+  for (const root of roots) {
+    if (!fs.existsSync(root)) continue;
+    walkMd(root, (fp) => {
+      if (fixLinksInFile(fp)) {
+        console.log("fixed:", path.relative(root, fp));
+        n++;
+      }
+    });
+  }
   console.log(`Done. Updated ${n} file(s).`);
 }
 
