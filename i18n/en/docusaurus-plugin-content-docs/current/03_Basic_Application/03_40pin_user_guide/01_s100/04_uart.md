@@ -16,10 +16,10 @@ The 40-pin header requires a DIP switch to select between UART2 and I2C5. For sp
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="UART Application photo" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
 
-After toggling the DIP switch, you also need to modify the device tree file. The modification path and method are as follows:
+After toggling the DIP switch, you also need to modify the device tree file: set the `uart2` status to `okay` and the `i2c5` status to `disabled`. The modification path and method are as follows:
 
 ```{.text}
-/*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
+/*source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi*/
 uart2: uart@394C0000 {
         power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
         compatible = "snps,dw-apb-uart";
@@ -31,6 +31,26 @@ uart2: uart@394C0000 {
         pinctrl-names = "default";
         pinctrl-0 = <&peri_uart2>;
         status = "okay";
+};
+...
+i2c5: i2c@39470000 {
+        power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+        compatible = "snps,designware-i2c";
+        reg = <0x0 0x39470000 0x0 0x10000>;
+        clocks = <&scmi_smc_clk CLK_IDX_TOP_PERI_I2C5>;
+        clock-names = "apb_pclk";
+        interrupts = <GIC_SPI PERISYS_I2C5_INTR PERISYS_I2C5_INTR_TRIG_TYPE>;
+        clock-frequency = <400000>;
+        i2c-sda-hold-time-ns = <50>;
+        pinctrl-names = "default", "gpio";
+        pinctrl-0 = <&peri_i2c5>;
+        pinctrl-1 = <&peri_i2c5_gpio>;
+        scl-gpios = <&peri_port0 15 GPIO_ACTIVE_HIGH>;
+        sda-gpios = <&peri_port0 16 GPIO_ACTIVE_HIGH>;
+        status = "disabled";
+        ...
 };
 ```
 

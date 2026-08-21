@@ -33,19 +33,6 @@ import DocScope from '@site/src/components/DocScope';
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-package-3.7.0-s100-s600.tgz
 ```
 
-### OE 用户手册
-
-
-**在线阅读地址：**
-👉 [https://toolchain.d-robotics.cc/](https://toolchain.d-robotics.cc/)
-
-**下载地址：**
-<!-- ```bash
-wget -c ftp://oeftp@sdk.d-robotics.cc/oe_v3.2.0/s100~3.2.0-oe-doc.zip --ftp-password=Oeftp~123$%
-```   -->
-
-👉 [OE用户手册 3.7.0 版本下载](https://archive.d-robotics.cc/toolchain/oe-doc-3.7.0-s100-s600.zip)
-
 ## Docker 镜像
 
 ### CPU Docker
@@ -77,3 +64,9 @@ docker pull registry.d-robotics.cc/deliver/ai_toolchain_ubuntu_22_s100_s600_gpu:
 ```bash
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_toolchain_ubuntu_22_s100_s600_gpu_v3.7.0.tar
 ```
+
+### OE 用户手册
+
+
+
+[**在线阅读地址**](https://developer.d-robotics.cc/oe_s_doc/index.html)

@@ -11,7 +11,7 @@ window.difyChatbotConfig = {
 // Auto-switch token based on language
 (function() {
   const cnToken = 'rJYrxmxmjOkjEx2c';
-  const enToken = 'YJZVeswIhH8pRFbp';
+  const enToken = 'rJYrxmxmjOkjEx2c';
 
   // Check if URL contains /en/ indicating English locale
   // Docusaurus typically uses /<baseUrl>/en/... for English
