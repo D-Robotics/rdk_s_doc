@@ -1,20 +1,26 @@
+---
+sidebar_position: 5
+title: "sample_gdc Usage Instructions"
+description: "sample_gdc Usage Instructions - board-side sample usage instructions"
+---
+
 # sample_gdc Usage Instructions
 
 ## Function Overview
-The `sample_gdc` directory contains example programs demonstrating how to use GDC. The main functionalities are as follows:
+The `sample_gdc` directory contains example programs that demonstrate how to use GDC. The main functions are described below:
 
-1. `generate_custom_config.py`: Generates calibration configuration parameters for GDC correction.
+1. `generate_custom_config.py`: Generates the correction calibration configuration parameters for GDC.
 2. `generate_bin`: Reads a local JSON configuration file and generates the corresponding `gdc.bin` file.
-3. `gdc_static_valid`: Reads a local `gdc.bin` file and an original YUV file, processes them through GDC, and saves the output as a YUV file.
-4. `gdc_stress_test`: Reads a local `gdc.bin` file and repeatedly feeds an original YUV file into GDC for performance stress testing.
-5. `gdc_equisolid`: Reads a local NV12 YUV image and performs panoramic correction using GDC.
-6. `gdc_transformation`: Reads a local JSON configuration file and applies 180-degree linear transformation, cylindrical transformation, equidistant transformation, and trapezoidal correction + distortion removal to the input image via GDC.
+3. `gdc_static_valid`: Reads a local `gdc.bin` file and an original YUV file, feeds them into GDC for transformation processing, and saves the result as a YUV file.
+4. `gdc_stress_test`: Reads a local `gdc.bin` file and repeatedly feeds an original YUV file into GDC to perform GDC performance testing.
+5. `gdc_equisolid`: Reads a local NV12 YUV image and sends the image to GDC for panoramic correction processing.
+6. `gdc_transformation`: Reads a local JSON configuration file and sends the image to GDC for 180-degree linear transformation, cylindrical transformation, equidistant transformation, and keystone correction + dewarping processing.
 
 ## 1-custom_config
 
 ### Function Overview
 
-This example demonstrates how to prepare input images using a custom transformation method and generate a calibration parameter file to guide GDC correction.
+This example demonstrates how to prepare input images in advance using a custom transformation method, and generate a calibration parameter file to guide GDC correction.
 
 ### Code Location and Directory Structure
 
@@ -33,17 +39,17 @@ This example demonstrates how to prepare input images using a custom transformat
 
 ### Development and Usage Workflow
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/gdc-calibration-workflow-en.png" alt="GDC calibration workflow on PC and board" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/S100-gdc.jpg" alt="S100 GDC Data Flow Diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-Use the `generate_custom_config.py` script on a PC to generate GDC calibration configuration parameters.
+Use the `generate_custom_config.py` script on a PC to generate the correction calibration configuration parameters for GDC.
 
-- Prepare a chessboard image (`chessboard.png`), either by printing it out or displaying it on a monitor.
+- Prepare a chessboard image (`chessboard.png`). It can be printed out or previewed on a monitor.
 
-- Capture approximately 15 chessboard images using the target camera sensor from various angles. It is recommended to capture more images for better results.
+- Use the target camera sensor to capture chessboard images from different angles. Capture around 15 images; it is recommended to capture more.
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Checkerboard_Image.png" alt="Checkerboard Calibration Image" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Checkerboard_Image.png" alt="Chessboard Calibration Image" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-- Use the captured chessboard images as input and run the following Python script (ensure Python 3 and the `opencv-python` library are installed) to generate the GDC calibration parameter file (`custom_config.txt`):
+- Use the chessboard images above as input and run the following Python script (make sure the system supports Python 3 and the `opencv-python` library is installed) to generate the GDC correction calibration parameter file (`custom_config.txt`):
 
   ```bash
   # Enter /app/multimedia_samples/sample_gdc/1-custom_config directory
@@ -51,10 +57,10 @@ Use the `generate_custom_config.py` script on a PC to generate GDC calibration c
   ```
 
   :::caution Note
-  Note: When capturing chessboard images, maintain a greater distance from the board. If the chessboard occupies too large a portion of the image, the Python script may fail to recognize it.
+  Note: When capturing the chessboard, keep as much distance as possible. If the chessboard occupies a large portion of the frame, the Python script is likely to fail to recognize it.
   :::
 
-  Log output when running in a terminal:
+  Log output when running in a character terminal:
 
   ```bash
   No graphical environment detected. Skipping display of images.
@@ -137,11 +143,11 @@ Use the `generate_custom_config.py` script on a PC to generate GDC calibration c
   No graphical environment detected. The output image has been saved to 'custom_config.txt'.
   ```
 
-  If run in a terminal within a graphical desktop environment, the calibration and correction effects will be displayed:
+  If run in a terminal of a graphical desktop, the calibration and correction effects during execution will be displayed:
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Calibration_Process.png" alt="Calibration Process" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Calibration_Process.png" alt="Calibration Process" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Correction_Effect.png" alt="Correction Effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Correction_Effect.png" alt="Correction Effect" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 Command-line options for `generate_custom_config.py`:
 
@@ -185,19 +191,20 @@ This program reads a local `gdc_bin_custom_config.json` configuration file and g
 #### Compilation
 
 - Enter the `sample_gdc/2-generate_bin` directory and run `make` to compile.
-- The compiled executable is `generate_bin`, located in the `sample_gdc/2-generate_bin` directory.
+- The output artifact is `generate_bin`, located in the `sample_gdc/2-generate_bin` directory.
 
 #### Program Deployment
 
-After installing the `hobot-multimedia-samples` package and compiling, the executable for this sample is located on the board at: `/app/multimedia_samples/sample_gdc/2-generate_bin`.
+After installing the hobot-multimedia-samples package and compiling, this sample's executable is located on the board at: `/app/multimedia_samples/sample_gdc/2-generate_bin`.
 
 ### Execution
 
 #### How to Run the Program
 
-Run `./generate_bin -h` directly to display help information:
+Run `./generate_bin -h` directly to get help information:
 
-```shell# Enter /app/multimedia_samples/sample_gdc/2-generate_bin directory
+```shell
+# Enter /app/multimedia_samples/sample_gdc/2-generate_bin directory
 ./generate_bin -h
 genereate_bin [-c json_config_file] [-o output_file]
 ```
@@ -206,9 +213,9 @@ genereate_bin [-c json_config_file] [-o output_file]
 
 **Options:**
 
-- `[-c json_config_file]`: Specifies the JSON configuration file for GDC module (optional). Default: `./gdc_bin_custom_config.json`.
+- `[-c json_config_file]`: Specifies the JSON parameter file for configuring the GDC module (optional). Defaults to `./gdc_bin_custom_config.json`.
 
-- `[-o output_file]`: Specifies the output path for the GDC bin file (optional). Default: `./gdc.bin`.
+- `[-o output_file]`: Specifies the output path of the GDC bin file (optional). Defaults to `./gdc.bin`.
 
 #### Execution Result
 
@@ -232,7 +239,7 @@ Generate bin file size:10972
 
 ### Function Overview
 
-The `gdc_static_valid` program reads a local NV12 YUV image, sends both the `gdc.bin` configuration and the image to the GDC module for transformation processing, and finally saves the result as a local NV12-formatted YUV image.
+The `gdc_static_valid` program reads a local NV12 YUV image, sends the `gdc.bin` file and the image together to GDC for transformation processing, and finally saves the result as a local NV12-format YUV image.
 
 #### Code Location and Directory Structure
 
@@ -254,17 +261,17 @@ The `gdc_static_valid` program reads a local NV12 YUV image, sends both the `gdc
 #### Compilation
 
 - Enter the `sample_gdc/3-gdc_static_valid` directory and run `make` to compile.
-- The compiled output is `gdc_static_valid` located in the `sample_gdc/3-gdc_static_valid` directory.
+- The output artifact is `gdc_static_valid`, located in the `sample_gdc/3-gdc_static_valid` directory.
 
 #### Program Deployment
 
-After installing the `hobot-multimedia-samples` package and compiling, the executable for this sample resides on the board at: `/app/multimedia_samples/sample_gdc/3-gdc_static_valid`.
+After installing the hobot-multimedia-samples package and compiling, this sample's executable is located on the board at: `/app/multimedia_samples/sample_gdc/3-gdc_static_valid`.
 
 ### Execution
 
 #### How to Run the Program
 
-Running `./gdc_static_valid` directly displays the help message:
+Run `./gdc_static_valid` directly to get help information:
 
 ```bash
 Usage: gdc_static_valid [OPTIONS]
@@ -285,6 +292,8 @@ If --ow and --oh are not specified, they will default to the input width and hei
 
 Option descriptions for `gdc_static_valid`:
 
+Options:
+
 - `c, --config`: Specifies the `gdc.bin` configuration file.
 - `i, --input`: Specifies the input NV12 image.
 - `o, --output`: Specifies the output NV12 image.
@@ -295,7 +304,7 @@ Option descriptions for `gdc_static_valid`:
 
 #### Execution Result
 
-Run the following command to perform static image correction validation:
+Run the following command to perform static-image correction validation:
 
 ```bash
 # Enter /app/multimedia_samples/sample_gdc/3-gdc_static_valid directory
@@ -319,7 +328,7 @@ handle 34661 GDC dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800
 
 ### Function Overview
 
-The `gdc_stress_test` program reads a local NV12 YUV image, sends both the `gdc.bin` configuration and the image to the GDC module for transformation processing, and saves the result as a local NV12-formatted YUV image. It allows specifying the number of GDC processing iterations, records execution time, and calculates frames per second (FPS) and total processing time.
+The `gdc_stress_test` program reads a local NV12 YUV image, sends the `gdc.bin` file and the image together to GDC for transformation processing, and finally saves the result as a local NV12-format YUV image. It can specify the number of times GDC processing is performed, record the runtime, and calculate the frame rate (FPS) and total elapsed time.
 
 #### Code Location and Directory Structure
 
@@ -343,17 +352,17 @@ The `gdc_stress_test` program reads a local NV12 YUV image, sends both the `gdc.
 #### Compilation
 
 - Enter the `sample_gdc/4-gdc_stress_test` directory and run `make` to compile.
-- The compiled output is `gdc_stress_test` located in the `sample_gdc/4-gdc_stress_test` directory.
+- The output artifact is `gdc_stress_test`, located in the `sample_gdc/4-gdc_stress_test` directory.
 
 #### Program Deployment
 
-After installing the `hobot-multimedia-samples` package and compiling, the executable for this sample resides on the board at: `/app/multimedia_samples/sample_gdc/4-gdc_stress_test`.
+After installing the hobot-multimedia-samples package and compiling, this sample's executable is located on the board at: `/app/multimedia_samples/sample_gdc/4-gdc_stress_test`.
 
 ### Execution
 
 #### How to Run the Program
 
-Running `./gdc_stress_test` directly displays the help message:
+Run `./gdc_stress_test` directly to get help information:
 
 ```bash
 Usage: gdc_stress_test [OPTIONS]
@@ -376,6 +385,8 @@ If --ow and --oh are not specified, they will default to the input width and hei
 
 Option descriptions for `gdc_stress_test`:
 
+Options:
+
 - `c, --config`: Specifies the `gdc.bin` configuration file.
 - `i, --input`: Specifies the input NV12 image.
 - `o, --output`: Specifies the output NV12 image.
@@ -383,9 +394,9 @@ Option descriptions for `gdc_stress_test`:
 - `h, --ih`: Specifies the input image height (vertical resolution).
 - `x, --ow`: Specifies the output image width (horizontal resolution) (optional). Defaults to the same value as `--iw`.
 - `y, --oh`: Specifies the output image height (vertical resolution) (optional). Defaults to the same value as `--ih`.
-- `C, --Count`: Specifies the number of times the image is sent to the GDC module for processing.
-- `p, --p`: Specifies the process ID.
-- `f, --feedback`: Enables feedback mode.
+- `C, --Count`: Specifies the number of times the image is sent to the GDC module.
+- `p, --p`: Specifies the process id.
+- `f, --feedback`: Uses feedback mode.
 
 #### Execution Result
 
@@ -396,7 +407,7 @@ Run command:
 sh test.sh
 ```
 
-Running log:
+Execution log:
 
 ```shell
 root@ubuntu:/app/multimedia_samples/sample_gdc/4-gdc_stress_test# GDC vnode work mode: vflow
@@ -440,14 +451,14 @@ Gdc time consuming [process3]: 70
 fps average gdc [process3] = 142
 ```
 :::info
-- The above printout is for illustration only; actual output depends on execution on the board.
-- The stress-test script runs the stress-test program in the background continuously and will automatically stop after a period of time. To stop it earlier, use the command: `sudo killall gdc_stress_test`
+- The output above is only an example; the actual output depends on the board-side execution.
+- The stress test script runs the stress test program in the background continuously and stops automatically after a period of time. To stop it early, use the command: `sudo killall gdc_stress_test`
 :::
 
 ## 5-gdc_equisolid
 ### Function Overview
 
-The `gdc_equisolid` program reads a local NV12 YUV image, feeds it into the GDC module for panoramic correction processing, and finally saves the corrected result as a local NV12-formatted YUV image.
+The `gdc_equisolid` program reads a local NV12 YUV image, sends the image to GDC for panoramic correction processing, and finally saves the corrected result as a local NV12-format YUV image.
 
 #### Code Location and Directory Structure
 
@@ -466,17 +477,17 @@ The `gdc_equisolid` program reads a local NV12 YUV image, feeds it into the GDC 
 #### Compilation
 
 - Enter the `sample_gdc/5-gdc_equisolid` directory and run `make` to compile.
-- The output binary is `gdc_equisolid`, located in the `sample_gdc/5-gdc_equisolid` directory.
+- The output artifact is `gdc_equisolid`, located in the `sample_gdc/5-gdc_equisolid` directory.
 
 #### Program Deployment
 
-After installing the `hobot-multimedia-samples` package and compiling, the executable for this sample resides on the board at: `/app/multimedia_samples/sample_gdc/5-gdc_equisolid`.
+After installing the hobot-multimedia-samples package and compiling, this sample's executable is located on the board at: `/app/multimedia_samples/sample_gdc/5-gdc_equisolid`.
 
 ### Execution
 
 #### How to Run the Program
 
-Running the program directly with `./gdc_equisolid -h` displays the help information:
+Run `./gdc_equisolid -h` directly to get help information:
 
 ```bash
 Usage: gdc_equisolid [OPTIONS]
@@ -488,15 +499,17 @@ Options:
 	f, --feedback                 Specify feedback mode
 ```
 
-#### Program Parameter Description
+#### Program Argument Options Description
 
-Parameter options for `gdc_equisolid`:
+Option descriptions for `gdc_equisolid`:
 
-- `i, --input`: Specify the input NV12 image.
-- `o, --output`: Specify the output NV12 image (optional).
-- `w, --iw`: Specify the input image width (horizontal resolution).
-- `h, --ih`: Specify the input image height (vertical resolution).
-- `f, --feedback`: Enable feedback mode.
+Options:
+
+- `i, --input`: Specifies the input NV12 image.
+- `o, --output`: Specifies the output NV12 image (optional).
+- `w, --iw`: Specifies the input image width (horizontal resolution).
+- `h, --ih`: Specifies the input image height (vertical resolution).
+- `f, --feedback`: Uses feedback mode.
 
 #### Execution Result
 
@@ -507,7 +520,7 @@ Run the following command to perform panoramic correction validation on a static
 ./gdc_equisolid -i ../3-gdc_static_valid/test_res/test_image_1920x1080.yuv --iw 1920 --ih 1080
 ```
 
-Running log:
+Execution log:
 
 ```bash
 GDC vnode work mode: vflow
@@ -522,15 +535,15 @@ handle 34661 GDC dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800
 
 ### Function Overview
 
-This `gdc_transformation` sample implements the GDC module to perform 180-degree linear transformation, cylindrical transformation, equidistant transformation, and keystone correction + dewarping on feedback-fed input images.
+The `gdc_transformation` described in this document implements the GDC module to apply 180-degree linear transformation, cylindrical transformation, equidistant transformation, and keystone correction + dewarping to the feedback input images.
 
 #### Software Architecture Description
 
-The `gdc_transformation` program uses a feedback workflow: it reads the original YUV file and a JSON file generated by the GDC Tool from system storage as inputs to the GDC module. It relies on `libgdcbin.so` to compute GDC coordinate points and saves the transformed image as a local NV12-formatted YUV file.
+The `gdc_transformation` program uses a feedback workflow: it reads the original YUV file and the JSON file generated by the GDC Tool from system storage as the input image for GDC. It relies on `libgdcbin.so` to compute the GDC coordinate points, and saves the transformation result of the image as a local NV12-format YUV image.
 
-All JSON files generated by the GDC Tool are stored in the `gdc_res` directory. Currently, this directory contains four JSON files corresponding to the following transformation effects: Affine, Equisolid (cylinder), Equidistant, and Keystone + dewarping. `gdc_transformation` will generate four YUV output images based on these four JSON files.
+The JSON files generated by the GDC Tool are all in the `gdc_res` directory. The current `gdc_res` directory contains four JSON files, whose transformation effects are Affine, Equisolid (cylinder), Equidistant, and Keystone+dewarping respectively. `gdc_transformation` dumps four YUV images based on these four JSON files.
 
-Note: The number of JSON files in the `gdc_res` directory determines how many YUV images will be dumped.
+Note: The number of JSON files in the `gdc_res` directory determines the number of YUV images that will be dumped.
 
 #### Code Location and Directory Structure
 
@@ -549,25 +562,24 @@ Note: The number of JSON files in the `gdc_res` directory determines how many YU
 		│   └── test_building_1920x1080.yuv
 		└── gdc_transformation.c
 	```
-
-The root directory contains the Makefile. The `gdc_res` directory holds resource files such as JSON files generated by the GDC Tool and YUV images. `gdc_transformation.c` is the main entry-point source file.
+The root directory contains the Makefile. The `gdc_res` directory contains resource files, such as JSON files generated by the GDC Tool and YUV images. `gdc_transformation.c` is the file where the main entry is located.
 
 ### Compilation and Deployment
 
 #### Compilation
 
 - Enter the `sample_gdc/6-gdc_transformation` directory and run `make` to compile.
-- The output binary is `gdc_transformation`, located in the `sample_gdc/6-gdc_transformation` directory.
+- The output artifact is `gdc_transformation`, located in the `sample_gdc/6-gdc_transformation` directory.
 
 #### Program Deployment
 
-After installing the `hobot-multimedia-samples` package and compiling, the executable for this sample resides on the board at: `/app/multimedia_samples/sample_gdc/6-gdc_transformation`.
+After installing the hobot-multimedia-samples package and compiling, this sample's executable is located on the board at: `/app/multimedia_samples/sample_gdc/6-gdc_transformation`.
 
 ### Execution
 
 #### How to Run the Program
 
-Running the program directly with `./gdc_transformation` displays the help information:
+Run `./gdc_transformation` directly to get help information:
 
 ```bash
 Usage: gdc_transformation [OPTIONS]
@@ -577,24 +589,26 @@ Options:
   y, --iy <input_height>        Specify the height of the input image.
 ```
 
-#### Program Parameter Description
+#### Program Argument Options Description
 
-Parameter options for `gdc_transformation`:
+Option descriptions for `gdc_transformation`:
 
-- `i, --input`: Specify the input NV12 image.
-- `x, --ix`: Specify the input image width (horizontal resolution).
-- `y, --iy`: Specify the input image height (vertical resolution).
+Options:
+
+- `i, --input`: Specifies the input NV12 image.
+- `x, --ix`: Specifies the input image width (horizontal resolution).
+- `y, --iy`: Specifies the input image height (vertical resolution).
 
 #### Execution Result
 
 Run the following command to perform transformation validation on a static image:
 
-```bash  
+```bash
 # Enter /app/multimedia_samples/sample_gdc/6-gdc_transformation directory
 ./gdc_transformation -i gdc_res/test_building_1920x1080.yuv --ix 1920 --iy 1080
 ```
 
-Running log:
+Execution log:
 
 ```bash
 # ./gdc_transformation -i gdc_res/test_building_1920x1080.yuv --ix 1920 --iy 1080
@@ -611,7 +625,7 @@ gdc gen cfg_buf 0xaaab00d868b0, size 8548
 Dump image to file(Equisolid_cylinder.yuv), size(2073600) + size1(1036800) succeeded
 ```
 
-Option parameter description for gdc_transformation:
+Option descriptions for `gdc_transformation`:
 
 ```bash
 #./gdc_transformation -h
@@ -622,11 +636,42 @@ Options:
   y, --iy <input_height>        Specify the height of the input image.
 ```
 
-#### Description of Running Results
+#### Description of Execution Results
 The original image is shown below:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Original_Image.png" alt="Description of Running Results photo" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Original_Image.png" alt="Actual Image Showing Execution Results" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-After applying transformations parsed from each JSON file, four processed YUV images in NV12 format are generated. The results are shown below:
+After parsing and transforming each JSON file separately, four processed NV12-format YUV images are output. The results are shown below:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="Transformed Effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="Transformation Effect" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## Common Issues
+
+### JSON Configuration Parsing or Bin Generation Failure
+
+**Symptom**: When `2-generate_bin` generates the bin, it outputs `Generate bin file failed` or reports a parsing error.
+
+**Cause**: The `gdc_bin_custom_config.json` file has a format error (missing fields or type mismatch), or the input/output resolution exceeds the range supported by GDC.
+
+**Solution**: Verify the JSON fields against the examples in `custom_config.txt` / `generate_custom_config.py`; first use `1-custom_config` to generate a valid configuration, then convert it to bin.
+
+### Abnormal Image After Distortion Correction
+
+**Symptom**: The output image of `3-gdc_static_valid` is black, misaligned, or has the wrong size.
+
+**Cause**: The input/output geometry configured in the bin does not match the actual input image, or `2-generate_bin` was not run first to generate the corresponding bin.
+
+**Solution**: Make sure to use the bin generated by `2-generate_bin` (`gdc.bin`), and keep the input image resolution consistent with the bin configuration.
+
+### Insufficient Memory During Stress Test or Transformation
+
+**Symptom**: `4-gdc_stress_test` / `6-gdc_transformation` reports a memory allocation failure.
+
+**Cause**: Multiple processing channels request large blocks of ION memory at the same time, exceeding the system limit.
+
+**Solution**: Reduce the number of concurrent channels or lower the resolution; adjust the system ION memory allocation if necessary.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

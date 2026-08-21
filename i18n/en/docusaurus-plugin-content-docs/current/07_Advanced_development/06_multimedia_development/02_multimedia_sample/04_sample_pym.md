@@ -1,30 +1,38 @@
-# sample_pym Usage Instructions  
-## Function Overview  
-sample_pym reads a YUV file into memory allocated by hbm, passes it to PYM, which processes it in a pyramid layer manner, and finally dumps the processed YUV data to the file system.
+---
+sidebar_position: 4
+title: "sample_pym Usage Instructions"
+description: "sample_pym Usage Instructions: on-board sample usage guide"
+---
 
-### Code Location and Directory Structure  
-- Code location: `/app/multimedia_samples/sample_pym`  
-- Directory structure:  
+# sample_pym Usage Instructions
+
+## Function Overview
+sample_pym reads a YUV file into memory allocated via hbm, passes it to PYM, which processes it in a pyramid-layer manner, and finally dumps the processed YUV data to the file system.
+
+### Code Location and Directory Structure
+- Code location: `/app/multimedia_samples/sample_pym`
+- Directory structure:
 ```
 sample_pym/
 ├── Makefile
 └── sample_pym.c
 ```
 
-## Compilation  
+## Compilation
 
-Run the `make` command in the source code directory to compile:  
+Run the `make` command in the source directory to complete compilation:
 
 ```Shell
 cd /app/multimedia_samples/sample_pym
 make
 ```
 
-## Execution  
-### How to Run the Program  
-Execute the program directly with `./sample_pym` to display help information:  
+## Execution
 
-### Program Argument Options  
+### How to Run the Program
+Execute the program `./sample_pym` directly to display help information:
+
+### Program Argument Options
 ```
 ./sample_pym
 Usage: sample_pym [OPTIONS]
@@ -35,25 +43,24 @@ Options:
 -f, --feedback                  Specify feedback mode
 -V, --verbose           Enable verbose mode
 ```
-- `-i`: Specifies the input YUV file. The test program uses files in NV12 format as input.  
-- `-w`: Width of the input YUV image.  
-- `-h`: Height of the input YUV image.  
-- `-f`: Specifies the PYM operating mode. By default, it runs in Vflow mode.  
+- `-i`: Specifies the input YUV file. The test program uses NV12-format files as input.
+- `-w`: Width of the input YUV image.
+- `-h`: Height of the input YUV image.
+- `-f`: Specifies the PYM operating mode. By default, it runs in vflow mode.
 
-### Execution Example  
-Taking a YUV image with input resolution 1920×1080 as an example, run:  
-`./sample_pym -i /app/res/assets/nv12_1920x1080.yuv -w 1920 -h 1080`.
+### Execution Result
+Taking a YUV image with an input resolution of 1920 x 1080 as an example, run `./sample_pym -i /app/res/assets/nv12_1920x1080.yuv -w 1920 -h 1080`.
 
-This feeds a YUV image into PYM, initializes six channels, performs downsampling operations at scales of 1, 1/2, 1/4, 1/8, 1/16, and 1/32 respectively, and saves the processed images as YUV files:
+This feeds a YUV image into PYM, initializes six channels, and performs downscaling at ratios of 1, 1/2, 1/4, 1/8, 1/16, and 1/32 respectively, then saves the processed images as YUV images:
 
-  - Channel 0 outputs the original resolution: 1920 × 1080.  
-  - Channel 1 outputs width and height each halved: 960 × 540.  
-  - Channel 2 outputs width and height each quartered: 480 × 270.  
-  - Channel 3 outputs width and height each reduced by 1/8: 240 × 134.  
-  - Channel 4 outputs width and height each reduced by 1/16: 120 × 66.  
-  - Channel 5 outputs width and height each reduced by 1/32: 60 × 32.  
+  - Channel 0 outputs the original resolution of the input image: 1920 x 1080.
+  - Channel 1 outputs the result with width and height each reduced by 2x: 960 x 540.
+  - Channel 2 outputs the result with width and height each reduced by 4x: 480 x 270.
+  - Channel 3 outputs the result with width and height each reduced by 8x: 240 x 134.
+  - Channel 4 outputs the result with width and height each reduced by 16x: 120 x 66.
+  - Channel 5 outputs the result with width and height each reduced by 32x: 60 x 32.
 
-Output log as follows:  
+Output log is as follows:
 ```
 pym vnode work mode: vflow
 Using input file:/app/res/assets/nv12_1920x1080.yuv, input:1920x1080
@@ -69,5 +76,28 @@ pym config:
         ochn[5] ratio= 32, width = 60, height = 32 wstride=64 vstride=32 out[60*32]
 ```
 
-Note:  
-1. The width output by the PYM module is aligned to 16-byte boundaries. When viewing images, pay attention to cases where the `width` differs from the `wstride` parameter.
+Note:
+1. The width output by the PYM module is aligned to 16 bytes. When viewing images, note that the `width` and `wstride` parameters may differ.
+
+## Common Issues
+
+### Abnormal Output Caused by Input YUV Mismatching the Parameters
+
+**Symptom**: After running `./sample_pym -i <file> -w <width> -h <height>`, the output pyramid image is garbled or has an incorrect size.
+
+**Cause**: The actual resolution/format of the input YUV file does not match the `-w`/`-h` parameters (this sample uses NV12-format input).
+
+**Solution**: Confirm that the input file is in NV12 format and that the width/height parameters match the actual file. Note that the PYM output width is aligned to 16 bytes; when viewing the output, distinguish between `width` and `wstride`.
+
+### Difference Between feedback and vflow Modes
+
+**Symptom**: The `-f` parameter (feedback mode) behaves differently from the default vflow mode, and the fed-back data is not processed.
+
+**Cause**: In feedback mode, the input image must be sent manually via `hbn_vnode_sendframe`; in vflow mode, PYM is connected as a vnode into vflow and flows automatically.
+
+**Solution**: Use `-f` when debugging by feeding back a single image; use the default vflow mode when used in a pipeline, referring to `sample_pipeline`.
+
+## Related Documents
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

@@ -1,11 +1,18 @@
+---
+sidebar_position: 2
+title: "sample_vin Usage Instructions"
+description: "sample_vin Usage Instructions On-board example usage instructions"
+---
+
 # sample_vin Usage Instructions
 
 ## Function Overview
-`sample_vin` initializes the Camera Sensor, MIPI CSI, and SIF modules, enabling the acquisition of video frame data from the VIN module. It supports retrieving images in either Raw or YUV format from the VIN module.
+
+`sample_vin` completes the initialization of the Camera Sensor, MIPI (Mobile Industry Processor Interface) CSI (Camera Serial Interface), and SIF (Sensor Interface) modules, enables the function of acquiring video frame data from the vin module, and supports acquiring Raw or YUV format images from the VIN (Video Input) module.
 
 ### sample_vin Architecture Description
 
-`sample_vin` contains multiple examples, each located as a subdirectory under `/app/multimedia_samples/sample_vin`. The subdirectories are described as follows:
+`sample_vin` contains multiple examples, each located as a subdirectory under `/app/multimedia_samples/sample_vin`. Each subdirectory is described as follows:
 
 | Directory      | Description |
 | ----------- | ----------- |
@@ -27,9 +34,9 @@ make
 #### How to Run the Program
 Execute the program directly with `./get_vin_data -h` to display help information:
 
-#### Program Parameter Options Explanation
+#### Program Parameter Options Description
 
-Running `./get_vin_data -h` displays help information and the list of supported Camera Sensors.
+Running the command `./get_vin_data -h` displays help information and the list of supported Camera Sensors.
 
 ```shell
 root@ubuntu:/app/multimedia_samples/sample_vin/get_vin_data# ./get_vin_data -h
@@ -47,7 +54,7 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
 **Command Parameter Descriptions:**
 
 - `s <sensor_index>`: This option specifies the sensor index to be used. The user must provide a valid index value.
-- `l <link_port>`: This option specifies the port used to connect Serdes Sensors. It is mandatory for Serdes sensors.
+- `l <link_port>`: This option specifies the port used to connect SerDes (Serializer/Deserializer) sensors. It is mandatory for SerDes sensors.
 - `h`: Displays help information.
 
 #### Execution Results
@@ -76,7 +83,7 @@ Dumping RAW data: handle 34661, resolution: 1920x1080 (stride: 2400), size: 2592
 Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_0_ts_0.raw), size(2592000) succeeded
 ```
 
-- **g**: Acquire a single frame. Multiple 'g' inputs can be used to continuously capture images (e.g., inputting "gggg").
+- g: Acquire a single frame. Multiple g inputs are supported to continuously acquire images, for example, entering gggg.
 
 ```shell
 Command: g
@@ -84,7 +91,7 @@ Dumping RAW data: handle 34661, resolution: 1920x1080 (stride: 2400), size: 2592
 Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_138_ts_1012736827400.raw), size(2592000) succeeded
 ```
 
-- **l**: Continuously acquire 12 frames, equivalent to entering 'g' twelve times.
+- l: Continuously acquire 12 frames, equivalent to entering 12 g's.
 
 ```shell
 Command: l
@@ -97,14 +104,14 @@ Dumping RAW data: handle 34661, resolution: 1920x1080 (stride: 2400), size: 2592
 Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw), size(2592000) succeeded
 ```
 
-- **q**: Quit the program.
+- q: Quit the program.
 
 ```shell
 Command: q
 quit
 ```
 
-After running the program, RAW images will be saved with filenames like `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw`.
+After running the program, raw images named in the format `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw` will be acquired.
 
 ## get_multi_vin_data
 
@@ -121,9 +128,9 @@ make
 #### How to Run the Program
 Execute the program directly with `./get_multi_vin_data -h` to display help information:
 
-#### Program Parameter Options Explanation
+#### Program Parameter Options Description
 
-Running `./get_multi_vin_data -h` displays help information and the list of supported Camera Sensors.
+Running the command `./get_multi_vin_data -h` displays help information and the list of supported Camera Sensors.
 
 ```shell
 root@ubuntu:/app/multimedia_samples/sample_vin/get_multi_vin_data# ./get_multi_vin_data -h
@@ -132,7 +139,6 @@ Options:
 -c, --config="sensor=id"
 	Configure parameters for each video pipeline, can be repeated up to 6 times.
 	sensor   --  Sensor index,can have multiple parameters, reference sensor list.
-	mode     --  Sensor mode of camera_config_t
 	link     --  Sensor link port number, serdes sensor must be configured according to the hardware connection, can be set to [0-3] 0:A 1:B 2:C 3:D.
 -h, --help      Show help message
 Support sensor list:
@@ -146,7 +152,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 **Command Parameter Descriptions:**
 
 - `c <sensor>`: This option specifies the sensor index to be used. The user must provide a valid index value.
-- `l <link_port>`: This option specifies the port used to connect Serdes Sensors. It is mandatory for Serdes sensors.
+- `l <link_port>`: This option specifies the port used to connect SerDes sensors. It is mandatory for SerDes sensors.
 - `h`: Displays help information.
 
 #### Execution Results
@@ -154,7 +160,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 Taking the imx219 sensor and the ar0820std 4K sensor as examples, execute `./get_multi_vin_data -c "sensor=0" -c "sensor=2 link=1"`.
 
 :::caution Note
-The value set for `link` depends on the port to which the Serdes sensor is connected on the deserializer. Ensure the Serdes sensor is connected to the specified port.
+The value set for `link` is determined by the port on the deserializer to which the SerDes sensor is connected. Ensure the SerDes sensor is connected to the specified port.
 :::
 
 ```shell
@@ -189,4 +195,35 @@ Dumping YUV data: handle 100197, resolution: 3840x2160 (stride: 3840), size: 829
 Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv (size: 256)
 ```
 
-After running the program, you will obtain a RAW image from the imx219 sensor named like `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` and a YUV image from the ar0820std sensor named like `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.
+After running the program, you will obtain a RAW image from the imx219 sensor named in the format `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw`, and a YUV image from the ar0820std sensor named in the format `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.
+
+## Common Issues
+
+### `No Camera Sensor found` Prompt
+
+**Symptom**: Running `./get_vin_data -s <index>` reports `No Camera Sensor found. Please check if the specified sensor is connected to the Camera interface.`
+
+**Cause**: The specified sensor is not connected to the development board, or it is connected to a different interface (MIPI direct connection / GMSL (Gigabit Multimedia Serial Link) port mismatch).
+
+**Solution**: Confirm that the actually connected camera model corresponds to the `-s` index (run `./get_vin_data -h` to view the supported list); MIPI directly-connected sensors must be connected to the corresponding CSI interface, and GMSL sensors require specifying `-l <link_port>` and `-m <mipi_rx>`.
+
+### GMSL/SerDes Sensor Must Specify link port
+
+**Symptom**: Running a GMSL sensor reports `[Error] ... is serdes sensor, must config link port according to the hardware connection, can be set to [0-3]`.
+
+**Cause**: The SerDes sensor needs to know the link port of the hardware connection (0:A 1:B 2:C 3:D) in order to communicate with the deserializer.
+
+**Solution**: Specify `-l 0/1/2/3` according to the actual hardware connection, and specify mipi_rx with `-m`.
+
+### Frame Acquisition Timeout or Failure to Acquire Frames
+
+**Symptom**: After the program runs, `hbn_vnode_getframe` returns a timeout error, or there is no output for a long time.
+
+**Cause**: The sensor is not outputting frames properly (not started, or abnormal wiring), the frame rate does not match the configuration, or mipi_rx does not match the hardware.
+
+**Solution**: Check whether the camera is powered on (compare with the output log during normal operation), verify mipi_rx/link_port against the actual wiring, and confirm that the resolution/frame rate in the configuration file matches the sensor.
+
+## Related Documents
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
