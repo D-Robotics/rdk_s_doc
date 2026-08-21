@@ -6,6 +6,8 @@ description: "RDK S100/S600 5.5.1.3 Camera（相机接口）"
 
 # 相机接口 - Camera
 
+> **层级说明**：本篇是【底层多媒体 API】（板端 `hb_camera_interface.h`），Camera 采集入口 API（函数名 `hbn_camera_*`），pipeline 的最前端。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
+
 ## 概述
 
 Camera 是 RDK 多媒体 pipeline 的采集入口（板端 `hb_camera_interface.h`，函数名 `hbn_camera_*`）。封装 sensor 配置、通道初始化与 VIN 绑定，与 HBN vnode（VIN/ISP/PYM）组成 vflow。

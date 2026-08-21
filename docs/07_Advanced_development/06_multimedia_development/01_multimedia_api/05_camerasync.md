@@ -6,6 +6,8 @@ description: "多路 Camera 及与 Lidar 同步"
 
 # 多路 Camera 及与 Lidar 同步
 
+> **层级说明**：本篇是【底层多媒体 API】（板端 `Camera 同步框架`），多路 Camera 时间戳同步机制说明。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
+
 ## 简述
 
 在多路 Camera 接入使用场景中，为满足算法或应用需求，一般有多路 Camera 同步需要，同时还有与 Lidar 同步的要求，可通过 ETH PPS 等方式进行同步。

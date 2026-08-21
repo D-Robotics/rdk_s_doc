@@ -6,6 +6,8 @@ description: "RDK S100/S600 5.5.1.4 VIO（视频输入输出）"
 
 # 视频输入输出 - VIO
 
+> **层级说明**：本篇是【底层多媒体 API】（板端 `hb_vio_interface.h`），高层 pipeline API，封装 sensor 采集到 VIN/ISP/PYM/GDC 整条链路的初始化/启停/取帧。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
+
 ## 概述
 
 VIO（Video Input/Output）是 RDK 多媒体的高层 pipeline API（板端 `hb_vio_interface.h`；X5 称 VIN，RDK 实际为 VIO）。封装从 sensor 采集到 VIN/ISP/PYM/GDC 整条 pipeline 的初始化、启停、参数配置与帧获取，是 HBN vnode 之上的便捷封装层。

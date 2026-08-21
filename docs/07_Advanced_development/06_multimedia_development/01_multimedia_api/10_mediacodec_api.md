@@ -6,6 +6,8 @@ description: "RDK S100/S600 5.5.1.10 MediaCodec（编解码）"
 
 # 编解码 - MediaCodec
 
+> **层级说明**：本篇是【底层多媒体 API】（板端 `hb_media_codec.h`），音视频编解码 API（X5 Codec → RDK MediaCodec）。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
+
 ## 概述
 
 MediaCodec（音视频编解码，X5 Codec → RDK MediaCodec）是 RDK 的音视频编解码 API（板端 `hb_media_codec.h`，函数 `hb_mm_mc_*`）。封装编码器/解码器的初始化、配置、启停、VPF 接入、音视频编码器/解码器注册与去注册、IDR 帧请求等能力，基于状态机驱动。

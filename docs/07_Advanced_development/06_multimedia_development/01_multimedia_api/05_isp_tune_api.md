@@ -6,6 +6,8 @@ description: "RDK S100/S600 5.5.1.5 ISP（图像信号处理）"
 
 # 图像信号处理 - ISP
 
+> **层级说明**：本篇是【底层多媒体 API】（板端 `hb_api_isp.h`），ISP 图像信号处理调参 API（函数 `hb_isp_*`）。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
+
 ## 概述
 
 ISP（Image Signal Processor）图像信号处理 API（板端 `hb_api_isp.h`，函数 `hb_isp_*`）。提供 ISP 模块控制、AE/AWB 统计与信息查询、标定参数、硬件参数与分区信息获取等能力。

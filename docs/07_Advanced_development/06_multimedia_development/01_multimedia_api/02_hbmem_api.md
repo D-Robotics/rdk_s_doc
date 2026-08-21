@@ -6,6 +6,8 @@ description: "RDK S100/S600 5.5.1.2 Hbmem（共享内存）"
 
 # 共享内存 - Hbmem
 
+> **层级说明**：本篇是【底层多媒体 API】（板端 `hbmem.h`），共享内存管理库，提供物理内存分配/映射/跨进程共享/cache 维护，供多媒体各模块与 BPU 共用。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
+
 ## 概述
 
 hbmem 是 RDK 的共享内存管理库（对应板端 `hbmem.h`），提供物理内存分配/映射/释放、跨进程共享、cache 维护与 DMA 拷贝能力，供多媒体各模块（VIO/VPF/Codec 等）共享大块物理内存。

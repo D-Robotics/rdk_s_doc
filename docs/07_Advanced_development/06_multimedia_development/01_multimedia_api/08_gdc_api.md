@@ -6,6 +6,8 @@ description: "RDK S100/S600 GDC 畸变矫正配置"
 
 # 畸变矫正 - GDC
 
+> **层级说明**：本篇是【底层多媒体 API】（板端 `hb_gdc_cfg.h / hbn_vpf_interface.h`），GDC 几何畸变矫正，通过配置结构体实现，无独立函数 API。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
+
 ## 概述
 
 GDC（Geometric Distortion Correction，畸变矫正）用于相机图像的几何畸变矫正与拼接。GDC 无独立函数 API，通过配置结构体（板端 `hb_gdc_cfg.h` 的 `gdc_config_t`/`gdc_settings_t`）描述输入/输出几何，配置 binary 由 `hbn_gen_gdc_cfg` 生成（见 5.5.1.6 VPF/PYM），经 HBN vnode 的 GDC 通道（`hbn_vnode_set_ochn_attr`）设入。
