@@ -36,7 +36,7 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   - 多模型并行推理：当输入为多模型结构时，底层会为每个模型启动线程并行执行推理任务（multi-threaded launch），在多核 BPU 系统上可提升吞吐；单模型场景则仅对应一个推理线程。
 
 ## 安装说明（Installation）
-本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和地平线提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装，适用于 Python 3.10 及以上版本。
+本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和D-Robotics提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装，适用于 Python 3.10 及以上版本。
 ### 系统依赖
 | 依赖项       | 最低版本  | 说明                                                   |
 |------------|-----------|--------------------------------------------------------|
@@ -44,7 +44,7 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 | pip        | ≥ 22.0    | 安装 wheel 包所需                                      |
 | pybind11   | 任意      | 构建时使用，安装包时不需要依赖                         |
 | scikit-build-core | ≥ 0.7 | 构建 wheel 包时使用（仅源码构建）                    |
-| 地平线基础库 | 根据平台 | 如 libdnn.so、libhbucp.so 等，通常由 BSP 提供         |
+| D-Robotics基础库 | 根据平台 | 如 libdnn.so、libhbucp.so 等，通常由 BSP 提供         |
 
 ### 构建wheel包
 构建wheel包的方式有三种下面分别介绍。
@@ -150,12 +150,12 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
-# 加载模型（以 S600 预装模型为例，可替换为任意 .hbm 路径）
-model = HB_HBMRuntime("/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm")
+# 加载单输入模型（NV12 等多输入模型请使用下方「多输入推理」小节）
+model = HB_HBMRuntime("/path/to/single_input_model.hbm")
 
 # 获取模型名与输入名
 model_name = model.model_names[0]
-input_name = model.input_names[model_name][0]  # 假设模型只有一个输入
+input_name = model.input_names[model_name][0]  # 单输入模型只有一个输入
 
 # 获取该输入对应的 shape
 input_shape = model.input_shapes[model_name][input_name]
@@ -407,7 +407,7 @@ for t in threads: t.join()
   如需更复杂用法（多输入模型、量化参数读取等），请参考[API部分](#模块类函数说明api-reference)。
 
 ## 模块/类/函数说明（API Reference）
-Python 模块 hbm_runtime 是通过 PyBind11 封装的地平线 HBM 模型推理接口，基于底层 libdnn 和 libhbucp 实现。提供统一封装的模型加载、输入输出信息查询、推理执行等功能，支持多模型加载、多输入推理、指定推理模型，BPU Core、推理任务优先级等。
+Python 模块 hbm_runtime 是通过 PyBind11 封装的D-Robotics HBM 模型推理接口，基于底层 libdnn 和 libhbucp 实现。提供统一封装的模型加载、输入输出信息查询、推理执行等功能，支持多模型加载、多输入推理、指定推理模型，BPU Core、推理任务优先级等。
 
 ### 枚举类型
 #### hbDNNDataType
@@ -510,7 +510,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     ```python
     #打印所有模型的描述信息
     print(model.model_descs)
-    # 输出：{'yolov5x_672x672_nv12': 'Image classification model based on ResNet-18.'}
+    # 输出：{'yolov5x_672x672_nv12': '{...}'}  # 值为模型内嵌的编译元信息（JSON 字符串），键为模型名称
     ```
 
 - hbm_descs: Dict[str, str]

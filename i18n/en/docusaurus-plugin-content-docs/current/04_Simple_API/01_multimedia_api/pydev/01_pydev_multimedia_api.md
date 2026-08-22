@@ -10,10 +10,10 @@ RDK OS comes pre-installed with the Python multimedia module `libsrcampy` (packa
 
 | Object | Function | See Also |
 | --- | --- | --- |
-| `Camera` | Camera capture (MIPI/USB) | [Camera Object](./object_camera) |
-| `Encoder` | Video encoding (H.264/H.265) | [Encoder Object](./object_encoder) |
-| `Decoder` | Video decoding | [Decoder Object](./object_decoder) |
-| `Display` | Display output (HDMI) | [Display Object](./object_display) |
+| `Camera` | Camera capture (MIPI/USB) | [Camera Object](./02_object_camera.md) |
+| `Encoder` | Video encoding (H.264/H.265) | [Encoder Object](./03_object_encoder.md) |
+| `Decoder` | Video decoding | [Decoder Object](./04_object_decoder.md) |
+| `Display` | Display output (HDMI) | [Display Object](./05_object_display.md) |
 
 ## Basic Usage
 
@@ -48,9 +48,9 @@ while True:
 
 ## Related Documentation
 
-- [Camera Object](./object_camera)
-- [Encoder Object](./object_encoder)
-- [Decoder Object](./object_decoder)
-- [Display Object](./object_display)
-- [Interface Usage Examples](./pydev_api_demo)
+- [Camera Object](./02_object_camera.md)
+- [Encoder Object](./03_object_encoder.md)
+- [Decoder Object](./04_object_decoder.md)
+- [Display Object](./05_object_display.md)
+- [Interface Usage Examples](./06_pydev_api_demo.md)
 - [Python Multimedia Examples](/Demos/multimedia_demo/pydev/pydev_multimedia)

@@ -105,7 +105,7 @@ Enables the vps (video process) image processing function of the specified camer
 [Function Declaration]  
 
 ```python
-Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height, crop_rect, rotate, src_size, dst_size)
+Camera.open_vps(pipe_id, process_mode, src_width, src_height, dst_width, dst_height, crop_rect, rotate, src_size, dst_size)
 ```
 
 [Parameter Description]  
@@ -114,7 +114,7 @@ Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height
 | Parameter Name      | Description                  | Value Range    |
 | ----------- | ------------------------ | --------  |
 | pipe_id    | Pipeline channel number corresponding to the camera  | Starts from 0 by default, range 0~7  |
-| proc_mode  | Image processing mode configuration, supporting scaling, cropping, and rotation   | Range 1~4, representing `scaling`, `scaling + cropping`, `scaling + rotation`, and `scaling + cropping + rotation` respectively |
+| process_mode  | Image processing mode configuration, supporting scaling, cropping, and rotation   | Range 1~4, representing `scaling`, `scaling + cropping`, `scaling + rotation`, and `scaling + cropping + rotation` respectively |
 | src_width  | Input image width                 | Depends on the camera output width |
 | src_height | Input image height                 | Depends on the camera output height |
 | dst_width  | Output image width | [1, 1/64) times the input width |
@@ -183,7 +183,7 @@ Camera.get_img(module, width, height)
 
 | Parameter Name | Description                 | Value Range     |
 | -------- | ------- | ----------- |
-| module   | Module from which to get the image | Default is 2 |
+| module   | Module from which to get the image (0=SP_DEV_VIN, 1=SP_DEV_ISP, 2=SP_DEV_VPS) | Default is 2 (SP_DEV_VPS) |
 | width    | Width of the image to get | Output width set by `open_cam` and `open_vps` |
 | height   | Height of the image to get | Output height set by `open_cam` and `open_vps` |
 
@@ -258,14 +258,14 @@ Inputs an image to the `vps` module and triggers image processing operations.
 [Function Declaration]  
 
 ```python
-Camera.set_img(img)
+Camera.set_img(img_obj)
 ```
 
 [Parameter Description]  
 
 | Parameter Name | Description     | Value Range      |
 | -------- | -------------------- | ----- |
-| img      | Image data to be processed | Must match the vps input size |
+| img_obj  | Image data to be processed | Must match the vps input size |
 
 [Usage] 
 
@@ -281,7 +281,7 @@ img = fin.read()
 fin.close()
 
 #send image to vps module
-ret = vps.set_img(img)
+ret = camera.set_img(img)
 ```
 
 [Return Value]  

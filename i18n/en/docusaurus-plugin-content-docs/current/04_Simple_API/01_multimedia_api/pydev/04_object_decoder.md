@@ -45,7 +45,7 @@ Decoder.decode(file, video_chn, type, width, height)
 
 ```python
 #create decode object
-decode = libsrcampy.Decoder()
+dec = libsrcampy.Decoder()
 
 #enable decode channel 0, solution: 1080p, format: H264
 ret = dec.decode("encode.h264", 0, 1, 1920, 1080)

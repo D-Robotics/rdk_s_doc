@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: "Display 对象"
-description: "Display 对象 对象接口说明"
+description: "Display 对象接口说明"
 ---
 
 # Display 对象

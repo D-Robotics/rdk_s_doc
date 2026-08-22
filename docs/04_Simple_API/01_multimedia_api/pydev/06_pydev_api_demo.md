@@ -400,7 +400,7 @@ def test_rtsp_decode_bind_vps_bind_disp(rtsp_url):
     while True:
         ret, stream_frame = cap.read()
         if not ret:
-            return
+            break
         nalu_types = get_h264_nalu_type(stream_frame.tobytes())
 
         # 送入解码的第一帧需要是 pps，sps, 否则解码器会报 "FAILED TO DEC_PIC_HDR" 异常而退出
@@ -411,7 +411,7 @@ def test_rtsp_decode_bind_vps_bind_disp(rtsp_url):
         if stream_frame is not None:
             ret = dec.set_img(stream_frame.tobytes(), 0) # 发送码流, 先解码数帧图像后再获取
             if ret != 0:
-                return ret
+                break
             if skip_count < 5:
                 skip_count += 1
                 image_count = 0
@@ -450,6 +450,9 @@ test_cam_vps_display()
 
 ## 相关文档
 
-- [多媒体接口说明](./pydev_multimedia_api)
-- [Camera 对象](./object_camera)
+- [多媒体接口说明](./01_pydev_multimedia_api.md)
+- [Camera 对象](./02_object_camera.md)
+- [Encoder 对象](./03_object_encoder.md)
+- [Decoder 对象](./04_object_decoder.md)
+- [Display 对象](./05_object_display.md)
 - [Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

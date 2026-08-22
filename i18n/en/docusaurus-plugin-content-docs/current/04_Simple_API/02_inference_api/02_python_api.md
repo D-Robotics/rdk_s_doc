@@ -36,7 +36,7 @@ In addition, the new API releases the Python GIL on the C++ side during inferenc
   - Multi-model parallel inference: when the input is a multi-model structure, the runtime launches a thread for each model to run its inference task in parallel (multi-threaded launch), which can improve throughput on multi-core BPU systems; in the single-model scenario there is only one inference thread.
 
 ## Installation
-The module hbm_runtime is a high-performance inference runtime Python API implemented in C++, depending on pybind11 and the underlying inference libraries provided by Horizon (such as libdnn, libhbucp, etc.). It supports installation via system DEB packages (.deb) and is compatible with Python 3.10 and later.
+The module hbm_runtime is a high-performance inference runtime Python API implemented in C++, depending on pybind11 and the underlying inference libraries provided by D-Robotics (such as libdnn, libhbucp, etc.). It supports installation via system DEB packages (.deb) and is compatible with Python 3.10 and later.
 ### System Dependencies
 | Dependency   | Minimum Version | Description                                            |
 |------------|-----------|--------------------------------------------------------|
@@ -44,7 +44,7 @@ The module hbm_runtime is a high-performance inference runtime Python API implem
 | pip        | ≥ 22.0    | Required for installing wheel packages                 |
 | pybind11   | any       | Used at build time; not required as a dependency at install time |
 | scikit-build-core | ≥ 0.7 | Used when building wheel packages (source builds only) |
-| Horizon base libraries | platform-dependent | e.g., libdnn.so, libhbucp.so, usually provided by the BSP |
+| D-Robotics base libraries | platform-dependent | e.g., libdnn.so, libhbucp.so, usually provided by the BSP |
 
 ### Building the Wheel Package
 There are three ways to build the wheel package, introduced below respectively.
@@ -151,12 +151,12 @@ import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
 # Load the model
-# Load the model (using a pre-installed S600 model as an example; replace with any .hbm path)
-model = HB_HBMRuntime("/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm")
+# Load a single-input model (for NV12 or other multi-input models, use the "Multi-input inference" section below)
+model = HB_HBMRuntime("/path/to/single_input_model.hbm")
 
 # Get the model name and input name
 model_name = model.model_names[0]
-input_name = model.input_names[model_name][0]  # assume the model has only one input
+input_name = model.input_names[model_name][0]  # a single-input model has only one input
 
 # Get the shape corresponding to this input
 input_shape = model.input_shapes[model_name][input_name]
@@ -408,7 +408,7 @@ for t in threads: t.join()
   For more complex usage (multi-input models, reading quantization parameters, etc.), refer to the [API Reference section](#moduleclassfunction-reference-api-reference).
 
 ## Module/Class/Function Reference (API Reference)
-The Python module hbm_runtime is a PyBind11-wrapped Horizon HBM model inference API, implemented on top of the underlying libdnn and libhbucp. It provides unified wrappers for model loading, input/output information queries, inference execution, and so on, supporting multi-model loading, multi-input inference, specifying the inference model, BPU Core, inference task priority, etc.
+The Python module hbm_runtime is a PyBind11-wrapped D-Robotics HBM model inference API, implemented on top of the underlying libdnn and libhbucp. It provides unified wrappers for model loading, input/output information queries, inference execution, and so on, supporting multi-model loading, multi-input inference, specifying the inference model, BPU Core, inference task priority, etc.
 
 ### Enumerated Types
 #### hbDNNDataType
@@ -511,7 +511,7 @@ All the properties below are read-only.
     ```python
     # Print the description information of all models
     print(model.model_descs)
-    # Output: {'yolov5x_672x672_nv12': 'Image classification model based on ResNet-18.'}
+    # Output: {'yolov5x_672x672_nv12': '{...}'}  # value is the model's embedded compile metadata (JSON string), keyed by model name
     ```
 
 - hbm_descs: Dict[str, str]

@@ -218,6 +218,6 @@ None
 
 ## Related Documentation
 
-- [Multimedia Interface Description](./pydev_multimedia_api)
-- [Decoder Object](./object_decoder)
+- [Multimedia Interface Description](./01_pydev_multimedia_api.md)
+- [Decoder Object](./04_object_decoder.md)
 - [Capture → Encode](/Demos/multimedia_demo/cdev/vio2encoder)

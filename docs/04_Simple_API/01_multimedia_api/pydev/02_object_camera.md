@@ -63,7 +63,7 @@ ret = camera.open_cam(0, -1, 30, 1920, 1080)
 
 【注意事项】 
 
-`width`，`height`参数支持`list`类型输入，表示使能 camera 多组不同分辨率输出。`list`最多支持6组缩小, 缩放区间为 camera 原始分辨率的[1 ,1/64)。使用方式如下：
+`width`，`height`参数支持`list`类型输入，表示使能 camera 多组不同分辨率输出。`list`最多支持6组缩小，缩放区间为 camera 原始分辨率的[1 ,1/64)。使用方式如下：
 
 ```python
 ret = cam.open_cam(0, -1, 30, [1920, 1280], [1080, 720])
@@ -105,7 +105,7 @@ cam.open_cam(0, -1, 10, [3840, 1920], [2160, 1080], 3000, 4000)
 【函数声明】  
 
 ```python
-Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height, crop_rect, rotate, src_size, dst_size)
+Camera.open_vps(pipe_id, process_mode, src_width, src_height, dst_width, dst_height, crop_rect, rotate, src_size, dst_size)
 ```
 
 【参数描述】  
@@ -114,7 +114,7 @@ Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height
 | 参数名称      | 定义描述                  | 取值范围    |
 | ----------- | ------------------------ | --------  |
 | pipe_id    | camera 对应的 pipeline 通道号  | 默认从0开始，范围0~7  |
-| proc_mode  | 图像处理模式配置，支持缩放、裁剪、旋转   | 范围1~4，分别表示`缩放`、`缩放+裁剪`、`缩放+旋转`、`缩放+裁剪+旋转`|
+| process_mode  | 图像处理模式配置，支持缩放、裁剪、旋转   | 范围1~4，分别表示`缩放`、`缩放+裁剪`、`缩放+旋转`、`缩放+裁剪+旋转`|
 | src_width  | 图像输入宽度                 | 视 camera 输出宽度而定 |
 | src_height | 图像输入高度                 | 视 camera 输出高度而定 |
 | dst_width  | 图像输出宽度 | 输入宽度的[1, 1/64)倍 |
@@ -150,7 +150,7 @@ ret = camera.open_vps(1, 1, 1920, 1080, 512, 512)
 
 :::info 注意！
 
-`S100`芯片对于`VPS`输出的宽度是有对齐需求的，输出宽度需满足16对齐，输出高度需满足2对齐，如果您设置的宽度和高度不符合对齐要求，则会检测报错。。
+`S100`芯片对于`VPS`输出的宽度是有对齐需求的，输出宽度需满足16对齐，输出高度需满足2对齐，如果您设置的宽度和高度不符合对齐要求，则会检测报错。
 
 :::
 
@@ -183,7 +183,7 @@ Camera.get_img(module, width, height)
 
 | 参数名称 | 定义描述                 | 取值范围     |
 | -------- | ------- | ----------- |
-| module   | 需要获取图像的模块 | 默认为2 |
+| module   | 需要获取图像的模块（0=SP_DEV_VIN、1=SP_DEV_ISP、2=SP_DEV_VPS） | 默认为2（SP_DEV_VPS） |
 | width    | 需要获取图像的宽度 | `open_cam`、`open_vps`设置的输出宽度 |
 | height   | 需要获取图像的高度 | `open_cam`、`open_vps`设置的输出高度 |
 
@@ -258,14 +258,14 @@ test_camera()
 【函数声明】  
 
 ```python
-Camera.set_img(img)
+Camera.set_img(img_obj)
 ```
 
 【参数描述】  
 
 | 参数名称 | 定义描述     | 取值范围      |
 | -------- | -------------------- | ----- |
-| img      | 需要处理的图像数据 | 跟 vps 输入尺寸保持一致 |
+| img_obj  | 需要处理的图像数据 | 跟 vps 输入尺寸保持一致 |
 
 【使用方法】 
 
@@ -281,7 +281,7 @@ img = fin.read()
 fin.close()
 
 #send image to vps module
-ret = vps.set_img(img)
+ret = camera.set_img(img)
 ```
 
 【返回值】  

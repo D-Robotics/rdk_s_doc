@@ -400,7 +400,7 @@ def test_rtsp_decode_bind_vps_bind_disp(rtsp_url):
     while True:
         ret, stream_frame = cap.read()
         if not ret:
-            return
+            break
         nalu_types = get_h264_nalu_type(stream_frame.tobytes())
 
         # The first frame fed into the decoder must be pps, sps; otherwise the decoder will report a "FAILED TO DEC_PIC_HDR" exception and exit
@@ -411,7 +411,7 @@ def test_rtsp_decode_bind_vps_bind_disp(rtsp_url):
         if stream_frame is not None:
             ret = dec.set_img(stream_frame.tobytes(), 0) # Send the bitstream; decode several frames first before retrieving
             if ret != 0:
-                return ret
+                break
             if skip_count < 5:
                 skip_count += 1
                 image_count = 0
@@ -450,6 +450,9 @@ test_cam_vps_display()
 
 ## Related Documentation
 
-- [Multimedia Interface Description](./pydev_multimedia_api)
-- [Camera Object](./object_camera)
+- [Multimedia Interface Description](./01_pydev_multimedia_api.md)
+- [Camera Object](./02_object_camera.md)
+- [Encoder Object](./03_object_encoder.md)
+- [Decoder Object](./04_object_decoder.md)
+- [Display Object](./05_object_display.md)
 - [Python Multimedia Examples](/Demos/multimedia_demo/pydev/pydev_multimedia)

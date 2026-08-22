@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: "Encoder 对象"
-description: "Encoder 对象 对象接口说明"
+description: "Encoder 对象接口说明"
 ---
 
 # Encoder 对象
@@ -218,6 +218,6 @@ Encoder.close()
 
 ## 相关文档
 
-- [多媒体接口说明](./pydev_multimedia_api)
-- [Decoder 对象](./object_decoder)
+- [多媒体接口说明](./01_pydev_multimedia_api.md)
+- [Decoder 对象](./04_object_decoder.md)
 - [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)
