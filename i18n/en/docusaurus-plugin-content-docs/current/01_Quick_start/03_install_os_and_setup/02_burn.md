@@ -198,7 +198,7 @@ Flashing NVMe requires the NVMe version of the image. The image provided by D-Ro
 
    If the device produces no display output for a long time after power-on (over 2 minutes), the boot is abnormal and you need to debug over a serial cable. For boot failure troubleshooting, see the XBurn manual [Boot issues](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues).
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-boot.png" alt="image-desktop_display.jpg" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-boot.png" alt="System booting into the Ubuntu desktop" style={{ width: '100%' }} />
 
 </DocScope>
 

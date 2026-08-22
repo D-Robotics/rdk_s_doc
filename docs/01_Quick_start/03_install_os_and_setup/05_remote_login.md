@@ -29,7 +29,7 @@ import DocScope from '@site/src/components/DocScope';
 系统提供了两个默认账户，方便用户首次使用：
 
 - **普通用户：** 用户名 `sunrise`，密码 `sunrise`
-- **超级用户 (root)：** 用户名 `root`，密码 `root`
+- **超级用户（root）：** 用户名 `root`，密码 `root`
 
 :::tip
 通过网络方式远程登录前，开发板需要通过有线以太网或者无线 Wi-Fi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：
@@ -71,7 +71,7 @@ import DocScope from '@site/src/components/DocScope';
 - [调试串口章节](../01_hardware_introduction/02_rdk_s600.md#j4)
 </DocScope>
 
-串口登录需要借助 PC 终端工具，目前常用的工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
+串口登录需要借助 PC 终端工具，目前常用的工具有`PuTTY`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建串口连接过程：
 
 - 当串口 USB 转接板首次插入电脑时，需要安装串口驱动。驱动程序可从资源中心的[工具子栏目](https://developer.d-robotics.cc/resource)获取。驱动安装完成后，设备管理器可正常识别串口板端口，如下图：
 
@@ -216,7 +216,7 @@ macOS 系统下，使用 minicom 工具连接串口，步骤如下：
 - 确认开发板、电脑的子网掩码、网关配置是否一致
 - 确认电脑网络防火墙是否处于关闭状态
 
-开发板靠外的有线以太网口（eth1）默认采用静态 IP 模式，IP 地址为`192.168.127.10`。对于开发板、电脑网络直连的情况，只需要将电脑配置为静态 IP，保证跟开发板处于同一网段即可。以 WIN10 系统为例，电脑静态 IP 修改方法如下：
+开发板靠外的有线以太网口（eth1）默认采用静态 IP 模式，IP 地址为`192.168.127.10`。对于开发板、电脑网络直连的情况，只需要将电脑配置为静态 IP，保证跟开发板处于同一网段即可。以 Windows 10 系统为例，电脑静态 IP 修改方法如下：
 
 - 在网络连接中找到对应的以太网设备并双击打开
 - 找到 Internet 协议版本 4 选项并双击打开
@@ -231,7 +231,7 @@ macOS 系统下，使用 minicom 工具连接串口，步骤如下：
 
 ### 终端软件
 
-目前常用终端工具有`Putty`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建 SSH 连接过程：
+目前常用终端工具有`PuTTY`、`MobaXterm`等，用户可根据自身使用习惯来选择。不同工具的端口配置流程基本类似，下面以`MobaXterm`为例，介绍新建 SSH 连接过程：
 
 1. 打开`MobaXterm`工具，点击`Session`，然后选择`SSH`
 2. 输入开发板 IP 地址，例如`192.168.127.10`
@@ -263,7 +263,7 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-2. 在跳出来的界面中填写`RDK100/RDKS600`的主机信息，完成后点击`Add`
+2. 在跳出来的界面中填写`RDKS100/RDKS600`的主机信息，完成后点击`Add`
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -271,7 +271,7 @@ NoMachine 功能需要 S100/S600端的软件包支持，配置指南见[NoMachin
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login03.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-4. 弹出登录界面，输入用户名、密码点击 OK 即可完成远程登陆
+4. 弹出登录界面，输入用户名、密码点击 OK 即可完成远程登录
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login04.jpg" alt="NoMachine 登录截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

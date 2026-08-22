@@ -6,6 +6,10 @@ description: "烧录后第一步：确认系统版本与板卡型号"
 
 # 系统状态查询
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 烧录完成并登录开发板后，**第一步先确认系统版本与板卡型号**，确保烧入的是预期镜像、跑在预期硬件上。确认无误后，再检查 BPU、MCU、VDSP 各核心的工作状态，确保整板硬件就绪。
 
 ## 前置条件
@@ -18,11 +22,21 @@ description: "烧录后第一步：确认系统版本与板卡型号"
 cat /etc/version
 ```
 
+<DocScope products="RDK S600">
+
 输出示例（RDK S600，RDK OS 5.1.0）：
 
 ```text
 5.1.0
 ```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+RDK S100 的输出为所烧录镜像的版本号，当前 S100 最新镜像版本为 `4.0.5`。
+
+</DocScope>
 
 该值即 RDK OS 的版本号。若与预期镜像版本不一致，说明烧入的镜像不对，需重新烧录（见 [烧录说明](./01_instruction.md)）。
 
@@ -31,6 +45,8 @@ cat /etc/version
 ```bash
 cat /etc/os-release
 ```
+
+<DocScope products="RDK S600">
 
 RDK S600 实测（RDK OS V5.1.0）：
 
@@ -53,6 +69,14 @@ LOGO="rdk-os-logo"
 - 版本号：`5.1.0`（`cat /etc/version`）。
 - 主机名：`drobot`（`cat /etc/hostname`）。
 
+</DocScope>
+
+<DocScope products="RDK S100">
+
+RDK S100 基线为 Ubuntu 22.04，版本号、主机名等字段以板端实际输出为准。
+
+</DocScope>
+
 ## 确认板卡型号与硬件 ID
 
 ```bash
@@ -61,6 +85,8 @@ rdkos_info
 
 `rdkos_info` 汇总系统关键信息，开头会给出硬件型号与 Board Id：
 
+<DocScope products="RDK S600">
+
 ```text
 ================ RDK System Information Collection ================
 
@@ -68,14 +94,34 @@ rdkos_info
 	D-Robotics RDK S600 MCB V1p0 (Board Id = 0x5131310)
 ```
 
+</DocScope>
+
+<DocScope products="RDK S100">
+
+输出同样以 `[Hardware Model]` 开头，给出 RDK S100 的板卡型号与 Board Id。
+
+</DocScope>
+
 从中可确认：板卡是 RDK S100 还是 S600、载板版本（如 `MCB V1p0`）、Board Id。后续还会输出 CPU/BPU 温度、频率等运行状态，可用于排障。
 
 如只需 Board Id，单独执行：
+
+<DocScope products="RDK S600">
 
 ```bash
 hrut_boardid
 # 输出示例：0x5131310
 ```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+```bash
+hrut_boardid
+```
+
+</DocScope>
 
 ## 确认 SoC 唯一 ID
 
@@ -182,4 +228,5 @@ VDSP 固件在业务需要时由上层应用加载，加载后 `state` 变为 `r
 
 - [烧录说明](./01_instruction.md)
 - [远程登录](05_remote_login.md)
-- [RDK 专属命令详解](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md)（`devmem`/`hrut_boardid`/`hrut_socuid`/`rdkos_info`）
+- [入门配置](04_configuration_wizard.md)
+- RDK 专属命令详解：[devmem](../../09_Appendix/rdk-command-manual/01_devmem.md)、[hrut_boardid](../../09_Appendix/rdk-command-manual/02_hrut_boardid.md)、[hrut_socuid](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md)、[rdkos_info](../../09_Appendix/rdk-command-manual/06_rdkos_info.md)

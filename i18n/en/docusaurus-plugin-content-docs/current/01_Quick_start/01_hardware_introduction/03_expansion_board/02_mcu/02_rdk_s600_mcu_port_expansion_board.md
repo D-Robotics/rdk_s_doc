@@ -69,7 +69,7 @@ On the V0P1 hardware revision, the 2x SPI interfaces are temporarily unavailable
 
 | **Name** | **Parameter**                                                                        |
 | -------- | ----------------------------------------------------------------------------------- |
-| Interfaces | 5 x CAN FD (up to 8Mbps) <br />1 x 30-pin, with up to 7x ADC, 2x I2C, 2x SPI<br/> |
+| Interfaces | 5 x CAN FD (up to 8Mbps) <br />1 x 30-pin, with up to 7x ADC, 2x I2C, 2x SPI |
 | Onboard module | IMU: BMI088 (SPI)                                                            |
 | Operating temperature | 0℃~65℃                                                                    |
 | Dimensions | 70x70x17mm                                                                       |
@@ -112,7 +112,7 @@ The expansion board provides 5 CAN FD interfaces (CAN1 ~ CAN4 and CAN10). Each i
 Pin definitions: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx</a>
 
 :::info Tip
-When the following 5 IOs of the 30-Pin Connector are connected to external devices, you must ensure that the default high/low state of the corresponding external device pins at power-on is consistent with the Pull Up/Down status in the Pin definition file, and adding/connecting extra pull-up/pull-down resistors is not allowed:
+When the following 6 IOs of the 30-Pin Connector are connected to external devices, you must ensure that the default high/low state of the corresponding external device pins at power-on is consistent with the Pull Up/Down status in the Pin definition file, and adding/connecting extra pull-up/pull-down resistors is not allowed:
 
 - PIN11: MCU_GPIO0_3V3
 - PIN15: MCU_SPI4_CSN0_3V3

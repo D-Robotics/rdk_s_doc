@@ -69,7 +69,7 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 </div>
 
 
-### Camera Installation Guide
+## Camera Installation Guide
 
 <div className="table-responsive">
 
@@ -82,7 +82,7 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 
 </div>
 
-### Assembly Instructions
+## Assembly Instructions
 
 :::danger
 
@@ -92,7 +92,7 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 :::
 
 
-#### Expansion Board Assembly Guide
+### Expansion Board Assembly Guide
 
 <video controls width="100%" preload="metadata">
   <source src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/video/camera_expansion_board_assembly_guide_12l.mp4" type="video/mp4" />
@@ -136,7 +136,7 @@ The Camera Expansion Board integrates 3 MAX96712 deserializer chips, each of whi
 :::
 
 
-## Power Indicator LED (D2000)
+### Power Indicator LED (D2000)
 
 The power indicator LED, located next to the DC power input interface.
 

@@ -7,7 +7,7 @@ description: "User guide for the TogetheROS.Bot (tros.b) robotics middleware"
 
 # Using TogetheROS.Bot
 
-**TogetheROS.Bot** (**tros.b** for short) is a robotics middleware built by D-Robotics on top of ROS 2. It is preinstalled in the RDK OS image and provides RDK development boards with robotics application development capabilities such as perception, planning and control, and mapping.
+**TogetheROS.Bot** (**tros.b** for short) is a robotics middleware built by D-Robotics on top of ROS 2. It is delivered through RDK OS images and provides RDK development boards with robotics application development capabilities such as perception, planning and control, and mapping.
 
 ## What Is tros.b
 
@@ -42,7 +42,7 @@ tros.b runs on top of RDK OS and achieves energy-efficient robot perception and 
 
 | Aspect | Native ROS 2 | tros.b |
 | --- | --- | --- |
-| Installation | Manually install ROS 2 + dependencies | Preinstalled in the RDK OS image; works out of the box |
+| Installation | Manually install ROS 2 + dependencies | Works out of the box after flashing an image that includes tros.b |
 | Model inference | CPU inference or your own integration | BPU-accelerated nodes with models already converted and quantized |
 | Sensor synchronization | Software timestamps | Hardware-level LPWM/PPS synchronization |
 | Performance | Limited by the CPU | BPU + MCU heterogeneous acceleration |
@@ -150,7 +150,9 @@ def generate_launch_description():
             package='tros_perception',
             executable='yolo_detection',
             parameters=[{
-                'model': '/app/model/yolov5x.bin',
+                # Path on S600; S100 uses /opt/hobot/model/s100/basic/
+                'model': '/opt/hobot/model/s600/basic/'
+                         'yolov5x_672x672_nv12.hbm',
                 'camera': 'mipi_cam0',
             }],
         ),

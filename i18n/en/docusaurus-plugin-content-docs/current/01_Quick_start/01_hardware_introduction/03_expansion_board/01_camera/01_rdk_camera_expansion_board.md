@@ -78,7 +78,7 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 
 </div>
 
-### Camera Installation Guide
+## Camera Installation Guide
 
 <div className="table-responsive">
 
@@ -94,7 +94,7 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 
 </div>
 
-### Assembly Instructions
+## Assembly Instructions
 
 :::danger
 
@@ -113,14 +113,14 @@ Please check the assembly video corresponding to your actual product.
 
 :::
 
-#### Threaded Pillar Expansion Board Assembly Guide
+### Threaded Pillar Expansion Board Assembly Guide
 
 <video controls width="100%" preload="metadata">
   <source src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/video/camera_expansion_board_assembly_guide.mp4" type="video/mp4" />
   Your browser does not support the video tag.
 </video>
 
-#### Smooth-Hole Pillar Expansion Board Assembly Guide
+### Smooth-Hole Pillar Expansion Board Assembly Guide
 
 <video controls width="100%" preload="metadata">
   <source src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/video/camera_expansion_board_assembly_guide_smooth_hole_support.mp4" type="video/mp4" />
@@ -201,7 +201,7 @@ Pin 5 of the MIPI camera interface connector supports switching between the two 
 
 </div>
 
-## Power Indicator LED (D2000)
+### Power Indicator LED (D2000)
 
 The power indicator LED, located next to the DC power input interface.
 

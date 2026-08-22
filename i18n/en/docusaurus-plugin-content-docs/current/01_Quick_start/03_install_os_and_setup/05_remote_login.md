@@ -71,7 +71,7 @@ Before logging in via the serial port, you need to confirm that the development 
 - [Debug serial port section](../01_hardware_introduction/02_rdk_s600.md#j4)
 </DocScope>
 
-Serial port login requires a PC terminal tool. Commonly used tools include `Putty`, `MobaXterm`, and so on. Users can choose according to their own usage habits. The port configuration process is basically similar across different tools. The following takes `MobaXterm` as an example to introduce the process of creating a new serial port connection:
+Serial port login requires a PC terminal tool. Commonly used tools include `PuTTY`, `MobaXterm`, and so on. Users can choose according to their own usage habits. The port configuration process is basically similar across different tools. The following takes `MobaXterm` as an example to introduce the process of creating a new serial port connection:
 
 - When the serial port USB adapter board is plugged into the computer for the first time, you need to install the serial driver. The driver can be obtained from the [Tools subsection](https://developer.d-robotics.cc/resource) of the Resource Center. After the driver installation completes, Device Manager recognizes the serial board port properly, as shown below:
 
@@ -216,7 +216,7 @@ Before using remote login, you need to ensure that the network communication bet
 - Confirm whether the subnet mask and gateway configuration of the development board and the computer are consistent
 - Confirm whether the computer's network firewall is turned off
 
-The outer wired Ethernet port (eth1) of the development board uses static IP mode by default, with IP address `192.168.127.10`. For a direct network connection between the development board and the computer, you only need to configure the computer with a static IP to ensure it is on the same network segment as the development board. Taking the WIN10 system as an example, the method to change the computer's static IP is as follows:
+The outer wired Ethernet port (eth1) of the development board uses static IP mode by default, with IP address `192.168.127.10`. For a direct network connection between the development board and the computer, you only need to configure the computer with a static IP to ensure it is on the same network segment as the development board. Taking Windows 10 as an example, the method to change the computer's static IP is as follows:
 
 - In Network Connections, find the corresponding Ethernet device and double-click to open it
 - Find the Internet Protocol Version 4 option and double-click to open it
@@ -231,7 +231,7 @@ The following introduces the steps for creating a connection with terminal softw
 
 ### Terminal software
 
-Currently commonly used terminal tools include `Putty`, `MobaXterm`, and so on. Users can choose according to their own usage habits. The port configuration process is basically similar across different tools. The following takes `MobaXterm` as an example to introduce the process of creating a new SSH connection:
+Currently commonly used terminal tools include `PuTTY`, `MobaXterm`, and so on. Users can choose according to their own usage habits. The port configuration process is basically similar across different tools. The following takes `MobaXterm` as an example to introduce the process of creating a new SSH connection:
 
 1. Open the `MobaXterm` tool, click `Session`, then select `SSH`
 2. Enter the development board's IP address, for example `192.168.127.10`
@@ -263,7 +263,7 @@ This section is for users of the Ubuntu Desktop system version, introducing how 
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login01.jpg" alt="NoMachine login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-2. In the pop-up window, fill in the host information for `RDK100/RDKS600`, then click `Add` when done
+2. In the pop-up window, fill in the host information for `RDKS100/RDKS600`, then click `Add` when done
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-S100-nomachine_login02.jpg" alt="NoMachine login screenshot" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

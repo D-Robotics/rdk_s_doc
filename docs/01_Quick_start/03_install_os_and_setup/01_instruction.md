@@ -39,6 +39,7 @@ import DocScope from '@site/src/components/DocScope';
 - [ ] 一台 PC（Windows/Linux/macOS），用于运行 XBurn 烧录工具。
 - [ ] 带屏蔽层、支持数据传输的 Type-C 数据线（非纯充电线）。
 - [ ] 开发板配套电源适配器。
+- 已完成：[开始使用 RDK](../02_getting_started.md) 的基础外设连接。
 
 ## 安全注意事项
 

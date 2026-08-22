@@ -15,9 +15,9 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 套件介绍
 
-**D-Robotics Developer Kits**，简称 RDK 套件，是基于 D-Robotics 计算平台打造的机器人开发者套件，涵盖硬件板卡与配套软件，帮助开发者快速搭建机器人原型、开展评测与验证。套件硬件产品线包括 RDK X3、RDK X3 Module、RDK X5、RDK Ultra、RDK S100 系列、RDK S600 系列。本手册面向 **RDK S100 / RDK S600**。
+**D-Robotics Developer Kits**，简称 RDK 套件，是基于 D-Robotics 计算平台打造的机器人开发者套件，涵盖硬件板卡与配套软件，帮助开发者快速搭建机器人原型、开展评测与验证。套件硬件产品线包括 RDK X3、RDK X3 Module、RDK X5、RDK Ultra、RDK S100 系列和 RDK S600 系列。本手册面向 **RDK S100 / RDK S600**。
 
-RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱可用；TogetheROS.Bot（tros.b）机器人中间件预装在镜像内。详见 产品共识（标准仓库）。
+RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱可用；TogetheROS.Bot（tros.b）机器人中间件预装在镜像内。详见下文 [RDK OS 介绍](#rdk-os-介绍)。
 
 :::note 注意
 确认系统版本号：`cat /etc/version`；`rdkos_info` 查看板卡与运行时信息。详见 [系统状态查询](./01_Quick_start/03_install_os_and_setup/03_system_status.md)。
@@ -27,7 +27,7 @@ RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱�
 
 <DocScope products="RDK S100">
 
-**RDK S100 系列** 是一款高性能开发套件，具有 80/128 TOPS 端侧推理算力与 6 核 ARM A78AE 处理能力，支持 2 路 MIPI Camera 接入，4 路 USB 3.0 接口，2 路 PCIe3.0 接口，充分满足各类场景的使用需求。
+**RDK S100 系列**是一款高性能开发套件，具有 80/128 TOPS 端侧推理算力与 6 核 ARM A78AE 处理能力，支持 2 路 MIPI Camera 接入，4 路 USB 3.0 接口，2 路 PCIe 3.0 接口，充分满足各类场景的使用需求。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="RDK S100 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -35,7 +35,7 @@ RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱�
 
 <DocScope products="RDK S600">
 
-**RDK S600 系列** 是一款高性能开发套件，具有 560 TOPS 端侧推理算力与 18 核 ARM A78AE 处理能力，支持 6 路 MIPI Camera 接入，6 路 USB 3.0 接口，4 路 PCIe3.0 接口，充分满足各类场景的使用需求。
+**RDK S600 系列**是一款高性能开发套件，具有 560 TOPS 端侧推理算力与 18 核 ARM A78AE 处理能力，支持 2 路 MIPI Camera 与 6 路 GMSL Camera 接入，6 路 USB 3.0 接口，4 路 PCIe 3.0 接口，充分满足各类场景的使用需求。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="RDK S600 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -57,7 +57,7 @@ RDK OS 开箱即有：
 
 ## 资料索引
 
-> 系统镜像、工具、硬件资料下载。商业资料请切换 **FTP 下载** 选项，按表格路径在 FTP 服务器获取。
+> 系统镜像、工具、硬件资料下载。商业版资料通过问卷与 NDA 流程获取，见下方 [商业版资料](#商业版资料) 节。
 
 ### 系统镜像
 
@@ -71,7 +71,7 @@ RDK OS 开箱即有：
 | 工具 | 说明 |
 | --- | --- |
 | [XBurn](https://developer.d-robotics.cc/xburn_doc/install) | 系统烧录工具 |
-| [RDK Studio](https://developer.d-robotics.cc/) | 集成开发环境 |
+| [RDK Studio](https://developer.d-robotics.cc/rdkstudio) | 集成开发环境 |
 | 交叉编译工具链 | 见 [搭建开发环境](/Advanced_development/environment_build/environment_build) |
 
 ### 硬件资料
@@ -97,7 +97,7 @@ RDK OS 开箱即有：
 ## 文档导航
 
 - **第 1 章 [快速开始](/Quick_start)**：硬件介绍、外设连接、烧录、入门配置、远程登录。
-- **第 2 章 [系统配置](/System_configuration)**：网络、蓝牙、系统更新、srpi-config、config.txt、显示音频、存储、时钟、用户权限、日志、调试串口。
+- **第 2 章 [系统配置](/System_configuration)**：网络、蓝牙、系统更新、srpi-config、config.txt、显示音频、存储、时钟、用户权限、日志和调试串口。
 - **第 3 章 [开发示例](/Demos)**：外设、多媒体、算法（分类/检测/分割/姿态/语音/摄像头推理）demo，C/C++ 与 Python 对照。
 - **第 4 章 [简易 API](/Simple_API)**：多媒体与推理的封装层简易接口。
 - **第 5 章 [进阶开发](/Advanced_development)**：deb/系统软件/驱动/多媒体/MCU/算法工具链/VDSP（模式 3）。
@@ -112,7 +112,7 @@ RDK OS 开箱即有：
 | 模式 2 产品集成 | 产品公司研发 | 第 2 章系统配置 + 第 5 章进阶开发中的系统定制（apt/配置层/重制镜像） |
 | 模式 3 高度定制 | 商业客户/深度团队 | 第 5 章进阶开发全章（deb/驱动/多媒体/MCU/工具链/VDSP） |
 
-详见 产品共识（标准仓库）§3。
+各模式的推荐路径见上表。
 
 ## 版本发布
 

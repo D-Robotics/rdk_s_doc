@@ -50,13 +50,13 @@ The RDK S600 system provides two default accounts:
 
 <DocScope products="RDK S100">
 
-Follow the Ubuntu 22.04 Wi-Fi connection tutorial.
+In the Ubuntu 22.04 desktop environment, click the Wi-Fi icon in the top-right corner of the desktop, select the hotspot, and enter the password to connect. For illustrated steps, see [Network Configuration - Wireless Network](../../02_System_configuration/01_network_config.md#wireless-network).
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-Follow the Ubuntu 24.04 Wi-Fi connection tutorial.
+In the Ubuntu 24.04 desktop environment, click the Wi-Fi icon in the top-right corner of the desktop, select the hotspot, and enter the password to connect. For illustrated steps, see [Network Configuration - Wireless Network](../../02_System_configuration/01_network_config.md#wireless-network).
 
 </DocScope>
 
@@ -102,7 +102,7 @@ The desktop version can also open the Terminal and run the same commands below t
 
 Use the systemctl command to check the current running status of the SSH service:
 
-```
+```bash
 sudo systemctl status ssh
 ```
 
@@ -123,7 +123,7 @@ sudo systemctl restart ssh # Restart SSH service
 
 </Tabs>
 
-For SSH usage, see [Remote Login - SSH Login](./remote_login#ssh).
+For SSH usage, see [Remote Login - SSH Login](./05_remote_login.md#ssh).
 
 ## Set the Login Mode
 
@@ -246,7 +246,7 @@ and click `Download`
 
 ```shell
 sudo apt update; sudo apt upgrade -y   # Ensure the current software is up to date
-dpkg -i nomachine_*_arm64.deb
+sudo dpkg -i nomachine_*_arm64.deb
 ```
 
 **Configure and start**
@@ -295,7 +295,7 @@ Reboot the S600.
 
 Due to a configuration issue with `NXServer`, connecting directly after completing the above operations results in a black screen. A reboot is required before use.
 
-For `NoMachine` usage, see [Remote Login - NoMachine Login](./remote_login#ssh).
+For `NoMachine` usage, see [Remote Login - NoMachine Login](./05_remote_login.md#nomachine-login).
 
 ## User Management
 

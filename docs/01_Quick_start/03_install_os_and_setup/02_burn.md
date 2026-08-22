@@ -170,7 +170,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 - 从 **UFS** 启动：SW8 拨至 UFS 启动位（`D12=ON, D13=ON` 或 `D12=OFF, D13=OFF`）。
 - 从 **NVMe** 启动：SW8 拨至 NVMe 启动位（`D12=OFF, D13=ON`）。
 
-烧录 NVMe 需使用 NVMe 版本的镜像，地瓜默认提供的镜像面向 UFS，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](/Advanced_development/environment_build/rdk_gen#emmcufsnvme-镜像编译须知)。
+烧录 NVMe 需使用 NVMe 版本的镜像，默认提供的镜像面向 UFS，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](/Advanced_development/environment_build/rdk_gen#emmcufsnvme-镜像编译须知)。
 :::
 
 1. **产品类型** 选择 `RDK S600`。
@@ -198,7 +198,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
    如果设备上电后长时间没有显示输出（2 分钟以上），说明启动异常，需要通过串口线调试。启动异常排查见 XBurn 手册 [启动异常](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues)。
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-boot.png" alt="image-desktop_display.jpg" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-boot.png" alt="系统启动进入 Ubuntu 桌面" style={{ width: '100%' }} />
 
 </DocScope>
 

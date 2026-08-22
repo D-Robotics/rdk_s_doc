@@ -6,6 +6,10 @@ description: "First step after flashing: confirm the system version and board mo
 
 # System Status
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 After flashing completes and you log in to the development board, **first confirm the system version and board model** to ensure that the flashed image is the expected one and it is running on the expected hardware. After confirmation, check the working status of the BPU, MCU, and VDSP cores to ensure the whole board's hardware is ready.
 
 ## Prerequisites
@@ -18,11 +22,21 @@ After flashing completes and you log in to the development board, **first confir
 cat /etc/version
 ```
 
+<DocScope products="RDK S600">
+
 Sample output (RDK S600, RDK OS 5.1.0):
 
 ```text
 5.1.0
 ```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+On RDK S100, the output is the version number of the flashed image; the latest S100 image version is `4.0.5`.
+
+</DocScope>
 
 This value is the RDK OS version number. If it does not match the expected image version, the flashed image is wrong and you need to flash again (see [Flashing preparation](./01_instruction.md)).
 
@@ -31,6 +45,8 @@ This value is the RDK OS version number. If it does not match the expected image
 ```bash
 cat /etc/os-release
 ```
+
+<DocScope products="RDK S600">
 
 Measured on RDK S600 (RDK OS V5.1.0):
 
@@ -53,6 +69,14 @@ LOGO="rdk-os-logo"
 - Version number: `5.1.0` (`cat /etc/version`).
 - Hostname: `drobot` (`cat /etc/hostname`).
 
+</DocScope>
+
+<DocScope products="RDK S100">
+
+RDK S100 is based on Ubuntu 22.04; fields such as the version number and hostname are subject to the actual board output.
+
+</DocScope>
+
 ## Confirm the board model and hardware ID
 
 ```bash
@@ -61,6 +85,8 @@ rdkos_info
 
 `rdkos_info` summarizes the key system information. At the beginning it shows the hardware model and Board Id:
 
+<DocScope products="RDK S600">
+
 ```text
 ================ RDK System Information Collection ================
 
@@ -68,14 +94,34 @@ rdkos_info
 	D-Robotics RDK S600 MCB V1p0 (Board Id = 0x5131310)
 ```
 
+</DocScope>
+
+<DocScope products="RDK S100">
+
+The output likewise starts with `[Hardware Model]`, showing the RDK S100 board model and Board Id.
+
+</DocScope>
+
 From this you can confirm: whether the board is an RDK S100 or S600, the carrier board version (such as `MCB V1p0`), and the Board Id. It also outputs runtime status such as CPU/BPU temperatures and frequencies later, which can be used for troubleshooting.
 
 If you only need the Board Id, run separately:
+
+<DocScope products="RDK S600">
 
 ```bash
 hrut_boardid
 # Example output: 0x5131310
 ```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+```bash
+hrut_boardid
+```
+
+</DocScope>
 
 ## Confirm the SoC unique ID
 
@@ -182,4 +228,5 @@ The VDSP firmware is loaded by upper-layer applications when needed by the workl
 
 - [Flashing preparation](./01_instruction.md)
 - [Remote login](05_remote_login.md)
-- [RDK dedicated commands reference](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md) (`devmem`/`hrut_boardid`/`hrut_socuid`/`rdkos_info`)
+- [Initial configuration](04_configuration_wizard.md)
+- RDK dedicated commands reference: [devmem](../../09_Appendix/rdk-command-manual/01_devmem.md), [hrut_boardid](../../09_Appendix/rdk-command-manual/02_hrut_boardid.md), [hrut_socuid](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md), [rdkos_info](../../09_Appendix/rdk-command-manual/06_rdkos_info.md)

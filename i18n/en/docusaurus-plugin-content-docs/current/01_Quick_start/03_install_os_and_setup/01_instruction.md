@@ -39,6 +39,7 @@ Before you start flashing, make sure you have:
 - [ ] A PC (Windows/Linux/macOS) for running the XBurn flashing tool.
 - [ ] A shielded Type-C data cable that supports data transfer (not a charge-only cable).
 - [ ] The power adapter bundled with the development board.
+- Completed: basic peripheral connection in [Getting Started with RDK](../02_getting_started.md).
 
 ## Safety notes
 

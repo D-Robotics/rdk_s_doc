@@ -41,7 +41,7 @@ RDK S600 系统提供了两个默认账户：
 </DocScope>
 
 - **普通用户：** 用户名 `sunrise`，密码 `sunrise`
-- **超级用户 (root)：** 用户名 `root`，密码 `root`
+- **超级用户（root）：** 用户名 `root`，密码 `root`
 
 ## 连接 Wi-Fi
 
@@ -50,13 +50,13 @@ RDK S600 系统提供了两个默认账户：
 
 <DocScope products="RDK S100">
 
-参考 Ubuntu 22.04 Wi-Fi 链接教程进行。
+在 Ubuntu 22.04 桌面环境中，点击桌面右上角 Wi-Fi 图标，选择热点并输入密码完成连接。操作图示见 [网络配置 - 无线网络](../../02_System_configuration/01_network_config.md#无线网络)。
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-参考 Ubuntu 24.04 Wi-Fi 链接教程进行。
+在 Ubuntu 24.04 桌面环境中，点击桌面右上角 Wi-Fi 图标，选择热点并输入密码完成连接。操作图示见 [网络配置 - 无线网络](../../02_System_configuration/01_network_config.md#无线网络)。
 
 </DocScope>
 
@@ -102,7 +102,7 @@ Device 'wlan0' successfully activated with 'd7468833-4195-45aa-aa33-3d43da86e1a7
 
 使用 systemctl 命令可以查看 SSH 服务当前的运行状态，命令如下：
 
-```
+```bash
 sudo systemctl status ssh
 ```
 
@@ -123,7 +123,7 @@ sudo systemctl restart ssh #重启 SSH 服务
 
 </Tabs>
 
-SSH 的使用请查看 [远程登录 - SSH 登录](./remote_login#ssh)。
+SSH 的使用请查看 [远程登录 - SSH 登录](./05_remote_login.md#ssh)。
 
 ## 设置登录模式
 
@@ -175,7 +175,7 @@ ExecStart=-/sbin/agetty --autologin root -o '-p -- \\u' --keep-baud 921600,11520
 
 ## 设置中文环境
 
-1. 安装命令包
+1. 安装语言包
 
 ```bash
 sudo apt install language-pack-zh-hans language-pack-zh-hans-base fonts-wqy-microhei
@@ -246,7 +246,7 @@ NoMachine 下载官方网址： [NoMachine Download](https://downloads.nomachine
 
 ```shell
 sudo apt update; sudo apt upgrade -y   # 确保当前软件是较新的状态
-dpkg -i nomachine_*_arm64.deb
+sudo dpkg -i nomachine_*_arm64.deb
 ```
 
 **配置启动**
@@ -295,7 +295,7 @@ dpkg -i nomachine_*_arm64.deb
 
 由于`NXServer`的配置问题，完成上述操作后直接连接会黑屏，需要重启后使用。
 
-`NoMachine`的使用请查看 [远程登录 - NoMachine登录](./remote_login#nomachine-登录)。
+`NoMachine`的使用请查看 [远程登录 - NoMachine登录](./05_remote_login.md#nomachine-登录)。
 
 ## 用户管理
 

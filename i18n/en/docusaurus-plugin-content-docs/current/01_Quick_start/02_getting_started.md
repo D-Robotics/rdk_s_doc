@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 This page guides you through connecting the basic peripherals and completing the first boot after you receive an RDK development board. Simply connect the power, display, and input devices to enter the desktop environment (Desktop edition) or the console (Server edition), preparing the board for the subsequent flashing, configuration, and development.
 
-> For the installation of accessories such as the Camera Expansion Board and the MCU Port Expansion Board, see the documents of each board under [Hardware Introduction](/01_Quick_start/01_hardware_introduction/03_expansion_board). For in-depth network configuration, see [Network Configuration](../02_System_configuration/01_network_config.md). For flashing the OS, see [OS Flashing](./03_install_os_and_setup/01_instruction.md).
+> For the installation of accessories such as the Camera Expansion Board and the MCU Port Expansion Board, see the documents of each board under [Expansion Boards](/01_Quick_start/01_hardware_introduction/03_expansion_board). For in-depth network configuration, see [Network Configuration](../02_System_configuration/01_network_config.md). For flashing the OS, see [OS Flashing](./03_install_os_and_setup/01_instruction.md).
 
 ## Prerequisites
 
@@ -71,8 +71,20 @@ The RDK S600 boots from the onboard **UFS**. The boot device selection is determ
 
 ## Keyboard and Mouse
 
-- **Wired keyboard and mouse**: Simply plug them into a **USB Type-A** port of the development board. The RDK S100 provides 4 USB 3.0 Type-A ports, and the RDK S600 provides 6 USB 3.2 Type-A ports.
+- **Wired keyboard and mouse**: Simply plug them into a **USB Type-A** port of the development board.
 - **Bluetooth keyboard and mouse**: You must first install the Wi-Fi & Bluetooth module (M.2 Key E interface). For pairing instructions, see [Bluetooth Configuration](../02_System_configuration/02_bluetooth_config.md).
+
+<DocScope products="RDK S100">
+
+The RDK S100 provides 4 USB 3.0 Type-A ports.
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+The RDK S600 provides 6 USB 3.2 Type-A ports.
+
+</DocScope>
 
 ## Display
 
@@ -94,7 +106,19 @@ Once connected, power on the board. On the first boot, the system performs the d
 
 ## Audio
 
-Audio can be output via HDMI (built-in speakers of the monitor/TV) or via the onboard audio interface. The RDK S100 provides an onboard I2S/PCM audio interface; for the audio output configuration, see [Audio Configuration](../02_System_configuration/10_audio_output.md).
+Audio can be output via HDMI (built-in speakers of the monitor/TV) or via the onboard audio interface. For the audio output configuration, see [Audio Configuration](../02_System_configuration/10_audio_output.md).
+
+<DocScope products="RDK S100">
+
+The RDK S100 provides an onboard I2S/PCM audio interface.
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+The RDK S600 provides a PCM+I2C interface (J19) for connecting audio-related function daughter boards. See [Introduction to the S600 Hardware](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit).
+
+</DocScope>
 
 ## Network
 
@@ -152,7 +176,7 @@ The USB Type-A ports are used for connecting storage devices such as USB flash d
 
 ## Related Documentation
 
-- [Hardware Introduction](/01_Quick_start/01_hardware_introduction/03_expansion_board)
+- [Expansion Boards](/01_Quick_start/01_hardware_introduction/03_expansion_board)
 - [OS Flashing](./03_install_os_and_setup/01_instruction.md)
 - [System Status Query](03_install_os_and_setup/03_system_status.md)
 - [Initial Configuration](03_install_os_and_setup/04_configuration_wizard.md)

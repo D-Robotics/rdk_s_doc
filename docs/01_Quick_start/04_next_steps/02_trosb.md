@@ -7,7 +7,7 @@ description: "TogetheROS.Bot（tros.b）机器人中间件使用指南"
 
 # 使用 TogetheROS.Bot
 
-**TogetheROS.Bot**（简称 **tros.b**）是 D-Robotics 基于 ROS 2 打造的机器人中间件，预装在 RDK OS 镜像中，为 RDK 开发板提供感知、规控、建图等机器人应用开发能力。
+**TogetheROS.Bot**（简称 **tros.b**）是 D-Robotics 基于 ROS 2 打造的机器人中间件，通过 RDK OS 镜像提供，为 RDK 开发板提供感知、规控、建图等机器人应用开发能力。
 
 ## 什么是 tros.b
 
@@ -42,7 +42,7 @@ tros.b 运行在 RDK OS 之上，通过 BPU 硬件加速实现高能效的机器
 
 | 方面 | 原生 ROS 2 | tros.b |
 | --- | --- | --- |
-| 安装 | 手动安装 ROS 2 + 依赖 | 预装在 RDK OS 镜像，开箱即用 |
+| 安装 | 手动安装 ROS 2 + 依赖 | 烧录带 tros.b 的镜像后开箱即用 |
 | 模型推理 | CPU 推理或自行集成 | BPU 加速节点，模型已转换量化 |
 | 传感器同步 | 软件时间戳 | 硬件级 LPWM/PPS 同步 |
 | 性能 | 受 CPU 限制 | BPU + MCU 异构加速 |
@@ -150,7 +150,9 @@ def generate_launch_description():
             package='tros_perception',
             executable='yolo_detection',
             parameters=[{
-                'model': '/app/model/yolov5x.bin',
+                # 模型路径以 S600 为例，S100 对应 /opt/hobot/model/s100/basic/
+                'model': '/opt/hobot/model/s600/basic/'
+                         'yolov5x_672x672_nv12.hbm',
                 'camera': 'mipi_cam0',
             }],
         ),

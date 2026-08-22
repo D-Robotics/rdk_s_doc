@@ -39,9 +39,9 @@ RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 
 
 为避免本扩展板故障或损坏，请严格遵守以下事项：
 
-1. 环境要求 ​：运行时请勿接触水、湿气或导电物体表面，远离热源（如暖气、阳光直射），确保工作环境温度符合产品规格书要求。
-2. 装配操作 ​：装配过程中需轻拿轻放，避免对印刷电路板（PCB）及连接器施加机械压力或电气干扰（如静电触碰）。
-3. 通电操作 ​：通电状态下禁止直接触摸 PCB 板面或设备边缘金属接口，降低静电放电（ESD）损坏风险。
+1. 环境要求：运行时请勿接触水、湿气或导电物体表面，远离热源（如暖气、阳光直射），确保工作环境温度符合产品规格书要求。
+2. 装配操作：装配过程中需轻拿轻放，避免对印刷电路板（PCB）及连接器施加机械压力或电气干扰（如静电触碰）。
+3. 通电操作：通电状态下禁止直接触摸 PCB 板面或设备边缘金属接口，降低静电放电（ESD）损坏风险。
 
 :::
 
@@ -69,7 +69,7 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 | **名称** | **参数**                                                                        |
 | -------- | ------------------------------------------------------------------------------- |
-| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x I2C, 2x SPI<br/> |
+| 接口     | 5 x CAN FD（最高 8Mbps） <br />1 x 30-pin，具有最多 7x ADC, 2x I2C, 2x SPI |
 | 板载模组 | IMU：BMI088（SPI）                                                              |
 | 工作温度 | 0℃~65℃                                                                          |
 | 尺寸     | 70x70x17mm                                                                      |
@@ -112,7 +112,7 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 接口定义: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s600/rdk_s600/rdk_s600_mcu_port_expansion_board/drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx">drobotics_rdk_s600_mcu_port_expansion_board_pinlist_v1p0.xlsx</a>
 
 :::info 提示
-30-Pin Connector 中如下 5 个 IO 接外设使用时，必须保证外设对应管脚上电默认高/低状态与 Pin 定义文件中的 Pull Up/Down 状态保持一致，不允许添加/连接额外上下拉：
+30-Pin Connector 中如下 6 个 IO 接外设使用时，必须保证外设对应管脚上电默认高/低状态与 Pin 定义文件中的 Pull Up/Down 状态保持一致，不允许添加/连接额外上下拉：
 
 - PIN11: MCU_GPIO0_3V3
 - PIN15: MCU_SPI4_CSN0_3V3

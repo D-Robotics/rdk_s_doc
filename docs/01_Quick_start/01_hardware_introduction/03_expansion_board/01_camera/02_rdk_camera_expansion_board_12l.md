@@ -29,9 +29,9 @@ sidebar_products: RDK S100
 
 为避免本扩展板故障或损坏，请严格遵守以下事项：
 
-1. 环境要求 ​：运行时请勿接触水、湿气或导电物体表面，远离热源（如暖气、阳光直射），确保工作环境温度符合产品规格书要求。
-2. 装配操作 ​：装配过程中需轻拿轻放，避免对印刷电路板（PCB）及连接器施加机械压力或电气干扰（如静电触碰）。
-3. 通电操作 ​：通电状态下禁止直接触摸 PCB 板面或设备边缘金属接口，降低静电放电（ESD）损坏风险。
+1. 环境要求：运行时请勿接触水、湿气或导电物体表面，远离热源（如暖气、阳光直射），确保工作环境温度符合产品规格书要求。
+2. 装配操作：装配过程中需轻拿轻放，避免对印刷电路板（PCB）及连接器施加机械压力或电气干扰（如静电触碰）。
+3. 通电操作：通电状态下禁止直接触摸 PCB 板面或设备边缘金属接口，降低静电放电（ESD）损坏风险。
 
 :::
 
@@ -69,7 +69,7 @@ sidebar_products: RDK S100
 </div>
 
 
-### 相机安装说明
+## 相机安装说明
 
 <div className="table-responsive">
 
@@ -82,7 +82,7 @@ sidebar_products: RDK S100
 
 </div>
 
-### 组装说明
+## 组装说明
 
 :::danger
 
@@ -92,7 +92,7 @@ sidebar_products: RDK S100
 :::
 
 
-#### 扩展板组装说明
+### 扩展板组装说明
 
 <video controls width="100%" preload="metadata">
   <source src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/video/camera_expansion_board_assembly_guide_12l.mp4" type="video/mp4" />
@@ -136,7 +136,7 @@ Camera 扩展板集成了 3 颗 MAX96712 解串芯片，每颗能够接入 4 路
 :::
 
 
-## 电源指示灯（D2000）
+### 电源指示灯（D2000）
 
 电源指示灯，其位置在 DC 电源输入接口旁边。
 

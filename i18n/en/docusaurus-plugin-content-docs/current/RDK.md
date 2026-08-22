@@ -17,7 +17,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **D-Robotics Developer Kits**, abbreviated as RDK kits, are robot developer kits built on the D-Robotics computing platform, covering both hardware boards and supporting software to help developers rapidly build robot prototypes and carry out evaluation and validation. The hardware product line of the kits includes RDK X3, RDK X3 Module, RDK X5, RDK Ultra, the RDK S100 series, and the RDK S600 series. This manual targets the **RDK S100 / RDK S600**.
 
-RDK OS is a board-level operating system image customized based on Ubuntu, and it works out of the box right after flashing. The TogetheROS.Bot (tros.b) robotics middleware is preinstalled in the image. See Product Consensus (standard repository) for details.
+RDK OS is a board-level operating system image customized based on Ubuntu, and it works out of the box right after flashing. The TogetheROS.Bot (tros.b) robotics middleware is preinstalled in the image. See [RDK OS Introduction](#rdk-os-introduction) below for details.
 
 :::note Note
 Check the system version number: `cat /etc/version`; use `rdkos_info` to view board and runtime information. See [System Status Query](./01_Quick_start/03_install_os_and_setup/03_system_status.md) for details.
@@ -27,7 +27,7 @@ Check the system version number: `cat /etc/version`; use `rdkos_info` to view bo
 
 <DocScope products="RDK S100">
 
-The **RDK S100 series** is a high-performance development kit featuring 80/128 TOPS of on-device inference capability and 6-core ARM A78AE processing power. It supports 2 MIPI camera inputs, 4 USB 3.0 ports, and 2 PCIe3.0 interfaces, fully meeting the requirements of various scenarios.
+The **RDK S100 series** is a high-performance development kit featuring 80/128 TOPS of on-device inference capability and 6-core ARM A78AE processing power. It supports 2 MIPI camera inputs, 4 USB 3.0 ports, and 2 PCIe 3.0 interfaces, fully meeting the requirements of various scenarios.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="RDK S100 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -35,7 +35,7 @@ The **RDK S100 series** is a high-performance development kit featuring 80/128 T
 
 <DocScope products="RDK S600">
 
-The **RDK S600 series** is a high-performance development kit featuring 560 TOPS of on-device inference capability and 18-core ARM A78AE processing power. It supports 6 MIPI camera inputs, 6 USB 3.0 ports, and 4 PCIe3.0 interfaces, fully meeting the requirements of various scenarios.
+The **RDK S600 series** is a high-performance development kit featuring 560 TOPS of on-device inference capability and 18-core ARM A78AE processing power. It supports 2 MIPI camera and 6 GMSL camera inputs, 6 USB 3.0 ports, and 4 PCIe 3.0 interfaces, fully meeting the requirements of various scenarios.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="RDK S600 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -57,7 +57,7 @@ RDK OS works out of the box with:
 
 ## Resource Index
 
-> Download system images, tools, and hardware materials here. For commercial materials, switch to the **FTP download** option and obtain them from the FTP server following the paths in the tables.
+> Download system images, tools, and hardware materials here. Commercial edition materials are obtained through the questionnaire and NDA process; see the [Commercial Edition Materials](#commercial-edition-materials) section below.
 
 ### System Images
 
@@ -71,7 +71,7 @@ RDK OS works out of the box with:
 | Tool | Description |
 | --- | --- |
 | [XBurn](https://developer.d-robotics.cc/xburn_doc/install) | System flashing tool |
-| [RDK Studio](https://developer.d-robotics.cc/) | Integrated development environment |
+| [RDK Studio](https://developer.d-robotics.cc/rdkstudio) | Integrated development environment |
 | Cross-compilation toolchain | See [Setting Up the Development Environment](/Advanced_development/environment_build/environment_build) |
 
 ### Hardware Materials
@@ -112,7 +112,7 @@ Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby7
 | Mode 2 Product Integration | R&D at product companies | Chapter 2 System Configuration + system customization in Chapter 5 Advanced Development (apt/configuration layer/image rebuilding) |
 | Mode 3 Deep Customization | Commercial customers/deep-diver teams | The entire Chapter 5 Advanced Development (deb/drivers/multimedia/MCU/toolchain/VDSP) |
 
-See Product Consensus (standard repository) §3 for details.
+For the recommended path of each mode, see the table above.
 
 ## Version Releases
 

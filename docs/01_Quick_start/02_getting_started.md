@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 本页指导你在拿到 RDK 开发板后，连接基础外设并完成首次启动。只需接好电源、显示器和输入设备，即可进入桌面环境（Desktop 版）或控制台（Server 版），为后续烧录、配置和开发做准备。
 
-> 相机扩展板、MCU 接口扩展板等配件的安装见 [硬件介绍](/01_Quick_start/01_hardware_introduction/03_expansion_board) 各板卡文档。网络深度配置见 [网络配置](../02_System_configuration/01_network_config.md)。烧录系统见 [系统烧录](./03_install_os_and_setup/01_instruction.md)。
+> 相机扩展板、MCU 接口扩展板等配件的安装见 [扩展板介绍](/01_Quick_start/01_hardware_introduction/03_expansion_board) 各板卡文档。网络深度配置见 [网络配置](../02_System_configuration/01_network_config.md)。烧录系统见 [系统烧录](./03_install_os_and_setup/01_instruction.md)。
 
 ## 前置条件
 
@@ -71,8 +71,20 @@ RDK S600 从板载 **UFS** 启动。启动盘选择由 **SW8 BOOT** 拨码决定
 
 ## 键盘与鼠标
 
-- **有线键鼠**：插入开发板的 **USB Type-A** 接口即可。RDK S100 提供 4 个 USB 3.0 Type-A 接口，RDK S600 提供 6 个 USB 3.2 Type-A 接口。
+- **有线键鼠**：插入开发板的 **USB Type-A** 接口即可。
 - **蓝牙键鼠**：需先安装 Wi-Fi & 蓝牙模组（M.2 Key E 接口），配对方法见 [蓝牙配置](../02_System_configuration/02_bluetooth_config.md)。
+
+<DocScope products="RDK S100">
+
+RDK S100 提供 4 个 USB 3.0 Type-A 接口。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+RDK S600 提供 6 个 USB 3.2 Type-A 接口。
+
+</DocScope>
 
 ## 显示器
 
@@ -94,7 +106,19 @@ RDK S600 提供 1 个 HDMI 接口。
 
 ## 音频
 
-音频可通过 HDMI 输出（显示器/电视自带扬声器）或板载音频接口输出。RDK S100 提供板载 I2S/PCM 音频接口；具体音频输出配置见 [音频配置](../02_System_configuration/10_audio_output.md)。
+音频可通过 HDMI 输出（显示器/电视自带扬声器）或板载音频接口输出。具体音频输出配置见 [音频配置](../02_System_configuration/10_audio_output.md)。
+
+<DocScope products="RDK S100">
+
+RDK S100 提供板载 I2S/PCM 音频接口。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+RDK S600 提供 PCM+I2C 接口（J19），用于接入音频相关功能子卡，见 [S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit)。
+
+</DocScope>
 
 ## 网络
 
@@ -152,7 +176,7 @@ USB Type-A 接口用于连接 U 盘、移动硬盘等存储设备。USB Type-C �
 
 ## 相关文档
 
-- [硬件介绍](/01_Quick_start/01_hardware_introduction/03_expansion_board)
+- [扩展板介绍](/01_Quick_start/01_hardware_introduction/03_expansion_board)
 - [系统烧录](./03_install_os_and_setup/01_instruction.md)
 - [系统状态查询](03_install_os_and_setup/03_system_status.md)
 - [入门配置](03_install_os_and_setup/04_configuration_wizard.md)

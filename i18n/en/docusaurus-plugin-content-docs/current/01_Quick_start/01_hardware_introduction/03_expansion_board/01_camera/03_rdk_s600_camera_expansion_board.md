@@ -62,7 +62,7 @@ To avoid malfunction or damage of this expansion board, strictly observe the fol
 | ----------- | ----------------------------------------------------------------------------------------------------- |
 | Deserializer | 2x Maxim MAX96712                                                                                    |
 | GMSL connectors | 2x FAKRA-Mini 4in1                                                                              |
-| External power supply | 12V DC, used only when the current demand is greater than 2.4A, maximum 4.8A.               |
+| External power supply | 12V DC, used only when the current demand is greater than 700mA, maximum 4.8A.               |
 | Operating temperature | 0℃~65℃                                                                                          |
 
 ### Topology Diagram
