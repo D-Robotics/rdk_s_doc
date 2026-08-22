@@ -38,7 +38,7 @@ description: "用 hbm_runtime Python 接口部署 YOLO11 做实例分割的预�
 
 | 参数 | 说明 | 默认值 |
 |---|---|---|
-| `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm`（S100 对应 `s100/basic/`） |
+| `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm`；S100: `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
 | `--test-img` | 测试图片路径 | `/app/res/assets/office_desk.jpg` |
 | `--label-file` | 类别标签（COCO 80 类） | `/app/res/labels/coco_classes.names` |
 | `--img-save-path` | 输出结果图保存路径 | `result.jpg` |
@@ -60,13 +60,13 @@ python ultralytics_yolo11_seg.py
 
 ## 运行效果
 
-以下是 RDK S600 上的实测输出（测试图 `office_desk.jpg`）：
+以下是 RDK S600 上的实测输出（节选，测试图 `office_desk.jpg`）：
 
 ```text
 Model Description:
  - yolo11n_seg_nashp_640x640_nv12_debug: {"MARCH": "nash-p",
    "INPUT_SHAPE": "1x3x640x640", "INPUT_TYPE_RT": "nv12",
-   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]", ...}
+   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
 yolo11n_seg_nashp_640x640_nv12_debug:

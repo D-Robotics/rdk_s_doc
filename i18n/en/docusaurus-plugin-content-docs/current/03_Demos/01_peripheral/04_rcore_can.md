@@ -20,7 +20,7 @@ This example demonstrates sending and receiving data over the CAN bus on the RDK
 
 On-board path: `/app/Can/`
 
-```
+```text
 Can/
 ├── can_get/         # HAL approach: receive CAN data
 ├── can_send/        # HAL approach: send CAN data

@@ -117,3 +117,5 @@ WebSocket server started on ws://0.0.0.0:8080
 - [Video Decode and YOLOv5x Inference (C/C++)](./04_decode.md)
 - [Object Detection - YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
 - [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [Python Inference API](../../../04_Simple_API/02_inference_api/02_python_api.md)
+- [Camera Object](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)

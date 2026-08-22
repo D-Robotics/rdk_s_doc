@@ -13,14 +13,16 @@ description: "用 hbm_runtime Python 接口部署 YOLO11 做目标检测的预�
 ## 前置条件
 
 - 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
-- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`。
+- 预装模型已就位：
+  - S100：`/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`
+  - S600：`/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`
 - Python 环境与 `hbm_runtime` 已随镜像预装。
 
 ## 参数说明
 
 | 参数 | 说明 | 默认值 |
 |---|---|---|
-| `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm` |
+| `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`；S100: `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm` |
 | `--test-img` | 测试图片路径 | `/app/res/assets/kite.jpg` |
 | `--label-file` | 类别标签（COCO 80 类） | `/app/res/labels/coco_classes.names` |
 | `--img-save-path` | 检测结果图保存路径 | `result.jpg` |
@@ -40,17 +42,17 @@ python ultralytics_yolo11.py
 
 - 须先 `cd` 进示例目录再运行：脚本依赖上级目录的公共 `utils` 模块，在其他目录运行会报 `No module named 'utils'`。
 - 检测结果图 `result.jpg` 保存在当前工作目录（即示例目录），在其他目录运行会找不到结果图。
-- 模型须位于默认路径 `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`，缺失时 `--model-path` 需显式指定。
+- 模型须位于默认路径（S600 为 `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`，S100 为 `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`），缺失时 `--model-path` 需显式指定。
 
 ## 运行效果
 
-以下是 RDK S600 上的实测输出（测试图 `kite.jpg`）：
+以下是 RDK S600 上的实测输出（节选，测试图 `kite.jpg`）：
 
 ```text
 Model Description:
  - yolo11n_detect_nashp_640x640_nv12_beta: {"MARCH": "nash-p",
    "INPUT_SHAPE": "1x3x640x640", "INPUT_TYPE_RT": "nv12",
-   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]", ...}
+   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
   priority    : 0

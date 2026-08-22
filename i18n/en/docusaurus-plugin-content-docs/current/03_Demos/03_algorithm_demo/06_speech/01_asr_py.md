@@ -21,7 +21,7 @@ Neither the S100 nor the S600 system image bundles the `asr.hbm` model. Before r
 ## Prerequisites
 
 - The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
-- The pre-installed models are in place (not bundled in the image, download from the RDK model zoo, see [Model files](../../04_demo_support/01_model_files.md)):
+- The ASR model must be downloaded and placed manually (not bundled in the image, download from the RDK model zoo, see [Model files](../../04_demo_support/01_model_files.md)):
   - S100: `/opt/hobot/model/s100/basic/asr.hbm`
   - S600: `/opt/hobot/model/s600/basic/asr.hbm`
 - Install `soundfile` (for audio reading):
@@ -80,12 +80,12 @@ After a successful run, the recognized text is printed to the terminal.
 
 ## Execution Results
 
-The following is actual output on RDK S600 (test audio `chi_sound.wav`, whose content is "我是来自阿里云的大规模语言模型叫做通义千问"):
+The following is actual output (excerpt) on RDK S600 (test audio `chi_sound.wav`, whose content is "我是来自阿里云的大规模语言模型叫做通义千问"):
 
 ```text
 Model Description:
  - asr: {"MARCH": "nash-p", "INPUT_SHAPE": "1x30000",
-   "INPUT_TYPE_RT": "featuremap", "NORM_TYPE": "no_preprocess", ...}
+   "INPUT_TYPE_RT": "featuremap", "NORM_TYPE": "no_preprocess"}
 
 === Scheduling Parameters ===
 asr:

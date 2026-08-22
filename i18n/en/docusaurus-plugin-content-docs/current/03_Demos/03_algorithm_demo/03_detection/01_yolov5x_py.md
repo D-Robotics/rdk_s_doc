@@ -83,13 +83,13 @@ After it runs successfully, the detection boxes are drawn on the original image 
 
 ## Execution Results
 
-The program loads the model, runs inference and NMS post-processing, draws boxes, and saves the result. The following is actual output on RDK S600 (test image `kite.jpg`):
+The program loads the model, runs inference and NMS post-processing, draws boxes, and saves the result. The following is actual output (excerpt) on RDK S600 (test image `kite.jpg`):
 
 ```text
 Model Description:
  - yolov5x_672x672_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x672x672",
    "INPUT_TYPE_RT": "nv12", "NORM_TYPE": "data_scale",
-   "SCALE_VALUE": "[0.003921568627451]", ...}
+   "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
 yolov5x_672x672_nv12:

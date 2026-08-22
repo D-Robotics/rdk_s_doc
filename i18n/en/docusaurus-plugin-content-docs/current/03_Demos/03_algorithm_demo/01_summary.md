@@ -52,4 +52,5 @@ The models bundled with the demos are already quantized to `.hbm`. To use your o
 - [C/C++ Demo Build Guide](../04_demo_support/02_c_cpp_build.md)
 - [Python Demo Build Guide](../04_demo_support/03_python_build.md)
 - [Using Your Own Model](../04_demo_support/04_custom_model.md)
+- [C Inference API](../../04_Simple_API/02_inference_api/01_c_api.md)
 - [Python Inference API](../../04_Simple_API/02_inference_api/02_python_api.md)

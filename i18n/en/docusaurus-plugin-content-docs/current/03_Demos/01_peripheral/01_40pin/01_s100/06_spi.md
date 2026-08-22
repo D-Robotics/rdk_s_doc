@@ -35,7 +35,7 @@ Connect MISO and MOSI directly together on the hardware with a jumper cap:
 - Run `python3 /app/40pin_samples/test_spi.py`
 - Select a bus number and chip select number from the printed spi controllers as input options. For example, to test `spidev0.0`, both `bus num` and `cs num` are `0`; press Enter to confirm:
 
-```
+```text
 List of enabled spi controllers:
 /dev/spidev0.0
 /dev/spidev0.1
@@ -45,7 +45,7 @@ Please input SPI cs num (default 0):0
 
 - After shorting MISO and MOSI, if the program runs correctly it will continuously print `0x55 0xAA`:
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 0x55 0xAA
 0x55 0xAA
@@ -53,7 +53,7 @@ Starting demo now! Press CTRL+C to exit
 
 - If MISO/MOSI are not shorted (loopback failed), what is read back is the default level of MISO (measured as `0xFF 0xFF` on this board), which does not match the written value:
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 0xFF 0xFF
 0xFF 0xFF

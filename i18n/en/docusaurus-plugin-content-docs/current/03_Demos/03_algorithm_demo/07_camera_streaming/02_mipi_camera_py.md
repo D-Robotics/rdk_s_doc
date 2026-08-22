@@ -104,3 +104,4 @@ Indicators of success after connecting a MIPI camera (per the source code `01_mi
 - [C++ MIPI Camera Sample](./02_mipi_camera.md)
 - [Object Detection - YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
 - [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [Python Inference API](../../../04_Simple_API/02_inference_api/02_python_api.md)

@@ -1,6 +1,7 @@
 ---
 title: "IMU Application"
 sidebar_position: 5
+sidebar_products: RDK S600
 description: "Example of reading IMU sensor data on RDK S600 (BMI08X/ICM42688)"
 ---
 
@@ -21,7 +22,7 @@ This example reads data via the Linux IIO subsystem, and is currently shipped wi
 
 On-board path: `/app/sample_imu/`
 
-```
+```text
 sample_imu/
 ├── Makefile
 ├── sample_imu.c       # Main program: parses arguments + interactively reads IMU data

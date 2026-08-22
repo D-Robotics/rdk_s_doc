@@ -13,14 +13,16 @@ The sample code is located in the `/app/pydev_demo/classification_sample/mobilen
 ## Prerequisites
 
 - The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
-- The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`.
+- The pre-installed model is in place:
+  - S100: `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`
+  - S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`
 - The Python environment and `hbm_runtime` are pre-installed with the image.
 
 ## Parameters
 
 | Parameter | Description | Default |
 |---|---|---|
-| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
+| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`; S100: `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm` |
 | `--test-img` | Test image path | `/app/res/assets/zebra_cls.jpg` |
 | `--label-file` | Class labels (imagenet 1000 classes) | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--priority` | Model scheduling priority | `0` |
@@ -36,17 +38,17 @@ python mobilenetv2.py
 **Notes**:
 
 - You must first `cd` into the sample directory before running it: the script depends on the common `utils` module in the parent directory, and running it in another directory will fail with `No module named 'utils'`.
-- The model must be located at the default path `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`. If missing, `--model-path` must be explicitly specified.
+- The model must be located at the default path (S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`, S100: `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`). If missing, `--model-path` must be explicitly specified.
 
 ## Execution Results
 
-Actual output on RDK S600 (test image `zebra_cls.jpg`):
+Actual output (excerpt) on RDK S600 (test image `zebra_cls.jpg`):
 
 ```text
 Model Description:
  - mobilenetv2_224x224_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x224x224",
    "INPUT_TYPE_RT": "nv12", "NORM_TYPE": "data_mean_and_scale",
-   "MEAN_VALUE": "[103.94, 116.78, 123.68]", "SCALE_VALUE": "[0.017]", ...}
+   "MEAN_VALUE": "[103.94, 116.78, 123.68]", "SCALE_VALUE": "[0.017]"}
 
 Top-5 Predictions:
 zebra: 0.9927

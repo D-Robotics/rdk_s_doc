@@ -59,13 +59,13 @@ python ultralytics_yolo11_pose.py
 
 ## 运行效果
 
-以下是 RDK S600 上的实测输出（测试图 `bus.jpg`）：
+以下是 RDK S600 上的实测输出（节选，测试图 `bus.jpg`）：
 
 ```text
 Model Description:
  - yolo11n_pose_nashp_640x640_nv12_debug: {"MARCH": "nash-p",
    "INPUT_SHAPE": "1x3x640x640", "INPUT_TYPE_RT": "nv12",
-   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]", ...}
+   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
 yolo11n_pose_nashp_640x640_nv12_debug:

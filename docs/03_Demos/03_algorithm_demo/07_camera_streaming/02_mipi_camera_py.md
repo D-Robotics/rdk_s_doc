@@ -104,3 +104,4 @@ No camera sensor found, please check whether the camera connection or video_idx 
 - [C++ 版 MIPI Camera 示例](./02_mipi_camera.md)
 - [目标检测-YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)

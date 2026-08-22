@@ -66,7 +66,7 @@ make -j$(nproc)
 
 | 参数 | 说明 | 默认值 |
 |---|---|---|
-| `--model_path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm`（S100 对应 `s100/basic/`） |
+| `--model_path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm`；S100: `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
 | `--test_img` | 测试图片路径 | `/app/res/assets/office_desk.jpg` |
 | `--label_file` | 类别标签（COCO 80 类） | `/app/res/labels/coco_classes.names` |
 | `--score_thres` | 置信度阈值 | `0.25` |

@@ -129,3 +129,4 @@ No USB camera found under /dev/video*.
 - [目标检测-YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
 - [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [C 语言推理 API](../../../04_Simple_API/02_inference_api/01_c_api.md)

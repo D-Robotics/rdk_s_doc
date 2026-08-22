@@ -1,11 +1,11 @@
 ---
 sidebar_position: 4
-title: "Instance Segmentation - Ultralytics YOLOE11"
+title: "Instance Segmentation - Ultralytics YOLOE11 (Python)"
 description: Instance Segmentation - Ultralytics YOLOE11
 sidebar_products: RDK S100
 ---
 
-# Instance Segmentation - Ultralytics YOLOE11
+# Instance Segmentation - Ultralytics YOLOE11 (Python)
 
 :::info S100 only
 This sample applies only to RDK S100. The RDK S600 image does not include the corresponding hbm model, and the related sample code is only shipped with the system image on S100; it is not supported on S600 yet.

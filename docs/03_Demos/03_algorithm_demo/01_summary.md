@@ -52,4 +52,5 @@ Model Zoo GitHub：https://github.com/D-Robotics/rdk_model_zoo
 - [C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)
 - [Python demo 编程指南](../04_demo_support/03_python_build.md)
 - [使用自己的模型](../04_demo_support/04_custom_model.md)
+- [C 语言推理 API](../../04_Simple_API/02_inference_api/01_c_api.md)
 - [Python 推理 API](../../04_Simple_API/02_inference_api/02_python_api.md)

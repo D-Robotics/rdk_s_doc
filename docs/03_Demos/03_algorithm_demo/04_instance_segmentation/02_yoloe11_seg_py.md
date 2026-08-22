@@ -1,11 +1,11 @@
 ---
 sidebar_position: 4
-title: "实例分割-Ultralytics YOLOE11"
+title: "实例分割-Ultralytics YOLOE11 (Python)"
 description: 实例分割-Ultralytics YOLOE11
 sidebar_products: RDK S100
 ---
 
-# 实例分割-Ultralytics YOLOE11
+# 实例分割-Ultralytics YOLOE11 (Python)
 
 :::info S100 only
 本示例仅适用于 RDK S100。RDK S600 镜像未内置对应 hbm 模型，相关示例代码也仅在 S100 上随系统镜像发布；S600 上暂不支持。

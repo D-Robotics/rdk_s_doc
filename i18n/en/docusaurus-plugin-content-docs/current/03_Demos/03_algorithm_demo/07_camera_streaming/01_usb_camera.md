@@ -129,3 +129,4 @@ Data flow: probe/open `/dev/video*` (V4L2) → capture BGR frames → letterbox 
 - [Object Detection - YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
 - [C/C++ Demo Programming Guide](../../04_demo_support/02_c_cpp_build.md)
 - [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

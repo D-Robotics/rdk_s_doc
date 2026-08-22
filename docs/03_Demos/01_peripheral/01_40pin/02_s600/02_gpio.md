@@ -45,11 +45,13 @@ GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，相关脚本如下�
 
 - BOARD：物理引脚序号，与开发板的丝印序号一一对应。
 - BCM：根据博通 SoC 制定的 GPIO 命名规则。
-- CVM： 使用字符串代替数字，对应于 CVM / CVB 连接器的信号名称。
-- SOC： 对应的编号是芯片内部的 GPIO 管脚序号。
+- CVM：使用字符串代替数字，对应于 CVM / CVB 连接器的信号名称。
+- SOC：对应的编号是芯片内部的 GPIO 管脚序号。
 
 本文推荐用户使用`BOARD`编码模式，设置编码的方式如下：
-注意：编码每次只能设置一次，如果想要重新设置，需要`GPIO.cleanup()`后重新设置
+
+注意：编码每次只能设置一次，如果想要重新设置，需要`GPIO.cleanup()`后重新设置。
+
 ```python
 GPIO.setmode(GPIO.BOARD)
 # or
@@ -449,8 +451,8 @@ def signal_handler(signal, frame):
 
 
 # 定义使用的GPIO通道：
-# 15号作为输出，可以点亮一个LED
-# 16号作为输出，可以点亮一个LED
+# 1号作为输出，可以点亮一个LED
+# 2号作为输出，可以点亮一个LED
 # but_pin作为输入，可以接一个按钮
 led_pin_1 = 1  # BOARD 编码 1
 led_pin_2 = 2  # BOARD 编码 2
@@ -510,7 +512,7 @@ if __name__ == '__main__':
 ```
 ## hb_gpioinfo 工具介绍
 
-hb_gpioinfo 是适配 RDK S600的一个 gpio 帮助工具，可以查看当前开发板的的 PinName 和 PinNum 的对应关系，命令示例输出如下：
+hb_gpioinfo 是适配 RDK S600 的一个 GPIO 帮助工具，可以查看当前开发板的 PinName 和 PinNum 的对应关系，命令示例输出如下：
 ```shell
 sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|

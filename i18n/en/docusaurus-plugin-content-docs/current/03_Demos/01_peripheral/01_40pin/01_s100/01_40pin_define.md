@@ -17,7 +17,7 @@ The development board has an expansion pin header, making peripheral expansion e
 
 ## Expansion Pin Header Definition{#40pin_define}
 
-The RDKS100 has 40 pins, making peripheral expansion easy. The digital IOs are designed with 3.3V levels. The interface definitions are as follows:
+The RDK S100 has 40 pins, making peripheral expansion easy. The digital IOs are designed with 3.3V levels. The interface definitions are as follows:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_40pin.png" alt="Expansion pin header definition diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -39,7 +39,7 @@ Take `/app/40pin_samples/button_led.py` as an example: this program configures p
 
 ## Code Location
 
-All example code in this chapter is located in the on-board `/app/40pin_samples/` directory, containing 8 Python scripts:
+All example code in this chapter is located in the on-board `/app/40pin_samples/` directory, containing 9 Python scripts:
 
 ```text
 /app/40pin_samples/
@@ -48,6 +48,7 @@ All example code in this chapter is located in the on-board `/app/40pin_samples/
 ├── button_led.py        # Example of controlling LED output with button input
 ├── simple_input.py      # GPIO input example
 ├── simple_out.py        # GPIO output example
+├── simple_pwm.py        # PWM output example
 ├── test_i2c.py          # I2C bus scan and read/write example
 ├── test_serial.py       # UART loopback test example
 └── test_spi.py          # SPI loopback test example
@@ -55,7 +56,7 @@ All example code in this chapter is located in the on-board `/app/40pin_samples/
 
 ## Environment Preparation
 
-Use dupont wires to connect pin `24` to 3.3v or GND to control its high/low level.
+Use dupont wires to connect pin `24` to 3.3V or GND to control its high/low level.
 
 ## How to Run
 
@@ -71,7 +72,7 @@ root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 By controlling the high/low level of pin `24`, you can change the output level of pin `23`.
 
 ```bash
-root@ubuntu:/app/40pin_samples# ./button_led.py
+root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 Starting demo now! Press CTRL+C to exit
 Outputting 1 to Pin 23
 Outputting 0 to Pin 23

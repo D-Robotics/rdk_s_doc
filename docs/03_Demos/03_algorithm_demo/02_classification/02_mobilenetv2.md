@@ -14,7 +14,9 @@ description: "用 C/C++ 部署 MobileNetV2 做图像分类的预装示例"
 
 - 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - 板端有编译工具链（`cmake`、`make`、`g++`，镜像已预装）。
-- 预装模型已就位：S600 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`。
+- 预装模型已就位：
+  - S100：`/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`
+  - S600：`/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`
 
 ## 环境依赖
 
@@ -37,7 +39,7 @@ make -j$(nproc)
 
 | 参数 | 说明 | 默认值 |
 |---|---|---|
-| `--model_path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
+| `--model_path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`；S100: `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm` |
 | `--test_img` | 测试图片路径 | `/app/res/assets/zebra_cls.jpg` |
 | `--label_file` | 类别标签（imagenet） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--top_k` | 输出 Top-K 数 | `5` |
@@ -52,7 +54,7 @@ make -j$(nproc)
 
 - 须在 `build` 目录中运行，`--test_img`、`--label_file` 等默认路径均按板端预装目录给出。
 - 首次编译前需按"环境依赖"安装 `libgflags-dev`，否则 `make` 会报错。
-- 模型须位于默认路径 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`，缺失时 `--model_path` 需显式指定。
+- 模型须位于默认路径（S600 为 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`，S100 为 `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`），缺失时 `--model_path` 需显式指定。
 
 ## 运行效果
 

@@ -17,7 +17,7 @@ The development board has an expansion pin header, making peripheral expansion e
 
 ## Expansion Pin Header Definition{#pin_define}
 
-The RDKS600 has two 10-pin latching connectors, one 12-pin latching connector, and one 14-pin latching connector, making peripheral expansion easy. The digital IOs are designed with 1.8V levels. The interface definitions are as follows:
+The RDK S600 has two 10-pin latching connectors, one 12-pin latching connector, and one 14-pin latching connector, making peripheral expansion easy. The digital IOs are designed with 1.8V levels. The interface definitions are as follows:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mainboard_pin.png" alt="Expansion pin header definition photo" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -27,7 +27,7 @@ The pins mentioned below are for illustration only; port values differ across pl
 :::
 
 
-Under the development board's `/app/40pin_samples/` directory, functional test code for multiple PIN pins is provided, including gpio input/output tests, I2C, SPI, UART, etc. All test programs are written in Python; see the other modules in this chapter for details.
+Under the development board's `/app/40pin_samples/` directory, functional test code for multiple PIN pins is provided, including GPIO input/output tests, I2C, SPI, UART, etc. All test programs are written in Python; see the other modules in this chapter for details.
 
 Take `/app/40pin_samples/button_led.py` as an example: this program configures pin `4` as input and pin `3` as output, and controls the output state of pin `3` according to the input state of pin `4`.
 
@@ -66,7 +66,7 @@ root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 By controlling the high/low level of pin `4`, you can change the output level of pin `3`.
 
 ```bash
-root@ubuntu:/app/40pin_samples# ./button_led.py
+root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 Starting demo now! Press CTRL+C to exit
 Outputting 1 to Pin 3
 Outputting 0 to Pin 3
@@ -90,5 +90,6 @@ Outputting 1 to Pin 3
 ## Related Documentation
 
 - [Expansion Pin Application (S600)](/Demos/peripheral/40pin)
+- [GPIO Application](./02_gpio.md)
 - [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)
 - [Hardware Introduction](/01_hardware_introduction)

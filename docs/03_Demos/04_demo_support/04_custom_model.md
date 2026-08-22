@@ -22,12 +22,12 @@ description: "用自己的模型替换 demo 模型的入口"
 以 ResNet18 分类 demo 为例，把自己的模型 `my_model.hbm` 放到板端后：
 
 ```bash
-scp my_model.hbm root@<板端IP>:/opt/hobot/model/s600/basic/
+scp my_model.hbm root@<板端IP>:/opt/hobot/model/<产品>/basic/
 
 # 板端运行时指定
 cd /app/pydev_demo/classification_sample/resnet18
 python resnet18.py \
-    --model-path /opt/hobot/model/s600/basic/my_model.hbm \
+    --model-path /opt/hobot/model/<产品>/basic/my_model.hbm \
     --label-file /app/res/labels/imagenet1000_clsidx_to_labels.txt
 ```
 

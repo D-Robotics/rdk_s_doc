@@ -117,3 +117,5 @@ WebSocket server started on ws://0.0.0.0:8080
 - [视频解码及 YOLOv5x 推理 (C/C++)](./04_decode.md)
 - [目标检测-YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)
+- [Camera 对象](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)

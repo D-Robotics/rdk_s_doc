@@ -36,7 +36,7 @@ Before testing, short TXD and RXD:
 - Run `python3 /app/40pin_samples/test_serial.py`
 - Select a serial device from the printed serial devices as the input option (/dev/ttyS0 is the system debug port; testing it is not recommended unless you fully understand its role). For example, on RDK S600 select `/dev/ttyS6` or `/dev/ttyS7` to test and press Enter to confirm, then enter the baud rate parameter:
 
-```
+```text
 root@ubuntu:/app/40pin_samples# ./test_serial.py
 List of enabled UART:
 /dev/ttyS0
@@ -55,7 +55,7 @@ Serial<id=0xffff211c3850, open=True>(port='/dev/ttyS6', baudrate=921600, bytesiz
 
 - After shorting TXD and RXD, if the program runs correctly it will continuously print `Send: AA55` and `Recv:  AA55`:
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 Send:  AA55
 Recv:  AA55
@@ -63,7 +63,7 @@ Recv:  AA55
 
 - If TXD/RXD are not shorted, nothing appears after `Recv:` (no data can be read), indicating the loopback failed:
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 Send:  AA55
 Recv:

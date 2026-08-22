@@ -59,13 +59,13 @@ After a successful run, the person bounding boxes and keypoint skeleton are draw
 
 ## Execution Results
 
-The following is actual output on RDK S600 (test image `bus.jpg`):
+The following is actual output (excerpt) on RDK S600 (test image `bus.jpg`):
 
 ```text
 Model Description:
  - yolo11n_pose_nashp_640x640_nv12_debug: {"MARCH": "nash-p",
    "INPUT_SHAPE": "1x3x640x640", "INPUT_TYPE_RT": "nv12",
-   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]", ...}
+   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
 yolo11n_pose_nashp_640x640_nv12_debug:

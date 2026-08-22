@@ -1,11 +1,11 @@
 ---
 sidebar_position: 2
-title: "实例分割-Ultralytics YOLOE11"
+title: "实例分割-Ultralytics YOLOE11 (C/C++)"
 description: 实例分割-Ultralytics YOLOE11
 sidebar_products: RDK S100
 ---
 
-# 实例分割-Ultralytics YOLOE11
+# 实例分割-Ultralytics YOLOE11 (C/C++)
 
 :::info S100 only
 本示例仅适用于 RDK S100。RDK S600 镜像未内置对应 hbm 模型，相关示例代码也仅在 S100 上随系统镜像发布；S600 上暂不支持。
@@ -72,7 +72,7 @@ sudo apt install libgflags-dev
 |-- CMakeLists.txt                      # CMake 构建脚本：目标/依赖/包含路径/链接库配置
 |-- README.md                           # 使用说明（当前文件）
 |-- inc
-|   `-- ultralytics_yoloe11_seg.hpp     # YOLO11E_Seg 封装头文件：加载/预处理/推理/后处理接口声明
+|   `-- ultralytics_yoloe11_seg.hpp     # YOLOE11_Seg 封装头文件：加载/预处理/推理/后处理接口声明
 `-- src
     |-- main.cc                         # 程序入口：解析参数→完整 pipeline→渲染并保存结果
     `-- ultralytics_yoloe11_seg.cc      # 推理实现：解码、分数过滤、按类 NMS、掩码生成与还原

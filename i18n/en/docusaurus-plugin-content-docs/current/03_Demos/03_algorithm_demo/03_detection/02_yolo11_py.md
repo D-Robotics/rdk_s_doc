@@ -13,14 +13,16 @@ The sample code is located in the `/app/pydev_demo/detection_sample/ultralytics_
 ## Prerequisites
 
 - The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
-- The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`.
+- The pre-installed model is in place:
+  - S100: `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`
+  - S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`
 - The Python environment and `hbm_runtime` are pre-installed with the image.
 
 ## Parameters
 
 | Parameter | Description | Default |
 |---|---|---|
-| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm` |
+| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`; S100: `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm` |
 | `--test-img` | Test image path | `/app/res/assets/kite.jpg` |
 | `--label-file` | Class labels (COCO 80 classes) | `/app/res/labels/coco_classes.names` |
 | `--img-save-path` | Save path of the detection result image | `result.jpg` |
@@ -40,17 +42,17 @@ After it runs successfully, the detection boxes are drawn on the original image 
 
 - You must first `cd` into the sample directory before running it: the script depends on the common `utils` module in the parent directory, and running it in another directory will fail with `No module named 'utils'`.
 - The detection result image `result.jpg` is saved in the current working directory (i.e., the sample directory). Running it in another directory will make the result image hard to find.
-- The model must be located at the default path `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`. If missing, `--model-path` must be explicitly specified.
+- The model must be located at the default path (S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`, S100: `/opt/hobot/model/s100/basic/yolo11n_detect_nashe_640x640_nv12.hbm`). If missing, `--model-path` must be explicitly specified.
 
 ## Execution Results
 
-The following is actual output on RDK S600 (test image `kite.jpg`):
+The following is actual output (excerpt) on RDK S600 (test image `kite.jpg`):
 
 ```text
 Model Description:
  - yolo11n_detect_nashp_640x640_nv12_beta: {"MARCH": "nash-p",
    "INPUT_SHAPE": "1x3x640x640", "INPUT_TYPE_RT": "nv12",
-   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]", ...}
+   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
   priority    : 0

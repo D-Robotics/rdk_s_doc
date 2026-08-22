@@ -8,7 +8,7 @@ description: "RDK S600 14-PIN SPI1 使用与回环测试"
 
 # SPI 应用
 
-RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选，IO 电压 1.8V；
+RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选，IO 电压 1.8V。
 
 请参阅 `/app/40pin_samples/test_spi.py`了解如何使用 SPI 的详细信息。
 
@@ -32,15 +32,15 @@ SPI 回环测试代码位于板端 `/app/40pin_samples/test_spi.py`。
 
 ### 测试过程
 
-- 运行 `cd /boot`，在 config.txt 文件(如果不存在，则运行 `sudo nano config.txt` 创建)中写入
-    ```shell
+- 运行 `cd /boot`，在 config.txt 文件（如果不存在，则运行 `sudo nano config.txt` 创建）中写入
+    ```text
     dtbo_file_path=/overlays/s600_v0p2_enable_spi1.dtbo
     ```
 - 运行 `sudo reboot` 重启系统
 - 重启后，运行 `python3 /app/40pin_samples/test_spi.py`
 - 从打印的 spi 控制器中选择总线号和片选号作为输入选项，例如选择测试 `spidev1.0`，`bus num` 选择 `1` 和 `cs num` 选择 `0`，按回车键确认：
 
-```
+```text
 List of enabled spi controllers:
 /dev/spidev0.0  /dev/spidev1.0
 Please input SPI bus num (default 0):1
@@ -49,7 +49,7 @@ Please input SPI cs num (default 0):0
 
 - MISO 与 MOSI 短接后，程序正确运行起来会持续打印 `0x55 0xAA`：
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 0x55 0xAA
 0x55 0xAA
@@ -57,7 +57,7 @@ Starting demo now! Press CTRL+C to exit
 
 - 若未短接 MISO/MOSI（回环失败），读回的是 MISO 默认电平（本板实测为 `0xFF 0xFF`），与写入值不一致：
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 0xFF 0xFF
 0xFF 0xFF

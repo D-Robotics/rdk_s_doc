@@ -12,13 +12,13 @@ description: "Usage and loopback test of UART2 on the RDK S100 40-pin header"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-The RDK S100 supports UART2 on the 40PIN, not enabled by default, with physical pin numbers 8 and 10 and 3.3V IO levels.
+The RDK S100 supports UART2 on the 40-pin, not enabled by default, with physical pin numbers 8 and 10 and 3.3V IO levels.
 
 :::info
 
 On the 40-pin header, you need to toggle the DIP switch to select between UART2 and I2C5. See the figure below for the details:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="UART application diagram" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0,0' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="UART application diagram" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 After toggling the DIP switch, you also need to modify the device tree file. The path and modification method are as follows:
 
@@ -68,7 +68,7 @@ Connect TXD and RXD directly together on the hardware with a jumper cap:
 - Run `python3 /app/40pin_samples/test_serial.py`
 - Select a serial device from the printed serial devices as the input option (/dev/ttyS0 is the system debug port; testing it is not recommended unless you fully understand its role). For example, on RDK S100 select `/dev/ttyS2` to test and press Enter to confirm, then enter the baud rate parameter:
 
-```
+```text
 root@ubuntu:/app/40pin_samples# ./test_serial.py
 List of enabled UART:
 /dev/ttyS0
@@ -83,7 +83,7 @@ Serial<id=0x7f819dcac0, open=True>(port='/dev/ttyS2', baudrate=921600, bytesize=
 
 - After shorting TXD and RXD, if the program runs correctly it will continuously print `Send: AA55` and `Recv:  AA55`:
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 Send:  AA55
 Recv:  AA55
@@ -91,7 +91,7 @@ Recv:  AA55
 
 - If TXD/RXD are not shorted, nothing appears after `Recv:` (no data can be read), indicating the loopback failed:
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 Send:  AA55
 Recv:

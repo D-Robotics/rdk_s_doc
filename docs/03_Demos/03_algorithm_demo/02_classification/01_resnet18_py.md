@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- 开发板已烧录 RDK OS 并能通过 SSH 登录（见 [烧录系统与配置](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
+- 开发板已烧录 RDK OS 并能通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
 - 预装模型已就位（默认路径下存在，无需手动下载）：
   - S100：`/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm`
   - S600：`/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`
@@ -92,13 +92,13 @@ python resnet18.py \
 
 ## 运行效果
 
-程序加载模型、完成一次推理后，输出 Top-5 分类结果。以下是 RDK S600 上的实测输出（测试图为斑马 `zebra_cls.jpg`）：
+程序加载模型、完成一次推理后，输出 Top-5 分类结果。以下是 RDK S600 上的实测输出（节选，测试图为斑马 `zebra_cls.jpg`）：
 
 ```text
 Model Description:
  - resnet18_224x224_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x224x224",
    "INPUT_TYPE_RT": "nv12", "MEAN_VALUE": "[123.675, 116.28, 103.53]",
-   "SCALE_VALUE": "[0.01712475, 0.017507, 0.01742919]", ...}
+   "SCALE_VALUE": "[0.01712475, 0.017507, 0.01742919]"}
 
 === Scheduling Parameters ===
 resnet18_224x224_nv12:

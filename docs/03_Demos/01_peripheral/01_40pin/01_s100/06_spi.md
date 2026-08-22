@@ -8,7 +8,7 @@ description: "RDK S100 40-pin SPI0 使用与回环测试"
 
 # SPI 应用
 
-RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26`引出了 `SPI0` 总线，支持两个片选，IO 电压 3.3V；
+RDK S100 在 40PIN 上物理管脚 `19, 21, 23, 24, 26` 引出了 `SPI0` 总线，支持两个片选，IO 电压 3.3V；
 
 请参阅 `/app/40pin_samples/test_spi.py`了解如何使用 SPI 的详细信息。
 
@@ -22,7 +22,7 @@ SPI 回环测试代码位于板端 `/app/40pin_samples/test_spi.py`。
 
 ## 回环测试
 
-把 MISO 和 MOSI 在硬件上进行连接，然后运行 SPI 测试程序，进行写和读操作，预期结果是读出的数据要完全等于写入的数据
+把 MISO 和 MOSI 在硬件上进行连接，然后运行 SPI 测试程序，进行写和读操作，预期结果是读出的数据要完全等于写入的数据。
 
 ### 硬件连接
 
@@ -35,7 +35,7 @@ SPI 回环测试代码位于板端 `/app/40pin_samples/test_spi.py`。
 - 运行 `python3 /app/40pin_samples/test_spi.py`
 - 从打印的 spi 控制器中选择总线号和片选号作为输入选项，例如选择测试 `spidev0.0`，则`bus num` 和 `cs num`都是`0`，按回车键确认：
 
-```
+```text
 List of enabled spi controllers:
 /dev/spidev0.0
 /dev/spidev0.1
@@ -45,7 +45,7 @@ Please input SPI cs num (default 0):0
 
 - MISO 与 MOSI 短接后，程序正确运行起来会持续打印 `0x55 0xAA`：
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 0x55 0xAA
 0x55 0xAA
@@ -53,7 +53,7 @@ Starting demo now! Press CTRL+C to exit
 
 - 若未短接 MISO/MOSI（回环失败），读回的是 MISO 默认电平（本板实测为 `0xFF 0xFF`），与写入值不一致：
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 0xFF 0xFF
 0xFF 0xFF

@@ -50,7 +50,7 @@ root@drobot:/app/pydev_demo/mipi_camera_sample# python3 05_mipi_camera_streamer.
 
 ## 预期效果
 程序执行后，显示器会实时显示摄像头画面，如下所示：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="MIPI摄像头实时画面显示效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="MIPI摄像头实时画面显示效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 成功运行时，脚本采集约 10 秒后自动结束，并输出：
 

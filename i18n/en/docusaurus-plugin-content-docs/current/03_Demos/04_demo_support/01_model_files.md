@@ -85,7 +85,7 @@ The test images and videos used for running demos are located in `/app/res/asset
 Taking the ResNet18 classification demo as an example, confirm that the model and image are in place:
 
 ```bash
-ls /opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm
+ls /opt/hobot/model/<product>/basic/resnet18_224x224_nv12.hbm
 ls /app/res/assets/zebra_cls.jpg
 ls /app/res/labels/imagenet1000_clsidx_to_labels.txt
 ```

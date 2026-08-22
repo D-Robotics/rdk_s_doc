@@ -90,8 +90,8 @@ Before connecting two USB cameras, you need to run `rmmod uvcvideo; modprobe uvc
 ## Notes on Connecting USB 2.0 Cameras{#usb-2.0-note}
 
 :::tip
-1. The USB 2.0 bandwidth is 480Mb/s. The theoretical bandwidth of a 720p30fps USB camera, 1280x720x16x30=442Mb/s, is already close to the theoretical 2.0 bandwidth. In addition, UVC protocol overhead also consumes part of the bandwidth, so the remaining bandwidth actually available for transmitting image data may be around 50%. In theory, two usb2.0 720p30fps cameras cannot be connected to the same host either. As verified, two usb2.0 640x480 20fps cameras can be connected to the same USB host.
-2. The s100 development board has two USB hosts; the top and bottom ports belong to the same host. If you need to connect two usb2.0 720p cameras, insert them into the left and right ports so that each usb2.0 camera occupies one host.
+1. The USB 2.0 bandwidth is 480Mb/s. The theoretical bandwidth of a 720p30fps USB camera, 1280x720x16x30=442Mb/s, is already close to the theoretical 2.0 bandwidth. In addition, UVC protocol overhead also consumes part of the bandwidth, so the remaining bandwidth actually available for transmitting image data may be around 50%. In theory, two USB 2.0 720p30fps cameras cannot be connected to the same host either. As verified, two USB 2.0 640x480 20fps cameras can be connected to the same USB host.
+2. The RDK S100 development board has two USB hosts; the top and bottom ports belong to the same host. If you need to connect two USB 2.0 720p cameras, insert them into the left and right ports so that each USB 2.0 camera occupies one host.
 :::
 
 ## Related Documentation

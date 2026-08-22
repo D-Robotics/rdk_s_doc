@@ -83,13 +83,13 @@ python ultralytics_yolov5x.py
 
 ## 运行效果
 
-程序加载模型、推理、NMS 后处理、绘制框并保存。以下是 RDK S600 上的实测输出（测试图 `kite.jpg`）：
+程序加载模型、推理、NMS 后处理、绘制框并保存。以下是 RDK S600 上的实测输出（节选，测试图 `kite.jpg`）：
 
 ```text
 Model Description:
  - yolov5x_672x672_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x672x672",
    "INPUT_TYPE_RT": "nv12", "NORM_TYPE": "data_scale",
-   "SCALE_VALUE": "[0.003921568627451]", ...}
+   "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
 yolov5x_672x672_nv12:

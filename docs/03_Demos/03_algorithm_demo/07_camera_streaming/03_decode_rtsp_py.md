@@ -118,3 +118,5 @@ Model already exists: /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm
 - [C++ 版 RTSP 示例](./03_decode_rtsp.md)
 - [目标检测-YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
 - [WebSocket YOLOv5x 推理 (Python)](./04_websocket_py.md)
+- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)
+- [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)

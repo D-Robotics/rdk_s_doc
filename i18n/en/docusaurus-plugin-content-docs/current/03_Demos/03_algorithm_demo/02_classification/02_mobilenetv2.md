@@ -14,7 +14,9 @@ The sample code is located in the `/app/cdev_demo/bpu/classification_sample/mobi
 
 - The development board is flashed with RDK OS and logged in via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
 - The board has a compilation toolchain (`cmake`, `make`, `g++`, pre-installed in the image).
-- The pre-installed model is in place: S600 `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`.
+- The pre-installed model is in place:
+  - S100: `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`
+  - S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`
 
 ## Environment Dependencies
 
@@ -37,7 +39,7 @@ The artifact is `build/mobilenetv2`.
 
 | Parameter | Description | Default |
 |---|---|---|
-| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm` |
+| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`; S100: `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm` |
 | `--test_img` | Test image path | `/app/res/assets/zebra_cls.jpg` |
 | `--label_file` | Class labels (imagenet) | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
 | `--top_k` | Number of Top-K results to output | `5` |
@@ -52,7 +54,7 @@ The artifact is `build/mobilenetv2`.
 
 - It must be run in the `build` directory. The default paths such as `--test_img` and `--label_file` are given according to the pre-installed directories on the board.
 - Before compiling for the first time, install `libgflags-dev` as described in "Environment Dependencies", otherwise `make` will fail.
-- The model must be located at the default path `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`. If missing, `--model_path` must be explicitly specified.
+- The model must be located at the default path (S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`, S100: `/opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12.hbm`). If missing, `--model_path` must be explicitly specified.
 
 ## Execution Results
 

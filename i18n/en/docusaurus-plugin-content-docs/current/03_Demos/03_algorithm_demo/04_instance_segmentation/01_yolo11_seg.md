@@ -66,7 +66,7 @@ The build artifact is `build/ultralytics_yolo11_seg`.
 
 | Parameter | Description | Default |
 |---|---|---|
-| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` (S100 corresponds to `s100/basic/`) |
+| `--model_path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm`; S100: `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
 | `--test_img` | Test image path | `/app/res/assets/office_desk.jpg` |
 | `--label_file` | Class labels (COCO 80 classes) | `/app/res/labels/coco_classes.names` |
 | `--score_thres` | Confidence threshold | `0.25` |

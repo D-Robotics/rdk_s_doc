@@ -135,3 +135,5 @@ rtsp_w:1920, rtsp_h:1080, display_w:1920, display_h:1080
 - [目标检测-YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
 - [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
 - [模型获取与放置](../../04_demo_support/01_model_files.md)
+- [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
+- [VIO（视频输入）API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)

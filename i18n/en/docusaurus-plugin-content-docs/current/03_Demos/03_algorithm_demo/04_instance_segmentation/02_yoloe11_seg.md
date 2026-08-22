@@ -1,11 +1,11 @@
 ---
 sidebar_position: 2
-title: "Instance Segmentation - Ultralytics YOLOE11"
+title: "Instance Segmentation - Ultralytics YOLOE11 (C/C++)"
 description: Instance Segmentation - Ultralytics YOLOE11
 sidebar_products: RDK S100
 ---
 
-# Instance Segmentation - Ultralytics YOLOE11
+# Instance Segmentation - Ultralytics YOLOE11 (C/C++)
 
 :::info S100 only
 This sample applies only to RDK S100. The RDK S600 image does not include the corresponding hbm model, and the related sample code is only shipped with the system image on S100; it is not supported on S600 yet.
@@ -72,7 +72,7 @@ sudo apt install libgflags-dev
 |-- CMakeLists.txt                      # CMake build script: target/dependency/include path/linked library configuration
 |-- README.md                           # Usage instructions (current file)
 |-- inc
-|   `-- ultralytics_yoloe11_seg.hpp     # YOLO11E_Seg wrapper header: load/preprocess/inference/post-process interface declarations
+|   `-- ultralytics_yoloe11_seg.hpp     # YOLOE11_Seg wrapper header: load/preprocess/inference/post-process interface declarations
 `-- src
     |-- main.cc                         # Program entry: parse arguments → complete pipeline → render and save results
     `-- ultralytics_yoloe11_seg.cc      # Inference implementation: decoding, score filtering, per-class NMS, mask generation and restoration

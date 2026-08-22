@@ -23,7 +23,7 @@ UART 回环测试代码位于板端 `/app/40pin_samples/test_serial.py`。
 
 ## 回环测试
 
-把 TXD 和 RXD 在硬件上进行连接，然后运行测试程序，进行写和读操作，预期结果是读出的数据要完全等于写入的数据
+把 TXD 和 RXD 在硬件上进行连接，然后运行测试程序，进行写和读操作，预期结果是读出的数据要完全等于写入的数据。
 
 ### 硬件连接
 
@@ -36,7 +36,7 @@ UART 回环测试代码位于板端 `/app/40pin_samples/test_serial.py`。
 - 运行 `python3 /app/40pin_samples/test_serial.py`
 - 从打印的串口设备（其中 /dev/ttyS0 是系统调试口，不建议对它进行测试，除非你完全明白它的作用）中选择串口设备作为输入选项，例如 RDK S600 选择测试 `/dev/ttyS6` 或者 `/dev/ttyS7` 按回车键确认，并输入波特率参数：
 
-```
+```text
 root@ubuntu:/app/40pin_samples# ./test_serial.py
 List of enabled UART:
 /dev/ttyS0
@@ -55,7 +55,7 @@ Serial<id=0xffff211c3850, open=True>(port='/dev/ttyS6', baudrate=921600, bytesiz
 
 - TXD 与 RXD 短接后，程序正确运行起来会持续打印 `Send: AA55` 和 `Recv:  AA55`：
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 Send:  AA55
 Recv:  AA55
@@ -63,7 +63,7 @@ Recv:  AA55
 
 - 若未短接 TXD/RXD，`Recv:` 后面为空（读不到数据），说明回环失败：
 
-```
+```text
 Starting demo now! Press CTRL+C to exit
 Send:  AA55
 Recv:

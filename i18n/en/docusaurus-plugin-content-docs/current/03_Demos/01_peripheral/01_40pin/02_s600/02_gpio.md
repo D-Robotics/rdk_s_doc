@@ -49,7 +49,9 @@ The development board supports 4 pin numbering modes:
 - SOC: the corresponding numbers are the internal GPIO pin numbers of the chip.
 
 This document recommends using the `BOARD` numbering mode. The numbering mode is set as follows:
+
 Note: the mode can only be set once each time. To set it again, call `GPIO.cleanup()` first and then set it again.
+
 ```python
 GPIO.setmode(GPIO.BOARD)
 # or
@@ -449,8 +451,8 @@ def signal_handler(signal, frame):
 
 
 # Define the GPIO channels to use:
-# Pin 15 as output, can light up an LED
-# Pin 16 as output, can light up an LED
+# Pin 1 as output, can light up an LED
+# Pin 2 as output, can light up an LED
 # but_pin as input, can connect a button
 led_pin_1 = 1  # BOARD numbering 1
 led_pin_2 = 2  # BOARD numbering 2
@@ -510,7 +512,7 @@ if __name__ == '__main__':
 ```
 ## hb_gpioinfo Tool Introduction
 
-hb_gpioinfo is a gpio helper tool adapted for the RDK S600. It can show the correspondence between PinName and PinNum of the current development board. Example command output is as follows:
+hb_gpioinfo is a GPIO helper tool adapted for the RDK S600. It can show the correspondence between PinName and PinNum of the current development board. Example command output is as follows:
 ```shell
 sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|

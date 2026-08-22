@@ -144,3 +144,6 @@ Data flow: VIO initialization and sensor open (NV12 1920×1080) → `sp_vio_get_
 - [Object Detection - YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
 - [C/C++ Demo Programming Guide](../../04_demo_support/02_c_cpp_build.md)
 - [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)
+- [VIO (Video Input) API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
+- [DISPLAY (Display Module) API](../../../04_Simple_API/01_multimedia_api/cdev/04_display_api.md)

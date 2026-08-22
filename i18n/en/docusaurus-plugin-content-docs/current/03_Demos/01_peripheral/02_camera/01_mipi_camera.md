@@ -50,7 +50,7 @@ Parameter description:
 
 ## Expected Result
 After the program runs, the monitor displays the camera view in real time, as shown below:
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="Real-time MIPI camera display effect" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="Real-time MIPI camera display effect" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 When it runs successfully, the script automatically ends after capturing for about 10 seconds and outputs:
 

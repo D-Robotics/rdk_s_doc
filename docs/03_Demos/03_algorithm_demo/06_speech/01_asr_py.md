@@ -21,7 +21,7 @@ S100 与 S600 系统镜像均未内置 `asr.hbm` 模型，运行前需手动下�
 ## 前置条件
 
 - 开发板已烧录 RDK OS 并通过 SSH 登录（见 [远程登录](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)）。
-- 预装模型已就位（镜像未内置，需从 RDK 模型库下载，见 [模型获取与放置](../../04_demo_support/01_model_files.md)）：
+- ASR 模型需手动下载放置（镜像未内置，需从 RDK 模型库下载，见 [模型获取与放置](../../04_demo_support/01_model_files.md)）：
   - S100：`/opt/hobot/model/s100/basic/asr.hbm`
   - S600：`/opt/hobot/model/s600/basic/asr.hbm`
 - 安装 `soundfile`（音频读取）：
@@ -80,12 +80,12 @@ python asr.py
 
 ## 运行效果
 
-以下是 RDK S600 上的实测输出（测试音频 `chi_sound.wav`，内容为"我是来自阿里云的大规模语言模型叫做通义千问"）：
+以下是 RDK S600 上的实测输出（节选，测试音频 `chi_sound.wav`，内容为"我是来自阿里云的大规模语言模型叫做通义千问"）：
 
 ```text
 Model Description:
  - asr: {"MARCH": "nash-p", "INPUT_SHAPE": "1x30000",
-   "INPUT_TYPE_RT": "featuremap", "NORM_TYPE": "no_preprocess", ...}
+   "INPUT_TYPE_RT": "featuremap", "NORM_TYPE": "no_preprocess"}
 
 === Scheduling Parameters ===
 asr:

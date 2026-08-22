@@ -92,13 +92,13 @@ python resnet18.py \
 
 ## Execution Results
 
-After loading the model and completing one inference, the program outputs the Top-5 classification results. The following is actual output on RDK S600 (test image is the zebra `zebra_cls.jpg`):
+After loading the model and completing one inference, the program outputs the Top-5 classification results. The following is actual output (excerpt) on RDK S600 (test image is the zebra `zebra_cls.jpg`):
 
 ```text
 Model Description:
  - resnet18_224x224_nv12: {"MARCH": "nash-p", "INPUT_SHAPE": "1x3x224x224",
    "INPUT_TYPE_RT": "nv12", "MEAN_VALUE": "[123.675, 116.28, 103.53]",
-   "SCALE_VALUE": "[0.01712475, 0.017507, 0.01742919]", ...}
+   "SCALE_VALUE": "[0.01712475, 0.017507, 0.01742919]"}
 
 === Scheduling Parameters ===
 resnet18_224x224_nv12:

@@ -13,13 +13,13 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-开发板上的存在扩展引脚排，方便用户进行外围扩展，接口定义请查看本章节。
+开发板上存在扩展引脚排，方便用户进行外围扩展，接口定义请查看本章节。
 
 ## 扩展引脚排定义{#pin_define}
 
-RDKS600 有 2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin 自锁接口，方便用户进行外围扩展，其中数字 IO 采用 1.8V 电平设计。接口定义如下：
+RDK S600 有 2 个 10-pin 自锁接口，1 个 12-pin 自锁接口，1 个 14-pin 自锁接口，方便用户进行外围扩展，其中数字 IO 采用 1.8V 电平设计。接口定义如下：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mainboard_pin.png" alt="扩展引脚排定义{#pin_define}实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mainboard_pin.png" alt="扩展引脚排定义实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## GPIO 读写操作示例
 :::tip
@@ -27,7 +27,7 @@ RDKS600 有 2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin 自�
 :::
 
 
-开发板 `/app/40pin_samples/` 目录下，预置了多种 PIN 管脚的功能测试代码，包括 gpio 的输入/输出测试 I2C、SPI、UART 等测试。所有测试程序均使用 python 语言编写，详细信息可以查阅本章节其他模块。
+开发板 `/app/40pin_samples/` 目录下，预置了多种 PIN 管脚的功能测试代码，包括 GPIO 的输入/输出测试 I2C、SPI、UART 等测试。所有测试程序均使用 Python 语言编写，详细信息可以查阅本章节其他模块。
 
 以`/app/40pin_samples/button_led.py`为例，该程序配置`4`号管脚为输入，配置`3`号管脚配置为输出，并根据`4`号管脚的输入状态来控制`3`号管脚的输出状态。
 
@@ -66,7 +66,7 @@ root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 通过控制`4`号管脚的高低电平，可以改变 `3`号管脚的输出电平值。
 
 ```bash
-root@ubuntu:/app/40pin_samples# ./button_led.py
+root@ubuntu:/app/40pin_samples# sudo python3 ./button_led.py
 Starting demo now! Press CTRL+C to exit
 Outputting 1 to Pin 3
 Outputting 0 to Pin 3
@@ -90,5 +90,6 @@ Outputting 1 to Pin 3
 ## 相关文档
 
 - [扩展引脚应用（S600）](/Demos/peripheral/40pin)
+- [GPIO 应用](./02_gpio.md)
 - [GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
 - [硬件介绍](/01_hardware_introduction)

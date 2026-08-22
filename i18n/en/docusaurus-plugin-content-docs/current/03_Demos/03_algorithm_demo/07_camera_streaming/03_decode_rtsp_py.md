@@ -1,199 +1,122 @@
 ---
 sidebar_position: 7
+title: "RTSP Stream Pull and YOLOv5x Inference (Python)"
+description: "Preset sample for pulling frames from an RTSP stream and performing real-time YOLOv5x detection using the hbm_runtime Python interface"
 ---
 
-# RTSP Stream Pull and YOLOv5x Inference
+# RTSP Stream Pull and YOLOv5x Inference (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK S100">
+This sample demonstrates how to deploy a quantized Ultralytics YOLOv5x model using the `hbm_runtime` Python interface, pull frames from an RTSP video stream for object detection, and display the results. It applies to BPU-equipped RDK devices and requires an RTSP video source (camera/NVR/local RTSP service). For the C/C++ version, see [RTSP Stream Pull and YOLOv5x Inference](./03_decode_rtsp.md).
 
-This sample demonstrates how to combine SP hardware modules (decoder, VIO, display) with the BPU on platforms such as RDK S100 to implement:
-RTSP/H.264 video stream → hardware decode (NV12) → YOLOv5x inference → overlay detection boxes → real-time display. The sample code is located in `/app/pydev_demo/12_rtsp_yolov5x_display_sample/`.
+:::tip
+The sample code is located at `/app/pydev_demo/rtsp_yolov5x_display_sample/` on the board. It has been verified on the board.
+:::
 
-</DocScope>
-<DocScope products="RDK S600">
+## Prerequisites
 
-This sample demonstrates how to combine SP hardware modules (decoder, VIO, display) with the BPU on platforms such as RDK S600 to implement:
-RTSP/H.264 video stream → hardware decode (NV12) → YOLOv5x inference → overlay detection boxes → real-time display. The sample code is located in `/app/pydev_demo/rtsp_yolov5x_display_sample/`.
-
-</DocScope>
-
-## Features
-
-- Model loading
-
-    Load the YOLOv5x model with `hbm_runtime.HB_HBMRuntime(model_path)`, read input/output information, and configure BPU priority and core binding through `set_scheduling_params()`.
-
-- Preprocessing
-
-    Obtain NV12 frames from the decode thread, split Y/UV channels, resize to model input dimensions, and pack them into BPU input format.
-
-- Inference
-
-    Call `self.model.run()` to perform forward inference and generate detection results.
-
-- Postprocessing
-
-    Dequantize inference outputs, decode, filter, apply NMS, map coordinates to the display resolution, and output detection boxes and classes.
-
-- RTSP decoding
-
-    A child thread uses `cv2.VideoCapture` to pull H.264 streams and hardware-decodes them to NV12 frames through `srcampy.Decoder`.
-
-- Resolution and display (VPS + Display)
-
-    Call `srcampy.Display()` and `srcampy.Camera().open_vps()` to build a VPS → HDMI display pipeline.
-
-- Overlay drawing
-
-    Use `draw.draw_detections_on_disp()` to draw detection boxes and class labels on the display layer.
-
-- Signal handling
-
-    Catch `SIGINT` (`Ctrl+C`), set `is_stop=True`, safely exit the main loop and child threads, and close VPS, display, and decoder in order.
-
-- Threading and frame queue
-
-    `DecodeRtspStream` inherits from `threading.Thread` and maintains a frame queue; the main thread obtains the latest frame through `get_frame()`.
-
-- Argument parsing
-
-    Provide parameters through `argparse`: RTSP source, model path, BPU cores, priority, label file, NMS threshold, and confidence threshold.
-
-- HDMI resolution detection
-
-    Call `/usr/bin/get_hdmi_res` to obtain the current HDMI resolution; default to 1920×1080 if unavailable.
-
-## Model Description
-
-    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x_py.md) section.
-
+- An accessible RTSP stream address (e.g. `rtsp://<ip>/<stream>`).
+- A desktop/display environment.
+- The preset model is in place: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`).
 
 ## Environment Dependencies
-This sample has no special environment requirements. You only need to ensure the dependencies in `pydev` are installed.
+
+Depends on the `pydev_demo` shared utility library (`utils`). If dependencies are reported missing:
 
 <DocScope products="RDK S100">
+
 ```bash
-pip install -r ../requirements.txt
+cd /app/pydev_demo && pip install -r requirements.txt
 ```
 
 </DocScope>
 <DocScope products="RDK S600">
+
 ```bash
-pip install -r ../requirements.txt --break-system-packages
+cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 ```
 
 </DocScope>
 
-## Directory Structure
+## Code Location
+
+Board path: `/app/pydev_demo/rtsp_yolov5x_display_sample/`
+
+Directory structure:
 
 ```text
 .
-├── README.md               # Usage instructions
-└── rtsp_yolov5x_display.py # Main program
+├── README.md                 # Usage instructions
+└── rtsp_yolov5x_display.py   # Main program
 ```
 
-## Parameter Description
+## Parameter Reference
 
-<DocScope products="RDK S100">
-| Parameter       | Description                                              | Default Value                               |
-| ----------------------- | -------------------------------------------------------- | --------------------------------------------- |
-| `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/1080P_test.h264` |
-| `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | Inference priority (`0~255`, `255` is highest)           | `0`                                           |
-| `--bpu-cores`   | BPU core index list (for example, `0 1`)                 | `[0]`                                         |
-| `--label-file`  | Class label file path                                    | `/app/res/labels/coco_classes.names`          |
-| `--nms-thres`   | IoU threshold for Non-Maximum Suppression (NMS)          | `0.45`                                        |
-| `--score-thres` | Detection confidence threshold                           | `0.25`                                        |
+| Parameter | Description | Default Value |
+|---|---|---|
+| `--rtsp-urls` / `-u` | RTSP stream address (separate multiple streams with semicolons, e.g. `rtsp://192.168.1.10/s1;rtsp://192.168.1.11/s2`) | `rtsp://127.0.0.1/assets/1080P_test.h264` |
+| `--model-path` | BPU quantized model path (`.hbm`) | Auto-selected by SoC: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`) |
+| `--priority` | Inference priority (`0~255`, `255` is highest) | `0` |
+| `--bpu-cores` | BPU core index list (for example, `--bpu-cores 0 1`) | `[0]` |
+| `--label-file` | Class label file (COCO) | `/app/res/labels/coco_classes.names` |
+| `--nms-thres` | IoU threshold for NMS | `0.45` |
+| `--score-thres` | Detection confidence threshold | `0.25` |
 
-</DocScope>
-<DocScope products="RDK S600">
-| Parameter       | Description                                              | Default Value                               |
-| ----------------------- | -------------------------------------------------------- | --------------------------------------------- |
-| `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/1080P_test.h264` |
-| `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | Inference priority (`0~255`, `255` is highest)           | `0`                                           |
-| `--bpu-cores`   | BPU core index list (for example, `0 1`)                 | `[0]`                                         |
-| `--label-file`  | Class label file path                                    | `/app/res/labels/coco_classes.names`          |
-| `--nms-thres`   | IoU threshold for Non-Maximum Suppression (NMS)          | `0.45`                                        |
-| `--score-thres` | Detection confidence threshold                           | `0.25`                                        |
+## Usage
 
-</DocScope>
+Before using the default address, start a local RTSP streaming service first (serve `/app/res/assets/1080P_test.h264` as an RTSP stream):
 
+```bash
+cd /app/res
+sudo chmod +x live555MediaServer
+sudo ./live555MediaServer &
+```
 
-## Quick Start
-- Prepare RTSP stream
+Then run:
 
-    Use the built-in streaming service to prepare an RTSP stream as input. The service converts the `1080P_test.h264` video file into an RTSP stream at `rtsp://127.0.0.1/assets/1080P_test.h264`. Start the streaming service with:
-    ```bash
-    cd /app/res
-    sudo chmod +x live555MediaServer
-    sudo ./live555MediaServer &
-    ```
-- Run the model
-    - Use default parameters
-        ```bash
-        python rtsp_yolov5x_display.py
-        ```
-    - Run with specified parameters
+```bash
+cd /app/pydev_demo/rtsp_yolov5x_display_sample
+python rtsp_yolov5x_display.py
+```
 
-        <DocScope products="RDK S100">
-        ```bash
-        python rtsp_yolov5x_display.py \
-        --rtsp-urls rtsp://127.0.0.1/assets/1080P_test.h264 \
-        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
+Run with an explicit stream address:
 
-        </DocScope>
-        <DocScope products="RDK S600">
-        ```bash
-        python rtsp_yolov5x_display.py \
-        --rtsp-urls rtsp://127.0.0.1/assets/1080P_test.h264 \
-        --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
+```bash
+python rtsp_yolov5x_display.py --rtsp-urls rtsp://<stream-address>
+```
 
-        </DocScope>
+After it starts, frames are pulled from the RTSP stream → YOLOv5x inference → detection boxes are displayed. Press `Ctrl+C` to exit.
 
-- Exit
+## Running Results
 
-    Press `Ctrl+C` in the terminal.
+The following is the actual output measured on RDK S600 (live555 streaming + default parameters):
 
-- View results
+```text
+['rtsp://127.0.0.1/assets/1080P_test.h264']
+RTSP stream frame_width:1920, frame_height:1080
+Decoder(0, 1) return:0
+Camera vps return:0
+Model already exists: /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm
+=== Model Name List ===
+['yolov5x_672x672_nv12']
+```
 
-    After successful execution, object detection results are displayed on screen in real time.
+**Indicators of success**: `RTSP stream frame_width:1920, frame_height:1080` means the RTSP stream was opened successfully. The model is then loaded (which prints `Model Name List`), and the screen displays the real-time frame with detection boxes.
 
-## Notes
-- This program must run in a desktop environment.
+## FAQ
 
-- For more deployment options or supported models, refer to the official documentation or contact platform technical support.
+- **Stream pull failure/timeout**: confirm the RTSP address is reachable and the network works; verify the stream with `ffprobe rtsp://...` or VLC.
+- **No image displayed**: a display environment is required.
+- **Multiple streams are laggy**: the BPU has a limit on parallel multi-stream processing; reduce the number of streams or increase `--bpu-cores`.
+- **Error: model not found**: check whether the `.hbm` file exists under `--model-path`.
 
-## License
-    ```license
-    Copyright (C) 2025, XiangshunZhao D-Robotics.
+## Related Documentation
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [C/C++ RTSP Sample](./03_decode_rtsp.md)
+- [Object Detection - YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
+- [WebSocket YOLOv5x Inference (Python)](./04_websocket_py.md)
+- [Python Inference API](../../../04_Simple_API/02_inference_api/02_python_api.md)
+- [DECODER (Decode Module) API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)

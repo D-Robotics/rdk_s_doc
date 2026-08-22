@@ -12,6 +12,10 @@ This section introduces examples of multimedia capture, display and encoding/dec
 The example source code is pre-installed in the `/app/pydev_demo/` directory on the board. Python scripts do not need compilation — just run them directly.
 :::
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## Prerequisites
 
 - The development board is flashed with RDK OS and booted (see [Getting Started with RDK](../../../01_Quick_start/02_getting_started.md))
@@ -19,9 +23,21 @@ The example source code is pre-installed in the `/app/pydev_demo/` directory on 
 - An HDMI display is connected (for display-type examples)
 - Python dependencies are installed:
 
+<DocScope products="RDK S600">
+
+```bash
+pip install -r /app/pydev_demo/requirements.txt --break-system-packages
+```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
 ```bash
 pip install -r /app/pydev_demo/requirements.txt
 ```
+
+</DocScope>
 
 ## Code Location
 

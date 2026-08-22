@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 
-The audio module is developed based on the standard alsa framework. In user space, the libraries and binary executables provided by the open-source alsa-lib code are used for functional testing. This chapter describes the basic methods for audio functional testing.
+The audio module is developed based on the standard ALSA framework. In user space, the libraries and binary executables provided by the open-source alsa-lib code are used for functional testing. This chapter describes the basic methods for audio functional testing.
 
 ## Environment Preparation
 
@@ -27,13 +27,13 @@ There is no standalone audio demo on the board; the system alsa-lib tools are us
 
 <DocScope products="RDK S100">
 
-S100 implements audio based on alsa. The following explains the meanings of commonly used parameter configurations and provides reference commands for testing.
+S100 implements audio based on ALSA. The following explains the meanings of commonly used parameter configurations and provides reference commands for testing.
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-S600 implements audio based on alsa. The following explains the meanings of commonly used parameter configurations and provides reference commands for testing.
+S600 implements audio based on ALSA. The following explains the meanings of commonly used parameter configurations and provides reference commands for testing.
 
 </DocScope>
 
@@ -103,13 +103,13 @@ amixer scontents
 For example, adjust the playback volume
 
 ```
-amixer sset 'DAC' 120 //set
-amixer sget 'DAC' //get
+amixer sset 'DAC' 120 # set
+amixer sget 'DAC' # get
 ```
 
 :::info Note
 
-The default sound card/device number is 0,0. If multiple sound card devices are connected in your scenario, you need to specify the device and sound card numbers with -D and -c.
+The default sound card/device number is 0,0. If multiple sound card devices are connected in your scenario, you need to specify the device and sound card numbers with -D.
 :::
 
 How to determine the sound card/device number to adjust:

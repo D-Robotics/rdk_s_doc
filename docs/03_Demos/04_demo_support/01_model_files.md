@@ -85,7 +85,7 @@ ImageNet、COCO 等数据集的类别映射文件位于 `/app/res/labels/`：
 以 ResNet18 分类 demo 为例，确认模型与图片就位：
 
 ```bash
-ls /opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm
+ls /opt/hobot/model/<产品>/basic/resnet18_224x224_nv12.hbm
 ls /app/res/assets/zebra_cls.jpg
 ls /app/res/labels/imagenet1000_clsidx_to_labels.txt
 ```

@@ -38,7 +38,7 @@ Directory structure:
 
 | Parameter | Description | Default |
 |---|---|---|
-| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` (S100 corresponds to `s100/basic/`) |
+| `--model-path` | Model file path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm`; S100: `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
 | `--test-img` | Test image path | `/app/res/assets/office_desk.jpg` |
 | `--label-file` | Class labels (COCO 80 classes) | `/app/res/labels/coco_classes.names` |
 | `--img-save-path` | Save path of the output result image | `result.jpg` |
@@ -60,13 +60,13 @@ After it runs successfully, the instance segmentation masks are overlaid on the 
 
 ## Execution Results
 
-The following is actual output on RDK S600 (test image `office_desk.jpg`):
+The following is actual output (excerpt) on RDK S600 (test image `office_desk.jpg`):
 
 ```text
 Model Description:
  - yolo11n_seg_nashp_640x640_nv12_debug: {"MARCH": "nash-p",
    "INPUT_SHAPE": "1x3x640x640", "INPUT_TYPE_RT": "nv12",
-   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]", ...}
+   "NORM_TYPE": "data_scale", "SCALE_VALUE": "[0.003921568627451]"}
 
 === Scheduling Parameters ===
 yolo11n_seg_nashp_640x640_nv12_debug:

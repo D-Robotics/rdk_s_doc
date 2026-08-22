@@ -20,7 +20,7 @@ description: "RDK S100/S600 CAN 总线收发示例，无需改系统代码"
 
 板端路径：`/app/Can/`
 
-```
+```text
 Can/
 ├── can_get/         # HAL 方式：接收 CAN 数据
 ├── can_send/        # HAL 方式：发送 CAN 数据

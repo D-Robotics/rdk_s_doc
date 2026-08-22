@@ -135,3 +135,5 @@ Data flow: FFmpeg initializes the network stack and opens the RTSP stream (`avfo
 - [Object Detection - YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
 - [C/C++ Demo Programming Guide](../../04_demo_support/02_c_cpp_build.md)
 - [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [DECODER (Decode Module) API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
+- [VIO (Video Input) API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)

@@ -130,3 +130,6 @@ Data flow: the SP decoder opens the H.264 file (`sp_init_decoder_module`/`sp_sta
 - [Object Detection - YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
 - [C/C++ Demo Programming Guide](../../04_demo_support/02_c_cpp_build.md)
 - [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)
+- [DECODER (Decode Module) API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
+- [DISPLAY (Display Module) API](../../../04_Simple_API/01_multimedia_api/cdev/04_display_api.md)
+- [C Inference API](../../../04_Simple_API/02_inference_api/01_c_api.md)

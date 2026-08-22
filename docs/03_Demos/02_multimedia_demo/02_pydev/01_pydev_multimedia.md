@@ -12,6 +12,10 @@ description: "RDK S100/S600 Python 多媒体采集/显示/编解码示例"
 示例源码预置在板端 `/app/pydev_demo/` 目录，Python 脚本无需编译，直接运行。
 :::
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 环境准备
 
 - 开发板已烧录 RDK OS 并启动（见 [开始使用 RDK](../../../01_Quick_start/02_getting_started.md)）
@@ -19,9 +23,21 @@ description: "RDK S100/S600 Python 多媒体采集/显示/编解码示例"
 - HDMI 显示器已连接（显示类示例）
 - Python 依赖已安装：
 
+<DocScope products="RDK S600">
+
+```bash
+pip install -r /app/pydev_demo/requirements.txt --break-system-packages
+```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
 ```bash
 pip install -r /app/pydev_demo/requirements.txt
 ```
+
+</DocScope>
 
 ## 代码位置
 

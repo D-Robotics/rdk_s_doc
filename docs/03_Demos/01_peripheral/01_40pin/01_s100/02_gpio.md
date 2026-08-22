@@ -49,7 +49,9 @@ GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，相关脚本如下�
 - SOC： 对应的编号是芯片内部的 GPIO 管脚序号。
 
 本文推荐用户使用`BOARD`编码模式，设置编码的方式如下：
-注意：编码每次只能设置一次，如果想要重新设置，需要`GPIO.cleanup()`后重新设置
+
+注意：编码每次只能设置一次，如果想要重新设置，需要`GPIO.cleanup()`后重新设置。
+
 ```python
 GPIO.setmode(GPIO.BOARD)
 # or
@@ -85,7 +87,7 @@ GPIO.setwarnings(False)
 
 :::info
 
-在`RDK S100`平台上，支持`40-pin` GPIO 拓展， `40-pin`在使用过程中有如下的限制:
+在`RDK S100`平台上，支持`40-pin` GPIO 扩展， `40-pin`在使用过程中有如下的限制:
 
 - `40-pin`上有一组引脚涉及到二选一（UART2, I2C5）。
 - `40-pin`上 PCM 相关引脚如果要使用需要拨动拨码开关。
@@ -523,7 +525,7 @@ if __name__ == '__main__':
 ```
 ## hb_gpioinfo 工具介绍
 
-hb_gpioinfo 是适配 RDK S100的一个 gpio 帮助工具，可以查看当前开发板的的 PinName 和 PinNum 的对应关系，命令示例输出如下：
+hb_gpioinfo 是适配 RDK S100 的一个 GPIO 帮助工具，可以查看当前开发板的 PinName 和 PinNum 的对应关系，命令示例输出如下：
 ```shell
 sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|

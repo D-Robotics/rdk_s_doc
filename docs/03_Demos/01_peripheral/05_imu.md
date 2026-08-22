@@ -1,6 +1,7 @@
 ---
 title: "IMU 应用"
 sidebar_position: 5
+sidebar_products: RDK S600
 description: "RDK S600 IMU 传感器数据读取示例（BMI08X/ICM42688）"
 ---
 
@@ -21,7 +22,7 @@ description: "RDK S600 IMU 传感器数据读取示例（BMI08X/ICM42688）"
 
 板端路径：`/app/sample_imu/`
 
-```
+```text
 sample_imu/
 ├── Makefile
 ├── sample_imu.c       # 主程序：解析参数 + 交互式读取 IMU 数据
