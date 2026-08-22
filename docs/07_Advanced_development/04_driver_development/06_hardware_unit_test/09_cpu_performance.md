@@ -208,13 +208,13 @@ Total time (secs): 18.982000
 Iterations/Sec   : 84290.380360
 Iterations       : 1600000
 Compiler version : GCC11.3.1 20220712
-Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
+Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
 Parallel PThreads : 8
 Memory location  : Please put data memory location here
                         (e.g. code in flash, data on heap etc)
 seedcrc          : 0xe9f5
 Correct operation validated. See README.md for run and reporting rules.
-CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads
+CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads
 ```
 
 </DocScope>
@@ -309,7 +309,7 @@ CoreMark 1.0 : 320684.126136 / GCC13.3.0 -O3 -funroll-all-loops -static --param 
 
 根据 O3 优化下单核测试的评分结果计算， CoreMark Iterations/Sec = 14481 次 / 秒， CPU Clock (MHz) = 1500 MHz， CPU Cores = 1 核（单核测试），根据公式计算 `CoreMark Score = 14481 /（ 1500 x 1 ） = 9.65`, 性能远高于常规 O3 优化基准（4.2），表现优秀。
 
-根据 O3 优化下多核测试的评分结果计算， CoreMark Iterations/Sec = 84290 次 / 秒， CPU Clock (MHz) = 1500 MHz， CPU Cores = 8 核（多核测试），根据公式计算 `CoreMark Score = 84290 /（ 1500 x 8 ） ≈ 7.03` , 同样远高于 O3 多核基准（4.2），系统整体计算能力强。
+根据 O3 优化下多核测试的评分结果计算， CoreMark Iterations/Sec = 84290 次 / 秒， CPU Clock (MHz) = 1500 MHz， CPU Cores = 8 核（多核测试，旧 8×A55 参数时期实测值；S100 实为 6×A78AE，新参数复测后更新），根据公式计算 `CoreMark Score = 84290 /（ 1500 x 8 ） ≈ 7.03`（旧口径）, 同样远高于 O3 多核基准（4.2），系统整体计算能力强。
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -345,10 +345,10 @@ make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -
 mv coremark.exe coremark_O2_single
 ```
 
-编译 8 核开启 `-O2` 的 coremark 命令：
+编译 18 核开启 `-O2` 的 coremark 命令：
 
 ```shell
-make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
+make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=18 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
 
 mv coremark.exe coremark_O2_mutli
 ```

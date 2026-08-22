@@ -174,7 +174,7 @@ Total time (secs): 18.982000
 Iterations/Sec   : 84290.380360
 Iterations       : 1600000
 Compiler version : GCC11.3.1 20220712
-Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
+Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
 Parallel PThreads : 8
 Memory location  : Please put data memory location here
                         (e.g. code in flash, data on heap etc)
@@ -212,7 +212,7 @@ seedcrc          : 0xe9f5
 [6]crcfinal      : 0x4983  
 [7]crcfinal      : 0x4983  
 Correct operation validated. See README.md for run and reporting rules.  
-CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads  
+CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads  
 
 ```
 
@@ -262,7 +262,7 @@ CoreMark Iterations/Sec = 84,290 iterations/second,
 CPU Clock (MHz) = 1500 MHz,  
 CPU Cores = 8 (multi-core test),  
 the CoreMark Score is calculated as:  
-`CoreMark Score = 84290 / (1500 × 8) ≈ 7.03`,  
+`CoreMark Score = 84290 / (1500 × 8) ≈ 7 (legacy measurement under the old 8-core A55 configuration; S100 is actually 6x A78AE, to be re-measured).03`,  
 which also far surpasses the `-O3` multi-core baseline (4.2), indicating strong overall system computational capability.
 
 ## FAQ
@@ -270,6 +270,8 @@ which also far surpasses the `-O3` multi-core baseline (4.2), indicating strong 
 **Q1**: How do I test the CoreMark metric under multi-core configuration with `-O2` compiler optimization enabled?
 
 **A1**: To test CoreMark under multi-core mode with `-O2` compiler optimization, you need to recompile the CoreMark source code by setting the appropriate compiler options to generate the desired executable. Navigate to the directory `/app/chip_base_test/07_cpu_performance/coremark-main` and use the following commands to recompile.
+
+<DocScope products="RDK S100">
 
 Command to compile single-core CoreMark with `-O2`:
 
@@ -286,6 +288,28 @@ make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -
 
 mv coremark.exe coremark_O2_mutli
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+Command to compile single-core CoreMark with `-O2`:
+
+```shell
+make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78" REBUILD=1 run1.log
+
+mv coremark.exe coremark_O2_single
+```
+
+Command to compile 18-core CoreMark with `-O2`:
+
+```shell
+make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=18 -DUSE_PTHREAD -lrt -pthread" REBUILD=1 run2.log
+
+mv coremark.exe coremark_O2_mutli
+```
+
+</DocScope>
 
 ## Related Documentation
 
