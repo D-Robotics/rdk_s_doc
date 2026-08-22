@@ -189,3 +189,8 @@ After running the test, verify the following to ensure the new test item works c
 - Whether log files are generated as expected and contain complete records.
 - Whether test results meet functional expectations.
 - Whether parameters configured in `config.ini` take effect correctly.
+
+## Related Documentation
+
+- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

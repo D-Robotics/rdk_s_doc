@@ -137,6 +137,37 @@ The S600 platform has a total of 18 cores (Cortex-A78AE), divided into 5 policie
 
 ## Test Method
 
+### Board Built-in STREAM Test
+
+The `08_ddr_bandwidth` directory already provides the STREAM benchmark source code `stream.c`, which can be compiled and run directly on the board without cross-compilation:
+
+```shell
+cd /app/chip_base_test/08_ddr_bandwidth
+gcc -O3 -fopenmp -DNTIMES=100 stream.c -lgomp -o stream
+OMP_NUM_THREADS=18 ./stream
+```
+
+<DocScope products="RDK S600">
+
+Board measurement results (18 threads, `NTIMES=100`, best time of each kernel):
+
+```text
+Function    Best Rate MB/s  Avg time     Min time     Max time
+Copy:           89633.9     0.001952     0.001785     0.002350
+Scale:          90908.8     0.001902     0.001760     0.002532
+Add:            72310.4     0.003488     0.003319     0.003956
+Triad:          72859.9     0.003479     0.003294     0.004133
+Solution Validates: avg error less than 1.000000e-13 on all three arrays
+```
+
+Among them, `Triad` (reading two arrays and writing one array simultaneously) best reflects the actual mixed read/write bandwidth of the DDR. Note that STREAM and lmbench's `bw_mem` use different measurement methods, so their values cannot be compared directly.
+
+</DocScope>
+
+### Cross-Compile lmbench (Optional)
+
+If finer-grained bandwidth and latency metrics are needed, cross-compile the `bw_mem` of lmbench as described in the `Preparation` section, and then run it with the command format below.
+
 ### Command Format
 
 ```shell
@@ -328,3 +359,8 @@ Taking S100 as an example:
 ### Passing Criteria
 
 Due to the read/write latency of the DDR system itself and the maintenance commands sent to DRAM particles, which also occupy time slices on the address and data buses, the actual DDR bandwidth will be lower than the theoretical bandwidth. The practical bandwidth standard should be approximately 70% of the theoretical bandwidth. Additionally, under high temperatures (automotive grade, DRAM above 85°C), more refresh commands must be sent to the DRAM particles, further reducing the actual bandwidth.
+
+## Related Documentation
+
+- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

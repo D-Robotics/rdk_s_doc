@@ -1,3 +1,8 @@
+---
+sidebar_position: 12
+title: "hbmem sample usage instructions"
+description: "hbmem sample usage instructions - On-board sample usage instructions"
+---
 # hbmem sample usage instructions
 
 ## Function Overview

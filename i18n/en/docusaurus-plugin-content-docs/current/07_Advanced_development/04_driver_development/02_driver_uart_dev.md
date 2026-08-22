@@ -140,3 +140,8 @@ On RDK S600, uart4 is initialized as /dev/ttyS1. uart4 does not have physical pi
 - In the RDK S600 hardware design, only uart6 and uart7 are exposed via expansion pin headers, and a TXB series level shift chip from TI is used to convert 1.8V IO to 3.3V IO. **Due to hardware limitations on the RDK S600 V0P1 development board, uart6 and uart7 cannot be used**.
 
 </DocScope>
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [dpkg-deb Command](/Appendix/linux-command-manual/dpkg-deb)

@@ -57,23 +57,23 @@ After downloading the development toolkit, refer to `oellm_runtime/model/resolve
 
 ### Statistics
 
-- **model**：Model name.
+- **model**:Model name.
 
-- **BPU core num**：Number of BPU cores occupied by the model at runtime.
+- **BPU core num**:Number of BPU cores occupied by the model at runtime.
 
-- **qtype**：Quantization precision of the model.
+- **qtype**:Quantization precision of the model.
 
-- **sequence length**：Token sequence length processed in a single pass during the prefill stage.
+- **sequence length**:Token sequence length processed in a single pass during the prefill stage.
 
-- **max context**：Maximum cumulative token sequence length the model can handle.
+- **max context**:Maximum cumulative token sequence length the model can handle.
 
 - **RTF**: The ratio of the time consumed to process a piece of audio to the actual duration of that audio.
 
-- **TTFT(ms)**：Time to first token.
+- **TTFT(ms)**:Time to first token.
 
-- **Decode(TPS)**：Number of tokens generated per second during the decode stage.
+- **Decode(TPS)**:Number of tokens generated per second during the decode stage.
 
-- **memory(GB)**：The total memory usage of Linux memory and ION memory when the model is running.
+- **memory(GB)**:The total memory usage of Linux memory and ION memory when the model is running.
 
 ### Test Data
 
@@ -81,13 +81,13 @@ After downloading the development toolkit, refer to `oellm_runtime/model/resolve
 
 **Standard Mode**
 
-General configuration:：
+General configuration::
 
-- **BPU core num**：All use 4 BPU cores
+- **BPU core num**:All use 4 BPU cores
 
-- **sequence length**：All use 256
+- **sequence length**:All use 256
 
-- **max context**：All use 2048
+- **max context**:All use 2048
 
 <table>
 <colgroup>
@@ -162,15 +162,15 @@ General configuration:：
 **Speculative Sampling Mode**
 
 
-General configuration：
+General configuration:
 
-- **BPU core num**：All use 4 BPU cores
+- **BPU core num**:All use 4 BPU cores
 
-- **qtype**：The base model all uses w4, and the draft model all uses w8
+- **qtype**:The base model all uses w4, and the draft model all uses w8
 
-- **sequence length**：All use 256
+- **sequence length**:All use 256
 
-- **max context**：All use 2048
+- **max context**:All use 2048
 
 :::info
 
@@ -342,7 +342,7 @@ General configuration:
 
 General configuration:
 
-- **qtype**：All use 8-bit quantization weights
+- **qtype**:All use 8-bit quantization weights
 
 :::info
 
@@ -517,4 +517,6 @@ General configuration:
 </tbody>
 </table>
 
+## Related Documentation
 
+- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)

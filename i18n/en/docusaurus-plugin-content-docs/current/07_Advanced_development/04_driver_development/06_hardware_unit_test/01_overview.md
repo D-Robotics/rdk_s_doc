@@ -60,3 +60,8 @@ Driver functional unit testing aims to cover the following core objectives:
 - **Compatibility Testing:** Verify driver compatibility across different hardware configurations or software versions.
 
 Detailed testing methods, procedures, and pass/fail criteria for each driver type will be elaborated in subsequent chapters.
+
+## Related Documentation
+
+- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

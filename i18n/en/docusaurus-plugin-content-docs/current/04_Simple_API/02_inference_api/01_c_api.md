@@ -8,7 +8,7 @@ description: "hbDNN C inference API (hb_dnn.h): model loading, tensor query and 
 
 hbDNN is a C wrapper API on RDK for loading and running neural network models (`hb_dnn.h`), covering the complete flow from loading model files, querying input/output tensors and preparing memory, to submitting inference tasks and retrieving the results. Models are compiled into `.hbm` files by the AI toolchain (see "Using Your Own Model"); hbDNN parses them and executes them on the BPU.
 
-> **Interface level**: this page is the 【encapsulated simple API】(mode 1), ready to use out of the box. When you need to directly manage low-level primitives such as BPU cores, task scheduling and BPU memory, see [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md); for the Python wrapper, see [Python Inference API](./02_python_api.md).
+> **Interface level**: this page is the encapsulated simple API(mode 1), ready to use out of the box. When you need to directly manage low-level primitives such as BPU cores, task scheduling and BPU memory, see [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md); for the Python wrapper, see [Python Inference API](./02_python_api.md).
 
 **Applicable scenarios**: loading a `.hbm` model in a C/C++ application and performing inference (custom pipelines for tasks such as classification, detection and segmentation), or scenarios that need multi-model batch loading or asynchronous task scheduling.
 

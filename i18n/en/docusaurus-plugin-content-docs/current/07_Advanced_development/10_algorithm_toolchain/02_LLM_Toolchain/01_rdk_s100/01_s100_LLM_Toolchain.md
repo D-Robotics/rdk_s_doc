@@ -81,3 +81,7 @@ After downloading the development toolkit, check the oellm_runtime/model/resolve
 | model | platform | dtype | seqlen | max context | TTFT(ms) | TPS | memory(GB) |
 |-------|----------|-------|--------|-------------|----------|-----|------------|
 | Qwen2.5-Omni-3B | S100P | q8 | 256 | 2048 | 285 | 14.03 | 5.5 |
+
+## Related Documentation
+
+- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)

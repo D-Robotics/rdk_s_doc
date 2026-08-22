@@ -1,3 +1,8 @@
+---
+sidebar_position: 6
+title: "sample_codec User Guide"
+description: "sample_codec User Guide - On-board sample usage instructions"
+---
 # sample_codec User Guide
 ## Functional Overview
 sample_codec is an example program for video encoding and decoding. It performs video encoding and decoding based on configuration items defined in the configuration file (`codec_config.ini`), helping users debug video codecs.
@@ -214,3 +219,34 @@ Encode idx: 0, frame= 100
 ```
 
 According to the configuration `frame_num = 100` in `codec_config.ini`, the program automatically exits after encoding 100 frames.
+
+## Common Issues
+
+### codec_config.ini Configuration Not Taking Effect
+
+**Symptom**: After modifying `codec_config.ini`, the encoding resolution/frame count does not run as expected.
+
+**Cause**: The program reads the ini file at startup; modifications made while it is running are not hot-reloaded. Alternatively, the ini section name or field name may be misspelled.
+
+**Solution**: Re-run the program after making modifications; verify that the `venc_stream`/`vdec_stream` sections and field names are consistent with the parsing logic in `sample_codec.c`.
+
+### Input Buffer Timeout
+
+**Symptom**: During encoding/decoding, `hb_mm_mc_dequeue_input_buffer` returns a timeout (-268435443).
+
+**Cause**: The input image frame rate/resolution does not match the codec configuration, or the upstream is not continuously feeding frames.
+
+**Solution**: Verify that the input YUV resolution matches `codec_config.ini`; confirm that the dequeue → fill → queue rhythm in the loop is correct.
+
+### Empty Bitstream Output or Corrupted File
+
+**Symptom**: The output h264/h265 file cannot be played or has an abnormal size.
+
+**Cause**: The `frame_num` value is too small, the output buffer is not queued back correctly, or the bit rate parameter is extreme.
+
+**Solution**: Confirm that `frame_num` is greater than 0; check that `hb_mm_mc_dequeue_output_buffer`/`queue_output_buffer` are paired; adjust the bit rate appropriately.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

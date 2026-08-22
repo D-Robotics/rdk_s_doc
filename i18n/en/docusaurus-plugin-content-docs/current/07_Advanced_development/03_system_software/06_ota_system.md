@@ -1380,3 +1380,8 @@ Refer to `otaGetOwnerFlag`.
 **Example Code**
 
 Refer to `otaGetOwnerFlag`.
+
+## Related Documentation
+
+- [Major Version Upgrade and Firmware](/System_configuration/system_update/upgrade_firmware)
+- [miniboot Upgrade](/Advanced_development/system_software/ota_miniboot)

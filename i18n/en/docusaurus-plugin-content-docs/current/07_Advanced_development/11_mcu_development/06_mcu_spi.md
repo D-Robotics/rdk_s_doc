@@ -528,7 +528,7 @@ The factory default parameters for MCU1's SPI are based on the `Spi_PBcfg.c` con
 #### void Spi_Init(const Spi_ConfigType* ConfigPtr)
 
 ```shell
-Description：Service for SPI initialization.
+Description:Service for SPI initialization.
 
 Parameters(in)
     ConfigPtr: Pointer to configuration set
@@ -536,13 +536,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Spi_WriteIB(Spi_ChannelType Channel, const Spi_DataBufferType* DataBufferPtr)
 
 ```shell
-Description：Service for SPI de-initialization.
+Description:Service for SPI de-initialization.
 
 Parameters(in)
     Channel: Channel ID.
@@ -551,7 +551,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Spi write IB buffer success.
     E_NOT_OK: Spi write IB buffer failed.
 ```
@@ -559,7 +559,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Spi_AsyncTransmit(Spi_SequenceType Sequence)
 
 ```shell
-Description：Service to transmit data on the SPI bus.
+Description:Service to transmit data on the SPI bus.
 
 Sync/Async:Asynchronous
 Parameters(in)
@@ -568,7 +568,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: set success
     E_NOT_OK: set failed
 ```
@@ -576,7 +576,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Spi_ReadIB(Spi_ChannelType Channel, Spi_DataBufferType* DataBufferPtr)
 
 ```shell
-Description：Service for reading synchronously one or more data from an IB SPI
+Description:Service for reading synchronously one or more data from an IB SPI
              Handler/Driver Channel specified by parameter.
 
 Sync/Async:Synchronous
@@ -586,7 +586,7 @@ Parameters(inout)
     None
 Parameters(out)
     DataBufferPtr: Pointer to destination data buffer in RAM
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: set success
     E_NOT_OK: set failed
 ```
@@ -594,7 +594,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Spi_SetupEB(Spi_ChannelType Channel, const Spi_DataBufferType* SrcDataBufferPtr, Spi_DataBufferType* DesDataBufferPtr, Spi_NumberOfDataType Length)
 
 ```shell
-Description：Service to setup the buffers and the length of data for the EB SPI
+Description:Service to setup the buffers and the length of data for the EB SPI
              Handler/Driver Channel specified.
 
 Sync/Async:Synchronous
@@ -606,7 +606,7 @@ Parameters(inout)
     None
 Parameters(out)
     DesDataBufferPtr: Pointer to the memory location that will hold the received data
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Spi Setup EB buffer success.
     E_NOT_OK: Spi Setup EB buffer failed.
 ```
@@ -614,7 +614,7 @@ Return value：Std_ReturnType
 #### Spi_StatusType Spi_GetStatus(const Spi_ConfigType* ConfigPtr)
 
 ```shell
-Description：Service returns the SPI Handler/Driver software module status.
+Description:Service returns the SPI Handler/Driver software module status.
 
 Sync/Async:Synchronous
 Parameters(in)
@@ -623,14 +623,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Spi_StatusType
+Return value:Spi_StatusType
     Spi_StatusType
 ```
 
 #### Spi_JobResultType Spi_GetJobResult(Spi_JobType Job)
 
 ```shell
-Description：This service returns the last transmission result of the specified Job.
+Description:This service returns the last transmission result of the specified Job.
 
 Sync/Async:Synchronous
 Parameters(in)
@@ -639,14 +639,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Spi_JobResultType
+Return value:Spi_JobResultType
     Spi_JobResultType
 ```
 
 #### Spi_SeqResultType Spi_GetSequenceResult(Spi_SequenceType Sequence)
 
 ```shell
-Description：This service returns the last transmission result of the specified Sequence.
+Description:This service returns the last transmission result of the specified Sequence.
 
 Sync/Async:Synchronous
 Parameters(in)
@@ -655,14 +655,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Spi_JobResultType
+Return value:Spi_JobResultType
     Spi_JobResultType
 ```
 
 #### void Spi_GetVersionInfo(Std_VersionInfoType* versioninfo)
 
 ```shell
-Description：This service returns the version information of this module.
+Description:This service returns the version information of this module.
 
 Sync/Async:Synchronous
 Parameters(in)
@@ -671,13 +671,13 @@ Parameters(inout)
     None
 Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Spi_SyncTransmit(Spi_SequenceType Sequence)
 
 ```shell
-Description：Service to transmit data on the SPI bus.
+Description:Service to transmit data on the SPI bus.
 
 Sync/Async:Synchronous
 Parameters(in)
@@ -686,7 +686,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Transmission command has been accepted
     E_NOT_OK: Transmission command has not been accepted
 ```
@@ -694,7 +694,7 @@ Return value：Std_ReturnType
 #### Spi_StatusType Spi_GetHWUnitStatus(Spi_HWUnitType HWUnit)
 
 ```shell
-Description：This service returns the status of the specified SPI Hardware
+Description:This service returns the status of the specified SPI Hardware
              microcontroller peripheral.
 
 Sync/Async:Synchronous
@@ -704,14 +704,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Spi_StatusType
+Return value:Spi_StatusType
     Spi_StatusType
 ```
 
 #### void Spi_Cancel(Spi_SequenceType Sequence)
 
 ```shell
-Description：Service cancels the specified on-going sequence transmission.
+Description:Service cancels the specified on-going sequence transmission.
 
 Sync/Async:Synchronous
 Parameters(in)
@@ -720,13 +720,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Spi_SetAsyncMode(Spi_AsyncModeType Mode)
 
 ```shell
-Description：Service to set the asynchronous mechanism mode for SPI
+Description:Service to set the asynchronous mechanism mode for SPI
              busses handled asyn-chronously.
 
 Sync/Async:Synchronous
@@ -736,7 +736,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：    Std_ReturnType:
+Return value:    Std_ReturnType:
     E_OK: Setting command has been accepted
     E_NOT_OK: Setting command has not been accepted
 ```
@@ -744,7 +744,7 @@ Return value：    Std_ReturnType:
 #### void Spi_MainFunction_Handling(void)
 
 ```shell
-Description：This function shall polls the SPI interrupts linked to HW Units
+Description:This function shall polls the SPI interrupts linked to HW Units
              allocated to the transmission of SPI sequences to enable the evolution
              of transmission state machine.
 
@@ -755,5 +755,10 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [SPI Debugging Guide](/Advanced_development/driver_development/driver_spi_dev)

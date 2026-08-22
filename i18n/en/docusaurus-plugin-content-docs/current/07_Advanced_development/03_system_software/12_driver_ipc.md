@@ -626,7 +626,7 @@ rx_packet(128)
 :::tip
 IpcBox only implements control of SPI Master with the following limitations:
 - Slave mode is not supported
-- The MCU-side底层 uses interrupt + asynchronous mode by default, supporting synchronous mode
+- The MCU side uses interrupt + asynchronous mode by default, supporting synchronous mode
 - Application-layer control of frame length is not supported
 :::
 
@@ -741,7 +741,7 @@ from ipcbox_packet import ipcbox_packet
 
 3. Example
 
-Test whether the Python library的效果 matches the interfaces provided by C++:
+Test whether the Python library effects match the interfaces provided by C++:
 ```bash
 root@ubuntu:/app/pyhbipchal_sample# python pyhbipchal_test.py
 Library version: 1.0.0
@@ -986,12 +986,12 @@ IPCFHAL defines several error codes covering common error types. Use the interfa
 ### statistic Debug Node
 Prints statistics about communication, including pkg, pkg_len, err_acq, err_shm_tx, err_cb.
 
-#### 【Node Path】
+#### Node Path
 ```bash
 //ins-X represents insid, e.g., ins-5 if insid is 5
 /sys/kernel/debug/ipcdrv-ins-5/statistic
 ```
-#### 【Node Function】
+#### Node Function
 ```c
 //Per instance, counts all channel receive & send counts
 struct ipc_statistic_t {
@@ -1006,7 +1006,7 @@ struct ipc_statistic_t {
         uint64_t datalen;/**< tx/rx: datalen*/
 };
 ```
-#### 【Node Usage】
+#### Node Usage
 ```
 //Method 1: Directly operate the sys node
 //After channel initialization and before data transmission/reception, enable
@@ -1022,7 +1022,7 @@ write(fd, buf, 1024);
 read(fd, buf, 1024);
 close(fd);
 ```
-#### 【Log】
+#### Log
 ```bash
 DataLink:
                                 pkg              pkg_len    err_acq err_shm_tx     err_cb
@@ -1047,18 +1047,18 @@ DataLink:
 ### tsdump Debug Node
 Per channel, prints timestamps when sending/receiving data.
 
-#### 【Node Path】
+#### Node Path
 ```bash
 //ins-X represents insid, e.g., ins-5 if insid is 5
 /sys/kernel/debug/ipcdrv-ins-5/tsdump
 ```
-#### 【Node Function】
+#### Node Function
 ```c
 //Per channel, enables timestamp logging when sending/receiving data
 int32_t tsdump;/**< >=0, enables timestamp logging for specified channel, <0, disables timestamp logging*/
 ```
 
-#### 【Node Usage】
+#### Node Usage
 ```c
 //Method 1: Directly operate the sys node
 //After channel initialization and before data transmission/reception, enable
@@ -1075,7 +1075,7 @@ write(fd, buf, 1024);
 read(fd, buf, 1024);
 close(fd);
 ```
-#### 【Log】
+#### Log
 ```bash
 [ 1173.246630] ipc-shm-hal: dev_print_timestamp()[515]: [5][0] tx wt sta: 1717558158.887241446
 [ 1173.246642] ipc-shm-hal: dev_print_timestamp()[515]: [5][0] tx wt end: 1717558158.887253646
@@ -1094,18 +1094,18 @@ tsdump: 0
 ### wdump Debug Node
 Per channel, prints sent data.
 
-#### 【Node Path】
+#### Node Path
 ```bash
 //ins-X represents insid, e.g., ins-5 if insid is 5
 /sys/kernel/debug/ipcdrv-ins-5/wdump
 ```
-#### 【Node Function】
+#### Node Function
 ```bash
 //Per channel, enables sent data dump, prints sent data
 //The printed length depends on dumplen; if dumplen is not set, all data is printed by default
 int32_t wdump;/**< =chan_id, enables send dump, otherwise, disables send dump*/
 ```
-#### 【Node Usage】
+#### Node Usage
 ```c
 //Method 1: Directly operate the sys node
 //After channel initialization and before data transmission, enable
@@ -1123,7 +1123,7 @@ read(fd, buf, 1024);
 close(fd);
 ```
 
-#### 【Log】
+#### Log
 ```c
 [ 1022.271650] ipc-shm-hal: hal_ipc_shm_write()[926]: [5][0] tx size 32
 [ 1022.271666] ipc-shm-hal: ipcf_dump_data()[519]: dump info: tx data len[32] mul[1] remain[0]
@@ -1140,18 +1140,18 @@ wdump: 0
 ### rdump Debug Node
 Per channel, prints received data.
 
-#### 【Node Path】
+#### Node Path
 ```
 //ins-X represents insid, e.g., ins-5 if insid is 5
 /sys/kernel/debug/ipcdrv-ins-5/rdump
 ```
-#### 【Node Function】
+#### Node Function
 ```c
 //Per channel, enables received data dump, prints received data
 //The printed length depends on dumplen; if dumplen is not set, all data is printed by default
 uint32_t rdump;/**< =chan_id, enables receive dump, otherwise, disables receive dump*/
 ```
-#### 【Node Usage】
+#### Node Usage
 ```bash
 //Method 1: Directly operate the sys node
 //After channel initialization and before data transmission/reception, enable
@@ -1168,7 +1168,7 @@ write(fd, buf, DEV_README_BUFSIZE);
 read(fd, buf, DEV_README_BUFSIZE);
 close(fd);
 ```
-#### 【Log】
+#### Log
 
 ```bash
 [  983.730497] ipc-shm-hal: data_callback()[803]: [6][0] callback size 32
@@ -1186,19 +1186,19 @@ rdump: 0
 
 ### dumplen Debug Node
 Per channel, configures the length of data to dump.
-#### 【Node Path】
+#### Node Path
 ```bash
 //ins-X represents insid, e.g., ins-5 if insid is 5
 /sys/kernel/debug/ipcdrv-ins-5/dumplen
 ```
-#### 【Node Function】
+#### Node Function
 ```bash
 //Per channel, configures the length of data to dump
 //Valid when dumplen>0 and dumplen<data_len
 //Prerequisite: wdump or rdump is enabled
 uint32_t dumplen;/**< Number of bytes to print when dumping data*/
 ```
-#### 【Node Usage】
+#### Node Usage
 ```bash
 //Method 1: Directly operate the sys node
 //After channel initialization and before data transmission, enable
@@ -1215,7 +1215,7 @@ write(fd, buf, DEV_README_BUFSIZE);
 read(fd, buf, DEV_README_BUFSIZE);
 close(fd);
 ```
-#### 【Log】
+#### Log
 ```bash
 [  852.898250] ipc-shm-hal: hal_ipc_shm_write()[926]: [5][0] tx size 32
 [  852.898283] ipc-shm-hal: ipcf_dump_data()[519]: dump info: tx data len[16] mul[0] remain[16]
@@ -1247,3 +1247,8 @@ wdump: 0
 libipcfhal-test: TestBody() [2593] info :
 wdump: 0
 ```
+
+## Related Documentation
+
+- [IPC Usage Guide (MCU Side)](/Advanced_development/mcu_development/mcu_ipc)
+- [Time Synchronization Scheme](/Advanced_development/system_software/driver_timesync)

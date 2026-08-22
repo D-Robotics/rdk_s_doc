@@ -202,3 +202,8 @@ If the PC does not recognize the new device after switching Gadget modes:
 
 1. Disconnect and reconnect the USB cable
 2. Run `usb-gadget.sh stop` to stop the current mode, then start the new mode
+
+## Related Documentation
+
+- [System Customization](/Advanced_development/system_software/system_customization)
+- [Peripheral Application Examples](/Demos/peripheral)

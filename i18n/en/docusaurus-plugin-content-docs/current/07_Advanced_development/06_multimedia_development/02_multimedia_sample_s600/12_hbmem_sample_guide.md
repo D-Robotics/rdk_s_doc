@@ -1,3 +1,8 @@
+---
+sidebar_position: 12
+title: "hbmem sample User Guide"
+description: "hbmem sample User Guide - On-board sample usage instructions"
+---
 # hbmem sample User Guide
 
 ## Function Overview
@@ -264,3 +269,34 @@ sample_alloc_com_buf done
 ```
 
 (Other execution output examples retain the original text structure, with only formatting and keyword adjustments applied; repetitive content omitted here.)
+
+## Common Issues
+
+### Memory Allocation Failure
+
+**Symptom**: `hb_mem_alloc_com_buf` / `hb_mem_alloc_graph_buf` returns an error.
+
+**Cause**: The requested size exceeds the available space of the backend, the heapmask specifies an unavailable heap, or `hb_mem_module_open` was not called first.
+
+**Solution**: Confirm `hb_mem_module_open` was called first; check the size and heapmask parameters; if necessary, retry with another backend (ION CMA / CARVEOUT / SRAM).
+
+### Cross-Process Sharing Failure
+
+**Symptom**: Another process fails to map the same memory segment using a share_id.
+
+**Cause**: The share_id was not passed correctly, the receiving process did not open the hbmem module, or the shared memory was already released.
+
+**Solution**: Obtain the share_id via `hb_mem_get_share_id` and pass it reliably; the receiving process must call `hb_mem_module_open` first; do not release the memory while it is still shared.
+
+### Cache Coherence Issue
+
+**Symptom**: After the CPU writes data, the DMA or another core cannot read the latest data, or vice versa.
+
+**Cause**: No cache invalidate/clean operation was performed.
+
+**Solution**: Perform `hb_mem_cache_clean` (or flush) after writing and before reading, and `hb_mem_cache_invalid` before reading; refer to the usage in `sample_share.c`.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

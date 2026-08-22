@@ -438,3 +438,8 @@ For MCU Log usage notes, see: [Introduction to MCU Log](../11_mcu_development/01
 ### How to Effectively Retrieve Logs at the Time of an Issue
 
 1.  File names in the log partition include the last modification time of the corresponding log file. You can search the files for logs at the time of the issue.
+
+## Related Documentation
+
+- [System Log Viewing](/System_configuration/system_log)
+- [Linux Command Usage](/Appendix/linux-command-manual/apt)

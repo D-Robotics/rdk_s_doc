@@ -433,3 +433,8 @@ timer_interrupt gettime 3
 Output:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case3.png" alt="MCU Timer Case 3" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## Related Documentation
+
+- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
+- [Time Synchronization Scheme](/Advanced_development/system_software/driver_timesync)

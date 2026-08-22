@@ -16,7 +16,7 @@ There are three internal power domains: AON, MCU, and Main. The AON is a power d
 ## Power State List
 Five power states are currently implemented: Off, MCU only, Working, Deep sleep, and Light sleep. Detailed descriptions are as follows:
 
-| Power State  |       Description                             |  AON  |  MCU  |  Main  |  DDR颗粒  |
+| Power State  |       Description                             |  AON  |  MCU  |  Main  |  DDR chip  |
 | --------     | ---------------------------------------| ----  | ----- | -----  | ---------- |
 | Off          | Chip completely powered off               | Off   |   Off |   Off  |   Off      |
 | MCU only     | MCU Rcore working normally                | On    |   On  |   Off  |   Off      |
@@ -327,3 +327,8 @@ Currently, the callback logic for D-Robotics software sleep/wakeup is implemente
 :::warning
 All upper-layer services must be stopped before sleep; otherwise, the system may not be able to perform sleep/wakeup correctly.
 :::
+
+## Related Documentation
+
+- [Thermal and CPU Frequency Management](/System_configuration/frequency_management)
+- [Screen Sleep and Power Management](/System_configuration/screen_sleep)

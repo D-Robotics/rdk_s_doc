@@ -411,3 +411,8 @@ The connection method is shown below:
 When toggling the pin functions with the DIP switch, move the upper 40-pin DIP switch to the left, and move the lower PCM DIP switch to the right. As shown in the figure below:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3-en.png" alt="Connecting the Audio Daughter Board to the Deve... diagram" style={{ width: '50%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## Related Documentation
+
+- [Audio Configuration](/System_configuration/audio_output)
+- [Audio Application Examples](/Demos/peripheral/audio)

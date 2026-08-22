@@ -1,3 +1,8 @@
+---
+sidebar_position: 9
+title: "sample_pipeline User Guide"
+description: "sample_pipeline User Guide - On-board sample usage instructions"
+---
 # sample_pipeline User Guide
 
 ## Feature Overview
@@ -773,3 +778,34 @@ loop cnt use up
 pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
+
+## Common Issues
+
+### Multi-pipeline Startup Failure
+
+**Symptom**: `multi_pipe_vin_isp_ynr_pym_gdc_vpu` reports a failure to create or bind vnode.
+
+**Cause**: Conflicting mipi_rx/hw_id across multiple sensors, or insufficient ION memory.
+
+**Solution**: Verify that the mipi_rx configured for each pipeline matches the hardware wiring; reduce the number of pipelines or increase the ION memory.
+
+### uvc_capture_sample Cannot Open /dev/video*
+
+**Symptom**: `uvc_capture_sample` reports that it cannot open the video device.
+
+**Cause**: The system is not in V4L2 (Video4Linux2) mode, or the corresponding video node has not been created.
+
+**Solution**: Load the v4l2 driver as described in the V4L2 chapter and confirm that the video node exists; verify that the scene configuration matches the hardware.
+
+### Pipeline Frame Acquisition Timeout
+
+**Symptom**: getframe times out while the pipeline is running.
+
+**Cause**: The upstream vnode is not outputting frames (the sensor is not lit up) or the vflow binding is incorrect.
+
+**Solution**: Check the sensor output log; verify that the channel number of `hbn_vflow_bind_vnode` is consistent with the configuration.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

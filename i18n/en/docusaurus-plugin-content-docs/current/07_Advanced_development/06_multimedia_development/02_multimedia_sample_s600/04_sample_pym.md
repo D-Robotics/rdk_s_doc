@@ -1,3 +1,8 @@
+---
+sidebar_position: 4
+title: "sample_pym User Guide"
+description: "sample_pym User Guide - On-board sample usage instructions"
+---
 # sample_pym User Guide  
 ## Function Overview  
 sample_pym reads a YUV file into memory allocated by hbm and passes it to the PYM. The PYM processes the data in pyramid layers and finally dumps the processed YUV data into the file system.  
@@ -70,3 +75,26 @@ pym config:
 
 Note:  
 1. The width output by the PYM module is aligned to 16 bytes. When viewing the image, pay attention to cases where the `width` and `wstride` parameters differ.
+
+## Common Issues
+
+### Abnormal Output Caused by Input YUV Mismatching the Parameters
+
+**Symptom**: After running `./sample_pym -i <file> -w <width> -h <height>`, the output pyramid image is garbled or has an incorrect size.
+
+**Cause**: The actual resolution/format of the input YUV file does not match the `-w`/`-h` parameters (this sample uses NV12-format input).
+
+**Solution**: Confirm that the input file is in NV12 format and that the width/height parameters match the actual file. Note that the PYM output width is aligned to 16 bytes; when viewing the output, distinguish between `width` and `wstride`.
+
+### Difference Between feedback and vflow Modes
+
+**Symptom**: The `-f` parameter (feedback mode) behaves differently from the default vflow mode, and the fed-back data is not processed.
+
+**Cause**: In feedback mode, the input image must be sent manually via `hbn_vnode_sendframe`; in vflow mode, PYM is connected as a vnode into vflow and flows automatically.
+
+**Solution**: Use `-f` when debugging by feeding back a single image; use the default vflow mode when used in a pipeline, referring to `sample_pipeline`.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

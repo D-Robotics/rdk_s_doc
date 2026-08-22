@@ -56,3 +56,8 @@ The fields in the `cyclictest` output have the following meanings:
 - `Act`: Actual latency (in microseconds) observed in the current test cycle.
 - `Avg`: Average latency (in microseconds) observed in the current test cycle.
 - `Max`: Maximum latency (in microseconds) observed in the current test cycle.
+
+## Related Documentation
+
+- [Linux Debug Features](/Advanced_development/system_software/kernel_debug)
+- [Kernel Headers](/Advanced_development/system_software/kernel_headers)

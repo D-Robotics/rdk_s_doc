@@ -168,3 +168,8 @@ make distclean
 # or
 make mrproper
 ```
+
+## Related Documentation
+
+- [Boot-Related Configuration](/System_configuration/config_txt/boot_options)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

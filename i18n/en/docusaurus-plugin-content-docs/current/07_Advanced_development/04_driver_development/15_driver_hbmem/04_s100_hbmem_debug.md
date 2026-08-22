@@ -84,3 +84,8 @@ root@ubuntu:~# devmem 0xE0000000
 0x12345678
 root@ubuntu:~#
 ```
+
+## Related Documentation
+
+- [Software Description](./03_s100_hbmem_software.md)
+- [Linux Debug Features](../../03_system_software/10_kernel_debug.md)

@@ -1,11 +1,18 @@
 ---
 sidebar_position: 1
+title: "Base Framework - HBN"
+description: "RDK S100/S600 Multimedia Base Framework HBN API"
 ---
 
-# HBN API
+# Base Framework - HBN
+
+> **Level description**: This chapter covers the **low-level multimedia API** (board-side `hbn_vpf_interface.h`) — the HBN vnode abstraction layer API, a unified node interface for all modules after the Camera (VIN/ISP/PYM/GDC). It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
 
-### Description
+
+
+
+## Overview
 
 In software, the Camera uses a dedicated set of APIs. Modules downstream of the Camera are abstracted as vnodes. These vnodes include VIN, ISP, PYM, and GDC.  
 Multiple vnodes form a vflow (similar to a pipeline). The Camera and VIN are bound together via the attach interface.  
@@ -19,15 +26,147 @@ Example API usage:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/492ed46bde119b791326f621b9f5b064-en.jpg" alt="Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-### API Reference
+
+
+## Software Abstraction
+
+HBN abstracts the hardware modules after the Camera (VIN, ISP, PYM, GDC) as vnodes; each vnode corresponds to one hardware module. Multiple vnodes form a vflow (similar to a pipeline). The Camera and VIN are bound together via the attach interface. Once the vflow is created and started, data frames are passed from upstream to downstream internally by the SDK — no manual frame passing is required.
+
+## vnode Connection
+
+### Output Channel
+
+A vnode has one input channel and one or more output channels; the output channel IDs are described in each module's channel description.
+
+### Connection Method
+
+Use `hbn_vflow_bind_vnode` to bind the output channel of the upstream vnode to the input channel of the downstream vnode, forming a vflow.
+
+### Parameter Configuration
+
+Module basic attributes are passed in structures ending with `<module_name>_attr_t`, extended attributes with `<module_name>_attr_ex_t`, and channel attributes with `<module_name>_ochn_attr_t`/`<module_name>_ichn_attr_t`.
+
+## API List
+
+| Function | Description |
+| --- | --- |
+| hbn_vnode_open | Open the module device node and return the vnode handle |
+| hbn_vnode_close | Close the module device node |
+| hbn_vnode_set_attr / get_attr | Set/get module basic attributes |
+| hbn_vnode_set_attr_ex / get_attr_ex | Set/get module extended attributes (can be dynamically set at runtime) |
+| hbn_vnode_set_ochn_attr / get_ochn_attr | Set/get output channel attributes |
+| hbn_vnode_set_ochn_attr_ex | Set output channel extended attributes |
+| hbn_vnode_set_ichn_attr / get_ichn_attr | Set/get input channel attributes |
+| hbn_vnode_set_ochn_buf_attr | Set output channel buffer attributes |
+| hbn_vnode_start / stop | Start/stop the module |
+| hbn_vnode_getframe / releaseframe | Get/release the output channel image (single layer) |
+| hbn_vnode_getframe_group / releaseframe_group | Get/release multi-layer aggregated images (used by ISP, PYM outputs) |
+| hbn_vnode_sendframe / sendframe_async | Send an image to the input channel (synchronous/asynchronous) |
+| hbn_vflow_create / destroy | Create/destroy a vflow |
+| hbn_vflow_add_vnode | Add a vnode to the vflow |
+| hbn_vflow_bind_vnode | Bind upstream/downstream vnode channels |
+
+| hbn_vnode_set_attr_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_attr_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_attr_ex_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_attr_ex_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_ochn_attr_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_ochn_attr_ex_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_ochn_attr_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_ichn_attr_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_ichn_attr_ex_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_ichn_attr_s | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_enable_ichn | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_disable_ichn | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_enable_ochn | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_disable_ochn | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_reset | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_fd | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_getframe_cond | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_getframe_group_cond | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_sendframe_async | Board extension (see hbn_vpf_interface.h) |
+| hbn_vflow_create_cfg | Board extension (see hbn_vpf_interface.h) |
+| hbn_vflow_del_vnode | Board extension (see hbn_vpf_interface.h) |
+| hbn_vflow_pause | Board extension (see hbn_vpf_interface.h) |
+| hbn_vflow_resume | Board extension (see hbn_vpf_interface.h) |
+| hbn_vflow_get_version | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_output_frame | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_output_groupframe | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_sendframe_group | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_output_groupframe | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_output_frame | Board extension (see hbn_vpf_interface.h) |
+| hbn_vflow_get_fd | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_set_ctrl | Board extension (see hbn_vpf_interface.h) |
+| hbn_vnode_get_ctrl | Board extension (see hbn_vpf_interface.h) |
+
+## API Call Flow
+
+### Creation Flow
+
+1. `hbn_vnode_open` opens each module and obtains the vnode handle.
+2. `hbn_vnode_set_attr` / `set_ochn_attr` / `set_ichn_attr` configure the module and channel attributes.
+3. `hbn_vflow_create` creates the vflow, `hbn_vflow_add_vnode` adds each vnode, and `hbn_vflow_bind_vnode` binds the upstream/downstream channels.
+4. `hbn_vnode_start` starts each module; the vflow begins passing data frames.
+5. `hbn_vnode_getframe` / `getframe_group` retrieve the output image; return it with `releaseframe` / `releaseframe_group` after processing.
+
+### Destruction Flow
+
+1. `hbn_vnode_stop` stops each module.
+2. `hbn_vflow_destroy` destroys the vflow (vnodes already chained into the vflow need no separate `hbn_vnode_close`; independently used modules such as GDC loopback need a separate close).
+
+## Quick Example
+
+The following example follows the minimal call sequence of the board-side `/app/multimedia_samples/sample_isp/get_isp_data/`, demonstrating the creation, start and frame retrieval of a VIN→ISP two-level vflow:
+
+```c
+#include "hbn_vpf_interface.h"
+#include "hb_mem_mgr.h"
+
+hbn_vnode_handle_t vin_fd, isp_fd;
+hbn_vflow_handle_t vflow_fd;
+
+// 1. Open the VIN / ISP modules
+hbn_vnode_open(HB_VIN, mipi_rx, AUTO_ALLOC_ID, &vin_fd);
+hbn_vnode_open(HB_ISP, 0, AUTO_ALLOC_ID, &isp_fd);
+
+// 2. Configure module attributes and channel attributes
+hbn_vnode_set_attr(vin_fd, &vin_attr);
+hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_ichn_attr);
+hbn_vnode_set_ochn_attr(vin_fd, 0, &vin_ochn_attr);
+hbn_vnode_set_attr(isp_fd, &isp_attr);
+hbn_vnode_set_ichn_attr(isp_fd, 0, &isp_ichn_attr);
+hbn_vnode_set_ochn_attr(isp_fd, 0, &isp_ochn_attr);
+
+// 3. Create the vflow, add vnodes and bind upstream/downstream channels
+hbn_vflow_create(&vflow_fd);
+hbn_vflow_add_vnode(vflow_fd, vin_fd);
+hbn_vflow_add_vnode(vflow_fd, isp_fd);
+hbn_vflow_bind_vnode(vflow_fd, vin_fd, 0, isp_fd, 0);
+
+// 4. Start the vflow; data frames automatically flow from VIN to ISP
+hbn_vflow_start(vflow_fd);
+
+// 5. Retrieve frames from the ISP output channel and return them after processing
+hbn_vnode_image_group_t out_group;
+hbn_vnode_getframe_group(isp_fd, 0, 10000, &out_group);
+/* Process out_group ... */
+hbn_vnode_releaseframe_group(isp_fd, 0, &out_group);
+
+// 6. Stop and destroy
+hbn_vflow_stop(vflow_fd);
+hbn_vflow_destroy(vflow_fd);
+```
+
+
+## API Interface Description
 
 ### hbn_vnode_open
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t ctx_id, hbn_vnode_handle_t *vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hb_vnode_type vnode_type: Vnode type. Each hardware module corresponds to a specific vnode type, such as HB_VIN, HB_ISP, HB_PYM, etc.
 
@@ -37,154 +176,154 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t ct
 
 [OUT] hbn_vnode_handle_t *vnode_fd: Returns the vnode handle of the module.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCESS (0)  
 Failure: Negative error code; refer to the Return Value Description table.
 
-【Function Description】
+**Description**
 
 Initializes a specific module, opens its device node, and returns the module's vnode handle.
 
-【Notes】
+**Notes**
 
 None.
 
 ### hbn_vnode_close
 
-【Function Declaration】
+**Function Declaration**
 
 void hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
-【Return Value】
+**Return Value**
 
 None
 
-【Function Description】
+**Description**
 
 Closes the module's device node.
 
-【Notes】
+**Notes**
 
 If hbn_vflow_destroy has been called, there is no need to call hbn_vnode_close.  
 hbn_vnode_close should only be used when a module is used independently (e.g., GDC loopback). If the module is part of a vflow, calling hbn_vflow_destroy is sufficient—do not call hbn_vnode_close.
 
 ### hbn_vnode_set_attr
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
 [IN] void *attr: Pointer to the module's basic attribute structure. This structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—i.e., any structure named \<module_name\>_attr_t.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCESS (0)  
 Failure: Negative error code; refer to the Return Value Description table.
 
-【Function Description】
+**Description**
 
 Sets the basic attributes of a module.
 
-【Notes】
+**Notes**
 
 None.
 
 ### hbn_vnode_get_attr
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
 [OUT] void *attr: Pointer to the module's basic attribute structure (e.g., vin_attr_t, isp_attr_t, pym_attr_t, etc.).*attr: Pointer to the basic attribute structure of the module. The basic attribute structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—any attribute structure named with the module name followed by _attr_t.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Obtains the basic attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_set_attr_ex
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 [IN] void *attr: Pointer to the extended attribute structure of the module. The extended attribute structure can be vin_attr_ex_t, etc.—any attribute structure named with the module name followed by _attr_ex_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Sets the extended attributes of a module, which can be dynamically configured during application runtime.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_get_attr_ex
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 [OUT] void  
 *attr: Pointer to the extended attribute structure of the module. The extended attribute structure can be vin_attr_ex_t, etc.—any attribute structure named with the module name followed by _attr_ex_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Obtains the extended attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_set_ochn_attr
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -192,28 +331,28 @@ ochn_id, void *attr)
 
 [IN] void *attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Sets the output channel attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_get_ochn_attr
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -221,28 +360,28 @@ ochn_id, void *attr)
 
 [OUT] void *attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Obtains the output channel attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_set_ochn_attr_ex
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ochn_attr_ex(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -250,28 +389,28 @@ ochn_id, void *attr)
 
 [IN] void *attr: Pointer to the extended output channel attribute structure of the module. The extended output channel attribute can be pym_ochn_attr_ex_t, etc.—any attribute structure named with the module name followed by _ochn_attr_ex_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Sets the extended output channel attributes of a module, which can be dynamically configured during application runtime.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_set_ichn_attr
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ichn_id, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -279,54 +418,54 @@ ichn_id, void *attr)
 
 [IN] void *attr: Pointer to the input channel attribute structure of the module. The input channel attribute can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute structure named with the module name followed by _ichn_attr_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Sets the input channel attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_get_ichn_attr
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ichn_id, void *attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;[IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for channel IDs.
 
 [OUT] void *attr: Pointer to the input channel attribute structure of the module. The input channel attributes can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute ending with the module name followed by _ichn_attr_t.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Obtain the input channel attributes of the module.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_set_ochn_buf_attr
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, hbn_buf_alloc_attr_t *alloc_attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -334,73 +473,73 @@ ochn_id, hbn_buf_alloc_attr_t *alloc_attr)
 
 [IN] hbn_buf_alloc_attr_t *alloc_attr: Buffer allocation attributes;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Set the buffer attributes for the output channel.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_start
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Start the module.
 
-【Notes】
+**Notes**
 
 The module must be opened before starting.
 
 ### hbn_vnode_stop
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Stop the module.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_getframe
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,  
 uint32_t millisecondTimeout, hbn_vnode_image_t *out_img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -410,27 +549,27 @@ uint32_t millisecondTimeout, hbn_vnode_image_t *out_img)
 
 [OUT] hbn_vnode_image_t *out_img: Address of the output image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Retrieve an image from the module's output channel; this is a blocking interface.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_releaseframe
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, hbn_vnode_image_t *img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -438,27 +577,27 @@ ochn_id, hbn_vnode_image_t *img)
 
 [IN] hbn_vnode_image_t *img: Address of the image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Release the image buffer; the buffer will be returned to the specified output channel.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_getframe_group
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_getframe_group(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, uint32_t millisecondTimeout, hbn_vnode_image_group_t *out_img);
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -468,55 +607,55 @@ ochn_id, uint32_t millisecondTimeout, hbn_vnode_image_group_t *out_img);
 
 [OUT] hbn_vnode_image_group_t *out_img: Address of the output image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Retrieve a multi-layer aggregated image from the module's output channel; this is a blocking interface.
 
-【Notes】
+**Notes**
 
 This interface must be used to obtain output images from ISP and PYM.
 
 ### hbn_vnode_releaseframe_group
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_releaseframe_group(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, hbn_vnode_image_group_t *img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;  
 [IN] hbn_vnode_image_t *img: Address of the image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Releases a multi-layer aggregated image buffer. The buffer will be returned to the specified output channel.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vnode_sendframe
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 hbn_vnode_image_t *img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
 
@@ -524,102 +663,102 @@ hbn_vnode_image_t *img)
 
 [IN] hbn_vnode_image_t *img: Address of the input image buffer;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Sends an image to the input channel of the module, triggering the module to process it. This is a blocking API that waits until hardware processing completes before returning, with a default timeout of 1 second.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vflow_create
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_create(hbn_vflow_handle_t *vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [OUT] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Creates a vflow and returns the vflow handle.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vflow_destroy
 
-【Function Declaration】
+**Function Declaration**
 
 void hbn_vflow_destroy(hbn_vflow_handle_t vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
-【Return Value】
+**Return Value**
 
 None
 
-【Function Description】
+**Description**
 
 Destroys a vflow based on the provided vflow handle.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vflow_add_vnode
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_add_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t
 vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Adds a module into the vflow for management by the vflow.
 
-【Notes】
+**Notes**
 
 None
 
 ### hbn_vflow_bind_vnode
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_bind_vnode(hbn_vflow_handle_t vflow_fd,
 hbn_vnode_handle_t src_vnode_fd, uint32_t out_chn, hbn_vnode_handle_t
 dst_vnode_fd, uint32_t in_chn)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
@@ -631,29 +770,29 @@ dst_vnode_fd, uint32_t in_chn)
 
 [IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Binds two modules together. After binding, data frames from the src_vnode_fd module will automatically flow to the dst_vnode_fd module.
 
-【Notes】
+**Notes**
 
 The flow must be created, and the modules must be opened.
 
 ### hbn_vflow_unbind_vnode
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_unbind_vnode(hbn_vflow_handle_t vflow_fd,
 hbn_vnode_handle_t src_vnode_fd, uint32_t out_chn, hbn_vnode_handle_t
 dst_vnode_fd, uint32_t in_chn)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
@@ -665,93 +804,485 @@ dst_vnode_fd, uint32_t in_chn)
 
 [IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Unbinds the src_vnode_fd and dst_vnode_fd modules.
 
-【Notes】
+**Notes**
 
 Not supported currently.
 
 ### hbn_vflow_start
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_start(hbn_vflow_handle_t vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: Vflow handle;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Start a vflow. All vnodes contained within the vflow will be started.
 
-【Notes】
+**Notes**
 
 The module vnode must be added to the vflow in advance.
 
 ### hbn_vflow_stop
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_stop(hbn_vflow_handle_t vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: vflow handle;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Stop a vflow. All vnodes contained within the vflow will be stopped.
 
-【Notes】
+**Notes**
 
 This function should be used in pair with hbn_vflow_start.
 
 ### hbn_vflow_get_vnode_handle
 
-【Function Declaration】
+**Function Declaration**
 
 hbn_vnode_handle_t hbn_vflow_get_vnode_handle(hbn_vflow_handle_t vflow_fd,  
 hb_vnode_type vnode_type, uint32_t index)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: vflow handle;  
 [IN] hb_vnode_type vnode_type: module ID;  
 [IN] uint32_t index: context ID, range [0, 7]
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Description**
 
 Obtain the vnode handle via module ID and context ID.
 
-【Notes】
+**Notes**
 
 The module must be opened in advance.
 
-### Parameter Description
+
+
+## Board-Extended Functions
+
+The following functions are taken from the board-side `hbn_vpf_interface.h` (no doxygen, signatures only); together with the base set above, they form the complete HBN vnode/vflow API:
+
+
+### hbn_vnode_set_attr_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_attr_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_attr_ex_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_attr_ex_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_ochn_attr_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_ochn_attr_ex_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_ochn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_ochn_attr_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_ichn_attr_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_ichn_attr_ex_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_ichn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_ichn_attr_s
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_enable_ichn
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_enable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_disable_ichn
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_disable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_enable_ochn
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_enable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_disable_ochn
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_disable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_reset
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_reset(hbn_vnode_handle_t vnode_fd);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_fd
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_fd(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, int32_t *fd);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_getframe_cond
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_getframe_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_t *out_img); // block function;
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_getframe_group_cond
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_getframe_group_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_group_t *out_img); // block function;
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_sendframe_async
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_sendframe_async(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_t *img); // no block function
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vflow_create_cfg
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vflow_create_cfg(const char *cfg_file, hbn_vflow_handle_t *vflow_fd);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vflow_del_vnode
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vflow_del_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t vnode_fd);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vflow_pause
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vflow_pause(hbn_vflow_handle_t vflow_fd);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vflow_resume
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vflow_resume(hbn_vflow_handle_t vflow_fd);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vflow_get_version
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vflow_get_version(hbn_version_t *version);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_output_frame
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_output_groupframe
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_sendframe_group
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_sendframe_group(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_group_t *img_group);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_output_groupframe
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_output_frame
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vflow_get_fd
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vflow_get_fd(hbn_vflow_handle_t *vflow_fd);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_set_ctrl
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_set_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+### hbn_vnode_get_ctrl
+
+**Function Declaration**
+
+```c
+hobot_status hbn_vnode_get_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);
+```
+
+**Description**
+
+See the board-side `hbn_vpf_interface.h` (no doxygen; signature taken from the header).
+
+
+## Parameter Description
 
 **Common**
 
@@ -1134,7 +1665,9 @@ stitch_ch_attr
 | strid[MAX_STH_FRAME_PLAN]         | uint32_t          | Stride              |     |     |         | Yes      |
 | rois[MAX_STH_ROI_NUMS]            | struct roi_info   | ROI region description |   |     |         | Yes      |
 
-### Channel Binding Description
+
+
+## Channel Binding Description
 
 | Module | Output Channel ID | Channel Function                                      |
 |--------|-------------------|-------------------------------------------------------|
@@ -1148,12 +1681,16 @@ stitch_ch_attr
 
 "Online" indicates direct hardware connection; "Offline" indicates output to DDR buffer.
 
-### SLOT_ID and Debug Mode Description
+
+
+## SLOT_ID and Debug Mode Description
 
 1. The ISP's `slot_id` parameter selects the ISP hardware context. In CIM-direct-to-ISP scenarios, `slot_id` can be 0–3; in CIM-DDR-ISP scenarios, `slot_id` can be 4–11. Different channels must use distinct `slot_id` values. In ISP-online-YNR-online-PYM or ISP-online-PYM scenarios, the `slot_id` of YNR and PYM must match that of the ISP.
 2. The PYM's `sched_mode` parameter selects the ISP scheduling mode. In CIM-ISP direct hardware connection scenarios, select mode 2 (passthrough); in other scenarios, select mode 1 (manual). In ISP-online-YNR-online-PYM or ISP-online-PYM scenarios, the YNR `work_mode` and PYM `pym_mode` must be consistent with the ISP `sched_mode`.
 
-### Return Value Description
+
+
+## Return Value Description
 
 | Error Code | Macro Definition                    | Description                                                                 |
 |------------|-------------------------------------|-----------------------------------------------------------------------------|
@@ -1220,391 +1757,10 @@ stitch_ch_attr
 | 60         | HBN_STATUS_RGN_OPEN_FILE_FAIL       | RGN module file open failed                                                 |
 | 128        | HBN_STATUS_ERR_UNKNOW               | Unknown error                                                               |
 
-## 板端扩展函数
 
-以下函数取自板端 `hbn_vpf_interface.h`（无 doxygen，仅签名）：
 
-### hbn_vnode_set_attr_s
+## Related Documentation
 
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_attr_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_attr_ex_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_attr_ex_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_ochn_attr_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_ochn_attr_ex_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_ochn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_ochn_attr_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_ichn_attr_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_ichn_attr_ex_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_ichn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_ichn_attr_s
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_enable_ichn
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_enable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_disable_ichn
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_disable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_enable_ochn
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_enable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_disable_ochn
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_disable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_reset
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_reset(hbn_vnode_handle_t vnode_fd);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_fd
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_fd(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, int32_t *fd);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_getframe_cond
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_getframe_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_t *out_img); // block function;
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_getframe_group_cond
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_getframe_group_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_group_t *out_img); // block function;
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_sendframe_async
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_sendframe_async(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_t *img); // no block function
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vflow_create_cfg
-
-【函数声明】
-
-```c
-hobot_status hbn_vflow_create_cfg(const char *cfg_file, hbn_vflow_handle_t *vflow_fd);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vflow_del_vnode
-
-【函数声明】
-
-```c
-hobot_status hbn_vflow_del_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t vnode_fd);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vflow_pause
-
-【函数声明】
-
-```c
-hobot_status hbn_vflow_pause(hbn_vflow_handle_t vflow_fd);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vflow_resume
-
-【函数声明】
-
-```c
-hobot_status hbn_vflow_resume(hbn_vflow_handle_t vflow_fd);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vflow_get_version
-
-【函数声明】
-
-```c
-hobot_status hbn_vflow_get_version(hbn_version_t *version);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_output_frame
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_output_groupframe
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_sendframe_group
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_sendframe_group(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_group_t *img_group);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_output_groupframe
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_output_frame
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vflow_get_fd
-
-【函数声明】
-
-```c
-hobot_status hbn_vflow_get_fd(hbn_vflow_handle_t *vflow_fd);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_set_ctrl
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_set_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
-### hbn_vnode_get_ctrl
-
-【函数声明】
-
-```c
-hobot_status hbn_vnode_get_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);
-```
-
-【功能描述】
-
-见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
-
+- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [Shared Memory - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
+- [Video Capture](/Demos/multimedia_demo/cdev/vio_capture)

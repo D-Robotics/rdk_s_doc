@@ -1,3 +1,8 @@
+---
+sidebar_position: 10
+title: "sunrise camera User Manual"
+description: "sunrise camera User Manual - On-board sample usage instructions"
+---
 # sunrise camera User Manual
 
 ## Functional Overview
@@ -255,3 +260,34 @@ The RTSP stream network URL link can be viewed in the device information on the 
 4. Disable clock synchronization in advanced settings
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="VLC Disable Clock Sync" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## Common Issues
+
+### RTSP Playback Freezes / Shows Artifacts
+
+**Symptom**: VLC playback shows mosaic artifacts, screen corruption or dropped frames.
+
+**Cause**: Bitrate exceeds network bandwidth; VLC buffer is too small; clock synchronization causes buffering anomalies.
+
+**Solution**: For 4K@30fps high bitrate (8192Kbps+) prefer a gigabit network; raise VLC buffer_size from the default 250000 to 1200000; prefer HTTP streaming mode; disable clock synchronization in VLC advanced settings.
+
+### Camera Not Enabled After Replacement
+
+**Symptom**: No image from a newly attached camera after power-on.
+
+**Cause**: After saving configuration and powering on again, a newly inserted camera is disabled by default.
+
+**Solution**: Re-enable the corresponding Camera interface in the web configuration UI and save.
+
+### Too Many Enabled Channels Hit Memory Limit
+
+**Symptom**: Enabling multiple decode/encode channels in the intelligent analysis box reports out-of-memory.
+
+**Cause**: The device's default ION memory budget for encode/decode and algorithms is limited (intelligent box ~1GB); too many channels exceed the limit.
+
+**Solution**: Reduce the number of enabled channels, or adjust the system ION memory size.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

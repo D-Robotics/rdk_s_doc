@@ -440,3 +440,8 @@ On the Slave device side, the data sent by the S100 Master will be received.
 This test is not currently supported.
 
 </DocScope>
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [UART Driver Debugging Guide](/Advanced_development/driver_development/driver_uart_dev)

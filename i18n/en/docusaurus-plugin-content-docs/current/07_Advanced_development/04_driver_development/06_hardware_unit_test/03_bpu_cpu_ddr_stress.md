@@ -526,3 +526,8 @@ dmesg -T --level=err,warn,crit | tail -n 50
 :::info
 During the startup phase, there will be some normal BPU driver info logs (e.g., `arm-smmu-v3 28c00000.bpu_smmu: hobot_smmu_clk_get: miss clk:...`), which are **not** stress test anomalies. The grep pattern above with `bpu.*error` already excludes them and will only match when there is a real issue.
 :::
+
+## Related Documentation
+
+- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

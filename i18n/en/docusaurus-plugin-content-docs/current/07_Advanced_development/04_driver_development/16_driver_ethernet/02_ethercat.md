@@ -93,8 +93,8 @@ sudo systemctl daemon-reload
 ```
 
 :::info
-- `ExecStartPre=-`：Automatically unloads `hobot_eth_super` before starting (the prefix `-` means execution continues even if this command fails)
-- `ExecStopPost=-`：Automatically reloads `hobot_eth_super` after stopping to restore normal network functionality
+- `ExecStartPre=-`:Automatically unloads `hobot_eth_super` before starting (the prefix `-` means execution continues even if this command fails)
+- `ExecStopPost=-`:Automatically reloads `hobot_eth_super` after stopping to restore normal network functionality
 :::
 
 :::warning
@@ -1062,3 +1062,8 @@ If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [A
     #
     UPDOWN_INTERFACES="eth0"
     ```
+
+## Related Documentation
+
+- [Ethernet](./01_ethernet.md)
+- [EtherCAT User Manual (MCU Side)](../../11_mcu_development/17_mcu_ethercat.md)

@@ -74,3 +74,8 @@ The meaning of each field is as follows:
 - Arrow 5 indicates the value of the CPU CPSR register when the exception occurred.
 
 - Arrow 6 indicates the address information where the crash dump was recorded when the exception occurred. You can enter `dumpmem [addr] 4 64` in the MCU shell to read the register and stack information saved at the crash site, or [obtain the register and stack information from the A-core via sysfs](#obtaining-mcu-exception-information).
+
+## Related Documentation
+
+- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)
+- [Linux Debug Features](/Advanced_development/system_software/kernel_debug)

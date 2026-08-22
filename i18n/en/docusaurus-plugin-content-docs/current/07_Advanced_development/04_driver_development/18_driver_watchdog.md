@@ -460,3 +460,8 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   1. The reset method for watchdog feeding timeouts is determined by the watchdog reset register configuration. Currently, reset is handled by the watchdog reset interrupt reported to the MCU driver software.
   2. Feeding the watchdog outside the window period will directly trigger a bark.
+
+## Related Documentation
+
+- [Configure U-Boot and Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [VDSP Development Guide](/Advanced_development/driver_development/vdsp_development)

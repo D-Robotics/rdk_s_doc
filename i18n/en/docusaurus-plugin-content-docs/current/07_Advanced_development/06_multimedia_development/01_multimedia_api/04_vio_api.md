@@ -1,23 +1,25 @@
 ---
 sidebar_position: 4
-title: "VIO API"
-description: RDK S100/S600 VIO API
+title: "Video Input/Output - VIO"
+description: "RDK S100/S600 5.5.1.4 VIO (Video Input/Output)"
 ---
 
-# VIO API
+# Video Input/Output - VIO
+
+> **Level description**: This section covers the low-level multimedia API (board-side `hb_vio_interface.h`), a high-level pipeline API (X5 VIN → RDK VIO) that wraps the initialization, start/stop, and frame retrieval of the entire chain from sensor capture through VIN/ISP/PYM/GDC. It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3); if you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
 ## Overview
 
 VIO (Video Input/Output) is the high-level RDK multimedia pipeline API (board header `hb_vio_interface.h`; X5 calls it VIN, RDK uses VIO). It wraps init, start/stop, parameter config and frame retrieval of the whole pipeline from sensor capture through VIN/ISP/PYM/GDC, as a convenience layer above HBN vnodes.
 
-## Abstraction
+## Software Abstraction
 
 - **Pipeline**: a VIO pipeline chains VIN->ISP->PYM/GDC stages; initialized by `hb_vio_init`, started by `hb_vio_start_pipeline`.
 - **Params & info**: `hb_vio_set_param`/`get_param` configure/query pipeline params; `hb_vio_get_info` queries runtime info.
 - **Frame retrieval**: `hb_vio_run_pym`/`run_gdc`/`run_raw` fetch stage outputs; `hb_vio_raw_dump`/`raw_feedback` for feedback debugging.
 - **GDC**: `hb_vio_set_gdc_cfg`/`set_gdc_cfg_opt` configure distortion correction.
 
-## Call flow
+## API Call Flow
 
 1. `hb_vio_init` initializes the pipeline with a config file.
 2. `hb_vio_set_param` configures params (optional); `hb_vio_set_gdc_cfg` configures GDC if needed.
@@ -25,1487 +27,1888 @@ VIO (Video Input/Output) is the high-level RDK multimedia pipeline API (board he
 4. `hb_vio_run_pym`/`run_gdc`/`run_raw` fetch results; `hb_vio_get_info` queries status.
 5. `hb_vio_stop_pipeline` stops.
 
+## Quick Example
 
-## API 列表
+The following example demonstrates the minimal usage sequence of the high-level pipeline API in `hb_vio_interface.h` (the configuration file defines the whole pipeline including sensor/ISP/PYM, etc.):
 
-| 函数 | 说明 |
+```c
+#include "hb_vio_interface.h"
+
+// 1. Initialize the pipeline with a configuration file (including CIM/MIPI/ISP/PYM/GDC)
+int32_t ret = hb_vio_init("./vio_config.json");
+if (ret != 0) {
+    /* Handle initialization failure */
+}
+
+// 2. Start the pipeline
+ret = hb_vio_start_pipeline(0);
+
+// 3. Get the PYM processing result and release it after use
+hb_vio_buffer_t pym_data;
+ret = hb_vio_get_data(0, HB_VIO_PYM_DATA_V3, &pym_data);
+/* Use pym_data ... */
+hb_vio_free_pymbuf(0, HB_VIO_PYM_DATA_V3, &pym_data);
+
+// 4. Stop the pipeline and de-initialize it
+hb_vio_stop_pipeline(0);
+hb_vio_deinit();
+```
+
+> Board-side samples such as `get_vin_data`/`get_isp_data` build the pipeline directly with the HBN vnode style (`hbn_vnode_*`); `hb_vio_*` is the high-level interface layered on top of them. For configuration, see the `06_multimedia_sample` chapter and the configuration files of the samples under `/app/multimedia_samples/` on the board.
+
+## API List
+
+| Function | Description |
 | --- | --- |
-| hb_cam_init | Select the corresponding vin index from the configuration file to initialize the sensor;通过配置文件选择对应 vin index,初始化 sensor |
-| hb_cam_deinit | Select the corresponding vin index from the configuration file to de-initialize the sensor;通过配置文件选择对应 vin index,反初始化 sensor; |
-| hb_cam_start | Start the sensor data flow of the specified software channel; 启动指定软件通道的sensor数据流 |
-| hb_cam_stop | Stop the sensor data flow of the specified software channel; 关闭指定软件通道的sensor数据流 |
-| hb_cam_start_all | Not support; 不支持 |
-| hb_cam_stop_all | Not support; 不支持 |
-| hb_cam_reset | Reset the corresponding port cam; 复位对应port cam |
-| hb_cam_power_on | Not support; 不支持 |
-| hb_cam_power_off | Not support; 不支持 |
-| hb_cam_get_fps | Get the fps parameter in the configuration file of the corresponding port; 获取对应port的配置文件中fps参数 |
-| hb_cam_get_img | Not support; 不支持 |
-| hb_cam_free_img | Not support; 不支持 |
-| hb_cam_clean_img | Not support; 不支持 |
-| hb_cam_get_data | Get the cim data of the corresponding port; 获取对应port的cim的数据 |
-| hb_cam_free_data | Release the result of hb_cam_get_data of the corresponding port; 释放对应port的hb_cam_get_data 的结果 |
-| hb_cam_bypass_enable | bypass corresponding sensor port; bypass 对应的sensor port |
-| hb_cam_set_fps_ctrl | Set the frame rate of the corresponding port, and whether to select skip frame; 设置对应port的帧率,是否选择跳帧 |
-| hb_cam_set_lpwm_ctrl | Set dynamic lpwm attr value; 动态设置port对应的lpwm 通道的属性值 |
-| hb_cam_get_stat_info | Get corresponding sensor port frame information; 获取对应port的帧信息 |
-| hb_cam_dynamic_switch_fps | The frame rate switching interface requires the corresponding support of the sensor library; 帧率切换接口,需sensor库对应支持 |
-| hb_cam_dynamic_switch_mode | Not support; 不支持 |
-| hb_cam_dynamic_switch | Not support; 不支持 |
-| hb_cam_set_mclk | Not support; 不支持 |
-| hb_cam_enable_mclk | Not support; 不支持 |
-| hb_cam_disable_mclk | Not support; 不支持 |
-| hb_cam_extern_isp_reset | Not support; 不支持 |
-| hb_cam_extern_isp_poweroff | Not support; 不支持 |
-| hb_cam_extern_isp_poweron | Not support; 不支持 |
-| hb_cam_i2c_read | Access sensor through i2c; 通过i2c访问sensor |
-| hb_cam_i2c_read_byte | Not support; 不支持 |
-| hb_cam_i2c_write | Write sensor register through i2c; 通过i2c写入sensor寄存器 |
-| hb_cam_i2c_write_byte | Not support; 不支持 |
-| hb_cam_i2c_block_write | Not support; 不支持 |
-| hb_cam_i2c_block_read | Not support; 不支持 |
-| hb_cam_spi_block_write | Not support; 不支持 |
-| hb_cam_spi_block_read | Not support; 不支持 |
-| hb_cam_ipi_reset | Reset the ipi path operation of the specified mipi, which can be used to switch the specified ipi data path; 复位指定mipi的ipi通路操作,可用于开关指定ipi数据通路 |
-| hb_cam_get_sns_info | Get sensor information; 获取sensor信息 |
-| hb_cam_get_status | Get sensor information; 获取sensor信息 |
-| hb_cam_parse_embed_data | parse camera embed data;获取sensor信息曝光参数等 |
-| hb_cam_set_event_callback | set event callback function;设置事件回调函数 |
-| hb_vio_init | Initialize all pipelines configured in the configuration file according to the incoming configuration file, including isp&amp;pym&amp;gdc, CIM and mipi configurations; 根据传入的配置文件初始化配置文件所配置的所有pipeline,包括 isp &amp; pym &amp; gdc,CIM和mipi配置 |
-| hb_vio_deinit | De-initialize all initialized pipelines and release the resources of the initialization request; 对初始化的所有pipeline进行反初始化并释放初始化申请的资源. |
-| hb_vio_start_pipeline | Enable corresponding pipeline; 使能对应pipeline |
-| hb_vio_stop_pipeline | disable corresponding pipeline; 停止对应pipeline |
-| hb_vio_set_event_callback | set event callback function;设置事件回调函数 |
-| hb_vio_get_info | Get the parameters of the corresponding pipeline through info_type; 通过info_type获取对应pipeline的参数。 |
-| hb_vio_set_callbacks | Not support; 不支持 |
-| hb_vio_set_param | Not support; 不支持 |
-| hb_vio_get_param | Get the parameters of the corresponding pipeline through info_type; 通过info_type获取对应pipeline的参数。 |
-| hb_vio_get_data | Obtain the data of the corresponding pipeline through the corresponding datatype;; 通过对应data_type获取对应pipeline_id的数据; |
-| hb_vio_get_data_conditional | Get the data of the corresponding pipelineid conditionally through the corresponding datatype and the set times parameter; 通过对应data_type以及设置的times参数有条件的获取对应pipeline_id的数据; |
-| hb_vio_run_pym | Enable pym to process the reinjection data of the corresponding pipeline; 使能pym处理对应pipeline的回灌数据. |
-| hb_vio_free_ipubuf | Not support; 不支持 |
-| hb_vio_free_ispbuf | Release the isp data corresponding to pipelineid, and hb_vio_get_data is used to obtain the isp data; 释放对应pipeline_id的isp数据,和hb_vio_get_data获取isp数据对应使用. |
-| hb_vio_free_pymbuf | Release the pym data corresponding to pipelineid, and hb_vio_get_data is used to obtain the pym data; 释放对应pipeline_id的pym数据,和hb_vio_get_data获取pym数据对应使用. |
-| hb_vio_gen_gdc_cfg | Generate the cfg bin file required for the work of the gdc module; 生成gdc模块的工作所需的cfg bin文件 |
-| hb_vio_set_gdc_cfg | Set cfg bin of gdc module; 设置gdc模块的cfg bin |
-| hb_vio_set_gdc_cfg_opt | Set cfg bin of gdc module; 设置gdc模块的cfg bin |
-| hb_vio_free_gdc_cfg | Release the buffer of the production gdc module cfg bin; 释放生产gdc模块cfg bin的buffer |
-| hb_vio_run_gdc | Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。 |
-| hb_vio_run_gdc_opt | Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。 |
-| hb_vio_run_gdc_adv | Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。 |
-| hb_vio_run_gdc_adv_user | Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。 |
-| hb_vio_free_gdcbuf | Release the gdc data corresponding to pipelineid, and hb_vio_get_data is used to obtain the gdc data; 释放对应pipeline_id的gdc数据,和hb_vio_get_data获取gdc数据对应使用. |
-| hb_vio_raw_dump | Not support; 不支持 |
-| hb_vio_raw_feedback | Not support; 不支持 |
-| hb_vio_run_raw | After the video system is initialized, hb_vio_get_data obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data.; 视频系统初始化后,通过hb_vio_get_data获取isp raw 回灌地址并将外部RAW图像回灌到获取的地址中,使能isp 对回灌数据进行处理。 |
-| hb_vio_cfg_check | Check whether the vpm&amp;vin configuration file parameters are correct; |
-| hb_vio_pause_pipeline | pause the CIM data flow of the specified software channel; 暂停指定软件通道的CIM数据流 |
-| hb_vio_resume_pipeline | resume the CIM data flow of the specified software channel; 恢复指定软件通道的CIM数据流 |
+| hb_cam_init | Select the corresponding vin index from the configuration file to initialize the sensor |
+| hb_cam_deinit | Select the corresponding vin index from the configuration file to de-initialize the sensor |
+| hb_cam_start | Start the sensor data flow of the specified software channel |
+| hb_cam_stop | Stop the sensor data flow of the specified software channel |
+| hb_cam_start_all | Not support |
+| hb_cam_stop_all | Not support |
+| hb_cam_reset | Reset the corresponding port cam |
+| hb_cam_power_on | Not support |
+| hb_cam_power_off | Not support |
+| hb_cam_get_fps | Get the fps parameter in the configuration file of the corresponding port |
+| hb_cam_get_img | Not support |
+| hb_cam_free_img | Not support |
+| hb_cam_clean_img | Not support |
+| hb_cam_get_data | Get the cim data of the corresponding port |
+| hb_cam_free_data | Release the result of hb_cam_get_data of the corresponding port |
+| hb_cam_bypass_enable | bypass corresponding sensor port |
+| hb_cam_set_fps_ctrl | Set the frame rate of the corresponding port, and whether to select skip frame |
+| hb_cam_set_lpwm_ctrl | Set dynamic lpwm attr value |
+| hb_cam_get_stat_info | Get corresponding sensor port frame information |
+| hb_cam_dynamic_switch_fps | The frame rate switching interface requires the corresponding support of the sensor library |
+| hb_cam_dynamic_switch_mode | Not support |
+| hb_cam_dynamic_switch | Not support |
+| hb_cam_set_mclk | Not support |
+| hb_cam_enable_mclk | Not support |
+| hb_cam_disable_mclk | Not support |
+| hb_cam_extern_isp_reset | Not support |
+| hb_cam_extern_isp_poweroff | Not support |
+| hb_cam_extern_isp_poweron | Not support |
+| hb_cam_i2c_read | Access sensor through i2c |
+| hb_cam_i2c_read_byte | Not support |
+| hb_cam_i2c_write | Write sensor register through i2c |
+| hb_cam_i2c_write_byte | Not support |
+| hb_cam_i2c_block_write | Not support |
+| hb_cam_i2c_block_read | Not support |
+| hb_cam_spi_block_write | Not support |
+| hb_cam_spi_block_read | Not support |
+| hb_cam_ipi_reset | Reset the ipi path operation of the specified mipi, which can be used to switch the specified ipi data path |
+| hb_cam_get_sns_info | Get sensor information |
+| hb_cam_get_status | Get sensor information |
+| hb_cam_parse_embed_data | Parse camera embed data and obtain sensor exposure parameters, etc. |
+| hb_cam_set_event_callback | set event callback function |
+| hb_vio_init | Initialize all pipelines configured in the configuration file according to the incoming configuration file, including isp&amp;pym&amp;gdc, CIM and mipi configurations |
+| hb_vio_deinit | De-initialize all initialized pipelines and release the resources of the initialization request |
+| hb_vio_start_pipeline | Enable corresponding pipeline |
+| hb_vio_stop_pipeline | disable corresponding pipeline |
+| hb_vio_set_event_callback | set event callback function |
+| hb_vio_get_info | Get the parameters of the corresponding pipeline through info_type |
+| hb_vio_set_callbacks | Not support |
+| hb_vio_set_param | Not support |
+| hb_vio_get_param | Get the parameters of the corresponding pipeline through info_type |
+| hb_vio_get_data | Obtain the data of the corresponding pipeline through the corresponding datatype |
+| hb_vio_get_data_conditional | Get the data of the corresponding pipelineid conditionally through the corresponding datatype and the set times parameter |
+| hb_vio_run_pym | Enable pym to process the reinjection data of the corresponding pipeline |
+| hb_vio_free_ipubuf | Not support |
+| hb_vio_free_ispbuf | Release the isp data corresponding to pipelineid, and hb_vio_get_data is used to obtain the isp data |
+| hb_vio_free_pymbuf | Release the pym data corresponding to pipelineid, and hb_vio_get_data is used to obtain the pym data |
+| hb_vio_gen_gdc_cfg | Generate the cfg bin file required for the work of the gdc module |
+| hb_vio_set_gdc_cfg | Set cfg bin of gdc module |
+| hb_vio_set_gdc_cfg_opt | Set cfg bin of gdc module |
+| hb_vio_free_gdc_cfg | Release the buffer of the production gdc module cfg bin |
+| hb_vio_run_gdc | Enable gdc corresponding to pipelineid to correct the process distortion of src data |
+| hb_vio_run_gdc_opt | Enable gdc corresponding to pipelineid to correct the process distortion of src data |
+| hb_vio_run_gdc_adv | Enable gdc corresponding to pipelineid to correct the process distortion of src data |
+| hb_vio_run_gdc_adv_user | Enable gdc corresponding to pipelineid to correct the process distortion of src data |
+| hb_vio_free_gdcbuf | Release the gdc data corresponding to pipelineid, and hb_vio_get_data is used to obtain the gdc data |
+| hb_vio_raw_dump | Not support |
+| hb_vio_raw_feedback | Not support |
+| hb_vio_run_raw | After the video system is initialized, hb_vio_get_data obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data. |
+| hb_vio_cfg_check | Check whether the vpm&amp;vin configuration file parameters are correct |
+| hb_vio_pause_pipeline | pause the CIM data flow of the specified software channel |
+| hb_vio_resume_pipeline | resume the CIM data flow of the specified software channel |
 
-## API 接口说明
+## API Interface Description
 
 ### hb_cam_init
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_init(uint32_t cfg_index, const char *cfg_file);
 ```
 
-【功能描述】
+**Description**
 
-Select the corresponding vin index from the configuration file to initialize the sensor;通过配置文件选择对应 vin index,初始化 sensor
+Select the corresponding vin index from the configuration file to initialize the sensor
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t cfg_index: Cfg of vin in configuration file to be initialized index; range:[0, 2147483647],default:0
+[IN] const char *cfg_file:Vin profile absolute path
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_deinit
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_deinit(uint32_t cfg_index);
 ```
 
-【功能描述】
+**Description**
 
-Select the corresponding vin index from the configuration file to de-initialize the sensor;通过配置文件选择对应 vin index,反初始化 sensor;
+Select the corresponding vin index from the configuration file to de-initialize the sensor
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t cfg_index: Config index of vin in the configuration file; range:[0, 2147483647],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_start
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_start(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Start the sensor data flow of the specified software channel; 启动指定软件通道的sensor数据流
+Start the sensor data flow of the specified software channel
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Indicates the sensor, port and corresponding configuration file port that need to be enabled; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_stop
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_stop(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Stop the sensor data flow of the specified software channel; 关闭指定软件通道的sensor数据流
+Stop the sensor data flow of the specified software channel
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Indicates the sensor, port and corresponding configuration file port that need to be disanabled; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_start_all
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_start_all(void);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] None
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_stop_all
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_stop_all(void);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] None
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_reset
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_reset(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Reset the corresponding port cam; 复位对应port cam
+Reset the corresponding port cam
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Cam ports to be reset; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_power_on
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_power_on(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_power_off
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_power_off(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_get_fps
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_get_fps(uint32_t port, uint32_t *fps);
 ```
 
-【功能描述】
+**Description**
 
-Get the fps parameter in the configuration file of the corresponding port; 获取对应port的配置文件中fps参数
+Get the fps parameter in the configuration file of the corresponding port
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[OUT] uint32_t *fps: Get the storage address of the frame rate value
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_get_img
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_get_img(cam_img_info_t *cam_img_info);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] cam_img_info_t *cam_img_info: camera image information
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3; SW: 1.0.0
 
 ### hb_cam_free_img
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_free_img(cam_img_info_t *cam_img_info);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] cam_img_info_t *cam_img_info: camera image information
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3; SW: 1.0.0
 
 ### hb_cam_clean_img
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_clean_img(cam_img_info_t *cam_img_info);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] cam_img_info_t *cam_img_info: camera image information
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3; SW: 1.0.0
 
 ### hb_cam_get_data
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_get_data(uint32_t port, CAM_DATA_TYPE_E data_type, void *data);
 ```
 
-【功能描述】
+**Description**
 
-Get the cim data of the corresponding port; 获取对应port的cim的数据
+Get the cim data of the corresponding port
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] CAM_DATA_TYPE_E data_type: Set the required info type; data_type parameter description: HB_CAM_RAW_DATA:get cam raw data(raw sensor) HB_CAM_YUV_DATA:get cam yuv data(yuv sensor) HB_CAM_FEEDBACK_RAW_DATA:get feedback raw buff,used by cim feedback
+[OUT] void * data: Output the data result of the corresponding type
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_free_data
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_free_data(uint32_t port, CAM_DATA_TYPE_E data_type, void *data);
 ```
 
-【功能描述】
+**Description**
 
-Release the result of hb_cam_get_data of the corresponding port; 释放对应port的hb_cam_get_data 的结果
+Release the result of hb_cam_get_data of the corresponding port
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] CAM_DATA_TYPE_E data_type: Set the released info type,corresponding to hb_cam_get_data
+[IN] void * data:The corresponding data is used with hb_cam_get_data
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_bypass_enable
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_bypass_enable(uint32_t port, int32_t enable);
 ```
 
-【功能描述】
+**Description**
 
-bypass corresponding sensor port; bypass 对应的sensor port
+bypass corresponding sensor port
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] int32_t enable[0, 1]:if enable bypass function for this port; range:[0, 1],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_set_fps_ctrl
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_set_fps_ctrl(uint32_t port, uint32_t skip_frame, uint32_t in_fps, uint32_t out_fps);
 ```
 
-【功能描述】
+**Description**
 
-Set the frame rate of the corresponding port, and whether to select skip frame; 设置对应port的帧率,是否选择跳帧
+Set the frame rate of the corresponding port, and whether to select skip frame
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] int32_t skip_frame[0, 1]:if skip frame enable,0-no skip,1-skip; range:[0, 1],default:0
+[IN] uint32_t in_fps:sensor input fps; range:[1, 480],default:30
+[IN] int32_t skip_frame:sensor output fps; range:[1, 480],default:30
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_set_lpwm_ctrl
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_set_lpwm_ctrl(uint32_t port, uint32_t lpwn_chn, lpwm_dynamic_t *lpwm_dynamic_attr);
 ```
 
-【功能描述】
+**Description**
 
-Set dynamic lpwm attr value; 动态设置port对应的lpwm 通道的属性值
+Set dynamic lpwm attr value
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t lpwn_chn:lpwn channel id
+[IN] lpwm_dynamic_t *lpwm_dynamic_attr: lpwm_dynamic_attr channel attribute value
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_get_stat_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_get_stat_info(uint32_t port, struct vio_statinfo *info);
 ```
 
-【功能描述】
+**Description**
 
-Get corresponding sensor port frame information; 获取对应port的帧信息
+Get corresponding sensor port frame information
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[OUT] vio_statinfo *statinfo:address of statinfo
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_dynamic_switch_fps
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_dynamic_switch_fps(uint32_t port, uint32_t fps);
 ```
 
-【功能描述】
+**Description**
 
-The frame rate switching interface requires the corresponding support of the sensor library; 帧率切换接口,需sensor库对应支持
+The frame rate switching interface requires the corresponding support of the sensor library
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t fps:Indicates the frame rate to switch; range:[1, 480],default:30
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_dynamic_switch_mode
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_dynamic_switch_mode(uint32_t port, uint32_t mode);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t mode: camera work mode; range:[0, 100],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_dynamic_switch
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_dynamic_switch(uint32_t port, uint32_t fps, uint32_t resolution);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t fps:Indicates the frame rate to switch; range:[1, 480],default:30
+[IN] uint32_t resolution:image resolution; range:[1, 8294400],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_set_mclk
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_set_mclk(uint32_t entry_num, uint32_t mclk);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
+[IN] uint32_t mclk:senosr clock; range:[1, 3000000],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_enable_mclk
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_enable_mclk(uint32_t entry_num);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_disable_mclk
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_disable_mclk(uint32_t entry_num);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_extern_isp_reset
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_extern_isp_reset(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_extern_isp_poweroff
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_extern_isp_poweroff(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_extern_isp_poweron
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_extern_isp_poweron(uint32_t port);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_i2c_read
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_i2c_read(uint32_t port, uint32_t reg_addr);
 ```
 
-【功能描述】
+**Description**
 
-Access sensor through i2c; 通过i2c访问sensor
+Access sensor through i2c
 
-【返回值】
+**Parameter Description**
 
-&gt; 0: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t reg_addr:i2c address to access
 
-【兼容性】
+**Return Value**
+
+&gt; 0: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_i2c_read_byte
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_i2c_read_byte(uint32_t port, uint32_t reg_addr);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t reg_addr:i2c address to access
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_i2c_write
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_i2c_write(uint32_t port, uint32_t reg_addr, uint16_t value);
 ```
 
-【功能描述】
+**Description**
 
-Write sensor register through i2c; 通过i2c写入sensor寄存器
+Write sensor register through i2c
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t reg_addr:i2c address to access
+[IN] uint16_t value:Indicates the value written
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_i2c_write_byte
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_i2c_write_byte(uint32_t port, uint32_t reg_addr, uint8_t value);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t reg_addr:i2c address to access
+[IN] uint16_t value:Indicates the value written
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_i2c_block_write
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_i2c_block_write(uint32_t port, uint32_t subdev, uint32_t reg_addr, char *buffer, uint32_t size);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t subdev: device; 0 sensor;1 eeprom,default:0
+[IN] uint32_t reg_addr:i2c address to access
+[IN] char *buffer:address to access
+[IN] uint32_t size:Indicates the value written
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_i2c_block_read
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_i2c_block_read(uint32_t port, uint32_t subdev, uint32_t reg_addr, char *buffer, uint32_t size);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t subdev: device; 0 sensor;1 eeprom,default:0
+[IN] uint32_t reg_addr:i2c address to access
+[IN] uint32_t size:Indicates the value written
+[OUT] char *buffer:address to access
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_spi_block_write
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_spi_block_write(uint32_t port, uint32_t subdev, uint32_t reg_addr, char *buffer, uint32_t size);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t subdev: device; range:[0, 3000000],default:0
+[IN] uint32_t reg_addr:spi address to access
+[IN] char *buffer:address to access
+[IN] uint32_t size:Indicates the value written
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_spi_block_read
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_spi_block_read(uint32_t port, uint32_t subdev, uint32_t reg_addr, char *buffer, uint32_t size);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint32_t subdev: device; range:[0, 3000000],default:0
+[IN] uint32_t reg_addr:spi address to access
+[IN] uint32_t size:Indicates the value written
+[OUT] char *buffer:address to access
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_ipi_reset
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_ipi_reset(uint32_t entry_num, uint32_t ipi_index, uint32_t enable);
 ```
 
-【功能描述】
+**Description**
 
-Reset the ipi path operation of the specified mipi, which can be used to switch the specified ipi data path; 复位指定mipi的ipi通路操作,可用于开关指定ipi数据通路
+Reset the ipi path operation of the specified mipi, which can be used to switch the specified ipi data path
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
+[IN] uint32_t ipi_index:ipi index inside of Mipi host; range:[0, 3],default:0
+[IN] uint32_t enable:Ipi switch status: 0-off, 1-on; range:[0, 1],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_get_sns_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_get_sns_info(uint32_t port, cam_parameter_t *sp, uint8_t type);
 ```
 
-【功能描述】
+**Description**
 
-Get sensor information; 获取sensor信息
+Get sensor information
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port:Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] uint8_t type:Type of parameter
+[OUT] cam_parameter_t *sp:Gets the address of the parameter
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_get_status
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_get_status(uint32_t port, struct cam_statinfo *info);
 ```
 
-【功能描述】
+**Description**
 
-Get sensor information; 获取sensor信息
+Get sensor information
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port:Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[OUT] camera_staus_t *statinfo:Gets the address of the parameter
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: Ultra/X5/Super; SW: 1.0.0
 
 ### hb_cam_parse_embed_data
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_parse_embed_data(uint32_t port, char *embed_raw, struct embed_data_info_s *embed_info);
 ```
 
-【功能描述】
+**Description**
 
-parse camera embed data;获取sensor信息曝光参数等
+Parse camera embed data and obtain sensor exposure parameters, etc.
 
-【返回值】
+**Parameter Description**
+
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] char* embed_raw: data to be parsed
+[OUT] struct embed_data_info_s *embed_info: pared data information
+
+**Return Value**
 
 zero: Success
 less than zero: Fail, return error code
 
 ### hb_cam_set_event_callback
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_cam_set_event_callback(uint32_t port, void (*event_callback)(cam_event_t *fault_info));
 ```
 
-【功能描述】
+**Description**
 
-set event callback function;设置事件回调函数
+set event callback function
 
-【返回值】
+**Parameter Description**
 
-zero: Success;成功
-less than zero: Fail, return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+[IN] void (*event_callback)(cam_event_t* fault_info): callback function handler
 
-【兼容性】
+**Return Value**
+
+zero: Success
+less than zero: Fail, return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_init
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_init(const char *cfg_file);
 ```
 
-【功能描述】
+**Description**
 
-Initialize all pipelines configured in the configuration file according to the incoming configuration file, including isp&amp;pym&amp;gdc, CIM and mipi configurations; 根据传入的配置文件初始化配置文件所配置的所有pipeline,包括 isp &amp; pym &amp; gdc,CIM和mipi配置
+Initialize all pipelines configured in the configuration file according to the incoming configuration file, including isp&amp;pym&amp;gdc, CIM and mipi configurations
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] const char *cfg_file: The absolute path of the vpm configuration file. The path length should not exceed 256 bytes
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_deinit
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_deinit(void);
 ```
 
-【功能描述】
+**Description**
 
-De-initialize all initialized pipelines and release the resources of the initialization request; 对初始化的所有pipeline进行反初始化并释放初始化申请的资源.
+De-initialize all initialized pipelines and release the resources of the initialization request
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] None
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_start_pipeline
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_start_pipeline(uint32_t pipeline_id);
 ```
 
-【功能描述】
+**Description**
 
-Enable corresponding pipeline; 使能对应pipeline
+Enable corresponding pipeline
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_stop_pipeline
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_stop_pipeline(uint32_t pipeline_id);
 ```
 
-【功能描述】
+**Description**
 
-disable corresponding pipeline; 停止对应pipeline
+disable corresponding pipeline
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_set_event_callback
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_set_event_callback(uint32_t pipeline_id, VIO_MODULE_TYPE_E module_type, VIO_EVENT_TYPE_E event_type, void (*event_callback)(void *event_info));
 ```
 
-【功能描述】
+**Description**
 
-set event callback function;设置事件回调函数
+set event callback function
 
-【返回值】
+**Parameter Description**
 
-zero: Success;成功
-less than zero: Fail, return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_MODULE_TYPE_E module_type: Module type ID
+[IN] IO_EVENT_TYPE_E event_type: Event type
+[IN] void (*event_callback)(void* fault_info): callback function handler
 
-【兼容性】
+**Return Value**
+
+zero: Success
+less than zero: Fail, return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_get_info
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_get_info(uint32_t pipeline_id, VIO_MODULE_TYPE_E module_type, VIO_INFO_E info_type, void *info);
 ```
 
-【功能描述】
+**Description**
 
-Get the parameters of the corresponding pipeline through info_type; 通过info_type获取对应pipeline的参数。
+Get the parameters of the corresponding pipeline through info_type
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_MODULE_TYPE_E module_type: Module type ID
+[IN] VIO_INFO_E info_type: Info type
+[OUT] void *info:Parameters to be obtained
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_set_callbacks
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_set_callbacks(uint32_t pipeline_id, VIO_CALLBACK_TYPE_E type, data_cb cb);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_CALLBACK_TYPE_E type: callback type
+[IN] data_cb cb:call back function
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_set_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_set_param(uint32_t pipeline_id, VIO_INFO_TYPE_E info_type, void *info);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_INFO_TYPE_E info_type:type to set
+[IN] void *info:information to be set
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_get_param
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_get_param(uint32_t pipeline_id, VIO_INFO_TYPE_E info_type, void *info);
 ```
 
-【功能描述】
+**Description**
 
-Get the parameters of the corresponding pipeline through info_type; 通过info_type获取对应pipeline的参数。
+Get the parameters of the corresponding pipeline through info_type
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_INFO_TYPE_E info_type:Parameter type to obtain, type description: HB_VIO_ISP_IMG_INFO, ISP memory information; HB_VIO_PYM_V3_IMG_INFO, PYM memory information
+[OUT] void *info:Parameters to be obtained
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_get_data
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_get_data(uint32_t pipeline_id, VIO_DATA_TYPE_E data_type, void *data);
 ```
 
-【功能描述】
+**Description**
 
-Obtain the data of the corresponding pipeline through the corresponding datatype;; 通过对应data_type获取对应pipeline_id的数据;
+Obtain the data of the corresponding pipeline through the corresponding datatype
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_DATA_TYPE_E data_type:The type of data to be obtained; data_ Type description: HB_VIO_PYM_DATA_V3 Get pym processing results. Super is the most commonly used type; HB_VIO_ISP_YUV_DATA To obtain the yuv data output by the isp, you need to cooperate with isp_dma_output_format parameter settings in the configuration file; HB_VIO_ISP_RAW_DATA To obtain the raw data output by the isp, you need to cooperate with isp_dma_output_format parameter settings in the configuration file;
+[OUT] void *data:The data to be obtained, and the data type corresponds to the datatype
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_get_data_conditional
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_get_data_conditional(uint32_t pipeline_id, VIO_DATA_TYPE_E data_type, void *data, int32_t times);
 ```
 
-【功能描述】
+**Description**
 
-Get the data of the corresponding pipelineid conditionally through the corresponding datatype and the set times parameter; 通过对应data_type以及设置的times参数有条件的获取对应pipeline_id的数据;
+Get the data of the corresponding pipelineid conditionally through the corresponding datatype and the set times parameter
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_DATA_TYPE_E data_type:The type of data to be obtained; data_ Type description: HB_VIO_PYM_DATA_V3,Get pym processing results. Super is the most commonly used type;
+[IN] int32_t times:Set the relative time to acquire frames; Time parameter description: times = 0:Clear the current cache frame and wait for the next frame; times > 0:Find the earliest frame in the cache that meets the current time-time requirement; times < 0:Clear the current cache frame and wait for the frame after the current time – time; range:[-1056, 1056],default:0
+[OUT] void *data:The data to be obtained, and the data type corresponds to the datatype
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_run_pym
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_run_pym(uint32_t pipeline_id, hb_vio_buffer_t *src_img_info);
 ```
 
-【功能描述】
+**Description**
 
-Enable pym to process the reinjection data of the corresponding pipeline; 使能pym处理对应pipeline的回灌数据.
+Enable pym to process the reinjection data of the corresponding pipeline
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] hb_vio_buffer_t * src_img_info:Pym memory to be processed
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_free_ipubuf
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_free_ipubuf(uint32_t pipeline_id, hb_vio_buffer_t *dst_img_info);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] hb_vio_buffer_t * dst_img_info:ipu memory to be freed
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_free_ispbuf
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_free_ispbuf(uint32_t pipeline_id, hb_vio_buffer_t *dst_img_info);
 ```
 
-【功能描述】
+**Description**
 
-Release the isp data corresponding to pipelineid, and hb_vio_get_data is used to obtain the isp data; 释放对应pipeline_id的isp数据,和hb_vio_get_data获取isp数据对应使用.
+Release the isp data corresponding to pipelineid, and hb_vio_get_data is used to obtain the isp data
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] hb_vio_buffer_t * dst_img_info:isp memory to be freed
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_free_pymbuf
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_free_pymbuf(uint32_t pipeline_id, VIO_DATA_TYPE_E data_type, void *img_info);
 ```
 
-【功能描述】
+**Description**
 
-Release the pym data corresponding to pipelineid, and hb_vio_get_data is used to obtain the pym data; 释放对应pipeline_id的pym数据,和hb_vio_get_data获取pym数据对应使用.
+Release the pym data corresponding to pipelineid, and hb_vio_get_data is used to obtain the pym data
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] VIO_DATA_TYPE_E data_type:Released data type, type description: HB_VIO_PYM_DATA_V3, Super most commonly used type;
+[IN] void * dst_img_info:pym memory to be freed
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_gen_gdc_cfg
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_gen_gdc_cfg(param_t *gdc_parm, window_t *wnds, uint32_t wnd_num, void **cfg_buf, uint64_t *cfg_size);
 ```
 
-【功能描述】
+**Description**
 
-Generate the cfg bin file required for the work of the gdc module; 生成gdc模块的工作所需的cfg bin文件
+Generate the cfg bin file required for the work of the gdc module
 
-【参数描述】
+**Parameter Description**
 
-[OUT] cfg_buf: Generated gdc cfg bin, internal allocation; 生成的gdc cfg bin,内部分配
-[OUT] cfg_size: Size of gdc cfg bin file; gdc cfg bin文件的大小
+[OUT] cfg_buf: Generated gdc cfg bin, internal allocation
+[OUT] cfg_size: Size of gdc cfg bin file
 
-【返回值】
+**Return Value**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
 
-【兼容性】
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_set_gdc_cfg
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_set_gdc_cfg(uint32_t pipeline_id, uint32_t *cfg_buf, uint64_t cfg_size);
 ```
 
-【功能描述】
+**Description**
 
-Set cfg bin of gdc module; 设置gdc模块的cfg bin
+Set cfg bin of gdc module
 
-【参数描述】
+**Parameter Description**
 
-[IN] cfg_buf: config buffer of gdc cfg bin; gdc cfg bin 的buffer
-[IN] cfg_size: size of gdc cfg bin ; gdc cfg bin文件的大小
+[IN] cfg_buf: config buffer of gdc cfg bin
+[IN] cfg_size: size of gdc cfg bin
 
-【返回值】
+**Return Value**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
 
-【兼容性】
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_set_gdc_cfg_opt
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_set_gdc_cfg_opt(uint32_t pipeline_id, uint32_t gdc_id, uint32_t *cfg_buf, uint64_t cfg_size); //comp xj3
 ```
 
-【功能描述】
+**Description**
 
-Set cfg bin of gdc module; 设置gdc模块的cfg bin
+Set cfg bin of gdc module
 
-【参数描述】
+**Parameter Description**
 
-[IN] cfg_buf: config buffer of gdc cfg bin; gdc cfg bin 的buffer
-[IN] cfg_size: size of gdc cfg bin ; gdc cfg bin文件的大小
+[IN] cfg_buf: config buffer of gdc cfg bin
+[IN] cfg_size: size of gdc cfg bin
 
-【返回值】
+**Return Value**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
 
-【兼容性】
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_free_gdc_cfg
 
-【函数声明】
+**Function Declaration**
 
 ```c
 void hb_vio_free_gdc_cfg(uint32_t *cfg_buf);
 ```
 
-【功能描述】
+**Description**
 
-Release the buffer of the production gdc module cfg bin; 释放生产gdc模块cfg bin的buffer
+Release the buffer of the production gdc module cfg bin
 
-【返回值】
+**Parameter Description**
+
+[IN] uint32_t* cfg_buf:Buffer of gdc cfg bin
+
+**Return Value**
 
 None
 
-【兼容性】
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_run_gdc
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_run_gdc(uint32_t pipeline_id, hb_vio_buffer_t *src_img_info, hb_vio_buffer_t *dst_img_info, int32_t rotate);
 ```
 
-【功能描述】
+**Description**
 
-Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。
+Enable gdc corresponding to pipelineid to correct the process distortion of src data
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_run_gdc_opt
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_run_gdc_opt(uint32_t pipeline_id, uint32_t gdc_id, hb_vio_buffer_t *src_img_info, hb_vio_buffer_t *dst_img_info, int32_t rotate);
 ```
 
-【功能描述】
+**Description**
 
-Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。
+Enable gdc corresponding to pipelineid to correct the process distortion of src data
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] uint32_t gdc_id:gdc hardware id; range:[0, 1],default:0
+[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_run_gdc_adv
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_run_gdc_adv(uint32_t pipeline_id, uint32_t gdc_id, const gdc_config_t *gdc_cfg, hb_vio_buffer_t *src_img_info, hb_vio_buffer_t *dst_img_info, int32_t rotate);
 ```
 
-【功能描述】
+**Description**
 
-Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。
+Enable gdc corresponding to pipelineid to correct the process distortion of src data
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] uint32_t gdc_id:gdc hardware id; range:[0, 1],default:0
+[IN] const gdc_config_t *gdc_cfg:User's gdc configuration
+[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_run_gdc_adv_user
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_run_gdc_adv_user(uint32_t pipeline_id, uint32_t gdc_id, const gdc_config_t *gdc_cfg, const hb_vio_buffer_t *src_img_info, hb_vio_buffer_t *dst_img_info, int32_t rotate);
 ```
 
-【功能描述】
+**Description**
 
-Enable gdc corresponding to pipelineid to correct the process distortion of src data; 使能对应pipeline_id的gdc,对src数据进程畸变矫正。
+Enable gdc corresponding to pipelineid to correct the process distortion of src data
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] uint32_t gdc_id]:gdc hardware id; range:[0, 1],default:0
+[IN] const gdc_config_t *gdc_cfg:User's gdc configuration
+[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process,allocated by user
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_free_gdcbuf
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_free_gdcbuf(uint32_t pipeline_id, hb_vio_buffer_t *dst_img_info);
 ```
 
-【功能描述】
+**Description**
 
-Release the gdc data corresponding to pipelineid, and hb_vio_get_data is used to obtain the gdc data; 释放对应pipeline_id的gdc数据,和hb_vio_get_data获取gdc数据对应使用.
+Release the gdc data corresponding to pipelineid, and hb_vio_get_data is used to obtain the gdc data
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] hb_vio_buffer_t * dst_img_info:gdc memory to be freed
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_raw_dump
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_raw_dump(uint32_t pipeline_id, hb_vio_buffer_t *raw_img, hb_vio_buffer_t *yuv);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[OUT] hb_vio_buffer_t * raw_img:raw memory to be dump
+[OUT] hb_vio_buffer_t * yuv:yuv memory to be dump
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_raw_feedback
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_raw_feedback(uint32_t pipeline_id, hb_vio_buffer_t *feedback_src, hb_vio_buffer_t *isp_dst_yuv);
 ```
 
-【功能描述】
+**Description**
 
-Not support; 不支持
+Not support
 
-【返回值】
+**Parameter Description**
 
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[OUT] hb_vio_buffer_t * feedback_src:feedback_src memory to be feedback
+[OUT] hb_vio_buffer_t * isp_dst_yuv:isp_dst_yuv memory to be feedback
 
-【兼容性】
+**Return Value**
+
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_run_raw
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_run_raw(uint32_t pipeline_id, hb_vio_buffer_t *feedback_src, int32_t timeout);
 ```
 
-【功能描述】
+**Description**
 
-After the video system is initialized, hb_vio_get_data obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data.; 视频系统初始化后,通过hb_vio_get_data获取isp raw 回灌地址并将外部RAW图像回灌到获取的地址中,使能isp 对回灌数据进行处理。
+After the video system is initialized, hb_vio_get_data obtain the isp raw reinjection address and reinjection the external RAW image into the acquired address, enabling isp to process the reinjection data.
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+[IN] hb_vio_buffer_t * feedback_src:Input image memory needed to process isp
+[IN] int32_t timeout: timeout of process; range:[0, 2147483647],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: X3/J3/Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_cfg_check
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_cfg_check(const char *vpm_file, const char *vin_file, uint32_t cfg_index);
 ```
 
-【功能描述】
+**Description**
 
 Check whether the vpm&amp;vin configuration file parameters are correct;
 
-【返回值】
+**Parameter Description**
+
+[IN] const char* vpm_file: The absolute path of the vpm configuration file
+[IN] const char* vin_file: The absolute path of the vin configuration file
+[IN] uint32_t cfg_index:  The configure index of vin configuration file
+
+**Return Value**
 
 zero: Success
 less than zero: Fail, return error code
 
-【兼容性】
+**Compatibility**
 HW: Ultra/X5/Super; SW: 1.0.0
 
 ### hb_vio_pause_pipeline
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_pause_pipeline(uint32_t pipeline_id);
 ```
 
-【功能描述】
+**Description**
 
-pause the CIM data flow of the specified software channel; 暂停指定软件通道的CIM数据流
+pause the CIM data flow of the specified software channel
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: Super; SW: 1.0.0
 
 ### hb_vio_resume_pipeline
 
-【函数声明】
+**Function Declaration**
 
 ```c
 int32_t hb_vio_resume_pipeline(uint32_t pipeline_id);
 ```
 
-【功能描述】
+**Description**
 
-resume the CIM data flow of the specified software channel; 恢复指定软件通道的CIM数据流
+resume the CIM data flow of the specified software channel
 
-【返回值】
+**Parameter Description**
 
-E_OK: Success;成功
-E_NOT_OK: Fail,return error code;失败,返回错误码;range:[-10000,-1]
+[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
-【兼容性】
+**Return Value**
+
+E_OK: Success
+E_NOT_OK: Fail,return error code; range:[-10000,-1]
+
+**Compatibility**
 HW: Super; SW: 1.0.0
 
+## Related Documentation
+
+- [Basic Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
+- [Video Capture](/Demos/multimedia_demo/cdev/vio_capture)

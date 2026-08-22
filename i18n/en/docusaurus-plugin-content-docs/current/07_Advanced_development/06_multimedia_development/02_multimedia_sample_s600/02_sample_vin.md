@@ -1,3 +1,8 @@
+---
+sidebar_position: 2
+title: "sample_vin User Manual"
+description: "sample_vin User Manual - On-board sample usage instructions"
+---
 # sample_vin User Manual
 
 ## Functional Overview
@@ -207,3 +212,34 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 ```
 
 After executing the program, you will get the RAW image for imx219 named in the format `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` and the YUV image for ar0820std named in the format `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.
+
+## Common Issues
+
+### `No Camera Sensor found` Prompt
+
+**Symptom**: Running `./get_vin_data -s <index>` reports `No Camera Sensor found. Please check if the specified sensor is connected to the Camera interface.`
+
+**Cause**: The specified sensor is not connected to the development board, or it is connected to a different interface (MIPI direct connection / GMSL port mismatch).
+
+**Solution**: Confirm that the actually connected camera model corresponds to the `-s` index (run `./get_vin_data -h` to view the supported list); MIPI directly-connected sensors must be connected to the corresponding CSI interface, and GMSL sensors require specifying `-l <link_port>` and `-m <mipi_rx>`.
+
+### GMSL/SerDes Sensor Must Specify link port
+
+**Symptom**: Running a GMSL sensor reports `[Error] ... is serdes sensor, must config link port according to the hardware connection, can be set to [0-3]`.
+
+**Cause**: The SerDes sensor needs to know the link port of the hardware connection (0:A 1:B 2:C 3:D) in order to communicate with the deserializer.
+
+**Solution**: Specify `-l 0/1/2/3` according to the actual hardware connection, and specify mipi_rx with `-m`.
+
+### Frame Acquisition Timeout or Failure to Acquire Frames
+
+**Symptom**: After the program runs, `hbn_vnode_getframe` returns a timeout error, or there is no output for a long time.
+
+**Cause**: The sensor is not outputting frames properly (not started, or abnormal wiring), the frame rate does not match the configuration, or mipi_rx does not match the hardware.
+
+**Solution**: Check whether the camera is powered on (compare with the output log during normal operation), verify mipi_rx/link_port against the actual wiring, and confirm that the resolution/frame rate in the configuration file matches the sensor.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

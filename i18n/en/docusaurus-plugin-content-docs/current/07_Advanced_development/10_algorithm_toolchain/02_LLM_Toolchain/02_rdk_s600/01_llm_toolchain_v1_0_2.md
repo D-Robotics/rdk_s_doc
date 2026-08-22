@@ -155,7 +155,7 @@ After downloading the development toolkit, refer to `oellm_runtime/model/resolve
 
 :::info
 
-TTFT(ms)：The Time to First Token (TTFT) of the VLM is the sum of the ViT processing time and the prefill processing time.
+TTFT(ms):The Time to First Token (TTFT) of the VLM is the sum of the ViT processing time and the prefill processing time.
 
 :::
 
@@ -279,8 +279,8 @@ TTFT(ms)：The Time to First Token (TTFT) of the VLM is the sum of the ViT proce
 #### VLA Benchmark
 
 :::info
-- all：The total latency of a single on-device run, including five stages: preprocess, vision, language, action, and postprocess.
-- vision：The latency measured for the 3-core BPU performing parallel inference on three 224×224 images.
+- all:The total latency of a single on-device run, including five stages: preprocess, vision, language, action, and postprocess.
+- vision:The latency measured for the 3-core BPU performing parallel inference on three 224×224 images.
 :::
 
 <table>
@@ -365,3 +365,7 @@ TTFT(ms)：The Time to First Token (TTFT) of the VLM is the sum of the ViT proce
 
 </tbody>
 </table>
+
+## Related Documentation
+
+- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)

@@ -141,3 +141,8 @@ The code consists of two lines:
   - `IsUsedGpio`: Defines whether the Port module will configure the GPIO direction and output for the pin during initialization;
 
 Customers can define the initial state of pins as needed.
+
+## Related Documentation
+
+- [Port Usage Guide](/Advanced_development/mcu_development/mcu_port/user_manual)
+- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)

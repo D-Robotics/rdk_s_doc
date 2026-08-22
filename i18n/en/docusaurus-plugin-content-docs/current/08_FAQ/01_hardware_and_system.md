@@ -965,3 +965,55 @@ To configure manually, comment out `DefaultEnvironment="TZ=CST-08:00"` and `rebo
         }
         module_exit(test_power_exit);                                           // Module exit
     ```
+
+
+## Hardware Usage Notes (RDK S100)
+
+When using the RDK S100, pay attention to the following notes on power supply, interfaces, and connections.
+
+:::warning Power Supply Voltage and Current
+
+- The supply voltage must be kept within 12~20V. Exceeding 20V will damage the board; below 12V may cause abnormal startup (e.g., abnormal power-on, boot not entering the kernel).
+- Do not exceed the maximum supply current specified by D-Robotics, otherwise the board may be damaged or startup may be abnormal.
+- The maximum current that all PINs of the external interfaces can output is the maximum current the peripherals can obtain; paralleling multiple PINs does not provide higher current capability.
+
+:::
+
+:::note Interface and Sensor Connection
+
+- For specific notes on each interface, see the "Tip" or "Note" information in the corresponding interface introduction section.
+- Before connecting a sensor, confirm that the power supply meets the sensor's electrical requirements such as voltage, current, and signal level, and check that the hardware circuit connections are correct.
+- When a USB device behaves abnormally, check whether the hardware connection is loose, whether the USB cable is too long, whether the board can meet the power consumption requirements of the USB device, and whether the USB software configuration is correct; you can also try a different USB device to confirm.
+
+:::
+
+:::note Pinlist Description
+
+- The Pull up/down column in the Pinlist Excel file indicates the default pull-up or pull-down state of the interface signals at power-on.
+- Pin function abbreviations: `AO` analog output, `AI` analog input, `I` digital input, `O` digital output, `IO` digital input or output, `NULL` null value, `/` no pin or no state.
+
+:::
+
+:::tip Expansion Board Connection
+
+For how to connect the CAM daughter board and MCU daughter board to the RDK S100 main board, refer to the reference videos in the [RDK S100 Camera Expansion Board](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board) and [RDK S100 MCU Port Expansion Board](/Quick_start/hardware_introduction/rdk_mcu_port_expansion_board) chapters.
+
+:::
+
+:::warning Connection and Short-Circuit Protection
+
+- When connecting the CAM daughter board and MCU daughter board, confirm that the connection position is accurate and free of looseness before powering the main board; if no daughter board is needed, you can directly supply 12~20V power to the main board and boot it.
+- During use, pay attention to whether there are conductors in the surroundings that directly contact the development kit circuitry; if so, move the development kit away from bare conductors to avoid short circuits.
+
+:::
+
+## Flashing and Boot FAQ
+
+Issues during flashing and boot, such as serial port, driver, and boot exceptions, are documented in the troubleshooting chapters of the XBurn manual:
+
+- [Serial Port and Driver Issues](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver) — Ubuntu serial garbled output, Ubuntu 24.04 drivers, macOS CH340N driver, etc.
+- [Boot Exceptions](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues) — no display output after flashing, boot disk selection, backup image flashing failure, etc.
+
+:::tip
+For more issues, visit the [D-Robotics Developer Forum](https://developer.d-robotics.cc/forum) for help.
+:::

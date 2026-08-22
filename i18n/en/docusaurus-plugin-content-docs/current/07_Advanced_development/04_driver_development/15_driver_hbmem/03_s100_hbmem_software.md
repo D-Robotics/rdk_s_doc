@@ -166,3 +166,8 @@ libhbmem compilation outputs one static library file libhbmem.a, and three dynam
 Among them, libhbmem.so.1 and libhbmem.so are dynamic soft links; libhbmem.so.1.0.0 is the main binary, with the numeric suffix representing the version number.
 Runtime package compilation is enabled by default, which includes libhbmem.so.1.
 Dev package compilation is enabled by default, which includes libhbmem.so.1.0.0, libhbmem.so.1, libhbmem.so.
+
+## Related Documentation
+
+- [Hardware Information](./02_s100_hbmem_hardware.md)
+- [Shared Memory - Hbmem](../../06_multimedia_development/01_multimedia_api/02_hbmem_api.md)

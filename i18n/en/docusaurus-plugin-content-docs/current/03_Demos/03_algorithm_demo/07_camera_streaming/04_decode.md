@@ -1,5 +1,7 @@
 ---
 sidebar_position: 4
+title: "Video Decode and YOLOv5x Inference"
+description: "Preset sample for decoding a local H.264 file and performing real-time YOLOv5x object detection"
 ---
 
 # Video Decode and YOLOv5x Inference
@@ -8,181 +10,123 @@ sidebar_position: 4
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+This sample demonstrates the end-to-end pipeline of combining SP decode/display/VIO with the BPU: local H.264 file → hardware decode (NV12) → YOLOv5x inference → overlay boxes on the display layer. For the WebSocket version, see [WebSocket YOLOv5x Inference (Python)](./04_websocket_py.md).
 
-This sample demonstrates how to combine SP decode/display/VIO modules with the BPU on platforms such as RDK S100 to implement an end-to-end pipeline:
-local H.264 file → hardware decode (NV12) → YOLOv5x inference → overlay boxes on the display layer. The sample code is located in `/app/cdev_demo/bpu/decode_yolov5x_display_sample`.
+:::tip
+The sample code is located at `/app/cdev_demo/bpu/decode_yolov5x_display_sample/` on the board. It has been verified on the board and can be compiled and run directly.
+:::
 
-</DocScope>
-<DocScope products="RDK-S600">
+## Prerequisites
 
-This sample demonstrates how to combine SP decode/display/VIO modules with the BPU on platforms such as RDK S600 to implement an end-to-end pipeline:
-local H.264 file → hardware decode (NV12) → YOLOv5x inference → overlay boxes on the display layer. The sample code is located in `/app/cdev_demo/bpu/decode_yolov5x_display_sample`.
-
-</DocScope>
-
-## Feature Overview
-
-- Model loading
-
-    Load the model and obtain input/output related information.
-
-- Preprocessing
-
-    Convert NV12 frames obtained from VIO to BGR (`cv::cvtColor`), apply letterbox/scaling, and write to the NV12 input tensor.
-
-- Inference
-
-    Call `infer()` to execute forward computation on the BPU.
-
-- Postprocessing
-
-    Call `yolov5x.post_process(score_thres, nms_thres, W, H)` to complete decoding, confidence filtering, and NMS, and restore box coordinates to the original resolution.
-
-- Camera management (VIO)
-
-    Open the sensor channel through `sp_open_camera_v2` and pull NV12 frames with `sp_vio_get_yuv`.
-
-- Screen overlay (SP Display)
-
-    Initialize the display channel with `sp_start_display`; draw detection results on screen with `draw_detections_on_disp`.
-
-## Model Description
-    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x.md) section.
+- The board is flashed with RDK OS and accessible via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
+- Desktop image (Desktop) is used; the desktop/console display is available.
+- The input video file is in place: `/app/res/assets/1080P_test.h264`.
+- The preset model is in place: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`); if missing, see [Model Acquisition and Placement](../../04_demo_support/01_model_files.md).
 
 ## Environment Dependencies
-Before building and running, ensure the following dependencies are installed:
+
+Building requires `libgflags-dev`:
+
 ```bash
 sudo apt update
 sudo apt install libgflags-dev
 ```
 
-## Directory Structure
+## Code Location
+
+Board path: `/app/cdev_demo/bpu/decode_yolov5x_display_sample/`
+
+Directory structure:
 
 ```text
 .
-|-- CMakeLists.txt                     # CMake build script (target/dependency/include/link)
-|-- README.md                          # Usage instructions
+|-- CMakeLists.txt                 # CMake build script (target/dependency/include/link configuration)
+|-- README.md                      # Usage instructions
 |-- inc
-|   `-- ultralytics_yolov5x.hpp        # YOLOv5x wrapper header: load/preprocess/infer/postprocess interfaces
+|   `-- ultralytics_yolov5x.hpp    # YOLOv5x wrapper header: load/preprocess/infer/postprocess interfaces
 `-- src
-    |-- main.cc                        # Program entry: H.264 decode → infer → display overlay (Ctrl+C to exit)
-    `-- ultralytics_yolov5x.cc         # YOLOv5x implementation: letterbox, NV12 tensor write, decode, NMS, coordinate restoration
+    |-- main.cc                    # Program entry: H.264 decode → infer → display overlay (Ctrl+C to exit)
+    `-- ultralytics_yolov5x.cc     # YOLOv5x implementation: letterbox, NV12 tensor write, decode, NMS, coordinate restoration
 ```
 
-## Build the Project
-- Configure and build
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+## Build
 
-<DocScope products="RDK-S100">
-## Model Download
-If the model is not found at runtime, download it with the following command:
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+cd /app/cdev_demo/bpu/decode_yolov5x_display_sample
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
-## Model Download
-If the model is not found at runtime, download it with the following command:
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
-
-</DocScope>
+The build output is `build/decode_yolov5x_display`.
 
 ## Parameter Reference
 
-<DocScope products="RDK-S100">
-| Parameter       | Description                                              | Default Value                                              |
-| --------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
-| `--width`       | Source stream/decode expected width (pixels)             | `1920`                                                     |
-| `--height`      | Source stream/decode expected height (pixels)            | `1080`                                                     |
-| `--input_path`  | Input H.264 file path (local file in this example; can be extended to stream pipelines) | `/app/res/assets/1080P_test.h264` |
-| `--model_path`  | YOLOv5x quantized model (`.hbm`) path                      | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm`     |
-| `--label_file`  | Class name list file (one class name per line)           | `/app/res/labels/coco_classes.names`                       |
-| `--score_thres` | Confidence threshold (filter low-score boxes)          | `0.25`                                                     |
-| `--nms_thres`   | NMS IoU threshold                                        | `0.45`                                                     |
+| Parameter | Description | Default Value |
+|---|---|---|
+| `--width` | Expected source stream/decode width (pixels) | `1920` |
+| `--height` | Expected source stream/decode height (pixels) | `1080` |
+| `--input_path` | Input H.264 file path | `/app/res/assets/1080P_test.h264` |
+| `--model_path` | YOLOv5x quantized model path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`) |
+| `--label_file` | Class name list file (one class name per line) | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | Confidence threshold (filters low-score boxes) | `0.25` |
+| `--nms_thres` | IoU threshold for NMS | `0.45` |
 
-</DocScope>
+## Usage
+
+In the `build` directory, run with default parameters:
+
+```bash
+./decode_yolov5x_display
+```
+
+Run with explicit parameters (equivalent to the defaults):
+
 <DocScope products="RDK-S600">
-| Parameter       | Description                                              | Default Value                                              |
-| --------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
-| `--width`       | Source stream/decode expected width (pixels)             | `1920`                                                     |
-| `--height`      | Source stream/decode expected height (pixels)            | `1080`                                                     |
-| `--input_path`  | Input H.264 file path (local file in this example; can be extended to stream pipelines) | `/app/res/assets/1080P_test.h264` |
-| `--model_path`  | YOLOv5x quantized model (`.hbm`) path                      | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`     |
-| `--label_file`  | Class name list file (one class name per line)           | `/app/res/labels/coco_classes.names`                       |
-| `--score_thres` | Confidence threshold (filter low-score boxes)          | `0.25`                                                     |
-| `--nms_thres`   | NMS IoU threshold                                        | `0.45`                                                     |
+
+```bash
+./decode_yolov5x_display \
+  --width 1920 --height 1080 \
+  --input_path /app/res/assets/1080P_test.h264 \
+  --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.45
+```
 
 </DocScope>
 
-## Quick Start
-- Run the model
-    - Make sure you are in the `build` directory
-    - Use default parameters
-        ```bash
-        ./decode_yolov5x_display
-        ```
-    - Run with custom parameters
+To exit: press `Ctrl+C` on the command line.
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./decode_yolov5x_display \
-            --width 1920 --height 1080 \
-            --input_path /app/res/assets/1080P_test.h264 \
-            --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+## Running Results
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./decode_yolov5x_display \
-            --width 1920 --height 1080 \
-            --input_path /app/res/assets/1080P_test.h264 \
-            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+The following is the actual output measured on RDK S600 (default parameters, `1080P_test.h264`):
 
-        </DocScope>
+```text
+./decode_yolov5x_display
+disp_w=1920, disp_h=1080
+[BPU][[BPU_MONITOR]][INFO]BPULib verison(2, 2, 15)[f21ee84]!
+[DNN]: 3.13.6_(4.7.5 HBRT)
+sp_start_decode success!
+sp_start_display success!
+```
 
-- Exit
+**Indicators of success**: `sp_start_decode success!` means the decode channel was opened successfully, `sp_start_display success!` means the display channel is ready; `BPULib verison(2, 2, 15)` and `DNN: 3.13.6` mean the BPU runtime loaded normally. The screen displays the real-time frame with detection boxes.
 
-    Press `Ctrl+C` in the terminal.
+## Software Description
 
-- View the results
+Data flow: the SP decoder opens the H.264 file (`sp_init_decoder_module`/`sp_start_decode`) → `sp_decoder_get_image` captures NV12 frames → NV12 to BGR → letterbox scale → BPU inference → NMS → draw detection boxes on the Display layer (`draw_detections_on_disp`); if the display resolution does not match the video resolution, an SP VPS scaling pipeline is inserted automatically; after the file is decoded to the end, it loops automatically.
 
-    After successful execution, object detection results are displayed on screen in real time.
+## FAQ
 
-## Notes
-- This program must run in a desktop environment.
+- **`sp_start_decode failed`**: the file specified by `--input_path` does not exist or is not an H.264 stream; check the file path.
+- **No image displayed**: a display environment is required; confirm `--width`/`--height` match the actual video resolution, otherwise VPS scaling is needed.
+- **`make` fails with gflags not found**: `libgflags-dev` is not installed; install it per "Environment Dependencies".
+- **Error: model not found**: check whether the `.hbm` file exists under `--model_path`.
 
-- For more deployment options or model support information, refer to the official documentation or contact platform technical support.
+## Related Documentation
 
-## License
-    ```license
-    Copyright (C) 2025, XiangshunZhao D-Robotics.
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [WebSocket YOLOv5x Inference (Python)](./04_websocket_py.md)
+- [Object Detection - YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
+- [C/C++ Demo Programming Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)

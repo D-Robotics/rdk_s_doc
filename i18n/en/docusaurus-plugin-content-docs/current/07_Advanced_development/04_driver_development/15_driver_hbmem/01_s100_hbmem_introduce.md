@@ -42,3 +42,9 @@ During system startup, a large block of memory is pre-allocated for the user, so
 ## Shared Memory Pool
 
 The shared memory pool function is the same as above, except that memory allocated from the shared memory pool supports sharing across multiple processes. However, the buffers allocated from the shared memory pool are of the same size, and the buffer size can only be specified when creating the shared memory pool. Due to support for multi-process sharing, operations such as importing and freeing memory allocated from the shared memory pool are slightly less efficient than those of ordinary memory.
+
+## Related Documentation
+
+- [Hardware Information](./02_s100_hbmem_hardware.md)
+- [Software Description](./03_s100_hbmem_software.md)
+- [Shared Memory - Hbmem](../../06_multimedia_development/01_multimedia_api/02_hbmem_api.md)

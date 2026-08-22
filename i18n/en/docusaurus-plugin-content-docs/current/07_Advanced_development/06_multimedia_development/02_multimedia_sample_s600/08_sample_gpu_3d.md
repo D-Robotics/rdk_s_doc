@@ -1,3 +1,8 @@
+---
+sidebar_position: 8
+title: "sample_gpu_3d User Manual"
+description: "sample_gpu_3d User Manual - On-board sample usage instructions"
+---
 # sample_gpu_3d User Manual
 ## Function Overview
 3D GPU supports the following standard APIs:
@@ -104,3 +109,26 @@ Execution log: None
 Effect description:
 1. A window will be displayed on the monitor desktop: the window shows a red Bezier curve
 2. The content displayed in the window will also be saved as a file: in the current directory, a bmp format image file named `bezier.bmp` will be generated
+
+## Common Issues
+
+### No Display Environment, Cannot Preview
+
+**Symptom**: In a headless environment (no HDMI monitor), the OpenGL ES sample cannot display a window or reports an error.
+
+**Cause**: OpenGL ES rendering requires a display device; a headless environment has no available display surface.
+
+**Solution**: Connect an HDMI monitor to run it, or use the OpenCL sample (pure computation, no display required); you can also use a virtual display such as xvfb for verification.
+
+### OpenCL / OpenGL ES Selection
+
+**Symptom**: Not sure about the differences between the two samples.
+
+**Cause**: OpenCL is for general-purpose computing (no window), while OpenGL ES is for graphics rendering (requires a display).
+
+**Solution**: Use OpenCL for image/data processing tasks; use OpenGL ES for tasks that need to render to the screen/window.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

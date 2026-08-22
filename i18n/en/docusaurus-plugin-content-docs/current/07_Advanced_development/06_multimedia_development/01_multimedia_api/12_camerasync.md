@@ -323,7 +323,17 @@ LPWM configuration is performed via JSON. Below is a configuration example; for 
 }
 ```
 
+## Quick Example
+
+Camera synchronization has no standalone function API; it is implemented by delivering the sensor configuration file plus the LPWM configuration. The minimal configuration flow is as follows (taking AR0820 + ETH PPS0 trigger, 30fps as an example):
+
+1. **Configure the Camera in Slave/Shutter Sync mode**: add 512 (bit9) to `config_index` in the sensor configuration to enable synchronization; configure `deserial_gpio.trig_pin` with the MFP index connected to LPWM.
+2. **Configure the LPWM output**: configure `trigger_source=8` (ETH PPS0), `trigger_mode=1` (external trigger), `period=33333us` (1s/30fps), and `offset` according to the formula `1000000 - period * fps + 1`.
+3. **Load the configuration and start streaming**: the configuration file is loaded with the sensor library; the LPWM outputs a square wave triggered by PPS, and multiple cameras capture/output frames synchronously.
+
 When `trigger_mode` is set to 1 and `trigger_source` is set to 8, ETH PPS0 is used as the synchronization source.
+
+> Board-side example: `get_vin_data` synchronizes the `lpwm_chn_attr_t` (`hbn_vin_cfg.h`) into the camera configuration for SerDes sensors through `vp_deserial_config_update`; the meaning of each LPWM field is described in the "LPWM Configuration Item Description" section of this chapter.
 
 ## Summary
 
@@ -418,3 +428,8 @@ In other words, there is no correlation between CIM frame start (tv) and LPWM tr
 In this case, the timestamp has no reference value and can be ignored.
 
 In actual use, ensure PPS stably falls in the **low-level region** by appropriately increasing `offset` based on debugging results.
+## Related Documentation
+
+- [Image Signal Processing - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
+- [Time Synchronization Scheme](/Advanced_development/system_software/driver_timesync)
+- [Camera Usage](/Demos/peripheral/camera/mipi_camera)

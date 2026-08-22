@@ -927,3 +927,8 @@ MCU log description:
 "Get Time From Acore success" indicates that the MCU successfully obtained the time from Acore;
 
 "TimeKeeperRTC and TimeKeeperIPC Offset" indicates the offset when Rtc uses IPC time synchronization.
+
+## Related Documentation
+
+- [Clock and RTC Synchronization](/System_configuration/rtc_ntp)
+- [IPC Module Introduction](/Advanced_development/system_software/driver_ipc)

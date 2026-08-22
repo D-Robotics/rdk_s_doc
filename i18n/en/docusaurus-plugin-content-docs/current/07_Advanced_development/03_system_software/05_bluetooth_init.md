@@ -352,3 +352,8 @@ sudo modprobe btusb
 # Start the Bluetooth service
 sudo systemctl start hobot-bluetooth
 ```
+
+## Related Documentation
+
+- [Bluetooth Configuration](/System_configuration/bluetooth_config)
+- [Wi-Fi Driver Debugging Guide](/Advanced_development/driver_development/driver_wifi)

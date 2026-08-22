@@ -122,940 +122,940 @@ hb_disp_close_id(DISP_PRI_1);
 
 ### hb_disp_init_dev_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_init_dev_cfg(uint32_t disp_id, const char *cfg_file);
 ```
 
-【Function Description】
+**Description**
 
 Initialize a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_init_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_init_cfg(const char *cfg_file);
 ```
 
-【Function Description】
+**Description**
 
 Initialize all display device
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_close
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_close(void);
 ```
 
-【Function Description】
+**Description**
 
 Close all display device
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_close_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_close_id(uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Close a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_start
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_start(void);
 ```
 
-【Function Description】
+**Description**
 
 Start all display device
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_start_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_start_id(uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Start a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_stop
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_stop(void);
 ```
 
-【Function Description】
+**Description**
 
 Stop all display device
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_stop_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_stop_id(uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Stop a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_on
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_layer_on(uint32_t layer_number);
 ```
 
-【Function Description】
+**Description**
 
 Enable a layer of all display device
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_on_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_layer_on_id(uint32_t layer_number, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Enable a layer of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_off
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_layer_off(uint32_t layer_number);
 ```
 
-【Function Description】
+**Description**
 
 Close a layer of all display device
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_off_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_layer_off_id(uint32_t layer_number, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Close a layer of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_video_bufaddr
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_video_bufaddr(uint32_t layer_no, void *addr_y, void *addr_c);
 ```
 
-【Function Description】
+**Description**
 
 Set video buffer address
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Super; SW: 0.0.1
 
 ### hb_disp_set_video_bufaddr_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_video_bufaddr_id(uint32_t disp_id, uint32_t layer_no, void *addr_y, void *addr_c);
 ```
 
-【Function Description】
+**Description**
 
 Set video buffer address to a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Super; SW: 0.0.1
 
 ### hb_disp_set_layer_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_layer_cfg(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos);
 ```
 
-【Function Description】
+**Description**
 
 Set video buffer address
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_layer_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_layer_cfg_id(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Set video buffer address for a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_timing
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_timing(disp_timing_t *user_timing);
 ```
 
-【Function Description】
+**Description**
 
 Set display timing
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_timing_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_timing_id(disp_timing_t *user_timing, uint32_t	    disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Set display timing for a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_gamma_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_gamma_cfg(float32_t *gamma_val);
 ```
 
-【Function Description】
+**Description**
 
 Get gamma config value
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_gamma_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_gamma_cfg_id(float32_t *gamma_val, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Get gamma config value for a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_gamma_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_gamma_cfg(float32_t gamma_user);
 ```
 
-【Function Description】
+**Description**
 
 Set gamma config for a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_gamma_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_gamma_cfg_id(float32_t gamma_user, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Set gamma config
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_dynamic_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_output_dynamic_cfg_id(output_dynamic_cfg_t *dynamic_cfg, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Set output dynamic config
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Super; SW: 0.0.1
 
 ### hb_disp_get_output_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_output_cfg(output_cfg_t *cfg);
 ```
 
-【Function Description】
+**Description**
 
 Get ouput config
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_output_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_output_cfg_id(output_cfg_t *cfg, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Get ouput config of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_output_cfg(output_cfg_t *cfg);
 ```
 
-【Function Description】
+**Description**
 
 Set ouput config
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_output_cfg_id(output_cfg_t *cfg, uint32_t	     disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Set ouput config of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_upscaling_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_upscaling_cfg(upscaling_cfg_t *cfg);
 ```
 
-【Function Description】
+**Description**
 
 Get upscale config
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_upscaling_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_upscaling_cfg_id(upscaling_cfg_t *cfg, uint32_t	     disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Get upscale config of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_upscaling_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_upscaling_cfg(const upscaling_cfg_t *cfg);
 ```
 
-【Function Description】
+**Description**
 
 Set upscale config of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_upscaling_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_upscaling_cfg_id(const upscaling_cfg_t *cfg, uint32_t		   disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Set upscale config of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_channel_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_channel_cfg(uint32_t chn, channel_base_cfg_t *cfg);
 ```
 
-【Function Description】
+**Description**
 
 Get channel config parameters
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_channel_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_channel_cfg_id(uint32_t chn, channel_base_cfg_t *cfg, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Get channel config parameters of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_channel_cfg
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_channel_cfg(uint32_t			 chn, channel_base_cfg_t *cfg);
 ```
 
-【Function Description】
+**Description**
 
 Set channel config parameters of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_channel_cfg_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_channel_cfg_id(uint32_t		    chn, channel_base_cfg_t *cfg, uint32_t		    disp_id);
 ```
 
-【Function Description】
+**Description**
 
 Set channel config parameters of a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_out_upscale
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_out_upscale(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h);
 ```
 
-【Function Description】
+**Description**
 
 user config up-scale
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_out_upscale_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_out_upscale_id(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 user config up-scale for a display device instance
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_display_done
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_display_done(void);
 ```
 
-【Function Description】
+**Description**
 
 user get the display done flag
 
-【Return Value】
+**Return Value**
 
 0:not done;1:done
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_display_done_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_display_done_id(uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 user get the display done flag for a display device instance
 
-【Return Value】
+**Return Value**
 
 0:not done;1:done
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_check_video_bufaddr_valid
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_check_video_bufaddr_valid(size_t	  graphic_size, uint32_t disp_layer_no);
 ```
 
-【Function Description】
+**Description**
 
 user check whether the graphic size matches the channel
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_check_video_bufaddr_valid_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_check_video_bufaddr_valid_id(size_t   graphic_size, uint32_t disp_layer_no, uint32_t  disp_id);
 ```
 
-【Function Description】
+**Description**
 
 user check whether the graphic size matches the channel
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_video_display_done_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_video_display_done_id(uint32_t layer, uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 user get layer buffer read done flag
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_video_display_done
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_video_display_done(uint32_t layer);
 ```
 
-【Function Description】
+**Description**
 
 user get layer buffer read done flag
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_disp_done_sync_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_disp_done_sync_id(uint32_t disp_id, uint64_t rel_seq);
 ```
 
-【Function Description】
+**Description**
 
 user wait display vsync flag
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Super; SW: 0.0.1
 
 ### hb_disp_get_capture_buf_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_get_capture_buf_id(uint32_t disp_id, uint32_t timeout, struct hb_mem_graphic_buf_t *out_buf);
 ```
 
-【Function Description】
+**Description**
 
 user get capture buffer
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Super; SW: 0.0.1
 
 ### hb_disp_release_capture_buf_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_release_capture_buf_id(uint32_t disp_id, struct hb_mem_graphic_buf_t *out_buf);
 ```
 
-【Function Description】
+**Description**
 
 user release capture buffer
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Super; SW: 0.0.1
 
 ### hb_disp_set_disp_oneshot_trigger_id
 
-【Function Declaration】
+**Function Declaration**
 
 ```c
 HB_API int32_t hb_disp_set_disp_oneshot_trigger_id(uint32_t disp_id);
 ```
 
-【Function Description】
+**Description**
 
 user trigger display control oneshot output
 
-【Return Value】
+**Return Value**
 
 "= 0" success
 &lt;0 failed
 
-【Compatibility】
+**Compatibility**
 HW: Super; SW: 0.0.1
 
 ## Related Documentation

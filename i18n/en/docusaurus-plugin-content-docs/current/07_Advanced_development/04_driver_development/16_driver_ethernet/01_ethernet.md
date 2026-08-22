@@ -13,16 +13,16 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-The S100 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet收发, PTP/TSN time-sensitive networking, and EtherCAT master features.  
+The S100 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet transmission and reception, PTP/TSN time-sensitive networking, and EtherCAT master features.  
 
 </DocScope>
 <DocScope products="RDK S600">
 
-The S600 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet收发, PTP/TSN time-sensitive networking, and EtherCAT master features.  
+The S600 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet transmission and reception, PTP/TSN time-sensitive networking, and EtherCAT master features.  
 
 </DocScope>
 
-The controllers have built-in hardware multi-queue, MTL layer 2 transport layer, DMA engine, etc., to achieve packet收发 in the various scenarios mentioned above.  
+The controllers have built-in hardware multi-queue, MTL layer 2 transport layer, DMA engine, etc., to achieve packet transmission and reception in the various scenarios mentioned above.  
 This document mainly includes a network card usage guide, development board Bringup, and key feature descriptions.
 
 ## Terminology
@@ -702,7 +702,7 @@ This document mainly includes a network card usage guide, development board Brin
 
 | Function Category | Core POSIX API Code |
 | :--------------- | :------------------ |
-| L2 packet收发 | `socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));`<br/>`bind(fd, (struct sockaddr *) &addr, sizeof(addr));`<br/>`setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, name, strlen(name)); /* Bind to specific NIC */`<br/>`setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &prg, sizeof(prg)); /* Attach packet filter */`<br/>`ioctl(sock, SIOCGIFHWADDR, &ifr); /* Get NIC MAC address */` |
+| L2 packet transmission and reception | `socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));`<br/>`bind(fd, (struct sockaddr *) &addr, sizeof(addr));`<br/>`setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, name, strlen(name)); /* Bind to specific NIC */`<br/>`setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &prg, sizeof(prg)); /* Attach packet filter */`<br/>`ioctl(sock, SIOCGIFHWADDR, &ifr); /* Get NIC MAC address */` |
 | Packet Hardware Timestamping | `ioctl(fd, SIOCSHWTSTAMP, &ifreq); /* Enable hardware timestamping */`<br/>`setsockopt(fd, SOL_SOCKET, SO_TIMESTAMPING, &flags, sizeof(flags)); /* Enable timestamping delivery */`<br/>`recvmsg(fd, &msg, MSG_ERRQUEUE); /* Get transmit packet hardware timestamp */`<br/>`recvmsg(fd, &msg, 0); /* Get receive packet hardware timestamp */` |
 | Get NIC PHC Index | `socket(AF_INET, SOCK_DGRAM, 0);`<br/>`ioctl(fd, SIOCETHTOOL, &ifr);` |
 | PHC Time Read/Write | `open("/dev/ptp0", O_RDWR);`<br/>`FD_TO_CLOCKID(fd);`<br/>`clock_gettime(clkid, &ts);`<br/>`clock_settime(clkid, &ts);` |
@@ -1023,3 +1023,8 @@ This document mainly includes a network card usage guide, development board Brin
 - Q: U-Boot upgrade fails (cannot ping)?
 - A: Check IP configuration, serverip; use a small LAN or direct connection to PC.
   Check MAC configuration; verify that the expected NIC is being used. Check if the network cable is Cat6.
+
+## Related Documentation
+
+- [Network Configuration](../../../02_System_configuration/01_network_config.md)
+- [EtherCAT (Linux Side)](./02_ethercat.md)

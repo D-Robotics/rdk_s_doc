@@ -1,3 +1,8 @@
+---
+sidebar_position: 3
+title: "sample_isp Usage Guide"
+description: "sample_isp Usage Guide - On-board sample usage instructions"
+---
 # sample_isp Usage Guide
 
 ## Function Overview
@@ -226,3 +231,8 @@ The program starts running and saves the following calibrated YUV images in the 
 ### Common Issues with isp_feedback
 
 - If the specified image resolution or format parameters do not match the actual loopback image, it may cause image anomalies.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

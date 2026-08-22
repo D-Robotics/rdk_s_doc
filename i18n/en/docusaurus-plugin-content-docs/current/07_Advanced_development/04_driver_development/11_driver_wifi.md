@@ -114,3 +114,8 @@ PCIe-expanded Wi-Fi modules generally require the host side to control signals s
 The PCIe driver of the S600 requests these GPIOs and performs operations such as de-asserting reset during initialization.
 
 </DocScope>
+
+## Related Documentation
+
+- [Network Configuration](/System_configuration/network_config)
+- [PCIe Usage Guide](/Advanced_development/driver_development/driver_pcie)

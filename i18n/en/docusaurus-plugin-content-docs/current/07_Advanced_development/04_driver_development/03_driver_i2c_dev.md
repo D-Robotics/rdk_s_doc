@@ -428,3 +428,8 @@ root@ubuntu:~# i2cdetect -r -y 3
 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 70: -- -- -- -- -- -- -- --
 ```
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)

@@ -638,3 +638,9 @@ Currently, the MCU Log supports the following formatted output types:
 - %c — Single character
 
 Other formatted output types are not supported at this time. Future versions will gradually expand support for more data types and formats to meet richer debugging needs.
+
+## Related Documentation
+
+- [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
+- [MCU System Description](/Advanced_development/mcu_development/MCU_build_system)
+- [MCU Interface Expansion Board](/01_hardware_introduction)

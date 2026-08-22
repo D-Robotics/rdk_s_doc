@@ -74,7 +74,7 @@ The UFS subsystem consists of the following parts:
 
 ## Code Paths
 
-# Hobot UFS driver files
+### Hobot UFS driver files
 
 ```shell
 hobot-drivers/ufs/ufs-hobot.c          # Main driver file
@@ -85,7 +85,7 @@ hobot-drivers/ufs/Kconfig              # Kernel config options
 hobot-drivers/ufs/Makefile             # Build configuration
 ```
 
-# Linux kernel UFS core code
+### Linux kernel UFS core code
 
 ```shell
 drivers/ufs/core/ufshcd.c              # UFS core layer
@@ -93,7 +93,7 @@ drivers/ufs/core/ufshcd.h              # UFS core header
 drivers/ufs/host/ufshcd-pltfrm.c       # Platform driver layer
 ```
 
-# Device tree configuration
+### Device tree files
 
 <DocScope products="RDK S100">
 ```shell
@@ -206,7 +206,7 @@ ufs: ufs@0x39410000 {
 </DocScope>
 
 <DocScope products="RDK S600">
-### S600 SoC 配置 (drobot-s600-soc.dtsi)
+### S600 SoC Configuration (drobot-s600-soc.dtsi)
 
 ```dts
 		ufs: ufs@0x33700000 {
@@ -654,3 +654,8 @@ When adapting new UFS device models, follow these requirements:
 3. **Signal Integrity**: Pay attention to PCB trace design and impedance matching in high-speed mode
 4. **Temperature Effects**: MPHY calibration values vary with temperature; ensure operation within valid temperature range
 5. **Hot-Swap**: UFS does not support hot-swap; ensure the device is properly connected before power-on
+
+## Related Documentation
+
+- [Configure U-Boot and Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [Storage and Disk Management](/System_configuration/storage)

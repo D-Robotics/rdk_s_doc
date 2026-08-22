@@ -315,16 +315,16 @@ D-Robotics:/$ Adc_TestNormal stop
 #### void Adc_Init(const Adc_ConfigType* ConfigPtr)
 
 ```shell
-Description：Initializes the ADC hardware units and driver.
+Description:Initializes the ADC hardware units and driver.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 
@@ -332,10 +332,10 @@ Return value：None
 #### Std_ReturnType Adc_SetupResultBuffer(Adc_GroupType Group, const Adc_ValueGroupType* DataBufferPtr)
 
 ```shell
-Description：Initializes the group specific ADC result buffer pointer as configured
+Description:Initializes the group specific ADC result buffer pointer as configured
              to point to the pDataBufferPtr address which is passed as parameter.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     Group: Numeric ID of requested ADC channel group.
     DataBufferPtr: pointer to result data buffer.
@@ -343,7 +343,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: result buffer pointer initialized correctly
     E_NOT_OK: operation failed or development error occurred
 ```
@@ -351,42 +351,42 @@ Return value：Std_ReturnType
 #### void Adc_DeInit(void)
 
 ```shell
-Description：Returns all ADC HW Units to a state comparable to their power on reset state.
+Description:Returns all ADC HW Units to a state comparable to their power on reset state.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     ConfigPtr: Pointer to configuration set in Variant PB
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Adc_StartGroupConversion(Adc_GroupType Group)
 
 ```shell
-Description：Starts the conversion of all channels of the requested ADC Channel group.
+Description:Starts the conversion of all channels of the requested ADC Channel group.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Adc_ReadGroup(Adc_GroupType Group, Adc_ValueGroupType* DataBufferPt)
 
 ```shell
-Description：Reads the group conversion result of the last completed conversion round of the requested group
+Description:Reads the group conversion result of the last completed conversion round of the requested group
              and stores the channel values starting at the DataBufferPtr address.
              The group channel values are stored in ascending channel number order
              (in contrast to the storage layout of the result buffer if streaming access is configured).
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
@@ -394,7 +394,7 @@ Parameters(inout)
 Parameters(out)
     DataBufferPtr: ADC results of all channels of the selected group are stored in the data buffer
                    addressed with the pointer.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Aresults are available and written to the data buffer
     E_NOT_OK: no results are available or development error occurred
 ```
@@ -402,9 +402,9 @@ Return value：Std_ReturnType
 #### void Adc_EnableHardwareTrigger(Adc_GroupType Group)
 
 ```shell
-Description：Enables the hardware trigger for the requested ADC Channel group.
+Description:Enables the hardware trigger for the requested ADC Channel group.
 
-Sync/Async：Asynchronous
+Sync/Async:Asynchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
@@ -412,114 +412,114 @@ Parameters(inout)
 Parameters(out)
     DataBufferPtr: ADC results of all channels of the selected group are stored
                    in the data buffer addressed with the pointer.
-Return value：None
+Return value:None
 ```
 
 #### void Adc_DisableHardwareTrigger(Adc_GroupType Group)
 
 ```shell
-Description：Disables the hardware trigger for the requested ADC Channel group.
+Description:Disables the hardware trigger for the requested ADC Channel group.
 
-Sync/Async：Asynchronous
+Sync/Async:Asynchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Adc_EnableGroupNotification(Adc_GroupType Group)
 
 ```shell
-Description：Enables the notification mechanism for the requested ADC Channel group.
+Description:Enables the notification mechanism for the requested ADC Channel group.
 
-Sync/Async：Asynchronous
+Sync/Async:Asynchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Adc_DisableGroupNotification(Adc_GroupType Group)
 
 ```shell
-Description：Disables the notification mechanism for the requested ADC Channel group.
+Description:Disables the notification mechanism for the requested ADC Channel group.
 
-Sync/Async：Asynchronous
+Sync/Async:Asynchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Adc_StatusType Adc_GetGroupStatus(Adc_GroupType Group)
 
 ```shell
-Description：Returns the conversion status of the requested ADC Channel group.
+Description:Returns the conversion status of the requested ADC Channel group.
 
-Sync/Async：Asynchronous
+Sync/Async:Asynchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Adc_StatusType
+Return value:Adc_StatusType
 	Conversion status for the requested group.
 ```
 
 #### Adc_StreamNumSampleType Adc_GetStreamLastPointer(Adc_GroupType Group, Adc_ValueGroupType** PtrToSamplePtr)
 
 ```shell
-Description：Returns the number of valid samples per channel, stored in the result buffer.
+Description:Returns the number of valid samples per channel, stored in the result buffer.
              Reads a pointer, pointing to a position in the group result buffer.
              With the pointer position, the results of all group channels of the last
              completed conversion round can be accessed.
              With the pointer and the return value, all valid group conversion results can
              be accessed.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     Group: Numeric ID of requested ADC Channel group.
 Parameters(inout)
     None
 Parameters(out)
     PtrToSamplePtr: Pointer to result buffer pointer.
-Return value：Adc_StreamNum SampleType
+Return value:Adc_StreamNum SampleType
 	Number of valid samples per channel.
 ```
 
 #### void Adc_GetVersionInfo(Std_VersionInfoType* versioninfo)
 
 ```shell
-Description：Returns the version information of this module.
+Description:Returns the version information of this module.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
     None
 Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
-Return value：None
+Return value:None
 
 ```
 
 #### Std_ReturnType Adc_SetPowerState(Adc_PowerStateRequestResultType* Result)
 
 ```shell
-Description：This API configures the Adc module so that it enters the already prepared
+Description:This API configures the Adc module so that it enters the already prepared
              power state, chosen between a predefined set of configured ones.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
@@ -531,7 +531,7 @@ Parameters(out)
         ADC_NOT_INIT: ADC Module not initialized.
         ADC_SEQUENCE_ERROR: wrong API call sequence.
         ADC_HW_FAILURE: the HW module has a failure which prevents it to enter the required power state.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Power Mode changed
     E_NOT_OK: request rejected
 ```
@@ -539,10 +539,10 @@ Return value：Std_ReturnType
 #### Std_ReturnType Adc_GetCurrentPowerState(Adc_PowerStateType* CurrentPowerState, Adc_PowerStateRequestResultType* Result)
 
 ```shell
-Description：This API returns the current power state of the ADC HW unit.
+Description:This API returns the current power state of the ADC HW unit.
 
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
@@ -551,7 +551,7 @@ Parameters(out)
     CurrentPowerState: The current power mode of the ADC HW Unit is returned in this parameter
     Result: If the API returns E_OK: ADC_SERVICE_ACCEPTED: Current power mode was returned
             If the API returns E_NOT_OK: ADC_NOT_INIT: ADC Module not initialized.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Mode could be read
     E_NOT_OK: request rejected
 ```
@@ -559,10 +559,10 @@ Return value：Std_ReturnType
 #### Std_ReturnType Adc_GetTargetPowerState(Adc_PowerStateType* TargetPowerState, Adc_PowerStateRequestResultType* Result)
 
 ```shell
-Description：This API returns the Target power state of the ADC HW unit.
+Description:This API returns the Target power state of the ADC HW unit.
 
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
@@ -571,7 +571,7 @@ Parameters(out)
     CurrentPowerState: The current power mode of the ADC HW Unit is returned in this parameter
     Result: If the API returns E_OK: ADC_SERVICE_ACCEPTED: Current power mode was returned
             If the API returns E_NOT_OK: ADC_NOT_INIT: ADC Module not initialized.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Mode could be read
     E_NOT_OK: request rejected
 ```
@@ -579,9 +579,9 @@ Return value：Std_ReturnType
 #### Std_ReturnType Adc_PreparePowerState(Adc_PowerStateType PowerState, Adc_PowerStateRequestResultType* Result)
 
 ```shell
-Description：This API returns the Target power state of the ADC HW unit.
+Description:This API returns the Target power state of the ADC HW unit.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     PowerState: The target power state intended to be attained
 Parameters(inout)
@@ -596,7 +596,7 @@ Parameters(out)
         ADC_POWER_STATE_NOT_SUPP: ADC Module does not support the requested power state.
         ADC_TRANS_NOT_POSSIBLE: ADC Module cannot transition directly from the current power
                                 state to the requested power state or the HW peripheral is still busy.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Mode could be read
     E_NOT_OK: request rejected
 ```
@@ -607,7 +607,7 @@ Return value：Std_ReturnType
 #### void Adc_EnableWdgNotification(Adc_ChannelType ChannelId)
 
 ```shell
-Description：Enable notification of a channel that has watchdog functionality
+Description:Enable notification of a channel that has watchdog functionality
              configured at initialization
 
 Parameters(in)
@@ -616,13 +616,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Adc_DisableWdgNotification(Adc_ChannelType ChannelId)
 
 ```shell
-Description：Disable notification of a channel that has watchdog functionality
+Description:Disable notification of a channel that has watchdog functionality
              configured at initialization
 
 Parameters(in)
@@ -631,7 +631,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 
@@ -641,7 +641,7 @@ Return value：None
 #### void Adc_EnableWdgNotification(Adc_ChannelType ChannelId, uint8 Instance)
 
 ```shell
-Description：Enable notification of a channel that has watchdog functionality configured at initialization
+Description:Enable notification of a channel that has watchdog functionality configured at initialization
 
 Parameters(in)
     ChannelId: The channel ID of ADC
@@ -650,13 +650,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Adc_DisableWdgNotification(Adc_ChannelType ChannelId, uint8 Instance)
 
 ```shell
-Description：Disable notification of a channel that has watchdog functionality configured at initialization
+Description:Disable notification of a channel that has watchdog functionality configured at initialization
 
 Parameters(in)
     ChannelId: The channel ID of ADC
@@ -665,7 +665,11 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 </TabItem>
 </Tabs>
+
+## Related Documentation
+
+- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)

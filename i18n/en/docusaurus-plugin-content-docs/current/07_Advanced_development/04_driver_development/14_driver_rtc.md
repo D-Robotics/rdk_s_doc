@@ -1346,3 +1346,8 @@ Corresponding interrupt entries for each board:
 </DocScope>
 
 > Example (S100): Change `ENABLE` to `DISABLE` at the end of the `Os_IntChannel_Gpio_Icu3ExtIsr` line in `Interrupt_McuConfigs[]`. The same applies to S600.
+
+## Related Documentation
+
+- [Clock and RTC Synchronization](/System_configuration/rtc_ntp)
+- [Time Synchronization Scheme](/Advanced_development/system_software/driver_timesync)

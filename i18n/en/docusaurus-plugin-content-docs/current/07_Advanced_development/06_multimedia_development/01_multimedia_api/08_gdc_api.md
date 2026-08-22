@@ -25,3 +25,8 @@ GDC (Geometric Distortion Correction) is for camera image geometric distortion c
 
 - [VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api) (`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`)
 - [HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api) (vnode channel binding)
+
+## Related Documentation
+
+- [VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)
+- [HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

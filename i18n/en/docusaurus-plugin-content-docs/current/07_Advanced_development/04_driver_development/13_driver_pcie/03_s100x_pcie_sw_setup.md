@@ -116,3 +116,9 @@ S600 PCIE link supports 3 modes:
 ...
 ```
 </DocScope>
+
+## Related Documentation
+
+- [PCIe Software Architecture](./02_s100x_pcie_sw_arch.md)
+- [PCIe User-Space API](./04_s100x_pcie_libhbpciehal.md)
+- [PCIe Hardware Specifications](./01_s100x_pcie_hw_guide.md)

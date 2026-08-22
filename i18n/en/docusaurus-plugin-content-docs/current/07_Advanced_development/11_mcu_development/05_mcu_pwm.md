@@ -347,16 +347,16 @@ D-Robotics:/$ pwmdumpregs 0 4
 #### void Pwm_Init(const Pwm_ConfigType* ConfigPtr)
 
 ```shell
-Description：Service for PWM initialization
+Description:Service for PWM initialization
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
-    ConfigPtr： Pointer to configuration set
+    ConfigPtr: Pointer to configuration set
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 
@@ -364,23 +364,23 @@ Return value：None
 #### void Pwm_DeInit(void)
 
 ```shell
-Description：Service for PWM De-Initialization.
+Description:Service for PWM De-Initialization.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Pwm_SetDutyCycle(Pwm_ChannelType ChannelNumber, uint16 DutyCycle)
 
 ```shell
-Description：Service sets the duty cycle of the PWM channel.
-Sync/Async：Asynchronous
+Description:Service sets the duty cycle of the PWM channel.
+Sync/Async:Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
     DutyCycle: Min=0x0000 Max=0x8000
@@ -388,14 +388,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Pwm_SetPeriodAndDuty(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period, uint16 DutyCycle)
 
 ```shell
-Description：Service sets the duty cycle of the PWM channel.
-Sync/Async：Asynchronous
+Description:Service sets the duty cycle of the PWM channel.
+Sync/Async:Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
     Period: Period of the PWM signal
@@ -404,28 +404,28 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Pwm_SetOutputToIdle(Pwm_ChannelType ChannelNumber)
 
 ```shell
-Description：Service sets the PWM output to the configured Idle state.
-Sync/Async：Asynchronous
+Description:Service sets the PWM output to the configured Idle state.
+Sync/Async:Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Pwm_OutputStateType Pwm_GetOutputState(Pwm_ChannelType ChannelNumber)
 
 ```shell
-Description：Service to read the internal state of the PWM output signal.
-Sync/Async：Asynchronous
+Description:Service to read the internal state of the PWM output signal.
+Sync/Async:Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
 Parameters(inout)
@@ -433,7 +433,7 @@ Parameters(inout)
 Parameters(out)
     None
 
-Return value：Pwm_OutputStateType
+Return value:Pwm_OutputStateType
     PWM_HIGH: The PWM output state is high
     PWM_LOW: The PWM output state is low
 ```
@@ -441,22 +441,22 @@ Return value：Pwm_OutputStateType
 #### void Pwm_DisableNotification(Pwm_ChannelType ChannelNumber)
 
 ```shell
-Description：Service to disable the PWM signal edge notification.
-Sync/Async：Asynchronous
+Description:Service to disable the PWM signal edge notification.
+Sync/Async:Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Pwm_EnableNotification(Pwm_ChannelType ChannelNumber, Pwm_EdgeNotificationType Notification)
 
 ```shell
-Description：Service to enable the PWM signal edge notification.
-Sync/Async：Asynchronous
+Description:Service to enable the PWM signal edge notification.
+Sync/Async:Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
     Notification: Notification type to be enabled
@@ -464,19 +464,24 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Pwm_GetVersionInfo(Std_VersionInfoType* versioninfo)
 
 ```shell
-Description：Service returns the version information of this module.
-Sync/Async：Synchronous
+Description:Service returns the version information of this module.
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
     None
 Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
-Return value：None
+Return value:None
 ```
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [PWM Driver Debugging Guide](/Advanced_development/driver_development/driver_pwm)

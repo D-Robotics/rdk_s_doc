@@ -1131,7 +1131,7 @@ can_tran_debug
 #### void Can_Init(const Can_ConfigType* Config)
 
 ```shell
-Description：This function initializes the module.
+Description:This function initializes the module.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1140,13 +1140,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Can_GetVersionInfo(Std_VersionInfoType* versioninfo)
 
 ```shell
-Description：Returns the version information of this module.
+Description:Returns the version information of this module.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1155,13 +1155,13 @@ Parameters(inout)
     None
 Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
-Return value：None
+Return value:None
 ```
 
 #### void Can_DeInit(void)
 
 ```shell
-Description：This function de-initializes the module.
+Description:This function de-initializes the module.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1170,13 +1170,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Can_SetControllerMode(uint8 Controller, Can_ControllerStateType Transition)
 
 ```shell
-Description：This function performs software triggered state transitions of the CAN controller State machine.
+Description:This function performs software triggered state transitions of the CAN controller State machine.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1186,7 +1186,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
 	E_OK: request accepted.
     E_NOT_OK: request not accepted, a development error occurred.
 ```
@@ -1194,7 +1194,7 @@ Return value：Std_ReturnType
 #### void Can_DisableControllerInterrupts(uint8 Controller)
 
 ```shell
-Description：This function disables all interrupts for this CAN controller.
+Description:This function disables all interrupts for this CAN controller.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1203,13 +1203,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Can_EnableControllerInterrupts(uint8 Controller)
 
 ```shell
-Description：This function enables all allowed interrupts.
+Description:This function enables all allowed interrupts.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1218,13 +1218,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Can_GetControllerErrorState(uint8 ControllerId, Can_ErrorStateType* ErrorStatePtr)
 
 ```shell
-Description：This service obtains the error state of the CAN controller.
+Description:This service obtains the error state of the CAN controller.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1233,7 +1233,7 @@ Parameters(inout)
     None
 Parameters(out)
     ErrorStatePtr:Pointer to a memory location, where the error state of the CAN controller will be stored.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
 	E_OK: Error state request has been accepted.
     E_NOT_OK: Error state request has not been accepted.
 ```
@@ -1241,7 +1241,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Can_GetControllerMode(uint8 Controller, Can_ControllerStateType* ControllerModePtr)
 
 ```shell
-Description：This service reports about the current status of the requested CAN controller.
+Description:This service reports about the current status of the requested CAN controller.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1250,7 +1250,7 @@ Parameters(inout)
     None
 Parameters(out)
     ControllerModePtr: Pointer to a memory location, where the current mode of the CAN controller will be stored.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Controller mode request has been accepted.
     E_NOT_OK: Controller mode request has not been accepted.
 ```
@@ -1258,7 +1258,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Can_GetControllerRxErrorCounter(uint8 ControllerId, uint8* RxErrorCounterPtr)
 
 ```shell
-Description：Returns the Rx error counter for a CAN controller.
+Description:Returns the Rx error counter for a CAN controller.
              This value might not be available for all CAN controllers, in which case E_NOT_OK would be
              returned.Please note that the value of the counter might not be correct at the moment the
              API returns it, because the Rx counter is handled as ynchronously in hardware.Applications
@@ -1272,7 +1272,7 @@ Parameters(inout)
 Parameters(out)
     RxErrorCounterPtr: Pointer to a memory location, where the current Rx error counter of the
                        CAN controller will be stored.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Rx error counter available.
     E_NOT_OK: Wrong ControllerId, or Rx error counter not available.
 ```
@@ -1280,7 +1280,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Can_GetControllerTxErrorCounter(uint8 ControllerId, uint8* TxErrorCounterPtr)
 
 ```shell
-Description：Returns the Tx error counter for a CAN controller. This value might not be available
+Description:Returns the Tx error counter for a CAN controller. This value might not be available
              for all CAN controllers, in which case E_NOT_OK would be returned.Please note that the
              value of the counter might not be correct at the moment the API returns it, because the
              Tx counter is handled as ynchronously in hardware.Applications should not trust this
@@ -1294,7 +1294,7 @@ Parameters(inout)
 Parameters(out)
     TxErrorCounterPtr:Pointer to a memory location, where the current Tx error counter
                       of the CAN controller will be stored.
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Rx error counter available.
     E_NOT_OK: Wrong ControllerId, or Rx error counter not available.
 ```
@@ -1302,7 +1302,7 @@ Return value：Std_ReturnType
 #### Std_ReturnTypeCan_Write(Can_HwHandleType Hth, const Can_PduType* PduInfo)
 
 ```shell
-Description：This function is called by CanIf to pass a CAN message to CanDrv for tran smission.
+Description:This function is called by CanIf to pass a CAN message to CanDrv for tran smission.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1313,7 +1313,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: Write command has been accepted.
     E_NOT_OK: development error occurred.
     CAN_BUSY: No TX hardware buffer available or pre-emptive call of Can_Write that can’t be implemented re-entrant (see Can_ReturnType).
@@ -1322,7 +1322,7 @@ Return value：Std_ReturnType
 #### void Can_MainFunction_Write(Void)
 
 ```shell
-Description：This function performs the polling of TX confirmation when CAN_TX_PROCESSING
+Description:This function performs the polling of TX confirmation when CAN_TX_PROCESSING
              is set to POLLING.
 
 Sync/Async: Synchronous
@@ -1338,7 +1338,7 @@ Return value: None
 #### void Can_MainFunction_Read(Void)
 
 ```shell
-Description：Returns the value of the specified CAN channel.This function performs the
+Description:Returns the value of the specified CAN channel.This function performs the
              polling of RX indications when CAN_RX_PROCESSING is set to POLLING.
 
 Sync/Async: Synchronous
@@ -1348,13 +1348,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Can_MainFunction_BusOff(Void)
 
 ```shell
-Description：This function performs the polling of bus-off events that are configured statically
+Description:This function performs the polling of bus-off events that are configured statically
              as ‘to be polled’.
 
 Sync/Async: Synchronous
@@ -1364,13 +1364,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Can_MainFunction_Mode(Void)
 
 ```shell
-Description：This function performs the polling of CAN controller mode transitions.
+Description:This function performs the polling of CAN controller mode transitions.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1379,5 +1379,10 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
+
+## Related Documentation
+
+- [CAN Application Examples](/Demos/peripheral/rcore_can)
+- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)

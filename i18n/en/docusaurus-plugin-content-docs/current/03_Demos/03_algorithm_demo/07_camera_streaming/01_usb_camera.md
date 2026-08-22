@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+title: "USB Camera YOLOv5x Inference"
+description: "Preset sample for real-time YOLOv5x object detection with a USB camera"
 ---
 
 # USB Camera YOLOv5x Inference
@@ -8,171 +10,122 @@ sidebar_position: 1
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
-This is a real-time Ultralytics YOLOv5x inference sample based on the BPU. It reads frames from a USB camera for object detection and visualizes the results in fullscreen. The sample code is located in `/app/cdev_demo/bpu/09_usb_camera_sample/`.
+This sample demonstrates how to deploy a quantized Ultralytics YOLOv5x model on the BPU, read frames in real time from a USB camera for object detection, and visualize the detection results in a fullscreen window (preprocessing + inference + NMS + box drawing). For the Python version, see [USB Camera YOLOv5x Inference (Python)](./01_usb_camera_py.md).
 
-</DocScope>
-<DocScope products="RDK-S600">
-This is a real-time Ultralytics YOLOv5x inference sample based on the BPU. It reads frames from a USB camera for object detection and visualizes the results in fullscreen. The sample code is located in `/app/cdev_demo/bpu/usb_camera_sample/`.
+:::tip
+The sample code is located at `/app/cdev_demo/bpu/usb_camera_sample/` on the board. It has been verified on the board and can be compiled and run directly.
+:::
 
-</DocScope>
+## Prerequisites
 
-## Feature Overview
-- Model loading
-
-    Load the specified `.hbm` model file and extract related model metadata.
-
-- Camera capture
-
-    Automatically scan devices under `/dev/video*`, open the first available USB camera, and configure MJPEG encoding, 1080p resolution, and 30 FPS.
-
-- Image preprocessing
-
-    Resize BGR images to the model input resolution (letterbox or plain scaling) and convert them to NV12 format.
-
-- Inference execution
-
-    Submit input tensors through the `infer()` method to perform model forward inference on the BPU.
-
-- Postprocessing
-
-    Includes quantized output decoding, candidate box filtering (by score threshold), NMS deduplication, and coordinate mapping back to the original image size.
-
-- Visualization
-
-    Draw detection boxes with class labels and confidence scores on the image, display them fullscreen in a window, and support real-time processing and exit control.
-
-## Model Description
-
-    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x.md) section.
+- The board is flashed with RDK OS and accessible via SSH (see [Remote Login](../../../01_Quick_start/03_install_os_and_setup/05_remote_login.md)).
+- Desktop image (Desktop) is used; the desktop/console display is available.
+- A USB camera is connected and detected (`ls /dev/video*` shows a device).
+- The preset model is in place: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`); if missing, see [Model Acquisition and Placement](../../04_demo_support/01_model_files.md).
 
 ## Environment Dependencies
-Before building and running, ensure the following dependencies are installed:
+
+Building requires `libgflags-dev`:
+
 ```bash
 sudo apt update
 sudo apt install libgflags-dev
 ```
 
-## Directory Structure
+## Code Location
+
+Board path: `/app/cdev_demo/bpu/usb_camera_sample/`
+
+Directory structure:
+
 ```text
 .
 |-- CMakeLists.txt                 # CMake build script: target/dependency/include/link configuration
-|-- README.md                      # Usage instructions (this file)
+|-- README.md                      # Usage instructions
 |-- inc
 |   `-- ultralytics_yolov5x.hpp    # YOLOv5x inference wrapper header: load/preprocess/infer/postprocess interfaces
 `-- src
-    |-- main.cc                    # Program entry: camera probe → capture → infer → draw → display (fullscreen window)
+    |-- main.cc                    # Program entry: camera probe → capture → infer → draw → display
     `-- ultralytics_yolov5x.cc     # Inference implementation: letterbox, NV12 tensor write, decode, NMS, box restoration
 ```
 
-## Build the Project
-- Configure and build
-    ```bash
-    mkdir build && cd build
-    cmake ..
-    make -j$(nproc)
-    ```
+## Build
 
-<DocScope products="RDK-S100">
-## Model Download
-If the model is not found at runtime, download it with the following command:
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
+cd /app/cdev_demo/bpu/usb_camera_sample
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
 ```
 
-</DocScope>
-<DocScope products="RDK-S600">
-## Model Download
-If the model is not found at runtime, download it with the following command:
-```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_YOLO/yolov5x_672x672_nv12.hbm
-```
-
-</DocScope>
+The build output is `build/usb_camera`.
 
 ## Parameter Reference
 
-<DocScope products="RDK-S100">
-| Parameter        | Description                                              | Default Value                                                |
-| ---------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
-| `--video_device` | Specify video device (e.g. `/dev/video0`; auto-detect if empty) | `""` (empty: auto-detect first openable device under `/dev/video*`) |
-| `--model_path`   | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm`        |
-| `--label_file`   | Class label file (one class name per line)               | `/app/res/labels/coco_classes.names`                         |
-| `--score_thres`  | Confidence threshold                                     | `0.25`                                                       |
-| `--nms_thres`    | IoU threshold for NMS                                    | `0.45`                                                       |
+| Parameter | Description | Default Value |
+|---|---|---|
+| `--video_device` | Video device (e.g. `/dev/video0`; auto-detected if empty) | `""` (auto-detect the first openable device under `/dev/video*`) |
+| `--model_path` | BPU quantized model path (.hbm) | S600: `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`) |
+| `--label_file` | Class label file (one class name per line) | `/app/res/labels/coco_classes.names` |
+| `--score_thres` | Confidence threshold | `0.25` |
+| `--nms_thres` | IoU threshold for NMS | `0.45` |
 
-</DocScope>
+## Usage
+
+In the `build` directory, run with default parameters:
+
+```bash
+./usb_camera
+```
+
+Run with explicit parameters (equivalent to the defaults):
+
 <DocScope products="RDK-S600">
-| Parameter        | Description                                              | Default Value                                                |
-| ---------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
-| `--video_device` | Specify video device (e.g. `/dev/video0`; auto-detect if empty) | `""` (empty: auto-detect first openable device under `/dev/video*`) |
-| `--model_path`   | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`        |
-| `--label_file`   | Class label file (one class name per line)               | `/app/res/labels/coco_classes.names`                         |
-| `--score_thres`  | Confidence threshold                                     | `0.25`                                                       |
-| `--nms_thres`    | IoU threshold for NMS                                    | `0.45`                                                       |
+
+```bash
+./usb_camera \
+  --video_device /dev/video0 \
+  --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
+  --label_file /app/res/labels/coco_classes.names \
+  --score_thres 0.25 \
+  --nms_thres 0.45
+```
 
 </DocScope>
 
+To exit: place the mouse inside the display window and press `q`.
 
-## Quick Start
-Note: This program must run in a desktop environment.
-- Run the model
-    - Make sure you are in the `build` directory
-    - Use default parameters
-        ```bash
-        ./usb_camera
-        ```
-    - Run with custom parameters
+## Running Results
 
-        <DocScope products="RDK-S100">
-        ```bash
-        ./usb_camera \
-            --video_device /dev/video0 \
-            --model_path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+The program first probes for a USB camera, then loads the model for inference and displays the result fullscreen. The actual output on this board (no USB camera connected) is:
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        ./usb_camera \
-            --video_device /dev/video0 \
-            --model_path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-            --label_file /app/res/labels/coco_classes.names \
-            --score_thres 0.25 \
-            --nms_thres 0.45
-        ```
+```text
+./usb_camera
+No USB camera found under /dev/video*.
+```
 
-        </DocScope>
-- Exit
+Indicators of success after connecting a USB camera (per the source code `main.cc`):
 
-    Move the mouse over the display window and press `q` to quit.
+- Prints `Open USB camera successfully`;
+- Prints `Place the mouse in the display window and press 'q' to quit`;
+- The screen displays the real-time frame with detection boxes fullscreen; press `q` to exit.
 
-- View the results
+<!-- TODO: 待接入摄像头实测成功 log -->
 
-    After successful execution, object detection results are displayed on screen in real time.
+## Software Description
 
-## Notes
-- This program must run in a desktop environment.
+Data flow: probe/open `/dev/video*` (V4L2) → capture BGR frames → letterbox scale to 672×672 → convert to NV12 → BPU inference → decode output head + NMS → keep boxes with score ≥ 0.25 → draw boxes and classes on the frame → display fullscreen.
 
-- For more deployment options or model support information, refer to the official documentation or contact platform technical support.
+## FAQ
 
-## License
-    ```license
-    Copyright (C) 2025, XiangshunZhao D-Robotics.
+- **`No USB camera found under /dev/video*.`**: the USB camera is not recognized. Check the USB connection, whether `lsusb` lists the device, whether it is a UVC camera, and confirm the device node with `ls /dev/video*`.
+- **No image/black screen**: a desktop environment is required (Desktop image or configured display); the Server version cannot display fullscreen.
+- **`make` fails with gflags not found**: `libgflags-dev` is not installed; install it per "Environment Dependencies".
+- **Error: model not found**: check whether the `.hbm` file exists under `--model_path`; the S600 model is in `/opt/hobot/model/s600/basic/`.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+## Related Documentation
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+- [Python USB Camera Sample](./01_usb_camera_py.md)
+- [Object Detection - YOLOv5x (C/C++)](../03_detection/01_yolov5x.md)
+- [C/C++ Demo Programming Guide](../../04_demo_support/02_c_cpp_build.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)

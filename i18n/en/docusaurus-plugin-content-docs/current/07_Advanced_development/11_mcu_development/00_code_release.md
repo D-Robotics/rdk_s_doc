@@ -58,3 +58,8 @@ MCU
 ├── Service              # Contains D-Robotics proprietary middleware service code, such as power management, OTA management, Log/Shell, etc.
 └── Target               # System base code, such as startup, task definitions, interrupts, etc.
 ```
+
+## Related Documentation
+
+- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
+- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)

@@ -1,3 +1,8 @@
+---
+sidebar_position: 11
+title: "Sunrise camera development instructions"
+description: "Sunrise camera development instructions - On-board sample usage instructions"
+---
 # Sunrise camera development instructions
 
 ## Sunrise camera system design
@@ -549,3 +554,34 @@ handleMessage(event) {
 }
 
 ```
+
+## Common Issues
+
+### CMD Invocation Failure
+
+**Symptom**: CMD invocation fails during interaction between modules.
+
+**Cause**: The received CMD is not registered or not enabled.
+
+**Solution**: Confirm that the target module has registered the CMD and that it is in the enabled state (see the "Inter-module Communication" section).
+
+### Inference Does Not Take Effect After Adding a New Model
+
+**Symptom**: After adding a new model to `model_zoom`, the Web side cannot select it, or inference reports an error.
+
+**Cause**: The model file is not placed in the correct directory, the `bpu_models` configuration is not added, or the inference/post-processing functions are not implemented.
+
+**Solution**: Check the four steps according to "Adding a New Model": place the model file in `Platform/s100/model_zoom` (*.hbm), add the configuration to `bpu_models` in `bpu_wrap.c`, implement the inference thread handler function, and implement the corresponding post-processing code.
+
+### Module Startup Order Error
+
+**Symptom**: Some functions are unavailable or the system crashes after startup.
+
+**Cause**: Submodules are not started in the order of their dependency relationships (for example, the algorithm module is started before VIN/VENC).
+
+**Solution**: Check the startup order according to the "Submodule Startup Order" section, and start the later modules only after the prerequisite modules are ready.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

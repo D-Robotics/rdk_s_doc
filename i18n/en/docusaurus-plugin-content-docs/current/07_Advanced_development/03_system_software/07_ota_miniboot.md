@@ -100,3 +100,8 @@ Refer to the Update miniboot entry in [srpi-config](../../02_System_configuratio
 ## Precautions
 
 - **Do not** unplug the power, cut off power, reboot, or perform any other write operations on the partitions during the upgrade process — interrupting a `dd` full flash will directly brick the device.
+
+## Related Documentation
+
+- [Major Version Upgrade and Firmware](/System_configuration/system_update/upgrade_firmware)
+- [System OTA Upgrade](/Advanced_development/system_software/ota_system)

@@ -5,7 +5,7 @@ sidebar_products: RDK S600
 
 # RDK S600 Hardware Bringup
 
-The S600 boardid is determined by the combined effect of ADC0, ADC1, ADC2, ADC4, ADC5, and ADC6. Among them, ADC0, ADC1, and ADC2 are used for D-Robotics hardware differentiation and cannot be modified by customers. ADC4 is used to differentiate the module底板, ADC5 is used to differentiate the底板 version, and ADC4 and ADC5 can be modified by users. ADC6 is reserved and forced to be 0x1. For details on how to set the voltage divider resistors for the ADC, please contact the D-Robotics FAE team for support.
+The S600 boardid is determined by the combined effect of ADC0, ADC1, ADC2, ADC4, ADC5, and ADC6. Among them, ADC0, ADC1, and ADC2 are used for D-Robotics hardware differentiation and cannot be modified by customers. ADC4 is used to differentiate the module base board, ADC5 is used to differentiate the base board version, and ADC4 and ADC5 can be modified by users. ADC6 is reserved and forced to be 0x1. For details on how to set the voltage divider resistors for the ADC, please contact the D-Robotics FAE team for support.
 
 ADC0, ADC1, and ADC2 channels have a total of 8 levels, corresponding to 0x0-0x7. ADC4 and ADC5 channels have a total of 7 levels, corresponding to 0x0-0x6. The boardid of the S600 is a 28-bit unsigned integer, for example `0x5131310`, where boardid[27:24] corresponds to ADC0, which is 0x5; boardid[23:20] corresponds to ADC1, which is 0x1; boardid[19:16] corresponds to ADC2, which is 0x3; boardid[15:12] corresponds to ADC4, which is 0x1; boardid[11:8] corresponds to ADC5, which is 0x3; boardid[7:4] corresponds to ADC6, which is 0x1; boardid[3:0] defaults to 0x0.
 
@@ -453,3 +453,9 @@ super
 S600
 8e09458433902940750b6e1900000786
 ```
+
+## Related Documentation
+
+- [Development Environment and Build](../06_environment_build/01_environment_build.md)
+- [Driver Development Guide](/Advanced_development/driver_development)
+- [Hardware Introduction](/01_hardware_introduction)

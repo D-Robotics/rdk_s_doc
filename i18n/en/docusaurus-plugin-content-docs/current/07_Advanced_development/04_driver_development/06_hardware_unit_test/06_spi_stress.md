@@ -226,3 +226,8 @@ Performance Note: The reference maximum SPI communication rate is 30 Mbps. The a
 
 Note: When performing an external loopback test, execute the SPI Slave program first, followed by the SPI Master program. If the SPI Master program runs before the SPI Slave program, data loss may occur due to lack of synchronization between Master and Slave.
 :::
+
+## Related Documentation
+
+- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

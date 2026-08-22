@@ -389,3 +389,8 @@ pinctrl_cam: pinctrl@37121000 {
 }
 ```
 </DocScope>
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [Pinctrl Debugging Guide](/Advanced_development/driver_development/driver_pinctrl_dev)

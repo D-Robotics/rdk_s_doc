@@ -1039,3 +1039,8 @@ EL1_Reset_Handler:
     .end
 ```
 </DocScope>
+
+## Related Documentation
+
+- [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
+- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)

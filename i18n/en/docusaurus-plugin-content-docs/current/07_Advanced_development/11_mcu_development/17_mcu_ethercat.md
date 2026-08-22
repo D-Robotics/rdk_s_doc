@@ -1374,3 +1374,8 @@ D-Robotics:/$ [065.302668 0]INFO: ec_config_init wkc == 1
 | Shutdown | `EtherCAT to SAFE_OP` → `EtherCAT to INIT` → `EtherCAT bringup completed` |
 
 ---
+
+## Related Documentation
+
+- [EtherCAT (Linux Side)](/Advanced_development/driver_development/driver_ethernet)
+- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)

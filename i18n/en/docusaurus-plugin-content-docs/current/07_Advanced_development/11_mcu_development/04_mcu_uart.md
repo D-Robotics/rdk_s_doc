@@ -68,7 +68,7 @@ The S600 MCU chip has a total of 4 UARTs, namely Uart8 to Uart11. Among them, Ua
 
 ## Code Path
 
-- `McalCdd/Common/Register/inc/Uart_Register.h`: Register相关内容
+- `McalCdd/Common/Register/inc/Uart_Register.h`: Register-related content
 - `McalCdd/Uart/src/Uart.c`: Driver code
 - `McalCdd/Uart/src/Uart_Lld.c`: Low-level driver code
 - `McalCdd/Uart/inc/Uart.h`: Driver header file
@@ -228,7 +228,7 @@ Rx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e
 #### void Uart_Init(void)
 
 ```shell
-Description：Subsystem driver initialization function.
+Description:Subsystem driver initialization function.
 
 Parameters(in)
     None
@@ -236,13 +236,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Uart_Deinit(void)
 
 ```shell
-Description：Subsystem driver deinitialization function.
+Description:Subsystem driver deinitialization function.
 
 Parameters(in)
     None
@@ -250,13 +250,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Uart_BaudSet(uint8 Channel, Uart_BaudrateType Baudrate)
 
 ```shell
-Description：Set baud for an Uart channel.
+Description:Set baud for an Uart channel.
 
 Parameters(in)
     Channel: Uart Channel
@@ -265,7 +265,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
 	E_OK: set success
     E_NOT_OK: set failed
 ```
@@ -273,7 +273,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Uart_BaudGet(uint8 Channel, uint32* Baudrate)
 
 ```shell
-Description：Get baud for an Uart channel.
+Description:Get baud for an Uart channel.
 
 Parameters(in)
     Channel: Uart Channel
@@ -281,7 +281,7 @@ Parameters(inout)
     None
 Parameters(out)
     Baudrate: current baud
-Return value：Std_ReturnType
+Return value:Std_ReturnType
 	E_OK: get success
     E_NOT_OK: get failed
 ```
@@ -289,16 +289,16 @@ Return value：Std_ReturnType
 #### Std_ReturnType Uart_SetDatabits(uint8 Channel, uint8 Databits)
 
 ```shell
-Description：Set Databits for an Uart channel.
+Description:Set Databits for an Uart channel.
 
 Parameters(in)
     Channel: Uart Channel
-    Databits：Desired Databits
+    Databits:Desired Databits
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
 	E_OK: set success
     E_NOT_OK: set failed
 ```
@@ -306,7 +306,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Uart_SetStopbit(uint8 Channel, uint8 Stopbit)
 
 ```shell
-Description：Set Stopbit for an Uart channel.
+Description:Set Stopbit for an Uart channel.
 
 Parameters(in)
     Channel: Uart Channel
@@ -315,7 +315,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
 	E_OK: set success
     E_NOT_OK: set failed
 ```
@@ -323,7 +323,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Uart_SetParity(uint8 Channel, Uart_ParityType CurParity)
 
 ```shell
-Description：Set Parity type for an Uart channel.
+Description:Set Parity type for an Uart channel.
 
 Parameters(in)
     Channel: Uart Channel
@@ -332,7 +332,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
 	E_OK: set success
     E_NOT_OK: set failed
 ```
@@ -340,7 +340,7 @@ Return value：Std_ReturnType
 #### Uart_StatusType Uart_StatusGet(uint8 Channel, uint32* BytesTransfered, Uart_DataDirectionType TransferType)
 
 ```shell
-Description：Gets the status of an Uart channel.
+Description:Gets the status of an Uart channel.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -351,14 +351,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Uart_StatusType
+Return value:Uart_StatusType
     Uart current state
 ```
 
 #### Std_ReturnType Uart_SyncDataTrans(uint8 Channel, const uint8* Buffer, uint32 BufferSize, uint32 Timeout)
 
 ```shell
-Description：Sends an Uart message blocking.
+Description:Sends an Uart message blocking.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -370,7 +370,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: command has been accepted
     E_NOT_OK: command has not been accepted
 ```
@@ -378,7 +378,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Uart_SyncDataReceive(uint8 Channel, const uint8* Buffer, uint32 BufferSize, uint32 Timeout)
 
 ```shell
-Description：Receive an Uart message blocking.
+Description:Receive an Uart message blocking.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -390,7 +390,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: command has been accepted
     E_NOT_OK: command has not been accepted
 ```
@@ -398,7 +398,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Uart_AsyncDataTrans(uint8 Channel, const uint8* Buffer, uint32 BufferSize)
 
 ```shell
-Description：Sends an Uart message async.
+Description:Sends an Uart message async.
 
 Sync/Async:Asynchronous
 Parameters(in)
@@ -409,7 +409,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: command has been accepted
     E_NOT_OK: command has not been accepted
 ```
@@ -417,7 +417,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Uart_AsyncDataReceive(uint8 Channel, const uint8* Buffer, uint32 BufferSize)
 
 ```shell
-Description：Receive an Uart message async.
+Description:Receive an Uart message async.
 
 Sync/Async:Asynchronous
 Parameters(in)
@@ -428,7 +428,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: command has been accepted
     E_NOT_OK: command has not been accepted
 ```
@@ -436,7 +436,7 @@ Return value：Std_ReturnType
 #### void Uart_GetVersionInfo(Std_VersionInfoType* VersionInfo)
 
 ```shell
-Description：This function Gets the version information of this module
+Description:This function Gets the version information of this module
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -447,3 +447,8 @@ Parameters(out)
     VersionInfo: version information of this module
 Return value: None
 ```
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [UART Driver Debugging Guide](/Advanced_development/driver_development/driver_uart_dev)

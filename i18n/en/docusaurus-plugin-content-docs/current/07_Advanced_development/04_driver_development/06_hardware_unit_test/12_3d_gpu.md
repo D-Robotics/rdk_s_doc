@@ -297,3 +297,8 @@ Error: main: Could not initialize canvas
 
 - Root cause: No suitable display connector detected.  
 - Solution: Connect an HDMI monitor and run the test from the desktop environment.
+
+## Related Documentation
+
+- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

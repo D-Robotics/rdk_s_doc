@@ -1,3 +1,8 @@
+---
+sidebar_position: 10
+title: "sunrise camera User Guide"
+description: "sunrise camera User Guide - On-board sample usage instructions"
+---
 # sunrise camera User Guide
 
 ## Feature Overview
@@ -161,7 +166,7 @@ This scheme provides the following features:
 - Execution of specified algorithms
 - Multi-channel video preview when multiple Camera Sensors are connected
 
-### Parameter Descriptions
+### Parameter Description
 
 Configurable parameters in the Intelligent Camera scheme include:
 
@@ -198,7 +203,7 @@ This scheme provides the following features:
   - Supports control over bitrate and frame rate.
 - Execution of specified algorithms.  
  
- ### Parameter Description
+### Parameter Description
 
 The intelligent analytics box solution has the following adjustable parameters:
 

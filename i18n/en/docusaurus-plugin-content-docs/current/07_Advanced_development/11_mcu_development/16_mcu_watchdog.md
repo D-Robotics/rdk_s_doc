@@ -261,3 +261,8 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 | OS task (delay + long reset) | Target\...\HorizonTask.c: TASK(OsTask_SysCore_WDG_RST) | When `g_need_reset` is true: log → `vTaskDelay(MS_TO_TICK(5000))` (approx. 5s) → `Rfchm_TriggerSocLongReset()` executes SoC long reset |
 
 </DocScope>
+
+## Related Documentation
+
+- [Watchdog](/Advanced_development/driver_development/driver_watchdog)
+- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)

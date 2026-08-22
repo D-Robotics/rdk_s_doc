@@ -661,3 +661,9 @@ sudo ./pack_image.sh -l  # Use local deb packages during the build; the -l flag 
 - The miniboot_flash image compiled under NVMe mode supports only NVMe boot and does not support other modes. The miniboot_flash image compiled under eMMC/UFS mode supports NVMe boot.
 - The download tool version 1.1.10 and later supports NVMe image flashing.
 :::
+
+## Related Documentation
+
+- [Set Up the Development Environment](./01_environment_build.md)
+- [BSP Source Directory Structure](./02_bsp_source_layout.md)
+- [System Customization](../03_system_software/02_system_customization/01_system_customization.md)

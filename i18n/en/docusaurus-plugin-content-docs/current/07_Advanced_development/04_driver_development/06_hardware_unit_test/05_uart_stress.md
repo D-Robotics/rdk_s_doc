@@ -163,7 +163,13 @@ Then, use a female-to-female Dupont jumper wire to connect `uart2_tx` and `uart2
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Connection_diagram.png" alt="Notes diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-**4.** Confirm that the following three files exist in the `/app/chip_base_test/03_uart_test` directory: `uartstress.sh`, `uart_test.c`, and `uart_test`.
+</DocScope>
+
+
+
+### Compile and Run the Executable
+
+Confirm that the following three files exist in the `/app/chip_base_test/03_uart_test` directory: `uartstress.sh`, `uart_test.c`, and `uart_test`.
 
 ```shell
 sunrise@ubuntu:/app/chip_base_test/03_uart_test$ tree
@@ -174,7 +180,7 @@ sunrise@ubuntu:/app/chip_base_test/03_uart_test$ tree
 └── uartstress.sh
 ```
 
-**5.** You can regenerate the executable using the following compilation command:
+You can regenerate the executable using the following compilation command:
 
 ```shell
 gcc -o uart_test uart_test.c
@@ -220,12 +226,8 @@ Data verification successful. Received data matches sent data. Test total data c
 This is uart send test 3 times  
 This is receive test 4 times  
 Data verification successful. Received data matches sent data. Test total data count: 0x180000  
-This is uart send test 4 times  
-
+This is uart send test 4 times
 ```
-
-</DocScope>
-
 
 ## Test Metrics
 
@@ -254,3 +256,8 @@ This is receive test 50 times
 Data verification successful. Received data matches sent data. Test total data count: 0x1880000  
 This is uart send test 50 times  
 ```
+
+## Related Documentation
+
+- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
+- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)

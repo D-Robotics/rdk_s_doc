@@ -3271,3 +3271,8 @@ Unmap the VDSP device address via libvdsp
 **Example**
 
 See [hb_vdsp_mmu_map](#hb_vdsp_mmu_map)
+
+## Related Documentation
+
+- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)
+- [Algorithm Examples](/Demos/algorithm_demo/summary)

@@ -111,11 +111,11 @@ D-Robotics:/$ i2cdetect 13
 ### void I2c_Init ( const I2c_ConfigType * Config )
 
 ```shell
-Description：Subsystem driver initialization function.
+Description:Subsystem driver initialization function.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
-    Config： Pointer to configuration structure
+    Config: Pointer to configuration structure
 Parameters(inout)
     None
 Parameters(out)
@@ -126,9 +126,9 @@ Return value: None
 ### void I2c_DeInit ( void )
 
 ```shell
-Description：De-initialize of i2c system to reset values.
+Description:De-initialize of i2c system to reset values.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     None
 Parameters(inout)
@@ -141,9 +141,9 @@ Return value: None
 ### Std_ReturnType I2c_SyncDataTrans ( uint8 Channel, const I2c_RequestType* RequestPtr )
 
 ```shell
-Description：Sends or receives an I2C message blocking.
+Description:Sends or receives an I2C message blocking.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     Channel: I2C Channel.
     RequestPtr: I2C transmit request type
@@ -159,9 +159,9 @@ Return value:
 ### Std_ReturnType I2c_SyncMultiDataTrans ( uint8 Channel, const I2c_RequestType* RequestPtr uint8 I2cRequestCnt)
 
 ```shell
-Description：Sends or receives an I2C message blocking.
+Description:Sends or receives an I2C message blocking.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     Channel: I2C Channel.
     RequestPtr: I2C transmit request type
@@ -178,9 +178,9 @@ Return value:
 ### Std_ReturnType I2c_AsyncDataTrans ( uint8 Channel, const I2c_RequestType* RequestPtr )
 
 ```shell
-Description：This function performs Sends or receives an I2C message non-blocking
+Description:This function performs Sends or receives an I2C message non-blocking
 
-Sync/Async：Asynchronous
+Sync/Async:Asynchronous
 Parameters(in)
     Channel: I2C Channel.
     RequestPtr: I2C transmit request type
@@ -196,9 +196,9 @@ Return value:
 ### I2c_StatusType I2c_StatusGet ( uint8 Channel )
 
 ```shell
-Description：Gets the status of an I2C channel.
+Description:Gets the status of an I2C channel.
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     Channel: I2C Channel.
 Parameters(inout)
@@ -211,9 +211,9 @@ Return value: status of an I2C channel
 ### void I2c_GetVersionInfo ( Std_VersionInfoType* VersionInfo )
 
 ```shell
-Description：This function Gets the version information of this module
+Description:This function Gets the version information of this module
 
-Sync/Async：Synchronous
+Sync/Async:Synchronous
 Parameters(in)
     VersionInfo: version information of this module
 Parameters(inout)
@@ -222,3 +222,8 @@ Parameters(out)
     None
 Return value: None
 ```
+
+## Related Documentation
+
+- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [I2C Debugging Guide](/Advanced_development/driver_development/driver_i2c_dev)

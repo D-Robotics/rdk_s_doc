@@ -90,3 +90,9 @@ The userspace-related source code is located in the hbre directory. Detailed inf
 |------|-------------------------------|-----------------|--------------|
 | both | S13E01C15 PCIe user library   | libhbpcie.so    | libhbpcie/   |
 | both | S13E01C16 PCIe High Level API | libhbpciehl.so  | libhbpciehl/ |
+
+## Related Documentation
+
+- [PCIe Hardware Specifications](./01_s100x_pcie_hw_guide.md)
+- [PCIe Kernel Configuration](./03_s100x_pcie_sw_setup.md)
+- [PCIe User-Space API](./04_s100x_pcie_libhbpciehal.md)

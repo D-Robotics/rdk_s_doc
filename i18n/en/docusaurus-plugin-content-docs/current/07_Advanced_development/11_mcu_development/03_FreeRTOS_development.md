@@ -1189,3 +1189,8 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 If shared memory is used for data transfer, there may be an issue where MCU updates data to SRAM, but the Acore cache still contains old data, leading to data read inconsistencies.
 
 To avoid data inconsistency between Acore and MCU, add "volatile" or the "ioremap_np() function" before the variable. Both methods avoid reading from the cache and instead read SRAM data directly.
+
+## Related Documentation
+
+- [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
+- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)

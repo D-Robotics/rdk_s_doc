@@ -35,3 +35,10 @@ serial I/O interconnect for multiple market segments, including desktops, mobile
 4. **Topology 4**: One development board acts as a PCIe EP device connected to a third-party RC device, typically used when the development board serves as a PCIe accelerator card
 
 5. **Topology 5**: Multiple development boards and third-party standard PCIe EP devices connected via a PCIe Switch, with one development board acting as RC and all other devices as EP
+
+## Related Documentation
+
+- [PCIe Software Architecture](./02_s100x_pcie_sw_arch.md)
+- [PCIe Kernel Configuration](./03_s100x_pcie_sw_setup.md)
+- [PCIe User-Space API](./04_s100x_pcie_libhbpciehal.md)
+- [Hardware Introduction](/01_hardware_introduction)

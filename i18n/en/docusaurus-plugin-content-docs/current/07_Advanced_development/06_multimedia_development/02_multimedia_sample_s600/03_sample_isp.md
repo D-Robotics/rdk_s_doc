@@ -1,3 +1,8 @@
+---
+sidebar_position: 3
+title: "sample_isp User Guide"
+description: "sample_isp User Guide - On-board sample usage instructions"
+---
 # sample_isp User Guide
 
 ## Functional Overview
@@ -236,3 +241,8 @@ When the program runs, it will save the tuned YUV images in the current director
 ### isp_feedback Common Issues
 
 - If the resolution or format parameters of the specified image do not match the actual feedback image, it may cause image anomalies.
+
+## Related Documentation
+
+- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

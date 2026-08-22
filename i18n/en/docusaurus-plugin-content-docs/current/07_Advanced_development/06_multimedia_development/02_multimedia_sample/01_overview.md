@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+title: "Example Code Introduction"
+description: "Example Code Introduction - On-board sample usage instructions"
+---
 # Example Code Introduction
 
 This chapter mainly introduces example code for the multimedia modules on the chip, primarily covering usage examples of multimedia hardware acceleration modules. It includes single-module functional examples, multi-module cascaded examples, and application solution examples. Users can leverage these examples to quickly perform functional evaluations, and referring to the implementation code will help them get started rapidly and develop applications tailored to their specific needs.
@@ -114,3 +119,7 @@ To reduce kernel log verbosity on the board and avoid excessive logging that int
 ```
 echo 4 > /proc/sys/kernel/printk
 ```
+
+## Related Documentation
+
+- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

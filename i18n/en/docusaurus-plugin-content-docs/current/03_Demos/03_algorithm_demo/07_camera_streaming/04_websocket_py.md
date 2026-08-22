@@ -1,202 +1,119 @@
 ---
+title: WebSocket YOLOv5x Inference (Python)
 sidebar_position: 8
+description: "Preset sample for pushing YOLOv5x detection results over WebSocket for browser viewing"
 ---
 
-# WebSocket YOLOv5x Inference
+# WebSocket YOLOv5x Inference (Python)
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+This sample demonstrates how to deploy a quantized Ultralytics YOLOv5x model using the `hbm_runtime` Python interface, and push the MIPI camera detection results (JPEG image + detection boxes) to a browser frontend in real time over WebSocket. No desktop on the board is required — results are viewed in a PC browser, suitable for Server boards without a display.
 
-This sample demonstrates how to run Ultralytics YOLOv5x object detection on an embedded platform with HBM acceleration and a VIO camera module (such as RDK S100), and stream JPEG images and detection boxes to clients in real time over WebSocket. The sample code is located in `/app/pydev_demo/11_web_display_camera_sample/`.
+:::tip
+The sample code is located at `/app/pydev_demo/web_display_camera_sample/` on the board. It has been verified on the board.
+:::
 
-</DocScope>
-<DocScope products="RDK-S600">
+## Prerequisites
 
-This sample demonstrates how to run Ultralytics YOLOv5x object detection on an embedded platform with HBM acceleration and a VIO camera module (such as RDK S600), and stream JPEG images and detection boxes to clients in real time over WebSocket. The sample code is located in `/app/pydev_demo/web_display_camera_sample/`.
-
-</DocScope>
-
-## Features
-Y
-- Model loading
-
-    Initialize `hbm_runtime`, load the model, and obtain input/output names and dimensions.
-
-- Preprocessing
-
-    Split raw NV12 images into Y/UV channels, scale them to the model input size, and build input tensors in the required format.
-
-- Inference
-
-    Call `.run()` to execute BPU inference.
-
-- Postprocessing
-
-    Decode inference results, filter low-confidence detections, apply NMS, and scale results back to the original image size.
-
-- Camera management (`CameraManager`)
-
-    Open the camera, obtain raw or model-sized images, and encode them as JPEG.
-
-- WebSocket server
-
-    Accept web client connections, continuously fetch camera frames, run detection, and return Protocol Buffer results to the web client.
-
-## Model Description
-
-    See the [Ultralytics YOLOv5x object detection sample](../03_detection/01_yolov5x_py.md) section.
+- The MIPI camera module is connected to the onboard MIPI interface and detected.
+- A PC browser (on the same network segment as the board, to receive and display the results).
+- The preset model is in place: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`).
 
 ## Environment Dependencies
-- Ensure the dependencies in `pydev` are installed
-    ```bash
-    pip install -r ../requirements.txt
-    ```
-- Install WebSocket packages
 
-    <DocScope products="RDK-S100">
-    ```bash
-    pip install websockets==15.0.1 protobuf==3.20.3
-    ```
-
-    </DocScope>
-    <DocScope products="RDK-S600">
-    ```bash
-    pip install websockets==15.0.1 protobuf==3.20.3 --break-system-packages
-    ```
-
-    </DocScope>
-
-## Hardware Requirements
-- The MIPI camera interface uses auto-detection mode. Only one MIPI camera may be connected when running this sample (any MIPI port is supported). Connecting multiple cameras will cause errors.
-- This sample currently supports only MIPI sensors: IMX219 and SC230AI.
+Depends on the `pydev_demo` common utility library (`utils`), and the WebSocket-related packages must be installed:
 
 <DocScope products="RDK-S100">
 
-- For MIPI camera installation, refer to [Camera Expansion Board - MIPI Camera Interface](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board#mipi-camera-interfaces-j2200-j2201).
-
-</DocScope>
-<DocScope products="RDK-S600">
-
-- For MIPI camera installation, refer to [MIPI Camera Interface](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-camera-interface-j11j13).
-
-</DocScope>
-
-## Directory Structure
-```text
-.
-├── mipi_camera_web_yolov5x.py      # Main program
-└── README.md                       # Usage instructions
+```bash
+cd /app/pydev_demo && pip install -r requirements.txt
+pip install websockets==15.0.1 protobuf==3.20.3
 ```
 
-## Parameter Description
-
-<DocScope products="RDK-S100">
-| Parameter      | Description                                              | Default Value                               |
-| --------------- | -------------------------------------------------------- | --------------------------------------------- |
-| `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | Inference priority (`0~255`, `255` is highest)           | `0`                                           |
-| `--bpu-cores`   | BPU core index list (for example, `0 1`)                 | `[0]`                                         |
-| `--label-file`  | Class label file path                                    | `/app/res/labels/coco_classes.names`          |
-| `--nms-thres`   | IoU threshold for Non-Maximum Suppression (NMS)          | `0.45`                                        |
-| `--score-thres` | Detection confidence threshold                           | `0.25`                                        |
-
 </DocScope>
 <DocScope products="RDK-S600">
-| Parameter      | Description                                              | Default Value                               |
-| --------------- | -------------------------------------------------------- | --------------------------------------------- |
-| `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | Inference priority (`0~255`, `255` is highest)           | `0`                                           |
-| `--bpu-cores`   | BPU core index list (for example, `0 1`)                 | `[0]`                                         |
-| `--label-file`  | Class label file path                                    | `/app/res/labels/coco_classes.names`          |
-| `--nms-thres`   | IoU threshold for Non-Maximum Suppression (NMS)          | `0.45`                                        |
-| `--score-thres` | Detection confidence threshold                           | `0.25`                                        |
+
+```bash
+cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
+pip install websockets==15.0.1 protobuf==3.20.3 --break-system-packages
+```
 
 </DocScope>
 
+## Code Location
 
-## Quick Start
-- Start the web service
-    ```bash
-    # 1. Enter the webservice directory
-    cd webservice/
+Board path: `/app/pydev_demo/web_display_camera_sample/`
 
-    # 2. Start the service
-    sudo ./sbin/nginx -p .
-    ```
-- Run the model
-    - Return to the sample directory
-        ```bash
-        cd ..
-        ```
-    - Use default parameters
-        ```bash
-        python mipi_camera_web_yolov5x.py
-        ```
-    - Run with specified parameters
+Directory structure:
 
-        <DocScope products="RDK-S100">
-        ```bash
-        python mipi_camera_web_yolov5x.py \
-        --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
+```text
+.
+├── mipi_camera_web_yolov5x.py   # Main program: MIPI capture + inference + WebSocket push
+├── x3_pb2.py                    # protobuf generated code (detection result serialization)
+├── start_nginx.sh               # Frontend nginx start script
+├── webservice/                  # nginx + frontend pages (html/modules/protos etc.)
+└── README.md                    # Usage instructions
+```
 
-        </DocScope>
-        <DocScope products="RDK-S600">
-        ```bash
-        python mipi_camera_web_yolov5x.py \
-        --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
-        --priority 0 \
-        --bpu-cores 0 \
-        --label-file /app/res/labels/coco_classes.names \
-        --nms-thres 0.45 \
-        --score-thres 0.25
-        ```
+## Parameter Reference
 
-        </DocScope>
+| Parameter | Description | Default Value |
+|---|---|---|
+| `--model-path` | BPU quantized model path (.hbm) | Auto-selected by SoC: S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` (S100 uses the corresponding `s100/basic/`) |
+| `--priority` | Inference priority (0~255, 255 is highest) | `0` |
+| `--bpu-cores` | BPU core index list (e.g. `--bpu-cores 0 1`) | `[0]` |
+| `--label-file` | Class labels (COCO) | `/app/res/labels/coco_classes.names` |
+| `--nms-thres` | IoU threshold for NMS | `0.45` |
+| `--score-thres` | Detection confidence threshold | `0.25` |
 
-- View results
+> The WebSocket service port is fixed at `8080` (hardcoded in the source code) and is not configurable via command-line parameters.
 
-    After successful execution, open the web display at: `http://IP`
+## Usage
 
-    **Note: Do not include a port number.**
+1. Start the frontend nginx (in the `webservice/` directory):
 
-- Exit
+```bash
+cd /app/pydev_demo/web_display_camera_sample/webservice
+sudo ./sbin/nginx -p .
+```
 
-    Press `Ctrl+C` in the terminal.
+2. Return to the sample directory and start the inference + WebSocket service:
 
-## Notes
+```bash
+cd /app/pydev_demo/web_display_camera_sample
+python mipi_camera_web_yolov5x.py
+```
 
-<DocScope products="RDK-S100">
-- If the specified model path does not exist, try searching under `/opt/hobot/model/s100/basic/`.
+3. Open `http://<board-IP>` in a PC browser to view the detection frames in real time. Press `Ctrl+C` to exit.
 
-</DocScope>
-<DocScope products="RDK-S600">
-- If the specified model path does not exist, try searching under `/opt/hobot/model/s600/basic/`.
+## Running Results
 
-</DocScope>
+The following is the actual output measured on RDK S600 (no MIPI camera connected on this board; only the service startup was verified):
 
-## License
-    ```license
-    Copyright (C) 2025, XiangshunZhao D-Robotics.
+```text
+No camera sensor found, please check whether the camera connection or video_idx is correct.
+[OpenCamera] CamInitParam failed error(-1)
+Model already exists: /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm
+=== Model Name List ===
+['yolov5x_672x672_nv12']
+WebSocket server started on ws://0.0.0.0:8080
+```
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+**Indicators of success**: the last line `WebSocket server started on ws://0.0.0.0:8080` means the WebSocket service is ready. After connecting a MIPI camera, open `http://<board-IP>` in the browser to see the real-time detection frames; if no camera is connected, only `No camera sensor found` is printed and the browser shows no image.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+<!-- TODO: 待接入摄像头实测完整推理画面 log -->
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+## FAQ
+
+- **`No module named 'websockets'`**: install `websockets`/`protobuf` per "Environment Dependencies".
+- **Browser cannot connect**: confirm the board and PC are on the same network segment, ports `8080`/`80` are open, the frontend address points to the board IP, and nginx is started in the `webservice/` directory.
+- **No inference frames**: confirm the MIPI camera is connected and detected (`dmesg | grep -i sensor`).
+
+## Related Documentation
+
+- [Video Decode and YOLOv5x Inference (C/C++)](./04_decode.md)
+- [Object Detection - YOLOv5x (Python)](../03_detection/01_yolov5x_py.md)
+- [Model Acquisition and Placement](../../04_demo_support/01_model_files.md)

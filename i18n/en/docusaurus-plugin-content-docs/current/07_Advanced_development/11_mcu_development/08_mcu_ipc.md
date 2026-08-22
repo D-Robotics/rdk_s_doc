@@ -296,38 +296,38 @@ This section covers the IPC interface on the MCU side.
 #### void Ipc_MDMA_Init(Ipc_InstanceConfigType* pConfigPtr, uint32 InstanceId)
 
 ```shell
-Description：Ipc MDMA Init.
+Description:Ipc MDMA Init.
 
 Sync/Async: Synchronous
 Parameters(in)
-    pConfigPtr：the pointer to the device configuration parameter
-    InstanceId：InstanceId id
+    pConfigPtr:the pointer to the device configuration parameter
+    InstanceId:InstanceId id
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Ipc_MDMA_DeInit(uint32 InstanceId)
 
 ```shell
-Description：Subsystem driver deinitialization function.
+Description:Subsystem driver deinitialization function.
 
 Sync/Async: Synchronous
 Parameters(in)
-    InstanceId：InstanceId id
+    InstanceId:InstanceId id
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### void Ipc_GetVersionInfo(Std_VersionInfoType * versioninfo)
 
 ```shell
-Description：get driver version.
+Description:get driver version.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -336,22 +336,22 @@ Parameters(inout)
     versioninfo: the pointer to Version Info
 Parameters(out)
     None
-Return value：None
+Return value:None
 ```
 
 #### Std_ReturnType Ipc_MDMA_CheckRemoteCoreReady(uint32 InstanceId)
 
 ```shell
-Description：check whether remote core is ready.
+Description:check whether remote core is ready.
 
 Sync/Async: Synchronous
 Parameters(in)
-    InstanceId：InstanceId id
+    InstanceId:InstanceId id
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: remote core is ready
     IPC_E_PARAM_ERROR: param illegal
     IPC_E_DRIVER_NOT_INIT: Driver is not init
@@ -362,7 +362,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Ipc_MDMA_SendMsg(uint32 InstanceId, uint32 ChanId, uint32 Size, uint8* Buf, uint32 Timeout)
 
 ```shell
-Description：send message.
+Description:send message.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -375,7 +375,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: success
     IPC_E_PARAM_ERROR: param is illegal
     IPC_E_DRIVER_NOT_INIT: Driver is not init
@@ -392,7 +392,7 @@ DMA hardware requires the transfer address to be 16-byte aligned. The buffer sho
 #### Std_ReturnType Ipc_MDMA_PollMsg(uint32 InstanceId)
 
 ```shell
-Description：poll message If the Instance does not receive data using interrupts.
+Description:poll message If the Instance does not receive data using interrupts.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -401,7 +401,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: success
     IPC_E_PARAM_ERROR: param is illegal
     IPC_E_DRIVER_NOT_INIT: Driver is not init
@@ -412,7 +412,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Ipc_MDMA_OpenInstance(uint32 InstanceId)
 
 ```shell
-Description：Open a Instance pointed to by ID.
+Description:Open a Instance pointed to by ID.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -421,17 +421,17 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: success
     IPC_E_DRIVER_NOT_INIT: Driver is not init
     IPC_E_CHANNEL_NOT_CLOSE: Instance has been opened
     IPC_E_PARAM_ERROR param is illegal
 ```
 
-#### Std_ReturnType Ipc_MDMA_CloseInstance(uint32 InstanceId)
+### Std_ReturnType Ipc_MDMA_CloseInstance(uint32 InstanceId)
 
 ```shell
-Description：close a Instance pointed to by ID.
+Description:close a Instance pointed to by ID.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -440,17 +440,17 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: success
     IPC_E_DRIVER_NOT_INIT: Driver is not init
     IPC_E_CHANNEL_NOT_CLOSE: Instance has been opened
     IPC_E_PARAM_ERROR param is illegal
 ```
 
-#### Std_ReturnType Ipc_MDMA_TryGetHwResource(uint32 InstanceId, uint32 ChanId, uint32 BufSize)
+### Std_ReturnType Ipc_MDMA_TryGetHwResource(uint32 InstanceId, uint32 ChanId, uint32 BufSize)
 
 ```shell
-Description：try get Hardware resource.
+Description:try get Hardware resource.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -459,7 +459,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value:Std_ReturnType
     E_OK: success
     IPC_E_DRIVER_NOT_INIT: Driver is not init
     IPC_E_DEVICE_BUSY: Instance is busy.
@@ -467,3 +467,8 @@ Return value：Std_ReturnType
     IPC_E_NO_BUF_ERROR: no buffer
     IPC_E_CHANNEL_NOT_OPEN: Instance has been closed
 ```
+
+## Related Documentation
+
+- [IPC Module Introduction (Acore Side)](/Advanced_development/system_software/driver_ipc)
+- [IPC Usage Guide (MCU Side)](/Advanced_development/mcu_development/mcu_ipc)
