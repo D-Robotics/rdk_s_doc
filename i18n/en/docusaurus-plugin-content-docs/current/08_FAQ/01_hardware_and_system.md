@@ -24,7 +24,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 
 
 ### Q1: What is the D-Robotics RDK Kit?
-**A:** D-Robotics Developer Kits, abbreviated as the [D-Robotics RDK Kit](../RDK.md), are robot developer kits built on D-Robotics intelligent chips.
+**A:** D-Robotics Developer Kits, abbreviated as the [D-Robotics RDK Kit](../RDK.md), are robot developer kits built on the D-Robotics computing platform.
 
 ### Q2: How do I check the system version on an RDK board?
 **A:** After logging in to the RDK board system, you can use the following commands:
@@ -727,7 +727,7 @@ IMX219 camera connection diagram:
 1.  **Ensure the camera is connected and the board is powered.**
 2.  **Run the MIPI camera sample (RDK S100 example):**
     ```bash
-    cd /app/pydev_demo/10_mipi_camera_sample # Path may vary by OS version
+    cd /app/pydev_demo/mipi_camera_sample # Path may vary by OS version
     python3 01_mipi_camera_yolov5x.py
     ```
     If successful, you should see live camera output and optional AI overlays via HDMI or another configured output.

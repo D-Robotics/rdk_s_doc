@@ -11,13 +11,13 @@ By default (when not redirected), it outputs a file named nohup.out to the curre
 ## Syntax
 
 ```
-nohup COMMAND [ARG]... [　& ]
+nohup COMMAND [ARG]... [ & ]
 nohup OPTION
 ```
 
 **COMMAND**: The command to be executed.
 
-**ARG**: Any additional parameters that can be used to specify an output file.
+**ARG**: The parameters passed to the command.
 
 **&**: Allows the command to be executed in the background, even after the terminal is closed.
 
@@ -37,7 +37,7 @@ nohup /root/runoob.sh &
 To stop the execution, you need to use the following command to find the PID of the running script using nohup, and then use the kill command to delete it:
 
 ```
-ps -aux | grep "runoob.sh" 
+ps aux | grep "runoob.sh" 
 ```
 
 The following command executes the runoob.sh script in the background under the root directory and redirects the input to the runoob.log file:
@@ -53,3 +53,7 @@ Redirect standard error 2 to standard output &1, and then redirect standard outp
 - 0 - stdin (standard input)
 - 1 - stdout (standard output)
 - 2 - stderr (standard error output)
+
+## Related Documentation
+
+- [ps](./12_ps.md)

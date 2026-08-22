@@ -139,9 +139,9 @@ Using the methods above, you can accurately identify and control different audio
 
     ```
         .ifexists module-udev-detect.so
-        load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // add
-        load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // add
-        # load-module module-udev-detect // comment out
+        load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 # add
+        load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 # add
+        # load-module module-udev-detect # comment out
     ```
 
     :::tip

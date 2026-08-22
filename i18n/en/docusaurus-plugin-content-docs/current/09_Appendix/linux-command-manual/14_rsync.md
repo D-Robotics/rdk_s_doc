@@ -113,7 +113,7 @@ rsync [OPTION...] SRC... [DEST]
 - -I, --ignore-times: Do not skip files that match in size and modification time
 - -M, --remote-option=OPTION: Only send OPTION to remote side
   - --size-only: Skip files that match in size only
-- @, --modify-window=NUM: Set the accuracy of modification time comparison
+- -@, --modify-window=NUM: Set the accuracy of modification time comparison
 - -T, --temp-dir=DIR: Create temporary files in directory DIR
 - -y, --fuzzy: Find similar files as a basis if no target file exists
   - --compare-dest=DIR: Also compare target files relative to DIR
@@ -204,5 +204,5 @@ rsync -v rsync://192.168.1.12/app
 - Specify the password storage file, no need to enter the password, and directly execute rsync transfer.
 
 ```
-rsync -rvzP --password-file=/etc/rsync.password rsync@$192.168.1.12::app/ /app
+rsync -rvzP --password-file=/etc/rsync.password rsync@192.168.1.12::app/ /app
 ```

@@ -57,7 +57,7 @@ netstat -at      #List all TCP ports
 netstat -au      #List all UDP ports
 ```
 
-Display current registered UDP connections
+Display current host UDP connections
 
 ```
 netstat -nu
@@ -137,5 +137,10 @@ netstat -an | grep ':80'
 Find process ID by port
 
 ```bash
-netstat -anp|grep 8081 | grep LISTEN|awk '{printf $7}'|cut -d/ -f1
+netstat -anp|grep 8081 | grep LISTEN|awk '{print $7}'|cut -d/ -f1
 ```
+
+## Related Documentation
+
+- [route](./13_route.md)
+- [ip](./08_ip.md)

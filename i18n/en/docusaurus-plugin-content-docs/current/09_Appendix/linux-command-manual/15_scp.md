@@ -55,11 +55,11 @@ Command format:
 
 ```
 scp local_file remote_username@remote_ip:remote_folder 
-or 
+# or
 scp local_file remote_username@remote_ip:remote_file 
-or 
+# or
 scp local_file remote_ip:remote_folder 
-or 
+# or
 scp local_file remote_ip:remote_file 
 ```
 
@@ -79,7 +79,7 @@ Copying directory command format:
 
 ```
 scp -r local_folder remote_username@remote_ip:remote_folder 
-or 
+# or
 scp -r local_folder remote_ip:remote_folder 
 ```
 

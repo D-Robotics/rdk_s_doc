@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 **A:** Development boards with version V1.2 and above support this feature. You can usually confirm the version by checking the silkscreen on the PCB. Proceed with caution and verify that your board version actually supports this function. An incorrect power supply method may cause hardware damage.
 
 #### Q2: Does the development board support controlling 40-PIN GPIO interfaces using C/C++?
-**A:** Yes, it is supported. You can refer to related articles and code examples in the Horizon developer community forum, for example:
+**A:** Yes, it is supported. You can refer to related articles and code examples in the D-Robotics developer community forum, for example:
 * C/C++ GPIO libraries: Prefer the interfaces and examples provided in the current documentation and SDK.
 * Consult the GPIO development chapter in the official documentation for your RDK model. It usually provides low-level operation methods or recommended libraries.
 
@@ -73,7 +73,7 @@ import DocScope from '@site/src/components/DocScope';
         3.  On your PC, try `ping <board IP address>` to see whether it responds. If ping fails, resolve the network connection issue first (check IP configuration, Ethernet cable, Wi-Fi connection, router settings, firewall, etc.).
         4.  Confirm that the SSH service (`sshd`) is running on the development board. After logging in via the serial port, run `sudo systemctl status ssh` or `ps aux | grep sshd` to check. If it is not running, try starting it with `sudo systemctl start ssh`.
         5.  Check whether a firewall on your PC or in the network is blocking connections to port 22 on the development board.
-    * **Reference:** [SSH Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md) section (Please replace the link with the actual valid documentation path).
+    * **Reference:** [SSH Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md) section.
 
 * **Message `Authentication failed` or `Permission denied, please try again.`:**
     * **Cause:** This indicates that the network connection has been established, but the username or password you provided is incorrect and the SSH server rejected your login request.

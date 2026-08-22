@@ -91,7 +91,7 @@ rsync [OPTION...] SRC... [DEST]
   - --remove-source-files：发送端删除已同步的文件（非目录）
   - --del：--delete-during 的别名
   - --delete：从目标目录中删除多余的文件
-  - --delete-before：在传输期间接收端删除
+  - --delete-before：在传输前接收端删除
   - --delete-during：在传输期间接收端删除
   - --delete-delay：找到删除操作后才删除
   - --delete-after：在传输后接收端删除
@@ -116,7 +116,7 @@ rsync [OPTION...] SRC... [DEST]
 - -I, --ignore-times：不跳过大小和修改时间匹配的文件
 - -M, --remote-option=OPTION：仅将选项发送到远程端
   - --size-only：跳过大小匹配的文件
-- @, --modify-window=NUM：设置修改时间比较的精度
+- -@, --modify-window=NUM：设置修改时间比较的精度
 - -T, --temp-dir=DIR：在目录 DIR 中创建临时文件
 - -y, --fuzzy：在没有目标文件的情况下查找相似的文件作为基准
   - --compare-dest=DIR：相对于 DIR，也比较目标文件
@@ -193,7 +193,7 @@ rsync -av 192.168.1.12:/app /app
 rsync -av root@192.168.1.12::www /userdata
 ```
 
-- 拷贝本地机器文件到远程 rsync 服务器(daemon 形式运行 rsync)中。当 DST 路径信息包含”::”分隔符时启动该模式。
+- 拷贝本地机器文件到远程 rsync 服务器(daemon 形式运行 rsync)中。当 DST 路径信息包含 `::` 分隔符时启动该模式。
 
 ```
 rsync -av /userdata root@192.168.1.12::www
@@ -208,5 +208,5 @@ rsync -v rsync://192.168.1.12/app
 - 指定密码存放文件，无需输入密码，直接执行 rsync 传输
 
 ```
-rsync -rvzP --password-file=/etc/rsync.password rsync@$192.168.1.12::app/ /app
+rsync -rvzP --password-file=/etc/rsync.password rsync@192.168.1.12::app/ /app
 ```

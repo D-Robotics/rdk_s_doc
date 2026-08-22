@@ -27,7 +27,7 @@ description: "多媒体处理与应用 常见问题与排查"
 3.  **推流软件兼容性：**
     * **不推荐使用 VLC 直接推流：** 使用 VLC 软件直接进行 RTSP 推流可能无法成功被 RDK 解码，原因是 VLC 在某些配置下可能不支持在推流时主动添加或确保 `PPS` 和 `SPS` 信息。建议使用 `ffmpeg` 或其他能确保码流参数完整性的专业推流工具。
 
-## Audio 常见问题
+## 音频常见问题
 
 ### Q2: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
 **A:** `tinyalsa` 是一个轻量级的音频库，主要用于 Android 和嵌入式 Linux 系统。它提供了对 ALSA（ Advanced Linux Sound Architecture）的简化接口，便于开发者进行音频处理。
@@ -131,7 +131,7 @@ description: "多媒体处理与应用 常见问题与排查"
 
 通过以上方法，您可以准确地识别并控制连接到 RDK 板卡上的不同音频设备。
 
-### Q4: RDKS100 如何通过图形化界面方式支持音频功能使用
+### Q4: RDK S100 如何通过图形化界面方式支持音频功能使用
 
 1. 修改 PulseAudio 配置文件：`/etc/pulse/default.pa`
 
@@ -141,9 +141,9 @@ description: "多媒体处理与应用 常见问题与排查"
 
     ```
         .ifexists module-udev-detect.so
-        load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // 新增
-        load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // 新增
-        # load-module module-udev-detect // 注释掉
+        load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 # 新增
+        load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 # 新增
+        # load-module module-udev-detect # 注释掉
     ```
 
     :::tip

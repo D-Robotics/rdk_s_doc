@@ -92,3 +92,8 @@ Deleting and adding a default gateway
 route del default gw 192.168.2.1
 route add default gw 192.168.2.1
 ```
+
+## Related Documentation
+
+- [ip](./08_ip.md)
+- [netstat](./10_netstat.md)

@@ -50,7 +50,7 @@ Edit the `/etc/fstab` file and add the following line at the end (assuming your 
 
 **Reference tutorial:** [Swap Usage Tutorial](https://developer.d-robotics.cc/forumDetail/98129467158916281)
 
-### Q3: How do I run the example program for the GC4633 MIPI camera?
+### Q3: How do I run the example program for the GC4663 MIPI camera?
 **A:** D-Robotics officially provides AI algorithm examples based on common MIPI cameras (such as F37 and GC4663), for example FCOS object detection. These examples usually detect the connected camera model automatically and perform algorithm inference.
 
 **Example run steps (using `/app/ai_inference/03_mipi_camera_sample` as an example):**
@@ -287,7 +287,7 @@ find /opt/tros/ -name dnn_node_example.launch.py
             ```yaml
             ament/google_benchmark_vendor:
               type: git
-              url: [https://github.com/ament/google_benchmark_vendor.git](https://github.com/ament/google_benchmark_vendor.git)
+              url: https://github.com/ament/google_benchmark_vendor.git
               version: 0.0.7
             ```
             This means the source code for the `google_benchmark_vendor` package will be downloaded to `src/ament/google_benchmark_vendor/`.
@@ -322,8 +322,8 @@ find /opt/tros/ -name dnn_node_example.launch.py
     This step ensures you can obtain the latest compatible `python3-catkin-pkg` version from the official ROS source.
     ```bash
     sudo apt update && sudo apt install curl gnupg2 lsb-release
-    sudo curl -sSL [https://raw.githubusercontent.com/ros/rosdistro/master/ros.key](https://raw.githubusercontent.com/ros/rosdistro/master/ros.key) -o /usr/share/keyrings/ros-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] [http://packages.ros.org/ros2/ubuntu](http://packages.ros.org/ros2/ubuntu) $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
     ```
     Note: `$(source /etc/os-release && echo $UBUNTU_CODENAME)` automatically retrieves your current Ubuntu codename (such as `focal` for 20.04 and `jammy` for 22.04).
 
@@ -357,7 +357,7 @@ Installed-Size: unknown
 Depends: hobot-models-basic, tros-ros-base, tros-ai-msgs, ... (many dependencies)
 Download-Size: 980 B
 APT-Manual-Installed: yes
-APT-Sources: [http://archive.d-robotics.cc/ubuntu-rdk](http://archive.d-robotics.cc/ubuntu-rdk) focal/main arm64 Packages
+APT-Sources: http://archive.d-robotics.cc/ubuntu-rdk focal/main arm64 Packages
 Description: TogetheROS Bot
 ```
 

@@ -4,7 +4,7 @@ sidebar_position: 16
 
 # ssh
 
-The **ssh command** is a client connection tool in the openssh suite, which can be used to securely remote login to a server using the ssh encryption protocol.
+The **ssh command** is a client connection tool in the OpenSSH suite, which can be used to securely remote login to a server using the ssh encryption protocol.
 
 ## Syntax
 
@@ -41,7 +41,7 @@ ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]
 - `-q`: Quiet mode.
 - `-X`: Enable X11 forwarding.
 - `-x`: Disable X11 forwarding.
-- `-y`: Enable trusted X11 forwarding.
+- `-Y`: Enable trusted X11 forwarding.
 
 ## Common Commands
 
@@ -54,8 +54,8 @@ ssh -p 2211 sunrise@192.168.1.10
 # SSH family
 ssh -p 22 user@ip  # Default username is the current username, default port is 22
 ssh-keygen # Generate ssh public and private keys for the current user
-ssh-keygen -f keyfile -i -m key_format -e -m key_format # key_format: RFC4716/SSH2(default) PKCS8 PEM
-ssh-copy-id user@ip:port # Copy the public key of the current user to the ~/.ssh/authorized_keys file on the server that needs SSH, enabling passwordless login
+ssh-keygen -t rsa -b 4096 -m PEM -f ~/.ssh/id_rsa # Generate an RSA key (-m specifies the format: PEM/PKCS8/RFC4716)
+ssh-copy-id -p port user@hostname # Copy the public key of the current user to the ~/.ssh/authorized_keys file on the target server, enabling passwordless login
 ```
 
 Connect to remote server

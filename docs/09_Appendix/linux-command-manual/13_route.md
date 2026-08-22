@@ -10,7 +10,7 @@ description: "Linux 命令 route 用法"
 
 在 Linux 系统中设置路由通常是为了解决以下问题：
 
-该 Linux 系统在一个局域网中，局域网中有一个网关，能够让机器访问 Internet，那么就需要将这台机器的 ip 地址设置为 Linux 机器的默认路由。要注意的是，直接在命令行下执行 route 命令来添加路由，不会永久保存，当网卡重启或者机器重启之后，该路由就失效了；可以在`/etc/rc.local`中添加 route 命令来保证该路由设置永久有效。
+该 Linux 系统在一个局域网中，局域网中有一个网关，能够让机器访问 Internet，那么就需要将这台机器的 IP 地址设置为 Linux 机器的默认路由。要注意的是，直接在命令行下执行 route 命令来添加路由，不会永久保存，当网卡重启或者机器重启之后，该路由就失效了；可以在`/etc/rc.local`中添加 route 命令来保证该路由设置永久有效。
 
 ## 语法说明
 
@@ -66,7 +66,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 - `H`： Host，表示此网关为一主机。
 - `G`：Gateway，表示此网关为一路由器。
 - `R`：Reinstate Route，使用动态路由重新初始化的路由。
-- `D`： Dynamically,此路由是动态性地写入。
+- `D`： Dynamically，此路由是动态性地写入。
 - `M`： Modified，此路由是由路由守护程序或导向器动态修改。
 - `!`： 表示此路由当前为关闭状态。
 
@@ -95,4 +95,9 @@ route del -net 192.168.2.0 netmask 255.255.255.0 reject
 route del default gw 192.168.2.1
 route add default gw 192.168.2.1
 ```
+
+## 相关文档
+
+- [ip](./08_ip.md)
+- [netstat](./10_netstat.md)
 

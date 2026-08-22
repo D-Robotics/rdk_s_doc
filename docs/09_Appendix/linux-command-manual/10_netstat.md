@@ -59,7 +59,7 @@ netstat -at    #列出所有tcp端口
 netstat -au    #列出所有udp端口   
 ```
 
-显示当前户籍 UDP 连接状况
+显示当前主机 UDP 连接状况
 
 ```
 netstat -nu
@@ -86,9 +86,9 @@ netstat -g
 显示网络统计信息
 
 ```
-netstat -s   显示所有端口的统计信息
-netstat -st   显示TCP端口的统计信息
-netstat -su   显示UDP端口的统计信息
+netstat -s    #显示所有端口的统计信息
+netstat -st   #显示TCP端口的统计信息
+netstat -su   #显示UDP端口的统计信息
 ```
 
 显示监听的套接口
@@ -139,5 +139,10 @@ netstat -an | grep ':80'
 通过端口找进程 ID
 
 ```bash
-netstat -anp|grep 8081 | grep LISTEN|awk '{printf $7}'|cut -d/ -f1
+netstat -anp|grep 8081 | grep LISTEN|awk '{print $7}'|cut -d/ -f1
 ```
+
+## 相关文档
+
+- [route](./13_route.md)
+- [ip](./08_ip.md)

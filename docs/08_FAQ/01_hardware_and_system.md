@@ -26,7 +26,7 @@ import DocScope from '@site/src/components/DocScope';
 
 
 ### Q1: 什么是 D-Robotics RDK 套件？
-**A:** D-Robotics Developer Kits，简称[D-Robotics RDK套件](../RDK.md)，是基于 D-Robotics 智能芯片打造的机器人开发者套件。
+**A:** D-Robotics Developer Kits，简称[D-Robotics RDK套件](../RDK.md)，是基于 D-Robotics 计算平台打造的机器人开发者套件。
 
 ### Q2: 如何查看 RDK 板卡的系统版本号？
 **A:** 登录到 RDK 板卡的系统后，您可以使用以下命令：
@@ -500,7 +500,7 @@ no mmc device at slot X
 ### Q22: 板卡在高负载运行时感觉温度过高，应该如何处理？
 **A:** 板卡温度过高会影响性能稳定性，甚至可能损坏硬件。处理方法如下：
 1.  **检查并改善散热方式：**
-    * **被动散热 vs. 主动散热：** 确认板卡当前的散热方案。对于需要长时间高负载运行（如持续 AI 推理、视频处理）的场景，仅靠小面积的被动散热片可能不足。强烈建议使用**主动散热**方案，例如带有风扇的散热片，或者将板卡安装在有良好空气流通的机箱内。
+    * **被动散热 vs. 主动散热：** 确认板卡当前的散热方案。对于需要长时间高负载运行（如持续智能推理、视频处理）的场景，仅靠小面积的被动散热片可能不足。强烈建议使用**主动散热**方案，例如带有风扇的散热片，或者将板卡安装在有良好空气流通的机箱内。
     * **散热片安装：** 确保散热片与芯片（CPU/SoC）接触良好，导热硅脂或导热垫片已正确涂抹/放置。
 2.  **确保空气流通：** 避免将板卡放置在密闭或通风不良的环境中。
 3.  **监控温度：**
@@ -729,16 +729,16 @@ IMX219摄像头连接示意图：
 1.  **确保摄像头已正确连接且开发板已上电。**
 2.  **运行 MIPI 摄像头示例程序 (以 RDK S100为例)：**
     ```bash
-    cd /app/pydev_demo/10_mipi_camera_sample # 路径可能因系统版本而异
+    cd /app/pydev_demo/mipi_camera_sample # 路径可能因系统版本而异
     python3 01_mipi_camera_yolov5x.py
     ```
-    如果一切正常，您应该能通过 HDMI 输出或其他指定方式看到摄像头捕捉的画面以及可能的 AI 算法处理结果
+    如果一切正常，您应该能通过 HDMI 输出或其他指定方式看到摄像头捕捉的画面以及可能的智能算法处理结果
     示例算法渲染结果 HDMI 输出（检测到`teddy bear`、`cup`和`vase`）：
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI摄像头算法渲染结果示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3.  **通过 `i2cdetect` 命令检查 I2C 通信：**
 
-    MIPI 摄像头通常通过 I2C 总线与主控芯片通信以进行配置。您可以使用 `i2cdetect` 命令来扫描连接到特定 I2C 总线上的设备。RDK S100上 MIPI 摄像头常用的 I2C 总线可能是 `i2c-1` 或 `i2c-2` (具体请查
+    MIPI 摄像头通常通过 I2C 总线与主控芯片通信以进行配置。您可以使用 `i2cdetect` 命令来扫描连接到特定 I2C 总线上的设备。RDK S100上 MIPI 摄像头常用的 I2C 总线可能是 `i2c-1` 或 `i2c-2`（具体请查阅硬件接口定义）。
     ```bash
     sudo i2cdetect -y -r 1  # 扫描 i2c-1 总线
     # 或 sudo i2cdetect -y -r 2 # 扫描 i2c-2 总线

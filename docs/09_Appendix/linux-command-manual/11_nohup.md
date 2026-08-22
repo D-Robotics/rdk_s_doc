@@ -13,20 +13,20 @@ description: "Linux 命令 nohup 用法"
 ## 语法说明
 
 ```
-nohup COMMAND [ARG]... [　& ]
+nohup COMMAND [ARG]... [ & ]
 nohup OPTION
 ```
 
 **COMMAND**：要执行的命令。
 
-**ARG**：一些参数，可以指定输出文件。
+**ARG**：传递给命令的参数。
 
 **&**：让命令在后台执行，终端退出后命令仍旧执行。
 
 ## 选项说明
 
 - `--help`：显示帮助信息。
-- ` --version`：显示版本信息。
+- `--version`：显示版本信息。
 
 ## 常用命令
 
@@ -39,7 +39,7 @@ nohup /root/runoob.sh &
 如果要停止运行，你需要使用以下命令查找到 nohup 运行脚本到 PID，然后使用 kill 命令来删除
 
 ```
-ps -aux | grep "runoob.sh" 
+ps aux | grep "runoob.sh" 
 ```
 
 以下命令在后台执行 root 目录下的 runoob.sh 脚本，并重定向输入到 runoob.log 文件：
@@ -55,3 +55,7 @@ nohup /root/runoob.sh > runoob.log 2>&1 &
 - 0 – stdin (standard input，标准输入)
 - 1 – stdout (standard output，标准输出)
 - 2 – stderr (standard error，标准错误输出)
+
+## 相关文档
+
+- [ps](./12_ps.md)

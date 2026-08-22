@@ -4,7 +4,7 @@ sidebar_position: 19
 
 # zip
 
-The **zip command** can be used to decompress files or perform packaging operations on files. zip is a widely used compression program, and files compressed with it will produce a compressed file with the extension `.zip`.
+The **zip command** is used to compress files or perform packaging operations on files (use unzip to decompress). zip is a widely used compression program, and files compressed with it will produce a compressed file with the extension `.zip`.
 
 ## Syntax
 
@@ -28,7 +28,7 @@ zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
 - `-d`: Deletes entries in the compressed file.
 - `-D`: Does not add directory entries.
 - `-e`: Encrypts.
-- `-f`: This option is similar to specifying "-u", but not only updates existing files. If some files do not exist in the compressed file, this option will add them to the compressed file.
+- `-f`: Only updates files that already exist in the compressed file (adds no new files); to add new files use `-u`.
 - `-F`: Attempts to repair damaged compressed files (-FF attempts a stricter repair).
 - `-h2`: Displays more help.
 - `-i`: Only compresses files that meet the conditions.
@@ -40,7 +40,7 @@ zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
 - `-o`: Makes the compressed file have the same date as the newest entry.
 - `-q`: Runs in quiet mode.
 - `-r`: Recursively into directories.
-- `-s`: Changes the delay time between two refreshes, in seconds (if there are decimals, in milliseconds). Entering a value of 0 means the system will refresh continuously, the default value is 5 seconds.
+- `-s`: Splits the compressed file into volumes of a specified size.
 - `-T`: Tests the integrity of the compressed file.
 - `-u`: Updates (only includes changed or new files).
 - `-v`: Detailed operation, prints version information.
@@ -67,3 +67,7 @@ Delete the file `a.c` from the compressed file `cp.zip`:
 ```
 zip -dv cp.zip a.c
 ```
+
+## Related Documentation
+
+- [tar](./17_tar.md)

@@ -6,7 +6,7 @@ description: "Linux 命令 ssh 用法"
 
 # ssh
 
-**ssh 命令** 是 openssh 套件中的客户端连接工具，可以给予 ssh 加密协议实现安全的远程登录服务器。
+**ssh 命令** 是 OpenSSH 套件中的客户端连接工具，可以基于 ssh 加密协议实现安全的远程登录服务器。
 
 ## 语法说明
 
@@ -43,7 +43,7 @@ ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]
 - `-q`：静默模式。
 - `-X`：开启 X11转发功能。
 - `-x`：关闭 X11转发功能。
-- `-y`：开启信任 X11转发功能。
+- `-Y`：开启信任 X11 转发功能。
 
 ## 常用命令
 
@@ -56,8 +56,8 @@ ssh -p 2211 sunrise@192.168.1.10
 # ssh 大家族
 ssh -p 22 user@ip  # 默认用户名为当前用户名，默认端口为 22
 ssh-keygen # 为当前用户生成 ssh 公钥 + 私钥
-ssh-keygen -f keyfile -i -m key_format -e -m key_format # key_format: RFC4716/SSH2(default) PKCS8 PEM
-ssh-copy-id user@ip:port # 将当前用户的公钥复制到需要 ssh 的服务器的 ~/.ssh/authorized_keys，之后可以免密登录
+ssh-keygen -t rsa -b 4096 -m PEM -f ~/.ssh/id_rsa # 生成 RSA 密钥（-m 指定格式：PEM/PKCS8/RFC4716）
+ssh-copy-id -p port user@hostname # 将当前用户的公钥复制到目标服务器的 ~/.ssh/authorized_keys，之后可免密登录
 ```
 
 连接远程服务器

@@ -287,7 +287,7 @@ Compress file without packaging:
 
 ```
 touch a.c
-tar -czvf test.tar.gz a.c   //Compress file a.c to test.tar.gz
+tar -czvf test.tar.gz a.c   # Compress file a.c to test.tar.gz
 ```
 - z: with gzip attribute
 - j: with bz2 attribute
@@ -308,3 +308,7 @@ Extract files:
 tar -xzvf test.tar.gz
 a.c
 ```
+
+## Related Documentation
+
+- [zip](./19_zip.md)

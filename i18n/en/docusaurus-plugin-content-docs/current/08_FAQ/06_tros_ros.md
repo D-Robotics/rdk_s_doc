@@ -111,7 +111,6 @@ This section answers common questions related to developing and using the D-Robo
 **A:** The official D-Robotics TROS manual usually has dedicated sections or examples explaining how to use RDK multimedia capabilities in a ROS2 environment.
 * **Community manual - Robot Development - Application Examples - Video Applications (video_boxs):**
     [https://developer.d-robotics.cc/rdk_doc/Robot_development/apps/video_boxs](https://developer.d-robotics.cc/rdk_doc/Robot_development/apps/video_boxs)
-    (Please confirm that this link is the latest and valid.)
     The page or its subpages linked here usually include:
     * How to publish image topics using MIPI cameras or USB cameras.
     * How to use the hardware codec (`hobot_codec`) for image/video encoding (such as H.264, H.265, MJPEG) and decoding.
@@ -217,7 +216,7 @@ In this way, compute-intensive visualization and simulation tasks can run on the
 
 * **TROS Humble version (based on ROS2 Humble):**
     * ROS2 Humble has more mature and standardized zero-copy support (especially through loaned messages and DDS shared memory transport).
-    * **Configuration method:** This usually involves setting a series of environment variables to enable shared memory transport in Fast DDS (a DDS implementation). For detailed steps, refer to **Q15: How do I configure and use zero-copy data transmission in TROS Humble?** in the "8.3 Applications and Examples" section of this FAQ document.
+    * **Configuration method:** This usually involves setting a series of environment variables to enable shared memory transport in Fast DDS (a DDS implementation). For detailed steps, refer to **Q15: How do I configure and use zero-copy data transmission in TROS Humble?** in the "Applications and Examples" section of this FAQ document.
         Brief review of key environment variables:
         ```bash
         export RMW_IMPLEMENTATION=rmw_fastrtps_cpp

@@ -8,7 +8,7 @@ description: "Linux 命令 scp 用法"
 
 Linux scp 命令用于 Linux 之间复制文件和目录。
 
-scp 是 secure copy 的缩写, scp 是 linux 系统下基于 ssh 登陆进行安全的远程文件拷贝命令。
+scp 是 secure copy 的缩写，scp 是 Linux 系统下基于 ssh 登录进行安全的远程文件拷贝命令。
 
 scp 是加密的，[rcp](https://www.runoob.com/linux/linux-comm-rcp.html) 是不加密的，scp 是 rcp 的加强版。
 
@@ -27,7 +27,7 @@ scp [option] file_source file_target
 ```
 
 - **file_source**：指定要复制的源文件。
-- **file_target**：目标文件。格式为`user@host：filename`（文件名为目标文件的名称）。
+- **file_target**：目标文件。格式为`user@host:filename`（文件名为目标文件的名称）。
 
 ## 选项说明
 
@@ -38,7 +38,7 @@ scp [option] file_source file_target
 - -C： 允许压缩。（将-C 标志传递给 ssh，从而打开压缩功能）
 - -p：保留原文件的修改时间，访问时间和访问权限。
 - -q： 静默模式：禁用进度表以及来自 ssh(1)的警告和诊断消息。
-- -r： 递归地复制整个目录。请注意，scp 会遵循树遍历中遇到的符号链接。、
+- -r： 递归地复制整个目录。请注意，scp 会遵循树遍历中遇到的符号链接。
 - -T：禁用严格的文件名检查。默认情况下，当从远程主机复制文件到本地目录时，scp 会检查接收的文件名是否与命令行上请求的文件名匹配，以防止远程端发送意外或不需要的文件。由于不同操作系统和 Shell 解释文件名通配符的方式不同，这些检查可能会导致希望的文件被拒绝。此选项禁用这些检查，但需要完全信任服务器不会发送意外的文件名。
 - -v：详细模式。导致 scp 和 ssh(1)打印关于它们的进展的调试消息。这在调试连接、身份验证和配置问题时很有帮助。
 - -c cipher： 选择用于加密数据传输的密码。此选项直接传递给 ssh(1)。
@@ -57,16 +57,16 @@ scp [option] file_source file_target
 
 ```
 scp local_file remote_username@remote_ip:remote_folder 
-或者 
+# 或者 
 scp local_file remote_username@remote_ip:remote_file 
-或者 
+# 或者 
 scp local_file remote_ip:remote_folder 
-或者 
+# 或者 
 scp local_file remote_ip:remote_file 
 ```
 
-- 第1,2个指定了用户名，命令执行后需要再输入密码，第1个仅指定了远程的目录，文件名字不变，第2个指定了文件名；
-- 第3,4个没有指定用户名，命令执行后需要输入用户名和密码，第3个仅指定了远程的目录，文件名字不变，第4个指定了文件名；
+- 第1、2个指定了用户名，命令执行后需要再输入密码，第1个仅指定了远程的目录，文件名字不变，第2个指定了文件名；
+- 第3、4个没有指定用户名，命令执行后需要输入用户名和密码，第3个仅指定了远程的目录，文件名字不变，第4个指定了文件名；
 
 应用实例：
 
@@ -81,7 +81,7 @@ scp /home/sunrise/test.c 192.168.1.10:/userdata/test_01.c
 
 ```
 scp -r local_folder remote_username@remote_ip:remote_folder 
-或者 
+# 或者 
 scp -r local_folder remote_ip:remote_folder 
 ```
 

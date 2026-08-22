@@ -17,7 +17,7 @@ top -hv | -bcEHiOSs1 -d secs -n max -u|U user -p pid(s) -o field -w [cols]
 - `-b`: Run in batch mode and directly output the results to a file.
 - `-c`: Display the complete command line without truncation.
 - `-d <seconds>`: Screen refresh interval time.
-- `-I`: Ignore idle processes.
+- `-i`: Ignore idle processes.
 - `-s`: Secure mode.
 - `-S`: Accumulatively display the CPU usage time of processes.
 - `-i`: Do not display idle or useless processes.
@@ -46,7 +46,7 @@ Some interactive commands that can be used during the execution of the top comma
 - `M`: Sort by resident memory size.
 - `P`: Sort by CPU usage percentage.
 - `T`: Sort by time/accumulative time.
-- `w`: Write current settings to the ~/.toprc file.
+- `W`: Write current settings to the ~/.toprc file.
 
 ## Display Information
 
@@ -148,3 +148,7 @@ Users will not be able to use interactive commands to control processes
 ```
 top -s
 ```
+
+## Related Documentation
+
+- [ps](./12_ps.md)

@@ -52,7 +52,7 @@ swapon --show
 
 **参考教程：** [Swap使用教程](https://developer.d-robotics.cc/forumDetail/98129467158916281)
 
-### Q3: 如何运行 GC4633 MIPI 摄像头的示例程序？
+### Q3: 如何运行 GC4663 MIPI 摄像头的示例程序？
 **A:** 地瓜机器人官方通常会提供基于常见 MIPI 摄像头（如 F37、GC4663）的 AI 算法示例（例如 FCOS 目标检测）。这些示例一般会自动检测连接的摄像头型号并进行算法推理。
 
 **运行步骤示例 (以 `/app/ai_inference/03_mipi_camera_sample` 为例)：**
@@ -288,7 +288,7 @@ find /opt/tros/ -name dnn_node_example.launch.py
             ```yaml
             ament/google_benchmark_vendor:
               type: git
-              url: [https://github.com/ament/google_benchmark_vendor.git](https://github.com/ament/google_benchmark_vendor.git)
+              url: https://github.com/ament/google_benchmark_vendor.git
               version: 0.0.7
             ```
             这说明`google_benchmark_vendor`这个 package 的源码会被下载到 `src/ament/google_benchmark_vendor/` 路径下。
@@ -323,8 +323,8 @@ find /opt/tros/ -name dnn_node_example.launch.py
     这一步是为了确保能从 ROS 官方获取到最新兼容的`python3-catkin-pkg`版本。
     ```bash
     sudo apt update && sudo apt install curl gnupg2 lsb-release
-    sudo curl -sSL [https://raw.githubusercontent.com/ros/rosdistro/master/ros.key](https://raw.githubusercontent.com/ros/rosdistro/master/ros.key) -o /usr/share/keyrings/ros-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] [http://packages.ros.org/ros2/ubuntu](http://packages.ros.org/ros2/ubuntu) $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
     ```
     注意：`$(source /etc/os-release && echo $UBUNTU_CODENAME)` 会自动获取您当前 Ubuntu 系统的代号（如 `focal` for 20.04, `jammy` for 22.04）。
 
@@ -358,7 +358,7 @@ Installed-Size: unknown
 Depends: hobot-models-basic, tros-ros-base, tros-ai-msgs, ... (大量依赖包)
 Download-Size: 980 B
 APT-Manual-Installed: yes
-APT-Sources: [http://archive.d-robotics.cc/ubuntu-rdk](http://archive.d-robotics.cc/ubuntu-rdk) focal/main arm64 Packages
+APT-Sources: http://archive.d-robotics.cc/ubuntu-rdk focal/main arm64 Packages
 Description: TogetheROS Bot
 ```
 

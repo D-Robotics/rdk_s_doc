@@ -911,7 +911,7 @@ Center-crops a new image size based on the expected short-side length and curren
   ShortSideResizeTransformer(short_size=256)
 
   # Resize short side to 256 with Lanczos interpolation over 8x8 neighborhood
-  ShortSideResizeTransformer(short_size=256, interpolation=Image.LANCZOS4) 
+  ShortSideResizeTransformer(short_size=256, interpolation=Image.LANCZOS) 
 ```
 
 ##### PaddedCenterCropTransformer
@@ -1060,11 +1060,11 @@ Converts input from RGB to YUV444.
 **Usage examples:**
 
 ``` bash
-  # Convert BGR to YUV444 when layout is NCHW
-  BGR2YUV444Transformer(data_format='CHW')
+  # Convert RGB to YUV444 when layout is NCHW
+  RGB2YUV444Transformer(data_format='CHW')
 
-  # Convert BGR to YUV444 when layout is NHWC
-  BGR2YUV444Transformer(data_format='HWC')
+  # Convert RGB to YUV444 when layout is NHWC
+  RGB2YUV444Transformer(data_format='HWC')
 ```
 
 ##### BGR2YUV444Transformer

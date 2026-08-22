@@ -90,7 +90,7 @@ description: "TROS/ROS 开发 常见问题与排查"
         cd <your_ros_workspace_root>
         rosdep install --from-paths src --ignore-src -r -y
         ```
-    * 社区通常无法对 индивидуальные 编译环境的依赖问题提供一对一支持。
+    * 社区通常无法对个人编译环境的依赖问题提供一对一支持。
 
 ### Q6: 在 RDK 板卡上尝试安装标准 ROS2时报错，怎么办？
 **A:** 在 RDK 板卡上（可能已经预装了 TROS）自行安装标准的 ROS2发行版（如 Foxy, Humble）时，如果遇到问题：
@@ -113,7 +113,6 @@ description: "TROS/ROS 开发 常见问题与排查"
 **A:** D-Robotics 官方 TROS 手册中通常会有专门的章节或示例介绍如何在 ROS2环境中使用 RDK 的多媒体能力。
 * **社区手册 - 机器人开发 - 应用示例 - 视频应用 (video_boxs)：**
     [https://developer.d-robotics.cc/rdk_doc/Robot_development/apps/video_boxs](https://developer.d-robotics.cc/rdk_doc/Robot_development/apps/video_boxs)
-    (请确认此链接为最新且有效。)
     这个链接指向的页面或其子页面通常会包含：
     * 如何使用 MIPI 摄像头或 USB 摄像头发布图像话题。
     * 如何使用硬件编解码器（hobot_codec）进行图像/视频的编码（如 H.264, H.265, MJPEG）和解码。
@@ -219,7 +218,7 @@ description: "TROS/ROS 开发 常见问题与排查"
 
 * **TROS Humble 版本 (基于 ROS2 Humble)：**
     * ROS2 Humble 对零拷贝（特别是通过借贷消息 Loaned Messages 和 DDS 的共享内存传输）的支持更为成熟和标准化。
-    * **配置方法：** 通常涉及设置一系列环境变量来启用 Fast DDS（一种 DDS 实现）的共享内存传输特性。具体步骤请参考本 FAQ 文档“8.3 应用和示例”章节中 **Q15: 在 TROS Humble 版本中如何配置和使用零拷贝（Zero-Copy）数据传输？** 的详细解答。
+    * **配置方法：** 通常涉及设置一系列环境变量来启用 Fast DDS（一种 DDS 实现）的共享内存传输特性。具体步骤请参考本 FAQ 文档“应用和示例”章节中 **Q15: 在 TROS Humble 版本中如何配置和使用零拷贝（Zero-Copy）数据传输？** 的详细解答。
         简要回顾关键环境变量：
         ```bash
         export RMW_IMPLEMENTATION=rmw_fastrtps_cpp

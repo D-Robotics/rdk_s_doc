@@ -18,7 +18,7 @@ import DocScope from '@site/src/components/DocScope';
 **A:** 开发板 V1.2及以上版本可以支持。版本号通常可以通过查看开发板 PCB 板上的丝印信息来确认。请务必谨慎操作，并确认您的板卡版本确实支持此功能，错误的供电方式可能导致硬件损坏。
 
 #### Q2: 开发板是否支持通过 C/C++语言操作40PIN GPIO 接口？
-**A:** 是的，支持。您可以参考地平线开发者社区论坛中的相关文章和代码示例，例如：
+**A:** 是的，支持。您可以参考 D-Robotics 开发者社区论坛中的相关文章和代码示例，例如：
 * C/C++ GPIO 库：请优先使用当前文档与 SDK 中提供的接口和示例。
 * 查阅对应 RDK 型号的官方文档中关于 GPIO 开发的章节，通常会提供底层的操作方法或推荐的库。
 
@@ -75,7 +75,7 @@ import DocScope from '@site/src/components/DocScope';
         3.  在您的电脑上尝试 `ping <开发板IP地址>`，看是否能 ping 通。如果 ping 不通，则先解决网络连接问题（检查 IP 配置、网线、Wi-Fi 连接、路由器设置、防火墙等）。
         4.  确认开发板上的 SSH 服务 (`sshd`) 正在运行。可以尝试通过串口登录后，执行 `sudo systemctl status ssh` 或 `ps aux | grep sshd` 查看。如果未运行，尝试启动：`sudo systemctl start ssh`。
         5.  检查电脑或网络中是否有防火墙阻止了到开发板22端口的连接。
-    * **参考：** [SSH登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)章节 (请将链接替换为实际有效的文档路径)。
+    * **参考：** [SSH登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)章节。
 
 * **提示 `Authentication failed` 或 `Permission denied, please try again.`：**
     * **原因：** 这表示网络连接已建立，但您提供的用户名或密码不正确，SSH 服务器拒绝了您的登录请求。

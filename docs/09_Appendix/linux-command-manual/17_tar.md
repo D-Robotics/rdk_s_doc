@@ -10,7 +10,7 @@ description: "Linux 命令 tar 用法"
 
 首先要弄清两个概念：打包和压缩。打包是指将一大堆文件或目录变成一个总的文件；压缩则是将一个大的文件通过一些压缩算法变成一个小文件。
 
-为什么要区分这两个概念呢？这源于 Linux 中很多压缩程序只能针对一个文件进行压缩，这样当你想要压缩一大堆文件时，你得先将这一大堆文件先打成一个包（tar 命令），然后再用压缩程序进行压缩（gzip bzip2命令）。
+为什么要区分这两个概念呢？这源于 Linux 中很多压缩程序只能针对一个文件进行压缩，这样当你想要压缩一大堆文件时，你得先将这一大堆文件先打成一个包（tar 命令），然后再用压缩程序进行压缩（gzip、bzip2 命令）。
 
 ## 语法说明
 
@@ -323,7 +323,7 @@ tar [OPTION...] [FILE]...
 
 ```
 touch a.c       
-tar -czvf test.tar.gz a.c   //压缩 a.c文件为test.tar.gz
+tar -czvf test.tar.gz a.c   # 压缩 a.c 文件为 test.tar.gz
 ```
 
 - z：有 gzip 属性的
@@ -345,3 +345,7 @@ tar -tzvf test.tar.gz
 tar -xzvf test.tar.gz 
 a.c
 ```
+
+## 相关文档
+
+- [zip](./19_zip.md)

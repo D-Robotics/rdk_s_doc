@@ -510,7 +510,7 @@ description: "模型、算法与工具链 常见问题与排查"
 
 #### Transformer 使用说明
 
-本章节将对各个 transformer 的概念及参数进行说明，并为您提供参考使用示例，方便您进行 tranformer 操作。
+本章节将对各个 transformer 的概念及参数进行说明，并为您提供参考使用示例，方便您进行 transformer 操作。
 
 在文档内容开始阅读前，以下内容请您注意：
 
@@ -544,7 +544,7 @@ description: "模型、算法与工具链 常见问题与排查"
 
 **参数**：
 
-- means: 对每个像素做增加的数值, 注意 value 的取值可以为负数, 如 -128。
+- means: 对每个像素做减去的数值, 注意 value 的取值可以为负数, 如 -128。
 
 - data_format: 输入的 layout 类型，取值范围为["CHW","HWC"], 默认 "CHW"。
 
@@ -691,7 +691,7 @@ description: "模型、算法与工具链 常见问题与排查"
 
 当宽度比高度的数值大时，会裁剪出一个中心以高度大小为准的正方形，如宽100，高70，裁剪之后大小为70*70。
 
-当高度比宽度的数值大时，会裁剪出一个中心以宽度大小不变，高度为差值的一半+宽度 的长方形，如宽70，高100，裁剪之后大小为 `70*（100-70）/2+70` ，即70* 85大小的长方形。
+当高度比宽度的数值大时，会裁剪出一个中心以宽度大小不变，高度为差值的一半+宽度 的长方形，如宽70，高100，裁剪之后大小为 `70+(100-70)/2` ，即 70*85 大小的长方形。
 
 **参数**：不涉及。
 
@@ -913,7 +913,7 @@ description: "模型、算法与工具链 常见问题与排查"
   ShortSideResizeTransformer(short_size=256)
 
   # 将短边大小调整为256，插值方式为8x8像素邻域内的Lanczos插值
-  ShortSideResizeTransformer(short_size=256, interpolation=Image.LANCZOS4) 
+  ShortSideResizeTransformer(short_size=256, interpolation=Image.LANCZOS) 
 ```
 
 ##### PaddedCenterCropTransformer
@@ -928,8 +928,8 @@ description: "模型、算法与工具链 常见问题与排查"
 
 计算方式为：
 
-1. 计算系数，int((float( image_size ) / ( image_size + crop_pad ))。
-2. 计算中心 size 的大小， 系数 * np.minimum( 原始图片的高度, 原始图片的宽度 ))。
+1. 计算系数，int(float( image_size ) / ( image_size + crop_pad ))。
+2. 计算中心 size 的大小， 系数 * np.minimum( 原始图片的高度, 原始图片的宽度 )。
 3. 根据计算出来的 size 大小，做中心裁剪。
 
 :::
@@ -1063,11 +1063,11 @@ description: "模型、算法与工具链 常见问题与排查"
 **使用举例**：
 
 ``` bash
-  # layout为NCHW时，做BGR转成YUV444
-  BGR2YUV444Transformer(data_format='CHW')
+  # layout为NCHW时，做RGB转成YUV444
+  RGB2YUV444Transformer(data_format='CHW')
 
-  # layout为NHWC时，做BGR转成YUV444
-  BGR2YUV444Transformer(data_format='HWC')
+  # layout为NHWC时，做RGB转成YUV444
+  RGB2YUV444Transformer(data_format='HWC')
 ```
 
 ##### BGR2YUV444Transformer
