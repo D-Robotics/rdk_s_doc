@@ -94,7 +94,7 @@ Run the program with the following commands
   Choose a configuration supported by the RDK X5 at runtime; in the figure above, choosing either 0 or 1 is fine.
 
   Refer to the following video for the startup process:
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/20241217-115536.gif" alt="MIPI camera startup process demonstration" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+(Animated demo of MIPI camera startup; static screenshot pending)
 
 </details>
 

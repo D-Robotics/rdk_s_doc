@@ -920,17 +920,16 @@ Center-crops a new image size based on the expected short-side length and curren
 
 Center-crops the image using padding.
 
-.. attention::
+:::warning Note
 
-  Only applicable to EfficientNet-lite related instance models.
+Only applicable to EfficientNet-lite related instance models.
 
-  Calculation method:
+Calculation method:
 
-  1. Compute coefficient: int(float(image_size) / (image_size + crop_pad)).
-
-  2. Compute center size: coefficient * np.minimum(original image height, original image width).
-
-  3. Perform center crop based on the computed size.
+1. Compute coefficient: int(float(image_size) / (image_size + crop_pad)).
+2. Compute center size: coefficient * np.minimum(original image height, original image width).
+3. Center-crop according to the computed size.
+:::
 
 **Parameters:**
 

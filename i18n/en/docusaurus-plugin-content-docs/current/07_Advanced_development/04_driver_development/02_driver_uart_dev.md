@@ -34,7 +34,7 @@ Configuration file path: `hobot-drivers/configs/drobot_s100_defconfig`
 Configuration file path: `hobot-drivers/configs/drobot_s600_defconfig`
 </DocScope>
 
-``` {.text}
+```text
 CONFIG_SERIAL_8250=y   # 8250 driver configuration
 CONFIG_SERIAL_8250_CONSOLE=y   # 8250 console driver configuration
 CONFIG_SERIAL_8250_DW=y   # Enable Designware-specific features
@@ -44,7 +44,7 @@ CONFIG_SERIAL_8250_DW=y   # Enable Designware-specific features
 
 <DocScope products="RDK S100">
 
-``` {.text}
+```text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
 uart1: uart@394A0000 {
     power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
@@ -65,7 +65,7 @@ uart1: uart@394A0000 {
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+```text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi*/
 uart4: uart@3484E000 {
     // power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
@@ -88,7 +88,7 @@ uart4: uart@3484E000 {
 
 ### Check UART Nodes
 
-``` {.text}
+```text
 ls /dev/ttyS*
 /dev/ttyS0  /dev/ttyS1  /dev/ttyS2  /dev/ttyS3
 ```
@@ -97,13 +97,13 @@ ls /dev/ttyS*
 
 -   View serial port baud rate and other configurations:
 
-    ``` {.text}
+    ```text
     stty -F /dev/ttyS1 -a
     ```
 
 -   Configure baud rate, etc.:
 
-    ``` {.text}
+    ```text
     stty -F /dev/ttyS1 speed 921600 cs8 -cstopb parenb -parodd
     ```
 
@@ -111,13 +111,13 @@ ls /dev/ttyS*
 
 -   Read serial port data:
 
-    ``` {.text}
+    ```text
     cat /dev/ttyS1
     ```
 
 -   Test output data to the serial port:
 
-    ``` {.text}
+    ```text
     echo 123456789 > /dev/ttyS1
     ```
 

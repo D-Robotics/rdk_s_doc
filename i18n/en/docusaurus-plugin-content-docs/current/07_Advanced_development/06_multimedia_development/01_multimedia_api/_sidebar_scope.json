@@ -1,5 +1,5 @@
 {
     "versions": [">=4.0.5"],
-    "products": ["RDK-S100","RDK-S600"]
+    "products": ["RDK S100","RDK S600"]
   }
   

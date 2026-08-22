@@ -2,7 +2,7 @@
 sidebar_position: 4
 title: "Instance Segmentation - Ultralytics YOLOE11"
 description: Instance Segmentation - Ultralytics YOLOE11
-sidebar_products: RDK-S100
+sidebar_products: RDK S100
 ---
 
 # Instance Segmentation - Ultralytics YOLOE11

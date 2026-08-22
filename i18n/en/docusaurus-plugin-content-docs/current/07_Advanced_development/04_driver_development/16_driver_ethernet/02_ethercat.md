@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 :::warning
-❌ **Note:** Using the EtherCAT protocol requires system version V4.0.4 or higher.
+⚠️ **Note:** Using the EtherCAT protocol requires system version V4.0.4 or higher.
 :::
 
 ## Native Driver vs. Generic Driver
@@ -20,7 +20,7 @@ import DocScope from '@site/src/components/DocScope';
 **RDK S100 V4.0.7 and above use the Native (hobot) EtherCAT driver by default**, not the Generic driver.
 
 :::warning
-❌ **Note:** The EtherCAT usage methods described in subsequent sections of this document ("[Network Configuration Before Use](#network-configuration-before-use)", "[EtherCAT Usage Guide](#ethercat-usage-guide)", etc.) are **based on the Generic driver mode**. If you are using the **V4.0.7 default image**, the system is pre-configured for Native driver mode. Please refer to the Native driver usage instructions in this section first.
+⚠️ **Note:** The EtherCAT usage methods described in subsequent sections of this document ("[Network Configuration Before Use](#network-configuration-before-use)", "[EtherCAT Usage Guide](#ethercat-usage-guide)", etc.) are **based on the Generic driver mode**. If you are using the **V4.0.7 default image**, the system is pre-configured for Native driver mode. Please refer to the Native driver usage instructions in this section first.
 :::
 </DocScope>
 
@@ -28,7 +28,7 @@ import DocScope from '@site/src/components/DocScope';
 **RDK S600 V5.1.0 and above use the Native (hobot) EtherCAT driver by default**, not the Generic driver.
 
 :::warning
-❌ **Note:** The EtherCAT usage methods described in subsequent sections of this document ("[Network Configuration Before Use](#network-configuration-before-use)", "[EtherCAT Usage Guide](#ethercat-usage-guide)", etc.) are **based on the Generic driver mode**. If you are using the **V5.1.0 default image**, the system is pre-configured for Native driver mode. Please refer to the Native driver usage instructions in this section first.
+⚠️ **Note:** The EtherCAT usage methods described in subsequent sections of this document ("[Network Configuration Before Use](#network-configuration-before-use)", "[EtherCAT Usage Guide](#ethercat-usage-guide)", etc.) are **based on the Generic driver mode**. If you are using the **V5.1.0 default image**, the system is pre-configured for Native driver mode. Please refer to the Native driver usage instructions in this section first.
 :::
 </DocScope>
 
@@ -100,7 +100,7 @@ sudo systemctl daemon-reload
 :::
 
 :::warning
-❌ **SSH Connection Note:** If you are connected to the development board via SSH, when you execute `systemctl start ethercat` or `systemctl stop ethercat`, the network will experience a brief interruption of a few seconds (ping will show `Destination Host Unreachable`) due to the unloading/reloading of the gmac driver. The SSH client will typically reconnect automatically. This is normal and does not require manual intervention.
+⚠️ **SSH Connection Note:** If you are connected to the development board via SSH, when you execute `systemctl start ethercat` or `systemctl stop ethercat`, the network will experience a brief interruption of a few seconds (ping will show `Destination Host Unreachable`) due to the unloading/reloading of the gmac driver. The SSH client will typically reconnect automatically. This is normal and does not require manual intervention.
 :::
 
 **Step 3: Start EtherCAT**
@@ -185,7 +185,7 @@ To switch the network port used by EtherCAT, simply modify `MASTER0_DEVICE` in `
 ### Risks and Impacts of the Native Driver
 
 :::warning
-❌ **Important:** Because the Native driver and the gmac driver are mutually exclusive, it is **strongly recommended to use `systemctl` to manage the EtherCAT service** (with the systemd drop-in to automatically handle driver unloading/reloading). **Do not use the `ethercatctl` command directly.** Using `ethercatctl start` directly requires manually unloading `hobot_eth_super` with `rmmod`, and improper operation (e.g., forgetting to unload the gmac driver) will cause EtherCAT to fail to start. Furthermore, in remote SSH connection scenarios, manual operation could lead to network loss that cannot be recovered.
+⚠️ **Important:** Because the Native driver and the gmac driver are mutually exclusive, it is **strongly recommended to use `systemctl` to manage the EtherCAT service** (with the systemd drop-in to automatically handle driver unloading/reloading). **Do not use the `ethercatctl` command directly.** Using `ethercatctl start` directly requires manually unloading `hobot_eth_super` with `rmmod`, and improper operation (e.g., forgetting to unload the gmac driver) will cause EtherCAT to fail to start. Furthermore, in remote SSH connection scenarios, manual operation could lead to network loss that cannot be recovered.
 :::
 
 #### 1. Conflict with gmac driver
@@ -234,7 +234,7 @@ After modification, restart the device or the EtherCAT service. For detailed usa
 
 <DocScope products="RDK S100">
 :::warning
-❌ **Note:** The following content applies to **Generic driver mode**. If you are using the V4.0.7 default Native driver mode, please refer to the "[Native Driver Usage Steps](#native-driver-usage-steps)" section above.
+⚠️ **Note:** The following content applies to **Generic driver mode**. If you are using the V4.0.7 default Native driver mode, please refer to the "[Native Driver Usage Steps](#native-driver-usage-steps)" section above.
 
 The EtherCAT protocol is mutually exclusive with the Ethernet protocol and **cannot coexist**. **The development board uses eth0 as the DHCP management interface by default**. If you want to use eth0 as the EtherCAT network interface, you can use one of the following network configuration schemes. **[Click here to see using eth0 as the EtherCAT master](#using-eth0-as-the-ethercat-master)**.
 
@@ -244,7 +244,7 @@ The EtherCAT protocol is mutually exclusive with the Ethernet protocol and **can
 
 <DocScope products="RDK S600">
 :::warning
-❌ **Note:** The following content applies to **Generic driver mode**. If you are using the V5.1.0 default Native driver mode, please refer to the "[Native Driver Usage Steps](#native-driver-usage-steps)" section above.
+⚠️ **Note:** The following content applies to **Generic driver mode**. If you are using the V5.1.0 default Native driver mode, please refer to the "[Native Driver Usage Steps](#native-driver-usage-steps)" section above.
 
 The EtherCAT protocol is mutually exclusive with the Ethernet protocol and **cannot coexist**. **The development board uses eth0 as the DHCP management interface by default**. If you want to use eth0 as the EtherCAT network interface, you can use one of the following network configuration schemes. **[Click here to see using eth0 as the EtherCAT master](#using-eth0-as-the-ethercat-master)**.
 
@@ -456,7 +456,7 @@ The pre-installed version on the board is igh 1.5.x, which does not support auto
 - **Hint**: Special configuration of the network interface used by EtherCAT via netplan is required as described in the schemes below.
 
 :::warning
-❌ **Special Note:** Do not disable NetworkManager's automatic startup, otherwise the system will not be able to automatically bring UP all network interfaces after reboot!!! There is a risk of losing device connectivity!!!
+⚠️ **Special Note:** Do not disable NetworkManager's automatic startup, otherwise the system will not be able to automatically bring UP all network interfaces after reboot!!! There is a risk of losing device connectivity!!!
 :::
 
 ### Scheme 1: Configure NetworkManager not to manage the eth0 interface (Recommended)

@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 :::warning
-❌ **注意：**使用 EtherCAT 协议需要系统版本 V4.0.4及以上。
+⚠️ **注意：**使用 EtherCAT 协议需要系统版本 V4.0.4及以上。
 :::
 
 ## Native 驱动与 Generic 驱动
@@ -22,7 +22,7 @@ import DocScope from '@site/src/components/DocScope';
 **RDK S100 V4.0.7 及以上版本默认使用 Native（hobot）EtherCAT 驱动**，而非 Generic 驱动。
 
 :::warning
-❌ **注意：**本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V4.0.7 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
+⚠️ **注意：**本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V4.0.7 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
 :::
 </DocScope>
 
@@ -30,7 +30,7 @@ import DocScope from '@site/src/components/DocScope';
 **RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动**，而非 Generic 驱动。
 
 :::warning
-❌ **注意：**本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V5.1.0 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
+⚠️ **注意：**本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V5.1.0 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
 :::
 </DocScope>
 
@@ -69,7 +69,7 @@ import DocScope from '@site/src/components/DocScope';
 默认镜像中 `/etc/ethercat.conf` 已预配置为 Native 模式。如需切换 EtherCAT 使用的网口，修改 `MASTER0_DEVICE` 为对应网口的 MAC 地址：
 
 :::warning
-❌ **Native 驱动只支持使用 Mac 地址进行配置。**默认的 MASTER0_DEVICE 值为 ff:ff:ff:ff:ff:ff，在启用的时候默认使用 eth0 网口，请根据需求修改。
+⚠️ **Native 驱动只支持使用 Mac 地址进行配置。**默认的 MASTER0_DEVICE 值为 ff:ff:ff:ff:ff:ff，在启用的时候默认使用 eth0 网口，请根据需求修改。
 :::
 
 ```
@@ -84,7 +84,7 @@ DEVICE_MODULES="hobot"
 ```
 
 :::warning
-❌ **SSH 连接注意事项：**如果通过 SSH 远程连接开发板，使用 systemctl 或 ethercatctl 管理 ethercat 服务的时候。由于 gmac 驱动的卸载/重装，**网络会短暂中断几秒**（ping 会显示 `Destination Host Unreachable`），SSH 客户端通常会自动重连。这是正常现象，无需手动干预。
+⚠️ **SSH 连接注意事项：**如果通过 SSH 远程连接开发板，使用 systemctl 或 ethercatctl 管理 ethercat 服务的时候。由于 gmac 驱动的卸载/重装，**网络会短暂中断几秒**（ping 会显示 `Destination Host Unreachable`），SSH 客户端通常会自动重连。这是正常现象，无需手动干预。
 :::
 
 **步骤 2：启动 EtherCAT**
@@ -172,7 +172,7 @@ sudo systemctl stop ethercat
 ### Native 驱动的风险与影响
 
 :::warning
-❌ **重要：**由于 Native 驱动与 gmac 驱动互斥，涉及到网卡驱动的卸载与加载。在进行 Native 驱动与 generic 驱动切换的时候，**必须先修改配置文件，然后重启系统完成驱动切换**，否则可能会引起网络中断。
+⚠️ **重要：**由于 Native 驱动与 gmac 驱动互斥，涉及到网卡驱动的卸载与加载。在进行 Native 驱动与 generic 驱动切换的时候，**必须先修改配置文件，然后重启系统完成驱动切换**，否则可能会引起网络中断。
 :::
 
 #### 1. 与 gmac 驱动冲突
@@ -219,7 +219,7 @@ sudo sed -i 's/MASTER0_DEVICE=".*"/MASTER0_DEVICE="eth0"/' /etc/ethercat.conf
 
 <DocScope products="RDK S100">
 :::warning
-❌ **注意：**以下内容适用于 **Generic 驱动模式**。如果您使用的是 V4.0.7 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
+⚠️ **注意：**以下内容适用于 **Generic 驱动模式**。如果您使用的是 V4.0.7 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
 
 EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
 
@@ -229,7 +229,7 @@ EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使
 
 <DocScope products="RDK S600">
 :::warning
-❌ **注意：**以下内容适用于 **Generic 驱动模式**。如果您使用的是 V5.1.0 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
+⚠️ **注意：**以下内容适用于 **Generic 驱动模式**。如果您使用的是 V5.1.0 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
 
 EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
 
@@ -441,7 +441,7 @@ Host 端构建支持两种构建方式：
 - **提示**：需要按照下述方案使用 netplan 对 EtherCAT 所使用的网络接口进行特殊配置
 
 :::warning
-❌ **特别注意：**不要关闭 NetworkManager 的自动启动，否则重启后系统无法自动 UP 所有网络接口！！！会有设备失联的风险！！！
+⚠️ **特别注意：**不要关闭 NetworkManager 的自动启动，否则重启后系统无法自动 UP 所有网络接口！！！会有设备失联的风险！！！
 :::
 
 ### 方案一：配置 NetworkManager 不管理 eth0 接口（推荐）

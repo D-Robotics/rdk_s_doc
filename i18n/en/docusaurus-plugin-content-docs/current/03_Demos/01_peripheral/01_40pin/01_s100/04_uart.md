@@ -22,7 +22,7 @@ On the 40-pin header, you need to toggle the DIP switch to select between UART2 
 
 After toggling the DIP switch, you also need to modify the device tree file. The path and modification method are as follows:
 
-```{.text}
+```text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
 uart2: uart@394C0000 {
         power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;

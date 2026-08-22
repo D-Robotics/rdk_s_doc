@@ -50,6 +50,10 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 
 Method 1: Log in to the Digua Registry server and pull the image online
 
+:::info Note
+This login account is a read-only public delivery account; the password is published with each release and can be used directly.
+:::
+
 ```bash
 docker login -u "ccr\$deliver-ronly" registry.d-robotics.cc -p 'VLaeatrjF9yGf6I44trT74zKhUpZSVlr'
 docker pull registry.d-robotics.cc/deliver/ai_toolchain_ubuntu_22_s100_s600_cpu:v3.7.0

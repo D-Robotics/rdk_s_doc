@@ -5,7 +5,7 @@ sidebar_position: 1
 
 Driver functional unit testing is a critical phase for verifying the stability, performance, and functional integrity of system drivers and hardware components. This chapter provides a detailed introduction to the testing methodologies and criteria for various driver functional units, ensuring the system delivers high reliability and exceptional performance in real-world application scenarios.
 
-## <span id="Deploy_test_program"/>Test Code Storage Path
+## Test Code Storage Path{#Deploy_test_program}
 
 To facilitate unified management and usage of test code, scripts, and tools, all test resources described in this chapter have been integrated into the BSP source code within the SDK delivery package. The storage path is as follows:
 

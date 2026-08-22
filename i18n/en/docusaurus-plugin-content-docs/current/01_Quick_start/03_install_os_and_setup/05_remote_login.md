@@ -92,7 +92,6 @@ Serial port login requires a PC terminal tool. Commonly used tools include `Putt
   | Flow Control | None     |
 
 - Click `OK`, enter the username: `root`, password: `root` to log in to the device
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="Windows serial port connection demo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 At this point, you can use the `ifconfig -a` command to query the development board's IP address, where eth0/eth1 and wlan0 represent wired and wireless networks respectively:
 
@@ -239,7 +238,6 @@ Currently commonly used terminal tools include `Putty`, `MobaXterm`, and so on. 
 3. Select `specify username` and enter `sunrise`
 4. After clicking OK, enter the username (sunrise) and password (sunrise) to complete the login
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="Terminal software demo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Computer command line
 
@@ -249,7 +247,6 @@ Users can also log in via SSH through the command line. The steps are as follows
 2. When the connection confirmation prompt appears, enter YES
 3. Enter the password (sunrise) to complete the login
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="Computer command line demo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## NoMachine Login

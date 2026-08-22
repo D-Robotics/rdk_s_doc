@@ -44,7 +44,7 @@ The figure above shows the SPI software architecture. From bottom to top, it can
 
 The hobot SPI driver-related code is located in the **\$project/hobot-drivers/spi** directory.
 
-``` {.text}
+```text
 oops@tiger$ tree . -L 1
 
 ├── Kconfig                       # Kconfig related
@@ -54,7 +54,7 @@ oops@tiger$ tree . -L 1
 
 **\$project/hobot-drivers/spi/spi_drv** directory description
 
-``` {.text}
+```text
 oops@tiger$ tree . -L 1
 ├── Makefile
 ├── spi-dw.c                       # spi driver core code
@@ -67,7 +67,7 @@ oops@tiger$ tree . -L 1
 
 The Linux SPI protocol-related code is located in the **\$project/kernel/drivers/spi** directory.
 
-``` {.text}
+```text
 oops@tiger$ tree kernel/drivers/spi/
 drivers/spi/
 ├── spi.c                             # spi framework code

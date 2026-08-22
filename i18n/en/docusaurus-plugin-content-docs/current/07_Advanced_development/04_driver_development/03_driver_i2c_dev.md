@@ -54,7 +54,7 @@ CONFIG_I2C_DESIGNWARE_PLATFORM=y 	# DW I2C driver configuration macro
 
 <DocScope products="RDK S100">
 
-``` {.text}
+```text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
 i2c0: i2c@39420000 {
         power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
@@ -79,7 +79,7 @@ i2c0: i2c@39420000 {
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+```text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi*/
 i2c0: i2c@34840000 {
 	power-domains = <&dummy_pd 0>;
@@ -121,7 +121,7 @@ The S600 I2C driver provides an interface in Kernel Space for setting the I2C tr
 
 The default I2C rate is 400K, supporting four rates: 100k/400k/1M/3.4M. The rate can be modified by changing the clock-frequency of the corresponding I2C node in the DTS. The code for selecting the actual rate is as follows:
 
-``` {.text}
+```text
 kernel/drivers/i2c/busses/i2c-designware-common.c
 Supported I2C rate configurations are as follows:
 static const u32 supported_speeds[] = {
@@ -197,7 +197,7 @@ To view I2C register information, take i2c-0 as an example
 
 <DocScope products="RDK S100">
 
-``` {.text}
+```text
 root@ubuntu:/# cat /sys/kernel/debug/dw_i2c0/registers
 39420000.i2c registers:
 =================================
@@ -224,7 +224,7 @@ TYPE:           0x44570140
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+```text
 root@ubuntu:/# cat /sys/kernel/debug/dw_i2c0/registers
 34840000.i2c registers:
 =================================
@@ -254,7 +254,7 @@ TYPE:           0x44570140
 
 Real-time dump enable interface. Real-time I2C transmission data can be viewed via dmesg.
 
-``` {.text}
+```text
 # enable
 echo 1 > /sys/kernel/debug/dw_i2c0/reldump_en
 
@@ -266,7 +266,7 @@ echo 0 > /sys/kernel/debug/dw_i2c0/reldump_en
 
 Fifodump enable interface. Can dump recent I2C read/write data. Each channel is configured separately. Only supports master 7-bit address mode.
 
-``` {.text}
+```text
 # enable
 echo 1 > /sys/kernel/debug/dw_i2c0/fifodump_en
 
@@ -280,7 +280,7 @@ Temporarily stores I2C data. Printed via cat when fifodump_en is enabled.
 
 Normal transmission:
 
-``` {.text}
+```text
 root@ubuntu:~# i2cdump -f -y 0 0x28
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
 00: 00 1f 21 00 00 00 00 00 00 00 XX XX XX XX XX XX    .?!.......XXXXXX
@@ -336,7 +336,7 @@ m[1]-a[0x28]-f[0x1]:0x00
 
 Abnormal transmission:
 
-``` {.text}
+```text
 =b[1]-t[32991.050148]-n[2]-me[0]-ce[1]-ae[0x800001]=
 m[0]-a[0x10]-f[0x0]:0xfa
 m[1]-a[0x10]-f[0x1]:0x13
@@ -351,7 +351,7 @@ ae: abort_source.
 
 **whitelist Interface**
 
-``` {.text}
+```text
 root@ubuntu:~# echo 01 02 > /sys/kernel/debug/dw_i2c0/whitelist
 root@ubuntu:~# cat /sys/kernel/debug/dw_i2c0/whitelist
 whitelist: 01 02
@@ -383,7 +383,7 @@ Check whether i2c-dev nodes are created. The following devices are all configure
 
 <DocScope products="RDK S100">
 
-``` {.text}
+```text
 root@ubuntu:~# ls /sys/class/i2c-dev/
 i2c-0  i2c-1  i2c-2  i2c-3  i2c-4  i2c-5
 
@@ -394,7 +394,7 @@ Synopsys DesignWare I2C adapter
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+```text
 root@ubuntu:~# ls /sys/class/i2c-dev/
 i2c-0  i2c-2  i2c-3  i2c-4  i2c-5  i2c-7  i2c-9
 
@@ -406,7 +406,7 @@ Synopsys DesignWare I2C adapter
 
 Check whether the I2C device node is created
 
-``` {.text}
+```text
 root@ubuntu:~# ls /sys/class/i2c-dev/i2c-0/device/
 delete_device  device  i2c-dev  name  new_device  of_node  power  subsystem  uevent
 ```
@@ -416,7 +416,7 @@ delete_device  device  i2c-dev  name  new_device  of_node  power  subsystem  uev
 - Test command: i2cdetect -y -r 3
 - Test example is as follows
 
-``` {.text}
+```text
 root@ubuntu:~# i2cdetect -r -y 3
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:                         -- -- -- -- -- -- -- --

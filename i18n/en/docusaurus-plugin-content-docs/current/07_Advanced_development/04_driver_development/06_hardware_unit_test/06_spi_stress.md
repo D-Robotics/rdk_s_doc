@@ -33,7 +33,7 @@ The core of the SPI stress test involves loopback testing for data transmission 
 
 ## Preparation
 
-### <span id="test-script-user-manual"/> Stress Test Script Usage Instructions
+### Stress Test Script Usage Instructions{#test-script-user-manual}
 
 The serial stress test script supports the `-h` suffix to display command parameter descriptions. For example:
 

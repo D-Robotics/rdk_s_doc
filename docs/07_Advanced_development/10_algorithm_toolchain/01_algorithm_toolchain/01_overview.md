@@ -57,6 +57,10 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 
 方法1. 登录地瓜 Registry 服务器在线拉取镜像
 
+:::info 说明
+该登录账号为只读公开交付账号，密码随发布对外公开，可直接使用。
+:::
+
 ```bash
 docker login -u "ccr\$deliver-ronly" registry.d-robotics.cc -p 'VLaeatrjF9yGf6I44trT74zKhUpZSVlr'
 docker pull registry.d-robotics.cc/deliver/ai_toolchain_ubuntu_22_s100_s600_cpu:v3.7.0
