@@ -6,7 +6,7 @@ description: "Audio output device selection and basic control"
 
 # Audio Configuration
 
-The RDK board audio can be output from the 3.5mm headphone jack, HDMI, or a USB sound card. Select the output device and adjust the volume via the desktop settings or the command line.
+The RDK board requires an audio device to be connected before it can output audio: on the S100, connect the Audio Driver HAT REV2 audio daughter board; on the S600, connect a USB sound card or a 14PIN I2S audio daughter board. Audio can also be output via HDMI when an HDMI display is connected. Select the output device and adjust the volume via the desktop settings or the command line.
 
 :::info Note
 This RDK S600 board has no audio output device connected (no audio codec/sound card). Both `aplay -l` and `arecord -l` report no soundcards; the following commands assume a board with an audio device connected.
@@ -71,6 +71,7 @@ aplay /app/res/assets/chi_sound.wav
 
 ## Related Documentation
 
+- [Audio Application](../03_Demos/01_peripheral/03_audio.md)
 - [Display Configuration](./09_display_config.md)
 - [Bluetooth Configuration](./02_bluetooth_config.md)
 - [Package Management apt](./03_system_update/01_apt_usage.md)

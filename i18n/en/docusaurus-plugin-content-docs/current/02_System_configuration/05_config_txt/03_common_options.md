@@ -41,7 +41,7 @@ This page lists the commonly used configuration options in config.txt, organized
 
 > The display output interface (DSI/HDMI) is configured through Display Options in [srpi-config](../04_srpi_config/01_overview.md), not in config.txt.
 
-> For the full list of configuration options and how to develop new configuration options, see [config.txt Parser Development Guide](./05_parser_dev.md).
+> For how to develop new configuration options and the parsing mechanism, see [config.txt Parser Development Guide](./05_parser_dev.md).
 
 ## Related Documentation
 

@@ -14,7 +14,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## RDK S100
 ### 温度传感器
-在 RDKS100芯片中有5个温度传感器，用于显示 MCU 域/BPU/MAIN 域的温度，其中 MAIN 域和 MCU 各有两个温度传感器，BPU 有一个温度传感器
+在 RDK S100 芯片中有5个温度传感器，用于显示 MCU 域/BPU/MAIN 域的温度，其中 MAIN 域和 MCU 各有两个温度传感器，BPU 有一个温度传感器
 
 在/sys/class/hwmon/下有 hwmon0目录下包含温度传感器的相关参数
 - temp1_input 是 MAIN 域的第一个温度传感器，temp2_input 是 MAIN 域的第二个温度传感器，
@@ -74,7 +74,7 @@ echo user_space > /sys/class/thermal/thermal_zone0/policy
 在 thermal_zone0中有4个 trip_point，
 - trip_point_0_temp：关机温度，默认设置为120度
 - trip_point_1_temp：用于控制风扇转速，默认为43度，风扇档位范围2~5，表示超过43度，风扇将从关闭状态调整为2档，最高可提升到5档。
-- trip_point_2_temp：用于控制风扇转速，默认为65度，风扇档位范围6~10，表示超过65度，风扇将调整到6档，最高可提升到10档慢转速。
+- trip_point_2_temp：用于控制风扇转速，默认为65度，风扇档位范围6~10，表示超过65度，风扇将调整到6档，最高可提升到10档转速。
 - trip_point_3_temp：用于控制 CPU Acore 频率，默认为95度，表示超过95度，CPU Acore 会降频。
 可通过 sysfs 查看相应的温度设置
 ```shell
@@ -108,7 +108,7 @@ echo 105000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_0_temp
 ```
 
 :::info
-PS：以上设置只在当前启动有效，<ins>重启后</ins>需要**重新**设置。
+以上设置只在当前启动有效，<ins>重启后</ins>需要**重新**设置。
 :::
 
 #### 降温设备
@@ -140,7 +140,7 @@ RDK S100开发板上的 emc2305风扇控制器，可以通过设备节点获取�
    root@ubuntu:~# cat /sys/class/thermal/cooling_device2/cur_state
    5
    ```
-4. 配置 thermal_zone0的策略为`userspace`：
+4. 配置 thermal_zone0的策略为`user_space`：
     ```
     echo user_space > /sys/class/thermal/thermal_zone0/policy
     ```
@@ -155,7 +155,7 @@ RDK S100开发板上的 emc2305风扇控制器，可以通过设备节点获取�
 
 ### CPU 频率管理
 
-在 linux 内核中，自带了 cpufreq 子系统用来控制 cpu 的频率和频率控制策略。
+在 Linux 内核中，自带了 cpufreq 子系统用来控制 cpu 的频率和频率控制策略。
 
 进入目录`/sys/devices/system/cpu/cpufreq/policy0`，`ls` 一下，会看到目录中有如下文件：
 
@@ -183,7 +183,7 @@ cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies
 ```
 
 注：支持的频点可能在不同类型的芯片上有所差异。
-RDK S100系统使用的 linux 内核支持以下种类的调频策略:
+RDK S100系统使用的 Linux 内核支持以下种类的调频策略:
 
 - performance（性能）：以最高频率执行，即硬件所支持的最高频（最高性能）。
 - ondemand：按照负载调整频率
@@ -215,7 +215,7 @@ echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 
 ## RDK S600
 ### 温度传感器
-在 RDKS600芯片中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。
+在 RDK S600 芯片中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。
 
 在/sys/class/hwmon/下有 hwmon1目录下包含温度传感器的相关参数
 - temp1_input 到 temp7_input 是 CPU 的温度传感器，对应的 label 为 CMN0-TS[0-6]
@@ -347,7 +347,7 @@ echo 105000 > /sys/class/thermal/thermal_zone18/trip_point_0_temp
 ```
 
 :::info
-PS：以上设置只在当前启动有效，<ins>重启后</ins>需要**重新**设置。
+以上设置只在当前启动有效，<ins>重启后</ins>需要**重新**设置。
 :::
 
 #### 降温设备
@@ -376,7 +376,7 @@ RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取�
    root@ubuntu:~# cat /sys/class/thermal/cooling_device5/cur_state
    5
    ```
-4. 配置 thermal_zone2的策略为`userspace`：
+4. 配置 thermal_zone2的策略为`user_space`：
     ```
     # thermal_zone2和thermal_zone16会通过控制风扇
     echo user_space > /sys/class/thermal/thermal_zone2/policy
@@ -393,7 +393,7 @@ RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取�
 
 ### CPU 频率管理
 
-在 linux 内核中，自带了 cpufreq 子系统用来控制 cpu 的频率和频率控制策略。
+在 Linux 内核中，自带了 cpufreq 子系统用来控制 cpu 的频率和频率控制策略。
 
 进入目录`/sys/devices/system/cpu/cpufreq/policy0`，`ls` 一下，会看到目录中有如下文件：
 
@@ -421,7 +421,7 @@ cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies
 ```
 
 注：支持的频点可能在不同类型的芯片上有所差异。
-RDK S600系统使用的 linux 内核支持以下种类的调频策略:
+RDK S600系统使用的 Linux 内核支持以下种类的调频策略:
 
 - performance（性能）：以最高频率执行，即硬件所支持的最高频（最高性能）。
 - ondemand：按照负载调整频率

@@ -6,7 +6,7 @@ description: "如何创建和修改 RDK config.txt 配置文件"
 
 # 自定义 config.txt
 
-config.txt 是 RDK 的启动配置文件，用于在 U-Boot 阶段配置内核启动参数、DTS 节点、显示选项等，无需重新编译固件即可调整系统行为。
+config.txt 是 RDK 的启动配置文件，用于在 U-Boot 阶段配置内核启动参数、DTS 节点、DTB Overlay 等，无需重新编译固件即可调整系统行为。
 
 ## 文件位置
 
@@ -21,9 +21,8 @@ config.txt 默认路径为 `/boot/config.txt`，位于启动分区（boot 分区
 
 ```text
 # 这是一个注释
-bootargs=isolcpus=1-2 loglevel=8
-hdmi_group=2
-hdmi_mode=82
+bootargs=isolcpus=1-2
+loglevel=8
 ```
 
 ## 修改方法
@@ -46,11 +45,11 @@ reboot
 
 ### 方法 2：通过 U-Boot 命令行
 
-在启动时按任意键进入 U-Boot 命令行，使用 `setenv` 临时修改（优先级高于 config.txt）：
+在启动时按任意键进入 U-Boot 命令行，使用 `setenv` 临时修改（优先级高于 config.txt）。与 config.txt 的 `bootargs=` 追加语义不同，`setenv bootargs` 会整体替换该环境变量，覆盖默认 cmdline（`root=`、`console=` 等关键参数），追加参数需引用已有值：
 
 ```text
-# U-Boot 命令行
-setenv bootargs 'isolcpus=1-2 loglevel=8'
+# U-Boot 命令行（追加内核参数，保留默认 cmdline）
+setenv bootargs ${bootargs} isolcpus=1-2 loglevel=8
 boot
 ```
 

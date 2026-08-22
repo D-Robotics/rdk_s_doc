@@ -39,7 +39,7 @@ hci0:   Type: Primary  Bus: USB
 
 `bluetoothctl` is an interactive command-line tool (version 5.72):
 
-```bash
+```text
 bluetoothctl
 # After entering the interactive mode:
 [bluetooth]# power on               # Power on
@@ -53,7 +53,7 @@ bluetoothctl
 [bluetooth]# quit
 ```
 
-During pairing, both sides need to confirm the PIN or matching code. Once successful, the device is listed in `bluetoothctl devices`.
+During pairing, both sides need to confirm the PIN or pairing code. Once successful, the device is listed in `bluetoothctl devices`.
 
 ## Paired/Connected Devices
 
@@ -75,7 +75,7 @@ configure the above two items, then restart `bluetooth.service`.
 
 - **`rfkill` shows blocked**: `sudo rfkill unblock bluetooth`; some boards have a hardware switch that needs to be turned on manually.
 - **Device cannot be found by scanning**: Confirm that the peer device is discoverable; check whether `hciconfig` shows `UP`; check whether the USB adapter is recognized (`lsusb`).
-- **Cannot connect after pairing**: `trust` the device; audio devices additionally require configuring a pulseaudio/pipewire profile.
+- **Cannot connect after pairing**: `trust` the device; audio devices additionally require configuring a PulseAudio/PipeWire profile.
 - **No automatic reconnection on boot**: Check `ReconnectAttempts` and
   `ReconnectIntervals` in `/etc/bluetooth/main.conf` (commented out by default); for HID devices, try having the peripheral initiate the connection.
 

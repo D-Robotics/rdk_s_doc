@@ -21,7 +21,7 @@ Filesystem                                              Size  Used Avail Use% Mo
 /dev/disk/by-partuuid/1993ccc4-e089-b84e-b2d5-193a1bc4b7f3  45G  9.8G  33G  23% /
 ```
 
-The rootfs is 45G with 9.8G used (23%) and 33G remaining. When usage is high, clean up the apt cache (`apt clean`) or logs (`journalctl --vacuum-size`).
+The rootfs is 45G with 9.8G used (23%) and 33G remaining. When usage is high, clean up the apt cache (`apt clean`) or logs (`journalctl --vacuum-size=100M`).
 
 ## Check Block Devices
 
@@ -61,8 +61,8 @@ The RDK S600 boots from an SSD (`sda`). Its partitions include boot (sda1~sda4),
 # Check mounted devices
 mount | grep -E "sd|mmc"
 
-# Mount a USB flash drive
-sudo mount /dev/sdb1 /mnt
+# Mount a USB flash drive (first confirm the device name with lsblk; sdb/sdc are the onboard 4M storage, and the USB drive usually appears as sdd or later)
+sudo mount /dev/sdd1 /mnt
 
 # Unmount
 sudo umount /mnt
@@ -70,16 +70,19 @@ sudo umount /mnt
 
 ## Expanding rootfs
 
-If the rootfs does not fill the whole partition, it can be expanded:
+`resize2fs` expands the file system to the limit of the partition it resides on (use it when the file system does not fill the partition); `growpart` expands a partition into the unallocated space of the disk (use it when there is still free space after the partition; after growing the partition, run `resize2fs` again):
 
 ```bash
-sudo resize2fs /dev/<rootfs_partition>      # ext4
-# Or grow to the partition limit
+# Expand the ext4 file system to the partition limit
+sudo resize2fs /dev/<rootfs_partition>
+
+# If there is unallocated space after the partition, grow the partition first, then the file system
 sudo growpart /dev/sda <partition_number>
+sudo resize2fs /dev/<rootfs_partition>
 ```
 
 :::warning
-Partition operations carry a risk of data loss. First use `df`/`lsblk` to confirm the target partition, and back up when necessary.
+Partition operations carry a risk of data loss. First use `df`/`lsblk` to confirm the target partition, and back up when necessary. On this board, the rootfs is on sda17 (the last partition) with no unallocated space after it, so `growpart` cannot be used here; it applies only when unallocated space exists.
 :::
 
 ## Related Documentation

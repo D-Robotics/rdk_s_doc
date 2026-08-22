@@ -44,7 +44,7 @@ cat /sys/class/drm/card0-HDMI-A-1/status    # connected / disconnected
 cat /sys/class/drm/card0-HDMI-A-1/modes     # Supported display modes
 ```
 
-Measured on RDK S600 (HDMI-A-1 connected, outputting 1920x1080@60):
+Measured on RDK S600 (HDMI-A-1 connected, outputting 1920x1080@60, excerpt):
 
 ```text
 $ cat /sys/class/drm/card0-HDMI-A-1/status
@@ -56,7 +56,6 @@ $ cat /sys/class/drm/card0-HDMI-A-1/modes
 1440x900
 1280x800
 1280x720
-...
 ```
 
 The Server edition console resolution is configured with the `video=` parameter in config.txt (see [config.txt](./05_config_txt/01_usage.md)).

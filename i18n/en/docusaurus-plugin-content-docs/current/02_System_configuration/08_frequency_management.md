@@ -74,7 +74,7 @@ echo user_space > /sys/class/thermal/thermal_zone0/policy
 thermal_zone0 has 4 trip_points:
 - trip_point_0_temp: shutdown temperature, set to 120 degrees by default
 - trip_point_1_temp: used to control the fan speed. The default is 43 degrees, and the fan level range is 2~5, meaning that above 43 degrees, the fan will change from the off state to level 2, and can be raised up to level 5.
-- trip_point_2_temp: used to control the fan speed. The default is 65 degrees, and the fan level range is 6~10, meaning that above 65 degrees, the fan will be adjusted to level 6, and can be raised up to level 10 slow speed.
+- trip_point_2_temp: used to control the fan speed. The default is 65 degrees, and the fan level range is 6~10, meaning that above 65 degrees, the fan will be adjusted to level 6, and can be raised up to level 10.
 - trip_point_3_temp: used to control the CPU Acore frequency. The default is 95 degrees, meaning that above 95 degrees, the CPU Acore will scale down its frequency.
 You can check the corresponding temperature settings through sysfs
 ```shell
@@ -108,7 +108,7 @@ echo 105000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_0_temp
 ```
 
 :::info
-PS: The above settings are only effective for the current boot. After <ins>reboot</ins>, they need to be set **again**.
+The above settings are only effective for the current boot. After <ins>reboot</ins>, they need to be set **again**.
 :::
 
 #### Cooling Devices
@@ -140,7 +140,7 @@ The emc2305 fan controller on the RDK S100 development board allows you to get b
    root@ubuntu:~# cat /sys/class/thermal/cooling_device2/cur_state
    5
    ```
-4. Set the policy of thermal_zone0 to `userspace`:
+4. Set the policy of thermal_zone0 to `user_space`:
     ```
     echo user_space > /sys/class/thermal/thermal_zone0/policy
     ```
@@ -347,7 +347,7 @@ echo 105000 > /sys/class/thermal/thermal_zone18/trip_point_0_temp
 ```
 
 :::info
-PS: The above settings are only effective for the current boot. After <ins>reboot</ins>, they need to be set **again**.
+The above settings are only effective for the current boot. After <ins>reboot</ins>, they need to be set **again**.
 :::
 
 #### Cooling Devices
@@ -376,7 +376,7 @@ The emc2305 fan controller on the RDK S600 development board allows you to get b
    root@ubuntu:~# cat /sys/class/thermal/cooling_device5/cur_state
    5
    ```
-4. Set the policy of thermal_zone2 to `userspace`:
+4. Set the policy of thermal_zone2 to `user_space`:
     ```
     # thermal_zone2 and thermal_zone16 will control the fan
     echo user_space > /sys/class/thermal/thermal_zone2/policy

@@ -122,14 +122,15 @@ Use the following command to mount the Windows NFS shared directory to the mount
 
 ```bash
 sudo mount -v -t nfs -o vers=3,proto=tcp 192.168.127.11:/D/NFSShare /userdata/windows_nfs_share
-
-Explanation:
--v       : verbose, shows the detailed mount process
--t nfs   : specifies the file system type as NFS
--o       : specifies mount options
-vers=3   : uses the NFSv3 protocol
-proto=tcp: uses TCP transport
 ```
+
+Parameter explanation:
+
+- `-v`: verbose, shows the detailed mount process
+- `-t nfs`: specifies the file system type as NFS
+- `-o`: specifies mount options
+- `vers=3`: uses the NFSv3 protocol
+- `proto=tcp`: uses TCP transport
 
 4. Verify the mount
 
@@ -138,7 +139,7 @@ Run the following command to check whether the mount succeeded:
 mount | grep windows_nfs_share
 ```
 
-If you see in the output that 192.168.127.11:/D:/NFSShare is mounted on /userdata/windows_nfs_share, the mount succeeded.
+If you see in the output that 192.168.127.11:/D/NFSShare is mounted on /userdata/windows_nfs_share, the mount succeeded.
 
 5. Set up automatic mounting at boot (optional)
 
@@ -178,7 +179,7 @@ To make Ubuntu automatically mount the NFS shared directory at every boot, you c
       systemctl start mount-windows-nfs.service
       ```
 
-   - Save and exit the editor.
+   - The service file has already been written directly by the `cat` heredoc above; no need to open an editor.
 
 ## Related Documentation
 

@@ -66,5 +66,6 @@ At the moment of power-on, press any key (or space) in the serial terminal to in
 
 - [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
 - [User and Permission Management](./14_user_permission.md)
+- [UART Driver Debug Guide](../07_Advanced_development/04_driver_development/02_driver_uart_dev.md)
 - [Configuring U-Boot and Kernel Option Parameters (Advanced)](../07_Advanced_development/04_driver_development/01_uboot_kernel_config.md)
 - [System Log Viewing](./15_system_log.md)

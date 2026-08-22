@@ -10,15 +10,14 @@ RDK OS is based on Ubuntu and uses `apt` to manage software packages. The system
 
 ## Package Sources
 
-Check the current apt sources (`apt policy`, tested on RDK S600):
+Check the current apt sources (`apt policy`, tested on RDK S600, excerpt):
 
 ```text
 Package files:
  100 /var/lib/dpkg/status
  500 http://archive.d-robotics.cc/ubuntu-rdk-s600-beta noble/main arm64 Packages
-     release o=D-Robotics RDK S600 APT Repo,n=noble,...
+     release o=D-Robotics RDK S600 APT Repo,n=noble
  500 http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports noble/multiverse arm64 Packages
-     ...
 ```
 
 - `archive.d-robotics.cc/ubuntu-rdk-s600-beta`: D-Robotics packages specific to RDK S600 (the `hobot-*` series).
@@ -64,15 +63,14 @@ sudo apt full-upgrade         # Upgrade and handle dependency changes
 
 ## RDK-Specific Packages
 
-A set of `hobot-*` packages is preinstalled on RDK boards (`dpkg -l | grep hobot`, tested on S600):
+A set of `hobot-*` packages is preinstalled on RDK boards (`dpkg -l | grep hobot`, tested on S600, excerpt):
 
 ```text
-ii  hobot-audio-config   5.0.0-...   arm64   Configuration files of audio hat
-ii  hobot-camera         5.1.0-...   arm64   Camera Sensor Support Package
-ii  hobot-configs         5.1.0-...   arm64   Hobot custom system configuration
-ii  hobot-dnn             5.1.0-...   arm64   UCP sdk build
-ii  hobot-ethercat       5.1.0-...   arm64   Ethercat IgH Package
-...
+ii  hobot-audio-config   5.0.0       arm64   Configuration files of audio hat
+ii  hobot-camera         5.1.0       arm64   Camera Sensor Support Package
+ii  hobot-configs         5.1.0       arm64   Hobot custom system configuration
+ii  hobot-dnn             5.1.0       arm64   UCP sdk build
+ii  hobot-ethercat       5.1.0       arm64   Ethercat IgH Package
 ```
 
 These are system-level packages for BPU runtime, camera, audio, and so on. **Do not uninstall them at will**; otherwise, board capabilities will be affected.

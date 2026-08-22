@@ -66,5 +66,6 @@ screen /dev/ttyUSB0 921600
 
 - [远程登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
 - [用户与权限管理](./14_user_permission.md)
+- [UART 驱动调试指南](../07_Advanced_development/04_driver_development/02_driver_uart_dev.md)
 - [配置 U-Boot 和 Kernel 选项参数（进阶）](../07_Advanced_development/04_driver_development/01_uboot_kernel_config.md)
 - [系统日志查看](./15_system_log.md)

@@ -14,13 +14,13 @@ Ubuntu 系统添加开机自启动的方式有多种，推荐用 systemd 自定�
 systemctl list-unit-files --state=enabled --type=service
 ```
 
-RDK S600 实测（部分）：
+RDK S600 实测（节选）：
 
 ```text
-accounts-daemon.service   enabled
-apparmor.service           enabled
-bluetooth.service          enabled
-...
+UNIT FILE                              STATE
+accounts-daemon.service                enabled
+apparmor.service                       enabled
+bluetooth.service                      enabled
 ```
 
 ## 方法一：systemd 自定义服务（推荐）

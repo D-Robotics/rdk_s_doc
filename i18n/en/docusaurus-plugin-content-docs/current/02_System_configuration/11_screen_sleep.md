@@ -46,10 +46,11 @@ xset s noblank
 The kernel framebuffer console blanks the screen after 10 minutes by default. To disable it:
 
 ```bash
-# Temporary
+# Temporarily disable blanking
 setterm --blank 0
-# Permanent: add consoleblank=0 to the kernel command line (see config.txt configuration)
 ```
+
+To disable it permanently, add `consoleblank=0` to the kernel command line; see [config.txt Configuration](./05_config_txt/01_usage.md).
 
 The RDK S600 board uses the serial console by default (`console=ttyS0` in the output of `cat /proc/cmdline`), so there is no framebuffer console and no screen blanking handling is needed; for a desktop environment with a monitor connected, configure it as described in the previous section.
 

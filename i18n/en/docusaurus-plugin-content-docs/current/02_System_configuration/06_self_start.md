@@ -14,13 +14,13 @@ There are multiple ways to add boot auto-start on the Ubuntu system. Using a cus
 systemctl list-unit-files --state=enabled --type=service
 ```
 
-Measured on RDK S600 (partial):
+Measured on RDK S600 (excerpt):
 
 ```text
-accounts-daemon.service   enabled
-apparmor.service           enabled
-bluetooth.service          enabled
-...
+UNIT FILE                              STATE
+accounts-daemon.service                enabled
+apparmor.service                       enabled
+bluetooth.service                      enabled
 ```
 
 ## Method 1: Custom systemd Service (Recommended)

@@ -44,7 +44,7 @@ cat /sys/class/drm/card0-HDMI-A-1/status    # connected / disconnected
 cat /sys/class/drm/card0-HDMI-A-1/modes     # 支持的显示模式
 ```
 
-RDK S600 实测（HDMI-A-1 已连接，输出 1920x1080@60）：
+RDK S600 实测（HDMI-A-1 已连接，输出 1920x1080@60，节选）：
 
 ```text
 $ cat /sys/class/drm/card0-HDMI-A-1/status
@@ -56,7 +56,6 @@ $ cat /sys/class/drm/card0-HDMI-A-1/modes
 1440x900
 1280x800
 1280x720
-...
 ```
 
 Server 版控制台分辨率在 config.txt（见 [config.txt](./05_config_txt/01_usage.md)）里配置 `video=` 参数。

@@ -33,7 +33,7 @@ The factory default accounts and network of the development board are as follows
 
 ## Wired Network{#config_ethnet}
 
-### Wired Network Configuration - Network Manager Method
+### Wired Network Configuration - NetworkManager Method
 
 :::note Note
 
@@ -118,7 +118,7 @@ In the desktop environment, static IP and DNS can also be configured via the `Ne
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-sel-eth.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-3. Taking the modification of `Ethernet (eth1)` as an example, click the gear icon in the options to the right of the modify button, select `IPV4` in the window that pops up, choose `Manual` for manual configuration, and enter the `IP` address, mask, and gateway in the `Addresser` field below.
+3. Taking the modification of `Ethernet (eth1)` as an example, click the gear icon in the options to the right of the modify button, select `IPv4` in the window that pops up, choose `Manual` for manual configuration, and enter the `IP` address, mask, and gateway in the `Addresses` field below.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_ip.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -149,7 +149,7 @@ If there is no network configuration entry in the configuration file under the /
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel-eth.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-3. Taking the modification of `Ethernet (eth1)` as an example, click the gear icon in the options to the right of the modify button, select `IPV4` in the window that pops up, choose `Manual` for manual configuration, and enter the `IP` address, mask, and gateway in the `Addresser` field below.
+3. Taking the modification of `Ethernet (eth1)` as an example, click the gear icon in the options to the right of the modify button, select `IPv4` in the window that pops up, choose `Manual` for manual configuration, and enter the `IP` address, mask, and gateway in the `Addresses` field below.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_ip.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -166,7 +166,7 @@ If there is no network configuration entry in the configuration file under the /
 
 ## Wireless Network
 
-The development board needs to be equipped with a wireless Wi-Fi module, which supports both Soft AP and Station modes and runs in Station mode by default. The usage of the two modes is described below.
+The development board needs to be equipped with a wireless Wi-Fi module and runs in Station mode by default. Soft AP mode is currently unavailable; the Station mode usage is described below.
 
 ### Station Mode
 
@@ -203,8 +203,7 @@ In Station mode, the development board acts as a client, connecting to the route
 ### Soft AP Mode
 
 :::tip
-Wi-Fi AP mode is currently unavailable
-Continuously updating...
+Wi-Fi AP mode is currently unavailable and is being continuously updated.
 :::
 
 <!-- The development board's wireless network runs in Station mode by default. If you need to use Soft AP mode, follow the steps below to configure it.
@@ -394,22 +393,31 @@ to check the active DNS servers.
 
 Proxy configuration refers to setting up a network proxy. In network communication, a proxy server acts as an intermediary layer between the client and the target server. The client's request is first sent to the proxy server, which then forwards it to the target server. The target server's response is also returned to the client through the proxy server.
 
-Edit the `~/.bashrc` or `/etc/environment` file. If configuring the proxy for the current user, edit `~/.bashrc`; if configuring the proxy for all users, edit `/etc/environment`.
+Edit the `~/.bashrc` or `/etc/environment` file; the two differ in syntax and in how they take effect:
 
-Add the following content to the file (using HTTP proxy as an example):
+- To configure the proxy for the current user, edit `~/.bashrc`. Variables must have the `export` prefix, otherwise child processes (such as `apt` and `curl`) cannot read the proxy settings:
 
-```
-http_proxy=http://proxy_server_address:port
-https_proxy=http://proxy_server_address:port
-ftp_proxy=http://proxy_server_address:port
-no_proxy=localhost,127.0.0.1
-```
+  ```bash
+  export http_proxy=http://proxy_server_address:port
+  export https_proxy=http://proxy_server_address:port
+  export ftp_proxy=http://proxy_server_address:port
+  export no_proxy=localhost,127.0.0.1
+  ```
 
-After saving the file, run the following command to apply the configuration:
+  After saving, run the following command to apply the configuration:
 
-```
-source ~/.bashrc
-```
+  ```bash
+  source ~/.bashrc
+  ```
+
+- To configure the proxy for all users, edit `/etc/environment` and write variables directly in `KEY=VALUE` form (without `export`). This file is read by PAM at login and takes effect after re-login; running `source ~/.bashrc` does not apply it:
+
+  ```bash
+  http_proxy=http://proxy_server_address:port
+  https_proxy=http://proxy_server_address:port
+  ftp_proxy=http://proxy_server_address:port
+  no_proxy=localhost,127.0.0.1
+  ```
 
 ### Configuring Proxy via GUI{#gui_proxy}
 
@@ -465,3 +473,5 @@ For system software package upgrades and major version/firmware updates, see [Sy
 - [Bluetooth Configuration](./02_bluetooth_config.md)
 - [System Update](./03_system_update/02_upgrade_firmware.md)
 - [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
+- [Wi-Fi Driver Debug Guide](../07_Advanced_development/04_driver_development/11_driver_wifi.md)
+- [Ethernet](../07_Advanced_development/04_driver_development/16_driver_ethernet/01_ethernet.md)

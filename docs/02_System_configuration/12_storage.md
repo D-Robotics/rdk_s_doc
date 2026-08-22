@@ -21,7 +21,7 @@ Filesystem                                              Size  Used Avail Use% Mo
 /dev/disk/by-partuuid/1993ccc4-e089-b84e-b2d5-193a1bc4b7f3  45G  9.8G  33G  23% /
 ```
 
-rootfs 45G、已用 9.8G（23%），剩余 33G。占用高时清理 apt 缓存（`apt clean`）或日志（`journalctl --vacuum-size`）。
+rootfs 45G、已用 9.8G（23%），剩余 33G。占用高时清理 apt 缓存（`apt clean`）或日志（`journalctl --vacuum-size=100M`）。
 
 ## 查看块设备
 
@@ -61,8 +61,8 @@ RDK S600 用 SSD（`sda`）启动，分区含引导（sda1~sda4）、内核/DTB�
 # 查看已挂载
 mount | grep -E "sd|mmc"
 
-# 挂载 U 盘
-sudo mount /dev/sdb1 /mnt
+# 挂载 U 盘（先 lsblk 确认设备名；sdb/sdc 为板载 4M 存储，U 盘通常为 sdd 及之后）
+sudo mount /dev/sdd1 /mnt
 
 # 卸载
 sudo umount /mnt
@@ -70,16 +70,19 @@ sudo umount /mnt
 
 ## rootfs 扩容
 
-若 rootfs 未占满整个分区，可扩展：
+`resize2fs` 把文件系统扩展到所在分区上限（文件系统未占满分区时使用）；`growpart` 把分区扩展到磁盘的未分配空间（分区后仍有空闲空间时使用，扩分区后需再跑 `resize2fs`）：
 
 ```bash
-sudo resize2fs /dev/<rootfs分区>      # ext4
-# 或对齐到分区上限
+# 将 ext4 文件系统扩展到分区上限
+sudo resize2fs /dev/<rootfs分区>
+
+# 分区后仍有未分配空间时，先扩分区，再扩文件系统
 sudo growpart /dev/sda <分区号>
+sudo resize2fs /dev/<rootfs分区>
 ```
 
 :::warning
-操作分区有数据丢失风险，先 `df`/`lsblk` 确认目标分区，必要时备份。
+操作分区有数据丢失风险，先 `df`/`lsblk` 确认目标分区，必要时备份。本机 rootfs 位于 sda17（最后一个分区），其后已无未分配空间，无法用 `growpart` 扩展，仅当存在未分配空间时可用。
 :::
 
 ## 相关文档

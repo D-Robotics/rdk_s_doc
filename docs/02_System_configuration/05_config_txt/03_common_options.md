@@ -42,7 +42,7 @@ description: "RDK config.txt 常用配置项速查表"
 > 显示输出接口（DSI/HDMI）通过 [srpi-config](../04_srpi_config/01_overview.md)
 > 的 Display Options 配置，不在 config.txt 中配置。
 
-> 配置项的完整列表和新增配置项的开发方法见 [config.txt 解析开发指南](./05_parser_dev.md)。
+> 新增配置项的开发方法与解析机制见 [config.txt 解析开发指南](./05_parser_dev.md)。
 
 ## 相关文档
 

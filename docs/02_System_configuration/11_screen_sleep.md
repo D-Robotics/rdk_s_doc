@@ -46,10 +46,11 @@ xset s noblank
 内核帧缓冲控制台默认 10 分钟后黑屏，关闭：
 
 ```bash
-# 临时
+# 临时关闭息屏
 setterm --blank 0
-# 永久：内核命令行加 consoleblank=0（见 config.txt 配置）
 ```
+
+永久关闭需在内核命令行加 `consoleblank=0`，方法见 [config.txt 配置](./05_config_txt/01_usage.md)。
 
 RDK S600 板默认走串口控制台（`cat /proc/cmdline` 中 `console=ttyS0`），无帧缓冲控制台，无需处理息屏；接显示器的桌面环境按上一节配置。
 

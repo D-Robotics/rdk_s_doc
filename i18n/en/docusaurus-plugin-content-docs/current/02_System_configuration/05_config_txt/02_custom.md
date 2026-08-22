@@ -6,7 +6,7 @@ description: "How to create and modify the RDK config.txt configuration file"
 
 # Customizing config.txt
 
-config.txt is the boot configuration file of the RDK. It is used to configure kernel boot parameters, DTS nodes, display options and so on at the U-Boot stage, allowing you to adjust system behavior without recompiling the firmware.
+config.txt is the boot configuration file of the RDK. It is used to configure kernel boot parameters, DTS nodes, DTB Overlay and so on at the U-Boot stage, allowing you to adjust system behavior without recompiling the firmware.
 
 ## File Location
 
@@ -21,9 +21,8 @@ The default path of config.txt is `/boot/config.txt`, located on the boot partit
 
 ```text
 # This is a comment
-bootargs=isolcpus=1-2 loglevel=8
-hdmi_group=2
-hdmi_mode=82
+bootargs=isolcpus=1-2
+loglevel=8
 ```
 
 ## How to Modify
@@ -46,11 +45,11 @@ reboot
 
 ### Method 2: Via the U-Boot Command Line
 
-Press any key at boot time to enter the U-Boot command line, and use `setenv` for temporary modification (higher priority than config.txt):
+Press any key at boot time to enter the U-Boot command line, and use `setenv` for temporary modification (higher priority than config.txt). Unlike the append semantics of the config.txt `bootargs=` key, `setenv bootargs` replaces the environment variable entirely, overwriting the default cmdline (key parameters such as `root=` and `console=`); to append parameters, reference the existing value:
 
 ```text
-# U-Boot command line
-setenv bootargs 'isolcpus=1-2 loglevel=8'
+# U-Boot command line (append kernel parameters, keeping the default cmdline)
+setenv bootargs ${bootargs} isolcpus=1-2 loglevel=8
 boot
 ```
 

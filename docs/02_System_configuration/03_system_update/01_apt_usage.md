@@ -10,15 +10,14 @@ RDK OS 基于 Ubuntu，用 `apt` 管理软件包。系统已配置 D-Robotics �
 
 ## 软件包源
 
-查看当前 apt 源（`apt policy`，RDK S600 实测）：
+查看当前 apt 源（`apt policy`，RDK S600 实测，节选）：
 
 ```text
 Package files:
  100 /var/lib/dpkg/status
  500 http://archive.d-robotics.cc/ubuntu-rdk-s600-beta noble/main arm64 Packages
-     release o=D-Robotics RDK S600 APT Repo,n=noble,...
+     release o=D-Robotics RDK S600 APT Repo,n=noble
  500 http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports noble/multiverse arm64 Packages
-     ...
 ```
 
 - `archive.d-robotics.cc/ubuntu-rdk-s600-beta`：D-Robotics RDK S600 专属包（`hobot-*` 系列）。
@@ -64,15 +63,14 @@ sudo apt full-upgrade         # 升级并处理依赖变化
 
 ## RDK 专属包
 
-RDK 板端预装一批 `hobot-*` 包（`dpkg -l | grep hobot`，S600 实测）：
+RDK 板端预装一批 `hobot-*` 包（`dpkg -l | grep hobot`，S600 实测，节选）：
 
 ```text
-ii  hobot-audio-config   5.0.0-...   arm64   Configuration files of audio hat
-ii  hobot-camera         5.1.0-...   arm64   Camera Sensor Support Package
-ii  hobot-configs         5.1.0-...   arm64   Hobot custom system configuration
-ii  hobot-dnn             5.1.0-...   arm64   UCP sdk build
-ii  hobot-ethercat       5.1.0-...   arm64   Ethercat IgH Package
-...
+ii  hobot-audio-config   5.0.0       arm64   Configuration files of audio hat
+ii  hobot-camera         5.1.0       arm64   Camera Sensor Support Package
+ii  hobot-configs         5.1.0       arm64   Hobot custom system configuration
+ii  hobot-dnn             5.1.0       arm64   UCP sdk build
+ii  hobot-ethercat       5.1.0       arm64   Ethercat IgH Package
 ```
 
 这些是 BPU 运行时、相机、音频等系统级包，**勿随意卸载**，否则影响板端能力。

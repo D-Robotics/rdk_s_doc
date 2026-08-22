@@ -39,7 +39,7 @@ hci0:   Type: Primary  Bus: USB
 
 `bluetoothctl` 是交互式命令行工具（版本 5.72）：
 
-```bash
+```text
 bluetoothctl
 # 进入交互后：
 [bluetooth]# power on               # 开电源
@@ -53,7 +53,7 @@ bluetoothctl
 [bluetooth]# quit
 ```
 
-配对时双方需确认 PIN 或一致码。成功后设备列入 `bluetoothctl devices`。
+配对时双方需确认 PIN 或配对码。成功后设备列入 `bluetoothctl devices`。
 
 ## 已配对/连接设备
 
@@ -75,7 +75,7 @@ HID 类设备（键鼠）通常由外设主动发起重连；如需调整重连�
 
 - **`rfkill` 显示 blocked**：`sudo rfkill unblock bluetooth`；部分板子有硬件开关需手动打开。
 - **扫描不到设备**：确认对端可发现；`hciconfig` 是否 `UP`；USB 适配器是否被识别（`lsusb`）。
-- **配对后无法连接**：`trust` 该设备；音频设备需额外配 pulseaudio/pipewire profile。
+- **配对后无法连接**：`trust` 该设备；音频设备需额外配 PulseAudio/PipeWire profile。
 - **开机不自动重连**：检查 `/etc/bluetooth/main.conf` 的 `ReconnectAttempts`、
   `ReconnectIntervals`（默认注释）；HID 设备可尝试由外设主动发起连接。
 

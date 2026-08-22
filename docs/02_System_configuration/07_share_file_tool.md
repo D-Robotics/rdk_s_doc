@@ -97,7 +97,7 @@ RDK OS 默认未安装 ufw（板端 `ufw` 命令不存在），本步骤仅在�
 
 NFS（Network File System）即网络文件系统，NFS 采用经典的客户端 - 服务器（C/S）架构。服务器负责管理和存储共享的文件与目录，客户端则通过网络请求访问这些资源。
 
-本章节介绍 Ubuntu 22.04/24.04 作为 NFS 客户端使用的教程
+本章节介绍 Ubuntu 22.04/24.04 作为 NFS 客户端使用的教程。
 
 **使用前提：** 已搭建好 NFS 服务
 
@@ -122,14 +122,15 @@ sudo mkdir -p /userdata/windows_nfs_share
 
 ```bash
 sudo mount -v -t nfs -o vers=3,proto=tcp 192.168.127.11:/D/NFSShare /userdata/windows_nfs_share
-
-解析：
--v       ：verbose，显示详细挂载过程
--t nfs   ：指定文件系统类型为 NFS
--o       ：指定挂载选项
-vers=3   ：使用 NFSv3 协议
-proto=tcp：使用 TCP 传输
 ```
+
+参数解析：
+
+- `-v`：verbose，显示详细挂载过程
+- `-t nfs`：指定文件系统类型为 NFS
+- `-o`：指定挂载选项
+- `vers=3`：使用 NFSv3 协议
+- `proto=tcp`：使用 TCP 传输
 
 4. 验证挂载
 
@@ -138,9 +139,9 @@ proto=tcp：使用 TCP 传输
 mount | grep windows_nfs_share
 ```
 
-如果在输出中看到 192.168.127.11:/D:/NFSShare 被挂载到 /userdata/windows_nfs_share，则表示挂载成功。
+如果在输出中看到 192.168.127.11:/D/NFSShare 被挂载到 /userdata/windows_nfs_share，则表示挂载成功。
 
-5. 设置开机自动挂载(可选)
+5. 设置开机自动挂载（可选）
 
 为了使 Ubuntu 在每次开机时自动挂载 NFS 共享目录，可以执行下面命令：
 
@@ -178,7 +179,7 @@ mount | grep windows_nfs_share
       systemctl start mount-windows-nfs.service
       ```
 
-   - 保存并退出编辑器。
+   - 服务文件已由上方 `cat` heredoc 直接写入，无需再打开编辑器。
 
 ## 相关文档
 

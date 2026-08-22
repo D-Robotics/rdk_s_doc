@@ -6,7 +6,7 @@ description: "RDK config.txt 启动相关配置项"
 
 # 启动相关配置
 
-本页列出 config.txt 中与系统启动相关的配置项，包括内核 cmdline、启动介质选择和 AB 启动。修改方法见 [自定义 config.txt](./02_custom.md)。
+本页列出 config.txt 中与系统启动相关的配置项，包括内核 cmdline 和启动介质选择。修改方法见 [自定义 config.txt](./02_custom.md)。
 
 ## 内核 cmdline（bootargs）
 

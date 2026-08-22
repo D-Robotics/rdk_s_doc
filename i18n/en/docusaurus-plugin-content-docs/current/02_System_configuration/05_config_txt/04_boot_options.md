@@ -6,7 +6,7 @@ description: "Boot-related configuration options for RDK config.txt"
 
 # Boot-related Configuration
 
-This page lists the configuration options related to system boot in config.txt, including kernel cmdline, boot medium selection and AB boot. For how to modify, see [Customizing config.txt](./02_custom.md).
+This page lists the configuration options related to system boot in config.txt, including kernel cmdline and boot medium selection. For how to modify, see [Customizing config.txt](./02_custom.md).
 
 ## Kernel cmdline (bootargs)
 
