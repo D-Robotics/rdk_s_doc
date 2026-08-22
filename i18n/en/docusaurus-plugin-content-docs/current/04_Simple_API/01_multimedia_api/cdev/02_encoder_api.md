@@ -25,7 +25,7 @@ The `ENCODER` API provides the following interfaces:
 
 :::warning Note
 
-The image to be encoded requires 16-bit alignment on RDK X5, while RDK X3 allows 8/16-bit alignment.
+The width of the image to be encoded must be aligned to 16 bytes (verified on S100: width aligned to 16 bytes and height to 2 — see the alignment notes in the [VIO API](./01_vio_api.md); S600 alignment requirements pending board verification).
 
 :::
 

@@ -30,6 +30,10 @@ sidebar_position: 9
 
 **4.** Compile single-core and multi-core performance programs with `-O3` optimization.
 
+<DocScope products="RDK S100">
+
+The S100 platform features a 6-core Cortex-A78AE; use `-mcpu=cortex-a78` and `-DMULTITHREAD=6`:
+
 Command to compile single-core CoreMark with `-O3` optimization:
 
 ```shell
@@ -46,9 +50,35 @@ make  XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 
 mv coremark.exe coremark_O3_multi
 ```
 
+</DocScope>
+
+<DocScope products="RDK S600">
+
+The S600 platform features an 18-core Cortex-A78AE; use `-mcpu=cortex-a78` and `-DMULTITHREAD=18`:
+
+Command to compile single-core CoreMark with `-O3` optimization:
+
+```shell
+make XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78" REBUILD=1 run1.log
+
+mv coremark.exe coremark_O3_single
+```
+
+Command to compile 18-core CoreMark with `-O3` optimization:
+
+```shell
+make  XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=18 -DUSE_PTHREAD -lrt -pthread" REBUILD=1 run2.log
+
+mv coremark.exe coremark_O3_multi
+```
+
+</DocScope>
+
 
 **Check CPU operating frequency and temperature:**  
 Use the command `hrut_somstatus` to view frequency and temperature information for modules such as CPU, MCU, and BPU:
+
+<DocScope products="RDK S100">
 
 ```shell
 temperature-->
@@ -116,7 +146,42 @@ bpu status information---->
         bpu0:   0
 ```
 
-**Manually set CPU frequency:**  
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```shell
+temperature-->
+        pvt_cmn_pvtc1_t1 : 44.944 (C)
+        pvt_cmn_pvtc1_t2 : 44.616 (C)
+        pvt_ddr_pvtc4_t1 : 45.268 (C)
+        pvt_bpu_pvtc1_t1 : 44.287 (C)
+        pvt_bpu_pvtc1_t2 : 43.799 (C)
+        ...
+voltage-->
+        VDD_CPU   : 901.0 (mV)
+        VDD_BPUL  : 819.0 (mV)
+        VDD_BPUR  : 819.0 (mV)
+        VDDQ_DDR0n1 : 501.0 (mV)
+        ...
+cpu frequency-->
+                  min   cur     max
+        policy0:  525000 2100000 2100000
+        policy2:  525000 2100000 2100000
+        policy6:  525000 2100000 2100000
+        policy10: 525000 2100000 2100000
+        policy14: 525000 2100000 2100000
+bpu status information---->
+                ratio
+        bpu0:   0
+```
+
+</DocScope>
+
+**Manually set CPU frequency:**
+
+<DocScope products="RDK S100">
+
 Set the CPU to run in performance mode using the following commands:
 
 ```shell
@@ -124,7 +189,21 @@ echo userspace >/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 ```
 
+</DocScope>
+
+<DocScope products="RDK S600">
+
+Set the CPU to run in performance mode using the following command (max frequency of each S600 policy is 2100000 kHz):
+
+```shell
+echo performance >/sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+```
+
+</DocScope>
+
 ## Test Procedure
+
+<DocScope products="RDK S100">
 
 **1. Run single-core test (`coremark_O3_single`)**
 
@@ -227,6 +306,30 @@ CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static
 - **`Compiler flags`**: Compiler options used during compilation; here, `-O3` and `-lrt`.
 - **`CoreMark 1.0`**: A summary of key information. The value 84290.380360 is the CoreMark performance score, representing iterations per second. A higher value indicates stronger processor performance.
 
+</DocScope>
+
+<DocScope products="RDK S600">
+
+**1. Run single-core test (`coremark_O3_single`)**
+
+After ensuring consistency with the preparation steps above, execute the command:
+
+```shell
+./coremark_O3_single
+```
+
+**2. Run multi-core test (`coremark_O3_multi`)**
+
+After ensuring consistency with the preparation steps above, execute the command:
+
+```shell
+./coremark_O3_multi
+```
+
+Board-measured output for S600 is not yet recorded here; capture and backfill from an actual run (see the S100 blocks above for output format).
+
+</DocScope>
+
 ## Test Metrics
 
 The following metrics should be measured under an idle system and averaged over multiple runs. The standard CoreMark scoring formula is:
@@ -239,8 +342,26 @@ The following metrics should be measured under an idle system and averaged over 
 
 ### Scoring Criteria
 
+<DocScope products="RDK S100">
+
 - CoreMark with `-O3` optimization: On the S100 platform, the single-core score should exceed X > 4.2.
 - CoreMark with `-O2` optimization: On the S100 platform, the single-core score should exceed X > 4.2.
+
+Based on the single-core test result under `-O3` optimization: CoreMark Iterations/Sec = 14481 iterations/second, CPU Clock (MHz) = 1500 MHz, CPU Cores = 1 (single-core test), the CoreMark Score is calculated as `CoreMark Score = 14481 / (1500 x 1) = 9.65`, which significantly exceeds the standard `-O3` single-core baseline (4.2), demonstrating excellent performance.
+
+Based on the multi-core test result under `-O3` optimization: CoreMark Iterations/Sec = 84290 iterations/second, CPU Clock (MHz) = 1500 MHz, CPU Cores = 8 (multi-core test; legacy measurement under the old 8-core A55 configuration — S100 is actually 6x A78AE, to be re-measured), the CoreMark Score is calculated as `CoreMark Score = 84290 / (1500 x 8) = 7.03` (legacy configuration), which also far surpasses the `-O3` multi-core baseline (4.2), indicating strong overall system computational capability.
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+The S600 platform features an 18-core Cortex-A78AE (CPU Clock = 2100 MHz). Board-measured:
+
+Based on the single-core test result under `-O3` optimization: CoreMark Iterations/Sec = 18258 iterations/second, CPU Clock (MHz) = 2100 MHz, CPU Cores = 1 (single-core test), the CoreMark Score is calculated as `CoreMark Score = 18258 / (2100 x 1) = 8.69`.
+
+Based on the multi-core test result under `-O3` optimization: CoreMark Iterations/Sec = 320684 iterations/second, CPU Clock (MHz) = 2100 MHz, CPU Cores = 18 (multi-core test), the CoreMark Score is calculated as `CoreMark Score = 320684 / (2100 x 18) = 8.48`.
+
+</DocScope>
 
 ### Understanding the Scoring Criteria
 
@@ -248,22 +369,6 @@ These two scoring criteria (for `-O3` and `-O2`) establish minimum performance r
 
 - `-O3` optimization represents the highest optimization level in GCC and other compilers, employing aggressive optimization strategies to maximize execution speed. This level enables numerous performance-enhancing features such as loop unrolling and function inlining, aiming for peak computational performance.
 - `-O2` optimization is a more conservative level. Compared to `-O3`, `-O2` avoids certain aggressive optimizations that might significantly increase code size. Thus, `-O2` typically delivers a more balanced performance, maintaining both efficiency and portability.
-
-Based on the single-core test result under `-O3` optimization:  
-CoreMark Iterations/Sec = 14,481 iterations/second,  
-CPU Clock (MHz) = 1500 MHz,  
-CPU Cores = 1 (single-core test),  
-the CoreMark Score is calculated as:  
-`CoreMark Score = 14481 / (1500 × 1) = 9.65`,  
-which significantly exceeds the standard `-O3` single-core baseline (4.2), demonstrating excellent performance.
-
-Based on the multi-core test result under `-O3` optimization:  
-CoreMark Iterations/Sec = 84,290 iterations/second,  
-CPU Clock (MHz) = 1500 MHz,  
-CPU Cores = 8 (multi-core test),  
-the CoreMark Score is calculated as:  
-`CoreMark Score = 84290 / (1500 × 8) ≈ 7 (legacy measurement under the old 8-core A55 configuration; S100 is actually 6x A78AE, to be re-measured).03`,  
-which also far surpasses the `-O3` multi-core baseline (4.2), indicating strong overall system computational capability.
 
 ## FAQ
 
