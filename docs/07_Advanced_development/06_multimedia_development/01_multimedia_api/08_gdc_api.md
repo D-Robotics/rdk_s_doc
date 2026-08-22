@@ -12,11 +12,27 @@ description: "RDK S100/S600 GDC 畸变矫正配置"
 
 GDC（Geometric Distortion Correction，畸变矫正）用于相机图像的几何畸变矫正与拼接。GDC 无独立函数 API，通过配置结构体（板端 `hb_gdc_cfg.h` 的 `gdc_config_t`/`gdc_settings_t`）描述输入/输出几何，配置 binary 由 `hbn_gen_gdc_cfg` 生成（见 5.5.1.6 VPF/PYM），经 HBN vnode 的 GDC 通道（`hbn_vnode_set_ochn_attr`）设入。
 
+:::info 注意
+
+GDC 模块的输入为 VPF/PYM 的输出，输出接后续处理（VENC/VOT 等），其畸变参数（网格映射表）由 `hbn_gen_gdc_cfg` 根据输入/输出几何与畸变模型生成，使用中不直接手写 binary。
+:::
+
 ## 软件抽象
 
 - `gdc_config_t`：GDC 单路配置——输入/输出宽高、stride、plane 数、分割模式（`div_width`/`div_height`）、`sequential_mode` 等。
 - `gdc_settings_t`：GDC 设置——`gdc_config_t` 数组 + 配置 binary 的 ion share id（`binary_ion_id`）与物理地址偏移（`binary_offset`）。
 - 配置 binary 由 `hbn_gen_gdc_cfg`（`hbn_vpf_interface.h`）根据 `param_t`/`window_t` 生成，`hbn_free_gdc_cfg` 释放。
+
+## 配置项说明
+
+| 结构体 | 关键字段 | 说明 |
+|---|---|---|
+| `gdc_config_t` | 输入/输出宽高、stride、plane 数 | 描述单路 GDC 处理的输入/输出几何 |
+| `gdc_config_t` | `div_width` / `div_height` | 分割模式，控制 GDC 图像分割 |
+| `gdc_config_t` | `sequential_mode` | 顺序处理模式开关 |
+| `gdc_settings_t` | `gdc_config_t` 数组 | 多路 GDC 配置集合 |
+| `gdc_settings_t` | `binary_ion_id` | 配置 binary 的 ion share id |
+| `gdc_settings_t` | `binary_offset` | 配置 binary 的物理地址偏移 |
 
 ## API 调用流程
 
@@ -64,7 +80,19 @@ hbn_vnode_start(gdc_fd);
 
 > 板端 GDC 相关示例：`sample_gdc/3-gdc_static_valid`（静态畸变矫正验证）、`4-gdc_stress_test`（压测）、`5-gdc_equisolid`（等距投影）、`6-gdc_transformation`（几何变换）。
 
+## 常见问题
+
+### GDC 配置 binary 如何生成？
+
+配置 binary 由板端 `hbn_gen_gdc_cfg`（`hbn_vpf_interface.h`）根据输入/输出几何参数与畸变模型生成，使用完毕后需 `hbn_free_gdc_cfg` 释放，避免内存泄漏。
+
+### GDC 无独立函数 API 如何接入 pipeline？
+
+GDC 不提供独立函数接口，通过配置结构体 `gdc_settings_t` 承载 binary 的 ion share id 与物理地址偏移，经 HBN vnode 的 `hbn_vnode_set_ochn_attr` 设入 GDC 通道，再 `hbn_vnode_start` 启动。
+
 ## 相关文档
 
-- [VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)（`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`）
-- [HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)（vnode 通道绑定）
+- [VPF/PYM](./06_vpf_pym_api.md)（`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`）
+- [HBN](./01_hbn_api.md)（vnode 通道绑定）
+- 简易接口（模式 1）：[VIO](/Simple_API/multimedia_api/cdev/vio_api)
+- 板端示例：见 `sample_gdc`
