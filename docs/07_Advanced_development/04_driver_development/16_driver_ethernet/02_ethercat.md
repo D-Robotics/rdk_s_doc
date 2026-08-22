@@ -4,6 +4,8 @@ title: "EtherCAT"
 description: "EtherCAT"
 ---
 
+# EtherCAT
+
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```

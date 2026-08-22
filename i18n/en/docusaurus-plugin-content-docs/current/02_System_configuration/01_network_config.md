@@ -100,6 +100,70 @@ The `RDK S100` desktop version uses the `NetworkManager + Netplan` network frame
 You can also directly edit the `.nmconnection` files in this directory; after editing, run `sudo nmcli connection reload` and `sudo nmcli connection up [connection_name]` to apply the configuration.
 :::
 
+### Configuring Static IP and DNS via GUI{#gui_static_ip}
+
+In the desktop environment, static IP and DNS can also be configured via the `Network` panel of the system `settings` application, equivalent to the command-line methods above.
+
+<DocScope products="RDK S100">
+
+#### S100 Steps
+
+1. After entering the desktop, click the bottom-left corner to open the application list, select the `settings` application, and select `Network` in the window that pops up.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-show-app.jpg" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+2. `Ethernet (eth0)` and `Ethernet (eth1)` correspond to different physical network port configurations respectively. The correspondence between configuration and physical ports is as follows:
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-phy-eth.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-sel-eth.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. Taking the modification of `Ethernet (eth1)` as an example, click the gear icon in the options to the right of the modify button, select `IPV4` in the window that pops up, choose `Manual` for manual configuration, and enter the `IP` address, mask, and gateway in the `Addresser` field below.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_ip.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+4. Scroll down and enter the DNS configuration in the DNS field below.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_dns.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+5. To configure multiple IP addresses for one network interface, taking `Ethernet (eth1)` as an example, click the plus sign on the right. The IP address configuration is consistent with steps 3 and 4. After completing the configuration, make sure to select `eth1_cfg` so that the `√` option appears.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_netplan.jpg" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+If there is no network configuration entry in the configuration file under the /etc/netplan/ directory, the configuration interface is as follows.
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_only.jpg" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+#### S600 Steps
+
+1. After entering the desktop, click the bottom-left corner to open the application list, select the `settings` application, and select `Network` in the window that pops up.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-show-app.jpg" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+2. `Ethernet (eth0)`, `Ethernet (eth1)`, `Ethernet (eth2)`, and `Ethernet (eth3)` correspond to different physical network port configurations respectively. The correspondence between configuration and physical ports is as follows:
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-phy-eth.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel-eth.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. Taking the modification of `Ethernet (eth1)` as an example, click the gear icon in the options to the right of the modify button, select `IPV4` in the window that pops up, choose `Manual` for manual configuration, and enter the `IP` address, mask, and gateway in the `Addresser` field below.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_ip.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+4. Enter the DNS configuration in the DNS field below.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_dns.png" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+5. To configure multiple IP addresses for one network interface, taking `Ethernet (eth1)` as an example, click the plus sign on the right. The IP address configuration is consistent with steps 3 and 4. After completing the configuration, make sure to select `eth1_cfg` so that the `√` option appears.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel_ok.jpg" alt="Illustration of modifying static IP and DNS configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+
 ## Wireless Network
 
 The development board needs to be equipped with a wireless Wi-Fi module, which supports both Soft AP and Station modes and runs in Station mode by default. The usage of the two modes is described below.
@@ -346,6 +410,45 @@ After saving the file, run the following command to apply the configuration:
 ```
 source ~/.bashrc
 ```
+
+### Configuring Proxy via GUI{#gui_proxy}
+
+<DocScope products="RDK S100">
+
+#### S100 Steps
+
+Similar to modifying the static `IP`, the steps to modify the `Proxy` configuration are as follows:
+
+1. After entering the desktop, click the bottom-left corner to open the application list, select the `settings` application, and select `Network` in the window that pops up.
+
+2. Scroll down and click the gear icon of `Network Proxy` to enter the configuration.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-proxy.jpg" alt="Illustration of modifying Proxy configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. Fill in the required configuration in the window that pops up.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-proxy_set.png" alt="Illustration of modifying Proxy configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+#### S600 Steps
+
+Similar to modifying the static `IP`, the steps to modify the `Proxy` configuration are as follows:
+
+1. After entering the desktop, click the bottom-left corner to open the application list, select the `settings` application, and select `Network` in the window that pops up.
+
+2. Select `Proxy` and click to enter the configuration.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy.jpg" alt="Illustration of modifying Proxy configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. Fill in the required configuration in the window that pops up.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy_set_0.png" alt="Illustration of modifying Proxy configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy_set_1.png" alt="Illustration of modifying Proxy configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
 
 :::tip
 For system software package upgrades and major version/firmware updates, see [System Update](./03_system_update/02_upgrade_firmware.md).

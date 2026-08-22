@@ -44,7 +44,7 @@ The IP configurations for S600 and S100 are as follows:
 
 ## Code Path
 
-# Description of PWM Module Related Files
+## Description of PWM Module Related Files
 
 - `Config/McalCdd/gen_xxx/Pwm/src/Pwm_PBCfg.c`: Pre-compiled configuration source file for PWM in normal mode, containing specific configuration parameters for channels and instances (such as period, duty cycle, polarity, etc.).
 - `Config/McalCdd/gen_xxx/Pwm/inc`: Pre-compiled configuration header file, defining macro switches.
@@ -186,7 +186,7 @@ pwmtest 0 0 0x30d40 0x4000
 
 - Period Calculation
 
-PWM period = clock source frequency / period register value.
+PWM period = period register value / clock source frequency.
 
 Example: To output a wave with a period of 1000us, and the PWM clock source is 200Mhz by default, write 200000000/1000=200000 (0x30d40) into the register.
 

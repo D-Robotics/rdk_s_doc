@@ -100,6 +100,70 @@ nmcli device show eth1
 也可以直接编辑该目录中的 `.nmconnection` 文件；编辑完成后，执行 `sudo nmcli connection reload` 和 `sudo nmcli connection up [connection_name]` 使配置生效。
 :::
 
+### 通过图形界面配置静态 IP 与 DNS{#gui_static_ip}
+
+桌面环境下也可通过系统 `settings` 应用的 `Network` 面板完成静态 IP 与 DNS 配置，与上述命令行方式等效。
+
+<DocScope products="RDK S100">
+
+#### S100 操作步骤
+
+1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-show-app.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+2. `Ethernet (eth0)` 和`Ethernet (eth1)`分别对应不同的物理网口配置，配置与实物对应如下:
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-phy-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-sel-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. 以修改`Ethernet (eth1)` 为例,点击修改按钮右侧选项中的齿轮，在跳出来的界面中选择`IPV4`, 选择`Manual`手动配置，在下方`Addresser`栏中写入`IP`地址，掩码和网关。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_ip.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+4. 下拉，在下方 DNS 栏中输入 DNS 配置。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_dns.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+5. 一个网卡配置多个 ip 地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置 ip 地址和步骤3、4一致，完成配置后注意选中`eth1_cfg`出现`√`选项
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_netplan.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+若是/etc/netplan/目录下的配置文件中没有网络配置项，则配置界面如下。
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_only.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+#### S600 操作步骤
+
+1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-show-app.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+2. `Ethernet (eth0)` 、`Ethernet (eth1)`、`Ethernet (eth2)`和`Ethernet (eth3)`分别对应不同的物理网口配置，配置与实物对应如下:
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-phy-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. 以修改`Ethernet (eth1)` 为例,点击修改按钮右侧选项中的齿轮，在跳出来的界面中选择`IPV4`, 选择`Manual`手动配置，在下方`Addresser`栏中写入`IP`地址，掩码和网关。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_ip.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+4. 在下方 DNS 栏中输入 DNS 配置。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_dns.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+5. 一个网卡配置多个 ip 地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置 ip 地址和步骤3、4一致，完成配置后注意选中`eth1_cfg`出现`√`选项
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel_ok.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+
 ## 无线网络
 
 开发板需安装无线 Wi-Fi 模块，支持 Soft AP 和 Station 两种模式，默认运行在 Station 模式下。下面介绍两种模式的使用方法。
@@ -346,6 +410,45 @@ no_proxy=localhost,127.0.0.1
 ```
 source ~/.bashrc
 ```
+
+### 通过图形界面配置 Proxy{#gui_proxy}
+
+<DocScope products="RDK S100">
+
+#### S100 操作步骤
+
+与修改静态`IP`类似, 修改`Proxy`配置步骤如下:
+
+1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+
+2. 下拉选择`Network Proxy`的齿轮进入配置。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-proxy.jpg" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. 在跳出来的界面中填写所需配置即可。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-proxy_set.png" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+#### S600 操作步骤
+
+与修改静态`IP`类似, 修改`Proxy`配置步骤如下:
+
+1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+
+2. 选择`Proxy`点击进入配置。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy.jpg" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+3. 在跳转的界面中填写所需配置即可。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy_set_0.png" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy_set_1.png" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
 
 :::tip
 系统软件包升级与主版本/固件更新见 [系统更新](./03_system_update/02_upgrade_firmware.md)。

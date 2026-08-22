@@ -2,6 +2,8 @@
 sidebar_position: 2
 ---
 
+# EtherCAT
+
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```

@@ -1,1 +1,112 @@
-{"docs/02_System_configuration/01_network_config.md": {"pos": 1, "h1": "2.1 网络配置"}, "docs/02_System_configuration/02_bluetooth_config.md": {"pos": 2, "title": "2.2 蓝牙配置", "h1": "2.2 蓝牙配置"}, "docs/02_System_configuration/03_system_update/01_rdk_os_intro.md": {"pos": 1, "title": "2.3.1 RDK OS 介绍", "h1": "2.3.1 RDK OS 介绍"}, "docs/02_System_configuration/03_system_update/02_apt_usage.md": {"pos": 2, "title": "2.3.2 软件包管理 apt", "h1": "2.3.2 软件包管理 apt"}, "docs/02_System_configuration/03_system_update/03_upgrade_firmware.md": {"pos": 3, "title": "2.3.3 主版本升级与固件", "h1": "2.3.3 主版本升级与固件"}, "docs/02_System_configuration/04_srpi_config/_category_.json": {"catLabel": "2.4 srpi-config 工具配置", "pos": 4}, "docs/02_System_configuration/04_srpi_config/01_overview.md": {"pos": 1, "title": "2.4 srpi-config 工具配置", "h1": "2.4 srpi-config 工具配置"}, "docs/02_System_configuration/05_config_txt/01_usage.md": {"pos": 1, "h1": "2.5.1 config.txt 使用指南"}, "docs/02_System_configuration/05_config_txt/02_custom.md": {"pos": 2, "title": "2.5.2 自定义 config.txt", "h1": "2.5.2 自定义 config.txt"}, "docs/02_System_configuration/05_config_txt/03_common_options.md": {"pos": 3, "title": "2.5.3 常用配置项参考", "h1": "2.5.3 常用配置项参考"}, "docs/02_System_configuration/05_config_txt/04_boot_options.md": {"pos": 4, "title": "2.5.4 启动相关配置", "h1": "2.5.4 启动相关配置"}, "docs/02_System_configuration/05_config_txt/05_parser_dev.md": {"pos": 5, "title": "2.5.5 config.txt 解析开发指南", "h1": "2.5.5 config.txt 解析开发指南"}, "docs/02_System_configuration/06_gui_network_config.md": {"unlisted": true, "pos": 6}, "docs/02_System_configuration/06_self_start.md": {"pos": 6, "title": "2.6 开机自启动配置", "h1": "2.6 开机自启动配置"}, "docs/02_System_configuration/07_share_file_tool.md": {"pos": 7, "h1": "2.7 共享文件配置"}, "docs/02_System_configuration/08_frequency_management.md": {"pos": 8, "h1": "2.8 Thermal 和 CPU 频率管理"}, "docs/02_System_configuration/09_display_config.md": {"pos": 9, "title": "2.9 显示配置", "h1": "2.9 显示配置"}, "docs/02_System_configuration/10_audio_output.md": {"pos": 10, "title": "2.10 音频配置", "h1": "2.10 音频配置"}, "docs/02_System_configuration/11_screen_sleep.md": {"pos": 11, "title": "2.11 屏幕休眠与电源管理", "h1": "2.11 屏幕休眠与电源管理"}, "docs/02_System_configuration/12_storage.md": {"pos": 12, "title": "2.12 存储与磁盘管理", "h1": "2.12 存储与磁盘管理"}, "docs/02_System_configuration/13_rtc_ntp.md": {"pos": 13, "title": "2.13 时钟与 RTC 同步", "h1": "2.13 时钟与 RTC 同步"}, "docs/02_System_configuration/14_user_permission.md": {"pos": 14, "title": "2.14 用户与权限管理", "h1": "2.14 用户与权限管理"}, "docs/02_System_configuration/15_system_log.md": {"pos": 15, "title": "2.15 系统日志查看", "h1": "2.15 系统日志查看"}, "docs/02_System_configuration/16_debug_serial.md": {"pos": 16, "title": "2.16 调试串口", "h1": "2.16 调试串口"}}
+{
+  "docs/02_System_configuration/01_network_config.md": {
+    "pos": 1,
+    "h1": "2.1 网络配置"
+  },
+  "docs/02_System_configuration/02_bluetooth_config.md": {
+    "pos": 2,
+    "title": "2.2 蓝牙配置",
+    "h1": "2.2 蓝牙配置"
+  },
+  "docs/02_System_configuration/03_system_update/01_rdk_os_intro.md": {
+    "pos": 1,
+    "title": "2.3.1 RDK OS 介绍",
+    "h1": "2.3.1 RDK OS 介绍"
+  },
+  "docs/02_System_configuration/03_system_update/02_apt_usage.md": {
+    "pos": 2,
+    "title": "2.3.2 软件包管理 apt",
+    "h1": "2.3.2 软件包管理 apt"
+  },
+  "docs/02_System_configuration/03_system_update/03_upgrade_firmware.md": {
+    "pos": 3,
+    "title": "2.3.3 主版本升级与固件",
+    "h1": "2.3.3 主版本升级与固件"
+  },
+  "docs/02_System_configuration/04_srpi_config/_category_.json": {
+    "catLabel": "2.4 srpi-config 工具配置",
+    "pos": 4
+  },
+  "docs/02_System_configuration/04_srpi_config/01_overview.md": {
+    "pos": 1,
+    "title": "2.4 srpi-config 工具配置",
+    "h1": "2.4 srpi-config 工具配置"
+  },
+  "docs/02_System_configuration/05_config_txt/01_usage.md": {
+    "pos": 1,
+    "h1": "2.5.1 config.txt 使用指南"
+  },
+  "docs/02_System_configuration/05_config_txt/02_custom.md": {
+    "pos": 2,
+    "title": "2.5.2 自定义 config.txt",
+    "h1": "2.5.2 自定义 config.txt"
+  },
+  "docs/02_System_configuration/05_config_txt/03_common_options.md": {
+    "pos": 3,
+    "title": "2.5.3 常用配置项参考",
+    "h1": "2.5.3 常用配置项参考"
+  },
+  "docs/02_System_configuration/05_config_txt/04_boot_options.md": {
+    "pos": 4,
+    "title": "2.5.4 启动相关配置",
+    "h1": "2.5.4 启动相关配置"
+  },
+  "docs/02_System_configuration/05_config_txt/05_parser_dev.md": {
+    "pos": 5,
+    "title": "2.5.5 config.txt 解析开发指南",
+    "h1": "2.5.5 config.txt 解析开发指南"
+  },
+  "docs/02_System_configuration/06_self_start.md": {
+    "pos": 6,
+    "title": "2.6 开机自启动配置",
+    "h1": "2.6 开机自启动配置"
+  },
+  "docs/02_System_configuration/07_share_file_tool.md": {
+    "pos": 7,
+    "h1": "2.7 共享文件配置"
+  },
+  "docs/02_System_configuration/08_frequency_management.md": {
+    "pos": 8,
+    "h1": "2.8 Thermal 和 CPU 频率管理"
+  },
+  "docs/02_System_configuration/09_display_config.md": {
+    "pos": 9,
+    "title": "2.9 显示配置",
+    "h1": "2.9 显示配置"
+  },
+  "docs/02_System_configuration/10_audio_output.md": {
+    "pos": 10,
+    "title": "2.10 音频配置",
+    "h1": "2.10 音频配置"
+  },
+  "docs/02_System_configuration/11_screen_sleep.md": {
+    "pos": 11,
+    "title": "2.11 屏幕休眠与电源管理",
+    "h1": "2.11 屏幕休眠与电源管理"
+  },
+  "docs/02_System_configuration/12_storage.md": {
+    "pos": 12,
+    "title": "2.12 存储与磁盘管理",
+    "h1": "2.12 存储与磁盘管理"
+  },
+  "docs/02_System_configuration/13_rtc_ntp.md": {
+    "pos": 13,
+    "title": "2.13 时钟与 RTC 同步",
+    "h1": "2.13 时钟与 RTC 同步"
+  },
+  "docs/02_System_configuration/14_user_permission.md": {
+    "pos": 14,
+    "title": "2.14 用户与权限管理",
+    "h1": "2.14 用户与权限管理"
+  },
+  "docs/02_System_configuration/15_system_log.md": {
+    "pos": 15,
+    "title": "2.15 系统日志查看",
+    "h1": "2.15 系统日志查看"
+  },
+  "docs/02_System_configuration/16_debug_serial.md": {
+    "pos": 16,
+    "title": "2.16 调试串口",
+    "h1": "2.16 调试串口"
+  }
+}
