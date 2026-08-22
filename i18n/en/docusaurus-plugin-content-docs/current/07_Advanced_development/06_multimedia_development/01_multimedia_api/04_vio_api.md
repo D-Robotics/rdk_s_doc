@@ -8,6 +8,8 @@ description: "RDK S100/S600 5.5.1.4 VIO (Video Input/Output)"
 
 > **Level description**: This section covers the low-level multimedia API (board-side `hb_vio_interface.h`), a high-level pipeline API (X5 VIN → RDK VIO) that wraps the initialization, start/stop, and frame retrieval of the entire chain from sensor capture through VIN/ISP/PYM/GDC. It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3); if you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
+> **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
+
 ## Overview
 
 VIO (Video Input/Output) is the high-level RDK multimedia pipeline API (board header `hb_vio_interface.h`; X5 calls it VIN, RDK uses VIO). It wraps init, start/stop, parameter config and frame retrieval of the whole pipeline from sensor capture through VIN/ISP/PYM/GDC, as a convenience layer above HBN vnodes.

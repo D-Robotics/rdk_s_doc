@@ -8,6 +8,8 @@ description: "RDK S100/S600 5.5.1.3 Camera (Camera Interface)"
 
 > **Level description**: This chapter covers the low-level multimedia API (board-side `hb_camera_interface.h`), i.e. the Camera capture entry API (function names `hbn_camera_*`), the frontmost stage of the pipeline. It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
+> **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
+
 ## Overview
 
 Camera is the capture entry of the RDK multimedia pipeline (board header `hb_camera_interface.h`, functions `hbn_camera_*`). It wraps sensor config, channel initialization and VIN binding, forming a vflow with HBN vnodes (VIN/ISP/PYM).

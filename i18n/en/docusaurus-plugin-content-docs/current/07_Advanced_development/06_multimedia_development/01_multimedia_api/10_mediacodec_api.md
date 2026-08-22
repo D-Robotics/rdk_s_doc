@@ -8,6 +8,8 @@ description: RDK S100/S600 5.5.1.10 MediaCodec (codec)
 
 > **Level description**: This chapter covers the [Low-level Multimedia API] (board header `hb_media_codec.h`), the audio/video codec API (X5 Codec → RDK MediaCodec). It is intended for advanced development that directly operates on the multimedia pipeline (Mode 3); if you only need to run the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
+> **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
+
 ## Overview
 
 MediaCodec (audio/video codec; X5 Codec → RDK MediaCodec) is the RDK A/V codec API (board header `hb_media_codec.h`, functions `hb_mm_mc_*`): codec init/config/start-stop, VPF attach, A/V encoder/decoder register/unregister and IDR frame request, driven by a state machine.

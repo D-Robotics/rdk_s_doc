@@ -38,18 +38,20 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
+S100 平台为 Cortex-A78AE、6 核，编译参数应使用 `-mcpu=cortex-a78`、`-DMULTITHREAD=6`：
+
 编译单核开启 `-O3` 的 coremark 命令：
 
 ```shell
-make XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55" REBUILD=1 run1.log
+make XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78" REBUILD=1 run1.log
 
 mv coremark.exe coremark_O3_single
 ```
 
-编译 8 核开启 `-O3` 的 coremark 命令：
+编译 6 核开启 `-O3` 的 coremark 命令：
 
 ```shell
-make  XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
+make  XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
 
 mv coremark.exe coremark_O3_multi
 ```
@@ -168,7 +170,7 @@ echo performance >/sys/devices/system/cpu/cpufreq/policy0/scaling_governor
 ./coremark_O3_single
 ```
 
-等待 10 秒后得到以下结果：
+等待 10 秒后得到以下结果（以下为旧参数 `-mcpu=cortex-a55` 时期的板端实测输出，保留原始记录；编译命令已更新为 `cortex-a78`，新参数实测值待复测回填）：
 
 ```yaml
 2K performance run parameters for coremark.
@@ -206,13 +208,13 @@ Total time (secs): 18.982000
 Iterations/Sec   : 84290.380360
 Iterations       : 1600000
 Compiler version : GCC11.3.1 20220712
-Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
+Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
 Parallel PThreads : 8
 Memory location  : Please put data memory location here
                         (e.g. code in flash, data on heap etc)
 seedcrc          : 0xe9f5
 Correct operation validated. See README.md for run and reporting rules.
-CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads
+CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads
 ```
 
 </DocScope>
@@ -338,7 +340,7 @@ S600 平台为 Cortex-A78AE、18 核（CPU Clock = 2100 MHz）。板端实测：
 编译单核开启 `-O2` 的 coremark 命令：
 
 ```shell
-make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55" REBUILD=1 run1.log
+make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78" REBUILD=1 run1.log
 
 mv coremark.exe coremark_O2_single
 ```
@@ -346,7 +348,7 @@ mv coremark.exe coremark_O2_single
 编译 8 核开启 `-O2` 的 coremark 命令：
 
 ```shell
-make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
+make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
 
 mv coremark.exe coremark_O2_mutli
 ```

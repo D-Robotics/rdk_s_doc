@@ -10,6 +10,8 @@ description: "RDK S100/S600 BPU low-level driver C API (hb_bpu): core/task/memor
 
 > **Level description**: This chapter covers the **low-level API** (BPU driver interface), not the wrapper layer. Model parsing, tensor management and inference wrapping are done by upper layers, e.g. the `hbm_runtime` wrapped by the [Python Inference API](../../../04_Simple_API/02_inference_api/02_python_api.md) (which internally uses hbDNN/hbUCP). `hb_bpu` receives compiled task data (hbdk_task) and executes it on the BPU cores. It is intended for developers who need to drive the BPU hardware directly in C/C++ and finely control core binding and task scheduling.
 
+> **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
+
 ## Quick Example
 
 Submit a compiled task to the BPU core for execution synchronously:

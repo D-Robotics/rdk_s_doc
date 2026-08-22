@@ -12,6 +12,8 @@ description: "RDK S100/S600 Multimedia Base Framework HBN API"
 
 
 
+> **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
+
 ## Overview
 
 In software, the Camera uses a dedicated set of APIs. Modules downstream of the Camera are abstracted as vnodes. These vnodes include VIN, ISP, PYM, and GDC.  

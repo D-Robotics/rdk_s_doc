@@ -8,6 +8,8 @@ description: "RDK S100/S600 5.5.1.2 Hbmem (Shared Memory)"
 
 > **Level description**: This chapter covers the **low-level multimedia API** (board-side `hbmem.h`) — the shared memory management library, providing physical memory allocation/mapping, cross-process sharing and cache maintenance, shared by all multimedia modules and the BPU. It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
 
+> **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
+
 ## Overview
 
 hbmem is the RDK shared memory management library (board header `hbmem.h`), providing physical memory allocation/mapping/release, cross-process sharing, cache maintenance and DMA copy, so that multimedia modules (VIO/VPF/Codec, etc.) can share large blocks of physical memory.

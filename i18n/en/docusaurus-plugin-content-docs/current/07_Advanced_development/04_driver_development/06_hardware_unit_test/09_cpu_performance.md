@@ -33,15 +33,15 @@ sidebar_position: 9
 Command to compile single-core CoreMark with `-O3` optimization:
 
 ```shell
-make XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55" REBUILD=1 run1.log
+make XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78" REBUILD=1 run1.log
 
 mv coremark.exe coremark_O3_single
 ```
 
-Command to compile 8-core CoreMark with `-O3` optimization:
+Command to compile 6-core CoreMark with `-O3` optimization:
 
 ```shell
-make  XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
+make  XCFLAGS="-O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
 
 mv coremark.exe coremark_O3_multi
 ```
@@ -134,7 +134,9 @@ After ensuring consistency with the preparation steps above, execute the command
 ./coremark_O3_single
 ```
 
-After approximately 10 seconds, you will get the following result:
+After approximately 10 seconds, you will get the following (The output below was measured on board with the older `-mcpu=cortex-a55` flags and is kept as the original record; compile commands have been updated to `cortex-a78`, new measurements pending.)
+
+result:
 
 ```yaml
 2K performance run parameters for coremark.
@@ -144,7 +146,7 @@ Total time (secs): 13.811000
 Iterations/Sec   : 14481.210629
 Iterations       : 200000
 Compiler version : GCC11.3.1 20220712
-Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55  -lrt
+Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78  -lrt
 Memory location  : Please put data memory location here
                         (e.g. code in flash, data on heap etc)
 seedcrc          : 0xe9f5
@@ -153,7 +155,7 @@ seedcrc          : 0xe9f5
 [0]crcstate      : 0x8e3a
 [0]crcfinal      : 0x4983
 Correct operation validated. See README.md for run and reporting rules.
-CoreMark 1.0 : 14481.210629 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55  -lrt / Heap
+CoreMark 1.0 : 14481.210629 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78  -lrt / Heap
 ```
 
 **2. Run multi-core test (`coremark_O3_multi`)**
@@ -172,7 +174,7 @@ Total time (secs): 18.982000
 Iterations/Sec   : 84290.380360
 Iterations       : 1600000
 Compiler version : GCC11.3.1 20220712
-Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
+Compiler flags   :  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt
 Parallel PThreads : 8
 Memory location  : Please put data memory location here
                         (e.g. code in flash, data on heap etc)
@@ -210,7 +212,7 @@ seedcrc          : 0xe9f5
 [6]crcfinal      : 0x4983  
 [7]crcfinal      : 0x4983  
 Correct operation validated. See README.md for run and reporting rules.  
-CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads  
+CoreMark 1.0 : 84290.380360 / GCC11.3.1 20220712  -O3 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread  -lrt / Heap / 8:PThreads  
 
 ```
 
@@ -272,15 +274,15 @@ which also far surpasses the `-O3` multi-core baseline (4.2), indicating strong 
 Command to compile single-core CoreMark with `-O2`:
 
 ```shell
-make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55" REBUILD=1 run1.log
+make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78" REBUILD=1 run1.log
 
 mv coremark.exe coremark_O2_single
 ```
 
-Command to compile 8-core CoreMark with `-O2`:
+Command to compile 6-core CoreMark with `-O2`:
 
 ```shell
-make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a55 -DMULTITHREAD=8 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
+make XCFLAGS="-O2 -funroll-all-loops -static --param max-inline-insns-auto=550 -DPERFORMANCE_RUN=1 -mcpu=cortex-a78 -DMULTITHREAD=6 -DUSE_PTHREAD -DVALIDATION_RUN=1  -lrt -pthread" REBUILD=1 run2.log
 
 mv coremark.exe coremark_O2_mutli
 ```

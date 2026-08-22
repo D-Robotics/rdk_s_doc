@@ -8,6 +8,8 @@ description: "RDK S100/S600 5.5.1.6 VPF/PYM（视频处理框架）"
 
 > **层级说明**：本篇是【底层多媒体 API】（板端 `hbn_vpf_interface.h / hbn_pym_cfg.h`），VPF/PYM 视频处理与金字塔下采样 API（X5 VSE → RDK VPF/PYM）。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
 
+> **平台代号说明**：本文兼容性标注沿用底层头文件原始写法——XJ3/J3、Ultra 为更早代上游平台代号，X5 为现行上游产品线代号（非本两板），Super/J6 为本产品线同源架构代号（板端实证：S100/S600 同源，S600 为多核形态）。`HW:` 列表表示该接口在上游多代平台的适用范围，其中 Super 代即对应本产品线（继承自上游标注，未逐一板端验证）；`SW` 为上游软件版本号，RDK 对应版本以 Release Note 为准。未列入代号的接口表示继承自上游、RDK 侧未逐一验证。
+
 ## 概述
 
 VPF/PYM（Video Process Framework / Pyramid；X5 VSE → RDK VPF/PYM）是 RDK 的视频处理与金字塔下采样模块。VPF/PYM 作为 HBN vnode 接入 pipeline，其参数通过 HBN vnode API（`hbn_vnode_set_attr` 设 `pym_attr_t`）配置，配置结构体定义在 `hbn_pym_cfg.h`。本节列出 VPF/PYM 相关辅助接口（独立函数 API 较少，主体为配置结构体 + HBN vnode 调用）。

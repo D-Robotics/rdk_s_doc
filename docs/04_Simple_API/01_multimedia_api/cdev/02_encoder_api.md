@@ -25,7 +25,7 @@ description: "ENCODER（编码模块）API 接口说明"
 
 :::warning 注意
 
-编码的图片 RDK X5 需要 16bit 对齐，RDK X3 可以 8/16bit 对齐。
+编码输入图片的宽度需满足 16bit 对齐（S100 实测：宽度 16 字节对齐、高度 2 对齐，见 [VIO API](./01_vio_api.md) 对齐说明；S600 对齐要求需板端复核）。
 
 :::
 
