@@ -87,7 +87,7 @@ Make sure you are in the `build` directory and run with default parameters:
 
 Run with explicit parameters (equivalent to the defaults):
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 ./asr \

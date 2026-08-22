@@ -25,13 +25,13 @@ There is no standalone audio demo on the board; the system alsa-lib tools are us
 
 ## alsa-lib Introduction
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 S100 implements audio based on alsa. The following explains the meanings of commonly used parameter configurations and provides reference commands for testing.
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 S600 implements audio based on alsa. The following explains the meanings of commonly used parameter configurations and provides reference commands for testing.
 
@@ -143,7 +143,7 @@ For API descriptions and usage, refer to the official documentation: https://www
 
 
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ## Adapted Audio Daughter Board Introduction
 

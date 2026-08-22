@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 # 烧录步骤
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 :::info 说明
 本页基于官方烧录说明整理，未在 S100 板端复现验证（无 S100 板，烧录会抹除系统）；S100 拨码与指示灯待 S100 板回归核对。
@@ -22,7 +22,7 @@ import DocScope from '@site/src/components/DocScope';
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 :::info 说明
 本页基于官方烧录说明整理，未在 S600 板端复现验证（烧录会抹除当前在用的 S600 系统）；拨码与指示灯以板端实物为准。
@@ -47,7 +47,7 @@ import DocScope from '@site/src/components/DocScope';
 - [ ] [烧录准备](./01_instruction.md)：下载镜像、安装 XBurn、连接 Type-C 数据线、完成环境准备。
 - [ ] 已根据设备状态选好下载模式（见 [下载模式](#下载模式)）。
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 - [ ] 已根据目标存储介质设置 SW8 BOOT 拨码（见 [烧录全镜像](#烧录全镜像) 的启动盘选择）。
 
@@ -60,7 +60,7 @@ import DocScope from '@site/src/components/DocScope';
 | DFU+Fastboot | 空板或系统损坏导致设备变砖 | 需拨码使设备进入 DFU 引导模式 |
 | Fastboot | 非空板状态更新系统 | 要求非空板且系统能进入 U-Boot |
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模式，再进入对应模式执行烧录。
 
@@ -70,7 +70,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 通过 XBurn 烧录系统镜像，先按设备状态选下载模式，再进入对应模式执行烧录。
 
@@ -78,7 +78,7 @@ RDK S600 通过 XBurn 烧录系统镜像，先按设备状态选下载模式，�
 
 ### 进入 DFU+Fastboot 模式
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 1. 将 [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↑，关闭电源。
 2. 将 [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↑，进入 Download 模式。
@@ -89,7 +89,7 @@ RDK S600 通过 XBurn 烧录系统镜像，先按设备状态选下载模式，�
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
@@ -106,7 +106,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 ### 进入 Fastboot 模式
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 1. 将 [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↑，关闭电源。
 2. 将 [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↓，进入正常启动模式。
@@ -114,7 +114,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#开关sw2sw3) 拨码至 `OFF`，关闭电源。
 2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#开关sw2sw3) 拨码至 `OFF`，进入正常启动模式。
@@ -127,7 +127,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 ## 烧录全镜像
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 适用于首次刷机或系统恢复，烧录完整系统镜像包，覆盖板载 eMMC 与 Norflash 上的 `miniboot_flash`。
 
@@ -160,7 +160,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 适用于首次刷机或系统恢复，烧录完整系统镜像包，**存储介质** 按实际情况选 `UFS`（板载）或 `NVMe`（扩展）。
 
@@ -210,7 +210,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 按指定区域烧录，只烧录部分镜像，而非完整的全镜像包。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 **存储介质** 选 `eMMC`，支持的区域如下：
 
@@ -226,7 +226,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 `miniboot_flash` 位于 Norflash，与所选介质无关，UFS/NVMe 均可勾选；其余区域按「实际存储介质」列与所选介质对应。
 
@@ -248,7 +248,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 备份指定区域的镜像到 PC。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 **存储介质** 选 `eMMC`，支持的备份区域如下：
 
@@ -268,7 +268,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 `miniboot_flash` 位于 Norflash，UFS/NVMe 均可备份；其余区域按「实际存储介质」列与所选介质对应。
 
@@ -295,7 +295,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 在 [烧录全镜像](#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **烧录指定分区镜像**，勾选目标分区，完成烧录并启动验证。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 勾选后出现的分区选项如下：
 
@@ -303,7 +303,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 勾选后出现的分区选项如下：
 
@@ -330,13 +330,13 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 - [系统状态查询](/Quick_start/install_os_and_setup/system_status)
 - [远程登录](/Quick_start/install_os_and_setup/remote_login)
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 - [S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit)
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 - [S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit)
 

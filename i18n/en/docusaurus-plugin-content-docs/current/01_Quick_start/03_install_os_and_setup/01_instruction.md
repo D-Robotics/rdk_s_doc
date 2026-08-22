@@ -12,13 +12,13 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 **Note:** This page is compiled from the official flashing documentation. Flashing wipes the board's system, and the flashing procedure has not been reproduced and verified on an S100 board; the image download links have been verified reachable (verified 2026-08-20).
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 **Note:** This page is compiled from the official flashing documentation. Flashing wipes the board's system, and the flashing procedure has not been reproduced and verified on an S600 board (to avoid wiping the S600 currently in use); the image download links have been verified reachable (verified 2026-08-20 that both the S100/S600 download pages return HTTP 200), and the XBurn tool follows the official documentation.
 
@@ -52,7 +52,7 @@ Before you start flashing, make sure you have:
 The device ships with a test firmware preinstalled. Flash the latest image before using the device.
 :::
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 provides an Ubuntu 22.04 desktop system image with a graphical desktop environment included.
 
@@ -64,7 +64,7 @@ RDK S100 provides an Ubuntu 22.04 desktop system image with a graphical desktop 
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 provides an Ubuntu 24.04 desktop system image with a graphical desktop environment included.
 
@@ -90,13 +90,13 @@ Flashing transfers the image over a Type-C data cable. A substandard cable cause
 
 ## Hardware connection
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 Use a Type-C data cable to connect a USB port on your PC to the Type-C port of the RDK S100.
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 Use a Type-C data cable to connect a USB port on your PC to the Type-C port of the RDK S600.
 
@@ -125,13 +125,13 @@ After the preparation is done, confirm:
 - [System status](/Quick_start/install_os_and_setup/system_status)
 - [Remote login](/Quick_start/install_os_and_setup/remote_login)
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 - [S100 hardware introduction](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit)
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 - [S600 hardware introduction](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit)
 

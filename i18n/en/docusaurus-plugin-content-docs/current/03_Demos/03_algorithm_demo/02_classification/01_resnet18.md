@@ -78,7 +78,7 @@ Make sure you are in the `build` directory, then run with default parameters:
 
 Run with specified parameters (equivalent to the defaults):
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 ./resnet_18 \

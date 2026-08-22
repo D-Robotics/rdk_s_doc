@@ -32,7 +32,7 @@ The RDK development board is powered by an external DC power adapter. USB power 
 The development board must be powered on **before** any independently powered peripherals. If the peripherals are powered on first and back-feed power to the main board, the development board may trigger a protection state and fail to boot.
 :::
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 power specifications:
 
@@ -43,7 +43,7 @@ RDK S100 power specifications:
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 power specifications:
 
@@ -57,13 +57,13 @@ RDK S600 power specifications:
 
 The RDK ships with a pre-installed system image and can boot directly from the onboard storage; no additional SD card is required.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 The RDK S100 boots from the onboard **eMMC**. The boot device selection is determined by the **SW3** DIP switch, which is set to the eMMC boot position at the factory. If you need to boot from other media (NVMe boot is currently not supported), refer to the SW3 description in [Introduction to the S100 Hardware](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#boot-device-selection-sw3).
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 The RDK S600 boots from the onboard **UFS**. The boot device selection is determined by the **SW8 BOOT** DIP switch, which is set to the UFS boot position at the factory. If you need to boot from NVMe, refer to the SW8 description in [Introduction to the S600 Hardware](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#bootsw8), and use the NVMe edition image.
 
@@ -78,13 +78,13 @@ The RDK S600 boots from the onboard **UFS**. The boot device selection is determ
 
 Connect a monitor through the **HDMI** interface.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 The RDK S100 provides one HDMI Type-A port, supporting up to **2560×1440@60Hz**.
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 The RDK S600 provides one HDMI port.
 
@@ -102,13 +102,13 @@ Audio can be output via HDMI (built-in speakers of the monitor/TV) or via the on
 
 Plug an Ethernet cable into the **RJ45** port of the development board.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 The RDK S100 provides 2 1000M Ethernet ports (RJ45).
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 The RDK S600 provides 2 1GbE + 2 10GbE Ethernet ports (RJ45), plus one 1GbE port in the MCU domain.
 

@@ -25,7 +25,7 @@ Check the system version number: `cat /etc/version`; use `rdkos_info` to view bo
 
 ### Product Introduction
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 The **RDK S100 series** is a high-performance development kit featuring 80/128 TOPS of on-device inference capability and 6-core ARM A78AE processing power. It supports 2 MIPI camera inputs, 4 USB 3.0 ports, and 2 PCIe3.0 interfaces, fully meeting the requirements of various scenarios.
 
@@ -33,7 +33,7 @@ The **RDK S100 series** is a high-performance development kit featuring 80/128 T
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 The **RDK S600 series** is a high-performance development kit featuring 560 TOPS of on-device inference capability and 18-core ARM A78AE processing power. It supports 6 MIPI camera inputs, 6 USB 3.0 ports, and 4 PCIe3.0 interfaces, fully meeting the requirements of various scenarios.
 

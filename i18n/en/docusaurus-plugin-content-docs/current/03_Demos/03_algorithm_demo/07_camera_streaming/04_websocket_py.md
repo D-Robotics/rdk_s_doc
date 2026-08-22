@@ -26,7 +26,7 @@ The sample code is located at `/app/pydev_demo/web_display_camera_sample/` on th
 
 Depends on the `pydev_demo` common utility library (`utils`), and the WebSocket-related packages must be installed:
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt
@@ -34,7 +34,7 @@ pip install websockets==15.0.1 protobuf==3.20.3
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages

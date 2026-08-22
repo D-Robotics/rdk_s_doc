@@ -64,7 +64,7 @@ make -j$(nproc)
 
 指定参数运行（等价于默认值）：
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 ./ultralytics_yolov5x \

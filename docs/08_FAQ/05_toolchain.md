@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
-title: "AI 模型、算法与工具链"
-description: "AI 模型、算法与工具链 常见问题与排查"
+title: "模型、算法与工具链"
+description: "模型、算法与工具链 常见问题与排查"
 ---
 
-# AI 模型、算法与工具链
+# 模型、算法与工具链
 
 :::tip 🛠️ 工具链和系统下载指引
 
@@ -12,7 +12,7 @@ description: "AI 模型、算法与工具链 常见问题与排查"
 
 :::
 
-本节主要解答与地瓜机器人 RDK 平台上 AI 模型部署、算法开发、以及算法工具链使用相关的常见疑问。
+本节主要解答与地瓜机器人 RDK 平台上智能模型部署、算法开发、以及算法工具链使用相关的常见疑问。
 
 ### Q1: 使用算法工具链遇到问题，在提问时需要提供哪些信息？
 **A:** 当您在使用地瓜机器人算法工具链遇到问题并寻求技术支持时，为了帮助快速定位问题，请尽量提供以下完整信息：
@@ -43,7 +43,7 @@ description: "AI 模型、算法与工具链 常见问题与排查"
 **A:**
 1.  **RDK 用户手册 - 算法工具链章节：** 这是最基础也是最重要的参考资料，详细介绍了工具链的安装、使用流程、各项工具的功能和参数等。
     * 通用入口：[https://developer.d-robotics.cc/rdk_doc/04_toolchain_development](https://developer.d-robotics.cc/rdk_doc/04_toolchain_development) (请以官方最新文档为准)
-2.  **RDK Model Zoo (模型仓库)：** 官方提供的模型示例库，包含了多种常见 AI 模型在 RDK 平台上的移植、优化、量化和部署示例代码及教程。
+2.  **RDK Model Zoo (模型仓库)：** 官方提供的模型示例库，包含了多种常见智能模型在 RDK 平台上的移植、优化、量化和部署示例代码及教程。
     * GitHub 仓库：[https://github.com/D-Robotics/rdk_model_zoo](https://github.com/D-Robotics/rdk_model_zoo)
 3.  **地瓜开发者社区 - 资源中心：** 社区的资源中心板块通常会汇总各类开发资源，包括工具链、SDK、示例代码、技术文档、教程视频等。
     * 社区资源中心入口：[https://developer.d-robotics.cc/resource](https://developer.d-robotics.cc/resource)

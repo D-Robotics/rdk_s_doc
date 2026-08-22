@@ -36,11 +36,11 @@ sudo apt install libgflags-dev
 
 - The MIPI camera interface uses auto-detection mode. Only one MIPI camera can be connected at runtime (any MIPI interface works); connecting multiple cameras at once causes an error.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 - For MIPI camera installation, refer to [Camera Expansion Board (RDK S100)](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md).
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 - For MIPI camera installation, refer to [MIPI Camera Interface (J11/J13)](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-camera-interfaces-j11j13).
 </DocScope>
 
@@ -93,7 +93,7 @@ In the `build` directory, run with default parameters:
 
 Run with explicit parameters (equivalent to the defaults):
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 ./mipi_camera \

@@ -8,11 +8,11 @@ sidebar_position: 5
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`. It reads frames from a USB camera for object detection and visualizes the results in fullscreen. The sample code is located in `/app/pydev_demo/09_usb_camera_sample/`.
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`. It reads frames from a USB camera for object detection and visualizes the results in fullscreen. The sample code is located in `/app/pydev_demo/usb_camera_sample/`.
 
 </DocScope>
@@ -49,13 +49,13 @@ This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`.
 ## Environment Dependencies
 - Ensure the dependencies in `pydev` are installed
 
-    <DocScope products="RDK-S100">
+    <DocScope products="RDK S100">
     ```bash
     pip install -r ../requirements.txt
     ```
 
     </DocScope>
-    <DocScope products="RDK-S600">
+    <DocScope products="RDK S600">
     ```bash
     pip install -r ../requirements.txt --break-system-packages
     ```
@@ -71,7 +71,7 @@ This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`.
 
 ## Parameter Description
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 | Parameter      | Description                                              | Default Value                               |
 | --------------- | -------------------------------------------------------- | --------------------------------------------- |
 | `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
@@ -82,7 +82,7 @@ This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`.
 | `--score-thres` | Detection confidence threshold                           | `0.25`                                        |
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 | Parameter      | Description                                              | Default Value                               |
 | --------------- | -------------------------------------------------------- | --------------------------------------------- |
 | `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
@@ -104,7 +104,7 @@ Note: This program must run in a desktop environment.
         ```
     - Run with specified parameters
 
-        <DocScope products="RDK-S100">
+        <DocScope products="RDK S100">
         ```bash
         python usb_camera_yolov5x.py \
         --model-path /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm \
@@ -116,7 +116,7 @@ Note: This program must run in a desktop environment.
         ```
 
         </DocScope>
-        <DocScope products="RDK-S600">
+        <DocScope products="RDK S600">
         ```bash
         python usb_camera_yolov5x.py \
         --model-path /opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm \
@@ -140,11 +140,11 @@ Note: This program must run in a desktop environment.
 ## Notes
 - This program must run in a desktop environment.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 - If the specified model path does not exist, try searching under `/opt/hobot/model/s100/basic/`.
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 - If the specified model path does not exist, try searching under `/opt/hobot/model/s600/basic/`.
 
 </DocScope>

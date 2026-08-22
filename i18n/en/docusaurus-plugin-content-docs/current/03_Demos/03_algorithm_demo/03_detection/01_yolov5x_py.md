@@ -24,14 +24,14 @@ The sample code is located in the `/app/pydev_demo/detection_sample/ultralytics_
 
 It depends on the common utility library (`utils`) of `pydev_demo`. If it reports missing dependencies:
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages

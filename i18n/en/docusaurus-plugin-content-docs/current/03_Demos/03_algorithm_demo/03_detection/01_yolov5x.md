@@ -64,7 +64,7 @@ Run in the `build` directory:
 
 Run with specified parameters (equivalent to the defaults):
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 ./ultralytics_yolov5x \

@@ -28,13 +28,13 @@ import DocScope from '@site/src/components/DocScope';
 
 在进行系统配置前，您需要先登录系统。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 系统提供了两个默认账户：
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 系统提供了两个默认账户：
 
@@ -48,13 +48,13 @@ RDK S600 系统提供了两个默认账户：
 <Tabs groupId="rdk-type">
 <TabItem value="desktop" label="Desktop">
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 参考 Ubuntu 22.04 Wi-Fi 链接教程进行。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 参考 Ubuntu 24.04 Wi-Fi 链接教程进行。
 
@@ -131,7 +131,7 @@ SSH 的使用请查看 [远程登录 - SSH 登录](./remote_login#ssh)。
 
 修改 serial-getty 服务文件可以设置免密登陆，操作如下：
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 1. 打开 `serial-getty@.service`。
 
@@ -145,7 +145,7 @@ sudo vim /lib/systemd/system/serial-getty@.service
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 1. 打开 `serial-getty@ttyS0.service`。
 
@@ -212,7 +212,7 @@ source /etc/default/locale
 
 ## 设置 RDK Studio
 
-RDK Studio 是面向机器人开发的 AI 原生桌面工作台。它把 Moss 对话、项目工作区、设备连接、远程开发、烧录、本地模型和板端 Agent 放在同一个原生窗口里。
+RDK Studio 是面向机器人开发的智能原生桌面工作台。它把 Moss 对话、项目工作区、设备连接、远程开发、烧录、本地模型和板端 Agent 放在同一个原生窗口里。
 
 RDK Studio 的使用方法请参考 [RDK Studio 用户手册](https://developer.d-robotics.cc/rdk_studio_doc/category/1-product-intro)。
 
@@ -226,13 +226,13 @@ NoMachine 下载官方网址： [NoMachine Download](https://downloads.nomachine
 
 进入官网后找到适合
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 `RDK S100`
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 `RDK S600`
 
@@ -281,13 +281,13 @@ dpkg -i nomachine_*_arm64.deb
 
 **重启**
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 重启 S100。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 重启 S600。
 

@@ -8,13 +8,13 @@ sidebar_position: 7
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 This sample demonstrates how to combine SP hardware modules (decoder, VIO, display) with the BPU on platforms such as RDK S100 to implement:
 RTSP/H.264 video stream → hardware decode (NV12) → YOLOv5x inference → overlay detection boxes → real-time display. The sample code is located in `/app/pydev_demo/12_rtsp_yolov5x_display_sample/`.
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 This sample demonstrates how to combine SP hardware modules (decoder, VIO, display) with the BPU on platforms such as RDK S600 to implement:
 RTSP/H.264 video stream → hardware decode (NV12) → YOLOv5x inference → overlay detection boxes → real-time display. The sample code is located in `/app/pydev_demo/rtsp_yolov5x_display_sample/`.
@@ -75,13 +75,13 @@ RTSP/H.264 video stream → hardware decode (NV12) → YOLOv5x inference → ove
 ## Environment Dependencies
 This sample has no special environment requirements. You only need to ensure the dependencies in `pydev` are installed.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 ```bash
 pip install -r ../requirements.txt
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 ```bash
 pip install -r ../requirements.txt --break-system-packages
 ```
@@ -98,7 +98,7 @@ pip install -r ../requirements.txt --break-system-packages
 
 ## Parameter Description
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 | Parameter       | Description                                              | Default Value                               |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------- |
 | `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/1080P_test.h264` |
@@ -110,7 +110,7 @@ pip install -r ../requirements.txt --break-system-packages
 | `--score-thres` | Detection confidence threshold                           | `0.25`                                        |
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 | Parameter       | Description                                              | Default Value                               |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------- |
 | `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/1080P_test.h264` |
@@ -140,7 +140,7 @@ pip install -r ../requirements.txt --break-system-packages
         ```
     - Run with specified parameters
 
-        <DocScope products="RDK-S100">
+        <DocScope products="RDK S100">
         ```bash
         python rtsp_yolov5x_display.py \
         --rtsp-urls rtsp://127.0.0.1/assets/1080P_test.h264 \
@@ -153,7 +153,7 @@ pip install -r ../requirements.txt --break-system-packages
         ```
 
         </DocScope>
-        <DocScope products="RDK-S600">
+        <DocScope products="RDK S600">
         ```bash
         python rtsp_yolov5x_display.py \
         --rtsp-urls rtsp://127.0.0.1/assets/1080P_test.h264 \

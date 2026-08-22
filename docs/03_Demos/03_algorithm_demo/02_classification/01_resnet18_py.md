@@ -26,14 +26,14 @@ import DocScope from '@site/src/components/DocScope';
 
 本示例依赖 `pydev_demo` 目录下的公共工具库（`utils`）。若提示缺少依赖：
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
@@ -74,7 +74,7 @@ python resnet18.py
 
 指定参数运行（等价于默认值）：
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 python resnet18.py \

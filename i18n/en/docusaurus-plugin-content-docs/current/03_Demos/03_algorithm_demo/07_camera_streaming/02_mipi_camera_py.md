@@ -26,14 +26,14 @@ The sample code is located at `/app/pydev_demo/mipi_camera_sample/` on the board
 
 Depends on the `pydev_demo` common utility library (`utils`). If missing dependencies are reported:
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages

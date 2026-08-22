@@ -26,14 +26,14 @@ Neither the S100 nor the S600 system image bundles the `asr.hbm` model. Before r
   - S600: `/opt/hobot/model/s600/basic/asr.hbm`
 - Install `soundfile` (for audio reading):
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ```bash
 pip install soundfile
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 pip install soundfile --break-system-packages

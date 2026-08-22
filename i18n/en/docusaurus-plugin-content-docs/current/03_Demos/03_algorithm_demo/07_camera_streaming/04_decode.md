@@ -82,7 +82,7 @@ In the `build` directory, run with default parameters:
 
 Run with explicit parameters (equivalent to the defaults):
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 ./decode_yolov5x_display \

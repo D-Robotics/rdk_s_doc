@@ -117,7 +117,7 @@ This is uart send test 2 times
 This is uart send test 3 times
 ```
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ### Notes
 

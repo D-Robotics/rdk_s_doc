@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# AI Models, Algorithms, and Toolchain
+# Models, Algorithms, and Toolchain
 
 :::tip 🛠️ Toolchain and System Download Guide
 
@@ -10,7 +10,7 @@ For toolchain issues, we recommend using the latest version first. For related d
 
 :::
 
-This section answers common questions about AI model deployment, algorithm development, and toolchain usage on D-Robotics RDK platforms.
+This section answers common questions about intelligent model deployment, algorithm development, and toolchain usage on D-Robotics RDK platforms.
 
 ### Q1: What information should I provide when reporting a toolchain issue?
 **A:** When you encounter an issue with the D-Robotics algorithm toolchain and need technical support, please provide the following complete information to help us locate the problem quickly:
@@ -41,7 +41,7 @@ This section answers common questions about AI model deployment, algorithm devel
 **A:**
 1.  **RDK User Manual - Algorithm Toolchain chapter:** This is the most fundamental and important reference. It describes toolchain installation, usage workflow, tool functions, parameters, and more.
     * General entry: [https://developer.d-robotics.cc/rdk_doc/04_toolchain_development](https://developer.d-robotics.cc/rdk_doc/04_toolchain_development) (refer to the latest official documentation)
-2.  **RDK Model Zoo:** The official model example repository, containing porting, optimization, quantization, and deployment example code and tutorials for many common AI models on RDK platforms.
+2.  **RDK Model Zoo:** The official model example repository, containing porting, optimization, quantization, and deployment example code and tutorials for many common intelligent models on RDK platforms.
     * GitHub repository: [https://github.com/D-Robotics/rdk_model_zoo](https://github.com/D-Robotics/rdk_model_zoo)
 3.  **D-Robotics Developer Community - Resource Center:** The community resource center usually aggregates development resources, including toolchain packages, SDKs, sample code, technical documentation, tutorial videos, and more.
     * Community resource center: [https://developer.d-robotics.cc/resource](https://developer.d-robotics.cc/resource)

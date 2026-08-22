@@ -26,7 +26,7 @@ import DocScope from '@site/src/components/DocScope';
 
 依赖 `pydev_demo` 公共工具库（`utils`），并需安装 WebSocket 相关包：
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt
@@ -34,7 +34,7 @@ pip install websockets==15.0.1 protobuf==3.20.3
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages

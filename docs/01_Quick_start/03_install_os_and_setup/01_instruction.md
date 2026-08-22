@@ -12,13 +12,13 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 **说明：** 本页基于官方烧录说明整理。烧录会抹除板端系统，烧录操作未在 S100 板端复现验证；镜像下载地址已实测可达（2026-08-20 验证）。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 **说明：** 本页基于官方烧录说明整理。烧录会抹除板端系统，未在 S600 板端复现验证（避免抹除当前在用的 S600）；镜像下载地址已实测可达（2026-08-20 验证 S100/S600 下载页均返回 HTTP 200），XBurn 工具以官方说明为准。
 
@@ -52,7 +52,7 @@ import DocScope from '@site/src/components/DocScope';
 设备出厂预装的是测试版固件，建议重新烧录最新版本镜像后再使用。
 :::
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 提供 Ubuntu 22.04 桌面版系统镜像，自带图形桌面环境。
 
@@ -64,7 +64,7 @@ RDK S100 提供 Ubuntu 22.04 桌面版系统镜像，自带图形桌面环境。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 提供 Ubuntu 24.04 桌面版系统镜像，自带图形桌面环境。
 
@@ -90,13 +90,13 @@ RDK S600 提供 Ubuntu 24.04 桌面版系统镜像，自带图形桌面环境。
 
 ## 硬件连接
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 通过 Type-C 数据线连接 PC 的 USB 口与 RDK S100 的 Type-C 口。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 通过 Type-C 数据线连接 PC 的 USB 口与 RDK S600 的 Type-C 口。
 
@@ -125,13 +125,13 @@ RDK S600 提供 Ubuntu 24.04 桌面版系统镜像，自带图形桌面环境。
 - [系统状态查询](/Quick_start/install_os_and_setup/system_status)
 - [远程登录](/Quick_start/install_os_and_setup/remote_login)
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 - [S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit)
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 - [S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit)
 

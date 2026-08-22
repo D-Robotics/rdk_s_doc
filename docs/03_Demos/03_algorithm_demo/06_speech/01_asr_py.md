@@ -26,14 +26,14 @@ S100 与 S600 系统镜像均未内置 `asr.hbm` 模型，运行前需手动下�
   - S600：`/opt/hobot/model/s600/basic/asr.hbm`
 - 安装 `soundfile`（音频读取）：
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ```bash
 pip install soundfile
 ```
 
 </DocScope>
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 pip install soundfile --break-system-packages

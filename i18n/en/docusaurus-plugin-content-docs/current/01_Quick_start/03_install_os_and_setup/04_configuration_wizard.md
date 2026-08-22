@@ -28,13 +28,13 @@ Before starting, please prepare:
 
 Before configuring the system, you need to log in first.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 The RDK S100 system provides two default accounts:
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 The RDK S600 system provides two default accounts:
 
@@ -48,13 +48,13 @@ The RDK S600 system provides two default accounts:
 <Tabs groupId="rdk-type">
 <TabItem value="desktop" label="Desktop">
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 Follow the Ubuntu 22.04 Wi-Fi connection tutorial.
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 Follow the Ubuntu 24.04 Wi-Fi connection tutorial.
 
@@ -131,7 +131,7 @@ For SSH usage, see [Remote Login - SSH Login](./remote_login#ssh).
 
 Modify the serial-getty service file to enable passwordless login. The steps are:
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 1. Open `serial-getty@.service`.
 
@@ -145,7 +145,7 @@ sudo vim /lib/systemd/system/serial-getty@.service
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 1. Open `serial-getty@ttyS0.service`.
 
@@ -212,7 +212,7 @@ After the Chinese locale is installed, the system's built-in input method is sup
 
 ## Set up RDK Studio
 
-RDK Studio is an AI-native desktop workbench for robotics development. It puts Moss conversation, project workspaces, device connection, remote development, flashing, local models, and on-board Agent all in the same native window.
+RDK Studio is an intelligent-native desktop workbench for robotics development. It puts Moss conversation, project workspaces, device connection, remote development, flashing, local models, and on-board Agent all in the same native window.
 
 For RDK Studio usage, refer to the [RDK Studio User Manual](https://developer.d-robotics.cc/rdk_studio_doc/category/1-product-intro).
 
@@ -226,13 +226,13 @@ NoMachine official download URL: [NoMachine Download](https://downloads.nomachin
 
 On the official website, find the `ARM64` version installation package suitable for
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 `RDK S100`
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 `RDK S600`
 
@@ -281,13 +281,13 @@ dpkg -i nomachine_*_arm64.deb
 
 **Reboot**
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 Reboot the S100.
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 Reboot the S600.
 

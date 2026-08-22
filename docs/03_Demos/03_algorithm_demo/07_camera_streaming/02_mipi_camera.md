@@ -36,11 +36,11 @@ sudo apt install libgflags-dev
 
 - MIPI 相机的接口使用自动检测模式，该示例运行时只能接入一个 MIPI 摄像头（任意 MIPI 接口均可），同时接入多个会报错。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 - MIPI 摄像头安装方法可参考 [相机扩展板（RDK S100）](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md)。
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 - MIPI 摄像头安装方法可参考 [MIPI 相机接口（J11/J13）](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-camera-interfaces-j11j13)。
 </DocScope>
 
@@ -93,7 +93,7 @@ make -j$(nproc)
 
 指定参数运行（等价于默认值）：
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 ```bash
 ./mipi_camera \

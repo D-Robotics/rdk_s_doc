@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 # Flashing Steps
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 :::info Note
 This page is compiled from the official flashing documentation and has not been reproduced and verified on an S100 board (no S100 board is available, and flashing wipes the system); the S100 DIP switch and LED settings are to be cross-checked once the S100 board is back.
@@ -22,7 +22,7 @@ This page describes system flashing for the RDK S100. Complete [Flashing prepara
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 :::info Note
 This page is compiled from the official flashing documentation and has not been reproduced and verified on an S600 board (flashing would wipe the S600 system currently in use); the DIP switch and LED settings are subject to the actual board.
@@ -47,7 +47,7 @@ Before you start flashing, make sure you have completed:
 - [ ] [Flashing preparation](./01_instruction.md): downloaded the image, installed XBurn, connected the Type-C data cable, and completed the environment setup.
 - [ ] Selected a download mode based on the device state (see [Download modes](#download-modes)).
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 - [ ] Set the SW8 BOOT DIP switch based on the target storage medium (see the boot disk selection in [Flash the full image](#flash-the-full-image)).
 
@@ -60,7 +60,7 @@ Before you start flashing, make sure you have completed:
 | DFU+Fastboot | Blank board, or the device is bricked due to system corruption | Set the DIP switches to put the device into DFU boot mode |
 | Fastboot | Update the system on a non-blank board | Requires a non-blank board whose system can enter U-Boot |
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 Before flashing the system image to the RDK S100 with XBurn, select a download mode based on the device state, then enter that mode and run the flashing.
 
@@ -70,7 +70,7 @@ Before flashing the system image to the RDK S100 with XBurn, select a download m
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 To flash the system image to the RDK S600 with XBurn, select a download mode based on the device state, then enter that mode and run the flashing.
 
@@ -78,7 +78,7 @@ To flash the system image to the RDK S600 with XBurn, select a download mode bas
 
 ### Enter DFU+Fastboot mode
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 1. Set the [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) DIP switch to ↑, and power off.
 2. Set the [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) DIP switch to ↑ to enter Download mode.
@@ -89,7 +89,7 @@ To flash the system image to the RDK S600 with XBurn, select a download mode bas
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 The currently sold version of the RDK S600 is V1P0. Enter DFU mode as follows:
 
@@ -106,7 +106,7 @@ The currently sold version of the RDK S600 is V1P0. Enter DFU mode as follows:
 
 ### Enter Fastboot mode
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 1. Set the [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) DIP switch to ↑, and power off.
 2. Set the [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) DIP switch to ↓ to enter normal boot mode.
@@ -114,7 +114,7 @@ The currently sold version of the RDK S600 is V1P0. Enter DFU mode as follows:
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 1. Set the [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) DIP switch to `OFF`, and power off.
 2. Set the [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) DIP switch to `OFF` to enter normal boot mode.
@@ -127,7 +127,7 @@ The currently sold version of the RDK S600 is V1P0. Enter DFU mode as follows:
 
 ## Flash the full image
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 Use this for a first-time flash or system recovery. It flashes the complete system image package and overwrites `miniboot_flash` on the onboard eMMC and Norflash.
 
@@ -160,7 +160,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 Use this for a first-time flash or system recovery. It flashes the complete system image package. For **Storage medium**, select `UFS` (onboard) or `NVMe` (expansion) based on the actual setup.
 
@@ -210,7 +210,7 @@ Use this for specific scenarios other than a first-time flash. In addition to fl
 
 Flashing by specified region flashes only part of the image, instead of the complete full-image package.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 For **Storage medium**, select `eMMC`. The supported regions are:
 
@@ -226,7 +226,7 @@ Based on the steps in [Flash the full image](#flash-the-full-image), expand **Ad
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 `miniboot_flash` is on Norflash and is independent of the selected medium; it can be selected for both UFS and NVMe. Other regions correspond to the selected medium per the "Actual storage medium" column.
 
@@ -248,7 +248,7 @@ Based on the steps in [Flash the full image](#flash-the-full-image), expand **Ad
 
 Back up the image of specified regions to your PC.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 For **Storage medium**, select `eMMC`. The supported backup regions are:
 
@@ -268,7 +268,7 @@ Based on the steps in [Flash the full image](#flash-the-full-image), expand **Ad
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 `miniboot_flash` is on Norflash and can be backed up for both UFS and NVMe. Other regions correspond to the selected medium per the "Actual storage medium" column.
 
@@ -295,7 +295,7 @@ Flashing by **individual system component partition**, at a finer granularity th
 
 Based on the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific partition images**, and select the target partitions. Complete the flashing and verify the boot.
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 The partition options that appear after selection are:
 
@@ -303,7 +303,7 @@ The partition options that appear after selection are:
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 The partition options that appear after selection are:
 
@@ -330,13 +330,13 @@ For detailed status query commands and sample outputs, see [System status](03_sy
 - [System status](/Quick_start/install_os_and_setup/system_status)
 - [Remote login](/Quick_start/install_os_and_setup/remote_login)
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 - [S100 hardware introduction](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit)
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 - [S600 hardware introduction](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit)
 

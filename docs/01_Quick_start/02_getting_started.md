@@ -32,7 +32,7 @@ RDK 开发板使用外接 DC 电源适配器供电，不支持 USB 供电。
 开发板需**先于**独立供电的外设上电。若外设先上电且对主板有电源倒灌，开发板可能触发保护状态无法启动。
 :::
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 电源规格：
 
@@ -43,7 +43,7 @@ RDK S100 电源规格：
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 电源规格：
 
@@ -57,13 +57,13 @@ RDK S600 电源规格：
 
 RDK 出厂预装系统镜像，可直接从板载存储启动，无需额外 SD 卡。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 从板载 **eMMC** 启动。启动盘选择由 **SW3** 拨码决定，出厂已设为 eMMC 启动位。如需从其他介质启动（暂不支持 NVMe 启动），参考 [S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#系统启动盘选择-sw3) 的 SW3 说明。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 从板载 **UFS** 启动。启动盘选择由 **SW8 BOOT** 拨码决定，出厂已设为 UFS 启动位。如需从 NVMe 启动，参考 [S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#bootsw8) 的 SW8 说明，并需使用 NVMe 版本镜像。
 
@@ -78,13 +78,13 @@ RDK S600 从板载 **UFS** 启动。启动盘选择由 **SW8 BOOT** 拨码决定
 
 通过 **HDMI** 接口连接显示器。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 提供 1 个 HDMI Type-A 接口，最高支持 **2560×1440@60Hz**。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 提供 1 个 HDMI 接口。
 
@@ -102,13 +102,13 @@ RDK S600 提供 1 个 HDMI 接口。
 
 将以太网线插入开发板的 **RJ45** 接口。
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 RDK S100 提供 2 个 1000M 以太网口（RJ45）。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 RDK S600 提供 2 个 1GbE + 2 个 10GbE 以太网口（RJ45），另有 1 个 MCU 域 1GbE 口。
 

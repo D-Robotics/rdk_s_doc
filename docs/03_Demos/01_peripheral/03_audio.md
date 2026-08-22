@@ -25,13 +25,13 @@ import DocScope from '@site/src/components/DocScope';
 
 ## alsa-lib 介绍
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 S100 基于 alsa 实现，以下说明常用参数配置含义以及测试参考命令。
 
 </DocScope>
 
-<DocScope products="RDK-S600">
+<DocScope products="RDK S600">
 
 S600 基于 alsa 实现，以下说明常用参数配置含义以及测试参考命令。
 
@@ -143,7 +143,7 @@ API 描述及使用参考官方文档介绍：https://www.alsa-project.org/alsa-
 
 
 
-<DocScope products="RDK-S100">
+<DocScope products="RDK S100">
 
 ## 适配音频子板介绍
 
