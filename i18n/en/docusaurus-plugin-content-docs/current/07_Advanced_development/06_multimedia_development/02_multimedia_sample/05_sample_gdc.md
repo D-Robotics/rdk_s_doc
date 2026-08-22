@@ -1,10 +1,10 @@
 ---
 sidebar_position: 5
-title: "sample_gdc Usage Instructions"
-description: "sample_gdc Usage Instructions - board-side sample usage instructions"
+title: "sample_gdc User Guide"
+description: "sample_gdc User Guide - board-side sample usage instructions"
 ---
 
-# sample_gdc Usage Instructions
+# sample_gdc User Guide
 
 ## Function Overview
 The `sample_gdc` directory contains example programs that demonstrate how to use GDC. The main functions are described below:
@@ -645,7 +645,7 @@ After parsing and transforming each JSON file separately, four processed NV12-fo
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="Transformation Effect" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-## Common Issues
+## FAQ
 
 ### JSON Configuration Parsing or Bin Generation Failure
 

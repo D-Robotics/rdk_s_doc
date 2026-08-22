@@ -100,7 +100,7 @@ Similar to modifying the static `IP`, the steps to modify the `Proxy` configurat
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy_set_1.png" alt="Illustration of modifying Proxy configuration" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
-## Related Documents
+## Related Documentation
 
 - [Network Configuration](./01_network_config.md)
 - [Bluetooth Configuration](./02_bluetooth_config.md)

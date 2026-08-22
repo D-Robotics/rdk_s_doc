@@ -72,13 +72,13 @@ TriggeredBy: ● ssh.socket
 
 `degraded` means some service failed to start (`apport.service` in this example); use `systemctl --failed` to identify it. If `ssh` shows `active (running)`, it is normal.
 
-## Common Issues
+## FAQ
 
 - **`journalctl` fills up the disk**: Limit the size with `--vacuum-size`, or adjust `SystemMaxUse` in `/etc/systemd/journald.conf`.
 - **`is-system-running` shows degraded**: List the failed services with `systemctl --failed` and investigate them one by one.
 - **No permission for dmesg**: root can run `dmesg` directly; non-root users need to be in the `video`/`systemd-journal` group or use `sudo`.
 
-## Related Documents
+## Related Documentation
 
 - [Boot Auto-Start Configuration](./06_self_start.md)
 - [Storage and Disk Management](./12_storage.md)

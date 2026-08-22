@@ -478,7 +478,7 @@ Check that the input is correctly quantized according to `hbDNNTensorProperties.
 **Q: How do I specify BPU cores or priority after submitting a task?**
 Via `hbUCPSchedParam` (initialize with the `HB_UCP_INITIALIZE_SCHED_PARAM` macro and then modify the `backend`/`priority` fields; core definitions such as `HB_UCP_BPU_CORE_0`). For more low-level core management, see [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md).
 
-## Related Documents
+## Related Documentation
 
 - [Python Inference API](./02_python_api.md)
 - [BPU Low-level API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md)

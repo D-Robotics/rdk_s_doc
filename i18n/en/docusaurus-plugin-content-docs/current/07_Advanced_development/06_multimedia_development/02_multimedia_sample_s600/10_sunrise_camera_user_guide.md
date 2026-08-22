@@ -1,9 +1,9 @@
 ---
 sidebar_position: 10
-title: "sunrise camera User Manual"
-description: "sunrise camera User Manual - On-board sample usage instructions"
+title: "sunrise camera User Guide"
+description: "sunrise camera User Guide - On-board sample usage instructions"
 ---
-# sunrise camera User Manual
+# sunrise camera User Guide
 
 ## Functional Overview
 
@@ -261,7 +261,7 @@ The RTSP stream network URL link can be viewed in the device information on the 
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync.png" alt="VLC Disable Clock Sync" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-## Common Issues
+## FAQ
 
 ### RTSP Playback Freezes / Shows Artifacts
 

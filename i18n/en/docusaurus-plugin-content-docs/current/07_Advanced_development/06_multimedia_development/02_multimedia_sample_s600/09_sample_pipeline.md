@@ -779,7 +779,7 @@ pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
 
-## Common Issues
+## FAQ
 
 ### Multi-pipeline Startup Failure
 

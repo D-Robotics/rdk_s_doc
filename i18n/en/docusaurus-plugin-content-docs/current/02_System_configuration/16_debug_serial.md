@@ -56,13 +56,13 @@ After connecting and powering on, the serial port outputs boot logs (U-Boot → 
 
 At the moment of power-on, press any key (or space) in the serial terminal to interrupt auto-boot and enter the U-Boot command line, where you can check/modify boot parameters and recover the boot. For U-Boot parameter configuration, see [Configuring U-Boot and Kernel Option Parameters](../07_Advanced_development/04_driver_development/01_uboot_kernel_config.md).
 
-## Common Issues
+## FAQ
 
 - **No output on the serial port**: The wrong serial port is selected (the board enumerates two serial ports, Main/MCU; select the Main domain); the baud rate is wrong (confirm 921600); the CH340 driver is not installed.
 - **Garbled characters**: The baud rate is wrong (confirm 921600); a leftover macOS driver, see [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver).
 - **Cannot enter U-Boot**: The power-on timing must be early (interrupt as soon as boot logs start); if missed, restart and retry.
 
-## Related Documents
+## Related Documentation
 
 - [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
 - [User and Permission Management](./14_user_permission.md)

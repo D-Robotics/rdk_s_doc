@@ -1,9 +1,9 @@
 ---
 sidebar_position: 3
-title: "sample_isp Usage Guide"
-description: "sample_isp Usage Guide - On-board sample usage instructions"
+title: "sample_isp User Guide"
+description: "sample_isp User Guide - On-board sample usage instructions"
 ---
-# sample_isp Usage Guide
+# sample_isp User Guide
 
 ## Function Overview
 

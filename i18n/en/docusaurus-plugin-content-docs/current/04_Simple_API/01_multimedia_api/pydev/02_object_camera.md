@@ -382,7 +382,7 @@ The host number corresponding to the camera is shown in the figure below:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Diagram of the host number corresponding to the Camera" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-## Related Documents
+## Related Documentation
 
 - [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
 - [Encoder Object](/Simple_API/multimedia_api/pydev/object_encoder)

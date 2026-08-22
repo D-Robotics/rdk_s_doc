@@ -46,7 +46,7 @@ while True:
 | Capture → Encode | Camera → Encoder | [Capture → Encode](/Demos/multimedia_demo/cdev/vio2encoder) |
 | Decode → Display | Decoder → Display | [Decode → Display](/Demos/multimedia_demo/cdev/decode2display) |
 
-## Related Documents
+## Related Documentation
 
 - [Camera Object](./object_camera)
 - [Encoder Object](./object_encoder)

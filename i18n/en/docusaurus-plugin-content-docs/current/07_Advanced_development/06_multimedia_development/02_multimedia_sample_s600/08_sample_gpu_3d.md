@@ -1,9 +1,9 @@
 ---
 sidebar_position: 8
-title: "sample_gpu_3d User Manual"
-description: "sample_gpu_3d User Manual - On-board sample usage instructions"
+title: "sample_gpu_3d User Guide"
+description: "sample_gpu_3d User Guide - On-board sample usage instructions"
 ---
-# sample_gpu_3d User Manual
+# sample_gpu_3d User Guide
 ## Function Overview
 3D GPU supports the following standard APIs:
 - OpenGLES
@@ -110,7 +110,7 @@ Effect description:
 1. A window will be displayed on the monitor desktop: the window shows a red Bezier curve
 2. The content displayed in the window will also be saved as a file: in the current directory, a bmp format image file named `bezier.bmp` will be generated
 
-## Common Issues
+## FAQ
 
 ### No Display Environment, Cannot Preview
 

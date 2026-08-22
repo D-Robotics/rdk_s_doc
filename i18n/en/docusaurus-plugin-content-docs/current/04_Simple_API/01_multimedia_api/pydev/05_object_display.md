@@ -387,7 +387,7 @@ None
 
 None
 
-## Related Documents
+## Related Documentation
 
 - [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
 - [Camera Object](/Simple_API/multimedia_api/pydev/object_camera)

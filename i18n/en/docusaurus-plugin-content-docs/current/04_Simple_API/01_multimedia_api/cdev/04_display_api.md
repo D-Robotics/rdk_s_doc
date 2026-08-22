@@ -213,7 +213,7 @@ sp_stop_display(disp);                       // 4. Stop the display channel
 sp_release_display_module(disp);             // 5. Destroy the DISPLAY object
 ```
 
-## Related Documents
+## Related Documentation
 
 - [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
 - [Display Object](/Simple_API/multimedia_api/pydev/object_display)

@@ -1315,7 +1315,7 @@ On the MCU interface, you can see the interrupt generation
 [03384.498117 0]INFO: Inst 5 chan 0 2 success
 ```
 
-## Frequently Asked Questions
+## FAQ
 
 ### Q1: Why can't I set a second-level alarm?
 

@@ -104,7 +104,7 @@ SRC_PATH += $(shell find ${PLATFORM_SAMPLES_DIR}/vp_sensors -maxdepth 1 -type d)
 	get_vin_data  get_vin_data.c  get_vin_data.o  Makefile
 	```
 
-## Common Issues
+## FAQ
 
 ### Insufficient space in `/app` directory causing example execution failure
 

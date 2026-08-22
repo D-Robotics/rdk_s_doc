@@ -1,10 +1,10 @@
 ---
 sidebar_position: 9
-title: "sample_pipeline Usage Guide"
-description: "sample_pipeline Usage Guide - On-board Example Usage Guide"
+title: "sample_pipeline User Guide"
+description: "sample_pipeline User Guide - On-board Example Usage Guide"
 ---
 
-# sample_pipeline Usage Guide
+# sample_pipeline User Guide
 
 ## Function Overview
 `sample_pipeline` is used to chain single-channel or multi-channel sensor pipelines, covering the common pipeline scenarios for users. Users can learn how to set up each pipeline by exploring the subdirectories under `sample_pipeline`.
@@ -862,7 +862,7 @@ The sample log is as follows:
 [INFO] Cleanup complete
 ```
 
-## Common Issues
+## FAQ
 
 ### Multi-pipeline Startup Failure
 
@@ -870,7 +870,7 @@ The sample log is as follows:
 
 **Cause**: Conflicting mipi_rx/hw_id across multiple sensors, or insufficient ION memory.
 
-**Resolution**: Verify that the mipi_rx configured for each pipeline matches the hardware wiring; reduce the number of pipelines or increase the ION memory.
+**Solution**: Verify that the mipi_rx configured for each pipeline matches the hardware wiring; reduce the number of pipelines or increase the ION memory.
 
 ### uvc_capture_sample Cannot Open /dev/video*
 
@@ -878,7 +878,7 @@ The sample log is as follows:
 
 **Cause**: The system is not in V4L2 (Video4Linux2) mode, or the corresponding video node has not been created.
 
-**Resolution**: Load the v4l2 driver as described in the V4L2 chapter and confirm that the video node exists; verify that the scene configuration matches the hardware.
+**Solution**: Load the v4l2 driver as described in the V4L2 chapter and confirm that the video node exists; verify that the scene configuration matches the hardware.
 
 ### Pipeline Frame Acquisition Timeout
 
@@ -886,9 +886,9 @@ The sample log is as follows:
 
 **Cause**: The upstream vnode is not outputting frames (the sensor is not lit up) or the vflow binding is incorrect.
 
-**Resolution**: Check the sensor output log; verify that the channel number of `hbn_vflow_bind_vnode` is consistent with the configuration.
+**Solution**: Check the sensor output log; verify that the channel number of `hbn_vflow_bind_vnode` is consistent with the configuration.
 
-## Related Documents
+## Related Documentation
 
 - [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
 - [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

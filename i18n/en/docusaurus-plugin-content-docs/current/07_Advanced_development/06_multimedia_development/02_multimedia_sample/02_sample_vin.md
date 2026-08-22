@@ -1,10 +1,10 @@
 ---
 sidebar_position: 2
-title: "sample_vin Usage Instructions"
-description: "sample_vin Usage Instructions On-board example usage instructions"
+title: "sample_vin User Guide"
+description: "sample_vin User Guide On-board example usage instructions"
 ---
 
-# sample_vin Usage Instructions
+# sample_vin User Guide
 
 ## Function Overview
 
@@ -197,7 +197,7 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 
 After running the program, you will obtain a RAW image from the imx219 sensor named in the format `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw`, and a YUV image from the ar0820std sensor named in the format `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.
 
-## Common Issues
+## FAQ
 
 ### `No Camera Sensor found` Prompt
 
@@ -223,7 +223,7 @@ After running the program, you will obtain a RAW image from the imx219 sensor na
 
 **Solution**: Check whether the camera is powered on (compare with the output log during normal operation), verify mipi_rx/link_port against the actual wiring, and confirm that the resolution/frame rate in the configuration file matches the sensor.
 
-## Related Documents
+## Related Documentation
 
 - [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
 - [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

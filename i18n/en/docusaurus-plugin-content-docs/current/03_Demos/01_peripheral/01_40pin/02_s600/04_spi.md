@@ -127,17 +127,17 @@ if __name__ == '__main__':
 
 ### `open spi failed` is reported
 
-**Reason**: The SPI controller is not enabled, or the bus number/chip select number is entered incorrectly.
+**Cause**: The SPI controller is not enabled, or the bus number/chip select number is entered incorrectly.
 
 **Solution**: Confirm that `s600_v0p2_enable_spi1.dtbo` has been written into `config.txt` as described above and the system has been rebooted; `SPI1` corresponds to `bus num = 1`.
 
 ### `0xFF 0xFF` is printed continuously
 
-**Reason**: MISO and MOSI are not shorted, so MISO is at its default level.
+**Cause**: MISO and MOSI are not shorted, so MISO is at its default level.
 
 **Solution**: Short MISO and MOSI as described in [Hardware Connection](#hardware-connection) and try again. When successful, `0x55 0xAA` should be printed.
 
-## Related Documents
+## Related Documentation
 
 - [Pin Definitions](./01_ext_io.md)
 - [SPI Debugging Guide](/Advanced_development/driver_development/driver_spi_dev)

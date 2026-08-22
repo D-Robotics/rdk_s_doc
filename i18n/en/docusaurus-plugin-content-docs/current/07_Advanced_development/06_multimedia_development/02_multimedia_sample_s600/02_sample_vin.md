@@ -1,9 +1,9 @@
 ---
 sidebar_position: 2
-title: "sample_vin User Manual"
-description: "sample_vin User Manual - On-board sample usage instructions"
+title: "sample_vin User Guide"
+description: "sample_vin User Guide - On-board sample usage instructions"
 ---
-# sample_vin User Manual
+# sample_vin User Guide
 
 ## Functional Overview
 `sample_vin` completes the initialization of the Camera Sensor, MIPI CSI, and SIF modules, enabling the function of acquiring video frame data from the vin module. It supports acquiring Raw or YUV format images from the VIN module.
@@ -213,7 +213,7 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 
 After executing the program, you will get the RAW image for imx219 named in the format `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` and the YUV image for ar0820std named in the format `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.
 
-## Common Issues
+## FAQ
 
 ### `No Camera Sensor found` Prompt
 

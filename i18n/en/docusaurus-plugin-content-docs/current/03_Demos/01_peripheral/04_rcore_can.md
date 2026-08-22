@@ -111,7 +111,7 @@ Send end, send package total: 1 frame total: 1
 - After `can_send` sends a CAN frame, the `can_get` side can receive the corresponding data
 - In the SocketCAN approach, `candump can0` can be used to verify reception
 
-## Related Documents
+## Related Documentation
 
 - [CAN Driver Development](../../07_Advanced_development/11_mcu_development/09_mcu_can.md)
 - [C/C++ Demo Programming Guide](../04_demo_support/02_c_cpp_build.md)

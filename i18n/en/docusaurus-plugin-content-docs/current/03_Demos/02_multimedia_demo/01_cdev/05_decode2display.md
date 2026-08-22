@@ -94,7 +94,7 @@ See [DECODER API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.m
 
 **Solution**: Confirm the file path is correct and the width/height parameters match the bitstream.
 
-## Related Documents
+## Related Documentation
 
 - [Capture→Encode](./03_vio2encoder.md) (generates the bitstream file)
 - [RTSP→Display](./06_rtsp2display.md)

@@ -270,7 +270,7 @@ sample_alloc_com_buf done
 
 (Other execution output examples retain the original text structure, with only formatting and keyword adjustments applied; repetitive content omitted here.)
 
-## Common Issues
+## FAQ
 
 ### Memory Allocation Failure
 

@@ -94,7 +94,7 @@ Before connecting two USB cameras, you need to run `rmmod uvcvideo; modprobe uvc
 2. The s100 development board has two USB hosts; the top and bottom ports belong to the same host. If you need to connect two usb2.0 720p cameras, insert them into the left and right ports so that each usb2.0 camera occupies one host.
 :::
 
-## Related Documents
+## Related Documentation
 
 - [Capture → Display](../../02_multimedia_demo/01_cdev/02_vio2display.md)
 - [USB Camera Based Inference](../../03_algorithm_demo/07_camera_streaming/01_usb_camera.md)

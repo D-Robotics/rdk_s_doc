@@ -46,7 +46,7 @@ Some firmware components (such as miniboot and the bootloader) support upgrade/d
 - **Abnormal behavior after downgrade**: firmware downgrading carries compatibility risks; confirm that the downgrade path is officially supported.
 - **OTA failure**: Check whether the partition layout and the `miniboot` version match; see [System OTA Upgrade](../../07_Advanced_development/03_system_software/06_ota_system.md).
 
-## Related Documents
+## Related Documentation
 
 - [Package Management apt](./01_apt_usage.md)
 - [Flashing Steps](../../01_Quick_start/03_install_os_and_setup/02_burn.md)

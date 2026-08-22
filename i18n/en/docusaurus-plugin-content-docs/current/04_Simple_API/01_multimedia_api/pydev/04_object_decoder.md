@@ -261,7 +261,7 @@ The `close` interface must be called when exiting the program to release resourc
 
 None
 
-## Related Documents
+## Related Documentation
 
 - [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
 - [Encoder Object](/Simple_API/multimedia_api/pydev/object_encoder)

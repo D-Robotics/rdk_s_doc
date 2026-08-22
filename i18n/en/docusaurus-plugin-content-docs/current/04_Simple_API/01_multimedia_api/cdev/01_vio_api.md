@@ -320,7 +320,7 @@ sp_release_vio_module(vio);                  // 5. Destroy the VIO object
 free(buf);
 ```
 
-## Related Documents
+## Related Documentation
 
 - [Multimedia API Overview](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
 - [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)

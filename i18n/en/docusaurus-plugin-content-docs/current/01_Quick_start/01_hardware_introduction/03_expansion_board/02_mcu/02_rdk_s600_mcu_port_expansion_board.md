@@ -134,7 +134,7 @@ Below the 5-position switch (SW401) of the expansion board, there is one green L
 - Steady green: The RDK S600 and the MCU Expansion Board are connected properly, and the 5V power supply is normal;
 - Off: The connection between the RDK S600 and the MCU Expansion Board is abnormal, and there is no 5V power supply.
 
-## Related Documents
+## Related Documentation
 
 - Main board: [Introduction to the Developer Kit (RDK S600)](../../02_rdk_s600.md)
 - Expansion board: [RDK S600 Camera Expansion Board](../01_camera/03_rdk_s600_camera_expansion_board.md)

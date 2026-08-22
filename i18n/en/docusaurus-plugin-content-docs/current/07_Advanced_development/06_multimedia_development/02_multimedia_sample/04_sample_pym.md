@@ -1,10 +1,10 @@
 ---
 sidebar_position: 4
-title: "sample_pym Usage Instructions"
-description: "sample_pym Usage Instructions: on-board sample usage guide"
+title: "sample_pym User Guide"
+description: "sample_pym User Guide: on-board sample usage guide"
 ---
 
-# sample_pym Usage Instructions
+# sample_pym User Guide
 
 ## Function Overview
 sample_pym reads a YUV file into memory allocated via hbm, passes it to PYM, which processes it in a pyramid-layer manner, and finally dumps the processed YUV data to the file system.
@@ -79,7 +79,7 @@ pym config:
 Note:
 1. The width output by the PYM module is aligned to 16 bytes. When viewing images, note that the `width` and `wstride` parameters may differ.
 
-## Common Issues
+## FAQ
 
 ### Abnormal Output Caused by Input YUV Mismatching the Parameters
 
@@ -97,7 +97,7 @@ Note:
 
 **Solution**: Use `-f` when debugging by feeding back a single image; use the default vflow mode when used in a pipeline, referring to `sample_pipeline`.
 
-## Related Documents
+## Related Documentation
 
 - [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
 - [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

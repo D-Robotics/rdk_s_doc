@@ -140,17 +140,17 @@ if __name__ == '__main__':
 
 ### `open serial failed` is reported
 
-**Reason**: Opening the serial device failed; it may be occupied by another process, or the device does not exist.
+**Cause**: Opening the serial device failed; it may be occupied by another process, or the device does not exist.
 
 **Solution**: Confirm that the selected `/dev/ttySx` exists and is not occupied; testing the system debug port `/dev/ttyS0` is not recommended.
 
 ### Nothing appears after `Recv:`
 
-**Reason**: TXD and RXD are not shorted, or the wiring is wrong, so no loopback data can be read.
+**Cause**: TXD and RXD are not shorted, or the wiring is wrong, so no loopback data can be read.
 
 **Solution**: Short TXD and RXD as described in [Hardware Connection](#hardware-connection) and try again.
 
-## Related Documents
+## Related Documentation
 
 - [Pin Definitions](./01_ext_io.md)
 - [UART Driver Debugging Guide](/Advanced_development/driver_development/driver_uart_dev)

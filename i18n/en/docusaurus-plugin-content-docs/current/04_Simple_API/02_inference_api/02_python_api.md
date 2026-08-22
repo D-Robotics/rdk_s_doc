@@ -1005,7 +1005,7 @@ run() provides 3 input forms (single input / single-model multi-input / multi-mo
 ## Notes
 - Dynamic inputs and outputs have not been tested; use them with caution;
 
-## Related Documents
+## Related Documentation
 
 - [ResNet18 Classification Example (Python)](../../03_Demos/03_algorithm_demo/02_classification/01_resnet18_py.md)
 - [YOLOv5x Detection Example (Python)](../../03_Demos/03_algorithm_demo/03_detection/01_yolov5x_py.md)

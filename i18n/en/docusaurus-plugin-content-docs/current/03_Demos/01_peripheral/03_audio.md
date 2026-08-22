@@ -256,7 +256,7 @@ Currently only dupont wire connection to the audio daughter board is supported. 
 
 </DocScope>
 
-## Related Documents
+## Related Documentation
 
 - [Audio Configuration](../../02_System_configuration/10_audio_output.md)
 - [Audio Debugging Guide](../../07_Advanced_development/04_driver_development/09_driver_audio.md)

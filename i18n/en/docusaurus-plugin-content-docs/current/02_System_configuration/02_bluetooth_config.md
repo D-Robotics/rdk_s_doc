@@ -79,7 +79,7 @@ configure the above two items, then restart `bluetooth.service`.
 - **No automatic reconnection on boot**: Check `ReconnectAttempts` and
   `ReconnectIntervals` in `/etc/bluetooth/main.conf` (commented out by default); for HID devices, try having the peripheral initiate the connection.
 
-## Related Documents
+## Related Documentation
 
 - [Bluetooth Initialization Guide (Advanced)](../07_Advanced_development/03_system_software/05_bluetooth_init.md)
 - [Network Configuration](./01_network_config.md)

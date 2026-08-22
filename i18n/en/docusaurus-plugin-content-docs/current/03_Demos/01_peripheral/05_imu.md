@@ -101,7 +101,7 @@ Error: init IMU 'bmi08x' failed !!! Quit Now
 
 > The data frame above is an output format example (acceleration in m/s², angular velocity in rad/s); the actual values vary with the sensor pose and range.
 
-## Related Documents
+## Related Documentation
 
 - [Extended Pin Application](./01_40pin/02_s600/02_gpio.md)
 - [C/C++ Demo Programming Guide](../04_demo_support/02_c_cpp_build.md)

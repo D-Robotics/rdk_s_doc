@@ -644,7 +644,7 @@ After parsing and transforming each JSON file, 4 processed NV12 format YUV image
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/Transformed_Effect.png" alt="Transformed Effect" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-## Common Issues
+## FAQ
 
 ### JSON Configuration Parsing or Bin Generation Failure
 

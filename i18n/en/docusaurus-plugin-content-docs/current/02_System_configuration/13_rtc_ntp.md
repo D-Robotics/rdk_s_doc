@@ -69,13 +69,13 @@ hwclock: Warning: unrecognized line in adjtime file:
 If the board has no network across power loss but must keep time, make sure the RTC has battery power and that a real time has been written with `hwclock --systohc`.
 :::
 
-## Common Issues
+## FAQ
 
 - **System time falls back to 1970 after power loss**: No real time has been written to the RTC. After connecting to the network, run `sudo hwclock --systohc` to write it.
 - **NTP not taking effect**: Confirm that the network is reachable and that `set-ntp true` is enabled; check `systemctl status systemd-timesyncd`.
 - **`hwclock` reports adjtime warnings**: The `/etc/adjtime` format is abnormal; rebuild it as suggested or ignore the warnings (main functionality is unaffected).
 
-## Related Documents
+## Related Documentation
 
 - [RTC Debugging Guide (Advanced)](../07_Advanced_development/04_driver_development/14_driver_rtc.md)
 - [System Log Viewing](./15_system_log.md)

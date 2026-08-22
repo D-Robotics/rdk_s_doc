@@ -76,7 +76,7 @@ pym config:
 Note:  
 1. The width output by the PYM module is aligned to 16 bytes. When viewing the image, pay attention to cases where the `width` and `wstride` parameters differ.
 
-## Common Issues
+## FAQ
 
 ### Abnormal Output Caused by Input YUV Mismatching the Parameters
 

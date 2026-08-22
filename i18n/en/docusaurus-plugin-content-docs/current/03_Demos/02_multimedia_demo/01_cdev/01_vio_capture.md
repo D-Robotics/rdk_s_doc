@@ -65,7 +65,7 @@ Troubleshooting failure: when no camera is connected, the program prints `[Error
 
 **Solution**: Power off the board, reconnect the camera, and retry after confirming that the sensor model is supported.
 
-## Related Documents
+## Related Documentation
 
 - [VIO (Video Input) API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
 - [Capture→Display](./02_vio2display.md)

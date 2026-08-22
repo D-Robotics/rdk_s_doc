@@ -137,7 +137,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 **Cause:**
 The D-Robotics official APT repository hostname or GPG signing key has changed, leaving local configuration outdated.
 
-**Resolution steps:**
+**Solution steps:**
 
 1. **Check current repository configuration**
    ```bash
@@ -214,7 +214,7 @@ The D-Robotics official APT repository hostname or GPG signing key has changed, 
 **Cause:**
 The ROS 2 official repository GPG signing key was updated, leaving local configuration outdated.
 
-**Resolution steps:**
+**Solution steps:**
 
 1. **Update the GPG key**
    ```bash

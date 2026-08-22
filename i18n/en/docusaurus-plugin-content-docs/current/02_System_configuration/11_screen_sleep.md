@@ -66,7 +66,7 @@ For Thermal and CPU frequency policies, see [Thermal and CPU Frequency Managemen
 - **The desktop still blanks the screen**: Confirm that the gsettings took effect; under Wayland, you need to use the corresponding org.gnome.* settings.
 - **The console still goes black**: Check whether `consoleblank=0` made it into the kernel command line (`cat /proc/cmdline`).
 
-## Related Documents
+## Related Documentation
 
 - [Display Configuration](./09_display_config.md)
 - [Thermal and CPU Frequency Management](./08_frequency_management.md)

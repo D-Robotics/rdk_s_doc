@@ -1,10 +1,10 @@
 ---
 sidebar_position: 8
-title: "sample_gpu_3d Usage Guide"
+title: "sample_gpu_3d User Guide"
 description: "sample_gpu_3d usage guide - board-side example usage guide"
 ---
 
-# sample_gpu_3d Usage Guide
+# sample_gpu_3d User Guide
 
 ## Function Overview
 
@@ -135,7 +135,7 @@ Result description:
 1. A window will be displayed on the monitor desktop: the window displays a red Bézier curve
 2. The content displayed in the window is also saved as a file: the following bmp image file will be generated in the current directory: `bezier.bmp`
 
-## Frequently Asked Questions
+## FAQ
 
 ### No Display Environment, Cannot Preview
 
@@ -153,7 +153,7 @@ Result description:
 
 **Solution**: Use OpenCL for image/data processing tasks; use OpenGL ES for tasks that need to render to the screen/window.
 
-## Related Documents
+## Related Documentation
 
 - [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
 - [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

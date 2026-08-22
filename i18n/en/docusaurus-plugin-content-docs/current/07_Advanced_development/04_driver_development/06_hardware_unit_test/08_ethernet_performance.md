@@ -147,7 +147,7 @@ Receive bandwidth: **949 Mbits/sec**
 
 Transmit bandwidth: **950 Mbits/sec**
 
-## Common Issues
+## FAQ
 
 ### 1. Why can't the `iperf3` client connect to the server?
 

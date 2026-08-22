@@ -82,17 +82,17 @@ Outputting 1 to Pin 23
 
 ### Running the example script shows insufficient permissions
 
-**Reason**: Accessing peripherals such as GPIO requires root privileges.
+**Cause**: Accessing peripherals such as GPIO requires root privileges.
 
 **Solution**: Run with `sudo python3 ./button_led.py`, or run `sudo -s` first to switch to the root user.
 
 ### Pin level does not change
 
-**Reason**: The input pin is not connected to a level correctly, or the output pin has no measurement point attached.
+**Cause**: The input pin is not connected to a level correctly, or the output pin has no measurement point attached.
 
 **Solution**: Confirm the dupont wire connection is correct; pin `24` is an input and must be connected to 3.3V or GND; pin `23` is an output, and can be observed with a multimeter or by connecting an LED.
 
-## Related Documents
+## Related Documentation
 
 - [Expansion Pin Application (S100)](/Demos/peripheral/40pin)
 - [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)

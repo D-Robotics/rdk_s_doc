@@ -52,7 +52,7 @@ root@ubuntu:~# lspci -v -s 04:00.0
         Kernel modules: brcmfmac
 ```
 ## Module Driver Code
-The driver code for the AW-XM612 module is provided by the module manufacturer and integrated by Dijiang. The integrated code is located in the `source/kernel/drivers/net/wireless/broadcom/brcm80211/` directory.
+The driver code for the AW-XM612 module is provided by the module manufacturer and integrated by D-Robotics. The integrated code is located in the `source/kernel/drivers/net/wireless/broadcom/brcm80211/` directory.
 
 ## Module Kernel Configuration
 The driver for the AW-XM612 module requires the following configurations:

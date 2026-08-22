@@ -216,7 +216,7 @@ This interface must be used after calling `Encoder.encode()` to create an encodi
 
 None
 
-## Related Documents
+## Related Documentation
 
 - [Multimedia Interface Description](./pydev_multimedia_api)
 - [Decoder Object](./object_decoder)

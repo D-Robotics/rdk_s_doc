@@ -89,7 +89,7 @@ See [VIO API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) and [
 
 **Solution**: Power off the board, reconnect the camera, and retry after confirming that the sensor model is supported.
 
-## Related Documents
+## Related Documentation
 
 - [Video Capture](./01_vio_capture.md)
 - [Using MIPI Camera](../../01_peripheral/02_camera/01_mipi_camera.md)

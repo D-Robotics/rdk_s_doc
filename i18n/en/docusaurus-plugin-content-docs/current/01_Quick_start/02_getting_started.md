@@ -150,7 +150,7 @@ The USB Type-A ports are used for connecting storage devices such as USB flash d
 - **The development board fails to boot**: Check the power-up sequence (independently powered peripherals must not be powered on before the development board), and check whether the boot media DIP switch is set to the default boot position.
 - **Keyboard and mouse are unresponsive**: Try another USB Type-A port; make sure you are using a wired keyboard and mouse (Bluetooth keyboards/mice require the Wi-Fi & Bluetooth module to be installed first).
 
-## Related Documents
+## Related Documentation
 
 - [Hardware Introduction](/01_Quick_start/01_hardware_introduction/03_expansion_board)
 - [OS Flashing](./03_install_os_and_setup/01_instruction.md)

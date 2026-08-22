@@ -123,17 +123,17 @@ if __name__ == '__main__':
 
 ### `open spi failed` is reported
 
-**Reason**: The SPI controller is not enabled, or the bus number/chip select number is entered incorrectly.
+**Cause**: The SPI controller is not enabled, or the bus number/chip select number is entered incorrectly.
 
 **Solution**: Confirm that SPI0 is enabled; the two chip selects of SPI0 correspond to `bus num = 0`, `cs num = 0` or `1`.
 
 ### The read-back data does not match the written value
 
-**Reason**: MISO and MOSI are not shorted, so MISO is at its default level.
+**Cause**: MISO and MOSI are not shorted, so MISO is at its default level.
 
 **Solution**: Short MISO and MOSI as described in [Hardware Connection](#hardware-connection) and try again. When successful, `0x55 0xAA` should be printed.
 
-## Related Documents
+## Related Documentation
 
 - [Pin Definitions](./01_40pin_define.md)
 - [SPI Debugging Guide](/Advanced_development/driver_development/driver_spi_dev)

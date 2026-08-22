@@ -69,7 +69,7 @@ aplay /app/res/assets/chi_sound.wav
 - **USB sound card not recognized**: Verify with `lsusb`, and check the driver loading with `dmesg`.
 - **Noise/crackling**: Lower the sample rate, and check the buffer/period settings.
 
-## Related Documents
+## Related Documentation
 
 - [Display Configuration](./09_display_config.md)
 - [Bluetooth Configuration](./02_bluetooth_config.md)

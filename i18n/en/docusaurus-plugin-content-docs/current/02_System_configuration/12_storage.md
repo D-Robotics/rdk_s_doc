@@ -82,7 +82,7 @@ sudo growpart /dev/sda <partition_number>
 Partition operations carry a risk of data loss. First use `df`/`lsblk` to confirm the target partition, and back up when necessary.
 :::
 
-## Related Documents
+## Related Documentation
 
 - [Package Management apt](./03_system_update/01_apt_usage.md)
 - [System Log Viewing](./15_system_log.md)

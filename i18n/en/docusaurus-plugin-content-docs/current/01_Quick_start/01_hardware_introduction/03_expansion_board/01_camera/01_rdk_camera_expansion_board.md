@@ -232,7 +232,7 @@ The power indicator LED, located next to the DC power input interface.
 
 Refer to [Accessory List](../../01_rdk_s100.md#accessory-list)
 
-## Related Documents
+## Related Documentation
 
 - Main board: [Developer Kit Introduction (RDK S100)](../../01_rdk_s100.md)
 - Expansion boards: [RDK S100 Camera Expansion Board 12 Channels](./02_rdk_camera_expansion_board_12l.md), [RDK S100 MCU Port Expansion Board](../02_mcu/01_rdk_mcu_port_expansion_board.md)

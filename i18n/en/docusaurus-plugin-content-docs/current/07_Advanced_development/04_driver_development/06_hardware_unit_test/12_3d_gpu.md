@@ -285,7 +285,7 @@ Kernel launch latency : 96.12 us
 - Kernel launch latency is relatively high, possibly due to driver scheduling or OpenCL runtime overhead.  
 - This may create a performance bottleneck for real-time computing applications (e.g., computer vision); thus, minimizing the number of kernel invocations is advised.
 
-## Common Issues
+## FAQ
 
 1. Rendering performance test fails during execution  
 - Issue description: Error log as follows

@@ -99,7 +99,7 @@ See [VIO API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) and [
 
 **Solution**: Confirm the input file exists and that `--iwidth` / `--iheight` match the resolution of the input data.
 
-## Related Documents
+## Related Documentation
 
 - [Video Capture](./01_vio_capture.md)
 - [VIO (Video Input) API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)

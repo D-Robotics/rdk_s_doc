@@ -357,7 +357,7 @@ For system software package upgrades and major version/firmware updates, see [Sy
 - Wireless Station: `ip addr show wlan0` shows the IP address assigned by the router.
 - DNS: `nmcli device show eth1 | grep DNS` or `cat /etc/resolv.conf` shows the active DNS servers.
 
-## Related Documents
+## Related Documentation
 
 - [Bluetooth Configuration](./02_bluetooth_config.md)
 - [System Update](./03_system_update/02_upgrade_firmware.md)

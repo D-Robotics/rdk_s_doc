@@ -92,7 +92,7 @@ sp_module_bind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY);   // Bind: VIO output
 sp_module_unbind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY); // Unbind before exit
 ```
 
-## Related Documents
+## Related Documentation
 
 - [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
 - [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)

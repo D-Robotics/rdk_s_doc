@@ -148,7 +148,7 @@ The power indicator, located next to the DC power input interface.
 
 See [Accessory List](https://horizonrobotics.feishu.cn/wiki/NMBEwLysUiDHFYk547BcgA9QnIf)
 
-## Related Documents
+## Related Documentation
 
 - Main board: [Introduction to the Developer Kit (RDK S600)](../../02_rdk_s600.md)
 - Expansion board: [RDK S600 MCU Port Expansion Board](../02_mcu/02_rdk_s600_mcu_port_expansion_board.md)

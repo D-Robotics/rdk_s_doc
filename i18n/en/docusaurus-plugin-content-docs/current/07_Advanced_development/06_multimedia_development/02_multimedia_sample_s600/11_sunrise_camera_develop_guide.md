@@ -1,9 +1,9 @@
 ---
 sidebar_position: 11
-title: "Sunrise camera development instructions"
-description: "Sunrise camera development instructions - On-board sample usage instructions"
+title: "Sunrise camera Development Guide"
+description: "Sunrise camera Development Guide - On-board sample usage instructions"
 ---
-# Sunrise camera development instructions
+# Sunrise camera Development Guide
 
 ## Sunrise camera system design
 
@@ -555,7 +555,7 @@ handleMessage(event) {
 
 ```
 
-## Common Issues
+## FAQ
 
 ### CMD Invocation Failure
 
@@ -571,7 +571,7 @@ handleMessage(event) {
 
 **Cause**: The model file is not placed in the correct directory, the `bpu_models` configuration is not added, or the inference/post-processing functions are not implemented.
 
-**Solution**: Check the four steps according to "Adding a New Model": place the model file in `Platform/s100/model_zoom` (*.hbm), add the configuration to `bpu_models` in `bpu_wrap.c`, implement the inference thread handler function, and implement the corresponding post-processing code.
+**Solution**: Check the four steps according to "Adding a New Model": place the model file in `Platform/S600/model_zoom` (*.hbm), add the configuration to `bpu_models` in `bpu_wrap.c`, implement the inference thread handler function, and implement the corresponding post-processing code.
 
 ### Module Startup Order Error
 

@@ -163,7 +163,7 @@ sp_release_decoder_module(dec);              // 5. Destroy the DECODER object
 free(img);
 ```
 
-## Related Documents
+## Related Documentation
 
 - [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
 - [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)

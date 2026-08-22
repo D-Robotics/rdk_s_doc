@@ -97,7 +97,7 @@ exit 0
 For new projects, prefer systemd unit (Method 1), which can manage dependencies, restart policies, and logs; init.d/rc.local are only for compatibility.
 :::
 
-## Related Documents
+## Related Documentation
 
 - [Viewing System Logs](./15_system_log.md)
 - [User and Permission Management](./14_user_permission.md)

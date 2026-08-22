@@ -106,7 +106,7 @@ libsrcampy.bind(cam, disp)           # bind capture to display
 
 **Solution**: Use the desktop image and run them within a desktop session.
 
-## Related Documents
+## Related Documentation
 
 - [C Language Examples](../01_cdev/01_vio_capture.md)
 - [Multimedia Interface Description](../../../04_Simple_API/01_multimedia_api/pydev/01_pydev_multimedia_api.md)

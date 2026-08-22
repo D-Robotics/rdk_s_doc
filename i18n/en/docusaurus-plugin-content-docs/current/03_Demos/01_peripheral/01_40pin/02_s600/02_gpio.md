@@ -743,17 +743,17 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 
 ### Running the GPIO example produces no output or the level does not change
 
-**Reason**: The 30-pin latching connector digital IOs of the RDK S600 are 1.8V level; the pin numbers used in the examples are automatically adapted to the board type (see `determine_pins()`).
+**Cause**: The 30-pin latching connector digital IOs of the RDK S600 are 1.8V level; the pin numbers used in the examples are automatically adapted to the board type (see `determine_pins()`).
 
 **Solution**: Confirm that the peripheral levels match 1.8V; input pins must be connected to a definite level, and output pins can be observed with a multimeter or an LED.
 
 ### The pin is reported as already occupied
 
-**Reason**: The GPIO is already used by another process.
+**Cause**: The GPIO is already used by another process.
 
 **Solution**: Terminate the occupying process and retry; the examples automatically call `GPIO.cleanup()` on exit to release the pins. You can also use `GPIO.setwarnings(False)` to suppress warnings.
 
-## Related Documents
+## Related Documentation
 
 - [Pin Definitions](./01_ext_io.md)
 - [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)

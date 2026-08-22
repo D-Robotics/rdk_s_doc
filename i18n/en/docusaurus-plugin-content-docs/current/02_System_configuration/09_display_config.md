@@ -87,7 +87,7 @@ In the Wayland session, configure the rotation direction in "Settings → Displa
 - **Wrong resolution**: In X11, use `xrandr` to check the supported list; in Wayland, adjust in "Settings → Displays", or check the modes supported by the kernel with `cat /sys/class/drm/card0-HDMI-A-1/modes`, and choose the modes reported by EDID.
 - **Garbled screen/flickering**: Replace with a compliant HDMI cable and check the refresh rate.
 
-## Related Documents
+## Related Documentation
 
 - [config.txt Configuration](./05_config_txt/01_usage.md)
 - [Screen Sleep and Power Management](./11_screen_sleep.md)

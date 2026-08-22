@@ -449,7 +449,7 @@ You can use the `sudo hrut_somstatus` command to check the current chip operatin
 
 </DocScope>
 
-## Related Documents
+## Related Documentation
 
 - [Display Configuration](./09_display_config.md)
 - [Screen Sleep and Power Management](./11_screen_sleep.md)

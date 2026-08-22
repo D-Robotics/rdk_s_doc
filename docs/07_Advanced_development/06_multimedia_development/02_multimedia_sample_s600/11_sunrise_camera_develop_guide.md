@@ -573,7 +573,7 @@ handleMessage(event) {
 
 **原因**：模型文件未放对目录、`bpu_models` 配置未添加、推理/后处理函数未实现。
 
-**解决**：按「添加一个新模型流程」核对四步：模型文件放 `Platform/s100/model_zoom`（*.hbm）、`bpu_wrap.c` 的 `bpu_models` 添加配置、实现推理线程处理函数、实现对应后处理代码。
+**解决**：按「添加一个新模型流程」核对四步：模型文件放 `Platform/S600/model_zoom`（*.hbm）、`bpu_wrap.c` 的 `bpu_models` 添加配置、实现推理线程处理函数、实现对应后处理代码。
 
 ### 模块启动顺序错误
 

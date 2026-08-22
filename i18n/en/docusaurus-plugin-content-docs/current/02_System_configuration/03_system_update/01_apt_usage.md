@@ -92,7 +92,7 @@ sudo apt autoremove          # Remove unnecessary dependencies
 
 For rootfs expansion, see [Storage and Disk Management](../12_storage.md).
 
-## Related Documents
+## Related Documentation
 
 - [Major Version Upgrade and Firmware](./02_upgrade_firmware.md)
 - [Storage and Disk Management](../12_storage.md)

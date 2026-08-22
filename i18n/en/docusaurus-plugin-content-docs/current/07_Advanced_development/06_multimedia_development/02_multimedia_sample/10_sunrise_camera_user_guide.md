@@ -267,7 +267,7 @@ The RTSP stream URL can be found in the device information section of the web in
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_disable_clock_sync-en.png" alt="VLC Disable Clock Sync" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
-## Common Issues
+## FAQ
 
 ### RTSP Playback Freezes / Shows Artifacts
 
@@ -275,7 +275,7 @@ The RTSP stream URL can be found in the device information section of the web in
 
 **Cause**: Bitrate exceeds network bandwidth; VLC buffer is too small; clock synchronization causes buffering anomalies.
 
-**Fix**: For 4K@30fps high bitrate (8192Kbps+) prefer a gigabit network; raise VLC buffer_size from the default 250000 to 1200000; prefer HTTP streaming mode; disable clock synchronization in VLC advanced settings.
+**Solution**: For 4K@30fps high bitrate (8192Kbps+) prefer a gigabit network; raise VLC buffer_size from the default 250000 to 1200000; prefer HTTP streaming mode; disable clock synchronization in VLC advanced settings.
 
 ### Camera Not Enabled After Replacement
 
@@ -283,7 +283,7 @@ The RTSP stream URL can be found in the device information section of the web in
 
 **Cause**: After saving configuration and powering on again, a newly inserted camera is disabled by default.
 
-**Fix**: Re-enable the corresponding Camera interface in the web configuration UI and save.
+**Solution**: Re-enable the corresponding Camera interface in the web configuration UI and save.
 
 ### Too Many Enabled Channels Hit Memory Limit
 
@@ -291,7 +291,7 @@ The RTSP stream URL can be found in the device information section of the web in
 
 **Cause**: The device's default ION memory budget for encode/decode and algorithms is limited (intelligent box ~1GB); too many channels exceed the limit.
 
-**Fix**: Reduce the number of enabled channels, or adjust the system ION memory size.
+**Solution**: Reduce the number of enabled channels, or adjust the system ION memory size.
 
 ## Related Documentation
 

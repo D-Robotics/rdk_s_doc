@@ -220,7 +220,7 @@ Encode idx: 0, frame= 100
 
 According to the configuration `frame_num = 100` in `codec_config.ini`, the program automatically exits after encoding 100 frames.
 
-## Common Issues
+## FAQ
 
 ### codec_config.ini Configuration Not Taking Effect
 

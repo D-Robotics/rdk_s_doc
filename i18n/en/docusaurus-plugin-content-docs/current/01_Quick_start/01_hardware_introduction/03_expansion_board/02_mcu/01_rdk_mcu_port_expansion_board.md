@@ -137,7 +137,7 @@ Below the expansion board 100PIN connector (J1), there is one green LED indicato
 
 Board dimensions: 70x70x17mm
 
-## Related Documents
+## Related Documentation
 
 - Main board: [Introduction to the Developer Kit (RDK S100)](../../01_rdk_s100.md)
 - Expansion board: [RDK S100 Camera Expansion Board](../01_camera/01_rdk_camera_expansion_board.md)

@@ -76,17 +76,17 @@ if __name__ == '__main__':
 
 ### No waveform output
 
-**Reason**: The PWM pin is occupied by another function, or no measurement device is connected.
+**Cause**: The PWM pin is occupied by another function, or no measurement device is connected.
 
 **Solution**: Confirm that pins `32`/`33` are not occupied by other functions; measure the output waveform with an oscilloscope or logic analyzer. The example output is a square wave starting at 25% duty cycle, increasing/decreasing by 5% every 0.25 seconds.
 
 ### PWM channel initialization failure is reported
 
-**Reason**: The selected pin does not support hardware PWM.
+**Cause**: The selected pin does not support hardware PWM.
 
 **Solution**: On the RDK S100 40-pin header, only pins `32` and `33` support LPWM; switch to these two pins.
 
-## Related Documents
+## Related Documentation
 
 - [Pin Definitions](./01_40pin_define.md)
 - [PWM Driver Debugging Guide](/Advanced_development/driver_development/driver_pwm)

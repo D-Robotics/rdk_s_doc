@@ -70,7 +70,7 @@ chmod 755 <file>              # rwxr-xr-x
 chown <user>:<group> <file>   # Change owner and group
 ```
 
-## Related Documents
+## Related Documentation
 
 - [Boot Auto-Start Configuration](./06_self_start.md)
 - [System Log Viewing](./15_system_log.md)

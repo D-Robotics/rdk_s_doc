@@ -1,9 +1,9 @@
 ---
 sidebar_position: 12
-title: "hbmem sample usage instructions"
-description: "hbmem sample usage instructions - On-board sample usage instructions"
+title: "hbmem sample User Guide"
+description: "hbmem sample User Guide - On-board sample usage instructions"
 ---
-# hbmem sample usage instructions
+# hbmem sample User Guide
 
 ## Function Overview
 
@@ -268,7 +268,7 @@ sample_alloc_com_buf done
 
 (Other execution output examples retain the original text structure, with only formatting and keyword adjustments applied; repetitive content omitted here.)
 
-## Common Issues
+## FAQ
 
 ### Memory Allocation Failure
 
@@ -276,7 +276,7 @@ sample_alloc_com_buf done
 
 **Cause**: The requested size exceeds the available space of the backend, the heapmask specifies an unavailable heap, or `hb_mem_module_open` was not called first.
 
-**Fix**: Confirm `hb_mem_module_open` was called first; check the size and heapmask parameters; if necessary, retry with another backend (ION CMA / CARVEOUT / SRAM).
+**Solution**: Confirm `hb_mem_module_open` was called first; check the size and heapmask parameters; if necessary, retry with another backend (ION CMA / CARVEOUT / SRAM).
 
 ### Cross-Process Sharing Failure
 
@@ -284,7 +284,7 @@ sample_alloc_com_buf done
 
 **Cause**: The share_id was not passed correctly, the receiving process did not open the hbmem module, or the shared memory was already released.
 
-**Fix**: Obtain the share_id via `hb_mem_get_share_id` and pass it reliably; the receiving process must call `hb_mem_module_open` first; do not release the memory while it is still shared.
+**Solution**: Obtain the share_id via `hb_mem_get_share_id` and pass it reliably; the receiving process must call `hb_mem_module_open` first; do not release the memory while it is still shared.
 
 ### Cache Coherence Issue
 
@@ -292,7 +292,7 @@ sample_alloc_com_buf done
 
 **Cause**: No cache invalidate/clean operation was performed.
 
-**Fix**: Perform `hb_mem_cache_clean` (or flush) after writing and before reading, and `hb_mem_cache_invalid` before reading; refer to the usage in `sample_share.c`.
+**Solution**: Perform `hb_mem_cache_clean` (or flush) after writing and before reading, and `hb_mem_cache_invalid` before reading; refer to the usage in `sample_share.c`.
 
 ## Related Documentation
 

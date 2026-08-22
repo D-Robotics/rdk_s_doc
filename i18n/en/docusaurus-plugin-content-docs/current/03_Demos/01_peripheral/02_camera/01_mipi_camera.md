@@ -107,11 +107,11 @@ After the program runs, the monitor displays the camera view and the results of 
 
 ### `No camera sensor found` is reported when running
 
-**Reason**: The MIPI camera is not connected correctly, or multiple cameras are connected at the same time.
+**Cause**: The MIPI camera is not connected correctly, or multiple cameras are connected at the same time.
 
 **Solution**: Check the connection between the camera and the MIPI CSI interface, confirm that only one camera is connected, and try again.
 
-## Related Documents
+## Related Documentation
 
 - [Capture → Display](../../02_multimedia_demo/01_cdev/02_vio2display.md)
 - [MIPI Camera Inference Example](../../03_algorithm_demo/07_camera_streaming/02_mipi_camera.md)

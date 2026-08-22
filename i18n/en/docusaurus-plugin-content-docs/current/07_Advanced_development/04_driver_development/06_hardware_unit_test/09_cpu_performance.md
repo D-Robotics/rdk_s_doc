@@ -263,7 +263,7 @@ the CoreMark Score is calculated as:
 `CoreMark Score = 84290 / (1500 × 8) ≈ 7.03`,  
 which also far surpasses the `-O3` multi-core baseline (4.2), indicating strong overall system computational capability.
 
-## Frequently Asked Questions
+## FAQ
 
 **Q1**: How do I test the CoreMark metric under multi-core configuration with `-O2` compiler optimization enabled?
 

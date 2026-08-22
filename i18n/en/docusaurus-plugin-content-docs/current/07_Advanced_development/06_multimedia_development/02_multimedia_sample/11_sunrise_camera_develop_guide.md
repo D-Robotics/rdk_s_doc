@@ -557,7 +557,7 @@ handleMessage(event) {
 
 ```
 
-## Frequently Asked Questions
+## FAQ
 
 ### CMD Invocation Failure
 
@@ -583,7 +583,7 @@ handleMessage(event) {
 
 **Solution**: Check the startup order according to the "Submodule Startup Order" section, and start the later modules only after the prerequisite modules are ready.
 
-## Related Documents
+## Related Documentation
 
 - [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
 - [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

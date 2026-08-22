@@ -448,7 +448,7 @@ test_cam_vps_display()
 - When feeding an RTSP bitstream into the decoder, the first frame must be SPS/PPS; otherwise the decoder will report a `FAILED TO DEC_PIC_HDR` exception and exit.
 - Each test case generates files such as `output.img` and `encode.h264` in the current directory, and a later test case depends on the output files of the previous one, so it is recommended to run them in order.
 
-## Related Documents
+## Related Documentation
 
 - [Multimedia Interface Description](./pydev_multimedia_api)
 - [Camera Object](./object_camera)

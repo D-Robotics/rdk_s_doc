@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
-title: "sample_codec Usage Instructions"
+title: "sample_codec User Guide"
 description: "sample_codec usage instructions - on-board sample usage instructions"
 ---
 
-# sample_codec Usage Instructions
+# sample_codec User Guide
 ## Function Overview
 sample_codec is a sample program for video encoding and decoding. It performs video encoding and decoding according to the configuration items defined in the configuration file (`codec_config.ini`), helping users debug the video codec.
 
@@ -223,7 +223,7 @@ Encode idx: 0, frame= 100
 
 According to the configuration `frame_num = 100` in `codec_config.ini`, the program exits automatically after encoding 100 frames.
 
-## Common Problems
+## FAQ
 
 ### codec_config.ini Configuration Not Taking Effect
 
@@ -249,7 +249,7 @@ According to the configuration `frame_num = 100` in `codec_config.ini`, the prog
 
 **Solution**: Confirm that `frame_num` is greater than 0; check that `hb_mm_mc_dequeue_output_buffer`/`queue_output_buffer` are paired; adjust the bit rate appropriately.
 
-## Related Documents
+## Related Documentation
 
 - [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
 - [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

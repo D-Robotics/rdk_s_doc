@@ -172,7 +172,7 @@ sp_release_encoder_module(enc);              // 6. Destroy the ENCODER object
 free(stream);
 ```
 
-## Related Documents
+## Related Documentation
 
 - [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
 - [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
