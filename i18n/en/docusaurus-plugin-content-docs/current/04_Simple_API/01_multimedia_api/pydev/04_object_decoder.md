@@ -21,17 +21,17 @@ The Decoder object implements video data decoding. It includes several methods s
 
 ## decode
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Enables the decode module and decodes a video file.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Decoder.decode(file, video_chn, type, width, height)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name  | Description           | Value Range                    |
 | --------- | --------------- | ------------------- |
@@ -41,7 +41,7 @@ Decoder.decode(file, video_chn, type, width, height)
 | width     | Image width input to the decoding module      | Up to 4096              |
 | height    | Image height input to the decoding module      | Up to 4096              |
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 #create decode object
@@ -51,7 +51,7 @@ decode = libsrcampy.Decoder()
 ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
 ```
 
- <font color='Blue'>[Return Value]</font>  
+ [Return Value]  
 
 The return value is a `list` with 2 members
 
@@ -60,30 +60,30 @@ The return value is a `list` with 2 members
 | list[0] | 0: decoding succeeded, -1: decoding failed      | 
 | list[1] | Number of frames in the input bitstream file; valid when decoding succeeds     |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 None
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 
 ## get_img
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Gets the output result of the decoding module.
 
-<font color='Blue'>[Function Declaration]</font>
+[Function Declaration]
 ```python
 Decoder.get_img()
 ```
 
-<font color='Blue'>[Parameter Description]</font>
+[Parameter Description]
 
 None
 
-<font color='Blue'>[Usage]</font>
+[Usage]
 
 ```python
 ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
@@ -92,18 +92,18 @@ print ("Decoder return:%d frame count: %d" %(ret[0], ret[1]))
 img = dec.get_img()
 ```
 
-<font color='Blue'>[Return Value]</font>
+[Return Value]
 
 | Return Value | Description |
 | ------ | ----- |
 | PyBytesObject | Success, returns the decoded image data |
 | None          | Failure |
 
-<font color='Blue'>[Notes]</font>
+[Notes]
 
 This interface must be used after calling `Decoder.decode()` to create a decoding channel.
 
-<font color='Blue'>[Reference Code]</font>
+[Reference Code]
 
 ```python
 import sys, os, time
@@ -140,17 +140,17 @@ test_decode()
 
 ## set_img
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Feeds a single frame of encoded data into the decoding module for decoding.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Decoder.set_img(img, chn, eos)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name | Description         | Value Range |
 | -------- | ------------- | --- | 
@@ -158,22 +158,22 @@ Decoder.set_img(img, chn, eos)
 | chn      | Decoder channel number      | Range 0~31 |
 | eos      | Whether decoding data has ended   | 0: not ended, 1: ended |
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 None
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This interface must be used after calling `Decoder.decode()` to create a decoding channel, and when creating the decoding channel the `file` argument must be left empty.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 ```python
 import sys, os, time
@@ -229,35 +229,35 @@ test_cam_bind_encode_decode_bind_display()
 
 ## close
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Closes the decoding module.
 
-<font color='Blue'>[Function Declaration]</font>
+[Function Declaration]
 ```python
 Decoder.close()
 ```
 
-<font color='Blue'>[Parameter Description]</font>
+[Parameter Description]
 
 None
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 None
 
-<font color='Blue'>[Return Value]</font>
+[Return Value]
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font>
+[Notes]
 
 The `close` interface must be called when exiting the program to release resources.
 
-<font color='Blue'>[Reference Code]</font>
+[Reference Code]
 
 None
 

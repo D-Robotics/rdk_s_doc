@@ -295,7 +295,7 @@ Reboot the S600.
 
 Due to a configuration issue with `NXServer`, connecting directly after completing the above operations results in a black screen. A reboot is required before use.
 
-For `NoMachine` usage, see [Remote Login - NoMachine Login](./remote_login#nomachine-login).
+For `NoMachine` usage, see [Remote Login - NoMachine Login](./remote_login#ssh).
 
 ## User Management
 

@@ -151,7 +151,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 9. Verify the boot. Keep the device powered off first, connect the device to a monitor with an HDMI cable, then power on the device. On first boot, the system performs default environment configuration for about 45 seconds, after which the Ubuntu desktop appears on the monitor.
 
    :::tip Device LED description
-   - **<font color='Green'>Green</font>** LED: Lit means the hardware is powered on normally.
+   - **✅ Green** LED: Lit means the hardware is powered on normally.
    :::
 
    If the device produces no display output for a long time after power-on (over 2 minutes), the boot is abnormal and you need to debug over a serial cable. For boot failure troubleshooting, see the XBurn manual [Boot issues](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues).
@@ -193,7 +193,7 @@ Flashing NVMe requires the NVMe version of the image. The image provided by D-Ro
 9. Verify the boot. Keep the device powered off first, connect the device to a monitor with an HDMI cable, then power on the device. On first boot, the system performs default environment configuration for about 45 seconds, after which the Ubuntu desktop appears on the monitor.
 
    :::tip Device LED Description
-   - **<font color='Green'>Green</font>** LED: Lit means the hardware is powered on normally.
+   - **✅ Green** LED: Lit means the hardware is powered on normally.
    :::
 
    If the device produces no display output for a long time after power-on (over 2 minutes), the boot is abnormal and you need to debug over a serial cable. For boot failure troubleshooting, see the XBurn manual [Boot issues](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues).

@@ -56,7 +56,7 @@ CONFIG_I2C_DESIGNWARE_PLATFORM=y 	# DW I2C驱动配置宏
 
 <DocScope products="RDK S100">
 
-``` {.text}
+``` text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
 i2c0: i2c@39420000 {
         power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
@@ -81,7 +81,7 @@ i2c0: i2c@39420000 {
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+``` text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi*/
 i2c0: i2c@34840000 {
 	power-domains = <&dummy_pd 0>;
@@ -123,7 +123,7 @@ S600 I2C 驱动在 Kernel Space 下提供了可以设置 I2C 传输频率的接�
 
 默认的 I2C 速率为400K，支持100k/400k/1M/3.4M 四种速率，可通过修改 dts 中相应 i2c 节点的 clock-frequency 完成速率修改。对应到代码中有关实际速率选择代码如下：
 
-``` {.text}
+``` text
 kernel/drivers/i2c/busses/i2c-designware-common.c
 I2C支持的速率配置如下：
 static const u32 supported_speeds[] = {
@@ -199,7 +199,7 @@ int i2c_dw_validate_speed(struct dw_i2c_dev *dev)
 
 <DocScope products="RDK S100">
 
-``` {.text}
+``` text
 root@ubuntu:/# cat /sys/kernel/debug/dw_i2c0/registers
 39420000.i2c registers:
 =================================
@@ -226,7 +226,7 @@ TYPE:           0x44570140
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+``` text
 root@ubuntu:/# cat /sys/kernel/debug/dw_i2c0/registers
 34840000.i2c registers:
 =================================
@@ -256,7 +256,7 @@ TYPE:           0x44570140
 
 实时 dump 使能接口，可通过 dmesg 查看 I2C 实时传输的数据。
 
-``` {.text}
+``` text
 # enable
 echo 1 > /sys/kernel/debug/dw_i2c0/reldump_en
 
@@ -269,7 +269,7 @@ echo 0 > /sys/kernel/debug/dw_i2c0/reldump_en
 fifodump 使能接口，可以 dump 最近多次 I2C 读写数据，每个通道单独配置，仅支持 master
 7位地址模式。
 
-``` {.text}
+``` text
 # enable
 echo 1 > /sys/kernel/debug/dw_i2c0/fifodump_en
 
@@ -283,7 +283,7 @@ echo 0 > /sys/kernel/debug/dw_i2c0/fifodump_en
 
 传输正常：
 
-``` {.text}
+``` text
 root@ubuntu:~# i2cdump -f -y 0 0x28
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
 00: 00 1f 21 00 00 00 00 00 00 00 XX XX XX XX XX XX    .?!.......XXXXXX
@@ -339,7 +339,7 @@ m[1]-a[0x28]-f[0x1]:0x00
 
 传输异常：
 
-``` {.text}
+``` text
 =b[1]-t[32991.050148]-n[2]-me[0]-ce[1]-ae[0x800001]=
 m[0]-a[0x10]-f[0x0]:0xfa
 m[1]-a[0x10]-f[0x1]:0x13
@@ -354,7 +354,7 @@ ae: abort_source.
 
 **whitelist 接口**
 
-``` {.text}
+``` text
 root@ubuntu:~# echo 01 02 > /sys/kernel/debug/dw_i2c0/whitelist
 root@ubuntu:~# cat /sys/kernel/debug/dw_i2c0/whitelist
 whitelist: 01 02
@@ -386,7 +386,7 @@ i2c-tools 是一套开源工具，该工具已经被交叉编译并包含在 S60
 
 <DocScope products="RDK S100">
 
-``` {.text}
+``` text
 root@ubuntu:~# ls /sys/class/i2c-dev/
 i2c-0  i2c-1  i2c-2  i2c-3  i2c-4  i2c-5
 
@@ -397,7 +397,7 @@ Synopsys DesignWare I2C adapter
 </DocScope>
 <DocScope products="RDK S600">
 
-``` {.text}
+``` text
 root@drobot:~# ls /sys/class/i2c-dev/
 i2c-0  i2c-1  i2c-2  i2c-3  i2c-4  i2c-5  i2c-7  i2c-8  i2c-9
 
@@ -409,7 +409,7 @@ Synopsys DesignWare I2C adapter
 
 查看 i2c 设备节点是否产生
 
-``` {.text}
+``` text
 root@ubuntu:~# ls /sys/class/i2c-dev/i2c-0/device/
 delete_device  device  i2c-dev  name  new_device  of_node  power  subsystem  uevent
 ```
@@ -419,7 +419,7 @@ delete_device  device  i2c-dev  name  new_device  of_node  power  subsystem  uev
 - 测试命令：i2cdetect -y -r 3
 - 测试示例如下
 
-``` {.text}
+``` text
 root@ubuntu:~# i2cdetect -r -y 3
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:                         -- -- -- -- -- -- -- --

@@ -173,49 +173,49 @@ Please refer to the latest RDK documentation or community resources for accurate
 
 #### hb_mapper checker (01_check.sh) Model Validation Errors
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
 ```bash
   ERROR The shape of model input:input is [xxx] which has dimensions of 0. Please specify input-shape parameter. 
 ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the model input has a dynamic shape. For this error, use the ``--input-shape input_name input_shape`` parameter to specify the input node shape.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
 ```bash
   ERROR HorizonRT not support these cpu operators: {op_type}
 ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the CPU operator used is not supported by D-Robotics. Replace the operator according to our operator support list. If the unsupported CPU operator is a core model operator, contact D-Robotics for development evaluation.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
 ```bash
   Unsupported op {op_type} 
 ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the BPU operator used is not supported by D-Robotics. If overall model performance meets your needs, you may ignore this log. Otherwise, replace the operator according to our operator support list.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
 ```bash
   ERROR nodes:['{op_type}'] are specified as domain:xxx, which are not supported by official onnx. Please check whether these ops are official onnx ops or defined by yourself 
 ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the custom operator used is not supported by D-Robotics. Replace the operator according to our operator support list, or refer to custom operator development to register a custom CPU operator.
 
 #### hb_mapper makertbin (03_build.sh) Model Conversion Errors
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   Layer `{op_name}`  
@@ -224,61 +224,61 @@ Please refer to the latest RDK documentation or community resources for accurate
       Tensor xxx expects be n dimensions, but m provided
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because operator ``{op_name}`` exceeded supported limits and was fallback to CPU execution. If the CPU operator performance overhead is acceptable, you can ignore this message. Otherwise, modify the op to a BPU-supported range according to our operator support list.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   INFO： Layer `{op_name}` will be executed on CPU
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because operator ``{op_name}`` was fallback to CPU execution because shape (CxHxW) exceeded 8192. If only a few operators fallback to CPU and overall performance meets requirements, you can ignore this message. Otherwise, check the operator support list and replace with other BPU operators without shape limits.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR There is an error in pass: `{op_name}`. Error message:xxx
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because optimization of operator `{op_name}` failed. Collect the model and `.log` files and provide them to D-Robotics technical support for analysis.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   Error There is an error in pass:constant_folding. Error message: Could not find an implementation for the node `{op_name}`
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because onnxruntime does not yet support this operator. Replace the operator according to our operator support list. If the unsupported operator is a core operator, contact D-Robotics for development evaluation.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   WARNING input shape [xxx] has length: n  ERROR list index out of range
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because non-4D model inputs are currently not supported. Modify the model input to 4D (for example, HxW -> 1x1xHxW).
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   Start to parse the onnx model
   core dump
   ```
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because model parsing failed (possibly because only one output/input node was assigned a name when exporting the model). Re-export the ONNX model and verify its validity (do not specify output/input names when exporting, or assign names to each output/input node sequentially).
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   Start to calibrate/quantize the model
@@ -288,219 +288,219 @@ Please refer to the latest RDK documentation or community resources for accurate
   core dump
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because model quantization/compilation failed. Collect the model and `.log` files and provide them to D-Robotics technical support for analysis.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR model conversion faild: Inferred shape and existing shape differ in dimension x: (n) vs (m)
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the ONNX model input shape is invalid, or a toolchain optimization pass is incorrect. Ensure the ONNX model is valid. If the ONNX model can infer normally, provide the model to D-Robotics technical support for analysis.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   WARNING got unexpected input/output/sumin threshold on conv `{op_name}`! value: xxx
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because data preprocessing is incorrect, or the node weight values are too small/large. 1. Check whether data preprocessing is correct; 2. We recommend using a BN operator to optimize the data distribution.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR hbdk-cc compile hbir model failed with returncode -n
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because model compilation failed. Collect the model and `.log` files and provide them to D-Robotics technical support for analysis.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR {op_type}  only support 4 dim input
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the toolchain does not yet support non-4D input dimensions for this op. Adjust the op input dimensions to 4D.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR {op_type} Not support this attribute/mode=xxx
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the toolchain does not yet support this op attribute. Replace the operator according to our operator support list, or contact D-Robotics for development evaluation.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR There is no node can execute on BPU in this model, please make sure the model has at least one conv node which is supported by BPU.
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because there are no quantizable BPU nodes in the model. Ensure the ONNX model is valid and contains at least one conv node. If these conditions are met, collect the model and `.log` files and provide them to D-Robotics technical support for analysis.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR [ONNXRuntimeError] : 9 : NOT_IMPLEMENTED : could not find a implementation for the node of `{op_name}`:{op_type}(opset) 
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the model opset version exceeds toolchain support limits. Re-export the model and ensure ``opset_version=10 or 11``.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR The opset version of the onnx model is n, only model with opset_version 10/11 is supported 
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the model opset version exceeds toolchain support limits. Re-export the model and ensure ``opset_version=10 or 11``.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   Conversion error after using run_on_bpu.
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because run_on_bpu is not currently supported for this operator. ``run_on_bpu`` currently only supports specifying ``Relu/Softmax/pooling (maxpool, avgpool, etc.)`` operators at the model tail and CPU*+Transpose combinations (by declaring the ``Transpose`` node name, both ``CPU*+Transpose`` can run on BPU; CPU* refers to ops supported by BPU). If the above conditions are met but ``run_on_bpu`` still fails, contact D-Robotics technical support for analysis. If the conditions are not met, contact D-Robotics for development evaluation.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR tool limits for max output num is 32
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the toolchain only supports up to 32 model output nodes. Keep the number of model output nodes within 32.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR xxx file parse failed.
   ERROR xxx does not exist in xxx.
   ```
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the environment is configured incorrectly. Use the Docker environment provided by D-Robotics for quantization.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR exception in command: makertbin.
   ERROR cannot reshape array of size xxx into shape xxx.
   ```
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because of abnormal data preprocessing. Refer to preprocessing-related information in our documentation.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR load cal data for input xxx error
   ERROR cannot reshape array of size xxx into shape xxx
   ```
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the toolchain version does not match. Use the corresponding toolchain version in the SDK we provide.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR [ONNXRuntimeError] : 1 : FAIL : Non-zero status code returned while running HzCalibration node.Name:'xxx'Status Message :CUDA error cudaErrorNoKernelImageForDevice:no kernel image is available for execution on the device
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because Docker was loaded incorrectly. Try using the nvidia-docker load command when starting Docker.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   [ONNXRuntimeError] : 10 : INVALID_GRAPH : Load model from xxx.onnx failed:This is an invalid model. In Node, ("xxx", HzSQuantizedPreprocess, "", -1) : ("images": tensor(int8),"xxx": tensor(int8),"xxx": tensor(int32),"xxx": tensor(int8),) -> ("xxx": tensor(int8),) , Error No Op registered for HzSQuantizedPreprocess with domain_version of 11
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the ONNX version does not match. Re-export the ONNX model with opset 10 and use OpenCV for preprocessing.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   [E:onnxruntime:, sequential_executor.cc:183 Execute] Non-zero status code returned while running Resize node. Name:'xxx' Status Message: upsample.h:299 void onnxruntime::UpsampleBase::ScalesValidation(const std::vector<float>&, onnxruntime::UpsampleMode) const scales.size() == 2 || (scales.size() == 4 && scales[0] == 1 && scales[1] == 1) was false. 'Linear' mode and 'Cubic' mode only support 2-D inputs ('Bilinear', 'Bicubic') or 4-D inputs with the corresponding outermost 2 scale values being 1 in the Resize operator
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may be an onnxruntime issue. Batch calibration is not supported; calibrate one image at a time because the model contains reshape operations and dimensions mismatch after batching. This does not affect the result.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   ERROR No guantifiable nodes were found, and the model is not supported
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because the model structure does not contain output nodes.
 
 ### Algorithm Model Board Deployment Errors and Solutions
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   (common.h:79): HR:ERROR: op_name:xxx invalid attr key xxx
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because libDNN does not yet support a certain attribute of this op. Replace the operator according to our operator support list, or contact D-Robotics for development evaluation.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   (hb_dnn_ndarray.cpp:xxx): data type of ndarray do not match specified type. NDArray dtype_: n, given：m
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because libDNN does not yet support this input type (we will gradually move operator constraints to the model conversion stage in future releases). Replace the operator according to our operator support list, or contact D-Robotics for development evaluation.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   (validate_util.cpp:xxx)：tensor aligned shape size is xxx , but tensor hbSysMem memSize is xxx, tensor hbSysMem memSize should >= tensor aligned shape size!
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - This error may occur because insufficient memory was allocated for input data. Use `hbDNNTensorProperties.alignedByteSize` to allocate memory.
 
-<font color='Blue'>[Issue]</font> 
+[Issue] 
 
   ```bash
   (bpu_model_info.cpp:xxx): HR:ERROR: hbm model input feature names must be equal to graph node input names
   ```
 
-<font color='Green'>[Solution]</font> 
+✅ [Solution] 
 
 - For this error, fully update to the latest toolchain SDK development package.
 

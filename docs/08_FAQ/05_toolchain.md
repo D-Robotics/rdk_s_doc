@@ -175,49 +175,49 @@ description: "AI 模型、算法与工具链 常见问题与排查"
 
 #### hb_mapper checker (01_check.sh) 模型验证错误
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
 ```bash
   ERROR The shape of model input:input is [xxx] which has dimensions of 0. Please specify input-shape parameter. 
 ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型输入为动态 shape。针对此错误，您可使用参数 ``--input-shape input_name input_shape`` 来指定输入节点的 shape 信息。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
 ```bash
   ERROR HorizonRT not support these cpu operators: {op_type}
 ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是使用的 CPU 算子为 D-Robotics 不支持的 CPU 算子。 针对此错误，您可以根据我们提供的算子支持列表中的内容对算子进行替换；若不被支持的 CPU 算子为模型核心算子，请您联系 D-Robotics 对此进行开发评估。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
 ```bash
   Unsupported op {op_type} 
 ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是使用的 BPU 算子为 D-Robotics 不支持的 BPU 算子。针对此错误，若模型整体性能可满足需要，您可以忽略该日志；若模型整体性能不能达到您的预期，您可以根据我们提供的算子支持列表中的内容对算子进行替换。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
 ```bash
   ERROR nodes:['{op_type}'] are specified as domain:xxx, which are not supported by official onnx. Please check whether these ops are official onnx ops or defined by yourself 
 ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是使用的自定义算子为 D-Robotics 不支持的自定义算子。针对此错误，您可以根据我们提供的算子支持列表中的内容对算子进行替换或参考自定义算子开发完成自定义 CPU 算子注册。
 
 #### hb_mapper makertbin (03_build.sh) 模型转换错误
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   Layer `{op_name}`  
@@ -226,61 +226,61 @@ description: "AI 模型、算法与工具链 常见问题与排查"
       Tensor xxx expects be n dimensions, but m provided
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是，``{op_name}``算子超过支持限制被回退到 CPU 计算。针对此错误，若 CPU 算子带来的性能损耗您可接受，则无需关注该信息；若性能不能达到您的要求，您可以根据我们提供的算子支持列表中的内容将该 op 修改至 BPU 可支持的范围。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   INFO： Layer `{op_name}` will be executed on CPU
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是，``{op_name}``算子由于 shape（CxHxW）超过8192被回退到 CPU 计算。针对此错误，若仅少数算子被回退 CPU 计算且模型整体性能满足要求，则无需关注该信息；若性能不满足要求，建议查看算子支持列表，替换为其他无 shape 限制的 BPU 算子。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR There is an error in pass: `{op_name}`. Error message:xxx
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是，`{op_name}`算子优化失败。针对此错误，请您将模型以及.log 文件收集好后提供给 D-Robotics 技术人员进行分析处理。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   Error There is an error in pass:constant_folding. Error message: Could not find an implementation for the node `{op_name}`
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是该算子 onnxruntime 暂未支持。针对此错误，您可以根据我们提供的算子支持列表中的内容对算子进行替换，如不被支持的算子为核心算子，请您联系 D-Robotics 对此进行开发评估。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   WARNING input shape [xxx] has length: n  ERROR list index out of range
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是目前模型输入暂不支持非四维输入。针对此错误，建议您将模型输入修改至四维（例如 HxW -> 1x1xHxW）。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   Start to parse the onnx model
   core dump
   ```
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型解析失败（可能是导出模型时只为一个 output/input 节点指定了 name）。针对此错误，建议您重新导出 onnx 并确认其有效性（导出 onnx 模型时不指定 output/input name，或者依次为每个 output/input 节点指定名称）。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   Start to calibrate/quantize the model
@@ -290,219 +290,219 @@ description: "AI 模型、算法与工具链 常见问题与排查"
   core dump
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型量化/编译失败。针对此错误，请您将模型以及.log 文件收集好后提供给 D-Robotics 技术人员进行分析处理。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR model conversion faild: Inferred shape and existing shape differ in dimension x: (n) vs (m)
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是 onnx 模型的输入 shape 非法，或者是工具优化 pass 有误。针对此错误，请您确保 onnx 模型的有效性，若 onnx 模型可正常推理，请将模型提供给 D-Robotics 技术人员进行分析处理。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   WARNING got unexpected input/output/sumin threshold on conv `{op_name}`! value: xxx
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是数据预处理有误，或该节点 weight 值太小/太大。针对此错误，1.请您检查数据预处理是否有误；2.我们建议您使用 BN 算子优化数据分布。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR hbdk-cc compile hbir model failed with returncode -n
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型编译失败。针对此错误，请您将模型以及.log 文件收集好后提供给 D-Robotics 技术人员进行分析处理。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR {op_type}  only support 4 dim input
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是工具链暂不支持该 op 输入维度为非四维。针对此错误，我们建议您将该 op 输入维度调整为四维输入。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR {op_type} Not support this attribute/mode=xxx
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是工具链暂不支持 op 的该属性。针对此错误，您可以根据我们提供的算子支持列表中的内容进行替换或联系 D-Robotics 对此进行开发评估。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR There is no node can execute on BPU in this model, please make sure the model has at least one conv node which is supported by BPU.
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型中没有可量化的 BPU 节点。针对此错误，请您确保 onnx 模型的有效性，且模型中至少使用了一个 conv；若前述条件均已满足，请您将模型以及.log 文件收集好后提供给 D-Robotics 技术人员进行分析处理。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR [ONNXRuntimeError] : 9 : NOT_IMPLEMENTED : could not find a implementation for the node of `{op_name}`:{op_type}(opset) 
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型 opset 版本超出工具链支持限制。 针对此错误，请您重新导出模型，确保 ``opset_version=10或者11`` 。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR The opset version of the onnx model is n, only model with opset_version 10/11 is supported 
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型 opset 版本超出工具链支持限制。针对此错误，请您重新导出模型，确保 ``opset_version=10 或者 11`` 。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   使用run_on_bpu后转换报错。
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是目前暂不支持将该算子 run_on_bpu。``run_on_bpu`` 暂仅支持指定模型尾部的 ``Relu/Softmax/pooling（maxpool、avgpool 等）`` 算子以及 CPU*+Transpose 组合（可通过声明 ``Transpose`` 节点名称，将 ``CPU*+Transpose`` 都运行在 BPU 上，CPU*特指 BPU 支持的 op），若满足前述条件但仍 ``run_on_bpu`` 失败，请您联系 D-Robotics 技术人员对此进行分析处理；若不满足前述条件，可联系 D-Robotics 技术人员对此进行开发评估。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR tool limits for max output num is 32
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是工具链仅支持模型输出节点数量不超过32。针对此错误，建议您将模型输出节点数量控制在32个以内。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR xxx file parse failed.
   ERROR xxx does not exist in xxx.
   ```
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是，环境配置不正确。请使用 D-Robotics 提供的 docker 环境进行量化。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR exception in command: makertbin.
   ERROR cannot reshape array of size xxx into shape xxx.
   ```
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是，数据预处理异常导致，请参考我们的文档中预处理相关信息。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR load cal data for input xxx error
   ERROR cannot reshape array of size xxx into shape xxx
   ```
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是工具链版本不匹配，请使用我们提供的 SDK 中对应的工具链版本。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR [ONNXRuntimeError] : 1 : FAIL : Non-zero status code returned while running HzCalibration node.Name:'xxx'Status Message :CUDA error cudaErrorNoKernelImageForDevice:no kernel image is available for execution on the device
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是 docker 加载错误。 建议您加载 Docker 时换用 nvidia docker 加载命令
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   [ONNXRuntimeError] : 10 : INVALID_GRAPH : Load model from xxx.onnx failed:This is an invalid model. In Node, ("xxx", HzSQuantizedPreprocess, "", -1) : ("images": tensor(int8),"xxx": tensor(int8),"xxx": tensor(int32),"xxx": tensor(int8),) -> ("xxx": tensor(int8),) , Error No Op registered for HzSQuantizedPreprocess with domain_version of 11
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能 onnx 版本不匹配，重新导出 onnx opset10版本并采用 opencv 方法做预处理
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   [E:onnxruntime:, sequential_executor.cc:183 Execute] Non-zero status code returned while running Resize node. Name:'xxx' Status Message: upsample.h:299 void onnxruntime::UpsampleBase::ScalesValidation(const std::vector<float>&, onnxruntime::UpsampleMode) const scales.size() == 2 || (scales.size() == 4 && scales[0] == 1 && scales[1] == 1) was false. 'Linear' mode and 'Cubic' mode only support 2-D inputs ('Bilinear', 'Bicubic') or 4-D inputs with the corresponding outermost 2 scale values being 1 in the Resize operator
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是 onnxruntime 自己的问题，不能 batch 校准，只能1张张校准，因为模型里边有 reshape, batch 后维度对不上了，对结果不影响。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   ERROR No guantifiable nodes were found, and the model is not supported
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是模型结构中没有包含输出节点导致的原因。
 
 ### 算法模型上板错误及解决方法
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   (common.h:79): HR:ERROR: op_name:xxx invalid attr key xxx
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是 libDNN 暂不支持该 op 的某个属性。针对此错误，您可以根据我们提供的算子支持列表中的内容进行替换或联系 D-Robotics 对此进行开发评估。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   (hb_dnn_ndarray.cpp:xxx): data type of ndarray do not match specified type. NDArray dtype_: n, given：m
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是 libDNN 暂不支持该输入类型（后续我们将逐步把算子约束前移至模型转换阶段提醒）。针对此错误，您可以根据我们提供的算子支持列表中的内容进行替换或联系 D-Robotics 对此进行开发评估。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   (validate_util.cpp:xxx)：tensor aligned shape size is xxx , but tensor hbSysMem memSize is xxx, tensor hbSysMem memSize should >= tensor aligned shape size!
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 发生此错误的原因可能是输入数据申请内存不足。针对此错误，请使用 hbDNNTensorProperties.alignedByteSize 来申请内存空间。
 
-<font color='Blue'>【问题】</font> 
+【问题】 
 
   ```bash
   (bpu_model_info.cpp:xxx): HR:ERROR: hbm model input feature names must be equal to graph node input names
   ```
 
-<font color='Green'>【解答】</font> 
+✅ 【解答】 
 
 - 针对此错误，请您完整更新最新版本的工具链 SDK 开发包。
 
@@ -922,17 +922,17 @@ description: "AI 模型、算法与工具链 常见问题与排查"
 
 使用填充的方式对图片中心进行裁剪的操作。
 
-.. attention::
+:::warning 注意
 
-  仅适用于 EfficientNet-lite 相关实例模型。
+仅适用于 EfficientNet-lite 相关实例模型。
 
-  计算方式为：
+计算方式为：
 
-  1. 计算系数，int((float( image_size ) / ( image_size + crop_pad ))。
+1. 计算系数，int((float( image_size ) / ( image_size + crop_pad ))。
+2. 计算中心 size 的大小， 系数 * np.minimum( 原始图片的高度, 原始图片的宽度 ))。
+3. 根据计算出来的 size 大小，做中心裁剪。
 
-  2. 计算中心 size 的大小， 系数 * np.minimum( 原始图片的高度, 原始图片的宽度 ))。
-
-  3. 根据计算出来的 size 大小，做中心裁剪。
+:::
 
 **参数**：
 

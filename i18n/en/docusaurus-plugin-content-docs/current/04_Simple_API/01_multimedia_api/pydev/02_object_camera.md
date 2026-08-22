@@ -22,17 +22,17 @@ The Camera object is used for image capture and processing of MIPI cameras. It i
 
 ## open_cam
 
-<font color='Blue'>[Function Description]</font>  
+[Function Description]  
 
 Opens the MIPI camera on the specified channel and sets the camera output frame rate and resolution format.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Camera.open_cam(pipe_id, video_index, fps, width, height, raw_height, raw_width)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name      | Description                  | Value Range    |
 | ----------- | ------------------------ | --------  |
@@ -44,7 +44,7 @@ Camera.open_cam(pipe_id, video_index, fps, width, height, raw_height, raw_width)
 | raw_height       | Original RAW image output height of the camera    | Default is -1 (not set)|
 | raw_width      | Original RAW image output width of the camera  | Default is -1 (not set)|
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 #create camera object
@@ -54,14 +54,14 @@ camera = libsrcampy.Camera()
 ret = camera.open_cam(0, -1, 30, 1920, 1080)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ----- |
 | 0      | Success  |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 The `width` and `height` parameters support `list` type input, which enables the camera to output multiple groups of different resolutions. The `list` supports up to 6 scale-down groups, and the scaling range is [1, 1/64) of the camera's original resolution. Usage is as follows:
 
@@ -92,23 +92,23 @@ The `S100` chip has alignment requirements for `VPS` output: the output width mu
 
 :::
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 
 ## open_vps
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Enables the vps (video process) image processing function of the specified camera channel, supporting scaling, cropping, and other operations on the input image.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height, crop_rect, rotate, src_size, dst_size)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 
 | Parameter Name      | Description                  | Value Range    |
@@ -124,7 +124,7 @@ Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height
 | src_size | Reserved parameter | No configuration required by default |
 | dst_size | Reserved parameter | No configuration required by default |
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 #create camera object
@@ -134,7 +134,7 @@ camera = libsrcampy.Camera()
 ret = camera.open_vps(1, 1, 1920, 1080, 512, 512)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |                 
 | ------ | ----- |
@@ -164,22 +164,22 @@ camera = libsrcampy.Camera()
 ret = camera.open_vps(0, 1, 3840, 2160, [1920, 1280], [1080, 720], [2560, 1440])
 ```
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 None
 
 ## get_img
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Gets the image output of the camera object. It must be called after `open_cam` and `open_vps`.
 
-<font color='Blue'>[Function Declaration]</font> 
+[Function Declaration] 
 
 ```python
 Camera.get_img(module, width, height)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name | Description                 | Value Range     |
 | -------- | ------- | ----------- |
@@ -188,7 +188,7 @@ Camera.get_img(module, width, height)
 | height   | Height of the image to get | Output height set by `open_cam` and `open_vps` |
 
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 cam = libsrcampy.Camera()
@@ -203,18 +203,18 @@ time.sleep(1)
 img = cam.get_img(2)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |                 
 | ------ | ----- |
 | PyBytesObject | Success, returns the image data |
 | None          | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This method must be called after `open_cam` and `open_vps`.  
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 ```python
 import sys, os, time
@@ -251,23 +251,23 @@ test_camera()
 
 ## set_img
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Inputs an image to the `vps` module and triggers image processing operations.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Camera.set_img(img)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name | Description     | Value Range      |
 | -------- | -------------------- | ----- |
 | img      | Image data to be processed | Must match the vps input size |
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 camera = libsrcampy.Camera()
@@ -284,18 +284,18 @@ fin.close()
 ret = vps.set_img(img)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |                 
 | ------ | ----- |
 | 0      | Success  |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This interface must be called after `open_vps`.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 ```python
 import sys, os, time
@@ -339,21 +339,21 @@ test_camera_vps()
 
 ## close_cam
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Closes the enabled MIPI camera.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Camera.close_cam()
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 None
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 cam = libsrcampy.Camera()
@@ -366,15 +366,15 @@ print("Camera open_cam return:%d" % ret)
 cam.close_cam()
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 None
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 None
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 ## Host ID Selection

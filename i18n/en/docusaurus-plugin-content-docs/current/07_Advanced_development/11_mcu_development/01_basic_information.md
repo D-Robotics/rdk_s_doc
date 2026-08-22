@@ -62,7 +62,7 @@ pip install tqdm
 :::info Toolchain Download Instructions
 
 The first compilation will download the toolchain from the ARM official website and decompress it (about 10 minutes). Poor network conditions may cause the toolchain download to fail or be incomplete. It is recommended to download the compilation toolchain using the following method:
-1. Click the [Toolchain Download Link](../../RDK.md#tool-downloads) to download the compilation toolchain.
+1. Click the [Toolchain Download Link](../../RDK.md#tools) to download the compilation toolchain.
 2. Move the existing toolchain to /Build/ToolChain/Gcc/. Use the following command to move the toolchain:
 
     `mv path_to_toolchain/toolchain-filename    path_to_new_code/Build/ToolChain/Gcc/`
@@ -362,12 +362,12 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
 <DocScope products="RDK S100">
 
-For information on using the XBurn tool to flash specific regions, refer to the [Flash specific regions](../../01_Quick_start/03_install_os_and_setup/02_burn.md#flashing-specific-regions) section.
+For information on using the XBurn tool to flash specific regions, refer to the [Flash specific regions](../../01_Quick_start/03_install_os_and_setup/02_burn.md#flash-specific-regions) section.
 
 </DocScope>
 <DocScope products="RDK S600">
 
-For information on using the XBurn tool to flash specific regions, refer to the [Flash specific regions](../../01_Quick_start/03_install_os_and_setup/02_burn.md#flashing-specific-regions) section.
+For information on using the XBurn tool to flash specific regions, refer to the [Flash specific regions](../../01_Quick_start/03_install_os_and_setup/02_burn.md#flash-specific-regions) section.
 
 </DocScope>
 

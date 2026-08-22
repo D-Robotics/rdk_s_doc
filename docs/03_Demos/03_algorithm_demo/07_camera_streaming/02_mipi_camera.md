@@ -41,7 +41,7 @@ sudo apt install libgflags-dev
 </DocScope>
 
 <DocScope products="RDK-S600">
-- MIPI 摄像头安装方法可参考 [MIPI 相机接口（J11/J13）](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-相机接口-j11j13)。
+- MIPI 摄像头安装方法可参考 [MIPI 相机接口（J11/J13）](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#mipi-camera-interfaces-j11j13)。
 </DocScope>
 
 ## 代码位置

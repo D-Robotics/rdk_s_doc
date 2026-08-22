@@ -21,17 +21,17 @@ Decoder 对象实现了对视频数据的解码功能，包含了`decode`、`set
 
 ## decode
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 使能 decode 解码模块，并对视频文件进行解码
 
-<font color='Blue'>【函数声明】</font>  
+【函数声明】  
 
 ```python
 Decoder.decode(file, video_chn, type, width, height)
 ```
 
-<font color='Blue'>【参数描述】</font>  
+【参数描述】  
 
 | 参数名称  | 描述           | 取值范围                    |
 | --------- | --------------- | ------------------- |
@@ -41,7 +41,7 @@ Decoder.decode(file, video_chn, type, width, height)
 | width     | 输入解码模块的图像宽度      | 不超过4096              |
 | height    | 输入解码模块的图像高度      | 不超过4096              |
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 ```python
 #create decode object
@@ -51,7 +51,7 @@ decode = libsrcampy.Decoder()
 ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
 ```
 
- <font color='Blue'>【返回值】</font>  
+ 【返回值】  
 
 返回值为2个成员的`list`数据
 
@@ -60,30 +60,30 @@ ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
 | list[0] | 0：解码成功，-1：解码失败      | 
 | list[1] | 输入码流文件的帧数，解码成功时有效     |
 
-<font color='Blue'>【注意事项】</font> 
+【注意事项】 
 
 无
 
-<font color='Blue'>【参考代码】</font>  
+【参考代码】  
 
 无
 
 ## get_img
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 获取解码模块的输出结果
 
-<font color='Blue'>【函数声明】</font>
+【函数声明】
 ```python
 Decoder.get_img()
 ```
 
-<font color='Blue'>【参数描述】</font>
+【参数描述】
 
 无
 
-<font color='Blue'>【使用方法】</font>
+【使用方法】
 
 ```python
 ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
@@ -92,18 +92,18 @@ print ("Decoder return:%d frame count: %d" %(ret[0], ret[1]))
 img = dec.get_img()
 ```
 
-<font color='Blue'>【返回值】</font>
+【返回值】
 
 | 返回值 | 定义描述 |
 | ------ | ----- |
 | PyBytesObject | 成功，返回解码后的图像数据 |
 | None          | 失败 |
 
-<font color='Blue'>【注意事项】</font>
+【注意事项】
 
 该接口需要在调用`Decoder.decode()`创建解码通道后使用
 
-<font color='Blue'>【参考代码】</font>
+【参考代码】
 
 ```python
 import sys, os, time
@@ -140,17 +140,17 @@ test_decode()
 
 ## set_img
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 将单帧编码数据送入解码模块，并进行解码
 
-<font color='Blue'>【函数声明】</font>  
+【函数声明】  
 
 ```python
 Decoder.set_img(img, chn, eos)
 ```
 
-<font color='Blue'>【参数描述】</font>  
+【参数描述】  
 
 | 参数名称 | 定义描述         | 取值范围 |
 | -------- | ------------- | --- | 
@@ -158,22 +158,22 @@ Decoder.set_img(img, chn, eos)
 | chn      | 解码器通道号      | 范围0~31 |
 | eos      | 解码数据是否结束   | 0：未结束，1：结束 |
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 无
 
-<font color='Blue'>【返回值】</font>  
+【返回值】  
 
 | 返回值 | 描述 |
 | ------ | ---- |
 | 0      | 成功 |
 | -1    | 失败 |
 
-<font color='Blue'>【注意事项】</font> 
+【注意事项】 
 
 该接口需要在调用`Decoder.decode()`创建解码通道后使用，且解码通道创建时入参`file`置空
 
-<font color='Blue'>【参考代码】</font>  
+【参考代码】  
 
 ```python
 import sys, os, time
@@ -229,35 +229,35 @@ test_cam_bind_encode_decode_bind_display()
 
 ## close
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 关闭解码模块
 
-<font color='Blue'>【函数声明】</font>
+【函数声明】
 ```python
 Decoder.close()
 ```
 
-<font color='Blue'>【参数描述】</font>
+【参数描述】
 
 无
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 无
 
-<font color='Blue'>【返回值】</font>
+【返回值】
 
 | 返回值 | 定义描述 |
 | ------ | ---- |
 | 0      | 成功 |
 | -1    | 失败 |
 
-<font color='Blue'>【注意事项】</font>
+【注意事项】
 
 退出程序时需要调用`close`接口以释放资源。
 
-<font color='Blue'>【参考代码】</font>
+【参考代码】
 
 无
 

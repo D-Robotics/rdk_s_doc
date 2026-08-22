@@ -21,17 +21,17 @@ The Encoder object implements video data encoding and compression. It includes s
 
 ## encode
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Configures and enables the encode module.
 
-<font color='Blue'>[Function Declaration]</font>
+[Function Declaration]
 
 ```python
 Encoder.encode(video_chn, type, width, height, bits)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name  | Description           | Value Range                    |
 | --------- | --------------- | ------------------- |
@@ -41,7 +41,7 @@ Encoder.encode(video_chn, type, width, height, bits)
 | height    | Image height input to the encoding module      | Up to 4096              |
 | bits      | Bitrate of the encoding module         |    Default is 8000kbps         |
 
-<font color='Blue'>[Usage]</font>
+[Usage]
 
 ```python
 #create encode object
@@ -51,40 +51,40 @@ encode = libsrcampy.Encoder()
 ret = encode.encode(0, 1, 1920, 1080)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |                 
 | ------ | ----- |
 | 0      | Success  |
 | -1    | Failure   |
 
-<font color='Blue'>[Notes]</font>
+[Notes]
 
 None
 
-<font color='Blue'>[Reference Code]</font>
+[Reference Code]
 
 None
 
 ## encode_file
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Inputs an image file to the enabled encoding channel and encodes it in the preset format.
 
-<font color='Blue'>[Function Declaration]</font> 
+[Function Declaration] 
 
 ```python
 Encoder.encode_file(img)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name | Description              | Value Range                     |
 | -------- | ----------------- | --------------------- |
 | img      | Image data to be encoded; it must be in NV12 format | None |
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 fin = open("output.img", "rb")
@@ -95,53 +95,53 @@ fin.close()
 ret = encode.encode_file(input_img)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |                 
 | ------ | ----- |
 | 0      | Success  |
 | -1    | Failure   |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 None
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 
 ## get_img
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Gets the encoded data.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Encoder.get_img()
 ```
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 None
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 None
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ----- |
 | PyBytesObject | Success, returns the encoded data |
 | None          | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This interface must be used after calling `Encoder.encode()` to create an encoding channel.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 ```python
 import sys, os, time
@@ -183,36 +183,36 @@ test_encode()
 
 ## close
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Closes the enabled encoding channel.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Encoder.close()
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 None
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 None
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ----- |
 | 0      | Success  |
 | -1    | Failure   |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This interface must be used after calling `Encoder.encode()` to create an encoding channel.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 

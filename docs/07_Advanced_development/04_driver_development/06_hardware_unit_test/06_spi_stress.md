@@ -34,7 +34,7 @@ SPI 压力测试的核心部分是通过回环测试进行数据的传输和接�
 
 ## 准备工作
 
-### <span id="test-script-user-manual"/> 压测脚本使用说明
+### 压测脚本使用说明{#test-script-user-manual}
 
 串口压测支持输入后缀 -h 查看命令参数的说明 ，例如：
 

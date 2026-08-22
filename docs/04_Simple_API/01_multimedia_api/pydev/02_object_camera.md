@@ -22,17 +22,17 @@ Camera 对象用于完成 MIPI Camera 的图像采集和处理功能，包含了
 
 ## open_cam
 
-<font color='Blue'>【功能描述】</font>  
+【功能描述】  
 
 打开指定通道的 MIPI 摄像头，并设置摄像头输出帧率、分辨率格式。
 
-<font color='Blue'>【函数声明】</font>  
+【函数声明】  
 
 ```python
 Camera.open_cam(pipe_id, video_index, fps, width, height, raw_height, raw_width)
 ```
 
-<font color='Blue'>【参数描述】</font>  
+【参数描述】  
 
 | 参数名称      | 定义描述                  | 取值范围    |
 | ----------- | ------------------------ | --------  |
@@ -44,7 +44,7 @@ Camera.open_cam(pipe_id, video_index, fps, width, height, raw_height, raw_width)
 | raw_height       | camera 原始 RAW 图像输出高度    |  默认值 -1（不设置）|
 | raw_width      | camera 原始 RAW 图像输出宽度  |    默认值 -1（不设置）|
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 ```python
 #create camera object
@@ -54,14 +54,14 @@ camera = libsrcampy.Camera()
 ret = camera.open_cam(0, -1, 30, 1920, 1080)
 ```
 
-<font color='Blue'>【返回值】</font>  
+【返回值】  
 
 | 返回值 | 描述 |
 | ------ | ----- |
 | 0      | 成功  |
 | -1    | 失败 |
 
-<font color='Blue'>【注意事项】</font> 
+【注意事项】 
 
 `width`，`height`参数支持`list`类型输入，表示使能 camera 多组不同分辨率输出。`list`最多支持6组缩小, 缩放区间为 camera 原始分辨率的[1 ,1/64)。使用方式如下：
 
@@ -92,23 +92,23 @@ cam.open_cam(0, -1, 10, [3840, 1920], [2160, 1080], 3000, 4000)
 
 :::
 
-<font color='Blue'>【参考代码】</font>  
+【参考代码】  
 
 无
 
 ## open_vps
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 使能指定 camera 通道的 vps(video process)图像处理功能，支持对输入图像完成缩放、裁剪等功能。
 
-<font color='Blue'>【函数声明】</font>  
+【函数声明】  
 
 ```python
 Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height, crop_rect, rotate, src_size, dst_size)
 ```
 
-<font color='Blue'>【参数描述】</font>  
+【参数描述】  
 
 
 | 参数名称      | 定义描述                  | 取值范围    |
@@ -124,7 +124,7 @@ Camera.open_vps(pipe_id, proc_mode, src_width, src_height, dst_width, dst_height
 | src_size | 保留参数 | 默认不需要配置 |
 | dst_size | 保留参数 | 默认不需要配置 |
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 ```python
 #create camera object
@@ -134,7 +134,7 @@ camera = libsrcampy.Camera()
 ret = camera.open_vps(1, 1, 1920, 1080, 512, 512)
 ```
 
-<font color='Blue'>【返回值】</font>  
+【返回值】  
 
 | 返回值 | 定义描述 |                 
 | ------ | ----- |
@@ -164,22 +164,22 @@ camera = libsrcampy.Camera()
 ret = camera.open_vps(0, 1, 3840, 2160, [1920, 1280], [1080, 720], [2560, 1440])
 ```
 
-<font color='Blue'>【参考代码】</font>  
+【参考代码】  
 无
 
 ## get_img
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 获取 camera 对象的图像输出，需要在`open_cam`、`open_vps`之后调用
 
-<font color='Blue'>【函数声明】</font> 
+【函数声明】 
 
 ```python
 Camera.get_img(module, width, height)
 ```
 
-<font color='Blue'>【参数描述】</font>  
+【参数描述】  
 
 | 参数名称 | 定义描述                 | 取值范围     |
 | -------- | ------- | ----------- |
@@ -188,7 +188,7 @@ Camera.get_img(module, width, height)
 | height   | 需要获取图像的高度 | `open_cam`、`open_vps`设置的输出高度 |
 
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 ```python
 cam = libsrcampy.Camera()
@@ -203,18 +203,18 @@ time.sleep(1)
 img = cam.get_img(2)
 ```
 
-<font color='Blue'>【返回值】</font>  
+【返回值】  
 
 | 返回值 | 定义描述 |                 
 | ------ | ----- |
 | PyBytesObject | 成功，返回图像数据 |
 | None          | 失败 |
 
-<font color='Blue'>【注意事项】</font> 
+【注意事项】 
 
 该方法需要在`open_cam`、`open_vps`之后调用  
 
-<font color='Blue'>【参考代码】</font>  
+【参考代码】  
 
 ```python
 import sys, os, time
@@ -251,23 +251,23 @@ test_camera()
 
 ## set_img
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 向`vps`模块输入图像，并触发图像处理操作
 
-<font color='Blue'>【函数声明】</font>  
+【函数声明】  
 
 ```python
 Camera.set_img(img)
 ```
 
-<font color='Blue'>【参数描述】</font>  
+【参数描述】  
 
 | 参数名称 | 定义描述     | 取值范围      |
 | -------- | -------------------- | ----- |
 | img      | 需要处理的图像数据 | 跟 vps 输入尺寸保持一致 |
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 ```python
 camera = libsrcampy.Camera()
@@ -284,18 +284,18 @@ fin.close()
 ret = vps.set_img(img)
 ```
 
-<font color='Blue'>【返回值】</font>  
+【返回值】  
 
 | 返回值 | 定义描述 |                 
 | ------ | ----- |
 | 0      | 成功  |
 | -1    | 失败 |
 
-<font color='Blue'>【注意事项】</font> 
+【注意事项】 
 
 该接口需要在`open_vps`之后调用
 
-<font color='Blue'>【参考代码】</font>  
+【参考代码】  
 
 ```python
 import sys, os, time
@@ -339,21 +339,21 @@ test_camera_vps()
 
 ## close_cam
 
-<font color='Blue'>【功能描述】</font>
+【功能描述】
 
 关闭使能的 MIPI camera 摄像头
 
-<font color='Blue'>【函数声明】</font>  
+【函数声明】  
 
 ```python
 Camera.close_cam()
 ```
 
-<font color='Blue'>【参数描述】</font>  
+【参数描述】  
 
 无
 
-<font color='Blue'>【使用方法】</font> 
+【使用方法】 
 
 ```python
 cam = libsrcampy.Camera()
@@ -366,15 +366,15 @@ print("Camera open_cam return:%d" % ret)
 cam.close_cam()
 ```
 
-<font color='Blue'>【返回值】</font>  
+【返回值】  
 
 无
 
-<font color='Blue'>【注意事项】</font> 
+【注意事项】 
 
 无
 
-<font color='Blue'>【参考代码】</font>  
+【参考代码】  
 
 无
 ## host 编号选择

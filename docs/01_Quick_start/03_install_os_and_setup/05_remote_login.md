@@ -92,7 +92,6 @@ import DocScope from '@site/src/components/DocScope';
   | 流控（Flow Control） | 无     |
 
 - 点击`OK`，输入用户名：`root`、密码：`root`登录设备
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Uart-Login.gif" alt="win 连接串口演示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 此时，可使用`ifconfig -a`命令查询开发板 IP 地址，其中 eth0/eth1、wlan0 分别代表有线、无线网络：
 
@@ -239,7 +238,6 @@ macOS 系统下，使用 minicom 工具连接串口，步骤如下：
 3. 选中`specify username`，输入`sunrise`
 4. 点击 OK 后，输入用户名（sunrise）、密码（sunrise）即可完成登录
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/image-Network-Login.gif" alt="终端软件演示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 电脑命令行
 
@@ -249,7 +247,6 @@ macOS 系统下，使用 minicom 工具连接串口，步骤如下：
 2. 弹出连接确认提示，输入 YES
 3. 输入密码（sunrise）即可完成登录
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/remote_login/linux_login_01.gif" alt="电脑命令行演示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 ## NoMachine 登录

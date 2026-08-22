@@ -22,7 +22,7 @@ RDK S100 在 40PIN 支持 UART2，没有使能，物理管脚号 8 和 10，IO �
 
 拨动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
 
-```{.text}
+```text
 /*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
 uart2: uart@394C0000 {
         power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;

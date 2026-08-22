@@ -485,38 +485,38 @@ erDiagram
     }
 ```
 
-Both `SPI_HWUNIT` and `SPI_EXTERNAL_DEVICE` need to be associated with a hardware instance, which determines which SPI interface is used for communication. Since the RDKS100 platform provides a total of 8 SPI controllers, with the MAIN domain containing 2 (SPI0, SPI1) and the MCU domain containing 6 (SPI2 to SPI7), the SPI in the MCU domain actually starts numbering from SPI2. The table below shows the mapping between SPI sequence configurations (Spi SeqCfg) and the corresponding hardware resources (Spi BusId, HWUnit, Instance) in <font color='green'>**green**</font> font.
+Both `SPI_HWUNIT` and `SPI_EXTERNAL_DEVICE` need to be associated with a hardware instance, which determines which SPI interface is used for communication. Since the RDKS100 platform provides a total of 8 SPI controllers, with the MAIN domain containing 2 (SPI0, SPI1) and the MCU domain containing 6 (SPI2 to SPI7), the SPI in the MCU domain actually starts numbering from SPI2. The table below shows the mapping between SPI sequence configurations (Spi SeqCfg) and the corresponding hardware resources (Spi BusId, HWUnit, Instance) in ✅ **green** font.
 
 <DocScope products="RDK S100">
 
-| **SPI SeqCfg** | <font color='green'>**Spi BusId**</font> | <font color='green'>**HWUnit**</font> | <font color='green'>**Instance**</font> | **Spi Baudrate** | **Spi Cs** | **Frame size**|
+| **SPI SeqCfg** | ✅ **Spi BusId** | ✅ **HWUnit** | ✅ **Instance** | **Spi Baudrate** | **Spi Cs** | **Frame size**|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| SpiSequence_0 | <font color='green'>SPI2</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 2000000 | CS0 | 16 bit |
-| SpiSequence_1 | <font color='green'>SPI3</font> | <font color='green'>CSIB1</font> | <font color='green'>1</font> | 2000000 | CS0 | 16 bit |
-| SpiSequence_2 | <font color='green'>SPI4</font> | <font color='green'>CSIB2</font> | <font color='green'>2</font> | 1000000 | CS0 | 8 bit |
-| SpiSequence_3 | <font color='green'>SPI5</font> | <font color='green'>CSIB3</font> | <font color='green'>3</font> | 1000000 | CS0 | 8 bit |
-| SpiSequence_4 | <font color='green'>SPI5</font> | <font color='green'>CSIB3</font> | <font color='green'>3</font> | 1000000 | CS0 | 16 bit |
-| SpiSequence_5 | <font color='green'>SPI6</font> | <font color='green'>CSIB4</font> | <font color='green'>4</font> | 1000000 | CS0 | 8 bit |
-| SpiSequence_6 | <font color='green'>SPI7</font> | <font color='green'>CSIB5</font> | <font color='green'>5</font> | 1000000 | CS0 | 8 bit |
-| SpiSequence_7 | <font color='green'>SPI2</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 2000000 | CS1 | 16 bit |
-| SpiSequence_8 | <font color='green'>SPI3</font> | <font color='green'>CSIB1</font> | <font color='green'>1</font> | 2000000 | CS1 | 16 bit |
-| SpiSequence_9 | <font color='green'>SPI4</font> | <font color='green'>CSIB2</font> | <font color='green'>2</font> | 1000000 | CS1 | 8 bit |
-| SpiSequence_10 | <font color='green'>SPI5</font> | <font color='green'>CSIB3</font> | <font color='green'>3</font> | 1000000 | CS1 | 8 bit |
-| SpiSequence_11 | <font color='green'>SPI5</font> | <font color='green'>CSIB3</font> | <font color='green'>3</font> | 1000000 | CS1 | 16 bit |
-| SpiSequence_12 | <font color='green'>SPI6</font> | <font color='green'>CSIB4</font> | <font color='green'>4</font> | 1000000 | CS1 | 8 bit |
-| SpiSequence_13 | <font color='green'>SPI7</font> | <font color='green'>CSIB5</font> | <font color='green'>5</font> | 1000000 | CS1 | 8 bit |
+| SpiSequence_0 | ✅ SPI2 | ✅ CSIB0 | ✅ 0 | 2000000 | CS0 | 16 bit |
+| SpiSequence_1 | ✅ SPI3 | ✅ CSIB1 | ✅ 1 | 2000000 | CS0 | 16 bit |
+| SpiSequence_2 | ✅ SPI4 | ✅ CSIB2 | ✅ 2 | 1000000 | CS0 | 8 bit |
+| SpiSequence_3 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS0 | 8 bit |
+| SpiSequence_4 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS0 | 16 bit |
+| SpiSequence_5 | ✅ SPI6 | ✅ CSIB4 | ✅ 4 | 1000000 | CS0 | 8 bit |
+| SpiSequence_6 | ✅ SPI7 | ✅ CSIB5 | ✅ 5 | 1000000 | CS0 | 8 bit |
+| SpiSequence_7 | ✅ SPI2 | ✅ CSIB0 | ✅ 0 | 2000000 | CS1 | 16 bit |
+| SpiSequence_8 | ✅ SPI3 | ✅ CSIB1 | ✅ 1 | 2000000 | CS1 | 16 bit |
+| SpiSequence_9 | ✅ SPI4 | ✅ CSIB2 | ✅ 2 | 1000000 | CS1 | 8 bit |
+| SpiSequence_10 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS1 | 8 bit |
+| SpiSequence_11 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS1 | 16 bit |
+| SpiSequence_12 | ✅ SPI6 | ✅ CSIB4 | ✅ 4 | 1000000 | CS1 | 8 bit |
+| SpiSequence_13 | ✅ SPI7 | ✅ CSIB5 | ✅ 5 | 1000000 | CS1 | 8 bit |
 
 </DocScope>
 <DocScope products="RDK S600">
 
-| **SPI SeqCfg** | <font color='green'>**Spi BusId**</font> | <font color='green'>**HWUnit**</font> | <font color='green'>**Instance**</font> | **Spi Baudrate** | **Spi Cs** | **Frame size**|
+| **SPI SeqCfg** | ✅ **Spi BusId** | ✅ **HWUnit** | ✅ **Instance** | **Spi Baudrate** | **Spi Cs** | **Frame size**|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| SpiSequence_0 | <font color='green'>SPI6</font> | <font color='green'>CSIB2</font> | <font color='green'>2</font> | 2000000 | CS0 | 16 bit |
-| SpiSequence_1 | <font color='green'>SPI6</font> | <font color='green'>CSIB2</font> | <font color='green'>2</font> | 2000000 | CS1 | 16 bit |
-| SpiSequence_2 | <font color='green'>SPI13</font> | <font color='green'>CSIB9</font> | <font color='green'>9</font> | 1000000 | CS0 | 8 bit |
-| SpiSequence_3 | <font color='green'>SPI13</font> | <font color='green'>CSIB9</font> | <font color='green'>9</font> | 1000000 | CS1 | 8 bit |
-| SpiSequence_4 | <font color='green'>SPI4</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 1000000 | CS0 | 8 bit |
-| SpiSequence_5 | <font color='green'>SPI4</font> | <font color='green'>CSIB0</font> | <font color='green'>0</font> | 1000000 | CS1 | 8 bit |
+| SpiSequence_0 | ✅ SPI6 | ✅ CSIB2 | ✅ 2 | 2000000 | CS0 | 16 bit |
+| SpiSequence_1 | ✅ SPI6 | ✅ CSIB2 | ✅ 2 | 2000000 | CS1 | 16 bit |
+| SpiSequence_2 | ✅ SPI13 | ✅ CSIB9 | ✅ 9 | 1000000 | CS0 | 8 bit |
+| SpiSequence_3 | ✅ SPI13 | ✅ CSIB9 | ✅ 9 | 1000000 | CS1 | 8 bit |
+| SpiSequence_4 | ✅ SPI4 | ✅ CSIB0 | ✅ 0 | 1000000 | CS0 | 8 bit |
+| SpiSequence_5 | ✅ SPI4 | ✅ CSIB0 | ✅ 0 | 1000000 | CS1 | 8 bit |
 </DocScope>
 
 :::tip

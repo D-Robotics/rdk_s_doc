@@ -94,7 +94,7 @@ Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
   在运行的时候选择 RKD X5支持的配置，上图中选择0或者1都可以。
 
   启动过程可以参考如下视频：
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/20241217-115536.gif" alt="MIPI摄像头启动过程演示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+（MIPI 摄像头启动过程动态演示，截图待重制）
 
 </details>
 

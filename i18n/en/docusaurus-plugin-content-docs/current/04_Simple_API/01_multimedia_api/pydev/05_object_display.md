@@ -23,17 +23,17 @@ The Display object implements video display functionality. It can output image d
 | `libsrcampy.unbind` | Unbinds two previously bound modules | [unbind Interface](#unbind-interface) |
 
 ## display
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Initializes the display module and configures display parameters.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Display.display(chn, width, height, vot_intf, vot_out_mode, chn_width, chn_height)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name     | Description                  | Value Range      |
 | ------------ | ----------------------- | ----------------- |
@@ -51,7 +51,7 @@ The `chn` parameter has been changed to an output interface selection: `10` mean
 
 :::
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 ```python
 #create display object
@@ -61,56 +61,56 @@ disp = libsrcampy.Display()
 ret = disp.display(0, 1920, 1080, 0, 1)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 The resolution of the development board's HDMI interface is obtained from the monitor's EDID. Currently only the following resolutions are supported: `1920x1080`, `1280x720`, `1024x600`, and `800x480`. When enabling the display module, make sure the configured resolution matches the actual resolution of the monitor.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 
 ## set_img
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Inputs display data to the display module. The format must be `NV12`.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Display.set_img(img, chn)
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 | Parameter Name     | Description                  | Value Range      |
 | ------------ | ----------------------- | ----------------- |
 | img          | Image data to be displayed        | NV12 format  |
 | chn          | Display output layer        | 0~1 are video layers, default is 0 |
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 None
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This interface must be used after enabling the display function with the `display` interface. The input data must be in `NV12` format.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 ```python
 import sys, os, time
@@ -145,17 +145,17 @@ test_display()
 
 ## set_graph_rect
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Draws a rectangle on the graphics layer of the display module.
 
-<font color='Blue'>[Function Declaration]</font>
+[Function Declaration]
 
 ```python
 Display.set_graph_rect(x0, y0, x1, y1, chn, flush, color, line_width)
 ```
 
-<font color='Blue'>[Parameter Description]</font>
+[Parameter Description]
 
 | Parameter Name   | Description             |    Value Range            |
 | ---------- | ----------------------- | --------- |
@@ -168,7 +168,7 @@ Display.set_graph_rect(x0, y0, x1, y1, chn, flush, color, line_width)
 | color      | Rectangle color setting |  ARGB8888 format |
 | line_width | Width of the rectangle border        | Range 1~16, default is 4      |
 
-<font color='Blue'>[Usage]</font>
+[Usage]
 
 ```python
 #enable graph layer 2
@@ -179,34 +179,34 @@ print ("Display display 2 return:%d" % ret)
 ret = disp.set_graph_rect(100, 100, 1920, 200, chn = 2, flush = 1,  color = 0xffff00ff)
 ```
 
-<font color='Blue'>[Return Value]</font>
+[Return Value]
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font>
+[Notes]
 
 This interface must be used after enabling the display function with the `display` interface.
 
-<font color='Blue'>[Reference Code]</font>
+[Reference Code]
 
 None
 
 ## set_graph_word
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Draws characters on the graphics layer of the display module.
 
-<font color='Blue'>[Function Declaration]</font>
+[Function Declaration]
 
 ```python
 Display.set_graph_word(x, y, str, chn, flush, color, line_width)
 ```
 
-<font color='Blue'>[Parameter Description]</font>
+[Parameter Description]
 
 | Parameter Name   | Description                    | Value Range         |
 | ---------- | ---------------------- | ------------- |
@@ -218,7 +218,7 @@ Display.set_graph_word(x, y, str, chn, flush, color, line_width)
 | color      | Character color setting |  ARGB8888 format |
 | line_width | Width of the character strokes        | Range 1~16, default is 1      |
 
-<font color='Blue'>[Usage]</font>
+[Usage]
 
 ```python
 #enable graph layer 2
@@ -231,75 +231,75 @@ ret = disp.set_graph_word(300, 300, string.encode('gb2312'), 2, 0, 0xff00ffff)
 print ("Display set_graph_word return:%d" % ret)
 ```
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This interface must be used after enabling the display function with the `display` interface.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 
 ## close
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Closes the display module.
 
-<font color='Blue'>[Function Declaration]</font>  
+[Function Declaration]  
 
 ```python
 Display.close()
 ```
 
-<font color='Blue'>[Parameter Description]</font>  
+[Parameter Description]  
 
 None
 
-<font color='Blue'>[Usage]</font> 
+[Usage] 
 
 None
 
-<font color='Blue'>[Return Value]</font>  
+[Return Value]  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font> 
+[Notes] 
 
 This interface must be used after enabling the display function with the `display` interface.
 
-<font color='Blue'>[Reference Code]</font>  
+[Reference Code]  
 
 None
 
 ## bind Interface
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 This interface can bind the output and input data streams of the `Camera`, `Encoder`, `Decoder`, and `Display` modules. Once bound, data automatically flows between the bound modules without any user action. For example, after binding `Camera` and `Display`, camera data is automatically output to the screen through the display module, with no need to call additional interfaces.
 
-<font color='Blue'>[Function Declaration]</font>
+[Function Declaration]
 ```python
     libsrcampy.bind(src, dst)
 ```
 
-<font color='Blue'>[Parameter Description]</font>
+[Parameter Description]
 
 | Parameter Name | Description         | Value Range |
 | -------- | ------------ | --- |
 | src      | Source data module   |`Camera`, `Encoder`, `Decoder` modules |
 | dst      | Destination data module |`Camera`, `Encoder`, `Decoder`, `Display` modules|
 
-<font color='Blue'>[Usage]</font>
+[Usage]
 
 ```python
 #create camera object
@@ -317,40 +317,40 @@ ret = libsrcampy.bind(cam, enc)
 print("libsrcampy bind return:%d" % ret)
 ```
 
- <font color='Blue'>[Return Value]</font>
+ [Return Value]
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font>
+[Notes]
 
 None
 
-<font color='Blue'>[Reference Code]</font>
+[Reference Code]
 
 None
 
 ## unbind Interface
 
-<font color='Blue'>[Function Description]</font>
+[Function Description]
 
 Unbinds two previously bound modules.
 
-<font color='Blue'>[Function Declaration]</font>
+[Function Declaration]
 ```python
 libsrcampy.unbind(src, dst)
 ```
 
-<font color='Blue'>[Parameter Description]</font>
+[Parameter Description]
 
 | Parameter Name | Description         | Value Range |
 | -------- | ------------ | --- |
 | src      | Source data module   |`Camera`, `Encoder`, `Decoder` modules |
 | dst      | Destination data module |`Camera`, `Encoder`, `Decoder`, `Display` modules|
 
-<font color='Blue'>[Usage]</font>
+[Usage]
 
 ```python
 #create camera object
@@ -372,18 +372,18 @@ ret = libsrcampy.unbind(cam, enc)
 print("libsrcampy unbind return:%d" % ret)
 ```
 
- <font color='Blue'>[Return Value]</font>
+ [Return Value]
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>[Notes]</font>
+[Notes]
 
 None
 
-<font color='Blue'>[Reference Code]</font>
+[Reference Code]
 
 None
 

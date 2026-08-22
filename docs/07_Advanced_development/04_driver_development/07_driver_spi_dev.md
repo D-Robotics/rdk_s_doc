@@ -52,7 +52,7 @@ RDK S600 开发板中的 SPI0与 CAN0和 CAN1复用4个引脚，由于这些引�
 
 hobot spi 驱动相关代码都放在 **\$project/hobot-drivers/spi** 目录下
 
-``` {.text}
+``` text
 oops@tiger$ tree . -L 1
 
 ├── Kconfig                       # Kconfig相关
@@ -62,7 +62,7 @@ oops@tiger$ tree . -L 1
 
 **\$project/hobot-drivers/spi/spi_drv** 目录说明
 
-``` {.text}
+``` text
 oops@tiger$ tree . -L 1
 ├── Makefile
 ├── spi-dw.c                       # spi驱动核心代码
@@ -75,7 +75,7 @@ oops@tiger$ tree . -L 1
 
 Linux spi 协议相关代码都放在 **\$project/kernel/drivers/spi** 目录下
 
-``` {.text}
+``` text
 oops@tiger$ tree kernel/drivers/spi/
 drivers/spi/
 ├── spi.c                             # spi框架代码
