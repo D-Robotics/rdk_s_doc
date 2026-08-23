@@ -6,24 +6,13 @@ sidebar_label: "MCU Port Expansion Board"
 sidebar_products: RDK S600
 ---
 
-
-
 # MCU Port Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="RDK S600 MCU Port Expansion Board" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-
 ## Product Introduction
 
 The RDK S600 MCU Port Expansion Board (including the accompanying FPC) is a core expansion module of the D-Robotics RDK S600 series developer kits. It is mainly used to expand MCU interface capabilities, supporting CAN_FD, ADC, and more.
-
-<!-- :::danger Note
-
-1. This product is still under development, and the content described is subject to change.
-2. For RDK S600 Early Access users, please read first: [**RDK S600 Early Access Note**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
-3. Before use, please read [**RDK S600 Early Prototype Notes**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd) to learn about the hardware.
-
-::: -->
 
 :::warning
 
@@ -58,14 +47,7 @@ The side of the FPC with the "CB" silkscreen label corresponds to the J15 interf
 
 :::
 
-
-
 ## Product Specifications  
-<!-- :::warning Note
-
-On the V0P1 hardware revision, the 2x SPI interfaces are temporarily unavailable.
-
-::: -->
 
 | **Name** | **Parameter**                                                                        |
 | -------- | ----------------------------------------------------------------------------------- |
@@ -81,8 +63,6 @@ On the V0P1 hardware revision, the 2x SPI interfaces are temporarily unavailable
 ### Interface Overview
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="RDK S600 MCU Port Expansion Board interface diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-
 
 | Ref.  | Function                     |
 | ----- | ---------------------------- |

@@ -87,7 +87,7 @@ GPIO.setwarnings(False)
 
 :::info
 
-在`RDK S600`平台上，支持2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin 自锁接口 GPIO 拓展，在使用过程中有如下的限制:
+在`RDK S600`平台上，支持2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin 自锁接口 GPIO 拓展。
 
 管脚定义请参考 [管脚配置与定义](./01_ext_io.md#pin_define)
 

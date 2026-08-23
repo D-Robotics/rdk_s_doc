@@ -41,7 +41,6 @@ netstat { [-vWeenNac] -i | [-cnNe] -M | -s [-6tuw] }
 - `-Z, --context`: Display SELinux security context for displaying SELinux security information of sockets.
 - `-v, --verbose`: Enable verbose output to provide more information to the user about ongoing operations. Particularly useful when dealing with unconfigured address families, providing some useful information.
 - `-o, --timers`: Include information related to network timers.
-- `-p, --program`: Display the PID and name of the program that each socket belongs to.
 - `-l, --listening`: Only display listening sockets. By default, these are omitted.
 - `-a, --all`: Display both listening and non-listening sockets. When using the `--interfaces` option, display disabled interfaces.
 - `-F`: Print routing information from the FIB (default).

@@ -66,42 +66,9 @@ ERROR [CamInitParam] No camera sensor found, please check whether the camera con
 Error: Failed to open camera.
 ```
 
-<!--
-Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
+Video demo: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
 
-The development board has the `mipi_camera.py` program installed for testing the MIPI camera data path. This example captures image data from the MIPI camera in real time, then runs the object detection algorithm, and finally fuses the image data with the detection results and outputs them through the HDMI interface.
 
-## Environment Preparation
-
-  - Connect the MIPI camera module to the MIPI CSI interface of the development board. For the specific connection method, refer to [Hardware Introduction - MIPI Interface](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board)
-  - Connect the development board and the monitor with an HDMI cable
-
-## How to Run
-Run the program with the following commands
-
-  ```bash
-  sunrise@ubuntu:~$ cd /app/pydev_demo/03_mipi_camera_sample/
-  sunrise@ubuntu:/app/pydev_demo/03_mipi_camera_sample$ python3 mipi_camera.py
-  ```
-
-<details>
-  <summary>When using this demo on the RDK X5, you are asked to choose the camera configuration; click to view details</summary>
-
-  After running in the terminal, a "please choose sensor config,xxxx" prompt appears.
-
-  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_Image/image/mipi_camera/screenshot-20241217-115245.png" alt="MIPI camera sensor configuration selection screen" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-  Choose a configuration supported by the RDK X5 at runtime; in the figure above, choosing either 0 or 1 is fine.
-
-  Refer to the following video for the startup process:
-(Animated demo of MIPI camera startup; static screenshot pending)
-
-</details>
-
-## Expected Result
-After the program runs, the monitor displays the camera view and the results of the object detection algorithm (object type, confidence) in real time, as shown below:
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/image-20220511181747071.png" alt="MIPI camera object detection algorithm results" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
--->
 
 ## FAQ
 

@@ -6,26 +6,13 @@ sidebar_label: "Camera Expansion Board"
 sidebar_products: RDK S600
 ---
 
-
-
-
 # Camera Expansion Board
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="RDK S600 Camera Expansion Board" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-
-
 ## Product Introduction
 
 The RDK S600 Camera Expansion Board (hereinafter referred to as the "Camera Expansion Board") is a core expansion module of the D-Robotics RDK S600 series developer kits. The Camera Expansion Board is developed based on the RDK S600 Camera Expansion Connector and provides 8 GMSL camera interfaces.
-
-<!-- :::danger Note
-
-1. This product is still under development, and the content described is subject to change.
-2. For RDK S600 Early Access users, please read first: [**RDK S600 Early Access Note**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
-3. Before use, please read [**RDK S600 Early Prototype Notes**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd) to learn about the hardware.
-
-::: -->
 
 :::warning
 
@@ -54,8 +41,6 @@ To avoid malfunction or damage of this expansion board, strictly observe the fol
 
 :::
 
-
-
 ## Product Specifications
 
 | **Name**    | **Parameter**                                                                                         |
@@ -71,12 +56,7 @@ To avoid malfunction or damage of this expansion board, strictly observe the fol
 
 ### Interface Overview
 
-<!-- **V0P2 interface diagram**
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png" alt="RDK S600 Camera Expansion Board interface diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-**V0P3 interface diagram** -->
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="RDK S600 Camera Expansion Board interface diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
 
 | Ref.  | Function          |
 | ----- | ----------------- |

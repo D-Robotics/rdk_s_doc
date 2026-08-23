@@ -6,24 +6,13 @@ sidebar_label: "MCU 接口扩展板"
 sidebar_products: RDK S600
 ---
 
-
-
 # MCU 接口扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="RDK S600 MCU 接口扩展板" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-
 ## 产品介绍
 
 RDK S600 MCU Port Expansion Board（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块，主要用于扩展 MCU 接口功能，支持 CAN_FD、ADC 等。
-
-<!-- :::danger 注意
-
-1. 本产品仍处于研发阶段，所述内容可能会有变更。
-2. 对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
-3. 使用前请先阅读 [**RDK S600 早期样机情况说明**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd)，获取硬件相关情况。
-
-::: -->
 
 :::warning
 
@@ -58,14 +47,7 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 
 :::
 
-
-
 ## 产品规格  
-<!-- :::warning 注意
-
-在 V0P1 硬件版本中，2x SPI 接口暂时无法使用。
-
-::: -->
 
 | **名称** | **参数**                                                                        |
 | -------- | ------------------------------------------------------------------------------- |
@@ -81,8 +63,6 @@ FPC 正面丝印"CB"标识侧对应 RDK S600 主板的 J15 接口，"SUB"标识�
 ### 接口描述
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="RDK S600 MCU 接口扩展板接口示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-
 
 | 位号  | 功能                     |
 | ----- | ------------------------ |

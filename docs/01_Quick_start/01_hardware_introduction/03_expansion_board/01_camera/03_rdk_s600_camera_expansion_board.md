@@ -6,26 +6,13 @@ sidebar_label: "相机扩展板"
 sidebar_products: RDK S600
 ---
 
-
-
-
 # 相机扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2.png" alt="RDK S600 相机扩展板" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-
-
 ## 产品介绍
 
 RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S600 Camera Expansion Connector 进行二次开发，提供了 8 个 GMSL 相机接口。
-
-<!-- :::danger 注意
-
-1. 本产品仍处于研发阶段，所述内容可能会有变更。
-2. 对于 RDK S600 Early Access 用户，请先阅读：[**RDK S600 早期试用说明（Early Access Note）**](https://horizonrobotics.feishu.cn/wiki/IHX3wmvS8iWM5vkEcIqcBmY7nAd?from=from_copylink)
-3. 使用前请先阅读 [**RDK S600 早期样机情况说明**](https://horizonrobotics.feishu.cn/wiki/LyjewVlbZiUOdSkBGdocgdxhngd)，获取硬件相关情况。
-
-::: -->
 
 :::warning
 
@@ -54,8 +41,6 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 :::
 
-
-
 ## 产品规格
 
 | **名称**    | **参数**                                         |
@@ -71,12 +56,7 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 接口说明
 
-<!-- **V0P2 接口图**
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_v0p2_interface%20.png" alt="RDK S600相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-**V0P3 接口图** -->
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="RDK S600 相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
 
 | 位号  | 功能            |
 | ----- | --------------- |
