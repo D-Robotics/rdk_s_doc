@@ -382,6 +382,32 @@ camera 对应的 host 编号如下图所示
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Camera对应的host编号示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 常见问题
+
+### 设置输出宽高时报错
+
+**现象**：调用 `open_vps`/`open_cam` 设置输出宽高后检测报错。
+
+**原因**：S100 对 `VPS` 输出宽度有 16 对齐、高度 2 对齐的要求。
+
+**解决**：将输出宽度调整为满足 16 对齐、高度满足 2 对齐。
+
+### IMX477 切换分辨率后采集异常
+
+**现象**：`IMX477` 摄像头从 `1080P` 切换至其它分辨率后无法正常采集。
+
+**原因**：`IMX477` 分辨率切换需要手动复位。
+
+**解决**：在板端执行 `hobot_reset_camera.py` 完成复位操作。
+
+### get_img 返回 None
+
+**现象**：调用 `get_img` 拿不到图像数据。
+
+**原因**：该方法需在 `open_cam`、`open_vps` 之后调用。
+
+**解决**：确保先调用 `open_cam`/`open_vps`，再调用 `get_img`。
+
 ## 相关文档
 
 - [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)

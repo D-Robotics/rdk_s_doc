@@ -37,6 +37,32 @@ python resnet18.py \
 - The number of classes must match the label file (e.g. 1000 classes uses the imagenet labels, 80 classes uses the COCO labels).
 - If the model comes from an open-source repository, first confirm that its license permits deployment.
 
+## FAQ
+
+### Wrong Results When Running a Demo With My Own Model
+
+**Symptom**: Inference results are wrong after replacing the model with your own.
+
+**Cause**: The model's input size, normalization (mean/scale), and input format (NV12, etc.) do not match the demo preprocessing.
+
+**Solution**: Check `INPUT_SHAPE`, `NORM_TYPE`, and `SCALE_VALUE` in the toolchain model description and align them with the demo preprocessing.
+
+### Wrong Class Labels
+
+**Symptom**: The classification/detection classes do not match expectations.
+
+**Cause**: The number of classes does not match the label file.
+
+**Solution**: Make sure the number of classes matches the label file (e.g. imagenet labels for 1000 classes, COCO labels for 80 classes).
+
+### How to Choose MARCH During Quantization
+
+**Symptom**: The quantized `.hbm` cannot run normally on the board.
+
+**Cause**: MARCH does not match the product during quantization.
+
+**Solution**: Match MARCH to the product: `nashp` for S600 and `nashe` for S100.
+
 ## Related Documentation
 
 - [Algorithm Toolchain (Advanced)](../../07_Advanced_development/10_algorithm_toolchain/01_algorithm_toolchain/01_overview.md)

@@ -46,6 +46,24 @@ while True:
 | Capture → Encode | Camera → Encoder | [Capture → Encode](/Demos/multimedia_demo/cdev/vio2encoder) |
 | Decode → Display | Decoder → Display | [Decode → Display](/Demos/multimedia_demo/cdev/decode2display) |
 
+## FAQ
+
+### get_img/set_img Returns None or Reports an Error
+
+**Symptom**: Calling data processing methods such as `get_img`/`set_img` returns `None` or reports an error.
+
+**Cause**: These methods must be called after the corresponding object is enabled (`open_cam`/`open_vps`/`encode`/`decode`/`display`).
+
+**Solution**: Call the corresponding enable interface first, then call the data processing method.
+
+### Resources Not Released After the Program Exits
+
+**Symptom**: Resources are not released after the program exits, or the next run is affected.
+
+**Cause**: The close interface of each object was not called before exiting, or bound modules were not unbound.
+
+**Solution**: Call `close_cam`/`close` to release resources before exiting; modules bound with `libsrcampy.bind` must be unbound with `libsrcampy.unbind` first.
+
 ## Related Documentation
 
 - [Camera Object](./02_object_camera.md)

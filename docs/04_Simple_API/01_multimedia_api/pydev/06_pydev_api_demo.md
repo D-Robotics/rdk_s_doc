@@ -448,6 +448,32 @@ test_cam_vps_display()
 - RTSP 码流送入解码时，第一帧需要是 SPS/PPS，否则解码器会报 `FAILED TO DEC_PIC_HDR` 异常退出。
 - 各用例会在当前目录生成 `output.img`、`encode.h264` 等文件，且后一个用例依赖前一个用例的输出文件，建议按顺序执行。
 
+## 常见问题
+
+### get_img 取到的图像为空
+
+**现象**：`open_cam` 后立即调用 `get_img` 取不到图像。
+
+**原因**：摄像头需要约 1 秒完成 ISP tuning。
+
+**解决**：`open_cam` 成功后等待约 1 秒再调用 `get_img`。
+
+### RTSP 解码报 FAILED TO DEC_PIC_HDR 退出
+
+**现象**：RTSP 码流送入解码时报 `FAILED TO DEC_PIC_HDR` 异常退出。
+
+**原因**：送入解码的第一帧不是 SPS/PPS 描述信息。
+
+**解决**：保证送入解码的第一帧是 SPS/PPS（示例中会跳过非 SPS/PPS 的首帧）。
+
+### 单独运行后置用例失败
+
+**现象**：单独运行某个后置用例报找不到输入文件。
+
+**原因**：各用例会生成 `output.img`、`encode.h264` 等文件，后一个用例依赖前一个用例的输出文件。
+
+**解决**：按顺序执行用例。
+
 ## 相关文档
 
 - [多媒体接口说明](./01_pydev_multimedia_api.md)

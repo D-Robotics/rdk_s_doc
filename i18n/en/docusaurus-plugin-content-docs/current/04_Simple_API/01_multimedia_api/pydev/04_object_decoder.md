@@ -261,6 +261,32 @@ The `close` interface must be called when exiting the program to release resourc
 
 None
 
+## FAQ
+
+### set_img Single-Frame Decoding Fails
+
+**Symptom**: Calling `set_img` to feed a single frame for decoding reports an error or fails.
+
+**Cause**: This interface must be called after creating a decoding channel with `decode()`, and the `file` argument must be left empty when creating the channel.
+
+**Solution**: Create the decoding channel with `decode("", ...)` and then call `set_img`; to decode a file, pass the file name directly to `decode`.
+
+### get_img Returns None
+
+**Symptom**: Calling `get_img` cannot decode image data.
+
+**Cause**: This interface must be called after creating a decoding channel with `decode()`.
+
+**Solution**: Call `decode()` to enable the decoding channel first, then call `get_img`.
+
+### How to Check Whether File Decoding Succeeded
+
+**Symptom**: You are unsure whether `decode` succeeded in decoding the file.
+
+**Cause**: The return value of `decode` is a `list` with 2 members.
+
+**Solution**: `list[0]` is 0 on success and -1 on failure; `list[1]` is the number of frames in the input bitstream file (valid on success).
+
 ## Related Documentation
 
 - [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)

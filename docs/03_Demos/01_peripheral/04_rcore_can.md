@@ -111,6 +111,24 @@ Send end, send package total: 1 frame total: 1
 - `can_send` 发送 CAN 帧后，`can_get` 端可接收到对应数据
 - SocketCAN 方式可用 `candump can0` 验证接收
 
+## 常见问题
+
+### 发送报错 canSendMsgFrame failed ret: -14
+
+**现象**：HAL 发送示例输出 `[CANHAL][ERROR] HorizonHal_IPCF_Send ... failed`、`canSendMsgFrame failed ret: -14`。
+
+**原因**：对端 MCU/接收端未连接。
+
+**解决**：确认 CAN 总线已连接（CAN_H/CAN_L + 共地），且接收端已就绪。
+
+### SocketCAN 方式无法正常收发数据
+
+**现象**：运行 SocketCAN 示例后无法正常收发 CAN 数据。
+
+**原因**：运行前未加载 CAN 模块并配置 CAN 接口。
+
+**解决**：先加载 CAN 模块并配置 CAN 接口（如 `ip link set can0 ...`），具体步骤与参数见 `socketcan/README.md`。
+
 ## 相关文档
 
 - [CAN 驱动开发](../../07_Advanced_development/11_mcu_development/09_mcu_can.md)

@@ -140,6 +140,24 @@ pip install -r ../../requirements.txt
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
 
+## FAQ
+
+### Can This Example Run on RDK S600
+
+**Symptom**: Running this example on RDK S600 fails, or the model cannot be found.
+
+**Cause**: The RDK S600 image does not include the corresponding hbm model, and the example code is only released with the S100 system image.
+
+**Solution**: This example only applies to RDK S100; it is not supported on S600.
+
+### Model Not Found at Runtime
+
+**Symptom**: The program reports that the model file is not found at runtime.
+
+**Cause**: The specified model path does not exist.
+
+**Solution**: The program downloads the model from the model zoo automatically; no manual action is needed.
+
 ## Related Documentation
 
 - [C/C++ version of the YOLOE11 segmentation sample](./02_yoloe11_seg.md)

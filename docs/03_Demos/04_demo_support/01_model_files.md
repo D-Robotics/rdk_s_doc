@@ -103,6 +103,32 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resne
 
 放到 `/opt/hobot/model/<产品>/basic/` 或 demo 指定的 `--model-path` 路径即可。
 
+## 常见问题
+
+### 跑 demo 报找不到模型文件
+
+**现象**：运行示例时提示模型文件不存在。
+
+**原因**：模型未预装，或未放到正确路径。
+
+**解决**：先确认 `/opt/hobot/model/<产品>/basic/` 下是否存在对应 `.hbm` 文件；若不存在，从 RDK 模型库联网下载并放入该目录，或放到 demo 指定的 `--model-path` 路径。
+
+### 语音识别（ASR）示例缺少模型
+
+**现象**：ASR 示例提示找不到 `asr.hbm`。
+
+**原因**：`asr.hbm` 不在镜像预装列表中。
+
+**解决**：从 RDK 模型库下载，见 [ASR 示例](../03_algorithm_demo/06_speech/01_asr_py.md)。
+
+### 模型路径中的 `<产品>` 如何填写
+
+**现象**：不清楚模型路径 `/opt/hobot/model/<产品>/basic/` 中 `<产品>` 该填什么。
+
+**原因**：模型按产品分目录存放，S600 为 `s600`、S100 为 `s100`。
+
+**解决**：按实际产品填写，S600 用 `/opt/hobot/model/s600/basic/`，S100 用 `/opt/hobot/model/s100/basic/`。
+
 ## 相关文档
 
 - [ResNet18 分类示例](../03_algorithm_demo/02_classification/01_resnet18_py.md)

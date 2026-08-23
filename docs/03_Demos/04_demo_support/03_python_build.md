@@ -64,6 +64,32 @@ cd /app/pydev_demo && pip install -r requirements.txt
 - Python 示例依赖上级 `utils` 目录，**必须在示例目录内运行**，单独拷贝脚本到别处会找不到 `utils`。
 - `--break-system-packages`（S600）用于绕过 PEP 668 的外部环境保护；若用 venv 则无需此参数。
 
+## 常见问题
+
+### 运行示例报 ModuleNotFoundError
+
+**现象**：运行 Python 示例时输出 `ModuleNotFoundError`。
+
+**原因**：依赖包未安装或环境不满足。
+
+**解决**：执行 `cd /app/pydev_demo && pip install -r requirements.txt`（S600 需加 `--break-system-packages`；使用 venv 时无需该参数）。
+
+### 单独拷贝示例脚本后找不到 utils
+
+**现象**：把单个脚本拷贝到别处运行，报找不到 `utils`。
+
+**原因**：Python 示例依赖上级 `utils` 公共工具库目录。
+
+**解决**：必须在示例目录内运行，不要单独拷贝脚本到其它位置。
+
+### pip install 被 PEP 668 外部环境保护拦截
+
+**现象**：S600 上 pip 安装依赖时报外部环境管理相关错误。
+
+**原因**：PEP 668 的外部环境管理保护。
+
+**解决**：安装命令加 `--break-system-packages` 绕过，或改用 venv。
+
 ## 相关文档
 
 - [ResNet18 (Python) 示例](../03_algorithm_demo/02_classification/01_resnet18_py.md)

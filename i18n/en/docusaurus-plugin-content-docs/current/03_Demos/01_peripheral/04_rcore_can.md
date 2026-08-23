@@ -111,6 +111,24 @@ Send end, send package total: 1 frame total: 1
 - After `can_send` sends a CAN frame, the `can_get` side can receive the corresponding data
 - In the SocketCAN approach, `candump can0` can be used to verify reception
 
+## FAQ
+
+### Send Fails With "canSendMsgFrame failed ret: -14"
+
+**Symptom**: The HAL send example prints `[CANHAL][ERROR] HorizonHal_IPCF_Send ... failed` and `canSendMsgFrame failed ret: -14`.
+
+**Cause**: The peer MCU/receiver is not connected.
+
+**Solution**: Confirm the CAN bus is connected (CAN_H/CAN_L plus common ground), and the receiver is ready.
+
+### SocketCAN Cannot Send or Receive Data
+
+**Symptom**: The SocketCAN example cannot send or receive CAN data normally.
+
+**Cause**: The CAN module was not loaded and the CAN interface was not configured before running.
+
+**Solution**: Load the CAN module and configure the CAN interface first (e.g. `ip link set can0 ...`); see `socketcan/README.md` for the specific steps and parameters.
+
 ## Related Documentation
 
 - [CAN Driver Development](../../07_Advanced_development/11_mcu_development/09_mcu_can.md)

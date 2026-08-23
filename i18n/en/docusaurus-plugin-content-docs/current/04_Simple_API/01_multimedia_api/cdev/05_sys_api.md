@@ -92,6 +92,24 @@ sp_module_bind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY);   // Bind: VIO output
 sp_module_unbind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY); // Unbind before exit
 ```
 
+## FAQ
+
+### sp_module_bind Returns a Failure
+
+**Symptom**: Calling `sp_module_bind` to bind two modules returns a failure.
+
+**Cause**: The binding relationship is not in the supported list (only VIO→ENCODER, VIO→DISPLAY, DECODER→ENCODER, DECODER→DISPLAY).
+
+**Solution**: Check whether the source/destination module types conform to the supported binding relationships.
+
+### Abnormal Exit or Unreleased Resources
+
+**Symptom**: The program exits abnormally or the next run is affected.
+
+**Cause**: The modules were not unbound with `sp_module_unbind` before exiting.
+
+**Solution**: Call `sp_module_unbind` to unbind the modules before exiting.
+
 ## Related Documentation
 
 - [VIO API](/Simple_API/multimedia_api/cdev/vio_api)

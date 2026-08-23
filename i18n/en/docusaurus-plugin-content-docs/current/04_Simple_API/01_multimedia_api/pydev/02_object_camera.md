@@ -382,6 +382,32 @@ The host number corresponding to the camera is shown in the figure below:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Diagram of the host number corresponding to the Camera" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## FAQ
+
+### Error When Setting Output Width/Height
+
+**Symptom**: Calling `open_vps`/`open_cam` to set the output width/height reports an error.
+
+**Cause**: On S100, the `VPS` output width has a 16-alignment requirement and the height has a 2-alignment requirement.
+
+**Solution**: Adjust the output width to be 16-aligned and the height to be 2-aligned.
+
+### IMX477 Capture Is Abnormal After Switching Resolution
+
+**Symptom**: The `IMX477` camera cannot capture normally after switching from `1080P` to another resolution.
+
+**Cause**: Switching the `IMX477` resolution requires a manual reset.
+
+**Solution**: Run `hobot_reset_camera.py` on the board to perform the reset.
+
+### get_img Returns None
+
+**Symptom**: Calling `get_img` cannot retrieve image data.
+
+**Cause**: This method must be called after `open_cam` and `open_vps`.
+
+**Solution**: Make sure `open_cam`/`open_vps` is called before `get_img`.
+
 ## Related Documentation
 
 - [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)

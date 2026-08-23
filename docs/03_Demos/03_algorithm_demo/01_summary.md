@@ -46,6 +46,24 @@ Model Zoo GitHub：https://github.com/D-Robotics/rdk_model_zoo
 
 示例自带模型已量化为 `.hbm`。要用自己的模型，需经算法工具链量化编译，见 [使用自己的模型](../04_demo_support/04_custom_model.md) 与第 5 章 [算法工具链](../../07_Advanced_development/10_algorithm_toolchain/01_algorithm_toolchain/01_overview.md)。
 
+## 常见问题
+
+### 为什么有些示例只有 C/C++ 或只有 Python 版本
+
+**现象**：发现个别示例只提供一个语言版本（如视频解码仅 C/C++、WebSocket 仅 Python）。
+
+**原因**：多数示例同时提供 C/C++ 与 Python 两版，个别示例只提供一版。
+
+**解决**：按语言选读对应版本；单版本示例按已有版本使用即可。
+
+### 示例自带模型能否直接换成自己的模型
+
+**现象**：想用自己的模型替换示例自带的模型直接运行。
+
+**原因**：示例自带模型已量化为 `.hbm`，自己的浮点模型（ONNX/CAFFE）不能直接使用。
+
+**解决**：需经算法工具链量化编译，见 [使用自己的模型](../04_demo_support/04_custom_model.md)。
+
 ## 相关文档
 
 - [模型获取与放置](../04_demo_support/01_model_files.md)

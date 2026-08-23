@@ -67,6 +67,32 @@ No USB camera found.
 2. RDK S100 开发板有两个 USB host，上下两个口为同一个 host，如果接入两个 USB 2.0 720p camera，需要左右两个口插入，每个 USB 2.0 相机占用一个 host 的方式。
 :::
 
+## 常见问题
+
+### 程序提示找不到 USB 摄像头
+
+**现象**：运行脚本后输出 `No USB camera found.`。
+
+**原因**：USB 摄像头未正确接入，或未生成 `/dev/videoX` 设备节点。
+
+**解决**：确认 USB 摄像头已接入开发板，并检查 `/dev/videoX`（`X` 为数字）设备节点是否生成。
+
+### 同时接入两个 USB 摄像头后无法正常工作
+
+**现象**：同时对接两个 USB 摄像头时采集异常或带宽不足。
+
+**原因**：`uvcvideo` 默认带宽占用可能导致两个摄像头无法稳定工作。
+
+**解决**：接入前执行 `rmmod uvcvideo; modprobe uvcvideo quirks=128` 限制 `uvcvideo` 带宽占用。
+
+### 同一 USB host 接入两路摄像头无画面或卡顿
+
+**现象**：同一 USB host 同时接入两路高分辨率摄像头时画面异常。
+
+**原因**：USB 2.0 带宽为 480Mb/s，720p30fps 的理论带宽已接近上限，加上 UVC 协议开销，同一 USB host 无法承载两路 720p30fps 摄像头。
+
+**解决**：同一 USB host 建议接入两路 640x480 20fps 摄像头；如需接两路 720p 摄像头，应分别插入上下两个 USB host 对应的端口。
+
 ## 相关文档
 
 - [采集 → 显示](../../02_multimedia_demo/01_cdev/02_vio2display.md)

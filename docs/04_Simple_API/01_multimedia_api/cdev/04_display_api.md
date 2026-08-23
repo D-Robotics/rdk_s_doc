@@ -213,6 +213,24 @@ sp_stop_display(disp);                       // 4. 停止显示通道
 sp_release_display_module(disp);             // 5. 销毁 DISPLAY 对象
 ```
 
+## 常见问题
+
+### 图像无法显示或花屏
+
+**现象**：调用 `sp_display_set_image` 后无画面或花屏。
+
+**原因**：图像数据不是 `NV12` 格式，或通道号使用错误（桌面系统下 0 通道已用作图形化系统）。
+
+**解决**：确保送入数据为 `NV12` 格式；桌面系统下应用程序使用通道 1，叠加图形使用通道 2~3。
+
+### 绘制字符串显示乱码
+
+**现象**：调用 `sp_display_draw_string` 绘制文字显示乱码。
+
+**原因**：需要绘制的字符串必须是 `GB2312` 编码。
+
+**解决**：将字符串转换为 `GB2312` 编码后传入。
+
 ## 相关文档
 
 - [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)

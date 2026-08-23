@@ -46,6 +46,24 @@ Community contributions of new models/optimizations/documentation (Pull Requests
 
 The models bundled with the demos are already quantized to `.hbm`. To use your own model, it must be quantized and compiled with the algorithm toolchain. See [Using Your Own Model](../04_demo_support/04_custom_model.md) and Chapter 5 [Algorithm Toolchain](../../07_Advanced_development/10_algorithm_toolchain/01_algorithm_toolchain/01_overview.md).
 
+## FAQ
+
+### Why Do Some Examples Only Provide C/C++ or Python
+
+**Symptom**: Some examples only provide a single language version (e.g. video decoding is C/C++ only, WebSocket is Python only).
+
+**Cause**: Most examples provide both C/C++ and Python versions, but a few provide only one.
+
+**Solution**: Pick the version by language; for single-version examples, use the provided version.
+
+### Can I Replace the Bundled Model With My Own Model Directly
+
+**Symptom**: You want to replace the bundled model with your own model and run directly.
+
+**Cause**: The bundled models are already quantized to `.hbm`; your own floating-point model (ONNX/CAFFE) cannot be used directly.
+
+**Solution**: Quantize and compile it with the algorithm toolchain; see [Using Your Own Model](../04_demo_support/04_custom_model.md).
+
 ## Related Documentation
 
 - [Model Acquisition and Placement](../04_demo_support/01_model_files.md)

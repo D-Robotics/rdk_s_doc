@@ -92,6 +92,24 @@ sp_module_bind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY);   // 绑定：VIO 输
 sp_module_unbind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY); // 退出前解绑
 ```
 
+## 常见问题
+
+### sp_module_bind 返回失败
+
+**现象**：调用 `sp_module_bind` 绑定两个模块后返回失败。
+
+**原因**：绑定的模块关系不在支持的绑定关系列表中（仅 VIO→ENCODER、VIO→DISPLAY、DECODER→ENCODER、DECODER→DISPLAY）。
+
+**解决**：检查源/目标模块类型是否符合支持的绑定关系。
+
+### 模块退出时异常或资源未释放
+
+**现象**：程序退出时出现异常或下次运行受影响。
+
+**原因**：模块退出前未先调用 `sp_module_unbind` 解绑。
+
+**解决**：模块退出前先调用 `sp_module_unbind` 完成解绑。
+
 ## 相关文档
 
 - [VIO API](/Simple_API/multimedia_api/cdev/vio_api)

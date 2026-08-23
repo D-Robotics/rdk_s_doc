@@ -320,6 +320,32 @@ sp_release_vio_module(vio);                  // 5. Destroy the VIO object
 free(buf);
 ```
 
+## FAQ
+
+### Error When Setting the VPS Output Resolution
+
+**Symptom**: Configuring the output width/height in `sp_open_vps` or `sp_open_camera_v2` reports an error during validation.
+
+**Cause**: On S100, the `VPS` output width has a 16-alignment requirement, and the height has a 2-alignment requirement.
+
+**Solution**: Adjust the output width to be 16-aligned and the height to be 2-aligned.
+
+### sp_vio_get_frame Fails to Retrieve an Image Frame
+
+**Symptom**: Calling `sp_vio_get_frame` fails to retrieve an image frame.
+
+**Cause**: The required resolution was not passed in when opening the module, or the pre-allocated `frame_buffer` is too small.
+
+**Solution**: Confirm the resolution is configured in `sp_open_camera`/`sp_open_vps`, and pre-allocate `frame_buffer` by `height * width * 3 / 2` (or the `FRAME_BUFFER_SIZE(w, h)` macro).
+
+### Abnormal Result After sp_vio_set_frame Processing
+
+**Symptom**: The result processed by the `vps` module is abnormal.
+
+**Cause**: The fed data is not in `NV12` format, or its resolution does not match the original frame resolution used in `sp_open_vps`.
+
+**Solution**: Ensure the `frame_buffer` data is in `NV12` format and its resolution matches the original frame resolution configured in `sp_open_vps`.
+
 ## Related Documentation
 
 - [Multimedia API Overview](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)

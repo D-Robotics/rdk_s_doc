@@ -172,6 +172,32 @@ sp_release_encoder_module(enc);              // 6. Destroy the ENCODER object
 free(stream);
 ```
 
+## FAQ
+
+### Encoded Image Shows Artifacts or Is Abnormal
+
+**Symptom**: The encoded image shows mosaic artifacts or is abnormal.
+
+**Cause**: The width of the input image is not aligned to 16 bytes (on S100: width aligned to 16 bytes and height to 2; S600 alignment requirements pending board verification).
+
+**Solution**: Adjust the input image width so it is aligned to 16 bytes.
+
+### sp_encoder_set_frame Fails to Feed a Frame
+
+**Symptom**: Calling `sp_encoder_set_frame` to feed an image frame returns a failure.
+
+**Cause**: The frame data is not in `NV12` format, or its resolution does not match that used when creating the channel with `sp_start_encode`.
+
+**Solution**: Ensure the frame data is in `NV12` format and its resolution matches the `sp_start_encode` configuration.
+
+### How to Choose the Encoding Bitrate (bits)
+
+**Symptom**: You are unsure how to set the `bits` parameter of `sp_start_encode`.
+
+**Cause**: The bitrate affects image sharpness and stream size.
+
+**Solution**: Common values are 512, 1024, 2048, 4096, 8192, 16384 (unit: Mbps). The higher the bitrate, the sharper the image but the larger the stream.
+
 ## Related Documentation
 
 - [VIO API](/Simple_API/multimedia_api/cdev/vio_api)

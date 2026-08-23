@@ -213,6 +213,24 @@ sp_stop_display(disp);                       // 4. Stop the display channel
 sp_release_display_module(disp);             // 5. Destroy the DISPLAY object
 ```
 
+## FAQ
+
+### Image Cannot Be Displayed or Shows Artifacts
+
+**Symptom**: After calling `sp_display_set_image`, there is no image or the image shows artifacts.
+
+**Cause**: The image data is not in `NV12` format, or the channel number is wrong (on a desktop system, channel 0 is already used by the graphical system).
+
+**Solution**: Ensure the fed data is in `NV12` format; on a desktop system, applications should use channel 1, and use channels 2~3 for overlaying graphics.
+
+### Drawn String Displays Garbled Text
+
+**Symptom**: Text drawn by `sp_display_draw_string` displays as garbled characters.
+
+**Cause**: The string to draw must be `GB2312`-encoded.
+
+**Solution**: Convert the string to `GB2312` encoding before passing it in.
+
 ## Related Documentation
 
 - [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)

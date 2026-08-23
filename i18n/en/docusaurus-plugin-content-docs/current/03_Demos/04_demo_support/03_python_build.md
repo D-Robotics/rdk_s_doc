@@ -64,6 +64,32 @@ cd /app/pydev_demo && pip install -r requirements.txt
 - The Python examples depend on the parent-level `utils` directory, so they **must be run inside the example directory**; copying a script elsewhere on its own will fail to find `utils`.
 - `--break-system-packages` (S600) is used to bypass the PEP 668 externally-managed-environment protection; this flag is not needed when using a venv.
 
+## FAQ
+
+### ModuleNotFoundError When Running an Example
+
+**Symptom**: Running a Python example prints `ModuleNotFoundError`.
+
+**Cause**: Dependencies are not installed, or the environment is insufficient.
+
+**Solution**: Run `cd /app/pydev_demo && pip install -r requirements.txt` (add `--break-system-packages` on S600; not needed when using a venv).
+
+### Cannot Find `utils` After Copying a Single Script
+
+**Symptom**: Copying a single script elsewhere and running it reports that `utils` cannot be found.
+
+**Cause**: The Python examples depend on the parent `utils` utility library directory.
+
+**Solution**: Run the script inside the example directory; do not copy the script alone to another location.
+
+### `pip install` Blocked by PEP 668 Protection
+
+**Symptom**: On S600, `pip install` reports an externally-managed-environment error.
+
+**Cause**: PEP 668 externally-managed-environment protection.
+
+**Solution**: Add `--break-system-packages` to bypass it, or use a venv.
+
 ## Related Documentation
 
 - [ResNet18 (Python) Example](../03_algorithm_demo/02_classification/01_resnet18_py.md)

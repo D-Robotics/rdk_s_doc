@@ -148,6 +148,32 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
 
+## FAQ
+
+### Can This Example Run on RDK S600
+
+**Symptom**: Compiling or running this example on RDK S600 fails, or the model cannot be found.
+
+**Cause**: The RDK S600 image does not include the corresponding hbm model, and the example code is only released with the S100 system image.
+
+**Solution**: This example only applies to RDK S100; it is not supported on S600.
+
+### Build Fails With Missing gflags Dependency
+
+**Symptom**: The build reports a missing gflags-related header or link error.
+
+**Cause**: The `libgflags-dev` dependency is not installed.
+
+**Solution**: Run `sudo apt update && sudo apt install libgflags-dev`.
+
+### Model Not Found at Runtime
+
+**Symptom**: The program reports that the model file is not found at runtime.
+
+**Cause**: The specified model path does not exist.
+
+**Solution**: The program downloads the model automatically, or you can download it manually with `wget` to the default path.
+
 ## Related Documentation
 
 - [Python version of the YOLOE11 segmentation sample](./02_yoloe11_seg_py.md)

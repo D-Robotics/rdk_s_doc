@@ -102,6 +102,24 @@ Error: init IMU 'bmi08x' failed !!! Quit Now
 
 > The data frame above is an output format example (acceleration in m/s², angular velocity in rad/s); the actual values vary with the sensor pose and range.
 
+## FAQ
+
+### Program Exits Because No IMU Is Detected
+
+**Symptom**: After startup, the program prints `Error: init IMU 'bmi08x' failed !!! Quit Now` and exits.
+
+**Cause**: No IMU sensor is connected, or the corresponding IIO driver is not loaded.
+
+**Solution**: Confirm the IMU sensor is connected, and check for an `iio:device*` node under `/sys/bus/iio/devices/`.
+
+### How to Read a Non-default Sensor Model
+
+**Symptom**: You need to read another sensor model such as ICM42688 but are not sure how to specify it.
+
+**Cause**: The program uses `bmi08x` by default; other models must be specified with the `-n` option.
+
+**Solution**: Specify the sensor name with `-n`; supported sensors are `bmi08x`, `icm42688-gyro`, and `icm42688-accel`.
+
 ## Related Documentation
 
 - [Extended Pin Application](./01_40pin/02_s600/02_gpio.md)

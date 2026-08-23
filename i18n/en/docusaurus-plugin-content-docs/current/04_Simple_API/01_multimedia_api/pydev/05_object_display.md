@@ -387,6 +387,32 @@ None
 
 None
 
+## FAQ
+
+### Black Screen or Abnormal Display
+
+**Symptom**: After calling `set_img`, there is no image or the display is abnormal.
+
+**Cause**: The enabled resolution does not match the actual monitor resolution, or the fed data is not in `NV12` format, or the display function is not enabled.
+
+**Solution**: Match the enabled resolution to the monitor's EDID-supported resolutions (1920x1080, 1280x720, 1024x600, 800x480), use `NV12` data, and make sure the display is enabled with `display` first.
+
+### Drawn Characters Display Garbled Text
+
+**Symptom**: Characters drawn by `set_graph_word` display as garbled text.
+
+**Cause**: The character data must be `GB2312`-encoded.
+
+**Solution**: Encode the characters with `GB2312` before passing them in (e.g. `string.encode('gb2312')`).
+
+### How to Choose the Output Interface via the chn Parameter
+
+**Symptom**: You are unsure what value to fill in for the `chn` parameter of `display`.
+
+**Cause**: The `chn` parameter has been changed to an output interface selection.
+
+**Solution**: `10` means DP (DisplayPort) output, `11` means HDMI output, and `0~3` are legacy values (handled as HDMI by default).
+
 ## Related Documentation
 
 - [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)

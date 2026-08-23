@@ -46,6 +46,24 @@ while True:
 | 采集→编码 | Camera → Encoder | [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder) |
 | 解码→显示 | Decoder → Display | [解码→显示](/Demos/multimedia_demo/cdev/decode2display) |
 
+## 常见问题
+
+### 调用 get_img/set_img 返回 None 或报错
+
+**现象**：调用 `get_img`/`set_img` 等数据处理方法返回 `None` 或报错。
+
+**原因**：这些方法需在对应对象使能（`open_cam`/`open_vps`/`encode`/`decode`/`display`）之后调用。
+
+**解决**：先调用对应对象的使能接口，再调用数据处理方法。
+
+### 程序退出后资源未释放
+
+**现象**：程序退出后资源未被释放或下次运行异常。
+
+**原因**：退出前未调用各对象的关闭接口，或模块绑定后未解绑。
+
+**解决**：退出前调用 `close_cam`/`close` 释放资源；使用 `libsrcampy.bind` 绑定的模块需先调用 `libsrcampy.unbind` 解绑。
+
 ## 相关文档
 
 - [Camera 对象](./02_object_camera.md)

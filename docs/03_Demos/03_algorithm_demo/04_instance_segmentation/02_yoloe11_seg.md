@@ -148,6 +148,32 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
     ```
 
+## 常见问题
+
+### RDK S600 上能否运行本示例
+
+**现象**：在 RDK S600 上编译/运行本示例失败或找不到模型。
+
+**原因**：RDK S600 镜像未内置对应 hbm 模型，示例代码也仅在 S100 上随系统镜像发布。
+
+**解决**：本示例仅适用于 RDK S100，S600 上暂不支持。
+
+### 编译时报缺少 gflags 相关依赖
+
+**现象**：编译工程时报缺少 gflags 相关头文件或链接错误。
+
+**原因**：未安装 `libgflags-dev` 依赖。
+
+**解决**：执行 `sudo apt update && sudo apt install libgflags-dev`。
+
+### 运行时未找到模型
+
+**现象**：程序运行时提示未找到模型文件。
+
+**原因**：指定模型路径不存在。
+
+**解决**：程序会自动下载模型，也可手动使用 `wget` 下载到默认路径。
+
 ## 相关文档
 
 - [Python 版 YOLOE11 分割示例](./02_yoloe11_seg_py.md)

@@ -320,6 +320,32 @@ sp_release_vio_module(vio);                  // 5. 销毁 VIO 对象
 free(buf);
 ```
 
+## 常见问题
+
+### 设置 VPS 输出分辨率时报错
+
+**现象**：配置 `sp_open_vps` 或 `sp_open_camera_v2` 的输出宽高后检测报错。
+
+**原因**：S100 对 `VPS` 输出宽度有 16 对齐、高度 2 对齐的要求。
+
+**解决**：将输出宽度调整为满足 16 对齐、高度满足 2 对齐。
+
+### sp_vio_get_frame 获取图像帧失败
+
+**现象**：调用 `sp_vio_get_frame` 获取图像帧失败。
+
+**原因**：所需分辨率未在打开模块时传入，或 `frame_buffer` 预分配内存不足。
+
+**解决**：确认分辨率已在 `sp_open_camera`/`sp_open_vps` 配置，并按 `高 * 宽 * 3 / 2`（或 `FRAME_BUFFER_SIZE(w, h)` 宏）预分配 `frame_buffer`。
+
+### sp_vio_set_frame 处理后结果异常
+
+**现象**：`vps` 模块处理后的结果异常。
+
+**原因**：送入的数据不是 `NV12` 格式，或分辨率与 `sp_open_vps` 的原始帧分辨率不一致。
+
+**解决**：确保 `frame_buffer` 数据为 `NV12` 格式，且分辨率与 `sp_open_vps` 配置的原始帧分辨率一致。
+
 ## 相关文档
 
 - [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)

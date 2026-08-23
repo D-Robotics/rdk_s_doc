@@ -103,6 +103,32 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ResNet/resne
 
 Place it under `/opt/hobot/model/<product>/basic/` or at the `--model-path` path specified by the demo.
 
+## FAQ
+
+### "Model File Not Found" When Running a Demo
+
+**Symptom**: Running an example reports that the model file does not exist.
+
+**Cause**: The model is not pre-installed, or it is not placed in the correct path.
+
+**Solution**: First check whether the corresponding `.hbm` file exists under `/opt/hobot/model/<product>/basic/`; if not, download it from the RDK model zoo (network required) and put it in that directory, or place it at the `--model-path` specified by the demo.
+
+### The ASR Example Is Missing Its Model
+
+**Symptom**: The ASR example reports that `asr.hbm` cannot be found.
+
+**Cause**: `asr.hbm` is not in the pre-installed model list.
+
+**Solution**: Download it from the RDK model zoo; see [ASR Example](../03_algorithm_demo/06_speech/01_asr_py.md).
+
+### How to Fill In `<product>` in the Model Path
+
+**Symptom**: You are unsure what to put for `<product>` in `/opt/hobot/model/<product>/basic/`.
+
+**Cause**: Models are stored per product directory: `s600` for S600 and `s100` for S100.
+
+**Solution**: Fill it in by product: `/opt/hobot/model/s600/basic/` for S600 and `/opt/hobot/model/s100/basic/` for S100.
+
 ## Related Documentation
 
 - [ResNet18 Classification Example](../03_algorithm_demo/02_classification/01_resnet18_py.md)

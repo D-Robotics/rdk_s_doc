@@ -216,6 +216,24 @@ This interface must be used after calling `Encoder.encode()` to create an encodi
 
 None
 
+## FAQ
+
+### encode_file Encoding Result Is Abnormal
+
+**Symptom**: The data encoded by `encode_file` cannot be played normally or is abnormal.
+
+**Cause**: The image data to be encoded must be in `NV12` format.
+
+**Solution**: Feed image data in `NV12` format into `encode_file`.
+
+### get_img Returns None
+
+**Symptom**: Calling `get_img` cannot retrieve the encoded data.
+
+**Cause**: This interface must be called after creating an encoding channel with `encode()`.
+
+**Solution**: Call `encode()` to enable the encoding channel first, then call `get_img`.
+
 ## Related Documentation
 
 - [Multimedia Interface Description](./01_pydev_multimedia_api.md)

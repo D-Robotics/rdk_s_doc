@@ -163,6 +163,32 @@ sp_release_decoder_module(dec);              // 5. Destroy the DECODER object
 free(img);
 ```
 
+## FAQ
+
+### Decoded H264/H265 Frame Is Empty or Abnormal
+
+**Symptom**: The decoded frame retrieved when decoding an H264/H265 stream is empty or abnormal.
+
+**Cause**: The decoder needs to buffer several frames first.
+
+**Solution**: Feed 3~5 frames of data first so the decoder finishes frame buffering, then retrieve the decoded frame.
+
+### Decoder Reports an Error and Exits When Decoding H264
+
+**Symptom**: The decoder reports an error and exits when decoding an H264 stream.
+
+**Cause**: The first frame fed in is not the SPS/PPS description information.
+
+**Solution**: The first frame fed into the decoder must be the SPS and PPS description information.
+
+### Decoding a Stream in Memory Instead of a File
+
+**Symptom**: You need to decode stream data in memory rather than a file.
+
+**Cause**: When `stream_file` of `sp_start_decode` is set to a file name, that file is decoded; when it is an empty string, the data must be fed manually.
+
+**Solution**: Pass an empty string as `stream_file` of `sp_start_decode`, then feed the stream data via `sp_decoder_set_image`.
+
 ## Related Documentation
 
 - [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)

@@ -37,6 +37,32 @@ python resnet18.py \
 - 类别数与标签文件要匹配（如 1000 类用 imagenet 标签，80 类用 COCO 标签）。
 - 若模型来自开源仓库，先确认其 License 允许部署。
 
+## 常见问题
+
+### 用自己的模型跑 demo 结果错误
+
+**现象**：替换为自己的模型后推理结果错误。
+
+**原因**：模型的输入尺寸、归一化方式（mean/scale）、输入格式（NV12 等）与 demo 预处理不一致。
+
+**解决**：在工具链模型描述里核对 `INPUT_SHAPE`、`NORM_TYPE`、`SCALE_VALUE`，并与 demo 预处理对齐。
+
+### 类别标签识别错误
+
+**现象**：分类/检测结果的类别与预期不符。
+
+**原因**：类别数与标签文件不匹配。
+
+**解决**：确保类别数与标签文件匹配（如 1000 类用 imagenet 标签，80 类用 COCO 标签）。
+
+### 量化编译时 MARCH 如何选择
+
+**现象**：量化生成的 `.hbm` 无法在板端正常运行。
+
+**原因**：量化编译时 MARCH 与产品不匹配。
+
+**解决**：MARCH 与产品匹配——S600 为 `nashp`、S100 为 `nashe`。
+
 ## 相关文档
 
 - [算法工具链（进阶）](../../07_Advanced_development/10_algorithm_toolchain/01_algorithm_toolchain/01_overview.md)

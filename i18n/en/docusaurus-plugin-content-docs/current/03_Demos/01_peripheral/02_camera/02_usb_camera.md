@@ -67,6 +67,32 @@ Before connecting two USB cameras, you need to run `rmmod uvcvideo; modprobe uvc
 2. The RDK S100 development board has two USB hosts; the top and bottom ports belong to the same host. If you need to connect two USB 2.0 720p cameras, insert them into the left and right ports so that each USB 2.0 camera occupies one host.
 :::
 
+## FAQ
+
+### Program Reports "No USB camera found"
+
+**Symptom**: After running the script, the program prints `No USB camera found.`.
+
+**Cause**: The USB camera is not properly connected, or the `/dev/videoX` device node was not created.
+
+**Solution**: Confirm the USB camera is connected to the board, and check whether the `/dev/videoX` device node (where `X` is a number) was created.
+
+### Two USB Cameras Cannot Work Simultaneously
+
+**Symptom**: Abnormal capture or insufficient bandwidth when two USB cameras are connected at the same time.
+
+**Cause**: The default bandwidth usage of `uvcvideo` may prevent two cameras from working reliably.
+
+**Solution**: Before connecting, run `rmmod uvcvideo; modprobe uvcvideo quirks=128` to limit the bandwidth usage of `uvcvideo`.
+
+### No Image or Dropped Frames With Two Cameras on the Same USB Host
+
+**Symptom**: Abnormal image when two high-resolution cameras are connected to the same USB host at the same time.
+
+**Cause**: The USB 2.0 bandwidth is 480Mb/s; the theoretical bandwidth of 720p30fps is already close to the limit, and with UVC protocol overhead a single host cannot carry two 720p30fps cameras.
+
+**Solution**: On the same USB host, connect two 640x480 20fps cameras; to connect two 720p cameras, insert them into the left and right ports so each camera occupies its own host.
+
 ## Related Documentation
 
 - [Capture → Display](../../02_multimedia_demo/01_cdev/02_vio2display.md)
