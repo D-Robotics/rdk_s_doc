@@ -6,7 +6,7 @@ description: "RDK deb package development workflow and conventions"
 
 # deb Package Development
 
-The RDK system is based on Debian/Ubuntu, and system components are distributed as deb packages. This section describes the deb package development workflow.
+The RDK system is based on Debian/Ubuntu, and system components are distributed as deb packages. This section targets Mode 3 (deep customization) users and describes how to develop system components at the deb/source level. For image-level apt/configuration customization, see [System customization](../02_system_customization/01_system_customization.md).
 
 :::note To Be Completed
 The single-deb-package development model is still being explored. This section currently records the current status and design principles; the actual content will be supplemented once the development workflow stabilizes (ADR D3).

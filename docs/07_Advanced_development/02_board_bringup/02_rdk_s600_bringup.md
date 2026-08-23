@@ -7,11 +7,11 @@ sidebar_products: RDK S600
 
 # RDK S600 硬件点亮
 
-本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S600 的流程：从 boardid 分配、MCU 侧电源管理、spl/Uboot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S600 的 boardid 机制。
+本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S600 的流程：从 boardid 分配、MCU 侧电源管理、spl/U-Boot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S600 的 boardid 机制。
 
 S600 boardid 由 ADC0、ADC1、ADC2、ADC4、ADC5、ADC6共同作用，其中 ADC0、 ADC1和ADC2用于地瓜硬件区分，客户不可更改；ADC4用于module底板区分，ADC5用于底板版本区分，ADC4和ADC5用户可以更改；ADC6为预留状态，强制为0x1。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
 
-ADC0、ADC1和ADC2 通道共有8个档位，对应0x0-0x7；ADC4、ADC5通道共有7个档位，对应0x0-0x6。S600的 boardid 是一个28bit 的无符号整形，例如`0x5131310`，其中 boardid[27:24]对应 ADC0，为0x5；boardid[23:20]对应 ADC1，为0x1；boardid[19:16]对应 ADC2，为0x3；boardid[15:12]对应 ADC4，为0x1；boardid[11:8]对应 ADC5，为0x3；boardid[7:4]对应 ADC6，为0x1；boardid[3:0]默认为0x0
+ADC0、ADC1和ADC2 通道共有8个档位，对应0x0-0x7；ADC4、ADC5通道共有7个档位，对应0x0-0x6。S600的 boardid 是一个28bit 的无符号整型，例如`0x5131310`，其中 boardid[27:24]对应 ADC0，为0x5；boardid[23:20]对应 ADC1，为0x1；boardid[19:16]对应 ADC2，为0x3；boardid[15:12]对应 ADC4，为0x1；boardid[11:8]对应 ADC5，为0x3；boardid[7:4]对应 ADC6，为0x1；boardid[3:0]默认为0x0
 
 由 ADC 采样形成 boardid，在 SBL 内实现，对应代码路径为`mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`，函数`SBL_GetADC_To_AonSram`
 
@@ -169,15 +169,15 @@ static int BoardId_Check(uint32 BoardId)
 - `IntEnable`改为`FALSE`
 - `IntMask`改为`TRUE`
 
-## 在 spl 和 Uboot 下新增硬件
+## 在 spl 和 U-Boot 下新增硬件
 
-spl 为 Uboot 下的 spl
+spl 为 U-Boot 下的 spl
 
 ### 新增配置文件
 
-Uboot 的配置文件位于 SDK 目录`source/bootloader/uboot/configs`下，对应的配置文件`hobot_s600_defconfig`
+U-Boot 的配置文件位于 SDK 目录`source/bootloader/uboot/configs`下，对应的配置文件`hobot_s600_defconfig`
 
-Uboot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为`source/bootloader/device/rdk/s600/board_s600_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定 Uboot 配置文件
+U-Boot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为`source/bootloader/device/rdk/s600/board_s600_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定 U-Boot 配置文件
 
 ```shell
 # hobot_s600_defconfig
@@ -188,11 +188,11 @@ export HR_ARCH_UBOOT="arm"
 ...
 ```
 
-如果客户有需求可以生成自己的 Uboot config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的 U-Boot config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
 
 ### 新增设备树
 
-Uboot 的设备树文件位于 SDK 目录`source/bootloader/uboot/arch/arm/dts/drobot-s600-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
+U-Boot 的设备树文件位于 SDK 目录`source/bootloader/uboot/arch/arm/dts/drobot-s600-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
 
 ```shell
 # hobot_s600_defconfig
@@ -205,7 +205,7 @@ CONFIG_DEFAULT_DEVICE_TREE="drobot-s600-rdk"
 
 ### 新增 boardid
 
-在Uboot dts中`source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi`的`board_cfg`中，添加板级配置信息
+在U-Boot dts中`source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi`的`board_cfg`中，添加板级配置信息
 
 ```c
     board_cfg {
@@ -231,7 +231,7 @@ CONFIG_DEFAULT_DEVICE_TREE="drobot-s600-rdk"
 - `hw_name`：硬件名
 - `version`：硬件版本
 - `pcie_mode`：PCIe mode，默认为rc
-- `fdt_feat`：Uboot和SPL使用的dtb的名字
+- `fdt_feat`：U-Boot和SPL使用的dtb的名字
 - `pxe_label`：extlinux中kernel的配置
 - `bootsrc`：表示根据strap pin选择启动介质
 
@@ -274,7 +274,7 @@ Kernel 的设备树文件位于 SDK 目录`source/hobot-drivers/kernel-dts`
 
 ### extlinux 配置
 
-S600中 Uboot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
+S600中 U-Boot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
 
 extlinux 文件位于`source/kernel/scripts/package/rdk_extlinux`
 
@@ -393,7 +393,7 @@ hb_fetch_boardinfo targetid[0x5131310]
 ...
 ```
 
-- Uboot log 中会打印出 Model，可以判断是否和 Uboot dts 中定义的一致
+- U-Boot log 中会打印出 Model，可以判断是否和 U-Boot dts 中定义的一致
 
 ```shell
 U-Boot 2022.04-00885-ge6f5dae98d (May 28 2026 - 16:43:04 +0800)
@@ -402,7 +402,7 @@ Model: D-Robotics S600 Module Board
 ...
 ```
 
-- Uboot log 中会打印出 boardid，例如下面的5131310
+- U-Boot log 中会打印出 boardid，例如下面的5131310
 
 ```shell
 U-Boot 2022.04-00885-ge6f5dae98d (May 28 2026 - 16:43:04 +0800)
@@ -411,7 +411,7 @@ system_slot: 0 adc_boardinfo: 5131310
 ...
 ```
 
-- Uboot log 中会打印出在 extlinux 中对应的 label，以及 Kernel 镜像、dtb 和 initramfs
+- U-Boot log 中会打印出在 extlinux 中对应的 label，以及 Kernel 镜像、dtb 和 initramfs
 
 ```shell
 U-Boot 2022.04-00885-ge6f5dae98d (May 28 2026 - 16:43:04 +0800)
@@ -429,7 +429,7 @@ Retrieving file: /hobot/rdk-s600-mcb-v1p0.dtb
 
 - 查看 bootargs 中的 board info
 
-主要是`hobotboot.socname=S600` `board.hwname=rdk` `board.ver=V1P0` `board.pcie_mode=rc`等，是否和 Uboot 中定义的一致
+主要是`hobotboot.socname=S600` `board.hwname=rdk` `board.ver=V1P0` `board.pcie_mode=rc`等，是否和 U-Boot 中定义的一致
 
 ```shell
 root@ubuntu:~# cat /proc/cmdline

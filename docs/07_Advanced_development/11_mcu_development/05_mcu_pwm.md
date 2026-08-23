@@ -18,11 +18,11 @@ import DocScope from '@site/src/components/DocScope';
 
 
 
-- 每个通道都是独立的，支持 irq requset 和 dma requset
+- 每个通道都是独立的，支持 irq request 和 dma request
 - 支持配置两种工作模式，通用工作模式（PWM 脉冲输出），输入捕获模式。
 - 每个通道有自己独立的时钟分频寄存器
 - 每个 IP 所有通道共享一个中断
-- 当目标边沿或者脉冲类型到来的时候，会触发中断或者 dma req
+- 当目标边沿或者脉冲类型到来的时候，会触发中断或者 dma request
 - 支持 DMA 更新 period 和 duty
 - 支持周期边沿对齐方式设置，可以设置为边沿对齐或者中心对齐
 - 支持针对每个 PWM 通道配置其周期和占空比，需要满足如下限制：
@@ -98,7 +98,7 @@ static Pwm_Lld_ChannelConfigType Pwm_HwChannelConfig_PB[PWM_HW_CONF_MODS_PB][12]
             /**< the callback of dma complete notification */
             .DmaCpltCallback = NULL_PTR,
         },
-        .......
+        /* ... */
 ```
 
 2. `Pwm_Channels_PB` 结构体数组定义了逻辑 PWM 通道与底层硬件通道之间的映射关系; `Pwm_HwChannelConfig_PB`结构体数组定义了每个 PWM 通道的默认硬件参数，如周期、占空比、极性、中断使能等。
@@ -132,9 +132,9 @@ const Pwm_ConfigType Pwm_Config = {
     .NumInstances = PWM_HW_CONF_MODS_PB,
     /** @brief Number of configured Pwm channels */
     .NumChannels = PWM_CONF_CHANNELS_PB,
-    /** @brief Number of configured Pwm channels */
-    .PwmChannelsConfig = Pwm_Channels_PB,
     /** @brief Pointer to array of Pwm channels */
+    .PwmChannelsConfig = Pwm_Channels_PB,
+    /** @brief Pointer to array of Pwm LLD IP configurations */
     .PwmLldIpConfig = Pwm_Lld_IpConfig_PB,
 };
 
@@ -153,8 +153,8 @@ S100 开发板将 PWM 引出供用户开发学习使用，已引出 PWM Channel 
 |--------|---------------------------|---------------------------|
 | pwm0   | MCU 扩展板                 |  与 I2C9 SCL 复用            |
 | pwm1   | MCU 扩展板                 |  NONE                     |
-| pwm6   | Mainboad 板的 MCU expansion Header | NONE               |
-| pwm7   | Mainboad 板的 MCU expansion Header | NONE              |
+| pwm6   | Mainboard 板的 MCU expansion Header | NONE               |
+| pwm7   | Mainboard 板的 MCU expansion Header | NONE              |
 | pwm10  | MCU 扩展板                 | 与 I2C8 SCL 复用            |
 | pwm11  | MCU 扩展板                 | 与 I2C8 SDA 复用            |
 
@@ -181,6 +181,7 @@ pwmtest 0 0 0x30d40 0x4000
 - 参数说明
 
 ```sh
+<pwm_id>: PWM 硬件 IP 实例 ID。
 <pwm通道>: 要配置或停止的PWM通道号。
 <周期>: PWM信号的周期。
 <占空比>: PWM信号的占空比，必须在0x0000（0%）到0x8000（100%）的范围内。
@@ -190,7 +191,7 @@ pwmtest 0 0 0x30d40 0x4000
 
 PWM 周期 = 周期寄存器值 / 时钟源频率
 
-例：输出周期为1000us 的波，pwm 时钟源默认为200Mhz，则需要在寄存器中写入 200000000/1000=200000(0x30d40)。
+例：输出周期为1000us 的波，pwm 时钟源默认为200MHz，则需要在寄存器中写入 200000000/1000=200000(0x30d40)。
 
 
 ### Debug Sample
@@ -397,7 +398,7 @@ Return value：None
 #### void Pwm_SetPeriodAndDuty(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period, uint16 DutyCycle)
 
 ```shell
-Description：Service sets the duty cycle of the PWM channel.
+Description：Service sets the period and duty cycle of the PWM channel.
 Sync/Async：Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM

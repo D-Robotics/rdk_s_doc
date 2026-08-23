@@ -135,14 +135,14 @@ Each Channel of the timer can trigger an interrupt. The interrupt numbers for ea
 
 Code paths:
 
-- McalCdd\Gpt\src\Gpt_Lld.c
-- McalCdd\Gpt\inc\Gpt_Lld.h
-- McalCdd\Gpt\inc\Gpt_Types.h
-- McalCdd\Gpt\inc\Gpt.h
-- McalCdd\Gpt\src\Gpt.c
-- Config\McalCdd\gen_xxx\Gpt\inc\Gpt_Cfg.h
-- Config\McalCdd\gen_xxx\Gpt\inc\Gpt_PBcfg.h
-- Config\McalCdd\gen_xxx\Gpt\src\Gpt_PBcfg.c
+- McalCdd/Gpt/src/Gpt_Lld.c
+- McalCdd/Gpt/inc/Gpt_Lld.h
+- McalCdd/Gpt/inc/Gpt_Types.h
+- McalCdd/Gpt/inc/Gpt.h
+- McalCdd/Gpt/src/Gpt.c
+- Config/McalCdd/gen_xxx/Gpt/inc/Gpt_Cfg.h
+- Config/McalCdd/gen_xxx/Gpt/inc/Gpt_PBcfg.h
+- Config/McalCdd/gen_xxx/Gpt/src/Gpt_PBcfg.c
 
 
 ## Application Sample
@@ -351,7 +351,7 @@ void Gpt_DisableNotification(Gpt_ChannelType Channel)
  * @param[in] Channel: Numeric identifier of the GPT channel
  * @param[out] None
  *
- * @retval None
+ * @retval Gpt_ValueType: The remaining time in the configured timer ticks.
  */
 /*coverity[misra_c_2012_rule_8_7_violation:SUPPRESS] ## violation reason SYSSW_V_8.7_01*/
 Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType Channel)
@@ -379,7 +379,12 @@ timer_interrupt <operation> <load/type> [irq]
     ```c
     load_value = timer_clk(Hz) × period(s)
     ```
+    <DocScope products="RDK S100">
     For example: when timer_clk = 200 MHz, a 1 s period corresponds to load_value = 200000000.
+    </DocScope>
+    <DocScope products="RDK S600">
+    For example: when timer_clk = 40 MHz, a 1 s period corresponds to load_value = 40000000.
+    </DocScope>
     In addition, load also supports time input in seconds/milliseconds/microseconds.
 - type: Read remaining time, valid only for the gettime operation
     - 0 - Read the register reload value

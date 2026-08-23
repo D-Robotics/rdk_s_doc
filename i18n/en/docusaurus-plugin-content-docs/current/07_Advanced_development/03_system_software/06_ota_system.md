@@ -4,6 +4,10 @@ sidebar_position: 6
 
 # System OTA Upgrade
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## Overview
 
 **OTA** (Over-the-Air Technology) refers to technology that enables remote software upgrades through wireless networks. First introduced by the Android system to mobile devices, OTA technology has significantly simplified the traditional software upgrade process. Without requiring computer connections, users can directly download and install updates on their devices. This technology greatly facilitates users and improves device maintenance efficiency.
@@ -46,9 +50,9 @@ OTA functionality is not enabled by default on RDK. To enable it, please follow 
         # Only establish the build environment
         sudo ./pack_image.sh -p
         ```
-2. In the `ubuntu-22.04_desktop_rdk-s100_beta.conf` and `ubuntu-22.04_desktop_rdk-s100_release.conf` files under the build_params directory, configure PARTITION_FILE for the OTA version: `export PARTITION_FILE="s100-ota-gpt.json"`, and configure RDK_DM_VERIFY_ENABLE to enable: `export RDK_DM_VERIFY_ENABLE="yes"`;
+2. <DocScope products="RDK S100">In the `ubuntu-22.04_desktop_rdk-s100_beta.conf` and `ubuntu-22.04_desktop_rdk-s100_release.conf` files under the build_params directory, configure PARTITION_FILE for the OTA version: `export PARTITION_FILE="s100-ota-gpt.json"`, and configure RDK_DM_VERIFY_ENABLE to enable: `export RDK_DM_VERIFY_ENABLE="yes"`;</DocScope>
 
-3. In the `board_s100_debug.mk` and `board_s100_release.mk` files under the source/bootloader/device/rdk/s100 directory, configure the RDK_OTA variable to enable: `export RDK_OTA="yes"`;
+3. <DocScope products="RDK S100">In the `board_s100_debug.mk` and `board_s100_release.mk` files under the source/bootloader/device/rdk/s100 directory, configure the RDK_OTA variable to enable: `export RDK_OTA="yes"`;</DocScope>
 
 4. Compilation
    - Create a new miniboot deb package
@@ -315,6 +319,7 @@ If you need to replace them with your own keys, follow these steps:
 
     # Compile the local project
     sudo ./pack_image.sh -l
+    ```
 
 **Note:**
 - The generated OTA package is named `all_in_one_xxx` by default. The upgrade program verifies the package name; the package name **must** contain the keyword "all_in_one". Additionally, the package name must not contain the following keywords: "app", "APP", "middleware", "param".
@@ -322,6 +327,8 @@ If you need to replace them with your own keys, follow these steps:
 ### Introduction to OTA Upgrade Package
 
 #### Upgrade Package Structure
+
+<DocScope products="RDK S100">
 
 ```bash
 Archive:  all_in_one_signed.zip
@@ -346,6 +353,7 @@ Archive:  all_in_one_signed.zip
 ---------                     -------
 8632992549                     16 files
 ```
+</DocScope>
 
 The above shows the file structure within a current OTA upgrade package, mainly including the following four types of files. The number of image files may vary based on the actual configuration.
 
@@ -383,6 +391,8 @@ Per-Partition Configuration (partition_info)
 | imgname       | str      | Image name, only supports files suffixed with `.img/.bin/.ubifs` |
 
 Below is an example of a data.json file:
+
+<DocScope products="RDK S100">
 
 ```JSON
 {
@@ -568,6 +578,8 @@ Below is an example of a data.json file:
 }
 ```
 
+</DocScope>
+
 With the above configuration, the OTA upgrade package can ensure that the image for each partition is correctly verified and updated during the upgrade process.
 
 ## Detailed OTA Implementation
@@ -622,7 +634,7 @@ typedef enum ota_update_flag {
 #### misc (AB State Machine)
 1. Area Allocation
 
-    Dijia uses the Android AB mechanism to implement the AB system. The following information introduces some principles of this mechanism. For detailed principles, please refer to: https://source.android.google.cn/docs/core/ota
+    This platform uses the Android AB mechanism to implement the AB system. The following information introduces some principles of this mechanism. For detailed principles, please refer to: https://source.android.google.cn/docs/core/ota
 
     bootloader_message_ab occupies a total of 4K: The bootloader_control used by AB is located at struct bootloader_message_ab->slot_suffix, occupying 32 bytes.
 
@@ -760,7 +772,9 @@ The diagram below illustrates how A/B slots are switched during normal boot (thi
 - When booting from a slot that has never been marked as `successboot`, one retry attempt will be consumed. If the retry count reaches 0 or the slot is marked as corrupted, this slot will be skipped.
 
 ### Reboot Verification and Rollback
+<DocScope products="RDK S100">
 In the S100 reference implementation, after the OTA update completes and the system reboots, the kernel triggers the systemd OTA service to perform a reboot check, thereby completing the full OTA process (essentially executing `ota_tool -b`).
+</DocScope>
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_boot_check_state-en.jpg" alt="Reboot Verification and Rollback diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Partition Flashing Method
@@ -771,9 +785,12 @@ OTA performs upgrades on a per-partition basis. Each partition to be upgraded ha
 #### Delta Image Upgrade
   - A delta image is generated by applying a delta algorithm to compute the differences between the original image and the target image. Differential analysis typically extracts the differences between the target and original images, streamlining redundant information. The size of the resulting delta image is generally much smaller than the target image (the exact size depends on the degree of difference between the original and target – the smaller the difference, the smaller the image). This method is useful for saving bandwidth/data traffic.
 
+  <DocScope products="RDK S100">
+
   - During a delta upgrade, S100 OTA uses the delta image and the original partition data on the device to reconstruct the target image through a reverse delta process. It then writes this reconstructed image to the corresponding external storage partition, completing the final upgrade.
 
   - The S100 platform utilizes the open-source delta algorithm tool `hdiffz/hpatch`. For more information, please refer to: [github | HDiffPatch](https://github.com/sisong/HDiffPatch).
+</DocScope>
 
 
 ### OTA Security Protection Measures
@@ -793,7 +810,9 @@ OTA performs upgrades on a per-partition basis. Each partition to be upgraded ha
         HSM_RCA:8388608:8650751:0
         ···
         ```
+    <DocScope products="RDK S100">
     - As the S100 partition scheme supports automatic expansion of the last partition, its end address can change dynamically. Therefore, the GPT verification only checks partitions up to the `userdata` partition. The last partition typically does not contain an image, so this limitation does not affect normal usage.
+    </DocScope>
 ### Typical Upgrade Process
 1.  The OTA Service downloads and verifies the upgrade package from the cloud, then calls `otaInitLib` to initialize the dynamic library.
 
@@ -965,7 +984,9 @@ err:
 After the upgrade process finishes and the system reboots, `ota_tool -b` should be launched to check and verify the upgrade result, and to perform subsequent operations.
 
 #### ota_boot_check
+<DocScope products="RDK S100">
 After the S100 boots, it starts a `hobot-otatool.service` service. This service invokes `ota_tool -b`. This option checks if the `/ota/ota_tool_force_upgrade` file exists. If it exists, it enters the upgrade process (the process re-invokes the upgrade command). If the file does not exist, it proceeds to the upgrade verification process `ota_boot_check`.
+</DocScope>
 ```c
 int32_t ota_boot_check(void)
 {
@@ -1036,7 +1057,9 @@ exit:
 
 
 ## OTA API Introduction
+<DocScope products="RDK S100">
 The S100 platform provides a low-level flashing library, `libupdate.so`, which implements a set of cross-platform APIs for flashing OTA packages.
+</DocScope>
 
 The `ota_tool` utility was developed by the underlying software team based on the OTA HighLevel API.
 
@@ -1146,7 +1169,8 @@ Refer to `otaInitLib`.
 int main(void) {
     int32_t ret;
     char version[128];
-    if (ret = otaGetLibVersion(version, sizeof(version))) {
+    ret = otaGetLibVersion(version, sizeof(version));
+    if (ret != 0) {
         return ret;
     }
     printf("version: %s\n", version);
@@ -1171,19 +1195,22 @@ int main(void) {
     int32_t result;
     int32_t progress;
     char imgname[256];
+    uint8_t cur_part;
     ret = otaInitLib();
     if (ret != 0) {
         printf("otaInitLib return: %d\n", ret);
         return ret;
     }
-    if (ret = otaRequestStart("/ota/all_in_one-secure_signed.zip;/ota/middleware.zip;/ota/param.zip", OTA_TOOL)) {
+    ret = otaRequestStart("/ota/all_in_one-secure_signed.zip", OTA_TOOL);
+    if (ret != 0) {
         printf("otaRequestStart return: %d\n", ret);
         return ret;
     }
     do {
         result = otaGetResult();
-        if (ret = otaGetUpdatingImageName(imgname, sizeof(imgname))) {
-            printf("otaGetUpdatingImageName return: %d\n", imgname);
+        ret = otaGetUpdatingImageName(imgname, sizeof(imgname));
+        if (ret != 0) {
+            printf("otaGetUpdatingImageName return: %d\n", ret);
         }
         progress = otaGetProgress();
         printf("current image: %s, progress: %d\n", imgname, progress);

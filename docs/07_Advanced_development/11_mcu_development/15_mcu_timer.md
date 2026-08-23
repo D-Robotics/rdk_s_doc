@@ -14,10 +14,10 @@ import DocScope from '@site/src/components/DocScope';
 ## 硬件支持
 
 <DocScope products="RDK S100">
-目前 RDK S100有6个 Instance，每个 Instance 有4个32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
+目前 RDK S100 有 6 个 Instance，每个 Instance 有4个32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
 </DocScope>
 <DocScope products="RDK S600">
-目前 RDK S600有10个 Instance，每个 Instance 有4个32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
+目前 RDK S600 有 10 个 Instance，每个 Instance 有4个32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
 </DocScope>
 
 定时器(Timer)的具体配置信息在如下宏中定义:
@@ -137,14 +137,14 @@ import DocScope from '@site/src/components/DocScope';
 
 代码路径：
 
-- McalCdd\Gpt\src\Gpt_Lld.c
-- McalCdd\Gpt\inc\Gpt_Lld.h
-- McalCdd\Gpt\inc\Gpt_Types.h
-- McalCdd\Gpt\inc\Gpt.h
-- McalCdd\Gpt\src\Gpt.c
-- Config\McalCdd\gen_xxx\Gpt\inc\Gpt_Cfg.h
-- Config\McalCdd\gen_xxx\Gpt\inc\Gpt_PBcfg.h
-- Config\McalCdd\gen_xxx\Gpt\src\Gpt_PBcfg.c
+- McalCdd/Gpt/src/Gpt_Lld.c
+- McalCdd/Gpt/inc/Gpt_Lld.h
+- McalCdd/Gpt/inc/Gpt_Types.h
+- McalCdd/Gpt/inc/Gpt.h
+- McalCdd/Gpt/src/Gpt.c
+- Config/McalCdd/gen_xxx/Gpt/inc/Gpt_Cfg.h
+- Config/McalCdd/gen_xxx/Gpt/inc/Gpt_PBcfg.h
+- Config/McalCdd/gen_xxx/Gpt/src/Gpt_PBcfg.c
 
 
 ## 应用 sample
@@ -159,7 +159,7 @@ sample 程序默认使用定时器2的通道2（Timer2 Channel2），S600上的�
 
 ### 配置说明
 
-1. sample 代码在 MCU1上运行，需要先配置 `Gpt_ConfigType` 结构体用于模块初始化
+1. sample 代码在 MCU1 上运行，需要先配置 `Gpt_ConfigType` 结构体用于模块初始化
 
 ```c
 Config/McalCdd/gen_xxx/Gpt/src/Gpt_PBcfg.c
@@ -353,7 +353,7 @@ void Gpt_DisableNotification(Gpt_ChannelType Channel)
  * @param[in] Channel: Numeric identifier of the GPT channel
  * @param[out] None
  *
- * @retval None
+ * @retval Gpt_ValueType: The remaining time in the configured timer ticks.
  */
 /*coverity[misra_c_2012_rule_8_7_violation:SUPPRESS] ## violation reason SYSSW_V_8.7_01*/
 Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType Channel)
@@ -381,7 +381,12 @@ timer_interrupt <operation> <load/type> [irq]
     ```c
     load_value = timer_clk(Hz) × period(s)
     ```
-    例如：timer_clk = 200MHz 时，计时1s 对应的 load_value 为200000000
+    <DocScope products="RDK S100">
+    例如：timer_clk = 200MHz 时，计时 1s 对应的 load_value 为 200000000。
+    </DocScope>
+    <DocScope products="RDK S600">
+    例如：timer_clk = 40MHz 时，计时 1s 对应的 load_value 为 40000000。
+    </DocScope>
     此外，load 还支持以秒/毫秒/微秒为单位的时间输入
 - type：读取剩余时间，仅在 gettime 操作下有效
     - 0 - 读取寄存器装载值

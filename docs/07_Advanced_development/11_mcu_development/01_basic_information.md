@@ -14,24 +14,24 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 范围
 
-本章节概述了 MCU 系统，旨在帮助读者快速了解并掌握相关内容，以便开展 MCU1 的开发工作。因为 MCU0负责启动 Acore、MCU1以及电源管理等功能，这部分不建议客户自行修改，默认不释放源码，提供地瓜验证过的 bin 文件。章节中仅对可能与 MCU1 发生冲突的部分进行简要说明，旨在帮助用户在开发过程中规避 MCU0 与 MCU1 之间的资源竞争问题。
+本章节概述了 MCU 系统，旨在帮助读者快速了解并掌握相关内容，以便开展 MCU1 的开发工作。因为 MCU0 负责启动 Acore、MCU1 以及电源管理等功能，这部分不建议客户自行修改，默认不释放源码，提供 D-Robotics 验证过的 bin 文件。章节中仅对可能与 MCU1 发生冲突的部分进行简要说明，旨在帮助用户在开发过程中规避 MCU0 与 MCU1 之间的资源竞争问题。
 
 ## 基础信息
 
 1. MCU 编译工具链为 GCC 工具链，版本为 gcc-arm-none-eabi-10.3~2021.10
 2. MCU 核为 ARM R52+，可以用 ARM R52 technical reference manual 文档作为参考：[官网链接](https://developer.arm.com/documentation/100026/latest)
 3. MCU 运行的操作系统均为 FreeRTOS，版本为 FreeRTOS Kernel V10.0.1
-4. MCU 主要分为两部分：MCU0和 MCU1。MCU0主要负责启动 Acore、MCU1以及电源管理等功能，目前不开源；MCU1主要负责跑业务等功能，开源，客户可根据自己需求进行修改
+4. MCU 主要分为两部分：MCU0 和 MCU1。MCU0 主要负责启动 Acore、MCU1 以及电源管理等功能，目前不开源；MCU1主要负责跑业务等功能，开源，客户可根据自己需求进行修改
 
 ## MCU 框架
 
 <DocScope products="RDK S100">
-MCU0是板子启动的开始，也是重中之重。因为 MCU0负责启动 Acore、MCU1以及电源管理等功能。Acore 所运行的 linux 操作系统是客户开发功能的重要载体，而 MCU1运行的 FreeRTOS 操作系统为客户的实时任务进行保驾护航。
-MCU1通过 linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK-S100的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
+MCU0是板子启动的开始，也是重中之重。因为 MCU0 负责启动 Acore、MCU1 以及电源管理等功能。Acore 所运行的 Linux 操作系统是客户开发功能的重要载体，而 MCU1运行的 FreeRTOS 操作系统为客户的实时任务进行保驾护航。
+MCU1 通过 Linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK-S100的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
 </DocScope>
 <DocScope products="RDK S600">
-MCU0是板子启动的开始，也是重中之重。因为 MCU0负责启动 Acore、MCU1以及电源管理等功能。Acore 所运行的 linux 操作系统是客户开发功能的重要载体，而 MCU1运行的 FreeRTOS 操作系统为客户的实时任务进行保驾护航。
-MCU1通过 linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK-S600的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
+MCU0是板子启动的开始，也是重中之重。因为 MCU0 负责启动 Acore、MCU1 以及电源管理等功能。Acore 所运行的 Linux 操作系统是客户开发功能的重要载体，而 MCU1运行的 FreeRTOS 操作系统为客户的实时任务进行保驾护航。
+MCU1 通过 Linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK-S600的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
 </DocScope>
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_frame.png" alt="MCU 框架示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -295,10 +295,10 @@ MCU 目前在 sysfs 上支持查看系统状态 alive，系统存活时间 taskc
 3. mcu 版本 mcu_version：可以查看 mcu 版本信息，包括 debug 版本还是 release 版本，以及编译的时间；
 4. sbl 版本 sbl_version：可以查看 sbl 版本信息以及编译的时间，但是只有在 remoteproc_mcu0下可以查看;
 5. mcu cpuloads: 可以获取到 MCU0/MCU1各任务的任务状态，优先级，剩余栈，运行次数（FreeRtos tickcount）和使用率等信息，帮助用户去 debug。cpuloads 数据获取需要1s 的延迟，因为会涉及到大量数据拷贝至 sysfs 文件系统下的输出 buffer。cpuloads 的获取需要在 MCU0/MCU1**已上电**的情况下才能进行获取。
-6. 固件名 firmware：该固件名为 remoteproc 框架下 mcu0启动 mcu1时的，mcu1的固件名字。当 mcu0启动 mcu1时，linux 会去板端/lib/firmware 文件夹下，找相应文件，从而加载至相应位置。
+6. 固件名 firmware：该固件名为 remoteproc 框架下 mcu0启动 mcu1时的，mcu1的固件名字。当 mcu0启动 mcu1时，Linux 会去板端 /lib/firmware 文件夹下，找相应文件，从而加载至相应位置。
 7. 节点名 name：如 mcu0，为 soc:remoteproc_mcu0;mcu1,为 soc:remoteproc_mcu1。
 8. 状态 state：指 remoteproc 子系统的状态。启动 mcu1，经过 mcu0 remoteproc 节点，所以会变为 running 状态。未启动 mcu1时，状态为 offline。
-9. recovery 节点：指当 mcu 挂掉后，是否可以获取 coredump 寄存器信息。该功能正常情况下是使能的，如果用到该功能，请参考[MCU ramdump章节](./13_mcu_ramdump.md)章节。
+9. recovery 节点：指当 mcu 挂掉后，是否可以获取 coredump 寄存器信息。该功能正常情况下是使能的，如果用到该功能，请参考 [MCU ramdump](./13_mcu_ramdump.md) 章节。
 10. uevent 节点：指设备类型，为 DEVTYPE=remoteproc。
 11. timesync 节点：主从设备同步时间需要，MCU 不支持该功能。
 
@@ -521,7 +521,13 @@ uint32 User_Undefined_Handler(void *reg)
 
 ## MCU1 main 函数简介
 
-main 函数是进入系统后的关键代码。MCU1 当前会根据 `GetCurrentCoreID()` 区分 core0 与 core1 的初始化流程。core0 负责主要外设、log、版本信息、GIC WAKER、中断亲和性和 FreeRTOS 任务初始化；core1 负责 Can5~Can9 数据中断、核间中断以及 stop/deepsleep 流程。
+main 函数是进入系统后的关键代码。MCU1 当前会根据 `GetCurrentCoreID()` 区分 core0 与 core1 的初始化流程。core0 负责主要外设、log、版本信息、GIC WAKER、中断亲和性和 FreeRTOS 任务初始化；
+<DocScope products="RDK S100">
+core1 负责 Can5~Can9 数据中断、核间中断以及 stop/deepsleep 流程。
+</DocScope>
+<DocScope products="RDK S600">
+core1 负责 Can4、Can6~Can10 数据中断、核间中断以及 stop/deepsleep 流程。
+</DocScope>
 
 <DocScope products="RDK S100">
 
@@ -630,7 +636,7 @@ int main(void)
 
 ## MCU Log 简介
 
-MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行状态记录。当前版本的 Log 模块支持通过格式化字符串的方式输出信息，便于开发者在调试过程中快速定位问题和查看变量状态。在 Acore 侧可通过`/proc/remoteproc_mcu0`和`/proc/remoteproc_mcu1`这两个节点可以查看 MCU0和 MCU1的日志信息。
+MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行状态记录。当前版本的 Log 模块支持通过格式化字符串的方式输出信息，便于开发者在调试过程中快速定位问题和查看变量状态。在 Acore 侧可通过 `/proc/remoteproc_mcu0` 和 `/proc/remoteproc_mcu1` 这两个节点查看 MCU0 和 MCU1 的日志信息。
 
 以获取 MCU1串口 log 信息为例，如下图所示：
 

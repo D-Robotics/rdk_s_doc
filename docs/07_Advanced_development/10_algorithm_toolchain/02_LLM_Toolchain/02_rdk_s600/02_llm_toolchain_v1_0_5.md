@@ -181,7 +181,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 :::info 说明
 
-投机采样的 Decode (TPS)  不固定，这里展示多次测试后的最大值。
+投机采样的 Decode(TPS)  不固定，这里展示多次测试后的最大值。
 
 :::
 
@@ -218,7 +218,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 <tr>
 <td>eagle3</td>
 <td>Qwen3-8B_eagle3_base</td>
-<td>Qwen3-8b_eagle3</td>
+<td>Qwen3-8B_eagle3</td>
 <td>113.2</td>
 <td>90.41</td>
 <td>8.0</td>
@@ -449,6 +449,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 <col style={{ width: '10%' }} />
 <col style={{ width: '10%' }} />
 <col style={{ width: '10%' }} />
+<col style={{ width: '10%' }} />
 </colgroup>
 <thead>
 <tr>
@@ -530,3 +531,4 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 ## 相关文档
 
 - [算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [LLM 工具链 v1.0.2](./01_llm_toolchain_v1_0_2.md)

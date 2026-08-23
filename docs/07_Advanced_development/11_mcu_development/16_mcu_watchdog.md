@@ -27,36 +27,36 @@ import DocScope from '@site/src/components/DocScope';
 #### Lowlevel 接口
 这些是 Watchdog 底层驱动的实现和内部公共接口文件，一般用户不需要直接关注：
 
-- McalCdd\Wdg\inc\Wdg_Lld.h
-- McalCdd\Wdg\src\Wdg_Lld.c
-- McalCdd\Wdg\inc\Wdg_Prv.h
-- McalCdd\Wdg\src\Wdg_Common.c
+- McalCdd/Wdg/inc/Wdg_Lld.h
+- McalCdd/Wdg/src/Wdg_Lld.c
+- McalCdd/Wdg/inc/Wdg_Prv.h
+- McalCdd/Wdg/src/Wdg_Common.c
 
 #### Highlevel 接口
 
 <DocScope products="RDK S100">
 这些是用于用户调用的 API 实现文件，每一个 Wdg 的 instance 需要一份独立代码文件：
 
-- McalCdd\Wdg\src\Wdg0.c
-- McalCdd\Wdg\src\Wdg1.c
-- McalCdd\Wdg\src\Wdg2.c
-- McalCdd\Wdg\inc\Wdg0.h
-- McalCdd\Wdg\inc\Wdg1.h
-- McalCdd\Wdg\inc\Wdg2.h
+- McalCdd/Wdg/src/Wdg0.c
+- McalCdd/Wdg/src/Wdg1.c
+- McalCdd/Wdg/src/Wdg2.c
+- McalCdd/Wdg/inc/Wdg0.h
+- McalCdd/Wdg/inc/Wdg1.h
+- McalCdd/Wdg/inc/Wdg2.h
 </DocScope>
 <DocScope products="RDK S600">
 这些是用于用户调用的 API 实现文件，每一个 Wdg 的 instance 需要一份独立代码文件：
 
-- McalCdd\Wdg\src\Wdg0.c
-- McalCdd\Wdg\src\Wdg1.c
-- McalCdd\Wdg\src\Wdg2.c
-- McalCdd\Wdg\src\Wdg3.c
-- McalCdd\Wdg\src\Wdg4.c
-- McalCdd\Wdg\inc\Wdg0.h
-- McalCdd\Wdg\inc\Wdg1.h
-- McalCdd\Wdg\inc\Wdg2.h
-- McalCdd\Wdg\inc\Wdg3.h
-- McalCdd\Wdg\inc\Wdg4.h
+- McalCdd/Wdg/src/Wdg0.c
+- McalCdd/Wdg/src/Wdg1.c
+- McalCdd/Wdg/src/Wdg2.c
+- McalCdd/Wdg/src/Wdg3.c
+- McalCdd/Wdg/src/Wdg4.c
+- McalCdd/Wdg/inc/Wdg0.h
+- McalCdd/Wdg/inc/Wdg1.h
+- McalCdd/Wdg/inc/Wdg2.h
+- McalCdd/Wdg/inc/Wdg3.h
+- McalCdd/Wdg/inc/Wdg4.h
 </DocScope>
 
 ## 3. 应用程序接口
@@ -259,8 +259,8 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 
 | Name | Location | Description |
 |---|---|---|
-| 中断（入口） | Target\...\HorizonISR.c：ISR(Wdt_CfIntIsr) | 置 g_need_reset = 1（g_need_reset 在 McalCdd\Wdg\src\Wdg_Common.c），Os_Disable_Wdt_CfIntIsr()；与 IntRouter、ConfigInterrupts.h 绑定 |
-| OS 任务（延时 + 长复位） | Target\...\HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
+| 中断（入口） | Target/.../HorizonISR.c：ISR(Wdt_CfIntIsr) | 置 g_need_reset = 1（g_need_reset 在 McalCdd/Wdg/src/Wdg_Common.c），Os_Disable_Wdt_CfIntIsr()；与 IntRouter、ConfigInterrupts.h 绑定 |
+| OS 任务（延时 + 长复位） | Target/.../HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
 
 </DocScope>
 

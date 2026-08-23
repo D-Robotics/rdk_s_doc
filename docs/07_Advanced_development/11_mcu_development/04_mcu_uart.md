@@ -50,7 +50,7 @@ S600 MCU 芯片共有4路 Uart，即 Uart8~Uart11。其中 Uart8作为调试控�
 
 - MCU 最大可用 UART 数量: 4个
 - UART FIFO 深度：8byte x 16
-- 支持4800、9600、38400 115200、921600等常用波特率
+- 支持4800、9600、38400、115200、921600等常用波特率
 - 支持5~8位数据位配置
 - 支持奇偶校验配置
 - 支持1、1.5、2位停止位配置
@@ -64,7 +64,7 @@ S600 MCU 芯片共有4路 Uart，即 Uart8~Uart11。其中 Uart8作为调试控�
 
 - UART APP: Uart 的应用层代码。
 - UART Interface: Uart 的接口层代码，提供标准化的 UART 操作接口。
-- UART LLD: Uart 的底层驱动代码，直接操作硬件寄存器，实现异步/同步传输、中断处理、FIFO 管理能核心功能。
+- UART LLD: Uart 的底层驱动代码，直接操作硬件寄存器，实现异步/同步传输、中断处理、FIFO 管理等核心功能。
 - UART PBcfg: Uart 的 PB 配置文件，用于外设的配置参数。
 - Hardware: UART 硬件。
 
@@ -98,7 +98,7 @@ S100 开发板将 Uart5引出供用户开发学习使用，PIN 脚位于`Main Bo
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_interface.png" alt="使用示例实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
-当 Uart5 可能用于 Ipc 透传时会与测试用例产生冲突，产生测试失败的现象，可以通过 `ipcbox_set_mode debug` 命令确认，若 `uart` 所在行显示 `Enable` 则代表已经被占用。
+当 Uart5 用于 Ipc 透传时，会与测试用例产生冲突，产生测试失败的现象，可以通过 `ipcbox_set_mode debug` 命令确认，若 `uart` 所在行显示 `Enable` 则代表已经被占用。
 
 ```bash
 D-Robotics:/$ ipcbox_set_mode debug
@@ -155,7 +155,7 @@ Tx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e
 - `uarttest 4` 获取 GPS 数据，RDK 内部测试用例。
 
 - `uarttest 5` 设置波特率为9600
-```
+```shell
 D-Robotics:/$ uarttest 5
 [042602.833314 0]Channel 1 Baud: 9600
 
@@ -163,7 +163,7 @@ D-Robotics:/$ uarttest 5
 
 - `uarttest 6` 设置波特率为115200
 
-```
+```shell
 D-Robotics:/$ uarttest 6
 [042617.473286 0]Channel 1 Baud: 115200
 ```
@@ -171,7 +171,7 @@ D-Robotics:/$ uarttest 6
 <DocScope products="RDK S600">
 
 
-S600 开发板将 Uart10和 Uart11引出供用户开发学习使用，PIN 脚位于`Main Board`板上上的`2x UART(MAIN)/2x UART(MCU)(J18)`
+S600 开发板将 Uart10和 Uart11引出供用户开发学习使用，PIN 脚位于`Main Board`板上的`2x UART(MAIN)/2x UART(MCU)(J18)`
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png" alt="RDK S600主板接口图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -185,7 +185,7 @@ S600 开发板将 Uart10和 Uart11引出供用户开发学习使用，PIN 脚位
     - `parity`: 校验位设置（可选，部分测试用例使用）
     - `stopbit`: 停止位设置（可选，部分测试用例使用）
     - `databits`: 数据位设置（可选，部分测试用例使用）
-```
+```text
 uarttest <test_id> [bus] [baudrate] [parity] [stopbit] [databits]
 ```
 
@@ -235,7 +235,7 @@ D-Robotics:/$ uarttest 3
 Tx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 41 42 43 44 45
 ```
 
-- `uarttest 4` 回环测试，同时测试发送和接收功能
+- `uarttest 4` 回环测试，同时测试发送和接收功能，注意将 RX 引脚接 TX 引脚
 
 
 ```shell
@@ -371,12 +371,11 @@ Description：Gets the status of an Uart channel.
 Sync/Async: Synchronous
 Parameters(in)
     Channel: Uart Channel
-    BytesTransfered: Byte has transfered
     TransferType: Send or Receive
 Parameters(inout)
     None
 Parameters(out)
-    None
+    BytesTransfered: Number of bytes transferred
 Return value：Uart_StatusType
     Uart current state
 ```
@@ -390,7 +389,7 @@ Sync/Async: Synchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    BufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
     Timeout: Timeout value
 Parameters(inout)
     None
@@ -410,7 +409,7 @@ Sync/Async: Synchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    ufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
     Timeout: Timeout value
 Parameters(inout)
     None
@@ -430,7 +429,7 @@ Sync/Async:Asynchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    ufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
 Parameters(inout)
     None
 Parameters(out)
@@ -449,7 +448,7 @@ Sync/Async:Asynchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    ufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
 Parameters(inout)
     None
 Parameters(out)

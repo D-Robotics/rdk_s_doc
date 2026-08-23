@@ -15,7 +15,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 概述
 
-**OTA** ：（ Over-the-Air Technology，空中下载技术）是指通过无线网络实现远程软件升级的技术。最早由安卓系统引入到手机设备中， OTA 技术大幅简化了传统软件升级过程，无需通过计算机连接设备，用户可直接在设备上下载并安装更新。这一技术极大地方便了用户，提高了设备维护的效率。
+**OTA** ：（ Over-the-Air Technology，空中下载技术）是指通过无线网络实现远程软件升级的技术。最早由 Android 系统引入到手机设备中， OTA 技术大幅简化了传统软件升级过程，无需通过计算机连接设备，用户可直接在设备上下载并安装更新。这一技术极大地方便了用户，提高了设备维护的效率。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_intro.png" alt="概述示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -349,6 +349,7 @@ all_in_one_signed.zst.tar       #secure 升级包文件
 
     #编译本地项目
     sudo ./pack_image.sh -l
+    ```
 
 **注意：**
 - 打包生成的 OTA 包默认命名为 all_in_one_xxx。升级程序会对包名进行校验，包名中必须包含 "all_in_one" 关键字。此外，包名中不得包含以下关键字："app"、"APP"、"middleware"、"param"。
@@ -837,7 +838,7 @@ OTA 升级包中包含一个名为 data.json 的配置文件。该文件在编�
 通过以上配置， OTA 升级包能够确保每个分区的镜像在升级过程中被正确校验和更新。
 
 ## OTA 实现详解
-### OTA流程
+### OTA 流程
 以下流程以ota_tool中实现为例（开发者实现可参考此工具）。
 
 - 准备阶段：
@@ -888,7 +889,7 @@ typedef enum ota_update_flag {
 #### misc （AB状态机）
 1. 区域分配
 
-    地瓜使用andriod AB机制来应用AB系统，下面的信息都是对于该机制的部分原理介绍，详细原理请参考：https://source.android.google.cn/docs/core/ota?hl=zh-cn
+    本平台使用 Android AB 机制来应用 AB 系统，下面的信息都是对于该机制的部分原理介绍，详细原理请参考：https://source.android.google.cn/docs/core/ota?hl=zh-cn
 
     bootloader_message_ab 总共占4K： 其中AB使用的bootloader_control 位于struct bootloader_message_ab->slot_suffix处，占32个字节。
     ```c
@@ -1000,10 +1001,10 @@ OTA升级的状态机存储在此区域，以下是OTA中对此区域的应用�
         uint32_t           magic;               /**< magic number */
         ota_update_flag_e  up;
         ota_update_flag_e  up_system;           /**< system partition update flag */
-        ota_update_flag_e  up_backup;           /**< system partition update flag */
-        ota_update_flag_e  up_app;              /**< system partition update flag */
-        ota_update_flag_e  up_middleware;       /**< system partition update flag */
-        ota_update_flag_e  up_param;            /**< system partition update flag */
+        ota_update_flag_e  up_backup;           /**< backup partition update flag */
+        ota_update_flag_e  up_app;              /**< app partition update flag */
+        ota_update_flag_e  up_middleware;       /**< middleware partition update flag */
+        ota_update_flag_e  up_param;            /**< param partition update flag */
         ota_update_owner_e owner;
         uint32_t           next_slot;           /**< expect slot for next boot */
         update_part_t      update_part;
@@ -1028,10 +1029,10 @@ OTA升级的状态机存储在此区域，以下是OTA中对此区域的应用�
 ### 重启验证与回滚
 
 <DocScope products="RDK S100">
-S100 参考实现中，OTA 升级完重启之后起到内核会触发 systemd 的 OTA 服务来执行重启检查，来完成完整的 OTA 流程（实际上是执行 `ota_tool -b`）
+S100 参考实现中，OTA 升级完重启之后启动到内核会触发 systemd 的 OTA 服务来执行重启检查，来完成完整的 OTA 流程（实际上是执行 `ota_tool -b`）
 </DocScope>
 <DocScope products="RDK S600">
-S600 参考实现中，OTA 升级完重启之后起到内核会触发 systemd 的 OTA 服务来执行重启检查，来完成完整的 OTA 流程（实际上是执行 `ota_tool -b`）
+S600 参考实现中，OTA 升级完重启之后启动到内核会触发 systemd 的 OTA 服务来执行重启检查，来完成完整的 OTA 流程（实际上是执行 `ota_tool -b`）
 </DocScope>
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_boot_check_state.png" alt="重启验证与回滚示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -1104,7 +1105,7 @@ S600 参考实现中，OTA 升级完重启之后起到内核会触发 systemd �
 **此处以 ZIP 格式 的 OTA 包为示例进行说明。除非特别说明，TAR（img 经 Zstandard 压缩）格式 的使用方法与 ZIP 格式完全一致，仅需将文档中的 .zip 后缀替换为 .zst.tar 即可。**
 
 
-在板端可通过ota_tool手动发起 OTA 升级，在输入ota_tool -h指令可查询详细的。
+在板端可通过ota_tool手动发起 OTA 升级，在输入ota_tool -h指令可查询详细的参数说明。
 
 ```bash
 ota_tool Usage:
@@ -1309,7 +1310,7 @@ exit:
 
 4. 若 owner 不为 OTA_TOOL ，则正常退出
 
-5. 调用 otaCheckUpdate 获取升级结果。若升级结果异常，则调用 otaClearFlags 清除 OTA 标记，终止OTA流程
+5. 调用 otaCheckUpdate 获取升级结果。若升级结果异常，则调用 otaClearFlags 清除 OTA 标记，终止 OTA 流程
 
 6. 调用 otaMarkOTASuccessful 标记启动成功
 
@@ -1435,7 +1436,8 @@ int main(void) {
 int main(void) {
     int32_t ret;
     char version[128];
-    if (ret = otaGetLibVersion(version, sizeof(version))) {
+    ret = otaGetLibVersion(version, sizeof(version));
+    if (ret != 0) {
         return ret;
     }
     printf("version: %s\n", version);
@@ -1460,19 +1462,22 @@ int main(void) {
     int32_t result;
     int32_t progress;
     char imgname[256];
+    uint8_t cur_part;
     ret = otaInitLib();
     if (ret != 0) {
         printf("otaInitLib return: %d\n", ret);
         return ret;
     }
-    if (ret = otaRequestStart("/ota/all_in_one-secure_signed.zip;/ota/middleware.zip;/ota/param.zip", OTA_TOOL)) {
+    ret = otaRequestStart("/ota/all_in_one-secure_signed.zip", OTA_TOOL);
+    if (ret != 0) {
         printf("otaRequestStart return: %d\n", ret);
         return ret;
     }
     do {
         result = otaGetResult();
-        if (ret = otaGetUpdatingImageName(imgname, sizeof(imgname))) {
-            printf("otaGetUpdatingImageName return: %d\n", imgname);
+        ret = otaGetUpdatingImageName(imgname, sizeof(imgname));
+        if (ret != 0) {
+            printf("otaGetUpdatingImageName return: %d\n", ret);
         }
         progress = otaGetProgress();
         printf("current image: %s, progress: %d\n", imgname, progress);

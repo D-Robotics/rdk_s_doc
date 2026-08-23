@@ -54,6 +54,10 @@ cd /workspace
 ./pack_image.sh
 ```
 
+:::note Container Restart
+`docker run --name rdk-build` creates a container with a fixed name. Running the same `docker run` again after exiting will report a name conflict. In that case, run `docker start -ai rdk-build` to re-enter, or run `docker rm rdk-build` first and then recreate it.
+:::
+
 ## Build Artifacts
 
 The build artifacts are located under `/workspace/out/` inside the container (`out/product/img_packages/` contains the system image, `out/product/deb_packages/` contains deb packages). After exiting the container, they are directly accessible in the host mount directory.
@@ -62,4 +66,5 @@ The build artifacts are located under `/workspace/out/` inside the container (`o
 
 - [Set up the development environment](./01_environment_build.md)
 - [BSP source directory structure](./02_bsp_source_layout.md)
+- [RDK build system (rdk-gen)](./03_rdk_gen.md)
 - [Build with Podman](./05_podman_build.md)

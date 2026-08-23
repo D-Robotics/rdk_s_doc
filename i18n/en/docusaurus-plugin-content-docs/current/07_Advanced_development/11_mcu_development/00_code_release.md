@@ -22,14 +22,14 @@ https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
 
 ## MCU Community Edition
 
-```c
+```text
 MCU
 ├── Build                # Build system, contains compilation/link scripts
 ├── Config               # McalCdd module configurations for various boards
 ├── Include              # Mainly header files from driver and Service folders
 ├── Library              # Mainly static library files for drivers and Service
 ├── log                  # Compilation logs
-├── OpenSource           # FreeRtos open source code repository
+├── OpenSource           # FreeRTOS open source code repository
 ├── output               # Directory for compilation/link generated files
 ├── samples              # Contains usage examples, including Can, IPC, Eth drivers, etc.
 └── Target               # System base code, such as startup, task definitions, interrupts, etc.
@@ -37,7 +37,7 @@ MCU
 
 
 ## MCU Enterprise Edition
-```c
+```text
 MCU
 ├── Build                # Build system, contains compilation/link scripts
 |   ├── FreeRtos         # For compiling MCU0 firmware
@@ -48,7 +48,7 @@ MCU
 ├── Config               # McalCdd module configurations for various boards
 ├── log                  # Compilation logs
 ├── McalCdd              # Various module driver codes
-├── OpenSource           # FreeRtos open source code repository
+├── OpenSource           # FreeRTOS open source code repository
 ├── output               # Directory for compilation/link generated files
 ├── Platform             # Platform configuration related, such as basic data definitions, Memmap configurations for each module; this part can be replaced by customers
 |   ├── Compiler         # Platform configuration and compiler-related definitions

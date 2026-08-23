@@ -725,10 +725,10 @@ Scans and prints slave information. Options:
 ### `Ec_SlaveOP`
 
 ```
-Ec_SlaveOP <slave> <index> <subindex> <value> <action>
+Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 ```
 
-Direct SDO read (`action=1`) or write (`action=2`).
+Direct SDO read (`upload`) or write (`download`); the write operation additionally requires the `value` argument.
 
 ---
 
@@ -942,8 +942,6 @@ if (wkc > 0)
 
 2. Call FoE write APIs (see `ec_foe.h`)
 3. Return the slave through INIT → PRE_OP → SAFE_OP → OPERATIONAL
-
----
 
 ---
 

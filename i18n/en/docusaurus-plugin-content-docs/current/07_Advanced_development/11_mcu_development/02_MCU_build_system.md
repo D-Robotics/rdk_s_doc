@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 ## Basic Description of the Compilation System
-The MCU compilation system is based on Scons 3.0.0 ([Scons 3.0.0 User Manual Official Website](https://scons.org/doc/3.0.0/HTML/scons-user.html)).
+The MCU compilation system is based on SCons 3.0.0 ([SCons 3.0.0 User Manual Official Website](https://scons.org/doc/3.0.0/HTML/scons-user.html)).
 
 ## MCU1 Compilation System
 <DocScope products="RDK S100">
@@ -20,14 +20,14 @@ The MCU1 compilation system is located at mcu/Build/FreeRtos_mcu1. The specific 
 ```c
 FreeRtos_mcu1
 ├── build_freertos.py                   # Compilation entry script
-├── SConstruct                          # Scons build definition file (unified entry)
+├── SConstruct                          # SCons build definition file (unified entry)
 ├── build_config                        # YAML files used for compilation folder control
 │    └── S100
 │         └── lite-matrix-B-mcu1.yaml
 ├── setting_files                       # gcc compile/link parameter files
 │    └── gcc
 │         └── settings_lite_freertos.py
-├── site_scons                          # Scons compile/link command definitions
+├── site_scons                          # SCons compile/link command definitions
 │    └── site_tools
 │         └── gcc_arm.py
 └── Linker                              # Linker script directory
@@ -41,14 +41,14 @@ The MCU1 compilation system is located at mcu/Build/FreeRtos_mcu1. The specific 
 ```c
 FreeRtos_mcu1
 ├── build_freertos.py                   # Compilation entry script
-├── SConstruct                          # Scons build definition file (S600 unified entry)
+├── SConstruct                          # SCons build definition file (S600 unified entry)
 ├── build_config                        # YAML files for adding/removing compilation folders
      └── S600
          └── lite-matrix-B-mcu1.yaml
 ├── settings_files                      # gcc compilation and linking parameters
      └── gcc
          └── settings_lite_freertos.py
-├── site_scons                          # Scons compilation and linking command files
+├── site_scons                          # SCons compilation and linking command files
      └── site_tools
          └── gcc_arm.py
 └── Linker                              # Linker script directory
@@ -64,17 +64,17 @@ FreeRtos_mcu1
 ## Introduction to the Relationships Among Key Files in the Compilation Process
 <DocScope products="RDK S100">
 
-build_freertos.py is the overall entry point for compilation. However, when actually dispatching to scons, the following can influence the scons compilation environment/process:
-1. SConstruct file: The SConstruct file is the definition file for scons compilation. Together with the Sconscript file within each module, it forms the equivalent of the Cmakefile in CMake or the makefile in the Make system.
-2. settings_lite_freertos.py: The effective entry is initialization of the `Variables` class in `SConstruct`. This file provides statically defined compilation environment variables. Variable names and values are loaded into `Variables`, then consumed by the `Environment` used for scons compilation.
+build_freertos.py is the overall entry point for compilation. However, when actually dispatching to SCons, the following can influence the SCons compilation environment/process:
+1. SConstruct file: The SConstruct file is the definition file for SCons compilation. Together with the SConscript file within each module, it forms the equivalent of the Cmakefile in CMake or the makefile in the Make system.
+2. settings_lite_freertos.py: The effective entry is initialization of the `Variables` class in `SConstruct`. This file provides statically defined compilation environment variables. Variable names and values are loaded into `Variables`, then consumed by the `Environment` used for SCons compilation.
 3. gcc_arm.py: This file defines actual compile/link commands. Its effective entry is the `COMPILER_TOOL` field defined in `settings_lite_freertos.py`, which is added in `SConstruct` via `Variables` and finally retrieved from `env`.
 4. `build_config/S100/lite-matrix-B-mcu1.yaml`: YAML config file used by S100 MCU1 lite builds. In this file, `SettingFile` points to `Build/FreeRtos_mcu1/setting_files/__COMPILER__/settings_lite_freertos.py`; `LinkFIle` points to `Build/FreeRtos_mcu1/Linker/__COMPILER__/S100/link_freertos_mcu1.ld`; fields such as `BuildPath`, `StaticLibCommonPath`, `StaticLibMcalCddPath`, `StaticLibPlatformPath`, and `StaticLibServicePath` control which directories are included in compilation.
 
 </DocScope>
 <DocScope products="RDK S600">
-build_freertos.py is the overall entry point for compilation. However, when actually dispatching to scons, the following can influence the scons compilation environment/process:
-1. SConstruct file: The SConstruct file is the definition file for scons compilation. Together with the Sconscript file within each module, it forms the equivalent of the Cmakefile in CMake or the makefile in the Make system.
-2. settings_lite_freertos.py: The entry point for this file is actually the initialization of the "Variables" class within SConstruct. Its core function is to introduce a series of statically defined compilation environment variables. The variable names in the environment variables correspond to those in settings_lite_freertos.py, and their values correspond to the values of those variable names. The instantiated object of the "Variables" class is then used by the Environment class for scons compilation.
+build_freertos.py is the overall entry point for compilation. However, when actually dispatching to SCons, the following can influence the SCons compilation environment/process:
+1. SConstruct file: The SConstruct file is the definition file for SCons compilation. Together with the SConscript file within each module, it forms the equivalent of the Cmakefile in CMake or the makefile in the Make system.
+2. settings_lite_freertos.py: The entry point for this file is actually the initialization of the "Variables" class within SConstruct. Its core function is to introduce a series of statically defined compilation environment variables. The variable names in the environment variables correspond to those in settings_lite_freertos.py, and their values correspond to the values of those variable names. The instantiated object of the "Variables" class is then used by the Environment class for SCons compilation.
 3. gcc_arm.py: This file actually defines the compilation commands. The effective entry point is the "COMPILER_TOOL" field defined in settings_lite_freertos.py. The COMPILER_TOOL field is further added by the Variables of the SConstruct file and finally retrieved by the env, including configurations such as "CC".
 4. lite-matrix-B-mcu1.yaml: The folders to be compiled. Add or remove compilation folders in this file. The `LinkFIle` field points to `Linker/gcc/S600/link_freertos_mcu1.ld`.
 </DocScope>
@@ -1043,4 +1043,5 @@ EL1_Reset_Handler:
 ## Related Documentation
 
 - [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
+- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
 - [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)

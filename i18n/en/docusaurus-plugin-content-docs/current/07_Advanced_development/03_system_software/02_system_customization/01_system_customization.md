@@ -32,8 +32,9 @@ sudo ./pack_image.sh
 Add the following in `hobot_customize_rootfs.sh`:
 
 ```bash
-# Install an additional deb into the rootfs
-chroot ${DST_ROOTFS_DIR} dpkg -i /path/to/custom-package.deb
+# Install an additional deb into the rootfs (copy the deb into the rootfs first, then install it inside chroot)
+cp /path/to/custom-package.deb ${DST_ROOTFS_DIR}/tmp/
+chroot ${DST_ROOTFS_DIR} dpkg -i /tmp/custom-package.deb
 ```
 
 ### Preinstalling Custom Files

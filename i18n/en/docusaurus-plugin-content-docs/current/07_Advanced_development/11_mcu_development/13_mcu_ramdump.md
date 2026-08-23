@@ -16,7 +16,7 @@ The MCU ramdump feature is designed so that when the MCU crashes or enters an ex
 
 When the MCU enters an exception, it preserves the context information in a global variable that can be read by the A-core or through the MCU shell.
 
-If MCU0 encounters an exception, the system will restart. During the restart flow, the system checks the reboot reason. If the reboot reason is determined to be `mpainc`, the system ensures that the memory region corresponding to the global variable that stores the MCU exception context is not zeroed out. After the system restarts, you can read the ramdump data and use it to analyze the cause of the exception.
+If MCU0 encounters an exception, the system will restart. During the restart flow, the system checks the reboot reason. If the reboot reason is determined to be `mpanic`, the system ensures that the memory region corresponding to the global variable that stores the MCU exception context is not zeroed out. After the system restarts, you can read the ramdump data and use it to analyze the cause of the exception.
 
 The exception handling flow is shown below:
 
@@ -30,9 +30,9 @@ When MCU1 encounters an exception, it enters the shell. At this point, you can s
 
 ```shell
   # Stop
-  echo stop > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo stop > /sys/class/remoteproc/remoteproc_mcu1/state
   # Start
-  echo start > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo start > /sys/class/remoteproc/remoteproc_mcu1/state
 ```
 ## Obtaining MCU Exception Information
 - On the A-core, you can read the context information recorded when MCU1 encounters an exception through the sysfs node. The corresponding sysfs node is:
@@ -41,7 +41,7 @@ When MCU1 encounters an exception, it enters the shell. At this point, you can s
     cat /sys/devices/platform/soc/soc:mcu_crash/crash
   ```
 
-- When MCU0 encounters an exception and the system restarts, if the reboot reason is `mpainc`, the context information is dumped to the `/log` partition for historical log tracking and analysis. Log dump directories are named in the format `SuperSoC_Mdump-<count>-<time>`. \
+- When MCU0 encounters an exception and the system restarts, if the reboot reason is `mpanic`, the context information is dumped to the `/log` partition for historical log tracking and analysis. Log dump directories are named in the format `SuperSoC_Mdump-<count>-<time>`. \
   Here, `<count>` indicates the number of system reboots, and `<time>` is the timestamp in the format `year_month_day_hour_minute_second`, for example: `SuperSoC_Mdump-0010-2025_08_13_20_25_11`
 
 - When the MCU encounters data abort, undefined, or prefetch exceptions, the context information can be dumped for analysis.

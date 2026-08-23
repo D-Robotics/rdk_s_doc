@@ -58,10 +58,10 @@ sudo ./pack_image.sh -p
   - [Debian manpage](https://manpages.debian.org/bookworm/multistrap/multistrap.1.en.html)
 
 #### 工具简介
-总结而言，`multistrap`是独立于`debbootstrap`工具的另一套 debian/Ubuntu 等以 apt 源为基础生成根文件系统的工具。它基于一个/多个配置文件定义生成根文件系统所使用的 apt 源，以及需要默认生成哪些包。
+总结而言，`multistrap`是独立于`debootstrap`工具的另一套 debian/Ubuntu 等以 apt 源为基础生成根文件系统的工具。它基于一个/多个配置文件定义生成根文件系统所使用的 apt 源，以及需要默认生成哪些包。
 与`debootstrap`最大的区别有以下几点：
 1. 灵活性：`multistrap`允许用户完全自定义新生成的根文件系统内的所有包，包括 apt 源内标记为必选的包，但是用户需要自行保证根文件系统的完整性和可用性；
-2. 生成流程：`multistrap`不同于`debbootstrap`，它的生成流程可以概括为以下几个步骤，最大的区别在于第四步，`multistrap`只进行包的解压缩，没有对包进行配置（也就是执行[pre/post]install 脚本）：
+2. 生成流程：`multistrap`不同于`debootstrap`，它的生成流程可以概括为以下几个步骤，最大的区别在于第四步，`multistrap`只进行包的解压缩，没有对包进行配置（也就是执行[pre/post]install 脚本）：
   1. 读取配置文件
   2. 根据配置文件从获取指定的 apt 源的元数据
   3. 根据配置文件尝试下载指定的包
@@ -178,12 +178,12 @@ multistrap 默认会将所有 Priority 为"Required"的包进行安装。
 
 <DocScope products="RDK S100">
 
-用户直接在 samplefs/configs/jammy-base.conf 等配置文件的各个"packages"字段中删除自己不需要的包，或者定义一个新的字段集，并在"[General]"字段集的"boostrap"字段中去掉原有字段集并添加自己的字段集即可。
+用户直接在 samplefs/configs/jammy-base.conf 等配置文件的各个"packages"字段中删除自己不需要的包，或者定义一个新的字段集，并在"[General]"字段集的"bootstrap"字段中去掉原有字段集并添加自己的字段集即可。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-用户直接在 samplefs/configs/noble-base.conf 等配置文件的各个"packages"字段中删除自己不需要的包，或者定义一个新的字段集，并在"[General]"字段集的"boostrap"字段中去掉原有字段集并添加自己的字段集即可。
+用户直接在 samplefs/configs/noble-base.conf 等配置文件的各个"packages"字段中删除自己不需要的包，或者定义一个新的字段集，并在"[General]"字段集的"bootstrap"字段中去掉原有字段集并添加自己的字段集即可。
 
 </DocScope>
 
@@ -191,7 +191,7 @@ multistrap 默认会将所有 Priority 为"Required"的包进行安装。
 **注意**：一般来说各个 apt 源的维护者会将他们认为该系统（Ubuntu/Debian 的各个版本）的最小集的包的优先级标为"Required"，但是是可以进一步裁剪的。进行这种程度的根文件系统裁剪时，用户需要**自己保证根文件系统的完整性和可用性**。
 
 步骤如下：
-1. 在`[Gerneral]`字段集中添加`omitrequired=true`；
+1. 在`[General]`字段集中添加`omitrequired=true`；
 2. 在`Packages`中对所有需要添加的包进行定义。
 
 ## RDK deb 包构建流程说明
@@ -202,7 +202,7 @@ RDK 默认以 deb 包的形式来管理用户层的地瓜定制功能。在 SDK 
 构建 deb 的入口脚本为`mk_debs.sh`，该脚本位于 SDK 包的根目录。用户可以通过该脚本构建仓库内的 deb 包。
 
 ### deb 包源码目录
-`source`下的目录，除`bootloader`，`kernel`，`hobot-drivers`外均为地瓜定制化功能的 deb 包的构建源码。其中`hobot-spdev`，`hobot-camera`，`hobot-io`等目录内包含了相应动态库的源码，通过 mk_debs.sh 脚本构建这两个包时，对应的源码会被编译。
+`source`下的目录，除`bootloader`，`kernel`，`hobot-drivers`外均为地瓜定制化功能的 deb 包的构建源码。其中`hobot-spdev`，`hobot-camera`，`hobot-io`等目录内包含了相应动态库的源码，通过 mk_debs.sh 脚本构建这些包时，对应的源码会被编译。
 deb 包源码目录的基本结构（以 hobot-configs 为例）内会包括：
 ```bash
 hobot-configs/
@@ -262,7 +262,7 @@ hobot-camera/
      - 在`case`内调度`sed`命令，将默认的"depends"字段替换为真正的 deb 依赖。假设`new_package`的依赖为`dep_pkg1`和`dep_pkg2`；
        - 如果有依赖，则使用`sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
        - 如果没有依赖，则使用`sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
-     - (可选)如果该 deb 在打包前，需要进行源码编译，则进行源码编译命令的调度，请注意最终的所有输出，均需要输出到`out/build/debs/new_pkg/debian/`目录下;
+     - (可选)如果该 deb 在打包前，需要进行源码编译，则进行源码编译命令的调度，请注意最终的所有输出，均需要输出到`out/build/debs/new_package/debian/`目录下;
      - 置位`is_allowed=1`
 
 ## deb 包编入镜像流程说明
@@ -283,7 +283,7 @@ hobot-camera/
 2. 在指定的编译配置文件内的`RDK_DPKG_DEB_PKG_LIST`变量内添加对应的包名。
 
 :::info 提示
-获取报名的方法请参考[获取所需deb包名的方法](#get_package_name)
+获取包名的方法请参考[获取所需deb包名的方法](#get_package_name)
 :::
 
 ### 离线镜像构建
@@ -301,7 +301,7 @@ apt download <package names>
 ```
 
 :::info 提示
-获取报名的方法请参考[获取所需deb包名的方法](#get_package_name)
+获取包名的方法请参考[获取所需deb包名的方法](#get_package_name)
 :::
 
 ### 获取所需 deb 包名的方法{#get_package_name}
@@ -665,4 +665,6 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 
 - [搭建开发环境](./01_environment_build.md)
 - [BSP 源码目录结构](./02_bsp_source_layout.md)
+- [Docker 编译环境](./04_docker_build.md)
+- [Podman 编译环境](./05_podman_build.md)
 - [系统定制](../03_system_software/02_system_customization/01_system_customization.md)

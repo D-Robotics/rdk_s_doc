@@ -6,7 +6,7 @@ description: "RDK deb 包开发流程与规范"
 
 # deb 包开发
 
-RDK 系统基于 Debian/Ubuntu，系统组件以 deb 包形式分发。本节介绍 deb 包的开发流程。
+RDK 系统基于 Debian/Ubuntu，系统组件以 deb 包形式分发。本节面向模式 3（高度定制）用户，介绍如何在 deb/源码层开发系统组件；镜像层的 apt/配置层定制见 [系统定制](../02_system_customization/01_system_customization.md)。
 
 :::note 待完善
 单 deb 包开发模式研发流程仍在探索阶段，本节当前记录现状与设计原则，实际内容待研发流程稳定后补充（ADR D3）。

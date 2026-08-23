@@ -165,15 +165,15 @@ In the `Icu_Gpio_ChannelConfig_PB` array in the MCU code file `mcu/Config/McalCd
 - Change `IntEnable` to `FALSE`.
 - Change `IntMask` to `TRUE`.
 
-## Adding New Hardware Under SPL and Uboot
+## Adding New Hardware Under SPL and U-Boot
 
-The SPL is the SPL under Uboot.
+The SPL is the SPL under U-Boot.
 
 ### Add Configuration File
 
-The Uboot configuration file is located in the SDK directory `source/bootloader/uboot/configs`, with the corresponding configuration file `hobot_s600_defconfig`.
+The U-Boot configuration file is located in the SDK directory `source/bootloader/uboot/configs`, with the corresponding configuration file `hobot_s600_defconfig`.
 
-The Uboot configuration file is specified in the bootloader board-level configuration file. For the debug configuration file, the path is `source/bootloader/device/rdk/s600/board_s600_debug.mk`, with the variable `HR_UBOOT_CONFIG_FILE` specifying the Uboot configuration file.
+The U-Boot configuration file is specified in the bootloader board-level configuration file. For the debug configuration file, the path is `source/bootloader/device/rdk/s600/board_s600_debug.mk`, with the variable `HR_UBOOT_CONFIG_FILE` specifying the U-Boot configuration file.
 
 ```shell
 # hobot_s600_defconfig
@@ -184,11 +184,11 @@ export HR_ARCH_UBOOT="arm"
 ...
 ```
 
-If customers need to generate their own Uboot config file, they can replace it as described above. Generally, reusing D-Robotics' configuration is sufficient.
+If customers need to generate their own U-Boot config file, they can replace it as described above. Generally, reusing D-Robotics' configuration is sufficient.
 
 ### Add Device Tree
 
-The Uboot device tree file is located in the SDK directory `source/bootloader/uboot/arch/arm/dts/drobot-s600-rdk.dts`. The device tree is specified by the variable `CONFIG_DEFAULT_DEVICE_TREE` in the configuration file.
+The U-Boot device tree file is located in the SDK directory `source/bootloader/uboot/arch/arm/dts/drobot-s600-rdk.dts`. The device tree is specified by the variable `CONFIG_DEFAULT_DEVICE_TREE` in the configuration file.
 
 ```shell
 # hobot_s600_defconfig
@@ -201,7 +201,7 @@ If customers need to add their own device tree file, note that they must `#inclu
 
 ### Add Board ID
 
-In the Uboot dts file `source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi`, under `board_cfg`, add board-level configuration information.
+In the U-Boot dts file `source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi`, under `board_cfg`, add board-level configuration information.
 
 ```c
     board_cfg {
@@ -227,7 +227,7 @@ In the Uboot dts file `source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.
 - `hw_name`: Hardware name.
 - `version`: Hardware version.
 - `pcie_mode`: PCIe mode, defaults to rc.
-- `fdt_feat`: The name of the dtb used by Uboot and SPL.
+- `fdt_feat`: The name of the dtb used by U-Boot and SPL.
 - `pxe_label`: Kernel configuration in extlinux.
 - `bootsrc`: Indicates selecting the boot medium based on strap pin.
 
@@ -270,7 +270,7 @@ If customers need to add their own device tree file, note that they must `#inclu
 
 ### Extlinux Configuration
 
-In the S600, Uboot parses the Kernel configuration based on extlinux and selects the corresponding dtb, Kernel image, and initramfs to load.
+In the S600, U-Boot parses the Kernel configuration based on extlinux and selects the corresponding dtb, Kernel image, and initramfs to load.
 
 The extlinux file is located at `source/kernel/scripts/package/rdk_extlinux`.
 
@@ -389,7 +389,7 @@ hb_fetch_boardinfo targetid[0x5131310]
 ...
 ```
 
-- The Uboot log will print the Model, which can be used to determine if it matches the definition in the Uboot dts.
+- The U-Boot log will print the Model, which can be used to determine if it matches the definition in the U-Boot dts.
 
 ```shell
 U-Boot 2022.04-00885-ge6f5dae98d (May 28 2026 - 16:43:04 +0800)
@@ -398,7 +398,7 @@ Model: D-Robotics S600 Module Board
 ...
 ```
 
-- The Uboot log will print the boardid, for example, 5131310 below.
+- The U-Boot log will print the boardid, for example, 5131310 below.
 
 ```shell
 U-Boot 2022.04-00885-ge6f5dae98d (May 28 2026 - 16:43:04 +0800)
@@ -407,7 +407,7 @@ system_slot: 0 adc_boardinfo: 5131310
 ...
 ```
 
-- The Uboot log will print the label corresponding to extlinux, as well as the Kernel image, dtb, and initramfs.
+- The U-Boot log will print the label corresponding to extlinux, as well as the Kernel image, dtb, and initramfs.
 
 ```shell
 U-Boot 2022.04-00885-ge6f5dae98d (May 28 2026 - 16:43:04 +0800)
@@ -425,7 +425,7 @@ Retrieving file: /hobot/rdk-s600-mcb-v1p0.dtb
 
 - Check the board info in bootargs.
 
-Mainly check `hobotboot.socname=S600`, `board.hwname=rdk`, `board.ver=V1P0`, `board.pcie_mode=rc`, etc., to see if they match the definitions in Uboot.
+Mainly check `hobotboot.socname=S600`, `board.hwname=rdk`, `board.ver=V1P0`, `board.pcie_mode=rc`, etc., to see if they match the definitions in U-Boot.
 
 ```shell
 root@ubuntu:~# cat /proc/cmdline

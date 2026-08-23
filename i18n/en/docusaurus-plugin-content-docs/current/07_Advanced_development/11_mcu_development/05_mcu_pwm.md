@@ -96,7 +96,7 @@ static Pwm_Lld_ChannelConfigType Pwm_HwChannelConfig_PB[PWM_HW_CONF_MODS_PB][12]
             /**< the callback of dma complete notification */
             .DmaCpltCallback = NULL_PTR,
         },
-        .......
+        /* ... */
 ```
 
 2. The `Pwm_Channels_PB` structure array defines the mapping between logical PWM channels and underlying hardware channels; the `Pwm_HwChannelConfig_PB` structure array defines the default hardware parameters for each PWM channel, such as period, duty cycle, polarity, interrupt enable, etc.
@@ -130,9 +130,9 @@ const Pwm_ConfigType Pwm_Config = {
     .NumInstances = PWM_HW_CONF_MODS_PB,
     /** @brief Number of configured Pwm channels */
     .NumChannels = PWM_CONF_CHANNELS_PB,
-    /** @brief Number of configured Pwm channels */
-    .PwmChannelsConfig = Pwm_Channels_PB,
     /** @brief Pointer to array of Pwm channels */
+    .PwmChannelsConfig = Pwm_Channels_PB,
+    /** @brief Pointer to array of Pwm LLD IP configurations */
     .PwmLldIpConfig = Pwm_Lld_IpConfig_PB,
 };
 
@@ -179,6 +179,7 @@ pwmtest 0 0 0x30d40 0x4000
 - Parameter Description
 
 ```sh
+pwm_id: PWM hardware IP instance ID.
 <pwm_channel>: The PWM channel number to configure or stop.
 <period>: The period of the PWM signal.
 <duty_cycle>: The duty cycle of the PWM signal, must be in the range of 0x0000 (0%) to 0x8000 (100%).
@@ -188,7 +189,7 @@ pwmtest 0 0 0x30d40 0x4000
 
 PWM period = period register value / clock source frequency.
 
-Example: To output a wave with a period of 1000us, and the PWM clock source is 200Mhz by default, write 200000000/1000=200000 (0x30d40) into the register.
+Example: To output a wave with a period of 1000us, and the PWM clock source is 200MHz by default, write 200000000/1000=200000 (0x30d40) into the register.
 
 
 ### Debug Sample
@@ -394,7 +395,7 @@ Return value:None
 #### void Pwm_SetPeriodAndDuty(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period, uint16 DutyCycle)
 
 ```shell
-Description:Service sets the duty cycle of the PWM channel.
+Description:Service sets the period and duty cycle of the PWM channel.
 Sync/Async:Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM

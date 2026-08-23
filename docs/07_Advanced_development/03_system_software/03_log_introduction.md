@@ -22,11 +22,11 @@ import DocScope from '@site/src/components/DocScope';
 | 基础系统 log | coredump | `/log/stackdump` | NA | 20 | 否 | 应用 crash 的 log 信息 |
 | 基础系统 log | remoteproc | `/log/dsp0` | 1M | 200 | 否 | DSP0固件输出的 log 信息 |
 | 基础系统 log | remoteproc | `/log/bl31` | 1M | 200 | 否 | BL31固件输出的 log 信息 |
-| 基础系统 log | remoteproc | `/log/optee` | 1M | 200 | 否 | optee 固件输出的 log 信息 |
+| 基础系统 log | remoteproc | `/log/optee` | 1M | 200 | 否 | OP-TEE 固件输出的 log 信息 |
 | 基础系统 log | remoteproc | `/log/mcu*` | 2M | 200 | 否 | mcu 固件输出的 log 信息 |
 | 基础系统 log | remoteproc | `/log/bpu0` | 1M | 200 | 否 | bpu0固件输出的 log 信息 |
 | 基础系统 log | remoteproc | `/log/hsm` | 1M | 200 | 否 | hsm 固件输出的 log 信息 |
-| 基础系统 log | remoteproc | `/log/uboot` | 8KB | 100 | 否 | uboot 输出的 log 信息 |
+| 基础系统 log | remoteproc | `/log/uboot` | 8KB | 100 | 否 | U-Boot 输出的 log 信息 |
 | 基础系统 log | reset | `/log/reset_reason.txt` | 1M | 1 | 否 | 记录每次系统启动原因 |
 | 基础系统 log | reset | `/log/reset_count.txt` | 4KB | 1 | 否 | 记录当前系统重启次数 |
 | ALOG 系统 | ALOG | `/log/usr` | 2M | 200 | 否 | ALOG 接口的 log 信息 |
@@ -53,12 +53,12 @@ import DocScope from '@site/src/components/DocScope';
         -   scpreboot：scp 正常重启
         -   splreboot：spl 正常重启
         -   splpanic：spl panic 重启
-        -   freboot：bl31正常重启
-        -   fpanic：bl31 panic 重启
-        -   oreboot：optee 正常重启
-        -   opanic：optee panic 重启
-        -   ureboot：uboot 正常重启
-        -   upanic：uboot panic 重启
+        -   freboot：BL31 正常重启
+        -   fpanic：BL31 panic 重启
+        -   oreboot：OP-TEE 正常重启
+        -   opanic：OP-TEE panic 重启
+        -   ureboot：U-Boot 正常重启
+        -   upanic：U-Boot panic 重启
         -   kreboot：kernel 正常重启
         -   kpanic：kernel panic 重启
         -   lmbistfail：硬件 bist 失败重启
@@ -70,12 +70,12 @@ import DocScope from '@site/src/components/DocScope';
     -   reset_count.txt：当前系统重启次数，0到9999循环计数
 3.  remoteproc log
     -   dsp*：dsp*固件输出的 log 信息
-    -   bl31：bl31固件输出的 log 信息
-    -   optee：optee 固件输出的 log 信息
+    -   bl31：BL31固件输出的 log 信息
+    -   optee：OP-TEE 固件输出的 log 信息
     -   mcu：mcu 固件输出的 log 信息
     -   bpu*：bpu*固件输出的 log 信息
     -   hsm：hsm 固件输出的 log 信息，加密保存
-    -  uboot：uboot 输出的 log 信息
+    -  uboot：U-Boot 输出的 log 信息
 
 4.  ALOG 系统
     -   使用 libalog 库的 pr_*接口打印的 log 信息
@@ -95,7 +95,7 @@ import DocScope from '@site/src/components/DocScope';
 1.  进程信息
     -   板端 log 进程运行信息如下，不同设备的 log 进程有所区别，以实际命令结果为准：
 
-    ```Shell
+    ```bash
     root@ubuntu:/userdata# ps -ef | grep log | grep -v -e grep -e login -e dbus-daemon
     root        1083       1  0 11:16 ?        00:00:00 /bin/bash /usr/bin/hobot-log
     root        1514       1  0 11:16 ?        00:00:00 /bin/sh /usr/bin/hobot-log-start bl31
@@ -141,7 +141,7 @@ import DocScope from '@site/src/components/DocScope';
 2.  启动顺序
     -   hobot-log-daemon.service 服务开机自启，启动 hobot-log 守护进程，去启动相关 log 服务，并管理日志，启动顺序如下：
 
-        ```Shell
+        ```bash
         |- /usr/bin/hobot-log
               |- record_reset_count(shell function)
               |- record_reset_reason(shell function)
@@ -188,7 +188,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
             -   系统最多保留4个历史日志文件
         -   log 归档：
             -   当日志轮转发生时，当前日志文件会按照编号进行重命名归档。归档原则：kern.log 达到轮转周期，logrotate 将 kern.log 重命名为 kern.log.1，创建新的 kern.log，rsyslog 继续写入日志。当超过最大数量限制后，最开始产生的日志文件会被删除
-            -   为减少磁盘占用，系统会对历史日志进行压缩。压缩策略：最近一次轮转日志延迟一轮再解压缩
+            -   为减少磁盘占用，系统会对历史日志进行压缩。压缩策略：最近一次轮转日志延迟一轮再压缩
         - 参数配置：
             -   如果用不想使用 ubuntu 默认配置参数来配置日志管理策略，可以通过修改`/etc/logrotate.d/rsyslog`文件中的配置实现。
             ```text
@@ -218,7 +218,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
         -   可以通过增减 systemd 的 log
             service，来增减 log 进程，通过修改`source/hobot-configs/debian/DEBIAN/postinst`文件实现。部分 log 相关服务如下：
 
-            ```Shell
+            ```bash
             /etc/systemd/system/basic.target.wants/hobot-log-bl31.service
             /etc/systemd/system/basic.target.wants/hobot-log-bl31-timesync.service
             /etc/systemd/system/basic.target.wants/hobot-log-bpu0.service
@@ -232,7 +232,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
 
         -   以 hobot-log-logcat.service 为例，介绍设备端如何控制 log 服务启停：
 
-            ```Shell
+            ```bash
             # 开启服务开机自启
             systemctl enable hobot-log-logcat.service
             # 关闭服务开机自启
@@ -245,7 +245,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
             systemctl stop hobot-log-logcat.service
             ```
 3.  log 时间
-    -   hobot-log 提供了等待时间同步完成的功能，以确保日志中的时间戳准确。该功能可通过``YEAR_LIMIT 和 WAIT_FOR_TIMESYNC_TIMEOUT 两``个变量进行配置，分别用于设定时间同步成功的阈值以及超时时间。需要注意的是，Debian 系统的默认时间为其发行版本的发布时间。因此，在每次更新 Debian 版本时，应相应修改``YEAR_LIMIT``的值，使其大于该版本的发布时间。通常情况下，将其配置为最新日期即可。
+    -   hobot-log 提供了等待时间同步完成的功能，以确保日志中的时间戳准确。该功能可通过 `YEAR_LIMIT` 和 `WAIT_FOR_TIMESYNC_TIMEOUT` 两个变量进行配置，分别用于设定时间同步成功的阈值以及超时时间。需要注意的是，Debian 系统的默认时间为其发行版本的发布时间。因此，在每次更新 Debian 版本时，应相应修改 `YEAR_LIMIT` 的值，使其大于该版本的发布时间。通常情况下，将其配置为最新日期即可。
 
 ## Log 接口使用推荐
 
@@ -255,12 +255,11 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
 2.  没有设备结构的场合使用如下接口 pr_error, pr_warn, pr_info,
     pr_debug。
 3.  pr_debug，dev_dbg 可通过如下方法动态开启。
-    -   ``echo "file drivers/mmc/host/* +p" >
-        /sys/kernel/debug/dynamic_debug/control``
-    -   ``echo "module mmc_core +p" >
-        /sys/kernel/debug/dynamic_debug/control``
-    -   ``echo "func mmc_detect_change +p" >
-        /sys/kernel/debug/dynamic_debug/control``
+    ```bash
+    echo "file drivers/mmc/host/* +p" > /sys/kernel/debug/dynamic_debug/control
+    echo "module mmc_core +p" > /sys/kernel/debug/dynamic_debug/control
+    echo "func mmc_detect_change +p" > /sys/kernel/debug/dynamic_debug/control
+    ```
 4.  对于出错后可能重复非常多次的打印，用如下接口。
     -   printk_once： 只打印一次
     -   printk_ratelimited： 限制每秒打印次数，默认每5秒最多打印10次
@@ -292,17 +291,17 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
 
     int main(int argc, char **argv)
     {
-       pr_verbose("*ALOG test start*n");
-       pr_debug("********1********n");
-       pr_info("********2********n");
-       pr_warn("********3********n");
-       pr_err("********4********n");
-       pr_verbose("*ALOG test end***n");
+       pr_verbose("*ALOG test start*\n");
+       pr_debug("********1********\n");
+       pr_info("********2********\n");
+       pr_warn("********3********\n");
+       pr_err("********4********\n");
+       pr_verbose("*ALOG test end***\n");
        return 0;
     }
     ```
 
-    ```Shell
+    ```bash
     # 测试结果：
     root@ubuntu:/# ./logtest
 
@@ -349,7 +348,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
 
 `LogSync/LogNotice/LogAsync`接口支持将 log 输出到串口以及转存到 Acore。
 
-其中，转存到 Acore 的临时文件节点在：`/proc/remoteproc_mcu0`和`/proc/remoteproc_mcu1`，Acore 会启动 hrut_remoteproc_log 进程周期性的获取 proc 节点中的日志写入`/log/mcu*`的 messag 文件实现转存。
+其中，转存到 Acore 的临时文件节点在：`/proc/remoteproc_mcu0`和`/proc/remoteproc_mcu1`，Acore 会启动 hrut_remoteproc_log 进程周期性的获取 proc 节点中的日志写入`/log/mcu*`的 message 文件实现转存。
 
 由于单个文件可以存储的日志大小有限，加上重启后上一次存储的 message 日志会被启动的 log 进程重写覆盖。所以实现了 log 管理机制支持对 log 文件重命名归档，具体描述见：[log管理](#log-管理)。
 
@@ -396,7 +395,7 @@ MCU Log 使用注意事项，请参考：[MCU Log简介](../11_mcu_development/0
 2.  每个转存周期（10min）内产生超过 rotate 数量的日志会造成日志丢失
     -   首先应只输出必要的日志
     -   如果输出较多 log，在设置 rotate 的数量时候，要考虑好所需大小
-3.  不要在串口、ssh 窗口实时查看日志。可能会发现丢日志，原因是输出慢，覆盖导致。如果必须，建议 ssh 窗口实时查看日志。
+3.  不要在串口窗口实时查看日志。可能会发现丢日志，原因是输出慢，覆盖导致。如果必须，建议在 ssh 窗口实时查看日志。
     -   比如使用 logcat 在串口实时查看输出，内核若输出"logcat lost
         message"，则说明有日志丢失。
 
@@ -442,4 +441,4 @@ MCU Log 使用注意事项，请参考：[MCU Log简介](../11_mcu_development/0
 ## 相关文档
 
 - [系统日志查看](/System_configuration/system_log)
-- [Linux 命令用法](/Appendix/linux-command-manual/apt)
+- [Linux 命令 dmesg](/Appendix/linux-command-manual/dmesg)

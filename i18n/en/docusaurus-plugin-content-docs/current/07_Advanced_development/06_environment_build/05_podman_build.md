@@ -40,6 +40,10 @@ cd /workspace
 ./pack_image.sh
 ```
 
+:::note Rootless Mode and /opt
+In rootless mode, `/opt` inside the container may not be writable, while the cross-compilation toolchain is installed to `/opt` by default. If you encounter permission errors, switch to rootful mode (run `sudo podman run`), or install the toolchain to a writable path inside the container.
+:::
+
 :::tip :Z Label
 Under SELinux, the mounted directory must add the `:Z` label, otherwise it cannot be accessed inside the container.
 :::
@@ -57,4 +61,5 @@ Under SELinux, the mounted directory must add the `:Z` label, otherwise it canno
 
 - [Set up the development environment](./01_environment_build.md)
 - [Build with Docker](./04_docker_build.md)
+- [RDK build system (rdk-gen)](./03_rdk_gen.md)
 - [BSP source directory structure](./02_bsp_source_layout.md)

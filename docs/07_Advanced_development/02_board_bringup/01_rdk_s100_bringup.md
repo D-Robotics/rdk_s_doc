@@ -7,11 +7,11 @@ sidebar_products: RDK S100
 
 # RDK S100 硬件点亮
 
-本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S100 的流程：从 boardid 分配、MCU 侧电源管理、spl/Uboot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S100 的 boardid 机制。
+本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S100 的流程：从 boardid 分配、MCU 侧电源管理、spl/U-Boot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S100 的 boardid 机制。
 
 S100 boardid 由 ADC0、ADC1、ADC3和 ADC4共同作用，其中 ADC0和 ADC1用于地瓜硬件区分，客户不可更改；ADC3用于识别 Acore 外设上电时序，客户可自定义 Acore 外设上电时序，并同时修改 ADC3的分压电阻；ADC4用于识别硬件版本。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
 
-每个 ADC 通道共有16个档位，对应0x0~0xF。S100的 boardid 是一个16bit 的无符号整形，例如`0x6A84`，其中 boardid[15:12]对应 ADC0，为0x6；boardid[11:8]对应 ADC1，为0xA；boardid[7:4]对应 ADC3，为0x8；boardid[3:0]对应 ADC4，为0x4
+每个 ADC 通道共有16个档位，对应0x0~0xF。S100的 boardid 是一个16bit 的无符号整型，例如`0x6A84`，其中 boardid[15:12]对应 ADC0，为0x6；boardid[11:8]对应 ADC1，为0xA；boardid[7:4]对应 ADC3，为0x8；boardid[3:0]对应 ADC4，为0x4
 
 由 ADC 采样形成 boardid，在 SBL 内实现，这部分属于闭源代码，客户无需关心
 
@@ -145,15 +145,15 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 - `IntEnable`改为`FALSE`
 - `IntMask`改为`TRUE`
 
-## 在 spl 和 Uboot 下新增硬件
+## 在 spl 和 U-Boot 下新增硬件
 
-spl 为 Uboot 下的 spl
+spl 为 U-Boot 下的 spl
 
 ### 新增配置文件
 
-Uboot 的配置文件位于 SDK 目录`source/bootloader/uboot/configs`下，debug 模式对应的配置文件`hobot_s100_defconfig`，release 模式对应的配置文件为`hobot_s100_rel_defconfig`
+U-Boot 的配置文件位于 SDK 目录`source/bootloader/uboot/configs`下，debug 模式对应的配置文件`hobot_s100_defconfig`，release 模式对应的配置文件为`hobot_s100_rel_defconfig`
 
-Uboot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为`source/bootloader/device/rdk/s100/board_s100_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定 Uboot 配置文件
+U-Boot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为`source/bootloader/device/rdk/s100/board_s100_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定 U-Boot 配置文件
 
 ```shell
 # hobot_s100_defconfig
@@ -164,11 +164,11 @@ export HR_ARCH_UBOOT="arm"
 ...
 ```
 
-如果客户有需求可以生成自己的 Uboot config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的 U-Boot config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
 
 ### 新增设备树
 
-Uboot 的设备树文件位于 SDK 目录`source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
+U-Boot 的设备树文件位于 SDK 目录`source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
 
 ```shell
 # hobot_s100_defconfig
@@ -322,7 +322,7 @@ dtb 的命名需要和`source/bootloader/uboot/arch/arm/mach-hobot/super/super_b
 
 ### extlinux 配置
 
-S100中 Uboot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
+S100中 U-Boot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
 
 extlinux 文件位于`source/kernel/scripts/package/rdk_extlinux`
 
@@ -368,7 +368,7 @@ if [ -f "$boardid_sys_path" ]; then
                         *)
                                 ;;
                 esac
-        elif [[ "$boardid" =~ ^0x(51)[1234567][01234567][1234567][1234567].$ ]];then
+        elif [[ "$boardid" =~ ^0x(51)[01234567][0123456][0123456][1234567].$ ]];then
                 # S600 Boardid rules
                 modprobe hobot-pcie-rc
         else
@@ -411,7 +411,7 @@ boot_flags.boardid_adc_ch4 0x4
 ...
 ```
 
-- Uboot log 中会打印出 Model，可以判断是否和 Uboot dts 中定义的是否一致
+- U-Boot log 中会打印出 Model，可以判断是否和 U-Boot dts 中定义的是否一致
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -420,7 +420,7 @@ Model: D-Robotics S100 SIP Board
 ...
 ```
 
-- Uboot log 中会打印出 boardid，例如下面的6a84
+- U-Boot log 中会打印出 boardid，例如下面的6a84
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -429,7 +429,7 @@ system_slot: 0 adc_boardinfo: 6a84
 ...
 ```
 
-- Uboot log 中会打印出在 extlinux 中对应的 label，以及 Kernel 镜像、dtb 和 initramfs
+- U-Boot log 中会打印出在 extlinux 中对应的 label，以及 Kernel 镜像、dtb 和 initramfs
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -445,7 +445,7 @@ Retrieving file: /hobot/rdk-s100-v0p5.dtb
 
 - 查看 bootargs 中的 board info
 
-主要是`hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc`等，是否和 Uboot 中定义的一致
+主要是`hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc`等，是否和 U-Boot 中定义的一致
 
 ```shell
 root@ubuntu:~# cat /proc/cmdline

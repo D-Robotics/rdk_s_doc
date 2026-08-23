@@ -141,15 +141,15 @@ In the `Icu_Gpio_ChannelConfig_PB` array in the MCU code file `mcu/Config/McalCd
 - Change `IntEnable` to `FALSE`
 - Change `IntMask` to `TRUE`
 
-## Adding Hardware Under spl and Uboot
+## Adding Hardware Under spl and U-Boot
 
-spl refers to the spl under Uboot.
+spl refers to the spl under U-Boot.
 
 ### Adding Configuration Files
 
-The Uboot configuration files are located in the SDK directory `source/bootloader/uboot/configs`. The configuration file for debug mode is `hobot_s100_defconfig`, and for release mode it is `hobot_s100_rel_defconfig`.
+The U-Boot configuration files are located in the SDK directory `source/bootloader/uboot/configs`. The configuration file for debug mode is `hobot_s100_defconfig`, and for release mode it is `hobot_s100_rel_defconfig`.
 
-The Uboot configuration file is specified in the bootloader board-level configuration file. For the debug configuration file, the path is `source/bootloader/device/rdk/s100/board_s100_debug.mk`, and the variable `HR_UBOOT_CONFIG_FILE` specifies the Uboot configuration file.
+The U-Boot configuration file is specified in the bootloader board-level configuration file. For the debug configuration file, the path is `source/bootloader/device/rdk/s100/board_s100_debug.mk`, and the variable `HR_UBOOT_CONFIG_FILE` specifies the U-Boot configuration file.
 
 ```shell
 # hobot_s100_defconfig
@@ -160,11 +160,11 @@ export HR_ARCH_UBOOT="arm"
 ...
 ```
 
-If customers have requirements, they can generate their own Uboot config file and replace it as described above. Generally, reusing Donggua's configuration is sufficient.
+If customers have requirements, they can generate their own U-Boot config file and replace it as described above. Generally, reusing Donggua's configuration is sufficient.
 
 ### Adding Device Trees
 
-The Uboot device tree file is located in the SDK directory `source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`. The device tree is specified by the variable `CONFIG_DEFAULT_DEVICE_TREE` in the configuration file.
+The U-Boot device tree file is located in the SDK directory `source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`. The device tree is specified by the variable `CONFIG_DEFAULT_DEVICE_TREE` in the configuration file.
 
 ```shell
 # hobot_s100_defconfig
@@ -320,7 +320,7 @@ The naming of the dtb needs to correspond to the fdt_feat in the `hb_super_btype
 
 ### extlinux Configuration
 
-In the S100, Uboot parses the Kernel configuration based on extlinux and selects the corresponding dtb, Kernel image, and initramfs to load.
+In the S100, U-Boot parses the Kernel configuration based on extlinux and selects the corresponding dtb, Kernel image, and initramfs to load.
 
 The extlinux file is located at `source/kernel/scripts/package/rdk_extlinux`.
 
@@ -366,7 +366,7 @@ if [ -f "$boardid_sys_path" ]; then
                         *)
                                 ;;
                 esac
-        elif [[ "$boardid" =~ ^0x(51)[1234567][01234567][1234567][1234567].$ ]];then
+        elif [[ "$boardid" =~ ^0x(51)[01234567][0123456][0123456][1234567].$ ]];then
                 # S600 Boardid rules
                 modprobe hobot-pcie-rc
         else
@@ -409,7 +409,7 @@ boot_flags.boardid_adc_ch4 0x4
 ...
 ```
 
-- The Uboot log will print the Model, which can determine whether it is consistent with the definition in the Uboot dts.
+- The U-Boot log will print the Model, which can determine whether it is consistent with the definition in the U-Boot dts.
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -418,7 +418,7 @@ Model: D-Robotics S100 SIP Board
 ...
 ```
 
-- The Uboot log will print the boardid, for example, 6a84 below.
+- The U-Boot log will print the boardid, for example, 6a84 below.
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -427,7 +427,7 @@ system_slot: 0 adc_boardinfo: 6a84
 ...
 ```
 
-- The Uboot log will print the label corresponding to extlinux, as well as the Kernel image, dtb, and initramfs.
+- The U-Boot log will print the label corresponding to extlinux, as well as the Kernel image, dtb, and initramfs.
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -443,7 +443,7 @@ Retrieving file: /hobot/rdk-s100-v0p5.dtb
 
 - Check the board info in bootargs.
 
-Mainly `hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc`, etc., to see if they are consistent with the definitions in Uboot.
+Mainly `hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc`, etc., to see if they are consistent with the definitions in U-Boot.
 
 ```shell
 root@ubuntu:~# cat /proc/cmdline

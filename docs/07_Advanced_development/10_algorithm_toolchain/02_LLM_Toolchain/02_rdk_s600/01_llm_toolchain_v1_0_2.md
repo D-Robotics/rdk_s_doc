@@ -81,7 +81,6 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.2/D
 <col style={{ width: '12%' }} />
 <col style={{ width: '12%' }} />
 <col style={{ width: '12%' }} />
-<col style={{ width: '12%' }} />
 </colgroup>
 <thead>
 <tr>
@@ -287,7 +286,7 @@ TTFT(ms)：VLM的首字生成时间为vit处理时间和prefill处理时间总�
 #### VLA 性能 Benchmark
 
 :::info 说明
-- all：端侧单次运行总耗时，包含 preprocess，vision，language，action，postprecess 共五个阶段。
+- all：端侧单次运行总耗时，包含 preprocess，vision，language，action，post-process 共五个阶段。
 - vision：统计 3 核 BPU 并行推理 3 张 224*224 分辨率图像的耗时。
 :::
 
@@ -377,3 +376,4 @@ TTFT(ms)：VLM的首字生成时间为vit处理时间和prefill处理时间总�
 ## 相关文档
 
 - [算法工具链开发指南](/Advanced_development/algorithm_toolchain)
+- [LLM 工具链 v1.0.5（最新版）](./02_llm_toolchain_v1_0_5.md)

@@ -174,7 +174,7 @@ General configuration:
 
 :::info
 
-The Decode (TPS) of speculative sampling is not fixed. Here the maximum value after multiple tests is shown.
+The Decode(TPS) of speculative sampling is not fixed. Here the maximum value after multiple tests is shown.
 
 :::
 
@@ -211,7 +211,7 @@ The Decode (TPS) of speculative sampling is not fixed. Here the maximum value af
 <tr>
 <td>eagle3</td>
 <td>Qwen3-8B_eagle3_base</td>
-<td>Qwen3-8b_eagle3</td>
+<td>Qwen3-8B_eagle3</td>
 <td>113.2</td>
 <td>90.41</td>
 <td>8.0</td>
@@ -440,6 +440,7 @@ General configuration:
 <col style={{ width: '10%' }} />
 <col style={{ width: '10%' }} />
 <col style={{ width: '10%' }} />
+<col style={{ width: '10%' }} />
 </colgroup>
 <thead>
 <tr>
@@ -520,3 +521,4 @@ General configuration:
 ## Related Documentation
 
 - [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)
+- [LLM Toolchain v1.0.2](./01_llm_toolchain_v1_0_2.md)

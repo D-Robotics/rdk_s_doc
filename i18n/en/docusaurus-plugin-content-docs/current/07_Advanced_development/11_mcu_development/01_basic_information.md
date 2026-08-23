@@ -516,7 +516,13 @@ Although `S600_Exception_Handler`, `EL1_Undefined_Handler`, and `EL1_Abort_Handl
 </DocScope>
 ## Introduction to the MCU1 main Function
 
-The main function is the key code after system entry. On MCU1, the current flow branches by `GetCurrentCoreID()` between core0 and core1 initialization. Core0 handles major peripheral init, logging, version info, GIC WAKER, IRQ affinity, and FreeRTOS task setup; core1 handles Can5~Can9 data interrupts, inter-core interrupts, and stop/deepsleep flow.
+The main function is the key code after system entry. On MCU1, the current flow branches by `GetCurrentCoreID()` between core0 and core1 initialization. Core0 handles major peripheral init, logging, version info, GIC WAKER, IRQ affinity, and FreeRTOS task setup;
+<DocScope products="RDK S100">
+Core1 handles Can5~Can9 data interrupts, inter-core interrupts, and stop/deepsleep flow.
+</DocScope>
+<DocScope products="RDK S600">
+Core1 handles Can4 and Can6~Can10 data interrupts, inter-core interrupts, and stop/deepsleep flow.
+</DocScope>
 <DocScope products="RDK S100">
 
  The following excerpt shows key logic in the current RDK S100 MCU1 main function. Do not remove these initialization steps arbitrarily, or startup, remoteproc stop/start, CAN interrupt handling, or low-power flows may fail.

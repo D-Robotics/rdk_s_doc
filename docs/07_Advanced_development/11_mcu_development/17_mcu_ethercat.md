@@ -727,10 +727,10 @@ Ec_SlaveInfo [-sdo] [-map]
 ### `Ec_SlaveOP`
 
 ```
-Ec_SlaveOP <slave> <index> <subindex> <value> <action>
+Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 ```
 
-直接对从站执行 SDO 读（`action=1`）或写（`action=2`）操作。
+直接对从站执行 SDO 读（`upload`）或写（`download`）操作，其中写操作需要额外的 `value` 参数。
 
 ---
 
@@ -932,8 +932,6 @@ if (wkc > 0)
    ```
 2. 调用 FoE 写入接口（参见 `ec_foe.h`）
 3. 完成后将从站切回 INIT → PRE_OP → SAFE_OP → OPERATIONAL
-
----
 
 ---
 

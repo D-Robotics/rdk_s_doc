@@ -54,6 +54,10 @@ cd /workspace
 ./pack_image.sh
 ```
 
+:::note 容器重启
+`docker run --name rdk-build` 会创建固定名称的容器。中断退出后再次执行同名 `docker run` 会报名称冲突，此时可执行 `docker start -ai rdk-build` 重新进入，或先执行 `docker rm rdk-build` 再重新创建。
+:::
+
 ## 编译产物
 
 编译产物位于容器内 `/workspace/out/` 下（`out/product/img_packages/` 为系统镜像，
@@ -63,4 +67,5 @@ cd /workspace
 
 - [搭建开发环境](./01_environment_build.md)
 - [BSP 源码目录结构](./02_bsp_source_layout.md)
+- [RDK 构建系统（rdk-gen）](./03_rdk_gen.md)
 - [使用 Podman 编译](./05_podman_build.md)

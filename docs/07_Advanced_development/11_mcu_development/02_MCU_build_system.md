@@ -13,7 +13,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 ## 编译系统基本说明
-MCU 的编译系统基于 Scons3.0.0创建（[Scons 3.0.0用户手册官网](https://scons.org/doc/3.0.0/HTML/scons-user.html)）。
+MCU 的编译系统基于 SCons 3.0.0 创建（[SCons 3.0.0 用户手册官网](https://scons.org/doc/3.0.0/HTML/scons-user.html)）。
 
 ## MCU1编译系统
 <DocScope products="RDK S100">
@@ -22,14 +22,14 @@ MCU1 编译系统位于 mcu/Build/FreeRtos_mcu1，具体目录结构，如下图
 ```c
 FreeRtos_mcu1
 ├── build_freertos.py                   # 编译的入口脚本
-├── SConstruct                          # Scons 编译定义文件（统一入口）
+├── SConstruct                          # SCons 编译定义文件（统一入口）
 ├── build_config                        # 编译所需 yaml 文件，增删编译文件夹
 │    └── S100
 │         └── lite-matrix-B-mcu1.yaml
 ├── setting_files                       # gcc 编译链接等参数
 │    └── gcc
 │         └── settings_lite_freertos.py
-├── site_scons                          # Scons 编译链接命令文件
+├── site_scons                          # SCons 编译链接命令文件
 │    └── site_tools
 │         └── gcc_arm.py
 └── Linker                              # 链接脚本所在目录
@@ -46,14 +46,14 @@ MCU1 编译系统位于 mcu/Build/FreeRtos_mcu1，具体目录结构，如下图
 ```c
 FreeRtos_mcu1
 ├── build_freertos.py                   # 编译的入口脚本
-├── SConstruct                          # Scons 编译定义文件（S600 统一入口）
+├── SConstruct                          # SCons 编译定义文件（S600 统一入口）
 ├── build_config                        # 编译所需 yaml 文件，增删编译文件夹
      └── S600
          └── lite-matrix-B-mcu1.yaml
 ├── settings_files                      # gcc 编译链接等参数
      └── gcc
          └── settings_lite_freertos.py
-├── site_scons                          # Scons 编译链接命令文件
+├── site_scons                          # SCons 编译链接命令文件
      └── site_tools
          └── gcc_arm.py
 └── Linker                              # 链接脚本所在目录
@@ -69,9 +69,9 @@ FreeRtos_mcu1
 ## 编译中的重点文件关系介绍
 <DocScope products="RDK S100">
 
-build_freertos.py 是编译的整体入口，但是实际调度到 scons 时，能够对 scons 编译环境/流程产生影响的方式有以下几个：
+build_freertos.py 是编译的整体入口，但是实际调度到 SCons 时，能够对 SCons 编译环境/流程产生影响的方式有以下几个：
 
-1. `SConstruct` 文件：`SConstruct` 是 scons 编译的定义文件，它和每个模块内的 `SConscript` 组成完整的构建入口。
+1. `SConstruct` 文件：`SConstruct` 是 SCons 编译的定义文件，它和每个模块内的 `SConscript` 组成完整的构建入口。
 
 2. `setting_files/gcc/settings_lite_freertos.py`：该文件生效入口是 `SConstruct` 中 `Variables` 类的初始化，核心在于引入一系列静态定义的编译环境变量。环境变量名和值来自 `settings_lite_freertos.py` 中的定义。
 
@@ -82,10 +82,10 @@ build_freertos.py 是编译的整体入口，但是实际调度到 scons 时，�
 </DocScope>
 <DocScope products="RDK S600">
 
-build_freertos.py 是编译的整体入口，但是实际调度到 scons 时，能够对 scons 编译环境/流程产生影响的方式有以下几个：
-1. SConstruct 文件：SConstruct 文件是 scons 编译的定义文件，它和每个模块内的 Sconscript 组成了 Cmake 里 Cmakefile；Make 系统里 makefile 的作用；
-2. settings_lite_freertos.py：该文件生效的入口实际上是 SConstruct 里面的“Variables”类的初始化，核心在于引入一系列静态定义的编译环境变量；环境变量的变量名就是 settings_lite_freertos.py 里面的变量名，变量值就是 settings_lite_freertos.py 里面的变量名对应的变量值；“Variables”类实例化后的示例会被 Environment 类使用，用于 scons 的编译
-3. gcc_arm.py：实际定义编译命令的定义文件，真正生效的入口是 settings_lite_freertos.py 里面定义的“COMPILER_TOOL”字段，COMPILER_TOOL 字段进一步会被 Sconscruct 文件的 Variables 添加并最后被 env 获取到其中的“CC”等配置
+build_freertos.py 是编译的整体入口，但是实际调度到 SCons 时，能够对 SCons 编译环境/流程产生影响的方式有以下几个：
+1. SConstruct 文件：SConstruct 文件是 SCons 编译的定义文件，它和每个模块内的 SConscript 组成了 Cmake 里 Cmakefile；Make 系统里 makefile 的作用；
+2. settings_lite_freertos.py：该文件生效的入口实际上是 SConstruct 里面的“Variables”类的初始化，核心在于引入一系列静态定义的编译环境变量；环境变量的变量名就是 settings_lite_freertos.py 里面的变量名，变量值就是 settings_lite_freertos.py 里面的变量名对应的变量值；“Variables”类实例化后的示例会被 Environment 类使用，用于 SCons 的编译
+3. gcc_arm.py：实际定义编译命令的定义文件，真正生效的入口是 settings_lite_freertos.py 里面定义的“COMPILER_TOOL”字段，COMPILER_TOOL 字段进一步会被 SConstruct 文件的 Variables 添加并最后被 env 获取到其中的“CC”等配置
 4. lite-matrix-B-mcu1.yaml：被编译的文件夹，在该文件中增删编译涉及到的文件夹；其中 `LinkFIle` 字段指向 `Linker/gcc/S600/link_freertos_mcu1.ld`
 
 </DocScope>
@@ -104,9 +104,9 @@ build_freertos.py 是编译的整体入口，但是实际调度到 scons 时，�
 | SCMI_IPC_Reserved| 0x0CD5D000|12K |SCMI IPC 通信需要的空间，用于 buffer 及关键数据 |
 | ATCM_Reserved| 0x0A000000|64K |Can 模块代码、数据的运行使用区域 |
 
-在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询地瓜相关支持人员。
+在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询D-Robotics 相关支持人员。
 
-下面是地瓜版本中的链接文件（`Linker/gcc/S100/link_freertos_mcu1.ld`），解释了链接脚本中提供的一些变量作用：
+下面是D-Robotics 版本中的链接文件（`Linker/gcc/S100/link_freertos_mcu1.ld`），解释了链接脚本中提供的一些变量作用：
 ```c
 MEMORY
 {
@@ -403,9 +403,9 @@ SECTIONS
 | FREERTOS_HEAP| 0x0CE00000|512K |FreeRTOS 堆空间 |
 | ATCM_Reserved| 0x0A000000|64K |Can 模块代码、数据的运行使用区域 |
 
-在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询地瓜相关支持人员。
+在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询D-Robotics 相关支持人员。
 
-下面是地瓜版本中的链接文件（`Linker/gcc/S600/link_freertos_mcu1.ld`），解释了链接脚本中提供的一些变量作用：
+下面是D-Robotics 版本中的链接文件（`Linker/gcc/S600/link_freertos_mcu1.ld`），解释了链接脚本中提供的一些变量作用：
 ```c
 MEMORY
 {
@@ -734,12 +734,12 @@ EL2_Reset_Handler:
 ```
 3. 在做其他操作前，通过 MPU 配置后续可能用到的各个地址空间。RDK S100 当前 `startup.s` 在 `MPU_Init` 标号处配置了 region 0 至 region 10。其中 region 1 至 region 5 按链接脚本符号（`__HEAP_START`、`__STACK_START`、`__COPY_TABLE`）将 MCU SRAM 划分为 cacheable / non-cacheable 区域；region 6 至 region 10 覆盖 GIC、外设寄存器、CPUSYS、DDR、XSPI 等固定地址空间。若需调整 SRAM 切分，应同步修改链接脚本与 MPU 配置，并参考上一节 MCU1 镜像 layout。
 
-4. 地瓜版本中重要的 MPU region 说明如下：
+4. D-Robotics 版本中重要的 MPU region 说明如下：
 
 :::caution
 - ARM R52 的 background region 和 RDK-S100 芯片上实际实现的 memory map 存在差异。例如 `0x22000000` 在 ARM background region 中默认可能属于 normal memory，但在 RDK S100 上对应 MCU GIC 等 device 寄存器空间。因此，访问前必须通过 MPU 将 memory 类型与芯片实际实现保持一致，否则可能导致访问异常。
 
-- 固定外设 /DDR/XSPI 区域请保持与地瓜代码一致；SRAM 区域如需调整，必须同步修改链接脚本与 MPU 配置。
+- 固定外设 /DDR/XSPI 区域请保持与 D-Robotics 代码一致；SRAM 区域如需调整，必须同步修改链接脚本与 MPU 配置。
 :::
 
 | MPU region | 起始地址 | 结束地址 | memory 类型 | 说明 |
@@ -901,14 +901,14 @@ MPU_Init:
 
           //.....region 0、2~5、7~9 及其他省略，见 startup.s
 ```
-4. 地瓜版本中重要的 MPU region 说明如下（对照 `startup.s`）：
+4. D-Robotics 版本中重要的 MPU region 说明如下（对照 `startup.s`）：
 
 :::caution
 ARM R52 的 background region 和 RDK-S600 芯片上实际实现的 memory map 是有差异的。
 
 比如 0x2200_0000 在 ARM 的 background region 中默认属于 normal memory，但在 RDK-S600 上对应 GIC 等 **device** 寄存器空间。
 
-因此，访问前须通过 MPU 将 memory 类型与芯片实际实现保持一致，否则会导致访问异常。region 6 至 9 等固定外设/DDR 区域请保持与地瓜代码一致；region 1 至 5 的 SRAM 切分若需调整，须同时修改链接脚本与 MPU 配置。
+因此，访问前须通过 MPU 将 memory 类型与芯片实际实现保持一致，否则会导致访问异常。region 6 至 9 等固定外设/DDR 区域请保持与 D-Robotics 代码一致；region 1 至 5 的 SRAM 切分若需调整，须同时修改链接脚本与 MPU 配置。
 :::
 
 | MPU region | 起始地址 | 结束地址 | memory 类型 | 说明 |
@@ -1058,4 +1058,5 @@ EL1_Reset_Handler:
 ## 相关文档
 
 - [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
 - [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

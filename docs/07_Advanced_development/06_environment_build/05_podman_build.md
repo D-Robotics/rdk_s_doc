@@ -39,6 +39,10 @@ cd /workspace
 ./pack_image.sh
 ```
 
+:::note rootless 与 /opt
+rootless 模式下容器内 `/opt` 可能不可写，而交叉编译工具链默认安装到 `/opt`。如遇权限错误，请改用 rootful 模式运行容器（通过 `sudo podman run`），或将工具链改安装到容器内可写路径。
+:::
+
 :::tip :Z 标签
 SELinux 环境下挂载目录需加 `:Z` 标签，否则容器内无法访问。
 :::
@@ -56,4 +60,5 @@ SELinux 环境下挂载目录需加 `:Z` 标签，否则容器内无法访问。
 
 - [搭建开发环境](./01_environment_build.md)
 - [使用 Docker 编译](./04_docker_build.md)
+- [RDK 构建系统（rdk-gen）](./03_rdk_gen.md)
 - [BSP 源码目录结构](./02_bsp_source_layout.md)

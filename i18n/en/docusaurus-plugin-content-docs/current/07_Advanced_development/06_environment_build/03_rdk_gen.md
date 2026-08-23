@@ -263,7 +263,7 @@ For detailed process, please refer to the `mk_debs.sh` script implementation. Be
      - In the `case`, use the `sed` command to replace the default `depends` field with the actual deb dependencies. Assume `new_package` depends on `dep_pkg1` and `dep_pkg2`:
        - If there are dependencies, use `sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
        - If there are no dependencies, use `sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
-     - (Optional) If the deb requires source compilation before packaging, invoke the source compilation commands. Note that all final outputs must be placed under `out/build/debs/new_pkg/debian/`.
+     - (Optional) If the deb requires source compilation before packaging, invoke the source compilation commands. Note that all final outputs must be placed under `out/build/debs/new_package/debian/`.
      - Set `is_allowed=1`.
 
 ## Incorporating deb Packages into the Image Build Process
@@ -666,4 +666,6 @@ sudo ./pack_image.sh -l  # Use local deb packages during the build; the -l flag 
 
 - [Set Up the Development Environment](./01_environment_build.md)
 - [BSP Source Directory Structure](./02_bsp_source_layout.md)
+- [Docker Build Environment](./04_docker_build.md)
+- [Podman Build Environment](./05_podman_build.md)
 - [System Customization](../03_system_software/02_system_customization/01_system_customization.md)

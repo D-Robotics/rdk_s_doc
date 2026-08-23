@@ -143,13 +143,13 @@ Tx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e
 - `uarttest 4` Get GPS data, internal test case for RDK.
 
 - `uarttest 5` Set baud rate to 9600
-```
+```shell
 D-Robotics:/$ uarttest 5
 [042602.833314 0]Channel 1 Baud: 9600
 ```
 
 - `uarttest 6` Set baud rate to 115200
-```
+```shell
 D-Robotics:/$ uarttest 6
 [042617.473286 0]Channel 1 Baud: 115200
 ```
@@ -169,7 +169,7 @@ The S600 development board exposes Uart10 and Uart11 for user development and le
     - `parity`: Parity setting (optional, used by some test cases)
     - `stopbit`: Stop bit setting (optional, used by some test cases)
     - `databits`: Data bit setting (optional, used by some test cases)
-```
+```text
 uarttest <test_id> [bus] [baudrate] [parity] [stopbit] [databits]
 ```
 
@@ -213,7 +213,7 @@ D-Robotics:/$ uarttest 3
 Tx: 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 41 42 43 44 45
 ```
 
-- `uarttest 4` Loopback test, test both transmit and receive functions
+- `uarttest 4` Loopback test, test both transmit and receive functions. Note to connect the RX pin to the TX pin
 
 ```shell
 D-Robotics:/$ uarttest 4
@@ -345,12 +345,11 @@ Description:Gets the status of an Uart channel.
 Sync/Async: Synchronous
 Parameters(in)
     Channel: Uart Channel
-    BytesTransfered: Byte has transfered
     TransferType: Send or Receive
 Parameters(inout)
     None
 Parameters(out)
-    None
+    BytesTransfered: Number of bytes transferred
 Return value:Uart_StatusType
     Uart current state
 ```
@@ -364,7 +363,7 @@ Sync/Async: Synchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    BufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
     Timeout: Timeout value
 Parameters(inout)
     None
@@ -384,7 +383,7 @@ Sync/Async: Synchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    ufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
     Timeout: Timeout value
 Parameters(inout)
     None
@@ -404,7 +403,7 @@ Sync/Async:Asynchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    ufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
 Parameters(inout)
     None
 Parameters(out)
@@ -423,7 +422,7 @@ Sync/Async:Asynchronous
 Parameters(in)
     Channel: Uart Channel
     Buffer: pointer to Data buffer
-    ufferSize: number bytes buffer
+    BufferSize: number of bytes buffer
 Parameters(inout)
     None
 Parameters(out)

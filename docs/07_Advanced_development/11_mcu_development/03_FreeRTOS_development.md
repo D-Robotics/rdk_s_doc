@@ -411,7 +411,7 @@ import DocScope from '@site/src/components/DocScope';
 ||102|Wdg_Ins4IntIsr|
 |OTF_CRC0|103|Otf_Isr|
 |CRC0|104|Crc_Isr|
-|GPT0|105|Gpt_Ins0Ch0Is|
+|GPT0|105|Gpt_Ins0Ch0Isr|
 ||106|Gpt_Ins0Ch1Isr|
 ||107|Gpt_Ins0Ch2Isr|
 ||108|Gpt_Ins0Ch3Isr|
@@ -831,7 +831,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 
 ## MCU 中断使用情况
-由于 MCU0 和 MCU1 处于统一硬件域，所以当中断产生时，MCU0/MCU1 都能接收到同一中断。因此为了保障 MCU 系统的正常运行，同一中断只能由 MCU0 或 MCU1 使能。但是又因为 MCU0 不对外开源，因此需要对 MCU0 使用的中断进行总结，避免 MCU1 客户开发过程中使用冲突。
+由于 MCU0 和 MCU1 处于同一硬件域，所以当中断产生时，MCU0/MCU1 都能接收到同一中断。因此为了保障 MCU 系统的正常运行，同一中断只能由 MCU0 或 MCU1 使能。但是又因为 MCU0 不对外开源，因此需要对 MCU0 使用的中断进行总结，避免 MCU1 客户开发过程中使用冲突。
 
 目前 MCU0已经使用的中断：
 <DocScope products="RDK S100">
@@ -979,13 +979,13 @@ StaticLibServicePath:
 2. 在添加编译的模块下，添加 SConscript 文件，SConscript 文件可以从任意已经编译的模块文件夹下获取
 </DocScope>
 
-## MCU FreeRtos 系统简介
+## MCU FreeRTOS 系统简介
 MCU 这边有几个系统关键功能，如下图所示：
 <DocScope products="RDK S100">
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system.png" alt="MCU FreeRtos 系统简介示意图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system.png" alt="MCU FreeRTOS 系统简介示意图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="MCU FreeRtos 系统简介截图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="MCU FreeRTOS 系统简介截图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 上图可以看到各个功能所在任务的相对优先级及同一个任务中的调用顺序，客户集成请保持各功能的相对优先级、所在 core 及同一个任务中的调用顺序。各个功能的说明及注意事项如下：
@@ -1014,9 +1014,9 @@ SysPower_McuCoreEnterLowPower：放在本 core 上能支持的最短周期最高
 MCU 和 Acore/HSM 通信依赖 IPC，IPC 系统服务涉及到的中断可以参考：[IPC 的相关介绍](./08_mcu_ipc.md) 章节
 这些中断优先级建议配置成比平常的功能类中断优先级高，这些中断本身可以配置成同样的优先级。
 
-## FreeRtos 系统简介
+## FreeRTOS 系统简介
 FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将硬件初始化，RTOS 系统初始化，所有任务的创建这些都弄好，最后启动 RTOS 的调度器，开始多任务的调度；第二种，在 main 函数中将硬件和 RTOS 系统先初始化好，然后创建一个启动任务后就启动调度器，在启动任务里面创建各种应用任务，当所有任务都创建成功后，启动任务把自己删除。两种方式没有太强的优劣之分，RDK-S100/RDK-S600选择第一种方式。
-### FreeRtos 系统任务创建
+### FreeRTOS 系统任务创建
 <DocScope products="RDK S100">
 
 任务创建位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c` 中，举例如下：
@@ -1028,10 +1028,10 @@ FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将�
 
 </DocScope>
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="FreeRtos 系统任务创建示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="FreeRTOS 系统任务创建示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 xxx_Startup 任务，为启动初始化相关的函数，只执行一次。
-FreeRtos_OsTask_SysCore_BSW_xms 和 FreeRtos_OsTask_SysCore_ASW_xms 为周期性任务，会根据 xms 的不同产生周期性的调度。同时周期性任务内部会有工作处理，细节见本章上一节"MCU FreeRtos 系统简介"章节。
+FreeRtos_OsTask_SysCore_BSW_xms 和 FreeRtos_OsTask_SysCore_ASW_xms 为周期性任务，会根据 xms 的不同产生周期性的调度。同时周期性任务内部会有工作处理，细节见本章上一节"MCU FreeRTOS 系统简介"章节。
 
 如果客户自行开发，可参考上述两种类型的例子。也可以在已经创建的任务中处理自己的 demo，见下文。
 <DocScope products="RDK S100">
@@ -1053,15 +1053,15 @@ TASK(OsTask_SysCore_BSW_10ms)
     #endif
 }
 ```
-### FreeRtos 系统中断使用
+### FreeRTOS 系统中断使用
 <DocScope products="RDK S100">
 
-FreeRtos 的中断使用集中在 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
+FreeRTOS 的中断使用集中在 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
 
 </DocScope>
 <DocScope products="RDK S600">
 
-FreeRtos 的中断使用集中在 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
+FreeRTOS 的中断使用集中在 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
 
 </DocScope>
 ```c
@@ -1130,10 +1130,10 @@ DefaultISR:
 ```
 
 注意：
-在 MCU1使能中断的时候一定要确保 MCU0相应的中断处于关闭状态！！！
+在 MCU1使能中断的时候一定要确保 MCU0相应的中断处于关闭状态
 
-### FreeRtos 内存管理方案简介
-FreeRtos 内存管理方案位于/mcu/OpenSource/FreeRTOS/portable/MemMang/文件夹中，共有5 种内存管理算法，分别是 heap_1.c、heap_2.c、heap_3.c、heap_4.c 和 heap_5.c。FreeRTOS 的内存管理模块通过对内存的申请、释放操作，来管理用户和系统对内存的使用，使内存的利用率和使用效率达到最优，同时最大限度地解决系统可能产生的内存碎片问题。
+### FreeRTOS 内存管理方案简介
+FreeRTOS 内存管理方案位于/mcu/OpenSource/FreeRTOS/portable/MemMang/文件夹中，共有5 种内存管理算法，分别是 heap_1.c、heap_2.c、heap_3.c、heap_4.c 和 heap_5.c。FreeRTOS 的内存管理模块通过对内存的申请、释放操作，来管理用户和系统对内存的使用，使内存的利用率和使用效率达到最优，同时最大限度地解决系统可能产生的内存碎片问题。
 #### heap_1.c
 heap_1.c 管理方案是 FreeRTOS 提供所有内存管理方案中最简单的一个，它只能申请内存而不能进行内存释放，这样子对于要求安全的嵌入式设备来说是最好的，因为不允许内存释放，就不会产生内存碎片而导致系统崩溃，但是也有缺点，那就是内存利用率不高，某段内存只能用于内存申请的地方，即使该内存只使用一次，也无法让系统回收重新利用。
 #### heap_2.c
@@ -1143,7 +1143,7 @@ heap_3.c 方案只是简单的封装了标准 C 库中的 malloc()和 free()函�
 #### heap_4.c
 heap_4.c 方案与 heap_2.c 方案一样都采用最佳匹配算法来实现动态的内存分配，但是不一样的是 heap_4.c 方案还包含了一种合并算法，能把相邻的空闲的内存块合并成一个更大的块，这样可以减少内存碎片。heap_4.c 方案特别适用于移植层中可以直接使用 pvPortMalloc()和 vPortFree()函数来分配和释放内存的代码。heap_4.c 内存管理方案的空闲块链表不是以内存块大小进行排序的，而是以内存块起始地址大小排序，内存地址小的在前，地址大的在后，因为 heap_4.c 方案还有一个内存合并算法，在释放内存的时候，假如相邻的两个空闲内存块在地址上是连续的，那么就可以合并为一个内存块，这也是为了适应合并算法而作的改变。
 #### heap_5.c
-heap_5.c 方案在实现动态内存分配时与 heap4.c 方案一样，采用最佳匹配算法和合并算法，并且允许内存堆跨越多个非连续的内存区，也就是允许在不连续的内存堆中实现内存分配，比如用户在片内 RAM 中定义一个内存堆，还可以在外部 SDRAM 再定义一个或多个内存堆，这些内存都归系统管理。该方案较为复杂，实时性略逊于 heap_4.c。
+heap_5.c 方案在实现动态内存分配时与 heap_4.c 方案一样，采用最佳匹配算法和合并算法，并且允许内存堆跨越多个非连续的内存区，也就是允许在不连续的内存堆中实现内存分配，比如用户在片内 RAM 中定义一个内存堆，还可以在外部 SDRAM 再定义一个或多个内存堆，这些内存都归系统管理。该方案较为复杂，实时性略逊于 heap_4.c。
 
 <DocScope products="RDK S100">
 #### RDK-S100内存方案
@@ -1190,9 +1190,10 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 ### 使用注意事项
 如果使用共享内存的方式传输数据，可能会出现 MCU 数据更新至 SRAM，但是 Acore 的缓存还为旧数据的问题，因此导致读取数据不同步。
 
-为避免 Acore 和 MCU 出现数据不同步的问题，需要在变量前加"volatile"或者"ioremap_np()函数"。这两种方式都是为了避免读取缓存，而是直接读取 SRAM 数据。
+为避免 Acore 和 MCU 出现数据不同步的问题，需要在变量前加 `volatile` 关键字，或者使用 `ioremap_np()` 函数。这两种方式都是为了避免读取缓存，而是直接读取 SRAM 数据。
 
 ## 相关文档
 
 - [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
 - [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)

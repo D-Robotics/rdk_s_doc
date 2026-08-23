@@ -57,7 +57,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D
 
 #### DeepSeek-R1-Distill-Qwen 模型
 
-| model | platform | dtype | seqlen | max context | TTFt(ms) | TPS | memory(GB) |
+| model | platform | dtype | seqlen | max context | TTFT(ms) | TPS | memory(GB) |
 |-------|----------|-------|--------|-------------|----------|-----|------------|
 | DeepSeek-R1-Distill-Qwen-1.5B | S100P | q8 | 256 | 1024 | 109 | 27.08 | 1.7 |
 | DeepSeek-R1-Distill-Qwen-1.5B | S100P | q4 | 256 | 1024 | 108 | 39.49 | 1.1 |
@@ -68,13 +68,13 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D
 
 #### InternLM2 模型
 
-| model | platform | dtype | seqlen | max context | TTFt(ms) | TPS | memory(GB) |
+| model | platform | dtype | seqlen | max context | TTFT(ms) | TPS | memory(GB) |
 |-------|----------|-------|--------|-------------|----------|-----|------------|
 | InternLM2-1.8B | S100P | q8 | 256 | 1024 | 132 | 23.83 | 1.8 |
 
 #### Qwen2.5 模型
 
-| model | platform | dtype | seqlen | max context | TTFt(ms) | TPS | memory(GB) |
+| model | platform | dtype | seqlen | max context | TTFT(ms) | TPS | memory(GB) |
 |-------|----------|-------|--------|-------------|----------|-----|------------|
 | Qwen2.5-1.5B | S100P | q8 | 256 | 1024 | 130 | 24.04 | 1.8 |
 | Qwen2.5-1.5B-Instruct | S100P | q8 | 256 | 1024 | 130 | 24.40 | 1.8 |
@@ -83,7 +83,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D
 
 #### Qwen2.5-Omni 模型
 
-| model | platform | dtype | seqlen | max context | TTFt(ms) | TPS | memory(GB) |
+| model | platform | dtype | seqlen | max context | TTFT(ms) | TPS | memory(GB) |
 |-------|----------|-------|--------|-------------|----------|-----|------------|
 | Qwen2.5-Omni-3B | S100P | q8 | 256 | 2048 | 285 | 14.03 | 5.5 |
 

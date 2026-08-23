@@ -409,7 +409,7 @@ import DocScope from '@site/src/components/DocScope';
 ||102|Wdg_Ins4IntIsr|
 |OTF_CRC0|103|Otf_Isr|
 |CRC0|104|Crc_Isr|
-|GPT0|105|Gpt_Ins0Ch0Is|
+|GPT0|105|Gpt_Ins0Ch0Isr|
 ||106|Gpt_Ins0Ch1Isr|
 ||107|Gpt_Ins0Ch2Isr|
 ||108|Gpt_Ins0Ch3Isr|
@@ -1188,9 +1188,10 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 ### Usage Precautions
 If shared memory is used for data transfer, there may be an issue where MCU updates data to SRAM, but the Acore cache still contains old data, leading to data read inconsistencies.
 
-To avoid data inconsistency between Acore and MCU, add "volatile" or the "ioremap_np() function" before the variable. Both methods avoid reading from the cache and instead read SRAM data directly.
+To avoid data inconsistency between Acore and MCU, add the `volatile` keyword, or use the `ioremap_np()` function before the variable. Both methods avoid reading from the cache and instead read SRAM data directly.
 
 ## Related Documentation
 
 - [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
 - [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
+- [MCU System Overview](/Advanced_development/mcu_development/MCU_build_system)

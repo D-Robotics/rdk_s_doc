@@ -393,7 +393,7 @@ The ICU module is a software submodule based on the S600 chip solution and serve
 
 ## GPIO Interrupt User Guide
 
-In the S600 MCU, GPIO has five IO groups: GPIO0, GPIO1, GPIO2, GPIO3, and GPIO_AON. The GPIO groups provide 105 pins in total, while the GPIO_AON group provides 42 pins. Refer to `mcu/Config/McalCdd/gen_S600_sip_B_mcu1/Port/src/Port_PBcfg.c` for details. All pins support the following interrupt trigger modes: rising edge, falling edge, both edges, and high/low level trigger.
+In the S600 MCU, GPIO has five IO groups: GPIO0, GPIO1, GPIO2, GPIO3, and GPIO_AON. The GPIO groups provide 105 pins in total, while the GPIO_AON group provides 42 pins. Refer to `mcu/Config/McalCdd/gen_s600_md_mcu1/Port/src/Port_PBcfg.c` for details. All pins support the following interrupt trigger modes: rising edge, falling edge, both edges, and high/low level trigger.
 
 | ISR Function | IRQ | IRQ Define        | Description |
 | :----------- | :-- | :---------------- | :---------- |
@@ -412,7 +412,7 @@ Each pin on the S600 MCU supports at least one function. Therefore, before using
 | PWM4_IO | IO       | SPI11_MISO | I        | USS_PWM17 | IO       | GPIO_MCU[52] | IO       |
 | PWM5_IO | IO       | SPI11_SCLK | O        | USS_PWM18 | IO       | GPIO_MCU[53] | IO       |
 
-Configure both pins to FUNC3, that is, GPIO mode. For Port introduction and usage, refer to [Port User Guide](./12_mcu_port/01_user_manual.md) and [Port Development Guide](./12_mcu_port/02_development_manual.md). The configuration file is `mcu/Config/McalCdd/gen_s600_md/Port/src/Port_PBcfg.c`.
+Configure both pins to FUNC3, that is, GPIO mode. For Port introduction and usage, refer to [Port User Guide](./12_mcu_port/01_user_manual.md) and [Port Development Guide](./12_mcu_port/02_development_manual.md). The configuration file is `mcu/Config/McalCdd/gen_s600_md_mcu1/Port/src/Port_PBcfg.c`.
 
 ```c
 static const Port_Lld_PinConfigType Port_McuPinConfigs[PORT_MCU_MAX_NUM]=
@@ -513,7 +513,7 @@ static Gpio_Icu_IpConfigType Icu_Gpio_IpConfig_PB[ICU_GPIO_CONF_MODS_PB] = {
 | Parameter      | Description                                               |
 | :------------- | :-------------------------------------------------------- |
 | NumChannels    | Number of channels                                        |
-| instanceNo     | Controller instance (e.g., 0 - GPIO0)                     |
+| instanceNo     | Controller instance (e.g., 1 - GPIO1)                     |
 | ChannelsConfig | Pointer to the `Gpio_Icu_ChannelConfigType` structure     |
 
 #### Icu_ChannelConfigType
@@ -581,8 +581,8 @@ static Icu_Lld_ChannelConfigType Icu_Lld_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MOD
 ```c
 #define ICU_GPIO_CONF_MODS_PB 1
 
-extern void Icu_Gpio_Channel_0_20_ISR(void);
-extern void Icu_Gpio_Channel_0_21_ISR(void);
+extern void Icu_Gpio_Channel_1_20_ISR(void);
+extern void Icu_Gpio_Channel_1_21_ISR(void);
 
 /** @brief Array of Gpio Channel ConfigType channels*/
 static Gpio_Icu_ChannelConfigType Icu_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MODS_PB][32] = {
@@ -629,7 +629,7 @@ static Gpio_Icu_ChannelConfigType Icu_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MODS_P
 | Parameter               | Description                                                                                        |
 | :---------------------- | :------------------------------------------------------------------------------------------------- |
 | PinId                   | Pin number (or channel number)                                                                     |
-| instanceNo              | Controller instance (e.g., 0 - GPIO0)                                                              |
+| instanceNo              | Controller instance (e.g., 1 - GPIO1)                                                              |
 | DefaultStartEdge        | Interrupt trigger mode:<br />1. Falling edge<br />2. Rising edge<br />3. Rising or falling edge<br />4. High level<br />5. Low level |
 | NotificationEnable      | Whether to enable the callback                                                                     |
 | GpioChannelNotification | Callback function pointer (no parameters, no return value)                                         |

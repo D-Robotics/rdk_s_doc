@@ -95,7 +95,7 @@ import DocScope from '@site/src/components/DocScope';
 1.  Process information
     -   The on-board log process information is shown below. Log processes may differ across devices; refer to the actual command output:
 
-    ```Shell
+    ```bash
     root@ubuntu:/userdata# ps -ef | grep log | grep -v -e grep -e login -e dbus-daemon
     root        1083       1  0 11:16 ?        00:00:00 /bin/bash /usr/bin/hobot-log
     root        1514       1  0 11:16 ?        00:00:00 /bin/sh /usr/bin/hobot-log-start bl31
@@ -141,7 +141,7 @@ import DocScope from '@site/src/components/DocScope';
 2.  Startup sequence
     -   The hobot-log-daemon.service starts automatically at boot, launches the hobot-log daemon, starts related log services, and manages logs. The startup sequence is as follows:
 
-        ```Shell
+        ```bash
         |- /usr/bin/hobot-log
               |- record_reset_count(shell function)
               |- record_reset_reason(shell function)
@@ -188,7 +188,7 @@ Log file generation and directory space management are mainly handled by hobot-l
             -   The system retains at most 4 historical log files
         -   Log archiving:
             -   When log rotation occurs, the current log file is renamed and archived by number. Archiving principle: when `kern.log` reaches the rotation period, logrotate renames `kern.log` to `kern.log.1`, creates a new `kern.log`, and rsyslog continues writing logs. When the maximum count is exceeded, the oldest log file is deleted
-            -   To reduce disk usage, the system compresses historical logs. Compression strategy: the most recent rotated log is decompressed one rotation later
+            -   To reduce disk usage, the system compresses historical logs. Compression strategy: the most recent rotated log is compressed one rotation later
         - Parameter configuration:
             -   If you do not want to use Ubuntu default configuration parameters for log management, modify the configuration in `/etc/logrotate.d/rsyslog`.
             ```text
@@ -218,7 +218,7 @@ Log file generation and directory space management are mainly handled by hobot-l
         -   You can add or remove log processes by adding or removing systemd log
             services through modifications to `hbre/boot-utils/hb-init-scripts/DEBIAN/postinst`. Some log-related services are listed below:
 
-            ```Shell
+            ```bash
             /etc/systemd/system/basic.target.wants/hobot-log-bl31.service
             /etc/systemd/system/basic.target.wants/hobot-log-bl31-timesync.service
             /etc/systemd/system/basic.target.wants/hobot-log-bpu0.service
@@ -232,7 +232,7 @@ Log file generation and directory space management are mainly handled by hobot-l
 
         -   Using hobot-log-logcat.service as an example, here is how to control log service startup and shutdown on the device:
 
-            ```Shell
+            ```bash
             # Enable service auto-start at boot
             systemctl enable hobot-log-logcat.service
             # Disable service auto-start at boot
@@ -245,7 +245,7 @@ Log file generation and directory space management are mainly handled by hobot-l
             systemctl stop hobot-log-logcat.service
             ```
 3.  Log time
-    -   hobot-log provides a feature to wait for time synchronization to complete, ensuring accurate timestamps in logs. This feature can be configured through the ``YEAR_LIMIT`` and ``WAIT_FOR_TIMESYNC_TIMEOUT`` variables, which set the threshold for successful time synchronization and the timeout respectively. Note that the default time on Debian systems is the release date of that Debian version. Therefore, whenever the Debian version is updated, ``YEAR_LIMIT`` should be updated accordingly to a value greater than that release date. In general, configure it to the latest date.
+    -   hobot-log provides a feature to wait for time synchronization to complete, ensuring accurate timestamps in logs. This feature can be configured through the `YEAR_LIMIT` and `WAIT_FOR_TIMESYNC_TIMEOUT` variables, which set the threshold for successful time synchronization and the timeout respectively. Note that the default time on Debian systems is the release date of that Debian version. Therefore, whenever the Debian version is updated, `YEAR_LIMIT` should be updated accordingly to a value greater than that release date. In general, configure it to the latest date.
 
 ## Recommended Log Interface Usage
 
@@ -255,12 +255,11 @@ Log file generation and directory space management are mainly handled by hobot-l
 2.  When there is no device structure, use the following interfaces: pr_error, pr_warn, pr_info,
     pr_debug.
 3.  pr_debug and dev_dbg can be enabled dynamically as follows.
-    -   ``echo "file drivers/mmc/host/* +p" >
-        /sys/kernel/debug/dynamic_debug/control``
-    -   ``echo "module mmc_core +p" >
-        /sys/kernel/debug/dynamic_debug/control``
-    -   ``echo "func mmc_detect_change +p" >
-        /sys/kernel/debug/dynamic_debug/control``
+    ```bash
+    echo "file drivers/mmc/host/* +p" > /sys/kernel/debug/dynamic_debug/control
+    echo "module mmc_core +p" > /sys/kernel/debug/dynamic_debug/control
+    echo "func mmc_detect_change +p" > /sys/kernel/debug/dynamic_debug/control
+    ```
 4.  For prints that may repeat very frequently after an error, use the following interfaces.
     -   printk_once: print only once
     -   printk_ratelimited: limit print frequency; by default, at most 10 prints every 5 seconds
@@ -292,17 +291,17 @@ Log file generation and directory space management are mainly handled by hobot-l
 
     int main(int argc, char **argv)
     {
-       pr_verbose("*ALOG test start*n");
-       pr_debug("********1********n");
-       pr_info("********2********n");
-       pr_warn("********3********n");
-       pr_err("********4********n");
-       pr_verbose("*ALOG test end***n");
+       pr_verbose("*ALOG test start*\n");
+       pr_debug("********1********\n");
+       pr_info("********2********\n");
+       pr_warn("********3********\n");
+       pr_err("********4********\n");
+       pr_verbose("*ALOG test end***\n");
        return 0;
     }
     ```
 
-    ```Shell
+    ```bash
     # Test results:
     root@ubuntu:/# ./logtest
 
@@ -396,7 +395,7 @@ For MCU Log usage notes, see: [Introduction to MCU Log](../11_mcu_development/01
 2.  Producing more logs than the rotate count within each transfer cycle (10 min) can cause log loss
     -   Only necessary logs should be output first
     -   If more logs are output, consider the required size when setting the rotate count
-3.  Do not view logs in real time on the serial port or SSH window. Log loss may occur because slow output causes overwrite. If necessary, use an SSH window to view logs in real time.
+3.  Do not view logs in real time on the serial port. Log loss may occur because slow output causes overwrite. If necessary, use an SSH window to view logs in real time.
     -   For example, if the kernel outputs "logcat lost
         message" while using logcat on the serial port in real time, log loss has occurred.
 
@@ -442,4 +441,4 @@ For MCU Log usage notes, see: [Introduction to MCU Log](../11_mcu_development/01
 ## Related Documentation
 
 - [System Log Viewing](/System_configuration/system_log)
-- [Linux Command Usage](/Appendix/linux-command-manual/apt)
+- [Linux Command dmesg](/Appendix/linux-command-manual/dmesg)

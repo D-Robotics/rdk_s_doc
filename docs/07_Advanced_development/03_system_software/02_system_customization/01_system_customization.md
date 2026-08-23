@@ -32,8 +32,9 @@ sudo ./pack_image.sh
 在 `hobot_customize_rootfs.sh` 中添加：
 
 ```bash
-# 安装额外 deb 到 rootfs
-chroot ${DST_ROOTFS_DIR} dpkg -i /path/to/custom-package.deb
+# 安装额外 deb 到 rootfs（先把 deb 拷贝进 rootfs，再在 chroot 内安装）
+cp /path/to/custom-package.deb ${DST_ROOTFS_DIR}/tmp/
+chroot ${DST_ROOTFS_DIR} dpkg -i /tmp/custom-package.deb
 ```
 
 ### 预装自定义文件

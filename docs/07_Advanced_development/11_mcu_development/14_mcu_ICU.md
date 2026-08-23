@@ -17,7 +17,7 @@ ICU 模块是基于 S100芯片解决方案的一个软件子模块，在整个�
 
 ## GPIO 中断使用指南
 
-S100 MCU 中，GPIO 共有四个 IO 组，分别是3个 GPIO0，GPIO1，GPIO2，GPIO_AON。其中，前三组共计提供88个 Pin，而 GPIO_AON 组则提供12个 Pin。该部分可参考 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_PBcfg.c` 。所有的 Pin 支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
+S100 MCU 中，GPIO 共有四个 IO 组，分别是 GPIO0、GPIO1、GPIO2、GPIO_AON。其中，前三组共计提供88个 Pin，而 GPIO_AON 组则提供12个 Pin。该部分可参考 `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Port/src/Port_PBcfg.c` 。所有的 Pin 支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
 
 | ISR Function | IRQ | IRQ Define           | Description |
 | :----------- | :-- | :------------------- | :---------- |
@@ -395,7 +395,7 @@ ICU 模块是基于 S600芯片解决方案的一个软件子模块，在整个�
 
 ## GPIO 中断使用指南
 
-S600 MCU 中，GPIO 共有5个 IO 组，分别是 GPIO0，GPIO1，GPIO2，GPIO3, GPIO_AON。其中，GPIO 组共计提供105个 Pin，而 GPIO_AON 组则提供42个 Pin。该部分可参考 `mcu/Config/McalCdd/gen_S600_sip_B_mcu1/Port/src/Port_PBcfg.c` 。所有的 Pin 支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
+S600 MCU 中，GPIO 共有5个 IO 组，分别是 GPIO0、GPIO1、GPIO2、GPIO3、GPIO_AON。其中，GPIO 组共计提供105个 Pin，而 GPIO_AON 组则提供42个 Pin。该部分可参考 `mcu/Config/McalCdd/gen_s600_md_mcu1/Port/src/Port_PBcfg.c` 。所有的 Pin 支持的中断触发模式包括：上升沿、下降沿、双边沿以及高/低电平触发。
 
 | ISR Function | IRQ | IRQ Define        | Description |
 | :----------- | :-- | :---------------- | :---------- |
@@ -414,7 +414,7 @@ S600 MCU 上的每个 Pin 支持至少一个功能，因此在使用 GPIO 中断
 | PWM4_IO | IO       | SPI11_MISO | I        | USS_PWM17 | IO       | GPIO_MCU[52] | IO       |
 | PWM5_IO | IO       | SPI11_SCLK | O        | USS_PWM18 | IO       | GPIO_MCU[53] | IO       |
 
-需要将两个 Pin 配置为 FUNC3，即 GPIO 模式，关于 Port 的介绍和使用可以查阅 [Port使用指南](./12_mcu_port/01_user_manual.md) 和 [Port开发指南](./12_mcu_port/02_development_manual.md) 这两个章节。具体的配置文件为 `mcu/Config/McalCdd/gen_s600_md/Port/src/Port_PBcfg.c`。
+需要将两个 Pin 配置为 FUNC3，即 GPIO 模式，关于 Port 的介绍和使用可以查阅 [Port使用指南](./12_mcu_port/01_user_manual.md) 和 [Port开发指南](./12_mcu_port/02_development_manual.md) 这两个章节。具体的配置文件为 `mcu/Config/McalCdd/gen_s600_md_mcu1/Port/src/Port_PBcfg.c`。
 
 ```c
 static const Port_Lld_PinConfigType Port_McuPinConfigs[PORT_MCU_MAX_NUM]=
@@ -515,7 +515,7 @@ static Gpio_Icu_IpConfigType Icu_Gpio_IpConfig_PB[ICU_GPIO_CONF_MODS_PB] = {
 | Parameter      | Description                                      |
 | :------------- | :----------------------------------------------- |
 | NumChannels    | 通道数                                           |
-| instanceNo     | 控制器实例(如0 - GPIO0)                          |
+| instanceNo     | 控制器实例(如1 - GPIO1)                          |
 | ChannelsConfig | 指向 `Gpio_Icu_ChannelConfigType` 结构体的指针 |
 
 #### Icu_ChannelConfigType
@@ -583,8 +583,8 @@ static Icu_Lld_ChannelConfigType Icu_Lld_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MOD
 ```c
 #define ICU_GPIO_CONF_MODS_PB 1
 
-extern void Icu_Gpio_Channel_0_20_ISR(void);
-extern void Icu_Gpio_Channel_0_21_ISR(void);
+extern void Icu_Gpio_Channel_1_20_ISR(void);
+extern void Icu_Gpio_Channel_1_21_ISR(void);
 
 /** @brief Array of Gpio Channel ConfigType channels*/
 static Gpio_Icu_ChannelConfigType Icu_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MODS_PB][32] = {
@@ -631,7 +631,7 @@ static Gpio_Icu_ChannelConfigType Icu_Gpio_ChannelConfig_PB[ICU_GPIO_CONF_MODS_P
 | Parameter               | Description                                                                                        |
 | :---------------------- | :------------------------------------------------------------------------------------------------- |
 | PinId                   | 引脚号(或通道号)                                                                                   |
-| instanceNo              | 控制器实例(如0 - GPIO0)                                                                            |
+| instanceNo              | 控制器实例(如1 - GPIO1)                                                                            |
 | DefaultStartEdge        | 中断触发方式:<br />1. 下降沿<br />2. 上升沿<br />3. 上升沿或者下降沿<br />4. 高电平<br />5. 低电平 |
 | NotificationEnable      | 是否启用回调                                                                                       |
 | GpioChannelNotification | 回调函数指针(无传参，无返回值)                                                                     |
