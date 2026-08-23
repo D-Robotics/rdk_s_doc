@@ -39,7 +39,7 @@ description: "模型、算法与工具链 常见问题与排查"
     * [Docker挂载方法帖](https://developer.d-robotics.cc/forumDetail/228559182180396619)
 * 如果问题复杂，建议将完整的开发机转换项目、板端部署项目以及详细的错误复现方式，通过网盘等形式分享给技术支持人员。
 
-### Q2: 进行 AI 算法开发有哪些推荐的官方资源？
+### Q2: 进行 智能 算法开发有哪些推荐的官方资源？
 **A:**
 1.  **RDK 用户手册 - 算法工具链章节：** 这是最基础也是最重要的参考资料，详细介绍了工具链的安装、使用流程、各项工具的功能和参数等。
     * 通用入口：[https://developer.d-robotics.cc/rdk_doc/04_toolchain_development](https://developer.d-robotics.cc/rdk_doc/04_toolchain_development) (请以官方最新文档为准)
