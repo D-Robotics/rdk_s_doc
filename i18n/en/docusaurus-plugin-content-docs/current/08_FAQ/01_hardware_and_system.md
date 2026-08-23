@@ -573,7 +573,7 @@ Possible approaches and notes:
     [Kernel headers and module build](/Advanced_development/system_software/kernel_headers) (see the module signing section).
     </DocScope>
 
-### Q25: Out-of-memory errors when building large projects or running memory-heavy tools like `hb_mapper`. What should I do?
+### Q25: Out-of-memory errors when building large projects or running memory-heavy tools like model conversion tools. What should I do?
 **A:** OOM is common on resource-limited boards. Mitigations:
 
 1.  **Increase swap space:**
@@ -630,7 +630,7 @@ Possible approaches and notes:
         # Then run colcon build or other build commands
         ```
 
-3.  **For `hb_mapper` (Horizon model conversion tool):**
+3.  **For the model conversion tool:**
     * In the conversion `yaml`, look for options such as `compiler_parameters` -> `jobs: 1` to limit parallelism. See the latest algorithm toolchain documentation.
 
 4.  **Stop unnecessary services and apps:**

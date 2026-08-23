@@ -575,7 +575,7 @@ no mmc device at slot X
     [内核头文件与模块编译](/Advanced_development/system_software/kernel_headers) (请查找此文档中关于模块签名的具体章节)。
     </DocScope>
 
-### Q25: 在编译大型项目（如使用 gcc/make/cmake/colcon 构建 ROS2工作空间）或运行内存消耗较大的工具（如`hb_mapper`模型转换）时，遇到内存不足的错误怎么办？
+### Q25: 在编译大型项目（如使用 gcc/make/cmake/colcon 构建 ROS2工作空间）或运行内存消耗较大的工具（如模型转换工具）时，遇到内存不足的错误怎么办？
 **A:** 内存不足（Out of Memory, OOM）是嵌入式设备或资源受限的开发机上编译大型项目或运行内存密集型应用时常见的问题。以下是一些解决方法：
 
 1.  **增加 Swap 交换空间：**
@@ -632,7 +632,7 @@ no mmc device at slot X
         # 然后执行 colcon build 或其他编译命令
         ```
 
-3.  **针对 `hb_mapper` (地平线模型转换工具)：**
+3.  **针对模型转换工具：**
     * 在模型转换的 `yaml` 配置文件中，查找是否有类似 `compiler_parameters` -> `jobs: 1` 的选项，用以限制模型编译（例如 ONNX 到 BIN 模型过程中某些阶段）的并行进程数。具体参数名请查阅最新的算法工具链文档。
 
 4.  **关闭不必要的后台服务和应用程序：**
