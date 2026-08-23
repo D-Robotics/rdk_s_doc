@@ -7,8 +7,6 @@ description: "系统 OTA 升级"
 # 系统 OTA 升级
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

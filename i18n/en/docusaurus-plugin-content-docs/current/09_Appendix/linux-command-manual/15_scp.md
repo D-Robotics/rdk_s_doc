@@ -8,7 +8,7 @@ The Linux scp command is used to copy files and directories between Linux system
 
 scp is short for secure copy. It is a secure remote file copy command based on ssh login in the Linux system.
 
-scp is encrypted, while [rcp](https://www.runoob.com/linux/linux-comm-rcp.html) is not encrypted. scp is an enhanced version of rcp.
+scp is encrypted, while rcp is not encrypted. scp is an enhanced version of rcp.
 
 ## Syntax
 

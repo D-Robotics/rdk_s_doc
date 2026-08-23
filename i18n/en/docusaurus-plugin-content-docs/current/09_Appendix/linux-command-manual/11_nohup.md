@@ -28,27 +28,27 @@ nohup OPTION
 
 ## Common commands
 
-The following command executes the runoob.sh script in the background under the root directory:
+The following command executes the test.sh script in the background under the root directory:
 
 ```
-nohup /root/runoob.sh &
+nohup /root/test.sh &
 ```
 
 To stop the execution, you need to use the following command to find the PID of the running script using nohup, and then use the kill command to delete it:
 
 ```
-ps aux | grep "runoob.sh" 
+ps aux | grep "test.sh" 
 ```
 
-The following command executes the runoob.sh script in the background under the root directory and redirects the input to the runoob.log file:
+The following command executes the test.sh script in the background under the root directory and redirects the input to the test.log file:
 
 ```
-nohup /root/runoob.sh > runoob.log 2>&1 &
+nohup /root/test.sh > test.log 2>&1 &
 ```
 
 Explanation of `2>&1`:
 
-Redirect standard error 2 to standard output &1, and then redirect standard output &1 to the runoob.log file.
+Redirect standard error 2 to standard output &1, and then redirect standard output &1 to the test.log file.
 
 - 0 - stdin (standard input)
 - 1 - stdout (standard output)

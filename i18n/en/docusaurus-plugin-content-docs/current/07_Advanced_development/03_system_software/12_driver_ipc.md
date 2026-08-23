@@ -5,8 +5,6 @@ sidebar_position: 12
 # IPC Module Introduction
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

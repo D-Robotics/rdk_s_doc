@@ -5,8 +5,6 @@ sidebar_position: 10
 # I2C User Guide
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

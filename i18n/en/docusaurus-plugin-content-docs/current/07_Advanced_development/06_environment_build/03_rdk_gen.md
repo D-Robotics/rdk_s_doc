@@ -110,8 +110,6 @@ Key fields:
 
 ##### Multi-File Configuration Example
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 <DocScope products="RDK S100">
 Please refer to the code path `samplefs/configs/jammy-desktop.conf`

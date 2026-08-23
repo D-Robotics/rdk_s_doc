@@ -7,8 +7,6 @@ description: "通过 SSH/串口/NoMachine 远程登录开发板的方法与默�
 # 远程登录
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

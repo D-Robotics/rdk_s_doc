@@ -10,7 +10,7 @@ Linux scp 命令用于 Linux 之间复制文件和目录。
 
 scp 是 secure copy 的缩写，scp 是 Linux 系统下基于 ssh 登录进行安全的远程文件拷贝命令。
 
-scp 是加密的，[rcp](https://www.runoob.com/linux/linux-comm-rcp.html) 是不加密的，scp 是 rcp 的加强版。
+scp 是加密的，rcp 是不加密的，scp 是 rcp 的加强版。
 
 ## 语法说明
 

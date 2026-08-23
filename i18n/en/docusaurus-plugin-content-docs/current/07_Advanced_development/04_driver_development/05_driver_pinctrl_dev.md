@@ -2,8 +2,6 @@
 sidebar_position: 5
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
 # Pinctrl Debugging Guide

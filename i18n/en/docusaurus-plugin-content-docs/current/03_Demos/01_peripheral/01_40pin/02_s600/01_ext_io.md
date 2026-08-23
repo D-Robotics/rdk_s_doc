@@ -8,10 +8,6 @@ description: "RDK S600 expansion pin definitions and GPIO read/write examples"
 
 # Pin Definitions and Applications
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-```
 
 The development board has an expansion pin header, making peripheral expansion easy. See this chapter for the interface definitions.
 

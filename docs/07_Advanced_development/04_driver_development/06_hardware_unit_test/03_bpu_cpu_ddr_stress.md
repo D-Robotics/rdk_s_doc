@@ -7,8 +7,6 @@ description: "CPU-BPU-DDR 压力测试"
 # CPU-BPU-DDR 压力测试
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

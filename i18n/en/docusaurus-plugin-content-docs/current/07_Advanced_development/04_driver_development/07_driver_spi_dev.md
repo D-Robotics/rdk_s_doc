@@ -5,8 +5,6 @@ sidebar_position: 6
 # SPI Debugging Guide
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

@@ -111,8 +111,6 @@ samplefs/configs/
   - 用于定义需要拉取的包的字段，一个 packages 字段可以定义多个包，包之间以空格分隔，多个 packages 字段的合集会作为最终的包定义。
 ##### 多文件配置示例
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 <DocScope products="RDK S100">
 请参考代码路径`samplefs/configs/jammy-desktop.conf`

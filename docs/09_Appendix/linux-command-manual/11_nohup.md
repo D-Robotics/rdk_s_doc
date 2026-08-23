@@ -30,27 +30,27 @@ nohup OPTION
 
 ## 常用命令
 
-以下命令在后台执行 root 目录下的 runoob.sh 脚本
+以下命令在后台执行 root 目录下的 test.sh 脚本
 
 ```
-nohup /root/runoob.sh &
+nohup /root/test.sh &
 ```
 
 如果要停止运行，你需要使用以下命令查找到 nohup 运行脚本到 PID，然后使用 kill 命令来删除
 
 ```
-ps aux | grep "runoob.sh" 
+ps aux | grep "test.sh" 
 ```
 
-以下命令在后台执行 root 目录下的 runoob.sh 脚本，并重定向输入到 runoob.log 文件：
+以下命令在后台执行 root 目录下的 test.sh 脚本，并重定向输入到 test.log 文件：
 
 ```
-nohup /root/runoob.sh > runoob.log 2>&1 &
+nohup /root/test.sh > test.log 2>&1 &
 ```
 
 **2>&1** 解释：
 
-将标准错误 2 重定向到标准输出 &1 ，标准输出 &1 再被重定向输入到 runoob.log 文件中。
+将标准错误 2 重定向到标准输出 &1 ，标准输出 &1 再被重定向输入到 test.log 文件中。
 
 - 0 – stdin (standard input，标准输入)
 - 1 – stdout (standard output，标准输出)

@@ -14,8 +14,6 @@ This chapter describes how to use the USB Gadget feature on the development boar
 
 ### USB Interface Overview
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 <DocScope products="RDK S100">
 

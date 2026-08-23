@@ -195,9 +195,7 @@ rsync -av root@192.168.1.12::www /userdata
 rsync -av /userdata root@192.168.1.12::www
 ```
 
-- Display file list of remote machine. This is similar to rsync transfer, but omitting the local machine information in the command.Please translate the Chinese parts in the following content into English, while keeping the original format and content:
-
-```
+- Display file list of remote machine. This is similar to rsync transfer, but omitting the local machine information in the command.```
 rsync -v rsync://192.168.1.12/app
 ```
 

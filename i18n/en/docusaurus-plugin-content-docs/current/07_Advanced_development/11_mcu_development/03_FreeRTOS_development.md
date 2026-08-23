@@ -5,8 +5,6 @@ sidebar_position: 3
 # MCU1 Development Guide
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

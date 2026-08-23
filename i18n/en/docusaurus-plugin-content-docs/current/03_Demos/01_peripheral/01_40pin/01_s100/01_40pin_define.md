@@ -8,10 +8,6 @@ description: "RDK S100 40-pin expansion pin definitions and GPIO read/write exam
 
 # Pin Definitions and Applications
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-```
 
 The development board has an expansion pin header, making peripheral expansion easy. See this chapter for the interface definitions.
 

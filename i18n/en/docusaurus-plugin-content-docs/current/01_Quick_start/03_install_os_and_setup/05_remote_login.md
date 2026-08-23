@@ -7,8 +7,6 @@ description: "Methods and default accounts for remotely logging in to the develo
 # Remote Login
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

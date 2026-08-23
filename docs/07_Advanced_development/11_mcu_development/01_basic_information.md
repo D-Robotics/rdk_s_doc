@@ -7,8 +7,6 @@ description: "MCU 快速入门指南"
 # MCU 快速入门指南
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

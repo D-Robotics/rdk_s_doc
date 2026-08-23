@@ -7,8 +7,6 @@ description: "接口、外设与驱动 常见问题与排查"
 # 接口、外设与驱动
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

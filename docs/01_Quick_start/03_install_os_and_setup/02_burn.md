@@ -5,8 +5,6 @@ description: "RDK S100/S600 用 XBurn 烧录系统镜像的步骤"
 ---
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

@@ -7,8 +7,6 @@ description: "Preparation before flashing RDK S100/S600: image download, tools, 
 # Flashing Preparation
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

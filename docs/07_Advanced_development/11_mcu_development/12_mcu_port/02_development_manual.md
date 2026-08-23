@@ -4,8 +4,6 @@ title: "Port 开发指南"
 description: "Port 开发指南"
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 
 # Port 开发指南

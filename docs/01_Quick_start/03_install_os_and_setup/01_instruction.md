@@ -7,8 +7,6 @@ description: "RDK S100/S600 烧录前准备：镜像下载、工具、数据线�
 # 烧录说明
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

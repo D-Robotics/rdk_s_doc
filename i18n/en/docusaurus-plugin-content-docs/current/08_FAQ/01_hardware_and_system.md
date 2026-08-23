@@ -11,8 +11,6 @@ Many issues can be resolved by updating the system. For related download resourc
 :::
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

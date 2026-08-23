@@ -7,8 +7,6 @@ description: "Eth 使用指南"
 # Eth 使用指南
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

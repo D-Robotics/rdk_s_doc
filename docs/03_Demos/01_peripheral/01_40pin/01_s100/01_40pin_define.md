@@ -8,10 +8,6 @@ description: "RDK S100 40-pin 扩展引脚定义与 GPIO 读写示例"
 
 # 管脚定义与应用
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-```
 
 开发板上存在扩展引脚排，方便用户进行外围扩展，接口定义请查看本章节。
 

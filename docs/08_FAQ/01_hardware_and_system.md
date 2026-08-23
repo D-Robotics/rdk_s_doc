@@ -13,8 +13,6 @@ description: "硬件、系统与环境配置 常见问题与排查"
 :::
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

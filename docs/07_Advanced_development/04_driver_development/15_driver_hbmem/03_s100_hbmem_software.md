@@ -6,8 +6,6 @@ description: "软件说明"
 # 软件说明
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

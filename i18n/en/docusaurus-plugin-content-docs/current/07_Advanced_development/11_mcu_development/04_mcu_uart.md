@@ -5,8 +5,6 @@ sidebar_position: 4
 # UART User Guide
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

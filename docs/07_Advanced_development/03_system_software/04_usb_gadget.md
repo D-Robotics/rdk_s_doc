@@ -16,8 +16,6 @@ import DocScope from '@site/src/components/DocScope'
 
 ### USB 接口概述
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 <DocScope products="RDK S100">
 

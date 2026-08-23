@@ -6,8 +6,6 @@ description: "PCIe 模块功能在 kernel 下的配置"
 # PCIe 模块功能在 kernel 下的配置
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

@@ -8,8 +8,6 @@ description: "RDK S100/S600 套件介绍、资料索引、文档导航、三模�
 # D-Robotics RDK 套件
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

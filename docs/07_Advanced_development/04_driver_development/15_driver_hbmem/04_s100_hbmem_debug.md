@@ -6,8 +6,6 @@ description: "debug 信息"
 # debug 信息
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

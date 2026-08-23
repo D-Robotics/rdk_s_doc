@@ -5,8 +5,6 @@ description: "Steps for flashing the RDK S100/S600 system image with XBurn"
 ---
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 

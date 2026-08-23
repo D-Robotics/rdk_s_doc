@@ -465,7 +465,6 @@ Description: TogetheROS Bot
     # 4. 启用ROS2的借贷消息 (Loaned Messages) 机制，这是实现零拷贝的关键
     export ROS_DISABLE_LOANED_MESSAGES=0 
     ```
-    *
     这些环境变量的详细说明可以参考 ROS2官方文档或 Fast DDS 的文档，例如：
     * [ROS 2 using Fast DDS middleware](https://fast-dds.docs.eprosima.com/en/latest/fastdds/ros2/ros2.html)
     * 地瓜机器人官方`hobot_shm`包的 README：[hobot_shm README_cn.md](https://github.com/D-Robotics/hobot_shm/blob/develop/README_cn.md) (请访问最新的官方链接)
@@ -479,26 +478,22 @@ Description: TogetheROS Bot
         # (然后设置上面的环境变量)
         ros2 launch mipi_cam mipi_cam.launch.py mipi_video_device:=F37 
         ```
-        *
     * 启动`hobot_codec`节点通过共享内存订阅图像并进行处理：
         ```bash
         # (同样需要source环境和设置环境变量)
         ros2 launch hobot_codec hobot_codec.launch.py codec_in_mode:=shared_mem codec_in_format:=nv12 codec_out_mode:=ros codec_out_format:=jpeg codec_sub_topic:=/hbmem_img codec_pub_topic:=/image_jpeg
         ```
-        *
 
 **检查是否成功使用零拷贝：**
 * 当支持零拷贝的发布者和订阅者成功通过共享内存进行通信时，系统会在 `/dev/shm/` 目录下创建一些内存映射文件。您可以通过以下命令查看：
     ```bash
     ls -lthr /dev/shm/fast_datasharing* /dev/shm/fastrtps_*
     ```
-    *
     如果看到有类似 `fast_datasharing_...` 的文件被创建，并且文件大小与传输的数据（如图像帧大小）相关，则表明共享内存传输可能已启用。
 * 还可以使用 `lsof` 命令查看哪些进程正在使用这些共享内存文件：
     ```bash
     sudo lsof /dev/shm/fast_datasharing*
     ```
-    *
     输出中应该能看到您的发布者和订阅者进程。
 
 **禁用零拷贝功能：**
@@ -506,7 +501,6 @@ Description: TogetheROS Bot
     ```bash
     export ROS_DISABLE_LOANED_MESSAGES=1
     ```
-    *
 * 禁用零拷贝的详细说明参考 ROS2官方文档：[How to disable loaned messages](https://docs.ros.org/en/humble/How-To-Guides/Configure-ZeroCopy-loaned-messages.html#how-to-disable-loaned-messages)
 
 **注意：**
