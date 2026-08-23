@@ -39,10 +39,10 @@ The following example demonstrates the minimal sequence for ISP tuning (based on
 // 1. Pause the 2A algorithm to enter manual tuning mode
 hb_isp_pause_algo(0);
 
-// 2. Query/set the sub-module enable status
-isp_module_ctrl_u mod_ctrl;
+// 2. Query/set the sub-module bypass status
+isp_module_ctrl_u mod_ctrl = {0};
 hb_isp_get_module_control(0, &mod_ctrl);
-mod_ctrl.isp_work_state.ae_enable = 0;   /* Manual exposure */
+mod_ctrl.isp_module_ctrl_reg1.u32Key = 0;   /* disable reg1 sub-module bypass */
 hb_isp_set_module_control(0, &mod_ctrl);
 
 // 3. Get the AE statistics and issue manual exposure parameters accordingly
@@ -60,8 +60,8 @@ hb_isp_run_algo(0);
 
 | Function | Description |
 | --- | --- |
-| hb_isp_run_algo | Set the 2A algorithm to manual mode |
-| hb_isp_pause_algo | Get the 2A manual on/off status; set the algorithm to auto mode |
+| hb_isp_run_algo | Run the 2A algorithm (resume automatic tuning) |
+| hb_isp_pause_algo | Pause the 2A algorithm (enter manual tuning) |
 | hb_isp_set_module_control | Control whether the ISP sub-modules are bypassed; provide an interface to set the ISP sub-module bypass |
 | hb_isp_get_module_control | Get the ISP sub-module bypass status; provide an interface to query the ISP sub-module bypass state |
 | hb_isp_get_ae_statistics | Get the AE statistics of the current pipeline |
@@ -102,7 +102,7 @@ extern int32_t hb_isp_run_algo(uint32_t pipeline_id);
 
 **Description**
 
-Set the 2A algorithm to manual mode.
+Run the 2A algorithm (resume automatic tuning).
 
 **Return Value**
 
@@ -123,7 +123,7 @@ extern int32_t hb_isp_pause_algo(uint32_t pipeline_id);
 
 **Description**
 
-Get the 2A manual on/off status; set the algorithm to auto mode.
+Pause the 2A algorithm (enter manual tuning).
 
 **Return Value**
 

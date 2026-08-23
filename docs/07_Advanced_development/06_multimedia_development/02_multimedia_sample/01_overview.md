@@ -69,7 +69,7 @@ Options:
 ### 编译方法
 
 本模块的示例代码的依赖如下:
-1. 依赖 BSP 源码编译生成的 hbre 头文件、库文件，以及根文件系统中的 ffmpeg 等头文件和动态库, 相关库和路径的引用在各个 Sample 目录下的 Makfile 中指定
+1. 依赖 BSP 源码编译生成的 hbre 头文件、库文件，以及根文件系统中的 ffmpeg 等头文件和动态库, 相关库和路径的引用在各个 Sample 目录下的 Makefile 中指定
 ```
 LDFLAGS += -lvpf -lvio -lcam -lhbmem
 LDFLAGS := -L/usr/hobot/lib
@@ -95,7 +95,7 @@ SRC_PATH += $(shell find ${PLATFORM_SAMPLES_DIR}/vp_sensors -maxdepth 1 -type d)
 - **单个示例编译方法**
 
 1. 登录到设备中
-2. 进入 `/app/multimedia_samples/` 目录中各个各示例， 单独进行开发与编译。例如，单独编译 `sample_vin` 示例：
+2. 进入 `/app/multimedia_samples/` 目录中各个示例， 单独进行开发与编译。例如，单独编译 `sample_vin` 示例：
 
 	```
 	cd /app/multimedia_samples/sample_vin/get_vin_data
@@ -115,7 +115,7 @@ SRC_PATH += $(shell find ${PLATFORM_SAMPLES_DIR}/vp_sensors -maxdepth 1 -type d)
 
 **解决方法：** 可以把程序拷贝到 其他目录执行，或清理不用的数据
 
-### 串口终端登陆的情况下内核日志刷屏
+### 串口终端登录的情况下内核日志刷屏
 
 在板端执行以下命令降低 Kernel 的日志输出级别，避免输出日志太多，影响查看程序的执行流程：
 

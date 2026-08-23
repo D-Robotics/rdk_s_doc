@@ -47,6 +47,7 @@ Options:
 - `-w`: Width of the input YUV image.
 - `-h`: Height of the input YUV image.
 - `-f`: Specifies the PYM operating mode. By default, it runs in vflow mode.
+- `-V`: Enable verbose mode, printing more runtime information.
 
 ### Execution Result
 Taking a YUV image with an input resolution of 1920 x 1080 as an example, run `./sample_pym -i /app/res/assets/nv12_1920x1080.yuv -w 1920 -h 1080`.

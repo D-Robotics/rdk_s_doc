@@ -538,7 +538,7 @@ Set the frame rate of the corresponding port, and whether to select skip frame; 
 [IN] uint32_t port: Corresponding to the port set in the configuration file; 和配置文件中设置的port 相对应;range:[0, 23],default:0
 [IN] int32_t skip_frame[0, 1]:if skip frame enable,0-no skip,1-skip; 是否使能跳帧功能,0-不跳帧,1-跳帧;range:[0, 1],default:0
 [IN] uint32_t in_fps:sensor input fps; 输入的帧率;range:[1, 480],default:30
-[IN] int32_t skip_frame:sensor output fps; 输出的帧率;range:[1, 480],default:30
+[IN] uint32_t out_fps:sensor output fps; 输出的帧率;range:[1, 480],default:30
 
 【返回值】
 
@@ -688,7 +688,7 @@ Not support; 不支持
 【参数描述】
 
 [IN] uint32_t entry_num:Mipi host index; mipi host索引;range:[0, 3],default:0
-[IN] uint32_t mclk:senosr clock; sensor工作时钟;range:[1, 3000000],default:0
+[IN] uint32_t mclk:sensor clock; sensor工作时钟;range:[1, 3000000],default:0
 
 【返回值】
 
@@ -1087,7 +1087,7 @@ Get sensor information; 获取sensor信息
 【参数描述】
 
 [IN] uint32_t port:Corresponding to the port set in the configuration file; 和配置文件中设置的port 相对应;range:[0, 23],default:0
-[OUT] camera_staus_t *statinfo:Gets the address of the parameter;获取的参数的地址
+[OUT] struct cam_statinfo *info:Gets the address of the parameter;获取的参数的地址
 
 【返回值】
 
@@ -1113,7 +1113,7 @@ parse camera embed data;获取sensor信息曝光参数等
 
 [IN] uint32_t port: Corresponding to the port set in the configuration file; 和配置文件中设置的port 相对应;range:[0, 23],default:0
 [IN] char* embed_raw: data to be parsed;待解析的数据
-[OUT] struct embed_data_info_s *embed_info: pared data information;解析好的数据信息
+[OUT] struct embed_data_info_s *embed_info: parsed data information;解析好的数据信息
 
 【返回值】
 

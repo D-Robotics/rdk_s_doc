@@ -277,7 +277,7 @@ This module is an encapsulation of ZLMediakit, wrapping ZLMediakit into several 
 
 For startup and usage of this module, refer to the flow introduction in the Main Program Entry section.
 
-#### Websocket Server module
+#### WebSocket Server module
 
 This module handles interactions with the web. After corresponding operations on the web, the websocket server receives commands and parameters of the corresponding kind, which are processed in the handle_user_msg function of handle_user_massage.c. To add new interaction commands, please add them in this function.
 

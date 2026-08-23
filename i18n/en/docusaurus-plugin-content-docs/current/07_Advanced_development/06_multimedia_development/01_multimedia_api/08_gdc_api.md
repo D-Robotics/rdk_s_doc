@@ -48,21 +48,23 @@ The GDC module takes the output of VPF/PYM as input and outputs to the downstrea
 GDC has no standalone function API; it is used through the "generate configuration binary → set via HBN vnode" configuration flow. The minimal flow to generate the configuration binary is as follows (referencing the on-board `/app/multimedia_samples/sample_gdc/2-generate_bin/`):
 
 ```c
+#include <stdio.h>
 #include "gdc_cfg.h"
 #include "gdc_bin_cfg.h"
+#include "gdc_json_parser.h"
 
-// 1. Parse the JSON configuration (input/output geometry, distortion mapping, etc.)
-gdc_bin_custom_config_t cfg = {0};
-parse_json_config("./gdc_bin_custom_config.json", &cfg);
-
-// 2. Generate the GDC configuration binary and write it to a file
-//    (the same implementation as the on-board hbn_gen_gdc_cfg)
+// Generate the GDC configuration binary (the first argument is the config json
+// file path; referencing sample_gdc/2-generate_bin/generate_bin.c)
 uint32_t *cfg_buf = NULL;
 uint64_t config_size = 0;
-gdc_cfg_bin_gen(json_str, NULL, (void **)&cfg_buf, &config_size);
-save_to_file("./gdc.bin", cfg_buf, config_size);
+gdc_cfg_bin_gen("./gdc_bin_custom_config.json", NULL, (void **)&cfg_buf, &config_size);
 
-// 3. Release the generated buffer
+// Write it to gdc.bin
+FILE *fp = fopen("./gdc.bin", "w");
+fwrite(cfg_buf, 1, config_size, fp);
+fclose(fp);
+
+// Release the generated buffer
 hbn_free_gdc_cfg(cfg_buf);
 ```
 

@@ -458,7 +458,7 @@ fps average gdc [process3] = 142
 ## 5-gdc_equisolid
 ### 功能概述
 
-gdc_equisolid 程序会读取本地 NV12 的 YUV 图，把图片送入 GDC 做（全景 panoramic）校正处理，最后把校正的结果结果保存为本地 NV12 格式的 YUV 图。
+gdc_equisolid 程序会读取本地 NV12 的 YUV 图，把图片送入 GDC 做（全景 panoramic）校正处理，最后把校正的结果保存为本地 NV12 格式的 YUV 图。
 
 #### 代码位置及目录结构
 
@@ -541,7 +541,7 @@ handle 34661 GDC dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800
 
 gdc_transformation 程序采用回灌流程，即从系统存储中读取原始 YUV 文件和 GDC Tool 生成的 json 文件，作为 GDC 的输入图像。 依赖`libgdcbin.so`将 GDC 坐标点通过计算，把图像的变换结果保存为本地 NV12 格式的 YUV 图。
 
-使用 GDC Tool 生成生成的 json 文件都在 gdc_res 目录下，当前 gdc_res 目录有四个 json 文件，变换效果分别是 Affine、Equisolid(cylinder)、Equidistant、Keystone+dewarping，gdc_transformation 会根据这四个 json 去 dump 出4张 YUV 图。
+使用 GDC Tool 生成的 json 文件都在 gdc_res 目录下，当前 gdc_res 目录有四个 json 文件，变换效果分别是 Affine、Equisolid(cylinder)、Equidistant、Keystone+dewarping，gdc_transformation 会根据这四个 json 去 dump 出4张 YUV 图。
 
 注意：gdc_res 目录下有几个 json 文件就会 dump 出几张 YUV 图片。
 
@@ -562,7 +562,7 @@ gdc_transformation 程序采用回灌流程，即从系统存储中读取原始 
 		│   └── test_building_1920x1080.yuv
 		└── gdc_transformation.c
 	```
-根目录包含 Makefile,gdc_res 目录中包含了资源文件,比如 GDC Tool 生成生成的 json 文件、YUV 图像；gdc_transformation.c 是 main 入口的所在文件。
+根目录包含 Makefile,gdc_res 目录中包含了资源文件,比如 GDC Tool 生成的 json 文件、YUV 图像；gdc_transformation.c 是 main 入口的所在文件。
 
 ### 编译部署
 

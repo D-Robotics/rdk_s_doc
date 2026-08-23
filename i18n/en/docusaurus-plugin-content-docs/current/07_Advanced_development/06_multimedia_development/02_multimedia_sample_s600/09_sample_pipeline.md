@@ -561,7 +561,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
   - Configure the parameters for each video pipeline. This option can be repeated multiple times.
   - `sensor` is a mandatory parameter, while `channel`, `type`, and `output` are optional. If the user does not configure them, the program will use default values.
   - `sensor`: Sensor index, mandatory parameter, can have multiple parameters. Refer to the sensor list.
-  - `link`: The Link Port for Serdes type Sensors (ignored for MIPI type Sensors). For example, if connected to Port A, specify as 0: `-l 0`.
+  - `link`: The Link Port for Serdes type Sensors (ignored for MIPI type Sensors). For example, if connected to Port A, specify as 0 by writing `link=0` in the `-c` config string.
   - `mipi`: The mipi host connected to the Serdes Sensor.
   - `channel`: VSE channel index, optional, default is 0, can be set to [0~5].
   - `type`: Encoding type, optional, default is h264, can be set to [h264, h265].

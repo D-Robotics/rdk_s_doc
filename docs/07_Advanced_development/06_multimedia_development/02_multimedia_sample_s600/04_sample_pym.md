@@ -45,6 +45,7 @@ Options:
 - w: 输入 YUV 图像的宽度
 - h: 输入 YUV 图像的高度
 - f: 指定 pym 运行的模式， 默认按照 Vflow 的方式运行
+- V: 启用详细输出模式，打印更多运行时信息
 ### 运行效果
 以输入分辨率为 1920 x 1080 的 YUV 图片为例，执行 `./sample_pym -i /app/res/assets/nv12_1920x1080.yuv -w 1920 -h 1080`。
 

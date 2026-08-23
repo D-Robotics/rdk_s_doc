@@ -152,7 +152,7 @@ attach camera handle to handle of vin node in vpf get connection info from vin a
 **Parameter Description**
 
 [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] vin: vpf handle of vin node which vpf create returned range_fd: [!NULL, !NULL], default: NA
+[IN] vin_fd: vpf handle of vin node which vpf create returned; range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -200,7 +200,7 @@ attach camera handle to handle of deserial link camera connection info inherit f
 
 [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 [IN] des_fd: deserial handle which create returned range: [!NULL, !NULL], default: NA
-[IN] link: the link index of deerial to attach range: [0, 3], default: NA
+[IN] link: the link index of deserial to attach range: [0, 3], default: NA
 
 **Return Value**
 

@@ -150,8 +150,8 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 
 **命令参数说明：**
 
-- `c <sensor>`: 该选项用于指定要使用的传感器索引。用户需要提供一个有效的索引值。
-- `l <link_port>`: 该选项用于指定 Serdes Sensor 的连接的端口 , Serdes sensor 必须指定。
+- `-c, --config="sensor=id"`: 配置每路 video pipeline，可重复至 6 次，`sensor` 指定传感器索引。
+- `link`: `-c` 配置串的子参数，用于指定 Serdes Sensor 的连接端口（0:A 1:B 2:C 3:D），Serdes sensor 必须指定。
 - `h`: 显示帮助信息。
 
 #### 运行效果
@@ -204,7 +204,7 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 
 **原因**：指定的 sensor 未接入开发板，或接入了其他接口（MIPI 直连 / GMSL 端口不匹配）。
 
-**解决**：确认实际接入的 camera 型号与 `-s` 索引对应（可用 `./get_vin_data -h` 查看支持列表）；MIPI 直连 sensor 需接入对应 CSI 接口，GMSL sensor 需指定 `-l <link_port>` 与 `-m <mipi_rx>`。
+**解决**：确认实际接入的 camera 型号与 `-s` 索引对应（可用 `./get_vin_data -h` 查看支持列表）；MIPI 直连 sensor 需接入对应 CSI 接口，GMSL sensor 需指定 `-l <link_port>`。
 
 ### GMSL/SerDes sensor 必须指定 link port
 
@@ -212,7 +212,7 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 
 **原因**：SerDes sensor 需要知道硬件连接的 link port（0:A 1:B 2:C 3:D）才能与解串器通信。
 
-**解决**：按实际硬件连接指定 `-l 0/1/2/3`，同时用 `-m` 指定 mipi_rx。
+**解决**：按实际硬件连接指定 `-l 0/1/2/3`。
 
 ### 取帧超时或无法取到帧
 

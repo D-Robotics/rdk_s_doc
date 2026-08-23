@@ -81,8 +81,8 @@ sample_bezier/
 #### Execution
 ##### Program Execution Method
 The following preparations need to be done before executing the program:
-1. Connect the RDKS600 to a monitor via the HDMI interface
-2. Connect a mouse and keyboard to the RDKS600, and log into the Ubuntu system through the monitor interface
+1. Connect the RDK S600 to a monitor via the HDMI interface
+2. Connect a mouse and keyboard to the RDK S600, and log into the Ubuntu system through the monitor interface
 
 Execute the program:
 1. Enter the directory: `cd /app/multimedia_samples/sample_gpu_3d/gles/sample_bezier`

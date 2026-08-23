@@ -39,10 +39,10 @@ ISP（Image Signal Processor）图像信号处理 API（板端 `hb_api_isp.h`，
 // 1. 暂停 2A 算法，进入手动调参模式
 hb_isp_pause_algo(0);
 
-// 2. 查询/设置子模块使能状态
-isp_module_ctrl_u mod_ctrl;
+// 2. 查询/设置子模块 bypass 状态
+isp_module_ctrl_u mod_ctrl = {0};
 hb_isp_get_module_control(0, &mod_ctrl);
-mod_ctrl.isp_work_state.ae_enable = 0;   /* 手动曝光 */
+mod_ctrl.isp_module_ctrl_reg1.u32Key = 0;   /* 关闭 reg1 各子模块 bypass */
 hb_isp_set_module_control(0, &mod_ctrl);
 
 // 3. 获取 AE 统计，据此下发手动曝光参数
@@ -60,8 +60,8 @@ hb_isp_run_algo(0);
 
 | 函数 | 说明 |
 | --- | --- |
-| hb_isp_run_algo | set 2a manual on/off; 设置算法manual模式 |
-| hb_isp_pause_algo | get 2a manual on/off status; 设置算法auto模式 |
+| hb_isp_run_algo | run 2a algorithm; 恢复 2A 算法（自动调参） |
+| hb_isp_pause_algo | pause 2a algorithm; 暂停 2A 算法（进入手动调参） |
 | hb_isp_set_module_control | control isp modual bypass or not; 提供设置ISP子模块bypass与否的接口 |
 | hb_isp_get_module_control | get isp modual bypass status; 获取设置ISP子模块bypass与否状态的接口 |
 | hb_isp_get_ae_statistics | get ae statistics; 获取当前通路的ae统计数据 |
@@ -81,12 +81,12 @@ hb_isp_run_algo(0);
 | hb_isp_get_zone_info | get zone info value; 获取ae zone区域信息 |
 | hb_isp_set_hist_thresh_info | set histgram thresh info; 设置histgram区间门限信息 |
 | hb_isp_get_hist_thresh_info | get histgram thresh info; 获取histgram区间门限信息 |
-| hb_isp_set_calibration_param | set calibration param; 获取histgram区间门限信息 |
-| hb_isp_get_calibration_param | get calibration param; 获取histgram区间门限信息 |
-| hb_isp_set_command_param | set command param; 获取histgram区间门限信息 |
-| hb_isp_get_command_param | get command param; 获取histgram区间门限信息 |
-| hb_isp_get_command_range | get command range; 获取calibration 参数 |
-| hb_isp_get_hardware_param | get hardware param; 获取histgram区间门限信息 |
+| hb_isp_set_calibration_param | set calibration param; 设置 calibration 参数 |
+| hb_isp_get_calibration_param | get calibration param; 获取 calibration 参数 |
+| hb_isp_set_command_param | set command param; 设置 command 参数 |
+| hb_isp_get_command_param | get command param; 获取 command 参数 |
+| hb_isp_get_command_range | get command range; 获取 command 参数范围 |
+| hb_isp_get_hardware_param | get hardware param; 获取 hardware 参数 |
 | hb_isp_set_hardware_param | set hardware param; 设置hardware参数 |
 | hb_isp_get_hardware_range | get hardware range; 获取hardware 参数范围 |
 
@@ -102,7 +102,7 @@ extern int32_t hb_isp_run_algo(uint32_t pipeline_id);
 
 【功能描述】
 
-set 2a manual on/off; 设置算法manual模式
+run 2a algorithm; 恢复 2A 算法（自动调参）
 
 【返回值】
 
@@ -122,7 +122,7 @@ extern int32_t hb_isp_pause_algo(uint32_t pipeline_id);
 
 【功能描述】
 
-get 2a manual on/off status; 设置算法auto模式
+pause 2a algorithm; 暂停 2A 算法（进入手动调参）
 
 【返回值】
 
@@ -522,7 +522,7 @@ extern int32_t hb_isp_set_calibration_param(uint32_t pipeline_id, const char *na
 
 【功能描述】
 
-set calibration param; 获取histgram区间门限信息
+set calibration param; 设置 calibration 参数
 
 【返回值】
 
@@ -542,7 +542,7 @@ extern int32_t hb_isp_get_calibration_param(uint32_t pipeline_id, const char *na
 
 【功能描述】
 
-get calibration param; 获取histgram区间门限信息
+get calibration param; 获取 calibration 参数
 
 【返回值】
 
@@ -562,7 +562,7 @@ extern int32_t hb_isp_set_command_param(uint32_t pipeline_id, uint32_t section, 
 
 【功能描述】
 
-set command param; 获取histgram区间门限信息
+set command param; 设置 command 参数
 
 【返回值】
 
@@ -582,7 +582,7 @@ extern int32_t hb_isp_get_command_param(uint32_t pipeline_id, uint32_t section, 
 
 【功能描述】
 
-get command param; 获取histgram区间门限信息
+get command param; 获取 command 参数
 
 【返回值】
 
@@ -602,7 +602,7 @@ extern int32_t hb_isp_get_command_range(uint32_t pipeline_id, uint32_t section, 
 
 【功能描述】
 
-get command range; 获取calibration 参数
+get command range; 获取 command 参数范围
 
 【返回值】
 
@@ -622,7 +622,7 @@ extern int32_t hb_isp_get_hardware_param(uint32_t pipeline_id, const char *name,
 
 【功能描述】
 
-get hardware param; 获取histgram区间门限信息
+get hardware param; 获取 hardware 参数
 
 【返回值】
 

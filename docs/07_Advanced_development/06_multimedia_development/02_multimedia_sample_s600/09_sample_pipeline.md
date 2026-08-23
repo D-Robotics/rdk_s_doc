@@ -7,7 +7,7 @@ description: "sample_pipeline 使用说明 板端示例使用说明"
 # sample_pipeline 使用说明
 
 ## 功能概述
-`sample_pipeline` 用于实现单路或多路 sensor pipeline 串联，实现用户常见的 pipeline 场景，用户可在通过 `sample_pipeline` 子目录了解各个 pipeline 的搭建方法。
+`sample_pipeline` 用于实现单路或多路 sensor pipeline 串联，实现用户常见的 pipeline 场景，用户可通过 `sample_pipeline` 子目录了解各个 pipeline 的搭建方法。
 
 ### sample_pipeline 架构说明
 `sample_pipeline` 包含多个示例，每个示例均以子目录形式存在 `app/multimedia_samples/sample_pipeline` 下，每个子目录描述如下
@@ -287,7 +287,7 @@ pym_output_nv12_chn5_60x32_stride_64_count_0.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后达到 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片。
+`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后到达 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc`
@@ -400,7 +400,7 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21680305428000.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc_vpu` 示例串联 `VIN`，`ISP`，`YNR`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、ISP、YNR、PYM 模块后达到 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片，输出数据会再送给编码器编码后保存为 H264 视频码流。
+`single_pipe_vin_isp_ynr_pym_gdc_vpu` 示例串联 `VIN`，`ISP`，`YNR`，`PYM`，`GDC`，`CODEC ` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、ISP、YNR、PYM 模块后到达 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片，输出数据会再送给编码器编码后保存为 H264 视频码流。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc_vpu`
@@ -566,7 +566,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
   - 配置每一路视频通路的参数。此选项最多可以重复多次。
   - sensor 是必须的参数， channel、 type、 output 是可选参数，用户不配置时，程序会使用默认值。
   - `sensor`：传感器索引，必须参数，可以有多个参数，参考传感器列表。
-  - `link`： Serdes 类型的 Sensor 接入的 Link Port (MIPI 类型的 Sensor 忽略此参数 ), 比如接入的是 Port A，指定为 0: `-l 0`
+  - `link`： Serdes 类型的 Sensor 接入的 Link Port (MIPI 类型的 Sensor 忽略此参数 ), 比如接入的是 Port A，指定为 0，即在 `-c` 配置串中写 `link=0`
   - `mipi`： Serdes 类型的 Sensor 接入的 mipi host
   - `channel`： VSE 通道索引，可选参数，默认为 0 ，可以设置为 [0~5]。
   - `type`：编码类型，可选参数，默认为 h264 ，可以设置为 [h264, h265]。

@@ -39,14 +39,10 @@ The following example references `/app/multimedia_samples/sample_codec/sample_co
 // 1. Get the codec descriptor and the default context, initialize it as an encoder
 const media_codec_descriptor_t *desc = hb_mm_mc_get_descriptor(MEDIA_CODEC_ID_H265);
 media_codec_context_t context = {0};
-hb_mm_mc_get_default_context(MEDIA_CODEC_ID_H265, &context);
-context.encoder = true;            /* encode */
-context.codec_id = MEDIA_CODEC_ID_H265;
+hb_mm_mc_get_default_context(MEDIA_CODEC_ID_H265, true, &context);   /* true = encoder */
 
-// 2. Initialize and configure (bitrate/resolution/framerate, etc.)
+// 2. Initialize and configure (bitrate/resolution/framerate, etc. are set in context and VPF parameters)
 hb_mm_mc_initialize(&context);
-mc_av_codec_config_t codec_cfg = {0};
-/* fill in codec_cfg as needed ... */
 hb_mm_mc_configure(&context);
 
 // 3. Start encoding
@@ -54,8 +50,8 @@ mc_av_codec_startup_params_t startup_params = {0};
 hb_mm_mc_start(&context, &startup_params);
 
 // 4. Feed in image frames and get the encoded stream back (buffer reuse loop)
-mc_buffer_t in_buf, out_buf;
-mc_buffer_info_t out_info;
+media_codec_buffer_t in_buf, out_buf;
+media_codec_output_buffer_info_t out_info;
 hb_mm_mc_dequeue_input_buffer(&context, &in_buf, 2000);
 /* fill in_buf with an NV12 image ... */
 hb_mm_mc_queue_input_buffer(&context, &in_buf, 2000);

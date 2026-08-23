@@ -34,22 +34,21 @@ The following example demonstrates the minimal usage sequence of DISP (based on 
 
 ```c
 #include "hb_disp_interface.h"
+#include "hbn_idu_cfg.h"
 
-// 1. Initialize the display device (DISP_PRI_1 is the display priority; see hbn_idu_cfg.h)
+// 1. Initialize the display device (DISP_PRI_1 is defined in hb_disp_interface.h)
 int32_t ret = hb_disp_init_dev_cfg(DISP_PRI_1, "");
 if (ret != 0) {
     /* handle initialization failure */
 }
 
-// 2. Configure the output channel and layer
-output_channel_cfg_t chn_cfg = {0};
-chn_cfg.output_mode = OUTPUT_MIPI;
-hb_disp_set_output_cfg_id(DISP_PRI_1, &chn_cfg);
+// 2. Configure the output (output_cfg_t is defined in hbn_idu_cfg.h) and layer
+output_cfg_t chn_cfg = {0};
+chn_cfg.out_sel = OUTPUT_MIPI;
+hb_disp_set_output_cfg_id(&chn_cfg, DISP_PRI_1);
 
-disp_layer_cfg_t layer_cfg = {0};
-layer_cfg.width  = 1920;
-layer_cfg.height = 1080;
-hb_disp_set_layer_cfg_id(1, &layer_cfg, DISP_PRI_1);
+// Layer config uses 6 scalar parameters (layer_no, width, height, x_pos, y_pos, disp_id)
+hb_disp_set_layer_cfg_id(1, 1920, 1080, 0, 0, DISP_PRI_1);
 
 // 3. Start the display and enable the layer
 hb_disp_start_id(DISP_PRI_1);
@@ -59,14 +58,14 @@ hb_disp_layer_on_id(1, DISP_PRI_1);
 void *addr_y = /* Y address of the image */;
 void *addr_c = /* C address of the image */;
 hb_disp_set_video_bufaddr_id(DISP_PRI_1, 1, addr_y, addr_c);
-hb_disp_get_disp_done_sync_id(DISP_PRI_1, 1, 1000);
+hb_disp_get_disp_done_sync_id(DISP_PRI_1, 0);   /* rel_seq is the display sequence number */
 
 // 5. Close
 hb_disp_stop_id(DISP_PRI_1);
 hb_disp_close_id(DISP_PRI_1);
 ```
 
-> For the display layer numbers, priorities, and output mode enums, see `hbn_idu_cfg.h`; for HDMI display on the board, refer to `sample_pipeline/common/vp_display.c` (DRM/KMS path).
+> For the display layer numbers, priorities, and output mode enums, see `hb_disp_interface.h`; for structures such as `output_cfg_t`/`disp_timing_t`, see `hbn_idu_cfg.h`; for HDMI display on the board, refer to `sample_pipeline/common/vp_display.c` (DRM/KMS path).
 
 ## API List
 

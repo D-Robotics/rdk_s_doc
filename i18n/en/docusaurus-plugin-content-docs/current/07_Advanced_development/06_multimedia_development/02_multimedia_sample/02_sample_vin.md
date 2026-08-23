@@ -152,7 +152,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 **Command Parameter Descriptions:**
 
 - `c <sensor>`: This option specifies the sensor index to be used. The user must provide a valid index value.
-- `l <link_port>`: This option specifies the port used to connect SerDes sensors. It is mandatory for SerDes sensors.
+- `link`: A sub-parameter of the `-c` config string; specifies the port used to connect SerDes sensors (0:A 1:B 2:C 3:D). It is mandatory for SerDes sensors.
 - `h`: Displays help information.
 
 #### Execution Results
@@ -205,7 +205,7 @@ After running the program, you will obtain a RAW image from the imx219 sensor na
 
 **Cause**: The specified sensor is not connected to the development board, or it is connected to a different interface (MIPI direct connection / GMSL (Gigabit Multimedia Serial Link) port mismatch).
 
-**Solution**: Confirm that the actually connected camera model corresponds to the `-s` index (run `./get_vin_data -h` to view the supported list); MIPI directly-connected sensors must be connected to the corresponding CSI interface, and GMSL sensors require specifying `-l <link_port>` and `-m <mipi_rx>`.
+**Solution**: Confirm that the actually connected camera model corresponds to the `-s` index (run `./get_vin_data -h` to view the supported list); MIPI directly-connected sensors must be connected to the corresponding CSI interface, and GMSL sensors require specifying `-l <link_port>`.
 
 ### GMSL/SerDes Sensor Must Specify link port
 
@@ -213,7 +213,7 @@ After running the program, you will obtain a RAW image from the imx219 sensor na
 
 **Cause**: The SerDes sensor needs to know the link port of the hardware connection (0:A 1:B 2:C 3:D) in order to communicate with the deserializer.
 
-**Solution**: Specify `-l 0/1/2/3` according to the actual hardware connection, and specify mipi_rx with `-m`.
+**Solution**: Specify `-l 0/1/2/3` according to the actual hardware connection.
 
 ### Frame Acquisition Timeout or Failure to Acquire Frames
 

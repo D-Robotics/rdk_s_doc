@@ -38,14 +38,10 @@ MediaCodec（音视频编解码，X5 Codec → RDK MediaCodec）是 RDK 的音�
 // 1. 获取 codec descriptor 与默认 context，初始化为编码器
 const media_codec_descriptor_t *desc = hb_mm_mc_get_descriptor(MEDIA_CODEC_ID_H265);
 media_codec_context_t context = {0};
-hb_mm_mc_get_default_context(MEDIA_CODEC_ID_H265, &context);
-context.encoder = true;            /* 编码 */
-context.codec_id = MEDIA_CODEC_ID_H265;
+hb_mm_mc_get_default_context(MEDIA_CODEC_ID_H265, true, &context);   /* true=编码器 */
 
-// 2. 初始化并配置（码率/分辨率/帧率等）
+// 2. 初始化并配置（码率/分辨率/帧率等在 context 与 VPF 参数中设置）
 hb_mm_mc_initialize(&context);
-mc_av_codec_config_t codec_cfg = {0};
-/* 按需填充 codec_cfg ... */
 hb_mm_mc_configure(&context);
 
 // 3. 启动编码
@@ -53,8 +49,8 @@ mc_av_codec_startup_params_t startup_params = {0};
 hb_mm_mc_start(&context, &startup_params);
 
 // 4. 送入图像帧，取回编码码流（buffer 复用循环）
-mc_buffer_t in_buf, out_buf;
-mc_buffer_info_t out_info;
+media_codec_buffer_t in_buf, out_buf;
+media_codec_output_buffer_info_t out_info;
 hb_mm_mc_dequeue_input_buffer(&context, &in_buf, 2000);
 /* 填充 in_buf 为 NV12 图像 ... */
 hb_mm_mc_queue_input_buffer(&context, &in_buf, 2000);

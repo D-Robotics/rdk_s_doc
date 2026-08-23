@@ -43,7 +43,8 @@ Options:
 - i: Specify the input YUV file. The test program uses a file in NV12 format as input.  
 - w: Width of the input YUV image.  
 - h: Height of the input YUV image.  
-- f: Specify the PYM operation mode. The default mode is Vflow.  
+- f: Specify the PYM operation mode. The default mode is Vflow.
+- V: Enable verbose mode, print more runtime information.  
 
 ### Running Effect  
 Take a YUV image with an input resolution of 1920 x 1080 as an example: run `./sample_pym -i /app/res/assets/nv12_1920x1080.yuv -w 1920 -h 1080`.  

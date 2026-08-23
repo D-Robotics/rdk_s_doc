@@ -537,7 +537,7 @@ Set the frame rate of the corresponding port, and whether to select skip frame
 [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 [IN] int32_t skip_frame[0, 1]:if skip frame enable,0-no skip,1-skip; range:[0, 1],default:0
 [IN] uint32_t in_fps:sensor input fps; range:[1, 480],default:30
-[IN] int32_t skip_frame:sensor output fps; range:[1, 480],default:30
+[IN] uint32_t out_fps:sensor output fps; range:[1, 480],default:30
 
 **Return Value**
 
@@ -687,7 +687,7 @@ Not support
 **Parameter Description**
 
 [IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
-[IN] uint32_t mclk:senosr clock; range:[1, 3000000],default:0
+[IN] uint32_t mclk:sensor clock; range:[1, 3000000],default:0
 
 **Return Value**
 
@@ -1086,7 +1086,7 @@ Get sensor information
 **Parameter Description**
 
 [IN] uint32_t port:Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[OUT] camera_staus_t *statinfo:Gets the address of the parameter
+[OUT] struct cam_statinfo *info:Gets the address of the parameter
 
 **Return Value**
 
@@ -1112,7 +1112,7 @@ Parse camera embed data and obtain sensor exposure parameters, etc.
 
 [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 [IN] char* embed_raw: data to be parsed
-[OUT] struct embed_data_info_s *embed_info: pared data information
+[OUT] struct embed_data_info_s *embed_info: parsed data information
 
 **Return Value**
 

@@ -34,22 +34,21 @@ DISP（Display，显示输出，X5 Display → RDK DISP）是 RDK 的显示输�
 
 ```c
 #include "hb_disp_interface.h"
+#include "hbn_idu_cfg.h"
 
-// 1. 初始化显示设备（DISP_PRI_1 为显示优先级，见 hbn_idu_cfg.h）
+// 1. 初始化显示设备（DISP_PRI_1 定义于 hb_disp_interface.h）
 int32_t ret = hb_disp_init_dev_cfg(DISP_PRI_1, "");
 if (ret != 0) {
     /* 初始化失败处理 */
 }
 
-// 2. 配置输出通道与 layer
-output_channel_cfg_t chn_cfg = {0};
-chn_cfg.output_mode = OUTPUT_MIPI;
-hb_disp_set_output_cfg_id(DISP_PRI_1, &chn_cfg);
+// 2. 配置输出（output_cfg_t 定义于 hbn_idu_cfg.h）与 layer
+output_cfg_t chn_cfg = {0};
+chn_cfg.out_sel = OUTPUT_MIPI;
+hb_disp_set_output_cfg_id(&chn_cfg, DISP_PRI_1);
 
-disp_layer_cfg_t layer_cfg = {0};
-layer_cfg.width  = 1920;
-layer_cfg.height = 1080;
-hb_disp_set_layer_cfg_id(1, &layer_cfg, DISP_PRI_1);
+// layer 配置走 6 个标量参数（layer_no、width、height、x_pos、y_pos、disp_id）
+hb_disp_set_layer_cfg_id(1, 1920, 1080, 0, 0, DISP_PRI_1);
 
 // 3. 启动显示，打开 layer
 hb_disp_start_id(DISP_PRI_1);
@@ -59,14 +58,14 @@ hb_disp_layer_on_id(1, DISP_PRI_1);
 void *addr_y = /* 图像 Y 地址 */;
 void *addr_c = /* 图像 C 地址 */;
 hb_disp_set_video_bufaddr_id(DISP_PRI_1, 1, addr_y, addr_c);
-hb_disp_get_disp_done_sync_id(DISP_PRI_1, 1, 1000);
+hb_disp_get_disp_done_sync_id(DISP_PRI_1, 0);   /* rel_seq 为显示序号 */
 
 // 5. 关闭
 hb_disp_stop_id(DISP_PRI_1);
 hb_disp_close_id(DISP_PRI_1);
 ```
 
-> 显示层（layer）编号与优先级、输出模式枚举见 `hbn_idu_cfg.h`；板端 HDMI 显示参考 `sample_pipeline/common/vp_display.c`（DRM/KMS 路径）。
+> 显示层（layer）编号与优先级、输出模式枚举见 `hb_disp_interface.h`；`output_cfg_t`/`disp_timing_t` 等结构体见 `hbn_idu_cfg.h`；板端 HDMI 显示参考 `sample_pipeline/common/vp_display.c`（DRM/KMS 路径）。
 
 ## API 列表
 

@@ -537,7 +537,7 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
   - Configures the parameters for each video pipeline. This option can be repeated multiple times.
   - `sensor` is mandatory; `channel`, `type`, and `output` are optional. When the user does not configure them, the program uses the default values.
   - `sensor`: Sensor index (mandatory). It can have multiple parameters; refer to the sensor list.
-  - `link`: The Link Port that a SerDes sensor is connected to (this parameter is ignored for MIPI (Mobile Industry Processor Interface) sensors). For example, if the sensor is connected to Port A, specify 0: `-l 0`.
+  - `link`: The Link Port that a SerDes sensor is connected to (this parameter is ignored for MIPI (Mobile Industry Processor Interface) sensors). For example, if the sensor is connected to Port A, specify 0 by writing `link=0` in the `-c` config string.
   - `channel`: VSE channel index (optional, defaults to 0, can be set to [0~5]).
   - `type`: Encoding type (optional, defaults to h264, can be set to [h264, h265]).
   - `output`: Saves the encoded stream data to a file (optional, defaults to `pipeline[xx]_[width]x[height]_[xxx]fps.[type]`).

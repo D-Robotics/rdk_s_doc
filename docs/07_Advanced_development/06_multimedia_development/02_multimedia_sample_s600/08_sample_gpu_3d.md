@@ -20,7 +20,7 @@ description: "sample_gpu_3d 使用说明 板端示例使用说明"
 ## OpenCL
 ### sample_matrix_multiply
 #### 功能概述
-功能描述：`sample_matrix_multiply` 使用 3D GPU 和 CPU 进行相同的矩阵运行，并打印两者的耗时
+功能描述：`sample_matrix_multiply` 使用 3D GPU 和 CPU 进行相同的矩阵运算，并打印两者的耗时
 
 ##### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_gpu_3d/cl/sample_matrix_multiply`
@@ -56,7 +56,7 @@ Matrices are identical!
 1. CPU 耗时： 0.997923 seconds
 2. GPU 耗时： 0.038153 seconds
 
-总耗时中可以看出在做矩阵乘法运算时， GPU 比 CPU 有更高得性能
+总耗时中可以看出在做矩阵乘法运算时， GPU 比 CPU 有更高的性能
 
 ## OpenGL ES
 
@@ -82,8 +82,8 @@ sample_bezier/
 #### 运行
 ##### 程序运行方法
 程序执行前需要做如下准备工作：
-1. RDKS600 通过 HDMI 接口接上显示器
-2. RDKS600 接上鼠标和键盘，通过显示器界面登录到 Ubuntu 系统中
+1. RDK S600 通过 HDMI 接口接上显示器
+2. RDK S600 接上鼠标和键盘，通过显示器界面登录到 Ubuntu 系统中
 
 执行程序：
 1. 进入目录：`cd /app/multimedia_samples/sample_gpu_3d/gles/sample_bezier`

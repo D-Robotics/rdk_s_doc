@@ -48,20 +48,22 @@ GDC 模块的输入为 VPF/PYM 的输出，输出接后续处理（VENC/VOT 等�
 GDC 无独立函数 API，通过「生成配置 binary → 经 HBN vnode 设入」的配置流程使用。生成配置 binary 的最小流程如下（参考板端 `/app/multimedia_samples/sample_gdc/2-generate_bin/`）：
 
 ```c
+#include <stdio.h>
 #include "gdc_cfg.h"
 #include "gdc_bin_cfg.h"
+#include "gdc_json_parser.h"
 
-// 1. 解析 JSON 配置（输入/输出几何、畸变映射等）
-gdc_bin_custom_config_t cfg = {0};
-parse_json_config("./gdc_bin_custom_config.json", &cfg);
-
-// 2. 生成 GDC 配置 binary，写入文件（板端 hbn_gen_gdc_cfg 同源实现）
+// 生成 GDC 配置 binary（第一个参数为配置 json 文件路径，参考板端 sample_gdc/2-generate_bin/generate_bin.c）
 uint32_t *cfg_buf = NULL;
 uint64_t config_size = 0;
-gdc_cfg_bin_gen(json_str, NULL, (void **)&cfg_buf, &config_size);
-save_to_file("./gdc.bin", cfg_buf, config_size);
+gdc_cfg_bin_gen("./gdc_bin_custom_config.json", NULL, (void **)&cfg_buf, &config_size);
 
-// 3. 释放生成 buffer
+// 写入 gdc.bin
+FILE *fp = fopen("./gdc.bin", "w");
+fwrite(cfg_buf, 1, config_size, fp);
+fclose(fp);
+
+// 释放生成 buffer
 hbn_free_gdc_cfg(cfg_buf);
 ```
 

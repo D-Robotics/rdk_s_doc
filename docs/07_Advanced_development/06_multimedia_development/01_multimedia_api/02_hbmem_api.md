@@ -48,7 +48,8 @@ hbmem_cache_clean(addr, 4 * 1024 * 1024);
 
 // 3. 查询物理地址 / 虚拟地址（多进程共享时用 share_id）
 uint64_t phy = hbmem_phyaddr(addr);
-uint32_t share_id = hbmem_get_share_id(addr);
+int32_t share_id = 0;
+hbmem_get_share_id(addr, &share_id);
 
 // 4. 释放
 hbmem_free(addr);
@@ -119,7 +120,7 @@ alloc hobot memory
 
 [IN] size: Size of memory space to be allocated range: (0, ); default: 0
 [IN] flag: Request identifier @hbmem_backends
-[IN] lable: String to identify the memory space
+[IN] label: String to identify the memory space
 
 【返回值】
 

@@ -129,7 +129,7 @@ Examples:
 ; 0x0 表示不启用编码
 ; 0x01 表示只启用 venc_stream1 编码流
 ; 0x02 表示只启用 venc_stream2 编码流
-; 0x03 表示只启用前两路编码流（ venc_stream1 和 venc_stream2 ）, 0x07 表示启用前三路编码流 , 0x0f 表示启用前三路编码流，以此类推
+; 0x03 表示只启用前两路编码流（ venc_stream1 和 venc_stream2 ）, 0x07 表示启用前三路编码流 , 0x0f 表示启用前四路编码流，以此类推
 encode_streams = 0x1
 
 [venc_stream1]
