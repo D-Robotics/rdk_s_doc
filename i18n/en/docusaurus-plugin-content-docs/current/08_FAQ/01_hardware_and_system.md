@@ -6,7 +6,7 @@ sidebar_position: 1
 
 :::info 🔄 Consider updating to the latest system before troubleshooting
 
-Many issues can be resolved by updating the system. For related download resources, see: [Download Resources](../RDK.md#资料索引)
+Many issues can be resolved by updating the system. For related download resources, see: [Download Resources](../RDK.md#resource-index)
 
 :::
 
@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-For certified accessories and purchase links, see the [RDK S100 Certified Accessories List](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#配件清单)
+For certified accessories and purchase links, see the [RDK S100 Certified Accessories List](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#accessory-list)
 
 </DocScope>
 

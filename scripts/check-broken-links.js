@@ -126,6 +126,15 @@ function classifyLink(url) {
 
 // ==================== VERIFY INTERNAL ====================
 
+// 盲区⑨：同 rel 的 zh/en 文件混在一个数组里，en 源文件的链接应取 en 目标文件验证锚点
+function pickForSource(files, sourceFile) {
+  if (!files || !files.length) return null;
+  if (files.length === 1) return files[0];
+  const wantI18n = sourceFile.includes('i18n');
+  const m = files.find(f => f.includes('i18n') === wantI18n);
+  return m || files[0];
+}
+
 function verifyInternalLink(linkUrl, sourceFile, fileMap) {
   const sourceDir = path.dirname(sourceFile);
   let anchor = null, pathOnly = linkUrl;
@@ -156,16 +165,14 @@ function verifyInternalLink(linkUrl, sourceFile, fileMap) {
   }
 
   if (!foundFile) {
-    let norm = pathOnly.startsWith('/') ? pathOnly.slice(1) : path.relative(DOCS_DIR, resolvedPath).replace(/\\/g, '/');
-    if (!fileMap.has(norm)) {
-      const i18nRel = path.relative(I18N_DIR, resolvedPath).replace(/\\/g, '/');
-      if (fileMap.has(i18nRel)) norm = i18nRel;
-    }
-    if (fileMap.has(norm)) foundFile = fileMap.get(norm)[0];
+    const baseDir = sourceFile.includes('i18n') ? I18N_DIR : DOCS_DIR;
+    let norm = (pathOnly.startsWith('/') ? pathOnly.slice(1) : path.relative(baseDir, resolvedPath).replace(/\\/g, '/'))
+    .split('/').map(s => s.replace(/^\d+_/, '')).join('/');
+    if (fileMap.has(norm)) foundFile = pickForSource(fileMap.get(norm), sourceFile);
     if (!foundFile) {
       const targetSeg = pathOnly.split('/').filter(Boolean).pop() || '';
       for (const [key, files] of fileMap) {
-        if (key.split('/').filter(Boolean).pop() === targetSeg) { foundFile = files[0]; break; }
+        if (key.split('/').filter(Boolean).pop() === targetSeg) { foundFile = pickForSource(files, sourceFile); break; }
       }
     }
     // 盲区2：category 路由——绝对 slug 指向目录（无 index），Docusaurus 路由到目录首篇
@@ -173,7 +180,14 @@ function verifyInternalLink(linkUrl, sourceFile, fileMap) {
       const normDir = pathOnly.slice(1).replace(/\/+$/, '').split('/').map(s => s.replace(/^\d+_/, '')).join('/');
       const prefix = normDir + '/';
       for (const [key, files] of fileMap) {
-        if (key.startsWith(prefix)) { foundFile = files[0]; break; }
+        if (key.startsWith(prefix)) { foundFile = pickForSource(files, sourceFile); break; }
+      }
+      // A 型：裸 category slug（单段，如 /01_hardware_introduction），按目录名反查首篇
+      const segs = normDir.split('/').filter(Boolean);
+      if (!foundFile && segs.length === 1) {
+        for (const [key, files] of fileMap) {
+          if (key.split('/').includes(segs[0])) { foundFile = pickForSource(files, sourceFile); break; }
+        }
       }
     }
   }

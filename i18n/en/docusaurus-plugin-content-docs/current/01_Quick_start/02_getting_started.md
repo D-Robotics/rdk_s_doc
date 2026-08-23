@@ -65,7 +65,7 @@ The RDK S100 boots from the onboard **eMMC**. The boot device selection is deter
 
 <DocScope products="RDK S600">
 
-The RDK S600 boots from the onboard **UFS**. The boot device selection is determined by the **SW8 BOOT** DIP switch, which is set to the UFS boot position at the factory. If you need to boot from NVMe, refer to the SW8 description in [Introduction to the S600 Hardware](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#bootsw8), and use the NVMe edition image.
+The RDK S600 boots from the onboard **UFS**. The boot device selection is determined by the **SW8 BOOT** DIP switch, which is set to the UFS boot position at the factory. If you need to boot from NVMe, refer to the SW8 description in [Introduction to the S600 Hardware](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#boot-sw8), and use the NVMe edition image.
 
 </DocScope>
 

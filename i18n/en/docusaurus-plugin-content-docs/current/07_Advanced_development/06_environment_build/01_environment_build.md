@@ -83,7 +83,7 @@ import DocScope from '@site/src/components/DocScope'
 ## Acquiring the Source Code
 
 :::info BSP source package
-The download address of the BSP source package is in [System Images](../../RDK.md#系统镜像) (registration and login required).
+The download address of the BSP source package is in [System Images](../../RDK.md#system-images) (registration and login required).
 :::
 
 :::tip Commercial Support
