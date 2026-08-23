@@ -206,7 +206,7 @@ The audio loopback capture feature can be used to capture the signal of the play
 - **Analyze the loopback capture signal**
   After recording completes, use audio analysis software such as Audacity to open `8chn_test.wav` and check whether the spectrum frequency of channels 7 and 8 meets expectations, to verify whether the loopback capture feature works properly.
 
-## Common Issue Troubleshooting
+## FAQ
 
 - If no sound card is detected, check that the hardware connection and DIP switch settings are correct.
 - If recording or playback is silent, confirm that the audio file format and channel count match the command parameters.
