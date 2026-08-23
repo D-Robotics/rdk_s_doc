@@ -54,6 +54,17 @@ function buildFileMap(dirs) {
       if (!map.has(noIdx)) map.set(noIdx, []);
       map.get(noIdx).push(file);
     }
+    // 也按 frontmatter 显式 slug 建索引（盲区1：显式 slug 文件的引用）
+    const content = fs.readFileSync(file, 'utf-8');
+    const fm = content.match(/^---\n([\s\S]*?)\n---/);
+    if (fm) {
+      const sm = fm[1].match(/^slug:\s*["']?([^"'\n]+)["']?\s*$/m);
+      if (sm) {
+        const slug = sm[1].trim().replace(/^\/+/, '');
+        if (slug && !map.has(slug)) map.set(slug, []);
+        if (slug) map.get(slug).push(file);
+      }
+    }
   }
   return map;
 }
@@ -84,6 +95,7 @@ function extractLinks(filePath) {
   const links = [];
   const seen = new Set();
   function add(type, url, text, line) {
+    if (url.includes('[')) return; // 盲区3：误抓代码里的数组下标 arr[i]
     const key = `${type}:${url}:${line}`;
     if (seen.has(key)) return;
     seen.add(key);
@@ -156,6 +168,14 @@ function verifyInternalLink(linkUrl, sourceFile, fileMap) {
         if (key.split('/').filter(Boolean).pop() === targetSeg) { foundFile = files[0]; break; }
       }
     }
+    // 盲区2：category 路由——绝对 slug 指向目录（无 index），Docusaurus 路由到目录首篇
+    if (!foundFile && pathOnly.startsWith('/')) {
+      const normDir = pathOnly.slice(1).replace(/\/+$/, '').split('/').map(s => s.replace(/^\d+_/, '')).join('/');
+      const prefix = normDir + '/';
+      for (const [key, files] of fileMap) {
+        if (key.startsWith(prefix)) { foundFile = files[0]; break; }
+      }
+    }
   }
 
   if (!foundFile) return { status: 'broken', reason: `target file not found: ${pathOnly}` };
@@ -184,6 +204,7 @@ function verifyCrossDocLink(url) {
 
   const sourceDir = CROSS_DOC_MAP[repoKey];
   if (!sourceDir) return { status: 'unverifiable', reason: `unknown repo: ${repoKey}` };
+  if (!fs.existsSync(sourceDir)) return { status: 'unverifiable', reason: `cross-doc repo not checked out: ${repoKey}` };
 
   const segments = docPath.split('/').filter(Boolean);
   const stripped = segments.map(s => s.replace(/^\d+_/, ''));
