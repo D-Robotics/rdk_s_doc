@@ -159,3 +159,4 @@ On RDK S600, uart4 is initialized as /dev/ttyS1. uart4 does not have physical pi
 
 - [Expansion Pin Usage](/Demos/peripheral/40pin)
 - [dpkg-deb Command](/Appendix/linux-command-manual/dpkg-deb)
+- [Debug Serial](/System_configuration/debug_serial)

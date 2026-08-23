@@ -182,3 +182,4 @@ USB Type-A 接口用于连接 U 盘、移动硬盘等存储设备。USB Type-C �
 - [入门配置](03_install_os_and_setup/04_configuration_wizard.md)
 - [远程登录](03_install_os_and_setup/05_remote_login.md)
 - [网络配置](../02_System_configuration/01_network_config.md)
+- [启动相关配置](../02_System_configuration/05_config_txt/04_boot_options.md)

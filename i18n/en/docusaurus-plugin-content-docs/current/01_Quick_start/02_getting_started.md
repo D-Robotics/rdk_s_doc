@@ -182,3 +182,4 @@ The USB Type-A ports are used for connecting storage devices such as USB flash d
 - [Initial Configuration](03_install_os_and_setup/04_configuration_wizard.md)
 - [Remote Login](03_install_os_and_setup/05_remote_login.md)
 - [Network Configuration](../02_System_configuration/01_network_config.md)
+- [Boot Configuration](../02_System_configuration/05_config_txt/04_boot_options.md)

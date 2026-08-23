@@ -162,3 +162,4 @@ RDK S600是将 uart4初始化为/dev/ttyS1，uart4并没有引出物理引脚，
 
 - [扩展引脚应用](/Demos/peripheral/40pin)
 - [dpkg-deb 命令](/Appendix/linux-command-manual/dpkg-deb)
+- [调试串口](/System_configuration/debug_serial)
