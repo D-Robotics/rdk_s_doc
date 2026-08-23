@@ -51,8 +51,10 @@ OTA functionality is not enabled by default on RDK. To enable it, please follow 
         sudo ./pack_image.sh -p
         ```
 2. <DocScope products="RDK S100">In the `ubuntu-22.04_desktop_rdk-s100_beta.conf` and `ubuntu-22.04_desktop_rdk-s100_release.conf` files under the build_params directory, configure PARTITION_FILE for the OTA version: `export PARTITION_FILE="s100-ota-gpt.json"`, and configure RDK_DM_VERIFY_ENABLE to enable: `export RDK_DM_VERIFY_ENABLE="yes"`;</DocScope>
+<DocScope products="RDK S600">In the `ubuntu-24.04_desktop_rdk-s600_beta.conf`, `ubuntu-24.04_server_rdk-s600_beta.conf`, `ubuntu-24.04_desktop_rdk-s600_release.conf`, and `ubuntu-24.04_server_rdk-s600_release.conf` files under the build_params directory (modify only the conf files you use), configure PARTITION_FILE for the OTA version: `export PARTITION_FILE="s600-ota-gpt.json"`, and configure RDK_DM_VERIFY_ENABLE to enable: `export RDK_DM_VERIFY_ENABLE="yes"`;</DocScope>
 
 3. <DocScope products="RDK S100">In the `board_s100_debug.mk` and `board_s100_release.mk` files under the source/bootloader/device/rdk/s100 directory, configure the RDK_OTA variable to enable: `export RDK_OTA="yes"`;</DocScope>
+<DocScope products="RDK S600">In the `board_s600_debug.mk` and `board_s600_release.mk` files under the source/bootloader/device/rdk/s600 directory, configure the RDK_OTA variable to enable: `export RDK_OTA="yes"`;</DocScope>
 
 4. Compilation
    - Create a new miniboot deb package
@@ -354,6 +356,32 @@ Archive:  all_in_one_signed.zip
 8632992549                     16 files
 ```
 </DocScope>
+<DocScope products="RDK S600">
+```bash
+Archive:  all_in_one_signed.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+     1069  2025-12-01 18:15   gpt.conf
+     5619  2025-12-01 18:15   data.json
+   526336  2025-12-01 18:03   HSM_FW_L0_signed.img
+   264192  2025-12-01 18:03   HSM_RCA_L0_signed.img
+   264192  2025-12-01 18:03   keyimage_signed.img
+   264192  2025-12-01 18:03   SBL_signed.img
+   788480  2025-12-01 18:03   spl_signed.img
+  1312768  2025-12-01 18:03   MCU_S600_V1.0_signed.img
+   342592  2025-12-01 18:03   acore_cfg.img
+   601088  2025-12-01 18:03   bl31.img
+   891840  2025-12-01 18:03   optee.img
+  1080064  2025-12-01 18:03   uboot.img
+     2752  2025-12-01 18:06   vbmeta.img
+125829120  2025-12-01 18:05   boot.img
+9828880384  2025-12-01 18:05   system.img
+   337560  2025-11-27 20:23   ota_process
+---------                     -------
+9961392248                     16 files
+```
+
+</DocScope>
 
 The above shows the file structure within a current OTA upgrade package, mainly including the following four types of files. The number of image files may vary based on the actual configuration.
 
@@ -579,6 +607,205 @@ Below is an example of a data.json file:
 ```
 
 </DocScope>
+<DocScope products="RDK S600">
+```JSON
+{
+    "antirollbackUpdate_host": true,
+    "antirollbackUpdate_hsm": false,
+    "backup_dir": "/tmp/ota/backup",
+    "sys_version": "None",
+    "ab_sync": false,
+    "update_partition": [
+        "HSM_FW",
+        "HSM_RCA",
+        "keyimage",
+        "SBL",
+        "spl",
+        "MCU",
+        "acore_cfg",
+        "bl31",
+        "optee",
+        "uboot",
+        "vbmeta",
+        "boot",
+        "system"
+    ],
+    "nor_sign": true,
+    "partition_info": {
+        "HSM_FW": {
+            "md5sum": {
+                "HSM_FW_L0_signed.img": "a3f9c37c0d7e52cb083952442bdf7d6a"
+            },
+            "md5_scope": {
+                "HSM_FW_L0_signed.img": 524288
+            },
+            "medium": "nor",
+            "part_type": "BAK",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "HSM_FW_L0_signed.img"
+        },
+        "HSM_RCA": {
+            "md5sum": {
+                "HSM_RCA_L0_signed.img": "1dd1d254fd5e0e20c2713fdcc843682a"
+            },
+            "md5_scope": {
+                "HSM_RCA_L0_signed.img": 262144
+            },
+            "medium": "nor",
+            "part_type": "BAK",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "HSM_RCA_L0_signed.img"
+        },
+        "keyimage": {
+            "md5sum": {
+                "keyimage_signed.img": "4e2c05cee532d05eb4c9cff0d142d0b2"
+            },
+            "md5_scope": {
+                "keyimage_signed.img": 262144
+            },
+            "medium": "nor",
+            "part_type": "BAK",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "keyimage_signed.img"
+        },
+        "SBL": {
+            "md5sum": {
+                "SBL_signed.img": "850841d2aa725381dc775c17e1deece5"
+            },
+            "md5_scope": {
+                "SBL_signed.img": 262144
+            },
+            "medium": "nor",
+            "part_type": "BAK",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "SBL_signed.img"
+        },
+        "spl": {
+            "md5sum": {
+                "spl_signed.img": "f53f121bb10c4e506ec8225728e26623"
+            },
+            "md5_scope": {
+                "spl_signed.img": 786432
+            },
+            "medium": "nor",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "spl_signed.img"
+        },
+        "MCU": {
+            "md5sum": {
+                "MCU_S600_V1.0_signed.img": "43543ddbda842e44684eb14134d29571"
+            },
+            "md5_scope": {
+                "MCU_S600_V1.0_signed.img": 1310720
+            },
+            "medium": "nor",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "MCU_S600_V1.0_signed.img"
+        },
+        "acore_cfg": {
+            "md5sum": {
+                "acore_cfg.img": "2eeecd965de917d734d4f947de5c4388"
+            },
+            "md5_scope": {
+                "acore_cfg.img": 342592
+            },
+            "medium": "emmc",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "acore_cfg.img"
+        },
+        "bl31": {
+            "md5sum": {
+                "bl31.img": "26f405587f38c0cf90c89f89f498079e"
+            },
+            "md5_scope": {
+                "bl31.img": 601088
+            },
+            "medium": "emmc",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "bl31.img"
+        },
+        "optee": {
+            "md5sum": {
+                "optee.img": "50a1d2c6bd4e90028a100094ff6151bd"
+            },
+            "md5_scope": {
+                "optee.img": 891840
+            },
+            "medium": "emmc",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "optee.img"
+        },
+        "uboot": {
+            "md5sum": {
+                "uboot.img": "11a04d4a5e7cbef696c5ed1f245232f7"
+            },
+            "md5_scope": {
+                "uboot.img": 1080064
+            },
+            "medium": "emmc",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "uboot.img"
+        },
+        "vbmeta": {
+            "md5sum": {
+                "vbmeta.img": "2651efe9e881f540b19957ad8fdb7413"
+            },
+            "md5_scope": {
+                "vbmeta.img": 2752
+            },
+            "medium": "emmc",
+            "part_type": "AB",
+            "have_anti_ver": true,
+            "upgrade_method": "image",
+            "imgname": "vbmeta.img"
+        },
+        "boot": {
+            "md5sum": {
+                "boot.img": "b0f94362d2e0a29cd15b3d226395b27b"
+            },
+            "md5_scope": {
+                "boot.img": 125829120
+            },
+            "medium": "emmc",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "boot.img"
+        },
+        "system": {
+            "md5sum": {
+                "system.img": "bd4f5a4210d6ea641a00f9fa0abc69ac"
+            },
+            "md5_scope": {
+                "system.img": 9828880384
+            },
+            "medium": "emmc",
+            "part_type": "AB",
+            "have_anti_ver": null,
+            "upgrade_method": "image",
+            "imgname": "system.img"
+        }
+    }
+}
+```
+
+</DocScope>
 
 With the above configuration, the OTA upgrade package can ensure that the image for each partition is correctly verified and updated during the upgrade process.
 
@@ -775,6 +1002,10 @@ The diagram below illustrates how A/B slots are switched during normal boot (thi
 <DocScope products="RDK S100">
 In the S100 reference implementation, after the OTA update completes and the system reboots, the kernel triggers the systemd OTA service to perform a reboot check, thereby completing the full OTA process (essentially executing `ota_tool -b`).
 </DocScope>
+<DocScope products="RDK S600">
+In the S600 reference implementation, after the OTA upgrade completes and the system reboots, booting into the kernel triggers the systemd OTA service to perform a reboot check, thereby completing the full OTA flow (essentially executing `ota_tool -b`).
+
+</DocScope>
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_boot_check_state-en.jpg" alt="Reboot Verification and Rollback diagram" style={{ width: "100%", maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Partition Flashing Method
@@ -790,6 +1021,11 @@ OTA performs upgrades on a per-partition basis. Each partition to be upgraded ha
   - During a delta upgrade, S100 OTA uses the delta image and the original partition data on the device to reconstruct the target image through a reverse delta process. It then writes this reconstructed image to the corresponding external storage partition, completing the final upgrade.
 
   - The S100 platform utilizes the open-source delta algorithm tool `hdiffz/hpatch`. For more information, please refer to: [github | HDiffPatch](https://github.com/sisong/HDiffPatch).
+</DocScope>
+<DocScope products="RDK S600">
+
+  - During a delta upgrade, S600 OTA uses the delta image and the original partition data on the device to reconstruct the target image through a reverse delta process, then writes it to the corresponding external storage partition to complete the final upgrade.
+  - S600 uses the open-source delta algorithm tool hdiffz/hpatch. For details, see: [github | HDiffPatch](https://github.com/sisong/HDiffPatch).
 </DocScope>
 
 
@@ -812,6 +1048,9 @@ OTA performs upgrades on a per-partition basis. Each partition to be upgraded ha
         ```
     <DocScope products="RDK S100">
     - As the S100 partition scheme supports automatic expansion of the last partition, its end address can change dynamically. Therefore, the GPT verification only checks partitions up to the `userdata` partition. The last partition typically does not contain an image, so this limitation does not affect normal usage.
+    </DocScope>
+<DocScope products="RDK S600">
+    - Because the S600 partition scheme supports automatic expansion of the last partition, its end address changes dynamically, so GPT verification only checks partitions up to the `userdata` partition. The last partition generally contains no image, so this does not affect normal use.
     </DocScope>
 ### Typical Upgrade Process
 1.  The OTA Service downloads and verifies the upgrade package from the cloud, then calls `otaInitLib` to initialize the dynamic library.
@@ -987,6 +1226,9 @@ After the upgrade process finishes and the system reboots, `ota_tool -b` should 
 <DocScope products="RDK S100">
 After the S100 boots, it starts a `hobot-otatool.service` service. This service invokes `ota_tool -b`. This option checks if the `/ota/ota_tool_force_upgrade` file exists. If it exists, it enters the upgrade process (the process re-invokes the upgrade command). If the file does not exist, it proceeds to the upgrade verification process `ota_boot_check`.
 </DocScope>
+<DocScope products="RDK S600">
+After the S600 boots, it starts a `hobot-otatool.service` service that invokes `ota_tool -b`. This option checks whether the `/ota/ota_tool_force_upgrade` file exists; if so, it enters the upgrade flow (re-invoking the upgrade command). If not, it proceeds to the upgrade verification flow `ota_boot_check`.
+</DocScope>
 ```c
 int32_t ota_boot_check(void)
 {
@@ -1059,6 +1301,9 @@ exit:
 ## OTA API Introduction
 <DocScope products="RDK S100">
 The S100 platform provides a low-level flashing library, `libupdate.so`, which implements a set of cross-platform APIs for flashing OTA packages.
+</DocScope>
+<DocScope products="RDK S600">
+The S600 platform provides a low-level flashing library `libupdate.so`, which implements a cross-platform API set for flashing OTA packages.
 </DocScope>
 
 The `ota_tool` utility was developed by the underlying software team based on the OTA HighLevel API.
