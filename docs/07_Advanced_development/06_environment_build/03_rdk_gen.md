@@ -89,7 +89,7 @@ samplefs/configs/
 - **RDK S600**: 使用 `noble-*` 配置文件（Ubuntu 24.04）
 :::
 
-##### 基本格式介绍
+#### 基本格式介绍
 详细的字段介绍请参考官方文档，这里主要针对地瓜的配置文件中的重要配置进行说明。
 1. 字段：`key1=value1`的格式，定义了某个字段"key1"的值为"value1"
 2. 字段集（stanza/section）：通过定义"`[Some-Section]`"来归集从该行开始，到下一个"`[Next-Section]`"为止中间所有字段为一个"`Section`"
@@ -109,7 +109,7 @@ samplefs/configs/
   - omitdebsrc：拉取 apt 元数据及包时，是否下载 deb 包对应的 src 包，一般配置为"true"，即不下载 deb 包对应的 src 包，以加速构建。
 - packages
   - 用于定义需要拉取的包的字段，一个 packages 字段可以定义多个包，包之间以空格分隔，多个 packages 字段的合集会作为最终的包定义。
-##### 多文件配置示例
+#### 多文件配置示例
 
 
 <DocScope products="RDK S100">
@@ -172,7 +172,7 @@ multistrap 默认会将所有 Priority 为"Required"的包进行安装。
 地瓜定义 important 包也会被安装。
 :::
 
-##### 仅裁剪/自定义 apt 优先级不为"important"/"required"的包
+#### 仅裁剪/自定义 apt 优先级不为"important"/"required"的包
 
 <DocScope products="RDK S100">
 
@@ -185,7 +185,7 @@ multistrap 默认会将所有 Priority 为"Required"的包进行安装。
 
 </DocScope>
 
-##### 需要裁剪/自定义 apt 优先级为"important"/"required"的包
+#### 需要裁剪/自定义 apt 优先级为"important"/"required"的包
 **注意**：一般来说各个 apt 源的维护者会将他们认为该系统（Ubuntu/Debian 的各个版本）的最小集的包的优先级标为"Required"，但是是可以进一步裁剪的。进行这种程度的根文件系统裁剪时，用户需要**自己保证根文件系统的完整性和可用性**。
 
 步骤如下：

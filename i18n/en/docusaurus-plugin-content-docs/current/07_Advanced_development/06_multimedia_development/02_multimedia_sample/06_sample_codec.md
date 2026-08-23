@@ -168,10 +168,10 @@ output = 1920x1080.yuv
 
 #### Encoding Configuration
 
-##### [encode]
+#### [encode]
 - **encode_streams**: This option specifies which encoding streams to enable, using bitwise representation. For example, `0x1` enables only the `venc_stream1` encoding stream, and `0x3` enables the first two encoding streams (`venc_stream1` and `venc_stream2`). **The value of this option is overridden by the command-line argument `-e`.**
 
-##### [venc_stream]
+#### [venc_stream]
 - **codec_type**: Specifies the encoding type. Valid values are `0` (H264), `1` (H265), `2` (MJPEG), and `3` (JPEG).
 - **width**: Width of the video frame.
 - **height**: Height of the video frame.
@@ -187,10 +187,10 @@ output = 1920x1080.yuv
 
 #### Decoding Configuration
 
-##### [decode]
+#### [decode]
 - **decode_streams**: This section specifies which decoding streams to enable, using bitwise representation. For example, `0x1` enables only the `vdec_stream1` decoding stream, and `0x3` enables the first two decoding streams (`vdec_stream1` and `vdec_stream2`).
 
-##### [vdec_stream]
+#### [vdec_stream]
 - **codec_type**: Specifies the video codec type to decode. Valid values are `0` (H264), `1` (H265), `2` (MJPEG), and `3` (JPEG).
 - **width**: Width of the decoded video frame.
 - **height**: Height of the decoded video frame.

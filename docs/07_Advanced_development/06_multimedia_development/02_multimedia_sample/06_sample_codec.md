@@ -167,10 +167,10 @@ output = 1920x1080.yuv
 
 #### 编码配置
 
-##### [encode]
+#### [encode]
 - **encode_streams**：此选项用于指定要启用的编码流。采用按位运算的方式表示。例如，`0x1` 表示只启用 `venc_stream1` 编码流，`0x3` 表示启用前两路编码流（`venc_stream1` 和 `venc_stream2`）。**本选项的值会被命令行参数 -e 所覆盖**
 
-##### [venc_stream]
+#### [venc_stream]
 - **codec_type**：指定编码的类型，可选值为 `0`（ H264 ）、`1`（ H265 ）、`2`（ MJPEG）和 `3`（ JPEG）。
 - **width**：视频帧的宽度。
 - **height**：视频帧的高度。
@@ -186,10 +186,10 @@ output = 1920x1080.yuv
 
 #### 解码配置
 
-##### [decode]
+#### [decode]
 - **decode_streams**：此部分用于指定要启用的解码流。采用按位运算的方式表示。例如，`0x1` 表示只启用 `vdec_stream1` 解码流，`0x3` 表示启用前两路解码流（`vdec_stream1` 和 `vdec_stream2`）。
 
-##### [vdec_stream]
+#### [vdec_stream]
 - **codec_type**：指定解码的视频编码类型，可选值为 `0`（ H264 ）、`1`（ H265 ）、`2`（ MJPEG）和 `3`（ JPEG）。
 - **width**：解码后视频帧的宽度。
 - **height**：解码后视频帧的高度。

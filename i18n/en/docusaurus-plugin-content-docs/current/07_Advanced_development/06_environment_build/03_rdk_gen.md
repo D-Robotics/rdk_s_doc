@@ -87,7 +87,7 @@ samplefs/configs/
 - **RDK S600**: Use `noble-*` configuration files (Ubuntu 24.04)
 :::
 
-##### Basic Format Introduction
+#### Basic Format Introduction
 For detailed field descriptions, please refer to the official documentation. Here we focus on important configurations in D-Robotics' configuration files.
 1. Field: In the format `key1=value1`, defines the value of field `key1` as `value1`.
 2. Stanza/Section: Defined by `[Some-Section]`, it groups all fields from that line until the next `[Next-Section]` into a `Section`.
@@ -108,7 +108,7 @@ Key fields:
 - packages
   - A field for defining packages to fetch. One packages field can define multiple packages separated by spaces. The union of multiple packages fields becomes the final package definition.
 
-##### Multi-File Configuration Example
+#### Multi-File Configuration Example
 
 
 <DocScope products="RDK S100">
@@ -173,7 +173,7 @@ multistrap installs all packages with Priority "Required" by default.
 D-Robotics also defines important packages to be installed.
 :::
 
-##### Trimming/Customizing Only Packages with APT Priority Other Than "important"/"required"
+#### Trimming/Customizing Only Packages with APT Priority Other Than "important"/"required"
 
 <DocScope products="RDK S100">
 
@@ -186,7 +186,7 @@ Users can directly delete unwanted packages from the various `packages` fields i
 
 </DocScope>
 
-##### Trimming/Customizing Packages with APT Priority "important"/"required"
+#### Trimming/Customizing Packages with APT Priority "important"/"required"
 **Note**: Generally, maintainers of APT sources mark packages that constitute the minimal set for that system (various versions of Ubuntu/Debian) with Priority "Required", but further trimming is possible. When trimming the root filesystem to this extent, users **must ensure the integrity and usability of the root filesystem themselves**.
 
 Steps:

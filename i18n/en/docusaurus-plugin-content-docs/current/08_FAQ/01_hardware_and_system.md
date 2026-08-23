@@ -124,7 +124,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 
 #### Troubleshooting and resolution
 
-##### 1. Repository domain change or GPG key issues
+#### 1. Repository domain change or GPG key issues
 
 **Typical error messages:**
 - `Clearsigned file isn't valid, got 'NOSPLIT'`
@@ -174,7 +174,7 @@ The D-Robotics official APT repository hostname or GPG signing key has changed, 
         sudo apt update
         ```
 
-##### 2. APT lock file held
+#### 2. APT lock file held
 * **Example error:**
     ```
     E: Could not get lock /var/lib/apt/lists/lock. It is held by process XXXX (apt-get)
@@ -198,7 +198,7 @@ The D-Robotics official APT repository hostname or GPG signing key has changed, 
         ```
     4.  Run `sudo apt update` again.
 
-##### 3. ROS 2 GPG key issues
+#### 3. ROS 2 GPG key issues
 
 **Typical error messages:**
 

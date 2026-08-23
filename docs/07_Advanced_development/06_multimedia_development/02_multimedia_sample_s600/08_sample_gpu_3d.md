@@ -22,7 +22,7 @@ description: "sample_gpu_3d 使用说明 板端示例使用说明"
 #### 功能概述
 功能描述：`sample_matrix_multiply` 使用 3D GPU 和 CPU 进行相同的矩阵运算，并打印两者的耗时
 
-##### 代码位置及目录结构
+#### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_gpu_3d/cl/sample_matrix_multiply`
 - 目录结构
 ```
@@ -37,11 +37,11 @@ description: "sample_gpu_3d 使用说明 板端示例使用说明"
 - 输出成果物是 sample_matrix_multiply 源码目录下的 `matrix_multiply`
 
 #### 运行
-##### 程序运行方法
+#### 程序运行方法
 执行可执行程序：`./matrix_multiply`
-##### 程序参数选项说明
+#### 程序参数选项说明
 无
-##### 运行效果
+#### 运行效果
 执行命令：
 `./matrix_multiply`
 运行日志：
@@ -66,7 +66,7 @@ Matrices are identical!
 1. 显示器桌面
 2. 保存图片
 
-##### 代码位置及目录结构
+#### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier`
 - 目录结构
 ```
@@ -80,7 +80,7 @@ sample_bezier/
 - 输出成果物是 sample_bezier 源码目录下的 `bezier`
 
 #### 运行
-##### 程序运行方法
+#### 程序运行方法
 程序执行前需要做如下准备工作：
 1. RDK S600 通过 HDMI 接口接上显示器
 2. RDK S600 接上鼠标和键盘，通过显示器界面登录到 Ubuntu 系统中
@@ -100,10 +100,10 @@ root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# id -u sunr
 root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# export WAYLAND_DISPLAY=/run/user/1000/wayland-0
 ```
 
-##### 程序参数选项说明
+#### 程序参数选项说明
 无参数选项
 
-##### 运行效果
+#### 运行效果
 
 运行日志：无
 

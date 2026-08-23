@@ -144,7 +144,7 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   请确保已正确安装 HBMRuntime（详见[安装说明](#安装说明installation)），并已具备模型文件 hbm 模型。
 ### 示例
 #### 单线程推理
-##### 单线程单模型单输入推理
+#### 单线程单模型单输入推理
 适用于模型只有一个输入张量的情况。
 ```python
 import numpy as np
@@ -170,7 +170,7 @@ outputs = model.run(input_tensor)
 output_array = outputs[model_name]
 print("Output:", output_array)
 ```
-##### 单线程单模型多输入推理
+#### 单线程单模型多输入推理
 适用于模型有多个输入张量的情况。
 ```python
 import numpy as np
@@ -222,7 +222,7 @@ results = model.run(input_tensors)
 for output_name, output_data in results[model_name].items():
     print(f"Output: {output_name}, shape={output_data.shape}")
 ```
-##### 单线程多模型多输入推理
+#### 单线程多模型多输入推理
 适用于多模型有多个输入张量的情况，注意这里的多模型可以是多个 HBM 文件，也可以是单个 HBM 文件里面包含多个模型。
 ```python
 """Multi-model inference quick start."""
@@ -270,7 +270,7 @@ for m, outs in outputs.items():
 ```
 
 #### 多线程推理
-##### 多线程单模型单输入推理
+#### 多线程单模型单输入推理
 适用于模型只有一个输入张量的情况。
 ```python
 import threading
@@ -304,7 +304,7 @@ threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
 for t in threads: t.start()
 for t in threads: t.join()
 ```
-##### 多线程单模型多输入推理
+#### 多线程单模型多输入推理
 适用于模型有多个输入张量的情况。
 ```python
 import threading
@@ -349,7 +349,7 @@ threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
 for t in threads: t.start()
 for t in threads: t.join()
 ```
-##### 多线程多模型多输入推理
+#### 多线程多模型多输入推理
 ```python
 """4-thread demo: each thread runs inference on a dedicated BPU core."""
 import threading
@@ -411,7 +411,7 @@ Python 模块 hbm_runtime 是通过 PyBind11 封装的D-Robotics HBM 模型推�
 
 ### 枚举类型
 #### hbDNNDataType
-##### 张量数据类型枚举：
+#### 张量数据类型枚举：
 - S4：4-bit signed
 - U4：4-bit unsigned
 - S8：8-bit signed
@@ -428,16 +428,16 @@ Python 模块 hbm_runtime 是通过 PyBind11 封装的D-Robotics HBM 模型推�
 - BOOL8：8-bit bool 类型
 - MAX：最大值（保留字段）
 
-##### 示例
+#### 示例
 ```python
 from hbm_runtime import hbDNNDataType
 print(hbDNNDataType.F32)  # 输出: hbDNNDataType.F32
 ```
 #### hbDNNQuantiType
-##### 张量量化类型枚举：
+#### 张量量化类型枚举：
 - NONE：非量化类型
 - SCALE：线性缩放量化（scale + zero_point）
-##### 示例
+#### 示例
 ```python
 from hbm_runtime import hbDNNQuantiType
 print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
@@ -446,7 +446,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
 ### 类说明
 #### HB_HBMRuntime
 模型运行时类，加载一个或多个 HBM 模型文件，并提供推理执行接口。
-##### 构造函数
+#### 构造函数
 - 函数签名
     ```python
     HB_HBMRuntime(model_file: str)
@@ -470,7 +470,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     model = HB_HBMRuntime(["model1.hbm", "model2.hbm"])
     ```
 
-##### 属性说明
+#### 属性说明
 以下所有属性均为只读。
 - version: str
   - 功能说明：
@@ -764,7 +764,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     #   deviceId: 0
     ```
     注意：bpu_cores返回-1表示由调度器自动分配；
-##### 配置函数
+#### 配置函数
 - set_scheduling_params
   - 函数签名
     ```python
@@ -824,7 +824,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     print(model.sched_params["model1"].priority)  # 仍为: 200
     ```
 
-##### 推理执行函数
+#### 推理执行函数
 
 run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多输入），并且每次调用都可以单独传入调度参数：priority / bpu_cores / custom_id / device_id。
 
@@ -950,12 +950,12 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
   - 推理前需确保输入张量 shape 与 input_shapes 完全一致。
 #### QuantParams 类
   张量量化参数对象。
-##### 属性
+#### 属性
 - scale: numpy.ndarray，量化比例因子数组
 - zero_point: numpy.ndarray，零点数组
 - quant_type: hbDNNQuantiType 类型，表示量化模式
 - axis: int，量化轴（若为 per-channel 量化）
-##### 示例：
+#### 示例：
     ```python
     # 获取模型某个输出的量化参数
     tensor_qparams = model.output_quants[model_name][output_name]
@@ -967,7 +967,7 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
 
 #### SchedParam 类
   模型调度参数对象，用于描述单个模型的默认调度状态（优先级、核心绑定等）。该对象通常用于读取当前模型的调度配置，而不是作为主要的配置入口。
-##### 属性
+#### 属性
 - priority: Dict[str, int]
 
   模型推理任务的调度优先级，取值范围 0~255，数值越大优先级越高。
@@ -984,7 +984,7 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
 
   模型部署的设备 ID（多设备场景使用）。
 
-##### 示例：
+#### 示例：
   ```python
   from hbm_runtime import HB_HBMRuntime
 

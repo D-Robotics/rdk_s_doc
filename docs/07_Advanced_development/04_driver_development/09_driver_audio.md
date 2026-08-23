@@ -211,15 +211,15 @@ procfs 是 Linux 的一个文件系统，提供关于内核数据结构的接口
 
 ALSA procfs 挂载目录为：`/proc/asound`，ALSA 使用`/proc/asound`目录下的文件保存设备信息和控制目的。通过 proc 节点，我们可以快速查看某些信息用于定位调试遇到的问题。
 
-##### /proc/asound/cards
+#### /proc/asound/cards
 
 已注册声卡的列表。通过查看该节点，检查当前系统注册的声卡列表或者检查声卡是否注册成功
 
-##### /proc/asound/pcm
+#### /proc/asound/pcm
 
 分配的 pcm 流设备的信息。通过查看该节点，找到当前声卡支持的设备列表。这有助于测试时选择如何设置设备节点的 card/device 值。
 
-##### /proc/asound/cardX/pcmY[c, p]/*
+#### /proc/asound/cardX/pcmY[c, p]/*
 系统中声卡对应的每个 pcm 流设备都有一个类似上面的 procfs 目录。其中 X 代表声卡号，`/proc/asound/cards`或者`/dev/snd`下的设备节点信息可确认；
 Y 代表设备号，`/proc/asound/pcm或者/dev/snd`下的设备节点信息可确认。c/p 分别代表 capture/playback。该目录可查看 PCM 设备的信息以及 status。
 
@@ -270,13 +270,13 @@ boundary: 4611686018427387904
 
 音频在播放时偶现或者连续某个时间段出现断断续续、声音类似"呲呲"或者"爆破"的杂音， 一般是发生了 xrun。xrun 丢帧受系统性能限制不可避免，在满足使用场景的需求下，允许有一定的丢帧率，只能通过某些方法优化达到尽量规避。如果出现 xrun 频发，无法恢复的情况，就需要排查代码实现上是否有缺陷
 
-##### 可能出现 xrun 的场景
+#### 可能出现 xrun 的场景
 
 播放时，应用会不断把音频数据填入驱动 buffer，驱动 buffer 经过 i2s fifo 送给 codec 播放。当应用填入慢了，导致驱动 buffer 为空，就会触发 underrun 导致丢帧，可能会有声音异常的现象
 
 录音时，codec 转化的数字信号经过 i2s fifo 填入驱动 buffer，应用会从驱动 buffer 中读取音频数据。当应用读取的速度赶不上写入的速度，超过 stop_threshold 阈值就会触发 overrun
 
-##### 定位 xrun
+#### 定位 xrun
 
 检查 xrun 是否由于 IO 操作耗时导致
 
@@ -318,7 +318,7 @@ proc 节点对应位置```/proc/asound/cardX/pcmY[c,p]/xrun_debug```
 echo 3 > /proc/asound/card0/pcm0p/xrun_debug
 ```
 
-##### 修复 xrun
+#### 修复 xrun
 
 - 提高线程优先级(设置实时线程+优先权值)
 - 调大 period_size，改变 DMA 传输数据量
@@ -353,7 +353,7 @@ echo 3 > /proc/asound/card0/pcm0p/xrun_debug
 
 ALSA 框架允许单个设备同一时刻只能打开一次。检查应用实现上，是否存在上次执行还未退出的情况下，又启动应用
 
-##### 录制/播放问题
+#### 录制/播放问题
 
 - pcm_read/pcm_write 返回异常值为-5
 

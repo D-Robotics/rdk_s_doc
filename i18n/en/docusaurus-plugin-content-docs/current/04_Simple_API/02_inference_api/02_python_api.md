@@ -144,7 +144,7 @@ This section introduces how to use hbm_runtime for model loading and inference. 
 Please make sure that HBMRuntime is properly installed (see [Installation](#installation)) and that you have an hbm model file available.
 ### Examples
 #### Single-threaded Inference
-##### Single-threaded, Single-model, Single-input Inference
+#### Single-threaded, Single-model, Single-input Inference
 Applicable when the model has only one input tensor.
 ```python
 import numpy as np
@@ -171,7 +171,7 @@ outputs = model.run(input_tensor)
 output_array = outputs[model_name]
 print("Output:", output_array)
 ```
-##### Single-threaded, Single-model, Multi-input Inference
+#### Single-threaded, Single-model, Multi-input Inference
 Applicable when the model has multiple input tensors.
 ```python
 import numpy as np
@@ -223,7 +223,7 @@ results = model.run(input_tensors)
 for output_name, output_data in results[model_name].items():
     print(f"Output: {output_name}, shape={output_data.shape}")
 ```
-##### Single-threaded, Multi-model, Multi-input Inference
+#### Single-threaded, Multi-model, Multi-input Inference
 Applicable when multiple models have multiple input tensors. Note that the multiple models here can be multiple HBM files, or a single HBM file containing multiple models.
 ```python
 """Multi-model inference quick start."""
@@ -271,7 +271,7 @@ for m, outs in outputs.items():
 ```
 
 #### Multi-threaded Inference
-##### Multi-threaded, Single-model, Single-input Inference
+#### Multi-threaded, Single-model, Single-input Inference
 Applicable when the model has only one input tensor.
 ```python
 import threading
@@ -305,7 +305,7 @@ threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
 for t in threads: t.start()
 for t in threads: t.join()
 ```
-##### Multi-threaded, Single-model, Multi-input Inference
+#### Multi-threaded, Single-model, Multi-input Inference
 Applicable when the model has multiple input tensors.
 ```python
 import threading
@@ -350,7 +350,7 @@ threads = [threading.Thread(target=worker, args=(i,)) for i in range(4)]
 for t in threads: t.start()
 for t in threads: t.join()
 ```
-##### Multi-threaded, Multi-model, Multi-input Inference
+#### Multi-threaded, Multi-model, Multi-input Inference
 ```python
 """4-thread demo: each thread runs inference on a dedicated BPU core."""
 import threading
@@ -412,7 +412,7 @@ The Python module hbm_runtime is a PyBind11-wrapped D-Robotics HBM model inferen
 
 ### Enumerated Types
 #### hbDNNDataType
-##### Tensor data type enum:
+#### Tensor data type enum:
 - S4: 4-bit signed
 - U4: 4-bit unsigned
 - S8: 8-bit signed
@@ -429,16 +429,16 @@ The Python module hbm_runtime is a PyBind11-wrapped D-Robotics HBM model inferen
 - BOOL8: 8-bit bool type
 - MAX: maximum value (reserved field)
 
-##### Example
+#### Example
 ```python
 from hbm_runtime import hbDNNDataType
 print(hbDNNDataType.F32)  # Output: hbDNNDataType.F32
 ```
 #### hbDNNQuantiType
-##### Tensor quantization type enum:
+#### Tensor quantization type enum:
 - NONE: non-quantized type
 - SCALE: linear scaling quantization (scale + zero_point)
-##### Example
+#### Example
 ```python
 from hbm_runtime import hbDNNQuantiType
 print(hbDNNQuantiType.SCALE)  # Output: hbDNNQuantiType.SCALE
@@ -447,7 +447,7 @@ print(hbDNNQuantiType.SCALE)  # Output: hbDNNQuantiType.SCALE
 ### Class Reference
 #### HB_HBMRuntime
 The model runtime class, which loads one or more HBM model files and provides the inference execution interface.
-##### Constructor
+#### Constructor
 - Function signature
     ```python
     HB_HBMRuntime(model_file: str)
@@ -471,7 +471,7 @@ The model runtime class, which loads one or more HBM model files and provides th
     model = HB_HBMRuntime(["model1.hbm", "model2.hbm"])
     ```
 
-##### Property Reference
+#### Property Reference
 All the properties below are read-only.
 - version: str
   - Function:
@@ -765,7 +765,7 @@ All the properties below are read-only.
     #   deviceId: 0
     ```
     Note: a returned value of -1 in bpu_cores means it is automatically allocated by the scheduler;
-##### Configuration Functions
+#### Configuration Functions
 - set_scheduling_params
   - Function signature
     ```python
@@ -825,7 +825,7 @@ All the properties below are read-only.
     print(model.sched_params["model1"].priority)  # Still: 200
     ```
 
-##### Inference Execution Functions
+#### Inference Execution Functions
 
 run() provides 3 input forms (single input / single-model multi-input / multi-model multi-input), and each call can individually pass scheduling parameters: priority / bpu_cores / custom_id / device_id.
 
@@ -951,12 +951,12 @@ run() provides 3 input forms (single input / single-model multi-input / multi-mo
   - Before inference, make sure the input tensor shape exactly matches input_shapes.
 #### QuantParams Class
   Tensor quantization parameter object.
-##### Properties
+#### Properties
 - scale: numpy.ndarray, the array of quantization scale factors
 - zero_point: numpy.ndarray, the array of zero points
 - quant_type: hbDNNQuantiType type, indicates the quantization mode
 - axis: int, the quantization axis (for per-channel quantization)
-##### Example:
+#### Example:
     ```python
     # Get the quantization parameters of one output of the model
     tensor_qparams = model.output_quants[model_name][output_name]
@@ -968,7 +968,7 @@ run() provides 3 input forms (single input / single-model multi-input / multi-mo
 
 #### SchedParam Class
   Model scheduling parameter object, used to describe the default scheduling state of a single model (priority, core binding, etc.). This object is usually used to read the scheduling configuration of the current model, rather than as the primary configuration entry point.
-##### Properties
+#### Properties
 - priority: Dict[str, int]
 
   The scheduling priority of the model inference task. The value range is 0~255; the higher the value, the higher the priority.
@@ -985,7 +985,7 @@ run() provides 3 input forms (single input / single-model multi-input / multi-mo
 
   The device ID where the model is deployed (used in multi-device scenarios).
 
-##### Example:
+#### Example:
   ```python
   from hbm_runtime import HB_HBMRuntime
 

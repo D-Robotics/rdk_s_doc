@@ -151,11 +151,11 @@ For API descriptions and usage, refer to the official documentation: https://www
 
 #### Audio Driver HAT REV2
 
-##### Usage Preparation
+#### Usage Preparation
 
 S100 adapts the audio adapter board manufactured by Waveshare Electronics, connecting to the S100 development board via 40PIN. For the daughter board introduction and specific connection methods, refer to: [Audio Daughter Board Usage Instructions](../../07_Advanced_development/04_driver_development/09_driver_audio.md#audio-daughter-board-usage-instructions)
 
-##### Device Nodes
+#### Device Nodes
 
 After this audio board is connected to S100 and the driver is loaded, the generated device nodes are:
 
@@ -165,7 +165,7 @@ After this audio board is connected to S100 and the driver is loaded, the genera
 
 - controlC0: control
 
-##### Functional Testing
+#### Functional Testing
 
 - Recording
 

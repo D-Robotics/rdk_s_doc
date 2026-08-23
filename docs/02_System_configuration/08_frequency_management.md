@@ -70,7 +70,7 @@ user_space step_wise
 echo user_space > /sys/class/thermal/thermal_zone0/policy
 ```
 
-##### thermal_zone0简介
+#### thermal_zone0简介
 在 thermal_zone0中有4个 trip_point，
 - trip_point_0_temp：关机温度，默认设置为120度
 - trip_point_1_temp：用于控制风扇转速，默认为43度，风扇档位范围2~5，表示超过43度，风扇将从关闭状态调整为2档，最高可提升到5档。
@@ -86,7 +86,7 @@ root@ubuntu:~# cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp
 echo 85000 > /sys/devices/virtual/thermal/thermal_zone0/trip_point_3_temp
 ```
 
-##### thermal_zone1/2/3简介
+#### thermal_zone1/2/3简介
 在 thermal_zone1/2/3中有1个 trip_point，都表示的是关机温度，默认为120度
 
 在 thermal_zone4中有两个 trip_point,其中
@@ -123,7 +123,7 @@ echo 105000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_0_temp
 
 目前默认的策略用的是`step_wise`。
 
-##### 风扇调节
+#### 风扇调节
 RDK S100开发板上的 emc2305风扇控制器，可以通过设备节点获取设备基本信息及控制转速：
 1. 获取降温设备信息：
     ```shell
@@ -274,7 +274,7 @@ user_space step_wise
 echo user_space > /sys/class/thermal/thermal_zone0/policy
 ```
 
-##### CPU thermal_zone 简介
+#### CPU thermal_zone 简介
 
 CPU thermal_zone 包含 thermal_zone0到 thermal_zone6
 
@@ -297,7 +297,7 @@ echo 85000 > /sys/class/thermal/thermal_zone2/trip_point_2_temp
 
 其他 thermal_zone 中有1个 trip_point，都表示的是关机温度，默认为115度
 
-##### DDR thermal_zone 简介
+#### DDR thermal_zone 简介
 
 DDR thermal_zone 包含 thermal_zone7到 thermal_zone10
 
@@ -305,7 +305,7 @@ thermal_zone 中有2个 trip_point，
 - trip_point_0_temp：hot 温度，默认设置为110度，表示超过110度，系统发出 hot 警告。
 - trip_point_1_temp：关机温度，默认设置为115度，表示超过115度，系统将关机。
 
-##### BPU thermal_zone 简介
+#### BPU thermal_zone 简介
 
 BPU thermal_zone 包含 thermal_zone11到 thermal_zone18
 
@@ -359,7 +359,7 @@ echo 105000 > /sys/class/thermal/thermal_zone18/trip_point_0_temp
 
 目前默认的策略用的是 `step_wise`。
 
-##### 风扇调节
+#### 风扇调节
 RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取设备基本信息及控制转速：
 1. 获取降温设备信息：
     ```shell

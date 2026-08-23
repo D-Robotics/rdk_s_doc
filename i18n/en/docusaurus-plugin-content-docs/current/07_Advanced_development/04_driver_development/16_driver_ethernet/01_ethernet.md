@@ -782,10 +782,10 @@ This document mainly includes a network card usage guide, development board Brin
 - The mapping of packets to queues is implemented by the ndo_select_queue method in the NIC driver.
 
 #### Data Scheduling (Shaper)
-##### Credit-Based Shaper (CBS) (IEEE 802.1-Qav)
+#### Credit-Based Shaper (CBS) (IEEE 802.1-Qav)
 - Each queue is set with a certain credit value, corresponding to bandwidth based on the credit value. CBS divides queues into Class A (Tight delay bound) and Class B (Loose delay bound).
 
-##### Enhancements to Scheduled Traffic (EST) (IEEE 802.1Qbv-2015)
+#### Enhancements to Scheduled Traffic (EST) (IEEE 802.1Qbv-2015)
 - EST is defined by IEEE 802.1Qbv, also known as TAS (Time Awareness Shaper). It is a mechanism that dynamically provides on/off control for egress queues based on a pre-set periodic gate control list.
   Qbv defines a time window. This window is pre-determined in the mechanism. The gate control list is scanned periodically and opens transmission ports for different queues in a pre-defined order.
 
@@ -796,7 +796,7 @@ This document mainly includes a network card usage guide, development board Brin
     - Time interval: Defines the time, in nanoseconds, for which the gate control item is valid before reading the next gate control item from the list.
     - Gate control: Defines the state of the gate for each TC, either logic 1 indicating open (O-open) or logic 0 indicating close (C-close).
 
-##### Frame Preemption (FPE) (IEEE 802.1Qbu-2016)
+#### Frame Preemption (FPE) (IEEE 802.1Qbu-2016)
 - To address the waste of protection bandwidth and priority inversion issues of EST, the preemption standard was introduced. Therefore, TSN's 802.1Qbu and the IEEE 802.3 working group jointly developed IEEE 802.3br, the preemptable MAC mechanism, consisting of pMAC (Preemptable MAC) and eMAC (express MAC). pMAC can be preempted by eMAC. Through preemption, the protection bandwidth can be reduced to the shortest low-priority frame fragment.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media_en/image17.png" alt="Data Scheduling (Shaper) photo" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -806,14 +806,14 @@ This document mainly includes a network card usage guide, development board Brin
 :::
 
 #### Configuration Verification
-##### tc
+#### tc
 - For various TSN features, the Linux-native tc command (Traffic Control) is typically used for configuration and verification.
 - Supports the following methods:
 :::tip
    SHAPING, SCHEDULING, POLICING, DROPPING
 :::
 
-##### CBS
+#### CBS
 - Command format:
 ```bash
     tc qdisc ... dev dev parent classid [ handle major: ] cbs idleslope <idleslope> sendslope <sendslope> hicredit <hicredit> locredit <locredit> [ offload 0|1 ]
@@ -831,7 +831,7 @@ This document mainly includes a network card usage guide, development board Brin
     39.829567 Mbps
 ```
 
-##### EST
+#### EST
 - Command format:
 ```bash
     tc qdisc ... dev dev parent classid [ handle major: ] taprio num_tc tsc  map P0 P1 P2 ...  queues count1@offset1 count2@offset2 ...  base-time base-time clockid clockid
@@ -933,7 +933,7 @@ This document mainly includes a network card usage guide, development board Brin
 ```
 
 #### Performance Testing Analysis
-##### Topology
+#### Topology
 
 <DocScope products="RDK S100">
 - Direct connection for S100.
@@ -942,7 +942,7 @@ This document mainly includes a network card usage guide, development board Brin
 - Direct connection for S600.
 </DocScope>
 
-##### napi Independent Threading
+#### napi Independent Threading
 - Linux network tasks are handled by ksoftirqd/n, which has a relatively low default priority. Making them independent can improve CPU utilization and TSN-related control.
   Packet loss rate can reach zero under no load. Under heavy load, performance balance can be achieved by planning overall task priorities.
 ```console
@@ -1004,7 +1004,7 @@ This document mainly includes a network card usage guide, development board Brin
 - netstat to view protocol stack-related information, such as protocol stack packet counts and TCP/UDP status information.
 
 #### Common Development Issue Troubleshooting
-##### EQOS_DMA_MODE_SWR stuck
+#### EQOS_DMA_MODE_SWR stuck
 - Description: emac soft reset failed.
     1. U-Boot log: EQOS_DMA_MODE_SWR stuck.
     2. Linux log: device or resource busy. dmesg log as follows:
@@ -1016,13 +1016,13 @@ This document mainly includes a network card usage guide, development board Brin
 - Troubleshooting.
     1. Check if the SGMII reference clock is provided; if using internal clock, check if the clock is enabled.
 
-##### PHY link fails
+#### PHY link fails
 - Troubleshooting.
     - Use mdio/mii/phytool commands to check if PHY registers can be read/written normally.
     - Check PHY clock, PHY reset, PHY power supply, etc.
     - Check transformers, etc.
 
-##### Transmit Exception
+#### Transmit Exception
 - Troubleshooting.
     - Check if PHY link is UP.
     - Check operating mode (speed, duplex, etc.).
@@ -1031,13 +1031,13 @@ This document mainly includes a network card usage guide, development board Brin
     - Check the peer for packet errors, etc.
     - Use loopback to locate the fault point.
 
-##### Receive Exception
+#### Receive Exception
 - Troubleshooting.
     - Measure PHY tx clock.
     - MAC loopback; if packets are received normally, the issue may be PHY tx clock and MAC rx reception coordination.
     - Check for packet errors; if ECC errors exist, it could be a signal quality issue.
 
-##### Massive Packet Errors
+#### Massive Packet Errors
 - Troubleshooting.
     - Check if clk meets requirements.
     - Measure signal eye diagram if conditions allow.

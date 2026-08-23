@@ -106,7 +106,7 @@ Return: 0, 0x00000000
 
 #### Setting Wakeup Source via MCU API
 
-##### RTC Wakeup Time Setting
+#### RTC Wakeup Time Setting
 
 **SysPower_RtcWakeupSet**
 
@@ -125,7 +125,7 @@ Return: 0, 0x00000000
 
 **After setting the RTC wakeup time, timing begins only when the MCU actually initiates the sleep action; i.e., after SysPower_Suspend is called, core0 enters sleep and then timing starts.**
 
-##### GPIO Wakeup Source Setting
+#### GPIO Wakeup Source Setting
 
 **SysPower_GpioWakeupSet**
 
@@ -142,7 +142,7 @@ Return: 0, 0x00000000
 | Description | Set gpio wakeup source |
 | Available via | as extern function |
 
-##### GPIO Index Definition
+#### GPIO Index Definition
 <DocScope products="RDK S100">
 
 ```Shell

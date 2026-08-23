@@ -209,15 +209,15 @@ Procfs is a file system in Linux that provides an interface to kernel data struc
 
 The ALSA procfs mount directory is: `/proc/asound`. ALSA uses files in the `/proc/asound` directory to save device information and for control purposes. Through proc nodes, we can quickly view certain information to locate and debug issues encountered.
 
-##### /proc/asound/cards
+#### /proc/asound/cards
 
 A list of registered sound cards. By checking this node, you can review the list of sound cards currently registered on the system or check whether a sound card has been registered successfully.
 
-##### /proc/asound/pcm
+#### /proc/asound/pcm
 
 Information about allocated PCM stream devices. By checking this node, you can find the list of devices supported by the current sound card. This helps in selecting how to set the card/device values for the device node during testing.
 
-##### /proc/asound/cardX/pcmY[c, p]/*
+#### /proc/asound/cardX/pcmY[c, p]/*
 Each PCM stream device corresponding to a sound card in the system has a procfs directory similar to the above. Here, X represents the sound card number, which can be confirmed via `/proc/asound/cards` or the device node information under `/dev/snd`. Y represents the device number, which can be confirmed via `/proc/asound/pcm` or the device node information under `/dev/snd`. c/p represent capture/playback respectively. This directory allows viewing of PCM device information and status.
 
 ###### info
@@ -266,13 +266,13 @@ You can view the current status of the substream (running, xrun, etc.), and the 
 
 Intermittent or continuous periods of choppy audio, sounds resembling "hissing" or "popping" during playback, typically indicate an xrun has occurred. xrun frame drops are inevitable due to system performance limitations. A certain frame drop rate is acceptable depending on the usage scenario requirements, and can only be optimized through various methods to try and avoid it as much as possible. If xrun occurs frequently and cannot be recovered, it is necessary to investigate whether there are defects in the code implementation.
 
-##### Scenarios where xrun may occur
+#### Scenarios where xrun may occur
 
 During playback, the application continuously fills audio data into the driver buffer. The driver buffer then sends the data to the codec for playback via the I2S FIFO. If the application fills data too slowly, causing the driver buffer to become empty, an underrun is triggered, leading to frame drops and potentially abnormal sound.
 
 During recording, the digital signal converted by the codec fills the driver buffer via the I2S FIFO. The application reads the audio data from the driver buffer. If the application reads slower than the data is being written, and the stop_threshold is exceeded, an overrun is triggered.
 
-##### Locating xrun
+#### Locating xrun
 
 Check if the xrun is caused by the time consumption of IO operations.
 
@@ -314,7 +314,7 @@ For example, writing 3 to xrun_debug enables basic debugging and stack dumping f
 echo 3 > /proc/asound/card0/pcm0p/xrun_debug
 ```
 
-##### Fixing xrun
+#### Fixing xrun
 
 - Increase the thread priority (set real-time threads + priority value).
 - Increase the period_size to change the DMA transfer data size.
@@ -349,7 +349,7 @@ The parameter values set for the current test exceed the intersection of the rat
 
 The ALSA framework allows a single device to be opened only once at a time. Check if the application implementation starts another instance while a previous instance has not yet exited.
 
-##### Recording/Playback Issues
+#### Recording/Playback Issues
 
 - pcm_read/pcm_write returns an abnormal value of -5
 

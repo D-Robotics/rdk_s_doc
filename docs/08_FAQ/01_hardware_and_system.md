@@ -126,7 +126,7 @@ import DocScope from '@site/src/components/DocScope';
 
 #### 问题排查与解决
 
-##### 1. 软件源域名变更或 GPG 密钥问题
+#### 1. 软件源域名变更或 GPG 密钥问题
 
 **典型报错信息：**
 - `Clearsigned file isn't valid, got 'NOSPLIT'`
@@ -176,7 +176,7 @@ import DocScope from '@site/src/components/DocScope';
         sudo apt update
         ```
 
-##### 2. APT 锁文件被占用
+#### 2. APT 锁文件被占用
 * **报错示例：**
     ```
     E: Could not get lock /var/lib/apt/lists/lock. It is held by process XXXX (apt-get)
@@ -200,7 +200,7 @@ import DocScope from '@site/src/components/DocScope';
         ```
     4.  再次尝试 `sudo apt update`。
 
-##### 3. ROS2 GPG 密钥问题
+#### 3. ROS2 GPG 密钥问题
 
 **典型报错信息：**
 

@@ -727,7 +727,7 @@ cat /sys/class/pps/pps[*]/name
 
 #### 软件架构说明
 
-##### 时间源接入 Acore 的单时间域方案
+#### 时间源接入 Acore 的单时间域方案
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image45.png" alt="软件架构说明实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -796,11 +796,11 @@ MCU 侧本 sample 的编译环境使用 MCU 代码中的 build 工具，请参�
 
 #### 运行
 
-##### 支持平台
+#### 支持平台
 
 S100/S600
 
-##### 板端部署及配置
+#### 板端部署及配置
 
 需要做好如下准备工作：
 
@@ -814,7 +814,7 @@ S100/S600
   systemctl stop systemd-timesyncd
 ```
 
-##### 运行指南
+#### 运行指南
 
 ###### 时间源接入 Acore 的单时间域方案
 

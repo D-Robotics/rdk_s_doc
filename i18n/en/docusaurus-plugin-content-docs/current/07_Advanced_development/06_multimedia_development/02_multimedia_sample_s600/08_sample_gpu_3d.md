@@ -21,7 +21,7 @@ Please select the corresponding API example for reference and use based on speci
 #### Function Overview
 Function description: `sample_matrix_multiply` performs the same matrix operation using both the 3D GPU and CPU, and prints the time taken by both
 
-##### Code Location and Directory Structure
+#### Code Location and Directory Structure
 - Code location `/app/multimedia_samples/sample_gpu_3d/cl/sample_matrix_multiply`
 - Directory structure
 ```
@@ -36,11 +36,11 @@ Function description: `sample_matrix_multiply` performs the same matrix operatio
 - The output artifact is `matrix_multiply` in the sample_matrix_multiply source directory
 
 #### Execution
-##### Program Execution Method
+#### Program Execution Method
 Run the executable program: `./matrix_multiply`
-##### Program Parameter Options Description
+#### Program Parameter Options Description
 None
-##### Execution Effect
+#### Execution Effect
 Execute command:
 `./matrix_multiply`
 Execution log:
@@ -65,7 +65,7 @@ Function description: `sample_bezier` uses the 3D GPU to draw a Bezier curve, di
 1. On the monitor desktop
 2. Saved as an image
 
-##### Code Location and Directory Structure
+#### Code Location and Directory Structure
 - Code location `/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier`
 - Directory structure
 ```
@@ -79,7 +79,7 @@ sample_bezier/
 - The output artifact is `bezier` in the sample_bezier source directory
 
 #### Execution
-##### Program Execution Method
+#### Program Execution Method
 The following preparations need to be done before executing the program:
 1. Connect the RDK S600 to a monitor via the HDMI interface
 2. Connect a mouse and keyboard to the RDK S600, and log into the Ubuntu system through the monitor interface
@@ -99,10 +99,10 @@ root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# id -u sunr
 root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# export WAYLAND_DISPLAY=/run/user/1000/wayland-0
 ```
 
-##### Program Parameter Options Description
+#### Program Parameter Options Description
 No parameter options
 
-##### Execution Effect
+#### Execution Effect
 
 Execution log: None
 

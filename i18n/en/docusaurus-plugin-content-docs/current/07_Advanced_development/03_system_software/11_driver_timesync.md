@@ -722,7 +722,7 @@ This chapter mainly uses S100 as an example to introduce the time synchronizatio
 
 #### Software Architecture Explanation
 
-##### Single Time Domain Solution for Time Source Accessing Acore
+#### Single Time Domain Solution for Time Source Accessing Acore
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image45.png" alt="Software Architecture Explanation photo" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -791,11 +791,11 @@ Compile the FreeRtos image version. Note:
 
 #### Running
 
-##### Supported Platforms
+#### Supported Platforms
 
 S100/S600
 
-##### Board Deployment and Configuration
+#### Board Deployment and Configuration
 
 The following preparations need to be made:
 
@@ -809,7 +809,7 @@ To prevent interference from the Linux operating system's built-in time synchron
   systemctl stop systemd-timesyncd
 ```
 
-##### Operation Guide
+#### Operation Guide
 
 ###### Single Time Domain Solution for Time Source Accessing Acore
 

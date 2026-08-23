@@ -760,10 +760,10 @@ point，PCP）由3位代码构成；3位 PCP 码定义了0（最低）～7（最
 - 数据包与队列的映射关系由网卡驱动中的 ndo_select_queue 方法实现。
 
 #### 数据调度（整形器）
-##### 基于信用的整形器机制（CBS）（IEEE 802.1-Qav）
+#### 基于信用的整形器机制（CBS）（IEEE 802.1-Qav）
 - 每个队列设置一定的信用值，根据信用值对应带宽，CBS 将队列分为 Class A（Tight delay bound）和 Class B（Loose delay bound）。
 
-##### 增强型整形机制（ EST）（IEEE 802.1Qbv-2015）
+#### 增强型整形机制（ EST）（IEEE 802.1Qbv-2015）
 - EST 由 IEEE 802.1Qbv 定义，也叫 TAS（Time Awareness Shaper）。是基于预先设定的周期性门控制列表，动态地为出口队列提供开/关控制的机制。
 Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged），这个窗口在这个机制中是被预先确定的，同时这个门控制列表被周期性的扫描，
 并按预先定义的次序为不同的队列开放传输端口。
@@ -775,7 +775,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
     - 时间间隔：定义时间，以纳秒为单位，在从列表中读取下一个门控制项之前，门控制项是有效的。
     - 门控：定义每个 TC 的门的逻辑1表示的开（O-open）或逻辑0表示的关（C-close）状态。
 
-##### 帧抢占（ FPE）（IEEE 802.1Qbu-2016）
+#### 帧抢占（ FPE）（IEEE 802.1Qbu-2016）
 - 为了解决 EST 的保护带宽的浪费以及优先级反转问题，引入了抢占标准。因此，TSN 的802.1Qbu 和 IEEE 802.3工作组共同开发了 IEEE
 802.3br，即可抢占式 MAC 机制，由可被抢占 MAC（pMAC-Preemptable MAC）和快速 MAC（eMAC-express MAC）组成。pMAC 可以被 eMAC 抢占。
 通过抢占，保护带宽可以被减少至最短低优先级帧片段。
@@ -787,14 +787,14 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 :::
 
 #### 配置验证
-##### tc
+#### tc
 - 关于 TSN 各种特性, 通常采用 Linux 原生自带的 tc 命令(即 Traffic Control)进行配置和验证
 - 支持如下几种方式：
 :::tip
    SHAPING（限制）、 SCHEDULING（调度）、POLICING（策略）、DROPPING（丢弃）
 :::
 
-##### CBS
+#### CBS
 - 命令格式:
 ```bash
     tc qdisc ... dev dev parent classid [ handle major: ] cbs idleslope <idleslope> sendslope <sendslope> hicredit <hicredit> locredit <locredit> [ offload 0|1 ]
@@ -812,7 +812,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
     39.829567 Mbps
 ```
 
-##### EST
+#### EST
 - 命令格式：
 ```bash
     tc qdisc ... dev dev parent classid [ handle major: ] taprio num_tc tsc  map P0 P1 P2 ...  queues count1@offset1 count2@offset2 ...  base-time base-time clockid clockid
@@ -914,7 +914,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 ```
 
 #### 性能测试分析
-##### 拓扑
+#### 拓扑
 
 <DocScope products="RDK S100">
 - 直接 S100直连即可
@@ -923,7 +923,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 - 直接 S600直连即可
 </DocScope>
 
-##### napi 独立线程化
+#### napi 独立线程化
 - Linux 网络任务由 ksoftirqd/n 处理，默认任务优先级相对较低，独立后可提高 CPU 利用率以及 TSN 的相关的控制。
 丢包率在空负载的情况下可以达到0丢包，在大负载情况下可以通过规划项目整体任务的优先级达到性能平衡。
 ```console
@@ -985,7 +985,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 - netstat 查看协议栈相关的信息。如协议栈报文计数及 tcp/udp 状态信息等。
 
 #### 开发常见问题排查
-##### EQOS_DMA_MODE_SWR stuck
+#### EQOS_DMA_MODE_SWR stuck
 - 描述: emac 软复位失败。
     1. U-Boot 日志如下：EQOS_DMA_MODE_SWR stuck。
     2. linux 日志：device or resource busy。dmesg 日志如下：
@@ -997,13 +997,13 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 - 故障排除。
     1. 检查 SGMII 参考时钟是否提供，若使用内部时钟检查 clock 是否使能。
 
-##### phy link 不上
+#### phy link 不上
 - 故障排除。
     - 使用 mdio/mii/phytool 命令能否正常读写 phy 寄存器。
     - 检查 phy 时钟、phy 复位、phy 供电等。
     - 检查变压器等。
 
-##### 发送异常
+#### 发送异常
 - 故障排除。
     - 检查 phy link 是否 UP。
     - 检查工作模式（速率，双工等）。
@@ -1012,13 +1012,13 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
     - 对端查看是否错包等。
     - 使用环回定位故障点。
 
-##### 接收异常
+#### 接收异常
 - 故障排查
     - 测量 phy tx 时钟。
     - mac 环回，若正常收包。可判定 phy tx 时钟 与 MAC rx 接收配合问题。
     - 查看是否有错包，如果有 ECC 错包可推断是信号质量问题。
 
-##### 大量错包
+#### 大量错包
 - 故障排除。
     - 检查 clk 是否符合要求。
     - 条件允许的话，测下信号的眼图。

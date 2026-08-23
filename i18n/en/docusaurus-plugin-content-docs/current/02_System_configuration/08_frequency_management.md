@@ -70,7 +70,7 @@ For example: dynamically switch the policy of thermal_zone0 to `user_space` mode
 echo user_space > /sys/class/thermal/thermal_zone0/policy
 ```
 
-##### thermal_zone0 Overview
+#### thermal_zone0 Overview
 thermal_zone0 has 4 trip_points:
 - trip_point_0_temp: shutdown temperature, set to 120 degrees by default
 - trip_point_1_temp: used to control the fan speed. The default is 43 degrees, and the fan level range is 2~5, meaning that above 43 degrees, the fan will change from the off state to level 2, and can be raised up to level 5.
@@ -86,7 +86,7 @@ If you want to adjust the corresponding temperature, e.g., start CPU frequency s
 echo 85000 > /sys/devices/virtual/thermal/thermal_zone0/trip_point_3_temp
 ```
 
-##### thermal_zone1/2/3 Overview
+#### thermal_zone1/2/3 Overview
 thermal_zone1/2/3 each have 1 trip_point, which all represents the shutdown temperature. The default is 120 degrees.
 
 thermal_zone4 has two trip_points, where
@@ -123,7 +123,7 @@ Among them, the cooling devices CPU and fan are associated with thermal_zone0, a
 
 The current default policy is `step_wise`.
 
-##### Fan Control
+#### Fan Control
 The emc2305 fan controller on the RDK S100 development board allows you to get basic device information and control the speed through device nodes:
 1. Get cooling device information:
     ```shell
@@ -274,7 +274,7 @@ For example: dynamically switch the policy of thermal_zone0 to `user_space` mode
 echo user_space > /sys/class/thermal/thermal_zone0/policy
 ```
 
-##### CPU thermal_zone Overview
+#### CPU thermal_zone Overview
 
 The CPU thermal_zones include thermal_zone0 through thermal_zone6.
 
@@ -297,7 +297,7 @@ echo 85000 > /sys/class/thermal/thermal_zone2/trip_point_2_temp
 
 The other thermal_zones each have 1 trip_point, which all represents the shutdown temperature. The default is 115 degrees.
 
-##### DDR thermal_zone Overview
+#### DDR thermal_zone Overview
 
 The DDR thermal_zones include thermal_zone7 through thermal_zone10.
 
@@ -305,7 +305,7 @@ Each thermal_zone has 2 trip_points:
 - trip_point_0_temp: hot temperature, set to 110 degrees by default, meaning that above 110 degrees, the system issues a hot warning.
 - trip_point_1_temp: shutdown temperature, set to 115 degrees by default, meaning that above 115 degrees, the system will shut down.
 
-##### BPU thermal_zone Overview
+#### BPU thermal_zone Overview
 
 The BPU thermal_zones include thermal_zone11 through thermal_zone18.
 
@@ -359,7 +359,7 @@ The RDK S600 has 11 cooling devices in total:
 
 The current default policy is `step_wise`.
 
-##### Fan Control
+#### Fan Control
 The emc2305 fan controller on the RDK S600 development board allows you to get basic device information and control the speed through device nodes:
 1. Get cooling device information:
     ```shell

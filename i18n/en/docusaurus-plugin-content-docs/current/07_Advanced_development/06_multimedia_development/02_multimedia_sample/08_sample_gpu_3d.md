@@ -27,7 +27,7 @@ Please select the API sample that matches your specific requirement for referenc
 
 Function description: `sample_matrix_multiply` uses the 3D GPU and the CPU to run the same matrix operation, and prints the time consumed by both.
 
-##### Code Location and Directory Structure
+#### Code Location and Directory Structure
 
 - Code location: `/app/multimedia_samples/sample_gpu_3d/cl/sample_matrix_multiply`
 - Directory structure:
@@ -45,15 +45,15 @@ Function description: `sample_matrix_multiply` uses the 3D GPU and the CPU to ru
 
 #### Running
 
-##### How to Run the Program
+#### How to Run the Program
 
 Run the executable program: `./matrix_multiply`
 
-##### Program Parameter Options
+#### Program Parameter Options
 
 None
 
-##### Running Result
+#### Running Result
 
 Execute the command:
 `./matrix_multiply`
@@ -84,7 +84,7 @@ Function description: `sample_bezier` uses the 3D GPU to draw a Bézier curve, a
 1. On the monitor desktop
 2. As a saved image
 
-##### Code Location and Directory Structure
+#### Code Location and Directory Structure
 
 - Code location: `/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier`
 - Directory structure:
@@ -102,7 +102,7 @@ sample_bezier/
 
 #### Running
 
-##### How to Run the Program
+#### How to Run the Program
 
 The following preparations are required before running the program:
 1. Connect a monitor to the RDK S100 via the HDMI interface
@@ -123,11 +123,11 @@ root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# id -u sunr
 root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# export WAYLAND_DISPLAY=/run/user/1000/wayland-0
 ```
 
-##### Program Parameter Options
+#### Program Parameter Options
 
 No parameter options
 
-##### Running Result
+#### Running Result
 
 Runtime log: none
 
