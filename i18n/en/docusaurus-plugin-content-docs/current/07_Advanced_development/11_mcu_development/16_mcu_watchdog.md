@@ -25,36 +25,36 @@ Wherever `Wdgx` is mentioned in this document, `x` is an index with a valid rang
 #### Low-Level Interface
 These are the Watchdog low-level driver implementation and internal common interface files. General users do not need to focus on them directly:
 
-- McalCdd\Wdg\inc\Wdg_Lld.h
-- McalCdd\Wdg\src\Wdg_Lld.c
-- McalCdd\Wdg\inc\Wdg_Prv.h
-- McalCdd\Wdg\src\Wdg_Common.c
+- McalCdd/Wdg/inc/Wdg_Lld.h
+- McalCdd/Wdg/src/Wdg_Lld.c
+- McalCdd/Wdg/inc/Wdg_Prv.h
+- McalCdd/Wdg/src/Wdg_Common.c
 
 #### High-Level Interface
 
 <DocScope products="RDK S100">
 These are the API implementation files for user calls. Each Wdg instance requires a separate code file:
 
-- McalCdd\Wdg\src\Wdg0.c
-- McalCdd\Wdg\src\Wdg1.c
-- McalCdd\Wdg\src\Wdg2.c
-- McalCdd\Wdg\inc\Wdg0.h
-- McalCdd\Wdg\inc\Wdg1.h
-- McalCdd\Wdg\inc\Wdg2.h
+- McalCdd/Wdg/src/Wdg0.c
+- McalCdd/Wdg/src/Wdg1.c
+- McalCdd/Wdg/src/Wdg2.c
+- McalCdd/Wdg/inc/Wdg0.h
+- McalCdd/Wdg/inc/Wdg1.h
+- McalCdd/Wdg/inc/Wdg2.h
 </DocScope>
 <DocScope products="RDK S600">
 These are the API implementation files for user calls. Each Wdg instance requires a separate code file:
 
-- McalCdd\Wdg\src\Wdg0.c
-- McalCdd\Wdg\src\Wdg1.c
-- McalCdd\Wdg\src\Wdg2.c
-- McalCdd\Wdg\src\Wdg3.c
-- McalCdd\Wdg\src\Wdg4.c
-- McalCdd\Wdg\inc\Wdg0.h
-- McalCdd\Wdg\inc\Wdg1.h
-- McalCdd\Wdg\inc\Wdg2.h
-- McalCdd\Wdg\inc\Wdg3.h
-- McalCdd\Wdg\inc\Wdg4.h
+- McalCdd/Wdg/src/Wdg0.c
+- McalCdd/Wdg/src/Wdg1.c
+- McalCdd/Wdg/src/Wdg2.c
+- McalCdd/Wdg/src/Wdg3.c
+- McalCdd/Wdg/src/Wdg4.c
+- McalCdd/Wdg/inc/Wdg0.h
+- McalCdd/Wdg/inc/Wdg1.h
+- McalCdd/Wdg/inc/Wdg2.h
+- McalCdd/Wdg/inc/Wdg3.h
+- McalCdd/Wdg/inc/Wdg4.h
 </DocScope>
 
 ## 3. Application Programming Interface
@@ -257,8 +257,8 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 
 | Name | Location | Description |
 |---|---|---|
-| Interrupt (entry) | Target\...\HorizonISR.c: ISR(Wdt_CfIntIsr) | Set `g_need_reset = 1` (`g_need_reset` is in `McalCdd\Wdg\src\Wdg_Common.c`), `Os_Disable_Wdt_CfIntIsr()`; bound to IntRouter and ConfigInterrupts.h |
-| OS task (delay + long reset) | Target\...\HorizonTask.c: TASK(OsTask_SysCore_WDG_RST) | When `g_need_reset` is true: log → `vTaskDelay(MS_TO_TICK(5000))` (approx. 5s) → `Rfchm_TriggerSocLongReset()` executes SoC long reset |
+| Interrupt (entry) | Target/.../HorizonISR.c: ISR(Wdt_CfIntIsr) | Set `g_need_reset = 1` (`g_need_reset` is in `McalCdd/Wdg/src/Wdg_Common.c`), `Os_Disable_Wdt_CfIntIsr()`; bound to IntRouter and ConfigInterrupts.h |
+| OS task (delay + long reset) | Target/.../HorizonTask.c: TASK(OsTask_SysCore_WDG_RST) | When `g_need_reset` is true: log → `vTaskDelay(MS_TO_TICK(5000))` (approx. 5s) → `Rfchm_TriggerSocLongReset()` executes SoC long reset |
 
 </DocScope>
 
