@@ -408,8 +408,8 @@ For MCU Log usage notes, see: [Introduction to MCU Log](../11_mcu_development/01
 <DocScope products="RDK S600">
 4.  S600 logs are written to storage devices. Considering the limited lifespan of storage devices and the impact of large log volumes on
     IO/CPU performance, only necessary logs should be output. Production releases should not output large volumes of debug logs.
-    -   For example, when the S600 storage device is eMMC (64 GB, MLC, 3000 erase cycles), writing 10 MB of logs
-        per minute consumes 27% of its lifespan over ten years of continuous operation; write amplification may consume even more.
+    -   For example, when the S600 storage device is UFS 3.1 (64 GB or 256 GB), writing 10 MB of logs
+        per minute also consumes a certain amount of its lifespan over ten years of continuous operation; write amplification may consume even more.
 </DocScope>
 
 ### logcat Usage
