@@ -11,7 +11,7 @@ description: "用自己的模型替换 demo 模型的入口"
 ## 整体流程
 
 1. 准备浮点模型（导出为 ONNX，或 CAFFE）。
-2. 用 RDK 算法工具链量化编译为 `.hbm`（MARCH 与产品匹配：S600 为 `nash-p`、S100 为 `nash-m`）。
+2. 用 RDK 算法工具链量化编译为 `.hbm`（MARCH 与产品匹配：S600 为 `nashp`、S100 为 `nashe`）。
 3. 把 `.hbm` 与配套的类别标签文件传到板端。
 4. 在 demo 命令里用 `--model-path` 指向新模型、`--label-file` 指向新标签。
 

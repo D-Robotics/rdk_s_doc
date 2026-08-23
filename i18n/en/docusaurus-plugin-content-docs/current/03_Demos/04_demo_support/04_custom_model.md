@@ -11,7 +11,7 @@ The models bundled with the demos on the board (`/opt/hobot/model/<product>/basi
 ## Overall Workflow
 
 1. Prepare the floating-point model (export it as ONNX, or CAFFE).
-2. Quantize and compile it into a `.hbm` with the RDK algorithm toolchain (the MARCH must match the product: `nash-p` for S600, `nash-m` for S100).
+2. Quantize and compile it into a `.hbm` with the RDK algorithm toolchain (the MARCH must match the product: `nashp` for S600, `nashe` for S100).
 3. Copy the `.hbm` and the accompanying class label file to the board.
 4. In the demo command, use `--model-path` to point to the new model and `--label-file` to point to the new labels.
 
