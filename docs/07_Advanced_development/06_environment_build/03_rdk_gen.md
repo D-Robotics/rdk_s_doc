@@ -24,7 +24,7 @@ BSP 源码包下载地址参见： [系统镜像](../../RDK.md#系统镜像)（�
 3. 内容释放：完成协议签署后，我们将通过私有渠道为您开放商业版本资料
 
 如您希望获取商业版内容，请点击下方链接填写问卷，我们将在 3 ～ 5 个工作日内与您联系：
-https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
+[填写问卷](https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre)
 :::
 
 

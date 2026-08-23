@@ -95,7 +95,7 @@ Commercial edition acquisition process:
 3. Content release: after the agreement is signed, we will provide access to the commercial edition materials through a private channel.
 
 If you wish to obtain the commercial edition content, click the link below to fill in the questionnaire, and we will contact you within 3 to 5 business days:
-https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
+[Fill in the questionnaire](https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre)
 :::
 
 ## Build Process

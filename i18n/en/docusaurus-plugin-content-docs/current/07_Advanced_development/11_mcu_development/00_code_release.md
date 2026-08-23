@@ -17,7 +17,7 @@ Commercial Edition Acquisition Process:
 3. Content Release: After signing the agreement, we will provide you with the commercial edition materials through private channels
   
 If you wish to obtain the commercial edition content, please click the link below to fill out the questionnaire. We will contact you within 3 to 5 working days:
-https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
+[Fill in the questionnaire](https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre)
 :::
 
 ## MCU Community Edition
