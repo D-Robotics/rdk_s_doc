@@ -200,14 +200,14 @@ arecord/aplay 对应参数配置：--period-size=X
 
 ```
 echo "8 4 1 7" > /proc/sys/kernel/printk
-echo -n "file hhobot-cpudai-super.c +p" > /sys/kernel/debug/dynamic_debug/control
+echo -n "file hobot-cpudai-super.c +p" > /sys/kernel/debug/dynamic_debug/control
 echo -n "file hobot-i2s-super.c +p" > /sys/kernel/debug/dynamic_debug/control
 echo -n "file hobot-platform-super.c +p" > /sys/kernel/debug/dynamic_debug/control
 ```
 
 #### ALSA profs 节点说明
 
-profs 是 linux 的一个文件系统，提供关于内核数据结构的接口。挂载目录为`/proc`。
+procfs 是 Linux 的一个文件系统，提供关于内核数据结构的接口。挂载目录为`/proc`。
 
 ALSA procfs 挂载目录为：`/proc/asound`，ALSA 使用`/proc/asound`目录下的文件保存设备信息和控制目的。通过 proc 节点，我们可以快速查看某些信息用于定位调试遇到的问题。
 
@@ -328,7 +328,7 @@ echo 3 > /proc/asound/card0/pcm0p/xrun_debug
 
 #### 打开设备节点报错
 
-- Unable to open PCM device (cannot open device '/dev/snd/pcmC0D3c': No such file or director)
+- Unable to open PCM device (cannot open device '/dev/snd/pcmC0D3c': No such file or directory)
 
   - 驱动加载失败，导致/dev/snd 下没有生成设备节点；
   - 设置的 card/device 值错误导致找不到对应的设备节点；

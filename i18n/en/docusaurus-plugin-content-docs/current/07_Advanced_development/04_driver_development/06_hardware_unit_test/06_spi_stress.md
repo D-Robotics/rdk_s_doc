@@ -35,7 +35,7 @@ The core of the SPI stress test involves loopback testing for data transmission 
 
 ### Stress Test Script Usage Instructions{#test-script-user-manual}
 
-The serial stress test script supports the `-h` suffix to display command parameter descriptions. For example:
+The SPI stress test script supports the `-h` suffix to display command parameter descriptions. For example:
 
 ```shell
 sunrise@ubuntu:/app/chip_base_test/04_spi_test# ./spistress.sh -h
@@ -59,7 +59,7 @@ Parameter details:
 **Example:**  
 For instance, the command:  
 `./spistress.sh -d /dev/spidev0.0 -c 500 -s 24000000 -o /userdata/spi_test_logs`  
-customizes the test for SPI device `/dev/spidev0.0`, sets the transfer speed to 24 MHz, runs 500 iterations, and saves logs to `/app/chip_base_test`.
+customizes the test for SPI device `/dev/spidev0.0`, sets the transfer speed to 24 MHz, runs 500 iterations, and saves logs to `/userdata/spi_test_logs`.
 
 Detailed parameters and command explanations from the `spidev_tc` source code are as follows:
 
@@ -88,7 +88,7 @@ Detailed parameters and command explanations from the `spidev_tc` source code ar
 -h, --help: Display help information.
 ```
 
-**1.** Refer to the RDK_S100 schematic to locate the pins and connector positions for SPI0_MOSI and SPI0_MISO, as shown below:
+**1.** Refer to the RDK S100 schematic to locate the pins and connector positions for SPI0_MOSI and SPI0_MISO, as shown below:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png" alt="diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
@@ -97,7 +97,7 @@ Then, connect SPI0_MOSI and SPI0_MISO using a female-to-female Dupont jumper wir
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png" alt="diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 :::caution Note
-The RDKS100 Acore supports two SPI interfaces, and both SPI0 and SPI1 can only operate as SPI Masters.  
+The RDK S100 Acore supports two SPI interfaces, and both SPI0 and SPI1 can only operate as SPI Masters.  
 Internal SPI loopback testing is only supported in SPI Master mode. The principle is that the SPI hardware IP’s TX FIFO sends data directly to the RX FIFO, forming a loopback.
 :::
 
@@ -196,7 +196,7 @@ Test times: 0 Data verification Successful
 
 #### SPI External Loopback Test
 
-Prepare an RDK_S100 development board and wire out the four SPI lines. The Master can use SPI0, while the SPI Slave uses an external SPI device (selected by the user).
+Prepare an RDK S100 development board and wire out the four SPI lines. The Master can use SPI0, while the SPI Slave uses an external SPI device (selected by the user).
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png" alt="SPI External Loopback Test diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 

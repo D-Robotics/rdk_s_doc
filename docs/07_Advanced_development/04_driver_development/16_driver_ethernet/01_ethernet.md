@@ -74,7 +74,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 
 - 配置 MAC 地址
 ```shell
-      setenv ethaddr xx:xx:xx:xx:xx:xx          //设置eth mac地址
+      setenv ethaddr xx:xx:xx:xx:xx:xx          # 设置eth mac地址
       env del -f ethaddr                        //删除mac地址
 ```
 
@@ -94,7 +94,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 
 - 配置 IP
 ```shell
-      ip addr add 192.168.1.10/24 dev eth0.10 //推荐
+      ip addr add 192.168.1.10/24 dev eth0.10 # 推荐
       或者
       ifconfig eth0.10 192.168.1.10 netmask 255.255.255.0
 ```
@@ -693,7 +693,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以�
 - 举例说明使用方法
 ```c
     // 打开PHC设备
-    phcfd = open(“/dev/ptp0”, O_RDWR);
+    phcfd = open("/dev/ptp0", O_RDWR);
 
     // 通过ioctl设置PHC的snapshot源
     struct ptp_extts_request extts_request;
@@ -926,7 +926,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 </DocScope>
 
 ##### napi 独立线程化
-- linux 网络任务由 ksoftirqd/n 处理，默认任务优先级相对较低，独立后可提高 CPU 利用率以及 TSN 的相关的控制。
+- Linux 网络任务由 ksoftirqd/n 处理，默认任务优先级相对较低，独立后可提高 CPU 利用率以及 TSN 的相关的控制。
 丢包率在空负载的情况下可以达到0丢包，在大负载情况下可以通过规划项目整体任务的优先级达到性能平衡。
 ```console
     root@hobot:~# echo 1 > /sys/class/net/eth0/threaded

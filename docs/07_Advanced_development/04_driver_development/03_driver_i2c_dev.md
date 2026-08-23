@@ -347,7 +347,7 @@ m[1]-a[0x10]-f[0x1]:0x13
 m[0]-a[0x10]-f[0x0]:0xfb
 m[1]-a[0x10]-f[0x1]:0x13
 
-me: msg_err. Normal transmission is equal to "0", ddress/length mismatch will equal "-EINVAL".
+me: msg_err. Normal transmission is equal to "0", address/length mismatch will equal "-EINVAL".
 ce: cmd_err. Normal transmission is equal to "0", the error was "DW_IC_ERR_TX_ABRT (0x1u)" transmit termination error.
 ae: abort_source.
 ```

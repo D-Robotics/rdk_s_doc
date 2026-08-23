@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-The S100(S600) chip has a total of 4(8) UARTs, namely uart0-uart3(uart0~uart7). Among them, uart0 is used as the debug console, DMA is not enabled by default, and the baud rate is determined by controlling the Bootstrip pin to be either 115200 or 921600.
+The S100(S600) chip has a total of 4(8) UARTs, namely uart0-uart3(uart0~uart7). Among them, uart0 is used as the debug console, DMA is not enabled by default, and the baud rate is determined by controlling the Bootstrap pin to be either 115200 or 921600.
 
 The other UARTs are used for data transmission, with DMA enabled by default in the device tree. They support various baud rates configured via software, with the commonly used baud rate being 921600. uart0 and uart1 support hardware flow control, while the other UARTs do not support this feature.
 
@@ -90,8 +90,24 @@ uart4: uart@3484E000 {
 
 ```text
 ls /dev/ttyS*
+```
+
+<DocScope products="RDK S100">
+
+```text
 /dev/ttyS0  /dev/ttyS1  /dev/ttyS2  /dev/ttyS3
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```text
+/dev/ttyS0  /dev/ttyS1  /dev/ttyS2  /dev/ttyS3  /dev/ttyS4
+/dev/ttyS5  /dev/ttyS6  /dev/ttyS7
+```
+
+</DocScope>
 
 ### Serial Port Operations
 

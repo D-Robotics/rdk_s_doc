@@ -310,7 +310,7 @@ EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使
 ## EtherCAT 开发指南
 
 ### 软件栈
-地瓜 RDK S100 默认提供 EtherCAT-IgH 1.5 版本软件栈（本节以 S100 为例，S600 同理）。[EtherCAT-IgH软件栈](https://docs.etherlab.org/ethercat/1.5/pdf/ethercat_doc.pdf)是目前主流的开源 EtherCAT 主站协议。
+RDK S100 默认提供 EtherCAT-IgH 1.5 版本软件栈（本节以 S100 为例，S600 同理）。[EtherCAT-IgH软件栈](https://docs.etherlab.org/ethercat/1.5/pdf/ethercat_doc.pdf)是目前主流的开源 EtherCAT 主站协议。
 
 EtherCAT 官网：[EtherLab | EtherCAT](https://etherlab.org/en_GB/ethercat)
 EtherCAT 开源代码仓库：[Gitlab | EtherLab - EtherCAT](https://gitlab.com/etherlab.org/ethercat)
@@ -882,7 +882,7 @@ Host 端构建支持两种构建方式：
     eth3           ethernet  unavailable             --
     eth1           ethernet  unmanaged               --
     ```
-    此时查看 IP 地址，可以看到 eth0 是 DOWN 状态：
+    此时查看 IP 地址，可以看到 eth1 是 DOWN 状态：
     ```shell
     sunrise@ubuntu:~$ sudo ip a
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000

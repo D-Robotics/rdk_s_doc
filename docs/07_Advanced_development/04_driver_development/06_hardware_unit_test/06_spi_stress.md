@@ -36,7 +36,7 @@ SPI 压力测试的核心部分是通过回环测试进行数据的传输和接�
 
 ### 压测脚本使用说明{#test-script-user-manual}
 
-串口压测支持输入后缀 -h 查看命令参数的说明 ，例如：
+SPI 压测支持输入后缀 -h 查看命令参数的说明 ，例如：
 
 ```shell
 sunrise@ubuntu:/app/chip_base_test/04_spi_test# ./spistress.sh -h
@@ -58,7 +58,7 @@ Options:
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
 
 **示例：**
-例如，使用命令： `./spistress.sh -d /dev/spidev0.0 -c 500 -s 24000000 -o /userdata/spi_test_logs` 自定义测试 SPI 设备 /dev/spidev0.0 ，设置传输速度为 24 MHz，进行 500 次测试，输出目录为 /app/chip_base_test 。
+例如，使用命令： `./spistress.sh -d /dev/spidev0.0 -c 500 -s 24000000 -o /userdata/spi_test_logs` 自定义测试 SPI 设备 /dev/spidev0.0 ，设置传输速度为 24 MHz，进行 500 次测试，输出目录为 /userdata/spi_test_logs。
 
 `spidev_tc` 源码中的详细参数与设置命令解析如下：
 
@@ -87,7 +87,7 @@ Options:
 -h, --help: 显示帮助信息。
 ```
 
-**1.** 查看 RDK_S100 原理图并找到 SPI0_MOSI 和 SPI0_MISO 对应的引脚与连接器位置，如图：
+**1.** 查看 RDK S100 原理图并找到 SPI0_MOSI 和 SPI0_MISO 对应的引脚与连接器位置，如图：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Schematic_diagram.png" alt=" 引脚与连接器位置" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -96,7 +96,7 @@ Options:
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Spi_Connection_diagram.png" alt="连接示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::caution 注意
-RDKS100 Acore 支持2路 SPI，且 SPI0，SPI1只能做 SPI Master。
+RDK S100 Acore 支持2路 SPI，且 SPI0，SPI1只能做 SPI Master。
 SPI 内部回环测试仅 SPI Master 支持，其原理是 SPI 硬件 IP 的 tx fifo 将数据发给 rx fifo 从而形成回环。
 :::
 
@@ -196,7 +196,7 @@ Test times: 0 Data verification Successful
 
 #### SPI 外部回环测试
 
-可以准备一块 RDK_S100 开发板，将 SPI 的4根线飞好。Master 可以选择 SPI0，SPI Slave 选择外部 SPI 设备（客户自行选择）。
+可以准备一块 RDK S100 开发板，将 SPI 的4根线飞好。Master 可以选择 SPI0，SPI Slave 选择外部 SPI 设备（客户自行选择）。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/SPI_wiring_diagram.png" alt="SPI 外部回环测试示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

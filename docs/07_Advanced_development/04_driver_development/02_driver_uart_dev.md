@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
-S100(S600)芯片共有4(8)路 uart，即 uart0-uart3(uart0~uart7)。其中 uart0作为调试控制台使用，默认不开启 DMA，且需要通过控制 Bootstrip pin 决定波特率为115200或921600;
+S100（S600）芯片共有4(8)路 UART，即 uart0-uart3(uart0~uart7)。其中 uart0 作为调试控制台使用，默认不开启 DMA，且需要通过控制 Bootstrap pin 决定波特率为115200或921600。
 
 其他几路 uart 用作数据传输功能，设备树中默认开启 DMA，支持用户通过软件配置为各种波特率，常用波特率为921600。uart0和1支持硬件流控功能，其他几路 uart 不支持该功能。
 
@@ -89,7 +89,7 @@ uart4: uart@3484E000 {
 
 ## 使用示例
 
-### 检查 uart 节点
+### 检查 UART 节点
 
 ```bash
 ls /dev/ttyS*

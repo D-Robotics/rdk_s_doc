@@ -39,6 +39,8 @@ This document mainly includes a network card usage guide, development board Brin
 
 ## Network Card Feature Introduction
 
+<DocScope products="RDK S100">
+
 | Feature | Description            | S100                             |
 | ------- | ---------------------- | -------------------------------- |
 | Configuration | Number of Ethernet ports | Dual-port                       |
@@ -49,6 +51,9 @@ This document mainly includes a network card usage guide, development board Brin
 | AVB/TSN  | Time-Sensitive Networking | &#x2705;                        |
 | C22/C45  | MDIO PHY data protocol | &#x2705;                         |
 
+</DocScope>
+<DocScope products="RDK S600">
+
 | Feature | Description            | S600                                          |
 | ------- | ---------------------- | --------------------------------------------- |
 | Configuration | Number of Ethernet ports | 3x gmac + 3x xgmac<br/>First 2 gmacs share PHY with PCIe |
@@ -58,6 +63,8 @@ This document mainly includes a network card usage guide, development board Brin
 | Multi-queue | NIC multi-queue feature | &#x2705;                                     |
 | AVB/TSN  | Time-Sensitive Networking | &#x2705;                                     |
 | C22/C45  | MDIO PHY data protocol | &#x2705;                                      |
+
+</DocScope>
 
 ## Network Configuration
 ### U-Boot
@@ -74,8 +81,8 @@ This document mainly includes a network card usage guide, development board Brin
 
 - Configure MAC Address
 ```shell
-      setenv ethaddr xx:xx:xx:xx:xx:xx          //set eth mac address
-      env del -f ethaddr                        //delete mac address
+      setenv ethaddr xx:xx:xx:xx:xx:xx          # set eth mac address
+      env del -f ethaddr                        # delete mac address
 ```
 
 - Switch current eth
@@ -94,7 +101,7 @@ This document mainly includes a network card usage guide, development board Brin
 
 - Configure IP
 ```shell
-      ip addr add 192.168.1.10/24 dev eth0.10 //recommended
+      ip addr add 192.168.1.10/24 dev eth0.10 # recommended
       or
       ifconfig eth0.10 192.168.1.10 netmask 255.255.255.0
 ```
@@ -141,6 +148,8 @@ This document mainly includes a network card usage guide, development board Brin
 </DocScope>
 
 #### Device Tree Configuration
+<DocScope products="RDK S100">
+
 ```dts
     // Configure hsis mode and reference clock selection, such as combo PHY multiplexing, reference clock source, etc.
     hsis0: hsis0 {
@@ -159,6 +168,9 @@ This document mainly includes a network card usage guide, development board Brin
             <0x0 0x330d0000 0x0 0x10000>;
     };
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ```dts
     // Configure hsis mode and reference clock selection, such as combo PHY multiplexing, reference clock source, and PHY eye diagram signal parameters.
@@ -189,9 +201,13 @@ This document mainly includes a network card usage guide, development board Brin
 - hobot-txeq:       Set eye diagram parameters for different gears, range [0, 10], default is gear 4, no adjustment needed for sgmii.
 - hobot-vboost:     Eye diagram amplitude coefficient, 0 disables.
 
+</DocScope>
+
 #### mdio phy Configuration
 - Refer to schematics and hardware documentation for PHY connection details.
 - Software mainly needs to focus on the reset pin and phy addr address.
+
+<DocScope products="RDK S100">
 
 ```dts
     // drobot-s100-soc.dtsi, default eth configuration for the chip; can be overridden by specific board's dts
@@ -225,6 +241,9 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ``` 
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ```dts
     // hobot-s600-soc.dtsi, default eth configuration for the chip. Can be overridden by specific board's dts.
@@ -263,9 +282,13 @@ This document mainly includes a network card usage guide, development board Brin
     };
 ```
 
+</DocScope>
+
 #### MAC2MAC
 - In MAC TO MAC direct connection scenarios, configure as fixed-link.
 - For example:
+
+<DocScope products="RDK S100">
 
 ```dts
     // Default eth0 node configuration can refer to drobot-s100-soc.dts
@@ -279,6 +302,9 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
+</DocScope>
+<DocScope products="RDK S600">
+
 ```dts
     // Similar for S600 development board, override to fixed-link mode in the board-level dts.
     &eth3 {
@@ -289,6 +315,8 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
+
+</DocScope>
 
 #### U-Boot Commands Introduction
 - mii: PHY read/write commands (C22 protocol)
@@ -335,12 +363,17 @@ This document mainly includes a network card usage guide, development board Brin
 
 </DocScope>
 
+<DocScope products="RDK S100">
+
 ```dts
     &hsis0 {
             hsi-mode = <0x4>;  /* 0x1: pcie x4, 0x4: pcie x2 + gmac0 + gmac1, 0x8: pcie0 x1 + pcie1 x1 + gmac0 + gmac1 >
             refclk-mode = <0>; /* 0:internal; 1:external; */
     };
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ```dts
     &hsis0 {
@@ -353,7 +386,11 @@ This document mainly includes a network card usage guide, development board Brin
     };
 ```
 
+</DocScope>
+
 #### Network Card and PHY Configuration
+<DocScope products="RDK S100">
+
 ```dts
     // Default network card node can refer to drobot-s100-soc.dtsi
     // Board-level related configuration depends on actual hardware connections. For traditional sgmii phy mode, refer to nodes in rdk-v0p5.dtsi.
@@ -373,6 +410,9 @@ This document mainly includes a network card usage guide, development board Brin
             };
     };
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ```dts
     // Default network card node can refer to drobot-s600-soc.dtsi
@@ -398,6 +438,8 @@ This document mainly includes a network card usage guide, development board Brin
             };
     };
 ```
+
+</DocScope>
 
 #### Common MAC and PHY Configurations
 - Refer to the device tree content above and more complete information in dts files.
@@ -674,7 +716,7 @@ This document mainly includes a network card usage guide, development board Brin
 - Example usage:
 ```c
     // Open PHC device
-    phcfd = open(“/dev/ptp0”, O_RDWR);
+    phcfd = open("/dev/ptp0", O_RDWR);
 
     // Set PHC snapshot source via ioctl
     struct ptp_extts_request extts_request;
@@ -846,8 +888,12 @@ This document mainly includes a network card usage guide, development board Brin
     - Perform loop reboot test and check if the network can be pinged.
 
 - Power cycle test
+    <DocScope products="RDK S100">
     - Use a relay to perform loop power on/off and check if the S100 network starts normally.
+    </DocScope>
+    <DocScope products="RDK S600">
     - Use a relay to perform loop power on/off and check if the S600 network starts normally.
+    </DocScope>
 
 - iperf3 24-hour test
     - tcp test
@@ -999,19 +1045,29 @@ This document mainly includes a network card usage guide, development board Brin
 
 ### FAQ
 #### TSN
+<DocScope products="RDK S100">
 - Q: Which TSN standards does the S100 support?
+</DocScope>
+<DocScope products="RDK S600">
 - Q: Which TSN standards does the S600 support?
+</DocScope>
 - A: Credit-Based Shaper (CBS) (IEEE 802.1-Qav), Enhancements to Scheduled Traffic (EST) (IEEE 802.1Qbv-2015), Frame Preemption (FPE) (IEEE 802.1Qbu-2016).
 
 #### PHY
+<DocScope products="RDK S100">
 - Q: Which PHYs have been adapted for the S100?
+</DocScope>
+<DocScope products="RDK S600">
 - Q: Which PHYs have been adapted for the S600?
+</DocScope>
 - A: Realtek 8211, Marvell 88E1512, Marvell 88Q2121, Marvell 88Q2220, TI dp83867, Marvell CUX3520.
 
 #### Network Environment
+<DocScope products="RDK S100">
 - Q: S100 cannot ping Windows, but Windows can ping S100?
 - A: Check if Windows firewall is turned off; Windows built-in firewall is shown below:
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="Network Environment photo" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+</DocScope>
 
 #### U-Boot Debugging and Upgrade
 - Q: U-Boot network auto-negotiation fails or cannot ping after negotiating to Gigabit?

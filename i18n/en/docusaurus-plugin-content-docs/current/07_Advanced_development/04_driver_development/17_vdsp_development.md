@@ -774,9 +774,9 @@ Start the RPMSG communication service
 #include <hb_vdsp_log.h>
 #include <platform.h>
 
-#ifdef CNFIG_VDSP0
+#ifdef CONFIG_VDSP0
 static char test_server_name[] = "dcore0_rpmsg_op";
-#elif CNFIG_VDSP1
+#elif CONFIG_VDSP1
 static char test_server_name[] = "dcore1_rpmsg_op";
 #endif
 #define CORE_COM_TX_RX_PAYLOAD_SIZE     (240)
@@ -929,9 +929,9 @@ Send communication service frame data with a timeout parameter
 #include <hb_vdsp_log.h>
 #include <platform.h>
 
-#ifdef CNFIG_VDSP0
+#ifdef CONFIG_VDSP0
 static char test_server_name[] = "dcore0_rpmsg_op";
-#elif CNFIG_VDSP1
+#elif CONFIG_VDSP1
 static char test_server_name[] = "dcore1_rpmsg_op";
 #endif
 #define CORE_COM_TX_RX_PAYLOAD_SIZE     (240)
@@ -1079,7 +1079,7 @@ int main(int argc, char *argv[])
         printf("rpmsg get version failed\n");
         return ret;
     } else {
-        printf("rpmsg verion: %u.%u.%u\n", major, minor, patch);
+        printf("rpmsg version: %u.%u.%u\n", major, minor, patch);
     }
     reconnect:
     ret = hb_rpmsg_connect_server(argv[1], RPMSG_F_BLOCK, timeout,
@@ -1435,7 +1435,7 @@ static int32_t ipcfhal_thread_func(void *arg, int32_t unused) {
 	if (ret < 0) {
 		return ret;
 	} else {
-		printf("ipcfhal verion: %u.%u.%u\n", major, minor, patch);
+		printf("ipcfhal version: %u.%u.%u\n", major, minor, patch);
 	}
 
 	ret = hb_ipcfhal_getchan_byjson(ch_name, &channel, CFG_FILE);

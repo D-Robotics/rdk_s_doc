@@ -91,7 +91,7 @@ mmcblk0boot0
 mmcblk0boot1
 ```
 
-In eMMC performance testing, the `-s 256MB` command creates files of the specified size for read/write tests (e.g., `-s 256M -f "$output_dir/iozone_data"`). Please ensure sufficient free space is available under the `/app` mount path to accommodate the largest file size used in testing.
+In eMMC performance testing, the `-s 256M` command creates files of the specified size for read/write tests (e.g., `-s 256M -f "$output_dir/iozone_data"`). Please ensure sufficient free space is available under the `/app` mount path to accommodate the largest file size used in testing.
 
 **2.** Confirm that the two test scripts `emmc_performance_test.sh` and `emmc_stability_test.sh` exist under the path `/app/chip_base_test/02_emmc`.
 
@@ -224,7 +224,7 @@ loop_test: 1
   - bkwd (Backward Read): Throughput for backward (reverse-order) read operations.
   - record write / record read: Throughput for sequential record write and read operations.
   - stride read / stride write: Throughput for stride (strided) read and write operations.
-  - fwrite / frewrite / fread / freread: These columns represent throughput for direct I/O operations using the O_DIRECT flag.
+  - fwrite / frewrite / fread / freread: These columns represent throughput for file I/O operations using the stdio cache path (fopen/fread/fwrite).
 
 ### eMMC Performance Test:
 
@@ -291,7 +291,7 @@ After running for a period of time, the output appears as follows:
   - bkwd (Backward Read): Throughput for backward (reverse-order) read operations.
   - record write / record read: Throughput for sequential record write and read operations.
   - stride read / stride write: Throughput for stride (strided) read and write operations.
-  - fwrite / frewrite / fread / freread: These columns represent throughput for direct I/O operations using the O_DIRECT flag.
+  - fwrite / frewrite / fread / freread: These columns represent throughput for file I/O operations using the stdio cache path (fopen/fread/fwrite).
 
 ## Test Metrics
 
@@ -332,11 +332,11 @@ The test objective is to ensure the system runs stably for 48 hours without rebo
 cd "/app/chip_base_test/output/" && grep -iE 'error|fail|timeout' test_iozone_emmc_performance*.log
 ```
 
-Additionally, performance should meet general standards for real-world usage. For RDKS100 (eMMC 5.1), which supports HS400 mode at maximum, typical read speeds range from 250 MB/s to 300 MB/s, while write speeds are slightly lower, typically between 120 MB/s and 200 MB/s.
+Additionally, performance should meet general standards for real-world usage. For RDK S100 (eMMC 5.1), which supports HS400 mode at maximum, typical read speeds range from 250 MB/s to 300 MB/s, while write speeds are slightly lower, typically between 120 MB/s and 200 MB/s.
 
 ### eMMC Performance Test Results
 
-After 48 hours of testing, log inspection using the command revealed no abnormal status messages. According to the log output, the maximum read speed reached approximately 168 MB/s, and the maximum write speed was about 102 MB/s, confirming that the performance stress test has passed.
+After 48 hours of testing, log inspection using the command revealed no abnormal status messages. According to the log output, the maximum read speed reached approximately 312 MB/s, and the maximum write speed was about 257 MB/s, confirming that the performance stress test has passed.
 
 ```shell
 Test loop 1 succeeded!

@@ -36,11 +36,11 @@ eMMC 压力测试包含了 `emmc_performance_test.sh` 和 `emmc_stability_test.s
 - 参数解析：
   - -e：启用扩展测试 (extended test)，这是 iozone 的一个特性，可以执行更多的测试类型，如重写 (rewrite)、反向写 (reverse write) 和 EOF 写入等。
   - -I：启用直接 I/O（ O_DIRECT），绕过操作系统的缓存直接进行磁盘读写。
-  - -a：执行自动模式测试。 Iozone 会自动测试不同的操作和文件大小，通常会进行顺序读写、随机读写等多种测试。
+  - -a：执行自动模式测试。 IOzone 会自动测试不同的操作和文件大小，通常会进行顺序读写、随机读写等多种测试。
   - -z：在这个命令中，用于在每次测试时填充文件，以确保测试期间会进行连续的读写操作，增强了对系统压力的考验。这是常见的稳定性测试选项。
   - -n 16m：设置每次写入测试的最小数据块大小为 16MB。这意味着测试从 16MB 数据块开始，并逐渐增大。
-  - -g 2g：设置测试的最大文件大小为 2GB。这表示 Iozone 将测试最大 2GB 文件的读写性能。
-  - -q 16m：在执行测试时，设置 Iozone 使用的文件块大小为 16MB，且这个块大小是内存缓冲区的大小。
+  - -g 2g：设置测试的最大文件大小为 2GB。这表示 IOzone 将测试最大 2GB 文件的读写性能。
+  - -q 16m：在执行测试时，设置 IOzone 使用的文件块大小为 16MB，且这个块大小是内存缓冲区的大小。
   - -f "$output_dir/iozone_data"：指定测试结果存储的文件路径。
   - -Rb "$output_dir/test_iozone_emmc_ext4_stability_$\{loop_num}.xls"：使用 Excel 格式 (.xls) 输出测试结果文件。
 
@@ -91,7 +91,7 @@ mmcblk0boot0
 mmcblk0boot1
 ```
 
-在 eMMC 性能测试中，命令 -s 256MB 会创建指定大小的文件进行读写测试，例如，-s 256M -f "$output_dir/iozone_data"， 请注意在 `/app` 挂载路径下的剩余空间是否满足最大文件读写测试的需求。
+在 eMMC 性能测试中，命令 -s 256M 会创建指定大小的文件进行读写测试，例如，-s 256M -f "$output_dir/iozone_data"， 请注意在 `/app` 挂载路径下的剩余空间是否满足最大文件读写测试的需求。
 
 **2.** 确认在 /app/chip_base_test/02_emmc 路径下存在 `emmc_performance_test.sh` 和 `emmc_stability_test` 两个测试脚本。
 
@@ -222,7 +222,7 @@ loop_test: 1
   - bkwd (Backward Read)：表示倒序读取（ Backward Read）操作的吞吐量。
   - record write / record read：表示记录顺序写入和顺序读取吞吐量。
   - stride read / stride write：表示跳跃读取（ stride read）和跳跃写入（ stride write）的吞吐量。
-  - fwrite / frewrite / fread / freread：这些列表示基于 O_DIRECT 标志进行的直接 I/O 操作的吞吐量。
+  - fwrite / frewrite / fread / freread：这些列表示通过 stdio 缓存路径（fopen/fread/fwrite）进行的文件 I/O 操作的吞吐量。
 
 ### eMMC 性能测试：
 
@@ -289,7 +289,7 @@ loop_test: 1
   - bkwd (Backward Read)：表示倒序读取（ Backward Read）操作的吞吐量。
   - record write / record read：表示记录顺序写入和顺序读取吞吐量。
   - stride read / stride write：表示跳跃读取（ stride read）和跳跃写入（ stride write）的吞吐量。
-  - fwrite / frewrite / fread / freread：这些列表示基于 O_DIRECT 标志进行的直接 I/O 操作的吞吐量。
+  - fwrite / frewrite / fread / freread：这些列表示通过 stdio 缓存路径（fopen/fread/fwrite）进行的文件 I/O 操作的吞吐量。
 
 ## 测试指标
 
@@ -330,11 +330,11 @@ Test loop 3 succeeded!
 cd "/app/chip_base_test/output/" && grep -iE 'error|fail|timeout' test_iozone_emmc_performance*.log
 ```
 
-此外，性能应符合实际使用中的通用标准。针对 RDKS100 （ eMMC 5.1 ），其最高支持 HS400 模式。通常，读取速度在 250 MB/s 到 300 MB/s 之间，写入速度略低，通常在 120 MB/s 到 200 MB/s 之间。
+此外，性能应符合实际使用中的通用标准。针对 RDK S100 （ eMMC 5.1 ），其最高支持 HS400 模式。通常，读取速度在 250 MB/s 到 300 MB/s 之间，写入速度略低，通常在 120 MB/s 到 200 MB/s 之间。
 
 ### eMMC 性能测试结果
 
-经过 48 小时的测试，使用命令检查 log 日志时未发现异常状态信息且通过日志输出，最大读取速率可达到约 168 MB/s，最大写入速率约为 102 MB/s，性能压测合格。
+经过 48 小时的测试，使用命令检查 log 日志时未发现异常状态信息且通过日志输出，最大读取速率可达到约 312 MB/s，最大写入速率约为 257 MB/s，性能压测合格。
 
 ```shell
 Test loop 1 succeeded!

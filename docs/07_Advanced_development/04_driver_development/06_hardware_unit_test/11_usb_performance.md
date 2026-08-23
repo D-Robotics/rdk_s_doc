@@ -52,7 +52,7 @@ dd if=/path/to/source_file of=/dev/null bs=4K iflag=direct
 
 ### U 盘读写准备方法
 
-**1.** 将 U 盘插入 RDK_S100 开发板 USB 3.0 接口，可输入命令查看 U 盘接口类型：
+**1.** 将 U 盘插入 RDK S100 开发板 USB 3.0 接口，可输入命令查看 U 盘接口类型：
 
 ```shell
 root@ubuntu:~# lsusb
@@ -63,7 +63,7 @@ Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
 Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 ```
 
-lsblk 识别到了 /dev/sda1 u 盘设备
+lsblk 识别到了 /dev/sda1 U 盘设备
 
 ```shell
 root@ubuntu:~# lsblk
@@ -153,7 +153,7 @@ root@ubuntu:~# dd if=/mnt/usb/myfile of=/dev/null bs=4K count=256K
 
 ### usb 虚拟网口准备方法
 
-**1.** 将 RDK_S100 开发板的 USB 2.0 口连接至 PC 的 USB 2.0 ，如图：
+**1.** 将 RDK S100 开发板的 USB 2.0 口连接至 PC 的 USB 2.0 ，如图：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/S100_USB2.0.png" alt="usb 虚拟网口准备方法示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -192,7 +192,7 @@ Run some userspace daemons(eg. usb_camera)...
 usb-gadget start succeed.
 ```
 
-在电脑上可以查看网络配置页面，可以看到如下图所示的 `Remote RNIS Compatible Device` 网卡。
+在电脑上可以查看网络配置页面，可以看到如下图所示的 `Remote RNDIS Compatible Device` 网卡。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="usb 虚拟网口准备方法示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -214,7 +214,7 @@ PC 端远程网卡 ip 配置如图：
 iperf3 -s -p 5002
 ```
 
-在 RDK_S100 开发板运行 iperf3 启动客户端，设置 Server 端一样的 ip 地址和 port 号连接 Server 启动测试，执行命令如下：
+在 RDK S100 开发板运行 iperf3 启动客户端，设置 Server 端一样的 ip 地址和 port 号连接 Server 启动测试，执行命令如下：
 
 ```shell
 root@ubuntu:~# iperf3 -c 192.168.1.111 -i 1 -t 600 -p 5002

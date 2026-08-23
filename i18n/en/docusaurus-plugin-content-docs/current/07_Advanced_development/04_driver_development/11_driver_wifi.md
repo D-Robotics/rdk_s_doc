@@ -59,7 +59,7 @@ The driver for the AW-XM612 module requires the following configurations:
 ```defconfig
 CONFIG_CFG80211=m
 CONFIG_BRCMFMAC=m
-CONFIG_BRCMFMAC_PCIE=y
+CONFIG_BRCMFMAC_PCIE=m
 ```
 
 ## Kernel DTS Configuration

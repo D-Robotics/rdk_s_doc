@@ -82,7 +82,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 设备树
 
-在设备树中增加看门狗的硬件信息描述（位置：code/source/hobot-drivers/kernel-dts/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi）
+在设备树中增加看门狗的硬件信息描述（位置：source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi）
 ```dts
   watchdog1: wdt@30110000 {
           status = "okay";
@@ -113,7 +113,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 设备树
 
-在设备树中增加看门狗的硬件信息描述（位置：code/source/hobot-drivers/kernel-dts/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi）
+在设备树中增加看门狗的硬件信息描述（位置：source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi）
 ```dts
   watchdog0: wdt@32260000 {
           status = "okay";

@@ -46,7 +46,7 @@ Configure the USB port to operate in device mode and enable the RNDIS driver. On
 
 ### USB Flash Drive Read/Write Preparation
 
-**1.** Insert the USB flash drive into the USB 3.0 port of the RDK_S100 development board. You can run the following command to check the USB interface type:
+**1.** Insert the USB flash drive into the USB 3.0 port of the RDK S100 development board. You can run the following command to check the USB interface type:
 
 ```shell
 root@ubuntu:~# lsusb
@@ -147,7 +147,7 @@ root@ubuntu:~# dd if=/mnt/usb/myfile of=/dev/null bs=4K count=256K
 
 ### USB Virtual Network Interface Setup
 
-**1.** Connect the RDK_S100 development board’s USB 2.0 port to a PC’s USB 2.0 port, as shown below:
+**1.** Connect the RDK S100 development board’s USB 2.0 port to a PC’s USB 2.0 port, as shown below:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/S100_USB2.0.png" alt="USB Virtual Network Interface Setup diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
@@ -208,7 +208,7 @@ On the PC side, run iperf3 to start the server. Launch the server by executing t
 iperf3 -s -p 5002
 ```
 
-On the RDK_S100 development board, run iperf3 as a client. Use the same IP address and port number as configured on the server side to connect and initiate the test. Execute the following command:
+On the RDK S100 development board, run iperf3 as a client. Use the same IP address and port number as configured on the server side to connect and initiate the test. Execute the following command:
 
 ```shell
 root@ubuntu:~# iperf3 -c 192.168.1.111 -i 1 -t 600 -p 5002

@@ -28,7 +28,7 @@ RDK S600 开发板中的 SPI0与 CAN0和 CAN1复用4个引脚，由于这些引�
 </DocScope>
 
 
-## 软件构架
+## 软件架构
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-spi_software.png" alt="SPI 软件架构图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -53,7 +53,7 @@ RDK S600 开发板中的 SPI0与 CAN0和 CAN1复用4个引脚，由于这些引�
 hobot spi 驱动相关代码都放在 **\$project/hobot-drivers/spi** 目录下
 
 ``` text
-oops@tiger$ tree . -L 1
+root@ubuntu$ tree . -L 1
 
 ├── Kconfig                       # Kconfig相关
 ├── README.md
@@ -63,7 +63,7 @@ oops@tiger$ tree . -L 1
 **\$project/hobot-drivers/spi/spi_drv** 目录说明
 
 ``` text
-oops@tiger$ tree . -L 1
+root@ubuntu$ tree . -L 1
 ├── Makefile
 ├── spi-dw.c                       # spi驱动核心代码
 ├── spi-dw.h
@@ -76,11 +76,11 @@ oops@tiger$ tree . -L 1
 Linux spi 协议相关代码都放在 **\$project/kernel/drivers/spi** 目录下
 
 ``` text
-oops@tiger$ tree kernel/drivers/spi/
+root@ubuntu$ tree kernel/drivers/spi/
 drivers/spi/
 ├── spi.c                             # spi框架代码
 
-oops@tiger$
+root@ubuntu$
 ```
 
 ### SPI 设备树代码
@@ -426,12 +426,12 @@ RX | 01 02 03 04 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 
 SPI 外部回环测试指 SPI Master 接 SPI Slave。
 
-Master 可以选择 SPI1，SPI Slave 选择外部 SPI 设备（客户自行选择）。
+Master 可以选择 SPI0，SPI Slave 选择外部 SPI 设备（客户自行选择）。
 
 S100侧的发送测试命令参考如下：
 
 ```bash
-root@ubuntu:/map# ./spidev_test -D /dev/spidev1.0 -s 1000000 -S 100  -v -p "\x01\x02\x03\x04"
+root@ubuntu:/map# ./spidev_test -D /dev/spidev0.0 -s 1000000 -S 100  -v -p "\x01\x02\x03\x04"
 spi mode: 0x0
 bits per word: 8
 max speed: 1000000 Hz (1000 kHz)

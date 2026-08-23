@@ -70,7 +70,7 @@ CONFIG_PCIE_HOBOT_DEBUG=y
 
 控制器的配置节点为： `hobot_pcie_rc0` 和 `hobot_pcie_rc1` 。
 
-一般情况下只需要修改 `status` 字段由 `disable` 为 `okay` 即可使能对应控制器的 RC 模式，反之关闭。
+一般情况下只需要修改 `status` 字段由 `disabled` 为 `okay` 即可使能对应控制器的 RC 模式，反之关闭。
 
 ### EP 模式
 

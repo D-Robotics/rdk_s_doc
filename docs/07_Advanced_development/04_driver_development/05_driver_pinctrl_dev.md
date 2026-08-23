@@ -129,7 +129,7 @@ pinmux 和 pinconf 一般是在设备 dts 里配置，具体如下：
 };
 ```
 
-### Pinconf 支持设置的属性与设置树中对应关键字
+### Pinconf 支持设置的属性与设备树中对应关键字
 | 关键字 | 属性 |
 | --- | --- |
 | bias-pull-up | 上拉设置 |
@@ -680,7 +680,7 @@ pin 38 (PCM0_DATA0): (MUX UNCLAIMED) (GPIO UNCLAIMED)
 pin 39 (PCM0_DATA1): (MUX UNCLAIMED) (GPIO UNCLAIMED)
 ```
 
-#### /sys/kernel/debug/\<pinctrl_dev>/pinmux-select
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/pinmux-select
 
 可以通过节点 pinmux-functions 来查询需要每个 pin 的 group 和 function，
 通过 pinmux-select 节点设置 pinmux， 参数 group name 和 func name。
@@ -692,7 +692,7 @@ echo  "peri_i2c5_scl peri_i2c5"  > pinmux-select
 echo  "peri_i2c5_sda peri_i2c5"  > pinmux-select
 ```
 
-#### /sys/kernel/debug/\<pinctrl_dev>/pins
+#### /sys/kernel/debug/pinctrl/\<pinctrl_dev>/pins
 
 查看每个引脚的信息，包含引脚名称和对应的 gpio 管脚。以下命令以`<pinctrl_dev>`为`39ff5000.pinctrl-peri`为例。
 

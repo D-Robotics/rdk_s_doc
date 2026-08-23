@@ -6,7 +6,7 @@ sidebar_position: 12
 
 ## Testing Principles
 3D GPU performance testing is primarily used to evaluate GPU performance under various computational and rendering workloads. Based on different GPU application scenarios, common tests can be categorized as follows:
-- **OpenGLES (Rendering Performance Test)**: Uses `glmark2` to assess the GPU's graphics rendering capabilities, such as geometry processing, texture fill rate, and shader performance.
+- **OpenGL ES (Rendering Performance Test)**: Uses `glmark2` to assess the GPU's graphics rendering capabilities, such as geometry processing, texture fill rate, and shader performance.
 - **OpenCL (Compute Performance Test)**: Uses `clpeak` to evaluate GPU performance in general-purpose computing (GPGPU) tasks, including floating-point operations, memory bandwidth, and integer computations.
 
 ## Test Preparation
@@ -235,7 +235,7 @@ half16 : 200.11
 ```
 
 - Half-precision compute performance is substantially higher than single-precision, with half4 and wider configurations exceeding 200 GFLOPS.  
-- Highly suitable for applications requiring high throughput but lower precision, such as AI inference and image preprocessing.
+- Highly suitable for applications requiring high throughput but lower precision, such as model inference and image preprocessing.
 
 #### Integer Compute Performance (GIOPS)
 

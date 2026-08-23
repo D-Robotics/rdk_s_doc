@@ -45,7 +45,7 @@ The figure above shows the SPI software architecture. From bottom to top, it can
 The hobot SPI driver-related code is located in the **\$project/hobot-drivers/spi** directory.
 
 ```text
-oops@tiger$ tree . -L 1
+root@ubuntu$ tree . -L 1
 
 ├── Kconfig                       # Kconfig related
 ├── README.md
@@ -55,7 +55,7 @@ oops@tiger$ tree . -L 1
 **\$project/hobot-drivers/spi/spi_drv** directory description
 
 ```text
-oops@tiger$ tree . -L 1
+root@ubuntu$ tree . -L 1
 ├── Makefile
 ├── spi-dw.c                       # spi driver core code
 ├── spi-dw.h
@@ -68,11 +68,11 @@ oops@tiger$ tree . -L 1
 The Linux SPI protocol-related code is located in the **\$project/kernel/drivers/spi** directory.
 
 ```text
-oops@tiger$ tree kernel/drivers/spi/
+root@ubuntu$ tree kernel/drivers/spi/
 drivers/spi/
 ├── spi.c                             # spi framework code
 
-oops@tiger$
+root@ubuntu$
 ```
 
 ### SPI Device Tree Code
@@ -417,12 +417,12 @@ RX | 01 02 03 04 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 
 The SPI external loopback test refers to an SPI Master connected to an SPI Slave.
 
-For the Master, you can choose SPI1, and for the SPI Slave, choose an external SPI device (selected by the customer).
+For the Master, you can choose SPI0, and for the SPI Slave, choose an external SPI device (selected by the customer).
 
 The test command reference for the S100 side is as follows:
 
 ```bash
-root@ubuntu:/map# ./spidev_test -D /dev/spidev1.0 -s 1000000 -S 100  -v -p "\x01\x02\x03\x04"
+root@ubuntu:/map# ./spidev_test -D /dev/spidev0.0 -s 1000000 -S 100  -v -p "\x01\x02\x03\x04"
 spi mode: 0x0
 bits per word: 8
 max speed: 1000000 Hz (1000 kHz)

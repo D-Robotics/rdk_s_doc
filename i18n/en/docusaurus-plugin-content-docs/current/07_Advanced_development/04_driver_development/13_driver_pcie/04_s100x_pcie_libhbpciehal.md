@@ -7,7 +7,7 @@ description: "Introduction to PCIe User-Space High Level API"
 
 ## Overview
 
-`libhbpciehl` (PCIe High Level API, the `libhbpciehl.so` shared library) is built on top of the Low Level API (`libhbpcie.so`). It abstracts the general topic / subscribe / publish concepts and shields the hardware differences among different series of D-Robotics chips, making it easier for users to use PCIe for data communication.
+`libhbpciehl` (PCIe High Level API, the `libhbpciehl.so` shared library) is built on top of the Low Level API (`libhbpcie.so`). It abstracts the general topic / subscribe / publish concepts and shields the hardware differences among different series of computing platforms, making it easier for users to use PCIe for data communication.
 
 - **Positioning**: Sends and receives data (publish / subscribe) between RC and EP through topics.
 - **Interface level**: This document covers the low-level API, which wraps the primitive layer of `libhbpcie.so` rather than the business encapsulation layer.

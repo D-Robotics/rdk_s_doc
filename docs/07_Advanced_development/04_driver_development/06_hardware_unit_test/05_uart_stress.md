@@ -66,7 +66,7 @@ Options:
 
 各参数解析如下：
 
-- `-b <baudrate>`：设置波特率，默认值是 115200 。。
+- `-b <baudrate>`：设置波特率，默认值是 115200。
 - `-d <device>`：该选项用于指定测试的串口设备，默认值为 /dev/ttyS2（脚本的 `-h` 帮助文本里误写为 `/dev/ttyS1`，实际生效的默认值仍为 `/dev/ttyS2`）。
 - `-c <count>`：指定了测试的压力次数，默认值是 100 。
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
@@ -115,7 +115,7 @@ This is uart send test 3 times
 <DocScope products="RDK S100">
 ### 注意事项
 
-为了 RDK_S100 接口良好的扩展性，目前 i2c5 和 uart2 是可以通过拨码开关进行切换的，运行该测试时需要修改设备树管脚复用关系重新编译 dtb 安装，并把拨码开关拨到正确的位置。
+为了 RDK S100 接口良好的扩展性，目前 i2c5 和 uart2 是可以通过拨码开关进行切换的，运行该测试时需要修改设备树管脚复用关系重新编译 dtb 安装，并把拨码开关拨到正确的位置。
 
 **1.** 测试 uart2 需要修改设备树如下：
 
@@ -145,11 +145,11 @@ index 504b21b..8d72794 100644
 +
 ```
 
-**2.** 根据下面的 RDK_S100 实物图并找到 uart2 对应并将拨码开关往右拨到 连接 uart2 的位置：
+**2.** 根据下面的 RDK S100 实物图并找到 uart2 对应并将拨码开关往右拨到 连接 uart2 的位置：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram.png" alt="注意事项示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-**3.** 查看 RDK_S100 原理图并找到 uart2 对应的引脚与连接器位置，如图：
+**3.** 查看 RDK S100 原理图并找到 uart2 对应的引脚与连接器位置，如图：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png" alt="注意事项示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

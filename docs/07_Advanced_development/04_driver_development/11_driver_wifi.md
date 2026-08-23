@@ -61,7 +61,7 @@ AW-XM612模组的驱动需要使能以下配置：
 ```defconfig
 CONFIG_CFG80211=m
 CONFIG_BRCMFMAC=m
-CONFIG_BRCMFMAC_PCIE=y
+CONFIG_BRCMFMAC_PCIE=m
 ```
 
 ## 内核 DTS 配置

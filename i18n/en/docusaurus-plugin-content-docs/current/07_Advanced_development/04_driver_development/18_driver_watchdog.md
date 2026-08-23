@@ -7,10 +7,13 @@ sidebar_position: 15
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
 ```
 
 
 ## Watchdog Overview
+
+<DocScope products="RDK S100">
 
 Watchdog supports window mode and normal mode. In normal mode, the watchdog must be fed before the timer counts down to zero. In window mode, feeding is required within a specific window period. The window period is between the first timeout and the second timeout. An interrupt signal can be configured to be generated at the first timeout. If feeding is not performed within the window period or is performed outside the window period, a watchdog reset signal is sent to the MCU, which then controls the reset.
 The SoC includes 13 watchdogs, distributed as follows: Acore has 6, MCU has 3, VDSP has 1, BPU has 2, and HSM has 1. The specific usage of the Acore Watchdog is shown in the table below:
@@ -43,6 +46,8 @@ The SoC includes 13 watchdogs, distributed as follows: Acore has 6, MCU has 3, V
     </tr>
   </tbody>
 </table>
+</DocScope>
+<DocScope products="RDK S600">
   Watchdog supports window mode and normal mode. In normal mode, the watchdog must be fed before the timer counts down to zero. In window mode, feeding is required within a specific window period. The window period is between the first timeout and the second timeout. An interrupt signal can be configured to be generated at the first timeout. If feeding is not performed within the window period or is performed outside the window period, a watchdog reset signal is sent to the MCU, which then controls the reset.
   The SoC includes 18 watchdogs, distributed as follows: Acore has 2, MCU has 5, VDSP has 2, BPU has 8, and HSM has 1. The specific usage of the Acore Watchdog is shown in the table below:
 <table>
@@ -57,6 +62,7 @@ The SoC includes 13 watchdogs, distributed as follows: Acore has 6, MCU has 3, V
     </tr>
   </tbody>
 </table>
+</DocScope>
 
 ## Features
 
@@ -73,7 +79,9 @@ A window watchdog is a special type of watchdog commonly used in functional safe
 
 ## Device Tree
 
-Add the hardware information description of the watchdog to the device tree (location: code/source/hobot-drivers/kernel-dts/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi)
+<DocScope products="RDK S100">
+
+Add the hardware information description of the watchdog to the device tree (location: source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi)
 ```dts
   watchdog1: wdt@30110000 {
           status = "okay";
@@ -99,10 +107,12 @@ Add the hardware information description of the watchdog to the device tree (loc
           };
   };
 ```
+</DocScope>
+<DocScope products="RDK S600">
 
 ## Device Tree
 
-Add the hardware information description of the watchdog to the device tree (location: code/source/hobot-drivers/kernel-dts/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi)
+Add the hardware information description of the watchdog to the device tree (location: source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi)
 ```dts
   watchdog0: wdt@32260000 {
           status = "okay";
@@ -128,6 +138,7 @@ Add the hardware information description of the watchdog to the device tree (loc
           };
 		};
 ```
+</DocScope>
 
 ## Watchdog Driver Code
 
@@ -141,8 +152,14 @@ When a Watchdog timeout monitoring the Acore occurs, an interrupt is triggered a
 
 ## User Development
 
+<DocScope products="RDK S100">
+
 Currently, WDT1 is used to monitor kernel interrupt disable timeouts, WDT2 is used to monitor kernel threads, and the remaining WDT0, WDT3, WDT4, and WDT5 can be operated from user space via the ioctl interface as shown below.
+</DocScope>
+<DocScope products="RDK S600">
+
 Currently, WDT0 is used to monitor kernel interrupt disable timeouts, and WDT1 is used to monitor kernel threads.
+</DocScope>
 
 ### hb_wdt_ioctl.h Description
 
@@ -383,6 +400,8 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
 ## Watchdog Monitoring Solutions
 
+<DocScope products="RDK S100">
+
 ### HardLockup Monitoring
   HardLockup monitoring is implemented based on the Watchdog module, using Watchdog1 configured in window mode, with the monitoring logic implemented in the driver. When the system is running normally, the monitoring logic is as shown below:
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup Monitoring diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -418,6 +437,9 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
   4. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sets a flag. The Watchdog monitoring Kthread running on that core detects the flag, clears its own bit in the CPU bitmap, and sends IPIs to other cores to execute the same logic. It records a bitmap of currently online CPUs. Whenever a core receives the IPI, executes the logic, or goes offline, the corresponding bit in the bitmap is cleared. When the entire bitmap is empty, the monitoring task for this cycle is complete, and feeding the watchdog is allowed.
 
   5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. Upon first receiving the watchdog reset interrupt corresponding to a bark, the MCU refreshes the watchdog timeout to 2581ms to allow the Acore time to dump the stack. When the watchdog reset interrupt is triggered again, a reset is performed.
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ### HardLockup Monitoring
   HardLockup monitoring is implemented based on the Watchdog module, using Watchdog0 configured in window mode, with the monitoring logic implemented in the driver. When the system is running normally, the monitoring logic is as shown below:
@@ -455,6 +477,8 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. Upon first receiving the watchdog reset interrupt corresponding to a bark, the MCU refreshes the watchdog timeout to 2581ms to allow the Acore time to dump the stack. When the watchdog reset interrupt is triggered again, a reset is performed.
 
+
+</DocScope>
 
 ## Important Notes
 

@@ -112,7 +112,7 @@ kernel-dts/drobot-s600-soc.dtsi        # S600 SoC configuration
 ### Configuration Options
 
 <DocScope products="RDK S100">
-`hobot-drivers/configs/drobot_s100_defconfig`
+`hobot-drivers/configs/drobot_ufs.config`
 </DocScope>
 <DocScope products="RDK S600">
 `hobot-drivers/configs/drobot_s600_defconfig`
@@ -168,7 +168,7 @@ UFS runs in HS-GEAR4 mode under U-Boot, supporting standard SCSI commands to acc
 ext4ls scsi 0:17
 
 # Load file from ext4 partition to memory
-ext4load scsi 0:17 0x80000000 /boot/Image
+ext4load scsi 0:12 0x80000000 /boot/Image
 
 # Write memory data to ext4 partition
 ext4write scsi 0:17 0x80000000 /newfile 0x10000
@@ -388,7 +388,7 @@ journalctl -kf | grep -i ufs
 <DocScope products="RDK S100">
 The RDK S100 series development board has the following partitions by default. The actual partitions are subject to the board's output:
 </DocScope>
-<DocScope products="RDK S100">
+<DocScope products="RDK S600">
 The RDK S600 series development board has the following partitions by default. The actual partitions are subject to the board's output:
 </DocScope>
 

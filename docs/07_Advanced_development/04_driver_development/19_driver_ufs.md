@@ -110,7 +110,7 @@ kernel-dts/drobot-s600-soc.dtsi        # S600 SoC配置
 
 内核配置文件:
 <DocScope products="RDK S100">
-`hobot-drivers/configs/drobot_s100_defconfig`
+`hobot-drivers/configs/drobot_ufs.config`
 </DocScope>
 <DocScope products="RDK S600">
 `hobot-drivers/configs/drobot_s600_defconfig`
@@ -165,7 +165,7 @@ U-Boot 下 UFS 运行在 HS-GEAR4模式，支持在 U-Boot console 下使用标�
 ext4ls scsi 0:17
 
 # 从ext4分区加载文件到内存
-ext4load scsi 0:17 0x80000000 /boot/Image
+ext4load scsi 0:12 0x80000000 /boot/Image
 
 # 将内存数据写入ext4分区
 ext4write scsi 0:17 0x80000000 /newfile 0x10000

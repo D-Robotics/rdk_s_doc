@@ -68,7 +68,7 @@ Note that the same controller can only be configured in either RC or EP mode.
 
 The controller configuration nodes are: `hobot_pcie_rc0` and `hobot_pcie_rc1`.
 
-In general, simply change the `status` field from `disable` to `okay` to enable RC mode for the corresponding controller, or change it back to disable it.
+In general, simply change the `status` field from `disabled` to `okay` to enable RC mode for the corresponding controller, or change it back to disable it.
 
 ### EP Mode
 

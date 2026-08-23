@@ -7,15 +7,15 @@ description: "配置 U-Boot 和 Kernel 选项参数"
 # 配置 U-Boot 和 Kernel 选项参数
 
 
-在系统软件开发中，经常需要对 u-boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
+在系统软件开发中，经常需要对 U-Boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
 
-## 配置 uboot 选项参数
+## 配置 U-Boot 选项参数
 
 :::info 注意
 
 ​	以下说明以修改 `hobot_s100_defconfig`配置文件为例。
 
-​	Uboot 具体使用的配置文件可以在`./xbuild.sh lunch`之后查看`bootloader/device/.board_config.mk`板级配置文件中 `HR_UBOOT_CONFIG_FILE`的变量值。
+​	U-Boot 具体使用的配置文件可以在`./xbuild.sh lunch`之后查看`bootloader/device/.board_config.mk`板级配置文件中 `HR_UBOOT_CONFIG_FILE`的变量值。
 
 :::
 
@@ -28,15 +28,15 @@ description: "配置 U-Boot 和 Kernel 选项参数"
 ├── device # 板级配置目录，每种硬件对应一份配置文件，可以设置编译选项和分区表等
 ├── miniboot  # 生成包含gpt、mbr、bl2、ddr、bl3x 一体的最小启动固件
 ├── out # 编译输出目录
-└── uboot # Uboot源代码
+└── uboot # U-Boot 源代码
 ```
 
-`build/xbuild.sh`为主编译脚本，提供了以下命令帮助用户进行 Uboot 的选项配置，该命令会自动使用板级配置文件中设置的 Uboot 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
+`build/xbuild.sh`为主编译脚本，提供了以下命令帮助用户进行 U-Boot 的选项配置，该命令会自动使用板级配置文件中设置的 U-Boot 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
 ```
 ./xbuild.sh uboot menuconfig
 ```
 
-命令执行成功后会打开 Uboot 图形化配置界面，您可以在这个交互界面下完成选项的配置，包括删除不需要的功能和启用需要的功能。
+命令执行成功后会打开 U-Boot 图形化配置界面，您可以在这个交互界面下完成选项的配置，包括删除不需要的功能和启用需要的功能。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/screenshot-20241120-201418.png" alt="menuconfig图形化配置界面" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -49,13 +49,13 @@ description: "配置 U-Boot 和 Kernel 选项参数"
 ```
 # 调用savedefconfig对配置文件进行清理，保留必须项，删除被依赖项，生成 defconfig 文件
 make savedefconfig
-# 使用 defconfig 文件覆盖板级配置文件中设置的Uboot配置文件
+# 使用 defconfig 文件覆盖板级配置文件中设置的U-Boot配置文件
 cp -f defconfig <板级配置文件中设置的Uboot配置文件>
 ```
 
 ### 手动配置
 
-首先进入`source/bootloader/uboot`目录，执行`make ARCH=arm64 hobot_s100_defconfig `。因为`make`命令将首先执行顶级目录下的 Makefile 文件。其中对于以 config 结尾的目标都有一个共同的入口：
+首先进入`source/bootloader/uboot`目录，执行`make ARCH=arm64 hobot_s100_defconfig `。因为`make`命令将首先执行顶层目录下的 Makefile 文件。其中对于以 config 结尾的目标都有一个共同的入口：
 
 ```makefile
 %config: scripts_basic outputmakefile FORCE
@@ -68,7 +68,7 @@ cp -f defconfig <板级配置文件中设置的Uboot配置文件>
 make -f ./scripts/Makefile.build obj=scripts/kconfig hobot_s100_defconfig
 ```
 
-本命令执行后会在`uboot`的源码根目录下会生成 `.config`的文件。
+本命令执行后会在`U-Boot`的源码根目录下生成 `.config`的文件。
 
 ```bash
 make ARCH=arm64 hobot_s100_defconfig
@@ -84,7 +84,7 @@ make ARCH=arm64 hobot_s100_defconfig
 #
 ```
 
-然后就可以执行`make ARCH=arm64 menuconfig`打开图形化的配置界面进行`uboot`的选项参数配置。
+然后就可以执行`make ARCH=arm64 menuconfig`打开图形化的配置界面进行`U-Boot`的选项参数配置。
 
 在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
 
@@ -136,7 +136,7 @@ cp defconfig <板级配置文件中设置的Kernel配置文件>
 
 ### 手动配置
 
-通过`menuconfig`方式配置`kernel`与配置`uboot`的的过程是一样的。命令执行过程如下：
+通过`menuconfig`方式配置`kernel`与配置`U-Boot`的过程是一样的。命令执行过程如下：
 
 首先进入`source/kernel`目录，然后按照以下步骤配置`kernel`选项。
 

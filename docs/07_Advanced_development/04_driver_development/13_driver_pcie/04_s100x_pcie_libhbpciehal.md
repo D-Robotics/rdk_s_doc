@@ -9,7 +9,7 @@ description: "PCIe 用户态 High Level API 介绍"
 
 `libhbpciehl`（PCIe High Level API，动态库 `libhbpciehl.so`）基于 Low Level
 API（`libhbpcie.so`）封装，抽象出通用的 topic / subscribe / publish 概念，
-屏蔽不同系列地瓜芯片的硬件差异，让用户能够更加便捷地使用 PCIe 进行数据通信。
+屏蔽不同系列计算平台的硬件差异，让用户能够更加便捷地使用 PCIe 进行数据通信。
 
 - **功能定位**：在 RC 与 EP 之间通过 topic 进行数据收发（publish / subscribe）。
 - **接口层级**：本篇为【底层 API】，基于 `libhbpcie.so` 的原语层封装，非业务封装层。

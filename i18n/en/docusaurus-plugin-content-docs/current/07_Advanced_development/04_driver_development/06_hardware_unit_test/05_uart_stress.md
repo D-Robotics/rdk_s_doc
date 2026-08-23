@@ -121,7 +121,7 @@ This is uart send test 3 times
 
 ### Notes
 
-For better extensibility of the RDK_S100 interface, I2C5 and UART2 can be switched via DIP switches. To run this test, you must modify the device tree pin multiplexing configuration, recompile the DTB, install it, and set the DIP switch to the correct position.
+For better extensibility of the RDK S100 interface, I2C5 and UART2 can be switched via DIP switches. To run this test, you must modify the device tree pin multiplexing configuration, recompile the DTB, install it, and set the DIP switch to the correct position.
 
 **1.** To test UART2, modify the device tree as follows:
 
@@ -151,11 +151,11 @@ index 504b21b..8d72794 100644
 +
 ```
 
-**2.** Refer to the RDK_S100 physical diagram below, locate UART2, and switch the DIP switch to the right to connect UART2:
+**2.** Refer to the RDK S100 physical diagram below, locate UART2, and switch the DIP switch to the right to connect UART2:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Actual_device_diagram-en.png" alt="Notes diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
-**3.** Consult the RDK_S100 schematic to identify the UART2 pins and connector locations, as shown:
+**3.** Consult the RDK S100 schematic to identify the UART2 pins and connector locations, as shown:
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Schematic_diagram.png" alt="Notes diagram" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
