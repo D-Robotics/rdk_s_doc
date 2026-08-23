@@ -118,7 +118,7 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 }
 ```
 
-### 取消SLEEP KEY的处理
+### 取消SLEEP KEY的处理（MCU 侧）
 
 在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
 
@@ -281,7 +281,7 @@ const static struct hb_super_btype_node hb_super_btype_list[] = {
 
 其中`hb_super_btype_node`中`fdt_feat`为 Kernel dtb 的名字，`pxe_label`为 extlinux 中的 Kernel 配置，名字必须相互对应
 
-### 取消SLEEP KEY的处理
+### 取消SLEEP KEY的处理（U-Boot 侧）
 
 在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
 

@@ -142,7 +142,7 @@ static int BoardId_Check(uint32 BoardId)
 }
 ```
 
-### 取消SLEEP KEY的处理
+### 取消SLEEP KEY的处理（MCU 侧）
 
 在RDK S600 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 8，这个PIN的其他function是SPI8_CSN1 或CAN11_RX。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
 
@@ -235,7 +235,7 @@ CONFIG_DEFAULT_DEVICE_TREE="drobot-s600-rdk"
 - `pxe_label`：extlinux中kernel的配置
 - `bootsrc`：表示根据strap pin选择启动介质
 
-### 取消SLEEP KEY的处理
+### 取消SLEEP KEY的处理（U-Boot 侧）
 
 在RDK S600 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 8，这个PIN的其他function是SPI8_CSN1 或CAN11_RX。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
 

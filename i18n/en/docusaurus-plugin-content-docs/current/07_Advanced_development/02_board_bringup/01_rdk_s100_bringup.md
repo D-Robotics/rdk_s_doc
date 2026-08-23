@@ -114,7 +114,7 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 }
 ```
 
-### Cancel SLEEP KEY Handling
+### Cancel SLEEP KEY Handling (MCU Side)
 
 In the RDK S100/S100P design, there is a SLEEP KEY whose functions include putting the system to sleep and entering the U-Boot fastboot state upon startup. The SLEEP KEY uses PIN AON GPIO 11. Other functions of this PIN include LIN2_RXD, UART6_RXD, or SPI6_CSN3. If any of these functions are used, the following modifications need to be made in the RDK SDK code to ensure normal startup.
 
@@ -278,7 +278,7 @@ const static struct hb_super_btype_node hb_super_btype_list[] = {
 In `hb_super_btype_node`, `fdt_feat` is the name of the Kernel dtb, and `pxe_label` is the Kernel configuration in extlinux. The names must correspond to each other.
 
 
-### Handling the Cancellation of the SLEEP KEY
+### Handling the Cancellation of the SLEEP KEY (U-Boot Side)
 
 In the RDK S100/S100P design, there is a SLEEP KEY whose functions include putting the device to sleep when pressed and entering the uboot fastboot mode during startup. The SLEEP KEY uses the PIN AON GPIO 11. Other functions of this PIN include LIN2_RXD, UART6_RXD, or SPI6_CSN3. If any of these functions are used, the following modifications need to be made in the RDK SDK code to ensure normal startup.
 

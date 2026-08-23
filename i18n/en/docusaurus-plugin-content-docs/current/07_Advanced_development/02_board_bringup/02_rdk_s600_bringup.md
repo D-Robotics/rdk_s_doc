@@ -138,7 +138,7 @@ static int BoardId_Check(uint32 BoardId)
 }
 ```
 
-### Disable SLEEP KEY Handling
+### Disable SLEEP KEY Handling (MCU Side)
 
 In the RDK S600 design, there is a SLEEP KEY whose functions are to put the device to sleep via key press and to enter the uboot fastboot state via key press during startup. The PIN used for the SLEEP KEY is AON GPIO 8. The other functions of this PIN are SPI8_CSN1 or CAN11_RX. If you are using any of these functions, you need to make the following modifications in the RDK SDK code to ensure normal startup.
 
@@ -231,7 +231,7 @@ In the U-Boot dts file `source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg
 - `pxe_label`: Kernel configuration in extlinux.
 - `bootsrc`: Indicates selecting the boot medium based on strap pin.
 
-### Disable SLEEP KEY Handling
+### Disable SLEEP KEY Handling (U-Boot Side)
 
 In the RDK S600 design, there is a SLEEP KEY whose functions are to put the device to sleep via key press and to enter the uboot fastboot state via key press during startup. The PIN used for the SLEEP KEY is AON GPIO 8. The other functions of this PIN are SPI8_CSN1 or CAN11_RX. If you are using any of these functions, you need to make the following modifications in the RDK SDK code to ensure normal startup.
 
