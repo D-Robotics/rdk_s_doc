@@ -299,6 +299,8 @@ function main() {
   function shouldScan(p) {
     const base = path.basename(p);
     if (base.startsWith(".")) return false;
+    // 排除 section-map 路径清单（坑8：renumber 链接替换不应污染人工维护的路径清单）
+    if (base.startsWith("section-map") && base.endsWith(".json")) return false;
     for (const seg of p.split(path.sep)) {
       if (skipDirs.has(seg)) return false;
     }
@@ -329,12 +331,16 @@ function main() {
       content = content.replace(new RegExp(fromEsc, "g"), toRel);
     }
     if (content !== orig) {
-      fs.writeFileSync(fullPath, content, "utf8");
+      if (process.env.DRY_RUN) {
+        // 预览模式：只统计不写（坑6：预演必须覆盖链接替换阶段，且不落盘）
+      } else {
+        fs.writeFileSync(fullPath, content, "utf8");
+      }
       touched++;
     }
   });
 
-  console.log(`\nUpdated link references in ${touched} file(s).`);
+  console.log(`\n${process.env.DRY_RUN ? "[DRY_RUN] Link references would be updated in" : "Updated link references in"} ${touched} file(s).`);
   console.log("Run: npm run generate-sidebar-config");
 }
 
