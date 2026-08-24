@@ -8,6 +8,18 @@ sidebar_position: 5
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Code Location
+
+The test code is located on the board in the `/app/chip_base_test/03_uart_test/` directory:
+
+```text
+/app/chip_base_test/03_uart_test/
+├── Makefile
+├── Readme.md
+├── uart_test.c        # UART stress test source code
+└── uartstress.sh      # stress test script
+```
+
 ## Test Principle
 
 UART stress testing is a method used to verify the stability and performance of UART communication by exchanging large volumes of data and performing high-load operations. Its principle mainly involves sending and receiving massive amounts of data to simulate real-world UART usage scenarios. Specifically, it includes the following aspects:
@@ -256,6 +268,20 @@ This is receive test 50 times
 Data verification successful. Received data matches sent data. Test total data count: 0x1880000  
 This is uart send test 50 times  
 ```
+
+## FAQ
+
+### No data is transmitted or received on uart2
+
+**Cause**: `i2c5` and `uart2` share the same pins, so the device tree must be modified and the DIP switch set to the `uart2` position.
+
+**Solution**: As described in the Notes section, disable `i2c5` and enable `uart2` (recompile and install the DTB), set the DIP switch to `uart2`, and connect `uart2_tx`/`uart2_rx` with a jumper wire.
+
+### Data errors or loss during UART stress testing
+
+**Cause**: Incorrect baud rate configuration, poor wiring, or loose Dupont wires.
+
+**Solution**: Verify that the `-b` parameter matches the actual UART baud rate, and check and reconnect the `uart2_tx`/`uart2_rx` Dupont wires.
 
 ## Related Documentation
 

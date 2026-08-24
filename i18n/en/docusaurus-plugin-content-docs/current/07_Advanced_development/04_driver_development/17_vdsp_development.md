@@ -12,6 +12,62 @@ import DocScope from '@site/src/components/DocScope';
 **The S600 includes two VDSP cores. The VDSP1 descriptions below are supported on S600 only!**
 :::
 
+## Overview
+
+VDSP (Vector Digital Signal Processor) is a coprocessor on RDK platforms for high-performance vector computing and image processing. This guide covers basic VDSP debugging, sample execution, and API interfaces.
+
+<DocScope products="RDK S100">
+The S100 contains 1 VDSP core (VDSP0) with the following default configuration:
+
+| Item | Default Value |
+|---|---|
+| VDSP core | VDSP0 |
+| Management node | `remoteproc_vdsp0` |
+| Default FW name | `vdsp0` |
+</DocScope>
+
+<DocScope products="RDK S600">
+The S600 contains 2 VDSP cores (VDSP0 and VDSP1). VDSP1 is supported only on dual-core platforms such as the S600. The default configuration is as follows:
+
+| Item | Default Value |
+|---|---|
+| VDSP cores | VDSP0, VDSP1 |
+| Management nodes | `remoteproc_vdsp0`, `remoteproc_vdsp1` |
+| Default FW name | `vdsp0` (all cores share one Firmware) |
+</DocScope>
+
+**Target Audience**: Mode 3 deep-customization developers (commercial customers/deep teams) — BSP/driver engineers who need to develop/debug VDSP Firmware or inter-core communication.
+
+**Prerequisites**: RDK OS is flashed and the board is accessible; understanding of remoteproc and inter-core communication (RPMSG/IPCFHAL) basics; a VDSP cross-compilation toolchain is set up.
+
+**Relationships with Other Modules**: VDSP interacts with the CPU side through inter-core communication (RPMSG/IPCFHAL). For watchdog linkage, see [Watchdog](./18_driver_watchdog.md). The VDSP FW is not started by default at boot; it must be loaded manually or via init.rc.
+
+## Device Tree Configuration
+
+The VDSP kernel registers the `remoteproc_vdsp0` node with the remoteproc subsystem to load and manage VDSP Firmware. The node is located in `drobot-s100-soc.dtsi`. Key properties (the complete configuration includes iommu/reserved memory mapping, etc.; see the kernel DTS):
+
+```dts
+remoteproc_vdsp0: remoteproc_vdsp0 {
+    status = "okay";
+    compatible = "hobot,remoteproc-vdsp0";
+    power-domains = <&scmi_smc_pd PD_IDX_VDSP_TOP>;
+    clocks = <&scmi_smc_clk CLK_IDX_GATE_VDSP_REG_VDSP0>;
+    clock-names = "vdsp0_clk";
+    clock_max_freq = <1000000000>;
+    resets = <&scmi_reset RST_MCU_IDX_IP_VDSP_VDSP0>;
+    reset-names = "vdsp0_reset";
+    interrupt-parent = <&gic>;
+    interrupts = <GIC_SPI VDSPSYS_Q8_EARLY_RESET_REQ_INTR VDSPSYS_Q8_EARLY_RESET_REQ_INTR_TRIG_TYPE>,
+             <GIC_SPI VDSPSYS_Q8_RESET_REQ_INTR VDSPSYS_Q8_RESET_REQ_INTR_TRIG_TYPE>,
+             <GIC_SPI CPUSYS_SW0_TRIG_INTR_3 CPUSYS_SW0_TRIG_INTR_3_TRIG_TYPE>;
+    mboxes = <&mailbox1 15 31 15>, <&mailbox1 14 30 14>, <&mailbox1 13 29 13>;
+};
+```
+
+<DocScope products="RDK S600">
+In addition to `remoteproc_vdsp0`, the S600 also has a `remoteproc_vdsp1` node (`compatible = "hobot,remoteproc-vdsp1"`) for managing the second VDSP core, corresponding to the sysfs node `remoteproc_vdsp1`.
+</DocScope>
+
 ## Basic Debugging Guide
 
 ### CPU-side Development

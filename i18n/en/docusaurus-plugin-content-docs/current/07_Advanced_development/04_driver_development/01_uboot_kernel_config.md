@@ -4,7 +4,25 @@ sidebar_position: 1
 
 # Configuring U-Boot and Kernel Option Parameters
 
-In system software development, it is often necessary to configure the functional options of u-boot and the kernel. This chapter introduces several commonly used configuration methods for users' reference.
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+In system software development, it is often necessary to configure the functional options of U-Boot and the kernel. This chapter introduces several commonly used configuration methods for users' reference.
+
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/build engineers who need to trim the kernel/U-Boot configuration or customize board-level `defconfig`.
+
+**Prerequisites**: An SDK source compilation environment (`xbuild.sh`) has been set up; familiarity with the configuration mechanism of U-Boot and kernel `defconfig`.
+
+**Relationships with Other Modules**: This page is the unified entry point for kernel-mode switches of each driver/function module, cross-linked with the "Kernel Configuration" sections of the driver pages under "5.4 Driver Development"; the final `defconfig` is used for image compilation.
+
+<DocScope products="RDK S100">
+The kernel configuration file for the S100 is `hobot-drivers/configs/drobot_s100_defconfig`. The U-Boot configuration file is specified by `HR_UBOOT_CONFIG_FILE` in the board-level `.board_config.mk`.
+</DocScope>
+
+<DocScope products="RDK S600">
+The kernel configuration file for the S600 is `hobot-drivers/configs/drobot_s600_defconfig`. The U-Boot configuration file is specified by `HR_UBOOT_CONFIG_FILE` in the board-level `.board_config.mk`.
+</DocScope>
 
 ## Configuring U-Boot Option Parameters
 
@@ -168,6 +186,20 @@ make distclean
 # or
 make mrproper
 ```
+
+## FAQ
+
+### Recompilation reports "xxx is not clean, please run 'make mrproper'"
+
+**Cause**: Files such as `.config` left over from the previous compilation remain in the source directory, inconsistent with the current configuration.
+
+**Solution**: Run `make distclean` (or `make mrproper`) in the corresponding source directory to clean up, then reconfigure and recompile.
+
+### Configuration lost after recompiling following menuconfig changes
+
+**Cause**: Only `.config` was modified and not saved back to the board-level `defconfig`, so it was overwritten by the board-level configuration during recompilation.
+
+**Solution**: Use `make savedefconfig` to generate the `defconfig` file, overwrite the corresponding board-level configuration file under `hobot-drivers/configs/`, and then recompile.
 
 ## Related Documentation
 

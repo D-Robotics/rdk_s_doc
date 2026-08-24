@@ -62,6 +62,12 @@ The SoC includes 13 watchdogs, distributed as follows: Acore has 6, MCU has 3, V
 </table>
 </DocScope>
 
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to configure the watchdog timeout/window mode, monitoring solutions, or troubleshoot abnormal resets.
+
+**Prerequisites**: RDK OS is flashed and you can log in to the board; understand the Linux watchdog subsystem basics.
+
+**Relationships with Other Modules**: This driver is the low-level implementation of system reliability monitoring (HardLockup/SoftLockup) and the abnormal reset mechanism; for related configuration, see [Configure U-Boot and Kernel](./01_uboot_kernel_config.md).
+
 ## Features
 
 A window watchdog is a special type of watchdog commonly used in functional safety products.
@@ -167,6 +173,12 @@ Before using the `ioctl` interface described in this document in a user-space pr
 - **`HB_WDT_START`, `HB_WDT_RESTART`, etc.**: Specific command numbers distinguished under the `'W'` marker, corresponding to the subsections below.
 
 The above definitions must remain consistent with the kernel watchdog character device driver.
+
+:::tip
+
+The SDK already provides a canonical header file `hobot-drivers/include/uapi/linux/hobot_watchdog.h`, which defines `WDT_MAGIC_NUM` and macros from `HB_WDT_START` to `HB_WDT_PROCEED`, consistent with the content below. You can directly `#include <linux/hobot_watchdog.h>`, or save its content as `hb_wdt_ioctl.h`.
+
+:::
 
 **File Content**
 
@@ -482,6 +494,20 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   1. The reset method for watchdog feeding timeouts is determined by the watchdog reset register configuration. Currently, reset is handled by the watchdog reset interrupt reported to the MCU driver software.
   2. Feeding the watchdog outside the window period will directly trigger a bark.
+
+## FAQ
+
+### System Restarts Abnormally, Suspected Watchdog Reset
+
+**Cause**: In normal mode the watchdog was not fed within the timeout, or in window mode the watchdog was fed outside the window period (feeding outside the window period directly causes a bark and reset).
+
+**Solution**: Check the feeding program timing and confirm that feeding occurs within the window period; the reset method is determined by the watchdog reset register configuration.
+
+### HardLockup/SoftLockup Monitoring Triggers a Reset
+
+**Cause**: The CPU does not respond to interrupts for a long time (HardLockup) or a soft lockup (SoftLockup) occurs.
+
+**Solution**: Check the kernel log to locate the hang point and the long interrupt-disabled region, and adjust the monitoring strategy with reference to the `Watchdog Monitoring Solutions` section.
 
 ## Related Documentation
 

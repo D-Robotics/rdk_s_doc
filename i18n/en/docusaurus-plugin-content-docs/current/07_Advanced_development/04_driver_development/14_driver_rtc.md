@@ -18,6 +18,12 @@ In the S100 chip, an RTC module is built-in. This module is a configurable high-
 In the S600 chip, an RTC module is built-in. This module is a configurable high-precision counter that provides a stable time base for the system. Additionally, the S600 includes an external YSN8130E module, which supports an external battery to maintain time continuity when the system is powered off.
 </DocScope>
 
+**Target Audience**: Mode 3 deep-customization developers (commercial customers/deep teams) — BSP/driver engineers who need to debug the RTC driver, alarm/interrupt, or device tree.
+
+**Prerequisites**: RDK OS is flashed and the board is accessible; understanding of the Linux RTC subsystem and device tree basics.
+
+**Relationships with Other Modules**: This driver is the low-level implementation of system clock synchronization (RTC/NTP) and scheduled wake-up. For system-level configuration, see [Clock and RTC Synchronization](/System_configuration/rtc_ntp).
+
 ### RTC Features
 
 #### Time and Date Recording
@@ -683,6 +689,89 @@ The specific explanation is as follows:
 5. **Return Result**:
 
    - The operation result is returned layer by layer to the user-space program, which continues execution based on the returned result.
+
+## Device Tree Configuration
+
+The RTC device tree contains two kinds of nodes: the built-in RTC (super-rtc) and the external YSN8130E.
+
+The built-in RTC node (`rtc: rtc@aon`):
+
+<DocScope products="RDK S100">
+
+```dts
+/* drobot-s100-soc.dtsi */
+rtc: rtc@aon {
+    compatible = "drobot,super-rtc";
+    reg = <0x0 0x2a830000 0x0 0x10>;
+    regmap-reg = <&rtc_ctrl_reg>;
+    interrupt-parent = <&gic>;
+    interrupts = <GIC_SPI CPUSYS_SW0_TRIG_INTR_4 CPUSYS_SW0_TRIG_INTR_4_TRIG_TYPE>;
+    rtc-as-bin-timer;
+    clock-frequency = <32768>;
+    status = "okay";
+    parity;
+    lockstep;
+};
+```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```dts
+/* drobot-s600-soc.dtsi */
+rtc: rtc@aon {
+    compatible = "drobot,super-rtc";
+    reg = <0x0 0x3b420000 0x0 0x10>;
+    regmap-reg = <&rtc_ctrl_reg>;
+    rtc-as-bin-timer;
+    clock-frequency = <32768>;
+    status = "okay";
+    s600;
+    parity;
+    lockstep;
+};
+```
+
+</DocScope>
+
+The external YSN8130E node (mounted on the I2C bus, address `0x32`):
+
+<DocScope products="RDK S100">
+
+```dts
+/* rdk-v0p5.dtsi */
+ysn8130@32 {
+    compatible = "drobot,ysn8130e";
+    reg = <0x32>;
+    status = "okay";
+    drobot,backup-charge-enable = <0>;
+    drobot,bfvsel = <2>;
+};
+```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```dts
+/* rdk-s600-mcb-v0p1.dts */
+ysn8130@32 {
+    compatible = "drobot,ysn8130e";
+    reg = <0x32>;
+    status = "okay";
+};
+```
+
+</DocScope>
+
+## Usage
+
+Using the RTC involves three stages:
+
+- **U-Boot stage**: The RTC is managed by the kernel driver; generally no special configuration is required in U-Boot (optional).
+- **Kernel stage**: The kernel loads the `drobot,super-rtc` and `drobot,ysn8130e` drivers, and the device tree nodes have `status = "okay"`. See "Device Tree Configuration" and "RTC Driver Code".
+- **User-space usage**: Read/write the time via `/dev/rtc`, `hwclock`, or the test interfaces. See "RTC Usage Overview".
 
 ## RTC Usage Overview
 

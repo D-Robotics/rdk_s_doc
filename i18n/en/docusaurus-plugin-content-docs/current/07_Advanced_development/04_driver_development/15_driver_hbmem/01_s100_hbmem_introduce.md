@@ -3,7 +3,25 @@ sidebar_position: 1
 ---
 # Function Description
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 The Hbmem module primarily implements functions including **memory allocation**, **memory sharing**, **memory queue management**, and **memory pool**, and is specifically used to manage **system-reserved memory**.
+
+**Target Audience**: Mode 3 deep-customization developers (business customers / deep teams) — development engineers who need to directly manage reserved memory, share buffers across processes, or optimize memory allocation performance.
+
+**Prerequisites**: Familiarity with the fundamentals of Linux ION/dma-buf memory management and cache coherence.
+
+**Relationships with Other Modules**: This module is the underlying implementation for memory allocation/sharing in user programs such as hbrt and dnn. For the hardware memory layout, see [Hardware Information](./02_s100_hbmem_hardware.md); the remaining sub-documents introduce the software interfaces, debugging, and FAQ respectively.
+
+<DocScope products="RDK S100">
+The S100 (S100X) supports two memory sizes, 12G/24G. For the specific ION reservation, see [Hardware Information](./02_s100_hbmem_hardware.md).
+</DocScope>
+
+<DocScope products="RDK S600">
+The S600 supports 32G memory. For the specific ION reservation, see [Hardware Information](./02_s100_hbmem_hardware.md).
+</DocScope>
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/01_func_overview-en.png" alt="Function Description diagram" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

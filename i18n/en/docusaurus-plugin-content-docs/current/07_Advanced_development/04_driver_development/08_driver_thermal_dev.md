@@ -6,7 +6,25 @@ description: "RDK S100/S600 Thermal System Debugging Guide"
 
 # Thermal System
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 The Thermal system is based on the kernel Thermal framework. It obtains the temperature through the PVT (Process-Voltage-Temperature) monitor inside the SoC, and acts on CPU frequency, BPU frequency and fan speed according to temperature policies to prevent overheating-induced frequency throttling or shutdown. This section introduces the Thermal system driver, debugging interfaces and configuration methods.
+
+<DocScope products="RDK S100">
+The S100 has 5 temperature sensors (2 in the MCU domain, 1 in the BPU, and 2 in the MAIN domain), corresponding to 5 thermal zones (`thermal_zone0`~`thermal_zone4`).
+</DocScope>
+
+<DocScope products="RDK S600">
+The S600 has 19 thermal zones (`thermal_zone0`~`thermal_zone18`), with types covering the `pvt_cmn`, `pvt_ddr`, `pvt_bpu` domains, etc.
+</DocScope>
+
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to adjust thermal policies, trip points, or troubleshoot heat dissipation/frequency throttling issues.
+
+**Prerequisites**: RDK OS is flashed and you can log in to the board; understand the Linux Thermal framework and CPU/BPU frequency management basics.
+
+**Relationships with Other Modules**: This system is the low-level implementation of the `Thermal and CPU Frequency Management` configuration, and it works with CPU frequency scaling (cpufreq); for the policy/trip point differences between the S100 and S600, see the `S100/S600 Differences` section.
 
 ## Driver Code
 
@@ -118,6 +136,20 @@ The Thermal system of the S100 is described in [S100 Thermal System](../../02_Sy
 The Thermal system of the S600 is described in [S600 Thermal System](../../02_System_configuration/08_frequency_management.md#rdk-s600).
 
 </DocScope>
+
+## FAQ
+
+### CPU/BPU Frequency Is Limited (Throttled)
+
+**Cause**: After the temperature exceeds a trip point, the Thermal policy (such as `step_wise`) triggers cooling devices to limit the CPU/BPU frequency.
+
+**Solution**: Use the `Temperature Query` section to check the current temperature and trip point of each thermal zone (in millidegree Celsius) to confirm whether the limit is exceeded; improve heat dissipation or adjust the trip point, then observe whether the frequency recovers.
+
+### Cannot Read Thermal Zone Temperature
+
+**Cause**: The `hb_pvt` driver module is not loaded and has not registered thermal zones with the kernel Thermal framework.
+
+**Solution**: Use `dmesg | grep -i pvt` to check the driver loading log; if missing, run `modprobe hb_pvt`, then `ls /sys/class/thermal/` to confirm the thermal zones are registered.
 
 ## Related Documentation
 

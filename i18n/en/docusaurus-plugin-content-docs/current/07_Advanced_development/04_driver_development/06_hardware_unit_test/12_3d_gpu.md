@@ -4,6 +4,17 @@ sidebar_position: 12
 
 # 3D GPU Performance Testing
 
+## Code Location
+
+The board stores the clpeak patch and build instructions in the `/app/chip_base_test/10_gpu_3d_test/` directory:
+
+```text
+/app/chip_base_test/10_gpu_3d_test/
+└── clpeak/
+    ├── Readme.md
+    └── 0001-feat-build-add-aarch64-toolchain-for-S100-cross-comp.patch
+```
+
 ## Testing Principles
 3D GPU performance testing is primarily used to evaluate GPU performance under various computational and rendering workloads. Based on different GPU application scenarios, common tests can be categorized as follows:
 - **OpenGL ES (Rendering Performance Test)**: Uses `glmark2` to assess the GPU's graphics rendering capabilities, such as geometry processing, texture fill rate, and shader performance.

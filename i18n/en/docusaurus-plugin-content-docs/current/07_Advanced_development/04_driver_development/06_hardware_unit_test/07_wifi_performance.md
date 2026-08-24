@@ -128,6 +128,20 @@ There is no universal set of numerical benchmarks for evaluating Wi-Fi performan
 
 When evaluating Wi-Fi performance metrics, consider all the above factors holistically and develop optimization strategies to ensure stable and reliable network performance.
 
+## FAQ
+
+### iperf3 client cannot connect to the server
+
+**Cause**: The server is not started, or the Wi-Fi network between the board and the server is unreachable.
+
+**Solution**: First run `ping -I wlan0 <server IP>` to confirm connectivity, then start the server on the PC with `iperf3 -s -p 5002` and retry.
+
+### Measured bandwidth is significantly lower than expected
+
+**Cause**: Wi-Fi performance is affected by environmental factors such as antenna orientation, channel interference, signal strength/attenuation, and nearby wireless devices.
+
+**Solution**: Refer to the Performance Benchmarks section to check and optimize the test environment item by item.
+
 ## Related Documentation
 
 - [Driver Functional Unit Test](./01_overview.md)

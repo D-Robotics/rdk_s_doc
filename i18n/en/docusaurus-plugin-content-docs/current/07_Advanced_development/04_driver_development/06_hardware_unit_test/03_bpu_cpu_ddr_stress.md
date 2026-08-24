@@ -12,6 +12,21 @@ import DocScope from '@site/src/components/DocScope';
 This document covers both RDK S100 and RDK S600. The CPU/DDR section (`stressapptest`) is identical across both platforms; **the BPU section uses completely different stress testing tools and models for the two platforms**—S100 uses `bpu_os_test` (a raw binary with the group proportion mechanism in `run.sh`), while S600 uses `hrt_model_exec` (provided by the `hobot-dnn` package).
 :::
 
+## Code Location
+
+The test code is located on the board in the `/app/chip_base_test/01_cpu_bpu_ddr/` directory:
+
+```text
+/app/chip_base_test/01_cpu_bpu_ddr/
+└── scripts/
+    ├── Readme.md
+    ├── stress_test.sh              # stress test entry script
+    ├── stop_test.sh                # stop script
+    ├── stressapptest               # CPU/DDR stress test binary
+    └── module/
+        └── resnet50_224x224_nv12.hbm   # BPU stress test model
+```
+
 ## Test Principles
 
 The test principles of the CPU-BPU-DDR stress test primarily involve evaluating the performance and stability of the CPU, BPU, and DDR under high-load conditions. Below are the basic principles of stress testing for these components:
@@ -524,6 +539,20 @@ dmesg -T --level=err,warn,crit | tail -n 50
 :::info
 During the startup phase, there will be some normal BPU driver info logs (e.g., `arm-smmu-v3 28c00000.bpu_smmu: hobot_smmu_clk_get: miss clk:...`), which are **not** stress test anomalies. The grep pattern above with `bpu.*error` already excludes them and will only match when there is a real issue.
 :::
+
+## FAQ
+
+### grep error/fail produces false positives
+
+**Cause**: On normal completion, `stressapptest` also prints `with 0 hardware incidents, 0 errors` and `Status: PASS`, which a naive `grep -iE 'error|fail|timeout'` will match.
+
+**Solution**: Use the anomaly grep pattern recommended in the Test Metrics section (`Error:`/`FAILED`/`Timeout`/`N errors`) to filter and avoid false positives.
+
+### BPU utilization is lower than expected
+
+**Cause**: The stress test is not running at true full load.
+
+**Solution**: Observe continuously via `cat /sys/devices/system/bpu/ratio`; S100 should stabilize at 98~100% under full load, and each S600 core should stabilize at a high level.
 
 ## Related Documentation
 

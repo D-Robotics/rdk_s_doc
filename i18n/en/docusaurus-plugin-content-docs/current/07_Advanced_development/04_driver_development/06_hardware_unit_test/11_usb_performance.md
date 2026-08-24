@@ -251,6 +251,20 @@ Actual transfer speeds are typically lower than the theoretical maximum due to p
 
 Using the methods described in Test 1 and Test 2, the actual transfer speeds of USB 3.1 Gen 1 and USB 2.0 can be effectively measured, and the results align well with real-world USB performance.
 
+## FAQ
+
+### USB read/write speed is lower than the nominal value
+
+**Cause**: Affected by factors such as the USB flash drive's own performance, interface speed, test block size, and file size.
+
+**Solution**: Refer to the Common Influencing Factors section to check items one by one, and use larger block sizes and files for read/write testing.
+
+### USB flash drive is not automatically mounted after being plugged in
+
+**Cause**: The device is not auto-mounted or is not recognized.
+
+**Solution**: Use `lsblk` to check the device, then manually `mount` it to a mount point before testing.
+
 ## Related Documentation
 
 - [Driver Functional Unit Test](./01_overview.md)

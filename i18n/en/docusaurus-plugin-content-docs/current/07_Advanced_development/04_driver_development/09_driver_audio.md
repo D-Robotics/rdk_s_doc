@@ -12,15 +12,52 @@ This chapter mainly covers the specifications and features of I2S, basic audio k
 
 ## Overview
 
-CPU DAI: The digital audio interface on the CPU side, typically an I2S interface, responsible for control bus transmission.
+The audio subsystem is based on the ALSA (Advanced Linux Sound Architecture) framework. A sound card consists of four parts: the CPU DAI, the CODEC DAI, the PLATFORM, and the sound card. The CPU DAI is the I2S interface driver, the CODEC DAI is the external codec driver, the PLATFORM is the DMA driver, and the sound card binds the CPU DAI and CODEC DAI together. On RDK platforms, drivers under `sound/soc/hobot/` work together with external codec chips (such as es7210/es8156) to perform recording and playback.
 
-CODEC DAI: Refers to the codec. Controls the codec workflow and provides it to the core layer.
+<DocScope products="RDK S100">
+The S100 connects an audio daughter board via the 40-pin PCM header (Audio Driver HAT, typically configured with 2x es7210 + 1x es8156). The PCM pins are multiplexed with the PCIe Wi-Fi module and switched via a DIP switch.
+</DocScope>
 
-DAI LINK: Binds the CPU DAI and CODEC DAI, referring to the hardware controller driver.
+<DocScope products="RDK S600">
+The S600 similarly works with external codecs (such as es7210/es8156) via PCM/I2S pins, supporting the same recording/playback paths as the S100.
+</DocScope>
 
-PLATFORM: Specifies the platform driver on the CPU side, usually a DMA driver used for data transmission.
+**Target Audience**: Mode 3 deep-customization developers (commercial customers/deep teams) — BSP/driver engineers who need to port codecs, customize sound cards, or debug the audio path.
 
-DAPM: Dynamic Audio Power Management.
+**Prerequisites**: RDK OS is flashed and the board is accessible; understanding of the ALSA framework and device tree basics; an audio daughter board or codec hardware is connected.
+
+**Relationships with Other Modules**: This driver is the low-level implementation of user-space audio applications (recording/playback). For system-level audio output configuration, see "Audio Configuration"; for the application layer, see "Audio Applications".
+
+### Terminology
+
+- **CPU DAI**: The digital audio interface on the CPU side, typically an I2S interface, responsible for control bus transmission.
+- **CODEC DAI**: Refers to the codec. Controls the codec workflow and provides it to the core layer.
+- **DAI LINK**: Binds the CPU DAI and CODEC DAI, referring to the hardware controller driver.
+- **PLATFORM**: Specifies the platform driver on the CPU side, usually a DMA driver used for data transmission.
+- **DAPM**: Dynamic Audio Power Management.
+
+## Driver Code
+
+The audio driver source code is located in the kernel `sound/soc/` directory:
+
+```text
+sound/soc/hobot/hobot-snd-super-ac-fdx-host.c   # sound card driver
+sound/soc/hobot/hobot-cpudai-super.c            # CPU DAI (I2S) driver
+sound/soc/hobot/hobot-i2s-super.c               # I2S control driver
+sound/soc/hobot/hobot-platform-super.c          # DMA (platform) driver
+sound/soc/codecs/snd-soc-es7210.c               # es7210 codec driver
+sound/soc/codecs/snd-soc-es8156.c               # es8156 codec driver
+```
+
+The corresponding kernel modules are: `hobot_cpudai_super`, `hobot_snd_super_ac_fdx_host`, `snd-soc-es7210`, `snd-soc-es8156`.
+
+## Usage
+
+Using the audio driver involves the following stages:
+
+- **U-Boot stage**: Generally no special audio configuration is required in U-Boot (optional).
+- **Kernel stage**: Compile and load the codec/CPU DAI/sound card drivers and configure the device tree. See "Adding a New Codec" in "Audio Development Instructions".
+- **User-space usage**: After the drivers are loaded, play/record via ALSA tools (`aplay`/`arecord`) or applications. See "Debugging Instructions" for debugging methods.
 
 ## Audio Development Instructions
 

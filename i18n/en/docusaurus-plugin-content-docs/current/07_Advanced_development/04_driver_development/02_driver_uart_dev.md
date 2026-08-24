@@ -8,9 +8,29 @@ sidebar_position: 2
 import DocScope from '@site/src/components/DocScope';
 ```
 
-The S100(S600) chip has a total of 4(8) UARTs, namely uart0-uart3(uart0~uart7). Among them, uart0 is used as the debug console, DMA is not enabled by default, and the baud rate is determined by controlling the Bootstrap pin to be either 115200 or 921600.
+## Overview
 
-The other UARTs are used for data transmission, with DMA enabled by default in the device tree. They support various baud rates configured via software, with the commonly used baud rate being 921600. uart0 and uart1 support hardware flow control, while the other UARTs do not support this feature.
+UART (Universal Asynchronous Receiver/Transmitter) is the basic serial communication peripheral on RDK development boards. This driver is implemented on the DesignWare 8250 framework and supports DMA transfer and hardware flow control.
+
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to modify kernel drivers or device trees, or debug board-level serial ports.
+
+**Prerequisites**: RDK OS has been flashed and the board can be logged in; familiarity with the Linux device tree (DTS) and pinctrl basics; for serial loopback or transmit/receive self-testing, prepare jumper wires or a USB-to-TTL module.
+
+**Relationships with Other Modules**: This driver is the underlying implementation of the user-space serial read/write application (3.1.1 Expansion Pin Usage); the board-level entry for the debug console uart0 is in "2.16 Debug Serial"; kernel and U-Boot option configuration is in "5.4.1 Configuring U-Boot and Kernel Option Parameters".
+
+### Hardware Resources
+
+<DocScope products="RDK S100">
+
+The RDK S100 development board has 4 UARTs (uart0 to uart3): uart0 serves as the debug console with DMA disabled by default, and its baud rate (115200/921600) is controlled by the Bootstrap pin. The other 3 UARTs are used for data transmission with DMA enabled by default in the device tree, and they support software-configured baud rates (commonly 921600). uart0 and uart1 support hardware flow control.
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+The RDK S600 development board has 8 UARTs (uart0 to uart7): uart0 serves as the debug console with DMA disabled by default. The other 7 UARTs are used for data transmission with DMA enabled by default in the device tree, and they support software-configured baud rates (commonly 921600). uart0 and uart1 support hardware flow control.
+
+</DocScope>
 
 ## UART Usage Instructions
 
@@ -154,6 +174,20 @@ On RDK S600, uart4 is initialized as /dev/ttyS1. uart4 does not have physical pi
 - In the RDK S600 hardware design, only uart6 and uart7 are exposed via expansion pin headers, and a TXB series level shift chip from TI is used to convert 1.8V IO to 3.3V IO. **Due to hardware limitations on the RDK S600 V0P1 development board, uart6 and uart7 cannot be used**.
 
 </DocScope>
+
+## FAQ
+
+### Serial communication data is abnormal or signal quality is poor
+
+**Cause**: The 40-pin GPIO on RDK S100/S600 both use TI TXS/TXB series level shift chips to convert 1.8V IO to 3.3V IO. If the communication peer adds another level of level shifting, it introduces signal distortion and affects communication quality and reliability.
+
+**Solution**: Avoid stacking additional level shift chips on the communication peer; if multi-level conversion is necessary, measure the line signal quality (edges, amplitude) during testing.
+
+### RDK S600 cannot perform serial read/write testing on /dev/ttyS1
+
+**Cause**: The RDK S600 initializes UART4 as `/dev/ttyS1`, but UART4 has no physical pins exposed and does not support software loopback internally. In addition, the V0P1 development board cannot use UART6 and UART7 due to hardware limitations.
+
+**Solution**: First run `ls /dev/ttyS*` to confirm available device nodes before performing transmit/receive tests; channels that are not exposed or are limited by hardware should not be used for serial read/write verification.
 
 ## Related Documentation
 

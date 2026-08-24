@@ -8,7 +8,19 @@ sidebar_position: 16
 import DocScope from '@site/src/components/DocScope';
 ```
 
-The S100/S600 chip integrates a UFS Host controller, with hardware supporting up to the UFS3.1 protocol, software interface supporting up to 3.0, HS-G4 rate mode, and 2 data lanes. This document describes the development, configuration, and debugging methods for the UFS driver.
+<DocScope products="RDK S100">
+The S100 chip integrates a UFS Host controller, with hardware supporting up to the UFS 3.1 protocol, software interface supporting up to 3.0, HS-G4 rate mode, and 2 data lanes.
+</DocScope>
+
+<DocScope products="RDK S600">
+The S600 chip integrates a UFS Host controller, with hardware supporting up to the UFS 3.1 protocol, software interface supporting up to 3.0, HS-G4 rate mode, and 2 data lanes.
+</DocScope>
+
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to debug the UFS driver, firmware adaptation, performance, or reliability issues.
+
+**Prerequisites**: RDK OS is flashed and you can log in to the board; understand the Linux UFS/SCSI subsystem and device tree basics.
+
+**Relationships with Other Modules**: This driver is the low-level implementation of board storage (`/dev/sda`) partition mounting, and the boot/root file system depends on it; for the kernel configuration entry, see [Configure U-Boot and Kernel](./01_uboot_kernel_config.md). This document describes the development, configuration, and debugging methods for the UFS driver.
 
 ## UFS Hardware Architecture
 
@@ -654,6 +666,20 @@ When adapting new UFS device models, follow these requirements:
 3. **Signal Integrity**: Pay attention to PCB trace design and impedance matching in high-speed mode
 4. **Temperature Effects**: MPHY calibration values vary with temperature; ensure operation within valid temperature range
 5. **Hot-Swap**: UFS does not support hot-swap; ensure the device is properly connected before power-on
+
+## FAQ
+
+### /dev/sda Block Device Node Does Not Appear (UFS Not Recognized)
+
+**Cause**: The UFS device is not correctly connected (UFS does not support hot-plug), or the driver is not correctly initialized.
+
+**Solution**: Use `lsblk` to check block devices, and `dmesg | grep -i ufs` to check the kernel log and confirm `ufshcd`-related output; confirm that the device is properly connected before power-on.
+
+### UFS Read/Write Performance Is Lower Than Expected
+
+**Cause**: The reference clock is unstable, there are high-speed signal integrity issues, or the test method is incorrect.
+
+**Solution**: Confirm that the 26MHz reference clock is stable and that the PCB traces meet the high-speed impedance requirements; for performance testing, rerun the `fio` cases in the `Debugging Methods` section on the correct partition.
 
 ## Related Documentation
 

@@ -6,6 +6,16 @@ import DocScope from '@site/src/components/DocScope';
 
 # Pinctrl Debugging Guide
 
+## Overview
+
+The Pinctrl subsystem is responsible for pin function multiplexing (pinmux), electrical attribute configuration (pinconf), and voltage domain (io-domain) management of SoC pins. It is the foundation for peripheral drivers such as GPIO/UART/SPI/I2C/PWM.
+
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to configure pin muxing and pull-up/pull-down/drive strength, or troubleshoot pin muxing conflicts.
+
+**Prerequisites**: RDK OS has been flashed and the board can be logged in; familiarity with the Linux pinctrl subsystem and device tree basics.
+
+**Relationships with Other Modules**: This subsystem is the pin-muxing foundation for GPIO and other peripheral drivers; for GPIO debugging, see "[GPIO Usage](./04_driver_gpio_dev.md)", and for PWM pin muxing, see "[PWM Driver Debugging Guide](./07_driver_pwm.md)".
+
 ## Pinctrl Usage
 
 <DocScope products="RDK S100">
@@ -735,6 +745,20 @@ pin 38 (PCM0_DATA0) 4:39500000.gpio
 pin 39 (PCM0_DATA1) 5:39500000.gpio
 root@ubuntu:~#
 ```
+
+## FAQ
+
+### Peripheral has no function after pin muxing
+
+**Cause**: The `function`/`pins` configuration of the device tree `pinmux` is incorrect, or the node `status` is not set to `okay`.
+
+**Solution**: Use the debugfs `pinmux-pins`/`pins` to check the current muxing status and verify that `function` and `pins` in "Pinctrl Node Reference Configuration" are correct.
+
+### Pull-up/pull-down or drive strength settings do not take effect
+
+**Cause**: The `pinconf` property name is inconsistent with the keywords supported by the driver.
+
+**Solution**: Refer to the keyword table in "Supported Pinconf Attributes and Corresponding Keywords in Device Tree" and verify the property spelling and values in the device tree.
 
 ## Related Documentation
 

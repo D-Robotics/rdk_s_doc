@@ -4,6 +4,17 @@ sidebar_position: 4
 
 # eMMC Stress Testing
 
+## Code Location
+
+The test scripts are located on the board in the `/app/chip_base_test/02_emmc/` directory:
+
+```text
+/app/chip_base_test/02_emmc/
+├── Readme.md
+├── emmc_performance_test.sh   # eMMC performance test script
+└── emmc_stability_test.sh     # eMMC stability test script
+```
+
 ## Test Principle
 
 The eMMC stress test uses the iozone tool to perform stress testing on eMMC storage devices, simulating various I/O operation patterns and measuring metrics such as read/write performance, throughput, and latency. The specific test principles are as follows:
@@ -344,6 +355,20 @@ Test loop 2 succeeded!
 Test loop 3 succeeded!
 .....
 ```
+
+## FAQ
+
+### eMMC device does not appear in lsblk
+
+**Cause**: The eMMC device is not recognized or has a connection issue.
+
+**Solution**: First run `lsblk -f` to confirm whether the device is listed; if it still does not appear, check the hardware connection and kernel logs.
+
+### The test script reports that the output directory does not exist
+
+**Cause**: The `/app/chip_base_test/log` or `/app/chip_base_test/output` directory has not been created or is not writable.
+
+**Solution**: Create the corresponding output directory with `mkdir -p` in advance and confirm write permission.
 
 ## Related Documentation
 

@@ -30,6 +30,12 @@ The S600 chip has a total of 3 sys with gpio devices, namely hsi, cam, and peri,
 
 </DocScope>
 
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to operate GPIO pin levels or interrupts, or debug pin muxing/index calculation.
+
+**Prerequisites**: RDK OS has been flashed and the board can be logged in; familiarity with the Linux GPIO subsystem and sysfs/debugfs basics.
+
+**Relationships with Other Modules**: This driver is the underlying implementation of the user-space GPIO application (Expansion Pin Usage); pin muxing depends on the Pinctrl subsystem, see "[Pinctrl Debugging Guide](./05_driver_pinctrl_dev.md)".
+
 ## Driver Code
 
 ```bash
@@ -389,6 +395,20 @@ pinctrl_cam: pinctrl@37121000 {
 }
 ```
 </DocScope>
+
+## FAQ
+
+### GPIO output level does not match expectations
+
+**Cause**: The direction is not set to `out`, the pin muxing is not switched to the GPIO function, or the calculated `gpio-index` is incorrect.
+
+**Solution**: Run `cat /sys/kernel/debug/gpio` to check the current usage status, set the direction with `echo out > direction`, and recheck the index using `kernel_index = base + offset` per "Determining gpio-index".
+
+### The GPIO value read never changes
+
+**Cause**: The direction is still `out` (in output mode, what is read is the output level), or the actual pin level is indeed fixed.
+
+**Solution**: Switch to input with `echo in > direction` and then read `value`; if it still does not change, use a multimeter to measure the actual pin level.
 
 ## Related Documentation
 

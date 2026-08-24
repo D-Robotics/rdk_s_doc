@@ -12,6 +12,24 @@ import DocScope from '@site/src/components/DocScope';
 ⚠️ **Note:** Using the EtherCAT protocol requires system version V4.0.4 or higher.
 :::
 
+## Overview
+
+EtherCAT is a real-time industrial Ethernet protocol based on standard Ethernet. The RDK platform supports two EtherCAT driver modes, Native (hobot) and Generic, and supports using eth0 or eth1 as the EtherCAT master.
+
+<DocScope products="RDK S100">
+RDK S100 V4.0.7 and above use the Native (hobot) EtherCAT driver by default, not the Generic driver.
+</DocScope>
+
+<DocScope products="RDK S600">
+RDK S600 V5.1.0 and above use the Native (hobot) EtherCAT driver by default, not the Generic driver.
+</DocScope>
+
+**Target Audience**: Mode 3 deep-customization developers (business customers / deep teams) — BSP/driver engineers who need to deploy the EtherCAT master, switch driver modes, or debug slaves.
+
+**Prerequisites**: A system version that supports EtherCAT has been flashed and the board can be logged into; familiarity with the EtherCAT master (igh) and the fundamentals of network configuration.
+
+**Relationships with Other Modules**: This driver depends on the Ethernet controller; see [Ethernet](./01_ethernet.md). For the MCU-side master, see "EtherCAT User Manual (MCU Side)". Using the EtherCAT protocol requires system version V4.0.4 or above.
+
 ## Native Driver vs. Generic Driver
 
 ### Version Notes
@@ -1043,6 +1061,18 @@ Note: The RDK S600 uses eth0 as the DHCP port by default, and eth1 is configured
 If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [Automatic network card start/stop (supported in EtherCAT igh master version 1.6.4 and later)](#automatic-network-card-startstop-supported-in-ethercat-igh-master-version-164-and-later) for configuration.
 
 ## FAQ
+
+### All EtherCAT frames time out in Generic driver mode (frame time out)
+
+**Cause**: The corresponding network port was not activated before the master started (no `ip link set up`), or the port was not added to `UPDOWN_INTERFACES`.
+
+**Solution**: Write the network port into `UPDOWN_INTERFACES` in `/etc/ethercat.conf`, or manually run `ip link set dev eth0 up` before starting the master.
+
+### Master does not work after switching between Native and Generic
+
+**Cause**: After switching driver modes, the network port was not re-configured according to the section for the corresponding mode, or the `deb` package versions do not match.
+
+**Solution**: Re-configure by referring to "Switching the Network Port Used by the Native Driver" and "Network Configuration Before Use"; when upgrading via `deb`, ensure the version numbers of the two EtherCAT packages match.
 
 ### Automatic network card start/stop (supported in EtherCAT igh master version 1.6.4 and later)
 

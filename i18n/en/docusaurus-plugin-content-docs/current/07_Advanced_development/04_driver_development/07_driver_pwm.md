@@ -28,6 +28,12 @@ PWM controllers measured on the board:
 
 </DocScope>
 
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to debug the PWM driver, device tree, or output waveform.
+
+**Prerequisites**: RDK OS is flashed and you can log in to the board; understand the Linux PWM subsystem and device tree basics; the PWM output pin is correctly muxed.
+
+**Relationships with Other Modules**: This driver is the low-level implementation of the user-space PWM usage (expansion pin usage); see [Pinctrl Debugging Guide](./05_driver_pinctrl_dev.md) for pin-mux configuration.
+
 ## Driver Code
 
 The LPWM controller driver is located in the `hobot-drivers/camsys/lpwm_super/` directory, and its synchronous wrapper driver is in the `hobot-drivers/pwm/` directory.
@@ -169,6 +175,20 @@ dmesg | grep -i lpwm
 2. Confirm the channel is exported and `enable` is `1`.
 3. Confirm `period` and `duty_cycle` are written correctly.
 4. Confirm the pin is muxed to the `cam_lpwm*` function; use `cat /sys/kernel/debug/pinctrl/<pinctrl_dev>/pinmux-pins` to view the pin mux status.
+
+## FAQ
+
+### PWM Outputs No Waveform
+
+**Cause**: The controller is not registered, the channel is not enabled, `period`/`duty_cycle` are not written correctly, or the pin is not muxed to the `cam_lpwm*` function.
+
+**Solution**: Check item by item following the `Debugging` section: use `ls /sys/class/pwm/` to confirm `pwmchip*` exists, `enable` is `1`, the period and duty cycle are written, and use `pinmux-pins` to view the pin mux status.
+
+### Written Period/Duty Cycle Does Not Match the Expected Frequency
+
+**Cause**: In sysfs, the unit of `period` and `duty_cycle` is nanoseconds (ns), but it was mistaken for frequency (Hz) or a percentage.
+
+**Solution**: Convert the frequency using `f = 1e9 / period`, and the duty cycle = `duty_cycle / period`; for example, a period of `1000000` (ns) corresponds to 1 kHz.
 
 ## Related Documentation
 

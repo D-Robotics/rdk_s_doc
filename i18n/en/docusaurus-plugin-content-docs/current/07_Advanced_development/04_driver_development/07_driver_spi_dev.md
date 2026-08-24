@@ -23,6 +23,12 @@ On the RDK S600 development board, SPI0 shares 4 pins with CAN0 and CAN1, and th
 
 </DocScope>
 
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to debug the SPI driver, device tree, or SPI peripheral communication.
+
+**Prerequisites**: RDK OS is flashed and you can log in to the board; understand the Linux SPI subsystem and device tree basics; prepare the SPI slave device to be debugged.
+
+**Relationships with Other Modules**: This driver is the low-level implementation of the user-space SPI usage (expansion pin usage) and the `spidev` tool; see [Pinctrl Debugging Guide](./05_driver_pinctrl_dev.md) for pin-mux configuration.
+
 ## Software Architecture
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-spi_software.png" alt="Software Architecture diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -438,6 +444,20 @@ On the Slave device side, the data sent by the S100 Master will be received.
 This test is not currently supported.
 
 </DocScope>
+
+## FAQ
+
+### Received Data Loss During SPI External Loopback Test
+
+**Cause**: The SPI Master program is executed first and the Slave program after, so the Master and Slave are out of sync.
+
+**Solution**: When performing an external loopback test, execute the SPI Slave program first, then the SPI Master program.
+
+### FIFO overrun/underrun Prompts Appear During SPI Testing
+
+**Cause**: The communication rate is set too high, exceeding the actual processing capability of the current system.
+
+**Solution**: Reduce the communication rate and retry. The reference maximum SPI communication rate is about 30Mbps; the actual value is affected by factors such as system load, so it is recommended to use actual measurements as the basis.
 
 ## Related Documentation
 

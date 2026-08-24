@@ -4,8 +4,6 @@ sidebar_position: 1
 # ethernet
 
 ```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
@@ -24,6 +22,12 @@ The S600 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers
 
 The controllers have built-in hardware multi-queue, MTL layer 2 transport layer, DMA engine, etc., to achieve packet transmission and reception in the various scenarios mentioned above.  
 This document mainly includes a network card usage guide, development board Bringup, and key feature descriptions.
+
+**Target Audience**: Mode 3 deep-customization developers (business customers / deep teams) — BSP/driver engineers who need to debug the NIC driver, TSN/PTP/EtherCAT, or board-level bringup.
+
+**Prerequisites**: RDK OS has been flashed and the board can be logged into; familiarity with the fundamentals of the Linux network subsystem and time synchronization.
+
+**Relationships with Other Modules**: This driver is the underlying implementation for network configuration, EtherCAT (Linux side), and time synchronization (PTP/gPTP).
 
 ## Terminology
 
@@ -460,8 +464,7 @@ This document mainly includes a network card usage guide, development board Brin
 #### MAC2MAC
 - Similar to U-Boot, for MAC2MAC scenarios, the main thing is to configure fixed-link mode.
 
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
+<DocScope products="RDK S100">
 ```dts
     // Default eth0 node configuration can refer to drobot-s100-soc.dts
     // Actual board-level configuration can be described in the corresponding dts, e.g., refer to drobot-s100-rdk.dts.
@@ -474,9 +477,9 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
-</TabItem>
+</DocScope>
 
-<TabItem value="S600" label="S600">
+<DocScope products="RDK S600">
 ```dts
     // Similar for S600 development board, override to fixed-link mode in the board-level dts.
     &ethernet2 {
@@ -487,8 +490,7 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
-</TabItem>
-</Tabs>
+</DocScope>
 
 - Description of common fixed-link node attributes:
    - speed (integer, required): Indicates link speed, can be set to 10, 100, 1000.
@@ -504,6 +506,8 @@ This document mainly includes a network card usage guide, development board Brin
 ```dts
     hobot,tso = <1>;            // Enable NIC TSO functionality
 ```
+
+<DocScope products="RDK S600">
 
 #### Configure XGMAC to 1G Mode
 - This feature is only needed for S600 10-Gigabit NICs. (S100 defaults to 1G Gigabit mode)
@@ -522,6 +526,8 @@ This document mainly includes a network card usage guide, development board Brin
 - xpcs-speed:           Configure XPCS to operate in 1G SGMII mode with 1000.
 - hobot,xgmac_gmii:     Force XGMAC to operate in GMII mode.
 
+</DocScope>
+
 #### Interrupt Coalescing
 ```dts
     ethernet3: xgmac0@0x33130000 {
@@ -532,6 +538,7 @@ This document mainly includes a network card usage guide, development board Brin
 - hobot,disable_coal;   # Interrupt coalescing is enabled by default on the NIC; this flag can be used to disable it.
 
 #### RSS
+<DocScope products="RDK S600">
 - Receive Side Scaling, a receive-side load balancing technology supported by multi-queue NIC hardware.
 - Typically for 10-Gigabit NICs, e.g., S600 requires this technology.
 ```dts
@@ -548,7 +555,10 @@ This document mainly includes a network card usage guide, development board Brin
 - hobot,multi_irq;      # NIC multi-interrupt support, registering different ISRs for multiple interrupts.
 - hobot,rss_en;         # Enable NIC receive-side scaling functionality.
 
+</DocScope>
+
 #### HSIS, XPCS
+<DocScope products="RDK S600">
 ```dts
     hsis0: hsis0 {
         status = "okay";
@@ -565,6 +575,8 @@ This document mainly includes a network card usage guide, development board Brin
 - The hsis configuration in Linux is only used to restore hsis mode and xpcs mode during suspend/resume.
 - Therefore, when modifying hsis configuration, ensure it is synchronously modified with the U-Boot hsis node.
 :::
+
+</DocScope>
 
 #### Queues
 - Modern network cards are multi-queue NICs.

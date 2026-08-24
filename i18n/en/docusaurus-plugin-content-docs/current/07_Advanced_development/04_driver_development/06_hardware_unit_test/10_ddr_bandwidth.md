@@ -8,6 +8,17 @@ sidebar_position: 10
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Code Location
+
+The STREAM test code pre-installed on the board is located in the `/app/chip_base_test/08_ddr_bandwidth/` directory:
+
+```text
+/app/chip_base_test/08_ddr_bandwidth/
+├── README.md
+├── stream.c      # STREAM test source code
+└── stream        # STREAM test binary
+```
+
 ## Test Principle
 
 lmbench is an open-source system micro-benchmark suite (LMbench - Tools for Performance Analysis). The `bw_mem` component within it is specifically designed to measure memory bandwidth. It works by performing different read/write operations on a memory region of a specified size, timing them, and then calculating the memory bandwidth in MB/s.
@@ -359,6 +370,20 @@ Taking S100 as an example:
 ### Passing Criteria
 
 Due to the read/write latency of the DDR system itself and the maintenance commands sent to DRAM particles, which also occupy time slices on the address and data buses, the actual DDR bandwidth will be lower than the theoretical bandwidth. The practical bandwidth standard should be approximately 70% of the theoretical bandwidth. Additionally, under high temperatures (automotive grade, DRAM above 85°C), more refresh commands must be sent to the DRAM particles, further reducing the actual bandwidth.
+
+## FAQ
+
+### Memory bandwidth test result is lower than the theoretical bandwidth
+
+**Cause**: CPU cores are not pinned, the CPU frequency is low, or system load is interfering.
+
+**Solution**: Pin the process to specified cores with `taskset` and retest; confirm the CPU is running at full frequency and reduce background load.
+
+### The lmbench cross-compiled binary cannot run
+
+**Cause**: The cross-compilation toolchain does not match the target architecture.
+
+**Solution**: Recompile `lmbench` with an aarch64 cross toolchain and push it to the board for execution.
 
 ## Related Documentation
 

@@ -17,6 +17,12 @@ The S100 chip provides a standard I2C bus. The I2C bus controller transmits info
 The S600 chip provides a standard I2C bus. The I2C bus controller transmits information between devices connected to the bus via a serial data line (SDA) and a serial clock (SCL) line. Each device has a unique address (whether it is a microcontroller—MCU, LCD controller, memory, or keyboard interface) and can act as both a transmitter and a receiver (depending on the device's function).
 </DocScope>
 
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to debug I2C peripheral drivers, device trees, or board-level I2C devices.
+
+**Prerequisites**: RDK OS has been flashed and the board can be logged in; familiarity with the Linux I2C bus and device tree basics; prepare the I2C peripheral device to be debugged.
+
+**Relationships with Other Modules**: This driver is the underlying implementation of the user-space I2C peripheral application (Expansion Pin Usage) and the `i2c-tools` tool; for GPIO debugging points, see "[GPIO Usage](./04_driver_gpio_dev.md)".
+
 The I2C controller supports the following features:
 
 - Supports four speed modes:
@@ -426,6 +432,20 @@ root@ubuntu:~# i2cdetect -r -y 3
 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 70: -- -- -- -- -- -- -- --
 ```
+
+## FAQ
+
+### i2cdetect scan result is all `--` (no device detected)
+
+**Cause**: Pull-up resistors are missing on the SCL/SDA lines, the peripheral device is not powered on, or the device address exceeds the scan range of `i2cdetect`.
+
+**Solution**: Use an oscilloscope/multimeter to confirm SCL and SDA are high (pulled up) when the bus is idle, confirm the peripheral's power supply is normal, and then rescan with `i2cdetect -r -y <bus>`.
+
+### Cannot find the `/dev/i2c-N` device node
+
+**Cause**: The `i2c-dev` driver is not loaded, or the corresponding bus's device tree node is not enabled (`status` is not `okay`).
+
+**Solution**: First run `ls /sys/class/i2c-dev/` to confirm whether the node has been created; if missing, run `modprobe i2c-dev` and check the device tree node status.
 
 ## Related Documentation
 

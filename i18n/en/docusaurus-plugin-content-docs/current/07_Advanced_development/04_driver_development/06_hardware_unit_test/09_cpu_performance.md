@@ -4,6 +4,35 @@ sidebar_position: 9
 
 # CPU Performance Testing
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+## Code Location
+
+The CoreMark source code is located on the board in the `/app/chip_base_test/07_cpu_performance/coremark-main/` directory:
+
+```text
+/app/chip_base_test/07_cpu_performance/
+└── coremark-main/
+    ├── Makefile
+    ├── README.md
+    ├── LICENSE.md
+    ├── core_main.c
+    ├── core_list_join.c
+    ├── core_matrix.c
+    ├── core_state.c
+    ├── core_util.c
+    ├── coremark.h
+    ├── aarch64/
+    │   ├── core_portme.c
+    │   ├── core_portme.h
+    │   └── core_portme.mak
+    ├── linux/
+    │   └── core_portme.mak
+    └── docs/
+```
+
 ## Test Principles
 
 `CoreMark` is a widely used benchmark program for evaluating CPU performance in embedded systems. Its core testing methodology involves simulating typical computational tasks found in embedded applications to assess CPU performance under common computational patterns. The test is based on the following key elements:

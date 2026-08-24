@@ -3,6 +3,10 @@ sidebar_position: 11
 ---
 # Wi-Fi Driver Debugging Guide
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 <DocScope products="RDK S100">
 
 The Wi-Fi of the RDK S100 is connected to the M.2 interface expanded via PCIe. This chapter introduces some user-space commands and kernel DTS configuration items.
@@ -13,6 +17,12 @@ The Wi-Fi of the RDK S100 is connected to the M.2 interface expanded via PCIe. T
 The Wi-Fi of the RDK S600 is connected to the M.2 interface expanded via PCIe. This chapter introduces some user-space commands and kernel DTS configuration items.
 
 </DocScope>
+
+**Target Audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — BSP/driver engineers who need to debug the Wi-Fi module driver, kernel DTS configuration, or troubleshoot module recognition anomalies.
+
+**Prerequisites**: RDK OS is flashed and you can log in to the board; understand the PCIe and Linux wireless driver basics; a Wi-Fi module (such as AW-XM612) is prepared.
+
+**Relationships with Other Modules**: This driver depends on the PCIe subsystem (the module is connected via M.2/PCIe); for user-space configuration, see [Network Configuration](../../02_System_configuration/01_network_config.md), and for the PCIe side, see [PCIe Usage Guide](./13_driver_pcie/01_s100x_pcie_hw_guide.md).
 
 The examples in this chapter are based on the AW-XM612 module. Users should make corresponding modifications according to the specific module they are using.
 
@@ -114,6 +124,20 @@ PCIe-expanded Wi-Fi modules generally require the host side to control signals s
 The PCIe driver of the S600 requests these GPIOs and performs operations such as de-asserting reset during initialization.
 
 </DocScope>
+
+## FAQ
+
+### lspci Does Not Show the Wi-Fi Module Node
+
+**Cause**: The M.2 module is not seated firmly, or the PCIe endpoint is not enumerated properly.
+
+**Solution**: Re-seat the module and use `lspci -vt` to confirm the endpoint node appears; if it still does not appear, check the module power supply and reset GPIO configuration.
+
+### Wi-Fi Module Is Recognized but Cannot Connect to the Network
+
+**Cause**: The kernel module or DTS configuration does not match the specific module (the example in this document is AW-XM612; other modules require corresponding modifications).
+
+**Solution**: Following the `Module Driver Code` and `Kernel DTS Configuration` sections, check and adjust to the configuration of the module in use.
 
 ## Related Documentation
 

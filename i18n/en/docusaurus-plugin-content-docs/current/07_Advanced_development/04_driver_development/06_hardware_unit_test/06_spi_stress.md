@@ -4,6 +4,18 @@ sidebar_position: 6
 
 # SPI Stress Test
 
+## Code Location
+
+The test code is located on the board in the `/app/chip_base_test/04_spi_test/` directory:
+
+```text
+/app/chip_base_test/04_spi_test/
+├── Makefile
+├── Readme.md
+├── spidev_tc.c        # SPI stress test source code
+└── spistress.sh       # stress test script
+```
+
 ## Test Principle
 
 The SPI bus test tool (`spidev_tc`) is used to verify the basic functionality and performance of SPI devices. It simulates high-load conditions by configuring various parameters to evaluate key performance metrics such as SPI bus stability, throughput, latency, and error rate.
@@ -226,6 +238,20 @@ Performance Note: The reference maximum SPI communication rate is 30 Mbps. The a
 
 Note: When performing an external loopback test, execute the SPI Slave program first, followed by the SPI Master program. If the SPI Master program runs before the SPI Slave program, data loss may occur due to lack of synchronization between Master and Slave.
 :::
+
+## FAQ
+
+### Data loss during SPI external loopback reception
+
+**Cause**: The SPI Master program was executed first, followed by the Slave program, causing the Master and Slave to be out of sync.
+
+**Solution**: Execute the SPI Slave program first, then the SPI Master program.
+
+### FIFO overrun/underrun warnings appear during testing
+
+**Cause**: The communication rate is set too high, exceeding the actual processing capability of the system.
+
+**Solution**: Reduce the communication rate and retry; the reference maximum communication rate is about 30 Mbps, and real-world measurement is recommended.
 
 ## Related Documentation
 

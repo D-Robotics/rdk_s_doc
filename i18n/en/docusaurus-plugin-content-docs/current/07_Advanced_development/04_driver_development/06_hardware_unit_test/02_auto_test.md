@@ -190,6 +190,20 @@ After running the test, verify the following to ensure the new test item works c
 - Whether test results meet functional expectations.
 - Whether parameters configured in `config.ini` take effect correctly.
 
+## FAQ
+
+### startup.sh fails to run tests correctly
+
+**Cause**: `config/config.ini` still uses the legacy path `/app/multimedia_samples/chip_base_test/`, or the UART/SPI directory names still use the old names `04_uart_test`/`05_spi_test`.
+
+**Solution**: Update them to `/app/chip_base_test/` and `03_uart_test`/`04_spi_test` as shown in the examples in this document.
+
+### No test logs are generated after startup
+
+**Cause**: The log output directory does not exist or the path is misconfigured.
+
+**Solution**: Confirm that the `/app/chip_base_test/log` directory is writable; after moving the `chip_base_test` directory, update the `-o` output path in `config.ini` accordingly.
+
 ## Related Documentation
 
 - [Driver Functional Unit Test](./01_overview.md)

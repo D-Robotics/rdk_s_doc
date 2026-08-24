@@ -12,7 +12,7 @@ description: "Introduction to PCIe User-Space High Level API"
 - **Positioning**: Sends and receives data (publish / subscribe) between RC and EP through topics.
 - **Interface level**: This document covers the low-level API, which wraps the primitive layer of `libhbpcie.so` rather than the business encapsulation layer.
 - **Applicable scenarios**: Large-block data communication over direct PCIe connections between two or more boards (such as moving images and feature maps).
-- **Target readers**: Developers in Mode 3 (business customers / deep teams) who need to operate the PCIe data channel directly.
+- **Target Audience**: Developers in Mode 3 (business customers / deep teams) who need to operate the PCIe data channel directly.
 - **Prerequisites**: PCIe link configuration and driver loading must be completed (see [PCIe Kernel Configuration](./03_s100x_pcie_sw_setup.md)), and you should be familiar with the [PCIe Software Architecture](./02_s100x_pcie_sw_arch.md).
 - **Specifications**: Each topic is a full-duplex channel; the DMA transfer `weight` ranges from `1` to `31` (WRR weighted round-robin arbitration).
 - **Compatibility**: Applies to Ultra/Super series hardware (including RDK S100/S600), starting from software version 0.1.0.
