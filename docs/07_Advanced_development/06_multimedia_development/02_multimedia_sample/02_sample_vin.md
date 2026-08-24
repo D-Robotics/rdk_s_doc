@@ -9,6 +9,14 @@ description: "sample_vin 使用说明 板端示例使用说明"
 ## 功能概述
 `sample_vin`完成 Camera Sensor 、MIPI CSI 和 SIF 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
 
+```mermaid
+flowchart LR
+    A[Camera Sensor] --> B[MIPI CSI]
+    B --> C[SIF]
+    C --> D[VIN 模块]
+    D --> E[Raw / YUV 视频帧]
+```
+
 ### sample_vin 架构说明
 
 `sample_vin` 包含多个示例，每个示例均以子目录形式存在 `/app/multimedia_samples/sample_vin` 下，每个子目录描述如下

@@ -67,6 +67,16 @@ RDK 开发板通过 `usb-gadget.sh` 脚本支持以下 Gadget 功能：
 | **adb** | Android Debug Bridge，用于 ADB 调试 |
 | **rndis** | Remote NDIS，虚拟网卡功能，可实现 USB 网络共享 |
 
+### 机制原理
+
+USB Gadget 框架由下表模块协同工作，将板端虚拟成 USB 从设备（Device）：
+
+| 模块 | 作用 |
+|------|------|
+| UDC 驱动（USB Device Controller） | 板端 USB 控制器，负责与主机的物理层通信 |
+| Function 驱动 | 实现具体功能（如 adb、rndis） |
+| `usb-gadget.sh` 脚本 | 组合 UDC 与 Function，一键切换模式 |
+
 
 ## 使用方法
 

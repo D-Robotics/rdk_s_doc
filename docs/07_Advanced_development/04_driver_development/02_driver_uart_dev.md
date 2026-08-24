@@ -10,9 +10,29 @@ description: "UART 驱动调试指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-S100（S600）芯片共有4(8)路 UART，即 uart0-uart3(uart0~uart7)。其中 uart0 作为调试控制台使用，默认不开启 DMA，且需要通过控制 Bootstrap pin 决定波特率为115200或921600。
+## 概述
 
-其他几路 uart 用作数据传输功能，设备树中默认开启 DMA，支持用户通过软件配置为各种波特率，常用波特率为921600。uart0和1支持硬件流控功能，其他几路 uart 不支持该功能。
+UART（Universal Asynchronous Receiver/Transmitter，通用异步收发传输器）是 RDK 开发板的基础串行通信外设，本驱动基于 DesignWare 8250 框架实现，支持 DMA 收发与硬件流控。
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要改动内核驱动、设备树，或调试板级串口的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux 设备树（DTS）与 pinctrl 基础；如需做串口回环/收发自测，请准备杜邦线或 USB 转 TTL 模块。
+
+**与其他模块关系**：本驱动是用户态串口读写应用（3.1.1 扩展引脚应用）的底层实现；调试控制台 uart0 的板级入口见「2.16 调试串口」；内核与 U-Boot 选项配置见「5.4.1 配置 U-Boot 和 Kernel 选项参数」。
+
+### 硬件资源
+
+<DocScope products="RDK S100">
+
+S100 开发板共有 4 路 UART（uart0~uart3）：uart0 作为调试控制台，默认不开启 DMA，波特率（115200/921600）由 Bootstrap pin 控制；其余 3 路用于数据传输，设备树默认开启 DMA，支持软件配置波特率（常用 921600）；uart0、uart1 支持硬件流控。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+S600 开发板共有 8 路 UART（uart0~uart7）：uart0 作为调试控制台，默认不开启 DMA；其余 7 路用于数据传输，设备树默认开启 DMA，支持软件配置波特率（常用 921600）；uart0、uart1 支持硬件流控。
+
+</DocScope>
 
 
 ## UART 使用说明

@@ -468,6 +468,26 @@ Proxy 配置指的是对网络代理进行设置。在网络通信中，代理�
 - 无线 Station：`ip addr show wlan0` 能查到路由器分配的 IP 地址。
 - DNS：`nmcli device show eth1 | grep DNS` 或 `cat /etc/resolv.conf` 显示生效的 DNS 服务器。
 
+## 常见问题
+
+### 配置静态 IP 后无法访问外网
+
+**原因**：默认网关或 DNS 未配对，或与网段不符。
+
+**解决**：用 `ip route` 查看默认路由、`cat /etc/resolv.conf` 查看生效 DNS，与「有线网络」节的配置逐项核对；网关须与 IP 同一网段。
+
+### DHCP 获取不到地址
+
+**原因**：NetworkManager 连接未激活，或网线/网口异常。
+
+**解决**：用 `nmcli device show eth1` 查看连接状态；`nmcli con up <connection>` 激活连接；仍无地址则检查网线或换网口。
+
+### 能 ping 通 IP 但域名解析失败
+
+**原因**：DNS 服务器未配置或不可达。
+
+**解决**：检查 `/etc/resolv.conf` 是否有 DNS；无则通过 NetworkManager 或 `nmcli con mod` 补 DNS（如 `223.5.5.5`、`8.8.8.8`）。
+
 ## 相关文档
 
 - [蓝牙配置](./02_bluetooth_config.md)

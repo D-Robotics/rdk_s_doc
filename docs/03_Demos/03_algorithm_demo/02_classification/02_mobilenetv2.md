@@ -24,6 +24,18 @@ description: "用 C/C++ 部署 MobileNetV2 做图像分类的预装示例"
 sudo apt update && sudo apt install libgflags-dev
 ```
 
+## 代码位置
+
+示例代码位于板端 `/app/cdev_demo/bpu/classification_sample/mobilenetv2/` 目录，结构如下：
+
+```text
+/app/cdev_demo/bpu/classification_sample/mobilenetv2/
+├── inc/
+│   └── mobilenetv2.hpp
+└── src/
+    └── mobilenetv2.cc
+```
+
 ## 编译
 
 ```bash
