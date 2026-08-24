@@ -163,7 +163,7 @@ See [Common Packages](#common-packages) and [Algorithm Demos](../../03_Demos/03_
 
 ## Common Packages
 
-This section lists the common packages provided by tros.b, organized by functional domain. The packages cross-link with [Algorithm Demos](../../03_Demos/03_algorithm_demo/01_summary.md) and the [TROS/ROS Development FAQ](/FAQ/tros_ros).
+This section lists the common packages provided by tros.b, organized by functional domain. The packages cross-link with [Algorithm Demos](../../03_Demos/03_algorithm_demo/01_summary.md) and the [TROS/ROS Development FAQ](../../08_FAQ/06_tros_ros.md).
 
 ### Perception
 
@@ -228,4 +228,4 @@ tros.b is not currently preinstalled in the image on the S600 board; the command
 
 - [Using RDK Studio](./01_rdk_studio.md)
 - [Algorithm Demos](../../03_Demos/03_algorithm_demo/01_summary.md) (BPU inference demos)
-- [TROS/ROS Development FAQ](/FAQ/tros_ros)
+- [TROS/ROS Development FAQ](../../08_FAQ/06_tros_ros.md)

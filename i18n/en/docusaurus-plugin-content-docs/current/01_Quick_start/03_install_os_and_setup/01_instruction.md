@@ -120,9 +120,9 @@ After the preparation is done, confirm:
 
 ## Related documents
 
-- [Flashing steps](/Quick_start/install_os_and_setup/burn)
-- [System status](/Quick_start/install_os_and_setup/system_status)
-- [Remote login](/Quick_start/install_os_and_setup/remote_login)
+- [Flashing steps](./02_burn.md)
+- [System status](./03_system_status.md)
+- [Remote login](./05_remote_login.md)
 
 <DocScope products="RDK S100">
 

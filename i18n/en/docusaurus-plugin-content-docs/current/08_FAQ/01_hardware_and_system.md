@@ -798,7 +798,7 @@ When using the RDK S100, pay attention to the following notes on power supply, i
 
 :::tip Expansion Board Connection
 
-For how to connect the CAM daughter board and MCU daughter board to the RDK S100 main board, refer to the reference videos in the [RDK S100 Camera Expansion Board](/Quick_start/hardware_introduction/rdk_s100/rdk_camera_expansion_board/rdk_camera_expansion_board) and [RDK S100 MCU Port Expansion Board](/Quick_start/hardware_introduction/rdk_mcu_port_expansion_board) chapters.
+For how to connect the CAM daughter board and MCU daughter board to the RDK S100 main board, refer to the reference videos in the [RDK S100 Camera Expansion Board](../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md) and [RDK S100 MCU Port Expansion Board](../01_Quick_start/01_hardware_introduction/03_expansion_board/02_mcu/01_rdk_mcu_port_expansion_board.md) chapters.
 
 :::
 

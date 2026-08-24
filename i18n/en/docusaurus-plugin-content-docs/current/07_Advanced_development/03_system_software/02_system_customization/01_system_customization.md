@@ -71,12 +71,12 @@ sudo ./pack_image.sh -l
 
 Internally, `pack_image.sh` completes in sequence: download samplefs -> extract and invoke `hobot_customize_rootfs.sh` to customize -> install deb packages -> generate the image. If you only need to set up the deb build environment without generating the final `.img`, use `sudo ./pack_image.sh -p`; to rebuild a specific official deb package separately, use `./mk_debs.sh <package-name>`.
 
-The generated image can be flashed to the board using [System burning](/Quick_start/install_os_and_setup/instruction).
+The generated image can be flashed to the board using [System burning](../../../01_Quick_start/03_install_os_and_setup/01_instruction.md).
 
 ## Related Documentation
 
 - [deb package development](../01_deb/01_deb.md)
 - [Set up the development environment](../../06_environment_build/01_environment_build.md)
 - [BSP source directory structure](../../06_environment_build/02_bsp_source_layout.md)
-- [System burning](/Quick_start/install_os_and_setup/instruction)
+- [System burning](../../../01_Quick_start/03_install_os_and_setup/01_instruction.md)
 - [System update](../../../02_System_configuration/03_system_update/01_apt_usage.md)

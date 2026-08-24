@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 This page is compiled from the official flashing documentation and has not been reproduced and verified on an S100 board (no S100 board is available, and flashing wipes the system); the S100 DIP switch and LED settings are to be cross-checked once the S100 board is back.
 :::
 
-This page describes system flashing for the RDK S100. Complete [Flashing preparation](/Quick_start/install_os_and_setup/instruction) before flashing.
+This page describes system flashing for the RDK S100. Complete [Flashing preparation](./01_instruction.md) before flashing.
 
 </DocScope>
 
@@ -26,7 +26,7 @@ This page describes system flashing for the RDK S100. Complete [Flashing prepara
 This page is compiled from the official flashing documentation and has not been reproduced and verified on an S600 board (flashing would wipe the S600 system currently in use); the DIP switch and LED settings are subject to the actual board.
 :::
 
-This page describes system flashing for the RDK S600. Complete [Flashing preparation](/Quick_start/install_os_and_setup/instruction) before flashing.
+This page describes system flashing for the RDK S600. Complete [Flashing preparation](./01_instruction.md) before flashing.
 
 </DocScope>
 
@@ -324,9 +324,9 @@ For detailed status query commands and sample outputs, see [System status](03_sy
 
 ## Related documents
 
-- [Flashing preparation](/Quick_start/install_os_and_setup/instruction)
-- [System status](/Quick_start/install_os_and_setup/system_status)
-- [Remote login](/Quick_start/install_os_and_setup/remote_login)
+- [Flashing preparation](./01_instruction.md)
+- [System status](./03_system_status.md)
+- [Remote login](./05_remote_login.md)
 
 <DocScope products="RDK S100">
 
