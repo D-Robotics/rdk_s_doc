@@ -8,6 +8,28 @@ sidebar_position: 13
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Overview
+
+The Low Power Mode Debugging Guide introduces the power domain division and the five power states (Off / MCU only / Deep sleep / Light sleep / Working) of the RDK development board, along with the configuration and debugging methods for sleep and wakeup sources, used to reduce standby power consumption and enable on-demand wakeup.
+
+**Target audience**: Mode 3 deep-customization developers — software and system engineers who need to reduce product power consumption and configure sleep/wakeup strategies.
+
+**Prerequisites**: RDK OS is flashed and you can log into the board; understand the basic concepts of power domains and Linux power management (suspend).
+
+**Relationship with other modules**: for user-space screen sleep and power management, see [Screen Sleep and Power Management](../../02_System_configuration/11_screen_sleep.md); for CPU frequency and thermal management, see [Thermal and CPU Frequency Management](../../02_System_configuration/08_frequency_management.md).
+
+## Software Architecture
+
+The development board is internally divided into three power domains: AON, MCU and Main. The five power states are different combinations of these three power domains and the DDR chips:
+
+```mermaid
+flowchart TD
+    A[Development board power domains] --> B[AON domain<br/>always powered, not power-offable]
+    A --> C[MCU domain<br/>HSM + MCU and internal IP]
+    A --> D[Main domain<br/>remaining IP]
+    D --> E[DDR chips<br/>self-refresh during Deep/Light sleep]
+```
+
 ## Chip Power Domains
 There are three internal power domains: AON, MCU, and Main. The AON is a power domain that must remain powered at all times as it cannot be powered off. The MCU power domain supplies power to the Hsm, MCU, and their internal IPs. The Main domain supplies power to the other parts.
 
@@ -325,6 +347,20 @@ Currently, the callback logic for D-Robotics software sleep/wakeup is implemente
 :::warning
 All upper-layer services must be stopped before sleep; otherwise, the system may not be able to perform sleep/wakeup correctly.
 :::
+
+## Code Location
+
+- SDK sleep/wakeup callback script: `source/hobot-configs/debian/usr/lib/systemd/system-sleep/suspend_resume.sh`
+- Example of user-defined service start/stop: `/usr/lib/systemd/system-sleep/example.sh`
+- Sleep mode sysfs interface: `/sys/devices/platform/suspend-mode/suspend_mode/`
+
+## Debugging
+
+- View the supported sleep modes: `cat /sys/devices/platform/suspend-mode/suspend_mode/suspend_mode` (returns light, deep; default is deep).
+- Switch the sleep mode: `echo light > /sys/devices/platform/suspend-mode/suspend_mode/suspend_mode`, then confirm with `cat .../current_suspend_mode`.
+- Before sleeping, upper-layer services must be stopped; otherwise, sleep/wakeup may fail (the `system-sleep` callback can be used to start/stop services during the pre/post phases).
+
+<!-- TODO(Sx): pending collection -- FAQ: there are no real "symptom -> cause -> solution" materials for low power yet -->
 
 ## Related Documentation
 

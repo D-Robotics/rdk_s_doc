@@ -62,6 +62,20 @@ cd /workspace
 
 The build artifacts are located under `/workspace/out/` inside the container (`out/product/img_packages/` contains the system image, `out/product/deb_packages/` contains deb packages). After exiting the container, they are directly accessible in the host mount directory.
 
+## FAQ
+
+### Running docker run again reports a container name conflict
+
+**Cause**: `docker run --name rdk-build` uses a fixed container name, and a container with the same name already exists.
+
+**Solution**: run `docker start -ai rdk-build` to re-enter the original container, or run `docker rm rdk-build` first and then recreate it.
+
+### S600 cross-compilation toolchain version mismatch
+
+**Cause**: the command uses the S100 toolchain version `11.3.rel1`.
+
+**Solution**: replace `11.3.rel1` in the toolchain download and extraction commands with `13.2.Rel1` (S600).
+
 ## Related Documentation
 
 - [Set up the development environment](./01_environment_build.md)

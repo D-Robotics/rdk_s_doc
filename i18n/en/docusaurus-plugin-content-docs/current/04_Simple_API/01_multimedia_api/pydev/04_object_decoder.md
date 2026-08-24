@@ -68,6 +68,10 @@ None
 
 None
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## get_img
 
 [Function Description]
@@ -137,6 +141,10 @@ def test_decode():
 
 test_decode()
 ```
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## set_img
 
@@ -227,6 +235,10 @@ def test_cam_bind_encode_decode_bind_display():
 test_cam_bind_encode_decode_bind_display()
 ```
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## close
 
 [Function Description]
@@ -260,6 +272,10 @@ The `close` interface must be called when exiting the program to release resourc
 [Reference Code]
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## FAQ
 

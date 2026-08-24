@@ -96,6 +96,10 @@ The `S100` chip has alignment requirements for `VPS` output: the output width mu
 
 None
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## open_vps
 
 [Function Description]
@@ -166,6 +170,14 @@ ret = camera.open_vps(0, 1, 3840, 2160, [1920, 1280], [1080, 720], [2560, 1440])
 
 [Reference Code]  
 None
+
+[Notes]
+
+The camera must be enabled before calling. `process_mode` supports scaling, scaling + cropping, scaling + rotation, and scaling + cropping + rotation (values 1~4). VPS only supports scaling down (ratio [1, 1/64)) with at most 6 output channels; the output width must be 16-aligned and the height 2-aligned.
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## get_img
 
@@ -248,6 +260,10 @@ def test_camera():
 
 test_camera()
 ```
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## set_img
 
@@ -337,6 +353,10 @@ def test_camera_vps():
 test_camera_vps()
 ```
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## close_cam
 
 [Function Description]
@@ -377,6 +397,11 @@ None
 [Reference Code]  
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## Host ID Selection
 The host number corresponding to the camera is shown in the figure below:
 

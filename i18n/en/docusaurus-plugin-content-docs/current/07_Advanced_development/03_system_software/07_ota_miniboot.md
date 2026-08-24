@@ -101,6 +101,26 @@ Refer to the Update miniboot entry in [srpi-config](../../02_System_configuratio
 
 - **Do not** unplug the power, cut off power, reboot, or perform any other write operations on the partitions during the upgrade process — interrupting a `dd` full flash will directly brick the device.
 
+## FAQ
+
+### Upgrade fails and reports "N step(s) failed to flash"
+
+**Cause**: the `dd` flash of a partition failed (image mismatch, partition occupied, or concurrent writes, etc.).
+
+**Solution**: run `dmesg | tail` to inspect the relevant error; confirm there are no other write operations during the upgrade, then re-run `rdk-miniboot-update`.
+
+### miniboot is not updated after the upgrade
+
+**Cause**: the device was not rebooted after the upgrade; the new miniboot only takes effect after a reboot.
+
+**Solution**: run `rdk-miniboot-update --reboot y`, or run `reboot` manually.
+
+### Upgrade is rejected on a device that has entered the OHP stage
+
+**Cause**: the device is in the OHP lifecycle stage, and online upgrade is disabled.
+
+**Solution**: use the factory tool to re-flash the whole device.
+
 ## Related Documentation
 
 - [Major Version Upgrade and Firmware](../../02_System_configuration/03_system_update/02_upgrade_firmware.md)

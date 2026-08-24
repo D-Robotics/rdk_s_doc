@@ -246,6 +246,14 @@ char const *hbDNNGetVersion();
 
 Returns the hbDNN version information string, which can be used for a runtime environment self-check.
 
+**Note**:
+
+No model needs to be loaded first; this interface can be called directly for a runtime environment self-check.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ### hbDNNInitializeFromFiles
 
 ```c
@@ -262,6 +270,14 @@ int32_t hbDNNInitializeFromFiles(hbDNNPackedHandle_t *dnnPackedHandle,
 
 Loads one or more models from files. Returns `HB_DNN_SUCCESS` on success; returns `HB_DNN_CAN_NOT_OPEN_FILE` when a file does not exist, and `HB_DNN_INVALID_MODEL` when a model is invalid.
 
+**Note**:
+
+The model must be a `.hbm` file compiled by the AI toolchain for the target platform; `HB_DNN_CAN_NOT_OPEN_FILE` is returned when a file does not exist, and `HB_DNN_INVALID_MODEL` is returned when a model is invalid.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ### hbDNNInitializeFromDDR
 
 ```c
@@ -273,6 +289,14 @@ int32_t hbDNNInitializeFromDDR(hbDNNPackedHandle_t *dnnPackedHandle,
 
 Loads models from memory (the model data has already been read into memory, without going through the file system). The parameter meanings correspond to those of `hbDNNInitializeFromFiles`.
 
+**Note**:
+
+The model data must already have been read into memory (without going through the file system); the parameter meanings correspond to those of `hbDNNInitializeFromFiles`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ### hbDNNRelease
 
 ```c
@@ -280,6 +304,14 @@ int32_t hbDNNRelease(hbDNNPackedHandle_t dnnPackedHandle);
 ```
 
 Releases all models and related resources inside the packed handle. It should be called after all inference tasks are completed.
+
+**Note**:
+
+It should be called after all inference tasks are completed, to release all models and related resources inside the packed handle.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ### hbDNNGetModelNameList
 
@@ -291,6 +323,14 @@ int32_t hbDNNGetModelNameList(char const ***modelNameList,
 
 Gets the name list and count of all models inside the packed handle, used to distinguish handles in multi-model scenarios.
 
+**Note**:
+
+Used to distinguish handles in multi-model scenarios; the returned model name list is used by `hbDNNGetModelHandle` to obtain a handle by name.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ### hbDNNGetModelHandle
 
 ```c
@@ -300,6 +340,14 @@ int32_t hbDNNGetModelHandle(hbDNNHandle_t *dnnHandle,
 ```
 
 Gets the single-model handle `hbDNNHandle_t` from the packed handle by model name. All subsequent tensor queries and inference take this handle as a parameter.
+
+**Note**:
+
+All subsequent tensor queries and inference take the returned `hbDNNHandle_t` handle as a parameter.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ### hbDNNGetModelDesc / hbDNNGetHBMDesc
 
@@ -312,6 +360,14 @@ int32_t hbDNNGetHBMDesc(char const **desc, uint32_t *size, int32_t *type,
 
 Gets the description information of a model / a specified hbm file; see `hbDNNDescType` for the values of `type`. The `index` of `hbDNNGetHBMDesc` is the file sequence number at load time (0 ~ file count - 1).
 
+**Note**:
+
+See `hbDNNDescType` for the values of `type`; the `index` of `hbDNNGetHBMDesc` is the file sequence number at load time (0 ~ file count - 1).
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ### hbDNNGetCompileBpuCoreNum
 
 ```c
@@ -319,6 +375,14 @@ int32_t hbDNNGetCompileBpuCoreNum(int32_t *bpuCoreNum, hbDNNHandle_t dnnHandle);
 ```
 
 Gets the BPU core count specified when the model was compiled by the toolchain. Scheduling of multi-core models is handled by hbUCP.
+
+**Note**:
+
+Returns the BPU core count specified when the model was compiled by the toolchain; scheduling of multi-core models is handled by hbUCP.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ### hbDNNGetInputCount / hbDNNGetOutputCount
 
@@ -328,6 +392,14 @@ int32_t hbDNNGetOutputCount(int32_t *outputCount, hbDNNHandle_t dnnHandle);
 ```
 
 Gets the number of input/output tensors of the model, used to iterate over tensors by index.
+
+**Note**:
+
+Used to iterate over tensors by index; the index range is determined by the return value.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ### hbDNNGetInputName / hbDNNGetOutputName
 
@@ -339,6 +411,14 @@ int32_t hbDNNGetOutputName(char const **name, hbDNNHandle_t dnnHandle,
 ```
 
 Gets the input/output tensor name by index.
+
+**Note**:
+
+Gets the input/output tensor name by index; the index range is determined by the return values of `hbDNNGetInputCount`/`hbDNNGetOutputCount`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ### hbDNNGetInputTensorProperties / hbDNNGetOutputTensorProperties
 
@@ -353,6 +433,14 @@ int32_t hbDNNGetOutputTensorProperties(hbDNNTensorProperties *properties,
 
 Gets the input/output tensor properties (`hbDNNTensorProperties`), including the valid shape, data type, quantization scale/zeroPoint, and `alignedByteSize` (allocate tensor memory according to this value).
 
+**Note**:
+
+Allocate tensor memory according to the returned `alignedByteSize` (e.g. via `hbUCPMallocCached`); `scale`/`zeroPoint` are used for quantization/dequantization.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ### hbDNNGetInputDesc / hbDNNGetOutputDesc
 
 ```c
@@ -363,6 +451,14 @@ int32_t hbDNNGetOutputDesc(char const **desc, uint32_t *size, int32_t *type,
 ```
 
 Gets the description information of the input/output tensors; see `hbDNNDescType` for the values of `type`.
+
+**Note**:
+
+See `hbDNNDescType` for the values of `type`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ### hbDNNInferV2
 
@@ -386,6 +482,14 @@ The three usage patterns of `taskHandle` (as specified by the header file):
 
 In asynchronous mode, after `hbDNNInferV2` returns the task has not finished yet; it must be submitted via `hbUCPSubmitTask`, waited on via `hbUCPWaitTaskDone`, and released via `hbUCPReleaseTask` (see step 5 of the Quick Example).
 
+**Note**:
+
+The element counts of the `input`/`output` tensor arrays must equal the return values of `hbDNNGetInputCount`/`hbDNNGetOutputCount` respectively; in asynchronous mode the task has not finished when this interface returns, so it must be submitted via `hbUCPSubmitTask`, waited on via `hbUCPWaitTaskDone`, and released via `hbUCPReleaseTask`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ### hbDNNGetTaskOutputTensorProperties
 
 ```c
@@ -396,6 +500,14 @@ int32_t hbDNNGetTaskOutputTensorProperties(hbDNNTensorProperties *properties,
 ```
 
 Gets the tensor properties of the specified subtask and output index within a task, used for dynamic output scenarios. Tasks executed synchronously cannot obtain a taskHandle, so this interface is not supported for them.
+
+**Note**:
+
+Used for dynamic output scenarios; tasks executed synchronously cannot obtain a taskHandle, so this interface is not supported for them.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## Data Structures
 

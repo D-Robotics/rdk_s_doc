@@ -41,6 +41,14 @@ None.
 
 Returns a `DECODER` object on success, and NULL on failure.
 
+**Note**:
+
+This interface must be called to obtain the `DECODER` operation handle before using any other decoder interface.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_release_decoder_module  
 
 **[Function Prototype]**  
@@ -58,6 +66,14 @@ Destroys the decoder module object.
 **[Return Value]**  
 
 None
+
+**Note**:
+
+The passed `obj` must be a valid object pointer returned by `sp_init_decoder_module`. Call it to release resources after decoding is stopped.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_start_decode  
 
@@ -82,6 +98,14 @@ Creates a decoding channel and sets the channel number, the stream type to decod
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+The `DECODER` object must be initialized before calling. When `stream_file` is a file name, that file is decoded; when it is an empty string, the stream must be fed manually via `sp_decoder_set_image`. `video_chn` supports 0~31.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_stop_decode  
 
 **[Function Prototype]**  
@@ -99,6 +123,14 @@ Closes the decoding channel.
 **[Return Value]** 
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+The passed `obj` must be a pointer to an already initialized `DECODER` object. Call it to close the decoding channel after decoding is finished.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_decoder_get_image  
 
@@ -118,6 +150,14 @@ Retrieves the decoded image frame data from the decoding channel. The returned i
 **[Return Value]** 
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+Create the decoding channel before calling. `image_buffer` must have memory pre-allocated; its size relates to the image resolution as `(width * height * 3) / 2`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_decoder_set_image  
 
@@ -142,6 +182,14 @@ When decoding an H264 stream, the first frame fed to the decoder must be the SPS
 **[Return Value]** 
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+Create the decoding channel with an empty `stream_file` before calling. When decoding H264/H265, feed 3~5 frames first to finish frame buffering before retrieving frames. For H264, the first frame must be the SPS and PPS description information.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## Data Structures and Constants
 

@@ -4,6 +4,26 @@ sidebar_position: 10
 
 # Introduction to Linux Debugging Features
 
+## Overview
+
+ramdump is a means of saving a complete memory image at the moment of a kernel panic for offline analysis; combined with the crash tool, you can inspect the stack, registers, dmesg and kernel data structures at panic time, making it suitable for locating issues that cannot be reproduced by logs alone, such as memory corruption and occasional crashes.
+
+**Target audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — driver or kernel engineers who need to analyze kernel crashes and panics.
+
+**Prerequisites**: RDK OS is flashed and you can enter the U-Boot console; an X86~64 server is available for compiling and running the crash tool.
+
+**Relationship with other modules**: this feature is used for kernel crash investigation and, together with [Applying the Real-Time Kernel](./08_realtime_kernel.md) and [Kernel Headers](./09_kernel_headers.md), belongs to the kernel-layer development support.
+
+## Mechanism
+
+The overall flow of ramdump is: first enable the RAMDUMP switch via `hrut_ddr_misc` (or set `enable_ramdump` under U-Boot); after the Kernel triggers a panic, reboot into U-Boot and run `memdump` to dump the contents of each DDR bank, by offset, to `DDRCSx.bin`, along with `cpu-contexts.bin`; then use the crash tool on an X86~64 server to load `vmlinux` and these dump files for offline analysis.
+
+| Stage | Tool/Artifact | Description |
+|------|----------|------|
+| Enable capture | `hrut_ddr_misc` / `enable_ramdump` | Turn on the RAMDUMP capability |
+| Save the image | `memdump` (U-Boot) | Dump `DDRCSx.bin` and `cpu-contexts.bin` to a designated partition |
+| Offline analysis | `crash` + `vmlinux` | View the stack, registers and logs on an X86~64 platform |
+
 ## Analyzing ramdump with crash
 
 ### Capturing ramdump
@@ -307,6 +327,27 @@ PID: 4240     TASK: ffff00040f10f000  CPU: 0    COMMAND: "bash"
     ORIG_X0: 0000000000000001  SYSCALLNO: 40  PSTATE: 20001000  
 crash>  
 ```
+
+## Notes
+
+- Currently the ramdump feature only supports capturing scenarios triggered by a Kernel panic.
+- ramdump may corrupt the partition where the dump files are saved; always save the dump to a non-rootfs partition, and the partition capacity must be larger than the DDR capacity. It is recommended to create a partition dedicated to ramdump; see [Build System rdk_gen](../06_environment_build/03_rdk_gen.md).
+- The crash tool currently only supports use on the X86~64 platform.
+- For secure boot devices, automatically capturing ramdump requires additionally flashing the HB_APDP partition image and enabling secure debug; contact FAE for the corresponding instructions.
+
+## FAQ
+
+### Saved partition corrupted after capturing ramdump
+
+**Cause**: the dump file was written to the rootfs partition, or the target partition capacity is smaller than the DDR capacity.
+
+**Solution**: save the dump to an independent non-rootfs partition, and ensure that partition's capacity is larger than the DDR capacity.
+
+### crash tool cannot run
+
+**Cause**: crash currently only supports the X86~64 platform.
+
+**Solution**: copy `DDRCSx.bin` and `cpu-contexts.bin` to an X86~64 server, then run `crash`.
 
 ## Related Documentation
 

@@ -46,6 +46,14 @@ None
 
 Returns a `VIO` object pointer on success, and `NULL` on failure.
 
+**Note**:
+
+This interface must be called to complete initialization before calling any other interface. Each `VIO` object should be initialized only once; repeated initialization causes a handle leak.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_release_vio_module  
 
 **[Function Prototype]**  
@@ -63,6 +71,14 @@ Destroys the `VIO` object.
 **[Return Value]**  
 
 None
+
+**Note**:
+
+The passed `obj` must be a valid object pointer returned by `sp_init_vio_module`. Call this interface to release resources when the `VIO` object is no longer in use.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_open_camera  
 
@@ -87,6 +103,14 @@ Setting the output resolution is supported. Up to 6 sets of resolutions can be c
 **[Return Value]** 
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+The `VIO` object must be initialized before calling. `chn_num` indicates the number of output resolution groups, at most 6 and at least 1. Only downscaling is supported, with a downscale ratio range of [1, 1/64).
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_open_camera_v2  
 
@@ -135,6 +159,14 @@ The `S100` chip has alignment requirements for the `VPS` output width: the outpu
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+The `VIO` object must be initialized before calling. `parameters` specifies the resolution and frame rate of the camera RAW output via `sp_sensors_parameters`. Only downscaling of the output resolution is supported, with a downscale ratio range of [1, 1/64).
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_open_vps  
 
 **[Function Prototype]**  
@@ -171,6 +203,14 @@ The `S100` chip has alignment requirements for the `VPS` output width: the outpu
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+The `VIO` object must be initialized before calling. VPS source data usually comes from an already opened camera. `proc_mode` supports `SP_VPS_SCALE` (scale only) and `SP_VPS_SCALE_CROP` (crop and scale). When crop is not enabled, pass `NULL` for the crop parameters. Rotation is not supported yet, so `NULL` must be passed to `rotate`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_vio_close  
 
 **[Function Prototype]**  
@@ -188,6 +228,14 @@ Depending on whether the passed `obj` is an opened `camera` or `vps`, it closes 
 **[Return Value]**  
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+The passed `obj` must be a pointer to an opened camera or VPS object. Whether the camera or the VPS is closed is determined automatically by the object type.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_vio_get_frame  
 
@@ -211,6 +259,14 @@ Gets the image frame data of the specified resolution (the resolution must be pa
 
 Returns 0 on success, and -1 on failure 
 
+**Note**:
+
+Open the camera or VPS before calling. `frame_buffer` must have memory pre-allocated (`NV12` size `height * width * 3 / 2`, computable with the `FRAME_BUFFER_SIZE(w, h)` macro). `width`/`height` must match the resolution configured when opening the module.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_vio_get_raw  
 
 **[Function Prototype]**  
@@ -232,6 +288,14 @@ Gets the RAW image data from the camera
 **[Return Value]**  
 
 Returns 0 on success, and -1 on failure 
+
+**Note**:
+
+Open the camera before calling. `frame_buffer` must have memory pre-allocated (size computable as `(height * width * image bit depth) / 8`). Pass `NULL` for `width`/`height`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_vio_get_yuv  
 
@@ -255,6 +319,14 @@ Gets the YUV data from the camera's ISP module
 
 Returns 0 on success, and -1 on failure 
 
+**Note**:
+
+Open the camera before calling. `frame_buffer` must have memory pre-allocated (`NV12` size `height * width * 3 / 2`, computable with the `FRAME_BUFFER_SIZE(w, h)` macro). Pass `NULL` for `width`/`height`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_vio_set_frame  
 
 **[Function Prototype]**  
@@ -274,6 +346,14 @@ When using the `vps` module functionality, the source data must be fed in by cal
 **[Return Value]**  
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+Open VPS before calling. The `frame_buffer` data must be in `NV12` format, and its resolution must match the original frame resolution configured in `sp_open_vps`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## Host Number Selection
 The host numbers corresponding to the cameras are shown in the figure below

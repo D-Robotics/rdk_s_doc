@@ -65,6 +65,15 @@ RDK development boards support the following Gadget functions through the `usb-g
 | **adb** | Android Debug Bridge, used for ADB debugging |
 | **rndis** | Remote NDIS, virtual network adapter function that enables USB network sharing |
 
+### Mechanism
+
+The USB Gadget framework is composed of the following modules working together to virtualize the board as a USB device:
+
+| Module | Role |
+|------|------|
+| UDC driver (USB Device Controller) | The on-board USB controller, responsible for physical-layer communication with the host |
+| Function driver | Implements the specific functions (such as adb, rndis) |
+| `usb-gadget.sh` script | Combines the UDC and Function drivers to switch modes with a single command |
 
 ## Usage
 
@@ -170,6 +179,26 @@ ping 192.168.1.111
 ```bash
 usb-gadget.sh stop rndis
 ```
+
+## Configuration and Tools
+
+Gadget mode switching is uniformly done through the `usb-gadget.sh` script:
+
+| Command | Description |
+|------|------|
+| `usb-gadget.sh start adb` | Start ADB mode |
+| `usb-gadget.sh stop adb` | Stop ADB mode |
+| `usb-gadget.sh start rndis` | Start RNDIS mode |
+| `usb-gadget.sh stop rndis` | Stop RNDIS mode |
+
+Internally, the script dynamically creates the `g_comp` composite device based on Linux ConfigFS, and binds the specific Gadget functions according to the `.usb-config` file (see the script output `Bind functions according to .usb-config file`). Before restarting, `stop` the corresponding mode first to avoid conflicts.
+
+## Notes
+
+- The USB Type-C interface (S100 J16 / S600 J4) supports Device mode only; it cannot read USB drives or be used as a Host.
+- The USB Type-A interface supports Host mode only and cannot be configured as Gadget.
+- ADB and RNDIS modes are mutually exclusive: before switching, run `usb-gadget.sh stop` on the current mode first, then `start` the new mode.
+- When the PC does not recognize the new device after switching modes, first reconnect the USB cable, or run `usb-gadget.sh stop` and then start the new mode.
 
 ## FAQ
 

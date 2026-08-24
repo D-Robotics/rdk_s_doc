@@ -5,11 +5,40 @@ sidebar_products: RDK S600
 
 # RDK S600 Hardware Bringup
 
+This chapter targets Mode 3 customers and describes the process of bringing up the RDK S600 on a self-developed baseboard / self-developed peripherals: from boardid assignment, MCU-side power management, adding hardware on the spl/U-Boot and Kernel sides, to on-board debugging. The prerequisite is having obtained the BSP source code (see [Development Environment and Build](../06_environment_build/01_environment_build.md)) and understanding the S600 boardid mechanism.
+
 The S600 boardid is determined by the combined effect of ADC0, ADC1, ADC2, ADC4, ADC5, and ADC6. Among them, ADC0, ADC1, and ADC2 are used for D-Robotics hardware differentiation and cannot be modified by customers. ADC4 is used to differentiate the module base board, ADC5 is used to differentiate the base board version, and ADC4 and ADC5 can be modified by users. ADC6 is reserved and forced to be 0x1. For details on how to set the voltage divider resistors for the ADC, please contact the D-Robotics FAE team for support.
 
 ADC0, ADC1, and ADC2 channels have a total of 8 levels, corresponding to 0x0-0x7. ADC4 and ADC5 channels have a total of 7 levels, corresponding to 0x0-0x6. The boardid of the S600 is a 28-bit unsigned integer, for example `0x5131310`, where boardid[27:24] corresponds to ADC0, which is 0x5; boardid[23:20] corresponds to ADC1, which is 0x1; boardid[19:16] corresponds to ADC2, which is 0x3; boardid[15:12] corresponds to ADC4, which is 0x1; boardid[11:8] corresponds to ADC5, which is 0x3; boardid[7:4] corresponds to ADC6, which is 0x1; boardid[3:0] defaults to 0x0.
 
 The boardid is formed by ADC sampling and implemented in the SBL. The corresponding code path is `mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`, function `SBL_GetADC_To_AonSram`.
+
+## Hardware Resources
+
+S600 board-level bringup relies on the boardid mechanism, which is jointly determined by six ADC channels ADC0, ADC1, ADC2, ADC4, ADC5 and ADC6. The default configuration is as follows:
+
+| ADC Channel | Purpose | Customer-Modifiable |
+|---------|------|---------|
+| ADC0 | Hardware differentiation | No |
+| ADC1 | Hardware differentiation | No |
+| ADC2 | Hardware differentiation | No |
+| ADC4 | module baseboard differentiation | Yes |
+| ADC5 | baseboard version differentiation | Yes |
+| ADC6 | Reserved (forced to 0x1) | No |
+
+ADC0~ADC2 each have 8 levels (0x0~0x7); ADC4 and ADC5 each have 7 levels (0x0~0x6). The boardid is a 28-bit unsigned integer; for example, `0x5131310` corresponds to ADC0=0x5, ADC1=0x1, ADC2=0x3, ADC4=0x1, ADC5=0x3, ADC6=0x1.
+
+## Software Architecture
+
+Board-level bringup advances level by level: "SBL generates boardid → MCU power management → spl/U-Boot configuration → Kernel configuration and loading → on-board debugging":
+
+```mermaid
+flowchart TD
+    A["SBL<br/>ADC sampling generates boardid"] --> B["MCU<br/>Acore power management"]
+    B --> C["spl / U-Boot<br/>config files + device tree + boardid"]
+    C --> D["Kernel<br/>config files + device tree + load ko by boardid"]
+    D --> E["on-board debugging<br/>boot info comparison"]
+```
 
 ## Adding New Hardware Under MCU
 
@@ -453,6 +482,17 @@ super
 S600
 8e09458433902940750b6e1900000786
 ```
+
+## Code Location
+
+The source code involved in board-level bringup is spread across three sides: MCU, U-Boot and Kernel:
+
+- MCU-side power management: `mcu/BootLoader/Sys/src/Sys_InitSocEarly.c` (`Sys_Lld_SetPmicGpio`)
+- SBL boardid generation: `mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`
+- U-Boot side: config file `hobot_s600_defconfig`, device tree and boardid-related code
+- Kernel side: config script `mk_kernel.sh`, device tree and the ko loaded by boardid
+
+<!-- TODO(Sx): pending collection -- FAQ: there are no real "symptom -> cause -> solution" materials for hardware bringup yet -->
 
 ## Related Documentation
 

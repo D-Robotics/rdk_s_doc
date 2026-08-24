@@ -66,6 +66,10 @@ None
 
 None
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## encode_file
 
 [Function Description]
@@ -109,6 +113,10 @@ None
 [Reference Code]  
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## get_img
 
@@ -181,6 +189,10 @@ def test_encode():
 test_encode()
 ```
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## close
 
 [Function Description]
@@ -215,6 +227,10 @@ This interface must be used after calling `Encoder.encode()` to create an encodi
 [Reference Code]  
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## FAQ
 

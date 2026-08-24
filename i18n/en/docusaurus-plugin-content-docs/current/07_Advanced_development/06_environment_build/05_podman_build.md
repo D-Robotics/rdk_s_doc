@@ -57,6 +57,20 @@ Under SELinux, the mounted directory must add the `:Z` label, otherwise it canno
 | Command compatibility | `docker` | `podman` (alias docker=podman for compatibility) |
 | Image format | OCI | OCI (compatible with Docker Hub) |
 
+## FAQ
+
+### /opt is not writable in rootless mode
+
+**Cause**: the cross-compilation toolchain is installed to `/opt` by default, and `/opt` may not be writable inside the rootless container.
+
+**Solution**: run the container in rootful mode (`sudo podman run`), or install the toolchain to a writable path inside the container.
+
+### Container cannot access the mount directory in an SELinux environment
+
+**Cause**: SELinux restricts the container's access to mounted volumes.
+
+**Solution**: add the `:Z` flag when mounting the directory (e.g. `-v /path/to/rdk-gen:/workspace:Z`).
+
 ## Related Documentation
 
 - [Set up the development environment](./01_environment_build.md)

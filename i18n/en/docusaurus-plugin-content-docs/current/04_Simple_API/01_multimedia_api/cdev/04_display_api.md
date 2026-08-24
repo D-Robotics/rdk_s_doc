@@ -43,6 +43,14 @@ None
 
 Returns a `DISPLAY` object pointer on success, and NULL on failure.
 
+**Note**:
+
+This interface must be called to obtain the `DISPLAY` operation handle before using any other display interface.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_release_display_module  
 
 **[Function Prototype]**  
@@ -60,6 +68,14 @@ Destroys the `DISPLAY` object.
 **[Return Value]** 
 
 None
+
+**Note**:
+
+The passed `obj` must be a valid object pointer returned by `sp_init_display_module`. Call it to release resources after display is stopped.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_start_display  
 
@@ -82,6 +98,14 @@ Creates a display channel. The RDK S100 development board supports 4 channels: 2
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+The `DISPLAY` object must be initialized before calling. `chn` supports 0~3. On a desktop system channel 0 is already used by the graphical system, so applications should use channel 1 and use channels 2~3 for graphic-layer overlay. The maximum resolution is 1920 x 1080 and the maximum frame rate is 60fps.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_stop_display  
 
 **[Function Prototype]**  
@@ -99,6 +123,14 @@ Closes the display channel.
 **[Return Value]** 
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+The passed `obj` must be a pointer to an already initialized `DISPLAY` object. Call it to close the display channel after display is finished.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_display_set_image  
 
@@ -120,6 +152,14 @@ Displays the image data in `addr` on display channel `chn`. Only `NV12` `YUV` im
 **[Return Value]** 
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+Create the display channel (`sp_start_display`) before calling. The `addr` image data must be in `NV12` format, and `chn` must match the channel number used in `sp_start_display`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_display_draw_rect  
 
@@ -147,6 +187,14 @@ Draws a rectangle on the graphic layer of the display module.
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+The `DISPLAY` object must be initialized before calling. `chn` is the graphic layer (2~3), and `color` uses the ARGB8888 format.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_display_draw_string  
 
 **[Function Prototype]**  
@@ -172,6 +220,14 @@ Draws a string on the graphic layer of the display module.
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+The `DISPLAY` object must be initialized before calling. `str` must be GB2312 encoded, `chn` is the graphic layer (2~3), and `color` uses the ARGB8888 format.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_get_display_resolution  
 
 **[Function Prototype]**  
@@ -190,6 +246,14 @@ Gets the resolution of the currently connected monitor.
 **[Return Value]** 
 
 None.
+
+**Note**:
+
+Use it to get the resolution of the currently connected monitor before creating a display channel; the resolution is filled back through `width`/`height`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## Data Structures and Constants
 

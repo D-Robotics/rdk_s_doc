@@ -6,6 +6,17 @@ sidebar_position: 9
 
 If you need to compile kernel modules or similar code on your development board, you must install the Linux kernel headers. These header files contain various constant definitions, macro definitions, function interface declarations, and data structure definitions from the Linux kernel, and are essential dependencies required to compile kernel module code.
 
+**Target audience**: Mode 3 deep-customization developers — driver or kernel engineers who need to compile and load kernel modules on the board.
+
+**Prerequisites**: RDK OS is flashed and you can log into the board; the board has internet access (to install dependencies via apt).
+
+**Relationship with other modules**: the kernel headers are a prerequisite for [Applying the Real-Time Kernel](./08_realtime_kernel.md) and third-party driver module compilation; module development and signing are described below, and kernel debugging is covered in [Linux Debug Features](./10_kernel_debug.md).
+
+## Environment Support
+
+- Products supported: RDK S100, RDK S600 (both based on the Linux 6.1 kernel).
+- Header package: `linux-headers-6.1.158-rt58` (the version varies with the system release; use `uname -r` as the authority).
+
 ## Installation
 
 You can install the kernel headers and kernel compilation dependencies using the following commands:
@@ -356,6 +367,20 @@ sudo echo hello > /lib/modules-load.d/hello.conf
         # Insert PCAN driver
         sudo insmod /lib/modules/6.1.112/misc/pcan.ko
         ```
+
+## FAQ
+
+### Module compilation fails after accidentally running make clean
+
+**Cause**: running `make clean` in `/usr/src/linux-headers-$(uname -r)` corrupted the on-board kernel module build environment.
+
+**Solution**: reinstall the `linux-headers-6.1.158-rt58` package to restore the environment (the version is subject to `uname -r`).
+
+### "Required key not available" error when loading a module
+
+**Cause**: the driver module is not signed, while module signature verification is enabled on the board.
+
+**Solution**: sign the `.ko` file as described in the "Module Signing" section, then load it via `modprobe` or `insmod`.
 
 ## Related Documentation
 

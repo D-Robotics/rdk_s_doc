@@ -4,7 +4,18 @@ sidebar_position: 8
 
 # Applying the Real-Time Kernel
 
-The `RDKS100` enables the real-time kernel by default. A real-time kernel is an operating system kernel capable of providing more precise and reliable response times, commonly used in applications with high time-sensitivity requirements, such as robotic control and industrial automation. Below are commands for enabling and disabling the real-time kernel, along with common use cases and testing methods.
+RDK S100/S600 enable the real-time kernel (PREEMPT_RT) by default. A real-time kernel is an operating system kernel capable of providing more precise and reliable response times, and is commonly used in applications with high time-sensitivity requirements, such as robotic control and industrial automation. The following describes the performance testing methods for the real-time kernel.
+
+**Target audience**: Mode 3 deep-customization developers — R&D and test engineers who need to evaluate or verify the system's real-time performance.
+
+**Prerequisites**: RDK OS is flashed and you can log into the board; the `rt-tests` testing tool has been installed via apt.
+
+**Relationship with other modules**: this page provides the performance testing method for the real-time kernel; for kernel debugging, see [Linux Debug Features](./10_kernel_debug.md); for the kernel development environment, see [Kernel Headers](./09_kernel_headers.md).
+
+## Environment Support
+
+- Products supported: RDK S100 and RDK S600 enable the real-time kernel (PREEMPT_RT) by default.
+- Testing tool: `rt-tests` (including `cyclictest`, etc.), installed via apt.
 
 ## Real-Time Performance Testing
 

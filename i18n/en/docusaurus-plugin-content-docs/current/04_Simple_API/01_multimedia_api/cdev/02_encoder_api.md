@@ -47,6 +47,14 @@ None
 
 Returns an `ENCODER` object pointer on success, and `NULL` on failure.
 
+**Note**:
+
+This interface must be called to obtain the `ENCODER` operation handle before using any other encoder interface.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_release_encoder_module  
 
 **[Function Prototype]**  
@@ -64,6 +72,14 @@ Destroys the encoder module object.
 **[Return Value]**  
 
 None
+
+**Note**:
+
+The passed `obj` must be a valid object pointer returned by `sp_init_encoder_module`. Call it to release resources after encoding is stopped.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_start_encode  
 
@@ -88,6 +104,14 @@ Creates one image encoding channel. Up to `32` channels can be created, and the 
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+The `ENCODER` object must be initialized before calling. `chn` supports 0~31. `type` supports `SP_ENCODER_H264`, `SP_ENCODER_H265` and `SP_ENCODER_MJPEG`. The input image width must meet the alignment requirements (see the warning at the top of this document).
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_stop_encode  
 
 **[Function Prototype]**  
@@ -105,6 +129,14 @@ Closes an opened encoding channel.
 **[Return Value]** 
 
 Returns 0 on success, and -1 on failure
+
+**Note**:
+
+The passed `obj` must be a pointer to an already initialized `ENCODER` object. Call it to close the encoding channel after encoding is finished.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## sp_encoder_set_frame  
 
@@ -126,6 +158,14 @@ Feeds the image frame data to be encoded into the encoding channel. The format m
 
 Returns 0 on success, and -1 on failure
 
+**Note**:
+
+Create the encoding channel (`sp_start_encode`) before calling. The `frame_buffer` data must be in `NV12` format, and its resolution must match that used when creating the channel with `sp_start_encode`.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_encoder_get_stream  
 
 **[Function Prototype]**  
@@ -144,6 +184,14 @@ Retrieves the encoded bitstream data from the encoding channel.
 **[Return Value]** 
 
 Returns the size of the bitstream data on success, and -1 on failure
+
+**Note**:
+
+Create the encoding channel and feed frame data before calling. `stream_buffer` must have enough memory pre-allocated according to the encoding resolution and bitrate.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## Data Structures and Constants
 

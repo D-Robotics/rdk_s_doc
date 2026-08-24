@@ -5,11 +5,38 @@ sidebar_products: RDK S100
 
 # RDK S100 Hardware Bringup
 
+This chapter targets Mode 3 customers and describes the process of bringing up the RDK S100 on a self-developed baseboard / self-developed peripherals: from boardid assignment, MCU-side power management, adding hardware on the spl/U-Boot and Kernel sides, to on-board debugging. The prerequisite is having obtained the BSP source code (see [Development Environment and Build](../06_environment_build/01_environment_build.md)) and understanding the S100 boardid mechanism.
+
 The S100 boardid is determined by the combined effect of ADC0, ADC1, ADC3, and ADC4. Among these, ADC0 and ADC1 are used for Donggua hardware differentiation and cannot be modified by the customer; ADC3 is used to identify the power-up sequence of Acore peripherals, allowing customers to customize the power-up sequence and modify the ADC3 voltage divider resistor accordingly; ADC4 is used to identify the hardware version. For details on how to set the ADC voltage divider resistors, please contact the Donggua FAE team for support.
 
 Each ADC channel has 16 levels, corresponding to 0x0~0xF. The boardid of the S100 is a 16-bit unsigned integer, for example `0x6A84`, where boardid[15:12] corresponds to ADC0 as 0x6; boardid[11:8] corresponds to ADC1 as 0xA; boardid[7:4] corresponds to ADC3 as 0x8; boardid[3:0] corresponds to ADC4 as 0x4.
 
 The boardid is formed by ADC sampling and implemented in SBL. This part is closed-source code, and customers do not need to worry about it.
+
+## Hardware Resources
+
+S100 board-level bringup relies on the boardid mechanism, which is jointly determined by four ADC channels ADC0, ADC1, ADC3 and ADC4. The default configuration is as follows:
+
+| ADC Channel | Purpose | Customer-Modifiable |
+|---------|------|---------|
+| ADC0 | Hardware differentiation (default level 0x6) | No |
+| ADC1 | Hardware differentiation (default level 0xA) | No |
+| ADC3 | Acore peripheral power-up sequence | Yes |
+| ADC4 | Hardware version | Yes |
+
+Each ADC channel has 16 levels (0x0~0xF). The boardid is a 16-bit unsigned integer; for example, `0x6A84` corresponds to ADC0=0x6, ADC1=0xA, ADC3=0x8, ADC4=0x4.
+
+## Software Architecture
+
+Board-level bringup advances level by level: "SBL generates boardid → MCU power management → spl/U-Boot configuration → Kernel configuration and loading → on-board debugging":
+
+```mermaid
+flowchart TD
+    A["SBL<br/>ADC sampling generates boardid"] --> B["MCU<br/>Acore peripheral power management"]
+    B --> C["spl / U-Boot<br/>config files + device tree + boardid"]
+    C --> D["Kernel<br/>config files + device tree + load ko by boardid"]
+    D --> E["on-board debugging<br/>boot info comparison"]
+```
 
 ## Adding Hardware Under MCU
 
@@ -470,6 +497,16 @@ s100
 S100
 060c0495309069410f94dc4c00001079
 ```
+
+## Code Location
+
+The source code involved in board-level bringup is spread across three sides: MCU, U-Boot and Kernel:
+
+- MCU-side power management: `mcu/McalCdd/Common/Power/S100/scp/boot/src/main_top_init.c`
+- U-Boot side: config file `hobot_s100_defconfig`, device tree and boardid-related code
+- Kernel side: config script `mk_kernel.sh`, device tree and the ko loaded by boardid
+
+<!-- TODO(Sx): pending collection -- FAQ: there are no real "symptom -> cause -> solution" materials for hardware bringup yet -->
 
 ## Related Documentation
 

@@ -1653,6 +1653,32 @@ Refer to `otaGetOwnerFlag`.
 
 Refer to `otaGetOwnerFlag`.
 
+## FAQ
+
+### Delta upgrade reports an md5 verification failure
+
+**Cause**: the partition to be delta-upgraded is mounted, but not mounted read-only or the `noload` option is missing.
+
+**Solution**: mount the relevant partition read-only and add the `noload` option, then retry the upgrade.
+
+### Upgrade stops due to partition verification failure
+
+**Cause**: the gpt.conf in the upgrade package is inconsistent with the current system partition table, which has been adjusted.
+
+**Solution**: verify and restore the partition table (or re-flash the whole device) so that the partition table matches the upgrade package.
+
+### Upgrade package is not recognized by the upgrade program
+
+**Cause**: the upgrade package naming does not follow the convention — the package name must contain the `all_in_one` keyword and must not contain `app`, `APP`, `middleware`, or `param`.
+
+**Solution**: rename the upgrade package according to the naming convention and re-initiate the upgrade.
+
+### Rolls back to the old version after upgrade
+
+**Cause**: a reboot occurred after the image was flashed but before success was marked (`otaMarkOTASuccessful`), so the AB state machine did not mark the new slot as `boot_successful`.
+
+**Solution**: follow the complete verification process, ensure the new image passes boot verification and then complete the upgrade; avoid rebooting midway through the verification phase.
+
 ## Related Documentation
 
 - [Major Version Upgrade and Firmware](../../02_System_configuration/03_system_update/02_upgrade_firmware.md)

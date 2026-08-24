@@ -8,6 +8,24 @@ sidebar_position: 11
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Overview
+
+The time synchronization solution unifies the time bases of the various time domains (systime / PHC / RTC / MCU) on RDK S100/S600, supports multiple time sources such as gPTP NIC time, PPS and RTC, and synchronizes the Acore time to the MCU-side RTC and modules such as CAN and CIM.
+
+**Target audience**: Mode 3 deep-customization developers — software and system engineers who need to integrate time synchronization (robotic control, multi-sensor timestamp alignment, etc.).
+
+**Prerequisites**: RDK OS is flashed and you can log into the board; understand the basic concepts of PTP/gPTP, PPS and RTC.
+
+**Relationship with other modules**: this solution is the basis for Acore-MCU time alignment; for inter-core communication details, see [IPC Module Introduction](./12_driver_ipc.md); for user-space clock configuration, see [Clock and RTC Synchronization](../../02_System_configuration/13_rtc_ntp.md).
+
+> Default state: the mainline does not start time synchronization by default. To start it by default, follow the "Run Guide" in the "Overall Time Synchronization Solution" section.
+
+## Environment Support
+
+- Time source types: gPTP (NIC PHC, synchronized via `ptp4l` / `phc2sys`), PPS (pulse), RTC, MCU time synchronization.
+- Global time base (timeline): `systime` / `phc` / `rtc`; RTC time is used by default, and it can be switched via the `globaltime` device tree and sysfs interface.
+- Products supported: RDK S100, RDK S600 (for the MCU-side time synchronization details, see "MCU Time Synchronization Explanation").
+
 ## Abbreviations and Explanations
 
 | **Abbreviation** | **Explanation**                                     |
@@ -925,6 +943,14 @@ MCU log description:
 "Get Time From Acore success" indicates that the MCU successfully obtained the time from Acore;
 
 "TimeKeeperRTC and TimeKeeperIPC Offset" indicates the offset when Rtc uses IPC time synchronization.
+
+## Debugging
+
+- View the global time base (timeline): `cat /sys/devices/platform/soc/soc:globaltime/globaltime` (0=systime, 1=phc, 2=rtc).
+- Confirm PPS is in effect: after enabling, check whether `/sys/class/pps/pps[*]/assert` changes, and use `cat /sys/class/pps/pps[*]/name` to confirm which pps corresponds to the MCU PPS.
+- MCU synchronization success marker: the MCU log shows `Get Time From Acore success`.
+
+<!-- TODO(Sx): pending collection -- FAQ: there are no real "symptom -> cause -> solution" materials for time synchronization yet -->
 
 ## Related Documentation
 

@@ -49,6 +49,14 @@ The supported module binding relationships are as follows:
 
 Returns 0 on success, and a non-zero value on failure.
 
+**Note**:
+
+The source/destination module objects must be initialized first. Only the four binding relationships VIO→ENCODER, VIO→DISPLAY, DECODER→ENCODER and DECODER→DISPLAY are supported.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
+
 ## sp_module_unbind  
 
 **[Function Prototype]**  
@@ -69,6 +77,14 @@ This interface unbinds two modules that have been bound together. Modules must b
 **[Return Value]**  
 
 Returns 0 on success, and a non-zero value on failure.
+
+**Note**:
+
+The parameters must be consistent with those used when binding with `sp_module_bind`. The modules must be unbound via this interface before exiting.
+
+**Compatibility**:
+
+Supports RDK S100 and RDK S600.
 
 ## Data Structures and Constants
 

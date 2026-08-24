@@ -76,6 +76,10 @@ The resolution of the development board's HDMI interface is obtained from the mo
 
 None
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## set_img
 
 [Function Description]
@@ -143,6 +147,10 @@ def test_display():
 test_display()
 ```
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## set_graph_rect
 
 [Function Description]
@@ -193,6 +201,10 @@ This interface must be used after enabling the display function with the `displa
 [Reference Code]
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## set_graph_word
 
@@ -246,6 +258,10 @@ This interface must be used after enabling the display function with the `displa
 
 None
 
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
+
 ## close
 
 [Function Description]
@@ -280,6 +296,10 @@ This interface must be used after enabling the display function with the `displa
 [Reference Code]  
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## bind Interface
 
@@ -331,6 +351,10 @@ None
 [Reference Code]
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## unbind Interface
 
@@ -386,6 +410,10 @@ None
 [Reference Code]
 
 None
+
+[Compatibility]
+
+Supports RDK S100 and RDK S600.
 
 ## FAQ
 

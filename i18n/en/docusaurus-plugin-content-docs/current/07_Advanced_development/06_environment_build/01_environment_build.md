@@ -8,6 +8,12 @@ description: "RDK S100/S600 cross-compilation environment setup, source code acq
 
 This section describes the requirements and setup of a cross-compilation development environment, as well as instructions for downloading source code and building system images.
 
+**Target audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — R&D engineers who need to set up the BSP build environment and compile system images, kernel or deb packages.
+
+**Prerequisites**: have an x86_64 host running Ubuntu 18.04 / 20.04 / 22.04 (see "Host Requirements"); have obtained the BSP source package (registration/login required).
+
+**Relationship with other modules**: this environment is a prerequisite for [deb package development](../03_system_software/01_deb/01_deb.md), [System customization](../03_system_software/02_system_customization/01_system_customization.md) and subsequent driver/kernel development; for the source directory structure, see [BSP Source Directory Structure](./02_bsp_source_layout.md).
+
 ## Host Requirements
 
 | Item | Requirement |

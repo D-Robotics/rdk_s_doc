@@ -10,6 +10,16 @@ import DocScope from '@site/src/components/DocScope';
 
 # Log User Guide
 
+## Overview
+
+The Log system is responsible for collecting, storing and archiving the runtime logs of the various modules on the development board (kernel, MCU, DSP, BL31, OP-TEE, U-Boot, ALOG, systemd, etc.), and provides time- and module-based querying and capacity management capabilities.
+
+**Target audience**: Mode 3 deep-customization developers (commercial customers / deep teams) — R&D and test engineers who need to locate driver, firmware or application issues.
+
+**Prerequisites**: RDK OS is flashed and you can log into the board (SSH or debug serial port); understand Linux logging basics (`dmesg`, `logcat`, `systemd journal`).
+
+**Relationship with other modules**: this guide focuses on log partition planning, log process mechanisms and interface usage; for the on-board log viewing entry, see [System Log Viewing](../../02_System_configuration/15_system_log.md); for kernel command details, see [Linux Command dmesg](../../09_Appendix/linux-command-manual/02_dmesg.md); for the MCU-side log interfaces, see "Introduction to MCU Log" in [MCU basic information](../11_mcu_development/01_basic_information.md#introduction-to-mcu-log).
+
 ## Log System Partition Planning
 
 ### Log Partitions
@@ -437,6 +447,26 @@ For MCU Log usage notes, see: [Introduction to MCU Log](../11_mcu_development/01
 ### How to Effectively Retrieve Logs at the Time of an Issue
 
 1.  File names in the log partition include the last modification time of the corresponding log file. You can search the files for logs at the time of the issue.
+
+## FAQ
+
+### Serial real-time log viewing drops logs
+
+**Cause**: the serial output is slow, and when the real-time log volume is too large, prints are overwritten; the kernel reports `logcat lost message`.
+
+**Solution**: switch to viewing logs in an SSH window, or only output necessary logs and appropriately increase the rotate count.
+
+### Logs consume excessive storage life
+
+**Cause**: a large amount of debug logs is continuously written to the storage device (such as eMMC / UFS), producing write amplification and consuming storage life.
+
+**Solution**: the production version should only output necessary logs, not a large amount of debug logs; trim the log services and log levels as needed.
+
+### Partial module logs are missing during a crash
+
+**Cause**: the pstore mechanism can only save kernel logs from a panic; BL31 and MCU panic information cannot be saved.
+
+**Solution**: when investigating a crash, rely primarily on the pstore kernel logs; retain MCU/BL31-side information at runtime via the serial port or by dumping to the Acore.
 
 ## Related Documentation
 

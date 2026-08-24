@@ -21,6 +21,20 @@ The development board supports connecting Bluetooth modules through USB or UART 
 | USB Bluetooth | USB interface | Bluetooth adapter connected through a USB interface |
 | UART Bluetooth | UART serial port | Bluetooth module connected through a UART serial port (such as CYW55560) |
 
+## Mechanism
+
+Bluetooth initialization is performed collaboratively by the following components, which ultimately enumerate the Bluetooth device as `hci0` for upper layers to use:
+
+| Component | Role |
+|------|------|
+| `hobot-bluetooth.service` | A oneshot system service that starts at boot and triggers the initialization process |
+| `startbt.sh` | Initialization script that detects USB/UART Bluetooth in turn and chains the loading sequence |
+| `btusb` driver | Kernel driver module for USB Bluetooth adapters |
+| `mbt` / `hciattach` | UART Bluetooth firmware download and HCI attachment |
+| `hciconfig hci0` | Enables the Bluetooth device and turns on discoverable/scannable mode (piscan) |
+
+The initialization script first detects USB Bluetooth (`lsusb`); if found, it loads the `btusb` driver. If not found, it detects UART Bluetooth (`/dev/ttyS1`) and, via GPIO, controls enable and reset, downloads the firmware with `mbt`, and attaches with `hciattach`. Both paths ultimately run `hciconfig hci0 up` to complete initialization; see "Initialization Flow" below for the detailed process.
+
 ## System Services
 
 ### hobot-bluetooth Service
@@ -269,6 +283,12 @@ bluetoothctl
 [bluetooth]# trust XX:XX:XX:XX:XX:XX
 [bluetooth]# connect XX:XX:XX:XX:XX:XX
 ```
+
+## Notes
+
+- This document uses XM612 as the example for UART Bluetooth initialization; the GPIO enable pin, UART port, baud rate and firmware path are all subject to the actual hardware. When selecting a different Bluetooth module, contact the module vendor for the firmware and initialization process.
+- After plugging in a USB Bluetooth adapter, the initialization script waits for the firmware to load (about 3 seconds); do not plug/unplug the device during this period.
+- This page describes the initialization of on-board Bluetooth (driver loading and `hci0` enumeration); user-space pairing, power on/off and other capabilities belong to [Bluetooth Configuration](../../02_System_configuration/02_bluetooth_config.md). The two have different positions; do not confuse them.
 
 ## FAQ
 

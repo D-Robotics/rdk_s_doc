@@ -1246,6 +1246,20 @@ libipcfhal-test: TestBody() [2593] info :
 wdump: 0
 ```
 
+## FAQ
+
+### ipcbox I2C test cannot detect the device
+
+**Cause**: in the `IpcBox_InstanceMap` configuration of `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` on the MCU side, the entry corresponding to `i2c` is `DISABLE` by default.
+
+**Solution**: change the `i2c` entry to `ENABLE` and test again.
+
+### A customer-defined IPC instance does not take effect
+
+**Cause**: in the default instance allocation, some instances are internally reserved or occupied by CANHAL, planning-control and other services.
+
+**Solution**: modify the Acore-side device tree configuration files (`drobot-s100-ipc.dtsi` / `drobot-s600-ipc.dtsi`), select an idle instance as needed, and recompile.
+
 ## Related Documentation
 
 - [IPC Usage Guide (MCU Side)](../11_mcu_development/08_mcu_ipc.md)
