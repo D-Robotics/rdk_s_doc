@@ -161,6 +161,32 @@ The parsing functionality code of the configuration file is located in the
 `board/hobot/common/drobot_boot_config.c` file in the U-Boot directory. For the parsing mechanism and how to add new configuration items, see
 [config.txt Parser Development Guide](./05_parser_dev.md).
 
+## Verification
+
+- `bootargs`: after reboot, `cat /proc/cmdline` confirms the appended kernel parameters have taken effect.
+- `fdt-enable`/`fdt-disable`: after reboot, `ls /proc/device-tree/soc/` confirms the target node appears/disappears.
+- DTB Overlay: after reboot, `ls /proc/device-tree/soc/spi@39800000/slave@1/` showing properties such as `compatible` and `reg` means the Overlay has taken effect (see the example above).
+
+## FAQ
+
+### Configuration Does Not Take Effect After Modification
+
+**Cause**: Manual configuration via `setenv` in U-Boot has a higher priority than the configuration file, so the file is overridden.
+
+**Solution**: Check whether U-Boot used `setenv` to override a variable with the same name; the priority is `setenv > configuration file > saveenv`.
+
+### Configuration Stops Working After Enabling AVB
+
+**Cause**: Modifying the boot partition content conflicts with AVB verification; config.txt cannot be used when AVB is enabled.
+
+**Solution**: AVB is disabled by default; if it has been enabled, disable AVB first, or use another configuration entry point.
+
+### DTS Node Path Not Found
+
+**Cause**: The example node address is for the S100; the S600 uses a different node address, or the full path is misspelled.
+
+**Solution**: Use the actual node names under `/proc/device-tree` on the board; obtain the path with `realpath --relative-to=/proc/device-tree/ <node>` and prepend a leading `/`.
+
 ## Related Documentation
 
 - [Customizing config.txt](./02_custom.md)

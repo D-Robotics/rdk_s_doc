@@ -69,6 +69,12 @@ aplay /app/res/assets/chi_sound.wav
 - **USB sound card not recognized**: Verify with `lsusb`, and check the driver loading with `dmesg`.
 - **Noise/crackling**: Lower the sample rate, and check the buffer/period settings.
 
+## Verification
+
+- Device list: `aplay -l` lists the playback devices (with an audio device connected, card/device entries such as `hw:0,0` appear; with no device, it reports `no soundcards found`).
+- Volume: `amixer scontrols` lists the controllable elements, and `amixer get Master` shows the current volume.
+- Playback: `speaker-test -t sine -f 440 -l 1` or `aplay <wav>` producing sound means the output is working.
+
 ## Related Documentation
 
 - [Audio Application](../03_Demos/01_peripheral/03_audio.md)

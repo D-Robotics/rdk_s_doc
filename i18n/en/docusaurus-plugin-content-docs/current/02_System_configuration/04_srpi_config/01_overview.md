@@ -152,6 +152,31 @@ Selecting this option displays the following information:
 
 After completing your changes, select the `Finish` button. For the system configuration provided by `srpi-config`, options that depend on a reboot to take effect will ask you whether to reboot. If you do not reboot, the configuration will not take effect properly. Please decide the reboot timing according to your usage.
 
+## Verification
+
+- Tool opens: `sudo srpi-config` entering the configuration menu means it works (on the Desktop edition, open `RDK Configuration` from the menu).
+- Configuration takes effect: after making changes, choose reboot at the `Finish` prompt, and the configuration takes effect after reboot; for example, after `Expand Filesystem`, `df -h /` shows more space, and after changing `Hostname`, `hostname` outputs the new name.
+
+## FAQ
+
+### Changes Do Not Take Effect
+
+**Cause**: Some configurations require a reboot, and you did not choose to reboot after `Finish`.
+
+**Solution**: Choose reboot at the `Finish` prompt, or manually run `reboot` and then verify.
+
+### Running as a Regular User Reports a Permission Error
+
+**Cause**: The default `sunrise` account does not have permission to modify system files.
+
+**Solution**: Run `sudo srpi-config` with root privileges.
+
+### Abnormal Background Color in the Terminal UI
+
+**Cause**: Different `TERM` environment variables lead to color-scheme differences.
+
+**Solution**: This does not affect functionality; adjust the terminal type as needed, based on the text of the menu options.
+
 ## Related Documentation
 
 - [config.txt File Configuration](../05_config_txt/01_usage.md)

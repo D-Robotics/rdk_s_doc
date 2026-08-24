@@ -70,6 +70,32 @@ chmod 755 <file>              # rwxr-xr-x
 chown <user>:<group> <file>   # Change owner and group
 ```
 
+## Verification
+
+- Current identity: `whoami`/`id` shows the current user and uid.
+- User exists: `grep "^sunrise:" /etc/passwd` finds the default user; after creating a new user, `grep "^myapp:" /etc/passwd` finds it.
+- Group membership and permissions: `groups <user>` shows the groups the user belongs to; `ls -l <file>` shows permissions and ownership.
+
+## FAQ
+
+### Permission Denied When a Regular User Runs a Command
+
+**Cause**: Insufficient file/directory permissions, or the user is not in the corresponding group (for example, `dialout` for serial port access, `video` for display device access).
+
+**Solution**: Use `sudo` to elevate privileges, or add the user to the corresponding group with `sudo usermod -aG <group> <user>` and log in again.
+
+### sudo Requires a Password or Cannot Elevate
+
+**Cause**: sudoers does not authorize passwordless sudo for this user, or the passwordless configuration was removed.
+
+**Solution**: `sunrise` is passwordless by default (`/etc/sudoers.d/010_sunrise-nopasswd`); add new users to the `sudo` group and authorize them as needed with `visudo`.
+
+### User Is Removed from Other Groups After Being Added to a Group
+
+**Cause**: `usermod -G` (overwrite) was mistakenly used instead of `-aG` (append).
+
+**Solution**: To append a group, use `sudo usermod -aG <group> <user>` to keep the existing groups.
+
 ## Related Documentation
 
 - [Boot Auto-Start Configuration](./06_self_start.md)

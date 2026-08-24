@@ -78,6 +78,12 @@ TriggeredBy: ● ssh.socket
 - **`is-system-running` shows degraded**: List the failed services with `systemctl --failed` and investigate them one by one.
 - **No permission for dmesg**: root can run `dmesg` directly; non-root users need to be in the `video`/`systemd-journal` group or use `sudo`.
 
+## Verification
+
+- Kernel logs: `dmesg | tail -20` shows the kernel/driver logs; `dmesg --level=err,warn` shows only errors and warnings.
+- systemd logs: `journalctl -b` shows the logs for the current boot; `journalctl -u ssh` shows the logs for a specific service.
+- Service status: `systemctl status ssh` showing `Active: active (running)` means it is normal; `systemctl --failed` lists the failed services.
+
 ## Related Documentation
 
 - [Boot Auto-Start Configuration](./06_self_start.md)

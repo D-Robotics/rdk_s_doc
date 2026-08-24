@@ -79,6 +79,12 @@ configure the above two items, then restart `bluetooth.service`.
 - **No automatic reconnection on boot**: Check `ReconnectAttempts` and
   `ReconnectIntervals` in `/etc/bluetooth/main.conf` (commented out by default); for HID devices, try having the peripheral initiate the connection.
 
+## Verification
+
+- Service ready: `systemctl is-active bluetooth` returns `active`; `hciconfig` shows `hci0` as `UP RUNNING`.
+- Readiness self-check: in `rfkill list`, the Bluetooth device shows `Soft blocked: no` and `Hard blocked: no`.
+- Pairing and connection: `bluetoothctl devices` lists the paired devices; in `bluetoothctl info <MAC>`, the `Connected` field showing `yes` means it is connected.
+
 ## Related Documentation
 
 - [Bluetooth Initialization Guide (Advanced)](../07_Advanced_development/03_system_software/05_bluetooth_init.md)

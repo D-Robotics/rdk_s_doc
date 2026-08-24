@@ -86,6 +86,12 @@ In the Wayland session, configure the rotation direction in "Settings → Displa
 - **Wrong resolution**: In X11, use `xrandr` to check the supported list; in Wayland, adjust in "Settings → Displays", or check the modes supported by the kernel with `cat /sys/class/drm/card0-HDMI-A-1/modes`, and choose the modes reported by EDID.
 - **Garbled screen/flickering**: Replace with a compliant HDMI cable and check the refresh rate.
 
+## Verification
+
+- Monitor connected: `cat /sys/class/drm/card0-HDMI-A-1/status` outputs `connected`.
+- Supported resolutions: `cat /sys/class/drm/card0-HDMI-A-1/modes` lists the supported display modes.
+- Current resolution: under X11, use `xrandr` to check the mode marked with `*`; under Wayland, check in "Settings → Displays".
+
 ## Related Documentation
 
 - [config.txt Configuration](./05_config_txt/01_usage.md)

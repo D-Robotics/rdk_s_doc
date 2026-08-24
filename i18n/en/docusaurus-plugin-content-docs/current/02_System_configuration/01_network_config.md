@@ -468,6 +468,26 @@ For system software package upgrades and major version/firmware updates, see [Sy
 - Wireless Station: `ip addr show wlan0` shows the IP address assigned by the router.
 - DNS: `nmcli device show eth1 | grep DNS` or `cat /etc/resolv.conf` shows the active DNS servers.
 
+## FAQ
+
+### Cannot Access the Internet After Configuring a Static IP
+
+**Cause**: The default gateway or DNS is not configured correctly, or it does not match the network segment.
+
+**Solution**: Use `ip route` to check the default route and `cat /etc/resolv.conf` to check the active DNS, then verify each item against the "Wired Network" section; the gateway must be in the same network segment as the IP.
+
+### DHCP Cannot Obtain an Address
+
+**Cause**: The NetworkManager connection is not active, or the cable/port is faulty.
+
+**Solution**: Use `nmcli device show eth1` to check the connection status; run `nmcli con up <connection>` to activate the connection; if there is still no address, check the cable or try another port.
+
+### Can Ping an IP Address but Domain Name Resolution Fails
+
+**Cause**: The DNS server is not configured or is unreachable.
+
+**Solution**: Check whether `/etc/resolv.conf` has a DNS entry; if not, add one through NetworkManager or `nmcli con mod` (for example `223.5.5.5` and `8.8.8.8`).
+
 ## Related Documentation
 
 - [Bluetooth Configuration](./02_bluetooth_config.md)

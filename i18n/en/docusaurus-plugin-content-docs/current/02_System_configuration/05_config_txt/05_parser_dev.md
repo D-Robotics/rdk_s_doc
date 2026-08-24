@@ -59,6 +59,25 @@ The config.txt parsing source code is located in the U-Boot source tree of the B
 [Development Environment and Compilation](../../07_Advanced_development/06_environment_build/01_environment_build.md).
 :::
 
+## Verification
+
+- After adding a general configuration option, reboot into U-Boot and use `printenv <key>` to confirm the `key=value` has been written to the environment variables.
+- After device-tree category options (`fdt-enable`/`dtbo_file_path`, etc.) take effect, enter the system and use `ls /proc/device-tree/soc/` to confirm the node or Overlay.
+
+## FAQ
+
+### Newly Added Configuration Option Does Not Take Effect
+
+**Cause**: The key is handled by an existing branch of `process_key_val_pair()` (such as the `bootargs` appending or `ion*` splitting) instead of being written as expected.
+
+**Solution**: Check the handling branch against `parse_config_file()`/`process_key_val_pair()` in `board/hobot/common/drobot_boot_config.c`.
+
+### Device-Tree Category Configuration Option Does Not Take Effect
+
+**Cause**: It was only written at the environment variable layer, and no consuming logic was added in `drobot_fdt_runtime_conf()` of `drobot_fdt_runtime_config.c`.
+
+**Solution**: Add the corresponding consuming logic to that function and rebuild U-Boot.
+
 ## Related Documentation
 
 - [config.txt Usage Guide](./01_usage.md)

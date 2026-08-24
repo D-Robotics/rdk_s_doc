@@ -8,6 +8,11 @@ description: "Introduction and download of the RDK Studio integrated development
 
 **RDK Studio** is the integrated development environment (IDE) built by D-Robotics for RDK development boards. It provides one-stop development capabilities including code editing, remote compilation, debugging, model deployment, and performance profiling, so you don't need to manually set up a cross-compilation environment on the host machine.
 
+## Prerequisites
+
+- The host machine (Windows/Linux/macOS) is connected to the network to download the installer.
+- For remote development, the development board has an RDK OS image flashed and is network-reachable from the host.
+
 ## Download and Installation
 
 :::warning Upgrade Notice
@@ -31,6 +36,10 @@ description: "Introduction and download of the RDK Studio integrated development
 | Installation | Just download the installer | Install toolchain + dependencies |
 | Compilation | One click inside the IDE | Command line mk_*.sh |
 | Debugging | Graphical debugger | gdb / printf |
+
+## Verification
+
+- After downloading and installing, launching RDK Studio successfully means the installation succeeded. For specific operations such as connecting to the board, compiling, and debugging, see the [RDK Studio User Manual](https://developer.d-robotics.cc/rdk_studio_doc/category/1-product-intro).
 
 ## Related Documentation
 

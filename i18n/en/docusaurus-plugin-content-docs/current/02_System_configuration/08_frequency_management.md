@@ -449,6 +449,33 @@ You can use the `sudo hrut_somstatus` command to check the current chip operatin
 
 </DocScope>
 
+## Verification
+
+- Temperature reading: `cat /sys/class/hwmon/hwmon<X>/temp1_input` reads a value in thousandths of a degree Celsius (hwmon0 on the S100, hwmon1 on the S600).
+- CPU frequency: `cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq` shows the current frequency, and `cat .../scaling_governor` shows the current governor.
+- Fan level: `cat /sys/class/thermal/cooling_device<X>/cur_state` shows the current level (cooling_device2 on the S100, cooling_device5 on the S600).
+- Overall status: `sudo hrut_somstatus` shows the current frequency, temperature, and other status.
+
+## FAQ
+
+### Manually Set Fan Level Is Adjusted Automatically by the System
+
+**Cause**: When the thermal policy is `step_wise`, the system adjusts the fan level automatically based on temperature, overriding the manual setting.
+
+**Solution**: First change the policy of the corresponding thermal_zone to `user_space` (for example, `echo user_space > /sys/class/thermal/thermal_zone0/policy`), then set the fan level.
+
+### CPU Cannot Be Pinned to a Specific Frequency
+
+**Cause**: `scaling_setspeed` is only available when the governor is `userspace`.
+
+**Solution**: First run `echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`, then write the target frequency to `scaling_setspeed`.
+
+### sysfs Changes Are Lost After a Reboot
+
+**Cause**: Thermal/frequency changes made through sysfs only take effect for the current boot.
+
+**Solution**: To make them persistent, put the commands in a boot script (see [Boot Auto-Start Configuration](./06_self_start.md)), or use build-time configuration instead.
+
 ## Related Documentation
 
 - [Display Configuration](./09_display_config.md)

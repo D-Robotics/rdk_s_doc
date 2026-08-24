@@ -43,6 +43,24 @@ This page lists the commonly used configuration options in config.txt, organized
 
 > For how to develop new configuration options and the parsing mechanism, see [config.txt Parser Development Guide](./05_parser_dev.md).
 
+## Verification
+
+- Fill in the configuration options on this page, write them to `/boot/config.txt`, and reboot; confirm the appended parameters with `cat /proc/cmdline` for `bootargs`, and confirm the node or Overlay took effect with `ls /proc/device-tree/soc/` for `fdt-enable`/`dtbo_file_path`. See [config.txt Usage Guide](./01_usage.md) for details.
+
+## FAQ
+
+### Configuration Option Does Not Take Effect
+
+**Cause**: The key name is misspelled, or the line starts with `#` and is skipped as a comment.
+
+**Solution**: Check the key name against the quick reference on this page; confirm it is not a comment line; a single line must not exceed 1024 characters.
+
+### S100 Example Node Not Found on the S600
+
+**Cause**: The DTS node addresses on this page are S100 examples; the S600 uses different node addresses.
+
+**Solution**: Use the actual node names under `/proc/device-tree/soc/` on the board.
+
 ## Related Documentation
 
 - [config.txt Usage Guide](./01_usage.md)

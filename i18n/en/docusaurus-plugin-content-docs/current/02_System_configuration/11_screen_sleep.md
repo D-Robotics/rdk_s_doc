@@ -67,6 +67,11 @@ For Thermal and CPU frequency policies, see [Thermal and CPU Frequency Managemen
 - **The desktop still blanks the screen**: Confirm that the gsettings took effect; under Wayland, you need to use the corresponding org.gnome.* settings.
 - **The console still goes black**: Check whether `consoleblank=0` made it into the kernel command line (`cat /proc/cmdline`).
 
+## Verification
+
+- Desktop blanking delay: `gsettings get org.gnome.desktop.session idle-delay` outputs the current value in seconds (`uint32 300` = 5 minutes, `0` = disabled).
+- Console blanking: after running `setterm --blank 0`, the console no longer blanks automatically; to disable it permanently, confirm the kernel command line contains `consoleblank=0` (`cat /proc/cmdline`).
+
 ## Related Documentation
 
 - [Display Configuration](./09_display_config.md)

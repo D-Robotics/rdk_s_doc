@@ -97,6 +97,26 @@ exit 0
 For new projects, prefer systemd unit (Method 1), which can manage dependencies, restart policies, and logs; init.d/rc.local are only for compatibility.
 :::
 
+## Verification
+
+- Immediate start: `systemctl status myapp` showing `Active: active (running)` means it started successfully.
+- Start on boot: `systemctl is-enabled myapp` outputs `enabled`.
+- Full auto-start list: `systemctl list-unit-files --state=enabled --type=service` shows the target service as `enabled`.
+
+## FAQ
+
+### Service Does Not Start After `systemctl start`
+
+**Cause**: The `ExecStart` path is wrong, the script lacks execute permission, or `daemon-reload` was not run after the unit was modified.
+
+**Solution**: Run `systemctl status myapp` to see the error; after modifying the unit, run `systemctl daemon-reload` first and then start.
+
+### Service Does Not Start Automatically on Boot
+
+**Cause**: `systemctl enable` was not run, or the `[Install]` section is missing `WantedBy=multi-user.target`.
+
+**Solution**: Add `WantedBy=multi-user.target` and run `systemctl enable myapp`; confirm with `systemctl is-enabled myapp` that it outputs `enabled`.
+
 ## Related Documentation
 
 - [Viewing System Logs](./15_system_log.md)

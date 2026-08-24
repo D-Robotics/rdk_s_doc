@@ -224,6 +224,15 @@ ros2 launch tros_yolo_detection yolo_detection.launch.py
 tros.b is not currently preinstalled in the image on the S600 board; the commands above need to be run on an image that includes tros.b.
 :::
 
+## Verification
+
+- Run your own node: `ros2 run my_robot_node my_robot_node` continuously printing `[INFO] [my_node]: Hello from tros.b!` means it runs successfully.
+- Package availability: `ros2 pkg list | grep tros` shows the installed packages; `ros2 param list /tros_yolo_detection` lists the node parameters.
+
+:::note Board verification
+tros.b is not currently preinstalled in the image on the S600 board; the verifications above need to be run on an image that includes tros.b.
+:::
+
 ## Related Documentation
 
 - [Using RDK Studio](./01_rdk_studio.md)

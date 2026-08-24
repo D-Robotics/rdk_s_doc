@@ -90,6 +90,32 @@ sudo apt autoremove          # Remove unnecessary dependencies
 
 For rootfs expansion, see [Storage and Disk Management](../12_storage.md).
 
+## Verification
+
+- Source effective: the output of `apt policy` includes `archive.d-robotics.cc` (the D-Robotics dedicated package source) and the official Ubuntu sources.
+- Installation successful: `apt list --installed | grep <package>` shows the installed package, or `apt show <package>` displays its details.
+- Upgrade result: `apt list --upgradable` lists the packages pending upgrade; after upgrading, `df -h /` shows the change in rootfs usage.
+
+## FAQ
+
+### System Malfunctions After an Upgrade
+
+**Cause**: Upgrading across major versions with `apt upgrade` is not supported and introduces compatibility issues.
+
+**Solution**: Reflash the correct image version; within the same major version, confirm the packages pending upgrade before upgrading, and validate on a test board in production environments first.
+
+### Missing Capabilities After Accidentally Removing hobot-* System Packages
+
+**Cause**: `hobot-*` packages are system-level packages such as the BPU runtime, camera, and audio; after removing them, the corresponding board capabilities stop working.
+
+**Solution**: Do not remove them casually; if already removed, reinstall with `sudo apt install <package>` and restart the corresponding services.
+
+### apt Cache Fills Up the Disk
+
+**Cause**: The download cache in `/var/cache/apt/archives` and unused dependencies are not cleaned up.
+
+**Solution**: Run `sudo apt clean` to clear the cache and `sudo apt autoremove` to remove unused dependencies; if the rootfs is still short on space, see [Storage and Disk Management](../12_storage.md).
+
 ## Related Documentation
 
 - [Major Version Upgrade and Firmware](./02_upgrade_firmware.md)

@@ -181,6 +181,25 @@ To make Ubuntu automatically mount the NFS shared directory at every boot, you c
 
    - The service file has already been written directly by the `cat` heredoc above; no need to open an editor.
 
+## Verification
+
+- Samba: `systemctl status smbd` shows `Active: active (running)`; accessing `\\<board-IP>\shared` from a client with a Samba account successfully means it is configured.
+- NFS: `mount | grep windows_nfs_share` output containing the `192.168.127.11:/D/NFSShare` mount point means the mount succeeded.
+
+## FAQ
+
+### Client Cannot Access the Samba Share
+
+**Cause**: smbd is not running, the Samba user/password is not configured, or the firewall does not allow it.
+
+**Solution**: Run `systemctl status smbd` to confirm it is running; create a Samba user with `sudo smbpasswd -a sunrise`; if a firewall is enabled, run `sudo ufw allow samba`.
+
+### NFS Mount Fails
+
+**Cause**: The NFS service is unreachable, or the `vers`/`proto` parameters do not match the server.
+
+**Solution**: Confirm that the server IP and shared directory are correct; adjust `-o vers=3,proto=tcp` to the version supported by the server.
+
 ## Related Documentation
 
 - [Network Configuration](./01_network_config.md)

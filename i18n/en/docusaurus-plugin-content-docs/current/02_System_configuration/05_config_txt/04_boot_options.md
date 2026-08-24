@@ -48,6 +48,26 @@ fdt-disable=/soc/i2c@3932000;
 
 > The node path must match the full path in the device tree. You can run `ls /proc/device-tree/soc/` to view the node names. The example is an S100 node address; S600 node addresses are different.
 
+## Verification
+
+- `bootargs` appending: after reboot, `cat /proc/cmdline` confirms parameters such as `isolcpus`/`loglevel`/`norandmaps` have been appended.
+- DTS nodes: after reboot, `ls /proc/device-tree/soc/` confirms that `fdt-enable` nodes exist and `fdt-disable` nodes are gone.
+- Boot medium: after flipping the DIP switches and rebooting, `lsblk` confirms the board boots from the expected medium (eMMC/UFS/NVMe).
+
+## FAQ
+
+### Appended bootargs Overwrites the Default Parameters
+
+**Cause**: `setenv bootargs` was mistakenly used to replace the whole variable instead of appending with `bootargs=` in config.txt.
+
+**Solution**: The `bootargs=` in config.txt appends to the end of the default cmdline and does not overwrite it; to append in U-Boot, use `setenv bootargs ${bootargs} <parameters>`.
+
+### DTS Node Enable/Disable Has No Effect
+
+**Cause**: The full node path does not match the device tree (the examples use S100 addresses; the S600 is different).
+
+**Solution**: Verify the node name with `ls /proc/device-tree/soc/`, and confirm that the `fdt-enable`/`fdt-disable` statements end with a semicolon.
+
 ## Related Documentation
 
 - [config.txt Usage Guide](./01_usage.md)

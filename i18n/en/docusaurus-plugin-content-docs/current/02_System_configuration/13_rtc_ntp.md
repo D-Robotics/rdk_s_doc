@@ -75,6 +75,12 @@ If the board has no network across power loss but must keep time, make sure the 
 - **NTP not taking effect**: Confirm that the network is reachable and that `set-ntp true` is enabled; check `systemctl status systemd-timesyncd`.
 - **`hwclock` reports adjtime warnings**: The `/etc/adjtime` format is abnormal; rebuild it as suggested or ignore the warnings (main functionality is unaffected).
 
+## Verification
+
+- System clock: in `timedatectl`, `System clock synchronized: yes` + `NTP service: active` means NTP is synchronized.
+- Time zone: `Time zone` in `timedatectl` shows the target time zone (such as `Asia/Shanghai`).
+- RTC write: `sudo hwclock --show` reading the real time means the write succeeded (the board's RTC defaults to 1970; run `sudo hwclock --systohc` first to write it).
+
 ## Related Documentation
 
 - [RTC Debugging Guide (Advanced)](../07_Advanced_development/04_driver_development/14_driver_rtc.md)

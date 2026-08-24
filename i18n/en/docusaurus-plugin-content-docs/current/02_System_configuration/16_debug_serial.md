@@ -62,6 +62,12 @@ At the moment of power-on, press any key (or space) in the serial terminal to in
 - **Garbled characters**: The baud rate is wrong (confirm 921600); a leftover macOS driver, see [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver).
 - **Cannot enter U-Boot**: The power-on timing must be early (interrupt as soon as boot logs start); if missed, restart and retry.
 
+## Verification
+
+- Serial port ready: after connecting the USB Type-C cable, the PC enumerates both the Main and MCU serial ports (Windows Device Manager; on Linux, `ls /dev/ttyUSB*`).
+- Baud rate: the onboard `cat /proc/cmdline` contains `console=ttyS0,921600n8`, confirming the baud rate is 921600.
+- Login successful: after connecting with minicom/screen and pressing Enter, a login prompt appears, and entering `root`/`root` enters the system.
+
 ## Related Documentation
 
 - [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
