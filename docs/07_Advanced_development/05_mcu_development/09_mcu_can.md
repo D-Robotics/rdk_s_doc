@@ -63,7 +63,7 @@ S100 CAN 转发方案的核心流程如下：
 - CANHAL 模块获取来自 MCU 侧的 IPC 数据，按照指定的传输协议解析数据，并支持业务软件通过 API 获取原始 CAN 帧。
 </DocScope>
 <DocScope products="RDK S600">
-S600芯片的 CAN 控制器位于 MCU 域，负责 CAN 数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
+S600 MCU 域集成 16 路 CAN 控制器(CAN0~CAN15),默认使能(CAN1-CAN10),由 MCU 侧 CAN 驱动负责与外部 CAN 总线的数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
 
 S600 CAN 转发方案的核心流程如下：
 - 首先通过 MCU 侧 CAN2IPC 模块将 CAN 通道映射到对应 IPC 通道，然后通过 Acore 侧 CANHAL 模块将 IPC 通道反映射为虚拟 CAN 设备通道。最后用户通过 CANHAL 提供的 API 接口获取虚拟 CAN 设备中的数据。其中，CAN2IPC 模块为 MCU 侧服务，CANHAL 模块为 Acore 侧提供给应用程序的动态库。
