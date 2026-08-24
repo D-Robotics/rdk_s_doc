@@ -57,6 +57,15 @@ List all files and folders in the current directory and subdirectories:
 find .
 ```
 
+Expected output (excerpt):
+
+```text
+.
+./c.c
+./b.txt
+./a.txt
+```
+
 Find a file named file.txt in the current directory:
 
 ```

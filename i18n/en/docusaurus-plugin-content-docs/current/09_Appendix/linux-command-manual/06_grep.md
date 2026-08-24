@@ -97,6 +97,12 @@ grep match_pattern file_name
 grep "match_pattern" file_name
 ```
 
+Expected output (excerpt, using searching for `root` in `/etc/passwd` as an example):
+
+```text
+root:x:0:0:root:/root:/bin/bash
+```
+
 Searches for a pattern in multiple files.
 
 ```shell

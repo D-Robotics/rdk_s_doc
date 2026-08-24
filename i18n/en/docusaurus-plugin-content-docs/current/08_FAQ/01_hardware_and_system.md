@@ -30,7 +30,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
     ```bash
     cat /etc/version
     ```
-    For example, the output may be `2.0.0` or `x3_ubuntu_v1.1.6`.
+    For example, current systems (RDK OS 4.x/5.x) output values such as `4.0.5` and `5.1.0`; legacy versions (RDK OS 1.x/2.x) may output `2.0.0` or `x3_ubuntu_v1.1.6`.
 
 2.  **Check installed D-Robotics core package versions:**
     ```bash
@@ -40,7 +40,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
     ```bash
     rdkos_info
     ```
-    **Sample output (RDK OS 2.x, e.g., 2.0.0):**
+    **Sample output (legacy RDK OS 2.x, e.g., 2.0.0):**
     ```shell
     root@ubuntu:~# apt list --installed | grep hobot
     hobot-boot/unknown,now 2.0.0-20230530181103 arm64 [installed]
@@ -49,7 +49,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
     root@ubuntu:~# cat /etc/version
     2.0.0
     ```
-    **Sample output (RDK OS 1.x, e.g., 1.1.6):**
+    **Sample output (legacy RDK OS 1.x, e.g., 1.1.6):**
     ```shell
     root@ubuntu:~# apt list --installed | grep hobot
     hobot-arm64-boot/unknown,now 1.1.6 arm64 [installed]
@@ -60,7 +60,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 
 ### Q3: What is the relationship between RDK OS versions and hardware platforms?
 **A:**
-* **RDK OS 2.x and newer (e.g., 2.0.0, 2.1.0, 3.0.x):**
+* **RDK OS 2.x/3.x (legacy releases, e.g., 2.0.0, 2.1.0, 3.0.x):**
     * Built from the D-Robotics Linux open-source codebase.
     * Typically supports RDK hardware for the corresponding chip; confirm compatibility for your system version and board model.
 * **RDK OS 1.x:**
@@ -69,7 +69,7 @@ For certified accessories and purchase links, see the [RDK S100 Certified Access
 
 **Important notes:**
 * **Version upgrade:** RDK OS 1.x **cannot** be upgraded directly to 2.x or newer via `apt`. To upgrade, you must re-flash a new system image and [install the operating system](../01_Quick_start/03_install_os_and_setup/02_burn.md) again.
-* **TROS compatibility:** Different major TROS releases (e.g., Foxy-based and Humble-based TROS) are usually tied to specific RDK OS major versions. For example, RDK OS 2.x typically ships with TROS based on ROS 2 Foxy, while RDK OS 3.x typically ships with TROS based on ROS 2 Humble.
+* **TROS compatibility:** Different major TROS releases (e.g., Foxy-based and Humble-based TROS) are usually tied to specific RDK OS major versions. For example, legacy RDK OS 2.x typically ships with TROS based on ROS 2 Foxy, while legacy RDK OS 3.x typically ships with TROS based on ROS 2 Humble.
 
 ### Q4: What precautions apply when connecting or disconnecting a camera?
 **A:** **Never connect or disconnect a camera while the board is powered on**, as this can easily damage the camera module or the board connector. Always disconnect all power from the board before connecting or removing a camera.
@@ -509,8 +509,8 @@ Such logs usually mean reseating the card, replacing it, or inspecting the slot.
 
 **Important:** Low power draw does not guarantee low temperature. Poor cooling still raises surface temperature quickly. Good thermal design is essential for stable embedded operation.
 
-### Q23: How do I use D-Robotics RDK Python packages (e.g., `hobot.GPIO`, `hobot_dnn`) in a Conda environment?
-**A:** Packages such as `hobot.GPIO` and `hobot_dnn` are usually prebuilt for the system Python and depend on board-specific libraries and drivers. Conda virtual environments isolate dependencies, which complicates use.
+### Q23: How do I use D-Robotics RDK Python packages (e.g., `Hobot.GPIO`, `hbm_runtime`) in a Conda environment?
+**A:** D-Robotics officially provides Python packages such as `Hobot.GPIO` (GPIO control) and `hbm_runtime` (the AI computing architecture inference runtime; known as `hobot_dnn` in legacy versions), which are usually prebuilt and optimized for the RDK system Python environment and may depend on board-specific libraries and drivers. Conda virtual environments isolate dependencies, which complicates use.
 
 Possible approaches and notes:
 

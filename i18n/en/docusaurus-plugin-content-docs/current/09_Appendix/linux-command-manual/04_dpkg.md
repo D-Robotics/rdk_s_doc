@@ -100,6 +100,15 @@ dpkg -S keyword
 dpkg -l
 ```
 
+Expected output (excerpt):
+
+```text
+||/ Name            Version           Architecture Description
++++-===============-=================-============-================
+ii  7zip            23.01+dfsg-11     arm64        7-Zip file archiver
+ii  accountsservice 23.13.9-2ubuntu6  arm64        query and manipulate user account information
+```
+
 - List the contents of a deb package
 
 ```

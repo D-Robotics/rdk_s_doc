@@ -55,6 +55,16 @@ ifconfig -a  # All configured network interfaces, regardless of whether they are
 ifconfig eth0  # Display network card information for eth0
 ```
 
+Expected output (excerpt):
+
+```text
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.64.91.53  netmask 255.255.255.0  broadcast 10.64.91.255
+        ether c6:5d:e8:4f:03:66  txqueuelen 1000  (Ethernet)
+        RX packets 10238627  bytes 15169242754 (15.1 GB)
+        TX packets 1527785  bytes 163538166 (163.5 MB)
+```
+
 Start and stop specified network card
 
 ```shell

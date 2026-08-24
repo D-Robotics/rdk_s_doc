@@ -58,3 +58,10 @@ dpkg-deb -e hobot-configs_2.2.0-20231030133209_arm64.deb hobot-configs/DEBIAN
 ```shell
 dpkg-deb -c hobot-configs_2.2.0-20231030133209_arm64.deb
 ```
+
+Expected output (excerpt; the file list varies with the package content):
+
+```text
+drwxr-xr-x root/root         0 2026-08-24 18:30 ./
+-rw-r--r-- root/root         6 2026-08-24 18:30 ./hello.txt
+```

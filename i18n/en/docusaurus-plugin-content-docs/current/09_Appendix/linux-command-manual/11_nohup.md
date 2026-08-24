@@ -34,6 +34,12 @@ The following command executes the test.sh script in the background under the ro
 nohup /root/test.sh &
 ```
 
+Expected output (excerpt; the script output is written to nohup.out in the current directory by default):
+
+```text
+nohup test output
+```
+
 To stop the execution, you need to use the following command to find the PID of the running script using nohup, and then use the kill command to delete it:
 
 ```

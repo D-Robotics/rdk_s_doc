@@ -56,6 +56,15 @@ Pack all files and folders under the `/app` directory into a `app.zip` file in t
 zip -q -r app.zip /app
 ```
 
+> `-q` is quiet mode with no output; to view the compression process, remove `-q`.
+
+Expected output (excerpt, without `-q`):
+
+```text
+  adding: a.txt (stored 0%)
+  adding: b.txt (stored 0%)
+```
+
 If we are in the `/app` directory, we can execute the following command:
 
 ```

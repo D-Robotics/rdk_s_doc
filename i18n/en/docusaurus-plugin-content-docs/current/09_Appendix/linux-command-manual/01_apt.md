@@ -20,6 +20,17 @@ The apt command execution requires superuser (root) privileges.
 - **command:** The operation to be performed.
 - **package:** The package name to be installed.
 
+## Options
+
+Common options:
+
+- `-h, --help`: Display help information.
+- `-y, --yes`: Automatically answer "yes" to all prompts.
+- `-q, --quiet`: Quiet mode, which reduces output information.
+- `-V, --version`: Display version information.
+- `-s, --simulate/--no-act`: Simulate execution without actually modifying the system.
+- `--no-install-recommends`: Do not install recommended dependency packages during installation.
+
 ## Common commands
 
 - Update the apt software source database: **sudo apt update**
@@ -45,5 +56,16 @@ The apt command execution requires superuser (root) privileges.
 - Search for a software package: **sudo apt search `<package_name>`**
 
 - List all installed packages: **apt list --installed**
+
+  Expected output (excerpt):
+
+  ```text
+  Listing...
+  7zip/noble,now 23.01+dfsg-11 arm64 [installed]
+  accountsservice/noble,now 23.13.9-2ubuntu6 arm64 [installed]
+  acl/noble-updates,now 2.3.2-1build1.1 arm64 [installed]
+  adduser/noble,now 3.137ubuntu1 all [installed]
+  ...
+  ```
 
 - List version information of all installed packages: **apt list --all-versions**

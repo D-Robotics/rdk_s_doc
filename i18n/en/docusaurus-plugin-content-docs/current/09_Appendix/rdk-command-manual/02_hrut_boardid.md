@@ -8,7 +8,16 @@ The **hrut_boardid** command is used to retrieve the ID of the current developme
 
 > ⚠️ The board ID affects hardware initialization during boot—please configure it with caution.
 
-Example command output:
+## Syntax
+
+```
+hrut_boardid
+```
+
+## Common Commands
+
+Get the current board ID:
+
 ```
 root@ubuntu:~# hrut_boardid
 0x6A84

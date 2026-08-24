@@ -70,6 +70,21 @@ Mount nfs network file system.
 mount -t nfs -o nolock 192.168.1.20:/home/ /tmp/nfs
 ```
 
+View currently mounted file systems:
+
+```
+mount
+```
+
+Expected output (excerpt):
+
+```text
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,relatime,size=12336064k,nr_inodes=192751,mode=755)
+/dev/sda17 on / type ext4 (rw,relatime)
+```
+
 ## Related Documentation
 
 - [Storage and Disk Management](../../02_System_configuration/12_storage.md)

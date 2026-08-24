@@ -33,3 +33,17 @@ The **hrut_ps** command prints process status information not supported by BusyB
 - **vsize**: Virtual memory size. Represents the size of the virtual memory address space accessible to the process.
 - **rss**: Resident Set Size (physical memory usage). Indicates the amount of physical RAM currently allocated and used by the process.
 - **comm**: Command name. Contains the name of the command or executable file associated with the process, used to identify the process type or purpose.
+
+## Common Commands
+
+```shell
+sunrise@ubuntu:~$ hrut_ps
+     pid    ppid   state    prio    nice rt_prio  policy           vsize       rss  comm            
+       1       0       S      20       0       0       0        25886720     278KB  (systemd)       
+      10       2       I       0     -20       0       0               0       0KB  (mm_percpu_wq)  
+     100       2       S    -100       0      99       1               0       0KB  (migration/10)  
+    1000       2       S     -51       0      50       1               0       0KB  (irq/192-ynr)   
+    1001       2       S     -51       0      50       1               0       0KB  (irq/193-pym)   
+    1002       2       S     -51       0      50       1               0       0KB  (irq/194-cim)   
+    ...
+```

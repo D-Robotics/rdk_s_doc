@@ -93,3 +93,5 @@ Forward a remote port to the local machine
 ```shell
 ssh -R remote_port:local_host:local_port username@remote_host
 ```
+
+<!-- TODO(S3): pending board verification — ssh is an interactive login command with no fixed expected output; for local verification, use `ssh -V` to check the OpenSSH version (example: OpenSSH_9.6p1). -->

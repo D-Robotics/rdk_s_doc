@@ -113,6 +113,16 @@ Display program information in batch mode
 top -b
 ```
 
+Expected output (excerpt):
+
+```text
+MiB Mem :  24131.2 total,   4002.6 free,   3828.2 used,  16626.6 buff/cache
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   7501 root      20   0   36.4g 609088  68352 R 133.3   2.5  31:21.90 node
+      1 root      20   0   25280  17792   9408 S   0.0   0.1   0:10.69 systemd
+```
+
 Display program information in cumulative mode
 
 ```

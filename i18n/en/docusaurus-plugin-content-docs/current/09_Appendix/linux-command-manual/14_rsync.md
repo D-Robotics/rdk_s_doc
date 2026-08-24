@@ -171,6 +171,17 @@ rsync [OPTION...] SRC... [DEST]
 rsync -avSH /app/ /userdata/
 ```
 
+Expected output (excerpt, local directory sync as an example):
+
+```text
+sending incremental file list
+a.txt
+b.txt
+
+sent 178 bytes  received 54 bytes  464.00 bytes/sec
+total size is 4  speedup is 0.02
+```
+
 - Copy local machine content to remote machine
 
 ```

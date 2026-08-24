@@ -347,7 +347,7 @@ If the problem persists, you may also need to check the version of the `pyparsin
 apt show tros
 ```
 
-**Example output (RDK OS 2.x system, tros.b 2.0.0):**
+**Example output (legacy RDK OS 2.x, tros.b 2.0.0):**
 
 ```bash
 Package: tros
@@ -365,7 +365,7 @@ Description: TogetheROS Bot
 **A:**
 * **Relationship with system versions and RDK platform hardware:**
     * **tros.b 2.x (and later versions such as 3.x):**
-        * Usually supports only the corresponding major version of RDK OS (for example, tros.b 2.x supports RDK OS 2.x).
+        * Usually supports only the corresponding major version of RDK OS (for example, tros.b 2.x supports RDK OS 2.x; both are legacy releases).
         * Supports the full range of hardware for the corresponding RDK OS version.
         * Future new features and main maintenance for tros.b will focus on these newer versions.
         * Code is usually hosted under the `D-Robotics` organization on GitHub.

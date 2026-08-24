@@ -31,8 +31,8 @@ This section answers common questions related to developing and using the D-Robo
 * **Relationship between TROS and ROS2:**
     * TROS (TogetheROS.Bot) is a robot operating system released by D-Robotics based on the open-source ROS2 (Robot Operating System 2), optimized and adapted for its RDK hardware platform.
     * It is usually built on an LTS (Long-Term Support) version of ROS2, for example:
-        * On RDK OS 2.x (based on Ubuntu 20.04), TROS is usually based on **ROS2 Foxy Fitzroy**.
-        * On RDK OS 3.x (based on Ubuntu 22.04), TROS is usually based on **ROS2 Humble Hawksbill**.
+        * On legacy RDK OS 2.x (based on Ubuntu 20.04), TROS is usually based on **ROS2 Foxy Fitzroy**.
+        * On legacy RDK OS 3.x (based on Ubuntu 22.04), TROS is usually based on **ROS2 Humble Hawksbill**.
     * On top of standard ROS2, TROS integrates drivers for D-Robotics hardware (such as BPU, VPU, JPU, Sensor, etc.), hardware acceleration libraries, and optimized solutions and examples for common robot functions.
     * TROS is **fully compatible** with the corresponding version of standard ROS2 in core APIs and communication mechanisms. This means nodes and services developed for standard ROS2 Foxy/Humble can usually run directly or with minor modifications on the corresponding version of TROS, and vice versa. They can communicate with each other.
 

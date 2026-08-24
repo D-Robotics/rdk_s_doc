@@ -41,3 +41,5 @@ Write 32-bit: devmem 0xa6003078 32 0x1000100
 Write 16-bit: devmem 0xa6003078 16 0x1234
 Write 8-bit:  devmem 0xa6003078 8 0x12
 ```
+
+<!-- TODO(S3): pending board verification. The sample register addresses 0xa600307c/0xa6003078 are RDK S100 platform addresses, but the current verification board is RDK S600 (RDK OS 5.1.0), so those addresses do not apply; the read/write physical-register output is to be supplemented. -->

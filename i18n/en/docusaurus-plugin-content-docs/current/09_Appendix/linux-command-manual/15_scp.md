@@ -104,3 +104,5 @@ scp sunrise@192.168.1.10:/userdata/log.log /home/sunrise/
 ```
 
 Download the file `log.log` from the directory `/userdata/` on the machine with IP address 192.168.1.10 to the local directory `/home/sunrise/`.
+
+<!-- TODO(S3): pending board verification — scp transfer requires a remote peer host, and the verification board has no second host to test against, so the transfer output is to be supplemented. -->
