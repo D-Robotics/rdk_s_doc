@@ -8,7 +8,7 @@ description: "RDK system customization: image remastering, custom rootfs, deb/so
 
 This section targets Mode 2 (product integration) users and describes how to customize the system on top of the apt/configuration layer, including remastering the image, customizing the rootfs content, and preinstalling software.
 
-> Boundary with [2. System Configuration](../../../02_System_configuration/01_network_config.md): Chapter 2 covers runtime configuration (apt install/network/srpi-config); this section covers image-level customization (remastering rootfs/preinstalling deb/modifying samplefs). Mode 2 users complete system customization here; deb/source-level customization is covered in [deb package development](../01_deb/01_deb.md).
+> Boundary with [2. System Configuration](/System_configuration): Chapter 2 covers runtime configuration (apt install/network/srpi-config); this section covers image-level customization (remastering rootfs/preinstalling deb/modifying samplefs). Mode 2 users complete system customization here; deb/source-level customization is covered in [deb package development](../01_deb/01_deb.md).
 
 ## Customization Entry
 

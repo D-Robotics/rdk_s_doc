@@ -94,13 +94,13 @@ Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby7
 
 ## Documentation Navigation
 
-- **Chapter 1 [Quick Start](./01_Quick_start/03_install_os_and_setup/01_instruction.md)**: hardware introduction, peripheral connections, flashing, initial setup, and remote login.
-- **Chapter 2 [System Configuration](./02_System_configuration/01_network_config.md)**: network, Bluetooth, system update, srpi-config, config.txt, display and audio, storage, clock, user permissions, logs, and debug serial port.
-- **Chapter 3 [Demos](./03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)**: demos for peripherals, multimedia, and algorithms (classification/detection/segmentation/pose/speech/camera inference), with C/C++ and Python side by side.
-- **Chapter 4 [Simple API](./04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)**: simple interfaces of the wrapper layer for multimedia and inference.
-- **Chapter 5 [Advanced Development](./07_Advanced_development/02_board_bringup/01_rdk_s100_bringup.md)**: deb/system software/drivers/multimedia/MCU/algorithm toolchain/VDSP (Mode 3).
-- **Chapter 6 [FAQ](./08_FAQ/01_hardware_and_system.md)**: FAQs organized by problem domain.
-- **Chapter 7 [Appendix](./09_Appendix/rdk-command-manual/01_devmem.md)**: RDK-specific commands and Linux command usage.
+- **Chapter 1 [Quick Start](/Quick_start)**: hardware introduction, peripheral connections, flashing, initial setup, and remote login.
+- **Chapter 2 [System Configuration](/System_configuration)**: network, Bluetooth, system update, srpi-config, config.txt, display and audio, storage, clock, user permissions, logs, and debug serial port.
+- **Chapter 3 [Demos](/Demos)**: demos for peripherals, multimedia, and algorithms (classification/detection/segmentation/pose/speech/camera inference), with C/C++ and Python side by side.
+- **Chapter 4 [Simple API](/Simple_API)**: simple interfaces of the wrapper layer for multimedia and inference.
+- **Chapter 5 [Advanced Development](/Advanced_development)**: deb/system software/drivers/multimedia/MCU/algorithm toolchain/VDSP (Mode 3).
+- **Chapter 6 [FAQ](/FAQ)**: FAQs organized by problem domain.
+- **Chapter 7 [Appendix](/Appendix)**: RDK-specific commands and Linux command usage.
 
 ## Three-Mode Tour
 
@@ -143,5 +143,5 @@ When you are involved in the following scenarios, we recommend submitting your p
 👉 Project cooperation entry point: [D-Robotics Ecosystem Project Cooperation Exchange](https://horizonrobotics.feishu.cn/share/base/form/shrcnpxBa3PjdjFmtxZS3tBXw0e)
 
 :::note Note
-This entry point applies to well-defined projects or commercial deployment needs. For everyday technical questions, we recommend resolving them first through forum Q&A or the [FAQ](./08_FAQ/01_hardware_and_system.md) chapter.
+This entry point applies to well-defined projects or commercial deployment needs. For everyday technical questions, we recommend resolving them first through forum Q&A or the [FAQ](/FAQ) chapter.
 :::
