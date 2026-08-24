@@ -67,7 +67,6 @@ Module basic attributes are passed in structures ending with `<module_name>_attr
 | hbn_vflow_create / destroy | Create/destroy a vflow |
 | hbn_vflow_add_vnode | Add a vnode to the vflow |
 | hbn_vflow_bind_vnode | Bind upstream/downstream vnode channels |
-
 | hbn_vnode_set_attr_s | Board extension (see hbn_vpf_interface.h) |
 | hbn_vnode_get_attr_s | Board extension (see hbn_vpf_interface.h) |
 | hbn_vnode_set_attr_ex_s | Board extension (see hbn_vpf_interface.h) |

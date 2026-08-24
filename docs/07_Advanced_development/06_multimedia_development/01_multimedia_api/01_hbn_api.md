@@ -62,7 +62,6 @@ HBN 用 vnode 抽象 Camera 之后的硬件模块（VIN、ISP、PYM、GDC），�
 | hbn_vflow_create / destroy | 创建/销毁 vflow |
 | hbn_vflow_add_vnode | 将 vnode 加入 vflow |
 | hbn_vflow_bind_vnode | 绑定上下游 vnode 通道 |
-
 | hbn_vnode_set_attr_s | 板端扩展（见 hbn_vpf_interface.h） |
 | hbn_vnode_get_attr_s | 板端扩展（见 hbn_vpf_interface.h） |
 | hbn_vnode_set_attr_ex_s | 板端扩展（见 hbn_vpf_interface.h） |
