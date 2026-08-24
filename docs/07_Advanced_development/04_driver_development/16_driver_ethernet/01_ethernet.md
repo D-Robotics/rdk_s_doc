@@ -11,14 +11,19 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前言
 <DocScope products="RDK S100">
-S100芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以太网报文收发, PTP/TSN 时间敏感性网络, 以及 EtherCAT 主站等特性。
+S100芯片提供多个标准千兆/万兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
 </DocScope>
 <DocScope products="RDK S600">
-S600芯片提供多个标准千兆/万兆以太网控制器, 支持传统的以太网报文收发, PTP/TSN 时间敏感性网络, 以及 EtherCAT 主站等特性。
+S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
 </DocScope>
-控制器内置硬件多队列, MTL 二层传输层, DMA 引擎等。以实现上述各种场景的报文收发。
-本文主要包括网卡使用指南, 开发板 Bringup, 关键特性描述等。
+控制器内置硬件多队列、MTL 二层传输层、DMA 引擎等，以实现上述各种场景的报文收发。
+本文主要包括网卡使用指南、开发板 Bringup、关键特性描述等。
 
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试网卡驱动、TSN/PTP/EtherCAT 或板级 Bringup 的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux 网络子系统与时间同步基础。
+
+**与其他模块关系**：本驱动是网络配置、EtherCAT（Linux 侧）、时间同步（PTP/gptp）的底层实现。
 
 ## 名词解释
 | 缩略语 | 英文全名                          | 中文解释             |

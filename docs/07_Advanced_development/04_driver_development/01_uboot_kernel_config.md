@@ -6,8 +6,25 @@ description: "配置 U-Boot 和 Kernel 选项参数"
 
 # 配置 U-Boot 和 Kernel 选项参数
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
 
 在系统软件开发中，经常需要对 U-Boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要裁剪内核/U-Boot 配置、定制板级 `defconfig` 的 BSP/构建工程师。
+
+**前置条件**：已搭建 SDK 源码编译环境（`xbuild.sh`）；了解 U-Boot 与内核 `defconfig` 的配置机制。
+
+**与其他模块关系**：本页是各驱动/功能模块内核态开关的统一入口，与「5.4 驱动开发」各驱动篇的「内核配置」节互链；最终生成的 `defconfig` 供镜像编译使用。
+
+<DocScope products="RDK S100">
+S100 的内核配置文件为 `hobot-drivers/configs/drobot_s100_defconfig`，U-Boot 配置文件由板级 `.board_config.mk` 中的 `HR_UBOOT_CONFIG_FILE` 指定。
+</DocScope>
+
+<DocScope products="RDK S600">
+S600 的内核配置文件为 `hobot-drivers/configs/drobot_s600_defconfig`，U-Boot 配置文件由板级 `.board_config.mk` 中的 `HR_UBOOT_CONFIG_FILE` 指定。
+</DocScope>
 
 ## 配置 U-Boot 选项参数
 
@@ -171,6 +188,20 @@ make distclean
 # 或者
 make mrproper
 ```
+
+## 常见问题
+
+### 重新编译系统时报「xxx is not clean, please run 'make mrproper'」
+
+**原因**：源码目录下残留了上次编译生成的 `.config` 等文件，与当前配置不一致。
+
+**解决**：在对应源码目录执行 `make distclean`（或 `make mrproper`）清理后再重新配置、编译。
+
+### menuconfig 修改后重新编译配置丢失
+
+**原因**：只修改了 `.config`，未保存回板级 `defconfig`，重新编译时被板级配置覆盖。
+
+**解决**：用 `make savedefconfig` 生成 `defconfig` 文件，再覆盖 `hobot-drivers/configs/` 下对应的板级配置文件后重新编译。
 
 ## 相关文档
 

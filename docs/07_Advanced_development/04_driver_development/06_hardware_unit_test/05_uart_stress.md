@@ -10,6 +10,18 @@ description: "串口压力测试"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 代码位置
+
+本测试代码位于板端 `/app/chip_base_test/03_uart_test/` 目录：
+
+```text
+/app/chip_base_test/03_uart_test/
+├── Makefile
+├── Readme.md
+├── uart_test.c        # 串口压测源码
+└── uartstress.sh      # 压测脚本
+```
+
 ## 测试原理
 
 串口压测（ UART Stress Test）是一种通过大量数据交换和高负载操作来验证串口通信稳定性和性能的方法。它的原理主要是通过发送和接收大量的数据、模拟真实的串口使用场景，具体原理包括以下几个方面：
@@ -253,6 +265,20 @@ This is receive test 50 times
 Data verification successful. Received data matches sent data. Test total data count: 0x1880000
 This is uart send test 50 times
 ```
+
+## 常见问题
+
+### uart2 收发无数据
+
+**原因**：`i2c5` 与 `uart2` 存在复用，需修改设备树并将拨码开关拨到 `uart2` 位置。
+
+**解决**：按「注意事项」禁用 `i2c5`、使能 `uart2`（重新编译 dtb 安装），拨码拨到 `uart2`，并用杜邦线连接 `uart2_tx`/`uart2_rx`。
+
+### 串口压测数据误码或丢失
+
+**原因**：波特率配置错误、接线不良或杜邦线松动。
+
+**解决**：核对 `-b` 参数与实际串口波特率一致，检查并重新连接 `uart2_tx`/`uart2_rx` 杜邦线。
 
 ## 相关文档
 

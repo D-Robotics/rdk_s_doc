@@ -14,6 +14,24 @@ import DocScope from '@site/src/components/DocScope';
 ⚠️ **注意：**使用 EtherCAT 协议需要系统版本 V4.0.4及以上。
 :::
 
+## 概述
+
+EtherCAT 是一种基于标准以太网的实时工业以太网协议，RDK 平台支持 Native（hobot）与 Generic 两种 EtherCAT 驱动模式，并支持使用 eth0 或 eth1 作为 EtherCAT 主站。
+
+<DocScope products="RDK S100">
+RDK S100 V4.0.7 及以上版本默认使用 Native（hobot）EtherCAT 驱动，而非 Generic 驱动。
+</DocScope>
+
+<DocScope products="RDK S600">
+RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动，而非 Generic 驱动。
+</DocScope>
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要部署 EtherCAT 主站、切换驱动模式或联调从站的 BSP/驱动工程师。
+
+**前置条件**：已烧录支持 EtherCAT 的系统版本并可登录板端；了解 EtherCAT 主站（igh）与网络配置基础。
+
+**与其他模块关系**：本驱动依赖以太网控制器，见「[Ethernet](./01_ethernet.md)」；MCU 侧主站见「EtherCAT 用户手册（MCU 侧）」；使用 EtherCAT 协议需要系统版本 V4.0.4 及以上。
+
 ## Native 驱动与 Generic 驱动
 
 ### 版本说明
@@ -1028,7 +1046,19 @@ Host 端构建支持两种构建方式：
 
 如果你使用的是 EtherCAT igh 主站1.6.4以上的版本，可以参考[自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）](#自动启停网卡ethercat-igh-主站164版本之后支持)进行配置。
 
-## FAQ
+## 常见问题
+
+### Generic 驱动模式下 EtherCAT 帧全部超时（frame time out）
+
+**原因**：master 启动前对应网口未激活（未 `ip link set up`），或未将网口加入 `UPDOWN_INTERFACES`。
+
+**解决**：把网口写入 `/etc/ethercat.conf` 的 `UPDOWN_INTERFACES`，或手动 `ip link set dev eth0 up` 后再启动 master。
+
+### Native 与 Generic 切换后主站不工作
+
+**原因**：切换驱动模式后未按对应模式的章节重新配置网口，或 `deb` 包版本不匹配。
+
+**解决**：参考「切换 Native 驱动使用的网口」「使用前网络配置」重新配置；通过 `deb` 升级时确保两个 EtherCAT 包版本号匹配。
 
 ### 自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）
 

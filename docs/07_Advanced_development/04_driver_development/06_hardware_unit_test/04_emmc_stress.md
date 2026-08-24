@@ -6,6 +6,17 @@ description: "eMMC 压力测试"
 
 # eMMC 压力测试
 
+## 代码位置
+
+本测试脚本位于板端 `/app/chip_base_test/02_emmc/` 目录：
+
+```text
+/app/chip_base_test/02_emmc/
+├── Readme.md
+├── emmc_performance_test.sh   # eMMC 性能测试脚本
+└── emmc_stability_test.sh     # eMMC 稳定性测试脚本
+```
+
 ## 测试原理
 
 eMMC 压力测试通过 iozone 工具对 eMMC 存储设备进行压力测试，模拟不同的 I/O 操作模式，测量读写性能、吞吐量、延迟等指标。具体测试原理如下：
@@ -342,6 +353,20 @@ Test loop 2 succeeded!
 Test loop 3 succeeded!
 .....
 ```
+
+## 常见问题
+
+### lsblk 看不到 eMMC 设备
+
+**原因**：eMMC 设备未识别或连接异常。
+
+**解决**：先用 `lsblk -f` 确认设备是否列出；仍无则检查硬件连接与内核日志。
+
+### 测试脚本报输出目录不存在
+
+**原因**：`/app/chip_base_test/log` 或 `/app/chip_base_test/output` 目录未创建或不可写。
+
+**解决**：提前 `mkdir -p` 对应输出目录并确认有写入权限。
 
 ## 相关文档
 

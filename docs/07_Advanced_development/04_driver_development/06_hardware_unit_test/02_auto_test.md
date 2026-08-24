@@ -202,6 +202,20 @@ ExecStart=/app/chip_base_test/new_test/new_test.sh -t 12h -o /userdata/new_test_
 - 测试结果是否符合功能预期。
 - `config.ini` 配置的参数是否正确生效。
 
+## 常见问题
+
+### startup.sh 无法正确执行测试
+
+**原因**：`config/config.ini` 沿用旧路径 `/app/multimedia_samples/chip_base_test/`，或 UART/SPI 目录名仍写为旧名 `04_uart_test`/`05_spi_test`。
+
+**解决**：按本文示例统一改为 `/app/chip_base_test/` 与 `03_uart_test`/`04_spi_test`。
+
+### 启动后未产生测试日志
+
+**原因**：日志输出目录不存在或路径配置错误。
+
+**解决**：确认 `/app/chip_base_test/log` 目录可写；移动 `chip_base_test` 目录后同步更新 `config.ini` 中的 `-o` 输出路径。
+
 ## 相关文档
 
 - [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)

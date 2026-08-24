@@ -64,6 +64,12 @@ import DocScope from '@site/src/components/DocScope';
 </table>
 </DocScope>
 
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要配置看门狗超时/窗口模式、监控方案或排查异常复位的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux watchdog 子系统基础。
+
+**与其他模块关系**：本驱动是系统可靠性监控（HardLockup/SoftLockup）与异常复位机制的底层实现，相关配置见「[配置 U-Boot 和 Kernel](./01_uboot_kernel_config.md)」。
+
 ## 特性
 
 窗口看门狗(window Watchdog)是功能安全产品常用的特殊看门狗。
@@ -485,6 +491,20 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   1. 喂狗超时的重启方式由看门狗重启寄存器配置决定，目前重启由看门狗重启中断上报 MCU 驱动软件处理。
   2. 非窗口期喂狗会直接导致狗叫。
+
+## 常见问题
+
+### 系统异常重启，疑似看门狗复位
+
+**原因**：普通模式未在 timeout 内喂狗，或窗口模式在窗口期外喂狗（非窗口期喂狗会直接导致狗叫复位）。
+
+**解决**：检查喂狗程序时序，确认在窗口期内喂狗；重启方式由看门狗重启寄存器配置决定。
+
+### HardLockup/SoftLockup 监控触发复位
+
+**原因**：CPU 长时间不响应中断（HardLockup）或发生软锁（SoftLockup）。
+
+**解决**：查看内核日志定位卡死点与长时间关中断位置，结合「Watchdog 监控方案」调整监控策略。
 
 ## 相关文档
 

@@ -25,6 +25,11 @@ RDK S600 开发板中的 SPI0与 CAN0和 CAN1复用4个引脚，由于这些引�
 
 </DocScope>
 
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试 SPI 驱动、设备树或 SPI 外设通信的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux SPI 子系统与设备树基础；准备待调试的 SPI 从设备。
+
+**与其他模块关系**：本驱动是用户态 SPI 应用（扩展引脚应用）与 `spidev` 工具的底层实现；引脚复用配置见「[Pinctrl 调试指南](./05_driver_pinctrl_dev.md)」。
 
 ## 软件架构
 
@@ -35,11 +40,11 @@ RDK S600 开发板中的 SPI0与 CAN0和 CAN1复用4个引脚，由于这些引�
 
 -   硬件 IP 层：该层为 SPI 硬件层。
 -   内核层：又可以细分为3层。
-    -   spi driver 层：主要实现对 SPI 硬件 IP 的操作，另外还实现了 spi
+    -   SPI driver 层：主要实现对 SPI 硬件 IP 的操作，另外还实现了 SPI
         framework 定义的接口。
-    -   spi framework 层：可以理解为 spi
+    -   SPI framework 层：可以理解为 SPI
         driver 的适配层，对下层定义了一组 driver 层需要实现的接口，对上提供了通用接口屏蔽了硬件细节。
-    -   spi char
+    -   SPI char
         device 层：为用户空间提供节点，方便用户空间与内核空间进行数据交换。目前使用 kernel 自带的 spidev 字符设备。
 -   app 层：为各种应用程序，这些应用程序通过调用字符设备驱动达到与内核空间数据交换的目的。
 
@@ -48,14 +53,14 @@ RDK S600 开发板中的 SPI0与 CAN0和 CAN1复用4个引脚，由于这些引�
 
 ### Hobot SPI 协议代码
 
-hobot spi 驱动相关代码都放在 **\$project/hobot-drivers/spi** 目录下
+hobot SPI 驱动相关代码都放在 **\$project/hobot-drivers/spi** 目录下
 
 ``` text
 root@ubuntu$ tree . -L 1
 
 ├── Kconfig                       # Kconfig相关
 ├── README.md
-└──spi_drv                        # spi driver相关
+└──spi_drv                        # SPI driver 相关
 ```
 
 **\$project/hobot-drivers/spi/spi_drv** 目录说明
@@ -63,20 +68,20 @@ root@ubuntu$ tree . -L 1
 ``` text
 root@ubuntu$ tree . -L 1
 ├── Makefile
-├── spi-dw.c                       # spi驱动核心代码
+├── spi-dw.c                       # SPI 驱动核心代码
 ├── spi-dw.h
-├── spi-dw-mmio.c                  # spi驱动mmio代码
-└── spi-dw-mmio-dma.c              # spi驱动dma代码
+├── spi-dw-mmio.c                  # SPI 驱动 mmio 代码
+└── spi-dw-mmio-dma.c              # SPI 驱动 dma 代码
 ```
 
 ### Linux SPI 框架代码
 
-Linux spi 协议相关代码都放在 **\$project/kernel/drivers/spi** 目录下
+Linux SPI 协议相关代码都放在 **\$project/kernel/drivers/spi** 目录下
 
 ``` text
 root@ubuntu$ tree kernel/drivers/spi/
 drivers/spi/
-├── spi.c                             # spi框架代码
+├── spi.c                             # SPI 框架代码
 
 root@ubuntu$
 ```
@@ -85,22 +90,22 @@ root@ubuntu$
 
 <DocScope products="RDK S100">
 
-S100中涉及到 spi 配置相关的 dts 文件如下：
+S100中涉及到 SPI 配置相关的 dts 文件如下：
 
 ```C
-|-- drobot-s100-pinctrl.dtsi       # spi pinctrl相关配置
-|-- drobot-s100-soc.dtsi           # spi 设备节点配置
-|-- drobot-s100-pdma.dtsi          # spi pdma使用配置
+|-- drobot-s100-pinctrl.dtsi       # SPI pinctrl 相关配置
+|-- drobot-s100-soc.dtsi           # SPI 设备节点配置
+|-- drobot-s100-pdma.dtsi          # SPI pdma 使用配置
 ```
 </DocScope>
 <DocScope products="RDK S600">
 
-S600中涉及到 spi 配置相关的 dts 文件如下：
+S600中涉及到 SPI 配置相关的 dts 文件如下：
 
 ```c
-|-- drobot-s600-pinctrl.dtsi       # spi pinctrl相关配置
-|-- drobot-s600-soc.dtsi           # spi 设备节点配置
-|-- drobot-s600-pdma.dtsi          # spi pdma使用配置
+|-- drobot-s600-pinctrl.dtsi       # SPI pinctrl 相关配置
+|-- drobot-s600-soc.dtsi           # SPI 设备节点配置
+|-- drobot-s600-pdma.dtsi          # SPI pdma 使用配置
 ```
 
 </DocScope>
@@ -296,8 +301,8 @@ spi3: spi@34930000 {
 
 这里着重说明 SPI 新增的配置项
 
--   sample-delay：spi 控制器作 master 时，对接收数据的采样延迟值，如果出现数据 bit 位错位的情况，可以调整该值。
--   num-cs：spi 控制器作 master 时，支持 cs 个数，SPI 作 master 时，最多支持两个片选。
+-   sample-delay：SPI 控制器作 master 时，对接收数据的采样延迟值，如果出现数据 bit 位错位的情况，可以调整该值。
+-   num-cs：SPI 控制器作 master 时，支持 cs 个数，SPI 作 master 时，最多支持两个片选。
 
 ### SPI 配置 GPIO CS
 
@@ -447,6 +452,20 @@ RX | FF FF FF FF __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 暂不支持该测试。
 
 </DocScope>
+
+## 常见问题
+
+### SPI 外部回环测试时接收数据丢失
+
+**原因**：先执行了 SPI Master 程序、后执行 Slave 程序，Master 与 Slave 不同步。
+
+**解决**：进行外部回环测试时先执行 SPI Slave 程序，再执行 SPI Master 程序。
+
+### SPI 测试出现 FIFO overrun/underrun 提示
+
+**原因**：通信速率设置过高，超出当前系统实际处理能力。
+
+**解决**：降低通信速率重试。SPI 最大通信速率参考值约 30Mbps，实际受系统压力等因素影响，建议以实测为准。
 
 ## 相关文档
 

@@ -14,6 +14,21 @@ import DocScope from '@site/src/components/DocScope';
 本文档同时覆盖 RDK S100 与 RDK S600。CPU/DDR 段（`stressapptest`）两平台一致；**BPU 段两平台使用了完全不同的压测工具与模型**——S100 使用 `bpu_os_test`（裸 binary，配合 `run.sh` 中的 group proportion 机制），S600 使用 `hrt_model_exec`（由 `hobot-dnn` 包提供）。
 :::
 
+## 代码位置
+
+本测试代码位于板端 `/app/chip_base_test/01_cpu_bpu_ddr/` 目录：
+
+```text
+/app/chip_base_test/01_cpu_bpu_ddr/
+└── scripts/
+    ├── Readme.md
+    ├── stress_test.sh              # 压测入口脚本
+    ├── stop_test.sh                # 停止脚本
+    ├── stressapptest               # CPU/DDR 压测 binary
+    └── module/
+        └── resnet50_224x224_nv12.hbm   # BPU 压测模型
+```
+
 ## 测试原理
 
 CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高负荷条件下的性能和稳定性进行评估，以下是这些组件压力测试的一些基本原理：
@@ -521,6 +536,20 @@ dmesg -T --level=err,warn,crit | tail -n 50
 :::info
 启动阶段会有一些 BPU 驱动正常的 info 日志（`arm-smmu-v3 28c00000.bpu_smmu: hobot_smmu_clk_get: miss clk:...` 等），这些**不是**压测异常。上面的 grep 用 `bpu.*error` 的组合模式已将它们排除，只在真出问题时才会匹配到。
 :::
+
+## 常见问题
+
+### grep error/fail 出现误报
+
+**原因**：`stressapptest` 正常完成时也会打印 `with 0 hardware incidents, 0 errors` 与 `Status: PASS`，会被朴素的 `grep -iE 'error|fail|timeout'` 匹配。
+
+**解决**：使用「测试指标」推荐的异常 grep 模式（`Error:`/`FAILED`/`Timeout`/`N errors`）过滤，避免误报。
+
+### BPU 占用率低于预期
+
+**原因**：压测未真正满载。
+
+**解决**：`cat /sys/devices/system/bpu/ratio` 持续观察；S100 满载应稳定在 98~100%，S600 各核应稳定在高位。
 
 ## 相关文档
 

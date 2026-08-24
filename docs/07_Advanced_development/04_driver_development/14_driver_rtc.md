@@ -20,6 +20,12 @@ Linux RTC（Real-Time Clock）实时时钟驱动子系统是内核中管理硬�
 在 S600 芯片中，内置了一个 RTC 模块，该模块是可配置高精度计数器，能够为系统提供稳定的时间基准。此外，S600 还外置了一个 YSN8130E 模块，该模块支持外部电池供电，从而在系统断电时仍能保持时间的连续性。
 </DocScope>
 
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试 RTC 驱动、闹钟/中断或设备树的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux RTC 子系统与设备树基础。
+
+**与其他模块关系**：本驱动是系统时钟同步（RTC/NTP）与定时唤醒的底层实现，系统级配置见「[时钟与 RTC 同步](/System_configuration/rtc_ntp)」。
+
 ### RTC 特点
 
 #### 时间与日期记录
@@ -685,6 +691,89 @@ EXPORT_SYMBOL_GPL(__devm_rtc_register_device);
 5. **返回结果**：
 
    - 操作结果逐层返回到用户态程序，用户态程序根据返回结果继续执行。
+
+## 设备树配置
+
+RTC 设备树包含内置 RTC（super-rtc）与外置 YSN8130E 两类节点。
+
+内置 RTC 节点（`rtc: rtc@aon`）：
+
+<DocScope products="RDK S100">
+
+```dts
+/* drobot-s100-soc.dtsi */
+rtc: rtc@aon {
+    compatible = "drobot,super-rtc";
+    reg = <0x0 0x2a830000 0x0 0x10>;
+    regmap-reg = <&rtc_ctrl_reg>;
+    interrupt-parent = <&gic>;
+    interrupts = <GIC_SPI CPUSYS_SW0_TRIG_INTR_4 CPUSYS_SW0_TRIG_INTR_4_TRIG_TYPE>;
+    rtc-as-bin-timer;
+    clock-frequency = <32768>;
+    status = "okay";
+    parity;
+    lockstep;
+};
+```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```dts
+/* drobot-s600-soc.dtsi */
+rtc: rtc@aon {
+    compatible = "drobot,super-rtc";
+    reg = <0x0 0x3b420000 0x0 0x10>;
+    regmap-reg = <&rtc_ctrl_reg>;
+    rtc-as-bin-timer;
+    clock-frequency = <32768>;
+    status = "okay";
+    s600;
+    parity;
+    lockstep;
+};
+```
+
+</DocScope>
+
+外置 YSN8130E 节点（挂载在 I2C 总线，地址 `0x32`）：
+
+<DocScope products="RDK S100">
+
+```dts
+/* rdk-v0p5.dtsi */
+ysn8130@32 {
+    compatible = "drobot,ysn8130e";
+    reg = <0x32>;
+    status = "okay";
+    drobot,backup-charge-enable = <0>;
+    drobot,bfvsel = <2>;
+};
+```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+```dts
+/* rdk-s600-mcb-v0p1.dts */
+ysn8130@32 {
+    compatible = "drobot,ysn8130e";
+    reg = <0x32>;
+    status = "okay";
+};
+```
+
+</DocScope>
+
+## 功能使用
+
+RTC 的使用分为三个阶段：
+
+- **U-Boot 阶段**：RTC 由内核驱动管理，U-Boot 一般无需特殊配置（可选）。
+- **Kernel 阶段**：内核加载 `drobot,super-rtc` 与 `drobot,ysn8130e` 驱动，设备树节点 `status = "okay"`，详见「设备树配置」与「RTC 驱动代码」。
+- **用户态使用**：通过 `/dev/rtc`、`hwclock` 或测试接口读写时间，详见「RTC 使用简介」。
 
 ## RTC 使用简介
 

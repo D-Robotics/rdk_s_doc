@@ -5,6 +5,10 @@ description: "Wi-Fi 驱动调试指南"
 ---
 # Wi-Fi 驱动调试指南
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 <DocScope products="RDK S100">
 
 RDK S100 的 Wi-Fi 接在由 PCIe 拓展出来的 M.2 接口上。本章节会介绍部分用户层命令和内核 dts 配置项。
@@ -15,6 +19,12 @@ RDK S100 的 Wi-Fi 接在由 PCIe 拓展出来的 M.2 接口上。本章节会�
 RDK S600 的 Wi-Fi 接在由 PCIe 拓展出来的 M.2 接口上。本章节会介绍部分用户层命令和内核 dts 配置项。
 
 </DocScope>
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试 Wi-Fi 模组驱动、内核 DTS 配置或排查模组识别异常的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 PCIe 与 Linux 无线驱动基础；已准备 Wi-Fi 模组（如 AW-XM612）。
+
+**与其他模块关系**：本驱动依赖 PCIe 子系统（模组经 M.2/PCIe 接入），用户态配置见「[网络配置](/System_configuration/network_config)」，PCIe 侧见「[PCIe 使用指南](/Advanced_development/driver_development/driver_pcie)」。
 
 本章节后续示例以 AW-XM612 模组为例，用户需要根据自己使用的具体模组进行对应的修改。
 
@@ -116,6 +126,20 @@ PCIe 拓展的 Wi-Fi 模组一般需要 Host 端对模组的 reset 信号/reg_on
 S600的 PCIe 驱动会在初始化时，申请这些 GPIO 并作解复位等操作。
 
 </DocScope>
+
+## 常见问题
+
+### lspci 未显示 Wi-Fi 模组节点
+
+**原因**：M.2 模组未插紧，或 PCIe ep 未正常枚举。
+
+**解决**：重新插拔模组后 `lspci -vt` 确认 ep 节点出现；仍无则检查模组供电与复位 GPIO 配置。
+
+### Wi-Fi 模组已识别但无法联网
+
+**原因**：内核模块或 DTS 配置与具体模组不匹配（本文示例为 AW-XM612，其他模组需对应修改）。
+
+**解决**：按「模组驱动代码」「内核 DTS 配置」核对并调整为所使用模组的配置。
 
 ## 相关文档
 

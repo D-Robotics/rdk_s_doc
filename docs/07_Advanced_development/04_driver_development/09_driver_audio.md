@@ -10,19 +10,56 @@ description: "音频调试指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-本章主要是关于 I2S 的规格特性，语音基础知识以及添加 codec、调试声卡的说明。
+本章主要是关于 I2S 的规格特性、声卡工作原理以及添加 codec、调试声卡的说明。
 
 ## 概述
 
-CPU DAI: CPU 侧的数字音频接口，一般是 i2s 接口，控制总线传输
+音频子系统基于 ALSA（Advanced Linux Sound Architecture）框架，声卡由 CPU DAI、CODEC DAI、PLATFORM 与 sound card 四部分构成：CPU DAI 为 I2S 接口驱动，CODEC DAI 为外接 codec 驱动，PLATFORM 为 DMA 驱动，sound card 负责绑定前两者。RDK 平台通过 `sound/soc/hobot/` 下的驱动与外部 codec 芯片（如 es7210/es8156）协同完成录音与播放。
 
-CODEC DAI：即 codec。控制 codec 工作流，提供给 core 层
+<DocScope products="RDK S100">
+S100 通过 40PIN 的 PCM 引脚接入音频子板（Audio Driver HAT，典型配置为 2 颗 es7210 + 1 颗 es8156），PCM 引脚与 PCIe 的 Wi-Fi 模组复用，由拨码开关切换。
+</DocScope>
 
-DAI LINK：绑定 CPU DAI 和 CODEC DAI，指硬件控制器驱动
+<DocScope products="RDK S600">
+S600 同样通过 PCM/I2S 引脚与外部 codec（如 es7210/es8156）协同工作，支持与 S100 一致的录音/播放路径。
+</DocScope>
 
-PLATFORM：指定 CPU 侧的平台驱动，通常是 DMA 驱动，用于传输
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要移植 codec、定制声卡或调试音频通路的 BSP/驱动工程师。
 
-DAPM：动态音频电源管理
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 ALSA 框架与设备树基础；已接入音频子板或 codec 硬件。
+
+**与其他模块关系**：本驱动是用户态音频应用（录音/播放）的底层实现；系统级音频输出配置见「音频配置」，应用层见「音频应用」。
+
+### 名词解释
+
+- **CPU DAI**：CPU 侧的数字音频接口，一般是 I2S 接口，控制总线传输。
+- **CODEC DAI**：即 codec，控制 codec 工作流，提供给 core 层。
+- **DAI LINK**：绑定 CPU DAI 和 CODEC DAI，指硬件控制器驱动。
+- **PLATFORM**：指定 CPU 侧的平台驱动，通常是 DMA 驱动，用于传输。
+- **DAPM**：动态音频电源管理。
+
+## 驱动代码
+
+音频驱动源码位于内核 `sound/soc/` 目录：
+
+```text
+sound/soc/hobot/hobot-snd-super-ac-fdx-host.c   # sound card 驱动
+sound/soc/hobot/hobot-cpudai-super.c            # CPU DAI（I2S）驱动
+sound/soc/hobot/hobot-i2s-super.c               # I2S 控制驱动
+sound/soc/hobot/hobot-platform-super.c          # DMA（platform）驱动
+sound/soc/codecs/snd-soc-es7210.c               # es7210 codec 驱动
+sound/soc/codecs/snd-soc-es8156.c               # es8156 codec 驱动
+```
+
+对应内核模块：`hobot_cpudai_super`、`hobot_snd_super_ac_fdx_host`、`snd-soc-es7210`、`snd-soc-es8156`。
+
+## 功能使用
+
+音频驱动的使用分为以下阶段：
+
+- **U-Boot 阶段**：U-Boot 一般无需针对音频做特殊配置（可选）。
+- **Kernel 阶段**：编译并加载 codec/CPU DAI/声卡驱动、配置设备树，详见「音频开发说明」中的「新增 Codec 说明」。
+- **用户态使用**：驱动加载后通过 ALSA 工具（`aplay`/`arecord`）或应用播放/录音，调试方法见「调试说明」。
 
 ## 音频开发说明
 

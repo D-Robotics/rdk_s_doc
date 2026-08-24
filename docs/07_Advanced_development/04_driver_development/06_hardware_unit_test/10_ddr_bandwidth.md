@@ -10,6 +10,17 @@ description: "DDR 带宽测试"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 代码位置
+
+板端自带的 STREAM 测试代码位于 `/app/chip_base_test/08_ddr_bandwidth/` 目录：
+
+```text
+/app/chip_base_test/08_ddr_bandwidth/
+├── README.md
+├── stream.c      # STREAM 测试源码
+└── stream        # STREAM 测试 binary
+```
+
 ## 测试原理
 
 lmbench 是一套开源的系统微基准测试工具（LMbench - Tools for Performance Analysis），其中的 `bw_mem` 组件专门用于测量内存带宽。它通过在指定大小的内存区域上执行不同的读写操作并计时，计算出内存带宽，单位为 MB/s。
@@ -359,6 +370,20 @@ fwr (256m): 161014.81(MB/s)
 ### 及格标准
 
 由于DDR系统本身的读写latency和DDR系统给DRAM颗粒发的一些维护命令，也会占用地址和数据总线上的时间片，所以DDR的实际带宽会小于理论带宽，实际带宽的标准应为理论带宽的 70%左右。并且在高温（车规，DRAM 85度以上）下需要给DRAM颗粒发送更多的refresh命令，实际带宽还会进一步降低
+
+## 常见问题
+
+### 内存带宽测试结果低于理论带宽
+
+**原因**：未绑定 CPU 核心、CPU 频率低或系统负载干扰。
+
+**解决**：用 `taskset` 绑定指定核心后重测，确认 CPU 处于满频率并降低后台负载。
+
+### lmbench 交叉编译产物无法运行
+
+**原因**：交叉编译工具链与目标架构不匹配。
+
+**解决**：使用 aarch64 交叉工具链重新编译 `lmbench` 后推送到板端执行。
 
 ## 相关文档
 

@@ -28,6 +28,12 @@ S600 的 PWM 控制器是 LPWM（Light Pulse Width Modulation），位于 CAM �
 
 </DocScope>
 
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试 PWM 驱动、设备树或输出波形的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux PWM 子系统与设备树基础；PWM 输出引脚已正确复用。
+
+**与其他模块关系**：本驱动是用户态 PWM 应用（扩展引脚应用）的底层实现；引脚复用配置见「[Pinctrl 调试指南](./05_driver_pinctrl_dev.md)」。
+
 ## 驱动代码
 
 LPWM 控制器驱动位于 `hobot-drivers/camsys/lpwm_super/` 目录，其同步封装驱动位于 `hobot-drivers/pwm/` 目录。
@@ -169,6 +175,20 @@ dmesg | grep -i lpwm
 2. 确认通道已导出且 `enable` 为 `1`。
 3. 确认 `period` 与 `duty_cycle` 已正确写入。
 4. 确认引脚已被复用为 `cam_lpwm*` 功能，可用 `cat /sys/kernel/debug/pinctrl/<pinctrl_dev>/pinmux-pins` 查看引脚复用状态。
+
+## 常见问题
+
+### PWM 无波形输出
+
+**原因**：控制器未注册、通道未使能、`period`/`duty_cycle` 未正确写入，或引脚未复用为 `cam_lpwm*` 功能。
+
+**解决**：按「调试」节逐项核对：`ls /sys/class/pwm/` 确认 `pwmchip*` 存在、`enable` 为 `1`、周期与占空比已写入，并用 `pinmux-pins` 查看引脚复用状态。
+
+### 写入的周期/占空比与预期频率不符
+
+**原因**：sysfs 中 `period` 与 `duty_cycle` 的单位是纳秒（ns），被误当作频率（Hz）或百分比填写。
+
+**解决**：按 `f = 1e9 / period` 换算频率，占空比 = `duty_cycle / period`；例如周期 `1000000`（ns）对应 1 kHz。
 
 ## 相关文档
 

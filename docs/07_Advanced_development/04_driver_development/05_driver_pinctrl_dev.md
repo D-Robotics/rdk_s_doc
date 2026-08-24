@@ -8,6 +8,16 @@ import DocScope from '@site/src/components/DocScope';
 
 # Pinctrl 调试指南
 
+## 概述
+
+Pinctrl 子系统负责 SoC 引脚的功能复用（pinmux）、电气属性配置（pinconf）与电压域（io-domain）管理，是 GPIO/UART/SPI/I2C/PWM 等外设驱动的基础。
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要配置引脚复用、上下拉/驱动能力，或排查引脚复用冲突的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux pinctrl 子系统与设备树基础。
+
+**与其他模块关系**：本系统是 GPIO 及各外设驱动的引脚复用底座；GPIO 调试见「[GPIO 使用](./04_driver_gpio_dev.md)」，PWM 引脚复用见「[PWM 驱动调试指南](./07_driver_pwm.md)」。
+
 ## Pinctrl 使用
 
 <DocScope products="RDK S100">
@@ -739,6 +749,20 @@ pin 38 (PCM0_DATA0) 4:39500000.gpio
 pin 39 (PCM0_DATA1) 5:39500000.gpio
 root@ubuntu:~#
 ```
+
+## 常见问题
+
+### 引脚复用后外设无功能
+
+**原因**：设备树 `pinmux` 的 `function`/`pins` 配置错误，或节点 `status` 未设置为 `okay`。
+
+**解决**：用 debugfs `pinmux-pins`/`pins` 查看当前复用状态，核对「Pinctrl 节点参考设置」中 `function` 与 `pins` 是否正确。
+
+### 上下拉/驱动能力设置不生效
+
+**原因**：`pinconf` 属性名与驱动支持的关键字不一致。
+
+**解决**：对照「Pinconf 支持设置的属性与设备树中对应关键字」里的关键字表，核对设备树中属性拼写与取值。
 
 ## 相关文档
 

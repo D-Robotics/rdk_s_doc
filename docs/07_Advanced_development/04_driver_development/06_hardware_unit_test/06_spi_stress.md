@@ -6,6 +6,18 @@ description: "SPI 压力测试"
 
 # SPI 压力测试
 
+## 代码位置
+
+本测试代码位于板端 `/app/chip_base_test/04_spi_test/` 目录：
+
+```text
+/app/chip_base_test/04_spi_test/
+├── Makefile
+├── Readme.md
+├── spidev_tc.c        # SPI 压测源码
+└── spistress.sh       # 压测脚本
+```
+
 ## 测试原理
 
 SPI 总线测试工具（ spidev_tc ）用于测试 SPI 设备的基本功能和性能，主要通过配置不同的参数来模拟高负载环境，验证 SPI 总线的稳定性、吞吐量、延迟、错误率等关键性能指标。
@@ -226,6 +238,20 @@ RX | 67 C6 69 73 51 FF 4A EC 29 CD __ __ __ __ __ __ __ __ __ __ __ __ __ __ __
 
 注：在进行外部回环测试时，需要先执行 SPI Slave 程序，再执行 SPI Master 程序。假如先执行 SPI Master 程序，后执行 SPI Slave 程序，可能会由于 Master 与 Slave 不同步导致 SPI 接收数据出现丢失。
 :::
+
+## 常见问题
+
+### SPI 外部回环测试接收数据丢失
+
+**原因**：先执行了 SPI Master 程序、后执行 Slave 程序，导致 Master 与 Slave 不同步。
+
+**解决**：先执行 SPI Slave 程序，再执行 SPI Master 程序。
+
+### 测试出现 FIFO overrun/underrun 提示
+
+**原因**：通信速率设置过高，超出系统实际处理能力。
+
+**解决**：降低通信速率重试；最大通信速率参考值约 30Mbps，建议以实测为准。
 
 ## 相关文档
 

@@ -14,6 +14,62 @@ import DocScope from '@site/src/components/DocScope';
 **S600上包含两个 VDSP 核，以下描述关于 VDSP1的使用只有在 S600上支持！**
 :::
 
+## 概述
+
+VDSP（Vector Digital Signal Processor，向量数字信号处理器）是 RDK 平台上用于高性能向量计算/图像处理的协处理器。本指南介绍 VDSP 的基础调试、sample 运行与 API 接口。
+
+<DocScope products="RDK S100">
+S100 包含 1 个 VDSP 核（VDSP0），默认配置如下表：
+
+| 项 | 默认值 |
+|---|---|
+| VDSP 核 | VDSP0 |
+| 管理节点 | `remoteproc_vdsp0` |
+| FW 默认名 | `vdsp0` |
+</DocScope>
+
+<DocScope products="RDK S600">
+S600 包含 2 个 VDSP 核（VDSP0 与 VDSP1），VDSP1 仅在 S600 等双核平台上支持，默认配置如下表：
+
+| 项 | 默认值 |
+|---|---|
+| VDSP 核 | VDSP0、VDSP1 |
+| 管理节点 | `remoteproc_vdsp0`、`remoteproc_vdsp1` |
+| FW 默认名 | `vdsp0`（所有核共用同一 Firmware） |
+</DocScope>
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要开发/调试 VDSP Firmware 或核间通信的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 remoteproc 与核间通信（RPMSG/IPCFHAL）基础；已搭建 VDSP 交叉编译工具链。
+
+**与其他模块关系**：VDSP 通过核间通信（RPMSG/IPCFHAL）与 CPU 侧交互；看门狗联动见「[Watchdog](./18_driver_watchdog.md)」；系统启动时默认不启动 VDSP FW，需手动或通过 init.rc 加载。
+
+## 设备树配置
+
+VDSP 内核通过 `remoteproc_vdsp0` 节点注册到 remoteproc 子系统，加载/管理 VDSP Firmware。节点位于 `drobot-s100-soc.dtsi`，关键属性（完整配置含 iommu/预留内存映射等，见内核 dts）：
+
+```dts
+remoteproc_vdsp0: remoteproc_vdsp0 {
+    status = "okay";
+    compatible = "hobot,remoteproc-vdsp0";
+    power-domains = <&scmi_smc_pd PD_IDX_VDSP_TOP>;
+    clocks = <&scmi_smc_clk CLK_IDX_GATE_VDSP_REG_VDSP0>;
+    clock-names = "vdsp0_clk";
+    clock_max_freq = <1000000000>;
+    resets = <&scmi_reset RST_MCU_IDX_IP_VDSP_VDSP0>;
+    reset-names = "vdsp0_reset";
+    interrupt-parent = <&gic>;
+    interrupts = <GIC_SPI VDSPSYS_Q8_EARLY_RESET_REQ_INTR VDSPSYS_Q8_EARLY_RESET_REQ_INTR_TRIG_TYPE>,
+             <GIC_SPI VDSPSYS_Q8_RESET_REQ_INTR VDSPSYS_Q8_RESET_REQ_INTR_TRIG_TYPE>,
+             <GIC_SPI CPUSYS_SW0_TRIG_INTR_3 CPUSYS_SW0_TRIG_INTR_3_TRIG_TYPE>;
+    mboxes = <&mailbox1 15 31 15>, <&mailbox1 14 30 14>, <&mailbox1 13 29 13>;
+};
+```
+
+<DocScope products="RDK S600">
+S600 除 `remoteproc_vdsp0` 外，还包含 `remoteproc_vdsp1` 节点（`compatible = "hobot,remoteproc-vdsp1"`），用于管理第二个 VDSP 核，对应 sysfs 节点 `remoteproc_vdsp1`。
+</DocScope>
+
 ## 基础调试指南
 
 ### CPU 侧开发

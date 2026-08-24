@@ -10,6 +10,31 @@ description: "CPU 性能测试"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 代码位置
+
+CoreMark 源码位于板端 `/app/chip_base_test/07_cpu_performance/coremark-main/` 目录：
+
+```text
+/app/chip_base_test/07_cpu_performance/
+└── coremark-main/
+    ├── Makefile
+    ├── README.md
+    ├── LICENSE.md
+    ├── core_main.c
+    ├── core_list_join.c
+    ├── core_matrix.c
+    ├── core_state.c
+    ├── core_util.c
+    ├── coremark.h
+    ├── aarch64/
+    │   ├── core_portme.c
+    │   ├── core_portme.h
+    │   └── core_portme.mak
+    ├── linux/
+    │   └── core_portme.mak
+    └── docs/
+```
+
 ## 测试原理
 
 `CoreMark` 是一个广泛用于评估嵌入式系统 CPU 性能的基准测试程序。其测试核心是通过模拟一些典型的嵌入式应用计算任务，来评估 CPU 在常见计算模式下的表现，测试的核心是基于以下几个要素：

@@ -5,7 +5,25 @@ description: "功能说明"
 ---
 # 功能说明
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 Hbmem 模块主要实现的功能包括 **内存分配**、**内存共享**、**内存队列管理** 和 **内存池**，专门用于对 **系统预留内存** 进行管理。
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要直接管理预留内存、跨进程共享 buffer 或优化内存分配性能的开发工程师。
+
+**前置条件**：了解 Linux ION/dma-buf 内存管理与缓存一致性基础。
+
+**与其他模块关系**：本模块是 hbrt、dnn 等用户程序内存分配/共享的底层实现；硬件内存布局见「[硬件信息](./02_s100_hbmem_hardware.md)」，其余子篇分别介绍软件接口、调试与常见问题。
+
+<DocScope products="RDK S100">
+S100（S100X）支持 12G/24G 两种内存大小，具体 ION 预留见「[硬件信息](./02_s100_hbmem_hardware.md)」。
+</DocScope>
+
+<DocScope products="RDK S600">
+S600 支持 32G 内存，具体 ION 预留见「[硬件信息](./02_s100_hbmem_hardware.md)」。
+</DocScope>
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/hbmem/01_func_overview.png" alt="功能说明示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

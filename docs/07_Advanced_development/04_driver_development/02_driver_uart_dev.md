@@ -161,7 +161,7 @@ ls /dev/ttyS*
 </DocScope>
 <DocScope products="RDK S600">
 
-RDK S600是将 uart4初始化为/dev/ttyS1，uart4并没有引出物理引脚，且内部不支持软件环回，无法进行串口读写测试。
+RDK S600是将 UART4 初始化为/dev/ttyS1，UART4 并没有引出物理引脚，且内部不支持软件环回，无法进行串口读写测试。
 
 </DocScope>
 
@@ -174,9 +174,23 @@ RDK S600是将 uart4初始化为/dev/ttyS1，uart4并没有引出物理引脚，
 </DocScope>
 <DocScope products="RDK S600">
 
-- RDK S600硬件设计上只将 uart6和 uart7通过拓展引脚排引出，且使用了 TI 的 TXB 系列的电平转换芯片将1.8V IO 转成3.3V IO。**RDK S600 V0P1 开发板由于硬件限制，uart6和 uart7无法使用**。
+- RDK S600硬件设计上只将 UART6 和 UART7 通过拓展引脚排引出，且使用了 TI 的 TXB 系列的电平转换芯片将1.8V IO 转成3.3V IO。**RDK S600 V0P1 开发板由于硬件限制，UART6 和 UART7 无法使用**。
 
 </DocScope>
+
+## 常见问题
+
+### 串口通信数据异常或信号质量差
+
+**原因**：RDK S100/S600 的 40PIN GPIO 都经过 TI TXS/TXB 系列电平转换芯片将 1.8V IO 转为 3.3V IO，通信对端若再做一级电平转换，会引入信号畸变，影响通信质量与可靠性。
+
+**解决**：通信对端尽量不叠加电平转换芯片；若必须多级转换，实测关注线路信号质量（边沿、幅值）。
+
+### RDK S600 无法对 /dev/ttyS1 做串口读写测试
+
+**原因**：RDK S600 将 UART4 初始化为 `/dev/ttyS1`，但 UART4 未引出物理引脚且内部不支持软件环回；此外 V0P1 开发板因硬件限制，UART6、UART7 也无法使用。
+
+**解决**：先通过 `ls /dev/ttyS*` 确认可用设备节点再做收发测试；未引出或受硬件限制的通道不进行串口读写验证。
 
 ## 相关文档
 

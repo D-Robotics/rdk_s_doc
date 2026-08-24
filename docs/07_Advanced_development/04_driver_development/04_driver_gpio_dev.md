@@ -32,6 +32,12 @@ S600芯片内中共有3个 sys 有 gpio 设备，分别是 hsi, cam 和 peri，�
 
 </DocScope>
 
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要操作 GPIO 引脚电平、中断，或调试引脚复用/索引计算的 BSP/驱动工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux GPIO 子系统与 sysfs/debugfs 基础。
+
+**与其他模块关系**：本驱动是用户态 GPIO 应用（扩展引脚应用）的底层实现；引脚复用依赖 Pinctrl 子系统，见「[Pinctrl 调试指南](./05_driver_pinctrl_dev.md)」。
+
 ## 驱动代码
 
 ```bash
@@ -403,6 +409,20 @@ pinctrl_cam: pinctrl@37121000 {
 }
 ```
 </DocScope>
+
+## 常见问题
+
+### GPIO 输出电平与预期不符
+
+**原因**：方向未设置为 `out`、引脚复用未切换到 GPIO 功能，或计算得到的 `gpio-index` 有误。
+
+**解决**：`cat /sys/kernel/debug/gpio` 查看当前使用状态，`echo out > direction` 设置方向，并按「确定 gpio-index」用 `kernel_index = base + offset` 重新核对索引。
+
+### 读取 GPIO 值始终不变
+
+**原因**：方向仍为 `out`（输出态读取的是输出电平），或引脚实际电平确实固定。
+
+**解决**：`echo in > direction` 切换为输入后再读 `value`；仍不变则用万用表实测引脚电平。
 
 ## 相关文档
 
