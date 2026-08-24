@@ -136,5 +136,5 @@ if __name__ == '__main__':
 ## Related Documentation
 
 - [Pin Definitions](./01_40pin_define.md)
-- [SPI Debugging Guide](/Advanced_development/driver_development/driver_spi_dev)
-- [C/C++ Demo Programming Guide](/Demos/demo_support/c_cpp_build)
+- [SPI Debugging Guide](../../../../07_Advanced_development/04_driver_development/07_driver_spi_dev.md)
+- [C/C++ Demo Programming Guide](../../../04_demo_support/02_c_cpp_build.md)

@@ -18,6 +18,7 @@ The RDK S100 supports UART2 on the 40-pin, not enabled by default, with physical
 
 On the 40-pin header, you need to toggle the DIP switch to select between UART2 and I2C5. See the figure below for the details:
 
+<!-- TODO(F1): uart/i2c diagram reuses audio3.png; likely the wrong schematic, replace with the correct one -->
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="UART application diagram" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 After toggling the DIP switch, you also need to modify the device tree file. The path and modification method are as follows:
@@ -176,5 +177,5 @@ if __name__ == '__main__':
 ## Related Documentation
 
 - [Pin Definitions](./01_40pin_define.md)
-- [UART Driver Debugging Guide](/Advanced_development/driver_development/driver_uart_dev)
-- [C/C++ Demo Programming Guide](/Demos/demo_support/c_cpp_build)
+- [UART Driver Debugging Guide](../../../../07_Advanced_development/04_driver_development/02_driver_uart_dev.md)
+- [C/C++ Demo Programming Guide](../../../04_demo_support/02_c_cpp_build.md)

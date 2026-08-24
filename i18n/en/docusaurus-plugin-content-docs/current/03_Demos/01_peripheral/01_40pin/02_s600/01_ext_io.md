@@ -85,7 +85,7 @@ Outputting 1 to Pin 3
 
 ## Related Documentation
 
-- [Expansion Pin Application (S600)](/Demos/peripheral/40pin)
+- [Expansion Pin Application (S600)](./01_ext_io.md)
 - [GPIO Application](./02_gpio.md)
-- [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)
-- [Hardware Introduction](/01_hardware_introduction)
+- [GPIO Usage](../../../../07_Advanced_development/04_driver_development/04_driver_gpio_dev.md)
+- [Hardware Introduction](../../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md)

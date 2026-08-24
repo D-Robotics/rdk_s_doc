@@ -91,6 +91,6 @@ Outputting 1 to Pin 23
 
 ## Related Documentation
 
-- [Expansion Pin Application (S100)](/Demos/peripheral/40pin)
-- [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)
-- [Hardware Introduction](/01_hardware_introduction)
+- [Expansion Pin Application (S100)](./01_40pin_define.md)
+- [GPIO Usage](../../../../07_Advanced_development/04_driver_development/04_driver_gpio_dev.md)
+- [Hardware Introduction](../../../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)

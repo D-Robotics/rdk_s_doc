@@ -153,5 +153,5 @@ if __name__ == '__main__':
 ## Related Documentation
 
 - [Pin Definitions](./01_ext_io.md)
-- [UART Driver Debugging Guide](/Advanced_development/driver_development/driver_uart_dev)
-- [C/C++ Demo Programming Guide](/Demos/demo_support/c_cpp_build)
+- [UART Driver Debugging Guide](../../../../07_Advanced_development/04_driver_development/02_driver_uart_dev.md)
+- [C/C++ Demo Programming Guide](../../../04_demo_support/02_c_cpp_build.md)

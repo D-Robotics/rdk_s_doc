@@ -695,5 +695,5 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 ## Related Documentation
 
 - [Pin Definitions](./01_40pin_define.md)
-- [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)
-- [C/C++ Demo Programming Guide](/Demos/demo_support/c_cpp_build)
+- [GPIO Usage](../../../../07_Advanced_development/04_driver_development/04_driver_gpio_dev.md)
+- [C/C++ Demo Programming Guide](../../../04_demo_support/02_c_cpp_build.md)
