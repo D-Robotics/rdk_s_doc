@@ -18,6 +18,16 @@ description: "用 hbm_runtime Python 接口部署 MobileNetV2 做图像分类的
   - S600：`/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`
 - Python 环境与 `hbm_runtime` 已随镜像预装。
 
+## 代码位置
+
+示例代码位于板端 `/app/pydev_demo/classification_sample/mobilenetv2/` 目录，结构如下：
+
+```text
+/app/pydev_demo/classification_sample/mobilenetv2/
+├── README.md
+└── mobilenetv2.py
+```
+
 ## 参数说明
 
 | 参数 | 说明 | 默认值 |

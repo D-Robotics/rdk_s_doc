@@ -18,6 +18,16 @@ description: "用 hbm_runtime Python 接口部署 YOLO11 做目标检测的预�
   - S600：`/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`
 - Python 环境与 `hbm_runtime` 已随镜像预装。
 
+## 代码位置
+
+示例代码位于板端 `/app/pydev_demo/detection_sample/ultralytics_yolo11/` 目录，结构如下：
+
+```text
+/app/pydev_demo/detection_sample/ultralytics_yolo11/
+├── README.md
+└── ultralytics_yolo11.py
+```
+
 ## 参数说明
 
 | 参数 | 说明 | 默认值 |

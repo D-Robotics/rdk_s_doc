@@ -30,9 +30,12 @@ sudo apt update && sudo apt install libgflags-dev
 
 ```text
 /app/cdev_demo/bpu/classification_sample/mobilenetv2/
+├── CMakeLists.txt
+├── README.md
 ├── inc/
 │   └── mobilenetv2.hpp
 └── src/
+    ├── main.cc
     └── mobilenetv2.cc
 ```
 

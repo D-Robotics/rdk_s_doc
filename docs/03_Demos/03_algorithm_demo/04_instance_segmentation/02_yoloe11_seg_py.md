@@ -119,6 +119,8 @@ pip install -r ../../requirements.txt
     [Saved] Result saved to: result.jpg
     ```
 
+    **成功标志**：末尾出现 `[Saved] Result saved to: result.jpg`，打开 `result.jpg` 可见物体的分割掩膜与检测框。
+
 ## 注意事项
 - 若指定模型路径不存在，程序将尝试自动下载模型。
 
