@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ```
 
-## 1. 概述
+## 概述
 
 <DocScope products="RDK S100">
 本模块基于开源 **SOEM**（Simple Open EtherCAT Master）库，针对搭载 **FreeRTOS** 的嵌入式 MCU 平台（S100）进行了移植与适配。主要特性如下：
@@ -33,7 +33,15 @@ import DocScope from '@site/src/components/DocScope';
 
 ---
 
-## 2. 软件架构
+## 软件架构
+
+```mermaid
+flowchart TB
+    App["用户应用层<br/>ec_sample / slaveinfo"] --> SOEM["SOEM 核心层<br/>ec_main / ec_config / ec_coe / ec_dc / ec_foe"]
+    SOEM --> OSAL["OSAL 抽象层<br/>osal.c（FreeRTOS 适配）"]
+    SOEM --> NIC["OSHW / NIC 层<br/>nicdrv.c / oshw.c"]
+    NIC --> HW["硬件层<br/>以太网控制器（ETH 0x88A4）"]
+```
 
 | 层级 | 模块 / 文件 | 说明 | 对外接口 |
 |------|------------|------|---------|
@@ -55,7 +63,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ---
 
-## 3. 目录结构
+## 目录结构
 
 ```
 McalCdd/EtherCAT/
@@ -111,9 +119,9 @@ samples/EtherCAT/
 
 ---
 
-## 4. 关键数据结构
+## 关键数据结构
 
-### 4.1 ecx_contextt — 主站上下文
+### ecx_contextt — 主站上下文
 
 所有 SOEM API 均以此结构体的指针作为第一个参数。应用层需声明一个该类型的静态变量：
 
@@ -138,7 +146,7 @@ static ecx_contextt ctx;
 | `overlappedMode` | `boolean` | 重叠模式（适用于 TI ESC） |
 | `packedMode` | `boolean` | 紧凑 PDO 映射模式 |
 
-### 4.2 ec_slavet — 从站信息
+### ec_slavet — 从站信息
 
 | 成员 | 说明 |
 |------|------|
@@ -154,7 +162,7 @@ static ecx_contextt ctx;
 | `islost` | 从站是否已丢失连接 |
 | `name` | 从站可读名称字符串 |
 
-### 4.3 ec_groupt — 从站分组
+### ec_groupt — 从站分组
 
 | 成员 | 说明 |
 |------|------|
@@ -165,7 +173,7 @@ static ecx_contextt ctx;
 
 ---
 
-## 5. 从站状态机
+## 从站状态机
 
 EtherCAT 从站遵循以下状态机（ESM）：
 
@@ -206,9 +214,9 @@ ecx_statecheck(&ctx, 0, EC_STATE_OPERATIONAL, EC_TIMEOUTSTATE);
 
 ---
 
-## 6. API 参考
+## API 参考
 
-### 6.1 初始化与关闭
+### 初始化与关闭
 
 #### `ecx_init`
 
@@ -242,7 +250,7 @@ void ecx_close(ecx_contextt *context);
 
 ---
 
-### 6.2 从站配置
+### 从站配置
 
 #### `ecx_config_init`
 
@@ -300,7 +308,7 @@ int ecx_recover_slave(ecx_contextt *context, uint16 slave, int timeout);
 
 ---
 
-### 6.3 状态管理
+### 状态管理
 
 #### `ecx_readstate`
 
@@ -338,7 +346,7 @@ uint16 ecx_statecheck(ecx_contextt *context, uint16 slave, uint16 reqstate, int 
 
 ---
 
-### 6.4 过程数据（PDO）
+### 过程数据（PDO）
 
 PDO 通信是 EtherCAT 实时数据交换的核心，须在专用实时任务中周期性调用。
 
@@ -385,7 +393,7 @@ memcpy(&my_input, slave->inputs, slave->Ibytes);
 
 ---
 
-### 6.5 邮箱协议（CoE / SDO）
+### 邮箱协议（CoE / SDO）
 
 #### SDO 读取
 
@@ -461,7 +469,7 @@ ecx_readOE(&ctx, item, &ODlist, &OElist);
 
 ---
 
-### 6.6 分布式时钟（DC）
+### 分布式时钟（DC）
 
 #### `ecx_configdc`
 
@@ -501,7 +509,7 @@ if (ctx.slavelist[0].hasdc && (wkc > 0))
 
 ---
 
-### 6.7 错误处理
+### 错误处理
 
 #### 错误栈操作
 
@@ -536,11 +544,11 @@ boolean ecx_poperror(ecx_contextt *context, ec_errort *Ec);
 
 ---
 
-## 7. 快速入门：ec_sample
+## 快速入门：ec_sample
 
 `samples/EtherCAT/ec_sample/src/ec_sample.c` 提供了一个完整的 EtherCAT 主站运行示例，展示了从初始化到运行再到关闭的全流程。
 
-### 7.1 总体流程
+### 总体流程
 
 ```
 EtherCAT_Sample_Start(cycle_time_us)
@@ -560,7 +568,7 @@ EtherCAT_Sample_Start(cycle_time_us)
                         └─ ecx_writestate() → SAFE_OP → INIT
 ```
 
-### 7.2 启动函数
+### 启动函数
 
 ```c
 /**
@@ -571,7 +579,7 @@ EtherCAT_Sample_Start(cycle_time_us)
 int EtherCAT_Sample_Start(int cycle_time_us);
 ```
 
-### 7.3 实时任务（ecatthread）
+### 实时任务（ecatthread）
 
 运行在最高 FreeRTOS 优先级，周期性执行：
 
@@ -609,7 +617,7 @@ void ecatthread(void *pvParameters)
 }
 ```
 
-### 7.4 故障检测任务（ecatcheck）
+### 故障检测任务（ecatcheck）
 
 运行在低优先级（每 10ms 执行一次），负责监控和恢复异常从站：
 
@@ -638,7 +646,7 @@ void ecatcheck(void *pvParameters)
 }
 ```
 
-### 7.5 FreeRTOS 任务参数汇总
+### FreeRTOS 任务参数汇总
 
 | 任务名 | 函数 | 栈大小 | 优先级 |
 |--------|------|--------|--------|
@@ -650,11 +658,11 @@ void ecatcheck(void *pvParameters)
 
 ---
 
-## 8. 从站信息查询：slaveinfo
+## 从站信息查询：slaveinfo
 
 `samples/EtherCAT/slaveinfo/src/slaveinfo.c` 提供了扫描并打印总线上所有从站详细信息的工具。
 
-### 8.1 启动函数
+### 启动函数
 
 ```c
 /**
@@ -665,7 +673,7 @@ void ecatcheck(void *pvParameters)
 void EtherCAT_SlaveInfo_Start(boolean sdo_flag, boolean map_flag);
 ```
 
-### 8.2 输出内容
+### 输出内容
 
 扫描完成后将逐一打印每个从站的以下信息：
 
@@ -679,7 +687,7 @@ void EtherCAT_SlaveInfo_Start(boolean sdo_flag, boolean map_flag);
 - PDO 映射详情（`-map` 标志）
 - 对象字典条目（`-sdo` 标志）
 
-### 8.3 SDO 操作命令
+### SDO 操作命令
 
 通过 Shell 命令可直接执行 SDO 读写：
 
@@ -696,7 +704,7 @@ int Ec_SlaveOP(uint16 slave, uint16 index, uint8 subindex, uint8 value, uint16 a
 
 ---
 
-## 9. Shell 命令接口
+## Shell 命令接口
 
 两个示例程序均通过 `SHELL_EXPORT_CMD` 宏向 Shell 系统注册了命令，可在运行时直接调用：
 
@@ -734,9 +742,9 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 
 ---
 
-## 10. 平台适配层
+## 平台适配层
 
-### 10.1 OSAL（操作系统抽象层）
+### OSAL（操作系统抽象层）
 
 **文件**：`osal/src/osal.c`
 
@@ -757,7 +765,7 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 | `osal_malloc(size)` | `pvPortMalloc(size)` | 内存分配 |
 | `osal_free(ptr)` | `vPortFree(ptr)` | 内存释放 |
 
-### 10.2 OSHW / NIC 驱动层
+### OSHW / NIC 驱动层
 
 **文件**：`oshw/src/nicdrv.c`
 
@@ -794,7 +802,7 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 
 ---
 
-## 11. 配置宏参考
+## 配置宏参考
 
 所有配置宏定义于 `core/inc/soem/ec_options.h`：
 
@@ -818,7 +826,7 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 
 ---
 
-## 12. 超时常量参考
+## 超时常量参考
 
 定义于 `core/inc/soem/ec_options.h`：
 
@@ -834,7 +842,7 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 
 ---
 
-## 13. 常见问题与故障排查
+## 常见问题与故障排查
 
 ### Q1：`ecx_init` 返回 0，初始化失败
 
@@ -935,7 +943,7 @@ if (wkc > 0)
 
 ---
 
-## 14. 测试用例
+## 测试用例
 
 本章仅介绍 `samples/EtherCAT/` 目录下通过 Shell 注册的 **3 条命令**的使用方法。所有操作均在串口 Shell 交互界面中完成，无需修改代码。
 

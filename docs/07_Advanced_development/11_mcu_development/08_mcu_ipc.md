@@ -12,6 +12,23 @@ import DocScope from '@site/src/components/DocScope';
 
 此章节着重说明 MCU 侧的相关使用说明，更多的 IPC 的原理和使用可以查阅 [IPC模块介绍](../03_system_software/12_driver_ipc.md) 章节。
 
+<DocScope products="RDK S100">
+S100 MCU 侧 IPC 各实例的默认分配如下，完整分配见 [IPC 使用情况](#ipc-使用情况)：
+
+| 配置项 | 默认值 |
+|---|---|
+| User 可用 Instance | Ipc_ShmCfgInstances0~8 |
+| IPC 发送通道 | 2 个 |
+</DocScope>
+<DocScope products="RDK S600">
+S600 MCU 侧 IPC 各实例的默认分配如下，完整分配见 [IPC 使用情况](#ipc-使用情况)：
+
+| 配置项 | 默认值 |
+|---|---|
+| User 可用 Instance | Ipc_ShmCfgInstances0~7、8~15 |
+| IPC 发送通道 | 2 个 |
+</DocScope>
+
 ## 使用限制说明
 
 1. 在使用 Ipc_MDMA_SendMsg 接口发送数据时, 需要保证数据 buffer 地址16字节对齐。
@@ -107,6 +124,11 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 | Ipc_PrivShmCfgInstance3    | QGA          | ISR(Ipc0_Ch9Isr): Ipc_Driver_MCUIpc0Ch9Isr()                                    | Acore instance51      |
 | Housekeeping               | Housekeeping | ISR(Ipc2_Ch3Isr): Housekeeping_IrqHandler()                                     | Acore Housekeeping    |
 </DocScope>
+
+## 代码路径
+
+- `mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c`：S100 MCU0 侧 IPC 配置
+- `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c`：S100 MCU1 侧 IPC 配置
 
 ## 应用 sample
 
@@ -262,7 +284,7 @@ D-Robotics:/$ ipcbox_loglevel 4
     - Acore 向 MCU 发送数据时触发 mcu 的中断，在中断的 callback 中将数据存储到队列中
 2. `MCU->Ipc->Acore`过程
     - MCU 存在一个常驻线程，不断的在去读队列中的数据是否为空，若不为空，则校验并解析数据，识别出 cmd 命令并运行
-    - freertos 的 cmd 的应用类似于 uboot 的 cmd 的命令，通过此方式用户可以很方便的定制化自己的应用，在此场景中，运行的 cmd 将 adc 的值读出，再通过 ipc 返回给 Acore
+    - FreeRTOS 的 cmd 的应用类似于 U-Boot 的 cmd 的命令，通过此方式用户可以很方便的定制化自己的应用，在此场景中，运行的 cmd 将 adc 的值读出，再通过 ipc 返回给 Acore
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="Acore与MCU之间透传Can数据架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -478,7 +500,32 @@ Return value：Std_ReturnType
     IPC_E_CHANNEL_NOT_OPEN: Instance has been closed
 ```
 
+## 调试
+
+- **通信自测**：运行 Acore 侧 sample 与 MCU1 进行通信，核对数据收发正确。
+- **配置核对**：核对两端 IPC 配置一致，包括 Instance 控制段与 data 段地址、Channel 数量与 ID、Buffer 大小。
+- **中断核对**：核对 Instance 工作核配置（`receive_coreid`）与中断使能核一致，避免多核抢占导致通信失败。
+
+## 常见问题
+
+### IPC 通信失败，两端配置不一致
+
+**原因**：MCU 端与对端 IPC 配置不一致，包括 Instance 控制段与 data 段地址、Channel 数量与 ID、Buffer 数据与大小。
+
+**解决**：核对两端配置并保持一致后重试。
+
+### IPC 通信失败，receive_coreid 配置错误
+
+**原因**：Instance 的 `receive_coreid` 与实际工作核（MCU0 或 MCU1）不匹配。
+
+**解决**：明确 Instance 工作在 MCU0 还是 MCU1，相应配置为 `Ipc_Receive_Core1`。
+
+### IPC 通信失败，中断被其他核抢占
+
+**原因**：IPC 中断在多个核上同时使能，被其他核抢占。
+
+**解决**：仅在实际工作的核上使能对应 IPC 中断。
+
 ## 相关文档
 
 - [IPC 模块介绍（Acore 侧）](/Advanced_development/system_software/driver_ipc)
-- [IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)

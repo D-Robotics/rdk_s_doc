@@ -99,6 +99,11 @@ S600 CAN 转发方案的核心流程如下：
 - 支持多个 CAN 通道并行传输。MCU 侧多个 CAN 控制器的数据可同时被转发给 Acore，Acore 应用程序通过 CANHAL 从不同通道号读出 CAN 数据。
 - 由于 CANHAL 底层通过 ipc 核间通信进行传输，而 ipc 目前不支持多个进程或者线程读写同一个通道，因此 CANHAL 也不支持该特性。
 
+## 代码路径
+
+- `Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c`：MCU 侧 CAN 配置（通道映射、波特率等）
+- `source/hobot-io-samples/debian/app/Can`：Acore 侧 canhal sample 源码，板端位于 `/app/Can`
+
 ## 硬件连接说明
 <DocScope products="RDK S100">
 - CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S100的 sample 默认采用闭环总线网络架构**。
@@ -752,7 +757,7 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
 
 #### 简单的 can 收发 sample
 
-##### 目录介绍
+**目录介绍**
 ```
 // /app/Can/can_send
 .
@@ -773,7 +778,7 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
     └── nodes.json  // 通道映射配置文件
 ```
 
-##### 使用前提
+**使用前提**
 
 这里仅给出一个简单的 sample，实际应用中需要根据实际需求进行修改。
 
@@ -805,7 +810,7 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
 }
 ```
 
-##### 使用方式
+**使用方式**
 1. 分别编译 can_send 和 can_get 两个 sample
 2. 进入 can_get 目录执行以下命令
 ```bash
@@ -841,7 +846,7 @@ Send end, send package total: 1 frame total: 1
 
 #### 多通道传输
 
-##### 目录介绍
+**目录介绍**
 ```bash
 // /app/Can/can_multi_ch
 .
@@ -888,14 +893,14 @@ Send end, send package total: 1 frame total: 1
 - 被动接收数据，验证接收数据的计数器和计算传输时延
 - 超过100秒未收到数据则退出程序（代码中定义的超时时间）
 
-##### 依赖
+**依赖**
 - `pthread`: 线程库
 - `hobot_can_hal `: CAN 接口库
 - `hb_ipcf_hal`: IPCF 接口库
 - `alog`: Android 日志库
 
 
-##### 通道映射关系
+**通道映射关系**
 
 
 <DocScope products="RDK S100">
@@ -929,7 +934,7 @@ Send end, send package total: 1 frame total: 1
 </DocScope>
 
 
-##### DEBUG 开关
+**DEBUG 开关**
 
 ```C
 // can_multich_log.h
@@ -937,7 +942,7 @@ Send end, send package total: 1 frame total: 1
 ```
 也可以使用 logcat 查看更多日志
 
-##### 发送端
+**发送端**
 
 <DocScope products="RDK S100">
 
@@ -954,23 +959,23 @@ Send end, send package total: 1 frame total: 1
 - 目标通道：按照配置文件中启用的 CAN 通道发送数据（S600默认 CAN1-CAN10）
 </DocScope>
 
-##### 接收端
+**接收端**
 
 接收策略:
 - 被动接收数据，验证接收数据的计数器和计算传输时延
 - 超过100秒未收到数据则退出程序（代码中定义的超时时间）
 
-##### 注意事项
+**注意事项**
 - 程序退出时会自动释放 CAN 设备资源
 - 按 Ctrl+C 可中断程序运行
 - 支持命令行参数配置发送帧数、CAN 帧类型和数据长度
 
-##### 编译命令
+**编译命令**
 ```bash
 make # 编译
 make clean # 清除编译文件
 ```
-##### 命令行参数
+**命令行参数**
 程序支持以下命令行参数来自定义运行参数：
 ```bash
 -n <can_tran_num>                 指定要发送的帧数 (默认: 1)
@@ -979,7 +984,7 @@ make clean # 清除编译文件
 -h, --help                        显示帮助信息
 ```
 
-##### 运行命令
+**运行命令**
 ```bash
 export CAN_HAL_DEBUG_LEVEL=6 //  设置CAN接口库调试等级，不打印任何日志;打印较多的情况下会影响发送频率
 ./can_multi_ch
@@ -989,7 +994,7 @@ export CAN_HAL_DEBUG_LEVEL=6 //  设置CAN接口库调试等级，不打印任�
 ./can_multi_ch -t 2 -l 64 -n 5
 ```
 
-##### 日志分析
+**日志分析**
 
 S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日志字段含义与 S100一致，仅通道与 IPC 映射按 S600配置解析。
 
@@ -1381,6 +1386,20 @@ Parameters(out)
     None
 Return value：None
 ```
+
+## 常见问题
+
+### CAN 数据传输超时报警
+
+**原因**：MCU 侧 CAN2IPC 转发数据时会打上 MCU 侧时间戳，Acore CANHAL 接收后读取 Acore 时间戳比对，若 MCU RTC 时间与 Acore 网卡 phc0 时间未同步会触发超时报警。
+
+**解决**：提前启动时间同步，完成 MCU RTC 时间与 Acore 网卡 phc0 时间的同步。
+
+### 接收线程报 -303 错误
+
+**原因**：接收线程启动后长时间没有接收到数据，触发接收超时。
+
+**解决**：根据实际情况判断是否存在异常；当超过 100s 仍无数据时线程会退出，确认数据源是否正常发送。
 
 ## 相关文档
 

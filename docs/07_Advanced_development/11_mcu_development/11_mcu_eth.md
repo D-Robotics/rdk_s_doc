@@ -12,6 +12,32 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 基本概述
 
+本文介绍 MCU 侧 Eth（以太网）驱动的使用，包括硬件特性、代码路径与收发示例。
+
+- **定位**：帮助用户在 MCU 上开发以太网数据收发功能。
+- **适用读者**：需要开发 MCU 以太网通信的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：ETH 用于 MCU 与外部设备间的以太网通信。
+
+<DocScope products="RDK S100">
+
+| 配置项 | 默认值 |
+|---|---|
+| 最大速率 | 1000Mbps |
+| 收发 FIFO 数量 | 各 6 个 |
+| 模块时钟 | 250MHz |
+| 默认数据传输模式 | 轮询 |
+</DocScope>
+<DocScope products="RDK S600">
+
+| 配置项 | 默认值 |
+|---|---|
+| 最大速率 | 1000Mbps |
+| 收发 FIFO 数量 | 各 8 个 |
+| 模块时钟 | 250MHz |
+| 默认数据传输模式 | 轮询 |
+</DocScope>
+
 ### 硬件特性
 
 - 最大支持1000Mbps 数据传输速率
@@ -39,6 +65,19 @@ import DocScope from '@site/src/components/DocScope';
 - 单个接收帧的长度(包括14字节的以太网帧头和4字节的 FCS)必须小于或等于 RX buffer 的配置长度。
 
 - 模块时钟频率为250M，PTP 时钟周期为20ns。
+
+## 软件架构
+
+Eth 驱动采用分层设计：应用层通过 Eth API 调用驱动，驱动经底层 MAC 驱动或中断处理完成收发，配置由 PBCfg 提供。
+
+```mermaid
+flowchart LR
+    App[应用层 Eth API] --> Drv["驱动层<br/>Eth.c"]
+    Drv --> Int["中断处理<br/>Eth_Interrupt.c"]
+    Drv --> LLD["底层 MAC 驱动<br/>Mac_Lld.c"]
+    LLD --> Reg["以太网 MAC 寄存器"]
+    Drv --> Cfg["配置层<br/>Eth_PBcfg / Mac_Ip_PBcfg"]
+```
 
 ## 代码路径
 
@@ -360,6 +399,26 @@ Return value：Std_ReturnType
     E_OK: success
     E_NOT_OK: failed
 ```
+
+## 调试
+
+- **收发自测**：使用 `setvar Eth_Test 1` 使能周期性调用，`setvar eth_contrMode 1` 使能 eth，再通过 `setvar eth_testCase 14` 发送 arp 报文，用 PC 抓包核对。
+- **配置核对**：核对 `Eth_Init` 前 phy 已通过 reset pin 拉高解复位。
+- **buffer 核对**：轮询模式发送后调用 `Eth_TxConfirmation` 释放 buffer，避免 buffer 泄漏。
+
+## 常见问题
+
+### `Eth_Init` 初始化失败
+
+**原因**：初始化前 phy 未解复位。
+
+**解决**：在 Eth 初始化之前，先通过 phy reset pin 拉高实现解复位，再调用 `Eth_Init`。
+
+### 轮询模式发送后 buffer 未释放
+
+**原因**：轮询模式下发送数据后，未调用 `Eth_TxConfirmation` 释放 buffer。
+
+**解决**：申请 buffer 经 `Eth_Transmit` 发送后，调用 `Eth_TxConfirmation` 释放 buffer。
 
 ## 相关文档
 

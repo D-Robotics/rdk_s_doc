@@ -12,9 +12,20 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 S100 MCU 芯片提供了标准的 I2C 总线，I2C 总线控制器通过串行数据线（SDA）和串行时钟（SCL）线在连接到总线的器件间传递信息。每个器件都有一个唯一的地址。I2C 子系统的主要功能是实现单片机与外围设备之间的串行通信。它可以驱动 mipi 子卡、pmic 芯片和其他常用的外围设备。
+
+| 配置项 | 默认值 |
+|---|---|
+| I2C 控制器数量 | 4 个 |
+| 控制器编号 | I2C6~I2C9 |
+| 默认速率模式 | Fast Mode Plus |
 </DocScope>
 <DocScope products="RDK S600">
 S600 MCU 芯片提供了标准的 I2C 总线，I2C 总线控制器通过串行数据线（SDA）和串行时钟（SCL）线在连接到总线的器件间传递信息。每个器件都有一个唯一的地址。I2C 子系统的主要功能是实现单片机与外围设备之间的串行通信。它可以驱动 mipi 子卡、pmic 芯片和其他常用的外围设备。
+
+| 配置项 | 默认值 |
+|---|---|
+| I2C 控制器数量 | 5 个 |
+| 控制器编号 | I2C10~I2C14 |
 </DocScope>
 
 ## I2C 控制器
@@ -30,6 +41,18 @@ I2C 控制器支持以下功能：
 - 支持 7 位和 10 位寻址模式
 
 S100 MCU 芯片总共提供4个 I2C 控制器(I2C6~9)，默认速率为 Fast Mode Plus。
+
+## 软件架构
+
+I2C 驱动采用分层设计：应用层通过 I2c API 调用驱动，驱动再调用底层 LLD 直接操作硬件寄存器，配置由 PBCfg 与板级配置提供。
+
+```mermaid
+flowchart LR
+    App[应用层 I2c API] --> Drv["驱动层<br/>I2c.c"]
+    Drv --> LLD["底层驱动<br/>I2c_Lld.c"]
+    LLD --> Reg["寄存器<br/>I2c_Register.h"]
+    Drv --> PB["配置层<br/>I2c_PBcfg / I2c_Board"]
+```
 
 ## 代码路径
 
@@ -57,10 +80,10 @@ S600 为 MCU 侧实现了一套类似 i2c-tools 开源工具的命令，来支�
 </DocScope>
 
 <DocScope products="RDK S100">
-S100的 MCU 域 i2c 支持范围 i2c6-i2c9。
+S100的 MCU 域 I2C 支持范围 I2C6~I2C9。
 </DocScope>
 <DocScope products="RDK S600">
-S600的 MCU 域支持 i2c10-i2c14。
+S600的 MCU 域支持 I2C10~I2C14。
 </DocScope>
 
 
@@ -222,6 +245,16 @@ Parameters(out)
     None
 Return value: None
 ```
+
+## 调试
+
+- **挂载检测**：使用 `i2cdetect <bus>` 列举指定 I2C 总线上已挂载的设备地址。
+- **读写验证**：使用 `i2cget` / `i2cset` 读取或写入设备寄存器，核对返回值与预期一致。
+- **配置核对**：核对速率模式、主从模式、寻址模式是否与目标设备一致。
+
+## 常见问题
+
+<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 

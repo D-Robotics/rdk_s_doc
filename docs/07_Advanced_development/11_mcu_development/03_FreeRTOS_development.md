@@ -10,6 +10,27 @@ description: "MCU1 开发指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+本文介绍 MCU1（FreeRTOS）的开发方法，包括 MCU 中断号、FreeRTOS 任务创建、中断使用、内存管理、LOG 与共享内存等内容。
+
+- **定位**：帮助用户在 MCU1 上进行 FreeRTOS 应用开发与系统集成。
+- **适用读者**：需要在 MCU1 上开发或集成 FreeRTOS 业务的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：MCU1 固件经 [MCU 系统说明](02_MCU_build_system.md) 的编译系统构建，由 MCU0 通过 remoteproc 加载；与 Acore 通信依赖 IPC，参见 [IPC 使用指南](08_mcu_ipc.md)。
+
+## 代码路径
+
+- `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml`：S100 增删编译目录配置
+- `mcu/Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml`：S600 增删编译目录配置
+- `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld`：S100 链接脚本
+- `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld`：S600 链接脚本
+- `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/`：S100 任务、中断、启动代码（Task_Hal.c、HorizonTask.c、Isr_Hal.c、SuperSoC_ISR.s）
+- `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/`：S600 任务、中断、启动代码（Task_Hal.c、HorizonTask.c、Isr_Hal.c、S600_ISR.s）
+- `mcu/OpenSource/FreeRTOS/`：FreeRTOS 内核开源代码（内存管理位于 portable/MemMang/）
+- `mcu/Service/Log`：Log 服务
+- `mcu/samples/MyDemo`：自定义编译目录示例
+
 ## MCU 中断号及模块对应关系
 <DocScope products="RDK S100">
 | 模块 | 中断号 | 名称 |
@@ -1013,7 +1034,7 @@ MCU 和 Acore/HSM 通信依赖 IPC，IPC 系统服务涉及到的中断可以参
 这些中断优先级建议配置成比平常的功能类中断优先级高，这些中断本身可以配置成同样的优先级。
 
 ## FreeRTOS 系统简介
-FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将硬件初始化，RTOS 系统初始化，所有任务的创建这些都弄好，最后启动 RTOS 的调度器，开始多任务的调度；第二种，在 main 函数中将硬件和 RTOS 系统先初始化好，然后创建一个启动任务后就启动调度器，在启动任务里面创建各种应用任务，当所有任务都创建成功后，启动任务把自己删除。两种方式没有太强的优劣之分，RDK-S100/RDK-S600选择第一种方式。
+FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将硬件初始化，RTOS 系统初始化，所有任务的创建这些都弄好，最后启动 RTOS 的调度器，开始多任务的调度；第二种，在 main 函数中将硬件和 RTOS 系统先初始化好，然后创建一个启动任务后就启动调度器，在启动任务里面创建各种应用任务，当所有任务都创建成功后，启动任务把自己删除。两种方式没有太强的优劣之分，RDK S100/RDK S600 选择第一种方式。
 ### FreeRTOS 系统任务创建
 <DocScope products="RDK S100">
 
@@ -1144,12 +1165,12 @@ heap_4.c 方案与 heap_2.c 方案一样都采用最佳匹配算法来实现动�
 heap_5.c 方案在实现动态内存分配时与 heap_4.c 方案一样，采用最佳匹配算法和合并算法，并且允许内存堆跨越多个非连续的内存区，也就是允许在不连续的内存堆中实现内存分配，比如用户在片内 RAM 中定义一个内存堆，还可以在外部 SDRAM 再定义一个或多个内存堆，这些内存都归系统管理。该方案较为复杂，实时性略逊于 heap_4.c。
 
 <DocScope products="RDK S100">
-#### RDK-S100内存方案
-RDK-S100采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
+#### RDK S100 内存方案
+RDK S100 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
 </DocScope>
 <DocScope products="RDK S600">
-#### RDK-S600内存方案
-RDK-S600采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
+#### RDK S600 内存方案
+RDK S600 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
 </DocScope>
 ## LOG 区域调整
 ### MCU1区域调整
@@ -1189,6 +1210,26 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 如果使用共享内存的方式传输数据，可能会出现 MCU 数据更新至 SRAM，但是 Acore 的缓存还为旧数据的问题，因此导致读取数据不同步。
 
 为避免 Acore 和 MCU 出现数据不同步的问题，需要在变量前加 `volatile` 关键字，或者使用 `ioremap_np()` 函数。这两种方式都是为了避免读取缓存，而是直接读取 SRAM 数据。
+
+## 调试
+
+- **中断核对**：新增中断前，核对中断号与「MCU 中断号及模块对应关系」表一致，避免与 MCU0 已占用中断冲突。
+- **任务集成核对**：集成功能时保持各功能的相对优先级、所在 core 及同一任务中的调用顺序与参考实现一致。
+- **内存方案核对**：默认可使用 heap_4.c 内存管理方案；如需定制，核对内存分配/释放行为是否符合预期。
+
+## 常见问题
+
+### Acore 访问 MCU 寄存器导致 Acore 异常
+
+**原因**：Boot 流程中的 `Housekeeping_WriteMagicNum` 未正常初始化。
+
+**解决**：确保 `AcoreBootProc` 在 MCU0 上正常完成初始化，避免对 MCU 寄存器的访问导致 Acore 异常。
+
+### 共享内存传输数据读取不同步
+
+**原因**：MCU 将数据更新至 SRAM 后，Acore 侧缓存仍为旧数据。
+
+**解决**：在共享变量前加 `volatile` 关键字，或使用 `ioremap_np()` 函数直接读取 SRAM 数据。
 
 ## 相关文档
 

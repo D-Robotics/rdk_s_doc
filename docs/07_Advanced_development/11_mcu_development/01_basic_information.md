@@ -16,20 +16,24 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 基础信息
 
-1. MCU 编译工具链为 GCC 工具链，版本为 gcc-arm-none-eabi-10.3~2021.10
-2. MCU 核为 ARM R52+，可以用 ARM R52 technical reference manual 文档作为参考：[官网链接](https://developer.arm.com/documentation/100026/latest)
-3. MCU 运行的操作系统均为 FreeRTOS，版本为 FreeRTOS Kernel V10.0.1
-4. MCU 主要分为两部分：MCU0 和 MCU1。MCU0 主要负责启动 Acore、MCU1 以及电源管理等功能，目前不开源；MCU1主要负责跑业务等功能，开源，客户可根据自己需求进行修改
+MCU 系统的默认配置如下：
+
+| 配置项 | 默认值 |
+|---|---|
+| 编译工具链 | GCC（gcc-arm-none-eabi-10.3~2021.10） |
+| MCU 核 | ARM R52+（参考 [ARM R52 technical reference manual](https://developer.arm.com/documentation/100026/latest)） |
+| 操作系统 | FreeRTOS Kernel V10.0.1 |
+| MCU 组成 | MCU0（启动 Acore/MCU1、电源管理，不开源）+ MCU1（业务，开源，可修改） |
 
 ## MCU 框架
 
 <DocScope products="RDK S100">
 MCU0是板子启动的开始，也是重中之重。因为 MCU0 负责启动 Acore、MCU1 以及电源管理等功能。Acore 所运行的 Linux 操作系统是客户开发功能的重要载体，而 MCU1运行的 FreeRTOS 操作系统为客户的实时任务进行保驾护航。
-MCU1 通过 Linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK-S100的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
+MCU1 通过 Linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK S100 的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
 </DocScope>
 <DocScope products="RDK S600">
 MCU0是板子启动的开始，也是重中之重。因为 MCU0 负责启动 Acore、MCU1 以及电源管理等功能。Acore 所运行的 Linux 操作系统是客户开发功能的重要载体，而 MCU1运行的 FreeRTOS 操作系统为客户的实时任务进行保驾护航。
-MCU1 通过 Linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK-S600的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
+MCU1 通过 Linux 的 remoteproc 框架实现，在 Acore 的 sysfs 通过向 MCU0发送通知，从而控制 MCU1的启动和关闭。同时在 RDK S600 的休眠模式下，也是通知 Acore 通知 MCU0从而操作 MCU1，实现低功耗休眠功能。
 </DocScope>
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_frame.png" alt="MCU 框架示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -329,10 +333,10 @@ MCU 目前在 sysfs 上支持查看系统状态 alive，系统存活时间 taskc
 ## MCU 串口使用
 
 <DocScope products="RDK S100">
-如果 RDK-S100含有连接方式如下，mcu 串口和 Acore 串口共用一个串口，自行查看：设备管理器 -> 端口 -> MCU-COM -> 波特率921600
+如果 RDK S100 含有连接方式如下，mcu 串口和 Acore 串口共用一个串口，自行查看：设备管理器 -> 端口 -> MCU-COM -> 波特率921600
 </DocScope>
 <DocScope products="RDK S600">
-如果 RDK-S600含有连接方式如下，mcu 串口和 Acore 串口共用一个串口，自行查看：设备管理器 -> 端口 -> MCU-COM -> 波特率921600
+如果 RDK S600 含有连接方式如下，mcu 串口和 Acore 串口共用一个串口，自行查看：设备管理器 -> 端口 -> MCU-COM -> 波特率921600
 </DocScope>
 
 <DocScope products="RDK S100">
@@ -345,7 +349,7 @@ MCU 目前在 sysfs 上支持查看系统状态 alive，系统存活时间 taskc
 ## MCU0烧录流程
 ### 手动烧录
 #### 非空板烧录
-1. 打开板子，板端 Acore 串口常按 enter 进入 uboot（一定要一直按）
+1. 打开板子，板端 Acore 串口常按 enter 进入 U-Boot（一定要一直按）
 ```c
 fastboot 0
 ```
@@ -649,6 +653,20 @@ MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行�
 - %c —— 单个字符
 
 除以上类型外的其他格式化输出暂不支持，后续版本将逐步扩展更多的数据类型与格式支持，以满足更丰富的调试需求。
+
+## 常见问题
+
+### 首次编译时工具链下载不成功或下载不完整
+
+**原因**：首次编译会从 Arm 官网下载工具链后解压缩，网速不好可能导致下载失败。
+
+**解决**：手动下载编译工具链，并将工具链移动到代码的 `Build/ToolChain/Gcc/` 目录后重新编译，编译时检测到已有工具链便不再从官网下载。
+
+### stop MCU1 后立即 start 导致系统跑飞挂死
+
+**原因**：系统尚未进入 wfi 模式时 start MCU1，会重新加载 firmware 至 MCU SRAM，覆盖之前的代码位置。
+
+**解决**：stop MCU1 后，必须等待系统进入 wfi 模式，再执行 start MCU1。
 
 ## 相关文档
 

@@ -8,7 +8,22 @@ import DocScope from '@site/src/components/DocScope';
 
 # Port 开发指南
 ## 基本概述
+
 Port 整体分为对外接口和"Low Level Driver(LLD)"两大部分，这里只介绍用户接口开发部分。
+
+- **定位**：介绍 Port_Func 模块与 Port 模块（PinCtrl）的开发方法。
+- **适用读者**：需要自定义 PIN 初始状态或进行进阶 Port 开发的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](../01_basic_information.md)。
+- **与其他模块关系**：Port 模块是底层 PinCtrl 模块，Port_Func 模块供用户配置外设 PIN 功能；Port 模块部分功能仅在商业版代码开放。
+
+## 软件架构
+
+```mermaid
+flowchart LR
+    App[应用层] --> Func["对外接口<br/>Port_Func / Port"]
+    Func --> LLD["Low Level Driver<br/>Port_Lld / PinCtrl"]
+    LLD --> Cfg["PIN 初始状态<br/>Port_PBcfg"]
+```
 
 ## Port_Func 模块
 地瓜 MCU 系统提供针对功能整体配置的 Port_Func 模块。
@@ -141,6 +156,21 @@ MCU0在启动时，会调度`Port_Init()`接口对 MCU 的所有 PIN 进行初�
   - `IsUsedGpio`：定义 Port 模块是否会在初始化时对该 PIN 进行 GPIO 的方向及输出配置；
 
 客户可以根据需要自行定义 PIN 的初始状态。
+
+## 调试
+
+- **PIN 初始状态核对**：核对 `Port_PBcfg.c` 中各 PIN 的初始状态配置是否符合预期。
+- **配置字段核对**：核对 `PinMode`、`Config Type`、`IsUsed`、`ModeChange`、`IsUsedGpio` 等字段是否按需求配置。
+
+## 常见问题
+
+### MCU1 二次调度 `Port_Init()` 后基础功能异常
+
+**原因**：MCU1 启动时默认不会再执行 `Port_Init()`，二次初始化 PIN 状态可能导致 S100 SIP 的供电等基础功能异常。
+
+**解决**：不建议用户在 MCU1 二次调度 `Port_Init()` 接口。
+
+<!-- TODO(Sx): 待收集（补充第 2 条） -->
 
 ## 相关文档
 

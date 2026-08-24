@@ -9,6 +9,36 @@ description: "TIMER 使用指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+本文介绍 MCU 侧 TIMER（GPT）驱动的使用，包括硬件支持、软件架构、配置说明与使用示例。
+
+- **定位**：帮助用户在 MCU 上使用定时器实现定时、中断等功能。
+- **适用读者**：需要开发定时/计时功能的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：定时器每个 Channel 均可触发中断，中断号与映射见下文硬件支持。
+
+TIMER 的默认配置如下：
+
+<DocScope products="RDK S100">
+
+| 配置项 | 默认值 |
+|---|---|
+| Instance 数量 | 6 个 |
+| 每 Instance Channel 数 | 4 个 |
+| 默认输入时钟 | 200MHz |
+| 默认位宽 | 32bit |
+</DocScope>
+<DocScope products="RDK S600">
+
+| 配置项 | 默认值 |
+|---|---|
+| Instance 数量 | 10 个 |
+| 每 Instance Channel 数 | 4 个 |
+| 默认输入时钟 | 40MHz |
+| 默认位宽 | 32bit |
+</DocScope>
+
 ## 硬件支持
 
 <DocScope products="RDK S100">
@@ -132,6 +162,16 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 
 ## 软件驱动
+
+TIMER 驱动采用分层设计，应用层通过 Gpt API 调用驱动，底层 LLD 直接操作硬件寄存器，配置由 PBCfg 提供。
+
+```mermaid
+flowchart LR
+    App[应用层 Gpt API] --> Drv["驱动层<br/>Gpt.c"]
+    Drv --> LLD["底层驱动<br/>Gpt_Lld.c"]
+    LLD --> Reg["寄存器<br/>Gpt_Register.h"]
+    Drv --> PB["配置层<br/>Gpt_PBcfg / Gpt_Cfg"]
+```
 
 代码路径：
 
@@ -438,6 +478,16 @@ timer_interrupt gettime 3
 输出结果:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case3.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## 调试
+
+- **计时验证**：使用 `timer_interrupt on <周期>` 启动定时器，并用 `timer_interrupt gettime <type>` 读取剩余计数值。
+- **时钟核对**：核对输入时钟（S100 为 200MHz，S600 为 40MHz）与装载值计算是否一致。
+- **中断验证**：使用 `timer_interrupt on <周期> 1` 启动定时中断，核对中断是否按设定周期触发。
+
+## 常见问题
+
+<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 

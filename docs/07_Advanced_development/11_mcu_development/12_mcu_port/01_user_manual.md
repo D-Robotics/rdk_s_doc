@@ -8,7 +8,31 @@ import DocScope from '@site/src/components/DocScope';
 
 # Port 使用指南
 ## 基本概述
+
 Port 子系统是 MCU 上对 PIN 的功能和属性进行配置的子系统。
+
+- **定位**：利用 Port_Func 模块对 PIN 的功能进行初始化配置，或操作 GPIO。
+- **适用读者**：需要配置 MCU PIN 复用或操作 GPIO 的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](../01_basic_information.md)。
+- **与其他模块关系**：UART、SPI、I2C、PWM、CAN 等外设使用前须先通过 Port 配置 PIN 功能。
+
+Port 子系统对外提供 Port_Func 模块（用户接口）与底层 Port 模块（LLD/PinCtrl），默认外设 PIN 配置记录在 `McalCdd/Port/inc/Port_Func.h` 的 `PinFunctions` 枚举中。
+
+## 软件架构
+
+```mermaid
+flowchart LR
+    App[应用层] --> Func["Port_Func 模块<br/>引脚功能配置 / GPIO"]
+    Func --> Port["Port 模块<br/>PinCtrl / LLD"]
+    Port --> Cfg["PIN 初始状态<br/>Port_PBcfg"]
+```
+
+## 代码路径
+
+- `McalCdd/Port/inc/Port_Func.h`：对外接口与默认外设 PIN 配置（PinFunctions 枚举）
+- `McalCdd/Port/src/Port_Func.c`：Port_Func 模块实现
+- `Config/McalCdd/.../Port/src/Port_PBcfg.c`：各 PIN 初始状态配置
+- `samples/Spi/SPI_sample/Spi_sample.c`：Port_Func 配置 PIN 功能的使用示例
 
 ## Port_Func 模块 PIN 号对应的 PIN 名称列表{#pin_list}
 下表中各列含义如下：
@@ -466,6 +490,16 @@ Port_Func 提供的 GPIO 接口，使用的 PinIdx 为[Port_Func模块PIN号对�
 
         </DocScope>
 :::
+
+## 调试
+
+- **PIN 功能核对**：配置 PIN 功能后，运行对应外设的测试命令验证该外设是否正常工作。
+- **GPIO 操作验证**：参考 Port_Func 操作 GPIO 的示例，核对 GPIO 电平状态是否符合预期。
+- **配置核对**：核对 `Port_Func.h` 的 `PinFunctions` 枚举与 PIN 名称列表是否一致。
+
+## 常见问题
+
+<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 

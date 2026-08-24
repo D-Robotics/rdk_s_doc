@@ -10,6 +10,26 @@ description: "SPI 使用指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+<DocScope products="RDK S100">
+S100 MCU 域共提供 6 个 SPI 控制器（SPI2~SPI7）。SPI 出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下：
+
+| 配置项 | 默认值 |
+|---|---|
+| MCU 域 SPI 控制器 | SPI2~SPI7 |
+| 默认波特率 | 1000000 / 2000000 |
+| 默认片选 | CS0（部分序列使用 CS1） |
+| 默认数据宽度 | 8 bit / 16 bit |
+</DocScope>
+<DocScope products="RDK S600">
+S600 MCU 域 SPI 出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下，完整序列与硬件资源映射见[配置文件说明](#spi_config)：
+
+| 配置项 | 默认值 |
+|---|---|
+| 默认波特率 | 1000000 / 2000000 |
+| 默认片选 | CS0（部分序列使用 CS1） |
+| 默认数据宽度 | 8 bit / 16 bit |
+</DocScope>
+
 ## 硬件支持
 
 - 如果 SPI 使用 DMA 传输，必须保证以下限制:
@@ -33,6 +53,18 @@ import DocScope from '@site/src/components/DocScope';
 - 当 SPI 采用非 DMA 方式发送数据时，若系统负载比较大，会因为 SPI 中断响应不及时导致 SPI FIFO 未能及时写入，从而导致 CS 引脚短暂拉高，此时推荐采用 DMA 模式。
 - 如果使用场景是多个 Sequence 使用同一个 SPI IP 进行异步传输，且 Sequence 之间并没有传输完成先后顺序，则会存在 Sequence 传输排队的现象，此时需要在 SchM_Spi.c 文件中实现关中断临界区保护。
 
+
+## 软件架构
+
+SPI 驱动采用分层设计：应用层通过 Spi API 调用驱动，驱动再调用底层 LLD 直接操作硬件寄存器，配置由 PBCfg 与板级配置提供。
+
+```mermaid
+flowchart LR
+    App[应用层 Spi API] --> Drv["驱动层<br/>Spi.c"]
+    Drv --> LLD["底层驱动<br/>Spi_Lld.c"]
+    LLD --> Reg["寄存器<br/>Spi_Register.h"]
+    Drv --> PB["配置层<br/>Spi_PBcfg / Spi_Board"]
+```
 
 ## 代码路径
 
@@ -192,13 +224,13 @@ other: SpiTest 110  -- help
 ```
 - 参数解析：
     - Case_num (argv[1]): 指定要执行的操作，支持5种模式，如使用中断异步传输， Case_num 设置为4
-    - Sequences (argv[2]): 指定使用哪路 spi， 如使用 spi4，Sequences 参数设置为4
+    - Sequences (argv[2]): 指定使用哪路 SPI， 如使用 SPI4，Sequences 参数设置为4
     - Cs (argv[3]): 表示使用哪路 cs， 如使用 cs0， Cs 参数设置为0
     - DataWidth (argv[4]): 表示传输数据位宽， 如位宽为8bit，DataWidth 设置为8
     - Datalen (argv[5]): 表示传输的数据量，如传输10组数据， Datalen 设置为10
     - Loop_times (argv[6]): 表示测试几次， 如测试5次， Loop_times 设置为5
 - 举例说明：
-    - spi4，async interrupt 传输，cs1，8bit 数据宽度， 10组数据， 测试1次： SpiTest_Mul_cs 4 4 1 8 10 1
+    - SPI4，async interrupt 传输，cs1，8bit 数据宽度， 10组数据， 测试1次： SpiTest_Mul_cs 4 4 1 8 10 1
 
 将 SPI4的 MISO 和 MOSI 短接，运行以下命令
 ```shell
@@ -246,7 +278,7 @@ spi_test 0 <spi_bus> <sync_mode> <trans_mode> <ch_cfg> <cs_seq0> <cs_seq1> <cs_s
 - cs_seq2：cs2 所用的 SPI 序列 id，255=无效
 - cs_seq3：cs3 所用的 SPI 序列 id，255=无效
 
-配置 spi 的基础参数配置，参数配置完成后，将参数保存在组1中。
+配置 SPI 的基础参数配置，参数配置完成后，将参数保存在组1中。
 
 ```shell
 D-Robotics:/$ spi_test 0 13 0 1 10 2 3 255 255
@@ -766,6 +798,26 @@ Parameters(out)
     None
 Return value：None
 ```
+
+## 调试
+
+- **收发自测**：运行 `SpiTest_Mul_cs` / `spi_test` 自环测试前，将对应通道的 MISO 与 MOSI 短接，比对发送与接收数据是否一致（日志出现 `check data success` 表示通过）。
+- **配置核对**：应用层配置与底层 `Spi_PBcfg.c` 配置应保持一致，否则会出现传输错误。
+- **寄存器核对**：通过序列配置表核对 Spi BusId、HWUnit、Instance、波特率、片选与目标配置一致。
+
+## 常见问题
+
+### SPI 传输报错，应用层配置与底层配置不一致
+
+**原因**：应用层配置（波特率、数据宽度、片选等）与底层 `Spi_PBcfg.c` 配置不一致。
+
+**解决**：核对应用层配置与底层配置，使二者保持一致后重试。
+
+### 非 DMA 模式发送时 CS 引脚短暂拉高
+
+**原因**：系统负载较大时，SPI 中断响应不及时，导致 SPI FIFO 未能及时写入。
+
+**解决**：推荐改用 DMA 模式传输，以硬件方式自动完成数据搬运。
 
 ## 相关文档
 

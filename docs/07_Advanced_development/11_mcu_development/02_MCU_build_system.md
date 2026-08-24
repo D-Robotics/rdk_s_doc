@@ -10,6 +10,15 @@ description: "MCU 系统说明"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+本文介绍 RDK S100 / RDK S600 的 MCU1 编译系统。编译系统基于 SCons 创建，负责将 MCU1 源码编译、链接为可被 MCU0 加载运行的固件镜像。
+
+- **定位**：说明 MCU1 编译系统的目录结构、编译流程、重点文件关系、镜像 layout 与启动代码。
+- **适用读者**：需要编译或定制 MCU1 固件的深度定制开发者。
+- **前置条件**：了解 MCU 的基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：编译产出的 MCU1 固件由 MCU0 在上电或 remoteproc 流程中加载运行。
+
 ## 编译系统基本说明
 MCU 的编译系统基于 SCons 3.0.0 创建（[SCons 3.0.0 用户手册官网](https://scons.org/doc/3.0.0/HTML/scons-user.html)）。
 
@@ -735,7 +744,7 @@ EL2_Reset_Handler:
 4. D-Robotics 版本中重要的 MPU region 说明如下：
 
 :::caution
-- ARM R52 的 background region 和 RDK-S100 芯片上实际实现的 memory map 存在差异。例如 `0x22000000` 在 ARM background region 中默认可能属于 normal memory，但在 RDK S100 上对应 MCU GIC 等 device 寄存器空间。因此，访问前必须通过 MPU 将 memory 类型与芯片实际实现保持一致，否则可能导致访问异常。
+- ARM R52 的 background region 和 RDK S100 芯片上实际实现的 memory map 存在差异。例如 `0x22000000` 在 ARM background region 中默认可能属于 normal memory，但在 RDK S100 上对应 MCU GIC 等 device 寄存器空间。因此，访问前必须通过 MPU 将 memory 类型与芯片实际实现保持一致，否则可能导致访问异常。
 
 - 固定外设 /DDR/XSPI 区域请保持与 D-Robotics 代码一致；SRAM 区域如需调整，必须同步修改链接脚本与 MPU 配置。
 :::
@@ -902,9 +911,9 @@ MPU_Init:
 4. D-Robotics 版本中重要的 MPU region 说明如下（对照 `startup.s`）：
 
 :::caution
-ARM R52 的 background region 和 RDK-S600 芯片上实际实现的 memory map 是有差异的。
+ARM R52 的 background region 和 RDK S600 芯片上实际实现的 memory map 是有差异的。
 
-比如 0x2200_0000 在 ARM 的 background region 中默认属于 normal memory，但在 RDK-S600 上对应 GIC 等 **device** 寄存器空间。
+比如 0x2200_0000 在 ARM 的 background region 中默认属于 normal memory，但在 RDK S600 上对应 GIC 等 **device** 寄存器空间。
 
 因此，访问前须通过 MPU 将 memory 类型与芯片实际实现保持一致，否则会导致访问异常。region 6 至 9 等固定外设/DDR 区域请保持与 D-Robotics 代码一致；region 1 至 5 的 SRAM 切分若需调整，须同时修改链接脚本与 MPU 配置。
 :::
@@ -1052,6 +1061,22 @@ EL1_Reset_Handler:
     .end
 ```
 </DocScope>
+
+## 调试
+
+- **编译产物核对**：编译后核对 `output` 目录生成物与 MCU1 镜像 layout 一致。
+- **MPU 配置核对**：访问内存前核对 memory 类型与芯片实际实现一致，避免 ARM R52 background region 与芯片 memory map 差异导致的访问异常。
+- **链接脚本核对**：若调整 SRAM 切分（region 1~5），须同时修改链接脚本与 MPU 配置，保持二者一致。
+
+## 常见问题
+
+### 访问内存出现异常
+
+**原因**：ARM R52 的 background region 与芯片实际实现的 memory map 存在差异。例如 `0x22000000` 在 background region 中默认属于 normal memory，但在芯片上对应 MCU GIC 等 device 寄存器空间。
+
+**解决**：访问前通过 MPU 将 memory 类型与芯片实际实现保持一致；固定外设/DDR 区域的 region 6~9 保持与参考代码一致。
+
+<!-- TODO(Sx): 待收集（补充第 2 条） -->
 
 ## 相关文档
 

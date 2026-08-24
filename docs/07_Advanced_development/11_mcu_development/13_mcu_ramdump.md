@@ -76,6 +76,32 @@ MCU1出现异常后会陷入 shell，这时可以通过 Acore remoteproc 控制�
 
 - 箭头6表示发生异常时记录 crash dump 的地址信息。可以通过 MCU shell 输入`dumpmem [addr] 4 64`来读取 crash 现场保存的寄存器和栈信息，或者在 [Acore 通过 sysfs](#获取-mcu-异常信息)获取 crash 现场的寄存器和栈信息
 
+## 常见问题
+
+### 执行 `addr2line` 命令提示找不到该命令
+
+**原因**：系统未安装包含 `addr2line` 的 binutils 工具包。
+
+**解决**：安装 binutils 后重试。
+
+```shell
+sudo apt update
+sudo apt install binutils -y
+```
+
+### MCU1 异常后陷入 shell，不再继续运行
+
+**原因**：MCU1 出现异常后不会自动复位（与 MCU0 异常后系统会自动重启不同），而是陷入 shell。
+
+**解决**：通过 Acore 的 remoteproc 控制机制将 MCU1 停止后重新启动。
+
+```shell
+# 停止运行
+echo stop > /sys/class/remoteproc/remoteproc_mcu1/state
+# 启动
+echo start > /sys/class/remoteproc/remoteproc_mcu1/state
+```
+
 ## 相关文档
 
 - [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

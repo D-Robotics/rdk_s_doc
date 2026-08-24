@@ -11,6 +11,33 @@ description: "PWM 使用指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+本文介绍 MCU 侧 PWM 驱动的使用，包括硬件支持、软件驱动、重要配置与使用示例。
+
+- **定位**：帮助用户在 MCU 上输出 PWM 或进行输入捕获。
+- **适用读者**：需要开发 PWM 输出/输入捕获的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：部分 PWM 通道与 I2C 等外设存在 PIN 复用，使用前需通过 Port 配置 PIN 功能。
+
+<DocScope products="RDK S100">
+S100 默认配置如下：
+
+| 配置项 | 默认值 |
+|---|---|
+| PWM IP 数量 | 1 个 |
+| 每 IP 通道数 | 12 个 |
+| 总通道数 | 12 个 |
+</DocScope>
+<DocScope products="RDK S600">
+S600 默认配置如下：
+
+| 配置项 | 默认值 |
+|---|---|
+| PWM IP 数量 | 3 个 |
+| 每 IP 通道数 | 12 个 |
+| 总通道数 | 36 个 |
+</DocScope>
 
 ## 硬件支持
 
@@ -34,6 +61,16 @@ S600和 S100的 IP 配置如下：
 | S100 | 1个        | 12个 Channel    | 12个 Channel |
 
 ## 软件驱动
+
+PWM 驱动采用分层设计，应用层通过 Pwm API 调用驱动，底层 LLD 直接操作硬件寄存器，配置由 PBCfg 提供。
+
+```mermaid
+flowchart LR
+    App[应用层 Pwm API] --> Drv["驱动层<br/>Pwm.c"]
+    Drv --> LLD["底层驱动<br/>Pwm_Lld.c"]
+    LLD --> Reg["PWM 硬件寄存器"]
+    Drv --> PB["配置层<br/>Pwm_PBcfg"]
+```
 
 - 支持 CPU 更新 PWM 通道的周期和占空比
 - 支持 DMA 更新 PWM 通道的周期和占空比
@@ -482,6 +519,16 @@ Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
 Return value：None
 ```
+
+## 调试
+
+- **输出验证**：使用 `pwmtest <pwm_id> <通道> <周期> <占空比>` 输出波形，用示波器或逻辑分析仪核对周期与占空比。
+- **寄存器核对**：使用 `pwmdumpregs <pwm_id> <通道>` dump 通道寄存器，核对周期、占空比、中断/DMA 掩码等配置。
+- **周期换算核对**：核对周期寄存器值与时钟频率的换算关系（周期 = 寄存器值 / 时钟源频率）。
+
+## 常见问题
+
+<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 

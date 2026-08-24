@@ -12,6 +12,15 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+本文介绍 MCU 侧 ADC 驱动的使用，包括硬件能力、标准/私有两套驱动的差异、软件架构、代码路径与使用示例。
+
+- **定位**：帮助用户在 MCU 上进行 ADC 采样开发。
+- **适用读者**：需要开发 ADC 采样功能的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：ADC 接口必须在上电自检（POST）完成之后调用。
+
 ## 硬件支持
 
 | 特性项                 | S100 ADC                                      | S600 ADC                                      |
@@ -25,6 +34,18 @@ import DocScope from '@site/src/components/DocScope';
 | **软件设计说明**       | 基于基本场景设计，**可扩展但未覆盖全部产品需求** | 同左                                          |
 
 ## 软件驱动
+
+ADC 驱动采用分层设计：应用层可选择标准 ADC 驱动或私有 ADC 驱动，标准驱动经底层 LLD 或板级配置访问寄存器，私有驱动直接操作硬件寄存器。
+
+```mermaid
+flowchart LR
+    App[应用层] --> Std["标准 ADC 驱动<br/>Adc.c"]
+    App --> Priv["私有 ADC 驱动<br/>Adc_Private.c"]
+    Std --> LLD["底层驱动<br/>Adc_Lld.c"]
+    LLD --> Reg["寄存器<br/>Adc_Register.h"]
+    Priv --> Reg
+    Std --> Cfg["板级配置<br/>Adc_PBcfg / Adc_Cfg"]
+```
 
 代码中实际上存在着两套 ADC 驱动，区别如下
 
@@ -671,6 +692,16 @@ Return value：None
 ```
 </TabItem>
 </Tabs>
+
+## 调试
+
+- **采样验证**：运行 `Adc_Test <ADC 通道>` 执行单次采样，核对输出的原始值与毫伏（mv）值是否符合预期。
+- **连续采样验证**：运行 `Adc_TestNormal start` 启动连续采样，用 `Adc_TestNormal read` 读取结果，用 `Adc_TestNormal stop` 停止。
+- **配置核对**：核对 `Adc_GroupsCfg` 中的 `AdcWithoutInterrupt` 字段是否按需求配置（如 S600 需配置为 STD_ON）。
+
+## 常见问题
+
+<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 

@@ -477,6 +477,28 @@ Return value: None
 - **波形验证**：使用示波器或逻辑分析仪测 UART TX 引脚波形，核对实测波特率与配置一致。
 - **配置核对**：检查 `Uart_PBcfg.c` 与 `Uart_Board.h` 中波特率、数据位、停止位、校验位是否与目标配置一致。
 
+## 常见问题
+
+### UART 测试失败，提示通道被占用
+
+**原因**：Uart5 被 IPC 透传占用，与测试用例产生冲突。
+
+**解决**：通过 `ipcbox_set_mode debug` 确认占用状态，若 `uart` 所在行显示 `Enable`，则在 MCU 控制终端执行 `ipcbox_set_mode uart 0` 释放 Uart5 后重试。
+
+```shell
+D-Robotics:/$ ipcbox_set_mode debug
+[0427.611637 0]Module: uart, Enable
+
+D-Robotics:/$ ipcbox_set_mode uart 0
+[0774.571200 0]uart processing disabled
+```
+
+### 自环测试 `uarttest 1` 失败
+
+**原因**：自环测试需要外部将 UART 通道的 RX 引脚与 TX 引脚短接，未短接时发送的数据无法回环接收。
+
+**解决**：将测试通道的 RX 引脚接 TX 引脚后，重新执行 `uarttest 1`。
+
 ## 相关文档
 
 - [扩展引脚应用](/Demos/peripheral/40pin)

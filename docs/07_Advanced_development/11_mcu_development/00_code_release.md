@@ -6,6 +6,37 @@ description: "MCU 代码包结构介绍"
 
 # MCU 代码包结构介绍
 
+## 概述
+
+本文介绍 MCU 代码包（社区版/企业版）的目录结构，帮助用户了解各子目录的作用。
+
+- **定位**：说明 MCU 代码包的目录划分与各子目录作用。
+- **适用读者**：需要了解或使用 MCU SDK 的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：代码包是 [MCU 系统说明](02_MCU_build_system.md) 与 [MCU1 开发指南](03_FreeRTOS_development.md) 的代码载体。
+
+MCU 代码包主要子目录及作用如下：
+
+| 目录 | 作用 |
+|---|---|
+| Build | 编译系统，包含编译/链接脚本、工具链 |
+| Config | 各 board 的 McalCdd 模块配置 |
+| McalCdd | 各模块驱动代码（企业版） |
+| OpenSource | FreeRTOS 开源代码 |
+| samples | 使用样例（Can、IPC、Eth 等） |
+| Target | 系统基础代码（启动、任务、中断） |
+| Service | 中间服务（电源管理、OTA、Log/Shell 等，企业版） |
+| Platform | 平台配置（企业版，可替换） |
+
+## 软件架构
+
+```mermaid
+flowchart LR
+    Src["源码<br/>McalCdd / Service / Target / OpenSource / samples"] --> Build["编译系统<br/>Build"]
+    Cfg["配置<br/>Config"] --> Build
+    Build --> Out["产物<br/>output"]
+```
+
 :::info
 MCU0固件编译/McalCdd/Service/Platform 等代码为企业版专有，如有需要，请联系[D-Robotics](mailto:developer@d-robotics.cc)获取支持。
 :::
@@ -60,6 +91,20 @@ MCU
 ├── Service              # 包含 D-Robotics 自研的中间服务代码，比如电源管理，OTA管理，Log/Shell等
 └── Target               # 系统基础代码，比如启动相关，任务定义相关，中断相关等
 ```
+
+## 开发使用
+
+1. **环境搭建**：按 [MCU 快速入门指南](01_basic_information.md) 准备主机编译环境。
+2. **编译**：按 [MCU 系统说明](02_MCU_build_system.md) 编译 MCU1 固件。
+3. **运行**：将编译产物加载到 MCU 运行，细节见 [MCU1 开发指南](03_FreeRTOS_development.md)。
+
+## 调试
+
+<!-- TODO(Sx): 待收集 -->
+
+## 常见问题
+
+<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 

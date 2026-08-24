@@ -793,6 +793,42 @@ D-Robotics:/$ gpio_interrupt off
 
 </DocScope>
 
+## 软件架构
+
+ICU 驱动采用分层设计，应用层经 ICU 驱动与底层 LLD 访问 GPIO/PWM 硬件，回调由 `GpioChannelNotification` 注册。
+
+```mermaid
+flowchart LR
+    App[应用层 回调] --> Icu["ICU 驱动<br/>Icu.c"]
+    Icu --> LLD["底层驱动<br/>Icu_Lld.c / Icu_Lld_Gpio.c"]
+    LLD --> Gpio["GPIO / PWM 硬件"]
+    Icu --> Cfg["配置<br/>Icu_PBCfg.c"]
+```
+
+## 代码路径
+
+- `McalCdd/Icu/src/Icu.c`：ICU 驱动实现
+- `McalCdd/Icu/src/Icu_Lld.c`、`Icu_Lld_Gpio.c`：底层驱动实现
+- `McalCdd/Icu/inc/Icu.h`、`Icu_Lld.h`、`Icu_Types.h`、`Icu_Lld_Gpio.h`：头文件
+- `Config/McalCdd/.../Icu/src/Icu_PBCfg.c`：ICU 配置
+- `samples/Interrupt/src/gpio_Interrupt_test.c`：GPIO 中断 sample
+
+## 调试
+
+- **中断自测**：触发 GPIO 中断，核对回调日志（如 `enter Icu_Gpio_Channel_0_20_ISR`）是否打印。
+- **配置核对**：完整启用中断及回调需 `NotificationEnable = TRUE`、`IntEnable = TRUE`、`IntMask = FALSE` 且 `GpioChannelNotification` 指向回调函数。
+- **中断号核对**：核对目标引脚绑定的中断号及入口函数（如 GPIO_MCU[20] 对应中断号 68）。
+
+## 常见问题
+
+### GPIO 中断不产生回调
+
+**原因**：中断与回调的使能配置不全，`NotificationEnable`、`IntEnable`、`IntMask` 或 `GpioChannelNotification` 未按要求配置。
+
+**解决**：确保 `NotificationEnable = TRUE`、`IntEnable = TRUE`、`IntMask = FALSE` 且 `GpioChannelNotification` 指向具体回调函数。
+
+<!-- TODO(Sx): 待收集（补充第 2 条） -->
+
 ## 相关文档
 
 - [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

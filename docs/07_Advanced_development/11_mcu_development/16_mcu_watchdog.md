@@ -9,7 +9,7 @@ description: "MCU 看门狗"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-## 1. 简介
+## 简介
 
 <DocScope products="RDK S100">
 本用户文档旨在提供 WDG 驱动的相关信息，包括功能、配置参数、API。
@@ -20,8 +20,8 @@ import DocScope from '@site/src/components/DocScope';
 文档每一处提及的 Wdgx，x 为索引，有效范围为0、1、2、3、4。
 </DocScope>
 
-## 2. 概览
-### 2.1 文件列表
+## 概览
+### 文件列表
 #### Lowlevel 接口
 这些是 Watchdog 底层驱动的实现和内部公共接口文件，一般用户不需要直接关注：
 
@@ -57,11 +57,23 @@ import DocScope from '@site/src/components/DocScope';
 - McalCdd/Wdg/inc/Wdg4.h
 </DocScope>
 
-## 3. 应用程序接口
+## 软件架构
 
-### 3.1 类型
+WDG 驱动采用分层设计，用户通过 Highlevel Wdgx API 调用底层驱动，底层驱动经 GPT 定时器提供喂狗周期，并通过复位链路完成超时复位。
 
-#### 3.1.1 导入类型
+```mermaid
+flowchart LR
+    App[用户应用] --> Wdgx["Highlevel 接口<br/>Wdgx_Init / Wdgx_SetMode / Wdgx_SetTriggerCondition"]
+    Wdgx --> LLD["Lowlevel 驱动<br/>Wdg_Lld / Wdg_Common"]
+    LLD --> GPT[GPT 定时器<br/>Wdg_GptChannel / Wdg_GptFreq]
+    LLD --> RST[复位链路<br/>Wdg_Enable_RstConfig]
+```
+
+## 应用程序接口
+
+### 类型
+
+#### 导入类型
 | Module | Header File | Imported Type |
 |---|---|---|
 | Std_Types | Std_Types.h | Std_ReturnType |
@@ -70,8 +82,8 @@ import DocScope from '@site/src/components/DocScope';
 | Rte_Type | Rte_Type.h | Dem_EventStatusType |
 | WdgIf | WdgIf_Types.h | WdgIf_ModeType |
 
-#### 3.1.2 类型定义
-##### Wdg_ApiIdType
+#### 类型定义
+**Wdg_ApiIdType**
 | Name | Wdg_ApiIdType | Analysis |
 |---|---|---|
 | Type | Enumeration |
@@ -82,7 +94,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | WDG ApiId Enumeration |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_ErrIdType
+**Wdg_ErrIdType**
 | Name | Wdg_ErrIdType | Analysis |
 |---|---|---|
 | Type | Enumeration |
@@ -95,7 +107,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | WDG ErrId Enumeration |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_StateType
+**Wdg_StateType**
 | Name | Wdg_StateType |
 |---|---|
 | Type | Enumeration |
@@ -105,7 +117,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | WDG State Enumeration |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_ModeType
+**Wdg_ModeType**
 | Name | Wdg_ModeType | Analysis |
 |---|---|---|
 | Type | Structure |
@@ -114,7 +126,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | WDG Mode Structure |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_ConfigType
+**Wdg_ConfigType**
 | Name | Wdg_ConfigType | Analysis |
 |---|---|---|
 | Type | Structure |
@@ -126,8 +138,8 @@ import DocScope from '@site/src/components/DocScope';
 | Description | WDG Configuration  Structure |
 | Available via | Wdg_Prv.h |
 
-### 3.2 函数定义
-#### 3.2.1 Wdgx_Init
+### 函数定义
+#### Wdgx_Init
 | Service Name | Wdgx_Init |
 |---|---|
 | Syntax | void Wdgx_Init(const Wdg_ConfigType *ConfigPtr) |
@@ -140,7 +152,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | Initializes the module |
 | Available via | Wdgx.h |
 
-#### 3.2.2 Wdgx_SetMode
+#### Wdgx_SetMode
 | Service Name | Wdgx_SetMode |
 |---|---|
 | Syntax | Std_ReturnType Wdgx_SetMode(WdgIf_ModeType Mode) |
@@ -153,7 +165,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | Switches the Watchdog into the mode Mode. |
 | Available via | Wdgx.h |
 
-#### 3.2.3 Wdgx_SetTriggerCondition
+#### Wdgx_SetTriggerCondition
 | Service Name | Wdgx_SetTriggerCondition |
 |---|---|
 | Syntax | void Wdgx_SetTriggerCondition(uint16 timeout) |
@@ -166,7 +178,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | Sets the timeout value for the trigger counter. |
 | Available via | Wdgx.h |
 
-#### 3.2.4 Wdgx_GetVersionInfo
+#### Wdgx_GetVersionInfo
 | Service Name | Wdgx_GetVersionInfo |
 |---|---|
 | Syntax | void Wdgx_GetVersionInfo(Std_VersionInfoType *VersionInfoPtr) |
@@ -179,7 +191,7 @@ import DocScope from '@site/src/components/DocScope';
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
-### 3.3 中断处理
+### 中断处理
 
 <DocScope products="RDK S100">
 | ISR Name | Hardware Interrupt Vector |
@@ -206,7 +218,7 @@ import DocScope from '@site/src/components/DocScope';
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
-### 3.4 临界区
+### 临界区
 使用`SchM_Enter_Wdg_ExclusiveZone_XX`和`SchM_Exit_Wdg_ExclusiveZone_XX`来定义进入和退出临界区的操作，WDG 驱动程序需要用户结合实际应用部署情况来处理临界区，其函数已在驱动中调用。
 
 保护`Wdg_LastMode`:
@@ -239,9 +251,9 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S600">
 
-## 4. Acore 看门狗超时 MCU 处理流程
+## Acore 看门狗超时 MCU 处理流程
 
-### 4.1 复位配置使能
+### 复位配置使能
 
 在 Target 的 `main.c` 调用 `Wdg_Enable_RstConfig()`（实现见 `Wdg_Common.c`，声明见 `Wdg_Prv.h`），完成看门狗侧与 MCU 复位/通知链路相关的底层使能。
 
@@ -249,7 +261,7 @@ import DocScope from '@site/src/components/DocScope';
 |---|---|
 | Wdg_Enable_RstConfig | 复位配置 |
 
-### 4.2 MCU 侧处理流程
+### MCU 侧处理流程
 
 Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发起复位，以便 Acore 打印栈等信息。
 
@@ -261,6 +273,16 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 | OS 任务（延时 + 长复位） | Target/.../HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
 
 </DocScope>
+
+## 调试
+
+- **超时配置核对**：调用 `Wdgx_SetTriggerCondition(timeout)` 后，核对超时值与目标一致；超时周期由 `Wdg_GptPeriod` 与 GPT 通道频率共同决定。
+- **中断核对**：核对 `Wdg_Ins0IntIsr` / `Wdg_Ins0RstIsr` 等中断服务函数与中断向量表是否绑定正确。
+- **复位流程验证**：触发 Acore 看门狗超时，核对 MCU 是否按「中断置标志 → OS 任务延时约 5s → 长复位」执行。
+
+## 常见问题
+
+<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 
