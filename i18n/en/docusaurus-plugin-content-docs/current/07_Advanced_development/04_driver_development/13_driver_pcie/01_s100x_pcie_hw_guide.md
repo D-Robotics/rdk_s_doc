@@ -41,4 +41,4 @@ serial I/O interconnect for multiple market segments, including desktops, mobile
 - [PCIe Software Architecture](./02_s100x_pcie_sw_arch.md)
 - [PCIe Kernel Configuration](./03_s100x_pcie_sw_setup.md)
 - [PCIe User-Space API](./04_s100x_pcie_libhbpciehal.md)
-- [Hardware Introduction](/01_hardware_introduction)
+- [Hardware Introduction](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)

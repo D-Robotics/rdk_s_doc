@@ -485,5 +485,5 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
 ## Related Documentation
 
-- [Configure U-Boot and Kernel](/Advanced_development/driver_development/uboot_kernel_config)
-- [VDSP Development Guide](/Advanced_development/driver_development/vdsp_development)
+- [Configure U-Boot and Kernel](./01_uboot_kernel_config.md)
+- [VDSP Development Guide](./17_vdsp_development.md)

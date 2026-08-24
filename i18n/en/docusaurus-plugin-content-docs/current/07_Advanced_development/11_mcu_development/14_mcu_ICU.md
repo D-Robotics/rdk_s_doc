@@ -793,5 +793,5 @@ D-Robotics:/$ gpio_interrupt off
 
 ## Related Documentation
 
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
-- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)
+- [MCU Quick Start Guide](./01_basic_information.md)
+- [MCU1 Development Guide](./03_FreeRTOS_development.md)

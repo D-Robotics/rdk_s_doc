@@ -118,4 +118,4 @@ Below the 5-position switch (SW401) of the expansion board, there is one green L
 
 - Main board: [Introduction to the Developer Kit (RDK S600)](../../02_rdk_s600.md)
 - Expansion board: [RDK S600 Camera Expansion Board](../01_camera/03_rdk_s600_camera_expansion_board.md)
-- CAN applications: [CAN Applications](/Demos/peripheral/rcore_can)
+- CAN applications: [CAN Applications](../../../../03_Demos/01_peripheral/04_rcore_can.md)

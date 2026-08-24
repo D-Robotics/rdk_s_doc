@@ -159,21 +159,21 @@ def generate_launch_description():
     ])
 ```
 
-See [Common Packages](#common-packages) and [Algorithm Demos](/Demos/algorithm_demo/summary) for details.
+See [Common Packages](#common-packages) and [Algorithm Demos](../../03_Demos/03_algorithm_demo/01_summary.md) for details.
 
 ## Common Packages
 
-This section lists the common packages provided by tros.b, organized by functional domain. The packages cross-link with [Algorithm Demos](/Demos/algorithm_demo/summary) and the [TROS/ROS Development FAQ](/FAQ/tros_ros).
+This section lists the common packages provided by tros.b, organized by functional domain. The packages cross-link with [Algorithm Demos](../../03_Demos/03_algorithm_demo/01_summary.md) and the [TROS/ROS Development FAQ](/FAQ/tros_ros).
 
 ### Perception
 
 | Package | Function | Corresponding algorithm demo |
 | --- | --- | --- |
-| `tros_yolo_detection` | Object detection (YOLOv5x/YOLO11) | [Object detection](/Demos/algorithm_demo/detection/yolov5x) |
-| `tros_classification` | Image classification (ResNet18/MobileNetV2) | [Image classification](/Demos/algorithm_demo/classification/resnet18) |
-| `tros_instance_segmentation` | Instance segmentation (YOLO11 seg) | [Instance segmentation](/Demos/algorithm_demo/instance_segmentation/yolo11_seg) |
-| `tros_pose_estimation` | Pose estimation (YOLO11 pose) | [Pose estimation](/Demos/algorithm_demo/pose/yolo11_pose) |
-| `tros_asr` | Speech recognition | [Automatic speech recognition](/Demos/algorithm_demo/speech/asr) |
+| `tros_yolo_detection` | Object detection (YOLOv5x/YOLO11) | [Object detection](../../03_Demos/03_algorithm_demo/03_detection/01_yolov5x.md) |
+| `tros_classification` | Image classification (ResNet18/MobileNetV2) | [Image classification](../../03_Demos/03_algorithm_demo/02_classification/01_resnet18.md) |
+| `tros_instance_segmentation` | Instance segmentation (YOLO11 seg) | [Instance segmentation](../../03_Demos/03_algorithm_demo/04_instance_segmentation/01_yolo11_seg.md) |
+| `tros_pose_estimation` | Pose estimation (YOLO11 pose) | [Pose estimation](../../03_Demos/03_algorithm_demo/05_pose/01_yolo11_pose.md) |
+| `tros_asr` | Speech recognition | [Automatic speech recognition](../../03_Demos/03_algorithm_demo/06_speech/01_asr.md) |
 
 ### Mapping and Localization
 
@@ -227,5 +227,5 @@ tros.b is not currently preinstalled in the image on the S600 board; the command
 ## Related Documentation
 
 - [Using RDK Studio](./01_rdk_studio.md)
-- [Algorithm Demos](/Demos/algorithm_demo/summary) (BPU inference demos)
+- [Algorithm Demos](../../03_Demos/03_algorithm_demo/01_summary.md) (BPU inference demos)
 - [TROS/ROS Development FAQ](/FAQ/tros_ros)

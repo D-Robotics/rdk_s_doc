@@ -58,7 +58,7 @@ import DocScope from '@site/src/components/DocScope';
     * Use `ping <gateway IP>` to test connectivity to the gateway.
 5.  **Refer to official documentation:** For detailed network configuration steps and troubleshooting methods, refer to the "Network Configuration" section in the official documentation.
     <DocScope products="RDK S100">
-    [RDK S100 Network Configuration](/System_configuration/network_config)
+    [RDK S100 Network Configuration](../02_System_configuration/01_network_config.md)
     </DocScope>
 
 #### Q5: The development board cannot be connected remotely via SSH. What could be the cause?

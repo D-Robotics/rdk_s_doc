@@ -8,8 +8,8 @@ description: "DISPLAY (display module) API reference"
 
 The `DISPLAY` module provides video image display functionality, displaying `NV12` images on a monitor connected via the `HDMI` interface, and supports drawing rectangles and text on the screen.
 
-- **Interface level**: encapsulated simple API (mode 1). For the low-level DISP, see [DISP API](/Advanced_development/multimedia_development/multimedia_api/disp_api).
-- **Applicable scenarios**: capture→display, decode→display. See [Capture→Display](/Demos/multimedia_demo/cdev/vio2display).
+- **Interface level**: encapsulated simple API (mode 1). For the low-level DISP, see [DISP API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/09_disp_api.md).
+- **Applicable scenarios**: capture→display, decode→display. See [Capture→Display](../../../03_Demos/02_multimedia_demo/01_cdev/02_vio2display.md).
 - **Prerequisites**: RDK OS is flashed, a compile toolchain is available on the board, and an HDMI monitor is connected.
 
 The `DISPLAY` API provides the following interfaces:
@@ -202,7 +202,7 @@ The following constants are defined in `sp_display.h`:
 
 ## Quick Example
 
-The typical call sequence for displaying one image frame (see [Capture→Display](/Demos/multimedia_demo/cdev/vio2display) for a fully compilable example):
+The typical call sequence for displaying one image frame (see [Capture→Display](../../../03_Demos/02_multimedia_demo/01_cdev/02_vio2display.md) for a fully compilable example):
 
 ```c
 void *disp = sp_init_display_module();       // 1. Initialize the DISPLAY object
@@ -233,6 +233,6 @@ sp_release_display_module(disp);             // 5. Destroy the DISPLAY object
 
 ## Related Documentation
 
-- [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [Display Object](/Simple_API/multimedia_api/pydev/object_display)
-- [Capture→Display](/Demos/multimedia_demo/cdev/vio2display)
+- [DECODER API](./03_decoder_api.md)
+- [Display Object](../pydev/05_object_display.md)
+- [Capture→Display](../../../03_Demos/02_multimedia_demo/01_cdev/02_vio2display.md)

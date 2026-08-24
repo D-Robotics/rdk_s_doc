@@ -8,8 +8,8 @@ description: "DECODER (decoding module) API reference"
 
 The `DECODER` module provides video stream decoding functionality, supporting `H264`, `H265` and `MJPEG` streams.
 
-- **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api).
-- **Applicable scenarios**: decode→display, RTSP stream pull and decode. See [Decode→Display](/Demos/multimedia_demo/cdev/decode2display).
+- **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/10_mediacodec_api.md).
+- **Applicable scenarios**: decode→display, RTSP stream pull and decode. See [Decode→Display](../../../03_Demos/02_multimedia_demo/01_cdev/05_decode2display.md).
 - **Prerequisites**: RDK OS is flashed, a compile toolchain is available on the board, and a stream file or stream data source is available.
 
 The `DECODER` API provides the following interfaces:
@@ -149,7 +149,7 @@ The decoding types reuse the encoding type constants (defined in `sp_codec.h`): 
 
 ## Quick Example
 
-The typical call sequence for decoding a video file (see [Decode→Display](/Demos/multimedia_demo/cdev/decode2display) for a fully compilable example):
+The typical call sequence for decoding a video file (see [Decode→Display](../../../03_Demos/02_multimedia_demo/01_cdev/05_decode2display.md) for a fully compilable example):
 
 ```c
 void *dec = sp_init_decoder_module();        // 1. Initialize the DECODER object
@@ -191,6 +191,6 @@ free(img);
 
 ## Related Documentation
 
-- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
-- [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)
-- [Decode→Display](/Demos/multimedia_demo/cdev/decode2display)
+- [ENCODER API](./02_encoder_api.md)
+- [DISPLAY API](./04_display_api.md)
+- [Decode→Display](../../../03_Demos/02_multimedia_demo/01_cdev/05_decode2display.md)

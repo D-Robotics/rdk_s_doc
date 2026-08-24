@@ -248,7 +248,7 @@ The ROS 2 official repository GPG signing key was updated, leaving local configu
     # Insert what you need before this line
     exit 0
     ```
-    See: [RDK documentation — rc.local autostart](/System_configuration/self_start)
+    See: [RDK documentation — rc.local autostart](../02_System_configuration/06_self_start.md)
 
 2.  **Via a `systemd` service (modern, recommended):**
     Create a `.service` file (e.g., `/etc/systemd/system/myapp.service`) defining the start command, dependencies, user, restart policy, and so on.
@@ -570,7 +570,7 @@ Possible approaches and notes:
 * D-Robotics RDK Linux/driver development docs may include platform-specific signing guidance:
     
     <DocScope products="RDK S100">
-    [Kernel headers and module build](/Advanced_development/system_software/kernel_headers) (see the module signing section).
+    [Kernel headers and module build](../07_Advanced_development/03_system_software/09_kernel_headers.md) (see the module signing section).
     </DocScope>
 
 ### Q25: Out-of-memory errors when building large projects or running memory-heavy tools like model conversion tools. What should I do?

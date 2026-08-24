@@ -414,5 +414,5 @@ When toggling the pin functions with the DIP switch, move the upper 40-pin DIP s
 
 ## Related Documentation
 
-- [Audio Configuration](/System_configuration/audio_output)
-- [Audio Application Examples](/Demos/peripheral/audio)
+- [Audio Configuration](../../02_System_configuration/10_audio_output.md)
+- [Audio Application Examples](../../03_Demos/01_peripheral/03_audio.md)

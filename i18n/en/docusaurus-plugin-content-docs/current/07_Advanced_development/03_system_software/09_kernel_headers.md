@@ -359,5 +359,5 @@ sudo echo hello > /lib/modules-load.d/hello.conf
 
 ## Related Documentation
 
-- [Realtime Kernel Usage](/Advanced_development/system_software/realtime_kernel)
-- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)
+- [Realtime Kernel Usage](./08_realtime_kernel.md)
+- [Set Up the Development Environment](../06_environment_build/01_environment_build.md)

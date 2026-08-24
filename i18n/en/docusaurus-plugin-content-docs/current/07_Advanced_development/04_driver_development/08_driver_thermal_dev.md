@@ -109,17 +109,17 @@ cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
 <DocScope products="RDK S100">
 
-The Thermal system of the S100 is described in [S100 Thermal System](/System_configuration/frequency_management#rdk-s100).
+The Thermal system of the S100 is described in [S100 Thermal System](../../02_System_configuration/08_frequency_management.md#rdk-s100).
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-The Thermal system of the S600 is described in [S600 Thermal System](/System_configuration/frequency_management#rdk-s600).
+The Thermal system of the S600 is described in [S600 Thermal System](../../02_System_configuration/08_frequency_management.md#rdk-s600).
 
 </DocScope>
 
 ## Related Documentation
 
-- [Thermal and CPU Frequency Management](/System_configuration/frequency_management)
-- [Configure U-Boot and Kernel](/Advanced_development/driver_development/uboot_kernel_config)
+- [Thermal and CPU Frequency Management](../../02_System_configuration/08_frequency_management.md)
+- [Configure U-Boot and Kernel](./01_uboot_kernel_config.md)

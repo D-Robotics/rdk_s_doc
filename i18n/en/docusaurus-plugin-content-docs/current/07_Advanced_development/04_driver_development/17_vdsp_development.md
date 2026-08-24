@@ -3274,5 +3274,5 @@ See [hb_vdsp_mmu_map](#hb_vdsp_mmu_map)
 
 ## Related Documentation
 
-- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)
-- [Algorithm Examples](/Demos/algorithm_demo/summary)
+- [Algorithm Toolchain Development Guide](../10_algorithm_toolchain/01_algorithm_toolchain/01_overview.md)
+- [Algorithm Examples](../../03_Demos/03_algorithm_demo/01_summary.md)

@@ -672,4 +672,4 @@ Return value:None
 
 ## Related Documentation
 
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
+- [MCU Quick Start Guide](./01_basic_information.md)

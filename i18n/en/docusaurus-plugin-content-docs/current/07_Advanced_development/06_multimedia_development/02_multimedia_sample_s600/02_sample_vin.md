@@ -241,5 +241,5 @@ After executing the program, you will get the RAW image for imx219 named in the 
 
 ## Related Documentation
 
-- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [Sample Code Introduction](./01_overview.md)
+- [Multimedia API Reference](../01_multimedia_api/01_hbn_api.md)

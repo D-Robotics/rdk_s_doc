@@ -8,8 +8,8 @@ description: "ENCODER (encoding module) API reference"
 
 The `ENCODER` module provides image encoding functionality, supporting `H264`, `H265` and `MJPEG` encoding.
 
-- **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api).
-- **Applicable scenarios**: capture→encode and save. See [Capture→Encode](/Demos/multimedia_demo/cdev/vio2encoder).
+- **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/10_mediacodec_api.md).
+- **Applicable scenarios**: capture→encode and save. See [Capture→Encode](../../../03_Demos/02_multimedia_demo/01_cdev/03_vio2encoder.md).
 - **Prerequisites**: RDK OS is flashed, a compile toolchain is available on the board, and a MIPI camera can be connected or image frame data is available.
 
 The `ENCODER` API provides the following interfaces:
@@ -157,7 +157,7 @@ The following constants are defined in `sp_codec.h`:
 
 ## Quick Example
 
-The typical call sequence for encoding one frame (see [Capture→Encode](/Demos/multimedia_demo/cdev/vio2encoder) for a fully compilable example):
+The typical call sequence for encoding one frame (see [Capture→Encode](../../../03_Demos/02_multimedia_demo/01_cdev/03_vio2encoder.md) for a fully compilable example):
 
 ```c
 void *enc = sp_init_encoder_module();        // 1. Initialize the ENCODER object
@@ -200,6 +200,6 @@ free(stream);
 
 ## Related Documentation
 
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [Capture→Encode](/Demos/multimedia_demo/cdev/vio2encoder)
+- [VIO API](./01_vio_api.md)
+- [DECODER API](./03_decoder_api.md)
+- [Capture→Encode](../../../03_Demos/02_multimedia_demo/01_cdev/03_vio2encoder.md)

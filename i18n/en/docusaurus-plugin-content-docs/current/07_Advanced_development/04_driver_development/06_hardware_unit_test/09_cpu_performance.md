@@ -418,5 +418,5 @@ mv coremark.exe coremark_O2_mutli
 
 ## Related Documentation
 
-- [Driver Functional Unit Test](/Advanced_development/driver_development/hardware_unit_test)
-- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)
+- [Driver Functional Unit Test](./01_overview.md)
+- [Set Up the Development Environment](../../06_environment_build/01_environment_build.md)

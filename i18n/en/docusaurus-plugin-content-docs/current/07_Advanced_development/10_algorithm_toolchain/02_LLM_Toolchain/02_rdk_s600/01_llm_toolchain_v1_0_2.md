@@ -367,5 +367,5 @@ TTFT(ms):The Time to First Token (TTFT) of the VLM is the sum of the ViT process
 
 ## Related Documentation
 
-- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)
+- [Algorithm Toolchain Development Guide](../../01_algorithm_toolchain/01_overview.md)
 - [LLM Toolchain v1.0.5 (latest)](./02_llm_toolchain_v1_0_5.md)

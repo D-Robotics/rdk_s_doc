@@ -103,5 +103,5 @@ Refer to the Update miniboot entry in [srpi-config](../../02_System_configuratio
 
 ## Related Documentation
 
-- [Major Version Upgrade and Firmware](/System_configuration/system_update/upgrade_firmware)
-- [System OTA Upgrade](/Advanced_development/system_software/ota_system)
+- [Major Version Upgrade and Firmware](../../02_System_configuration/03_system_update/02_upgrade_firmware.md)
+- [System OTA Upgrade](./06_ota_system.md)

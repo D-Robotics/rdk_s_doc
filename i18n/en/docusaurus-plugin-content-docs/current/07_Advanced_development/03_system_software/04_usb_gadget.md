@@ -203,5 +203,5 @@ If the PC does not recognize the new device after switching Gadget modes:
 
 ## Related Documentation
 
-- [System Customization](/Advanced_development/system_software/system_customization)
-- [Peripheral Application Examples](/Demos/peripheral)
+- [System Customization](./02_system_customization/01_system_customization.md)
+- [Peripheral Application Examples](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)

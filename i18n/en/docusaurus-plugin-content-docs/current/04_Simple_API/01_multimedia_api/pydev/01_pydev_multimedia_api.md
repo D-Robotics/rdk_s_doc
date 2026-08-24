@@ -42,9 +42,9 @@ while True:
 
 | Pipeline | Object Combination | Corresponding C Example |
 | --- | --- | --- |
-| Capture → Display | Camera → Display | [Capture → Display](/Demos/multimedia_demo/cdev/vio2display) |
-| Capture → Encode | Camera → Encoder | [Capture → Encode](/Demos/multimedia_demo/cdev/vio2encoder) |
-| Decode → Display | Decoder → Display | [Decode → Display](/Demos/multimedia_demo/cdev/decode2display) |
+| Capture → Display | Camera → Display | [Capture → Display](../../../03_Demos/02_multimedia_demo/01_cdev/02_vio2display.md) |
+| Capture → Encode | Camera → Encoder | [Capture → Encode](../../../03_Demos/02_multimedia_demo/01_cdev/03_vio2encoder.md) |
+| Decode → Display | Decoder → Display | [Decode → Display](../../../03_Demos/02_multimedia_demo/01_cdev/05_decode2display.md) |
 
 ## FAQ
 
@@ -71,4 +71,4 @@ while True:
 - [Decoder Object](./04_object_decoder.md)
 - [Display Object](./05_object_display.md)
 - [Interface Usage Examples](./06_pydev_api_demo.md)
-- [Python Multimedia Examples](/Demos/multimedia_demo/pydev/pydev_multimedia)
+- [Python Multimedia Examples](../../../03_Demos/02_multimedia_demo/02_pydev/01_pydev_multimedia.md)

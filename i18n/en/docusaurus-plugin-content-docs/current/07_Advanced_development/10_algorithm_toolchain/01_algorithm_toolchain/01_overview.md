@@ -80,7 +80,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_tool
 
 ## Related Documentation
 
-- [LLM Toolchain](/Advanced_development/algorithm_toolchain/LLM_Toolchain)
+- [LLM Toolchain](../02_LLM_Toolchain/01_rdk_s100/01_s100_LLM_Toolchain.md)
 - [Algorithm Toolchain V3.2.0 (legacy)](./02_v3_2_0.md)
-- [Use Your Own Model](/Demos/demo_support/custom_model)
-- [Algorithm Examples](/Demos/algorithm_demo/summary)
+- [Use Your Own Model](../../../03_Demos/04_demo_support/04_custom_model.md)
+- [Algorithm Examples](../../../03_Demos/03_algorithm_demo/01_summary.md)

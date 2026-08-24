@@ -117,5 +117,5 @@ The PCIe driver of the S600 requests these GPIOs and performs operations such as
 
 ## Related Documentation
 
-- [Network Configuration](/System_configuration/network_config)
-- [PCIe Usage Guide](/Advanced_development/driver_development/driver_pcie)
+- [Network Configuration](../../02_System_configuration/01_network_config.md)
+- [PCIe Usage Guide](./13_driver_pcie/01_s100x_pcie_hw_guide.md)

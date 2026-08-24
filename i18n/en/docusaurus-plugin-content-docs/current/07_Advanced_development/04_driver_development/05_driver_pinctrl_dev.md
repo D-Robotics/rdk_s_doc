@@ -738,5 +738,5 @@ root@ubuntu:~#
 
 ## Related Documentation
 
-- [GPIO Usage](/Advanced_development/driver_development/driver_gpio_dev)
-- [Expansion Pin Usage](/Demos/peripheral/40pin)
+- [GPIO Usage](./04_driver_gpio_dev.md)
+- [Expansion Pin Usage](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)

@@ -6,7 +6,7 @@ description: "Interface description of the Camera object"
 
 # Camera Object
 
-> **Interface level**: encapsulated simple API (mode 1). For the low-level VIO primitives, see [VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api). For the corresponding C interfaces, see [VIO API](/Simple_API/multimedia_api/cdev/vio_api).
+> **Interface level**: encapsulated simple API (mode 1). For the low-level VIO primitives, see [VIO API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/04_vio_api.md). For the corresponding C interfaces, see [VIO API](../cdev/01_vio_api.md).
 
 The Camera object is used for image capture and processing of MIPI cameras. It includes several methods such as `open_cam`, `open_vps`, `get_img`, `set_img`, and `close_cam`. Detailed descriptions are as follows:
 
@@ -410,7 +410,7 @@ The host number corresponding to the camera is shown in the figure below:
 
 ## Related Documentation
 
-- [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [Encoder Object](/Simple_API/multimedia_api/pydev/object_encoder)
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [Python Multimedia Examples](/Demos/multimedia_demo/pydev/pydev_multimedia)
+- [Multimedia Interface Description](./01_pydev_multimedia_api.md)
+- [Encoder Object](./03_object_encoder.md)
+- [VIO API](../cdev/01_vio_api.md)
+- [Python Multimedia Examples](../../../03_Demos/02_multimedia_demo/02_pydev/01_pydev_multimedia.md)

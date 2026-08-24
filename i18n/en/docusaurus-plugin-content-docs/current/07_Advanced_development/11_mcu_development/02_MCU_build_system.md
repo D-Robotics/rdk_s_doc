@@ -1040,6 +1040,6 @@ EL1_Reset_Handler:
 
 ## Related Documentation
 
-- [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
-- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)
+- [MCU Code Package Structure](./00_code_release.md)
+- [MCU Quick Start Guide](./01_basic_information.md)
+- [MCU1 Development Guide](./03_FreeRTOS_development.md)

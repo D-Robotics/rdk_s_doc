@@ -141,4 +141,4 @@ Board dimensions: 70x70x17mm
 
 - Main board: [Introduction to the Developer Kit (RDK S100)](../../01_rdk_s100.md)
 - Expansion board: [RDK S100 Camera Expansion Board](../01_camera/01_rdk_camera_expansion_board.md)
-- CAN applications: [CAN Applications](/Demos/peripheral/rcore_can)
+- CAN applications: [CAN Applications](../../../../03_Demos/01_peripheral/04_rcore_can.md)

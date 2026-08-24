@@ -7,7 +7,7 @@ description: "Common issues and solutions for third-party applications on the RD
 
 This section answers common issues encountered when using third-party applications on the RDK desktop.
 
-> For desktop display/audio/screen sleep configuration, see [Display Configuration](/System_configuration/display_config), [Audio Configuration](/System_configuration/audio_output), and [Screen Sleep and Power Management](/System_configuration/screen_sleep).
+> For desktop display/audio/screen sleep configuration, see [Display Configuration](../02_System_configuration/09_display_config.md), [Audio Configuration](../02_System_configuration/10_audio_output.md), and [Screen Sleep and Power Management](../02_System_configuration/11_screen_sleep.md).
 
 ## VS Code Does Not Open
 
@@ -38,7 +38,7 @@ It is recommended not to use the system language switch feature for now. If you 
 
 ## Incorrect Screen Resolution
 
-The HDMI display resolution can be configured through config.txt; see the display options section of [Common Configuration Item Reference](/System_configuration/config_txt/common_options).
+The HDMI display resolution can be configured through config.txt; see the display options section of [Common Configuration Item Reference](../02_System_configuration/05_config_txt/03_common_options.md).
 
 It can also be adjusted via Settings → Displays on the desktop.
 
@@ -48,19 +48,19 @@ It can also be adjusted via Settings → Displays on the desktop.
 2. Confirm that the monitor power is on and the input source is set to HDMI.
 3. Confirm that the power indicator is on (the system has started).
 4. The first system startup takes about 45 seconds for configuration; the desktop should appear after waiting.
-5. If there is still no display after a long time (more than 2 minutes), debug via serial port; see [Debug Serial Port](/System_configuration/debug_serial).
+5. If there is still no display after a long time (more than 2 minutes), debug via serial port; see [Debug Serial Port](../02_System_configuration/16_debug_serial.md).
 
 ## Desktop Lag
 
-- Check CPU usage: `top` (see [top command](/Appendix/linux-command-manual/top)).
-- Check BPU usage: `hrut_ps` (see [hrut_ps](/Appendix/rdk-command-manual/hrut_ps)).
+- Check CPU usage: `top` (see [top command](../09_Appendix/linux-command-manual/18_top.md)).
+- Check BPU usage: `hrut_ps` (see [hrut_ps](../09_Appendix/rdk-command-manual/03_hrut_ps.md)).
 - Close unnecessary background services.
 - Reduce desktop effects: Settings → Appearance → turn off animations.
 
 ## Related Documentation
 
-- [Display Configuration](/System_configuration/display_config)
-- [Audio Configuration](/System_configuration/audio_output)
-- [Screen Sleep and Power Management](/System_configuration/screen_sleep)
-- [Common Configuration Item Reference](/System_configuration/config_txt/common_options)
-- [Debug Serial Port](/System_configuration/debug_serial)
+- [Display Configuration](../02_System_configuration/09_display_config.md)
+- [Audio Configuration](../02_System_configuration/10_audio_output.md)
+- [Screen Sleep and Power Management](../02_System_configuration/11_screen_sleep.md)
+- [Common Configuration Item Reference](../02_System_configuration/05_config_txt/03_common_options.md)
+- [Debug Serial Port](../02_System_configuration/16_debug_serial.md)

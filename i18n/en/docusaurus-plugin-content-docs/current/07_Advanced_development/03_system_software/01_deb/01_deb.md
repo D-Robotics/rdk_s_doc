@@ -59,10 +59,10 @@ The following are the official deb packages currently supported by `mk_debs.sh` 
 | `hobot-firmware` | Peripheral firmware (Ethernet/USB, etc.) |
 | `hobot-ethercat` | EtherCAT support |
 
-For the full list and source directory descriptions, see [BSP source directory structure](/Advanced_development/environment_build/bsp_source_layout).
+For the full list and source directory descriptions, see [BSP source directory structure](../../06_environment_build/02_bsp_source_layout.md).
 
 ## Related Documentation
 
 - [System customization](../02_system_customization/01_system_customization.md)
-- [Set up the development environment](/Advanced_development/environment_build/environment_build)
-- [BSP source directory structure](/Advanced_development/environment_build/bsp_source_layout)
+- [Set up the development environment](../../06_environment_build/01_environment_build.md)
+- [BSP source directory structure](../../06_environment_build/02_bsp_source_layout.md)

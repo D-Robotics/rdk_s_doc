@@ -439,5 +439,5 @@ Output:
 
 ## Related Documentation
 
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
-- [Time Synchronization Scheme](/Advanced_development/system_software/driver_timesync)
+- [MCU Quick Start Guide](./01_basic_information.md)
+- [Time Synchronization Scheme](../03_system_software/11_driver_timesync.md)

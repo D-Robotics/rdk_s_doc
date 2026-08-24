@@ -645,6 +645,6 @@ Other formatted output types are not supported at this time. Future versions wil
 
 ## Related Documentation
 
-- [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
-- [MCU System Description](/Advanced_development/mcu_development/MCU_build_system)
-- [MCU Interface Expansion Board](/01_hardware_introduction)
+- [MCU Code Package Structure](./00_code_release.md)
+- [MCU System Description](./02_MCU_build_system.md)
+- [MCU Interface Expansion Board](../../01_Quick_start/01_hardware_introduction/03_expansion_board/02_mcu/01_rdk_mcu_port_expansion_board.md)

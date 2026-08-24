@@ -8,7 +8,7 @@ description: "RDK system customization: image remastering, custom rootfs, deb/so
 
 This section targets Mode 2 (product integration) users and describes how to customize the system on top of the apt/configuration layer, including remastering the image, customizing the rootfs content, and preinstalling software.
 
-> Boundary with [2. System Configuration](/System_configuration): Chapter 2 covers runtime configuration (apt install/network/srpi-config); this section covers image-level customization (remastering rootfs/preinstalling deb/modifying samplefs). Mode 2 users complete system customization here; deb/source-level customization is covered in [deb package development](../01_deb/01_deb.md).
+> Boundary with [2. System Configuration](../../../02_System_configuration/01_network_config.md): Chapter 2 covers runtime configuration (apt install/network/srpi-config); this section covers image-level customization (remastering rootfs/preinstalling deb/modifying samplefs). Mode 2 users complete system customization here; deb/source-level customization is covered in [deb package development](../01_deb/01_deb.md).
 
 ## Customization Entry
 
@@ -76,7 +76,7 @@ The generated image can be flashed to the board using [System burning](/Quick_st
 ## Related Documentation
 
 - [deb package development](../01_deb/01_deb.md)
-- [Set up the development environment](/Advanced_development/environment_build/environment_build)
-- [BSP source directory structure](/Advanced_development/environment_build/bsp_source_layout)
+- [Set up the development environment](../../06_environment_build/01_environment_build.md)
+- [BSP source directory structure](../../06_environment_build/02_bsp_source_layout.md)
 - [System burning](/Quick_start/install_os_and_setup/instruction)
-- [System update](/System_configuration/system_update)
+- [System update](../../../02_System_configuration/03_system_update/01_apt_usage.md)

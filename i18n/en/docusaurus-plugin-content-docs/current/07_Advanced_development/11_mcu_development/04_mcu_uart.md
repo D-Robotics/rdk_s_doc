@@ -447,5 +447,5 @@ Return value: None
 
 ## Related Documentation
 
-- [Expansion Pin Usage](/Demos/peripheral/40pin)
-- [UART Driver Debugging Guide](/Advanced_development/driver_development/driver_uart_dev)
+- [Expansion Pin Usage](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)
+- [UART Driver Debugging Guide](../04_driver_development/02_driver_uart_dev.md)

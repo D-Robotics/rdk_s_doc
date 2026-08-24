@@ -6,7 +6,7 @@ description: "Interface description of the Decoder object"
 
 # Decoder Object
 
-> **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api). For the corresponding C interfaces, see [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api).
+> **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/10_mediacodec_api.md). For the corresponding C interfaces, see [DECODER API](../cdev/03_decoder_api.md).
 
 The Decoder object implements video data decoding. It includes several methods such as `decode`, `set_img`, `get_img`, and `close`. Detailed descriptions are as follows:
 
@@ -289,6 +289,6 @@ None
 
 ## Related Documentation
 
-- [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [Encoder Object](/Simple_API/multimedia_api/pydev/object_encoder)
-- [Decode → Display](/Demos/multimedia_demo/cdev/decode2display)
+- [Multimedia Interface Description](./01_pydev_multimedia_api.md)
+- [Encoder Object](./03_object_encoder.md)
+- [Decode → Display](../../../03_Demos/02_multimedia_demo/01_cdev/05_decode2display.md)

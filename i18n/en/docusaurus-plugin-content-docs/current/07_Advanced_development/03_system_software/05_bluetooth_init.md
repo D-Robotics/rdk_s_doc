@@ -355,5 +355,5 @@ sudo systemctl start hobot-bluetooth
 
 ## Related Documentation
 
-- [Bluetooth Configuration](/System_configuration/bluetooth_config)
-- [Wi-Fi Driver Debugging Guide](/Advanced_development/driver_development/driver_wifi)
+- [Bluetooth Configuration](../../02_System_configuration/02_bluetooth_config.md)
+- [Wi-Fi Driver Debugging Guide](../04_driver_development/11_driver_wifi.md)

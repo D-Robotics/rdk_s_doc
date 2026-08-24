@@ -132,4 +132,4 @@ See [Accessory List](https://horizonrobotics.feishu.cn/wiki/NMBEwLysUiDHFYk547Bc
 
 - Main board: [Introduction to the Developer Kit (RDK S600)](../../02_rdk_s600.md)
 - Expansion board: [RDK S600 MCU Port Expansion Board](../02_mcu/02_rdk_s600_mcu_port_expansion_board.md)
-- Camera usage: [MIPI Camera Usage](/Demos/peripheral/camera/mipi_camera)
+- Camera usage: [MIPI Camera Usage](../../../../03_Demos/01_peripheral/02_camera/01_mipi_camera.md)

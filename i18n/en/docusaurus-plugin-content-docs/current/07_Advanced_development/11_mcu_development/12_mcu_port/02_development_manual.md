@@ -142,5 +142,5 @@ Customers can define the initial state of pins as needed.
 
 ## Related Documentation
 
-- [Port Usage Guide](/Advanced_development/mcu_development/mcu_port/user_manual)
-- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)
+- [Port Usage Guide](./01_user_manual.md)
+- [MCU1 Development Guide](../03_FreeRTOS_development.md)

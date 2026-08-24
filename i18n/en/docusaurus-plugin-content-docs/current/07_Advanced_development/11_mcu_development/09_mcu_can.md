@@ -1382,5 +1382,5 @@ Return value:None
 
 ## Related Documentation
 
-- [CAN Application Examples](/Demos/peripheral/rcore_can)
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
+- [CAN Application Examples](../../03_Demos/01_peripheral/04_rcore_can.md)
+- [MCU Quick Start Guide](./01_basic_information.md)

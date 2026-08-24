@@ -520,5 +520,5 @@ General configuration:
 
 ## Related Documentation
 
-- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)
+- [Algorithm Toolchain Development Guide](../../01_algorithm_toolchain/01_overview.md)
 - [LLM Toolchain v1.0.2](./01_llm_toolchain_v1_0_2.md)

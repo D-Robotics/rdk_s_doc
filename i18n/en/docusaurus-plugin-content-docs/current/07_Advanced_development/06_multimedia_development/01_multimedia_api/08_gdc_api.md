@@ -6,7 +6,7 @@ description: "RDK S100/S600 GDC geometric distortion correction configuration"
 
 # Geometric Distortion Correction - GDC
 
-> **Level description**: This chapter covers the low-level multimedia API (on-board `hb_gdc_cfg.h / hbn_vpf_interface.h`), GDC geometric distortion correction implemented through configuration structs without a standalone function API. It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
+> **Level description**: This chapter covers the low-level multimedia API (on-board `hb_gdc_cfg.h / hbn_vpf_interface.h`), GDC geometric distortion correction implemented through configuration structs without a standalone function API. It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) (Mode 1).
 
 > **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
 
@@ -99,5 +99,5 @@ GDC does not provide a standalone function interface. It carries the binary's io
 
 - [VPF/PYM](./06_vpf_pym_api.md) (`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`)
 - [HBN](./01_hbn_api.md) (vnode channel binding)
-- Simple API (Mode 1): [VIO](/Simple_API/multimedia_api/cdev/vio_api)
+- Simple API (Mode 1): [VIO](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
 - On-board sample: see `sample_gdc`

@@ -361,5 +361,5 @@ Return value:Std_ReturnType
 
 ## Related Documentation
 
-- [Network Configuration](/System_configuration/network_config)
-- [Ethernet Development Guide](/Advanced_development/driver_development/driver_ethernet)
+- [Network Configuration](../../02_System_configuration/01_network_config.md)
+- [Ethernet Development Guide](../04_driver_development/16_driver_ethernet/01_ethernet.md)

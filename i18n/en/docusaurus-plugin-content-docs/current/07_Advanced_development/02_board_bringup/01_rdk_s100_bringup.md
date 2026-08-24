@@ -474,5 +474,5 @@ S100
 ## Related Documentation
 
 - [Development Environment and Build](../06_environment_build/01_environment_build.md)
-- [Driver Development Guide](/Advanced_development/driver_development)
-- [Hardware Introduction](/01_hardware_introduction)
+- [Driver Development Guide](../04_driver_development/01_uboot_kernel_config.md)
+- [Hardware Introduction](../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)

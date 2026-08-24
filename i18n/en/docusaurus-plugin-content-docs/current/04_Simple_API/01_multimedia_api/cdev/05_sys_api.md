@@ -9,7 +9,7 @@ description: "SYS (module binding) API reference"
 The `SYS` module provides internal binding between the `VIO`, `ENCODER`, `DECODER` and `DISPLAY` modules. Once bound, data flows automatically between them without manual transfer.
 
 - **Interface level**: encapsulated simple API (mode 1).
-- **Applicable scenarios**: simplified pipelines for capture→display and capture→encode. See [Multimedia Demos](/Demos/multimedia_demo).
+- **Applicable scenarios**: simplified pipelines for capture→display and capture→encode. See [Multimedia Demos](../../../03_Demos/02_multimedia_demo/01_cdev/01_vio_capture.md).
 - **Prerequisites**: RDK OS is flashed, and a compile toolchain is available on the board.
 
 The `SYS` API provides the following interfaces:
@@ -83,7 +83,7 @@ The following module type constants are defined in `sp_sys.h` and are used for t
 
 ## Quick Example
 
-The typical call for binding the VIO output to the DISPLAY input (see [Capture→Display](/Demos/multimedia_demo/cdev/vio2display) for the complete example):
+The typical call for binding the VIO output to the DISPLAY input (see [Capture→Display](../../../03_Demos/02_multimedia_demo/01_cdev/02_vio2display.md) for the complete example):
 
 ```c
 // vio and disp are the already initialized VIO / DISPLAY objects respectively
@@ -112,5 +112,5 @@ sp_module_unbind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY); // Unbind before ex
 
 ## Related Documentation
 
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
+- [VIO API](./01_vio_api.md)
+- [ENCODER API](./02_encoder_api.md)

@@ -440,5 +440,5 @@ For MCU Log usage notes, see: [Introduction to MCU Log](../11_mcu_development/01
 
 ## Related Documentation
 
-- [System Log Viewing](/System_configuration/system_log)
-- [Linux Command dmesg](/Appendix/linux-command-manual/dmesg)
+- [System Log Viewing](../../02_System_configuration/15_system_log.md)
+- [Linux Command dmesg](../../09_Appendix/linux-command-manual/02_dmesg.md)

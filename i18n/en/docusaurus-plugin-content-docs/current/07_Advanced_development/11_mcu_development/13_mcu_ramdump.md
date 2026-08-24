@@ -77,5 +77,5 @@ The meaning of each field is as follows:
 
 ## Related Documentation
 
-- [MCU1 Development Guide](/Advanced_development/mcu_development/FreeRTOS_development)
-- [Linux Debug Features](/Advanced_development/system_software/kernel_debug)
+- [MCU1 Development Guide](./03_FreeRTOS_development.md)
+- [Linux Debug Features](../03_system_software/10_kernel_debug.md)

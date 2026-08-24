@@ -84,4 +84,4 @@ After downloading the development toolkit, check the oellm_runtime/model/resolve
 
 ## Related Documentation
 
-- [Algorithm Toolchain Development Guide](/Advanced_development/algorithm_toolchain)
+- [Algorithm Toolchain Development Guide](../../01_algorithm_toolchain/01_overview.md)

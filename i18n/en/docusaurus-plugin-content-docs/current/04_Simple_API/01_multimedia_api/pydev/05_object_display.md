@@ -6,7 +6,7 @@ description: "Interface description of the Display object"
 
 # Display Object
 
-> **Interface level**: encapsulated simple API (mode 1). For the low-level DISP, see [DISP API](/Advanced_development/multimedia_development/multimedia_api/disp_api). For the corresponding C interfaces, see [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api).
+> **Interface level**: encapsulated simple API (mode 1). For the low-level DISP, see [DISP API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/09_disp_api.md). For the corresponding C interfaces, see [DISPLAY API](../cdev/04_display_api.md).
 
 The Display object implements video display functionality. It can output image data to a monitor via the `HDMI` interface. This object includes methods such as `display`, `set_img`, `set_graph_rect`, `set_graph_word`, and `close`. Detailed descriptions are as follows:
 
@@ -415,6 +415,6 @@ None
 
 ## Related Documentation
 
-- [Multimedia Interface Description](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [Camera Object](/Simple_API/multimedia_api/pydev/object_camera)
-- [Capture → Display](/Demos/multimedia_demo/cdev/vio2display)
+- [Multimedia Interface Description](./01_pydev_multimedia_api.md)
+- [Camera Object](./02_object_camera.md)
+- [Capture → Display](../../../03_Demos/02_multimedia_demo/01_cdev/02_vio2display.md)

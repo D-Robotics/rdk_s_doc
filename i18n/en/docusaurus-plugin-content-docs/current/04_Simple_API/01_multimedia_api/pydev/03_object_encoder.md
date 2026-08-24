@@ -6,7 +6,7 @@ description: "Interface description of the Encoder object"
 
 # Encoder Object
 
-> **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api). For the corresponding C interfaces, see [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api).
+> **Interface level**: encapsulated simple API (mode 1). For the low-level MediaCodec, see [MediaCodec API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/10_mediacodec_api.md). For the corresponding C interfaces, see [ENCODER API](../cdev/02_encoder_api.md).
 
 The Encoder object implements video data encoding and compression. It includes several methods such as `encode`, `encode_file`, `get_img`, and `close`. Detailed descriptions are as follows:
 
@@ -238,4 +238,4 @@ None
 
 - [Multimedia Interface Description](./01_pydev_multimedia_api.md)
 - [Decoder Object](./04_object_decoder.md)
-- [Capture → Encode](/Demos/multimedia_demo/cdev/vio2encoder)
+- [Capture → Encode](../../../03_Demos/02_multimedia_demo/01_cdev/03_vio2encoder.md)

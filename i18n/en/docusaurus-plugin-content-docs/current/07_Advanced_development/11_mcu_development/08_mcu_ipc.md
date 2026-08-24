@@ -468,5 +468,5 @@ Return value:Std_ReturnType
 
 ## Related Documentation
 
-- [IPC Module Introduction (Acore Side)](/Advanced_development/system_software/driver_ipc)
-- [IPC Usage Guide (MCU Side)](/Advanced_development/mcu_development/mcu_ipc)
+- [IPC Module Introduction (Acore Side)](../03_system_software/12_driver_ipc.md)
+- [IPC Usage Guide (MCU Side)](./08_mcu_ipc.md)

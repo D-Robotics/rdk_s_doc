@@ -6,7 +6,7 @@ description: "RDK S100/S600 Multimedia Base Framework HBN API"
 
 # Base Framework - HBN
 
-> **Level description**: This chapter covers the **low-level multimedia API** (board-side `hbn_vpf_interface.h`) — the HBN vnode abstraction layer API, a unified node interface for all modules after the Camera (VIN/ISP/PYM/GDC). It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
+> **Level description**: This chapter covers the **low-level multimedia API** (board-side `hbn_vpf_interface.h`) — the HBN vnode abstraction layer API, a unified node interface for all modules after the Camera (VIN/ISP/PYM/GDC). It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) (Mode 1).
 
 
 
@@ -1762,6 +1762,6 @@ stitch_ch_attr
 
 ## Related Documentation
 
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [Shared Memory - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
-- [Video Capture](/Demos/multimedia_demo/cdev/vio_capture)
+- [VIO API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
+- [Shared Memory - Hbmem](./02_hbmem_api.md)
+- [Video Capture](../../../03_Demos/02_multimedia_demo/01_cdev/01_vio_capture.md)

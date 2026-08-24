@@ -657,5 +657,5 @@ When adapting new UFS device models, follow these requirements:
 
 ## Related Documentation
 
-- [Configure U-Boot and Kernel](/Advanced_development/driver_development/uboot_kernel_config)
-- [Storage and Disk Management](/System_configuration/storage)
+- [Configure U-Boot and Kernel](./01_uboot_kernel_config.md)
+- [Storage and Disk Management](../../02_System_configuration/12_storage.md)

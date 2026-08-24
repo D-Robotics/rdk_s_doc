@@ -328,5 +328,5 @@ All upper-layer services must be stopped before sleep; otherwise, the system may
 
 ## Related Documentation
 
-- [Thermal and CPU Frequency Management](/System_configuration/frequency_management)
-- [Screen Sleep and Power Management](/System_configuration/screen_sleep)
+- [Thermal and CPU Frequency Management](../../02_System_configuration/08_frequency_management.md)
+- [Screen Sleep and Power Management](../../02_System_configuration/11_screen_sleep.md)

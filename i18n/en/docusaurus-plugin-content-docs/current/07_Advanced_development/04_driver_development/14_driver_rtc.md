@@ -1347,5 +1347,5 @@ Corresponding interrupt entries for each board:
 
 ## Related Documentation
 
-- [Clock and RTC Synchronization](/System_configuration/rtc_ntp)
-- [Time Synchronization Scheme](/Advanced_development/system_software/driver_timesync)
+- [Clock and RTC Synchronization](../../02_System_configuration/13_rtc_ntp.md)
+- [Time Synchronization Scheme](../03_system_software/11_driver_timesync.md)

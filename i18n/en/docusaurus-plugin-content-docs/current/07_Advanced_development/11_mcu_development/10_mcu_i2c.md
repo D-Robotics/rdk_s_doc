@@ -223,5 +223,5 @@ Return value: None
 
 ## Related Documentation
 
-- [Expansion Pin Usage](/Demos/peripheral/40pin)
-- [I2C Debugging Guide](/Advanced_development/driver_development/driver_i2c_dev)
+- [Expansion Pin Usage](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)
+- [I2C Debugging Guide](../04_driver_development/03_driver_i2c_dev.md)

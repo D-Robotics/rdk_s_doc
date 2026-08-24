@@ -467,6 +467,6 @@ For usage examples, refer to `samples/Gpio/src/Gpio_sample.c`. The basic usage l
 
 ## Related Documentation
 
-- [Port Development Guide](/Advanced_development/mcu_development/mcu_port/development_manual)
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
-- [MCU Interface Expansion Board](/01_hardware_introduction)
+- [Port Development Guide](./02_development_manual.md)
+- [MCU Quick Start Guide](../01_basic_information.md)
+- [MCU Interface Expansion Board](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/02_mcu/01_rdk_mcu_port_expansion_board.md)

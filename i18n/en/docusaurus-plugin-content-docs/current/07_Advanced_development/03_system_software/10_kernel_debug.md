@@ -310,5 +310,5 @@ crash>
 
 ## Related Documentation
 
-- [Realtime Kernel Usage](/Advanced_development/system_software/realtime_kernel)
-- [Kernel Headers](/Advanced_development/system_software/kernel_headers)
+- [Realtime Kernel Usage](./08_realtime_kernel.md)
+- [Kernel Headers](./09_kernel_headers.md)

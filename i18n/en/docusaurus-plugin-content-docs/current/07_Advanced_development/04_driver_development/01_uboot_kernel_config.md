@@ -171,5 +171,5 @@ make mrproper
 
 ## Related Documentation
 
-- [Boot-Related Configuration](/System_configuration/config_txt/boot_options)
-- [Set Up the Development Environment](/Advanced_development/environment_build/environment_build)
+- [Boot-Related Configuration](../../02_System_configuration/05_config_txt/04_boot_options.md)
+- [Set Up the Development Environment](../06_environment_build/01_environment_build.md)

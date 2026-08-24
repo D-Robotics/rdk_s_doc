@@ -1190,6 +1190,6 @@ To avoid data inconsistency between Acore and MCU, add the `volatile` keyword, o
 
 ## Related Documentation
 
-- [MCU Code Package Structure](/Advanced_development/mcu_development/code_release)
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
-- [MCU System Overview](/Advanced_development/mcu_development/MCU_build_system)
+- [MCU Code Package Structure](./00_code_release.md)
+- [MCU Quick Start Guide](./01_basic_information.md)
+- [MCU System Overview](./02_MCU_build_system.md)

@@ -8,8 +8,8 @@ description: "VIO (video input) API reference"
 
 The `VIO` module provides the functionality to operate `MIPI` cameras and perform image processing.
 
-- **Interface level**: encapsulated simple API (mode 1). For the low-level VIO primitives, see [VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api).
-- **Applicable scenarios**: running the multimedia demos (capture / capture+display / capture+encode). See [Multimedia Demos](/Demos/multimedia_demo).
+- **Interface level**: encapsulated simple API (mode 1). For the low-level VIO primitives, see [VIO API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/04_vio_api.md).
+- **Applicable scenarios**: running the multimedia demos (capture / capture+display / capture+encode). See [Multimedia Demos](../../../03_Demos/02_multimedia_demo/01_cdev/01_vio_capture.md).
 - **Prerequisites**: RDK OS is flashed, a compile toolchain (`gcc`/`make`) is available on the board, and a MIPI camera can be connected.
 
 The `VIO` API provides the following interfaces:
@@ -306,7 +306,7 @@ typedef struct {
 
 ## Quick Example
 
-The typical call sequence for capturing one image frame (see [Capture Example](/Demos/multimedia_demo/cdev/vio_capture) for a fully compilable example):
+The typical call sequence for capturing one image frame (see [Capture Example](../../../03_Demos/02_multimedia_demo/01_cdev/01_vio_capture.md) for a fully compilable example):
 
 ```c
 void *vio = sp_init_vio_module();            // 1. Initialize the VIO object
@@ -348,6 +348,6 @@ free(buf);
 
 ## Related Documentation
 
-- [Multimedia API Overview](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
-- [VIO API](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [Multimedia API Overview](../pydev/01_pydev_multimedia_api.md)
+- [ENCODER API](./02_encoder_api.md)
+- [VIO API](../../../07_Advanced_development/06_multimedia_development/01_multimedia_api/04_vio_api.md)

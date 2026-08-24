@@ -262,5 +262,5 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 
 ## Related Documentation
 
-- [Watchdog](/Advanced_development/driver_development/driver_watchdog)
-- [MCU Quick Start Guide](/Advanced_development/mcu_development/basic_information)
+- [Watchdog](../04_driver_development/18_driver_watchdog.md)
+- [MCU Quick Start Guide](./01_basic_information.md)

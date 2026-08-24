@@ -6,7 +6,7 @@ description: "RDK S100/S600 5.5.1.6 VPF/PYM (Video Processing Framework)"
 
 # Video Processing Framework - VPF/PYM
 
-> **Level description**: This chapter covers the [low-level multimedia APIs] (board-side `hbn_vpf_interface.h / hbn_pym_cfg.h`), i.e. the VPF/PYM video processing and pyramid downsampling APIs (X5 VSE -> RDK VPF/PYM). It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need to get the encapsulated capture/codec/display functionality running, see Chapter 4 [Simple APIs](/Simple_API/multimedia_api/cdev/vio_api) (Mode 1).
+> **Level description**: This chapter covers the [low-level multimedia APIs] (board-side `hbn_vpf_interface.h / hbn_pym_cfg.h`), i.e. the VPF/PYM video processing and pyramid downsampling APIs (X5 VSE -> RDK VPF/PYM). It is intended for advanced developers who need to directly operate the multimedia pipeline (Mode 3). If you only need to get the encapsulated capture/codec/display functionality running, see Chapter 4 [Simple APIs](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) (Mode 1).
 
 > **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
 
@@ -126,6 +126,6 @@ See board-side `hbn_vpf_interface.h` (no doxygen; the signature is taken from th
 
 ## Related Documentation
 
-- [Image Signal Processing - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
-- [Basic Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- [SYS API](/Simple_API/multimedia_api/cdev/sys_api)
+- [Image Signal Processing - ISP](./05_isp_tune_api.md)
+- [Basic Framework - HBN](./01_hbn_api.md)
+- [SYS API](../../../04_Simple_API/01_multimedia_api/cdev/05_sys_api.md)

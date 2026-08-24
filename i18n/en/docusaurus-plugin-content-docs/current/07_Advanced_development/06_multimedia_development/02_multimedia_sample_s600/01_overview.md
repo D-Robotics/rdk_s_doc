@@ -134,4 +134,4 @@ echo 4 > /proc/sys/kernel/printk
 
 ## Related Documentation
 
-- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [Multimedia API Reference](../01_multimedia_api/01_hbn_api.md)

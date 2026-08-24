@@ -168,7 +168,7 @@ The boot disk is determined by the [SW8 BOOT DIP switch](/01_Quick_start/01_hard
 - Boot from **UFS**: Set SW8 to the UFS boot position (`D12=ON, D13=ON` or `D12=OFF, D13=OFF`).
 - Boot from **NVMe**: Set SW8 to the NVMe boot position (`D12=OFF, D13=ON`).
 
-Flashing NVMe requires the NVMe version of the image. The image provided by D-Robotics by default targets UFS; the NVMe image must be compiled on your own (build config `RDK_DISK_MEDIUM="nvme"`). See [Build System Development Guide · eMMC/UFS/NVMe Image Build Notes](/Advanced_development/environment_build/rdk_gen#emmcufsnvme-image-build-notes).
+Flashing NVMe requires the NVMe version of the image. The image provided by D-Robotics by default targets UFS; the NVMe image must be compiled on your own (build config `RDK_DISK_MEDIUM="nvme"`). See [Build System Development Guide · eMMC/UFS/NVMe Image Build Notes](../../07_Advanced_development/06_environment_build/03_rdk_gen.md#emmcufsnvme-image-build-notes).
 :::
 
 1. For **Product type**, select `RDK S600`.

@@ -225,5 +225,5 @@ After running the program, you will obtain a RAW image from the imx219 sensor na
 
 ## Related Documentation
 
-- [Sample Code Introduction](/Advanced_development/multimedia_development/multimedia_sample/overview)
-- [Multimedia API Reference](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- [Sample Code Introduction](./01_overview.md)
+- [Multimedia API Reference](../01_multimedia_api/01_hbn_api.md)

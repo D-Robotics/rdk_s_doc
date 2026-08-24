@@ -172,6 +172,6 @@ dmesg | grep -i lpwm
 
 ## Related Documentation
 
-- [Expansion Pin Usage (PWM)](/Demos/peripheral/40pin)
-- [SPI Debugging Guide](/Advanced_development/driver_development/driver_spi_dev)
-- [Pinctrl Debugging Guide](/Advanced_development/driver_development/driver_pinctrl_dev)
+- [Expansion Pin Usage (PWM)](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)
+- [SPI Debugging Guide](./07_driver_spi_dev.md)
+- [Pinctrl Debugging Guide](./05_driver_pinctrl_dev.md)

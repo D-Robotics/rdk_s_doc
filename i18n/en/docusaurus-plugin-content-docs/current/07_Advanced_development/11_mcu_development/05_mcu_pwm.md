@@ -482,5 +482,5 @@ Return value:None
 
 ## Related Documentation
 
-- [Expansion Pin Usage](/Demos/peripheral/40pin)
-- [PWM Driver Debugging Guide](/Advanced_development/driver_development/driver_pwm)
+- [Expansion Pin Usage](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)
+- [PWM Driver Debugging Guide](../04_driver_development/07_driver_pwm.md)

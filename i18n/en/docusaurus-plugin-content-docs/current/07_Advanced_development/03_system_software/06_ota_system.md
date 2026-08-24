@@ -1655,5 +1655,5 @@ Refer to `otaGetOwnerFlag`.
 
 ## Related Documentation
 
-- [Major Version Upgrade and Firmware](/System_configuration/system_update/upgrade_firmware)
-- [miniboot Upgrade](/Advanced_development/system_software/ota_miniboot)
+- [Major Version Upgrade and Firmware](../../02_System_configuration/03_system_update/02_upgrade_firmware.md)
+- [miniboot Upgrade](./07_ota_miniboot.md)

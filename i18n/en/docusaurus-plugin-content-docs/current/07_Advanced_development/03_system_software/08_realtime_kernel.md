@@ -59,5 +59,5 @@ The fields in the `cyclictest` output have the following meanings:
 
 ## Related Documentation
 
-- [Linux Debug Features](/Advanced_development/system_software/kernel_debug)
-- [Kernel Headers](/Advanced_development/system_software/kernel_headers)
+- [Linux Debug Features](./10_kernel_debug.md)
+- [Kernel Headers](./09_kernel_headers.md)
