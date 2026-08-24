@@ -8,6 +8,15 @@ description: "sample_pipeline User Guide - On-board sample usage instructions"
 ## Feature Overview
 The `sample_pipeline` is used to implement single-channel or multi-channel sensor pipeline chaining, enabling common pipeline scenarios for users. Users can learn how to set up various pipelines by exploring the `sample_pipeline` subdirectories.
 
+```mermaid
+flowchart LR
+    A[Camera Sensor] --> B[VIN]
+    B --> C[ISP]
+    C --> D[PYM]
+    D --> E[GDC]
+    E --> F[CODEC]
+```
+
 ### sample_pipeline Architecture Description
 The `sample_pipeline` contains multiple examples, each existing as a subdirectory under `app/multimedia_samples/sample_pipeline`. Each subdirectory is described as follows:
 
@@ -778,6 +787,8 @@ loop cnt use up
 pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
+
+<!-- TODO(S4): S600 missing the single_3dgpu_bpu section, to be added -->
 
 ## FAQ
 

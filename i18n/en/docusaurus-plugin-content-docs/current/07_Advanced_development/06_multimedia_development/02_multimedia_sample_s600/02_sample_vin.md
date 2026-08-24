@@ -8,6 +8,14 @@ description: "sample_vin User Guide - On-board sample usage instructions"
 ## Functional Overview
 `sample_vin` completes the initialization of the Camera Sensor, MIPI CSI, and SIF modules, enabling the function of acquiring video frame data from the vin module. It supports acquiring Raw or YUV format images from the VIN module.
 
+```mermaid
+flowchart LR
+    A[Camera Sensor] --> B[MIPI CSI]
+    B --> C[SIF]
+    C --> D[VIN Module]
+    D --> E[Raw / YUV Frame]
+```
+
 ### sample_vin Architecture Description
 
 `sample_vin` contains multiple examples, each existing as a subdirectory under `/app/multimedia_samples/sample_vin`. Each subdirectory is described as follows:

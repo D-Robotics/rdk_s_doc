@@ -9,6 +9,14 @@ description: "sample_isp User Guide - On-board sample usage instructions"
 
 `sample_isp` initializes the Camera Sensor, MIPI CSI, CIM, and ISP modules, enabling the retrieval of video frame data from the ISP module. It supports obtaining YUV format images from the ISP module.
 
+```mermaid
+flowchart LR
+    A[Camera Sensor] --> B[MIPI CSI]
+    B --> C[CIM]
+    C --> D[ISP]
+    D --> E[YUV Frame]
+```
+
 ### sample_isp Architecture Description
 
 `sample_isp` contains multiple examples, each existing as a subdirectory under `/app/multimedia_samples/sample_isp`. Each subdirectory is described as follows:
@@ -20,7 +28,7 @@ description: "sample_isp User Guide - On-board sample usage instructions"
 
 ## get_isp_data
 
-#### Code Location and Directory Structure
+### Code Location and Directory Structure
 
 The source code path for `get_isp_data` is `/app/multimedia_samples/sample_isp/get_isp_data`, with the following code structure:
 
@@ -141,7 +149,7 @@ After executing the program, you will obtain a YUV image named with the format `
 
 ## isp_feedback
 
-#### Code Location and Directory Structure
+### Code Location and Directory Structure
 
 The source code path for `isp_feedback` is `/app/multimedia_samples/sample_isp/isp_feedback`, with the following code structure:
 

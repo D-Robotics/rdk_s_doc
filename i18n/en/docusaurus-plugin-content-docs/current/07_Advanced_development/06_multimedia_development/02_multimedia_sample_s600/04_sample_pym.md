@@ -7,6 +7,14 @@ description: "sample_pym User Guide - On-board sample usage instructions"
 ## Function Overview  
 sample_pym reads a YUV file into memory allocated by hbm and passes it to the PYM. The PYM processes the data in pyramid layers and finally dumps the processed YUV data into the file system.  
 
+```mermaid
+flowchart LR
+    A[YUV File] --> B[HBM Memory]
+    B --> C[PYM]
+    C --> D[Channels 0~5 downscale 1/1~1/32]
+    D --> E[dump to filesystem]
+```
+
 ### Code Location and Directory Structure  
 - Code location: `/app/multimedia_samples/sample_pym`  
 - Directory structure:  

@@ -9,6 +9,15 @@ description: "sample_pipeline User Guide - On-board Example Usage Guide"
 ## Function Overview
 `sample_pipeline` is used to chain single-channel or multi-channel sensor pipelines, covering the common pipeline scenarios for users. Users can learn how to set up each pipeline by exploring the subdirectories under `sample_pipeline`.
 
+```mermaid
+flowchart LR
+    A[Camera Sensor] --> B[VIN]
+    B --> C[ISP]
+    C --> D[PYM]
+    D --> E[GDC]
+    E --> F[CODEC]
+```
+
 ### sample_pipeline Architecture Description
 `sample_pipeline` contains multiple examples, each stored as a subdirectory under `app/multimedia_samples/sample_pipeline`. Each subdirectory is described below:
 

@@ -5,7 +5,7 @@ description: "Example Code Introduction - On-board sample usage instructions"
 ---
 # Example Code Introduction
 
-This chapter mainly introduces example code for the multimedia modules on the chip, primarily covering usage examples of multimedia hardware acceleration modules. It includes single-module functional examples, multi-module cascaded examples, and application solution examples. Users can leverage these examples to quickly perform functional evaluations, and referring to the implementation code will help them get started rapidly and develop applications tailored to their specific needs.
+This chapter mainly introduces example code for the multimedia modules on the computing platform, primarily covering usage examples of multimedia hardware acceleration modules. It includes single-module functional examples, multi-module cascaded examples, and application solution examples. Users can leverage these examples to quickly perform functional evaluations, and referring to the implementation code will help them get started rapidly and develop applications tailored to their specific needs.
 
 By using the examples provided in this chapter, users will be able to:
 
