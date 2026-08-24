@@ -96,6 +96,7 @@ sp_start_decode success!
 
 ## 相关文档
 
+- [Python 示例](../02_pydev/01_pydev_multimedia.md)
 - [采集→编码](./03_vio2encoder.md)（生成码流文件）
 - [RTSP→显示](./06_rtsp2display.md)
 - [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)

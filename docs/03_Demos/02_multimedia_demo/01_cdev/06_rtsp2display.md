@@ -112,6 +112,7 @@ recv:2,Stoping...
 
 ## 相关文档
 
+- [Python 示例](../02_pydev/01_pydev_multimedia.md)
 - [解码→显示](./05_decode2display.md)（本地文件版）
 - [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
 - [DISPLAY（显示模块）API](../../../04_Simple_API/01_multimedia_api/cdev/04_display_api.md)

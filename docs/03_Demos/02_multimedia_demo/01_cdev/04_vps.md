@@ -101,6 +101,7 @@ make
 
 ## 相关文档
 
+- [Python 示例](../02_pydev/01_pydev_multimedia.md)
 - [视频采集](./01_vio_capture.md)
 - [VIO（视频输入）API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
 - [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)

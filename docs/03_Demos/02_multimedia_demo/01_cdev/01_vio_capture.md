@@ -67,6 +67,7 @@ capture time :9
 
 ## 相关文档
 
+- [Python 示例](../02_pydev/01_pydev_multimedia.md)
 - [VIO（视频输入）API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
 - [采集→显示](./02_vio2display.md)
 - [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)

@@ -91,6 +91,7 @@ Searching camera sensor on device: /proc/device-tree/soc/vcon@5 i2c bus: 5 mipi 
 
 ## 相关文档
 
+- [Python 示例](../02_pydev/01_pydev_multimedia.md)
 - [视频采集](./01_vio_capture.md)
 - [摄像头使用](../../01_peripheral/02_camera/01_mipi_camera.md)
 - [VIO（视频输入）API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
