@@ -10,6 +10,32 @@ import DocScope from '@site/src/components/DocScope';
 
 ## Overview
 
+This document describes the use of the MCU-side Eth (Ethernet) driver, including hardware features, code paths, and transmit/receive examples.
+
+- **Positioning**: Helps users develop Ethernet data transmit/receive functionality on the MCU.
+- **Target audience**: Advanced customization developers who need to develop MCU Ethernet communication.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](./01_basic_information.md).
+- **Relationship with other modules**: ETH is used for Ethernet communication between the MCU and external devices.
+
+<DocScope products="RDK S100">
+
+| Configuration Item | Default Value |
+|---|---|
+| Maximum rate | 1000Mbps |
+| Number of TX/RX FIFOs | 6 each |
+| Module clock | 250MHz |
+| Default data transfer mode | Polling |
+</DocScope>
+<DocScope products="RDK S600">
+
+| Configuration Item | Default Value |
+|---|---|
+| Maximum rate | 1000Mbps |
+| Number of TX/RX FIFOs | 8 each |
+| Module clock | 250MHz |
+| Default data transfer mode | Polling |
+</DocScope>
+
 ### Hardware Features
 
 - Maximum data transfer rate: 1000 Mbps
@@ -37,6 +63,19 @@ import DocScope from '@site/src/components/DocScope';
 - The length of a single received frame (including the 14-byte Ethernet header and 4-byte FCS) must be less than or equal to the configured RX buffer length.
 
 - Module clock frequency is 250 MHz; PTP clock period is 20 ns.
+
+## Software Architecture
+
+The Eth driver uses a layered design: the application layer calls the driver through the Eth API, the driver completes transmit/receive via the low-level MAC driver or interrupt handling, and the configuration is provided by PBCfg.
+
+```mermaid
+flowchart LR
+    App["Application layer<br/>Eth API"] --> Drv["Driver layer<br/>Eth.c"]
+    Drv --> Int["Interrupt handling<br/>Eth_Interrupt.c"]
+    Drv --> LLD["Low-level MAC driver<br/>Mac_Lld.c"]
+    LLD --> Reg["Ethernet MAC registers"]
+    Drv --> Cfg["Configuration layer<br/>Eth_PBcfg / Mac_Ip_PBcfg"]
+```
 
 ## Code Paths
 
@@ -358,6 +397,26 @@ Return value:Std_ReturnType
     E_OK: success
     E_NOT_OK: failed
 ```
+
+## Debugging
+
+- **Transmit/receive self-test**: Use `setvar Eth_Test 1` to enable periodic calls, `setvar eth_contrMode 1` to enable eth, then use `setvar eth_testCase 14` to send ARP packets and verify by capturing packets on a PC.
+- **Configuration check**: Verify that the phy has been de-asserted from reset via the reset pin before `Eth_Init`.
+- **Buffer check**: After transmission in polling mode, call `Eth_TxConfirmation` to release the buffer and avoid buffer leaks.
+
+## FAQ
+
+### `Eth_Init` initialization fails
+
+**Cause**: The phy was not de-asserted from reset before initialization.
+
+**Solution**: Before Eth initialization, assert the phy reset pin high to de-assert reset first, then call `Eth_Init`.
+
+### Buffer not released after polling-mode transmission
+
+**Cause**: After sending data in polling mode, `Eth_TxConfirmation` was not called to release the buffer.
+
+**Solution**: After the buffer is sent via `Eth_Transmit`, call `Eth_TxConfirmation` to release the buffer.
 
 ## Related Documentation
 

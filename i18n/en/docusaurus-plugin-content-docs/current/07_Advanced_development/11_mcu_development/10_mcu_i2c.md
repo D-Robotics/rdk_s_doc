@@ -10,9 +10,20 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 The S100 MCU provides a standard I2C bus. The I2C bus controller transfers information between devices connected to the bus through the serial data line (SDA) and serial clock line (SCL). Each device has a unique address. The main function of the I2C subsystem is to implement serial communication between the microcontroller and peripherals. It can drive MIPI daughter cards, PMIC chips, and other common peripherals.
+
+| Configuration Item | Default Value |
+|---|---|
+| Number of I2C controllers | 4 |
+| Controller numbers | I2C6~I2C9 |
+| Default speed mode | Fast Mode Plus |
 </DocScope>
 <DocScope products="RDK S600">
 The S600 MCU provides a standard I2C bus. The I2C bus controller transfers information between devices connected to the bus through the serial data line (SDA) and serial clock line (SCL). Each device has a unique address. The main function of the I2C subsystem is to implement serial communication between the microcontroller and peripherals. It can drive MIPI daughter cards, PMIC chips, and other common peripherals.
+
+| Configuration Item | Default Value |
+|---|---|
+| Number of I2C controllers | 5 |
+| Controller numbers | I2C10~I2C14 |
 </DocScope>
 
 ## I2C Controller
@@ -28,6 +39,18 @@ The I2C controller supports the following features:
 - 7-bit and 10-bit addressing modes
 
 The S100 MCU provides 4 I2C controllers (I2C6~9) in total, with Fast Mode Plus as the default speed.
+
+## Software Architecture
+
+The I2C driver uses a layered design: the application layer calls the driver through the I2c API, the driver then calls the low-level LLD to operate hardware registers directly, and the configuration is provided by PBCfg and board-level configuration.
+
+```mermaid
+flowchart LR
+    App["Application layer<br/>I2c API"] --> Drv["Driver layer<br/>I2c.c"]
+    Drv --> LLD["Low-level driver<br/>I2c_Lld.c"]
+    LLD --> Reg["Registers<br/>I2c_Register.h"]
+    Drv --> PB["Configuration layer<br/>I2c_PBcfg / I2c_Board"]
+```
 
 ## Code Paths
 
@@ -220,6 +243,16 @@ Parameters(out)
     None
 Return value: None
 ```
+
+## Debugging
+
+- **Mount detection**: Use `i2cdetect <bus>` to list the device addresses mounted on the specified I2C bus.
+- **Read/write verification**: Use `i2cget` / `i2cset` to read or write device registers and verify that the return values match expectations.
+- **Configuration check**: Verify that the speed mode, master/slave mode, and addressing mode match the target device.
+
+## FAQ
+
+<!-- TODO(Sx): pending board verification -->
 
 ## Related Documentation
 

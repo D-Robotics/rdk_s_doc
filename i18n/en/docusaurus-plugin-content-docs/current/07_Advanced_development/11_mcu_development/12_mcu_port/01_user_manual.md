@@ -8,6 +8,29 @@ import DocScope from '@site/src/components/DocScope';
 ## Basic Overview
 The Port subsystem is a subsystem on the MCU that configures the functions and attributes of PINs.
 
+- **Positioning**: Use the Port_Func module to initialize the functions of PINs or operate GPIO.
+- **Target audience**: Advanced customization developers who need to configure MCU PIN multiplexing or operate GPIO.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](../01_basic_information.md).
+- **Relationship with other modules**: Peripherals such as UART, SPI, I2C, PWM, and CAN must configure PIN functions via Port before use.
+
+The Port subsystem provides the Port_Func module (user interface) and the low-level Port module (LLD/PinCtrl). The default peripheral PIN configuration is recorded in the `PinFunctions` enumeration in `McalCdd/Port/inc/Port_Func.h`.
+
+## Software Architecture
+
+```mermaid
+flowchart LR
+    App["Application layer"] --> Func["Port_Func module<br/>pin function config / GPIO"]
+    Func --> Port["Port module<br/>PinCtrl / LLD"]
+    Port --> Cfg["Pin initial state<br/>Port_PBcfg"]
+```
+
+## Code Location
+
+- `McalCdd/Port/inc/Port_Func.h`: Public interface and default peripheral PIN configuration (`PinFunctions` enumeration)
+- `McalCdd/Port/src/Port_Func.c`: Port_Func module implementation
+- `Config/McalCdd/.../Port/src/Port_PBcfg.c`: Initial state configuration of each PIN
+- `samples/Spi/SPI_sample/Spi_sample.c`: Example of using Port_Func to configure PIN functions
+
 ## List of PIN Names Corresponding to PIN Numbers in the Port_Func Module{#pin_list}
 The columns in the following table have the following meanings:
     - PIN Index: **PIN index used in the Port submodule**;
@@ -464,6 +487,16 @@ For usage examples, refer to `samples/Gpio/src/Gpio_sample.c`. The basic usage l
 
         </DocScope>
 :::
+
+## Debugging
+
+- **PIN function check**: After configuring the PIN function, run the corresponding peripheral test command to verify that the peripheral works correctly.
+- **GPIO operation verification**: Refer to the GPIO operation example in Port_Func and verify that the GPIO level state meets expectations.
+- **Configuration check**: Verify that the `PinFunctions` enumeration in `Port_Func.h` matches the PIN name list.
+
+## FAQ
+
+<!-- TODO(Sx): pending board verification -->
 
 ## Related Documentation
 

@@ -75,6 +75,32 @@ The meaning of each field is as follows:
 
 - Arrow 6 indicates the address information where the crash dump was recorded when the exception occurred. You can enter `dumpmem [addr] 4 64` in the MCU shell to read the register and stack information saved at the crash site, or [obtain the register and stack information from the A-core via sysfs](#obtaining-mcu-exception-information).
 
+## FAQ
+
+### `addr2line` command not found
+
+**Cause**: The system does not have the binutils package installed, which contains `addr2line`.
+
+**Solution**: Install binutils and retry.
+
+```shell
+sudo apt update
+sudo apt install binutils -y
+```
+
+### MCU1 enters the shell after an exception and stops running
+
+**Cause**: Unlike MCU0 (which reboots automatically after an exception), MCU1 does not reset automatically after an exception; instead, it enters the shell.
+
+**Solution**: Stop and restart MCU1 using the A-core remoteproc control mechanism.
+
+```shell
+# Stop
+echo stop > /sys/class/remoteproc/remoteproc_mcu1/state
+# Start
+echo start > /sys/class/remoteproc/remoteproc_mcu1/state
+```
+
 ## Related Documentation
 
 - [MCU1 Development Guide](./03_FreeRTOS_development.md)

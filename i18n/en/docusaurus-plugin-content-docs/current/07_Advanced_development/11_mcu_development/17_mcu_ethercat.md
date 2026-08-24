@@ -10,7 +10,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ```
 
-## 1. Overview
+## Overview
 
 <DocScope products="RDK S100">
 This module is based on the open-source **SOEM** (Simple Open EtherCAT Master) library, ported and adapted for the embedded MCU platform (S100) running **FreeRTOS**. Main features:
@@ -31,7 +31,15 @@ This module is based on the open-source **SOEM** (Simple Open EtherCAT Master) l
 
 ---
 
-## 2. Software architecture
+## Software Architecture
+
+```mermaid
+flowchart TB
+    App["Application layer<br/>ec_sample / slaveinfo"] --> SOEM["SOEM core layer<br/>ec_main / ec_config / ec_coe / ec_dc / ec_foe"]
+    SOEM --> OSAL["OSAL abstraction layer<br/>osal.c (FreeRTOS adaptation)"]
+    SOEM --> NIC["OSHW / NIC layer<br/>nicdrv.c / oshw.c"]
+    NIC --> HW["Hardware layer<br/>Ethernet controller (ETH 0x88A4)"]
+```
 
 | Layer | Module / file | Description | Public interface |
 |------|------------|------|---------|
@@ -53,7 +61,7 @@ This module is based on the open-source **SOEM** (Simple Open EtherCAT Master) l
 
 ---
 
-## 3. Directory layout
+## Directory layout
 
 ```
 McalCdd/EtherCAT/
@@ -109,9 +117,9 @@ samples/EtherCAT/
 
 ---
 
-## 4. Key data structures
+## Key data structures
 
-### 4.1 ecx_contextt — Master context
+### ecx_contextt — Master context
 
 All SOEM APIs take a pointer to this structure as the first argument. The application should declare one static instance:
 
@@ -136,7 +144,7 @@ Main members:
 | `overlappedMode` | `boolean` | Overlapped mode (for TI ESC) |
 | `packedMode` | `boolean` | Compact PDO mapping mode |
 
-### 4.2 ec_slavet — Slave information
+### ec_slavet — Slave information
 
 | Member | Description |
 |------|------|
@@ -152,7 +160,7 @@ Main members:
 | `islost` | Whether the slave is considered lost |
 | `name` | Human-readable slave name string |
 
-### 4.3 ec_groupt — Slave group
+### ec_groupt — Slave group
 
 | Member | Description |
 |------|------|
@@ -163,7 +171,7 @@ Main members:
 
 ---
 
-## 5. Slave state machine
+## Slave state machine
 
 EtherCAT slaves follow this state machine (ESM):
 
@@ -204,9 +212,9 @@ ecx_statecheck(&ctx, 0, EC_STATE_OPERATIONAL, EC_TIMEOUTSTATE);
 
 ---
 
-## 6. API reference
+## API reference
 
-### 6.1 Init and shutdown
+### Init and shutdown
 
 #### `ecx_init`
 
@@ -240,7 +248,7 @@ Shuts down the master and releases low-level network resources.
 
 ---
 
-### 6.2 Slave configuration
+### Slave configuration
 
 #### `ecx_config_init`
 
@@ -298,7 +306,7 @@ Recovers a slave that was marked lost.
 
 ---
 
-### 6.3 State management
+### State management
 
 #### `ecx_readstate`
 
@@ -336,7 +344,7 @@ Polls until the slave reaches `reqstate` or times out.
 
 ---
 
-### 6.4 Process data (PDO)
+### Process data (PDO)
 
 PDO traffic is the core of real-time EtherCAT exchange; call send/receive periodically from a dedicated real-time task.
 
@@ -383,7 +391,7 @@ memcpy(&my_input, slave->inputs, slave->Ibytes);
 
 ---
 
-### 6.5 Mailbox protocols (CoE / SDO)
+### Mailbox protocols (CoE / SDO)
 
 #### SDO read
 
@@ -459,7 +467,7 @@ ecx_readOE(&ctx, item, &ODlist, &OElist);
 
 ---
 
-### 6.6 Distributed clock (DC)
+### Distributed clock (DC)
 
 #### `ecx_configdc`
 
@@ -499,7 +507,7 @@ if (ctx.slavelist[0].hasdc && (wkc > 0))
 
 ---
 
-### 6.7 Error handling
+### Error handling
 
 #### Error stack
 
@@ -534,11 +542,11 @@ Error type enum:
 
 ---
 
-## 7. Quick start: ec_sample
+## Quick start: ec_sample
 
 `samples/EtherCAT/ec_sample/src/ec_sample.c` is a full EtherCAT master sample from init through run to shutdown.
 
-### 7.1 Overall flow
+### Overall flow
 
 ```
 EtherCAT_Sample_Start(cycle_time_us)
@@ -558,7 +566,7 @@ EtherCAT_Sample_Start(cycle_time_us)
                         └─ ecx_writestate() → SAFE_OP → INIT
 ```
 
-### 7.2 Start function
+### Start function
 
 ```c
 /**
@@ -569,7 +577,7 @@ EtherCAT_Sample_Start(cycle_time_us)
 int EtherCAT_Sample_Start(int cycle_time_us);
 ```
 
-### 7.3 Real-time task (ecatthread)
+### Real-time task (ecatthread)
 
 Runs at the highest FreeRTOS priority and executes periodically:
 
@@ -607,7 +615,7 @@ void ecatthread(void *pvParameters)
 }
 ```
 
-### 7.4 Fault-check task (ecatcheck)
+### Fault-check task (ecatcheck)
 
 Runs at low priority (every 10 ms), monitors and recovers misbehaving slaves:
 
@@ -636,7 +644,7 @@ void ecatcheck(void *pvParameters)
 }
 ```
 
-### 7.5 FreeRTOS task parameters
+### FreeRTOS task parameters
 
 | Task name | Function | Stack size | Priority |
 |--------|------|--------|--------|
@@ -648,11 +656,11 @@ void ecatcheck(void *pvParameters)
 
 ---
 
-## 8. Slave info: slaveinfo
+## Slave info: slaveinfo
 
 `samples/EtherCAT/slaveinfo/src/slaveinfo.c` scans the bus and prints detailed information for each slave.
 
-### 8.1 Start function
+### Start function
 
 ```c
 /**
@@ -663,7 +671,7 @@ void ecatcheck(void *pvParameters)
 void EtherCAT_SlaveInfo_Start(boolean sdo_flag, boolean map_flag);
 ```
 
-### 8.2 Printed content
+### Printed content
 
 After the scan, each slave prints:
 
@@ -677,7 +685,7 @@ After the scan, each slave prints:
 - PDO mapping details (`-map`)
 - Object dictionary entries (`-sdo`)
 
-### 8.3 SDO shell command
+### SDO shell command
 
 ```c
 /**
@@ -692,7 +700,7 @@ int Ec_SlaveOP(uint16 slave, uint16 index, uint8 subindex, uint8 value, uint16 a
 
 ---
 
-## 9. Shell commands
+## Shell commands
 
 Both samples register commands with `SHELL_EXPORT_CMD`:
 
@@ -732,9 +740,9 @@ Direct SDO read (`upload`) or write (`download`); the write operation additional
 
 ---
 
-## 10. Platform adaptation
+## Platform adaptation
 
-### 10.1 OSAL
+### OSAL
 
 **File:** `osal/src/osal.c`
 
@@ -755,7 +763,7 @@ Abstracts OS services for SOEM; current port uses **FreeRTOS**.
 | `osal_malloc(size)` | `pvPortMalloc(size)` | Allocate |
 | `osal_free(ptr)` | `vPortFree(ptr)` | Free |
 
-### 10.2 OSHW / NIC
+### OSHW / NIC
 
 **File:** `oshw/src/nicdrv.c`
 
@@ -792,7 +800,7 @@ Maps SOEM NIC operations onto McalCdd/Ethernet (`Eth.h`).
 
 ---
 
-## 11. Configuration macros
+## Configuration macros
 
 Defined in `core/inc/soem/ec_options.h`:
 
@@ -816,7 +824,7 @@ Defined in `core/inc/soem/ec_options.h`:
 
 ---
 
-## 12. Timeout constants
+## Timeout constants
 
 From `core/inc/soem/ec_options.h`:
 
@@ -832,7 +840,7 @@ From `core/inc/soem/ec_options.h`:
 
 ---
 
-## 13. FAQ and troubleshooting
+## FAQ and troubleshooting
 
 ### Q1: `ecx_init` returns 0
 
@@ -945,7 +953,7 @@ if (wkc > 0)
 
 ---
 
-## 14. Test cases
+## Test cases
 
 This section covers the **three** Shell-registered commands under `samples/EtherCAT/`. All steps use the serial Shell; no code changes are required.
 

@@ -97,6 +97,11 @@ Solution features:
 - Supports parallel transmission on multiple CAN channels. Data from multiple MCU-side CAN controllers can be forwarded to Acore simultaneously. Acore applications read CAN data from different channel numbers through CANHAL.
 - Because CANHAL uses IPC for underlying transport, and IPC currently does not support multiple processes or threads reading/writing the same channel, CANHAL does not support this either.
 
+## Code Location
+
+- `Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c`: MCU-side CAN configuration (channel mapping, baud rate, etc.)
+- `source/hobot-io-samples/debian/app/Can`: Acore-side canhal sample source code; on-board location is `/app/Can`
+
 ## Hardware Connection
 <DocScope products="RDK S100">
 - CAN physical layer topologies are mainly closed-loop bus and open-loop bus networks. One suits high-speed communication and the other suits long-distance communication. **The S100 sample defaults to a closed-loop bus network architecture**.
@@ -751,7 +756,7 @@ CAN receive and send functions depend on IPC resources. When transmission rate i
 
 #### Simple CAN Send/Receive Sample
 
-##### Directory Structure
+**Directory Structure**
 ```
 // /app/Can/can_send
 .
@@ -772,7 +777,7 @@ CAN receive and send functions depend on IPC resources. When transmission rate i
     └── nodes.json  // Channel mapping configuration
 ```
 
-##### Prerequisites
+**Prerequisites**
 
 This is a simple sample only. Modify according to actual requirements in production.
 
@@ -804,7 +809,7 @@ Prerequisites:
 }
 ```
 
-##### Usage
+**Usage**
 1. Build `can_send` and `can_get` separately
 2. In the `can_get` directory, run:
 ```bash
@@ -840,7 +845,7 @@ Send end, send package total: 1 frame total: 1
 
 #### Multi-Channel Transmission
 
-##### Directory Structure
+**Directory Structure**
 ```bash
 // /app/Can/can_multi_ch
 .
@@ -888,14 +893,14 @@ Receive strategy:
 - Passively receive data, verify counters, and compute transmission delay
 - Exit if no data is received for more than 100 seconds (timeout defined in code)
 
-##### Dependencies
+**Dependencies**
 - `pthread`: thread library
 - `hobot_can_hal `: CAN interface library
 - `hb_ipcf_hal`: IPCF interface library
 - `alog`: Android log library
 
 
-##### Channel Mapping
+**Channel Mapping**
 
 
 <DocScope products="RDK S100">
@@ -929,7 +934,7 @@ Receive strategy:
 </DocScope>
 
 
-##### DEBUG Switch
+**DEBUG Switch**
 
 ```C
 // can_multich_log.h
@@ -937,7 +942,7 @@ Receive strategy:
 ```
 You can also use logcat for more logs
 
-##### Sender
+**Sender**
 
 <DocScope products="RDK S100">
 
@@ -954,23 +959,23 @@ Send strategy:
 - Target channels: send according to enabled CAN channels in the configuration file (S600 default CAN1-CAN10)
 </DocScope>
 
-##### Receiver
+**Receiver**
 
 Receive strategy:
 - Passively receive data, verify counters, and compute transmission delay
 - Exit if no data is received for more than 100 seconds (timeout defined in code)
 
-##### Notes
+**Notes**
 - CAN device resources are released automatically on exit
 - Press Ctrl+C to interrupt the program
 - Command-line parameters configure send frame count, CAN frame type, and data length
 
-##### Build Commands
+**Build Commands**
 ```bash
 make # Build
 make clean # Clean build artifacts
 ```
-##### Command-Line Parameters
+**Command-Line Parameters**
 ```bash
 -n <can_tran_num>                 Specify number of frames to send (default: 1)
 -t <can_type>                     CAN frame type (0: standard, 1: extended, 2: FD standard, 3: FD extended) (default: 2)
@@ -978,7 +983,7 @@ make clean # Clean build artifacts
 -h, --help                        Show help
 ```
 
-##### Run Commands
+**Run Commands**
 ```bash
 export CAN_HAL_DEBUG_LEVEL=6 // Set CAN library debug level; verbose logging may affect send frequency
 ./can_multi_ch
@@ -988,7 +993,7 @@ Or run with parameters:
 ./can_multi_ch -t 2 -l 64 -n 5
 ```
 
-##### Log Analysis
+**Log Analysis**
 
 On S600, use the same `can_multi_ch` test flow. Log field meanings match S100; only channel and IPC mapping follow S600 configuration.
 
@@ -1379,6 +1384,20 @@ Parameters(out)
     None
 Return value:None
 ```
+
+## FAQ
+
+### CAN data transmission timeout alarm
+
+**Cause**: When the MCU-side CAN2IPC forwards data, it stamps packets with an MCU-side timestamp. After Acore CANHAL receives the data, it reads the Acore timestamp and compares them. If the MCU RTC time and the Acore NIC phc0 time are not synchronized, a timeout alarm is triggered.
+
+**Solution**: Start time synchronization in advance to synchronize the MCU RTC time with the Acore NIC phc0 time.
+
+### Receive thread reports -303 error
+
+**Cause**: The receive thread did not receive any data for a long period after starting, triggering a receive timeout.
+
+**Solution**: Determine whether there is an abnormality based on the actual situation. If there is still no data after more than 100s, the thread exits; confirm whether the data source is sending normally.
 
 ## Related Documentation
 

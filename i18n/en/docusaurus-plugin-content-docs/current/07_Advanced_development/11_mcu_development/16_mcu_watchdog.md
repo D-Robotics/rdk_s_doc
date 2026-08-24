@@ -7,7 +7,7 @@ sidebar_position: 16
 import DocScope from '@site/src/components/DocScope';
 ```
 
-## 1. Introduction
+## Introduction
 
 <DocScope products="RDK S100">
 This user document provides information about the WDG driver, including features, configuration parameters, and APIs.
@@ -18,8 +18,8 @@ This user document provides information about the WDG driver, including features
 Wherever `Wdgx` is mentioned in this document, `x` is an index with a valid range of 0, 1, 2, 3, and 4.
 </DocScope>
 
-## 2. Overview
-### 2.1 File List
+## Overview
+### File List
 #### Low-Level Interface
 These are the Watchdog low-level driver implementation and internal common interface files. General users do not need to focus on them directly:
 
@@ -55,11 +55,23 @@ These are the API implementation files for user calls. Each Wdg instance require
 - McalCdd/Wdg/inc/Wdg4.h
 </DocScope>
 
-## 3. Application Programming Interface
+## Software Architecture
 
-### 3.1 Types
+The WDG driver uses a layered design: users call the low-level driver through the Highlevel Wdgx API, the low-level driver provides the watchdog feed period via the GPT timer, and timeout reset is completed through the reset link.
 
-#### 3.1.1 Imported Types
+```mermaid
+flowchart LR
+    App["User application"] --> Wdgx["Highlevel interface<br/>Wdgx_Init / Wdgx_SetMode / Wdgx_SetTriggerCondition"]
+    Wdgx --> LLD["Lowlevel driver<br/>Wdg_Lld / Wdg_Common"]
+    LLD --> GPT["GPT timer<br/>Wdg_GptChannel / Wdg_GptFreq"]
+    LLD --> RST["Reset link<br/>Wdg_Enable_RstConfig"]
+```
+
+## Application Programming Interface
+
+### Types
+
+#### Imported Types
 | Module | Header File | Imported Type |
 |---|---|---|
 | Std_Types | Std_Types.h | Std_ReturnType |
@@ -68,8 +80,8 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Rte_Type | Rte_Type.h | Dem_EventStatusType |
 | WdgIf | WdgIf_Types.h | WdgIf_ModeType |
 
-#### 3.1.2 Type Definitions
-##### Wdg_ApiIdType
+#### Type Definitions
+**Wdg_ApiIdType**
 | Name | Wdg_ApiIdType | Analysis |
 |---|---|---|
 | Type | Enumeration |
@@ -80,7 +92,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | WDG ApiId Enumeration |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_ErrIdType
+**Wdg_ErrIdType**
 | Name | Wdg_ErrIdType | Analysis |
 |---|---|---|
 | Type | Enumeration |
@@ -93,7 +105,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | WDG ErrId Enumeration |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_StateType
+**Wdg_StateType**
 | Name | Wdg_StateType |
 |---|---|
 | Type | Enumeration |
@@ -103,7 +115,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | WDG State Enumeration |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_ModeType
+**Wdg_ModeType**
 | Name | Wdg_ModeType | Analysis |
 |---|---|---|
 | Type | Structure |
@@ -112,7 +124,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | WDG Mode Structure |
 | Available via | Wdg_Prv.h |
 
-##### Wdg_ConfigType
+**Wdg_ConfigType**
 | Name | Wdg_ConfigType | Analysis |
 |---|---|---|
 | Type | Structure |
@@ -124,8 +136,8 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | WDG Configuration  Structure |
 | Available via | Wdg_Prv.h |
 
-### 3.2 Function Definitions
-#### 3.2.1 Wdgx_Init
+### Function Definitions
+#### Wdgx_Init
 | Service Name | Wdgx_Init |
 |---|---|
 | Syntax | void Wdgx_Init(const Wdg_ConfigType *ConfigPtr) |
@@ -138,7 +150,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | Initializes the module |
 | Available via | Wdgx.h |
 
-#### 3.2.2 Wdgx_SetMode
+#### Wdgx_SetMode
 | Service Name | Wdgx_SetMode |
 |---|---|
 | Syntax | Std_ReturnType Wdgx_SetMode(WdgIf_ModeType Mode) |
@@ -151,7 +163,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | Switches the Watchdog into the mode Mode. |
 | Available via | Wdgx.h |
 
-#### 3.2.3 Wdgx_SetTriggerCondition
+#### Wdgx_SetTriggerCondition
 | Service Name | Wdgx_SetTriggerCondition |
 |---|---|
 | Syntax | void Wdgx_SetTriggerCondition(uint16 timeout) |
@@ -164,7 +176,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | Sets the timeout value for the trigger counter. |
 | Available via | Wdgx.h |
 
-#### 3.2.4 Wdgx_GetVersionInfo
+#### Wdgx_GetVersionInfo
 | Service Name | Wdgx_GetVersionInfo |
 |---|---|
 | Syntax | void Wdgx_GetVersionInfo(Std_VersionInfoType *VersionInfoPtr) |
@@ -177,7 +189,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
-### 3.3 Interrupt Handling
+### Interrupt Handling
 
 <DocScope products="RDK S100">
 | ISR Name | Hardware Interrupt Vector |
@@ -204,7 +216,7 @@ These are the API implementation files for user calls. Each Wdg instance require
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
-### 3.4 Critical Sections
+### Critical Sections
 Use `SchM_Enter_Wdg_ExclusiveZone_XX` and `SchM_Exit_Wdg_ExclusiveZone_XX` to define operations for entering and exiting critical sections. The WDG driver requires users to handle critical sections according to their actual application deployment. These functions are already called in the driver.
 
 Protects `Wdg_LastMode`:
@@ -237,9 +249,9 @@ Protects `Wdg_Lld_Rst`:
 
 <DocScope products="RDK S600">
 
-## 4. A-Core Watchdog Timeout MCU Handling Flow
+## A-Core Watchdog Timeout MCU Handling Flow
 
-### 4.1 Reset Configuration Enable
+### Reset Configuration Enable
 
 Call `Wdg_Enable_RstConfig()` in Target's `main.c` (implementation in `Wdg_Common.c`, declaration in `Wdg_Prv.h`) to complete the low-level enablement related to the watchdog-side and MCU reset/notification link.
 
@@ -247,7 +259,7 @@ Call `Wdg_Enable_RstConfig()` in Target's `main.c` (implementation in `Wdg_Commo
 |---|---|
 | Wdg_Enable_RstConfig | Reset configuration |
 
-### 4.2 MCU-Side Handling Flow
+### MCU-Side Handling Flow
 
 When the A-core watchdog times out, an interrupt is sent to MCU0. MCU0 then initiates a reset after a delay so that the A-core can print stack and other information.
 
@@ -259,6 +271,16 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 | OS task (delay + long reset) | Target/.../HorizonTask.c: TASK(OsTask_SysCore_WDG_RST) | When `g_need_reset` is true: log → `vTaskDelay(MS_TO_TICK(5000))` (approx. 5s) → `Rfchm_TriggerSocLongReset()` executes SoC long reset |
 
 </DocScope>
+
+## Debugging
+
+- **Timeout configuration check**: After calling `Wdgx_SetTriggerCondition(timeout)`, verify that the timeout value matches the target; the timeout period is determined by `Wdg_GptPeriod` and the GPT channel frequency.
+- **Interrupt check**: Verify that interrupt service functions such as `Wdg_Ins0IntIsr` / `Wdg_Ins0RstIsr` are correctly bound to the interrupt vector table.
+- **Reset flow verification**: Trigger the A-core watchdog timeout and verify that the MCU executes the sequence "interrupt sets flag → OS task delays ~5s → long reset".
+
+## FAQ
+
+<!-- TODO(Sx): pending board verification -->
 
 ## Related Documentation
 

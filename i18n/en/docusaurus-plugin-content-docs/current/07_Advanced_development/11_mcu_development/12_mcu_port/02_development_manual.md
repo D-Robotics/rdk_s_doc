@@ -8,6 +8,20 @@ import DocScope from '@site/src/components/DocScope';
 ## Basic Overview
 The Port is generally divided into two parts: the external interface and the "Low Level Driver (LLD)". This section only covers the development of the user interface part.
 
+- **Positioning**: Introduces the development methods of the Port_Func module and the Port module (PinCtrl).
+- **Target audience**: Advanced customization developers who need to customize PIN initial state or perform advanced Port development.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](../01_basic_information.md).
+- **Relationship with other modules**: The Port module is the low-level PinCtrl module, and the Port_Func module is used by users to configure peripheral PIN functions; some Port module features are only available in the commercial version of the code.
+
+## Software Architecture
+
+```mermaid
+flowchart LR
+    App["Application layer"] --> Func["External interface<br/>Port_Func / Port"]
+    Func --> LLD["Low Level Driver<br/>Port_Lld / PinCtrl"]
+    LLD --> Cfg["Pin initial state<br/>Port_PBcfg"]
+```
+
 ## Port_Func Module
 The D-Robotics MCU system provides the Port_Func module for overall function configuration.
 
@@ -139,6 +153,21 @@ The code consists of two lines:
   - `IsUsedGpio`: Defines whether the Port module will configure the GPIO direction and output for the pin during initialization;
 
 Customers can define the initial state of pins as needed.
+
+## Debugging
+
+- **PIN initial state check**: Verify that the initial state configuration of each PIN in `Port_PBcfg.c` meets expectations.
+- **Configuration field check**: Verify that the `PinMode`, `Config Type`, `IsUsed`, `ModeChange`, `IsUsedGpio`, and other fields are configured as required.
+
+## FAQ
+
+### Basic functions abnormal after MCU1 calls `Port_Init()` a second time
+
+**Cause**: MCU1 does not call `Port_Init()` again by default at startup. Reinitializing the PIN state may cause abnormalities in basic functions such as power supply on the S100 SIP.
+
+**Solution**: It is not recommended for users to call the `Port_Init()` interface again on MCU1.
+
+<!-- TODO(Sx): pending board verification (add item 2) -->
 
 ## Related Documentation
 

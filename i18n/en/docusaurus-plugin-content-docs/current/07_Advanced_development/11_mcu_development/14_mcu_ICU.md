@@ -791,6 +791,42 @@ D-Robotics:/$ gpio_interrupt off
 
 </DocScope>
 
+## Software Architecture
+
+The ICU driver uses a layered design: the application layer accesses GPIO/PWM hardware through the ICU driver and the low-level LLD, and callbacks are registered via `GpioChannelNotification`.
+
+```mermaid
+flowchart LR
+    App["Application layer<br/>callback"] --> Icu["ICU driver<br/>Icu.c"]
+    Icu --> LLD["Low-level driver<br/>Icu_Lld.c / Icu_Lld_Gpio.c"]
+    LLD --> Gpio["GPIO / PWM hardware"]
+    Icu --> Cfg["Configuration<br/>Icu_PBCfg.c"]
+```
+
+## Code Location
+
+- `McalCdd/Icu/src/Icu.c`: ICU driver implementation
+- `McalCdd/Icu/src/Icu_Lld.c`, `Icu_Lld_Gpio.c`: Low-level driver implementation
+- `McalCdd/Icu/inc/Icu.h`, `Icu_Lld.h`, `Icu_Types.h`, `Icu_Lld_Gpio.h`: Header files
+- `Config/McalCdd/.../Icu/src/Icu_PBCfg.c`: ICU configuration
+- `samples/Interrupt/src/gpio_Interrupt_test.c`: GPIO interrupt sample
+
+## Debugging
+
+- **Interrupt self-test**: Trigger the GPIO interrupt and verify that the callback log (such as `enter Icu_Gpio_Channel_0_20_ISR`) is printed.
+- **Configuration check**: Fully enabling the interrupt and callback requires `NotificationEnable = TRUE`, `IntEnable = TRUE`, `IntMask = FALSE`, and `GpioChannelNotification` pointing to the callback function.
+- **Interrupt number check**: Verify the interrupt number bound to the target pin and its entry function (for example, GPIO_MCU[20] corresponds to interrupt number 68).
+
+## FAQ
+
+### GPIO interrupt does not produce a callback
+
+**Cause**: The interrupt and callback enables are incomplete; `NotificationEnable`, `IntEnable`, `IntMask`, or `GpioChannelNotification` is not configured as required.
+
+**Solution**: Ensure that `NotificationEnable = TRUE`, `IntEnable = TRUE`, `IntMask = FALSE`, and `GpioChannelNotification` points to the specific callback function.
+
+<!-- TODO(Sx): pending board verification (add item 2) -->
+
 ## Related Documentation
 
 - [MCU Quick Start Guide](./01_basic_information.md)

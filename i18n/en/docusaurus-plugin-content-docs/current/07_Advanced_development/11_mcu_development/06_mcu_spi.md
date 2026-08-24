@@ -8,6 +8,26 @@ sidebar_position: 6
 import DocScope from '@site/src/components/DocScope';
 ```
 
+<DocScope products="RDK S100">
+The S100 MCU domain provides a total of 6 SPI controllers (SPI2~SPI7). The SPI factory default parameters are based on `Spi_PBcfg.c`, with the following default configuration:
+
+| Configuration Item | Default Value |
+|---|---|
+| MCU domain SPI controllers | SPI2~SPI7 |
+| Default baud rate | 1000000 / 2000000 |
+| Default chip select | CS0 (some sequences use CS1) |
+| Default data width | 8 bit / 16 bit |
+</DocScope>
+<DocScope products="RDK S600">
+The S600 MCU domain SPI factory default parameters are based on `Spi_PBcfg.c`, with the following default configuration; for the complete sequence and hardware resource mapping, see [Configuration File Description](#spi_config):
+
+| Configuration Item | Default Value |
+|---|---|
+| Default baud rate | 1000000 / 2000000 |
+| Default chip select | CS0 (some sequences use CS1) |
+| Default data width | 8 bit / 16 bit |
+</DocScope>
+
 ## Hardware Support
 
 - If SPI uses DMA transfer, the following restrictions must be observed:
@@ -30,6 +50,18 @@ import DocScope from '@site/src/components/DocScope';
 - SPI DMA mode consumes lower CPU load compared to non-DMA mode.
 - When SPI transmits data in non-DMA mode and the system load is high, the SPI FIFO may not be written in time due to delayed SPI interrupt response, causing the CS pin to be briefly pulled high. In this case, DMA mode is recommended.
 - If the use case involves multiple sequences performing asynchronous transfers using the same SPI IP, and there is no requirement for the order of transfer completion among the sequences, sequence transmission queuing may occur. In this case, critical section protection with interrupts disabled needs to be implemented in the SchM_Spi.c file.
+
+## Software Architecture
+
+The SPI driver uses a layered design: the application layer calls the driver through the Spi API, the driver then calls the low-level LLD to operate hardware registers directly, and the configuration is provided by PBCfg and board-level configuration.
+
+```mermaid
+flowchart LR
+    App["Application layer<br/>Spi API"] --> Drv["Driver layer<br/>Spi.c"]
+    Drv --> LLD["Low-level driver<br/>Spi_Lld.c"]
+    LLD --> Reg["Registers<br/>Spi_Register.h"]
+    Drv --> PB["Configuration layer<br/>Spi_PBcfg / Spi_Board"]
+```
 
 ## Code Paths
 
@@ -755,6 +787,26 @@ Parameters(out)
     None
 Return value:None
 ```
+
+## Debugging
+
+- **Transmit/receive self-test**: Before running the `SpiTest_Mul_cs` / `spi_test` loopback test, short the MISO and MOSI of the corresponding channel and compare whether the sent and received data are consistent (the log showing `check data success` indicates success).
+- **Configuration check**: The application-layer configuration should be consistent with the low-level `Spi_PBcfg.c` configuration; otherwise transfer errors may occur.
+- **Register check**: Use the sequence configuration table to verify that the Spi BusId, HWUnit, Instance, baud rate, and chip select match the target configuration.
+
+## FAQ
+
+### SPI transfer error — application-layer configuration inconsistent with low-level configuration
+
+**Cause**: The application-layer configuration (baud rate, data width, chip select, etc.) is inconsistent with the low-level `Spi_PBcfg.c` configuration.
+
+**Solution**: Verify the application-layer and low-level configurations and make them consistent, then retry.
+
+### CS pin briefly pulled high during non-DMA transmission
+
+**Cause**: When the system load is high, the SPI interrupt response is delayed, causing the SPI FIFO not to be written in time.
+
+**Solution**: It is recommended to switch to DMA transfer mode, which uses hardware to handle data movement automatically.
 
 ## Related Documentation
 

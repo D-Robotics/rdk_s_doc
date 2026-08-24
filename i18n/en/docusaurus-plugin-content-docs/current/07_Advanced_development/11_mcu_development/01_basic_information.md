@@ -10,24 +10,28 @@ import DocScope from '@site/src/components/DocScope';
 
 ## Scope
 
-This section provides an overview of the MCU system, aimed at helping readers quickly understand and master the relevant content to facilitate the development of MCU1. Since MCU0 is responsible for booting Acore, MCU1, and power management, it is not recommended for customers to modify this part. The source code is not released by default, and a verified bin file from Dijia is provided. This section only briefly explains potential conflicts with MCU1, aiming to help users avoid resource contention issues between MCU0 and MCU1 during development.
+This section provides an overview of the MCU system, aimed at helping readers quickly understand and master the relevant content to facilitate the development of MCU1. Since MCU0 is responsible for booting Acore, MCU1, and power management, it is not recommended for customers to modify this part. The source code is not released by default, and a D-Robotics-verified bin file is provided. This section only briefly explains potential conflicts with MCU1, aiming to help users avoid resource contention issues between MCU0 and MCU1 during development.
 
 ## Basic Information
 
-1. The MCU compilation toolchain is the GCC toolchain, version gcc-arm-none-eabi-10.3~2021.10.
-2. The MCU core is ARM R52+, and the ARM R52 technical reference manual can be used as a reference: [Official Link](https://developer.arm.com/documentation/100026/latest)
-3. The operating system running on the MCU is FreeRTOS, version FreeRTOS Kernel V10.0.1.
-4. The MCU is mainly divided into two parts: MCU0 and MCU1. MCU0 is responsible for booting Acore, MCU1, and power management, and is currently not open-source. MCU1 is responsible for running business functions and is open-source, allowing customers to modify it according to their needs.
+The default configuration of the MCU system is as follows:
+
+| Configuration Item | Default Value |
+|---|---|
+| Compilation toolchain | GCC (gcc-arm-none-eabi-10.3~2021.10) |
+| MCU core | ARM R52+ (refer to the [ARM R52 technical reference manual](https://developer.arm.com/documentation/100026/latest)) |
+| Operating system | FreeRTOS Kernel V10.0.1 |
+| MCU composition | MCU0 (boots Acore/MCU1, power management, not open source) + MCU1 (business, open source, modifiable) |
 
 ## MCU Framework
 
 <DocScope products="RDK S100">
 MCU0 is the starting point for booting the board and is of utmost importance. MCU0 is responsible for booting Acore, MCU1, and power management. The Linux operating system running on Acore is a critical platform for customer development, while the FreeRTOS operating system running on MCU1 ensures real-time task execution.
-MCU1 is implemented using Linux's remoteproc framework. Through Acore's sysfs, notifications are sent to MCU0 to control the startup and shutdown of MCU1. Additionally, during the sleep mode of the RDK-S100, Acore notifies MCU0 to operate MCU1, enabling low-power sleep functionality.
+MCU1 is implemented using Linux's remoteproc framework. Through Acore's sysfs, notifications are sent to MCU0 to control the startup and shutdown of MCU1. Additionally, during the sleep mode of the RDK S100, Acore notifies MCU0 to operate MCU1, enabling low-power sleep functionality.
 </DocScope>
 <DocScope products="RDK S600">
 MCU0 is the starting point for booting the board and is of utmost importance. MCU0 is responsible for booting Acore, MCU1, and power management. The Linux operating system running on Acore is a critical platform for customer development, while the FreeRTOS operating system running on MCU1 ensures real-time task execution.
-MCU1 is implemented using Linux's remoteproc framework. Through Acore's sysfs, notifications are sent to MCU0 to control the startup and shutdown of MCU1. Additionally, during the sleep mode of the RDK-S600, Acore notifies MCU0 to operate MCU1, enabling low-power sleep functionality.
+MCU1 is implemented using Linux's remoteproc framework. Through Acore's sysfs, notifications are sent to MCU0 to control the startup and shutdown of MCU1. Additionally, during the sleep mode of the RDK S600, Acore notifies MCU0 to operate MCU1, enabling low-power sleep functionality.
 </DocScope>
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_frame-en.jpg" alt="MCU Software Framework" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -326,10 +330,10 @@ The MCU currently supports viewing system status (alive), system uptime (taskcou
 ## MCU Serial Port Usage
 
 <DocScope products="RDK S100">
-If the RDK-S100 has the following connection method, the MCU serial port and the Acore serial port share one serial port. Check: Device Manager -> Ports -> MCU-COM -> Baud rate 921600.
+If the RDK S100 has the following connection method, the MCU serial port and the Acore serial port share one serial port. Check: Device Manager -> Ports -> MCU-COM -> Baud rate 921600.
 </DocScope>
 <DocScope products="RDK S600">
-If the RDK-S600 has the following connection method, the MCU serial port and the Acore serial port share one serial port. Check: Device Manager -> Ports -> MCU-COM -> Baud rate 921600.
+If the RDK S600 has the following connection method, the MCU serial port and the Acore serial port share one serial port. Check: Device Manager -> Ports -> MCU-COM -> Baud rate 921600.
 </DocScope>
 
 <DocScope products="RDK S100">
@@ -342,7 +346,7 @@ If the RDK-S600 has the following connection method, the MCU serial port and the
 ## MCU0 Flashing Process
 ### Manual Flashing
 #### Non-Empty Board Flashing
-1. Power on the board, press and hold Enter on the Acore serial port to enter uboot (must keep pressing).
+1. Power on the board, press and hold Enter on the Acore serial port to enter U-Boot (must keep pressing).
 ```c
 fastboot 0
 ```
@@ -376,7 +380,7 @@ For information on using the XBurn tool to flash specific regions, refer to the 
 Under normal circumstances, after the system enters an Undefined/Abort exception, it proceeds through exception handling and context-saving logic. On RDK S100, MCU1 cannot be hardware power-cycled independently, so the MCU1 remoteproc stop/start flow and the synchronous Undefined/Abort exception handling flow should be understood separately.
 </DocScope>
 <DocScope products="RDK S600">
-Under normal circumstances, when the system encounters an undefined/abort exception, it eventually enters an infinite loop. Only by re-executing the power-on/power-off process can it return to normal operation. Since the RDK-S600 cannot power on/off MCU1 independently, system process modifications are required to achieve the desired outcome.
+Under normal circumstances, when the system encounters an undefined/abort exception, it eventually enters an infinite loop. Only by re-executing the power-on/power-off process can it return to normal operation. Since the RDK S600 cannot power on/off MCU1 independently, system process modifications are required to achieve the desired outcome.
 </DocScope>
 
 <DocScope products="RDK S100">
@@ -642,6 +646,20 @@ Currently, the MCU Log supports the following formatted output types:
 - %c — Single character
 
 Other formatted output types are not supported at this time. Future versions will gradually expand support for more data types and formats to meet richer debugging needs.
+
+## FAQ
+
+### First compilation: toolchain download fails or is incomplete
+
+**Cause**: The first compilation downloads the toolchain from Arm's official website and decompresses it; poor network conditions may cause the download to fail.
+
+**Solution**: Manually download the compilation toolchain, move it to the `Build/ToolChain/Gcc/` directory of the code, and then recompile. When a toolchain is detected during compilation, it will not be downloaded from the official website again.
+
+### System crashes after starting MCU1 immediately after stopping it
+
+**Cause**: Starting MCU1 before the system has entered wfi mode reloads the firmware into MCU SRAM, overwriting the previous code location.
+
+**Solution**: After stopping MCU1, wait until the system enters wfi mode before starting MCU1 again.
 
 ## Related Documentation
 

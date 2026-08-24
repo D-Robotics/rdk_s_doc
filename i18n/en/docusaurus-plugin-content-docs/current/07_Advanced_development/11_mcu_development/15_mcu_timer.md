@@ -7,6 +7,36 @@ sidebar_position: 15
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Overview
+
+This document describes the use of the MCU-side TIMER (GPT) driver, including hardware support, software architecture, configuration, and usage examples.
+
+- **Positioning**: Helps users use timers on the MCU for timing, interrupt, and other functions.
+- **Target audience**: Advanced customization developers who need to develop timing functions.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](./01_basic_information.md).
+- **Relationship with other modules**: Each timer Channel can trigger an interrupt; the interrupt number and mapping are described in the Hardware Support section below.
+
+The default TIMER configuration is as follows:
+
+<DocScope products="RDK S100">
+
+| Configuration Item | Default Value |
+|---|---|
+| Number of Instances | 6 |
+| Channels per Instance | 4 |
+| Default input clock | 200MHz |
+| Default bit width | 32bit |
+</DocScope>
+<DocScope products="RDK S600">
+
+| Configuration Item | Default Value |
+|---|---|
+| Number of Instances | 10 |
+| Channels per Instance | 4 |
+| Default input clock | 40MHz |
+| Default bit width | 32bit |
+</DocScope>
+
 ## Hardware Support
 
 <DocScope products="RDK S100">
@@ -130,6 +160,16 @@ Each Channel of the timer can trigger an interrupt. The interrupt numbers for ea
 </DocScope>
 
 ## Software Driver
+
+The TIMER driver uses a layered design: the application layer calls the driver through the Gpt API, the low-level LLD directly operates hardware registers, and the configuration is provided by PBCfg.
+
+```mermaid
+flowchart LR
+    App["Application layer<br/>Gpt API"] --> Drv["Driver layer<br/>Gpt.c"]
+    Drv --> LLD["Low-level driver<br/>Gpt_Lld.c"]
+    LLD --> Reg["Registers<br/>Gpt_Register.h"]
+    Drv --> PB["Configuration layer<br/>Gpt_PBcfg / Gpt_Cfg"]
+```
 
 Code paths:
 
@@ -436,6 +476,16 @@ timer_interrupt gettime 3
 Output:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case3.png" alt="MCU Timer Case 3" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+## Debugging
+
+- **Timing verification**: Use `timer_interrupt on <period>` to start the timer, and use `timer_interrupt gettime <type>` to read the remaining count value.
+- **Clock check**: Verify that the input clock (200MHz on S100, 40MHz on S600) and the load value calculation are consistent.
+- **Interrupt verification**: Use `timer_interrupt on <period> 1` to start the timer interrupt and verify that the interrupt triggers at the set period.
+
+## FAQ
+
+<!-- TODO(Sx): pending board verification -->
 
 ## Related Documentation
 

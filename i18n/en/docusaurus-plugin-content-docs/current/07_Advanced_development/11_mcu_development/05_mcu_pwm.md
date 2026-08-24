@@ -9,6 +9,33 @@ sidebar_position: 5
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Overview
+
+This document describes the use of the MCU-side PWM driver, including hardware support, software driver, important configuration, and usage examples.
+
+- **Positioning**: Helps users output PWM or perform input capture on the MCU.
+- **Target audience**: Advanced customization developers who need to develop PWM output/input capture.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](./01_basic_information.md).
+- **Relationship with other modules**: Some PWM channels share PIN multiplexing with peripherals such as I2C; configure the PIN function via Port before use.
+
+<DocScope products="RDK S100">
+The S100 default configuration is as follows:
+
+| Configuration Item | Default Value |
+|---|---|
+| Number of PWM IPs | 1 |
+| Channels per IP | 12 |
+| Total channels | 12 |
+</DocScope>
+<DocScope products="RDK S600">
+The S600 default configuration is as follows:
+
+| Configuration Item | Default Value |
+|---|---|
+| Number of PWM IPs | 3 |
+| Channels per IP | 12 |
+| Total channels | 36 |
+</DocScope>
 
 ## Hardware Support
 
@@ -32,6 +59,16 @@ The IP configurations for S600 and S100 are as follows:
 | S100     | 1                 | 12 Channels               | 12 Channels              |
 
 ## Software Driver
+
+The PWM driver uses a layered design: the application layer calls the driver through the Pwm API, the low-level LLD operates the hardware registers directly, and the configuration is provided by PBCfg.
+
+```mermaid
+flowchart LR
+    App["Application layer<br/>Pwm API"] --> Drv["Driver layer<br/>Pwm.c"]
+    Drv --> LLD["Low-level driver<br/>Pwm_Lld.c"]
+    LLD --> Reg["PWM hardware registers"]
+    Drv --> PB["Configuration layer<br/>Pwm_PBcfg"]
+```
 
 - Supports CPU update of PWM channel period and duty cycle.
 - Supports DMA update of PWM channel period and duty cycle.
@@ -479,6 +516,16 @@ Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
 Return value:None
 ```
+
+## Debugging
+
+- **Output verification**: Use `pwmtest <pwm_id> <channel> <period> <duty_cycle>` to output a waveform, and use an oscilloscope or logic analyzer to verify the period and duty cycle.
+- **Register check**: Use `pwmdumpregs <pwm_id> <channel>` to dump channel registers and verify the period, duty cycle, interrupt/DMA mask, and other configurations.
+- **Period conversion check**: Verify the conversion relationship between the period register value and the clock frequency (period = register value / clock source frequency).
+
+## FAQ
+
+<!-- TODO(Sx): pending board verification -->
 
 ## Related Documentation
 

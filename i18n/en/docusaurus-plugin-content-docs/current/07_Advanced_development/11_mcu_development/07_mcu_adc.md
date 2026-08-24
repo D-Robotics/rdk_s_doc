@@ -10,6 +10,15 @@ import TabItem from '@theme/TabItem';
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Overview
+
+This document describes the use of the MCU-side ADC driver, including hardware capabilities, the differences between the standard and private drivers, software architecture, code paths, and usage examples.
+
+- **Positioning**: Helps users develop ADC sampling on the MCU.
+- **Target audience**: Advanced customization developers who need to develop ADC sampling features.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](./01_basic_information.md).
+- **Relationship with other modules**: The ADC interface must be called after the power-on self-test (POST) completes.
+
 ## Hardware Support
 
 | Feature | S100 ADC | S600 ADC |
@@ -23,6 +32,18 @@ import DocScope from '@site/src/components/DocScope';
 | **Software design note** | Designed for basic scenarios; **extensible but does not cover all product requirements** | Same as left |
 
 ## Software Driver
+
+The ADC driver uses a layered design: the application layer can choose the standard ADC driver or the private ADC driver. The standard driver accesses registers through the low-level LLD or board-level configuration, while the private driver directly operates hardware registers.
+
+```mermaid
+flowchart LR
+    App["Application layer"] --> Std["Standard ADC driver<br/>Adc.c"]
+    App --> Priv["Private ADC driver<br/>Adc_Private.c"]
+    Std --> LLD["Low-level driver<br/>Adc_Lld.c"]
+    LLD --> Reg["Registers<br/>Adc_Register.h"]
+    Priv --> Reg
+    Std --> Cfg["Board-level config<br/>Adc_PBcfg / Adc_Cfg"]
+```
 
 The codebase actually contains two ADC drivers, with the following differences:
 
@@ -669,6 +690,16 @@ Return value:None
 ```
 </TabItem>
 </Tabs>
+
+## Debugging
+
+- **Sampling verification**: Run `Adc_Test <ADC channel>` to perform a single sampling and verify that the output raw value and millivolt (mv) value meet expectations.
+- **Continuous sampling verification**: Run `Adc_TestNormal start` to start continuous sampling, `Adc_TestNormal read` to read the results, and `Adc_TestNormal stop` to stop.
+- **Configuration check**: Verify whether the `AdcWithoutInterrupt` field in `Adc_GroupsCfg` is configured as required (for example, on S600 it must be set to STD_ON).
+
+## FAQ
+
+<!-- TODO(Sx): pending board verification -->
 
 ## Related Documentation
 

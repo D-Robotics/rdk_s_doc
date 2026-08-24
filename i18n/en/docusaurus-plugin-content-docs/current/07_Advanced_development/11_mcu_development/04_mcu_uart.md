@@ -445,6 +445,34 @@ Parameters(out)
 Return value: None
 ```
 
+## Debugging
+
+- **Transmit/receive self-test**: Run the transmit/receive example in the [application sample](#application-sample) and compare whether the sent and received data are consistent; if not, first check that the baud rate, data bits, stop bits, and parity match the peer.
+- **Waveform verification**: Use an oscilloscope or logic analyzer to measure the UART TX pin waveform and verify that the actual baud rate matches the configuration.
+- **Configuration check**: Check that the baud rate, data bits, stop bits, and parity in `Uart_PBcfg.c` and `Uart_Board.h` match the target configuration.
+
+## FAQ
+
+### UART test fails with a channel-occupied error
+
+**Cause**: Uart5 is occupied by IPC passthrough, which conflicts with the test case.
+
+**Solution**: Run `ipcbox_set_mode debug` to check the occupancy status. If the `uart` row shows `Enable`, run `ipcbox_set_mode uart 0` on the MCU control terminal to release Uart5, then retry.
+
+```shell
+D-Robotics:/$ ipcbox_set_mode debug
+[0427.611637 0]Module: uart, Enable
+
+D-Robotics:/$ ipcbox_set_mode uart 0
+[0774.571200 0]uart processing disabled
+```
+
+### Loopback test `uarttest 1` fails
+
+**Cause**: The loopback test requires the RX pin and TX pin of the UART channel to be externally shorted; if they are not shorted, the transmitted data cannot be looped back and received.
+
+**Solution**: Short the RX pin of the test channel to the TX pin, then re-execute `uarttest 1`.
+
 ## Related Documentation
 
 - [Expansion Pin Usage](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)

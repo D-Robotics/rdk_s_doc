@@ -8,6 +8,15 @@ sidebar_position: 2
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Overview
+
+This document describes the MCU1 compilation system for the RDK S100 / RDK S600. The compilation system is created based on SCons, and is responsible for compiling and linking the MCU1 source code into a firmware image that can be loaded and run by MCU0.
+
+- **Positioning**: Describes the directory structure, compilation process, key file relationships, image layout, and startup code of the MCU1 compilation system.
+- **Target audience**: Advanced customization developers who need to compile or customize the MCU1 firmware.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](./01_basic_information.md).
+- **Relationship with other modules**: The MCU1 firmware produced by the compilation system is loaded and run by MCU0 during power-on or the remoteproc flow.
+
 ## Basic Description of the Compilation System
 The MCU compilation system is based on SCons 3.0.0 ([SCons 3.0.0 User Manual Official Website](https://scons.org/doc/3.0.0/HTML/scons-user.html)).
 
@@ -721,7 +730,7 @@ EL2_Reset_Handler:
 4. Description of important MPU regions in the D-Robotics version:
 
 :::caution
-- The ARM R52 background region and the actual memory map implemented on RDK-S100 are different. For example, `0x22000000` may default to normal memory in ARM background settings, but on RDK-S100 it maps to MCU GIC and other device register space. Therefore, MPU memory attributes must match the chip implementation before access, or access exceptions may occur.
+- The ARM R52 background region and the actual memory map implemented on the RDK S100 are different. For example, `0x22000000` may default to normal memory in ARM background settings, but on the RDK S100 it maps to MCU GIC and other device register space. Therefore, MPU memory attributes must match the chip implementation before access, or access exceptions may occur.
 
 - Keep fixed peripheral/DDR/XSPI regions consistent with the D-Robotics reference code. If SRAM partitioning is adjusted, both linker script and MPU configuration must be updated together.
 :::
@@ -887,9 +896,9 @@ MPU_Init:
 4. Description of important MPU regions in the D-Robotics version (refer to `startup.s`):
 
 :::caution
-There are differences between the ARM R52 background region and the actual memory map implemented on the RDK-S600 chip.
+There are differences between the ARM R52 background region and the actual memory map implemented on the RDK S600 chip.
 
-For example, 0x2200_0000 belongs to normal memory space by default in the ARM background region, but on the RDK-S600 chip corresponds to **device** register space such as GIC.
+For example, 0x2200_0000 belongs to normal memory space by default in the ARM background region, but on the RDK S600 chip corresponds to **device** register space such as GIC.
 
 Therefore, before accessing such areas, you must use the MPU to make the memory type consistent with the actual chip implementation; otherwise, access exceptions will occur. Keep regions 6 through 9 and other fixed peripheral/DDR regions consistent with the D-Robotics code. If you need to adjust regions 1 through 5 SRAM partitioning, update both the linker script and MPU configuration.
 :::
@@ -1037,6 +1046,22 @@ EL1_Reset_Handler:
     .end
 ```
 </DocScope>
+
+## Debugging
+
+- **Compilation output check**: After compilation, verify that the generated files in the `output` directory match the MCU1 image layout.
+- **MPU configuration check**: Before accessing memory, verify that the memory type matches the actual chip implementation to avoid access exceptions caused by differences between the ARM R52 background region and the chip memory map.
+- **Linker script check**: If the SRAM partitioning is adjusted (region 1~5), the linker script and MPU configuration must be modified together and kept consistent.
+
+## FAQ
+
+### Memory access exception
+
+**Cause**: The ARM R52 background region differs from the memory map actually implemented on the chip. For example, `0x22000000` defaults to normal memory in the background region, but on the chip it maps to device register space such as the MCU GIC.
+
+**Solution**: Before access, use the MPU to keep the memory type consistent with the actual chip implementation; keep region 6~9 for fixed peripherals/DDR areas consistent with the reference code.
+
+<!-- TODO(Sx): pending board verification (add item 2) -->
 
 ## Related Documentation
 

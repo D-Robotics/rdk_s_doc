@@ -8,6 +8,27 @@ sidebar_position: 3
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## Overview
+
+This document describes the development method for MCU1 (FreeRTOS), including MCU interrupt numbers, FreeRTOS task creation, interrupt usage, memory management, LOG, and shared memory.
+
+- **Positioning**: Helps users perform FreeRTOS application development and system integration on MCU1.
+- **Target audience**: Advanced customization developers who need to develop or integrate FreeRTOS services on MCU1.
+- **Prerequisites**: Understand the basic MCU framework; see [MCU Quick Start Guide](./01_basic_information.md).
+- **Relationship with other modules**: The MCU1 firmware is built by the compilation system described in [MCU System Description](./02_MCU_build_system.md) and loaded by MCU0 via remoteproc; communication with Acore relies on IPC, see [IPC User Guide](./08_mcu_ipc.md).
+
+## Code Location
+
+- `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml`: S100 compilation directory add/remove configuration
+- `mcu/Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml`: S600 compilation directory add/remove configuration
+- `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld`: S100 linker script
+- `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld`: S600 linker script
+- `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/`: S100 task, interrupt, and startup code (Task_Hal.c, HorizonTask.c, Isr_Hal.c, SuperSoC_ISR.s)
+- `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/`: S600 task, interrupt, and startup code (Task_Hal.c, HorizonTask.c, Isr_Hal.c, S600_ISR.s)
+- `mcu/OpenSource/FreeRTOS/`: FreeRTOS kernel open source code (memory management is in portable/MemMang/)
+- `mcu/Service/Log`: Log service
+- `mcu/samples/MyDemo`: Custom compilation directory example
+
 ## MCU Interrupt Number and Module Correspondence
 <DocScope products="RDK S100">
 | Module | Interrupt Number | Name |
@@ -975,7 +996,7 @@ StaticLibServicePath:
 2. Add the SConscript file under the added compilation module. The SConscript file can be obtained from any already compiled module folder.
 </DocScope>
 
-## Introduction to the MCU FreeRtos System
+## Introduction to the MCU FreeRTOS System
 The MCU has several key system functions, as shown in the figure below:
 <DocScope products="RDK S100">
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system-en.jpg" alt="FreeRTOS System Architecture" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -1010,9 +1031,9 @@ Integration Note: This function only runs when sleep/wakeup is required. At othe
 MCU communication with Acore/HSM relies on IPC. Interrupts involved in IPC system services can be referenced in the [Introduction to IPC](./08_mcu_ipc.md) section.
 These interrupts should be configured with a higher priority than regular functional interrupts. These interrupts themselves can be configured with the same priority.
 
-## Introduction to FreeRtos System
-There are two mainstream startup methods for FreeRTOS: First, in the main function, initialize the hardware, RTOS system, and create all tasks, then start the RTOS scheduler to begin multitasking scheduling. Second, initialize the hardware and RTOS system in the main function, create a startup task, and then start the scheduler. Within the startup task, create various application tasks. After all tasks are created successfully, the startup task deletes itself. There is no strong advantage or disadvantage between the two methods. RDK-S100/RDK-S600 choose the first method.
-### FreeRtos System Task Creation
+## Introduction to FreeRTOS System
+There are two mainstream startup methods for FreeRTOS: First, in the main function, initialize the hardware, RTOS system, and create all tasks, then start the RTOS scheduler to begin multitasking scheduling. Second, initialize the hardware and RTOS system in the main function, create a startup task, and then start the scheduler. Within the startup task, create various application tasks. After all tasks are created successfully, the startup task deletes itself. There is no strong advantage or disadvantage between the two methods. RDK S100/RDK S600 choose the first method.
+### FreeRTOS System Task Creation
 <DocScope products="RDK S100">
 
 Task creation is located in `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c`, as shown in the example below:
@@ -1027,7 +1048,7 @@ Task creation is located in `mcu/Target/Target_S600/Target-hobot-lite-freertos-m
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="Task Initialization" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 The xxx_Startup task is responsible for startup-related initialization and runs only once.
-FreeRtos_OsTask_SysCore_BSW_xms and FreeRtos_OsTask_SysCore_ASW_xms are periodic tasks that schedule periodically based on different xms values. These periodic tasks also handle internal work, as detailed in the previous section "Introduction to the MCU FreeRtos System."
+FreeRtos_OsTask_SysCore_BSW_xms and FreeRtos_OsTask_SysCore_ASW_xms are periodic tasks that schedule periodically based on different xms values. These periodic tasks also handle internal work, as detailed in the previous section "Introduction to the MCU FreeRTOS System."
 
 If customers are developing independently, they can refer to the two types of examples above. They can also handle their own demos within already created tasks, as described below.
 <DocScope products="RDK S100">
@@ -1049,15 +1070,15 @@ TASK(OsTask_SysCore_BSW_10ms)
     #endif
 }
 ```
-### FreeRtos System Interrupt Usage
+### FreeRTOS System Interrupt Usage
 <DocScope products="RDK S100">
 
-Interrupt usage in FreeRtos is concentrated in `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`,
+Interrupt usage in FreeRTOS is concentrated in `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`,
 
 </DocScope>
 <DocScope products="RDK S600">
 
-Interrupt usage in FreeRtos is concentrated in `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`,
+Interrupt usage in FreeRTOS is concentrated in `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`,
 
 </DocScope>
 ```c
@@ -1128,8 +1149,8 @@ DefaultISR:
 Note:
 When enabling interrupts on MCU1, ensure that the corresponding interrupts on MCU0 are disabled!!!
 
-### Introduction to FreeRtos Memory Management Scheme
-The FreeRtos memory management scheme is located in the /mcu/OpenSource/FreeRTOS/portable/MemMang/ folder. There are five types of memory management algorithms: heap_1.c, heap_2.c, heap_3.c, heap_4.c, and heap_5.c. FreeRTOS's memory management module manages memory allocation and deallocation for users and the system, optimizing memory utilization and efficiency while minimizing memory fragmentation issues that may arise in the system.
+### Introduction to FreeRTOS Memory Management Scheme
+The FreeRTOS memory management scheme is located in the /mcu/OpenSource/FreeRTOS/portable/MemMang/ folder. There are five types of memory management algorithms: heap_1.c, heap_2.c, heap_3.c, heap_4.c, and heap_5.c. FreeRTOS's memory management module manages memory allocation and deallocation for users and the system, optimizing memory utilization and efficiency while minimizing memory fragmentation issues that may arise in the system.
 #### heap_1.c
 The heap_1.c management scheme is the simplest among all memory management schemes provided by FreeRTOS. It only allows memory allocation and not deallocation. This is ideal for safety-critical embedded devices because disallowing memory deallocation prevents memory fragmentation that could crash the system. However, it has the drawback of low memory utilization, as a segment of memory can only be used for allocation and cannot be recycled by the system even if used only once.
 #### heap_2.c
@@ -1142,12 +1163,12 @@ The heap_4.c scheme, like heap_2.c, uses the best-fit algorithm for dynamic memo
 The heap_5.c scheme implements dynamic memory allocation similarly to heap_4.c, using the best-fit algorithm and merging algorithm. It also allows the memory heap to span multiple non-contiguous memory regions, enabling memory allocation across non-contiguous memory heaps. For example, users can define a memory heap in on-chip RAM and one or more additional memory heaps in external SDRAM, all managed by the system. This scheme is more complex and slightly less real-time than heap_4.c.
 
 <DocScope products="RDK S100">
-#### RDK-S100 Memory Scheme
-RDK-S100 uses the heap_4.c scheme, which combines the best-fit algorithm and merging algorithm. It can allocate and deallocate random byte-sized memory, avoiding memory fragmentation while covering all scenarios of real-time system memory allocation, with good real-time performance.
+#### RDK S100 Memory Scheme
+RDK S100 uses the heap_4.c scheme, which combines the best-fit algorithm and merging algorithm. It can allocate and deallocate random byte-sized memory, avoiding memory fragmentation while covering all scenarios of real-time system memory allocation, with good real-time performance.
 </DocScope>
 <DocScope products="RDK S600">
-#### RDK-S600 Memory Scheme
-RDK-S600 uses the heap_4.c scheme, which combines the best-fit algorithm and merging algorithm. It can allocate and deallocate random byte-sized memory, avoiding memory fragmentation while covering all scenarios of real-time system memory allocation, with good real-time performance.
+#### RDK S600 Memory Scheme
+RDK S600 uses the heap_4.c scheme, which combines the best-fit algorithm and merging algorithm. It can allocate and deallocate random byte-sized memory, avoiding memory fragmentation while covering all scenarios of real-time system memory allocation, with good real-time performance.
 </DocScope>
 ## LOG Area Adjustment
 ### MCU1 Area Adjustment
@@ -1187,6 +1208,26 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 If shared memory is used for data transfer, there may be an issue where MCU updates data to SRAM, but the Acore cache still contains old data, leading to data read inconsistencies.
 
 To avoid data inconsistency between Acore and MCU, add the `volatile` keyword, or use the `ioremap_np()` function before the variable. Both methods avoid reading from the cache and instead read SRAM data directly.
+
+## Debugging
+
+- **Interrupt check**: Before adding a new interrupt, verify that the interrupt number matches the "MCU Interrupt Number and Module Correspondence" table to avoid conflicts with interrupts already occupied by MCU0.
+- **Task integration check**: When integrating a feature, keep the relative priority of each feature, the core it runs on, and the call order within the same task consistent with the reference implementation.
+- **Memory scheme check**: The heap_4.c memory management scheme can be used by default; if customization is required, verify that memory allocation/deallocation behavior meets expectations.
+
+## FAQ
+
+### Acore exception caused by Acore accessing MCU registers
+
+**Cause**: `Housekeeping_WriteMagicNum` in the Boot flow was not initialized properly.
+
+**Solution**: Ensure that `AcoreBootProc` completes initialization properly on MCU0 to avoid the exception caused by accessing MCU registers.
+
+### Inconsistent data read during shared memory transfer
+
+**Cause**: After the MCU updates data to SRAM, the Acore-side cache still holds the old data.
+
+**Solution**: Add the `volatile` keyword before the shared variable, or use the `ioremap_np()` function to read SRAM data directly.
 
 ## Related Documentation
 

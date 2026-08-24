@@ -10,6 +10,22 @@ import DocScope from '@site/src/components/DocScope';
 
 This section focuses on the usage instructions for the MCU side. For more details on the principles and usage of IPC, please refer to the [IPC Module Introduction](../03_system_software/12_driver_ipc.md) section.
 
+<DocScope products="RDK S100">
+The default allocation of S100 MCU-side IPC instances is as follows; for the complete allocation, see [IPC Usage](#ipc-usage):
+
+| Configuration Item | Default Value |
+|---|---|
+| Instances available to User | Ipc_ShmCfgInstances0~8 |
+| IPC send channels | 2 |
+</DocScope>
+<DocScope products="RDK S600">
+The default allocation of S600 MCU-side IPC instances is as follows; for the complete allocation, see [IPC Usage](#ipc-usage):
+
+| Configuration Item | Default Value |
+|---|---|
+| Instances available to User | Ipc_ShmCfgInstances0~7, 8~15 |
+| IPC send channels | 2 |
+</DocScope>
 
 ## Usage Restrictions
 
@@ -106,6 +122,11 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 | Ipc_PrivShmCfgInstance3    | QGA          | ISR(Ipc0_Ch9Isr): Ipc_Driver_MCUIpc0Ch9Isr()                                    | Acore instance51      |
 | Housekeeping               | Housekeeping | ISR(Ipc2_Ch3Isr): Housekeeping_IrqHandler()                                     | Acore Housekeeping    |
 </DocScope>
+
+## Code Location
+
+- `mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c`: S100 MCU0-side IPC configuration
+- `mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c`: S100 MCU1-side IPC configuration
 
 ## Application Sample
 
@@ -465,6 +486,32 @@ Return value:Std_ReturnType
     IPC_E_NO_BUF_ERROR: no buffer
     IPC_E_CHANNEL_NOT_OPEN: Instance has been closed
 ```
+
+## Debugging
+
+- **Communication self-test**: Run the Acore-side sample to communicate with MCU1 and verify that data is sent and received correctly.
+- **Configuration check**: Verify that the IPC configurations on both ends are consistent, including the Instance control segment and data segment addresses, the number and IDs of channels, and the buffer size.
+- **Interrupt check**: Verify that the Instance's working-core configuration (`receive_coreid`) matches the core on which the interrupt is enabled, to avoid communication failures caused by multi-core preemption.
+
+## FAQ
+
+### IPC communication failure — inconsistent configuration on both ends
+
+**Cause**: The IPC configuration on the MCU side is inconsistent with the peer, including the Instance control segment and data segment addresses, the number and IDs of channels, and the buffer data and size.
+
+**Solution**: Verify the configurations on both ends and keep them consistent, then retry.
+
+### IPC communication failure — incorrect receive_coreid configuration
+
+**Cause**: The Instance's `receive_coreid` does not match the actual working core (MCU0 or MCU1).
+
+**Solution**: Clarify whether the Instance works on MCU0 or MCU1, and configure it as `Ipc_Receive_Core1` accordingly.
+
+### IPC communication failure — interrupt preempted by another core
+
+**Cause**: The IPC interrupt is enabled on multiple cores simultaneously and is preempted by another core.
+
+**Solution**: Enable the corresponding IPC interrupt only on the core that actually works.
 
 ## Related Documentation
 
