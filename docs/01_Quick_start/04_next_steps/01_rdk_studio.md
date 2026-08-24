@@ -8,6 +8,11 @@ description: "RDK Studio 集成开发环境介绍与下载"
 
 **RDK Studio** 是 D-Robotics 为 RDK 开发板打造的集成开发环境（IDE），提供代码编辑、远程编译、调试、模型部署、性能分析等一站式开发能力，无需在宿主机上手动搭建交叉编译环境。
 
+## 前置条件
+
+- 宿主机（Windows/Linux/macOS）已联网，用于下载安装包。
+- 使用远程开发时，开发板已烧录 RDK OS 镜像，且与宿主机网络可达。
+
 ## 下载与安装
 
 :::warning 升级说明
@@ -31,6 +36,10 @@ description: "RDK Studio 集成开发环境介绍与下载"
 | 安装 | 下载安装包即可 | 安装工具链+依赖 |
 | 编译 | IDE 内一键 | 命令行 mk_*.sh |
 | 调试 | 图形化调试器 | gdb / printf |
+
+## 验证
+
+- 下载安装后能正常启动 RDK Studio 即安装成功；连接板端、编译、调试等具体操作见 [RDK Studio 用户手册](https://developer.d-robotics.cc/rdk_studio_doc/category/1-product-intro)。
 
 ## 相关文档
 

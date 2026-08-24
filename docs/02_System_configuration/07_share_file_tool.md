@@ -181,6 +181,25 @@ mount | grep windows_nfs_share
 
    - 服务文件已由上方 `cat` heredoc 直接写入，无需再打开编辑器。
 
+## 验证
+
+- Samba：`systemctl status smbd` 显示 `Active: active (running)`；客户端用 Samba 账户访问 `\\<板IP>\shared` 成功即配好。
+- NFS：`mount | grep windows_nfs_share` 输出含 `192.168.127.11:/D/NFSShare` 挂载点即挂载成功。
+
+## 常见问题
+
+### 客户端访问不了 Samba 共享
+
+**原因**：smbd 未运行、Samba 用户/密码未配，或防火墙未放行。
+
+**解决**：`systemctl status smbd` 确认运行；用 `sudo smbpasswd -a sunrise` 建 Samba 用户；有防火墙时 `sudo ufw allow samba`。
+
+### NFS 挂载失败
+
+**原因**：NFS 服务不可达，或 `vers`/`proto` 参数与服务端不匹配。
+
+**解决**：确认服务端 IP 与共享目录正确；按服务端支持的版本调整 `-o vers=3,proto=tcp`。
+
 ## 相关文档
 
 - [网络配置](./01_network_config.md)

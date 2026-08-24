@@ -69,6 +69,12 @@ aplay /app/res/assets/chi_sound.wav
 - **USB 声卡不识别**：`lsusb` 确认，`dmesg` 查驱动加载。
 - **杂音/爆音**：降采样率，确认 buffer/period 设置。
 
+## 验证
+
+- 设备列表：`aplay -l` 列出回放设备（接好音频设备后会有 `hw:0,0` 等 card/device；无设备时提示 `no soundcards found`）。
+- 音量：`amixer scontrols` 列出可调控件，`amixer get Master` 显示当前音量。
+- 播放：`speaker-test -t sine -f 440 -l 1` 或 `aplay <wav>` 能出声即输出正常。
+
 ## 相关文档
 
 - [音频应用](../03_Demos/01_peripheral/03_audio.md)

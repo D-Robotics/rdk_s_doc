@@ -46,6 +46,12 @@ RDK OS 跨大版本（如 5.0.x → 5.1.x）**不能靠 `apt` 升级**，须重�
 - **降级后异常**：固件降级有兼容风险，确认降级路径官方支持。
 - **OTA 失败**：检查分区布局与 `miniboot` 版本是否匹配，见 [系统 OTA 升级](../../07_Advanced_development/03_system_software/06_ota_system.md)。
 
+## 验证
+
+- 包级更新：`apt upgrade` 后按 [系统状态查询](../../01_Quick_start/03_install_os_and_setup/03_system_status.md) 确认系统仍正常、关键包版本已更新（`apt list --upgradable` 无待升级包）。
+- 主版本升级：烧录目标镜像后，用 [系统状态查询](../../01_Quick_start/03_install_os_and_setup/03_system_status.md) 确认版本号已到目标大版本。
+- 固件升级/降级：OTA/miniboot 流程完成后重启，系统能正常启动即成功。
+
 ## 相关文档
 
 - [软件包管理 apt](./01_apt_usage.md)

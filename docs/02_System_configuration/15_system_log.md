@@ -78,6 +78,12 @@ TriggeredBy: ● ssh.socket
 - **`is-system-running` 显示 degraded**：`systemctl --failed` 列出失败服务，逐个排查。
 - **dmesg 没权限**：root 直接 `dmesg`；非 root 需在 `video`/`systemd-journal` 组或用 `sudo`。
 
+## 验证
+
+- 内核日志：`dmesg | tail -20` 能看到内核/驱动日志；`dmesg --level=err,warn` 只看错误与警告。
+- systemd 日志：`journalctl -b` 查看本次开机日志；`journalctl -u ssh` 查看指定服务日志。
+- 服务状态：`systemctl status ssh` 显示 `Active: active (running)` 即正常；`systemctl --failed` 列出失败服务。
+
 ## 相关文档
 
 - [开机自启动配置](./06_self_start.md)

@@ -59,6 +59,25 @@ config.txt 解析源码位于 BSP 的 U-Boot 源码树中，路径为
 [开发环境与编译](../../07_Advanced_development/06_environment_build/01_environment_build.md)。
 :::
 
+## 验证
+
+- 新增通用配置项后，重启进入 U-Boot 用 `printenv <key>` 确认 `key=value` 已写入环境变量。
+- 设备树类配置项（`fdt-enable`/`dtbo_file_path` 等）生效后，进入系统用 `ls /proc/device-tree/soc/` 确认节点或 Overlay。
+
+## 常见问题
+
+### 新增配置项没生效
+
+**原因**：key 被 `process_key_val_pair()` 的既有分支（如 `bootargs` 追加、`ion*` 拆分）特殊处理，未按预期写入。
+
+**解决**：对照 `board/hobot/common/drobot_boot_config.c` 的 `parse_config_file()`/`process_key_val_pair()` 确认处理分支。
+
+### 设备树类配置项不生效
+
+**原因**：只在环境变量层写入，未在 `drobot_fdt_runtime_config.c` 的 `drobot_fdt_runtime_conf()` 加入消费逻辑。
+
+**解决**：在该函数新增对应消费逻辑后重新编译 U-Boot。
+
 ## 相关文档
 
 - [config.txt 使用指南](./01_usage.md)

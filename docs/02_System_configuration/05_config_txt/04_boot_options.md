@@ -48,6 +48,26 @@ fdt-disable=/soc/i2c@3932000;
 
 > 节点路径需与设备树中的完整路径一致，可用 `ls /proc/device-tree/soc/` 查看节点名。示例为 S100 节点地址，S600 的节点地址不同。
 
+## 验证
+
+- `bootargs` 追加：重启后 `cat /proc/cmdline` 确认 `isolcpus`/`loglevel`/`norandmaps` 等参数已追加。
+- DTS 节点：重启后 `ls /proc/device-tree/soc/` 确认 `fdt-enable` 的节点存在、`fdt-disable` 的节点消失。
+- 启动介质：拨码后重启，`lsblk` 确认从对应介质（eMMC/UFS/NVMe）启动。
+
+## 常见问题
+
+### 追加的 bootargs 覆盖了默认参数
+
+**原因**：误用 `setenv bootargs` 整体替换，而不是在 config.txt 用 `bootargs=` 追加。
+
+**解决**：config.txt 的 `bootargs=` 会追加到默认 cmdline 末尾，不会覆盖；U-Boot 内追加用 `setenv bootargs ${bootargs} <参数>`。
+
+### DTS 节点使能/失能无效
+
+**原因**：节点全路径与设备树不符（示例为 S100 地址，S600 不同）。
+
+**解决**：用 `ls /proc/device-tree/soc/` 核对节点名，确认 `fdt-enable`/`fdt-disable` 语句末尾带分号。
+
 ## 相关文档
 
 - [config.txt 使用指南](./01_usage.md)

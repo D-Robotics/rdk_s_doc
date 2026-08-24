@@ -70,6 +70,32 @@ chmod 755 <文件>        # rwxr-xr-x
 chown <用户>:<组> <文件>  # 改属主属组
 ```
 
+## 验证
+
+- 当前身份：`whoami`/`id` 查看当前用户与 uid。
+- 用户存在：`grep "^sunrise:" /etc/passwd` 能查到默认用户；新建用户后 `grep "^myapp:" /etc/passwd` 能查到。
+- 组成员与权限：`groups <用户>` 查看所属组；`ls -l <文件>` 查看权限与属主。
+
+## 常见问题
+
+### 普通用户执行命令提示 permission denied
+
+**原因**：文件/目录权限不足，或用户不在对应组（如 `dialout` 访问串口、`video` 访问显示设备）。
+
+**解决**：用 `sudo` 提权，或 `sudo usermod -aG <组> <用户>` 加入对应组后重新登录。
+
+### sudo 需要密码或无法提权
+
+**原因**：sudoers 未授权该用户免密，或免密配置被删除。
+
+**解决**：`sunrise` 默认免密（`/etc/sudoers.d/010_sunrise-nopasswd`）；新建用户加入 `sudo` 组并用 `visudo` 按需授权。
+
+### 加组后用户被踢出其它组
+
+**原因**：误用 `usermod -G`（覆盖）而非 `-aG`（追加）。
+
+**解决**：追加组用 `sudo usermod -aG <组> <用户>`，保留原组。
+
 ## 相关文档
 
 - [开机自启动配置](./06_self_start.md)

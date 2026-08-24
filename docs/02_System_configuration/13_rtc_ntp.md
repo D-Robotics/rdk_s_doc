@@ -75,6 +75,12 @@ hwclock: Warning: unrecognized line in adjtime file:
 - **NTP 不生效**：确认网络可达、`set-ntp true` 已开；看 `systemctl status systemd-timesyncd`。
 - **`hwclock` 报 adjtime 警告**：`/etc/adjtime` 格式异常，按提示重建或忽略（不影响主功能）。
 
+## 验证
+
+- 系统时钟：`timedatectl` 中 `System clock synchronized: yes` + `NTP service: active` 表示 NTP 已同步。
+- 时区：`timedatectl` 中 `Time zone` 显示目标时区（如 `Asia/Shanghai`）。
+- RTC 写入：`sudo hwclock --show` 读到真实时间即写入成功（本板默认 RTC 为 1970，需先 `sudo hwclock --systohc` 写入）。
+
 ## 相关文档
 
 - [RTC 调试指南（进阶）](../07_Advanced_development/04_driver_development/14_driver_rtc.md)

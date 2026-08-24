@@ -90,6 +90,32 @@ sudo apt autoremove          # 删无用依赖
 
 rootfs 扩容见 [存储与磁盘管理](../12_storage.md)。
 
+## 验证
+
+- 源生效：`apt policy` 输出含 `archive.d-robotics.cc`（D-Robotics 专属包源）与 Ubuntu 官方源。
+- 安装成功：`apt list --installed | grep <包名>` 能查到已装包，或 `apt show <包名>` 显示详情。
+- 升级结果：`apt list --upgradable` 查看待升级包；升级后 `df -h /` 查看 rootfs 占用变化。
+
+## 常见问题
+
+### 升级后系统功能异常
+
+**原因**：跨大版本用 `apt upgrade` 升级不被支持，会引入兼容性问题。
+
+**解决**：重新烧录正确版本的镜像；同大版本内升级前先确认待升包，生产环境先在测试板验证。
+
+### 误删 hobot-* 系统包导致能力缺失
+
+**原因**：`hobot-*` 是 BPU 运行时、相机、音频等系统级包，卸载后对应板端能力失效。
+
+**解决**：勿随意卸载；已误删时用 `sudo apt install <包名>` 重新安装并重启对应服务。
+
+### apt 缓存占满磁盘
+
+**原因**：`/var/cache/apt/archives` 下载缓存与无用依赖未清理。
+
+**解决**：`sudo apt clean` 清缓存、`sudo apt autoremove` 删无用依赖；rootfs 仍不足见 [存储与磁盘管理](../12_storage.md)。
+
 ## 相关文档
 
 - [主版本升级与固件](./02_upgrade_firmware.md)

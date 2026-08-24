@@ -224,6 +224,15 @@ ros2 launch tros_yolo_detection yolo_detection.launch.py
 当前 S600 板端镜像未预装 tros.b，以上命令需在带 tros.b 的镜像上运行。
 :::
 
+## 验证
+
+- 运行自建节点：`ros2 run my_robot_node my_robot_node` 持续输出 `[INFO] [my_node]: Hello from tros.b!` 即运行成功。
+- 功能包可用：`ros2 pkg list | grep tros` 能看到已装功能包；`ros2 param list /tros_yolo_detection` 能列出节点参数。
+
+:::note 板端验证
+当前 S600 板端镜像未预装 tros.b，以上验证需在带 tros.b 的镜像上执行。
+:::
+
 ## 相关文档
 
 - [使用 RDK Studio](./01_rdk_studio.md)

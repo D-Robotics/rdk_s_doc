@@ -86,6 +86,12 @@ Wayland 会话请在「设置 → 显示器」里配置旋转方向。
 - **分辨率不对**：X11 用 `xrandr` 看支持列表；Wayland 在「设置 → 显示器」调整，或 `cat /sys/class/drm/card0-HDMI-A-1/modes` 看内核支持的模式，选 EDID 报告的模式。
 - **花屏/闪屏**：换合规 HDMI 线，确认刷新率。
 
+## 验证
+
+- 显示器连接：`cat /sys/class/drm/card0-HDMI-A-1/status` 输出 `connected`。
+- 支持的分辨率：`cat /sys/class/drm/card0-HDMI-A-1/modes` 列出支持的显示模式。
+- 当前分辨率：X11 下 `xrandr` 查看标 `*` 的当前模式；Wayland 下在「设置 → 显示器」查看。
+
 ## 相关文档
 
 - [config.txt 配置](./05_config_txt/01_usage.md)

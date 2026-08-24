@@ -62,6 +62,12 @@ screen /dev/ttyUSB0 921600
 - **乱码**：波特率不对（确认 921600）；macOS 驱动残留，见 [macOS 驱动残留导致仍乱码](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver)。
 - **进不了 U-Boot**：上电时机要早（启动日志一开始就打断），错过就重启重试。
 
+## 验证
+
+- 串口就绪：USB Type-C 连接后，PC 识别出 Main 与 MCU 两个串口（Windows 设备管理器；Linux 为 `ls /dev/ttyUSB*`）。
+- 波特率：板端 `cat /proc/cmdline` 中 `console=ttyS0,921600n8` 确认波特率为 921600。
+- 登录成功：minicom/screen 连接后回车出现登录提示，输入 `root`/`root` 能进入系统。
+
 ## 相关文档
 
 - [远程登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)

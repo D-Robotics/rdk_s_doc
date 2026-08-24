@@ -65,6 +65,31 @@ boot
 
 config.txt 在每次启动时由 U-Boot 自动读取并解析。修改后**重启开发板**即可生效，无需重新烧录固件。
 
+## 验证
+
+- 挂载就绪：`mount | grep /boot` 能看到 boot 分区已挂载，或 `vi /boot/config.txt` 能正常读写。
+- 配置生效：修改后 `reboot`，重启后用 `cat /proc/cmdline` 查看 bootargs、`ls /proc/device-tree/soc/` 查看 fdt 节点确认生效。
+
+## 常见问题
+
+### 编辑 config.txt 时提示只读或找不到文件
+
+**原因**：boot 分区未挂载，或无写权限。
+
+**解决**：执行 `mount /boot` 挂载（依赖 `/etc/fstab` 中 by-name/boot_cur 条目），并用 `sudo` 编辑。
+
+### 追加参数后丢失默认 cmdline
+
+**原因**：在 U-Boot 用 `setenv bootargs` 会整体替换环境变量，覆盖 `root=`/`console=` 等默认参数。
+
+**解决**：追加参数用 `setenv bootargs ${bootargs} <新增参数>` 引用已有值。
+
+### AVB 使能时修改不生效
+
+**原因**：修改启动分区内容与 AVB 校验冲突。
+
+**解决**：AVB 使能时不能使用 config.txt，先关闭 AVB。
+
 ## 相关文档
 
 - [config.txt 使用指南](./01_usage.md)

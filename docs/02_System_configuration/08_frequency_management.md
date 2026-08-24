@@ -14,7 +14,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## RDK S100
 ### 温度传感器
-在 RDK S100 芯片中有5个温度传感器，用于显示 MCU 域/BPU/MAIN 域的温度，其中 MAIN 域和 MCU 各有两个温度传感器，BPU 有一个温度传感器
+在 RDK S100 计算平台中有5个温度传感器，用于显示 MCU 域/BPU/MAIN 域的温度，其中 MAIN 域和 MCU 各有两个温度传感器，BPU 有一个温度传感器
 
 在/sys/class/hwmon/下有 hwmon0目录下包含温度传感器的相关参数
 - temp1_input 是 MAIN 域的第一个温度传感器，temp2_input 是 MAIN 域的第二个温度传感器，
@@ -215,7 +215,7 @@ echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 
 ## RDK S600
 ### 温度传感器
-在 RDK S600 芯片中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。
+在 RDK S600 计算平台中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。
 
 在/sys/class/hwmon/下有 hwmon1目录下包含温度传感器的相关参数
 - temp1_input 到 temp7_input 是 CPU 的温度传感器，对应的 label 为 CMN0-TS[0-6]
@@ -448,6 +448,33 @@ echo 1050000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态
 
 </DocScope>
+
+## 验证
+
+- 温度读取：`cat /sys/class/hwmon/hwmon<X>/temp1_input` 能读到千分之一摄氏度的数值（S100 为 hwmon0、S600 为 hwmon1）。
+- CPU 频率：`cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq` 查看当前频率，`cat .../scaling_governor` 查看当前策略。
+- 风扇档位：`cat /sys/class/thermal/cooling_device<X>/cur_state` 查看当前档位（S100 为 cooling_device2、S600 为 cooling_device5）。
+- 综合状态：`sudo hrut_somstatus` 查看当前频率、温度等状态。
+
+## 常见问题
+
+### 手动设置的风扇档位被系统自动调整
+
+**原因**：Thermal 策略为 `step_wise` 时，系统按温度自动调节风扇档位，覆盖手动设置。
+
+**解决**：先把对应 thermal_zone 的策略改为 `user_space`（如 `echo user_space > /sys/class/thermal/thermal_zone0/policy`），再设置风扇档位。
+
+### CPU 无法固定到指定频率
+
+**原因**：`scaling_setspeed` 仅在 governor 为 `userspace` 时可用。
+
+**解决**：先 `echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`，再向 `scaling_setspeed` 写入目标频率。
+
+### sysfs 修改重启后失效
+
+**原因**：通过 sysfs 的温控/调频修改只在当前启动有效。
+
+**解决**：需要持久化时把命令写入开机脚本（见 [开机自启动配置](./06_self_start.md)），或改用编译期配置。
 
 ## 相关文档
 

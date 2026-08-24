@@ -85,6 +85,32 @@ sudo resize2fs /dev/<rootfs分区>
 操作分区有数据丢失风险，先 `df`/`lsblk` 确认目标分区，必要时备份。本机 rootfs 位于 sda17（最后一个分区），其后已无未分配空间，无法用 `growpart` 扩展，仅当存在未分配空间时可用。
 :::
 
+## 验证
+
+- 磁盘占用：`df -h /` 查看 rootfs 大小与可用空间。
+- 块设备：`lsblk` 列出磁盘与分区挂载情况。
+- 挂载：`mount | grep -E "sd|mmc"` 查看已挂载设备；挂载 U 盘后 `ls /mnt` 能看到内容即成功。
+
+## 常见问题
+
+### rootfs 占用过高
+
+**原因**：apt 缓存、日志或用户数据占用过大。
+
+**解决**：`sudo apt clean`、`journalctl --vacuum-size=100M` 清理；仍不足则见「rootfs 扩容」或迁移数据。
+
+### 挂载 U 盘失败
+
+**原因**：设备名判断错误（`sdb`/`sdc` 为板载 4M 存储，U 盘通常为 `sdd` 及之后）。
+
+**解决**：先 `lsblk` 确认设备名，再用正确节点挂载。
+
+### growpart 提示无可扩展空间
+
+**原因**：rootfs 分区后已无未分配空间（本机 rootfs 为最后一个分区）。
+
+**解决**：仅当分区后存在未分配空间时才可 `growpart`；否则另挂存储迁移数据。
+
 ## 相关文档
 
 - [软件包管理 apt](./03_system_update/01_apt_usage.md)

@@ -97,6 +97,26 @@ exit 0
 新项目优先用 systemd unit（方法一），可管理依赖、重启策略、日志；init.d/rc.local 仅作兼容。
 :::
 
+## 验证
+
+- 立即启动：`systemctl status myapp` 显示 `Active: active (running)` 即启动成功。
+- 开机自启：`systemctl is-enabled myapp` 输出 `enabled`。
+- 全量自启清单：`systemctl list-unit-files --state=enabled --type=service` 能看到目标服务 `enabled`。
+
+## 常见问题
+
+### `systemctl start` 后服务没起来
+
+**原因**：`ExecStart` 路径写错或脚本无执行权限，或改 unit 后未 `daemon-reload`。
+
+**解决**：`systemctl status myapp` 看报错；改 unit 后先 `systemctl daemon-reload` 再 start。
+
+### 开机后服务未自启
+
+**原因**：未执行 `systemctl enable`，或 `[Install]` 段缺少 `WantedBy=multi-user.target`。
+
+**解决**：补 `WantedBy=multi-user.target` 后 `systemctl enable myapp`；用 `systemctl is-enabled myapp` 确认输出 `enabled`。
+
 ## 相关文档
 
 - [系统日志查看](./15_system_log.md)

@@ -161,6 +161,32 @@ U-Boot 会根据当前启动使用的储存介质和分区，自动获取默认�
 `board/hobot/common/drobot_boot_config.c` 文件内。解析机制与新增配置项说明见
 [config.txt 解析开发指南](./05_parser_dev.md)。
 
+## 验证
+
+- `bootargs`：重启后 `cat /proc/cmdline` 确认追加的内核参数已生效。
+- `fdt-enable`/`fdt-disable`：重启后 `ls /proc/device-tree/soc/` 确认目标节点出现/消失。
+- DTB Overlay：重启后 `ls /proc/device-tree/soc/spi@39800000/slave@1/` 能看到 `compatible`、`reg` 等属性即 Overlay 生效（见上文示例）。
+
+## 常见问题
+
+### 配置修改后未生效
+
+**原因**：U-Boot 内 `setenv` 手动配置的优先级高于配置文件，配置文件被覆盖。
+
+**解决**：检查 U-Boot 是否用 `setenv` 覆盖了同名变量；优先级为 `setenv > 配置文件 > saveenv`。
+
+### 使能 AVB 后配置失效
+
+**原因**：修改启动分区内容与 AVB 校验冲突，AVB 使能时 config.txt 不可用。
+
+**解决**：AVB 默认不使能；如已使能需先关闭 AVB，或改用其它配置入口。
+
+### DTS 节点路径找不到
+
+**原因**：示例节点地址为 S100；S600 的节点地址不同，或全路径拼写有误。
+
+**解决**：以板端 `/proc/device-tree` 实际节点名为准，用 `realpath --relative-to=/proc/device-tree/ <节点>` 获取路径并补行首 `/`。
+
 ## 相关文档
 
 - [自定义 config.txt](./02_custom.md)
