@@ -32,7 +32,7 @@ import DocScope from '@site/src/components/DocScope';
     ```bash
     cat /etc/version
     ```
-    例如，输出可能是 `2.0.0` 或 `x3_ubuntu_v1.1.6`。
+    例如，现行系统（RDK OS 4.x/5.x）输出类似 `4.0.5`、`5.1.0`；历史版本（RDK OS 1.x/2.x）的输出可能是 `2.0.0` 或 `x3_ubuntu_v1.1.6`。
 
 2.  **查看已安装的地瓜核心功能包版本：**
     ```bash
@@ -42,7 +42,7 @@ import DocScope from '@site/src/components/DocScope';
     ```bash
     rdkos_info
     ```
-    **示例输出 (RDK OS 2.x 版本，如2.0.0):**
+    **示例输出（历史版本 RDK OS 2.x，如 2.0.0）：**
     ```shell
     root@ubuntu:~# apt list --installed | grep hobot
     hobot-boot/unknown,now 2.0.0-20230530181103 arm64 [installed]
@@ -51,7 +51,7 @@ import DocScope from '@site/src/components/DocScope';
     root@ubuntu:~# cat /etc/version
     2.0.0
     ```
-    **示例输出 (RDK OS 1.x 版本，如1.1.6):**
+    **示例输出（历史版本 RDK OS 1.x，如 1.1.6）：**
     ```shell
     root@ubuntu:~# apt list --installed | grep hobot
     hobot-arm64-boot/unknown,now 1.1.6 arm64 [installed]
@@ -62,7 +62,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### Q3: 不同 RDK OS 系统版本和硬件平台之间有什么对应关系？
 **A:**
-* **RDK OS 2.x 及更新版本系统 (如2.0.0, 2.1.0, 3.0.x)：**
+* **RDK OS 2.x/3.x 版本系统（历史版本，如 2.0.0、2.1.0、3.0.x）：**
     * 基于 D-Robotics Linux 开源代码包制作。
     * 通常支持对应芯片的 RDK 系列硬件，请根据实际系统版本与板卡型号确认。
 * **RDK OS 1.x 版本系统：**
@@ -71,7 +71,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **重要注意事项：**
 * **版本升级：** 1.x 版本系统**无法**通过`apt`命令直接升级到2.x 或更新版本的系统。如需升级，必须通过烧录新版本系统镜像的方式重新[安装操作系统](../01_Quick_start/03_install_os_and_setup/02_burn.md)。
-* **TROS 兼容性：** 不同大版本的 TROS（如基于 Foxy 的 TROS 和基于 Humble 的 TROS）通常与特定的 RDK OS 大版本绑定。例如，RDK OS 2.x 通常搭载基于 ROS2 Foxy 的 TROS，而 RDK OS 3.x 通常搭载基于 ROS2 Humble 的 TROS。
+* **TROS 兼容性：** 不同大版本的 TROS（如基于 Foxy 的 TROS 和基于 Humble 的 TROS）通常与特定的 RDK OS 大版本绑定。例如，（历史版本）RDK OS 2.x 通常搭载基于 ROS2 Foxy 的 TROS，而 RDK OS 3.x 通常搭载基于 ROS2 Humble 的 TROS。
 
 ### Q4: 摄像头插拔有什么注意事项？
 **A:** **严禁在开发板未断电的情况下插拔摄像头，否则非常容易烧坏摄像头模组或主板接口。** 请务必在断开开发板所有电源后，再进行摄像头的连接或移除操作。
@@ -81,7 +81,7 @@ import DocScope from '@site/src/components/DocScope';
 * **供电不足或不稳定：**
     * **现象：** 系统在 U-Boot 加载内核时或内核启动初期无明显错误日志就直接重启；状态灯异常或 HDMI 完全黑屏。
 
-        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914173433676.png" alt="Uboot引导内核时因供电不足重启日志示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914173433676.png" alt="U-Boot引导内核时因供电不足重启日志示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
         <br/>
         <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/system/image-20230914174123619.png" alt="内核启动数秒后因供电不足重启日志示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -403,13 +403,13 @@ ROS2官方软件源 GPG 签名密钥更新，导致本地配置过期。
 **A:** HDMI 显示问题可能由多种原因造成：
 1.  **显示器兼容性：**
     * 部分显示器可能与 RDK 板卡输出的特定分辨率或刷新率不完全兼容。
-    * RDK OS 2.1.0及以上版本引入了更多的 HDMI 分辨率支持，但也可能导致与某些旧显示器的兼容性问题。
+    * RDK OS 2.1.0 及以后版本（含现行 4.x/5.x）引入了更多的 HDMI 分辨率支持，但也可能导致与某些旧显示器的兼容性问题。
     * 通常情况下，标准的1080p (1920x1080) 分辨率的显示器在板卡启动时直接连接，兼容性会比较好。
 2.  **线缆问题：** 确保使用的 HDMI 线缆质量良好且连接牢固。尝试更换一条 HDMI 线。
 3.  **RDK 系统配置：**
     * 对于 Desktop 版本的系统，确保图形界面服务（如 LightDM）正常启动。
     * 对于 Server 版本的系统，默认情况下 HDMI 可能只输出启动 LOGO 或控制台信息，不会有图形桌面。
-    * 在 RDK OS 2.1.0及以上版本，如果遇到显示不兼容，可以尝试先通过 VNC 连接到板卡（如果已开启），然后在系统中手动调整 HDMI 的输出分辨率。参考：[HDMI显示问题及分辨率调整](https://developer.d-robotics.cc/forumDetail/204825652464181769)
+    * 在 RDK OS 2.1.0 及以后版本（含现行 4.x/5.x），如果遇到显示不兼容，可以尝试先通过 VNC 连接到板卡（如果已开启），然后在系统中手动调整 HDMI 的输出分辨率。参考：[HDMI显示问题及分辨率调整](https://developer.d-robotics.cc/forumDetail/204825652464181769)
 4.  **供电问题：** 虽然不直接，但严重的供电不足可能导致系统无法正常初始化显示子系统。
 5.  **硬件问题：** 极少数情况下，可能是板卡的 HDMI 接口或显示器本身的硬件故障。
 
@@ -511,8 +511,8 @@ no mmc device at slot X
 
 **重要提示：** “发热量小不代表温度会低”。即使芯片本身设计功耗不高，如果散热不良，热量积聚仍然会导致表面温度快速升高。良好的散热设计是保证嵌入式系统稳定运行的关键。
 
-### Q23: 如何在 Conda 虚拟环境中获取和使用地瓜机器人 RDK 特定的 Python 包（如 `hobot.GPIO`, `hobot_dnn` 等）？
-**A:** 地瓜机器人官方提供的 `hobot.GPIO`、`hobot_dnn` 等 Python 包通常是为 RDK 的系统 Python 环境预编译和优化的，它们可能依赖于系统底层的特定库文件和驱动程序。在 Conda 等 Python 虚拟环境中使用这些包可能会遇到一些挑战，因为虚拟环境旨在隔离依赖。
+### Q23: 如何在 Conda 虚拟环境中获取和使用地瓜机器人 RDK 特定的 Python 包（如 `Hobot.GPIO`, `hbm_runtime` 等）？
+**A:** 地瓜机器人官方提供的 `Hobot.GPIO`（GPIO 控制）、`hbm_runtime`（智能计算架构推理运行时，历史版本中为 `hobot_dnn`）等 Python 包通常是为 RDK 的系统 Python 环境预编译和优化的，它们可能依赖于系统底层的特定库文件和驱动程序。在 Conda 等 Python 虚拟环境中使用这些包可能会遇到一些挑战，因为虚拟环境旨在隔离依赖。
 
 以下是一些可能的方法和注意事项：
 
@@ -768,8 +768,8 @@ DefaultEnvironment="TZ=CST-08:00"
 ```
 如果需要手动配置，请注释掉`DefaultEnvironment="TZ=CST-08:00"`，然后`reboot`重启设备使配置生效。
 
-### Q32: RDKS100 桌面应用`Power Statistics` 应用设备节点显示不全问题
-RDKS100默认不支持，未提供相应的驱动。如用户需要支持显示适配器信息和电池信息，请用户自行联系电源管理芯片供应商提供驱动。
+### Q32: RDK S100 桌面应用`Power Statistics` 应用设备节点显示不全问题
+RDK S100默认不支持，未提供相应的驱动。如用户需要支持显示适配器信息和电池信息，请用户自行联系电源管理芯片供应商提供驱动。
 ## 硬件使用注意（RDK S100）
 
 使用 RDK S100 时，请留意以下供电、接口与连接注意事项。

@@ -23,23 +23,23 @@ description: "应用开发、编译与示例 常见问题与排查"
 
 **增加 Swap 空间的步骤示例 (创建一个1GB 的 Swap 文件)：**
 ```bash
-# 1. （可选）创建一个目录用于存放Swap文件，或者直接在根目录创建
+## 1. （可选）创建一个目录用于存放Swap文件，或者直接在根目录创建
 sudo mkdir -p /swapfile_custom_dir 
 cd /swapfile_custom_dir
 
-# 2. 使用dd命令创建一个指定大小的空文件 (bs=1M表示块大小为1MB, count=1024表示1024个块，即1GB)
+## 2. 使用dd命令创建一个指定大小的空文件 (bs=1M表示块大小为1MB, count=1024表示1024个块，即1GB)
 sudo dd if=/dev/zero of=swap bs=1M count=1024 
 
-# 3. 设置正确的文件权限 (只有root用户可读写)
+## 3. 设置正确的文件权限 (只有root用户可读写)
 sudo chmod 0600 swap 
 
-# 4. 将该文件格式化为Swap分区
+## 4. 将该文件格式化为Swap分区
 sudo mkswap -f swap 
 
-# 5. 启用Swap分区
+## 5. 启用Swap分区
 sudo swapon swap 
 
-# 6. 验证Swap空间是否已启用 (会显示Swap总量和已用量)
+## 6. 验证Swap空间是否已启用 (会显示Swap总量和已用量)
 free -h
 swapon --show
 ```
@@ -268,7 +268,7 @@ swapon --show
 
 **查找示例：**
 ```bash
-# 查找名为 dnn_node_example.launch.py 的文件
+## 查找名为 dnn_node_example.launch.py 的文件
 find /opt/tros/ -name dnn_node_example.launch.py
 ```
 
@@ -348,7 +348,7 @@ find /opt/tros/ -name dnn_node_example.launch.py
 apt show tros
 ```
 
-**示例输出 (RDK OS 2.x 版本系统，tros.b 2.0.0):**
+**示例输出（历史版本 RDK OS 2.x，tros.b 2.0.0）：**
 
 ```bash
 Package: tros
@@ -366,7 +366,7 @@ Description: TogetheROS Bot
 **A:**
 * **和系统版本、RDK 平台硬件对应关系：**
     * **2.x 版本 tros.b (及后续如3.x 等)：**
-        * 通常仅支持对应大版本的 RDK OS 系统（例如，tros.b 2.x 支持 RDK OS 2.x）。
+        * 通常仅支持对应大版本的 RDK OS 系统（例如，tros.b 2.x 支持 RDK OS 2.x，均为历史版本）。
         * 支持对应版本 RDK OS 的全系列硬件。
         * 未来 tros.b 的新增功能和主要维护会集中在这些较新的版本上。
         * 代码通常托管在 GitHub 上的 `D-Robotics` 组织下。

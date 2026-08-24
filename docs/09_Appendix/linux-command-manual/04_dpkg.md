@@ -102,6 +102,15 @@ dpkg -S keyword
 dpkg -l
 ```
 
+预期输出（节选）：
+
+```text
+||/ Name            Version           Architecture Description
++++-===============-=================-============-================
+ii  7zip            23.01+dfsg-11     arm64        7-Zip file archiver
+ii  accountsservice 23.13.9-2ubuntu6  arm64        query and manipulate user account information
+```
+
 - 列出 deb 包的内容
 
 ```

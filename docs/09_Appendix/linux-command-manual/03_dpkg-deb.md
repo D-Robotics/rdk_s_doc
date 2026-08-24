@@ -41,7 +41,7 @@ dpkg-deb 命令不仅有选项可以设置，还需要设置命令来执行不�
 - `-Z<type>`：设置构建时使用的压缩类型。允许的类型有 gzip、xz、zstd、none。
 - `-S<strategy>`：设置构建时的压缩策略。允许的值有 none、extreme（xz）、filtered、huffman、rle、fixed（gzip）。
 
-### 常用命令
+## 常用命令
 
 - 解压程序文件
 
@@ -59,4 +59,11 @@ dpkg-deb -e hobot-configs_2.2.0-20231030133209_arm64.deb hobot-configs/DEBIAN
 
 ```shell
 dpkg-deb -c hobot-configs_2.2.0-20231030133209_arm64.deb
+```
+
+预期输出（节选，文件列表会随包内容变化）：
+
+```text
+drwxr-xr-x root/root         0 2026-08-24 18:30 ./
+-rw-r--r-- root/root         6 2026-08-24 18:30 ./hello.txt
 ```

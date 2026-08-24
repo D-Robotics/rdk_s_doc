@@ -57,11 +57,11 @@ scp [option] file_source file_target
 
 ```
 scp local_file remote_username@remote_ip:remote_folder 
-# 或者 
+## 或者 
 scp local_file remote_username@remote_ip:remote_file 
-# 或者 
+## 或者 
 scp local_file remote_ip:remote_folder 
-# 或者 
+## 或者 
 scp local_file remote_ip:remote_file 
 ```
 
@@ -81,7 +81,7 @@ scp /home/sunrise/test.c 192.168.1.10:/userdata/test_01.c
 
 ```
 scp -r local_folder remote_username@remote_ip:remote_folder 
-# 或者 
+## 或者 
 scp -r local_folder remote_ip:remote_folder 
 ```
 
@@ -108,3 +108,5 @@ scp sunrise@192.168.1.10:/userdata/log.log /home/sunrise/
 ```
 
 从192.168.1.10机器上的`/userdata/`的目录中下载`log.log` 文件到本地`/home/sunrise/`目录中。
+
+<!-- TODO(S3): 待板端实测输出——scp 传输需远程对端主机，本验证板无第二主机可测，传输输出待补充。 -->

@@ -33,8 +33,8 @@ description: "TROS/ROS 开发 常见问题与排查"
 * **TROS 与 ROS2的关系：**
     * TROS (TogetheROS.Bot) 是 D-Robotics 基于开源的 ROS2（Robot Operating System 2）针对其 RDK 硬件平台进行优化和适配后发布的机器人操作系统。
     * 它通常基于某个 ROS2的 LTS（长期支持）版本进行构建，例如：
-        * 在 RDK OS 2.x (基于 Ubuntu 20.04) 上，TROS 通常基于 **ROS2 Foxy Fitzroy**。
-        * 在 RDK OS 3.x (基于 Ubuntu 22.04) 上，TROS 通常基于 **ROS2 Humble Hawksbill**。
+        * 在 RDK OS 2.x（历史版本，基于 Ubuntu 20.04）上，TROS 通常基于 **ROS2 Foxy Fitzroy**。
+        * 在 RDK OS 3.x（历史版本，基于 Ubuntu 22.04）上，TROS 通常基于 **ROS2 Humble Hawksbill**。
     * TROS 在标准的 ROS2基础上，集成了 D-Robotics 硬件（如 BPU、VPU、JPU、Sensor 等）的驱动、硬件加速库、以及针对机器人常用功能的优化方案和示例。
     * TROS 与对应版本的标准 ROS2在核心 API 和通信机制上是**完全兼容**的，这意味着为标准 ROS2 Foxy/Humble 开发的节点和服务通常可以直接或稍作修改后在对应版本的 TROS 上运行，反之亦然。它们可以相互通信。
 

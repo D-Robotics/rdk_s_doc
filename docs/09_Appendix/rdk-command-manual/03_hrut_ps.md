@@ -36,3 +36,17 @@ description: "RDK 命令 hrut_ps 用法"
 - **rss**：物理内存占用。表示进程当前占用的物理内存大小，即实际分配给进程的物理 RAM 大小。
 - **comm**：命令名。包含了进程的命令名称或可执行文件的名称，用于标识进程的类型或用途。
 
+## 常用命令
+
+```shell
+sunrise@ubuntu:~$ hrut_ps
+     pid    ppid   state    prio    nice rt_prio  policy           vsize       rss  comm            
+       1       0       S      20       0       0       0        25886720     278KB  (systemd)       
+      10       2       I       0     -20       0       0               0       0KB  (mm_percpu_wq)  
+     100       2       S    -100       0      99       1               0       0KB  (migration/10)  
+    1000       2       S     -51       0      50       1               0       0KB  (irq/192-ynr)   
+    1001       2       S     -51       0      50       1               0       0KB  (irq/193-pym)   
+    1002       2       S     -51       0      50       1               0       0KB  (irq/194-cim)   
+    ...
+```
+

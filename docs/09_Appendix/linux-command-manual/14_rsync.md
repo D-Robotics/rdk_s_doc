@@ -175,6 +175,17 @@ rsync [OPTION...] SRC... [DEST]
 rsync -avSH /app/ /userdata/
 ```
 
+预期输出（节选，以本地目录同步为例）：
+
+```text
+sending incremental file list
+a.txt
+b.txt
+
+sent 178 bytes  received 54 bytes  464.00 bytes/sec
+total size is 4  speedup is 0.02
+```
+
 - 拷贝本地机器的内容到远程机器
 
 ```

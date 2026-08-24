@@ -108,7 +108,7 @@ description: "模型、算法与工具链 常见问题与排查"
 ### Q9: YOLOv5部署时，检测框都异常地聚集在图像的左上角，可能是什么原因？
 **A:**
 * **可能原因：后处理库参数传递问题 (特指某些系统版本中的示例)。**
-    * 在 RDK OS 3.0.0及以上版本系统中，`/app/pydev_demo/07_yolov5_sample` 等示例中可能使用了 CPython 封装的后处理库。如果模型训练的类别数量等关键参数没有正确地传递给这个后处理库的初始化或调用接口，可能会导致解码逻辑错误，出现检测框聚集在左上角的现象。
+    * 在 RDK OS 3.0.0及以上版本系统（历史版本）中，`/app/pydev_demo/07_yolov5_sample` 等示例中可能使用了 CPython 封装的后处理库。如果模型训练的类别数量等关键参数没有正确地传递给这个后处理库的初始化或调用接口，可能会导致解码逻辑错误，出现检测框聚集在左上角的现象。
     * **示例图：**
         <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/AI_toolchain/7.png" alt="YOLOv5检测框聚集左上角示例" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} /> * **解决方法：**
     * **推荐使用 RDK Model Zoo 中的后处理：** 对于 YOLOv5等模型的验证和部署，强烈建议参考或直接使用 **RDK Model Zoo** ([https://github.com/D-Robotics/rdk_model_zoo](https://github.com/D-Robotics/rdk_model_zoo)) 中提供的后处理代码。Model Zoo 中的实现通常更健壮、更优化，并且与工具链的配合更紧密。
@@ -274,7 +274,7 @@ description: "模型、算法与工具链 常见问题与排查"
 
 **在进行排查前，请确认当前模型转换所用的 Docker 镜像或转换环境版本，并保留版本信息**
 
-##### 1. 验证浮点 onnx 模型的推理结果
+#### 1. 验证浮点 onnx 模型的推理结果
 
 进入模型转换环境，来测试浮点 onnx 模型(特指从 DL 框架导出的 onnx 模型)的单张结果，此步骤结果应与训练后的模型推理结果完全一致（nv12格式除外，可能会引入少许差异）
 
@@ -314,7 +314,7 @@ description: "模型、算法与工具链 常见问题与排查"
 
 ```
 
-##### 2. 验证 yaml 配置文件以及前、后处理代码的正确性
+#### 2. 验证 yaml 配置文件以及前、后处理代码的正确性
 
 测试 original_float.onnx 模型的单张结果，应与浮点 onnx 模型推理结果完全一致（nv12格式除外，由于 nv12数据本身有损，可能会引入少许差异）
 
@@ -322,7 +322,7 @@ description: "模型、算法与工具链 常见问题与排查"
 
 由于 HzPreprocess 节点的存在，会使得转换后的模型其预处理操作可能会和原始模型有所不同，该算子是在进行模型转换时，根据 yaml 配置文件中的配置参数（input_type_rt、input_type_train 以及 norm_type、mean_value、scale_value）来决定是否为模型加入 HzPreprocess 节点，预处理节点的生成细节，请参考 PTQ 原理及步骤详解章节的 ``norm_type 配置参数说明`` 内容，另外预处理节点会出现在转换过程产生的所有产物中。
 
-理想状态下，这个 HzPreprocess 节点应该完成 input_type_rt 到 input_type_train 的完整转换， 但实际情况是整个 type 转换过程需要使用 D-Robotics AI 芯片硬件完成，但 ONNX 模型里面并没有包含硬件转换的部分，因此 ONNX 的真实输入类型会使用一种中间类型，这种中间类型就是硬件对 input_type_rt 的处理结果类型， 故针对图像输入数据类型为：RGB/BGR/NV12/YUV444/GRAY，并且数据 dtype= uint8的模型时，在预处理代码中需要做 ``-128`` 的操作，``featuremap`` 数据类型因为使用的是 float32，因此预处理代码中 ``不需要-128`` 的操作； original_float.onnx 的数据 layout(NCHW/NHWC)会保持和原始浮点模型的输入 layout 一致。 
+理想状态下，这个 HzPreprocess 节点应该完成 input_type_rt 到 input_type_train 的完整转换， 但实际情况是整个 type 转换过程需要使用 D-Robotics 智能计算平台硬件完成，但 ONNX 模型里面并没有包含硬件转换的部分，因此 ONNX 的真实输入类型会使用一种中间类型，这种中间类型就是硬件对 input_type_rt 的处理结果类型， 故针对图像输入数据类型为：RGB/BGR/NV12/YUV444/GRAY，并且数据 dtype= uint8的模型时，在预处理代码中需要做 ``-128`` 的操作，``featuremap`` 数据类型因为使用的是 float32，因此预处理代码中 ``不需要-128`` 的操作； original_float.onnx 的数据 layout(NCHW/NHWC)会保持和原始浮点模型的输入 layout 一致。 
 
 可参考如下示例代码步骤，来确认 original_float.onnx 模型的推理的步骤、数据预处理、后处理代码是否正确！
 
@@ -363,7 +363,7 @@ description: "模型、算法与工具链 常见问题与排查"
 
 ```
 
-##### 3. 验证模型的图优化阶段未引入精度误差
+#### 3. 验证模型的图优化阶段未引入精度误差
 
 测试 optimize_float.onnx 模型的单张结果，应与 original_float.onnx 推理结果完全一致
 
@@ -408,7 +408,7 @@ optimize_float.onnx 模型的推理可参考如下示例代码步骤，来确认
 
 ```
 
-##### 4. 验证量化精度是否满足预期  
+#### 4. 验证量化精度是否满足预期  
 
 测试 quantized.onnx 的精度指标。
 
@@ -453,7 +453,7 @@ quantized.onnx 模型的推理可参考如下示例代码步骤，来确认 quan
 
 ```
 
-##### 5. 确保模型编译过程无误且板端推理代码正确
+#### 5. 确保模型编译过程无误且板端推理代码正确
 
 使用 ``hb_model_verifier`` 工具验证 quantized.onnx 和.bin 的一致性，模型输出应至少满足小数点后2~3位对齐
 

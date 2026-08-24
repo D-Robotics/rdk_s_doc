@@ -76,6 +76,15 @@ netstat -apu
 netstat -i
 ```
 
+预期输出（节选）：
+
+```text
+Kernel Interface table
+Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+eth0             1500 10238631      0  22960 0       1527793      0      0      0 BMRU
+eth1             1500      540      0      0 0           498      0      0      0 BMU
+```
+
 显示组播组的关系
 
 ```

@@ -58,6 +58,16 @@ ifconfig -a  #所有配置的网络接口，不论其是否激活
 ifconfig eth0  #显示eth0的网卡信息
 ```
 
+预期输出（节选）：
+
+```text
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.64.91.53  netmask 255.255.255.0  broadcast 10.64.91.255
+        ether c6:5d:e8:4f:03:66  txqueuelen 1000  (Ethernet)
+        RX packets 10238627  bytes 15169242754 (15.1 GB)
+        TX packets 1527785  bytes 163538166 (163.5 MB)
+```
+
 启动、关闭指定网卡
 
 ```shell

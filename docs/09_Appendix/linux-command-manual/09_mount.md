@@ -72,6 +72,21 @@ mount -o remount,rw /
 mount -t nfs -o nolock 192.168.1.20:/home/ /tmp/nfs
 ```
 
+查看当前系统已挂载的文件系统
+
+```
+mount
+```
+
+预期输出（节选）：
+
+```text
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,relatime,size=12336064k,nr_inodes=192751,mode=755)
+/dev/sda17 on / type ext4 (rw,relatime)
+```
+
 ## 相关文档
 
 - [存储与磁盘管理](../../02_System_configuration/12_storage.md)

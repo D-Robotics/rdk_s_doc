@@ -22,6 +22,17 @@ apt 命令执行需要超级管理员权限(root)。
 - **command：**要进行的操作。
 - **package**：安装的包名。
 
+## 选项说明
+
+常见选项：
+
+- `-h, --help`：显示帮助信息。
+- `-y, --yes`：对所有提示自动回答 "yes"。
+- `-q, --quiet`：静默模式，减少输出信息。
+- `-V, --version`：显示版本信息。
+- `-s, --simulate/--no-act`：模拟执行，不实际修改系统。
+- `--no-install-recommends`：安装时不同时安装推荐的依赖包。
+
 ## 常用命令
 
 - 更新 apt 软件源数据库：**sudo apt update**
@@ -47,5 +58,16 @@ apt 命令执行需要超级管理员权限(root)。
 - 查找软件包命令： **sudo apt search `package_name`**
 
 - 列出所有已安装的包：**apt list --installed**
+
+  预期输出（节选）：
+
+  ```text
+  Listing...
+  7zip/noble,now 23.01+dfsg-11 arm64 [installed]
+  accountsservice/noble,now 23.13.9-2ubuntu6 arm64 [installed]
+  acl/noble-updates,now 2.3.2-1build1.1 arm64 [installed]
+  adduser/noble,now 3.137ubuntu1 all [installed]
+  ...
+  ```
 
 - 列出所有已安装的包的版本信息：**apt list --all-versions**

@@ -36,6 +36,12 @@ nohup OPTION
 nohup /root/test.sh &
 ```
 
+预期输出（节选，脚本的输出默认写入当前目录的 nohup.out）：
+
+```text
+nohup 测试输出
+```
+
 如果要停止运行，你需要使用以下命令查找到 nohup 运行脚本到 PID，然后使用 kill 命令来删除
 
 ```

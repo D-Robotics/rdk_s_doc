@@ -58,6 +58,15 @@ zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
 zip -q -r app.zip /app
 ```
 
+> `-q` 为静默模式无输出；如需查看压缩过程，去掉 `-q`。
+
+预期输出（节选，去掉 `-q`）：
+
+```text
+  adding: a.txt (stored 0%)
+  adding: b.txt (stored 0%)
+```
+
 如果我们在 `/app` 目录下，可以执行以下命令：
 
 ```

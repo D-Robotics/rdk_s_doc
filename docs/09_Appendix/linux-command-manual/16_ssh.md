@@ -48,12 +48,12 @@ ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]
 ## 常用命令
 
 ```shell
-# ssh 用户名@远程服务器地址
+## ssh 用户名@远程服务器地址
 ssh sunrise@192.168.1.10
-# 指定端口
+## 指定端口
 ssh -p 2211 sunrise@192.168.1.10
 
-# ssh 大家族
+## ssh 大家族
 ssh -p 22 user@ip  # 默认用户名为当前用户名，默认端口为 22
 ssh-keygen # 为当前用户生成 ssh 公钥 + 私钥
 ssh-keygen -t rsa -b 4096 -m PEM -f ~/.ssh/id_rsa # 生成 RSA 密钥（-m 指定格式：PEM/PKCS8/RFC4716）
@@ -95,3 +95,5 @@ ssh -L local_port:remote_host:remote_port username@remote_host
 ```shell
 ssh -R remote_port:local_host:local_port username@remote_host
 ```
+
+<!-- TODO(S3): 待板端实测输出——ssh 为交互式登录命令，无固定预期输出；本地验证可通过 `ssh -V` 核对 OpenSSH 版本（示例：OpenSSH_9.6p1）。 -->

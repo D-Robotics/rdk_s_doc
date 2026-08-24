@@ -94,6 +94,12 @@ grep match_pattern file_name
 grep "match_pattern" file_name
 ```
 
+预期输出（节选，以在 `/etc/passwd` 中查找 `root` 为例）：
+
+```text
+root:x:0:0:root:/root:/bin/bash
+```
+
 在多个文件中查找
 
 ```shell
@@ -140,7 +146,7 @@ grep "match_pattern" file_name --color=auto
 
 ```shell
 grep -E "[1-9]+"
-# 或
+## 或
 egrep "[1-9]+"
 ```
 
@@ -176,9 +182,9 @@ history | grep git
 
 ```shell
 grep "text" -n file_name
-# 或
+## 或
 cat file_name | grep "text" -n
-#多个文件
+## 多个文件
 grep "text" -n file_1 file_2
 ```
 
@@ -186,7 +192,7 @@ grep "text" -n file_1 file_2
 
 ```shell
 echo gun is not unix | grep -b -o "not"
-#一行中字符串的字符偏移是从该行的第一个字符开始计算，起始值为0。选项  **-b -o**  一般总是配合使用。
+## 一行中字符串的字符偏移是从该行的第一个字符开始计算，起始值为0。选项  **-b -o**  一般总是配合使用。
 ```
 
 搜索多个文件并查找匹配文本在哪些文件中

@@ -10,8 +10,17 @@ description: "RDK 命令 hrut_boardid 用法"
 
 > ⚠️ boardid 会影响到启动时硬件的初始化，请谨慎设置。
 
-命令输出示例：
+## 语法说明
+
 ```
+hrut_boardid
+```
+
+## 常用命令
+
+获取当前开发板的编号：
+
+```shell
 root@ubuntu:~# hrut_boardid
 0x6A84
 ```
