@@ -34,7 +34,7 @@ RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选�
 
 ```
 List of enabled spi controllers:
-/dev/spidev0.0  /dev/spidev0.1
+/dev/spidev0.0  /dev/spidev1.0 
 Please input SPI bus num:1
 Please input SPI cs num:0
 ```
