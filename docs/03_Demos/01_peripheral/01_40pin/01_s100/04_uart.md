@@ -18,6 +18,7 @@ RDK S100 在 40-pin 支持 UART2，没有使能，物理管脚号 8 和 10，IO 
 
 40-pin 上需要拨动拨码开关来选择使用 UART2 还是 I2C5, 具体细节可以查看下图：
 
+<!-- TODO(F1): uart/i2c 示意图复用 audio3.png 疑错，待换正确原理图 -->
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="串口应用示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 拨动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
@@ -176,5 +177,5 @@ if __name__ == '__main__':
 ## 相关文档
 
 - [管脚定义](./01_40pin_define.md)
-- [UART 驱动调试指南](/Advanced_development/driver_development/driver_uart_dev)
-- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [UART 驱动调试指南](../../../../07_Advanced_development/04_driver_development/02_driver_uart_dev.md)
+- [C/C++ demo 编程指南](../../../04_demo_support/02_c_cpp_build.md)

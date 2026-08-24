@@ -758,5 +758,5 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 ## 相关文档
 
 - [管脚定义](./01_ext_io.md)
-- [GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
-- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [GPIO 使用](../../../../07_Advanced_development/04_driver_development/04_driver_gpio_dev.md)
+- [C/C++ demo 编程指南](../../../04_demo_support/02_c_cpp_build.md)

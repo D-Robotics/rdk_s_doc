@@ -39,6 +39,7 @@ sample_gdc 目录下是用于演示如何使用 GDC 的示例程序，主要功�
 
 ### 开发和使用流程
 
+<!-- TODO(F1): sample_gdc 数据流图配图残留 S100（S100-gdc.jpg），待换 S600 版 -->
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/02_multimedia_application/sample_gdc/S100-gdc.jpg" alt="S100 GDC 数据流图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 在 PC 上使用 `generate_custom_config.py` 程序生成 GDC 的矫正标定配置参数。

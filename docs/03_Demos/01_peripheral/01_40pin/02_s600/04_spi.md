@@ -140,5 +140,5 @@ if __name__ == '__main__':
 ## 相关文档
 
 - [管脚定义](./01_ext_io.md)
-- [SPI 调试指南](/Advanced_development/driver_development/driver_spi_dev)
-- [C/C++ demo 编程指南](/Demos/demo_support/c_cpp_build)
+- [SPI 调试指南](../../../../07_Advanced_development/04_driver_development/07_driver_spi_dev.md)
+- [C/C++ demo 编程指南](../../../04_demo_support/02_c_cpp_build.md)

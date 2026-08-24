@@ -1370,5 +1370,5 @@ D-Robotics:/$ [065.302668 0]INFO: ec_config_init wkc == 1
 
 ## 相关文档
 
-- [EtherCAT（Linux 侧）](/Advanced_development/driver_development/driver_ethernet)
+- [EtherCAT（Linux 侧）](../04_driver_development/16_driver_ethernet/02_ethercat.md)
 - [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
