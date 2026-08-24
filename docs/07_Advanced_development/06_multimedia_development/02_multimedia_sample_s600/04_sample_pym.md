@@ -8,6 +8,14 @@ description: "sample_pym 使用说明 板端示例使用说明"
 ## 功能概述
 sample_pym 将 YUV 文件读入 hbm 申请的内存，并传入 PYM，PYM 按照金字塔图层的方式处理，最后将处理好的 YUV 数据 dump 到文件系统中。
 
+```mermaid
+flowchart LR
+    A[YUV 文件] --> B[HBM 内存]
+    B --> C[PYM]
+    C --> D[通道 0~5 缩小 1/1~1/32]
+    D --> E[dump 至文件系统]
+```
+
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pym`
 - 目录结构

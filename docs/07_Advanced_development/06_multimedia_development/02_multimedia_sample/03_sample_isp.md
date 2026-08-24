@@ -10,6 +10,14 @@ description: "sample_isp 使用说明 板端示例使用说明"
 
 `sample_isp` 完成 Camera Sensor 、 MIPI CSI 、 CIM 和 ISP 模块的初始化，实现从 ISP 模块获取视频帧数据的功能，支持从 ISP 模块获取 YUV 格式的图像。
 
+```mermaid
+flowchart LR
+    A[Camera Sensor] --> B[MIPI CSI]
+    B --> C[CIM]
+    C --> D[ISP]
+    D --> E[YUV 视频帧]
+```
+
 ### sample_isp 架构说明
 
 `sample_isp` 包含多个示例，每个示例均以子目录形式存在 `/app/multimedia_samples/sample_isp` 下，每个子目录描述如下
@@ -21,7 +29,7 @@ description: "sample_isp 使用说明 板端示例使用说明"
 
 ## get_isp_data
 
-#### 代码位置及目录结构
+### 代码位置及目录结构
 
 `get_isp_data` 相关源码路径为 `/app/multimedia_samples/sample_isp/get_isp_data`，代码结构如下：
 
@@ -133,7 +141,7 @@ quit
 
 ## isp_feedback
 
-#### 代码位置及目录结构
+### 代码位置及目录结构
 
 `isp_feedback` 相关源码路径为 `/app/multimedia_samples/sample_isp/isp_feedback`，代码结构如下：
 

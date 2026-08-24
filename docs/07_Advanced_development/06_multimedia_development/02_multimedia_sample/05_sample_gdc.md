@@ -562,7 +562,7 @@ gdc_transformation 程序采用回灌流程，即从系统存储中读取原始 
 		│   └── test_building_1920x1080.yuv
 		└── gdc_transformation.c
 	```
-根目录包含 Makefile,gdc_res 目录中包含了资源文件,比如 GDC Tool 生成的 json 文件、YUV 图像；gdc_transformation.c 是 main 入口的所在文件。
+根目录包含 Makefile,gdc_res 目录中包含了资源文件，比如 GDC Tool 生成的 json 文件、YUV 图像；gdc_transformation.c 是 main 入口的所在文件。
 
 ### 编译部署
 

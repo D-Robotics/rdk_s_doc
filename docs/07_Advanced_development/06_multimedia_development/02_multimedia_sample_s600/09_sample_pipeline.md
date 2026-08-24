@@ -9,6 +9,15 @@ description: "sample_pipeline 使用说明 板端示例使用说明"
 ## 功能概述
 `sample_pipeline` 用于实现单路或多路 sensor pipeline 串联，实现用户常见的 pipeline 场景，用户可通过 `sample_pipeline` 子目录了解各个 pipeline 的搭建方法。
 
+```mermaid
+flowchart LR
+    A[Camera Sensor] --> B[VIN]
+    B --> C[ISP]
+    C --> D[PYM]
+    D --> E[GDC]
+    E --> F[CODEC]
+```
+
 ### sample_pipeline 架构说明
 `sample_pipeline` 包含多个示例，每个示例均以子目录形式存在 `app/multimedia_samples/sample_pipeline` 下，每个子目录描述如下
 
@@ -783,6 +792,8 @@ loop cnt use up
 pipe(0)Test thread 281473524101408---join done.
 ------ Test case uvc_capture_sample done  ------
 ```
+
+<!-- TODO(S4): S600 缺 single_3dgpu_bpu 节待补 -->
 
 ## 常见问题
 
