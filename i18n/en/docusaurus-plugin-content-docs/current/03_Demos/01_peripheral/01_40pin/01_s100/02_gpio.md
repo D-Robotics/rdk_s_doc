@@ -678,6 +678,8 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 ```
 
+<!-- TODO(S3): pending board verification -->
+
 ## FAQ
 
 ### Running the GPIO example produces no output or the level does not change

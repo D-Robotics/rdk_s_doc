@@ -96,6 +96,7 @@ See [DECODER API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.m
 
 ## Related Documentation
 
+- [Python Multimedia Examples](../02_pydev/01_pydev_multimedia.md)
 - [Capture→Encode](./03_vio2encoder.md) (generates the bitstream file)
 - [RTSP→Display](./06_rtsp2display.md)
 - [DECODER (Decoder Module) API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)

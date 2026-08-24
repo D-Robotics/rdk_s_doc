@@ -101,6 +101,7 @@ See [VIO API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) and [
 
 ## Related Documentation
 
+- [Python Multimedia Examples](../02_pydev/01_pydev_multimedia.md)
 - [Video Capture](./01_vio_capture.md)
 - [VIO (Video Input) API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
 - [DECODER (Decoder Module) API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)

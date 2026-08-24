@@ -91,6 +91,7 @@ See [VIO API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) and [
 
 ## Related Documentation
 
+- [Python Multimedia Examples](../02_pydev/01_pydev_multimedia.md)
 - [Video Capture](./01_vio_capture.md)
 - [Using MIPI Camera](../../01_peripheral/02_camera/01_mipi_camera.md)
 - [VIO (Video Input) API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)

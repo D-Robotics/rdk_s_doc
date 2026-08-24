@@ -112,6 +112,7 @@ See [DECODER API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.m
 
 ## Related Documentation
 
+- [Python Multimedia Examples](../02_pydev/01_pydev_multimedia.md)
 - [Decode→Display](./05_decode2display.md) (local file version)
 - [DECODER (Decoder Module) API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
 - [DISPLAY (Display Module) API](../../../04_Simple_API/01_multimedia_api/cdev/04_display_api.md)

@@ -16,6 +16,12 @@ See the example code below for how to use PWM.
 The pins mentioned below are for illustration only; port values differ across platforms, and the actual situation prevails. You can also directly use the code under the `/app/40pin_samples/` directory, which has been verified on the board.
 :::
 
+## Environment Preparation
+
+- Hardware: RDK S100 development board with a 40-pin expansion header (only pins `32` and `33` support hardware PWM); oscilloscope or logic analyzer (optional, for observing the output waveform)
+- System: RDK OS flashed and booted
+- Dependencies: Python3 and the `Hobot.GPIO` library are pre-installed; no additional installation is required
+
 ## Code Location
 
 - On-board pre-installed script: `/app/40pin_samples/simple_pwm.py` (identical logic to the test code below; can be run directly)
@@ -71,6 +77,8 @@ if __name__ == '__main__':
     main()
 
 ```
+
+<!-- TODO(S3): pending board verification -->
 
 ## FAQ
 

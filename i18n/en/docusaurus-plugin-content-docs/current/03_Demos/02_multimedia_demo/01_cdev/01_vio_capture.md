@@ -67,6 +67,7 @@ Troubleshooting failure: when no camera is connected, the program prints `[Error
 
 ## Related Documentation
 
+- [Python Multimedia Examples](../02_pydev/01_pydev_multimedia.md)
 - [VIO (Video Input) API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
 - [Capture→Display](./02_vio2display.md)
 - [C/C++ Demo Programming Guide](../../04_demo_support/02_c_cpp_build.md)
