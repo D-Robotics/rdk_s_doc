@@ -98,9 +98,15 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 | Ipc_ShmCfgInstances0 / 4   | canhal       | —                                                                               | Acore instance0/4     |
 | Ipc_ShmCfgInstances5       | 外置 RTC      | —                                                                                | Acore instance5        |
 | Ipc_ShmCfgInstances7       | ipcbox       | —                                                                               | Acore instance7        |
-| Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 (except 8 & 10) |
+| Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 |
 | Ipc_ShmCfgInstance8        | mcu1 boot    | —                                                                               | Acore instance8       |
+| Ipc_ShmCfgInstances9       | can          | —                                                                               | Acore instance9       |
 | Ipc_ShmCfgInstance10       | timesync     | —                                                                               | Acore instance10      |
+| Ipc_ShmCfgInstances11      | can          | —                                                                               | Acore instance11      |
+| Ipc_ShmCfgInstances12      | can          | —                                                                               | Acore instance12      |
+| Ipc_ShmCfgInstances13      | can          | —                                                                               | Acore instance13      |
+| Ipc_ShmCfgInstances14      | can          | —                                                                               | Acore instance14      |
+| Ipc_ShmCfgInstances15      | can          | —                                                                               | Acore instance15      |
 | Ipc_PrivShmCfgInstance0    | Crypto       | ISR(Ipc_HsmIpc3Ch4Isr): Ipc_Driver_HSMIpc3Ch4Isr()                              | HSM                    |
 | Ipc_PrivShmCfgInstance1    | HSM Diag     | ISR(Ipc_HsmIpc3Ch5Isr): Ipc_Driver_HSMIpc3Ch5Isr()                              | HSM                    |
 | Ipc_PrivShmCfgInstance2    | Ota          | ISR(Ipc0_Ch8Isr): Ipc_Driver_MCUIpc0Ch8Isr()                                    | Acore instance50      |
