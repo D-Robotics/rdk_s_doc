@@ -72,6 +72,14 @@ description: "VIO（视频输入）API 接口说明"
 
 无
 
+**【注意事项】**
+
+传入的 `obj` 须为 `sp_init_vio_module` 返回的有效对象指针；在不再使用 `VIO` 对象时调用本接口释放资源。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_open_camera  
 
 **【函数原型】**  
@@ -95,6 +103,14 @@ description: "VIO（视频输入）API 接口说明"
 **【返回类型】** 
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+调用前须先初始化 `VIO` 对象；`chn_num` 表示输出分辨率组数，最多 6 组、最少 1 组；只支持缩小，缩小倍率范围为 [1, 1/64)。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_open_camera_v2  
 
@@ -143,6 +159,14 @@ description: "VIO（视频输入）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先初始化 `VIO` 对象；`parameters` 通过 `sp_sensors_parameters` 指定摄像头 RAW 输出的分辨率与帧率；输出分辨率只支持缩小，缩小倍率范围为 [1, 1/64)。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_open_vps  
 
 **【函数原型】**  
@@ -179,6 +203,14 @@ description: "VIO（视频输入）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先初始化 `VIO` 对象，VPS 的源数据通常来自已打开的摄像头；`proc_mode` 支持 `SP_VPS_SCALE`（仅缩放）、`SP_VPS_SCALE_CROP`（裁剪并缩放）；未启用裁剪时裁剪参数传入 `NULL`，`rotate` 暂不支持旋转须传入 `NULL`。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_vio_close  
 
 **【函数原型】**  
@@ -196,6 +228,14 @@ description: "VIO（视频输入）API 接口说明"
 **【返回类型】**  
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+传入的 `obj` 须为已打开的摄像头或 VPS 对象指针，由对象类型自动决定关闭 camera 还是 vps。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_vio_get_frame  
 
@@ -219,6 +259,14 @@ description: "VIO（视频输入）API 接口说明"
 
 成功返回 0，失败返回 -1 
 
+**【注意事项】**
+
+调用前须先打开摄像头或 VPS；`frame_buffer` 须预先分配内存（NV12 格式大小 `高 * 宽 * 3 / 2`，可用 `FRAME_BUFFER_SIZE(w, h)` 宏计算）；`width`/`height` 须与打开模块时配置的分辨率一致。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_vio_get_raw  
 
 **【函数原型】**  
@@ -240,6 +288,14 @@ description: "VIO（视频输入）API 接口说明"
 **【返回类型】**  
 
 成功返回 0，失败返回 -1 
+
+**【注意事项】**
+
+调用前须先打开摄像头；`frame_buffer` 须预先分配内存（大小可按 `(高 * 宽 * 图像深度) / 8` 计算）；`width`/`height` 传 `NULL`。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_vio_get_yuv  
 
@@ -263,6 +319,14 @@ description: "VIO（视频输入）API 接口说明"
 
 成功返回 0，失败返回 -1 
 
+**【注意事项】**
+
+调用前须先打开摄像头；`frame_buffer` 须预先分配内存（NV12 格式大小 `高 * 宽 * 3 / 2`，可用 `FRAME_BUFFER_SIZE(w, h)` 宏计算）；`width`/`height` 传 `NULL`。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_vio_set_frame  
 
 **【函数原型】**  
@@ -282,6 +346,14 @@ description: "VIO（视频输入）API 接口说明"
 **【返回类型】**  
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+调用前须先打开 VPS；`frame_buffer` 数据必须为 `NV12` 格式，分辨率须与 `sp_open_vps` 配置的原始帧分辨率一致。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## host 编号选择
 camera 对应的 host 编号如下图所示

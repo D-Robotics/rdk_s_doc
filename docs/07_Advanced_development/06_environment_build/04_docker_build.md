@@ -8,6 +8,12 @@ description: "使用 Docker 容器编译 RDK BSP"
 
 使用 Docker 容器可以避免在宿主机上安装交叉编译工具链和依赖，实现可复现的编译环境。
 
+**适用读者**：模式 3 深度定制开发者——希望在容器内搭建可复现 BSP 编译环境的研发工程师。
+
+**前置条件**：宿主机已安装 Docker；BSP 源码已获取（见 [搭建开发环境](./01_environment_build.md)）。
+
+**与其他模块关系**：本页是宿主机原生编译（[搭建开发环境](./01_environment_build.md)）的容器化替代方案；无守护进程的替代实现见 [使用 Podman 编译](./05_podman_build.md)。
+
 ## 环境准备
 
 - 宿主机已安装 Docker
@@ -62,6 +68,20 @@ cd /workspace
 
 编译产物位于容器内 `/workspace/out/` 下（`out/product/img_packages/` 为系统镜像，
 `out/product/deb_packages/` 为 deb 包），退出容器后在宿主机挂载目录中可直接访问。
+
+## 常见问题
+
+### 再次执行 docker run 报容器名冲突
+
+**原因**：`docker run --name rdk-build` 使用了固定容器名，同名容器已存在。
+
+**解决**：执行 `docker start -ai rdk-build` 重新进入原容器，或先 `docker rm rdk-build` 再重新创建。
+
+### S600 交叉工具链版本不匹配
+
+**原因**：命令中使用了 S100 的工具链版本 `11.3.rel1`。
+
+**解决**：将工具链下载与解压命令中的 `11.3.rel1` 替换为 `13.2.Rel1`（S600）。
 
 ## 相关文档
 

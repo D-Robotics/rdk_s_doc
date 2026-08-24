@@ -49,6 +49,12 @@ sudo ./pack_image.sh -p
 ./mk_debs.sh hobot-configs
 ```
 
+## 环境支持
+
+- 构建模式：在线构建（`pack_image.sh`）、离线构建（`pack_image.sh -l`）、仅搭建 deb 编译环境（`pack_image.sh -p`）。
+- 存储介质：eMMC / UFS / NVMe（NVMe 启动需 RDK S100 V0P6 及以上、RDK S600 V1P0 及以上）。
+- 产品支持：RDK S100、RDK S600（分别对应不同的 conf 文件，修改方法见下文）。相关使用说明以 rdk_gen 仓库 README.md 为准。
+
 ## 根文件系统预编译包构建说明
 根文件系统由 multistrap+chroot 构建生成。
 
@@ -658,6 +664,25 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 - 在 NVMe 模式下编译出的 miniboot_flash 镜像，仅支持 NVMe 启动，其他模式均不支持；在 eMMC/UFS 模式下编译出的 miniboot_flash 镜像，支持 NVMe 启动
 - 下载工具1.1.10及其以后版本，才支持 NVMe 镜像烧写
 :::
+
+## 调试
+
+- 修改 conf 文件后，需按「修改完 conf 文件后的编译流程」重新编译 hobot-miniboot、kernel 与 disk 镜像，并加 `-l` 使用本地 deb 包。
+- 编译产物路径：`out/product/deb_packages/`（deb 包）、`out/product/img_packages/`（系统镜像）。
+
+## 常见问题
+
+### 编译时用了远端包而非本地修改后的包
+
+**原因**：`pack_image.sh` 未加 `-l` 参数，默认从远端获取 deb 包。
+
+**解决**：使用 `sudo ./pack_image.sh -l`，确保使用本地 `out/product/deb_packages/` 下的包。
+
+### NVMe 启动失败
+
+**原因**：板卡版本不支持 NVMe 启动，或使用了不匹配 NVMe 模式的 miniboot_flash 镜像。
+
+**解决**：确认板卡为 RDK S100 V0P6 及以上或 RDK S600 V1P0 及以上，且 miniboot_flash 镜像按 NVMe 模式编译。
 
 ## 相关文档
 

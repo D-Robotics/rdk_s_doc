@@ -246,6 +246,14 @@ char const *hbDNNGetVersion();
 
 返回 hbDNN 版本信息字符串，可用于运行环境自检。
 
+**【注意事项】**
+
+无需先加载模型，可直接调用，用于运行环境自检。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ### hbDNNInitializeFromFiles
 
 ```c
@@ -262,6 +270,14 @@ int32_t hbDNNInitializeFromFiles(hbDNNPackedHandle_t *dnnPackedHandle,
 
 从文件加载一个或多个模型。成功返回 `HB_DNN_SUCCESS`；文件不存在返回 `HB_DNN_CAN_NOT_OPEN_FILE`，模型不合法返回 `HB_DNN_INVALID_MODEL`。
 
+**【注意事项】**
+
+模型须为 AI 工具链针对目标平台编译的 `.hbm` 文件；文件不存在返回 `HB_DNN_CAN_NOT_OPEN_FILE`，模型不合法返回 `HB_DNN_INVALID_MODEL`。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ### hbDNNInitializeFromDDR
 
 ```c
@@ -273,6 +289,14 @@ int32_t hbDNNInitializeFromDDR(hbDNNPackedHandle_t *dnnPackedHandle,
 
 从内存加载模型（模型数据已读入内存、不经文件系统），参数含义与 `hbDNNInitializeFromFiles` 对应。
 
+**【注意事项】**
+
+模型数据需已读入内存（不经文件系统），参数含义与 `hbDNNInitializeFromFiles` 对应。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ### hbDNNRelease
 
 ```c
@@ -280,6 +304,14 @@ int32_t hbDNNRelease(hbDNNPackedHandle_t dnnPackedHandle);
 ```
 
 释放 packed handle 内的全部模型与相关资源。应在所有推理任务完成后调用。
+
+**【注意事项】**
+
+应在所有推理任务完成后调用，释放 packed handle 内的全部模型与相关资源。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ### hbDNNGetModelNameList
 
@@ -291,6 +323,14 @@ int32_t hbDNNGetModelNameList(char const ***modelNameList,
 
 获取 packed handle 内全部模型的名称列表与个数，用于多模型场景区分句柄。
 
+**【注意事项】**
+
+用于多模型场景区分句柄，返回的模型名列表供 `hbDNNGetModelHandle` 按名取句柄。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ### hbDNNGetModelHandle
 
 ```c
@@ -300,6 +340,14 @@ int32_t hbDNNGetModelHandle(hbDNNHandle_t *dnnHandle,
 ```
 
 按模型名从 packed handle 中取单模型句柄 `hbDNNHandle_t`，后续张量查询与推理均以该句柄为参数。
+
+**【注意事项】**
+
+后续张量查询与推理均以返回的 `hbDNNHandle_t` 句柄为参数。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ### hbDNNGetModelDesc / hbDNNGetHBMDesc
 
@@ -312,6 +360,14 @@ int32_t hbDNNGetHBMDesc(char const **desc, uint32_t *size, int32_t *type,
 
 获取模型/指定 hbm 文件的描述信息，`type` 取值见 `hbDNNDescType`。`hbDNNGetHBMDesc` 的 `index` 为加载时的文件序号（0 ~ 文件数-1）。
 
+**【注意事项】**
+
+`type` 取值见 `hbDNNDescType`；`hbDNNGetHBMDesc` 的 `index` 为加载时的文件序号（0 ~ 文件数-1）。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ### hbDNNGetCompileBpuCoreNum
 
 ```c
@@ -319,6 +375,14 @@ int32_t hbDNNGetCompileBpuCoreNum(int32_t *bpuCoreNum, hbDNNHandle_t dnnHandle);
 ```
 
 获取模型在工具链编译时指定的 BPU 核数。多核模型的调度由 hbUCP 完成。
+
+**【注意事项】**
+
+返回模型在工具链编译时指定的 BPU 核数；多核模型的调度由 hbUCP 完成。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ### hbDNNGetInputCount / hbDNNGetOutputCount
 
@@ -328,6 +392,14 @@ int32_t hbDNNGetOutputCount(int32_t *outputCount, hbDNNHandle_t dnnHandle);
 ```
 
 获取模型输入/输出张量个数，用于按索引遍历张量。
+
+**【注意事项】**
+
+用于按索引遍历张量，索引范围由返回值确定。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ### hbDNNGetInputName / hbDNNGetOutputName
 
@@ -339,6 +411,14 @@ int32_t hbDNNGetOutputName(char const **name, hbDNNHandle_t dnnHandle,
 ```
 
 按索引获取输入/输出张量名。
+
+**【注意事项】**
+
+按索引获取输入/输出张量名，索引范围由 `hbDNNGetInputCount`/`hbDNNGetOutputCount` 返回值确定。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ### hbDNNGetInputTensorProperties / hbDNNGetOutputTensorProperties
 
@@ -353,6 +433,14 @@ int32_t hbDNNGetOutputTensorProperties(hbDNNTensorProperties *properties,
 
 获取输入/输出张量属性（`hbDNNTensorProperties`），包括有效 shape、数据类型、量化 scale/zeroPoint 与 `alignedByteSize`（按此值分配张量内存）。
 
+**【注意事项】**
+
+按返回的 `alignedByteSize` 分配张量内存（如 `hbUCPMallocCached`）；`scale`/`zeroPoint` 用于量化/反量化。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ### hbDNNGetInputDesc / hbDNNGetOutputDesc
 
 ```c
@@ -363,6 +451,14 @@ int32_t hbDNNGetOutputDesc(char const **desc, uint32_t *size, int32_t *type,
 ```
 
 获取输入/输出张量的描述信息，`type` 取值见 `hbDNNDescType`。
+
+**【注意事项】**
+
+`type` 取值见 `hbDNNDescType`。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ### hbDNNInferV2
 
@@ -386,6 +482,14 @@ int32_t hbDNNInferV2(hbUCPTaskHandle_t *taskHandle, hbDNNTensor *output,
 
 异步模式下，`hbDNNInferV2` 返回后任务尚未执行完毕，需经 `hbUCPSubmitTask` 提交、`hbUCPWaitTaskDone` 等待、`hbUCPReleaseTask` 释放（见快速示例第 5 步）。
 
+**【注意事项】**
+
+`input`/`output` 张量数组元素个数须分别等于 `hbDNNGetInputCount`/`hbDNNGetOutputCount` 返回值；异步模式下返回后任务尚未执行完毕，须经 `hbUCPSubmitTask` 提交、`hbUCPWaitTaskDone` 等待、`hbUCPReleaseTask` 释放。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ### hbDNNGetTaskOutputTensorProperties
 
 ```c
@@ -396,6 +500,14 @@ int32_t hbDNNGetTaskOutputTensorProperties(hbDNNTensorProperties *properties,
 ```
 
 获取任务中指定子任务、指定输出索引的张量属性，用于动态输出场景。同步执行任务无法取得 taskHandle，不支持本接口。
+
+**【注意事项】**
+
+用于动态输出场景；同步执行任务无法取得 taskHandle，不支持本接口。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## 数据结构
 

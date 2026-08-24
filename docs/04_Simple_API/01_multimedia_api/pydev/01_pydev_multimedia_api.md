@@ -8,6 +8,8 @@ description: "RDK Python pydev 多媒体接口总览（Camera/Encoder/Decoder/Di
 
 RDK OS 预装了 Python 多媒体模块 `libsrcampy`（包名 `hobot_vio`），提供以下对象，用于完成摄像头采集、视频编解码和显示输出：
 
+- **接口层级**：封装层简易接口（模式 1）。
+
 | 对象 | 功能 | 详见 |
 | --- | --- | --- |
 | `Camera` | 摄像头采集（MIPI/USB） | [Camera 对象](./02_object_camera.md) |

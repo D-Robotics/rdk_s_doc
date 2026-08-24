@@ -8,6 +8,17 @@ description: "内核头文件"
 
 如果你需要在开发板上编译内核模块或类似的代码，你需要安装 Linux 内核头文件。这些头文件包含 Linux 内核的各种常量定义、宏定义、函数接口定义和数据结构定义，是完成内核模块代码编译所必须的依赖代码。
 
+**适用读者**：模式 3 深度定制开发者——需要在板端编译、加载内核模块的驱动或内核工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；板端可访问互联网（apt 安装依赖）。
+
+**与其他模块关系**：内核头文件是 [应用实时内核](/Advanced_development/system_software/realtime_kernel) 与第三方驱动模块编译的前置依赖；模块开发与签名见下文，内核调试见 [Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)。
+
+## 环境支持
+
+- 产品支持：RDK S100、RDK S600（均基于 Linux 6.1 内核）。
+- 头文件包：`linux-headers-6.1.158-rt58`（版本随系统发布变化，以 `uname -r` 为准）。
+
 ## 安装
 
 你可以通过以下命令安装内核头文件及内核编译依赖。
@@ -347,6 +358,20 @@ sudo echo hello > /lib/modules-load.d/hello.conf
         # Insert PCAN driver
         sudo insmod /lib/modules/6.1.158-rt58/misc/pcan.ko
         ```
+
+## 常见问题
+
+### 误执行 make clean 后模块编译失败
+
+**原因**：在 `/usr/src/linux-headers-$(uname -r)` 目录执行 `make clean` 破坏了板端内核模块编译环境。
+
+**解决**：重新安装 `linux-headers-6.1.158-rt58` 包进行环境恢复（版本以 `uname -r` 为准）。
+
+### 加载模块报 "Required key not available"
+
+**原因**：驱动模块未签名，而板端开启了模块签名校验。
+
+**解决**：参照「模块签名」章节对 `.ko` 文件签名，再通过 `modprobe` 或 `insmod` 加载。
 
 ## 相关文档
 

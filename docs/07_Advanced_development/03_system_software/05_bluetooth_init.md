@@ -23,6 +23,20 @@ import DocScope from '@site/src/components/DocScope'
 | USB 蓝牙 | USB 接口 | 通过 USB 接口连接的蓝牙适配器 |
 | UART 蓝牙 | UART 串口 | 通过 UART 串口连接的蓝牙模块（如 CYW55560） |
 
+## 机制原理
+
+蓝牙初始化由以下组件协同完成，最终将蓝牙设备枚举为 `hci0` 供上层使用：
+
+| 组件 | 作用 |
+|------|------|
+| `hobot-bluetooth.service` | 开机自启的 oneshot 系统服务，触发初始化流程 |
+| `startbt.sh` | 初始化脚本，依次检测 USB/UART 蓝牙并串起加载链路 |
+| `btusb` 驱动 | USB 蓝牙适配器内核驱动模块 |
+| `mbt` / `hciattach` | UART 蓝牙固件下载与 HCI 挂载 |
+| `hciconfig hci0` | 启用蓝牙设备并开启可发现/可扫描（piscan） |
+
+初始化脚本先检测 USB 蓝牙（`lsusb`），命中则加载 `btusb` 驱动；未命中则检测 UART 蓝牙（`/dev/ttyS1`），通过 GPIO 控制使能与复位、`mbt` 下载固件、`hciattach` 挂载。两条路径最终都执行 `hciconfig hci0 up` 完成初始化，具体流程见下文「初始化流程」。
+
 ## 系统服务
 
 ### hobot-bluetooth 服务
@@ -271,6 +285,12 @@ bluetoothctl
 [bluetooth]# trust XX:XX:XX:XX:XX:XX
 [bluetooth]# connect XX:XX:XX:XX:XX:XX
 ```
+
+## 注意事项
+
+- 本文 UART 蓝牙初始化以 XM612 为例，GPIO 使能脚、UART 端口、波特率与固件路径均以实际硬件为准；选择其他蓝牙模组时，请联系模组厂提供固件与初始化流程。
+- 插入 USB 蓝牙后初始化脚本会等待固件加载（约 3 秒），期间请勿拔插设备。
+- 本页说明的是板端蓝牙的初始化（驱动加载与 `hci0` 枚举），用户态的配对、开关等能力归《[蓝牙配置](/System_configuration/bluetooth_config)》；两者定位不同，勿混淆。
 
 ## 常见问题
 

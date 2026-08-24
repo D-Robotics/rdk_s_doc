@@ -10,6 +10,24 @@ description: "时间同步方案"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+时间同步方案用于统一 RDK S100/S600 各时间域（systime / PHC / RTC / MCU）的时间基准，支持 gPTP 网卡时间、PPS、RTC 等多种时间源，并将 Acore 时间同步到 MCU 侧 RTC 与 CAN、CIM 等模块。
+
+**适用读者**：模式 3 深度定制开发者——需要集成时间同步（机器人控制、多传感器时间戳对齐等场景）的软件、系统工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 PTP/gPTP、PPS 与 RTC 等基本概念。
+
+**与其他模块关系**：本方案是 Acore 与 MCU 时间对齐的基础；核间通信细节见 [IPC 模块介绍](/Advanced_development/system_software/driver_ipc)，用户态的时钟配置见 [时钟与 RTC 同步](/System_configuration/rtc_ntp)。
+
+> 默认状态：主线默认未启动时间同步，如需默认启动，参照「时间同步整体方案」章节的「运行指南」配置。
+
+## 环境支持
+
+- 时间源类型：gPTP（网卡 PHC，经 `ptp4l` / `phc2sys` 同步）、PPS（脉冲）、RTC、MCU 时间同步。
+- 全局时间基准（timeline）：`systime` / `phc` / `rtc`，默认使用 RTC 时间，可通过 `globaltime` 设备树与 sysfs 接口切换。
+- 产品支持：RDK S100、RDK S600（MCU 侧时间同步细节见「MCU 时间同步说明」）。
+
 ## 名词缩写及解释
 
 | **缩写** | **解释**                                     |
@@ -930,6 +948,14 @@ MCU log 说明：
 "Get Time From Acore success" 表明 MCU 从 Acore 拿时间成功；
 
 "TimeKeeperRTC and TimeKeeperIPC Offset" ，表明在同步时，Rtc 使用 IPC 时间同步时的 offset。
+
+## 调试
+
+- 查看全局时间基准（timeline）：`cat /sys/devices/platform/soc/soc:globaltime/globaltime`（0=systime、1=phc、2=rtc）。
+- 确认 PPS 生效：使能后查看 `/sys/class/pps/pps[*]/assert` 是否变化，并用 `cat /sys/class/pps/pps[*]/name` 确认哪个 pps 对应 MCU PPS。
+- MCU 同步成功标志：MCU log 出现 `Get Time From Acore success`。
+
+<!-- TODO(Sx): 待收集 —— 常见问题：时间同步暂无真实「现象→原因→解决」素材 -->
 
 ## 相关文档
 

@@ -76,6 +76,10 @@ ret = disp.display(0, 1920, 1080, 0, 1)
 
 无
 
+【兼容性】
+
+支持 RDK S100、RDK S600。
+
 ## set_img
 
 【功能描述】
@@ -143,6 +147,10 @@ def test_display():
 test_display()
 ```
 
+【兼容性】
+
+支持 RDK S100、RDK S600。
+
 ## set_graph_rect
 
 【功能描述】
@@ -193,6 +201,10 @@ ret = disp.set_graph_rect(100, 100, 1920, 200, chn = 2, flush = 1,  color = 0xff
 【参考代码】
 
 无
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## set_graph_word
 
@@ -246,6 +258,10 @@ print ("Display set_graph_word return:%d" % ret)
 
 无
 
+【兼容性】
+
+支持 RDK S100、RDK S600。
+
 ## close
 
 【功能描述】
@@ -280,6 +296,10 @@ Display.close()
 【参考代码】  
 
 无
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## bind 接口
 
@@ -331,6 +351,10 @@ print("libsrcampy bind return:%d" % ret)
 【参考代码】
 
 无
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## unbind 接口
 
@@ -386,6 +410,10 @@ print("libsrcampy unbind return:%d" % ret)
 【参考代码】
 
 无
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## 常见问题
 

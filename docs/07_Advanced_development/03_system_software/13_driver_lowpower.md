@@ -10,6 +10,28 @@ description: "低功耗模式调试指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+低功耗模式调试指南介绍 RDK 开发板的电源域划分与五种电源状态（Off / MCU only / Deep sleep / Light sleep / Working），以及休眠、唤醒源的配置与调试方法，用于降低待机功耗、实现按需唤醒。
+
+**适用读者**：模式 3 深度定制开发者——需要降低产品功耗、配置休眠唤醒策略的软件、系统工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端；理解电源域与 Linux 电源管理（suspend）基本概念。
+
+**与其他模块关系**：用户态的屏幕休眠与电源管理见 [屏幕休眠与电源管理](/System_configuration/screen_sleep)，CPU 频率与散热管理见 [Thermal 和 CPU 频率管理](/System_configuration/frequency_management)。
+
+## 软件架构
+
+开发板内部划分为 AON、MCU、Main 三个电源域，五种电源状态正是这三个电源域与 DDR 颗粒的不同组合：
+
+```mermaid
+flowchart TD
+    A[开发板电源域] --> B[AON 域<br/>常供电、非下电]
+    A --> C[MCU 域<br/>HSM + MCU 及内部 IP]
+    A --> D[Main 域<br/>其余 IP]
+    D --> E[DDR 颗粒<br/>Deep/Light sleep 时自刷新]
+```
+
 ## 芯片电源域
 内部有 AON、MCU 和 Main 域三个电源域。其中 AON 为非下电状态需要一直供电的电源域，MCU 电源域用于给 Hsm 和 MCU 及其内部 IP 供电，Main 域给其他部分供电。
 
@@ -328,6 +350,20 @@ exit 0
 :::warning
 在休眠前要关闭所有上层服务，否则可能导致系统无法正常进行休眠唤醒。
 :::
+
+## 代码路径
+
+- SDK 休眠唤醒回调脚本：`source/hobot-configs/debian/usr/lib/systemd/system-sleep/suspend_resume.sh`
+- 用户自定义 service 启停示例：`/usr/lib/systemd/system-sleep/example.sh`
+- 休眠模式 sysfs 接口：`/sys/devices/platform/suspend-mode/suspend_mode/`
+
+## 调试
+
+- 查看支持的休眠模式：`cat /sys/devices/platform/suspend-mode/suspend_mode/suspend_mode`（返回 light、deep，默认 deep）。
+- 切换休眠模式：`echo light > /sys/devices/platform/suspend-mode/suspend_mode/suspend_mode`，再用 `cat .../current_suspend_mode` 确认。
+- 休眠前需关闭上层服务，否则可能导致无法正常休眠唤醒（可借助 `system-sleep` 回调在 pre/post 阶段启停服务）。
+
+<!-- TODO(Sx): 待收集 —— 常见问题：低功耗暂无真实「现象→原因→解决」素材 -->
 
 ## 相关文档
 

@@ -41,6 +41,14 @@ description: "DECODER（解码模块）API 接口说明"
 
 成功返回`DECODER`对象，失败返回 NULL。
 
+**【注意事项】**
+
+使用其他解码接口前必须先调用本接口获得 `DECODER` 操作句柄。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_release_decoder_module  
 
 **【函数原型】**  
@@ -58,6 +66,14 @@ description: "DECODER（解码模块）API 接口说明"
 **【返回类型】**  
 
 无
+
+**【注意事项】**
+
+传入的 `obj` 须为 `sp_init_decoder_module` 返回的有效对象指针，在停止解码后调用释放资源。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_start_decode  
 
@@ -82,6 +98,14 @@ description: "DECODER（解码模块）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先初始化 `DECODER` 对象；`stream_file` 传文件名时解码文件、传空字符串时需通过 `sp_decoder_set_image` 手动送入码流；`video_chn` 支持 0~31。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_stop_decode  
 
 **【函数原型】**  
@@ -99,6 +123,14 @@ description: "DECODER（解码模块）API 接口说明"
 **【返回类型】** 
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+传入的 `obj` 须为已初始化的 `DECODER` 对象指针，在解码结束后调用关闭解码通道。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_decoder_get_image  
 
@@ -118,6 +150,14 @@ description: "DECODER（解码模块）API 接口说明"
 **【返回类型】** 
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+调用前须先创建解码通道；`image_buffer` 须预先分配内存，大小与图像分辨率的关系为 `(width * height * 3) / 2`。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_decoder_set_image  
 
@@ -142,6 +182,14 @@ description: "DECODER（解码模块）API 接口说明"
 **【返回类型】** 
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+调用前须先创建解码通道且 `stream_file` 传入空字符串；解码 H264/H265 需先送入 3~5 帧数据完成帧缓存后再取帧；H264 第一帧必须是 sps 和 pps 描述信息。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## 数据结构与常量
 

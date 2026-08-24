@@ -6,6 +6,26 @@ description: "Linux 调试功能介绍"
 
 # Linux 调试功能介绍
 
+## 概述
+
+ramdump 是一种将内核 panic 瞬间完整内存镜像保存下来用于离线分析的手段，配合 crash 工具可以查看 panic 时的堆栈、寄存器、dmesg 与内核数据结构，适合定位仅靠日志无法复现的踩内存、偶发死机等问题。
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要分析内核死机、panic 的驱动或内核工程师。
+
+**前置条件**：已烧录 RDK OS 并可进入 U-Boot 控制台；准备一台 X86~64 服务器用于编译与运行 crash 工具。
+
+**与其他模块关系**：本功能用于内核死机排查，与《[应用实时内核](/Advanced_development/system_software/realtime_kernel)》《[内核头文件](/Advanced_development/system_software/kernel_headers)》同属内核层开发配套。
+
+## 机制原理
+
+ramdump 的整体流程为：先通过 `hrut_ddr_misc` 打开 RAMDUMP 开关（或 U-Boot 下设置 `enable_ramdump`），当 Kernel 触发 panic 后，重启进 U-Boot 执行 `memdump`，将各 DDR bank 内容按偏移导出为 `DDRCSx.bin`，同时导出 `cpu-contexts.bin`；随后在 X86~64 服务器上用 crash 工具加载 `vmlinux` 与这些 dump 文件进行离线分析。
+
+| 阶段 | 工具/产物 | 说明 |
+|------|----------|------|
+| 开启抓取 | `hrut_ddr_misc` / `enable_ramdump` | 打开 RAMDUMP 能力 |
+| 保存镜像 | `memdump`（U-Boot） | 导出 `DDRCSx.bin` 与 `cpu-contexts.bin` 到指定分区 |
+| 离线分析 | `crash` + `vmlinux` | 在 X86~64 平台查看堆栈、寄存器、日志 |
+
 ## crash 分析 ramdump
 
 ### 抓取 ramdump
@@ -316,6 +336,27 @@ PID: 4240     TASK: ffff00040f10f000  CPU: 0    COMMAND: "bash"
     ORIG_X0: 0000000000000001  SYSCALLNO: 40  PSTATE: 20001000
 crash>
 ```
+
+## 注意事项
+
+- 当前 ramdump 功能只支持抓取由 Kernel panic 触发的场景。
+- ramdump 可能损坏保存 dump 文件的分区，请务必将 dump 保存到非根文件系统分区，且分区容量须大于 DDR 容量；建议创建专门用于 ramdump 的分区，见《[构建系统 rdk_gen](/Advanced_development/environment_build/rdk_gen)》。
+- crash 工具目前只支持在 X86~64 平台使用。
+- secure boot 设备自动抓取 ramdump 需要额外烧写 HB_APDP 分区镜像并开启 secure debug，请联系 FAE 获取对应说明。
+
+## 常见问题
+
+### 抓取 ramdump 后保存分区损坏
+
+**原因**：dump 文件被写到根文件系统分区，或目标分区容量小于 DDR 容量。
+
+**解决**：将 dump 保存到非根文件系统的独立分区，并确保该分区容量大于 DDR 容量。
+
+### crash 工具无法运行
+
+**原因**：crash 目前只支持 X86~64 平台。
+
+**解决**：将 `DDRCSx.bin` 与 `cpu-contexts.bin` 复制到 X86~64 服务器上，再运行 `crash`。
 
 ## 相关文档
 

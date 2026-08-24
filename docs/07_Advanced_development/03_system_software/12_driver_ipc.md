@@ -701,7 +701,7 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
         ```
 
 :::tip
-ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave
+ipcbox 只实现了对 I2C Master 的简单传输，不支持 Slave
 
 测试用例中的读写操作都是对8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于 MCU 的 SDK 中的 Service/HouseKeeping/ipc_box/src/ipc_i2c.c
 :::
@@ -1265,6 +1265,20 @@ wdump: 0
 libipcfhal-test: TestBody() [2593] info :
 wdump: 0
 ```
+
+## 常见问题
+
+### ipcbox I2C 测试探测不到设备
+
+**原因**：MCU 侧 `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` 的 `IpcBox_InstanceMap` 配置中，`i2c` 对应项默认为 `DISABLE`。
+
+**解决**：将该 `i2c` 项改为 `ENABLE` 后重新测试。
+
+### 客户自行定义 IPC 实例无效
+
+**原因**：默认实例分配中，部分实例被内部预留或被 CANHAL、规控等业务占用。
+
+**解决**：修改 Acore 侧设备树配置文件（`drobot-s100-ipc.dtsi` / `drobot-s600-ipc.dtsi`），按需选用空闲实例并重新编译。
 
 ## 相关文档
 

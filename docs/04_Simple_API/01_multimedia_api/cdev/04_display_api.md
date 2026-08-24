@@ -43,6 +43,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 
 成功返回 `DISPLAY` 对象指针，失败返回 NULL。
 
+**【注意事项】**
+
+使用其他显示接口前必须先调用本接口获得 `DISPLAY` 操作句柄。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_release_display_module  
 
 **【函数原型】**  
@@ -60,6 +68,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 **【返回类型】** 
 
 无
+
+**【注意事项】**
+
+传入的 `obj` 须为 `sp_init_display_module` 返回的有效对象指针，在停止显示后调用释放资源。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_start_display  
 
@@ -82,6 +98,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先初始化 `DISPLAY` 对象；`chn` 支持 0~3，桌面系统下 0 通道已用作图形化系统，应用程序请使用通道 1，图形层叠加使用通道 2~3；最大分辨率 1920 x 1080、最大帧率 60fps。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_stop_display  
 
 **【函数原型】**  
@@ -99,6 +123,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 **【返回类型】** 
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+传入的 `obj` 须为已初始化的 `DISPLAY` 对象指针，在显示结束后调用关闭显示通道。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_display_set_image  
 
@@ -120,6 +152,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 **【返回类型】** 
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+调用前须先创建显示通道（`sp_start_display`）；`addr` 图像数据必须为 `NV12` 格式，`chn` 与 `sp_start_display` 使用的通道号一致。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_display_draw_rect  
 
@@ -147,6 +187,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先初始化 `DISPLAY` 对象；`chn` 为图形层（2~3），`color` 使用 ARGB8888 格式。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_display_draw_string  
 
 **【函数原型】**  
@@ -172,6 +220,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先初始化 `DISPLAY` 对象；`str` 须为 GB2312 编码，`chn` 为图形层（2~3），`color` 使用 ARGB8888 格式。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_get_display_resolution  
 
 **【函数原型】**  
@@ -190,6 +246,14 @@ description: "DISPLAY（显示模块）API 接口说明"
 **【返回类型】** 
 
 无。
+
+**【注意事项】**
+
+用于在创建显示通道前获取当前接入显示器的分辨率，输出经 `width`/`height` 回填。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## 数据结构与常量
 

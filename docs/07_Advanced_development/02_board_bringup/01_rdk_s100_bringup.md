@@ -15,6 +15,31 @@ S100 boardid 由 ADC0、ADC1、ADC3和 ADC4共同作用，其中 ADC0和 ADC1用
 
 由 ADC 采样形成 boardid，在 SBL 内实现，这部分属于闭源代码，客户无需关心
 
+## 硬件支持
+
+S100 板级点亮依赖 boardid 机制，由 ADC0、ADC1、ADC3、ADC4 四个通道共同决定，默认配置如下：
+
+| ADC 通道 | 用途 | 客户可改 |
+|---------|------|---------|
+| ADC0 | 硬件区分（默认档位 0x6） | 否 |
+| ADC1 | 硬件区分（默认档位 0xA） | 否 |
+| ADC3 | Acore 外设上电时序 | 是 |
+| ADC4 | 硬件版本 | 是 |
+
+每个 ADC 通道 16 个档位（0x0~0xF）。boardid 为 16bit 无符号整型，如 `0x6A84` 对应 ADC0=0x6、ADC1=0xA、ADC3=0x8、ADC4=0x4。
+
+## 软件架构
+
+板级点亮按「SBL 生成 boardid → MCU 电源管理 → spl/U-Boot 配置 → Kernel 配置与加载 → 上板调试」逐级推进：
+
+```mermaid
+flowchart TD
+    A["SBL<br/>ADC 采样生成 boardid"] --> B["MCU<br/>Acore 外设电源管理"]
+    B --> C["spl / U-Boot<br/>配置文件 + 设备树 + boardid"]
+    C --> D["Kernel<br/>配置文件 + 设备树 + 按 boardid 加载 ko"]
+    D --> E["上板调试<br/>启动信息比对"]
+```
+
 ## 在 MCU 下新增硬件
 
 :::info 提示
@@ -472,6 +497,16 @@ s100
 S100
 060c0495309069410f94dc4c00001079
 ```
+
+## 代码路径
+
+板级点亮涉及的源码分散在 MCU、U-Boot 与 Kernel 三侧：
+
+- MCU 侧电源管理：`mcu/McalCdd/Common/Power/S100/scp/boot/src/main_top_init.c`
+- U-Boot 侧：配置文件 `hobot_s100_defconfig`、设备树与 boardid 相关代码
+- Kernel 侧：配置脚本 `mk_kernel.sh`、设备树与按 boardid 加载的 ko
+
+<!-- TODO(Sx): 待收集 —— 常见问题：硬件点亮暂无真实「现象→原因→解决」素材 -->
 
 ## 相关文档
 

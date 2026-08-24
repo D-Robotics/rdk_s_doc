@@ -49,6 +49,14 @@ description: "SYS（模块绑定）API 接口说明"
 
 成功返回 0，失败返回其他值。
 
+**【注意事项】**
+
+源/目标模块对象须先完成各自模块的初始化；仅支持 VIO→ENCODER、VIO→DISPLAY、DECODER→ENCODER、DECODER→DISPLAY 四种绑定关系。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_module_unbind  
 
 **【函数原型】**  
@@ -69,6 +77,14 @@ description: "SYS（模块绑定）API 接口说明"
 **【返回类型】**  
 
 成功返回 0，失败返回其他值。
+
+**【注意事项】**
+
+参数须与 `sp_module_bind` 绑定时一致；模块退出前需先调用本接口完成解绑。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## 数据结构与常量
 

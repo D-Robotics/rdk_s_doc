@@ -10,6 +10,16 @@ import DocScope from '@site/src/components/DocScope';
 
 # Log 使用指南
 
+## 概述
+
+Log 系统负责收集、存储与归档开发板各模块（内核、MCU、DSP、BL31、OP-TEE、U-Boot、ALOG、systemd 等）运行日志，并提供按时间、按模块的查询与容量管控能力。
+
+**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要定位驱动、固件或应用问题的研发、测试工程师。
+
+**前置条件**：已烧录 RDK OS 并可登录板端（SSH 或调试串口）；了解 Linux 日志基础（`dmesg`、`logcat`、`systemd journal`）。
+
+**与其他模块关系**：本指南重点讲 log 分区规划、日志进程机制与接口用法；板端日志查看入口见《[系统日志查看](/System_configuration/system_log)》；内核命令细节见《[Linux 命令 dmesg](/Appendix/linux-command-manual/dmesg)》；MCU 侧 log 接口见《[MCU 基础信息](../11_mcu_development/01_basic_information.md#mcu-log-简介)》的「MCU Log 简介」。
+
 ## Log 系统分区规划
 
 ### Log 分区
@@ -437,6 +447,26 @@ MCU Log 使用注意事项，请参考：[MCU Log简介](../11_mcu_development/0
 ### 有效获取问题时刻日志
 
 1.  在 log 分区中的文件的命名字段中包含对应 log 文件的最后修改时间的信息，可以去文件中查找问题时刻的 log。
+
+## 常见问题
+
+### 串口实时查看日志出现丢失
+
+**原因**：串口输出速度较慢，实时日志量过大时打印会被覆盖，内核会提示 `logcat lost message`。
+
+**解决**：改为在 SSH 窗口查看日志；或只输出必要日志、适当增大 rotate 数量。
+
+### 日志占用过多存储寿命
+
+**原因**：大量调试日志持续写入存储设备（如 eMMC / UFS），产生写入放大后消耗存储寿命。
+
+**解决**：正式版本只输出必要日志，不输出大量调试日志；按需裁剪 log 服务与日志级别。
+
+### 死机时部分模块日志缺失
+
+**原因**：pstore 机制只能保存发生 panic 的内核日志，BL31 与 MCU 的 panic 信息无法保存。
+
+**解决**：排查死机时以 pstore 内核日志为准，MCU/BL31 侧信息通过串口或转存 Acore 的方式在运行时留存。
 
 ## 相关文档
 

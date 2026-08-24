@@ -47,6 +47,14 @@ description: "ENCODER（编码模块）API 接口说明"
 
 成功返回一个`ENCODER`对象指针，失败返回`NULL`。
 
+**【注意事项】**
+
+使用其他编码接口前必须先调用本接口获得 `ENCODER` 操作句柄。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_release_encoder_module  
 
 **【函数原型】**  
@@ -64,6 +72,14 @@ description: "ENCODER（编码模块）API 接口说明"
 **【返回类型】**  
 
 无
+
+**【注意事项】**
+
+传入的 `obj` 须为 `sp_init_encoder_module` 返回的有效对象指针，在停止编码后调用释放资源。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_start_encode  
 
@@ -88,6 +104,14 @@ description: "ENCODER（编码模块）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先初始化 `ENCODER` 对象；`chn` 支持 0~31；`type` 支持 `SP_ENCODER_H264`、`SP_ENCODER_H265`、`SP_ENCODER_MJPEG`；输入图像宽度须满足对齐要求（见文首警告）。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_stop_encode  
 
 **【函数原型】**  
@@ -105,6 +129,14 @@ description: "ENCODER（编码模块）API 接口说明"
 **【返回类型】** 
 
 成功返回 0，失败返回 -1
+
+**【注意事项】**
+
+传入的 `obj` 须为已初始化的 `ENCODER` 对象指针，在编码结束后调用关闭编码通道。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## sp_encoder_set_frame  
 
@@ -126,6 +158,14 @@ description: "ENCODER（编码模块）API 接口说明"
 
 成功返回 0，失败返回 -1
 
+**【注意事项】**
+
+调用前须先创建编码通道（`sp_start_encode`）；`frame_buffer` 数据必须为 `NV12` 格式，分辨率须与 `sp_start_encode` 创建通道时一致。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
+
 ## sp_encoder_get_stream  
 
 **【函数原型】**  
@@ -144,6 +184,14 @@ description: "ENCODER（编码模块）API 接口说明"
 **【返回类型】** 
 
 成功返回码流数据的 size，失败返回 -1
+
+**【注意事项】**
+
+调用前须先创建编码通道并送入帧数据；`stream_buffer` 须按编码分辨率和码率预分配足够内存。
+
+**【兼容性】**
+
+支持 RDK S100、RDK S600。
 
 ## 数据结构与常量
 

@@ -104,6 +104,26 @@ Error: N step(s) failed to flash.
 
 - 升级过程中**禁止**拔电源、断电、重启或对分区执行任何其它写入操作——`dd` 整片烧写被打断会直接导致变砖。
 
+## 常见问题
+
+### 升级失败并提示 "N step(s) failed to flash"
+
+**原因**：某个分区的 `dd` 烧写失败（镜像不符、分区被占用或并发写入等）。
+
+**解决**：执行 `dmesg | tail` 查看相关错误；确认升级过程中无其它写入操作后，重新执行 `rdk-miniboot-update`。
+
+### 升级后 miniboot 未更新
+
+**原因**：升级完成后未重启，新 miniboot 需重启后才会生效。
+
+**解决**：执行 `rdk-miniboot-update --reboot y`，或手动执行 `reboot`。
+
+### 已进入 OHP 阶段的设备升级被拒绝
+
+**原因**：设备处于 OHP 生命周期阶段，在线升级被禁用。
+
+**解决**：改用 factory 工具整片重烧。
+
 ## 相关文档
 
 - [主版本升级与固件](/System_configuration/system_update/upgrade_firmware)

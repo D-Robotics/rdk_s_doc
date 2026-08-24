@@ -183,6 +183,26 @@ ping 192.168.1.111
 usb-gadget.sh stop rndis
 ```
 
+## 配置与工具
+
+Gadget 模式切换统一通过 `usb-gadget.sh` 脚本完成：
+
+| 命令 | 说明 |
+|------|------|
+| `usb-gadget.sh start adb` | 启动 ADB 模式 |
+| `usb-gadget.sh stop adb` | 停止 ADB 模式 |
+| `usb-gadget.sh start rndis` | 启动 RNDIS 模式 |
+| `usb-gadget.sh stop rndis` | 停止 RNDIS 模式 |
+
+脚本内部基于 Linux ConfigFS 动态创建 `g_comp` 组合设备，并依据 `.usb-config` 文件绑定具体 Gadget 功能（见脚本输出 `Bind functions according to .usb-config file`）；重复启动前请先 `stop` 对应模式，避免冲突。
+
+## 注意事项
+
+- USB Type-C 接口（S100 J16 / S600 J4）仅支持 Device 模式，不能连接 U 盘或作为 Host 使用。
+- USB Type-A 接口仅支持 Host 模式，不能配置为 Gadget。
+- ADB 与 RNDIS 模式互斥：切换前先 `usb-gadget.sh stop` 当前模式，再 `start` 新模式。
+- 切换模式后 PC 未识别新设备时，先拔插 USB 线重新连接，或执行 `usb-gadget.sh stop` 后再启动新模式。
+
 ## 常见问题
 
 ### Windows 无法识别 RNDIS 设备

@@ -8,6 +8,12 @@ description: "使用 Podman 容器编译 RDK BSP"
 
 Podman 是 Docker 的替代方案，无需守护进程（daemonless），且默认以非 root 用户运行，安全性更高。编译流程与 Docker 基本一致。
 
+**适用读者**：模式 3 深度定制开发者——希望在无守护进程的容器内搭建可复现 BSP 编译环境的研发工程师。
+
+**前置条件**：宿主机已安装 Podman；BSP 源码已获取（见 [搭建开发环境](./01_environment_build.md)）。
+
+**与其他模块关系**：本页是 [使用 Docker 编译](./04_docker_build.md) 的 daemonless 替代方案，编译流程与依赖一致。
+
 ## 环境准备
 
 - 宿主机已安装 Podman
@@ -55,6 +61,20 @@ SELinux 环境下挂载目录需加 `:Z` 标签，否则容器内无法访问。
 | Root 权限 | 默认 root 运行 | 支持 rootless |
 | 命令兼容 | `docker` | `podman`（alias docker=podman 可兼容） |
 | 镜像格式 | OCI | OCI（兼容 Docker Hub） |
+
+## 常见问题
+
+### rootless 模式下 /opt 不可写
+
+**原因**：交叉编译工具链默认安装到 `/opt`，rootless 容器内 `/opt` 可能不可写。
+
+**解决**：改用 rootful 模式（`sudo podman run`）运行容器，或将工具链改安装到容器内可写路径。
+
+### SELinux 环境下容器无法访问挂载目录
+
+**原因**：SELinux 限制容器访问挂载卷。
+
+**解决**：挂载目录时添加 `:Z` 标签（如 `-v /path/to/rdk-gen:/workspace:Z`）。
 
 ## 相关文档
 

@@ -66,6 +66,10 @@ ret = encode.encode(0, 1, 1920, 1080)
 
 无
 
+【兼容性】
+
+支持 RDK S100、RDK S600。
+
 ## encode_file
 
 【功能描述】
@@ -109,6 +113,10 @@ ret = encode.encode_file(input_img)
 【参考代码】  
 
 无
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## get_img
 
@@ -181,6 +189,10 @@ def test_encode():
 test_encode()
 ```
 
+【兼容性】
+
+支持 RDK S100、RDK S600。
+
 ## close
 
 【功能描述】
@@ -215,6 +227,10 @@ Encoder.close()
 【参考代码】  
 
 无
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## 常见问题
 

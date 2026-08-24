@@ -68,6 +68,10 @@ ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
 
 无
 
+【兼容性】
+
+支持 RDK S100、RDK S600。
+
 ## get_img
 
 【功能描述】
@@ -137,6 +141,10 @@ def test_decode():
 
 test_decode()
 ```
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## set_img
 
@@ -227,6 +235,10 @@ def test_cam_bind_encode_decode_bind_display():
 test_cam_bind_encode_decode_bind_display()
 ```
 
+【兼容性】
+
+支持 RDK S100、RDK S600。
+
 ## close
 
 【功能描述】
@@ -260,6 +272,10 @@ Decoder.close()
 【参考代码】
 
 无
+
+【兼容性】
+
+支持 RDK S100、RDK S600。
 
 ## 常见问题
 

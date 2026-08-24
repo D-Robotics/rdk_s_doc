@@ -15,6 +15,33 @@ ADC0、ADC1和ADC2 通道共有8个档位，对应0x0-0x7；ADC4、ADC5通道共
 
 由 ADC 采样形成 boardid，在 SBL 内实现，对应代码路径为`mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`，函数`SBL_GetADC_To_AonSram`
 
+## 硬件支持
+
+S600 板级点亮依赖 boardid 机制，由 ADC0、ADC1、ADC2、ADC4、ADC5、ADC6 六个通道共同决定，默认配置如下：
+
+| ADC 通道 | 用途 | 客户可改 |
+|---------|------|---------|
+| ADC0 | 硬件区分 | 否 |
+| ADC1 | 硬件区分 | 否 |
+| ADC2 | 硬件区分 | 否 |
+| ADC4 | module 底板区分 | 是 |
+| ADC5 | 底板版本区分 | 是 |
+| ADC6 | 预留（强制 0x1） | 否 |
+
+ADC0~ADC2 每通道 8 个档位（0x0~0x7）；ADC4、ADC5 每通道 7 个档位（0x0~0x6）。boardid 为 28bit 无符号整型，如 `0x5131310` 对应 ADC0=0x5、ADC1=0x1、ADC2=0x3、ADC4=0x1、ADC5=0x3、ADC6=0x1。
+
+## 软件架构
+
+板级点亮按「SBL 生成 boardid → MCU 电源管理 → spl/U-Boot 配置 → Kernel 配置与加载 → 上板调试」逐级推进：
+
+```mermaid
+flowchart TD
+    A["SBL<br/>ADC 采样生成 boardid"] --> B["MCU<br/>Acore 电源管理"]
+    B --> C["spl / U-Boot<br/>配置文件 + 设备树 + boardid"]
+    C --> D["Kernel<br/>配置文件 + 设备树 + 按 boardid 加载 ko"]
+    D --> E["上板调试<br/>启动信息比对"]
+```
+
 ## 在 MCU 下新增硬件
 
 :::info 提示
@@ -457,6 +484,17 @@ super
 S600
 8e09458433902940750b6e1900000786
 ```
+
+## 代码路径
+
+板级点亮涉及的源码分散在 MCU、U-Boot 与 Kernel 三侧：
+
+- MCU 侧电源管理：`mcu/BootLoader/Sys/src/Sys_InitSocEarly.c`（`Sys_Lld_SetPmicGpio`）
+- SBL boardid 生成：`mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`
+- U-Boot 侧：配置文件 `hobot_s600_defconfig`、设备树与 boardid 相关代码
+- Kernel 侧：配置脚本 `mk_kernel.sh`、设备树与按 boardid 加载的 ko
+
+<!-- TODO(Sx): 待收集 —— 常见问题：硬件点亮暂无真实「现象→原因→解决」素材 -->
 
 ## 相关文档
 

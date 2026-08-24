@@ -8,6 +8,12 @@ description: "RDK S100/S600 BSP 源码目录结构与关键脚本说明"
 
 本节介绍 RDK BSP 源码的顶层目录结构和关键构建脚本，帮助开发者快速定位需要修改的组件。
 
+**适用读者**：模式 3 深度定制开发者——需要在 BSP 源码中定位组件或脚本的研发工程师。
+
+**前置条件**：已获取 BSP 源码包（目录根为 `rdk-gen`）；可结合 [搭建开发环境](./01_environment_build.md) 的编译流程使用。
+
+**与其他模块关系**：本页是全 BSP 结构的索引；deb 包开发见 [deb 包开发](../03_system_software/01_deb/01_deb.md)，构建系统细节见 [构建系统开发指南](./03_rdk_gen.md)，镜像定制见 [系统定制](../03_system_software/02_system_customization/01_system_customization.md)。
+
 ## 顶层目录
 
 BSP 源码根目录为 `rdk-gen`（即下载解压后的源码目录），负责打包、制作
@@ -72,6 +78,8 @@ sudo ./pack_image.sh  # 一键构建系统镜像
 ```
 
 详见 [搭建开发环境](./01_environment_build.md)。
+
+<!-- TODO(Sx): 待收集 —— 常见问题/调试：BSP 目录结构参考页暂无真实案例 -->
 
 ## 相关文档
 
