@@ -18,6 +18,16 @@ The sample code is located in the `/app/pydev_demo/classification_sample/mobilen
   - S600: `/opt/hobot/model/s600/basic/mobilenetv2_224x224_nv12.hbm`
 - The Python environment and `hbm_runtime` are pre-installed with the image.
 
+## Code Location
+
+The sample code is located in the `/app/pydev_demo/classification_sample/mobilenetv2/` directory on the board, with the following structure:
+
+```text
+/app/pydev_demo/classification_sample/mobilenetv2/
+├── README.md
+└── mobilenetv2.py
+```
+
 ## Parameters
 
 | Parameter | Description | Default |

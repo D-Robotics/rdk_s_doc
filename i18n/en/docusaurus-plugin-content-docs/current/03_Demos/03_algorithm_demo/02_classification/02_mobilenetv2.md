@@ -24,6 +24,21 @@ The sample code is located in the `/app/cdev_demo/bpu/classification_sample/mobi
 sudo apt update && sudo apt install libgflags-dev
 ```
 
+## Code Location
+
+The sample code is located in the `/app/cdev_demo/bpu/classification_sample/mobilenetv2/` directory on the board, with the following structure:
+
+```text
+/app/cdev_demo/bpu/classification_sample/mobilenetv2/
+├── CMakeLists.txt
+├── README.md
+├── inc/
+│   └── mobilenetv2.hpp
+└── src/
+    ├── main.cc
+    └── mobilenetv2.cc
+```
+
 ## Build
 
 ```bash

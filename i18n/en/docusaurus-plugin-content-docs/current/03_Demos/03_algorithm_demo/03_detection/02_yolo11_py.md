@@ -18,6 +18,16 @@ The sample code is located in the `/app/pydev_demo/detection_sample/ultralytics_
   - S600: `/opt/hobot/model/s600/basic/yolo11n_detect_nashp_640x640_nv12.hbm`
 - The Python environment and `hbm_runtime` are pre-installed with the image.
 
+## Code Location
+
+The sample code is located in the `/app/pydev_demo/detection_sample/ultralytics_yolo11/` directory on the board, with the following structure:
+
+```text
+/app/pydev_demo/detection_sample/ultralytics_yolo11/
+├── README.md
+└── ultralytics_yolo11.py
+```
+
 ## Parameters
 
 | Parameter | Description | Default |

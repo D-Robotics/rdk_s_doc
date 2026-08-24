@@ -124,6 +124,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
     [Saved] Result saved to: result.jpg
     ```
 
+    **Success indicator**: `[Saved] Result saved to: result.jpg` appears at the end. Open `build/result.jpg` to see the segmentation masks and detection boxes of the objects.
+
 ## Notes
 - The output result is saved as result.jpg; you can view it yourself.
 - If the specified model path does not exist, the program will attempt to download the model automatically.

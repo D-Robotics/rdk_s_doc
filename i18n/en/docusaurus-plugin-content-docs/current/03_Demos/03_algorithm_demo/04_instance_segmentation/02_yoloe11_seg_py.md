@@ -119,6 +119,8 @@ pip install -r ../../requirements.txt
     [Saved] Result saved to: result.jpg
     ```
 
+    **Success indicator**: `[Saved] Result saved to: result.jpg` appears at the end. Open `result.jpg` to see the segmentation masks and detection boxes of the objects.
+
 ## Notes
 - If the specified model path does not exist, the program will attempt to download the model automatically.
 
