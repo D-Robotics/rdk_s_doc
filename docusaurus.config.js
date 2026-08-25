@@ -82,6 +82,10 @@ const config = {
     {
       src: "/rdk_s_doc/js/dify-config.js",
     },
+    {
+      src: "/rdk_s_doc/js/umami-events.js",
+      async: true,
+    },
   ],
   headTags: [
     {
