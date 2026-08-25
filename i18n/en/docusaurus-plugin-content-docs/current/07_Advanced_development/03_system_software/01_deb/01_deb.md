@@ -2,6 +2,7 @@
 title: "deb Package Development"
 sidebar_position: 1
 description: "RDK deb package development workflow and conventions"
+slug: /Advanced_development/system_software/deb/deb
 ---
 
 # deb Package Development

@@ -2,6 +2,7 @@
 title: "deb 包开发"
 sidebar_position: 1
 description: "RDK deb 包开发流程与规范"
+slug: /Advanced_development/system_software/deb/deb
 ---
 
 # deb 包开发
