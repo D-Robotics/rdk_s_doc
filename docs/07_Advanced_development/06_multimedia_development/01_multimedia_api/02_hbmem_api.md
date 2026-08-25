@@ -80,7 +80,7 @@ hbmem_free(addr);
 
 ### hbmem_version
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t hbmem_version(uint32_t *major, uint32_t *minor, uint32_t *patch_version);
@@ -90,11 +90,11 @@ int32_t hbmem_version(uint32_t *major, uint32_t *minor, uint32_t *patch_version)
 
 get the hbmem version
 
-【参数描述】
+【参数】
 
-[OUT] major: Major version number
-[OUT] minor: Minor version number
-[OUT] patch_version: Patch version number
+- [OUT] major: Major version number
+- [OUT] minor: Minor version number
+- [OUT] patch_version: Patch version number
 
 【返回值】
 
@@ -106,7 +106,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_alloc
 
-【函数声明】
+【函数原型】
 
 ```c
 hbmem_addr_t hbmem_alloc(uint32_t size, uint64_t flag, const char* label);
@@ -116,11 +116,11 @@ hbmem_addr_t hbmem_alloc(uint32_t size, uint64_t flag, const char* label);
 
 alloc hobot memory
 
-【参数描述】
+【参数】
 
-[IN] size: Size of memory space to be allocated range: (0, ); default: 0
-[IN] flag: Request identifier @hbmem_backends
-[IN] label: String to identify the memory space
+- [IN] size: Size of memory space to be allocated range: (0, ); default: 0
+- [IN] flag: Request identifier @hbmem_backends
+- [IN] label: String to identify the memory space
 
 【返回值】
 
@@ -132,7 +132,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_free
 
-【函数声明】
+【函数原型】
 
 ```c
 void hbmem_free(hbmem_addr_t addr);
@@ -142,9 +142,9 @@ void hbmem_free(hbmem_addr_t addr);
 
 free hobot memory
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 【返回值】
 
@@ -155,7 +155,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_mmap
 
-【函数声明】
+【函数原型】
 
 ```c
 hbmem_addr_t hbmem_mmap(uint64_t phyaddr, uint32_t size, uint64_t flag);
@@ -165,11 +165,11 @@ hbmem_addr_t hbmem_mmap(uint64_t phyaddr, uint32_t size, uint64_t flag);
 
 Map the memory space of the known physical address with hbmem
 
-【参数描述】
+【参数】
 
-[IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
-[IN] size: Size of mmap range: (0, ); default: 0
-[IN] flag: Request identifier @hbmem_backends
+- [IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
+- [IN] size: Size of mmap range: (0, ); default: 0
+- [IN] flag: Request identifier @hbmem_backends
 
 【返回值】
 
@@ -181,7 +181,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_mmap_with_share_id
 
-【函数声明】
+【函数原型】
 
 ```c
 hbmem_addr_t hbmem_mmap_with_share_id(uint64_t phyaddr, uint32_t size, uint64_t flag, int32_t share_id);
@@ -191,12 +191,12 @@ hbmem_addr_t hbmem_mmap_with_share_id(uint64_t phyaddr, uint32_t size, uint64_t 
 
 Use share_id maps the memory space of the known physical address to hbmem
 
-【参数描述】
+【参数】
 
-[IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
-[IN] size: Map Size range: (0, ); default: 0
-[IN] flag: Request identifier @hbmem_backends
-[IN] share_id: the share id range: [0, ); default: 0
+- [IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
+- [IN] size: Map Size range: (0, ); default: 0
+- [IN] flag: Request identifier @hbmem_backends
+- [IN] share_id: the share id range: [0, ); default: 0
 
 【返回值】
 
@@ -208,7 +208,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_munmap
 
-【函数声明】
+【函数原型】
 
 ```c
 void hbmem_munmap(hbmem_addr_t addr);
@@ -218,9 +218,9 @@ void hbmem_munmap(hbmem_addr_t addr);
 
 release the hbmem_mmap
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 【返回值】
 
@@ -231,7 +231,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_dmacpy
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t hbmem_dmacpy(hbmem_addr_t dst, hbmem_addr_t src, uint32_t size);
@@ -241,11 +241,11 @@ int32_t hbmem_dmacpy(hbmem_addr_t dst, hbmem_addr_t src, uint32_t size);
 
 Use the system's dma to complete the copy operation of data in two hbmem memory spaces
 
-【参数描述】
+【参数】
 
-[IN] dst: Start address of target hbmem space range: (0, ); default: 0
-[IN] src: Start address of source hbmem space range: (0, ); default: 0
-[IN] size: Memory space size to be copied range: (0, ); default: 0
+- [IN] dst: Start address of target hbmem space range: (0, ); default: 0
+- [IN] src: Start address of source hbmem space range: (0, ); default: 0
+- [IN] size: Memory space size to be copied range: (0, ); default: 0
 
 【返回值】
 
@@ -257,7 +257,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_is_cacheable
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t hbmem_is_cacheable(hbmem_addr_t addr);
@@ -267,9 +267,9 @@ int32_t hbmem_is_cacheable(hbmem_addr_t addr);
 
 Get the hidden object type of hbmem space corresponding to hbmem_addr_t
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 【返回值】
 
@@ -282,7 +282,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_cache_invalid
 
-【函数声明】
+【函数原型】
 
 ```c
 void hbmem_cache_invalid(hbmem_addr_t addr, uint32_t size);
@@ -292,10 +292,10 @@ void hbmem_cache_invalid(hbmem_addr_t addr, uint32_t size);
 
 Invalid operation on hidden objects in hbmem memory space
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[IN] size: the invalid size range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] size: the invalid size range: (0, ); default: 0
 
 【返回值】
 
@@ -306,7 +306,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_cache_clean
 
-【函数声明】
+【函数原型】
 
 ```c
 void hbmem_cache_clean(hbmem_addr_t addr, uint32_t size);
@@ -316,10 +316,10 @@ void hbmem_cache_clean(hbmem_addr_t addr, uint32_t size);
 
 Clean operation on hidden objects in hbmem memory space
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[IN] size: the clean size range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] size: the clean size range: (0, ); default: 0
 
 【返回值】
 
@@ -330,7 +330,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_phyaddr
 
-【函数声明】
+【函数原型】
 
 ```c
 uint64_t hbmem_phyaddr(hbmem_addr_t addr);
@@ -340,9 +340,9 @@ uint64_t hbmem_phyaddr(hbmem_addr_t addr);
 
 Get the actual ddr physical address corresponding to the hbmem memory space address
 
-【参数描述】
+【参数】
 
-[IN] addr: valid hbmem_addr_t range: (0, ); default: 0
+- [IN] addr: valid hbmem_addr_t range: (0, ); default: 0
 
 【返回值】
 
@@ -354,7 +354,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_virtaddr
 
-【函数声明】
+【函数原型】
 
 ```c
 uint64_t hbmem_virtaddr(hbmem_addr_t addr);
@@ -364,9 +364,9 @@ uint64_t hbmem_virtaddr(hbmem_addr_t addr);
 
 Get the real virtual address corresponding to the hbmem memory space address
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 【返回值】
 
@@ -378,7 +378,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_info
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t hbmem_info(hbmem_addr_t addr, hbmem_addr_t *start, uint32_t *size);
@@ -388,11 +388,11 @@ int32_t hbmem_info(hbmem_addr_t addr, hbmem_addr_t *start, uint32_t *size);
 
 Get incoming hbmem_addr_t address value information
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[OUT] start: Corresponding starting virtual address
-[OUT] size: the hbmem alloc size
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [OUT] start: Corresponding starting virtual address
+- [OUT] size: the hbmem alloc size
 
 【返回值】
 
@@ -404,7 +404,7 @@ HW: XJ3/Ultra/Super; SW: 0.1.1
 
 ### hbmem_get_share_id
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t hbmem_get_share_id(hbmem_addr_t addr, int32_t *share_id);
@@ -414,10 +414,10 @@ int32_t hbmem_get_share_id(hbmem_addr_t addr, int32_t *share_id);
 
 Get the share_id of virtual address
 
-【参数描述】
+【参数】
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[OUT] share_id: the share_id
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [OUT] share_id: the share_id
 
 【返回值】
 

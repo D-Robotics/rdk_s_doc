@@ -150,8 +150,8 @@ Select the corresponding vin index from the configuration file to initialize the
 
 **Parameter Description**
 
-[IN] uint32_t cfg_index: Cfg of vin in configuration file to be initialized index; range:[0, 2147483647],default:0
-[IN] const char *cfg_file:Vin profile absolute path
+- [IN] uint32_t cfg_index: Cfg of vin in configuration file to be initialized index; range:[0, 2147483647],default:0
+- [IN] const char *cfg_file:Vin profile absolute path
 
 **Return Value**
 
@@ -175,7 +175,7 @@ Select the corresponding vin index from the configuration file to de-initialize 
 
 **Parameter Description**
 
-[IN] uint32_t cfg_index: Config index of vin in the configuration file; range:[0, 2147483647],default:0
+- [IN] uint32_t cfg_index: Config index of vin in the configuration file; range:[0, 2147483647],default:0
 
 **Return Value**
 
@@ -199,7 +199,7 @@ Start the sensor data flow of the specified software channel
 
 **Parameter Description**
 
-[IN] uint32_t port: Indicates the sensor, port and corresponding configuration file port that need to be enabled; range:[0, 23],default:0
+- [IN] uint32_t port: Indicates the sensor, port and corresponding configuration file port that need to be enabled; range:[0, 23],default:0
 
 **Return Value**
 
@@ -223,7 +223,7 @@ Stop the sensor data flow of the specified software channel
 
 **Parameter Description**
 
-[IN] uint32_t port: Indicates the sensor, port and corresponding configuration file port that need to be disanabled; range:[0, 23],default:0
+- [IN] uint32_t port: Indicates the sensor, port and corresponding configuration file port that need to be disanabled; range:[0, 23],default:0
 
 **Return Value**
 
@@ -247,7 +247,7 @@ Not support
 
 **Parameter Description**
 
-[IN] None
+- [IN] None
 
 **Return Value**
 
@@ -270,7 +270,7 @@ Not support
 
 **Parameter Description**
 
-[IN] None
+- [IN] None
 
 **Return Value**
 
@@ -293,7 +293,7 @@ Reset the corresponding port cam
 
 **Parameter Description**
 
-[IN] uint32_t port: Cam ports to be reset; range:[0, 23],default:0
+- [IN] uint32_t port: Cam ports to be reset; range:[0, 23],default:0
 
 **Return Value**
 
@@ -317,7 +317,7 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
 **Return Value**
 
@@ -340,7 +340,7 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
 **Return Value**
 
@@ -363,8 +363,8 @@ Get the fps parameter in the configuration file of the corresponding port
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[OUT] uint32_t *fps: Get the storage address of the frame rate value
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [OUT] uint32_t *fps: Get the storage address of the frame rate value
 
 **Return Value**
 
@@ -388,7 +388,7 @@ Not support
 
 **Parameter Description**
 
-[IN] cam_img_info_t *cam_img_info: camera image information
+- [IN] cam_img_info_t *cam_img_info: camera image information
 
 **Return Value**
 
@@ -411,7 +411,7 @@ Not support
 
 **Parameter Description**
 
-[IN] cam_img_info_t *cam_img_info: camera image information
+- [IN] cam_img_info_t *cam_img_info: camera image information
 
 **Return Value**
 
@@ -434,7 +434,7 @@ Not support
 
 **Parameter Description**
 
-[IN] cam_img_info_t *cam_img_info: camera image information
+- [IN] cam_img_info_t *cam_img_info: camera image information
 
 **Return Value**
 
@@ -457,9 +457,9 @@ Get the cim data of the corresponding port
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] CAM_DATA_TYPE_E data_type: Set the required info type; data_type parameter description: HB_CAM_RAW_DATA:get cam raw data(raw sensor) HB_CAM_YUV_DATA:get cam yuv data(yuv sensor) HB_CAM_FEEDBACK_RAW_DATA:get feedback raw buff,used by cim feedback
-[OUT] void * data: Output the data result of the corresponding type
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] CAM_DATA_TYPE_E data_type: Set the required info type; data_type parameter description: HB_CAM_RAW_DATA:get cam raw data(raw sensor) HB_CAM_YUV_DATA:get cam yuv data(yuv sensor) HB_CAM_FEEDBACK_RAW_DATA:get feedback raw buff,used by cim feedback
+- [OUT] void * data: Output the data result of the corresponding type
 
 **Return Value**
 
@@ -483,9 +483,9 @@ Release the result of hb_cam_get_data of the corresponding port
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] CAM_DATA_TYPE_E data_type: Set the released info type,corresponding to hb_cam_get_data
-[IN] void * data:The corresponding data is used with hb_cam_get_data
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] CAM_DATA_TYPE_E data_type: Set the released info type,corresponding to hb_cam_get_data
+- [IN] void * data:The corresponding data is used with hb_cam_get_data
 
 **Return Value**
 
@@ -509,8 +509,8 @@ bypass corresponding sensor port
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] int32_t enable[0, 1]:if enable bypass function for this port; range:[0, 1],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] int32_t enable[0, 1]:if enable bypass function for this port; range:[0, 1],default:0
 
 **Return Value**
 
@@ -534,10 +534,10 @@ Set the frame rate of the corresponding port, and whether to select skip frame
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] int32_t skip_frame[0, 1]:if skip frame enable,0-no skip,1-skip; range:[0, 1],default:0
-[IN] uint32_t in_fps:sensor input fps; range:[1, 480],default:30
-[IN] uint32_t out_fps:sensor output fps; range:[1, 480],default:30
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] int32_t skip_frame[0, 1]:if skip frame enable,0-no skip,1-skip; range:[0, 1],default:0
+- [IN] uint32_t in_fps:sensor input fps; range:[1, 480],default:30
+- [IN] uint32_t out_fps:sensor output fps; range:[1, 480],default:30
 
 **Return Value**
 
@@ -561,9 +561,9 @@ Set dynamic lpwm attr value
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t lpwn_chn:lpwn channel id
-[IN] lpwm_dynamic_t *lpwm_dynamic_attr: lpwm_dynamic_attr channel attribute value
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t lpwn_chn:lpwn channel id
+- [IN] lpwm_dynamic_t *lpwm_dynamic_attr: lpwm_dynamic_attr channel attribute value
 
 **Return Value**
 
@@ -587,8 +587,8 @@ Get corresponding sensor port frame information
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[OUT] vio_statinfo *statinfo:address of statinfo
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [OUT] vio_statinfo *statinfo:address of statinfo
 
 **Return Value**
 
@@ -612,8 +612,8 @@ The frame rate switching interface requires the corresponding support of the sen
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t fps:Indicates the frame rate to switch; range:[1, 480],default:30
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t fps:Indicates the frame rate to switch; range:[1, 480],default:30
 
 **Return Value**
 
@@ -637,8 +637,8 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t mode: camera work mode; range:[0, 100],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t mode: camera work mode; range:[0, 100],default:0
 
 **Return Value**
 
@@ -661,9 +661,9 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t fps:Indicates the frame rate to switch; range:[1, 480],default:30
-[IN] uint32_t resolution:image resolution; range:[1, 8294400],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t fps:Indicates the frame rate to switch; range:[1, 480],default:30
+- [IN] uint32_t resolution:image resolution; range:[1, 8294400],default:0
 
 **Return Value**
 
@@ -686,8 +686,8 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
-[IN] uint32_t mclk:sensor clock; range:[1, 3000000],default:0
+- [IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
+- [IN] uint32_t mclk:sensor clock; range:[1, 3000000],default:0
 
 **Return Value**
 
@@ -710,7 +710,7 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
+- [IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
 
 **Return Value**
 
@@ -733,7 +733,7 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
+- [IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
 
 **Return Value**
 
@@ -756,7 +756,7 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
 **Return Value**
 
@@ -779,7 +779,7 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
 **Return Value**
 
@@ -802,7 +802,7 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
 
 **Return Value**
 
@@ -825,8 +825,8 @@ Access sensor through i2c
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t reg_addr:i2c address to access
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t reg_addr:i2c address to access
 
 **Return Value**
 
@@ -850,8 +850,8 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t reg_addr:i2c address to access
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t reg_addr:i2c address to access
 
 **Return Value**
 
@@ -874,9 +874,9 @@ Write sensor register through i2c
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t reg_addr:i2c address to access
-[IN] uint16_t value:Indicates the value written
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t reg_addr:i2c address to access
+- [IN] uint16_t value:Indicates the value written
 
 **Return Value**
 
@@ -900,9 +900,9 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t reg_addr:i2c address to access
-[IN] uint16_t value:Indicates the value written
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t reg_addr:i2c address to access
+- [IN] uint16_t value:Indicates the value written
 
 **Return Value**
 
@@ -925,11 +925,11 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t subdev: device; 0 sensor;1 eeprom,default:0
-[IN] uint32_t reg_addr:i2c address to access
-[IN] char *buffer:address to access
-[IN] uint32_t size:Indicates the value written
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t subdev: device; 0 sensor;1 eeprom,default:0
+- [IN] uint32_t reg_addr:i2c address to access
+- [IN] char *buffer:address to access
+- [IN] uint32_t size:Indicates the value written
 
 **Return Value**
 
@@ -952,11 +952,11 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t subdev: device; 0 sensor;1 eeprom,default:0
-[IN] uint32_t reg_addr:i2c address to access
-[IN] uint32_t size:Indicates the value written
-[OUT] char *buffer:address to access
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t subdev: device; 0 sensor;1 eeprom,default:0
+- [IN] uint32_t reg_addr:i2c address to access
+- [IN] uint32_t size:Indicates the value written
+- [OUT] char *buffer:address to access
 
 **Return Value**
 
@@ -979,11 +979,11 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t subdev: device; range:[0, 3000000],default:0
-[IN] uint32_t reg_addr:spi address to access
-[IN] char *buffer:address to access
-[IN] uint32_t size:Indicates the value written
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t subdev: device; range:[0, 3000000],default:0
+- [IN] uint32_t reg_addr:spi address to access
+- [IN] char *buffer:address to access
+- [IN] uint32_t size:Indicates the value written
 
 **Return Value**
 
@@ -1006,11 +1006,11 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint32_t subdev: device; range:[0, 3000000],default:0
-[IN] uint32_t reg_addr:spi address to access
-[IN] uint32_t size:Indicates the value written
-[OUT] char *buffer:address to access
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint32_t subdev: device; range:[0, 3000000],default:0
+- [IN] uint32_t reg_addr:spi address to access
+- [IN] uint32_t size:Indicates the value written
+- [OUT] char *buffer:address to access
 
 **Return Value**
 
@@ -1033,9 +1033,9 @@ Reset the ipi path operation of the specified mipi, which can be used to switch 
 
 **Parameter Description**
 
-[IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
-[IN] uint32_t ipi_index:ipi index inside of Mipi host; range:[0, 3],default:0
-[IN] uint32_t enable:Ipi switch status: 0-off, 1-on; range:[0, 1],default:0
+- [IN] uint32_t entry_num:Mipi host index; range:[0, 3],default:0
+- [IN] uint32_t ipi_index:ipi index inside of Mipi host; range:[0, 3],default:0
+- [IN] uint32_t enable:Ipi switch status: 0-off, 1-on; range:[0, 1],default:0
 
 **Return Value**
 
@@ -1059,9 +1059,9 @@ Get sensor information
 
 **Parameter Description**
 
-[IN] uint32_t port:Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] uint8_t type:Type of parameter
-[OUT] cam_parameter_t *sp:Gets the address of the parameter
+- [IN] uint32_t port:Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] uint8_t type:Type of parameter
+- [OUT] cam_parameter_t *sp:Gets the address of the parameter
 
 **Return Value**
 
@@ -1085,8 +1085,8 @@ Get sensor information
 
 **Parameter Description**
 
-[IN] uint32_t port:Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[OUT] struct cam_statinfo *info:Gets the address of the parameter
+- [IN] uint32_t port:Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [OUT] struct cam_statinfo *info:Gets the address of the parameter
 
 **Return Value**
 
@@ -1110,9 +1110,9 @@ Parse camera embed data and obtain sensor exposure parameters, etc.
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] char* embed_raw: data to be parsed
-[OUT] struct embed_data_info_s *embed_info: parsed data information
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] char* embed_raw: data to be parsed
+- [OUT] struct embed_data_info_s *embed_info: parsed data information
 
 **Return Value**
 
@@ -1133,8 +1133,8 @@ set event callback function
 
 **Parameter Description**
 
-[IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
-[IN] void (*event_callback)(cam_event_t* fault_info): callback function handler
+- [IN] uint32_t port: Corresponding to the port set in the configuration file; range:[0, 23],default:0
+- [IN] void (*event_callback)(cam_event_t* fault_info): callback function handler
 
 **Return Value**
 
@@ -1158,7 +1158,7 @@ Initialize all pipelines configured in the configuration file according to the i
 
 **Parameter Description**
 
-[IN] const char *cfg_file: The absolute path of the vpm configuration file. The path length should not exceed 256 bytes
+- [IN] const char *cfg_file: The absolute path of the vpm configuration file. The path length should not exceed 256 bytes
 
 **Return Value**
 
@@ -1182,7 +1182,7 @@ De-initialize all initialized pipelines and release the resources of the initial
 
 **Parameter Description**
 
-[IN] None
+- [IN] None
 
 **Return Value**
 
@@ -1206,7 +1206,7 @@ Enable corresponding pipeline
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
 **Return Value**
 
@@ -1230,7 +1230,7 @@ disable corresponding pipeline
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
 **Return Value**
 
@@ -1254,10 +1254,10 @@ set event callback function
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_MODULE_TYPE_E module_type: Module type ID
-[IN] IO_EVENT_TYPE_E event_type: Event type
-[IN] void (*event_callback)(void* fault_info): callback function handler
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_MODULE_TYPE_E module_type: Module type ID
+- [IN] IO_EVENT_TYPE_E event_type: Event type
+- [IN] void (*event_callback)(void* fault_info): callback function handler
 
 **Return Value**
 
@@ -1281,10 +1281,10 @@ Get the parameters of the corresponding pipeline through info_type
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_MODULE_TYPE_E module_type: Module type ID
-[IN] VIO_INFO_E info_type: Info type
-[OUT] void *info:Parameters to be obtained
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_MODULE_TYPE_E module_type: Module type ID
+- [IN] VIO_INFO_E info_type: Info type
+- [OUT] void *info:Parameters to be obtained
 
 **Return Value**
 
@@ -1308,9 +1308,9 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_CALLBACK_TYPE_E type: callback type
-[IN] data_cb cb:call back function
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_CALLBACK_TYPE_E type: callback type
+- [IN] data_cb cb:call back function
 
 **Return Value**
 
@@ -1333,9 +1333,9 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_INFO_TYPE_E info_type:type to set
-[IN] void *info:information to be set
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_INFO_TYPE_E info_type:type to set
+- [IN] void *info:information to be set
 
 **Return Value**
 
@@ -1358,9 +1358,9 @@ Get the parameters of the corresponding pipeline through info_type
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_INFO_TYPE_E info_type:Parameter type to obtain, type description: HB_VIO_ISP_IMG_INFO, ISP memory information; HB_VIO_PYM_V3_IMG_INFO, PYM memory information
-[OUT] void *info:Parameters to be obtained
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_INFO_TYPE_E info_type:Parameter type to obtain, type description: HB_VIO_ISP_IMG_INFO, ISP memory information; HB_VIO_PYM_V3_IMG_INFO, PYM memory information
+- [OUT] void *info:Parameters to be obtained
 
 **Return Value**
 
@@ -1384,9 +1384,9 @@ Obtain the data of the corresponding pipeline through the corresponding datatype
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_DATA_TYPE_E data_type:The type of data to be obtained; data_ Type description: HB_VIO_PYM_DATA_V3 Get pym processing results. Super is the most commonly used type; HB_VIO_ISP_YUV_DATA To obtain the yuv data output by the isp, you need to cooperate with isp_dma_output_format parameter settings in the configuration file; HB_VIO_ISP_RAW_DATA To obtain the raw data output by the isp, you need to cooperate with isp_dma_output_format parameter settings in the configuration file;
-[OUT] void *data:The data to be obtained, and the data type corresponds to the datatype
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_DATA_TYPE_E data_type:The type of data to be obtained; data_ Type description: HB_VIO_PYM_DATA_V3 Get pym processing results. Super is the most commonly used type; HB_VIO_ISP_YUV_DATA To obtain the yuv data output by the isp, you need to cooperate with isp_dma_output_format parameter settings in the configuration file; HB_VIO_ISP_RAW_DATA To obtain the raw data output by the isp, you need to cooperate with isp_dma_output_format parameter settings in the configuration file;
+- [OUT] void *data:The data to be obtained, and the data type corresponds to the datatype
 
 **Return Value**
 
@@ -1410,10 +1410,10 @@ Get the data of the corresponding pipelineid conditionally through the correspon
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_DATA_TYPE_E data_type:The type of data to be obtained; data_ Type description: HB_VIO_PYM_DATA_V3,Get pym processing results. Super is the most commonly used type;
-[IN] int32_t times:Set the relative time to acquire frames; Time parameter description: times = 0:Clear the current cache frame and wait for the next frame; times > 0:Find the earliest frame in the cache that meets the current time-time requirement; times < 0:Clear the current cache frame and wait for the frame after the current time – time; range:[-1056, 1056],default:0
-[OUT] void *data:The data to be obtained, and the data type corresponds to the datatype
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_DATA_TYPE_E data_type:The type of data to be obtained; data_ Type description: HB_VIO_PYM_DATA_V3,Get pym processing results. Super is the most commonly used type;
+- [IN] int32_t times:Set the relative time to acquire frames; Time parameter description: times = 0:Clear the current cache frame and wait for the next frame; times > 0:Find the earliest frame in the cache that meets the current time-time requirement; times < 0:Clear the current cache frame and wait for the frame after the current time – time; range:[-1056, 1056],default:0
+- [OUT] void *data:The data to be obtained, and the data type corresponds to the datatype
 
 **Return Value**
 
@@ -1437,8 +1437,8 @@ Enable pym to process the reinjection data of the corresponding pipeline
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] hb_vio_buffer_t * src_img_info:Pym memory to be processed
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] hb_vio_buffer_t * src_img_info:Pym memory to be processed
 
 **Return Value**
 
@@ -1462,8 +1462,8 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] hb_vio_buffer_t * dst_img_info:ipu memory to be freed
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] hb_vio_buffer_t * dst_img_info:ipu memory to be freed
 
 **Return Value**
 
@@ -1486,8 +1486,8 @@ Release the isp data corresponding to pipelineid, and hb_vio_get_data is used to
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] hb_vio_buffer_t * dst_img_info:isp memory to be freed
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] hb_vio_buffer_t * dst_img_info:isp memory to be freed
 
 **Return Value**
 
@@ -1511,9 +1511,9 @@ Release the pym data corresponding to pipelineid, and hb_vio_get_data is used to
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] VIO_DATA_TYPE_E data_type:Released data type, type description: HB_VIO_PYM_DATA_V3, Super most commonly used type;
-[IN] void * dst_img_info:pym memory to be freed
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] VIO_DATA_TYPE_E data_type:Released data type, type description: HB_VIO_PYM_DATA_V3, Super most commonly used type;
+- [IN] void * dst_img_info:pym memory to be freed
 
 **Return Value**
 
@@ -1537,8 +1537,8 @@ Generate the cfg bin file required for the work of the gdc module
 
 **Parameter Description**
 
-[OUT] cfg_buf: Generated gdc cfg bin, internal allocation
-[OUT] cfg_size: Size of gdc cfg bin file
+- [OUT] cfg_buf: Generated gdc cfg bin, internal allocation
+- [OUT] cfg_size: Size of gdc cfg bin file
 
 **Return Value**
 
@@ -1562,8 +1562,8 @@ Set cfg bin of gdc module
 
 **Parameter Description**
 
-[IN] cfg_buf: config buffer of gdc cfg bin
-[IN] cfg_size: size of gdc cfg bin
+- [IN] cfg_buf: config buffer of gdc cfg bin
+- [IN] cfg_size: size of gdc cfg bin
 
 **Return Value**
 
@@ -1587,8 +1587,8 @@ Set cfg bin of gdc module
 
 **Parameter Description**
 
-[IN] cfg_buf: config buffer of gdc cfg bin
-[IN] cfg_size: size of gdc cfg bin
+- [IN] cfg_buf: config buffer of gdc cfg bin
+- [IN] cfg_size: size of gdc cfg bin
 
 **Return Value**
 
@@ -1612,7 +1612,7 @@ Release the buffer of the production gdc module cfg bin
 
 **Parameter Description**
 
-[IN] uint32_t* cfg_buf:Buffer of gdc cfg bin
+- [IN] uint32_t* cfg_buf:Buffer of gdc cfg bin
 
 **Return Value**
 
@@ -1635,10 +1635,10 @@ Enable gdc corresponding to pipelineid to correct the process distortion of src 
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
-[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
-[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+- [IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+- [OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
 
 **Return Value**
 
@@ -1662,11 +1662,11 @@ Enable gdc corresponding to pipelineid to correct the process distortion of src 
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] uint32_t gdc_id:gdc hardware id; range:[0, 1],default:0
-[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
-[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
-[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] uint32_t gdc_id:gdc hardware id; range:[0, 1],default:0
+- [IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+- [IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+- [OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
 
 **Return Value**
 
@@ -1690,12 +1690,12 @@ Enable gdc corresponding to pipelineid to correct the process distortion of src 
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] uint32_t gdc_id:gdc hardware id; range:[0, 1],default:0
-[IN] const gdc_config_t *gdc_cfg:User's gdc configuration
-[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
-[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
-[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] uint32_t gdc_id:gdc hardware id; range:[0, 1],default:0
+- [IN] const gdc_config_t *gdc_cfg:User's gdc configuration
+- [IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+- [IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+- [OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process
 
 **Return Value**
 
@@ -1719,12 +1719,12 @@ Enable gdc corresponding to pipelineid to correct the process distortion of src 
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] uint32_t gdc_id]:gdc hardware id; range:[0, 1],default:0
-[IN] const gdc_config_t *gdc_cfg:User's gdc configuration
-[IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
-[IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
-[OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process,allocated by user
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] uint32_t gdc_id]:gdc hardware id; range:[0, 1],default:0
+- [IN] const gdc_config_t *gdc_cfg:User's gdc configuration
+- [IN] hb_vio_buffer_t * src_img_info:Input image memory needed to process gdc
+- [IN] int32_t rotate:Indicates the rotation angle to be processed, and supports an angle of 0,90,180,270
+- [OUT] hb_vio_buffer_t * dst_img_info:Out image memory of gdc after process,allocated by user
 
 **Return Value**
 
@@ -1748,8 +1748,8 @@ Release the gdc data corresponding to pipelineid, and hb_vio_get_data is used to
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] hb_vio_buffer_t * dst_img_info:gdc memory to be freed
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] hb_vio_buffer_t * dst_img_info:gdc memory to be freed
 
 **Return Value**
 
@@ -1773,9 +1773,9 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[OUT] hb_vio_buffer_t * raw_img:raw memory to be dump
-[OUT] hb_vio_buffer_t * yuv:yuv memory to be dump
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [OUT] hb_vio_buffer_t * raw_img:raw memory to be dump
+- [OUT] hb_vio_buffer_t * yuv:yuv memory to be dump
 
 **Return Value**
 
@@ -1798,9 +1798,9 @@ Not support
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[OUT] hb_vio_buffer_t * feedback_src:feedback_src memory to be feedback
-[OUT] hb_vio_buffer_t * isp_dst_yuv:isp_dst_yuv memory to be feedback
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [OUT] hb_vio_buffer_t * feedback_src:feedback_src memory to be feedback
+- [OUT] hb_vio_buffer_t * isp_dst_yuv:isp_dst_yuv memory to be feedback
 
 **Return Value**
 
@@ -1823,9 +1823,9 @@ After the video system is initialized, hb_vio_get_data obtain the isp raw reinje
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
-[IN] hb_vio_buffer_t * feedback_src:Input image memory needed to process isp
-[IN] int32_t timeout: timeout of process; range:[0, 2147483647],default:0
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] hb_vio_buffer_t * feedback_src:Input image memory needed to process isp
+- [IN] int32_t timeout: timeout of process; range:[0, 2147483647],default:0
 
 **Return Value**
 
@@ -1849,9 +1849,9 @@ Check whether the vpm&amp;vin configuration file parameters are correct;
 
 **Parameter Description**
 
-[IN] const char* vpm_file: The absolute path of the vpm configuration file
-[IN] const char* vin_file: The absolute path of the vin configuration file
-[IN] uint32_t cfg_index:  The configure index of vin configuration file
+- [IN] const char* vpm_file: The absolute path of the vpm configuration file
+- [IN] const char* vin_file: The absolute path of the vin configuration file
+- [IN] uint32_t cfg_index:  The configure index of vin configuration file
 
 **Return Value**
 
@@ -1875,7 +1875,7 @@ pause the CIM data flow of the specified software channel
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
 **Return Value**
 
@@ -1899,7 +1899,7 @@ resume the CIM data flow of the specified software channel
 
 **Parameter Description**
 
-[IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
+- [IN] uint32_t pipeline_id:pipeline id; range:[0, 23],default:0
 
 **Return Value**
 

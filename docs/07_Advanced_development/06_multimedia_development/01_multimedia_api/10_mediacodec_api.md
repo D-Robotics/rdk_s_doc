@@ -149,7 +149,7 @@ hb_mm_mc_release(&context);
 
 ### hb_mm_mc_get_descriptor
 
-【函数声明】
+【函数原型】
 
 ```c
 extern const media_codec_descriptor_t *hb_mm_mc_get_descriptor( media_codec_id_t codec_id);
@@ -159,9 +159,9 @@ extern const media_codec_descriptor_t *hb_mm_mc_get_descriptor( media_codec_id_t
 
 Get the descriptor of the specified code id.
 
-【参数描述】
+【参数】
 
-[IN] codec_id: codec id
+- [IN] codec_id: codec id
 
 【返回值】
 
@@ -173,7 +173,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_default_context
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_default_context(media_codec_id_t codec_id, hb_bool encoder, media_codec_context_t *context);
@@ -183,11 +183,11 @@ extern hb_s32 hb_mm_mc_get_default_context(media_codec_id_t codec_id, hb_bool en
 
 Get the default media codec context.
 
-【参数描述】
+【参数】
 
-[IN] codec_id: codec id
-[IN] encoder: encoder or decoder
-[OUT] context: codec context
+- [IN] codec_id: codec id
+- [IN] encoder: encoder or decoder
+- [OUT] context: codec context
 
 【返回值】
 
@@ -199,7 +199,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_initialize
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_initialize(media_codec_context_t *context);
@@ -209,9 +209,9 @@ extern hb_s32 hb_mm_mc_initialize(media_codec_context_t *context);
 
 Initialize the codec and codec context. If success, MediaCodec will
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
+- [IN] context: codec context
 
 【返回值】
 
@@ -227,7 +227,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_vpf_init
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_vpf_init(media_codec_context_t * context, hb_s32 channel_idx);
@@ -237,10 +237,10 @@ extern hb_s32 hb_mm_mc_vpf_init(media_codec_context_t * context, hb_s32 channel_
 
 Initialize the vpf codec. And it must to be called
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] channel_idx: codec_node channel idx
+- [IN] context: codec context
+- [IN] channel_idx: codec_node channel idx
 
 【返回值】
 
@@ -255,7 +255,7 @@ HW: Super; SW: v1.2.3
 
 ### hb_mm_mc_configure
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_configure(media_codec_context_t *context);
@@ -265,9 +265,9 @@ extern hb_s32 hb_mm_mc_configure(media_codec_context_t *context);
 
 Configure the codec using the specified parameters. If success, MediaCodec
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
+- [IN] context: codec context
 
 【返回值】
 
@@ -283,7 +283,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_callback
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_callback(media_codec_context_t *context, const media_codec_callback_t *callback, hb_ptr userdata);
@@ -293,11 +293,11 @@ extern hb_s32 hb_mm_mc_set_callback(media_codec_context_t *context, const media_
 
 Set callback to media codec. And Encoder/Decoder will work in async mode.
 
-【参数描述】
+【参数】
 
-[IN] context: ccodec context
-[IN] callback: ccallback function
-[IN] userdata: pointer to user data which is passed as an incoming parameter when the callback function is called
+- [IN] context: ccodec context
+- [IN] callback: ccallback function
+- [IN] userdata: pointer to user data which is passed as an incoming parameter when the callback function is called
 
 【返回值】
 
@@ -311,7 +311,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_vlc_buffer_listener
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_vlc_buffer_listener( media_codec_context_t *context, const media_codec_callback_t *callback, hb_ptr userdata);
@@ -321,11 +321,11 @@ extern hb_s32 hb_mm_mc_set_vlc_buffer_listener( media_codec_context_t *context, 
 
 Set VLC buffer size listener to media codec. And user can modify the
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] callback: @see media_codec_callback_t
-[IN] userdata: pointer to user data
+- [IN] context: codec context
+- [IN] callback: @see media_codec_callback_t
+- [IN] userdata: pointer to user data
 
 【返回值】
 
@@ -339,7 +339,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_camera
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_camera(media_codec_context_t *context, hb_s32 pipeline, hb_s32 channel_port_id);
@@ -349,11 +349,11 @@ extern hb_s32 hb_mm_mc_set_camera(media_codec_context_t *context, hb_s32 pipelin
 
 It can specify the channel information of camera.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] pipeline: pipeline number
-[IN] channel_port_id: IPU channel port id
+- [IN] context: codec context
+- [IN] pipeline: pipeline number
+- [IN] channel_port_id: IPU channel port id
 
 【返回值】
 
@@ -368,7 +368,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_start
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_start(media_codec_context_t *context, const mc_av_codec_startup_params_t * info);
@@ -378,10 +378,10 @@ extern hb_s32 hb_mm_mc_start(media_codec_context_t *context, const mc_av_codec_s
 
 Start the codec processing. VPU will create encoder instance, decode stream,
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] info: startup information
+- [IN] context: codec context
+- [IN] info: startup information
 
 【返回值】
 
@@ -397,7 +397,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_stop
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_stop(media_codec_context_t *context);
@@ -407,9 +407,9 @@ extern hb_s32 hb_mm_mc_stop(media_codec_context_t *context);
 
 Stop the codec processing. If success, MediaCodec will be reset and
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
+- [IN] context: codec context
 
 【返回值】
 
@@ -423,7 +423,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_pause
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_pause(media_codec_context_t *context);
@@ -433,9 +433,9 @@ extern hb_s32 hb_mm_mc_pause(media_codec_context_t *context);
 
 Pause the codec processing. If success, MediaCodec will be paused and
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
+- [IN] context: codec context
 
 【返回值】
 
@@ -449,7 +449,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_flush
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_flush(media_codec_context_t *context);
@@ -459,9 +459,9 @@ extern hb_s32 hb_mm_mc_flush(media_codec_context_t *context);
 
 Flush the input and output buffers of the codec. And MediaCodec will enter
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
+- [IN] context: codec context
 
 【返回值】
 
@@ -475,7 +475,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_release
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_release(media_codec_context_t *context);
@@ -485,9 +485,9 @@ extern hb_s32 hb_mm_mc_release(media_codec_context_t *context);
 
 Release the codec. MediaCodec will be released and go back to
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
+- [IN] context: codec context
 
 【返回值】
 
@@ -501,7 +501,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_state
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_state(media_codec_context_t *context, media_codec_state_t *state);
@@ -511,10 +511,10 @@ extern hb_s32 hb_mm_mc_get_state(media_codec_context_t *context, media_codec_sta
 
 Get the state of media codec. The value is enum media_codec_state_t.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] state: codec state
+- [IN] context: codec context
+- [OUT] state: codec state
 
 【返回值】
 
@@ -529,7 +529,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_status
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_status(media_codec_context_t *context, mc_inter_status_t *status);
@@ -539,10 +539,10 @@ extern hb_s32 hb_mm_mc_get_status(media_codec_context_t *context, mc_inter_statu
 
 Get the status of media codec.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] status: codec status
+- [IN] context: codec context
+- [OUT] status: codec status
 
 【返回值】
 
@@ -557,7 +557,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_queue_input_buffer
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_queue_input_buffer( media_codec_context_t *context, media_codec_buffer_t *buffer, hb_s32 timeout);
@@ -567,11 +567,11 @@ extern hb_s32 hb_mm_mc_queue_input_buffer( media_codec_context_t *context, media
 
 Queue the input buffer into MediaCodec. The operation is valid only if
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
 
 【返回值】
 
@@ -588,7 +588,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_dequeue_input_buffer
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_dequeue_input_buffer( media_codec_context_t *context, media_codec_buffer_t *buffer, hb_s32 timeout);
@@ -598,11 +598,11 @@ extern hb_s32 hb_mm_mc_dequeue_input_buffer( media_codec_context_t *context, med
 
 Dequeue the input buffer from MediaCodec. The operation is valid only if
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
 
 【返回值】
 
@@ -619,7 +619,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_queue_output_buffer
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_queue_output_buffer( media_codec_context_t *context, media_codec_buffer_t *buffer, hb_s32 timeout);
@@ -629,11 +629,11 @@ extern hb_s32 hb_mm_mc_queue_output_buffer( media_codec_context_t *context, medi
 
 Queue the output buffer into MediaCodec. The operation is valid only if
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
 
 【返回值】
 
@@ -650,7 +650,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_dequeue_output_buffer
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_dequeue_output_buffer( media_codec_context_t *context, media_codec_buffer_t *buffer, media_codec_output_buffer_info_t*info, hb_s32 timeout);
@@ -660,12 +660,12 @@ extern hb_s32 hb_mm_mc_dequeue_output_buffer( media_codec_context_t *context, me
 
 Dequeue the output buffer from MediaCodec. The operation is valid only if
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
-[OUT] info: stream information
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
+- [OUT] info: stream information
 
 【返回值】
 
@@ -682,7 +682,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_longterm_ref_mode
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_longterm_ref_mode( media_codec_context_t *context, mc_video_longterm_ref_mode_t *params);
@@ -692,10 +692,10 @@ extern hb_s32 hb_mm_mc_get_longterm_ref_mode( media_codec_context_t *context, mc
 
 Get the parameters of long-term reference mode.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: long-term reference parameters
+- [IN] context: codec context
+- [OUT] params: long-term reference parameters
 
 【返回值】
 
@@ -709,7 +709,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_longterm_ref_mode
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_longterm_ref_mode( media_codec_context_t *context, const mc_video_longterm_ref_mode_t *params);
@@ -719,10 +719,10 @@ extern hb_s32 hb_mm_mc_set_longterm_ref_mode( media_codec_context_t *context, co
 
 Set the parameters of long-term reference mode.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: long-term reference parameters
+- [IN] context: codec context
+- [IN] params: long-term reference parameters
 
 【返回值】
 
@@ -737,7 +737,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_intra_refresh_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_intra_refresh_config( media_codec_context_t *context, mc_video_intra_refresh_params_t *params);
@@ -747,10 +747,10 @@ extern hb_s32 hb_mm_mc_get_intra_refresh_config( media_codec_context_t *context,
 
 Get the parameters of the intra refresh.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: intra refresh parameters @see mc_video_intra_refresh_params_t
+- [IN] context: codec context
+- [OUT] params: intra refresh parameters @see mc_video_intra_refresh_params_t
 
 【返回值】
 
@@ -764,7 +764,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_intra_refresh_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_intra_refresh_config( media_codec_context_t *context, const mc_video_intra_refresh_params_t *params);
@@ -774,10 +774,10 @@ extern hb_s32 hb_mm_mc_set_intra_refresh_config( media_codec_context_t *context,
 
 Intra refresh mode can be enabled for error robustness.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: intra refresh parameters @see mc_video_intra_refresh_params_t
+- [IN] context: codec context
+- [IN] params: intra refresh parameters @see mc_video_intra_refresh_params_t
 
 【返回值】
 
@@ -792,7 +792,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_rate_control_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_rate_control_config( media_codec_context_t *context, mc_rate_control_params_t *params);
@@ -802,10 +802,10 @@ extern hb_s32 hb_mm_mc_get_rate_control_config( media_codec_context_t *context, 
 
 Get the parameters of rate control.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: rate control parameters
+- [IN] context: codec context
+- [OUT] params: rate control parameters
 
 【返回值】
 
@@ -819,7 +819,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_rate_control_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_rate_control_config( media_codec_context_t *context, const mc_rate_control_params_t *params);
@@ -829,10 +829,10 @@ extern hb_s32 hb_mm_mc_set_rate_control_config( media_codec_context_t *context, 
 
 Set the parameters of rate control.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: rate control parameters
+- [IN] context: codec context
+- [IN] params: rate control parameters
 
 【返回值】
 
@@ -847,7 +847,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_max_bit_rate_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_max_bit_rate_config( media_codec_context_t *context, hb_u32 *params);
@@ -857,10 +857,10 @@ extern hb_s32 hb_mm_mc_get_max_bit_rate_config( media_codec_context_t *context, 
 
 Get the max bit rate of rate control. It's only useful for AVBR and CBR.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: max bitrate
+- [IN] context: codec context
+- [OUT] params: max bitrate
 
 【返回值】
 
@@ -874,7 +874,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_max_bit_rate_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_max_bit_rate_config( media_codec_context_t *context, hb_u32 params);
@@ -884,10 +884,10 @@ extern hb_s32 hb_mm_mc_set_max_bit_rate_config( media_codec_context_t *context, 
 
 Set the max bit rate of AVBR rate control.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: rate control parameters
+- [IN] context: codec context
+- [IN] params: rate control parameters
 
 【返回值】
 
@@ -902,7 +902,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_deblk_filter_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_deblk_filter_config( media_codec_context_t *context, mc_video_deblk_filter_params_t *params);
@@ -912,10 +912,10 @@ extern hb_s32 hb_mm_mc_get_deblk_filter_config( media_codec_context_t *context, 
 
 Get the parameters of deblock filter.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: deblock filter parameters @see mc_video_deblk_filter_params_t
+- [IN] context: codec context
+- [OUT] params: deblock filter parameters @see mc_video_deblk_filter_params_t
 
 【返回值】
 
@@ -929,7 +929,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_deblk_filter_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_deblk_filter_config( media_codec_context_t *context, const mc_video_deblk_filter_params_t *params);
@@ -939,10 +939,10 @@ extern hb_s32 hb_mm_mc_set_deblk_filter_config( media_codec_context_t *context, 
 
 Set the parameters of deblock filter.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: deblock filter parameters @see mc_video_deblk_filter_params_t
+- [IN] context: codec context
+- [IN] params: deblock filter parameters @see mc_video_deblk_filter_params_t
 
 【返回值】
 
@@ -957,7 +957,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_sao_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_sao_config(media_codec_context_t *context, mc_h265_sao_params_t *params);
@@ -967,10 +967,10 @@ extern hb_s32 hb_mm_mc_get_sao_config(media_codec_context_t *context, mc_h265_sa
 
 Get the parameters of sample adaptive offset.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: SAO parameters @see mc_h265_sao_params_t
+- [IN] context: codec context
+- [OUT] params: SAO parameters @see mc_h265_sao_params_t
 
 【返回值】
 
@@ -984,7 +984,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_sao_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_sao_config(media_codec_context_t *context, const mc_h265_sao_params_t *params);
@@ -994,10 +994,10 @@ extern hb_s32 hb_mm_mc_set_sao_config(media_codec_context_t *context, const mc_h
 
 Set the parameters of sample adaptive offset.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: SAO parameters @see mc_h265_sao_params_t
+- [IN] context: codec context
+- [IN] params: SAO parameters @see mc_h265_sao_params_t
 
 【返回值】
 
@@ -1012,7 +1012,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_entropy_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_entropy_config( media_codec_context_t *context, mc_h264_entropy_params_t *params);
@@ -1022,10 +1022,10 @@ extern hb_s32 hb_mm_mc_get_entropy_config( media_codec_context_t *context, mc_h2
 
 Get the parameters of entropy coding.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: entropy coding parameters @see mc_h264_entropy_params_t
+- [IN] context: codec context
+- [OUT] params: entropy coding parameters @see mc_h264_entropy_params_t
 
 【返回值】
 
@@ -1039,7 +1039,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_entropy_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_entropy_config( media_codec_context_t *context, const mc_h264_entropy_params_t *params);
@@ -1049,10 +1049,10 @@ extern hb_s32 hb_mm_mc_set_entropy_config( media_codec_context_t *context, const
 
 Set the parameters of entropy coding mode.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: entropy coding parameters @see mc_h264_entropy_params_t
+- [IN] context: codec context
+- [IN] params: entropy coding parameters @see mc_h264_entropy_params_t
 
 【返回值】
 
@@ -1067,7 +1067,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_vui_timing_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_vui_timing_config( media_codec_context_t *context, mc_video_vui_timing_params_t *params);
@@ -1077,10 +1077,10 @@ extern hb_s32 hb_mm_mc_get_vui_timing_config( media_codec_context_t *context, mc
 
 Get the timing parameters of VUI.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: VUI timing parameters @see mc_video_vui_timing_params_t
+- [IN] context: codec context
+- [OUT] params: VUI timing parameters @see mc_video_vui_timing_params_t
 
 【返回值】
 
@@ -1094,7 +1094,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_vui_timing_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_vui_timing_config( media_codec_context_t *context, const mc_video_vui_timing_params_t *params);
@@ -1104,10 +1104,10 @@ extern hb_s32 hb_mm_mc_set_vui_timing_config( media_codec_context_t *context, co
 
 Set the timing parameters of VUI.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: VUI timing parameters @see mc_video_vui_timing_params_t
+- [IN] context: codec context
+- [IN] params: VUI timing parameters @see mc_video_vui_timing_params_t
 
 【返回值】
 
@@ -1122,7 +1122,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_vui_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_vui_config( media_codec_context_t *context, mc_video_vui_params_t *params);
@@ -1132,10 +1132,10 @@ extern hb_s32 hb_mm_mc_get_vui_config( media_codec_context_t *context, mc_video_
 
 Get the parameters of VUI.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: VUI parameters @see mc_video_vui_params_t
+- [IN] context: codec context
+- [OUT] params: VUI parameters @see mc_video_vui_params_t
 
 【返回值】
 
@@ -1149,7 +1149,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_vui_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_vui_config( media_codec_context_t *context, const mc_video_vui_params_t *params);
@@ -1159,10 +1159,10 @@ extern hb_s32 hb_mm_mc_set_vui_config( media_codec_context_t *context, const mc_
 
 Set the parameters of VUI.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: VUI parameters @see mc_video_vui_params_t
+- [IN] context: codec context
+- [IN] params: VUI parameters @see mc_video_vui_params_t
 
 【返回值】
 
@@ -1177,7 +1177,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_slice_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_slice_config(media_codec_context_t *context, mc_video_slice_params_t *params);
@@ -1187,10 +1187,10 @@ extern hb_s32 hb_mm_mc_get_slice_config(media_codec_context_t *context, mc_video
 
 Get the slice parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: slice parameters @see mc_video_slice_params_t
+- [IN] context: codec context
+- [OUT] params: slice parameters @see mc_video_slice_params_t
 
 【返回值】
 
@@ -1204,7 +1204,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_slice_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_slice_config(media_codec_context_t *context, const mc_video_slice_params_t *params);
@@ -1214,10 +1214,10 @@ extern hb_s32 hb_mm_mc_set_slice_config(media_codec_context_t *context, const mc
 
 Set the slice parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: slice parameters @see mc_video_slice_params_t
+- [IN] context: codec context
+- [IN] params: slice parameters @see mc_video_slice_params_t
 
 【返回值】
 
@@ -1232,7 +1232,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_insert_user_data
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_insert_user_data(media_codec_context_t * context, hb_u8 *data, hb_u32 length);
@@ -1242,11 +1242,11 @@ extern hb_s32 hb_mm_mc_insert_user_data(media_codec_context_t * context, hb_u8 *
 
 Insert user data.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] data: userdata, must be "UUID+string"
-[IN] length: length (0, 1024]
+- [IN] context: codec context
+- [IN] data: userdata, must be "UUID+string"
+- [IN] length: length (0, 1024]
 
 【返回值】
 
@@ -1260,7 +1260,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_request_idr_frame
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_request_idr_frame(media_codec_context_t *context);
@@ -1270,9 +1270,9 @@ extern hb_s32 hb_mm_mc_request_idr_frame(media_codec_context_t *context);
 
 Request the IDR Frame.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
+- [IN] context: codec context
 
 【返回值】
 
@@ -1286,7 +1286,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_request_idr_header
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_request_idr_header( media_codec_context_t *context, hb_u32 force_header);
@@ -1296,10 +1296,10 @@ extern hb_s32 hb_mm_mc_request_idr_header( media_codec_context_t *context, hb_u3
 
 Enable the IDR Frame.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
+- [IN] context: codec context
+- [IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
 
 【返回值】
 
@@ -1314,7 +1314,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_enable_idr_frame
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_enable_idr_frame( media_codec_context_t *context, hb_bool enable);
@@ -1324,10 +1324,10 @@ extern hb_s32 hb_mm_mc_enable_idr_frame( media_codec_context_t *context, hb_bool
 
 Enable the IDR Frame.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
+- [IN] context: codec context
+- [IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
 
 【返回值】
 
@@ -1342,7 +1342,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_skip_pic
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_skip_pic(media_codec_context_t * context, hb_s32 src_idx);
@@ -1352,10 +1352,10 @@ extern hb_s32 hb_mm_mc_skip_pic(media_codec_context_t * context, hb_s32 src_idx)
 
 Request skip the picture. The encoder ignores sourceFrame and generates
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] src_idx: source buffer index
+- [IN] context: codec context
+- [IN] src_idx: source buffer index
 
 【返回值】
 
@@ -1370,7 +1370,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_3dnr_enc_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_3dnr_enc_config( media_codec_context_t *context, mc_video_3dnr_enc_params_t *params);
@@ -1380,10 +1380,10 @@ extern hb_s32 hb_mm_mc_get_3dnr_enc_config( media_codec_context_t *context, mc_v
 
 Get the parameters of 3DNR (3D Noise Reduction).
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: 3dnr encoding parameters
+- [IN] context: codec context
+- [OUT] params: 3dnr encoding parameters
 
 【返回值】
 
@@ -1397,7 +1397,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_3dnr_enc_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_3dnr_enc_config( media_codec_context_t *context, const mc_video_3dnr_enc_params_t *params);
@@ -1407,10 +1407,10 @@ extern hb_s32 hb_mm_mc_set_3dnr_enc_config( media_codec_context_t *context, cons
 
 Set the parameters of 3DNR (3D Noise Reduction) for better quality of image
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: smart background encoding parameters
+- [IN] context: codec context
+- [IN] params: smart background encoding parameters
 
 【返回值】
 
@@ -1425,7 +1425,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_smart_bg_enc_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_smart_bg_enc_config( media_codec_context_t *context, mc_video_smart_bg_enc_params_t *params);
@@ -1435,10 +1435,10 @@ extern hb_s32 hb_mm_mc_get_smart_bg_enc_config( media_codec_context_t *context, 
 
 Get the parameters of smart background encoding.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: smart background encoding parameters
+- [IN] context: codec context
+- [OUT] params: smart background encoding parameters
 
 【返回值】
 
@@ -1452,7 +1452,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_smart_bg_enc_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_smart_bg_enc_config( media_codec_context_t *context, const mc_video_smart_bg_enc_params_t *params);
@@ -1462,10 +1462,10 @@ extern hb_s32 hb_mm_mc_set_smart_bg_enc_config( media_codec_context_t *context, 
 
 Set the parameters of smart background encoding.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: smart background encoding parameters
+- [IN] context: codec context
+- [IN] params: smart background encoding parameters
 
 【返回值】
 
@@ -1480,7 +1480,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_pred_unit_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_pred_unit_config( media_codec_context_t *context, mc_video_pred_unit_params_t *params);
@@ -1490,10 +1490,10 @@ extern hb_s32 hb_mm_mc_get_pred_unit_config( media_codec_context_t *context, mc_
 
 Get the intra prediction parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: intra prediction @see mc_video_pred_unit_params_t
+- [IN] context: codec context
+- [OUT] params: intra prediction @see mc_video_pred_unit_params_t
 
 【返回值】
 
@@ -1507,7 +1507,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_pred_unit_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_pred_unit_config( media_codec_context_t *context, const mc_video_pred_unit_params_t *params);
@@ -1517,10 +1517,10 @@ extern hb_s32 hb_mm_mc_set_pred_unit_config( media_codec_context_t *context, con
 
 Set the intra prediction parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: intra prediction @see mc_video_pred_unit_params_t
+- [IN] context: codec context
+- [IN] params: intra prediction @see mc_video_pred_unit_params_t
 
 【返回值】
 
@@ -1535,7 +1535,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_transform_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_transform_config( media_codec_context_t *context, mc_video_transform_params_t *params);
@@ -1545,10 +1545,10 @@ extern hb_s32 hb_mm_mc_get_transform_config( media_codec_context_t *context, mc_
 
 Get the transform parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: transform parameters @see mc_video_transform_params_t
+- [IN] context: codec context
+- [OUT] params: transform parameters @see mc_video_transform_params_t
 
 【返回值】
 
@@ -1562,7 +1562,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_transform_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_transform_config( media_codec_context_t *context, const mc_video_transform_params_t *params);
@@ -1572,10 +1572,10 @@ extern hb_s32 hb_mm_mc_set_transform_config( media_codec_context_t *context, con
 
 Set the transform parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: transform parameters @see mc_video_transform_params_t
+- [IN] context: codec context
+- [IN] params: transform parameters @see mc_video_transform_params_t
 
 【返回值】
 
@@ -1590,7 +1590,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_roi_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_roi_config(media_codec_context_t * context, mc_video_roi_params_t * params);
@@ -1600,10 +1600,10 @@ extern hb_s32 hb_mm_mc_get_roi_config(media_codec_context_t * context, mc_video_
 
 Get the ROI parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: ROI parameters @see mc_video_roi_params_t
+- [IN] context: codec context
+- [OUT] params: ROI parameters @see mc_video_roi_params_t
 
 【返回值】
 
@@ -1617,7 +1617,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_roi_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_roi_config(media_codec_context_t * context, const mc_video_roi_params_t *params);
@@ -1627,10 +1627,10 @@ extern hb_s32 hb_mm_mc_set_roi_config(media_codec_context_t * context, const mc_
 
 Set the ROI parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: ROI parameters @see mc_video_roi_params_t
+- [IN] context: codec context
+- [IN] params: ROI parameters @see mc_video_roi_params_t
 
 【返回值】
 
@@ -1645,7 +1645,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_roi_avg_qp
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_roi_avg_qp(media_codec_context_t * context, hb_u32 * params);
@@ -1655,10 +1655,10 @@ extern hb_s32 hb_mm_mc_get_roi_avg_qp(media_codec_context_t * context, hb_u32 * 
 
 Get the ROI average QP.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: ROI average QP
+- [IN] context: codec context
+- [OUT] params: ROI average QP
 
 【返回值】
 
@@ -1672,7 +1672,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_roi_avg_qp
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_roi_avg_qp(media_codec_context_t * context, hb_u32 params);
@@ -1682,10 +1682,10 @@ extern hb_s32 hb_mm_mc_set_roi_avg_qp(media_codec_context_t * context, hb_u32 pa
 
 Set the ROI average QP.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: ROI average QP [0, 51] 0: using the average qp of QP map.
+- [IN] context: codec context
+- [IN] params: ROI average QP [0, 51] 0: using the average qp of QP map.
 
 【返回值】
 
@@ -1700,7 +1700,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_roi_config_ex
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_roi_config_ex(media_codec_context_t *context, hb_u32 roi_idx, mc_video_roi_params_ex_t *params);
@@ -1710,11 +1710,11 @@ extern hb_s32 hb_mm_mc_get_roi_config_ex(media_codec_context_t *context, hb_u32 
 
 Get the ROI parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] roi_idx: roi index
-[OUT] params: ROI parameters @see mc_video_roi_params_ex_t
+- [IN] context: codec context
+- [IN] roi_idx: roi index
+- [OUT] params: ROI parameters @see mc_video_roi_params_ex_t
 
 【返回值】
 
@@ -1728,7 +1728,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_roi_config_ex
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_roi_config_ex(media_codec_context_t *context, const mc_video_roi_params_ex_t *params);
@@ -1738,10 +1738,10 @@ extern hb_s32 hb_mm_mc_set_roi_config_ex(media_codec_context_t *context, const m
 
 Set the ROI parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: ROI parameters @see mc_video_roi_params_ex_t
+- [IN] context: codec context
+- [IN] params: ROI parameters @see mc_video_roi_params_ex_t
 
 【返回值】
 
@@ -1756,7 +1756,7 @@ HW: Ultra; SW: v1.2.3
 
 ### hb_mm_mc_get_mode_decision_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_mode_decision_config( media_codec_context_t *context, mc_video_mode_decision_params_t *params);
@@ -1766,10 +1766,10 @@ extern hb_s32 hb_mm_mc_get_mode_decision_config( media_codec_context_t *context,
 
 Get the encoding mode decision parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: mode decision parameters
+- [IN] context: codec context
+- [OUT] params: mode decision parameters
 
 【返回值】
 
@@ -1783,7 +1783,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_mode_decision_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_mode_decision_config( media_codec_context_t *context, const mc_video_mode_decision_params_t *params);
@@ -1793,10 +1793,10 @@ extern hb_s32 hb_mm_mc_set_mode_decision_config( media_codec_context_t *context,
 
 Set the mode decision parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: mode decision parameters
+- [IN] context: codec context
+- [IN] params: mode decision parameters
 
 【返回值】
 
@@ -1811,7 +1811,7 @@ HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_user_data
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_user_data(media_codec_context_t * context, mc_user_data_buffer_t *params, hb_s32 timeout);
@@ -1835,7 +1835,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_release_user_data
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_release_user_data(media_codec_context_t * context, const mc_user_data_buffer_t * params);
@@ -1845,10 +1845,10 @@ extern hb_s32 hb_mm_mc_release_user_data(media_codec_context_t * context, const 
 
 Release the user data.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: user data parameters @see mc_user_data_buffer_t
+- [IN] context: codec context
+- [OUT] params: user data parameters @see mc_user_data_buffer_t
 
 【返回值】
 
@@ -1861,7 +1861,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_explicit_header_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_explicit_header_config( media_codec_context_t *context, hb_s32 *status);
@@ -1871,10 +1871,10 @@ extern hb_s32 hb_mm_mc_get_explicit_header_config( media_codec_context_t *contex
 
 Get explicit header configuration.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] status: explicit header configuration The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
+- [IN] context: codec context
+- [OUT] status: explicit header configuration The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
 
 【返回值】
 
@@ -1888,7 +1888,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_explicit_header_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_explicit_header_config( media_codec_context_t *context, hb_s32 status);
@@ -1898,10 +1898,10 @@ extern hb_s32 hb_mm_mc_set_explicit_header_config( media_codec_context_t *contex
 
 Set explicit header configuration.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] status: enalbe/diable explicit header, default enable The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
+- [IN] context: codec context
+- [IN] status: enalbe/diable explicit header, default enable The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
 
 【返回值】
 
@@ -1916,7 +1916,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_mjpeg_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_mjpeg_config(media_codec_context_t * context, mc_mjpeg_enc_params_t *params);
@@ -1926,10 +1926,10 @@ extern hb_s32 hb_mm_mc_get_mjpeg_config(media_codec_context_t * context, mc_mjpe
 
 Get the mjpeg parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: mjpeg parameters
+- [IN] context: codec context
+- [OUT] params: mjpeg parameters
 
 【返回值】
 
@@ -1943,7 +1943,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_mjpeg_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_mjpeg_config(media_codec_context_t * context, const mc_mjpeg_enc_params_t *params);
@@ -1953,10 +1953,10 @@ extern hb_s32 hb_mm_mc_set_mjpeg_config(media_codec_context_t * context, const m
 
 Set the mjpeg parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] params: mjpeg parameters
+- [IN] context: codec context
+- [IN] params: mjpeg parameters
 
 【返回值】
 
@@ -1971,7 +1971,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_jpeg_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_jpeg_config(media_codec_context_t * context, mc_jpeg_enc_params_t *params);
@@ -1981,10 +1981,10 @@ extern hb_s32 hb_mm_mc_get_jpeg_config(media_codec_context_t * context, mc_jpeg_
 
 Get the jpeg parameters.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] params: jpeg parameters
+- [IN] context: codec context
+- [OUT] params: jpeg parameters
 
 【返回值】
 
@@ -1998,7 +1998,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_jpeg_config
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_jpeg_config(media_codec_context_t * context, const mc_jpeg_enc_params_t *params);
@@ -2008,10 +2008,10 @@ extern hb_s32 hb_mm_mc_set_jpeg_config(media_codec_context_t * context, const mc
 
 Set the jpeg parameters.
 
-【参数描述】
+【参数】
 
-[IN] codec: context
-[IN] jpeg: parameters @see mc_jpeg_enc_params_t
+- [IN] codec: context
+- [IN] jpeg: parameters @see mc_jpeg_enc_params_t
 
 【返回值】
 
@@ -2026,7 +2026,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_fd
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_get_fd(media_codec_context_t * context, hb_s32 *fd);
@@ -2036,10 +2036,10 @@ extern hb_s32 hb_mm_mc_get_fd(media_codec_context_t * context, hb_s32 *fd);
 
 Get device fd. And user can use it to do select operation.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[OUT] fd: device fd
+- [IN] context: codec context
+- [OUT] fd: device fd
 
 【返回值】
 
@@ -2052,7 +2052,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_close_fd
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_close_fd(media_codec_context_t * context, hb_s32 fd);
@@ -2062,10 +2062,10 @@ extern hb_s32 hb_mm_mc_close_fd(media_codec_context_t * context, hb_s32 fd);
 
 Close device fd. User must close the fd which is aquired through hb_mm_mc_get_fd.
 
-【参数描述】
+【参数】
 
-[IN] context: codec context
-[IN] fd: device fd
+- [IN] context: codec context
+- [IN] fd: device fd
 
 【返回值】
 
@@ -2079,7 +2079,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_register_audio_encoder
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_register_audio_encoder(hb_s32 *handle, mc_audio_encode_param_t *encoder);
@@ -2089,10 +2089,10 @@ extern hb_s32 hb_mm_mc_register_audio_encoder(hb_s32 *handle, mc_audio_encode_pa
 
 Register audio encoder. User can use it to register external codec.
 
-【参数描述】
+【参数】
 
-[OUT] handle: register handle
-[IN] encoder: audio encoder
+- [OUT] handle: register handle
+- [IN] encoder: audio encoder
 
 【返回值】
 
@@ -2107,7 +2107,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_unregister_audio_encoder
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_unregister_audio_encoder(hb_s32 handle);
@@ -2117,9 +2117,9 @@ extern hb_s32 hb_mm_mc_unregister_audio_encoder(hb_s32 handle);
 
 Unregister audio encoder. User can use it to unregister codec.
 
-【参数描述】
+【参数】
 
-[IN] handle: register handle
+- [IN] handle: register handle
 
 【返回值】
 
@@ -2134,7 +2134,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_register_audio_decoder
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_register_audio_decoder(hb_s32 *handle, mc_audio_decode_param_t *decoder);
@@ -2144,10 +2144,10 @@ extern hb_s32 hb_mm_mc_register_audio_decoder(hb_s32 *handle, mc_audio_decode_pa
 
 Register audio decoder. User can use it to register external codec.
 
-【参数描述】
+【参数】
 
-[OUT] handle: register handle
-[IN] decoder: audio decoder
+- [OUT] handle: register handle
+- [IN] decoder: audio decoder
 
 【返回值】
 
@@ -2162,7 +2162,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_unregister_audio_decoder
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_unregister_audio_decoder(hb_s32 handle);
@@ -2172,9 +2172,9 @@ extern hb_s32 hb_mm_mc_unregister_audio_decoder(hb_s32 handle);
 
 Unregister audio decoder. User can use it to unregister codec.
 
-【参数描述】
+【参数】
 
-[IN] handle: register handle
+- [IN] handle: register handle
 
 【返回值】
 
@@ -2189,7 +2189,7 @@ HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_status
 
-【函数声明】
+【函数原型】
 
 ```c
 extern hb_s32 hb_mm_mc_set_status(media_codec_context_t *context, mc_user_status_t *status);

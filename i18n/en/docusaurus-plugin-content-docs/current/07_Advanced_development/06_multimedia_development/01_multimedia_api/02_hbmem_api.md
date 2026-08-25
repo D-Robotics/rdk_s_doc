@@ -92,9 +92,9 @@ get the hbmem version
 
 **Parameter Description**
 
-[OUT] major: Major version number
-[OUT] minor: Minor version number
-[OUT] patch_version: Patch version number
+- [OUT] major: Major version number
+- [OUT] minor: Minor version number
+- [OUT] patch_version: Patch version number
 
 **Return Value**
 
@@ -118,9 +118,9 @@ alloc hobot memory
 
 **Parameter Description**
 
-[IN] size: Size of memory space to be allocated range: (0, ); default: 0
-[IN] flag: Request identifier @hbmem_backends
-[IN] label: String to identify the memory space
+- [IN] size: Size of memory space to be allocated range: (0, ); default: 0
+- [IN] flag: Request identifier @hbmem_backends
+- [IN] label: String to identify the memory space
 
 **Return Value**
 
@@ -144,7 +144,7 @@ free hobot memory
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 **Return Value**
 
@@ -167,9 +167,9 @@ Map the memory space of the known physical address with hbmem
 
 **Parameter Description**
 
-[IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
-[IN] size: Size of mmap range: (0, ); default: 0
-[IN] flag: Request identifier @hbmem_backends
+- [IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
+- [IN] size: Size of mmap range: (0, ); default: 0
+- [IN] flag: Request identifier @hbmem_backends
 
 **Return Value**
 
@@ -193,10 +193,10 @@ Use share_id maps the memory space of the known physical address to hbmem
 
 **Parameter Description**
 
-[IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
-[IN] size: Map Size range: (0, ); default: 0
-[IN] flag: Request identifier @hbmem_backends
-[IN] share_id: the share id range: [0, ); default: 0
+- [IN] phyaddr: Start address (page alignment) range: (0, ); default: 0
+- [IN] size: Map Size range: (0, ); default: 0
+- [IN] flag: Request identifier @hbmem_backends
+- [IN] share_id: the share id range: [0, ); default: 0
 
 **Return Value**
 
@@ -220,7 +220,7 @@ release the hbmem_mmap
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 **Return Value**
 
@@ -243,9 +243,9 @@ Use the system's dma to complete the copy operation of data in two hbmem memory 
 
 **Parameter Description**
 
-[IN] dst: Start address of target hbmem space range: (0, ); default: 0
-[IN] src: Start address of source hbmem space range: (0, ); default: 0
-[IN] size: Memory space size to be copied range: (0, ); default: 0
+- [IN] dst: Start address of target hbmem space range: (0, ); default: 0
+- [IN] src: Start address of source hbmem space range: (0, ); default: 0
+- [IN] size: Memory space size to be copied range: (0, ); default: 0
 
 **Return Value**
 
@@ -269,7 +269,7 @@ Get the hidden object type of hbmem space corresponding to hbmem_addr_t
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 **Return Value**
 
@@ -294,8 +294,8 @@ Invalid operation on hidden objects in hbmem memory space
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[IN] size: the invalid size range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] size: the invalid size range: (0, ); default: 0
 
 **Return Value**
 
@@ -318,8 +318,8 @@ Clean operation on hidden objects in hbmem memory space
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[IN] size: the clean size range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] size: the clean size range: (0, ); default: 0
 
 **Return Value**
 
@@ -342,7 +342,7 @@ Get the actual ddr physical address corresponding to the hbmem memory space addr
 
 **Parameter Description**
 
-[IN] addr: valid hbmem_addr_t range: (0, ); default: 0
+- [IN] addr: valid hbmem_addr_t range: (0, ); default: 0
 
 **Return Value**
 
@@ -366,7 +366,7 @@ Get the real virtual address corresponding to the hbmem memory space address
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
 
 **Return Value**
 
@@ -390,9 +390,9 @@ Get incoming hbmem_addr_t address value information
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[OUT] start: Corresponding starting virtual address
-[OUT] size: the hbmem alloc size
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [OUT] start: Corresponding starting virtual address
+- [OUT] size: the hbmem alloc size
 
 **Return Value**
 
@@ -416,8 +416,8 @@ Get the share_id of virtual address
 
 **Parameter Description**
 
-[IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
-[OUT] share_id: the share_id
+- [IN] addr: the return value of hbmem_alloc range: (0, ); default: 0
+- [OUT] share_id: the share_id
 
 **Return Value**
 

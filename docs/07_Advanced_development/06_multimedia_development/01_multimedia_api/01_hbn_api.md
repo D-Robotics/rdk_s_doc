@@ -156,22 +156,22 @@ hbn_vflow_destroy(vflow_fd);
 
 ### hbn_vnode_open
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t
 ctx_id, hbn_vnode_handle_t *vnode_fd)
 
-【参数描述】
+【参数】
 
-[IN] hb_vnode_type
+- [IN] hb_vnode_type
 vnode_type：vnode 类型，每个硬件模块对应一个 vnode 类型。取值为 HB_VIN、HB_ISP、HB_PYM 等；
 
-[IN] uint32_t hw_id：模块的硬件 id。
+- [IN] uint32_t hw_id：模块的硬件 id。
 
-[IN] uint32_t ctx_id：模块的 context id，软件上的概念，可指定 context
+- [IN] uint32_t ctx_id：模块的 context id，软件上的概念，可指定 context
 id 值，也可设置为 AUTO_ALLOC_ID，由 SDK 自动分配 context id；
 
-[OUT] hbn_vnode_handle_t *vnode_fd：返回模块的 vnode handle；
+- [OUT] hbn_vnode_handle_t *vnode_fd：返回模块的 vnode handle；
 
 【返回值】
 
@@ -189,13 +189,13 @@ id 值，也可设置为 AUTO_ALLOC_ID，由 SDK 自动分配 context id；
 
 ### hbn_vnode_close
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
 【返回值】
 
@@ -215,15 +215,15 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
 
 ### hbn_vnode_set_attr
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] void
+- [IN] void
 *attr：模块的基本属性结构体指针。基本属性结构体可以是 vin_attr_t、isp_attr_t、pym_attr_t 等，以模块名+_attr_t 结尾的属性；
 
 【返回值】
@@ -242,15 +242,15 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
 ### hbn_vnode_get_attr
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_get_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[OUT] void
+- [OUT] void
 *attr：模块的基本属性结构体指针。基本属性结构体可以是 vin_attr_t、isp_attr_t、pym_attr_t 等，以模块名+_attr_t 结尾的属性；
 
 【返回值】
@@ -269,15 +269,15 @@ hobot_status hbn_vnode_get_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
 ### hbn_vnode_set_attr_ex
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_set_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] void
+- [IN] void
 *attr：模块的扩展属性结构体指针。扩展属性结构体可以是 vin_attr_ex_t 等，以模块名+_attr_ex_t 结尾的属性；
 
 【返回值】
@@ -296,15 +296,15 @@ hobot_status hbn_vnode_set_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
 ### hbn_vnode_get_attr_ex
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_get_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[OUT] void
+- [OUT] void
 *attr：模块的扩展属性结构体指针。扩展属性结构体可以是 vin_attr_ex_t 等，以模块名+_attr_ex_t 结尾的属性；
 
 【返回值】
@@ -323,18 +323,18 @@ hobot_status hbn_vnode_get_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
 ### hbn_vnode_set_ochn_attr
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t
 ochn_id, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；；
 
-[IN] void
+- [IN] void
 *attr：模块的输出通道属性结构体指针。输出通道属性可以是 vin_ochn_attr_t、isp_ochn_attr_t 等，以模块名+_ochn_attr_t 结尾的属性；
 
 【返回值】
@@ -353,18 +353,18 @@ ochn_id, void *attr)
 
 ### hbn_vnode_get_ochn_attr
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_get_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t
 ochn_id, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[OUT] void
+- [OUT] void
 *attr：模块输出通道属性结构体指针。输出通道属性可以是 vin_ochn_attr_t、isp_ochn_attr_t 等，以模块名+_ochn_attr_t 结尾的属性；
 
 【返回值】
@@ -383,18 +383,18 @@ ochn_id, void *attr)
 
 ### hbn_vnode_set_ochn_attr_ex
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_set_ochn_attr_ex(hbn_vnode_handle_t vnode_fd, uint32_t
 ochn_id, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] void
+- [IN] void
 *attr：模块的输出通道扩展属性结构体指针。输出通道扩展属性可以是 pym_ochn_attr_ex_t 等，以模块名+_ochn_attr_ex_t 结尾的属性；
 
 【返回值】
@@ -413,18 +413,18 @@ ochn_id, void *attr)
 
 ### hbn_vnode_set_ichn_attr
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t
 ichn_id, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ichn_id：模块的输入通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ichn_id：模块的输入通道 id，通道 id 见模块通道说明；
 
-[IN] void
+- [IN] void
 *attr：模块的输入通道属性结构体指针。输入通道属性可以是 vin_ichn_attr_t、isp_ichn_attr_t 等，以模块名+_ichn_attr_t 结尾的属性；
 
 【返回值】
@@ -443,18 +443,18 @@ ichn_id, void *attr)
 
 ### hbn_vnode_get_ichn_attr
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_get_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t
 ichn_id, void *attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ichn_id：模块的输入通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ichn_id：模块的输入通道 id，通道 id 见模块通道说明；
 
-[OUT] void
+- [OUT] void
 *attr：模块的输入通道属性结构体指针。输入通道属性可以是 vin_ichn_attr_t、isp_ichn_attr_t 等，以模块名+_ichn_attr_t 结尾的属性；
 
 【返回值】
@@ -473,18 +473,18 @@ ichn_id, void *attr)
 
 ### hbn_vnode_set_ochn_buf_attr
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t
 ochn_id, hbn_buf_alloc_attr_t *alloc_attr)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] hbn_buf_alloc_attr_t *alloc_attr：buffer 分配属性；
+- [IN] hbn_buf_alloc_attr_t *alloc_attr：buffer 分配属性；
 
 【返回值】
 
@@ -502,13 +502,13 @@ ochn_id, hbn_buf_alloc_attr_t *alloc_attr)
 
 ### hbn_vnode_start
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
 【返回值】
 
@@ -526,13 +526,13 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd)
 
 ### hbn_vnode_stop
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
 【返回值】
 
@@ -550,20 +550,20 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd)
 
 ### hbn_vnode_getframe
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
 uint32_t millisecondTimeout, hbn_vnode_image_t *out_img)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] uint32_t millisecondTimeout：超时等待时间；
+- [IN] uint32_t millisecondTimeout：超时等待时间；
 
-[OUT] hbn_vnode_image_t *out_img：输出图像 buffer 结构体地址；
+- [OUT] hbn_vnode_image_t *out_img：输出图像 buffer 结构体地址；
 
 【返回值】
 
@@ -581,18 +581,18 @@ uint32_t millisecondTimeout, hbn_vnode_image_t *out_img)
 
 ### hbn_vnode_releaseframe
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t
 ochn_id, hbn_vnode_image_t *img)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] hbn_vnode_image_t *img：图像 buffer 结构体地址；
+- [IN] hbn_vnode_image_t *img：图像 buffer 结构体地址；
 
 【返回值】
 
@@ -610,20 +610,20 @@ ochn_id, hbn_vnode_image_t *img)
 
 ### hbn_vnode_getframe_group
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_getframe_group(hbn_vnode_handle_t vnode_fd, uint32_t
 ochn_id, uint32_t millisecondTimeout,hbn_vnode_image_group_t *out_img);
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] uint32_t millisecondTimeout：超时等待时间；
+- [IN] uint32_t millisecondTimeout：超时等待时间；
 
-[OUT] hbn_vnode_image_group_t *out_img：输出图像 buffer 结构体地址；
+- [OUT] hbn_vnode_image_group_t *out_img：输出图像 buffer 结构体地址；
 
 【返回值】
 
@@ -641,18 +641,18 @@ ISP 和 PYM 输出图像需要调用该接口获取
 
 ### hbn_vnode_releaseframe_group
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_releaseframe_group(hbn_vnode_handle_t vnode_fd, uint32_t
 ochn_id, hbn_vnode_image_group_t*img)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ochn_id：模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] hbn_vnode_image_group_t *img_group：多层聚合图像 buffer 结构体地址；
+- [IN] hbn_vnode_image_group_t *img_group：多层聚合图像 buffer 结构体地址；
 
 【返回值】
 
@@ -670,18 +670,18 @@ ochn_id, hbn_vnode_image_group_t*img)
 
 ### hbn_vnode_sendframe
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 hbn_vnode_image_t *img)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
-[IN] uint32_t ichn_id：模块的输入通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t ichn_id：模块的输入通道 id，通道 id 见模块通道说明；
 
-[IN] hbn_vnode_image_t *img：输入图像 buffer 地址；
+- [IN] hbn_vnode_image_t *img：输入图像 buffer 地址；
 
 【返回值】
 
@@ -699,13 +699,13 @@ hbn_vnode_image_t *img)
 
 ### hbn_vflow_create
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vflow_create(hbn_vflow_handle_t *vflow_fd)
 
-【参数描述】
+【参数】
 
-[OUT] hbn_vflow_handle_t *vflow_fd：vflow handle；
+- [OUT] hbn_vflow_handle_t *vflow_fd：vflow handle；
 
 【返回值】
 
@@ -723,13 +723,13 @@ hobot_status hbn_vflow_create(hbn_vflow_handle_t *vflow_fd)
 
 ### hbn_vflow_destroy
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vflow_destroy(hbn_vflow_handle_t vflow_fd)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
+- [IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
 【返回值】
 
@@ -747,16 +747,16 @@ hobot_status hbn_vflow_destroy(hbn_vflow_handle_t vflow_fd)
 
 ### hbn_vflow_add_vnode
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vflow_add_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t
 vnode_fd)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
+- [IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
-[IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle；
 
 【返回值】
 
@@ -774,23 +774,23 @@ vnode_fd)
 
 ### hbn_vflow_bind_vnode
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vflow_bind_vnode(hbn_vflow_handle_t vflow_fd,
 hbn_vnode_handle_t src_vnode_fd, uint32_t out_chn, hbn_vnode_handle_t
 dst_vnode_fd, uint32_t in_chn)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
+- [IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
-[IN] hbn_vnode_handle_t src_vnode_fd：源模块的 vnode handle；
+- [IN] hbn_vnode_handle_t src_vnode_fd：源模块的 vnode handle；
 
-[IN] uint32_t out_chn：源模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t out_chn：源模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] hbn_vnode_handle_t dst_vnode_fd：目的模块的 vnode handle；
+- [IN] hbn_vnode_handle_t dst_vnode_fd：目的模块的 vnode handle；
 
-[IN] uint32_t in_chn：目的模块的输入通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t in_chn：目的模块的输入通道 id，通道 id 见模块通道说明；
 
 【返回值】
 
@@ -808,23 +808,23 @@ flow 需要创建，模块需要 open。
 
 ### hbn_vflow_unbind_vnode
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vflow_unbind_vnode(hbn_vflow_handle_t vflow_fd,
 hbn_vnode_handle_t src_vnode_fd, uint32_t out_chn, hbn_vnode_handle_t
 dst_vnode_fd, uint32_t in_chn)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
+- [IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
-[IN] hbn_vnode_handle_t src_vnode_fd：源模块的 vnode handle；
+- [IN] hbn_vnode_handle_t src_vnode_fd：源模块的 vnode handle；
 
-[IN] uint32_t out_chn：源模块的输出通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t out_chn：源模块的输出通道 id，通道 id 见模块通道说明；
 
-[IN] hbn_vnode_handle_t dst_vnode_fd：目的模块的 vnode handle；
+- [IN] hbn_vnode_handle_t dst_vnode_fd：目的模块的 vnode handle；
 
-[IN] uint32_t in_chn：目的模块的输入通道 id，通道 id 见模块通道说明；
+- [IN] uint32_t in_chn：目的模块的输入通道 id，通道 id 见模块通道说明；
 
 【返回值】
 
@@ -842,13 +842,13 @@ dst_vnode_fd, uint32_t in_chn)
 
 ### hbn_vflow_start
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vflow_start(hbn_vflow_handle_t vflow_fd)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
+- [IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
 【返回值】
 
@@ -866,13 +866,13 @@ hobot_status hbn_vflow_start(hbn_vflow_handle_t vflow_fd)
 
 ### hbn_vflow_stop
 
-【函数声明】
+【函数原型】
 
 hobot_status hbn_vflow_stop(hbn_vflow_handle_t vflow_fd)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
+- [IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
 【返回值】
 
@@ -890,18 +890,18 @@ hobot_status hbn_vflow_stop(hbn_vflow_handle_t vflow_fd)
 
 ### hbn_vflow_get_vnode_handle
 
-【函数声明】
+【函数原型】
 
 hbn_vnode_handle_t hbn_vflow_get_vnode_handle(hbn_vflow_handle_t vflow_fd,
 hb_vnode_type vnode_type, uint32_t index)
 
-【参数描述】
+【参数】
 
-[IN] hbn_vflow_handle_t vflow_fd：vflow handle；
+- [IN] hbn_vflow_handle_t vflow_fd：vflow handle；
 
-[IN] hb_vnode_type vnode_type：模块 id；
+- [IN] hb_vnode_type vnode_type：模块 id；
 
-[IN] uint32_t index：context id，范围为[0, 7]
+- [IN] uint32_t index：context id，范围为[0, 7]
 
 【返回值】
 
@@ -923,7 +923,7 @@ hb_vnode_type vnode_type, uint32_t index)
 
 ### hbn_vnode_set_attr_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
@@ -935,7 +935,7 @@ hobot_status hbn_vnode_set_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_
 
 ### hbn_vnode_get_attr_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
@@ -947,7 +947,7 @@ hobot_status hbn_vnode_get_attr_s(hbn_vnode_handle_t vnode_fd, void *attr, size_
 
 ### hbn_vnode_set_attr_ex_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
@@ -959,7 +959,7 @@ hobot_status hbn_vnode_set_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, si
 
 ### hbn_vnode_get_attr_ex_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, size_t size);
@@ -971,7 +971,7 @@ hobot_status hbn_vnode_get_attr_ex_s(hbn_vnode_handle_t vnode_fd, void *attr, si
 
 ### hbn_vnode_set_ochn_attr_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
@@ -983,7 +983,7 @@ hobot_status hbn_vnode_set_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t och
 
 ### hbn_vnode_set_ochn_attr_ex_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_ochn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
@@ -995,7 +995,7 @@ hobot_status hbn_vnode_set_ochn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t 
 
 ### hbn_vnode_get_ochn_attr_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
@@ -1007,7 +1007,7 @@ hobot_status hbn_vnode_get_ochn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t och
 
 ### hbn_vnode_set_ichn_attr_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
@@ -1019,7 +1019,7 @@ hobot_status hbn_vnode_set_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ich
 
 ### hbn_vnode_set_ichn_attr_ex_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_ichn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr, size_t size);
@@ -1031,7 +1031,7 @@ hobot_status hbn_vnode_set_ichn_attr_ex_s(hbn_vnode_handle_t vnode_fd, uint32_t 
 
 ### hbn_vnode_get_ichn_attr_s
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr, size_t size);
@@ -1043,7 +1043,7 @@ hobot_status hbn_vnode_get_ichn_attr_s(hbn_vnode_handle_t vnode_fd, uint32_t ich
 
 ### hbn_vnode_enable_ichn
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_enable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
@@ -1055,7 +1055,7 @@ hobot_status hbn_vnode_enable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id
 
 ### hbn_vnode_disable_ichn
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_disable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id);
@@ -1067,7 +1067,7 @@ hobot_status hbn_vnode_disable_ichn(hbn_vnode_handle_t vnode_fd, uint32_t ichn_i
 
 ### hbn_vnode_enable_ochn
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_enable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
@@ -1079,7 +1079,7 @@ hobot_status hbn_vnode_enable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id
 
 ### hbn_vnode_disable_ochn
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_disable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id);
@@ -1091,7 +1091,7 @@ hobot_status hbn_vnode_disable_ochn(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 
 ### hbn_vnode_reset
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_reset(hbn_vnode_handle_t vnode_fd);
@@ -1103,7 +1103,7 @@ hobot_status hbn_vnode_reset(hbn_vnode_handle_t vnode_fd);
 
 ### hbn_vnode_get_fd
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_fd(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, int32_t *fd);
@@ -1115,7 +1115,7 @@ hobot_status hbn_vnode_get_fd(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, int
 
 ### hbn_vnode_getframe_cond
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_getframe_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_t *out_img); // block function;
@@ -1127,7 +1127,7 @@ hobot_status hbn_vnode_getframe_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 
 ### hbn_vnode_getframe_group_cond
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_getframe_group_cond(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, uint32_t millisecondTimeout, int32_t cond_time, hbn_vnode_image_group_t *out_img); // block function;
@@ -1139,7 +1139,7 @@ hobot_status hbn_vnode_getframe_group_cond(hbn_vnode_handle_t vnode_fd, uint32_t
 
 ### hbn_vnode_sendframe_async
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_sendframe_async(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_t *img); // no block function
@@ -1151,7 +1151,7 @@ hobot_status hbn_vnode_sendframe_async(hbn_vnode_handle_t vnode_fd, uint32_t ich
 
 ### hbn_vflow_create_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vflow_create_cfg(const char *cfg_file, hbn_vflow_handle_t *vflow_fd);
@@ -1163,7 +1163,7 @@ hobot_status hbn_vflow_create_cfg(const char *cfg_file, hbn_vflow_handle_t *vflo
 
 ### hbn_vflow_del_vnode
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vflow_del_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t vnode_fd);
@@ -1175,7 +1175,7 @@ hobot_status hbn_vflow_del_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t
 
 ### hbn_vflow_pause
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vflow_pause(hbn_vflow_handle_t vflow_fd);
@@ -1187,7 +1187,7 @@ hobot_status hbn_vflow_pause(hbn_vflow_handle_t vflow_fd);
 
 ### hbn_vflow_resume
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vflow_resume(hbn_vflow_handle_t vflow_fd);
@@ -1199,7 +1199,7 @@ hobot_status hbn_vflow_resume(hbn_vflow_handle_t vflow_fd);
 
 ### hbn_vflow_get_version
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vflow_get_version(hbn_version_t *version);
@@ -1211,7 +1211,7 @@ hobot_status hbn_vflow_get_version(hbn_version_t *version);
 
 ### hbn_vnode_set_output_frame
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
@@ -1223,7 +1223,7 @@ hobot_status hbn_vnode_set_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t oc
 
 ### hbn_vnode_set_output_groupframe
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
@@ -1235,7 +1235,7 @@ hobot_status hbn_vnode_set_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32
 
 ### hbn_vnode_sendframe_group
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_sendframe_group(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, hbn_vnode_image_group_t *img_group);
@@ -1247,7 +1247,7 @@ hobot_status hbn_vnode_sendframe_group(hbn_vnode_handle_t vnode_fd, uint32_t ich
 
 ### hbn_vnode_get_output_groupframe
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_group_t *img_group);
@@ -1259,7 +1259,7 @@ hobot_status hbn_vnode_get_output_groupframe(hbn_vnode_handle_t vnode_fd, uint32
 
 ### hbn_vnode_get_output_frame
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, hbn_vnode_image_t *img);
@@ -1271,7 +1271,7 @@ hobot_status hbn_vnode_get_output_frame(hbn_vnode_handle_t vnode_fd, uint32_t oc
 
 ### hbn_vflow_get_fd
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vflow_get_fd(hbn_vflow_handle_t *vflow_fd);
@@ -1283,7 +1283,7 @@ hobot_status hbn_vflow_get_fd(hbn_vflow_handle_t *vflow_fd);
 
 ### hbn_vnode_set_ctrl
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);
@@ -1295,7 +1295,7 @@ hobot_status hbn_vnode_set_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext
 
 ### hbn_vnode_get_ctrl
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_vnode_get_ctrl(hbn_vnode_handle_t vnode_fd, vpf_ext_ctrl_t *ext_ctrl);

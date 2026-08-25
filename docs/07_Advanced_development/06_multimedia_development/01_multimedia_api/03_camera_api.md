@@ -92,7 +92,7 @@ hbn_camera_destroy(cam_fd);
 
 ### hbn_camera_create
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_create(camera_config_t *cam_config, camera_handle_t *cam_fd);
@@ -102,10 +102,10 @@ extern int32_t hbn_camera_create(camera_config_t *cam_config, camera_handle_t *c
 
 create camera handle with camera config the camera config should adapt the sensor to be used. the handle returned should be used in APIs of this lib only.
 
-【参数描述】
+【参数】
 
-[IN] cam_config: camera config with camera_config_t struct range: [!NULL, !NULL], default: NA
-[OUT] cam_fd: camera handle fd created return range: [!NULL, !NULL], default: NA
+- [IN] cam_config: camera config with camera_config_t struct range: [!NULL, !NULL], default: NA
+- [OUT] cam_fd: camera handle fd created return range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -116,7 +116,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_destroy
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_destroy(camera_handle_t cam_fd);
@@ -126,9 +126,9 @@ extern int32_t hbn_camera_destroy(camera_handle_t cam_fd);
 
 destroy camera handle to exit all handle created should be destroyed at last.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -139,7 +139,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_attach_to_vin
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_attach_to_vin(camera_handle_t cam_fd, vpf_handle_t vin_fd);
@@ -149,10 +149,10 @@ extern int32_t hbn_camera_attach_to_vin(camera_handle_t cam_fd, vpf_handle_t vin
 
 attach camera handle to handle of vin node in vpf get connection info from vin and initializ the camera hardware. use it only if there is no deserial here.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] vin_fd: vpf handle of vin node which vpf create returned; range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] vin_fd: vpf handle of vin node which vpf create returned; range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -163,7 +163,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_detach_from_vin
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_detach_from_vin(camera_handle_t cam_fd);
@@ -173,9 +173,9 @@ extern int32_t hbn_camera_detach_from_vin(camera_handle_t cam_fd);
 
 detach camera handle from handle of vin node in vpf do deinitialization of camera hardware and detach from vin. use it only if there is no deserial here.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -186,7 +186,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_attach_to_deserial
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_attach_to_deserial(camera_handle_t cam_fd, deserial_handle_t des_fd, camera_des_link_t link);
@@ -196,11 +196,11 @@ extern int32_t hbn_camera_attach_to_deserial(camera_handle_t cam_fd, deserial_ha
 
 attach camera handle to handle of deserial link camera connection info inherit from deserial and initializ hardware. use it if there is a deserial which camera connected to.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] des_fd: deserial handle which create returned range: [!NULL, !NULL], default: NA
-[IN] link: the link index of deserial to attach range: [0, 3], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] des_fd: deserial handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] link: the link index of deserial to attach range: [0, 3], default: NA
 
 【返回值】
 
@@ -211,7 +211,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_detach_from_deserial
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_detach_from_deserial(camera_handle_t cam_fd);
@@ -221,9 +221,9 @@ extern int32_t hbn_camera_detach_from_deserial(camera_handle_t cam_fd);
 
 detach camera handle from deserial handle do deinitialization of camera hardware and detach from deserial
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -234,7 +234,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_start
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_start(camera_handle_t cam_fd);
@@ -244,9 +244,9 @@ extern int32_t hbn_camera_start(camera_handle_t cam_fd);
 
 camera start stream to enable sensor output only operate camera sensor hardware, and not affect internal hardware.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -257,7 +257,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_stop
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_stop(camera_handle_t cam_fd);
@@ -267,9 +267,9 @@ extern int32_t hbn_camera_stop(camera_handle_t cam_fd);
 
 camera stop stream to disable sensor output only operate camera sensor hardware, and not affect internal hardware.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -280,7 +280,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_reset
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_reset(camera_handle_t cam_fd);
@@ -290,9 +290,9 @@ extern int32_t hbn_camera_reset(camera_handle_t cam_fd);
 
 camera reset operation do stop deinit and init start again to reset the camera sensor.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -303,7 +303,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_change_fps
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_change_fps(camera_handle_t cam_fd, int32_t fps);
@@ -313,10 +313,10 @@ extern int32_t hbn_camera_change_fps(camera_handle_t cam_fd, int32_t fps);
 
 change frame frequency of camera sensor output only valid if sensor lib support corresponding function.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] fps: frame frequency per second range: [1, 120], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] fps: frame frequency per second range: [1, 120], default: NA
 
 【返回值】
 
@@ -327,7 +327,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_read_register
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_read_register(camera_handle_t cam_fd, camera_reg_type_t type, uint32_t reg_addr);
@@ -337,11 +337,11 @@ extern int32_t hbn_camera_read_register(camera_handle_t cam_fd, camera_reg_type_
 
 read register value from camera hardware the hardware info should configed in camera_config when created. the type should adapt the camera sensor used.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address of register to read range: [0x0, 0xFFFF], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address of register to read range: [0x0, 0xFFFF], default: NA
 
 【返回值】
 
@@ -352,7 +352,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_write_register
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_write_register(camera_handle_t cam_fd, camera_reg_type_t type, uint32_t reg_addr, uint32_t reg_value);
@@ -362,12 +362,12 @@ extern int32_t hbn_camera_write_register(camera_handle_t cam_fd, camera_reg_type
 
 write register value to camera hardware the hardware info should configed in camera_config when created. the type should adapt the camera sensor used.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address of register to write range: [0x0, 0xFFFF], default: NA
-[IN] reg_value: value of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] reg_value: value of register to write range: [0x0, 0xFFFF], default: NA
 
 【返回值】
 
@@ -378,7 +378,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_read_registers
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_read_registers(camera_handle_t cam_fd, camera_reg_type_t type, uint32_t *reg_addr, uint32_t *reg_value, uint32_t size_addr, uint32_t size_value);
@@ -388,14 +388,14 @@ extern int32_t hbn_camera_read_registers(camera_handle_t cam_fd, camera_reg_type
 
 read registers array value from camera hardware the hardware info should configed in camera_config when created. the type should adapt the camera sensor used.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address array of register to read range: [0x0, 0xFFFF], default: NA
-[OUT] reg_value: value array of register to read range: [0x0, 0xFFFF], default: NA
-[IN] size_addr: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, 64], default: NA
-[IN] size_value: size of reg_value array: 0:not read, &gt;0: count to read range: [0x0, 64], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address array of register to read range: [0x0, 0xFFFF], default: NA
+- [OUT] reg_value: value array of register to read range: [0x0, 0xFFFF], default: NA
+- [IN] size_addr: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, 64], default: NA
+- [IN] size_value: size of reg_value array: 0:not read, &gt;0: count to read range: [0x0, 64], default: NA
 
 【返回值】
 
@@ -406,7 +406,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_write_registers
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_write_registers(camera_handle_t cam_fd, camera_reg_type_t type, uint32_t *reg_addr, uint32_t *reg_value, uint32_t *reg_hist, uint32_t acount, uint32_t vcount);
@@ -416,15 +416,15 @@ extern int32_t hbn_camera_write_registers(camera_handle_t cam_fd, camera_reg_typ
 
 write registers array value to camera hardware the hardware info should configed in camera_config when created. the type should adapt the camera sensor used.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address array of register to write range: [0x0, 0xFFFF], default: NA
-[IN] reg_value: value array of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address array of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] reg_value: value array of register to write range: [0x0, 0xFFFF], default: NA
 [IN/OUT] reg_hist: histroy value array of register to compare and store if optimize range: [0x0, 0xFFFF], default: NA
-[IN] acount: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, ~], default: NA
-[IN] vcount: size of reg_value array: 0:not write, &gt;0: count to write range: [0x0, ~], default: NA
+- [IN] acount: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, ~], default: NA
+- [IN] vcount: size of reg_value array: 0:not write, &gt;0: count to write range: [0x0, ~], default: NA
 
 【返回值】
 
@@ -435,7 +435,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_parse_emb
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_parse_emb(camera_handle_t cam_fd, char* embed_raw, struct embed_data_info_s *embed_info);
@@ -445,11 +445,11 @@ extern int32_t hbn_camera_parse_emb(camera_handle_t cam_fd, char* embed_raw, str
 
 parse the embedded raw data to embed_info struct only valid if sensor lib support corresponding function.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] embed_raw: raw data buffer to parse range: [!NULL, !NULL], default: NA
-[OUT] embed_info: embedded info struct to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] embed_raw: raw data buffer to parse range: [!NULL, !NULL], default: NA
+- [OUT] embed_info: embedded info struct to store range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -460,7 +460,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_update_ae_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_update_ae_info(camera_handle_t cam_fd, camera_ae_info_t *ae_info);
@@ -470,10 +470,10 @@ extern int32_t hbn_camera_update_ae_info(camera_handle_t cam_fd, camera_ae_info_
 
 update ae info to camera sensor driver only valid if sensor lib support corresponding function.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] ae_info: ae info struct to update range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] ae_info: ae info struct to update range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -484,7 +484,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_get_sns_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_get_sns_info(camera_handle_t cam_fd, camera_param_type_t type, cam_parameter_t *sp);
@@ -494,11 +494,11 @@ extern int32_t hbn_camera_get_sns_info(camera_handle_t cam_fd, camera_param_type
 
 get parameter info of camera sensor the base param from config and the internal param from eeprom hardware. only valid if sensor lib support corresponding function.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: the param type as camera_param_type_t range: [CAMERA_SENSOR_PARAM, CAMERA_EEPROM_FULL_PARAM], default: NA
-[OUT] sp: camera param struct to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: the param type as camera_param_type_t range: [CAMERA_SENSOR_PARAM, CAMERA_EEPROM_FULL_PARAM], default: NA
+- [OUT] sp: camera param struct to store range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -509,7 +509,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_set_event_callback
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_set_event_callback(camera_handle_t cam_fd, void (*event_callback)(cam_event_t* fault_info));
@@ -519,10 +519,10 @@ extern int32_t hbn_camera_set_event_callback(camera_handle_t cam_fd, void (*even
 
 set camera event callback func
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] event_callback: camera event callback func range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] event_callback: camera event callback func range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -530,7 +530,7 @@ set camera event callback func
 
 ### hbn_camera_get_status
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_get_status(camera_handle_t cam_fd, camera_staus_t *status);
@@ -540,10 +540,10 @@ extern int32_t hbn_camera_get_status(camera_handle_t cam_fd, camera_staus_t *sta
 
 get camera runtime status get the status as init status, start status, link status, recovery status, etc.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[OUT] status: camera runtime status struct to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [OUT] status: camera runtime status struct to store range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -554,7 +554,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_get_version
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_get_version(camera_handle_t cam_fd, camera_version_type_t type, char *name, char *version);
@@ -564,12 +564,12 @@ extern int32_t hbn_camera_get_version(camera_handle_t cam_fd, camera_version_typ
 
 get version info of camera library version info store as sting buff with size mast larger then CAMERA_VERSON_LEN_MAX.
 
-【参数描述】
+【参数】
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: library type as camera_version_type_t range: [CAMERA_CAM_VERSION, CAMERA_TXSER_VERSION], default: NA
-[OUT] name: library name string buffer to store, NULL ignore range: [NULL, !NULL], default: NA
-[OUT] version: library version string buffer to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: library type as camera_version_type_t range: [CAMERA_CAM_VERSION, CAMERA_TXSER_VERSION], default: NA
+- [OUT] name: library name string buffer to store, NULL ignore range: [NULL, !NULL], default: NA
+- [OUT] version: library version string buffer to store range: [!NULL, !NULL], default: NA
 
 【返回值】
 
@@ -580,7 +580,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_get_handle
 
-【函数声明】
+【函数原型】
 
 ```c
 extern camera_handle_t hbn_camera_get_handle(vpf_handle_t vin_fd, int32_t camera_port);
@@ -590,10 +590,10 @@ extern camera_handle_t hbn_camera_get_handle(vpf_handle_t vin_fd, int32_t camera
 
 get camera handle by vin handle attached or camera port get by vin handle if valid, else get by camera index.
 
-【参数描述】
+【参数】
 
-[IN] vin_fd: vin handle if attached to get range: [NULL, !NULL], default: NA
-[IN] camera_port: camera port index range: [0, NA], default: NA
+- [IN] vin_fd: vin handle if attached to get range: [NULL, !NULL], default: NA
+- [IN] camera_port: camera port index range: [0, NA], default: NA
 
 【返回值】
 
@@ -604,7 +604,7 @@ HW: Super; SW: 1.0.0
 
 ### hbn_camera_init_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hbn_camera_init_cfg(const char *cfg_file);
@@ -614,9 +614,9 @@ extern int32_t hbn_camera_init_cfg(const char *cfg_file);
 
 camera init with config json file all camera and deserial config should included in json file. it will auto create camera handle and attach them.
 
-【参数描述】
+【参数】
 
-[IN] cfg_file: camera config json file path range: [!NULL, !NULL], default: NA
+- [IN] cfg_file: camera config json file path range: [!NULL, !NULL], default: NA
 
 【返回值】
 

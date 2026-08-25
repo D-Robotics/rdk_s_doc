@@ -162,7 +162,7 @@ Get the descriptor of the specified code id.
 
 **Parameter Description**
 
-[IN] codec_id: codec id
+- [IN] codec_id: codec id
 
 **Return Value**
 
@@ -186,9 +186,9 @@ Get the default media codec context.
 
 **Parameter Description**
 
-[IN] codec_id: codec id
-[IN] encoder: encoder or decoder
-[OUT] context: codec context
+- [IN] codec_id: codec id
+- [IN] encoder: encoder or decoder
+- [OUT] context: codec context
 
 **Return Value**
 
@@ -212,7 +212,7 @@ Initialize the codec and codec context. If success, MediaCodec will
 
 **Parameter Description**
 
-[IN] context: codec context
+- [IN] context: codec context
 
 **Return Value**
 
@@ -240,8 +240,8 @@ Initialize the vpf codec. And it must to be called
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] channel_idx: codec_node channel idx
+- [IN] context: codec context
+- [IN] channel_idx: codec_node channel idx
 
 **Return Value**
 
@@ -268,7 +268,7 @@ Configure the codec using the specified parameters. If success, MediaCodec
 
 **Parameter Description**
 
-[IN] context: codec context
+- [IN] context: codec context
 
 **Return Value**
 
@@ -296,9 +296,9 @@ Set callback to media codec. And Encoder/Decoder will work in async mode.
 
 **Parameter Description**
 
-[IN] context: ccodec context
-[IN] callback: ccallback function
-[IN] userdata: pointer to user data which is passed as an incoming parameter when the callback function is called
+- [IN] context: ccodec context
+- [IN] callback: ccallback function
+- [IN] userdata: pointer to user data which is passed as an incoming parameter when the callback function is called
 
 **Return Value**
 
@@ -324,9 +324,9 @@ Set VLC buffer size listener to media codec. And user can modify the
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] callback: @see media_codec_callback_t
-[IN] userdata: pointer to user data
+- [IN] context: codec context
+- [IN] callback: @see media_codec_callback_t
+- [IN] userdata: pointer to user data
 
 **Return Value**
 
@@ -352,9 +352,9 @@ It can specify the channel information of camera.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] pipeline: pipeline number
-[IN] channel_port_id: IPU channel port id
+- [IN] context: codec context
+- [IN] pipeline: pipeline number
+- [IN] channel_port_id: IPU channel port id
 
 **Return Value**
 
@@ -381,8 +381,8 @@ Start the codec processing. VPU will create encoder instance, decode stream,
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] info: startup information
+- [IN] context: codec context
+- [IN] info: startup information
 
 **Return Value**
 
@@ -410,7 +410,7 @@ Stop the codec processing. If success, MediaCodec will be reset and
 
 **Parameter Description**
 
-[IN] context: codec context
+- [IN] context: codec context
 
 **Return Value**
 
@@ -436,7 +436,7 @@ Pause the codec processing. If success, MediaCodec will be paused and
 
 **Parameter Description**
 
-[IN] context: codec context
+- [IN] context: codec context
 
 **Return Value**
 
@@ -462,7 +462,7 @@ Flush the input and output buffers of the codec. And MediaCodec will enter
 
 **Parameter Description**
 
-[IN] context: codec context
+- [IN] context: codec context
 
 **Return Value**
 
@@ -488,7 +488,7 @@ Release the codec. MediaCodec will be released and go back to
 
 **Parameter Description**
 
-[IN] context: codec context
+- [IN] context: codec context
 
 **Return Value**
 
@@ -514,8 +514,8 @@ Get the state of media codec. The value is enum media_codec_state_t.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] state: codec state
+- [IN] context: codec context
+- [OUT] state: codec state
 
 **Return Value**
 
@@ -542,8 +542,8 @@ Get the status of media codec.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] status: codec status
+- [IN] context: codec context
+- [OUT] status: codec status
 
 **Return Value**
 
@@ -570,9 +570,9 @@ Queue the input buffer into MediaCodec. The operation is valid only if
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
 
 **Return Value**
 
@@ -601,9 +601,9 @@ Dequeue the input buffer from MediaCodec. The operation is valid only if
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
 
 **Return Value**
 
@@ -632,9 +632,9 @@ Queue the output buffer into MediaCodec. The operation is valid only if
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
 
 **Return Value**
 
@@ -663,10 +663,10 @@ Dequeue the output buffer from MediaCodec. The operation is valid only if
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] timeout: timeout in ms
-[OUT] buffer: media codec buffer
-[OUT] info: stream information
+- [IN] context: codec context
+- [IN] timeout: timeout in ms
+- [OUT] buffer: media codec buffer
+- [OUT] info: stream information
 
 **Return Value**
 
@@ -695,8 +695,8 @@ Get the parameters of long-term reference mode.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: long-term reference parameters
+- [IN] context: codec context
+- [OUT] params: long-term reference parameters
 
 **Return Value**
 
@@ -722,8 +722,8 @@ Set the parameters of long-term reference mode.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: long-term reference parameters
+- [IN] context: codec context
+- [IN] params: long-term reference parameters
 
 **Return Value**
 
@@ -750,8 +750,8 @@ Get the parameters of the intra refresh.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: intra refresh parameters @see mc_video_intra_refresh_params_t
+- [IN] context: codec context
+- [OUT] params: intra refresh parameters @see mc_video_intra_refresh_params_t
 
 **Return Value**
 
@@ -777,8 +777,8 @@ Intra refresh mode can be enabled for error robustness.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: intra refresh parameters @see mc_video_intra_refresh_params_t
+- [IN] context: codec context
+- [IN] params: intra refresh parameters @see mc_video_intra_refresh_params_t
 
 **Return Value**
 
@@ -805,8 +805,8 @@ Get the parameters of rate control.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: rate control parameters
+- [IN] context: codec context
+- [OUT] params: rate control parameters
 
 **Return Value**
 
@@ -832,8 +832,8 @@ Set the parameters of rate control.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: rate control parameters
+- [IN] context: codec context
+- [IN] params: rate control parameters
 
 **Return Value**
 
@@ -860,8 +860,8 @@ Get the max bit rate of rate control. It's only useful for AVBR and CBR.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: max bitrate
+- [IN] context: codec context
+- [OUT] params: max bitrate
 
 **Return Value**
 
@@ -887,8 +887,8 @@ Set the max bit rate of AVBR rate control.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: rate control parameters
+- [IN] context: codec context
+- [IN] params: rate control parameters
 
 **Return Value**
 
@@ -915,8 +915,8 @@ Get the parameters of deblock filter.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: deblock filter parameters @see mc_video_deblk_filter_params_t
+- [IN] context: codec context
+- [OUT] params: deblock filter parameters @see mc_video_deblk_filter_params_t
 
 **Return Value**
 
@@ -942,8 +942,8 @@ Set the parameters of deblock filter.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: deblock filter parameters @see mc_video_deblk_filter_params_t
+- [IN] context: codec context
+- [IN] params: deblock filter parameters @see mc_video_deblk_filter_params_t
 
 **Return Value**
 
@@ -970,8 +970,8 @@ Get the parameters of sample adaptive offset.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: SAO parameters @see mc_h265_sao_params_t
+- [IN] context: codec context
+- [OUT] params: SAO parameters @see mc_h265_sao_params_t
 
 **Return Value**
 
@@ -997,8 +997,8 @@ Set the parameters of sample adaptive offset.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: SAO parameters @see mc_h265_sao_params_t
+- [IN] context: codec context
+- [IN] params: SAO parameters @see mc_h265_sao_params_t
 
 **Return Value**
 
@@ -1025,8 +1025,8 @@ Get the parameters of entropy coding.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: entropy coding parameters @see mc_h264_entropy_params_t
+- [IN] context: codec context
+- [OUT] params: entropy coding parameters @see mc_h264_entropy_params_t
 
 **Return Value**
 
@@ -1052,8 +1052,8 @@ Set the parameters of entropy coding mode.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: entropy coding parameters @see mc_h264_entropy_params_t
+- [IN] context: codec context
+- [IN] params: entropy coding parameters @see mc_h264_entropy_params_t
 
 **Return Value**
 
@@ -1080,8 +1080,8 @@ Get the timing parameters of VUI.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: VUI timing parameters @see mc_video_vui_timing_params_t
+- [IN] context: codec context
+- [OUT] params: VUI timing parameters @see mc_video_vui_timing_params_t
 
 **Return Value**
 
@@ -1107,8 +1107,8 @@ Set the timing parameters of VUI.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: VUI timing parameters @see mc_video_vui_timing_params_t
+- [IN] context: codec context
+- [IN] params: VUI timing parameters @see mc_video_vui_timing_params_t
 
 **Return Value**
 
@@ -1135,8 +1135,8 @@ Get the parameters of VUI.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: VUI parameters @see mc_video_vui_params_t
+- [IN] context: codec context
+- [OUT] params: VUI parameters @see mc_video_vui_params_t
 
 **Return Value**
 
@@ -1162,8 +1162,8 @@ Set the parameters of VUI.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: VUI parameters @see mc_video_vui_params_t
+- [IN] context: codec context
+- [IN] params: VUI parameters @see mc_video_vui_params_t
 
 **Return Value**
 
@@ -1190,8 +1190,8 @@ Get the slice parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: slice parameters @see mc_video_slice_params_t
+- [IN] context: codec context
+- [OUT] params: slice parameters @see mc_video_slice_params_t
 
 **Return Value**
 
@@ -1217,8 +1217,8 @@ Set the slice parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: slice parameters @see mc_video_slice_params_t
+- [IN] context: codec context
+- [IN] params: slice parameters @see mc_video_slice_params_t
 
 **Return Value**
 
@@ -1245,9 +1245,9 @@ Insert user data.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] data: userdata, must be "UUID+string"
-[IN] length: length (0, 1024]
+- [IN] context: codec context
+- [IN] data: userdata, must be "UUID+string"
+- [IN] length: length (0, 1024]
 
 **Return Value**
 
@@ -1273,7 +1273,7 @@ Request the IDR Frame.
 
 **Parameter Description**
 
-[IN] context: codec context
+- [IN] context: codec context
 
 **Return Value**
 
@@ -1299,8 +1299,8 @@ Enable the IDR Frame.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
+- [IN] context: codec context
+- [IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
 
 **Return Value**
 
@@ -1327,8 +1327,8 @@ Enable the IDR Frame.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
+- [IN] context: codec context
+- [IN] enable: enalbe/diable idr frame, default enable The valid numbers are as follows. 0 : Disable 1 : Enable
 
 **Return Value**
 
@@ -1355,8 +1355,8 @@ Request skip the picture. The encoder ignores sourceFrame and generates
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] src_idx: source buffer index
+- [IN] context: codec context
+- [IN] src_idx: source buffer index
 
 **Return Value**
 
@@ -1383,8 +1383,8 @@ Get the parameters of 3DNR (3D Noise Reduction).
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: 3dnr encoding parameters
+- [IN] context: codec context
+- [OUT] params: 3dnr encoding parameters
 
 **Return Value**
 
@@ -1410,8 +1410,8 @@ Set the parameters of 3DNR (3D Noise Reduction) for better quality of image
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: smart background encoding parameters
+- [IN] context: codec context
+- [IN] params: smart background encoding parameters
 
 **Return Value**
 
@@ -1438,8 +1438,8 @@ Get the parameters of smart background encoding.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: smart background encoding parameters
+- [IN] context: codec context
+- [OUT] params: smart background encoding parameters
 
 **Return Value**
 
@@ -1465,8 +1465,8 @@ Set the parameters of smart background encoding.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: smart background encoding parameters
+- [IN] context: codec context
+- [IN] params: smart background encoding parameters
 
 **Return Value**
 
@@ -1493,8 +1493,8 @@ Get the intra prediction parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: intra prediction @see mc_video_pred_unit_params_t
+- [IN] context: codec context
+- [OUT] params: intra prediction @see mc_video_pred_unit_params_t
 
 **Return Value**
 
@@ -1520,8 +1520,8 @@ Set the intra prediction parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: intra prediction @see mc_video_pred_unit_params_t
+- [IN] context: codec context
+- [IN] params: intra prediction @see mc_video_pred_unit_params_t
 
 **Return Value**
 
@@ -1548,8 +1548,8 @@ Get the transform parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: transform parameters @see mc_video_transform_params_t
+- [IN] context: codec context
+- [OUT] params: transform parameters @see mc_video_transform_params_t
 
 **Return Value**
 
@@ -1575,8 +1575,8 @@ Set the transform parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: transform parameters @see mc_video_transform_params_t
+- [IN] context: codec context
+- [IN] params: transform parameters @see mc_video_transform_params_t
 
 **Return Value**
 
@@ -1603,8 +1603,8 @@ Get the ROI parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: ROI parameters @see mc_video_roi_params_t
+- [IN] context: codec context
+- [OUT] params: ROI parameters @see mc_video_roi_params_t
 
 **Return Value**
 
@@ -1630,8 +1630,8 @@ Set the ROI parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: ROI parameters @see mc_video_roi_params_t
+- [IN] context: codec context
+- [IN] params: ROI parameters @see mc_video_roi_params_t
 
 **Return Value**
 
@@ -1658,8 +1658,8 @@ Get the ROI average QP.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: ROI average QP
+- [IN] context: codec context
+- [OUT] params: ROI average QP
 
 **Return Value**
 
@@ -1685,8 +1685,8 @@ Set the ROI average QP.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: ROI average QP [0, 51] 0: using the average qp of QP map.
+- [IN] context: codec context
+- [IN] params: ROI average QP [0, 51] 0: using the average qp of QP map.
 
 **Return Value**
 
@@ -1713,9 +1713,9 @@ Get the ROI parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] roi_idx: roi index
-[OUT] params: ROI parameters @see mc_video_roi_params_ex_t
+- [IN] context: codec context
+- [IN] roi_idx: roi index
+- [OUT] params: ROI parameters @see mc_video_roi_params_ex_t
 
 **Return Value**
 
@@ -1741,8 +1741,8 @@ Set the ROI parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: ROI parameters @see mc_video_roi_params_ex_t
+- [IN] context: codec context
+- [IN] params: ROI parameters @see mc_video_roi_params_ex_t
 
 **Return Value**
 
@@ -1769,8 +1769,8 @@ Get the encoding mode decision parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: mode decision parameters
+- [IN] context: codec context
+- [OUT] params: mode decision parameters
 
 **Return Value**
 
@@ -1796,8 +1796,8 @@ Set the mode decision parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: mode decision parameters
+- [IN] context: codec context
+- [IN] params: mode decision parameters
 
 **Return Value**
 
@@ -1848,8 +1848,8 @@ Release the user data.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: user data parameters @see mc_user_data_buffer_t
+- [IN] context: codec context
+- [OUT] params: user data parameters @see mc_user_data_buffer_t
 
 **Return Value**
 
@@ -1874,8 +1874,8 @@ Get explicit header configuration.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] status: explicit header configuration The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
+- [IN] context: codec context
+- [OUT] status: explicit header configuration The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
 
 **Return Value**
 
@@ -1901,8 +1901,8 @@ Set explicit header configuration.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] status: enalbe/diable explicit header, default enable The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
+- [IN] context: codec context
+- [IN] status: enalbe/diable explicit header, default enable The valid numbers are as follows. 0 : Disable, the header will be encoded into independent frame 1 : Enable, the header will be encoded into IDR frame if it exists.
 
 **Return Value**
 
@@ -1929,8 +1929,8 @@ Get the mjpeg parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: mjpeg parameters
+- [IN] context: codec context
+- [OUT] params: mjpeg parameters
 
 **Return Value**
 
@@ -1956,8 +1956,8 @@ Set the mjpeg parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] params: mjpeg parameters
+- [IN] context: codec context
+- [IN] params: mjpeg parameters
 
 **Return Value**
 
@@ -1984,8 +1984,8 @@ Get the jpeg parameters.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] params: jpeg parameters
+- [IN] context: codec context
+- [OUT] params: jpeg parameters
 
 **Return Value**
 
@@ -2011,8 +2011,8 @@ Set the jpeg parameters.
 
 **Parameter Description**
 
-[IN] codec: context
-[IN] jpeg: parameters @see mc_jpeg_enc_params_t
+- [IN] codec: context
+- [IN] jpeg: parameters @see mc_jpeg_enc_params_t
 
 **Return Value**
 
@@ -2039,8 +2039,8 @@ Get device fd. And user can use it to do select operation.
 
 **Parameter Description**
 
-[IN] context: codec context
-[OUT] fd: device fd
+- [IN] context: codec context
+- [OUT] fd: device fd
 
 **Return Value**
 
@@ -2065,8 +2065,8 @@ Close device fd. User must close the fd which is aquired through hb_mm_mc_get_fd
 
 **Parameter Description**
 
-[IN] context: codec context
-[IN] fd: device fd
+- [IN] context: codec context
+- [IN] fd: device fd
 
 **Return Value**
 
@@ -2092,8 +2092,8 @@ Register audio encoder. User can use it to register external codec.
 
 **Parameter Description**
 
-[OUT] handle: register handle
-[IN] encoder: audio encoder
+- [OUT] handle: register handle
+- [IN] encoder: audio encoder
 
 **Return Value**
 
@@ -2120,7 +2120,7 @@ Unregister audio encoder. User can use it to unregister codec.
 
 **Parameter Description**
 
-[IN] handle: register handle
+- [IN] handle: register handle
 
 **Return Value**
 
@@ -2147,8 +2147,8 @@ Register audio decoder. User can use it to register external codec.
 
 **Parameter Description**
 
-[OUT] handle: register handle
-[IN] decoder: audio decoder
+- [OUT] handle: register handle
+- [IN] decoder: audio decoder
 
 **Return Value**
 
@@ -2175,7 +2175,7 @@ Unregister audio decoder. User can use it to unregister codec.
 
 **Parameter Description**
 
-[IN] handle: register handle
+- [IN] handle: register handle
 
 **Return Value**
 

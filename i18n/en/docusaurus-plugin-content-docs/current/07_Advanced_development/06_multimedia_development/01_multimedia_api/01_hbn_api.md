@@ -169,13 +169,13 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t ct
 
 **Parameter Description**
 
-[IN] hb_vnode_type vnode_type: Vnode type. Each hardware module corresponds to a specific vnode type, such as HB_VIN, HB_ISP, HB_PYM, etc.
+- [IN] hb_vnode_type vnode_type: Vnode type. Each hardware module corresponds to a specific vnode type, such as HB_VIN, HB_ISP, HB_PYM, etc.
 
-[IN] uint32_t hw_id: Hardware ID of the module.
+- [IN] uint32_t hw_id: Hardware ID of the module.
 
-[IN] uint32_t ctx_id: Context ID of the module (a software concept). You can either specify a context ID or set it to AUTO_ALLOC_ID to let the SDK allocate one automatically.
+- [IN] uint32_t ctx_id: Context ID of the module (a software concept). You can either specify a context ID or set it to AUTO_ALLOC_ID to let the SDK allocate one automatically.
 
-[OUT] hbn_vnode_handle_t *vnode_fd: Returns the vnode handle of the module.
+- [OUT] hbn_vnode_handle_t *vnode_fd: Returns the vnode handle of the module.
 
 **Return Value**
 
@@ -198,7 +198,7 @@ void hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
+- [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
 **Return Value**
 
@@ -221,9 +221,9 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
+- [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
-[IN] void *attr: Pointer to the module's basic attribute structure. This structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—i.e., any structure named \<module_name\>_attr_t.
+- [IN] void *attr: Pointer to the module's basic attribute structure. This structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—i.e., any structure named \<module_name\>_attr_t.
 
 **Return Value**
 
@@ -246,9 +246,9 @@ hobot_status hbn_vnode_get_attr(hbn_vnode_handle_t vnode_fd, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
+- [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
-[OUT] void *attr: Pointer to the module's basic attribute structure (e.g., vin_attr_t, isp_attr_t, pym_attr_t, etc.).*attr: Pointer to the basic attribute structure of the module. The basic attribute structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—any attribute structure named with the module name followed by _attr_t.
+- [OUT] void *attr: Pointer to the module's basic attribute structure (e.g., vin_attr_t, isp_attr_t, pym_attr_t, etc.).*attr: Pointer to the basic attribute structure of the module. The basic attribute structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—any attribute structure named with the module name followed by _attr_t.
 
 **Return Value**
 
@@ -272,9 +272,9 @@ hobot_status hbn_vnode_set_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] void *attr: Pointer to the extended attribute structure of the module. The extended attribute structure can be vin_attr_ex_t, etc.—any attribute structure named with the module name followed by _attr_ex_t;
+- [IN] void *attr: Pointer to the extended attribute structure of the module. The extended attribute structure can be vin_attr_ex_t, etc.—any attribute structure named with the module name followed by _attr_ex_t;
 
 **Return Value**
 
@@ -298,9 +298,9 @@ hobot_status hbn_vnode_get_attr_ex(hbn_vnode_handle_t vnode_fd, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[OUT] void  
+- [OUT] void  
 *attr: Pointer to the extended attribute structure of the module. The extended attribute structure can be vin_attr_ex_t, etc.—any attribute structure named with the module name followed by _attr_ex_t;
 
 **Return Value**
@@ -326,11 +326,11 @@ ochn_id, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for valid channel IDs;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for valid channel IDs;
 
-[IN] void *attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
+- [IN] void *attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
 
 **Return Value**
 
@@ -355,11 +355,11 @@ ochn_id, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for valid channel IDs;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for valid channel IDs;
 
-[OUT] void *attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
+- [OUT] void *attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
 
 **Return Value**
 
@@ -384,11 +384,11 @@ ochn_id, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for valid channel IDs;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for valid channel IDs;
 
-[IN] void *attr: Pointer to the extended output channel attribute structure of the module. The extended output channel attribute can be pym_ochn_attr_ex_t, etc.—any attribute structure named with the module name followed by _ochn_attr_ex_t;
+- [IN] void *attr: Pointer to the extended output channel attribute structure of the module. The extended output channel attribute can be pym_ochn_attr_ex_t, etc.—any attribute structure named with the module name followed by _ochn_attr_ex_t;
 
 **Return Value**
 
@@ -413,11 +413,11 @@ ichn_id, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for valid channel IDs;
+- [IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for valid channel IDs;
 
-[IN] void *attr: Pointer to the input channel attribute structure of the module. The input channel attribute can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute structure named with the module name followed by _ichn_attr_t;
+- [IN] void *attr: Pointer to the input channel attribute structure of the module. The input channel attribute can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute structure named with the module name followed by _ichn_attr_t;
 
 **Return Value**
 
@@ -442,9 +442,9 @@ ichn_id, void *attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;[IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for channel IDs.
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;[IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for channel IDs.
 
-[OUT] void *attr: Pointer to the input channel attribute structure of the module. The input channel attributes can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute ending with the module name followed by _ichn_attr_t.
+- [OUT] void *attr: Pointer to the input channel attribute structure of the module. The input channel attributes can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute ending with the module name followed by _ichn_attr_t.
 
 **Return Value**
 
@@ -468,11 +468,11 @@ ochn_id, hbn_buf_alloc_attr_t *alloc_attr)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
 
-[IN] hbn_buf_alloc_attr_t *alloc_attr: Buffer allocation attributes;
+- [IN] hbn_buf_alloc_attr_t *alloc_attr: Buffer allocation attributes;
 
 **Return Value**
 
@@ -495,7 +495,7 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 **Return Value**
 
@@ -518,7 +518,7 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 **Return Value**
 
@@ -542,13 +542,13 @@ uint32_t millisecondTimeout, hbn_vnode_image_t *out_img)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
 
-[IN] uint32_t millisecondTimeout: Timeout waiting period (in milliseconds);
+- [IN] uint32_t millisecondTimeout: Timeout waiting period (in milliseconds);
 
-[OUT] hbn_vnode_image_t *out_img: Address of the output image buffer structure;
+- [OUT] hbn_vnode_image_t *out_img: Address of the output image buffer structure;
 
 **Return Value**
 
@@ -572,11 +572,11 @@ ochn_id, hbn_vnode_image_t *img)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
 
-[IN] hbn_vnode_image_t *img: Address of the image buffer structure;
+- [IN] hbn_vnode_image_t *img: Address of the image buffer structure;
 
 **Return Value**
 
@@ -600,13 +600,13 @@ ochn_id, uint32_t millisecondTimeout, hbn_vnode_image_group_t *out_img);
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;
 
-[IN] uint32_t millisecondTimeout: Timeout waiting period (in milliseconds);
+- [IN] uint32_t millisecondTimeout: Timeout waiting period (in milliseconds);
 
-[OUT] hbn_vnode_image_group_t *out_img: Address of the output image buffer structure;
+- [OUT] hbn_vnode_image_group_t *out_img: Address of the output image buffer structure;
 
 **Return Value**
 
@@ -630,10 +630,10 @@ ochn_id, hbn_vnode_image_group_t *img)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-[IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;  
-[IN] hbn_vnode_image_t *img: Address of the image buffer structure;
+- [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;  
+- [IN] hbn_vnode_image_t *img: Address of the image buffer structure;
 
 **Return Value**
 
@@ -658,11 +658,11 @@ hbn_vnode_image_t *img)
 
 **Parameter Description**
 
-[IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
 
-[IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for channel IDs;
+- [IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for channel IDs;
 
-[IN] hbn_vnode_image_t *img: Address of the input image buffer;
+- [IN] hbn_vnode_image_t *img: Address of the input image buffer;
 
 **Return Value**
 
@@ -686,7 +686,7 @@ hobot_status hbn_vflow_create(hbn_vflow_handle_t *vflow_fd)
 
 **Parameter Description**
 
-[OUT] hbn_vflow_handle_t *vflow_fd: Vflow handle;
+- [OUT] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
 **Return Value**
 
@@ -710,7 +710,7 @@ void hbn_vflow_destroy(hbn_vflow_handle_t vflow_fd)
 
 **Parameter Description**
 
-[IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
+- [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
 **Return Value**
 
@@ -733,9 +733,9 @@ vnode_fd)
 
 **Parameter Description**
 
-[IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
+- [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
-[IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
+- [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
 
 **Return Value**
 
@@ -761,15 +761,15 @@ dst_vnode_fd, uint32_t in_chn)
 
 **Parameter Description**
 
-[IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
+- [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
-[IN] hbn_vnode_handle_t src_vnode_fd: Vnode handle of the source module;
+- [IN] hbn_vnode_handle_t src_vnode_fd: Vnode handle of the source module;
 
-[IN] uint32_t out_chn: Output channel ID of the source module; refer to the module channel description for channel IDs;
+- [IN] uint32_t out_chn: Output channel ID of the source module; refer to the module channel description for channel IDs;
 
-[IN] hbn_vnode_handle_t dst_vnode_fd: Vnode handle of the destination module;
+- [IN] hbn_vnode_handle_t dst_vnode_fd: Vnode handle of the destination module;
 
-[IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
+- [IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
 
 **Return Value**
 
@@ -795,15 +795,15 @@ dst_vnode_fd, uint32_t in_chn)
 
 **Parameter Description**
 
-[IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
+- [IN] hbn_vflow_handle_t *vflow_fd: Vflow handle;
 
-[IN] hbn_vnode_handle_t src_vnode_fd: Vnode handle of the source module;
+- [IN] hbn_vnode_handle_t src_vnode_fd: Vnode handle of the source module;
 
-[IN] uint32_t out_chn: Output channel ID of the source module; refer to the module channel description for channel IDs;
+- [IN] uint32_t out_chn: Output channel ID of the source module; refer to the module channel description for channel IDs;
 
-[IN] hbn_vnode_handle_t dst_vnode_fd: Vnode handle of the destination module;
+- [IN] hbn_vnode_handle_t dst_vnode_fd: Vnode handle of the destination module;
 
-[IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
+- [IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
 
 **Return Value**
 
@@ -827,7 +827,7 @@ hobot_status hbn_vflow_start(hbn_vflow_handle_t vflow_fd)
 
 **Parameter Description**
 
-[IN] hbn_vflow_handle_t vflow_fd: Vflow handle;
+- [IN] hbn_vflow_handle_t vflow_fd: Vflow handle;
 
 **Return Value**
 
@@ -850,7 +850,7 @@ hobot_status hbn_vflow_stop(hbn_vflow_handle_t vflow_fd)
 
 **Parameter Description**
 
-[IN] hbn_vflow_handle_t vflow_fd: vflow handle;
+- [IN] hbn_vflow_handle_t vflow_fd: vflow handle;
 
 **Return Value**
 
@@ -874,9 +874,9 @@ hb_vnode_type vnode_type, uint32_t index)
 
 **Parameter Description**
 
-[IN] hbn_vflow_handle_t vflow_fd: vflow handle;  
-[IN] hb_vnode_type vnode_type: module ID;  
-[IN] uint32_t index: context ID, range [0, 7]
+- [IN] hbn_vflow_handle_t vflow_fd: vflow handle;  
+- [IN] hb_vnode_type vnode_type: module ID;  
+- [IN] uint32_t index: context ID, range [0, 7]
 
 **Return Value**
 

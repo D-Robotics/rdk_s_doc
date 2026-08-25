@@ -104,8 +104,8 @@ create camera handle with camera config the camera config should adapt the senso
 
 **Parameter Description**
 
-[IN] cam_config: camera config with camera_config_t struct range: [!NULL, !NULL], default: NA
-[OUT] cam_fd: camera handle fd created return range: [!NULL, !NULL], default: NA
+- [IN] cam_config: camera config with camera_config_t struct range: [!NULL, !NULL], default: NA
+- [OUT] cam_fd: camera handle fd created return range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -128,7 +128,7 @@ destroy camera handle to exit all handle created should be destroyed at last.
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -151,8 +151,8 @@ attach camera handle to handle of vin node in vpf get connection info from vin a
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] vin_fd: vpf handle of vin node which vpf create returned; range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] vin_fd: vpf handle of vin node which vpf create returned; range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -175,7 +175,7 @@ detach camera handle from handle of vin node in vpf do deinitialization of camer
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -198,9 +198,9 @@ attach camera handle to handle of deserial link camera connection info inherit f
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] des_fd: deserial handle which create returned range: [!NULL, !NULL], default: NA
-[IN] link: the link index of deserial to attach range: [0, 3], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] des_fd: deserial handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] link: the link index of deserial to attach range: [0, 3], default: NA
 
 **Return Value**
 
@@ -223,7 +223,7 @@ detach camera handle from deserial handle do deinitialization of camera hardware
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -246,7 +246,7 @@ camera start stream to enable sensor output only operate camera sensor hardware,
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -269,7 +269,7 @@ camera stop stream to disable sensor output only operate camera sensor hardware,
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -292,7 +292,7 @@ camera reset operation do stop deinit and init start again to reset the camera s
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -315,8 +315,8 @@ change frame frequency of camera sensor output only valid if sensor lib support 
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] fps: frame frequency per second range: [1, 120], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] fps: frame frequency per second range: [1, 120], default: NA
 
 **Return Value**
 
@@ -339,9 +339,9 @@ read register value from camera hardware the hardware info should configed in ca
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address of register to read range: [0x0, 0xFFFF], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address of register to read range: [0x0, 0xFFFF], default: NA
 
 **Return Value**
 
@@ -364,10 +364,10 @@ write register value to camera hardware the hardware info should configed in cam
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address of register to write range: [0x0, 0xFFFF], default: NA
-[IN] reg_value: value of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] reg_value: value of register to write range: [0x0, 0xFFFF], default: NA
 
 **Return Value**
 
@@ -390,12 +390,12 @@ read registers array value from camera hardware the hardware info should confige
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address array of register to read range: [0x0, 0xFFFF], default: NA
-[OUT] reg_value: value array of register to read range: [0x0, 0xFFFF], default: NA
-[IN] size_addr: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, 64], default: NA
-[IN] size_value: size of reg_value array: 0:not read, &gt;0: count to read range: [0x0, 64], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address array of register to read range: [0x0, 0xFFFF], default: NA
+- [OUT] reg_value: value array of register to read range: [0x0, 0xFFFF], default: NA
+- [IN] size_addr: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, 64], default: NA
+- [IN] size_value: size of reg_value array: 0:not read, &gt;0: count to read range: [0x0, 64], default: NA
 
 **Return Value**
 
@@ -418,13 +418,13 @@ write registers array value to camera hardware the hardware info should configed
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
-[IN] reg_addr: address array of register to write range: [0x0, 0xFFFF], default: NA
-[IN] reg_value: value array of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: device type of camera sensor range: [CAMERA_SENSOR_REG], CAMERA_EEPROM_REG], default: NA
+- [IN] reg_addr: address array of register to write range: [0x0, 0xFFFF], default: NA
+- [IN] reg_value: value array of register to write range: [0x0, 0xFFFF], default: NA
 [IN/OUT] reg_hist: histroy value array of register to compare and store if optimize range: [0x0, 0xFFFF], default: NA
-[IN] acount: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, ~], default: NA
-[IN] vcount: size of reg_value array: 0:not write, &gt;0: count to write range: [0x0, ~], default: NA
+- [IN] acount: size of reg_addr array: 0:as block, &gt;0:as count of reg_addr range: [0x0, ~], default: NA
+- [IN] vcount: size of reg_value array: 0:not write, &gt;0: count to write range: [0x0, ~], default: NA
 
 **Return Value**
 
@@ -447,9 +447,9 @@ parse the embedded raw data to embed_info struct only valid if sensor lib suppor
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] embed_raw: raw data buffer to parse range: [!NULL, !NULL], default: NA
-[OUT] embed_info: embedded info struct to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] embed_raw: raw data buffer to parse range: [!NULL, !NULL], default: NA
+- [OUT] embed_info: embedded info struct to store range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -472,8 +472,8 @@ update ae info to camera sensor driver only valid if sensor lib support correspo
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] ae_info: ae info struct to update range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] ae_info: ae info struct to update range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -496,9 +496,9 @@ get parameter info of camera sensor the base param from config and the internal 
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: the param type as camera_param_type_t range: [CAMERA_SENSOR_PARAM, CAMERA_EEPROM_FULL_PARAM], default: NA
-[OUT] sp: camera param struct to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: the param type as camera_param_type_t range: [CAMERA_SENSOR_PARAM, CAMERA_EEPROM_FULL_PARAM], default: NA
+- [OUT] sp: camera param struct to store range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -521,8 +521,8 @@ set camera event callback func
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] event_callback: camera event callback func range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] event_callback: camera event callback func range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -542,8 +542,8 @@ get camera runtime status get the status as init status, start status, link stat
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[OUT] status: camera runtime status struct to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [OUT] status: camera runtime status struct to store range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -566,10 +566,10 @@ get version info of camera library version info store as sting buff with size ma
 
 **Parameter Description**
 
-[IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
-[IN] type: library type as camera_version_type_t range: [CAMERA_CAM_VERSION, CAMERA_TXSER_VERSION], default: NA
-[OUT] name: library name string buffer to store, NULL ignore range: [NULL, !NULL], default: NA
-[OUT] version: library version string buffer to store range: [!NULL, !NULL], default: NA
+- [IN] cam_fd: camera handle which create returned range: [!NULL, !NULL], default: NA
+- [IN] type: library type as camera_version_type_t range: [CAMERA_CAM_VERSION, CAMERA_TXSER_VERSION], default: NA
+- [OUT] name: library name string buffer to store, NULL ignore range: [NULL, !NULL], default: NA
+- [OUT] version: library version string buffer to store range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
@@ -592,8 +592,8 @@ get camera handle by vin handle attached or camera port get by vin handle if val
 
 **Parameter Description**
 
-[IN] vin_fd: vin handle if attached to get range: [NULL, !NULL], default: NA
-[IN] camera_port: camera port index range: [0, NA], default: NA
+- [IN] vin_fd: vin handle if attached to get range: [NULL, !NULL], default: NA
+- [IN] camera_port: camera port index range: [0, NA], default: NA
 
 **Return Value**
 
@@ -616,7 +616,7 @@ camera init with config json file all camera and deserial config should included
 
 **Parameter Description**
 
-[IN] cfg_file: camera config json file path range: [!NULL, !NULL], default: NA
+- [IN] cfg_file: camera config json file path range: [!NULL, !NULL], default: NA
 
 **Return Value**
 
