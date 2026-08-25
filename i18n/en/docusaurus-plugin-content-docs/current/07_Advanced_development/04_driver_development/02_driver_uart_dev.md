@@ -16,7 +16,7 @@ UART (Universal Asynchronous Receiver/Transmitter) is the basic serial communica
 
 **Prerequisites**: RDK OS has been flashed and the board can be logged in; familiarity with the Linux device tree (DTS) and pinctrl basics; for serial loopback or transmit/receive self-testing, prepare jumper wires or a USB-to-TTL module.
 
-**Relationships with Other Modules**: This driver is the underlying implementation of the user-space serial read/write application (3.1.1 Expansion Pin Usage); the board-level entry for the debug console uart0 is in "2.16 Debug Serial"; kernel and U-Boot option configuration is in "5.4.1 Configuring U-Boot and Kernel Option Parameters".
+**Relationships with Other Modules**: This driver is the underlying implementation of the user-space serial read/write application [3.1.1 Expansion Pin Usage](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md); the board-level entry for the debug console uart0 is in [2.16 Debug Serial](../../02_System_configuration/16_debug_serial.md); kernel and U-Boot option configuration is in [5.4.1 Configuring U-Boot and Kernel Option Parameters](./01_uboot_kernel_config.md).
 
 ### Hardware Resources
 

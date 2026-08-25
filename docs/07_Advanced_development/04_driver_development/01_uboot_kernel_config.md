@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **前置条件**：已搭建 SDK 源码编译环境（`xbuild.sh`）；了解 U-Boot 与内核 `defconfig` 的配置机制。
 
-**与其他模块关系**：本页是各驱动/功能模块内核态开关的统一入口，与「5.4 驱动开发」各驱动篇的「内核配置」节互链；最终生成的 `defconfig` 供镜像编译使用。
+**与其他模块关系**：本页是各驱动/功能模块内核态开关的统一入口，与 [5.4 驱动开发](/Advanced_development/driver_development) 各驱动篇的「内核配置」节互链；最终生成的 `defconfig` 供镜像编译使用。
 
 <DocScope products="RDK S100">
 S100 的内核配置文件为 `hobot-drivers/configs/drobot_s100_defconfig`，U-Boot 配置文件由板级 `.board_config.mk` 中的 `HR_UBOOT_CONFIG_FILE` 指定。

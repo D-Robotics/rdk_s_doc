@@ -18,7 +18,7 @@ UART（Universal Asynchronous Receiver/Transmitter，通用异步收发传输器
 
 **前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux 设备树（DTS）与 pinctrl 基础；如需做串口回环/收发自测，请准备杜邦线或 USB 转 TTL 模块。
 
-**与其他模块关系**：本驱动是用户态串口读写应用（3.1.1 扩展引脚应用）的底层实现；调试控制台 uart0 的板级入口见「2.16 调试串口」；内核与 U-Boot 选项配置见「5.4.1 配置 U-Boot 和 Kernel 选项参数」。
+**与其他模块关系**：本驱动是用户态串口读写应用 [3.1.1 扩展引脚应用](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md) 的底层实现；调试控制台 uart0 的板级入口见 [2.16 调试串口](../../02_System_configuration/16_debug_serial.md)；内核与 U-Boot 选项配置见 [5.4.1 配置 U-Boot 和 Kernel 选项参数](./01_uboot_kernel_config.md)。
 
 ### 硬件资源
 

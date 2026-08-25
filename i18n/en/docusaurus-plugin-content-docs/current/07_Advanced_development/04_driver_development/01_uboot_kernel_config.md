@@ -14,7 +14,7 @@ In system software development, it is often necessary to configure the functiona
 
 **Prerequisites**: An SDK source compilation environment (`xbuild.sh`) has been set up; familiarity with the configuration mechanism of U-Boot and kernel `defconfig`.
 
-**Relationships with Other Modules**: This page is the unified entry point for kernel-mode switches of each driver/function module, cross-linked with the "Kernel Configuration" sections of the driver pages under "5.4 Driver Development"; the final `defconfig` is used for image compilation.
+**Relationships with Other Modules**: This page is the unified entry point for kernel-mode switches of each driver/function module, cross-linked with the "Kernel Configuration" sections of the driver pages under [5.4 Driver Development](/Advanced_development/driver_development); the final `defconfig` is used for image compilation.
 
 <DocScope products="RDK S100">
 The kernel configuration file for the S100 is `hobot-drivers/configs/drobot_s100_defconfig`. The U-Boot configuration file is specified by `HR_UBOOT_CONFIG_FILE` in the board-level `.board_config.mk`.
