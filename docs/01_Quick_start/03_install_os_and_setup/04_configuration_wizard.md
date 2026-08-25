@@ -345,7 +345,7 @@ sudo chown -R usertest:usertest /home/usertest
 - **Wi-Fi 扫描不到网络**：检查 Wi-Fi 模组是否安装（M.2 Key E 接口），`nmcli device` 查看设备状态。
 - **SSH 连接被拒绝**：`sudo systemctl status ssh` 确认服务运行；检查防火墙 `sudo ufw status`。
 - **中文环境切换后无法登录桌面**：见 [桌面应用](../../08_FAQ/07_desktop_app.md)。
-- **NoMachine 黑屏：**完成配置后必须**重启板卡**才生效。
+- **NoMachine 黑屏**：完成配置后必须**重启板卡**才生效。
 
 ## 相关文档
 
