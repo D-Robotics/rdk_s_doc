@@ -59,13 +59,13 @@ RDK 出厂预装系统镜像，可直接从板载存储启动，无需额外 SD 
 
 <DocScope products="RDK S100">
 
-RDK S100 从板载 **eMMC** 启动。启动盘选择由 **SW3** 拨码决定，出厂已设为 eMMC 启动位。如需从其他介质启动（暂不支持 NVMe 启动），参考 [S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#系统启动盘选择-sw3) 的 SW3 说明。
+RDK S100 从板载 **eMMC** 启动。启动盘选择由 **SW3** 拨码决定，出厂已设为 eMMC 启动位。如需从其他介质启动（暂不支持 NVMe 启动），参考 [S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#boot-device-selection-sw3) 的 SW3 说明。
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-RDK S600 从板载 **UFS** 启动。启动盘选择由 **SW8 BOOT** 拨码决定，出厂已设为 UFS 启动位。如需从 NVMe 启动，参考 [S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#bootsw8) 的 SW8 说明，并需使用 NVMe 版本镜像。
+RDK S600 从板载 **UFS** 启动。启动盘选择由 **SW8 BOOT** 拨码决定，出厂已设为 UFS 启动位。如需从 NVMe 启动，参考 [S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#boot-sw8) 的 SW8 说明，并需使用 NVMe 版本镜像。
 
 </DocScope>
 

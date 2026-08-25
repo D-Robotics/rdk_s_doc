@@ -63,7 +63,7 @@ import DocScope from '@site/src/components/DocScope';
 RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模式，再进入对应模式执行烧录。
 
 :::warning 前置确认
-  目前需要将 [SW3 开关](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#系统启动盘选择-sw3) 拨至从板载 eMMC 启动，暂不支持从 M.2 NVMe 固态硬盘启动。
+  目前需要将 [SW3 开关](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#boot-device-selection-sw3) 拨至从板载 eMMC 启动，暂不支持从 M.2 NVMe 固态硬盘启动。
 :::
 
 </DocScope>
@@ -78,10 +78,10 @@ RDK S600 通过 XBurn 烧录系统镜像，先按设备状态选下载模式，�
 
 <DocScope products="RDK S100">
 
-1. 将 [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↑，关闭电源。
-2. 将 [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↑，进入 Download 模式。
+1. 将 [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) 拨码至 ↑，关闭电源。
+2. 将 [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) 拨码至 ↑，进入 Download 模式。
 3. 将 SW1 拨码至 ▽，开启电源。
-4. 检查 [DOWNLOAD 指示灯](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#download红色)：灯亮表示已进入 DFU 模式；若不亮，按下 [K1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#按键-k1k2) 复位系统后重试。
+4. 检查 [DOWNLOAD 指示灯](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#download-red)：灯亮表示已进入 DFU 模式；若不亮，按下 [K1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#buttons-k1k2) 复位系统后重试。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/board_dfu1.png" alt="进入 DFU 模式" style={{ width: '100%' }} />
 
@@ -93,10 +93,10 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 **V1P0 版本（当前）**
 
-1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#开关sw2sw3) 拨码至 `ON`，进入 DFU 模式。
+1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `OFF`，关闭电源。
+2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `ON`，进入 DFU 模式。
 3. 将 SW3 拨码至 `ON`，开启电源。
-4. 检查 [D61 Flash 灯](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#指示灯d59d60d61)：常亮表示已进入 DFU 模式。
+4. 检查 [D61 Flash 灯](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#indicator-leds-d59d60d61)：常亮表示已进入 DFU 模式。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="image-S600-dfu-mode" style={{ width: '100%' }} />
 
@@ -106,16 +106,16 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 <DocScope products="RDK S100">
 
-1. 将 [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↑，关闭电源。
-2. 将 [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#开关-sw1sw2) 拨码至 ↓，进入正常启动模式。
+1. 将 [SW1](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) 拨码至 ↑，关闭电源。
+2. 将 [SW2](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#switches-sw1sw2) 拨码至 ↓，进入正常启动模式。
 3. 将 SW1 拨码至 ▽，开启电源。
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#开关sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#开关sw2sw3) 拨码至 `OFF`，进入正常启动模式。
+1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `OFF`，关闭电源。
+2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `OFF`，进入正常启动模式。
 3. 将 SW3 拨码至 `ON`，开启电源。
 
 </DocScope>
@@ -163,7 +163,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 适用于首次刷机或系统恢复，烧录完整系统镜像包，**存储介质** 按实际情况选 `UFS`（板载）或 `NVMe`（扩展）。
 
 :::warning 启动盘选择
-启动盘由 [SW8 BOOT 拨码](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#bootsw8) 决定，**烧录前**须按目标存储介质，正确设置 SW8 拨码，烧录后保持拨码位置不变：
+启动盘由 [SW8 BOOT 拨码](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#boot-sw8) 决定，**烧录前**须按目标存储介质，正确设置 SW8 拨码，烧录后保持拨码位置不变：
 
 - 从 **UFS** 启动：SW8 拨至 UFS 启动位（`D12=ON, D13=ON` 或 `D12=OFF, D13=OFF`）。
 - 从 **NVMe** 启动：SW8 拨至 NVMe 启动位（`D12=OFF, D13=ON`）。
