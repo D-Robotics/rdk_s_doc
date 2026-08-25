@@ -1113,6 +1113,93 @@ CAN_HAL_DEBUG_LEVEL 是一个环境变量，用于控制库文件 libhbcanhal.so
 ```
 通过设置 CAN_HAL_DEBUG_LEVEL 的值，可以控制日志输出的详细程度。例如，如果设置为 2，那么只有 log_info、log_warn、log_err 和 log_critical 级别的日志会被打印
 
+### 常见错误码说明
+
+Acore 侧 CANHAL 接口（`canInit`、`canSendMsgFrame`、`canRecvMsgFrame` 等）失败时返回负值错误码，定义于 `can_hal_type_def.h` 的 `ErrorCode` 枚举。日志中常见形式如下：
+
+```
+[recv_frame_data] [ERR]: canRecvMsgFrame failed ret: -303
+```
+
+RDK S100 / S600 上 CANHAL 默认走 IPCF 通道，将 MCU 侧 CAN 数据转发到 Acore。排障时优先核对 `config/` 下的 `nodes.json`、`channels.json`、`ipcf_channel.json`，以及 MCU1 是否已启动。
+
+### 错误码分类
+
+| 类别 | 数值区间 | 说明 |
+|------|---------|------|
+| 通用 | `0` / `-1` | 成功或未知错误 |
+| 配置文件 | `-100` ~ `-101` | 配置文件缺失或内容无效 |
+| 目标/节点 | `-200` | 收发时找不到指定 target |
+| IO 通道 | `-201` ~ `-206` | 通道 ID、存在性、初始化状态 |
+| 设备/HAL | `-301` ~ `-311` | HAL/IPCF 初始化、BSP 调用、设备加载 |
+| 发送/协议/缓存 | `-400` ~ `-409` | 参数指针、缓冲区、协议校验、延迟 |
+
+### 错误码速查
+
+| <div style={{minWidth: '72px', whiteSpace: 'nowrap'}}>值</div> | 错误码 | 含义 | 常见原因 | 处理建议 |
+|:----------|:-------|:-----|:---------|:---------|
+| <span style={{whiteSpace: 'nowrap'}}>`0`</span> | `SUCCESS` | 成功 | — | — |
+| <span style={{whiteSpace: 'nowrap'}}>`-1`</span> | `UNKNOWN` | 未知错误 | PHC 时钟源打开/读取失败，接收线程创建失败 | 检查 `/dev/hrtc0` 是否存在；确认 `nodes.json` 中 `clk_source` 配置 |
+| <span style={{whiteSpace: 'nowrap'}}>`-100`</span> | `CONFIG_FILE_INVALID` | 配置文件无效 | JSON 格式错误，target 为空或重复，通道 mode 无法识别 | 检查 `nodes.json` / `channels.json` 语法，确认 `target` 唯一且 `mode` 为 `R`/`W`/`RW` |
+| <span style={{whiteSpace: 'nowrap'}}>`-101`</span> | `CONFIG_FILE_NOT_EXIST` | 配置文件不存在 | 配置路径错误或文件缺失 | 确认程序当前目录下存在 `config/nodes.json`、`config/channels.json`、`config/ipcf_channel.json` |
+| <span style={{whiteSpace: 'nowrap'}}>`-200`</span> | `TARGET_NOT_EXIST` | 目标节点不存在 | 调用收发接口的 target 未在 `nodes.json` 中注册或未使能 | 核对 API 传入的 target 名称与 `nodes.json` 中 `target`、`enable` 是否一致 |
+| <span style={{whiteSpace: 'nowrap'}}>`-201`</span> | `IO_CHANNEL_INVALID_ID` | 通道 ID 无效 | 通道 `id < 0` 或 `id > 4096` | 修正 `ipcf_channel.json` 中的通道 `id` |
+| <span style={{whiteSpace: 'nowrap'}}>`-202`</span> | `IO_CHANNEL_NOT_EXIST` | 通道不存在 | 通道未在配置中定义或未注册 | 确认 `nodes.json` 的 `channel_id` 能在 `ipcf_channel.json` 中找到对应项 |
+| <span style={{whiteSpace: 'nowrap'}}>`-203`</span> | `IO_CHANNEL_CONFIG_INVALID` | 通道配置无效 | `io_channels` 缺失，或通道模式与收发操作不匹配 | 检查 `channels.json` 是否指向 IPCF 配置；只读通道不要调用发送接口 |
+| <span style={{whiteSpace: 'nowrap'}}>`-204`</span> | `IO_CHANNEL_NOT_INITED` | 通道未初始化 | 未先 `canInit` 就收发 | 先调用 `canInit()`，成功后再 `canSendMsgFrame` / `canRecvMsgFrame` |
+| <span style={{whiteSpace: 'nowrap'}}>`-205`</span> | `IO_CHANNEL_INITED_ALREDY` | 通道已初始化 | 重复初始化 | 可忽略，CANHAL 内部视为已就绪 |
+| <span style={{whiteSpace: 'nowrap'}}>`-206`</span> | `IO_CHANNEL_INIT_FAILED` | 通道初始化失败 | 底层 `InitChannel` 失败的汇总 | 结合 `-301`/`-302`/`-303` 继续查 IPCF 初始化与设备权限 |
+| <span style={{whiteSpace: 'nowrap'}}>`-301`</span> | `INIT_HAL_GROUP_FAILED` | HAL 组初始化失败 | `HorizonHal_IPCF_Init` 失败，或 socket/epoll 创建失败 | 确认 MCU1 已启动、`libhbipcfhal.so` 可加载、`/dev/ipcdrv` 存在 |
+| <span style={{whiteSpace: 'nowrap'}}>`-302`</span> | `CONFIG_HAL_GROUP_FAILED` | HAL 组配置失败 | `HorizonHal_IPCF_Config` 失败 | 检查 `ipcf_channel.json` 中 instance/channel 是否与 MCU 侧分配一致 |
+| <span style={{whiteSpace: 'nowrap'}}>`-303`</span> | `DEV_BSP_API_FAILED` | BSP API 失败 | IPCF recv/send 失败，或底层系统调用失败 | 接收超时场景较常见；确认对端有数据、IPC instance/channel 未被其它进程占用 |
+| <span style={{whiteSpace: 'nowrap'}}>`-304`</span> | `DEV_NO_CHANNEL_CONFIG` | 无通道配置 | 配置中 `channels` 为空 | 补全 `ipcf_channel.json` 的 `channels` 列表 |
+| <span style={{whiteSpace: 'nowrap'}}>`-305`</span> | `DEV_CONFIG_NO_GROUP` | 无组配置 | 通道已注册但底层 socket 未创建 | 重新初始化，检查设备节点权限 |
+| <span style={{whiteSpace: 'nowrap'}}>`-306`</span> | `DEV_CONFIG_NO_MSGS` | 无消息配置 | SPI 通道缺少 messages（非 S100/S600 默认路径） | 仅 SPI 设备需要关注 |
+| <span style={{whiteSpace: 'nowrap'}}>`-307`</span> | `DEV_CONFIG_NO_FILTERS` | 无过滤器配置 | `filter_sw = true` 但未配置 filter | 关闭软件过滤，或补全 filter 数组 |
+| <span style={{whiteSpace: 'nowrap'}}>`-308`</span> | `DEV_INITED_ALREADY` | 设备已初始化 | 重复 `Init` | 可忽略 |
+| <span style={{whiteSpace: 'nowrap'}}>`-309`</span> | `DEV_NOT_INITED` | 设备未初始化 | 未先完成设备 Init | 先调用 `canInit()` |
+| <span style={{whiteSpace: 'nowrap'}}>`-310`</span> | `DEV_RECONNECT` | 设备需要重连 | ETH TCP 断连（非 S100/S600 默认路径） | 检查以太网连通性 |
+| <span style={{whiteSpace: 'nowrap'}}>`-311`</span> | `BASIC_COM_LOAD_DEV_FAILED` | 设备加载失败 | 设备注册或 Init 失败 | 检查 IPCF 库路径 `libipcf_path` 及配置中的 `device_type` |
+| <span style={{whiteSpace: 'nowrap'}}>`-400`</span> | `SEND_INVALID_PTR` | 发送指针无效 | `target`/`frame`/`pack` 为空，或长度为 0 | 检查调用参数，确认缓冲区已分配且 `data_num` > 0 |
+| <span style={{whiteSpace: 'nowrap'}}>`-401`</span> | `SEND_BUFFER_OVERFLOW` | 发送缓冲区溢出 | 单次数据超过协议上限（IPCF 最大 4096 字节） | 减小合包数量或单次发送帧数 |
+| <span style={{whiteSpace: 'nowrap'}}>`-402`</span> | `PROTO_INVALID` | 协议数据无效 | 收到的数据包长度、DLC 或分片格式不合法 | 确认 MCU/Acore 使用相同协议（如 `built_1.0`） |
+| <span style={{whiteSpace: 'nowrap'}}>`-403`</span> | `PROTO_NOT_SUPPORT` | 协议不支持 | `nodes.json` 的 `raw_protocol` 无法识别 | 使用支持的协议名：`built_1.0` / `built_0.1` / `built_0.2` / `built_0.3` / `socketcan` |
+| <span style={{whiteSpace: 'nowrap'}}>`-404`</span> | `CACHE_INVALID` | 缓存无效 | 用户收发缓冲区为空或大小为 0 | 检查 `frame` 数组和 `pack` 是否正确传入 |
+| <span style={{whiteSpace: 'nowrap'}}>`-405`</span> | `CHECKSUM_ABNORMAL` | 校验和异常 | 预留，当前版本一般不会返回 | — |
+| <span style={{whiteSpace: 'nowrap'}}>`-406`</span> | `SEQUENCE_ABNORMAL` | 序列号异常 | 滚动计数器不连续，可能丢帧 | 降低发送频率，检查 IPC 是否拥塞；该错误仍会返回已解析的帧 |
+| <span style={{whiteSpace: 'nowrap'}}>`-407`</span> | `CACHE_TOO_SMALL` | 缓存太小 | 用户 CanFrame 数组装不下本包全部帧 | 增大接收侧 `CAN_FRAME_NUM` / 帧数组容量 |
+| <span style={{whiteSpace: 'nowrap'}}>`-408`</span> | `LATENCY_TOO_LARGE` | 延迟过大 | PHC 与 MCU 时间戳差值超过阈值（默认 28ms） | 先完成 MCU RTC 与 Acore `phc0` 时间同步；检查系统负载 |
+| <span style={{whiteSpace: 'nowrap'}}>`-409`</span> | `CRC_ERROR` | CRC 校验失败 | 标准协议 CRC16 不匹配，数据可能损坏 | 检查核间传输是否稳定，MCU/Acore 协议是否一致 |
+
+:::tip
+以下错误在初始化阶段可视为“已经就绪”，不会导致 `canInit` 失败：
+
+- `-205` `IO_CHANNEL_INITED_ALREDY`
+- `-308` `DEV_INITED_ALREADY`
+
+`-406` `SEQUENCE_ABNORMAL` 表示可能丢帧，但 CANHAL 仍会提取并返回已经解析出的 CAN 帧。
+:::
+
+### 常见问题排查
+
+| 现象 | 可能错误码 | 排查方向 |
+|------|-----------|---------|
+| `canInit` 失败 | `-100` / `-101` / `-301` / `-302` / `-311` | 检查 `config/` 目录三个 JSON 是否存在且格式正确；MCU1 是否启动；`/dev/ipcdrv` 与 `libhbipcfhal.so` 是否可用 |
+| 发送/接收提示找不到通道 | `-200` | 核对 API 的 target 与 `nodes.json` 中 `target`、`enable` |
+| 通道初始化失败 | `-206` / `-301` ~ `-303` | 检查 IPC instance/channel 是否与 MCU 侧分配一致，且未被其它进程占用 |
+| 接收日志反复出现 `-303` | `-303` | 对端未发送、硬件未组网、或该 IPC channel 已被占用；sample 中超过 100s 无数据会退出线程 |
+| 数据丢失 | `-406` | 降低发送频率，确认合包配置与 IPC 带宽 |
+| 数据内容错误 | `-409` / `-402` | 确认两端协议一致（`built_1.0`），检查传输链路 |
+| 延迟告警 | `-408` | 先做时间同步，再查 CPU 负载和 PHC 时钟（`/dev/hrtc0`） |
+| 发送失败 | `-400` / `-401` | 检查指针、长度，以及单次发送是否超过 4096 字节 |
+| 未 Init 就收发 | `-204` / `-309` | 调整调用顺序：`canInit` → 收发 → `canDeInit` |
+
+打开 CANHAL 日志有助于定位具体失败点：
+
+```bash
+export CAN_HAL_DEBUG_LEVEL=4
+```
+
 ### MCU 侧 DEBUG 应用说明
 1. 进入 MCU1的控制台
 2. 输入命令：can_tran_debug
