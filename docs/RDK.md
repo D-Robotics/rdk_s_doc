@@ -15,7 +15,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **D-Robotics Developer Kits**，简称 RDK 套件，是基于 D-Robotics 计算平台打造的机器人开发者套件，涵盖硬件板卡与配套软件，帮助开发者快速搭建机器人原型、开展评测与验证。套件硬件产品线包括 RDK X3、RDK X3 Module、RDK X5、RDK Ultra、RDK S100 系列和 RDK S600 系列。本手册面向 **RDK S100 / RDK S600**。
 
-RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱可用；TogetheROS.Bot（tros.b）机器人中间件预装在镜像内。详见下文 [RDK OS 介绍](#rdk-os-介绍)。
+RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱可用；TogetheROS.Bot（tros.b）机器人中间件预装在镜像内。详见下文 [RDK OS 介绍](#rdk-os-introduction)。
 
 :::note 注意
 确认系统版本号：`cat /etc/version`；`rdkos_info` 查看板卡与运行时信息。详见 [系统状态查询](./01_Quick_start/03_install_os_and_setup/03_system_status.md)。
@@ -39,7 +39,7 @@ RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱�
 
 </DocScope>
 
-## RDK OS 介绍
+## RDK OS 介绍 {#rdk-os-introduction}
 
 **RDK OS** 是基于 Ubuntu 定制的板端操作系统镜像，针对 RDK 板卡的 BPU/CPU/MCU/外设做了适配、驱动集成与预装示例。烧录后即获得开箱可用的 Linux 环境，无需自行编译内核或拼装根文件系统。
 
@@ -55,7 +55,7 @@ RDK OS 开箱即有：
 
 ## 资料索引
 
-> 系统镜像、工具、硬件资料下载。商业版资料通过问卷与 NDA 流程获取，见下方 [商业版资料](#商业版资料) 节。
+> 系统镜像、工具、硬件资料下载。商业版资料通过问卷与 NDA 流程获取，见下方 [商业版资料](#commercial-edition-materials) 节。
 
 ### 系统镜像
 
@@ -80,7 +80,7 @@ RDK OS 开箱即有：
 | STEP 3D 模型 / 产品渲染图 | 见 [硬件介绍](/01_hardware_introduction) 硬件资料节 |
 | 认证配件清单（AVL） | 见 [硬件介绍](/01_hardware_introduction) 配件清单节 |
 
-### 商业版资料
+### 商业版资料 {#commercial-edition-materials}
 
 :::tip 商业支持
 商业版提供更完整的功能支持、更深入的硬件能力开放和专属的定制内容。为确保内容合规、安全交付，通过以下方式开放访问权限：
