@@ -147,7 +147,7 @@ Connecting to host 192.168.127.195, port 5002
 
 接收带宽：**949Mbits/sec**
 
-发送带宽**：950Mbits/sec**
+发送带宽：**950Mbits/sec**
 
 ## 常见问题
 

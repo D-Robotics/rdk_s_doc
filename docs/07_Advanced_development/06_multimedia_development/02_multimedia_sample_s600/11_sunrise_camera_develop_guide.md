@@ -325,8 +325,8 @@ typedef struct vpp_ops {
 | --------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
 | 准备算法模型          | 放到 Platform/S600/model_zoom 目录下（*.hbm） | 在本目录添加可以在开发板上运行的定点算法模型 (系统自带的模型文件存储在：`/opt/hobot/model/s600/basic/`)                 |
 | 添加模型配置          | bpu_wrap.c                                        | 在 bpu_models 中添加新模型的名称、指定算法模型文件，推理和后处理函数接口 |
-| 推理线程处理函数      | bpu_wrap.c                                        | 在处理函数中准备输出 tensor，调用 **hbDNNInfer** 推理，得到结果后，把结果放入 output 队列。示例**：inference_yolov5s** |
-| 后处理线程函数        | bpu_wrap.c                                        | 从 output 队列中取出算法结果，调用后处理方法进行处理，得到 json 格式的结果字符串。如果设置了回调函数，则调用回调。示例**：post_process_yolov5s** |
+| 推理线程处理函数      | bpu_wrap.c                                        | 在处理函数中准备输出 tensor，调用 **hbDNNInfer** 推理，得到结果后，把结果放入 output 队列。示例：**inference_yolov5s** |
+| 后处理线程函数        | bpu_wrap.c                                        | 从 output 队列中取出算法结果，调用后处理方法进行处理，得到 json 格式的结果字符串。如果设置了回调函数，则调用回调。示例：**post_process_yolov5s** |
 | 后处理代码            | yolov5_post_process.cpp                           | 算法模型都要对应后处理方法，比如分类模型要把返回的 id 和类型名对应起来，检测模型要把检测框映射到原始图像的位置上。 |
 | Web 页面上增加渲染处理 |WebServer/www/js/DisplayWindowManager.js                                        | 非必须                                                       |
 
