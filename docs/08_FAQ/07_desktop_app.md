@@ -14,7 +14,7 @@ description: "RDK 桌面版第三方应用常见问题与解决方案"
 
 Visual Studio Code 使用的 Electron shell 在处理 GPU 硬件加速时可能存在问题，导致界面空白或无法打开。
 
-**解决方案：** 禁用 GPU 加速启动：
+**解决方案**： 禁用 GPU 加速启动：
 
 ```bash
 code --disable-gpu
@@ -26,7 +26,7 @@ code --disable-gpu
 
 在 Settings 中切换系统语言并重启桌面会话后，可能出现输入正确密码也无法登录的情况。
 
-**解决方案：**
+**解决方案**：
 
 1. 打开 Settings → Region & Language，选择目标语言。
 2. 点击 restart（仅重启桌面会话，不重启设备）。

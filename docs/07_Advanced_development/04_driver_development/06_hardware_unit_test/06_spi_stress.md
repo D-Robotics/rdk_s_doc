@@ -24,14 +24,14 @@ SPI 总线测试工具（ spidev_tc ）用于测试 SPI 设备的基本功能和
 
 ### 测试内容
 
-**1. 测试过程：**
+**1. 测试过程**：
 SPI 压力测试的核心部分是通过回环测试进行数据的传输和接收，源码中体现主要内容如下：
 
 - 数据传输测试：使用 `transfer_buf` 和 `transfer_read_write` 函数分别进行纯数据发送、读取和验证。数据包的长度由 `transfer_size` 参数控制，并且测试会多次循环进行（由 iterations 控制）。
 - 吞吐量和速率计算：通过全局变量 `_read_count` 和 `_write_count` 记录读取和写入的字节数，并周期性计算和输出传输速率。`show_transfer_rate` 函数用于计算并输出吞吐量（单位： kbps）。
 - 传输模式切换：通过 SPI 模式、位数和速度等参数的不同组合，测试 SPI 设备在不同条件下的性能表现。例如，可以设置数据 buffer 的大小或者 SPI 总线速度（ speed），测试设备在不同条件下的稳定性和性能。
 
-**2. 命令解析：**
+**2. 命令解析**：
 
 - 测试命令：`$\{script_dir}/spidev_tc" -D "$Device" -s "$spi_speed" -I "$StressCount" -e 3 -S 32 > "$spi_test_log_file" 2>&1`
 - 参数解析：
@@ -69,7 +69,7 @@ Options:
 - `-s <speed>`：设置 SPI 的速度，单位是 Hz，默认值为 12000000 （即 12 MHz）。
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
 
-**示例：**
+**示例**：
 例如，使用命令： `./spistress.sh -d /dev/spidev0.0 -c 500 -s 24000000 -o /userdata/spi_test_logs` 自定义测试 SPI 设备 /dev/spidev0.0 ，设置传输速度为 24 MHz，进行 500 次测试，输出目录为 /userdata/spi_test_logs。
 
 `spidev_tc` 源码中的详细参数与设置命令解析如下：

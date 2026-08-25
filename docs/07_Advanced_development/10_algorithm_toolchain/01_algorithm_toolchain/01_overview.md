@@ -34,7 +34,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### OE 开发工具包
 
-**下载地址：**
+**下载地址**：
 ```bash
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-package-3.7.0-s100-s600.tgz
 ```
@@ -42,10 +42,10 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 ### OE 用户手册
 
 
-**在线阅读地址：**
+**在线阅读地址**：
 👉 [https://toolchain.d-robotics.cc/](https://toolchain.d-robotics.cc/)
 
-**下载地址：**
+**下载地址**：
 
 👉 [OE用户手册 3.7.0 版本下载](https://archive.d-robotics.cc/toolchain/oe-doc-3.7.0-s100-s600.zip)
 
@@ -53,7 +53,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 
 ### CPU Docker
 
-**下载地址：**
+**下载地址**：
 
 方法1. 登录地瓜 Registry 服务器在线拉取镜像
 
@@ -73,7 +73,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_tool
 
 ### GPU Docker
 
-**下载地址：**
+**下载地址**：
 
 方法1. 登录地瓜 Registry 服务器在线拉取镜像
 ```bash

@@ -52,11 +52,11 @@ sunrise camera 有如下两种运行方式：
 1. 手动启动：适用于调试阶段
 2. 上电自启动：适用于程序调试稳定后，部署到正式场景运行
 
-**手动启动：**
+**手动启动**：
 
 编译 sunrise camera 后执行 `sh ./start_app.sh` 启动。
 
-**上电自启动：**
+**上电自启动**：
 1. 部署自启动文件（只需要第一次执行）
 ```sh
 cp sunrise_camera.service /etc/systemd/system/sunrise_camera.service

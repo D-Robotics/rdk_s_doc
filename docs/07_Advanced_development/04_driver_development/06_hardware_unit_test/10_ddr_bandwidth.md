@@ -43,20 +43,20 @@ lmbench 是一套开源的系统微基准测试工具（LMbench - Tools for Perf
 如果板端无网络连接，需要在 PC 端拉取源码并交叉编译，再通过 adb 推送至板端。
 :::
 
-**1. PC 端拉取 lmbench 源码：**
+**1. PC 端拉取 lmbench 源码**：
 
 ```shell
 git clone https://github.com/intel/lmbench.git
 cd lmbench
 ```
 
-**2. PC 端安装交叉编译工具链：**
+**2. PC 端安装交叉编译工具链**：
 
 ```shell
 sudo apt install gcc-aarch64-linux-gnu build-essential libtirpc-dev
 ```
 
-**3. PC 端交叉编译 lmbench：**
+**3. PC 端交叉编译 lmbench**：
 
 ```shell
 cd lmbench/src
@@ -72,7 +72,7 @@ ${MAKE} OS="${OS}" CC="${CC}" CFLAGS="${CFLAGS} -I/usr/include/tirpc" LDLIBS="${
 ```
 :::
 
-**4. 推送至板端：**
+**4. 推送至板端**：
 
 **方案一：PC 交叉编译后推送二进制**
 
@@ -104,7 +104,7 @@ adb.exe shell apt install -y libtirpc-dev
 
 然后重新编译。编译出的可执行文件路径参考方案一
 
-**5. 确认 CPU 拓扑（用于绑核）：**
+**5. 确认 CPU 拓扑（用于绑核）**：
 
 查看每个 policy 的核心分配和频率范围：
 
@@ -187,7 +187,7 @@ Solution Validates: avg error less than 1.000000e-13 on all three arrays
 bw_mem [选项] <测试大小> <操作类型>
 ```
 
-**常用选项：**
+**常用选项**：
 
 | 选项 | 说明 |
 |------|------|
@@ -195,13 +195,13 @@ bw_mem [选项] <测试大小> <操作类型>
 | `-W <N>` | 预热迭代次数 |
 | `-N <N>` | 测量重复次数 |
 
-**测试大小支持的单位：** `k`=1024B, `m`=1024×1024B, `g`=1024×1024×1024B。建议使用 256M 以超过 cache 大小，测得真实的 DDR 带宽。
+**测试大小支持的单位**： `k`=1024B, `m`=1024×1024B, `g`=1024×1024×1024B。建议使用 256M 以超过 cache 大小，测得真实的 DDR 带宽。
 
 ### 测试示例（关键步骤）
 
 使用 `taskset -c <核心号>` 将 `bw_mem` 绑定到指定 CPU 核心，避免进程在核间迁移导致测试结果波动。建议绑定不同cluster的核心，充分发挥多个测试核心的并行测试能力，最大程度上占满DDR带宽
 
-**绑核的必要性：** 在测试 DDR 带宽时，如果进程在不同 CPU 核之间迁移，会导致 L1/L2 cache 失效以及 NUMA 访问延迟变化，造成测试结果不稳定。使用 `taskset` 将 `bw_mem` 绑定到固定的 CPU 核心上，可获得稳定、可复现的带宽数据。其中 S600 示例绑定 `0-1,4-5,8-9,12-13,16-17`（每个 policy 取 2 核、共 10 核）；S100 仅有 6 核（`policy0`/`policy4`），示例使用 `taskset -c 0-5` 并降为 `-P 6`。
+**绑核的必要性**： 在测试 DDR 带宽时，如果进程在不同 CPU 核之间迁移，会导致 L1/L2 cache 失效以及 NUMA 访问延迟变化，造成测试结果不稳定。使用 `taskset` 将 `bw_mem` 绑定到固定的 CPU 核心上，可获得稳定、可复现的带宽数据。其中 S600 示例绑定 `0-1,4-5,8-9,12-13,16-17`（每个 policy 取 2 核、共 10 核）；S100 仅有 6 核（`policy0`/`policy4`），示例使用 `taskset -c 0-5` 并降为 `-P 6`。
 
 <DocScope products="RDK S100">
 

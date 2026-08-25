@@ -15,7 +15,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **D-Robotics Developer Kits**，简称 RDK 套件，是基于 D-Robotics 计算平台打造的机器人开发者套件，涵盖硬件板卡与配套软件，帮助开发者快速搭建机器人原型、开展评测与验证。套件硬件产品线包括 RDK X3、RDK X3 Module、RDK X5、RDK Ultra、RDK S100 系列和 RDK S600 系列。本手册面向 **RDK S100 / RDK S600**。
 
-TogetheROS.Bot（tros.b）机器人中间件预装在镜像内。详见下文 [RDK OS 介绍](#rdk-os-介绍)。
+RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱可用；TogetheROS.Bot（tros.b）机器人中间件预装在镜像内。详见下文 [RDK OS 介绍](#rdk-os-介绍)。
 
 :::note 注意
 确认系统版本号：`cat /etc/version`；`rdkos_info` 查看板卡与运行时信息。详见 [系统状态查询](./01_Quick_start/03_install_os_and_setup/03_system_status.md)。

@@ -84,7 +84,7 @@ USB Gadget 框架由下表模块协同工作，将板端虚拟成 USB 从设备�
 
 ADB (Android Debug Bridge) 模式允许用户通过 USB Type-C 接口进行调试和文件传输。
 
-**启动 ADB 模式：**
+**启动 ADB 模式**：
 
 ```bash
 usb-gadget.sh start adb
@@ -112,7 +112,7 @@ OK
 usb-gadget start succeed.
 ```
 
-**停止 ADB 模式：**
+**停止 ADB 模式**：
 
 ```bash
 usb-gadget.sh stop adb
@@ -122,7 +122,7 @@ usb-gadget.sh stop adb
 
 RNDIS (Remote Network Driver Interface Specification) 模式将 USB Type-C 接口虚拟为网卡，实现 USB 网络共享功能。连接到 PC 后，会在电脑上生成一个远程网卡设备。
 
-**启动 RNDIS 模式：**
+**启动 RNDIS 模式**：
 
 ```bash
 usb-gadget.sh stop adb
@@ -157,7 +157,7 @@ usb-gadget start succeed.
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/RNIS_Device.png" alt="切换到 RNDIS 模式示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-**配置网络 IP：**
+**配置网络 IP**：
 
 开发板端配置 USB 网卡 IP 地址：
 
@@ -169,7 +169,7 @@ PC 端配置远程网卡 IP 地址（需要与开发板在同一网段）：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/NETWORK_CONFIG.png" alt="配置网络 IP 示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-**验证网络连接：**
+**验证网络连接**：
 
 在开发板上 ping PC 端 IP：
 
@@ -177,7 +177,7 @@ PC 端配置远程网卡 IP 地址（需要与开发板在同一网段）：
 ping 192.168.1.111
 ```
 
-**停止 RNDIS 模式：**
+**停止 RNDIS 模式**：
 
 ```bash
 usb-gadget.sh stop rndis

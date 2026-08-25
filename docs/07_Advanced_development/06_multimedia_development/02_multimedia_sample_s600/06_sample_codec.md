@@ -39,7 +39,7 @@ sample_codec/
 - 进入 sample_codec 目录，执行 `make` 编译
 - 输出成果物是 sample_codec 源码目录下的 `sample_codec`
 
-**提示：** 在示例代码的目录下已经准备了 `1280x720_NV12.yuv`，`1920x1080_NV12.yuv` 和 `640x480_30fps.h264` 资源文件，您可以使用这几个文件快速运行 720P 、 1080P 分辨率的编码示例和 640 x 480 分辨率的 H264 解码示例。如果需要运行其他分辨率的编解码任务，请参考 `codec_config.ini` 的配置增加或者修改配置项，并且准备 input 文件。
+**提示**： 在示例代码的目录下已经准备了 `1280x720_NV12.yuv`，`1920x1080_NV12.yuv` 和 `640x480_30fps.h264` 资源文件，您可以使用这几个文件快速运行 720P 、 1080P 分辨率的编码示例和 640 x 480 分辨率的 H264 解码示例。如果需要运行其他分辨率的编解码任务，请参考 `codec_config.ini` 的配置增加或者修改配置项，并且准备 input 文件。
 ## 运行
 
 ### 程序运行方法
@@ -75,7 +75,7 @@ Examples:
   Display this help message:
     sample_codec -h
 ```
-**选项：**
+**选项**：
 
 - -f, --config_file FILE：指定配置文件的路径（可选），默认值为 `codec_config.ini`。
 - -e, --encode [OPTION]：设置编码选项（可选）。如果使用此选项，则会覆盖配置文件中的 `encode_streams` 选项。

@@ -349,7 +349,7 @@ all_in_one_signed.zst.tar       #secure 升级包文件
     sudo ./pack_image.sh -l
     ```
 
-**注意：**
+**注意**：
 - 打包生成的 OTA 包默认命名为 all_in_one_xxx。升级程序会对包名进行校验，包名中必须包含 "all_in_one" 关键字。此外，包名中不得包含以下关键字："app"、"APP"、"middleware"、"param"。
 
 ### OTA 升级包介绍

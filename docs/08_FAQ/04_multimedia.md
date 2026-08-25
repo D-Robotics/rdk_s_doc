@@ -13,36 +13,36 @@ description: "多媒体处理与应用 常见问题与排查"
 ### Q1: 开发板解码 RTSP 视频流时报错（如下图所示），可能是什么原因？
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/multimedia/image-20220728110439753.png" alt="RTSP 解码报错图片 " style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 **A:** RTSP 视频流解码报错，常见原因及解决方法如下：
-1.  **码流缺少 PPS 和 SPS 参数信息：**
-    * **原因：** 推流服务器推送的 RTSP 码流（尤其是 H.264 格式）中必须包含 `PPS` (Picture Parameter Set) 和 `SPS` (Sequence Parameter Set) 参数信息，解码器需要这些信息来正确解析视频。
-    * **解决方法：**
+1.  **码流缺少 PPS 和 SPS 参数信息**：
+    * **原因**： 推流服务器推送的 RTSP 码流（尤其是 H.264 格式）中必须包含 `PPS` (Picture Parameter Set) 和 `SPS` (Sequence Parameter Set) 参数信息，解码器需要这些信息来正确解析视频。
+    * **解决方法**：
         * 如果您使用 `ffmpeg` 从视频文件（如 `.mp4`, `.avi`）推流，建议在命令中添加 `-bsf:v h264_mp4toannexb` (H.264 Bitstream Filter: MP4 to Annex B) 选项（注意：较新版本的 ffmpeg 中 `-vbsf` 已被 `-bsf:v` 替代）。这个过滤器会自动为码流添加 `PPS` 和 `SPS` 信息。
-            **`ffmpeg`推流命令示例：**
+            **`ffmpeg`推流命令示例**：
             ```
             ffmpeg -re -stream_loop -1 -i xxx.mp4 -c:v copy -bsf:v h264_mp4toannexb -f rtsp rtsp://192.168.1.195:8554/h264_stream
             ```
             ( 请将 `xxx.mp4` 替换为您的视频文件名，并将 RTSP 服务器地址 `rtsp://192.168.1.195:8554/h264_stream` 替换为实际地址。)
-2.  **分辨率支持限制：**
+2.  **分辨率支持限制**：
     * 目前 RDK 板卡对 RTSP 视频流的解码可能仅支持到特定的分辨率，例如 **1080p (1920x1080)**。请确认您的 RTSP 流分辨率是否在此支持范围内。查阅您板卡型号的具体文档以获取准确支持列表。
-3.  **推流软件兼容性：**
-    * **不推荐使用 VLC 直接推流：** 使用 VLC 软件直接进行 RTSP 推流可能无法成功被 RDK 解码，原因是 VLC 在某些配置下可能不支持在推流时主动添加或确保 `PPS` 和 `SPS` 信息。建议使用 `ffmpeg` 或其他能确保码流参数完整性的专业推流工具。
+3.  **推流软件兼容性**：
+    * **不推荐使用 VLC 直接推流**： 使用 VLC 软件直接进行 RTSP 推流可能无法成功被 RDK 解码，原因是 VLC 在某些配置下可能不支持在推流时主动添加或确保 `PPS` 和 `SPS` 信息。建议使用 `ffmpeg` 或其他能确保码流参数完整性的专业推流工具。
 
 ## 音频常见问题
 
 ### Q2: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
 **A:** `tinyalsa` 是一个轻量级的音频库，主要用于 Android 和嵌入式 Linux 系统。它提供了对 ALSA（ Advanced Linux Sound Architecture）的简化接口，便于开发者进行音频处理。
 以下是一些常用的 `tinyalsa` 命令及其参数含义：
-1.  **列出所有声卡：**
+1.  **列出所有声卡**：
     ```bash
     tinymix -l
     ```
     这个命令会列出系统中所有已识别的声卡及其控件。如果 `tinymix -l` 命令没有生效，可以直接 `cat /proc/asound/cards` 检查。
-2.  **列出特定声卡的控件：**
+2.  **列出特定声卡的控件**：
     ```bash
     tinymix -c <card_number> -l
     ```
     其中 `<card_number>` 是声卡的序号。这个命令会列出指定声卡的所有控件。在不同的 tinymix 版本，需要使用的命令不一定一样，可以尝试使用 `tinymix -D <card_number> controls` 等命令。
-3.  **获取特定控件的值：**
+3.  **获取特定控件的值**：
     ```bash
     tinymix -c <card_number> <control_name>
     ```
@@ -51,7 +51,7 @@ description: "多媒体处理与应用 常见问题与排查"
     tinymix -c 0 'ADC PGA Gain'
     ```
     这将显示声卡 0 上名为 `ADC PGA Gain` 的控件的当前值。
-4.  **设置特定控件的值：**
+4.  **设置特定控件的值**：
     ```bash
     tinymix -c <card_number> <control_name> <value>
     ```
@@ -60,12 +60,12 @@ description: "多媒体处理与应用 常见问题与排查"
     tinymix -c 0 'ADC PGA Gain' 80%
     ```
     这将把声卡 0 上名为 `ADC PGA Gain` 的控件设置为 80%。
-5.  **查看当前音频状态：**
+5.  **查看当前音频状态**：
     ```bash
     tinymix -c <card_number> -s
     ```
     这个命令会显示指定声卡的当前音频状态，包括所有控件的当前值。
-6.  **播放音频文件：**
+6.  **播放音频文件**：
      ```bash
     tinyplay <file_name>
     ```
@@ -75,7 +75,7 @@ description: "多媒体处理与应用 常见问题与排查"
     tinyplay /path/to/audio.wav
     ```
     这将播放指定的音频文件。
-7.  **录制音频：**
+7.  **录制音频**：
     ```bash
     tinycap <file_name> -D <card_number> -d <device_number> -c <channels> -b <bit_depth> -r <sample_rate> -p <period_size> -n <periods> -t <duration>
     ```
@@ -89,7 +89,7 @@ description: "多媒体处理与应用 常见问题与排查"
     - `-p <period_size>`: 指定每个周期的大小（以帧为单位）。
     - `-n <periods>`: 指定周期数。
     - `-t <duration>`: 指定录音持续时间（以秒为单位）。
-    - **示例：**
+    - **示例**：
     ```bash
     tinycap ./recorded_audio.wav -D 0 -d 1 -c 2 -b 16 -r 48000 -p 512 -n 4 -t 5
     ```
@@ -98,12 +98,12 @@ description: "多媒体处理与应用 常见问题与排查"
 ### Q3: RDK 板卡上如何区分和使用 USB 声卡与板载声卡？特别是当同时连接了多种音频设备时。
 **A:** 当 RDK 板卡上同时连接了板载声卡（例如通过音频子板）和 USB 声卡时， Linux 音频系统（ ALSA）会为它们分配不同的声卡序号。您需要知道正确的声卡序号才能精确控制特定的音频设备。
 
-1.  **查看已识别的声卡及其序号：**
+1.  **查看已识别的声卡及其序号**：
     使用以下命令可以列出系统中所有已识别的声卡及其对应的序号和名称：
     ```bash
     cat /proc/asound/cards
     ```
-    **示例输出 (假设 USB 声卡先注册，板载声卡后注册)：**
+    **示例输出 (假设 USB 声卡先注册，板载声卡后注册)**：
     ```text
      0 [RC08          ]: USB-Audio - ROCWARE RC08
                           ROCWARE RC08 at usb-xhci-hcd.2.auto-1.2, high speed
@@ -113,17 +113,17 @@ description: "多媒体处理与应用 常见问题与排查"
     在这个示例中：
     * USB 声卡 `ROCWARE RC08` 被分配为声卡序号 **0**。
     * 板载声卡 `duplexaudio` (这通常是 RDK 音频子板的名称) 被分配为声卡序号 **1**。
-    * **注意：** 声卡序号的分配顺序可能因设备插入顺序、驱动加载顺序等因素而变化。如果 USB 声卡是在系统启动后插入的，它可能会获得一个较大的序号。
+    * **注意**： 声卡序号的分配顺序可能因设备插入顺序、驱动加载顺序等因素而变化。如果 USB 声卡是在系统启动后插入的，它可能会获得一个较大的序号。
 
-2.  **使用 `amixer` 或 `tinymix` 指定声卡进行操作：**
+2.  **使用 `amixer` 或 `tinymix` 指定声卡进行操作**：
     * 当您使用 `amixer` (ALSA Mixer command-line utility) 或 `tinymix` 等工具来查看或调整音频参数时，如果不指定声卡（ card）和设备（ device）编号，它们通常会默认操作序号为 0 的声卡。
     * 要操作特定的声卡，需要使用 `-c <card_number>` ( 或 `-c<card_number>`) 参数指定声卡序号，以及可能需要的 `-D hw:<card_number>` 或 `-d <device_number>` 参数。
-    * **查看特定声卡（如上述示例中的板载声卡，序号为1）的控件 (controls)：**
+    * **查看特定声卡（如上述示例中的板载声卡，序号为1）的控件 (controls)**：
         ```bash
         amixer -c 1 controls
         # 或者使用硬件设备名 : amixer -D hw:1 controls
         ```
-    * **获取或设置特定声卡上控件的值 (例如，获取板载声卡序号1上名为 'ADC PGA Gain' 的第一个控件的值)：**
+    * **获取或设置特定声卡上控件的值 (例如，获取板载声卡序号1上名为 'ADC PGA Gain' 的第一个控件的值)**：
         ```bash
         amixer -c 1 sget 'ADC PGA Gain',0
         ```

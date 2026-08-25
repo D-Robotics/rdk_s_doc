@@ -422,7 +422,7 @@ RDK S600的分区定义文件保存在`source/bootloader/device/rdk/s600/partiti
 
 ### 配置文件说明
 整体分区表的配置分为全局共享配置和分区单独配置，其中全局共享配置放在"global"字段中，这是对所有分区都有效的配置。
-**支持的全局参数：**
+**支持的全局参数**：
 - `antirollbackUpdate_host`：是否更新 host 的 anti-rollback 版本，true 或 false；
 - `antirollbackUpdate_hsm`：是否更新 hsm 的 anti-rollback 版本，true 或 false；
 - `ab_sync`：地瓜内部 reserved 字段；
@@ -484,7 +484,7 @@ RDK S600的分区定义文件保存在`source/bootloader/device/rdk/s600/partiti
 	}
 }
 ```
-**支持的分区参数：**
+**支持的分区参数**：
 - `depends`：表示分区依赖关系，当前分区的制作需要依赖哪些分区制作完成，列表的形式，在其中添加依赖的分区名；
 - `components`：表示当前分区需要包含哪些内容，可以是子镜像路径或文件目录，文件目录会做成文件系统，当前支持的文件系统有 ext4和 fat16，在路径后使用":"表示当前这一部分在分区中所占的大小。子镜像可以为多个，子镜像建议放在 out/xxx/deploy 下的对应分区的目录中；
 - `components_nose`：非安全启动镜像组件；

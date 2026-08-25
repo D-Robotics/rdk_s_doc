@@ -725,7 +725,7 @@ uvc_capture_sample
 
 #### 程序参数选项说明
 
-**选项：**
+**选项**：
 
 - `-i, --video_id <id>`
   - 指定对应的 video 的节点，比如 video0、video1。
@@ -744,7 +744,7 @@ uvc_capture_sample
 - `-h, --help`
   - 显示帮助信息。
 
-**示例：**
+**示例**：
 
 - 配置一条 uvc camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像。
 

@@ -104,7 +104,7 @@ mv coremark.exe coremark_O3_multi
 
 </DocScope>
 
-**检测 CPU 工作频率与温度：**
+**检测 CPU 工作频率与温度**：
 使用命令 hrut_somstatus 来查看 CPU、MCU、BPU 等模块的频率与温度信息：
 
 <DocScope products="RDK S100">
@@ -161,7 +161,7 @@ bpu status information---->
 
 </DocScope>
 
-**手动设置 CPU 频率：**
+**手动设置 CPU 频率**：
 
 <DocScope products="RDK S100">
 
@@ -304,7 +304,7 @@ CoreMark 1.0 : 320684.126136 / GCC13.3.0 -O3 -funroll-all-loops -static --param 
 
 </DocScope>
 
-**结果参数解析说明：**
+**结果参数解析说明**：
 
 - **`CoreMark Size`**：表示 CoreMark 基准测试的代码和数据大小，单位是字节。
 - **`Total ticks`**：表示测试过程中 CPU 使用的总时钟周期数。

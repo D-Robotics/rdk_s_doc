@@ -212,7 +212,7 @@ genereate_bin [-c json_config_file] [-o output_file]
 
 #### 程序参数选项说明
 
-**选项：**
+**选项**：
 
 - `[-c json_config_file]`：指定配置 GDC 的模块的 json 参数文件（可选），默认为 `./gdc_bin_custom_config.json`。
 

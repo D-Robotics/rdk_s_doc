@@ -40,8 +40,8 @@ RDK S600 系统提供了两个默认账户：
 
 </DocScope>
 
-- **普通用户：** 用户名 `sunrise`，密码 `sunrise`
-- **超级用户（root）：** 用户名 `root`，密码 `root`
+- **普通用户**： 用户名 `sunrise`，密码 `sunrise`
+- **超级用户（root）**： 用户名 `root`，密码 `root`
 
 ## 连接 Wi-Fi
 
@@ -165,7 +165,7 @@ sudo vim /usr/lib/systemd/system/serial-getty@ttyS0.service
 ExecStart=-/sbin/agetty --autologin root -o '-p -- \\u' --keep-baud 921600,115200,57600,38400,9600 - $TERM
 ```
 
-**参数解释：** `--autologin root` 用于指定自动登录的用户名（也可写作 `-a root`）。
+**参数解释**： `--autologin root` 用于指定自动登录的用户名（也可写作 `-a root`）。
 
 3. 重启后用户将自动登录。
 

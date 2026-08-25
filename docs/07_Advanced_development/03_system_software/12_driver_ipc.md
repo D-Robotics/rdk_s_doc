@@ -250,7 +250,7 @@ Sample 中 Acore 与 MCU 通过共享内存传输数据，通过 mailbox 中断�
 
 ### Acore 侧 Sample 代码位置与目录结构
 
-**代码路径：**
+**代码路径**：
 ```bash
 # Sample源码路径
 ${SDK}/source/hobot-io-samples/debian/app/ipcbox_sample  # ipc C++  Sample
@@ -263,7 +263,7 @@ ${S100}/app/ipcbox_sample
 ${S100}/app/pyhbipchal_sample
 ```
 
-**目录结构：**
+**目录结构**：
 
 ```bash
 root@ubuntu:/app/ipcbox_sample# tree .

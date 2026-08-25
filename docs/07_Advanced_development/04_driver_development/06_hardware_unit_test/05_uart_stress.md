@@ -36,7 +36,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### 测试内容
 
-**1. 测试过程：**
+**1. 测试过程**：
 `uartstress.sh` 脚本使用的回环测试（ Loopback Test）是串口测试中常见的一种方法，其原理是将发送端的数据通过物理连接或其他方式发送回接收端，从而验证数据传输的正常与否。在源码 `uart_test.c` 中， `perform_single_loopback_test()` 函数实现了这种测试。其步骤如下：
 
 - 打开串口并设置相关参数 `open_uart()`。
@@ -47,7 +47,7 @@ import DocScope from '@site/src/components/DocScope';
   - 数据检查线程负责比较接收到的数据与发送的数据是否一致。
 - 当所有线程都完成工作时， `pthread_join()` 等待所有线程结束，然后结束测试。
 
-**2. 命令解析：**
+**2. 命令解析**：
 
 - 测试命令：`uart_test" -l -s 1024 -c "$StressCount" -b "$Baudrate" -d "$Device" > "$uart_test_log_file"`
 - 参数解析：
@@ -83,7 +83,7 @@ Options:
 - `-c <count>`：指定了测试的压力次数，默认值是 100 。
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
 
-**示例：**
+**示例**：
 例如，使用命令： `./uartstress.sh -b 115200 -d /dev/ttyS2 -c 50 -o /app/chip_base_test` 自定义波特率为 115200 ，串口设备为 ttyS2( 与实际使用 uart 对应 )，循环次数为 50 次，输出目录为 /app/chip_base_test 。
 
 ### 执行程序使用说明

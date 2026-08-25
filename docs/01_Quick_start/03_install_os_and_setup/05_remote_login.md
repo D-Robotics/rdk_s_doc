@@ -26,8 +26,8 @@ import DocScope from '@site/src/components/DocScope';
 
 系统提供了两个默认账户，方便用户首次使用：
 
-- **普通用户：** 用户名 `sunrise`，密码 `sunrise`
-- **超级用户（root）：** 用户名 `root`，密码 `root`
+- **普通用户**： 用户名 `sunrise`，密码 `sunrise`
+- **超级用户（root）**： 用户名 `root`，密码 `root`
 
 :::tip
 通过网络方式远程登录前，开发板需要通过有线以太网或者无线 Wi-Fi 方式接入网络，配置好开发板 IP 地址。对于两种连接方式下的 IP 地址信息可参考如下描述：

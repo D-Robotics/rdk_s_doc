@@ -70,11 +70,11 @@ ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000
 
 ### 使用说明
 
-1. **编辑配置文件：**
+1. **编辑配置文件**：
    打开并编辑 `config/config.ini` 文件，根据需要调整每个测试项的 `Status` 值：
    - 设置为 `enabled`：启用测试项。
    - 设置为 `disabled`：禁用测试项。
-2. **修改测试参数：**
+2. **修改测试参数**：
    根据实际需求，调整 `ExecStart` 中的命令和参数。例如：
    - 修改测试时长（如 `-t 24h` 表示测试持续 24 小时）。
    - 调整设备路径（如 `/dev/ttyS2` 或 `/dev/spidev0.0`）。
@@ -121,7 +121,7 @@ ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000
 
 用户可以通过以下两种方式更改日志的保存位置：
 
-1. **移动目录：**
+1. **移动目录**：
     日志默认保存在 `chip_base_test` 目录下。用户只需将整个 `chip_base_test` 目录移动到新的位置，例如：
 
    ```bash

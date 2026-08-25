@@ -12,16 +12,16 @@ description: "应用开发、编译与示例 常见问题与排查"
 
 ### Q1: 第三方库在 RDK 上的安装/交叉编译和使用方法是怎样的？
 **A:**
-* **板端直接安装：** 如果第三方库提供了适用于 ARM 架构的预编译包（例如 `.deb` 文件），或者可以通过包管理器（如 `apt`）直接安装，那么可以在 RDK 板卡上直接进行安装。对于 Python 库，如果 Pypi 上有对应的 arm64 wheels 包，也可以直接 `pip install`。
-* **交叉编译：** 如果第三方库需要从源码编译，推荐在 PC 开发主机上进行交叉编译，然后将编译产物部署到 RDK 板卡上。
-    * **环境部署：** 详细的交叉编译环境搭建步骤，请参考地瓜开发者社区的教程：[交叉编译环境部署](https://developer.d-robotics.cc/forumDetail/112555549341653662)
-    * **编译步骤：** 通常需要配置 CMake Toolchain 文件，指定交叉编译器、目标系统 Sysroot 等。
+* **板端直接安装**： 如果第三方库提供了适用于 ARM 架构的预编译包（例如 `.deb` 文件），或者可以通过包管理器（如 `apt`）直接安装，那么可以在 RDK 板卡上直接进行安装。对于 Python 库，如果 Pypi 上有对应的 arm64 wheels 包，也可以直接 `pip install`。
+* **交叉编译**： 如果第三方库需要从源码编译，推荐在 PC 开发主机上进行交叉编译，然后将编译产物部署到 RDK 板卡上。
+    * **环境部署**： 详细的交叉编译环境搭建步骤，请参考地瓜开发者社区的教程：[交叉编译环境部署](https://developer.d-robotics.cc/forumDetail/112555549341653662)
+    * **编译步骤**： 通常需要配置 CMake Toolchain 文件，指定交叉编译器、目标系统 Sysroot 等。
 
 ### Q2: 在编译大型程序（如 C++项目、ROS 功能包）的过程中，如果系统提示编译进程被“kill”或出现内存不足相关的错误日志，应该如何解决？
 **A:** 编译大型项目时，如果物理内存不足，Linux 系统的 OOM (Out Of Memory) killer 机制可能会杀死消耗内存最多的进程（通常是编译器进程如`cc1plus`、`ld`等），导致编译失败。
-**解决方法：** 增加系统的交换空间 (Swap)。Swap 是硬盘上的一块区域，当物理内存不足时，系统可以将部分不常用的内存数据暂时存放到 Swap 中，从而释放物理内存供当前任务使用。虽然 Swap 比物理内存慢，但可以有效防止因瞬时内存不足导致的编译失败。
+**解决方法**： 增加系统的交换空间 (Swap)。Swap 是硬盘上的一块区域，当物理内存不足时，系统可以将部分不常用的内存数据暂时存放到 Swap 中，从而释放物理内存供当前任务使用。虽然 Swap 比物理内存慢，但可以有效防止因瞬时内存不足导致的编译失败。
 
-**增加 Swap 空间的步骤示例 (创建一个1GB 的 Swap 文件)：**
+**增加 Swap 空间的步骤示例 (创建一个1GB 的 Swap 文件)**：
 ```bash
 ## 1. （可选）创建一个目录用于存放Swap文件，或者直接在根目录创建
 sudo mkdir -p /swapfile_custom_dir 
@@ -44,18 +44,18 @@ free -h
 swapon --show
 ```
 
-**使其开机自动挂载 (可选但推荐)：**
+**使其开机自动挂载 (可选但推荐)**：
 编辑 `/etc/fstab` 文件，在末尾添加一行（假设您的 swap 文件路径是`/swapfile_custom_dir/swap`）：
 ```bash
 /swapfile_custom_dir/swap none swap sw 0 0
 ```
 
-**参考教程：** [Swap使用教程](https://developer.d-robotics.cc/forumDetail/98129467158916281)
+**参考教程**： [Swap使用教程](https://developer.d-robotics.cc/forumDetail/98129467158916281)
 
 ### Q3: 如何运行 GC4663 MIPI 摄像头的示例程序？
 **A:** 地瓜机器人官方通常会提供基于常见 MIPI 摄像头（如 F37、GC4663）的 智能 算法示例（例如 FCOS 目标检测）。这些示例一般会自动检测连接的摄像头型号并进行算法推理。
 
-**运行步骤示例 (以 `/app/ai_inference/03_mipi_camera_sample` 为例)：**
+**运行步骤示例 (以 `/app/ai_inference/03_mipi_camera_sample` 为例)**：
 1.  确保 GC4663（或其他兼容的 MIPI 摄像头）已正确连接到 RDK 板卡的 MIPI CSI 接口，并且板卡已上电。
 2.  通过 SSH 或串口登录到板卡系统。
 3.  进入示例程序所在的目录：
@@ -71,41 +71,41 @@ swapon --show
 
 ### Q4: 使用`rqt_image_view`查看 RDK 通过 ROS 发布的 RGB888 RAW 图像时，感觉非常卡顿，甚至无法接收图像，是什么原因？
 **A:** 这个问题通常与 ROS2中间件 DDS 的配置以及网络传输效率有关，特别是当传输未压缩的大尺寸原始图像数据时。
-* **原因分析：**
+* **原因分析**：
     * 默认的 FastDDS 在 UDP 协议层可能没有实现有效的 MTU（最大传输单元）分片。当发布的图像数据包大小超过网络路径上的 MTU 时，IP 层会进行分片。
     * 大量的 IP 分片对许多常见的路由器、交换机或网卡来说处理负担较重，可能导致无法有效缓冲所有分片。
     * 在 UDP 传输中，如果任何一个 IP 分片丢失，整个 UDP 包（即整个图像帧）通常就会被丢弃，或者需要等待重传（如果上层有相关机制，但 ROS 图像话题通常不保证可靠传输），这会导致严重的卡顿或图像丢失。这种情况有时被称为“IP fragmentation attack”的类似表现，即大量分片导致网络拥堵和丢包。
-* **解决方法：**
-    1.  **更换 DDS 实现：** 尝试将 ROS2的 RMW (ROS Middleware) 实现从默认的`rmw_fastrtps_cpp`切换到`rmw_cyclonedds_cpp`。CycloneDDS 在处理大数据包和网络分片方面有时表现更优。
+* **解决方法**：
+    1.  **更换 DDS 实现**： 尝试将 ROS2的 RMW (ROS Middleware) 实现从默认的`rmw_fastrtps_cpp`切换到`rmw_cyclonedds_cpp`。CycloneDDS 在处理大数据包和网络分片方面有时表现更优。
         在终端执行以下命令来切换 DDS（仅对当前终端会话有效，或可加入到`.bashrc`）：
         ```bash
         export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
         ```
         然后重新启动您的 ROS 节点。
-    2.  **降低传输数据量：**
-        * **发送压缩格式图像：** 考虑在 RDK 板卡端将原始图像（如 RGB888）压缩为 JPEG 或 PNG 等格式后再通过 ROS 话题发布。这会显著减小每帧图像的数据量。您可以在 PC 端订阅压缩图像话题，并由`rqt_image_view`（或自定义节点）进行解压显示。
-        * **降低分辨率或帧率：** 如果应用允许，适当降低发布图像的分辨率或帧率也能有效减少网络负担。
+    2.  **降低传输数据量**：
+        * **发送压缩格式图像**： 考虑在 RDK 板卡端将原始图像（如 RGB888）压缩为 JPEG 或 PNG 等格式后再通过 ROS 话题发布。这会显著减小每帧图像的数据量。您可以在 PC 端订阅压缩图像话题，并由`rqt_image_view`（或自定义节点）进行解压显示。
+        * **降低分辨率或帧率**： 如果应用允许，适当降低发布图像的分辨率或帧率也能有效减少网络负担。
 
 ### Q5: 地瓜机器人提供的 Linux 镜像（特指经过最小裁剪的系统，非完整 Ubuntu Desktop/Server）是否支持在板卡端直接进行编译操作？
 **A:** 地瓜机器人为 RDK 提供的部分 Linux 镜像，特别是那些为嵌入式部署而经过最小化裁剪的 rootfs（根文件系统），可能**不包含**完整的编译工具链（如 GCC, G++, make, CMake 等）和开发所需的头文件、库文件。
-* **结论：** 这类最小化 Linux 镜像通常**无法支持或不适合**在板卡端直接进行复杂的源码编译工作。
-* **推荐做法：** 对于需要在 RDK 上运行的应用程序，推荐采用**交叉编译**的方式。即在 PC 开发主机（如 Ubuntu PC）上配置好针对 RDK 目标平台的交叉编译环境，在 PC 上完成编译后，再将生成的可执行文件和相关依赖部署到 RDK 板卡上运行。
+* **结论**： 这类最小化 Linux 镜像通常**无法支持或不适合**在板卡端直接进行复杂的源码编译工作。
+* **推荐做法**： 对于需要在 RDK 上运行的应用程序，推荐采用**交叉编译**的方式。即在 PC 开发主机（如 Ubuntu PC）上配置好针对 RDK 目标平台的交叉编译环境，在 PC 上完成编译后，再将生成的可执行文件和相关依赖部署到 RDK 板卡上运行。
 
 ### Q6: 在地瓜机器人提供的最小化 Linux 镜像上如何运行官方手册中提供的示例（这些示例通常以 Ubuntu 系统环境为例）？
 **A:** 官方手册中的示例（尤其是 TROS/ROS 相关的示例）通常是在功能更完整的 Ubuntu 系统环境下演示的。要在最小化的 Linux 镜像（可能没有预装 Python 解释器或完整的 ROS 环境）上运行这些示例（特别是 C++编写的 ROS 节点），需要做一些调整：
 
-* **Ubuntu 系统与 Linux 镜像启动示例的差异：**
-    * **环境配置：**
-        * **Ubuntu 系统：** 通常使用 `source /opt/tros/setup.bash` (或对应 ROS 版本的 setup.bash) 来配置 TROS/ROS 环境，这个脚本会设置大量的环境变量（如`PATH`, `LD_LIBRARY_PATH`, `AMENT_PREFIX_PATH`等）。
-        * **Linux 镜像：** 可能需要手动设置关键的环境变量，特别是 `LD_LIBRARY_PATH` 以确保程序能找到所需的共享库。日志路径 `ROS_LOG_DIR` 也可能需要手动指定到一个可写的位置。
-    * **配置文件拷贝：** 无论哪种系统，运行示例前通常都需要将示例依赖的配置文件（如模型配置、参数文件等）从 TROS/ROS 安装路径下拷贝到当前工作目录或指定路径。
-    * **启动方式：**
-        * **Ubuntu 系统：** 常使用 `ros2 run <package_name> <executable_name>` 或 `ros2 launch <package_name> <launch_file_name>` 来启动节点或启动文件。
-        * **Linux 镜像：** 由于可能没有完整的`ros2`命令行工具或 launch 系统，通常需要直接运行编译好的 C++可执行程序，并通过命令行参数的方式传递原本在 launch 文件中设置的参数。
+* **Ubuntu 系统与 Linux 镜像启动示例的差异**：
+    * **环境配置**：
+        * **Ubuntu 系统**： 通常使用 `source /opt/tros/setup.bash` (或对应 ROS 版本的 setup.bash) 来配置 TROS/ROS 环境，这个脚本会设置大量的环境变量（如`PATH`, `LD_LIBRARY_PATH`, `AMENT_PREFIX_PATH`等）。
+        * **Linux 镜像**： 可能需要手动设置关键的环境变量，特别是 `LD_LIBRARY_PATH` 以确保程序能找到所需的共享库。日志路径 `ROS_LOG_DIR` 也可能需要手动指定到一个可写的位置。
+    * **配置文件拷贝**： 无论哪种系统，运行示例前通常都需要将示例依赖的配置文件（如模型配置、参数文件等）从 TROS/ROS 安装路径下拷贝到当前工作目录或指定路径。
+    * **启动方式**：
+        * **Ubuntu 系统**： 常使用 `ros2 run <package_name> <executable_name>` 或 `ros2 launch <package_name> <launch_file_name>` 来启动节点或启动文件。
+        * **Linux 镜像**： 由于可能没有完整的`ros2`命令行工具或 launch 系统，通常需要直接运行编译好的 C++可执行程序，并通过命令行参数的方式传递原本在 launch 文件中设置的参数。
 
-* **将 launch 脚本内容转换为 Linux 镜像上的直接执行命令（以一个 C++的`dnn_node_example`为例）：**
+* **将 launch 脚本内容转换为 Linux 镜像上的直接执行命令（以一个 C++的`dnn_node_example`为例）**：
 
-    1.  **分析 Ubuntu 上的启动命令：**
+    1.  **分析 Ubuntu 上的启动命令**：
         ```bash
         # Ubuntu: 配置tros.b环境
         source /opt/tros/setup.bash
@@ -117,13 +117,13 @@ swapon --show
         ros2 launch dnn_node_example dnn_node_example_feedback.launch.py
         ```
 
-    2.  **找到 launch 脚本并分析其内容：**
-        * **查找 launch 脚本路径：**
+    2.  **找到 launch 脚本并分析其内容**：
+        * **查找 launch 脚本路径**：
             ```bash
             # find /opt/tros/ -name dnn_node_example_feedback.launch.py
             /opt/tros/share/dnn_node_example/launch/dnn_node_example_feedback.launch.py
             ```
-        * **查看 launch 脚本内容 (Python launch file)：**
+        * **查看 launch 脚本内容 (Python launch file)**：
             ```python
             # dnn_node_example_feedback.launch.py (主要内容节选)
             def generate_launch_description():
@@ -164,7 +164,7 @@ swapon --show
             ```
         从 launch 脚本中，我们可以知道它启动了`dnn_node_example`包中的名为`example`的可执行文件，并传递了一系列参数。
 
-    3.  **找到可执行程序路径：**
+    3.  **找到可执行程序路径**：
         在 TROS 安装路径下查找该可执行文件：
         ```bash
         # find /opt/tros/ -name example -executable -type f 
@@ -174,8 +174,8 @@ swapon --show
         ```
         (假设 `TROS_DISTRO` 环境变量在 Linux 镜像上未设置，您需要知道实际的发行版名称，如 `humble` 或 `foxy`)
 
-    4.  **在 Linux 镜像上构造启动命令：**
-        * **配置环境：**
+    4.  **在 Linux 镜像上构造启动命令**：
+        * **配置环境**：
             ```bash
             # 假设TROS库文件位于/opt/tros/humble/lib (具体路径需确认)
             export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/tros/humble/lib/ 
@@ -183,12 +183,12 @@ swapon --show
             export ROS_LOG_DIR=/userdata/  # 或者 /tmp/roslogs/
             mkdir -p $ROS_LOG_DIR
             ```
-        * **拷贝配置文件：** (与 Ubuntu 上类似)
+        * **拷贝配置文件**： (与 Ubuntu 上类似)
             ```bash
             # 例如，对于humble版本:
             cp -r /opt/tros/humble/lib/dnn_node_example/config/ .
             ```
-        * **直接运行可执行程序并传递参数：**
+        * **直接运行可执行程序并传递参数**：
             ROS2节点参数通常通过 `--ros-args -p <param_name>:=<param_value>` 的形式传递。
             ```bash
             /opt/tros/humble/lib/dnn_node_example/example \
@@ -201,7 +201,7 @@ swapon --show
                 --log-level info
             ```
 
-    * **完整的 Linux 镜像上运行示例脚本可能如下：**
+    * **完整的 Linux 镜像上运行示例脚本可能如下**：
         ```bash
         #!/bin/bash
 
@@ -266,7 +266,7 @@ swapon --show
 ### Q7: 如何快速查找 ROS/TROS 中 launch 启动脚本文件的具体路径？
 **A:** 当您知道一个 launch 脚本的文件名（例如 `dnn_node_example.launch.py`），但需要修改它或查看其内容时，可以在 RDK 板卡的 TROS 安装路径（通常是 `/opt/tros/`）下使用 `find` 命令来查找。
 
-**查找示例：**
+**查找示例**：
 ```bash
 ## 查找名为 dnn_node_example.launch.py 的文件
 find /opt/tros/ -name dnn_node_example.launch.py
@@ -275,14 +275,14 @@ find /opt/tros/ -name dnn_node_example.launch.py
 ### Q8: 交叉编译 TogetheROS.Bot (tros.b) 完整源码时速度很慢，有什么方法可以加速吗？
 **A:** 完整编译 tros.b 的所有 package 确实需要较长时间（例如，在8核 CPU、32GB 内存的 PC 上可能需要20分钟左右）。以下是两种加速编译的方法：
 
-1.  **使用最小化编译脚本：**
+1.  **使用最小化编译脚本**：
     * 地瓜机器人提供的 tros.b 编译脚本中，通常除了`all_build.sh`（完整编译）之外，还会提供一个`minimal_build.sh`（最小化编译）的选项。
     * 最小化编译通常会跳过编译算法示例（examples）和测试用例（tests）等非核心功能包，从而显著减少编译时间。
-    * **使用方法：** 在您进行交叉编译配置的步骤中，将原本调用`./robot_dev_config/all_build.sh`的命令替换为调用`./robot_dev_config/minimal_build.sh`。
+    * **使用方法**： 在您进行交叉编译配置的步骤中，将原本调用`./robot_dev_config/all_build.sh`的命令替换为调用`./robot_dev_config/minimal_build.sh`。
 
-2.  **手动忽略不需要编译的 package：**
+2.  **手动忽略不需要编译的 package**：
     * Colcon（ROS2的构建工具）支持通过在特定 package 的源码目录下放置一个名为`COLCON_IGNORE`的空文件来忽略该 package 的编译。
-    * **步骤：**
+    * **步骤**：
         1.  首先，确定您不需要哪些 package。这些 package 的源码通常是在编译前通过`.repos`文件（例如 `robot_dev_config/ros2_release.repos`）下载到`src/`目录下的。
         2.  查看`.repos`文件，找到您想忽略的 package 的源码路径。例如，如果`.repos`文件中有如下配置：
             ```yaml
@@ -310,15 +310,15 @@ find /opt/tros/ -name dnn_node_example.launch.py
     * 如果您需要在不同的 ROS 版本间切换，请为每个版本打开独立的终端会话，并在各自的会话中 source 对应的`setup.bash`文件。
     :::
 
-* **tros.b 与 ROS2 Foxy/Humble 的兼容性：**
+* **tros.b 与 ROS2 Foxy/Humble 的兼容性**：
     * 地瓜机器人的 tros.b 通常是基于某个 ROS2 LTS 版本（如 Foxy 或 Humble）进行构建和优化的，并与之保持 API 接口兼容。这意味着，如果您的 tros.b 是基于 Humble 的，那么您通常可以直接使用为标准 ROS2 Humble 开发的工具和库，而无需再单独安装一遍 ROS2 Humble（除非您需要标准 ROS2 Desktop 完整版中的某些特定工具，而 tros.b 中未包含）。
 
 ### Q10: 使用`colcon build`命令编译 ROS2 package 时报错 `AttributeError: module 'pyparsing' has no attribute 'operatorPrecedence'`，如何解决？
 **A:** 这个错误 `AttributeError: module 'pyparsing' has no attribute 'operatorPrecedence'` 通常是由于系统中安装的`python3-catkin-pkg`（一个用于解析 ROS package.xml 文件的 Python 库）版本过低，而它依赖的`pyparsing`库版本与其不兼容，或者`python3-catkin-pkg`自身的功能不完备导致的。
 
-**解决方法：** 尝试升级`python3-catkin-pkg`到 ROS 官方源提供的较新版本。
+**解决方法**： 尝试升级`python3-catkin-pkg`到 ROS 官方源提供的较新版本。
 
-**步骤如下：**
+**步骤如下**：
 1.  **添加 ROS 官方的 APT 软件源**（如果尚未添加）：
     这一步是为了确保能从 ROS 官方获取到最新兼容的`python3-catkin-pkg`版本。
     ```bash
@@ -333,7 +333,7 @@ find /opt/tros/ -name dnn_node_example.launch.py
     sudo apt remove python3-catkin-pkg
     ```
 
-3.  **更新 APT 缓存并安装新版本的 `python3-catkin-pkg`：**
+3.  **更新 APT 缓存并安装新版本的 `python3-catkin-pkg`**：
     ```bash
     sudo apt update
     sudo apt install python3-catkin-pkg
@@ -348,7 +348,7 @@ find /opt/tros/ -name dnn_node_example.launch.py
 apt show tros
 ```
 
-**示例输出（历史版本 RDK OS 2.x，tros.b 2.0.0）：**
+**示例输出（历史版本 RDK OS 2.x，tros.b 2.0.0）**：
 
 ```bash
 Package: tros
@@ -364,13 +364,13 @@ Description: TogetheROS Bot
 
 ### Q12: 地瓜机器人 tros.b 的1.x 版本和2.x 版本（及更新版本）之间有什么主要说明和差异？
 **A:**
-* **和系统版本、RDK 平台硬件对应关系：**
-    * **2.x 版本 tros.b (及后续如3.x 等)：**
+* **和系统版本、RDK 平台硬件对应关系**：
+    * **2.x 版本 tros.b (及后续如3.x 等)**：
         * 通常仅支持对应大版本的 RDK OS 系统（例如，tros.b 2.x 支持 RDK OS 2.x，均为历史版本）。
         * 支持对应版本 RDK OS 的全系列硬件。
         * 未来 tros.b 的新增功能和主要维护会集中在这些较新的版本上。
         * 代码通常托管在 GitHub 上的 `D-Robotics` 组织下。
-    * **1.x 版本 tros.b：**
+    * **1.x 版本 tros.b**：
         * 属于历史版本。
         * 仅支持较早的1.x 版本 RDK OS 系统和对应硬件。
         * 未来1.x 版本 tros.b 可能仅发布关键问题修复，不再有新功能迭代。
@@ -382,73 +382,73 @@ Description: TogetheROS Bot
     参考：安装对应板卡系统（请参考当前文档站内对应机型安装章节）
     :::
 
-* **功能差异：**
+* **功能差异**：
     * 基础的 ROS2核心功能在兼容版本间是相同的。
     * 地瓜机器人针对其硬件特性优化的功能、新增的特定 package 以及最新的 智能 算法支持等，通常会优先或仅在2.x 及更新版本的 tros.b 中提供。
-* **安装包管理方式不同：**
-    * **1.x 版本 tros.b：** 可能采用一个较大的整体安装包文件。
-    * **2.x 版本 tros.b (及更新版本)：** 通常会根据功能模块将 tros.b 拆分为多个更细粒度的 Debian 软件包（如`tros-ros-base`, `tros-dnn-node`, `tros-mipi-cam`等），用户可以按需安装。对于开发者而言，通过`apt install tros`（元包）或`apt install <specific_tros_package>`来安装，使用体验上差异不大。
-* **使用差异：**
-    * **apt 安装和升级方法：** 基本的`apt`命令使用方式是类似的，但软件源和包名可能会有区别。
-    * **源码编译方法：** 编译流程和工具（如 Colcon）基本一致，但依赖的 ROS2基础版本和特定库版本会有所不同。
-    * **示例的 launch 启动脚本：** 2.x 及更新版本的 tros.b，其示例的 launch 启动脚本文件名、参数、依赖关系等可能进行了优化和调整，与1.x 版本不完全兼容。请务必参考对应 tros.b 版本的手册来运行示例。
+* **安装包管理方式不同**：
+    * **1.x 版本 tros.b**： 可能采用一个较大的整体安装包文件。
+    * **2.x 版本 tros.b (及更新版本)**： 通常会根据功能模块将 tros.b 拆分为多个更细粒度的 Debian 软件包（如`tros-ros-base`, `tros-dnn-node`, `tros-mipi-cam`等），用户可以按需安装。对于开发者而言，通过`apt install tros`（元包）或`apt install <specific_tros_package>`来安装，使用体验上差异不大。
+* **使用差异**：
+    * **apt 安装和升级方法**： 基本的`apt`命令使用方式是类似的，但软件源和包名可能会有区别。
+    * **源码编译方法**： 编译流程和工具（如 Colcon）基本一致，但依赖的 ROS2基础版本和特定库版本会有所不同。
+    * **示例的 launch 启动脚本**： 2.x 及更新版本的 tros.b，其示例的 launch 启动脚本文件名、参数、依赖关系等可能进行了优化和调整，与1.x 版本不完全兼容。请务必参考对应 tros.b 版本的手册来运行示例。
 
 ### Q13: 使用 WEB 浏览器（如 Chrome, Edge, Firefox）通过 IP 地址加端口号（例如 `http://<RDK_IP>:8000`）访问 RDK 上运行的 WEB 服务（如 TROS 的 Websocket 可视化示例）时，页面打开失败，可能是什么原因？
 **A:** 如果浏览器无法打开 RDK 上托管的 WEB 页面，可能的原因如下：
 
-* **Nginx 服务冲突或未正确启动 (针对某些依赖 Nginx 的 WEB 示例)：**
-    * **问题原因：** 如果 RDK 板卡上已经因为其他应用（例如，之前运行过某个不带特定端口号的 WEB 展示示例，它可能已启动了一个全局的 Nginx 服务监听80端口）而启动了 Nginx 服务，那么当您尝试启动一个新的、也想使用 Nginx（或者特定端口）的 WEB 示例时，可能会因为 Nginx 已在运行或端口已被占用而导致新服务无法正常启动或监听在预期端口。
-    * **解决方法：**
-        1.  **检查并停止现有 Nginx 进程：** SSH 登录到 RDK 板卡，使用 `ps aux | grep nginx` 查看是否有 Nginx 进程在运行。如果有，尝试使用 `sudo systemctl stop nginx` (如果是 systemd 服务) 或 `sudo pkill nginx` 来停止它们。
-        2.  **重启 RDK 板卡：** 一个简单粗暴但有效的方法是重启板卡，以确保所有旧的服务进程都已关闭。
+* **Nginx 服务冲突或未正确启动 (针对某些依赖 Nginx 的 WEB 示例)**：
+    * **问题原因**： 如果 RDK 板卡上已经因为其他应用（例如，之前运行过某个不带特定端口号的 WEB 展示示例，它可能已启动了一个全局的 Nginx 服务监听80端口）而启动了 Nginx 服务，那么当您尝试启动一个新的、也想使用 Nginx（或者特定端口）的 WEB 示例时，可能会因为 Nginx 已在运行或端口已被占用而导致新服务无法正常启动或监听在预期端口。
+    * **解决方法**：
+        1.  **检查并停止现有 Nginx 进程**： SSH 登录到 RDK 板卡，使用 `ps aux | grep nginx` 查看是否有 Nginx 进程在运行。如果有，尝试使用 `sudo systemctl stop nginx` (如果是 systemd 服务) 或 `sudo pkill nginx` 来停止它们。
+        2.  **重启 RDK 板卡**： 一个简单粗暴但有效的方法是重启板卡，以确保所有旧的服务进程都已关闭。
         3.  然后再重新运行您的目标 WEB 示例。
 
-* **网络连接问题：**
+* **网络连接问题**：
     * 确保您的 PC 和 RDK 板卡在同一局域网内，且网络通畅（PC 能 ping 通 RDK 的 IP 地址）。
     * 检查 RDK 板卡的 IP 地址是否正确。
 
-* **防火墙问题：**
+* **防火墙问题**：
     * PC 端或网络中的防火墙可能阻止了对 RDK 板卡目标端口（如8000）的访问。请检查并配置防火墙规则允许该端口的通信。
     * RDK 板卡自身的防火墙（如`ufw`，虽然默认可能未开启）如果配置不当也可能阻止外部访问。
 
-* **WEB 服务本身未成功启动或监听错误：**
+* **WEB 服务本身未成功启动或监听错误**：
     * SSH 登录到 RDK 板卡，检查您期望运行的 WEB 服务（例如 TROS 的`hobot_websocket`节点或其他 Python HTTP 服务器等）是否真的已经成功启动，并且正在监听您尝试访问的 IP 地址和端口号。
     * 查看该服务在板卡端的日志输出，看是否有报错信息。
     * 使用 `netstat -tulnp | grep <端口号>` (例如 `netstat -tulnp | grep 8000`) 命令在板卡上查看该端口是否真的处于 LISTEN 状态。
 
-* **浏览器缓存或代理问题：**
+* **浏览器缓存或代理问题**：
     * 尝试清除浏览器缓存或使用浏览器的隐身/无痕模式访问。
     * 如果您 PC 的网络配置中使用了代理服务器，请检查代理设置是否影响了对局域网内 IP 的直接访问。
 
 ### Q14: 通过 WEB 浏览器访问 TROS 的 Websocket 可视化示例时，只显示摄像头图像，但没有 智能 感知结果（如检测框、骨骼点等）被渲染出来，是什么原因？
 **A:** 如果 Websocket 可视化页面能显示图像但没有 智能 结果，通常表示图像数据流是通畅的，但 智能 结果数据流可能存在问题，或者前端渲染逻辑未被正确触发。
 
-1.  **检查 Web Node 启动命令参数：**
+1.  **检查 Web Node 启动命令参数**：
     * 许多 TROS 的 Websocket 节点（如`hobot_websocket`）在启动时可以通过参数来控制是否渲染 智能 感知结果。请仔细检查您启动该节点的`ros2 launch`或`ros2 run`命令，确保相关的参数（例如，可能是类似 `display_ai_results:=true` 或 `render_perception:=true` 的参数）已正确设置以开启感知结果的渲染。
     * 具体参数名称和用法，请查阅对应 Websocket 包（如`hobot_websocket`）的 README 文档或 launch 文件。例如：[hobot_websocket README 参数说明](https://github.com/D-Robotics/hobot_websocket#%E5%8F%82%E6%95%B0)
 
-2.  **检查 Web Node 启动终端的日志：**
+2.  **检查 Web Node 启动终端的日志**：
     * 在 RDK 板卡上启动 Websocket 节点的那个终端窗口中，仔细查看是否有任何错误（ERROR）或警告（WARN）日志输出。这些日志可能会提示 智能 结果处理或发送环节的问题。
 
-3.  **确认是否有 智能 感知结果数据正在发布：**
+3.  **确认是否有 智能 感知结果数据正在发布**：
     * 智能 感知结果（如检测框、姿态点等）通常是通过另外的 ROS 话题发布的（例如，类型可能是自定义的 AI 消息 `*_msgs/AiMsg`）。
     * 在一个新的终端中（source 好 TROS 环境后），使用 `ros2 topic list` 查看当前所有活跃的话题列表，确认是否存在发布 智能 感知结果的话题。
     * 如果话题存在，使用 `ros2 topic echo /the_ai_result_topic_name` (请替换为实际的 智能 结果话题名) 来实时查看是否有数据正在该话题上发布。如果长时间没有数据输出，说明上游的 智能 推理节点可能没有正常工作或没有检测到目标。
 
-4.  **检查是否意外启动了多个 Web Node 实例：**
+4.  **检查是否意外启动了多个 Web Node 实例**：
     * 如果因为某些原因，您在板卡上意外地启动了多个 Websocket 节点实例，它们可能会相互干扰，或者浏览器连接到了一个没有正确接收或处理 智能 数据的实例。
     * 在板卡上使用 `ps aux | grep web` (或更具体的进程名) 命令检查是否有多个 Websocket 服务进程在运行。如果有，请使用 `kill <PID>` 命令停止所有多余的 Websocket 进程，然后只启动一个实例。
 
-5.  **前端与后端数据同步或渲染逻辑问题：**
+5.  **前端与后端数据同步或渲染逻辑问题**：
     * 确保 Websocket 服务器（后端，在 RDK 上运行）与浏览器客户端（前端）之间的消息格式和协议版本是匹配的。
     * 检查浏览器开发者工具的控制台（Console）和网络（Network）标签页，看是否有 JavaScript 错误或 Websocket 通信错误。
 
 ### Q15: 在 TROS Humble 版本中如何配置和使用零拷贝（Zero-Copy）数据传输？
 **A:** 零拷贝是一种高效的数据传输机制，它允许数据在 ROS 节点间传递时避免不必要的内存拷贝，从而降低延迟、减少 CPU 占用，特别适用于传输大的数据块如图像。TROS Humble 版本（基于 ROS2 Humble）支持利用 Fast DDS（默认的 DDS 实现之一）的共享内存 (Shared Memory, SHM) 传输特性来实现零拷贝。
 
-**配置步骤 (适用于 Ubuntu 系统和 Linux 系统)：**
+**配置步骤 (适用于 Ubuntu 系统和 Linux 系统)**：
 
-1.  **设置必要的环境变量：**
+1.  **设置必要的环境变量**：
     在运行 ROS 节点的终端中，执行以下命令来配置 Fast DDS 使用共享内存进行传输：
     ```bash
     # 1. 确保RMW实现是Fast DDS (通常Humble默认就是，但显式设置更保险)
@@ -469,7 +469,7 @@ Description: TogetheROS Bot
     * [ROS 2 using Fast DDS middleware](https://fast-dds.docs.eprosima.com/en/latest/fastdds/ros2/ros2.html)
     * 地瓜机器人官方`hobot_shm`包的 README：[hobot_shm README_cn.md](https://github.com/D-Robotics/hobot_shm/blob/develop/README_cn.md) (请访问最新的官方链接)
 
-2.  **启动支持零拷贝的 ROS 节点：**
+2.  **启动支持零拷贝的 ROS 节点**：
     * 发布数据的节点（Publisher）和订阅数据的节点（Subscriber）都需要在其代码中支持并使用借贷消息 API。地瓜机器人官方提供的部分 TROS 包（如`mipi_cam`、`hobot_codec`等）可能已经适配了零拷贝。
     * 例如，启动`mipi_cam`节点发布共享内存图像：
         ```bash
@@ -484,7 +484,7 @@ Description: TogetheROS Bot
         ros2 launch hobot_codec hobot_codec.launch.py codec_in_mode:=shared_mem codec_in_format:=nv12 codec_out_mode:=ros codec_out_format:=jpeg codec_sub_topic:=/hbmem_img codec_pub_topic:=/image_jpeg
         ```
 
-**检查是否成功使用零拷贝：**
+**检查是否成功使用零拷贝**：
 * 当支持零拷贝的发布者和订阅者成功通过共享内存进行通信时，系统会在 `/dev/shm/` 目录下创建一些内存映射文件。您可以通过以下命令查看：
     ```bash
     ls -lthr /dev/shm/fast_datasharing* /dev/shm/fastrtps_*
@@ -496,13 +496,13 @@ Description: TogetheROS Bot
     ```
     输出中应该能看到您的发布者和订阅者进程。
 
-**禁用零拷贝功能：**
+**禁用零拷贝功能**：
 * 如果因某些原因需要禁用零拷贝（例如调试或兼容性问题），可以通过设置以下环境变量来实现，它具有最高优先级：
     ```bash
     export ROS_DISABLE_LOANED_MESSAGES=1
     ```
 * 禁用零拷贝的详细说明参考 ROS2官方文档：[How to disable loaned messages](https://docs.ros.org/en/humble/How-To-Guides/Configure-ZeroCopy-loaned-messages.html#how-to-disable-loaned-messages)
 
-**注意：**
+**注意**：
 * 确保`FASTRTPS_DEFAULT_PROFILES_FILE`指向的 XML 配置文件 (`shm_fastdds.xml`) 内容是正确的，并且确实启用了共享内存传输的相关配置。
 * 零拷贝的成功启用依赖于发布者和订阅者两端都正确支持和配置了借贷消息和共享内存传输。

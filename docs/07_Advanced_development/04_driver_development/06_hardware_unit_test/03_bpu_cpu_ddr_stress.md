@@ -38,7 +38,7 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 - **测试目标**：使用 `stressapptest` 工具模拟高负载环境，进行大量计算、数据处理和内存操作，测试系统在多线程并发任务下的性能。
 - **测试目的**：验证 CPU 在长时间高负载下的稳定性与性能，确保 CPU 和 DDR 能在高负荷运行时维持正常工作，避免崩溃、过热或性能下降等问题。
 
-- **stressapptest CPU 压测原理：** CPU 压测主要通过多线程并发执行一些计算密集型的任务来实现，这些任务包括：计算密集型任务、多线程并行执行等。
+- **stressapptest CPU 压测原理**： CPU 压测主要通过多线程并发执行一些计算密集型的任务来实现，这些任务包括：计算密集型任务、多线程并行执行等。
 	- 线程创建： `stressapptest` 通过 `pthread_create()` 来创建多个线程，每个线程执行计算任务，线程的数量通常由用户通过 -C 参数指定。
 
 	```C
@@ -64,7 +64,7 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 
 	- 线程同步和管理：通过 `pthread_join()` 等函数确保线程的正确执行和同步。
 
-- **stressapptest DDR 压测原理：** DDR 内存的压力测试主要涉及大量的内存分配、访问和数据交换，通过高内存使用、频繁的内存读写操作以及内存带宽的消耗来进行。
+- **stressapptest DDR 压测原理**： DDR 内存的压力测试主要涉及大量的内存分配、访问和数据交换，通过高内存使用、频繁的内存读写操作以及内存带宽的消耗来进行。
 	- 内存分配：在内存压力测试中，`stressapptest` 会根据 `-M` 参数（例如 `-M 8192`）来分配指定大小的内存。
 
 	```C
@@ -92,7 +92,7 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 
 	- 线程访问内存：`stressapptest` 使用多线程并发对内存进行访问，模拟高负载下内存的使用情况。
 
-- **命令分析：** 压测脚本内部对 `stressapptest` 的调用：`stressapptest -s "$stime" -M "$memory_size" -f /tmp/sat.io1 -f /tmp/sat.io2 -i "$io_threads" -m 8 -C 2 -W`
+- **命令分析**： 压测脚本内部对 `stressapptest` 的调用：`stressapptest -s "$stime" -M "$memory_size" -f /tmp/sat.io1 -f /tmp/sat.io2 -i "$io_threads" -m 8 -C 2 -W`
 	- `-s "$stime"`：测试持续时间。
 	- `-M "$memory_size"`：内存使用量（控制 `malloc` 分配大小）。
 	- `-f /tmp/sat.io1 -f /tmp/sat.io2`：用于 I/O 测试的文件。
@@ -105,16 +105,16 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 
 <DocScope products="RDK S100">
 
-- **测试目标：** 通过 `run.sh` 脚本调用 `bpu_os_test` 工具，用 `-r` 参数控制 BPU 负载比例（5~100%），在指定负载场景下持续推理 YOLOv3 模型，确保 BPU 在高负载下稳定工作并达到预期性能。
-- **测试目的：** 确保 BPU 在执行计算任务时能够输出正确结果，长时间高负载运行下不出现崩溃或错误。
+- **测试目标**： 通过 `run.sh` 脚本调用 `bpu_os_test` 工具，用 `-r` 参数控制 BPU 负载比例（5~100%），在指定负载场景下持续推理 YOLOv3 模型，确保 BPU 在高负载下稳定工作并达到预期性能。
+- **测试目的**： 确保 BPU 在执行计算任务时能够输出正确结果，长时间高负载运行下不出现崩溃或错误。
 
-- **bpu_os_test BPU 压测原理：** 通过加载包含大量计算任务的 YOLOv3 模型，利用 BPU 的 **group proportion 机制**调度推理任务，使 BPU 占用率稳定在指定比例。工作流程：
+- **bpu_os_test BPU 压测原理**： 通过加载包含大量计算任务的 YOLOv3 模型，利用 BPU 的 **group proportion 机制**调度推理任务，使 BPU 占用率稳定在指定比例。工作流程：
     1. `stress_test.sh` 包装层解析 `-r <portion>` 参数；
     2. `run.sh` 根据 `portion` 值分档选择线程数（1~8 线程）和 group 分布；
     3. 每个线程调用 `hb_bpu_set_group_proportion()` 设置其所在 group 的 BPU 配额，再通过 `hb_bpu_task_set_group()` 将推理任务绑定到对应 group；
     4. 所有 group 的 proportion 之和即最终的 BPU 占用率。
 
-- **命令分析：** 运行压测脚本后，内部实际执行如下命令（以 `-r 50` 为例）：
+- **命令分析**： 运行压测脚本后，内部实际执行如下命令（以 `-r 50` 为例）：
 
 	```shell
 	bpu_os_test -m ./module/yolov3.hbm \
@@ -140,16 +140,16 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 </DocScope>
 <DocScope products="RDK S600">
 
-- **测试目标：** 通过 `stress_test.sh` 调用 `hrt_model_exec` 工具，用 `-c` 选择要加压的 BPU 核心，持续推理 S600 适配的 HBM 模型（`resnet50_224x224_nv12.hbm`），确保 BPU 在高负载下稳定工作并达到预期性能。
-- **测试目的：** 确保 BPU 在执行推理计算时能够输出正确结果，长时间高负载运行下不出现崩溃或错误。
+- **测试目标**： 通过 `stress_test.sh` 调用 `hrt_model_exec` 工具，用 `-c` 选择要加压的 BPU 核心，持续推理 S600 适配的 HBM 模型（`resnet50_224x224_nv12.hbm`），确保 BPU 在高负载下稳定工作并达到预期性能。
+- **测试目的**： 确保 BPU 在执行推理计算时能够输出正确结果，长时间高负载运行下不出现崩溃或错误。
 
-- **hrt_model_exec BPU 压测原理：** `hrt_model_exec` 是 D-Robotics 官方提供的模型推理 / 性能测试工具，由 `hobot-dnn` 包安装到 `/usr/hobot/bin/`。压测时以 `perf` 子命令启动，用 `--core_id` 一次性指定要加压的 BPU 核列表、`--thread_num` 指定并发推理线程数、`--perf_time` 指定运行时长，使选中的多个核同时满载推理，实现多核稳态加压。`stress_test.sh` 工作流程：
+- **hrt_model_exec BPU 压测原理**： `hrt_model_exec` 是 D-Robotics 官方提供的模型推理 / 性能测试工具，由 `hobot-dnn` 包安装到 `/usr/hobot/bin/`。压测时以 `perf` 子命令启动，用 `--core_id` 一次性指定要加压的 BPU 核列表、`--thread_num` 指定并发推理线程数、`--perf_time` 指定运行时长，使选中的多个核同时满载推理，实现多核稳态加压。`stress_test.sh` 工作流程：
     1. 解析 `-t`（时长）、`-m`（内存大小）、`-i`（I/O 线程）、`-c <cores>`（要压的 BPU 核心列表，缺省为 `1,2,3,4`）；
     2. 后台启动 `stressapptest` 跑 CPU/DDR 后，启动**单个** `hrt_model_exec perf` 进程，`--core_id=<cores>` 让推理任务在多核间调度、填满所有选中的核；
     3. 循环采集 BPU 占用率（`/sys/devices/system/bpu/ratio` 及各核 `bpuN/ratio`）与 `hrut_somstatus` 温度/电压/频率，写入 `monitor-stressN.log`；
     4. `stressapptest` 结束后脚本 `SIGTERM` 停止 `hrt_model_exec`，结束测试。
 
-- **命令分析：** 脚本内部对 CPU/DDR 与 BPU 分别执行：
+- **命令分析**： 脚本内部对 CPU/DDR 与 BPU 分别执行：
 
 	```shell
 	# CPU/DDR 压测：stressapptest
@@ -264,7 +264,7 @@ Example:
 S100 平台只有一个 BPU core（可通过 `cat /sys/devices/system/bpu/core_num` 确认），因此无需提供 BPU 核心选择参数。
 :::
 
-**示例：** `sudo ./stress_test.sh -t 24h -m 200 -i 8 -r 80` 运行一个 24 小时的压力测试，使用 200MB 内存、8 个 I/O 线程、80% 的 BPU 负载。
+**示例**： `sudo ./stress_test.sh -t 24h -m 200 -i 8 -r 80` 运行一个 24 小时的压力测试，使用 200MB 内存、8 个 I/O 线程、80% 的 BPU 负载。
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -303,7 +303,7 @@ Examples:
 S600 平台有 4 个 BPU core（可通过 `cat /sys/devices/system/bpu/core_num` 确认）。脚本默认对全部 4 核满载加压；如需只压部分核，用 `-c` 显式指定核列表即可。
 :::
 
-**示例：** `sudo ./stress_test.sh -t 24h -m 200 -i 8` 运行一个 24 小时的压力测试，使用 200MB 内存、8 个 I/O 线程，对全部 4 个 BPU 核满载加压。
+**示例**： `sudo ./stress_test.sh -t 24h -m 200 -i 8` 运行一个 24 小时的压力测试，使用 200MB 内存、8 个 I/O 线程，对全部 4 个 BPU 核满载加压。
 
 </DocScope>
 

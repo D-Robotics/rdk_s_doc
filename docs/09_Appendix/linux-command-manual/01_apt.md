@@ -18,8 +18,8 @@ apt 命令执行需要超级管理员权限(root)。
   apt [options] [command] [package ...]
 ```
 
-- **options：**可选，选项包括 -h（帮助），-y（当安装过程提示选择全部为"yes"），-q（不显示安装的过程）等等。
-- **command：**要进行的操作。
+- **options**：可选，选项包括 -h（帮助），-y（当安装过程提示选择全部为"yes"），-q（不显示安装的过程）等等。
+- **command**：要进行的操作。
 - **package**：安装的包名。
 
 ## 选项说明
@@ -37,19 +37,19 @@ apt 命令执行需要超级管理员权限(root)。
 
 - 更新 apt 软件源数据库：**sudo apt update**
 
-- 更新已安装的软件包：**sudo apt upgrade**
+- 更新已安装的软件包**：sudo apt upgrade**
 
-  列出可更新的软件包及版本信息：**apt list --upgradeable**
+  列出可更新的软件包及版本信息**：apt list --upgradeable**
 
-  升级软件包，升级前先删除需要更新软件包：**sudo apt full-upgrade**
+  升级软件包，升级前先删除需要更新软件包**：sudo apt full-upgrade**
 
-- 安装指定的软件命令：**sudo apt install `package_name`**
+- 安装指定的软件命令**：sudo apt install `package_name`**
 
-  安装多个软件包：**sudo apt install `package_1` `package_2` `package_3`**
+  安装多个软件包**：sudo apt install `package_1` `package_2` `package_3`**
 
 - 显示软件包具体信息,例如：版本号，安装大小，依赖关系等等：**sudo apt show `package_name`**
 
-- 删除软件包命令：**sudo apt remove `package_name`**
+- 删除软件包命令**：sudo apt remove `package_name`**
 
 - 清理不再使用的依赖和库文件: **sudo apt autoremove**
 
@@ -57,7 +57,7 @@ apt 命令执行需要超级管理员权限(root)。
 
 - 查找软件包命令： **sudo apt search `package_name`**
 
-- 列出所有已安装的包：**apt list --installed**
+- 列出所有已安装的包**：apt list --installed**
 
   预期输出（节选）：
 

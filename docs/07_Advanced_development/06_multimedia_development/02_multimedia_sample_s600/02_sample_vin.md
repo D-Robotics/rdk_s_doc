@@ -60,7 +60,7 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
 index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
 ```
 
-**命令参数说明：**
+**命令参数说明**：
 
 - `s <sensor_index>`: 该选项用于指定要使用的传感器索引。用户需要提供一个有效的索引值。
 - `l <link_port>`: 该选项用于指定 Serdes Sensor 的连接的端口 , Serdes sensor 必须指定。
@@ -170,7 +170,7 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
 index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
 ```
 
-**命令参数说明：**
+**命令参数说明**：
 
 - `c <sensor>`: 该选项用于指定要使用的传感器索引。用户需要提供一个有效的索引值。
 - `l <link_port>`: 该选项用于指定 Serdes Sensor 的连接的端口 , Serdes sensor 必须指定。
