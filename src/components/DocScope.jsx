@@ -41,9 +41,16 @@ export default function DocScope({ versions, products, children }) {
 
   const show = versionMatch && productMatch;
 
+  const scopePayload = JSON.stringify({
+    versions: versionConfigs,
+    products: productList,
+  });
+
   // 始终保留 DOM，仅通过 CSS 隐藏，避免切换产品/版本时 React 卸载子树导致 DOM 不一致
   return (
-    <div className={show ? 'doc-scope' : 'doc-scope doc-scope--hidden'}>
+    <div
+      className={show ? 'doc-scope' : 'doc-scope doc-scope--hidden'}
+      data-doc-scope={scopePayload}>
       {children}
     </div>
   );
