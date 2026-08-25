@@ -87,7 +87,7 @@ RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动，�
 默认镜像中 `/etc/ethercat.conf` 已预配置为 Native 模式。如需切换 EtherCAT 使用的网口，修改 `MASTER0_DEVICE` 为对应网口的 MAC 地址：
 
 :::warning
-⚠️ **Native 驱动只支持使用 Mac 地址进行配置。**默认的 MASTER0_DEVICE 值为 ff:ff:ff:ff:ff:ff，在启用的时候默认使用 eth0 网口，请根据需求修改。
+⚠️ **Native 驱动只支持使用 Mac 地址进行配置**。默认的 MASTER0_DEVICE 值为 ff:ff:ff:ff:ff:ff，在启用的时候默认使用 eth0 网口，请根据需求修改。
 :::
 
 ```
