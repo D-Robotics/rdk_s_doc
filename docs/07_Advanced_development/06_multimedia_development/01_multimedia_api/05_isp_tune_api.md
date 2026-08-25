@@ -94,7 +94,7 @@ hb_isp_run_algo(0);
 
 ### hb_isp_run_algo
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_run_algo(uint32_t pipeline_id);
@@ -103,6 +103,10 @@ extern int32_t hb_isp_run_algo(uint32_t pipeline_id);
 【功能描述】
 
 run 2a algorithm; 恢复 2A 算法（自动调参）
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
 
 【返回值】
 
@@ -114,7 +118,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_pause_algo
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_pause_algo(uint32_t pipeline_id);
@@ -123,6 +127,10 @@ extern int32_t hb_isp_pause_algo(uint32_t pipeline_id);
 【功能描述】
 
 pause 2a algorithm; 暂停 2A 算法（进入手动调参）
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
 
 【返回值】
 
@@ -134,7 +142,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_module_control
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_module_control(uint32_t pipeline_id, const isp_module_ctrl_u *mod_ctrl);
@@ -143,6 +151,11 @@ extern int32_t hb_isp_set_module_control(uint32_t pipeline_id, const isp_module_
 【功能描述】
 
 control isp modual bypass or not; 提供设置ISP子模块bypass与否的接口
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const isp_module_ctrl_u *mod_ctrl: module control value; 设置ISP内部模块运行与否状态
 
 【返回值】
 
@@ -154,7 +167,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_module_control
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_module_control(uint32_t pipeline_id, isp_module_ctrl_u *mod_ctrl);
@@ -163,6 +176,11 @@ extern int32_t hb_isp_get_module_control(uint32_t pipeline_id, isp_module_ctrl_u
 【功能描述】
 
 get isp modual bypass status; 获取设置ISP子模块bypass与否状态的接口
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [OUT] isp_module_ctrl_u *mod_ctrl: module control value; 获取ISP内部模块运行与否状态
 
 【返回值】
 
@@ -174,7 +192,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_ae_statistics
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_ae_statistics(uint32_t pipeline_id, isp_statistics_t *ae_statistics, int32_t time_out);
@@ -183,6 +201,12 @@ extern int32_t hb_isp_get_ae_statistics(uint32_t pipeline_id, isp_statistics_t *
 【功能描述】
 
 get ae statistics; 获取当前通路的ae统计数据
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] int32_t time_out: timeout value; 接口超时时间; range:[0, 2147483647],default:3000
+- [OUT] isp_statistics_t *ae_statistics: ae statistics; ae统计数据
 
 【返回值】
 
@@ -194,7 +218,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_release_ae_statistics
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_release_ae_statistics(uint32_t pipeline_id, isp_statistics_t *ae_statistics);
@@ -203,6 +227,11 @@ extern int32_t hb_isp_release_ae_statistics(uint32_t pipeline_id, isp_statistics
 【功能描述】
 
 relese ae statistics; 释放已获取的当前通路的ae统计数据
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] isp_statistics_t *ae_statistics: ae statistics; ae统计数据
 
 【返回值】
 
@@ -214,7 +243,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_awb_statistics
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_awb_statistics(uint32_t pipeline_id, isp_statistics_t *awb_statistics, int32_t time_out);
@@ -223,6 +252,12 @@ extern int32_t hb_isp_get_awb_statistics(uint32_t pipeline_id, isp_statistics_t 
 【功能描述】
 
 get awb statistics; 获取当前通路的awb统计数据
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] int32_t time_out: timeout value; 接口超时时间; range:[0, 2147483647],default:3000
+- [OUT] isp_statistics_t *awb_statistics: awb statistics; awb统计数据
 
 【返回值】
 
@@ -234,7 +269,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_release_awb_statistics
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_release_awb_statistics(uint32_t pipeline_id, isp_statistics_t *awb_statistics);
@@ -243,6 +278,11 @@ extern int32_t hb_isp_release_awb_statistics(uint32_t pipeline_id, isp_statistic
 【功能描述】
 
 release awb statistics; 释放已获取的当前通路的awb统计数据
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] isp_statistics_t *awb_statistics: awb statistics; awb统计数据
 
 【返回值】
 
@@ -254,7 +294,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_command
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_command(uint32_t pipeline_id, isp_cmd_api_t *cmd_api);
@@ -263,6 +303,11 @@ extern int32_t hb_isp_command(uint32_t pipeline_id, isp_cmd_api_t *cmd_api);
 【功能描述】
 
 set isp command with api and value; 动态设置ISP cmd的对应的参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] isp_cmd_api_t *cmd_api: isp cmd api and data vale; 对应isp提供的cmd的id值和对应的参数
 
 【返回值】
 
@@ -274,7 +319,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_context
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_context(uint32_t pipeline_id, const isp_context_t *ptx);
@@ -283,6 +328,11 @@ extern int32_t hb_isp_set_context(uint32_t pipeline_id, const isp_context_t *ptx
 【功能描述】
 
 set isp context value; 动态设置isp ctx数据
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const isp_context_t *ptx: store context data point; isp ctx数据对应的地址，需外部提前申请好
 
 【返回值】
 
@@ -294,7 +344,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_context
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_context(uint32_t pipeline_id, isp_context_t *ptx);
@@ -303,6 +353,11 @@ extern int32_t hb_isp_get_context(uint32_t pipeline_id, isp_context_t *ptx);
 【功能描述】
 
 get isp context value; 动态获取isp ctx数据
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [OUT] isp_context_t *ptx: store context data point; isp ctx数据对应的地址，需外部提前申请好
 
 【返回值】
 
@@ -314,7 +369,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_ae_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_ae_info(uint32_t pipeline_id, const ae_info_t *ae_info);
@@ -323,6 +378,11 @@ extern int32_t hb_isp_set_ae_info(uint32_t pipeline_id, const ae_info_t *ae_info
 【功能描述】
 
 set isp ae info value; 设置isp ae相关参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const ae_info_t *ae_info: ae info value; ae info 参数
 
 【返回值】
 
@@ -334,7 +394,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_ae_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_ae_info(uint32_t pipeline_id, ae_info_t *ae_info);
@@ -343,6 +403,11 @@ extern int32_t hb_isp_get_ae_info(uint32_t pipeline_id, ae_info_t *ae_info);
 【功能描述】
 
 get isp ae info value; 获取isp ae相关参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [OUT] ae_info_t *ae_info: ae info value; ae info参数
 
 【返回值】
 
@@ -354,7 +419,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_awb_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_awb_info(uint32_t pipeline_id, const awb_info_t *awb_info);
@@ -363,6 +428,11 @@ extern int32_t hb_isp_set_awb_info(uint32_t pipeline_id, const awb_info_t *awb_i
 【功能描述】
 
 set isp awb info value; 设置isp awb相关参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const awb_info_t *awb_info: awb info value; awb参数
 
 【返回值】
 
@@ -374,7 +444,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_awb_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_awb_info(uint32_t pipeline_id, awb_info_t *awb_info);
@@ -383,6 +453,11 @@ extern int32_t hb_isp_get_awb_info(uint32_t pipeline_id, awb_info_t *awb_info);
 【功能描述】
 
 get isp awb info value; 获取isp awb相关参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [OUT] awb_info_t *awb_info: awb info value; awb参数
 
 【返回值】
 
@@ -394,7 +469,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_version
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_version(uint32_t pipeline_id, char *isp_ver, char *algo_ver, char *calib_ver);
@@ -403,6 +478,13 @@ extern int32_t hb_isp_get_version(uint32_t pipeline_id, char *isp_ver, char *alg
 【功能描述】
 
 get current isp,2a, calibration version; 获取当前系统的ISP版本，ISP算法版本和较准参数版本
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [OUT] char *isp_ver: isp系统软件版本
+- [OUT] char *algo_ver: 2a算法版本
+- [OUT] char *calib_ver: tuning参数的版本号，尺寸必须大于100byte
 
 【返回值】
 
@@ -414,7 +496,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_2a_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_2a_info(uint32_t pipeline_id, isp_info_t *isp_info, int time_out);
@@ -423,6 +505,12 @@ extern int32_t hb_isp_get_2a_info(uint32_t pipeline_id, isp_info_t *isp_info, in
 【功能描述】
 
 get isp 2a info value; 获取isp 2a相关参数信息
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] int32_t time_out: timeout value; 接口超时时间; range:[0, 2147483647],default:3000
+- [OUT] isp_info_t *isp_info: isp 2a info; isp 2a统计数据信息
 
 【返回值】
 
@@ -434,7 +522,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_ae5bin_statistics
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_ae5bin_statistics(uint32_t pipeline_id, isp_ae5bin_stats_t *isp_ae5bin_stats);
@@ -443,6 +531,11 @@ extern int32_t hb_isp_get_ae5bin_statistics(uint32_t pipeline_id, isp_ae5bin_sta
 【功能描述】
 
 get ae 5bin statustics value; 获取ae 5bin统计数据
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [OUT] isp_ae5bin_stats_t *isp_ae5bin_stats: ae 5bin statistics value; ae5bin统计数据
 
 【返回值】
 
@@ -454,7 +547,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_zone_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_zone_info(uint32_t pipeline_id, uint8_t type, isp_zone_info_t *zoneinfo);
@@ -463,6 +556,12 @@ extern int32_t hb_isp_get_zone_info(uint32_t pipeline_id, uint8_t type, isp_zone
 【功能描述】
 
 get zone info value; 获取ae zone区域信息
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] uint8_t type: isp zone type; isp统计信息的类型
+- [OUT] isp_zone_info_t *zoneinfo: isp zone inof; isp 统计区域范围信息; range:[0, 15],default:0
 
 【返回值】
 
@@ -474,7 +573,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_hist_thresh_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_hist_thresh_info(uint32_t pipeline_id, isp_hist_thresh_info_t *isp_hist_thresh_info);
@@ -483,6 +582,11 @@ extern int32_t hb_isp_set_hist_thresh_info(uint32_t pipeline_id, isp_hist_thresh
 【功能描述】
 
 set histgram thresh info; 设置histgram区间门限信息
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] isp_hist_thresh_info_t *isp_hist_thresh_info: isp hist thresh info; isp hist分区门限参数; range:[0, 255],default:0
 
 【返回值】
 
@@ -494,7 +598,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_hist_thresh_info
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_hist_thresh_info(uint32_t pipeline_id, isp_hist_thresh_info_t *isp_hist_thresh_info);
@@ -503,6 +607,11 @@ extern int32_t hb_isp_get_hist_thresh_info(uint32_t pipeline_id, isp_hist_thresh
 【功能描述】
 
 get histgram thresh info; 获取histgram区间门限信息
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [OUT] isp_hist_thresh_info_t *isp_hist_thresh_info: isp hist thresh info; isp hist分区门限参数; range:[0, 255],default:0
 
 【返回值】
 
@@ -514,7 +623,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_calibration_param
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_calibration_param(uint32_t pipeline_id, const char *name, uint32_t param_type, uint32_t param_size, void *ptr);
@@ -523,6 +632,14 @@ extern int32_t hb_isp_set_calibration_param(uint32_t pipeline_id, const char *na
 【功能描述】
 
 set calibration param; 设置 calibration 参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const char *name: param name; 参数名称
+- [IN] uint32_t param_type: param type; 参数类比
+- [IN] uint32_t param_size: param size; 参数尺寸
+- [IN] void *ptr: data ptr; 数据指针; range:[1, 65535],default:1
 
 【返回值】
 
@@ -534,7 +651,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_calibration_param
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_calibration_param(uint32_t pipeline_id, const char *name, uint32_t param_type, uint32_t param_size, void *ptr);
@@ -543,6 +660,14 @@ extern int32_t hb_isp_get_calibration_param(uint32_t pipeline_id, const char *na
 【功能描述】
 
 get calibration param; 获取 calibration 参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const char *name: param name; 参数名称
+- [IN] uint32_t param_type: param type; 参数类比
+- [IN] uint32_t param_size: param size; 参数尺寸
+- [OUT] void *ptr: data ptr; 数据指针; range:[1, 65535],default:1
 
 【返回值】
 
@@ -554,7 +679,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_command_param
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_command_param(uint32_t pipeline_id, uint32_t section, uint32_t command, uint32_t data);
@@ -563,6 +688,13 @@ extern int32_t hb_isp_set_command_param(uint32_t pipeline_id, uint32_t section, 
 【功能描述】
 
 set command param; 设置 command 参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] uint32_t section: section value; 字段名称
+- [IN] uint32_t command: command value; 命令名字
+- [IN] uint32_t data: data ptr; 数据指针; range:[1, 65535],default:1
 
 【返回值】
 
@@ -574,7 +706,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_command_param
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_command_param(uint32_t pipeline_id, uint32_t section, uint32_t command, uint32_t *data);
@@ -583,6 +715,13 @@ extern int32_t hb_isp_get_command_param(uint32_t pipeline_id, uint32_t section, 
 【功能描述】
 
 get command param; 获取 command 参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] uint32_t section: section value; 字段名称
+- [IN] uint32_t command: command value; 命令名字
+- [OUT] uint32_t *data: data ptr; 数据指针; range:[1, 65535],default:1
 
 【返回值】
 
@@ -594,7 +733,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_command_range
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_command_range(uint32_t pipeline_id, uint32_t section, uint32_t command, uint32_t *max, uint32_t *min);
@@ -603,6 +742,14 @@ extern int32_t hb_isp_get_command_range(uint32_t pipeline_id, uint32_t section, 
 【功能描述】
 
 get command range; 获取 command 参数范围
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] uint32_t section: api section(not used); api section(目前没有实际使用)
+- [IN] uint32_t command: command value; command参数
+- [OUT] uint32_t *max: ptr max; command max 数据指针
+- [OUT] uint32_t *min: ptr min; command min 数据指针
 
 【返回值】
 
@@ -614,7 +761,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_hardware_param
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_hardware_param(uint32_t pipeline_id, const char *name, uint32_t param_size, uint32_t *ptr);
@@ -623,6 +770,13 @@ extern int32_t hb_isp_get_hardware_param(uint32_t pipeline_id, const char *name,
 【功能描述】
 
 get hardware param; 获取 hardware 参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const char *name: param name; 参数名称
+- [IN] uint32_t param_size: param size; 参数尺寸
+- [OUT] uint32_t *ptr: data ptr; 数据指针; range:[1, 65535],default:1
 
 【返回值】
 
@@ -634,7 +788,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_set_hardware_param
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_set_hardware_param(uint32_t pipeline_id, const char *name, uint32_t param_size, uint32_t *ptr);
@@ -643,6 +797,13 @@ extern int32_t hb_isp_set_hardware_param(uint32_t pipeline_id, const char *name,
 【功能描述】
 
 set hardware param; 设置hardware参数
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const char *name: param name; 参数名称
+- [IN] uint32_t param_size: param size; 参数尺寸
+- [IN] uint32_t *ptr: data ptr; 数据指针; range:[1, 65535],default:1
 
 【返回值】
 
@@ -654,7 +815,7 @@ HW: Ultra/Super; SW: 1.0.0
 
 ### hb_isp_get_hardware_range
 
-【函数声明】
+【函数原型】
 
 ```c
 extern int32_t hb_isp_get_hardware_range(uint32_t pipeline_id, const char *name, uint32_t *max, uint32_t *min);
@@ -663,6 +824,13 @@ extern int32_t hb_isp_get_hardware_range(uint32_t pipeline_id, const char *name,
 【功能描述】
 
 get hardware range; 获取hardware 参数范围
+
+【参数】
+
+- [IN] uint32_t pipeline_id: pipeline id; 软件通道id; range:[0, 15],default:0
+- [IN] const char *name: param name; 参数名称
+- [OUT] uint32_t *max: ptr max; command max 数据指针
+- [OUT] uint32_t *min: ptr min; command min 数据指针
 
 【返回值】
 

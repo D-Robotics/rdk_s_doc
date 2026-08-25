@@ -123,7 +123,7 @@ hb_disp_close_id(DISP_PRI_1);
 
 ### hb_disp_init_dev_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_init_dev_cfg(uint32_t disp_id, const char *cfg_file);
@@ -132,6 +132,11 @@ HB_API int32_t hb_disp_init_dev_cfg(uint32_t disp_id, const char *cfg_file);
 【功能描述】
 
 Initialize a display device instance
+
+【参数】
+
+- [IN] uint32_t disp_id: display device id
+- [IN] const char *cfg_file: path of the config json file
 
 【返回值】
 
@@ -143,7 +148,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_init_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_init_cfg(const char *cfg_file);
@@ -152,6 +157,10 @@ HB_API int32_t hb_disp_init_cfg(const char *cfg_file);
 【功能描述】
 
 Initialize all display device
+
+【参数】
+
+- [IN] const char *cfg_file: path of the config json file
 
 【返回值】
 
@@ -163,7 +172,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_close
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_close(void);
@@ -172,6 +181,10 @@ HB_API int32_t hb_disp_close(void);
 【功能描述】
 
 Close all display device
+
+【参数】
+
+- [IN] None
 
 【返回值】
 
@@ -183,7 +196,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_close_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_close_id(uint32_t disp_id);
@@ -192,6 +205,10 @@ HB_API int32_t hb_disp_close_id(uint32_t disp_id);
 【功能描述】
 
 Close a display device instance
+
+【参数】
+
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -203,7 +220,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_start
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_start(void);
@@ -212,6 +229,10 @@ HB_API int32_t hb_disp_start(void);
 【功能描述】
 
 Start all display device
+
+【参数】
+
+- [IN] None
 
 【返回值】
 
@@ -223,7 +244,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_start_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_start_id(uint32_t disp_id);
@@ -232,6 +253,10 @@ HB_API int32_t hb_disp_start_id(uint32_t disp_id);
 【功能描述】
 
 Start a display device instance
+
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
 
 【返回值】
 
@@ -243,7 +268,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_stop
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_stop(void);
@@ -252,6 +277,10 @@ HB_API int32_t hb_disp_stop(void);
 【功能描述】
 
 Stop all display device
+
+【参数】
+
+- [IN] None
 
 【返回值】
 
@@ -263,7 +292,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_stop_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_stop_id(uint32_t disp_id);
@@ -272,6 +301,10 @@ HB_API int32_t hb_disp_stop_id(uint32_t disp_id);
 【功能描述】
 
 Stop a display device instance
+
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
 
 【返回值】
 
@@ -283,7 +316,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_on
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_layer_on(uint32_t layer_number);
@@ -292,6 +325,10 @@ HB_API int32_t hb_disp_layer_on(uint32_t layer_number);
 【功能描述】
 
 Enable a layer of all display device
+
+【参数】
+
+- [IN] uint32_t layer_number: the number of layer
 
 【返回值】
 
@@ -303,7 +340,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_on_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_layer_on_id(uint32_t layer_number, uint32_t disp_id);
@@ -312,6 +349,11 @@ HB_API int32_t hb_disp_layer_on_id(uint32_t layer_number, uint32_t disp_id);
 【功能描述】
 
 Enable a layer of a display device instance
+
+【参数】
+
+- [IN] uint32_t layer_number: layer id
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -323,7 +365,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_off
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_layer_off(uint32_t layer_number);
@@ -332,6 +374,10 @@ HB_API int32_t hb_disp_layer_off(uint32_t layer_number);
 【功能描述】
 
 Close a layer of all display device
+
+【参数】
+
+- [IN] uint32_t layer_number: layer id
 
 【返回值】
 
@@ -343,7 +389,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_layer_off_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_layer_off_id(uint32_t layer_number, uint32_t disp_id);
@@ -352,6 +398,11 @@ HB_API int32_t hb_disp_layer_off_id(uint32_t layer_number, uint32_t disp_id);
 【功能描述】
 
 Close a layer of a display device instance
+
+【参数】
+
+- [IN] uint32_t layer_number: layer id
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -363,7 +414,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_video_bufaddr
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_video_bufaddr(uint32_t layer_no, void *addr_y, void *addr_c);
@@ -372,6 +423,10 @@ HB_API int32_t hb_disp_set_video_bufaddr(uint32_t layer_no, void *addr_y, void *
 【功能描述】
 
 Set video buffer address
+
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
 
 【返回值】
 
@@ -383,7 +438,7 @@ HW: Super; SW: 0.0.1
 
 ### hb_disp_set_video_bufaddr_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_video_bufaddr_id(uint32_t disp_id, uint32_t layer_no, void *addr_y, void *addr_c);
@@ -392,6 +447,10 @@ HB_API int32_t hb_disp_set_video_bufaddr_id(uint32_t disp_id, uint32_t layer_no,
 【功能描述】
 
 Set video buffer address to a display device instance
+
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
 
 【返回值】
 
@@ -403,7 +462,7 @@ HW: Super; SW: 0.0.1
 
 ### hb_disp_set_layer_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_layer_cfg(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos);
@@ -412,6 +471,14 @@ HB_API int32_t hb_disp_set_layer_cfg(uint32_t layer_no, uint32_t width, uint32_t
 【功能描述】
 
 Set video buffer address
+
+【参数】
+
+- [IN] uint32_t layer_no: display layer id
+- [IN] uint32_t width: width of the layer
+- [IN] uint32_t height: height of the layer
+- [IN] uint32_t x_pos: x position of the layer
+- [IN] uint32_t y_pos: y position of the layer
 
 【返回值】
 
@@ -423,7 +490,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_layer_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_layer_cfg_id(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos, uint32_t disp_id);
@@ -432,6 +499,15 @@ HB_API int32_t hb_disp_set_layer_cfg_id(uint32_t layer_no, uint32_t width, uint3
 【功能描述】
 
 Set video buffer address for a display device instance
+
+【参数】
+
+- [IN] uint32_t layer_no: display layer id
+- [IN] uint32_t width: width of the layer
+- [IN] uint32_t height: height of the layer
+- [IN] uint32_t x_pos: x position of the layer
+- [IN] uint32_t y_pos: y position of the layer
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -443,7 +519,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_timing
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_timing(disp_timing_t *user_timing);
@@ -452,6 +528,10 @@ HB_API int32_t hb_disp_set_timing(disp_timing_t *user_timing);
 【功能描述】
 
 Set display timing
+
+【参数】
+
+- [IN] disp_timing_t *user_timing: the timing parameter user want to set
 
 【返回值】
 
@@ -463,7 +543,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_timing_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_timing_id(disp_timing_t *user_timing, uint32_t	    disp_id);
@@ -472,6 +552,11 @@ HB_API int32_t hb_disp_set_timing_id(disp_timing_t *user_timing, uint32_t	    di
 【功能描述】
 
 Set display timing for a display device instance
+
+【参数】
+
+- [IN] disp_timing_t *user_timing: the timing parameter user want to set
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -483,7 +568,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_gamma_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_gamma_cfg(float32_t *gamma_val);
@@ -492,6 +577,10 @@ HB_API int32_t hb_disp_get_gamma_cfg(float32_t *gamma_val);
 【功能描述】
 
 Get gamma config value
+
+【参数】
+
+- [OUT] float32_t *gamma_val: input gamma value pointer, store result
 
 【返回值】
 
@@ -503,7 +592,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_gamma_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_gamma_cfg_id(float32_t *gamma_val, uint32_t disp_id);
@@ -512,6 +601,11 @@ HB_API int32_t hb_disp_get_gamma_cfg_id(float32_t *gamma_val, uint32_t disp_id);
 【功能描述】
 
 Get gamma config value for a display device instance
+
+【参数】
+
+- [OUT] float32_t *gamma_val: input gamma value pointer, store result
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -523,7 +617,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_gamma_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_gamma_cfg(float32_t gamma_user);
@@ -532,6 +626,10 @@ HB_API int32_t hb_disp_set_gamma_cfg(float32_t gamma_user);
 【功能描述】
 
 Set gamma config for a display device instance
+
+【参数】
+
+- [IN] float32_t gamma_user: gamma value user want to set
 
 【返回值】
 
@@ -543,7 +641,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_gamma_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_gamma_cfg_id(float32_t gamma_user, uint32_t disp_id);
@@ -552,6 +650,11 @@ HB_API int32_t hb_disp_set_gamma_cfg_id(float32_t gamma_user, uint32_t disp_id);
 【功能描述】
 
 Set gamma config
+
+【参数】
+
+- [IN] float32_t gamma_user: gamma value user want to set
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -563,7 +666,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_dynamic_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_output_dynamic_cfg_id(output_dynamic_cfg_t *dynamic_cfg, uint32_t disp_id);
@@ -572,6 +675,11 @@ HB_API int32_t hb_disp_set_output_dynamic_cfg_id(output_dynamic_cfg_t *dynamic_c
 【功能描述】
 
 Set output dynamic config
+
+【参数】
+
+- [IN] output_dynamic_cfg_t *dynamic_cfg: output dynamic value user want to set
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -583,7 +691,7 @@ HW: Super; SW: 0.0.1
 
 ### hb_disp_get_output_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_output_cfg(output_cfg_t *cfg);
@@ -592,6 +700,10 @@ HB_API int32_t hb_disp_get_output_cfg(output_cfg_t *cfg);
 【功能描述】
 
 Get ouput config
+
+【参数】
+
+- [OUT] output_cfg_t *cfg: the output config parameters struct that user gets
 
 【返回值】
 
@@ -603,7 +715,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_output_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_output_cfg_id(output_cfg_t *cfg, uint32_t disp_id);
@@ -612,6 +724,11 @@ HB_API int32_t hb_disp_get_output_cfg_id(output_cfg_t *cfg, uint32_t disp_id);
 【功能描述】
 
 Get ouput config of a display device instance
+
+【参数】
+
+- [OUT] output_cfg_t *cfg: the output config parameters struct that user gets
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -623,7 +740,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_output_cfg(output_cfg_t *cfg);
@@ -632,6 +749,10 @@ HB_API int32_t hb_disp_set_output_cfg(output_cfg_t *cfg);
 【功能描述】
 
 Set ouput config
+
+【参数】
+
+- [IN] output_cfg_t *cfg: the output config parameters struct that user sets
 
 【返回值】
 
@@ -643,7 +764,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_output_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_output_cfg_id(output_cfg_t *cfg, uint32_t	     disp_id);
@@ -652,6 +773,11 @@ HB_API int32_t hb_disp_set_output_cfg_id(output_cfg_t *cfg, uint32_t	     disp_i
 【功能描述】
 
 Set ouput config of a display device instance
+
+【参数】
+
+- [IN] output_cfg_t *cfg: the output config parameters struct that user sets
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -663,7 +789,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_upscaling_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_upscaling_cfg(upscaling_cfg_t *cfg);
@@ -672,6 +798,10 @@ HB_API int32_t hb_disp_get_upscaling_cfg(upscaling_cfg_t *cfg);
 【功能描述】
 
 Get upscale config
+
+【参数】
+
+- [OUT] upscaling_cfg_t *cfg: the up scale config parameters struct that user gets
 
 【返回值】
 
@@ -683,7 +813,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_upscaling_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_upscaling_cfg_id(upscaling_cfg_t *cfg, uint32_t	     disp_id);
@@ -692,6 +822,11 @@ HB_API int32_t hb_disp_get_upscaling_cfg_id(upscaling_cfg_t *cfg, uint32_t	     
 【功能描述】
 
 Get upscale config of a display device instance
+
+【参数】
+
+- [OUT] upscaling_cfg_t *cfg: the up scale config parameters struct that user gets
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -703,7 +838,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_upscaling_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_upscaling_cfg(const upscaling_cfg_t *cfg);
@@ -712,6 +847,10 @@ HB_API int32_t hb_disp_set_upscaling_cfg(const upscaling_cfg_t *cfg);
 【功能描述】
 
 Set upscale config of a display device instance
+
+【参数】
+
+- [IN] const upscaling_cfg_t *cfg: the up scale config parameters struct that user Sets
 
 【返回值】
 
@@ -723,7 +862,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_upscaling_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_upscaling_cfg_id(const upscaling_cfg_t *cfg, uint32_t		   disp_id);
@@ -732,6 +871,11 @@ HB_API int32_t hb_disp_set_upscaling_cfg_id(const upscaling_cfg_t *cfg, uint32_t
 【功能描述】
 
 Set upscale config of a display device instance
+
+【参数】
+
+- [IN] const upscaling_cfg_t *cfg: the up scale config parameters struct that user Sets
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -743,7 +887,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_channel_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_channel_cfg(uint32_t chn, channel_base_cfg_t *cfg);
@@ -752,6 +896,11 @@ HB_API int32_t hb_disp_get_channel_cfg(uint32_t chn, channel_base_cfg_t *cfg);
 【功能描述】
 
 Get channel config parameters
+
+【参数】
+
+- [IN] uint32_t chn: the layer number user want to get
+- [OUT] channel_base_cfg_t *cfg: the up scale config parameters struct that user Sets
 
 【返回值】
 
@@ -763,7 +912,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_channel_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_channel_cfg_id(uint32_t chn, channel_base_cfg_t *cfg, uint32_t disp_id);
@@ -772,6 +921,12 @@ HB_API int32_t hb_disp_get_channel_cfg_id(uint32_t chn, channel_base_cfg_t *cfg,
 【功能描述】
 
 Get channel config parameters of a display device instance
+
+【参数】
+
+- [IN] uint32_t chn: the layer number user want to get
+- [OUT] channel_base_cfg_t *cfg: the channel config parameters struct that user Gets
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -783,7 +938,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_channel_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_channel_cfg(uint32_t			 chn, channel_base_cfg_t *cfg);
@@ -792,6 +947,11 @@ HB_API int32_t hb_disp_set_channel_cfg(uint32_t			 chn, channel_base_cfg_t *cfg)
 【功能描述】
 
 Set channel config parameters of a display device instance
+
+【参数】
+
+- [IN] uint32_t chn: the layer number user want to set
+- [IN] channel_base_cfg_t *cfg: the up scale config parameters struct that user sets
 
 【返回值】
 
@@ -803,7 +963,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_set_channel_cfg_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_channel_cfg_id(uint32_t		    chn, channel_base_cfg_t *cfg, uint32_t		    disp_id);
@@ -812,6 +972,12 @@ HB_API int32_t hb_disp_set_channel_cfg_id(uint32_t		    chn, channel_base_cfg_t 
 【功能描述】
 
 Set channel config parameters of a display device instance
+
+【参数】
+
+- [IN] uint32_t chn: the layer number user want to set
+- [IN] channel_base_cfg_t *cfg: the up scale config parameters struct that user sets
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -823,7 +989,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_out_upscale
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_out_upscale(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h);
@@ -832,6 +998,13 @@ HB_API int32_t hb_disp_out_upscale(uint32_t src_w, uint32_t src_h, uint32_t tag_
 【功能描述】
 
 user config up-scale
+
+【参数】
+
+- [IN] uint32_t src_w: width of the source graphic
+- [IN] uint32_t src_h: height of the source graphic
+- [IN] uint32_t tag_w: width of the target graphic
+- [IN] uint32_t tag_h: height of the target graphic
 
 【返回值】
 
@@ -843,7 +1016,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_out_upscale_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_out_upscale_id(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h, uint32_t disp_id);
@@ -852,6 +1025,14 @@ HB_API int32_t hb_disp_out_upscale_id(uint32_t src_w, uint32_t src_h, uint32_t t
 【功能描述】
 
 user config up-scale for a display device instance
+
+【参数】
+
+- [IN] uint32_t src_w: width of the source graphic
+- [IN] uint32_t src_h: height of the source graphic
+- [IN] uint32_t tag_w: width of the target graphic
+- [IN] uint32_t tag_h: height of the target graphic
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -863,7 +1044,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_display_done
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_display_done(void);
@@ -872,6 +1053,10 @@ HB_API int32_t hb_disp_get_display_done(void);
 【功能描述】
 
 user get the display done flag
+
+【参数】
+
+- [IN] None
 
 【返回值】
 
@@ -882,7 +1067,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_display_done_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_display_done_id(uint32_t disp_id);
@@ -891,6 +1076,10 @@ HB_API int32_t hb_disp_get_display_done_id(uint32_t disp_id);
 【功能描述】
 
 user get the display done flag for a display device instance
+
+【参数】
+
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -901,7 +1090,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_check_video_bufaddr_valid
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_check_video_bufaddr_valid(size_t	  graphic_size, uint32_t disp_layer_no);
@@ -910,6 +1099,11 @@ HB_API int32_t hb_disp_check_video_bufaddr_valid(size_t	  graphic_size, uint32_t
 【功能描述】
 
 user check whether the graphic size matches the channel
+
+【参数】
+
+- [IN] size_t graphic_size: the graphic size
+- [IN] uint32_t disp_layer_no: layer number of DISP
 
 【返回值】
 
@@ -921,7 +1115,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_check_video_bufaddr_valid_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_check_video_bufaddr_valid_id(size_t   graphic_size, uint32_t disp_layer_no, uint32_t  disp_id);
@@ -930,6 +1124,12 @@ HB_API int32_t hb_disp_check_video_bufaddr_valid_id(size_t   graphic_size, uint3
 【功能描述】
 
 user check whether the graphic size matches the channel
+
+【参数】
+
+- [IN] size_t graphic_size: the graphic size
+- [IN] uint32_t disp_layer_no: layer number of DISP
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -941,7 +1141,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_video_display_done_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_video_display_done_id(uint32_t layer, uint32_t disp_id);
@@ -950,6 +1150,11 @@ HB_API int32_t hb_disp_get_video_display_done_id(uint32_t layer, uint32_t disp_i
 【功能描述】
 
 user get layer buffer read done flag
+
+【参数】
+
+- [IN] uint32_t layer: layer id
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 
@@ -961,7 +1166,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_video_display_done
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_video_display_done(uint32_t layer);
@@ -970,6 +1175,10 @@ HB_API int32_t hb_disp_get_video_display_done(uint32_t layer);
 【功能描述】
 
 user get layer buffer read done flag
+
+【参数】
+
+- [IN] uint32_t layer: layer id
 
 【返回值】
 
@@ -981,7 +1190,7 @@ HW: Ultra/Super; SW: 0.0.1
 
 ### hb_disp_get_disp_done_sync_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_disp_done_sync_id(uint32_t disp_id, uint64_t rel_seq);
@@ -990,6 +1199,11 @@ HB_API int32_t hb_disp_get_disp_done_sync_id(uint32_t disp_id, uint64_t rel_seq)
 【功能描述】
 
 user wait display vsync flag
+
+【参数】
+
+- [IN] uint32_t disp_id: display device id
+- [IN] uint64_t rel_seq: user request vsync count
 
 【返回值】
 
@@ -1001,7 +1215,7 @@ HW: Super; SW: 0.0.1
 
 ### hb_disp_get_capture_buf_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_get_capture_buf_id(uint32_t disp_id, uint32_t timeout, struct hb_mem_graphic_buf_t *out_buf);
@@ -1010,6 +1224,12 @@ HB_API int32_t hb_disp_get_capture_buf_id(uint32_t disp_id, uint32_t timeout, st
 【功能描述】
 
 user get capture buffer
+
+【参数】
+
+- [IN] uint32_t disp_id: display device id
+- [IN] uint32_t timeout: wait timeout(ms)
+- [OUT] struct hb_mem_graphic_buf_t *out_buf: user import graphic buffer
 
 【返回值】
 
@@ -1021,7 +1241,7 @@ HW: Super; SW: 0.0.1
 
 ### hb_disp_release_capture_buf_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_release_capture_buf_id(uint32_t disp_id, struct hb_mem_graphic_buf_t *out_buf);
@@ -1030,6 +1250,11 @@ HB_API int32_t hb_disp_release_capture_buf_id(uint32_t disp_id, struct hb_mem_gr
 【功能描述】
 
 user release capture buffer
+
+【参数】
+
+- [IN] uint32_t disp_id: display device id
+- [OUT] struct hb_mem_graphic_buf_t *out_buf: user import graphic buffer
 
 【返回值】
 
@@ -1041,7 +1266,7 @@ HW: Super; SW: 0.0.1
 
 ### hb_disp_set_disp_oneshot_trigger_id
 
-【函数声明】
+【函数原型】
 
 ```c
 HB_API int32_t hb_disp_set_disp_oneshot_trigger_id(uint32_t disp_id);
@@ -1050,6 +1275,10 @@ HB_API int32_t hb_disp_set_disp_oneshot_trigger_id(uint32_t disp_id);
 【功能描述】
 
 user trigger display control oneshot output
+
+【参数】
+
+- [IN] uint32_t disp_id: display device id
 
 【返回值】
 

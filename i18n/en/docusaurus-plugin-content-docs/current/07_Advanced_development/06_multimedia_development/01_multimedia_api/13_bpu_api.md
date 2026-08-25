@@ -152,11 +152,9 @@ Get the BPU library version number.
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| major | `uint32_t *` | Yes | Output pointer for the major version number |
-| minor | `uint32_t *` | Yes | Output pointer for the minor version number |
-| patch | `uint32_t *` | Yes | Output pointer for the patch version number |
+- [OUT] uint32_t *major: major version value pointer
+- [OUT] uint32_t *minor: minor version value pointer
+- [OUT] uint32_t *patch: patch version value pointer
 
 **Return Value**
 
@@ -173,6 +171,10 @@ uint32_t hb_bpu_core_num(void);
 **Description**
 
 Get the number of BPU core devices in the system.
+
+**Parameters**
+
+- [IN] None
 
 **Return Value**
 
@@ -193,11 +195,9 @@ Create a BPU core instance, open the core device and return the handle, used to 
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| core | `hb_bpu_core_t *` | Yes | Output pointer for the core handle |
-| core_mask | `uint32_t` | Yes | Core bitmask: index 0 corresponds to `0x1`, index 1 to `0x2`, cores 0 and 1 to `0x3`, and so on |
-| method | `hb_bpu_choose_t` | Yes | The way to choose the actual execution core on multi-core (`CHOOSE_BY_CAP` / `CHOOSE_BY_EST_LOAD`) |
+- [OUT] hb_bpu_core_t *core: bpu core handle pointer use to assign return value
+- [IN] uint32_t core_mask: the bitmask which bpu core dev use (as index 0 -> 0x1; index 1-> 0x2, index 0&1->0x3...)
+- [IN] hb_bpu_choose_t method: when bpu core dev number > 1, how to choose the real process task core, reference hb_bpu_choose_t
 
 **Return Value**
 
@@ -217,9 +217,7 @@ Close and release the BPU core opened by `hb_bpu_core_open`.
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| core | `hb_bpu_core_t` | Yes | A valid core handle |
+- [IN] hb_bpu_core_t core: valid bpu core handle
 
 **Return Value**
 
@@ -239,10 +237,8 @@ Submit a task to the BPU core for execution. When the task type is `TASK_TYPE_SY
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| core | `hb_bpu_core_t` | Yes | A valid core handle |
-| task | `hb_bpu_task_t` | Yes | A valid task handle |
+- [IN] hb_bpu_core_t core: valid bpu core handle
+- [IN] hb_bpu_task_t task: valid bpu task handle
 
 **Return Value**
 
@@ -262,10 +258,8 @@ Allocate a BPU task instance and return the task handle.
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t *` | Yes | Output pointer for the task handle |
-| type | `hb_task_type_t` | Yes | Task type, see `hb_task_type_t` (e.g. `TASK_TYPE_SYNC`) |
+- [OUT] hb_bpu_task_t *task: the space pointer to assign the bpu task handle, should not be NULL
+- [IN] hb_task_type_t type: task type, reference hb_task_type_t
 
 **Return Value**
 
@@ -286,11 +280,9 @@ Configure a BPU task using the module information from the hbdk runtime.
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t` | Yes | A valid task handle |
-| hbdk_task | `void *` | Yes | Pointer to the task data from the hbdk runtime |
-| hbdk_task_num | `uint32_t` | Yes | Number of task data items |
+- [IN] hb_bpu_task_t task: the valid bpu task handle
+- [IN] void *hbdk_task: the task data pointer which from hbdk runtime
+- [IN] uint32_t hbdk_task_num: the task data number which from hbdk runtime
 
 **Return Value**
 
@@ -310,9 +302,7 @@ Free the task instance allocated by `hb_bpu_task_alloc`.
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t` | Yes | A valid task handle |
+- [IN] hb_bpu_task_t task: the valid bpu task handle
 
 **Return Value**
 
@@ -332,10 +322,8 @@ Set the BPU usage proportion of a group, used to limit the task occupancy of a s
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| group | `uint32_t` | Yes | The group value |
-| prop | `uint32_t` | Yes | BPU usage proportion, max 100; setting it to 0 deletes the group record |
+- [IN] uint32_t group: group value
+- [IN] uint32_t prop: bpu use proportion, max 100, if set 0, delete the group record from bpu software
 
 **Return Value**
 
@@ -355,10 +343,8 @@ Bind the BPU task to the specified group. Tasks are bound to group 0 by default;
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t` | Yes | A valid task handle |
-| group | `uint32_t` | Yes | The group id |
+- [IN] hb_bpu_task_t task: the valid bpu task handle
+- [IN] uint32_t group: group id
 
 **Return Value**
 
@@ -378,10 +364,8 @@ Allocate memory usable by the BPU.
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| size | `uint64_t` | Yes | Size of the memory to allocate |
-| flag | `uint32_t` | Yes | Allocation attributes (cacheable / coherence, etc.), see the `BPU_*` macros in `hb_bpu_mem.h` |
+- [IN] uint64_t size: allocate memory size
+- [IN] uint32_t flag: allocate memory flag(cacheable/coherence)
 
 **Return Value**
 
@@ -401,9 +385,7 @@ Free the memory allocated by `hb_bpu_mem_alloc`.
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| addr | `bpu_addr_t` | Yes | A valid memory address |
+- [IN] bpu_addr_t addr: the valid memory address
 
 ### hb_bpu_memcpy
 
@@ -420,12 +402,10 @@ Heterogeneous memory data copy (between CPU and BPU memory).
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| dst_addr | `bpu_addr_t` | Yes | Base address of the destination memory |
-| src_addr | `bpu_addr_t` | Yes | Base address of the source memory |
-| size | `uint64_t` | Yes | Copy size |
-| direction | `uint32_t` | Yes | Copy direction: `CPU_TO_BPU` (0) or `BPU_TO_CPU` (1) |
+- [IN] bpu_addr_t dst_addr: target memory range base address
+- [IN] bpu_addr_t src_addr: source memory range base address
+- [IN] uint64_t size: copy memory size
+- [IN] uint32_t direction: cpu->bpu or bpu->cpu
 
 **Return Value**
 
@@ -445,11 +425,9 @@ Perform a cache operation on cacheable memory (used after a write and before a r
 
 **Parameters**
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| addr | `bpu_addr_t` | Yes | Base address of the memory |
-| size | `uint64_t` | Yes | Size of the memory range |
-| flag | `uint32_t` | Yes | Cache operation type: `BPU_MEM_INVALIDATE` (1) or `BPU_MEM_CLEAN` (2) |
+- [IN] bpu_addr_t addr: cache operation memory range base
+- [IN] uint64_t size: cache operation memory range size
+- [IN] uint32_t flag: cache invalid or clean
 
 ## Data Structures
 

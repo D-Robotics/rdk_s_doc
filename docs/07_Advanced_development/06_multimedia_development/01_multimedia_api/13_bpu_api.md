@@ -146,319 +146,297 @@ hb_bpu_mem_free(addr);
 
 ### hb_bpu_version
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_version(uint32_t *major, uint32_t *minor, uint32_t *patch);
 ```
 
-**【功能描述】**
+【功能描述】
 
 获取 BPU 库版本号。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| major | `uint32_t *` | 是 | 主版本号输出指针 |
-| minor | `uint32_t *` | 是 | 次版本号输出指针 |
-| patch | `uint32_t *` | 是 | 补丁版本号输出指针 |
+- [OUT] uint32_t *major: major version value pointer
+- [OUT] uint32_t *minor: minor version value pointer
+- [OUT] uint32_t *patch: patch version value pointer
 
-**【返回值】**
+【返回值】
 
 `BPU_OK`（0）表示成功；`BPU_INVAL` 表示参数无效。
 
 ### hb_bpu_core_num
 
-**【函数原型】**
+【函数原型】
 
 ```c
 uint32_t hb_bpu_core_num(void);
 ```
 
-**【功能描述】**
+【功能描述】
 
 获取系统中 BPU 核设备数量。
 
-**【返回值】**
+【参数】
+
+- [IN] None
+
+【返回值】
 
 BPU 核设备数量（`uint32_t`）。
 
 ### hb_bpu_core_open
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_core_open(hb_bpu_core_t *core, uint32_t core_mask,
                               hb_bpu_choose_t method);
 ```
 
-**【功能描述】**
+【功能描述】
 
 创建 BPU 核实例，打开核设备并返回句柄，用于处理 BPU 任务。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| core | `hb_bpu_core_t *` | 是 | 核句柄输出指针 |
-| core_mask | `uint32_t` | 是 | 核位掩码，index 0 对应 `0x1`、index 1 对应 `0x2`、0 与 1 对应 `0x3`，以此类推 |
-| method | `hb_bpu_choose_t` | 是 | 多核时选择实际执行核的方式（`CHOOSE_BY_CAP` / `CHOOSE_BY_EST_LOAD`） |
+- [OUT] hb_bpu_core_t *core: bpu core handle pointer use to assign return value
+- [IN] uint32_t core_mask: the bitmask which bpu core dev use (as index 0 -> 0x1; index 1-> 0x2, index 0&1->0x3...)
+- [IN] hb_bpu_choose_t method: when bpu core dev number > 1, how to choose the real process task core, reference hb_bpu_choose_t
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败，参考 `hb_bpu_err_t`。
 
 ### hb_bpu_core_close
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_core_close(hb_bpu_core_t core);
 ```
 
-**【功能描述】**
+【功能描述】
 
 关闭并释放由 `hb_bpu_core_open` 打开的 BPU 核。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| core | `hb_bpu_core_t` | 是 | 有效的核句柄 |
+- [IN] hb_bpu_core_t core: valid bpu core handle
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败。
 
 ### hb_bpu_core_process
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_core_process(hb_bpu_core_t core, hb_bpu_task_t task);
 ```
 
-**【功能描述】**
+【功能描述】
 
 将任务提交到 BPU 核执行。当任务类型为 `TASK_TYPE_SYNC` 时，本接口阻塞
 直到任务执行完成或被取消。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| core | `hb_bpu_core_t` | 是 | 有效的核句柄 |
-| task | `hb_bpu_task_t` | 是 | 有效的任务句柄 |
+- [IN] hb_bpu_core_t core: valid bpu core handle
+- [IN] hb_bpu_task_t task: valid bpu task handle
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败。
 
 ### hb_bpu_task_alloc
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_task_alloc(hb_bpu_task_t *task, hb_task_type_t type);
 ```
 
-**【功能描述】**
+【功能描述】
 
 分配 BPU 任务实例并返回任务句柄。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t *` | 是 | 任务句柄输出指针 |
-| type | `hb_task_type_t` | 是 | 任务类型，见 `hb_task_type_t`（如 `TASK_TYPE_SYNC`） |
+- [OUT] hb_bpu_task_t *task: the space pointer to assign the bpu task handle, should not be NULL
+- [IN] hb_task_type_t type: task type, reference hb_task_type_t
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败。
 
 ### hb_bpu_task_config
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_task_config(hb_bpu_task_t task, void *hbdk_task,
                                 uint32_t hbdk_task_num);
 ```
 
-**【功能描述】**
+【功能描述】
 
 使用来自 hbdk runtime 的模块信息配置 BPU 任务。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t` | 是 | 有效的任务句柄 |
-| hbdk_task | `void *` | 是 | 来自 hbdk runtime 的任务数据指针 |
-| hbdk_task_num | `uint32_t` | 是 | 任务数据数量 |
+- [IN] hb_bpu_task_t task: the valid bpu task handle
+- [IN] void *hbdk_task: the task data pointer which from hbdk runtime
+- [IN] uint32_t hbdk_task_num: the task data number which from hbdk runtime
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败。
 
 ### hb_bpu_task_free
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_task_free(hb_bpu_task_t task);
 ```
 
-**【功能描述】**
+【功能描述】
 
 释放由 `hb_bpu_task_alloc` 分配的任务实例。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t` | 是 | 有效的任务句柄 |
+- [IN] hb_bpu_task_t task: the valid bpu task handle
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败。
 
 ### hb_bpu_set_group_proportion
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_set_group_proportion(uint32_t group, uint32_t prop);
 ```
 
-**【功能描述】**
+【功能描述】
 
 设置某个 group 的 BPU 使用比例，用于限制特定 group 的任务占用。group 0
 默认比例为 100，无需初始化设置。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| group | `uint32_t` | 是 | group 值 |
-| prop | `uint32_t` | 是 | BPU 使用比例，最大 100；设为 0 时删除该 group 记录 |
+- [IN] uint32_t group: group value
+- [IN] uint32_t prop: bpu use proportion, max 100, if set 0, delete the group record from bpu software
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败。
 
 ### hb_bpu_task_set_group
 
-**【函数原型】**
+【函数原型】
 
 ```c
 hb_bpu_err_t hb_bpu_task_set_group(hb_bpu_task_t task, uint32_t group);
 ```
 
-**【功能描述】**
+【功能描述】
 
 将 BPU 任务绑定到指定 group。任务默认绑定 group 0；绑定到非 0 group 前，
 必须先通过 `hb_bpu_set_group_proportion` 为该 group 设置大于 0 的比例。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| task | `hb_bpu_task_t` | 是 | 有效的任务句柄 |
-| group | `uint32_t` | 是 | group id |
+- [IN] hb_bpu_task_t task: the valid bpu task handle
+- [IN] uint32_t group: group id
 
-**【返回值】**
+【返回值】
 
 `BPU_OK` 表示成功；非 `BPU_OK` 表示失败。
 
 ### hb_bpu_mem_alloc
 
-**【函数原型】**
+【函数原型】
 
 ```c
 bpu_addr_t hb_bpu_mem_alloc(uint64_t size, uint32_t flag);
 ```
 
-**【功能描述】**
+【功能描述】
 
 分配 BPU 可用的内存。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| size | `uint64_t` | 是 | 分配内存大小 |
-| flag | `uint32_t` | 是 | 分配属性（cacheable / coherence 等），见 `hb_bpu_mem.h` 中 `BPU_*` 宏 |
+- [IN] uint64_t size: allocate memory size
+- [IN] uint32_t flag: allocate memory flag(cacheable/coherence)
 
-**【返回值】**
+【返回值】
 
 成功返回可访问地址（`> 0`）；失败返回 `0`。
 
 ### hb_bpu_mem_free
 
-**【函数原型】**
+【函数原型】
 
 ```c
 void hb_bpu_mem_free(bpu_addr_t addr);
 ```
 
-**【功能描述】**
+【功能描述】
 
 释放由 `hb_bpu_mem_alloc` 分配的内存。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| addr | `bpu_addr_t` | 是 | 有效的内存地址 |
+- [IN] bpu_addr_t addr: the valid memory address
 
 ### hb_bpu_memcpy
 
-**【函数原型】**
+【函数原型】
 
 ```c
 int32_t hb_bpu_memcpy(bpu_addr_t dst_addr, bpu_addr_t src_addr,
                       uint64_t size, uint32_t direction);
 ```
 
-**【功能描述】**
+【功能描述】
 
 异构内存数据拷贝（CPU 与 BPU 内存之间）。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| dst_addr | `bpu_addr_t` | 是 | 目标内存基地址 |
-| src_addr | `bpu_addr_t` | 是 | 源内存基地址 |
-| size | `uint64_t` | 是 | 拷贝大小 |
-| direction | `uint32_t` | 是 | 拷贝方向：`CPU_TO_BPU`（0）或 `BPU_TO_CPU`（1） |
+- [IN] bpu_addr_t dst_addr: target memory range base address
+- [IN] bpu_addr_t src_addr: source memory range base address
+- [IN] uint64_t size: copy memory size
+- [IN] uint32_t direction: cpu->bpu or bpu->cpu
 
-**【返回值】**
+【返回值】
 
 `0` 表示成功；`< 0` 表示失败。
 
 ### hb_bpu_mem_cache_flush
 
-**【函数原型】**
+【函数原型】
 
 ```c
 void hb_bpu_mem_cache_flush(bpu_addr_t addr, uint64_t size, uint32_t flag);
 ```
 
-**【功能描述】**
+【功能描述】
 
 对可缓存内存执行缓存操作（写后读前使用）。
 
-**【参数】**
+【参数】
 
-| 参数 | 类型 | 必选 | 说明 |
-| --- | --- | --- | --- |
-| addr | `bpu_addr_t` | 是 | 内存基地址 |
-| size | `uint64_t` | 是 | 内存范围大小 |
-| flag | `uint32_t` | 是 | 缓存操作类型：`BPU_MEM_INVALIDATE`（1）或 `BPU_MEM_CLEAN`（2） |
+- [IN] bpu_addr_t addr: cache operation memory range base
+- [IN] uint64_t size: cache operation memory range size
+- [IN] uint32_t flag: cache invalid or clean
 
 ## 数据结构
 

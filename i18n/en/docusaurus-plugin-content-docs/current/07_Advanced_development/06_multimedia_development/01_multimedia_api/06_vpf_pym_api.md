@@ -78,51 +78,71 @@ hbn_vnode_close(pym_fd);
 
 ### hbn_gen_gdc_cfg
 
-Function declaration
+**Function Prototype**
 
 ```c
 int32_t hbn_gen_gdc_cfg(const param_t *gdc_param, const window_t *windows, uint32_t wnd_num, void **cfg_buf, uint64_t *cfg_size);
 ```
 
-Function description
+**Description**
 
 See board-side `hbn_vpf_interface.h` (no doxygen; the signature is taken from the header file).
 
+**Parameters**
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
+
 ### hbn_free_gdc_cfg
 
-Function declaration
+**Function Prototype**
 
 ```c
 int32_t hbn_free_gdc_cfg(uint32_t *cfg_buf);
 ```
 
-Function description
+**Description**
 
 See board-side `hbn_vpf_interface.h` (no doxygen; the signature is taken from the header file).
 
+**Parameters**
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
+
 ### hbn_get_codec_channel_idx
 
-Function declaration
+**Function Prototype**
 
 ```c
 hobot_status hbn_get_codec_channel_idx(hbn_vnode_handle_t vnode_fd, int32_t encoder, int32_t *channel_idx);
 ```
 
-Function description
+**Description**
 
 See board-side `hbn_vpf_interface.h` (no doxygen; the signature is taken from the header file).
 
+**Parameters**
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
+
 ### vnode_get_mode
 
-Function declaration
+**Function Prototype**
 
 ```c
 int32_t vnode_get_mode(hbn_vnode_handle_t vnode_fd);
 ```
 
-Function description
+**Description**
 
 See board-side `hbn_vpf_interface.h` (no doxygen; the signature is taken from the header file).
+
+**Parameters**
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
 
 ## Related Documentation
 

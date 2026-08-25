@@ -78,7 +78,7 @@ hbn_vnode_close(pym_fd);
 
 ### hbn_gen_gdc_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t hbn_gen_gdc_cfg(const param_t *gdc_param, const window_t *windows, uint32_t wnd_num, void **cfg_buf, uint64_t *cfg_size);
@@ -88,9 +88,14 @@ int32_t hbn_gen_gdc_cfg(const param_t *gdc_param, const window_t *windows, uint3
 
 见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
 
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
+
 ### hbn_free_gdc_cfg
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t hbn_free_gdc_cfg(uint32_t *cfg_buf);
@@ -100,9 +105,14 @@ int32_t hbn_free_gdc_cfg(uint32_t *cfg_buf);
 
 见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
 
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
+
 ### hbn_get_codec_channel_idx
 
-【函数声明】
+【函数原型】
 
 ```c
 hobot_status hbn_get_codec_channel_idx(hbn_vnode_handle_t vnode_fd, int32_t encoder, int32_t *channel_idx);
@@ -112,9 +122,14 @@ hobot_status hbn_get_codec_channel_idx(hbn_vnode_handle_t vnode_fd, int32_t enco
 
 见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
 
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
+
 ### vnode_get_mode
 
-【函数声明】
+【函数原型】
 
 ```c
 int32_t vnode_get_mode(hbn_vnode_handle_t vnode_fd);
@@ -123,6 +138,11 @@ int32_t vnode_get_mode(hbn_vnode_handle_t vnode_fd);
 【功能描述】
 
 见板端 `hbn_vpf_interface.h`（无 doxygen，签名取自头文件）。
+
+【参数】
+
+<!-- TODO(Sx): 参数待头文件/板端核实 -->
+
 
 ## 相关文档
 
