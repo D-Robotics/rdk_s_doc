@@ -1,0 +1,12 @@
+diff --git a/node_modules/@docusaurus/plugin-content-docs/lib/sidebars/postProcessor.js b/node_modules/@docusaurus/plugin-content-docs/lib/sidebars/postProcessor.js
+index ac6a39408..8e1277fe4 100644
+--- a/node_modules/@docusaurus/plugin-content-docs/lib/sidebars/postProcessor.js
++++ b/node_modules/@docusaurus/plugin-content-docs/lib/sidebars/postProcessor.js
+@@ -57,6 +57,7 @@ function postProcessSidebarItem(item, params) {
+                 type: 'doc',
+                 label: category.label,
+                 id: category.link.id,
++                translatable: true,
+             };
+         }
+         // A non-collapsible category can't be collapsed!
