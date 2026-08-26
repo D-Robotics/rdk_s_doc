@@ -32,7 +32,7 @@ description: "示例代码介绍 板端示例使用说明"
 ├── sample_vin        # 初始化 Camera Sensor，从 VIN 模块获取图像
 ├── sample_pym        # 初始化 PYM 模块，使用 PYM 对图像进行缩小操作
 ├── sample_gpu_3d     # 提供OpenCL 和 OpenGLES 两种接口使用 3DGPU的示例
-├── sunrise_camera    # 集成大部分模块实现的应用方案示例代码，支持智能摄像头和智能分析盒，在 Web 上可以浏览视频图像和智能算法结果
+├── sunrise_camera    # 集成大部分模块实现的应用方案示例代码，支持智能摄像头和智能分析盒，在 Web 上可以浏览视频图像和 AI 算法结果
 ├── utils             # 包含通用的函数及结构体
 └── vp_sensors        # Camera Sensor 配置代码，本代码会被其他需要使用 Camera Sensor 的模块使用
 ```
