@@ -307,14 +307,6 @@
     "message": "C++",
     "description": "The label for category C 接口 in sidebar tutorialSidebar"
   },
-  "sidebar.tutorialSidebar.doc.deb 包开发": {
-    "message": "Deb Package Development",
-    "description": "The label for the doc item deb 包开发 in sidebar tutorialSidebar"
-  },
-  "sidebar.tutorialSidebar.doc.下一步": {
-    "message": "Next Steps",
-    "description": "The label for the doc item 下一步 in sidebar tutorialSidebar"
-  },
   "sidebar.tutorialSidebar.category.下一步": {
     "message": "Next Steps",
     "description": "The label for category 下一步 in sidebar tutorialSidebar"
@@ -482,5 +474,13 @@
   "sidebar.tutorialSidebar.category.常见问题.link.generated-index.description": {
     "message": "FAQ",
     "description": "The generated-index page description for category 常见问题 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.deb 包开发": {
+    "message": "Deb Package Development",
+    "description": "The label for category deb 包开发 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.deb 包开发.link.generated-index.description": {
+    "message": "Deb Package Development",
+    "description": "The generated-index page description for category deb 包开发 in sidebar tutorialSidebar"
   }
 }

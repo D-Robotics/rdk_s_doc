@@ -2,7 +2,8 @@
   "position": 1,
   "label": "deb 包开发",
   "link": {
-    "type": "doc",
-    "id": "Advanced_development/system_software/deb/deb"
+    "type": "generated-index",
+    "description": "deb Package Development",
+    "slug": "/Advanced_development/system_software/deb"
   }
 }
