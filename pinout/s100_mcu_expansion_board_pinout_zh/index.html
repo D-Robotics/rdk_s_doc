@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="RDK S100 MCU 接口扩展板 30-pin 交互式引脚参考。">
+  <title>RDK S100 · MCU 接口扩展板引脚定义</title>
+  <style>
+    :root{
+      --ink:#111;--line:#747474;--power:#f15a24;--ground:#050505;--gpio:#70b548;
+      --spi:#f1c2a5;--i2c:#10a4d8;--pwm:#7443a8;--adc:#c69add;
+      --serial:#f2c97d;--trace:#bcc5cf;--other:#e2e5e9;
+      --sans:Arial,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;--mono:Consolas,"Liberation Mono",monospace;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;overflow:hidden}
+    body{color:var(--ink);font-family:var(--sans);font-variant-numeric:tabular-nums;background:#fff;-webkit-font-smoothing:antialiased}
+    .slide{position:fixed;inset:0;padding:7px 9px 9px;background:#fff}
+    .panel{height:100%;display:flex;flex-direction:column;overflow:hidden;background:#fff}
+    .panel-title{flex:0 0 40px;display:flex;align-items:center;justify-content:center}
+    .panel-title h2{margin:0;font-size:clamp(20px,1.55vw,30px);line-height:1;font-weight:800;letter-spacing:-.02em}
+    .table-wrap{flex:1;min-height:0;display:flex;flex-direction:column}
+    .grid{display:grid;grid-template-columns:
+      minmax(0,.58fr) minmax(0,.9fr) minmax(0,.85fr) minmax(0,.7fr) minmax(0,.85fr) minmax(0,.9fr) minmax(0,.6fr) minmax(0,.95fr) minmax(0,1.35fr) minmax(0,1.1fr) minmax(0,.45fr)
+      minmax(0,.45fr) minmax(0,1.1fr) minmax(0,1.35fr) minmax(0,.95fr) minmax(0,.6fr) minmax(0,.9fr) minmax(0,.85fr) minmax(0,.7fr) minmax(0,.85fr) minmax(0,.9fr) minmax(0,.58fr)}
+    .table-head{flex:0 0 61px;border:1px solid var(--line);border-bottom:0;background:#f3f3f3;overflow:hidden}
+    .head,.cell{min-width:0;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;border-right:1px solid var(--line)}
+    .head:last-child,.cell:last-child{border-right:0}
+    .head{padding:3px;color:#111;font:800 clamp(9px,.62vw,12px)/1.08 var(--sans);overflow-wrap:anywhere}
+    .head.fn{background:#efefef}.head.identity{background:#f3b086}.head.desc{background:#dcebd5}
+    .head.physical{background:#dedede;font-size:clamp(9px,.62vw,12px)}
+    .head.physical.left{border-right:1.5px solid #444}
+    .rows{display:grid;grid-template-rows:repeat(15,minmax(0,1fr));flex:1;min-height:0;border:1px solid var(--line);overflow:hidden}
+    .row{min-height:0;border-bottom:1px solid var(--line)}
+    .row:last-child{border-bottom:0}
+    .cell{--group:var(--other);height:100%;padding:2px 3px;color:#111;font:700 clamp(9px,.65vw,15px)/1.03 var(--mono);overflow-wrap:anywhere}
+    .cell[data-group="power"]{--group:var(--power)}.cell[data-group="ground"]{--group:var(--ground)}.cell[data-group="gpio"]{--group:var(--gpio)}
+    .cell[data-group="spi"]{--group:var(--spi)}.cell[data-group="i2c"]{--group:var(--i2c)}.cell[data-group="pwm"]{--group:var(--pwm)}
+    .cell[data-group="adc"]{--group:var(--adc)}.cell[data-group="serial"]{--group:var(--serial)}.cell[data-group="trace"]{--group:var(--trace)}
+    .pull{background:#e2efd9}.direction{background:#ececec}.identity{background:#f4b68f}
+    .description{background:#dfeeda;font-family:var(--sans);font-weight:600;padding-inline:4px}
+    .logic{background:#fffdf2}.function{background:var(--group);font-weight:800}
+    .cell.merge{grid-column:span 4}
+    .function[data-group="ground"]{color:#fff}.function[data-group="pwm"]{color:#fff}.function[data-group="other"]{background:#e3e6ea}
+    .physical{background:#e7e7e7;font-size:clamp(10px,.72vw,13px);font-weight:800}  
+    .physical.odd{border-right:1.5px solid #444}.physical.even{background:#f1f1f1}
+    @media(max-width:1450px){.slide{padding-inline:5px}.cell{font-size:6px}.head{font-size:6px}.panel-title h2{font-size:20px}}
+  </style>
+</head>
+<body>
+  <main class="slide">
+    <section class="panel">
+      <div class="panel-title"><h2>S100 MCU 接口扩展板 · 30-Pin 排针</h2></div>
+      <div class="table-wrap">
+        <div class="table-head grid" id="head"></div>
+        <div class="rows" id="rows"></div>
+      </div>
+    </section>
+  </main>
+  <script>
+  (()=>{
+    const pins=[
+      {p:1,s:"PWM1_IO_3V3",d:"PWM或GPIO",sip:"PWM1_IO",v:"3.3V",f:["PWM1_IO","PMIC_ERR1","/","GPIO_MCU[86]"],dir:"IO/I/NULL/IO",pull:"PU, 10K"},
+      {p:2,s:"PPS_OUT_3V3",d:"PPS GPS同步或GPIO",sip:"PPS_INOUT",v:"3.3V",f:["PPS_IN2","PPS_OUT","/","GPIO_MCU[2]"],dir:"I/O/NULL/IO",pull:"PD"},
+      {p:3,s:"GND",d:"GND",sip:"/",v:"/",f:["GND","","",""],dir:"/",pull:"/"},
+      {p:4,s:"GND",d:"GND",sip:"/",v:"/",f:["GND","","",""],dir:"/",pull:"/"},
+      {p:5,s:"SPI4_CSN1_3V3",d:"SPI接口",sip:"SPI4_CSN1",v:"3.3V",f:["SPI4_CSN1","PPS_IN1","TRC_DATA4","GPIO_MCU[26]"],dir:"O/I/O/IO",pull:"PD"},
+      {p:6,s:"GPIO_MCU_4_3V3",d:"用作普通GPIO",sip:"LIN2_TXD",v:"3.3V",f:["LIN2_TXD","UART6_TXD","SPI6_CSN2","GPIO_MCU[4]"],dir:"O/O/O/IO",pull:"PD"},
+      {p:7,s:"SPI4_CSN0_3V3",d:"SPI接口",sip:"SPI4_CSN0",v:"3.3V",f:["SPI4_CSN0","/","TRC_DATA3","GPIO_MCU[25]"],dir:"IO/NULL/O/IO",pull:"PD"},
+      {p:8,s:"I2C9_SCL_3V3",d:"I2C9接口",sip:"PWM0_IO",v:"3.3V",f:["PWM0_IO","I2C9_SCL","/","GPIO_MCU[85]"],dir:"IO/IO/NULL/IO",pull:"PU, 3.2K"},
+      {p:9,s:"SPI4_SCLK_3V3",d:"SPI接口",sip:"SPI4_SCLK",v:"3.3V",f:["SPI4_SCLK","/","TRC_DATA7","GPIO_MCU[29]"],dir:"IO/NULL/O/IO",pull:"PD"},
+      {p:10,s:"I2C9_SDA_3V3",d:"I2C9接口",sip:"BIFSPI_MISO",v:"3.3V",f:["BIFSPI_MISO","I2C9_SDA","/","GPIO_MCU[70]"],dir:"O/IO/NULL/IO",pull:"PU, 3.2K"},
+      {p:11,s:"SPI4_MOSI_3V3",d:"SPI接口",sip:"SPI4_MOSI",v:"3.3V",f:["SPI4_MOSI","/","TRC_DATA5","GPIO_MCU[27]"],dir:"IO/NULL/O/IO",pull:"PD"},
+      {p:12,s:"I2C8_SCL_3V3",d:"I2C8接口",sip:"I2C8_SCL",v:"3.3V",f:["I2C8_SCL","PWM10_IO","/","GPIO_MCU[83]"],dir:"IO/IO/NULL/IO",pull:"PU, 4.7K"},
+      {p:13,s:"SPI4_MISO_3V3",d:"SPI接口",sip:"SPI4_MISO",v:"3.3V",f:["SPI4_MISO","/","TRC_DATA6","GPIO_MCU[28]"],dir:"IO/NULL/O/IO",pull:"PD"},
+      {p:14,s:"I2C8_SDA_3V3",d:"I2C8接口",sip:"I2C8_SDA",v:"3.3V",f:["I2C8_SDA","PWM11_IO","/","GPIO_MCU[84]"],dir:"IO/IO/NULL/IO",pull:"PU, 4.7K"},
+      {p:15,s:"GPIO_MCU_1_3V3",d:"用作普通GPIO",sip:"FUSA_ERR1",v:"3.3V",f:["FUSA_ERR1","SPI2_CSN3","/","GPIO_MCU[1]"],dir:"O/O/NULL/IO",pull:"PD"},
+      {p:16,s:"VDD_1V8",d:"VDD_3V3转换输出1.8V",sip:"/",v:"1.8V",f:["VDD_1V8","","",""],dir:"AO",pull:"/"},
+      {p:17,s:"SPI2_CSN0_3V3",d:"SPI接口",sip:"SPI2_CSN0",v:"3.3V",f:["SPI2_CSN0","/","/","GPIO_MCU[16]"],dir:"IO/NULL/NULL/IO",pull:"PD"},
+      {p:18,s:"ADC_11",d:"ADC",sip:"ADC_IO[11]",v:"1.8V ADC",f:["ADC_IO[11]","/","/","/"],dir:"AI",pull:"/"},
+      {p:19,s:"SPI2_SCLK_3V3",d:"SPI接口",sip:"SPI2_SCLK",v:"3.3V",f:["SPI2_SCLK","/","/","GPIO_MCU[19]"],dir:"IO/NULL/NULL/IO",pull:"PD"},
+      {p:20,s:"ADC_10",d:"ADC",sip:"ADC_IO[10]",v:"1.8V ADC",f:["ADC_IO[10]","/","/","/"],dir:"AI",pull:"/"},
+      {p:21,s:"SPI2_MOSI_3V3",d:"SPI接口",sip:"SPI2_MOSI",v:"3.3V",f:["SPI2_MOSI","/","/","GPIO_MCU[17]"],dir:"IO/NULL/NULL/IO",pull:"PD"},
+      {p:22,s:"ADC_9",d:"ADC",sip:"ADC_IO[9]",v:"1.8V ADC",f:["ADC_IO[9]","/","/","/"],dir:"AI",pull:"/"},
+      {p:23,s:"SPI2_MISO_3V3",d:"SPI接口",sip:"SPI2_MISO",v:"3.3V",f:["SPI2_MISO","/","/","GPIO_MCU[18]"],dir:"IO/NULL/NULL/IO",pull:"PD"},
+      {p:24,s:"ADC_8",d:"ADC",sip:"ADC_IO[8]",v:"1.8V ADC",f:["ADC_IO[8]","/","/","/"],dir:"AI",pull:"/"},
+      {p:25,s:"GND",d:"GND",sip:"/",v:"/",f:["GND","","",""],dir:"/",pull:"/"},
+      {p:26,s:"ADC_7",d:"ADC",sip:"ADC_IO[7]",v:"1.8V ADC",f:["ADC_IO[7]","/","/","/"],dir:"AI",pull:"/"},
+      {p:27,s:"VDD_3V3",d:"POWER",sip:"/",v:"3.3V",f:["VDD_AON_PERI_MCU_3V3","","",""],dir:"AO",pull:"/"},
+      {p:28,s:"ADC_6",d:"ADC",sip:"ADC_IO[6]",v:"1.8V ADC",f:["ADC_IO[6]","/","/","/"],dir:"AI",pull:"/"},
+      {p:29,s:"VDD_5V",d:"POWER",sip:"/",v:"5V",f:["VDD_AON_PERI_MCU_5V","","",""],dir:"AO",pull:"/"},
+      {p:30,s:"ADC_5",d:"ADC",sip:"ADC_IO[5]",v:"1.8V ADC",f:["ADC_IO[5]","/","/","/"],dir:"AI",pull:"/"}
+    ];
+    const heads=[
+  ["上拉/下拉",""],
+  ["方向<br>0/1/2/3",""],
+  ["功能3","fn"],
+  ["功能2","fn"],
+  ["功能1","fn"],
+  ["功能0","fn"],
+  ["逻辑<br>电平",""],
+  ["S100 SIP<br>引脚名","identity"],
+  ["主要功能<br>描述","desc"],
+  ["信号名","identity"],
+  ["引脚","physical"],
+  ["引脚","physical"],
+  ["信号名","identity"],
+  ["主要功能<br>描述","desc"],
+  ["S100 SIP<br>引脚名","identity"],
+  ["逻辑<br>电平",""],
+  ["功能0","fn"],
+  ["功能1","fn"],
+  ["功能2","fn"],
+  ["功能3","fn"],
+  ["方向<br>0/1/2/3",""],
+  ["上拉/下拉",""]
+    ];
+    const head=document.getElementById("head"),rows=document.getElementById("rows");
+    heads.forEach(([label,cls],i)=>{const e=document.createElement("div");e.className=`head ${cls}${i===10?" left":""}`;e.innerHTML=label;head.appendChild(e)});
+    const group=value=>{const s=String(value||"").toUpperCase();if(s.includes("GND"))return"ground";if(s.includes("VDD")||s==="POWER")return"power";if(s.includes("ADC"))return"adc";if(s.includes("I2C"))return"i2c";if(s.includes("SPI")||s.includes("BIFSPI"))return"spi";if(s.includes("PWM")||s.includes("PPS"))return"pwm";if(s.includes("UART")||s.includes("LIN"))return"serial";if(s.includes("TRC")||s.includes("FUSA")||s.includes("PMIC_ERR"))return"trace";if(s.includes("GPIO"))return"gpio";return"other"};
+    const esc=value=>String(value??"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const cell=(cls,value,grp)=>`<div class="cell ${cls}" data-group="${grp}">${esc(value)}</div>`;
+    const functions=x=>x.f.slice(1).every(v=>v==="")?[`<div class="cell function merge" data-group="${group(x.f[0])}">${esc(x.f[0])}</div>`]:x.f.map(v=>cell("function",v,group(v)));
+    const side=(x,left)=>{const g=group(`${x.s} ${x.d} ${x.sip}`);const normal=[cell("identity",x.s,g),cell("description",x.d,g),cell("identity",x.sip,group(x.sip)),cell("logic",x.v,g),...functions(x),cell("direction",x.dir,g),cell("pull",x.pull,g)];return left?[...normal].reverse():normal};
+    for(let i=0;i<15;i++){const odd=pins[i*2],even=pins[i*2+1],row=document.createElement("div");row.className="row grid";row.style.setProperty("--row",i);row.innerHTML=side(odd,true).join("")+cell("physical odd",odd.p,group(odd.s))+cell("physical even",even.p,group(even.s))+side(even,false).join("");rows.appendChild(row)}
+  })();
+  </script>
+</body>
+</html>
