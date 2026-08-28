@@ -261,24 +261,15 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
-    }),
-  themes: [
-    "@docusaurus/theme-mermaid",
-    [
-      require.resolve("@easyops-cn/docusaurus-search-local"),
-      {
-        hashed: true,
-        language: ["en", "zh"],
-        highlightSearchTermsOnTargetPage: true,
-        explicitSearchResultPath: true,
-        docsRouteBasePath: ["/", "rdk_s"],
-        indexDocs: true,
-        indexBlog: false,
-        indexPages: false,
-        searchResultContextMaxLength: 50,
+      algolia: {
+        appId: "1VU781LYTV",
+        apiKey: "fb65c6e54a52ce6fba0645bd2630e79b",
+        indexName: "rdk_s_doc",
+        contextualSearch: true,
+        searchPagePath: "search",
       },
-    ],
-  ],
+    }),
+  themes: ["@docusaurus/theme-mermaid"],
 };
 
 export default config;

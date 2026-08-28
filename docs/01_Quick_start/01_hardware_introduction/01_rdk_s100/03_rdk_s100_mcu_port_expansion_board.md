@@ -2,6 +2,8 @@
 sidebar_position: 3
 ---
 
+import S100McuPortPinout from '@site/src/components/S100McuPortPinout';
+
 # 1.1.3 MCU 接口扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png" alt="RDK S100 MCU 接口扩展板" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -100,7 +102,7 @@ MCU 扩展板提供了一个千兆以太网接口。
 
 ### 30-Pin（J12）
 
-接口定义: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/drobotics_rdk_s100_mcu_port_expansion_board_pinlist_v1p0_0924.xlsx">drobotics_rdk_s100_mcu_port_expansion_board_pinlist_v1p0.xlsx</a>
+<S100McuPortPinout lang="zh" />
 
 :::warning 注意
 
