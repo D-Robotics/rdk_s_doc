@@ -842,6 +842,7 @@ async function main() {
   }
 
   const searchKey = process.env.ALGOLIA_SEARCH_API_KEY || 'fb65c6e54a52ce6fba0645bd2630e79b';
+  const probePair = allPairs[0];
   const probe = await algoliaRequest(
     'POST',
     `indexes/${encodeURIComponent(INDEX_NAME)}/query`,
@@ -851,17 +852,19 @@ async function main() {
       facetFilters: [
         `language:${DEFAULT_LOCALE}`,
         'docusaurus_tag:docs-default-current',
-        'product:RDK S100',
-        'rdk_version:4.0.5',
+        `product:${probePair.product}`,
+        `rdk_version:${probePair.version}`,
       ],
     },
     searchKey,
   );
   console.log(
-    `Probe query "RDK" + language:${DEFAULT_LOCALE} + docusaurus_tag:docs-default-current + product:RDK S100 + rdk_version:4.0.5 => ${probe.nbHits} hits`,
+    `Probe query "RDK" + language:${DEFAULT_LOCALE} + docusaurus_tag:docs-default-current + product:${probePair.product} + rdk_version:${probePair.version} => ${probe.nbHits} hits`,
   );
   if (!probe.nbHits) {
-    throw new Error('Index upload succeeded but probe query returned 0 hits');
+    throw new Error(
+      `Index upload succeeded but probe query (product:${probePair.product}, rdk_version:${probePair.version}) returned 0 hits`,
+    );
   }
 }
 
