@@ -101,7 +101,7 @@ When in use, ensure that the connector between the Camera Expansion Board and th
 
 ### DC Power Input (J401)
 
-The Camera expansion board is equipped with an external 12V power input interface for GMSL cameras. When the total 12V current draw of all GMSL cameras connected to this Camera expansion board exceeds 2A, power must be supplied to the GMSL cameras through this DC power jack.
+The Camera Expansion Board is equipped with an external 12V power input interface for GMSL cameras. When the total 12V current draw of all GMSL cameras connected to this Camera Expansion Board exceeds 2A, power must be supplied to the GMSL cameras through this DC power jack.
 
 :::info Tip
 
@@ -112,7 +112,7 @@ The Camera expansion board is equipped with an external 12V power input interfac
 
 ### GMSL Camera Interfaces (J501/J601)
 
-The Camera expansion board integrates two MAX96712 deserializer chips, each of which can interface with four GMSL2 cameras, supporting a total of eight GMSL2 cameras; it can also provide 12V power to GMSL cameras via coaxial cables.
+The Camera Expansion Board integrates two MAX96712 deserializer chips, each of which can interface with four GMSL2 cameras, supporting a total of eight GMSL2 cameras; it can also provide 12V power to GMSL cameras via coaxial cables.
 
 :::warning Note
 
