@@ -101,7 +101,7 @@ When in use, ensure that the connector between the Camera Expansion Board and th
 
 ### DC Power Input (J401)
 
-The Camera Expansion Board is equipped with an external 12V power input interface for GMSL cameras. When the total current demand at 12V for all GMSL cameras connected to this expansion board exceeds 700mA, the GMSL cameras must be powered via this DC power jack.
+The Camera expansion board is equipped with an external 12V power input interface for GMSL cameras. When the total 12V current draw of all GMSL cameras connected to this Camera expansion board exceeds 2A, power must be supplied to the GMSL cameras through this DC power jack.
 
 :::info Tip
 
@@ -112,7 +112,7 @@ The Camera Expansion Board is equipped with an external 12V power input interfac
 
 ### GMSL Camera Interfaces (J501/J601)
 
-The Camera Expansion Board integrates the MAX96712 deserializer chip, supports connecting 4 GMSL2 cameras, and can provide 12V power to the GMSL cameras via coaxial cables.
+The Camera expansion board integrates two MAX96712 deserializer chips, each of which can interface with four GMSL2 cameras, supporting a total of eight GMSL2 cameras; it can also provide 12V power to GMSL cameras via coaxial cables.
 
 :::warning Note
 
@@ -122,7 +122,7 @@ The GMSL interface uses a mini Fakra 4-in-1 z code connector. Please use cables 
 
 :::info Tip
 
-1. When the 12V power current demand of the GMSL cameras is within 700mA, an external 12V adapter is not required; the 12V power is then provided by the RDK S600. If the current demand exceeds 700mA, an external 12V adapter must be connected to ensure a stable power supply to the GMSL camera modules.
+1. When the 12V current requirement of the GMSL cameras is within 2A, no external 12V adapter is needed, and the 12V power is supplied by the RDK S600. If the current requirement exceeds 2A, an external 12V adapter must be connected to ensure stable power delivery to the GMSL camera modules.
 2. The Camera Expansion Board can provide a maximum current of 550mA@12V per GMSL camera channel. Exceeding this current specification may compromise the stable operation of the GMSL camera modules.
 
 :::
