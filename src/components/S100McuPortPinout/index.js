@@ -2,8 +2,8 @@ import React from "react";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 const PINOUT_URLS = {
-  en: "pinout/s100_mcu_expansion_board_pinout_en/",
-  zh: "pinout/s100_mcu_expansion_board_pinout_zh/",
+  en: "pinout/s100_mcu_expansion_board_pinout_en/index.html",
+  zh: "pinout/s100_mcu_expansion_board_pinout_zh/index.html",
 };
 
 const TITLES = {
