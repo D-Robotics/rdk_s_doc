@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## System Overview
 
-The S100 camsys subsystem includes the Camera sensor (including SerDes), VIN (including MIPI, CIM), ISP, PYM, GDC, YNR, and STITCH modules.
+The camsys subsystem includes the Camera sensor (including SerDes), VIN (including MIPI, CIM), ISP, PYM, GDC, YNR, and STITCH modules.
 
 | Abbreviation | Full Name                              | Description                                                                 |
 |--------------|----------------------------------------|-----------------------------------------------------------------------------|
@@ -1267,9 +1267,9 @@ After RDK-S100 connects to cameras, the data flows through subsequent processing
 
 - **MIPI RX**: 3 CDPHY lanes, each supporting either DPHY up to 4.5 Gbps/lane × 4 lanes or CPHY up to 3.5 Gbps/trio × 3 trios. Each lane supports 4 virtual channels (VCs), theoretically allowing up to 12 camera inputs.
 
-| RDK-S100 software is expected to support up to 6 cameras: RX4 can connect up to 4 cameras via SerDes, while RX0 and RX1 each connect to 1 camera. For non-standard configurations, please consult an FAE for confirmation. |
-|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
-
+:::info
+RDK-S100 software is expected to support up to 6 cameras: RX4 can connect up to 4 cameras via SerDes, while RX0 and RX1 each connect to 1 camera. For non-standard configurations, please consult an FAE for confirmation. 
+:::
 
 :::tip
 The commercial version offers more comprehensive feature support, deeper hardware capability exposure, and exclusive customization options. To ensure compliance and secure delivery, access to the commercial version will be granted through the following process.
