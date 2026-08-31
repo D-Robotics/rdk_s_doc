@@ -128,35 +128,11 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 - **测试目标：** 通过 `stress_test.sh` 调用 `hrt_model_exec` 工具，用 `-c` 选择要加压的 BPU 核心、`-r` 控制每个核的负载比例，持续推理 S600 适配的 HBM 模型（`resnet50_224x224_nv12.hbm`），确保 BPU 在高负载下稳定工作并达到预期性能。
 - **测试目的：** 确保 BPU 在执行推理计算时能够输出正确结果，长时间高负载运行下不出现崩溃或错误。
 
-- **hrt_model_exec BPU 压测原理：** `hrt_model_exec` 是 D-Robotics 官方提供的模型推理 / 性能测试工具，由 `hobot-dnn` 包安装到 `/usr/hobot/bin/`。压测时以 `perf` 子命令启动；运行时通过环境变量 `BPU_BUF_GROUP=true` + `_HB_NN_BPU_GROUP_ID_=<core>` + `_HB_NN_BPU_GROUP_PROP_=<percent>` 把目标核绑定到一个 BPU group，并按 group_prop 给该 group 分配 BPU 时间片配额，从而实现按核、按比例的稳态加压。`stress_test.sh` 工作流程：
-    1. 解析 `-t`（时长）、`-r <portion>`（总负载 5~100%）、`-c <cores>`（要压的 BPU 核心列表，缺省时**自动从 `/sys/class/boardinfo/pg_map` 读取，跳过被掉电(power-gate)的核**）；
-    2. 计算每核 group_prop = `portion / 选中核数`（最少 1）；
-    3. 启动 `stressapptest` 跑 CPU/DDR 后，**为选中的每一个核 fork 一个独立的 `hrt_model_exec perf` 进程**，每个进程通过环境变量绑定到对应核 + 设置 group_prop；
-    4. 每个 `hrt_model_exec` 在自己的核上持续推理 `resnet50_224x224_nv12.hbm`，stdout 周期性输出 FPS、平均/最大/最小延迟。
-
-- **命令分析：** 以 `-c 1,3 -r 100`（只压 bpu0/bpu2，每核 50% group_prop）为例，`stress_test.sh` 内部对每个核执行：
-
-	```shell
-	BPU_BUF_GROUP=true \
-	HB_NN_LOG_LEVEL=4 \
-	_HB_NN_BPU_GROUP_ID_=1 \
-	_HB_NN_BPU_GROUP_PROP_=50 \
-	hrt_model_exec perf \
-	    --model_file=./module/resnet50_224x224_nv12.hbm \
-	    --core_id=1 \
-	    --thread_num=2 \
-	    --log_level=1 \
-	    --perf_time=$looptime_min
-	# bpu2 同理：_HB_NN_BPU_GROUP_ID_=3 _HB_NN_BPU_GROUP_PROP_=50 ... --core_id=3
-	```
-
-	- `BPU_BUF_GROUP=true`：开启 BPU buffer-group QoS 调度。
-	- `_HB_NN_BPU_GROUP_ID_=<core>`：本进程任务绑定的 BPU group ID，对应 `--core_id`。
-	- `_HB_NN_BPU_GROUP_PROP_=<percent>`：本 group 在对应核上的 BPU 时间片配额（百分比）。值由 `stress_test.sh` 按 `-r portion / 选中核数` 自动算出。
-	- `--model_file <hbm>`：S600 适配的 HBM 模型文件路径。
-	- `--core_id <id>`：单核 ID（1=bpu0、2=bpu1、3=bpu2、4=bpu3）。
-	- `--thread_num 2`：每核 2 个推理线程，足以填满单核流水线。
-	- `--perf_time <min>`：perf 模式运行时长，单位为分钟，由 `stress_test.sh -t` 换算得到。
+- **hrt_model_exec BPU 压测原理：** `hrt_model_exec` 是 D-Robotics 官方提供的模型推理 / 性能测试工具，由 `hobot-dnn` 包安装到 `/usr/hobot/bin/`（系统镜像默认安装）。压测脚本会自动调用，无需手动执行。`stress_test.sh` 工作流程：
+    1. 解析 `-t`（时长）、`-r <portion>`（BPU 负载比例 5~100%）、`-c <cores>`（要压的 BPU 核心列表，缺省时**自动从 `/sys/class/boardinfo/pg_map` 读取，跳过被掉电(power-gate)的核**）；
+    2. 启动 `stressapptest` 对 CPU/DDR 加压；
+    3. **为选中的每一个核启动一个独立的 `hrt_model_exec perf` 进程**，在该核上持续推理 `resnet50_224x224_nv12.hbm`，并按 `-r` 指定的比例限制该核的 BPU 占用率；
+    4. 周期性采集各核占用率与 `hrut_somstatus` 输出写入 `monitor-stressN.log`，BPU 推理的 FPS 与延迟写入 `bpu-stressN.log`。
 
 </DocScope>
 
@@ -289,7 +265,7 @@ Examples:
 - `-t <time>`：压力测试持续时间，支持小时（如 `2h`）或分钟（如 `30m`），默认 `48h`。
 - `-m <size>`：CPU/DDR 压测内存大小（MB），默认 `100`。
 - `-i <threads>`：`stressapptest` 的 I/O 线程数，默认 `4`。
-- `-r <portion>`：BPU 负载比例（百分比），取值 `5-100`，默认 `100`（满载）。脚本按 `portion / 选中核数` 算出每核 group_prop 配额，由 BPU runtime 通过 group QoS 调度实现稳态加压。
+- `-r <portion>`：BPU 负载比例（百分比），取值 `5-100`，默认 `100`（满载）。`-r N` 表示**每个被选中的核**稳定在约 `N%` 占用率，与 `-c` 选了几个核无关。
 - `-c <cores>`：要加压的 BPU 核心列表，编号规则 `1=bpu0 2=bpu1 3=bpu2 4=bpu3`，逗号分隔。**省略时自动从 `/sys/class/boardinfo/pg_map` 读取，跳过被掉电（power-gate）的核**；想只压子集（如排错单核异常）才显式指定。
 - `-o <directory>`：日志输出目录，默认 `../../log`。
 - `-h, --help`：显示帮助信息并退出。
@@ -298,7 +274,43 @@ Examples:
 S600 平台有 4 个 BPU core（可通过 `cat /sys/devices/system/bpu/core_num` 确认）。`/sys/class/boardinfo/pg_map` 是 power-gate 位图（bit i 置位表示对应核被关电源），脚本默认会跳过这些核，无需手动维护可用核列表。
 :::
 
-**示例：** `sudo ./stress_test.sh -t 24h -m 200 -i 8 -r 80` 运行一个 24 小时的压力测试，使用 200MB 内存、8 个 I/O 线程，所有可用 BPU 核稳定在 80% 负载。
+**常用压测命令：**
+
+```shell
+# 默认：满载压测 48 小时，自动使用所有未掉电的 BPU 核
+sudo ./stress_test.sh
+
+# 24 小时，200MB 内存、8 个 I/O 线程，所有可用核稳定在 80% 负载
+sudo ./stress_test.sh -t 24h -m 200 -i 8 -r 80
+
+# 半负载长稳：所有可用核稳定在 50%
+sudo ./stress_test.sh -t 12h -r 50
+
+# 只压 bpu0 和 bpu2（bpu1/bpu3 保持空闲），每核满载 —— 用于排查单核异常
+sudo ./stress_test.sh -t 30m -c 1,3
+
+# 只压 bpu1，负载 25% —— 低负载长时间老化
+sudo ./stress_test.sh -t 48h -c 2 -r 25
+
+# 指定日志输出目录
+sudo ./stress_test.sh -t 2h -o /userdata/stress_log
+```
+
+压测过程中可另开一个终端观察各核实时占用率：
+
+```shell
+# 整体占用率
+watch -n1 cat /sys/devices/system/bpu/ratio
+
+# 4 个核逐一查看
+for i in 0 1 2 3; do echo -n "bpu$i: "; cat /sys/devices/system/bpu/bpu$i/ratio; done
+```
+
+需要提前结束压测时，执行同目录下的停止脚本：
+
+```shell
+sudo ./stop_test.sh
+```
 
 </DocScope>
 
