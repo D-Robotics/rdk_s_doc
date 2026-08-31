@@ -17,6 +17,7 @@ src/context/generated-sidebar-config.json
 # Misc
 .DS_Store
 .env.local
+scripts/_algolia_tmp/
 
 # Local Pagefind artifacts (dev/temporary)
 .env.development.local
