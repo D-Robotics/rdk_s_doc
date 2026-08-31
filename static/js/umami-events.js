@@ -1,7 +1,11 @@
-// 站内自定义事件埋点：search / nav-click / cross-product（外链走 Umami 后台 Links 规则，不在此）
+// 站内自定义事件埋点：search / nav-click / cross-product / outbound / search-miss
 // 统一事件委托，不改动文档内容。各站 static/ 各放一份，经 docusaurus.config.js scripts 引入。
+// search-miss：Algolia DocSearch 空结果用 MutationObserver（.DocSearch-NoResults）捕获；
+// 本地搜索的空结果需 swizzle 搜索组件（见 doc-analytics-ops §3.8），不在此脚本。
 (function () {
   "use strict";
+
+  var INTERNAL_DOMAIN = "developer.d-robotics.cc";
 
   function track(name, data) {
     if (typeof window.umami !== "undefined" && typeof window.umami.track === "function") {
@@ -40,7 +44,20 @@
     return productOf(href.replace(/^https?:\/\/[^/]+/i, "")); // 去域名只留路径
   }
 
-  // 1) search：本地搜索框即输即搜、无 submit，debounce 后只上报稳态词。
+  // 站外链接：绝对 URL 且域名非本站（developer.d-robotics.cc 及其子域）。
+  // 相对路径 / 锚点 / 非 http(s)（mailto:/tel:/javascript:）不算；图床 <img> 非 <a>、天然不触发。
+  function outboundHost(href) {
+    if (!/^https?:\/\//i.test(href)) return null;
+    var host;
+    try { host = new URL(href).hostname; } catch (err) { return null; }
+    if (!host) return null;
+    if (host === INTERNAL_DOMAIN || host.endsWith("." + INTERNAL_DOMAIN)) return null;
+    return host;
+  }
+
+  // 1) search：搜索框即输即搜、无 submit，debounce 后只上报稳态词。
+  // - 本地搜索（docusaurus-search-local）输入框：input.navbar__search-input
+  // - Algolia DocSearch 弹层输入框：.DocSearch-Input
   // 门户首页搜索框是 role="searchbox"（跨站意图），同样报 search、带 scope:"portal"。
   function bindSearch(inputSelector, scope) {
     var timer = null;
@@ -58,9 +75,10 @@
     }, true);
   }
   bindSearch("input.navbar__search-input", null);
+  bindSearch(".DocSearch-Input", null);
   bindSearch('input[role="searchbox"]', "portal");
 
-  // 2/3) 点击委托：cross-product 优先，其次 nav-click
+  // 2) 点击委托：cross-product 优先，其次 outbound，再 nav-click
   document.addEventListener("click", function (e) {
     var a = e.target && e.target.closest ? e.target.closest("a") : null;
     if (!a) return;
@@ -73,8 +91,40 @@
       return;
     }
 
+    var host = outboundHost(href);
+    if (host) {
+      track("outbound", { url: href, domain: host });
+    }
+
     if (a.closest(".navbar")) {
       track("nav-click", { url: href, label: (a.textContent || "").trim().slice(0, 50) });
     }
   });
+
+  // 3) search-miss：Algolia DocSearch 空结果。弹层出现 .DocSearch-NoResults 时按当前 query 上报，同词去重。
+  function bindDocSearchMiss() {
+    if (typeof MutationObserver === "undefined") return;
+    var lastMissQuery = null;
+    var timer = null;
+    function currentQuery() {
+      var input = document.querySelector(".DocSearch-Input");
+      return input ? (input.value || "").trim() : "";
+    }
+    function flush() {
+      if (!document.querySelector(".DocSearch-NoResults")) {
+        lastMissQuery = null; // 空结果屏消失（有结果或关闭弹层），允许下次同词再报
+        return;
+      }
+      var q = currentQuery();
+      if (!q || q === lastMissQuery) return;
+      lastMissQuery = q;
+      track("search-miss", { query: q });
+    }
+    var observer = new MutationObserver(function () {
+      clearTimeout(timer);
+      timer = setTimeout(flush, 300);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+  bindDocSearchMiss();
 })();
