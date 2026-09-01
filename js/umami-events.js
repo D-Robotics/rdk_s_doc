@@ -124,7 +124,8 @@
       clearTimeout(timer);
       timer = setTimeout(flush, 300);
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    // documentElement 在 <head> 阶段即已存在；document.body 在 async 脚本早跑时可能为 null，observe(null) 会抛错导致 observer 永不建立。
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   }
   bindDocSearchMiss();
 })();
