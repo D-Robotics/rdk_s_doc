@@ -84,7 +84,7 @@ const config = {
     },
     {
       src: "/rdk_s_doc/js/umami-events.js",
-      async: true,
+      defer: true,
     },
   ],
   headTags: [
