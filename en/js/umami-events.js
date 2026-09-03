@@ -101,25 +101,61 @@
     }
   });
 
-  // 3) search-miss：Algolia DocSearch 空结果。弹层出现 .DocSearch-NoResults 时按当前 query 上报，同词去重。
+  // 3) search-miss：Algolia DocSearch 空结果，两种 UI 各自独立去重、用 surface 区分：
+  //    - 弹层（右上角搜索框）：出现 .DocSearch-NoResults，query 取输入框
+  //    - 全页（/search?q=…）：出现「未找到任何结果 / No results were found」的 <p>，query 取 URL ?q=
   function bindDocSearchMiss() {
     if (typeof MutationObserver === "undefined") return;
-    var lastMissQuery = null;
+    var lastModalQuery = null;
+    var lastPageQuery = null;
     var timer = null;
-    function currentQuery() {
+
+    function modalQuery() {
       var input = document.querySelector(".DocSearch-Input");
       return input ? (input.value || "").trim() : "";
     }
-    function flush() {
-      if (!document.querySelector(".DocSearch-NoResults")) {
-        lastMissQuery = null; // 空结果屏消失（有结果或关闭弹层），允许下次同词再报
-        return;
+    function pageQuery() {
+      try {
+        return (new URLSearchParams(location.search).get("q") || "").trim();
+      } catch (err) {
+        return "";
       }
-      var q = currentQuery();
-      if (!q || q === lastMissQuery) return;
-      lastMissQuery = q;
-      track("search-miss", { query: q });
     }
+    function pageMissText() {
+      // 仅在 /search 全页路径上找空结果 <p>，避免误报其它页面的同名文本
+      if (!/\/search\/?$/.test(location.pathname)) return "";
+      var ps = document.querySelectorAll("p");
+      for (var i = 0; i < ps.length; i++) {
+        var t = (ps[i].textContent || "").trim();
+        if (t === "未找到任何结果" || t === "No results were found") return t;
+      }
+      return "";
+    }
+
+    function flush() {
+      // 弹层空结果
+      if (document.querySelector(".DocSearch-NoResults")) {
+        var mq = modalQuery();
+        if (mq && mq !== lastModalQuery) {
+          lastModalQuery = mq;
+          track("search-miss", { query: mq, surface: "modal" });
+        }
+      } else {
+        lastModalQuery = null;
+      }
+
+      // 全页空结果
+      if (pageMissText()) {
+        var pq = pageQuery();
+        if (pq && pq !== lastPageQuery) {
+          lastPageQuery = pq;
+          track("search-miss", { query: pq, surface: "page" });
+        }
+      } else {
+        lastPageQuery = null;
+      }
+    }
+
     var observer = new MutationObserver(function () {
       clearTimeout(timer);
       timer = setTimeout(flush, 300);
