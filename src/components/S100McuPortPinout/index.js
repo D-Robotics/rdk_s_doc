@@ -7,8 +7,8 @@ const PINOUT_URLS = {
 };
 
 const TITLES = {
-  en: "30-Pin Header (J12) — Interactive Pinout",
-  zh: "30-Pin 排针（J12）—— 交互式引脚定义",
+  en: "30-Pin Header (J12)",
+  zh: "30-Pin 排针（J12）",
 };
 
 export default function S100McuPortPinout({ lang = "en" }) {
