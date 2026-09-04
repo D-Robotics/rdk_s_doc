@@ -9,8 +9,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 ```
 
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
+<DocScope products="RDK S100">
 
 S100 MCU芯片共有3路LIN（LIN0~LIN2），其中 **LIN1** 已通过板载接口引出供用户开发学习使用，配置为 **Master 节点**。
 
@@ -42,8 +41,8 @@ S100 MCU芯片共有3路LIN（LIN0~LIN2），其中 **LIN1** 已通过板载接�
 - 中断支持: 可屏蔽中断
 - 外部收发器: 需要外部LIN收发器芯片连接到LIN总线
 
-</TabItem>
-<TabItem value="S600" label="S600">
+</DocScope>
+<DocScope products="RDK S600">
 
 S600 MCU芯片共有8路LIN（LIN0~LIN7），其中 **LIN2 和 LIN3** 已通过板载接口引出供用户开发学习使用，均配置为 **Master 节点**。
 
@@ -75,8 +74,7 @@ S600 MCU芯片共有8路LIN（LIN0~LIN7），其中 **LIN2 和 LIN3** 已通过�
 - 中断支持: 可屏蔽中断
 - 外部收发器: 需要外部LIN收发器芯片连接到LIN总线
 
-</TabItem>
-</Tabs>
+</DocScope>
 
 
 ## 软件架构
@@ -107,12 +105,14 @@ S600 MCU芯片共有8路LIN（LIN0~LIN7），其中 **LIN2 和 LIN3** 已通过�
 
 ## 应用sample
 
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
+<DocScope products="RDK S100">
 
 ### 使用示例
 
 S100 开发板将 LIN1 引出供用户开发学习使用，引脚位于 `Main Board` 板上的 `MCU Port Expansion Header(J22)`：
+:::tip
+LIN1将复用UART5引脚
+:::
 
 | 信号 | 引脚 |
 |------|------|
@@ -130,45 +130,48 @@ S100 开发板将 LIN1 引出供用户开发学习使用，引脚位于 `Main Bo
     - `DataLen`: 数据长度（1-8）
     - `loop_times`: 循环次数
 ```
-qa_LinTest <case> <channel> <Pid> <ChecksumType> <ResponseType> <DataLen> <loop_times>
+LinTest <case> <channel> <Pid> <ChecksumType> <ResponseType> <DataLen> <loop_times>
 ```
 
 
 
-- `qa_LinTest 1` 打印驱动版本信息
+- `LinTest 1` 打印驱动版本信息
 
 ```shell
-D-Robotics:/$ qa_LinTest 1
-[qa_get_Lin_status 92] [INFO]: Lin status: LIN_CH_SLEEP
-[qa_LinTest 275] [INFO]: ####################### test_case_num: 1 #######################
+D-Robotics:/$ LinTest 1
+[get_Lin_status 113] [INFO]: Lin status: LIN_CH_SLEEP
+[LinTest 290] [INFO]: ####################### test_case_num: 1 #######################
 vendorID: 0xC4
 moduleID: 0x52
 sw_major_version: 1
 sw_minor_version: 0
 sw_patch_version: 0
-[qa_LinTest 290] [INFO]: Test case pass.
-[qa_LinTest 295] [INFO]: #####################################################################
+[LinTest 305] [INFO]: Test case pass.
+[LinTest 310] [INFO]: #####################################################################
 ```
 
-- `qa_LinTest 2 0 16 0 0 8 1` LIN1发送数据
+- `LinTest 2 0 16 0 0 8 1` LIN1发送数据
 
 ```shell
-D-Robotics:/$ qa_LinTest 2 0 16 0 0 8 1
-[qa_get_Lin_status 94] [INFO]: Lin status: LIN_CH_SLEEP
-[qa_LinTest 263] [INFO]: ####################### test_case_num: 2 #######################
+D-Robotics:/$ LinTest 2 0 16 0 0 8 1
+[get_Lin_status 113] [INFO]: Lin status: LIN_CH_SLEEP
+[LinTest 290] [INFO]: ####################### test_case_num: 2 #######################
 ############################# Loop Times: 1 #############################
-[qa_Lin_Transfer_Test 193] [INFO]: Transfer success.
-[qa_get_Lin_status 67] [INFO]: Lin status: LIN_TX_OK
-[qa_LinTest 278] [INFO]: Test case pass.
-[qa_LinTest 283] [INFO]: #####################################################################
+[Lin_Transfer_Test 214] [INFO]: Transfer success.
+[get_Lin_status 86] [INFO]: Lin status: LIN_TX_OK
+[LinTest 305] [INFO]: Test case pass.
+[LinTest 310] [INFO]: #####################################################################
 ```
 
-</TabItem>
-<TabItem value="S600" label="S600">
+</DocScope>
+<DocScope products="RDK S600">
 
 ### 使用示例
 
 S600开发板将LIN2和LIN3引出供用户开发学习使用，引脚位于 `Main Board` 板上的连接器 `J18`：
+:::tip
+LIN2复用UART10引脚,LIN3复用UART11引脚
+:::
 
 | 信号 | 引脚 |
 |------|------|
@@ -188,41 +191,40 @@ S600开发板将LIN2和LIN3引出供用户开发学习使用，引脚位于 `Mai
     - `DataLen`: 数据长度（1-8）
     - `loop_times`: 循环次数
 ```
-qa_LinTest <case> <channel> <Pid> <ChecksumType> <ResponseType> <DataLen> <loop_times>
+LinTest <case> <channel> <Pid> <ChecksumType> <ResponseType> <DataLen> <loop_times>
 ```
 
 
 
-- `qa_LinTest 1` 打印驱动版本信息
+- `LinTest 1` 打印驱动版本信息
 
 ```shell
-D-Robotics:/$ qa_LinTest 1
-[qa_get_Lin_status 92] [INFO]: Lin status: LIN_CH_SLEEP
-[qa_LinTest 275] [INFO]: ####################### test_case_num: 1 #######################
+D-Robotics:/$ LinTest 1
+[get_Lin_status 113] [INFO]: Lin status: LIN_CH_SLEEP
+[LinTest 290] [INFO]: ####################### test_case_num: 1 #######################
 vendorID: 0xC4
 moduleID: 0x52
 sw_major_version: 1
 sw_minor_version: 0
 sw_patch_version: 0
-[qa_LinTest 290] [INFO]: Test case pass.
-[qa_LinTest 295] [INFO]: #####################################################################
+[LinTest 305] [INFO]: Test case pass.
+[LinTest 310] [INFO]: #####################################################################
 ```
 
-- `qa_LinTest 2 0 16 0 0 8 1` LIN2发送数据
+- `LinTest 2 0 16 0 0 8 1` LIN2发送数据
 
 ```shell
-D-Robotics:/$ qa_LinTest 2 0 16 0 0 8 1
-[qa_get_Lin_status 94] [INFO]: Lin status: LIN_CH_SLEEP
-[qa_LinTest 263] [INFO]: ####################### test_case_num: 2 #######################
+D-Robotics:/$ LinTest 2 0 16 0 0 8 1
+[get_Lin_status 113] [INFO]: Lin status: LIN_CH_SLEEP
+[LinTest 290] [INFO]: ####################### test_case_num: 2 #######################
 ############################# Loop Times: 1 #############################
-[qa_Lin_Transfer_Test 193] [INFO]: Transfer success.
-[qa_get_Lin_status 67] [INFO]: Lin status: LIN_TX_OK
-[qa_LinTest 278] [INFO]: Test case pass.
-[qa_LinTest 283] [INFO]: #####################################################################
+[Lin_Transfer_Test 214] [INFO]: Transfer success.
+[get_Lin_status 86] [INFO]: Lin status: LIN_TX_OK
+[LinTest 305] [INFO]: Test case pass.
+[LinTest 310] [INFO]: #####################################################################
 ```
 
-</TabItem>
-</Tabs>
+</DocScope>
 
 
 ## 应用程序接口
