@@ -301,6 +301,8 @@ spi3: spi@34930000 {
 
 ### SPI 配置 GPIO CS
 
+<DocScope products="RDK S100">
+
 以 spi0 cs1 为例，在设备树中为 spi0 节点添加 cs-gpios 属性，将 cs1 映射到指定 GPIO：
 
 ```dts
@@ -314,32 +316,12 @@ spi0: spi@39800000 {
 ```
 > **说明**：各 SPI 片选引脚对应的 GPIO 编号及设备树节点如下表所示，可直接查表填写 cs-gpios 属性。
 
-<DocScope products="RDK S100">
-
 | 引脚      | GPIO      | 设备树             |
 |-----------|-----------|--------------------|
 | SPI0_CSN0 | GPIO0[17] | `<&peri_port0 17>` |
 | SPI0_CSN1 | GPIO0[18] | `<&peri_port0 18>` |
 | SPI1_CSN0 | GPIO0[22] | `<&peri_port0 22>` |
 | SPI1_CSN1 | GPIO0[23] | `<&peri_port0 23>` |
-
-</DocScope>
-<DocScope products="RDK S600">
-
-| 引脚      | GPIO      | 设备树            |
-|-----------|-----------|-------------------|
-| SPI0_CSN0 | GPIO1[30] | `<&hsi_port1 30>` |
-| SPI0_CSN1 | GPIO1[31] | `<&hsi_port1 31>` |
-| SPI1_CSN0 | GPIO1[10] | `<&hsi_port1 10>` |
-| SPI1_CSN1 | GPIO1[20] | `<&hsi_port1 20>` |
-| SPI2_CSN0 | GPIO1[16] | `<&hsi_port1 16>` |
-| SPI2_CSN1 | GPIO0[30] | `<&hsi_port0 30>` |
-| SPI3_CSN0 | GPIO1[0]  | `<&hsi_port1 0>`  |
-| SPI3_CSN1 | GPIO0[31] | `<&hsi_port0 31>` |
-
-> **注意**：S600 的 SPI 引脚电平为 **1.8V**，请注意与外设的电平匹配。
-
-</DocScope>
 
 另外，需要在 `source/hobot-drivers/kernel-dts/drobot-xxx-pinctrl.dtsi` 中找到 `peri_spi0`, 将 cs1 相关引脚从 pinmux 和 pinconf 中移除（避免与 GPIO 配置冲突）：
 
@@ -357,6 +339,38 @@ peri_spi0: peri_spi0_func {
 	};
 };
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+以 spi0 cs1 为例，在设备树中为 spi0 节点添加 cs-gpios 属性，去掉 `pinctrl-0` 里面的 cs1 配置，将 cs1 映射到指定 GPIO：
+
+```dts
+spi0: spi@34900000 {
+	...
+	pinctrl-0 = <&hsi_spi0_csn0_spi0_csn0 &hsi_spi0_mosi_spi0_mosi\
+		&hsi_spi0_miso_spi0_miso &hsi_spi0_sclk_spi0_sclk>
+	cs-gpios = <0>,					/* CS0：由 SPI 控制器原生控制 */
+		<&hsi_port1 31 GPIO_ACTIVE_LOW>;	/* CS1：由 GPIO 模拟控制 */
+	...
+};
+```
+> **说明**：各 SPI 片选引脚对应的 GPIO 编号及设备树节点如下表所示，可直接查表填写 cs-gpios 属性。
+
+| 引脚      | GPIO      | 设备树            |
+|-----------|-----------|-------------------|
+| SPI0_CSN0 | GPIO1[30] | `<&hsi_port1 30>` |
+| SPI0_CSN1 | GPIO1[31] | `<&hsi_port1 31>` |
+| SPI1_CSN0 | GPIO1[10] | `<&hsi_port1 10>` |
+| SPI1_CSN1 | GPIO1[20] | `<&hsi_port1 20>` |
+| SPI2_CSN0 | GPIO1[16] | `<&hsi_port1 16>` |
+| SPI2_CSN1 | GPIO0[30] | `<&hsi_port0 30>` |
+| SPI3_CSN0 | GPIO1[0]  | `<&hsi_port1 0>`  |
+| SPI3_CSN1 | GPIO0[31] | `<&hsi_port0 31>` |
+
+> **注意**：S600 的 SPI 引脚电平为 **1.8V**，请注意与外设的电平匹配。
+
+</DocScope>
 
 ## SPI 验证及调试
 
