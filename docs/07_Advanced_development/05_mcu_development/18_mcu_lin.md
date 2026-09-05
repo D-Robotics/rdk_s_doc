@@ -4,11 +4,6 @@ sidebar_position: 18
 
 # 7.5.19 LIN使用指南
 
-```mdx-code-block
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-```
-
 <DocScope products="RDK S100">
 
 S100 MCU芯片共有3路LIN（LIN0~LIN2），其中 **LIN1** 已通过板载接口引出供用户开发学习使用，配置为 **Master 节点**。
@@ -110,8 +105,9 @@ S600 MCU芯片共有8路LIN（LIN0~LIN7），其中 **LIN2 和 LIN3** 已通过�
 ### 使用示例
 
 S100 开发板将 LIN1 引出供用户开发学习使用，引脚位于 `Main Board` 板上的 `MCU Port Expansion Header(J22)`：
+
 :::tip
-LIN1将复用UART5引脚
+LIN1将复用UART5引脚，使用`LinTest`命令将会**自动将对应引脚复用为LIN功能**，UART功能将无法再使用。
 :::
 
 | 信号 | 引脚 |
@@ -169,8 +165,9 @@ D-Robotics:/$ LinTest 2 0 16 0 0 8 1
 ### 使用示例
 
 S600开发板将LIN2和LIN3引出供用户开发学习使用，引脚位于 `Main Board` 板上的连接器 `J18`：
+
 :::tip
-LIN2复用UART10引脚,LIN3复用UART11引脚
+LIN2复用UART10引脚，LIN3复用UART11引脚，使用`LinTest`命令将会**自动将对应引脚复用为LIN功能**，UART功能将无法再使用。
 :::
 
 | 信号 | 引脚 |
@@ -180,7 +177,7 @@ LIN2复用UART10引脚,LIN3复用UART11引脚
 | LIN3_TX | J18 PIN4 |
 | LIN3_RX | J18 PIN5 |
 
-![image-rdk_600_mainboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_v0p1_mainboard_interface.png)
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_v1p0_main.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
 
 - 语法格式
     - `case`: 测试用例ID（必需）
@@ -385,5 +382,3 @@ Return value：Std_ReturnType
     E_OK: set success
     E_NOT_OK: set failed
 ```
-
-
