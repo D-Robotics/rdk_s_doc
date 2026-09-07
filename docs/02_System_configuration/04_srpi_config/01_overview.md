@@ -6,6 +6,14 @@ description: "srpi-config 系统配置工具：System/Interface/Performance/Loca
 
 # srpi-config 工具配置
 
+:::note
+`srpi-config` 是跨平台配置工具。本平台当前版本不具备的功能，不会在本文档中提及；但菜单中仍可能看到对应选项，请忽略。
+:::
+
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 简介
 
 `srpi-config` 是一个系统配置工具，要打开配置工具，请在命令行中键入以下命令：
@@ -48,25 +56,13 @@ sudo srpi-config
 
   选择是引导到控制台还是桌面，以及是否需要自动登录。如果选择自动登录，会使用系统默认账号 `sunrise` 的身份进行登录。
 
-- **Power LED**
-
-  如果 RDK 的型号允许，可以在这个选项中更改电源 LED 的行为。默认是熄灭或者闪烁。
-
 - **Browser**
 
-  如果使用的桌面系统，可以设置默认的浏览器。不配置的情况下默认使用 `firefox`， 用户可以通过命令 `sudo apt install chromium`安装`chromium`浏览器。
+  如果使用桌面系统，可以设置默认的浏览器。不配置的情况下默认使用 `firefox`，用户可以通过命令 `sudo apt install chromium` 安装 `chromium` 浏览器。
 
 - **Update Miniboot**
 
   如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot 升级](../../07_Advanced_development/03_system_software/07_ota_miniboot.md)。
-
-## Display Options
-
-显示选项，用于选择板端显示输出接口。
-
-- **Display Chose**
-
-  选择 DSI 或 HDMI 作为显示输出。
 
 ## Interface Options
 
@@ -76,14 +72,25 @@ sudo srpi-config
 
 - **SSH**
 
-  使用 SSH 启用/禁用对`RDK`的远程登录。默认情况下系统是启用 SSH 选项的。
+  使用 SSH 启用/禁用对开发板的远程登录。默认情况下系统是启用 SSH 选项的。
 
 - **VNC**
 
-  S100 不支持 VNC（请使用 NoMachine）；S600 支持 VNC（基于 x11vnc）。
+  <DocScope products="RDK S100">
 
-- 外设配置
-  建议参考[config.txt 文件配置](../05_config_txt/01_usage.md)进行外设的配置；
+  不支持 VNC，请使用 NoMachine 进行远程桌面访问。
+
+  </DocScope>
+
+  <DocScope products="RDK S600">
+
+  支持 VNC（基于 x11vnc）。
+
+  </DocScope>
+
+- **外设配置**
+
+  建议参考 [config.txt 文件配置](../05_config_txt/01_usage.md)进行外设的配置。
 
 
 ## Performance Options
@@ -98,9 +105,9 @@ sudo srpi-config
 
 - **ION memory**
 
-  可以通过此选项配置 ION 内存的常用大小。
+  该菜单项预设大小对 S 系列偏小。S100 / S600 请改用 [`hb_switch_ion.sh`](../../09_Appendix/rdk-command-manual/07_hb_switch_ion.md) 调整 ION 内存大小。
 
-> ION 内存是预留出来给 BPU 和图像、视频多媒体功能的物理内存空间，由 `ion_cma`、`cma_reserved`、`carveout` 三部分组成（S600 板端实测分别为 1024MB、2048MB、2048MB）。运行大模型或多路编解码时可在此菜单按需调整。
+> ION 内存是预留出来给 BPU 和图像、视频多媒体功能的物理内存空间，由 `ion_reserved`、`ion_carveout`、`ion_cma` 组成（S600 另有 `ion_uncache`）。运行大模型或多路编解码时可按需调整。
 
 ## Localisation Options
 
@@ -128,7 +135,7 @@ sudo srpi-config
 
 - **Expand Filesystem**
 
-  此选项将扩展文件系统以填满整个储存介质（S100默认为 eMMC），提供更多空间用于文件系统。
+  此选项将扩展文件系统以填满整个储存介质（S100 默认为 eMMC），提供更多空间用于文件系统。
 
 - **Network Proxy Settings**
 
