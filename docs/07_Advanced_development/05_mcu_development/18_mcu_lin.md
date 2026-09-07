@@ -108,6 +108,7 @@ S100 开发板将 LIN1 引出供用户开发学习使用，引脚位于 `Main Bo
 
 :::tip
 LIN1将复用UART5引脚，使用`LinTest`命令将会**自动将对应引脚复用为LIN功能**，UART功能将无法再使用。
+恢复可使用命令`uarttest 0 5 921600 0 1 8`，或调用`Port_SetFunctionPins(PORT_FUNC_UART5)`来重新配置串口引脚。
 :::
 
 | 信号 | 引脚 |
@@ -168,6 +169,7 @@ S600开发板将LIN2和LIN3引出供用户开发学习使用，引脚位于 `Mai
 
 :::tip
 LIN2复用UART10引脚，LIN3复用UART11引脚，使用`LinTest`命令将会**自动将对应引脚复用为LIN功能**，UART功能将无法再使用。
+恢复可使用命令`uarttest 0 10/11 921600 0 1 8`，或调用`Port_SetFunctionPins(PORT_FUNC_UART10/11)`来重新配置串口引脚。
 :::
 
 | 信号 | 引脚 |
