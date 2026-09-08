@@ -61,29 +61,20 @@ UFS 子系统由以下几个部分组成：
 
 ### 软件架构
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    应用层                                    │
-├─────────────────────────────────────────────────────────────┤
-│                    文件系统层                                │
-├─────────────────────────────────────────────────────────────┤
-│                    块设备层                                  │
-├─────────────────────────────────────────────────────────────┤
-│                    SCSI子系统                                │
-├─────────────────────────────────────────────────────────────┤
-│                    UFS核心层 (ufshcd)                        │
-│  ┌───────────┬───────────┬───────────┬──────────────────┐   │
-│  │  UTP传输层 │  UIC控制层 │  DME管理层 │  电源管理层      │   │
-│  └───────────┴───────────┴───────────┴──────────────────┘   │
-├─────────────────────────────────────────────────────────────┤
-│                    Host Controller层                         │
-│              ┌──────────────────────────────┐               │
-│              │     Hobot UFS HSI层          │               │
-│              │  (ufs-hobot.c/ufs-hobot-hsi.c)│               │
-│              └──────────────────────────────┘               │
-├─────────────────────────────────────────────────────────────┤
-│                    MPHY物理层                                │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    APP[应用层] --> FS[文件系统层]
+    FS --> BLK[块设备层<br/>/dev/sda]
+    BLK --> SCSISUB[SCSI子系统]
+    SCSISUB --> UFSCORE
+    subgraph UFSCORE["UFS核心层 (ufshcd)"]
+        direction LR
+        UTP[UTP传输层] --- UIC[UIC控制层]
+        UIC --- DME[DME管理层]
+        DME --- PM[电源管理层]
+    end
+    UFSCORE --> HSI["Hobot UFS HSI层<br/>(ufs-hobot.c / ufs-hobot-hsi.c)"]
+    HSI --> MPHY["MPHY物理层<br/>HS-G4 · 2路数据通道"]
 ```
 
 ## 代码路径
@@ -125,7 +116,7 @@ kernel-dts/drobot-s600-soc.dtsi        # S600 SoC配置
 `hobot-drivers/configs/drobot_ufs.config`
 </DocScope>
 <DocScope products="RDK S600">
-`hobot-drivers/configs/drobot_s600_defconfig`
+`hobot-drivers/configs/drobot_s600_defconfig`（基础 defconfig），并由 `mk_kernel.sh` 按 `RDK_DISK_MEDIUM` 变量合并 `hobot-drivers/configs/drobot_ufs.config`（UFS 介质配置）
 </DocScope>
 
 ```
@@ -143,7 +134,6 @@ CONFIG_BLK_DEV_SD=y                    # SCSI磁盘支持
 
 # 电源管理
 CONFIG_PM=y                            # 电源管理支持
-CONFIG_PM_RUNTIME=y                    # 运行时电源管理
 ```
 
 ### 使用 mk_kernel 配置
@@ -154,33 +144,6 @@ CONFIG_PM_RUNTIME=y                    # 运行时电源管理
 
 # 搜索UFS相关配置
 # 在menuconfig界面中输入 / 进行搜索，输入 "UFS"
-```
-
-## U-Boot 下使用 UFS
-
-U-Boot 下 UFS 运行在 HS-GEAR4模式，支持在 U-Boot console 下使用标准 SCSI 命令访问 UFS 设备。
-
-### 常用 SCSI 命令
-
-| 命令 | 说明 | 示例 |
-|------|------|------|
-| `scsi info` | 查看所有可用的 UFS 设备信息 | `scsi info` |
-| `scsi device [dev]` | 切换选中的 UFS 设备 | `scsi device 0` |
-| `scsi part [dev]` | 查看 UFS 设备分区信息 | `scsi part 0` |
-| `scsi read addr blk# cnt` | 从 UFS 读取数据到内存 | `scsi read 0x80000000 0x1000 0x100` |
-| `scsi write addr blk# cnt` | 将内存数据写入 UFS | `scsi write 0x80000000 0x1000 0x100` |
-
-### U-Boot 下 ext4文件系统操作
-
-```shell
-# 查看ext4分区内容
-ext4ls scsi 0:17
-
-# 从ext4分区加载文件到内存
-ext4load scsi 0:12 0x80000000 /boot/Image
-
-# 将内存数据写入ext4分区
-ext4write scsi 0:17 0x80000000 /newfile 0x10000
 ```
 
 ## DTS 设备节点配置
@@ -217,23 +180,23 @@ ufs: ufs@0x39410000 {
 ### S600 SoC 配置 (drobot-s600-soc.dtsi)
 
 ```dts
-		ufs: ufs@0x33700000 {
-			// power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
-			status = "okay";
-			compatible = "drobot-s600-ufshc";
-			reg = <0 0x33700000 0 0x10000>,
-					<0x0 0x33000000 0x0 0x1000>,    // ufs sys reg
-					<0x0 0x34830000 0x0 0x1000>,    // ufs clk reg
-					<0x0 0x33710000 0x0 0x1000>;    // ufs wrap reg
-			interrupt-parent = <&gic>;
-			interrupts = <0 HSISYS_UFSHC_S_INTR IRQ_TYPE_LEVEL_HIGH>;
-			ref-clk-freq = <26000000>;
-			lanes-per-direction = <2>;
-			pinctrl-names = "default";
-			pinctrl-0 = <&hsi_ufs>;
-			ufstrim_reg_pa = <0xCDF701C>;
-			tx_eq_main_pre_post = <29 0 6>;
-		};
+ufs: ufs@0x33700000 {
+	// power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
+	status = "okay";
+	compatible = "drobot-s600-ufshc";
+	reg = <0 0x33700000 0 0x10000>,
+			<0x0 0x33000000 0x0 0x1000>,    // ufs sys reg
+			<0x0 0x34830000 0x0 0x1000>,    // ufs clk reg
+			<0x0 0x33710000 0x0 0x1000>;    // ufs wrap reg
+	interrupt-parent = <&gic>;
+	interrupts = <0 HSISYS_UFSHC_S_INTR IRQ_TYPE_LEVEL_HIGH>;
+	ref-clk-freq = <26000000>;
+	lanes-per-direction = <2>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&hsi_ufs>;
+	ufstrim_reg_pa = <0xCDF701C>;
+	tx_eq_main_pre_post = <29 0 6>;
+};
 ```
 </DocScope>
 
@@ -263,9 +226,9 @@ ufs: ufs@0x39410000 {
 | `tx_eq_main_pre_post` | 发射均衡器参数 | \<main pre post\> |
 </DocScope>
 
-## 调试方法
+## 板端使用与检查
 
-### 1. 检查 UFS 设备识别
+### 检查 UFS 设备识别
 
 ```shell
 # 查看UFS设备是否被正确识别
@@ -281,7 +244,7 @@ cat /proc/scsi/scsi
 # 应显示UFS设备信息
 ```
 
-### 2. 查看 UFS 驱动加载状态
+### 查看 UFS 驱动加载状态
 
 ```shell
 # 查看驱动是否加载（UFS 驱动为内核内置，非模块）
@@ -296,13 +259,15 @@ cat /sys/class/scsi_host/host*/proc_name
 # 应显示 "ufshcd"
 ```
 
-### 3. 文件系统操作
+### 文件系统操作
+
+分区可优先通过 `/dev/block/platform/by-name/<分区名>` 访问（如 `userdata`、`system`）。该目录下的符号链接由启动脚本根据 GPT 分区 PARTLABEL 自动创建（如 `userdata` → `/dev/sda16`），使用 by-name 路径可避免分区表调整导致分区编号变化的问题。
 
 #### 格式化 UFS 分区
 
 ```shell
-# 将UFS分区格式化为ext4格式（例如分区16）注意：会清空所有数据：
-mkfs.ext4 /dev/sda16
+# 将UFS分区格式化为ext4格式（例如 userdata 分区，即 /dev/sda16）注意：会清空所有数据：
+mkfs.ext4 /dev/block/platform/by-name/userdata
 ```
 
 #### 挂载 UFS 分区
@@ -310,7 +275,7 @@ mkfs.ext4 /dev/sda16
 ```shell
 # 挂载UFS分区到指定目录
 mkdir -p /userdata
-mount -t ext4 /dev/sda16 /userdata
+mount -t ext4 /dev/block/platform/by-name/userdata /userdata
 
 # 查看挂载情况
 mount | grep sda
@@ -322,58 +287,61 @@ mount | grep sda
 
 ```shell
 # 使用fsck工具检测和修复ext4文件系统
-fsck.ext4 -f /dev/sda16
+fsck.ext4 -f /dev/block/platform/by-name/userdata
 
 # 当fsck无法修复时，可考虑格式化（注意：会清空所有数据）
-mkfs.ext4 /dev/sda16
+mkfs.ext4 /dev/block/platform/by-name/userdata
 ```
 
-### 4. 使用 ufs-utils 工具
+### U-Boot 下使用 UFS
+
+U-Boot 下 UFS 运行在 HS-GEAR4模式，支持在 U-Boot console 下使用标准 SCSI 命令访问 UFS 设备。
+
+#### 常用 SCSI 命令
+
+| 命令 | 说明 | 示例 |
+|------|------|------|
+| `scsi info` | 查看所有可用的 UFS 设备信息 | `scsi info` |
+| `scsi device [dev]` | 切换选中的 UFS 设备 | `scsi device 0` |
+| `scsi part [dev]` | 查看 UFS 设备分区信息 | `scsi part 0` |
+| `scsi read addr blk# cnt` | 从 UFS 读取数据到内存 | `scsi read 0x80000000 0x1000 0x100` |
+| `scsi write addr blk# cnt` | 将内存数据写入 UFS | `scsi write 0x80000000 0x1000 0x100` |
+
+#### U-Boot 下 ext4文件系统操作
 
 ```shell
-# 查看UFS设备属性
-ufs-utils -p /dev/sda info
+# 查看ext4分区内容
+ext4ls scsi 0:17
 
-# 查看UFS健康状态
-ufs-utils -p /dev/sda health
+# 从ext4分区加载文件到内存
+ext4load scsi 0:12 0x80000000 /boot/Image
+
+# 将内存数据写入ext4分区
+ext4write scsi 0:17 0x80000000 /newfile 0x10000
+```
+
+## 调试方法
+
+### 使用 ufs-utils 工具
+
+```shell
+# ufs-utils 由 hobot-utils 软件包提供，系统默认已安装
+# 工具通过 BSG 字符设备访问 UFS，先确认节点名
+ufs-utils list_bsg
+# 输出：/dev/bsg/ufs-bsg0
+
+# 查看UFS设备描述符（协议版本、厂商ID等设备信息）
+ufs-utils desc -t 0 -r -p /dev/bsg/ufs-bsg0
 
 # 查看UFS配置描述符
-ufs-utils -p /dev/sda desc
+ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
+
+# 查看UFS健康状态（Device Health Descriptor）
+ufs-utils desc -t 9 -r -p /dev/bsg/ufs-bsg0
+# 关注 bPreEOLInfo / bDeviceLifeTimeEstA / bDeviceLifeTimeEstB 字段
 ```
 
-### 5. UFS 可靠性评估（寿命分析）
-
-由于各个厂商的 UFS 擦写均衡算法不同，UFS 的寿命与具体型号相关，需要根据具体的 UFS 设备数据手册来判断寿命。
-
-#### 查看 UFS 健康状态
-
-Linux 系统每次启动后会自动更新 UFS 设备下的健康状态节点：
-
-```shell
-# 查看UFS保留块状态
-cat /sys/devices/platform/soc/*ufs/health_descriptor/eol_info
-# 返回值：0x1表示保留块状态正常
-
-# 查看UFS寿命估计值A
-cat /sys/devices/platform/soc/*ufs/health_descriptor/life_time_estimation_a
-# 返回值范围0x1-0xA表示寿命正常
-
-# 查看UFS寿命估计值B
-cat /sys/devices/platform/soc/*ufs/health_descriptor/life_time_estimation_b
-# 返回值范围0x1-0xA表示寿命正常
-```
-
-#### 健康状态参数说明
-
-| 节点 | 说明 | 正常范围 | 备注 |
-|------|------|----------|------|
-| `eol_info` | 保留块状态 | 0x01 | 0x01表示正常 |
-| `life_time_estimation_a` | 寿命估计值 A | 0x01~0x0A | 值越小寿命越充足 |
-| `life_time_estimation_b` | 寿命估计值 B | 0x01~0x0A | 值越小寿命越充足 |
-
-具体数值含义请参考 UFS 设备数据手册中的 Device Health Descriptor 定义。
-
-### 6. 内核调试日志
+### 内核调试日志
 
 ```shell
 # 开启UFS调试日志
@@ -387,7 +355,19 @@ dmesg -w | grep -i ufs
 journalctl -kf | grep -i ufs
 ```
 
-### 7. 性能测试
+### 开启详细调试信息
+
+在驱动代码中定义调试宏：
+
+```c
+// 在ufs-hobot-hsi.h中添加
+#define DEBUG
+
+// 或者在内核配置中开启
+CONFIG_DYNAMIC_DEBUG=y
+```
+
+## 性能测试
 
 **注意**：UFS 性能测试应在已挂载的文件系统分区上进行，**禁止直接对块设备(/dev/sda)写入**，否则会导致文件系统损坏。
 
@@ -407,7 +387,7 @@ RDK S600系列开发板默认会有如下分区，实际分区以板端输出为
 - **userdata 分区** (`/dev/sda16` → `/userdata`)：首选，专为用户数据设计
 - **system 分区** (`/dev/sda17` → `/`)：备选，需注意系统文件保护
 
-#### 准备测试环境
+### 准备测试环境
 
 ```shell
 # 查看UFS分区挂载情况
@@ -425,14 +405,14 @@ lsblk
 mount | grep userdata
 # 如未挂载，手动挂载：
 # mkdir -p /userdata
-# mount /dev/sda16 /userdata
+# mount /dev/block/platform/by-name/userdata /userdata
 
 # 确保测试目录存在且有写入权限
 mkdir -p /userdata/ufs_test
 chmod 777 /userdata/ufs_test
 ```
 
-#### FIO 性能测试（推荐在 userdata 分区）
+### FIO 性能测试（推荐在 userdata 分区）
 
 ```shell
 # 进入userdata测试目录
@@ -535,7 +515,7 @@ fio --name=seq_read_1m \
 rm -f /userdata/ufs_test/test_file /userdata/ufs_test/test_file_big
 ```
 
-#### 在 system 分区测试（备选方案）
+### 在 system 分区测试（备选方案）
 
 如果 userdata 分区(/dev/sda16)不可用，可在 system 分区(/dev/sda17)的/tmp 目录测试：
 
@@ -565,7 +545,7 @@ rm -rf /tmp/ufs_test
 - 优先使用/tmp 目录，系统重启后自动清理
 - 不要在系统关键目录（/bin, /sbin, /etc 等）进行测试
 
-#### FIO 参数说明
+### FIO 参数说明
 
 | 参数 | 说明 | 常用值 |
 |------|------|--------|
@@ -582,7 +562,7 @@ rm -rf /tmp/ufs_test
 | `--group_reporting` | 汇总报告 | 启用 |
 | `--rwmixread` | 混合读写中读比例 | 70 (表示70%读,30%写) |
 
-#### 结果解读
+### 结果解读
 
 FIO 输出关键指标：
 
@@ -600,19 +580,118 @@ seq_write_4k: (groupid=0, jobs=1): err= 0: pid=1234: Mon Jan  1 00:00:00 2024
      lat (usec): min=55, max=5010, avg=185.73, stdev=85.80
 ```
 
-## 高级调试
+## UFS 可靠性评估（寿命分析）
 
-### 开启详细调试信息
+由于各个厂商的 UFS 擦写均衡算法不同，UFS 的寿命与具体型号相关，需要根据具体的 UFS 设备数据手册来判断寿命。
 
-在驱动代码中定义调试宏：
+### 查看 UFS 健康状态
 
-```c
-// 在ufs-hobot-hsi.h中添加
-#define DEBUG
+Linux 系统每次启动后会自动更新 UFS 设备下的健康状态节点：
 
-// 或者在内核配置中开启
-CONFIG_DYNAMIC_DEBUG=y
+```shell
+# 查看UFS保留块状态
+cat /sys/devices/platform/soc/*ufs/health_descriptor/eol_info
+# 返回值：0x1表示保留块状态正常
+
+# 查看UFS寿命估计值A
+cat /sys/devices/platform/soc/*ufs/health_descriptor/life_time_estimation_a
+
+# 查看UFS寿命估计值B
+cat /sys/devices/platform/soc/*ufs/health_descriptor/life_time_estimation_b
 ```
+
+### 健康状态参数说明
+
+| 节点 | 说明 | 正常范围 | 备注 |
+|------|------|----------|------|
+| `eol_info` | 保留块状态 | 0x01 | 0x01=正常（保留块消耗不足90%）；0x02=预警（保留块已消耗90%及以上）；0x03=紧急（保留块耗尽，设备寿命终止） |
+| `life_time_estimation_a` | 寿命估计值 A | 0x01~0x09 | 0x01=已消耗10%以内，每增1多消耗10%；0x0A=已消耗90~100%（接近寿命终点，需规划换料）；0x0B及以上=已超出预计寿命 |
+| `life_time_estimation_b` | 寿命估计值 B | 0x01~0x09 | 0x01=已消耗10%以内，每增1多消耗10%；0x0A=已消耗90~100%（接近寿命终点，需规划换料）；0x0B及以上=已超出预计寿命 |
+
+具体数值含义请参考 UFS 设备数据手册中的 Device Health Descriptor 定义。
+
+## 进阶使用
+
+### UFS 硬件分区（LUN）配置
+
+UFS 颗粒的硬件分区（LUN）划分存放在颗粒的 Configuration Descriptor 中，掉电不丢失。部分厂商（三星/群联等）的颗粒出厂已配置好硬件分区，其他颗粒需要产线或手动配置。
+
+配置 LUN 的作用：将 UFS 划分为不同用途的区域（boot LUN、user LUN 等）。有些 bootrom 只认 boot LUN，如果没有配置 boot LUN，U-Boot 逻辑上找不到可写入的 LUN，导致烧录失败；SPL 也找不到可读取的 LUN，导致启动失败。
+
+RDK 平台的标准划分方案为三个硬件分区：
+
+| LUN | 用途 | 大小 | 介质 |
+|-----|------|------|------|
+| LUN0 | 主数据分区 | 磁盘剩余全部空间 | 按颗粒容量计算 |
+| LUN1 | boot 分区 A | 32MB（0x18 个逻辑区） | SLC |
+| LUN2 | boot 分区 B | 32MB（0x18 个逻辑区） | SLC |
+
+为保证 boot 分区数据稳定，一般将 LUN1/LUN2 配置为 SLC 介质（注意：佰维（BIWIN）颗粒不支持 SLC，配置会失败，需保持 Normal 模式）。
+
+#### LUN 配置参数（Configuration Descriptor）
+
+参考配置项（详细说明请参考地瓜内部《S100 佰维颗粒UFS LUN配置调试记录》）：
+
+| 分类 | 描述符偏移 | 字段名 | 值 | 说明 |
+|------|-----------|--------|-----|------|
+| Header | 0x03 | bBootEnable | 0x01 | 启用 Boot LUN |
+| LUN0 | 0x16+0x00 | bLUEnable | 0x01 | LUN0 启用 |
+| LUN0 | 0x16+0x04 | dNumAllocUnits | Max - 0x30 | 增强区主要空间（数学公式，需按颗粒实际最大逻辑块计算，见下方说明） |
+| LUN1 | 0x30+0x00 | bLUEnable | 0x01 | LUN1 启用 |
+| LUN1 | 0x30+0x01 | bBootLunID | 0x01 | Boot LUN A |
+| LUN1 | 0x30+0x04 | dNumAllocUnits | 0x18 | 24 个分配单元（0x18 为十六进制） |
+| LUN2 | 0x4A+0x00 | bLUEnable | 0x01 | LUN2 启用 |
+| LUN2 | 0x4A+0x01 | bBootLunID | 0x02 | Boot LUN B |
+| LUN2 | 0x4A+0x04 | dNumAllocUnits | 0x18 | 24 个分配单元 |
+| LUN1/LUN2 | 0x30+0x03 / 0x4A+0x03 | bMemoryType | 0x00 或 0x03 | 0x00=Normal（佰维颗粒用此值）；0x03=SLC 模式（推荐） |
+| LUN1/LUN2 | 0x30+0x08 / 0x4A+0x08 | bDataReliability | 0x00 或 0x01 | 0x01=启用 Reliable Write（佰维颗粒不支持，保持 0x00） |
+| LUN0/LUN1/LUN2 | 各 +0x0A | bProvisioningType | 0x00 | Thin（佰维颗粒仅支持 Thin） |
+
+**LUN0 容量计算**：最大逻辑块数通过 UFS 颗粒 Spec 中搜索 `dEnhanced1MaxNAllocU` 获取。以 256GB 颗粒（0xEE5E）为例，LUN1/LUN2 各使用 0x18：LUN0 = `0xEE5E - 0x18 - 0x18 = 0xEE2E`。
+
+关键字段取值含义：
+
+| 字段 | 值 | 含义 |
+|------|-----|------|
+| bProvisioningType | 0x00 | Thin Provisioning：物理资源按需分配，空间利用率高，适合用户数据分区 |
+| | 0x01 | Full Provisioning：逻辑/物理空间 1:1 映射，性能可预测，适合延迟敏感场景 |
+| | 0x02 | RAW Provisioning：Host 直接管理物理地址，一般 UFS 设备不支持 |
+| bDataReliability | 0x00 | 关闭可靠性保护，写入可能因设备内部错误丢失数据 |
+| | 0x01 | Reliable Write：保证写入原子性，不会出现部分写入状态 |
+| bMemoryType | 0x00 | Normal：标准 NAND 模式，容量密度最高 |
+| | 0x01/0x02/0x04 | Enhanced Type 1/2/4：增强可靠性模式，容量密度下降 |
+| | 0x03 | Enhanced Type 3：SLC 模式，TLC NAND 每单元只存 1bit |
+| | 0x0F | RPMB Type：仅用于 RPMB LUN |
+
+#### 板端配置方法：ufs-config.sh
+
+UFS 配置工具是 `ufs-config.sh`，本 SDK 中的源码路径为 `hobot-utils/debian/usr/bin/ufs-config.sh`，板端位于 `/usr/bin/ufs-config.sh`（hobot-utils 软件包提供）。该脚本通过 `ufs-utils`（见「调试方法」章节）读写 Configuration Descriptor 完成配置。
+
+```shell
+# 板端执行（配置后需重新烧写镜像）
+ufs-config.sh lun
+```
+
+脚本自动完成：读取颗粒 `dEnhanced1MaxNAllocU` 计算 LUN0 容量，启用 LUN0（Thin Provisioning）、LUN1/LUN2（各 0x18 分配单元，SLC，bDataReliability=0x01），并使能 bBootEnable。
+
+**注意事项**：
+
+- 配置 LUN 完成后，需要 DFU 启动后，在 U-Boot 下通过 fastboot 重新烧写 UFS 上的镜像（烧写方法参考烧录文档）
+- 该脚本面向调试操作；产线推荐使用烧片器配置（见下节）
+- 某些颗粒（如佰维）对 SLC、bDataReliability、bProvisioningType 支持有限，脚本默认参数可能配置失败，需参照上表调整
+
+#### 产线配置方法：烧片器
+
+产线烧录时通过烧片器（烧录模式）向颗粒写入 Configuration Descriptor 完成 LUN 配置，界面字段名各烧片器厂商不同，按上表字段值对应配置即可。该配置掉电不丢失，只需配置一次。
+
+#### LUN 配置结果验证
+
+```shell
+# 读取 Configuration Descriptor（type 1），核对各 LUN 字段
+ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
+```
+
+验证要点：`bBootEnable = 0x01`；Config 0/1/2 Unit Descriptor 的 `bLUEnable = 0x01`、`bBootLunID` 分别为 0/1/2；LUN0 的 `dNumAllocUnits` 符合计算值；LUN1/LUN2 的 `dNumAllocUnits = 0x18` 且 `bMemoryType = 0x03`（SLC）；LUN3~7 的 `bLUEnable = 0x00`（未使用）。
 
 ## 适配新的 UFS 设备
 
@@ -646,23 +725,15 @@ CONFIG_DYNAMIC_DEBUG=y
    - 验证电源管理功能
    - 检查热插拔保护（虽然 UFS 不支持热插拔）
 
-## 参考文档
+## 常见问题
 
-- UFS Specification Version 2.1/3.0/3.1
-- JEDEC Standard JESD220C
-- UniPro Specification Version 1.61/1.8
-- M-PHY Specification Version 3.1/4.1
-- Linux Kernel Documentation: drivers/scsi/ufs/README
-
-## 注意事项
+排查具体问题时，先确认以下通用事项：
 
 1. **电源管理**：UFS 支持多种低功耗模式，确保电源域配置正确
 2. **时钟配置**：UFS 需要稳定的参考时钟，默认使用26MHz
 3. **信号完整性**：高速模式下注意 PCB 走线设计和阻抗匹配
 4. **温度影响**：MPHY 校准值随温度变化，确保在有效温度范围内使用
 5. **热插拔**：UFS 不支持热插拔，启动前确保设备已正确连接
-
-## 常见问题
 
 ### 块设备节点 /dev/sda 未出现（UFS 未识别）
 
@@ -674,7 +745,15 @@ CONFIG_DYNAMIC_DEBUG=y
 
 **原因**：参考时钟不稳定、高速信号完整性问题，或测试方法不正确。
 
-**解决**：确认 26MHz 参考时钟稳定、PCB 走线满足高速阻抗要求；性能测试用「调试方法」中的 `fio` 用例在正确分区上复测。
+**解决**：确认 26MHz 参考时钟稳定、PCB 走线满足高速阻抗要求；性能测试用「性能测试」章节中的 `fio` 用例在正确分区上复测。
+
+## 参考文档
+
+- UFS Specification Version 2.1/3.0/3.1
+- JEDEC Standard JESD220C
+- UniPro Specification Version 1.61/1.8
+- M-PHY Specification Version 3.1/4.1
+- Linux Kernel Documentation: Documentation/admin-guide/ufs.rst、Documentation/scsi/ufs.rst
 
 ## 相关文档
 
