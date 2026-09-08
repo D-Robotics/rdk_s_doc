@@ -6,22 +6,39 @@ description: "RDK OS 上 apt 软件包查询、安装、升级、卸载"
 
 # 软件包管理 apt
 
-RDK OS 基于 Ubuntu，用 `apt` 管理软件包。系统已配置 D-Robotics 官方 apt 源（提供 RDK 专属包如 `hobot-dnn`、`hobot-camera`）与 Ubuntu 官方源。模式 1 用户可用 `apt` 安装常用工具，模式 2 用户可基于 apt + 配置层做产品化集成。
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+RDK OS 基于 Ubuntu，用 `apt` 管理软件包。系统已配置 D-Robotics 官方 apt 源（提供 RDK 专属包如 `hobot-dnn`、`hobot-camera`）、Ubuntu 官方源和 ROS2 源。用户可用 `apt` 安装常用工具，也可基于 `apt` 与配置层做产品化集成。
 
 ## 软件包源
 
-查看当前 apt 源（`apt policy`，RDK S600 实测，节选）：
+RDK OS 预置了三类软件源：D-Robotics 专属源、Ubuntu 源和 ROS2 源：
+
+<DocScope products="RDK S600">
 
 ```text
-Package files:
- 100 /var/lib/dpkg/status
- 500 http://archive.d-robotics.cc/ubuntu-rdk-s600-beta noble/main arm64 Packages
-     release o=D-Robotics RDK S600 APT Repo,n=noble
- 500 http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports noble/multiverse arm64 Packages
+http://archive.d-robotics.cc/ubuntu-rdk-s600-beta noble main
+http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports noble main universe multiverse
+http://mirrors4.tuna.tsinghua.edu.cn/ros2/ubuntu noble main
 ```
 
-- `archive.d-robotics.cc/ubuntu-rdk-s600-beta`：D-Robotics RDK S600 专属包（`hobot-*` 系列）。
-- Ubuntu 官方源（`mirrors.tuna.tsinghua.edu.cn/ubuntu-ports`）：通用 Ubuntu 包，基线 Ubuntu 24.04（noble）。
+</DocScope>
+
+<DocScope products="RDK S100">
+
+```text
+http://archive.d-robotics.cc/ubuntu-rdk-s100-beta jammy main
+http://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy main universe multiverse
+http://mirrors4.tuna.tsinghua.edu.cn/ros2/ubuntu jammy main
+```
+
+</DocScope>
+
+- **D-Robotics 专属源**（`archive.d-robotics.cc/ubuntu-rdk-s600-beta` / `ubuntu-rdk-s100-beta`）：提供 RDK 专属包（`hobot-*` 系列）和 tros.b 机器人中间件（`tros-*` 系列，不随镜像预装）。
+- **Ubuntu 源**（`mirrors.tuna.tsinghua.edu.cn/ubuntu-ports`，清华镜像）：提供通用 Ubuntu 包。
+- **ROS2 源**（`mirrors4.tuna.tsinghua.edu.cn/ros2/ubuntu`）：提供 ROS2 软件包（`ros-*`），是 tros.b 的运行依赖，不随镜像预装，需要时通过 `apt install` 下载安装。
 
 ## 常用命令
 
@@ -51,19 +68,29 @@ sudo apt purge htop           # 连配置一起删
 
 ### 升级
 
-```bash
-sudo apt update               # 刷新包索引
-sudo apt upgrade              # 升级已装包（不动依赖关系）
-sudo apt full-upgrade         # 升级并处理依赖变化
-```
-
 :::warning
 `apt upgrade` / `full-upgrade` 可能升级 `hobot-*` 系统包，跨大版本升级有兼容风险。生产环境升级前先在测试板验证。主版本升级（如 RDK OS 大版本变更）须重新烧录镜像，见 [主版本升级与固件](./02_upgrade_firmware.md)。
 :::
 
+定期更新系统可及时获得 bug 修复、安全补丁与新功能。但直接执行 `apt upgrade` 会连同 RDK 专属包（`hobot-*` / `tros-*`）一起升级，跨版本有兼容风险。**升级前强烈建议先备份**，再按下面方式只更新 Ubuntu 包、不动 RDK 专属包：
+
+```bash
+# 1. 备份当前已装包清单，便于回滚
+dpkg --get-selections > ~/dpkg-selections-backup.txt
+
+# 2. 锁定 RDK 专属包（hobot-* / tros-*），避免被误升级
+sudo apt-mark hold $(apt list --installed 2>/dev/null | grep -E '^(hobot-|tros-)' | cut -d/ -f1)
+
+# 3. 刷新索引并升级其余系统包
+sudo apt update
+sudo apt upgrade
+```
+
+RDK 专属包用 `sudo update_rdkos` 单独升级（只升 `hobot-*` / `tros-*`，不动 Ubuntu 包），不要混在 `apt upgrade` 里。
+
 ## RDK 专属包
 
-RDK 板端预装一批 `hobot-*` 包（`dpkg -l | grep hobot`，S600 实测，节选）：
+RDK 板端预装一批 `hobot-*` 包（`dpkg -l | grep hobot` 节选）：
 
 ```text
 ii  hobot-audio-config   5.0.0       arm64   Configuration files of audio hat
@@ -92,7 +119,7 @@ rootfs 扩容见 [存储与磁盘管理](../12_storage.md)。
 
 ## 验证
 
-- 源生效：`apt policy` 输出含 `archive.d-robotics.cc`（D-Robotics 专属包源）与 Ubuntu 官方源。
+- 源生效：`apt policy` 输出含 `archive.d-robotics.cc`（D-Robotics 专属包源）、Ubuntu 源和 ROS2 源。
 - 安装成功：`apt list --installed | grep <包名>` 能查到已装包，或 `apt show <包名>` 显示详情。
 - 升级结果：`apt list --upgradable` 查看待升级包；升级后 `df -h /` 查看 rootfs 占用变化。
 
