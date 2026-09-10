@@ -500,14 +500,10 @@ function makeRecord({
 
 function extractPageRecords($, pageUrl, pagePairs, language, docusaurusTag) {
   const records = [];
-  const article =
-    $('article .theme-doc-markdown').first().length
-      ? $('article .theme-doc-markdown').first()
-      : $('article.markdown').first().length
-        ? $('article.markdown').first()
-        : $('article').first().length
-          ? $('article').first()
-          : $('main').first();
+  // Only index real documentation pages (identified by `.theme-doc-markdown`).
+  // Generated-index category/landing pages have no markdown body and merely list
+  // links to child docs, so indexing them yields noisy, out-of-scope records.
+  const article = $('article .theme-doc-markdown').first();
 
   if (!article.length) {
     return records;
