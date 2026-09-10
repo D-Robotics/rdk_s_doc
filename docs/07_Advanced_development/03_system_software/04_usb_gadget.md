@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope'
 
 本章节介绍开发板 USB Gadget 功能的使用方法，包括如何将 USB 2.0 Type-C 接口配置为 ADB 模式和 RNDIS 模式。
 
-## 硬件限制条件
+## 概述
 
 ### USB 接口概述
 
@@ -84,6 +84,14 @@ USB Gadget 框架由下表模块协同工作，将板端虚拟成 USB 从设备�
 
 ADB (Android Debug Bridge) 模式允许用户通过 USB Type-C 接口进行调试和文件传输。
 
+:::info 默认行为
+系统开机时会由 `hobot-adbd.service` 服务自动执行 `usb-gadget.sh start adb`，开发板默认已处于 ADB 模式：
+
+- 开机后直接执行 `usb-gadget.sh start adb` 会提示 `usb-gadget is already running`，属正常现象
+- `systemctl stop hobot-adbd` 只是停用该开机自启服务，并不会停止已运行的 ADB 模式；如需停止 ADB 模式，请执行 `usb-gadget.sh stop adb`
+- 可通过 `usb-gadget.sh status` 查看当前是否处于运行状态
+:::
+
 **启动 ADB 模式**：
 
 ```bash
@@ -93,9 +101,6 @@ usb-gadget.sh start adb
 执行输出示例：
 
 ```shell
-Detecting platform:
- board : D-Robotics RDK S100 V0P5
- udc   : 39820000.dwc3
 Creating the USB gadget
 Loading composite module
 Mount ConfigFS and create Gadget
@@ -111,6 +116,17 @@ Binding USB Device Controller
 OK
 usb-gadget start succeed.
 ```
+
+**PC 端验证**：
+
+使用 USB 数据线连接 PC 与开发板后，在 PC 端执行：
+
+```bash
+adb devices        # 查看已连接的设备，正常会列出开发板
+adb shell          # 登录开发板 shell
+```
+
+PC 端需提前安装 adb 工具（Windows 系统还需安装 ADB 驱动），相关问题处理见「常见问题」章节。
 
 **停止 ADB 模式**：
 
@@ -159,10 +175,12 @@ usb-gadget start succeed.
 
 **配置网络 IP**：
 
+RNDIS 模式没有 DHCP 服务，PC 端与开发板两侧的 IP 都需要手动配置。建议选用与开发板有线网口网段不冲突的独立网段（如 `192.168.100.x`），避免 PC 同时通过网线和 USB 线连接开发板时出现路由冲突。
+
 开发板端配置 USB 网卡 IP 地址：
 
 ```bash
-ifconfig usb0 192.168.1.110
+ifconfig usb0 192.168.100.110
 ```
 
 PC 端配置远程网卡 IP 地址（需要与开发板在同一网段）：
@@ -174,7 +192,7 @@ PC 端配置远程网卡 IP 地址（需要与开发板在同一网段）：
 在开发板上 ping PC 端 IP：
 
 ```bash
-ping 192.168.1.111
+ping 192.168.100.111
 ```
 
 **停止 RNDIS 模式**：
@@ -193,8 +211,17 @@ Gadget 模式切换统一通过 `usb-gadget.sh` 脚本完成：
 | `usb-gadget.sh stop adb` | 停止 ADB 模式 |
 | `usb-gadget.sh start rndis` | 启动 RNDIS 模式 |
 | `usb-gadget.sh stop rndis` | 停止 RNDIS 模式 |
+| `usb-gadget.sh status` | 查看当前运行状态 |
+| `usb-gadget.sh restart <模式>` | 重启指定模式（自动先 `stop` 再 `start`） |
 
-脚本内部基于 Linux ConfigFS 动态创建 `g_comp` 组合设备，并依据 `.usb-config` 文件绑定具体 Gadget 功能（见脚本输出 `Bind functions according to .usb-config file`）；重复启动前请先 `stop` 对应模式，避免冲突。
+脚本内部基于 Linux ConfigFS 动态创建 `g_comp` 组合设备，并根据模式读取 `/etc/init.d/.usb/` 目录下对应的配置文件（如 `.adb-config`、`.rndis-config`）绑定具体 Gadget 功能；重复启动前请先 `stop` 对应模式，避免冲突。
+
+各模式的 USB 设备标识定义于对应配置文件中的 `USB_VID`/`USB_PID`（PC 端可通过 `lsusb` 命令查看；「常见问题」中注册表项路径里的 `USB_VID`/`USB_PID` 即对应此处的值）：
+
+| 模式 | USB_VID | USB_PID | 配置文件 |
+|------|---------|---------|---------|
+| adb | 0x3652 | 0x0542 | `/etc/init.d/.usb/.adb-config` |
+| rndis | 0x0525 | 0xa4a2 | `/etc/init.d/.usb/.rndis-config` |
 
 ## 注意事项
 
