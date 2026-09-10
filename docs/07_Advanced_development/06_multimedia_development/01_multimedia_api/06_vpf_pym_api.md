@@ -146,6 +146,6 @@ int32_t vnode_get_mode(hbn_vnode_handle_t vnode_fd);
 
 ## 相关文档
 
-- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp_tune_api)
+- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp)
 - [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
 - [SYS API](/Simple_API/multimedia_api/cdev/sys_api)

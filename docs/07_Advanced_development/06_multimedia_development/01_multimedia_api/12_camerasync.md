@@ -421,6 +421,6 @@ Camera 同步无独立函数 API，通过传感器配置文件 + LPWM 配置下�
 
 ## 相关文档
 
-- [图像信号处理 - ISP](./05_isp_tune_api.md)
+- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp)
 - [时间同步方案](../../03_system_software/11_driver_timesync.md)
 - [摄像头使用](../../../03_Demos/01_peripheral/02_camera/01_mipi_camera.md)
