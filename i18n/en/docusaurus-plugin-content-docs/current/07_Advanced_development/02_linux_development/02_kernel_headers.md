@@ -35,11 +35,24 @@ If you have already executed `make clean`, please reinstall the `linux-headers-6
 
 We'll demonstrate how to use kernel headers by developing a simple `Hello World` kernel module. The general steps are as follows:
 
+<DocScope versions="<5.1.1">
+
 - Prepare the source code (using `${HOME}/test_ko` under the `sunrise` user as an example)
 - Write a Makefile to compile the driver module
 - Sign the driver module
 - Test loading and unloading the module
 - (Optional) Configure automatic module loading at boot
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+- Prepare the source code (using `${HOME}/test_ko` under the `sunrise` user as an example)
+- Write a Makefile to compile the driver module
+- Test loading and unloading the module
+- (Optional) Configure automatic module loading at boot
+
+</DocScope>
 
 #### Writing the Hello World Kernel Module
 
@@ -105,7 +118,7 @@ endif
 - `KERNELRELEASE` is a variable defined in the top-level kernel Makefile, typically used to determine whether the current build is running under the `Kbuild` framework;
 - Invoke the kernel's native `prepare` target to set up the tools required for compiling and installing kernel modules;
 - Invoke the kernel's native `modules` target to compile the kernel module;
-- Invoke the kernel's native `modules_install` target to sign and install the compiled kernel module into the system's module directory.
+- Invoke the kernel's native `modules_install` target to install the compiled kernel module into the system's module directory.
 
 After saving the `Makefile`, run the `make` command to compile the module and generate the `hello.ko` file:
 
@@ -198,6 +211,8 @@ make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191
 - For more details on compiling external kernel modules, please refer to: [Linux Kernel Doc | Building External Modules](https://kernel.org/doc/html/v6.1/kbuild/modules.html).
 :::
 
+<DocScope versions="<5.1.1">
+
 #### Module Signing
 
 The compiled driver module has already been automatically signed via `modules_install`. If you wish to sign it manually, execute the following commands:
@@ -243,6 +258,8 @@ If you load the driver module without signing it, the following error will occur
 ```
 ERROR: could not insert module hello.ko: Required key not available
 ```
+
+</DocScope>
 
 #### Load the module
 
@@ -340,6 +357,9 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     # Install PCAN drivers and libraries
     sudo make install
     ```
+
+<DocScope versions="<5.1.1">
+
 6. Sign and use the PCAN driver. The following example uses PCAN driver version 8.20.0, where the driver modules are installed by default to `/lib/modules/6.1.158/misc/`:
      1. Create a signing script as described in the [Module Signing](#module-signing) section;
      2. Run the signing command:
@@ -352,3 +372,15 @@ sudo echo hello > /lib/modules-load.d/hello.conf
         # Insert PCAN driver
         sudo insmod /lib/modules/6.1.158/misc/pcan.ko
         ```
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+6. Use the PCAN driver. The following example uses PCAN driver version 8.20.0, where the driver modules are installed by default to `/lib/modules/6.1.158/misc/`:
+    ```shell
+    # Insert PCAN driver
+    sudo insmod /lib/modules/6.1.158/misc/pcan.ko
+    ```
+
+</DocScope>
