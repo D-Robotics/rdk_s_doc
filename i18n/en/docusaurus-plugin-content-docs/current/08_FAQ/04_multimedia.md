@@ -4,6 +4,10 @@ sidebar_position: 4
 
 # 8.4 Multimedia Processing and Applications
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 This section answers common questions about video encoding/decoding, audio processing, and other multimedia features on D-Robotics RDK boards.
 
 ## Video Encoding and Decoding
@@ -25,9 +29,19 @@ This section answers common questions about video encoding/decoding, audio proce
 3.  **Streaming software compatibility:**
     * **VLC direct streaming is not recommended:** Using VLC to push RTSP streams directly may fail to be decoded by RDK, because VLC may not support actively adding or ensuring `PPS` and `SPS` information during streaming in some configurations. It is recommended to use `ffmpeg` or other professional streaming tools that ensure complete stream parameters.
 
+### Q2: When using ffmpeg for hardware encoding on S100/S600, ghosting occurs at 1080p resolution?
+
+The root cause lies in the ffmpeg source implementation: when copying input data from `AVFrame.data` to the v4l2 buffer, because of the hardware IP's 16-byte alignment requirement, the amount of data copied each time is based on the aligned size (for example, the Y plane is copied from 1920\*1080 to 1920\*1088), and copying the extra bytes ultimately causes encoding ghosting.
+
+For cases where the input file does not meet the hardware IP byte-alignment requirement, ffmpeg provides a video filter option that supports per-frame processing of video frames before encoding, such as scaling, cropping, and alignment. Therefore, you can use the following command to encode and ensure the result matches expectations.
+
+```
+ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 30 -i input.yuv -vf "pad=1920:1088:0:0" -codec:v h264_v4l2m2m -b:v 5M -f h264 output.h264
+```
+
 ## Common Audio Issues
 
-### Q2: The examples use tinyalsa. What do the parameters mean and how do I use them?
+### Q3: The examples use tinyalsa. What do the parameters mean and how do I use them?
 **A:** `tinyalsa` is a lightweight audio library mainly used for Android and embedded Linux systems. It provides a simplified interface to ALSA (Advanced Linux Sound Architecture), making audio development easier for developers.
 The following are commonly used `tinyalsa` commands and their parameter meanings:
 1.  **List all sound cards:**
@@ -93,7 +107,7 @@ The following are commonly used `tinyalsa` commands and their parameter meanings
     ```
     This command uses device 1 on sound card 0 to record 2-channel 16-bit 48 kHz audio for 5 seconds and saves it as `recorded_audio.wav`.
 
-### Q3: How do I distinguish and use USB sound cards and onboard sound cards on RDK boards, especially when multiple audio devices are connected?
+### Q4: How do I distinguish and use USB sound cards and onboard sound cards on RDK boards, especially when multiple audio devices are connected?
 **A:** When both an onboard sound card (for example, via an audio expansion board) and a USB sound card are connected to an RDK board, the Linux audio system (ALSA) assigns different sound card indices to them. You need to know the correct sound card index to control a specific audio device precisely.
 
 1.  **View recognized sound cards and their indices:**
@@ -129,23 +143,96 @@ The following are commonly used `tinyalsa` commands and their parameter meanings
 
 Using the methods above, you can accurately identify and control different audio devices connected to RDK boards.
 
-### Q4: How does RDK S100 support audio features through the graphical interface?
+### Q5: How to support audio features through the graphical interface?
 
-1. Modify the PulseAudio configuration file: `/etc/pulse/default.pa`
+<DocScope products="RDK S100">
 
-    The default `fragment_size` set when the PulseAudio server starts does not meet the PDMA requirement of 64-byte alignment, so the default configuration must be modified to ensure the PulseAudio service loads successfully.
+1.  **Configure the correct sound card device.**
 
-    Reference configuration changes:
+    The default `fragment_size` set when the PulseAudio server starts does not meet the 64-byte alignment required by PDMA, so the default configuration must be modified to ensure the PulseAudio service loads successfully.
+
+    The current board configuration is as follows: `/etc/pulse/default.pa`
 
     ```
         .ifexists module-udev-detect.so
-        load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // add
-        load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // add
+        load-module module-alsa-sink device=hw:0,1 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 fragment_size=1920
+        load-module module-alsa-source device=hw:0,0 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 fragment_size=1920
         # load-module module-udev-detect // comment out
     ```
 
-    :::tip
-    In the configuration above, `X` in `device=hw:X,Y` represents the sound card number and `Y` represents the device number. Configure them according to your actual requirements. For how to confirm sound card/device numbers, see [Control Commands](../03_Basic_Application/02_audio/01_audio_board_super.md#control-commands).
-    :::
+    In the configuration above, `X` in `device=hw:X,Y` represents the sound card number and `Y` represents the device number. By default, `hw:0,1` is used as the playback device and `hw:0,0` as the recording device. If the actual sound card and device numbers match the defaults, no changes are needed; otherwise, update the corresponding `device` parameter according to the actual device information.
 
-2. After saving the configuration, restart the system. Once the audio driver is loaded, the graphical interface features will work normally.
+    For how to confirm sound card/device numbers, see [Control Commands](../03_Basic_Application/02_audio/01_audio_board_super.md#control-commands).
+
+
+2.  **Ensure the audio driver loads before the PulseAudio service.**
+
+    PulseAudio can load and manage a sound card only after the corresponding audio driver has been initialized. Therefore, make sure the audio driver finishes loading before the PulseAudio service starts.
+
+    The audio driver can be loaded dynamically or built-in.
+
+    For dynamic loading, you can modify the file: `/usr/bin/hobot-loadko.sh`
+
+    For driver loading commands, see [Sound Card Debugging](../07_Advanced_development/02_linux_development/04_driver_development_super/11_driver_audio.md#sound-card-debugging).
+
+3.  **After modification, save the configuration and restart the system. Once the audio driver is loaded, the graphical interface features will work normally.**
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+1.  **Configure the correct sound card device.**
+
+    The default `fragment_size` set when the PulseAudio server starts does not meet the 64-byte alignment required by PDMA, so the default configuration must be modified to ensure the PulseAudio service loads successfully.
+
+    The current board configuration is as follows: `/etc/pipewire/pipewire-pulse.conf.d/99-s600-audio.conf `
+
+    ```
+    pulse.cmd = [
+        {
+            cmd = "load-module"
+            args = "module-alsa-sink device=hw:0,1 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 sink_properties='priority.session=1200'"
+            flags = [ ]
+        }
+        {
+            cmd = "load-module"
+            args = "module-alsa-source device=hw:0,0 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 source_properties='priority.session=2500'"
+            flags = [ ]
+        }
+    ]
+    ```
+
+    In the configuration above, `X` in `device=hw:X,Y` represents the sound card number and `Y` represents the device number. By default, `hw:0,1` is used as the playback device and `hw:0,0` as the recording device. If the actual sound card and device numbers match the defaults, no changes are needed; otherwise, update the corresponding `device` parameter according to the actual device information.
+
+    For how to confirm sound card/device numbers, see [Control Commands](../03_Basic_Application/02_audio/01_audio_board_super.md#control-commands).
+
+    Note: If the playback and recording device numbers are the same, for example `/dev/snd/pcmC0D1p` and `/dev/snd/pcmC0D1c`, you need to specify `sink_name=XXX` and `source_name=XXX` in the `args` respectively to clearly distinguish the input and output devices.
+
+    ```
+    pulse.cmd = [
+        {
+            ...
+            args = "module-alsa-sink device=hw:0,0 sink_name=alsa_output.hw_0_0 ...
+            ...
+        }
+        {
+            ...
+            args = "module-alsa-source device=hw:0,0 source_name=alsa_input.hw_0_0 ...
+            ...
+        }
+    ]
+    ```
+
+2.  **Ensure the audio driver loads before the PulseAudio service.**
+
+    PulseAudio can load and manage a sound card only after the corresponding audio driver has been initialized. Therefore, make sure the audio driver finishes loading before the PulseAudio service starts.
+
+    The audio driver can be loaded dynamically or built-in.
+
+    For dynamic loading, you can modify the file: `/usr/bin/hobot-loadko.sh`
+
+    For driver loading commands, see [Sound Card Debugging](../07_Advanced_development/02_linux_development/04_driver_development_super/11_driver_audio.md#sound-card-debugging).
+
+3.  **After modification, save the configuration and restart the system. Once the audio driver is loaded, the graphical interface features will work normally.**
+
+</DocScope>

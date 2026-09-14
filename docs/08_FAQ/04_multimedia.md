@@ -29,7 +29,7 @@ import DocScope from '@site/src/components/DocScope';
 3.  **推流软件兼容性：**
     * **不推荐使用 VLC 直接推流：** 使用 VLC 软件直接进行 RTSP 推流可能无法成功被 RDK 解码，原因是 VLC 在某些配置下可能不支持在推流时主动添加或确保 `PPS` 和 `SPS` 信息。建议使用 `ffmpeg` 或其他能确保码流参数完整性的专业推流工具。
 
-### Q2: S100/S600上使用ffmpeg实现硬件编码，1080p分辨率编码重影问题
+### Q2: S100/S600上使用ffmpeg实现硬件编码，1080p分辨率编码重影是什么问题?
 
 根本原因在于ffmpeg源码实现上在将输入数据从AVFrame.data拷贝到v4l2 buf时，由于硬件IP 16字节对齐要求，每次拷贝的数据量是按照对齐后的大小进行拷贝(比如Y的数据量拷贝从1920\*1080==》1920\*1088)，拷贝多余字节最终导致编码重影。
 
@@ -41,7 +41,7 @@ ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 30 -i input.yuv -vf "pad=1
 
 ## Audio 常见问题
 
-### Q2: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
+### Q3: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
 **A:** `tinyalsa` 是一个轻量级的音频库，主要用于 Android 和嵌入式 Linux 系统。它提供了对 ALSA（ Advanced Linux Sound Architecture）的简化接口，便于开发者进行音频处理。
 以下是一些常用的 `tinyalsa` 命令及其参数含义：
 1.  **列出所有声卡：**
@@ -107,7 +107,7 @@ ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 30 -i input.yuv -vf "pad=1
     ```
     这个命令会使用声卡 0 的设备 1 录制 2 通道 16 位 48kHz 的音频，持续 5 秒，并保存为 `recorded_audio.wav` 文件。
 
-### Q3: RDK 板卡上如何区分和使用 USB 声卡与板载声卡？特别是当同时连接了多种音频设备时。
+### Q4: RDK 板卡上如何区分和使用 USB 声卡与板载声卡？特别是当同时连接了多种音频设备时。
 **A:** 当 RDK 板卡上同时连接了板载声卡（例如通过音频子板）和 USB 声卡时， Linux 音频系统（ ALSA）会为它们分配不同的声卡序号。您需要知道正确的声卡序号才能精确控制特定的音频设备。
 
 1.  **查看已识别的声卡及其序号：**
@@ -144,9 +144,9 @@ ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 30 -i input.yuv -vf "pad=1
 通过以上方法，您可以准确地识别并控制连接到 RDK 板卡上的不同音频设备。
 
 
-<DocScope products="RDK S100">
+### Q5: 如何通过图形化界面方式支持音频功能使用？
 
-### Q4: RDKS100 如何通过图形化界面方式支持音频功能使用。
+<DocScope products="RDK S100">
 
 1.  **配置正确的声卡设备。**
 
@@ -180,8 +180,6 @@ ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 30 -i input.yuv -vf "pad=1
 
 </DocScope>
 <DocScope products="RDK S600">
-
-### Q4: RDKS600 如何通过图形化界面方式支持音频功能使用。
 
 1.  **配置正确的声卡设备。**
 
