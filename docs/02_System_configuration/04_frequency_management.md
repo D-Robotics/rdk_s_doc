@@ -244,7 +244,7 @@ Linux Thermal 是 Linux 系统下温度控制相关的模块，主要用来控�
 
 以上模块的信息和控制都可以在 `/sys/class/thermal` 目录下获取。
 
-#### Thermal Zone 简介
+#### Thermal Zone 简介{#thermal-zone-简介-s600}
 获取某一个 thermal_zone 的信息，以 thermal_zone0为例，示例命令如下：
 ```shell
 root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/type
@@ -395,7 +395,7 @@ RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取�
    ```
 
 :::info
-**注意**：当 thermal_zone2或 thermal_zone16的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone-简介)章节，将 thermal_zone2和 thermal_zone16的策略改为`user_space`
+**注意**：当 thermal_zone2或 thermal_zone16的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone-简介-s600)章节，将 thermal_zone2和 thermal_zone16的策略改为`user_space`
 :::
 
 ### CPU 频率管理
