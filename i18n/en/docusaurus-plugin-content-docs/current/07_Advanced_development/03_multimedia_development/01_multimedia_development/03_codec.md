@@ -11,48 +11,112 @@ import DocScope from '@site/src/components/DocScope';
 
 ### Overview
 
+<DocScope products="RDK S100">
 Codec (Coder-Decoder) refers to a codec used to compress or decompress media data such as video, images, and audio. The S100 SoC includes two hardware codec units: VPU (Video Processing Unit) and JPU (JPEG Processing Unit), providing 4K@90fps video codec capability and 4K@90fps image codec capability.
+</DocScope>
+<DocScope products="RDK S600">
+Codec (Coder-Decoder) refers to a codec used to compress or decompress media data such as video, images, and audio. The S600 SoC includes two hardware codec units: VPU (Video Processing Unit) and JPU (JPEG Processing Unit), providing 3\*4K@80fps video codec capability and 3\*4K@50fps image codec capability.
+</DocScope>
 
 #### JPU Hardware Features
 
-| **HW Feature** | **Feature Indicator**                        |
-| -------------------- | -------------------------------------------------- |
-| HW number            | 1                                                  |
-| maximum input        | 8192x8192                                          |
-| minimum input        | 32x32                                              |
-| performance          | 4K@90fps                                          |
-| max instance         | 64                                                 |
-| input image format   | 4:0:0, 4:2:0, 4:2:2, 4:4:0, and 4:4:4 color format |
-| output image format  | 4:0:0, 4:2:0, 4:2:2, 4:4:0, and 4:4:4 color format |
-| input crop           | Supports                                           |
-| bitrate control      | FIXQP(MJPEG)                                       |
-| rotation             | 90, 180, 270                                       |
-| mirror               | Vertical, Horizontal, Vertical+Horizontal          |
-| quantization table   | Supports Custom Settings                           |
-| huffman table        | Supports Custom Settings                           |
+<DocScope products="RDK S100">
+| **HW Feature** | **Feature Indicator** |
+| --- | --- |
+| HW number | 1 |
+| maximum input | 8192x8192 |
+| minimum input | 32x32 |
+| performance | 4K@90fps |
+| max instance | 64 |
+| input bitdepth | 8bit, 12bit |
+| input image format | 4:0:0, 4:2:0, 4:2:2, 4:4:0, and 4:4:4 color format |
+| output image format | 4:0:0, 4:2:0, 4:2:2, 4:4:0, and 4:4:4 color format |
+| input crop | Supports |
+| bitrate control | FIXQP(MJPEG) |
+| rotation | 90, 180, 270 |
+| mirror | Vertical, Horizontal, Vertical+Horizontal |
+| quantization table | Supports Custom Settings |
+| huffman table | Supports Custom Settings |
+</DocScope>
+<DocScope products="RDK S600">
+| **HW Feature** | **Feature Indicator** |
+| --- | --- |
+| HW number | 3 |
+| maximum input | 8192x8192 |
+| minimum input | 32x32 |
+| performance | 3*4K@50fps |
+| max instance | 64 |
+| input bitdepth | 8bit, 12bit |
+| input image format | 4:0:0, 4:2:0, 4:2:2, 4:4:0, and 4:4:4 color format |
+| output image format | 4:0:0, 4:2:0, 4:2:2, 4:4:0, and 4:4:4 color format |
+| input crop | Supports |
+| bitrate control | FIXQP(MJPEG) |
+| rotation | 90, 180, 270 |
+| mirror | Vertical, Horizontal, Vertical+Horizontal |
+| quantization table | Supports Custom Settings |
+| huffman table | Supports Custom Settings |
+</DocScope>
 
 #### VPU Hardware Features
 
-| **HW Feature**           | **Feature Indicator**                                                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HW number                      | 1                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| maximum input                  | 8192x4096                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| minimum input                  | 256x128                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| input alignment required       | width 32, height 8                                                                                                                                                                                                                                                                                                                                                                                                              |
-| performance                    | 4K@90fps                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| max instance                   | 32                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| input image format             | 4:2:0, 4:2:2 color format                                                                                                                                                                                                                                                                                                                                                                                                       |
-| output image format            | 4:2:0, 4:2:2 color format                                                                                                                                                                                                                                                                                                                                                                                                       |
-| input crop                     | Supports                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| bitrate control                | CBR, VBR, AVBR, FIXQP, QPMAP                                                                                                                                                                                                                                                                                                                                                                                                    |
-| rotation                       | 90, 180, 270                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| mirror                         | Vertical, Horizontal, Vertical+Horizontal                                                                                                                                                                                                                                                                                                                                                                                       |
-| long-term reference prediction | Supports Custom Settings                                                                                                                                                                                                                                                                                                                                                                                                        |
-| intra refresh                  | Supports                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| deblocking filter              | Supports                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| request IDR                    | Supports                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ROI mode                       | mode1: Users can set multiple zones’(up to 64) qp value(0-51), should not work with CBR or AVBR mode mode2: Users can set multiple zones’(up to 64) important level(0-8), should work with CBR or AVBR mode                                                                                                                                                                                                                   |
-| GOP mode                       | 0: Custom GOP 1 : I-I-I-I,..I (all intra, gop_size=1) 2 : I-P-P-P,… P (consecutive P, gop_size=1) 3 : I-B-B-B,…B (consecutive B, gop_size=1) 4 : I-B-P-B-P,… (gop_size=2) 5 : I-B-B-B-P,… (gop_size=4) 6 : I-P-P-P-P,… (consecutive P, gop_size=4) 7 : I-B-B-B-B,… (consecutive B, gop_size=4) 8 : I-B-B-B-B-B-B-B-B,… (random access, gop_size=8) 9 : I-P-P-P,… P (consecutive P, gop_size = 1, with single reference) |
+<DocScope products="RDK S100">
+| **HW Feature** | **Feature Indicator** |
+| --- | --- |
+| HW number | 1 |
+| maximum input | 8192x4096 |
+| minimum input | 256x128 |
+| input alignment required | width 32, height 8 |
+| performance | 4K@90fps |
+| max instance | 32 |
+| input bitdepth | 8bit, 10bit |
+| input image format | 4:2:0, 4:2:2 color format |
+| output image format | 4:2:0 color format |
+| input crop | Supports |
+| bitrate control | CBR, VBR, AVBR, FIXQP, QPMAP |
+| rotation | 90, 180, 270 |
+| mirror | Vertical, Horizontal, Vertical+Horizontal |
+| long-term reference prediction | Supports Custom Settings |
+| intra refresh | Supports |
+| deblocking filter | Supports |
+| request IDR | Supports |
+| ROI mode | mode1: Users can set multiple zones(up to 64) QP value(0-51), incompatible with CBR or AVBR mode<br />mode2: Users can set multiple zones(up to 64) importance level(0-8), requires CBR or AVBR mode |
+| GOP mode | 0: Custom GOP<br />1: I-I-I...I (all intra, gop_size=1)<br />2: I-P-P-P...P (consecutive P, gop_size=1)<br />3: I-B-B-B...B (consecutive B, gop_size=1)<br />4: I-B-P-B-P... (gop_size=2)<br />5: I-B-B-B-P... (gop_size=4)<br />6: I-P-P-P-P... (consecutive P, gop_size=4)<br />7: I-B-B-B-B... (consecutive B, gop_size=4)<br />8: I-B-B-B-B-B-B-B... (random access, gop_size=8)<br />9: I-P-P-P...P (consecutive P, gop_size = 1, with single reference) |
+
+Note:
+- Special note on the VPU YUV 4:2:2 format: only 4:2:2 input is supported for encoding, and the hardware internally downsamples it to 4:2:0 before encoding.
+
+- Special note on VPU YUV 10-bit performance: due to the bus outstanding bottleneck, the target specification for 10-bit decoding output frame rate is 4K@80fps.
+
+- Special note on JPU non-YUV420 8-bit performance: JPU decoding is mainly limited by bus write bandwidth, so the target specification for decoding formats other than YUV420 8-bit scales proportionally with the output data volume. For example, the target specification for YUV422 8-bit is 0.75 times that of YUV420 8-bit, and the target specification for YUV420 12-bit is 0.5 times that of YUV420 8-bit.
+</DocScope>
+<DocScope products="RDK S600">
+| **HW Feature** | **Feature Indicator** |
+| --- | --- |
+| HW number | 3 |
+| maximum input | 8192x4096 |
+| minimum input | 256x128 |
+| input alignment required | width 32, height 8 |
+| performance | 3*4K@80fps |
+| max instance | 32 |
+| input bitdepth | 8bit, 10bit |
+| input image format | 4:2:0, 4:2:2 color format |
+| output image format | 4:2:0 color format |
+| input crop | Supports |
+| bitrate control | CBR, VBR, AVBR, FIXQP, QPMAP |
+| rotation | 90, 180, 270 |
+| mirror | Vertical, Horizontal, Vertical+Horizontal |
+| long-term reference prediction | Supports Custom Settings |
+| intra refresh | Supports |
+| deblocking filter | Supports |
+| request IDR | Supports |
+| ROI mode | mode1: Users can set multiple zones (up to 64) QP value (0-51), incompatible with CBR or AVBR mode<br />mode2: Users can set multiple zones (up to 64) importance level (0-8), requires CBR or AVBR mode |
+| GOP mode | 0: Custom GOP<br />1: I-I-I-I,...I (all intra, gop_size=1)<br />2: I-P-P-P,...P (consecutive P, gop_size=1)<br />3: I-B-B-B,...B (consecutive B, gop_size=1)<br />4: I-B-P-B-P,... (gop_size=2)<br />5: I-B-B-B-P,... (gop_size=4)<br />6: I-P-P-P-P,... (consecutive P, gop_size=4)<br />7: I-B-B-B-B,... (consecutive B, gop_size=4)<br />8: I-B-B-B-B-B-B-B,... (random access, gop_size=8)<br />9: I-P-P-P,...P (consecutive P, gop_size = 1, with single reference) |
+
+Note:
+- Special note on the VPU YUV 4:2:2 format: only 4:2:2 input is supported for encoding, and the hardware internally downsamples it to 4:2:0 before encoding.
+
+- Special note on JPU non-YUV420 8-bit performance: JPU decoding is mainly limited by bus write bandwidth, so the target specification for decoding formats other than YUV420 8-bit scales proportionally with the output data volume. For example, the target specification for YUV422 8-bit is 0.75 times that of YUV420 8-bit, and the target specification for YUV420 12-bit is 0.5 times that of YUV420 8-bit.
+</DocScope>
 
 ### Software Features
 
@@ -490,7 +554,7 @@ The multi-stream decoding scenario is shown below. Scenario 0 is a simple file-i
 
 ##### GOP Configuration Issues
 
-**Issue Background:** On the S100, what is the composition of each GOP when publishing H265 frames each time? Are P-frames used? Does each frame support independent decoding? Are SPS and PPS inserted into each frame?
+**Issue Background:** What is the composition of each GOP when publishing H265 frames each time? Are P-frames used? Does each frame support independent decoding? Are SPS and PPS inserted into each frame?
 
 **Answer:** The GOP structure needs to be configured by the user. It supports both all I-frame and IP-frame modes. If using all IDR frames, independent decoding is supported. This requires configuring an all I-frame GOP structure with Intra period=1; Whether to insert SPS/PPS/VPS into each IDR frame can be selected via the interface `hb_mm_mc_request_idr_header`. By default, they are added.
 
@@ -581,9 +645,9 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 ##### Video Color Range Issue
 
-**Issue Background:** When using the VPU for H265 encoding on the S100, does the encoder force conversion to limit range (TV range) output?
+**Issue Background:** When using the VPU for H265 encoding on the SoC, does the encoder force conversion to limit range (TV range) output?
 
-**Test Method:** Playing back a 265 stream encoded by an S100 directly with ffmpeg shows it parsed as TV range.
+**Test Method:** Playing back a 265 stream encoded by the SoC directly with ffmpeg shows it parsed as TV range.
 
 **Resolution:** The codec cannot distinguish between full range and limit range, nor can it identify whether an image is full range or limit range. Only the user knows the input range. The codec processes pixel values within the [0,255] range based on the input directly, without conversion. Decoding also does not perform conversion. However, ffmpeg has a swscaler module that can perform conversions. yuv420p is limit range, yuvj420p is full range. Internally, it converts input and output formats based on video full range information.
 
@@ -5866,7 +5930,7 @@ typedef struct _mc_audio_codec_dec_params {
 
 ## Codec Sample
 
-<DocScope product="RDK-S600">
+<DocScope products="RDK-S600">
 
 :::info Note
 
