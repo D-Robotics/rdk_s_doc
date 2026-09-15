@@ -72,6 +72,7 @@ export default function DocScopeHydration() {
     if (!root) {
       return;
     }
+    let scopeChanged = false;
     root.querySelectorAll('.doc-scope[data-doc-scope]').forEach((el) => {
       const raw = el.getAttribute('data-doc-scope');
       if (!raw) {
@@ -80,6 +81,9 @@ export default function DocScopeHydration() {
       try {
         const spec = JSON.parse(raw);
         const show = matchesScope(spec, version, product);
+        if (el.classList.contains('doc-scope--hidden') === show) {
+          scopeChanged = true;
+        }
         el.classList.toggle('doc-scope--hidden', !show);
       } catch {
         el.classList.remove('doc-scope--hidden');
@@ -108,6 +112,21 @@ export default function DocScopeHydration() {
       attributes: true,
       attributeFilter: ['hidden', 'class'],
     });
+
+    // 隐藏 .doc-scope 会直接改变页面高度，而浏览器的锚点定位（含 Docusaurus 的
+    // scrollAfterNavigation）是在显隐生效之前完成的。若被隐藏的区块位于锚点上方，
+    // 内容整体上移，落点就会偏下（产品相关的 DocScope 段落通常有一两屏之高）。
+    // 因此这里在显隐真正发生变化时，按当前 hash 重新定位一次。同理，如果本次
+    // 没有任何显隐变化（scopeChanged 为 false），就不介入——页面高度没变，交给
+    // 浏览器和 Docusaurus 原有的定位即可。
+    if (scopeChanged && location.hash) {
+      const target = resolveHeadingByHash(root, location.hash);
+      if (target && target.getClientRects().length > 0) {
+        requestAnimationFrame(() => {
+          target.scrollIntoView({ block: 'start' });
+        });
+      }
+    }
 
     return () => observer.disconnect();
   }, [version, product, location.pathname]);

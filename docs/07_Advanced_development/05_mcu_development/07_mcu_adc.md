@@ -27,11 +27,11 @@ import DocScope from '@site/src/components/DocScope';
 代码中实际上存在着两套 ADC 驱动，区别如下
 
 - 标准 ADC 驱动（Main ADC Driver）
-    - 位于 McalCdd/Adc 目录下, 包含完整的 ADC 模块实现，文件包括 Adc.h、Adc.c、Adc_Lld.h、Adc_Lld.c 等
+    - 位于 `McalCdd/Adc` 目录下, 包含完整的 ADC 模块实现，文件包括 `Adc.h`、`Adc.c`、`Adc_Lld.h`、`Adc_Lld.c` 等
     - 提供完整的 ADC 功能
 
 - 私有 ADC 驱动（Private ADC Driver）
-    - 位于 McalCdd/Adc 目录下，包含 Adc_Private.h 和 Adc_Private.c
+    - 位于 `McalCdd/Adc` 目录下，包含 `Adc_Private.h` 和 `Adc_Private.c`
     - 提供特定于内部使用的简化接口
 
 ### 使用流程
@@ -67,7 +67,7 @@ import DocScope from '@site/src/components/DocScope';
 | 特性         | 标准 ADC 驱动                              | 私有 ADC 驱动                          |
 |--------------|----------------------------------------|-------------------------------------|
 | 复杂度       | 完整的 ADC 驱动实现，功能丰富              | 简化的接口，功能有限         |
-| 配置方式     | 使用完整的配置结构体（包括 Adc_GroupsCfg） | 直接操作硬件寄存器         |
+| 配置方式     | 使用完整的配置结构体（包括 `Adc_GroupsCfg`） | 直接操作硬件寄存器         |
 | API 丰富度    | 提供完整的 ADC 功能 API                     | 只提供最基本的初始化和读取功能   |
 | 中断支持     | 完整的中断和回调机制                     | 不使用中断                 |
 | 转换模式     | 单次转换和多次转换                  | 仅支持单次转换                  |

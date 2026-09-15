@@ -584,12 +584,12 @@ $ tree /app/Can/can_multi_ch
 └── run.sh // 运行脚本
 
 ```
-json 文件配置主要包括3个 json 配置文件：node.json、ipcf_channel.json、channels.json。目前为了支持多进程，各个进程都会去当前路径下的 config 目录下寻找这3个配置文件。
+json 文件配置主要包括3个 json 配置文件：`node.json`、`ipcf_channel.json`、`channels.json`。目前为了支持多进程，各个进程都会去当前路径下的 `config` 目录下寻找这3个配置文件。
 
-node.json 负责创建虚拟 CAN 设备节点给 CANHAL API 访问。关键配置选项包括：
-- channel_id 字段指定该虚拟 CAN 设备从 ipc 配置文件 ipcf_channel.json 中哪一个节点获取数据。
-- target 字段表示该虚拟 CAN 设备节点的名称，CANHAL API 通过该名称访问指定的节点。
-- enable 字段表示该节点是否使能。
+`node.json` 负责创建虚拟 CAN 设备节点给 CANHAL API 访问。关键配置选项包括：
+- `channel_id` 字段指定该虚拟 CAN 设备从 ipc 配置文件 `ipcf_channel.json` 中哪一个节点获取数据。
+- `target` 字段表示该虚拟 CAN 设备节点的名称，CANHAL API 通过该名称访问指定的节点。
+- `enable` 字段表示该节点是否使能。
 
 ```json
 {
@@ -738,11 +738,11 @@ int main(int argc, char *argv[])
 }
 ```
 
-- 首先执行 canInit()完成初始化,然后创建发送线程和接收线程
-- 发送线程调用 canSendMsgFrame()发送数据包，接收线程调用 canRecvMsgFrame()接收数据包，其中 target 参数为 json 文件中配置好的通道。
-- pack 信息包含这一包数据的信息，包括 can 帧数量、mcu 侧的时间戳以及 acore 侧的 monotic 时间戳等信息。
-- canhal 会从这一包 ipc 数据中解析出 can 帧，用户通过 frame 指针读取出所有 can 帧。
-- 最后执行 canDeInit()释放资源。
+- 首先执行 `canInit()` 完成初始化,然后创建发送线程和接收线程
+- 发送线程调用 `canSendMsgFrame()` 发送数据包，接收线程调用 `canRecvMsgFrame()` 接收数据包，其中 `target` 参数为 json 文件中配置好的通道。
+- `pack` 信息包含这一包数据的信息，包括 can 帧数量、mcu 侧的时间戳以及 acore 侧的 monotic 时间戳等信息。
+- `canhal` 会从这一包 ipc 数据中解析出 can 帧，用户通过 `frame` 指针读取出所有 can 帧。
+- 最后执行 `canDeInit()` 释放资源。
 
 :::tip
 can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会出现资源耗尽的情况，此时可以进行降速和重传。
@@ -806,12 +806,12 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
 ```
 
 ##### 使用方式
-1. 分别编译 can_send 和 can_get 两个 sample
-2. 进入 can_get 目录执行以下命令
+1. 分别编译 `can_send` 和 `can_get` 两个 sample
+2. 进入 `can_get` 目录执行以下命令
 ```bash
 ./canhal_get bypass &
 ```
-3. 进入 can_send 目录执行以下命令
+3. 进入 `can_send` 目录执行以下命令
 ```bash
 root@ubuntu:/app/Can/can_send# ./canhal_send bypass 6
 [CANHAL][INFO][ipcf_dev.cpp:32][2025-2-20 21:43:47.522]:the path of ipcf plugin is /usr/hobot/lib/libhbipcfhal.so.1.

@@ -45,9 +45,9 @@ static Ipc_ChannelConfigType Ipc_ShmInstance0CfgChannel[8] = {
 ......
 };
 ```
-2. 设置 receive_coreid。如果是在 MCU1上，则需要"receive_coreid=Ipc_Receive_Core1"。同时需要保障 MCU0关于 IPC 设置相同。
-- MCU0文件地址：/mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c
-- MCU1文件地址：/mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c
+2. 设置 `receive_coreid`。如果是在 MCU1上，则需要 `receive_coreid=Ipc_Receive_Core1`。同时需要保障 MCU0关于 IPC 设置相同。
+- MCU0文件地址：`/mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c`
+- MCU1文件地址：`/mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c`
 ```c
 Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
     .Ipc_InstanceId       = 0U,

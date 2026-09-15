@@ -30,9 +30,9 @@ When MCU1 encounters an exception, it enters the shell. At this point, you can s
 
 ```shell
   # Stop
-  echo stop > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo stop > /sys/class/remoteproc/remoteproc_mcu0/state
   # Start
-  echo start > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo start > /sys/class/remoteproc/remoteproc_mcu0/state
 ```
 ## Obtaining MCU Exception Information
 - On the A-core, you can read the context information recorded when MCU1 encounters an exception through the sysfs node. The corresponding sysfs node is:

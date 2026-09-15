@@ -80,8 +80,8 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 |-----------------------------|---------------|--------------------------------------------------------------------------------------------------|------------------------|
 | Ipc_ShmCfgInstances0~8      | User          | ISR(Ipc_CpuIpc0Ch0Isr): Ipc_Driver_CpuIpc0ChxIsr() (x=0..8)                                      | Acore instance0~8     |
 | Ipc_ShmCfgInstances0/4      | canhal        | —                                                                                                | Acore instance0/4     |
-| Ipc_ShmCfgInstances5        | External RTC  | —                                                                                                | Acore instance5        |
-| Ipc_ShmCfgInstances7        | ipcbox        | —                                                                                                | Acore instance7        |
+| Ipc_ShmCfgInstances5        | 外置 RTC       | —                                                                                                | Acore instance5        |
+| Ipc_ShmCfgInstances7        | ipcbox       | —                                                                                                | Acore instance7        |
 | Ipc_ShmCfgInstances8        | mcu1 boot     | —                                                                                                | Acore instance8        |
 | Ipc_PrivShmCfgInstance0     | Crypto        | ISR(Ipc_HsmIpc1Ch4Isr): Ipc_Driver_HSMIpc1Ch4Isr()                                               | HSM                    |
 | Ipc_PrivShmCfgInstance1     | HSM DIAG      | ISR(Ipc_HsmIpc1Ch5Isr): Ipc_Driver_HSMIpc1Ch5Isr()                                               | HSM                    |
@@ -96,11 +96,17 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 |----------------------------|--------------|---------------------------------------------------------------------------------|------------------------|
 | Ipc_ShmCfgInstances0~7     | User         | ISR(Ipc0_ChxIsr): Ipc_Driver_MCUIpc0ChxIsr() (x = 0..7)                         | Acore instance0~7     |
 | Ipc_ShmCfgInstances0 / 4   | canhal       | —                                                                               | Acore instance0/4     |
-| Ipc_ShmCfgInstances5       | External RTC  | —                                                                                | Acore instance5        |
+| Ipc_ShmCfgInstances5       | 外置 RTC      | —                                                                                | Acore instance5        |
 | Ipc_ShmCfgInstances7       | ipcbox       | —                                                                               | Acore instance7        |
-| Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 (except 8 & 10) |
+| Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 |
 | Ipc_ShmCfgInstance8        | mcu1 boot    | —                                                                               | Acore instance8       |
+| Ipc_ShmCfgInstances9       | can          | —                                                                               | Acore instance9       |
 | Ipc_ShmCfgInstance10       | timesync     | —                                                                               | Acore instance10      |
+| Ipc_ShmCfgInstances11      | can          | —                                                                               | Acore instance11      |
+| Ipc_ShmCfgInstances12      | can          | —                                                                               | Acore instance12      |
+| Ipc_ShmCfgInstances13      | can          | —                                                                               | Acore instance13      |
+| Ipc_ShmCfgInstances14      | can          | —                                                                               | Acore instance14      |
+| Ipc_ShmCfgInstances15      | can          | —                                                                               | Acore instance15      |
 | Ipc_PrivShmCfgInstance0    | Crypto       | ISR(Ipc_HsmIpc3Ch4Isr): Ipc_Driver_HSMIpc3Ch4Isr()                              | HSM                    |
 | Ipc_PrivShmCfgInstance1    | HSM Diag     | ISR(Ipc_HsmIpc3Ch5Isr): Ipc_Driver_HSMIpc3Ch5Isr()                              | HSM                    |
 | Ipc_PrivShmCfgInstance2    | Ota          | ISR(Ipc0_Ch8Isr): Ipc_Driver_MCUIpc0Ch8Isr()                                    | Acore instance50      |
@@ -124,7 +130,7 @@ Various peripherals are managed through a unified interface into the IpcBox. Sim
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-ipbox.jpg" alt="IpcBox Feature Introduction{#IPCBOX} diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
-Refer to the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md) section for the corresponding Acore side application.
+Refer to the [IPC Module Introduction](./../../07_Advanced_development/02_linux_development/04_driver_development_super/06_driver_ipc.md#IPC_APP) section for the corresponding Acore side application.
 
 <DocScope products="RDK S100">
 IpcBox underwent a refactoring during the upgrade from version `RDKS100 V4.0.4-Beta` to `RDKS100 V4.0.5-Beta`. The changes include the packet structure, IPC channels, and default configuration for passthrough peripherals. Pay attention to the version compatibility between the MCU side and the Acore side.
