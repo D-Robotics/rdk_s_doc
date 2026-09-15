@@ -4,6 +4,12 @@ sidebar_position: 1
 
 # VIO (Video Input) API
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
+```
+
 The `VIO` module provides functionalities for operating `MIPI` cameras and performing image processing.
 
 The `VIO` API offers the following interfaces:
@@ -64,7 +70,16 @@ None
 
 **[Description]**  
 
-Initializes the MIPI camera connected to the RDK S100.Supports configuring output resolutions—up to 6 different resolution sets—and only downscaling is supported. The downscaling ratio range is [1, 1/64).
+<DocScope products="RDK S100">
+
+Initializes the MIPI camera connected to the RDK S100. Supports configuring output resolutions—up to 6 different resolution sets—and only downscaling is supported. The downscaling ratio range is [1, 1/64).
+
+</DocScope>
+<DocScope products="RDK S600">
+
+Initializes the MIPI camera connected to the RDK S600. Supports configuring output resolutions—up to 6 different resolution sets—and only downscaling is supported. The downscaling ratio range is [1, 1/64).
+
+</DocScope>
 
 **[Parameters]**
 
@@ -87,9 +102,20 @@ Returns 0 on success; returns -1 on failure.
 
 **[Description]**  
 
+<DocScope products="RDK S100">
+
 Initializes the MIPI camera connected to the RDK S100.  
 Supports specifying the camera's native RAW output resolution via the `sp_sensors_parameters` structure.  
 Supports configuring output resolutions—up to 6 different resolution sets—and only downscaling is supported. The downscaling ratio range is [1, 1/64).
+
+</DocScope>
+<DocScope products="RDK S600">
+
+Initializes the MIPI camera connected to the RDK S600.  
+Supports specifying the camera's native RAW output resolution via the `sp_sensors_parameters` structure.  
+Supports configuring output resolutions—up to 6 different resolution sets—and only downscaling is supported. The downscaling ratio range is [1, 1/64).
+
+</DocScope>
 
 Currently supported camera resolutions are listed below:
 
@@ -118,7 +144,7 @@ Members of the `sp_sensors_parameters` structure are listed below:
 
 :::info Note!
 
-The `S100` chip has alignment requirements for `VPS` output: output width must be 16-byte aligned, and output height must be 2-byte aligned. An error will be reported if your configured width and height do not meet these alignment requirements.
+The `S100` and `S600` chips have alignment requirements for `VPS` output: output width must be 16-byte aligned, and output height must be 2-byte aligned. An error will be reported if your configured width and height do not meet these alignment requirements.
 
 :::
 
@@ -154,7 +180,7 @@ Opens an image processing module that supports scaling and cropping operations o
 
 :::info Note!
 
-The `S100` chip has alignment requirements for `VPS` output: output width must be 16-byte aligned, and output height must be 2-byte aligned. An error will be reported if your configured width and height do not meet these alignment requirements.
+The `S100` and `S600` chips have alignment requirements for `VPS` output: output width must be 16-byte aligned, and output height must be 2-byte aligned. An error will be reported if your configured width and height do not meet these alignment requirements.
 
 :::
 
@@ -270,4 +296,17 @@ Returns 0 on success, -1 on failure.
 
 The host IDs corresponding to each camera are shown in the figure below:
 
+<DocScope products="RDK S100">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Host ID Selection diagram" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+</DocScope>
+<DocScope products="RDK S600">
+
+For how to connect the camera interfaces, see [Hardware Introduction - Camera Expansion Board](../../../../01_Quick_start/01_hardware_introduction/02_rdk_s600/02_rdk_s600_camera_expansion_board.md).
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="S600 MIPI Host diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+
+
+</DocScope>
