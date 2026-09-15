@@ -585,15 +585,11 @@ Also, check the `IpcBox_InstanceMap` configuration in `mcu/Service/HouseKeeping/
   IpcBox_SpiInit, IpcBox_SpiDeinit },
 ```
 
-The test sample implements a loopback test for SPI. Using SPI3 as an example for S100. If using S600, modify `./ipcbox_spi -b 3` to `./ipcbox_spi -b 6`.
+The test sample implements a loopback test for SPI. S100 uses SPI3 and S600 uses SPI6 by default; the SPI bus number is passed at runtime through the `-b` option.
 <DocScope products="RDK S100">
 1. After booting into S100, navigate to the application directory `cd /app/ipcbox_sample/ipcbox_spi`
-</DocScope>
-<DocScope products="RDK S600">
-1. After booting into S600, navigate to the application directory `cd /app/ipcbox_sample/ipcbox_spi`
-</DocScope>
 2. Compile: `make`
-3. Run: `./ipcbox_spi`
+3. Run: `./ipcbox_spi -b 3`
 4. If the output `SPI write successful, 128 bytes` appears, the test passes. Reference log:
 ```
 root@ubuntu:/app/ipcbox_sample/ipcbox_spi# ./ipcbox_spi -b 3
@@ -622,6 +618,40 @@ rx_packet(128)
 
 [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 deinit success.
 ```
+</DocScope>
+<DocScope products="RDK S600">
+1. After booting into S600, navigate to the application directory `cd /app/ipcbox_sample/ipcbox_spi`
+2. Compile: `make`
+3. Run: `./ipcbox_spi -b 6`
+4. If the output `SPI write successful, 128 bytes` appears, the test passes. Reference log:
+```
+root@ubuntu:/app/ipcbox_sample/ipcbox_spi# ./ipcbox_spi -b 6
+[INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 init success.
+[INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 config success.
+SPI write successful, 128 bytes
+tx_data(128)
+00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F
+20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F
+30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F
+40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F
+50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F
+60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F
+70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+
+rx_packet(128)
+00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F
+20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F
+30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F
+40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F
+50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F
+60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F
+70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+
+[INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 deinit success.
+```
+</DocScope>
 
 :::tip
 IpcBox only implements control of SPI Master with the following limitations:
@@ -632,7 +662,7 @@ IpcBox only implements control of SPI Master with the following limitations:
 
 #### I2C Test
 
-The test sample implements I2C detection. Using I2C6 as an example for S100. If using S600, modify `./ipcbox_i2c detect 6` to `./ipcbox_i2c detect 13`.
+The test sample implements I2C detection. S100 uses I2C6 and S600 uses I2C13 by default; the I2C bus number is passed through the `i2c_channel` argument of the `detect`/`get`/`set` commands.
 
 Also, check the `IpcBox_InstanceMap` configuration in `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` on the MCU side to ensure the `i2c` entry is enabled. By default, `i2c` is `DISABLE` in the configuration below, change it to `ENABLE`:
 
@@ -644,10 +674,6 @@ Also, check the `IpcBox_InstanceMap` configuration in `mcu/Service/HouseKeeping/
 
 <DocScope products="RDK S100">
 1. After booting into S100, navigate to the application directory `cd /app/ipcbox_sample/ipcbox_i2c`
-</DocScope>
-<DocScope products="RDK S600">
-1. After booting into S600, navigate to the application directory `cd /app/ipcbox_sample/ipcbox_i2c`
-</DocScope>
 2. Compile: `make`
 3. Run: `./ipcbox_i2c` to see the following reference commands:
 ```
@@ -686,6 +712,26 @@ Parsed arguments: operation=get, channel=6, slave_addr=0x13, reg_addr=0x2
 Read data[0]: 0x3C
 [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 deinit success.
 ```
+</DocScope>
+<DocScope products="RDK S600">
+1. After booting into S600, navigate to the application directory `cd /app/ipcbox_sample/ipcbox_i2c`
+2. Compile: `make`
+3. Run: `./ipcbox_i2c` to see the following reference commands:
+```
+root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c
+Usage: ./ipcbox_i2c detect [i2c_channel]
+./ipcbox_i2c get [i2c_channel] [slave_addr] [reg_addr]
+./ipcbox_i2c set [i2c_channel] [slave_addr] [reg_addr] [val]
+Examples:
+./ipcbox_i2c detect 0
+./ipcbox_i2c set 0 0x50 0x01 0xAA
+./ipcbox_i2c get 0 0x50 0x01
+```
+4. Enter `./ipcbox_i2c detect 13` to detect devices on `I2C13`
+5. Enter `./ipcbox_i2c get 13 0x13 0x2` to read from `I2C13`, with slave address `0x13` and register address `0x2`
+
+The output is a standard I2C scan table and read result. The device addresses detected and the `Read data` value depend on what is actually connected to I2C13.
+</DocScope>
 
 :::tip
 ipcbox only implements simple transfers for I2C Master and does not support Slave.
