@@ -74,6 +74,20 @@ root@ubuntu:~# devmem 0xE0000000 32 0x12345678
 root@ubuntu:~#
 ```
 
+:::warning
+
+上文示例中的 `0xE0000000` 仅用于演示 `devmem` 的命令格式，**并非开发板上真实可写的地址**。实际使用时必须将其替换为真实存在且当前可访问的物理地址，否则 `mmap` 映射失败，命令会直接报错：
+
+```shell
+root@ubuntu:~# devmem 0xE0000000 32 0x12345678
+devmem: mmap: Operation not permitted
+root@ubuntu:~#
+```
+
+写入前应先确认目标地址的有效性，例如参考上文介绍的 ION 预留内存信息、`/proc/iomem` 中的内存映射或芯片手册中的地址规划。地址正确但属于受保护区域时，同样会出现上述报错。
+
+:::
+
 ### 读取内存
 
 ```shell
