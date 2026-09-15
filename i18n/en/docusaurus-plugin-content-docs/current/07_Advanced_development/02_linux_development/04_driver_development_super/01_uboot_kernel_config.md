@@ -4,17 +4,36 @@ sidebar_position: 1
 
 # Configuring U-Boot and Kernel Option Parameters
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
+```
+
 In system software development, it is often necessary to configure the functional options of u-boot and the kernel. This chapter introduces several commonly used configuration methods for users' reference.
 
 ## Configuring U-Boot Option Parameters
 
 :::info Note
 
-​	The following instructions use the modification of the `hobot_s100_defconfig` configuration file as an example.
+​	The following instructions use the modification of the U-Boot defconfig configuration file as an example.
 
 ​	The specific configuration file used by U-Boot can be found by checking the value of the `HR_UBOOT_CONFIG_FILE` variable in the board-level configuration file `bootloader/device/.board_config.mk` after running `./xbuild.sh lunch`.
 
 :::
+
+The U-Boot configuration file for the current platform is:
+
+<DocScope products="RDK S100">
+
+`hobot_s100_defconfig`
+
+</DocScope>
+<DocScope products="RDK S600">
+
+`hobot_s600_defconfig`
+
+</DocScope>
 
 ### Configuring via the xbuild Command
 
@@ -52,7 +71,17 @@ cp -f defconfig <U-Boot configuration file set in the board-level configuration 
 
 ### Manual Configuration
 
+<DocScope products="RDK S100">
+
 First, navigate to the `source/bootloader/uboot` directory and execute `make ARCH=arm64 hobot_s100_defconfig`. The `make` command will first execute the Makefile in the top-level directory. For targets ending with `config`, there is a common entry point:
+
+</DocScope>
+<DocScope products="RDK S600">
+
+First, navigate to the `source/bootloader/uboot` directory and execute `make ARCH=arm64 hobot_s600_defconfig`. The `make` command will first execute the Makefile in the top-level directory. For targets ending with `config`, there is a common entry point:
+
+</DocScope>
+
 
 ```makefile
 %config: scripts_basic outputmakefile FORCE
@@ -61,11 +90,24 @@ First, navigate to the `source/bootloader/uboot` directory and execute `make ARC
 
 The expanded execution command is:
 
+<DocScope products="RDK S100">
+
 ```
 make -f ./scripts/Makefile.build obj=scripts/kconfig hobot_s100_defconfig
 ```
 
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+make -f ./scripts/Makefile.build obj=scripts/kconfig hobot_s600_defconfig
+```
+
+</DocScope>
+
 After executing this command, a `.config` file will be generated in the root directory of the U-Boot source code.
+
+<DocScope products="RDK S100">
 
 ```bash
 make ARCH=arm64 hobot_s100_defconfig
@@ -81,13 +123,43 @@ make ARCH=arm64 hobot_s100_defconfig
 #
 ```
 
+</DocScope>
+<DocScope products="RDK S600">
+
+```bash
+make ARCH=arm64 hobot_s600_defconfig
+
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  YACC    scripts/kconfig/zconf.tab.c
+  LEX     scripts/kconfig/zconf.lex.c
+  HOSTCC  scripts/kconfig/zconf.tab.o
+  HOSTLD  scripts/kconfig/conf
+#
+# configuration written to .config
+#
+```
+
+</DocScope>
+
 Then, execute `make ARCH=arm64 menuconfig` to open the graphical configuration interface and configure U-Boot option parameters.
 
 After completing the configuration on the menuconfig interface, select `Exit` to quit, and choose `Yes` or `No` according to the prompts to save the changes to the `.config` file.
 
+<DocScope products="RDK S100">
+
 After saving the configuration, you can run the command `diff .config configs/hobot_s100_defconfig` to compare the differences and confirm that the changes meet your expectations.
 
 If the modifications are correct, execute `cp .config configs/hobot_s100_defconfig` to replace the default configuration file.
+
+</DocScope>
+<DocScope products="RDK S600">
+
+After saving the configuration, you can run the command `diff .config configs/hobot_s600_defconfig` to compare the differences and confirm that the changes meet your expectations.
+
+If the modifications are correct, execute `cp .config configs/hobot_s600_defconfig` to replace the default configuration file.
+
+</DocScope>
 
 Clean up files like `.config` in the source directory; otherwise, when recompiling the system, you will be prompted that "xxx is not clean, please run 'make mrproper'".
 ```bash
@@ -100,11 +172,24 @@ make mrproper
 
 :::info Note
 
-​	The following instructions use the modification of the `drobot_s100_defconfig` configuration file as an example.
+​	The following instructions use the modification of the Kernel defconfig configuration file as an example.
 
 ​	The specific configuration file used by the kernel can be found by checking the value of the `kernel_config_file` variable in the `mk_kernel.sh` script.
 
 :::
+
+The Kernel configuration file for the current platform is:
+
+<DocScope products="RDK S100">
+
+`drobot_s100_defconfig`
+
+</DocScope>
+<DocScope products="RDK S600">
+
+`drobot_s600_defconfig`
+
+</DocScope>
 
 ### Configuring via the mk_kernel Command
 
@@ -137,11 +222,22 @@ Configuring the kernel via `menuconfig` follows a similar process to configuring
 
 First, navigate to the `source/kernel` directory, then follow these steps to configure kernel options.
 
-- Use `drobot_s100_defconfig` to generate `.config`. If a full compilation of the source code has been performed, the `.config` file will already be configured.
+- Use the Kernel defconfig for the current platform to generate `.config`. If a full compilation of the source code has been performed, the `.config` file will already be configured.
+
+<DocScope products="RDK S100">
 
 ```
 make ARCH=arm64 drobot_s100_defconfig
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+make ARCH=arm64 drobot_s600_defconfig
+```
+
+</DocScope>
 
 - Execute the following command to modify the configuration:
 
@@ -151,15 +247,37 @@ make ARCH=arm64 menuconfig
 
 - After modification, you can check the differences between the modified and unmodified versions:
 
+<DocScope products="RDK S100">
+
 ```
 diff .config hobot-drivers/configs/drobot_s100_defconfig
 ```
 
-- Overwrite `drobot_s100_defconfig` with the new configuration:
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+diff .config hobot-drivers/configs/drobot_s600_defconfig
+```
+
+</DocScope>
+
+- Overwrite the Kernel defconfig for the current platform with the new configuration:
+
+<DocScope products="RDK S100">
 
 ```
 cp .config hobot-drivers/configs/drobot_s100_defconfig
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+cp .config hobot-drivers/configs/drobot_s600_defconfig
+```
+
+</DocScope>
 
 - Clean up files like `.config` in the source directory; otherwise, when recompiling the system, you will be prompted that "xxx is not clean, please run 'make mrproper'".
 
