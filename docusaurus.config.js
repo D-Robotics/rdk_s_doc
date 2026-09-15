@@ -133,6 +133,12 @@ const config = {
           routeBasePath: "/", // 修改默认文档路径
           sidebarPath: "./sidebars.js",
           showLastUpdateTime: true,
+          beforeDefaultRemarkPlugins: [
+            // 关闭单波浪号删除线：文档大量用 ~ 表示数值范围（如 250MB/s~300MB/s），
+            // 同一行出现成对的 ~ 会被 remark-gfm 误解析成删除线（如 sda1~sda4）、内核/DTB（sda5~sda13）。
+            // 设为 false 后仅 ~~ 生效。
+            [require("remark-gfm").default, { singleTilde: false }],
+          ],
           remarkPlugins: [remarkDirective, remarkDocScope],
 
           
