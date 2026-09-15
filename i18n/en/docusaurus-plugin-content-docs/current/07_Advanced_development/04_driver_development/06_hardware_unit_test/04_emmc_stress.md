@@ -1,8 +1,24 @@
 ---
 sidebar_position: 4
+title: "eMMC Stress Testing"
+description: "eMMC stress testing"
 ---
 
 # eMMC Stress Testing
+
+## Overview
+
+This document describes how to perform performance and stability stress testing on the on-board eMMC, to verify its reliability and performance under prolonged high-load read/write operations. The test is based on the iozone tool and driven by scripts pre-installed on the board.
+
+**Scope**: On-board eMMC storage. RDK S100 has 64GB eMMC (eMMC 5.1); RDK S600 uses UFS 3.1 storage and is not covered by this document. Refer to the [UFS Driver Debugging Guide](../19_driver_ufs.md) instead.
+
+**Intended audience**: Test and development engineers performing hardware unit tests and system-level stability verification.
+
+**Prerequisites**:
+
+- The board has been flashed with an officially released RDK OS image and boots normally.
+- The test scripts described in this document exist under `/app/chip_base_test/02_emmc/` on the board.
+- The partition holding the test output has sufficient free space: **at least 2GB for the stability test and at least 256MB for the performance test**. See [Preparation](#preparation) for details.
 
 ## Code Location
 
@@ -69,9 +85,9 @@ The eMMC stress test includes two test scripts: `emmc_performance_test.sh` and `
   - `-I`: Enables direct I/O, bypassing OS caching.
   - `-a`: Executes automatic mode testing, covering multiple read/write operations across various file and record sizes.
   - `-r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M`: Specifies record sizes used during testing, affecting eMMC performance under different block sizes.
-  - `-s 16K -s 1M -s 16M -s 128M -s 1G`: Specifies the range of test file sizes—from small 16KB to large 1GB—to evaluate read/write performance across different file sizes.
+  - `-s 16K -s 1M -s 16M -s 128M -s 256M`: Specifies the range of test file sizes, from 16KB to 256MB, to evaluate read/write performance across different file sizes.
   - `-f "$output_dir/iozone_data"`: Specifies the location for storing test files.
-  - `-Rb "$output_dir/test_iozone_emmc_ext4_performance_1.xls"`: Outputs test results in Excel format.
+  - `-Rb "$output_dir/test_iozone_emmc_ext4_performance_${loop_num}.xls"`: Outputs test results in Excel format (.xls).
 
 ## Preparation
 
@@ -102,15 +118,25 @@ mmcblk0boot0
 mmcblk0boot1
 ```
 
-In eMMC performance testing, the `-s 256M` command creates files of the specified size for read/write tests (e.g., `-s 256M -f "$output_dir/iozone_data"`). Please ensure sufficient free space is available under the `/app` mount path to accommodate the largest file size used in testing.
+:::warning
+iozone creates test files in the output directory. The maximum file size differs between the two scripts: **2GB** for the stability test (`-g 2g`) and **256MB** for the performance test (`-s 256M`). Run `df -h <output_dir>` to confirm that the free space exceeds this value, otherwise the test will be interrupted.
+:::
 
-**2.** Confirm that the two test scripts `emmc_performance_test.sh` and `emmc_stability_test.sh` exist under the path `/app/chip_base_test/02_emmc`.
+**2.** Confirm that the two test scripts `emmc_performance_test.sh` and `emmc_stability_test.sh` exist under the path `/app/chip_base_test/02_emmc/`.
 
-```shell
-02_emmc/
+```text
+/app/chip_base_test/02_emmc/
 ├── emmc_performance_test.sh
 └── emmc_stability_test.sh
 ```
+
+**3.** **Recommended before the performance test**: run TRIM to reclaim the filesystem's free blocks. Without TRIM, the eMMC must perform extra garbage collection on writes, and measurements show the write speed drops from about 160MB/s to about 100MB/s.
+
+```shell
+fstrim -v /
+```
+
+The output should look like `/: 2.4 GiB (2622627840 bytes) trimmed`. If discard is not supported on your board, skip this step. See [FAQ](#low-write-speed) for details.
 
 ## Test Procedure
 
@@ -130,15 +156,12 @@ Options:
 
 Parameter explanations:
 
-- `-t <time>`: Sets test duration (e.g., `2h` for 2 hours, `30m` for 30 minutes; default is 48 hours).
-- `-d <seconds>`: Sets sleep time between loops in seconds (default: 30 seconds).
-- `-o <directory>`: Sets the log output directory (default: the `../output` folder relative to the script's location).
+- `-t <time>`: Sets the test duration, for example `2h` for 2 hours or `30m` for 30 minutes. The default is 48h.
+- `-d <seconds>`: Sets the sleep time between loops, in seconds. The default is 30 seconds.
+- `-o <directory>`: Sets the log output directory. The default differs between the two scripts: `../output` for `emmc_performance_test.sh` and `../log` for `emmc_stability_test.sh`.
 - `-h`: Displays help information and exits the script.
 
-**Example:**  
-For instance, the command:  
-`./emmc_performance_test.sh -t 2h -d 10 -o /userdata/output`  
-customizes the test duration to 2 hours, sets a 10-second interval between loops, and specifies `/userdata/output` as the output directory.
+**Example**: The command `./emmc_performance_test.sh -t 2h -d 10 -o /userdata/output` sets the test duration to 2 hours, the interval between loops to 10 seconds, and the output directory to `/userdata/output`.
 
 ### eMMC Stability Test:
 
@@ -150,7 +173,7 @@ cd /app/chip_base_test/02_emmc/
 ./emmc_stability_test.sh
 ```
 
-After running for some time, the output will appear as follows:
+After running for some time, the output will appear as follows (**example output; the actual figures vary with the board and the environment**):
 
 ```shell
 eMMC stability test starting...
@@ -222,32 +245,41 @@ loop_test: 1
 
 **Key Information Description:**
 
-- `Test duration`: Test duration: This is the test duration in minutes (i.e., 48 hours).
-- `Sleep duration`: Sleep duration: During each test loop execution, the script waits for 30 seconds to allow the system and storage device sufficient time to recover, thereby minimizing potential fluctuations during testing.
-- `Output directory`: Output directory: `/app/chip_base_test/output`
-- `Command line used`: Command used: `iozone -e -I -az -n 16m -g 2g -q 16m -f /app/chip_base_test/output/iozone_data -Rb /app/chip_base_test/output/test_iozone_emmc_stability_1.xls`, with key parameters as follows:
-  - File size range: minimum 16 MB, maximum 2 GB.
-  - Record size range: from 4 KB to 16384 KB (i.e., 16 MB).
-- `Key performance metrics`:
-  - kB: indicates file size (in KB).
-  - reclen: indicates record size (in bytes), i.e., the data block size for each I/O operation.
-  - random write / rewrite / read / reread: These columns represent throughput for random write, rewrite, random read, and reread operations, respectively.
-  - bkwd (Backward Read): Throughput for backward (reverse-order) read operations.
-  - record write / record read: Throughput for sequential record write and read operations.
-  - stride read / stride write: Throughput for stride (strided) read and write operations.
-  - fwrite / frewrite / fread / freread: These columns represent throughput for file I/O operations using the stdio cache path (fopen/fread/fwrite).
+- `Test configuration`: The configuration of this test run.
+  - `Test duration`: Test duration in minutes; 2880 means 48 hours.
+  - `Sleep duration`: Wait time between loops in seconds. The wait allows the system and storage device to recover, reducing fluctuations during the test.
+  - `Output directory`: Log output directory, `/app/chip_base_test/log` by default.
+- `Command line used`: The full command used in this test run. Key parameters are as follows.
+
+  ```text
+  iozone -e -I -az -n 16m -g 2g -q 16m -f /app/chip_base_test/log/iozone_data
+  -Rb /app/chip_base_test/log/test_iozone_emmc_stability_1.xls
+  ```
+
+  - File size range: minimum 16MB, maximum 2GB.
+  - Record size range: 4KB to 16384KB (that is, 16MB).
+- **Result table columns**: The output unit is kB/s, and the columns are as follows.
+  - `kB`: File size in KB.
+  - `reclen`: Record size in KB, that is, the data block size of each read/write operation.
+  - `write` / `rewrite`: Throughput of sequential write and rewrite.
+  - `read` / `reread`: Throughput of sequential read and repeated read.
+  - `random read` / `random write`: Throughput of random read and random write.
+  - `bkwd read`: Throughput of backward read.
+  - `record rewrite`: Throughput of record rewrite.
+  - `stride read` / `stride write`: Throughput of stride read and stride write.
+  - `fwrite` / `frewrite` / `fread` / `freread`: Throughput of file I/O through the stdio cache path (`fopen`/`fread`/`fwrite`).
 
 ### eMMC Performance Test:
 
 After ensuring all preparations are complete, run the test command:
 
 ```shell
-/app/chip_base_test/02_emmc/
+cd /app/chip_base_test/02_emmc/
 
 ./emmc_performance_test.sh
 ```
 
-After running for a period of time, the output appears as follows:
+After running for a period of time, the output appears as follows (**example output; the actual figures vary with the board and the environment**):
 
 ```shell
         Output is in kBytes/sec
@@ -289,20 +321,26 @@ After running for a period of time, the output appears as follows:
 
 **Key Information Description:**
 
-- `Test duration`: Test duration: This is the test duration in minutes (i.e., 48 hours).
-- `Sleep duration`: Sleep duration: During each test loop execution, the script waits for 30 seconds to allow the system and storage device sufficient time to recover, thereby minimizing potential fluctuations during testing.
-- `Output directory`: Output directory: `/app/chip_base_test/output`
-- `Command line used`: Command used: `iozone -e -I -a -r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M -s 16K -s 1M -s 16M -s 128M -s 256M -f /app/chip_base_test/output/iozone_data -Rb /app/chip_base_test/output/test_iozone_emmc_performance_1.xls`
-  - Record sizes include: 4 KB, 16 KB, 64 KB, 256 KB, 1 MB, 4 MB, 16 MB.
-  - File sizes are set to: 16 KB, 1 MB, 16 MB, 128 MB, 256 MB.
-- `Key performance metrics`:
-  - kB: indicates file size (in KB).
-  - reclen: indicates record size (in bytes), i.e., the data block size for each I/O operation.
-  - random write / rewrite / read / reread: These columns represent throughput for random write, rewrite, random read, and reread operations, respectively.
-  - bkwd (Backward Read): Throughput for backward (reverse-order) read operations.
-  - record write / record read: Throughput for sequential record write and read operations.
-  - stride read / stride write: Throughput for stride (strided) read and write operations.
-  - fwrite / frewrite / fread / freread: These columns represent throughput for file I/O operations using the stdio cache path (fopen/fread/fwrite).
+- `Command line used`: The full command used in this test run.
+
+  ```text
+  iozone -e -I -a -r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M -s 16K -s 1M
+  -s 16M -s 128M -s 256M -f /app/chip_base_test/output/iozone_data
+  -Rb /app/chip_base_test/output/test_iozone_emmc_performance_1.xls
+  ```
+
+  - Record sizes: 4KB, 16KB, 64KB, 256KB, 1MB, 4MB, 16MB.
+  - File sizes: 16KB, 1MB, 16MB, 128MB, 256MB.
+- **Result table columns**: The output unit is kB/s, and the columns are as follows.
+  - `kB`: File size in KB.
+  - `reclen`: Record size in KB, that is, the data block size of each read/write operation.
+  - `write` / `rewrite`: Throughput of sequential write and rewrite.
+  - `read` / `reread`: Throughput of sequential read and repeated read.
+  - `random read` / `random write`: Throughput of random read and random write.
+  - `bkwd read`: Throughput of backward read.
+  - `record rewrite`: Throughput of record rewrite.
+  - `stride read` / `stride write`: Throughput of stride read and stride write.
+  - `fwrite` / `frewrite` / `fread` / `freread`: Throughput of file I/O through the stdio cache path (`fopen`/`fread`/`fwrite`).
 
 ## Test Metrics
 
@@ -310,67 +348,117 @@ After running for a period of time, the output appears as follows:
 
 After the test program starts, the stability test generates the following files in the `/app/chip_base_test/log` directory:
 
-- test_iozone_emmc_stability.log: Logs status information during stress testing.
-- test_iozone_emmc_stability_*.xls: Records data results from stress testing.
+- `test_iozone_emmc_stability.log`: Records status information during the stress test.
+- `test_iozone_emmc_stability_*.xls`: Records the data result of each test loop.
 
-The test objective is to ensure the system can run stably for 48 hours without rebooting or hanging. To verify stability during testing, use the following command to check log files for anomalies such as "fail", "error", or "timeout":
+**Pass criteria**: The system does not reboot or hang during the test. The test duration is set by the `-t` option, and the value differs between the two ways of running it:
+
+- **Manual run**: Without `-t`, the script runs continuously for **48 hours** by default (`-t 48h`).
+- **Automated test**: Specified by `ExecStart` in `/app/chip_base_test/config/config.ini`, which is set to **24 hours** (`-t 24h`) in the factory configuration. See [AutoTest Usage](./02_auto_test.md) for details.
+
+Whichever duration is used, check the logs for anomalies such as `fail`, `error`, or `timeout`:
 
 ```shell
-cd "/app/chip_base_test/output/" && grep -iE 'error|fail|timeout' test_iozone_emmc_stability*.log
+cd "/app/chip_base_test/log/" && grep -iE 'error|fail|timeout' test_iozone_emmc_stability*.log
 ```
 
-### eMMC Stability Test Results
-
-After running the test for 24 hours and inspecting the log files, no abnormal status messages were found, indicating the stability stress test has passed.
+No output means no anomalies were found. When a loop completes normally, the script prints `Test loop N succeeded!`:
 
 ```shell
 Test loop 1 succeeded!
 Test loop 2 succeeded!
 Test loop 3 succeeded!
-.....
+...
 ```
 
 ### eMMC Performance Test
 
 After the test program starts, the performance test generates the following files in the `/app/chip_base_test/output` directory:
 
-- test_iozone_emmc_performance.log: Logs status information during stress testing.
-- test_iozone_emmc_performance_*.xls: Records data results from stress testing.
+- `test_iozone_emmc_performance.log`: Records status information during the stress test.
+- `test_iozone_emmc_performance_*.xls`: Records the data result of each test loop.
 
-The test objective is to ensure the system runs stably for 48 hours without rebooting or hanging. To check for anomalies in the logs, use the following command to search for keywords like "fail", "error", or "timeout":
+The anomaly check command is the same, only the directory and file name change:
 
 ```shell
 cd "/app/chip_base_test/output/" && grep -iE 'error|fail|timeout' test_iozone_emmc_performance*.log
 ```
 
-Additionally, performance should meet general standards for real-world usage. For RDK S100 (eMMC 5.1), which supports HS400 mode at maximum, typical read speeds range from 250 MB/s to 300 MB/s, while write speeds are slightly lower, typically between 120 MB/s and 200 MB/s.
+**Pass criteria**: Read and write speeds reach the typical level of eMMC 5.1 in HS400 mode. Read speeds typically range from 250MB/s to 300MB/s, and write speeds are slightly lower, from 120MB/s to 200MB/s.
 
 ### eMMC Performance Test Results
 
-After 48 hours of testing, log inspection using the command revealed no abnormal status messages. According to the log output, the maximum read speed reached approximately 312 MB/s, and the maximum write speed was about 257 MB/s, confirming that the performance stress test has passed.
+The measured maximum read speed on the board is about 316MB/s and the maximum write speed is about 162MB/s, which meets the typical level above, so the performance stress test has passed. For detailed figures, see the `.xls` result file of each loop.
 
-```shell
-Test loop 1 succeeded!
-Test loop 2 succeeded!
-Test loop 3 succeeded!
-.....
-```
+:::note About write speed
+The eMMC write speed is limited by the NAND program speed. It measures about 160MB/s and is independent of the amount of data written. A read speed roughly twice the write speed is normal for this class of device and is not a fault. If it is clearly below that level, check the TRIM state first; see [FAQ](#low-write-speed).
+:::
 
 ## FAQ
 
 ### eMMC device does not appear in lsblk
 
-**Cause**: The eMMC device is not recognized or has a connection issue.
+**Cause**: The eMMC device is not recognized, or the eMMC controller is not initialized properly. The symptom is that `lsblk -f` only lists `mmcblk0boot0` and `mmcblk0boot1`, without `mmcblk0` or its partitions.
 
-**Solution**: First run `lsblk -f` to confirm whether the device is listed; if it still does not appear, check the hardware connection and kernel logs.
+**Solution**:
+
+1. Run `dmesg | grep -i mmc` to check whether the kernel has enumerated the eMMC device.
+2. Confirm that the corresponding eMMC controller node is enabled in the device tree.
+3. If both are normal, check the hardware connection and power supply.
 
 ### The test script reports that the output directory does not exist
 
-**Cause**: The `/app/chip_base_test/log` or `/app/chip_base_test/output` directory has not been created or is not writable.
+**Cause**: The default output directory `/app/chip_base_test/log` (stability test) or `/app/chip_base_test/output` (performance test) has not been created, or the current user does not have write permission, so the script exits with an error and produces no log.
 
-**Solution**: Create the corresponding output directory with `mkdir -p` in advance and confirm write permission.
+**Solution**: Create the directory and confirm it is writable, or use the `-o` option to specify an existing writable directory:
+
+```shell
+mkdir -p /app/chip_base_test/output
+./emmc_performance_test.sh -o /app/chip_base_test/output
+```
+
+### The test is interrupted due to insufficient space
+
+**Cause**: iozone creates test files in the output directory, with a maximum size of 2GB for the stability test (`-g 2g`) and 256MB for the performance test (`-s 256M`). If the target partition has insufficient free space, iozone fails to write and prints `write: No space left on device` to the terminal; the script then exits with a non-zero code, and the log records `Test failed in loop N with error code 74!` (74 is an I/O error).
+
+**Solution**: Before testing, run `df -h` to confirm that the free space of the partition holding the output directory exceeds the maximum test file size. You can also run `rm -f <output_dir>/iozone_data` to clean up leftover files from a previous run.
+
+### Low write speed
+
+**Cause**: The most common cause is that the **filesystem has not been trimmed recently**. If the eMMC is not told which blocks are free after files are deleted, it must read the original data and merge on writes, and additionally relocate valid data (garbage collection), which greatly reduces the write speed. A normal read speed together with a write speed of about 100MB/s (below the 120MB/s lower bound of the criteria) is the typical symptom.
+
+**Solution**:
+
+1. Run `fstrim -v /` to reclaim free blocks and re-test. In measurements this restores the write speed from about 100MB/s to about 160MB/s.
+2. If it is still low, run `cat /sys/kernel/debug/mmc0/ios` to confirm the bus speed mode; `timing spec` should be `mmc HS400`. If it is another mode, check the eMMC controller configuration in the device tree.
+3. Point the output directory to an idle partition (such as `/userdata`) to avoid contention with the system disk for the same eMMC.
+4. Stop unrelated high I/O workloads and re-test.
+
+<details>
+<summary>Minimal reproduction (about 10 minutes)</summary>
+
+```shell
+# 1. Baseline: measure after TRIM, expect about 168MB/s
+fstrim -v / && dd if=/dev/zero of=/tmp/t.bin bs=1M count=512 oflag=direct
+
+# 2. Create invalid blocks: write 8GB and delete it, without running fstrim
+dd if=/dev/zero of=/tmp/big.bin bs=1M count=8192 oflag=direct && rm -f /tmp/big.bin
+
+# 3. Reproduce the slowdown: the write speed drops to about 112MB/s
+dd if=/dev/zero of=/tmp/t.bin bs=1M count=512 oflag=direct
+
+# 4. Verify recovery: back to about 166MB/s after TRIM
+fstrim -v / && dd if=/dev/zero of=/tmp/t.bin bs=1M count=512 oflag=direct
+```
+
+</details>
+
+:::tip Troubleshooting order
+After a board has been in use for a long time, a low write speed can have several causes. Run `fstrim -v /` and re-test first: if the speed returns to normal, the cause was filesystem garbage collection and the board does not need to be replaced.
+:::
 
 ## Related Documentation
 
 - [Driver Functional Unit Test](./01_overview.md)
+- [AutoTest Usage](./02_auto_test.md)
 - [Set Up the Development Environment](../../06_environment_build/01_environment_build.md)

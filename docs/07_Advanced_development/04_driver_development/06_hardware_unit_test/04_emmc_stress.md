@@ -6,6 +6,20 @@ description: "eMMC 压力测试"
 
 # eMMC 压力测试
 
+## 概述
+
+本文介绍如何对板载 eMMC 进行性能与稳定性压力测试，用于验证 eMMC 在长时间高负载读写下的可靠性与性能表现。测试基于 iozone 工具，由板端预置脚本驱动。
+
+**适用范围**：开发板板载 eMMC 存储。S100 板载 64GB eMMC（eMMC 5.1）；S600 采用 UFS 3.1 存储，不适用本文，请参考 [UFS 驱动调试指南](../19_driver_ufs.md)。
+
+**适用读者**：进行硬件单元测试与整机稳定性验证的测试及开发人员。
+
+**前置条件**：
+
+- 开发板已烧录官方发布的 RDK OS 镜像，且已正常启动。
+- 板端 `/app/chip_base_test/02_emmc/` 下存在本文所需的测试脚本。
+- 测试输出所在分区有足够剩余空间：**稳定性测试至少 2GB，性能测试至少 256MB**。详见[准备工作](#准备工作)。
+
 ## 代码位置
 
 本测试脚本位于板端 `/app/chip_base_test/02_emmc/` 目录：
@@ -21,15 +35,15 @@ description: "eMMC 压力测试"
 
 eMMC 压力测试通过 iozone 工具对 eMMC 存储设备进行压力测试，模拟不同的 I/O 操作模式，测量读写性能、吞吐量、延迟等指标。具体测试原理如下：
 
-- 创建测试文件： IOzone 首先在 eMMC 存储上创建一个或多个文件，这些文件的大小和数量可以自定义来模拟不同类型的负载，创建文件时， IOzone 会使用特定的块大小来进行读写操作。
+- 创建测试文件：iozone 首先在 eMMC 存储上创建一个或多个文件。文件的大小和数量可以自定义，用于模拟不同类型的负载。创建文件时，iozone 会使用特定的记录大小进行读写操作。
 - 执行多种 I/O 操作：
-  - 顺序写入（ Sequential Write）：连续写入数据到存储设备，测试设备的最大写入带宽。
-  - 顺序读取（ Sequential Read）：连续读取数据，测试设备的读取带宽。
-  - 随机写入（ Random Write）：对数据进行随机写入，测试设备的随机写入能力。
-  - 随机读取（ Random Read）：对数据进行随机读取，测试设备的随机读取能力。
+  - 顺序写入（Sequential Write）：连续写入数据到存储设备，测试设备的最大写入带宽。
+  - 顺序读取（Sequential Read）：连续读取数据，测试设备的读取带宽。
+  - 随机写入（Random Write）：对数据进行随机写入，测试设备的随机写入能力。
+  - 随机读取（Random Read）：对数据进行随机读取，测试设备的随机读取能力。
   - 混合读写：模拟多种读写操作，测试设备的综合性能。
-  - 重写（ Re-write）：对已经存在的文件进行修改或覆盖，测试设备在更新文件时的性能。
-- 数据记录与分析： IOzone 会记录每个操作的执行时间，并计算吞吐量和延迟等关键指标生成数据报告。
+  - 重写（Re-write）：对已经存在的文件进行修改或覆盖，测试设备在更新文件时的性能。
+- 数据记录与分析：iozone 会记录每个操作的执行时间，并计算吞吐量和延迟等关键指标，生成数据报告。
 
 ### 测试内容
 
@@ -45,15 +59,15 @@ eMMC 压力测试包含了 `emmc_performance_test.sh` 和 `emmc_stability_test.s
 
 - 稳定性测试：`iozone -e -I -az -n 16m -g 2g -q 16m -f "$output_dir/iozone_data" -Rb "$output_dir/test_iozone_emmc_ext4_stability_${loop_num}.xls"`
 - 参数解析：
-  - -e：启用扩展测试 (extended test)，这是 iozone 的一个特性，可以执行更多的测试类型，如重写 (rewrite)、反向写 (reverse write) 和 EOF 写入等。
-  - -I：启用直接 I/O（ O_DIRECT），绕过操作系统的缓存直接进行磁盘读写。
-  - -a：执行自动模式测试。 IOzone 会自动测试不同的操作和文件大小，通常会进行顺序读写、随机读写等多种测试。
-  - -z：在这个命令中，用于在每次测试时填充文件，以确保测试期间会进行连续的读写操作，增强了对系统压力的考验。这是常见的稳定性测试选项。
-  - -n 16m：设置每次写入测试的最小数据块大小为 16MB。这意味着测试从 16MB 数据块开始，并逐渐增大。
-  - -g 2g：设置测试的最大文件大小为 2GB。这表示 IOzone 将测试最大 2GB 文件的读写性能。
-  - -q 16m：在执行测试时，设置 IOzone 使用的文件块大小为 16MB，且这个块大小是内存缓冲区的大小。
-  - -f "$output_dir/iozone_data"：指定测试结果存储的文件路径。
-  - -Rb "$output_dir/test_iozone_emmc_ext4_stability_$\{loop_num}.xls"：使用 Excel 格式 (.xls) 输出测试结果文件。
+  - `-e`：启用扩展测试（extended test）。这是 iozone 的一个特性，可以执行更多的测试类型，如重写（rewrite）、反向写（reverse write）和 EOF 写入等。
+  - `-I`：启用直接 I/O（O_DIRECT），绕过操作系统的缓存直接进行磁盘读写。
+  - `-a`：执行自动模式测试。iozone 会自动测试不同的操作和文件大小，通常会进行顺序读写、随机读写等多种测试。
+  - `-z`：用于在每次测试时填充文件，确保测试期间会进行连续的读写操作，增强对系统压力的考验。这是常见的稳定性测试选项。
+  - `-n 16m`：设置每次写入测试的最小文件大小为 16MB。测试从 16MB 文件开始，并逐渐增大。
+  - `-g 2g`：设置测试的最大文件大小为 2GB。
+  - `-q 16m`：设置 iozone 使用的内存缓冲区大小为 16MB。
+  - `-f "$output_dir/iozone_data"`：指定测试文件存储路径。
+  - `-Rb "$output_dir/test_iozone_emmc_ext4_stability_${loop_num}.xls"`：以 Excel 格式（.xls）输出测试结果文件。
 
 #### eMMC 性能测试
 
@@ -65,13 +79,13 @@ eMMC 压力测试包含了 `emmc_performance_test.sh` 和 `emmc_stability_test.s
 
 - 性能测试：`iozone -e -I -a -r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M -s 16K -s 1M -s 16M -s 128M -s 256M  -f "$output_dir/iozone_data" -Rb "$output_dir/test_iozone_emmc_ext4_performance_${loop_num}.xls"`
 - 参数解析：
-  - -e：启用扩展测试。
-  - -I：启用直接 I/O，绕过操作系统缓存。
-  - -a：执行自动模式测试，包含多个读写操作，测试多个文件大小和记录大小。
-  - -r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M：指定测试中使用的记录大小，影响 eMMC 在不同数据块尺寸下的性能表现。
-  - -s 16K -s 1M -s 16M -s 128M -s 256M：指定测试文件大小的范围。从较小的 16KB 到较大的 256MB，测试不同大小文件的读写性能。
-  - -f "$output_dir/iozone_data"：指定测试文件存储位置。
-  - -Rb "$output_dir/test_iozone_emmc_ext4_performance_1.xls"：输出测试结果为 Excel 格式。
+  - `-e`：启用扩展测试。
+  - `-I`：启用直接 I/O，绕过操作系统缓存。
+  - `-a`：执行自动模式测试，包含多个读写操作，测试多个文件大小和记录大小。
+  - `-r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M`：指定测试中使用的记录大小，影响 eMMC 在不同数据块尺寸下的性能表现。
+  - `-s 16K -s 1M -s 16M -s 128M -s 256M`：指定测试文件大小的范围，从 16KB 到 256MB，测试不同大小文件的读写性能。
+  - `-f "$output_dir/iozone_data"`：指定测试文件存储位置。
+  - `-Rb "$output_dir/test_iozone_emmc_ext4_performance_${loop_num}.xls"`：以 Excel 格式（.xls）输出测试结果文件。
 
 ## 准备工作
 
@@ -102,15 +116,25 @@ mmcblk0boot0
 mmcblk0boot1
 ```
 
-在 eMMC 性能测试中，命令 -s 256M 会创建指定大小的文件进行读写测试，例如，-s 256M -f "$output_dir/iozone_data"， 请注意在 `/app` 挂载路径下的剩余空间是否满足最大文件读写测试的需求。
+:::warning 警告
+iozone 会在输出目录下创建测试文件，两个脚本的最大文件大小不同：稳定性测试为 **2GB**（`-g 2g`），性能测试为 **256MB**（`-s 256M`）。请用 `df -h <输出目录>` 确认剩余空间大于该值，否则测试会因空间不足中断。
+:::
 
-**2.** 确认在 /app/chip_base_test/02_emmc 路径下存在 `emmc_performance_test.sh` 和 `emmc_stability_test` 两个测试脚本。
+**2.** 确认 `/app/chip_base_test/02_emmc/` 路径下存在 `emmc_performance_test.sh` 和 `emmc_stability_test.sh` 两个测试脚本。
 
-```shell
-02_emmc/
+```text
+/app/chip_base_test/02_emmc/
 ├── emmc_performance_test.sh
 └── emmc_stability_test.sh
 ```
+
+**3.** **性能测试前建议执行** TRIM，回收文件系统的空闲块。未 TRIM 时 eMMC 写入需额外做垃圾回收，实测写入速率会从约 160MB/s 降至 100MB/s 左右。
+
+```shell
+fstrim -v /
+```
+
+执行后应输出类似 `/: 2.4 GiB (2622627840 bytes) trimmed`。若提示不支持 discard，可跳过本步骤。详见[常见问题](#写入速率偏低)。
 
 ## 测试方法
 
@@ -130,13 +154,12 @@ Options:
 
 各参数解析如下：
 
-- `-t <time>`：设置测试时长，例如 2h 表示 2 小时， 30m 表示 30 分钟，默认是 48 小时。
-- `-d <seconds>`：设置循环之间的睡眠时间（以秒为单位），默认值是 30 秒。
-- `-o <directory>`：设置日志输出目录，默认值是脚本所在目录的 ../output 文件夹。
+- `-t <time>`：设置测试时长，例如 2h 表示 2 小时，30m 表示 30 分钟，默认 48h。
+- `-d <seconds>`：设置循环之间的睡眠时间，单位为秒，默认 30 秒。
+- `-o <directory>`：设置日志输出目录。两个脚本的默认值不同：`emmc_performance_test.sh` 为 `../output`，`emmc_stability_test.sh` 为 `../log`。
 - `-h`：显示帮助信息并退出脚本。
 
-**示例**：
-例如，使用命令： `./emmc_performance_test.sh -t 2h -d 10 -o /userdata/output` 自定义测试时长 2 小时， 10 秒循环间隔，输出目录为 /userdata/output 。
+**示例**：使用 `./emmc_performance_test.sh -t 2h -d 10 -o /userdata/output`，表示自定义测试时长 2 小时，循环间隔 10 秒，输出目录为 `/userdata/output`。
 
 ### eMMC 稳定性测试：
 
@@ -148,7 +171,7 @@ cd /app/chip_base_test/02_emmc/
 ./emmc_stability_test.sh
 ```
 
-运行一段时间后，打印结果如下：
+运行一段时间后，打印结果如下（**示例输出，具体数值因板卡与运行环境而异**）：
 
 ```shell
 eMMC stability test starting...
@@ -220,32 +243,41 @@ loop_test: 1
 
 **关键信息说明**：
 
-- `Test duration`：测试持续时间 : 这是测试的持续时间，单位为分钟（即 48 小时）。
-- `Sleep duration`：睡眠时间 : 在每次循环执行测试时，脚本会等待 30 秒钟，可以让系统和存储设备有足够的时间进行恢复，减少测试过程中可能的波动。
-- `Output directory`：输出目录：`/app/chip_base_test/log`
-- `Command line used`：使用命令：`iozone -e -I -az -n 16m -g 2g -q 16m -f /app/chip_base_test/log/iozone_data -Rb /app/chip_base_test/log/test_iozone_emmc_stability_1.xls`，关键参数如下：
+- `Test configuration`：本次测试的配置。
+  - `Test duration`：测试持续时间，单位为分钟，2880 即 48 小时。
+  - `Sleep duration`：每次循环之间的等待时间，单位为秒。等待可让系统与存储设备恢复，减少测试过程中的波动。
+  - `Output directory`：日志输出目录，默认 `/app/chip_base_test/log`。
+- `Command line used`：本次测试使用的完整命令，关键参数如下。
+
+  ```text
+  iozone -e -I -az -n 16m -g 2g -q 16m -f /app/chip_base_test/log/iozone_data
+  -Rb /app/chip_base_test/log/test_iozone_emmc_stability_1.xls
+  ```
+
   - 文件大小范围：最小 16MB，最大 2GB。
-  - 记录大小范围：从 4KB 到 16384KB（即 16MB）。
-- `主要性能指标`：
-  - kB：表示文件大小（单位： KB）。
-  - reclen：表示记录大小（单位：字节），即每次读写操作的数据块大小。
-  - random write / rewrite / read / reread：这些列分别表示在随机写入、重写、随机读取、重读时的吞吐量。
-  - bkwd (Backward Read)：表示倒序读取（ Backward Read）操作的吞吐量。
-  - record write / record read：表示记录顺序写入和顺序读取吞吐量。
-  - stride read / stride write：表示跳跃读取（ stride read）和跳跃写入（ stride write）的吞吐量。
-  - fwrite / frewrite / fread / freread：这些列表示通过 stdio 缓存路径（fopen/fread/fwrite）进行的文件 I/O 操作的吞吐量。
+  - 记录大小范围：4KB 到 16384KB（即 16MB）。
+- **结果表列说明**：输出单位为 kB/s，各列含义如下。
+  - `kB`：文件大小，单位 KB。
+  - `reclen`：记录大小，单位 KB，即每次读写操作的数据块大小。
+  - `write` / `rewrite`：顺序写入、重写的吞吐量。
+  - `read` / `reread`：顺序读取、重复读取的吞吐量。
+  - `random read` / `random write`：随机读取、随机写入的吞吐量。
+  - `bkwd read`：倒序读取（Backward Read）的吞吐量。
+  - `record rewrite`：记录重写的吞吐量。
+  - `stride read` / `stride write`：跳跃读取、跳跃写入的吞吐量。
+  - `fwrite` / `frewrite` / `fread` / `freread`：通过 stdio 缓存路径（`fopen`/`fread`/`fwrite`）进行文件 I/O 的吞吐量。
 
 ### eMMC 性能测试：
 
 确保已完成准备工作后，运行测试命令：
 
 ```shell
-/app/chip_base_test/02_emmc/
+cd /app/chip_base_test/02_emmc/
 
 ./emmc_performance_test.sh
 ```
 
-运行一段时间后，打印结果如下：
+运行一段时间后，打印结果如下（**示例输出，具体数值因板卡与运行环境而异**）：
 
 ```shell
         Output is in kBytes/sec
@@ -287,20 +319,26 @@ loop_test: 1
 
 **关键信息说明**：
 
-- `Test duration`：测试持续时间 : 这是测试的持续时间，单位为分钟（即 48 小时）。
-- `Sleep duration`：睡眠时间 : 在每次循环执行测试时，脚本会等待 30 秒钟，可以让系统和存储设备有足够的时间进行恢复，减少测试过程中可能的波动。
-- `Output directory`：输出目录：`/app/chip_base_test/output`
-- `Command line used`：使用命令：`iozone -e -I -a -r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M -s 16K -s 1M -s 16M -s 128M -s 256M -f /app/chip_base_test/output/iozone_data -Rb /app/chip_base_test/output/test_iozone_emmc_performance_1.xls`
-  - 记录大小（ Record Size）包括 4KB, 16KB, 64KB, 256KB, 1MB, 4MB, 16MB。
-  - 文件大小（ File Size）设置为 16KB, 1MB, 16MB, 128MB, 256MB。
-- `主要性能指标`：
-  - kB：表示文件大小（单位： KB）。
-  - reclen：表示记录大小（单位：字节），即每次读写操作的数据块大小。
-  - random write / rewrite / read / reread：这些列分别表示在随机写入、重写、随机读取、重读时的吞吐量。
-  - bkwd (Backward Read)：表示倒序读取（ Backward Read）操作的吞吐量。
-  - record write / record read：表示记录顺序写入和顺序读取吞吐量。
-  - stride read / stride write：表示跳跃读取（ stride read）和跳跃写入（ stride write）的吞吐量。
-  - fwrite / frewrite / fread / freread：这些列表示通过 stdio 缓存路径（fopen/fread/fwrite）进行的文件 I/O 操作的吞吐量。
+- `Command line used`：本次测试使用的完整命令。
+
+  ```text
+  iozone -e -I -a -r 4K -r 16K -r 64K -r 256K -r 1M -r 4M -r 16M -s 16K -s 1M
+  -s 16M -s 128M -s 256M -f /app/chip_base_test/output/iozone_data
+  -Rb /app/chip_base_test/output/test_iozone_emmc_performance_1.xls
+  ```
+
+  - 记录大小（Record Size）：4KB、16KB、64KB、256KB、1MB、4MB、16MB。
+  - 文件大小（File Size）：16KB、1MB、16MB、128MB、256MB。
+- **结果表列说明**：输出单位为 kB/s，各列含义如下。
+  - `kB`：文件大小，单位 KB。
+  - `reclen`：记录大小，单位 KB，即每次读写操作的数据块大小。
+  - `write` / `rewrite`：顺序写入、重写的吞吐量。
+  - `read` / `reread`：顺序读取、重复读取的吞吐量。
+  - `random read` / `random write`：随机读取、随机写入的吞吐量。
+  - `bkwd read`：倒序读取（Backward Read）的吞吐量。
+  - `record rewrite`：记录重写的吞吐量。
+  - `stride read` / `stride write`：跳跃读取、跳跃写入的吞吐量。
+  - `fwrite` / `frewrite` / `fread` / `freread`：通过 stdio 缓存路径（`fopen`/`fread`/`fwrite`）进行文件 I/O 的吞吐量。
 
 ## 测试指标
 
@@ -308,68 +346,117 @@ loop_test: 1
 
 测试程序启动后，稳定性测试会在 `/app/chip_base_test/log` 目录下生成以下文件：
 
-- test_iozone_emmc_stability.log：记录压测时的状态信息。
-- test_iozone_emmc_stability_*.xls：记录压测时的数据结果。
+- `test_iozone_emmc_stability.log`：记录压测时的状态信息。
+- `test_iozone_emmc_stability_*.xls`：记录每一轮压测的数据结果。
 
-测试目标是确保系统能够在 48 小时内稳定运行，不发生重启或挂死的情况。为确保测试过程中的稳定性，可通过以下命令检查日志文件中是否存在 fail、 error、 timeout 等异常信息：
+**合格判据**：测试期间不发生重启或挂死。测试时长由 `-t` 参数决定，两种跑法的取值不同：
+
+- **手动执行**：不指定 `-t` 时脚本默认连续运行 **48 小时**（`-t 48h`）。
+- **自动压测**：由 `/app/chip_base_test/config/config.ini` 的 `ExecStart` 指定，出厂配置为 **24 小时**（`-t 24h`），详见 [AutoTest 使用方法](./02_auto_test.md)。
+
+无论哪种时长，都需检查日志中是否存在 `fail`、`error`、`timeout` 等异常信息：
 
 ```shell
 cd "/app/chip_base_test/log/" && grep -iE 'error|fail|timeout' test_iozone_emmc_stability*.log
 ```
 
-### eMMC 稳定性测试结果
-
-运行测试 24H 后检测 log 日志，并未出现异常状态信息，说明稳定性压测合格。
+无输出表示未发现异常。每一轮测试正常完成时，脚本会打印 `Test loop N succeeded!`：
 
 ```shell
 Test loop 1 succeeded!
 Test loop 2 succeeded!
 Test loop 3 succeeded!
-.....
+...
 ```
 
 ### eMMC 性能测试
 
-测试程序启动后，性能测试将在 `/app/chip_base_test/output` 目录下生成以下文件：
+测试程序启动后，性能测试会在 `/app/chip_base_test/output` 目录下生成以下文件：
 
-- test_iozone_emmc_performance.log：记录压测时的状态信息。
-- test_iozone_emmc_performance_*.xls：记录压测时的数据结果
+- `test_iozone_emmc_performance.log`：记录压测时的状态信息。
+- `test_iozone_emmc_performance_*.xls`：记录每一轮压测的数据结果。
 
-测试目标是确保系统能够在 48 小时内稳定运行，期间不发生重启或挂死现象。为检查日志中的异常信息，可使用以下命令查找 fail、 error、 timeout 等关键字：
+异常检查命令同上，只需替换目录与文件名：
 
 ```shell
 cd "/app/chip_base_test/output/" && grep -iE 'error|fail|timeout' test_iozone_emmc_performance*.log
 ```
 
-此外，性能应符合实际使用中的通用标准。针对 RDK S100 （ eMMC 5.1 ），其最高支持 HS400 模式。通常，读取速度在 250 MB/s 到 300 MB/s 之间，写入速度略低，通常在 120 MB/s 到 200 MB/s 之间。
+**合格判据**：读取与写入速度达到 eMMC 5.1 在 HS400 模式下的通用水平。通常读取速度为 250MB/s~300MB/s，写入速度略低，为 120MB/s~200MB/s。
 
 ### eMMC 性能测试结果
 
-经过 48 小时的测试，使用命令检查 log 日志时未发现异常状态信息且通过日志输出，最大读取速率可达到约 312 MB/s，最大写入速率约为 257 MB/s，性能压测合格。
+板端实测最大读取速率约 316MB/s，最大写入速率约 162MB/s，达到上述通用水平，性能压测合格。具体数值可从每轮的 `.xls` 结果文件中查看。
 
-```shell
-Test loop 1 succeeded!
-Test loop 2 succeeded!
-Test loop 3 succeeded!
-.....
-```
+:::note 关于写入速率
+eMMC 的写入速率受 NAND 物理写入速度限制，实测约 160MB/s，且与写入量无关。读写速率差约一倍是该类器件的正常表现，不属于故障。若明显低于该水平，请先检查 TRIM 状态，见[常见问题](#写入速率偏低)。
+:::
 
 ## 常见问题
 
 ### lsblk 看不到 eMMC 设备
 
-**原因**：eMMC 设备未识别或连接异常。
+**原因**：eMMC 设备未识别，或 eMMC 控制器未正常初始化。表现为 `lsblk -f` 只列出 `mmcblk0boot0`、`mmcblk0boot1`，没有 `mmcblk0` 及其分区。
 
-**解决**：先用 `lsblk -f` 确认设备是否列出；仍无则检查硬件连接与内核日志。
+**解决**：
+
+1. 执行 `dmesg | grep -i mmc` 查看内核是否枚举到 eMMC 设备。
+2. 确认对应的 eMMC 控制器节点已在设备树中使能。
+3. 以上均正常时，检查硬件连接与供电。
 
 ### 测试脚本报输出目录不存在
 
-**原因**：`/app/chip_base_test/log` 或 `/app/chip_base_test/output` 目录未创建或不可写。
+**原因**：默认输出目录 `/app/chip_base_test/log`（稳定性测试）或 `/app/chip_base_test/output`（性能测试）未创建，或当前用户无写入权限，脚本因此报错退出且不产生日志。
 
-**解决**：提前 `mkdir -p` 对应输出目录并确认有写入权限。
+**解决**：提前创建目录并确认可写，或使用 `-o` 参数指定一个已存在的可写目录：
+
+```shell
+mkdir -p /app/chip_base_test/output
+./emmc_performance_test.sh -o /app/chip_base_test/output
+```
+
+### 测试因空间不足中断
+
+**原因**：iozone 会在输出目录下创建测试文件，稳定性测试最大 2GB（`-g 2g`），性能测试最大 256MB（`-s 256M`）。目标分区剩余空间不足时，iozone 写入失败并在终端输出 `write: No space left on device`，脚本随即以非零码退出，日志中记录 `Test failed in loop N with error code 74!`（74 为 I/O 错误）。
+
+**解决**：测试前用 `df -h` 确认输出目录所在分区的剩余空间大于最大测试文件；也可执行 `rm -f <输出目录>/iozone_data` 清理上一次的遗留文件。
+
+### 写入速率偏低
+
+**原因**：最常见的原因是**文件系统未及时 TRIM**。文件删除后，若未告知 eMMC 这些块已空闲，设备写入时需先读出原数据再合并，并额外搬移有效数据（垃圾回收），导致写入速率大幅下降。读取速率正常、写入降至约 100MB/s（低于 120MB/s 的判据下限）即是典型表现。
+
+**解决**：
+
+1. 执行 `fstrim -v /` 回收空闲块后重测。实测该操作可将写入速率从约 100MB/s 恢复到约 160MB/s。
+2. 若仍偏低，执行 `cat /sys/kernel/debug/mmc0/ios` 确认总线速度模式，`timing spec` 应为 `mmc HS400`。若为其他模式，检查设备树中 eMMC 控制器配置。
+3. 将输出目录指定到空闲分区（如 `/userdata`），避免与系统盘争用同一块 eMMC。
+4. 停止无关的高 I/O 业务后重测。
+
+<details>
+<summary>最小复现方法（约 10 分钟）</summary>
+
+```shell
+# 1. 基线：TRIM 后测量，应约 168MB/s
+fstrim -v / && dd if=/dev/zero of=/tmp/t.bin bs=1M count=512 oflag=direct
+
+# 2. 制造无效块：写入 8GB 后删除，不执行 fstrim
+dd if=/dev/zero of=/tmp/big.bin bs=1M count=8192 oflag=direct && rm -f /tmp/big.bin
+
+# 3. 复现掉速：写入速率降至约 112MB/s
+dd if=/dev/zero of=/tmp/t.bin bs=1M count=512 oflag=direct
+
+# 4. 验证恢复：TRIM 后回到约 166MB/s
+fstrim -v / && dd if=/dev/zero of=/tmp/t.bin bs=1M count=512 oflag=direct
+```
+
+</details>
+
+:::tip 排查顺序
+板卡长期使用后，写入掉速可能由多种原因造成。建议先执行 `fstrim -v /` 复测：若速率恢复正常，说明是文件系统的垃圾回收问题，无需更换板卡。
+:::
 
 ## 相关文档
 
 - [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [AutoTest 使用方法](./02_auto_test.md)
 - [搭建开发环境](/Advanced_development/environment_build/environment_build)
