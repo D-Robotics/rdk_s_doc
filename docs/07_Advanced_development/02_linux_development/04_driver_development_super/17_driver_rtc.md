@@ -729,71 +729,67 @@ root@ubuntu:/# dmesg | grep rtc
 
 所以，`/dev/rtc0` 即为内置 RTC，而 `/dev/rtc1` 即为外置 RTC-YSN8130。
 
-系统默认使用的是 `/dev/rtc0` 作为主 RTC 设备 `/dev/rtc`：
+系统默认使用的是 `/dev/rtc1` 作为主 RTC 设备 `/dev/rtc`，由内核配置 `CONFIG_RTC_HCTOSYS_DEVICE="rtc1"`、`CONFIG_RTC_SYSTOHC_DEVICE="rtc1"` 指定（开机从 rtc1 恢复系统时间，关机将系统时间写回 rtc1）：
 
 ```bash
 root@ubuntu:~/myworkspace# ls -l /dev/rtc*
-lrwxrwxrwx 1 root root      4 Jun  4 22:17 /dev/rtc -> rtc0
+lrwxrwxrwx 1 root root      4 Jan  1  2000 /dev/rtc -> rtc1
+crw-rw-r-- 1 root misc 252, 0 Jan  1  2000 /dev/rtc0
+crw-rw-r-- 1 root misc 252, 1 Jan  1  2000 /dev/rtc1
 ```
 
-这里就是对应的内置 RTC ，可以使用以下命令进行测试。
+这里就是对应的外置 RTC（YSN8130），可以使用以下命令进行测试。
+
+> **注意**：`hwclock` 命令（util-linux）不带 `--rtc` 参数时，默认打开的是 `/dev/rtc0`（内置 super-rtc），而**不是** `/dev/rtc`（软链接到 rtc1）。因此操作默认 RTC（rtc1）时，必须显式加上 `--rtc /dev/rtc1`，否则读写的是 rtc0。
 
 ```bash
-# 测试命令
-date -s "2024/01/01 17:00:00"       # 设置系统时间
-hwclock -w            # 将系统时间写入 RTC
-hwclock -r            # 读取 RTC 时间，确认时间是否写入成功
-hwclock --rtc /dev/rtc1 # 读取指定 RTC 的时间
-date              # 读取系统时间
+# 测试命令（默认主 RTC 为 rtc1/YSN8130）
+date -s "2024/01/01 17:00:00"       # 设置系统时间（板端 CST = UTC+8，对应 09:00:00 UTC）
+hwclock --rtc /dev/rtc1 -w          # 将系统时间写入 rtc1
+hwclock --rtc /dev/rtc1 -r          # 读取 rtc1，验证写入是否成功
+date                                # 读取系统时间
 
-# 设置指定RTC的时间为当前系统时间
-sudo hwclock --rtc /dev/rtc1 --systohc
+# 不带 --rtc 时 hwclock 默认读写 /dev/rtc0（内置 super-rtc）
+hwclock -r                          # 等价于 hwclock --rtc /dev/rtc0 -r
+hwclock --rtc /dev/rtc0 -r          # 读取 rtc0（内置 super-rtc，掉电后回到 1970）
 ```
 
-此时可以通过 `/proc/driver/rtc` 来验证配置结果：
+此时可以通过 `/proc/driver/rtc`（对应默认 RTC rtc1）来验证写入结果。注意该接口打印的是 RTC 芯片内部的**原始寄存器值（UTC）**，不是本地 CST 时间：
 
 ```bash
-root@buildroot:~# cat /proc/driver/rtc
-rtc_time        : 00:15:09
-rtc_date        : 1970-01-01
-alrm_time       : 00:00:00
-alrm_date       : 1970-01-01
-alarm_IRQ       : no
-alrm_pending    : no
-update IRQ enabled      : no
-periodic IRQ enabled    : no
-periodic IRQ frequency  : 1
-max user IRQ frequency  : 64
-24hr            : yes
-root@buildroot:~# date -s "2024/01/01 17:00:00"
-Mon Jan  1 17:00:00 UTC 2024
-root@buildroot:~# hwclock -w
-root@buildroot:~# clock -r
-Mon Jan  1 17:00:11 2024  0.000000 seconds
-root@buildroot:~# date
-Mon Jan  1 17:00:14 UTC 2024
-root@buildroot:~# cat /proc/driver/rtc
-rtc_time        : 17:00:20
+root@ubuntu:~# date -s "2024/01/01 17:00:00"
+Mon Jan  1 17:00:00 CST 2024
+root@ubuntu:~# hwclock --rtc /dev/rtc1 -w
+root@ubuntu:~# hwclock --rtc /dev/rtc1 -r
+2024-01-01 17:00:01.000220+08:00
+root@ubuntu:~# date
+Mon Jan  1 17:00:02 CST 2024
+root@ubuntu:~# cat /proc/driver/rtc
+rtc_time        : 09:00:02
 rtc_date        : 2024-01-01
 alrm_time       : 00:00:00
-alrm_date       : 1970-01-01
+alrm_date       : 2000-01-02
 alarm_IRQ       : no
 alrm_pending    : no
 update IRQ enabled      : no
 periodic IRQ enabled    : no
 periodic IRQ frequency  : 1
-max user IRQ frequency  : 64
+max user IRQ frequency  : 1
 24hr            : yes
+
+RTC-YSN8130 registers
+Extension Register: WADA=1, TE=0, USEL=0
+Flag Register: VLF=0, AF=0, TF=0, UF=0
+Control Register0: AIE=0, TIE=0, UIE=0, STOP=0, TEST=0
 ```
 
 可以看到 `rtc_time` 已经被成功配置了。
 
-外置 RTC 模块 YSN8130 测试前需要更换 `/dev/rtc` 的链接目标再进行验证
+如需测试内置 RTC 模块（rtc0），直接使用 `hwclock --rtc /dev/rtc0`（或省略 `--rtc`，默认即 rtc0）即可：
 
 ```bash
-# 建立 /dev/rtc1 到 /dev/rtc 的软连接
-rm /dev/rtc
-ln -s /dev/rtc1 /dev/rtc
+hwclock --rtc /dev/rtc0 -w          # 将系统时间写入 rtc0
+hwclock --rtc /dev/rtc0 -r          # 读取 rtc0
 ```
 
 ### RTC 测试接口

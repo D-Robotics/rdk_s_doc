@@ -729,71 +729,67 @@ root@ubuntu:/# dmesg | grep rtc
 
 Therefore, `/dev/rtc0` is the built-in RTC, and `/dev/rtc1` is the external RTC-YSN8130.
 
-The system uses `/dev/rtc0` as the primary RTC device `/dev/rtc` by default:
+The system uses `/dev/rtc1` as the primary RTC device `/dev/rtc` by default, specified by the kernel configuration `CONFIG_RTC_HCTOSYS_DEVICE="rtc1"` and `CONFIG_RTC_SYSTOHC_DEVICE="rtc1"` (at boot, the system time is restored from rtc1; at shutdown, the system time is written back to rtc1):
 
 ```bash
 root@ubuntu:~/myworkspace# ls -l /dev/rtc*
-lrwxrwxrwx 1 root root      4 Jun  4 22:17 /dev/rtc -> rtc0
+lrwxrwxrwx 1 root root      4 Jan  1  2000 /dev/rtc -> rtc1
+crw-rw-r-- 1 root misc 252, 0 Jan  1  2000 /dev/rtc0
+crw-rw-r-- 1 root misc 252, 1 Jan  1  2000 /dev/rtc1
 ```
 
-This corresponds to the built-in RTC. You can use the following commands for testing.
+This is the external RTC (YSN8130). You can use the following commands for testing.
+
+> **Note**: when `hwclock` (util-linux) is invoked without `--rtc`, it opens `/dev/rtc0` (the built-in super-rtc) by default, **not** `/dev/rtc` (the symlink to rtc1). Therefore, to operate on the default RTC (rtc1), you must explicitly pass `--rtc /dev/rtc1`; otherwise it reads/writes rtc0.
 
 ```bash
-# Test commands
-date -s "2024/01/01 17:00:00"       # Set system time
-hwclock -w            # Write system time to RTC
-hwclock -r            # Read RTC time, confirm if write was successful
-hwclock --rtc /dev/rtc1 # Read time of the specified RTC
-date              # Read system time
+# Test commands (default primary RTC is rtc1/YSN8130)
+date -s "2024/01/01 17:00:00"       # Set system time (board is CST = UTC+8, i.e. 09:00:00 UTC)
+hwclock --rtc /dev/rtc1 -w          # Write system time to rtc1
+hwclock --rtc /dev/rtc1 -r          # Read rtc1, confirm the write
+date                                # Read system time
 
-# Set the time of the specified RTC to the current system time
-sudo hwclock --rtc /dev/rtc1 --systohc
+# Without --rtc, hwclock reads/writes /dev/rtc0 (the built-in super-rtc) by default
+hwclock -r                          # Equivalent to hwclock --rtc /dev/rtc0 -r
+hwclock --rtc /dev/rtc0 -r          # Read rtc0 (built-in super-rtc, returns to 1970 after power loss)
 ```
 
-You can then verify the configuration via `/proc/driver/rtc`:
+You can then verify the write result via `/proc/driver/rtc` (which corresponds to the default RTC rtc1). Note that this interface prints the **raw register values (UTC)** inside the RTC chip, not the local CST time:
 
 ```bash
-root@buildroot:~# cat /proc/driver/rtc
-rtc_time        : 00:15:09
-rtc_date        : 1970-01-01
-alrm_time       : 00:00:00
-alrm_date       : 1970-01-01
-alarm_IRQ       : no
-alrm_pending    : no
-update IRQ enabled      : no
-periodic IRQ enabled    : no
-periodic IRQ frequency  : 1
-max user IRQ frequency  : 64
-24hr            : yes
-root@buildroot:~# date -s "2024/01/01 17:00:00"
-Mon Jan  1 17:00:00 UTC 2024
-root@buildroot:~# hwclock -w
-root@buildroot:~# clock -r
-Mon Jan  1 17:00:11 2024  0.000000 seconds
-root@buildroot:~# date
-Mon Jan  1 17:00:14 UTC 2024
-root@buildroot:~# cat /proc/driver/rtc
-rtc_time        : 17:00:20
+root@ubuntu:~# date -s "2024/01/01 17:00:00"
+Mon Jan  1 17:00:00 CST 2024
+root@ubuntu:~# hwclock --rtc /dev/rtc1 -w
+root@ubuntu:~# hwclock --rtc /dev/rtc1 -r
+2024-01-01 17:00:01.000220+08:00
+root@ubuntu:~# date
+Mon Jan  1 17:00:02 CST 2024
+root@ubuntu:~# cat /proc/driver/rtc
+rtc_time        : 09:00:02
 rtc_date        : 2024-01-01
 alrm_time       : 00:00:00
-alrm_date       : 1970-01-01
+alrm_date       : 2000-01-02
 alarm_IRQ       : no
 alrm_pending    : no
 update IRQ enabled      : no
 periodic IRQ enabled    : no
 periodic IRQ frequency  : 1
-max user IRQ frequency  : 64
+max user IRQ frequency  : 1
 24hr            : yes
+
+RTC-YSN8130 registers
+Extension Register: WADA=1, TE=0, USEL=0
+Flag Register: VLF=0, AF=0, TF=0, UF=0
+Control Register0: AIE=0, TIE=0, UIE=0, STOP=0, TEST=0
 ```
 
 You can see that `rtc_time` has been successfully configured.
 
-Before testing the external RTC module YSN8130, you need to change the link target of `/dev/rtc` for verification.
+To test the built-in RTC module (rtc0), simply use `hwclock --rtc /dev/rtc0` (or omit `--rtc`, which defaults to rtc0):
 
 ```bash
-# Create a soft link from /dev/rtc1 to /dev/rtc
-rm /dev/rtc
-ln -s /dev/rtc1 /dev/rtc
+hwclock --rtc /dev/rtc0 -w          # Write system time to rtc0
+hwclock --rtc /dev/rtc0 -r          # Read rtc0
 ```
 
 ### RTC Test Interface
