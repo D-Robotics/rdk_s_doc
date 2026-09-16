@@ -1022,6 +1022,88 @@ Note: The RDK S600 uses eth0 as the DHCP port by default, and eth1 is configured
 
 If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [Automatic network card start/stop (supported in EtherCAT igh master version 1.6.4 and later)](#automatic-network-card-startstop-supported-in-ethercat-igh-master-version-164-and-later) for configuration.
 
+## CPU Affinity Configuration (RUN_ON_CPU)
+
+By default, the EtherCAT master kernel threads (`EtherCAT-IDLE` / `EtherCAT-OP`) are scheduled by the kernel scheduler across all CPU cores. In scenarios that require real-time determinism or CPU isolation, you can use the `RUN_ON_CPU` configuration item to bind the master kernel threads to a specific CPU core, reducing scheduling jitter caused by cross-core migration and improving EtherCAT communication stability.
+
+:::info
+`RUN_ON_CPU` works for both the Native driver (`ec_hobot`) and the Generic driver (`ec_generic`), and is configured in the same way.
+
+<DocScope products="RDK S100">
+This feature requires system version **V4.1.0 or later**. If `/etc/ethercat.conf` does not contain the `RUN_ON_CPU` item, please upgrade the `hobot-ethercat` package.
+</DocScope>
+
+<DocScope products="RDK S600">
+This feature requires system version **V5.1.0 or later**. If `/etc/ethercat.conf` does not contain the `RUN_ON_CPU` item, please upgrade the `hobot-ethercat` package.
+</DocScope>
+:::
+
+### Configuration Method
+
+Edit `/etc/ethercat.conf` and set `RUN_ON_CPU` to the target CPU core number (counting from 0):
+
+```
+# Bind the EtherCAT master kernel threads to CPU 1
+RUN_ON_CPU="1"
+```
+
+| Value | Behavior |
+|------|------|
+| Empty or `off` | No CPU binding; the kernel scheduler is free to schedule (default) |
+| `0`, `1`, `2` ... | Bind the master kernel threads to the CPU core with the given number |
+
+Restart the EtherCAT service for the configuration to take effect:
+
+```shell
+sudo systemctl restart ethercat
+```
+
+:::warning
+<font color="red">**Note:**</font> `RUN_ON_CPU` takes effect when the service starts and loads the `ec_master` module. After changing the configuration, you must restart the EtherCAT service (reloading the module) to apply the new CPU affinity setting.
+:::
+
+### Configuration Validation
+
+To prevent an invalid configuration from affecting master startup, the `ethercatctl` and `init.d` scripts call `validate_run_on_cpu()` at startup to validate the value:
+
+| Input | Validation Result |
+|------|----------|
+| Empty or `off` | Valid; CPU binding is skipped |
+| A non-negative integer within the system CPU range | Valid; `run_on_cpu=N` is passed to `ec_master` |
+| Not an integer (e.g., `abc`) | Warning and CPU binding is skipped; the master starts normally |
+| Unable to detect the system CPU count | Warning and CPU binding is skipped |
+| Outside the available CPU range of the system | Warning and CPU binding is skipped |
+
+When validation fails, the script prints a `WARNING` and falls back to no CPU binding (the default behavior); **it does not prevent the EtherCAT service from starting**. For example, configuring `RUN_ON_CPU="8"` on a 4-core system:
+
+```shell
+$ sudo ethercatctl start
+WARNING: RUN_ON_CPU=8 exceeds available CPUs
+         (0-3). Using default (no CPU binding).
+```
+
+### Verifying the CPU Affinity
+
+1. Check the kernel log to confirm that CPU binding has taken effect. When binding succeeds, `ec_master` outputs a log like the following:
+
+    ```shell
+    $ dmesg | grep -i "binding thread"
+    [  123.456789] EtherCAT 0:  binding thread to cpu 1
+    ```
+
+2. Check the CPU core on which the master kernel thread actually runs (the `PSR` column is the CPU number the thread currently runs on):
+
+    ```shell
+    $ ps -eLo pid,psr,comm | grep EtherCAT
+    1234  1 EtherCAT-IDLE
+    ```
+
+    In the example above, the `PSR` of the `EtherCAT-IDLE` thread is `1`, indicating that it is bound to CPU 1.
+
+:::tip
+The master runs the `EtherCAT-IDLE` thread while idle and switches to the `EtherCAT-OP` thread once it enters the OP (Operational) phase. Both are bound to the CPU core specified by `RUN_ON_CPU`.
+:::
+
 ## FAQ
 
 ### Automatic network card start/stop (supported in EtherCAT igh master version 1.6.4 and later)

@@ -34,7 +34,7 @@ Before testing, short MISO and MOSI:
 
 ```
 List of enabled spi controllers:
-/dev/spidev0.0  /dev/spidev0.1
+/dev/spidev0.0  /dev/spidev1.0
 Please input SPI bus num:1
 Please input SPI cs num:0
 ```

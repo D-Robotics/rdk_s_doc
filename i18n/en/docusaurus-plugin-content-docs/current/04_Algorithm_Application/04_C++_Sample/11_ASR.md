@@ -87,17 +87,21 @@ sudo apt install -y libgflags-dev libsndfile1-dev libsamplerate0-dev
     ```
 
 ## Model Download
-If the model is not found at runtime, download it with the following command:
+If the model is not found at runtime, download it with the following command. Note that it must be downloaded to the default path of `--model_path`; otherwise running with the default parameters will still report that the model cannot be found.
 
 <DocScope products="RDK-S100">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+sudo mkdir -p /opt/hobot/model/s100/basic
+sudo wget -O /opt/hobot/model/s100/basic/asr.hbm \
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
 ```
 
 </DocScope>
 <DocScope products="RDK-S600">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
+sudo mkdir -p /opt/hobot/model/s600/basic
+sudo wget -O /opt/hobot/model/s600/basic/asr.hbm \
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 ```
 
 </DocScope>
@@ -152,6 +156,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 
     After successful execution, the result will be printed.
     ```bash
+    Full transcription:
     我是来自阿里云的大规模语言磨型过叫通意千问||
     ```
 

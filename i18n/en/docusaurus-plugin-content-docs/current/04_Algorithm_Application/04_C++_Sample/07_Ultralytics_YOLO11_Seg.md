@@ -10,7 +10,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK-S100">
 
-This example shows how to run the YOLOv11 semantic segmentation model on the BPU. It supports image preprocessing, inference, and post-processing (parse outputs and overlay colored segmentation masks). The sample code is located in `/app/cdev_demo/bpu/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`.
+This example shows how to run the YOLOv11 instance segmentation model on the BPU. It supports image preprocessing, inference, and post-processing (parse outputs and overlay colored segmentation masks). The sample code is located in `/app/cdev_demo/bpu/03_instance_segmentation_sample/02_ultralytics_yolo11_seg/`.
 
 </DocScope>
 <DocScope products="RDK-S600">

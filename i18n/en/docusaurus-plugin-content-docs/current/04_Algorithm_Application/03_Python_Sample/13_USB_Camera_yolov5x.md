@@ -66,6 +66,7 @@ This is a real-time Ultralytics YOLOv5x inference sample based on `hbm_runtime`.
 ```text
 .
 ├── usb_camera_yolov5x.py       # Main program
+├── usb_camera_snap.py          # USB camera still capture (unrelated to object detection)
 └── README.md                   # Usage instructions
 ```
 

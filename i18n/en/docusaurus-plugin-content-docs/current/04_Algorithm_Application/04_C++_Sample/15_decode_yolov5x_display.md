@@ -10,7 +10,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK-S100">
 
-This sample demonstrates how to combine SP decode/display/VIO modules with the BPU on platforms such as RDK S100 to implement an end-to-end pipeline:
+This sample demonstrates how to combine SP decode/display/VIO modules with the BPU on platforms such as RDK S600 to implement an end-to-end pipeline:
 local H.264 file → hardware decode (NV12) → YOLOv5x inference → overlay boxes on the display layer. The sample code is located in `/app/cdev_demo/bpu/decode_yolov5x_display_sample`.
 
 </DocScope>

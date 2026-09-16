@@ -1,5 +1,6 @@
 ---
 sidebar_position: 3
+sidebar_products: RDK S100
 ---
 
 # 7.1.3 RDK S100 硬件bringup
@@ -141,33 +142,6 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 - `IntMask`改为`TRUE`
 
 ## 在 spl 和 Uboot 下新增硬件
-
-在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
-
-在MCU0代码中，会检测AON GPIO 11的中断状态以决定是否要进入休眠模式，中断在ICU模块中注册，因此需要在ICU模块中关闭AON GPIO 11的中断
-
-在MCU代码`mcu/Config/McalCdd/gen_s100_sip_B/Icu/src/Icu_PBCfg.c`的`Icu_Gpio_ChannelConfig_PB`数组中，需要做以下设置：
-
-```c
-        ...
-         /** @brief gpio mod 3 channel 11 */
-        {
-            .PinId = 11,
-            .instanceNo = 3,
-            .DefaultStartEdge = GPIO_ICU_FALLING_EDGE,
-            .NotificationEnable = FALSE,
-            .GpioChannelNotification = Icu_Gpio_Channel_3_11_ISR,
-            .IntEnable = FALSE,
-            .IntMask = TRUE,
-        },
-        ...
-```
-
-- `NotificationEnable`改为`FALSE`
-- `IntEnable`改为`FALSE`
-- `IntMask`改为`TRUE`
-
-## 在spl和Uboot下新增硬件
 
 spl为Uboot下的spl
 

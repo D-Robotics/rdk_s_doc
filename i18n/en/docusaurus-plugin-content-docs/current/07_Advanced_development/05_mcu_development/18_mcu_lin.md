@@ -2,7 +2,7 @@
 sidebar_position: 18
 ---
 
-# 7.5.19 LIN使用指南
+# 7.5.19 LIN User Guide
 
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
@@ -10,133 +10,133 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-S100 MCU芯片共有3路LIN（LIN0~LIN2），其中 **LIN1** 已通过板载接口引出供用户开发学习使用，配置为 **Master 节点**。
+The S100 MCU chip has 3 LIN channels in total (LIN0~LIN2), among which **LIN1** is routed out through an on-board connector for user development and learning, and is configured as a **Master node**.
 
-| **配置项**         | **LIN1** |
+| **Configuration Item** | **LIN1** |
 |--------------------|----------|
-| 节点类型           | Master |
-| 波特率             | 9600 bps |
-| 停止位             | 1 位 |
-| 自动波特率         | 关闭 |
-| 唤醒检测           | 关闭 |
-| Break 域长度       | 13 bit |
-| 响应超时           | 14 bit time |
-| 头部超时           | 44 bit time |
+| Node type          | Master |
+| Baud rate          | 9600 bps |
+| Stop bits          | 1 bit |
+| Auto baud rate     | Disabled |
+| Wakeup detection   | Disabled |
+| Break field length | 13 bit |
+| Response timeout   | 14 bit time |
+| Header timeout     | 44 bit time |
 
-## 硬件支持
+## Hardware Support
 
-- MCU最大可用LIN数量: 3个（LIN0~LIN2）
-- 板载引出LIN: 1个（LIN1）
-- 支持LIN协议版本: 1.3、2.0、2.1、2.2
-- 支持Master/Slave节点模式
-- 数据缓冲: 单个8字节缓冲或FIFO模式
-- 支持16个标识符（Identifier Filters）
-- 支持经典校验（Classic Checksum）和增强校验（Enhanced Checksum）
-- 波特率: 最高20 Kbit/s（LIN协议标准），支持分数波特率生成器
-- 功耗模式: 初始化（Initialization）、正常（Normal）、睡眠（Sleep）
-- 超时管理: Header超时、Response超时、Frame超时
-- 高级错误检测: 支持多种LIN错误检测
-- 唤醒支持: Dominant bit检测唤醒
-- 中断支持: 可屏蔽中断
-- 外部收发器: 需要外部LIN收发器芯片连接到LIN总线
+- Maximum number of LIN channels available on the MCU: 3 (LIN0~LIN2)
+- LIN channels routed out on the board: 1 (LIN1)
+- Supported LIN protocol versions: 1.3, 2.0, 2.1, 2.2
+- Supports Master/Slave node modes
+- Data buffering: single 8-byte buffer or FIFO mode
+- Supports 16 identifiers (Identifier Filters)
+- Supports Classic Checksum and Enhanced Checksum
+- Baud rate: up to 20 Kbit/s (LIN protocol standard), with support for a fractional baud rate generator
+- Power modes: Initialization, Normal, Sleep
+- Timeout management: Header timeout, Response timeout, Frame timeout
+- Advanced error detection: supports multiple kinds of LIN error detection
+- Wakeup support: wakeup on Dominant bit detection
+- Interrupt support: maskable interrupts
+- External transceiver: an external LIN transceiver chip is required to connect to the LIN bus
 
 </DocScope>
 <DocScope products="RDK S600">
 
-S600 MCU芯片共有8路LIN（LIN0~LIN7），其中 **LIN2 和 LIN3** 已通过板载接口引出供用户开发学习使用，均配置为 **Master 节点**。
+The S600 MCU chip has 8 LIN channels in total (LIN0~LIN7), among which **LIN2 and LIN3** are routed out through on-board connectors for user development and learning, and both are configured as **Master nodes**.
 
-| **配置项**         | **LIN2** | **LIN3** |
+| **Configuration Item** | **LIN2** | **LIN3** |
 |--------------------|----------|----------|
-| 节点类型           | Master | Master |
-| 波特率             | 9600 bps | 9600 bps |
-| 停止位             | 1 位 | 1 位 |
-| 自动波特率         | 关闭 | 关闭 |
-| 唤醒检测           | 关闭 | 关闭 |
-| Break 域长度       | 13 bit | 13 bit |
-| 响应超时           | 14 bit time | 14 bit time |
-| 头部超时           | 44 bit time | 44 bit time |
+| Node type          | Master | Master |
+| Baud rate          | 9600 bps | 9600 bps |
+| Stop bits          | 1 bit | 1 bit |
+| Auto baud rate     | Disabled | Disabled |
+| Wakeup detection   | Disabled | Disabled |
+| Break field length | 13 bit | 13 bit |
+| Response timeout   | 14 bit time | 14 bit time |
+| Header timeout     | 44 bit time | 44 bit time |
 
-## 硬件支持
+## Hardware Support
 
-- MCU最大可用LIN数量: 8个（LIN0~LIN7）
-- 板载引出LIN: 2个（LIN2、LIN3）
-- 支持LIN协议版本: 1.3、2.0、2.1、2.2
-- 支持Master/Slave节点模式
-- 数据缓冲: 单个8字节缓冲或FIFO模式
-- 支持16个标识符（Identifier Filters）
-- 支持经典校验（Classic Checksum）和增强校验（Enhanced Checksum）
-- 波特率: 最高20 Kbit/s（LIN协议标准），支持分数波特率生成器
-- 功耗模式: 初始化（Initialization）、正常（Normal）、睡眠（Sleep）
-- 超时管理: Header超时、Response超时、Frame超时
-- 高级错误检测: 支持多种LIN错误检测
-- 唤醒支持: Dominant bit检测唤醒
-- 中断支持: 可屏蔽中断
-- 外部收发器: 需要外部LIN收发器芯片连接到LIN总线
+- Maximum number of LIN channels available on the MCU: 8 (LIN0~LIN7)
+- LIN channels routed out on the board: 2 (LIN2, LIN3)
+- Supported LIN protocol versions: 1.3, 2.0, 2.1, 2.2
+- Supports Master/Slave node modes
+- Data buffering: single 8-byte buffer or FIFO mode
+- Supports 16 identifiers (Identifier Filters)
+- Supports Classic Checksum and Enhanced Checksum
+- Baud rate: up to 20 Kbit/s (LIN protocol standard), with support for a fractional baud rate generator
+- Power modes: Initialization, Normal, Sleep
+- Timeout management: Header timeout, Response timeout, Frame timeout
+- Advanced error detection: supports multiple kinds of LIN error detection
+- Wakeup support: wakeup on Dominant bit detection
+- Interrupt support: maskable interrupts
+- External transceiver: an external LIN transceiver chip is required to connect to the LIN bus
 
 </DocScope>
 
 
-## 软件架构
+## Software Architecture
 
-- LIN APP: Lin的应用层代码。
-- LIN Interface: Lin的接口层代码，提供标准化的LIN操作接口。
-- LIN LLD: Lin的底层驱动代码，直接操作LINFLEXD寄存器，实现帧收发、中断处理等核心功能。
-- LIN PBcfg: Lin的PB配置文件，用于外设的配置参数。
-- Hardware: LINFLEXD硬件。
+- LIN APP: The LIN application layer code.
+- LIN Interface: The LIN interface layer code, which provides standardized LIN operation interfaces.
+- LIN LLD: The LIN low-level driver code, which directly operates the LINFLEXD registers and implements core functions such as frame transmission/reception and interrupt handling.
+- LIN PBcfg: The LIN PB configuration file, used for peripheral configuration parameters.
+- Hardware: The LINFLEXD hardware.
 
 
 
-## 代码路径
+## Code Paths
 
-- `McalCdd/Common/Register/inc/Lin_Register.h`：寄存器相关内容
-- `McalCdd/Lin/src/Lin.c`：API层代码
-- `McalCdd/Lin/src/Lin_Lld.c`：LLD层代码
-- `McalCdd/Lin/src/Linflexd_Lin_Ip.c`：IP层代码
-- `McalCdd/Lin/src/Lin_Irq.c`：中断处理代码
-- `McalCdd/Lin/src/LinIf.c`：LIN Interface回调桩
-- `McalCdd/Lin/inc/Lin.h`：对外公共API头文件
-- `McalCdd/Lin/inc/Lin_GeneralTypes.h`：标准类型定义
-- `McalCdd/Lin/inc/Lin_Types.h`：配置结构类型
-- `McalCdd/Lin/inc/Lin_Lld.h`：底层驱动接口声明
-- `McalCdd/Lin/inc/Linflexd_Lin_Ip.h`：LINFLEXD IP层接口
-- `McalCdd/Lin/inc/Lin_Irq.h`：中断处理声明
-- `Config/McalCdd/gen_xxx/Lin/src/Lin_PBcfg.c`：PostBuild配置文件
+- `McalCdd/Common/Register/inc/Lin_Register.h`: Register-related content
+- `McalCdd/Lin/src/Lin.c`: API layer code
+- `McalCdd/Lin/src/Lin_Lld.c`: LLD layer code
+- `McalCdd/Lin/src/Linflexd_Lin_Ip.c`: IP layer code
+- `McalCdd/Lin/src/Lin_Irq.c`: Interrupt handling code
+- `McalCdd/Lin/src/LinIf.c`: LIN Interface callback stubs
+- `McalCdd/Lin/inc/Lin.h`: Public API header file
+- `McalCdd/Lin/inc/Lin_GeneralTypes.h`: Standard type definitions
+- `McalCdd/Lin/inc/Lin_Types.h`: Configuration structure types
+- `McalCdd/Lin/inc/Lin_Lld.h`: Low-level driver interface declarations
+- `McalCdd/Lin/inc/Linflexd_Lin_Ip.h`: LINFLEXD IP layer interfaces
+- `McalCdd/Lin/inc/Lin_Irq.h`: Interrupt handling declarations
+- `Config/McalCdd/gen_xxx/Lin/src/Lin_PBcfg.c`: PostBuild configuration file
 
-## 应用sample
+## Application Sample
 
 <DocScope products="RDK S100">
 
-### 使用示例
+### Usage Example
 
-S100 开发板将 LIN1 引出供用户开发学习使用，引脚位于 `Main Board` 板上的 `MCU Port Expansion Header(J22)`：
+The S100 development board routes LIN1 out for user development and learning; the pins are located on the `MCU Port Expansion Header(J22)` on the `Main Board`:
 
 :::tip
-LIN1将复用UART5引脚，使用`LinTest`命令将会**自动将对应引脚复用为LIN功能**，UART功能将无法再使用。
-恢复可使用命令`uarttest 0 5 921600 0 1 8`，或调用`Port_SetFunctionPins(PORT_FUNC_UART5)`来重新配置串口引脚。
+LIN1 multiplexes the UART5 pins. Running the `LinTest` command will **automatically mux the corresponding pins to the LIN function**, and the UART function can no longer be used.
+To restore it, use the command `uarttest 0 5 921600 0 1 8`, or call `Port_SetFunctionPins(PORT_FUNC_UART5)` to reconfigure the serial pins.
 :::
 
-| 信号 | 引脚 |
+| Signal | Pin |
 |------|------|
 | LIN1_TX | J22 PIN13 |
 | LIN1_RX | J22 PIN15 |
 
 ![image-rdk_100_mainboard](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mainboard_interface.png)
 
-- 语法格式
-    - `case`: 测试用例ID（必需）
-    - `channel`: LIN通道编号（0=LIN1）
-    - `Pid`: 帧ID（0-0x3F）
-    - `ChecksumType`: 校验类型（0=ENHANCED, 1=CLASSIC）
-    - `ResponseType`: 响应类型（0=TX, 1=RX）
-    - `DataLen`: 数据长度（1-8）
-    - `loop_times`: 循环次数
+- Syntax
+    - `case`: Test case ID (required)
+    - `channel`: LIN channel number (0=LIN1)
+    - `Pid`: Frame ID (0-0x3F)
+    - `ChecksumType`: Checksum type (0=ENHANCED, 1=CLASSIC)
+    - `ResponseType`: Response type (0=TX, 1=RX)
+    - `DataLen`: Data length (1-8)
+    - `loop_times`: Number of loops
 ```
 LinTest <case> <channel> <Pid> <ChecksumType> <ResponseType> <DataLen> <loop_times>
 ```
 
 
 
-- `LinTest 1` 打印驱动版本信息
+- `LinTest 1` prints driver version information
 
 ```shell
 D-Robotics:/$ LinTest 1
@@ -151,7 +151,7 @@ sw_patch_version: 0
 [LinTest 310] [INFO]: #####################################################################
 ```
 
-- `LinTest 2 0 16 0 0 8 1` LIN1发送数据
+- `LinTest 2 0 16 0 0 8 1` sends data on LIN1
 
 ```shell
 D-Robotics:/$ LinTest 2 0 16 0 0 8 1
@@ -167,16 +167,16 @@ D-Robotics:/$ LinTest 2 0 16 0 0 8 1
 </DocScope>
 <DocScope products="RDK S600">
 
-### 使用示例
+### Usage Example
 
-S600开发板将LIN2和LIN3引出供用户开发学习使用，引脚位于 `Main Board` 板上的连接器 `J18`：
+The S600 development board routes LIN2 and LIN3 out for user development and learning; the pins are located on the connector `J18` on the `Main Board`:
 
 :::tip
-LIN2复用UART10引脚，LIN3复用UART11引脚，使用`LinTest`命令将会**自动将对应引脚复用为LIN功能**，UART功能将无法再使用。
-恢复可使用命令`uarttest 0 10/11 921600 0 1 8`，或调用`Port_SetFunctionPins(PORT_FUNC_UART10/11)`来重新配置串口引脚。
+LIN2 multiplexes the UART10 pins and LIN3 multiplexes the UART11 pins. Running the `LinTest` command will **automatically mux the corresponding pins to the LIN function**, and the UART function can no longer be used.
+To restore it, use the command `uarttest 0 10/11 921600 0 1 8`, or call `Port_SetFunctionPins(PORT_FUNC_UART10/11)` to reconfigure the serial pins.
 :::
 
-| 信号 | 引脚 |
+| Signal | Pin |
 |------|------|
 | LIN2_TX | J18 PIN2 |
 | LIN2_RX | J18 PIN3 |
@@ -185,21 +185,21 @@ LIN2复用UART10引脚，LIN3复用UART11引脚，使用`LinTest`命令将会**�
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_v1p0_main.png" alt="image-rdk_600_mainboard" style={{ width: '100%' }} />
 
-- 语法格式
-    - `case`: 测试用例ID（必需）
-    - `channel`: LIN通道编号（0=LIN2, 1=LIN3）
-    - `Pid`: 帧ID（0-0x3F）
-    - `ChecksumType`: 校验类型（0=ENHANCED, 1=CLASSIC）
-    - `ResponseType`: 响应类型（0=TX, 1=RX）
-    - `DataLen`: 数据长度（1-8）
-    - `loop_times`: 循环次数
+- Syntax
+    - `case`: Test case ID (required)
+    - `channel`: LIN channel number (0=LIN2, 1=LIN3)
+    - `Pid`: Frame ID (0-0x3F)
+    - `ChecksumType`: Checksum type (0=ENHANCED, 1=CLASSIC)
+    - `ResponseType`: Response type (0=TX, 1=RX)
+    - `DataLen`: Data length (1-8)
+    - `loop_times`: Number of loops
 ```
 LinTest <case> <channel> <Pid> <ChecksumType> <ResponseType> <DataLen> <loop_times>
 ```
 
 
 
-- `LinTest 1` 打印驱动版本信息
+- `LinTest 1` prints driver version information
 
 ```shell
 D-Robotics:/$ LinTest 1
@@ -214,7 +214,7 @@ sw_patch_version: 0
 [LinTest 310] [INFO]: #####################################################################
 ```
 
-- `LinTest 2 0 16 0 0 8 1` LIN2发送数据
+- `LinTest 2 0 16 0 0 8 1` sends data on LIN2
 
 ```shell
 D-Robotics:/$ LinTest 2 0 16 0 0 8 1
@@ -230,7 +230,7 @@ D-Robotics:/$ LinTest 2 0 16 0 0 8 1
 </DocScope>
 
 
-## 应用程序接口
+## Application Programming Interface
 
 #### void Lin_Init(const Lin_ConfigType *Config)
 

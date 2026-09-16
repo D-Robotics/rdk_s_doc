@@ -1346,3 +1346,32 @@ Corresponding interrupt entries for each board:
 </DocScope>
 
 > Example (S100): Change `ENABLE` to `DISABLE` at the end of the `Os_IntChannel_Gpio_Icu3ExtIsr` line in `Interrupt_McuConfigs[]`. The same applies to S600.
+
+### Q3: RTC and system time synchronization
+
+The kernel uses the HCTOSYS mechanism to synchronize the hardware RTC time to the system clock at boot. The relevant configurations are:
+
+| Configuration Item | Meaning |
+|------|------|
+| `CONFIG_RTC_HCTOSYS=y` | Automatically reads the time from the RTC and sets the system clock at boot (Hardware Clock TO SYStem) |
+| `CONFIG_RTC_HCTOSYS_DEVICE="rtc1"` | Specifies `rtc1` as the HCTOSYS synchronization source |
+
+To check which hardware `rtc1` maps to and its synchronization status:
+
+```bash
+ls /sys/class/rtc/
+cat /sys/class/rtc/rtc1/name    # Driver/device name corresponding to rtc1
+cat /sys/class/rtc/rtc1/time    # Current time of rtc1
+cat /sys/class/rtc/rtc1/hctosys # 1 = already synchronized to the system time
+```
+
+To synchronize manually at runtime:
+
+```bash
+# RTC (hardware) → system time
+hwclock --hctosys -f /dev/rtc1
+# System time → RTC (hardware), writes the current date back to rtc1
+hwclock --systohc -f /dev/rtc1
+```
+
+Make sure the synchronization source `rtc1` is ready at kernel boot; otherwise HCTOSYS does not trigger and you can only catch up manually at runtime with `hwclock --hctosys`.

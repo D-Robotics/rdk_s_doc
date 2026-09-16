@@ -24,7 +24,17 @@ On-device code for this project is located at: `/app/pydev_demo/`.
 This project is written in Python and depends on several third-party libraries. Make sure your environment meets the following requirements:
 
 #### Python Environment
+
+<DocScope products="RDK-S100">
+
 - Python version: Python 3.10.x is recommended (currently tested on Python 3.10.12)
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- Python version: Python 3.12.x is recommended (currently tested on Python 3.12.3)
+
+</DocScope>
 
 #### Dependencies
 - Dependency list
@@ -76,6 +86,7 @@ This project is written in Python and depends on several third-party libraries. 
 ├── 09_usb_camera_sample/            # USB camera + object detection examples
 ├── 10_mipi_camera_sample/           # MIPI camera + object detection examples
 ├── 11_web_display_camera_sample/    # Camera + Web + object detection examples
+├── 12_rtsp_yolov5x_display_sample/  # RTSP stream + object detection examples
 ├── utils/                           # Shared preprocessing and postprocessing utilities
 ├── requirements.txt                 # Python dependencies
 └── README.md                        # Top-level usage guide (this file)
@@ -141,10 +152,10 @@ Using the ResNet18 image classification example:
 - View results
     ``` bash
     Top-5 Predictions:
-    zebra: 0.9979
-    impala, Aepyceros melampus: 0.0005
-    cheetah, chetah, Acinonyx jubatus: 0.0005
-    gazelle: 0.0004
+    zebra: 0.9983
+    cheetah, chetah, Acinonyx jubatus: 0.0004
+    impala, Aepyceros melampus: 0.0004
+    gazelle: 0.0003
     prairie chicken, prairie grouse, prairie fowl: 0.0002
     ```
 

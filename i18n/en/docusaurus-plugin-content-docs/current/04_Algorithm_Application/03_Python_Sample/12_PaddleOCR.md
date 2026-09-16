@@ -11,6 +11,12 @@ This sample applies only to RDK S100. The RDK S600 system image does not include
 
 This sample runs PaddleOCR models using the `hbm_runtime` inference engine for text detection and recognition, supporting OCR recognition and visualization in Chinese scenarios. The sample code is located in `/app/pydev_demo/08_OCR_sample/01_paddleOCR/`.
 
+:::warning
+Installing `paddlepaddle`, which is required by this sample, forces an upgrade of `protobuf` to a higher version (such as 7.x), which is incompatible with `protobuf==3.20.3` required by the `15_WebSocket_yolov5x` sample. To run both the PaddleOCR and WebSocket samples in the same environment, the following is recommended:
+- Use a Python virtual environment (venv) to isolate dependencies; or
+- Re-run the `pip install` command from the corresponding README when switching samples, so as to restore the expected `protobuf` version.
+:::
+
 
 ## Model Description
 - Introduction:
