@@ -2,6 +2,7 @@
 sidebar_position: 4
 title: "eMMC 压力测试"
 description: "eMMC 压力测试"
+sidebar_products: RDK S100
 ---
 
 # eMMC 压力测试
