@@ -68,9 +68,7 @@ YNR 功能的生效需要在配置文件中开启 `nr2d_en` / `nr3d_en` 参数�
 
 ## API 列表
 
-YNR 是 HBN 框架下的一个 vnode，开发方式与其他模块一致：用 `hbn_vnode_open` 创建节点、`hbn_vnode_set_attr` 配置属性、`hbn_vflow_bind_vnode` 绑定前后级。YNR 开发用到的 HBN 框架接口（`hbn_vnode_*` / `hbn_vflow_*`）按使用时序排列，这些是所有硬件模块共用的通用接口，完整说明见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
-
-快速开发验证 YNR 可以参考 `single_pipe_vin_isp_ynr_pym_vpu` 示例。选用的 sensor 需要在 `vp_sensor_config_t` 里配置 `ynr_attr`，如下（以 sc230ai 为例）：
+YNR 是 HBN 框架下的一个 vnode。快速开发验证 YNR 可以参考 `single_pipe_vin_isp_ynr_pym_vpu` 示例，选用的 sensor 需要在 `vp_sensor_config_t` 里配置 `ynr_attr`，如下（以 sc230ai 为例）：
 
 ```c
 vp_sensor_config_t sc230ai_linear_1920x1080_raw10_30fps_1lane = {
@@ -95,6 +93,8 @@ vp_sensor_config_t sc230ai_linear_1920x1080_raw10_30fps_1lane = {
 ```
 
 其中 `.ynr_attr` 指向的 `sc230ai_ynr_attr` 就是 YNR 的配置，对应「数据结构」章节的 `ynr_init_attr`。
+
+除 sensor 配置外，YNR 节点本身的创建、属性设置和数据流绑定通过以下 HBN 框架接口（`hbn_vnode_*` / `hbn_vflow_*`）完成，按使用时序排列；这些是所有硬件模块共用的通用接口，完整说明见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)：
 
 | 函数 | 说明 |
 | --- | --- |
