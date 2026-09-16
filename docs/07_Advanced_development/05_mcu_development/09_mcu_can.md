@@ -95,7 +95,7 @@ S600 CAN 转发方案的核心流程如下：
 方案特性说明：
 - 支持数据透传正确性校验。
 - 支持数据透传丢包检测。
-- 支持传输超时检测。MCU 侧 CAN2IPC 转发数据时将数据包打上 MCU 侧的时间戳，Acore CANHAL 接收到数据后会读取 Acore 的时间戳，如果传输超时会报警。注意，需要提前启动时间同步完成 MCU RTC 时间和 Acore 网卡 phc0的时间同步。
+- 支持传输超时检测。MCU 侧 CAN2IPC 转发数据时将数据包打上 MCU 侧的时间戳，Acore CANHAL 接收到数据后会读取 Acore 的时间戳，如果传输超时会报警。注意，需要提前启动时间同步完成 MCU RTC 时间和 Acore 网卡 phc0 的时间同步，具体操作参考[时间同步方案](../02_linux_development/04_driver_development_super/12_driver_timesync.md#mcu-时间同步说明)。
 - 支持多个 CAN 通道并行传输。MCU 侧多个 CAN 控制器的数据可同时被转发给 Acore，Acore 应用程序通过 CANHAL 从不同通道号读出 CAN 数据。
 - 由于 CANHAL 底层通过 ipc 核间通信进行传输，而 ipc 目前不支持多个进程或者线程读写同一个通道，因此 CANHAL 也不支持该特性。
 
@@ -555,6 +555,116 @@ acore 侧也支持多包合并传输功能，下面只简单介绍相关数据�
 #define CAN_FRAME_NUM (1)   // Acore侧表示合并传输数据包的数量
 struct pack_info pack = { 0 };
 pack.data_num = CAN_FRAME_NUM;
+```
+
+## 硬件时间戳获取
+
+CAN 驱动支持由控制器硬件在收发帧时捕获时间戳（CAN FD 高分辨率时间戳，High Resolution Time Stamp），
+给每一帧数据打上微秒级的硬件时间，避免软件中断、任务调度带来的抖动。
+
+### 配置方式
+
+硬件时间戳默认关闭，S100 和 S600 都需要在各自产品的 `Can_Lld_Ip_Cfg.h` 中手动打开特性宏，并使用 RTC 作为时间戳源。
+各产品使用相互独立的配置文件和驱动：
+
+<DocScope products="RDK S600">
+S600 使用 `McalCdd/Can_Pro` 驱动，配置文件为 `${mcu_sdk}/Config/McalCdd/gen_s600_md_mcu1/Can/inc/Can_Lld_Ip_Cfg.h`，需要修改的配置项：
+
+```c
+/* @brief Has FlexCAN Timestamp enabled */
+#define FLEXCAN_IP_FEATURE_HAS_TS_ENABLE    (STD_ON)
+/* @brief Has FlexCAN High Resolution Timer for Time stamp CAN Message */
+#define FLEXCAN_IP_FEATURE_HAS_HR_TIMER    (STD_ON)
+
+/* @brief Has FlexCAN High Resolution Timer Source */
+#define FLEXCAN_IP_HR_TIMESTAMP_SOURCE    (FLEXCAN_HRTIMERSRC_RTC)
+```
+
+- `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 FlexCAN 时间戳特性；关闭时驱动不会配置时间戳相关寄存器。
+- `FLEXCAN_IP_FEATURE_HAS_HR_TIMER`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 32bit 高分辨率时间戳；只有打开后硬件才会捕获 `HR_TIME_STAMP`。
+- `FLEXCAN_IP_HR_TIMESTAMP_SOURCE`：默认 `FLEXCAN_HRTIMERSRC_UNUSED`，需配置为 `FLEXCAN_HRTIMERSRC_RTC`，时间戳源选择 RTC（ACore 与 MCU 共用同一个 RTC 硬件）；也可选择 `FLEXCAN_HRTIMERSRC_PHC`（Acore 网卡 phc0）。
+</DocScope>
+<DocScope products="RDK S100">
+S100 使用 `McalCdd/Can` 驱动，配置文件为 `${mcu_sdk}/Config/McalCdd/gen_s100_sip_B_mcu1/Can/inc/Can_Lld_Ip_Cfg.h`，需要修改的配置项（S100 的时间戳源由硬件固定为 RTC，没有源选择宏）：
+
+```c
+/* @brief Has FlexCAN Timestamp enabled */
+#define FLEXCAN_IP_FEATURE_HAS_TS_ENABLE    (STD_ON)
+/* @brief Has FlexCAN High Resolution Timer for Time stamp CAN Message */
+#define FLEXCAN_IP_FEATURE_HAS_HR_TIMER    (STD_ON)
+
+#if (FLEXCAN_IP_FEATURE_HAS_HR_TIMER == STD_ON)
+/* RTC 时间戳源的固定取值 */
+#define FLEXCAN_HRTIMERSRC_RTC_VALUE   (0U)
+/* 时间戳源是否可由软件选择，S100 固定为 RTC，保持默认即可 */
+#define FLEXCAN_IP_HR_TIMESTAMP_SRC_SELECTABLE (STD_OFF)
+#endif /* (FLEXCAN_IP_FEATURE_HAS_HR_TIMER == STD_ON) */
+```
+
+- `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 FlexCAN 时间戳特性；关闭时驱动不会配置时间戳相关寄存器。
+- `FLEXCAN_IP_FEATURE_HAS_HR_TIMER`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 32bit 高分辨率时间戳；只有打开后上述 `#if` 内的源配置才会生效。
+- `FLEXCAN_HRTIMERSRC_RTC_VALUE`：RTC 时间戳源的固定取值，保持默认 `0U` 即可。
+- `FLEXCAN_IP_HR_TIMESTAMP_SRC_SELECTABLE`：时间戳源由硬件固定为 RTC，不需要软件选择，保持默认 `STD_OFF` 即可。
+</DocScope>
+
+:::info 说明
+上文中的“默认值”是指 SDK 发布版本的初始值，打开硬件时间戳功能必须按“需配置为”修改。
+:::
+
+捕获点由时间戳配置结构体决定，默认在帧起始（SOF）捕获，配置位于各产品的 `Can_Lld_Ip_PBcfg.c`：
+
+<DocScope products="RDK S600">
+S600 配置文件：`${mcu_sdk}/Config/McalCdd/gen_s600_md_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`
+</DocScope>
+<DocScope products="RDK S100">
+S100 配置文件：`${mcu_sdk}/Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`
+</DocScope>
+
+```c
+#if (FLEXCAN_IP_FEATURE_HAS_TS_ENABLE == STD_ON)
+        /* Free Running Counter Time Stamp config */
+        {
+                FLEXCAN_TIMESTAMPCAPTURE_START,
+                FLEXCAN_HRTIMERSRC_RTC
+        },
+#endif /* FLEXCAN_IP_FEATURE_HAS_TS_ENABLE */
+```
+
+该配置项在两个产品的 `Can_Lld_Ip_PBcfg.c` 中均已按 `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE` 做条件编译，打开上面的特性宏后自动生效；
+其中 `FLEXCAN_TIMESTAMPCAPTURE_START` 表示在帧起始（SOF）捕获，也可以改为 `FLEXCAN_TIMESTAMPCAPTURE_END`（帧结束）等。
+
+### 时间戳格式
+
+时间戳源为 RTC 时，硬件捕获到的是一个 32bit 的打包值，由帧起始时刻的 RTC 值拼接而成：
+
+| 位域 | 含义 |
+|------|------|
+| `[31:16]` | RTC 秒计数器的低 16 位 |
+| `[15:0]` | 秒内 tick 计数，取值 `0 ~ 32767`（RTC 频率为 32768Hz） |
+
+- 消息缓冲区（MB）的 `HR_TIME_STAMPn` 寄存器和增强接收 FIFO 元素的 `TS_OFF` 字段存放的是同一个值，只是存放位置不同。
+- 秒只保存了低 16 位，每 65536s（约 18.2 小时）回绕一次，驱动会用当前 RTC 秒补齐完整的秒。
+- 驱动由 `Can_TimeStampRecovery()` 完成到微秒的换算；当捕获值与当前时间不在同一基准（时间源配置错误、计数器未运行等）时返回 0。
+
+### 上层获取方式
+
+驱动把接收帧上报给 CanIf 时，已经在 `CanIf_RxIndication()` 的 `Can_HwType` 参数中填好了时间戳，应用直接读取即可：
+
+- `Mailbox->TimeStamp`：单位微秒；`0` 表示硬件时间戳不可用，此时应用应回落到软件时间基准。
+- 该时间戳由 MCU RTC 的“秒 + 秒内 tick”换算得到，不是 Unix 时间戳；需要与 Acore 时间对齐时，请先完成 MCU RTC 与 Acore 网卡 `phc0` 的时间同步，具体操作参考[时间同步方案](../02_linux_development/04_driver_development_super/12_driver_timesync.md#mcu-时间同步说明)。
+
+```c
+void CanIf_RxIndication(const Can_HwType *Mailbox, const PduInfoType *PduInfoPtr)
+{
+    uint64 ts_us = Mailbox->TimeStamp;   /* 硬件捕获时间，单位 us，0 表示不可用 */
+
+    if (0U == ts_us)
+    {
+        /* 硬件时间戳不可用，回落到软件时间基准 */
+        hb_Pack_GetTimeInUs(&ts_us);
+    }
+    ...
+}
 ```
 
 ## 应用 sample
