@@ -872,4 +872,4 @@ HW: Ultra/Super; SW: 1.0.0
 ## Related Documentation
 
 - [Video Input/Output - VIO](./04_vio_api.md)
-- [Video Processing Framework - VPF/PYM](./06_vpf_pym_api.md)
+- [Video Processing Framework - VPF/PYM](./07_vpf_pym_api.md)

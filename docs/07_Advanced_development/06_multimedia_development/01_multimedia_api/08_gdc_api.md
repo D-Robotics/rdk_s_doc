@@ -96,7 +96,7 @@ GDC 不提供独立函数接口，通过配置结构体 `gdc_settings_t` 承载 
 
 ## 相关文档
 
-- [VPF/PYM](./06_vpf_pym_api.md)（`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`）
+- [VPF/PYM](./07_vpf_pym_api.md)（`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`）
 - [HBN](./01_hbn_api.md)（vnode 通道绑定）
 - 简易接口（模式 1）：[VIO](/Simple_API/multimedia_api/cdev/vio_api)
 - 板端示例：见 `sample_gdc`

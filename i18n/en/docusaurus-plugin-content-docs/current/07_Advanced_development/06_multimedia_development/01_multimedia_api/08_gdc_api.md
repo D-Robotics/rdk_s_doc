@@ -97,7 +97,7 @@ GDC does not provide a standalone function interface. It carries the binary's io
 
 ## Related Documentation
 
-- [VPF/PYM](./06_vpf_pym_api.md) (`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`)
+- [VPF/PYM](./07_vpf_pym_api.md) (`hbn_gen_gdc_cfg`/`hbn_free_gdc_cfg`)
 - [HBN](./01_hbn_api.md) (vnode channel binding)
 - Simple API (Mode 1): [VIO](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
 - On-board sample: see `sample_gdc`
