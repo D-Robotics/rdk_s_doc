@@ -20,11 +20,11 @@ import DocScope from '@site/src/components/DocScope';
 ## 功能说明
 - 模型加载
 
-    加载指定的 .hbm 模型文件，提取模型相关的元信息等。
+    加载指定的 `.hbm` 模型文件，提取模型相关的元信息等。
 
 - 摄像头采集
 
-    自动扫描 /dev/video* 下的设备，打开第一个可用的 USB 摄像头，设置为 MJPEG 编码、1080p 分辨率、30 FPS。
+    自动扫描 `/dev/video*` 下的设备，打开第一个可用的 USB 摄像头，设置为 MJPEG 编码、1080p 分辨率、30 FPS。
 
 - 图像预处理
 
@@ -32,7 +32,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    通过 infer() 方法提交输入张量，在 BPU 上完成模型前向计算。
+    通过 `infer()` 方法提交输入张量，在 BPU 上完成模型前向计算。
 
 - 后处理
 
@@ -148,7 +148,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         </DocScope>
 - 退出运行
 
-    把鼠标放置在显示框中，按q键退出
+    把鼠标放置在显示框中，按`q`键退出
 
 - 查看结果
 

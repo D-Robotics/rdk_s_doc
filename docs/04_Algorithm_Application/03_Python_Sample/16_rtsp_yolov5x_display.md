@@ -25,7 +25,7 @@ RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测
 
 - 模型加载 (Model Load)
 
-    使用 hbm_runtime.HB_HBMRuntime(model_path) 加载 YOLOv5x 模型，读取输入输出信息，可通过 set_scheduling_params() 设置 BPU 优先级与核心绑定。
+    使用 `hbm_runtime.HB_HBMRuntime(model_path)` 加载 YOLOv5x 模型，读取输入输出信息，可通过 `set_scheduling_params()` 设置 BPU 优先级与核心绑定。
 
 - 前处理 (Preprocess)
 
@@ -33,7 +33,7 @@ RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测
 
 - 模型推理 (Inference)
 
-    调用 self.model.run() 执行前向推理，生成检测结果。
+    调用 `self.model.run()` 执行前向推理，生成检测结果。
 
 - 后处理 (Postprocess)
 
@@ -41,31 +41,31 @@ RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测
 
 - RTSP 解码 (RTSP + HW Decoder)
 
-    子线程用 cv2.VideoCapture 拉取 H.264 码流，经 srcampy.Decoder 硬件解码为 NV12 帧。
+    子线程用 `cv2.VideoCapture` 拉取 H.264 码流，经 `srcampy.Decoder` 硬件解码为 NV12 帧。
 
 - 分辨率与显示 (VPS + Display)
 
-    调用 srcampy.Display() 与 srcampy.Camera().open_vps() 建立 VPS→HDMI 显示管线。
+    调用 `srcampy.Display()` 与 `srcampy.Camera().open_vps()` 建立 VPS→HDMI 显示管线。
 
 - 绘制检测结果 (Overlay Drawing)
 
-    使用 draw.draw_detections_on_disp() 在显示层绘制检测框与类别文字。
+    使用 `draw.draw_detections_on_disp()` 在显示层绘制检测框与类别文字。
 
 - 信号与退出 (Signal Handling)
 
-    捕获 SIGINT（Ctrl+C），设置 is_stop=True，安全退出主循环与子线程，依次关闭 VPS、显示与解码。
+    捕获 `SIGINT`（`Ctrl+C`），设置 `is_stop=True`，安全退出主循环与子线程，依次关闭 VPS、显示与解码。
 
 - 多线程与帧缓存 (Threading & Queue)
 
-    DecodeRtspStream 继承 threading.Thread，维护帧队列；主线程通过 get_frame() 获取最新帧。
+    `DecodeRtspStream` 继承 `threading.Thread`，维护帧队列；主线程通过 `get_frame()` 获取最新帧。
 
 - 参数解析 (Argument Parsing)
 
-    通过 argparse 提供参数：RTSP 源、模型路径、BPU 核心、优先级、标签文件、NMS 与置信度阈值。
+    通过 `argparse` 提供参数：RTSP 源、模型路径、BPU 核心、优先级、标签文件、NMS 与置信度阈值。
 
 - HDMI 分辨率探测 (Display Resolution)
 
-    调用 /usr/bin/get_hdmi_res 获取当前 HDMI 分辨率，若无则默认 1920×1080。
+    调用 `/usr/bin/get_hdmi_res` 获取当前 HDMI 分辨率，若无则默认 1920×1080。
 
 ## 模型说明
 
@@ -73,7 +73,7 @@ RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测
 
 
 ## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+本样例无特殊环境需求，只需确保安装了`pydev`中的环境依赖即可。
 
 <DocScope products="RDK-S100">
 ```bash
@@ -103,7 +103,7 @@ pip install -r ../requirements.txt --break-system-packages
 | ----------------------- | -------------------------- | ------------------------------------------------------ |
 | `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/assets/1080P_test.h264`                   |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
+| `--priority`    | 推理优先级（`0~255`，`255`为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                   |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
@@ -115,7 +115,7 @@ pip install -r ../requirements.txt --break-system-packages
 | ----------------------- | -------------------------- | ------------------------------------------------------ |
 | `--rtsp-urls` / `-u` | RTSP 视频流地址（可用分号分隔多路流，例如：`rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`）                                     | `rtsp://127.0.0.1/assets/1080P_test.h264`                   |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
+| `--priority`    | 推理优先级（`0~255`，`255`为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                   |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
@@ -127,7 +127,7 @@ pip install -r ../requirements.txt --break-system-packages
 ## 快速运行
 - 准备rtsp码流
 
-    使用系统预置的推流服务,准备rtsp码流作为输入源，该服务会把1080P_test.h264视频文件处理成 rtsp 流，url 地址为rtsp://127.0.0.1/assets/1080P_test.h264，用户可通过如下命令启动推流服务：
+    使用系统预置的推流服务,准备rtsp码流作为输入源，该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/assets/1080P_test.h264`，用户可通过如下命令启动推流服务：
     ```bash
     cd /app/res
     sudo chmod +x live555MediaServer
@@ -169,7 +169,7 @@ pip install -r ../requirements.txt --break-system-packages
 
 - 退出运行
 
-    在命令行输入Ctrl C
+    在命令行输入`Ctrl+C`
 
 - 查看结果
 

@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 <DocScope products="RDK-S100">
-本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/pydev_demo/07_speech_sample/01_asr/` 目录下。
+本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 `.wav` 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/pydev_demo/07_speech_sample/01_asr/` 目录下。
 
 :::warning
 当前 RDK S100 系统镜像**未内置** `asr.hbm` 模型，运行本示例前需手动下载（见下方"模型说明"中的下载地址），并放到默认路径 `/opt/hobot/model/s100/basic/asr.hbm`，或通过 `--model-path` 指定其它路径。
@@ -17,7 +17,7 @@ import DocScope from '@site/src/components/DocScope';
 
 </DocScope>
 <DocScope products="RDK-S600">
-本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/pydev_demo/speech_sample/asr/` 目录下。
+本示例基于 `hbm_runtime` 推理引擎运行语音识别模型，实现对 `.wav` 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/pydev_demo/speech_sample/asr/` 目录下。
 
 </DocScope>
 
@@ -25,11 +25,11 @@ import DocScope from '@site/src/components/DocScope';
 ## 模型说明
 - 简介：
 
-    ASR（Automatic Speech Recognition）自动语音识别模型用于将音频信号转换为文本。输入为单通道语音波形（经过采样率转换和标准化处理），输出为字符级别的 token 序列。配合字典（vocab）文件使用，可实现中文语音转写。本示例使用量化后的 .hbm 模型。
+    ASR（Automatic Speech Recognition）自动语音识别模型用于将音频信号转换为文本。输入为单通道语音波形（经过采样率转换和标准化处理），输出为字符级别的 token 序列。配合字典（vocab）文件使用，可实现中文语音转写。本示例使用量化后的 `.hbm` 模型。
 
-- HBM模型名称：asr.hbm
+- HBM模型名称：`asr.hbm`
 
-- 输入格式：音频波形，单通道，采样率为 16kHz，最大长度为 30000（样本点）
+- 输入格式：音频波形，单通道，采样率为 `16kHz`，最大长度为 `30000`（样本点）
 
 - 输出：字符 token 的概率分布（logits），通过 argmax 解码后映射为识别文本
 
@@ -55,25 +55,25 @@ import DocScope from '@site/src/components/DocScope';
 
 - 输入预处理
 
-    使用 SoundFile 读取音频（支持 .wav），将音频：
+    使用 SoundFile 读取音频（支持 `.wav`），将音频：
 
     - 转为单通道
-    - 重采样至目标采样率（默认 16kHz）
+    - 重采样至目标采样率（默认 `16kHz`）
     - 标准化为零均值单位方差（z-score）
-    - 补零或截断至固定长度（如 30000）
+    - 补零或截断至固定长度（如 `30000`）
     - 支持生成器方式处理长音频，实现流式识别。
 
 - 推理执行
 
-    采用 .run() 方法完成推理，输出 logits 张量。
+    采用 `.run()` 方法完成推理，输出 logits 张量。
 
 - 结果后处理
 
-    使用 np.argmax() 从输出 logits 中获取 token 索引，结合 vocab 字典文件（JSON 格式）映射为字符，输出最终识别文本。
+    使用 `np.argmax()` 从输出 logits 中获取 token 索引，结合 vocab 字典文件（JSON 格式）映射为字符，输出最终识别文本。
 
 
 ## 环境依赖
-- 确保安装了pydev中的环境依赖
+- 确保安装了`pydev`中的环境依赖
 
     <DocScope products="RDK-S100">
     ```bash
@@ -88,7 +88,7 @@ import DocScope from '@site/src/components/DocScope';
 
     </DocScope>
 
-- 安装soundfile包
+- 安装`soundfile`包
 
     <DocScope products="RDK-S100">
     ```bash
@@ -118,8 +118,8 @@ import DocScope from '@site/src/components/DocScope';
 | `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s100/basic/asr.hbm`                    |
 | `--audio-file`    | 输入音频文件（支持 `.wav` 或 `.flac`）         | `/app/res/assets/chi_sound.wav` |
 | `--vocab-file`    | 词表文件，映射 token → id                     | `/app/res/labels/vocab.json`    |
-| `--priority`      | 推理优先级，0\~255，数值越大越优先             | `0`                           |
-| `--bpu-cores`   ` | 指定使用哪些 BPU 核心（如：`--bpu-cores 0 1`） | `[0]`                         |
+| `--priority`      | 推理优先级，`0~255`，数值越大越优先             | `0`                           |
+| `--bpu-cores` | 指定使用哪些 BPU 核心（如：`--bpu-cores 0 1`） | `[0]`                         |
 | `--audio_maxlen`  | 音频裁剪/填充后的固定长度（单位：采样点数）     | `30000`                         |
 | `--new_rate`      | 目标采样率，音频会自动重采样为该采样率          | `16000`                         |
 
@@ -130,8 +130,8 @@ import DocScope from '@site/src/components/DocScope';
 | `--model-path`    | 模型路径（`.hbm` 格式）                        | `/opt/hobot/model/s600/basic/asr.hbm`                    |
 | `--audio-file`    | 输入音频文件（支持 `.wav` 或 `.flac`）         | `/app/res/assets/chi_sound.wav` |
 | `--vocab-file`    | 词表文件，映射 token → id                     | `/app/res/labels/vocab.json`    |
-| `--priority`      | 推理优先级，0\~255，数值越大越优先             | `0`                           |
-| `--bpu-cores`   ` | 指定使用哪些 BPU 核心（如：`--bpu-cores 0 1`） | `[0]`                         |
+| `--priority`      | 推理优先级，`0~255`，数值越大越优先             | `0`                           |
+| `--bpu-cores` | 指定使用哪些 BPU 核心（如：`--bpu-cores 0 1`） | `[0]`                         |
 | `--audio_maxlen`  | 音频裁剪/填充后的固定长度（单位：采样点数）     | `30000`                         |
 | `--new_rate`      | 目标采样率，音频会自动重采样为该采样率          | `16000`                         |
 

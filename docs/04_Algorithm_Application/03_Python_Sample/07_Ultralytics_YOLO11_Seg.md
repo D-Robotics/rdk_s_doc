@@ -23,15 +23,15 @@ import DocScope from '@site/src/components/DocScope';
     Ultralytics YOLO11 是一款轻量级目标检测与实例分割模型，基于 YOLO 系列设计并融合了 anchor-free 与 anchor-based 思想结构与回归分箱（distributional regression）策略。本模型为其实例分割变体，支持同时输出边界框、类别概率和高质量的像素级掩膜，适用于实时场景中的多对象检测与分割任务。
 
 <DocScope products="RDK-S100">
-- HBM 模型名称： yolo11n_seg_nashe_640x640_nv12.hbm
+- HBM 模型名称： `yolo11n_seg_nashe_640x640_nv12.hbm`
 
 </DocScope>
 <DocScope products="RDK-S600">
-- HBM 模型名称： yolo11n_seg_nashp_640x640_nv12.hbm
+- HBM 模型名称： `yolo11n_seg_nashp_640x640_nv12.hbm`
 
 </DocScope>
 
-- 输入格式： NV12 格式图像（Y/UV 分离），尺寸为 640x640
+- 输入格式： `NV12` 格式图像（Y/UV 分离），尺寸为 `640x640`
 
 - 输出：
 
@@ -62,11 +62,11 @@ import DocScope from '@site/src/components/DocScope';
 
 - 输入预处理
 
-    将输入 BGR 图像缩放至 640×640，并转换为 NV12 格式（Y、UV 平面分离），以适配模型输入要求。
+    将输入 BGR 图像缩放至 `640×640`，并转换为 NV12 格式（Y、UV 平面分离），以适配模型输入要求。
 
 - 推理执行
 
-    通过 .run() 方法触发前向推理，并支持通过接口设定调度参数（BPU 核绑定与优先级）。推理输出包含多个尺度的类别分数、边界框回归、掩膜系数以及全局掩膜原型张量。
+    通过 `.run()` 方法触发前向推理，并支持通过接口设定调度参数（BPU 核绑定与优先级）。推理输出包含多个尺度的类别分数、边界框回归、掩膜系数以及全局掩膜原型张量。
 
 - 结果后处理
 
@@ -83,7 +83,7 @@ import DocScope from '@site/src/components/DocScope';
     - 最终输出为边框、类别、分数与像素级实例掩膜。
 
 ## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+本样例无特殊环境需求，只需确保安装了`pydev`中的环境依赖即可。
 
 <DocScope products="RDK-S100">
 ```bash
@@ -110,11 +110,11 @@ pip install -r ../../requirements.txt --break-system-packages
 <DocScope products="RDK-S100">
 | 参数                | 说明                    | 默认值 |
 |--------------------|-----------------------------|--------------------------------------|
-| `--model-path`     | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
+| `--model-path`     | 模型文件路径（`.hbm` 格式）     | `/opt/hobot/model/s100/basic/yolo11n_seg_nashe_640x640_nv12.hbm` |
 | `--test-img`       | 测试图片路径                 | `/app/res/assets/office_desk.jpg`        |
 | `--label-file`     | 分类标签文件                 | `/app/res/labels/coco_classes.names`     |
 | `--img-save-path`  | 输出结果图片保存路径          | `result.jpg`                          |
-| `--priority`       | 模型优先级 (0~255)           | `0`                                   |
+| `--priority`       | 模型优先级 (`0~255`)           | `0`                                   |
 | `--bpu-cores`      | BPU 核心编号                 | `[0]`                                 |
 | `--nms-thres`      | NMS IoU 阈值                 | `0.7`                                 |
 | `--score-thres`    | 置信度阈值                   | `0.25`                                |
@@ -125,11 +125,11 @@ pip install -r ../../requirements.txt --break-system-packages
 <DocScope products="RDK-S600">
 | 参数                | 说明                    | 默认值 |
 |--------------------|-----------------------------|--------------------------------------|
-| `--model-path`     | 模型文件路径（.hbm 格式）     | `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` |
+| `--model-path`     | 模型文件路径（`.hbm` 格式）     | `/opt/hobot/model/s600/basic/yolo11n_seg_nashp_640x640_nv12.hbm` |
 | `--test-img`       | 测试图片路径                 | `/app/res/assets/office_desk.jpg`        |
 | `--label-file`     | 分类标签文件                 | `/app/res/labels/coco_classes.names`     |
 | `--img-save-path`  | 输出结果图片保存路径          | `result.jpg`                          |
-| `--priority`       | 模型优先级 (0~255)           | `0`                                   |
+| `--priority`       | 模型优先级 (`0~255`)           | `0`                                   |
 | `--bpu-cores`      | BPU 核心编号                 | `[0]`                                 |
 | `--nms-thres`      | NMS IoU 阈值                 | `0.7`                                 |
 | `--score-thres`    | 置信度阈值                   | `0.25`                                |
@@ -181,7 +181,7 @@ pip install -r ../../requirements.txt --break-system-packages
 
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到 --img-save-path 指定路径
+    运行成功后，会将结果绘制在原图上，并保存到 `--img-save-path` 指定路径
     ```bash
     [Saved] Result saved to: result.jpg
     ```

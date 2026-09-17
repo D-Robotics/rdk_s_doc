@@ -41,7 +41,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    调用 .infer() 方法执行推理。
+    调用 `.infer()` 方法执行推理。
 
 - 结果后处理
 

@@ -25,19 +25,19 @@ sidebar_products: RDK-S100
 
 - HBM 模型名称：
 
-- 检测模型（Detection）：cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm
+- 检测模型（Detection）：`cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm`
 
-- 识别模型（Recognition）：cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm
+- 识别模型（Recognition）：`cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm`
 
 - 输入格式：
 
-    - 检测模型：BGR 图像 → resize 到 640×640，转换为 NV12 格式（Y、UV 分离）
+    - 检测模型：BGR 图像 → resize 到 `640×640`，转换为 NV12 格式（Y、UV 分离）
 
-    - 识别模型：旋转裁剪后的 BGR 文本块图像 → resize 到 48×320，归一化、转为 RGB 格式
+    - 识别模型：旋转裁剪后的 BGR 文本块图像 → resize 到 `48×320`，归一化、转为 RGB 格式
 
 - 输出：
 
-    - 检测模型：分割概率图（1×1×H×W），后处理得到文本框坐标
+    - 检测模型：分割概率图（`1×1×H×W`），后处理得到文本框坐标
 
     - 识别模型：字符 token 的 logits，CTC 解码后得到识别文本字符串
 
@@ -56,13 +56,13 @@ sidebar_products: RDK-S100
 
 - 输入预处理
 
-    - 检测模型：将原图 resize 到 640×640，并转换为 NV12 格式（用于 BPU 推理）。
+    - 检测模型：将原图 resize 到 `640×640`，并转换为 NV12 格式（用于 BPU 推理）。
 
-    - 识别模型：将每个旋转裁剪后的文本块 resize 到 48×320，转为 RGB 格式并归一化，最终转为 NCHW 结构。
+    - 识别模型：将每个旋转裁剪后的文本块 resize 到 `48×320`，转为 RGB 格式并归一化，最终转为 NCHW 结构。
 
 - 推理执行
 
-    调用 .run() 方法进行前向推理，输出包括概率图（检测）与 logits（识别）。
+    调用 `.run()` 方法进行前向推理，输出包括概率图（检测）与 logits（识别）。
 
 - 结果后处理
 
@@ -76,12 +76,12 @@ sidebar_products: RDK-S100
 
     - 识别模型：
 
-        - 使用 CTCLabelDecode 对 logits 解码，映射为文字字符串
+        - 使用 `CTCLabelDecode` 对 logits 解码，映射为文字字符串
 
     最终将识别结果以红色文字标注在空白图中，与原图拼接可视化。
 
 ## 环境依赖
-- 确保安装了pydev中的环境依赖
+- 确保安装了`pydev`中的环境依赖
     ```bash
     pip install -r ../../requirements.txt
     ```
@@ -133,7 +133,7 @@ sidebar_products: RDK-S100
         ```
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到 --img-save-path 指定路径
+    运行成功后，会将结果绘制在原图上，并保存到 `--img-save-path` 指定路径
     ```bash
     [Saved] Result saved to: result.jpg
     ```

@@ -39,7 +39,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - BPU 推理
 
-    通过 .infer() 方法调用 BPU 执行推理任务;
+    通过 `.infer()` 方法调用 BPU 执行推理任务;
 
 - 结果后处理
 
@@ -174,7 +174,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         </DocScope>
 - 退出运行
 
-    在命令行输入Ctrl C
+    在命令行输入`Ctrl+C`
 
 - 查看结果
 

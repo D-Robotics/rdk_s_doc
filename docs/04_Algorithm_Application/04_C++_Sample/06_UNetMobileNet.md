@@ -41,7 +41,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    使用 .infer() 方法执行模型前向推理，输出为类别 logits 张量。
+    使用 `.infer()` 方法执行模型前向推理，输出为类别 logits 张量。
 
 - 结果后处理
 
@@ -89,7 +89,7 @@ sudo apt install libgflags-dev
 | -------------- | ----------------------------- | --------------------------------------------------------------- |
 | `--model_path` | 模型文件路径（.hbm 格式）               | `/opt/hobot/model/s100/basic/unet_mobilenet_1024x2048_nv12.hbm` |
 | `--test_img`   | 输入测试图像路径                      | `/app/res/assets/segmentation.png`                              |
-| `--alpha_f`    | 可视化融合系数，`0.0=仅显示掩码`，`1.0=仅原图` | `0.75`                                                   |
+| `--alpha_f`    | 可视化融合系数，`0.0`=仅显示掩码，`1.0`=仅原图 | `0.75`                                                   |
 
 </DocScope>
 <DocScope products="RDK-S600">
@@ -97,7 +97,7 @@ sudo apt install libgflags-dev
 | -------------- | ----------------------------- | --------------------------------------------------------------- |
 | `--model_path` | 模型文件路径（.hbm 格式）               | `/opt/hobot/model/s600/basic/unet_mobilenet_1024x2048_nv12.hbm` |
 | `--test_img`   | 输入测试图像路径                      | `/app/res/assets/segmentation.png`                              |
-| `--alpha_f`    | 可视化融合系数，`0.0=仅显示掩码`，`1.0=仅原图` | `0.75`                                                   |
+| `--alpha_f`    | 可视化融合系数，`0.0`=仅显示掩码，`1.0`=仅原图 | `0.75`                                                   |
 
 </DocScope>
 
@@ -131,12 +131,12 @@ sudo apt install libgflags-dev
 
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到build/result.jpg
+    运行成功后，会将结果绘制在原图上，并保存到`build/result.jpg`
     ```bash
     [Saved] Result saved to: result.jpg
     ```
 
 ## 注意事项
-- 输出结果存储为result.jpg，用户可自行查看。
+- 输出结果存储为`result.jpg`，用户可自行查看。
 
 - 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。

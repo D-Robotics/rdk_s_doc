@@ -23,35 +23,35 @@ RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测
 
 - 模型加载 (Model Load)
 
-    使用 YOLOv5x(model_path) 加载 BPU 模型，并通过 load_linewise_labels 获取类别名称列表，准备后续推理使用。
+    使用 `YOLOv5x(model_path)` 加载 BPU 模型，并通过 `load_linewise_labels` 获取类别名称列表，准备后续推理使用。
 
 - 前处理 (Preprocess)
 
-    从 SP 解码器获取 NV12 帧（sp_decoder_get_image），转换为 BGR（cv::cvtColor），进行缩放/letterbox 处理，并写入 YOLOv5x 输入张量（pre_process）。
+    从 SP 解码器获取 NV12 帧（`sp_decoder_get_image`），转换为 BGR（`cv::cvtColor`），进行缩放/letterbox 处理，并写入 YOLOv5x 输入张量（`pre_process`）。
 
 - 模型推理 (Inference)
 
-    调用 yolov5x.infer() 在 BPU 上执行前向计算，生成原始检测结果。
+    调用 `yolov5x.infer()` 在 BPU 上执行前向计算，生成原始检测结果。
 
 - 后处理 (Postprocess)
 
-    调用 yolov5x.post_process完成置信度过滤、NMS，并将检测框坐标映射回显示分辨率。
+    调用 `yolov5x.post_process`完成置信度过滤、NMS，并将检测框坐标映射回显示分辨率。
 
 - RTSP 拉流与解码 (SP Decoder / FFmpeg)
 
-    使用 FFmpeg 初始化网络栈 (avformat_network_init)，打开 RTSP 流 (avformat_open_input)，并通过 SP 模块拉取 H264 视频帧（sp_start_decode、sp_decoder_get_image）。
+    使用 FFmpeg 初始化网络栈 (`avformat_network_init`)，打开 RTSP 流 (`avformat_open_input`)，并通过 SP 模块拉取 H264 视频帧（`sp_start_decode`、`sp_decoder_get_image`）。
 
 - 分辨率适配与缩放 (VPS)
 
-    若显示分辨率与视频流分辨率不一致，使用 SP VPS 模块进行缩放 (sp_open_vps)，并通过 sp_module_bind 将解码器、VPS、显示模块绑定成管线。
+    若显示分辨率与视频流分辨率不一致，使用 SP VPS 模块进行缩放 (`sp_open_vps`)，并通过 `sp_module_bind` 将解码器、VPS、显示模块绑定成管线。
 
 - 屏幕显示 (SP Display)
 
-    通过 sp_start_display 初始化显示通道；使用 draw_detections_on_disp 将检测结果叠加绘制到屏幕；若分辨率一致，可直接通过 sp_display_set_image 显示 YUV 帧。
+    通过 `sp_start_display` 初始化显示通道；使用 `draw_detections_on_disp` 将检测结果叠加绘制到屏幕；若分辨率一致，可直接通过 `sp_display_set_image` 显示 YUV 帧。
 
 - 信号控制 (Signal Handler)
 
-    注册 signal_handler_func 捕获 SIGINT 等信号，设置全局标志 is_stop，以便主循环安全退出。
+    注册 `signal_handler_func` 捕获 SIGINT 等信号，设置全局标志 `is_stop`，以便主循环安全退出。
 
 ## 模型说明
 
@@ -109,7 +109,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | ----------------- | ------------------------------- | ------------------------------------------------------ |
 | `--rtsp_url`      | RTSP 流 URL                     | `rtsp://127.0.0.1/assets/1080P_test.h264`              |
 | `--transfer_type` | RTSP 传输类型（tcp/udp）         | `tcp`                                                  |
-| `--model_path`    | YOLOv5x 量化 BPU 模型路径 (.hbm) | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
+| `--model_path`    | YOLOv5x 量化 BPU 模型路径 (`.hbm`) | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
 | `--label_file`    | 类别名文件（每行一个类别名）       | `/app/res/labels/coco_classes.names`                   |
 | `--score_thres`   | 置信度阈值（过滤低分检测框）       | `0.25`                                                 |
 | `--nms_thres`     | NMS IoU 阈值                    | `0.45`                                                 |
@@ -120,7 +120,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 | ----------------- | ------------------------------- | ------------------------------------------------------ |
 | `--rtsp_url`      | RTSP 流 URL                     | `rtsp://127.0.0.1/assets/1080P_test.h264`              |
 | `--transfer_type` | RTSP 传输类型（tcp/udp）         | `tcp`                                                  |
-| `--model_path`    | YOLOv5x 量化 BPU 模型路径 (.hbm) | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
+| `--model_path`    | YOLOv5x 量化 BPU 模型路径 (`.hbm`) | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
 | `--label_file`    | 类别名文件（每行一个类别名）       | `/app/res/labels/coco_classes.names`                   |
 | `--score_thres`   | 置信度阈值（过滤低分检测框）       | `0.25`                                                 |
 | `--nms_thres`     | NMS IoU 阈值                    | `0.45`                                                 |
@@ -131,7 +131,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 ## 快速运行
 - 准备rtsp码流
 
-    使用系统预置的推流服务,准备rtsp码流作为输入源，该服务会把1080P_test.h264视频文件处理成 rtsp 流，url 地址为rtsp://127.0.0.1/assets/1080P_test.h264，用户可通过如下命令启动推流服务：
+    使用系统预置的推流服务,准备rtsp码流作为输入源，该服务会把`1080P_test.h264`视频文件处理成 rtsp 流，url 地址为`rtsp://127.0.0.1/assets/1080P_test.h264`，用户可通过如下命令启动推流服务：
     ```bash
     cd /app/res
     sudo chmod +x live555MediaServer
@@ -172,7 +172,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 
 - 退出运行
 
-    在命令行输入Ctrl C
+    在命令行输入`Ctrl+C`
 
 - 查看结果
 

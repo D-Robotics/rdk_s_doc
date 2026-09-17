@@ -15,7 +15,7 @@ sidebar_products: RDK-S100
 ## 模型说明
 - 简介：
 
-    LaneNet 是一种用于实时车道线检测的语义分割模型。LaneNet 在图像预处理上采用归一化与标准化方式，适合自动驾驶与 ADAS 系统中的道路场景分析。本示例使用的是量化版本模型 lanenet256x512.hbm，支持 BPU 推理加速。
+    LaneNet 是一种用于实时车道线检测的语义分割模型。LaneNet 在图像预处理上采用归一化与标准化方式，适合自动驾驶与 ADAS 系统中的道路场景分析。本示例使用的是量化版本模型 `lanenet256x512.hbm`，支持 BPU 推理加速。
 
 - HBM模型名称：lanenet256x512.hbm
 
@@ -38,7 +38,7 @@ sidebar_products: RDK-S100
 
 - 推理执行
 
-    使用 .infer() 方法进行推理，输出包括 instance 特征图和二值掩膜图。
+    使用 `.infer()` 方法进行推理，输出包括 instance 特征图和二值掩膜图。
 
 - 结果后处理
 
@@ -103,13 +103,13 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/Lanenet/lane
         ```
 - 查看结果
 
-    运行成功后，会将结果绘制出来，保存到 instance_pred.png 和 binary_pred.png
+    运行成功后，会将结果绘制出来，保存到 `instance_pred.png` 和 `binary_pred.png`
     ```bash
     [Saved] Instance result saved to: instance_pred.png
     [Saved] Binary result saved to: binary_pred.png
     ```
 
 ## 注意事项
-- 输出结果存储为instance_pred.png 和 binary_pred.png，用户可自行查看。
+- 输出结果存储为`instance_pred.png` 和 `binary_pred.png`，用户可自行查看。
 
 - 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。

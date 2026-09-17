@@ -23,15 +23,15 @@ import DocScope from '@site/src/components/DocScope';
     Ultralytics YOLO11 Pose 是一款高效的轻量级人体关键点检测模型，支持同时进行目标检测与姿态估计（多关键点预测）。它集成 Distribution Focal Loss（DFL）以增强边界框与关键点的定位精度，适用于实时应用场景中的多人体姿态识别任务。
 
 <DocScope products="RDK-S100">
-- HBM 模型名称： yolo11n_pose_nashe_640x640_nv12.hbm
+- HBM 模型名称： `yolo11n_pose_nashe_640x640_nv12.hbm`
 
 </DocScope>
 <DocScope products="RDK-S600">
-- HBM 模型名称： yolo11n_pose_nashp_640x640_nv12.hbm
+- HBM 模型名称： `yolo11n_pose_nashp_640x640_nv12.hbm`
 
 </DocScope>
 
-- 输入格式： NV12 格式图像（Y、UV 分离），尺寸为 640×640
+- 输入格式： `NV12` 格式图像（Y、UV 分离），尺寸为 `640×640`
 
 - 输出：
 
@@ -65,11 +65,11 @@ import DocScope from '@site/src/components/DocScope';
 
 - 输入预处理
 
-    将输入的 BGR 图像 resize 到 640×640，并转为 NV12 格式（Y、UV 分离），用于模型推理。
+    将输入的 BGR 图像 resize 到 `640×640`，并转为 NV12 格式（Y、UV 分离），用于模型推理。
 
 - 推理执行
 
-    调用 .run() 接口执行推理，同时支持设置运行优先级和 BPU 核心绑定，通过 set_scheduling_params() 实现。
+    调用 `.run()` 接口执行推理，同时支持设置运行优先级和 BPU 核心绑定，通过 `set_scheduling_params()` 实现。
 
 - 结果后处理
 
@@ -87,7 +87,7 @@ import DocScope from '@site/src/components/DocScope';
 
 
 ## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+本样例无特殊环境需求，只需确保安装了`pydev`中的环境依赖即可。
 
 <DocScope products="RDK-S100">
 ```bash
@@ -118,7 +118,7 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--test-img`       | 测试图像路径                                         | `/app/res/assets/bus.jpg`                |
 | `--label-file`     | 类别标签路径，每行一个类别名称                         | `/app/res/labels/coco_classes.names`     |
 | `--img-save-path`  | 检测结果保存路径                                     | `result.jpg`                          |
-| `--priority`       | 模型调度优先级（0\~255，数值越大优先级越高）           | `0`                                   |
+| `--priority`       | 模型调度优先级（`0~255`，数值越大优先级越高）           | `0`                                   |
 | `--bpu-cores`      | 推理所使用的 BPU 核心编号列表（如：`--bpu-cores 0 1`） | `[0]`                                 |
 | `--nms-thres`      | 非极大值抑制（NMS）中的 IoU 阈值                      | `0.7`                                 |
 | `--score-thres`    | 目标置信度阈值（低于该值的目标将被过滤）               | `0.25`                                |
@@ -132,7 +132,7 @@ pip install -r ../../requirements.txt --break-system-packages
 | `--test-img`       | 测试图像路径                                         | `/app/res/assets/bus.jpg`                |
 | `--label-file`     | 类别标签路径，每行一个类别名称                         | `/app/res/labels/coco_classes.names`     |
 | `--img-save-path`  | 检测结果保存路径                                     | `result.jpg`                          |
-| `--priority`       | 模型调度优先级（0\~255，数值越大优先级越高）           | `0`                                   |
+| `--priority`       | 模型调度优先级（`0~255`，数值越大优先级越高）           | `0`                                   |
 | `--bpu-cores`      | 推理所使用的 BPU 核心编号列表（如：`--bpu-cores 0 1`） | `[0]`                                 |
 | `--nms-thres`      | 非极大值抑制（NMS）中的 IoU 阈值                      | `0.7`                                 |
 | `--score-thres`    | 目标置信度阈值（低于该值的目标将被过滤）               | `0.25`                                |
@@ -181,7 +181,7 @@ pip install -r ../../requirements.txt --break-system-packages
 
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到 --img-save-path 指定路径
+    运行成功后，会将结果绘制在原图上，并保存到 `--img-save-path` 指定路径
     ```bash
     [Saved] Result saved to: result.jpg
     ```

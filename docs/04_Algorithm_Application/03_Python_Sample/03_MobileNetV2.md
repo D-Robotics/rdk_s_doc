@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 <DocScope products="RDK-S100">
-本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `hbm_runtime` 进行推理，本示例代码位于`/app/pydev_demo/01_classification_sample/02_mobilenetv2/ `目录下。
+本示例展示如何使用基于 BPU 部署的 `MobileNetV2` 模型进行图像分类任务，使用 `hbm_runtime` 进行推理，本示例代码位于`/app/pydev_demo/01_classification_sample/02_mobilenetv2/`目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
@@ -54,7 +54,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    调用 .run() 方法执行推理，支持设置 BPU 运行核心（如 core0/core1）及推理优先级（0~255）。
+    调用 `.run()` 方法执行推理，支持设置 BPU 运行核心（如 core0/core1）及推理优先级（0~255）。
 
 - 结果后处理
 

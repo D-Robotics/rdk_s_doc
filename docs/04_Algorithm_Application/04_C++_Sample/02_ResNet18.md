@@ -40,7 +40,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    通过 .infer() 方法完成模型前向推理。
+    通过 `.infer()` 方法完成模型前向推理。
 
 - 结果后处理
 

@@ -20,11 +20,11 @@ import DocScope from '@site/src/components/DocScope';
 ## 功能说明
 - 模型加载
 
-    通过 `hbm_runtime` 加载指定的 .hbm 模型文件，提取模型名称、输入输出形状、量化信息等。
+    通过 `hbm_runtime` 加载指定的 `.hbm` 模型文件，提取模型名称、输入输出形状、量化信息等。
 
 - 摄像头采集
 
-    自动扫描 /dev/video* 下的设备，打开第一个可用的 USB 摄像头，设置为 MJPEG 编码、1080p 分辨率、30 FPS。
+    自动扫描 `/dev/video*` 下的设备，打开第一个可用的 USB 摄像头，设置为 MJPEG 编码、1080p 分辨率、30 FPS。
 
 - 图像预处理
 
@@ -32,7 +32,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    通过 run() 方法提交输入张量，在 BPU 上完成模型前向计算。
+    通过 `run()` 方法提交输入张量，在 BPU 上完成模型前向计算。
 
 - 后处理
 
@@ -47,7 +47,7 @@ import DocScope from '@site/src/components/DocScope';
     参考 [Ultralytics YOLOv5x 目标检测示例小节](./04_Ultralytics_YOLOv5x.md)。
 
 ## 环境依赖
-- 确保安装了pydev中的环境依赖
+- 确保安装了`pydev`中的环境依赖
 
     <DocScope products="RDK-S100">
     ```bash
@@ -76,7 +76,7 @@ import DocScope from '@site/src/components/DocScope';
 | 参数名           | 说明                              | 默认值                                                    |
 | --------------- | --------------------------------- | ------------------------------------------------------ |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
+| `--priority`    | 推理优先级（`0~255`，`255`为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
@@ -87,7 +87,7 @@ import DocScope from '@site/src/components/DocScope';
 | 参数名           | 说明                              | 默认值                                                    |
 | --------------- | --------------------------------- | ------------------------------------------------------ |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
+| `--priority`    | 推理优先级（`0~255`，`255`为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
@@ -132,7 +132,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 退出运行
 
-    把鼠标放置在显示框中，按q键退出
+    把鼠标放置在显示框中，按`q`键退出
 
 - 查看结果
 

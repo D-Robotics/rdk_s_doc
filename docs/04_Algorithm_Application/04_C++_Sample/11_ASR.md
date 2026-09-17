@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 <DocScope products="RDK-S100">
-本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
+本示例基于BPU推理引擎运行语音识别模型，实现对 `.wav` 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
 
 :::warning
 当前 RDK S100 系统镜像**未内置** `asr.hbm` 模型，运行本示例前需手动下载（见下方"模型说明"中的下载地址），并放到默认路径 `/opt/hobot/model/s100/basic/asr.hbm`，或通过 `--model_path` 指定其它路径。
@@ -17,7 +17,7 @@ import DocScope from '@site/src/components/DocScope';
 
 </DocScope>
 <DocScope products="RDK-S600">
-本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下。
+本示例基于BPU推理引擎运行语音识别模型，实现对 `.wav` 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下。
 
 </DocScope>
 
@@ -25,7 +25,7 @@ import DocScope from '@site/src/components/DocScope';
 ## 模型说明
 - 简介：
 
-    ASR（Automatic Speech Recognition）自动语音识别模型用于将音频信号转换为文本。输入为单通道语音波形（经过采样率转换和标准化处理），输出为字符级别的 token 序列。配合字典（vocab）文件使用，可实现中文语音转写。本示例使用量化后的 .hbm 模型。
+    ASR（Automatic Speech Recognition）自动语音识别模型用于将音频信号转换为文本。输入为单通道语音波形（经过采样率转换和标准化处理），输出为字符级别的 token 序列。配合字典（vocab）文件使用，可实现中文语音转写。本示例使用量化后的 `.hbm` 模型。
 
 - HBM模型名称：asr.hbm
 
@@ -40,7 +40,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 输入预处理
 
-    使用 SoundFile 读取音频（支持 .wav），将音频：
+    使用 SoundFile 读取音频（支持 `.wav`），将音频：
 
     - 转为单通道
     - 重采样至目标采样率（默认 16kHz）
@@ -50,7 +50,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    采用 .infer() 方法完成推理。
+    采用 `.infer()` 方法完成推理。
 
 - 结果后处理
 

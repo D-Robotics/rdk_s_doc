@@ -160,7 +160,7 @@ import DocScope from '@site/src/components/DocScope';
     ```
 
 ### 通用工具说明
-项目中使用了统一的工具模块以简化样例开发，路径为 utils/：
+项目中使用了统一的工具模块以简化样例开发，路径为 `utils/`：
 
 * preprocess_utils.py：图像预处理，如 resize、颜色格式转换等
 
