@@ -14,7 +14,479 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-S100 暂不支持 SocketCAN 及旁路协议栈功能。如需使用 CAN，请联系技术支持。
+本章主要介绍S100 SocketCAN相关配置以及错误调试方法
+
+### MCU侧初始化配置
+
+<DocScope products="RDK S100">
+
+CAN收发器的STBY引脚默认高电平,处于STANDBY模式,MCU侧需要**拉低**STBY引脚来退出STANDBY模式,否则CAN收发器无法正常工作,MCU侧需执行以下代码:
+
+```
+/* 根据实际情况设置CAN0~9时钟源，和设备树中保持一致(80M),需要在McuFunc_ModuleInit/Mcu_InitClock之后调用 */
+writel((__IO uint32 *)(0x2370007c), 0x8001);
+writel((__IO uint32 *)(0x23700080), 0x8001);
+writel((__IO uint32 *)(0x23700084), 0x8001);
+writel((__IO uint32 *)(0x23700088), 0x8001);
+writel((__IO uint32 *)(0x2370008c), 0x8001);
+writel((__IO uint32 *)(0x23700090), 0x8001);
+writel((__IO uint32 *)(0x23700094), 0x8001);
+writel((__IO uint32 *)(0x23700098), 0x8001);
+writel((__IO uint32 *)(0x2370009c), 0x8001);
+writel((__IO uint32 *)(0x237000a0), 0x8001);
+
+/* 拉低STBY引脚，使能CAN收发器 */
+Port_Lld_SetPinModeWithoutCheck(6, PORT_PINMUX_GPIO, S100_PORT_MCU);
+Port_Lld_SetGpioDirWithoutCheck(6, PORT_PIN_DIR_OUT, S100_PORT_MCU);
+Dio_WriteChannel(6, STD_LOW);
+```
+</DocScope>
+
+### 设备树代码
+
+S100 中涉及 CAN 配置的 dts 文件：
+
+```text
+|-- source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi   # canfd0~canfd5 设备节点
+```
+
+### 设备树配置说明
+
+<DocScope products="RDK S100">
+
+S100 A-Core 侧共 6 个 FlexCAN 节点：
+
+```dts
+canfd1: canfd@0x23720000 {
+    status = "okay";
+    compatible = "hobot,s100-flexcan";
+    reg = <0x0 0x23720000 0x0 0x4000>;
+    interrupts = <GIC_SPI MCUSYS_CANFD5_IPI_MB_INTR  IRQ_TYPE_LEVEL_HIGH>,
+                 <GIC_SPI MCUSYS_CANFD5_IPI_ERR_INTR IRQ_TYPE_LEVEL_HIGH>;
+    clock-frequency = <80000000>;
+    fsl,clk-source = <0>;
+};
+```
+
+各节点与 MCU 侧 CAN-FD 的映射关系如下：
+
+| A-Core设备节点 | MCU 侧CAN控制器 | 寄存器地址 | 默认状态 |
+| -------------- | --------------- | ---------- | -------- |
+| canfd0         | MCU canfd3      | 0x235b0000 | disabled |
+| canfd1         | MCU canfd5      | 0x23720000 | disabled |
+| canfd2         | MCU canfd6      | 0x23730000 | disabled |
+| canfd3         | MCU canfd7      | 0x23740000 | disabled |
+| canfd4         | MCU canfd8      | 0x23750000 | disabled |
+| canfd5         | MCU canfd9      | 0x23760000 | disabled |
+
+配置项说明：
+
+-   `compatible = "hobot,s100-flexcan"`：厂商,型号。
+-   `reg`：设备占用的寄存器地址范围。
+-   `interrupts`：两个中断，分别为 Mailbox 收发中断（`_IPI_MB_INTR`）和错误中断（`_IPI_ERR_INTR`）。
+-   `clock-frequency`：CAN 模块时钟 80 MHz，波特率计算基于此值。
+-   `fsl,clk-source`：时钟源选择。
+
+</DocScope>
+
+## 环境搭建与测试
+
+<DocScope products="RDK S100">
+本小节以默认使能的 **can1**（canfd1， MCU侧 canfd5）为例，介绍 SocketCAN 的基本功能。
+</DocScope>
+
+### 测试环境准备
+
+板端需具备 `iproute2`（`ip` 命令）和 `can-utils`（`candump`/`cansend`）
+
+#### 1.加载 FlexCAN 驱动
+
+若 FlexCAN 驱动编译为内核模块，需先加载驱动：
+
+```bash
+modprobe flexcan
+```
+
+加载后用 `ip link` 确认已出现 can0~can5 设备：
+
+```bash
+ip link show
+```
+
+若驱动已内置（built-in）到内核镜像，则无需此步，系统启动后直接可见 CAN 设备。
+
+#### 2.配置比特率并使能接口
+
+经典 CAN
+
+```bash
+# 先关闭接口（改参数需在 DOWN 状态）
+ip link set can1 down
+# 配置比特率与采样点
+ip link set can1 type can bitrate 500000 sample-point 0.8
+# 使能接口
+ip link set can1 up
+```
+CAN-FD
+
+```bash
+# 先关闭接口（改参数需在 DOWN 状态）
+ip link set can1 down
+# 配置 CAN FD：仲裁段 1Mbps、采样点 80%；数据段 5Mbps、采样点 75%
+ip link set can1 type can bitrate 1000000 sample-point 0.8 dbitrate 5000000 dsample-point 0.75 fd on
+# 使能接口
+ip link set can1 up
+```
+
+
+#### 常用参数[ip link set ]
+
+| 参数 | 作用 | 示例 |
+|------|------|------|
+| `bitrate N` | 仲裁段比特率/经典CAN比特率 | `bitrate 500000` |
+| `dbitrate N` | CAN FD 数据段比特率 | `dbitrate 5000000` |
+| `restart-ms N` | bus-off 后 N ms 自动恢复 | `restart-ms 3000` |
+| `berr-reporting on/off` | 上报总线错误帧 | `berr-reporting on` |
+| `loopback on/off` | 内部回环 | `loopback on` |
+| `listen-only on/off` | 只听模式 | `listen-only on` |
+| `one-shot on/off` | 发送失败不自动重传 | `one-shot on` |
+| `fd on/off` | CAN FD模式支持 | `fd on` |
+
+:::tip
+调试错误状态时建议开启 `berr-reporting on`，否则驱动不会上报 BIT0/CRC 等总线错误帧，`candump` 看不到错误细节。
+:::
+
+### 基本收发测试
+
+#### 内部回环测试
+
+```bash
+ip link set can1 down
+ip link set can1 type can bitrate 500000 loopback on
+ip link set can1 up
+
+# 终端 A：抓包
+candump can1 &
+# 终端 B：发送标准帧,ID=0x123,数据 8 字节
+cansend can1 123#1122334455667788
+```
+
+回环模式下发送的帧会被自身接收，`candump` 应打印 `can1  123   [8]  11 22 33 44 55 66 77 88`
+
+#### 双节点闭环测试
+
+将两路 CAN（如 can1 与 can2）的 CAN_H/CAN_L 对接，并在两端各接一个 120Ω 终端电阻（S100 MCU 子板通过跳线帽接入）。一端发送，另一端接收：
+
+```bash
+# 节点 A (can1)
+cansend can1 123#AABBCCDD
+# 节点 B (can2)
+candump can2
+```
+## SocketCAN 调试
+
+### 查看接口状态与错误计数
+
+```bash
+# 查看 CAN 详细参数
+ip -s -d link show can1
+```
+
+输出示例：
+
+```c
+18: can1: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEFAULT group default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can <BERR-REPORTING> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 3000
+          bitrate 500000 sample-point 0.875
+          tq 25 prop-seg 37 phase-seg1 32 phase-seg2 10 sjw 1
+          flexcan: tseg1 2..96 tseg2 2..32 sjw 1..16 brp 1..1024 brp-inc 1
+          flexcan: dtseg1 2..39 dtseg2 2..8 dsjw 1..4 dbrp 1..1024 dbrp-inc 1
+          clock 80000000
+          re-started bus-errors arbit-lost error-warn error-pass bus-off
+          0          0          0          0          0          0         numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 parentbus platform parentdev 23740000.canfd
+    RX:  bytes packets errors dropped  missed   mcast
+             4       1      0       0       0       0
+    TX:  bytes packets errors dropped carrier collsns
+             4       1      0       0       0       0
+
+```
+
+### 错误状态机与 bus-off
+
+CAN 控制器根据 TEC/REC 维护错误状态机，不同计数值对应不同的错误档次：
+
+| 状态 | TEC / REC | 含义 | 上报 |
+|------|-----------|------|------|
+| ERROR-ACTIVE | 0 ~ 95 | 正常收发，主动错误标志 | — |
+| ERROR-WARNING | 96 ~ 127 | 错误警告 | `CAN_ERR_CRTL` + TX/RX_WARNING |
+| ERROR-PASSIVE | 128 ~ 255 | 被动错误，限制收发 | `CAN_ERR_CRTL` + TX/RX_PASSIVE |
+| BUS-OFF | ≥ 256 | 总线关闭，停止收发 | `CAN_ERR_BUSOFF` |
+
+#### 错误帧字段解读
+
+开启 `berr-reporting on` 后，`candump -e can1` 可看到错误帧。错误帧是 `struct can_frame`，`can_id` 带 `CAN_ERR_FLAG (0x20000000)`，`len=8`：
+
+| 字段 | 含义 | 常见取值 |
+|------|------|----------|
+| `can_id` 位 | 错误类别 | `CAN_ERR_BUSOFF=0x40`、`CAN_ERR_CRTL=0x04`、`CAN_ERR_PROT=0x08`、`CAN_ERR_ACK=0x20`、`CAN_ERR_BUSERROR=0x80`、`CAN_ERR_RESTARTED=0x100` |
+| `data[1]` | CRTL 状态 | `CAN_ERR_CRTL_RX_WARNING=0x04`、`TX_WARNING=0x08`、`RX_PASSIVE=0x10`、`TX_PASSIVE=0x20` |
+| `data[2]` | PROT 错误类型 | `CAN_ERR_PROT_BIT0=0x08`、`BIT1=0x10`、`BIT(single/CRC)=0x01`、`FORM=0x02`、`STUFF=0x04` |
+| `data[3]` | PROT 错误位置 | `CAN_ERR_PROT_LOC_ACK=0x19`、`CAN_ERR_PROT_LOC_CRC_SEQ=0x08` 等 |
+
+例如发生 bus-off 时，通常先收到一帧 `can_id=0x20000040`（报告进入 BUS-OFF 状态），紧接一帧 `can_id=0x20000088`（报告具体的总线错误，`data[2]=0x08` 即 BIT0）。各错误类别与字段含义对照见上表。
+
+### bus-off 恢复
+
+恢复方式分两类：自动恢复（配置 restart-ms 后定时到期自动恢复）与手动软复位，两者最终都通过软复位让控制器回到正常收发状态（ERROR-ACTIVE）。
+
+#### 自动恢复（restart-ms > 0）
+
+```bash
+ip link set can1 down
+ip link set can1 type can restart-ms 3000   # bus-off 后 3 秒自动恢复
+ip link set can1 up
+```
+
+bus-off 后，驱动会在 `restart-ms` 设定的时间到期后自动执行一次软复位恢复，并向应用层发出一帧 `CAN_ERR_RESTARTED` 通知。
+
+#### 手动软复位
+
+除自动恢复外，可手动触发软复位，有两种方式：
+
+**方式一：restart 命令**
+
+```bash
+ip link set can1 type can restart
+```
+
+该命令触发一次软复位，恢复后接口 carrier 重新置 on、状态回到 ERROR-ACTIVE，并向应用层发出一帧 `CAN_ERR_RESTARTED` 通知。仅当 `restart_ms == 0` 且 `state == BUS_OFF` 时才成功，否则返回：
+
+| 错误 | 原因 | 解决 |
+|------|------|------|
+| `Invalid argument` (-EINVAL) | `restart_ms != 0`（自动恢复开着时不允许手动） | 先 `down`，设 `restart-ms 0`，再 `up` |
+| `Device or resource busy` (-EBUSY) | `state != BUS_OFF`（没真到 bus-off） | 确认确实 bus-off；ACK 错误只到 error-passive，不算 bus-off |
+
+**方式二：down + up**
+
+```bash
+ip link set can1 down
+ip link set can1 up
+```
+
+先 down 再 up 会重新初始化整个接口（重新申请中断与收发资源，并执行一次软复位），状态回到 ERROR-ACTIVE。
+
+:::caution
+若MCU 侧CAN收发器未使能导致 bus-off，自动恢复与手动软复位都会"恢复成功后立刻再次 bus-off"，表现为反复 `bus-off -> restart -> bus-off` 循环，此时应排查 MCU 侧物理层。
+:::
+
+## 错误帧监控：用户态示例
+
+下面是一个基于 RAW socket 的错误帧监控示例程序，可解码 BUS OFF / ACK / CRC 等信息（前提`berr-reporting on`）：
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <sys/time.h> 
+#include <net/if.h>
+#include <linux/can.h>
+#include <linux/can/raw.h>
+#include <linux/can/error.h>
+#include <linux/can/netlink.h>
+
+static volatile int running = 1;
+static void sig_handler(int s) { running = 0; }
+
+/* 解码错误帧 */
+static void parse_err_frame(const struct can_frame *cf, struct timeval *tv) {
+    printf("[%ld.%06ld] ", tv->tv_sec, tv->tv_usec);
+    canid_t id = cf->can_id;
+
+    /* 错误类别 */
+    if (id & CAN_ERR_BUSOFF)    printf("[BUS-OFF] ");
+    if (id & CAN_ERR_ACK)       printf("[ACK_ERR] ");
+    if (id & CAN_ERR_RESTARTED) printf("[RESTARTED] ");
+
+    /* 控制器状态 */
+    if (id & CAN_ERR_CRTL) {
+        printf("[CRTL] ");
+        if (cf->data[1] & CAN_ERR_CRTL_TX_WARNING) printf("TX_WRN ");
+        if (cf->data[1] & CAN_ERR_CRTL_RX_WARNING) printf("RX_WRN ");
+        if (cf->data[1] & CAN_ERR_CRTL_TX_PASSIVE) printf("TX_PASSIVE ");
+        if (cf->data[1] & CAN_ERR_CRTL_RX_PASSIVE) printf("RX_PASSIVE ");
+    }
+
+    /* 协议错误类型 */
+    if (id & CAN_ERR_PROT) {
+        printf("[PROT] ");
+        if (cf->data[2] & CAN_ERR_PROT_BIT0)  printf("BIT0_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_BIT1)  printf("BIT1_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_FORM)  printf("FORM_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_STUFF) printf("STUFF_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_BIT)   printf("CRC_ERR ");
+    }
+
+    printf("\n");
+}
+
+int main(int argc, char **argv) {
+    /* 接口名,可通过命令行参数指定,默认为can1 */
+    const char *ifname = argc > 1 ? argv[1] : "can1";
+
+    struct sigaction sa = { .sa_handler = sig_handler };
+    sigaction(SIGINT, &sa, NULL);
+
+    /* 创建CAN_RAW套接字 */
+    int s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+
+    /* 获取指定CAN接口的索引号 */
+    struct ifreq ifr = {0};
+    strncpy(ifr.ifr_name, ifname, IFNAMSIZ - 1);
+    ioctl(s, SIOCGIFINDEX, &ifr);
+
+    /* 清空普通数据帧过滤器:长度为 0,不接收任何普通CAN数据帧 */
+    struct can_filter empty[0];
+    setsockopt(s, SOL_CAN_RAW, CAN_RAW_FILTER, empty, 0);
+
+    /* 打开错误消息帧过滤:接收所有类型的错误 */
+    can_err_mask_t err_mask = CAN_ERR_MASK;
+    setsockopt(s, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &err_mask, sizeof(err_mask));
+
+    /* 启用时间戳 */ 
+    int enable = 1;
+    setsockopt(s, SOL_SOCKET, SO_TIMESTAMP, &enable, sizeof(enable));
+    
+    /* 将套接字绑定到指定的CAN接口 */
+    struct sockaddr_can addr = { 
+        .can_family  = AF_CAN, 
+        .can_ifindex = ifr.ifr_ifindex
+    };
+    if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+        perror("bind");
+        close(s);
+        return 1;
+    }
+
+    printf("Listening for CAN error frames on %s ... (Ctrl+C to exit)\n", ifname);
+
+    struct can_frame cf;
+    struct msghdr msg = {0};
+    struct iovec iov;
+    unsigned char ctrl[1024];
+
+    iov.iov_base = &cf;
+    iov.iov_len = sizeof(cf);
+
+    msg.msg_iov = &iov;
+    msg.msg_iovlen = 1;
+    msg.msg_control = ctrl;
+    msg.msg_controllen = sizeof(ctrl);
+
+    while (running) {
+    msg.msg_controllen = sizeof(ctrl);
+    ssize_t n = recvmsg(s, &msg, 0);
+    
+        if (n == sizeof(cf) && (cf.can_id & CAN_ERR_FLAG)) {
+            struct timeval tv = {0, 0};
+            struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
+
+            while (cmsg) {
+                if (cmsg->cmsg_level == SOL_SOCKET && 
+                    cmsg->cmsg_type == SO_TIMESTAMP) {
+                    tv = *(struct timeval *)CMSG_DATA(cmsg);
+                    break;
+                }
+                cmsg = CMSG_NXTHDR(&msg, cmsg);
+            }
+
+            parse_err_frame(&cf, &tv);
+        }
+    }
+    close(s);
+    return 0;
+}
+```
+
+使用方法：
+
+```bash
+# 开启错误上报，并设置自恢复3S
+ip link set can1 type can berr-reporting on restart-ms 3000
+# 编译并运行
+gcc can_err_monitor.c -o can_err_monitor
+./can_err_monitor can1
+```
+示例输出
+```c
+Listening for CAN error frames on can1 ... (Ctrl+C to exit)
+[1786678280.362306] [CRTL] TX_WRN
+[1786678280.362316] [PROT] BIT0_ERR
+[1786678280.362322] [CRTL] TX_PASSIVE  #被动错误
+[1786678280.362323] [PROT] BIT0_ERR
+[1786678280.362338] [PROT] BIT0_ERR
+[1786678280.362363] [PROT] BIT0_ERR
+[1786678280.362390] [PROT] BIT0_ERR
+[1786678280.362415] [PROT] BIT0_ERR
+[1786678280.362441] [PROT] BIT0_ERR
+[1786678280.362469] [PROT] BIT0_ERR
+[1786678280.362494] [PROT] BIT0_ERR
+[1786678280.362518] [PROT] BIT0_ERR
+[1786678280.362542] [PROT] BIT0_ERR
+[1786678280.362569] [PROT] BIT0_ERR
+[1786678280.362597] [PROT] BIT0_ERR
+[1786678280.362623] [PROT] BIT0_ERR
+[1786678280.362650] [PROT] BIT0_ERR
+[1786678280.362673] [PROT] BIT0_ERR
+[1786678280.362713] [BUS-OFF]        #[BUS-OFF]之后跟着一帧 [BIT0_ERR],两帧的硬件时间戳几乎相同(Δt=2us),因为来自同一次中断,驱动是先报状态变化、再报总线错误
+[1786678280.362715] [PROT] BIT0_ERR 
+[1786678283.389491] [RESTARTED]
+
+```
+
+## 错误帧监控：内核日志
+
+1.先提升flexcan 日志级别（需先加载驱动）：
+
+```bash
+echo 'file flexcan-core.c +p' > /sys/kernel/debug/dynamic_debug/control
+```
+2.查看内核日志（`dmesg -w`）：
+
+```c
+[ 3877.853136] IPv6: ADDRCONF(NETDEV_CHANGE): can1: link becomes ready
+[ 4238.143737] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143767] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143789] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143814] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143841] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143868] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143892] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143917] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143944] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143969] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143995] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144022] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144048] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144073] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144097] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144125] flexcan 23740000.canfd can1: bus-off, scheduling restart in 3000 ms
+[ 4238.144135] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4241.368721] IPv6: ADDRCONF(NETDEV_CHANGE): can1: link becomes ready
+[ 4241.368722] flexcan 23740000.canfd can1: writing ctrl=0x0000c050
+[ 4241.368728] flexcan 23740000.canfd can1: writing cbt=0x802093e9
+[ 4241.368731] flexcan 23740000.canfd can1: writing fdctrl=0x06c00000
+[ 4241.368734] flexcan 23740000.canfd can1: flexcan_set_bittiming_cbt: mcr=0x5980000f ctrl=0x0000c050 ctrl2=0x80633800 fdctrl=0x06c00000 cbt=0x80000000 fdcbt=0x00000000
+[ 4241.368739] flexcan 23740000.canfd can1: flexcan_chip_start: writing mcr=0x59a3023f
+[ 4241.368742] flexcan 23740000.canfd can1: flexcan_chip_start: writing ctrl=0x00000050
+[ 4241.368745] flexcan 23740000.canfd can1: flexcan_chip_start: writing fdctrl=0x06c00000
+[ 4241.368795] flexcan 23740000.canfd can1: flexcan_chip_start: reading mcr=0x40a3023f ctrl=0x00000050
+
+```
 
 </DocScope>
 

@@ -530,7 +530,56 @@ RDK S100默认配置了6组参数，用户可以通过修改 Can_aControllerConf
 | 3                    | 1M         | 5M（短距离:小于50m） |
 | 4                    | 1M         | 5M（长距离:大于50m） |
 | 5                    | 1M         | 8M         |
+<DocScope products="RDK S100">
+## Bus Off自恢复配置
+`Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`中
+ctrlOptions成员添加`FLEXCAN_IP_BUSOFF_RECOVERY_U32`宏，将使能CAN控制器的硬件Bus Off自恢复功能（默认已经使能）
+```
+const Flexcan_Ip_ConfigType Flexcan_aCtrlConfigPB[10U]=
+{
+    /* Hardware Channel FLEXCAN_0 */
+    {
+        ...
+        /* Loopback enabled or not */
+        FLEXCAN_NORMAL_MODE,
+        /* Controller Options */
+        (uint32)( FLEXCAN_IP_BUSOFF_RECOVERY_U32 | FLEXCAN_IP_ISO_U32 |FLEXCAN_IP_EACEN_U32),
+    },
+}
+```
 
+## 禁止自动重传配置
+
+启用MCU侧的禁止自动重传需执行以下步骤：
+1. `Config/McalCdd/gen_s100_sip_B_mcu1/Can/inc/Can_Cfg.h`中启用`CAN_TX_ERR_ABORT_SUPPORT`宏
+```
+/**
+*   @brief      Enable/Disable abort Tx frame on first CAN TX error (ACK/bit)
+*/
+#define CAN_TX_ERR_ABORT_SUPPORT    (STD_ON)
+```
+2. `Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`中使能对应实例的错误中断
+```
+{Os_IntChannel_Can5_ErrorIsr, Os_Isr_Can5_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can6_ErrorIsr, Os_Isr_Can6_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can7_ErrorIsr, Os_Isr_Can7_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can8_ErrorIsr, Os_Isr_Can8_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can9_ErrorIsr, Os_Isr_Can9_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+```
+## 软复位
+
+若需复位CAN控制器，可执行以下代码：
+```
+    /* 复位CAN5 */
+    Can_SetControllerMode(CanController_5, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_5, CAN_CS_STARTED);
+    /* 复位CAN6 */
+    Can_SetControllerMode(CanController_6, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_6, CAN_CS_STARTED);
+
+    ...
+```
+</DocScope>
 
 ## 多包合并配置
 
