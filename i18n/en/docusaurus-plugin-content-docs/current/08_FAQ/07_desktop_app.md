@@ -3,6 +3,10 @@ sidebar_position: 7
 ---
 # 8.7 Desktop Applications
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 This section answers common issues when using third-party applications on the desktop.
 
 <!-- ```mdx-code-block
@@ -34,3 +38,17 @@ It is recommended not to use this feature for now. If you do, please follow the 
 **Steps:** Open the Settings app, navigate to Region & Language, select the target language, and click the restart button (this restart only restarts the desktop session, not the device). Enter your password on the lock screen.
 
 **Solution:** If you cannot log in with the correct password during the steps above, power cycle the device or run `reboot` to complete the language switch.
+
+<DocScope products="RDK S100">
+
+2. Lag when switching from other pages to "Bluetooth" in "Settings"
+
+:::info Note
+This issue still exists in the current version and has not been resolved yet. It is under investigation and will be fixed in a future release.
+:::
+
+**Issue description:** After opening the Settings app, repeatedly switching between the Bluetooth section and other sections causes noticeable lag, while all other sections work normally.
+
+**Scope:** This issue only affects the experience of using the Bluetooth page in the Settings app and does not affect the system Bluetooth functionality itself.
+
+</DocScope>
