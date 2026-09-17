@@ -226,6 +226,8 @@ ip link set can0 type can bitrate 500000 listen-only on
 ├── can_stress.c       # C 版压力/延迟测试工具
 ├── can_stress.py      # Python 版
 ├── can_pair_test.c    # 成对互通验证（can0<->can1, can2<->can3）
+├── can_hwtstamp_rx.c  # RX 硬件时间戳最小示例
+├── can_hwtstamp_test.c # RX 硬件时间戳诊断工具
 ├── Makefile
 └── README.md
 ```
@@ -247,7 +249,160 @@ sudo ./can_stress -i can0 -f 1 -l 64 -t 0x100 -r 0x101 -p 1 -w 1000 -L \
 sudo ./can_pair_test
 ```
 
-#### 1.6 错误与统计
+#### 1.6 获取 CAN 硬件时间戳（RX）
+
+FlexCAN 支持**接收帧的硬件时间戳**：报文到达控制器时，硬件把 SoC RTC 的时刻锁存到
+`HR_TIME_STAMPn` 寄存器；驱动在收包时读回该值，换算到 `CLOCK_REALTIME` 时间轴，最后由
+SocketCAN 通过 `SCM_TIMESTAMPING` 控制消息上报给用户态。
+
+| 项目 | 说明 |
+| ---- | ---- |
+| 支持方向 | 仅 RX（接收），**不支持 TX 硬件时间戳** |
+| 时间基准 | SoC RTC（32768 Hz tick），换算后落在 `CLOCK_REALTIME` 轴 |
+| 与 Fastpath | 使能旁路协议栈后报文不进协议栈，SocketCAN 取不到硬件时间戳 |
+
+:::note 前提条件
+- 驱动需带硬件时间戳能力（`FLEXCAN_QUIRK_HW_TIMESTAMP`）；
+- CAN 接口已 `up`，并已按 1.2、1.3 节加载模块、拉低 CAN_STB；
+- `SIOCSHWTSTAMP` 需要 `root`（或 `CAP_NET_ADMIN`）。
+:::
+
+**三步调用流程**
+
+| 步骤 | 接口 | 作用 |
+| ---- | ---- | ---- |
+| 1 | `ioctl(SIOCSHWTSTAMP)`，`rx_filter = HWTSTAMP_FILTER_ALL` | 打开整张网卡的 RX 硬件时间戳开关 |
+| 2 | `setsockopt(SO_TIMESTAMPING, SOF_TIMESTAMPING_RX_HARDWARE \| SOF_TIMESTAMPING_RAW_HARDWARE)` | 让内核把硬件时间戳投递给该 socket |
+| 3 | `recvmsg()` 解析 cmsg `SCM_TIMESTAMPING` | 硬件时间戳在 `ts[2]`，单位纳秒 |
+
+:::tip 为什么读 ts[2]
+`SCM_TIMESTAMPING` 的数据固定为 3 个 `timespec`，FlexCAN 只填最后一项：
+
+```text
+ts[0]  SOF_TIMESTAMPING_SOFTWARE      软件时间戳
+ts[1]  SOF_TIMESTAMPING_SYS_HARDWARE  转换后的硬件时间戳（flexcan 不填）
+ts[2]  SOF_TIMESTAMPING_RAW_HARDWARE  原始硬件时间戳   <-- 取这个
+```
+:::
+
+关键调用栈：
+
+```text
+【使能】应用 ioctl(SIOCSHWTSTAMP)
+  sock_ioctl -> dev_ioctl -> dev_ifsioc -> dev_eth_ioctl
+    -> flexcan_eth_ioctl -> flexcan_set_hwtstamp_config    # 记录 rx_filter，置 hwts.rx_enabled
+
+【收包】CAN 控制器收到报文
+  flexcan_irq -> flexcan_mailbox_read -> flexcan_hwts_read_mb      # 读 HR_TIME_STAMPn
+    -> skb_hwtstamps(skb)->hwtstamp = flexcan_hwts_to_ktime()      # RTC 时刻换算到 CLOCK_REALTIME
+    -> netif_receive_skb -> can_receive -> raw_rcv -> socket 接收队列
+
+【读取】应用 recvmsg()
+  raw_recvmsg -> sock_recv_cmsgs -> __sock_recv_timestamp -> put_cmsg(SCM_TIMESTAMPING)
+```
+
+**① 查看接口能力**
+
+```shell
+ethtool -T can0
+```
+
+`SOF_TIMESTAMPING_RX_HARDWARE` / `SOF_TIMESTAMPING_RAW_HARDWARE` 有效，且
+`SOF_TIMESTAMPING_TX_HARDWARE` 为空、`phc_index = -1`，即表示仅支持 RX 硬件时间戳。
+
+**② 使能/关闭 RX 硬件时间戳**
+
+用户态通过 `SIOCSHWTSTAMP` 下发（样例程序已封装）：
+
+```c
+struct hwtstamp_config cfg = {
+        .flags     = 0,
+        .tx_type   = HWTSTAMP_TX_OFF,      /* flexcan 无 TX 硬件时间戳 */
+        .rx_filter = HWTSTAMP_FILTER_ALL,  /* 所有 RX 帧都打硬件时间戳 */
+};
+struct ifreq ifr = { 0 };
+int fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+strncpy(ifr.ifr_name, "can0", IFNAMSIZ - 1);
+ifr.ifr_data = &cfg;
+ioctl(fd, SIOCSHWTSTAMP, &ifr);             /* 需要 CAP_NET_ADMIN；
+                                             * 读回当前配置用 SIOCGHWTSTAMP */
+```
+
+关闭时把 `rx_filter` 改为 `HWTSTAMP_FILTER_NONE` 再下发一次。
+
+:::warning 设备级开关
+该开关作用于整张网卡，只要有一个进程打开，其它 socket 也能取到硬件时间戳；
+`ip link set canX down` 会复位该状态，重新 `up` 后需要再下发一次。
+:::
+
+**③ 读取硬件时间戳**
+
+```c
+unsigned int flags = SOF_TIMESTAMPING_RX_HARDWARE |
+                     SOF_TIMESTAMPING_RAW_HARDWARE;
+struct timespec ts[3];                  /* [0]=SW [1]=保留 [2]=HW */
+char ctrl[CMSG_SPACE(sizeof(ts))];
+
+setsockopt(fd, SOL_SOCKET, SO_TIMESTAMPING, &flags, sizeof(flags));
+
+for (cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+        if (cmsg->cmsg_level != SOL_SOCKET ||
+            cmsg->cmsg_type != SCM_TIMESTAMPING)
+                continue;
+        memcpy(ts, CMSG_DATA(cmsg), sizeof(ts));
+        printf("hw = %lld.%09ld\n",
+               (long long)ts[2].tv_sec, (long)ts[2].tv_nsec);
+}
+```
+
+**④ 示例编译与运行**
+
+完整代码见 `hobot-io-samples/debian/app/Can/socketcan/can_hwtstamp_rx.c`（最小示例）与
+`can_hwtstamp_test.c`（诊断版：能力查询、软件时间戳对比、时延统计）。
+
+```shell
+cd hobot-io-samples/debian/app/Can/socketcan
+make can_hwtstamp_rx can_hwtstamp_test
+```
+
+单板自测（硬件回环，不需要第二个节点）：
+
+```shell
+ip link set can0 down
+ip link set can0 type can bitrate 500000 loopback on
+ip link set can0 up
+
+sudo ./can_hwtstamp_rx can0 &
+cansend can0 123#1122334455667788
+```
+
+```text
+SIOCSHWTSTAMP ok: tx_type=0 rx_filter=1
+id=0x123 len=8  no hw timestamp (tx echo frame or not enabled)
+id=0x123 len=8  hw_ts=1789563324.123456789
+```
+
+第一条是本机发送时回灌的 TX echo 帧（无硬件时间戳），第二条才是经硬件回环收到的帧；
+使用 `can0 <-> can1` 双节点测试时不会出现 echo 帧。诊断版用法：
+
+```shell
+# 接收侧：打印能力、等待 10 个带硬件时间戳的帧（-o 过滤 echo 帧）
+sudo ./can_hwtstamp_test -T -s -n 10 -o can0
+# 发送侧
+cangen can1 -g 10 -I 123 -L 8
+```
+
+**⑤ 常见问题**
+
+| 现象 | 原因 / 处理 |
+| ---- | ----------- |
+| `SIOCSHWTSTAMP: Operation not supported` | 驱动无硬件时间戳能力，或该接口不是 flexcan |
+| `ts[2]` 恒为 0 | 未下发 `SIOCSHWTSTAMP`；帧是本地 TX echo；接口 down 后未重新下发 |
+| 使能 Fastpath 后取不到时间戳 | 旁路模式报文不进协议栈，需先关闭 fastpath |
+| 时间戳与 `date` 存在固定偏差 | 硬件时间戳基于 SoC RTC tick 换算，RTC 与系统时钟需保持同步 |
+
+#### 1.7 错误与统计
 
 ```shell
 # 网络收发统计
