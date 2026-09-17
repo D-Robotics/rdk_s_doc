@@ -15,7 +15,7 @@ ISP（Image Signal Processing，图像信号处理）是一种用于处理前端
 ## 硬件框图
 
 ::::doc_scope{products="RDK S100"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM，CPE0 / CPE1 / CPE Lite 分组 + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM，CPE0 / CPE1 / CPE Lite 分组 + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 S100 的 ISP 硬件有 **2 个**（ISP0 / ISP1），两个 ISP core 可以并行处理视频流。
 
@@ -27,7 +27,7 @@ S100 的 YNR 硬件有 **1 个**（YNR1），支持 2DNR / 3DNR。只有 CPE1 �
 ::::
 
 :::doc_scope{products="RDK S600"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 S600 的 ISP 硬件有 **4 个**（ISP0 ~ ISP3），通路构成与 S100 相同（Sensor → MIPI RX → CIM → ISP → PYM）。S600 的能力：
 
@@ -37,7 +37,7 @@ S600 的 ISP 硬件有 **4 个**（ISP0 ~ ISP3），通路构成与 S100 相同�
 
 再看 ISP 内部。下图的 ISP 里面，处理管线固定为 `MCFE → RAW Domain → RGB Domain → Output Formatter` 四级，逐级完成多路调度、RAW 域校正、RGB 域色彩处理与输出格式转换：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/isp-pipeline.png" alt="ISP 图像信号处理硬件管线（CIM → MCFE → RAW Domain → Demosaic → RGB Domain → Output Formatter → 3DNR → PYM）" style={{ width: '100%', maxWidth: '1300px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/isp-pipeline.png" alt="ISP 图像信号处理硬件管线（CIM → MCFE → RAW Domain → Demosaic → RGB Domain → Output Formatter → 3DNR → PYM）" style={{ width: '100%', maxWidth: '1300px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **MCFE**：Multi-Context Front End，用于 ISP 多路调度控制与 buffer 管理，逐路进行 Multi-camera 图像处理。
 

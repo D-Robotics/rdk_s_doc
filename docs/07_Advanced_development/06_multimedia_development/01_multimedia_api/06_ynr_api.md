@@ -14,11 +14,11 @@ YNR 全称 Y（Luma）Noise Reduction，即亮度降噪，是 VPS 子系统中�
 
 2DNR 是空域降噪，只会利用当前帧内的图像信息，对平坦区、运动量大的像素做较强的低通滤波。降噪强度越大，画面越干净；降噪强度太大会引起图像模糊。降噪算法根据实现原理不同可以分成很多类型，如线性/非线性、空域/频域，频域又包括小波变换、傅里叶变换或其他变换。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/ynr-dnr-flow.png" alt="图像降噪基本流程（含噪图像 → 识别噪声 → 抑制噪声 → 高质量图像）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-dnr-flow.png" alt="图像降噪基本流程（含噪图像 → 识别噪声 → 抑制噪声 → 高质量图像）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3DNR 是时域降噪，它的主要思想是利用多帧图像在时间上的相关性实现降噪，利用邻帧之间图片内容的相关性和噪点的不相关性增强图像信号，抵消噪声信号。在静止的画面上处理效果非常好，但是降噪太强会引起图像拖尾或者拖影。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/ynr-3dnr.png" alt="3DNR 时域降噪原理（多帧融合：静止区域用历史帧，运动区域用当前帧）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-3dnr.png" alt="3DNR 时域降噪原理（多帧融合：静止区域用历史帧，运动区域用当前帧）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 如上图所示，当前帧的输出会与下一帧一起作为输入，根据检测两帧的 motion（图片的运动信息）进行融合，作为第二帧的输出，在静止区域使用历史帧的成分较大，运动区域使用当前帧的成分较大，以此类推。
 
@@ -31,14 +31,14 @@ YNR 全称 Y（Luma）Noise Reduction，即亮度降噪，是 VPS 子系统中�
 YNR 是可选的降噪环节——串 YNR 时走 `ISP → YNR → PYM` 全 online 链路，不串 YNR 时直接 `ISP → PYM` 输出也可以。通路框图如下：
 
 :::doc_scope{products="RDK S100"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **YNR**：1 个（YNR1），支持 2DNR / 3DNR。
 - **链路**：只有 CPE1 这一路的 ISP1 后级才能直接连接 YNR，走 `ISP1 → YNR1 → PYM1` 全 online 链路。
 :::
 
 :::doc_scope{products="RDK S600"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **YNR**：4 个（YNR0 ~ YNR3），只支持 `isp-online-ynr-online-pym` 场景。
 - **2D/3DNR**：YNR0 ~ YNR2 只支持 2DNR，YNR3 支持 2DNR & 3DNR。
@@ -48,7 +48,7 @@ YNR 是可选的降噪环节——串 YNR 时走 `ISP → YNR → PYM` 全 onlin
 
 YNR 当前仅支持 online 模式：2DNR 和 3DNR 都会走。其中 3DNR 做时域降噪时，YNR 会向 DDR 下载和获取 buffer 用于对比历史帧；此 buffer 不向用户开放，仅 YNR 自身使用。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/ynr-online-ddr.png" alt="YNR online 模式数据流（3DNR 从 DDR 取历史帧做时域降噪）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-online-ddr.png" alt="YNR online 模式数据流（3DNR 从 DDR 取历史帧做时域降噪）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## YNR 硬件规格
 
