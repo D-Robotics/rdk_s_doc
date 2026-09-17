@@ -92,6 +92,6 @@ ISP 硬件 IP 本身的主要特性：
 
 ## 相关文档
 
-- [视频输入输出 - VIO](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [视频输入 - VIN](/Advanced_development/multimedia_development/multimedia_api/vin_api)
 - [视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)
 

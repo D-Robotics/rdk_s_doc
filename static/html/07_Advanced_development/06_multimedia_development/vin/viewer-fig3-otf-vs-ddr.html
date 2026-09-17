@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Online OTF 与 Offline DDR 两条通路</title>
+<style>
+  :root {
+    --c0: #141518;
+    --c1: #2B2622;
+    --c2: #5C5A57;
+    --c3: #A9B4DE;
+    --c4: #C3B0E8;
+    --c5: #C6C4BC;
+    --c6: #D7DCF4;
+    --c7: #DFF6E6;
+    --c8: #EBE2FF;
+    --c9: #F0F4FD;
+    --c10: #F4F3F1;
+    --c11: #FAF9F7;
+    --c12: #FFFFFF;
+    --brand: #D5B763; --brand-soft: #FBF4E2; --brand-line: #E8D9AE;
+    --page: #FFFFFF; --chrome: #FAFAFB; --chrome-br: #E7EAEF;
+    --ctl-bg: #FFFFFF; --ctl-br: #DDE1E7; --ctl-fg: #40444C; --ctl-dim: #8A9099;
+  }
+  html[data-theme="dark"] {
+    --c0: #EDEBE8;
+    --c1: #050505;
+    --c2: #B9B6B1;
+    --c3: #2B3350;
+    --c4: #3A3050;
+    --c5: #3A3833;
+    --c6: #232A3D;
+    --c7: #1B2A22;
+    --c8: #241F33;
+    --c9: #1E2430;
+    --c10: #1C1E22;
+    --c11: #191A1D;
+    --c12: #14161A;
+    --brand: #E0C67E; --brand-soft: #2E2A1E; --brand-line: #5A5136;
+    --page: #14161A; --chrome: #1A1D22; --chrome-br: #2A2E36;
+    --ctl-bg: #22262D; --ctl-br: #343A44; --ctl-fg: #E6E8EC; --ctl-dim: #8A9099;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--page);
+               -webkit-user-select: none; user-select: none;
+               -webkit-tap-highlight-color: transparent; }
+  body { font: 13px/1.5 -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+         color: var(--ctl-fg); display: flex; flex-direction: column; }
+
+  .bar { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+         padding: 8px 10px; background: var(--chrome);
+         border-bottom: 2px solid var(--brand-soft); }
+  .bar .title { font-weight: 600; margin-right: auto; white-space: nowrap; }
+  button { font: inherit; color: var(--ctl-fg); background: var(--ctl-bg);
+           border: 1px solid var(--ctl-br); border-radius: 6px; padding: 4px 10px;
+           cursor: pointer; transition: background .12s, border-color .12s, color .12s; }
+  button:hover { background: var(--brand-soft); border-color: var(--brand-line); color: var(--brand); }
+  button:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+  .zoom { min-width: 54px; text-align: center; font-variant-numeric: tabular-nums;
+          color: var(--brand); font-weight: 600; }
+
+  /* flex:1 而不是 height:calc(100vh − 44px)——工具条实际高 47.5px，写死 44 会多出
+     3.5px，bar+stage 超过视口，viewer 里平白多一条滚动条 */
+  .stage { flex: 1 1 auto; min-height: 0; position: relative; overflow: hidden;
+           background: var(--page); cursor: grab; touch-action: none; }
+  .stage.grabbing { cursor: grabbing; }
+  #canvas { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; }
+  #canvas svg { display: block; pointer-events: none; }
+  .stage.anim #canvas { transition: transform .2s cubic-bezier(.22,.61,.36,1); }
+  .hint { position: absolute; left: 12px; bottom: 8px; font-size: 11px; color: var(--ctl-dim);
+          pointer-events: none; }
+  .srcnotes { padding: 26px 22px 44px; border-top: 1px solid var(--chrome-br); }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <span class="title">Online OTF 与 Offline DDR 两条通路</span>
+    <button id="zoom-out" title="缩小（-）">&minus;</button>
+    <span class="zoom" id="zoom-label">100%</span>
+    <button id="zoom-in" title="放大（+）">+</button>
+    <button id="fit" title="适应宽度（F）">适应宽度</button>
+    <button id="one" title="原始比例（1）">1:1</button>
+    <button id="reset" title="重置（R）">重置</button>
+    <button id="theme" title="深浅色：跟随主站 / 深色 / 浅色（T 切换）">跟随主站</button>
+  </div>
+  <div class="stage" id="stage">
+    <div id="canvas"><svg id="diagram" draggable="false" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--c12)"/><stop offset="1" stop-color="var(--c11)"/></linearGradient>
+    <linearGradient id="cimfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--c5)"/><stop offset="1" stop-color="var(--c0)"/></linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="var(--c0)" flood-opacity="0.20"/></filter>
+    <filter id="soft2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="var(--c1)" flood-opacity="0.30"/></filter>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1000" fill="url(#bg)"/>
+  <text x="800" y="73.2" font-size="32" fill="var(--c0)" text-anchor="middle" font-weight="bold">Online OTF 与 Offline DDR：两条通路对比</text>
+  <text x="800" y="105.6" font-size="16" fill="var(--c2)" text-anchor="middle">共同前端 MIPI CSI-2 RX → CIM；CIM 右侧分岔：一条硬件直连，一条经 DDR 帧缓冲绕行</text>
+
+  <!-- 共同前端 -->
+  <rect x="60" y="352" width="290" height="356" rx="18" fill="var(--c11)" stroke="var(--c5)" stroke-width="2.0" filter="url(#soft)"/>
+  <rect x="84" y="335" width="132" height="34" rx="17" fill="var(--c10)" stroke="var(--c5)" stroke-width="1.6"/>
+  <text x="150" y="357.4" font-size="14" fill="var(--c0)" text-anchor="middle" font-weight="bold">共同前端</text>
+  <rect x="84" y="398" width="242" height="64" rx="10" fill="var(--c7)" stroke="var(--c5)" stroke-width="1.5"/>
+  <text x="205" y="437" font-size="19" fill="var(--c0)" text-anchor="middle" font-weight="bold">MIPI CSI-2 RX</text>
+  <polyline points="205,462 205,509" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="205,522 199.5,511 210.5,511" fill="var(--c0)"/>
+  <rect x="84" y="522" width="242" height="140" rx="14" fill="var(--c8)" stroke="var(--c4)" stroke-width="2.0" filter="url(#soft2)"/>
+  <text x="205" y="605" font-size="36" fill="var(--c0)" text-anchor="middle" font-weight="bold">CIM</text>
+
+  <!-- 分岔 -->
+  <polyline points="326,592 400,592" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polyline points="400,592 400,310 555,310" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polyline points="400,592 400,685 555,685" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="564,310 553,304.5 553,315.5" fill="var(--c0)"/>
+  <polygon points="564,685 553,679.5 553,690.5" fill="var(--c0)"/>
+  <circle cx="400" cy="592" r="6" fill="var(--c0)"/>
+  <rect x="352" y="278" width="172" height="28" rx="14" fill="var(--c12)" stroke="var(--c5)" stroke-width="1.2"/>
+  <text x="438" y="297" font-size="13" fill="var(--c0)" text-anchor="middle" font-weight="bold">cim_isp_flyby = 1</text>
+  <rect x="352" y="656" width="172" height="28" rx="14" fill="var(--c12)" stroke="var(--c5)" stroke-width="1.2"/>
+  <text x="438" y="675" font-size="13" fill="var(--c0)" text-anchor="middle" font-weight="bold">ddr_en = 1</text>
+
+  <!-- 上泳道：Online OTF -->
+  <rect x="520" y="180" width="1020" height="260" rx="18" fill="var(--c9)" stroke="var(--c5)" stroke-width="1.6"/>
+  <rect x="544" y="163" width="196" height="34" rx="17" fill="var(--c9)" stroke="var(--c0)" stroke-width="1.4"/>
+  <text x="642" y="185.4" font-size="14" fill="var(--c0)" text-anchor="middle" font-weight="bold">Online OTF · 硬件直连</text>
+  <rect x="564" y="265" width="188" height="90" rx="12" fill="var(--c6)" stroke="var(--c3)" stroke-width="1.8"/>
+  <text x="658" y="318" font-size="22" fill="var(--c0)" text-anchor="middle" font-weight="bold">ISP</text>
+  <rect x="812" y="265" width="188" height="90" rx="12" fill="var(--c6)" stroke="var(--c3)" stroke-width="1.8"/>
+  <text x="906" y="318" font-size="22" fill="var(--c0)" text-anchor="middle" font-weight="bold">YNR</text>
+  <rect x="1060" y="265" width="188" height="90" rx="12" fill="var(--c6)" stroke="var(--c3)" stroke-width="1.8"/>
+  <text x="1154" y="318" font-size="22" fill="var(--c0)" text-anchor="middle" font-weight="bold">PYM</text>
+  <rect x="1308" y="265" width="188" height="90" rx="12" fill="var(--c6)" stroke="var(--c3)" stroke-width="1.8"/>
+  <text x="1402" y="318" font-size="22" fill="var(--c0)" text-anchor="middle" font-weight="bold">下游 / 显示</text>
+  <polyline points="752,310 803,310" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="812,310 801,304.5 801,315.5" fill="var(--c0)"/>
+  <polyline points="1000,310 1051,310" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="1060,310 1049,304.5 1049,315.5" fill="var(--c0)"/>
+  <polyline points="1248,310 1299,310" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="1308,310 1297,304.5 1297,315.5" fill="var(--c0)"/>
+  <text x="1030" y="405" font-size="15" fill="var(--c0)" text-anchor="middle">主帧既不写 DDR 也不读 DDR · 同帧硬件流水 · 延迟低</text>
+
+  <!-- 下泳道：Offline DDR -->
+  <rect x="520" y="540" width="1020" height="340" rx="18" fill="var(--c6)" stroke="var(--c5)" stroke-width="1.6"/>
+  <rect x="544" y="523" width="220" height="34" rx="17" fill="var(--c6)" stroke="var(--c5)" stroke-width="1.4"/>
+  <text x="654" y="545.4" font-size="14" fill="var(--c0)" text-anchor="middle" font-weight="bold">Offline DDR · 经帧缓冲</text>
+  <rect x="564" y="630" width="300" height="110" rx="12" fill="var(--c6)" stroke="var(--c3)" stroke-width="2.0"/>
+  <text x="714" y="691" font-size="17" fill="var(--c0)" text-anchor="middle" font-weight="bold">DMA 写通道 · MAIN / ROI / EMB</text>
+  <rect x="904" y="630" width="232" height="110" rx="12" fill="var(--c6)" stroke="var(--c3)" stroke-width="2.0"/>
+  <rect x="914" y="640" width="212" height="90" rx="8" fill="none" stroke="var(--c5)" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="1020" y="693" font-size="22" fill="var(--c0)" text-anchor="middle" font-weight="bold">DDR 帧缓冲</text>
+  <rect x="1176" y="630" width="320" height="110" rx="12" fill="var(--c6)" stroke="var(--c3)" stroke-width="2.0"/>
+  <text x="1336" y="691" font-size="17" fill="var(--c0)" text-anchor="middle" font-weight="bold">下游 DMA 读 · ISP / PYM</text>
+  <polyline points="864,685 895,685" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="904,685 893,679.5 893,690.5" fill="var(--c0)"/>
+  <polyline points="1136,685 1167,685" fill="none" stroke="var(--c0)" stroke-width="4.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polygon points="1176,685 1165,679.5 1165,690.5" fill="var(--c0)"/>
+  <text x="1030" y="815" font-size="15" fill="var(--c0)" text-anchor="middle">CIM 写一遍 DDR、下游再读一遍 · 带宽翻倍 · 延迟更高</text>
+
+  <!-- 控制字段 -->
+  <text x="64" y="912" font-size="14" fill="var(--c0)" text-anchor="start" font-weight="bold">三个控制字段（均属 vin_attr_t）</text>
+  <rect x="70" y="924" width="460" height="38" rx="19" fill="var(--c10)" stroke="var(--c5)" stroke-width="1.4"/>
+  <text x="300" y="948" font-size="14" fill="var(--c2)" text-anchor="middle">cim_isp_flyby = 1 → CIM 直连 ISP（Online）</text>
+  <rect x="570" y="924" width="460" height="38" rx="19" fill="var(--c10)" stroke="var(--c5)" stroke-width="1.4"/>
+  <text x="800" y="948" font-size="14" fill="var(--c2)" text-anchor="middle">cim_pym_flyby = 1 → CIM 直连 PYM（Online，与前者互斥）</text>
+  <rect x="1070" y="924" width="460" height="38" rx="19" fill="var(--c10)" stroke="var(--c5)" stroke-width="1.4"/>
+  <text x="1300" y="948" font-size="14" fill="var(--c2)" text-anchor="middle">ddr_en = 1 → 主帧写 DDR（Offline）</text>
+</svg></div>
+    <div class="hint">滚轮缩放 · 拖拽平移 · 双击适应宽度</div>
+  </div>
+
+<script>
+(function () {
+  var GRID   = false;
+  var stage  = document.getElementById('stage');
+  var canvas = document.getElementById('canvas');
+  var label  = document.getElementById('zoom-label');
+  var scale = 1, tx = 0, ty = 0;
+
+  function apply() {
+    canvas.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0) scale(' + scale + ')';
+    label.textContent = Math.round(scale * 100) + '%';
+  }
+  // 量布局尺寸而非 getBoundingClientRect：后者在过渡进行中返回插值，再除以目标
+  // scale 会算出错误的宽高——过渡那 200ms 内按 F/Esc 就会 fit 歪。
+  function size() { return { w: canvas.offsetWidth, h: canvas.offsetHeight }; }
+  function ease(animate) {
+    stage.classList.toggle('anim', !!animate);
+    if (animate) setTimeout(function () { stage.classList.remove('anim'); }, 220);
+  }
+  function place(s, animate) {
+    var b = size(), r = stage.getBoundingClientRect();
+    ease(animate); scale = s;
+    tx = (r.width  - b.w * s) / 2;
+    ty = (r.height - b.h * s) / 2;
+    apply();
+  }
+  // 宽高同时满足，且单图封顶 1。只按宽度算的话，父页面给的 iframe 矮一点就会裁掉
+  // 画布下半截；两个方向都取小值，高度写错最多是图略小，永远不裁切。
+  function fit(animate) {
+    var b = size();
+    var s = Math.min((stage.clientWidth - 24) / b.w, (stage.clientHeight - 24) / b.h);
+    place(Math.min(GRID ? 1.5 : 1, s), animate);
+  }
+
+  function zoomTo(ns, cx, cy, animate) {
+    ns = Math.min(8, Math.max(0.1, ns));
+    ease(animate);
+    tx = cx - (cx - tx) * (ns / scale);
+    ty = cy - (cy - ty) * (ns / scale);
+    scale = ns; apply();
+  }
+
+  // 点某格 → 该格填满 stage。#canvas 是 offsetParent，故 offset* 直接就是画布本地坐标
+  function focusCell(cell) {
+    var u = cell.offsetLeft, v = cell.offsetTop;
+    var w = cell.offsetWidth, h = cell.offsetHeight;
+    var ns = Math.min(4, (stage.clientWidth - 40) / w, (stage.clientHeight - 40) / h);
+    ease(true); scale = ns;
+    tx = stage.clientWidth  / 2 - (u + w / 2) * ns;
+    ty = stage.clientHeight / 2 - (v + h / 2) * ns;
+    apply();
+  }
+
+  document.getElementById('zoom-in').onclick  = function () { zoomTo(scale * 1.3, stage.clientWidth / 2, stage.clientHeight / 2, true); };
+  document.getElementById('zoom-out').onclick = function () { zoomTo(scale / 1.3, stage.clientWidth / 2, stage.clientHeight / 2, true); };
+  document.getElementById('fit').onclick      = function () { fit(true); };
+  document.getElementById('one').onclick      = function () { place(1, true); };
+  document.getElementById('reset').onclick    = function () { place(1, true); setTimeout(function () { fit(true); }, 215); };
+  // ---- 主题：默认跟随主站（文档站把主题写在 <html data-theme>），手动可覆盖 ----
+  var MODES = ['auto', 'dark', 'light'];
+  var MODE_LABEL = { auto: '跟随主站', dark: '深色', light: '浅色' };
+  var mode = 'auto', applied = null;
+
+  function siteTheme() {
+    try {
+      if (window.parent && window.parent !== window) {
+        var t = window.parent.document.documentElement.getAttribute('data-theme');
+        if (t === 'dark' || t === 'light') return t;
+      }
+    } catch (e) { /* 跨域时退回系统偏好 */ }
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+  function applyTheme(t) {
+    if (t !== applied) { applied = t; document.documentElement.setAttribute('data-theme', t); }
+    document.getElementById('theme').textContent = MODE_LABEL[mode];
+  }
+  function syncTheme() { if (mode === 'auto') applyTheme(siteTheme()); }
+
+  document.getElementById('theme').onclick = function () {
+    mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
+    applied = null;
+    applyTheme(mode === 'auto' ? siteTheme() : mode);
+  };
+  try {
+    new MutationObserver(syncTheme).observe(
+      window.parent.document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  } catch (e) {}
+  setInterval(syncTheme, 500);          // MutationObserver 的兜底
+
+  stage.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    var r = stage.getBoundingClientRect();
+    zoomTo(scale * (e.deltaY < 0 ? 1.12 : 0.89), e.clientX - r.left, e.clientY - r.top, false);
+  }, { passive: false });
+
+  // 拖拽平移：挡掉默认文本选择 + 3px 启动阈值（避免点击被当成拖拽）
+  var down = false, moved = false, sx = 0, sy = 0, lx = 0, ly = 0, vx = 0, vy = 0, raf = 0;
+  var THRESHOLD = 3;
+
+  stage.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    cancelAnimationFrame(raf);
+    down = true; moved = false;
+    sx = lx = e.clientX; sy = ly = e.clientY; vx = vy = 0;
+    try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+
+  stage.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    if (!moved && Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy) < THRESHOLD) return;
+    if (!moved) { moved = true; stage.classList.add('grabbing'); }
+    vx = e.clientX - lx; vy = e.clientY - ly;
+    tx += vx; ty += vy; lx = e.clientX; ly = e.clientY;
+    apply();
+  });
+
+  function release(e) {
+    if (!down) return;
+    down = false;
+    stage.classList.remove('grabbing');
+    try { stage.releasePointerCapture(e.pointerId); } catch (_) {}
+    if (!moved) {
+      // 指针被 stage 捕获，事件 target 恒为 stage，只能按坐标找落点
+      if (GRID) {
+        var hit = document.elementFromPoint(e.clientX, e.clientY);
+        var cell = hit && hit.closest && hit.closest('.cell');
+        if (cell) focusCell(cell); else fit(true);
+      }
+      return;
+    }
+    (function glide() {                       // 轻微惯性，跟手一点
+      vx *= 0.92; vy *= 0.92;
+      if (Math.abs(vx) < 0.4 && Math.abs(vy) < 0.4) return;
+      tx += vx; ty += vy; apply();
+      raf = requestAnimationFrame(glide);
+    })();
+  }
+  stage.addEventListener('pointerup', release);
+  stage.addEventListener('pointercancel', release);
+  stage.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  stage.addEventListener('selectstart', function (e) { e.preventDefault(); });
+  stage.addEventListener('dblclick', function () { fit(true); });
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === '+' || k === '=') document.getElementById('zoom-in').click();
+    else if (k === '-' || k === '_') document.getElementById('zoom-out').click();
+    else if (k === 'f' || k === 'F') fit(true);
+    else if (k === '1') place(1, true);
+    else if (k === 'r' || k === 'R') { place(1, false); setTimeout(function () { fit(true); }, 20); }
+    else if (k === 't' || k === 'T') document.getElementById('theme').click();
+    else if (GRID && k === 'Escape') fit(true);
+  });
+
+  var q = new URLSearchParams(location.search).get('theme');
+  if (q === 'dark' || q === 'light') mode = q;   // 显式指定则不跟随
+  applyTheme(mode === 'auto' ? siteTheme() : mode);
+
+  window.addEventListener('resize', function () { fit(false); });
+  fit(false);
+})();
+</script>
+</body>
+</html>

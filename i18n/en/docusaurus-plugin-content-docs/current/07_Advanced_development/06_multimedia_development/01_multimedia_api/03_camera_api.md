@@ -627,6 +627,6 @@ HW: Super; SW: 1.0.0
 
 ## Related Documentation
 
-- [Video Input/Output - VIO](./04_vio_api.md)
+- [Video Input - VIN](./04_vin_api.md)
 - [Camera Usage](../../../03_Demos/01_peripheral/02_camera/01_mipi_camera.md)
 - [Camera Object](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)

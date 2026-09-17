@@ -627,6 +627,6 @@ HW: Super; SW: 1.0.0
 
 ## 相关文档
 
-- [视频输入输出 - VIO](/Advanced_development/multimedia_development/multimedia_api/vio_api)
+- [视频输入 - VIN](/Advanced_development/multimedia_development/multimedia_api/vin_api)
 - [摄像头使用](/Demos/peripheral/camera/mipi_camera)
 - [Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
