@@ -10,6 +10,38 @@ description: "串口压力测试"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+本文介绍如何对开发板板载 UART 串口进行压力测试，通过回环（loopback）方式在长时间高负载下收发大量数据，验证串口通信的稳定性与性能。测试由板端预置脚本 `uartstress.sh` 驱动，底层调用 `uart_test` 可执行程序。
+
+**适用范围**：RDK S100 / S600 开发板板载 UART 串口，本文示例默认使用 `/dev/ttyS2`（对应 uart2）。
+
+<DocScope products="RDK S100">
+
+S100 板载 4 路 UART（uart0~uart3），其中 uart2 与 i2c5 复用，需通过拨码开关切换。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+S600 板载 8 路 UART（uart0~uart7）。
+
+</DocScope>
+
+**适用读者**：进行硬件单元测试与整机稳定性验证的测试及开发人员。
+
+## 环境准备
+
+- 开发板已烧录官方发布的 RDK OS 镜像，且已正常启动。
+- 板端 `/app/chip_base_test/03_uart_test/` 下存在测试源码与脚本（`uartstress.sh`、`uart_test.c`、`Makefile`）；`uart_test` 可执行文件需按[编译执行文件](#编译执行文件)步骤生成。
+- 回环测试需先用杜邦线将所测串口的 `tx` 与 `rx` 短接。
+
+<DocScope products="RDK S100">
+
+- S100 测试 uart2 前需先禁用 i2c5、使能 uart2（修改设备树并重新编译 dtb 安装），并将拨码开关拨到 uart2 位置，详见[注意事项](#注意事项)。
+
+</DocScope>
+
 ## 代码位置
 
 本测试代码位于板端 `/app/chip_base_test/03_uart_test/` 目录：
@@ -24,20 +56,20 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 测试原理
 
-串口压测（ UART Stress Test）是一种通过大量数据交换和高负载操作来验证串口通信稳定性和性能的方法。它的原理主要是通过发送和接收大量的数据、模拟真实的串口使用场景，具体原理包括以下几个方面：
+串口压测（UART stress test）是一种通过大量数据交换和高负载操作来验证串口通信稳定性和性能的方法。它的原理主要是通过发送和接收大量的数据、模拟真实的串口使用场景，具体原理包括以下几个方面：
 
 - 数据发送与接收：串口压测的核心原理是通过将大量的数据发送到串口设备，然后再从串口设备接收数据。
   - 发送数据：通过脚本或程序生成大规模的数据包，通过串口接口发送到目标设备。
   - 接收数据：目标设备将接收到的数据返回（例如通过串口的回环测试或外部设备响应），压测程序会接收这些数据并进行比对和验证。
-- 波特率和数据帧设置：波特率（ Baud Rate）是串口通信的传输速率，通常以每秒传输的比特数（ bps）表示，串口通信还包括其他参数，如：
-  - 数据位（ Data bits）：每个数据帧中的数据位数（常见有 8 位、 7 位等）。
-  - 停止位（ Stop bits）：指示数据传输结束的位（通常为 1 或 2 位）。
-  - 校验位（ Parity bits）：用于检查数据传输中的错误（奇偶校验）。
+- 波特率和数据帧设置：波特率（baud rate）是串口通信的传输速率，通常以每秒传输的比特数（bps）表示，串口通信还包括其他参数，如：
+  - 数据位（data bits）：每个数据帧中的数据位数（常见有 8 位、 7 位等）。
+  - 停止位（stop bits）：指示数据传输结束的位（通常为 1 或 2 位）。
+  - 校验位（parity bits）：用于检查数据传输中的错误（奇偶校验）。
 
 ### 测试内容
 
 **1. 测试过程**：
-`uartstress.sh` 脚本使用的回环测试（ Loopback Test）是串口测试中常见的一种方法，其原理是将发送端的数据通过物理连接或其他方式发送回接收端，从而验证数据传输的正常与否。在源码 `uart_test.c` 中， `perform_single_loopback_test()` 函数实现了这种测试。其步骤如下：
+`uartstress.sh` 脚本使用的回环测试（loopback test）是串口测试中常见的一种方法，其原理是将发送端的数据通过物理连接或其他方式发送回接收端，从而验证数据传输的正常与否。在源码 `uart_test.c` 中， `perform_single_loopback_test()` 函数实现了这种测试。其步骤如下：
 
 - 打开串口并设置相关参数 `open_uart()`。
 - 初始化信号量 `sem_init()`，确保线程在合适的时机进行同步。
@@ -49,20 +81,20 @@ import DocScope from '@site/src/components/DocScope';
 
 **2. 命令解析**：
 
-- 测试命令：`uart_test" -l -s 1024 -c "$StressCount" -b "$Baudrate" -d "$Device" > "$uart_test_log_file"`
+- 测试命令：`uart_test -l -s 1024 -c "$StressCount" -b "$Baudrate" -d "$Device" > "$uart_test_log_file"`
 - 参数解析：
-  - `-l`：执行回环测试（ Loopback Test ）。
+  - `-l`：执行回环测试（loopback test）。
   - `-s 1024`：指定每次测试的数据大小为 1024 字节。
   - `-c "$StressCount"`：指定压力测试的次数，即测试重复的次数。
   - `-b "$Baudrate"`：设置串口通信的波特率，变量 $Baudrate 会根据实际传入的值设置。
   - `-d "$Device"`：指定串口设备，变量 $Device 是串口设备路径。
-  - `-> "$uart_test_log_file"`：将测试结果输出到指定的日志文件 "$uart_test_log_file"。
+  - `> "$uart_test_log_file"`：将测试结果输出到指定的日志文件 "$uart_test_log_file"。
 
-## 准备工作
+## 使用方法
 
 ### 压测脚本使用说明
 
-串口压测支持输入后缀 -h 查看命令参数的说明 ，例如：
+串口压测支持输入后缀 -h 查看命令参数的说明，例如：
 
 ```shell
 sunrise@ubuntu:/app/chip_base_test/03_uart_test$ ./uartstress.sh -h
@@ -80,11 +112,11 @@ Options:
 
 - `-b <baudrate>`：设置波特率，默认值是 115200。
 - `-d <device>`：该选项用于指定测试的串口设备，默认值为 /dev/ttyS2（脚本的 `-h` 帮助文本里误写为 `/dev/ttyS1`，实际生效的默认值仍为 `/dev/ttyS2`）。
-- `-c <count>`：指定了测试的压力次数，默认值是 100 。
+- `-c <count>`：指定了测试的压力次数，默认值是 100。
 - `-o <directory>`：设置日志输出目录，默认值为 ../log。
 
 **示例**：
-例如，使用命令： `./uartstress.sh -b 115200 -d /dev/ttyS2 -c 50 -o /app/chip_base_test` 自定义波特率为 115200 ，串口设备为 ttyS2( 与实际使用 uart 对应 )，循环次数为 50 次，输出目录为 /app/chip_base_test 。
+例如，使用命令： `./uartstress.sh -b 115200 -d /dev/ttyS2 -c 50 -o /app/chip_base_test` 自定义波特率为 115200，串口设备为 ttyS2（与实际使用 UART 对应），循环次数为 50 次，输出目录为 /app/chip_base_test。
 
 ### 执行程序使用说明
 
@@ -93,7 +125,7 @@ Options:
 ```shell
 Usage: uart_test [OPTIONS]
 Options:
-  -s, --size      : 指定测试数据大小（ KB），默认为 1024KB，最大为 20480KB（ 20MB）
+  -s, --size      : 指定测试数据大小（KB），默认为 1024KB，最大为 20480KB（20MB）
   -b, --baudrate  : 指定 UART 的波特率，默认为 115200
   -c, --count     : 指定测试迭代次数，默认为无限循环
   -d, --device    : 指定 UART 设备路径
@@ -106,13 +138,13 @@ Options:
   -h, --help      : 显示帮助信息
 ```
 
-如要更改测试模式，只需将脚本 `uartstress.sh` 中 `-l` 改成 其他测试模式即可，例如，（ UART 只写模式测试）：
+如要更改测试模式，只需将脚本 `uartstress.sh` 中 `-l` 改成 其他测试模式即可，例如，（UART 只写模式测试）：
 
 ```shell
 "${script_dir}/uart_test" -w -s 1024 -c "$StressCount" -b "$Baudrate" -d "$Device" > "$uart_test_log_file"
 ```
 
-之后将 uart2_rx 与 uart2_tx 通过 ttl 串口转接模块连接至 pc 端，打开串口工具即可接收发送内容。
+之后将 uart2_rx 与 uart2_tx 通过 TTL 串口转接模块连接至 PC 端，打开串口工具即可接收发送内容。
 
 ```shell
 Test uart device:/dev/ttyS2
@@ -268,11 +300,15 @@ This is uart send test 50 times
 
 ## 常见问题
 
+<DocScope products="RDK S100">
+
 ### uart2 收发无数据
 
 **原因**：`i2c5` 与 `uart2` 存在复用，需修改设备树并将拨码开关拨到 `uart2` 位置。
 
 **解决**：按「注意事项」禁用 `i2c5`、使能 `uart2`（重新编译 dtb 安装），拨码拨到 `uart2`，并用杜邦线连接 `uart2_tx`/`uart2_rx`。
+
+</DocScope>
 
 ### 串口压测数据误码或丢失
 
@@ -283,5 +319,5 @@ This is uart send test 50 times
 ## 相关文档
 
 - [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [概述](/Advanced_development/driver_development/hardware_unit_test)
+- [概述](./01_overview.md)
 - [搭建开发环境](/Advanced_development/environment_build/environment_build)
