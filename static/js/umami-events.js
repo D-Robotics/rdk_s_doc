@@ -1,11 +1,20 @@
 // 站内自定义事件埋点：search / nav-click / cross-product / outbound / search-miss
 // 统一事件委托，不改动文档内容。各站 static/ 各放一份，经 docusaurus.config.js scripts 引入。
-// search-miss：Algolia DocSearch 空结果用 MutationObserver（.DocSearch-NoResults）捕获；
-// 本地搜索的空结果需 swizzle 搜索组件（见 doc-analytics-ops §3.8），不在此脚本。
+// search-miss 覆盖四种空结果 UI，全部走「文本匹配 + 弹层/全页独立去重」，不依赖 swizzle：
+//   Algolia DocSearch      弹层 .DocSearch-NoResults；全页 <p>「未找到任何结果 / No results were found」
+//   docusaurus-search-local 弹层 EmptyTemplate 文案（无稳定类名）；全页 <p>「没有找到任何文档 / No documents were found」
+// 注：easyops 的 SearchBar 组件无 getSwizzleConfig，eject 后相对 import 无法解析（构建失败），故不做 swizzle。
 (function () {
   "use strict";
 
   var INTERNAL_DOMAIN = "developer.d-robotics.cc";
+
+  // 空结果文案表：zh 走包内翻译 / Algolia 内置，en 走各仓 i18n/en/code.json 覆盖。
+  var MODAL_MISS_TEXTS = ["没有找到任何文档", "No results"]; // 弹层（easyops）
+  var PAGE_MISS_TEXTS = [
+    "未找到任何结果", "No results were found",      // 全页 · Algolia
+    "没有找到任何文档", "No documents were found", // 全页 · easyops
+  ];
 
   function track(name, data) {
     if (typeof window.umami !== "undefined" && typeof window.umami.track === "function") {
@@ -14,7 +23,6 @@
   }
 
   // 产品 baseUrl 前缀（跨产品跳转判断用）。新增产品线在此补一行。
-  // 含暂未装埋点脚本的仓（xburn/magicbox/rdk_studio/robogo），仅作跳转目标（to）识别。
   var PRODUCTS = [
     { key: "rdk_s", path: "rdk_s_doc" },
     { key: "rdk_x", path: "rdk_x_doc" },
@@ -25,6 +33,7 @@
     { key: "magicbox", path: "magicbox_doc" },
     { key: "rdk_studio", path: "rdk_studio_doc" },
     { key: "robogo", path: "robogo_doc" },
+    { key: "accessories_audio_kit", path: "accessories_audio_kit_doc" },
   ];
 
   function productOf(pathname) {
@@ -101,18 +110,38 @@
     }
   });
 
-  // 3) search-miss：Algolia DocSearch 空结果，两种 UI 各自独立去重、用 surface 区分：
-  //    - 弹层（右上角搜索框）：出现 .DocSearch-NoResults，query 取输入框
-  //    - 全页（/search?q=…）：出现「未找到任何结果 / No results were found」的 <p>，query 取 URL ?q=
-  function bindDocSearchMiss() {
+  // 3) search-miss：空结果，两种 UI 各自独立去重、用 surface 区分（modal / page）。
+  function bindSearchMiss() {
     if (typeof MutationObserver === "undefined") return;
     var lastModalQuery = null;
     var lastPageQuery = null;
     var timer = null;
 
+    // 在 root 子树内找「文本恰好等于 texts 之一」的元素。类名是 CSS module 哈希、不可依赖，
+    // 故按翻译文案匹配；只扫 span/p，避免命中外层容器拼接出的长文本。
+    function textIn(root, texts) {
+      if (!root) return "";
+      var nodes = root.querySelectorAll("span, p");
+      for (var i = 0; i < nodes.length; i++) {
+        var t = (nodes[i].textContent || "").trim();
+        for (var j = 0; j < texts.length; j++) {
+          if (t === texts[j]) return t;
+        }
+      }
+      return "";
+    }
+
     function modalQuery() {
-      var input = document.querySelector(".DocSearch-Input");
+      var input =
+        document.querySelector(".DocSearch-Input") ||
+        document.querySelector("input.navbar__search-input");
       return input ? (input.value || "").trim() : "";
+    }
+    function modalMiss() {
+      // Algolia DocSearch 弹层
+      if (document.querySelector(".DocSearch-NoResults")) return true;
+      // docusaurus-search-local 弹层：限定在搜索框容器内，避免误报页面其它同名文本
+      return !!textIn(document.querySelector(".navbar__search"), MODAL_MISS_TEXTS);
     }
     function pageQuery() {
       try {
@@ -122,19 +151,14 @@
       }
     }
     function pageMissText() {
-      // 仅在 /search 全页路径上找空结果 <p>，避免误报其它页面的同名文本
+      // 仅在 /search 全页路径上找空结果，避免误报其它页面的同名文本
       if (!/\/search\/?$/.test(location.pathname)) return "";
-      var ps = document.querySelectorAll("p");
-      for (var i = 0; i < ps.length; i++) {
-        var t = (ps[i].textContent || "").trim();
-        if (t === "未找到任何结果" || t === "No results were found") return t;
-      }
-      return "";
+      return textIn(document, PAGE_MISS_TEXTS);
     }
 
     function flush() {
       // 弹层空结果
-      if (document.querySelector(".DocSearch-NoResults")) {
+      if (modalMiss()) {
         var mq = modalQuery();
         if (mq && mq !== lastModalQuery) {
           lastModalQuery = mq;
@@ -163,5 +187,5 @@
     // documentElement 在 <head> 阶段即已存在；document.body 在 async 脚本早跑时可能为 null，observe(null) 会抛错导致 observer 永不建立。
     observer.observe(document.documentElement, { childList: true, subtree: true });
   }
-  bindDocSearchMiss();
+  bindSearchMiss();
 })();
