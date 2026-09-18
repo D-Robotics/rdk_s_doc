@@ -47,8 +47,8 @@ description: "sample_gpu_3d 使用说明 板端示例使用说明"
 运行日志：
 ```sh
 ./matrix_multiply
-CPU execution time: 0.997923 seconds
-OpenCL execution time: 0.038153 seconds
+CPU execution time: 0.711159 seconds
+OpenCL execution time: 0.030463 seconds
 Matrices are identical!
 ```
 效果说明
