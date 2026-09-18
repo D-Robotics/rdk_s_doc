@@ -696,7 +696,7 @@ Run the program directly with `./uvc_capture_sample -h` to display help informat
   - Sets the image height (in pixels).
 - `-W, --width <px>`
   - Sets the image width (in pixels).
-- `-E, --show_isp_info`
+- `-E, --isp_info`
   - Displays ISP exposure and white balance information.
 - `-h, --help`
   - Displays help information.
