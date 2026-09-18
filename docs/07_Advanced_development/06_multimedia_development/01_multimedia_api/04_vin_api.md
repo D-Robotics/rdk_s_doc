@@ -4,8 +4,6 @@ title: "视频输入 - VIN"
 description: "RDK S100/S600 5.5.1.4 VIN（视频输入模块）"
 ---
 
-import useBaseUrl from '@docusaurus/useBaseUrl';
-
 # 视频输入 - VIN
 
 > **层级说明**：本篇是【底层多媒体 API】中的 **VIN 模块使用文档**。VIN 在 HBN 框架里是 `HB_VIN` 类型的 vnode，本篇讲清它**是什么、怎么接、有哪些接口、典型怎么用**，读完即可上手开发。通用 vnode 接口的完整字段表见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)；Sensor 侧配置见 [相机接口 - Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api)。
@@ -52,7 +50,7 @@ VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 
 
 ### VIN 在链路中的位置
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/viewer-fig1-vin-position.html')} title="VIN 在相机链路中的位置与上下游" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 893', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![VIN 在相机链路中的位置与上下游](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig1-vin-position.svg)
 
 ### VIN 的四个子模块
 
@@ -145,7 +143,7 @@ VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下�
 
 LPWM 同时记录触发时刻，随帧信息一起返回，可用于多路相机之间的时间戳对齐。
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/viewer-fig2-frame-lifecycle.html')} title="一帧数据的完整生命周期" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 446', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![一帧数据的完整生命周期](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig2-frame-lifecycle.svg)
 
 ## CIM 内部结构与可配功能块
 
@@ -175,7 +173,7 @@ CIM 抓到的数据有两条出路，由 `vin_attr_t` 里的三个字段决定�
 
 `vin_node_attr.cim_attr.cim_isp_flyby` 与 `vin_node_attr.cim_attr.cim_pym_flyby` **互斥**，同一时刻只能有一个为 1；而它与 `vin_ochn_attr[x].ddr_en` **不互斥**——主帧可以既落 DDR、同时又 OTF 送一份给 ISP，代价是带宽。
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/viewer-fig3-otf-vs-ddr.html')} title="Online OTF 与 Offline DDR 两条通路" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 684', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![Online OTF 与 Offline DDR 两条通路](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig3-otf-vs-ddr.svg)
 
 ### Online（OTF）
 
@@ -212,11 +210,25 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 | 3 | 4 路 RAW Sensor | 1 路 Online + 3 路 Offline | 两个 ISP |
 | 4 | 4 路 YUV Sensor | Offline（DDR） | PYM |
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/viewer-cim-scenes.html')} title="CIM 典型组合：四种场景" style={{width: '100%', maxWidth: '1400px', aspectRatio: '1200 / 907', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![场景 1　4 路 RAW，全部 Online（OTF）输出至 ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene1.png)
+
+**场景 1　4 路 RAW，全部 Online（OTF）输出至 ISP**
+
+![场景 2　4 路 RAW，全部 Offline（DDR）输出至 ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene2.png)
+
+**场景 2　4 路 RAW，全部 Offline（DDR）输出至 ISP**
+
+![场景 3　4 路 RAW，1 路 Online + 3 路 Offline，分送两个 ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene3.png)
+
+**场景 3　4 路 RAW，1 路 Online + 3 路 Offline，分送两个 ISP**
+
+![场景 4　4 路 YUV，Offline（DDR）输出至 PYM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene4.png)
+
+**场景 4　4 路 YUV，Offline（DDR）输出至 PYM**
 
 ## API 调用流程
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/viewer-fig4-api-sequence.html')} title="API 典型调用时序" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 817', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![API 典型调用时序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig4-api-sequence.svg)
 
 <details>
 <summary>展开：函数调用参考</summary>

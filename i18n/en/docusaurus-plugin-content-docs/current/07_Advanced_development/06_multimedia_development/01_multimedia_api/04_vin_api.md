@@ -4,8 +4,6 @@ title: "Video Input - VIN"
 description: "RDK S100/S600 5.5.1.4 VIN (Video Input)"
 ---
 
-import useBaseUrl from '@docusaurus/useBaseUrl';
-
 # Video Input - VIN
 
 > **Level**: This is the **VIN module guide** in the Low-level Multimedia API set. VIN is a vnode of type `HB_VIN` in the HBN framework. It covers **what VIN is, how to bring it up, which interfaces it exposes and how it is typically used** — enough to start developing. For the full field tables of the generic vnode interfaces see [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api); for sensor-side configuration see [Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api).
@@ -51,7 +49,7 @@ The abbreviations and terms used in this document. **Skim these first** — `CPE
 
 ### Where VIN Sits in the Camera Chain
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/en/viewer-fig1-vin-position.html')} title="Where VIN sits in the camera chain" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 893', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![Where VIN sits in the camera chain](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig1-vin-position.svg)
 
 ### VIN's Four Sub-modules
 
@@ -144,7 +142,7 @@ VIN presents itself as a vnode. All configuration is carried in `vin_attr_t` and
 
 LPWM also records the trigger timestamp, which comes back with the frame information and can be used to align timestamps across cameras.
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/en/viewer-fig2-frame-lifecycle.html')} title="Frame lifecycle from trigger to release" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 446', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![Frame lifecycle from trigger to release](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig2-frame-lifecycle.svg)
 
 ## CIM Internals and Configurable Blocks
 
@@ -174,7 +172,7 @@ The data CIM captures has two possible destinations, decided by three fields in 
 
 `vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` are **mutually exclusive** — only one can be 1 at a time. Neither is exclusive with `vin_ochn_attr[x].ddr_en`: the main frame can land in DDR *and* be sent OTF to the ISP at the same time, at the cost of bandwidth.
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/en/viewer-fig3-otf-vs-ddr.html')} title="The Online OTF and Offline DDR paths" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 684', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![The Online OTF and Offline DDR paths](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig3-otf-vs-ddr.svg)
 
 ### Online (OTF)
 
@@ -211,11 +209,25 @@ The four IPIs of one CIM can **mix** Online and Offline, feeding different downs
 | 3 | 4× RAW sensor | 1× Online + 3× Offline | Two ISPs |
 | 4 | 4× YUV sensor | Offline (DDR) | PYM |
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/en/viewer-cim-scenes.html')} title="Typical CIM combinations: four scenarios" style={{width: '100%', maxWidth: '1400px', aspectRatio: '1200 / 907', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![Case 1 · 4× RAW, all Online (OTF) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene1.png)
+
+**Case 1 · 4× RAW, all Online (OTF) to the ISP**
+
+![Case 2 · 4× RAW, all Offline (DDR) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene2.png)
+
+**Case 2 · 4× RAW, all Offline (DDR) to the ISP**
+
+![Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene3.png)
+
+**Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs**
+
+![Case 4 · 4× YUV, Offline (DDR) to the PYM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene4.png)
+
+**Case 4 · 4× YUV, Offline (DDR) to the PYM**
 
 ## API Call Flow
 
-<iframe src={useBaseUrl('/html/07_Advanced_development/06_multimedia_development/vin/en/viewer-fig4-api-sequence.html')} title="Typical API call sequence" style={{width: '100%', maxWidth: '980px', aspectRatio: '980 / 817', display: 'block', margin: '0 auto'}} loading="lazy"></iframe>
+![Typical API call sequence](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig4-api-sequence.svg)
 
 <details>
 <summary>Expand: function call reference</summary>
