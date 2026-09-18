@@ -105,7 +105,12 @@ root@ubuntu:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# export WAY
 
 #### 运行效果
 
-运行日志：无
+运行日志：
+```shell
+root@drobot:/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier# ./bezier
+Using WAYLAND_DISPLAY: /run/user/1000/wayland-0
+Saved bezier.bmp
+```
 
 效果说明:
 1. 显示器桌面会显示一个窗口： 窗口中显示一条 红色的贝塞尔曲线
