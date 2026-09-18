@@ -1,39 +1,92 @@
 ---
 sidebar_position: 1
-title: "基础框架 - HBN"
+title: "HBN 框架说明"
 description: "RDK S100/S600 多媒体基础框架 HBN API"
 ---
 
-# 基础框架 - HBN
-
-> **层级说明**：本篇是【底层多媒体 API】（板端 `hbn_vpf_interface.h`），HBN vnode 抽象层 API，是 Camera 之后各模块（VIN/ISP/PYM/GDC）的统一节点接口。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
-
-
-> **平台代号说明**：本文兼容性标注沿用底层头文件原始写法——XJ3/J3、Ultra 为更早代上游平台代号，X5 为现行上游产品线代号（非本两板），Super/J6 为本产品线同源架构代号（板端实证：S100/S600 同源，S600 为多核形态）。`HW:` 列表表示该接口在上游多代平台的适用范围，其中 Super 代即对应本产品线（继承自上游标注，未逐一板端验证）；`SW` 为上游软件版本号，RDK 对应版本以 Release Note 为准。未列入代号的接口表示继承自上游、RDK 侧未逐一验证。
-
+# HBN 框架说明
 ## 概述
+摄像头链路的模块使用统一的HBN API(图中**橙色**部分)，主要有如下三部分组成
+1. `HBN Framework API`（图中**红色**部分）：实现对 SOC 中硬件加速单元的软件抽象， 本章将详细描述
+2. `Camera API`（图中**绿色**部分）：实现对 SOC 外的硬件模块的抽象，包括摄像头、加串器、解串器
+3. `ISP API`（图中**紫色**部分）：实现对 ISP模块参数的动态调整
 
-在软件上，Camera 是单独一套 API，Camera 之后的模块用 vnode 来抽象，vnode 抽象的模块包括 VIN、ISP、PYM、GDC。
-多个 vnode 组成一条 vflow（类似于一条 pipeline）。Camera 和 VIN 通过 attach 接口绑定起来。
-用户只需要调用 HBN 接口完成模块的初始化和绑定，vflow 建立并启动后，用户无须关心数据帧的传递，SDK 内部会将数据帧由上游传递到下游。
+HBN 框架覆盖了摄像头采集链路中大部分的模块，包括 VIN、ISP、PYM、GDC、STITCH。
+其中 `Camera API` 没有包含在 HBN 框架中，但是可以通过对应的 `attach` 函数绑定到 HBN 框架中。
+总的来说， HBN 框架覆盖了摄像头采集链路的所有模块，并且提供了简单灵活的 API。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/28afb7cb9d1a5de6c889657a0e548e82.jpg" alt="HBN Vflow/Vnode 架构图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-一个 vflow 由一个或多个 vnode 组成，一个 vnode 有一个输入通道，一个或多个输出通道。
-
-接口调用示例：
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/492ed46bde119b791326f621b9f5b064.png" alt="HBN API 接口调用示例流程图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+![软件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/soft_framework_hbn_highlight.png)
 
 ## 软件抽象
 
-HBN 用 vnode 抽象 Camera 之后的硬件模块（VIN、ISP、PYM、GDC），每个 vnode 对应一个硬件模块；多个 vnode 组成一条 vflow（类 pipeline）。Camera 与 VIN 通过 attach 接口绑定。vflow 建立并启动后，数据帧由 SDK 内部从上游传递到下游，用户无须手动传帧。
+HBN 框架中将 VIN、ISP、PYM、GDC、STITCH 中的每个模块用 vnode 来抽象，多个 ``vnode`` 连接成一个 ``vflow`` （类似于一条流水线）。
+由于 `Camera` 使用独立的 API，所以 HBN 框架提供了 attach 接口，实现 Camera 和 VIN 进行绑定， 从而实现了完整的流水线。
 
-## vnode 连接方式
+1. vnode 是对硬件加速单元的抽象，在 HBN 框架中 VIN、ISP、PYM、GDC、STITCH ，都会抽象成 vnode 的概念， vnode 包含如下属性 ：
+   - 硬件加速单元本身的属性，[ 比如 isp_attr_t](#isp_attr_t)
+   - 硬件加速单元输入通道的属性，[ 比如 isp_ichn_attr_t](#isp_ichn_attr_t)
+   - 硬件加速单元输出通道的属性，[ 比如 isp_ochn_attr_t](#isp_ochn_attr_t)
+2. 多个 vnode 连接起来形成 1 个 vflow, 支持同时创建多条 vflow, 不同 vflow 之间是完全独立的 , 连接 vnode 的流程如下：
+    - 创建 vflow 的接口：[hbn_vflow_create](#hbn_vflow_create)
+    - vflow 中添加 vnode 节点的接口：[hbn_vflow_add_vnode](#hbn_vflow_add_vnode)
+    - 在 vflow 中绑定两个 vnode 的接口：[hbn_vflow_bind_vnode](#hbn_vflow_bind_vnode)
+    - 启动 vflow 的接口：[hbn_vflow_start](#hbn_vflow_start)
+3. 对于 ``HBN API`` 中非 ``HBN Framework API`` 的模块，比如 Camera 支持使用 attach 接口绑定到 vflow 中
+4. 对于非 ``HBN API`` 中的模块， 比如 BPU 和 Display 等，通过接口 ``hbn_vnode_get_output_frame`` 从 vflow 中获取视频帧然后调用对应的接口送入到硬件单元中
+
+下图是三种场景的 vflow 例子（场景 1 中 **回灌** 的含义：数据源来自 DDR 的情况）：
+
+![软件抽象](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_framework_abstract.png)
+
+1. 场景 1 ：单路 vflow( 回灌 )
+   - 场景描述：视频帧来自 DDR ( 比如读取视频文件到 DDR)，使用 GDC 对视频帧进行畸变矫正
+   - 数据源：数据源没有包含在 vflow 中，需要在线程中主动将 DDR 中的视频帧送入到 vflow 中
+   - vflow 中至少有 1 个 vnode，可以有多个，只有 1 个节点时可以不绑定到 vflow 中，多个 vnode 节点并且需要连接起来时，必须绑定到 vflow
+   - ISP、 GDC、STITCH 都支持回灌的方式
+2. 场景 2 ：单路 vflow
+   - 场景描述：接入 1 路 Camera, 分别经过 VIN、 ISP、 GDC、 PYM，在 PYM 中输出 3 个通道，分别进行如下处理，
+     - 通道 0 ：交给 CODEC 进行编码
+     - 通道 1 ：交给 Display 进行显示
+     - 通道 2 ：交给 BPU 进行推理
+   - 数据源：通过 mipi 接口接入的 Camera Sensor
+   - vflow 中包含数据源， vflow 启动后， HBN 框架会自动调度完成数据流的传递，不需要开发者介入
+   - vflow 启动后，可以从末尾节点持续获取视频帧，并传递到非 HBN API 中的加速单元，比如图中 虚线框中的设备 (Codec、 Display、 BPU)
+3. 场景 3 ：多路 vflow
+   - 场景描述：接入 2 路 Camera, 分别经过不同的处理链路
+   - 数据源：每个 vflow 中各接入 1 个 Camera
+   - 使用两个 vflow 完成两路视频链路的采集
+   - 两个 vflow 之间是完全独立
+
+## vnode 连接
+vnode 之间通过输入通道和输出通道进行连接 :
+
+- 每个 vnode 节点，有一个输入通道和多个输出通道
+- 上游 vnode 的输出通道和下游 vnode 的输入通道连接 , 多个 vnode 连接成一个 vflow
+- 上游 vnode 节点的输出通道决定了 vnode 的连接方式
+
+下面从三个方面展开描述：输入通道、输出通道、连接方式
+
+### 输入通道
 
 ### 输出通道
 
-一个 vnode 有一个输入通道、一个或多个输出通道，输出通道 id 见各模块通道说明。
+- 输出通道决定了 vnode 的连接方式，支持 online 模式和 offline 模式，详细见 [ 系统概述 ](./0-Overview_zh_CN.html#id8)
+- 只有 `VIN 到 ISP` 和 `ISP 到 VSE` 支持 online 通道，其他模块之间只支持 offline 通道
+
+| 模块 | 输出通道编号 | 通道功能                            |
+|------|--------------|-------------------------------------|
+| VIN  | 0            | offline 通道，输出 camera 帧到 ddr      |
+|      | 1            | online 通道，连接到 isp               |
+|      | 3            | offline 通道，只输出 emb data 到 ddr    |
+| ISP  | 0            | offline 通道，输出 isp 处理后的帧到 ddr |
+|      | 1            | online 通道，连接到 vse               |
+| VSE  | 0            | offline 通道， 4K Downscale           |
+|      | 1            | offline 通道， 1080P0 Downscale       |
+|      | 2            | offline 通道， 1080P1 Downscale       |
+|      | 3            | offline 通道， 720P0 Downscale        |
+|      | 4            | offline 通道， 720P1 Downscale        |
+|      | 5            | offline 通道， 4K Upscale             |
+| GDC  | 0            | offline 通道，输出 gdc 处理后的帧到 ddr |
 
 ### 连接方式
 

@@ -41,6 +41,14 @@ description: "示例代码介绍 板端示例使用说明"
 
 ## 示例使用指南
 
+### 硬件使用指南
+#### 单Serdes的摄像头拓展板
+![单个Serdes 摄像头子板](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_camera_extren_board_mipi_link_label.png)
+
+#### 三Serdes的摄像头拓展板
+![三个Serdes 摄像头子板](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_camera_extren_board_mipi_link_label_3serdes.png)
+
+### 软件使用指南
 所有示例程序、依赖的资源文件，默认安装在开发板的 `/app/multimedia_samples` 目录下，用户可以直接登录开发板使用这些示例。例如想要使用 sample_pym 示例，可以按照以下命令使用：
 
 ```
