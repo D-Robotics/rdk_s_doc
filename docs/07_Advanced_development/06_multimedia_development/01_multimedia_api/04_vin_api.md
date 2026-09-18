@@ -579,9 +579,10 @@ VIN 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。常用接�
 
 ## API 接口说明
 
-下文 13 个接口的返回值约定一致：**成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码**（实现为 `-HBN_STATUS_xxx`），各小节不再重复。
+下文 13 个接口有两条共性约定，各小节不再重复。
 
-其中 `set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` 五个是**宏**——转发到带 `_s` 后缀的同名函数，长度由 `sizeof(*(attr))` 自动取得。因此**不能传 `void *`**，必须传指向具体类型的指针，下文不再重复。
+- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。完整清单见[基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#返回值说明)——注意那张表按**正值**列出（`10`、`13`…），而接口返回的是它的**负值**（`-10`、`-13`…）；VIN 上实际会遇到的返回码及处理建议见[常见返回码](#常见返回码)。
+- **五个宏**：`set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` 转发到带 `_s` 后缀的同名函数，长度由 `sizeof(*(attr))` 自动取得，因此**不能传 `void *`**，必须传指向具体类型的指针。
 
 ### hbn_vnode_open
 

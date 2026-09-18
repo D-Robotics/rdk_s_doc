@@ -578,9 +578,10 @@ Stream creation and binding use `hbn_vflow_create` / `hbn_vflow_add_vnode` / `hb
 
 ## API Interface Description
 
-All 13 interfaces below follow the same return convention: **`HBN_STATUS_SUCESS` (0) on success, a negative error code on failure** (implemented as `-HBN_STATUS_xxx`). Individual sections do not repeat this.
+All 13 interfaces below share two conventions, which the individual sections do not repeat.
 
-Five of them — `set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` — are **macros** that forward to the same-named function with an `_s` suffix, taking the length from `sizeof(*(attr))`. They therefore **cannot take a `void *`**: you must pass a pointer to the concrete type. Not repeated below.
+- **Return value**: `HBN_STATUS_SUCESS` (0) on success, a negative error code on failure (implemented as `-HBN_STATUS_xxx`). The full list is in [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#return-value-description) — note that it lists the codes as **positive** (`10`, `13`, …) while the interfaces return them **negated** (`-10`, `-13`, …); the codes VIN actually returns, with what to do about each, are in [Common Return Codes](#common-return-codes).
+- **Five macros**: `set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` forward to the same-named functions with an `_s` suffix, taking the length from `sizeof(*(attr))`. They therefore **cannot take a `void *`**: you must pass a pointer to the concrete type.
 
 ### hbn_vnode_open
 
