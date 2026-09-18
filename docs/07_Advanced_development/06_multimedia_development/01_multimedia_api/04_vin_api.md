@@ -68,8 +68,6 @@ VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 
 | 项目 | S100 |
 | --- | --- |
 | VIN / CIM 实例 | 3 个 |
-| MIPI RX 数量 | 3 个 |
-| 每路 RX 虚拟通道（VC） | 4 路 |
 | ISP 实例与最大分辨率 | 2 个，4096 × 2160 |
 | PYM 实例 | 3 个 |
 | YNR 实例 | 1 个 |
@@ -83,8 +81,6 @@ VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 
 | 项目 | S600 |
 | --- | --- |
 | VIN / CIM 实例 | 6 个 |
-| MIPI RX 数量 | 6 个 |
-| 每路 RX 虚拟通道（VC） | 4 路 |
 | ISP 实例与最大分辨率 | 4 个，5696 × 3328 |
 | PYM 实例 | 5 个 |
 | YNR 实例 | 4 个 |
@@ -92,6 +88,8 @@ VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 
 | LPWM 实例 / 通道 | 4 个 / 16 通道 |
 
 </DocScope>
+
+表中 ISP / PYM / YNR / GDC 是 **VIN 的下游模块**，列在这里只为给出全局比例，规格以各自模块的文档为准；每路 RX 自己的承载能力见[平台能力上限](#平台能力上限)。
 
 多路相机按 `hw_id` 区分，**`hw_id` 就是 MIPI RX 通道号**。
 
@@ -110,26 +108,6 @@ S600 合法的 `hw_id` 为 `0`–`5`。
 </DocScope>
 
 
-## 软件抽象
-
-VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下发（`hbn_vnode_set_attr`）；建流与绑定交给 `hbn_vflow_*`。
-
-| 类型 | 作用 | 关键成员 |
-| --- | --- | --- |
-| `vin_attr_t` | VIN 的全部配置 | `vin_node_attr`、`vin_attr_ex`、`vin_ichn_attr`、`vin_ochn_attr[VIN_TYPE_INVALID]`、`vin_ochn_buff_attr[VIN_TYPE_INVALID]`、`magicNumber` |
-| `vin_attr_ex_t` | 扩展属性 | `cim_static_attr`、`mipi_ex_attr`、`fps_ctrl`（跳帧）、`dynamic_fps_attr`（动态帧率）、`ipi_reset`、`bypass_enable` |
-| `vin_node_attr_t` | 节点级属性 | `cim_attr`、`vcon_attr`、`lpwm_attr`、`flow_id` |
-| `cim_attr_t` | 接入与通路配置 | `mipi_en` / `mipi_rx` / `vc_index` / `ipi_channels`、`cim_isp_flyby`、`cim_pym_flyby`、`rdma_input`、`tpg_input`、`func` |
-| `vcon_attr_t` | 板级连接配置 | `bus_main` / `bus_second`、`poc_map`、`gpios[]`、`lpwm_chn[]`、`rx_phy_mode` / `rx_phy_index` |
-| `vin_ichn_attr_t` | 输入通道属性 | `width`、`height`、`format` |
-| `vin_ochn_attr_t` | 输出通道属性，按 `ochn_id` 索引 | `ddr_en` / `roi_en` / `emb_en` / `rawds_en`、`vin_basic_attr`、`roi_attr`、`emb_attr` |
-| `vin_ochn_buff_attr_t` | 输出通道的 buffer 属性 | `buffers_num`、`flags` |
-
-**`hw_id`**：打开 VIN 时指定的硬件编号，**即 MIPI RX 通道号**。
-
-**`ochn_id`**：VIN 对外有 3 个数据通道——`0` 主帧、`4` ROI、`3` EMB。各通道能力见 [API 接口说明](#api-接口说明)。
-
-**接口分属三个库**：`hbn_vnode_*` / `hbn_vflow_*` 在 `libvpf.so`，`hbn_camera_*` 在 `libcam.so`，`hb_mem_*` 在 `libhbmem.so`。
 
 ## 一帧数据的流转
 
@@ -225,6 +203,242 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 ![场景 4　4 路 YUV，Offline（DDR）输出至 PYM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene4.png)
 
 **场景 4　4 路 YUV，Offline（DDR）输出至 PYM**
+
+## 接入评估
+
+选型前先算两笔账：**数据量能不能传**、**通路能不能扛**。
+
+### 数据量计算
+
+一路相机的原始数据量：
+
+```
+数据量(bps) = 宽 × 高 × 帧率 × 位深
+```
+
+- 1 路 8M RAW12@30fps：`3840 × 2160 × 30 × 12 ≈ 2.99 Gbps`
+- 1 路 2M RAW12@30fps：`1920 × 1080 × 30 × 12 ≈ 0.75 Gbps`
+
+> 这是**有效像素**口径。链路实际承载的还要加上 Sensor 的 blanking（消隐期），后文[算例](#算例)给出两者的差距——**核算带宽用含 blanking 的值**。
+
+### IPI 的传输效率
+
+MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**，像素时钟标称值见[平台能力上限](#平台能力上限)。两种数据类型每个 clock 能打包的像素数不同：
+
+| 数据类型 | 每个 IPI clock 可传 | 说明 |
+| --- | --- | --- |
+| RAW（RAW8/10/12/14） | **3 个 pixel** | 3 × 16bit 刚好填满 48bit |
+| YUV | **1 个 pixel** | 总线利用率只有 1/3 |
+
+因此同一个 IPI，传 RAW 的可用带宽是传 YUV 的 **3 倍**。**接入 YUV 模组（Sensor 内部已做 ISP）时尤其要注意这条**——它往往先于 PHY 带宽成为瓶颈。
+
+> 48bit 模式与 RAW/YUV 打包比例均取自本平台驱动；像素时钟为驱动标称值，实际按接入配置计算。
+
+### 平台能力上限
+
+<DocScope products="RDK S100">
+
+| 项目 | S100 |
+| --- | --- |
+| MIPI RX 路数 | 3 个 |
+| 每路 RX 的 lane / trio | D-PHY ≤ 4 lane；C-PHY ≤ 3 trio |
+| 单 lane / 单 trio 速率范围 | D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps |
+| **每路 RX 的 PHY 承载上限** | **D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28） |
+| 每路 RX 的虚拟通道（VC） | 4 个 |
+| 每个 CIM 的 IPI 通道数 | 4 个 |
+| IPI 像素时钟（标称） | 600 MHz |
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| 项目 | S600 |
+| --- | --- |
+| MIPI RX 路数 | 6 个 |
+| 每路 RX 的 lane / trio | D-PHY ≤ 4 lane；C-PHY ≤ 3 trio |
+| 单 lane / 单 trio 速率范围 | D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps |
+| **每路 RX 的 PHY 承载上限** | **D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28） |
+| 每路 RX 的虚拟通道（VC） | 4 个 |
+| 每个 CIM 的 IPI 通道数 | 4 个 |
+| IPI 像素时钟（标称） | 670 MHz |
+
+</DocScope>
+
+> 本表的 PHY 速率与像素时钟取自本平台驱动与板级硬件规格。
+
+表里的 PHY 上限由驱动按单 lane 4.5 Gbps（C-PHY 按单 trio 3.5 Gsps）卡校验，超限时 PHY 初始化直接返回失败；C-PHY 的 2.28 是协议标准系数。
+
+> **这是 SoC 侧 PHY 的能力，不是接入链路的实际上限。** 模组多经解串器接入，真实天花板常常是解串器的输出速率——业界主流解串器单 lane 只到 2.5 Gbps（对应单 RX 10 Gbps），此时上面这 18 Gbps 就用不满。规划时按模组规格确认解串器侧速率，别直接拿 18 / 23.9 去算。
+
+### 每个 IPI 的最大接入宽
+
+CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` 给出：
+
+<DocScope products="RDK S100">
+
+| CIM | CIM0 | CIM1 | CIM4 |
+| --- | --- | --- | --- |
+| IPI0 / IPI1 / IPI2 / IPI3（px） | 5696 / 4096 / 4096 / 4096 | 4096 ×4 | 4096 ×4 |
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| CIM | CIM0 | CIM1 | CIM2 | CIM3 | CIM4 | CIM5 |
+| --- | --- | --- | --- | --- | --- | --- |
+| IPI0 / IPI1 / IPI2 / IPI3（px） | 5696 ×4 | 5696 ×4 | 5696 ×4 | 4096 ×4 | 4096 ×4 | 4096 ×4 |
+
+</DocScope>
+
+表中每格按 `IPI0 / IPI1 / IPI2 / IPI3` 排列，`×4` 表示四路相同。
+
+输入宽超过该上限时，CIM 在 `set_ichn_attr` 阶段直接拒绝。
+
+> 注意：除 CIM 层外，MIPI host 的配置校验另有 **width ≤ 4096** 的上限。宽于 4096 的接入两层限制目前不一致，实际接入前需以板端验证为准。
+
+<DocScope products="RDK S100">
+
+**接 4 路宽于 4096 的图像时，只有 CIM0 的第一路 IPI 支持。**
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+**接 4 路宽于 4096 的图像时，只能用 CIM0 / CIM1 / CIM2。**
+
+</DocScope>
+
+### 搭配计算方法
+
+一张 RX 上挂几路、怎么搭配，按四步算。**PHY、IPI、VC 三道都要过**，任一不过就得调整；PHY 那道按实际用的是 D-PHY 还是 C-PHY 取对应值，两条只需过一条。
+
+**第 1 步 · 单路链路数据量**
+
+```
+单路数据量(bps) = 宽 × 高 × 帧率 × 位深 × k
+```
+
+- 位深：RAW12 填 `12`，YUV422 填 `16`
+- `k` 是含 blanking 的系数。参考值 **RAW 约 1.4、YUV 约 1.2**，随模组 blanking 设置变化——**以模组手册给出的行/帧总长为准**，这里的系数只用于估算
+
+常用配置速查：
+
+| 配置 | 有效像素 | 含 blanking |
+| --- | --- | --- |
+| 8M RAW12@30 | 2.99 Gbps | 约 4.18 Gbps |
+| 8M RAW12@60 | 5.97 Gbps | 约 8.36 Gbps |
+| 2M RAW12@30 | 0.75 Gbps | 约 1.05 Gbps |
+| 8M YUV422@30 | 3.98 Gbps | 约 4.78 Gbps |
+| 2M YUV422@30 | 1.00 Gbps | 约 1.20 Gbps |
+
+**第 2 步 · 三个卡口逐个校验**
+
+这些上限都是 **RX 级**——同一 RX 上所有相机共享同一份预算，不是每路各自一份。
+
+<DocScope products="RDK S100">
+
+| 卡口 | 上限（该 RX 上各路合计不得超过） |
+| --- | --- |
+| PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
+| PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
+| IPI · 纯 RAW12 | 600 MHz × 3 pixel × 12 bit = 21.6 Gbps |
+| IPI · **含任一路 YUV** | 600 MHz × 1 pixel × 16 bit = **9.6 Gbps** |
+| VC 路数 | 4 路 |
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| 卡口 | 上限（该 RX 上各路合计不得超过） |
+| --- | --- |
+| PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
+| PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
+| IPI · 纯 RAW12 | 670 MHz × 3 pixel × 12 bit = 24.1 Gbps |
+| IPI · **含任一路 YUV** | 670 MHz × 1 pixel × 16 bit = **10.72 Gbps** |
+| VC 路数 | 4 路 |
+
+</DocScope>
+
+**第 3 步 · 取最紧的那个**
+
+各路数据量之和要同时小于各道上限，**先撞哪个哪个就是瓶颈**。算例一节里 RAW 先撞 PHY、YUV 先撞 IPI，就是这个意思。
+
+**第 4 步 · 不过时按这个顺序调**
+
+1. **压缩模组 blanking**——把 `k` 降下来，不改配置、不损失画质，性价比最高
+2. 降帧率或降分辨率
+3. 拆到另一个 RX（S100 有 3 个、S600 有 6 个）
+4. 改 C-PHY——**只放宽 PHY，不放宽 IPI**，所以 YUV 场景换 C-PHY 没有用
+
+> **最容易踩的一条**：混接时 IPI 上限是**整条 RX 一起掉到 9.6 Gbps**（S600 是 10.72），不是只有那一路 YUV 受这个限制。所以「1 路 YUV + 3 路 8M RAW12」这种搭配，预算按 9.6 算而不是 21.6——光是 3 路 RAW12 含 blanking 就要 12.54 Gbps，已经超了。同一个 RX 上**有 YUV 就按 YUV 的口径算全部**。
+
+### 算例
+
+同样 8M@30fps、同样接在一路 RX 上，**RAW12 能接 4 颗，YUV422 只能接 2 颗**——差别全在 IPI 的打包率。下面按[搭配计算方法](#搭配计算方法)的四步各走一遍。
+
+#### 算例 1：4 颗 8M RAW12@30fps
+
+**① 算数据量**
+
+| 口径 | 单路 | 4 路合计 |
+| --- | --- | --- |
+| 有效像素（`宽 × 高 × 帧率 × 12`） | 2.99 Gbps | 11.96 Gbps |
+| **含 blanking（×1.4）** | 4.18 Gbps | **16.72 Gbps** |
+
+**② 逐个卡口校验**
+
+| 卡口 | 上限 | 4 路合计 | 结论 |
+| --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 16.72 Gbps | ✓ 已占 93%，只剩 7% |
+| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | ✓ 占 70% |
+| IPI（纯 RAW12） | S100 21.6 Gbps / S600 24.1 Gbps | 16.72 Gbps | ✓ 占 77% |
+| VC 路数 | 4 路 | 4 路 | ✓ |
+
+**③ 结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking。**改走 C-PHY 则宽裕得多**：PHY 占用降到 70%，瓶颈随之转到 IPI（S100 77%）。成立的前提是模组支持 C-PHY 且解串器输出速率跟得上。实际能否跑满以板端实测为准。
+
+#### 算例 2：4 颗 8M YUV422@30fps
+
+**① 算数据量**
+
+| 口径 | 单路 | 4 路合计 |
+| --- | --- | --- |
+| 有效像素（`宽 × 高 × 帧率 × 16`） | 3.98 Gbps | 15.93 Gbps |
+| **含 blanking（×1.2）** | 4.78 Gbps | **19.11 Gbps** |
+
+**② 逐个卡口校验**
+
+| 卡口 | 上限 | 4 路合计 | 结论 |
+| --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 19.11 Gbps | ✗ 超 |
+| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | ✓ 占 80% |
+| IPI（含 YUV） | S100 9.6 Gbps / S600 10.72 Gbps | 19.11 Gbps | ✗ 连有效像素的 15.93 都装不下 |
+| VC 路数 | 4 路 | 4 路 | ✓ |
+
+**③ 结论**：**4 颗走不通，先撞的是 IPI**——9.6 Gbps 连 4 路的有效像素（15.93）都装不下，PHY 的问题还没轮到。
+
+**这里换 C-PHY 是没用的**，也是它唯一容易误会的地方：C-PHY 把 PHY 那关买通了（19.11 < 23.94，反而过了），但 IPI 上限由像素时钟和打包率决定，和选哪种 PHY 无关，9.6 Gbps 还是 9.6 Gbps。**只要含 YUV，换 PHY 救不了。**
+
+**往下试几颗能行**：
+
+| 颗数 | 含 blanking 合计 | 对 S100 的 9.6 | 对 S600 的 10.72 |
+| --- | --- | --- | --- |
+| 1 颗 | 4.78 Gbps | ✓ | ✓ |
+| 2 颗 | 9.56 Gbps | ✓ 余量不到 1% | ✓ 余 11% |
+| 3 颗 | 14.33 Gbps | ✗ | ✗ |
+
+**同一 RX 上最多接 2 颗 8M YUV@30fps**——S100 上还是贴着上限跑的。
+
+**但三路本身不是禁区：贵的是 8M，不是路数。**
+
+| 组合 | 含 blanking 合计 | 对 IPI（S100 9.6 / S600 10.72） |
+| --- | --- | --- |
+| 2×8M + 1×2M | 10.75 Gbps | ✗ 超——2 颗 8M 已占掉 99.5%，再挂一路 2M 要 1.19 Gbps |
+| 1×8M + 2×2M | 7.17 Gbps | ✓ 占 74.7% |
+| 1×8M + 3×2M | 8.36 Gbps | ✓ 占 87.1% |
+
+要挂第三路，得先把其中一路 8M 降成 2M。全上 2M 的话 4 路也才 4.78 Gbps，那时先撞的是 VC 的 4 路上限，不是 IPI。
+
+> **规划接入时请按含 blanking 的口径核算，不要用有效像素值**，否则结论会偏乐观。除 PHY 外还必须确认解串器链路速率够不够。
 
 ## API 调用流程
 
@@ -365,6 +579,27 @@ int main(void)
 完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[通路选择](#通路选择online-与-offline)，`func` 里的 pattern / 跳帧见 [CIM 内部结构与可配功能块](#cim-内部结构与可配功能块)，通道字段见 [API 接口说明](#api-接口说明)。
 
 标「框架填」的字段不用自己设。
+
+### 类型总览
+
+VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下发（`hbn_vnode_set_attr`）；建流与绑定交给 `hbn_vflow_*`。
+
+| 类型 | 作用 | 关键成员 |
+| --- | --- | --- |
+| `vin_attr_t` | VIN 的全部配置 | `vin_node_attr`、`vin_attr_ex`、`vin_ichn_attr`、`vin_ochn_attr[VIN_TYPE_INVALID]`、`vin_ochn_buff_attr[VIN_TYPE_INVALID]`、`magicNumber` |
+| `vin_attr_ex_t` | 扩展属性 | `cim_static_attr`、`mipi_ex_attr`、`fps_ctrl`（跳帧）、`dynamic_fps_attr`（动态帧率）、`ipi_reset`、`bypass_enable` |
+| `vin_node_attr_t` | 节点级属性 | `cim_attr`、`vcon_attr`、`lpwm_attr`、`flow_id` |
+| `cim_attr_t` | 接入与通路配置 | `mipi_en` / `mipi_rx` / `vc_index` / `ipi_channels`、`cim_isp_flyby`、`cim_pym_flyby`、`rdma_input`、`tpg_input`、`func` |
+| `vcon_attr_t` | 板级连接配置 | `bus_main` / `bus_second`、`poc_map`、`gpios[]`、`lpwm_chn[]`、`rx_phy_mode` / `rx_phy_index` |
+| `vin_ichn_attr_t` | 输入通道属性 | `width`、`height`、`format` |
+| `vin_ochn_attr_t` | 输出通道属性，按 `ochn_id` 索引 | `ddr_en` / `roi_en` / `emb_en` / `rawds_en`、`vin_basic_attr`、`roi_attr`、`emb_attr` |
+| `vin_ochn_buff_attr_t` | 输出通道的 buffer 属性 | `buffers_num`、`flags` |
+
+**`hw_id`**：打开 VIN 时指定的硬件编号，**即 MIPI RX 通道号**。
+
+**`ochn_id`**：VIN 对外有 3 个数据通道——`0` 主帧、`4` ROI、`3` EMB。各通道能力见 [API 接口说明](#api-接口说明)。
+
+**接口分属三个库**：`hbn_vnode_*` / `hbn_vflow_*` 在 `libvpf.so`，`hbn_camera_*` 在 `libcam.so`，`hb_mem_*` 在 `libhbmem.so`。
 
 ### 顶层
 
@@ -845,242 +1080,6 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 
 - **阻塞接口，默认超时 4 s**；不需要等待的场景用 `hbn_vnode_sendframe_async`
 - 普通采集场景不需要调用
-
-## 接入评估
-
-选型前先算两笔账：**数据量能不能传**、**通路能不能扛**。
-
-### 数据量计算
-
-一路相机的原始数据量：
-
-```
-数据量(bps) = 宽 × 高 × 帧率 × 位深
-```
-
-- 1 路 8M RAW12@30fps：`3840 × 2160 × 30 × 12 ≈ 2.99 Gbps`
-- 1 路 2M RAW12@30fps：`1920 × 1080 × 30 × 12 ≈ 0.75 Gbps`
-
-> 这是**有效像素**口径。链路实际承载的还要加上 Sensor 的 blanking（消隐期），后文[算例](#算例)给出两者的差距——**核算带宽用含 blanking 的值**。
-
-### IPI 的传输效率
-
-MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**，像素时钟标称值见[平台能力上限](#平台能力上限)。两种数据类型每个 clock 能打包的像素数不同：
-
-| 数据类型 | 每个 IPI clock 可传 | 说明 |
-| --- | --- | --- |
-| RAW（RAW8/10/12/14） | **3 个 pixel** | 3 × 16bit 刚好填满 48bit |
-| YUV | **1 个 pixel** | 总线利用率只有 1/3 |
-
-因此同一个 IPI，传 RAW 的可用带宽是传 YUV 的 **3 倍**。**接入 YUV 模组（Sensor 内部已做 ISP）时尤其要注意这条**——它往往先于 PHY 带宽成为瓶颈。
-
-> 48bit 模式与 RAW/YUV 打包比例均取自本平台驱动；像素时钟为驱动标称值，实际按接入配置计算。
-
-### 平台能力上限
-
-<DocScope products="RDK S100">
-
-| 项目 | S100 |
-| --- | --- |
-| MIPI RX 路数 | 3 个 |
-| 每路 RX 的 lane / trio | D-PHY ≤ 4 lane；C-PHY ≤ 3 trio |
-| 单 lane / 单 trio 速率范围 | D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps |
-| **每路 RX 的 PHY 承载上限** | **D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28） |
-| 每路 RX 的虚拟通道（VC） | 4 个 |
-| 每个 CIM 的 IPI 通道数 | 4 个 |
-| IPI 像素时钟（标称） | 600 MHz |
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 项目 | S600 |
-| --- | --- |
-| MIPI RX 路数 | 6 个 |
-| 每路 RX 的 lane / trio | D-PHY ≤ 4 lane；C-PHY ≤ 3 trio |
-| 单 lane / 单 trio 速率范围 | D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps |
-| **每路 RX 的 PHY 承载上限** | **D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28） |
-| 每路 RX 的虚拟通道（VC） | 4 个 |
-| 每个 CIM 的 IPI 通道数 | 4 个 |
-| IPI 像素时钟（标称） | 670 MHz |
-
-</DocScope>
-
-> 本表的 PHY 速率与像素时钟取自本平台驱动与板级硬件规格。
-
-表里的 PHY 上限由驱动按单 lane 4.5 Gbps（C-PHY 按单 trio 3.5 Gsps）卡校验，超限时 PHY 初始化直接返回失败；C-PHY 的 2.28 是协议标准系数。
-
-> **这是 SoC 侧 PHY 的能力，不是接入链路的实际上限。** 模组多经解串器接入，真实天花板常常是解串器的输出速率——业界主流解串器单 lane 只到 2.5 Gbps（对应单 RX 10 Gbps），此时上面这 18 Gbps 就用不满。规划时按模组规格确认解串器侧速率，别直接拿 18 / 23.9 去算。
-
-### 每个 IPI 的最大接入宽
-
-CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` 给出：
-
-<DocScope products="RDK S100">
-
-| CIM | CIM0 | CIM1 | CIM4 |
-| --- | --- | --- | --- |
-| IPI0 / IPI1 / IPI2 / IPI3（px） | 5696 / 4096 / 4096 / 4096 | 4096 ×4 | 4096 ×4 |
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| CIM | CIM0 | CIM1 | CIM2 | CIM3 | CIM4 | CIM5 |
-| --- | --- | --- | --- | --- | --- | --- |
-| IPI0 / IPI1 / IPI2 / IPI3（px） | 5696 ×4 | 5696 ×4 | 5696 ×4 | 4096 ×4 | 4096 ×4 | 4096 ×4 |
-
-</DocScope>
-
-表中每格按 `IPI0 / IPI1 / IPI2 / IPI3` 排列，`×4` 表示四路相同。
-
-输入宽超过该上限时，CIM 在 `set_ichn_attr` 阶段直接拒绝。
-
-> 注意：除 CIM 层外，MIPI host 的配置校验另有 **width ≤ 4096** 的上限。宽于 4096 的接入两层限制目前不一致，实际接入前需以板端验证为准。
-
-<DocScope products="RDK S100">
-
-**接 4 路宽于 4096 的图像时，只有 CIM0 的第一路 IPI 支持。**
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-**接 4 路宽于 4096 的图像时，只能用 CIM0 / CIM1 / CIM2。**
-
-</DocScope>
-
-### 搭配计算方法
-
-一张 RX 上挂几路、怎么搭配，按四步算。**PHY、IPI、VC 三道都要过**，任一不过就得调整；PHY 那道按实际用的是 D-PHY 还是 C-PHY 取对应值，两条只需过一条。
-
-**第 1 步 · 单路链路数据量**
-
-```
-单路数据量(bps) = 宽 × 高 × 帧率 × 位深 × k
-```
-
-- 位深：RAW12 填 `12`，YUV422 填 `16`
-- `k` 是含 blanking 的系数。参考值 **RAW 约 1.4、YUV 约 1.2**，随模组 blanking 设置变化——**以模组手册给出的行/帧总长为准**，这里的系数只用于估算
-
-常用配置速查：
-
-| 配置 | 有效像素 | 含 blanking |
-| --- | --- | --- |
-| 8M RAW12@30 | 2.99 Gbps | 约 4.18 Gbps |
-| 8M RAW12@60 | 5.97 Gbps | 约 8.36 Gbps |
-| 2M RAW12@30 | 0.75 Gbps | 约 1.05 Gbps |
-| 8M YUV422@30 | 3.98 Gbps | 约 4.78 Gbps |
-| 2M YUV422@30 | 1.00 Gbps | 约 1.20 Gbps |
-
-**第 2 步 · 三个卡口逐个校验**
-
-这些上限都是 **RX 级**——同一 RX 上所有相机共享同一份预算，不是每路各自一份。
-
-<DocScope products="RDK S100">
-
-| 卡口 | 上限（该 RX 上各路合计不得超过） |
-| --- | --- |
-| PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
-| PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · 纯 RAW12 | 600 MHz × 3 pixel × 12 bit = 21.6 Gbps |
-| IPI · **含任一路 YUV** | 600 MHz × 1 pixel × 16 bit = **9.6 Gbps** |
-| VC 路数 | 4 路 |
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 卡口 | 上限（该 RX 上各路合计不得超过） |
-| --- | --- |
-| PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
-| PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · 纯 RAW12 | 670 MHz × 3 pixel × 12 bit = 24.1 Gbps |
-| IPI · **含任一路 YUV** | 670 MHz × 1 pixel × 16 bit = **10.72 Gbps** |
-| VC 路数 | 4 路 |
-
-</DocScope>
-
-**第 3 步 · 取最紧的那个**
-
-各路数据量之和要同时小于各道上限，**先撞哪个哪个就是瓶颈**。算例一节里 RAW 先撞 PHY、YUV 先撞 IPI，就是这个意思。
-
-**第 4 步 · 不过时按这个顺序调**
-
-1. **压缩模组 blanking**——把 `k` 降下来，不改配置、不损失画质，性价比最高
-2. 降帧率或降分辨率
-3. 拆到另一个 RX（S100 有 3 个、S600 有 6 个）
-4. 改 C-PHY——**只放宽 PHY，不放宽 IPI**，所以 YUV 场景换 C-PHY 没有用
-
-> **最容易踩的一条**：混接时 IPI 上限是**整条 RX 一起掉到 9.6 Gbps**（S600 是 10.72），不是只有那一路 YUV 受这个限制。所以「1 路 YUV + 3 路 8M RAW12」这种搭配，预算按 9.6 算而不是 21.6——光是 3 路 RAW12 含 blanking 就要 12.54 Gbps，已经超了。同一个 RX 上**有 YUV 就按 YUV 的口径算全部**。
-
-### 算例
-
-同样 8M@30fps、同样接在一路 RX 上，**RAW12 能接 4 颗，YUV422 只能接 2 颗**——差别全在 IPI 的打包率。下面按[搭配计算方法](#搭配计算方法)的四步各走一遍。
-
-#### 算例 1：4 颗 8M RAW12@30fps
-
-**① 算数据量**
-
-| 口径 | 单路 | 4 路合计 |
-| --- | --- | --- |
-| 有效像素（`宽 × 高 × 帧率 × 12`） | 2.99 Gbps | 11.96 Gbps |
-| **含 blanking（×1.4）** | 4.18 Gbps | **16.72 Gbps** |
-
-**② 逐个卡口校验**
-
-| 卡口 | 上限 | 4 路合计 | 结论 |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | ✓ 已占 93%，只剩 7% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | ✓ 占 70% |
-| IPI（纯 RAW12） | S100 21.6 Gbps / S600 24.1 Gbps | 16.72 Gbps | ✓ 占 77% |
-| VC 路数 | 4 路 | 4 路 | ✓ |
-
-**③ 结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking。**改走 C-PHY 则宽裕得多**：PHY 占用降到 70%，瓶颈随之转到 IPI（S100 77%）。成立的前提是模组支持 C-PHY 且解串器输出速率跟得上。实际能否跑满以板端实测为准。
-
-#### 算例 2：4 颗 8M YUV422@30fps
-
-**① 算数据量**
-
-| 口径 | 单路 | 4 路合计 |
-| --- | --- | --- |
-| 有效像素（`宽 × 高 × 帧率 × 16`） | 3.98 Gbps | 15.93 Gbps |
-| **含 blanking（×1.2）** | 4.78 Gbps | **19.11 Gbps** |
-
-**② 逐个卡口校验**
-
-| 卡口 | 上限 | 4 路合计 | 结论 |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 19.11 Gbps | ✗ 超 |
-| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | ✓ 占 80% |
-| IPI（含 YUV） | S100 9.6 Gbps / S600 10.72 Gbps | 19.11 Gbps | ✗ 连有效像素的 15.93 都装不下 |
-| VC 路数 | 4 路 | 4 路 | ✓ |
-
-**③ 结论**：**4 颗走不通，先撞的是 IPI**——9.6 Gbps 连 4 路的有效像素（15.93）都装不下，PHY 的问题还没轮到。
-
-**这里换 C-PHY 是没用的**，也是它唯一容易误会的地方：C-PHY 把 PHY 那关买通了（19.11 < 23.94，反而过了），但 IPI 上限由像素时钟和打包率决定，和选哪种 PHY 无关，9.6 Gbps 还是 9.6 Gbps。**只要含 YUV，换 PHY 救不了。**
-
-**往下试几颗能行**：
-
-| 颗数 | 含 blanking 合计 | 对 S100 的 9.6 | 对 S600 的 10.72 |
-| --- | --- | --- | --- |
-| 1 颗 | 4.78 Gbps | ✓ | ✓ |
-| 2 颗 | 9.56 Gbps | ✓ 余量不到 1% | ✓ 余 11% |
-| 3 颗 | 14.33 Gbps | ✗ | ✗ |
-
-**同一 RX 上最多接 2 颗 8M YUV@30fps**——S100 上还是贴着上限跑的。
-
-**但三路本身不是禁区：贵的是 8M，不是路数。**
-
-| 组合 | 含 blanking 合计 | 对 IPI（S100 9.6 / S600 10.72） |
-| --- | --- | --- |
-| 2×8M + 1×2M | 10.75 Gbps | ✗ 超——2 颗 8M 已占掉 99.5%，再挂一路 2M 要 1.19 Gbps |
-| 1×8M + 2×2M | 7.17 Gbps | ✓ 占 74.7% |
-| 1×8M + 3×2M | 8.36 Gbps | ✓ 占 87.1% |
-
-要挂第三路，得先把其中一路 8M 降成 2M。全上 2M 的话 4 路也才 4.78 Gbps，那时先撞的是 VC 的 4 路上限，不是 IPI。
-
-> **规划接入时请按含 blanking 的口径核算，不要用有效像素值**，否则结论会偏乐观。除 PHY 外还必须确认解串器链路速率够不够。
 
 ## 约束与注意事项
 
