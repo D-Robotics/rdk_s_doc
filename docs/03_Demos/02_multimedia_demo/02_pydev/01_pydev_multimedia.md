@@ -43,19 +43,41 @@ pip install -r /app/pydev_demo/requirements.txt
 
 板端路径：`/app/pydev_demo/`
 
+<DocScope products="RDK S600">
+
 ```
 pydev_demo/
-├── mipi_camera_sample/           # MIPI 摄像头采集/缩放/裁剪/推流
-│   ├── 02_mipi_camera_dump.py    #   采集并保存 YUV
-│   ├── 03_mipi_camera_scale.py   #   VPS 缩放
+├── mipi_camera_sample/              # MIPI 摄像头采集/缩放/裁剪/推流
+│   ├── 02_mipi_camera_dump.py       #   采集并保存 YUV
+│   ├── 03_mipi_camera_scale.py      #   VPS 缩放
 │   ├── 04_mipi_camera_crop_scale.py # VPS 裁剪 + 缩放
 │   ├── 05_mipi_camera_streamer.py   # 采集 → HDMI 显示
 │   └── 01_mipi_camera_yolov5x.py    # 目标检测（见算法示例）
-├── usb_camera_sample/            # USB 摄像头 + 目标检测
-├── rtsp_yolov5x_display_sample/  # RTSP 拉流 + 目标检测 + 显示
-├── web_display_camera_sample/    # Web 显示 + 目标检测
+├── usb_camera_sample/               # USB 摄像头 + 目标检测
+├── rtsp_yolov5x_display_sample/     # RTSP 拉流 + 目标检测 + 显示
+├── web_display_camera_sample/       # Web 显示 + 目标检测
 └── requirements.txt
 ```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+```
+pydev_demo/
+├── 09_usb_camera_sample/            # USB 摄像头 + 目标检测
+├── 10_mipi_camera_sample/           # MIPI 摄像头采集/缩放/裁剪/推流
+│   ├── 01_mipi_camera_yolov5x.py    #   目标检测（见算法示例）
+│   ├── 02_mipi_camera_dump.py       #   采集并保存 YUV
+│   ├── 03_mipi_camera_scale.py      #   VPS 缩放
+│   ├── 04_mipi_camera_crop_scale.py #   VPS 裁剪 + 缩放
+│   └── 05_mipi_camera_streamer.py   #   采集 → HDMI 显示
+├── 11_web_display_camera_sample/    # Web 显示 + 目标检测
+├── 12_rtsp_yolov5x_display_sample/  # RTSP 拉流 + 目标检测 + 显示
+└── requirements.txt
+```
+
+</DocScope>
 
 > 目标检测类示例（`01_mipi_camera_yolov5x.py`、`usb_camera_sample` 等）见 [算法示例](../../03_algorithm_demo/01_summary.md)。本节聚焦多媒体采集 / 显示 / 编解码。
 
@@ -72,11 +94,15 @@ python3 05_mipi_camera_streamer.py -w 1920 -h 1080
 python3 02_mipi_camera_dump.py -f 30 -c 10 -w 1920 -h 1080
 
 # VPS 缩放（输入为 NV12 格式 YUV 文件）
-python3 03_mipi_camera_scale.py -i input.yuv -o output.yuv \
+python3 03_mipi_camera_scale.py \
+  -i /app/res/assets/nv12_1920x1080.yuv \
+  -o output.yuv \
   -w 640 -h 360 --iwidth 1920 --iheight 1080
 
 # VPS 裁剪 + 缩放
-python3 04_mipi_camera_crop_scale.py -i input.yuv -o output.yuv \
+python3 04_mipi_camera_crop_scale.py \
+  -i /app/res/assets/nv12_1920x1080.yuv \
+  -o output.yuv \
   -w 640 -h 480 --iwidth 1920 --iheight 1080 \
   -x 304 -y 304 --crop_w 896 --crop_h 592
 ```
