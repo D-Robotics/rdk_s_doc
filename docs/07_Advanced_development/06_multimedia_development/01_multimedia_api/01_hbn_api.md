@@ -120,24 +120,27 @@ vnode 之间通过输入通道和输出通道进行连接 :
 ##### VIN 与 ISP
 | 连接方式 | vin_node_attr 结构体 | isp_node_attr 结构体 |
 |----------|----------------------|----------------------|
-| online | `cim_isp_flyby=1` | `sched_mode=2` `slot_id=0` `hw_id=与VIN相同` |
-| offline | `ddr_en=1` `cim_isp_flyby=0` | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` |
+| online | `cim_isp_flyby=1` | `sched_mode=2` `slot_id=0` `hw_id=同VIN` |
+| offline | `ddr_en=1` `cim_isp_flyby=0` | `sched_mode=1` `slot_id=4-11` `hw_id可选` |
 
 ##### VIN 与 PYM
 
 |连接方式 | vin_node_attr 结构体 | pym_cfg_t 结构体 |
 |----------|----------------------|------------------|
-| online | `cim_isp_flyby=1` | `pym_mode=2` `slot_id=0` `hw_id=与VIN相同` |
-| offline | `ddr_en=1` `cim_isp_flyby=0` | `pym_mode=3` `slot_id=4-11` `hw_id=选择的PYM的硬件ID` |
+| online | `cim_isp_flyby=1` | `pym_mode=2` `slot_id=0` `hw_id=同VIN` |
+| offline | `ddr_en=1` `cim_isp_flyby=0` | `pym_mode=3` `slot_id=4-11` `hw_id可选` |
 
 ##### ISP 与 PYM
 
 | 连接方式 | isp_node_attr 结构体 | isp_ochn_attr_t 结构体 | pym_cfg_t 结构体 |
 |----------|----------------------|------------------------|------------------|
-| 单路 online | `sched_mode=2` `slot_id=0` `hw_id=与VIN相同` | `axi_output_mode=0` | `pym_mode=1` `slot_id=与ISP相同` `hw_id=与ISP相同` |
-| 多路 online | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` | `axi_output_mode=0` | `pym_mode=2` `slot_id=与ISP相同` `hw_id=与ISP相同` |
-| offline | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` | `axi_output_mode=9` | `pym_mode=3` `slot_id=4-11` `hw_id=PYM的硬件ID` |
+| 单路 online | `sched_mode=2` `slot_id=0` `hw_id=同VIN` | `axi_output_mode=0` | `pym_mode=1` `slot_id=同ISP` `hw_id=同ISP` |
+| 多路 online | `sched_mode=1` `slot_id=4-11` `hw_id可选` | `axi_output_mode=0` | `pym_mode=2` `slot_id=同ISP` `hw_id=同ISP` |
+| offline | `sched_mode=1` `slot_id=4-11` `hw_id可选` | `axi_output_mode=9` | `pym_mode=3` `slot_id=4-11` `hw_id可选` |
 
+单路 online 与 多路 online 都是 ISP online 到 PYM，但是存在却别， 如下描述：
+1. 多路 online： VIN 到 ISP是 offline 并且是多路，然后 ISP online 到 PYM
+2. 单路 online: VIN 到 ISP是 online 是单路，然后 ISP online 到 PYM
 ##### ISP 与 YNR 
 由于 YNR 的输入不支持读取DDR 输出也不能写到DDR，所以使能 YNR后，必须使能PYM, 并且 ISP 必须 online 到 YNR，YNR 必须 online 到 pym。由于 ynr 的模式与ISP模式相关，ISP的模式与VIN的模式相关，所以分两种情况描述：
 
@@ -145,16 +148,16 @@ vnode 之间通过输入通道和输出通道进行连接 :
 1. Vin online 到 ISP
   - `vin_node_attr` 的 `cim_isp_flyby=1`
   - `isp_node_attr` 的 `sched_mode=2`
-  - `isp_node_attr` 的 `hw_id=与VIN相同`
+  - `isp_node_attr` 的 `hw_id=同VIN`
 2. ISP 必须 online 到 YNR
   - `isp_node_attr` 的 `slot_id=0`
   - `isp_ochn_attr_t` 的 `axi_output_mode=0`
-  - `ynr_init_attr` 的 `slot_id=与ISP相同`
+  - `ynr_init_attr` 的 `slot_id=同ISP`
   - `ynr_init_attr` 的 `work_mode=1`
 3. YNR 必须 online 到 PYM
   - `pym_cfg_t` 的 `pym_mode=2`
-  - `pym_cfg_t` 的 `slot_id=与ISP相同`
-  - `pym_cfg_t` 的 `hw_id=与ISP相同`
+  - `pym_cfg_t` 的 `slot_id=同ISP`
+  - `pym_cfg_t` 的 `hw_id=同ISP`
 
 情景2：VIN 和 ISP offline 的情况：
 1. Vin offline 到 ISP
@@ -165,13 +168,13 @@ vnode 之间通过输入通道和输出通道进行连接 :
 2. ISP 必须 online 到 YNR
   - `isp_node_attr` 的 `slot_id=4-11`
   - `isp_ochn_attr_t` 的 `axi_output_mode=0`
-  - `ynr_init_attr` 的 `slot_id=与ISP相同`
-  - `ynr_init_attr` 的 `slot_id=与ISP相同`
+  - `ynr_init_attr` 的 `slot_id=同ISP`
+  - `ynr_init_attr` 的 `slot_id=同ISP`
   - `ynr_init_attr` 的 `work_mode=1`
 3. YNR 必须 online 到 PYM
   - `pym_cfg_t` 的 `pym_mode=1`
-  - `pym_cfg_t` 的 `slot_id=与ISP相同`
-  - `pym_cfg_t` 的 `hw_id=与ISP相同`
+  - `pym_cfg_t` 的 `slot_id=同ISP`
+  - `pym_cfg_t` 的 `hw_id=同ISP`
 
 表格中部分数字的含义解释：
 - `isp_node_attr` 中 sched_mode 数字对应的枚举变量
