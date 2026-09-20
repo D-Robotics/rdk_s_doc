@@ -112,65 +112,65 @@ vnode 之间通过输入通道和输出通道进行连接 :
 
 ##### 通用配置
 1. `hbn_vflow_bind_vnode` 需要做如下区分：
-  - online: src_out_channel =1 dst_input_channel =0
-  - offline: src_out_channel =0 dst_input_channel =0
+  - online: `src_out_channel=1` `dst_input_channel=0`
+  - offline: `src_out_channel=0` `dst_input_channel=0`
 2. vnode 设置成offline的方式连接下一个 vnode 时，必须调用函数 `hbn_vnode_set_ochn_buf_attr`来配置输出buffer
 
 ##### VIN 与 ISP
-| 模块组合   | 连接方式| vin_node_attr 结构体                 | isp_node_attr 结构体 | 
-|------------|-------|--------------------------------------|--------------------|
-|VIN - ISP   |online |cim_isp_flyby =1                      |sched_mode = 2 slot_id =0  hw_id = 与VIN相同 |
-|VIN - ISP   |offline|ddr_en  =1 cim_isp_flyby =0           |sched_mode = 1 slot_id =4-11 hw_id = 选择的ISP硬件的ID|
+| 模块组合 | 连接方式 | vin_node_attr 结构体 | isp_node_attr 结构体 |
+|----------|----------|----------------------|----------------------|
+| VIN - ISP | online | `cim_isp_flyby=1` | `sched_mode=2` `slot_id=0` `hw_id=与VIN相同` |
+| VIN - ISP | offline | `ddr_en=1` `cim_isp_flyby=0` | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` |
 
 ##### VIN 与 PYM
 
-| 模块组合   | 连接方式| vin_node_attr 结构体            | pym_cfg_t 结构体 | 
-|------------|-------|--------------------------------|--------------------|
-|VIN - PYM   |online |cim_isp_flyby =1                | pym_mode = 2 slot_id =0  hw_id = 与VIN相同 |
-|VIN - PYM   |offline|ddr_en  =1 cim_isp_flyby =0     | pym_mode = 3 slot_id =4-11 hw_id = 选择的PYM的硬件ID |
+| 模块组合 | 连接方式 | vin_node_attr 结构体 | pym_cfg_t 结构体 |
+|----------|----------|----------------------|------------------|
+| VIN - PYM | online | `cim_isp_flyby=1` | `pym_mode=2` `slot_id=0` `hw_id=与VIN相同` |
+| VIN - PYM | offline | `ddr_en=1` `cim_isp_flyby=0` | `pym_mode=3` `slot_id=4-11` `hw_id=选择的PYM的硬件ID` |
 
 ##### ISP 与 PYM
 
-| 模块组合   | 连接方式|isp_node_attr 结构体                                  | isp_ochn_attr_t 结构体 |pym_cfg_t 结构体 | 
-|------------|------------|------------------------------------------------------|------------------------|-----------------------|
-|ISP - PYM   |单路 online |sched_mode = 2 slot_id =0  hw_id = 与VIN相同          | axi_output_mode=0      |pym_mode = 1 slot_id = 与ISP相同  hw_id = 与ISP相同 |
-|ISP - PYM   |多路 online |sched_mode = 1 slot_id =4-11 hw_id = 选择的ISP硬件的ID | axi_output_mode=0      |pym_mode = 2 slot_id = 与ISP相同  hw_id = 与ISP相同 |
-|ISP - PYM   |offline     |sched_mode = 1 slot_id =4-11 hw_id = 选择的ISP硬件的ID| axi_output_mode=2-21    |pym_mode = 3 slot_id =4-11 hw_id = PYM的硬件ID      |
+| 模块组合 | 连接方式 | isp_node_attr 结构体 | isp_ochn_attr_t 结构体 | pym_cfg_t 结构体 |
+|----------|----------|----------------------|------------------------|------------------|
+| ISP - PYM | 单路 online | `sched_mode=2` `slot_id=0` `hw_id=与VIN相同` | `axi_output_mode=0` | `pym_mode=1` `slot_id=与ISP相同` `hw_id=与ISP相同` |
+| ISP - PYM | 多路 online | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` | `axi_output_mode=0` | `pym_mode=2` `slot_id=与ISP相同` `hw_id=与ISP相同` |
+| ISP - PYM | offline | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` | `axi_output_mode=2-21` | `pym_mode=3` `slot_id=4-11` `hw_id=PYM的硬件ID` |
 
 ##### ISP 与 YNR 
 由于 YNR 的输入不支持读取DDR 输出也不能写到DDR，所以使能 YNR后，必须使能PYM
 
-VIN 和 ISP online 的情况（全 online）：
+VIN 和 ISP online 的情况：
 1. Vin online 到 ISP
-  - vin_node_attr 的 cim_isp_flyby = 1  
-  - isp_node_attr 的 sched_mode = 2
-  - isp_node_attr 的 hw_id = 与VIN相同
+  - `vin_node_attr` 的 `cim_isp_flyby=1`
+  - `isp_node_attr` 的 `sched_mode=2`
+  - `isp_node_attr` 的 `hw_id=与VIN相同`
 2. ISP 必须 online 到 YNR
-  - isp_node_attr 的 slot_id = 0
-  - isp_ochn_attr_t 的 axi_output_mode = 1 
-  - ynr_init_attr 的 slot_id = 与ISP相同
-  - ynr_init_attr 的 work_mode = 1
+  - `isp_node_attr` 的 `slot_id=0`
+  - `isp_ochn_attr_t` 的 `axi_output_mode=1`
+  - `ynr_init_attr` 的 `slot_id=与ISP相同`
+  - `ynr_init_attr` 的 `work_mode=1`
 3. YNR 必须 online 到 PYM
-  - pym_cfg_t 的 pym_mode = 2
-  - pym_cfg_t 的 slot_id = 与ISP相同
-  - pym_cfg_t 的 hw_id = 与ISP相同
+  - `pym_cfg_t` 的 `pym_mode=2`
+  - `pym_cfg_t` 的 `slot_id=与ISP相同`
+  - `pym_cfg_t` 的 `hw_id=与ISP相同`
 
 VIN 和 ISP offline 的情况：
 1. Vin offline 到 ISP
-  - vin_node_attr 的 ddr_en = 1
-  - vin_node_attr 的 cim_isp_flyby = 0
-  - isp_node_attr 的 sched_mode = 1
-  - isp_node_attr 的 hw_id = 选择的ISP硬件的ID
+  - `vin_node_attr` 的 `ddr_en=1`
+  - `vin_node_attr` 的 `cim_isp_flyby=0`
+  - `isp_node_attr` 的 `sched_mode=1`
+  - `isp_node_attr` 的 `hw_id=选择的ISP硬件的ID`
 2. ISP 必须 online 到 YNR
-  - isp_node_attr 的 slot_id = 4-11
-  - isp_ochn_attr_t 的 axi_output_mode = 1 
-  - ynr_init_attr 的 slot_id = 与ISP相同
-  - ynr_init_attr 的 slot_id = 与ISP相同
-  - ynr_init_attr 的 work_mode = 1
+  - `isp_node_attr` 的 `slot_id=4-11`
+  - `isp_ochn_attr_t` 的 `axi_output_mode=1`
+  - `ynr_init_attr` 的 `slot_id=与ISP相同`
+  - `ynr_init_attr` 的 `slot_id=与ISP相同`
+  - `ynr_init_attr` 的 `work_mode=1`
 3. YNR 必须 online 到 PYM
-  - pym_cfg_t 的 pym_mode = 1
-  - pym_cfg_t 的 slot_id = 与ISP相同
-  - pym_cfg_t 的 hw_id = 与ISP相同
+  - `pym_cfg_t` 的 `pym_mode=1`
+  - `pym_cfg_t` 的 `slot_id=与ISP相同`
+  - `pym_cfg_t` 的 `hw_id=与ISP相同`
 
 表格中部分数字的含义解释：
 - `isp_node_attr` 中 sched_mode 数字对应的枚举变量
