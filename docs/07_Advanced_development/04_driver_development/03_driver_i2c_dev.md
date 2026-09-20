@@ -10,447 +10,390 @@ description: "I2C 调试指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-## 前言
+## 概述
 
-<DocScope products="RDK S100">
-S100芯片提供了标准的 I2C 总线，I2C 总线控制器通过串行数据线（SDA）和串行时钟（SCL）线在连接到总线的器件间传递信息。每个器件都有一个唯一的地址（无论是微控制器——MCU、LCD 控制器、存储器或键盘接口），而且都可以作为一个发送器和一个接收器（由器件的功能决定）。
-</DocScope>
-<DocScope products="RDK S600">
-S600芯片提供了标准的 I2C 总线，I2C 总线控制器通过串行数据线（SDA）和串行时钟（SCL）线在连接到总线的器件间传递信息。每个器件都有一个唯一的地址（无论是微控制器——MCU、LCD 控制器、存储器或键盘接口），而且都可以作为一个发送器和一个接收器（由器件的功能决定）。
-</DocScope>
+I2C（Inter-Integrated Circuit）是 RDK 开发板上常用的两线制串行总线，通过 SDA/SCL 在主机与多个从设备之间传输数据。Acore 侧基于 Synopsys DesignWare I2C 控制器与 Linux I2C 子系统实现：内核提供 `i2c_adapter`、总线驱动与外设 `i2c_driver`；用户态可通过 `/dev/i2c-*` 字符设备与 `i2c-tools` 直接访问总线。
+
+**模块定位**：本文说明 RDK 平台 I2C 控制器的驱动代码路径、内核配置、设备树节点、用户态调试命令及 debugfs 抓包方法，用于排查总线扫描异常、速率配置与外设通信故障。具体外设（Codec、传感器等）的寄存器级驱动开发，请结合器件数据手册及对应专题文档。
 
 **适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试 I2C 外设驱动、设备树或板级 I2C 器件的 BSP/驱动工程师。
 
-**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux I2C 总线与设备树基础；准备待调试的 I2C 外设器件。
+**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux I2C 子系统与设备树（DTS）基础；如需验证 40-pin 扩展总线，请准备外接 I2C 设备或 Audio Driver HAT。
 
-**与其他模块关系**：本驱动是用户态 I2C 外设应用（扩展引脚应用）与 `i2c-tools` 工具的底层实现；GPIO 调试点位见「[GPIO 使用](./04_driver_gpio_dev.md)」。
+**与其他模块关系**：本驱动是用户态 I2C 应用（[I2C 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/05_i2c.md)）与 `i2c-tools` 的底层实现；引脚复用见「[Pinctrl 调试指南](./05_driver_pinctrl_dev.md)」；GPIO 相关中断/扩展见「[GPIO 使用](./04_driver_gpio_dev.md)」；MCU 侧 I2C 见「[MCU I2C 使用指南](../11_mcu_development/10_mcu_i2c.md)」。
 
-I2C 控制器支持以下功能：
+### 硬件资源
 
-- 支持四种速度模式：
-    - standard mode(0~100Kb/s)
-    - fast mode(100~400Kb/s)
-    - fast mode plus(400~1000Kb/s)
-    - high-speed mode(1000Kb/s-3.4Mb/s)
-- 支持主从模式配置
-- 支持7位和10位寻址模式
+<DocScope products="RDK S100">
+
+S100 Acore 集成 6 路 DesignWare I2C 控制器（`i2c0`～`i2c5`），板端对应 `/dev/i2c-0`～`/dev/i2c-5`。其中 **I2C4 / I2C5** 经 40-pin 引出，须注意与 UART2 的引脚复用及拨码配置。
+
+| 用户态总线 | DTS 节点 | 基地址 | pinctrl | 典型用途 |
+|---|---|---|---|---|
+| `i2c-0` | `i2c@39420000` | `0x39420000` | `cam_i2c0` | 摄像头、HDMI Bridge 等板载器件 |
+| `i2c-1` | `i2c@39430000` | `0x39430000` | `cam_i2c1` | 摄像头域外设 |
+| `i2c-2` | `i2c@39440000` | `0x39440000` | `cam_i2c2` | 摄像头域外设 |
+| `i2c-3` | `i2c@39450000` | `0x39450000` | `cam_i2c3` | 摄像头域外设 |
+| `i2c-4` | `i2c@39460000` | `0x39460000` | `cam_i2c4` | 40-pin **I2C4**（Pin 27/28），RTC/风扇等，扫描常见 `UU` |
+| `i2c-5` | `i2c@39470000` | `0x39470000` | `peri_i2c5` | 40-pin **I2C5**（Pin 3/5），扩展 HAT / 外设 |
+
+控制器能力：主模式；7 位 / 10 位寻址；速率 100 kHz / 400 kHz / 1 MHz / 3.4 MHz（由 DTS `clock-frequency` 配置，默认多为 400 kHz）。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png" alt="S100 40-pin I2C5 与 UART2 拨码复用示意" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+## S600 I2C 概述
+
+S600 Acore 集成 6 路 DesignWare I2C 控制器（`i2c0`～`i2c5`），位于 HSI 域，板端对应 `/dev/i2c-0`～`/dev/i2c-5`（以 `ls /sys/class/i2c-dev/` 为准）。
+
+| 用户态总线 | DTS 节点 | 基地址 | pinctrl | 说明 |
+|---|---|---|---|---|
+| `i2c-0` | `i2c@34840000` | `0x34840000` | `hsi_i2c0` | HSI I2C0 |
+| `i2c-1` | `i2c@34841000` | `0x34841000` | `hsi_i2c1` | HSI I2C1 |
+| `i2c-2` | `i2c@34842000` | `0x34842000` | `hsi_i2c2` | HSI I2C2 |
+| `i2c-3` | `i2c@34843000` | `0x34843000` | `hsi_i2c3` | HSI I2C3 |
+| `i2c-4` | `i2c@34844000` | `0x34844000` | `hsi_i2c4` | HSI I2C4 |
+| `i2c-5` | `i2c@34845000` | `0x34845000` | `hsi_i2c5` | HSI I2C5 |
+
+控制器能力：主模式；7 位 / 10 位寻址；速率 100 kHz / 400 kHz / 1 MHz / 3.4 MHz。
+
+</DocScope>
 
 ## 驱动代码
 
 ```bash
-drivers/i2c/i2c-dev.c # I2C字符设备接口代码
-drivers/i2c/i2c-core-base.c  # I2C框架代码
-drivers/i2c/busses/i2c-designware-platdrv.c   # I2C驱动代码源文件
+kernel/drivers/i2c/i2c-dev.c                 # I2C 字符设备接口
+kernel/drivers/i2c/i2c-core-base.c           # I2C 框架核心
+kernel/drivers/i2c/busses/i2c-designware-platdrv.c  # DesignWare 平台驱动
+kernel/drivers/i2c/busses/i2c-designware-common.c     # 速率与时序解析
+kernel/Documentation/i2c/dev-interface.rst   # 用户态接口说明
 ```
 
-### 内核配置位置
+### 内核配置
 
 <DocScope products="RDK S100">
-配置文件路径: `hobot-drivers/configs/drobot_s100_defconfig`
+配置文件路径：`hobot-drivers/configs/drobot_s100_defconfig`
 </DocScope>
 <DocScope products="RDK S600">
-配置文件路径: `hobot-drivers/configs/drobot_s600_defconfig`
+配置文件路径：`hobot-drivers/configs/drobot_s600_defconfig`
 </DocScope>
+
 ```bash
-CONFIG_I2C_CHARDEV=y 			# I2C驱动应用层配置宏
-CONFIG_I2C_DESIGNWARE_PLATFORM=y 	# DW I2C驱动配置宏
+CONFIG_I2C_CHARDEV=y                 # 使能 /dev/i2c-* 字符设备
+CONFIG_I2C_DESIGNWARE_PLATFORM=y     # DesignWare I2C 平台驱动
 ```
 
-### 内核 DTS 节点配置
+## 设备树配置
+
+I2C 控制器节点定义在 SoC DTS 中，板级 DTS 通过 `&i2cN { ... }` 挂载具体外设子节点。
 
 <DocScope products="RDK S100">
 
-``` text
-/*kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi*/
+SoC 节点文件：`hobot-drivers/kernel-dts/drobot-s100-soc.dtsi`
+
+
+40-pin / 音频子板相关板级配置：`hobot-drivers/kernel-dts/rdk-v0p5.dtsi`（及其他 `rdk-s100-*.dts`）
+
+**I2C0 控制器示例（板载域）：**
+
+```dts
 i2c0: i2c@39420000 {
-        power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
-        #address-cells = <1>;
-        #size-cells = <0>;
-        compatible = "snps,designware-i2c";
-        reg = <0x0 0x39420000 0x0 0x10000>;
-        clocks = <&scmi_smc_clk CLK_IDX_TOP_PERI_I2C0>;
-        clock-names = "apb_pclk";
-        interrupts = <GIC_SPI PERISYS_I2C0_INTR PERISYS_I2C0_INTR_TRIG_TYPE>;
-        clock-frequency = <400000>;
-        i2c-sda-hold-time-ns = <50>;
-        pinctrl-names = "default", "gpio";
-        pinctrl-0 = <&cam_i2c0>;
-        pinctrl-1 = <&cam_i2c0_gpio>;
-        scl-gpios = <&cam_port0 8 GPIO_ACTIVE_HIGH>;
-        sda-gpios = <&cam_port0 9 GPIO_ACTIVE_HIGH>;
+    power-domains = <&scmi_smc_pd PD_IDX_LSPERI_TOP>;
+    #address-cells = <1>;
+    #size-cells = <0>;
+    compatible = "snps,designware-i2c";
+    reg = <0x0 0x39420000 0x0 0x10000>;
+    clocks = <&scmi_smc_clk CLK_IDX_TOP_PERI_I2C0>;
+    clock-names = "apb_pclk";
+    interrupts = <GIC_SPI PERISYS_I2C0_INTR PERISYS_I2C0_INTR_TRIG_TYPE>;
+    clock-frequency = <400000>;          /* 400 kHz */
+    i2c-sda-hold-time-ns = <50>;
+    pinctrl-names = "default", "gpio";
+    pinctrl-0 = <&cam_i2c0>;
+    pinctrl-1 = <&cam_i2c0_gpio>;
+    scl-gpios = <&cam_port0 8 GPIO_ACTIVE_HIGH>;
+    sda-gpios = <&cam_port0 9 GPIO_ACTIVE_HIGH>;
+    status = "okay";
+};
+```
+
+**I2C5 控制器示例（40-pin I2C5，扣合 Audio Driver HAT 时常见子节点）：**
+
+```dts
+i2c5: i2c@39470000 {
+    compatible = "snps,designware-i2c";
+    reg = <0x0 0x39470000 0x0 0x10000>;
+    clock-frequency = <400000>;
+    pinctrl-0 = <&peri_i2c5>;
+    status = "okay";
+
+    es8156: es8156@8 {
+        compatible = "everest,es8156";
+        reg = <0x08>;
         status = "okay";
+    };
+
+    es7210_0: es7210_0@40 {
+        compatible = "MicArray_0";
+        reg = <0x40>;
+        status = "okay";
+    };
+
+    es7210_1@42 {
+        compatible = "MicArray_2";
+        reg = <0x42>;
+        status = "okay";
+    };
 };
 ```
 
+关键属性说明：
+
+| 属性 | 说明 |
+|---|---|
+| `clock-frequency` | 总线速率（Hz），仅支持 100k / 400k / 1M / 3.4M |
+| `i2c-sda-hold-time-ns` | SDA 保持时间，影响高速模式稳定性 |
+| `pinctrl-0` | 引脚复用为 I2C 功能 |
+| `reg`（子节点） | 7 位 I2C 从地址 |
+
 </DocScope>
+
 <DocScope products="RDK S600">
 
-``` text
-/*kernel/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi*/
+SoC 节点文件：`hobot-drivers/kernel-dts/drobot-s600-soc.dtsi`
+
+**I2C0 控制器示例：**
+
+```dts
 i2c0: i2c@34840000 {
-	power-domains = <&dummy_pd 0>;
-	#address-cells = <1>;
-	#size-cells = <0>;
-	compatible = "snps,designware-i2c";
-	reg = <0x0 0x34840000 0x0 0x1000>;
-	clocks = <&clk_500m>;
-	clock-names = "apb_pclk";
-	interrupts = <GIC_SPI HSISYS_I2C0_INTR IRQ_TYPE_LEVEL_HIGH>;
-	clock-frequency = <400000>;
-	i2c-sda-hold-time-ns = <50>;
-	pinctrl-names = "default", "gpio";
-	pinctrl-0 = <&hsi_i2c0>;
-	pinctrl-1 = <&hsi_i2c0_gpio>;
-	scl-gpios = <&hsi_port0 16 GPIO_ACTIVE_HIGH>;
-	sda-gpios = <&hsi_port0 17 GPIO_ACTIVE_HIGH>;
-	resets = <&smc_reset RST_IDX_I2C0>;
-	reset-names = "i2c_rst";
-	status = "okay";
+    #address-cells = <1>;
+    #size-cells = <0>;
+    compatible = "snps,designware-i2c";
+    reg = <0x0 0x34840000 0x0 0x1000>;
+    clocks = <&clk_500m>;
+    clock-names = "apb_pclk";
+    interrupts = <GIC_SPI HSISYS_I2C0_INTR IRQ_TYPE_LEVEL_HIGH>;
+    clock-frequency = <400000>;
+    i2c-sda-hold-time-ns = <50>;
+    pinctrl-names = "default", "gpio";
+    pinctrl-0 = <&hsi_i2c0>;
+    pinctrl-1 = <&hsi_i2c0_gpio>;
+    scl-gpios = <&hsi_port0 16 GPIO_ACTIVE_HIGH>;
+    sda-gpios = <&hsi_port0 17 GPIO_ACTIVE_HIGH>;
+    resets = <&smc_reset RST_IDX_I2C0>;
+    reset-names = "i2c_rst";
+    status = "okay";
 };
 ```
 
 </DocScope>
 
-## I2C 使用
+## 功能使用
 
-对于 I2C 的使用说明在 kernel/Documentation/i2c 目录下有详细的说明，本文主要列出 S100 I2C 驱动接口特殊的部分。
+### Kernel 阶段
 
-### Kernel Space
+内核加载 DesignWare I2C 驱动后，在 `/sys/class/i2c-dev/` 下注册适配器，并对外设子节点加载对应 `i2c_driver`。
 
-<DocScope products="RDK S100">
-S100 I2C 驱动在 Kernel Space 下提供了可以设置 I2C 传输频率的接口，使用方法如下：
-</DocScope>
-<DocScope products="RDK S600">
-S600 I2C 驱动在 Kernel Space 下提供了可以设置 I2C 传输频率的接口，使用方法如下：
-</DocScope>
-#### I2C 速度配置
+**检查适配器是否就绪（板端实测）：**
 
-默认的 I2C 速率为400K，支持100k/400k/1M/3.4M 四种速率，可通过修改 dts 中相应 i2c 节点的 clock-frequency 完成速率修改。对应到代码中有关实际速率选择代码如下：
+```bash
+ls /sys/class/i2c-dev/
+# i2c-0  i2c-1  i2c-2  i2c-3  i2c-4  i2c-5
 
-``` text
-kernel/drivers/i2c/busses/i2c-designware-common.c
-I2C支持的速率配置如下：
-static const u32 supported_speeds[] = {
-	I2C_MAX_HIGH_SPEED_MODE_FREQ,
-	I2C_MAX_FAST_MODE_PLUS_FREQ,
-	I2C_MAX_FAST_MODE_FREQ,
-	I2C_MAX_STANDARD_MODE_FREQ,
-};
-...
-kernel/drivers/i2c/busses/i2c-designware-pcidrv.c
-获取设备树中clock-frequency的函数接口如下：
-i2c_parse_fw_timings(&pdev->dev, t, false);
-展开为：
-void i2c_parse_fw_timings(struct device *dev, struct i2c_timings *t, bool use_defaults)
-{
-	bool u = use_defaults;
-	u32 d;
-
-	i2c_parse_timing(dev, "clock-frequency", &t->bus_freq_hz,
-			 I2C_MAX_STANDARD_MODE_FREQ, u);
-
-	d = t->bus_freq_hz <= I2C_MAX_STANDARD_MODE_FREQ ? 1000 :
-	    t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ ? 300 : 120;
-	i2c_parse_timing(dev, "i2c-scl-rising-time-ns", &t->scl_rise_ns, d, u);
-
-	d = t->bus_freq_hz <= I2C_MAX_FAST_MODE_FREQ ? 300 : 120;
-	i2c_parse_timing(dev, "i2c-scl-falling-time-ns", &t->scl_fall_ns, d, u);
-
-	i2c_parse_timing(dev, "i2c-scl-internal-delay-ns",
-			 &t->scl_int_delay_ns, 0, u);
-	i2c_parse_timing(dev, "i2c-sda-falling-time-ns", &t->sda_fall_ns,
-			 t->scl_fall_ns, u);
-	i2c_parse_timing(dev, "i2c-sda-hold-time-ns", &t->sda_hold_ns, 0, u);
-	i2c_parse_timing(dev, "i2c-digital-filter-width-ns",
-			 &t->digital_filter_width_ns, 0, u);
-	i2c_parse_timing(dev, "i2c-analog-filter-cutoff-frequency",
-			 &t->analog_filter_cutoff_freq_hz, 0, u);
-}
-验证I2C速率是否有效的函数接口如下：
-i2c_dw_validate_speed(dev);
-展开为：
-int i2c_dw_validate_speed(struct dw_i2c_dev *dev)
-{
-	struct i2c_timings *t = &dev->timings;
-	unsigned int i;
-
-	/*
-	 * Only standard mode at 100kHz, fast mode at 400kHz,
-	 * fast mode plus at 1MHz and high speed mode at 3.4MHz are supported.
-	 */
-	for (i = 0; i < ARRAY_SIZE(supported_speeds); i++) {
-		if (t->bus_freq_hz == supported_speeds[i])
-			return 0;
-	}
-
-	dev_err(dev->dev,
-		"%d Hz is unsupported, only 100kHz, 400kHz, 1MHz and 3.4MHz are supported\n",
-		t->bus_freq_hz);
-
-	return -EINVAL;
-}
+cat /sys/class/i2c-dev/i2c-0/name
+# Synopsys DesignWare I2C adapter
 ```
 
-### User Space
+**I2C 速率配置**
 
-通常，I2C 设备由内核驱动程序控制，但也可以从用户态访问总线上的所有设备，通过/dev/i2c-%d 接口来访问，Kernel 下面的 Documentation/i2c/dev-interface.rst 文档里有详细的介绍。
+默认速率由 DTS `clock-frequency` 决定（常见为 400 kHz）。驱动仅接受 100k / 400k / 1M / 3.4M 四档，解析与校验逻辑位于：
 
-#### Debug 接口
+```text
+kernel/drivers/i2c/busses/i2c-designware-common.c   # supported_speeds[]
+kernel/drivers/i2c/busses/i2c-designware-platdrv.c  # i2c_parse_fw_timings()
+```
 
-**寄存器信息获取**
+修改速率示例：将对应 `i2cN` 节点的 `clock-frequency` 改为 `<100000>` 或 `<1000000>`，重新编译内核/设备树并烧录。
 
-查看 I2C 寄存器信息，以 i2c-0为例
+### 用户态使用
+
+用户态通过 `/dev/i2c-N` 或 `i2c-tools` 访问总线。Kernel 文档详见 `Documentation/i2c/dev-interface.rst`。
+
+**1. 检查字符设备节点**
+
+```bash
+ls /dev/i2c-*
+# /dev/i2c-0  /dev/i2c-1  /dev/i2c-2  /dev/i2c-3  /dev/i2c-4  /dev/i2c-5
+```
+
+若节点缺失，可执行 `modprobe i2c-dev`，并确认 DTS 中对应控制器 `status = "okay"`。
+
+**2. 使用 i2c-tools 扫描与读写**
+
+工具已预装在 rootfs 中，常用命令：
+
+| 命令 | 作用 |
+|---|---|
+| `i2cdetect` | 列举总线及总线上的设备地址 |
+| `i2cdump` | 显示从设备寄存器 |
+| `i2cget` | 读取指定寄存器 |
+| `i2cset` | 写入指定寄存器 |
 
 <DocScope products="RDK S100">
 
-``` text
-root@ubuntu:/# cat /sys/kernel/debug/dw_i2c0/registers
-39420000.i2c registers:
-=================================
-CON:            0x00000065
-SAR:            0x00000055
-DATA_CMD:       0x00000800
-INTR_STAT:      0x00000000
-INTR_MASK:      0x00000000
-RX_TL:          0x00000000
-TX_TL:          0x00000002
-STATUS:         0x00000006
-TXFLR:          0x00000000
-RXFLR:          0x00000000
-SDA_HOLD:       0x0001000c
-TX_ABRT:        0x00000000
-EN_STATUS:      0x00000000
-CLR_RESTA:      0x00000000
-PARAM:          0x000303ee
-VERSION:        0x3230322a
-TYPE:           0x44570140
-=================================
-```
+板载 bus `0` 扫描（驱动已占用的地址显示为 `UU`）：
 
-</DocScope>
-<DocScope products="RDK S600">
-
-``` text
-root@ubuntu:/# cat /sys/kernel/debug/dw_i2c0/registers
-34840000.i2c registers:
-=================================
-CON:            0x00000075
-SAR:            0x00000055
-DATA_CMD:       0x00000000
-INTR_STAT:      0x00000000
-INTR_MASK:      0x00000000
-RX_TL:          0x00000000
-TX_TL:          0x00000010
-STATUS:         0x00000006
-TXFLR:          0x00000000
-RXFLR:          0x00000000
-SDA_HOLD:       0x00010019
-TX_ABRT:        0x00000000
-EN_STATUS:      0x00000000
-CLR_RESTA:      0x00000000
-PARAM:          0x001f1fee
-VERSION:        0x3230342a
-TYPE:           0x44570140
-=================================
-```
-
-</DocScope>
-
-**reldump_en 接口**
-
-实时 dump 使能接口，可通过 dmesg 查看 I2C 实时传输的数据。
-
-``` text
-# enable
-echo 1 > /sys/kernel/debug/dw_i2c0/reldump_en
-
-# disable
-echo 0 > /sys/kernel/debug/dw_i2c0/reldump_en
-```
-
-**fifodump_en 接口**
-
-fifodump 使能接口，可以 dump 最近多次 I2C 读写数据，每个通道单独配置，仅支持 master
-7位地址模式。
-
-``` text
-# enable
-echo 1 > /sys/kernel/debug/dw_i2c0/fifodump_en
-
-# disable
-echo 0 > /sys/kernel/debug/dw_i2c0/fifodump_en
-```
-
-**fifodump 接口**
-
-临时存储 I2C 数据，fifodump_en 使能条件下通过 cat 打印。
-
-传输正常：
-
-``` text
-root@ubuntu:~# i2cdump -f -y 0 0x28
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-00: 00 1f 21 00 00 00 00 00 00 00 XX XX XX XX XX XX    .?!.......XXXXXX
-10: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-20: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-30: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-40: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-50: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-60: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-70: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-80: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-90: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-a0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-b0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-c0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-d0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-e0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-f0: XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX    XXXXXXXXXXXXXXXX
-
-root@ubuntu:~# cat /sys/kernel/debug/dw_i2c0/fifodump
-=b[0]-t[1229.799811]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x84
-m[1]-a[0x28]-f[0x1]:0x00
-=b[0]-t[1229.799881]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x85
-m[1]-a[0x28]-f[0x1]:0x00
-=b[0]-t[1229.799953]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x86
-m[1]-a[0x28]-f[0x1]:0x00
-=b[0]-t[1229.800046]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x87
-m[1]-a[0x28]-f[0x1]:0x00
-=b[0]-t[1229.800152]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x88
-m[1]-a[0x28]-f[0x1]:0x00
-=b[0]-t[1229.800233]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x89
-m[1]-a[0x28]-f[0x1]:0x00
-=b[0]-t[1229.800308]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x8a
-m[1]-a[0x28]-f[0x1]:0x00
-=b[0]-t[1229.800384]-n[2]-me[0]-ce[1]-ae[0x800008]=
-m[0]-a[0x28]-f[0x0]:0x8b
-m[1]-a[0x28]-f[0x1]:0x00
-
- b: bus number.
- t: timestamp.
- n: msg numbers.
- m: msg label.
- a: slave addr.
- f: flags, 0 is write, 1 is read.
-```
-
-传输异常：
-
-``` text
-=b[1]-t[32991.050148]-n[2]-me[0]-ce[1]-ae[0x800001]=
-m[0]-a[0x10]-f[0x0]:0xfa
-m[1]-a[0x10]-f[0x1]:0x13
-=b[1]-t[32991.050257]-n[2]-me[0]-ce[1]-ae[0x800001]=
-m[0]-a[0x10]-f[0x0]:0xfb
-m[1]-a[0x10]-f[0x1]:0x13
-
-me: msg_err. Normal transmission is equal to "0", address/length mismatch will equal "-EINVAL".
-ce: cmd_err. Normal transmission is equal to "0", the error was "DW_IC_ERR_TX_ABRT (0x1u)" transmit termination error.
-ae: abort_source.
-```
-
-**whitelist 接口**
-
-``` text
-root@ubuntu:~# echo 01 02 > /sys/kernel/debug/dw_i2c0/whitelist
-root@ubuntu:~# cat /sys/kernel/debug/dw_i2c0/whitelist
-whitelist: 01 02
-```
-
-1.  通过 echo 命令可设置白名单，cat 命令可打印白名单。
-2.  白名单支持 reldump 以及 fifodump 的地址过滤。
-3.  默认为16进制，输入异常数据或者超过128的地址会报错；写入0会关闭白名单。
-
-### i2c-tools
-
-<DocScope products="RDK S100">
-i2c-tools 是一套开源工具，该工具已经被交叉编译并包含在 S100系统软件的 rootfs 中，客户可以直接使用：
-</DocScope>
-<DocScope products="RDK S600">
-i2c-tools 是一套开源工具，该工具已经被交叉编译并包含在 S600系统软件的 rootfs 中，客户可以直接使用：
-</DocScope>
-
--   i2cdetect --- 用来列举 I2C bus 及该 bus 上的所有设备
--   i2cdump --- 显示 i2c 设备的所有 register 值
--   i2cget --- 读取 i2c 设备某个 register 的值
--   i2cset --- 写入 i2c 设备某个 register 的值
-
-## I2C 测试
-
-### 检查 i2cdev 节点
-
-查看是否产生 i2c-dev 节点，以下设备均配置为主设备
-
-<DocScope products="RDK S100">
-
-``` text
-root@ubuntu:~# ls /sys/class/i2c-dev/
-i2c-0  i2c-1  i2c-2  i2c-3  i2c-4  i2c-5
-
-root@ubuntu:~# cat /sys/class/i2c-dev/i2c-0/name
-Synopsys DesignWare I2C adapter
-```
-
-</DocScope>
-<DocScope products="RDK S600">
-
-``` text
-root@drobot:~# ls /sys/class/i2c-dev/
-i2c-0  i2c-1  i2c-2  i2c-3  i2c-4  i2c-5  i2c-7  i2c-8  i2c-9
-
-root@drobot:~# cat /sys/class/i2c-dev/i2c-0/name
-Synopsys DesignWare I2C adapter
-```
-
-</DocScope>
-
-查看 i2c 设备节点是否产生
-
-``` text
-root@ubuntu:~# ls /sys/class/i2c-dev/i2c-0/device/
-delete_device  device  i2c-dev  name  new_device  of_node  power  subsystem  uevent
-```
-
-### 测试步骤
-
-- 测试命令：i2cdetect -y -r 3
-- 测试示例如下
-
-``` text
-root@ubuntu:~# i2cdetect -r -y 3
+```bash
+root@ubuntu:~# i2cdetect -y -r 0
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:                         -- -- -- -- -- -- -- --
 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: UU -- -- -- UU -- -- UU -- -- -- UU -- -- -- --
 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- 44 -- -- -- -- -- -- -- -- -- -- --
 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 70: -- -- -- -- -- -- -- --
 ```
 
+40-pin **I2C5**（bus `5`）在扣合 Audio Driver HAT REV2 后，应看到 `08`、`40`、`42`：
+
+```bash
+root@ubuntu:~# i2cdetect -y -r 5
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         08 -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: 40 -- 42 -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+```
+
+读取示例（以扫描到的地址为准）：
+
+```bash
+i2cget -y 5 0x08 0x00    # 读 ES8156 寄存器 0x00
+i2cget -y 5 0x42 0x00    # 读 ES7210 寄存器 0x00
+```
+
+</DocScope>
+
+**3. Python `i2cdev` 示例**
+
+板端示例脚本：`/app/40pin_samples/test_i2c.py`（SDK：`hobot-io-samples/debian/app/40pin_samples/test_i2c.py`）。
+
+```bash
+cd /app/40pin_samples
+python3 test_i2c.py
+```
+
+交互流程：输入 bus 号（默认 `0`）→ `i2cdetect` 扫描 → 输入十六进制地址（支持 `08` 或 `0x08`）→ 读取 1 字节并打印 `read value=`。
+
+扣合 Audio Driver HAT 后，bus `5` + 地址 `08` 的典型输出：
+
+```text
+Please input I2C BUS num (default 0):5
+...
+Please input I2C device num(Hex, e.g. 51):08
+Read data from device 0x8 on I2C bus 5
+read value= b'\x1c'
+```
+
+完整交互日志与接线说明见 [I2C 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/05_i2c.md)。
+
+## 调试
+
+DesignWare I2C 驱动在 debugfs 下提供寄存器与 FIFO 抓包接口。板端可见 `dw_i2c0`～`dw_i2c5` 调试目录（以 S100 为例）：
+
+```bash
+ls /sys/kernel/debug/ | grep dw_i2c
+# dw_i2c0  dw_i2c1  dw_i2c2  dw_i2c3  dw_i2c4  dw_i2c5
+```
+
+### 寄存器 dump
+
+以 `i2c-5` 为例（板端实测）：
+
+```bash
+root@ubuntu:~# cat /sys/kernel/debug/dw_i2c5/registers
+39470000.i2c registers:
+=================================
+CON:            0x00000065
+SAR:            0x00000055
+DATA_CMD:       0x00000000
+STATUS:         0x00000006
+SDA_HOLD:       0x0001000c
+...
+=================================
+```
+
+### 实时传输 dump（`reldump_en`）
+
+```bash
+# 使能
+echo 1 > /sys/kernel/debug/dw_i2c0/reldump_en
+# 关闭
+echo 0 > /sys/kernel/debug/dw_i2c0/reldump_en
+```
+
+使能后可通过 `dmesg` 查看实时传输记录。
+
+### FIFO 历史 dump（`fifodump_en` / `fifodump`）
+
+```bash
+echo 1 > /sys/kernel/debug/dw_i2c0/fifodump_en
+i2cget -y 0 0x28 0x00          # 触发一次访问
+cat /sys/kernel/debug/dw_i2c0/fifodump
+echo 0 > /sys/kernel/debug/dw_i2c0/fifodump_en
+```
+
+输出字段含义：`b`=bus，`a`=slave 地址，`f`=0 写 / 1 读；`me`/`ce`/`ae` 为非零时表示传输异常。
+
+### 地址白名单（`whitelist`）
+
+```bash
+echo 08 40 42 > /sys/kernel/debug/dw_i2c5/whitelist
+cat /sys/kernel/debug/dw_i2c5/whitelist
+# whitelist: 08 40 42
+```
+
+白名单用于过滤 `reldump` / `fifodump` 输出；写入 `0` 关闭过滤。
+
 ## 常见问题
 
-### i2cdetect 扫描结果全为 `--`（未检测到器件）
+### `i2cdetect` 扫描结果全为 `--`
 
-**原因**：SCL/SDA 线上缺少上拉电阻、外设器件未上电、或器件地址超出 `i2cdetect` 的扫描范围。
+**原因**：外设未上电、SDA/SCL 无上拉、引脚复用未切到 I2C，或扫描了未接设备的总线。
 
-**解决**：用示波器/万用表确认总线空闲时 SCL、SDA 为高电平（有上拉），确认外设供电正常，再用 `i2cdetect -r -y <bus>` 重新扫描。
+**解决**：确认外设供电与 40-pin 拨码（I2C5 须切至 I2C 而非 UART2）；用示波器/万用表确认空闲时 SCL/SDA 为高；对扩展场景使用 `i2cdetect -y -r 5` 重新扫描。
+
+### 扫描到 `UU` 或访问报 `Remote I/O error`
+
+**原因**：`UU` 表示该地址已有内核驱动占用，用户态不可裸读；`Remote I/O error` 常见于地址错误、总线未就绪或器件无应答。
+
+**解决**：`UU` 地址应通过对应内核驱动或 debug 接口调试，勿用 `i2cdev` 强读；用户态验证优先选择无驱动占用的外设总线（如 40-pin I2C5 + HAT）；确认输入地址与扫描矩阵一致。
 
 ### 找不到 `/dev/i2c-N` 设备节点
 
-**原因**：`i2c-dev` 驱动未加载，或对应总线的设备树节点未使能（`status` 非 `okay`）。
+**原因**：`i2c-dev` 未加载，或 DTS 中控制器 `status` 非 `okay`。
 
-**解决**：先用 `ls /sys/class/i2c-dev/` 确认节点是否生成；缺失时 `modprobe i2c-dev` 并检查设备树节点状态。
+**解决**：`ls /sys/class/i2c-dev/` 确认适配器；缺失时 `modprobe i2c-dev` 并检查设备树。
+
+### 误用 I2C4 与 I2C5
+
+**原因**：S100 40-pin 上 I2C4（Pin 27/28）接板载 RTC/风扇等，I2C5（Pin 3/5）接扩展子板；二者 bus 号不同。
+
+**解决**：扩展外设示例使用 bus `5`；板载器件使用 bus `4` 并由内核驱动管理。详见 [I2C 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/05_i2c.md)。
 
 ## 相关文档
 
-- [扩展引脚应用](/Demos/peripheral/40pin)
-- [GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
+- 用户层示例：[I2C 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/05_i2c.md)
+- 关联驱动：[GPIO 使用](./04_driver_gpio_dev.md)、[Pinctrl 调试指南](./05_driver_pinctrl_dev.md)
+- 跨核关联：[MCU I2C 使用指南](../11_mcu_development/10_mcu_i2c.md)
+- 音频子板器件说明：[音频调试指南](./09_driver_audio.md)
+- 板端示例代码：`/app/40pin_samples/test_i2c.py`
