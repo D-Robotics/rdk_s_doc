@@ -444,6 +444,17 @@ index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw1
 index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
 index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
 index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy                    config_file:dummy_sensor.c
+index: 6  sensor_name: sc230ai-30fps            config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw10_30fps_2lane.c
+index: 8  sensor_name: isx031_gmsl-30fps        config_file:linear_1920x1536_yuv422_30fps_4lane.c
+index: 9  sensor_name: shw3hstd_gmsl-60fps      config_file:linear_1920x1536_60fps_1lane.c
+index: 10 sensor_name: sc233hgs-120fps          config_file:linear_1920x1200_raw10_120fps_4lane.c
+index: 11 sensor_name: sc233hgs-30fps           config_file:linear_1920x1200_raw10_30fps_4lane.c
+index: 12 sensor_name: sc233hgs_hsmt_vc0        config_file:linear_1920x1200_raw10_30fps_4lane_vc0.c
+index: 13 sensor_name: sc233hgs_hsmt_vc1        config_file:linear_1920x1200_raw10_30fps_4lane_vc1.c
+index: 14 sensor_name: sc233hgs_hsmt_vc2        config_file:linear_1920x1200_raw10_30fps_4lane_vc2.c
+index: 15 sensor_name: sc233hgs_hsmt_vc3        config_file:linear_1920x1200_raw10_30fps_4lane_vc3.c
 ```
 
 #### 程序参数选项说明
@@ -456,7 +467,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 - 非 Serdes sensor 无需设置 link 和 mipi
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
 - mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有 mipi host 0，2，4，5 可以使用
+- 目前仅有 mipi host 0~3 可以使用
 :::
 
 #### 运行效果
@@ -551,7 +562,7 @@ multi_pipe_vin_isp_ynr_pym_gdc_vpu
 # ./multi_pipe_vin_isp_ynr_pym_gdc_vpu
 Usage: multi_pipe_vin_isp_ynr_pym_gdc_vpu [Options]
 Options:
--c, --config="sensor=id link=port channel=pym_chn type=TYPE output=FILE, 'channel' and 'type' and 'output' is not mandatory"
+-c, --config="sensor=id link=port mipi=mipi_rx channel=pym_chn type=TYPE output=FILE, 'channel' and 'type' and 'output' is not mandatory"
                 Configure parameters for each video pipeline, can be repeated up to 6 times
                 sensor   --  Sensor index,can have multiple parameters, reference sensor list.
                 link     --  Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D, can be set to [0-3].
@@ -567,17 +578,28 @@ index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw1
 index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
 index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
 index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy                    config_file:dummy_sensor.c
+index: 6  sensor_name: sc230ai-30fps            config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw10_30fps_2lane.c
+index: 8  sensor_name: isx031_gmsl-30fps        config_file:linear_1920x1536_yuv422_30fps_4lane.c
+index: 9  sensor_name: shw3hstd_gmsl-60fps      config_file:linear_1920x1536_60fps_1lane.c
+index: 10 sensor_name: sc233hgs-120fps          config_file:linear_1920x1200_raw10_120fps_4lane.c
+index: 11 sensor_name: sc233hgs-30fps           config_file:linear_1920x1200_raw10_30fps_4lane.c
+index: 12 sensor_name: sc233hgs_hsmt_vc0        config_file:linear_1920x1200_raw10_30fps_4lane_vc0.c
+index: 13 sensor_name: sc233hgs_hsmt_vc1        config_file:linear_1920x1200_raw10_30fps_4lane_vc1.c
+index: 14 sensor_name: sc233hgs_hsmt_vc2        config_file:linear_1920x1200_raw10_30fps_4lane_vc2.c
+index: 15 sensor_name: sc233hgs_hsmt_vc3        config_file:linear_1920x1200_raw10_30fps_4lane_vc3.c
 ```
 
 #### 程序参数选项说明
 
-- `-c, --config="sensor=id channel=vse_chn type=TYPE output=FILE"`
+- `-c, --config="sensor=id link=port mipi=mipi_rx channel=pym_chn type=TYPE output=FILE"`
   - 配置每一路视频通路的参数。此选项最多可以重复多次。
   - sensor 是必须的参数， channel、 type、 output 是可选参数，用户不配置时，程序会使用默认值。
   - `sensor`：传感器索引，必须参数，可以有多个参数，参考传感器列表。
   - `link`： Serdes 类型的 Sensor 接入的 Link Port (MIPI 类型的 Sensor 忽略此参数 ), 比如接入的是 Port A，指定为 0，即在 `-c` 配置串中写 `link=0`
   - `mipi`： Serdes 类型的 Sensor 接入的 mipi host
-  - `channel`： VSE 通道索引，可选参数，默认为 0 ，可以设置为 [0~5]。
+  - `channel`： PYM 通道索引，可选参数，默认为 0 ，可以设置为 [0~5]。
   - `type`：编码类型，可选参数，默认为 h264 ，可以设置为 [h264, h265]。
   - `output`：保存编码流数据到文件，可选参数，默认为 `pipeline[xx]_[width]x[height]_[xxx]fps.[type]`。
 
@@ -593,7 +615,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 3. 非 Serdes sensor 无需设置 link mipi 
 4. link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
 5. mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-6. 目前仅有 mipi host 0，2 可以使用
+6. 目前仅有 mipi host 0~3 可以使用
 
 #### 运行效果
 `multi_pipe_vin_isp_ynr_pym_gdc_vpu` 的输出：每条视频处理通道（ pipeline）都会将处理后的视频流编码为 H.264/H.265 格式并保存。
