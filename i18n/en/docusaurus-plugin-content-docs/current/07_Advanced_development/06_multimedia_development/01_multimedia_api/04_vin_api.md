@@ -630,7 +630,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vin_ochn_attr` | `vin_ochn_attr_t[]` | Output channels, indexed by `ochn_id` |
 | `vin_ichn_attr` | `vin_ichn_attr_t` | Input channel |
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[]` | Buffers of the DDR-bound channels, indexed by `ochn_id` |
-| `magicNumber` | `uint32_t` | *framework* |
+| `magicNumber` | `uint32_t` | `0x12345678`. This level never reaches the kernel and is not validated |
 
 #### Node Level — Input Mode and Board Connections
 
@@ -641,7 +641,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `lpwm_attr` | `lpwm_attr_t` | Exposure trigger |
 | `vcon_attr` | `vcon_attr_t` | I2C / POC / GPIO / PHY and other board connections |
 | `flow_id` | `uint32_t` | *framework* |
-| `magicNumber` | `uint32_t` | *framework* |
+| `magicNumber` | `uint32_t` | **Required: `0x12345678`**. The driver's `set_attr` validates it and fails the call on a mismatch |
 
 ##### cim_attr_t
 | Field | Type | Description |
@@ -763,7 +763,7 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `rawds_attr` | `vin_rawds_attr_t` | Downsampling attributes |
 | `roi_attr` | `struct vin_roi_attr_s` | Cropping attributes |
 | `emb_attr` | `vin_emb_attr_t` | EMB attributes |
-| `magicNumber` | `uint32_t` | *framework* |
+| `magicNumber` | `uint32_t` | **Required: `0x12345678`**. The driver's `set_ochn_attr` validates it and fails the call on a mismatch |
 
 ##### vin_basic_attr_t
 | Field | Type | Description |
@@ -872,7 +872,8 @@ Sets the module's basic attributes. For VIN this is `vin_attr_t`, which carries 
 
 **Key points**
 
-- `magicNumber` inside the attributes must follow the header's convention
+- `magicNumber` in `vin_node_attr_t` / `vin_ochn_attr_t` **must be filled in by the caller as `0x12345678`**; the driver's `set_attr` / `set_ochn_attr` validates it and fails the call on a mismatch
+- The framework does not fill this in for you: the `MAGIC_NUMBER` macro lives in the driver-internal header `camsys/vpf/vio_config.h` and is absent from the published `hbn_vin_cfg.h`, so hard-code `0x12345678` as the board samples do
 
 #### hbn_vnode_set_ichn_attr
 Sets the module's input channel attributes.

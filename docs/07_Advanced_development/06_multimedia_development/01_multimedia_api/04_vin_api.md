@@ -631,7 +631,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `vin_ochn_attr` | `vin_ochn_attr_t[]` | 输出通道，按 `ochn_id` 索引 |
 | `vin_ichn_attr` | `vin_ichn_attr_t` | 输入通道 |
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[]` | 落 DDR 通道的 buffer，按 `ochn_id` 索引 |
-| `magicNumber` | `uint32_t` | 框架填 |
+| `magicNumber` | `uint32_t` | 填 `0x12345678`。这一层不下发到内核，驱动也不校验 |
 
 #### 节点级 —— 接入方式与板级连接
 
@@ -642,7 +642,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `lpwm_attr` | `lpwm_attr_t` | 曝光触发 |
 | `vcon_attr` | `vcon_attr_t` | I2C / POC / GPIO / PHY 等板级连接 |
 | `flow_id` | `uint32_t` | 框架填 |
-| `magicNumber` | `uint32_t` | 框架填 |
+| `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_attr` 校验这个值，不符直接返回失败 |
 
 ##### cim_attr_t
 | 字段 | 类型 | 说明 |
@@ -764,7 +764,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `rawds_attr` | `vin_rawds_attr_t` | 下采样属性 |
 | `roi_attr` | `struct vin_roi_attr_s` | 裁剪属性 |
 | `emb_attr` | `vin_emb_attr_t` | EMB 属性 |
-| `magicNumber` | `uint32_t` | 框架填 |
+| `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_ochn_attr` 校验这个值，不符直接返回失败 |
 
 ##### vin_basic_attr_t
 | 字段 | 类型 | 说明 |
@@ -873,7 +873,8 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 **要点**
 
-- 属性中的 `magicNumber` 需按头文件约定填写
+- `vin_node_attr_t` / `vin_ochn_attr_t` 的 `magicNumber` **要调用方自己填 `0x12345678`**；驱动 `set_attr` / `set_ochn_attr` 会校验，不符直接返回失败
+- 这个值不是框架替你填的：`MAGIC_NUMBER` 宏只在驱动内部头 `camsys/vpf/vio_config.h`，发布的 `hbn_vin_cfg.h` 里没有，照板端 sample 写死 `0x12345678` 即可
 
 #### hbn_vnode_set_ichn_attr
 设置模块的输入通道属性。
