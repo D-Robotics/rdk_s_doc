@@ -69,9 +69,10 @@ vnode 之间通过输入通道和输出通道进行连接 :
 ### 输入通道
 
 每个 vnode 只有一个输入通道，分三种情况描述
-1. Camera 作为输入节点：
-2. vflow 的中间节点：`hbn_vflow_bind_vnode` 函数决定下游节点的输入通道
-3. 
+1. 源节点(VIN)：数据源来自 camera, 通过 `hbn_camera_attach_to_vin` 把 camera 与 VIN 绑定后，框架自动把camera 中的输入送入到 VIN 节点
+2. 中间节点：`hbn_vflow_bind_vnode` 函数决定上游节点的那个输出与下游节点的输入通道绑定
+3. 回灌场景：vnode 的输入没有与任何元素绑定，需要用户主动调用 `hbn_vnode_sendframe` 接口给 vnode的输入通道送数据
+
 ### 输出通道
 
 - 输出通道按照两种情况进行划分：连接方式和输出的数据内容，比如 VIN节点
@@ -135,19 +136,19 @@ vnode 之间通过输入通道和输出通道进行连接 :
 |----------|----------|----------------------|------------------------|------------------|
 | ISP - PYM | 单路 online | `sched_mode=2` `slot_id=0` `hw_id=与VIN相同` | `axi_output_mode=0` | `pym_mode=1` `slot_id=与ISP相同` `hw_id=与ISP相同` |
 | ISP - PYM | 多路 online | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` | `axi_output_mode=0` | `pym_mode=2` `slot_id=与ISP相同` `hw_id=与ISP相同` |
-| ISP - PYM | offline | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` | `axi_output_mode=2-21` | `pym_mode=3` `slot_id=4-11` `hw_id=PYM的硬件ID` |
+| ISP - PYM | offline | `sched_mode=1` `slot_id=4-11` `hw_id=选择的ISP硬件的ID` | `axi_output_mode=9` | `pym_mode=3` `slot_id=4-11` `hw_id=PYM的硬件ID` |
 
 ##### ISP 与 YNR 
-由于 YNR 的输入不支持读取DDR 输出也不能写到DDR，所以使能 YNR后，必须使能PYM
+由于 YNR 的输入不支持读取DDR 输出也不能写到DDR，所以使能 YNR后，必须使能PYM, 并且 ISP 必须 online 到 YNR，YNR 必须 online 到 pym。由于 ynr 的模式与ISP模式相关，ISP的模式与VIN的模式相关，所以分两种情况描述：
 
-VIN 和 ISP online 的情况：
+情景1：VIN 和 ISP online 的情况：
 1. Vin online 到 ISP
   - `vin_node_attr` 的 `cim_isp_flyby=1`
   - `isp_node_attr` 的 `sched_mode=2`
   - `isp_node_attr` 的 `hw_id=与VIN相同`
 2. ISP 必须 online 到 YNR
   - `isp_node_attr` 的 `slot_id=0`
-  - `isp_ochn_attr_t` 的 `axi_output_mode=1`
+  - `isp_ochn_attr_t` 的 `axi_output_mode=0`
   - `ynr_init_attr` 的 `slot_id=与ISP相同`
   - `ynr_init_attr` 的 `work_mode=1`
 3. YNR 必须 online 到 PYM
@@ -155,7 +156,7 @@ VIN 和 ISP online 的情况：
   - `pym_cfg_t` 的 `slot_id=与ISP相同`
   - `pym_cfg_t` 的 `hw_id=与ISP相同`
 
-VIN 和 ISP offline 的情况：
+情景2：VIN 和 ISP offline 的情况：
 1. Vin offline 到 ISP
   - `vin_node_attr` 的 `ddr_en=1`
   - `vin_node_attr` 的 `cim_isp_flyby=0`
@@ -163,7 +164,7 @@ VIN 和 ISP offline 的情况：
   - `isp_node_attr` 的 `hw_id=选择的ISP硬件的ID`
 2. ISP 必须 online 到 YNR
   - `isp_node_attr` 的 `slot_id=4-11`
-  - `isp_ochn_attr_t` 的 `axi_output_mode=1`
+  - `isp_ochn_attr_t` 的 `axi_output_mode=0`
   - `ynr_init_attr` 的 `slot_id=与ISP相同`
   - `ynr_init_attr` 的 `slot_id=与ISP相同`
   - `ynr_init_attr` 的 `work_mode=1`
@@ -190,7 +191,7 @@ VIN 和 ISP offline 的情况：
 - `pym_cfg_t`中 pym_mode 数字对应的枚举变量
   - `PYM_MANUAL_MODE`(1): 和ISP直连，并且ISP是 SCHED_MODE_MANUAL （VIN 与 PYM 连接时不能配置这个选项）
   - `PYM_OTF_MODE`(2): 和VIN/ISP直连， 如果和ISP直连接时 `isp_node_attr` 的 `sched_mode` 必须是SCHED_MODE_PASS_THRU
-  - `PYM_M2M_MODE`(3): 数据来自DDR
+  - `PYM_M2M_MODE`(3): PYM 的输入数据来自DDR
 
 ## API 列表
 
