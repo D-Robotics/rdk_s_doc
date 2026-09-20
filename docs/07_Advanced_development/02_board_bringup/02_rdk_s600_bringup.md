@@ -7,28 +7,54 @@ sidebar_products: RDK S600
 
 # RDK S600 硬件点亮
 
-本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S600 的流程：从 boardid 分配、MCU 侧电源管理、spl/U-Boot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S600 的 boardid 机制。
+本篇面向模式 3（高度定制）客户，介绍在自研底板/自研外设上点亮 RDK S600 的流程：从 boardid 分配、MCU 侧电源管理、spl/U-Boot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S600 的 boardid 机制。
 
-S600 boardid 由 ADC0、ADC1、ADC2、ADC4、ADC5、ADC6共同作用，其中 ADC0、 ADC1和ADC2用于地瓜硬件区分，客户不可更改；ADC4用于module底板区分，ADC5用于底板版本区分，ADC4和ADC5用户可以更改；ADC6为预留状态，强制为0x1。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
+## boardid 机制
 
-ADC0、ADC1和ADC2 通道共有8个档位，对应0x0-0x7；ADC4、ADC5通道共有7个档位，对应0x0-0x6。S600的 boardid 是一个28bit 的无符号整型，例如`0x5131310`，其中 boardid[27:24]对应 ADC0，为0x5；boardid[23:20]对应 ADC1，为0x1；boardid[19:16]对应 ADC2，为0x3；boardid[15:12]对应 ADC4，为0x1；boardid[11:8]对应 ADC5，为0x3；boardid[7:4]对应 ADC6，为0x1；boardid[3:0]默认为0x0
+RDK S600 的 boardid 是一个 28bit 无符号整型，由 ADC0_IO[0]、ADC0_IO[1]、ADC0_IO[2]、ADC0_IO[4]、ADC0_IO[5]、ADC0_IO[6] 六个 ADC 通道采样共同决定。每个通道占用一个 nibble（4bit），对应一个 boardid 字段：
 
-由 ADC 采样形成 boardid，在 SBL 内实现，对应代码路径为`mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`，函数`SBL_GetADC_To_AonSram`
+| boardid 位段 | ADC 通道 | 用途 | 档位 | 客户可改 |
+|---|---|---|---|---|
+| [27:24] | ADC0_IO[0] | 客户/项目 | 0x5：地瓜 S600 项目 | 否 |
+| [23:20] | ADC0_IO[1] | 硬件板卡类型 | 0x0：工厂测试模式；0x1：S600 Module | 否 |
+| [19:16] | ADC0_IO[2] | 硬件板卡版本 | 0x1：V0P1；0x2：V0P2；0x3：V1P0；0x4：V1P1 | 否 |
+| [15:12] | ADC0_IO[4] | 底板类型 | 0x1/0x2/0x3：地瓜底板；0xF：产线测试禁用 | 是 |
+| [11:8] | ADC0_IO[5] | 底板版本号 | 0x1：V0P1；0x2：V0P2；0x3：V1P0；0x4：V1P1；0xF：产线测试禁用 | 是 |
+| [7:4] | ADC0_IO[6] | PCIe RC/EP 检测 | 0x1：Default；0xF：产线测试禁用 | 否 |
+| [3:0] | — | 预留 | 0x0 | 否 |
 
-## 硬件支持
+其中 ADC0_IO[0]~ADC0_IO[2] 用于地瓜硬件区分，由地瓜维护，客户不可更改；ADC0_IO[4]（底板类型）和 ADC0_IO[5]（底板版本号）允许客户自定义；ADC0_IO[6] 为预留，默认 0x1。
 
-S600 板级点亮依赖 boardid 机制，由 ADC0、ADC1、ADC2、ADC4、ADC5、ADC6 六个通道共同决定，默认配置如下：
+ADC0_IO[3] 为 DDR 类型识别（DDR_TYPE_ID），不参与 boardid 计算：0x0 为 LPDDR5 单 rank 32GB，0x1 为 LPDDR5 双 rank 64GB，由地瓜维护。
 
-| ADC 通道 | 用途 | 客户可改 |
-|---------|------|---------|
-| ADC0 | 硬件区分 | 否 |
-| ADC1 | 硬件区分 | 否 |
-| ADC2 | 硬件区分 | 否 |
-| ADC4 | module 底板区分 | 是 |
-| ADC5 | 底板版本区分 | 是 |
-| ADC6 | 预留（强制 0x1） | 否 |
+例如 `0x5131310`：ADC0_IO[0]=0x5（地瓜 S600 项目）、ADC0_IO[1]=0x1（S600 Module）、ADC0_IO[2]=0x3（V1P0）、ADC0_IO[4]=0x1（地瓜底板）、ADC0_IO[5]=0x3（底板 V1P0）、ADC0_IO[6]=0x1（Default），低 4bit 预留为 0x0。
 
-ADC0~ADC2 每通道 8 个档位（0x0~0x7）；ADC4、ADC5 每通道 7 个档位（0x0~0x6）。boardid 为 28bit 无符号整型，如 `0x5131310` 对应 ADC0=0x5、ADC1=0x1、ADC2=0x3、ADC4=0x1、ADC5=0x3、ADC6=0x1。
+boardid 由 ADC 采样在 SBL 内生成，对应代码路径 `mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`（函数 `SBL_GetADC_To_AonSram`），这部分属于闭源代码，客户无需关心。
+
+### 底板类型与底板版本号
+
+底板类型（ADC0_IO[4]）和底板版本号（ADC0_IO[5]）是客户自研底板时最关心的两个字段，均可自定义。当前规划：
+
+- 底板类型：0x1/0x2/0x3 为地瓜底板；0xF 为产线测试强制覆写，禁用。
+- 底板版本号：0x1/0x2/0x3/0x4 分别对应 RDK S600 Module Carrier Board V0P1/V0P2/V1P0/V1P1；0xF 为产线测试强制覆写，禁用。
+
+客户自定义底板时，可申请新的档位，并在 MCU、U-Boot 与 Kernel 侧登记对应的 boardid（见下文各章节）。
+
+### ADC 档位分压电阻设计
+
+每个 ADC 通道通过分压电阻设定采样电压，将采样电压映射为档位编码。下表列出档位 0x0 至 0x6 的电压范围、典型电压与推荐分压电阻。表中 Ru 为上拉电阻、Rd 为下拉电阻，上拉电源为 1.8V。
+
+| 档位 | 电压范围 | 典型电压 | 推荐分压电阻 |
+|---|---|---|---|
+| 0x0 | 0mV~180mV | 0mV | 下拉接地（PD） |
+| 0x1 | 181mV~360mV | 272mV | Ru:33.2k; Rd:5.9k |
+| 0x2 | 361mV~560mV | 462mV | Ru:33.2k; Rd:11.5k |
+| 0x3 | 561mV~780mV | 672mV | Ru:33k; Rd:19.6k |
+| 0x4 | 781mV~1090mV | 937mV | Ru:33.2k; Rd:36k |
+| 0x5 | 1091mV~1400mV | 1247mV | Ru:6.81k; Rd:15.4k |
+| 0x6 | 1401mV~1800mV | 1602mV | Ru:33.2k; Rd:267k |
+
+该设计主要面向底板类型（ADC0_IO[4]）与底板版本号（ADC0_IO[5]）两个客户自定义通道，增大档位裕量、降低 ADC 被干扰的风险。
 
 ## 软件架构
 
@@ -36,7 +62,7 @@ ADC0~ADC2 每通道 8 个档位（0x0~0x7）；ADC4、ADC5 每通道 7 个档位
 
 ```mermaid
 flowchart TD
-    A["SBL<br/>ADC 采样生成 boardid"] --> B["MCU<br/>Acore 电源管理"]
+    A["SBL<br/>ADC 采样生成 boardid"] --> B["MCU<br/>外设电源管理"]
     B --> C["spl / U-Boot<br/>配置文件 + 设备树 + boardid"]
     C --> D["Kernel<br/>配置文件 + 设备树 + 按 boardid 加载 ko"]
     D --> E["上板调试<br/>启动信息比对"]
@@ -327,27 +353,7 @@ label drobot-s600-rdk-v1p0-kernel
 boardid_sys_path="/sys/class/boardinfo/adc_boardid"
 if [ -f "$boardid_sys_path" ]; then
         boardid="$(cat $boardid_sys_path)"
-        if [[ "$boardid" =~ ^0x(64|65|6A|6B)[0678][04567]$ ]];then # S100
-                case ${boardid} in
-                        *"0")
-                                # Check if TPIC2810 exists, if so, manual reset USB controller
-                                if [ -f /sys/class/i2c-adapter/i2c-2/2-0060/name ] &&
-                                   [ "$(cat /sys/class/i2c-adapter/i2c-2/2-0060/name)" = "tpic2810" ];then
-                                        /usr/bin/pcie-usb-reset.sh
-                                fi
-                                /usr/bin/start-pcie.sh &
-                        ;;
-                        *"7") ;&
-                        *"6") ;&
-                        *"5") ;&
-                        *"4")
-                                modprobe hobot-pcie-rc
-                                # check & update asm3042 firmware
-                                /usr/bin/update-asm3042-firmware.sh
-                                ;;
-                        *)
-                                ;;
-                esac
+        ...
         elif [[ "$boardid" =~ ^0x(51)[01234567][0123456][0123456][1234567].$ ]];then # S600
                 # S600 Boardid rules
                 modprobe hobot-pcie-rc
@@ -494,10 +500,20 @@ S600
 - U-Boot 侧：配置文件 `hobot_s600_defconfig`、设备树与 boardid 相关代码
 - Kernel 侧：配置脚本 `mk_kernel.sh`、设备树与按 boardid 加载的 ko
 
-<!-- TODO(Sx): 待收集 —— 常见问题：硬件点亮暂无真实「现象→原因→解决」素材 -->
+## 常见问题
+
+### boardid 不命中，PCIe 驱动未自动加载
+
+- **现象**：系统启动后，PCIe 驱动 `hobot-pcie-rc` 未自动加载。NVMe 硬盘、PCIe 网卡等 PCIe 设备不可用。`dmesg` 中可见 `Unsupported boardid:0x..., PCIE not Initialized!`。
+- **原因**：boardid 值与 `hobot-loadko.sh` 中登记的分支不匹配（不命中）。常见于自定义硬件后，boardid 未在脚本中登记。也可能是 MCU、U-Boot、Kernel 三侧登记的 boardid 不一致。
+- **解决**：
+  1. 执行 `cat /sys/class/boardinfo/adc_boardid` 查看实际 boardid。
+  2. 与 SBL/U-Boot log 中打印的 boardid 对比，判断三侧是否一致。
+  3. 不一致时，在 `hobot-loadko.sh` 中补全自定义 boardid 的分支（见上文「根据 boardid 加载 ko」），或修正三侧 boardid 定义。
 
 ## 相关文档
 
 - [开发环境与编译](../06_environment_build/01_environment_build.md)
 - [驱动开发指南](/Advanced_development/driver_development)
+- [MCU 开发指南](/Advanced_development/mcu_development)
 - [硬件介绍](/01_hardware_introduction)

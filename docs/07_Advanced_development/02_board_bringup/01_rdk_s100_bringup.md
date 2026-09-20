@@ -7,26 +7,110 @@ sidebar_products: RDK S100
 
 # RDK S100 硬件点亮
 
-本篇面向模式 3 客户，介绍在自研底板/自研外设上点亮 RDK S100 的流程：从 boardid 分配、MCU 侧电源管理、spl/U-Boot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S100 的 boardid 机制。
+本篇面向模式 3（高度定制）客户，介绍在自研底板/自研外设上点亮 RDK S100 的流程：从 boardid 分配、MCU 侧电源管理、spl/U-Boot 与 Kernel 侧新增硬件，到上板调试。前置条件为已获取 BSP 源码（见 [搭建开发环境](../06_environment_build/01_environment_build.md)），并了解 S100 的 boardid 机制。
 
-S100 boardid 由 ADC0、ADC1、ADC3和 ADC4共同作用，其中 ADC0和 ADC1用于地瓜硬件区分，客户不可更改；ADC3用于识别 Acore 外设上电时序，客户可自定义 Acore 外设上电时序，并同时修改 ADC3的分压电阻；ADC4用于识别硬件版本。具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队进行支持
+## boardid 机制
 
-每个 ADC 通道共有16个档位，对应0x0~0xF。S100的 boardid 是一个16bit 的无符号整型，例如`0x6A84`，其中 boardid[15:12]对应 ADC0，为0x6；boardid[11:8]对应 ADC1，为0xA；boardid[7:4]对应 ADC3，为0x8；boardid[3:0]对应 ADC4，为0x4
+S100 的 boardid 是一个 16bit 无符号整型，由 ADC0、ADC1、ADC3 和 ADC4 四个 ADC 通道采样共同决定。每个通道占用一个 nibble（4bit），共 16 个档位（0x0~0xF）：
 
-由 ADC 采样形成 boardid，在 SBL 内实现，这部分属于闭源代码，客户无需关心
+| boardid 位段 | ADC 通道 | 用途 | 档位 | 客户可改 |
+|---|---|---|---|---|
+| [15:12] | ADC0 | SIP 系列硬件标识 | 固定 0x6 | 否 |
+| [11:8] | ADC1 | SIP 类型 - PCIe Role | 0x4、0x5、0xA、0xB | 否 |
+| [7:4] | ADC3 | 外设电源使能控制方式 | 0x8：地瓜参考；0xB/0xC/0xD：客户自定义 | 是 |
+| [3:0] | ADC4 | 硬件版本 | 0x4 至 0x7：地瓜预留；0x8 至 0xD：客户自定义 | 是 |
 
-## 硬件支持
+例如 `0x6A84`：ADC0=0x6、ADC1=0xA、ADC3=0x8、ADC4=0x4。
 
-S100 板级点亮依赖 boardid 机制，由 ADC0、ADC1、ADC3、ADC4 四个通道共同决定，默认配置如下：
+boardid 由 ADC 采样在 SBL 内生成，这部分属于闭源代码，客户无需关心。
 
-| ADC 通道 | 用途 | 客户可改 |
-|---------|------|---------|
-| ADC0 | 硬件区分（默认档位 0x6） | 否 |
-| ADC1 | 硬件区分（默认档位 0xA） | 否 |
-| ADC3 | Acore 外设上电时序 | 是 |
-| ADC4 | 硬件版本 | 是 |
+### ADC1 档位说明
 
-每个 ADC 通道 16 个档位（0x0~0xF）。boardid 为 16bit 无符号整型，如 `0x6A84` 对应 ADC0=0x6、ADC1=0xA、ADC3=0x8、ADC4=0x4。
+ADC1 由 SIP 型号和 PCIe 角色两个维度共同决定，四选一：
+
+| 档位 | SIP 型号 | PCIe 角色 |
+|---|---|---|
+| 0x4 | S100P | RC |
+| 0x5 | S100P | EP |
+| 0xA | S100E | RC |
+| 0xB | S100E | EP |
+
+- **RC（Root Complex，根复合体）**：S100 作 PCIe 主控端，向下游连接 EP 设备（如 NVMe SSD），是 RDK S100/S100P 套件的默认形态。
+- **EP（Endpoint，端点）**：S100 作 PCIe 从设备，接入上位机的 PCIe 槽位，作为加速卡被第三方 RC 调用。
+
+S100P 为高性能版本（2.0GHz、24GB LPDDR5、128 TOPS），S100E 为标准版本（1.5GHz、12GB LPDDR5、80 TOPS）。
+
+:::note 说明
+软件侧（U-Boot / Kernel）读到的 `soc_name` 为 `S100` 时，其对应硬件即 S100E（SIP 型号），与 `S100P` 区分。
+:::
+
+### ADC3 档位说明
+
+ADC3 用于识别外设电源使能控制方式。外设电源使能既可由 MCU 的 GPIO 控制，也可由 MAIN 域的 IO 控制。客户可修改 ADC3 的分压电阻，再自行实现自定义的外设电源使能控制方式。
+
+**0x8（沿用地瓜参考设计）**
+
+外设电源使能控制信号按地瓜参考设计实现，具体行为如下：
+
+- SIP 上电完成后，立即拉高 CAN2_RX（AON 域 GPIO）；
+- 延时 50ms 后，立即拉高 SPI6_SCLK（MCU 域 GPIO）；
+- 进入 sleep 模式时，软件拉低 SPI6_SCLK，CAN2_RX 保持为高。
+
+:::note 注意
+选择 0x8 档位后，上述两个 GPIO 不允许修改。
+:::
+
+**0xB/0xC/0xD（客户自定义）**
+
+客户自定义外设电源控制，具体行为如下：
+
+- CAN2_RX 和 SPI6_SCLK 在启动阶段无拉高动作；
+- 客户自定义电源控制 GPIO，不使用地瓜参考设计电源控制引脚；
+- 外设电源使能既可由 MCU 的 GPIO 控制，也可由 MAIN 域的 IO 控制（如上电、复位等）；
+- 可在 MCU0 boot 阶段控制外设电源使能；
+- 若部分外设电源需要在休眠状态下保持供电，需选择 AON 域 CAN[1:7]_RX（GPIO_AON[1:7]）引脚控制。
+
+此外，0xB/0xC/0xD 三档还可用于扩展硬件版本空间。与 ADC4 的 0x4 至 0xD 十档组合后，可为客户提供 3 × 10 = 30 个版本组合。此时若仍沿用地瓜电源控制，需在 MCU 的 `switch` 中将 0xB/0xC/0xD 与 0x8 归入同一分支，无需再实现自定义上电方式。
+
+:::warning 注意
+
+自定义外设电源使能控制方式对设计能力有较高要求。客户需充分了解 MCU 与 Acore 的上下电时序，以及两者之间的 IPC（Inter-Processor Communication，核间通信）。地瓜提供参考设计与技术支持。客户自定义上电时序的稳定性，需由客户在量产前充分验证。
+
+:::
+
+自定义上电方式（0xB/0xC/0xD）的实现步骤见下文「在 MCU 下修改外设电源使能控制方式」。
+
+### ADC4 档位说明
+
+ADC4 标识硬件版本。当前 S100 已发布硬件版本与 ADC4 档位的对应关系如下：
+
+| ADC4 档位 | 硬件版本 |
+|---|---|
+| 0x4 | V0P5 |
+| 0x5 | V0P6 |
+| 0x6 | V1P0 |
+| 0x7 | V1P1 |
+
+其中 0x4 至 0x7 为地瓜预留档位，0x8 至 0xD 为客户自定义档位；历史版本 V1.2、V1.21 对应 ADC4=0x0（与 ADC3=0x6/0x7 组合），仅作兼容保留。客户新增硬件版本时，需在 U-Boot 的 `g_board_info` 数组中新增对应条目（见下文「新增 boardid」）。
+
+### ADC 档位分压电阻设计
+
+每个 ADC 通道通过分压电阻设定采样电压。档位 0x0 至 0x3 保留未开放。下表列出可用档位 0x4 至 0xD 的分压电阻建议。表中 Ru 为上拉电阻、Rd 为下拉电阻。
+
+| 档位 | 电压范围 | 典型电压 | 推荐分压电阻 |
+|---|---|---|---|
+| 0x4 | 221mV~320mV | 274mV | Ru:20k; Rd:3.6k |
+| 0x5 | 321mV~420mV | 365mV | Ru:20k; Rd:5.1k |
+| 0x6 | 421mV~540mV | 482mV | Ru:30k; Rd:11k |
+| 0x7 | 541mV~680mV | 608mV | Ru:19.6k; Rd:10k |
+| 0x8 | 681mV~820mV | 750mV | Ru:21k; Rd:15k |
+| 0x9 | 821mV~960mV | 890mV | Ru:20k; Rd:19.6k |
+| 0xA | 961mV~1100mV | 1034mV | Ru:20k; Rd:27k |
+| 0xB | 1101mV~1240mV | 1165mV | Ru:19.6k; Rd:36k |
+| 0xC | 1241mV~1380mV | 1309mV | Ru:21k; Rd:56k |
+| 0xD | 1381mV~1520mV | 1458mV | Ru:11k; Rd:47k |
+
+具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队支持。
 
 ## 软件架构
 
@@ -34,21 +118,23 @@ S100 板级点亮依赖 boardid 机制，由 ADC0、ADC1、ADC3、ADC4 四个通
 
 ```mermaid
 flowchart TD
-    A["SBL<br/>ADC 采样生成 boardid"] --> B["MCU<br/>Acore 外设电源管理"]
+    A["SBL<br/>ADC 采样生成 boardid"] --> B["MCU<br/>外设电源管理"]
     B --> C["spl / U-Boot<br/>配置文件 + 设备树 + boardid"]
     C --> D["Kernel<br/>配置文件 + 设备树 + 按 boardid 加载 ko"]
     D --> E["上板调试<br/>启动信息比对"]
 ```
 
-## 在 MCU 下新增硬件
+## 在 MCU 下修改外设电源使能控制方式
+
+外设电源使能控制方式由 ADC3 档位决定（见上文「ADC3 档位说明」）：ADC3 为 0x8 时沿用地瓜参考设计，无需修改 MCU；ADC3 为 0xB/0xC/0xD 时为客户自定义，需在 MCU 侧实现自己的上电方式。
 
 :::info 提示
-
-在 MCU 侧需要做的是实现自己的 Acore 外设上电方式，如果是参考地瓜的设计，客户无需修改 MCU，可忽略此部分
-
+沿用 0x8 地瓜参考设计的客户无需修改 MCU，可跳过本节。
 :::
 
-### 添加 Acore 外设电源管理代码
+### 添加外设电源管理代码
+
+外设电源管理分启动、下电、上电三个阶段实现，各阶段均通过读取 ADC3 档位（代码中为 `AdcCode3`）走不同的流程。
 
 #### 启动阶段
 
@@ -79,7 +165,7 @@ static Std_ReturnType Rdk_S100_Peri_Pwr_Init(void)
 }
 ```
 
-如代码所示，根据 ADC3档位走不同的 Acore 外设上电流程。如果客户自定义了 Acore 外设上电方式，需要分配一个新的 ADC3档位，实现自己的上电方式
+如代码所示，MCU 根据 ADC3 档位（`AdcCode3`）走不同的外设上电流程。其中 0x6/0x7 为历史版本的上电流程，0x8 为当前地瓜参考时序。客户使用 0xB/0xC/0xD 时，若实现自定义上电方式，需在 `switch` 中新增对应 case；若仅做版本扩展、仍沿用地瓜电源控制，则将 0xB/0xC/0xD 与 0x8 归入同一 case。
 
 #### reboot/suspend 的下电阶段
 
@@ -143,7 +229,11 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 }
 ```
 
-### 取消SLEEP KEY的处理（MCU 侧）
+### 取消 SLEEP KEY 的处理（MCU 侧）
+
+:::note 说明
+本节处理 SLEEP KEY 引脚复用冲突，与外设电源使能控制方式（ADC3）无关。
+:::
 
 在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
 
@@ -506,10 +596,20 @@ S100
 - U-Boot 侧：配置文件 `hobot_s100_defconfig`、设备树与 boardid 相关代码
 - Kernel 侧：配置脚本 `mk_kernel.sh`、设备树与按 boardid 加载的 ko
 
-<!-- TODO(Sx): 待收集 —— 常见问题：硬件点亮暂无真实「现象→原因→解决」素材 -->
+## 常见问题
+
+### boardid 不命中，PCIe 驱动未自动加载
+
+- **现象**：系统启动后，PCIe 驱动 `hobot-pcie-rc` 未自动加载。NVMe 硬盘、PCIe 网卡等 PCIe 设备不可用。`dmesg` 中可见 `Unsupported boardid:0x..., PCIE not Initialized!`。
+- **原因**：boardid 值与 `hobot-loadko.sh` 中登记的分支不匹配（不命中）。常见于自定义硬件后，boardid 未在脚本中登记。也可能是 MCU、U-Boot、Kernel 三侧登记的 boardid 不一致。
+- **解决**：
+  1. 执行 `cat /sys/class/boardinfo/adc_boardid` 查看实际 boardid。
+  2. 与 SBL/U-Boot log 中打印的 boardid 对比，判断三侧是否一致。
+  3. 不一致时，在 `hobot-loadko.sh` 中补全自定义 boardid 的分支（见上文「根据 boardid 加载 ko」），或修正三侧 boardid 定义。
 
 ## 相关文档
 
 - [开发环境与编译](../06_environment_build/01_environment_build.md)
 - [驱动开发指南](/Advanced_development/driver_development)
+- [MCU 开发指南](/Advanced_development/mcu_development)
 - [硬件介绍](/01_hardware_introduction)
