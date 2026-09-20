@@ -1,0 +1,39 @@
+name: Update Algolia search index
+
+on:
+  workflow_call:
+    secrets:
+      ALGOLIA_ADMIN_API_KEY:
+        required: true
+  workflow_dispatch:
+
+concurrency:
+  group: algolia-index-rdk_s_doc
+  cancel-in-progress: false
+
+jobs:
+  algolia-index:
+    runs-on: self-hosted
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Wait for live site to refresh
+        run: sleep 20
+
+      - name: Crawl live site and update Algolia index
+        env:
+          ALGOLIA_ADMIN_API_KEY: ${{ secrets.ALGOLIA_ADMIN_API_KEY }}
+          ALGOLIA_APP_ID: 1VU781LYTV
+          ALGOLIA_INDEX_NAME: rdk_s_doc
+          ALGOLIA_SITE_URL: https://developer.d-robotics.cc/rdk_s_doc/
+        run: |
+          if [ -z "$ALGOLIA_ADMIN_API_KEY" ]; then
+            echo "Missing GitHub secret ALGOLIA_ADMIN_API_KEY (use Admin or Write API Key)."
+            exit 1
+          fi
+          npm run algolia:index

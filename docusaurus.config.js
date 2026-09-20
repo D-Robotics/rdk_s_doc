@@ -20,12 +20,13 @@ const copyrightYearLabel =
     ? `${COPYRIGHT_START_YEAR}-${currentYear}`
     : `${COPYRIGHT_START_YEAR}`;
 
+const localePrefix = process.env.DOCUSAURUS_CURRENT_LOCALE === "en" ? "/en" : "";
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "RDK S100/S600 DOC",
   // tagline: 'Dinosaurs are cool',
   favicon: "img/logo.png",
-  // trailingSlash: false,
   // Set the production url of your site here
   // url: "https://developer.d-robotics.cc",
   url: "https://developer.d-robotics.cc",
@@ -81,6 +82,10 @@ const config = {
     // Dify：仅加载配置脚本；embed.min.js 在 body 就绪后由 dify-config.js 动态注入
     {
       src: "/rdk_s_doc/js/dify-config.js",
+    },
+    {
+      src: `/rdk_s_doc${localePrefix}/js/umami-events.js`,
+      defer: true,
     },
   ],
   headTags: [
@@ -257,24 +262,15 @@ const config = {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
-    }),
-  themes: [
-    "@docusaurus/theme-mermaid",
-    [
-      require.resolve("@easyops-cn/docusaurus-search-local"),
-      {
-        hashed: true,
-        language: ["en", "zh"],
-        highlightSearchTermsOnTargetPage: true,
-        explicitSearchResultPath: true,
-        docsRouteBasePath: ["/", "rdk_s"],
-        indexDocs: true,
-        indexBlog: false,
-        indexPages: false,
-        searchResultContextMaxLength: 50,
+      algolia: {
+        appId: "1VU781LYTV",
+        apiKey: "fb65c6e54a52ce6fba0645bd2630e79b",
+        indexName: "rdk_s_doc",
+        contextualSearch: true,
+        searchPagePath: "search",
       },
-    ],
-  ],
+    }),
+  themes: ["@docusaurus/theme-mermaid"],
 };
 
 export default config;

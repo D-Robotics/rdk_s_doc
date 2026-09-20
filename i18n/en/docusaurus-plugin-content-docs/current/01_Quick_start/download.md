@@ -179,7 +179,7 @@ For RDK S100 commercial materials, please switch to the **FTP Download** option 
 
 | Name                                                                                                            | Version | Upload Date | Documentation                                                 |
 | --------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
-| [RDK S100 Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/d_robotics_rdk_s100_board_zh_v1_2.pdf)    | V1.2 | 2026-02-10  | Detailed product specifications, features, dimensions, models, etc. |
+| [RDK S100 Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100/d_robotics_rdk_s100_board_en_v1_2.pdf)    | V1.2 | 2026-02-10  | Detailed product specifications, features, dimensions, models, etc. |
 
 </div>
 
@@ -191,7 +191,7 @@ For RDK S100 commercial materials, please switch to the **FTP Download** option 
 
 | Name                                                                                                                                                                      | Version | Upload Date | Documentation                                                 |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ------------------------------------------------------------- |
-| [Camera Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/d_robotics_rdk_s100_camera_expansion_board_zh_v1_1.pdf)                | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
+| [Camera Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/d_robotics_rdk_s100_camera_expansion_board_en_v1_1.pdf)                | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
 <!-- | [Camera Expansion Board 12L Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/rdk_s100_camera_expansion_board_12L/d_robotics_rdk_s100_camera_expansion_board_12l_en_v1_0.pdf)                | V1.0 | 2026-07-01  | Detailed product specifications, features, dimensions, models, etc. | -->
 
 </div>
@@ -203,7 +203,7 @@ For RDK S100 commercial materials, please switch to the **FTP Download** option 
 
 | Name                                                                                                                                                                          | Version | Upload Date | Documentation                                                      |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------- | ----------------------------------------------------------------- |
-| [MCU Port Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/d_robotics_rdk_s100_mcu_port__expansion_board_zh_v1_1.pdf)            | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
+| [MCU Port Expansion Board Datasheet](https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_mcu_port_expansion_board/d_robotics_rdk_s100_mcu_port__expansion_board_en_v1_1.pdf)            | V1.1 | 2025-12-16  | Detailed product specifications, features, dimensions, models, etc. |
 
 </div>
 

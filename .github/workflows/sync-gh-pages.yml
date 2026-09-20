@@ -9,7 +9,7 @@ on:
 
 jobs:
   sync-gh-pages:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
 
     steps:
@@ -39,3 +39,9 @@ jobs:
           --region cn-beijing \
           --update \
           --retry-times=3
+
+  update-algolia-index:
+    needs: sync-gh-pages
+    uses: ./.github/workflows/algolia-index.yml
+    secrets:
+      ALGOLIA_ADMIN_API_KEY: ${{ secrets.ALGOLIA_ADMIN_API_KEY }}
