@@ -29,6 +29,10 @@ flowchart LR
 
 ## get_isp_data
 
+### 功能概述
+
+`get_isp_data` 示例实现单路 sensor 从 ISP 模块获取 YUV 视频帧的功能：完成 Camera Sensor、MIPI CSI、CIM 和 ISP 模块的初始化，通过交互命令获取单帧或多帧 YUV 图像并保存为文件。
+
 ### 代码位置及目录结构
 
 `get_isp_data` 相关源码路径为 `/app/multimedia_samples/sample_isp/get_isp_data`，代码结构如下：
@@ -66,20 +70,35 @@ root@ubuntu:/app/multimedia_samples/sample_isp/get_isp_data# ./get_isp_data -h
 Usage: get_isp_data [OPTIONS]
 Options:
   -s <sensor_index>      Specify sensor index
-  -o <online>            Specify the connection method from VIN to ISP, 1: online 0: offline
+  -o <online>            Specify the connection method from VIN to ISP, 1: online 0: offline, online only use for serdes sensor
   -l <link_port>         Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D
+                         For HSMT sensors this is auto-derived from the config's vc_index.
+  -m <mipi_rx>           Specify the mipi_rx for connecting serdes/HSMT sensors
   -h                     Show this help message
-index: 0  sensor_name: imx219-30fps             config_file:linear_1920x1080_raw10_30fps_1lane.c
-index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw10_30fps_2lane.c
-index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
-index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
+index: 0  sensor_name: imx219-30fps        config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 1  sensor_name: sc1336_gmsl-30fps   config_file:linear_1280x720_raw10_30fps_2lane.c
+index: 2  sensor_name: ar0820std-30fps     config_file:linear_3840x2160_30fps_1lane.c
+index: 3  sensor_name: ar0820std-1080p30   config_file:linear_1920x1080_yuv_30fps_1lane.c
+index: 4  sensor_name: ovx3cstd-30fps      config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy               config_file:dummy_sensor.c
+index: 6  sensor_name: sc230ai-30fps       config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 7  sensor_name: sc132gs-30fps       config_file:linear_1088x1280_raw10_30fps_2lane.c
+index: 8  sensor_name: isx031_gmsl-30fps   config_file:linear_1920x1536_yuv422_30fps_4lane.c
+index: 9  sensor_name: shw3hstd_gmsl-60fps config_file:linear_1920x1536_60fps_1lane.c
+index: 10 sensor_name: sc233hgs-120fps     config_file:linear_1920x1200_raw10_120fps_4lane.c
+index: 11 sensor_name: sc233hgs-30fps      config_file:linear_1920x1200_raw10_30fps_4lane.c
+index: 12 sensor_name: sc233hgs_hsmt_vc0   config_file:linear_1920x1200_raw10_30fps_4lane_vc0.c
+index: 13 sensor_name: sc233hgs_hsmt_vc1   config_file:linear_1920x1200_raw10_30fps_4lane_vc1.c
+index: 14 sensor_name: sc233hgs_hsmt_vc2   config_file:linear_1920x1200_raw10_30fps_4lane_vc2.c
+index: 15 sensor_name: sc233hgs_hsmt_vc3   config_file:linear_1920x1200_raw10_30fps_4lane_vc3.c
 ```
 
 **命令参数说明**：
 
 - `s <sensor_index>`: 该选项用于指定要使用的传感器索引。用户需要提供一个有效的索引值。
-- `o <online>`: 该选项用于指定 VIN 到 ISP 的连接方式， 1: online 0: offline, 可选参数，默认是 offline 模式。
-- `l <link_port>`: 该选项用于指定 Serdes Sensor 的连接的端口 , Serdes sensor 必须指定。
+- `o <online>`: 该选项用于指定 VIN 到 ISP 的连接方式，1: online 0: offline；online 模式仅用于 Serdes Sensor，可选参数，默认是 offline 模式。
+- `l <link_port>`: 该选项用于指定 Serdes Sensor 的连接端口，0:A 1:B 2:C 3:D，Serdes Sensor 必须指定；对于 HSMT Sensor，该值会根据配置文件的 vc_index 自动推导。
+- `m <mipi_rx>`: 该选项用于指定 Serdes/HSMT Sensor 连接的 mipi_rx。
 - `h`: 显示帮助信息。
 
 #### 运行效果
@@ -140,6 +159,10 @@ quit
 执行程序后会获取到如 `handle_100197_isp_chn0_1920x1080_stride_1920_frameid_27_ts_20832399744000.yuv` 命名格式的 YUV 图像。
 
 ## isp_feedback
+
+### 功能概述
+
+`isp_feedback` 示例实现 ISP 回灌功能：将一张 RAW 图通过 dummy Sensor 回灌到 ISP，使用对应的 ISP 效果库进行调校，并输出调校后的 YUV 图像。
 
 ### 代码位置及目录结构
 
@@ -214,23 +237,23 @@ Creating camera with config: width=1920, height=1080, format=10
 isp process one frame cost:  2187075 ns
 isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
 isp process one frame cost:  2128900 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 1, timestamp: 0
 isp process one frame cost:  2115925 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 2, timestamp: 0
 isp process one frame cost:  2112825 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 3, timestamp: 0
 isp process one frame cost:  2112700 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 4, timestamp: 0
 isp process one frame cost:  2115200 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 5, timestamp: 0
 isp process one frame cost:  2116475 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 6, timestamp: 0
 isp process one frame cost:  2112700 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 7, timestamp: 0
 isp process one frame cost:  2112775 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 8, timestamp: 0
 isp process one frame cost:  2114200 ns
-isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
+isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 9, timestamp: 0
 ```
 
 程序运行启动，会在当前目录保存如下调校后的 yuv 图像，默认回灌10次，计算每次的回灌耗时：
