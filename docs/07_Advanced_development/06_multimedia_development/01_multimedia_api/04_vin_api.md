@@ -163,7 +163,7 @@ CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` �
 
 输入宽超过该上限时，CIM 在 `set_ichn_attr` 阶段直接拒绝。
 
-> 注意：除 CIM 层外，MIPI host 的配置校验另有 **width ≤ 4096** 的上限。宽于 4096 的接入两层限制目前不一致，实际接入前需以板端验证为准。
+> 注意：除 CIM 层外，MIPI host 的配置校验另有 **width ≤ 4096** 的上限。宽于 4096 的接入两层限制不一致，实际以 MIPI host 的 4096 为上限。
 
 <DocScope products="RDK S100">
 
@@ -287,7 +287,7 @@ MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**�
 | IPI（纯 RAW12） | S100 21.6 Gbps / S600 24.1 Gbps | 16.72 Gbps | ✓ 占 77% |
 | VC 路数 | 4 路 | 4 路 | ✓ |
 
-**③ 结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking。**改走 C-PHY 则宽裕得多**：PHY 占用降到 70%，瓶颈随之转到 IPI（S100 77%）。成立的前提是模组支持 C-PHY 且解串器输出速率跟得上。实际能否跑满以板端实测为准。
+**③ 结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking。**改走 C-PHY 则宽裕得多**：PHY 占用降到 70%，瓶颈随之转到 IPI（S100 77%）。成立的前提是模组支持 C-PHY 且解串器输出速率跟得上。
 
 #### 算例 2：4 颗 8M YUV422@30fps
 **① 算数据量**
@@ -390,21 +390,7 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 | 3 | 4 路 RAW Sensor | 1 路 Online + 3 路 Offline | 两个 ISP |
 | 4 | 4 路 YUV Sensor | Offline（DDR） | PYM |
 
-![场景 1　4 路 RAW，全部 Online（OTF）输出至 ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene1.png)
-
-**场景 1　4 路 RAW，全部 Online（OTF）输出至 ISP**
-
-![场景 2　4 路 RAW，全部 Offline（DDR）输出至 ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene2.png)
-
-**场景 2　4 路 RAW，全部 Offline（DDR）输出至 ISP**
-
-![场景 3　4 路 RAW，1 路 Online + 3 路 Offline，分送两个 ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene3.png)
-
-**场景 3　4 路 RAW，1 路 Online + 3 路 Offline，分送两个 ISP**
-
-![场景 4　4 路 YUV，Offline（DDR）输出至 PYM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene4.png)
-
-**场景 4　4 路 YUV，Offline（DDR）输出至 PYM**
+![CIM 典型组合：四种场景](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
 
 ### API 调用流程
 ![API 典型调用时序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig4-api-sequence.svg)

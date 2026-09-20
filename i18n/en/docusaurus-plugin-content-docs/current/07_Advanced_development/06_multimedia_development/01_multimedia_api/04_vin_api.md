@@ -390,21 +390,7 @@ The four IPIs of one CIM can **mix** Online and Offline, feeding different downs
 | 3 | 4× RAW sensor | 1× Online + 3× Offline | Two ISPs |
 | 4 | 4× YUV sensor | Offline (DDR) | PYM |
 
-![Case 1 · 4× RAW, all Online (OTF) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene1.png)
-
-**Case 1 · 4× RAW, all Online (OTF) to the ISP**
-
-![Case 2 · 4× RAW, all Offline (DDR) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene2.png)
-
-**Case 2 · 4× RAW, all Offline (DDR) to the ISP**
-
-![Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene3.png)
-
-**Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs**
-
-![Case 4 · 4× YUV, Offline (DDR) to the PYM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene4.png)
-
-**Case 4 · 4× YUV, Offline (DDR) to the PYM**
+![Typical CIM combinations: four scenarios](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-en.png)
 
 ### API Call Flow
 ![Typical API call sequence](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig4-api-sequence.svg)
