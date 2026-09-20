@@ -38,7 +38,7 @@ flowchart LR
 ```
 
 :::info
-MCU0固件编译/McalCdd/Service/Platform 等代码为企业版专有，如有需要，请联系[D-Robotics](mailto:developer@d-robotics.cc)获取支持。
+MCU0 固件编译 / McalCdd / Service / Platform 等代码为企业版专有，如有需要，请联系 [D-Robotics](mailto:developer@d-robotics.cc) 获取支持。
 :::
 
 :::tip 商业支持
@@ -48,7 +48,7 @@ MCU0固件编译/McalCdd/Service/Platform 等代码为企业版专有，如有�
 1. 填写问卷：提交您的机构信息、使用场景等基本情况
 2. 签署保密协议（NDA）：我们将根据提交信息与您联系，双方确认后签署保密协议
 3. 内容释放：完成协议签署后，我们将通过私有渠道为您开放商业版本资料
-  
+
 如您希望获取商业版内容，请点击下方链接填写问卷，我们将在 3~5 个工作日内与您联系：
 [填写问卷](https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre)
 :::
@@ -57,39 +57,52 @@ MCU0固件编译/McalCdd/Service/Platform 等代码为企业版专有，如有�
 
 ```text
 MCU
-├── Build                # Build系统，包含编译/链接脚本
-├── Config               # 针对各种不同board的McalCdd模块配置
-├── Include              # 主要为驱动和Service文件夹内的头文件
-├── Library              # 主要为驱动和Service静态库文件
-├── log                  # 编译log
+├── Build                # Build 系统，包含编译/链接脚本
+├── Config               # 针对各种不同 board 的 McalCdd 模块配置
+├── Include              # 主要为驱动和 Service 文件夹内的头文件
+├── Library              # 主要为驱动和 Service 静态库文件
+├── log                  # 编译 log
 ├── OpenSource           # FreeRTOS 开源代码仓库
 ├── output               # 编译/链接生成文件的所在目录
-├── samples              # 包含使用样例，包括Can，IPC，Eth等驱动
+├── samples              # 包含使用样例，包括 Can、IPC、Eth 等驱动
 └── Target               # 系统基础代码，比如启动相关，任务定义相关，中断相关等
 ```
 
-
 ## MCU 企业版
+
 ```text
 MCU
-├── Build                # Build系统，包含编译/链接脚本
-|   ├── FreeRtos         # 用于编译MCU0的固件
-|   ├── FreeRtos_mcu1    # 用于编译MCU1的固件
-|   ├── ToolChain        # gcc工具链
-|   └── Tools            # 编译过程中使用的通用工具
-├── Common               # 包含所有MCAL模块所需的通用文件和定义
-├── Config               # 针对各种不同board的McalCdd模块配置
-├── log                  # 编译log
-├── McalCdd              # 各种模块驱动代码
-├── OpenSource           # FreeRTOS 开源代码仓库
-├── output               # 编译/链接生成文件的所在目录
-├── Platform             # 平台配置相关，比如基础数据定义，各个模块的Memmap配置，此部分可以由客户自己替换
-|   ├── Compiler         # 平台配置和编译器相关的定义
-|   ├── Memmap           # 模块的memmap配置
-|   └── Schm             # 模块驱动中可能涉及到exclusive区域定义，可能需要客户选择填充
-├── samples              # 包含使用样例，包括Can，IPC，Eth等驱动
-├── Service              # 包含 D-Robotics 自研的中间服务代码，比如电源管理，OTA管理，Log/Shell等
-└── Target               # 系统基础代码，比如启动相关，任务定义相关，中断相关等
+├── Build                           # Build 系统，包含编译/链接脚本
+│   ├── FreeRtos                    # 用于编译 MCU0 的固件
+│   ├── FreeRtos_mcu1               # 用于编译 MCU1 的固件
+│   ├── ToolChain                   # gcc 工具链
+│   └── Tools                       # 编译过程中使用的通用工具
+├── Common                          # 包含所有 MCAL 模块所需的通用文件和定义
+├── Config                          # 针对各种不同 board 的 McalCdd 模块配置
+│   └── McalCdd
+│       ├── gen_s100_sip_B          # S100 MCU0 板级配置
+│       ├── gen_s100_sip_B_mcu1     # S100 MCU1 板级配置
+│       ├── gen_s600_md             # S600 MCU0 板级配置
+│       └── gen_s600_md_mcu1        # S600 MCU1 板级配置
+├── log                             # 编译 log
+├── McalCdd                         # 各种模块驱动代码
+├── OpenSource                      # FreeRTOS 开源代码仓库
+├── Platform                        # 平台配置相关，比如基础数据定义，各个模块的 Memmap 配置，此部分可以由客户自己替换
+│   ├── Compiler                    # 平台配置和编译器相关的定义
+│   ├── Memmap                      # 模块的 memmap 配置
+│   └── Schm                        # 模块驱动中可能涉及到 exclusive 区域定义，可能需要客户选择填充
+├── samples                         # 包含使用样例，包括 Can、IPC、Eth 等驱动
+├── Service                         # 包含 D-Robotics 自研的中间服务代码，比如电源管理、OTA 管理、Log/Shell 等
+├── Target                          # 系统基础代码，比如启动相关，任务定义相关，中断相关等
+│   ├── Target_S100
+│   │   ├── Target-hobot-lite-freertos      # S100 MCU0 目标代码
+│   │   └── Target-hobot-lite-freertos-mcu1 # S100 MCU1 目标代码
+│   └── Target_S600
+│       ├── Target-hobot-lite-freertos      # S600 MCU0 目标代码
+│       └── Target-hobot-lite-freertos-mcu1 # S600 MCU1 目标代码
+├── Tools                           # 调试/烧录/打包工具（Debug_Script、Lauterbach_* 等）
+├── output                          # [生成物] MCU1 产物
+└── output_sysmcu                   # [生成物] MCU0 产物
 ```
 
 ## 开发使用
@@ -97,14 +110,6 @@ MCU
 1. **环境搭建**：按 [MCU 快速入门指南](01_basic_information.md) 准备主机编译环境。
 2. **编译**：按 [MCU 系统说明](02_MCU_build_system.md) 编译 MCU1 固件。
 3. **运行**：将编译产物加载到 MCU 运行，细节见 [MCU1 开发指南](03_FreeRTOS_development.md)。
-
-## 调试
-
-<!-- TODO(Sx): 待收集 -->
-
-## 常见问题
-
-<!-- TODO(Sx): 待收集 -->
 
 ## 相关文档
 
