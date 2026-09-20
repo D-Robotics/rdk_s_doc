@@ -68,33 +68,91 @@ vnode 之间通过输入通道和输出通道进行连接 :
 
 ### 输入通道
 
+每个 vnode 只有一个输入通道，分三种情况描述
+1. Camera 作为输入节点：
+2. vflow 的中间节点：`hbn_vflow_bind_vnode` 函数决定下游节点的输入通道
+3. 
 ### 输出通道
 
-- 输出通道决定了 vnode 的连接方式，支持 online 模式和 offline 模式，详细见 [ 系统概述 ](./0-Overview_zh_CN.html#id8)
-- 只有 `VIN 到 ISP` 和 `ISP 到 VSE` 支持 online 通道，其他模块之间只支持 offline 通道
+- 输出通道按照两种情况进行划分：连接方式和输出的数据内容，比如 VIN节点
+  - 连接方式不同：通道0 和通道1输出的都是 camera 帧，不同的是与下一个 vnode 的连接方式
+  - 输出的数据内容不同：通道0、通道3、通道4的连接方式都是offline, 不同的是数据内容
+- 连接方式，支持 online 模式和 offline 模式，详细见 [ 系统概述 ](./0-Overview_zh_CN.html#id8)
+
+- 只有 `VIN 到 ISP/PYM` 和 `ISP 到 YNR/PYM` 支持 online 通道，其他模块之间只支持 offline 通道
 
 | 模块 | 输出通道编号 | 通道功能                            |
 |------|--------------|-------------------------------------|
 | VIN  | 0            | offline 通道，输出 camera 帧到 ddr      |
-|      | 1            | online 通道，连接到 isp               |
+|      | 1            | online 通道，连接到 isp 或 pym               |
 |      | 3            | offline 通道，只输出 emb data 到 ddr    |
+|      | 4            | offline 通道，对 camera 帧进行裁剪后输到 ddr    |
 | ISP  | 0            | offline 通道，输出 isp 处理后的帧到 ddr |
-|      | 1            | online 通道，连接到 vse               |
-| VSE  | 0            | offline 通道， 4K Downscale           |
-|      | 1            | offline 通道， 1080P0 Downscale       |
-|      | 2            | offline 通道， 1080P1 Downscale       |
-|      | 3            | offline 通道， 720P0 Downscale        |
-|      | 4            | offline 通道， 720P1 Downscale        |
-|      | 5            | offline 通道， 4K Upscale             |
+|      | 1            | online 通道，连接到ynr或pym               |
+| PYM  | 0            | offline通道，输出pym图像至ddr           |
 | GDC  | 0            | offline 通道，输出 gdc 处理后的帧到 ddr |
+
 
 ### 连接方式
 
-通过 `hbn_vflow_bind_vnode` 将上游 vnode 的输出通道绑定到下游 vnode 的输入通道，组成 vflow。
+#### 使用说明
+只有 `VIN 到 ISP/PYM` 和 `ISP 到 YNR/PYM` 支持 online 通道，其他模块之间只支持 offline 通道，所以针对 VIN、 ISP、 PYM、YNR 之间的组合，描述如下：
 
-### 参数配置
+| 模块组合  | 连接方式                                     | 说明                                                            |
+|-----------|----------------------------------------------|-----------------------------------------------------------------|
+| VIN - ISP | VIN online ISP， ISP 工作模式 PASSTHROUGH_MODE | VIN 和 ISP 之间是硬件连接，中间不经过 DDR，每个硬件实例最多支持 1 路使用该连接方式  |
+|           | VIN offline ISP， ISP 工作模式 DDR_MODE        | 中间需要经过 DDR，每个硬件实例最多支持 8 路使用该连接方式                      |
+| VIN - PYM | VIN online PYM                                | VIN 和 PYM 间是硬件连接，中间不经过 DDR，每个硬件实例最多支持 1 路使用该连接方式|
+|           | VIN offline PYM                               | 中间需要经过 DDR，每个硬件实例最多支持 1 路使用该连接方式|
+| ISP/YNR - PYM | ISP/YNR online PYM                        | ISP/YNR 和 PYM 间是硬件连接，中间不经过 DDR，每个硬件实例最多支持 8 路使用该连接方式|
+|           | ISP/YNR offline PYM                           | 中间需要经过 DDR，每个硬件实例最多支持 8 路使用该连接方式|
 
-模块基本属性以 `模块名_attr_t`、扩展属性以 `模块名_attr_ex_t`、通道属性以 `模块名_ochn_attr_t`/`_ichn_attr_t` 结尾的结构体传入。
+#### 参数配置
+函数 `hbn_vflow_bind_vnode` 绑定两个 vnode 节点时，通过函数参数确定模块间的连接方式，同时需要 VIN 和 ISP 节点设置为对应的配置，具体如下：
+
+##### VIN 与 ISP
+| 模块组合   | 连接方式| hbn_vflow_bind_vnode 函数                     | vin_node_attr 结构体 | isp_node_attr 结构体 | 
+|------------|-------|-----------------------------------------------|---------------------|--------------------|
+|VIN - ISP   |online |src_out_channel =1 dst_input_channel =0 |cim_isp_flyby =1                      |sched_mode = 2 slot_id =0  hw_id = 与VIN相同 |
+|VIN - ISP   |offline|src_out_channel =0 dst_input_channel =0 ddr_en  =1 cim_isp_flyby =0     |sched_mode = 1 slot_id =4-11 hw_id = 选择的ISP硬件的ID|
+
+##### VIN 与 PYM
+
+| 模块组合   | 连接方式| hbn_vflow_bind_vnode 函数                     | vin_node_attr 结构体                 | pym_cfg_t 结构体 | 
+|------------|-------|-----------------------------------------------|-------------------------------------- |--------------------|
+|VIN - PYM   |online |src_out_channel =1 dst_input_channel =0 | cim_isp_flyby =1                      | pym_mode = 2 slot_id =0  hw_id = 与VIN相同 |
+|VIN - PYM   |offline|src_out_channel =0 dst_input_channel =0 |ddr_en  =1 cim_isp_flyby =0     | pym_mode = 3 slot_id =4-11 hw_id = PYM的硬件ID |
+
+##### ISP 与 PYM
+
+| 模块组合   | 连接方式| hbn_vflow_bind_vnode 函数                     | isp_node_attr 结构体                 | isp_ochn_attr_t 结构体 |pym_cfg_t 结构体 | 
+|------------|-------|-----------------------------------------------|-------------------------------------- |--------------------|-----------------------|
+|ISP - PYM   |单路 online |src_out_channel =1 dst_input_channel =0 |sched_mode = 2 slot_id =0  hw_id = 与VIN相同          | axi_output_mode=0|pym_mode = 1 slot_id = 与ISP相同  hw_id = 与ISP相同 |
+|ISP - PYM   |多路 online |src_out_channel =1 dst_input_channel =0 |sched_mode = 1 slot_id =4-11 hw_id = 与VIN相同        | axi_output_mode=0|pym_mode = 2 slot_id = 与ISP相同  hw_id = 与ISP相同 |
+|ISP - PYM   |offline     |src_out_channel =0 dst_input_channel =0 |sched_mode = 1 slot_id =4-11 hw_id = 选择的ISP硬件的ID| axi_output_mode=2-21|pym_mode = 3 slot_id =4-11 hw_id = PYM的硬件ID |
+
+
+
+
+表格中部分数字的含义解释：
+- `isp_node_attr` 中 sched_mode 数字对应的枚举变量
+  - `SCHED_MODE_MANUAL`（1）: ISP 分时复用的模式 
+  - `SCHED_MODE_PASS_THRU`（2）: CIM 模块独占 ISP
+
+- `isp_ochn_attr_t` 中 stream_output_mode 数字对应的枚举变量
+  - `STREAM_OUTPUT_MODE_DISABLE`(0) ： ISP 不通过 online 的方式连接到下游模块
+  - `STREAM_OUTPUT_MODE_ENABLE`(1) ： ISP 直接 online 连接到下游模块
+
+- `isp_ochn_attr_t` 中 axi_output_mode 数字对应的枚举变量（常用的）
+  - `AXI_OUTPUT_MODE_DISABLE`(0): 关闭ISP写DDR
+  - `AXI_OUTPUT_MODE_RAW8`(1) ：按照 RAW8 的格式写DDR
+  - `AXI_OUTPUT_MODE_RAW10`(3) ：按照 RAW10 的格式写DDR
+  - `AXI_OUTPUT_MODE_YUV420`(9) ：按照 YUV420 的格式写DDR 
+
+- `pym_cfg_t`中 pym_mode 数字对应的枚举变量
+  - `PYM_MANUAL_MODE`(1): 和ISP直连，并且ISP是 SCHED_MODE_MANUAL （VIN 与 PYM 连接时不能配置这个选项）
+  - `PYM_OTF_MODE`(2): 和VIN/ISP直连， 如果和ISP直连接时 `isp_node_attr` 的 `sched_mode` 必须是SCHED_MODE_PASS_THRU
+  - `PYM_M2M_MODE`(3): 数据来自DDR
 
 ## API 列表
 
