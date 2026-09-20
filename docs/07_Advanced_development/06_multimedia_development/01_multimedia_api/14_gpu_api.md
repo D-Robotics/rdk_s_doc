@@ -6,10 +6,6 @@ description: "RDK S100/S600 3D GPU（Mali-G78AE）图形与通用计算：EGL / 
 
 # 图形处理 - GPU
 
-> **层级说明**：本篇是【底层标准 API】说明——GPU 通过 Khronos 行业标准接口（EGL / OpenGL ES / OpenCL / Vulkan）进行图形渲染与通用计算开发，接口定义以 Khronos 官方规范为准，非 RDK 私有封装 API；RDK 侧扩展仅包含休眠唤醒 load/unload 接口（`hb_load_*` / `hb_unload_*`）与 hbmem 零拷贝交互用法（见「参考示例」）。板端示例见 [sample_gpu_3d 使用说明](../02_multimedia_sample/08_sample_gpu_3d.md)。
-
-> **平台代号说明**：本文兼容性标注沿用底层头文件原始写法——XJ3/J3、Ultra 为更早代上游平台代号，X5 为现行上游产品线代号（非本两板），Super/J6 为本产品线同源架构代号（板端实证：S100/S600 同源，S600 为多核形态）。`HW:` 列表表示该接口在上游多代平台的适用范围，其中 Super 代即对应本产品线（继承自上游标注，未逐一板端验证）；`SW` 为上游软件版本号，RDK 对应版本以 Release Note 为准。未列入代号的接口表示继承自上游、RDK 侧未逐一验证。
-
 ## 模块描述
 
 ```mdx-code-block

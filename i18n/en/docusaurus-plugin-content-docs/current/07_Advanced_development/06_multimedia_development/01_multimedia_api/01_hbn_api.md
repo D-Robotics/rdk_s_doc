@@ -1763,5 +1763,5 @@ stitch_ch_attr
 ## Related Documentation
 
 - [VIO API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
-- [Shared Memory - Hbmem](./02_hbmem/02_hbmem_guide.md)
+- [Shared Memory - Hbmem](./02_hbmem_api.md)
 - [Video Capture](../../../03_Demos/02_multimedia_demo/01_cdev/01_vio_capture.md)
