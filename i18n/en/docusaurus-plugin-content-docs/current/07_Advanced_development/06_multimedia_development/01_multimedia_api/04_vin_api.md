@@ -43,7 +43,7 @@ The abbreviations and terms used in this document. **Skim these first** — `CPE
 ### VIN's Four Sub-modules
 | Sub-module | Responsibility |
 | --- | --- |
-| **MIPI RX** | Receives the MIPI CSI-2 stream, D-PHY / C-PHY; each RX supports several virtual channels (VC). Three RX on S100, six on S600 |
+| **MIPI RX** | Receives the MIPI CSI-2 stream, D-PHY / C-PHY; each RX supports several virtual channels (VC). Counts in [Platform Scale](#platform-scale) |
 | **CIM** | Camera Interface Manager. Distributes images from RX to the next stage (Online) or writes them to DDR (Offline) |
 | **LPWM** | Exposure trigger and frame sync pulses, for sensors that need external triggering |
 | **VCON** | Connection setup: I2C buses, POC power, GPIOs, PHY mapping and other board-level configuration |
@@ -53,18 +53,20 @@ The abbreviations and terms used in this document. **Skim these first** — `CPE
 ### Where VIN Sits in the Camera Chain
 ![Where VIN sits in the camera chain](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig1-vin-position.svg)
 
-### CIM Internals and Configurable Blocks
-CIM is one of VIN's four sub-modules and is itself built from several functional blocks. A few of them are user-configurable:
+### CIM Configurable Blocks
+The CIM is built from several functional blocks; these are the ones users can configure. The diagram shows where each one hangs, the table gives its configuration fields:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/cim-internal.png" alt="CIM internals" width="100%" />
+![Three input sources, three output channels, and the configurable blocks hanging off them](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/cim-blocks.svg)
 
-| Block | Where | Purpose | Configuration |
+| Block | Hangs off | Purpose | Configuration |
 | --- | --- | --- | --- |
-| `TPG` | One per IPI | Test pattern generator. Produces frames without a sensor, for path verification | `vin_node_attr.cim_attr.func.enable_pattern` |
-| `ROI` | On all three output channels, with a different meaning on each | Cropping. Once enabled on the main channel, both the DDR copy and the ISP copy are cropped; the ROI channel can only output to DDR; on the EMB channel, ROI carves the embedded data out of the image | `vin_ochn_attr[x].roi_en`, `vin_ochn_attr[x].roi_attr` (`roi_x` / `roi_y` / `roi_width` / `roi_height`) |
-| `EMB` | The third channel of every IPI | Receives embedded data, either as the `0x12` type or embedded in the image | `vin_ochn_attr[x].emb_en`, `vin_ochn_attr[x].emb_attr` |
-| `RAWDS` | The main channel | 2×2 downsampling, halving both width and height | `vin_ochn_attr[x].rawds_en`, `vin_ochn_attr[x].rawds_attr.rawds_mode` |
-| `RDMA` | Some IPIs (S100: IPI3 of CIM0; S600: IPI2/IPI3 of CIM3 — check each CIM's `rdma-support`) | DDR feedback, for debugging | `vin_node_attr.cim_attr.rdma_input.rdma_en` |
+| `TPG` | Input source (pick one) | Test pattern generator. Produces frames without a sensor, for path verification | `vin_node_attr.cim_attr.func.enable_pattern` |
+| `RDMA` | Input source (pick one) | DDR feedback, for debugging | `vin_node_attr.cim_attr.rdma_input.rdma_en` |
+| `ROI` | Main frame / ROI / EMB channels | Cropping. Once enabled on the main channel, both the DDR copy and the ISP copy are cropped; the ROI channel can only output to DDR; on the EMB channel, ROI carves the embedded data out of the image | `vin_ochn_attr[x].roi_en`, `vin_ochn_attr[x].roi_attr` (`roi_x` / `roi_y` / `roi_width` / `roi_height`) |
+| `EMB` | EMB channel (ochn 3) | Receives embedded data, either as the `0x12` type or embedded in the image | `vin_ochn_attr[3].emb_en`, `vin_ochn_attr[3].emb_attr` |
+| `RAWDS` | Main frame channel (ochn 0) | 2×2 downsampling, halving both width and height | `vin_ochn_attr[0].rawds_en`, `vin_ochn_attr[0].rawds_attr.rawds_mode` |
+
+`RAWDS` takes effect on the main frame channel only: every `rawds_en` branch in the driver reads `vin_ochn_attr[VIN_MAIN_FRAME]`, while the ROI and EMB channels read only `roi_en` / `emb_en`.
 
 `TPG`, MIPI input and `RDMA` are **mutually exclusive input sources**; only one can be selected at a time (see [Constraints and Caveats](#constraints-and-caveats)).
 
@@ -180,18 +182,6 @@ Input wider than the limit is rejected by CIM at the `set_ichn_attr` stage.
 ## Bring-up Sizing
 Before choosing a module, settle two questions: **does the data fit**, and **does the path carry it**.
 
-### Data Volume
-The raw data volume of one camera:
-
-```
-data rate (bps) = width × height × frame rate × bit depth
-```
-
-- 1× 8M RAW12@30fps: `3840 × 2160 × 30 × 12 ≈ 2.99 Gbps`
-- 1× 2M RAW12@30fps: `1920 × 1080 × 30 × 12 ≈ 0.75 Gbps`
-
-> This is the **active-pixel** figure. What the links actually carry also includes the sensor's blanking. The [worked examples](#worked-examples) below show the gap between the two — **size your bandwidth from the blanking-inclusive value**.
-
 ### IPI Transfer Efficiency
 MIPI RX talks to CIM over IPI. On this platform IPI defaults to **48-bit mode**; the nominal pixel clock is in [Platform Limits](#platform-limits). The two data types pack a different number of pixels per clock:
 
@@ -262,74 +252,129 @@ The sum over all cameras must stay under every ceiling, and **whichever is hit f
 
 1. **Compress the module's blanking** — lowers `k` with no configuration change and no image-quality loss; the best value for effort
 2. Lower the frame rate or the resolution
-3. Move cameras to another RX (S100 has 3, S600 has 6)
+3. Move cameras to another RX (available counts in [Platform Scale](#platform-scale))
 4. Switch to C-PHY — **this only loosens PHY, not IPI**, so it does nothing for a YUV scenario
 
-> **The easiest trap**: with a mix, the IPI ceiling is **the whole RX dropping to 9.6 Gbps** (10.72 on S600), not just the YUV camera being limited. So for a mix like "1× YUV + 3× 8M RAW12", the budget is 9.6 and not 21.6 — the three RAW12 streams alone need 12.54 Gbps blanking-inclusive, already over. **Once any YUV is present on an RX, size everything to the YUV figure.**
+<DocScope products="RDK S100">
+
+> **The easiest trap**: with a mix, the IPI ceiling is **the whole RX dropping to 9.6 Gbps**, not just the YUV camera being limited. So for a mix like "1× YUV + 3× 8M RAW12", the budget is 9.6 and not 21.6 — the three RAW12 streams alone need 12.54 Gbps blanking-inclusive, already over. **Once any YUV is present on an RX, size everything to the YUV figure.**
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+> **The easiest trap**: with a mix, the IPI ceiling is **the whole RX dropping to 10.72 Gbps**, not just the YUV camera being limited. So for a mix like "1× YUV + 3× 8M RAW12", the budget is 10.72 and not 24.1 — the three RAW12 streams alone need 12.54 Gbps blanking-inclusive, already over. **Once any YUV is present on an RX, size everything to the YUV figure.**
+
+</DocScope>
 
 ### Worked Examples
-Same 8M@30fps, same single RX: **4× RAW12 fits, 4× YUV422 does not** — the whole difference is IPI packing. Both walk the four steps of the [sizing method](#sizing-method).
+Same 8M@30fps, same single RX: **4× RAW12 fits, 4× YUV422 does not** — the whole difference is IPI packing. Both walk the four steps of the [sizing method](#sizing-method). The PHY ceilings are SoC-level and platform-independent; only IPI varies by platform, so in each table below the two PHY rows carry the same occupancy on every platform while the IPI row is computed from that platform's own ceiling and pixel clock.
 
 #### Example 1: 4× 8M RAW12@30fps
-**① Data volume**
+For 8M (3840 × 2160) one camera carries 2.99 Gbps of active pixels; at a blanking factor of 1.4 that is 4.18 Gbps, so **four cameras total 16.72 Gbps**:
 
-| Figure | Per camera | 4 cameras |
-| --- | --- | --- |
-| Active pixels (`width × height × frame rate × 12`) | 2.99 Gbps | 11.96 Gbps |
-| **Blanking-inclusive (×1.4)** | 4.18 Gbps | **16.72 Gbps** |
+<DocScope products="RDK S100">
 
-**② Check each ceiling**
+| Ceiling | Limit | 4 cameras | Used | Result |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% | ✓ 7% left |
+| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% | ✓ |
+| IPI (RAW only) | 21.6 Gbps | 16.72 Gbps | 77% | ✓ |
+| VC count | 4 | 4 | full | ✓ |
 
-| Ceiling | Limit | 4 cameras | Result |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | ✓ 93% used, 7% left |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | ✓ 70% used |
-| IPI (RAW only) | S100 21.6 Gbps / S600 24.1 Gbps | 16.72 Gbps | ✓ 77% used |
-| VC count | 4 | 4 | ✓ |
+**Conclusion**: on D-PHY it runs, but only 7% of PHY is left, so holding four streams at full frame rate needs the sensor's blanking compressed. On C-PHY PHY drops to 70% and **IPI at 77% becomes the new bottleneck** — any further headroom means compressing blanking or dropping a camera. That holds only if the module supports C-PHY and the deserialiser output keeps up — whether it really sustains full frame rate must be measured on the board.
 
-**③ Conclusion**: on D-PHY it runs, but only 7% of PHY is left, so holding four streams at full frame rate needs the sensor's blanking compressed. **On C-PHY there is far more room**: PHY drops to 70% and the bottleneck moves to IPI (77% on S100). That holds only if the module supports C-PHY and the deserialiser output keeps up. Whether it really sustains full frame rate must be measured on the board.
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| Ceiling | Limit | 4 cameras | Used | Result |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% | ✓ 7% left |
+| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% | ✓ |
+| IPI (RAW only) | 24.1 Gbps | 16.72 Gbps | 69% | ✓ |
+| VC count | 4 | 4 | full | ✓ |
+
+**Conclusion**: on D-PHY it runs, but only 7% of PHY is left, so holding four streams at full frame rate needs the sensor's blanking compressed. On C-PHY PHY drops to 70%, essentially level with IPI's 69% — **both ceilings keep about a third in reserve**, far roomier than the D-PHY case. That holds only if the module supports C-PHY and the deserialiser output keeps up — whether it really sustains full frame rate must be measured on the board.
+
+</DocScope>
 
 #### Example 2: 4× 8M YUV422@30fps
-**① Data volume**
+At a bit depth of 16 one camera carries 3.98 Gbps of active pixels; at a blanking factor of 1.2 that is 4.78 Gbps, so **four cameras total 19.11 Gbps** (15.93 Gbps of it active pixels):
 
-| Figure | Per camera | 4 cameras |
-| --- | --- | --- |
-| Active pixels (`width × height × frame rate × 16`) | 3.98 Gbps | 15.93 Gbps |
-| **Blanking-inclusive (×1.2)** | 4.78 Gbps | **19.11 Gbps** |
+<DocScope products="RDK S100">
 
-**② Check each ceiling**
+| Ceiling | Limit | 4 cameras | Used | Result |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 19.11 Gbps | 106% | ✗ over |
+| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | 80% | ✓ |
+| IPI (YUV present) | 9.6 Gbps | 19.11 Gbps | 199% | ✗ does not even fit the 15.93 of active pixels (166%) |
+| VC count | 4 | 4 | full | ✓ |
 
-| Ceiling | Limit | 4 cameras | Result |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 19.11 Gbps | ✗ over |
-| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | ✓ 80% used |
-| IPI (YUV present) | S100 9.6 Gbps / S600 10.72 Gbps | 19.11 Gbps | ✗ does not even fit the 15.93 of active pixels |
-| VC count | 4 | 4 | ✓ |
+**Conclusion**: **four do not fit, and IPI is hit first** — 9.6 Gbps cannot even carry the 15.93 Gbps of active pixels, so the PHY problem never comes up. **Switching to C-PHY buys nothing here**: C-PHY does clear the PHY ceiling (19.11 < 23.94, 80% used), but the IPI ceiling is set by the pixel clock and the packing ratio, not by which PHY you picked. **Once YUV is in the mix, no PHY change rescues it.**
 
-**③ Conclusion**: **four do not fit, and IPI is hit first** — 9.6 Gbps cannot even carry the 15.93 Gbps of active pixels, so the PHY problem never comes up.
+**At most two 8M YUV@30fps cameras fit on one RX** — 9.56 Gbps takes 99.5% of the 9.6 ceiling. **What is expensive is the 8M, not the camera count**: using all four cameras (the VC limit) means giving up an 8M in favour of 2M. Every mix, largest first:
 
-**Switching to C-PHY buys nothing here**, and this is the one place it is easy to misread: C-PHY does clear the PHY ceiling (19.11 < 23.94 — it would even pass), but the IPI ceiling is set by the pixel clock and the packing ratio, not by which PHY you picked, so 9.6 Gbps stays 9.6 Gbps. **Once YUV is in the mix, no PHY change rescues it.**
+| Combination | Cameras | Blanking-inclusive total | Used (ceiling 9.6 Gbps) | Result |
+| --- | --- | --- | --- | --- |
+| 4×8M | 4 | 19.11 Gbps | 199% | ✗ 99% over |
+| 3×8M + 1×2M | 4 | 15.53 Gbps | 162% | ✗ 62% over |
+| 2×8M + 2×2M | 4 | 11.94 Gbps | 124% | ✗ 24% over |
+| 2×8M + 1×2M | 3 | 10.75 Gbps | 112% | ✗ 12% over — the two 8M already take 99.5% |
+| 2×8M | 2 | 9.56 Gbps | 99.5% | ✓ right on the line, nothing to spare |
+| **1×8M + 3×2M** | 4 | 8.36 Gbps | 87.1% | ✓ **largest mix that fits with all four cameras** |
+| 1×8M + 2×2M | 3 | 7.17 Gbps | 74.7% | ✓ |
+| 4×2M | 4 | 4.78 Gbps | 49.8% | ✓ here the four-VC limit binds before IPI |
 
-**How many do fit**:
+**The largest mix that still uses all four cameras is `1×8M + 3×2M`** (8.36 Gbps). If four cameras are not required, `2×8M` carries more total bandwidth (9.56 Gbps) but only two cameras — **camera count or per-camera resolution, pick one**.
 
-| Cameras | Blanking-inclusive total | vs S100's 9.6 | vs S600's 10.72 |
-| --- | --- | --- | --- |
-| 1 | 4.78 Gbps | ✓ | ✓ |
-| 2 | 9.56 Gbps | ✓ under 1% margin | ✓ 11% margin |
-| 3 | 14.33 Gbps | ✗ | ✗ |
 
-**At most two 8M YUV@30fps cameras fit on one RX** — and on S100 they run right at the ceiling.
+**A mixed RX still uses this table, but one YUV stream drags the ceiling down** — IPI packing drops from 3 pixels/clock to 1, so the whole RX goes from 21.6 Gbps to 9.6 Gbps:
 
-**But three cameras are not off limits: what is expensive is the 8M, not the camera count.**
+| Combination | Cameras | Blanking-inclusive total | Used (ceiling 9.6 Gbps) | Result |
+| --- | --- | --- | --- | --- |
+| 3×8M RAW12 + 1×8M YUV422 | 4 | 17.32 Gbps | 180% | ✗ the three RAW12 alone take 58% — adding one YUV more than doubles it |
+| 1×8M YUV422 + 3×2M RAW12 | 4 | 7.91 Gbps | 82.4% | ✓ all four cameras |
+| 1×8M RAW12 + 3×2M YUV422 | 4 | 7.76 Gbps | 80.9% | ✓ all four cameras |
 
-| Combination | Blanking-inclusive total | vs IPI (S100 9.6 / S600 10.72) |
-| --- | --- | --- |
-| 2×8M + 1×2M | 10.75 Gbps | ✗ over — the two 8M already take 99.5%, and one more 2M needs 1.19 Gbps |
-| 1×8M + 2×2M | 7.17 Gbps | ✓ 74.7% used |
-| 1×8M + 3×2M | 8.36 Gbps | ✓ 87.1% used |
+</DocScope>
 
-To add a third camera, drop one 8M down to a 2M. Four 2M cameras come to 4.78 Gbps, where the four-VC limit binds before IPI does.
+<DocScope products="RDK S600">
 
+| Ceiling | Limit | 4 cameras | Used | Result |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 19.11 Gbps | 106% | ✗ over |
+| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | 80% | ✓ |
+| IPI (YUV present) | 10.72 Gbps | 19.11 Gbps | 178% | ✗ does not even fit the 15.93 of active pixels (149%) |
+| VC count | 4 | 4 | full | ✓ |
+
+**Conclusion**: **four do not fit, and IPI is hit first** — 10.72 Gbps cannot even carry the 15.93 Gbps of active pixels, so the PHY problem never comes up. **Switching to C-PHY buys nothing here**: C-PHY does clear the PHY ceiling (19.11 < 23.94, 80% used), but the IPI ceiling is set by the pixel clock and the packing ratio, not by which PHY you picked. **Once YUV is in the mix, no PHY change rescues it.**
+
+**At most two 8M YUV@30fps cameras fit on one RX** — 9.56 Gbps takes 89.1% of the 10.72 ceiling, leaving about 11%. **What is expensive is the 8M, not the camera count**: using all four cameras (the VC limit) means giving up an 8M in favour of 2M. Every mix, largest first:
+
+| Combination | Cameras | Blanking-inclusive total | Used (ceiling 10.72 Gbps) | Result |
+| --- | --- | --- | --- | --- |
+| 4×8M | 4 | 19.11 Gbps | 178% | ✗ 78% over |
+| 3×8M + 1×2M | 4 | 15.53 Gbps | 145% | ✗ 45% over |
+| 2×8M + 2×2M | 4 | 11.94 Gbps | 111% | ✗ 11% over |
+| 2×8M + 1×2M | 3 | 10.75 Gbps | 100.3% | ✗ over by 0.03 Gbps — on the line; trimming blanking would fit it |
+| 2×8M | 2 | 9.56 Gbps | 89.1% | ✓ about 11% to spare |
+| **1×8M + 3×2M** | 4 | 8.36 Gbps | 78.0% | ✓ **largest mix that fits with all four cameras** |
+| 1×8M + 2×2M | 3 | 7.17 Gbps | 66.9% | ✓ |
+| 4×2M | 4 | 4.78 Gbps | 44.6% | ✓ here the four-VC limit binds before IPI |
+
+**The largest mix that still uses all four cameras is `1×8M + 3×2M`** (8.36 Gbps). If four cameras are not required, `2×8M` carries more total bandwidth (9.56 Gbps) but only two cameras — **camera count or per-camera resolution, pick one**.
+
+
+**A mixed RX still uses this table, but one YUV stream drags the ceiling down** — IPI packing drops from 3 pixels/clock to 1, so the whole RX goes from 24.1 Gbps to 10.72 Gbps:
+
+| Combination | Cameras | Blanking-inclusive total | Used (ceiling 10.72 Gbps) | Result |
+| --- | --- | --- | --- | --- |
+| 3×8M RAW12 + 1×8M YUV422 | 4 | 17.32 Gbps | 162% | ✗ the three RAW12 alone take 52% — adding one YUV pushes the RX well over |
+| 1×8M YUV422 + 3×2M RAW12 | 4 | 7.91 Gbps | 73.8% | ✓ all four cameras |
+| 1×8M RAW12 + 3×2M YUV422 | 4 | 7.76 Gbps | 72.4% | ✓ all four cameras |
+
+</DocScope>
 > **Size your bring-up from the blanking-inclusive figure, not the active-pixel one**, or the conclusion comes out optimistic. Beyond PHY you must also confirm the deserialiser link rate is sufficient.
 
 ## Usage
@@ -371,7 +416,7 @@ CIM writes the data to DDR and the downstream module or user space reads it back
 - Pro: all three output channels (main frame / ROI / EMB) are available, and cross-CPE works
 - Cost: CIM writes it once and downstream reads it once, so bandwidth doubles and latency is higher
 
-#### Choosing Between Them
+#### Selection Criteria
 | Your case | Recommendation | Why |
 | --- | --- | --- |
 | Single RAW sensor | **Online first** | Lower latency; switch to Offline if you need ROI / EMB or want to store frames |
@@ -549,7 +594,7 @@ These **return no error** yet produce a wrong picture — worth checking item by
 ## API Reference
 
 ### Configuration Struct Reference
-The header `hbn_vin_cfg.h` is authoritative; this section is the readable version of it. The **semantics** of each field are covered where they belong — `cim_isp_flyby` / `cim_pym_flyby` in [Data Paths](#data-paths), the `func` pattern / frame-skip fields in [CIM Internals and Configurable Blocks](#cim-internals-and-configurable-blocks), the channel fields in [API Interface Description](#api-interface-description).
+The header `hbn_vin_cfg.h` is authoritative; this section is the readable version of it. The **semantics** of each field are covered where they belong — `cim_isp_flyby` / `cim_pym_flyby` in [Data Paths](#data-paths), the `func` pattern / frame-skip fields in [CIM Configurable Blocks](#cim-configurable-blocks), the channel fields in [API Interface Description](#api-interface-description).
 
 Fields marked *framework* are filled in by the framework; you do not set them.
 
@@ -1034,7 +1079,7 @@ A failing interface returns a **negative** value — the macro below, negated. T
 | `-25` | `HBN_STATUS_NOMEM` | Memory allocation failed |
 | `-43` | `HBN_STATUS_NODE_DEQUE_ERROR` | `hbn_vnode_getframe` failed to fetch; a timeout is the most common cause. Usually no frames are arriving at all — check `fs_cnt` in `cim_stat` |
 | `-50` | `HBN_STATUS_BIND_NODE_FAIL` | Binding failed: a duplicate binding, or Online binding conditions unmet (not the main-frame channel, or flyby not set to 1) |
-| `-786462` | `HBN_STATUS_VIN_OPEN_ICHN_FAIL` | Invalid `hw_id` — `/dev/vin<hw_id>_src` cannot be opened. S100 accepts `0` / `1` / `4` only; S600 accepts `0`–`5` |
+| `-786462` | `HBN_STATUS_VIN_OPEN_ICHN_FAIL` | Invalid `hw_id` — `/dev/vin<hw_id>_src` cannot be opened. Valid values in [Platform Scale](#platform-scale) |
 
 > The macros live in `hbn_error.h`. The last row's `HBN_STATUS_VIN_*` is a composite code built by shifting the module number left by 16 bits, which is why the value is so large — `-786462` is `-0xC001E` in hex, easier to read against the header.
 
@@ -1093,7 +1138,7 @@ cat /sys/class/vps/mipi_host0/status/icnt   # interrupt error counters
 cat /sys/class/vps/mipi_host0/status/regs   # register snapshot
 ```
 
-`status/cfg` confirms whether the board is really running the parameters you set; the error counters in `status/icnt` should all be 0 in normal operation. The nodes are numbered per host: `mipi_host0` / `mipi_host1` / `mipi_host4` (on S600, `mipi_host0`–`mipi_host5`).
+`status/cfg` confirms whether the board is really running the parameters you set; the error counters in `status/icnt` should all be 0 in normal operation. The nodes are numbered per host: `mipi_host<hw_id>` (valid `hw_id` values in [Platform Scale](#platform-scale)).
 
 Under `param/` are writable debug switches, the common ones being `irq_cnt` (interrupt count threshold, past which the driver disables that interrupt to prevent an interrupt storm), `dbg_value` (turn on debug logging) and `ipi_overst`. **These change the driver's runtime behaviour — do not adjust them on a production configuration.**
 

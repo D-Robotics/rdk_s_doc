@@ -2,6 +2,7 @@
 sidebar_position: 4
 title: "视频输入 - VIN"
 description: "RDK S100/S600 5.5.1.4 VIN（视频输入模块）"
+toc_max_heading_level: 4
 ---
 
 # 视频输入 - VIN
@@ -43,7 +44,7 @@ VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 
 ### VIN 的四个子模块
 | 子模块 | 职责 |
 | --- | --- |
-| **MIPI RX** | 接收 MIPI CSI-2 数据流，支持 D-PHY / C-PHY；每路 RX 支持多虚拟通道（VC）。S100 有 3 路、S600 有 6 路 |
+| **MIPI RX** | 接收 MIPI CSI-2 数据流，支持 D-PHY / C-PHY；每路 RX 支持多虚拟通道（VC）。路数见[平台规格](#平台规格) |
 | **CIM** | Camera Interface Manager，把 RX 送来的图像分发给后级（Online）或写入 DDR（Offline） |
 | **LPWM** | 曝光触发与帧同步信号，供需要外部触发的 Sensor 使用 |
 | **VCON** | 连接编排：I2C 总线、POC 供电、GPIO、PHY 映射等板级配置 |
@@ -53,18 +54,20 @@ VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 
 ### VIN 在链路中的位置
 ![VIN 在相机链路中的位置与上下游](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig1-vin-position.svg)
 
-### CIM 内部结构与可配功能块
-CIM 是 VIN 的四个子模块之一，其内部又由若干功能块组成。其中几个功能块对用户是可配的：
+### CIM 可配功能块
+CIM 内部由若干功能块组成，其中对用户可配的是下面这些。下图标出每个块挂在哪一级，表里给对应的配置字段：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/cim-internal.png" alt="CIM 内部结构" width="100%" />
+![CIM 的三个输入源、三条输出通道与挂在通道上的可配块](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/cim-blocks.svg)
 
-| 功能块 | 位置 | 作用 | 对应配置 |
+| 功能块 | 挂在 | 作用 | 对应配置 |
 | --- | --- | --- | --- |
-| `TPG` | 每个 IPI 一个 | 测试图案发生器。不接 Sensor 也能出图，用于通路验证 | `vin_node_attr.cim_attr.func.enable_pattern` |
-| `ROI` | 三条输出通道上，语义各不相同 | 裁剪。主通道使能后，落 DDR 与送 ISP 的图都会被裁；ROI 通道只能出 DDR；EMB 通道的 ROI 用于从图像里裁出 embedded data | `vin_ochn_attr[x].roi_en`、`vin_ochn_attr[x].roi_attr`（`roi_x` / `roi_y` / `roi_width` / `roi_height`） |
-| `EMB` | 每个 IPI 的第三条通道 | 接收 embedded data，支持 `0x12` 类型与嵌入图像内两种形态 | `vin_ochn_attr[x].emb_en`、`vin_ochn_attr[x].emb_attr` |
-| `RAWDS` | 主通道 | 2×2 下采样，宽高各减半 | `vin_ochn_attr[x].rawds_en`、`vin_ochn_attr[x].rawds_attr.rawds_mode` |
-| `RDMA` | 部分 IPI（S100：CIM0 的 IPI3；S600：CIM3 的 IPI2/IPI3，以各 CIM 的 `rdma-support` 为准） | DDR 回灌，用于调试 | `vin_node_attr.cim_attr.rdma_input.rdma_en` |
+| `TPG` | 输入源（三选一） | 测试图案发生器。不接 Sensor 也能出图，用于通路验证 | `vin_node_attr.cim_attr.func.enable_pattern` |
+| `RDMA` | 输入源（三选一） | DDR 回灌，用于调试 | `vin_node_attr.cim_attr.rdma_input.rdma_en` |
+| `ROI` | 主帧 / ROI / EMB 三个通道 | 裁剪。主通道使能后，落 DDR 与送 ISP 的图都会被裁；ROI 通道只能出 DDR；EMB 通道的 ROI 用于从图像里裁出 embedded data | `vin_ochn_attr[x].roi_en`、`vin_ochn_attr[x].roi_attr`（`roi_x` / `roi_y` / `roi_width` / `roi_height`） |
+| `EMB` | EMB 通道（ochn 3） | 接收 embedded data，支持 `0x12` 类型与嵌入图像内两种形态 | `vin_ochn_attr[3].emb_en`、`vin_ochn_attr[3].emb_attr` |
+| `RAWDS` | 主帧通道（ochn 0） | 2×2 下采样，宽高各减半 | `vin_ochn_attr[0].rawds_en`、`vin_ochn_attr[0].rawds_attr.rawds_mode` |
+
+`RAWDS` 只在主帧通道生效：驱动里所有 `rawds_en` 分支取的都是 `vin_ochn_attr[VIN_MAIN_FRAME]`，ROI / EMB 通道各自只读 `roi_en` / `emb_en`。
 
 `TPG`、MIPI 接入、`RDMA` 三者是**互斥的输入源**，同一时刻只能选一个（见[约束与注意事项](#约束与注意事项)）。
 
@@ -180,18 +183,6 @@ CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` �
 ## 接入评估
 选型前先算两笔账：**数据量能不能传**、**通路能不能扛**。
 
-### 数据量计算
-一路相机的原始数据量：
-
-```
-数据量(bps) = 宽 × 高 × 帧率 × 位深
-```
-
-- 1 路 8M RAW12@30fps：`3840 × 2160 × 30 × 12 ≈ 2.99 Gbps`
-- 1 路 2M RAW12@30fps：`1920 × 1080 × 30 × 12 ≈ 0.75 Gbps`
-
-> 这是**有效像素**口径。链路实际承载的还要加上 Sensor 的 blanking（消隐期），后文[算例](#算例)给出两者的差距——**核算带宽用含 blanking 的值**。
-
 ### IPI 的传输效率
 MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**，像素时钟标称值见[平台能力上限](#平台能力上限)。两种数据类型每个 clock 能打包的像素数不同：
 
@@ -262,74 +253,129 @@ MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**�
 
 1. **压缩模组 blanking**——把 `k` 降下来，不改配置、不损失画质，性价比最高
 2. 降帧率或降分辨率
-3. 拆到另一个 RX（S100 有 3 个、S600 有 6 个）
+3. 拆到另一个 RX（可用路数见[平台规格](#平台规格)）
 4. 改 C-PHY——**只放宽 PHY，不放宽 IPI**，所以 YUV 场景换 C-PHY 没有用
 
-> **最容易踩的一条**：混接时 IPI 上限是**整条 RX 一起掉到 9.6 Gbps**（S600 是 10.72），不是只有那一路 YUV 受这个限制。所以「1 路 YUV + 3 路 8M RAW12」这种搭配，预算按 9.6 算而不是 21.6——光是 3 路 RAW12 含 blanking 就要 12.54 Gbps，已经超了。同一个 RX 上**有 YUV 就按 YUV 的口径算全部**。
+<DocScope products="RDK S100">
+
+> **最容易踩的一条**：混接时 IPI 上限是**整条 RX 一起掉到 9.6 Gbps**，不是只有那一路 YUV 受这个限制。所以「1 路 YUV + 3 路 8M RAW12」这种搭配，预算按 9.6 算而不是 21.6——光是 3 路 RAW12 含 blanking 就要 12.54 Gbps，已经超了。同一个 RX 上**有 YUV 就按 YUV 的口径算全部**。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+> **最容易踩的一条**：混接时 IPI 上限是**整条 RX 一起掉到 10.72 Gbps**，不是只有那一路 YUV 受这个限制。所以「1 路 YUV + 3 路 8M RAW12」这种搭配，预算按 10.72 算而不是 24.1——光是 3 路 RAW12 含 blanking 就要 12.54 Gbps，已经超了。同一个 RX 上**有 YUV 就按 YUV 的口径算全部**。
+
+</DocScope>
 
 ### 算例
-同样 8M@30fps、同样接在一路 RX 上，**RAW12 能接 4 颗，YUV422 只能接 2 颗**——差别全在 IPI 的打包率。下面按[搭配计算方法](#搭配计算方法)的四步各走一遍。
+同样 8M@30fps、同样接在一路 RX 上，**RAW12 能接 4 颗，YUV422 只能接 2 颗**——差别全在 IPI 的打包率。下面按[搭配计算方法](#搭配计算方法)的四步各走一遍。PHY 上限是 SoC 级规格、与平台无关，随平台变的只有 IPI，所以下面每张表里 PHY 两行的占用率各平台相同，IPI 那一行则按本平台自己的上限与像素时钟算。
 
 #### 算例 1：4 颗 8M RAW12@30fps
-**① 算数据量**
+按 8M（3840 × 2160）算，单路有效像素 2.99 Gbps，乘 blanking 系数 1.4 得 4.18 Gbps，**四路合计 16.72 Gbps**：
 
-| 口径 | 单路 | 4 路合计 |
-| --- | --- | --- |
-| 有效像素（`宽 × 高 × 帧率 × 12`） | 2.99 Gbps | 11.96 Gbps |
-| **含 blanking（×1.4）** | 4.18 Gbps | **16.72 Gbps** |
+<DocScope products="RDK S100">
 
-**② 逐个卡口校验**
+| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% | ✓ 只剩 7% |
+| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% | ✓ |
+| IPI（纯 RAW12） | 21.6 Gbps | 16.72 Gbps | 77% | ✓ |
+| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
 
-| 卡口 | 上限 | 4 路合计 | 结论 |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | ✓ 已占 93%，只剩 7% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | ✓ 占 70% |
-| IPI（纯 RAW12） | S100 21.6 Gbps / S600 24.1 Gbps | 16.72 Gbps | ✓ 占 77% |
-| VC 路数 | 4 路 | 4 路 | ✓ |
+**结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking；改走 C-PHY 后 PHY 降到 70%，**此时 IPI 的 77% 成了新的瓶颈**——再要余量只能压 blanking 或减路数。前提是模组支持 C-PHY 且解串器输出速率跟得上，实际能不能跑满帧要在板子上实测。
 
-**③ 结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking。**改走 C-PHY 则宽裕得多**：PHY 占用降到 70%，瓶颈随之转到 IPI（S100 77%）。成立的前提是模组支持 C-PHY 且解串器输出速率跟得上。
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% | ✓ 只剩 7% |
+| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% | ✓ |
+| IPI（纯 RAW12） | 24.1 Gbps | 16.72 Gbps | 69% | ✓ |
+| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
+
+**结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking；改走 C-PHY 后 PHY 降到 70%，与 IPI 的 69% 基本齐平，**两道都还剩三成左右**，比 D-PHY 那档宽松得多。前提是模组支持 C-PHY 且解串器输出速率跟得上，实际能不能跑满帧要在板子上实测。
+
+</DocScope>
 
 #### 算例 2：4 颗 8M YUV422@30fps
-**① 算数据量**
+位深按 16 算，单路有效像素 3.98 Gbps，乘 blanking 系数 1.2 得 4.78 Gbps，**四路合计 19.11 Gbps**（其中有效像素 15.93 Gbps）：
 
-| 口径 | 单路 | 4 路合计 |
-| --- | --- | --- |
-| 有效像素（`宽 × 高 × 帧率 × 16`） | 3.98 Gbps | 15.93 Gbps |
-| **含 blanking（×1.2）** | 4.78 Gbps | **19.11 Gbps** |
+<DocScope products="RDK S100">
 
-**② 逐个卡口校验**
+| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 19.11 Gbps | 106% | ✗ 超 |
+| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | 80% | ✓ |
+| IPI（含 YUV） | 9.6 Gbps | 19.11 Gbps | 199% | ✗ 连有效像素的 15.93（占 166%）都装不下 |
+| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
 
-| 卡口 | 上限 | 4 路合计 | 结论 |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 19.11 Gbps | ✗ 超 |
-| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | ✓ 占 80% |
-| IPI（含 YUV） | S100 9.6 Gbps / S600 10.72 Gbps | 19.11 Gbps | ✗ 连有效像素的 15.93 都装不下 |
-| VC 路数 | 4 路 | 4 路 | ✓ |
+**结论**：**4 颗走不通，先撞的是 IPI**——9.6 Gbps 连 4 路的有效像素（15.93）都装不下，PHY 的问题还没轮到。**这里换 C-PHY 是没用的**：C-PHY 把 PHY 那关买通了（19.11 < 23.94，占 80%），但 IPI 上限由像素时钟和打包率决定，与选哪种 PHY 无关。**只要含 YUV，换 PHY 救不了。**
 
-**③ 结论**：**4 颗走不通，先撞的是 IPI**——9.6 Gbps 连 4 路的有效像素（15.93）都装不下，PHY 的问题还没轮到。
+**同一 RX 上最多接 2 颗 8M YUV@30fps**——9.56 Gbps 占掉 9.6 的 99.5%，是贴着上限跑的。**贵的是 8M，不是路数**：想接满 4 路（VC 上限），就得把 8M 让出来换成 2M。按合计从大到小列全：
 
-**这里换 C-PHY 是没用的**，也是它唯一容易误会的地方：C-PHY 把 PHY 那关买通了（19.11 < 23.94，反而过了），但 IPI 上限由像素时钟和打包率决定，和选哪种 PHY 无关，9.6 Gbps 还是 9.6 Gbps。**只要含 YUV，换 PHY 救不了。**
+| 组合 | 路数 | 含 blanking 合计 | 占用（上限 9.6 Gbps） | 结论 |
+| --- | --- | --- | --- | --- |
+| 4×8M | 4 | 19.11 Gbps | 199% | ✗ 超 99% |
+| 3×8M + 1×2M | 4 | 15.53 Gbps | 162% | ✗ 超 62% |
+| 2×8M + 2×2M | 4 | 11.94 Gbps | 124% | ✗ 超 24% |
+| 2×8M + 1×2M | 3 | 10.75 Gbps | 112% | ✗ 超 12%——2 颗 8M 已占掉 99.5% |
+| 2×8M | 2 | 9.56 Gbps | 99.5% | ✓ 贴线，几乎没有余量 |
+| **1×8M + 3×2M** | 4 | 8.36 Gbps | 87.1% | ✓ **满 4 路时能装的最大组合** |
+| 1×8M + 2×2M | 3 | 7.17 Gbps | 74.7% | ✓ |
+| 4×2M | 4 | 4.78 Gbps | 49.8% | ✓ 此时先撞 VC 的 4 路上限，不是 IPI |
 
-**往下试几颗能行**：
+**满 4 路时能装的最大组合是 `1×8M + 3×2M`**（8.36 Gbps）。不要求接满 4 路的话，`2×8M` 的总带宽更高（9.56 Gbps）但只接 2 路——**要路数还是要单路分辨率，二选一**。
 
-| 颗数 | 含 blanking 合计 | 对 S100 的 9.6 | 对 S600 的 10.72 |
-| --- | --- | --- | --- |
-| 1 颗 | 4.78 Gbps | ✓ | ✓ |
-| 2 颗 | 9.56 Gbps | ✓ 余量不到 1% | ✓ 余 11% |
-| 3 颗 | 14.33 Gbps | ✗ | ✗ |
 
-**同一 RX 上最多接 2 颗 8M YUV@30fps**——S100 上还是贴着上限跑的。
+**混流要按同一张表算，但上限会被那一路 YUV 拖下来**——IPI 的打包率从 3 pixel/clock 掉到 1 pixel/clock，整条 RX 的上限由 21.6 Gbps 变成 9.6 Gbps：
 
-**但三路本身不是禁区：贵的是 8M，不是路数。**
+| 组合 | 路数 | 含 blanking 合计 | 占用（上限 9.6 Gbps） | 结论 |
+| --- | --- | --- | --- | --- |
+| 3×8M RAW12 + 1×8M YUV422 | 4 | 17.32 Gbps | 180% | ✗ 3 路 RAW12 单独只占 58%，加 1 路 YUV 后整条 RX 反而超一倍 |
+| 1×8M YUV422 + 3×2M RAW12 | 4 | 7.91 Gbps | 82.4% | ✓ 满 4 路 |
+| 1×8M RAW12 + 3×2M YUV422 | 4 | 7.76 Gbps | 80.9% | ✓ 满 4 路 |
 
-| 组合 | 含 blanking 合计 | 对 IPI（S100 9.6 / S600 10.72） |
-| --- | --- | --- |
-| 2×8M + 1×2M | 10.75 Gbps | ✗ 超——2 颗 8M 已占掉 99.5%，再挂一路 2M 要 1.19 Gbps |
-| 1×8M + 2×2M | 7.17 Gbps | ✓ 占 74.7% |
-| 1×8M + 3×2M | 8.36 Gbps | ✓ 占 87.1% |
+</DocScope>
 
-要挂第三路，得先把其中一路 8M 降成 2M。全上 2M 的话 4 路也才 4.78 Gbps，那时先撞的是 VC 的 4 路上限，不是 IPI。
+<DocScope products="RDK S600">
 
+| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
+| --- | --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 19.11 Gbps | 106% | ✗ 超 |
+| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | 80% | ✓ |
+| IPI（含 YUV） | 10.72 Gbps | 19.11 Gbps | 178% | ✗ 连有效像素的 15.93（占 149%）都装不下 |
+| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
+
+**结论**：**4 颗走不通，先撞的是 IPI**——10.72 Gbps 连 4 路的有效像素（15.93）都装不下，PHY 的问题还没轮到。**这里换 C-PHY 是没用的**：C-PHY 把 PHY 那关买通了（19.11 < 23.94，占 80%），但 IPI 上限由像素时钟和打包率决定，与选哪种 PHY 无关。**只要含 YUV，换 PHY 救不了。**
+
+**同一 RX 上最多接 2 颗 8M YUV@30fps**——9.56 Gbps 占掉 10.72 的 89.1%，还剩约 11% 余量。**贵的是 8M，不是路数**：想接满 4 路（VC 上限），就得把 8M 让出来换成 2M。按合计从大到小列全：
+
+| 组合 | 路数 | 含 blanking 合计 | 占用（上限 10.72 Gbps） | 结论 |
+| --- | --- | --- | --- | --- |
+| 4×8M | 4 | 19.11 Gbps | 178% | ✗ 超 78% |
+| 3×8M + 1×2M | 4 | 15.53 Gbps | 145% | ✗ 超 45% |
+| 2×8M + 2×2M | 4 | 11.94 Gbps | 111% | ✗ 超 11% |
+| 2×8M + 1×2M | 3 | 10.75 Gbps | 100.3% | ✗ 超 0.03 Gbps——卡在线上，压一点 blanking 就能过 |
+| 2×8M | 2 | 9.56 Gbps | 89.1% | ✓ 还有约 11% 余量 |
+| **1×8M + 3×2M** | 4 | 8.36 Gbps | 78.0% | ✓ **满 4 路时能装的最大组合** |
+| 1×8M + 2×2M | 3 | 7.17 Gbps | 66.9% | ✓ |
+| 4×2M | 4 | 4.78 Gbps | 44.6% | ✓ 此时先撞 VC 的 4 路上限，不是 IPI |
+
+**满 4 路时能装的最大组合是 `1×8M + 3×2M`**（8.36 Gbps）。不要求接满 4 路的话，`2×8M` 的总带宽更高（9.56 Gbps）但只接 2 路——**要路数还是要单路分辨率，二选一**。
+
+
+**混流要按同一张表算，但上限会被那一路 YUV 拖下来**——IPI 的打包率从 3 pixel/clock 掉到 1 pixel/clock，整条 RX 的上限由 24.1 Gbps 变成 10.72 Gbps：
+
+| 组合 | 路数 | 含 blanking 合计 | 占用（上限 10.72 Gbps） | 结论 |
+| --- | --- | --- | --- | --- |
+| 3×8M RAW12 + 1×8M YUV422 | 4 | 17.32 Gbps | 162% | ✗ 3 路 RAW12 单独只占 52%，加 1 路 YUV 后整条 RX 超六成 |
+| 1×8M YUV422 + 3×2M RAW12 | 4 | 7.91 Gbps | 73.8% | ✓ 满 4 路 |
+| 1×8M RAW12 + 3×2M YUV422 | 4 | 7.76 Gbps | 72.4% | ✓ 满 4 路 |
+
+</DocScope>
 > **规划接入时请按含 blanking 的口径核算，不要用有效像素值**，否则结论会偏乐观。除 PHY 外还必须确认解串器链路速率够不够。
 
 ## 使用说明
@@ -371,7 +417,7 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 - 优点：三条输出通道（主帧 / ROI / EMB）都可用，支持跨 CPE
 - 代价：CIM 写一遍、下游读一遍，带宽翻倍，延迟更高
 
-#### 怎么选
+#### 选型依据
 | 你的场景 | 推荐 | 原因 |
 | --- | --- | --- |
 | 单路 RAW Sensor | **优先 Online** | 延迟低；需要 ROI / EMB 或存图时改用 Offline |
@@ -549,7 +595,7 @@ int main(void)
 ## API 相关
 
 ### 配置结构体定义
-完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[数据通路](#数据通路)，`func` 里的 pattern / 跳帧见 [CIM 内部结构与可配功能块](#cim-内部结构与可配功能块)，通道字段见 [API 接口说明](#api-接口说明)。
+完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[数据通路](#数据通路)，`func` 里的 pattern / 跳帧见 [CIM 可配功能块](#cim-可配功能块)，通道字段见 [API 接口说明](#api-接口说明)。
 
 标「框架填」的字段不用自己设。
 
@@ -1034,7 +1080,7 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 | `-25` | `HBN_STATUS_NOMEM` | 内存申请失败 |
 | `-43` | `HBN_STATUS_NODE_DEQUE_ERROR` | `hbn_vnode_getframe` 取帧失败，超时是最常见的一种。多半是根本没有帧进来，查 `cim_stat` 的 `fs_cnt` |
 | `-50` | `HBN_STATUS_BIND_NODE_FAIL` | 绑定失败：重复绑定、Online 绑定条件不满足（非主帧通道或 flyby 未置 1）都走这里 |
-| `-786462` | `HBN_STATUS_VIN_OPEN_ICHN_FAIL` | `hw_id` 无效，打不开 `/dev/vin<hw_id>_src`。S100 只接受 `0` / `1` / `4`，S600 接受 `0`–`5` |
+| `-786462` | `HBN_STATUS_VIN_OPEN_ICHN_FAIL` | `hw_id` 无效，打不开 `/dev/vin<hw_id>_src`。合法值见[平台规格](#平台规格) |
 
 > 宏定义在 `hbn_error.h`。最后一行的 `HBN_STATUS_VIN_*` 是复合码，由模块号左移 16 位拼出，所以数值很大——`-786462` 写成十六进制是 `-0xC001E`，对照时看后者更直观。
 
@@ -1093,7 +1139,7 @@ cat /sys/class/vps/mipi_host0/status/icnt   # 中断错误分类计数
 cat /sys/class/vps/mipi_host0/status/regs   # 寄存器快照
 ```
 
-`status/cfg` 用于确认板上跑的到底是不是你配的那份参数；`status/icnt` 的报错计数正常情况下应全为 0。节点按 host 编号区分，即 `mipi_host0` / `mipi_host1` / `mipi_host4`（S600 为 `mipi_host0`~`mipi_host5`）。
+`status/cfg` 用于确认板上跑的到底是不是你配的那份参数；`status/icnt` 的报错计数正常情况下应全为 0。节点按 host 编号区分，即 `mipi_host<hw_id>`（`hw_id` 合法值见[平台规格](#平台规格)）。
 
 `param/` 下是可写的调试开关，常用的有 `irq_cnt`（中断计数阈值，超过后驱动会关闭该路中断以防中断风暴）、`dbg_value`（打开调试日志）、`ipi_overst`。**这些参数会改变驱动的运行行为，不要在生产配置上随意调整。**
 
