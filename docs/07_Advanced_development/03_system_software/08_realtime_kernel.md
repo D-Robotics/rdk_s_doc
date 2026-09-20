@@ -32,6 +32,25 @@ sudo apt update
 sudo apt install rt-tests
 ```
 
+### 隔离测试核心
+
+为获得稳定、可复现的延迟结果，建议先隔离一个 CPU 核心作为专用实时核，避免其他任务抢占影响测试。隔离通过 U-Boot 配置 `bootargs` 实现：
+
+```bash
+setenv bootargs ${bootargs} isolcpus=<CPU> nohz_full=<CPU> rcu_nocbs=all
+saveenv
+reset
+```
+
+其中 `<CPU>` 为待隔离的核心编号。S100 与 S600 的 CPU 核心数不同，隔离核心需按实际核心数选择：
+
+| 产品 | CPU 核心 | 隔离核心示例 |
+|---|---|---|
+| RDK S100 | 6 核（CPU0~CPU5） | `isolcpus=5 nohz_full=5 rcu_nocbs=all` |
+| RDK S600 | 18 核（CPU0~CPU17） | `isolcpus=17 nohz_full=17 rcu_nocbs=all` |
+
+重启生效后，隔离核心不会被其他任务占用，`cyclictest` 在该核心上的延迟结果更稳定。
+
 ### 运行 cyclictest 测试
 
 `cyclictest`测试是`rt-tests`中的一个常用测试，它用于评估系统的定时行为和响应时间。执行以下命令运行`cyclictest`测试：
