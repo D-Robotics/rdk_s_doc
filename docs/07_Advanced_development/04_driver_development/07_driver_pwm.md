@@ -421,13 +421,21 @@ cat /sys/kernel/debug/pinctrl/*/pinmux-pins | grep -i lpwm
 
 ## 相关文档
 
-- [扩展引脚应用（PWM）](/Demos/peripheral/40pin)
-- [SPI 调试指南](./07_driver_spi_dev.md)
+- [GPIO 使用](./04_driver_gpio_dev.md)
 - [Pinctrl 调试指南](./05_driver_pinctrl_dev.md)
+- [MCU PWM 使用指南](../11_mcu_development/05_mcu_pwm.md)
+- [多路 Camera 及与 Lidar 同步](../06_multimedia_development/01_multimedia_api/12_camerasync.md)
 
 <DocScope products="RDK S100">
 
-- 用户层示例：[PWM 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/03_pwm.md)
-- 板端示例代码：`/app/40pin_samples/simple_pwm.py`
+- [PWM 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/03_pwm.md)
+- [GPIO 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/02_gpio.md)
+- [40-pin 管脚定义](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+- [GPIO 应用（RDK S600）](../../03_Demos/01_peripheral/01_40pin/02_s600/02_gpio.md)
 
 </DocScope>
