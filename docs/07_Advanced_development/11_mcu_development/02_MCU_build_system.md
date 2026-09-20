@@ -12,17 +12,23 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 概述
 
-本文介绍 RDK S100 / RDK S600 的 MCU1 编译系统。编译系统基于 SCons 创建，负责将 MCU1 源码编译、链接为可被 MCU0 加载运行的固件镜像。
+本文介绍 RDK S100 / RDK S600 的 MCU1 编译系统，包括目录结构、编译流程、重点文件之间的关系，以及镜像 layout 与启动代码，最终产出可被 MCU0 加载运行的 MCU1 固件。
 
-- **定位**：说明 MCU1 编译系统的目录结构、编译流程、重点文件关系、镜像 layout 与启动代码。
-- **适用读者**：需要编译或定制 MCU1 固件的深度定制开发者。
-- **前置条件**：了解 MCU 的基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
-- **与其他模块关系**：编译产出的 MCU1 固件由 MCU0 在上电或 remoteproc 流程中加载运行。
+- **定位**：说明 MCU1 编译系统的目录结构与编译入口、重点文件关系、新增编译目录的方法、镜像 layout 与链接脚本中的可配置常量，以及 `startup.s` 启动代码。
+- **适用读者**：需要自行编译 MCU1 固件，或需要调整编译目录、链接脚本与内存布局的深度定制开发者。
+- **前置条件**：主机编译环境参见 [MCU 快速入门指南](01_basic_information.md)；建议先了解代码包的目录划分，参见 [MCU 代码包结构介绍](00_code_release.md)。
+- **与其他模块关系**：编译系统位于代码包的 `Build` 目录下；产出的 MCU1 固件由 MCU0 在上电或 remoteproc 流程中加载运行；固件上的应用开发参见 [MCU1 开发指南](03_FreeRTOS_development.md)。
 
-## 编译系统基本说明
-MCU 的编译系统基于 SCons 3.0.0 创建（[SCons 3.0.0 用户手册官网](https://scons.org/doc/3.0.0/HTML/scons-user.html)）。
+**范围说明：** 本文只涉及 MCU1 固件的编译与链接；MCU0 与 SBL 固件不在本文范围内，其获取与烧录方式参见 [MCU 快速入门指南](01_basic_information.md)。
 
-## MCU1编译系统
+## 编译系统
+
+### 版本要求
+
+MCU 的编译系统基于 SCons 构建，要求 **SCons 4.0.0 及以上**，可参考 [SCons 用户手册](https://scons.org/doc/production/HTML/scons-user.html)。
+
+### 目录结构
+
 <DocScope products="RDK S100">
 
 MCU1 编译系统位于 mcu/Build/FreeRtos_mcu1，具体目录结构，如下图所示：
@@ -57,7 +63,7 @@ FreeRtos_mcu1
 ├── build_config                        # 编译所需 yaml 文件，增删编译文件夹
      └── S600
          └── lite-matrix-B-mcu1.yaml
-├── settings_files                      # gcc 编译链接等参数
+├── setting_files                       # gcc 编译链接等参数
      └── gcc
          └── settings_lite_freertos.py
 ├── site_scons                          # SCons 编译链接命令文件
@@ -70,10 +76,20 @@ FreeRtos_mcu1
 ```
 </DocScope>
 
-## 编译流程介绍
+### 编译流程
+
+编译过程由三层脚本配合完成：
+
+1. `build_freertos.py`（编译入口）：解析命令行参数、拼出要读取的 yaml 文件名，再以命令行变量的形式把 yaml 路径与编译模式传给 SCons；编译结束后按 yaml 中的 `BinProcess` 字段对镜像做后处理。
+
+2. `SConstruct`（SCons 入口）：读取 yaml 中的 `SettingFile`（编译/链接参数）与 `LinkFIle`（链接脚本），按 `BuildPath`、`StaticLib*Path` 等字段调用各模块的 `SConscript`，最终链接出 elf。
+
+3. 各模块的 `SConscript`：声明并编译本模块的源文件，产物落到 `output/objs/<模块路径>`。
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/MCU_build_system/build_freertos.png" alt="编译流程介绍示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-## 编译中的重点文件关系介绍
+## 重点文件关系
+
 <DocScope products="RDK S100">
 
 build_freertos.py 是编译的整体入口，但是实际调度到 SCons 时，能够对 SCons 编译环境/流程产生影响的方式有以下几个：
@@ -97,307 +113,70 @@ build_freertos.py 是编译的整体入口，但是实际调度到 SCons 时，�
 
 </DocScope>
 
-## MCU1镜像 layout
+### 新增编译目录
+
+MCU1 参与编译的目录由 `build_config/<SOC>/lite-matrix-B-mcu1.yaml` 控制，新增或移除模块需要同时修改 yaml 与模块内的 `SConscript`。
+
+**步骤一：** 在 yaml 中登记目录。`BuildPath` 中的目录会被编译并链接进固件；只提供头文件的目录放入 `HeadPath`（该字段会追加到头文件搜索路径）。以 S600 为例，文件为 `Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml`：
+
+```yaml
+BuildPath:
+  - McalCdd/Uart
+  - samples/MyModule        # 新增的模块目录
+```
+
+**步骤二：** 在模块目录下新增 `SConscript`。`SConstruct` 会为 `BuildPath` 与 `StaticLib*Path` 中的每个目录调用其 `SConscript`，并把编译产物落到 `output/objs/<模块路径>`；`SConscript` 负责声明源文件并返回 `objects`。最小示例如下：
+
+```python
+Import('*')
+import os, glob
+
+objects  = []
+includes = []
+cwd = Dir(".").abspath
+
+for directory in os.listdir(cwd):
+    path = os.path.join(cwd, directory)
+    if glob.glob(os.path.join(path, '*.h')):
+        includes.append(str(directory))
+    for file in glob.glob(os.path.join(path, '*.c')):
+        objects += env.Object(os.path.basename(file), file)
+
+for include in includes:
+    env.Append(CPPPATH=[Dir(include).abspath])
+
+Return('objects')
+```
+
+仓库中现有模块的 `SConscript`（例如 `samples/Uart/SConscript`）是这一结构的完整版本，新增模块时可直接拷贝修改。
+
+**提示：** 编译与链接参数（含链接入口）在 `setting_files/gcc/settings_lite_freertos.py` 中定义，由 `SConstruct` 通过 `Variables` 引入。例如固件入口由 `LINKER_FLAGS` 指定为 EL2 异常向量表：
+
+```python
+LINKER_FLAGS = '-e EL2_core_exceptions_table' +\
+```
+
+它决定了固件的起始位置是 `EL2_core_exceptions_table`、`EL2_Reset_Handler` 是执行入口，这也是下一节 `startup.s` 从 EL2 阶段开始执行的原因。
+
+## 镜像 layout 与链接脚本
+
+### 内存区域划分
 
 <DocScope products="RDK S100">
 
 |区域名称|起始地址|占用大小|作用|
 |----|---------------|---------------|---------|
 | FLASH_STARTUP| 0x0CAB0000|2K |启动代码、异常向量表等 |
-| FLASH| 0x0CAB0800|2154K |代码、数据、栈等使用的区域（不含 Can） |
-| FREERTOS_HEAP| 0x0CCCB000|512K |FreeRTOS 堆空间 |
+| FLASH| 0x0CAB0800|2666K |代码、数据、栈等使用的区域（不含 Can） |
 | CAN_Reserved| 0x0CD4B000|64K |Can 模块代码、数据的加载区域 |
 | LOG_SHARE_Reserved| 0x0CD5B000|8K |MCU1 log 存放的空间，log 会循环覆盖 |
 | SCMI_IPC_Reserved| 0x0CD5D000|12K |SCMI IPC 通信需要的空间，用于 buffer 及关键数据 |
+| FREERTOS_HEAP| 0x0CD60000|512K |FreeRTOS 堆空间 |
 | ATCM_Reserved| 0x0A000000|64K |Can 模块代码、数据的运行使用区域 |
 
 在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询D-Robotics 相关支持人员。
 
-下面是D-Robotics 版本中的链接文件（`Linker/gcc/S100/link_freertos_mcu1.ld`），解释了链接脚本中提供的一些变量作用：
-```c
-MEMORY
-{
-    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 2K
-    FLASH(rw)               : org = 0x0CAB0800, len = 2154K
-    FREERTOS_HEAP(rw)       : org = 0x0CCCB000, len = 512K
-    CAN_Reserved(rw)        : org = 0x0CD4B000, len = 64K
-    LOG_SHARE_Reserved(rw)  : org = 0x0CD5B000, len = 8K
-    SCMI_IPC_Reserved(rw)   : org = 0x0CD5D000, len = 12K
-    ATCM_Reserved(rw)       : org = 0x0A000000, len = 64K
-}
-
-/* Define output sections */
-SECTIONS
-{
-    .EL2_core_exceptions_table :
-    {
-        . = ALIGN(32);
-        _start = .;
-        *(.EL2_core_exceptions_table)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .EL2_Reset_Handler :
-    {
-        . = ALIGN(32);
-        *(.EL2_Reset_Handler)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .EL1_core_exceptions_table :
-    {
-		. = ALIGN(32);
-        *(.EL1_core_exceptions_table)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .EL1_core_exceptions_table_MCU2 :
-    {
-        . = ALIGN(32);
-        *(.EL1_core_exceptions_table_MCU2)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .text :
-    {
-        . = ALIGN(4);
-        *(.text .text.*)          /* .text sections (code) */
-        . = ALIGN(4);
-    } > FLASH
-
-    .shell :
-    {
-        _shell_command_start = .;
-        KEEP (*(shellCommand))
-        _shell_command_end = .;
-    } > FLASH
-
-    .mcal_text :
-    {
-        *(.mcal_text)
-    } > FLASH
-
-    .mcal_const_cfg :
-    {
-        *(.mcal_const_cfg)
-    } > FLASH
-
-    .mcal_const :
-    {
-        *(.mcal_const)
-    } > FLASH
-
-    .common_text :
-    {
-        *(.common_text)
-        PROVIDE(__TEXT_END = .);
-    } > FLASH
-    /******************text end******************/
-
-    .const :
-    {
-        . = ALIGN(32);
-        *(.const)
-        *(.rodata .rodata.*)
-    } > FLASH
-
-
-    .heap :
-    {
-        . = ALIGN(64);
-        __HEAP_START = .;
-        __end__ = .;
-        __heap_start__ = .;
-        PROVIDE(end = .);
-        PROVIDE(_end = .);
-        PROVIDE(__end = .);
-        __HeapBase = .;
-        . += HEAP_SIZE;
-        __HeapLimit = .;
-        __heap_limit = .;
-        __heap_end__ = .;
-    } > FLASH
-
-    .u_boot_list :
-    {
-        . = ALIGN(4);
-        *(SORT(.u_boot_list*))
-        . = ALIGN(4);
-     } > FLASH
-
-    .global_data :
-    {
-        . = ALIGN(64);
-        __DATA_RAM = .;
-        __data_start__ = .;      /* Create a global symbol at data start. */
-        *(.data .data.*)         /* .data sections */
-        . = ALIGN(64);
-        __data_end__ = .;        /* Define a global symbol at data end. */
-        PROVIDE(__DATA_END = .);
-        PROVIDE(__DATA_ROM = .);
-    } > FLASH
-
-    .stack (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __STACK_START = .;
-        __StackLimit = .;
-        __stack_start__ = .;
-        . += STACK_SIZE;
-        __stack_end__ = .;
-        __StackTop = .;
-    } > FLASH
-
-    .stack_mcu2 (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __STACK_START_MCU2 = .;
-        __StackLimit_MCU2 = .;
-        __stack_start_mcu2__ = .;
-        . += STACK_SIZE_MCU2;
-        __stack_end_mcu2__ = .;
-        __StackTop_MCU2 = .;
-    } > FLASH
-
-    .stack_exc (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __StackLimit_exc = .;
-        __stack_start_exc__ = .;
-        . += STACK_SIZE_EXC;
-        __stack_end_exc__ = .;
-        __StackTop_exc = .;
-        __STACK_END = .;
-    } > FLASH
-
-    .stack_exc_mcu2 (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __StackLimit_exc_MCU2 = .;
-        __stack_start_exc_mcu2__ = .;
-        . += STACK_SIZE_EXC_MCU2;
-        __stack_end_exc_mcu2__ = .;
-        __StackTop_exc_MCU2 = .;
-        __STACK_END_MCU2 = .;
-    } > FLASH
-
-    .init_table :
-    {
-      . = ALIGN(64);
-      __COPY_TABLE = .;
-      KEEP(*(.init_table))
-    } > FLASH
-
-    .zero_table :
-    {
-      . = ALIGN(64);
-      __ZERO_TABLE = .;
-      KEEP(*(.zero_table))
-    } > FLASH
-
-    .interrupts :
-    {
-        __VECTOR_TABLE = .;
-        __interrupts_start__ = .;
-        . = ALIGN(4);
-        KEEP(*(.isr_vector))     /* Startup code */
-        __interrupts_end__ = .;
-        . = ALIGN(4);
-    } > FLASH
-
-  __VECTOR_RAM = __VECTOR_TABLE;
-  __RAM_VECTOR_TABLE_SIZE = 0x0;
-  __VECTOR_TABLE_COPY_END = __VECTOR_TABLE + __RAM_VECTOR_TABLE_SIZE;
-
-
-    .interrupt_drv_shared_memory :
-    {
-      *(.interrupt_drv_shared_memory)
-    } > FLASH
-
-    .handlers :
-    {
-        . = ALIGN(32);
-      *(.handlers)
-    } > FLASH
-
-    .mcal_data :
-    {
-        *(.mcal_data)
-    } > FLASH
-
-    .mcal_shared_data :
-    {
-        *(.mcal_shared_data)
-    } > FLASH
-
-    .bss (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __BSS_START = .;
-        __bss_start__ = .;
-        *(.bss .bss.*)
-    } > FLASH
-
-    .mcal_bss (NOLOAD) :
-    {
-        . = ALIGN(64);
-        *(.mcal_bss)
-    } > FLASH
-
-    .mcal_shared_bss (NOLOAD) :
-    {
-        . = ALIGN(64);
-        *(.mcal_shared_bss)
-        __DATA_RAM_END = .;
-        __m_ram_init_end = .;
-        __bss_end__ = .;
-        __BSS_END = .;
-    } > FLASH
-
-    .ipc_mdma :
-    {
-        *(.ipc_mdma)
-    } > FLASH
-
-    .ucheap_section (NOLOAD) :
-    {
-        . = ALIGN(64);
-        KEEP(*(.ucheap_section))
-        . = ALIGN(64);
-    } > FREERTOS_HEAP
-
-    .log (NOLOAD) :
-    {
-        *(.log)
-    } > LOG_SHARE_Reserved
-
-    .tcm_code :
-    {
-        KEEP(*(.tcm_code))
-        KEEP(*(.tcm_data))
-    } > ATCM_Reserved
-
-    /*-------- LABELS USED IN CODE -------------------------------*/
-    SRAM_START_ADDR         = ORIGIN(FLASH_STARTUP);
-    FLASH_STARTUP_LEN       = LENGTH(FLASH_STARTUP);
-    FLASH_SEC_ADDR          = ORIGIN(FLASH);
-    MCU_LOG_START_ADDR      = ORIGIN(LOG_SHARE_Reserved);
-    MCU_LOG_SIZE            = LENGTH(LOG_SHARE_Reserved);
-    __SCMI_IPC_START_ADDR   = ORIGIN(SCMI_IPC_Reserved);
-    __SCMI_IPC_SIZE         = LENGTH(SCMI_IPC_Reserved);
-    NON_SECURE_START_ADDR   = ORIGIN(LOG_SHARE_Reserved);
-    CAN_START_ADDR          = ORIGIN(CAN_Reserved);
-    ATCM_START_ADDR         = ORIGIN(ATCM_Reserved);
-    ATCM_SIZE               = LENGTH(ATCM_Reserved);
-    OS_HEAP_START_ADDR      = ORIGIN(FREERTOS_HEAP);
-    OS_HEAP_SIZE            = LENGTH(FREERTOS_HEAP);
-
-    PROVIDE(SRAM_SIZE = 0x34FFFF);
-    PROVIDE(MCU0_LOG_START_ADDR = 0x0CAAB000); /* Base addr from MCU0 link region "LOG_SHARE_Reserved" */
-    PROVIDE(MCU_STATE_START_ADDR = 0x0C800800);/* Base addr from MCU0 link region "MCU_STATE_Reserved" */
-}
-```
+下面是 D-Robotics 版本中的链接文件（`Linker/gcc/S100/link_freertos_mcu1.ld`）。完整内容见文末 [附录：链接脚本全文](#附录链接脚本全文)。
 </DocScope>
 <DocScope products="RDK S600">
 |区域名称|起始地址|占用大小|作用|
@@ -412,294 +191,26 @@ SECTIONS
 
 在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询D-Robotics 相关支持人员。
 
-下面是D-Robotics 版本中的链接文件（`Linker/gcc/S600/link_freertos_mcu1.ld`），解释了链接脚本中提供的一些变量作用：
-```c
-MEMORY
-{
-    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 2K
-    FLASH(rw)               : org = 0x0CAB0800, len = 2666K
-    CAN_Reserved(rw)        : org = 0x0CD4B000, len = 64K
-    LOG_SHARE_Reserved(rw)  : org = 0x0CD5B000, len = 8K
-    SCMI_IPC_Reserved(rw)   : org = 0x0CD5D000, len = 12K
-    FREERTOS_HEAP(rw)       : org = 0x0CE00000, len = 512K
-    ATCM_Reserved(rw)       : org = 0x0A000000, len = 64K
-}
-
-/* Define output sections */
-SECTIONS
-{
-    .EL2_core_exceptions_table :
-    {
-        . = ALIGN(32);
-        _start = .;
-        *(.EL2_core_exceptions_table)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .EL2_Reset_Handler :
-    {
-        . = ALIGN(32);
-        *(.EL2_Reset_Handler)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .EL1_core_exceptions_table :
-    {
-		. = ALIGN(32);
-        *(.EL1_core_exceptions_table)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .EL1_core_exceptions_table_MCU2 :
-    {
-        . = ALIGN(32);
-        *(.EL1_core_exceptions_table_MCU2)
-        . = ALIGN(32);
-    } > FLASH_STARTUP
-
-    .text :
-    {
-        . = ALIGN(4);
-        *(.text .text.*)          /* .text sections (code) */
-        . = ALIGN(4);
-    } > FLASH
-
-    .shell :
-    {
-        _shell_command_start = .;
-        KEEP (*(shellCommand))
-        _shell_command_end = .;
-    } > FLASH
-
-    .mcal_text :
-    {
-        *(.mcal_text)
-    } > FLASH
-
-    .mcal_const_cfg :
-    {
-        *(.mcal_const_cfg)
-    } > FLASH
-
-    .mcal_const :
-    {
-        *(.mcal_const)
-    } > FLASH
-
-    .common_text :
-    {
-        *(.common_text)
-        PROVIDE(__TEXT_END = .);
-    } > FLASH
-    /******************text end******************/
-
-    .const :
-    {
-        . = ALIGN(32);
-        *(.const)
-        *(.rodata .rodata.*)
-    } > FLASH
-
-
-    .heap :
-    {
-        . = ALIGN(64);
-        __HEAP_START = .;
-        __end__ = .;
-        __heap_start__ = .;
-        PROVIDE(end = .);
-        PROVIDE(_end = .);
-        PROVIDE(__end = .);
-        __HeapBase = .;
-        . += HEAP_SIZE;
-        __HeapLimit = .;
-        __heap_limit = .;
-        __heap_end__ = .;
-    } > FLASH
-
-    .u_boot_list :
-    {
-        . = ALIGN(4);
-        *(SORT(.u_boot_list*))
-        . = ALIGN(4);
-     } > FLASH
-
-    .global_data :
-    {
-        . = ALIGN(64);
-        __DATA_RAM = .;
-        __data_start__ = .;      /* Create a global symbol at data start. */
-        *(.data .data.*)         /* .data sections */
-        . = ALIGN(64);
-        __data_end__ = .;        /* Define a global symbol at data end. */
-        PROVIDE(__DATA_END = .);
-        PROVIDE(__DATA_ROM = .);
-    } > FLASH
-
-    .stack (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __STACK_START = .;
-        __StackLimit = .;
-        __stack_start__ = .;
-        . += STACK_SIZE;
-        __stack_end__ = .;
-        __StackTop = .;
-    } > FLASH
-
-    .stack_mcu2 (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __STACK_START_MCU2 = .;
-        __StackLimit_MCU2 = .;
-        __stack_start_mcu2__ = .;
-        . += STACK_SIZE_MCU2;
-        __stack_end_mcu2__ = .;
-        __StackTop_MCU2 = .;
-    } > FLASH
-
-    .stack_exc (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __StackLimit_exc = .;
-        __stack_start_exc__ = .;
-        . += STACK_SIZE_EXC;
-        __stack_end_exc__ = .;
-        __StackTop_exc = .;
-        __STACK_END = .;
-    } > FLASH
-
-    .stack_exc_mcu2 (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __StackLimit_exc_MCU2 = .;
-        __stack_start_exc_mcu2__ = .;
-        . += STACK_SIZE_EXC_MCU2;
-        __stack_end_exc_mcu2__ = .;
-        __StackTop_exc_MCU2 = .;
-        __STACK_END_MCU2 = .;
-    } > FLASH
-
-    .init_table :
-    {
-      . = ALIGN(64);
-      __COPY_TABLE = .;
-      KEEP(*(.init_table))
-    } > FLASH
-
-    .zero_table :
-    {
-      . = ALIGN(64);
-      __ZERO_TABLE = .;
-      KEEP(*(.zero_table))
-    } > FLASH
-
-    .interrupts :
-    {
-        __VECTOR_TABLE = .;
-        __interrupts_start__ = .;
-        . = ALIGN(4);
-        KEEP(*(.isr_vector))     /* Startup code */
-        __interrupts_end__ = .;
-        . = ALIGN(4);
-    } > FLASH
-
-  __VECTOR_RAM = __VECTOR_TABLE;
-  __RAM_VECTOR_TABLE_SIZE = 0x0;
-  __VECTOR_TABLE_COPY_END = __VECTOR_TABLE + __RAM_VECTOR_TABLE_SIZE;
-
-
-    .interrupt_drv_shared_memory :
-    {
-      *(.interrupt_drv_shared_memory)
-    } > FLASH
-
-    .handlers :
-    {
-        . = ALIGN(32);
-      *(.handlers)
-    } > FLASH
-
-    .mcal_data :
-    {
-        *(.mcal_data)
-    } > FLASH
-
-    .mcal_shared_data :
-    {
-        *(.mcal_shared_data)
-    } > FLASH
-
-    .bss (NOLOAD) :
-    {
-        . = ALIGN(64);
-        __BSS_START = .;
-        __bss_start__ = .;
-        *(.bss .bss.*)
-    } > FLASH
-
-    .mcal_bss (NOLOAD) :
-    {
-        . = ALIGN(64);
-        *(.mcal_bss)
-    } > FLASH
-
-    .mcal_shared_bss (NOLOAD) :
-    {
-        . = ALIGN(64);
-        *(.mcal_shared_bss)
-        __DATA_RAM_END = .;
-        __m_ram_init_end = .;
-        __bss_end__ = .;
-        __BSS_END = .;
-    } > FLASH
-
-    .ipc_mdma :
-    {
-        *(.ipc_mdma)
-    } > FLASH
-
-    .ucheap_section (NOLOAD) :
-    {
-        . = ALIGN(64);
-        KEEP(*(.ucheap_section))
-        . = ALIGN(64);
-    } > FREERTOS_HEAP
-
-    .log (NOLOAD) :
-    {
-        *(.log)
-    } > LOG_SHARE_Reserved
-
-    .tcm_code :
-    {
-        KEEP(*(.tcm_code))
-        KEEP(*(.tcm_data))
-    } > ATCM_Reserved
-
-    /*-------- LABELS USED IN CODE -------------------------------*/
-    SRAM_START_ADDR         = ORIGIN(FLASH_STARTUP);
-    FLASH_STARTUP_LEN       = LENGTH(FLASH_STARTUP);
-    FLASH_SEC_ADDR          = ORIGIN(FLASH);
-    MCU_LOG_START_ADDR      = ORIGIN(LOG_SHARE_Reserved);
-    MCU_LOG_SIZE            = LENGTH(LOG_SHARE_Reserved);
-    __SCMI_IPC_START_ADDR   = ORIGIN(SCMI_IPC_Reserved);
-    __SCMI_IPC_SIZE         = LENGTH(SCMI_IPC_Reserved);
-    NON_SECURE_START_ADDR   = ORIGIN(LOG_SHARE_Reserved);
-    CAN_START_ADDR          = ORIGIN(CAN_Reserved);
-    ATCM_START_ADDR         = ORIGIN(ATCM_Reserved);
-    ATCM_SIZE               = LENGTH(ATCM_Reserved);
-    OS_HEAP_START_ADDR      = ORIGIN(FREERTOS_HEAP);
-    OS_HEAP_SIZE            = LENGTH(FREERTOS_HEAP);
-
-    PROVIDE(SRAM_SIZE = 0x34FFFF);
-    PROVIDE(MCU0_LOG_START_ADDR = 0x0CAAB000);
-    PROVIDE(MCU_STATE_START_ADDR = 0x0C800800);
-}
-```
+下面是 D-Robotics 版本中的链接文件（`Linker/gcc/S600/link_freertos_mcu1.ld`）。完整内容见文末 [附录：链接脚本全文](#附录链接脚本全文)。
 
 </DocScope>
-## startup.s 启动代码简介
+
+### 链接脚本中的可配置常量
+
+两份链接脚本（S100/S600）在文件头定义了下述常量。它们是 MCU1 内存布局中可供客户调整的部分，其余区域请遵循上文禁止修改的说明：
+
+| 常量 | 值 | 作用 |
+|---|---|---|
+| `HEAP_SIZE` | `0x10000`（64 KB） | `.heap` 段大小 |
+| `STACK_SIZE` | `0xC000`（48 KB） | core0 栈大小 |
+| `STACK_SIZE_EXC` | `0xC000`（48 KB） | core0 异常模式栈大小 |
+| `STACK_SIZE_MCU2` | `0x0200`（512 B） | core1 栈大小 |
+| `STACK_SIZE_EXC_MCU2` | `0x0200`（512 B） | core1 异常模式栈大小 |
+
+修改这些值会改变 `.heap`、`.stack`、`.stack_exc`、`.stack_mcu2`、`.stack_exc_mcu2` 各段的占用，需同步确认上一节 MPU region 2~5 的 SRAM 切分仍然有效。
+
+## 启动代码 startup.s
+
 <DocScope products="RDK S100">
 1. 启动的第一条指令就是进入 EL2_core_exceptions_table 向量表
 ```c
@@ -739,7 +250,7 @@ EL2_Reset_Handler:
 
     b MPU_Init
 ```
-3. 在做其他操作前，通过 MPU 配置后续可能用到的各个地址空间。RDK S100 当前 `startup.s` 在 `MPU_Init` 标号处配置了 region 0 至 region 10。其中 region 1 至 region 5 按链接脚本符号（`__HEAP_START`、`__STACK_START`、`__COPY_TABLE`）将 MCU SRAM 划分为 cacheable / non-cacheable 区域；region 6 至 region 10 覆盖 GIC、外设寄存器、CPUSYS、DDR、XSPI 等固定地址空间。若需调整 SRAM 切分，应同步修改链接脚本与 MPU 配置，并参考上一节 MCU1 镜像 layout。
+3. 在做其他操作前，通过 MPU 配置后续可能用到的各个地址空间。RDK S100 当前 `startup.s` 在 `MPU_Init` 标号处配置了 region 0 至 region 10。其中 region 1 至 region 5 按链接脚本符号（`__HEAP_START`、`__STACK_START`、`__COPY_TABLE`）将 MCU SRAM 划分为 cacheable / non-cacheable 区域；region 6 至 region 10 覆盖 GIC、外设寄存器、CPUSYS、DDR、XSPI 等固定地址空间。完整实现见 `Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/startup.s`。若需调整 SRAM 切分，应同步修改链接脚本与 MPU 配置，并参考上一节 MCU1 镜像 layout。
 
 4. D-Robotics 版本中重要的 MPU region 说明如下：
 
@@ -1083,3 +594,592 @@ EL1_Reset_Handler:
 - [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
 - [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
 - [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+
+## 附录：链接脚本全文
+
+<DocScope products="RDK S100">
+
+以下为 S100 与 S600 两份链接脚本的完整内容，其内存区域划分与可配置常量已在 [镜像 layout 与链接脚本](#镜像-layout-与链接脚本) 一节说明。
+
+### S100：Linker/gcc/S100/link_freertos_mcu1.ld
+
+以下为 S100 链接脚本的完整内容，其内存区域划分与可配置常量已在 [镜像 layout 与链接脚本](#镜像-layout-与链接脚本) 一节说明。
+
+
+```c
+MEMORY
+{
+    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 2K
+    FLASH(rw)               : org = 0x0CAB0800, len = 2666K
+    CAN_Reserved(rw)        : org = 0x0CD4B000, len = 64K
+    LOG_SHARE_Reserved(rw)  : org = 0x0CD5B000, len = 8K
+    SCMI_IPC_Reserved(rw)   : org = 0x0CD5D000, len = 12K
+    FREERTOS_HEAP(rw)       : org = 0x0CD60000, len = 512K
+    ATCM_Reserved(rw)       : org = 0x0A000000, len = 64K
+}
+
+/* Define output sections */
+SECTIONS
+{
+    .EL2_core_exceptions_table :
+    {
+        . = ALIGN(32);
+        _start = .;
+        *(.EL2_core_exceptions_table)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL2_Reset_Handler :
+    {
+        . = ALIGN(32);
+        *(.EL2_Reset_Handler)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL1_core_exceptions_table :
+    {
+		. = ALIGN(32);
+        *(.EL1_core_exceptions_table)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL1_core_exceptions_table_MCU2 :
+    {
+        . = ALIGN(32);
+        *(.EL1_core_exceptions_table_MCU2)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .text :
+    {
+        . = ALIGN(4);
+        *(.text .text.*)          /* .text sections (code) */
+        . = ALIGN(4);
+    } > FLASH
+
+    .shell :
+    {
+        _shell_command_start = .;
+        KEEP (*(shellCommand))
+        _shell_command_end = .;
+    } > FLASH
+
+    .mcal_text :
+    {
+        *(.mcal_text)
+    } > FLASH
+
+    .mcal_const_cfg :
+    {
+        *(.mcal_const_cfg)
+    } > FLASH
+
+    .mcal_const :
+    {
+        *(.mcal_const)
+    } > FLASH
+
+    .common_text :
+    {
+        *(.common_text)
+        PROVIDE(__TEXT_END = .);
+    } > FLASH
+    /******************text end******************/
+
+    .const :
+    {
+        . = ALIGN(32);
+        *(.const)
+        *(.rodata .rodata.*)
+    } > FLASH
+
+
+    .heap :
+    {
+        . = ALIGN(64);
+        __HEAP_START = .;
+        __end__ = .;
+        __heap_start__ = .;
+        PROVIDE(end = .);
+        PROVIDE(_end = .);
+        PROVIDE(__end = .);
+        __HeapBase = .;
+        . += HEAP_SIZE;
+        __HeapLimit = .;
+        __heap_limit = .;
+        __heap_end__ = .;
+    } > FLASH
+
+    .u_boot_list :
+    {
+        . = ALIGN(4);
+        *(SORT(.u_boot_list*))
+        . = ALIGN(4);
+     } > FLASH
+
+    .global_data :
+    {
+        . = ALIGN(64);
+        __DATA_RAM = .;
+        __data_start__ = .;      /* Create a global symbol at data start. */
+        *(.data .data.*)         /* .data sections */
+        . = ALIGN(64);
+        __data_end__ = .;        /* Define a global symbol at data end. */
+        PROVIDE(__DATA_END = .);
+        PROVIDE(__DATA_ROM = .);
+    } > FLASH
+
+    .stack (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __STACK_START = .;
+        __StackLimit = .;
+        __stack_start__ = .;
+        . += STACK_SIZE;
+        __stack_end__ = .;
+        __StackTop = .;
+    } > FLASH
+
+    .stack_mcu2 (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __STACK_START_MCU2 = .;
+        __StackLimit_MCU2 = .;
+        __stack_start_mcu2__ = .;
+        . += STACK_SIZE_MCU2;
+        __stack_end_mcu2__ = .;
+        __StackTop_MCU2 = .;
+    } > FLASH
+
+    .stack_exc (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __StackLimit_exc = .;
+        __stack_start_exc__ = .;
+        . += STACK_SIZE_EXC;
+        __stack_end_exc__ = .;
+        __StackTop_exc = .;
+        __STACK_END = .;
+    } > FLASH
+
+    .stack_exc_mcu2 (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __StackLimit_exc_MCU2 = .;
+        __stack_start_exc_mcu2__ = .;
+        . += STACK_SIZE_EXC_MCU2;
+        __stack_end_exc_mcu2__ = .;
+        __StackTop_exc_MCU2 = .;
+        __STACK_END_MCU2 = .;
+    } > FLASH
+
+    .init_table :
+    {
+      . = ALIGN(64);
+      __COPY_TABLE = .;
+      KEEP(*(.init_table))
+    } > FLASH
+
+    .zero_table :
+    {
+      . = ALIGN(64);
+      __ZERO_TABLE = .;
+      KEEP(*(.zero_table))
+    } > FLASH
+
+    .interrupts :
+    {
+        __VECTOR_TABLE = .;
+        __interrupts_start__ = .;
+        . = ALIGN(4);
+        KEEP(*(.isr_vector))     /* Startup code */
+        __interrupts_end__ = .;
+        . = ALIGN(4);
+    } > FLASH
+
+  __VECTOR_RAM = __VECTOR_TABLE;
+  __RAM_VECTOR_TABLE_SIZE = 0x0;
+  __VECTOR_TABLE_COPY_END = __VECTOR_TABLE + __RAM_VECTOR_TABLE_SIZE;
+
+
+    .interrupt_drv_shared_memory :
+    {
+      *(.interrupt_drv_shared_memory)
+    } > FLASH
+
+    .handlers :
+    {
+        . = ALIGN(32);
+      *(.handlers)
+    } > FLASH
+
+    .mcal_data :
+    {
+        *(.mcal_data)
+    } > FLASH
+
+    .mcal_shared_data :
+    {
+        *(.mcal_shared_data)
+    } > FLASH
+
+    .bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __BSS_START = .;
+        __bss_start__ = .;
+        *(.bss .bss.*)
+    } > FLASH
+
+    .mcal_bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        *(.mcal_bss)
+    } > FLASH
+
+    .mcal_shared_bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        *(.mcal_shared_bss)
+        __DATA_RAM_END = .;
+        __m_ram_init_end = .;
+        __bss_end__ = .;
+        __BSS_END = .;
+    } > FLASH
+
+    .ipc_mdma :
+    {
+        *(.ipc_mdma)
+    } > FLASH
+
+    .ucheap_section (NOLOAD) :
+    {
+        . = ALIGN(64);
+        KEEP(*(.ucheap_section))
+        . = ALIGN(64);
+    } > FREERTOS_HEAP
+
+    .log (NOLOAD) :
+    {
+        *(.log)
+    } > LOG_SHARE_Reserved
+
+    .tcm_code :
+    {
+        KEEP(*(.tcm_code))
+        KEEP(*(.tcm_data))
+    } > ATCM_Reserved
+
+    /*-------- LABELS USED IN CODE -------------------------------*/
+    SRAM_START_ADDR         = ORIGIN(FLASH_STARTUP);
+    FLASH_STARTUP_LEN       = LENGTH(FLASH_STARTUP);
+    FLASH_SEC_ADDR          = ORIGIN(FLASH);
+    MCU_LOG_START_ADDR      = ORIGIN(LOG_SHARE_Reserved);
+    MCU_LOG_SIZE            = LENGTH(LOG_SHARE_Reserved);
+    __SCMI_IPC_START_ADDR   = ORIGIN(SCMI_IPC_Reserved);
+    __SCMI_IPC_SIZE         = LENGTH(SCMI_IPC_Reserved);
+    NON_SECURE_START_ADDR   = ORIGIN(LOG_SHARE_Reserved);
+    CAN_START_ADDR          = ORIGIN(CAN_Reserved);
+    ATCM_START_ADDR         = ORIGIN(ATCM_Reserved);
+    ATCM_SIZE               = LENGTH(ATCM_Reserved);
+    OS_HEAP_START_ADDR      = ORIGIN(FREERTOS_HEAP);
+    OS_HEAP_SIZE            = LENGTH(FREERTOS_HEAP);
+
+    PROVIDE(SRAM_SIZE = 0x34FFFF);
+    PROVIDE(MCU0_LOG_START_ADDR = 0x0CAAB000); /* Base addr from MCU0 link region "LOG_SHARE_Reserved" */
+    PROVIDE(MCU_STATE_START_ADDR = 0x0C800800);/* Base addr from MCU0 link region "MCU_STATE_Reserved" */
+}
+```
+</DocScope>
+
+<DocScope products="RDK S600">
+
+以下为 S600 链接脚本的完整内容，其内存区域划分与可配置常量已在 [镜像 layout 与链接脚本](#镜像-layout-与链接脚本) 一节说明。
+
+### S600：Linker/gcc/S600/link_freertos_mcu1.ld
+
+```c
+MEMORY
+{
+    FLASH_STARTUP(rx)       : org = 0x0CAB0000, len = 2K
+    FLASH(rw)               : org = 0x0CAB0800, len = 2666K
+    CAN_Reserved(rw)        : org = 0x0CD4B000, len = 64K
+    LOG_SHARE_Reserved(rw)  : org = 0x0CD5B000, len = 8K
+    SCMI_IPC_Reserved(rw)   : org = 0x0CD5D000, len = 12K
+    FREERTOS_HEAP(rw)       : org = 0x0CE00000, len = 512K
+    ATCM_Reserved(rw)       : org = 0x0A000000, len = 64K
+}
+
+/* Define output sections */
+SECTIONS
+{
+    .EL2_core_exceptions_table :
+    {
+        . = ALIGN(32);
+        _start = .;
+        *(.EL2_core_exceptions_table)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL2_Reset_Handler :
+    {
+        . = ALIGN(32);
+        *(.EL2_Reset_Handler)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL1_core_exceptions_table :
+    {
+		. = ALIGN(32);
+        *(.EL1_core_exceptions_table)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .EL1_core_exceptions_table_MCU2 :
+    {
+        . = ALIGN(32);
+        *(.EL1_core_exceptions_table_MCU2)
+        . = ALIGN(32);
+    } > FLASH_STARTUP
+
+    .text :
+    {
+        . = ALIGN(4);
+        *(.text .text.*)          /* .text sections (code) */
+        . = ALIGN(4);
+    } > FLASH
+
+    .shell :
+    {
+        _shell_command_start = .;
+        KEEP (*(shellCommand))
+        _shell_command_end = .;
+    } > FLASH
+
+    .mcal_text :
+    {
+        *(.mcal_text)
+    } > FLASH
+
+    .mcal_const_cfg :
+    {
+        *(.mcal_const_cfg)
+    } > FLASH
+
+    .mcal_const :
+    {
+        *(.mcal_const)
+    } > FLASH
+
+    .common_text :
+    {
+        *(.common_text)
+        PROVIDE(__TEXT_END = .);
+    } > FLASH
+    /******************text end******************/
+
+    .const :
+    {
+        . = ALIGN(32);
+        *(.const)
+        *(.rodata .rodata.*)
+    } > FLASH
+
+
+    .heap :
+    {
+        . = ALIGN(64);
+        __HEAP_START = .;
+        __end__ = .;
+        __heap_start__ = .;
+        PROVIDE(end = .);
+        PROVIDE(_end = .);
+        PROVIDE(__end = .);
+        __HeapBase = .;
+        . += HEAP_SIZE;
+        __HeapLimit = .;
+        __heap_limit = .;
+        __heap_end__ = .;
+    } > FLASH
+
+    .u_boot_list :
+    {
+        . = ALIGN(4);
+        *(SORT(.u_boot_list*))
+        . = ALIGN(4);
+     } > FLASH
+
+    .global_data :
+    {
+        . = ALIGN(64);
+        __DATA_RAM = .;
+        __data_start__ = .;      /* Create a global symbol at data start. */
+        *(.data .data.*)         /* .data sections */
+        . = ALIGN(64);
+        __data_end__ = .;        /* Define a global symbol at data end. */
+        PROVIDE(__DATA_END = .);
+        PROVIDE(__DATA_ROM = .);
+    } > FLASH
+
+    .stack (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __STACK_START = .;
+        __StackLimit = .;
+        __stack_start__ = .;
+        . += STACK_SIZE;
+        __stack_end__ = .;
+        __StackTop = .;
+    } > FLASH
+
+    .stack_mcu2 (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __STACK_START_MCU2 = .;
+        __StackLimit_MCU2 = .;
+        __stack_start_mcu2__ = .;
+        . += STACK_SIZE_MCU2;
+        __stack_end_mcu2__ = .;
+        __StackTop_MCU2 = .;
+    } > FLASH
+
+    .stack_exc (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __StackLimit_exc = .;
+        __stack_start_exc__ = .;
+        . += STACK_SIZE_EXC;
+        __stack_end_exc__ = .;
+        __StackTop_exc = .;
+        __STACK_END = .;
+    } > FLASH
+
+    .stack_exc_mcu2 (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __StackLimit_exc_MCU2 = .;
+        __stack_start_exc_mcu2__ = .;
+        . += STACK_SIZE_EXC_MCU2;
+        __stack_end_exc_mcu2__ = .;
+        __StackTop_exc_MCU2 = .;
+        __STACK_END_MCU2 = .;
+    } > FLASH
+
+    .init_table :
+    {
+      . = ALIGN(64);
+      __COPY_TABLE = .;
+      KEEP(*(.init_table))
+    } > FLASH
+
+    .zero_table :
+    {
+      . = ALIGN(64);
+      __ZERO_TABLE = .;
+      KEEP(*(.zero_table))
+    } > FLASH
+
+    .interrupts :
+    {
+        __VECTOR_TABLE = .;
+        __interrupts_start__ = .;
+        . = ALIGN(4);
+        KEEP(*(.isr_vector))     /* Startup code */
+        __interrupts_end__ = .;
+        . = ALIGN(4);
+    } > FLASH
+
+  __VECTOR_RAM = __VECTOR_TABLE;
+  __RAM_VECTOR_TABLE_SIZE = 0x0;
+  __VECTOR_TABLE_COPY_END = __VECTOR_TABLE + __RAM_VECTOR_TABLE_SIZE;
+
+
+    .interrupt_drv_shared_memory :
+    {
+      *(.interrupt_drv_shared_memory)
+    } > FLASH
+
+    .handlers :
+    {
+        . = ALIGN(32);
+      *(.handlers)
+    } > FLASH
+
+    .mcal_data :
+    {
+        *(.mcal_data)
+    } > FLASH
+
+    .mcal_shared_data :
+    {
+        *(.mcal_shared_data)
+    } > FLASH
+
+    .bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        __BSS_START = .;
+        __bss_start__ = .;
+        *(.bss .bss.*)
+    } > FLASH
+
+    .mcal_bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        *(.mcal_bss)
+    } > FLASH
+
+    .mcal_shared_bss (NOLOAD) :
+    {
+        . = ALIGN(64);
+        *(.mcal_shared_bss)
+        __DATA_RAM_END = .;
+        __m_ram_init_end = .;
+        __bss_end__ = .;
+        __BSS_END = .;
+    } > FLASH
+
+    .ipc_mdma :
+    {
+        *(.ipc_mdma)
+    } > FLASH
+
+    .ucheap_section (NOLOAD) :
+    {
+        . = ALIGN(64);
+        KEEP(*(.ucheap_section))
+        . = ALIGN(64);
+    } > FREERTOS_HEAP
+
+    .log (NOLOAD) :
+    {
+        *(.log)
+    } > LOG_SHARE_Reserved
+
+    .tcm_code :
+    {
+        KEEP(*(.tcm_code))
+        KEEP(*(.tcm_data))
+    } > ATCM_Reserved
+
+    /*-------- LABELS USED IN CODE -------------------------------*/
+    SRAM_START_ADDR         = ORIGIN(FLASH_STARTUP);
+    FLASH_STARTUP_LEN       = LENGTH(FLASH_STARTUP);
+    FLASH_SEC_ADDR          = ORIGIN(FLASH);
+    MCU_LOG_START_ADDR      = ORIGIN(LOG_SHARE_Reserved);
+    MCU_LOG_SIZE            = LENGTH(LOG_SHARE_Reserved);
+    __SCMI_IPC_START_ADDR   = ORIGIN(SCMI_IPC_Reserved);
+    __SCMI_IPC_SIZE         = LENGTH(SCMI_IPC_Reserved);
+    NON_SECURE_START_ADDR   = ORIGIN(LOG_SHARE_Reserved);
+    CAN_START_ADDR          = ORIGIN(CAN_Reserved);
+    ATCM_START_ADDR         = ORIGIN(ATCM_Reserved);
+    ATCM_SIZE               = LENGTH(ATCM_Reserved);
+    OS_HEAP_START_ADDR      = ORIGIN(FREERTOS_HEAP);
+    OS_HEAP_SIZE            = LENGTH(FREERTOS_HEAP);
+
+    PROVIDE(SRAM_SIZE = 0x34FFFF);
+    PROVIDE(MCU0_LOG_START_ADDR = 0x0CAAB000);
+    PROVIDE(MCU_STATE_START_ADDR = 0x0C800800);
+}
+```
+</DocScope>
