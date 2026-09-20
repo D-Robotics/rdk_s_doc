@@ -6,11 +6,9 @@ description: "RDK S100/S600 5.5.1.4 VIN (Video Input)"
 
 # Video Input - VIN
 
-> **Level**: This is the **VIN module guide** in the Low-level Multimedia API set. VIN is a vnode of type `HB_VIN` in the HBN framework. It covers **what VIN is, how to bring it up, which interfaces it exposes and how it is typically used** — enough to start developing. For the full field tables of the generic vnode interfaces see [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api); for sensor-side configuration see [Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api).
-
+> **Level**: This is the **VIN module guide** in the Low-level Multimedia API set. For the full field tables of the generic vnode interfaces see [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api); for sensor-side configuration see [Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api).
 
 ## Overview
-
 VIN (Video In) is a vnode in the HBN framework. It brings camera data into the SoC and hands it to the downstream stages (board header `hbn_vin_cfg.h`, interface prefix `hbn_vnode_*`). It is the first stage of the camera pipeline and is built from four sub-modules: **MIPI RX / CIM / LPWM / VCON**.
 
 <details>
@@ -23,8 +21,6 @@ The abbreviations and terms used in this document. **Skim these first** — `CPE
 | Term | Description |
 | --- | --- |
 | **VIN** | Video In, the subject of this document. Brings camera data into the SoC and passes it downstream |
-| **CIM** | A VIN sub-module. Receives image data from MIPI RX and distributes it to ISP / PYM or writes it to DDR |
-| **MIPI RX** | The physical interface that receives MIPI CSI-2 data. Three on S100, six on S600 |
 | **IPI** | The **on-chip** data path between MIPI RX and CIM — not an external protocol. One camera stream occupies one IPI |
 | **VC** | Virtual Channel of MIPI CSI-2. One physical link can carry several streams, told apart by VC |
 | **hw_id** | The hardware index given when opening VIN — **this is the MIPI RX channel number** |
@@ -35,8 +31,6 @@ The abbreviations and terms used in this document. **Skim these first** — `CPE
 | **HBN** | The application-side module framework providing the generic `hbn_vnode_*` / `hbn_vflow_*` interfaces |
 | **SerDes** | Serialiser / deserialiser. Merges several cameras onto one coax link; the SoC side splits them apart again |
 | **POC** | Power Over Coax — powering a camera module over the coax cable |
-| **LPWM** | Generates the exposure trigger pulses used by cameras that need external triggering |
-| **VCON** | Board-level connection configuration: I2C buses, POC power, GPIOs, PHY mapping |
 | **EMB** | Embedded Data — line-embedded information (exposure, temperature…) sent alongside the image |
 | **ISP** | Image Signal Processor. RAW data has to go through it before it becomes an image |
 | **PYM** | Pyramid module, for image downscaling and ROI |
@@ -44,33 +38,44 @@ The abbreviations and terms used in this document. **Skim these first** — `CPE
 | **GDC** | Geometric Distortion Correction |
 | **DDR** | System memory. In Offline mode the image is written here first and read back downstream |
 
-
 </details>
 
-### Where VIN Sits in the Camera Chain
-
-![Where VIN sits in the camera chain](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig1-vin-position.svg)
-
 ### VIN's Four Sub-modules
-
 | Sub-module | Responsibility |
 | --- | --- |
-| **MIPI RX** | Receives the MIPI CSI-2 stream, D-PHY / C-PHY. Each RX supports several virtual channels (VC) |
-| **CIM** | Camera Interface Manager. Writes images from RX to DDR (Offline) or forwards them directly to the next stage (Online) |
+| **MIPI RX** | Receives the MIPI CSI-2 stream, D-PHY / C-PHY; each RX supports several virtual channels (VC). Three RX on S100, six on S600 |
+| **CIM** | Camera Interface Manager. Distributes images from RX to the next stage (Online) or writes them to DDR (Offline) |
 | **LPWM** | Exposure trigger and frame sync pulses, for sensors that need external triggering |
 | **VCON** | Connection setup: I2C buses, POC power, GPIOs, PHY mapping and other board-level configuration |
 
-### Platform Scale
+## Hardware Block Diagram
 
+### Where VIN Sits in the Camera Chain
+![Where VIN sits in the camera chain](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig1-vin-position.svg)
+
+### CIM Internals and Configurable Blocks
+CIM is one of VIN's four sub-modules and is itself built from several functional blocks. A few of them are user-configurable:
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/cim-internal.png" alt="CIM internals" width="100%" />
+
+| Block | Where | Purpose | Configuration |
+| --- | --- | --- | --- |
+| `TPG` | One per IPI | Test pattern generator. Produces frames without a sensor, for path verification | `vin_node_attr.cim_attr.func.enable_pattern` |
+| `ROI` | On all three output channels, with a different meaning on each | Cropping. Once enabled on the main channel, both the DDR copy and the ISP copy are cropped; the ROI channel can only output to DDR; on the EMB channel, ROI carves the embedded data out of the image | `vin_ochn_attr[x].roi_en`, `vin_ochn_attr[x].roi_attr` (`roi_x` / `roi_y` / `roi_width` / `roi_height`) |
+| `EMB` | The third channel of every IPI | Receives embedded data, either as the `0x12` type or embedded in the image | `vin_ochn_attr[x].emb_en`, `vin_ochn_attr[x].emb_attr` |
+| `RAWDS` | The main channel | 2×2 downsampling, halving both width and height | `vin_ochn_attr[x].rawds_en`, `vin_ochn_attr[x].rawds_attr.rawds_mode` |
+| `RDMA` | Some IPIs (S100: IPI3 of CIM0; S600: IPI2/IPI3 of CIM3 — check each CIM's `rdma-support`) | DDR feedback, for debugging | `vin_node_attr.cim_attr.rdma_input.rdma_en` |
+
+`TPG`, MIPI input and `RDMA` are **mutually exclusive input sources**; only one can be selected at a time (see [Constraints and Caveats](#constraints-and-caveats)).
+
+## Hardware Specification
+
+### Platform Scale
 <DocScope products="RDK S100">
 
 | Item | S100 |
 | --- | --- |
 | VIN / CIM instances | 3 |
-| ISP instances and max resolution | 2, 4096 × 2160 |
-| PYM instances | 3 |
-| YNR instances | 1 |
-| GDC instances | 1 |
 | LPWM instances / channels | 3 / 12 |
 
 </DocScope>
@@ -80,15 +85,9 @@ The abbreviations and terms used in this document. **Skim these first** — `CPE
 | Item | S600 |
 | --- | --- |
 | VIN / CIM instances | 6 |
-| ISP instances and max resolution | 4, 5696 × 3328 |
-| PYM instances | 5 |
-| YNR instances | 4 |
-| GDC instances | 2 |
 | LPWM instances / channels | 4 / 16 |
 
 </DocScope>
-
-ISP / PYM / YNR / GDC in the table are **downstream of VIN** — listed only for overall proportion, and their own module docs are authoritative. Per-RX capacity is in [Platform Limits](#platform-limits).
 
 Multiple cameras are told apart by `hw_id`, **which is the MIPI RX channel number**.
 
@@ -106,135 +105,7 @@ Valid `hw_id` on S600 are `0`–`5`.
 
 </DocScope>
 
-
-
-## Frame Lifecycle
-
-| Stage | What happens |
-| --- | --- |
-| Trigger | LPWM sends a trigger pulse to the sensor (only for modules that need external triggering) |
-| Receive | The MIPI CSI-2 stream from the sensor goes through MIPI RX into CIM |
-| Capture | Offline: CIM writes the image to DDR; Online: CIM connects directly to the next stage |
-| Deliver | Offline: the frame is ready in memory and user space can read it; Online: the frame goes straight into ISP / PYM and user space is not involved |
-| Fetch | Offline path only: user space calls `hbn_vnode_getframe` and returns the frame with `hbn_vnode_releaseframe` |
-
-LPWM also records the trigger timestamp, which comes back with the frame information and can be used to align timestamps across cameras.
-
-![Frame lifecycle from trigger to release](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig2-frame-lifecycle.svg)
-
-## CIM Internals and Configurable Blocks
-
-CIM is one of VIN's four sub-modules and is itself built from several functional blocks. A few of them are user-configurable:
-
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/cim-internal.png" alt="CIM internals" width="100%" />
-
-| Block | Where | Purpose | Configuration |
-| --- | --- | --- | --- |
-| `TPG` | One per IPI | Test pattern generator. Produces frames without a sensor, for path verification | `vin_node_attr.cim_attr.func.enable_pattern` |
-| `ROI` | On all three output channels, with a different meaning on each | Cropping. Once enabled on the main channel, both the DDR copy and the ISP copy are cropped; the ROI channel can only output to DDR; on the EMB channel, ROI carves the embedded data out of the image | `vin_ochn_attr[x].roi_en`, `vin_ochn_attr[x].roi_attr` (`roi_x` / `roi_y` / `roi_width` / `roi_height`) |
-| `EMB` | The third channel of every IPI | Receives embedded data, either as the `0x12` type or embedded in the image | `vin_ochn_attr[x].emb_en`, `vin_ochn_attr[x].emb_attr` |
-| `RAWDS` | The main channel | 2×2 downsampling, halving both width and height | `vin_ochn_attr[x].rawds_en`, `vin_ochn_attr[x].rawds_attr.rawds_mode` |
-| `RDMA` | Some IPIs (S100: IPI3 of CIM0; S600: IPI2/IPI3 of CIM3 — check each CIM's `rdma-support`) | DDR feedback, for debugging | `vin_node_attr.cim_attr.rdma_input.rdma_en` |
-
-`TPG`, MIPI input and `RDMA` are **mutually exclusive input sources**; only one can be selected at a time (see [Constraints and Caveats](#constraints-and-caveats)).
-
-## Path Selection: Online vs Offline
-
-The data CIM captures has two possible destinations, decided by three fields in `vin_attr_t`:
-
-| Field | Meaning |
-| --- | --- |
-| `vin_node_attr.cim_attr.cim_isp_flyby = 1` | CIM connects directly to ISP (Online) |
-| `vin_node_attr.cim_attr.cim_pym_flyby = 1` | CIM connects directly to PYM (Online) |
-| `vin_ochn_attr[x].ddr_en = 1` | This output channel writes to DDR (Offline) |
-
-`vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` are **mutually exclusive** — only one can be 1 at a time. Neither is exclusive with `vin_ochn_attr[x].ddr_en`: the main frame can land in DDR *and* be sent OTF to the ISP at the same time, at the cost of bandwidth.
-
-![The Online OTF and Offline DDR paths](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig3-otf-vs-ddr.svg)
-
-### Online (OTF)
-
-Data captured by CIM **never lands in DDR** — it goes straight to the ISP or PYM over a direct hardware connection.
-
-- Pro: no DDR bandwidth consumed, low latency
-- Limits: only the main-frame channel supports Online; the ROI and EMB bypasses do not; CIM and the downstream block must be in the same CPE
-
-### Offline (DDR)
-
-CIM writes the data to DDR and the downstream module or user space reads it back from memory.
-
-- Pro: all three output channels (main frame / ROI / EMB) are available, and cross-CPE works
-- Cost: CIM writes it once and downstream reads it once, so bandwidth doubles and latency is higher
-
-### Choosing Between Them
-
-| Your case | Recommendation | Why |
-| --- | --- | --- |
-| Single RAW sensor | **Online first** | Lower latency; switch to Offline if you need ROI / EMB or want to store frames |
-| Multiple camera sensors | **Offline** | Multiple cameras are usually spread across CPEs, and Online requires CIM and downstream to share a CPE |
-| Need embedded data (EMB) | **Offline** | EMB can only go through DDR |
-| Need cropped ROI output | **Offline** | The ROI channel does not support Online |
-| YUV sensor (ISR done inside the sensor) | Depends on the downstream | With Online it connects directly to PYM, and each PYM takes exactly one input exclusively; multiple YUV streams can only go Offline |
-
-### Typical Combinations
-
-The four IPIs of one CIM can **mix** Online and Offline, feeding different downstream blocks. Four typical combinations:
-
-| Case | Input | Output mode | Downstream |
-| --- | --- | --- | --- |
-| 1 | 4× RAW sensor | 4× Online (OTF) | ISP |
-| 2 | 4× RAW sensor | 4× Offline (DDR) | ISP |
-| 3 | 4× RAW sensor | 1× Online + 3× Offline | Two ISPs |
-| 4 | 4× YUV sensor | Offline (DDR) | PYM |
-
-![Case 1 · 4× RAW, all Online (OTF) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene1.png)
-
-**Case 1 · 4× RAW, all Online (OTF) to the ISP**
-
-![Case 2 · 4× RAW, all Offline (DDR) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene2.png)
-
-**Case 2 · 4× RAW, all Offline (DDR) to the ISP**
-
-![Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene3.png)
-
-**Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs**
-
-![Case 4 · 4× YUV, Offline (DDR) to the PYM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene4.png)
-
-**Case 4 · 4× YUV, Offline (DDR) to the PYM**
-
-## Bring-up Sizing
-
-Before choosing a module, settle two questions: **does the data fit**, and **does the path carry it**.
-
-### Data Volume
-
-The raw data volume of one camera:
-
-```
-data rate (bps) = width × height × frame rate × bit depth
-```
-
-- 1× 8M RAW12@30fps: `3840 × 2160 × 30 × 12 ≈ 2.99 Gbps`
-- 1× 2M RAW12@30fps: `1920 × 1080 × 30 × 12 ≈ 0.75 Gbps`
-
-> This is the **active-pixel** figure. What the links actually carry also includes the sensor's blanking. The [worked examples](#worked-examples) below show the gap between the two — **size your bandwidth from the blanking-inclusive value**.
-
-### IPI Transfer Efficiency
-
-MIPI RX talks to CIM over IPI. On this platform IPI defaults to **48-bit mode**; the nominal pixel clock is in [Platform Limits](#platform-limits). The two data types pack a different number of pixels per clock:
-
-| Data type | Per IPI clock | Note |
-| --- | --- | --- |
-| RAW (RAW8/10/12/14) | **3 pixels** | 3 × 16 bit exactly fills 48 bit |
-| YUV | **1 pixel** | Only one third of the bus is used |
-
-So on the same IPI, RAW gives **three times** the usable bandwidth of YUV. **This matters most when bringing up a YUV module (one whose ISP is inside the sensor)** — IPI often becomes the bottleneck before PHY does.
-
-> The 48-bit mode and the RAW/YUV packing ratios come from this platform's driver; the pixel clock is the driver's nominal value and the real figure follows your bring-up configuration.
-
 ### Platform Limits
-
 <DocScope products="RDK S100">
 
 | Item | S100 |
@@ -270,7 +141,6 @@ The driver enforces the PHY ceiling per lane at 4.5 Gbps (per trio at 3.5 Gsps f
 > **That ceiling is what the SoC PHY can do, not what the bring-up link can carry.** Modules usually arrive through a deserialiser, and the real ceiling is often the deserialiser's output rate — mainstream ones drive only 2.5 Gbps per lane (10 Gbps per RX), which leaves the 18 Gbps above unused. Check the module datasheet for the deserialiser's rate rather than sizing from 18 / 23.9 directly.
 
 ### Maximum Input Width per IPI
-
 Each CIM IPI accepts a different maximum image width, given by `max-width` in the DTS:
 
 <DocScope products="RDK S100">
@@ -307,8 +177,34 @@ Input wider than the limit is rejected by CIM at the `set_ichn_attr` stage.
 
 </DocScope>
 
-### Sizing Method
+## Bring-up Sizing
+Before choosing a module, settle two questions: **does the data fit**, and **does the path carry it**.
 
+### Data Volume
+The raw data volume of one camera:
+
+```
+data rate (bps) = width × height × frame rate × bit depth
+```
+
+- 1× 8M RAW12@30fps: `3840 × 2160 × 30 × 12 ≈ 2.99 Gbps`
+- 1× 2M RAW12@30fps: `1920 × 1080 × 30 × 12 ≈ 0.75 Gbps`
+
+> This is the **active-pixel** figure. What the links actually carry also includes the sensor's blanking. The [worked examples](#worked-examples) below show the gap between the two — **size your bandwidth from the blanking-inclusive value**.
+
+### IPI Transfer Efficiency
+MIPI RX talks to CIM over IPI. On this platform IPI defaults to **48-bit mode**; the nominal pixel clock is in [Platform Limits](#platform-limits). The two data types pack a different number of pixels per clock:
+
+| Data type | Per IPI clock | Note |
+| --- | --- | --- |
+| RAW (RAW8/10/12/14) | **3 pixels** | 3 × 16 bit exactly fills 48 bit |
+| YUV | **1 pixel** | Only one third of the bus is used |
+
+So on the same IPI, RAW gives **three times** the usable bandwidth of YUV. **This matters most when bringing up a YUV module (one whose ISP is inside the sensor)** — IPI often becomes the bottleneck before PHY does.
+
+> The 48-bit mode and the RAW/YUV packing ratios come from this platform's driver; the pixel clock is the driver's nominal value and the real figure follows your bring-up configuration.
+
+### Sizing Method
 How many cameras fit on one RX, and in what mix, takes four steps. **PHY, IPI and VC must all pass**; if any fails, adjust. For PHY take the D-PHY or the C-PHY figure, whichever your bring-up uses — only one of the two has to pass.
 
 **Step 1 · Link data volume per camera**
@@ -372,11 +268,9 @@ The sum over all cameras must stay under every ceiling, and **whichever is hit f
 > **The easiest trap**: with a mix, the IPI ceiling is **the whole RX dropping to 9.6 Gbps** (10.72 on S600), not just the YUV camera being limited. So for a mix like "1× YUV + 3× 8M RAW12", the budget is 9.6 and not 21.6 — the three RAW12 streams alone need 12.54 Gbps blanking-inclusive, already over. **Once any YUV is present on an RX, size everything to the YUV figure.**
 
 ### Worked Examples
-
 Same 8M@30fps, same single RX: **4× RAW12 fits, 4× YUV422 does not** — the whole difference is IPI packing. Both walk the four steps of the [sizing method](#sizing-method).
 
 #### Example 1: 4× 8M RAW12@30fps
-
 **① Data volume**
 
 | Figure | Per camera | 4 cameras |
@@ -396,7 +290,6 @@ Same 8M@30fps, same single RX: **4× RAW12 fits, 4× YUV422 does not** — the w
 **③ Conclusion**: on D-PHY it runs, but only 7% of PHY is left, so holding four streams at full frame rate needs the sensor's blanking compressed. **On C-PHY there is far more room**: PHY drops to 70% and the bottleneck moves to IPI (77% on S100). That holds only if the module supports C-PHY and the deserialiser output keeps up. Whether it really sustains full frame rate must be measured on the board.
 
 #### Example 2: 4× 8M YUV422@30fps
-
 **① Data volume**
 
 | Figure | Per camera | 4 cameras |
@@ -439,8 +332,81 @@ To add a third camera, drop one 8M down to a 2M. Four 2M cameras come to 4.78 Gb
 
 > **Size your bring-up from the blanking-inclusive figure, not the active-pixel one**, or the conclusion comes out optimistic. Beyond PHY you must also confirm the deserialiser link rate is sufficient.
 
-## API Call Flow
+## Usage
 
+### Data Paths
+| Stage | What happens |
+| --- | --- |
+| Trigger | LPWM sends a trigger pulse to the sensor (only for modules that need external triggering) |
+| Receive | The MIPI CSI-2 stream from the sensor goes through MIPI RX into CIM |
+| Capture | Offline: CIM writes the image to DDR; Online: CIM connects directly to the next stage |
+| Deliver | Offline: the frame is ready in memory and user space can read it; Online: the frame goes straight into ISP / PYM and user space is not involved |
+| Fetch | Offline path only: user space calls `hbn_vnode_getframe` and returns the frame with `hbn_vnode_releaseframe` |
+
+LPWM also records the trigger timestamp, which comes back with the frame information and can be used to align timestamps across cameras.
+
+![Frame lifecycle from trigger to release](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig2-frame-lifecycle.svg)
+
+The data CIM captures has two possible destinations, decided by three fields in `vin_attr_t`:
+
+| Field | Meaning |
+| --- | --- |
+| `vin_node_attr.cim_attr.cim_isp_flyby = 1` | CIM connects directly to ISP (Online) |
+| `vin_node_attr.cim_attr.cim_pym_flyby = 1` | CIM connects directly to PYM (Online) |
+| `vin_ochn_attr[x].ddr_en = 1` | This output channel writes to DDR (Offline) |
+
+`vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` are **mutually exclusive** — only one can be 1 at a time. Neither is exclusive with `vin_ochn_attr[x].ddr_en`: the main frame can land in DDR *and* be sent OTF to the ISP at the same time, at the cost of bandwidth.
+
+![The Online OTF and Offline DDR paths](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig3-otf-vs-ddr.svg)
+
+#### Online (OTF)
+Data captured by CIM **never lands in DDR** — it goes straight to the ISP or PYM over a direct hardware connection.
+
+- Pro: no DDR bandwidth consumed, low latency
+- Limits: only the main-frame channel supports Online; the ROI and EMB bypasses do not; CIM and the downstream block must be in the same CPE
+
+#### Offline (DDR)
+CIM writes the data to DDR and the downstream module or user space reads it back from memory.
+
+- Pro: all three output channels (main frame / ROI / EMB) are available, and cross-CPE works
+- Cost: CIM writes it once and downstream reads it once, so bandwidth doubles and latency is higher
+
+#### Choosing Between Them
+| Your case | Recommendation | Why |
+| --- | --- | --- |
+| Single RAW sensor | **Online first** | Lower latency; switch to Offline if you need ROI / EMB or want to store frames |
+| Multiple camera sensors | **Offline** | Multiple cameras are usually spread across CPEs, and Online requires CIM and downstream to share a CPE |
+| Need embedded data (EMB) | **Offline** | EMB can only go through DDR |
+| Need cropped ROI output | **Offline** | The ROI channel does not support Online |
+| YUV sensor (ISR done inside the sensor) | Depends on the downstream | With Online it connects directly to PYM, and each PYM takes exactly one input exclusively; multiple YUV streams can only go Offline |
+
+#### Typical Combinations
+The four IPIs of one CIM can **mix** Online and Offline, feeding different downstream blocks. Four typical combinations:
+
+| Case | Input | Output mode | Downstream |
+| --- | --- | --- | --- |
+| 1 | 4× RAW sensor | 4× Online (OTF) | ISP |
+| 2 | 4× RAW sensor | 4× Offline (DDR) | ISP |
+| 3 | 4× RAW sensor | 1× Online + 3× Offline | Two ISPs |
+| 4 | 4× YUV sensor | Offline (DDR) | PYM |
+
+![Case 1 · 4× RAW, all Online (OTF) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene1.png)
+
+**Case 1 · 4× RAW, all Online (OTF) to the ISP**
+
+![Case 2 · 4× RAW, all Offline (DDR) to the ISP](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene2.png)
+
+**Case 2 · 4× RAW, all Offline (DDR) to the ISP**
+
+![Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene3.png)
+
+**Case 3 · 4× RAW, 1× Online + 3× Offline to two ISPs**
+
+![Case 4 · 4× YUV, Offline (DDR) to the PYM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scene4.png)
+
+**Case 4 · 4× YUV, Offline (DDR) to the PYM**
+
+### API Call Flow
 ![Typical API call sequence](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/en/fig4-api-sequence.svg)
 
 <details>
@@ -471,8 +437,7 @@ To add a third camera, drop one 8M down to a 2M. Four 2M cameras come to 4.78 Gb
 
 </details>
 
-## Quick Example
-
+### Quick Example
 For how to build and run the complete board samples, their command-line arguments and expected output, see the sample documents:
 
 <DocScope products="RDK S100">
@@ -489,8 +454,7 @@ For how to build and run the complete board samples, their command-line argument
 
 </DocScope>
 
-### Minimal Example
-
+#### Minimal Example
 ```c
 #include <stdio.h>
 #include "hbn_vpf_interface.h"
@@ -573,14 +537,37 @@ int main(void)
 }
 ```
 
-## Configuration Struct Reference
+### Constraints and Caveats
 
-The header `hbn_vin_cfg.h` is authoritative; this section is the readable version of it. The **semantics** of each field are covered where they belong — `cim_isp_flyby` / `cim_pym_flyby` in [Path Selection](#path-selection-online-vs-offline), the `func` pattern / frame-skip fields in [CIM Internals and Configurable Blocks](#cim-internals-and-configurable-blocks), the channel fields in [API Interface Description](#api-interface-description).
+#### Rejected by the driver
+These **return an error** and are easy to spot:
+
+| Constraint | Note |
+| --- | --- |
+| `vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` must not both be 1 | An Online direct connection goes to either ISP or PYM, not both |
+| Exactly one of `vin_node_attr.cim_attr.mipi_en` / `...func.enable_pattern` / `...rdma_input.rdma_en` is 1 | The input source must be unique: MIPI, test pattern, or DDR feedback |
+| Online binding allows the main-frame channel only, with flyby already set to 1 | No other channel can be the source of an Online binding |
+| Offline binding requires the channel's switch to be on | Main frame needs `vin_ochn_attr[x].ddr_en`, EMB needs `.emb_en`, ROI needs `.roi_en` |
+| VIN's input node cannot be bound to | It is on the input side |
+| YUV422-8bit input may not enable ROI / rawds | Format restriction |
+| Online binding requires CIM and the downstream to share a CPE | Across CPEs only Offline works; the check runs on the downstream module's side |
+
+#### No Error, Wrong Result
+These **return no error** yet produce a wrong picture — worth checking item by item more than the list above:
+
+| Pitfall | Consequence |
+| --- | --- |
+| `pack_mode` and `format` in `vin_ochn_attr[x].vin_basic_attr` do not match | `pack_mode = 0` gives every pixel 2 bytes (4 bytes for RAW20, 1 byte for RAW8 / YUV422-8bit); `pack_mode = 1` packs tightly at the actual bit depth (`width × 1.5` for RAW12, `width × 1.25` for RAW10). A mismatch makes `wstride` disagree with reality and **the image in DDR is skewed** |
+| `vin_ichn_attr_t.format` does not match the sensor's actual output | Frames still arrive, but **the pixels are interpreted wrongly** and the image is garbage |
+
+## API Reference
+
+### Configuration Struct Reference
+The header `hbn_vin_cfg.h` is authoritative; this section is the readable version of it. The **semantics** of each field are covered where they belong — `cim_isp_flyby` / `cim_pym_flyby` in [Data Paths](#data-paths), the `func` pattern / frame-skip fields in [CIM Internals and Configurable Blocks](#cim-internals-and-configurable-blocks), the channel fields in [API Interface Description](#api-interface-description).
 
 Fields marked *framework* are filled in by the framework; you do not set them.
 
-### Type Overview
-
+#### Type Overview
 VIN presents itself as a vnode. All configuration is carried in `vin_attr_t` and handed over in one call (`hbn_vnode_set_attr`); stream creation and binding go through `hbn_vflow_*`.
 
 | Type | Role | Key members |
@@ -600,10 +587,9 @@ VIN presents itself as a vnode. All configuration is carried in `vin_attr_t` and
 
 **The interfaces live in three libraries**: `hbn_vnode_*` / `hbn_vflow_*` in `libvpf.so`, `hbn_camera_*` in `libcam.so`, `hb_mem_*` in `libhbmem.so`.
 
-### Top Level
+#### Top Level
 
-#### vin_attr_t
-
+##### vin_attr_t
 All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 
 | Field | Type | Description |
@@ -615,10 +601,9 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[]` | Buffers of the DDR-bound channels, indexed by `ochn_id` |
 | `magicNumber` | `uint32_t` | *framework* |
 
-### Node Level — Input Mode and Board Connections
+#### Node Level — Input Mode and Board Connections
 
-#### vin_node_attr_t
-
+##### vin_node_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `cim_attr` | `cim_attr_t` | Input and path selection |
@@ -627,8 +612,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `flow_id` | `uint32_t` | *framework* |
 | `magicNumber` | `uint32_t` | *framework* |
 
-#### cim_attr_t
-
+##### cim_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `mipi_en` | `uint32_t` | Input source select, 1 = MIPI |
@@ -642,8 +626,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `tpg_input` | `cim_input_tpg_t` | Test pattern input |
 | `func` | `cim_func_desc_t` | Frame ID, frame skip, pattern and so on |
 
-#### cim_func_desc_t
-
+##### cim_func_desc_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `enable_frame_id` | `uint32_t` | Whether to stamp frames with a frame ID |
@@ -662,8 +645,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `sparate_frames_mode` | `uint32_t` | See the header (spelling as in the header) |
 | `endian_mode` | `uint32_t` | Endianness |
 
-#### cim_input_rdma_t
-
+##### cim_input_rdma_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `rdma_en` | `uint32_t` | Feedback enable |
@@ -671,15 +653,13 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `pack_mode` | `uint32_t` | See the header |
 | `buff_num` | `uint32_t` | Number of feedback buffers |
 
-#### cim_input_tpg_t
-
+##### cim_input_tpg_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `tpg_en` | `uint32_t` | Test pattern enable |
 | `fps` | `uint32_t` | Pattern frame rate |
 
-#### vcon_attr_t
-
+##### vcon_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `attr_valid` | `int32_t` | Whether this group of attributes takes effect |
@@ -698,14 +678,12 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vcon_type` | `int32_t` | 0 = standalone, 1 = composite master, 2 = composite slave |
 | `vcon_link` | `int32_t` | VCON link index, for composite types |
 
-#### lpwm_attr_t
-
+##### lpwm_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | Per-channel configuration |
 
-#### lpwm_chn_attr_t
-
+##### lpwm_chn_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `enable` | `uint32_t` | Enable this channel |
@@ -717,10 +695,9 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `threshold` | `uint32_t` | See the header |
 | `adjust_step` | `uint32_t` | See the header |
 
-### Extended Attributes
+#### Extended Attributes
 
-#### vin_attr_ex_t
-
+##### vin_attr_ex_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `ex_attr_type` | `vin_attr_ex_type_e` | Which extended attributes take effect |
@@ -731,18 +708,16 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `ipi_reset` | `uint32_t` | MIPI IPI reset |
 | `bypass_enable` | `uint32_t` | Bypass enable |
 
-### Channel Attributes
+#### Channel Attributes
 
-#### vin_ichn_attr_t
-
+##### vin_ichn_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `format` | `uint32_t` | Image format |
 | `width` | `uint32_t` | Width |
 | `height` | `uint32_t` | Height |
 
-#### vin_ochn_attr_t
-
+##### vin_ochn_attr_t
 Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 
 | Field | Type | Description |
@@ -759,8 +734,7 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `emb_attr` | `vin_emb_attr_t` | EMB attributes |
 | `magicNumber` | `uint32_t` | *framework* |
 
-#### vin_basic_attr_t
-
+##### vin_basic_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `pack_mode` | `uint32_t` | How data is written to DDR |
@@ -768,14 +742,12 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `vstride` | `uint32_t` | Frame stride |
 | `format` | `uint32_t` | Format written to DDR |
 
-#### vin_rawds_attr_t
-
+##### vin_rawds_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `rawds_mode` | `uint32_t` | Downsampling mode |
 
-#### vin_roi_attr_s
-
+##### vin_roi_attr_s
 | Field | Type | Description |
 | --- | --- | --- |
 | `roi_x` | `uint32_t` | Crop origin X |
@@ -783,16 +755,14 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `roi_width` | `uint32_t` | Crop width |
 | `roi_height` | `uint32_t` | Crop height |
 
-#### vin_emb_attr_t
-
+##### vin_emb_attr_t
 | Field | Type | Description |
 | --- | --- | --- |
 | `embeded_dependence` | `uint32_t` | Whether EMB travels together with the image data |
 | `embeded_width` | `uint32_t` | EMB data width |
 | `embeded_height` | `uint32_t` | EMB data height |
 
-#### vin_ochn_buff_attr_t
-
+##### vin_ochn_buff_attr_t
 Indexed by `ochn_id`.
 
 | Field | Type | Description |
@@ -800,9 +770,7 @@ Indexed by `ochn_id`.
 | `buffers_num` | `uint32_t` | Buffer count for this channel |
 | `flags` | `int64_t` | Unused by the framework |
 
-
-## API List
-
+### API List
 VIN reuses the generic HBN vnode interfaces and has no private ioctl of its own. The commonly used interfaces:
 
 | Interface | Purpose |
@@ -823,15 +791,13 @@ VIN reuses the generic HBN vnode interfaces and has no private ioctl of its own.
 
 Stream creation and binding use `hbn_vflow_create` / `hbn_vflow_add_vnode` / `hbn_vflow_bind_vnode` / `hbn_vflow_start` / `hbn_vflow_stop` / `hbn_vflow_destroy`; see [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api).
 
-## API Interface Description
-
+### API Interface Description
 All 13 interfaces below share two conventions, which the individual sections do not repeat.
 
 - **Return value**: `HBN_STATUS_SUCESS` (0) on success, a negative error code on failure (implemented as `-HBN_STATUS_xxx`). The full list is in [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#return-value-description) — note that it lists the codes as **positive** (`10`, `13`, …) while the interfaces return them **negated** (`-10`, `-13`, …); the codes VIN actually returns, with what to do about each, are in [Common Return Codes](#common-return-codes).
 - **Five macros**: `set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` forward to the same-named functions with an `_s` suffix, taking the length from `sizeof(*(attr))`. They therefore **cannot take a `void *`**: you must pass a pointer to the concrete type.
 
-### hbn_vnode_open
-
+#### hbn_vnode_open
 Opens the VIN device node and returns the module's vnode handle. Used in pairs with `hbn_vnode_close`.
 
 ```c
@@ -846,11 +812,9 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 | `ctx_id` | `int32_t` | context id, a software concept; pass a concrete value, or `AUTO_ALLOC_ID` to let the framework allocate one |
 | `vnode_fd` | `hbn_vnode_handle_t *` | **Out parameter**, the returned vnode handle |
 
-
 **Device nodes**: each VIN instance has four nodes under `/dev` — `/dev/vinX_src`, `/dev/vinX_cap`, `/dev/vinX_emb` and `/dev/vinX_roi`, where `X` is the `hw_id`. Going through the `hbn_vnode_*` interfaces normally, you never touch them directly.
 
-### hbn_vnode_close
-
+#### hbn_vnode_close
 Closes the VIN device node and releases the handle. Used in pairs with `hbn_vnode_open`; call `hbn_vflow_stop` first.
 
 ```c
@@ -861,8 +825,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | --- | --- | --- |
 | `vnode_fd` | `hbn_vnode_handle_t` | The module's vnode handle |
 
-### hbn_vnode_set_attr
-
+#### hbn_vnode_set_attr
 Sets the module's basic attributes. For VIN this is `vin_attr_t`, which carries the `cim_attr` / `vcon_attr` / `lpwm_attr` sub-module configuration.
 
 ```c
@@ -880,8 +843,7 @@ Sets the module's basic attributes. For VIN this is `vin_attr_t`, which carries 
 
 - `magicNumber` inside the attributes must follow the header's convention
 
-### hbn_vnode_set_ichn_attr
-
+#### hbn_vnode_set_ichn_attr
 Sets the module's input channel attributes.
 
 ```c
@@ -900,8 +862,7 @@ Sets the module's input channel attributes.
 
 - `vin_ichn_attr_t.format` must match the sensor's actual output format
 
-### hbn_vnode_get_ichn_attr
-
+#### hbn_vnode_get_ichn_attr
 Reads back the module's input channel attributes.
 
 ```c
@@ -916,8 +877,7 @@ Reads back the module's input channel attributes.
 | `ichn_id` | `uint32_t` | Input channel id, **fixed to 0 for VIN** |
 | `attr` | `vin_ichn_attr_t *` | **Out parameter**, the input channel attributes read back |
 
-### hbn_vnode_set_ochn_attr
-
+#### hbn_vnode_set_ochn_attr
 Sets the module's output channel attributes.
 
 ```c
@@ -950,8 +910,7 @@ The **EMB channel** carries the line-embedded information the sensor outputs alo
 - Channels 3 / 4 are DDR only and do not support Online
 - To use a channel in Offline mode, switch it on in the attributes (`vin_ochn_attr[x].ddr_en` / `.emb_en` / `.roi_en`)
 
-### hbn_vnode_get_ochn_attr
-
+#### hbn_vnode_get_ochn_attr
 Reads back the module's output channel attributes.
 
 ```c
@@ -966,8 +925,7 @@ Reads back the module's output channel attributes.
 | `ochn_id` | `uint32_t` | Output channel id, same values as `hbn_vnode_set_ochn_attr` |
 | `attr` | `vin_ochn_attr_t *` | **Out parameter**, the output channel attributes read back |
 
-### hbn_vnode_set_ochn_buf_attr
-
+#### hbn_vnode_set_ochn_buf_attr
 Sets the buffer attributes of an output channel. **This interface is what actually triggers the buffer allocation.**
 
 ```c
@@ -987,9 +945,7 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 - In Online mode the main frame does not land in DDR, so no buffer is needed
 - **The channel named by `ochn_id` must already be enabled**, otherwise the call returns a not-supported error
 
-
-### hbn_vnode_start
-
+#### hbn_vnode_start
 Starts the vnode.
 
 ```c
@@ -1004,8 +960,7 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 
 - Usually `hbn_vflow_start` manages the whole flow, so calling this directly is unnecessary
 
-### hbn_vnode_stop
-
+#### hbn_vnode_stop
 Stops the vnode.
 
 ```c
@@ -1020,8 +975,7 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 
 - Usually `hbn_vflow_stop` manages the whole flow, so calling this directly is unnecessary
 
-### hbn_vnode_getframe
-
+#### hbn_vnode_getframe
 Fetches one frame from the given output channel. **Blocking interface.**
 
 ```c
@@ -1041,8 +995,7 @@ hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
 - A fetched frame **must** be returned with `hbn_vnode_releaseframe`, otherwise the buffers run out and fetching stops
 - Use `hbn_vnode_getframe_cond` when you need conditional fetching
 
-### hbn_vnode_releaseframe
-
+#### hbn_vnode_releaseframe
 Returns one frame.
 
 ```c
@@ -1060,8 +1013,7 @@ hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 
 - Used in pairs with `hbn_vnode_getframe`
 
-### hbn_vnode_sendframe
-
+#### hbn_vnode_sendframe
 Pushes frame data into an input channel, for DDR feedback and similar scenarios.
 
 ```c
@@ -1080,35 +1032,9 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 - **Blocking interface with a 4 s default timeout**; use `hbn_vnode_sendframe_async` when you do not want to wait
 - Not needed for ordinary capture
 
-## Constraints and Caveats
-
-### Rejected by the driver
-
-These **return an error** and are easy to spot:
-
-| Constraint | Note |
-| --- | --- |
-| `vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` must not both be 1 | An Online direct connection goes to either ISP or PYM, not both |
-| Exactly one of `vin_node_attr.cim_attr.mipi_en` / `...func.enable_pattern` / `...rdma_input.rdma_en` is 1 | The input source must be unique: MIPI, test pattern, or DDR feedback |
-| Online binding allows the main-frame channel only, with flyby already set to 1 | No other channel can be the source of an Online binding |
-| Offline binding requires the channel's switch to be on | Main frame needs `vin_ochn_attr[x].ddr_en`, EMB needs `.emb_en`, ROI needs `.roi_en` |
-| VIN's input node cannot be bound to | It is on the input side |
-| YUV422-8bit input may not enable ROI / rawds | Format restriction |
-| Online binding requires CIM and the downstream to share a CPE | Across CPEs only Offline works; the check runs on the downstream module's side |
-
-### No Error, Wrong Result
-
-These **return no error** yet produce a wrong picture — worth checking item by item more than the list above:
-
-| Pitfall | Consequence |
-| --- | --- |
-| `pack_mode` and `format` in `vin_ochn_attr[x].vin_basic_attr` do not match | `pack_mode = 0` gives every pixel 2 bytes (4 bytes for RAW20, 1 byte for RAW8 / YUV422-8bit); `pack_mode = 1` packs tightly at the actual bit depth (`width × 1.5` for RAW12, `width × 1.25` for RAW10). A mismatch makes `wstride` disagree with reality and **the image in DDR is skewed** |
-| `vin_ichn_attr_t.format` does not match the sensor's actual output | Frames still arrive, but **the pixels are interpreted wrongly** and the image is garbage |
-
 ## Troubleshooting
 
 ### Common Return Codes
-
 A failing interface returns a **negative** value — the macro below, negated. These are the codes that **actually come back** when using the `hbn_vnode_*` interfaces:
 
 | Value | Macro | Meaning and next step |
@@ -1127,7 +1053,6 @@ A failing interface returns a **negative** value — the macro below, negated. T
 > The macros live in `hbn_error.h`. The last row's `HBN_STATUS_VIN_*` is a composite code built by shifting the module number left by 16 bits, which is why the value is so large — `-786462` is `-0xC001E` in hex, easier to read against the header.
 
 ### CIM Status Nodes
-
 Every CIM exposes a group of read-only nodes under sysfs; `cim_stat` is the first place to look when debugging capture. The node name comes from the DTS address — swap it for whichever CIM you want:
 
 <DocScope products="RDK S100">
@@ -1176,7 +1101,6 @@ How to read them:
 The same directory also has `cim_capability` (the width ceiling of each IPI on that CIM) and `regdump` (a register snapshot).
 
 ### MIPI Status Nodes
-
 ```bash
 cat /sys/class/vps/mipi_host0/status/cfg    # the MIPI configuration actually in effect
 cat /sys/class/vps/mipi_host0/status/icnt   # interrupt error counters
@@ -1188,7 +1112,6 @@ cat /sys/class/vps/mipi_host0/status/regs   # register snapshot
 Under `param/` are writable debug switches, the common ones being `irq_cnt` (interrupt count threshold, past which the driver disables that interrupt to prevent an interrupt storm), `dbg_value` (turn on debug logging) and `ipi_overst`. **These change the driver's runtime behaviour — do not adjust them on a production configuration.**
 
 ## Related Documentation
-
 - [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api) — generic vnode interfaces and the `vin_attr_t` field tables
 - [Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api) — the sensor-side `hbn_camera_*` interfaces
 - [Video Processing Framework - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)
