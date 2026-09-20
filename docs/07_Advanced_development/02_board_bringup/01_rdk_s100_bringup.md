@@ -462,7 +462,7 @@ label drobot-s100-rdk-v1p1-kernel
 boardid_sys_path="/sys/class/boardinfo/adc_boardid"
 if [ -f "$boardid_sys_path" ]; then
         boardid="$(cat $boardid_sys_path)"
-        if [[ "$boardid" =~ ^0x(64|65|6A|6B)[0678][04567]$ ]];then
+        if [[ "$boardid" =~ ^0x(64|65|6A|6B)[0678][04567]$ ]];then # S100
                 case ${boardid} in
                         *"0")
                                 # Check if TPIC2810 exists, if so, manual reset USB controller

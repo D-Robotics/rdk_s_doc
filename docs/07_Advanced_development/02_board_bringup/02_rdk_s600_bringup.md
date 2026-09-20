@@ -353,7 +353,27 @@ label drobot-s600-rdk-v1p0-kernel
 boardid_sys_path="/sys/class/boardinfo/adc_boardid"
 if [ -f "$boardid_sys_path" ]; then
         boardid="$(cat $boardid_sys_path)"
-        ...
+        if [[ "$boardid" =~ ^0x(64|65|6A|6B)[0678][04567]$ ]];then # S100
+                case ${boardid} in
+                        *"0")
+                                # Check if TPIC2810 exists, if so, manual reset USB controller
+                                if [ -f /sys/class/i2c-adapter/i2c-2/2-0060/name ] &&
+                                   [ "$(cat /sys/class/i2c-adapter/i2c-2/2-0060/name)" = "tpic2810" ];then
+                                        /usr/bin/pcie-usb-reset.sh
+                                fi
+                                /usr/bin/start-pcie.sh &
+                        ;;
+                        *"7") ;&
+                        *"6") ;&
+                        *"5") ;&
+                        *"4")
+                                modprobe hobot-pcie-rc
+                                # check & update asm3042 firmware
+                                /usr/bin/update-asm3042-firmware.sh
+                                ;;
+                        *)
+                                ;;
+                esac
         elif [[ "$boardid" =~ ^0x(51)[01234567][0123456][0123456][1234567].$ ]];then # S600
                 # S600 Boardid rules
                 modprobe hobot-pcie-rc
