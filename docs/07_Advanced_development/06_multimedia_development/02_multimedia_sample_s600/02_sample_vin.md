@@ -28,6 +28,23 @@ flowchart LR
 
 ## get_vin_data
 
+### 功能概述
+
+`sample_vin`完成 Camera Sensor 、MIPI CSI 和 SIF 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
+
+#### 代码位置及目录结构
+
+代码位置：`/app/multimedia_samples/sample_vin/`
+
+目录结构
+
+```Shell
+/app/multimedia_samples/sample_vin/
+└── get_vin_data
+    ├── Makefile
+    ├── get_vin_data.c
+```
+
 ### 编译
 
 在源码路径下执行 `make` 命令即可完成编译：
@@ -38,7 +55,9 @@ make
 ```
 
 ### 运行
+
 #### 程序运行方法
+
 直接执行程序 `./get_vin_data -h` 可以获得帮助信息：
 
 #### 程序参数选项说明
@@ -49,15 +68,18 @@ make
 root@ubuntu:/app/multimedia_samples/sample_vin/get_vin_data# ./get_vin_data -h
 Usage: get_vin_data [OPTIONS]
 Options:
-	-s <sensor_index>      Specify sensor index
-	-l <link_port>         Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D
-	-m <mipi_rx>           Specify the mipi_rx for connecting serdes sensors
-	-h                     Show this help message
+  -s <sensor_index>      Specify sensor index
+  -l <link_port>         Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D
+  -m <mipi_rx>           Specify the mipi_rx for connecting serdes sensors
+  -h                     Show this help message
 index: 0  sensor_name: imx219-30fps             config_file:linear_1920x1080_raw10_30fps_1lane.c
 index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw10_30fps_2lane.c
 index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
 index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
 index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy                    config_file:dummy_sensor.c
+index: 6  sensor_name: sc230ai-30fps            config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw10_30fps_2lane.c
 ```
 
 **命令参数说明**：
@@ -77,7 +99,6 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 - 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
 - mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
 ```shell
@@ -129,10 +150,29 @@ Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_104094
 Command: q
 quit
 ```
+#### 运行效果说明
 
 执行程序后会获取到如 `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw` 命名格式的 raw 图像。
 
 ## get_multi_vin_data
+
+
+### 功能概述
+
+`get_multi_vin_data` 支持同时配置多路独立的 video pipeline，每路可指定不同的 sensor 与 SerDes link 端口，多路并发取流并各自 dump 为 Raw/YUV 文件。SerDes/GMSL sensor 共用一个解串器，仅初始化一次。
+
+#### 代码位置及目录结构
+
+代码位置：`/app/multimedia_samples/sample_vin/`
+
+目录结构
+
+```Shell
+/app/multimedia_samples/sample_vin/
+└── get_multi_vin_data
+    ├── Makefile
+    ├── get_multi_vin_data.c
+```
 
 ### 编译
 
@@ -144,7 +184,9 @@ make
 ```
 
 ### 运行
+
 #### 程序运行方法
+
 直接执行程序 `./get_multi_vin_data -h` 可以获得帮助信息：
 
 #### 程序参数选项说明
@@ -155,12 +197,11 @@ make
 root@ubuntu:/app/multimedia_samples/sample_vin/get_multi_vin_data# ./get_multi_vin_data -h
 Usage: get_multi_vin_data [Options]
 Options:
--c, --config="sensor=id"
-	Configure parameters for each video pipeline, can be repeated up to 6 times.
-	sensor   --  Sensor index,can have multiple parameters, reference sensor list.
-	mode     --  Sensor mode of camera_config_t
-	link     --  Sensor link port number, serdes sensor must be configured according to the hardware connection, can be set to [0-3] 0:A 1:B 2:C 3:D.
-	mipi     --  Specify the mipi_rx for connecting serdes sensors
+-c, --config="sensor=id link=port mipi=mipi_rx"
+                Configure parameters for each video pipeline, can be repeated up to 6 times.
+                sensor   --  Sensor index,can have multiple parameters, reference sensor list.
+                link     --  Sensor link port number, serdes sensor must be configured according to the hardware connection, can be set to [0-3] 0:A 1:B 2:C 3:D.
+                mipi     --  Specify the mipi_rx for connecting serdes sensors
 -h, --help      Show help message
 Support sensor list:
 index: 0  sensor_name: imx219-30fps             config_file:linear_1920x1080_raw10_30fps_1lane.c
@@ -168,6 +209,9 @@ index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw1
 index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
 index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
 index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy                    config_file:dummy_sensor.c
+index: 6  sensor_name: sc230ai-30fps            config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw10_30fps_2lane.c
 ```
 
 **命令参数说明**：
@@ -185,7 +229,6 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 - 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
 - mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
 ```shell
@@ -219,6 +262,8 @@ Dump image to file(handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321
 Dumping YUV data: handle 100197, resolution: 3840x2160 (stride: 3840), size: 8294400 + 4147200, frame id: 1, timestamp: 1317379256975
 Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv (size: 256)
 ```
+
+#### 运行效果说明
 
 执行程序后会获取到 imx219 `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` 命名格式的 RAW 图像 和 ar0820std 对应的`handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv` 命名格式的 YUV 图像。
 
