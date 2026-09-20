@@ -213,7 +213,7 @@ description: "DISPLAY（显示模块）API 接口说明"
 - `str`：需要绘制的字符串（需要是 GB2312编码）
 - `chn`：chn 显示输出层，2~3为图形层
 - `flush`：是否清零当前图形层 buffer
-- `color`：矩形框颜色（颜色格式为 ARGB8888）
+- `color`：字符串颜色（颜色格式为 ARGB8888）
 - `line_width`：文字的线宽
 
 **【返回类型】** 
