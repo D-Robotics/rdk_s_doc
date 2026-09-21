@@ -28,15 +28,16 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ## 代码位置
 
-GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，相关脚本如下：
+GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，主要的 GPIO 相关脚本如下：
 
 ```text
 /app/40pin_samples/
-├── simple_out.py        # GPIO 输出示例
-├── simple_input.py      # GPIO 输入示例
-├── button_led.py        # 按键输入控制 LED 输出示例
 ├── button_event.py      # 边沿事件检测示例
-└── button_interrupt.py  # 中断方式处理边沿事件示例
+├── button_interrupt.py  # 中断方式处理边沿事件示例
+├── button_led.py        # 按键输入控制 LED 输出示例
+├── gpio_rw_demo.py      # GPIO 读写演示
+├── simple_input.py      # GPIO 输入示例
+└── simple_out.py        # GPIO 输出示例
 ```
 
 ## 设置引脚编码方式
@@ -87,7 +88,16 @@ GPIO.setwarnings(False)
 
 :::info
 
-在`RDK S600`平台上，支持2个10-pin 自锁接口，1个12-pin 自锁接口，1个14-pin 自锁接口 GPIO 拓展。
+RDK S600 有 4 个扩展自锁接口，各自的用途如下：
+
+| 位号 | 规格   | 用途                               |
+| ---- | ------ | ---------------------------------- |
+| J16  | 12-pin | MCU 域 CAN（5 路）                 |
+| J17  | 10-pin | MAIN 域 CAN（4 路）                |
+| J18  | 10-pin | UART（2 路 MCU 域 + 2 路 MAIN 域） |
+| J19  | 14-pin | PCM（2 路）+ I2C（1 路）           |
+
+本文的 GPIO 示例使用 **J19** 上的 PCM 管脚（复用为 GPIO）。其余接口的信号由各自的控制器（CAN、UART）占用，不在本文范围内。
 
 管脚定义请参考 [管脚配置与定义](./01_ext_io.md#pin_define)
 
@@ -170,7 +180,7 @@ GPIO.gpio_function(channel)
 
 ## 边沿检测与中断
 
-边沿是电信号`从低到高`（上升沿）或`从高到低`（下降沿）的变化，这种改变可以看作是一种事件的发生，这种事件可以用来触发 CPU 中断信号。
+边沿是电信号 `从低到高`（上升沿）或 `从高到低`（下降沿）的变化。这种变化可看作一种事件的发生，可用于触发 CPU 中断信号。
 
 GPIO 库提供了三种方法来检测输入事件：
 
@@ -250,15 +260,16 @@ GPIO.remove_event_detect(channel)
 
 ## 测试例程
 
-在 `/app/40pin_samples/`目录下提供主要的测试例程：
+在 `/app/40pin_samples/` 目录下提供以下主要的 GPIO 相关测试例程：
 
-| 测试例程名             | 说明                                          |
-| ---------------------- | --------------------------------------------- |
-| simple_out.py          | 单个管脚`输出`测试                            |
-| simple_input.py        | 单个管脚`输入`测试                            |
-| button_led.py          | 一个管脚作为按键输入，一个管脚作为输出控制 LED |
-| button_event.py        | 捕获管脚的上升沿、下降沿事件                  |
-| button_interrupt.py    | 中断方式处理管脚的上升沿、下降沿事件          |
+| 测试例程              | 功能                                     | 使用管脚（J19）                     |
+| --------------------- | ---------------------------------------- | ----------------------------------- |
+| `gpio_rw_demo.py`     | 读写演示：`output` 模式翻转输出电平并打印，`input` 模式读取输入电平，仅在变化时打印 | 输出：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输入：`PCM1_DATA0_1V8`（第 4 脚） |
+| `simple_out.py`       | 输出测试：输出管脚每秒翻转一次电平       | 输出：`PCM1_FSYNC_1V8`（第 3 脚）   |
+| `simple_input.py`     | 输入测试：读取输入管脚电平，变化时打印   | 输入：`PCM1_FSYNC_1V8`（第 3 脚）   |
+| `button_led.py`       | 按键控制 LED：输入电平同步到输出管脚     | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输出：`PCM1_DATA0_1V8`（第 4 脚） |
+| `button_event.py`     | 边沿事件：检测输入下降沿，输出拉高 1 秒  | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输出：`PCM1_DATA0_1V8`（第 4 脚） |
+| `button_interrupt.py` | 中断：检测输入下降沿触发回调，另两脚输出 | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输出：`PCM1_MCLK_1V8`（第 1 脚）、`PCM1_BCLK_1V8`（第 2 脚） |
 
 - GPIO 设置为`输出模式`，1秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭， 测试代码 `simple_out.py`：
 
@@ -370,7 +381,7 @@ if __name__=='__main__':
 
 ```
 
-- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`, 实现检测4号管脚的下降沿，然后控制3号管脚的输出：
+- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`。该示例检测 `PCM1_FSYNC_1V8`（输入）的下降沿，然后控制 `PCM1_DATA0_1V8`（输出）：
 
 ```python
 #!/usr/bin/env python3
@@ -434,9 +445,9 @@ if __name__ == '__main__':
 
 ```
 
-- GPIO 设置为输入模式，启动 gpio 中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`, 实现了：
-  - 控制 1 号管脚以周期为4s，占空比为50%的模式拉高拉低，也就是拉高2s 后拉低2s，在程序运行期间持续运转；
-  - 检测 3 号管脚的下降沿触发中断，中断处理函数会控制2号管脚快速切换高低电平 5 次。用户只要拉低了3号管脚，就可以看到2号管脚以1s 的周期，50%的占空比，也就是0.5s 拉高，0.5s 拉低，运行总共5个周期。
+- GPIO 设置为输入模式，启动 GPIO 中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`。该示例实现了：
+  - 控制 `PCM1_MCLK_1V8`（第 1 脚）以周期 4s、占空比 50% 的模式拉高拉低，即拉高 2s 后拉低 2s，在程序运行期间持续运转；
+  - 检测 `PCM1_FSYNC_1V8`（第 3 脚）的下降沿触发中断，中断处理函数会控制 `PCM1_BCLK_1V8`（第 2 脚）快速切换高低电平 5 次。用户只要拉低了 `PCM1_FSYNC_1V8`，就可以看到 `PCM1_BCLK_1V8` 以周期 1s、占空比 50% 切换，即 0.5s 拉高、0.5s 拉低，共运行 5 个周期。
 
 ```python
 #!/usr/bin/env python3
@@ -512,7 +523,7 @@ if __name__ == '__main__':
 ```
 ## hb_gpioinfo 工具介绍
 
-hb_gpioinfo 是适配 RDK S600 的一个 GPIO 帮助工具，可以查看当前开发板的 PinName 和 PinNum 的对应关系，命令示例输出如下：
+hb_gpioinfo 是适配 RDK S600 的一个 GPIO 帮助工具，可以查看当前开发板的 Pin Name 和 Pin Num 的对应关系。Pin Num 与库中的 BOARD 编号一致，Pin Func 列随实际配置变化，以板端实际输出为准。命令示例输出如下：
 ```shell
 sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
@@ -745,11 +756,17 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 
 ## 常见问题
 
-### 运行 GPIO 示例无输出或电平不变
+### 运行 GPIO 示例无打印输出
 
-**原因**：RDK S600 的 30-pin 自锁接口数字 IO 为 1.8V 电平，示例使用的管脚号随板型自动适配（见 `determine_pins()`）。
+**原因**：部分示例（如 `simple_out.py`）本身无打印，只翻转输出管脚电平。另有部分示例（如 `simple_input.py`、`button_led.py`）仅在输入电平变化时打印，电平不变时无输出。
 
-**解决**：确认外设电平与 1.8V 匹配；输入管脚需外接确定电平，输出管脚可用万用表或 LED 观察。
+**解决**：确认脚本是否本身无打印；对仅在变化时打印的示例，需手动切换输入管脚电平。
+
+### 管脚电平不随操作变化
+
+**原因**：输入管脚悬空时电平不确定，读数不随操作变化；输出管脚未接测量点，无法观察到电平变化。
+
+**解决**：为输入管脚接确定电平（GND 或 1.8V），不要悬空；输出管脚接万用表或 LED 观察。注意 J19 的 PCM 管脚为 **1.8V** 电平，接入外部器件时需确认电平匹配。
 
 ### 提示管脚已被占用
 
