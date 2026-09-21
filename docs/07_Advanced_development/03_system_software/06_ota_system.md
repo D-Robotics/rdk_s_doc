@@ -10,7 +10,6 @@ description: "系统 OTA 升级"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-
 ## 概述
 
 **OTA** ：（ Over-the-Air Technology，空中下载技术）是指通过无线网络实现远程软件升级的技术。最早由 Android 系统引入到手机设备中， OTA 技术大幅简化了传统软件升级过程，无需通过计算机连接设备，用户可直接在设备上下载并安装更新。这一技术极大地方便了用户，提高了设备维护的效率。
@@ -19,7 +18,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 在 OTA 的广义应用中，可以划分为云端和设备端两个主要组成部分。云端部分负责处理设备的升级请求，包括执行升级校验、下发升级包以及收集升级结果等任务。而设备端则主要依赖云端下发的升级包，完成系统软件（ FOTA， Firmware Over-the-Air）或应用程序（ SOTA， Software Over-the-Air）的更新与升级。
 - 本文旨在提供底层设备端 OTA 的用户手册，详细阐述 OTA 在底层系统软件和应用程序升级中的机制及其实现方法，同时提供相关的开发指导。需要特别指出的是，通过 OTA 升级的系统软件与应用程序，主要是指更新存储在外部存储器（如 eMMC ）中的数据。
-- OTA 的对外交付物主要为一套 API 及其相应的实现库（如 libupdate.so），该库实现了底层烧写校验等关键功能。上层的 OTA 服务架构则由客户方实现，用以对接客户的云端服务。在成功从云端下载升级包后， OTA 服务会通过调用 libupdate.so 中的接口，实现版本的升级和校验等操作，从而确保设备能够顺利、安全地完成软件更新。
+- OTA 的对外交付物主要为一套 API 及其相应的实现库（如 `libupdate.so`），该库实现了底层烧写校验等关键功能。上层的 OTA 服务架构则由客户方实现，用以对接客户的云端服务。在成功从云端下载升级包后， OTA 服务会通过调用 `libupdate.so` 中的接口，实现版本的升级和校验等操作，从而确保设备能够顺利、安全地完成软件更新。
 
 **缩略语**
 
@@ -29,6 +28,7 @@ import DocScope from '@site/src/components/DocScope';
 | BL[x]    | Boot Loader Stage [x]           | 启动的阶段 x              |
 | SPL      | Secondary Program Loader        | 二级程序加载器            |
 | GPT      | GUID Partition Table            | GUID 磁盘分区表           |
+| FPT      | Flash Partition Table           | 闪存分区表                |
 | GUID     | Globally Unique IDentifier      | 全局唯一标识符            |
 | RSA      | RSA Algorithm                   | RSA 公开密钥密码体制      |
 | eMMC     | embedded MultiMedia Card        | 嵌入式非易失性存储器       |
@@ -41,11 +41,19 @@ OTA 时，将以分区为单位对目标分区进行更新，这些分区按照�
 |-----------|------|---------|------|
 | 持久化分区 | 参数分区：一般存储系统运行时需要加载的一些配置文件和参数等数据。如分区表中的 ubootenv 等 <br /><br /> 用户分区：指与系统启动无关的分区。一般在系统启动后才会被挂载，如 userdata 分区 | 单分区一般没有镜像， 分区数据需要长期保存， 不支持 OTA 升级。| ubootenv, veeprom, userdata |
 | AB 分区 | 前缀同名且尾缀带 _a 和 _b 的分区称做 AB 分区。 | AB 分区交替升级。 | boot_a, boot_b |
-| BAK 分区 | 前缀同名且尾缀带`bak`的分区称作 BAK 分区，主要构成为 1 个主分区和若干个备份分区。 | BAK 分区只升级主分区，主分区升级并验证成功后，将主分区内容同步到备份分区。 |SBL, SBL_bak|
+| BAK 分区 | 前缀同名且尾缀带 `bak` 的分区称作 BAK 分区，主要构成为 1 个主分区和若干个备份分区。 | BAK 分区只升级主分区，主分区升级并验证成功后，将主分区内容同步到备份分区。 |SBL, SBL_bak|
 
 ## 开启 OTA
+
 RDK 默认不开启 OTA 功能，如需开启请按如下流程操作：
-1. 开启 OTA 前，若未编译过工程，没有生成 out 目录则执行下列命令，必须先编译工程或者建立编译环境。
+
+:::warning
+开启 OTA 会同时更换分区表（新增 `vbmeta` 分区，`system` 由单分区变为 A/B 双分区）与 U-Boot 配置。改完配置重新编译后，**必须对设备整机重新烧录一次**，否则设备上的分区表与升级包不一致，OTA 会在分区校验阶段被直接中止。
+
+在线 miniboot 升级（`rdk-miniboot-update`）只适用于非 OTA 镜像，不会写入 `vbmeta`、也不会调整 GPT，无法替代整机烧录。
+:::
+
+1. 开启 OTA 前，若未编译过工程、没有生成 `out` 目录，需先编译工程或建立编译环境：
         ```bash
         # 编译工程，生成镜像
         sudo ./pack_image.sh
@@ -53,6 +61,8 @@ RDK 默认不开启 OTA 功能，如需开启请按如下流程操作：
         # 仅建立编译环境
         sudo ./pack_image.sh -p
         ```
+
+    注意：`-p` 只搭建 deb 编译环境、不生成镜像，但它同样会清空已有的 `out/product/img_packages` 目录，请提前备份。
 2. 配置 build_params 中对应平台的 conf 文件：
 
     <DocScope products="RDK S100">
@@ -61,6 +71,8 @@ RDK 默认不开启 OTA 功能，如需开启请按如下流程操作：
     <DocScope products="RDK S600">
     将 `build_params` 目录下的 `ubuntu-24.04_desktop_rdk-s600_beta.conf`、`ubuntu-24.04_server_rdk-s600_beta.conf`、`ubuntu-24.04_desktop_rdk-s600_release.conf` 和 `ubuntu-24.04_server_rdk-s600_release.conf`（可根据情况只修改用到的 conf）中的 `PARTITION_FILE` 配置为 OTA 版本：`export PARTITION_FILE="s600-ota-gpt.json"`，`RDK_DM_VERIFY_ENABLE` 配置为开启：`export RDK_DM_VERIFY_ENABLE="yes"`；
     </DocScope>
+
+    注意：`pack_image.sh` 不带 `-c` 时默认读取 desktop beta 的 conf，而 `mk_debs.sh` 打包使用的是 desktop release 的 conf。若只修改了 release/server 的 conf，编译时必须显式用 `-c` 指定该 conf，否则修改不会生效。
 
 3. 配置对应平台 board mk 文件中的 `RDK_OTA` 变量：
 
@@ -76,12 +88,20 @@ RDK 默认不开启 OTA 功能，如需开启请按如下流程操作：
         ```bash
         ./mk_debs.sh hobot-miniboot
         ```
-   - 重新编译本地镜像
+
+     该命令会重新编译 miniboot 与 U-Boot（而不是只重新打包 deb），并按 OTA 配置生成新的分区表。
+   - 重新编译本地镜像，用 `-c` 指定第 2 步修改过的 conf
         ```bash
-        sudo ./pack_image.sh -l
+        # 以 desktop release 为例
+        sudo ./pack_image.sh -l -c build_params/ubuntu-24.04_desktop_rdk-s600_release.conf
         ```
 
+5. 整机重新烧录
+
+   将新生成的 `out/product/img_packages/`（如 `ufs_disk.img`、miniboot 相关镜像）整机烧录到设备。只有完成这一步，设备上的 GPT 与 U-Boot 才与 OTA 镜像匹配，后续才能通过 OTA 升级。
+
 ## 根文件系统说明（OTA 模式）
+
 ### 概述
 
 开启 OTA 后，系统采用 system + overlayfs 的根文件系统结构。
@@ -106,24 +126,38 @@ OverlayFS 是一种联合文件系统（UnionFS），可将多个目录合并为
 
 | 分区类型             | 挂载角色 | 权限   | 说明                                               |
 | ------------------- | -------- | ----- | -------------------------------------------------- |
-| system_A / system_B | Lowerdir | 只读   | 系统基础文件所在分区，AB 双分区结构以支持无缝 OTA 升级 |
+| `system_A` / `system_B` | Lowerdir | 只读   | 系统基础文件所在分区，AB 双分区结构以支持无缝 OTA 升级 |
 | overlay             | Upperdir | 读写   | 用户数据及修改保存区，不参与 OTA 升级                 |
 | root (`/`)          | Merged   | 合并视图 | 提供统一的根目录访问视图                           |
 
-
 根文件系统的挂载逻辑如下：
 
-- system_A / system_B：通过 OTA 升级实现系统内容的更新；
+- `system_A` / `system_B`：通过 OTA 升级实现系统内容的更新；
 
 - overlay 分区：作为 overlayfs 的上层目录，保存运行时和用户的修改；
 
 - 根目录 /：用户看到的文件系统合并视图。
 
+### overlay 的启用方式
+
+overlayfs 并非由用户态手工挂载，而是由 U-Boot 与 initramfs 协作完成：
+
+1. U-Boot 启动时按分区布局决定根设备：
+
+   - 若存在单分区 `system`（非 OTA 布局），按 `root=<system> rw rootfstype=ext4 rootwait` 正常读写启动；
+   - 若存在 `system_a` / `system_b`（OTA 布局），则设置 `root=<当前 slot 的 system 分区> ro rootfstype=ext4 rootflags=noload rootwait overlayroot=<overlay 分区>`。
+
+2. initramfs 的 `10-prepare-overlay` 脚本读取 cmdline 中的 `overlayroot=`；当 overlay 分区还不是 ext4 时，自动执行 `mkfs.ext4` 格式化。
+
+3. 随后由 `overlayroot` 脚本把 `system_<slot>` 作为 lowerdir、`overlay` 分区作为 upperdir 联合挂载为 `/`。
+
+因此，只有使用 OTA 分区表（含 `overlay` 分区）的镜像才会以 `system + overlayfs` 方式启动；普通镜像仍然是单 `system` 分区读写挂载。
+
 ### 注意事项
 
 1. 初次烧录行为
 
-    整机烧录时，overlay 分区会被格式化，system_A / system_B 分区写入只读系统镜像，此后系统启动时会自动建立 overlayfs 合并层。
+    整机烧录时，overlay 分区会被格式化，`system_A` / `system_B` 分区写入只读系统镜像，此后系统启动时会自动建立 overlayfs 合并层。
 
 2. OTA 升级行为
 
@@ -163,6 +197,7 @@ tree
 其中 hooks 目录用于提供分区烧写前和烧写后的自动执行脚本，可用于在升级过程中插入自定义处理逻辑。在使用打包工具前，建议先了解 hooks 目录的作用和使用方式。
 
 #### OTA 升级 Hook 机制
+
 - Hook 脚本放置位置
 
     hooks 目录用于存放 OTA 分区升级过程中的前置 / 后置处理脚本，用于在分区烧写前或烧写后执行一些自定义逻辑，包括但不限于：
@@ -171,13 +206,11 @@ tree
 
     - 数据备份与迁移
 
-
     **如果某个分区不需要任何前后处理逻辑，对应的脚本文件可以省略。**
 
 - 脚本命名规则（必须遵守）
 
     为确保脚本能够被正确打包并在 OTA 升级过程中执行，脚本文件名必须严格遵循以下命名规则，否则将无法被识别和加入升级包。
-
 
     - 分区烧写前脚本（Pre-install Hook）
 
@@ -193,14 +226,13 @@ tree
 
     不符合上述命名规则的脚本文件将不会被加入 OTA 升级包，也不会在升级过程中被执行。
 
-    脚本文件名中的 `<分区名>` 必须 与 OTA 系统中使用的分区名称完全一致，如果不确定分区名称，可通过`out/product/img_packages/ota_tools/ota_info.json`文件中的`base_name`字段进行确认。
-
+    脚本文件名中的 `<分区名>` 必须 与 OTA 系统中使用的分区名称完全一致，如果不确定分区名称，可通过 `out/product/img_packages/ota_tools/ota_info.json` 文件中的 `base_name` 字段进行确认。
 
 - 使用示例
 
     以 MCU 分区为例
 
-    - 打开`out/product/img_packages/ota_tools/ota_info.json`文件，查看`MCU`部分的`base_name`字段，确认分区名称。
+    - 打开 `out/product/img_packages/ota_tools/ota_info.json` 文件，查看 `MCU` 部分的 `base_name` 字段，确认分区名称。
 
         **以下仅为示例，不与实际代码挂钩，实际分区表请参考源码**
         ```json
@@ -244,7 +276,7 @@ tree
 
 #### OTA 打包工具使用方法
 
-一般使用位于`ota_tools/`路径下的 ota_pack_tool.sh 制作所需的 OTA 升级包，支持 OTA 升级包解包，解包后重打包，制作升级包以及制作差分包等。
+一般使用位于 `ota_tools/` 路径下的 `ota_pack_tool.sh` 制作所需的 OTA 升级包，支持 OTA 升级包解包，解包后重打包，制作升级包以及制作差分包等。
 
 使用方法如下：
 ```bash
@@ -269,21 +301,26 @@ Options:
 
 通过如下命令可以制作系统升级包:
 
-```BASH
+```bash
 # tar格式升级包(-t参数省略)，sys_signed代表打包secure版本升级包
  ./ota_pack_tool.sh -c sys_signed -d ~/s600/out/product/img_packages/
 
 # zip格式升级包
 ./ota_pack_tool.sh -c sys_signed -d ~/s600/out/product/img_packages -t zip
 ```
-生成的 OTA 升级包将输出到`out/product/ota_packages`目录，在该目录下，您将看到`zip`或`.zst.tar`结尾的升级包和`signature`结尾的升级包的签名文件：
-```BASH
+生成的 OTA 升级包将输出到 `out/product/ota_packages` 目录，在该目录下，您将看到 `zip` 或 `.zst.tar` 结尾的升级包和 `signature` 结尾的升级包的签名文件：
+```bash
 all_in_one_signed.signature     #secure 升级包签名文件
 all_in_one_signed.zst.tar       #secure 升级包文件
 ```
 
 #### OTA 制作差分升级包
-可以通过 ota_pack_tool 制作 all_in_one_signed_inc.zip 系统差分包，制作时使用的 OTA 配置文件与 ota_process 均为 new 包解压所得。
+
+:::warning
+差分升级依赖已经烧录到设备上的旧镜像包。计划使用差分升级时，**请务必长期保存对应的旧镜像包**，避免丢失或损坏。
+:::
+
+可以通过 ota_pack_tool 制作 all_in_one_signed_inc.zip 系统差分包，制作时使用的 OTA 配置文件与 `ota_process` 均为 new 包解压所得。
 
 1. 差分升级作用
 
@@ -291,13 +328,13 @@ all_in_one_signed.zst.tar       #secure 升级包文件
 
 2. 差分升级原理
 
-    利用差分算法，得出新老镜像差分镜像，升级时差分还原到对向分区。（flash 介质的镜像不差分，其体积仅数 M，且 flash 读取慢）。差分库：hpatchz。支持的镜像：OTA 镜像包中的所有非 flash 介质的镜像。
+    利用差分算法，得出新老镜像差分镜像，升级时差分还原到对向分区。（flash 介质的镜像不差分，其体积仅数 M，且 flash 读取慢）。差分库：`hpatchz`。支持的镜像：OTA 镜像包中的所有非 flash 介质的镜像。
 
 3. 差分升级的限制
    - flash 上的分区不支持差分升级；
    - boot 分区有写入行为，不支持差分升级；
-   - 只有镜像包的大小大于10M 时才支持差分升级；
-   - 需要差分升级的分区如需挂载时，必须以只读方式挂载，且挂载时应添加 noload 选项，否则会出现 md5校验失败的问题；
+   - 只有镜像包的大小大于 10M 时才支持差分升级；
+   - 需要差分升级的分区如需挂载时，必须以只读方式挂载，且挂载时应添加 noload 选项，否则会出现 md5 校验失败的问题；
 4. 制作差分升级包
 
     - 差分镜像升级时需要依赖已经烧录的旧镜像包，因此，在计划使用差分升级时，**请务必妥善保存旧镜像包避免丢失或损坏**。
@@ -307,14 +344,15 @@ all_in_one_signed.zst.tar       #secure 升级包文件
    ```
 
 #### OTA 升级包解包与重打包
+
 升级包解包指令为：
 ```bash
 ./ota_pack_tool.sh -x all_in_one_signed.zip
 ```
-- 升级包解包后，可以更新`out/deploy/ota_deploy/unpack`下的镜像，重新制作 OTA 包，使用的 OTA 配置文件与 ota_process 均位于`out/deploy/ota_deploy/unpack`目录，该方法无法修改 OTA 配置文件 gpt.conf。
+- 升级包解包后，可以更新 `out/deploy/ota_deploy/unpack` 下的镜像，重新制作 OTA 包，使用的 OTA 配置文件与 `ota_process` 均位于 `out/deploy/ota_deploy/unpack` 目录，该方法无法修改 OTA 配置文件 `gpt.conf`。
 
 升级包重打包指令为：
-```BASH
+```bash
 ./ota_pack_tool.sh -r -t zip
 ```
 - 打包的源文件夹路径为：out/deploy/ota_deploy/unpack
@@ -322,7 +360,7 @@ all_in_one_signed.zst.tar       #secure 升级包文件
 
 ### 签名密钥
 
-签名所用的私钥`private_key.pem`放置在工程的：`ota_tools`目录。签名所用的公钥`public_key.pem`放置在工程的：`source/bootloader/miniboot/ota_flash_tools/`目录，在设备端该公钥的路径为 /usr/hobot/share/ota/public_key.pem。
+签名所用的私钥 `private_key.pem` 放置在工程的：`ota_tools` 目录。签名所用的公钥 `public_key.pem` 放置在工程的：`source/bootloader/miniboot/ota_flash_tools/` 目录，在设备端该公钥的路径为 /usr/hobot/share/ota/public_key.pem。
 
 如果需要替换为自己的密钥，步骤如下：
 
@@ -338,7 +376,7 @@ all_in_one_signed.zst.tar       #secure 升级包文件
   openssl rsa -RSAPublicKey_out -in private_key.pem  -out public_key.pem
   ```
 
-- 替换路径`source/bootloader/miniboot/ota_flash_tools/`下的`public_key.pem`以及替换路径`ota_tools/`下的`private_key.pem`.
+- 替换路径 `source/bootloader/miniboot/ota_flash_tools/` 下的 `public_key.pem` 以及替换路径 `ota_tools/` 下的 `private_key.pem`.
 - 执行下列命令重新编译
 
     ```bash
@@ -413,25 +451,24 @@ Archive:  all_in_one_signed.zip
 
 |    文件      |    描述      |
 |--------------|-------------|
-|   gpt.conf   | 分区表文件   |
-|  data.json   | OTA 配置文件 |
+|   `gpt.conf`   | 分区表文件   |
+|  `data.json`   | OTA 配置文件 |
 |    *.img     | 各分区镜像   |
-| ota_process  | OTA 烧写程序 |
+| `ota_process`  | OTA 烧写程序 |
 
 #### OTA 配置文件
 
-OTA 升级包中包含一个名为 data.json 的配置文件。该文件在编译时生成，其中包含了升级包的分区信息和镜像信息。
+OTA 升级包中包含一个名为 `data.json` 的配置文件。该文件在编译时生成，其中包含了升级包的分区信息和镜像信息。
 
 通用配置
 
 | 配置                    | 类型      | 功能                     |
 |-------------------------|----------|--------------------------|
-| backup_dir              | arr[obj] | HSM备份目录               |
-| ab_sync                 | str      | reserved字段,默认固定false |
-| nor_sign                | bool     | NOR Flash镜像签名校验开关   |
+| backup_dir              | arr[obj] | HSM 备份目录               |
+| ab_sync                 | str      | reserved 字段,默认固定 false |
+| nor_sign                | bool     | NOR Flash 镜像签名校验开关   |
 | update_partition        | arr[str] | 升级分区                   |
 | partition_info          | arr[str] | 各分区配置                 |
-
 
 各分区配置（ partition_info）
 
@@ -444,11 +481,11 @@ OTA 升级包中包含一个名为 data.json 的配置文件。该文件在编�
 | upgrade_method | str      | 升级方式 (image)                                  |
 | imgname        | str      | 镜像名，仅支持以 `.img/.bin/.ubifs` 为后缀的文件    |
 
-以下是一个 data.json 文件的示例：
+以下是一个 `data.json` 文件的示例：
 
 <DocScope products="RDK S100">
 
-```JSON
+```json
 {
     "antirollbackUpdate_host": false,
     "antirollbackUpdate_hsm": false,
@@ -634,7 +671,7 @@ OTA 升级包中包含一个名为 data.json 的配置文件。该文件在编�
 
 </DocScope>
 <DocScope products="RDK S600">
-```JSON
+```json
 {
     "antirollbackUpdate_host": true,
     "antirollbackUpdate_hsm": false,
@@ -836,25 +873,28 @@ OTA 升级包中包含一个名为 data.json 的配置文件。该文件在编�
 通过以上配置， OTA 升级包能够确保每个分区的镜像在升级过程中被正确校验和更新。
 
 ## OTA 实现详解
+
 ### OTA 流程
-以下流程以ota_tool中实现为例（开发者实现可参考此工具）。
+
+以下流程以 `ota_tool` 中实现为例（开发者实现可参考此工具）。
 
 - 准备阶段：
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step1.png" alt="OTA流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step1.png" alt="OTA 流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 升级阶段：
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step2.png" alt="OTA流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step2.png" alt="OTA 流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 验证阶段：
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step3.png" alt="OTA流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_tool_sequence_step3.png" alt="OTA 流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### OTA 状态机
 
 #### 升级包的状态
-状态存储在OTA进程空间，以下是流程说明：
+
+状态存储在 OTA 进程空间，以下是流程说明：
 ```c
 /**
  * @enum otahl_update_result
@@ -871,8 +911,9 @@ typedef enum otahl_update_result {
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_package_state.png" alt="升级包的状态示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-#### OTA升级流程的状态
-状态存储在veeprom，以下是流程说明：
+#### OTA 升级流程的状态
+
+状态存储在 veeprom，以下是流程说明：
 ```c
 typedef enum ota_update_flag {
     OTA_FLAG_NORMAL = 0,     // normal 状态
@@ -882,14 +923,15 @@ typedef enum ota_update_flag {
 } ota_update_flag_e;
 ```
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_upgrade_state.png" alt="OTA升级流程的状态示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_upgrade_state.png" alt="OTA 升级流程的状态示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-#### misc （AB状态机）
+#### misc （AB 状态机）
+
 1. 区域分配
 
     本平台使用 Android AB 机制来应用 AB 系统，下面的信息都是对于该机制的部分原理介绍，详细原理请参考：https://source.android.google.cn/docs/core/ota?hl=zh-cn
 
-    bootloader_message_ab 总共占4K： 其中AB使用的bootloader_control 位于struct bootloader_message_ab->slot_suffix处，占32个字节。
+    bootloader_message_ab 总共占 4K： 其中 AB 使用的 bootloader_control 位于 struct bootloader_message_ab->slot_suffix 处，占 32 个字节。
     ```c
     struct bootloader_message_ab {
         struct bootloader_message message;
@@ -910,7 +952,7 @@ typedef enum ota_update_flag {
     #endif
     ```
 
-2. AB结构体数据
+2. AB 结构体数据
     ```c
     #define ARRAY_32    (32U)
 
@@ -953,18 +995,18 @@ typedef enum ota_update_flag {
 
 3. 状态机说明
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ab_state.png" alt="misc （AB状态机）示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-- 状态1：默认状态，AB slot都可以启动。b的优先级高于a，默认从b启动。
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ab_state.png" alt="misc （AB 状态机）示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+- 状态 1：默认状态，AB slot 都可以启动。b 的优先级高于 a，默认从 b 启动。
 
-- 状态2：升级状态（烧写状态），a slot不可启动且boot success为0。
+- 状态 2：升级状态（烧写状态），a slot 不可启动且 boot success 为 0。
 
-- 状态3：烧写成功，还未重启，这个时候将要升级的slot设置为active状态，将当前slot设置为非active状态（调整优先级）。
+- 状态 3：烧写成功，还未重启，这个时候将要升级的 slot 设置为 active 状态，将当前 slot 设置为非 active 状态（调整优先级）。
 
-- 状态4：重启验证成功，将a设置为success boot状态。
+- 状态 4：重启验证成功，将 a 设置为 success boot 状态。
 
-#### veeprom区域
+#### veeprom 区域
 
-OTA升级的状态机存储在此区域，以下是OTA中对此区域的应用：
+OTA 升级的状态机存储在此区域，以下是 OTA 中对此区域的应用：
 
 ```c
 #define VEEPROM_OTA_STAT_OFFSET \
@@ -979,13 +1021,13 @@ OTA升级的状态机存储在此区域，以下是OTA中对此区域的应用�
     (128) /**< size 0f recovery information in the veeprom partition */
 ```
 
-1.  OTA区域
+1.  OTA 区域
 
     起始位置：1024
 
     大小：2048
 
-    作用：OTA状态存储
+    作用：OTA 状态存储
 
     存储数据如下：
 
@@ -1012,17 +1054,17 @@ OTA升级的状态机存储在此区域，以下是OTA中对此区域的应用�
     ```
 
 ### 启动状态切换
-下图说明正常启动时A/B slot是如何切换的（有没有OTA都是这个流程）
+
+下图说明正常启动时 A/B slot 是如何切换的（有没有 OTA 都是这个流程）
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/boot_slot_select.png" alt="启动状态切换示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-- 启动时，ROM boot count自动累加(该标记在aon域，下电时复位)
+- 启动时，ROM boot count 自动累加(该标记在 aon 域，下电时复位)
 
-- OTA升级时设置要更新的slot优先级为15，另一个slot为14。设置要升级的slot重试次数为1，slot损坏为0
+- OTA 升级时设置要更新的 slot 优先级为 15，另一个 slot 为 14。设置要升级的 slot 重试次数为 1，slot 损坏为 0
 
-- OTA启动验证成功时该slot标记为successboot，启动失败时该slot标记为已损坏
+- OTA 启动验证成功时该 slot 标记为 successboot，启动失败时该 slot 标记为已损坏
 
-- 从未标记successboot的slot启动时将会消耗一次重试次数，重试次数为0或被标记损坏会跳过此slot
-
+- 从未标记 successboot 的 slot 启动时将会消耗一次重试次数，重试次数为 0 或被标记损坏会跳过此 slot
 
 ### 重启验证与回滚
 
@@ -1034,28 +1076,40 @@ S600 参考实现中，OTA 升级完重启之后启动到内核会触发 systemd
 </DocScope>
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_boot_check_state.png" alt="重启验证与回滚示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+:::warning
+镜像烧写完成、但尚未调用 `otaMarkOTASuccessful` 标记成功之前，若发生任何重启，AB 状态机不会把新 slot 标记为 boot_successful，下次仍会从旧版本 slot 启动，本次升级判定失败。请避免在验证阶段中途重启。
+:::
+
 ### 分区烧写方式
-    OTA以分区为单位来进行升级，每个要升级的分区都有自己的镜像，升级时主要是将该镜像写入到外部存储器对应的分区上。在镜像类型上又分为全镜像与差分镜像两种形式。
+
+:::warning
+升级过程中禁止断电、重启或对目标分区执行其它写入操作，否则可能导致分区损坏、设备无法启动。
+:::
+
+    OTA 以分区为单位来进行升级，每个要升级的分区都有自己的镜像，升级时主要是将该镜像写入到外部存储器对应的分区上。在镜像类型上又分为全镜像与差分镜像两种形式。
 
 #### 全镜像升级
+
   - 全镜像指的是提供的目标分区完整镜像，升级时将镜像直接写到外部存储器对应分区的方式。
+
 #### 差分镜像升级
+
   - 差分镜像是通过差分算法对原始镜像和目标镜像进行差分计算得到的镜像。差分一般会提取目标镜像与原始镜像之间的差异信息，精简冗余信息。通过差分得到的镜像大小一般会远远小于目标镜像（具体大小取决于原始与目标之间的差异度，差异越小，镜像越小），可用于节省流量。
 <DocScope products="RDK S100">
   - 当差分升级时，S100 OTA 会根据差分镜像和板端原始分区数据通过逆差分还原成目标镜像，并写入到对应的外部存储器分区，完成最终的升级。
-  - S100 上使用的是开源的差分算法工具 hdiffz/hpatch，详细信息请参考：[github | HDiffPatch](https://github.com/sisong/HDiffPatch)。
+  - S100 上使用的是开源的差分算法工具 `hdiffz/hpatchz`，详细信息请参考：[github | HDiffPatch](https://github.com/sisong/HDiffPatch)。
 </DocScope>
 <DocScope products="RDK S600">
   - 当差分升级时，S600 OTA 会根据差分镜像和板端原始分区数据通过逆差分还原成目标镜像，并写入到对应的外部存储器分区，完成最终的升级。
-  - S600 上使用的是开源的差分算法工具 hdiffz/hpatch，详细信息请参考：[github | HDiffPatch](https://github.com/sisong/HDiffPatch)。
+  - S600 上使用的是开源的差分算法工具 `hdiffz/hpatchz`，详细信息请参考：[github | HDiffPatch](https://github.com/sisong/HDiffPatch)。
 </DocScope>
-
 
 ### OTA 安全保护措施
 
 #### 分区校验
-    OTA支持对镜像中的fpt/GPT分区文件校验，通过与当前系统的fpt/GPT分区进行对比，验证fpt/GPT分区表是否有调整，如果fpt/GPT分区有调整，则停止升级。
-    - OTA升级包含有通过编译系统生成的分区文件gpt.conf，具体内容格式如下：
+
+    OTA 支持对镜像中的 fpt/GPT 分区文件校验，通过与当前系统的 fpt/GPT 分区进行对比，验证 fpt/GPT 分区表是否有调整，如果 fpt/GPT 分区有调整，则停止升级。
+    - OTA 升级包含有通过编译系统生成的分区文件 `gpt.conf`，具体内容格式如下：
         ```bash
         fpt:0:262143:0
         recovery:262144:6291455:0
@@ -1073,37 +1127,62 @@ S600 参考实现中，OTA 升级完重启之后启动到内核会触发 systemd
     <DocScope products="RDK S600">
     - 由于 S600 分区支持最后一个分区的自动扩展，其结束地址会动态变化，所以校验 GPT 只校验到 userdata 分区，且最后一个分区一般不含镜像，不影响正常使用。
     </DocScope>
+
+#### dm-verity 与 AVB
+
+开启 OTA 时要求把 `RDK_DM_VERIFY_ENABLE` 配置为 `yes`，它与 OTA 分区表是**绑定关系**：只有 OTA 分区表才包含 `vbmeta` 分区，非 OTA 分区表没有该分区；若只把开关置为 `yes` 而分区表不是 OTA 版本，编译阶段就会因找不到 `vbmeta` 分区而报错。
+
+该开关会带来以下变化：
+
+- `boot` 分区：追加 AVB hash footer，并在内核 cmdline 中加入 `bootverify`；
+
+- `system` 分区：生成 dm-verity hash tree，并追加 hashtree footer；
+
+- 生成 `vbmeta` 分区，聚合 `boot` / `system` 的校验描述符；
+
+- U-Boot 启动时校验 `boot` / `vbmeta`，根文件系统以只读 `system_<slot>` + `overlay` 的方式挂载。
+
+相关构建产物：
+
+| 产物 | 说明 |
+|------|------|
+| `vbmeta.img` | vbmeta 分区镜像 |
+| `out/deploy/vbmeta/vbmeta_boot.img` | boot 分区的 AVB 描述符 |
+| `out/deploy/vbmeta/vbmeta_system.img` | system 分区的 AVB 描述符 |
+| `out/deploy/vbmeta/hash_system.txt` | system 分区的 dm-verity 哈希表信息 |
+| `out/deploy/vbmeta/dm_verity.conf` | dm-verity 映射配置 |
+
 ### 典型升级流程
-1. OTA Service 从云端下载并校验升级包，并调用otaInitLib初始化动态库。
 
-2. 调用otaRequestStart发起升级。该API会解压升级包中的ota_process程序，并fork一个进程，执行ota_process程序进行实际烧写。同时，该API还会创建文件锁（防止同时存在多次升级）、创建pipe文件（用于和ota_process通信）。另外，该API还会创建一个线程，用于定期读取pipe，获取实时升级进度、升级结果、升级分区等信息。
+1. OTA Service 从云端下载并校验升级包，并调用 `otaInitLib` 初始化动态库。
 
-3. 子进程升级阶段，OTA Service可以调用otaGetResult获取升级结果、调用otaGetProgress获取升级进度、调用otaGetUpdatingImageName获取正在升级的镜像。
+2. 调用 `otaRequestStart` 发起升级。该 API 会解压升级包中的 `ota_process` 程序，并 fork 一个进程，执行 `ota_process` 程序进行实际烧写。同时，该 API 还会创建文件锁（防止同时存在多次升级）、创建 pipe 文件（用于和 `ota_process` 通信）。另外，该 API 还会创建一个线程，用于定期读取 pipe，获取实时升级进度、升级结果、升级分区等信息。
 
-4. 当otaGetResult返回OTA_UPGRADE_SUCCESS时，代表镜像烧写成功，需要进入校验阶段。
+3. 子进程升级阶段，OTA Service 可以调用 `otaGetResult` 获取升级结果、调用 `otaGetProgress` 获取升级进度、调用 `otaGetUpdatingImageName` 获取正在升级的镜像。
 
-5. 调用otaSetPartition将下次启动分区设置为对向分区，并执行重启流程。
+4. 当 `otaGetResult` 返回 `OTA_UPGRADE_SUCCESS` 时，代表镜像烧写成功，需要进入校验阶段。
 
-6. 重启后，OTA Service 调用otaGetOwnerFlag获取升级owner，如果owner为OTA Service，则 OTA Service 为该次升级的校验负责，进入校验流程。
+5. 调用 `otaSetPartition` 将下次启动分区设置为对向分区，并执行重启流程。
 
-7. 调用otaCheckUpdate，获取升级结果。该API主要会检查镜像是否完整写入、是否从期望AB slot、Backup slot启动。
+6. 重启后，OTA Service 调用 `otaGetOwnerFlag` 获取升级 owner，如果 owner 为 OTA Service，则 OTA Service 为该次升级的校验负责，进入校验流程。
 
-8. 调用otaMarkOTASuccessful，标记当前分区启动成功。该API操作AB状态机，将本slot标记为boot_successful，保证后续从该slot启动。若在此步骤前发生任何重启，则下次将从旧版本镜像所在slot启动，升级失败。
+7. 调用 `otaCheckUpdate`，获取升级结果。该 API 主要会检查镜像是否完整写入、是否从期望 AB slot、Backup slot 启动。
 
-9. 调用otaPartitionSync，进行BAK分区的主备同步。
+8. 调用 `otaMarkOTASuccessful`，标记当前分区启动成功。该 API 操作 AB 状态机，将本 slot 标记为 boot_successful，保证后续从该 slot 启动。若在此步骤前发生任何重启，则下次将从旧版本镜像所在 slot 启动，升级失败。
 
-10. 调用otaClearFlags清除升级标记，结束升级。
+9. 调用 `otaPartitionSync`，进行 BAK 分区的主备同步。
+
+10. 调用 `otaClearFlags` 清除升级标记，结束升级。
 
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otaservice.png" alt="典型升级流程示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## OTA 升级端介绍
 
-### ota_tool 使用
+### `ota_tool` 使用
 
 **此处以 ZIP 格式 的 OTA 包为示例进行说明。除非特别说明，TAR（img 经 Zstandard 压缩）格式 的使用方法与 ZIP 格式完全一致，仅需将文档中的 .zip 后缀替换为 .zst.tar 即可。**
 
-
-在板端可通过ota_tool手动发起 OTA 升级，在输入ota_tool -h指令可查询详细的参数说明。
+在板端可通过 `ota_tool` 手动发起 OTA 升级，输入 `ota_tool -h` 指令可查询详细的参数说明。
 
 ```bash
 ota_tool Usage:
@@ -1115,26 +1194,28 @@ ota_tool Usage:
    -n, --noreboot                     request ota without reboot.
    -c, --checksign                    signature check.
    -i, --signature                    signature information file.
+   -k, --skip_set_partition           skipping setting partition to the opposite.
    -h, --help                         Display this help screen.
 ```
 
-使用 ota_tool 进行升级前，需要将 OTA 升级包上传至板端。
+使用 `ota_tool` 进行升级前，需要将 OTA 升级包上传至板端。
 
 参数介绍：
 
-- -h 用于获取帮助信息。
-- -v 用于获取 libupdate.so 版本、当前系统软件版本。
-- -b 启动后检查升级结果（系统启动时会自动进行此检查，用户无需干预）。
-- -s 设置下次启动 A/B slot, 0 表示 A， 1 表示 B。
-- -g 获取当前 A/B slot。
-- -p 指定升级包。
-- -n 升级成功后不进行自动重启。
-- -c 启用包完整性验证。
-- -i 指定签名文件（必须跟在 -p 参数后面）。
+- `-h` 用于获取帮助信息。
+- `-v` 用于获取 `libupdate.so` 的版本号。
+- `-b` 启动后检查升级结果（系统启动时会自动进行此检查，用户无需干预）。
+- `-s` 设置下次启动的 A/B slot，0 表示 A，1 表示 B。
+- `-g` 获取当前 A/B slot。
+- `-p` 指定升级包，可传相对或绝对路径；**路径长度必须小于 64 字节**。
+- `-n` 升级成功后不进行自动重启。
+- `-c` 启用包完整性验证。
+- `-i` 指定签名文件（必须跟在 `-p` 参数后面）。
+- `-k` 跳过“把下次启动分区切换到对向分区”的动作，便于调试或由外部流程接管分区切换。
 
 举例：
 
-```BASH
+```bash
 # 全量升级，不验证包完整性
 ota_tool -p all_in_one_signed.zip
 
@@ -1148,14 +1229,16 @@ ota_tool -p all_in_one_signed_inc.zip
 ota_tool -c -p all_in_one_signed_inc.zip -i all_in_one_signed_inc.signature
 ```
 
-### ota_tool 实现
-ota_tool 使用C语言实现，源码仅 otainterface.c 一个文件。 实现了获取系统软件版本、升级结果检查、设置/获取AB slot、OTA升级、强制升级、OTA包签名校验等功能。
+### `ota_tool` 实现
 
-若-c参数传入，则使用传入的签名文件对升级包进行签名校验。
+`ota_tool` 使用 C 语言实现，源码仅 otainterface.c 一个文件。 实现了获取系统软件版本、升级结果检查、设置/获取 AB slot、OTA 升级、强制升级、OTA 包签名校验等功能。
+
+若-c 参数传入，则使用传入的签名文件对升级包进行签名校验。
 
 最后，调用 ota_update_all_img 启动升级。
 
 #### ota_update_all_img
+
 ```c
 static int32_t ota_update_all_img(const char *zip_path)
 {
@@ -1227,19 +1310,19 @@ err:
 }
 ```
 
-1. 调用 otaGetPartition 获取当前所在 AB slot
+1. 调用 `otaGetPartition` 获取当前所在 AB slot
 
-2. 调用 otaInitLib 初始化 libupdate.so
+2. 调用 `otaInitLib` 初始化 `libupdate.so`
 
-3. 调用 otaRequestStart 并传入升级包和owner(OTA_TOOL)，开始升级
+3. 调用 `otaRequestStart` 并传入升级包和 owner(OTA_TOOL)，开始升级
 
-4. 等待 otaGetResult 的结果为 OTA_UPGRADE_SUCCESS 或 OTA_UPGRADE_FAILED 。等待过程中，调用 otaGetProgress 、 otaGetResult 、 otaGetUpdatingImageName 获取升级进度、升级结果、正在升级的镜像，并调用 OTA_show_Process_Bar 打印到控制台
+4. 等待 `otaGetResult` 的结果为 `OTA_UPGRADE_SUCCESS` 或 `OTA_UPGRADE_FAILED` 。等待过程中，调用 `otaGetProgress` 、 `otaGetResult` 、 `otaGetUpdatingImageName` 获取升级进度、升级结果、正在升级的镜像，并调用 OTA_show_Process_Bar 打印到控制台
 
-5. 若升级结果 otaGetResult 为 OTA_UPGRADE_SUCCESS ，则认为升级成功，调用 otaSetPartition 设置 AB slot 到对向 slot ，然后重启 SoC
+5. 若升级结果 `otaGetResult` 为 `OTA_UPGRADE_SUCCESS` ，则认为升级成功，调用 `otaSetPartition` 设置 AB slot 到对向 slot ，然后重启 SoC
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_update_all_img.png" alt="ota_update_all_img示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_update_all_img.png" alt="ota_update_all_img 示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-升级流程结束重启后，应启动 ota_tool -b 对升级结果进行检查校验，并进行后续操作。
+升级流程结束重启后，应启动 `ota_tool` -b 对升级结果进行检查校验，并进行后续操作。
 
 #### ota_boot_check
 
@@ -1300,24 +1383,59 @@ exit:
      return ret;
 }
 ```
-1. 调用 otaInitLib
+1. 调用 `otaInitLib`
 
-2. 调用 otaGetOwnerFlag 获取升级owner
+2. 调用 `otaGetOwnerFlag` 获取升级 owner
 
-3. 若 owner 为 NORMAL_BOOT ，则调用 otaMarkOTASuccessful 标记启动成功，然后退出
+3. 若 owner 为 NORMAL_BOOT ，则调用 `otaMarkOTASuccessful` 标记启动成功，然后退出
 
 4. 若 owner 不为 OTA_TOOL ，则正常退出
 
-5. 调用 otaCheckUpdate 获取升级结果。若升级结果异常，则调用 otaClearFlags 清除 OTA 标记，终止 OTA 流程
+5. 调用 `otaCheckUpdate` 获取升级结果。若升级结果异常，则调用 `otaClearFlags` 清除 OTA 标记，终止 OTA 流程
 
-6. 调用 otaMarkOTASuccessful 标记启动成功
+6. 调用 `otaMarkOTASuccessful` 标记启动成功
 
-7. 调用 otaPartitionSync 进行 AB 分区、 BAK 分区同步
+7. 调用 `otaPartitionSync` 进行 AB 分区、 BAK 分区同步
 
-    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_boot_check.png" alt="ota_boot_check示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/otatool-ota_boot_check.png" alt="ota_boot_check 示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+### 强制升级
 
-## OTA API介绍
+除在命令行通过 `-p` 指定升级包外，`ota_tool` 还支持“强制升级”文件：
+
+- 默认路径：`/ota/ota_tool_force_upgrade`；
+- 文件内容：本次要升级的 OTA 包路径。
+
+当该文件存在时，`ota_tool -b`（开机时由 `hobot-otatool.service` 自动执行）会读取其内容并进入升级流程；文件不存在时则走正常的升级校验流程 `ota_boot_check`。
+
+典型用法：
+
+```bash
+# 1. 将升级包上传到板端
+# 2. 把升级包路径写入强制升级文件
+echo "/ota/all_in_one_signed.zip" > /ota/ota_tool_force_upgrade
+
+# 3. 触发检查（正常开机时由 hobot-otatool.service 自动执行）
+ota_tool -b
+```
+
+:::warning
+强制升级完成后应删除 `/ota/ota_tool_force_upgrade`，否则每次开机都会重复触发升级。
+
+文件中的升级包路径长度超限会报错。
+:::
+
+### AB 状态排查工具
+
+除 `ota_tool` 外，系统还提供 `hrut_boot_control`，用于直接读写 misc 分区中的 AB 槽位状态，可在 OTA 校验异常时人工确认或复位：
+
+```bash
+hrut_boot_control -g          # 获取当前 slot
+hrut_boot_control -s 0        # 设置当前 slot 为 A（1 为 B）
+hrut_boot_control -d          # 将 AB slot 状态恢复为默认值
+```
+
+## OTA API 介绍
 
 <DocScope products="RDK S100">
 S100 提供底层刷写库 `libupdate.so`，实现了一套跨平台的 API，用于烧写 OTA 包。
@@ -1326,13 +1444,14 @@ S100 提供底层刷写库 `libupdate.so`，实现了一套跨平台的 API，�
 S600 提供底层刷写库 `libupdate.so`，实现了一套跨平台的 API，用于烧写 OTA 包。
 </DocScope>
 
-底软基于 OTA HighLevel API 开发了 ota_tool 工具。
+底软基于 OTA HighLevel API 开发了 `ota_tool` 工具。
 
 头文件：hobot_ota_hl.h
 
-链接库：libupdate.so
+链接库：`libupdate.so`
 
 ### 动态库接口错误码列表
+
 ```c
 enum ota_err_e {
     OTA_SUCCESS = 0,
@@ -1360,6 +1479,7 @@ enum ota_err_e {
 ```
 
 ### Interface List
+
 | 接口原型 | 描述 |
 |----------|------|
 | `int32_t otaInitLib(void);` | 动态库初始化 |
@@ -1374,17 +1494,21 @@ enum ota_err_e {
 | `int32_t otaGetOwnerFlag(enum ota_update_owner *owner);` | 获取 OTA owner（重启后） |
 | `int32_t otaMarkOTASuccessful();` | 标记 OTA 升级成功（重启后） |
 | `int32_t otaCheckUpdate();` | 检查是否升级成功（重启后） |
-| `int32_t otaPartitionSync(void);` | AB分区、BAK分区同步 |
+| `int32_t otaPartitionSync(void);` | AB 分区、BAK 分区同步 |
+| `int32_t otaInitSecImg(const char *zip_path, ota_sec_info_t *sec_info);` | 初始化 HSM 安全镜像信息 |
+| `int32_t otaVerifySecImg(ota_sec_info_t *sec_info);` | 认证 HSM 安全镜像升级 |
 | `void otaClearFlags(void);` | 结束升级，清除 OTA 标志 |
+| `int otaNotifyMCU(hl_ota_msg msg);` | 通知 MCU 执行 OTA 相关动作 |
 
-### Interface: otaInitLib
+### Interface: `otaInitLib`
+
 | 接口名     | int32_t otaInitLib(void); |
 |:---------|:-------------|
 | 接口形式   | c 函数接口    |
 | 输入参数   | N/A           |
 | 输出参数   | N/A           |
 | 返回值     | 0: 成功；<br/> -OTAERR_REPEAT:重复初始化 |
-| 功能描述   | 板端刷写接口动态库初始化，主要进行全局结构体g_upgrade_info的初始化 |
+| 功能描述   | 板端刷写接口动态库初始化，主要进行全局结构体 g_upgrade_info 的初始化 |
 
 **示例代码**
 ```c
@@ -1405,7 +1529,9 @@ int main(void) {
     return 0;
 }
 ```
-### Interface: otaDeinitLib
+
+### Interface: `otaDeinitLib`
+
 | 接口名   | int32_t otaDeinitLib(void); |
 |:---------|:--------------------------|
 | 接口形式 | c 函数接口                |
@@ -1416,9 +1542,10 @@ int main(void) {
 
 **示例代码**
 
-参考 otaInitLib
+参考 `otaInitLib`
 
-### Interface: otaGetLibVersion
+### Interface: `otaGetLibVersion`
+
 | 接口名   | int32_t otaGetLibVersion(char *version, int32_t len); |
 |:---------|:----------------------------------------------|
 | 接口形式 | c 函数接口                                    |
@@ -1442,13 +1569,14 @@ int main(void) {
 }
 ```
 
-### Interface: otaRequestStart
+### Interface: `otaRequestStart`
+
 | 接口名   | int32_t otaRequestStart(const char *image_name, enum ota_update_owner owner); |
 |:---------|:---------------------------------------------------------------------|
 | 接口形式 | c 函数接口                                                           |
 | 输入参数 | image_name: 升级包绝对路径。支持多种不同类型的包同时传入，用分号隔开。<br/>owner: 发起本次升级的进程，owner 由 enum ota_update_owner 定义|
 | 输出参数 | N/A                                                                   |
-| 返回值   | 0: 成功；<br/>-OTAERR_NULLPOINTER：image_name 空指针；<br/>-OTAERR_RANGE：owner 设置错误，超出当前定义范围；<br/>-OTAERR_NOTINIT：未初始化本动态库；<br/>-OTAERR_REPEAT：当前有其他进程正在升级；<br/>-OTAERR_IO：IO失败；<br/>-OTAERR_THREAD_CREATE：线程创建失败 |
+| 返回值   | 0: 成功；<br/>-OTAERR_NULLPOINTER：image_name 空指针；<br/>-OTAERR_RANGE：owner 设置错误，超出当前定义范围；<br/>-OTAERR_NOTINIT：未初始化本动态库；<br/>-OTAERR_REPEAT：当前有其他进程正在升级；<br/>-OTAERR_IO：IO 失败；<br/>-OTAERR_THREAD_CREATE：线程创建失败 |
 | 功能描述 | 启动升级进程，对传入的 image_name 进行升级，并设置当前升级所有者       |
 
 **示例代码**
@@ -1494,20 +1622,23 @@ int main(void) {
     return 0;
 }
 ```
-### Interface: otaGetResult
+
+### Interface: `otaGetResult`
+
 | 接口名   | int32_t otaGetResult(void);                                                 |
 |:---------|:-------------------------------------------------------------------|
 | 接口形式 | c 函数接口                                                         |
 | 输入参数 | N/A                                                                 |
 | 输出参数 | N/A                                                                 |
-| 返回值   | -OTAERR_NOTINIT: 未初始化本动态库<br/>OTA_UPGRADE_NOT_START：升级未开始；<br/>OTA_UPGRADE_IN_PROGRESS：升级中；<br/>OTA_UPGRADE_SUCCESS：升级结束，成功；<br/>OTA_UPGRADE_FAILED: 升级结束，失败 |
+| 返回值   | -OTAERR_NOTINIT: 未初始化本动态库<br/>`OTA_UPGRADE_NOT_START`：升级未开始；<br/>`OTA_UPGRADE_IN_PROGRESS`：升级中；<br/>`OTA_UPGRADE_SUCCESS`：升级结束，成功；<br/>`OTA_UPGRADE_FAILED`: 升级结束，失败 |
 | 功能描述 | 获取升级结果|
 
 **示例代码**
 
-参考 otaRequestStart
+参考 `otaRequestStart`
 
-### Interface: otaGetProgress
+### Interface: `otaGetProgress`
+
 | 接口名       | 	int32_t otaGetProgress(void); |
 |:---------|:-------------|
 | 接口形式     | c 函数接口                                       |
@@ -1516,61 +1647,61 @@ int main(void) {
 | 返回值       | 0 ~ 100: 当前升级进度(%)<br/>-OTAERR_NOTINIT: 未初始化本动态库 |
 | 描述         | 获取当前升级进度                               |
 
-
 **示例代码**
 
-参考 otaRequestStart
+参考 `otaRequestStart`
 
-### Interface: otaGetUpdatingImageName
+### Interface: `otaGetUpdatingImageName`
+
 | 接口名       | int32_t otaGetUpdatingImageName(char *image_name, int32_t len); |
 |:---------|:-------------|
 | 接口形式     | c 函数接口                                     |
-| 输入参数     | len: buffer长度                               |
-| 输出参数     | image_name: 用于存放结果的buffer。<br/>image_name可能出现的内容：idle_state–升级未开始，<br/>all_img_finish–升级完成，app_param–应用参数，其他以”.img”结尾的包名。 |
-| 返回值       | 0：成功<br/>-OTAERR_NULLPOINTER：image_name空指针<br/>-OTAERR_NOTINIT：本动态库未初始化<br/>-OTAERR_SHORTBUF：buffer长度太短 |
+| 输入参数     | len: buffer 长度                               |
+| 输出参数     | image_name: 用于存放结果的 buffer。<br/>image_name 可能出现的内容：idle_state–升级未开始，<br/>all_img_finish–升级完成，app_param–应用参数，其他以”.img”结尾的包名。 |
+| 返回值       | 0：成功<br/>-OTAERR_NULLPOINTER：image_name 空指针<br/>-OTAERR_NOTINIT：本动态库未初始化<br/>-OTAERR_SHORTBUF：buffer 长度太短 |
 | 描述         | 获取当前正在升级的镜像                       |
-
 
 **示例代码**
 
-参考 otaRequestStart
+参考 `otaRequestStart`
 
-### Interface: otaGetPartition
+### Interface: `otaGetPartition`
+
 | 接口名       | int32_t otaGetPartition(uint8_t *partition); |
 | :------------ | :------------------------------------------- |
 | 接口形式     | c 函数接口                                   |
 | 输入参数     | N/A                                         |
-| 输出参数     | partition：用于接收当前分区的变量地址。<br/>*partition=0：当前为A分区，*partition=1：当前为B分区 |
-| 返回值       | 0:成功<br/>-OTAERR_NULLPOINTER: partition 为空指针<br/>-OTAERR_IO: io错误，请重试 |
-| 描述         | 获取当前启动AB分区                         |
+| 输出参数     | partition：用于接收当前分区的变量地址。<br/>*partition=0：当前为 A 分区，*partition=1：当前为 B 分区 |
+| 返回值       | 0:成功<br/>-OTAERR_NULLPOINTER: partition 为空指针<br/>-OTAERR_IO: io 错误，请重试 |
+| 描述         | 获取当前启动 AB 分区                         |
 
 **示例代码**
 
-参考 otaRequestStart
+参考 `otaRequestStart`
 
-### Interface: otaSetPartition
+### Interface: `otaSetPartition`
+
 | 接口名       | int32_t otaSetPartition(uint8_t partition); |
 | :------------ | :------------------------------------------- |
 | 接口形式     | c 函数接口                                   |
-| 输入参数     | partition：下次启动分区。0：A分区，1：B分区 |
+| 输入参数     | partition：下次启动分区。0：A 分区，1：B 分区 |
 | 输出参数     | N/A                                         |
-| 返回值       | 0:成功<br/>-OTAERR_NOTINIT：本动态库未初始化<br/>-OTAERR_RANGE: partition范围错误，partition范围为0和1<br/>-OTAERR_IO: io错误，请重试<br/>-OTAERR_STAGE: 当前升级阶段不支持。升级过程中或升级失败不支持 |
-| 描述         | 设置下次启动AB分区                         |
-
+| 返回值       | 0:成功<br/>-OTAERR_NOTINIT：本动态库未初始化<br/>-OTAERR_RANGE: partition 范围错误，partition 范围为 0 和 1<br/>-OTAERR_IO: io 错误，请重试<br/>-OTAERR_STAGE: 当前升级阶段不支持。升级过程中或升级失败不支持 |
+| 描述         | 设置下次启动 AB 分区                         |
 
 **示例代码**
 
-参考 otaRequestStart
+参考 `otaRequestStart`
 
-### Interface: otaGetOwnerFlag
+### Interface: `otaGetOwnerFlag`
+
 | 接口名       | int32_t otaGetOwnerFlag(enum ota_update_owner *owner); |
 | :------------ | :------------------------------------------ |
 | 接口形式     | c 函数接口                                  |
 | 输入参数     | N/A                                        |
-| 输出参数     | owner：接收当前升级owner的变量。请参考enum ota_update_owner |
-| 返回值       | OTA_SUCCESS:成功<br/> -OTAERR_NOTINIT:未初始化<br/> -OTAERR_NULLPOINTER: partition为空指针<br/> -OTAERR_IO:io错误,请重试 |
-| 描述         | 获取当前升级owner                          |
-
+| 输出参数     | owner：接收当前升级 owner 的变量。请参考 enum ota_update_owner |
+| 返回值       | OTA_SUCCESS:成功<br/> -OTAERR_NOTINIT:未初始化<br/> -OTAERR_NULLPOINTER: partition 为空指针<br/> -OTAERR_IO:io 错误,请重试 |
+| 描述         | 获取当前升级 owner                          |
 
 **示例代码**
 
@@ -1616,35 +1747,36 @@ clearFlags:
 }
 ```
 
-### Interface: otaMarkOTASuccessful
+### Interface: `otaMarkOTASuccessful`
+
 | 接口名       | int32_t otaMarkOTASuccessful(); |
 | :------------ | :---------------------------------------- |
 | 接口形式     | c 函数接口                                |
 | 输入参数     | N/A                                      |
 | 输出参数     | N/A                                      |
-| 返回值       | 0:成功<br/>-OTAERR_NOTINIT: 未初始化<br/>-OTAERR_IO: io错误，请重试 |
+| 返回值       | 0:成功<br/>-OTAERR_NOTINIT: 未初始化<br/>-OTAERR_IO: io 错误，请重试 |
 | 描述         | 标记本次升级成功                          |
-
 
 **示例代码**
 
-参考 otaGetOwnerFlag
+参考 `otaGetOwnerFlag`
 
-### Interface: otaCheckUpdate
+### Interface: `otaCheckUpdate`
+
 | 接口名       | int32_t otaCheckUpdate(); |
 | :------------ | :---------------------------------------- |
 | 接口形式     | c 函数接口                                |
 | 输入参数     | N/A                                      |
 | 输出参数     | N/A                                      |
-| 返回值       | 0:成功<br/>-OTAERR_IO: io错误，请重试<br/>-OTAERR_STAGE: 未进行升级<br/>-OTAERR_IMAGE_WRITE: 镜像写入失败<br/>-OTAERR_BOOT_FAILED: 新镜像启动失败或未切换分区 |
+| 返回值       | 0:成功<br/>-OTAERR_IO: io 错误，请重试<br/>-OTAERR_STAGE: 未进行升级<br/>-OTAERR_IMAGE_WRITE: 镜像写入失败<br/>-OTAERR_BOOT_FAILED: 新镜像启动失败或未切换分区 |
 | 描述         | 检查本次升级是否成功                      |
-
 
 **示例代码**
 
-参考 otaGetOwnerFlag
+参考 `otaGetOwnerFlag`
 
-### Interface: otaClearFlags
+### Interface: `otaClearFlags`
+
 | 接口名       | void otaClearFlags(void); |
 | :------------ | :---------------------------------------- |
 | 接口形式     | c 函数接口                                |
@@ -1653,25 +1785,108 @@ clearFlags:
 | 返回值       | N/A                                      |
 | 描述         | 清除 OTA flags                           |
 
-
 **示例代码**
 
-参考 otaGetOwnerFlag
+参考 `otaGetOwnerFlag`
 
+### Interface: `otaPartitionSync`
 
-### Interface: otaPartitionSync
 | 接口名       | int32_t otaPartitionSync(void); |
 | :------------ | :---------------------------------------- |
 | 接口形式     | c 函数接口                                |
 | 输入参数     | N/A                                      |
 | 输出参数     | N/A                                      |
-| 返回值       | 0：成功<br/> -OTAERR_NOTINIT：未初始化<br/> -OTAERR_IO：IO错误 <br/>-OTAERR_REPEAT：与其他升级进程冲突 |
-| 描述         | AB分区、BAK分区同步                      |
-
+| 返回值       | 0：成功<br/> -OTAERR_NOTINIT：未初始化<br/> -OTAERR_IO：IO 错误 <br/>-OTAERR_REPEAT：与其他升级进程冲突 |
+| 描述         | AB 分区、BAK 分区同步                      |
 
 **示例代码**
 
-参考 otaGetOwnerFlag
+参考 `otaGetOwnerFlag`
+
+### 安全镜像与 MCU 联动
+
+除上述通用接口外，`hobot_ota_hl.h` 还提供了一组用于 HSM 安全镜像校验与 MCU 联动的接口。相关类型定义如下：
+
+```c
+typedef enum sec_update_type {
+    SEC_FW = 0xD2,   /**< SEC firmware */
+    SEC_RCA,         /**< SEC RCA */
+} ota_sec_update_type_e;
+
+typedef struct ota_sec_img_s {
+    ota_sec_update_type_e sec_type;       /**< secure image type */
+    char    cert_path[ARRAY_128];         /**< OTA cert path, reserved */
+    char    img_path[ARRAY_128];          /**< secure image path, filled by lib */
+    uint8_t nouce[ARRAY_32];              /**< nouce, filled by lib */
+    uint8_t signature[ARRAY_64];          /**< signature, filled by service */
+} ota_sec_img_t;
+
+typedef struct ota_sec_info_s {
+    uint8_t       num;                    /**< secure number */
+    ota_sec_img_t img_info[ARRAY_2];      /**< secure image struct */
+} ota_sec_info_t;
+
+typedef enum hl_ota_msg {
+    HL_MCU_START_OTA = 0,   /**< notify MCU to start OTA */
+    HL_MCU_POST_OTA,        /**< notify MCU OTA finished */
+    HL_MCU_ABORT_OTA,       /**< notify MCU to abort OTA */
+    HL_MCU_PRE_REBOOT,      /**< notify MCU before reboot */
+    HL_MCU_CMD_CNT,
+} hl_ota_msg;
+```
+
+### Interface: `otaInitSecImg`
+
+| 接口名   | int32_t otaInitSecImg(const char *zip_path, ota_sec_info_t *sec_info); |
+|:---------|:----------------------------------------------------------------------|
+| 接口形式 | c 函数接口                                                            |
+| 输入参数 | zip_path: 升级包路径；<br/>sec_info: 安全镜像信息结构体指针             |
+| 输出参数 | sec_info：由动态库填充安全镜像路径与随机数（nouce）                     |
+| 返回值   | 0: 成功；<br/>-OTAERR_NOTINIT: 未初始化；<br/>-OTAERR_NULLPOINTER: 空指针；<br/>-OTAERR_IO: IO 错误 |
+| 功能描述 | 初始化 HSM 安全镜像信息并向 HSM 申请随机数，供上层填充签名使用          |
+
+**示例代码**
+
+由 OTA Service 调用 `otaInitSecImg`，对返回的 `signature` 字段填充签名后，再调用 `otaVerifySecImg`。
+
+### Interface: `otaVerifySecImg`
+
+| 接口名   | int32_t otaVerifySecImg(ota_sec_info_t *sec_info); |
+|:---------|:--------------------------------------------------|
+| 接口形式 | c 函数接口                                        |
+| 输入参数 | sec_info: 已填充签名信息的安全镜像结构体指针        |
+| 输出参数 | N/A                                               |
+| 返回值   | 0: 成功；<br/>-OTAERR_NOTINIT: 未初始化；<br/>-OTAERR_NULLPOINTER: 空指针；<br/>-OTAERR_IO: IO 错误 |
+| 功能描述 | 认证 HSM 安全镜像升级                             |
+
+**示例代码**
+
+参考 `otaInitSecImg`。
+
+### Interface: `otaNotifyMCU`
+
+| 接口名   | int otaNotifyMCU(hl_ota_msg msg); |
+|:---------|:---------------------------------|
+| 接口形式 | c 函数接口                        |
+| 输入参数 | msg: 需要通知 MCU 的事件，取值见 `hl_ota_msg` |
+| 输出参数 | N/A                              |
+| 返回值   | 0: 成功；<br/>负数: 失败          |
+| 功能描述 | 通知 MCU 执行 OTA 相关动作（开始升级、升级完成、中止升级、重启前处理） |
+
+**示例代码**
+
+```c
+#include <stdio.h>
+#include <hobot_ota_hl.h>
+
+int notify_mcu(hl_ota_msg msg) {
+    int ret = otaNotifyMCU(msg);
+    if (ret != 0) {
+        printf("otaNotifyMCU(%d) returned with %d\n", msg, ret);
+    }
+    return ret;
+}
+```
 
 ## 常见问题
 
@@ -1683,15 +1898,17 @@ clearFlags:
 
 ### 升级因分区校验失败而停止
 
-**原因**：升级包内的 gpt.conf 与当前系统分区表不一致，分区表发生了调整。
+**原因**：升级包内的 `gpt.conf` 与当前系统分区表不一致，分区表发生了调整。
 
 **解决**：核对并恢复分区表（或重新整机烧录），使分区表与升级包一致。
 
 ### 升级包未被升级程序识别
 
-**原因**：升级包命名不符合规范——包名必须包含 `all_in_one` 关键字，且不得包含 `app`、`APP`、`middleware`、`param`。
+**原因**：升级程序按关键字对升级包的**完整路径**做大小写敏感的子串匹配。路径中必须包含 `all_in_one`（`all_in_one_full` 也会被识别），且不得出现 `app`、`APP`、`middleware`、`param`。
 
-**解决**：按命名规范重命名升级包后重新发起升级。
+由于匹配的是完整路径，不仅包名，**所在目录名**也不能包含上述禁止关键字。例如把包放在 `/data/app/` 下，或路径中出现 `wrapper`（包含子串 `app`），都会被误判。
+
+**解决**：把升级包放到不含禁止关键字的目录（如 `/ota/`），按命名规范重命名后重新发起升级。
 
 ### 升级后回滚到旧版本
 
