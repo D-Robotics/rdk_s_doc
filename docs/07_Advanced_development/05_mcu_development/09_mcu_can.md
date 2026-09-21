@@ -1340,6 +1340,25 @@ RDK S100 / S600 上 CANHAL 默认走 IPCF 通道，将 MCU 侧 CAN 数据转发�
 :::
 
 ### 常见问题排查
+#### 使能调试日志
+打开 CANHAL 日志有助于定位具体失败点：
+
+```bash
+export CAN_HAL_DEBUG_LEVEL=4
+```
+#### MCU侧DEBUG应用说明
+1. 进入 MCU1的控制台
+2. 输入命令：can_tran_debug
+```
+can_tran_debug
+```
+
+3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果
+
+   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%' }} />
+
+
+#### 常见错误现象
 
 | 现象 | 可能错误码 | 排查方向 |
 |------|-----------|---------|
@@ -1368,7 +1387,22 @@ can_tran_debug
 
 3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%' }} />
+
+#### 典型错误日志解析
+**Q**: 打印`Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`
+
+**A**: 类似这种错误具体原因是mcu打上时间戳到acore接收到can数据时会在算一个时间，通过计算差值来统计（mcu->acore）延时，如果超过阈值就会报此错误。
+
+**Q**: 打印`put_data_tofifo()[1151]: [0][4] failed fifo in len 97 avail61 cnt 1`
+
+**A**: 出现这个错误的时候表示recv can包的内存不够，需要排查两处：
+- 1：read是不是可以及时执行，中间不要有太多依赖。
+- 2：acore的处理速度跟不上mcu的处理速度，需要提高kfifio data区域大小。
+
+**Q**: 打印`ipc-drv: ipc_shm_acquire_buf() [1209]: instance 4 noready`
+
+**A**: 出现这种错一般是mcu1挂了，或者mcu1没有起来。
 
 
 ### 应用程序接口
