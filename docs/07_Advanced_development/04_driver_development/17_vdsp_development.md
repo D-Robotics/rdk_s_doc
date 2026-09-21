@@ -10,30 +10,42 @@ description: "VDSP 开发指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-:::warning
-**S600上包含两个 VDSP 核，以下描述关于 VDSP1的使用只有在 S600上支持！**
-:::
-
 ## 概述
 
-VDSP（Vector Digital Signal Processor，向量数字信号处理器）是 RDK 平台上用于高性能向量计算/图像处理的协处理器。本指南介绍 VDSP 的基础调试、sample 运行与 API 接口。
+VDSP（Vector Digital Signal Processor，向量数字信号处理器）是 RDK S 系列SoC 内置的可编程向量 DSP 协处理器，硬件 IP 采用 Cadence Tensilica **Vision Q8** DSP（5 路 VLIW 超长指令字 + 1024 bit SIMD 单指令多数据流），专用于计算机视觉与图像处理类算法的加速。
+
+在 RDK 异构架构中，VDSP 与 BPU、ARM Acore 各司其职：BPU 负责神经网络推理，ARM Acore 负责通用控制与调度，VDSP 则承接**BPU 无法加速、ARM 执行效率较低**的算子，将这类计算从 CPU 侧卸载到 DSP 侧，从而降低 CPU 负载、提升整链路实时性。VDSP **不是**相机 ISP、PYM（金字塔）、GDC（畸变校正）或 BPU 的替代品——图像采集、畸变校正、缩放、拼接等应优先使用专用 Camsys 硬件；VDSP 面向的是上述专用硬件未覆盖的自定义视觉/数值计算。
+
+**典型使用场景**：
+
+- **图像预处理/后处理**：自定义图像变换、滤波、像素级处理、色彩空间转换等专用硬件未支持的算子。
+- **视觉特征计算**：特征提取、光流、匹配等计算机视觉前处理/后处理。
+- **算法工具链算子下发**：通过 `dcore0_rpmsg_op` / `dcore1_rpmsg_op` 服务承接算法工具链下发的 DSP 算子。
+- **BEV / 点云配套计算**：自动驾驶/机器人感知中 BEV、点云等算法的辅助数值计算。
+- **自定义算法卸载**：将用户自研、不适合 BPU 加速的计算密集型算子部署到 VDSP，与 ARM 通过 RPMSG/IPCFHAL 协同。
+
+本指南介绍 VDSP 的驱动代码、设备树配置、CPU 侧与 VDSP 侧开发流程、调试方法、sample 运行与 API 接口。
 
 <DocScope products="RDK S100">
-S100 包含 1 个 VDSP 核（VDSP0），默认配置如下表：
+S100 内置 1 个 VDSP 核（VDSP0，Vision Q8），默认配置如下表：
 
 | 项 | 默认值 |
 |---|---|
-| VDSP 核 | VDSP0 |
+| VDSP 核 | VDSP0（Vision Q8） |
 | 管理节点 | `remoteproc_vdsp0` |
 | FW 默认名 | `vdsp0` |
+
+:::note
+S100 **仅有 VDSP0**，不存在 VDSP1。本指南中所有涉及 VDSP1 / `remoteproc_vdsp1` / `dcore1_*` / `/log/dsp1` / `/dev/.../vdsp1` 的内容均不适用于 S100，仅 S600 支持，请勿在 S100 上使用。
+:::
 </DocScope>
 
 <DocScope products="RDK S600">
-S600 包含 2 个 VDSP 核（VDSP0 与 VDSP1），VDSP1 仅在 S600 等双核平台上支持，默认配置如下表：
+S600 内置 2 个 VDSP 核（VDSP0 与 VDSP1，均为 Vision Q8），VDSP1 仅在 S600 等双核平台上支持，默认配置如下表：
 
 | 项 | 默认值 |
 |---|---|
-| VDSP 核 | VDSP0、VDSP1 |
+| VDSP 核 | VDSP0、VDSP1（均 Vision Q8） |
 | 管理节点 | `remoteproc_vdsp0`、`remoteproc_vdsp1` |
 | FW 默认名 | `vdsp0`（所有核共用同一 Firmware） |
 </DocScope>
@@ -43,6 +55,32 @@ S600 包含 2 个 VDSP 核（VDSP0 与 VDSP1），VDSP1 仅在 S600 等双核平
 **前置条件**：已烧录 RDK OS 并可登录板端；了解 remoteproc 与核间通信（RPMSG/IPCFHAL）基础；已搭建 VDSP 交叉编译工具链。
 
 **与其他模块关系**：VDSP 通过核间通信（RPMSG/IPCFHAL）与 CPU 侧交互；看门狗联动见「[Watchdog](./18_driver_watchdog.md)」；系统启动时默认不启动 VDSP FW，需手动或通过 init.rc 加载。
+
+## 驱动代码
+
+VDSP 涉及的驱动源码位于 SDK 的 `hobot-drivers/` 目录，关键文件如下：
+
+```bash
+hobot-drivers/remoteproc/hobot_remoteproc.c      # VDSP remoteproc 驱动，注册 remoteproc_vdsp0/vdsp1 节点，负责 FW 加载/卸载、心跳、coredump
+hobot-drivers/remoteproc/hobot_remoteproc.h      # remoteproc 驱动头文件
+hobot-drivers/remoteproc/hobot_mcu_remoteproc.c  # MCU remoteproc 驱动（MCU 核，非 VDSP）
+hobot-drivers/vdsp/hobot_vdsp_dev.c              # VDSP Acore 设备驱动，提供 ioctl 接口（启停/内存映射等）
+hobot-drivers/vdsp/hobot_vdsp_sys.c              # VDSP Acore 系统相关实现
+hobot-drivers/vdsp/hobot_vdsp_ioctl.h            # VDSP ioctl 命令定义
+hobot-drivers/rpmsg/                             # RPMSG 核间通信驱动
+```
+
+### 内核配置
+
+VDSP 相关的内核配置宏如下，启用 VDSP 功能需打开对应配置：
+
+| 配置宏 | 说明 | 依赖 |
+|---|---|---|
+| `CONFIG_HOBOT_REMOTEPROC` | Hobot remoteproc 驱动，管理 VDSP FW 加载/卸载 | `select RPMSG_VIRTIO` |
+| `CONFIG_HOBOT_MCU_REMOTEPROC` | MCU remoteproc 驱动（MCU 核，与 VDSP 区分） | 默认 `n` |
+| `CONFIG_HOBOT_VDSP` | VDSP Acore 设备驱动，提供用户态 ioctl 接口 | `depends on HOBOT_REMOTEPROC` |
+
+`CONFIG_HOBOT_VDSP` 依赖 `CONFIG_HOBOT_REMOTEPROC`，编译时需同时启用。配置入口见各驱动目录下的 `Kconfig`。
 
 ## 设备树配置
 
@@ -70,13 +108,13 @@ remoteproc_vdsp0: remoteproc_vdsp0 {
 S600 除 `remoteproc_vdsp0` 外，还包含 `remoteproc_vdsp1` 节点（`compatible = "hobot,remoteproc-vdsp1"`），用于管理第二个 VDSP 核，对应 sysfs 节点 `remoteproc_vdsp1`。
 </DocScope>
 
-## 基础调试指南
+## 功能使用
 
 ### CPU 侧开发
 
 #### 镜像加载卸载
 
-VDSP 所有核共用一个 Firmware，默认名字为 vdsp0。第二个 VDSP 核（VDSP1，仅 S600等双核平台）与 VDSP0在功能上一致：同样通过 remoteproc 节点设置 FW 名称、执行加载/卸载，并可通过 `version`、`state` 等节点查看版本与运行状态；区别仅在于 sysfs 节点为 `remoteproc_vdsp1`（以及启停、日志等路径中的实例号，见下文各小节）。系统在启动时默认不启动 VDSP FW（Firmware），需要用户通过命令的形式手动加载和卸载 FW，命令如下所示：
+VDSP 所有核共用一个 Firmware，默认名字为 vdsp0。系统在启动时默认不启动 VDSP FW（Firmware），需要用户通过命令的形式手动加载和卸载 FW，命令如下所示：
 
 ``` shell
 echo -n <firmware路径> > /sys/module/firmware_class/parameters/path
@@ -87,7 +125,13 @@ echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
 echo start > /sys/class/remoteproc/remoteproc_vdsp0/state
 #VDSP0的FW卸载：
 echo stop > /sys/class/remoteproc/remoteproc_vdsp0/state
+```
 
+<DocScope products="RDK S600">
+
+S600 的第二个 VDSP 核（VDSP1）与 VDSP0 在功能上一致：同样通过 remoteproc 节点设置 FW 名称、执行加载/卸载，并可通过 `version`、`state` 等节点查看版本与运行状态；区别仅在于 sysfs 节点为 `remoteproc_vdsp1`（以及启停、日志等路径中的实例号，见下文各小节）。VDSP1 的加载/卸载命令如下：
+
+``` shell
 # 设置VDSP1 FW名称：
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
 #VDSP1的FW加载：
@@ -95,6 +139,8 @@ echo start > /sys/class/remoteproc/remoteproc_vdsp1/state
 #VDSP1的FW卸载：
 echo stop > /sys/class/remoteproc/remoteproc_vdsp1/state
 ```
+
+</DocScope>
 
 用户可通过以下命令修改 FW 路径（**必须是绝对路径**）：
 
@@ -107,10 +153,16 @@ echo -n <firmware路径> > /sys/module/firmware_class/parameters/path
 ``` shell
 # VDSP0
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
+```
 
+<DocScope products="RDK S600">
+
+``` shell
 # VDSP1
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
 ```
+
+</DocScope>
 
 用户需要修改原始镜像，配置 init.rc，kernel 启动后由 init 进程自动加载 VDSP 镜像。
 
@@ -120,30 +172,50 @@ echo -n <firmware路径> > /sys/module/firmware_class/parameters/path
 # VDSP0
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp0/firmware
 echo start > /sys/class/remoteproc/remoteproc_vdsp0/state
+```
 
+<DocScope products="RDK S600">
+
+``` shell
 # VDSP1
 echo <firmware名称> > /sys/class/remoteproc/remoteproc_vdsp1/firmware
 echo start > /sys/class/remoteproc/remoteproc_vdsp1/state
 ```
 
+</DocScope>
+
 **FW 版本查看**
 
 ``` shell
-#S100 VDSP0
+# VDSP0
 cat /sys/class/remoteproc/remoteproc_vdsp0/version # for vdsp0
-#S600 VDSP1（与 VDSP0 相同，仅节点不同）
+```
+
+<DocScope products="RDK S600">
+
+``` shell
+# VDSP1（与 VDSP0 相同，仅节点不同）
 cat /sys/class/remoteproc/remoteproc_vdsp1/version # for vdsp1
 ```
+
+</DocScope>
 
 **VDSP 运行状态查看**
 
 ``` shell
 #running表示已加载，offline表示未加载
-#S100 VDSP0
+# VDSP0
 cat /sys/class/remoteproc/remoteproc_vdsp0/state # for vdsp0
-#S600 VDSP1（与 VDSP0 相同，仅节点不同）
+```
+
+<DocScope products="RDK S600">
+
+``` shell
+# VDSP1（与 VDSP0 相同，仅节点不同）
 cat /sys/class/remoteproc/remoteproc_vdsp1/state # for vdsp1
 ```
+
+</DocScope>
 
 **心跳监控**
 
@@ -163,14 +235,27 @@ echo N > /sys/module/hobot_remoteproc/parameters/heartbeat_enable
 
 #### 消息连接和发送
 
-目前用户只可使用系统预设的服务名称，可使用的服务名如下表所示：
+目前用户只可使用系统预设的服务名称，可使用的服务名如下表所示（VDSP0 对应 `dcore0_*`，两平台均可用）：
 
-| VDSP   | 服务名称                                                      | 作用                                   | 是否必须启动          | VDSP 侧是否默认启动 |
+| VDSP | 服务名称 | 作用 | 是否必须启动 | VDSP 侧是否默认启动 |
 | ------ | --------------------------------------------------------- | ------------------------------------ | --------------- | ------------ |
-| DSP0/1 | dcore0_device_op/dcore1_device_op                     | 系统软件内部对 DSP 的调试控制，系统软件已经使用，用户不可再次注册和使用 | 是               | 是            |
-| DSP0/1 | dcore0_acore_heart/dcore1_acore_heart                 | 心跳机制使用，目前未使用，用户可用作其他用途               | 否               | 否            |
-| DSP0/1 | dcore0_rpmsg_bpu/dcore1_rpmsg_bpu                     | BPU 相关的控制，目前未使用，用户可用作其他用途             | 否               | 否            |
-| DSP0/1 | dcore0_rpmsg_op/dcore1_rpmsg_op                       | 工具链算子相关的控制，目前未使用，用户可用作其他用途           | 否               | 否            |
+| DSP0 | dcore0_device_op | 系统软件内部对 DSP 的调试控制，系统软件已经使用，用户不可再次注册和使用 | 是 | 是 |
+| DSP0 | dcore0_acore_heart | 心跳机制使用，目前未使用，用户可用作其他用途 | 否 | 否 |
+| DSP0 | dcore0_rpmsg_bpu | BPU 相关的控制，目前未使用，用户可用作其他用途 | 否 | 否 |
+| DSP0 | dcore0_rpmsg_op | 工具链算子相关的控制，目前未使用，用户可用作其他用途 | 否 | 否 |
+
+<DocScope products="RDK S600">
+
+S600 的 VDSP1 对应 `dcore1_*` 系列服务，与 VDSP0 的 `dcore0_*` 一一对应：
+
+| VDSP | 服务名称 | 作用 | 是否必须启动 | VDSP 侧是否默认启动 |
+| ------ | --------------------------------------------------------- | ------------------------------------ | --------------- | ------------ |
+| DSP1 | dcore1_device_op | 系统软件内部对 DSP 的调试控制，系统软件已经使用，用户不可再次注册和使用 | 是 | 是 |
+| DSP1 | dcore1_acore_heart | 心跳机制使用，目前未使用，用户可用作其他用途 | 否 | 否 |
+| DSP1 | dcore1_rpmsg_bpu | BPU 相关的控制，目前未使用，用户可用作其他用途 | 否 | 否 |
+| DSP1 | dcore1_rpmsg_op | 工具链算子相关的控制，目前未使用，用户可用作其他用途 | 否 | 否 |
+
+</DocScope>
 
 用户可使用的 API 可参考下表：
 
@@ -244,9 +329,9 @@ library/libvdsp0.a
 samples/{subdir}/vdsp0
 ```
 
-### 调试指南
+## 调试
 
-#### 日志查看
+### 日志查看
 
 VDSP FW 的日志会通过串口输出。
 
@@ -262,9 +347,16 @@ echo 0 > /proc/sys/kernel/printk
 ``` shell
 #VDSP0 默认开机执行的启动命令，日志保存路径：/log/dsp0/message
 hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp0/log -f /log/dsp0/message -r 2048 -n 200
+```
+
+<DocScope products="RDK S600">
+
+``` shell
 #VDSP1（与 VDSP0 相同用法，仅 remoteproc 节点与落盘路径换为 dsp1）
 hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp1/log -f /log/dsp1/message -r 2048 -n 200
 ```
+
+</DocScope>
 
 同样的，VDSP FW 的日志会写入 Share memory 中，由 CPU 侧 log 服务进程存入文件系统中。因此用户可通过以下路径下的文件查看日志，但是需要注意的是这里的日志并不是实时的。
 
@@ -272,13 +364,20 @@ hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp1/log -f /log/dsp1/m
 #VDSP0的日志路径：
 /log/dsp0/message
 /log/dsp0/archive/
-#VDSP1的日志路径：
-/log/dsp1/message
-/log/dsp1/archive/
 #message是临时文件，存满之后会写入到archive/目录下，当该目录下的文件达到一定数量后，会删除时间较早产生的文件
 ```
 
-#### 日志打印接口
+<DocScope products="RDK S600">
+
+``` shell
+#VDSP1的日志路径：
+/log/dsp1/message
+/log/dsp1/archive/
+```
+
+</DocScope>
+
+### 日志打印接口
 
 使用 printf 接口日志会通过串口输出。
 
@@ -289,7 +388,7 @@ DSP_*接口使用注意事项：
 1. 头文件``hb_vdsp_log.h``
 2. 接口使用示例。比如进入异常分支需要打印日志时，使用 DSP_ERR 接口，``DSP_ERR("Input parameter invalid.\n");``
 
-#### 线程状态查看
+### 线程状态查看
 
 通过以下命令可在串口中查看 VDSP 侧的线程状态。需要注意的是以下数据的统计和输出可能会影响 VDSP 的性能。
 
@@ -297,15 +396,22 @@ DSP_*接口使用注意事项：
 
 ``` shell
 (void)hb_enable_stack_track(dev_thread_stack, sizeof(dev_thread_stack)/sizeof(dev_thread_stack[0]));
-#S100 VDSP0：
+#VDSP0：
 echo on > /sys/devices/virtual/misc/vdsp0/vdsp_ctrl/dspthread
 echo off > /sys/devices/virtual/misc/vdsp0/vdsp_ctrl/dspthread
-#S600 VDSP1（与 VDSP0 相同，仅 misc 设备节点为 vdsp1）：
+```
+
+<DocScope products="RDK S600">
+
+``` shell
+#VDSP1（与 VDSP0 相同，仅 misc 设备节点为 vdsp1）：
 echo on > /sys/devices/virtual/misc/vdsp1/vdsp_ctrl/dspthread
 echo off > /sys/devices/virtual/misc/vdsp1/vdsp_ctrl/dspthread
 ```
 
-#### coredump 查看
+</DocScope>
+
+### coredump 查看
 
 和 coredump 相关的系统软件初始化主要有两部分：注册异常和使能看门狗。
 
@@ -349,9 +455,18 @@ VDSP 发生 coredump 时，Acore 会把 VDSP 所有可能使用的 memory 空间
 ddr)全部写入指定的文件系统中，路径如下：
 
 ``` shell
-#vdsp0 / vdsp1 的落盘目录相同；具体 dump 文件名会带 vdsp0_* 或 vdsp1_* 前缀以区分实例
+#vdsp0 的落盘目录：
 /log/coredump/
 ```
+
+<DocScope products="RDK S600">
+
+``` shell
+#vdsp1 的落盘目录与 vdsp0 相同，具体 dump 文件名会带 vdsp1_* 前缀以区分实例：
+/log/coredump/
+```
+
+</DocScope>
 
 新建 restore.script.sh 脚本，4个 memory
 dump 文件的路径根据实际项目的存放路径设置，把获得到的 CPU 寄存器复制到该脚本对应处，如下所示：
@@ -366,7 +481,6 @@ restore vdsp0_ddr_2024-05-06-02-50-03.hex binary 0xf0000000
 restore vdsp0_iram_2024-05-06-02-50-03.hex binary 0x08080000
 restore vdsp0_dram0_2024-05-06-02-50-03.hex binary 0x08000000
 restore vdsp0_dram1_2024-05-06-02-50-03.hex binary 0x08040000
-# VDSP1：调试步骤与 VDSP0 相同，将上述文件替换为实际生成的 vdsp1_ddr_*.hex、vdsp1_iram_*.hex 等
 
 set $ar0 = 0xf00502a8
 set $ar1 = 0xf3fdded0
@@ -406,6 +520,12 @@ set $pc = 0xf0050057
 python thread_aware_rtos.k.rtos_support.XOS_initialized = True
 ```
 
+<DocScope products="RDK S600">
+
+VDSP1 的 coredump 调试步骤与 VDSP0 完全相同，只需将上述 restore 脚本中的文件替换为实际生成的 `vdsp1_ddr_*.hex`、`vdsp1_iram_*.hex`、`vdsp1_dram0_*.hex`、`vdsp1_dram1_*.hex` 即可。
+
+</DocScope>
+
 打开 xt-gdb 命令行(xplorer 或者命令行模式均可)，按照顺序执行如下操作：
 
 ``` shell
@@ -430,12 +550,12 @@ backtrace 调试信息显示如下：
 #5  0xf0030306 in main (argc=1, argv=0xf0073704) at main.c:68
 ```
 
-#### Stack usage 查看
+### Stack usage 查看
 
 Stack usage 的说明建议阅读 Xtensa® XOS Reference Manual Reference
 Manual：\<VDSP 安装路径\>/xtensa/XtDevTools/downloads/\<version\>/docs/xos_rm.pdf。
 
-#### MPU 配置
+### MPU 配置
 
 目前部署的 MPU 主要两个作用，一是用来限制 VDSP 访问地址的范围，访问超过 MPU 允许的范围会报 coredump 错误，第二个作用是可以配置地址段的属性，详细介绍请参考 Xtensa®
 System Software Reference
@@ -457,13 +577,13 @@ VDSP 地址映射以及 MPU 保护部分如下图所示，访问 MPU 保护地�
 
 （3）对于除（1）（2）外其他段的属性配置：XTHAL_MEM_WRITEBACK
 
-#### Cadence 文档路径位置
+### Cadence 文档路径位置
 
 安装 Xplorer 后，可通过如下位置\<VDSP 安装路径\>/xtensa/XtDevTools/downloads/RI-2023.11/docs 查看已下载的文档路径。
 
-### FAQ
+## 常见问题
 
-#### VDSP 侧耗时统计方式有哪些？
+### VDSP 侧耗时统计方式有哪些？
 
 用户可使用 gettimeofday()直接获取时间，也可通过 XT_RSR_CCOUNT()获取 count 个数来换算时间，前者需要包含\#include
 \<sys/time.h\>头文件。建议使用后者来统计时间，更精确，且不建议在耗时要求较高的场景下打印日志。
@@ -471,7 +591,7 @@ VDSP 地址映射以及 MPU 保护部分如下图所示，访问 MPU 保护地�
 此外用户还可参考 Xtensa® Software Development Toolkit User's
 Guide：\<VDSP 安装路径\>/xtensa/XtDevTools/downloads/\<version\>/docs/sw_dev_toolkit_ug.pdf。
 
-#### LSP 如何修改？
+### LSP 如何修改？
 
 （1）拷贝一份模板 lsp
 
@@ -484,11 +604,11 @@ Guide：\<VDSP 安装路径\>/xtensa/XtDevTools/downloads/\<version\>/docs/sw_de
 如果建立，配置环境变量，比如配置临时环境变量``export PATH=$PATH:[*]/XtensaTools/bin``
 :::
 
-#### CPU 侧 start 加载和 stop 卸载 FW 时提示不成功？
+### CPU 侧 start 加载和 stop 卸载 FW 时提示不成功？
 
 可能是 stop 时服务根本没启动，或者 start 时服务已启动。
 
-#### VDSP 侧如何增加用户线程？
+### VDSP 侧如何增加用户线程？
 
 示例代码如下：
 
@@ -498,17 +618,17 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 
 其中 dev_thread_func 表示创建的线程函数，用来实现用户想要在线程函数中处理的功能。dev_thread_stack 表示指向线程栈的首地址(由用户分配)。STACK_SIZE_1表示栈的大小。TRACE_THREAD_PRIO 表示线程优先级，取值范围在0~15，数值越小优先级越高。
 
-#### VDSP 侧如何获取设备 id？
+### VDSP 侧如何获取设备 id？
 
 可以使用 xthal_get_prid()。
 
-#### VDSP 侧 idma 使用哪个库？
+### VDSP 侧 idma 使用哪个库？
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_5.png" alt="VDSP侧idma可选库：libidma-os和libidma-debug-os" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 请使用 libidma-os 或者 libidma-debug-os，因为我们使用 xos。
 
-#### int64_t/uint64_t/float 类型的变量打印出错？
+### int64_t/uint64_t/float 类型的变量打印出错？
 
 如果 int64_t/uint64_t/float 定义的变量在打印时输出异常的值，而在使用时（如进行大小比较等操作）是正常的。
 
@@ -518,7 +638,7 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 标准 C 库的 printf 等函数，无法在中断 handler 中使用，否则会卡死。
 :::
 
-#### VDSP 在运行过程中出现卡住问题
+### VDSP 在运行过程中出现卡住问题
 
 需要排查变量指针的地址是否是对齐：
 
@@ -530,7 +650,7 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 
 确认在中断 handler 是否使用了标准 C 库的 printf 等函数，目前中断 handler 不支持使用。
 
-#### 使用 sim 软仿时出现 seg 段溢出问题
+### 使用 sim 软仿时出现 seg 段溢出问题
 
 需要更改 sim 的 xmm 文件，路径：xtensa/xtensa/XtDevTools/install/builds/RI-2023.11-win32/Vision_Q8/xtensa-elf/lib/sim/memmap.xmm，
 将相应的溢出段的值改大，在 xplorer 下打开 cmd：
@@ -547,19 +667,19 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 
 再次编译 vdsp 工程，进行 sim 软仿。
 
-#### Idma 搬运过程中出现异常停止问题
+### Idma 搬运过程中出现异常停止问题
 
 出现此情况可以查看 idma init 函数中，是否有设置运行时间，置0可以关闭时间限制：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png" alt="IDMA初始化函数中运行时间限制参数的设置代码" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-#### 在 windows 环境编译出的镜像提示 dcore0_rpmsg_op server not start
+### 在 windows 环境编译出的镜像提示 dcore0_rpmsg_op server not start
 
 需要手动在 Build Properties 中添加 CONFIG_TEST_CASE：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png" alt="在Build Properties中手动添加CONFIG_TEST_CASE宏的配置界面" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-#### 在总线程个数大于32的运行环境下，线程状态查看功能不生效
+### 在总线程个数大于32的运行环境下，线程状态查看功能不生效
 
 这是由于线程 dump 功能实现时，默认定义存放线程信息的数组大小为32； 可以通过加大数组大小来支持大于32个线程状态查看。
 
@@ -571,27 +691,27 @@ static int32_t cycle_check(void * arg, int32_t unused)
     const int32_t countMax = 64;
 ```
 
-#### VDSP 退出流程相关的适配说明
+### VDSP 退出流程相关的适配说明
 
 系统中依赖 dev_control 线程正常运行，用户通过 enable 宏 CONFIG_PLATFORM_INIT_BUILTIN_THREADS
 来控制由 hb_platform_init 函数启动，如果用户没有 enable 就需要创建相应的线程，同时用户线程需遵循下述的流程：
 
 （1）在用户任务循环线程中添加退出判断的逻辑：调用函数 hb_is_thread_stop，返回1表示需要立即退出线程
 
-#### VDSP log 使用场景限制
+### VDSP log 使用场景限制
 
 （1）当前中断 handler 不支持直接或间接使用标准 C 库的 printf，如果使用会出现 VDSP 挂死
 
 （2）在 hb_platform_init 之前不支持直接或间接使用标准 C 库的 printf，如果使用可能引发低概率 boot 失败的问题
 
-#### VDSP 编译注意事项
+### VDSP 编译注意事项
 
 （1）需要定义平台宏，不同平台对应的宏包括：CONFIG_ARCH_HOBOT_SOC_SIGIE、CONFIG_ARCH_HOBOT_SOC_SIGIP、CONFIG_ARCH_HOBOT_SOC_SIGIB
 
 （2）默认支持不同的 VDSP
 CORE 可加载同一个 FW，同时就不需要定义 CONFIG_VDSP 宏（CONFIG_VDSP0/CONFIG_VDSP1不再被使用）
 
-#### 安全下电和休眠流程
+### 安全下电和休眠流程
 
 （1）在安全下电和休眠流程的处理流程中，驱动会检查 VDSP
 Firmware 状态并确保已经进入停止状态后才继续相应的动作；同时建议在 APP 中实现 VDSP 退出流程
@@ -705,30 +825,30 @@ NA
 | `dsp_id` | `-d` / `--dsp_id=<id>`，指定 VDSP 核编号（与 `hb_vdsp_*`、`dcore<id>_rpmsg_op` 等一致） | `0` |
 | `dsp_pathname` | `-p` / `--dsp_pathname=<path>`，指定 VDSP Firmware 路径（传给 `hb_vdsp_start`） | `/app/vdsp_demo/vdsp_sample/res/q8sample` |
 | `sample-type` | `-t` / `--sample-type=<0\|1>`，sample 类型：`0` 基础（basic）、`1` 完整链路（full） | `1` |
-| `case` | `-c` / `--case=<name>`，用例名（如 `xi-sample-flip`；代码中还分支 `flip_stress`、`flops_stress` 等） | `xi-sample-flip` |
-| `test_time` | `--test_time=<秒>`，压力类用例时长，单位秒（用于 `flip_stress` / `flops_stress` 等） | `5` |
-| `loading` | `--loading=<0-100>`，压力类用例负载百分比 | `80` |
 | `help` | `-h` / `--help`，打印用法并退出（未知参数也会进入 `usage()`） | （无） |
+
+:::note
+当前板端 `vdsp_sample.c` 仅支持上表参数，sample 内部固定以 `xi-sample-flip` 用例调用 VDSP。若需扩展更多用例（如 `flip_stress`、`flops_stress` 等）或新增 `case`/`test_time`/`loading` 等参数，需自行修改 `vdsp_sample.c` 源码并重新编译。
+:::
 
 ### 运行结果说明
 
 ``` bash
 root@ubuntu:/app/vdsp_demo/vdsp_sample# ./vdsp_sample -d 1 -p /app/vdsp_demo/vdsp_sample/res/q8sample -t 0
-vdsp_sample_cxt:
+vdsp_sample_cxt_s:
         vdsp_id:1
-        case_name:xi-sample-flip
-        dsp_pathname:/app/vdsp_demo/vdsp_sample/res/q8sample
-vdsp_call_params:
+        vdsp_pathname:/app/vdsp_demo/vdsp_sample/res/q8sample
+vdsp_call_params_s:
         cmd:xi-sample-flip
         type:0
         buf_width:128
         buf_height:128
         vdsp_buf0:0xfffd0000
         vdsp_buf1:0xfffc0000
-result: 0
+recv_buf: <VDSP 返回内容>
 ```
 
-运行结束后会得到上述 log 输出，recv_buf 返回0表示执行正常。
+运行结束后会得到上述 log 输出，其中 `recv_buf` 为 VDSP 侧通过 rpmsg 回复的内容；若各步 `hb_vdsp_*` / `hb_rpmsg_*` 接口均返回 `0`（`HB_VDSP_OK` / 成功）且无 `fail` 打印，表示执行正常。
 
 ## VDSP API 介绍
 
@@ -808,15 +928,15 @@ VDSP0
   - dcore0_rpmsg_bpu.
   - dcore0_rpmsg_op.
 
+<DocScope products="RDK S600">
+
 VDSP1
 
   - dcore1_acore_heart.
   - dcore1_rpmsg_bpu.
   - dcore1_rpmsg_op.
 
-:::warning
-S100上没有 VDSP1，使用时需要注意。
-:::
+</DocScope>
 
 【说明】
 
@@ -3342,5 +3462,8 @@ int32_t boot_lib_mem_map_test(int32_t dsp_id)
 
 ## 相关文档
 
+- 前置：[搭建开发环境](../../06_environment_build/01_environment_build.md)
+- 关联（跨核）：[Watchdog](./18_driver_watchdog.md)（VDSP 心跳/复位与看门狗联动）
+- 板端示例：`/app/vdsp_demo/vdsp_sample/`、`/app/vdsp_demo/vdsp_ipcfhal_sample/`
 - [算法工具链开发指南](/Advanced_development/algorithm_toolchain)
 - [算法示例](/Demos/algorithm_demo/summary)
