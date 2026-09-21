@@ -12,26 +12,472 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 概述
 
-本文介绍 MCU1（FreeRTOS）的开发方法，包括 MCU 中断号、FreeRTOS 任务创建、中断使用、内存管理、LOG 与共享内存等内容。
+本文介绍 MCU1（FreeRTOS）的开发方法，包括中断资源与中断使用、各系统功能的任务划分与集成要求、任务创建与内存管理，以及 LOG 区域、共享内存与编译目录的调整方法。
 
-- **定位**：帮助用户在 MCU1 上进行 FreeRTOS 应用开发与系统集成。
-- **适用读者**：需要在 MCU1 上开发或集成 FreeRTOS 业务的深度定制开发者。
-- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
-- **与其他模块关系**：MCU1 固件经 [MCU 系统说明](02_MCU_build_system.md) 的编译系统构建，由 MCU0 通过 remoteproc 加载；与 Acore 通信依赖 IPC，参见 [IPC 使用指南](08_mcu_ipc.md)。
+- **定位**：说明 MCU1 上可用的中断资源与中断使用方式、系统功能的任务划分与集成约束、FreeRTOS 任务创建与内存管理方案，以及 LOG 区域、共享内存与编译目录的调整方法。中断号与中断源的全量对照表见文末 [附录：MCU 中断号及模块对应关系](#附录mcu-中断号及模块对应关系)。
+- **适用读者**：需要在 MCU1 上开发 FreeRTOS 业务，或在既有系统功能上做裁剪与二次集成的深度定制开发者。
+- **前置条件**：主机编译环境与 MCU1 固件的加载方式参见 [MCU 快速入门指南](01_basic_information.md)；建议先了解代码包目录与编译系统，参见 [MCU 代码包结构介绍](00_code_release.md) 与 [MCU 系统说明](02_MCU_build_system.md)。
+- **与其他模块关系**：MCU1 固件由 [MCU 系统说明](02_MCU_build_system.md) 所述编译系统构建，经 MCU0 通过 remoteproc 加载运行；与 Acore 的通信依赖 IPC，参见 [IPC 使用指南](08_mcu_ipc.md)；新增中断时需避开 MCU0 已占用的中断。
+
+**范围说明：** 本文只涉及 MCU1 侧的开发与集成。MCU0 固件不对外释放源码，文中标注"需要放在 MCU0 上处理"的内容仅供了解资源占用，MCU1 客户无需实现。
 
 ## 代码路径
 
-- `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml`：S100 增删编译目录配置
-- `mcu/Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml`：S600 增删编译目录配置
-- `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld`：S100 链接脚本
-- `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld`：S600 链接脚本
-- `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/`：S100 任务、中断、启动代码（Task_Hal.c、HorizonTask.c、Isr_Hal.c、SuperSoC_ISR.s）
-- `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/`：S600 任务、中断、启动代码（Task_Hal.c、HorizonTask.c、Isr_Hal.c、S600_ISR.s）
-- `mcu/OpenSource/FreeRTOS/`：FreeRTOS 内核开源代码（内存管理位于 portable/MemMang/）
-- `mcu/Service/Log`：Log 服务
-- `mcu/samples/MyDemo`：自定义编译目录示例
+MCU1 的代码分布在代码包的 `Build`、`Target`、`OpenSource`、`Service`、`samples` 目录下（目录划分见 [MCU 代码包结构介绍](00_code_release.md)）。S100 与 S600 的目录结构一致，下表用 `<SOC>` 代表芯片代号（`S100` / `S600`），`...` 代表 `mcu/Target/Target_<SOC>/Target-hobot-lite-freertos-mcu1`：
+
+| 用途 | 路径 |
+|---|---|
+| 编译入口 | `mcu/Build/FreeRtos_mcu1/` |
+| 编译目录配置 | `mcu/Build/FreeRtos_mcu1/build_config/<SOC>/lite-matrix-B-mcu1.yaml` |
+| 链接脚本 | `mcu/Build/FreeRtos_mcu1/Linker/gcc/<SOC>/link_freertos_mcu1.ld` |
+| 启动代码与异常向量表 | `.../target/OsAssembly/gcc/startup.s`；注意 S100 位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/startup.s` |
+| 中断向量表定义 | S600：`.../target/OsAssembly/gcc/S600_ISR.s`；S100：`mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/SuperSoC_ISR.s` |
+| 任务创建 | `.../target/FreeRtosOsHal/Task_Hal.c`、`.../target/HorizonTask.c` |
+| 中断配置与处理函数 | `.../target/FreeRtosOsHal/Isr_Hal.c`（中断配置表与 `FreeRtos_Irq_Init`）、`.../target/HorizonISR.c`（各中断的处理函数） |
+| 异常钩子 | `.../target/HorizonHook.c` |
+| 共享内存地址与 OS 定义 | `.../target/FreeRtosOsHal/Os.h` |
+| FreeRTOS 内核 | `mcu/OpenSource/FreeRTOS/`（内存管理见 `portable/MemMang/`） |
+| Log 服务 | `mcu/Service/Log/` |
+| 使用样例 | `mcu/samples/`（如 `Uart/`、`Can/Can_Pro_Sample`） |
 
 ## MCU 中断号及模块对应关系
+
+MCU0 与 MCU1 处于同一硬件域，中断源与中断号的全量对照表较长，已移至文末 [附录：MCU 中断号及模块对应关系](#附录mcu-中断号及模块对应关系)。
+
+MCU0 已占用的中断见下一节；MCU1 已实现的中断处理函数位于 `Target/Target_<SOC>/Target-hobot-lite-freertos-mcu1/target/HorizonISR.c`。
+
+## MCU 中断使用情况
+
+由于 MCU0 和 MCU1 处于同一硬件域，所以当中断产生时，MCU0/MCU1 都能接收到同一中断。因此为了保障 MCU 系统的正常运行，同一中断只能由 MCU0 或 MCU1 使能。但是又因为 MCU0 不对外开源，因此需要对 MCU0 使用的中断进行总结，避免 MCU1 客户开发过程中使用冲突。
+
+目前 MCU0已经使用的中断：
+<DocScope products="RDK S100">
+| 模块 | 中断号 | 名称 |
+|--------|----------------------------------------|---------------------------------------------|
+|GPIO0|68|Gpio_Icu0ExtIsr|
+|GPIO1|69|Gpio_Icu1ExtIsr|
+|GPIO2|70|Gpio_Icu2ExtIsr|
+|WWDT0|71|Wdg_Ins0RstIsr|
+|WWDT0|72|Wdg_Ins0IntIsr|
+|WWDT1|73|Wdg_Ins1RstIsr|
+|WWDT1|74|Wdg_Ins1IntIsr|
+|WWDT2|75|Wdg_Ins2RstIsr|
+|WWDT2|76|Wdg_Ins2IntIsr|
+|GPT0|81|Gpt_Ins0Ch2Isr|
+|GPT1|83|Gpt_Ins1Ch0Isr|
+|GPT1|84|Gpt_Ins1Ch1Isr|
+|L1FCHM|106|Fchm_MissionIntIsr|
+||107|Fchm_NcfIntIsr|
+||108|Fchm_CfIntIsr|
+|PWM0|111|Pwm_Generic0Isr|
+|MDMA1|211|Mdma1_Ch0Isr|
+|PDMA0|213|PDMA0_Ch0Isr|
+|PPS(RTC)|221|Pps_IcuRtcIsr|
+|HSM_IPC1|241|Ipc_HsmIpc1Ch4Isr|
+|HSM_IPC1|242|Ipc_HsmIpc1Ch5Isr|
+|CPU_IPC1_CH0|251|Ipc_CpuIpc1Ch0Isr|
+|CPU_IPC1_CH1|252|Ipc_CpuIpc1Ch1Isr|
+|CPU_IPC1_CH2|253|Ipc_CpuIpc1Ch2Isr|
+|CPU_IPC0_CH8|262|Ipc_CpuIpc0Ch8Isr|
+|CPU_IPC0_CH9|263|Ipc_CpuIpc0Ch9Isr|
+|CPU_IPC0_CH10|264|Ipc_CpuIpc0Ch10Isr|
+|CPU_IPC0_CH11|265|Ipc_CpuIpc0Ch11Isr|
+|CPU_IPC0_CH12|266|Ipc_CpuIpc0Ch12Isr|
+|CPU_IPC0_CH13|267|Ipc_CpuIpc0Ch13Isr|
+|CPU_IPC0_CH14|268|Ipc_CpuIpc0Ch14Isr|
+|CPU_IPC0_CH15|269|Ipc_CpuIpc0Ch15Isr|
+|CPU_ROUTER_SWTRIG1_0|270|Router_Swtrig1Ch0Isr|
+|CPU_ROUTER_SWTRIG1_1|271|Router_Swtrig1Ch1Isr|
+|CPU_ROUTER_SWTRIG1_2|272|Router_Swtrig1Ch2Isr|
+|CPU_ROUTER_SWTRIG1_3|273|Router_Swtrig1Ch3Isr|
+|RTC|360|Rtc_Isr|
+</DocScope>
+<DocScope products="RDK S600">
+| 模块 | 中断号 | 名称 |
+|--------|----------------------------------------|---------------------------------------------|
+|HSM_IPC3|366|Ipc_HsmIpc3Ch4Isr|
+|HSM_IPC3|367|Ipc_HsmIpc3Ch5Isr|
+|CPU_IPC2_CH0|405|Ipc_CpuIpc2Ch0Isr|
+|CPU_IPC2_CH1|406|Ipc_CpuIpc2Ch1Isr|
+|CPU_IPC2_CH2|407|Ipc_CpuIpc2Ch2Isr|
+|CPU_IPC2_CH3|408|Ipc_CpuIpc2Ch3Isr|
+|CPU_IPC2_CH4|409|Ipc_CpuIpc2Ch4Isr|
+|CPU_IPC2_CH5|410|Ipc_CpuIpc2Ch5Isr|
+|CPU_IPC2_CH6|411|Ipc_CpuIpc2Ch6Isr|
+|CPU_IPC2_CH7|412|Ipc_CpuIpc2Ch7Isr|
+|CPU_IPC3_CH0|413|Ipc_CpuIpc3Ch0Isr|
+|CPU_IPC3_CH1|414|Ipc_CpuIpc3Ch1Isr|
+|CPU_IPC3_CH2|415|Ipc_CpuIpc3Ch2Isr|
+|CPU_IPC3_CH3|416|Ipc_CpuIpc3Ch3Isr|
+|CPU_IPC3_CH4|417|Ipc_CpuIpc3Ch4Isr|
+|CPU_IPC3_CH5|418|Ipc_CpuIpc3Ch5Isr|
+|CPU_IPC3_CH6|419|Ipc_CpuIpc3Ch6Isr|
+|CPU_IPC3_CH7|420|Ipc_CpuIpc3Ch7Isr|
+|CPU_IPC4_CH0|421|Ipc_CpuIpc4Ch0Isr|
+|CPU_IPC4_CH1|422|Ipc_CpuIpc4Ch1Isr|
+|CPU_IPC4_CH2|423|Ipc_CpuIpc4Ch2Isr|
+|CPU_IPC4_CH3|424|Ipc_CpuIpc4Ch3Isr|
+|CPU_IPC5_CH0|425|Ipc_CpuIpc5Ch0Isr|
+|CPU_IPC5_CH1|426|Ipc_CpuIpc5Ch1Isr|
+|CPU_IPC5_CH2|427|Ipc_CpuIpc5Ch2Isr|
+|CPU_IPC5_CH3|428|Ipc_CpuIpc5Ch3Isr|
+|MDMA0_CH0|316|Mdma0_Ch0Isr|
+|MDMA0_CH1|317|Mdma0_Ch1Isr|
+|MDMA1_CH0|319|Mdma1_Ch0Isr|
+|MDMA1_CH1|320|Mdma1_Ch1Isr|
+|MDMA1_CH2|321|Mdma1_Ch2Isr|
+|MDMA1_CH3|322|Mdma1_Ch3Isr|
+|MDMA2_CH1|325|Mdma2_Ch1Isr|
+|MDMA2_CH2|326|Mdma2_Ch2Isr|
+|IPC0_CH1|260|Ipc0_Ch1Isr|
+|IPC0_CH2|261|Ipc0_Ch2Isr|
+|IPC0_CH3|262|Ipc0_Ch3Isr|
+|IPC0_CH5|264|Ipc0_Ch5Isr|
+|IPC0_CH6|265|Ipc0_Ch6Isr|
+|IPC0_CH8|267|Ipc0_Ch8Isr|
+|IPC0_CH9|268|Ipc0_Ch9Isr|
+|IPC0_CH10|269|Ipc0_Ch10Isr|
+|IPC0_CH11|270|Ipc0_Ch11Isr|
+|IPC1_CH0|283|Ipc1_Ch0Isr|
+|IPC1_CH1|284|Ipc1_Ch1Isr|
+|IPC1_CH3|286|Ipc1_Ch3Isr|
+|IPC1_CH4|287|Ipc1_Ch4Isr|
+|IPC1_CH5|288|Ipc1_Ch5Isr|
+|IPC1_CH6|289|Ipc1_Ch6Isr|
+|IPC1_CH7|290|Ipc1_Ch7Isr|
+|IPC2_CH0|299|Ipc2_Ch0Isr|
+|IPC2_CH1|300|Ipc2_Ch1Isr|
+|IPC2_CH2|301|Ipc2_Ch2Isr|
+|IPC2_CH3|302|Ipc2_Ch3Isr|
+|IPC2_CH4|303|Ipc2_Ch4Isr|
+|IPC2_CH5|304|Ipc2_Ch5Isr|
+|IPC2_CH6|305|Ipc2_Ch6Isr|
+|IPC2_CH7|306|Ipc2_Ch7Isr|
+</DocScope>
+
+## 增加编译目录教程
+
+完整的机制（`BuildPath` 与 `HeadPath` 的语义、模块 `SConscript` 模板、编译链接参数）见 [MCU 系统说明](02_MCU_build_system.md) 的「新增编译目录」一节；本节只说明 S100 与 S600 的差异。
+
+### 增加编译目录流程
+
+<DocScope products="RDK S100">
+1. 修改 `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml` 文件，增加或删除参与编译的目录。
+
+2. 普通业务/demo 源码目录建议添加到 `BuildPath`。例如新增 `mcu/samples/MyDemo`，可增加：
+
+```yaml
+BuildPath:
+  - samples/MyDemo
+```
+
+3. `Common`、`McalCdd`、`Platform`、`Service` 等目录已有独立的静态库 path 字段，新增这些模块时应放到对应字段中：
+
+```yaml
+StaticLibCommonPath:
+  - Common/xxx
+
+StaticLibMcalCddPath:
+  - McalCdd/xxx
+
+StaticLibPlatformPath:
+  - Platform/xxx
+
+StaticLibServicePath:
+  - Service/xxx
+```
+
+4. 在新增模块目录下添加 `SConscript` 文件。`SConstruct` 会根据 yaml 中配置的 path 扫描对应目录下的 `SConscript` 并参与编译。
+
+</DocScope>
+<DocScope products="RDK S600">
+1. 修改 mcu/Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml 文件，增加/删除相应的模块。
+
+   如增加 mcu/Service/Log 文件夹，只需增加相应的位置即可。目前 Service/Platform/McalCdd/Common 有独立的 path，增加该目录需要放在相应位置。除此之外，其他文件夹的添加统一放在 BuildPath 即可
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="增加编译目录流程示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+2. 在添加编译的模块下，添加 SConscript 文件，SConscript 文件可以从任意已经编译的模块文件夹下获取
+</DocScope>
+
+## FreeRTOS 系统集成
+
+MCU 侧有几个系统关键功能，如下图所示：
+<DocScope products="RDK S100">
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system.png" alt="MCU FreeRTOS 系统简介示意图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+</DocScope>
+<DocScope products="RDK S600">
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="MCU FreeRTOS 系统简介截图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+</DocScope>
+
+### 功能与任务划分
+
+上图可以看到各个功能所在任务的相对优先级及同一个任务中的调用顺序，客户集成请保持各功能的相对优先级、所在 core 及同一个任务中的调用顺序。各个功能的说明及注意事项如下：
+
+下文中标注"需要放在 MCU0 上处理"的功能属于 MCU0 侧（MCU0 源码不对外释放），MCU1 客户无需实现，但需要了解它们占用的资源（如 flash、IPC）。
+
+#### 电源管理
+
+ScmiProcess：放在高优先级任务中，建议放在 2ms 任务中。如果不能满足，最大调度周期不要超过100ms。放在调度周期长的任务中会影响启动时间，一般评估影响可以按照启动过程中的"scmi 通讯次数 x 所在任务周期"计算。
+
+SysPower_State_Loop/SysPower_State_MainFunction：放在低优先级任务中。
+
+#### Acore 启动
+
+AcoreBootProc：放在低优先级任务中。这个里面会有 Acore 启动需要的相关初始化等。其中就有 Housekeeping 关键功能的初始化 Housekeeping_WriteMagicNum，如果该功能未被正常初始化，Acore 对 MCU 的寄存器访问会导致 Acore 异常。
+
+集成注意：需要放在 MCU0 上处理。AcoreBoot 需要使用 flash，需要避免 flash 冲突问题。和下文的 OTA 功能都放到同一个低优任务中处理。
+
+#### OTA
+
+OtaFlash_MainFunction：放在低优先级任务，涉及到 OTA 相关处理逻辑。
+
+集成注意：需要放在 MCU0 上处理。OTA 功能需要使用 flash、IPC 以及 crypto 功能。需要避免 flash 并发操作的冲突问题，建议将所有使用到 flash 相关的功能放到一个低优先级的 task 中串行使用。比如前文提到的 AcoreBootProc 就是和它在同一个低优任务中。
+
+#### 休眠唤醒
+
+SysPower_McuCoreEnterLowPower：放在本 core 上能支持的最短周期最高优先级任务中。
+
+集成注意：该函数只有在需要休眠唤醒时才会真正运行，其他时候都是快速退出不会产生额外耗时。
+
+#### 系统中断说明
+
+MCU 和 Acore/HSM 通信依赖 IPC，IPC 系统服务涉及到的中断可以参考：[IPC 的相关介绍](./08_mcu_ipc.md) 章节
+这些中断优先级建议配置成比平常的功能类中断优先级高，这些中断本身可以配置成同样的优先级。
+
+### 任务创建
+
+FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将硬件初始化，RTOS 系统初始化，所有任务的创建这些都弄好，最后启动 RTOS 的调度器，开始多任务的调度；第二种，在 main 函数中将硬件和 RTOS 系统先初始化好，然后创建一个启动任务后就启动调度器，在启动任务里面创建各种应用任务，当所有任务都创建成功后，启动任务把自己删除。两种方式没有太强的优劣之分，RDK S100/RDK S600 选择第一种方式。
+
+<DocScope products="RDK S100">
+
+任务创建位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c` 中，举例如下：
+
+</DocScope>
+<DocScope products="RDK S600">
+
+任务创建位于 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c` 中，举例如下：
+
+</DocScope>
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="FreeRTOS 系统任务创建示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+xxx_Startup 任务，为启动初始化相关的函数，只执行一次。
+FreeRtos_OsTask_SysCore_BSW_xms 和 FreeRtos_OsTask_SysCore_ASW_xms 为周期性任务，会根据 xms 的不同产生周期性的调度。同时周期性任务内部会有工作处理，细节见本章上一节"MCU FreeRTOS 系统简介"章节。
+
+如果客户自行开发，可参考上述两种类型的例子。也可以在已经创建的任务中处理自己的 demo，见下文。
+<DocScope products="RDK S100">
+
+任务函数位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中，
+
+</DocScope>
+<DocScope products="RDK S600">
+
+任务函数位于 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中，
+
+</DocScope>
+以 OsTask_SysCore_BSW_10ms 为例，任务会周期性地检测 Shell 事务处理：
+```c
+TASK(OsTask_SysCore_BSW_10ms)
+{
+    #ifdef SHELL_ENABLE
+        Shell_Handler();
+    #endif
+}
+```
+
+### 中断使用
+
+<DocScope products="RDK S100">
+
+FreeRTOS 的中断使用集中在 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
+
+</DocScope>
+<DocScope products="RDK S600">
+
+FreeRTOS 的中断使用集中在 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
+
+</DocScope>
+```c
+void FreeRtos_Irq_Init(void)
+{
+  int interrupt_index = 0;
+  for(; interrupt_index < INTERRUPT_MCU_MAX_NUM; interrupt_index++)
+  {
+    if((!Interrupt_McuConfigs[interrupt_index].irqNumber) && (!Interrupt_McuConfigs[interrupt_index].priority)
+        && (!Interrupt_McuConfigs[interrupt_index].Handler) && (!Interrupt_McuConfigs[interrupt_index].enable_flag))
+    {
+      break;
+    }
+
+    if(Interrupt_McuConfigs[interrupt_index].Handler)
+    {
+      INT_SYS_InstallHandler(Interrupt_McuConfigs[interrupt_index].irqNumber, Interrupt_McuConfigs[interrupt_index].Handler, NULL);
+    }
+
+    if(Interrupt_McuConfigs[interrupt_index].priority)
+    {
+      INT_SYS_SetPriority(Interrupt_McuConfigs[interrupt_index].irqNumber, Interrupt_McuConfigs[interrupt_index].priority);
+    }
+
+    if(Interrupt_McuConfigs[interrupt_index].enable_flag)
+    {
+      INT_SYS_EnableIRQ(Interrupt_McuConfigs[interrupt_index].irqNumber);
+    }
+  }
+
+}
+```
+
+<DocScope products="RDK S100">
+
+如果没有设置中断处理函数，那么中断处理函数处于默认状态，见 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/SuperSoC_ISR.s` 文件。
+
+</DocScope>
+<DocScope products="RDK S600">
+
+如果没有设置中断处理函数，那么中断处理函数处于默认状态，见 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/OsAssembly/gcc/S600_ISR.s` 文件。
+
+</DocScope>
+以 RTC 中断处理函数为例：
+```c
+// DefaultISR---默认中断处理函数
+    .align  4
+    .weak   DefaultISR
+    .type   DefaultISR, %function
+DefaultISR:
+    hlt #0
+    b   .
+    .pool
+    .size   DefaultISR, . - DefaultISR
+
+/*    Macro to define default handlers. Default handler
+ *    will be weak symbol and just dead loops. They can be
+ *    overwritten by other handlers */
+    .macro  def_irq_handler handler_name
+    .weak   \handler_name
+    .set    \handler_name, DefaultISR
+    .endm
+
+// 设置RTC默认中断处理函数
+    def_irq_handler AON_RTC_INTR
+```
+
+注意：
+在 MCU1使能中断的时候一定要确保 MCU0相应的中断处于关闭状态
+
+### 内存管理
+
+FreeRTOS 内存管理方案位于 `/mcu/OpenSource/FreeRTOS/portable/MemMang/` 文件夹中，共有 5 种内存管理算法，分别是 heap_1.c、heap_2.c、heap_3.c、heap_4.c 和 heap_5.c。FreeRTOS 的内存管理模块通过对内存的申请、释放操作，来管理用户和系统对内存的使用，使内存的利用率和使用效率达到最优，同时最大限度地解决系统可能产生的内存碎片问题。
+
+#### heap_1.c
+
+heap_1.c 管理方案是 FreeRTOS 提供所有内存管理方案中最简单的一个，它只能申请内存而不能进行内存释放，这样子对于要求安全的嵌入式设备来说是最好的，因为不允许内存释放，就不会产生内存碎片而导致系统崩溃，但是也有缺点，那就是内存利用率不高，某段内存只能用于内存申请的地方，即使该内存只使用一次，也无法让系统回收重新利用。
+
+#### heap_2.c
+
+heap_2.c 方案与 heap_1.c 方案采用的内存管理算法不一样，它采用一种最佳匹配算法(best fit algorithm)，比如我们申请100字节的内存，而可申请内存中有三块对应大小200字节，500字节和1000字节大小的内存块，按照算法的最佳匹配，这时候系统会把200字节大小的内存块进行分割并返回申请内存的起始地址，剩余的内存则插回链表留待下次申请。Heap_2.c 方案支持释放申请的内存，将释放的内存重新插入链表，并按照大小进行排序，但是它不能把相邻的两个小的内存块合成一个大的内存块，对于每次申请内存大小都比较固定的，这个方式是没有问题的，而对于每次申请并不是固定内存大小的则会造成内存碎片，后面要讲解的 heap_4.c 方案采用的内存管理算法能解决内存碎片的问题，可以把这些释放的相邻的小的内存块合并成一个大的内存块。
+
+#### heap_3.c
+
+heap_3.c 方案只是简单的封装了标准 C 库中的 malloc()和 free()函数，并且能满足常用的编译器。重新封装后的 malloc()和 free()函数具有保护功能，采用的封装方式是操作内存前挂起调度器、完成后再恢复调度器。
+
+#### heap_4.c
+
+heap_4.c 方案与 heap_2.c 方案一样都采用最佳匹配算法来实现动态的内存分配，但是不一样的是 heap_4.c 方案还包含了一种合并算法，能把相邻的空闲的内存块合并成一个更大的块，这样可以减少内存碎片。heap_4.c 方案特别适用于移植层中可以直接使用 pvPortMalloc()和 vPortFree()函数来分配和释放内存的代码。heap_4.c 内存管理方案的空闲块链表不是以内存块大小进行排序的，而是以内存块起始地址大小排序，内存地址小的在前，地址大的在后，因为 heap_4.c 方案还有一个内存合并算法，在释放内存的时候，假如相邻的两个空闲内存块在地址上是连续的，那么就可以合并为一个内存块，这也是为了适应合并算法而作的改变。
+
+#### heap_5.c
+
+heap_5.c 方案在实现动态内存分配时与 heap_4.c 方案一样，采用最佳匹配算法和合并算法，并且允许内存堆跨越多个非连续的内存区，也就是允许在不连续的内存堆中实现内存分配，比如用户在片内 RAM 中定义一个内存堆，还可以在外部 SDRAM 再定义一个或多个内存堆，这些内存都归系统管理。该方案较为复杂，实时性略逊于 heap_4.c。
+
+<DocScope products="RDK S100">
+
+#### RDK S100 内存方案
+
+RDK S100 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
+</DocScope>
+<DocScope products="RDK S600">
+
+#### RDK S600 内存方案
+
+RDK S600 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
+</DocScope>
+
+## LOG 区域调整
+
+### MCU1区域调整
+
+<DocScope products="RDK S100">
+修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="MCU1区域调整截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+</DocScope>
+<DocScope products="RDK S600">
+修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
+</DocScope>
+
+### Acore 区域调整
+
+<DocScope products="RDK S100">
+修改 `source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="Acore 区域调整截图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+</DocScope>
+<DocScope products="RDK S600">
+修改 `source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。
+</DocScope>
+
+## MCU 与 Acore 共享内存区域预留
+
+该共享内存区域空间开辟在 MCU0所在空间，但 MCU0和 MCU1同属于 MCU SRAM 域，因此 MCU1也可以使用相应地址
+```c
+MCU_STATE_Reserved      : org = 0x0C800800, len = 1K
+```
+
+### 目前已经被占用的区域：
+
+```c
+MCU1_VERSION:  org = 0x0C800800, len = 0x60
+MCU_ALIVE:     org = 0x0C800860, len = 0x10
+     ---MCU0_ALIVE：org = 0x0C800860, len = 0x04；
+     ---MCU1_ALIVE：org = 0x0C800864, len = 0x04；
+     ---RESERVED：  org = 0x0C800868, len = 0x08；
+```
+
+### 使用注意事项
+
+如果使用共享内存的方式传输数据，可能会出现 MCU 数据更新至 SRAM，但是 Acore 的缓存还为旧数据的问题，因此导致读取数据不同步。
+
+为避免 Acore 和 MCU 出现数据不同步的问题，需要在变量前加 `volatile` 关键字，或者使用 `ioremap_np()` 函数。这两种方式都是为了避免读取缓存，而是直接读取 SRAM 数据。
+
+## 调试
+
+- **中断核对**：新增中断前，核对中断号与「MCU 中断号及模块对应关系」表一致，避免与 MCU0 已占用中断冲突。
+- **任务集成核对**：集成功能时保持各功能的相对优先级、所在 core 及同一任务中的调用顺序与参考实现一致。
+- **内存方案核对**：默认可使用 heap_4.c 内存管理方案；如需定制，核对内存分配/释放行为是否符合预期。
+
+## 常见问题
+
+### Acore 访问 MCU 寄存器导致 Acore 异常
+
+**原因**：Boot 流程中的 `Housekeeping_WriteMagicNum` 未正常初始化。
+
+**解决**：确保 `AcoreBootProc` 在 MCU0 上正常完成初始化，避免对 MCU 寄存器的访问导致 Acore 异常。
+
+### 共享内存传输数据读取不同步
+
+**原因**：MCU 将数据更新至 SRAM 后，Acore 侧缓存仍为旧数据。
+
+**解决**：在共享变量前加 `volatile` 关键字，或使用 `ioremap_np()` 函数直接读取 SRAM 数据。
+
+## 相关文档
+
+- [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
+- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)
+
+## 附录：MCU 中断号及模块对应关系
+
 <DocScope products="RDK S100">
 | 模块 | 中断号 | 名称 |
 |--------|----------------------------------------|---------------------------------------------|
@@ -352,6 +798,7 @@ import DocScope from '@site/src/components/DocScope';
 |CMN_PVTC|369|Pvt_CmnAlarmIsr|
 |CMN_PPU_PMU|370|Pmu_Ppu0Isr|
 </DocScope>
+
 <DocScope products="RDK S600">
 | 模块 | 中断号 | 名称 |
 |--------|----------------------------------------|---------------------------------------------|
@@ -848,391 +1295,3 @@ import DocScope from '@site/src/components/DocScope';
 ||522|Rec_Irq148|
 ||523|Rec_Irq149|
 </DocScope>
-
-## MCU 中断使用情况
-由于 MCU0 和 MCU1 处于同一硬件域，所以当中断产生时，MCU0/MCU1 都能接收到同一中断。因此为了保障 MCU 系统的正常运行，同一中断只能由 MCU0 或 MCU1 使能。但是又因为 MCU0 不对外开源，因此需要对 MCU0 使用的中断进行总结，避免 MCU1 客户开发过程中使用冲突。
-
-目前 MCU0已经使用的中断：
-<DocScope products="RDK S100">
-| 模块 | 中断号 | 名称 |
-|--------|----------------------------------------|---------------------------------------------|
-|GPIO0|68|Gpio_Icu0ExtIsr|
-|GPIO1|69|Gpio_Icu1ExtIsr|
-|GPIO2|70|Gpio_Icu2ExtIsr|
-|WWDT0|71|Wdg_Ins0RstIsr|
-|WWDT0|72|Wdg_Ins0IntIsr|
-|WWDT1|73|Wdg_Ins1RstIsr|
-|WWDT1|74|Wdg_Ins1IntIsr|
-|WWDT2|75|Wdg_Ins2RstIsr|
-|WWDT2|76|Wdg_Ins2IntIsr|
-|GPT0|81|Gpt_Ins0Ch2Isr|
-|GPT1|83|Gpt_Ins1Ch0Isr|
-|GPT1|84|Gpt_Ins1Ch1Isr|
-|L1FCHM|106|Fchm_MissionIntIsr|
-||107|Fchm_NcfIntIsr|
-||108|Fchm_CfIntIsr|
-|PWM0|111|Pwm_Generic0Isr|
-|MDMA1|211|Mdma1_Ch0Isr|
-|PDMA0|213|PDMA0_Ch0Isr|
-|PPS(RTC)|221|Pps_IcuRtcIsr|
-|HSM_IPC1|241|Ipc_HsmIpc1Ch4Isr|
-|HSM_IPC1|242|Ipc_HsmIpc1Ch5Isr|
-|CPU_IPC1_CH0|251|Ipc_CpuIpc1Ch0Isr|
-|CPU_IPC1_CH1|252|Ipc_CpuIpc1Ch1Isr|
-|CPU_IPC1_CH2|253|Ipc_CpuIpc1Ch2Isr|
-|CPU_IPC0_CH8|262|Ipc_CpuIpc0Ch8Isr|
-|CPU_IPC0_CH9|263|Ipc_CpuIpc0Ch9Isr|
-|CPU_IPC0_CH10|264|Ipc_CpuIpc0Ch10Isr|
-|CPU_IPC0_CH11|265|Ipc_CpuIpc0Ch11Isr|
-|CPU_IPC0_CH12|266|Ipc_CpuIpc0Ch12Isr|
-|CPU_IPC0_CH13|267|Ipc_CpuIpc0Ch13Isr|
-|CPU_IPC0_CH14|268|Ipc_CpuIpc0Ch14Isr|
-|CPU_IPC0_CH15|269|Ipc_CpuIpc0Ch15Isr|
-|CPU_ROUTER_SWTRIG1_0|270|Router_Swtrig1Ch0Isr|
-|CPU_ROUTER_SWTRIG1_1|271|Router_Swtrig1Ch1Isr|
-|CPU_ROUTER_SWTRIG1_2|272|Router_Swtrig1Ch2Isr|
-|CPU_ROUTER_SWTRIG1_3|273|Router_Swtrig1Ch3Isr|
-|RTC|360|Rtc_Isr|
-</DocScope>
-<DocScope products="RDK S600">
-| 模块 | 中断号 | 名称 |
-|--------|----------------------------------------|---------------------------------------------|
-|HSM_IPC3|366|Ipc_HsmIpc3Ch4Isr|
-|HSM_IPC3|367|Ipc_HsmIpc3Ch5Isr|
-|CPU_IPC2_CH0|405|Ipc_CpuIpc2Ch0Isr|
-|CPU_IPC2_CH1|406|Ipc_CpuIpc2Ch1Isr|
-|CPU_IPC2_CH2|407|Ipc_CpuIpc2Ch2Isr|
-|CPU_IPC2_CH3|408|Ipc_CpuIpc2Ch3Isr|
-|CPU_IPC2_CH4|409|Ipc_CpuIpc2Ch4Isr|
-|CPU_IPC2_CH5|410|Ipc_CpuIpc2Ch5Isr|
-|CPU_IPC2_CH6|411|Ipc_CpuIpc2Ch6Isr|
-|CPU_IPC2_CH7|412|Ipc_CpuIpc2Ch7Isr|
-|CPU_IPC3_CH0|413|Ipc_CpuIpc3Ch0Isr|
-|CPU_IPC3_CH1|414|Ipc_CpuIpc3Ch1Isr|
-|CPU_IPC3_CH2|415|Ipc_CpuIpc3Ch2Isr|
-|CPU_IPC3_CH3|416|Ipc_CpuIpc3Ch3Isr|
-|CPU_IPC3_CH4|417|Ipc_CpuIpc3Ch4Isr|
-|CPU_IPC3_CH5|418|Ipc_CpuIpc3Ch5Isr|
-|CPU_IPC3_CH6|419|Ipc_CpuIpc3Ch6Isr|
-|CPU_IPC3_CH7|420|Ipc_CpuIpc3Ch7Isr|
-|CPU_IPC4_CH0|421|Ipc_CpuIpc4Ch0Isr|
-|CPU_IPC4_CH1|422|Ipc_CpuIpc4Ch1Isr|
-|CPU_IPC4_CH2|423|Ipc_CpuIpc4Ch2Isr|
-|CPU_IPC4_CH3|424|Ipc_CpuIpc4Ch3Isr|
-|CPU_IPC5_CH0|425|Ipc_CpuIpc5Ch0Isr|
-|CPU_IPC5_CH1|426|Ipc_CpuIpc5Ch1Isr|
-|CPU_IPC5_CH2|427|Ipc_CpuIpc5Ch2Isr|
-|CPU_IPC5_CH3|428|Ipc_CpuIpc5Ch3Isr|
-|MDMA0_CH0|316|Mdma0_Ch0Isr|
-|MDMA0_CH1|317|Mdma0_Ch1Isr|
-|MDMA1_CH0|319|Mdma1_Ch0Isr|
-|MDMA1_CH1|320|Mdma1_Ch1Isr|
-|MDMA1_CH2|321|Mdma1_Ch2Isr|
-|MDMA1_CH3|322|Mdma1_Ch3Isr|
-|MDMA2_CH1|325|Mdma2_Ch1Isr|
-|MDMA2_CH2|326|Mdma2_Ch2Isr|
-|IPC0_CH1|260|Ipc0_Ch1Isr|
-|IPC0_CH2|261|Ipc0_Ch2Isr|
-|IPC0_CH3|262|Ipc0_Ch3Isr|
-|IPC0_CH5|264|Ipc0_Ch5Isr|
-|IPC0_CH6|265|Ipc0_Ch6Isr|
-|IPC0_CH8|267|Ipc0_Ch8Isr|
-|IPC0_CH9|268|Ipc0_Ch9Isr|
-|IPC0_CH10|269|Ipc0_Ch10Isr|
-|IPC0_CH11|270|Ipc0_Ch11Isr|
-|IPC1_CH0|283|Ipc1_Ch0Isr|
-|IPC1_CH1|284|Ipc1_Ch1Isr|
-|IPC1_CH3|286|Ipc1_Ch3Isr|
-|IPC1_CH4|287|Ipc1_Ch4Isr|
-|IPC1_CH5|288|Ipc1_Ch5Isr|
-|IPC1_CH6|289|Ipc1_Ch6Isr|
-|IPC1_CH7|290|Ipc1_Ch7Isr|
-|IPC2_CH0|299|Ipc2_Ch0Isr|
-|IPC2_CH1|300|Ipc2_Ch1Isr|
-|IPC2_CH2|301|Ipc2_Ch2Isr|
-|IPC2_CH3|302|Ipc2_Ch3Isr|
-|IPC2_CH4|303|Ipc2_Ch4Isr|
-|IPC2_CH5|304|Ipc2_Ch5Isr|
-|IPC2_CH6|305|Ipc2_Ch6Isr|
-|IPC2_CH7|306|Ipc2_Ch7Isr|
-</DocScope>
-
-## 增加编译目录教程
-### 增加编译目录流程
-<DocScope products="RDK S100">
-1. 修改 `mcu/Build/FreeRtos_mcu1/build_config/S100/lite-matrix-B-mcu1.yaml` 文件，增加或删除参与编译的目录。
-
-2. 普通业务/demo 源码目录建议添加到 `BuildPath`。例如新增 `mcu/samples/MyDemo`，可增加：
-
-```yaml
-BuildPath:
-  - samples/MyDemo
-```
-
-3. `Common`、`McalCdd`、`Platform`、`Service` 等目录已有独立的静态库 path 字段，新增这些模块时应放到对应字段中：
-
-```yaml
-StaticLibCommonPath:
-  - Common/xxx
-
-StaticLibMcalCddPath:
-  - McalCdd/xxx
-
-StaticLibPlatformPath:
-  - Platform/xxx
-
-StaticLibServicePath:
-  - Service/xxx
-```
-
-4. 在新增模块目录下添加 `SConscript` 文件。`SConstruct` 会根据 yaml 中配置的 path 扫描对应目录下的 `SConscript` 并参与编译。
-
-</DocScope>
-<DocScope products="RDK S600">
-1. 修改 mcu/Build/FreeRtos_mcu1/build_config/S600/lite-matrix-B-mcu1.yaml 文件，增加/删除相应的模块。
-
-   如增加 mcu/Service/Log 文件夹，只需增加相应的位置即可。目前 Service/Platform/McalCdd/Common 有独立的 path，增加该目录需要放在相应位置。除此之外，其他文件夹的添加统一放在 BuildPath 即可
-
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="增加编译目录流程示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-2. 在添加编译的模块下，添加 SConscript 文件，SConscript 文件可以从任意已经编译的模块文件夹下获取
-</DocScope>
-
-## MCU FreeRTOS 系统简介
-MCU 这边有几个系统关键功能，如下图所示：
-<DocScope products="RDK S100">
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system.png" alt="MCU FreeRTOS 系统简介示意图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-</DocScope>
-<DocScope products="RDK S600">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="MCU FreeRTOS 系统简介截图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-</DocScope>
-
-上图可以看到各个功能所在任务的相对优先级及同一个任务中的调用顺序，客户集成请保持各功能的相对优先级、所在 core 及同一个任务中的调用顺序。各个功能的说明及注意事项如下：
-
-### Power
-ScmiProcess：放在高优先级任务中，建议放在 2ms 任务中。如果不能满足，最大调度周期不要超过100ms。放在调度周期长的任务中会影响启动时间，一般评估影响可以按照启动过程中的"scmi 通讯次数 x 所在任务周期"计算。
-
-SysPower_State_Loop/SysPower_State_MainFunction：放在低优先级任务中。
-
-### Boot
-AcoreBootProc：放在低优先级任务中。这个里面会有 Acore 启动需要的相关初始化等。其中就有 Housekeeping 关键功能的初始化 Housekeeping_WriteMagicNum，如果该功能未被正常初始化，Acore 对 MCU 的寄存器访问会导致 Acore 异常。
-
-集成注意：需要放在 MCU0上处理。AcoreBoot 需要使用 flash，需要避免 flash 冲突问题。和下文的 OTA 功能都放到同一个低优任务中处理。
-
-### OTA
-OtaFlash_MainFunction：放在低优先级任务，涉及到 OTA 相关处理逻辑。
-
-集成注意：需要放在 MCU0上处理。OTA 功能需要使用 flash、IPC 以及 crypto 功能。需要避免 flash 并发操作的冲突问题，建议将所有使用到 flash 相关的功能放到一个低优先级的 task 中串行使用。比如前文提到的 AcoreBootProc 就是和它在同一个低优任务中。
-
-### 休眠唤醒
-SysPower_McuCoreEnterLowPower：放在本 core 上能支持的最短周期最高优先级任务中。
-
-集成注意：该函数只有在需要休眠唤醒时才会真正运行，其他时候都是快速退出不会产生额外耗时。
-
-### 系统中断说明
-MCU 和 Acore/HSM 通信依赖 IPC，IPC 系统服务涉及到的中断可以参考：[IPC 的相关介绍](./08_mcu_ipc.md) 章节
-这些中断优先级建议配置成比平常的功能类中断优先级高，这些中断本身可以配置成同样的优先级。
-
-## FreeRTOS 系统简介
-FreeRTOS 的主流的启动方式有两种：第一种，在 main 函数中将硬件初始化，RTOS 系统初始化，所有任务的创建这些都弄好，最后启动 RTOS 的调度器，开始多任务的调度；第二种，在 main 函数中将硬件和 RTOS 系统先初始化好，然后创建一个启动任务后就启动调度器，在启动任务里面创建各种应用任务，当所有任务都创建成功后，启动任务把自己删除。两种方式没有太强的优劣之分，RDK S100/RDK S600 选择第一种方式。
-### FreeRTOS 系统任务创建
-<DocScope products="RDK S100">
-
-任务创建位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c` 中，举例如下：
-
-</DocScope>
-<DocScope products="RDK S600">
-
-任务创建位于 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Task_Hal.c` 中，举例如下：
-
-</DocScope>
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/task_init.png" alt="FreeRTOS 系统任务创建示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-xxx_Startup 任务，为启动初始化相关的函数，只执行一次。
-FreeRtos_OsTask_SysCore_BSW_xms 和 FreeRtos_OsTask_SysCore_ASW_xms 为周期性任务，会根据 xms 的不同产生周期性的调度。同时周期性任务内部会有工作处理，细节见本章上一节"MCU FreeRTOS 系统简介"章节。
-
-如果客户自行开发，可参考上述两种类型的例子。也可以在已经创建的任务中处理自己的 demo，见下文。
-<DocScope products="RDK S100">
-
-任务函数位于 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中，
-
-</DocScope>
-<DocScope products="RDK S600">
-
-任务函数位于 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中，
-
-</DocScope>
-以 OsTask_SysCore_BSW_10ms 为例，任务会周期性地检测 Shell 事务处理：
-```c
-TASK(OsTask_SysCore_BSW_10ms)
-{
-    #ifdef SHELL_ENABLE
-        Shell_Handler();
-    #endif
-}
-```
-### FreeRTOS 系统中断使用
-<DocScope products="RDK S100">
-
-FreeRTOS 的中断使用集中在 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
-
-</DocScope>
-<DocScope products="RDK S600">
-
-FreeRTOS 的中断使用集中在 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c` 文件中，
-
-</DocScope>
-```c
-void FreeRtos_Irq_Init(void)
-{
-  int interrupt_index = 0;
-  for(; interrupt_index < INTERRUPT_MCU_MAX_NUM; interrupt_index++)
-  {
-    if((!Interrupt_McuConfigs[interrupt_index].irqNumber) && (!Interrupt_McuConfigs[interrupt_index].priority)
-        && (!Interrupt_McuConfigs[interrupt_index].Handler) && (!Interrupt_McuConfigs[interrupt_index].enable_flag))
-    {
-      break;
-    }
-
-    if(Interrupt_McuConfigs[interrupt_index].Handler)
-    {
-      INT_SYS_InstallHandler(Interrupt_McuConfigs[interrupt_index].irqNumber, Interrupt_McuConfigs[interrupt_index].Handler, NULL);
-    }
-
-    if(Interrupt_McuConfigs[interrupt_index].priority)
-    {
-      INT_SYS_SetPriority(Interrupt_McuConfigs[interrupt_index].irqNumber, Interrupt_McuConfigs[interrupt_index].priority);
-    }
-
-    if(Interrupt_McuConfigs[interrupt_index].enable_flag)
-    {
-      INT_SYS_EnableIRQ(Interrupt_McuConfigs[interrupt_index].irqNumber);
-    }
-  }
-
-}
-```
-
-<DocScope products="RDK S100">
-
-如果没有设置中断处理函数，那么中断处理函数处于默认状态，见 `mcu/Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/SuperSoC_ISR.s` 文件。
-
-</DocScope>
-<DocScope products="RDK S600">
-
-如果没有设置中断处理函数，那么中断处理函数处于默认状态，见 `mcu/Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/OsAssembly/gcc/S600_ISR.s` 文件。
-
-</DocScope>
-以 RTC 中断处理函数为例：
-```c
-// DefaultISR---默认中断处理函数
-    .align  4
-    .weak   DefaultISR
-    .type   DefaultISR, %function
-DefaultISR:
-    hlt #0
-    b   .
-    .pool
-    .size   DefaultISR, . - DefaultISR
-
-/*    Macro to define default handlers. Default handler
- *    will be weak symbol and just dead loops. They can be
- *    overwritten by other handlers */
-    .macro  def_irq_handler handler_name
-    .weak   \handler_name
-    .set    \handler_name, DefaultISR
-    .endm
-
-// 设置RTC默认中断处理函数
-    def_irq_handler AON_RTC_INTR
-```
-
-注意：
-在 MCU1使能中断的时候一定要确保 MCU0相应的中断处于关闭状态
-
-### FreeRTOS 内存管理方案简介
-FreeRTOS 内存管理方案位于/mcu/OpenSource/FreeRTOS/portable/MemMang/文件夹中，共有5 种内存管理算法，分别是 heap_1.c、heap_2.c、heap_3.c、heap_4.c 和 heap_5.c。FreeRTOS 的内存管理模块通过对内存的申请、释放操作，来管理用户和系统对内存的使用，使内存的利用率和使用效率达到最优，同时最大限度地解决系统可能产生的内存碎片问题。
-#### heap_1.c
-heap_1.c 管理方案是 FreeRTOS 提供所有内存管理方案中最简单的一个，它只能申请内存而不能进行内存释放，这样子对于要求安全的嵌入式设备来说是最好的，因为不允许内存释放，就不会产生内存碎片而导致系统崩溃，但是也有缺点，那就是内存利用率不高，某段内存只能用于内存申请的地方，即使该内存只使用一次，也无法让系统回收重新利用。
-#### heap_2.c
-heap_2.c 方案与 heap_1.c 方案采用的内存管理算法不一样，它采用一种最佳匹配算法(best fit algorithm)，比如我们申请100字节的内存，而可申请内存中有三块对应大小200字节，500字节和1000字节大小的内存块，按照算法的最佳匹配，这时候系统会把200字节大小的内存块进行分割并返回申请内存的起始地址，剩余的内存则插回链表留待下次申请。Heap_2.c 方案支持释放申请的内存，将释放的内存重新插入链表，并按照大小进行排序，但是它不能把相邻的两个小的内存块合成一个大的内存块，对于每次申请内存大小都比较固定的，这个方式是没有问题的，而对于每次申请并不是固定内存大小的则会造成内存碎片，后面要讲解的 heap_4.c 方案采用的内存管理算法能解决内存碎片的问题，可以把这些释放的相邻的小的内存块合并成一个大的内存块。
-#### heap_3.c
-heap_3.c 方案只是简单的封装了标准 C 库中的 malloc()和 free()函数，并且能满足常用的编译器。重新封装后的 malloc()和 free()函数具有保护功能，采用的封装方式是操作内存前挂起调度器、完成后再恢复调度器。
-#### heap_4.c
-heap_4.c 方案与 heap_2.c 方案一样都采用最佳匹配算法来实现动态的内存分配，但是不一样的是 heap_4.c 方案还包含了一种合并算法，能把相邻的空闲的内存块合并成一个更大的块，这样可以减少内存碎片。heap_4.c 方案特别适用于移植层中可以直接使用 pvPortMalloc()和 vPortFree()函数来分配和释放内存的代码。heap_4.c 内存管理方案的空闲块链表不是以内存块大小进行排序的，而是以内存块起始地址大小排序，内存地址小的在前，地址大的在后，因为 heap_4.c 方案还有一个内存合并算法，在释放内存的时候，假如相邻的两个空闲内存块在地址上是连续的，那么就可以合并为一个内存块，这也是为了适应合并算法而作的改变。
-#### heap_5.c
-heap_5.c 方案在实现动态内存分配时与 heap_4.c 方案一样，采用最佳匹配算法和合并算法，并且允许内存堆跨越多个非连续的内存区，也就是允许在不连续的内存堆中实现内存分配，比如用户在片内 RAM 中定义一个内存堆，还可以在外部 SDRAM 再定义一个或多个内存堆，这些内存都归系统管理。该方案较为复杂，实时性略逊于 heap_4.c。
-
-<DocScope products="RDK S100">
-#### RDK S100 内存方案
-RDK S100 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
-</DocScope>
-<DocScope products="RDK S600">
-#### RDK S600 内存方案
-RDK S600 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合并算法，可以分配和释放随机字节内存，在避免内存碎片的同时覆盖实时系统内存分配的全场景，并且实时性较好。
-</DocScope>
-## LOG 区域调整
-### MCU1区域调整
-<DocScope products="RDK S100">
-修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/mcu_log_address.png" alt="MCU1区域调整截图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-</DocScope>
-<DocScope products="RDK S600">
-修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S600/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
-</DocScope>
-
-### Acore 区域调整
-<DocScope products="RDK S100">
-修改 `source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。
-
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/acore_log_address.png" alt="Acore 区域调整截图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-</DocScope>
-<DocScope products="RDK S600">
-修改 `source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi` 文件中相应位置，与 MCU1 修改保持一致。
-</DocScope>
-
-## MCU 与 Acore 共享内存区域预留
-该共享内存区域空间开辟在 MCU0所在空间，但 MCU0和 MCU1同属于 MCU SRAM 域，因此 MCU1也可以使用相应地址
-```c
-MCU_STATE_Reserved      : org = 0x0C800800, len = 1K
-```
-### 目前已经被占用的区域：
-```c
-MCU1_VERSION:  org = 0x0C800800, len = 0x60
-MCU_ALIVE:     org = 0x0C800860, len = 0x10
-     ---MCU0_ALIVE：org = 0x0C800860, len = 0x04；
-     ---MCU1_ALIVE：org = 0x0C800864, len = 0x04；
-     ---RESERVED：  org = 0x0C800868, len = 0x08；
-```
-### 使用注意事项
-如果使用共享内存的方式传输数据，可能会出现 MCU 数据更新至 SRAM，但是 Acore 的缓存还为旧数据的问题，因此导致读取数据不同步。
-
-为避免 Acore 和 MCU 出现数据不同步的问题，需要在变量前加 `volatile` 关键字，或者使用 `ioremap_np()` 函数。这两种方式都是为了避免读取缓存，而是直接读取 SRAM 数据。
-
-## 调试
-
-- **中断核对**：新增中断前，核对中断号与「MCU 中断号及模块对应关系」表一致，避免与 MCU0 已占用中断冲突。
-- **任务集成核对**：集成功能时保持各功能的相对优先级、所在 core 及同一任务中的调用顺序与参考实现一致。
-- **内存方案核对**：默认可使用 heap_4.c 内存管理方案；如需定制，核对内存分配/释放行为是否符合预期。
-
-## 常见问题
-
-### Acore 访问 MCU 寄存器导致 Acore 异常
-
-**原因**：Boot 流程中的 `Housekeeping_WriteMagicNum` 未正常初始化。
-
-**解决**：确保 `AcoreBootProc` 在 MCU0 上正常完成初始化，避免对 MCU 寄存器的访问导致 Acore 异常。
-
-### 共享内存传输数据读取不同步
-
-**原因**：MCU 将数据更新至 SRAM 后，Acore 侧缓存仍为旧数据。
-
-**解决**：在共享变量前加 `volatile` 关键字，或使用 `ioremap_np()` 函数直接读取 SRAM 数据。
-
-## 相关文档
-
-- [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
-- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)
