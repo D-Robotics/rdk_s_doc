@@ -8,7 +8,7 @@ description: "sunrise camera 使用说明 板端示例使用说明"
 
 ## 功能概述
 
-sunrise camera 是官方开发的应用程序，方便用户对 Camera、 VIO、 Codec、 BPU 等模块的快速评测。用户通过 PC 上的 Web 浏览器，可以方便的对程序进行参数配置，并实时预览视频流、算法渲染结果等信息。程序主要功能如下：
+sunrise camera 是官方开发的应用程序，方便用户对 Camera、 ISP、 PYM、 GDC、 Codec、 BPU 等模块的快速评测。用户通过 PC 上的 Web 浏览器，可以方便的对程序进行参数配置，并实时预览视频流、算法渲染结果等信息。程序主要功能如下：
 
 - 支持智能摄像头功能模式，最大支持接入 2 路 Camera Sensor
 - 支持智能多路解码分析盒功能模式
@@ -22,7 +22,7 @@ sunrise camera 是官方开发的应用程序，方便用户对 Camera、 VIO、
 ## 硬件环境准备
 
 - 运行 sunrise camera 前，需要准备如下配件：
-  - 开发板配套摄像头，如 SC230AI、 SC132GS、 F37 等
+  - 开发板配套摄像头，如 SC230AI、 SC132GS、 IMX219 等
   - 网线一条，保证 PC 和开发板能够 ping 通
   - Micro USB 线一条 ( 无网口时 )，开发板可通过 USB 虚拟网口跟 PC 通讯
 
@@ -98,7 +98,7 @@ journalctl -u sunrise_camera.service -f --output=cat
 
 ### 主界面
 
-sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP 地址（开发板默认 IP 为 192.168.1.10 ）可以登录用户控制主界面，  例如： http://192.168.1.10
+sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP 地址（可将开发板配置为静态 IP，具体方法见 [网络配置](../../../02_System_configuration/01_network_config.md)，本文以设置静态 IP 为：192.168.1.10 为例）可以登录用户控制主界面
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/login_method.png" alt="主界面截图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -123,11 +123,11 @@ sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP �
 2. sunrise camera 支持通过 Web 端在线修改应用方案、选择 camera sensor 型号、设置解码、编码参数及选择算法模型等
 
 #### 智能摄像机配置方式
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/camera_page.png" alt="智能摄像机配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/camera_page.png" alt="智能摄像机配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 具体修改步骤如下：
 
-1. 启动 sunrise_camera 程序，打开 chrome 浏览器输入设备的 IP 地址，例如： http://192.168.1.10
+1. 启动 sunrise_camera 程序，打开 chrome 浏览器输入设备的 IP 地址
 2. 点击 `配置应用方案` 按钮，上图 `1` 标号
 3. 可以查看到当前的设备信息，包括芯片类型，软件版本， rtsp 码流链接（该链接支持在 vlc 软件上拉 rtsp 视频码流，可以支持录像、截图等操作），上图 `2` 标号
 4. 选中应用方案，上图 `3` 标号，每种应用方案的参数设置和注意事项，请点击 `问号` 按钮了解。
@@ -141,11 +141,11 @@ sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP �
 
 
 #### 智能分析盒配置方式
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/box_page.png" alt="智能分析盒配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/box_page.png" alt="智能分析盒配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 具体修改步骤如下：
 
-1. 启动 sunrise_camera 程序，打开 chrome 浏览器输入设备的 IP 地址，例如： http://192.168.1.10
+1. 启动 sunrise_camera 程序，打开 chrome 浏览器输入设备的 IP 地址
 2. 点击 `配置应用方案` 按钮，上图 `1` 标号
 3. 可以查看到当前的设备信息，包括芯片类型，软件版本， rtsp 码流链接（该链接支持在 vlc 软件上拉 rtsp 视频码流，可以支持录像、截图等操作），上图 `2` 标号
 4. 选中应用方案，上图 `3` 标号，每种应用方案的参数设置和注意事项，请点击 `问号` 按钮了解。
@@ -164,6 +164,7 @@ sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP �
 智能摄像机方案提供了以下功能：
 
 - 实时视频监控
+- 支持使用 RTSP 码流
 - 运行指定的算法
 - 当有多颗 Camera Sensor 接入时，支持开启多路视频预览
 
@@ -173,6 +174,7 @@ sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP �
 
 - 使能 Camera 接口：显示已经实际接入了摄像头的 CSI 接口的列表，并且可以根据需要使能不同的接口
 - Sensor 型号：程序会探测接入到设备上的可以使用的 Camera Sensor 型号，根据需要进行配置
+- GDC 使能开关（ gdc_status ）：控制是否启用 GDC 镜头畸变校正；仅当当前 Sensor 存在对应的 GDC 标定文件时该选项有效，存在标定文件时默认关闭，可按需打开
 - 编码类型：控制视频编码格式，支持 H264/H265/Mjpeg, 根据硬件能力、软件支持情况会有所不同
 - 编码码率：控制视频编码的码率，以下是不同分辨率视频的参考码率
   - 标清视频（ 480p : 256, 512, 768, 1024, 1536, 2048
@@ -241,6 +243,19 @@ sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP �
 
 sunrise camera 程序运行时会同步推送 rtsp 视频码流，用户可以通过 vlc 播放器播放 RTSP 码流，实现画面预览、录像、截图等功能。
 
+sunrise camera 支持主码流、子码流两路编码输出，每路 Camera 通道（ ch0、ch1 ）各自独立编码推流：
+
+- **主码流**：分辨率为当前 Camera Sensor 的输入分辨率，RTSP 地址形如 `rtsp://<开发板 IP>/ch0/main`
+- **子码流**：由输入分辨率按固定规则自动缩放得到，目前每路仅支持 1 路子码流，RTSP 地址形如 `rtsp://<开发板 IP>/ch0/sub1`
+
+子码流分辨率的缩放逻辑：
+
+- 输入分辨率宽或高任一小于 1280x720 时，子码流宽、高各减半
+- 否则宽度缩放至 1280，高度按原始宽高比等比缩放（四舍五入取整）
+- 最终宽度按 16 字节、高度按 8 字节对齐（编码器要求）
+
+Web 端播放器会按编码类型自动选择拉流通道：H264 拉主码流、H265 固定拉子码流；使用 VLC 拉流时可通过 URL 中的 `main` / `sub1` 区分主子码流。
+
 
 
 ### 播放方法
@@ -249,9 +264,9 @@ sunrise camera 程序运行时会同步推送 rtsp 视频码流，用户可以�
 
 在 `打开媒体` 对话框中填入 url 地址，点击 `播放` 按钮即可开始播放，如下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/vlc_play_method.png" alt="播放方法示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/vlc_play_method.png" alt="播放方法示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-rtsp 的码流网络 URL 链接，可以在 web 的设备信息上查看，默认支持的码流链接为： rtsp://192.168.1.10/stream_chn0.h264
+rtsp 的码流网络 URL 链接，可以在 web 页面的“设备信息”上查看，按本文示例配置（静态 IP 192.168.1.10）时，主码流链接为 rtsp://192.168.1.10/ch0/main ，子码流链接为 rtsp://192.168.1.10/ch0/sub1
 
 ### 4K@30fps 拉流配置说明
 
