@@ -161,6 +161,23 @@ const config = {
       },
     ],
     "docusaurus-plugin-image-zoom",
+    [
+      "@docusaurus/plugin-client-redirects",
+      {
+        // Bing 大小写 404（小写→大写），2026-09-20。
+        // from/to 都是 baseUrl（/rdk_s_doc/）之后的相对路径；i18n 下每个 locale 单独
+        // build，plugin 用各自 baseUrl 拼 from/to，一份配置自动落 zh/en 两处，勿手写 /en/ 前缀。
+        redirects: [
+          { from: "/rdk", to: "/RDK" },
+          { from: "/05_mcu_development", to: "/05_MCU_development" },
+          { from: "/03_python_sample", to: "/03_Python_Sample" },
+          { from: "/robot_development", to: "/Robot_development" },
+          { from: "/03_s600_multimedia_application", to: "/03_S600_multimedia_application" },
+          { from: "/basic_development", to: "/Basic_Development" },
+          { from: "/ota", to: "/OTA" },
+        ],
+      },
+    ],
   ],
   markdown: {
     mermaid: true,
