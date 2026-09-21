@@ -1,0 +1,9 @@
+{
+  "label": "图像质量调试指南",
+  "position": 14,
+  "link": {
+    "type": "generated-index",
+    "slug": "/Advanced_development/multimedia_development/multimedia_api/isp_tuning_guide",
+    "description": "ISP 图像质量调试概述与 hbplayer / tuning_tool 工具使用指南"
+  }
+}
