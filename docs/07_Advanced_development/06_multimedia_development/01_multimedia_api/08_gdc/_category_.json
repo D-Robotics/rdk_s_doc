@@ -1,0 +1,9 @@
+{
+  "label": "畸变矫正 - GDC",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "slug": "/Advanced_development/multimedia_development/multimedia_api/gdc",
+    "description": "GDC 几何畸变矫正：概述、GDC Tool、GDC Bin 生成 API、GDC vnode API"
+  }
+}
