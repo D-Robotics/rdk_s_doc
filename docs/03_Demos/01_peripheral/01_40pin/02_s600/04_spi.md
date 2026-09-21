@@ -18,7 +18,15 @@ RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选�
 
 ## 代码位置
 
-SPI 回环测试代码位于板端 `/app/40pin_samples/test_spi.py`。
+`s600_v0p2_enable_spi1` overlay 分**代码端**与**板端**两处，用途不同：
+
+| 类型 | 位置 | 说明 |
+|---|---|---|
+| 回环脚本（板端） | `/app/40pin_samples/test_spi.py` | 由 `hobot-io-samples` 包装至板端 |
+| SPI1 overlay 源文件（代码端/SDK） | `${SDK}/source/hobot-io-samples/debian/boot/overlays/s600_v0p2_enable_spi1.dtso` | overlay 源码；`mk_debs.sh` 编译 `hobot-io-samples` 时在同目录生成同名 `.dtbo` 并打入 deb |
+| SPI1 overlay 二进制（板端） | `/boot/overlays/s600_v0p2_enable_spi1.dtbo` | 随 `hobot-io-samples` deb 安装至板端，**不在 SDK 源码目录直接使用** |
+
+板级默认关闭 SPI1（`rdk-s600-mcb.dtsi` 中 `&spi1 { status = "disabled"; }`）。14-pin SPI1 须在**板端** `/boot/config.txt` 中加载上述 overlay 后才会出现 `/dev/spidev1.0`。
 
 ## 回环测试
 
@@ -32,10 +40,15 @@ SPI 回环测试代码位于板端 `/app/40pin_samples/test_spi.py`。
 
 ### 测试过程
 
-- 运行 `cd /boot`，在 config.txt 文件（如果不存在，则运行 `sudo nano config.txt` 创建）中写入
+- 确认板端 overlay 已安装：`ls /boot/overlays/s600_v0p2_enable_spi1.dtbo`
+- 运行 `cd /boot`，在 `config.txt`（不存在则 `sudo nano config.txt` 创建）中写入：
+
     ```text
     dtbo_file_path=/overlays/s600_v0p2_enable_spi1.dtbo
     ```
+
+  `config.txt` 中为启动加载路径；实际文件位于 `/boot/overlays/`。
+
 - 运行 `sudo reboot` 重启系统
 - 重启后，运行 `python3 /app/40pin_samples/test_spi.py`
 - 从打印的 spi 控制器中选择总线号和片选号作为输入选项，例如选择测试 `spidev1.0`，`bus num` 选择 `1` 和 `cs num` 选择 `0`，按回车键确认：
@@ -129,7 +142,7 @@ if __name__ == '__main__':
 
 **原因**：SPI 控制器未使能，或总线号/片选号输入错误。
 
-**解决**：确认已按上文在 `config.txt` 写入 `s600_v0p2_enable_spi1.dtbo` 并重启；`SPI1` 对应 `bus num = 1`。
+**解决**：确认 `/boot/overlays/s600_v0p2_enable_spi1.dtbo` 存在，且已按上文在 `config.txt` 写入 `dtbo_file_path` 并重启；用户态回环使用 **SPI1**（`bus num = 1`、`cs num = 0`，`/dev/spidev1.0`）。列表中若仍有 `/dev/spidev0.0`，对应 SPI0/CAN 引脚，**不可**用于 14-pin 外接 SPI。
 
 ### 一直打印 `0xFF 0xFF`
 
