@@ -1,0 +1,9 @@
+{
+  "label": "多媒体系统调试指南",
+  "position": 1.5,
+  "link": {
+    "type": "generated-index",
+    "slug": "/Advanced_development/multimedia_development/multimedia_api/debug_guide",
+    "description": "多媒体 pipeline 的系统级调试节点、通路观测与故障定位"
+  }
+}
