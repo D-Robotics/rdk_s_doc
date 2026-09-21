@@ -1,207 +1,350 @@
 ---
 sidebar_position: 7
 title: "Shared File Configuration"
-description: "Samba and NFS shared file configuration"
+description: "Share a directory from the board as a Samba or NFS server for PC clients to access"
 ---
 
 # Shared File Configuration
 
-This chapter describes how to use sharing tools on the Ubuntu system.
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
 
+In practice, files often need to be transferred between the board and a PC. RDK OS is based on Ubuntu and supports two network sharing protocols, Samba and NFS, which can share directories out for clients to access:
 
+| Protocol | Client | Notes |
+|---|---|---|
+| Samba (SMB/CIFS) | Windows / Linux / macOS | Native to Windows, best experience; first choice for Windows PCs |
+| NFS | Linux / macOS / Windows (Client for NFS) | Native to Linux, suited to Linux PCs/NAS; Windows requires enabling the client |
 
-## Samba
+:::info Prerequisites
+- The board has RDK OS flashed and is networked, and the PC can reach the board on the same subnet. For the default IP and account, see [Network Configuration](./01_network_config.md) (board default IP `192.168.127.10`, default account `sunrise`).
+- You can log in to the board over SSH to run commands, see [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md).
+:::
 
-### Installation Command
+## Samba: the board as a server
+
+Samba is a file-sharing protocol common to Windows/Linux/macOS. Once the board is configured as a Samba server, a PC can read and write a board-side directory like a network share; a Windows PC needs no extra software.
+
+### 1. Install Samba
 
 ```bash
+sudo apt update
 sudo apt install samba
 ```
 
-### Configure Samba
+### 2. Create the shared directory
 
-1. Create a shared directory. Create a directory named shared under the user home directory as the shared directory, and run the following command:
+Create the shared directory under the persistent `/userdata` partition and assign it to `sunrise`:
 
 ```bash
-mkdir ~/shared
+sudo mkdir -p /userdata/shared
+sudo chown sunrise:sunrise /userdata/shared
 ```
 
-2. Configure the Samba share. Open the Samba main configuration file `/etc/samba/smb.conf`, and append the following content at the end of the file to define the configuration of the shared directory:
+### 3. Configure the share
 
-   ```ini
-   [shared]
-      comment = Shared Directory
-      path = /home/your_username/shared
-      read only = no
-      browsable = yes
-      guest ok = no
-      create mask = 0775
-      directory mask = 0775
-   ```
+Open the Samba main configuration file `/etc/samba/smb.conf` and append the following at the end:
 
-   Syntax description:
+```ini
+[shared]
+   comment = Shared Directory
+   path = /userdata/shared
+   read only = no
+   browsable = yes
+   guest ok = no
+   create mask = 0775
+   directory mask = 0775
+```
 
-   - `[shared]`: The share name, i.e., the name that clients see when accessing the shared resource. Modify it as needed.
-   - `comment`: The description of the shared directory.
-   - `path`: The actual path of the shared directory. Replace `your_username` with your own username.
-   - `read only = no`: Allow clients to read from and write to the shared directory.
-   - `browsable = yes`: The shared directory can be browsed on the network.
-   - `guest ok = no`: A username and password are required to access the shared directory.
-   - `create mask` / `directory mask`: The default permissions when creating files and directories in the shared directory.
+Field descriptions:
 
-3. Set up the Samba user and password
+- `[shared]`: the share name, as seen by clients. Modify as needed.
+- `path`: the actual path of the shared directory. This uses the `shared` directory under the `/userdata` partition; if you use a different path, update this accordingly.
+- `read only = no`: allow clients to read and write.
+- `browsable = yes`: the share can be discovered when browsing the network.
+- `guest ok = no`: access requires a username and password; anonymous access is not allowed.
+- `create mask` / `directory mask`: default permissions for new files and directories created inside the share.
 
-To be able to access the shared directory, you need to create a Samba user and set a password. You can use an existing system user as the Samba user. Run the following command to add the system user to the Samba user list:
+### 4. Set the Samba user and password
+
+Samba uses a separate password database. You must add the system user to the Samba user list and set a password:
+
 ```bash
 sudo smbpasswd -a sunrise
 ```
 
-4. Restart the Samba service
+Enter the password twice when prompted. This uses the default account `sunrise`; to use another system account, replace the username accordingly.
+
+### 5. Start and enable at boot
 
 ```bash
-sudo systemctl restart smbd
+sudo systemctl enable --now smbd
 ```
 
-You can use the following command to check the running status of the Samba service:
+`enable --now` both sets the service to start at boot and starts it immediately.
 
-```bash
-sudo systemctl status smbd
-```
+### 6. (Optional) Open the firewall
 
-Measured on RDK S600 (Samba 4.19.5):
-
-```text
-● smbd.service - Samba SMB Daemon
-     Loaded: loaded (/usr/lib/systemd/system/smbd.service; enabled; preset: enabled)
-     Active: active (running) since Fri 2026-08-14 00:25:07 CST; 18h ago
-     Status: "smbd: ready to serve connections..."
-```
-
-`Active: active (running)` indicates that the Samba service is running properly.
-
-5. Configure the firewall (optional)
-
-If a firewall (such as ufw) is enabled on the system, you need to open the Samba-related ports so that other devices can access the shared directory:
+RDK OS does not ship with a firewall by default (the `ufw` command is not present). This step is only needed if you have enabled a firewall yourself:
 
 ```bash
 sudo ufw allow samba
 ```
 
-:::info
-RDK OS does not have ufw installed by default (the `ufw` command does not exist on the board). This step is only needed in environments with a firewall.
-:::
-
-
-
-## NFS
-
-NFS (Network File System) is a network file system. NFS adopts the classic client-server (C/S) architecture. The server is responsible for managing and storing the shared files and directories, while clients access these resources through network requests.
-
-This chapter provides a tutorial on using Ubuntu 22.04/24.04 as an NFS client.
-
-**Prerequisites:** An NFS service has been set up.
-
-
-1. Install the NFS client software
+### Verification
 
 ```bash
-sudo apt install nfs-common
+sudo systemctl status smbd
 ```
 
-2. Create a mount point
+Success indicator: the output contains `Active: active (running)`.
 
-Create a local directory on the Ubuntu system as the mount point, used to mount the Windows NFS shared directory, for example:
+<DocScope products="RDK S600">
+
+Verified on RDK S600 (Samba 4.19.5):
+
+```text
+● smbd.service - Samba SMB Daemon
+     Loaded: loaded (/usr/lib/systemd/system/smbd.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-09-21 13:02:50 CST; 16ms ago
+       Docs: man:smbd(8)
+             man:samba(7)
+             man:smb.conf(5)
+    Process: 15015 ExecCondition=/usr/share/samba/is-configured smb (code=exited, status=0/SUCCESS)
+   Main PID: 15018 (smbd)
+     Status: "smbd: ready to serve connections..."
+      Tasks: 3 (limit: 17033)
+     Memory: 31.3M ()
+     CGroup: /system.slice/smbd.service
+             ├─15018 /usr/sbin/smbd --foreground --no-process-group
+             ├─15021 "smbd: notifyd" .
+             └─15022 "smbd: cleanupd "
+```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+Verified on RDK S100 (Samba 4.19.5):
+
+```text
+● smbd.service - Samba SMB Daemon
+     Loaded: loaded (/usr/lib/systemd/system/smbd.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-09-21 13:02:50 CST; 21ms ago
+       Docs: man:smbd(8)
+             man:samba(7)
+             man:smb.conf(5)
+    Process: 24916 ExecCondition=/usr/share/samba/is-configured smb (code=exited, status=0/SUCCESS)
+   Main PID: 24919 (smbd)
+     Status: "smbd: ready to serve connections..."
+      Tasks: 3 (limit: 2861)
+     Memory: 27.8M ()
+     CGroup: /system.slice/smbd.service
+             ├─24919 /usr/sbin/smbd --foreground --no-process-group
+             ├─24923 "smbd: notifyd" .
+             └─24924 "smbd: cleanupd "
+```
+
+</DocScope>
+
+Once the server is ready, confirm from the PC:
+
+- **Windows**: open File Explorer, enter `\\192.168.127.10\shared` in the address bar.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20143720.png" alt="Windows File Explorer accessing the Samba share" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  Press Enter and provide the Samba username `sunrise` and the password set in step 4.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20152031.png" alt="Windows entering the Samba username and password" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  Seeing the contents of the `shared` directory means it is configured correctly.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20153625.png" alt="Successfully accessing the Samba share contents" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  Create a test file `pc_linux.txt` in the `shared` directory.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20153726.png" alt="Creating a test file pc_linux.txt in the shared directory" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  The file created on the PC in the previous step is visible from RDK OS:
+
+  ```shell
+  root@drobot:~# ls /userdata/shared/
+  pc_linux.txt
+  ```
+
+## NFS: the board as a server
+
+NFS (Network File System) is a Linux-native network filesystem. With the board configured as an NFS server, a Linux PC/NAS can mount it directly; a Windows PC must first enable Client for NFS.
+
+### 1. Install the NFS server
 
 ```bash
-sudo mkdir -p /userdata/windows_nfs_share
+sudo apt update
+sudo apt install nfs-kernel-server
 ```
 
-3. Mount the NFS shared directory
+### 2. Create the export directory
 
-Use the following command to mount the Windows NFS shared directory to the mount point on Ubuntu. Assume the IP address of the Windows server is 192.168.127.11 and the shared directory is D:\NFSShare:
+Create the export directory under the persistent `/userdata` partition and assign it to `sunrise`:
 
 ```bash
-sudo mount -v -t nfs -o vers=3,proto=tcp 192.168.127.11:/D/NFSShare /userdata/windows_nfs_share
+sudo mkdir -p /userdata/nfs_export
+sudo chown sunrise:sunrise /userdata/nfs_export
 ```
 
-Parameter explanation:
+### 3. Configure the export
 
-- `-v`: verbose, shows the detailed mount process
-- `-t nfs`: specifies the file system type as NFS
-- `-o`: specifies mount options
-- `vers=3`: uses the NFSv3 protocol
-- `proto=tcp`: uses TCP transport
+Edit `/etc/exports` and append one line at the end (replace `192.168.127.0/24` with your PC's subnet):
 
-4. Verify the mount
+```text
+/userdata/nfs_export 192.168.127.0/24(rw,sync,no_subtree_check,all_squash,insecure,anonuid=1000,anongid=1000)
+```
 
-Run the following command to check whether the mount succeeded:
+Option descriptions:
+
+- `rw`: allow clients to read and write.
+- `sync`: synchronous writes; data is flushed to disk before returning, safer.
+- `no_subtree_check`: skip subtree checking, a common optimization.
+- `all_squash`: squash all clients (including anonymous Windows) to the anonymous identity, then map to the board-side `sunrise` via `anonuid`/`anongid`. **Required for Windows Client for NFS**, which accesses anonymously by default; without it the anonymous client appears as nobody and cannot write.
+- `insecure`: allow clients to connect from non-privileged ports. **Required for Windows Client for NFS**; without it the connection is refused.
+- `anonuid=1000,anongid=1000`: map clients squashed to anonymous by `all_squash` to the board-side `sunrise` (UID/GID 1000). Windows clients access anonymously by default; mapped this way, files written from Windows are owned by `sunrise` on the board and can be read and written normally.
+
+### 4. Apply the export
+
 ```bash
-mount | grep windows_nfs_share
+sudo exportfs -ra
 ```
 
-If you see in the output that 192.168.127.11:/D/NFSShare is mounted on /userdata/windows_nfs_share, the mount succeeded.
+Confirm the current exports:
 
-5. Set up automatic mounting at boot (optional)
+```bash
+sudo exportfs -v
+```
 
-To make Ubuntu automatically mount the NFS shared directory at every boot, you can run the following commands:
+### 5. Start and enable at boot
 
-   - Create the mount service
+```bash
+sudo systemctl enable --now nfs-server
+```
 
-      ```
-      cat > /etc/systemd/system/mount-windows-nfs.service << 'EOF'
-      [Unit]
-      Description=Mount Windows NFS Share
-      After=network-online.target
-      Wants=network-online.target
+### Verification
 
-      [Service]
-      Type=oneshot
-      RemainAfterExit=yes
-      ExecStartPre=/bin/sleep 10
-      ExecStart=/bin/mount -t nfs -o vers=3,proto=tcp 192.168.127.11:/D/NFSShare /userdata/windows_nfs_share
-      ExecStop=/bin/umount /userdata/windows_nfs_share
+```bash
+sudo systemctl status nfs-server
+```
 
-      [Install]
-      WantedBy=multi-user.target
-      EOF
-      ```
+Success indicator: the output contains `Active: active (exited)`. The NFS server is a oneshot service that starts the kernel `nfsd`; `active (exited)` is normal and differs from `smbd`'s `active (running)` — it does not mean the service is not running.
 
-   - Start the service
+<DocScope products="RDK S600">
 
-      ```bash
-      # Reload the systemd configuration files
-      systemctl daemon-reload
+Verified on RDK S600 (nfs-kernel-server 2.6.4):
 
-      # Set up automatic start at boot
-      systemctl enable mount-windows-nfs.service
+```text
+● nfs-server.service - NFS server and services
+     Loaded: loaded (/usr/lib/systemd/system/nfs-server.service; enabled; preset: enabled)
+     Active: active (exited) since Fri 2026-06-05 23:36:40 CST; 3 months 16 days ago
+   Main PID: 4779 (code=exited, status=0/SUCCESS)
+```
 
-      # Start the service immediately
-      systemctl start mount-windows-nfs.service
-      ```
+</DocScope>
 
-   - The service file has already been written directly by the `cat` heredoc above; no need to open an editor.
+<DocScope products="RDK S100">
 
-## Verification
+Verified on RDK S100 (nfs-kernel-server 2.6.4):
 
-- Samba: `systemctl status smbd` shows `Active: active (running)`; accessing `\\<board-IP>\shared` from a client with a Samba account successfully means it is configured.
-- NFS: `mount | grep windows_nfs_share` output containing the `192.168.127.11:/D/NFSShare` mount point means the mount succeeded.
+```text
+● nfs-server.service - NFS server and services
+     Loaded: loaded (/usr/lib/systemd/system/nfs-server.service; enabled; preset: enabled)
+     Active: active (exited) since Fri 2026-06-05 23:39:36 CST; 3 months 16 days ago
+   Main PID: 3398 (code=exited, status=0/SUCCESS)
+```
+
+</DocScope>
+
+Confirm the export is active:
+
+```bash
+sudo exportfs -v
+```
+
+Success indicator: the output lists `/userdata/nfs_export` and its options, for example:
+
+```text
+/userdata/nfs_export
+		192.168.127.0/24(sync,wdelay,hide,no_subtree_check,anonuid=1000,anongid=1000,sec=sys,rw,insecure,root_squash,all_squash)
+```
+
+Once the server is ready, mount from the PC to confirm:
+
+- **Windows**: first enable **Client for NFS** under "Turn Windows features on or off". In Windows, press `Win + R` and enter `control.exe`.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20171426.png" alt="Enabling the Client for NFS feature" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  In the dialog that opens, find the **Programs and Features** option.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/20260921-171703.jpg" alt="Client for NFS feature enabled" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  In the left sidebar of the dialog, click **Turn Windows features on or off**.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/20260921-171750.jpg" alt="NFS client step 1" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  In the dialog, find the **Services for NFS** option, check **Client for NFS** and **Administrative Tools**, then click OK.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/20260921-171921.jpg" alt="NFS client step 2" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  Then run cmd as an administrator and mount with:
+
+  ```cmd
+  mount -o anon \\192.168.127.10\userdata\nfs_export Z:
+  ```
+  A "**The command completed successfully**" message means the mount succeeded.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20172111.png" alt="NFS client step 3" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  Open Windows File Explorer; the mounted directory appears under Network locations.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20172437.png" alt="NFS client step 4" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  Once mounted, the `Z:` drive can read and write the board's `/userdata/nfs_export` directory. Create a test file `pc_linux.txt` on the `Z:` drive, then back on the board confirm the file has synced:
+
+  ```shell
+  root@drobot:~# ls /userdata/nfs_export/
+  pc_linux.txt
+  ```
+
+  Unmount when done: `umount Z:`.
+
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/20260921-194757.jpg" alt="Unmounting the NFS mount" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## FAQ
 
-### Client Cannot Access the Samba Share
+### The client cannot access the Samba share
 
-**Cause**: smbd is not running, the Samba user/password is not configured, or the firewall does not allow it.
+**Cause**: `smbd` is not running, the Samba user or password was not configured, or the firewall is blocking it.
 
-**Solution**: Run `systemctl status smbd` to confirm it is running; create a Samba user with `sudo smbpasswd -a sunrise`; if a firewall is enabled, run `sudo ufw allow samba`.
+**Solution**: run `systemctl status smbd` to confirm the service is running; run `sudo smbpasswd -a sunrise` to create the Samba user; if you installed a firewall yourself, run `sudo ufw allow samba`.
 
-### NFS Mount Fails
+### Samba reports a wrong password or permission denied
 
-**Cause**: The NFS service is unreachable, or the `vers`/`proto` parameters do not match the server.
+**Cause**: the Samba password database is independent of the system login password; if the login password was changed, it was not synced to Samba.
 
-**Solution**: Confirm that the server IP and shared directory are correct; adjust `-o vers=3,proto=tcp` to the version supported by the server.
+**Solution**: reset the Samba password with `sudo smbpasswd sunrise` (not the system password).
 
-## Related Documentation
+### NFS client mount fails: access denied or connection timed out
 
-- [Network Configuration](./01_network_config.md)
-- [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
-- [Storage and Disk Management](./12_storage.md)
+**Cause**: the export subnet does not include the client IP, or the `insecure` option is missing (Windows clients are often rejected for this reason).
+
+**Solution**: confirm the `/etc/exports` subnet includes the PC's IP; for Windows clients the `insecure` option is required; after changes run `sudo exportfs -ra` to re-apply.
+
+### NFS mounts but is read-only or writes get Permission denied
+
+**Cause**: `anonuid`/`anongid` are not set or the mapped UID does not match a board-side user, so anonymous client writes have no permission.
+
+**Solution**: add `anonuid=1000,anongid=1000` to the export (mapping to `sunrise`), run `sudo exportfs -ra` to re-apply; or have the client mount with a matching UID.
+
+## Related documents
+
+- Default account, default IP, and networking: [Network Configuration](./01_network_config.md)
+- Logging in to the board to run commands: [Remote Login](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
+- The `/userdata` partition and persistent storage: [Storage and Disk Management](./12_storage.md)
