@@ -7,6 +7,7 @@ sidebar_position: 18
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
+
 <DocScope products="RDK S100">
 
 S100 MCU芯片共有3路LIN（LIN0~LIN2），其中 **LIN1** 已通过板载接口引出供用户开发学习使用，配置为 **Master 节点**。
