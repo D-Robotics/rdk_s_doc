@@ -22,21 +22,23 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在板子上经过实际验证。
 :::
 
 
 ## 代码位置
 
-GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，相关脚本如下：
+GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，主要的 GPIO 相关脚本如下：
 
 ```text
 /app/40pin_samples/
-├── simple_out.py        # GPIO 输出示例
-├── simple_input.py      # GPIO 输入示例
-├── button_led.py        # 按键输入控制 LED 输出示例
 ├── button_event.py      # 边沿事件检测示例
-└── button_interrupt.py  # 中断方式处理边沿事件示例
+├── button_interrupt.py  # 中断方式处理边沿事件示例
+├── button_led.py        # 按键输入控制 LED 输出示例
+├── gpio_rw_demo.py      # GPIO 读写演示
+├── simple_input.py      # GPIO 输入示例
+├── simple_out.py        # GPIO 输出示例
+└── simple_pwm.py        # PWM 输出示例
 ```
 
 ## 设置引脚编码方式
@@ -48,9 +50,9 @@ GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，相关脚本如下�
 - CVM： 使用字符串代替数字，对应于 CVM / CVB 连接器的信号名称。
 - SOC： 对应的编号是芯片内部的 GPIO 管脚序号。
 
-本文推荐用户使用`BOARD`编码模式，设置编码的方式如下：
+本文推荐用户使用 `BOARD` 编码模式，设置编码的方式如下：
 
-注意：编码每次只能设置一次，如果想要重新设置，需要`GPIO.cleanup()`后重新设置。
+注意：编码每次只能设置一次，如果想要重新设置，需要 `GPIO.cleanup()` 后重新设置。
 
 ```python
 GPIO.setmode(GPIO.BOARD)
@@ -87,12 +89,21 @@ GPIO.setwarnings(False)
 
 :::info
 
-在`RDK S100`平台上，支持`40-pin` GPIO 扩展， `40-pin`在使用过程中有如下的限制:
+RDK S100 的 40-pin 在使用过程中有以下限制：
 
-- `40-pin`上有一组引脚涉及到二选一（UART2, I2C5）。
-- `40-pin`上 PCM 相关引脚如果要使用需要拨动拨码开关。
+- 40-pin 上有一组引脚涉及二选一（UART2、I2C5）。
+- 40-pin 上 PCM 相关引脚如需使用，需要拨动拨码开关。
 
-上述描述细节可以查看下图：
+本文的 GPIO 示例使用的管脚如下：
+
+| 管脚            | 板端丝印           | 说明                       |
+| --------------- | ------------------ | -------------------------- |
+| 第 23 脚        | `SPI0_CLK_3V3`     | SPI0 时钟，可复用为 GPIO   |
+| 第 24 脚        | `SPI0_CS0_3V3`     | SPI0 片选 0，可复用为 GPIO |
+| 第 37 脚        | `40PIN_GPIO5_3V3`  | GPIO 扩展 IC 提供          |
+| 第 15 / 16 脚   | `40PIN_GPIO2_3V3`、`40PIN_GPIO6_3V3` | GPIO 扩展 IC 提供 |
+
+上述限制细节可查看下图：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin.png" alt="管脚配置实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -177,11 +188,11 @@ GPIO.gpio_function(channel)
 
 ## 边沿检测与中断
 
-边沿是电信号`从低到高`（上升沿）或`从高到低`（下降沿）的变化，这种改变可以看作是一种事件的发生，这种事件可以用来触发 CPU 中断信号。
+边沿是电信号 `从低到高`（上升沿）或 `从高到低`（下降沿）的变化。这种变化可看作一种事件的发生，可用于触发 CPU 中断信号。
 
 :::info
 
-在`RDK S100`平台上，`40-pin`上功能名为 PERI_GPIO 的管脚不支持中断使用，它们在`BOARD`编码模式下的编号为：**11**、**13**、**15**、**16**、**18**、**22**、**29**、**31**、**36**、**37**；
+在 `RDK S100` 平台上，`40-pin` 上功能名为 PERI_GPIO 的管脚不支持中断使用，它们在 `BOARD` 编码模式下的编号为：**11**、**13**、**15**、**16**、**18**、**22**、**29**、**31**、**36**、**37**；
 
 管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
 
@@ -197,7 +208,7 @@ GPIO 库提供了三种方法来检测输入事件：
 GPIO.wait_for_edge(channel, GPIO.RISING)
 ```
 
-其中，第二个参数指定要检测的边沿，取值范围为`GPIO.RISING、GPIO.FALLING 或 GPIO.BOTH`。如果要指定等待时间，可以选择设置超时：
+其中，第二个参数指定要检测的边沿，取值范围为 `GPIO.RISING、GPIO.FALLING 或 GPIO.BOTH`。如果要指定等待时间，可以选择设置超时：
 
 ```python
 # 超时以毫秒为单位
@@ -265,17 +276,18 @@ GPIO.remove_event_detect(channel)
 
 ## 测试例程
 
-在 `/app/40pin_samples/`目录下提供主要的测试例程：
+在 `/app/40pin_samples/` 目录下提供以下主要的 GPIO 相关测试例程：
 
-| 测试例程名             | 说明                                          |
-| ---------------------- | --------------------------------------------- |
-| simple_out.py          | 单个管脚`输出`测试                            |
-| simple_input.py        | 单个管脚`输入`测试                            |
-| button_led.py          | 一个管脚作为按键输入，一个管脚作为输出控制 LED |
-| button_event.py        | 捕获管脚的上升沿、下降沿事件                  |
-| button_interrupt.py    | 中断方式处理管脚的上升沿、下降沿事件          |
+| 测试例程              | 功能                                     | 使用管脚（40-pin）                  |
+| --------------------- | ---------------------------------------- | ----------------------------------- |
+| `gpio_rw_demo.py`     | 读写演示：`output` 模式翻转输出电平并打印，`input` 模式读取输入电平，仅在变化时打印 | 输出：第 23 脚（`SPI0_CLK_3V3`）<br/>输入：第 24 脚（`SPI0_CS0_3V3`） |
+| `simple_out.py`       | 输出测试：输出管脚每秒翻转一次电平       | 输出：第 37 脚（`40PIN_GPIO5_3V3`） |
+| `simple_input.py`     | 输入测试：读取输入管脚电平，变化时打印   | 输入：第 37 脚（`40PIN_GPIO5_3V3`） |
+| `button_led.py`       | 按键控制 LED：输入电平同步到输出管脚     | 输出：第 23 脚（`SPI0_CLK_3V3`）<br/>输入：第 24 脚（`SPI0_CS0_3V3`） |
+| `button_event.py`     | 边沿事件：检测输入下降沿，输出拉高 1 秒  | 输出：第 23 脚（`SPI0_CLK_3V3`）<br/>输入：第 24 脚（`SPI0_CS0_3V3`） |
+| `button_interrupt.py` | 中断：检测输入下降沿触发回调，另两脚输出 | 输入：第 24 脚（`SPI0_CS0_3V3`）<br/>输出：第 15 脚（`40PIN_GPIO2_3V3`）、第 16 脚（`40PIN_GPIO6_3V3`） |
 
-- GPIO 设置为`输出模式`，1秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭， 测试代码 `simple_out.py`：
+- GPIO 设置为 `输出模式`，1秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭， 测试代码 `simple_out.py`：
 
 ```python
 #!/usr/bin/env python3
@@ -324,7 +336,7 @@ if __name__ == '__main__':
     main()
 ```
 
-- GPIO 设置为`输入模式`，通过忙轮询方式读取管脚电平值，测试代码 `simple_input.py`：
+- GPIO 设置为 `输入模式`，通过忙轮询方式读取管脚电平值，测试代码 `simple_input.py`：
 
 ```python
 #!/usr/bin/env python3
@@ -383,7 +395,7 @@ if __name__=='__main__':
 
 ```
 
-- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`, 实现检测24号管脚的下降沿，然后控制23号管脚的输出：
+- GPIO 设置为输入模式，捕获管脚的上升沿、下降沿事件，测试代码 `button_event.py`。该示例检测 `SPI0_CS0_3V3`（第 24 脚，输入）的下降沿，然后控制 `SPI0_CLK_3V3`（第 23 脚，输出）：
 
 ```python
 #!/usr/bin/env python3
@@ -447,9 +459,9 @@ if __name__ == '__main__':
 
 ```
 
-- GPIO 设置为输入模式，启动 gpio 中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`, 实现了：
-  - 控制15号管脚以周期为4s，占空比为50%的模式拉高拉低，也就是拉高2s 后拉低2s，在程序运行期间持续运转；
-  - 检测 24 号管脚的下降沿触发中断，中断处理函数会控制16号管脚快速切换高低电平 5 次。用户只要拉低了24号管脚，就可以看到16号管脚以1s 的周期，50%的占空比，也就是0.5s 拉高，0.5s 拉低，运行总共5个周期。
+- GPIO 设置为输入模式，启动 GPIO 中断功能，响应管脚的上升沿、下降沿事件，测试代码 `button_interrupt.py`。该示例实现了：
+  - 控制 `40PIN_GPIO2_3V3`（第 15 脚）以周期 4s、占空比 50% 的模式拉高拉低，即拉高 2s 后拉低 2s，在程序运行期间持续运转；
+  - 检测 `SPI0_CS0_3V3`（第 24 脚）的下降沿触发中断，中断处理函数会控制 `40PIN_GPIO6_3V3`（第 16 脚）快速切换高低电平 5 次。用户只要拉低了 `SPI0_CS0_3V3`，就可以看到 `40PIN_GPIO6_3V3` 以周期 1s、占空比 50% 切换，即 0.5s 拉高、0.5s 拉低，共运行 5 个周期。
 
 ```python
 #!/usr/bin/env python3
@@ -684,11 +696,17 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 
 ## 常见问题
 
-### 运行 GPIO 示例无输出或电平不变
+### 运行 GPIO 示例无打印输出
 
-**原因**：RDK S100 的 40-pin 数字 IO 为 3.3V 电平，示例使用的管脚号随板型自动适配（见 `determine_pins()`）。
+**原因**：部分示例（如 `simple_out.py`）本身无打印，只翻转输出管脚电平。另有部分示例（如 `simple_input.py`、`button_led.py`）仅在输入电平变化时打印，电平不变时无输出。
 
-**解决**：确认外设电平与 3.3V 匹配；输入管脚需外接确定电平，输出管脚可用万用表或 LED 观察。
+**解决**：确认脚本是否本身无打印；对仅在变化时打印的示例，需手动切换输入管脚电平。
+
+### 管脚电平不随操作变化
+
+**原因**：输入管脚悬空时电平不确定，读数不随操作变化；输出管脚未接测量点，无法观察到电平变化。
+
+**解决**：为输入管脚接确定电平（GND 或 3.3V），不要悬空；输出管脚接万用表或 LED 观察。40-pin 数字 IO 为 **3.3V** 电平，接入外部器件时需确认电平匹配。
 
 ### 提示管脚已被占用
 
