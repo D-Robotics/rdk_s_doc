@@ -1,44 +1,85 @@
 ---
 sidebar_position: 2
+title: "AutoTest Usage Guide"
+description: "How to use the AutoTest automated stress testing tool: configure test items in config.ini and launch them with startup.sh"
 ---
+
 # AutoTest Usage Guide
 
-AutoTest provides a flexible automated testing solution that supports customizing stress test duration and test iterations via the configuration file `config.ini`. It also allows users to extend test cases according to their specific requirements, thereby fulfilling diverse testing needs. Developed on top of driver unit tests, this tool implements automated testing functionality while remaining independent from functional unit tests and fully reusing existing code resources.
+AutoTest is an automated test solution pre-installed on the development board. It chains multiple driver functional unit tests into a single unattended stability or stress test run. The configuration file `config/config.ini` selects which test items to run and how long to run them, and you can extend the list with your own test items using the same format.
 
-## AutoTest Directory Structure
+AutoTest is built on top of the driver functional unit test scripts and reuses them directly. The two are independent of each other: you can either orchestrate them with `startup.sh` or run a single test script on its own.
 
-AutoTest uses the `startup.sh` script to read the `config/config.ini` configuration file to launch tests. Users can customize test content by modifying the `config/config.ini` file. When performing stability or stress tests across multiple functionalities, this approach significantly reduces repetitive configuration efforts. Currently, AutoTest has already reused the following test items from driver functional unit tests:
+:::tip
+The pre-installed code is located in `/app/chip_base_test/`. The scripts in this directory have been verified on the development board and can be used directly.
+:::
 
-```bash
-#:~/sdk/source/hobot-multimedia-samples/debian/app/multimedia_samples/chip_base_test$ tree
-.
-├── 01_cpu_bpu_ddr
-│   └── scripts
-│       └── stress_test.sh         # CPU-BPU-DDR stress test
-├── 02_emmc
-│   └── emmc_stability_test.sh     # eMMC stability test
-├── 03_uart_test
-│   └── uartstress.sh              # UART stress test
-├── 04_spi_test
-│   └── spistress.sh               # SPI stress test
-├── config
-│   └── config.ini                 # Configuration file for automated testing
-└── startup.sh                     # Script for auto-start configuration
+## Prerequisites
+
+- Hardware: one development board, with the `/app/chip_base_test/` directory pre-installed by the image.
+- System: an officially released RDK OS image is flashed and the board boots and logs in normally.
+- Dependencies: none. Executables such as `stressapptest` and `bpu_os_test` are pre-installed in the directory; `uart_test` and `spidev_tc` are not on the board by default and must be compiled before running the UART and SPI tests, see the corresponding test pages.
+
+:::note
+Stress testing occupies the CPU, BPU, DDR, eMMC, and peripherals at full load for a long time. Make sure the board has a stable power supply and adequate cooling, and avoid running it on a board that carries production workloads.
+:::
+
+## Code Location
+
+- Board path: `/app/chip_base_test/`
+- Directory structure:
+
+```text
+/app/chip_base_test/
+├── 01_cpu_bpu_ddr/
+│   └── scripts/
+│       ├── stress_test.sh              # CPU-BPU-DDR stress test
+│       ├── stop_test.sh                # Stop a running stress test
+│       ├── stressapptest               # Memory stress test program
+│       ├── Readme.md
+│       └── module/
+│           └── resnet50_224x224_nv12.hbm
+├── 02_emmc/
+│   ├── emmc_stability_test.sh          # eMMC stability test
+│   ├── emmc_performance_test.sh        # eMMC performance test
+│   └── Readme.md
+├── 03_uart_test/
+│   ├── uartstress.sh                   # UART stress test
+│   ├── uart_test.c
+│   ├── Makefile
+│   └── Readme.md
+├── 04_spi_test/
+│   ├── spistress.sh                    # SPI stress test
+│   ├── spidev_tc.c
+│   ├── Makefile
+│   └── Readme.md
+├── 07_cpu_performance/
+│   └── coremark-main/                  # CoreMark source, must be built manually
+├── 08_ddr_bandwidth/
+│   ├── stream.c                        # STREAM source, must be built manually
+│   └── README.md
+├── 10_gpu_3d_test/
+│   └── clpeak/                         # clpeak patch and build instructions, build manually
+├── config/
+│   └── config.ini                      # AutoTest configuration file
+├── log/                                # Test log directory, created by startup.sh
+├── startup.sh                          # AutoTest launcher script
+└── README.md
 ```
 
-## Description of the config.ini Configuration File
+`07_cpu_performance`, `08_ddr_bandwidth`, and `10_gpu_3d_test` only provide source code and build instructions rather than ready-to-run stress scripts, so they are not configured in `config.ini`. See [Related Documentation](#related-documentation) for how to test them individually.
 
-The `config.ini` file is used to configure and manage AutoTest test items. By adjusting parameters within this file, users can quickly select desired tests and specify test parameters. Below is the file structure and configuration instructions:
+## Usage
 
-### Configuration File Structure
+### Configuring config.ini
 
-Each test item starts with `[Test Item Name]` and includes the following fields:
+`startup.sh` uses `config/config.ini` to decide which test items to run and how to run each one. Every test item starts with `[Test Item Name]` and contains the following fields:
 
-- **Status**: Enable status, which can be set to `enabled` (active) or `disabled` (inactive).
-- **Description**: A brief description of the test item, explaining its purpose.
-- **ExecStart**: Path to the test script along with execution parameters, defining how the specific test is run.
+- **`Status`**: Enable status. Set to `enabled` to activate the item, or `disabled` to deactivate it.
+- **`Description`**: A brief description of the test item.
+- **`ExecStart`**: The absolute path to the test script plus its runtime parameters.
 
-### Configuration File Example
+Example configuration:
 
 ```bash
 [CpuAndBpu]
@@ -54,7 +95,7 @@ ExecStart=/app/chip_base_test/02_emmc/emmc_stability_test.sh -t 24h
 [UART]
 Status=enabled
 Description=UART stress test
-ExecStart=/app/chip_base_test/03uart_test/uartstress.sh -b 115200 -d /dev/ttyS2 -c 1000000
+ExecStart=/app/chip_base_test/03_uart_test/uartstress.sh -b 115200 -d /dev/ttyS2 -c 1000000
 
 [SPI]
 Status=enabled
@@ -62,149 +103,163 @@ Description=SPI stress test
 ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000000
 ```
 
-### Usage Instructions
+Adjust the parameters in `ExecStart` to change the test behavior. For example, change `-t 24h` to `-t 30m` to shorten the run, or replace `/dev/ttyS2` and `/dev/spidev0.0` with the device nodes actually in use. Every test script supports `-h` for its own parameter reference.
 
-1. **Edit the configuration file:**
-   Open and edit the `config/config.ini` file, adjusting the `Status` value for each test item as needed:
-   - Set to `enabled`: activate the test item.
-   - Set to `disabled`: deactivate the test item.
+### Launching the Test
 
-2. **Modify test parameters:**
-   Adjust the command and parameters in `ExecStart` according to actual requirements. For example:
-   - Modify test duration (e.g., `-t 24h` means 24 hours of testing).
-   - Adjust device paths (e.g., `/dev/ttyS2` or `/dev/spidev0.0`).
-   - Tune other test options (e.g., loop count `-c` or baud rate `-b`).
-   - All current test scripts support the `-h` option, allowing users to consult help information for parameter adjustments.
-
-## Launching Tests with startup.sh
-
-After configuring `config.ini`, users can start AutoTest by running the `startup.sh` script. The script supports multiple launch methods to meet different usage scenarios:
-
-- **Manual launch or debugging of test items**
-
-  Suitable for scenarios where the official system image is used and manual execution or debugging of test items is required. Execute the following command to start testing:
-
-  ```bash
-  /app/chip_base_test/startup.sh
-  # or
-  cd /app/chip_base_test
-  ./startup.sh
-  ```
-
-  This method facilitates debugging individual test items or observing test execution.
-
-- **Auto-start or debugging of test items**
-
-  Once test items have been configured and debugged successfully, `startup.sh` can also be added to the `rc.local` auto-start script to enable automatic testing upon board power-up.
-
-## Viewing Test Logs
-
-During test execution, the system generates relevant log files that users can inspect to monitor test progress or results. By default, log files are saved in the following path:
+Before starting, confirm that the executables of the enabled test items have been built in their directories. `stressapptest` and `bpu_os_test` ship with the image, while `uart_test` and `spidev_tc` are not on the board by default and must be generated by running `make` in the `03_uart_test` and `04_spi_test` directories respectively (see the corresponding test pages for how to build them):
 
 ```bash
-/app/chip_base_test/log
+ls /app/chip_base_test/01_cpu_bpu_ddr/scripts/stressapptest
+ls /app/chip_base_test/03_uart_test/uart_test
+ls /app/chip_base_test/04_spi_test/spidev_tc
 ```
 
-### Changing the Log Storage Path
+If any of these files is missing, the corresponding test item will fail to start; if you do not need the UART or SPI tests, you can also set `Status` to `disabled` for those sections in `config.ini`.
 
-Users can change the log storage location using either of the following two methods:
+After configuring `config.ini`, start the test with:
 
-1. **Moving the directory:**
-   Logs are saved by default under the `chip_base_test` directory. Users can simply move the entire `chip_base_test` directory to a new location, for example:
+```bash
+/app/chip_base_test/startup.sh
+# or
+cd /app/chip_base_test
+./startup.sh
+```
+
+Without `-t`, `startup.sh` runs every test item whose `Status` is `enabled`, in the order they appear in `config.ini`.
+
+:::note
+Before running the tests, `startup.sh` first pins the CPU frequency governor to `performance`:
+
+```bash
+echo performance > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+```
+
+This is a prerequisite for comparable results across repeated runs. Do not switch back to another governor during the test.
+:::
+
+### Selecting Test Items
+
+`startup.sh` supports `-h/--help` and `-t/--test <test name>`, and the latter can be repeated to run several items in sequence:
+
+```shell
+root@drobot:/app/chip_base_test# ./startup.sh -h
+Usage: ./startup.sh [OPTIONS]
+
+Options:
+  -h, --help              Show this help message and exit
+  -t, --test TEST_NAME    Specify the test to execute (can be used multiple times)
+
+Available tests:
+  CpuAndBpu            CPU, BPU, and DDR stress test
+  EmmcStablity         eMMC stability test
+  UART                 UART stress test
+  SPI                  SPI stress test
+```
+
+```bash
+cd /app/chip_base_test
+./startup.sh -t CpuAndBpu -t SPI   # Run only CpuAndBpu and SPI
+```
+
+An item passed to `-t` must be enabled. If the name does not exist, or its `Status` is not `enabled`, the script prints `Test '<name>' not found or not enabled in config.ini` and exits with a non-zero status.
+
+### Viewing Test Logs
+
+The `log/` directory next to `startup.sh`, that is `/app/chip_base_test/log`, is the shared log directory. It is created automatically by `startup.sh` at launch, and each test script writes its logs there by default.
+
+- `log/status`: progress records written by `startup.sh`. Each completed item appends a `Running <test name>...finish` line, and the final line is `All tests completed successfully.`
+- `01_cpu_bpu_ddr`: `bpu-stress<N>.log`, `cpu-stress<N>.log`, `monitor-stress<N>.log` (temperature and utilization).
+- `02_emmc`: `test_iozone_emmc_stability.log`.
+- `03_uart_test`: `uart_test_log<N>.txt`.
+- `04_spi_test`: `spi_test_log<N>.txt`.
+
+`<N>` is a sequence number incremented automatically by the script, so repeated runs do not overwrite previous logs.
+
+To store logs elsewhere, use one of the following two methods:
+
+1. **Move the whole directory.** The scripts derive the log directory from their own path, so the logs follow `chip_base_test` when you move it:
 
    ```bash
    mv /app/chip_base_test /userdata/chip_base_test
    ```
 
-   After moving, log files will automatically be saved to the new path, for example:
+   Logs are then saved to `/userdata/chip_base_test/log` without editing `config.ini`.
 
-   ```text
-   /userdata/chip_base_test/log
-   ```
-
-2. **Customizing the log output path**
-   Driver unit test scripts support the `-o` option to customize the log directory. Users can edit the `config.ini` file and add the `-o` option to the `ExecStart` parameter of the corresponding test item. For example:
+2. **Set the output directory with `-o`.** Every test script supports `-o <directory>`. Add it to the `ExecStart` of the corresponding test item in `config.ini`:
 
    ```text
    ExecStart=/app/chip_base_test/01_cpu_bpu_ddr/scripts/stress_test.sh -t 24h -o /userdata/logs
    ```
 
-   This configuration saves logs to the `/userdata/logs` directory.
+### Auto-Starting on Boot
 
-By flexibly adjusting the log storage path, users can manage and review test results more conveniently while meeting log storage requirements in different environments.
+Once the test items are configured and verified, add `startup.sh` to `rc.local` to start testing automatically after the board powers on.
 
-## Adding New Test Items
+### Adding New Test Items
 
-AutoTest supports flexible extension of test items through the `config.ini` file and scripts. Users can add new test functionalities as needed. Below are the steps for adding a new test item:
+AutoTest can be extended with new test items through `config.ini` and scripts. Follow these steps.
 
-### Writing a Test Script
+1. **Write the test script.** It must run standalone and satisfy the following:
 
-Before adding a new test item, prepare or write the corresponding test script and ensure it can run independently. The test script should include the following elements:
+   - It has clear input parameters (test duration, device path, and so on).
+   - It supports the `-o` parameter to customize the log output directory.
 
-- Clear input parameters (e.g., test duration, device path, etc.).
-- Log output functionality, preferably supporting the `-o` parameter to customize the log path.
+   Place the script at a suitable path, for example `/app/chip_base_test/new_test/new_test.sh`.
 
-Save the test script in an appropriate location, for example:
+2. **Add a configuration block in `config.ini`**, for example:
 
-```bash
-/app/chip_base_test/new_test/new_test.sh
-```
+   ```text
+   [NewTest]
+   Status=enabled
+   Description=New feature stability or stress test
+   ExecStart=/app/chip_base_test/new_test/new_test.sh -t 12h -o /userdata/new_test_logs
+   ```
 
-### Configuring the `config.ini` File
+   Here `-t 12h` sets a 12-hour run and `-o /userdata/new_test_logs` sets the log directory.
 
-Add a new test item configuration block in `config/config.ini`, defining the following fields:
+3. **Launch and verify.** Run `startup.sh` again and confirm the new item is loaded. Check that log files are generated as expected, that the configured parameters take effect, and that the results meet expectations.
 
-- **Status**: Set to `enabled` to activate the test, or `disabled` to keep it inactive temporarily.
-- **Description**: Describe the test functionality for easy identification.
-- **ExecStart**: Specify the test script path and its runtime parameters.
+## Expected Results
 
-Example configuration:
+- Command: `./startup.sh -t <test name>`, or `./startup.sh` to run all enabled items.
+- Success indicators: the console prints `Executing <test name>...` for each item; the corresponding log files appear under `log/`; each script prints its own success message at the end of its log, such as `UART test completed successfully!` for UART, `SPI test completed successfully!` for SPI, and `Test loop <N> succeeded!` for eMMC; after everything finishes, `log/status` contains `All tests completed successfully.`
+- Result preview: the contents of `log/status` look like:
 
-```text
-[NewTest]
-Status=enabled
-Description=New feature stability or stress test
-ExecStart=/app/chip_base_test/new_test/new_test.sh -t 12h -o /userdata/new_test_logs
-```
+  ```text
+  Running CpuAndBpu...finish
+  Running EmmcStablity...finish
+  All tests completed successfully.
+  ```
 
-Field explanations:
+- Troubleshooting: keywords such as `failed` or `error` in a log, or a missing `All tests completed successfully.` line in `log/status`, indicate that a test item did not finish normally. Locate the cause in the log file for that item under `log/`, or run that test script alone to reproduce the issue.
 
-- The **`-t`** parameter specifies test duration, e.g., `12h` for 12 hours.
-- The **`-o`** parameter specifies the log storage path, e.g., `/userdata/new_test_logs`.
-
-### Launching the Test
-
-After completing the configuration, start the test using the `startup.sh` script:
-
-```bash
-/app/chip_base_test/startup.sh
-```
-
-The `startup.sh` script will automatically load and execute the newly added test item based on the `config.ini` configuration.
-
-### Verifying the Test Item
-
-After running the test, verify the following to ensure the new test item works correctly:
-
-- Whether log files are generated as expected and contain complete records.
-- Whether test results meet functional expectations.
-- Whether parameters configured in `config.ini` take effect correctly.
+:::note
+The success criteria above come from the log messages built into each script. A stress run takes a long time and its actual output varies with hardware state and test parameters, so always rely on the results from the board.
+:::
 
 ## FAQ
 
-### startup.sh fails to run tests correctly
+### Test 'xxx' not found or not enabled in config.ini
 
-**Cause**: `config/config.ini` still uses the legacy path `/app/multimedia_samples/chip_base_test/`, or the UART/SPI directory names still use the old names `04_uart_test`/`05_spi_test`.
+**Cause**: The test name passed to `-t` is misspelled, or that item's `Status` is not `enabled`.
 
-**Solution**: Update them to `/app/chip_base_test/` and `03_uart_test`/`04_spi_test` as shown in the examples in this document.
+**Solution**: Run `./startup.sh -h` first to list the available test names, then pass one to `-t`. If the item needs to run, set its `Status` to `enabled` in `config.ini`.
 
 ### No test logs are generated after startup
 
-**Cause**: The log output directory does not exist or the path is misconfigured.
+**Cause**: The log directory does not exist or is not writable, or the path given to `-o` is wrong.
 
-**Solution**: Confirm that the `/app/chip_base_test/log` directory is writable; after moving the `chip_base_test` directory, update the `-o` output path in `config.ini` accordingly.
+**Solution**: Confirm that the directory containing `startup.sh` is writable; the `log/` directory is created automatically by the script. If you used `-o` in `ExecStart`, confirm that the directory exists and is writable.
 
 ## Related Documentation
 
 - [Driver Functional Unit Test](./01_overview.md)
 - [Set Up the Development Environment](../../06_environment_build/01_environment_build.md)
+- [CPU-BPU-DDR Stress Test](./03_bpu_cpu_ddr_stress.md)
+- [eMMC Stress Test](./04_emmc_stress.md)
+- [UART Stress Test](./05_uart_stress.md)
+- [SPI Stress Test](./06_spi_stress.md)
+- [CPU Performance Testing](./09_cpu_performance.md)
+- [DDR Bandwidth Testing](./10_ddr_bandwidth.md)
+- [3D GPU Performance Testing](./12_3d_gpu.md)

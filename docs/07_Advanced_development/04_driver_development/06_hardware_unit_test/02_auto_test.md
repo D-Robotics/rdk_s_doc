@@ -1,46 +1,85 @@
 ---
 sidebar_position: 2
 title: "AutoTest 使用方法"
-description: "AutoTest 使用方法"
+description: "AutoTest 自动化压测工具的使用方法：通过 config.ini 配置测试项，由 startup.sh 统一启动"
 ---
+
 # AutoTest 使用方法
 
-AutoTest 提供了一种灵活的自动化测试解决方案，支持通过配置文件 `config.ini` 自定义压测时长和测试次数，并允许用户根据需求扩展测试用例，以满足不同的测试需求。该工具在驱动单元测试的基础上开发，实现了自动化测试功能，同时与功能单元的独立测试相互独立，并充分复用现有代码资源。
+AutoTest 是预置在开发板上的一套自动化测试方案，用于把多个驱动功能单元测试串联成一次无人值守的稳定性或压力测试。它通过配置文件 `config/config.ini` 选择测试项并指定压测时长，用户也可以按同样的格式扩展自己的测试项。
 
-## AutoTest 目录结构
+AutoTest 在驱动功能单元测试脚本的基础上开发，二者相互独立：既可以用 `startup.sh` 统一编排，也可以单独运行某一个测试脚本。
 
-AutoTest 使用 `startup.sh` 脚本读取 `config/config.ini` 配置文件来启动测试。用户可以通过修改 `config/config.ini` 文件自定义测试内容。在需要进行多个功能的稳定性或压力测试时，这种方式能显著减少用户重复配置测试环境的工作量。目前，AutoTest 已经复用了驱动功能单元测试中的以下测试项。
+:::tip
+板端预置代码位于 `/app/chip_base_test/`，该目录下的脚本已在开发板上验证通过，可直接使用。
+:::
 
-```bash
-#:~/sdk/source/hobot-multimedia-samples/debian/app/multimedia_samples/chip_base_test$ tree
-.
-├── 01_cpu_bpu_ddr
-│   └── scripts
-│       └── stress_test.sh         # CPU-BPU-DDR 压力测试
-├── 02_emmc
-│   └── emmc_stability_test.sh     # eMMC 稳定性测试
-├── 03_uart_test
-│   └── uartstress.sh              # 串口压力测试
-├── 04_spi_test
-│   └── spistress.sh               # SPI 压力测试
-├── config
-│   └── config.ini                 # 自动化测试的配置文件
-└── startup.sh                     # 配置自启动的脚本程序
+## 环境准备
+
+- 硬件：开发板一台，`/app/chip_base_test/` 目录已随镜像预置。
+- 系统：已烧录官方发布的 RDK OS 镜像，可正常启动并登录。
+- 依赖：无需额外安装。`stressapptest`、`bpu_os_test` 等可执行文件已随目录预置；`uart_test`、`spidev_tc` 默认不在板端，运行 UART 与 SPI 测试前需先编译，见各测试项章节。
+
+:::note
+压测会长时间占满 CPU、BPU、DDR、eMMC 与外设资源，请确认开发板供电稳定、散热正常，并避免在承载业务的板卡上执行。
+:::
+
+## 代码位置
+
+- 板端路径：`/app/chip_base_test/`
+- 目录结构：
+
+```text
+/app/chip_base_test/
+├── 01_cpu_bpu_ddr/
+│   └── scripts/
+│       ├── stress_test.sh              # CPU-BPU-DDR 压力测试
+│       ├── stop_test.sh                # 停止正在进行的压力测试
+│       ├── stressapptest               # 内存压力测试程序
+│       ├── Readme.md
+│       └── module/
+│           └── resnet50_224x224_nv12.hbm
+├── 02_emmc/
+│   ├── emmc_stability_test.sh          # eMMC 稳定性测试
+│   ├── emmc_performance_test.sh        # eMMC 性能测试
+│   └── Readme.md
+├── 03_uart_test/
+│   ├── uartstress.sh                   # 串口压力测试
+│   ├── uart_test.c
+│   ├── Makefile
+│   └── Readme.md
+├── 04_spi_test/
+│   ├── spistress.sh                    # SPI 压力测试
+│   ├── spidev_tc.c
+│   ├── Makefile
+│   └── Readme.md
+├── 07_cpu_performance/
+│   └── coremark-main/                  # CoreMark 源码，需自行编译
+├── 08_ddr_bandwidth/
+│   ├── stream.c                        # STREAM 源码，需自行编译
+│   └── README.md
+├── 10_gpu_3d_test/
+│   └── clpeak/                         # clpeak 补丁与编译说明，需自行编译
+├── config/
+│   └── config.ini                      # AutoTest 配置文件
+├── log/                                # 测试日志目录，运行 startup.sh 时自动创建
+├── startup.sh                          # AutoTest 启动脚本
+└── README.md
 ```
 
-## config.ini 配置文件说明
+其中 `07_cpu_performance`、`08_ddr_bandwidth`、`10_gpu_3d_test` 只提供源码和编译说明，不是可直接调用的压测脚本，因此没有配置在 `config.ini` 中。三者的独立测试方法见「[相关文档](#相关文档)」。
 
-`config.ini` 文件用于配置和管理 AutoTest 的测试项，通过调整其中的参数，用户可以快速选择需要执行的测试并指定测试参数。以下是文件结构及配置说明：
+## 使用方法
 
-### 配置文件结构
+### 配置 config.ini
 
-每个测试项以 `[测试项名称]` 开头，包含以下字段：
+`startup.sh` 通过 `config/config.ini` 决定运行哪些测试项、以及每个测试项怎么跑。每个测试项以 `[测试项名称]` 开头，包含以下字段：
 
-- **Status**:  启用状态，可设置为 `enabled`（启用）或 `disabled`（禁用）。
-- **Description**:  测试项的简要描述，说明测试内容。
-- **ExecStart**:  测试脚本的路径及运行参数，定义具体测试的执行方式。
+- **`Status`**：启用状态，设置为 `enabled` 表示启用，设置为 `disabled` 表示禁用。
+- **`Description`**：测试项的简要描述。
+- **`ExecStart`**：测试脚本的绝对路径及其运行参数。
 
-### 配置文件示例
+配置示例：
 
 ```bash
 [CpuAndBpu]
@@ -64,160 +103,163 @@ Description=SPI stress test
 ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000000
 ```
 
-:::info
-部分官方镜像中 `/app/chip_base_test/config/config.ini` 可能仍沿用旧路径 `/app/multimedia_samples/chip_base_test/`（该路径已不存在），且 UART/SPI 目录名仍写为 `04_uart_test`/`05_spi_test`。请以本文示例中的 `/app/chip_base_test/` 及 `03_uart_test`/`04_spi_test` 为准，否则 `startup.sh` 无法正确执行。
-:::
+按需调整 `ExecStart` 中的参数即可改变测试行为，例如把 `-t 24h` 改为 `-t 30m` 缩短压测时长，或把 `/dev/ttyS2`、`/dev/spidev0.0` 换成实际使用的设备节点。所有测试脚本都支持 `-h` 查看各自的参数说明。
 
-### 使用说明
+### 启动测试
 
-1. **编辑配置文件**：
-   打开并编辑 `config/config.ini` 文件，根据需要调整每个测试项的 `Status` 值：
-   - 设置为 `enabled`：启用测试项。
-   - 设置为 `disabled`：禁用测试项。
-2. **修改测试参数**：
-   根据实际需求，调整 `ExecStart` 中的命令和参数。例如：
-   - 修改测试时长（如 `-t 24h` 表示测试持续 24 小时）。
-   - 调整设备路径（如 `/dev/ttyS2` 或 `/dev/spidev0.0`）。
-   - 调整其他测试选项（如循环次数 `-c` 或波特率 `-b`）。
-   - 目前支持的所有测试项的脚本程序都支持 `-h` 选项，可以查阅命令帮助信息来调整参数。
-
-## 使用 startup.sh 启动测试
-
-在完成 `config.ini` 配置后，用户可以通过运行 `startup.sh` 脚本启动 AutoTest。脚本支持多种启动方式，以满足不同的使用需求：
-
-- **手动启动或调试测试项**
-
-  适用于使用官方系统镜像并需要手动运行或调试测试项的场景。执行以下命令启动测试：
-
-  ```bash
-  /app/chip_base_test/startup.sh
-  # 或者
-  cd /app/chip_base_test
-  ./startup.sh
-  ```
-
-  `startup.sh` 也支持 `-h` 查看可用测试项、`-t <测试项名称>` 只运行单个测试项：
-
-  ```bash
-  cd /app/chip_base_test
-  ./startup.sh -h             # 列出 config.ini 中所有启用的测试项
-  ./startup.sh -t CpuAndBpu   # 只运行 CpuAndBpu 这一项
-  ```
-
-​	此方式便于调试单项测试内容或观察测试执行情况。
-
-- **自启动或调试测试项**
-  测试项已经配置完成且调试通过时，也可以将 startup.sh 放到 rc.local 自启动脚本中进行自启动测试，需要开发板在上电后自动运行测试的场景
-
-## 查看测试日志
-
-在测试运行期间，系统会生成相关日志文件，用户可以通过这些日志检查测试的进展或结果。默认情况下，日志文件保存在以下路径：
+启动前先确认启用测试项的可执行文件已在对应目录下编译好。`stressapptest`、`bpu_os_test` 已随镜像预置；`uart_test`、`spidev_tc` 默认不在板端，需分别在 `03_uart_test`、`04_spi_test` 目录下执行 `make` 生成（编译方法见各测试项章节）：
 
 ```bash
-/app/chip_base_test/log
+ls /app/chip_base_test/01_cpu_bpu_ddr/scripts/stressapptest
+ls /app/chip_base_test/03_uart_test/uart_test
+ls /app/chip_base_test/04_spi_test/spidev_tc
 ```
 
-### 修改日志保存路径
+任一文件缺失时，对应测试项会启动失败；用不到 UART 或 SPI 测试时，也可把 `config.ini` 中对应段的 `Status` 改为 `disabled`。
 
-用户可以通过以下两种方式更改日志的保存位置：
+完成 `config.ini` 配置后，执行以下命令启动测试：
 
-1. **移动目录**：
-    日志默认保存在 `chip_base_test` 目录下。用户只需将整个 `chip_base_test` 目录移动到新的位置，例如：
+```bash
+/app/chip_base_test/startup.sh
+# 或者
+cd /app/chip_base_test
+./startup.sh
+```
+
+不指定 `-t` 时，`startup.sh` 会按 `config.ini` 中的先后顺序，依次运行所有 `Status=enabled` 的测试项。
+
+:::note
+运行测试前，`startup.sh` 会先把 CPU 调频策略固定为 `performance`：
+
+```bash
+echo performance > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+```
+
+这是保证多次压测结果可比的前提，测试期间请勿改回其他调频策略。
+:::
+
+### 选择测试项
+
+`startup.sh` 支持 `-h/--help` 与 `-t/--test <测试项名称>`，后者可重复使用以依次运行多项：
+
+```shell
+root@drobot:/app/chip_base_test# ./startup.sh -h
+Usage: ./startup.sh [OPTIONS]
+
+Options:
+  -h, --help              Show this help message and exit
+  -t, --test TEST_NAME    Specify the test to execute (can be used multiple times)
+
+Available tests:
+  CpuAndBpu            CPU, BPU, and DDR stress test
+  EmmcStablity         eMMC stability test
+  UART                 UART stress test
+  SPI                  SPI stress test
+```
+
+```bash
+cd /app/chip_base_test
+./startup.sh -t CpuAndBpu -t SPI   # 只运行 CpuAndBpu 和 SPI 两项
+```
+
+`-t` 指定的测试项必须已启用。若名称不存在或该项的 `Status` 不是 `enabled`，脚本会输出 `Test '<名称>' not found or not enabled in config.ini` 并以非 0 状态退出。
+
+### 查看测试日志
+
+`startup.sh` 所在目录下的 `log/` 是统一的日志目录，即 `/app/chip_base_test/log`。该目录由 `startup.sh` 在启动时自动创建，各测试脚本默认也把日志写入同一目录。
+
+- `log/status`：`startup.sh` 的进度记录，每完成一项追加一行 `Running <测试项名称>...finish`，全部完成后追加 `All tests completed successfully.`。
+- `01_cpu_bpu_ddr`：`bpu-stress<N>.log`、`cpu-stress<N>.log`、`monitor-stress<N>.log`（记录温度与占用率）。
+- `02_emmc`：`test_iozone_emmc_stability.log`。
+- `03_uart_test`：`uart_test_log<N>.txt`。
+- `04_spi_test`：`spi_test_log<N>.txt`。
+
+文件名中的 `<N>` 是脚本自动递增的序号，重复运行时不会覆盖上一次的日志。
+
+如需把日志写到其他位置，有两种方式：
+
+1. **移动整个目录**：脚本内部用自身路径推导日志目录，把 `chip_base_test` 整体移动到新位置后，日志会自动跟随，例如：
 
    ```bash
    mv /app/chip_base_test /userdata/chip_base_test
    ```
 
-   移动后，日志文件将自动保存到新的路径，例如：
+   此后日志保存到 `/userdata/chip_base_test/log`，无需修改 `config.ini`。
 
-   ```text
-   /userdata/chip_base_test/log
-   ```
-
-2. **自定义日志输出路径**
-   驱动单元测试程序的脚本支持通过 `-o` 选项自定义日志目录。用户可以编辑 `config.ini` 配置文件，在对应测试项的 `ExecStart` 参数中添加 `-o` 选项。例如：
+2. **用 `-o` 指定输出目录**：所有测试脚本都支持 `-o <目录>`，在 `config.ini` 中对应测试项的 `ExecStart` 里加上该参数即可，例如：
 
    ```text
    ExecStart=/app/chip_base_test/01_cpu_bpu_ddr/scripts/stress_test.sh -t 24h -o /userdata/logs
    ```
 
-   此配置会将日志保存到 `/userdata/logs` 目录下。
+### 配置开机自启动
 
-通过灵活调整日志保存路径，用户可以更方便地管理和查看测试结果，同时满足不同环境下的日志存储需求。
+测试项配置完成并调试通过后，可以把 `startup.sh` 加入 `rc.local`，让开发板上电后自动开始测试。
 
-## 新增测试项
+### 新增测试项
 
-AutoTest 支持通过配置 `config.ini` 文件和脚本灵活扩展测试项，用户可以根据需求添加新的测试功能。以下是新增测试项的操作步骤：
+AutoTest 通过 `config.ini` 与脚本扩展测试项，步骤如下。
 
-### 编写测试脚本
+1. **编写测试脚本**。脚本需要能独立运行，并满足：
 
-在新增测试项前，需要先编写或准备对应的测试脚本，并确保脚本可以独立运行。测试脚本应包含以下要素：
+   - 有明确的输入参数（如测试时长、设备路径等）。
+   - 支持 `-o` 参数自定义日志输出目录。
 
-- 明确的输入参数（如测试时长、设备路径等）。
-- 日志输出功能，建议支持 `-o` 参数自定义日志路径。
+   把脚本放到合适的路径，例如 `/app/chip_base_test/new_test/new_test.sh`。
 
-将测试脚本保存到适当位置，例如：
+2. **在 `config.ini` 中新增配置段**，示例：
 
-```bash
-/app/chip_base_test/new_test/new_test.sh
-```
+   ```text
+   [NewTest]
+   Status=enabled
+   Description=New feature stability or stress test
+   ExecStart=/app/chip_base_test/new_test/new_test.sh -t 12h -o /userdata/new_test_logs
+   ```
 
-### 配置 `config.ini` 文件
+   其中 `-t 12h` 指定测试时长为 12 小时，`-o /userdata/new_test_logs` 指定日志目录。
 
-在 `config/config.ini` 中新增测试项配置段落，定义以下字段：
+3. **启动并验证**。重新运行 `startup.sh`，确认新测试项被加载；检查日志文件是否按预期生成、参数是否正确生效、测试结果是否符合功能预期。
 
-- **Status**: 设置为 `enabled` 启用测试，或设置为 `disabled` 暂不启用。
-- **Description**: 描述测试功能，方便识别测试项。
-- **ExecStart**: 填写测试脚本路径及其运行参数。
+## 运行效果
 
-示例配置：
+- 运行命令：`./startup.sh -t <测试项名称>`，或直接执行 `./startup.sh` 运行全部启用项。
+- 成功标志：控制台逐项打印 `Executing <测试项名称>...`；`log/` 下生成对应日志文件；各脚本在日志末尾输出自己的成功文案，例如 UART 的 `UART test completed successfully!`、SPI 的 `SPI test completed successfully!`、eMMC 的 `Test loop <N> succeeded!`；全部结束后 `log/status` 中出现 `All tests completed successfully.`。
+- 结果预览：`log/status` 的内容形如：
 
-```text
-[NewTest]
-Status=enabled
-Description=New feature stability or stress test
-ExecStart=/app/chip_base_test/new_test/new_test.sh -t 12h -o /userdata/new_test_logs
-```
+  ```text
+  Running CpuAndBpu...finish
+  Running EmmcStablity...finish
+  All tests completed successfully.
+  ```
 
-字段说明：
+- 失败排查：日志中出现 `failed`、`error` 等关键字，或 `log/status` 缺少 `All tests completed successfully.`，说明有测试项未正常结束。此时按测试项名称查看 `log/` 下对应的日志文件定位原因，也可单独运行该测试脚本复现。
 
-- **`-t`** 参数指定测试时长，例如 `12h` 表示 12 小时。
-- **`-o`** 参数指定日志保存路径，例如 `/userdata/new_test_logs`。
-
-### 启动测试
-
-完成配置后，通过 `startup.sh` 脚本启动测试：
-
-```bash
-/app/chip_base_test/startup.sh
-```
-
-`startup.sh` 会根据 `config.ini` 文件中的配置自动加载并运行新增的测试项。
-
-### 验证测试项
-
-运行测试后，检查以下内容以确保新增测试项正常工作：
-
-- 日志文件是否按预期生成，且内容记录完整。
-- 测试结果是否符合功能预期。
-- `config.ini` 配置的参数是否正确生效。
+:::note
+以上成功判据来自各脚本内置的日志文案。压测耗时较长，实际输出内容会随硬件状态与测试参数变化，请以板端运行结果为准。
+:::
 
 ## 常见问题
 
-### startup.sh 无法正确执行测试
+### 提示 Test 'xxx' not found or not enabled in config.ini
 
-**原因**：`config/config.ini` 沿用旧路径 `/app/multimedia_samples/chip_base_test/`，或 UART/SPI 目录名仍写为旧名 `04_uart_test`/`05_spi_test`。
+**原因**：`-t` 指定的测试项名称拼写有误，或该项的 `Status` 不是 `enabled`。
 
-**解决**：按本文示例统一改为 `/app/chip_base_test/` 与 `03_uart_test`/`04_spi_test`。
+**解决**：先执行 `./startup.sh -h` 查看可用的测试项名称，再用 `-t` 指定；若该项需要运行，请把 `config.ini` 中对应的 `Status` 改为 `enabled`。
 
 ### 启动后未产生测试日志
 
-**原因**：日志输出目录不存在或路径配置错误。
+**原因**：日志目录不存在或不可写，或 `-o` 指定的路径有误。
 
-**解决**：确认 `/app/chip_base_test/log` 目录可写；移动 `chip_base_test` 目录后同步更新 `config.ini` 中的 `-o` 输出路径。
+**解决**：确认 `startup.sh` 所在目录可写，`log/` 会由脚本自动创建；若在 `ExecStart` 中使用了 `-o`，请确认该目录存在且可写。
 
 ## 相关文档
 
-- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [概述](/Advanced_development/driver_development/hardware_unit_test)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [驱动功能单元测试](./01_overview.md)
+- [搭建开发环境](../../06_environment_build/01_environment_build.md)
+- [CPU-BPU-DDR 压力测试](./03_bpu_cpu_ddr_stress.md)
+- [eMMC 稳定性测试](./04_emmc_stress.md)
+- [UART 压力测试](./05_uart_stress.md)
+- [SPI 压力测试](./06_spi_stress.md)
+- [CPU 性能测试](./09_cpu_performance.md)
+- [DDR 带宽测试](./10_ddr_bandwidth.md)
+- [3D GPU 性能测试](./12_3d_gpu.md)
