@@ -751,7 +751,7 @@ GPU 驱动提供 sysfs 节点调节性能相关的参数，这些参数一般保
 ## 相关文档
 
 - [sample_gpu_3d 使用说明](../02_multimedia_sample/08_sample_gpu_3d.md)
-- [视频处理框架 - VPF/PYM](06_vpf_pym_api.md)
+- [视频处理框架 - VPF/PYM](07_vpf_pym_api.md)
 - [hbmem 使用指南](02_hbmem/01_hbmem.md)
 - [显示输出 - DISP](09_disp_api.md)
 - [BPU 底层 API](13_bpu_api.md)

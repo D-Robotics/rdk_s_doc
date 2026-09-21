@@ -63,4 +63,4 @@ sudo hb_switch_ion.sh default
 ## 相关文档
 
 - [srpi-config 工具配置](../../02_System_configuration/04_srpi_config/01_overview.md)
-- [如何查看当前 ION 内存分配情况](../../07_Advanced_development/04_driver_development/15_driver_hbmem/04_s100_hbmem_debug.md)
+- [如何查看当前 ION 内存分配情况](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/02_hbmem/02_ion.md)
