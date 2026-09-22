@@ -6,20 +6,45 @@ description: "RDK MIPI 摄像头数据通路测试与 HDMI 出图"
 
 # MIPI 摄像头使用
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 开发板预置了 `05_mipi_camera_streamer.py` 脚本，用于测试 MIPI 摄像头的数据通路：实时采集 MIPI 摄像头的图像数据，并通过 HDMI 接口输出到显示器。
 
 :::tip
-本示例代码位于板端 `/app/pydev_demo/mipi_camera_sample/` 目录，已在板端经过实际验证。
+<DocScope products="RDK S100">
+本示例代码位于板端 `/app/pydev_demo/10_mipi_camera_sample/` 目录，已在板端经过实际验证。
+</DocScope>
+<DocScope products="RDK S600">
+本示例代码位于板端 `/app/pydev_demo/mipi_camera_sample/` 目录。
+</DocScope>
 :::
 
 ## 环境准备
 
-- 将 MIPI 摄像头模组连接到开发板的 MIPI CSI 接口，具体连接方法参考 [硬件简介 - MIPI 接口](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/03_rdk_s600_camera_expansion_board.md)
+- 将 MIPI 摄像头模组连接到开发板的 MIPI CSI 接口，具体连接方法参考：
+  <DocScope products="RDK S100">[硬件简介 - MIPI 接口](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md)</DocScope>
+  <DocScope products="RDK S600">[硬件简介 - MIPI 接口](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/03_rdk_s600_camera_expansion_board.md)</DocScope>
 - MIPI 摄像头接口采用自动检测模式，运行示例时只能接入一个 MIPI 摄像头（任意 MIPI 接口均可），同时接入多个会报错
 - 通过 HDMI 线缆连接开发板和显示器
 
 ## 代码位置
 
+<DocScope products="RDK S100">
+板端路径：`/app/pydev_demo/10_mipi_camera_sample/`
+
+```text
+10_mipi_camera_sample/
+├── 01_mipi_camera_yolov5x.py    # YOLOv5X 实时目标检测并显示
+├── 02_mipi_camera_dump.py       # 抓拍图像帧并保存为 YUV 文件
+├── 03_mipi_camera_scale.py      # 对本地 YUV 图像做缩放
+├── 04_mipi_camera_crop_scale.py # 对本地 YUV 图像裁剪并缩放
+├── 05_mipi_camera_streamer.py   # 图像实时显示到 HDMI（数据通路测试）
+└── README.md                    # 使用说明
+```
+</DocScope>
+<DocScope products="RDK S600">
 板端路径：`/app/pydev_demo/mipi_camera_sample/`
 
 ```text
@@ -31,6 +56,7 @@ mipi_camera_sample/
 ├── 05_mipi_camera_streamer.py   # 图像实时显示到 HDMI（数据通路测试）
 └── README.md                    # 使用说明
 ```
+</DocScope>
 
 本文以 `05_mipi_camera_streamer.py` 为例说明数据通路测试方法。
 
@@ -38,10 +64,18 @@ mipi_camera_sample/
 
 按照以下命令执行程序：
 
+<DocScope products="RDK S100">
+```shell
+root@drobot:~# cd /app/pydev_demo/10_mipi_camera_sample
+root@drobot:/app/pydev_demo/10_mipi_camera_sample# python3 05_mipi_camera_streamer.py -w 1920 -h 1080
+```
+</DocScope>
+<DocScope products="RDK S600">
 ```shell
 root@drobot:~# cd /app/pydev_demo/mipi_camera_sample
 root@drobot:/app/pydev_demo/mipi_camera_sample# python3 05_mipi_camera_streamer.py -w 1920 -h 1080
 ```
+</DocScope>
 
 参数说明：
 
