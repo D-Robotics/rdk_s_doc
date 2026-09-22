@@ -6,13 +6,65 @@ description: "3D GPU 性能测试"
 
 # 3D GPU 性能测试
 
-:::info
-本章示例以 RDK S100（GPU 为 Mali-G78AE，2 个计算单元）为例；RDK S600 的 GPU 同为 Mali-G78AE，但为 4 核（可通过 `cat /sys/class/misc/mali0/device/gpuinfo` 查看）。`glmark2` 与 `clpeak` 均未预装到板端，需按下文分别 `apt install` 或交叉编译后使用；示例结果为 S100 参考值，S600 实测数值会更高。
+## 功能概述
+
+3D GPU 性能测试用于评估 GPU 在不同计算任务和渲染任务下的性能。RDK 平台 GPU 为 ARM Mali-G78AE，针对 GPU 的不同应用场景，常见测试可分为渲染性能测试与计算性能测试两类，本章分别使用 `glmark2` 与 `clpeak` 进行评估。
+
+<DocScope products="RDK S100">
+
+RDK S100 的 GPU 为 Mali-G78AE，配置 2 个计算单元（Compute Unit），工作频率 800 MHz。可通过如下命令查看 GPU 信息：
+
+```bash
+cat /sys/class/misc/mali0/device/gpuinfo
+```
+
+:::note
+`glmark2-es2-wayland` 与 `clpeak` 均未预装到板端，需按下文「环境准备」与「代码位置」获取：板端联网可直接 `apt install` / `git clone`；板端离线时可由主机下载后 adb 推送安装/编译。本章示例命令与结果均以 RDK S100 为参考值。
 :::
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+RDK S600 的 GPU 为 Mali-G78AE，配置 4 个计算单元（Compute Unit），工作频率 800 MHz。可通过如下命令查看 GPU 信息：
+
+```bash
+cat /sys/class/misc/mali0/device/gpuinfo
+```
+
+:::note
+`glmark2-es2-wayland` 与 `clpeak` 均未预装到板端，需按下文「环境准备」与「代码位置」获取：板端联网可直接 `apt install` / `git clone`；板端离线时可由主机下载后 adb 推送安装/编译。S600 实测数值会高于本章给出的参考值。
+:::
+
+</DocScope>
+
+## 环境准备
+
+1. 连接 HDMI 显示器并进入桌面环境（渲染性能测试需要图形输出）：
+   - 在登录界面点击右下角小齿轮，选择 GNOME 或 Ubuntu (Wayland) 会话。
+   - 程序通过 HDMI 输出到显示器，可直观看到 3D GPU 的渲染效果。
+2. 安装渲染测试工具 glmark2（计算测试工具 clpeak 见 [代码位置](#代码位置)）。
+
+   `glmark2-es2-wayland` 与 `clpeak` 均未预装到板端，需联网安装或自行获取源码编译。根据板端是否可联网，选择对应方式：
+
+   - **方式一（板端联网，推荐）**：在板端直接安装
+     ```bash
+     apt update
+     apt install glmark2-es2-wayland -y
+     ```
+   - **方式二（板端离线，主机代理）**：在可联网的主机上下载 deb，再经 adb 推送到板端安装（`glmark2-data`、`libwayland-*` 等依赖已预装于镜像，通常无需额外下载）：
+     ```bash
+     # 主机（需 adb 可达板端）
+     curl -fSL https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/pool/universe/g/glmark2/glmark2-es2-wayland_2023.01+dfsg-1build2_arm64.deb \
+       -o glmark2-es2-wayland.deb
+     adb push glmark2-es2-wayland.deb /tmp/
+     # 板端
+     dpkg -i /tmp/glmark2-es2-wayland.deb
+     ```
 
 ## 代码位置
 
-板端存放了 clpeak 的补丁与编译方法，位于 `/app/chip_base_test/10_gpu_3d_test/` 目录：
+板端预置了 clpeak 的补丁与编译说明，位于 `/app/chip_base_test/10_gpu_3d_test/clpeak/`：
 
 ```text
 /app/chip_base_test/10_gpu_3d_test/
@@ -21,29 +73,60 @@ description: "3D GPU 性能测试"
     └── 0001-feat-build-add-aarch64-toolchain-for-S100-cross-comp.patch
 ```
 
-## 测试原理
-3D GPU 性能测试主要用于评估 GPU 在不同计算任务和渲染任务下的性能。针对 GPU 的不同应用场景，常见的测试可分为：
-- OpenGL ES（渲染性能测试）：使用 glmark2 进行测试，评估 GPU 的图形渲染能力，如几何处理、纹理填充、着色器性能等。
-- OpenCL（计算性能测试）：使用 clpeak 进行测试，评估 GPU 在通用计算（ GPGPU）任务中的性能，如浮点计算、内存带宽、整数计算等。
+补丁针对 clpeak 1.1.4 版本适配：新增 `cmake/aarch64_toolchain.cmake`（指定板端原生 `aarch64-linux-gnu-gcc` 与 OpenCL 库路径 `/usr/hobot/lib/libOpenCL.so`），并将带宽测试的分配上限限制为 64 MB 以规避运行时问题。板端已预装 `aarch64-linux-gnu-gcc`、`cmake`、OpenCL 头文件与库，可直接在板端原生编译（无需主机交叉编译）。
 
-## 测试准备工作
-1.  S100 开发板存放了 clpeak 的 patch 和 build 方法 , 可以 `cd` 到如下路径查看 :
-	```bash
-	cd /app/chip_base_test/10_gpu_3d_test/
-	ls clpeak
-	0001-feat-build-add-aarch64-toolchain-for-S100-cross-comp.patch  Readme.md
-	```
-## 测试方法
+获取源码（二选一）：
+
+- **方式一（板端联网）**：
+  ```bash
+  cd /app/chip_base_test/10_gpu_3d_test/
+  mkdir -p source && cd source
+  git clone --branch 1.1.4 --depth 1 https://github.com/krrishnarraj/clpeak.git
+  cd clpeak
+  ```
+- **方式二（板端离线，主机代理）**：在可联网主机下载 1.1.4 源码包，推送至板端解压
+  ```bash
+  # 主机
+  curl -fSL https://codeload.github.com/krrishnarraj/clpeak/tar.gz/refs/tags/1.1.4 -o clpeak-1.1.4.tar.gz
+  adb push clpeak-1.1.4.tar.gz /tmp/
+  # 板端
+  cd /app/chip_base_test/10_gpu_3d_test/
+  mkdir -p source && cd source
+  tar xzf /tmp/clpeak-1.1.4.tar.gz
+  mv clpeak-1.1.4 clpeak
+  cd clpeak
+  ```
+
+打补丁并在板端编译运行：
+
+```bash
+cp /app/chip_base_test/10_gpu_3d_test/clpeak/0001-feat-build-add-aarch64-toolchain-for-S100-cross-comp.patch ./
+patch -p1 < 0001-feat-build-add-aarch64-toolchain-for-S100-cross-comp.patch
+mkdir build && cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/aarch64_toolchain.cmake ..
+make
+./clpeak
+```
+
+## 使用方法
+
+### 测试原理
+
+3D GPU 性能测试主要用于评估 GPU 在不同计算任务和渲染任务下的性能。针对 GPU 的不同应用场景，常见的测试可分为：
+
+- OpenGL ES（渲染性能测试）：使用 glmark2 进行测试，评估 GPU 的图形渲染能力，如几何处理、纹理填充、着色器性能等。
+- OpenCL（计算性能测试）：使用 clpeak 进行测试，评估 GPU 在通用计算（GPGPU）任务中的性能，如浮点计算、内存带宽、整数计算等。
 
 ### 渲染性能测试方法
-1. `apt install glmark2-es2-wayland -y` 安装 glmark2 进行测试
 
+1. 按「[环境准备](#环境准备)」安装 `glmark2-es2-wayland` 并进入桌面 Wayland 会话。
 2. 连接显示器并进入桌面环境
-	- 在登录界面选择点击右下角的小齿轮，选择 GNOME 或 Ubuntu (Wayland)会话
-	- 程序通过 HDMI 输出到显示器，可以直观看到 3D GPU 的渲染效果
-3. 执行 glmark2-es2-wayland
+   - 在登录界面选择点击右下角的小齿轮，选择 GNOME 或 Ubuntu (Wayland)会话
+   - 程序通过 HDMI 输出到显示器，可以直观看到 3D GPU 的渲染效果
+3. 在桌面终端执行 `glmark2-es2-wayland`
 
 4. 打印如下结果：
+
 ```bash
 =======================================================
 	glmark2 2021.02
@@ -91,11 +174,15 @@ description: "3D GPU 性能测试"
 =======================================================
 ```
 
-### 计算性能测试方法
-1. 执行命令
+:::note
+受 GPU 频率/温度、后台负载、合成器调度等因素影响，各场景 FPS 与总分会存在波动，不同次运行、不同镜像版本（如 glmark2 2021.02 与 2023.01）测得数值会有小幅差异，属正常现象。请以实测值为准，本章数据仅作参考。
+:::
 
+### 计算性能测试方法
+
+1. 按「[代码位置](#代码位置)」获取源码、打补丁并编译后，执行
 	```sh
-	cd clpeak
+	cd /app/chip_base_test/10_gpu_3d_test/source/clpeak/build
 	./clpeak
 	```
 
@@ -172,22 +259,27 @@ description: "3D GPU 性能测试"
 		Kernel launch latency : 96.12 us
 	```
 
-## 测试指标
+:::note
+计算性能各项指标（带宽 GFLOPS/GIOPS、Kernel 启动延迟等）会随 GPU 频率/温度、DDR 负载与运行环境产生波动，不同次运行数值会有小幅差异，属正常现象。请以实测值为准，本章数据仅作参考。
+:::
+
+## 运行效果
+
 ### 渲染性能指标
 
 测试结果中 FPS（帧率）数值越高，表示 GPU 在该测试场景下表现越好。下面逐行对测试结果进行分析：
 
-#### **一般渲染测试**
+#### 一般渲染测试
 
 | 测试项 | FPS | 说明 |
 |--------|-----|------|
 | **use-vbo=false** | 2490 | 不使用 VBO（顶点缓冲对象）时的性能 |
 | **use-vbo=true** | 2403 | 启用 VBO，减少 CPU-GPU 交互，效率略高 |
-| **texture-filter=nearest/linear/mipmap** | 2648~2882 | 各种纹理采样方式对性能影响极小，均可高效运行 |
-| **shading=gouraud/phong/blinn-phong-inf/cel** | 2211~2339 | 着色器切换带来轻微性能差异 |
-| **bump-render=high-poly/normals/height** | 1530~3052 | 法线贴图相关技术对性能表现差异显著 |
+| **texture-filter=nearest/linear/mipmap** | 2648–2882 | 各种纹理采样方式对性能影响极小，均可高效运行 |
+| **shading=gouraud/phong/blinn-phong-inf/cel** | 2211–2339 | 着色器切换带来轻微性能差异 |
+| **bump-render=high-poly/normals/height** | 1530–3052 | 法线贴图相关技术对性能表现差异显著 |
 
-#### **复杂计算测试**
+#### 复杂计算测试
 
 | 测试项 | FPS | 说明 |
 |--------|-----|------|
@@ -197,15 +289,15 @@ description: "3D GPU 性能测试"
 | **ideas（粒子系统）** | 1532 | 动态粒子动画，表现良好 |
 | **jellyfish（水母仿真）** | 1360 | 用于测试 GPU 动画及复杂形变性能 |
 | **terrain（地形渲染）** | 128 | 地形复杂度高， FPS 下降 |
-| **refract（折射）** | 328	 | 折射光线模拟开销较大 |
+| **refract（折射）** | 328 | 折射光线模拟开销较大 |
 
-#### **计算型测试**
+#### 计算型测试
 
 | 测试项 | FPS | 说明 |
 |--------|-----|------|
-| **conditionals（分支计算）** | 	2837~3037 | 	GPU 对条件判断的处理效率很高 |
-| **function（复杂度递增的片段计算）** | 2603~2964 | 	越复杂的 shader 函数带来性能下降 |
-| **loop（循环计算）** | 2819~2922 | GPU 循环执行能力稳定强大 |
+| **conditionals（分支计算）** | 2837–3037 | GPU 对条件判断的处理效率很高 |
+| **function（复杂度递增的片段计算）** | 2603–2964 | 越复杂的 shader 函数带来性能下降 |
+| **loop（循环计算）** | 2819–2922 | GPU 循环执行能力稳定强大 |
 
 - 该分数在高分辨率场景下体现了 Mali-G78AE 在现代图形渲染任务中的较强能力，在 VBO、纹理采样、条件逻辑、循环计算等方面均表现出极高的 GPU 浮点运算与并行处理能力。
 
@@ -308,11 +400,11 @@ root@ubuntu:~#  glmark2-es2-wayland
 Error: main: Could not initialize canvas
 ```
 
-- 问题分析：没有找到合适的显示器的连接器
-- 解决办法：接上 HDMI 显示器在桌面进行测试
+- 问题分析：当前未处于 Wayland 图形会话（如从 SSH/串口等无显示环境执行），glmark2-es2-wayland 无法连接到 Wayland 合成器，故无法初始化画布。
+- 解决办法：接好 HDMI 显示器，在登录界面选择 GNOME 或 Ubuntu (Wayland) 会话登录后，在桌面终端内执行 `glmark2-es2-wayland`。
 
 ## 相关文档
 
-- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [概述](/Advanced_development/driver_development/hardware_unit_test)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)
+- [概述](./01_overview.md)
+- [AutoTest 使用方法](./02_auto_test.md)
+- [搭建开发环境](../../06_environment_build/01_environment_build.md)
