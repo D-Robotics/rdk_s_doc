@@ -6,6 +6,10 @@ description: "RDK USB 摄像头数据通路测试与目标检测"
 
 # USB 摄像头使用
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 视频演示：https://www.bilibili.com/video/BV1rm4y1E73q/?p=18
 
 
@@ -13,7 +17,12 @@ description: "RDK USB 摄像头数据通路测试与目标检测"
 开发板预置了 `usb_camera_yolov5x.py` 脚本，用于测试 USB 摄像头的数据通路：实时采集 USB 摄像头图像，运行 YOLOv5X 目标检测，并将检测结果叠加后显示到 HDMI 接口。
 
 :::tip
-本示例代码位于板端 `/app/pydev_demo/usb_camera_sample/` 目录，已在板端经过实际验证；C++ 版本位于 `/app/cdev_demo/bpu/usb_camera_sample/`。
+<DocScope products="RDK S100">
+本示例代码位于板端 `/app/pydev_demo/09_usb_camera_sample/` 目录，已在板端经过实际验证；C++ 版本位于 `/app/cdev_demo/bpu/09_usb_camera_sample/`。
+</DocScope>
+<DocScope products="RDK S600">
+本示例代码位于板端 `/app/pydev_demo/usb_camera_sample/` 目录；C++ 版本位于 `/app/cdev_demo/bpu/usb_camera_sample/`。
+</DocScope>
 :::
 
 ## 环境准备
@@ -23,6 +32,17 @@ description: "RDK USB 摄像头数据通路测试与目标检测"
 
 ## 代码位置
 
+<DocScope products="RDK S100">
+板端路径：`/app/pydev_demo/09_usb_camera_sample/`
+
+```text
+09_usb_camera_sample/
+├── usb_camera_yolov5x.py   # YOLOv5X 目标检测主程序
+├── usb_camera_snap.py      # USB 摄像头抓拍示例（保存为 img.jpg）
+└── README.md               # 使用说明
+```
+</DocScope>
+<DocScope products="RDK S600">
 板端路径：`/app/pydev_demo/usb_camera_sample/`
 
 ```text
@@ -30,15 +50,24 @@ usb_camera_sample/
 ├── usb_camera_yolov5x.py   # YOLOv5X 目标检测主程序
 └── README.md               # 使用说明
 ```
+</DocScope>
 
 ## 运行方式
 
 按照以下命令执行程序：
 
+<DocScope products="RDK S100">
+```shell
+root@drobot:~# cd /app/pydev_demo/09_usb_camera_sample
+root@drobot:/app/pydev_demo/09_usb_camera_sample# python3 usb_camera_yolov5x.py
+```
+</DocScope>
+<DocScope products="RDK S600">
 ```shell
 root@drobot:~# cd /app/pydev_demo/usb_camera_sample
 root@drobot:/app/pydev_demo/usb_camera_sample# python3 usb_camera_yolov5x.py
 ```
+</DocScope>
 
 运行后屏幕会实时显示目标检测图像；将鼠标放置在显示框内，按 `q` 键退出。
 
