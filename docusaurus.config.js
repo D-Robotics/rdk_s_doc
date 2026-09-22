@@ -22,6 +22,15 @@ const copyrightYearLabel =
 
 const localePrefix = process.env.DOCUSAURUS_CURRENT_LOCALE === "en" ? "/en" : "";
 
+// Windows / macOS 默认文件系统大小写不敏感，from 与 to 只差大小写的 redirect 会和真实
+// 页面落到同一个路径，plugin-client-redirects 会以 "not supposed to override existing
+// files" 中止构建（Bing 大小写 404 那 7 条全是这种）。生产构建在 Linux runner 和 OSS 上
+// 大小写敏感，规则照常生效，因此仅在大小写不敏感的平台过滤掉这类 redirect。
+const caseInsensitiveFs =
+  process.platform === "win32" || process.platform === "darwin";
+const isCaseOnlyRedirect = ({ from, to }) =>
+  from.toLowerCase() === to.toLowerCase() && from !== to;
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "RDK S100/S600 DOC",
@@ -175,7 +184,7 @@ const config = {
           { from: "/03_s600_multimedia_application", to: "/03_S600_multimedia_application" },
           { from: "/basic_development", to: "/Basic_Development" },
           { from: "/ota", to: "/OTA" },
-        ],
+        ].filter((r) => !(caseInsensitiveFs && isCaseOnlyRedirect(r))),
       },
     ],
   ],
