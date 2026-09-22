@@ -1,4 +1,7 @@
 ---
+unlisted: true
+# 占位版本，永不匹配版本矩阵中的真实版本，用于隐藏本文档
+sidebar_versions: 0.0.0
 title: "BPU 底层 API"
 sidebar_position: 13
 description: "RDK S100/S600 BPU 底层驱动 C API（hb_bpu）：核/任务/内存/电源管理"
