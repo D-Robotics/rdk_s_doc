@@ -196,6 +196,83 @@ vnode 之间通过输入通道和输出通道进行连接 :
   - `PYM_OTF_MODE`(2): 和VIN/ISP直连， 如果和ISP直连接时 `isp_node_attr` 的 `sched_mode` 必须是SCHED_MODE_PASS_THRU
   - `PYM_M2M_MODE`(3): PYM 的输入数据来自DDR
 
+## API 调用流程
+
+### 创建流程
+#### MIPI 接口的相机模组
+![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_create_and_start.png)
+
+- `hbn_vnode_open` 打开各模块，获取 vnode handle。
+- `hbn_vnode_set_attr` / `set_ochn_attr` / `set_ichn_attr` 配置模块与通道属性。
+- `hbn_vflow_create` 创建 vflow，`hbn_vflow_add_vnode` 加入各 vnode，`hbn_vflow_bind_vnode` 绑定上下游通道。
+- `hbn_camera_create` 和 `hbn_camera_attach_to_vin` 创建 camera 然后 绑定到 VIN
+- `hbn_vnode_start` 启动各模块，vflow 开始流转数据帧。
+
+#### Serdes 接口的相机模组
+![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_create_and_start_serdes.png)
+
+- `hbn_vnode_open` 打开各模块，获取 vnode handle。
+- `hbn_vnode_set_attr` / `set_ochn_attr` / `set_ichn_attr` 配置模块与通道属性。
+- `hbn_vflow_create` 创建 vflow，`hbn_vflow_add_vnode` 加入各 vnode，`hbn_vflow_bind_vnode` 绑定上下游通道。
+- `hbn_camera_create` 和 `hbn_deserial_create` 创建 camera 和 Deserial
+- `hbn_camera_attach_to_vin` 和 `hbn_deserial_attach_to_vin` 把 camera、deserial、vin 三个模块按照顺序绑定
+- `hbn_vnode_start` 启动各模块，vflow 开始流转数据帧。
+### 循环处理流程
+![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_loop_process.png)
+
+### 销毁流程
+销毁流程是创建流程的反操作，但是有如下几点需要注意：
+- 调用了 `hbn_vflow_destroy` 就不需要再调用 hbn_vnode_close 和 hbn_vflow_unbind_vnode
+- 调用了 `hbn_camera_destroy` 就不需要再调用 hbn_camera_detach_from_vin
+
+![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_stop_and_destroy.png)
+
+- `hbn_vnode_stop` 停止各模块。
+- `hbn_vflow_destroy` 销毁 vflow（已串入 vflow 的 vnode 无须再单独 `hbn_vnode_close`；独立使用的模块如 GDC 回灌需单独 close）。
+
+## 快速示例
+
+以下示例参考板端 `/app/multimedia_samples/sample_isp/get_isp_data/` 的最小调用序列，演示 VIN→ISP 两级 vflow 的创建、启动与取帧：
+
+```c
+#include "hbn_vpf_interface.h"
+#include "hb_mem_mgr.h"
+
+hbn_vnode_handle_t vin_fd, isp_fd;
+hbn_vflow_handle_t vflow_fd;
+
+// 1. 打开 VIN / ISP 模块
+hbn_vnode_open(HB_VIN, mipi_rx, AUTO_ALLOC_ID, &vin_fd);
+hbn_vnode_open(HB_ISP, 0, AUTO_ALLOC_ID, &isp_fd);
+
+// 2. 配置模块属性与通道属性
+hbn_vnode_set_attr(vin_fd, &vin_attr);
+hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_ichn_attr);
+hbn_vnode_set_ochn_attr(vin_fd, 0, &vin_ochn_attr);
+hbn_vnode_set_attr(isp_fd, &isp_attr);
+hbn_vnode_set_ichn_attr(isp_fd, 0, &isp_ichn_attr);
+hbn_vnode_set_ochn_attr(isp_fd, 0, &isp_ochn_attr);
+
+// 3. 创建 vflow，加入 vnode 并绑定上下游通道
+hbn_vflow_create(&vflow_fd);
+hbn_vflow_add_vnode(vflow_fd, vin_fd);
+hbn_vflow_add_vnode(vflow_fd, isp_fd);
+hbn_vflow_bind_vnode(vflow_fd, vin_fd, 0, isp_fd, 0);
+
+// 4. 启动 vflow，数据帧自动由 VIN 流转到 ISP
+hbn_vflow_start(vflow_fd);
+
+// 5. 从 ISP 输出通道取帧，处理完归还
+hbn_vnode_image_group_t out_group;
+hbn_vnode_getframe_group(isp_fd, 0, 10000, &out_group);
+/* 处理 out_group ... */
+hbn_vnode_releaseframe_group(isp_fd, 0, &out_group);
+
+// 6. 停止并销毁
+hbn_vflow_stop(vflow_fd);
+hbn_vflow_destroy(vflow_fd);
+```
+
 ## API 列表
 
 | 函数 | 说明 |
@@ -247,63 +324,6 @@ vnode 之间通过输入通道和输出通道进行连接 :
 | hbn_vflow_get_fd | 板端扩展（见 hbn_vpf_interface.h） |
 | hbn_vnode_set_ctrl | 板端扩展（见 hbn_vpf_interface.h） |
 | hbn_vnode_get_ctrl | 板端扩展（见 hbn_vpf_interface.h） |
-## API 调用流程
-
-### 创建流程
-
-1. `hbn_vnode_open` 打开各模块，获取 vnode handle。
-2. `hbn_vnode_set_attr` / `set_ochn_attr` / `set_ichn_attr` 配置模块与通道属性。
-3. `hbn_vflow_create` 创建 vflow，`hbn_vflow_add_vnode` 加入各 vnode，`hbn_vflow_bind_vnode` 绑定上下游通道。
-4. `hbn_vnode_start` 启动各模块，vflow 开始流转数据帧。
-5. `hbn_vnode_getframe` / `getframe_group` 获取输出图像，处理完 `releaseframe` / `releaseframe_group` 归还。
-
-### 销毁流程
-
-1. `hbn_vnode_stop` 停止各模块。
-2. `hbn_vflow_destroy` 销毁 vflow（已串入 vflow 的 vnode 无须再单独 `hbn_vnode_close`；独立使用的模块如 GDC 回灌需单独 close）。
-
-## 快速示例
-
-以下示例参考板端 `/app/multimedia_samples/sample_isp/get_isp_data/` 的最小调用序列，演示 VIN→ISP 两级 vflow 的创建、启动与取帧：
-
-```c
-#include "hbn_vpf_interface.h"
-#include "hb_mem_mgr.h"
-
-hbn_vnode_handle_t vin_fd, isp_fd;
-hbn_vflow_handle_t vflow_fd;
-
-// 1. 打开 VIN / ISP 模块
-hbn_vnode_open(HB_VIN, mipi_rx, AUTO_ALLOC_ID, &vin_fd);
-hbn_vnode_open(HB_ISP, 0, AUTO_ALLOC_ID, &isp_fd);
-
-// 2. 配置模块属性与通道属性
-hbn_vnode_set_attr(vin_fd, &vin_attr);
-hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_ichn_attr);
-hbn_vnode_set_ochn_attr(vin_fd, 0, &vin_ochn_attr);
-hbn_vnode_set_attr(isp_fd, &isp_attr);
-hbn_vnode_set_ichn_attr(isp_fd, 0, &isp_ichn_attr);
-hbn_vnode_set_ochn_attr(isp_fd, 0, &isp_ochn_attr);
-
-// 3. 创建 vflow，加入 vnode 并绑定上下游通道
-hbn_vflow_create(&vflow_fd);
-hbn_vflow_add_vnode(vflow_fd, vin_fd);
-hbn_vflow_add_vnode(vflow_fd, isp_fd);
-hbn_vflow_bind_vnode(vflow_fd, vin_fd, 0, isp_fd, 0);
-
-// 4. 启动 vflow，数据帧自动由 VIN 流转到 ISP
-hbn_vflow_start(vflow_fd);
-
-// 5. 从 ISP 输出通道取帧，处理完归还
-hbn_vnode_image_group_t out_group;
-hbn_vnode_getframe_group(isp_fd, 0, 10000, &out_group);
-/* 处理 out_group ... */
-hbn_vnode_releaseframe_group(isp_fd, 0, &out_group);
-
-// 6. 停止并销毁
-hbn_vflow_stop(vflow_fd);
-hbn_vflow_destroy(vflow_fd);
-```
 
 ## API 接口说明
 
