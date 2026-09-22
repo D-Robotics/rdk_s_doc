@@ -105,11 +105,11 @@ log  sunrise_camera  www
 
 示例：
 
-camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera_cmd_register 函数注册该 CMD 后，当 websocket 子模块收到 web 页面请求获取芯片类型时， websocket 模块可以通过以下代码调用 camera 子模块中的接口。
+vpp 子模块中定义了 SDK_CMD_VPP_GET_SOLUTION_CONFIG 命令，调用 vpp_cmd_register 函数注册该 CMD 后，当 websocket 子模块收到 web 页面获取设备信息（含芯片类型）的请求时， websocket 模块可以通过以下代码调用 vpp 子模块中的接口。
 
 整个过程如下图所示：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/event_bus_flow.png" alt="功能描述示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/event_bus_flow.png" alt="功能描述示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 模块代码结构
 
@@ -134,7 +134,15 @@ camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera
 
 示例：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/cmd_register.png" alt="接口描述示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+```c
+int sdk_cmd_register(SDK_CMD_E cmd, SDK_CMD_IMPL_CALL call, int enable)
+{
+	cmd_reg[cmd].cmd = cmd;
+	cmd_reg[cmd].call = call;
+	cmd_reg[cmd].enable = enable;
+	return 0;
+}
+```
 
 **sdk_cmd_register**
 
@@ -176,14 +184,18 @@ camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera
     │   ├── cmap.h
     │   ├── common_utils.h
     │   ├── cqueue.h
+    │   ├── exception_handling.h
     │   ├── gen_rand.h
     │   ├── lock_utils.h
     │   ├── mqueue.h
     │   ├── mthread.h
     │   ├── nalu_utils.h
+    │   ├── resize.h
     │   ├── sha256.h
     │   ├── stream_define.h
     │   ├── stream_manager.h
+    │   ├── stream_push_ctrl.h
+    │   ├── time_utils.h
     │   └── utils_log.h
     ├── Makefile
     └── src                      # 实现源码
@@ -193,13 +205,17 @@ camera 子模块中定义了 SDK_CMD_CAMERA_GET_CHIP_TYPE 命令，调用 camera
         ├── cmap.c
         ├── common_utils.c
         ├── cqueue.c
+        ├── exception_handling.c
         ├── gen_rand.c
         ├── lock_utils.c
         ├── mqueue.c
         ├── mthread.c
         ├── nalu_utils.c
+        ├── resize.cpp
         ├── sha256.c
         ├── stream_manager.c
+        ├── stream_push_ctrl.c
+        ├── time_utils.c
         └── utils_log.c
 ```
 
@@ -221,7 +237,7 @@ vp_wrap 实现多媒体模块的接口封装；
 
  bpu_wrap 模块实现算法推理接口和后处理方法的封装。
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/platform_module.png" alt="概述示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/platform_module.png" alt="概述示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 功能描述
 
@@ -229,14 +245,15 @@ vp_wrap 实现多媒体模块的接口封装；
 
 ```c
 typedef struct vpp_ops {
-	int (*init_param)(void); // 初始化 VIN、 VSE、 VENC、 BPU 等模块的配置参数
+	int (*init_param)(void); // 初始化 VIN、VENC、BPU 等模块的配置参数
 	int (*init)(void); // sdk 初始化，根据配置初始化
 	int (*uninit)(void); // 反初始化
 	int (*start)(void); // 启动媒体相关的各个模块
 	int (*stop)(void); // 停止
-	// 本模块支持的 CMD 都通过以下两个接口简直实现
+	// 本模块支持的 CMD 都通过以下两个接口间接实现
 	int (*param_set)(SOLUTION_PARAM_E type, char* val, unsigned int length);
 	int (*param_get)(SOLUTION_PARAM_E type, char* val, unsigned int* length);
+	int32_t (*io_param_get)(solution_cfg_t* solution_cfg, solution_ion_param_info_t *solution_param_info);
 } vpp_ops_t;
 ```
 
@@ -254,10 +271,10 @@ typedef struct vpp_ops {
 .
 ├── api                                   # CMD 注册
 ├── bpu_wrap                              # bpu 算法接口使用封装
+├── config                                # 配置文件目录（media_server.ini）
 ├── main                                  # CMD 注册的实际功能接口实现
 ├── Makefile                              # 编译脚本
 ├── makefile.param                        # 编译配置
-├── model_zoom                            # 算法模型仓库
 ├── test_data                             # 存放测试用的视频码流文件和程序配置文件
 ├── vpp_impl                              # 应用方案的功能实现
 ├── vp_sensors -> ../../../vp_sensors/    # Camera Sensor 配置代码，本目录下的代码与其他 sample 模块共用
@@ -268,7 +285,7 @@ typedef struct vpp_ops {
 
 #### 概述
 
-遵循传输协议与终端或平台交互的具体子模块；包含通过网络、 rtspserver 和 websocket 通信模块；
+遵循传输协议与终端或平台交互的具体子模块；包含 media_server（基于 ZLMediaKit 的 RTSP/HTTP/WebSocket 服务）和 websocket 通信模块；
 
 交互模块是模块间交互最多的部分，需要严格遵守设计约定。在向其他模块请求数据时都要通过定义的模块 CMD 进行处理。
 
@@ -280,9 +297,9 @@ typedef struct vpp_ops {
 
 #### WebSocket Server 模块
 
-本模块完成与 web 上的操作交互，在 web 上进行相应操作后， websocket server 接收到相应 kind 的命令和参数，在代码 handle_user_massage.c 的 handle_user_msg 函数中处理进行相应的功能处理，如果要添加新的交互命令，请在该函数中增加。
+本模块完成与 web 上的操作交互，在 web 上进行相应操作后， websocket server 接收到相应 kind 的命令和参数，在代码 handle_user_message.c 的 handle_user_msg 函数中处理进行相应的功能处理，如果要添加新的交互命令，请在该函数中增加。
 
-目前支持的交互命令：场景切换、场景参数获取和设置、获取芯片类型、 h264 码率设置、系统时间同步、 websocket 码流拉流和停止等。
+目前支持的交互命令：场景切换、场景参数获取和设置、获取设备信息（含芯片类型）、 h264 码率设置、系统时间同步、 websocket 码流拉流和停止等。
 
 ### 主程序入口（ main ）
 
@@ -321,14 +338,14 @@ typedef struct vpp_ops {
 
 当前 sunrise_camera 仅支持少量算法模型的运行，在实际应用中不可避免要跑其他的模型来测试效果，本节描述新增一个算法模型的基本步骤。
 
-| **项目**              | **源码文件**                                      | **说明**                                                     |
-| --------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
-| 准备算法模型          | 放到 Platform/s100/model_zoom 目录下（*.hbm） | 在本目录添加可以在开发板上运行的定点算法模型 (系统自带的模型文件存储在：`/opt/hobot/model/s100/basic/`)                 |
-| 添加模型配置          | bpu_wrap.c                                        | 在 bpu_models 中添加新模型的名称、指定算法模型文件，推理和后处理函数接口 |
-| 推理线程处理函数      | bpu_wrap.c                                        | 在处理函数中准备输出 tensor，调用 **hbDNNInfer** 推理，得到结果后，把结果放入 output 队列。示例：**inference_yolov5s** |
+| **项目**              | **源码文件**                                      | **说明**                                                                                     |
+| --------------------- | ------------------------------------------------- | ------------------------------------------------------------                         |
+| 准备算法模型          | 放到 Platform/s100/model_zoom 目录下（*.hbm） | 在本目录添加可以在开发板上运行的定点算法模型 (系统自带的模型文件存储在：`/opt/hobot/model/s100/basic/`)                                  |
+| 添加模型配置          | bpu_wrap.c                                        | 在 bpu_models 中添加新模型的名称、指定算法模型文件，推理和后处理函数接口                                                 |
+| 推理线程处理函数      | bpu_wrap.c                                        | 在处理函数中准备输出 tensor，调用 **hbDNNInferV2** 推理，得到结果后，把结果放入 output 队列。示例：**inference_yolov5s**      |
 | 后处理线程函数        | bpu_wrap.c                                        | 从 output 队列中取出算法结果，调用后处理方法进行处理，得到 json 格式的结果字符串。如果设置了回调函数，则调用回调。示例：**post_process_yolov5s** |
-| 后处理代码            | yolov5_post_process.cpp                           | 算法模型都要对应后处理方法，比如分类模型要把返回的 id 和类型名对应起来，检测模型要把检测框映射到原始图像的位置上。 |
-| Web 页面上增加渲染处理 |WebServer/www/js/DisplayWindowManager.js                                        | 非必须                                                       |
+| 后处理代码            | yolov5_post_process.cpp                           | 算法模型都要对应后处理方法，比如分类模型要把返回的 id 和类型名对应起来，检测模型要把检测框映射到原始图像的位置上。                               |
+| Web 页面上增加渲染处理 |WebServer/www/js/DisplayWindowManager.js                                        | 非必须                                                             |
 
 #### 准备算法模型
 
@@ -359,7 +376,7 @@ bpu_model_descriptor bpu_models[] = {
 
 #### 推理线程处理函数
 
-在推理线程中实现输出结果 tensor 的准备；从 yuv 队列中取出 yuv 数据，调用 HB_BPU_runModel 推理得到算法结果；再把算法结果推进 output Queue，供后处理使用。
+在推理线程中实现输出结果 tensor 的准备；从 yuv 队列中取出 yuv 数据，调用 hbDNNInferV2 推理得到算法结果；再把算法结果推进 output Queue，供后处理使用。
 
 ```c
 static void *inference_yolov5s(void *ptr)
@@ -383,7 +400,7 @@ static void *inference_yolov5s(void *ptr)
         // 模型推理 infer
 		hbDNNInferCtrlParam infer_ctrl_param;
 		HB_DNN_INITIALIZE_INFER_CTRL_PARAM(&infer_ctrl_param);
-		ret = hbDNNInfer(&task_handle,
+		ret = hbDNNInferV2(&task_handle,
 				&output,
 				&input_tensor->m_dnn_tensor,
 				dnn_handle,
@@ -444,7 +461,7 @@ static void *post_process_yolov5s(void *ptr)
 
 每个算法模型建议都添加一个后处理方法：
 
--   yolov5 ： yolo5_post_process.cpp
+-   yolov5 ： yolov5_post_process.cpp
 -   mobilenet_v2 ：分类模型的处理较简单，就是把 id 和类型名进行对应
 
 在后处理方法中要完成以下几件事情：
