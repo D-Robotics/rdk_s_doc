@@ -1,7 +1,7 @@
 ---
 sidebar_position: 9
 title: "CAN 使用指南"
-description: "CAN 使用指南"
+description: "MCU CAN/CAN FD 控制器配置、过滤器、波特率与 CANHAL 透传使用指南"
 ---
 
 # CAN 使用指南
@@ -10,28 +10,39 @@ description: "CAN 使用指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
-## 基本概述
+## 概述
+
+本文介绍 MCU CAN/CAN FD 的使用，包括硬件资源与限制、CAN 数据经 IPC 透传到 Acore 的软件架构、CAN Filter 与波特率等配置方法，以及 Acore 收发样例与 MCU 侧调试方式。
+
+- **定位**：说明 MCU 侧 CAN 控制器资源与限制、CAN2IPC/CANHAL 透传机制、CAN Filter 与波特率的配置方法，以及 Acore sample 与 MCU 调试命令的使用方式。
+- **适用读者**：需要在 MCU1/Acore 上使用 CAN/CAN FD 收发数据，或需要调整过滤器、波特率与合包参数的开发者。
+- **前置条件**：已完成 MCU 固件编译与加载、MCU1 正常运行（参见 [MCU 快速入门指南](./01_basic_information.md#mcu1启动关闭流程)）；了解 CAN/CAN FD 基本概念与 Can 驱动。
+- **与其他模块关系**：CAN 数据由 MCU 域控制器收发，经 CAN2IPC 通过 IPC 转发给 Acore 的 CANHAL；IPC 通道与用法参见 [MCU IPC 使用指南](./08_mcu_ipc.md)；透传超时检测依赖时间同步，参见 [时间同步文档](/Advanced_development/system_software/driver_timesync)；MCU 侧日志参见 [Log 使用指南](/Advanced_development/system_software/log_introduction)。
+
+
+## 硬件支持
+
 <DocScope products="RDK S100">
 - 最大可使用 CAN controller 数量：10。
-- CAN 最高传输速率：8M。(受限于 transceiver 的波特率限制，目前实验室只测试验证到5M 波特率。)
+- CAN 最高传输速率：8M。(受限于 transceiver 的波特率限制，目前实验室只测试验证到 5M 波特率。)
 - 一个 controller 的 Ram 内划分的 Block 个数：
     - CAN0-CAN3：4 Block (可变 payload);
     - CAN4-CAN9：4 Block (可变 payload)+ 4 Block(固定 payload)。
-- 一个 controller 支持的最大 Mailbox 个数为128。
+- 一个 controller 支持的最大 Mailbox 个数为 128。
 - 一个 controller 支持一路 RxFIFO，FIFO 深度为：
     - CAN0-CAN3：8 * 64 bytes;
     - CAN4-CAN9：32 * 64 bytes。
 - 不支持 TTController，即不支持 TTCAN（一种基于 CAN 总线的高层协议）。
-- CAN 支持多包合并传输，并且可以配置合包的数量和超时时间，默认合包数量为1，超时时间为1000us。
+- CAN 支持多包合并传输，并且可以配置合包的数量和超时时间，默认合包数量为 1，超时时间为 1000us。
 </DocScope>
 <DocScope products="RDK S600">
 - 最大可使用 CAN controller 数量：16。
-- CAN 最高传输速率：8M。(受限于 transceiver 的波特率限制，目前实验室只测试验证到5M 波特率。)
+- CAN 最高传输速率：8M。(受限于 transceiver 的波特率限制，目前实验室只测试验证到 5M 波特率。)
 - 一个 controller 的 Ram 内划分的 Block 个数：
     - CAN0-CAN3：4 Block (可变 payload);
     - CAN4-CAN11：4 Block (可变 payload)+ 4 Block(固定 payload)。
     - CAN12-CAN15：4 Block (可变 payload);
-- 一个 controller 支持的最大 Mailbox 个数为128。
+- 一个 controller 支持的最大 Mailbox 个数为 128。
 - 一个 controller 支持一路 RxFIFO，FIFO 深度为：
     - CAN0-CAN3：8 * 64 bytes;
     - CAN4-CAN11：32 * 64 bytes;
@@ -40,13 +51,15 @@ import DocScope from '@site/src/components/DocScope';
 - 不支持 TTController，即不支持 TTCAN（一种基于 CAN 总线的高层协议）。
 - CAN 支持多核使用，可将不同的 CAN 控制器绑定在不同的核心上，但不支持多个核心同时使用同一个 CAN 控制器。
 </DocScope>
+
 ## 软件架构{#Software_architecture}
+
 <DocScope products="RDK S100">
-S100芯片的 CAN 控制器位于 MCU 域，负责 CAN 数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
+S100 芯片的 CAN 控制器位于 MCU 域，负责 CAN 数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
 
 S100 CAN 转发方案的核心流程如下：
 - 首先通过 MCU 侧 CAN2IPC 模块将 CAN 通道映射到对应 IPC 通道，然后通过 Acore 侧 CANHAL 模块将 IPC 通道反映射为虚拟 CAN 设备通道。最后用户通过 CANHAL 提供的 API 接口获取虚拟 CAN 设备中的数据。其中，CAN2IPC 模块为 MCU 侧服务，CANHAL 模块为 Acore 侧提供给应用程序的动态库。
-- CAN 采用中断的方式接收数据，当接收到数据之后调用 CAN2IPC 模块，CAN2IPC 模块将 MCU 侧 CAN 数据，按照指定传输协议进行打包，然后通过 IPC 核间通信转发到 Acore。Ipc instance 0和 Ipc instance 4分配给 can 使用，默认使能 can5-can9, can5-can9与 IPC 对应关系如下表：
+- CAN 采用中断的方式接收数据，当接收到数据之后调用 CAN2IPC 模块，CAN2IPC 模块将 MCU 侧 CAN 数据，按照指定传输协议进行打包，然后通过 IPC 核间通信转发到 Acore。Ipc instance 0 和 Ipc instance 4 分配给 can 使用，默认使能 can5-can9, can5-can9 与 IPC 对应关系如下表：
 
 |             | Ipc_ShmCfgInstances | channel |
 |-------------|---------------------|---------|
@@ -63,11 +76,11 @@ S100 CAN 转发方案的核心流程如下：
 - CANHAL 模块获取来自 MCU 侧的 IPC 数据，按照指定的传输协议解析数据，并支持业务软件通过 API 获取原始 CAN 帧。
 </DocScope>
 <DocScope products="RDK S600">
-S600芯片的 CAN 控制器位于 MCU 域，负责 CAN 数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
+S600 芯片的 CAN 控制器位于 MCU 域，负责 CAN 数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
 
 S600 CAN 转发方案的核心流程如下：
 - 首先通过 MCU 侧 CAN2IPC 模块将 CAN 通道映射到对应 IPC 通道，然后通过 Acore 侧 CANHAL 模块将 IPC 通道反映射为虚拟 CAN 设备通道。最后用户通过 CANHAL 提供的 API 接口获取虚拟 CAN 设备中的数据。其中，CAN2IPC 模块为 MCU 侧服务，CANHAL 模块为 Acore 侧提供给应用程序的动态库。
-- CAN 采用中断的方式接收数据，当接收到数据之后调用 CAN2IPC 模块，CAN2IPC 模块将 MCU 侧 CAN 数据，按照指定传输协议进行打包，然后通过 IPC 核间通信转发到 Acore。Ipc instance 0和 Ipc instance 4分配给 can 使用，默认使能 can1-can10, can1-can10与 IPC 对应关系如下表：
+- CAN 采用中断的方式接收数据，当接收到数据之后调用 CAN2IPC 模块，CAN2IPC 模块将 MCU 侧 CAN 数据，按照指定传输协议进行打包，然后通过 IPC 核间通信转发到 Acore。Ipc instance 0 和 Ipc instance 4 分配给 can 使用，默认使能 can1-can10, can1-can10 与 IPC 对应关系如下表：
 
 |             | Ipc_ShmCfgInstances | channel |
 |-------------|---------------------|---------|
@@ -85,7 +98,7 @@ S600 CAN 转发方案的核心流程如下：
 - CANHAL 模块获取来自 MCU 侧的 IPC 数据，按照指定的传输协议解析数据，并支持业务软件通过 API 获取原始 CAN 帧。
 </DocScope>
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can.png" alt="Acore与MCU之间透传CAN数据架构图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can.png" alt="Acore 与 MCU 之间透传 CAN 数据架构图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 数据流如上图所示：
 - 外设数据通过 CAN 的 PHY 和控制器器件被 MCU 域 CAN 驱动接收后，CAN 驱动将数据上报并缓存在 hobot CANIF 模块。
@@ -95,41 +108,44 @@ S600 CAN 转发方案的核心流程如下：
 方案特性说明：
 - 支持数据透传正确性校验。
 - 支持数据透传丢包检测。
-- 支持传输超时检测。MCU 侧 CAN2IPC 转发数据时将数据包打上 MCU 侧的时间戳，Acore CANHAL 接收到数据后会读取 Acore 的时间戳，如果传输超时会报警。注意，需要提前启动时间同步完成 MCU RTC 时间和 Acore 网卡 phc0的时间同步。
+- 支持传输超时检测。MCU 侧 CAN2IPC 转发数据时将数据包打上 MCU 侧的时间戳，Acore CANHAL 接收到数据后会读取 Acore 的时间戳，如果传输超时会报警。注意，需要提前启动时间同步完成 MCU RTC 时间和 Acore 网卡 phc0 的时间同步。
 - 支持多个 CAN 通道并行传输。MCU 侧多个 CAN 控制器的数据可同时被转发给 Acore，Acore 应用程序通过 CANHAL 从不同通道号读出 CAN 数据。
 - 由于 CANHAL 底层通过 ipc 核间通信进行传输，而 ipc 目前不支持多个进程或者线程读写同一个通道，因此 CANHAL 也不支持该特性。
 
 ## 代码路径
 
-- `Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c`：MCU 侧 CAN 配置（通道映射、波特率等）
+- `Config/McalCdd/<gen_soc>/Can/src/Can_PBcfg.c`：MCU 侧 CAN 配置（通道映射、波特率、过滤器等），其中
+  - RDK S100：`Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c`
+  - RDK S600：`Config/McalCdd/gen_s600_md_mcu1/Can/src/Can_PBcfg.c`
 - `source/hobot-io-samples/debian/app/Can`：Acore 侧 canhal sample 源码，板端位于 `/app/Can`
 
 ## 硬件连接说明
+
 <DocScope products="RDK S100">
-- CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S100的 sample 默认采用闭环总线网络架构**。
+- CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S100 的 sample 默认采用闭环总线网络架构**。
 
-- CAN 总线的引脚位于 S100的 MCU 扩展板上，引出了5路 CAN 接口，连接器分别对应了5个绿色的螺丝式的3 PIN 连接器。1 PIN（三角标志）为 GND，中间 PIN 为 CAN_L，剩下的为 CAN_H。
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_phy.png" alt="MCU CAN物理图示" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-- MCU 小板通过2pin 跳帽的形式来选择是否在 CAN_H 和 CAN_L 之间接入120欧姆电阻；当插入跳帽时，接入电阻，适用于闭环网络所需的终端匹配阻抗‌；移除跳帽则断开终端电阻，适用于开环网络或中继节点场景‌。
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_sche.png" alt="MCU CAN简笔图示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+- CAN 总线的引脚位于 S100 的 MCU 扩展板上，引出了 5 路 CAN 接口，连接器分别对应了 5 个绿色的螺丝式的 3 PIN 连接器。1 PIN（三角标志）为 GND，中间 PIN 为 CAN_L，剩下的为 CAN_H。
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_phy.png" alt="MCU CAN 物理图示" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+- MCU 小板通过 2pin 跳帽的形式来选择是否在 CAN_H 和 CAN_L 之间接入 120 欧姆电阻；当插入跳帽时，接入电阻，适用于闭环网络所需的终端匹配阻抗‌；移除跳帽则断开终端电阻，适用于开环网络或中继节点场景‌。
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_sche.png" alt="MCU CAN 简笔图示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以下以 S100举例，如何正确接入电阻：
+CAN 闭环网络使用两个 120 欧姆电阻是 CAN 总线的标准配置，以下以 S100 举例，如何正确接入电阻：
 :::info 提示
-整体而言，开环网络配置不需要接入120欧姆电阻，而闭环网络配置总共需要插入**两个**120欧姆电阻；
+整体而言，开环网络配置不需要接入 120 欧姆电阻，而闭环网络配置总共需要插入**两个**120 欧姆电阻；
 :::
-- 在使用开环网络时，确保 CAN_H 与 CAN_L 线路正确连接，所用到的 CAN 不要插入跳线帽(在网络中不接入120欧姆电阻)；
-- 若将 S100的 CAN5和 CAN6连接组成双节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要在 CAN5和 CAN6接线端子后面的插针插入跳帽(在网络中插入两个120欧姆电阻)；
-- 若将 S100的 CAN5-CAN9连接组成多节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要插入两个跳线帽，任意选择两个，严禁插入超过2个跳线帽，以免出现不可预测的问题；
-- 若将 S100的 CAN5-CAN9中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要在 RDK 的 CAN 控制器的接线端子后面的插针插入跳帽，并在网络中其它设备端接入一个120Ω电阻；
+- 在使用开环网络时，确保 CAN_H 与 CAN_L 线路正确连接，所用到的 CAN 不要插入跳线帽(在网络中不接入 120 欧姆电阻)；
+- 若将 S100 的 CAN5 和 CAN6 连接组成双节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要在 CAN5 和 CAN6 接线端子后面的插针插入跳帽(在网络中插入两个 120 欧姆电阻)；
+- 若将 S100 的 CAN5-CAN9 连接组成多节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要插入两个跳线帽，任意选择两个，严禁插入超过 2 个跳线帽，以免出现不可预测的问题；
+- 若将 S100 的 CAN5-CAN9 中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要在 RDK 的 CAN 控制器的接线端子后面的插针插入跳帽，并在网络中其它设备端接入一个 120Ω电阻；
 </DocScope>
 <DocScope products="RDK S600">
-- CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S600的 sample 默认采用闭环总线网络架构**。
+- CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S600 的 sample 默认采用闭环总线网络架构**。
 
-- CAN 总线的引脚 S600共引出10路 can，其中在 MCU 扩展板，引出了5路 CAN 接口，连接器分别对应了5个绿色的螺丝式的3 PIN 连接器。每个 pin 脚的作用可以查看 mcu 子板的背面。在底板上，也引出了5路 CAN 接口，使用 BP 连接器引出。
-- MCU 小板通过拨动拨码开关，来选择是否在 CAN_H 和 CAN_L 之间接入120欧姆电阻；当拨码开关波动到 ON 端，表示接入电阻，适用于闭环网络所需的终端匹配阻抗‌；当拨码开关波动到数字编码端，表示断开电阻，适用于开环网络或中继节点场景‌。
+- CAN 总线的引脚 S600 共引出 10 路 can，其中在 MCU 扩展板，引出了 5 路 CAN 接口，连接器分别对应了 5 个绿色的螺丝式的 3 PIN 连接器。每个 pin 脚的作用可以查看 mcu 子板的背面。在底板上，也引出了 5 路 CAN 接口，使用 BP 连接器引出。
+- MCU 小板通过拨动拨码开关，来选择是否在 CAN_H 和 CAN_L 之间接入 120 欧姆电阻；当拨码开关波动到 ON 端，表示接入电阻，适用于闭环网络所需的终端匹配阻抗‌；当拨码开关波动到数字编码端，表示断开电阻，适用于开环网络或中继节点场景‌。
 - MCU 扩展版上的 CAN 与拨码开关:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/mcu.png" alt="MCU CAN物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/mcu.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - CAN 与拨码开关的对应关系：
 
@@ -139,11 +155,11 @@ CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以�
 | can2        | 2       | can10       | 5       |
 | can3        | 3       |
 
-- S600底板上的 CAN 与拨码开关:
+- S600 底板上的 CAN 与拨码开关:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/Baseboard.png" alt="MCU CAN物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/Baseboard.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-- 底板上 J16为 can 在的位置， 信号名 J16从上到下如下：
+- 底板上 J16 为 can 在的位置， 信号名 J16 从上到下如下：
 
 | Signal name |
 |-------------|
@@ -161,7 +177,7 @@ CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以�
 | CAN9_L      |
 
 - 底板拨码开关在底板背面
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/baseboard_dpi_switch.png" alt="MCU CAN物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/baseboard_dpi_switch.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 - CAN 与拨码开关的对应关系：
 
 |             | DPI num |             | DPI num |
@@ -170,24 +186,33 @@ CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以�
 | can6        | 2       | can9        | 5       |
 | can7        | 3       |
 
-CAN 闭环网络使用两个120欧姆电阻是 CAN 总线的标准配置，以下以 S600举例，如何正确接入电阻：
-- 在使用开环网络时，确保 CAN_H 与 CAN_L 线路正确连接，所用到的 CAN(在网络中不接入120欧姆电阻)；
-- 若将 S600的 CAN1和 CAN2连接组成双节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要将 CAN1和 CAN2对应拨码开关波动到 ON 端(在网络中插入两个120欧姆电阻)；
-- 若将 S600的 CAN1-CAN10中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要将 RDK 的 CAN 控制器对应的莫玛开源波动到 ON 端，并在网络中其它设备端接入一个120Ω电阻；
+CAN 闭环网络使用两个 120 欧姆电阻是 CAN 总线的标准配置，以下以 S600 举例，如何正确接入电阻：
+- 在使用开环网络时，确保 CAN_H 与 CAN_L 线路正确连接，所用到的 CAN(在网络中不接入 120 欧姆电阻)；
+- 若将 S600 的 CAN1 和 CAN2 连接组成双节点内部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接，还需要将 CAN1 和 CAN2 对应拨码开关波动到 ON 端(在网络中插入两个 120 欧姆电阻)；
+- 若将 S600 的 CAN1-CAN10 中的任意一个控制器和其它 CAN 设备组成外部闭环网络，确保 CAN_H 与 CAN_L 线路正确连接外，还需要将 RDK 的 CAN 控制器对应的拨码开关拨到 ON 端，并在网络中其它设备端接入一个 120Ω电阻；
 </DocScope>
 
 ## CAN Filter 配置
 
-标准帧的 filter 最多可配置128个，扩展帧的 filter 最多可配置64个，可选择的 filter 类型如下：
+标准帧与扩展帧各自维护独立的 filter 表，单表最多可配置 128 个 filter element（驱动侧 `FEATURE_MAX_FILTER_INDEX = 128`，FlexCAN 支持 64/128 两档，以实际配置为准）。可选择的 filter 类型如下：
 - ONE_ID_FILTER：指定 ID 并可配置 MASK 来忽略 ID 中的哪些 bit 进行过滤，
 - RANGE_ID_FILTER：按照 ID 范围进行过滤，
 - TWO_ID_FILTER：指定两个 ID 进行过滤。
 
 ### 过滤器的识别
-过滤器类型通过检查 u32HwFilterCode 的最高2位来确定：
+
+过滤器类型通过检查 u32HwFilterCode 的最高 2 位来确定：
 - 0b00: ONE_ID_FILTER
 - 0b01: RANGE_ID_FILTER
 - 0b10: TWO_ID_FILTER
+
+`u32HwFilterMask` 与 `u32HwFilterCode` 低 30 位的含义随类型不同（源码 `McalCdd/Can/src/Can.c` 中按 `id1 = u32HwFilterMask`、`id2 = u32HwFilterCode & 0x3FFFFFFF` 解析）：
+
+| 类型 | `u32HwFilterMask`（id1） | `u32HwFilterCode` 低 30 位（id2） |
+|------|--------------------------|-----------------------------------|
+| ONE_ID_FILTER | 过滤掩码 `Filter_Mask` | 过滤码 `Filter_Code` |
+| RANGE_ID_FILTER | 范围下界 | 范围上界 |
+| TWO_ID_FILTER | 第一个 ID | 第二个 ID |
 
 ```c
 /**
@@ -205,13 +230,13 @@ typedef struct Can_HwFilterType
 
 - 配置举例：
     - 这是 CAN 7 的过滤器配置，拥有两个过滤器
-    - 过滤器0的第一个元素的高2位为01，属于范围过滤方式
+    - 过滤器 0 的第一个元素的高 2 位为 01，属于范围过滤方式
     - 扩展帧和标准帧的过滤相互独立，互不影响
-    - 标准帧的所有过滤器，如下面的例子过滤器0和过滤1为"或"关系，即如果至少有一个过滤元件满足匹配标准，则 CAN 消息内容将被传输到增强型 RX FIFO 存储器
-    - 同理，扩展帧的所有过滤器，如下面的例子过滤器2和过滤3为"或"关系，即如果至少有一个过滤元件满足匹配标准，则 CAN 消息内容将被传输到增强型 RX FIFO 存储器
+    - 标准帧的所有过滤器，如下面的例子过滤器 0 和过滤 1 为"或"关系，即如果至少有一个过滤元件满足匹配标准，则 CAN 消息内容将被传输到增强型 RX FIFO 存储器
+    - 同理，扩展帧的所有过滤器，如下面的例子过滤器 2 和过滤 3 为"或"关系，即如果至少有一个过滤元件满足匹配标准，则 CAN 消息内容将被传输到增强型 RX FIFO 存储器
 
 ```c
-// Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
+// Can_PBcfg.c（路径见「代码路径」）
 static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
     { /* Standard frame configuration */
@@ -240,22 +265,23 @@ static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 if ((Received_ID & Filter_Mask) == (Filter_Code & Filter_Mask))
     // 接收该消息
 else
-    // 丢弃该消
+    // 丢弃该消息
 ```
 
-以标准帧过滤器0配置为例，代码如下：
+以标准帧过滤器 0 为例（`最高2位=0b00`，接收满足 `(Received_ID & mask) == (code & mask)` 的消息；同一控制器的不同 filter 元素可混用类型），代码如下：
+
 ```c
-// Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
+// Can_PBcfg.c（路径见「代码路径」）
 static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
     { /* Standard frame configuration */
-        (uint32)0x00000400U,  // 只接收id = 0x400&0x7ff = 0x400 消息
+        (uint32)0x00000400U,  // ONE_ID：只接收 id & 0x7ff == 0x400 消息
         (uint32)0x000007ffU
     },
-    {  /* Standard frame configuration */
-        (uint32)0x400007ffU,  // 范围过滤方式，支持混用
+    { /* Standard frame configuration */
+        (uint32)0x400007ffU,  // 范围过滤方式: 接收 id 0x600~0x7ff（支持与 ONE_ID 混用）
         (uint32)0x00000600U
-    }
+    },
     { /* Extended frame configuration */
         (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x0~0x1fffffff的消息
         (uint32)0x00000000U
@@ -267,7 +293,6 @@ static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 };
 ```
 
-
 ### RANGE_ID_FILTER（范围过滤方式）
 
 在这种模式下，使用范围过滤逻辑：
@@ -278,19 +303,20 @@ if (id1 <= Received_ID <= id2)
 else
     // 丢弃该消息
 ```
-这也是 S100 MCU 默认的过滤方式，也是最常用的过滤方式;举例代码如下：
+这是最常用的过滤方式。以标准帧过滤器 0、1 为例（`最高2位=0b01`，范围下界放在 mask，上界放在 code 低 30 位），代码如下：
+
 ```c
-// Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
+// Can_PBcfg.c（路径见「代码路径」）
 static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
     { /* Standard frame configuration */
-        (uint32)0x00000400U,  // 只接收id = 0x400&0x7ff = 0x400 消息
-        (uint32)0x000007ffU
+        (uint32)0x400007ffU,  // 只接收id = 0x400&0x7ff = 0x400 消息
+        (uint32)0x00000000U
     },
-    {  /* Standard frame configuration */
+    { /* Standard frame configuration */
         (uint32)0x400007ffU,  // 范围过滤方式，支持混用
         (uint32)0x00000600U
-    }
+    },
     { /* Extended frame configuration */
         (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x0~0x1fffffff的消息
         (uint32)0x00000000U
@@ -315,9 +341,9 @@ else
     // 丢弃该消息
 ```
 
-以标准帧过滤器0配置为例，代码如下：
+以标准帧过滤器 0 配置为例，代码如下：
 ```c
-// Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
+// Can_PBcfg.c（路径见「代码路径」）
 static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 {
     { /* Standard frame configuration */
@@ -327,7 +353,7 @@ static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
     { /* Standard frame configuration */
         (uint32)0x400007ffU,  // 范围过滤方式，支持混用
         (uint32)0x00000600U
-    }
+    },
     { /* Extended frame configuration */
         (uint32)0x5fffffffU,   // 扩展帧配置：接收id为0x0~0x1fffffff的消息
         (uint32)0x00000000U
@@ -340,36 +366,38 @@ static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 ```
 
 :::tip
-1. RDK S100软硬件支持收发扩展帧和标准帧，而不需要修改配置
-2. RDK S100软硬件支持对扩展帧和标准帧分别过滤
-3. 注意 id 的长度配置，超出规定长度将发生截断，扩展帧的 id 长度最高为29位，即最大为0x1FFFFFFF，标准帧的 id 长度最高为11位，即最大为0x7FF
-4. RDK S600软件目前还不支持扩展帧
+1. RDK S100 软硬件支持收发扩展帧和标准帧，而不需要修改配置
+2. RDK S100 软硬件支持对扩展帧和标准帧分别过滤
+3. 注意 id 的长度配置，超出规定长度将发生截断，扩展帧的 id 长度最高为 29 位，即最大为 0x1FFFFFFF，标准帧的 id 长度最高为 11 位，即最大为 0x7FF
+4. RDK S600 软件目前还不支持扩展帧
 :::
-
 
 ## 波特率配置
 
 CAN 的标称位时（Nominal bit timing）可以分为四个段：
-1. 同步段(sync_seg)‌：用于节点间的时钟同步，所有节点在此段内检测信号边沿。其长度固定为1个时间单位(TQ)
+1. 同步段(sync_seg)‌：用于节点间的时钟同步，所有节点在此段内检测信号边沿。其长度固定为 1 个时间单位(TQ)
 2. 传播段(prop_seg)‌：补偿信号在物理线路上的传播延迟。其长度可调整，用于确保信号在物理介质上的传输时间
-3. 相位缓冲段1(phase_seg1)‌：用于调整相位误差，确保采样点的准确性，可以扩展重同步
-4. 相位缓冲段2(phase_seg2)‌：同样用于调整相位误差，但可以缩短
+3. 相位缓冲段 1(phase_seg1)‌：用于调整相位误差，确保采样点的准确性，可以扩展重同步
+4. 相位缓冲段 2(phase_seg2)‌：同样用于调整相位误差，但可以缩短
 这些段的总和决定了 CAN 的总位时间，通过调整这些段的长度，可以配置不同的波特率。
 此外还有以下几个重要概念：
 1. 同步跳转宽度(SJW，synchronization jump width)：CAN 总线同步机制中允许调整相位缓冲段的最大时间量，在 硬同步 和 重同步 过程中补偿节点间的时钟偏差，确保采样点对齐。
 2. 延迟补偿偏移量(Transceiver Delay Compensation Offset)：仅 CAN FD 支持，用于解决数据段高速传输时的物理层时序偏移用于补偿 CAN FD 模式下 收发器环路延迟 和 信号传播时间 的固定修正值
-3. 采样点：CAN 控制器在位时间内对总线电平进行采样的精确时刻，用于判定位的逻辑值（显性0或隐性1）
+3. 采样点：CAN 控制器在位时间内对总线电平进行采样的精确时刻，用于判定位的逻辑值（显性 0 或隐性 1）
 
 ### 取值范围和公式计算
+
 1. 采样点计算：（sync_seg + prop_seg + phase_seg1）/（sync_seg + prop_seg + phase_seg1 + phase_seg2）×100%
 2. 同步段固定一个 tq
 3. prop_seg + phase_seg1>phase_seg2
 4. SJW ≤ min(Phase_Seg1, Phase_Seg2)
-5. 当配置5M 及以上波特率时，需配置补偿参数，补偿参数计算公式如下：
+5. 当配置 5M 及以上波特率时，需配置补偿参数，补偿参数计算公式如下：
   - TDC offset = (PropSeg + Seg1 + 1) * Fd Prescaler
 
-### 配置仲裁段1M 数据段5M 实例说明
+### 配置仲裁段 1M 数据段 5M 实例说明
+
 #### 1. 基础参数确认
+
 - CAN 时钟频率（CAN_CLK）: 40 MHz
 - 目标波特率（Bit Rate）: 5 Mbps
 - 预分频值（Prescaler）: 1（不分频）
@@ -377,6 +405,7 @@ CAN 的标称位时（Nominal bit timing）可以分为四个段：
 - 时间量子：Tq time = 1 / (40M / prescaler) = 1/40M = 25ns
 
 #### 2. 时间量子（TQ）分配
+
 Sync_Seg（固定段）: 1 TQ（同步段不可修改）
 
 剩余 TQ 分配: Prop_Seg+Phase_Seg1+Phase_Seg2=8−1=7TQ
@@ -393,16 +422,15 @@ SJW 必须满足: SJW≤min⁡(Phase_Seg1,Phase_Seg2)=min⁡(4,2)=2
 
 因此，配置 SJW = 2 TQ。
 
-#### 4. 终配置参数
+#### 4. 最终配置参数
 
-根据上述的方式同理可以计算到1M 情况下的参数，由于部分寄存器获取到的值会自动加一，所以实际写入的值要减一，具体可看下表
+根据上述的方式同理可以计算到 1M 情况下的参数，由于部分寄存器获取到的值会自动加一，所以实际写入的值要减一，具体可看下表
 
 - 5M 75%数据段配置
 
-
 | 参数名               | 值（TQ 或时间） | 需写入寄存器的值 |
 |----------------------|----------------|------------------|
-| Sync_Seg             | 1 TQ           | 无需写入，固定为1 |
+| Sync_Seg             | 1 TQ           | 无需写入，固定为 1 |
 | Prop_Seg             | 1 TQ           | 1                |
 | Phase_Seg1           | 4 TQ           | 3                |
 | Phase_Seg2           | 2 TQ           | 1                |
@@ -414,19 +442,18 @@ SJW 必须满足: SJW≤min⁡(Phase_Seg1,Phase_Seg2)=min⁡(4,2)=2
 
 | 参数名        | 值（TQ 或时间） | 需写入寄存器的值 |
 |---------------|----------------|------------------|
-| Sync_Seg      | 1 TQ           | 无需写入，固定为1  |
+| Sync_Seg      | 1 TQ           | 无需写入，固定为 1  |
 | Prop_Seg      | 7 TQ           | 6                |
 | Phase_Seg1    | 8 TQ           | 7                |
 | Phase_Seg2    | 4 TQ           | 3                |
 | Prescaler     | 2              | 1                |
 | SJW           | 2 TQ           | 1                |
 
-
-#### 5. 8M 的配置相对于5M 较为特殊，使用60%的采样
+#### 5. 8M 的配置相对于 5M 较为特殊，使用 60%的采样
 
 | 参数名          | 值（TQ 或时间） | 需写入寄存器的值 |
 |-----------------|----------------|------------------|
-| Sync_Seg        | 1 TQ           | 无需写入，固定为1  |
+| Sync_Seg        | 1 TQ           | 无需写入，固定为 1  |
 | Prop_Seg        | 1 TQ           | 1                |
 | Phase_Seg1      | 1 TQ           | 0                |
 | Phase_Seg2      | 2 TQ           | 1                |
@@ -435,12 +462,27 @@ SJW 必须满足: SJW≤min⁡(Phase_Seg1,Phase_Seg2)=min⁡(4,2)=2
 | 延迟补偿偏移量  | 3 TQ           | 3                |
 
 #### 6. 将结果更新到配置文件中
+
 配置文件路径:
-```
+<DocScope products="RDK S100">
+
+```text
 ${mcu_sdk}/Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_PBcfg.c
 ```
 
-配置文件中存在两个波特率相关的重要结构体，下面以 CAN5为例分别说明：
+</DocScope>
+<DocScope products="RDK S600">
+
+```text
+${mcu_sdk}/Config/McalCdd/gen_s600_md_mcu1/Can/src/Can_PBcfg.c
+```
+
+</DocScope>
+
+配置文件中存在两个波特率相关的重要结构体，下面以 CAN5 为例分别说明（S100 与 S600 的数组长度、默认索引不同，以下先给出 S100 示例）：
+
+<DocScope products="RDK S100">
+
 - Can_aControllerConfig：用于配置 CAN 控制器。每个控制器都有一个对应的配置项
 ```c
 static const Can_ControllerConfigType Can_aControllerConfig[CAN_CONTROLLER_CONFIG_COUNT]=
@@ -526,22 +568,45 @@ static const Can_BaudrateConfigType Can_aBaudrateConfig_Ctrl5[6U]=
     ...
 ```
 
-RDK S100默认配置了6组参数，用户可以通过修改 Can_aControllerConfig 中的 u16DefaultBaudrateID 成员值来选择波特率,下表为索引对应的波特率参数：
+RDK S100 默认配置了 6 组参数，用户可以通过修改 Can_aControllerConfig 中的 u16DefaultBaudrateID 成员值来选择波特率,下表为索引对应的波特率参数：
 | u16DefaultBaudrateID | 仲裁段频率 | 数据段频率 |
 |----------------------|------------|------------|
 | 0                    | 500K       | 1M         |
 | 1                    | 500K       | 2M         |
 | 2                    | 1M         | 2M         |
-| 3                    | 1M         | 5M（短距离:小于50m） |
-| 4                    | 1M         | 5M（长距离:大于50m） |
+| 3                    | 1M         | 5M（短距离：小于 50m） |
+| 4                    | 1M         | 5M（长距离：大于 50m） |
 | 5                    | 1M         | 8M         |
 
+</DocScope>
+<DocScope products="RDK S600">
+
+S600 的波特率配置与 S100 不同，需要注意以下几点：
+
+- **数组长度**：S600 的 `Can_aBaudrateConfig_CtrlX` 为 **4 组**（`[4U]`），不是 6 组。
+- **默认索引**：S600 所有控制器的 `u16DefaultBaudrateID` 均为 **1**，`Baudrate config Count` 为 **4**；索引 1 即默认速率（仲裁段 1M + 数据段 5M，源码注释为 `/* Nominal bit rate 1M */`、`/* Data bit rate 5M */`）。
+- **其它索引**：数组其它档位的寄存器取值请直接查看 `Can_PBcfg.c` 中的 `Can_aBaudrateConfig_CtrlX`，可按上一节的 TQ / 采样点公式反推，或按实测确认。
+
+以 CAN5 为例，S600 对应片段如下（注意 `Default Baudrate ID` 与 `Baudrate config Count` 的取值）：
+
+```c
+/* Default Baudrate ID */
+(uint16)1U,
+/* Baudrate config Count*/
+(uint16)4U,
+/* Pointer to baudrate config Structure */
+Can_aBaudrateConfig_Ctrl5,
+```
+
+如需新增档位，修改数组长度并同步 `Baudrate config Count` 与 `u16DefaultBaudrateID` 即可。
+
+</DocScope>
 
 ## 多包合并配置
 
 CAN 驱动支持接收多包合并数据传输功能，当 CAN 驱动接收到一定阈值的数据包时，会将它们合并，通过 IPC 从 MCU 传输到 Acore。目的是为了减少 IPC 传输频率，提高传输效率。在此基础上提供了合包数量和超时时间两个可配参数。
-1. 合包数量：用于设置 CAN 驱动接收到多少包之后，进行一次 IPC 传输， 默认为1。
-2. 超时时间：用于当一定时间内还没有收到所设阈值的数据包时，进行一次强制传输，默认为1000us。
+1. 合包数量：用于设置 CAN 驱动接收到多少包之后，进行一次 IPC 传输， 默认为 1。
+2. 超时时间：用于当一定时间内还没有收到所设阈值的数据包时，进行一次强制传输，默认为 1000us。
 
 ### 配置方式
 
@@ -555,7 +620,7 @@ D-Robotics:/$ Can_Set_Merge_Num 8   // 设置合包数量为8
 
 D-Robotics:/$ Can_Set_Merge_Time 100  // 设置超时时间为100us
 ```
-acore 侧也支持多包合并传输功能，下面只简单介绍相关数据结构，具体可以使用[应用sample](#应用-sample)中提供的测试用例进行修改验证。
+acore 侧也支持多包合并传输功能，下面只简单介绍相关数据结构，具体可以使用[应用 sample](#应用-sample)中提供的测试用例进行修改验证。
 ```c
 #define CAN_FRAME_NUM (1)   // Acore侧表示合并传输数据包的数量
 struct pack_info pack = { 0 };
@@ -572,24 +637,24 @@ pack.data_num = CAN_FRAME_NUM;
 
 :::
 
-Acore canhal 使用可参考 sample 源码目录：source/hobot-io-samples/debian/app/Can，可以在 S100的/app/Can 目录下直接 make 编译使用。
+Acore canhal 使用可参考 sample 源码目录：source/hobot-io-samples/debian/app/Can，可以在 S100 的/app/Can 目录下直接 make 编译使用。
 
 以多路透传为例，目录结构如下：
 ```bash
 $ tree /app/Can/can_multi_ch
 .
-├── Makefile // 主编译脚本
-├── config  // 配置文件目录
-│   ├── channels.json // 通道映射配置文件
-│   ├── ipcf_channel.json // IPCF通道映射配置文件
-│   └── nodes.json // Can虚拟设备映射配置文件
-├── main.cpp // 主程序
-├── readme.md // 说明文件
-├── can_multich_log.h // 日志头文件
-└── run.sh // 运行脚本
+├── Makefile                // 主编译脚本
+├── config                  // 配置文件目录
+│   ├── channels.json       // 通道映射配置文件
+│   ├── ipcf_channel.json   // IPCF通道映射配置文件
+│   └── nodes.json          // Can虚拟设备映射配置文件
+├── main.cpp                // 主程序
+├── readme.md               // 说明文件
+├── can_multich_log.h       // 日志头文件
+└── run.sh                  // 运行脚本
 
 ```
-json 文件配置主要包括3个 json 配置文件：node.json、ipcf_channel.json、channels.json。目前为了支持多进程，各个进程都会去当前路径下的 config 目录下寻找这3个配置文件。
+json 文件配置主要包括 3 个 json 配置文件：node.json、ipcf_channel.json、channels.json。目前为了支持多进程，各个进程都会去当前路径下的 config 目录下寻找这 3 个配置文件。
 
 node.json 负责创建虚拟 CAN 设备节点给 CANHAL API 访问。关键配置选项包括：
 - channel_id 字段指定该虚拟 CAN 设备从 ipc 配置文件 ipcf_channel.json 中哪一个节点获取数据。
@@ -678,8 +743,7 @@ channels.json 指定 ipc 配置文件，用户一般不需要更改。
 }
 ```
 
-Acore 无法直接操作 CAN 外设，需要通过借助 Ipc 模块来中转数据，与外设通道的映射关系可以查阅 [MCU IPC使用指南](./08_mcu_ipc.md) 中的 IPC 使用情况章节。
-
+Acore 无法直接操作 CAN 外设，需要通过借助 Ipc 模块来中转数据，与外设通道的映射关系可以查阅 [MCU IPC 使用指南](./08_mcu_ipc.md) 中的 IPC 使用情况章节。
 
 Acore 应用程序通过 CANHAL 获取 MCU 侧 CAN 帧的流程伪代码如下：
 
@@ -758,24 +822,24 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
 #### 简单的 can 收发 sample
 
 **目录介绍**
-```
+```text
 // /app/Can/can_send
 .
-├── Makefile // 主编译脚本
-├── canhal_send.c // 发送一帧标准帧数据
-└── config // 配置文件目录
-    ├── channels.json  // 通道映射配置文件
-    ├── ipcf_channel.json  // 通道映射配置文件
-    └── nodes.json // 通道映射配置文件
+├── Makefile                // 主编译脚本
+├── canhal_send.c           // 发送一帧标准帧数据
+└── config                  // 配置文件目录
+    ├── channels.json       // 通道映射配置文件
+    ├── ipcf_channel.json   // 通道映射配置文件
+    └── nodes.json          // 通道映射配置文件
 
 // /app/Can/can_get
 .
-├── Makefile // 主编译脚本
-├── canhal_get.c // while 1循环，接收数据
-└── config // 配置文件目录
-    ├── channels.json   // 通道映射配置文件
-    ├── ipcf_channel.json  // 通道映射配置文件
-    └── nodes.json  // 通道映射配置文件
+├── Makefile                // 主编译脚本
+├── canhal_get.c            // while 1循环，接收数据
+└── config                  // 配置文件目录
+    ├── channels.json       // 通道映射配置文件
+    ├── ipcf_channel.json   // 通道映射配置文件
+    └── nodes.json          // 通道映射配置文件
 ```
 
 **使用前提**
@@ -783,9 +847,9 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
 这里仅给出一个简单的 sample，实际应用中需要根据实际需求进行修改。
 
 使用前提：
-- MCU1正常运行
-- 硬件连接：使用 CAN 闭环总线网络，CAN5连接 CAN6，RDKS100上 CAN5和 CAN6需要在接线柱后面的2 PIN 引脚使用跳线帽或杜邦线短接， 以确保 CAN_H 和 CAN_L 之间接入120欧姆电阻， RDKS600上需要将 can5,can6对应的拨码开关，波到 ON 端，以确保 CAN_H 和 CAN_L 之间接入120欧姆电阻。
-- 由于 can_send 和 can_get 都使用的 instance channel4(默认映射来自 CAN5的数据)，**由于 Ipc 单个 channel 只能被一个线程使用**，因此在互联测试的时候需要依据 [软件架构](./09_mcu_can.md#Software_architecture)中 can 与 instance channel 的对应关系来设置配置文件。例如针对 can6, S100上 intance 为0， channel 为6， S600上 instance 为4， channel 为0， 对应设置文件如下：
+- MCU1 正常运行
+- 硬件连接：使用 CAN 闭环总线网络，CAN5 连接 CAN6，RDKS100 上 CAN5 和 CAN6 需要在接线柱后面的 2 PIN 引脚使用跳线帽或杜邦线短接， 以确保 CAN_H 和 CAN_L 之间接入 120 欧姆电阻， RDKS600 上需要将 can5,can6 对应的拨码开关，波到 ON 端，以确保 CAN_H 和 CAN_L 之间接入 120 欧姆电阻。
+- 由于 can_send 和 can_get 都使用的 instance channel4(默认映射来自 CAN5 的数据)，**由于 Ipc 单个 channel 只能被一个线程使用**，因此在互联测试的时候需要依据 [软件架构](./09_mcu_can.md#Software_architecture)中 can 与 instance channel 的对应关系来设置配置文件。例如针对 can6, S100 上 intance 为 0， channel 为 6， S600 上 instance 为 4， channel 为 0， 对应设置文件如下：
 
 ```json
 {
@@ -838,11 +902,10 @@ Send end, send package total: 1 frame total: 1
  0x0  0xaa  0xaa  0xaa  0xaa  0xaa  0xaa  0xfc
 ```
 4. 出现如下打印则测试成功：
-```
+```text
 [canhal_get] [bypass] [canframe] canid is 0x00000131 timestamp is 0x10b221 data is:
  0x0  0xaa  0xaa  0xaa  0xaa  0xaa  0xaa  0xfc
 ```
-
 
 #### 多通道传输
 
@@ -850,48 +913,47 @@ Send end, send package total: 1 frame total: 1
 ```bash
 // /app/Can/can_multi_ch
 .
-├── Makefile // 主编译脚本
-├── config  // 配置文件目录
-│   ├── channels.json // 通道映射配置文件
-│   ├── ipcf_channel.json // IPCF通道映射配置文件
-│   └── nodes.json // Can虚拟设备映射配置文件
-├── main.cpp // 主程序
-├── readme.md // 说明文件
-├── can_multich_log.h // 日志头文件
-└── run.sh // 运行脚本
+├── Makefile                // 主编译脚本
+├── config                  // 配置文件目录
+│   ├── channels.json       // 通道映射配置文件
+│   ├── ipcf_channel.json   // IPCF通道映射配置文件
+│   └── nodes.json          // Can虚拟设备映射配置文件
+├── main.cpp                // 主程序
+├── readme.md               // 说明文件
+├── can_multich_log.h       // 日志头文件
+└── run.sh                  // 运行脚本
 ```
 
 本程序实现 CAN 总线多通道数据发送与接收：
 <DocScope products="RDK S100">
 
-- **硬件连接**：使用 CAN 闭环总线网络，Can6连接 Can7，Can8连接 Can9，Can5单独通道不接，CAN_H 和 CAN_L 之间接入120欧姆电阻（把所用到的 CAN 总线的接线柱后面的2 PIN 引脚使用跳线帽或杜邦线短接）。
-- **发送线程**：为每个通道创建独立线程发送数据，当使用 CANFD 时，数据包含计数器和时间戳，当使用经典 CAN 时，数据为全0x55。
+- **硬件连接**：使用 CAN 闭环总线网络，Can6 连接 Can7，Can8 连接 Can9，Can5 单独通道不接，CAN_H 和 CAN_L 之间接入 120 欧姆电阻（把所用到的 CAN 总线的接线柱后面的 2 PIN 引脚使用跳线帽或杜邦线短接）。
+- **发送线程**：为每个通道创建独立线程发送数据，当使用 CANFD 时，数据包含计数器和时间戳，当使用经典 CAN 时，数据为全 0x55。
 - **接收线程**：为每个通道创建独立线程接收数据并验证数据正确性。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-- **硬件连接**：使用 CAN 闭环总线网络，建议两两互联进行回环测试（例如 Can1连接 Can2，Can3连接 Can4，Can5连接 Can6，Can7连接 Can8，Can9连接 Can10），并将参与组网的 CAN 通道对应拨码开关拨到 ON 端，使 CAN_H 和 CAN_L 之间接入120欧姆电阻。
-- **发送线程**：为每个通道创建独立线程发送数据，当使用 CANFD 时，数据包含计数器和时间戳，当使用经典 CAN 时，数据为全0x55。
+- **硬件连接**：使用 CAN 闭环总线网络，建议两两互联进行回环测试（例如 Can1 连接 Can2，Can3 连接 Can4，Can5 连接 Can6，Can7 连接 Can8，Can9 连接 Can10），并将参与组网的 CAN 通道对应拨码开关拨到 ON 端，使 CAN_H 和 CAN_L 之间接入 120 欧姆电阻。
+- **发送线程**：为每个通道创建独立线程发送数据，当使用 CANFD 时，数据包含计数器和时间戳，当使用经典 CAN 时，数据为全 0x55。
 - **接收线程**：为每个通道创建独立线程接收数据并验证数据正确性。
 
 </DocScope>
-
 
 <DocScope products="RDK S100">
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
-- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S100默认 CAN5-CAN9）
+- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S100 默认 CAN5-CAN9）
 </DocScope>
 <DocScope products="RDK S600">
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
-- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S600默认 CAN1-CAN10）
+- 目标通道：按照配置文件中启用的 CAN 通道广播数据（S600 默认 CAN1-CAN10）
 </DocScope>
 
 接收策略:
 - 被动接收数据，验证接收数据的计数器和计算传输时延
-- 超过100秒未收到数据则退出程序（代码中定义的超时时间）
+- 超过 100 秒未收到数据则退出程序（代码中定义的超时时间）
 
 **依赖**
 - `pthread`: 线程库
@@ -899,9 +961,7 @@ Send end, send package total: 1 frame total: 1
 - `hb_ipcf_hal`: IPCF 接口库
 - `alog`: Android 日志库
 
-
 **通道映射关系**
-
 
 <DocScope products="RDK S100">
 
@@ -933,10 +993,9 @@ Send end, send package total: 1 frame total: 1
 > CAN6→'ins4/ch0'，CAN7→'ins4/ch1'，CAN8→'ins4/ch2'，CAN9→'ins4/ch3'，CAN10→'ins4/ch5'。
 </DocScope>
 
-
 **DEBUG 开关**
 
-```C
+```c
 // can_multich_log.h
 #define VERBOSE 0 //修改为1时打印调试信息
 ```
@@ -949,21 +1008,21 @@ Send end, send package total: 1 frame total: 1
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
 - 数据内容：通过 CANFD 发送扩展帧(64bytes)的数据。
-- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S100默认 CAN5-CAN9）
+- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S100 默认 CAN5-CAN9）
 
 </DocScope>
 <DocScope products="RDK S600">
 发送策略：
 - 相隔固定时间通过 Can 发送数据，可通过修改延时调整发送频率，频率过高可能会出现丢包。
 - 数据内容：通过 CANFD 发送扩展帧(64bytes)的数据。
-- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S600默认 CAN1-CAN10）
+- 目标通道：按照配置文件中启用的 CAN 通道发送数据（S600 默认 CAN1-CAN10）
 </DocScope>
 
 **接收端**
 
 接收策略:
 - 被动接收数据，验证接收数据的计数器和计算传输时延
-- 超过100秒未收到数据则退出程序（代码中定义的超时时间）
+- 超过 100 秒未收到数据则退出程序（代码中定义的超时时间）
 
 **注意事项**
 - 程序退出时会自动释放 CAN 设备资源
@@ -996,9 +1055,9 @@ export CAN_HAL_DEBUG_LEVEL=6 //  设置CAN接口库调试等级，不打印任�
 
 **日志分析**
 
-S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日志字段含义与 S100一致，仅通道与 IPC 映射按 S600配置解析。
+S600 平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日志字段含义与 S100 一致，仅通道与 IPC 映射按 S600 配置解析。
 
-以运行 `./can_multi_ch -t 2 -l 64 -n 5 `为例:
+以运行 `./can_multi_ch -t 2 -l 64 -n 5 ` 为例:
 
 - 当前默认参数配置:
     ```bash
@@ -1009,16 +1068,7 @@ S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日
     ```
 
 - 使用的硬件配置，CAN 控制器，IPC 的实例和通道
-    ```
-    group name is can6_ins0ch6
-    group name is can7_ins4ch7
-    group name is can8_ins4ch2
-    group name is can9_ins0ch3
-    group name is can5_ins0ch4
-    ```
-
-- 使用的硬件配置，CAN 控制器，IPC 的实例和通道
-    ```
+    ```text
     group name is can6_ins0ch6
     group name is can7_ins4ch7
     group name is can8_ins4ch2
@@ -1041,7 +1091,7 @@ S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日
     ```
 
 - 发送线程发送的数据打印，可以看到发到成功将多少帧数据转发到 MCU，速率如何
-    ```
+    ```text
     [send_frame_data 266] [INFO]: Target can5_ins0ch4 Time: 0.005230s
     [send_frame_data 268] [INFO]: Send success count: 5 Total:5
     [send_frame_data 271] [INFO]: 61185.468750 byte/s -> 59.751434kb/s
@@ -1058,8 +1108,8 @@ S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日
     .....
     ```
 
-- 接收超时,起接收线程后会等待接收数据，长时间没有接收错误会报-303错误，可根据实际情况判断是否存在异常，当超过100s 时候，会退出线程
-    ```
+- 接收超时,起接收线程后会等待接收数据，长时间没有接收错误会报-303 错误，可根据实际情况判断是否存在异常，当超过 100s 时候，会退出线程
+    ```text
     [recv_frame_data 307] [ERR]: canRecvMsgFrame failed ret: -303
     [recv_frame_data 307] [ERR]: canRecvMsgFrame failed ret: -303
     [recv_frame_data 307] [ERR]: canRecvMsgFrame failed ret: -303
@@ -1075,8 +1125,8 @@ S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日
 
     ```
 
-- 按 ctrl+c 退出后可以看到各个接收线程中收到包的数量，接收的最大延迟(仅 CAN FD 支持)，由于 CAN5没有接设备，所以接收到的包数量为0
-    ```
+- 按 ctrl+c 退出后可以看到各个接收线程中收到包的数量，接收的最大延迟(仅 CAN FD 支持)，由于 CAN5 没有接设备，所以接收到的包数量为 0
+    ```text
     Target :can7_ins4ch7 recv frame num: 5 Total recv frame num: 5 Maximum transmission time:32209 us
     Target :can6_ins0ch6 recv frame num: 5 Total recv frame num: 5 Maximum transmission time:41182 us
     Target :can8_ins4ch2 recv frame num: 5 Total recv frame num: 5 Maximum transmission time:22676 us
@@ -1084,7 +1134,7 @@ S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日
     Target :can5_ins0ch4 recv frame num: 0 Total recv frame num: 5 Maximum transmission time:0 us
     ```
 - 资源释放
-    ```
+    ```text
     [INFO][hb_ipcf_hal.cpp:553] [channel] can5_ins0ch4 [ins] 0 [id] 4 deinit success.
     [INFO][hb_ipcf_hal.cpp:553] [channel] can8_ins4ch2 [ins] 0 [id] 2 deinit success.
     [INFO][hb_ipcf_hal.cpp:553] [channel] can9_ins0ch3 [ins] 0 [id] 3 deinit success.
@@ -1092,22 +1142,10 @@ S600平台可通过同样的 `can_multi_ch` 测试流程查看日志信息，日
     [INFO][hb_ipcf_hal.cpp:553] [channel] can6_ins0ch6 [ins] 0 [id] 6 deinit success.
     ```
 
-#### 多 can 组网传输
-
-:::tip
-持续更新中
-:::
-
-#### 应用层修改 can 波特率等配置
-
-:::tip
-持续更新中
-:::
-
 ### 库文件打印开关
 
 CAN_HAL_DEBUG_LEVEL 是一个环境变量，用于控制库文件 libhbcanhal.so 日志输出的级别。它的不同值代表不同的日志级别，这些级别决定了哪些日志信息会被记录下来
-```
+```text
 0 (log_trace): 跟踪级别。
 1 (log_debug): 调试级别。
 2 (log_info): 信息级别。
@@ -1119,273 +1157,321 @@ CAN_HAL_DEBUG_LEVEL 是一个环境变量，用于控制库文件 libhbcanhal.so
 通过设置 CAN_HAL_DEBUG_LEVEL 的值，可以控制日志输出的详细程度。例如，如果设置为 2，那么只有 log_info、log_warn、log_err 和 log_critical 级别的日志会被打印
 
 ### MCU 侧 DEBUG 应用说明
-1. 进入 MCU1的控制台
-2. 输入命令：can_tran_debug
-```
+
+1. 进入 MCU1 的控制台
+2. 输入命令：
+
+```text
+# 打印各层 CAN 转发统计
 can_tran_debug
+
+# 清空统计后重新计数
+can_tran_debug clean
 ```
 
-3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果
+3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果（`can_tran_debug` 的输出会写入 MCU1 的日志）
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
+   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug 日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 应用程序接口
 
-#### void Can_Init(const Can_ConfigType* Config)
+本节接口为 Can 驱动接口，运行在 MCU1，供 MCU 侧业务代码调用；Acore 侧通过 CANHAL 使用 CAN，不直接调用这些接口。接口声明见 `McalCdd/Can/inc/Can.h`，S600 MCU1 的驱动配置见 `Config/McalCdd/gen_s600_md_mcu1/Can/inc/Can_Cfg.h`。
 
-```shell
-Description：This function initializes the module.
+#### Can_Init
 
-Sync/Async: Synchronous
-Parameters(in)
-    Config: Pointer to driver configuration.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
-```
+**【函数原型】**
 
-#### void Can_GetVersionInfo(Std_VersionInfoType* versioninfo)
+`void Can_Init(const Can_ConfigType * Config)`
 
-```shell
-Description：Returns the version information of this module.
+**【功能描述】**
 
-Sync/Async: Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    versioninfo: Pointer to where to store the version information of this module.
-Return value：None
-```
+初始化 Can 驱动：复位驱动状态，按 Post-Build 配置初始化各控制器的引脚、时钟、Mailbox、RxFIFO、过滤器与中断。使用 Can 驱动前必须先调用本接口，通常在 MCU1 启动阶段调用一次。
 
-#### void Can_DeInit(void)
+**【参数】**
 
-```shell
-Description：This function de-initializes the module.
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `Config` | `const Can_ConfigType *` | 是 | — | 指向 Post-Build 配置的指针，即 [代码路径](#代码路径) 中 `Can_PBcfg.c` 的 `Can_Config`。S600 MCU1 未开启预编译配置（`CAN_PRECOMPILE_SUPPORT = STD_OFF`），必须传入非空指针 |
 
-Sync/Async: Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
-```
+**【返回值】**
 
-#### Std_ReturnType Can_SetControllerMode(uint8 Controller, Can_ControllerStateType Transition)
+无返回值（`void`）。若驱动已初始化、仍有控制器处于 `CAN_CS_STARTED`，或 `Config` 为 `NULL`，本接口不执行初始化，并通过 Det 上报开发错误。
 
-```shell
-Description：This function performs software triggered state transitions of the CAN controller State machine.
+#### Can_GetVersionInfo
 
-Sync/Async: Synchronous
-Parameters(in)
-    Controller: CAN controller for which the status shall be changed.
-    Transition: Transition value to request new CAN controller state.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Std_ReturnType
-	E_OK: request accepted.
-    E_NOT_OK: request not accepted, a development error occurred.
-```
+**【函数原型】**
 
-#### void Can_DisableControllerInterrupts(uint8 Controller)
+`void Can_GetVersionInfo(Std_VersionInfoType * versioninfo)`
 
-```shell
-Description：This function disables all interrupts for this CAN controller.
+**【功能描述】**
 
-Sync/Async: Synchronous
-Parameters(in)
-    Controller: CAN controller for which interrupts shall be disabled.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
-```
+读取 Can 模块的 vendor ID、module ID 与软件版本号，用于版本核对与问题定位。
 
-#### void Can_EnableControllerInterrupts(uint8 Controller)
+**【参数】**
 
-```shell
-Description：This function enables all allowed interrupts.
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `versioninfo` | `Std_VersionInfoType *` | 是 | — | 输出缓冲区，返回 `vendorID`、`moduleID`、`sw_major_version`、`sw_minor_version`、`sw_patch_version` |
 
-Sync/Async: Synchronous
-Parameters(in)
-    Controller: CAN controller for which interrupts shall be re-enabled.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
-```
+**【返回值】**
 
-#### Std_ReturnType Can_GetControllerErrorState(uint8 ControllerId, Can_ErrorStateType* ErrorStatePtr)
+无返回值（`void`），结果写入 `versioninfo`。`versioninfo` 为 `NULL` 时上报 `CAN_E_PARAM_POINTER` 开发错误。本接口由 `CAN_VERSION_INFO_API` 控制，S600 MCU1 已开启。
 
-```shell
-Description：This service obtains the error state of the CAN controller.
+#### Can_DeInit
 
-Sync/Async: Synchronous
-Parameters(in)
-    ControllerId: Abstracted CanIf ControllerId which is assigned to a CAN controller, which is requested for ErrorState.
-Parameters(inout)
-    None
-Parameters(out)
-    ErrorStatePtr:Pointer to a memory location, where the error state of the CAN controller will be stored.
-Return value：Std_ReturnType
-	E_OK: Error state request has been accepted.
-    E_NOT_OK: Error state request has not been accepted.
-```
+**【函数原型】**
 
-#### Std_ReturnType Can_GetControllerMode(uint8 Controller, Can_ControllerStateType* ControllerModePtr)
+`void Can_DeInit(void)`
 
-```shell
-Description：This service reports about the current status of the requested CAN controller.
+**【功能描述】**
 
-Sync/Async: Synchronous
-Parameters(in)
-    Controller: CAN controller for which the status shall be requested.
-Parameters(inout)
-    None
-Parameters(out)
-    ControllerModePtr: Pointer to a memory location, where the current mode of the CAN controller will be stored.
-Return value：Std_ReturnType
-    E_OK: Controller mode request has been accepted.
-    E_NOT_OK: Controller mode request has not been accepted.
-```
+反初始化 Can 驱动：关闭控制器并使硬件复位，释放驱动占用的配置与状态。用于 MCU1 低功耗或功能卸载场景，调用前需先停止所有控制器。
 
-#### Std_ReturnType Can_GetControllerRxErrorCounter(uint8 ControllerId, uint8* RxErrorCounterPtr)
+**【参数】**
 
-```shell
-Description：Returns the Rx error counter for a CAN controller.
-             This value might not be available for all CAN controllers, in which case E_NOT_OK would be
-             returned.Please note that the value of the counter might not be correct at the moment the
-             API returns it, because the Rx counter is handled as ynchronously in hardware.Applications
-             should not trust this value for any assumption about the current bus state.
+无。
 
-Sync/Async: Synchronous
-Parameters(in)
-    ControllerId: CAN controller, whose current Rx error counter shall be acquired.
-Parameters(inout)
-    None
-Parameters(out)
-    RxErrorCounterPtr: Pointer to a memory location, where the current Rx error counter of the
-                       CAN controller will be stored.
-Return value：Std_ReturnType
-    E_OK: Rx error counter available.
-    E_NOT_OK: Wrong ControllerId, or Rx error counter not available.
-```
+**【返回值】**
 
-#### Std_ReturnType Can_GetControllerTxErrorCounter(uint8 ControllerId, uint8* TxErrorCounterPtr)
+无返回值（`void`）。若仍有控制器处于 `CAN_CS_STARTED`，本接口跳过反初始化并上报 `CAN_E_TRANSITION` 开发错误。
 
-```shell
-Description：Returns the Tx error counter for a CAN controller. This value might not be available
-             for all CAN controllers, in which case E_NOT_OK would be returned.Please note that the
-             value of the counter might not be correct at the moment the API returns it, because the
-             Tx counter is handled as ynchronously in hardware.Applications should not trust this
-             value for any assumption about the current bus state.
+#### Can_SetControllerMode
 
-Sync/Async: Synchronous
-Parameters(in)
-    ControllerId: CAN controller, whose current Rx error counter shall be acquired.
-Parameters(inout)
-    None
-Parameters(out)
-    TxErrorCounterPtr:Pointer to a memory location, where the current Tx error counter
-                      of the CAN controller will be stored.
-Return value：Std_ReturnType
-    E_OK: Rx error counter available.
-    E_NOT_OK: Wrong ControllerId, or Rx error counter not available.
-```
+**【函数原型】**
 
-#### Std_ReturnTypeCan_Write(Can_HwHandleType Hth, const Can_PduType* PduInfo)
+`Std_ReturnType Can_SetControllerMode(uint8 Controller, Can_ControllerStateType Transition)`
 
-```shell
-Description：This function is called by CanIf to pass a CAN message to CanDrv for tran smission.
+**【功能描述】**
 
-Sync/Async: Synchronous
-Parameters(in)
-    Hth:information which HW-transmit handle shall be used for transmit.Implicitly this is
-        also the information about the controller to use because the Hth numbers are unique
-        inside one hardware unit.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Std_ReturnType
-    E_OK: Write command has been accepted.
-    E_NOT_OK: development error occurred.
-    CAN_BUSY: No TX hardware buffer available or pre-emptive call of Can_Write that can’t be
-              implemented re-entrant (see Can_ReturnType).
-```
+触发控制器状态机迁移，是控制器启动或停止参与总线通信的唯一入口：`CAN_CS_STOPPED` → `CAN_CS_STARTED` 启动控制器，`CAN_CS_STARTED` → `CAN_CS_STOPPED` 停止控制器，`CAN_CS_STOPPED` 或 `CAN_CS_SLEEP` → `CAN_CS_SLEEP` 进入逻辑睡眠。迁移成功后通过 `CanIf_ControllerModeIndication` 通知上层。
 
-#### void Can_MainFunction_Write(Void)
+**【参数】**
 
-```shell
-Description：This function performs the polling of TX confirmation when CAN_TX_PROCESSING
-             is set to POLLING.
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `Controller` | `uint8` | 是 | — | 控制器 ID，从 0 开始，按配置顺序依次对应 CAN0、CAN1 等 |
+| `Transition` | `Can_ControllerStateType` | 是 | — | 目标状态，可取 `CAN_CS_STARTED`、`CAN_CS_STOPPED`、`CAN_CS_SLEEP` |
 
-Sync/Async: Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value: None
-```
+**【返回值】**
 
-#### void Can_MainFunction_Read(Void)
+`E_OK`：请求被接受，控制器完成状态迁移；`E_NOT_OK`：迁移非法（如 `CAN_CS_STARTED` → `CAN_CS_STARTED`、`CAN_CS_STARTED` → `CAN_CS_SLEEP`）、控制器 ID 非法，或硬件启动/停止失败。
 
-```shell
-Description：Returns the value of the specified CAN channel.This function performs the
-             polling of RX indications when CAN_RX_PROCESSING is set to POLLING.
+#### Can_DisableControllerInterrupts
 
-Sync/Async: Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
-```
+**【函数原型】**
 
-#### void Can_MainFunction_BusOff(Void)
+`void Can_DisableControllerInterrupts(uint8 Controller)`
 
-```shell
-Description：This function performs the polling of bus-off events that are configured statically
-             as ‘to be polled’.
+**【功能描述】**
 
-Sync/Async: Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
-```
+关闭指定控制器的全部中断（含错误中断与 bus-off 中断），用于临界区保护。支持嵌套调用：驱动按控制器维护关闭层数，需与 `Can_EnableControllerInterrupts` 成对使用。
 
-#### void Can_MainFunction_Mode(Void)
+**【参数】**
 
-```shell
-Description：This function performs the polling of CAN controller mode transitions.
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `Controller` | `uint8` | 是 | — | 需要关闭中断的控制器 ID |
 
-Sync/Async: Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
-```
+**【返回值】**
+
+无返回值（`void`）。
+
+#### Can_EnableControllerInterrupts
+
+**【函数原型】**
+
+`void Can_EnableControllerInterrupts(uint8 Controller)`
+
+**【功能描述】**
+
+恢复被 `Can_DisableControllerInterrupts` 关闭的中断。仅当关闭层数减到 0 时才真正使能硬件中断；未先调用关闭接口时不做任何操作。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `Controller` | `uint8` | 是 | — | 需要恢复中断的控制器 ID |
+
+**【返回值】**
+
+无返回值（`void`）。
+
+#### Can_GetControllerErrorState
+
+**【函数原型】**
+
+`Std_ReturnType Can_GetControllerErrorState(uint8 ControllerId, Can_ErrorStateType * ErrorStatePtr)`
+
+**【功能描述】**
+
+读取 FlexCAN `ESR1` 寄存器的 `FLTCONF` 字段，获取控制器的总线错误状态，用于判断总线是否正常、是否已进入被动错误或 bus-off。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `ControllerId` | `uint8` | 是 | — | 控制器 ID |
+| `ErrorStatePtr` | `Can_ErrorStateType *` | 是 | — | 输出缓冲区，返回 `CAN_ERRORSTATE_ACTIVE`、`CAN_ERRORSTATE_PASSIVE` 或 `CAN_ERRORSTATE_BUSOFF` |
+
+**【返回值】**
+
+`E_OK`：错误状态读取成功；`E_NOT_OK`：控制器 ID 非法、`ErrorStatePtr` 为 `NULL`，或驱动未初始化。
+
+#### Can_GetControllerMode
+
+**【函数原型】**
+
+`Std_ReturnType Can_GetControllerMode(uint8 Controller, Can_ControllerStateType * ControllerModePtr)`
+
+**【功能描述】**
+
+读取驱动内维护的控制器当前状态，用于确认控制器是否已启动，排查 CAN 无法收发数据的问题。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `Controller` | `uint8` | 是 | — | 控制器 ID |
+| `ControllerModePtr` | `Can_ControllerStateType *` | 是 | — | 输出缓冲区，返回 `CAN_CS_UNINIT`、`CAN_CS_STARTED`、`CAN_CS_STOPPED` 或 `CAN_CS_SLEEP` |
+
+**【返回值】**
+
+`E_OK`：状态读取成功；`E_NOT_OK`：控制器 ID 非法、`ControllerModePtr` 为 `NULL`，或驱动未初始化。
+
+#### Can_GetControllerRxErrorCounter
+
+**【函数原型】**
+
+`Std_ReturnType Can_GetControllerRxErrorCounter(uint8 ControllerId, uint8 * RxErrorCounterPtr)`
+
+**【功能描述】**
+
+读取控制器的接收错误计数（REC），用于评估总线通信质量。计数由硬件异步更新，返回值不保证与读取时刻完全一致，不能作为判断总线状态的唯一依据。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `ControllerId` | `uint8` | 是 | — | 控制器 ID |
+| `RxErrorCounterPtr` | `uint8 *` | 是 | — | 输出缓冲区，返回接收错误计数 |
+
+**【返回值】**
+
+`E_OK`：接收错误计数可用；`E_NOT_OK`：控制器 ID 非法、`RxErrorCounterPtr` 为 `NULL`，或该控制器不支持读取计数。
+
+#### Can_GetControllerTxErrorCounter
+
+**【函数原型】**
+
+`Std_ReturnType Can_GetControllerTxErrorCounter(uint8 ControllerId, uint8 * TxErrorCounterPtr)`
+
+**【功能描述】**
+
+读取控制器的发送错误计数（TEC），用于评估总线通信质量。计数由硬件异步更新，返回值不保证与读取时刻完全一致，不能作为判断总线状态的唯一依据。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `ControllerId` | `uint8` | 是 | — | 控制器 ID |
+| `TxErrorCounterPtr` | `uint8 *` | 是 | — | 输出缓冲区，返回发送错误计数 |
+
+**【返回值】**
+
+`E_OK`：发送错误计数可用；`E_NOT_OK`：控制器 ID 非法、`TxErrorCounterPtr` 为 `NULL`，或该控制器不支持读取计数。
+
+#### Can_Write
+
+**【函数原型】**
+
+`Std_ReturnType Can_Write(Can_HwHandleType Hth, const Can_PduType * PduInfo)`
+
+**【功能描述】**
+
+通过 HTH 把一帧报文交给驱动发送，是 MCU 侧发送 CAN/CAN FD 报文的接口。驱动根据 HTH 定位对应的控制器与发送 Mailbox 并写入发送缓冲；控制器须处于 `CAN_CS_STARTED`，否则报文不会发送。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `Hth` | `Can_HwHandleType`（`uint16`） | 是 | — | 硬件发送句柄，须落在配置的 HTH 区间内，隐含指定使用的控制器 |
+| `PduInfo` | `const Can_PduType *` | 是 | — | 待发送报文，包含 `sdu`（数据缓冲区指针）、`length`（数据长度）、`id`（CAN 报文 ID）、`swPduHandle`（软件 PDU 句柄） |
+
+**【返回值】**
+
+`E_OK`：发送命令已被接受；`E_NOT_OK`：控制器未启动、`Hth` 非法、`PduInfo` 为 `NULL` 或驱动未初始化等开发错误；`CAN_BUSY`：无可用发送硬件缓冲。
+
+#### Can_MainFunction_Write
+
+**【函数原型】**
+
+`void Can_MainFunction_Write(void)`
+
+**【功能描述】**
+
+轮询处理发送确认，需在周期任务中调用。仅在发送处理方式配置为 POLLING 时生效；S600 MCU1 配置为 `CAN_TX_POLLING_SUPPORT = STD_OFF`，本接口为空操作，发送确认由中断方式处理。
+
+**【参数】**
+
+无。
+
+**【返回值】**
+
+无返回值（`void`）。
+
+#### Can_MainFunction_Read
+
+**【函数原型】**
+
+`void Can_MainFunction_Read(void)`
+
+**【功能描述】**
+
+轮询读取接收报文并上报，需在周期任务中调用。仅在接收处理方式配置为 POLLING 时生效；S600 MCU1 配置为 `CAN_RX_POLLING_SUPPORT = STD_OFF`，本接口为空操作，接收由中断方式处理。
+
+**【参数】**
+
+无。
+
+**【返回值】**
+
+无返回值（`void`）。
+
+#### Can_MainFunction_BusOff
+
+**【函数原型】**
+
+`void Can_MainFunction_BusOff(void)`
+
+**【功能描述】**
+
+轮询处理 bus-off 事件，遍历配置为轮询方式的控制器并上报事件。S600 MCU1 已开启 `CAN_BUSOFF_POLLING_SUPPORT`，需要周期性调用本接口，否则 bus-off 事件无法被及时处理。
+
+**【参数】**
+
+无。
+
+**【返回值】**
+
+无返回值（`void`）。
+
+#### Can_MainFunction_Mode
+
+**【函数原型】**
+
+`void Can_MainFunction_Mode(void)`
+
+**【功能描述】**
+
+轮询控制器状态迁移：读取硬件的状态确认结果，将驱动内部状态更新为目标状态并通知上层，用于控制器启动、停止的异步确认。
+
+**【参数】**
+
+无。
+
+**【返回值】**
+
+无返回值（`void`）。
 
 ## 常见问题
 
@@ -1400,6 +1486,18 @@ Return value：None
 **原因**：接收线程启动后长时间没有接收到数据，触发接收超时。
 
 **解决**：根据实际情况判断是否存在异常；当超过 100s 仍无数据时线程会退出，确认数据源是否正常发送。
+
+### CAN 无法收发数据
+
+**原因**：常见原因包括闭环网络终端电阻未接入（需要 2 个 120Ω）、CAN_H/CAN_L 接反、双方波特率/采样点不一致、控制器未使能，或 IPC 通道映射配置错误。
+
+**解决**：按 [硬件连接说明](#硬件连接说明) 检查接线与终端电阻；确认通信双方波特率一致；用 `Can_GetControllerMode`、`Can_GetControllerErrorState` 与 `Can_GetControllerRxErrorCounter`/`Can_GetControllerTxErrorCounter` 确认控制器状态与错误计数；核对 [软件架构](#Software_architecture) 中的 CAN 与 IPC 通道映射。
+
+### 控制器进入 bus-off
+
+**原因**：总线错误计数超过阈值，例如接线松动、终端电阻缺失、波特率不一致，或总线上只有一个节点持续发送。
+
+**解决**：先排除物理层问题；再用 `Can_SetControllerMode` 让控制器退出 bus-off（先切到停止状态再切回启动状态），必要时用 `Can_SetBaudrate` 切换波特率档位后重新启动控制器。
 
 ## 相关文档
 
