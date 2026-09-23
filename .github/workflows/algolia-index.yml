@@ -59,7 +59,7 @@ jobs:
           OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
           OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
         run: |
-          ~/ossutil cp scripts/_algolia_tmp/search-index.json \
+          ~/ossutil cp -f scripts/_algolia_tmp/search-index.json \
             oss://cn-rdk-front-prod/rdk_s_doc/search-index.json \
             -e https://d-robotics.cc \
             -i $OSS_ACCESS_KEY_ID \
