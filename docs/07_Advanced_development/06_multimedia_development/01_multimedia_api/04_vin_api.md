@@ -7,219 +7,161 @@ toc_max_heading_level: 4
 
 # 视频输入 - VIN
 
-> **层级说明**：本篇是【底层多媒体 API】中的 **VIN 模块使用文档**。通用 vnode 接口的完整字段表见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)；Sensor 侧配置见 [相机接口 - Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api)。
-
 ## 概述
-VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 SoC 并交给后级处理（板端头文件 `hbn_vin_cfg.h`，接口前缀 `hbn_vnode_*`）。它是相机通路的第一个环节，由 **MIPI RX / CIM / LPWM / VCON** 四个子模块构成。
+VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 SoC 并交给后级处理。它是相机通路的第一个环节，由四个子模块构成：
 
-<details>
-<summary>展开：术语表</summary>
+- **MIPI RX**：接收 MIPI CSI-2 数据流，支持 D-PHY / C-PHY；每路 RX 支持多虚拟通道（VC）
+- **CIM**：Camera Interface Manager，把 RX 送来的图像分发给后级（Online）或写入 DDR（Offline）
+- **LPWM**：曝光触发与帧同步信号，供需要外部触发的 Sensor 使用
+- **VCON**：虚拟设备，用于描述硬件接口信息（I2C 总线 / POC / GPIO / MIPI PHY 类型）。向上提供标准化的连接关系，差异由 dts 实现
 
-**术语表**
-
-本文档用到的缩写与专有名词。**第一次读建议先扫一眼这几条**——`CPE`、`OTF`、`IPI`、`vnode` 会贯穿全文。
-
-| 缩写 | 说明 |
-| --- | --- |
-| **VIN** | 视频输入模块，本文档的主题。负责把相机数据接进 SoC 并交给后级 |
-| **IPI** | 芯片**内部** MIPI RX 与 CIM 之间的数据通路，不是对外协议。1 路相机数据占 1 路 IPI |
-| **VC** | MIPI CSI-2 的虚拟通道。一条物理链路可传多路数据，靠 VC 区分 |
-| **hw_id** | 打开 VIN 时指定的硬件编号，**即 MIPI RX 通道号** |
-| **OTF** | On The Fly，硬件直连。数据不经过 DDR，由 CIM 直接送给 ISP / PYM |
-| **Online / Offline** | Online = 走 OTF，数据不落 DDR；Offline = CIM 先把数据写进 DDR，下游再从内存读 |
-| **CPE** | 芯片内相机处理单元的物理分组。**只有属于同一 CPE 的 CIM 与 ISP / PYM 之间才能 OTF 直连**，跨 CPE 只能走 Offline |
-| **vnode** | HBN 框架对功能模块的抽象。VIN 就是一个 vnode，用 `hbn_vnode_*` 接口操作 |
-| **HBN** | 应用侧的模块框架，提供 `hbn_vnode_*` / `hbn_vflow_*` 这组通用接口 |
-| **SerDes** | 加串器 / 解串器。把多路相机的数据合并到一条同轴链路传输，SoC 侧再解开 |
-| **POC** | Power Over Coax，通过同轴电缆给相机模组供电 |
-| **EMB** | Embedded Data，相机随图像一起输出的内嵌数据（曝光、温度等） |
-| **ISP** | 图像信号处理器。RAW 数据要经过它才能出图 |
-| **PYM** | 金字塔模块，做图像缩小与 ROI |
-| **YNR** | 降噪模块 |
-| **GDC** | 几何畸变校正 |
-| **DDR** | 内存。Offline 模式下图像先写到这里，下游再读 |
-
-</details>
-
-### VIN 的四个子模块
-| 子模块 | 职责 |
-| --- | --- |
-| **MIPI RX** | 接收 MIPI CSI-2 数据流，支持 D-PHY / C-PHY；每路 RX 支持多虚拟通道（VC）。路数见[平台规格](#平台规格) |
-| **CIM** | Camera Interface Manager，把 RX 送来的图像分发给后级（Online）或写入 DDR（Offline） |
-| **LPWM** | 曝光触发与帧同步信号，供需要外部触发的 Sensor 使用 |
-| **VCON** | 连接编排：I2C 总线、POC 供电、GPIO、PHY 映射等板级配置 |
+MIPI RX 与 CIM 的职责与接入能力见[硬件框图](#硬件框图)与[硬件规格](#硬件规格)。
 
 ## 硬件框图
 
-### VIN 在链路中的位置
-![VIN 在相机链路中的位置与上下游](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig1-vin-position.svg)
+<DocScope products="RDK S100">
 
-### CIM 可配功能块
-CIM 内部由若干功能块组成，其中对用户可配的是下面这些。下图标出每个块挂在哪一级，表里给对应的配置字段：
+![整机媒体链路硬件总览：Camera → MIPI Host → CIM → CPE（ISP / PYM / GDC / STITCH）→ IDU](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview.jpeg)
 
-![CIM 的三个输入源、三条输出通道与挂在通道上的可配块](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/cim-blocks.svg)
+</DocScope>
 
-| 功能块 | 挂在 | 作用 | 对应配置 |
-| --- | --- | --- | --- |
-| `TPG` | 输入源（三选一） | 测试图案发生器。不接 Sensor 也能出图，用于通路验证 | `vin_node_attr.cim_attr.func.enable_pattern` |
-| `RDMA` | 输入源（三选一） | DDR 回灌，用于调试 | `vin_node_attr.cim_attr.rdma_input.rdma_en` |
-| `ROI` | 主帧 / ROI / EMB 三个通道 | 裁剪。主通道使能后，落 DDR 与送 ISP 的图都会被裁；ROI 通道只能出 DDR；EMB 通道的 ROI 用于从图像里裁出 embedded data | `vin_ochn_attr[x].roi_en`、`vin_ochn_attr[x].roi_attr`（`roi_x` / `roi_y` / `roi_width` / `roi_height`） |
-| `EMB` | EMB 通道（ochn 3） | 接收 embedded data，支持 `0x12` 类型与嵌入图像内两种形态 | `vin_ochn_attr[3].emb_en`、`vin_ochn_attr[3].emb_attr` |
-| `RAWDS` | 主帧通道（ochn 0） | 2×2 下采样，宽高各减半 | `vin_ochn_attr[0].rawds_en`、`vin_ochn_attr[0].rawds_attr.rawds_mode` |
+<DocScope products="RDK S600">
 
-`RAWDS` 只在主帧通道生效：驱动里所有 `rawds_en` 分支取的都是 `vin_ochn_attr[VIN_MAIN_FRAME]`，ROI / EMB 通道各自只读 `roi_en` / `emb_en`。
+![S600 整机媒体链路硬件总览：Camera×6 → MIPI RX0-5 → CIM0-5 → CPE0-3（ISP / PYM）与 CPElite，offline 经 DDR](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview-s600.png)
 
-`TPG`、MIPI 接入、`RDMA` 三者是**互斥的输入源**，同一时刻只能选一个（见[约束与注意事项](#约束与注意事项)）。
+</DocScope>
+
+*整机媒体链路硬件总览——VIN 对应其中的接入段：MIPI RX 与 CIM。*
+
+![MIPI RX 与 CIM 的模块结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/mipi-cim-structure.png)
+
+*MIPI-RX 侧的 IPI0-3 送入 CIM，CIM 内四通道各含输入选择、ROI、DEC、RAWDS 与输出。*
+
+MIPI 侧从物理层到接口层：
+
+- **C-PHY / D-PHY** —— MIPI 的物理层
+- **CSI2 Host** —— CSI-2 协议控制器，解析数据包并按虚拟通道分流
+- **VC0 ~ VC3** —— MIPI CSI-2 的虚拟通道。一条物理链路靠 VC 区分多路数据
+- **IPI0 ~ IPI3** —— 芯片**内部** MIPI RX 与 CIM 之间的数据通路，不是对外协议；1 路相机数据占 1 路 IPI
+- **IDI** —— 图像数据接口
+
+CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件的输出通道——主帧、ROI、EMB。各通道的能力上限见[硬件规格](#硬件规格)。
+
+CIM 内部由若干功能块组成，其中对用户可配的是下面这些：
+
+- **TPG** —— 输入源之一，三选一。测试图案发生器：不接 Sensor 也能出图，用于通路验证
+  - 配置：`vin_node_attr.cim_attr.func.enable_pattern`
+  - 约束：与 MIPI 接入、RDMA 互斥，同一时刻只能选一个
+- **RDMA** —— 输入源之一，三选一。DDR 回灌，用于调试
+  - 配置：`vin_node_attr.cim_attr.rdma_input.rdma_en`
+  - 约束：与 MIPI 接入、TPG 互斥，同一时刻只能选一个
+- **ROI** —— 挂在主帧通道 ochn 0、ROI 通道 ochn 4、EMB 通道 ochn 3。裁剪：主通道使能后，落 DDR 与送 ISP 的图都会被裁；ROI 通道只能出 DDR；EMB 通道的 ROI 用于从图像里裁出 embedded data
+  - 配置：`vin_ochn_attr[x].roi_en`、`vin_ochn_attr[x].roi_attr`，字段为 `roi_x` / `roi_y` / `roi_width` / `roi_height`
+- **EMB** —— 挂在 EMB 通道 ochn 3。接收 embedded data，两种形态：`0x12` 类型——MIPI CSI-2 协议定义的 embedded data 数据类型，独立于图像格式；嵌入图像内——与图像同格式、随图像行一起输出，需 ROI 裁出
+  - 配置：`vin_ochn_attr[3].emb_en`、`vin_ochn_attr[3].emb_attr`
+- **RAWDS** —— 挂在主帧通道 ochn 0。2×2 下采样，宽高各减半
+  - 配置：`vin_ochn_attr[0].rawds_en`、`vin_ochn_attr[0].rawds_attr.rawds_mode`
+  - 生效范围：仅主帧通道——生效路径固定读 `vin_ochn_attr[VIN_MAIN_FRAME].rawds_en`，其余通道传入的该字段不参与动作；ROI ochn 4 与 EMB ochn 3 通道各自只读 `roi_en` / `emb_en`
 
 ## 硬件规格
 
-### 平台规格
+### MIPI RX
 <DocScope products="RDK S100">
 
-| 项目 | S100 |
-| --- | --- |
-| VIN / CIM 实例 | 3 个 |
-| LPWM 实例 / 通道 | 3 个 / 12 通道 |
+- MIPI RX 路数：3 个
+- 每路 RX 的 lane / trio：D-PHY ≤ 4 lane；C-PHY ≤ 3 trio
+- 单 lane / 单 trio 速率范围：D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps
+- 每路 RX 的 PHY 承载上限：**D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28）
+- 每路 RX 的虚拟通道（VC）：4 个
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-| 项目 | S600 |
-| --- | --- |
-| VIN / CIM 实例 | 6 个 |
-| LPWM 实例 / 通道 | 4 个 / 16 通道 |
+- MIPI RX 路数：6 个
+- 每路 RX 的 lane / trio：D-PHY ≤ 4 lane；C-PHY ≤ 3 trio
+- 单 lane / 单 trio 速率范围：D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps
+- 每路 RX 的 PHY 承载上限：**D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28）
+- 每路 RX 的虚拟通道（VC）：4 个
 
 </DocScope>
 
-多路相机按 `hw_id` 区分，**`hw_id` 就是 MIPI RX 通道号**。
+多路相机按 `hw_id` 区分，**`hw_id` 就是 MIPI RX 通道号**：打开 VIN 时传入的 `hw_id` 即该路相机接在哪条 MIPI RX 上。
 
 <DocScope products="RDK S100">
 
-S100 合法的 `hw_id` 为 `0` / `1` / `4`。
+:::warning 注意
 
-> 把 `hw_id` 写死成 `2` 或 `3` 的代码在 S100 上会打开失败。
+S100 合法的 `hw_id` 为 `0` / `1` / `4`。把 `hw_id` 写死成 `2` 或 `3` 的代码在 S100 上会打开失败。
+
+:::
 
 </DocScope>
 
 <DocScope products="RDK S600">
+
+:::warning 注意
 
 S600 合法的 `hw_id` 为 `0`–`5`。
 
+:::
+
 </DocScope>
 
-### 平台能力上限
+### CIM
+一个 MIPI RX 对应一个 CIM——S100 共 3 个，S600 共 6 个。
+
 <DocScope products="RDK S100">
 
-| 项目 | S100 |
-| --- | --- |
-| MIPI RX 路数 | 3 个 |
-| 每路 RX 的 lane / trio | D-PHY ≤ 4 lane；C-PHY ≤ 3 trio |
-| 单 lane / 单 trio 速率范围 | D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps |
-| **每路 RX 的 PHY 承载上限** | **D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28） |
-| 每路 RX 的虚拟通道（VC） | 4 个 |
-| 每个 CIM 的 IPI 通道数 | 4 个 |
-| IPI 像素时钟（标称） | 600 MHz |
+- 每个 CIM 的 IPI 通道数：4 个
+- IPI 像素时钟（标称）：600 MHz
 
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 项目 | S600 |
-| --- | --- |
-| MIPI RX 路数 | 6 个 |
-| 每路 RX 的 lane / trio | D-PHY ≤ 4 lane；C-PHY ≤ 3 trio |
-| 单 lane / 单 trio 速率范围 | D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps |
-| **每路 RX 的 PHY 承载上限** | **D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28） |
-| 每路 RX 的虚拟通道（VC） | 4 个 |
-| 每个 CIM 的 IPI 通道数 | 4 个 |
-| IPI 像素时钟（标称） | 670 MHz |
-
-</DocScope>
-
-> 本表的 PHY 速率与像素时钟取自本平台驱动与板级硬件规格。
-
-表里的 PHY 上限由驱动按单 lane 4.5 Gbps（C-PHY 按单 trio 3.5 Gsps）卡校验，超限时 PHY 初始化直接返回失败；C-PHY 的 2.28 是协议标准系数。
-
-> **这是 SoC 侧 PHY 的能力，不是接入链路的实际上限。** 模组多经解串器接入，真实天花板常常是解串器的输出速率——业界主流解串器单 lane 只到 2.5 Gbps（对应单 RX 10 Gbps），此时上面这 18 Gbps 就用不满。规划时按模组规格确认解串器侧速率，别直接拿 18 / 23.9 去算。
-
-### 每个 IPI 的最大接入宽
 CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` 给出：
 
-<DocScope products="RDK S100">
-
-| CIM | CIM0 | CIM1 | CIM4 |
-| --- | --- | --- | --- |
-| IPI0 / IPI1 / IPI2 / IPI3（px） | 5696 / 4096 / 4096 / 4096 | 4096 ×4 | 4096 ×4 |
+- **CIM0**：`IPI0` 5696 px；`IPI1` / `IPI2` / `IPI3` 各 4096 px
+- **CIM1** / **CIM4**：`IPI0` ~ `IPI3` 均为 4096 px
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-| CIM | CIM0 | CIM1 | CIM2 | CIM3 | CIM4 | CIM5 |
-| --- | --- | --- | --- | --- | --- | --- |
-| IPI0 / IPI1 / IPI2 / IPI3（px） | 5696 ×4 | 5696 ×4 | 5696 ×4 | 4096 ×4 | 4096 ×4 | 4096 ×4 |
+- 每个 CIM 的 IPI 通道数：4 个
+- IPI 像素时钟（标称）：670 MHz
+
+CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` 给出：
+
+- **CIM0** / **CIM1** / **CIM2**：`IPI0` ~ `IPI3` 均为 5696 px
+- **CIM3** / **CIM4** / **CIM5**：`IPI0` ~ `IPI3` 均为 4096 px
 
 </DocScope>
-
-表中每格按 `IPI0 / IPI1 / IPI2 / IPI3` 排列，`×4` 表示四路相同。
 
 输入宽超过该上限时，CIM 在 `set_ichn_attr` 阶段直接拒绝。
 
-> 注意：除 CIM 层外，MIPI host 的配置校验另有 **width ≤ 4096** 的上限。宽于 4096 的接入两层限制不一致，实际以 MIPI host 的 4096 为上限。
+:::warning 注意
 
+MIPI host 的配置校验上限为 **width ≤ 4096**。走 MIPI 输入时，图像宽度超过 4096 会被 MIPI host 直接拒绝——即使所在 CIM 的 IPI 标称上限高于 4096。**MIPI 接入的宽度实际上限就是 4096**；上文 CIM 列表中高于 4096 的上限只在非 MIPI 输入（如 `RDMA` 回灌）时用得到。
+
+:::
+
+### LPWM
 <DocScope products="RDK S100">
 
-**接 4 路宽于 4096 的图像时，只有 CIM0 的第一路 IPI 支持。**
+- LPWM 实例 / 通道：3 个 / 12 通道
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-**接 4 路宽于 4096 的图像时，只能用 CIM0 / CIM1 / CIM2。**
+- LPWM 实例 / 通道：4 个 / 16 通道
 
 </DocScope>
 
 ## 接入评估
-选型前先算两笔账：**数据量能不能传**、**通路能不能扛**。
 
-### IPI 的传输效率
-MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**，像素时钟标称值见[平台能力上限](#平台能力上限)。两种数据类型每个 clock 能打包的像素数不同：
+接入前完成带宽评估：
 
-| 数据类型 | 每个 IPI clock 可传 | 说明 |
-| --- | --- | --- |
-| RAW（RAW8/10/12/14） | **3 个 pixel** | 3 × 16bit 刚好填满 48bit |
-| YUV | **1 个 pixel** | 总线利用率只有 1/3 |
-
-因此同一个 IPI，传 RAW 的可用带宽是传 YUV 的 **3 倍**。**接入 YUV 模组（Sensor 内部已做 ISP）时尤其要注意这条**——它往往先于 PHY 带宽成为瓶颈。
-
-> 48bit 模式与 RAW/YUV 打包比例均取自本平台驱动；像素时钟为驱动标称值，实际按接入配置计算。
-
-### 搭配计算方法
-一张 RX 上挂几路、怎么搭配，按四步算。**PHY、IPI、VC 三道都要过**，任一不过就得调整；PHY 那道按实际用的是 D-PHY 还是 C-PHY 取对应值，两条只需过一条。
-
-**第 1 步 · 单路链路数据量**
-
-```
-单路数据量(bps) = 宽 × 高 × 帧率 × 位深 × k
-```
-
-- 位深：RAW12 填 `12`，YUV422 填 `16`
-- `k` 是含 blanking 的系数。参考值 **RAW 约 1.4、YUV 约 1.2**，随模组 blanking 设置变化——**以模组手册给出的行/帧总长为准**，这里的系数只用于估算
-
-常用配置速查：
-
-| 配置 | 有效像素 | 含 blanking |
-| --- | --- | --- |
-| 8M RAW12@30 | 2.99 Gbps | 约 4.18 Gbps |
-| 8M RAW12@60 | 5.97 Gbps | 约 8.36 Gbps |
-| 2M RAW12@30 | 0.75 Gbps | 约 1.05 Gbps |
-| 8M YUV422@30 | 3.98 Gbps | 约 4.78 Gbps |
-| 2M YUV422@30 | 1.00 Gbps | 约 1.20 Gbps |
-
-**第 2 步 · 三个卡口逐个校验**
-
-这些上限都是 **RX 级**——同一 RX 上所有相机共享同一份预算，不是每路各自一份。
+- **单路数据量** = 宽 × 高 × 帧率 × 位深 × k。位深：RAW12 取 12，YUV422 取 16。k 为 blanking 系数，估算取 RAW 1.4、YUV 1.2；精确值以模组手册给出的行/帧总长为准
+- **各道上限**均为 RX 级预算，同一 RX 上所有相机共享：
 
 <DocScope products="RDK S100">
 
@@ -227,8 +169,8 @@ MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**�
 | --- | --- |
 | PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
 | PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · 纯 RAW12 | 600 MHz × 3 pixel × 12 bit = 21.6 Gbps |
-| IPI · **含任一路 YUV** | 600 MHz × 1 pixel × 16 bit = **9.6 Gbps** |
+| IPI · 纯 RAW | 600 MHz × 3 pixel/clock × 12 bit = 21.6 Gbps |
+| IPI · 含任一路 YUV | 600 MHz × 1 pixel/clock × 16 bit = **9.6 Gbps** |
 | VC 路数 | 4 路 |
 
 </DocScope>
@@ -239,144 +181,42 @@ MIPI RX 与 CIM 之间走 IPI 接口。本平台 IPI 默认为 **48bit 模式**�
 | --- | --- |
 | PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
 | PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · 纯 RAW12 | 670 MHz × 3 pixel × 12 bit = 24.1 Gbps |
-| IPI · **含任一路 YUV** | 670 MHz × 1 pixel × 16 bit = **10.72 Gbps** |
+| IPI · 纯 RAW | 670 MHz × 3 pixel/clock × 12 bit = 24.1 Gbps |
+| IPI · 含任一路 YUV | 670 MHz × 1 pixel/clock × 16 bit = **10.72 Gbps** |
 | VC 路数 | 4 路 |
 
 </DocScope>
 
-**第 3 步 · 取最紧的那个**
+- IPI 上限与 PHY 类型无关：RAW 每 clock 传输 3 个 pixel，YUV 仅 1 个。同一 RX 上存在任一路 YUV 时，IPI 上限即按含 YUV 的口径计算；此时改用 C-PHY 仅放宽 PHY 限制，IPI 上限不变
+- **超出上限时依次调整**：压缩模组 blanking 以降低 k，不改变配置、不影响画质 → 降低帧率或分辨率 → 迁移至其他 RX，可用路数见 [MIPI RX](#mipi-rx) → 改用 C-PHY，仅对纯 RAW 场景有效
 
-各路数据量之和要同时小于各道上限，**先撞哪个哪个就是瓶颈**。算例一节里 RAW 先撞 PHY、YUV 先撞 IPI，就是这个意思。
+**算例：4 颗 8M RAW12@30fps**
 
-**第 4 步 · 不过时按这个顺序调**
-
-1. **压缩模组 blanking**——把 `k` 降下来，不改配置、不损失画质，性价比最高
-2. 降帧率或降分辨率
-3. 拆到另一个 RX（可用路数见[平台规格](#平台规格)）
-4. 改 C-PHY——**只放宽 PHY，不放宽 IPI**，所以 YUV 场景换 C-PHY 没有用
+8M 按 3840 × 2160 算，位深 12、k 取 1.4，单路 = 3840 × 2160 × 30 × 12 × 1.4 ≈ **4.18 Gbps**，四路合计 **16.72 Gbps**，对照上限：
 
 <DocScope products="RDK S100">
 
-> **最容易踩的一条**：混接时 IPI 上限是**整条 RX 一起掉到 9.6 Gbps**，不是只有那一路 YUV 受这个限制。所以「1 路 YUV + 3 路 8M RAW12」这种搭配，预算按 9.6 算而不是 21.6——光是 3 路 RAW12 含 blanking 就要 12.54 Gbps，已经超了。同一个 RX 上**有 YUV 就按 YUV 的口径算全部**。
+| 卡口 | 上限 | 4 路合计 | 占用 |
+| --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% |
+| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% |
+| IPI · 纯 RAW | 21.6 Gbps | 16.72 Gbps | 77% |
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-> **最容易踩的一条**：混接时 IPI 上限是**整条 RX 一起掉到 10.72 Gbps**，不是只有那一路 YUV 受这个限制。所以「1 路 YUV + 3 路 8M RAW12」这种搭配，预算按 10.72 算而不是 24.1——光是 3 路 RAW12 含 blanking 就要 12.54 Gbps，已经超了。同一个 RX 上**有 YUV 就按 YUV 的口径算全部**。
+| 卡口 | 上限 | 4 路合计 | 占用 |
+| --- | --- | --- | --- |
+| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% |
+| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% |
+| IPI · 纯 RAW | 24.1 Gbps | 16.72 Gbps | 69% |
 
 </DocScope>
 
-### 算例
-同样 8M@30fps、同样接在一路 RX 上，**RAW12 能接 4 颗，YUV422 只能接 2 颗**——差别全在 IPI 的打包率。下面按[搭配计算方法](#搭配计算方法)的四步各走一遍。PHY 上限是 SoC 级规格、与平台无关，随平台变的只有 IPI，所以下面每张表里 PHY 两行的占用率各平台相同，IPI 那一行则按本平台自己的上限与像素时钟算。
+**结论**：四路 RAW12 在 D-PHY 下可以跑，占用 93%，余量很小，稳满帧要压缩 blanking；换 C-PHY 后降到 70%。
 
-#### 算例 1：4 颗 8M RAW12@30fps
-按 8M（3840 × 2160）算，单路有效像素 2.99 Gbps，乘 blanking 系数 1.4 得 4.18 Gbps，**四路合计 16.72 Gbps**：
-
-<DocScope products="RDK S100">
-
-| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
-| --- | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% | ✓ 只剩 7% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% | ✓ |
-| IPI（纯 RAW12） | 21.6 Gbps | 16.72 Gbps | 77% | ✓ |
-| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
-
-**结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking；改走 C-PHY 后 PHY 降到 70%，**此时 IPI 的 77% 成了新的瓶颈**——再要余量只能压 blanking 或减路数。前提是模组支持 C-PHY 且解串器输出速率跟得上，实际能不能跑满帧要在板子上实测。
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
-| --- | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% | ✓ 只剩 7% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% | ✓ |
-| IPI（纯 RAW12） | 24.1 Gbps | 16.72 Gbps | 69% | ✓ |
-| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
-
-**结论**：D-PHY 下跑得起来，但 PHY 只剩 7% 余量，要稳住 4 路满帧得压缩 Sensor 的 blanking；改走 C-PHY 后 PHY 降到 70%，与 IPI 的 69% 基本齐平，**两道都还剩三成左右**，比 D-PHY 那档宽松得多。前提是模组支持 C-PHY 且解串器输出速率跟得上，实际能不能跑满帧要在板子上实测。
-
-</DocScope>
-
-#### 算例 2：4 颗 8M YUV422@30fps
-位深按 16 算，单路有效像素 3.98 Gbps，乘 blanking 系数 1.2 得 4.78 Gbps，**四路合计 19.11 Gbps**（其中有效像素 15.93 Gbps）：
-
-<DocScope products="RDK S100">
-
-| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
-| --- | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 19.11 Gbps | 106% | ✗ 超 |
-| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | 80% | ✓ |
-| IPI（含 YUV） | 9.6 Gbps | 19.11 Gbps | 199% | ✗ 连有效像素的 15.93（占 166%）都装不下 |
-| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
-
-**结论**：**4 颗走不通，先撞的是 IPI**——9.6 Gbps 连 4 路的有效像素（15.93）都装不下，PHY 的问题还没轮到。**这里换 C-PHY 是没用的**：C-PHY 把 PHY 那关买通了（19.11 < 23.94，占 80%），但 IPI 上限由像素时钟和打包率决定，与选哪种 PHY 无关。**只要含 YUV，换 PHY 救不了。**
-
-**同一 RX 上最多接 2 颗 8M YUV@30fps**——9.56 Gbps 占掉 9.6 的 99.5%，是贴着上限跑的。**贵的是 8M，不是路数**：想接满 4 路（VC 上限），就得把 8M 让出来换成 2M。按合计从大到小列全：
-
-| 组合 | 路数 | 含 blanking 合计 | 占用（上限 9.6 Gbps） | 结论 |
-| --- | --- | --- | --- | --- |
-| 4×8M | 4 | 19.11 Gbps | 199% | ✗ 超 99% |
-| 3×8M + 1×2M | 4 | 15.53 Gbps | 162% | ✗ 超 62% |
-| 2×8M + 2×2M | 4 | 11.94 Gbps | 124% | ✗ 超 24% |
-| 2×8M + 1×2M | 3 | 10.75 Gbps | 112% | ✗ 超 12%——2 颗 8M 已占掉 99.5% |
-| 2×8M | 2 | 9.56 Gbps | 99.5% | ✓ 贴线，几乎没有余量 |
-| **1×8M + 3×2M** | 4 | 8.36 Gbps | 87.1% | ✓ **满 4 路时能装的最大组合** |
-| 1×8M + 2×2M | 3 | 7.17 Gbps | 74.7% | ✓ |
-| 4×2M | 4 | 4.78 Gbps | 49.8% | ✓ 此时先撞 VC 的 4 路上限，不是 IPI |
-
-**满 4 路时能装的最大组合是 `1×8M + 3×2M`**（8.36 Gbps）。不要求接满 4 路的话，`2×8M` 的总带宽更高（9.56 Gbps）但只接 2 路——**要路数还是要单路分辨率，二选一**。
-
-
-**混流要按同一张表算，但上限会被那一路 YUV 拖下来**——IPI 的打包率从 3 pixel/clock 掉到 1 pixel/clock，整条 RX 的上限由 21.6 Gbps 变成 9.6 Gbps：
-
-| 组合 | 路数 | 含 blanking 合计 | 占用（上限 9.6 Gbps） | 结论 |
-| --- | --- | --- | --- | --- |
-| 3×8M RAW12 + 1×8M YUV422 | 4 | 17.32 Gbps | 180% | ✗ 3 路 RAW12 单独只占 58%，加 1 路 YUV 后整条 RX 反而超一倍 |
-| 1×8M YUV422 + 3×2M RAW12 | 4 | 7.91 Gbps | 82.4% | ✓ 满 4 路 |
-| 1×8M RAW12 + 3×2M YUV422 | 4 | 7.76 Gbps | 80.9% | ✓ 满 4 路 |
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 卡口 | 上限 | 4 路合计 | 占用 | 结论 |
-| --- | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 19.11 Gbps | 106% | ✗ 超 |
-| PHY · C-PHY | 23.94 Gbps | 19.11 Gbps | 80% | ✓ |
-| IPI（含 YUV） | 10.72 Gbps | 19.11 Gbps | 178% | ✗ 连有效像素的 15.93（占 149%）都装不下 |
-| VC 路数 | 4 路 | 4 路 | 满 | ✓ |
-
-**结论**：**4 颗走不通，先撞的是 IPI**——10.72 Gbps 连 4 路的有效像素（15.93）都装不下，PHY 的问题还没轮到。**这里换 C-PHY 是没用的**：C-PHY 把 PHY 那关买通了（19.11 < 23.94，占 80%），但 IPI 上限由像素时钟和打包率决定，与选哪种 PHY 无关。**只要含 YUV，换 PHY 救不了。**
-
-**同一 RX 上最多接 2 颗 8M YUV@30fps**——9.56 Gbps 占掉 10.72 的 89.1%，还剩约 11% 余量。**贵的是 8M，不是路数**：想接满 4 路（VC 上限），就得把 8M 让出来换成 2M。按合计从大到小列全：
-
-| 组合 | 路数 | 含 blanking 合计 | 占用（上限 10.72 Gbps） | 结论 |
-| --- | --- | --- | --- | --- |
-| 4×8M | 4 | 19.11 Gbps | 178% | ✗ 超 78% |
-| 3×8M + 1×2M | 4 | 15.53 Gbps | 145% | ✗ 超 45% |
-| 2×8M + 2×2M | 4 | 11.94 Gbps | 111% | ✗ 超 11% |
-| 2×8M + 1×2M | 3 | 10.75 Gbps | 100.3% | ✗ 超 0.03 Gbps——卡在线上，压一点 blanking 就能过 |
-| 2×8M | 2 | 9.56 Gbps | 89.1% | ✓ 还有约 11% 余量 |
-| **1×8M + 3×2M** | 4 | 8.36 Gbps | 78.0% | ✓ **满 4 路时能装的最大组合** |
-| 1×8M + 2×2M | 3 | 7.17 Gbps | 66.9% | ✓ |
-| 4×2M | 4 | 4.78 Gbps | 44.6% | ✓ 此时先撞 VC 的 4 路上限，不是 IPI |
-
-**满 4 路时能装的最大组合是 `1×8M + 3×2M`**（8.36 Gbps）。不要求接满 4 路的话，`2×8M` 的总带宽更高（9.56 Gbps）但只接 2 路——**要路数还是要单路分辨率，二选一**。
-
-
-**混流要按同一张表算，但上限会被那一路 YUV 拖下来**——IPI 的打包率从 3 pixel/clock 掉到 1 pixel/clock，整条 RX 的上限由 24.1 Gbps 变成 10.72 Gbps：
-
-| 组合 | 路数 | 含 blanking 合计 | 占用（上限 10.72 Gbps） | 结论 |
-| --- | --- | --- | --- | --- |
-| 3×8M RAW12 + 1×8M YUV422 | 4 | 17.32 Gbps | 162% | ✗ 3 路 RAW12 单独只占 52%，加 1 路 YUV 后整条 RX 超六成 |
-| 1×8M YUV422 + 3×2M RAW12 | 4 | 7.91 Gbps | 73.8% | ✓ 满 4 路 |
-| 1×8M RAW12 + 3×2M YUV422 | 4 | 7.76 Gbps | 72.4% | ✓ 满 4 路 |
-
-</DocScope>
-> **规划接入时请按含 blanking 的口径核算，不要用有效像素值**，否则结论会偏乐观。除 PHY 外还必须确认解串器链路速率够不够。
+> 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[数据通路](#数据通路)。
 
 ## 使用说明
 
@@ -402,8 +242,6 @@ CIM 抓到的数据有两条出路，由 `vin_attr_t` 里的三个字段决定�
 | `vin_ochn_attr[x].ddr_en = 1` | 该输出通道写 DDR（Offline） |
 
 `vin_node_attr.cim_attr.cim_isp_flyby` 与 `vin_node_attr.cim_attr.cim_pym_flyby` **互斥**，同一时刻只能有一个为 1；而它与 `vin_ochn_attr[x].ddr_en` **不互斥**——主帧可以既落 DDR、同时又 OTF 送一份给 ISP，代价是带宽。
-
-![Online OTF 与 Offline DDR 两条通路](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig3-otf-vs-ddr.svg)
 
 #### Online（OTF）
 CIM 抓到的数据**不落 DDR**，以硬件直连方式送给 ISP 或 PYM。
@@ -431,7 +269,7 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 
 | 场景 | 输入 | 输出方式 | 后级 |
 | --- | --- | --- | --- |
-| 1 | 4 路 RAW Sensor | 4 路 Online（OTF） | ISP |
+| 1 | 4 路 RAW Sensor | 1 路 Online（OTF），其余 3 路 Offline（DDR） | ISP |
 | 2 | 4 路 RAW Sensor | 4 路 Offline（DDR） | ISP |
 | 3 | 4 路 RAW Sensor | 1 路 Online + 3 路 Offline | 两个 ISP |
 | 4 | 4 路 YUV Sensor | Offline（DDR） | PYM |
@@ -439,33 +277,31 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 ![CIM 典型组合：四种场景](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
 
 ### API 调用流程
-![API 典型调用时序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig4-api-sequence.svg)
+![API 调用流程：从打开模块到关闭 vnode 的 11 组调用，含每帧循环](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig4-api-flow.png)
 
 <details>
 <summary>展开：函数调用参考</summary>
 
-**建流与配置**
+对应上图 12 步，应用程序侧依次调用：
 
-1. `hbn_vnode_open(HB_VIN, hw_id, AUTO_ALLOC_ID, &handle)` —— 打开一路 VIN，`hw_id` 即 MIPI RX 通道号
-2. `hbn_vnode_set_attr(handle, &vin_attr)` —— 一次性下发全局配置。`vin_attr_t` 里含 `vin_node_attr`（`cim_attr` / `vcon_attr` / `lpwm_attr`）、`vin_attr_ex`、`vin_ichn_attr`、`vin_ochn_attr[VIN_TYPE_INVALID]`、`vin_ochn_buff_attr[VIN_TYPE_INVALID]`
-3. `hbn_vnode_set_ichn_attr(handle, ichn_id, &ichn_attr)` —— 设输入通道的宽、高、格式
-4. `hbn_vnode_set_ochn_attr(handle, ochn_id, &ochn_attr)` —— 逐条设输出通道，`ochn_id` 取 `0` 主帧 / `4` ROI / `3` EMB
-5. `hbn_vnode_set_ochn_buf_attr(handle, ochn_id, &alloc_attr)` —— 给落 DDR 的通道配 buffer 数量与内存属性
-
-**建流、绑定与启动**
-
+1. `hb_mem_module_open()` —— 打开 hb_mem 内存模块；分配或导入帧缓冲前必须先调
+2. `hbn_camera_create(camera_config)` —— 创建 Camera 对象
+3. `hbn_vnode_open(HB_VIN, hw_id, AUTO_ALLOC_ID, &handle)` —— 打开一路 VIN，`hw_id` 即 MIPI RX 通道号
+4. `hbn_vnode_set_attr(handle, &vin_attr)` —— 一次性下发全局配置。`vin_attr_t` 里含 `vin_node_attr`（`cim_attr` / `vcon_attr` / `lpwm_attr`）、`vin_attr_ex`、`vin_ichn_attr`、`vin_ochn_attr[VIN_TYPE_INVALID]`、`vin_ochn_buff_attr[VIN_TYPE_INVALID]`
+5. 通道属性与缓冲，三条调用：
+   - `hbn_vnode_set_ichn_attr(handle, ichn_id, &ichn_attr)` —— 设输入通道的宽、高、格式
+   - `hbn_vnode_set_ochn_attr(handle, ochn_id, &ochn_attr)` —— 逐条设输出通道，`ochn_id` 取 `0` 主帧 / `4` ROI / `3` EMB
+   - `hbn_vnode_set_ochn_buf_attr(handle, ochn_id, &alloc_attr)` —— 给落 DDR 的通道配 buffer 数量与内存属性
 6. `hbn_vflow_create()` / `hbn_vflow_add_vnode()` / `hbn_vflow_bind_vnode()` —— 建流、把 VIN 挂上去、绑定下游
 7. `hbn_camera_attach_to_vin()` —— 把 Sensor 挂到 VIN
 8. `hbn_vflow_start()` —— 启动整条流。不用 vflow 统一管理时，也可直接 `hbn_vnode_start(handle)`
+9. `hbn_vnode_getframe(handle, ochn_id, timeout, &img)` —— 取帧
+   - 取到帧之后、归还之前，是**用户自己的处理逻辑**（对这一帧做推理、编码、送显等）
+10. `hbn_vnode_releaseframe(handle, ochn_id, &img)` —— 用完归还
+11. `hbn_vflow_stop()` —— 停流
+12. `hbn_vnode_close(handle)` —— 释放 vnode
 
-**每帧**
-
-9. `hbn_vnode_getframe(handle, ochn_id, timeout, &img)` —— 取帧；用完 `hbn_vnode_releaseframe(handle, ochn_id, &img)` 归还
-10. 回灌（RDMA）场景改用 `hbn_vnode_sendframe(handle, ichn_id, &img)` 往输入通道送帧
-
-**收尾**
-
-11. `hbn_vflow_stop()` / `hbn_vnode_close(handle)` —— 停流并释放
+> 回灌（RDMA）场景改用 `hbn_vnode_sendframe(handle, ichn_id, &img)` 往输入通道送帧。
 
 </details>
 
@@ -486,7 +322,6 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 
 </DocScope>
 
-#### 最小示例
 ```c
 #include <stdio.h>
 #include "hbn_vpf_interface.h"
@@ -569,238 +404,7 @@ int main(void)
 }
 ```
 
-### 约束与注意事项
-
-#### 配错会被驱动拒绝
-下面这些会**直接返回错误**，容易发现：
-
-| 约束 | 说明 |
-| --- | --- |
-| `vin_node_attr.cim_attr.cim_isp_flyby` 与 `vin_node_attr.cim_attr.cim_pym_flyby` 不得同时为 1 | Online 直连只能选 ISP 或 PYM 之一 |
-| `vin_node_attr.cim_attr.mipi_en` / `...func.enable_pattern` / `...rdma_input.rdma_en` 三者有且仅有一个为 1 | 输入源必须唯一：MIPI、测试图案、DDR 回灌 |
-| Online 绑定只允许主帧通道，且 flyby 已置 1 | 其他通道不能作为 Online 绑定的源 |
-| Offline 绑定要求对应通道开关已打开 | 主帧需 `vin_ochn_attr[x].ddr_en`、EMB 需 `.emb_en`、ROI 需 `.roi_en` |
-| VIN 的输入节点不支持被绑定 | 它是输入侧 |
-| YUV422-8bit 输入不允许开 ROI / rawds | 格式限制 |
-| Online 绑定要求 CIM 与下游在同一 CPE 内 | 跨 CPE 只能走 Offline；校验在下游模块侧执行 |
-
-#### 不报错、但结果不对
-下面这些**不会返回错误**，图却出不对——比上面那类更值得逐项核对：
-
-| 坑 | 后果 |
-| --- | --- |
-| `vin_ochn_attr[x].vin_basic_attr` 里 `pack_mode` 与 `format` 不匹配 | `pack_mode = 0` 让每 pixel 占 2 字节（RAW20 占 4 字节，RAW8 / YUV422-8bit 占 1 字节），`pack_mode = 1` 按实际位深紧凑打包（RAW12 为 `width × 1.5`，RAW10 为 `width × 1.25`）。配错会让 `wstride` 与实际不符，**DDR 里的图像错位** |
-| `vin_ichn_attr_t.format` 与 Sensor 实际输出不符 | 能取到帧，但**像素解释错**，图是花的 |
-
-## API 相关
-
-### 配置结构体定义
-完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[数据通路](#数据通路)，`func` 里的 pattern / 跳帧见 [CIM 可配功能块](#cim-可配功能块)，通道字段见 [API 接口说明](#api-接口说明)。
-
-标「框架填」的字段不用自己设。
-
-#### 类型总览
-VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下发（`hbn_vnode_set_attr`）；建流与绑定交给 `hbn_vflow_*`。
-
-| 类型 | 作用 | 关键成员 |
-| --- | --- | --- |
-| `vin_attr_t` | VIN 的全部配置 | `vin_node_attr`、`vin_attr_ex`、`vin_ichn_attr`、`vin_ochn_attr[VIN_TYPE_INVALID]`、`vin_ochn_buff_attr[VIN_TYPE_INVALID]`、`magicNumber` |
-| `vin_attr_ex_t` | 扩展属性 | `cim_static_attr`、`mipi_ex_attr`、`fps_ctrl`（跳帧）、`dynamic_fps_attr`（动态帧率）、`ipi_reset`、`bypass_enable` |
-| `vin_node_attr_t` | 节点级属性 | `cim_attr`、`vcon_attr`、`lpwm_attr`、`flow_id` |
-| `cim_attr_t` | 接入与通路配置 | `mipi_en` / `mipi_rx` / `vc_index` / `ipi_channels`、`cim_isp_flyby`、`cim_pym_flyby`、`rdma_input`、`tpg_input`、`func` |
-| `vcon_attr_t` | 板级连接配置 | `bus_main` / `bus_second`、`poc_map`、`gpios[]`、`lpwm_chn[]`、`rx_phy_mode` / `rx_phy_index` |
-| `vin_ichn_attr_t` | 输入通道属性 | `width`、`height`、`format` |
-| `vin_ochn_attr_t` | 输出通道属性，按 `ochn_id` 索引 | `ddr_en` / `roi_en` / `emb_en` / `rawds_en`、`vin_basic_attr`、`roi_attr`、`emb_attr` |
-| `vin_ochn_buff_attr_t` | 输出通道的 buffer 属性 | `buffers_num`、`flags` |
-
-**`hw_id`**：打开 VIN 时指定的硬件编号，**即 MIPI RX 通道号**。
-
-**`ochn_id`**：VIN 对外有 3 个数据通道——`0` 主帧、`4` ROI、`3` EMB。各通道能力见 [API 接口说明](#api-接口说明)。
-
-**接口分属三个库**：`hbn_vnode_*` / `hbn_vflow_*` 在 `libvpf.so`，`hbn_camera_*` 在 `libcam.so`，`hb_mem_*` 在 `libhbmem.so`。
-
-#### 顶层
-
-##### vin_attr_t
-VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `vin_node_attr` | `vin_node_attr_t` | 节点级：接入方式与板级连接 |
-| `vin_attr_ex` | `vin_attr_ex_t` | 扩展属性 |
-| `vin_ochn_attr` | `vin_ochn_attr_t[]` | 输出通道，按 `ochn_id` 索引 |
-| `vin_ichn_attr` | `vin_ichn_attr_t` | 输入通道 |
-| `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[]` | 落 DDR 通道的 buffer，按 `ochn_id` 索引 |
-| `magicNumber` | `uint32_t` | 填 `0x12345678`。这一层不下发到内核，驱动也不校验 |
-
-#### 节点级 —— 接入方式与板级连接
-
-##### vin_node_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `cim_attr` | `cim_attr_t` | 接入与通路选择 |
-| `lpwm_attr` | `lpwm_attr_t` | 曝光触发 |
-| `vcon_attr` | `vcon_attr_t` | I2C / POC / GPIO / PHY 等板级连接 |
-| `flow_id` | `uint32_t` | 框架填 |
-| `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_attr` 校验这个值，不符直接返回失败 |
-
-##### cim_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `mipi_en` | `uint32_t` | 输入源选择，1 = MIPI |
-| `mipi_rx` | `uint32_t` | MIPI RX 通道号 |
-| `vc_index` | `uint32_t` | 虚拟通道（VC）号 |
-| `ipi_channels` | `uint32_t` | 占用几路 IPI；DOL2 场景用 |
-| `cim_pym_flyby` | `uint32_t` | 1 = 直连 PYM（Online） |
-| `cim_isp_flyby` | `uint32_t` | 1 = 直连 ISP（Online） |
-| `y_uv_swap` | `uint32_t` | 见头文件 |
-| `rdma_input` | `cim_input_rdma_t` | DDR 回灌输入 |
-| `tpg_input` | `cim_input_tpg_t` | 测试图案输入 |
-| `func` | `cim_func_desc_t` | 帧号、跳帧、pattern 等 |
-
-##### cim_func_desc_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `enable_frame_id` | `uint32_t` | 是否给帧打帧号 |
-| `set_init_frame_id` | `uint32_t` | 起始帧号 |
-| `enable_pattern` | `uint32_t` | 测试图案使能 |
-| `skip_frame` | `uint32_t` | 跳帧使能 |
-| `input_fps` | `uint32_t` | 输入帧率 |
-| `output_fps` | `uint32_t` | 输出帧率 |
-| `skip_nums` | `uint32_t` | 每跳几帧 |
-| `hw_extract_m` | `uint32_t` | 硬件抽帧比 m/n |
-| `hw_extract_n` | `uint32_t` | 硬件抽帧比 m/n |
-| `lpwm_trig_sel` | `uint32_t` | 触发源选择 |
-| `skip_period_us` | `uint32_t` | 跳帧周期，微秒 |
-| `frame_duration_us` | `uint32_t` | 帧周期，微秒 |
-| `time_phase_us` | `uint32_t` | 时间相位，微秒 |
-| `sparate_frames_mode` | `uint32_t` | 见头文件（原头文件拼写如此） |
-| `endian_mode` | `uint32_t` | 字节序 |
-
-##### cim_input_rdma_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `rdma_en` | `uint32_t` | 回灌使能 |
-| `stride` | `uint32_t` | 读 stride |
-| `pack_mode` | `uint32_t` | 见头文件 |
-| `buff_num` | `uint32_t` | 回灌 buffer 数 |
-
-##### cim_input_tpg_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `tpg_en` | `uint32_t` | 测试图案使能 |
-| `fps` | `uint32_t` | 图案帧率 |
-
-##### vcon_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `attr_valid` | `int32_t` | 该组属性是否生效 |
-| `bus_main` | `int32_t` | 主 I2C 总线 |
-| `bus_second` | `int32_t` | 次 I2C 总线 |
-| `poc_map` | `int32_t` | POC 供电映射，取自 DTS |
-| `gpios` | `int32_t[VGPIO_NUM]` | GPIO 序号 |
-| `sensor_err` | `int32_t[SENSOR_ERR_PIN_NUM]` | Sensor err_pin 序号 |
-| `lpwm_chn` | `int32_t[LPWM_CHN_NUM]` | 各路 Sensor 用的 LPWM 通道 |
-| `rx_phy_mode` | `int32_t` | 0=不用 1=D-PHY 2=C-PHY |
-| `rx_phy_index` | `int32_t` | RX PHY 序号 |
-| `rx_phy_link` | `int32_t` | 0=不用 1=CSI 2=DSI |
-| `tx_phy_mode` | `int32_t` | 见头文件 |
-| `tx_phy_index` | `int32_t` | TX PHY 序号 |
-| `tx_phy_link` | `int32_t` | TX PHY link 序号，复合类型用 |
-| `vcon_type` | `int32_t` | 0=独立 1=复合主 2=复合从 |
-| `vcon_link` | `int32_t` | VCON link 序号，复合类型用 |
-
-##### lpwm_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | 逐通道配置 |
-
-##### lpwm_chn_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `enable` | `uint32_t` | 该通道使能 |
-| `trigger_source` | `uint32_t` | 触发源选择 |
-| `trigger_mode` | `uint32_t` | 触发模式 |
-| `period` | `uint32_t` | 周期 |
-| `offset` | `uint32_t` | 相位偏移 |
-| `duty_time` | `uint32_t` | 脉冲宽度 |
-| `threshold` | `uint32_t` | 见头文件 |
-| `adjust_step` | `uint32_t` | 见头文件 |
-
-#### 扩展属性
-
-##### vin_attr_ex_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `ex_attr_type` | `vin_attr_ex_type_e` | 哪些扩展属性生效 |
-| `cim_static_attr` | `cim_static_attr_t` | CIM 静态属性（水位线中断） |
-| `mipi_ex_attr` | `mipi_attr_ex_t` | MIPI 增强属性 |
-| `fps_ctrl` | `dynamic_fps_t` | 跳帧 |
-| `dynamic_fps_attr` | `lpwm_dynamic_fps_t` | 动态帧率切换 |
-| `ipi_reset` | `uint32_t` | MIPI IPI 复位 |
-| `bypass_enable` | `uint32_t` | bypass 使能 |
-
-#### 通道属性
-
-##### vin_ichn_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `format` | `uint32_t` | 图像格式 |
-| `width` | `uint32_t` | 宽 |
-| `height` | `uint32_t` | 高 |
-
-##### vin_ochn_attr_t
-按 `ochn_id` 索引，`0` 主帧 / `4` ROI / `3` EMB。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `ddr_en` | `uint32_t` | 该通道写 DDR |
-| `roi_en` | `uint32_t` | ROI 使能 |
-| `emb_en` | `uint32_t` | EMB 使能 |
-| `rawds_en` | `uint32_t` | 2×2 下采样使能 |
-| `pingpong_ring` | `uint32_t` | 见头文件 |
-| `ochn_attr_type` | `vin_ochn_attr_type_e` | 哪些通道属性生效 |
-| `vin_basic_attr` | `vin_basic_attr_t` | 写 DDR 的基本属性 |
-| `rawds_attr` | `vin_rawds_attr_t` | 下采样属性 |
-| `roi_attr` | `struct vin_roi_attr_s` | 裁剪属性 |
-| `emb_attr` | `vin_emb_attr_t` | EMB 属性 |
-| `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_ochn_attr` 校验这个值，不符直接返回失败 |
-
-##### vin_basic_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `pack_mode` | `uint32_t` | 写 DDR 的方式 |
-| `wstride` | `uint32_t` | 行 stride |
-| `vstride` | `uint32_t` | 帧 stride |
-| `format` | `uint32_t` | 写 DDR 的格式 |
-
-##### vin_rawds_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `rawds_mode` | `uint32_t` | 下采样模式 |
-
-##### vin_roi_attr_s
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `roi_x` | `uint32_t` | 裁剪起点 X |
-| `roi_y` | `uint32_t` | 裁剪起点 Y |
-| `roi_width` | `uint32_t` | 裁剪宽 |
-| `roi_height` | `uint32_t` | 裁剪高 |
-
-##### vin_emb_attr_t
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `embeded_dependence` | `uint32_t` | EMB 是否与图像数据在一起 |
-| `embeded_width` | `uint32_t` | EMB 数据宽 |
-| `embeded_height` | `uint32_t` | EMB 数据高 |
-
-##### vin_ochn_buff_attr_t
-按 `ochn_id` 索引。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `buffers_num` | `uint32_t` | 该通道 buffer 数量 |
-| `flags` | `int64_t` | 框架未使用 |
+## API 参考
 
 ### API 列表
 VIN 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。常用接口如下：
@@ -823,42 +427,93 @@ VIN 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。常用接�
 
 建流与绑定使用 `hbn_vflow_create` / `hbn_vflow_add_vnode` / `hbn_vflow_bind_vnode` / `hbn_vflow_start` / `hbn_vflow_stop` / `hbn_vflow_destroy`，详见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
 
-### API 接口说明
+### 接口说明
 下文 13 个接口有两条共性约定，各小节不再重复。
 
-- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。完整清单见[基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#返回值说明)——注意那张表按**正值**列出（`10`、`13`…），而接口返回的是它的**负值**（`-10`、`-13`…）；VIN 上实际会遇到的返回码及处理建议见[常见返回码](#常见返回码)。
+- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。完整清单见[基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#返回值说明)——注意那张表按**正值**列出（`10`、`13`…），而接口返回的是它的**负值**（`-10`、`-13`…）；VIN 上实际会遇到的返回码及处理建议见[返回值说明](#返回值说明)。
 - **五个宏**：`set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` 转发到带 `_s` 后缀的同名函数，长度由 `sizeof(*(attr))` 自动取得，因此**不能传 `void *`**，必须传指向具体类型的指针。
 
 #### hbn_vnode_open
-打开 VIN 的设备节点，返回该模块的 vnode handle。与 `hbn_vnode_close` 成对使用。
+
+**【函数原型】**
 
 ```c
 hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
                             int32_t ctx_id, hbn_vnode_handle_t *vnode_fd);
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_type` | `hb_vnode_type` | vnode 类型，VIN 取 `HB_VIN` |
-| `hw_id` | `uint32_t` | 硬件 id，**即 MIPI RX 通道号**。合法取值见[平台规模](#平台规格) |
-| `ctx_id` | `int32_t` | context id，软件概念；可指定具体值，或传 `AUTO_ALLOC_ID` 由框架自动分配 |
-| `vnode_fd` | `hbn_vnode_handle_t *` | **出参**，返回的 vnode handle |
+**【功能描述】**
 
-**设备节点**：每个 VIN 实例在 `/dev` 下对应 `/dev/vinX_src`、`/dev/vinX_cap`、`/dev/vinX_emb`、`/dev/vinX_roi` 四个节点，其中 `X` 即 `hw_id`。正常走 `hbn_vnode_*` 接口时不需要直接操作它们。
+打开 VIN 的设备节点，返回该模块的 vnode handle。与 `hbn_vnode_close` 成对使用。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_type` | `hb_vnode_type` | 是 | — | vnode 类型，VIN 取 `HB_VIN` |
+| `hw_id` | `uint32_t` | 是 | — | 硬件 id，**即 MIPI RX 通道号**。合法取值见 [MIPI RX](#mipi-rx) |
+| `ctx_id` | `int32_t` | 是 | `AUTO_ALLOC_ID` | context id，软件概念；可指定具体值，或传 `AUTO_ALLOC_ID` 由框架自动分配 |
+| `vnode_fd` | `hbn_vnode_handle_t *` | 是 | — | **出参**，返回的 vnode handle |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
+
+- 每个 VIN 实例在 `/dev` 下对应 `/dev/vinX_src`、`/dev/vinX_cap`、`/dev/vinX_emb`、`/dev/vinX_roi` 四个节点，其中 `X` 即 `hw_id`。正常走 `hbn_vnode_*` 接口时不需要直接操作它们。
+
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+```c
+/* 参考板端 /app/multimedia_samples/sample_vin/ 的最小调用序列 */
+hbn_vnode_handle_t vin_fd;
+hbn_vnode_open(HB_VIN, hw_id, AUTO_ALLOC_ID, &vin_fd);
+```
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 #### hbn_vnode_close
-关闭 VIN 设备节点，释放该 handle。需与 `hbn_vnode_open` 成对使用，建议先 `hbn_vflow_stop` 再关闭。
+
+**【函数原型】**
 
 ```c
 hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
+**【功能描述】**
+
+关闭 VIN 设备节点，释放该 handle。需与 `hbn_vnode_open` 成对使用，建议先 `hbn_vflow_stop` 再关闭。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
+
+无
+
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 #### hbn_vnode_set_attr
-设置模块的基本属性。VIN 的属性为 `vin_attr_t`，其中包含 `cim_attr` / `vcon_attr` / `lpwm_attr` 三段子模块配置。
+
+**【函数原型】**
 
 ```c
 /* 宏：转发到 hbn_vnode_set_attr_s，长度由 sizeof(*(attr)) 自动取得 */
@@ -866,52 +521,41 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
         hbn_vnode_set_attr_s((vnode_fd), (attr), sizeof(*(attr)))
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `attr` | `vin_attr_t *` | 基本属性结构体指针 |
+**【功能描述】**
 
-**要点**
+设置模块的基本属性。VIN 的属性为 `vin_attr_t`，其中包含 `cim_attr` / `vcon_attr` / `lpwm_attr` 三段子模块配置。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `attr` | `vin_attr_t *` | 是 | — | 基本属性结构体指针 |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
 
 - `vin_node_attr_t` / `vin_ochn_attr_t` 的 `magicNumber` **要调用方自己填 `0x12345678`**；驱动 `set_attr` / `set_ochn_attr` 会校验，不符直接返回失败
 - 这个值不是框架替你填的：`MAGIC_NUMBER` 宏只在驱动内部头 `camsys/vpf/vio_config.h`，发布的 `hbn_vin_cfg.h` 里没有，照板端 sample 写死 `0x12345678` 即可
 
-#### hbn_vnode_set_ichn_attr
-设置模块的输入通道属性。
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
 
 ```c
-/* 宏：转发到 hbn_vnode_set_ichn_attr_s，长度由 sizeof(*(attr)) 自动取得 */
-#define hbn_vnode_set_ichn_attr(vnode_fd, ichn_id, attr) \
-        hbn_vnode_set_ichn_attr_s((vnode_fd), (ichn_id), (attr), sizeof(*(attr)))
+hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例」 */
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ichn_id` | `uint32_t` | 输入通道 id，**VIN 固定为 0** |
-| `attr` | `vin_ichn_attr_t *` | 输入通道属性（宽、高、格式） |
-
-**要点**
-
-- `vin_ichn_attr_t.format` 需与 Sensor 实际输出格式一致
-
-#### hbn_vnode_get_ichn_attr
-获取模块的输入通道属性。
-
-```c
-/* 宏：转发到 hbn_vnode_get_ichn_attr_s，长度由 sizeof(*(attr)) 自动取得 */
-#define hbn_vnode_get_ichn_attr(vnode_fd, ichn_id, attr) \
-        hbn_vnode_get_ichn_attr_s((vnode_fd), (ichn_id), (attr), sizeof(*(attr)))
-```
-
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ichn_id` | `uint32_t` | 输入通道 id，**VIN 固定为 0** |
-| `attr` | `vin_ichn_attr_t *` | **出参**，回读到的输入通道属性 |
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 #### hbn_vnode_set_ochn_attr
-设置模块的输出通道属性。
+
+**【函数原型】**
 
 ```c
 /* 宏：转发到 hbn_vnode_set_ochn_attr_s，长度由 sizeof(*(attr)) 自动取得 */
@@ -919,11 +563,23 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
         hbn_vnode_set_ochn_attr_s((vnode_fd), (ochn_id), (attr), sizeof(*(attr)))
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id，取值见下表 |
-| `attr` | `vin_ochn_attr_t *` | 输出通道属性（是否落 DDR、打包方式、宽高 stride、格式、ROI 与 EMB 参数等） |
+**【功能描述】**
+
+设置模块的输出通道属性。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ochn_id` | `uint32_t` | 是 | — | 输出通道 id，取值见下表 |
+| `attr` | `vin_ochn_attr_t *` | 是 | — | 输出通道属性（是否落 DDR、打包方式、宽高 stride、格式、ROI 与 EMB 参数等） |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
 
 **`ochn_id` 取值**
 
@@ -938,13 +594,24 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 **EMB 通道**承载的是 Sensor 随图像一起输出的行内信息（曝光参数等）。VIN 单独接收、单独送 DDR，不影响主帧数据。
 
-**要点**
-
 - 通道 3 / 4 只能走 DDR，不支持 Online
 - Offline 使用某通道时，需在属性中打开对应开关（`vin_ochn_attr[x].ddr_en` / `.emb_en` / `.roi_en`）
 
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+```c
+hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
+```
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
 #### hbn_vnode_get_ochn_attr
-获取模块的输出通道属性。
+
+**【函数原型】**
 
 ```c
 /* 宏：转发到 hbn_vnode_get_ochn_attr_s，长度由 sizeof(*(attr)) 自动取得 */
@@ -952,138 +619,570 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
         hbn_vnode_get_ochn_attr_s((vnode_fd), (ochn_id), (attr), sizeof(*(attr)))
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id，取值同 `hbn_vnode_set_ochn_attr` |
-| `attr` | `vin_ochn_attr_t *` | **出参**，回读到的输出通道属性 |
+**【功能描述】**
+
+获取模块的输出通道属性。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ochn_id` | `uint32_t` | 是 | — | 输出通道 id，取值同 `hbn_vnode_set_ochn_attr` |
+| `attr` | `vin_ochn_attr_t *` | 是 | — | **出参**，回读到的输出通道属性 |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
+
+无
+
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
+#### hbn_vnode_set_ichn_attr
+
+**【函数原型】**
+
+```c
+/* 宏：转发到 hbn_vnode_set_ichn_attr_s，长度由 sizeof(*(attr)) 自动取得 */
+#define hbn_vnode_set_ichn_attr(vnode_fd, ichn_id, attr) \
+        hbn_vnode_set_ichn_attr_s((vnode_fd), (ichn_id), (attr), sizeof(*(attr)))
+```
+
+**【功能描述】**
+
+设置模块的输入通道属性。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，**VIN 固定为 0** |
+| `attr` | `vin_ichn_attr_t *` | 是 | — | 输入通道属性（宽、高、格式） |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
+
+- `vin_ichn_attr_t.format` 需与 Sensor 实际输出格式一致
+
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+```c
+hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
+```
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
+#### hbn_vnode_get_ichn_attr
+
+**【函数原型】**
+
+```c
+/* 宏：转发到 hbn_vnode_get_ichn_attr_s，长度由 sizeof(*(attr)) 自动取得 */
+#define hbn_vnode_get_ichn_attr(vnode_fd, ichn_id, attr) \
+        hbn_vnode_get_ichn_attr_s((vnode_fd), (ichn_id), (attr), sizeof(*(attr)))
+```
+
+**【功能描述】**
+
+获取模块的输入通道属性。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，**VIN 固定为 0** |
+| `attr` | `vin_ichn_attr_t *` | 是 | — | **出参**，回读到的输入通道属性 |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
+
+无
+
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 #### hbn_vnode_set_ochn_buf_attr
-设置输出通道的 buffer 属性，**真正发起 buffer 分配的是本接口**。
+
+**【函数原型】**
 
 ```c
 hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
                                          hbn_buf_alloc_attr_t *alloc_attr);
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id |
-| `alloc_attr` | `hbn_buf_alloc_attr_t *` | 含 `buffers_num` / `is_contig` / `flags` 三个成员 |
+**【功能描述】**
 
-**要点**
+设置输出通道的 buffer 属性，**真正发起 buffer 分配的是本接口**。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ochn_id` | `uint32_t` | 是 | — | 输出通道 id |
+| `alloc_attr` | `hbn_buf_alloc_attr_t *` | 是 | — | 含 `buffers_num` / `is_contig` / `flags` 三个成员 |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
 
 - 需要分配 buffer 的是落 DDR 的通道：主帧 `vin_ochn_attr[x].ddr_en`、ROI `.roi_en`、EMB `.emb_en`
 - Online 模式下主帧不落 DDR，可不分配 buffer
 - **`ochn_id` 对应的通道必须先使能**，否则返回不支持错误
 
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
 #### hbn_vnode_start
-启动 vnode。
+
+**【函数原型】**
 
 ```c
 hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
+**【功能描述】**
 
-**要点**
+启动 vnode。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
 
 - 通常直接用 `hbn_vflow_start` 统一管理整条流，不必单独调用
 
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
 #### hbn_vnode_stop
-停止 vnode。
+
+**【函数原型】**
 
 ```c
 hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
+**【功能描述】**
 
-**要点**
+停止 vnode。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
 
 - 通常直接用 `hbn_vflow_stop` 统一管理整条流，不必单独调用
 
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
 #### hbn_vnode_getframe
-从指定输出通道获取一帧，**阻塞接口**。
+
+**【函数原型】**
 
 ```c
 hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
                                 uint32_t millisecondTimeout, hbn_vnode_image_t *out_img);
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id，取值同 `hbn_vnode_set_ochn_attr` |
-| `millisecondTimeout` | `uint32_t` | 超时时间（毫秒） |
-| `out_img` | `hbn_vnode_image_t *` | **出参**，含帧号、时间戳、各 plane 的 dma-buf fd 与虚拟地址 |
+**【功能描述】**
 
-**要点**
+从指定输出通道获取一帧，**阻塞接口**。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ochn_id` | `uint32_t` | 是 | — | 输出通道 id，取值同 `hbn_vnode_set_ochn_attr` |
+| `millisecondTimeout` | `uint32_t` | 是 | — | 超时时间（毫秒） |
+| `out_img` | `hbn_vnode_image_t *` | 是 | — | **出参**，含帧号、时间戳、各 plane 的 dma-buf fd 与虚拟地址 |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
 
 - 获取到的帧**必须**通过 `hbn_vnode_releaseframe` 归还，否则缓冲区耗尽后无法继续取帧
 - 需要按条件取帧时可用 `hbn_vnode_getframe_cond`
 
-#### hbn_vnode_releaseframe
-归还一帧。
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
 
 ```c
-hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
-                                    hbn_vnode_image_t *img);
+hbn_vnode_image_t img;
+hbn_vnode_getframe(vin_fd, OCHN_MAIN, 1000, &img);   /* 超时 1s */
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id，需与取帧时一致 |
-| `img` | `hbn_vnode_image_t *` | 要归还的帧 |
-
-**要点**
-
-- 与 `hbn_vnode_getframe` 成对使用
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 #### hbn_vnode_sendframe
-向输入通道送入帧数据，用于回灌等场景。
+
+**【函数原型】**
 
 ```c
 hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
                                  hbn_vnode_image_t *img);
 ```
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ichn_id` | `uint32_t` | 输入通道 id |
-| `img` | `hbn_vnode_image_t *` | 要送入的帧 |
+**【功能描述】**
 
-**要点**
+向输入通道送入帧数据，用于回灌等场景。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id |
+| `img` | `hbn_vnode_image_t *` | 是 | — | 要送入的帧 |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
 
 - **阻塞接口，默认超时 4 s**；不需要等待的场景用 `hbn_vnode_sendframe_async`
 - 普通采集场景不需要调用
 
-## 排障
+**【兼容性】**
 
-### 常见返回码
-接口失败返回**负值**，值为下面这些宏取负。下表是走 `hbn_vnode_*` 接口时**实际会返回**的码：
+硬件：RDK S100 / RDK S600。
 
-| 返回值 | 宏 | 含义与下一步 |
+**【示例代码】**
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
+#### hbn_vnode_releaseframe
+
+**【函数原型】**
+
+```c
+hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
+                                    hbn_vnode_image_t *img);
+```
+
+**【功能描述】**
+
+归还一帧。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+| --- | --- | --- | --- | --- |
+| `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
+| `ochn_id` | `uint32_t` | 是 | — | 输出通道 id，需与取帧时一致 |
+| `img` | `hbn_vnode_image_t *` | 是 | — | 要归还的帧 |
+
+**【返回值】**
+
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+
+**【注意事项】**
+
+- 与 `hbn_vnode_getframe` 成对使用
+
+**【兼容性】**
+
+硬件：RDK S100 / RDK S600。
+
+**【示例代码】**
+
+```c
+hbn_vnode_releaseframe(vin_fd, OCHN_MAIN, &img);
+```
+
+完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+
+### 数据结构
+完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[数据通路](#数据通路)，`func` 里的 pattern / 跳帧见 [硬件框图](#硬件框图)的可配功能块表，通道字段见 [接口说明](#接口说明)。
+
+标「框架填」的字段不用自己设。
+
+#### 类型总览
+VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下发（`hbn_vnode_set_attr`）；建流与绑定交给 `hbn_vflow_*`。
+
+| 类型 | 作用 | 关键成员 |
 | --- | --- | --- |
-| `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针 |
-| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | 属性组合非法。最常见是 `vin_node_attr.cim_attr.cim_isp_flyby` 与 `...cim_pym_flyby` 同时为 1，或输入源三选一没配对；`vin_ichn_attr.format` 与 Sensor 实际输出不符也走这里 |
-| `-12` | `HBN_STATUS_FLOW_EXIST` | 同一路重复建流 |
-| `-13` | `HBN_STATUS_FLOW_UNEXIST` | 对不存在的流做操作 |
-| `-20` | `HBN_STATUS_NOT_BINDED` | `hbn_vflow_create` 建流时绑定失败 |
-| `-23` | `HBN_STATUS_NOT_SUPPORT` | 该组合不支持。例如对未使能的通道操作 |
-| `-25` | `HBN_STATUS_NOMEM` | 内存申请失败 |
-| `-43` | `HBN_STATUS_NODE_DEQUE_ERROR` | `hbn_vnode_getframe` 取帧失败，超时是最常见的一种。多半是根本没有帧进来，查 `cim_stat` 的 `fs_cnt` |
-| `-50` | `HBN_STATUS_BIND_NODE_FAIL` | 绑定失败：重复绑定、Online 绑定条件不满足（非主帧通道或 flyby 未置 1）都走这里 |
-| `-786462` | `HBN_STATUS_VIN_OPEN_ICHN_FAIL` | `hw_id` 无效，打不开 `/dev/vin<hw_id>_src`。合法值见[平台规格](#平台规格) |
+| `vin_attr_t` | VIN 的全部配置 | `vin_node_attr`、`vin_attr_ex`、`vin_ichn_attr`、`vin_ochn_attr[VIN_TYPE_INVALID]`、`vin_ochn_buff_attr[VIN_TYPE_INVALID]`、`magicNumber` |
+| `vin_attr_ex_t` | 扩展属性 | `cim_static_attr`、`mipi_ex_attr`、`fps_ctrl`（跳帧）、`dynamic_fps_attr`（动态帧率）、`ipi_reset`、`bypass_enable` |
+| `vin_node_attr_t` | 节点级属性 | `cim_attr`、`vcon_attr`、`lpwm_attr`、`flow_id` |
+| `cim_attr_t` | 接入与通路配置 | `mipi_en` / `mipi_rx` / `vc_index` / `ipi_channels`、`cim_isp_flyby`、`cim_pym_flyby`、`rdma_input`、`tpg_input`、`func` |
+| `vcon_attr_t` | 板级连接配置 | `bus_main` / `bus_second`、`poc_map`、`gpios[]`、`lpwm_chn[]`、`rx_phy_mode` / `rx_phy_index` |
+| `vin_ichn_attr_t` | 输入通道属性 | `width`、`height`、`format` |
+| `vin_ochn_attr_t` | 输出通道属性，按 `ochn_id` 索引 | `ddr_en` / `roi_en` / `emb_en` / `rawds_en`、`vin_basic_attr`、`roi_attr`、`emb_attr` |
+| `vin_ochn_buff_attr_t` | 输出通道的 buffer 属性 | `buffers_num`、`flags` |
+
+**`hw_id`**：打开 VIN 时指定的硬件编号，**即 MIPI RX 通道号**。
+
+**`ochn_id`**：VIN 对外有 3 个数据通道——`0` 主帧、`4` ROI、`3` EMB。各通道能力见 [接口说明](#接口说明)。
+
+**接口分属三个库**：`hbn_vnode_*` / `hbn_vflow_*` 在 `libvpf.so`，`hbn_camera_*` 在 `libcam.so`，`hb_mem_*` 在 `libhbmem.so`。
+
+#### 顶层
+
+##### vin_attr_t
+VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
+
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `vin_node_attr` | `vin_node_attr_t` | 节点级：接入方式与板级连接 | — | — | — |
+| `vin_attr_ex` | `vin_attr_ex_t` | 扩展属性 | — | — | — |
+| `vin_ochn_attr` | `vin_ochn_attr_t[VIN_TYPE_INVALID]` | 输出通道，按 `ochn_id` 索引 | — | — | — |
+| `vin_ichn_attr` | `vin_ichn_attr_t` | 输入通道 | — | — | — |
+| `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[VIN_TYPE_INVALID]` | 落 DDR 通道的 buffer，按 `ochn_id` 索引 | — | — | — |
+| `magicNumber` | `uint32_t` | 填 `0x12345678` | `0x12345678` | — | — |
+
+#### 节点级 —— 接入方式与板级连接
+
+##### vin_node_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `cim_attr` | `cim_attr_t` | 接入与通路选择 | — | — | — |
+| `lpwm_attr` | `lpwm_attr_t` | 曝光触发 | — | — | — |
+| `vcon_attr` | `vcon_attr_t` | I2C / POC / GPIO / PHY 等板级连接 | — | — | — |
+| `flow_id` | `uint32_t` | 框架填 | — | — | 框架回填 |
+| `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_attr` 校验这个值，不符直接返回失败 | `0x12345678` | — | 必须等于驱动内部宏 `MAGIC_NUMBER` |
+
+##### cim_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `mipi_en` | `uint32_t` | 输入源选择，1 = MIPI | 1 | 0 | `0` / `1`，与 `func.enable_pattern`、`rdma_input.rdma_en` 三选一 |
+| `mipi_rx` | `uint32_t` | MIPI RX 通道号 | 0 | — | S100 `0` / `1` / `4`；S600 `0`~`5` |
+| `vc_index` | `uint32_t` | 虚拟通道（VC）号 | 0 | 0 | `0`~`3` |
+| `ipi_channels` | `uint32_t` | 这次接入占用几路 IPI：单路取 `1`，DOL2 取 `2`。上限 2，超过会被驱动拒绝 | 1 | — | `1`~`2`，DOL2 取 2 |
+| `cim_pym_flyby` | `uint32_t` | 1 = 直连 PYM（Online） | 0 | 0 | `0` / `1`，与 `cim_isp_flyby` 互斥 |
+| `cim_isp_flyby` | `uint32_t` | 1 = 直连 ISP（Online） | 0 | 0 | `0` / `1`，与 `cim_pym_flyby` 互斥 |
+| `y_uv_swap` | `uint32_t` | YUV422 输入的 Y / UV 字节序交换开关：`0` 不换（默认）、`1` 交换。Sensor 输出的 YUV 字节序与平台不一致时才开；RAW 输入不受影响 | 0 | 0 | `0` / `1` |
+| `rdma_input` | `cim_input_rdma_t` | DDR 回灌输入 | — | — | — |
+| `tpg_input` | `cim_input_tpg_t` | 测试图案输入 | — | — | — |
+| `func` | `cim_func_desc_t` | 帧号、跳帧、pattern 等 | — | — | — |
+
+##### cim_func_desc_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `enable_frame_id` | `uint32_t` | 是否给帧打帧号 | 1 | 0 | `0` / `1` |
+| `set_init_frame_id` | `uint32_t` | 起始帧号 | 0 | 0 | `0` 起 |
+| `enable_pattern` | `uint32_t` | 测试图案使能 | 0 | 0 | `0` / `1`，与 MIPI 输入、`rdma_en` 三选一 |
+| `skip_frame` | `uint32_t` | **跳帧模式，不是开关**：`0` 不跳、`1` 按帧率比跳、`2` 跳前 N 帧、`3` 硬件抽帧、`4` 软同步、`5` `6` 软件定时。≥ `7` 非法；TPG 模式下不允许跳帧 | 0 | 0 | `0`~`6` |
+| `input_fps` | `uint32_t` | 模式 `1` `4` 用，输入帧率，**必须大于** `output_fps` | — | 0 | 模式 `1` `4` 时须大于 `output_fps` |
+| `output_fps` | `uint32_t` | 模式 `1` `4` 用，输出帧率，**必须小于** `input_fps` | — | 0 | 模式 `1` `4` 时须小于 `input_fps` |
+| `skip_nums` | `uint32_t` | 模式 `2` 用，上电先跳掉几帧 | — | 0 | 模式 `2` 用 |
+| `hw_extract_m` | `uint32_t` | 模式 `3` 用，硬件抽帧比：**m / n 二者之一是 1**，另一个 ≤ 63 | — | 0 | `0`~`63`，模式 `3` 时 m / n 之一是 1 |
+| `hw_extract_n` | `uint32_t` | 模式 `3` 用，同上 | — | 0 | `0`~`63`，同上 |
+| `lpwm_trig_sel` | `uint32_t` | 用哪路 LPWM 做触发对齐，取值 `[0, 12)`；填 `0xffff` 表示不用 | `0xffff` | `0xffff` | `0`~`11`，或 `0xffff` 表示不用 |
+| `skip_period_us` | `uint32_t` | 模式 `5` `6` 用，跳帧周期（微秒），**必须 ≥ `frame_duration_us`** | — | 0 | 模式 `5` `6` 时必须 ≥ `frame_duration_us` |
+| `frame_duration_us` | `uint32_t` | 模式 `5` `6` 用，帧周期（微秒），不能为 0 | — | 0 | 模式 `5` `6` 时不能为 0 |
+| `time_phase_us` | `uint32_t` | 模式 `5` `6` 用，相位对齐窗口（微秒） | — | — | — |
+| `sparate_frames_mode` | `uint32_t` | 驱动未使用（头文件拼写如此），填 `0` | 0 | 0 | 驱动未使用 |
+| `endian_mode` | `uint32_t` | 写 DDR 时的字节序 | — | — | — |
+
+##### cim_input_rdma_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `rdma_en` | `uint32_t` | 回灌使能 | 0 | 0 | `0` / `1`，与 MIPI 输入、`enable_pattern` 三选一 |
+| `stride` | `uint32_t` | 读 stride | — | — | — |
+| `pack_mode` | `uint32_t` | 回灌数据的打包方式，口径同 `vin_basic_attr_t.pack_mode`；`stride` 由它与格式算出 | 1 | 0 | `0` / `1` |
+| `buff_num` | `uint32_t` | 回灌 buffer 数 | — | — | — |
+
+##### cim_input_tpg_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `tpg_en` | `uint32_t` | 测试图案使能 | 0 | 0 | `0` / `1` |
+| `fps` | `uint32_t` | 图案帧率 | — | — | — |
+
+##### vcon_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `attr_valid` | `int32_t` | 该组属性是否生效 | 1 | 0 | `0` / `1` |
+| `bus_main` | `int32_t` | 主 I2C 总线 | — | — | — |
+| `bus_second` | `int32_t` | 次 I2C 总线 | — | — | — |
+| `poc_map` | `int32_t` | POC 供电映射，取自 DTS | — | — | — |
+| `gpios` | `int32_t[VGPIO_NUM]` | GPIO 序号 | — | — | — |
+| `sensor_err` | `int32_t[SENSOR_ERR_PIN_NUM]` | Sensor err_pin 序号 | — | — | — |
+| `lpwm_chn` | `int32_t[LPWM_CHN_NUM]` | 各路 Sensor 用的 LPWM 通道 | — | — | — |
+| `rx_phy_mode` | `int32_t` | 0=不用 1=D-PHY 2=C-PHY | 0 | 0 | `0` 不用 / `1` D-PHY / `2` C-PHY |
+| `rx_phy_index` | `int32_t` | RX PHY 序号 | — | — | — |
+| `rx_phy_link` | `int32_t` | 0=不用 1=CSI 2=DSI | 0 | 0 | `0` 不用 / `1` CSI / `2` DSI |
+| `tx_phy_mode` | `int32_t` | 这个 vcon 是否用 MIPI 发送（TX）PHY：`0` 不用、`1` 按 CSI、`2` 按 DSI。非 0 时配合 `tx_phy_index` 注册为 TX 侧设备，供旁路（bypass）链路查找 | 0 | 0 | `0` 不用 / `1` CSI / `2` DSI |
+| `tx_phy_index` | `int32_t` | TX PHY 序号 | — | — | — |
+| `tx_phy_link` | `int32_t` | TX PHY link 序号，复合类型用 | — | — | — |
+| `vcon_type` | `int32_t` | 0=独立 1=复合主 2=复合从 | 0 | 0 | `0` 独立 / `1` 复合主 / `2` 复合从 |
+| `vcon_link` | `int32_t` | VCON link 序号，复合类型用 | — | — | — |
+
+##### lpwm_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | 逐通道配置 | — | — | — |
+
+##### lpwm_chn_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `enable` | `uint32_t` | 该通道使能 | 0 | 0 | `0` / `1` |
+| `trigger_source` | `uint32_t` | 触发源选择 | 0 | 0 | `0` / `1` |
+| `trigger_mode` | `uint32_t` | 触发模式 | 0 | 0 | `0` / `1` |
+| `period` | `uint32_t` | 周期 | — | — | — |
+| `offset` | `uint32_t` | 相位偏移 | — | — | — |
+| `duty_time` | `uint32_t` | 脉冲宽度 | — | — | — |
+| `threshold` | `uint32_t` | 缓慢同步的相位误差门限（微秒），取值 0~65535。`0` 表示关闭缓慢同步；非 0 时按 `adjust_step` 逐步把触发相位拉向同步源，**并要求 `offset` 小于 `period`** | 0 | 0 | `0`~`65535`，单位 µs；`0` 关闭缓慢同步 |
+| `adjust_step` | `uint32_t` | 缓慢同步每次调整的步进量，取值 0~15。仅在 `threshold` 非 0 时起作用 | 0 | 0 | `0`~`15` |
+
+#### 扩展属性
+
+##### vin_attr_ex_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `ex_attr_type` | `vin_attr_ex_type_e` | 哪些扩展属性生效 | — | — | — |
+| `cim_static_attr` | `cim_static_attr_t` | CIM 静态属性（水位线中断） | — | — | — |
+| `mipi_ex_attr` | `mipi_attr_ex_t` | MIPI 增强属性 | — | — | — |
+| `fps_ctrl` | `dynamic_fps_t` | 跳帧 | — | — | — |
+| `dynamic_fps_attr` | `lpwm_dynamic_fps_t` | 动态帧率切换 | — | — | — |
+| `ipi_reset` | `uint32_t` | MIPI IPI 复位 | — | — | — |
+| `bypass_enable` | `uint32_t` | bypass 使能 | — | — | — |
+
+#### 通道属性
+
+##### vin_ichn_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `format` | `uint32_t` | 图像格式 | `HW_FORMAT_RAW10` | — | 见 `hb_vpm_data_info.h` 的 `HW_FORMAT_*` |
+| `width` | `uint32_t` | 宽 | — | — | — |
+| `height` | `uint32_t` | 高 | — | — | — |
+
+##### vin_ochn_attr_t
+按 `ochn_id` 索引，`0` 主帧 / `4` ROI / `3` EMB。
+
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `ddr_en` | `uint32_t` | 该通道写 DDR | 0 | 0 | `0` / `1` |
+| `roi_en` | `uint32_t` | ROI 使能 | 0 | 0 | `0` / `1`，`roi_width` ≥ 32 且 4 对齐 |
+| `emb_en` | `uint32_t` | EMB 使能 | 0 | 0 | `0` / `1` |
+| `rawds_en` | `uint32_t` | 2×2 下采样使能 | 0 | 0 | `0` / `1`，仅主帧通道生效 |
+| `pingpong_ring` | `uint32_t` | 底层 buffer 保留模式：`0` 不保留，应用层不归还就暂停输出；`1` 底层自留 2 块轮转，硬件持续出帧。VIN 主帧通常配 `1` | — | — | — |
+| `ochn_attr_type` | `vin_ochn_attr_type_e` | 哪些通道属性生效 | `VIN_BASIC_ATTR` | — | `VIN_BASIC_ATTR` / `VIN_EMB_ATTR` / `VIN_ROI_ATTR` / `VIN_RAWDS_ATTR` |
+| `vin_basic_attr` | `vin_basic_attr_t` | 写 DDR 的基本属性 | — | — | — |
+| `rawds_attr` | `vin_rawds_attr_t` | 下采样属性 | — | — | — |
+| `roi_attr` | `struct vin_roi_attr_s` | 裁剪属性 | — | — | — |
+| `emb_attr` | `vin_emb_attr_t` | EMB 属性 | — | — | — |
+| `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_ochn_attr` 校验这个值，不符直接返回失败 | `0x12345678` | — | 必须等于驱动内部宏 `MAGIC_NUMBER` |
+
+##### vin_basic_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `pack_mode` | `uint32_t` | 写 DDR 的方式 | 1 | 0 | `0` / `1` |
+| `wstride` | `uint32_t` | 行 stride | — | — | — |
+| `vstride` | `uint32_t` | 帧 stride | — | — | — |
+| `format` | `uint32_t` | 写 DDR 的格式 | — | — | — |
+
+##### vin_rawds_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `rawds_mode` | `uint32_t` | 下采样模式 | 0 | 0 | `0` / `1` |
+
+##### vin_roi_attr_s
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `roi_x` | `uint32_t` | 裁剪起点 X | — | — | — |
+| `roi_y` | `uint32_t` | 裁剪起点 Y | — | — | — |
+| `roi_width` | `uint32_t` | 裁剪宽 | — | — | — |
+| `roi_height` | `uint32_t` | 裁剪高 | — | — | — |
+
+##### vin_emb_attr_t
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `embeded_dependence` | `uint32_t` | EMB 是否与图像数据在一起 | 0 | 0 | `0` / `1` |
+| `embeded_width` | `uint32_t` | EMB 数据宽 | — | — | — |
+| `embeded_height` | `uint32_t` | EMB 数据高 | — | — | — |
+
+##### vin_ochn_buff_attr_t
+按 `ochn_id` 索引。
+
+| 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
+| --- | --- | --- | --- | --- | --- |
+| `buffers_num` | `uint32_t` | 该通道 buffer 数量 | 6 | — | 按通路缓冲需求 |
+| `flags` | `int64_t` | 驱动未使用，填 `0` | 0 | 0 | 驱动未使用 |
+### 返回值说明
+接口失败返回**负值**，值为下表的宏取负。下表是走 `hbn_vnode_*` 接口时**实际会返回**的码：
+
+| 错误码 | 宏定义 | 描述 | 常见原因 | 解决方法 |
+| --- | --- | --- | --- | --- |
+| `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针 | 必填参数传了 `NULL` | 检查传入的结构体指针 |
+| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | 属性组合非法 | `cim_isp_flyby` 与 `cim_pym_flyby` 同时为 1；输入源三选一没配对；`vin_ichn_attr.format` 与 Sensor 实际输出不符 | 按本篇的约束说明逐项核对 |
+| `-12` | `HBN_STATUS_FLOW_EXIST` | 同一路重复建流 | 对同一 `hw_id` 重复 `hbn_vflow_create` | 复用已有流，或先 `hbn_vflow_destroy` |
+| `-13` | `HBN_STATUS_FLOW_UNEXIST` | 对不存在的流做操作 | 流已销毁，句柄失效 | 核对句柄的生命周期 |
+| `-20` | `HBN_STATUS_NOT_BINDED` | 建流时绑定失败 | `hbn_vflow_create` 未绑定或绑定顺序不对 | 按「API 调用流程」的顺序建流与绑定 |
+| `-23` | `HBN_STATUS_NOT_SUPPORT` | 该组合不支持 | 对未使能的通道取帧或设属性 | 先打开对应通道开关（`ddr_en` / `roi_en` / `emb_en`） |
+| `-25` | `HBN_STATUS_NOMEM` | 内存申请失败 | 缓冲数量或分辨率超出可用内存 | 调小 `buffers_num` 或分辨率 |
+| `-43` | `HBN_STATUS_NODE_DEQUE_ERROR` | `hbn_vnode_getframe` 取帧失败 | 超时最常见，多半根本没有帧进来 | 查 `cim_stat` 的 `fs_cnt`，往上游查 MIPI 与 Sensor |
+| `-50` | `HBN_STATUS_BIND_NODE_FAIL` | 绑定失败 | 重复绑定；Online 绑定条件不满足（非主帧通道，或 flyby 未置 1） | 核对 `ochn_id` 是否为 `0`、flyby 是否已置 1 |
+| `-786462` | `HBN_STATUS_VIN_OPEN_ICHN_FAIL` | `hw_id` 无效 | 打不开 `/dev/vin<hw_id>_src` | 用 [MIPI RX](#mipi-rx) 里的合法 `hw_id` |
 
 > 宏定义在 `hbn_error.h`。最后一行的 `HBN_STATUS_VIN_*` 是复合码，由模块号左移 16 位拼出，所以数值很大——`-786462` 写成十六进制是 `-0xC001E`，对照时看后者更直观。
+
+## 排障
 
 ### CIM 状态节点
 每个 CIM 在 sysfs 下暴露一组只读节点，`cim_stat` 是接入侧排障的第一入口。节点名取自 DTS 地址，读哪颗 CIM 就换成对应地址：
@@ -1140,12 +1239,11 @@ cat /sys/class/vps/mipi_host0/status/icnt   # 中断错误分类计数
 cat /sys/class/vps/mipi_host0/status/regs   # 寄存器快照
 ```
 
-`status/cfg` 用于确认板上跑的到底是不是你配的那份参数；`status/icnt` 的报错计数正常情况下应全为 0。节点按 host 编号区分，即 `mipi_host<hw_id>`（`hw_id` 合法值见[平台规格](#平台规格)）。
+`status/cfg` 用于确认板上跑的到底是不是你配的那份参数；`status/icnt` 的报错计数正常情况下应全为 0。节点按 host 编号区分，即 `mipi_host<hw_id>`（`hw_id` 合法值见 [MIPI RX](#mipi-rx)）。
 
 `param/` 下是可写的调试开关，常用的有 `irq_cnt`（中断计数阈值，超过后驱动会关闭该路中断以防中断风暴）、`dbg_value`（打开调试日志）、`ipi_overst`。**这些参数会改变驱动的运行行为，不要在生产配置上随意调整。**
 
 ## 相关文档
 - [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api) —— vnode 通用接口与 `vin_attr_t` 字段表
 - [相机接口 - Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api) —— Sensor 侧 `hbn_camera_*` 接口
-- [视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)
-- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp)
+- [视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api) —— `hbn_vflow_*` 建流与绑定接口
