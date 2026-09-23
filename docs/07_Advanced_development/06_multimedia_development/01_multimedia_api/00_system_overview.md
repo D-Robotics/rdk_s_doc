@@ -88,11 +88,11 @@ description: "RDK S100/S600 多媒体系统概述"
 然而，由于硬件资源是有限的，当接入更多路摄像头时，必须通过分时复用的方式进行处理，视频数据必须通过 DDR 进行缓存。
 
 基于数据传输是否依赖 DDR 缓存，硬件加速单元之间的数据交互方式可以分为以下两种模式：
-1. Offline 模式 ( 图中 红色箭头)：数据通过 DDR 完成传输，上游模块将数据写入 DDR，下游模块从 DDR 读取。
-2. Online 模式 ( 图中 绿色箭头)：数据直接从上游模块传递至下游模块，无需读写 DDR，显著提升性能。
+1. Offline 模式 ( 图中 率色箭头)：数据通过 DDR 完成传输，上游模块将数据写入 DDR，下游模块从 DDR 读取。
+2. Online 模式 ( 图中 红色箭头)：数据直接从上游模块传递至下游模块，无需读写 DDR，显著提升性能。
 
 <DocScope products="RDK S100">
-![硬件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_framework.jpeg)
+![硬件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_data_path.svg)
 
 - CIM: 可online输出到ISP0/ISP1(RAW)与PYM0/PYM1(YUV)，也可offline下DDR，之后各模块通过DDR读取使用数据流。
 - ISP: 2个ISP设备，各支持4路online+8路offline输入。
