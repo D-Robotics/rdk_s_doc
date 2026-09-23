@@ -50,21 +50,22 @@ pip3 install -r requirements.txt
 ### 安装交叉编译工具链
 
 交叉编译工具链必须解压安装到 `/opt` 目录，`mk_kernel.sh` 内硬编码的
-`CROSS_COMPILE` 即指向该路径。不同平台的工具链版本如下：
+`CROSS_COMPILE` 即指向该路径。以下命令在宿主机上执行，解压到 `/opt` 需要 `sudo`。
+RDK S100 与 RDK S600 使用的工具链版本不同，请按所用平台执行对应命令。
 
-| 平台 | 工具链 |
-| --- | --- |
-| RDK S100 | `arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu` |
-| RDK S600 | `arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64-none-linux-gnu` |
-
-以 RDK S100 为例下载并安装：
+**RDK S100**
 
 ```bash
 curl -fO http://archive.d-robotics.cc/toolchain/arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
 sudo tar -xvf arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz -C /opt
 ```
 
-RDK S600 将上述命令中的 `11.3.rel1` 替换为 `13.2.Rel1` 即可。
+**RDK S600**
+
+```bash
+curl -fO http://archive.d-robotics.cc/toolchain/arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64-none-linux-gnu.tar.xz
+sudo tar -xvf arm-gnu-toolchain-13.2.Rel1-x86_64-aarch64-none-linux-gnu.tar.xz -C /opt
+```
 
 ## 交叉编译开发环境
 
