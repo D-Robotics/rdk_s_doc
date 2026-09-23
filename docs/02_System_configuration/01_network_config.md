@@ -33,18 +33,18 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 有线网络{#config_ethnet}
 
-### 有线网络配置-NetworkManager 方式
+### 有线网络配置（NetworkManager 方式）
 
 :::note 注意
 
  默认使用 `NetworkManager + Netplan` 管理网络，其它平台请以对应系统文档为准。
 
 <DocScope products="RDK S100">
-  - `RDK S100`根文件系统基于 Ubuntu-22.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
+  - `RDK S100` 根文件系统基于 Ubuntu 22.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
 </DocScope>
 
 <DocScope products="RDK S600">
-  - `RDK S600`根文件系统基于 Ubuntu-24.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
+  - `RDK S600` 根文件系统基于 Ubuntu 24.04 构建，默认不支持采用 ifup/ifdown 这种方式来对网络接口进行启用或停用操作。
 </DocScope>
 
 :::
@@ -108,17 +108,17 @@ nmcli device show eth1
 
 #### S100 操作步骤
 
-1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+1. 进入桌面后点击左下角打开应用列表，选择 `settings` 应用，在跳出来的界面中选择 `Network`。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-show-app.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-2. `Ethernet (eth0)` 和`Ethernet (eth1)`分别对应不同的物理网口配置，配置与实物对应如下:
+2. `Ethernet (eth0)` 和 `Ethernet (eth1)` 分别对应不同的物理网口配置，配置与实物对应如下：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-phy-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-sel-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-3. 以修改`Ethernet (eth1)` 为例,点击修改按钮右侧选项中的齿轮，在跳出来的界面中选择`IPv4`, 选择`Manual`手动配置，在下方`Addresses`栏中写入`IP`地址，掩码和网关。
+3. 以修改 `Ethernet (eth1)` 为例，点击修改按钮右侧选项中的齿轮，在跳出来的界面中选择 `IPv4`，选择 `Manual` 手动配置，在下方 `Addresses` 栏中写入 `IP` 地址、掩码和网关。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_ip.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -126,11 +126,11 @@ nmcli device show eth1
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image_set_static_dns.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-5. 一个网卡配置多个 ip 地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置 ip 地址和步骤3、4一致，完成配置后注意选中`eth1_cfg`出现`√`选项
+5. 一个网卡配置多个 IP 地址，以 `Ethernet (eth1)` 为例，点击右侧的加号，配置 IP 地址和步骤3、4一致，完成配置后注意选中 `eth1_cfg` 出现 `√` 选项
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_netplan.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-若是/etc/netplan/目录下的配置文件中没有网络配置项，则配置界面如下。
+若是 `/etc/netplan/` 目录下的配置文件中没有网络配置项，则配置界面如下。
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/image-sel_nmcli_only.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
@@ -139,17 +139,17 @@ nmcli device show eth1
 
 #### S600 操作步骤
 
-1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+1. 进入桌面后点击左下角打开应用列表，选择 `settings` 应用，在跳出来的界面中选择 `Network`。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-show-app.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-2. `Ethernet (eth0)` 、`Ethernet (eth1)`、`Ethernet (eth2)`和`Ethernet (eth3)`分别对应不同的物理网口配置，配置与实物对应如下:
+2. `Ethernet (eth0)`、`Ethernet (eth1)`、`Ethernet (eth2)` 和 `Ethernet (eth3)` 分别对应不同的物理网口配置，配置与实物对应如下：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-phy-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel-eth.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-3. 以修改`Ethernet (eth1)` 为例,点击修改按钮右侧选项中的齿轮，在跳出来的界面中选择`IPv4`, 选择`Manual`手动配置，在下方`Addresses`栏中写入`IP`地址，掩码和网关。
+3. 以修改 `Ethernet (eth1)` 为例，点击修改按钮右侧选项中的齿轮，在跳出来的界面中选择 `IPv4`，选择 `Manual` 手动配置，在下方 `Addresses` 栏中写入 `IP` 地址、掩码和网关。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_ip.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -157,7 +157,7 @@ nmcli device show eth1
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image_set_static_dns.png" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-5. 一个网卡配置多个 ip 地址，以`Ethernet (eth1)`为例，点击右侧的加号，配置 ip 地址和步骤3、4一致，完成配置后注意选中`eth1_cfg`出现`√`选项
+5. 一个网卡配置多个 IP 地址，以 `Ethernet (eth1)` 为例，点击右侧的加号，配置 IP 地址和步骤3、4一致，完成配置后注意选中 `eth1_cfg` 出现 `√` 选项
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-sel_ok.jpg" alt="修改静态 IP、DNS 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -166,7 +166,7 @@ nmcli device show eth1
 
 ## 无线网络
 
-开发板需安装无线 Wi-Fi 模块，默认运行在 Station 模式下。Soft AP 模式暂不可用，下面介绍 Station 模式的使用方法。
+开发板需安装无线 Wi-Fi 模块，默认运行在 Station 模式下。下面介绍 Station 模式与 Soft AP 模式的使用方法。
 
 ### Station 模式
 
@@ -177,13 +177,13 @@ Station 模式下，开发板作为客户端，接入路由器无线热点进行
 
 - 对于使用 Ubuntu Server 版本系统的用户，可通过命令行完成无线网络配置，步骤如下：
 
-1. 使用`sudo nmcli device wifi rescan`命令扫描热点。如返回如下信息，说明扫描过于频繁，需要稍后再试
+1. 使用 `sudo nmcli device wifi rescan` 命令扫描热点。如返回如下信息，说明扫描过于频繁，需要稍后再试
    ```shell
    root@ubuntu:~# sudo nmcli device wifi rescan
    Error: Scanning not allowed immediately following previous scan.
    ```
-2. 使用`sudo nmcli device wifi list`命令列出扫描到的热点
-3. 使用 `sudo wifi_connect "SSID" "PASSWD"`命令连接热点，返回如下信息，说明网络连接成功
+2. 使用 `sudo nmcli device wifi list` 命令列出扫描到的热点
+3. 使用 `sudo wifi_connect "SSID" "PASSWD"` 命令连接热点，返回如下信息，说明网络连接成功
 
    ```shell
    root@ubuntu:~# sudo wifi_connect "WiFi-Test" "12345678"
@@ -191,7 +191,7 @@ Station 模式下，开发板作为客户端，接入路由器无线热点进行
    ```
 
    :::tip
-   如果连接热点后，返回如下信息，说明热点没有找到，可以执行`sudo nmcli device wifi rescan`命令重新扫描后再次连接
+   如果连接热点后，返回如下信息，说明热点没有找到，可以执行 `sudo nmcli device wifi rescan` 命令重新扫描后再次连接
 
    ```shell
    root@ubuntu:~# sudo wifi_connect "WiFi-Test" "12345678"
@@ -202,9 +202,46 @@ Station 模式下，开发板作为客户端，接入路由器无线热点进行
 
 ### Soft AP 模式
 
+<DocScope products="RDK S600" versions=">= 5.1.1">
+
+S600 5.1.1 及以后版本支持双 Wi-Fi（`wlan0`、`wlan1`），其中 `wlan1` 可作为 AP 热点，`wlan0` 可同时作为 Station 接入其他热点。使用 NetworkManager 的 `nmcli` 即可开启热点，无需安装 hostapd。
+
+#### 开启 AP 热点
+
+以 `wlan1` 开启一个 2.4G AP 热点（SSID 为 `s600-wifi`、密码 `12345678`）为例：
+
+```shell
+sudo nmcli device wifi hotspot ifname wlan1 con-name wifi-hotspot ssid s600-wifi password 12345678 band bg channel 6
+```
+
+- `band bg` 表示 2.4G 频段；如需 5G 热点，把 `band bg channel 6` 改为 `band a channel 36`。
+- 开启后执行 `iw dev wlan1 info`，可看到 `wlan1` 的 type 变为 `AP`；执行 `ifconfig wlan1` 可查看热点地址，NetworkManager 默认给 AP 分配 `10.42.0.1`。
+- 其他设备（手机、PC 或另一块开发板）扫描到该热点后，输入密码即可接入。
+
+#### 关闭 AP 热点并切回 Station
+
+```shell
+sudo nmcli connection down wifi-hotspot
+sudo nmcli device wifi connect "SSID" "密码" ifname wlan1
+```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
 :::tip
 Wi-Fi AP 模式暂不可用，持续更新中。
 :::
+
+</DocScope>
+
+<DocScope products="RDK S600" versions="< 5.1.1">
+
+:::tip
+Wi-Fi AP 模式暂不可用，持续更新中。
+:::
+
+</DocScope>
 
 <!-- 开发板无线网络默认运行在 Station 模式下，如需使用 Soft AP 模式，请按照以下步骤进行配置。
 
@@ -364,9 +401,48 @@ Wi-Fi AP 模式暂不可用，持续更新中。
     wifi_connect "WiFi-Test" "12345678"
     ``` -->
 
+<DocScope products="RDK S600" versions=">= 5.1.1">
+
+### 双 Wi-Fi
+
+S600 5.1.1 及以后版本的无线模块支持两个 Wi-Fi 接口：`wlan0` 与 `wlan1`，两者可同时工作。常见用法有两种：
+
+- **双 Station**：`wlan0`、`wlan1` 各自接入热点；
+- **Station + AP**：`wlan0` 作 Station 接入热点，`wlan1` 作 AP 热点（见 [Soft AP 模式](#soft-ap-模式)）。
+
+查看两个 Wi-Fi 设备：
+
+```shell
+iw dev
+```
+
+#### 双 Station 使用
+
+分别给两个接口连接热点（2.4G 或 5G 均可）：
+
+```shell
+sudo nmcli device wifi connect "TP-LINK_F95A" password "Admin123##" ifname wlan0
+sudo nmcli device wifi connect "TP-LINK_F95A" password "Admin123##" ifname wlan1
+```
+
+确认两个接口都获取到 IP 后，分别执行 `ping -I wlan0 <网关>`、`ping -I wlan1 <网关>` 验证连通性（`<网关>` 换成各自实际获取到的网关 IP）。
+
+#### Station + AP 使用
+
+`wlan0` 作 Station 接入热点，`wlan1` 作 AP 热点：
+
+```shell
+sudo nmcli device wifi connect "TP-LINK_F95A" password "Admin123##" ifname wlan0
+sudo nmcli device wifi hotspot ifname wlan1 con-name wifi-hotspot ssid s600-wifi password 12345678 band bg channel 6
+```
+
+开启后执行 `iw dev wlan0 info`、`iw dev wlan1 info`，可分别看到 `type station` 与 `type AP`，表示 `wlan0` 为 Station、`wlan1` 为 AP。
+
+</DocScope>
+
 ## DNS 服务
 
-DNS（Domain Name Server）进行域名与 IP 地址之间的转换。
+DNS（Domain Name System）进行域名与 IP 地址之间的转换。
 
 RDK OS 的 DNS 由 NetworkManager 统一管理，`/etc/resolv.conf` 由
 NetworkManager 自动生成（文件头为 `# Generated by NetworkManager`），
@@ -425,11 +501,11 @@ Proxy 配置指的是对网络代理进行设置。在网络通信中，代理�
 
 #### S100 操作步骤
 
-与修改静态`IP`类似, 修改`Proxy`配置步骤如下:
+与修改静态 `IP` 类似，修改 `Proxy` 配置步骤如下：
 
-1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+1. 进入桌面后点击左下角打开应用列表，选择 `settings` 应用，在跳出来的界面中选择 `Network`。
 
-2. 下拉选择`Network Proxy`的齿轮进入配置。
+2. 下拉选择 `Network Proxy` 的齿轮进入配置。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s100/image-proxy.jpg" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -443,11 +519,11 @@ Proxy 配置指的是对网络代理进行设置。在网络通信中，代理�
 
 #### S600 操作步骤
 
-与修改静态`IP`类似, 修改`Proxy`配置步骤如下:
+与修改静态 `IP` 类似，修改 `Proxy` 配置步骤如下：
 
-1. 进入桌面后点击左下角打开应用列表，选择`settings`应用，在跳出来的界面中选择`Network`。
+1. 进入桌面后点击左下角打开应用列表，选择 `settings` 应用，在跳出来的界面中选择 `Network`。
 
-2. 选择`Proxy`点击进入配置。
+2. 选择 `Proxy` 点击进入配置。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/gui_network_config/s600/image-proxy.jpg" alt="修改 Proxy 配置示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
