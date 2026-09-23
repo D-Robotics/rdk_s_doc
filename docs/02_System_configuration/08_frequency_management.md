@@ -6,478 +6,667 @@ description: "Thermal 温控、风扇、CPU 频率管理"
 
 # Thermal 和 CPU 频率管理
 
+SoC（System on Chip，系统级芯片）运行时，内部 CPU、BPU（智能计算架构）、MCU（Microcontroller Unit，微控制器）、DDR 等模块会产生热量。为保证可靠性与使用寿命，RDK 平台提供两层机制对温度与频率进行管理：
+
+- **温度监测与热保护（Thermal）**：实时采集 SoC 内温度传感器数值，按温度阈值自动调整风扇转速、降低 CPU 与 BPU 运行频率，温度过高时关机保护。
+- **CPU 频率管理（cpufreq）**：通过 Linux cpufreq 子系统，按负载或固定值调节 CPU 运行频率，在性能与功耗之间取得平衡。
+
+两套机制均通过 sysfs 暴露给用户，可直接查询与配置，无需修改内核或驱动。下文先介绍工作原理，再给出配置方法。
+
 ```mdx-code-block
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 工作原理
+
+Linux Thermal 子系统是内核的温度控制框架，通过"测温—判断—降温"闭环维持芯片温度在安全区间：温度传感器采集温度，经 Thermal Zone 与 Governor 判定后，由 Cooling Device 执行降温动作。CPU 频率调节独立于 Thermal，由 cpufreq 子系统的 Governor 选定 OPP（Operating Performance Points，运行性能点），经时钟协议下发到固件完成变频。Thermal 闭环由三个角色协作完成：
+
+| 角色 | 概念 | 职责 |
+| --- | --- | --- |
+| 测温 | Thermal Zone（温区） | 绑定温度传感器，监控该点温度 |
+| 降温 | Cooling Device（降温设备） | 执行降温动作，包括风扇调速与频率限制 |
+| 判断 | Governor（温控策略） | 依据温度决定降温设备的工作状态 |
+
+### Trip Point 触发机制
+
+每个温区下挂载若干 **Trip Point（触发点）**，即"当温度达到 X 时执行 Y 动作"的规则。随温度从低到高升高，降温动作逐级升级：
+
+```text
+温度升高 → 风扇调速 → CPU/BPU 限频 → hot 警告 → 关机保护
+```
+
+Linux Thermal 框架定义四种触发点类型，对应不同动作：
+
+| 类型 | 含义 | 触发动作 |
+| --- | --- | --- |
+| `active` | 主动散热 | 启动或提升风扇档位 |
+| `passive` | 被动限频 | 降低 CPU 或 BPU 频率 |
+| `hot` | 高温警告 | 系统发出告警 |
+| `critical` | 临界关机 | 系统关机保护 |
+
+温区下的触发点以 `trip_point_N_temp` 形式暴露于 sysfs（`N` 为编号）。**编号顺序与温度高低无必然对应关系**，具体阈值以实际数值为准。修改某触发点的温度值，即调整该规则的触发阈值。
+
+### 温控策略（Governor）
+
+- **`step_wise`（默认）**：系统在每个轮询周期依据温度逐级调整降温档位。温度上升则档位递增，回落则逐级收回。该策略自动且渐进，但会覆盖用户手动设置的风扇档位。
+- **`user_space`**：系统仅通过 uevent 将温度与触发点信息上报至用户态，由用户态程序或手动操作决定档位。若需固定风扇转速，须切换至该策略，否则 `step_wise` 会按温度自动改写设置。
+
+:::info 配置非持久化
+本文所有通过 sysfs 写入的配置仅在本次启动有效，重启后恢复默认。持久化方法见下文「进阶配置」。
+:::
+
 <DocScope products="RDK S100">
 
-## RDK S100
-### 温度传感器
-在 RDK S100 计算平台中有5个温度传感器，用于显示 MCU 域/BPU/MAIN 域的温度，其中 MAIN 域和 MCU 各有两个温度传感器，BPU 有一个温度传感器
+## 温度传感器 {#rdk-s100}
 
-在/sys/class/hwmon/下有 hwmon0目录下包含温度传感器的相关参数
-- temp1_input 是 MAIN 域的第一个温度传感器，temp2_input 是 MAIN 域的第二个温度传感器，
-- temp3_input 是 MCU 域的第一个温度传感器，temp4_input 是 MCU 域的第二个温度传感器，
-- temp5_input 是 BPU 温度传感器。
+S100 内置 PVT（Process-Voltage-Temperature，工艺-电压-温度）监测单元，共 5 个温度传感器，分布于三个域：
 
-温度的精度为0.001摄氏度
+| 域 | 数量 | sysfs label | hwmon 节点 |
+| --- | --- | --- | --- |
+| MAIN | 2 | `CMN_T1`、`CMN_T2` | `temp1_input`、`temp2_input` |
+| MCU | 2 | `MCU_T1`、`MCU_T2` | `temp3_input`、`temp4_input` |
+| BPU | 1 | `BPU_T1` | `temp5_input` |
 
+温度精度为千分之一摄氏度。温度传感器通过 SCMI Sensor 协议上报，由 hwmon 设备 `scmi_sensors` 暴露，位于 `/sys/class/hwmon/hwmon0/`。
+
+:::note 两个 hwmon 设备
+S100 共有 2 个 hwmon 设备：hwmon0 为 `scmi_sensors`（温度传感器），hwmon1 为 `emc2305`（风扇控制器）。读取温度统一使用 hwmon0。
+:::
+
+## 温控配置
+
+S100 注册 5 个温区（`thermal_zone0`~`thermal_zone4`），与 5 个传感器一一对应：
+
+| 温区 | 域 | type | trip 数 |
+| --- | --- | --- | --- |
+| `thermal_zone0` | MAIN | `pvt_cmn_pvtc1_t1` | 4 |
+| `thermal_zone1` | MAIN | `pvt_cmn_pvtc1_t2` | 1 |
+| `thermal_zone2` | MCU | `pvt_mcu_pvtc1_t1` | 1 |
+| `thermal_zone3` | MCU | `pvt_mcu_pvtc1_t2` | 1 |
+| `thermal_zone4` | BPU | `pvt_bpu_pvtc1_t1` | 2 |
+
+主温区 `thermal_zone0` 承担完整的温控链路（风扇调速与 CPU 降频）；`thermal_zone4` 承担 BPU 降频；其余温区仅配置关机保护。S100 使用 `passive` 与 `critical` 两种触发点类型。
+
+### CPU 主温区（thermal_zone0）
+
+| 触发点 | 默认温度 | 类型 | 动作 |
+| --- | --- | --- | --- |
+| `trip_point_0_temp` | 120℃ | critical | 系统关机 |
+| `trip_point_1_temp` | 43℃ | passive | 风扇低速档（2~5） |
+| `trip_point_2_temp` | 65℃ | passive | 风扇高速档（6~10） |
+| `trip_point_3_temp` | 95℃ | passive | CPU 降频 |
+
+### BPU 主温区（thermal_zone4）
+
+| 触发点 | 默认温度 | 类型 | 动作 |
+| --- | --- | --- | --- |
+| `trip_point_0_temp` | 120℃ | critical | 系统关机 |
+| `trip_point_1_temp` | 95℃ | passive | BPU 降频 |
+
+其余温区（`thermal_zone1`、`thermal_zone2`、`thermal_zone3`）仅含 1 个 `critical`（120℃）触发点。
+
+## 降温设备
+
+降温设备（Cooling Device）是 Thermal 框架中执行降温动作的设备抽象。每个降温设备对应 sysfs 下的一个 `cooling_device` 节点，既可以是物理风扇（通过调速降温），也可以是 CPU 或 BPU（通过降低运行频率减少发热）。S100 共有 5 个降温设备（`cooling_device0`~`cooling_device4`），分三类：
+
+| 降温设备 | 数量 | sysfs type | max_state |
+| --- | --- | --- | --- |
+| CPU cluster | 2 | `cpufreq-cpu0` / `cpufreq-cpu4` | 1 |
+| 风扇 | 2 | `emc2305_fan` | 10 |
+| BPU | 1 | `devfreq-*.bpu` | 1 |
+
+`max_state` 为降温设备可用的最高冷却档位。CPU cluster 对应 2 个频点（`max_state=1`），BPU 对应 2 个频点（`max_state=1`），风扇对应 11 档转速（`max_state=10`，0 为关闭）。
+
+:::note 风扇与集群降频
+`thermal_zone0` 的 95℃ passive 触发点触发时，会对两个 cluster 全部 CPU 进行频率限制。BPU 降频作用于 BPU core。风扇在 sysfs 中有 2 个降温设备条目（`cooling_device2` 与 `cooling_device3`，均为 `emc2305_fan`），但二者映射到同一 PWM（Pulse Width Modulation，脉宽调制）通道（pwm1），驱动同一个物理风扇，设置任一个的档位，另一个同步变化。
+:::
+
+## CPU 频率管理
+
+CPU 调频独立于 Thermal，由 Linux cpufreq 子系统管理，相关节点位于 `/sys/devices/system/cpu/cpufreq/policy<N>/`。S100 的 CPU 共 6 个核（Cortex-A78AE），划分为 2 个 cluster，每个 cluster 对应一个 cpufreq policy：
+
+| policy | affected_cpus | 代表核 |
+| --- | --- | --- |
+| `policy0` | 0, 1, 2, 3 | cpu0 |
+| `policy4` | 4, 5 | cpu4 |
+
+两个 cluster 共享频点，支持两个频点：
+
+| 频率 | 典型用途 |
+| --- | --- |
+| 1,500,000 KHz（1.5 GHz） | 最高性能 |
+| 1,125,000 KHz（1.125 GHz） | 低功耗 |
+
+常用 sysfs 字段：
+
+| 文件 | 含义 |
+| --- | --- |
+| `scaling_governor` | 当前调频策略 |
+| `scaling_available_governors` | 内核支持的全部策略 |
+| `scaling_available_frequencies` | CPU 支持的频点列表（单位 KHz） |
+| `scaling_cur_freq` | 当前频率（读取自 cpufreq 缓存） |
+| `cpuinfo_cur_freq` | 当前频率（读取自硬件） |
+| `scaling_driver` | 当前调频驱动 |
+| `scaling_max_freq` / `scaling_min_freq` | 策略允许的最高 / 最低频率 |
+| `scaling_setspeed` | 手动设频，仅在 governor 为 `userspace` 时可用 |
+
+支持的调频策略（Governor）：
+
+| 策略 | 行为 |
+| --- | --- |
+| `performance` | 始终运行于最高频，性能优先（出厂默认） |
+| `powersave` | 始终运行于最低频，节能优先 |
+| `ondemand` | 依据负载动态调频，负载升高则提速 |
+| `conservative` | 类似 `ondemand`，升降频更为平滑 |
+| `schedutil` | 依据负载调频，与内核调度器协同 |
+| `userspace` | 由用户态设置频率，配合 `scaling_setspeed` 使用 |
+
+:::note
+不同芯片型号支持的频点与策略可能不同，以实际 `scaling_available_frequencies` / `scaling_available_governors` 输出为准。
+:::
+
+S100 的频点不由内核设备树定义，而由 SoC 固件经 SCMI（System Control and Management Interface，系统控制与管理接口）性能协议动态下发。cpufreq 驱动名为 `scmi`（scmi-cpufreq），它从固件读取 OPP 并经 SCMI 性能协议下发变频请求，最终由固件配置硬件 PLL（Phase-Locked Loop，锁相环）完成变频。
+
+:::note 默认策略
+S100 出厂默认调频策略为 `performance`，即开机后两个 cluster 全部运行在 1.5 GHz 最高频。需降低功耗时可切换其他策略，如 `ondemand` 在系统空闲时自动降至 1.125 GHz。
+:::
+
+## 配置方法
+
+### 查看温度
+
+```bash
+cat /sys/class/hwmon/hwmon0/temp1_input
 ```
-root@ubuntu:~# cat /sys/class/hwmon/hwmon0/temp1_input
-46837
-root@ubuntu:~#
-```
-### Thermal 机制
-Linux Thermal 是 Linux 系统下温度控制相关的模块，主要用来控制系统运行过程中芯片产生的热量，使芯片温度和设备外壳温度维持在一个安全、舒适的范围。
 
-要想达到合理控制设备温度，我们需要了解以下三个模块：
+预期输出（示例）：
 
-  - 获取温度的设备：在 Thermal 框架中被抽象为 Thermal Zone Device，RDK S100上有5个 thermal zone，分别是 thermal_zone0~thermal_zone4，分别绑定5个温度传感器；
-  - 进行降温的设备：在 Thermal 框架中被抽象为 Thermal Cooling Device，有 CPU、BPU 和风扇；
-    - CPU/BPU 等设备通过调频来进行降温；
-    - 风扇则可以控制转速来进行降温；
-  - 控制温度策略：在 Thermal 框架中被抽象为 Thermal Governor;
-
-以上模块的信息和控制都可以在 `/sys/class/thermal` 目录下获取。
-
-#### Thermal Zone 简介
-获取某一个 thermal_zone 的信息，以 thermal_zone0为例，示例命令如下：
-```shell
-root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/type
-pvt_cmn_pvtc1_t1
+```text
+50598
 ```
 
-获取某一个 thermal_zone 的当前的策略，以 thermal_zone0为例，示例命令如下：
-```shell
-root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/policy
-step_wise
+单位 0.001℃，即 50.6℃。查看传感器标签：
+
+```bash
+cat /sys/class/hwmon/hwmon0/temp1_label
 ```
 
-获取某一个 thermal_zone 支持的策略，以 thermal_zone0为例，示例命令如下：
-```shell
-root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/available_policies
-user_space step_wise
+预期输出：
+
+```text
+CMN_T1
 ```
-可看到 thermal 支持的策略有：`user_space`和`step_wise`
-- `user_space`： 是通过 uevent 将温区当前温度，温控触发点等信息上报到用户空间，由用户空间软件制定温控的策略。
 
-- `step_wise`： 是每个轮询周期逐级提高冷却状态，是一种相对温和的温控策略
+查看 SoC 整体状态（温度、电压等，工具位于 `/usr/hobot/bin/hrut_somstatus`）：
 
-具体选择哪种策略客户可以根据产品自行选择。可在编译的时候指定或者通过 sysfs 动态切换。
-例如：动态切换 thermal_zone0的策略为`user_space`模式
-```shell
+```bash
+sudo hrut_somstatus
+```
+
+### 查看与切换温控策略
+
+```bash
+cat /sys/class/thermal/thermal_zone0/policy # step_wise
+cat /sys/class/thermal/thermal_zone0/available_policies # user_space step_wise
+```
+
+切换为用户空间策略：
+
+```bash
 echo user_space > /sys/class/thermal/thermal_zone0/policy
 ```
 
-#### thermal_zone0简介
-在 thermal_zone0中有4个 trip_point，
-- trip_point_0_temp：关机温度，默认设置为120度
-- trip_point_1_temp：用于控制风扇转速，默认为43度，风扇档位范围2~5，表示超过43度，风扇将从关闭状态调整为2档，最高可提升到5档。
-- trip_point_2_temp：用于控制风扇转速，默认为65度，风扇档位范围6~10，表示超过65度，风扇将调整到6档，最高可提升到10档转速。
-- trip_point_3_temp：用于控制 CPU Acore 频率，默认为95度，表示超过95度，CPU Acore 会降频。
-可通过 sysfs 查看相应的温度设置
-```shell
-root@ubuntu:~# cat /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp
-120000
-```
-若想调整相应的温度，如85度开始 CPU 调频，可通过如下命令：
-```shell
-echo 85000 > /sys/devices/virtual/thermal/thermal_zone0/trip_point_3_temp
+### 调整温度阈值
+
+以"CPU 主温区 85℃ 开始降频"为例，将降频触发点改为 85℃（`thermal_zone0` 的降频 trip 为 `trip_point_3`）：
+
+```bash
+echo 85000 > /sys/class/thermal/thermal_zone0/trip_point_3_temp
 ```
 
-#### thermal_zone1/2/3简介
-在 thermal_zone1/2/3中有1个 trip_point，都表示的是关机温度，默认为120度
-
-在 thermal_zone4中有两个 trip_point,其中
-- trip_point_0_temp 为关机温度，默认为120度。
-- trip_point_1_temp 为 BPU 的调频温度，默认为95度
-
-例如想要结温到85摄氏度，BPU 开始调频：
-```shell
-echo 85000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_1_temp
-```
-
-如果想要调整关机温度为105摄氏度， 可通过修改所有 thermal_zone 的 trip_point_0_temp 来实现
-```shell
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone0/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone1/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone2/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone3/trip_point_0_temp
-echo 105000 > /sys/devices/virtual/thermal/thermal_zone4/trip_point_0_temp
-```
-
-:::info
-以上设置只在当前启动有效，<ins>重启后</ins>需要**重新**设置。
+:::warning 阈值调整风险
+调高 critical（关机）温度可能损坏硬件，调低 passive（降频）温度会降低性能。请结合产品散热条件谨慎设置。
 :::
 
-#### 降温设备
-在 RDK S100中一共有四个 cooling(降温)设备：
+### 固定风扇档位
 
-- cooling_device0: cpu cluster 0， 通过调整频率控制温度
-- cooling_device1: cpu cluster 1， 通过调整频率控制温度
-- cooling_device2: emc2305 fan，通过调整风扇转速档位来控制温度，档位从0~10，0表示关闭，10表示风扇满转速。
-- cooling_device3: bpu， 通过调整频率控制温度
+风扇档位范围 0~10，0 为关闭，10 为满转速。固定档位须先将 `thermal_zone0` 切换为 `user_space` 策略，再设置档位；否则 `step_wise` 会按温度自动改回：
 
-其中，cooling 设备 CPU 和风扇与 thermal_zone0关联，cooling 设备 BPU 与 thermal_zone4关联，thermal_zone1/2/3没有绑定 cooling 设备
+```bash
+# 查看风扇降温设备与当前档位
+cat /sys/class/thermal/cooling_device2/type          # emc2305_fan
+cat /sys/class/thermal/cooling_device2/max_state     # 10
+cat /sys/class/thermal/cooling_device2/cur_state
 
-目前默认的策略用的是`step_wise`。
-
-#### 风扇调节
-RDK S100开发板上的 emc2305风扇控制器，可以通过设备节点获取设备基本信息及控制转速：
-1. 获取降温设备信息：
-    ```shell
-    root@ubuntu:~# cat /sys/class/thermal/cooling_device2/type
-    emc2305_fan
-    ```
-2. 获取可配置的风扇档位：
-    ```shell
-    root@ubuntu:~# cat /sys/class/thermal/cooling_device2/max_state
-    10
-    ```
-3. 获取当前风扇档位
-   ```shell
-   root@ubuntu:~# cat /sys/class/thermal/cooling_device2/cur_state
-   5
-   ```
-4. 配置 thermal_zone0的策略为`user_space`：
-    ```
-    echo user_space > /sys/class/thermal/thermal_zone0/policy
-    ```
-5. 配置当前风扇档位为10：
-   ```shell
-   root@ubuntu:~# echo 10 > /sys/class/thermal/cooling_device2/cur_state
-   ```
-
-:::info
-**注意**：当 thermal_zone0的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone-简介)章节，将 thermal_zone0的策略改为`user_space`
-:::
-
-### CPU 频率管理
-
-在 Linux 内核中，自带了 cpufreq 子系统用来控制 cpu 的频率和频率控制策略。
-
-进入目录`/sys/devices/system/cpu/cpufreq/policy0`，`ls` 一下，会看到目录中有如下文件：
-
-```shell
-affected_cpus						# 当前控制影响的CPU核(没有显示处于offline状态的cpu)
-cpuinfo_cur_freq					# 当前CPU频率(单位: KHz）
-cpuinfo_max_freq					# 当前调频策略下CPU可用的最高频率(单位: KHz）
-cpuinfo_min_freq					# 当前调频策略下CPU可用的最低频率(单位: KHz）
-cpuinfo_transition_latency			# 处理器切换频率所需要的时间(单位:ns)
-related_cpus						# 该控制策略影响到哪些CPU核(包括了online+offline的所有cpu)
-scaling_available_frequencies		# CPU支持的主频率列表(单位: KHz）
-scaling_available_governors			# 当前内核中支持的所有 governor(调频)类型
-scaling_cur_freq					# 保存着 cpufreq 模块缓存的当前 CPU 频率，不会对 CPU 硬件寄存器进行检查。
-scaling_driver						# 当前使用的调频驱动
-scaling_governor					# governor(调频)策略
-scaling_max_freq					# 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
-scaling_min_freq					# 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
-scaling_setspeed					# 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
+# 将 CPU 主温区切换为用户空间策略，再设为满转速
+echo user_space > /sys/class/thermal/thermal_zone0/policy
+echo 10 > /sys/class/thermal/cooling_device2/cur_state
 ```
 
-目前支持的频率包括
-```shell
+:::note
+`cooling_device2` 与 `cooling_device3` 同为 `emc2305_fan` 且驱动同一物理风扇，可任选其一设置档位，另一个同步变化。
+:::
+
+### 查看 CPU 频点与当前频率
+
+```bash
+# 支持的频点列表（单位 KHz）
 cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies
-1500000 2000000
+# 当前频率（读取自 cpufreq 缓存）
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq
+# 当前调频驱动
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver
+# 当前调频策略
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
 ```
 
-注：支持的频点可能在不同类型的芯片上有所差异。
-RDK S100系统使用的 Linux 内核支持以下种类的调频策略:
+### 切换 CPU 调频策略
 
-- performance（性能）：以最高频率执行，即硬件所支持的最高频（最高性能）。
-- ondemand：按照负载调整频率
-- userspace：根据用户的设置频率
-- powersave：以最低频率执行
-- schedutil：按照负载调整频率，它是与 CPU 调度器结合来使用
-- conservative：类似 Ondemand，不过频率调节的会平滑一下，不会有忽然调整为最大值又忽然调整为最小值的现象
-
-用户可以通过控制目录`/sys/devices/system/cpu/cpu0/cpufreq/`下的对应设置来控制 CPU 的调频策略。
-
-例如让 CPU 运行在性能模式：
-
-```shell
-echo performance >/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+```bash
+echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 ```
 
-或者控制 CPU 运行在一个固定的频率（1.5GHz）：
+:::note 策略作用范围
+对 cpu0 切换 governor 时，实际作用于 `policy0` 覆盖的全部 CPU（`affected_cpus`）。如需对 cluster1 调整，操作 cpu4 的 cpufreq 目录即可。
+:::
 
-```shell
-echo userspace >/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-echo 1500000 >/sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
+### 固定 CPU 频率
+
+先切换为 `userspace` 策略，再设置目标频率：
+
+```bash
+echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo 1125000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 ```
 
-可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态
+## 验证
+
+```bash
+# 输出应与上述所设值一致
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq
+cat /sys/class/thermal/thermal_zone0/trip_point_3_temp
+```
+
+预期输出（示例）：
+
+```text
+userspace
+1125000
+85000
+```
+
+## 进阶配置
+
+### 持久化配置
+
+上述 sysfs 修改仅在本次启动有效，重启后恢复默认。需持久化时，将配置命令写入 systemd 服务或 `/etc/rc.local`，开机自动执行，参见[开机自启动配置](./06_self_start.md)。
+
+### 调整关机温度
+
+如需将关机温度从 120℃ 调整为 105℃，需修改所有温区的 critical 触发点。S100 所有温区的关机 trip 均为 `trip_point_0`：
+
+```bash
+for z in 0 1 2 3 4; do
+  echo 105000 > /sys/class/thermal/thermal_zone${z}/trip_point_0_temp
+done
+```
+
+:::warning 关机温度为硬件安全兜底
+调高关机温度有损坏硬件风险。建议仅在充分评估散热能力后调整，且不低于厂商建议值。
+:::
+
+## 常见问题
+
+### 修改 trip 温度后重启失效
+
+**原因**：sysfs 修改仅存于运行时内存，不落盘，重启后恢复默认。
+
+**解决**：将配置命令写入开机自启动脚本，参见上文「进阶配置 > 持久化配置」。
+
+### 固定风扇档位后被自动改回
+
+**原因**：对应温区仍为 `step_wise` 策略，Governor 按温度自动调节风扇，覆盖手动设置。
+
+**解决**：将主温区 `thermal_zone0` 切换为 `user_space` 后再设置档位。
+
+### 切换 governor 后 CPU 频率未变化
+
+**原因**：目标 CPU 处于 offline，或 policy 未覆盖该核。
+
+**解决**：先确认 CPU 在线（`cat /sys/devices/system/cpu/cpu0/online`），并检查 `affected_cpus` 是否包含目标核。
+
+### CPU 无法固定至指定频率
+
+**原因**：`scaling_setspeed` 仅在 governor 为 `userspace` 时可用。
+
+**解决**：先执行 `echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`，再向 `scaling_setspeed` 写入目标频率。
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-## RDK S600
-### 温度传感器
-在 RDK S600 计算平台中有19个温度传感器，用于显示 BPU/CPU/DDR 的温度，其中 BPU 有8个温度传感器，CPU 有7个温度传感器，DDR 有4个温度传感器。
+## 温度传感器 {#rdk-s600}
 
-在/sys/class/hwmon/下有 hwmon1目录下包含温度传感器的相关参数
-- temp1_input 到 temp7_input 是 CPU 的温度传感器，对应的 label 为 CMN0-TS[0-6]
-- temp8_input 到 temp11_input 是 DDR 的温度传感器，对应的 label 为 DDR[0-3]-TS0
-- temp12_input 到 temp19_input 是 BPU 的温度传感器，对应的 label 为 BPU[0-3]-TS0[0-1]
+S600 内置 PVT（Process-Voltage-Temperature，工艺-电压-温度）监测单元，共 19 个温度传感器，覆盖 CPU、DDR、BPU 三个域。每个传感器可通过 `_label` 节点反查归属：
 
-温度的精度为千分之一摄氏度，范围为-40~125摄氏度
+| 域 | 数量 | sysfs label | hwmon 节点 |
+| --- | --- | --- | --- |
+| CPU | 7 | `CMN0-TS0` ~ `CMN0-TS6` | `temp1_input` ~ `temp7_input` |
+| DDR | 4 | `DDR0-TS0` ~ `DDR3-TS0` | `temp8_input` ~ `temp11_input` |
+| BPU | 8 | `BPU0-TS00` ~ `BPU3-TS01` | `temp12_input` ~ `temp19_input` |
 
+温度精度为千分之一摄氏度，量程 -40~125℃。所有 PVT 温度传感器统一通过 hwmon 子系统上报，位于 `/sys/class/hwmon/hwmon1/`。
+
+:::note 四个 hwmon 设备
+S600 共有 4 个 hwmon 设备：hwmon0 为 `emc2305`（风扇控制器），hwmon1 为 `pvt_hwmon`（温度传感器），hwmon2 与 hwmon3 为以太网 PHY（Physical Layer，物理层）。读取温度统一使用 hwmon1。
+:::
+
+## 温控配置
+
+S600 注册 19 个温区（`thermal_zone0`~`thermal_zone18`），与 19 个传感器一一对应，按域分组。每个域设有一个主控温区挂载风扇与限频规则，其余温区仅配置关机保护：
+
+| 域 | 温区范围 | 主控温区 | 主控温区 trip 数 |
+| --- | --- | --- | --- |
+| CPU | zone0~6 | `thermal_zone2` | 5 |
+| DDR | zone7~10 | —（无降温设备） | 各 2 |
+| BPU | zone11~18 | `thermal_zone16` | 5 |
+
+### CPU 主温区（thermal_zone2）
+
+| 触发点 | 默认温度 | 类型 | 动作 |
+| --- | --- | --- | --- |
+| `trip_point_0_temp` | 45℃ | active | 风扇低速档（2~5） |
+| `trip_point_1_temp` | 65℃ | active | 风扇高速档（6~10） |
+| `trip_point_2_temp` | 95℃ | passive | CPU 限频 |
+| `trip_point_3_temp` | 110℃ | hot | 高温警告 |
+| `trip_point_4_temp` | 115℃ | critical | 系统关机 |
+
+其余 CPU 温区（zone0/1/3/4/5/6）仅含 1 个 `critical`（115℃）触发点。
+
+### DDR 温区（thermal_zone7~10）
+
+每个 DDR 温区含 2 个触发点：
+
+| 触发点 | 默认温度 | 类型 | 动作 |
+| --- | --- | --- | --- |
+| `trip_point_0_temp` | 110℃ | hot | 高温警告 |
+| `trip_point_1_temp` | 115℃ | critical | 系统关机 |
+
+### BPU 主温区（thermal_zone16）
+
+| 触发点 | 默认温度 | 类型 | 动作 |
+| --- | --- | --- | --- |
+| `trip_point_0_temp` | 45℃ | active | 风扇低速档（2~5） |
+| `trip_point_1_temp` | 65℃ | active | 风扇高速档（6~10） |
+| `trip_point_2_temp` | 95℃ | passive | BPU 限频 |
+| `trip_point_3_temp` | 110℃ | hot | 高温警告 |
+| `trip_point_4_temp` | 115℃ | critical | 系统关机 |
+
+其余 BPU 温区（zone11~15、17、18）仅含 1 个 `critical`（115℃）触发点。
+
+## 降温设备
+
+降温设备（Cooling Device）是 Thermal 框架中执行降温动作的设备抽象。每个降温设备对应 sysfs 下的一个 `cooling_device` 节点，既可以是物理风扇（通过调速降温），也可以是 CPU 或 BPU（通过降低运行频率减少发热）。S600 共有 11 个降温设备（`cooling_device0`~`cooling_device10`），分三类，其中风扇类为 2 个 sysfs 条目，对应同一物理风扇（详见下文）：
+
+| 降温设备 | 数量 | sysfs type | max_state |
+| --- | --- | --- | --- |
+| CPU cluster | 5 | `cpufreq-cpu0` / `cpu2` / `cpu6` / `cpu10` / `cpu14` | 2 |
+| 风扇 | 2 | `emc2305_fan` | 10 |
+| BPU core | 4 | `devfreq-*.bpu` | 1 |
+
+`max_state` 为降温设备可用的最高冷却档位。CPU cluster 对应 3 个频点（`max_state=2`），BPU 对应 2 个频点（`max_state=1`），风扇对应 11 档转速（`max_state=10`，0 为关闭）。
+
+:::note 风扇与集群降频
+风扇在 sysfs 中有 2 个降温设备条目（`cooling_device5` 与 `cooling_device6`，均为 `emc2305_fan`），二者映射到同一 PWM（Pulse Width Modulation，脉宽调制）通道（pwm1），驱动同一个物理风扇，设置任一个另一个同步变化。
+
+该风扇同时被 CPU 主温区（`thermal_zone2`）与 BPU 主温区（`thermal_zone16`）的 active 触发点引用，任一域温度升高都会触发风扇提速。
+
+CPU 限频时对 5 个 cluster 各选一个代表核限频，同一 cluster 内 CPU 共享 OPP 表，整个 cluster 随之降频。BPU 降频同理作用于 4 个 BPU core。
+:::
+
+## CPU 频率管理
+
+CPU 调频独立于 Thermal，由 Linux cpufreq 子系统管理，相关节点位于 `/sys/devices/system/cpu/cpufreq/policy<N>/`。S600 的 CPU 共 18 个核，划分为 5 个 cluster，每个 cluster 对应一个 cpufreq policy，共享一张 OPP 表，支持三个频点：
+
+| 频率 | 典型用途 |
+| --- | --- |
+| 2,100,000 KHz（2.1 GHz） | 最高性能 |
+| 1,050,000 KHz（1.05 GHz） | 平衡 |
+| 525,000 KHz（525 MHz） | 低功耗 |
+
+5 个 policy 与 cluster 的对应关系：
+
+| policy | affected_cpus | 代表核 |
+| --- | --- | --- |
+| `policy0` | 0, 1 | cpu0 |
+| `policy2` | 2, 3, 4, 5 | cpu2 |
+| `policy6` | 6, 7, 8, 9 | cpu6 |
+| `policy10` | 10, 11, 12, 13 | cpu10 |
+| `policy14` | 14, 15, 16, 17 | cpu14 |
+
+常用 sysfs 字段：
+
+| 文件 | 含义 |
+| --- | --- |
+| `scaling_governor` | 当前调频策略 |
+| `scaling_available_governors` | 内核支持的全部策略 |
+| `scaling_available_frequencies` | CPU 支持的频点列表（单位 KHz） |
+| `scaling_cur_freq` | 当前频率（读取自 cpufreq 缓存） |
+| `cpuinfo_cur_freq` | 当前频率（读取自硬件） |
+| `scaling_driver` | 当前调频驱动 |
+| `scaling_max_freq` / `scaling_min_freq` | 策略允许的最高 / 最低频率 |
+| `scaling_setspeed` | 手动设频，仅在 governor 为 `userspace` 时可用 |
+
+支持的调频策略（Governor）：
+
+| 策略 | 行为 |
+| --- | --- |
+| `performance` | 始终运行于最高频，性能优先（出厂默认） |
+| `powersave` | 始终运行于最低频，节能优先 |
+| `ondemand` | 依据负载动态调频，负载升高则提速 |
+| `conservative` | 类似 `ondemand`，升降频更为平滑 |
+| `schedutil` | 依据负载调频，与内核调度器协同 |
+| `userspace` | 由用户态设置频率，配合 `scaling_setspeed` 使用 |
+
+:::note
+不同芯片型号支持的频点与策略可能不同，以实际 `scaling_available_frequencies` / `scaling_available_governors` 输出为准。
+:::
+
+cpufreq 驱动名为 `cpufreq-dt`，从设备树读取 OPP 表，经 SCMI（System Control and Management Interface，系统控制与管理接口）时钟协议下发到安全固件，由安全固件配置硬件 PLL（Phase-Locked Loop，锁相环）完成变频。
+
+:::note 默认策略
+S600 出厂默认调频策略为 `performance`，即开机后 5 个 cluster 全部运行在 2.1 GHz 最高频。需降低功耗时可切换其他策略，如 `ondemand` 在系统空闲时自动降至 525 MHz。
+:::
+
+## 配置方法
+
+### 查看温度
+
+```bash
+cat /sys/class/hwmon/hwmon1/temp1_input
 ```
-root@ubuntu:~# cat /sys/class/hwmon/hwmon1/temp1_label
+
+预期输出（示例）：
+
+```text
+56339
+```
+
+单位 0.001℃，即 56.3℃。查看传感器标签：
+
+```bash
+cat /sys/class/hwmon/hwmon1/temp1_label
+```
+
+预期输出：
+
+```text
 CMN0-TS0
-root@ubuntu:~# cat /sys/class/hwmon/hwmon1/temp1_input
-45129
-```
-以上是 CPU 第一个温度传感器的示例，名字为 'CMN0-TS0'，温度为 45.129 摄氏度
-
-### Thermal 机制
-Linux Thermal 是 Linux 系统下温度控制相关的模块，主要用来控制系统运行过程中芯片产生的热量，使芯片温度和设备外壳温度维持在一个安全、舒适的范围。
-
-要想达到合理控制设备温度，我们需要了解以下三个模块：
-
-  - 获取温度的设备：在 Thermal 框架中被抽象为 Thermal Zone Device，RDK S600上有19个 thermal zone，分别是 thermal_zone0~thermal_zone18，分别绑定19个温度传感器；
-  - 进行降温的设备：在 Thermal 框架中被抽象为 Thermal Cooling Device，有 CPU、BPU 和风扇；
-    - CPU/BPU 等设备通过调频来进行降温；
-    - 风扇则可以控制转速来进行降温；
-  - 控制温度策略：在 Thermal 框架中被抽象为 Thermal Governor;
-
-以上模块的信息和控制都可以在 `/sys/class/thermal` 目录下获取。
-
-#### Thermal Zone 简介
-获取某一个 thermal_zone 的信息，以 thermal_zone0为例，示例命令如下：
-```shell
-root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/type
-pvt_cmn_pvtc1_t1
 ```
 
-获取某一个 thermal_zone 的当前的策略，以 thermal_zone0为例，示例命令如下：
-```shell
-root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/policy
-step_wise
+查看 SoC 整体状态（温度、电压等，工具位于 `/usr/hobot/bin/hrut_somstatus`）：
+
+```bash
+sudo hrut_somstatus
 ```
 
-获取某一个 thermal_zone 支持的策略，以 thermal_zone0为例，示例命令如下：
-```shell
-root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/available_policies
-user_space step_wise
-```
-可看到 thermal 支持的策略有：`user_space`和`step_wise`
-- `user_space`： 是通过 uevent 将温区当前温度，温控触发点等信息上报到用户空间，由用户空间软件制定温控的策略。
+### 查看与切换温控策略
 
-- `step_wise`： 是每个轮询周期逐级提高冷却状态，是一种相对温和的温控策略
-
-具体选择哪种策略客户可以根据产品自行选择。可在编译的时候指定或者通过 sysfs 动态切换。
-例如：动态切换 thermal_zone0的策略为`user_space`模式
-```shell
-echo user_space > /sys/class/thermal/thermal_zone0/policy
+```bash
+cat /sys/class/thermal/thermal_zone2/policy # step_wise
+cat /sys/class/thermal/thermal_zone2/available_policies # user_space step_wise
 ```
 
-#### CPU thermal_zone 简介
+切换为用户空间策略：
 
-CPU thermal_zone 包含 thermal_zone0到 thermal_zone6
-
-在 thermal_zone2中有5个 trip_point，
-- trip_point_0_temp：用于控制风扇转速，默认为45度，风扇档位范围2~5，表示超过45度，风扇将从关闭状态调整为2档，最高可提升到5档。
-- trip_point_1_temp：用于控制风扇转速，默认为65度，风扇档位范围6~10，表示超过65度，风扇将调整到6档，最高可提升到10档转速。
-- trip_point_2_temp：用于控制 CPU Acore 频率，默认为95度，表示超过95度，CPU Acore 会降频。
-- trip_point_3_temp：hot 温度，默认设置为110度，表示超过110度，系统发出 hot 警告。
-- trip_point_4_temp：关机温度，默认设置为115度，表示超过115度，系统将关机。
-
-可通过 sysfs 查看相应的温度设置
-```shell
-root@ubuntu:~# cat /sys/class/thermal/thermal_zone2/trip_point_0_temp
-45000
+```bash
+echo user_space > /sys/class/thermal/thermal_zone2/policy
 ```
-若想调整相应的温度，如85度开始 CPU 调频，可通过如下命令：
-```shell
+
+### 调整温度阈值
+
+以"CPU 主温区 85℃ 开始降频"为例，将降频触发点改为 85℃（`thermal_zone2` 的降频 trip 为 `trip_point_2`）：
+
+```bash
 echo 85000 > /sys/class/thermal/thermal_zone2/trip_point_2_temp
 ```
 
-其他 thermal_zone 中有1个 trip_point，都表示的是关机温度，默认为115度
-
-#### DDR thermal_zone 简介
-
-DDR thermal_zone 包含 thermal_zone7到 thermal_zone10
-
-thermal_zone 中有2个 trip_point，
-- trip_point_0_temp：hot 温度，默认设置为110度，表示超过110度，系统发出 hot 警告。
-- trip_point_1_temp：关机温度，默认设置为115度，表示超过115度，系统将关机。
-
-#### BPU thermal_zone 简介
-
-BPU thermal_zone 包含 thermal_zone11到 thermal_zone18
-
-在 thermal_zone16 中有 5 个 trip_point，其中
-- trip_point_0_temp：用于控制风扇转速，默认为45度，风扇档位范围2~5，表示超过45度，风扇将从关闭状态调整为2档，最高可提升到5档。
-- trip_point_1_temp：用于控制风扇转速，默认为65度，风扇档位范围6~10，表示超过65度，风扇将调整到6档，最高可提升到10档转速。
-- trip_point_2_temp：用于控制 BPU 频率，默认为95度，表示超过95度，BPU 会降频。
-- trip_point_3_temp：hot 温度，默认设置为110度，表示超过110度，系统发出 hot 警告。
-- trip_point_4_temp：关机温度，默认设置为115度，表示超过115度，系统将关机。
-
-例如想要结温到85摄氏度，BPU 开始调频：
-```shell
-echo 85000 > /sys/class/thermal/thermal_zone16/trip_point_2_temp
-```
-
-其他 thermal_zone 中有1个 trip_point，都表示的是关机温度，默认为115度
-
-如果想要调整关机温度为105摄氏度， 可通过修改所有 thermal_zone 的 trip_point_0_temp 来实现
-```shell
-echo 105000 > /sys/class/thermal/thermal_zone0/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone1/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone2/trip_point_4_temp
-echo 105000 > /sys/class/thermal/thermal_zone3/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone4/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone5/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone6/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone7/trip_point_1_temp
-echo 105000 > /sys/class/thermal/thermal_zone8/trip_point_1_temp
-echo 105000 > /sys/class/thermal/thermal_zone9/trip_point_1_temp
-echo 105000 > /sys/class/thermal/thermal_zone10/trip_point_1_temp
-echo 105000 > /sys/class/thermal/thermal_zone11/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone12/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone13/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone14/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone15/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone16/trip_point_4_temp
-echo 105000 > /sys/class/thermal/thermal_zone17/trip_point_0_temp
-echo 105000 > /sys/class/thermal/thermal_zone18/trip_point_0_temp
-```
-
-:::info
-以上设置只在当前启动有效，<ins>重启后</ins>需要**重新**设置。
+:::warning 阈值调整风险
+调高 critical（关机）温度可能损坏硬件，调低 passive（降频）温度会降低性能。请结合产品散热条件谨慎设置。
 :::
 
-#### 降温设备
-在 RDK S600 中一共有 11 个 cooling（降温）设备：
+### 固定风扇档位
 
-- cooling_device0~4：cpufreq，对应 cpufreq-cpu0/2/6/10/14，通过调整 CPU 频率控制温度；
-- cooling_device5~6：emc2305 fan，通过调整风扇转速档位来控制温度，档位从 0~10，0 表示关闭，10 表示风扇满转速；
-- cooling_device7~10：devfreq，对应 28108000/29108000/2a108000/2b108000.bpu，通过调整 BPU 频率控制温度。
+风扇档位范围 0~10，0 为关闭，10 为满转速。S600 的风扇同时受 `thermal_zone2` 与 `thermal_zone16` 两个温区控制，固定档位时**两个温区均须切换为 `user_space` 策略**，仅切换其一仍会被另一温区按温度改回：
 
-目前默认的策略用的是 `step_wise`。
+```bash
+# 查看风扇降温设备与当前档位
+cat /sys/class/thermal/cooling_device5/type          # emc2305_fan
+cat /sys/class/thermal/cooling_device5/max_state     # 10
+cat /sys/class/thermal/cooling_device5/cur_state
 
-#### 风扇调节
-RDK S600开发板上的 emc2305风扇控制器，可以通过设备节点获取设备基本信息及控制转速：
-1. 获取降温设备信息：
-    ```shell
-    root@ubuntu:~# cat /sys/class/thermal/cooling_device5/type
-    emc2305_fan
-    ```
-2. 获取可配置的风扇档位：
-    ```shell
-    root@ubuntu:~# cat /sys/class/thermal/cooling_device5/max_state
-    10
-    ```
-3. 获取当前风扇档位
-   ```shell
-   root@ubuntu:~# cat /sys/class/thermal/cooling_device5/cur_state
-   5
-   ```
-4. 配置 thermal_zone2的策略为`user_space`：
-    ```
-    # thermal_zone2和thermal_zone16会通过控制风扇
-    echo user_space > /sys/class/thermal/thermal_zone2/policy
-    echo user_space > /sys/class/thermal/thermal_zone16/policy
-    ```
-5. 配置当前风扇档位为10：
-   ```shell
-   root@ubuntu:~# echo 10 > /sys/class/thermal/cooling_device5/cur_state
-   ```
-
-:::info
-**注意**：当 thermal_zone2或 thermal_zone16的策略为`step_wise`时，用户配置的风扇档位会被系统自动根据当前温度进行调节。如果客户需要将风扇固定为特定档位，请参考[Thermal Zone](#thermal-zone-简介)章节，将 thermal_zone2和 thermal_zone16的策略改为`user_space`
-:::
-
-### CPU 频率管理
-
-在 Linux 内核中，自带了 cpufreq 子系统用来控制 cpu 的频率和频率控制策略。
-
-进入目录`/sys/devices/system/cpu/cpufreq/policy0`，`ls` 一下，会看到目录中有如下文件：
-
-```shell
-affected_cpus						# 当前控制影响的CPU核(没有显示处于offline状态的cpu)
-cpuinfo_cur_freq					# 当前CPU频率(单位: KHz）
-cpuinfo_max_freq					# 当前调频策略下CPU可用的最高频率(单位: KHz）
-cpuinfo_min_freq					# 当前调频策略下CPU可用的最低频率(单位: KHz）
-cpuinfo_transition_latency			# 处理器切换频率所需要的时间(单位:ns)
-related_cpus						# 该控制策略影响到哪些CPU核(包括了online+offline的所有cpu)
-scaling_available_frequencies		# CPU支持的主频率列表(单位: KHz）
-scaling_available_governors			# 当前内核中支持的所有 governor(调频)类型
-scaling_cur_freq					# 保存着 cpufreq 模块缓存的当前 CPU 频率，不会对 CPU 硬件寄存器进行检查。
-scaling_driver						# 当前使用的调频驱动
-scaling_governor					# governor(调频)策略
-scaling_max_freq					# 当前调频策略下CPU可用的最高频率（从cpufreq模块缓存中读取）
-scaling_min_freq					# 当前调频策略下CPU可用的最低频率（从cpufreq模块缓存中读取）
-scaling_setspeed					# 需将governor切换为userspace才能使用，往这个文件echo数值，会切换频率
+# 将两个主温区都切换为用户空间策略，再设为满转速
+echo user_space > /sys/class/thermal/thermal_zone2/policy
+echo user_space > /sys/class/thermal/thermal_zone16/policy
+echo 10 > /sys/class/thermal/cooling_device5/cur_state
 ```
 
-目前支持的频率包括
-```shell
+:::note
+`cooling_device5` 与 `cooling_device6` 同为 `emc2305_fan` 且驱动同一物理风扇，可任选其一设置档位，另一个同步变化。
+:::
+
+### 查看 CPU 频点与当前频率
+
+```bash
+# 支持的频点列表（单位 KHz）
 cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_frequencies
-525000 1050000 2100000
+# 当前频率（读取自 cpufreq 缓存）
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq
+# 当前调频驱动
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver
+# 当前调频策略
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
 ```
 
-注：支持的频点可能在不同类型的芯片上有所差异。
-RDK S600系统使用的 Linux 内核支持以下种类的调频策略:
+### 切换 CPU 调频策略
 
-- performance（性能）：以最高频率执行，即硬件所支持的最高频（最高性能）。
-- ondemand：按照负载调整频率
-- userspace：根据用户的设置频率
-- powersave：以最低频率执行
-- schedutil：按照负载调整频率，它是与 CPU 调度器结合来使用
-- conservative：类似 Ondemand，不过频率调节的会平滑一下，不会有忽然调整为最大值又忽然调整为最小值的现象
-
-用户可以通过控制目录`/sys/devices/system/cpu/cpu0/cpufreq/`下的对应设置来控制 CPU 的调频策略。
-
-例如让 CPU 运行在性能模式：
-
-```shell
+```bash
+echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo performance > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 ```
 
-或者控制 CPU 运行在一个固定的频率（1.05GHz）：
+:::note 策略作用范围
+对 cpu0 切换 governor 时，实际作用于 `policy0` 覆盖的全部 CPU（`affected_cpus`）。如需对其他 cluster 调整，操作该 cluster 内任意一个 CPU 的 cpufreq 目录即可。
+:::
 
-```shell
+### 固定 CPU 频率
+
+先切换为 `userspace` 策略，再设置目标频率：
+
+```bash
 echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo 1050000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
 ```
 
-可通过`sudo hrut_somstatus`命令查看当前芯片工作频率、温度等状态
-
-</DocScope>
-
 ## 验证
 
-- 温度读取：`cat /sys/class/hwmon/hwmon<X>/temp1_input` 能读到千分之一摄氏度的数值（S100 为 hwmon0、S600 为 hwmon1）。
-- CPU 频率：`cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq` 查看当前频率，`cat .../scaling_governor` 查看当前策略。
-- 风扇档位：`cat /sys/class/thermal/cooling_device<X>/cur_state` 查看当前档位（S100 为 cooling_device2、S600 为 cooling_device5）。
-- 综合状态：`sudo hrut_somstatus` 查看当前频率、温度等状态。
+```bash
+# 输出应与上述所设值一致
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq
+cat /sys/class/thermal/thermal_zone2/trip_point_2_temp
+```
+
+预期输出（示例）：
+
+```text
+userspace
+1050000
+85000
+```
+
+## 进阶配置
+
+### 持久化配置
+
+上述 sysfs 修改仅在本次启动有效，重启后恢复默认。需持久化时，将配置命令写入 systemd 服务或 `/etc/rc.local`，开机自动执行，参见[开机自启动配置](./06_self_start.md)。
+
+### 调整关机温度
+
+如需将关机温度从 115℃ 调整为 105℃，需修改所有温区的 critical 触发点。各温区的关机触发点编号不同：主控温区为 `trip_point_4`，DDR 温区为 `trip_point_1`，单触发点温区为 `trip_point_0`。
+
+```bash
+# CPU 主温区
+echo 105000 > /sys/class/thermal/thermal_zone2/trip_point_4_temp
+# BPU 主温区
+echo 105000 > /sys/class/thermal/thermal_zone16/trip_point_4_temp
+# DDR 温区
+for z in 7 8 9 10; do
+  echo 105000 > /sys/class/thermal/thermal_zone${z}/trip_point_1_temp
+done
+# 其余单触发点温区
+for z in 0 1 3 4 5 6 11 12 13 14 15 17 18; do
+  echo 105000 > /sys/class/thermal/thermal_zone${z}/trip_point_0_temp
+done
+```
+
+:::warning 关机温度为硬件安全兜底
+调高关机温度有损坏硬件风险。建议仅在充分评估散热能力后调整，且不低于厂商建议值。
+:::
 
 ## 常见问题
 
-### 手动设置的风扇档位被系统自动调整
+### 修改 trip 温度后重启失效
 
-**原因**：Thermal 策略为 `step_wise` 时，系统按温度自动调节风扇档位，覆盖手动设置。
+**原因**：sysfs 修改仅存于运行时内存，不落盘，重启后恢复默认。
 
-**解决**：先把对应 thermal_zone 的策略改为 `user_space`（如 `echo user_space > /sys/class/thermal/thermal_zone0/policy`），再设置风扇档位。
+**解决**：将配置命令写入开机自启动脚本，参见上文「进阶配置 > 持久化配置」。
 
-### CPU 无法固定到指定频率
+### 固定风扇档位后被自动改回
+
+**原因**：对应温区仍为 `step_wise` 策略，Governor 按温度自动调节风扇，覆盖手动设置。
+
+**解决**：风扇同时受 `thermal_zone2` 与 `thermal_zone16` 控制，须将两个温区都切换为 `user_space` 后再设置档位。
+
+### 切换 governor 后 CPU 频率未变化
+
+**原因**：目标 CPU 处于 offline，或 policy 未覆盖该核。
+
+**解决**：先确认 CPU 在线（`cat /sys/devices/system/cpu/cpu0/online`），并检查 `affected_cpus` 是否包含目标核。
+
+### CPU 无法固定至指定频率
 
 **原因**：`scaling_setspeed` 仅在 governor 为 `userspace` 时可用。
 
-**解决**：先 `echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`，再向 `scaling_setspeed` 写入目标频率。
+**解决**：先执行 `echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`，再向 `scaling_setspeed` 写入目标频率。
 
-### sysfs 修改重启后失效
-
-**原因**：通过 sysfs 的温控/调频修改只在当前启动有效。
-
-**解决**：需要持久化时把命令写入开机脚本（见 [开机自启动配置](./06_self_start.md)），或改用编译期配置。
+</DocScope>
 
 ## 相关文档
 
+- [开机自启动配置](./06_self_start.md)
 - [显示配置](./09_display_config.md)
 - [屏幕休眠与电源管理](./11_screen_sleep.md)
 - [Thermal 驱动开发（进阶）](../07_Advanced_development/04_driver_development/08_driver_thermal_dev.md)
