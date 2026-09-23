@@ -1,6 +1,6 @@
 ---
 title: "软件包管理 apt"
-sidebar_position: 1
+sidebar_position: 2
 description: "RDK OS 上 apt 软件包查询、安装、升级、卸载"
 ---
 
@@ -69,7 +69,7 @@ sudo apt purge htop           # 连配置一起删
 ### 升级
 
 :::warning
-`apt upgrade` / `full-upgrade` 可能升级 `hobot-*` 系统包，跨大版本升级有兼容风险。生产环境升级前先在测试板验证。主版本升级（如 RDK OS 大版本变更）须重新烧录镜像，见 [主版本升级与固件](./02_upgrade_firmware.md)。
+`apt upgrade` / `full-upgrade` 可能升级 `hobot-*` 系统包，跨大版本升级有兼容风险。生产环境升级前先在测试板验证。主版本升级（如 RDK OS 大版本变更）须重新烧录镜像，见 [系统升级方式](./01_upgrade_methods.md)。
 :::
 
 定期更新系统可及时获得 bug 修复、安全补丁与新功能。但直接执行 `apt upgrade` 会连同 RDK 专属包（`hobot-*` / `tros-*`）一起升级，跨版本有兼容风险。**升级前强烈建议先备份**，再按下面方式只更新 Ubuntu 包、不动 RDK 专属包：
@@ -145,6 +145,6 @@ rootfs 扩容见 [存储与磁盘管理](../12_storage.md)。
 
 ## 相关文档
 
-- [主版本升级与固件](./02_upgrade_firmware.md)
+- [系统升级方式](./01_upgrade_methods.md)
 - [存储与磁盘管理](../12_storage.md)
 - [apt 命令详解](../../09_Appendix/linux-command-manual/01_apt.md)

@@ -80,4 +80,4 @@ aplay /app/res/assets/chi_sound.wav
 - [音频应用](../03_Demos/01_peripheral/03_audio.md)
 - [显示配置](./09_display_config.md)
 - [蓝牙配置](./02_bluetooth_config.md)
-- [软件包管理 apt](./03_system_update/01_apt_usage.md)
+- [软件包管理 apt](./03_system_update/02_apt_usage.md)

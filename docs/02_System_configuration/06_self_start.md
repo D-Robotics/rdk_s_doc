@@ -261,4 +261,4 @@ sudo reboot
 
 - [系统日志查看](./15_system_log.md)
 - [用户与权限管理](./14_user_permission.md)
-- [软件包管理 apt](./03_system_update/01_apt_usage.md)
+- [软件包管理 apt](./03_system_update/02_apt_usage.md)

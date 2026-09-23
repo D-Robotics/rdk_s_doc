@@ -535,7 +535,7 @@ Proxy 配置指的是对网络代理进行设置。在网络通信中，代理�
 </DocScope>
 
 :::tip
-系统软件包升级与主版本/固件更新见 [系统更新](./03_system_update/02_upgrade_firmware.md)。
+系统软件包升级与主版本/固件更新见 [系统升级方式](./03_system_update/01_upgrade_methods.md)。
 :::
 
 ## 验证
@@ -567,7 +567,7 @@ Proxy 配置指的是对网络代理进行设置。在网络通信中，代理�
 ## 相关文档
 
 - [蓝牙配置](./02_bluetooth_config.md)
-- [系统更新](./03_system_update/02_upgrade_firmware.md)
+- [系统升级方式](./03_system_update/01_upgrade_methods.md)
 - [远程登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
 - [Wi-Fi 驱动调试指南](../07_Advanced_development/04_driver_development/11_driver_wifi.md)
 - [Ethernet](../07_Advanced_development/04_driver_development/16_driver_ethernet/01_ethernet.md)

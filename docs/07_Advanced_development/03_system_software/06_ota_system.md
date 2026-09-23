@@ -1918,5 +1918,5 @@ int notify_mcu(hl_ota_msg msg) {
 
 ## 相关文档
 
-- [主版本升级与固件](/System_configuration/system_update/upgrade_firmware)
+- [系统升级方式](/System_configuration/system_update/upgrade_methods)
 - [miniboot 升级](/Advanced_development/system_software/ota_miniboot)

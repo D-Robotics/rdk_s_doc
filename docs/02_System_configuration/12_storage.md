@@ -113,6 +113,6 @@ sudo resize2fs /dev/<rootfs分区>
 
 ## 相关文档
 
-- [软件包管理 apt](./03_system_update/01_apt_usage.md)
+- [软件包管理 apt](./03_system_update/02_apt_usage.md)
 - [系统日志查看](./15_system_log.md)
 - [Linux 命令：mount](../09_Appendix/linux-command-manual/09_mount.md)
