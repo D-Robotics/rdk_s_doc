@@ -46,22 +46,6 @@ The MIPI side, from the physical layer up to the interface:
 
 The CIM is only about taking data in and sending it out: the input is four IPIs, and the output maps to the software output channels — main frame, ROI and EMB. Per-channel limits are in [Hardware Specification](#hardware-specification).
 
-The CIM is built from several functional blocks; these are the ones users can configure:
-
-- **TPG** — one of the three input sources. Test pattern generator: produces frames without a sensor, for path verification
-  - Config: `vin_node_attr.cim_attr.func.enable_pattern`
-  - Constraint: mutually exclusive with the MIPI input and RDMA; exactly one is active at any time
-- **RDMA** — one of the three input sources. DDR feedback, for debugging
-  - Config: `vin_node_attr.cim_attr.rdma_input.rdma_en`
-  - Constraint: mutually exclusive with the MIPI input and TPG; exactly one is active at any time
-- **ROI** — hangs on the main frame channel ochn 0, the ROI channel ochn 4 and the EMB channel ochn 3. Cropping: once enabled on the main channel, both the DDR copy and the ISP copy are cropped; the ROI channel can only output to DDR; on the EMB channel, ROI carves the embedded data out of the image
-  - Config: `vin_ochn_attr[x].roi_en`, `vin_ochn_attr[x].roi_attr`, with the fields `roi_x` / `roi_y` / `roi_width` / `roi_height`
-- **EMB** — hangs on the EMB channel ochn 3. Receives embedded data, in two forms: the `0x12` type — the embedded-data data type defined by the MIPI CSI-2 spec, independent of the image format; and data embedded in the image — same format as the image, output with the image lines, cut out via ROI
-  - Config: `vin_ochn_attr[3].emb_en`, `vin_ochn_attr[3].emb_attr`
-- **RAWDS** — hangs on the main frame channel ochn 0. 2×2 downsampling, halving both width and height
-  - Config: `vin_ochn_attr[0].rawds_en`, `vin_ochn_attr[0].rawds_attr.rawds_mode`
-  - Scope: main frame channel only — the apply path reads `vin_ochn_attr[VIN_MAIN_FRAME].rawds_en` fixedly, and the field passed in on other channels never drives an action; the ROI ochn 4 and EMB ochn 3 channels read only `roi_en` / `emb_en`
-
 ## Hardware Specification
 
 ### MIPI RX
@@ -85,27 +69,7 @@ The CIM is built from several functional blocks; these are the ones users can co
 
 </DocScope>
 
-Several cameras are told apart by `hw_id`, and **`hw_id` is the MIPI RX channel number**: the `hw_id` passed when opening VIN is which MIPI RX that camera sits on.
-
-<DocScope products="RDK S100">
-
-:::warning Note
-
-Valid `hw_id` on S100 are `0` / `1` / `4`. Code that hard-codes `hw_id` to `2` or `3` fails to open on S100.
-
-:::
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-:::warning Note
-
-Valid `hw_id` on S600 are `0`–`5`.
-
-:::
-
-</DocScope>
+How the MIPI RX ports map to the CIM instances is in the [Hardware Block Diagram](#hardware-block-diagram).
 
 ### CIM
 One CIM per MIPI RX — three on S100, six on S600.
@@ -114,11 +78,7 @@ One CIM per MIPI RX — three on S100, six on S600.
 
 - IPI channels per CIM: 4
 - IPI pixel clock (nominal): 600 MHz
-
-Each IPI takes a different maximum image width, given by `max-width` in the DTS:
-
-- **CIM0**: `IPI0` 5696 px; `IPI1` / `IPI2` / `IPI3` 4096 px each
-- **CIM1** / **CIM4**: `IPI0` – `IPI3` all 4096 px
+- Max input width per IPI: **CIM0** `IPI0` 5696 px, the rest 4096 px; **CIM1** / **CIM4** all 4096 px
 
 </DocScope>
 
@@ -126,21 +86,9 @@ Each IPI takes a different maximum image width, given by `max-width` in the DTS:
 
 - IPI channels per CIM: 4
 - IPI pixel clock (nominal): 670 MHz
-
-Each IPI takes a different maximum image width, given by `max-width` in the DTS:
-
-- **CIM0** / **CIM1** / **CIM2**: `IPI0` – `IPI3` all 5696 px
-- **CIM3** / **CIM4** / **CIM5**: `IPI0` – `IPI3` all 4096 px
+- Max input width per IPI: **CIM0** / **CIM1** / **CIM2** all 5696 px; **CIM3** / **CIM4** / **CIM5** all 4096 px
 
 </DocScope>
-
-An input wider than the ceiling is rejected outright at `set_ichn_attr`.
-
-:::warning Note
-
-The MIPI host validates the configured width against a hard cap of **4096**. Over MIPI input, an image wider than 4096 is rejected by the MIPI host outright — even when the CIM IPI it lands on lists a higher ceiling. **4096 is the effective width ceiling for MIPI bring-up**; CIM ceilings above 4096 in the lists above only matter for non-MIPI inputs such as `RDMA` feedback.
-
-:::
 
 ### LPWM
 <DocScope products="RDK S100">
@@ -155,7 +103,9 @@ The MIPI host validates the configured width against a hard cap of **4096**. Ove
 
 </DocScope>
 
-## Bring-up Sizing
+## Usage
+
+### Bring-up Sizing
 
 Complete the bandwidth assessment before bring-up:
 
@@ -215,20 +165,7 @@ Complete the bandwidth assessment before bring-up:
 
 **Conclusion**: four RAW12 cameras run under D-PHY at 93% occupancy; that is tight, and holding full frame rates takes shrinking blanking. Under C-PHY occupancy drops to 70%.
 
-> Size with **blanking included**, never with active-pixel figures; and confirm the deserialiser link rate on top of the PHY. This section only sizes bandwidth — output paths are covered in [Data Paths](#data-paths).
-
-## Usage
-
-### Data Paths
-| Stage | What happens |
-| --- | --- |
-| Trigger | LPWM sends a trigger pulse to the sensor (only for modules that need external triggering) |
-| Receive | The MIPI CSI-2 stream from the sensor goes through MIPI RX into CIM |
-| Capture | Offline: CIM writes the image to DDR; Online: CIM connects directly to the next stage |
-| Deliver | Offline: the frame is ready in memory and user space can read it; Online: the frame goes straight into ISP / PYM and user space is not involved |
-| Fetch | Offline path only: user space calls `hbn_vnode_getframe` and returns the frame with `hbn_vnode_releaseframe` |
-
-LPWM also records the trigger timestamp, which comes back with the frame information and can be used to align timestamps across cameras.
+> Size with **blanking included**, never with active-pixel figures; and confirm the deserialiser link rate on top of the PHY. This section only sizes bandwidth — output paths are covered in [Usage](#usage).
 
 ![Frame lifecycle from trigger to release](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig2-frame-lifecycle.svg)
 
@@ -240,7 +177,7 @@ The data CIM captures has two possible destinations, decided by three fields in 
 | `vin_node_attr.cim_attr.cim_pym_flyby = 1` | CIM connects directly to PYM (Online) |
 | `vin_ochn_attr[x].ddr_en = 1` | This output channel writes to DDR (Offline) |
 
-`vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` are **mutually exclusive** — only one can be 1 at a time. Neither is exclusive with `vin_ochn_attr[x].ddr_en`: the main frame can land in DDR *and* be sent OTF to the ISP at the same time, at the cost of bandwidth.
+`vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` are **mutually exclusive** — only one can be 1 at a time. The main frame can land in DDR *and* be sent OTF to the ISP at the same time, at the cost of bandwidth.
 
 #### Online (OTF)
 Data captured by CIM **never lands in DDR** — it goes straight to the ISP or PYM over a direct hardware connection.
@@ -265,13 +202,6 @@ CIM writes the data to DDR and the downstream module or user space reads it back
 
 #### Typical Combinations
 The four IPIs of one CIM can **mix** Online and Offline, feeding different downstream blocks. Four typical combinations:
-
-| Case | Input | Output mode | Downstream |
-| --- | --- | --- | --- |
-| 1 | 4× RAW sensor | 1× Online (OTF), other 3× Offline (DDR) | ISP |
-| 2 | 4× RAW sensor | 4× Offline (DDR) | ISP |
-| 3 | 4× RAW sensor | 1× Online + 3× Offline | Two ISPs |
-| 4 | 4× YUV sensor | Offline (DDR) | PYM |
 
 ![Typical CIM combinations: four scenarios](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
 
@@ -957,7 +887,7 @@ hbn_vnode_releaseframe(vin_fd, OCHN_MAIN, &img);
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
 ### Data Structures
-The header `hbn_vin_cfg.h` is authoritative; this section is the readable version of it. The **semantics** of each field are covered where they belong — `cim_isp_flyby` / `cim_pym_flyby` in [Data Paths](#data-paths), the `func` pattern / frame-skip fields in the configurable-block table of [Hardware Block Diagram](#hardware-block-diagram), the channel fields in [Interface Reference](#interface-reference).
+The header `hbn_vin_cfg.h` is authoritative; this section is the readable version of it. The **semantics** of each field are covered where they belong — `cim_isp_flyby` / `cim_pym_flyby` in [Usage](#usage), the `func` pattern / frame-skip fields in [Constraints and Caveats](#constraints-and-caveats), the channel fields in [Interface Reference](#interface-reference).
 
 Fields marked *framework* are filled in by the framework; you do not set them.
 
@@ -995,7 +925,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[VIN_TYPE_INVALID]` | Buffers of the DDR-bound channels, indexed by `ochn_id` | — | — | — |
 | `magicNumber` | `uint32_t` | `0x12345678` | `0x12345678` | — | — |
 
-#### Node Level — Input Mode and Board Connections
+#### Node-Level Attributes
 
 ##### vin_node_attr_t
 | Field | Type | Description | Typical | Default | Range |
@@ -1169,7 +1099,7 @@ A failing interface returns a **negative** value — the macro below, negated. T
 | Error Code | Macro | Description | Common Cause | Resolution |
 | --- | --- | --- | --- | --- |
 | `-8` | `HBN_STATUS_INVALID_NULL_PTR` | A null pointer was passed | A required pointer is `NULL` | Check the struct pointers you pass in |
-| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | Illegal attribute combination | `cim_isp_flyby` and `cim_pym_flyby` both 1; the input-source three-way choice set wrong; `vin_ichn_attr.format` disagreeing with the sensor's actual output | Work through the constraint notes in this chapter item by item |
+| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | Illegal attribute combination | `cim_isp_flyby` and `cim_pym_flyby` both 1; the input-source three-way choice set wrong; `vin_ichn_attr.format` disagreeing with the sensor's actual output | Work through [Constraints and Caveats](#constraints-and-caveats) item by item |
 | `-12` | `HBN_STATUS_FLOW_EXIST` | The same stream was created twice | `hbn_vflow_create` called twice on the same `hw_id` | Reuse the existing stream, or `hbn_vflow_destroy` first |
 | `-13` | `HBN_STATUS_FLOW_UNEXIST` | Operation on a stream that does not exist | The stream was destroyed and the handle is stale | Review the handle's lifetime |
 | `-20` | `HBN_STATUS_NOT_BINDED` | Binding failed while the stream was being created | `hbn_vflow_create` was not bound, or bound out of order | Create and bind in the order given in "API Call Flow" |
@@ -1182,6 +1112,34 @@ A failing interface returns a **negative** value — the macro below, negated. T
 > The macros live in `hbn_error.h`. The last row's `HBN_STATUS_VIN_*` is a composite code built by shifting the module number left by 16 bits, which is why the value is so large — `-786462` is `-0xC001E` in hex, easier to read against the header.
 
 ## Troubleshooting
+
+### Constraints and Caveats
+
+The following combinations are rejected outright by the driver and easy to spot:
+
+- `cim_isp_flyby` and `cim_pym_flyby` must not both be 1 — the Online direct link targets either the ISP or the PYM, never both
+- exactly one of `mipi_en`, `func.enable_pattern` and `rdma_input.rdma_en` must be 1 — the input source must be unique
+- Online binding is allowed on the main frame channel only, with flyby set to 1; Offline binding requires the channel switch on — `ddr_en` for the main frame, `.emb_en` for EMB, `.roi_en` for ROI
+- YUV422-8bit input cannot enable ROI or RAWDS
+- frame skip is not allowed in TPG mode; `func.skip_frame` must be `0`
+- `vin_ichn_attr.width`, `roi_attr.roi_x` and `roi_attr.roi_width` must be 4-aligned; `roi_width` at least 32, and `roi_x + roi_width` / `roi_y + roi_height` must stay inside the input image
+- `cim_attr.mipi_rx`, `vc_index` and `ipi_channels` must not exceed their ceilings (see the range column in [Data Structures](#data-structures))
+- Online binding requires the CIM and its downstream in the same CPE — cross-CPE links must go Offline
+
+The following combinations return no error yet produce wrong output; check them item by item:
+
+- a `pack_mode` / `format` mismatch in `vin_basic_attr` makes `wstride` wrong, and the image in DDR lands misaligned
+- when `vin_ichn_attr_t.format` disagrees with the sensor's actual output, frames still arrive, but the pixels are interpreted wrongly
+
+
+:::warning Note
+
+`hw_id` is the MIPI RX channel number: the `hw_id` passed when opening VIN is which MIPI RX that camera sits on.
+
+- Valid values on S100: `0` / `1` / `4` — code that hard-codes `hw_id` to `2` or `3` fails to open on S100
+- Valid values on S600: `0`–`5`
+
+:::
 
 ### CIM Status Nodes
 Every CIM exposes a group of read-only nodes under sysfs; `cim_stat` is the first place to look when debugging capture. The node name comes from the DTS address — swap it for whichever CIM you want:

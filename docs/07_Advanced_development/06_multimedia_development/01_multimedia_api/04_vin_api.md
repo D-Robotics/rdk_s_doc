@@ -47,22 +47,6 @@ MIPI 侧从物理层到接口层：
 
 CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件的输出通道——主帧、ROI、EMB。各通道的能力上限见[硬件规格](#硬件规格)。
 
-CIM 内部由若干功能块组成，其中对用户可配的是下面这些：
-
-- **TPG** —— 输入源之一，三选一。测试图案发生器：不接 Sensor 也能出图，用于通路验证
-  - 配置：`vin_node_attr.cim_attr.func.enable_pattern`
-  - 约束：与 MIPI 接入、RDMA 互斥，同一时刻只能选一个
-- **RDMA** —— 输入源之一，三选一。DDR 回灌，用于调试
-  - 配置：`vin_node_attr.cim_attr.rdma_input.rdma_en`
-  - 约束：与 MIPI 接入、TPG 互斥，同一时刻只能选一个
-- **ROI** —— 挂在主帧通道 ochn 0、ROI 通道 ochn 4、EMB 通道 ochn 3。裁剪：主通道使能后，落 DDR 与送 ISP 的图都会被裁；ROI 通道只能出 DDR；EMB 通道的 ROI 用于从图像里裁出 embedded data
-  - 配置：`vin_ochn_attr[x].roi_en`、`vin_ochn_attr[x].roi_attr`，字段为 `roi_x` / `roi_y` / `roi_width` / `roi_height`
-- **EMB** —— 挂在 EMB 通道 ochn 3。接收 embedded data，两种形态：`0x12` 类型——MIPI CSI-2 协议定义的 embedded data 数据类型，独立于图像格式；嵌入图像内——与图像同格式、随图像行一起输出，需 ROI 裁出
-  - 配置：`vin_ochn_attr[3].emb_en`、`vin_ochn_attr[3].emb_attr`
-- **RAWDS** —— 挂在主帧通道 ochn 0。2×2 下采样，宽高各减半
-  - 配置：`vin_ochn_attr[0].rawds_en`、`vin_ochn_attr[0].rawds_attr.rawds_mode`
-  - 生效范围：仅主帧通道——生效路径固定读 `vin_ochn_attr[VIN_MAIN_FRAME].rawds_en`，其余通道传入的该字段不参与动作；ROI ochn 4 与 EMB ochn 3 通道各自只读 `roi_en` / `emb_en`
-
 ## 硬件规格
 
 ### MIPI RX
@@ -86,27 +70,7 @@ CIM 内部由若干功能块组成，其中对用户可配的是下面这些：
 
 </DocScope>
 
-多路相机按 `hw_id` 区分，**`hw_id` 就是 MIPI RX 通道号**：打开 VIN 时传入的 `hw_id` 即该路相机接在哪条 MIPI RX 上。
-
-<DocScope products="RDK S100">
-
-:::warning 注意
-
-S100 合法的 `hw_id` 为 `0` / `1` / `4`。把 `hw_id` 写死成 `2` 或 `3` 的代码在 S100 上会打开失败。
-
-:::
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-:::warning 注意
-
-S600 合法的 `hw_id` 为 `0`–`5`。
-
-:::
-
-</DocScope>
+各路 MIPI RX 与 CIM 的对应关系及可用路数见[硬件框图](#硬件框图)。
 
 ### CIM
 一个 MIPI RX 对应一个 CIM——S100 共 3 个，S600 共 6 个。
@@ -115,11 +79,7 @@ S600 合法的 `hw_id` 为 `0`–`5`。
 
 - 每个 CIM 的 IPI 通道数：4 个
 - IPI 像素时钟（标称）：600 MHz
-
-CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` 给出：
-
-- **CIM0**：`IPI0` 5696 px；`IPI1` / `IPI2` / `IPI3` 各 4096 px
-- **CIM1** / **CIM4**：`IPI0` ~ `IPI3` 均为 4096 px
+- 各 IPI 最大接入宽：**CIM0** `IPI0` 5696 px、其余 4096 px；**CIM1** / **CIM4** 均为 4096 px
 
 </DocScope>
 
@@ -127,21 +87,9 @@ CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` �
 
 - 每个 CIM 的 IPI 通道数：4 个
 - IPI 像素时钟（标称）：670 MHz
-
-CIM 每个 IPI 能接收的最大图像宽度不同，由 DTS 的 `max-width` 给出：
-
-- **CIM0** / **CIM1** / **CIM2**：`IPI0` ~ `IPI3` 均为 5696 px
-- **CIM3** / **CIM4** / **CIM5**：`IPI0` ~ `IPI3` 均为 4096 px
+- 各 IPI 最大接入宽：**CIM0** / **CIM1** / **CIM2** 均为 5696 px；**CIM3** / **CIM4** / **CIM5** 均为 4096 px
 
 </DocScope>
-
-输入宽超过该上限时，CIM 在 `set_ichn_attr` 阶段直接拒绝。
-
-:::warning 注意
-
-MIPI host 的配置校验上限为 **width ≤ 4096**。走 MIPI 输入时，图像宽度超过 4096 会被 MIPI host 直接拒绝——即使所在 CIM 的 IPI 标称上限高于 4096。**MIPI 接入的宽度实际上限就是 4096**；上文 CIM 列表中高于 4096 的上限只在非 MIPI 输入（如 `RDMA` 回灌）时用得到。
-
-:::
 
 ### LPWM
 <DocScope products="RDK S100">
@@ -156,7 +104,9 @@ MIPI host 的配置校验上限为 **width ≤ 4096**。走 MIPI 输入时，图
 
 </DocScope>
 
-## 接入评估
+## 使用说明
+
+### 接入评估
 
 接入前完成带宽评估：
 
@@ -216,20 +166,7 @@ MIPI host 的配置校验上限为 **width ≤ 4096**。走 MIPI 输入时，图
 
 **结论**：四路 RAW12 在 D-PHY 下可以跑，占用 93%，余量很小，稳满帧要压缩 blanking；换 C-PHY 后降到 70%。
 
-> 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[数据通路](#数据通路)。
-
-## 使用说明
-
-### 数据通路
-| 阶段 | 做什么 |
-| --- | --- |
-| 触发 | LPWM 产生触发脉冲送给 Sensor（需要外部触发的模组才用） |
-| 接收 | Sensor 输出的 MIPI CSI-2 像素流经 MIPI RX 送入 CIM |
-| 抓取 | Offline：CIM 把图像写入 DDR；Online：CIM 直连后级 |
-| 送出 | Offline：帧在内存中就绪，用户态可读；Online：帧直接进了 ISP / PYM，用户态不参与 |
-| 取帧 | 仅 Offline 路径：用户态用 `hbn_vnode_getframe` 拿到帧，用完 `hbn_vnode_releaseframe` 归还 |
-
-LPWM 同时记录触发时刻，随帧信息一起返回，可用于多路相机之间的时间戳对齐。
+> 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[使用说明](#使用说明)。
 
 ![一帧数据的完整生命周期](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig2-frame-lifecycle.svg)
 
@@ -241,7 +178,7 @@ CIM 抓到的数据有两条出路，由 `vin_attr_t` 里的三个字段决定�
 | `vin_node_attr.cim_attr.cim_pym_flyby = 1` | CIM 直连 PYM（Online） |
 | `vin_ochn_attr[x].ddr_en = 1` | 该输出通道写 DDR（Offline） |
 
-`vin_node_attr.cim_attr.cim_isp_flyby` 与 `vin_node_attr.cim_attr.cim_pym_flyby` **互斥**，同一时刻只能有一个为 1；而它与 `vin_ochn_attr[x].ddr_en` **不互斥**——主帧可以既落 DDR、同时又 OTF 送一份给 ISP，代价是带宽。
+`vin_node_attr.cim_attr.cim_isp_flyby` 与 `vin_node_attr.cim_attr.cim_pym_flyby` **互斥**，同一时刻只能有一个为 1。主帧可以既落 DDR、同时又 OTF 送一份给 ISP，代价是带宽。
 
 #### Online（OTF）
 CIM 抓到的数据**不落 DDR**，以硬件直连方式送给 ISP 或 PYM。
@@ -266,14 +203,6 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 
 #### 典型组合
 同一颗 CIM 的 4 路 IPI 可以**混合**使用 Online 与 Offline，分给不同的后级。四种典型组合：
-
-| 场景 | 输入 | 输出方式 | 后级 |
-| --- | --- | --- | --- |
-| 1 | 4 路 RAW Sensor | 1 路 Online（OTF），其余 3 路 Offline（DDR） | ISP |
-| 2 | 4 路 RAW Sensor | 4 路 Offline（DDR） | ISP |
-| 3 | 4 路 RAW Sensor | 1 路 Online + 3 路 Offline | 两个 ISP |
-| 4 | 4 路 YUV Sensor | Offline（DDR） | PYM |
-
 ![CIM 典型组合：四种场景](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
 
 ### API 调用流程
@@ -958,7 +887,7 @@ hbn_vnode_releaseframe(vin_fd, OCHN_MAIN, &img);
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### 数据结构
-完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[数据通路](#数据通路)，`func` 里的 pattern / 跳帧见 [硬件框图](#硬件框图)的可配功能块表，通道字段见 [接口说明](#接口说明)。
+完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[使用说明](#使用说明)，`func` 里的 pattern / 跳帧见 [注意事项与约束](#注意事项与约束)，通道字段见 [接口说明](#接口说明)。
 
 标「框架填」的字段不用自己设。
 
@@ -989,14 +918,14 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
-| `vin_node_attr` | `vin_node_attr_t` | 节点级：接入方式与板级连接 | — | — | — |
+| `vin_node_attr` | `vin_node_attr_t` | 节点级属性 | — | — | — |
 | `vin_attr_ex` | `vin_attr_ex_t` | 扩展属性 | — | — | — |
 | `vin_ochn_attr` | `vin_ochn_attr_t[VIN_TYPE_INVALID]` | 输出通道，按 `ochn_id` 索引 | — | — | — |
 | `vin_ichn_attr` | `vin_ichn_attr_t` | 输入通道 | — | — | — |
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[VIN_TYPE_INVALID]` | 落 DDR 通道的 buffer，按 `ochn_id` 索引 | — | — | — |
 | `magicNumber` | `uint32_t` | 填 `0x12345678` | `0x12345678` | — | — |
 
-#### 节点级 —— 接入方式与板级连接
+#### 节点级属性
 
 ##### vin_node_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
@@ -1170,7 +1099,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | 错误码 | 宏定义 | 描述 | 常见原因 | 解决方法 |
 | --- | --- | --- | --- | --- |
 | `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针 | 必填参数传了 `NULL` | 检查传入的结构体指针 |
-| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | 属性组合非法 | `cim_isp_flyby` 与 `cim_pym_flyby` 同时为 1；输入源三选一没配对；`vin_ichn_attr.format` 与 Sensor 实际输出不符 | 按本篇的约束说明逐项核对 |
+| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | 属性组合非法 | `cim_isp_flyby` 与 `cim_pym_flyby` 同时为 1；输入源三选一没配对；`vin_ichn_attr.format` 与 Sensor 实际输出不符 | 按[注意事项与约束](#注意事项与约束)逐项核对 |
 | `-12` | `HBN_STATUS_FLOW_EXIST` | 同一路重复建流 | 对同一 `hw_id` 重复 `hbn_vflow_create` | 复用已有流，或先 `hbn_vflow_destroy` |
 | `-13` | `HBN_STATUS_FLOW_UNEXIST` | 对不存在的流做操作 | 流已销毁，句柄失效 | 核对句柄的生命周期 |
 | `-20` | `HBN_STATUS_NOT_BINDED` | 建流时绑定失败 | `hbn_vflow_create` 未绑定或绑定顺序不对 | 按「API 调用流程」的顺序建流与绑定 |
@@ -1183,6 +1112,33 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 > 宏定义在 `hbn_error.h`。最后一行的 `HBN_STATUS_VIN_*` 是复合码，由模块号左移 16 位拼出，所以数值很大——`-786462` 写成十六进制是 `-0xC001E`，对照时看后者更直观。
 
 ## 排障
+
+### 注意事项与约束
+
+以下组合会被驱动直接拒绝，容易发现：
+
+- `cim_isp_flyby` 与 `cim_pym_flyby` 不得同时为 1——Online 直连只能选 ISP 或 PYM 之一
+- `mipi_en`、`func.enable_pattern`、`rdma_input.rdma_en` 三者有且仅有一个为 1——输入源必须唯一
+- Online 绑定只允许主帧通道，且 flyby 已置 1；Offline 绑定要求对应通道开关已打开——主帧需 `ddr_en`、EMB 需 `.emb_en`、ROI 需 `.roi_en`
+- YUV422-8bit 输入不允许开 ROI 或 RAWDS
+- TPG 模式下不允许跳帧，`func.skip_frame` 必须为 `0`
+- `vin_ichn_attr.width`、`roi_attr.roi_x`、`roi_attr.roi_width` 必须 4 对齐；`roi_width` 至少 32，且 `roi_x + roi_width`、`roi_y + roi_height` 不得超出输入图
+- `cim_attr.mipi_rx`、`vc_index`、`ipi_channels` 不得超过上限（见[数据结构](#数据结构)的范围列）
+- Online 绑定要求 CIM 与下游在同一 CPE 内——跨 CPE 只能走 Offline
+
+以下组合不报错、但结果不对，逐项核对：
+
+- `vin_basic_attr` 里 `pack_mode` 与 `format` 不匹配会让 `wstride` 与实际不符，DDR 里的图像错位
+- `vin_ichn_attr_t.format` 与 Sensor 实际输出不符时能取到帧，但像素解释错
+
+:::warning 注意
+
+`hw_id` 就是 MIPI RX 通道号，打开 VIN 时传入的 `hw_id` 即该路相机接在哪条 MIPI RX 上。
+
+- S100 合法取值：`0` / `1` / `4`——把 `hw_id` 写死成 `2` 或 `3` 的代码在 S100 上会打开失败
+- S600 合法取值：`0`–`5`
+
+:::
 
 ### CIM 状态节点
 每个 CIM 在 sysfs 下暴露一组只读节点，`cim_stat` 是接入侧排障的第一入口。节点名取自 DTS 地址，读哪颗 CIM 就换成对应地址：
