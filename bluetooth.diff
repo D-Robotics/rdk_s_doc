@@ -1,0 +1,134 @@
+diff --git a/docs/07_Advanced_development/03_system_software/05_bluetooth_init.md b/docs/07_Advanced_development/03_system_software/05_bluetooth_init.md
+index 51328f63c..b909266df 100644
+--- a/docs/07_Advanced_development/03_system_software/05_bluetooth_init.md
++++ b/docs/07_Advanced_development/03_system_software/05_bluetooth_init.md
+@@ -23,6 +23,16 @@ import DocScope from '@site/src/components/DocScope'
+ | USB 蓝牙 | USB 接口 | 通过 USB 接口连接的蓝牙适配器 |
+ | UART 蓝牙 | UART 串口 | 通过 UART 串口连接的蓝牙模块（如 CYW55560） |
+ 
++
++<DocScope products="RDK S100">
++### 蓝牙模组安装示意
++
++S100 安装示意图
++
++<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/bluetooth/s100_bt_wifi_connect.png" alt="S100 外接 Wi-Fi/蓝牙 combo 模组安装示意" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
++
++</DocScope>
++
+ ## 机制原理
+ 
+ 蓝牙初始化由以下组件协同完成，最终将蓝牙设备枚举为 `hci0` 供上层使用：
+@@ -91,52 +101,18 @@ sudo systemctl disable hobot-bluetooth
+ 
+ 蓝牙初始化脚本 `/usr/bin/startbt.sh` 会按以下顺序检测和初始化蓝牙设备：
+ 
+-```
+-┌─────────────────────────────┐
+-│    蓝牙初始化开始             │
+-└──────────────┬──────────────┘
+-               │
+-               ▼
+-┌─────────────────────────────┐
+-│    检测 USB 蓝牙设备         │
+-│    (lsusb -t | grep btusb)   │
+-└──────────────┬──────────────┘
+-               │
+-       ┌───────┴───────┐
+-       │               │
+-       ▼               ▼
+-   检测到 USB      未检测到 USB
+-       │               │
+-       ▼               ▼
+-┌──────────────┐  ┌──────────────────┐
+-│ 加载 btusb   │  │ 检测 UART 蓝牙    │
+-│ 驱动模块     │  │ (/dev/ttyS1)      │
+-└──────┬───────┘  └────────┬─────────┘
+-       │                   │
+-       │           ┌───────┴───────┐
+-       │           │               │
+-       │           ▼               ▼
+-       │       检测到 UART    未检测到 UART
+-       │           │               │
+-       │           ▼               ▼
+-       │    ┌──────────────┐  ┌──────────────┐
+-       │    │ GPIO 控制    │  │   报错退出    │
+-       │    │ 固件下载     │  │              │
+-       │    │ hciattach    │  │              │
+-       │    └──────┬───────┘  └──────────────┘
+-       │           │
+-       └─────┬─────┘
+-             │
+-             ▼
+-    ┌──────────────────┐
+-    │ hciconfig hci0 up │
+-    │ hciconfig piscan  │
+-    └────────┬─────────┘
+-             │
+-             ▼
+-    ┌──────────────────┐
+-    │   初始化完成      │
+-    └──────────────────┘
++```mermaid
++flowchart TD
++    A["蓝牙初始化开始"] --> B["检测 USB 蓝牙设备<br/>lsusb -t | grep btusb"]
++    B --> C{"是否检测到?"}
++    C -->|是| D["加载 btusb 驱动模块"]
++    C -->|否| E["检测 UART 蓝牙<br/>/dev/ttyS1"]
++    D --> F["hciconfig hci0 up<br/>hciconfig hci0 piscan"]
++    E --> G{"是否检测到?"}
++    G -->|是| H["GPIO 控制<br/>固件下载<br/>hciattach"]
++    G -->|否| I["报错退出"]
++    H --> F
++    F --> J["初始化完成"]
+ ```
+ 
+ ### USB 蓝牙初始化
+@@ -177,14 +153,18 @@ sleep 1
+ echo 1 > /sys/class/gpio/gpio427/value
+ sleep 2
+ 
+-# 3. 下载固件
++# 3. 导出 mbt 所需环境变量（必须，否则 mbt 报 "environtment set MBT_TRANSPORT not found"）
++export MBT_TRANSPORT=${UART_PORT}
++export MBT_REG_ON_GPIO=${BT_REG_GPIO}
++
++# 4. 下载固件
+ mbt download /lib/firmware/cypress/CYW55560A1.hcd --autobaud3M
+ mbt update_baudrate 921600
+ 
+-# 4. 启动 HCI attach
++# 5. 启动 HCI attach
+ hciattach -s 921600 /dev/ttyS1 any 921600 &
+ 
+-# 5. 启用蓝牙设备
++# 6. 启用蓝牙设备
+ hciconfig hci0 up
+ hciconfig hci0 piscan
+ ```
+@@ -224,6 +204,8 @@ hciconfig hci0
+ ```
+ 
+ 输出示例：
++
++USB 蓝牙：
+ ```
+ hci0:   Type: Primary  Bus: USB
+         BD Address: 00:11:22:33:44:55  ACL MTU: 1021:8  SCO MTU: 64:1
+@@ -232,6 +214,16 @@ hci0:   Type: Primary  Bus: USB
+         TX bytes:987 acl:0 sco:0 commands:123 errors:0
+ ```
+ 
++UART 蓝牙（CYW55560）：
++```
++hci0:   Type: Primary  Bus: UART
++        BD Address: 28:D0:43:83:5A:D2  ACL MTU: 1021:8  SCO MTU: 64:10
++        UP RUNNING PSCAN ISCAN
++        RX bytes:1243 acl:0 sco:0 events:84 errors:0
++        TX bytes:5571 acl:0 sco:0 commands:84 errors:0
++        Manufacturer: Infineon Technologies AG (9)
++```
++
+ ### 查看蓝牙设备属性
+ 
+ ```bash
