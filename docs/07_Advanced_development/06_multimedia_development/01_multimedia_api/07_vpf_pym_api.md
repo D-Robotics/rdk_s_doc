@@ -6,7 +6,7 @@ description: "RDK S100/S600 PYM（金字塔下采样模块）"
 
 ## 概述
 
-PYM（Pyramid，金字塔）是 HBN 框架中的视频处理 vnode（板端头文件 `hbn_pym_cfg.h`，接口前缀 `hbn_vnode_*`）。它是一个硬件加速模块，对输入图像按**金字塔图层**的方式做**下采样与 ROI**：把源图缩放出多路不同尺度的图像输出到 DDR，供算法（检测/跟踪等）做多尺度消费。
+PYM（Pyramid，金字塔）是 HBN 框架中的视频处理 ，是一个硬件加速模块，对输入图像按**金字塔图层**的方式做**缩放与裁剪**：把源图缩放出多路不同尺度的图像输出到 DDR，供算法（检测/跟踪等）做多尺度消费。
 
 ## 硬件框图
 
@@ -50,15 +50,13 @@ PYM 的图层分三类，数据自上而下逐级缩小：
 | 层 | 数量 | 说明 |
 | --- | --- | --- |
 | SRC 层 | 1 | 源图像层，即输入原图 |
-| BL 层 | 5（BL Base 0 ~ 4） | 双线性下采样层，依次为源图的 1/2、1/4、1/8、1/16、1/32 |
-| DS 层 | 最多 6 | **输出层**。每层任选输入层（SRC 或 BL0~4），再做下采样 + ROI，输出到 DDR |
+| BL 层 | 5（BL Base 0 ~ 4） | 双线性下采样层（缩放），依次为源图的 1/2、1/4、1/8、1/16、1/32 |
+| DS 层 | 最多 6 | **输出层**。每层任选输入层（SRC 或 BL0~4），再做下采样（缩放 ∈ (1/2, 1]）+ ROI（裁剪），输出到 DDR |
 
-DS 层是用户真正取帧的输出层，配置集中在 `chn_ctrl_t`：
+- 每层选一个输入（SRC 原图或 BL 缩放层），DS 层再缩放 + 裁剪 ROI，输出到 DDR
+- 由于 DS 层可以先取 BL 层再缩小，级联后可获得小于 1/32 的输出（例如取 BL4 即 1/32，再缩小到接近 1/2，即约 1/64）
 
-- `ds_roi_en` 按位使能第 0~5 层（bit0~bit5）
-- 每层用 `ds_roi_sel[]` 选输入层（`0` = SRC、`1` = BL）、`ds_roi_layer[]` 选 BL 几层、`ds_roi_info[]` 配置 ROI 与输出尺寸
-
-由于 DS 层可以先取 BL 层再缩小，级联后可获得小于 1/32 的输出（例如取 BL4 即 1/32，再缩小到接近 1/2，即约 1/64）。
+各配置项的取值细节见[数据结构](#数据结构)。
 
 ## 硬件规格
 
@@ -71,7 +69,6 @@ DS 层是用户真正取帧的输出层，配置集中在 `chn_ctrl_t`：
 | PYM 实例 | 3 个：PYM0 / PYM1 / PYM4 |
 | 处理性能 | PYM0 / PYM1：4K@120fps；PYM4：4K@90fps |
 | online 输入 | PYM4 **不支持** online 输入，只能 offline / 回灌 |
-| 合法 `hw_id` | `0` / `1` / `4` |
 
 </DocScope>
 
@@ -82,11 +79,10 @@ DS 层是用户真正取帧的输出层，配置集中在 `chn_ctrl_t`：
 | PYM 实例 | 5 个：PYM0 ~ PYM4 |
 | 处理性能 | PYM0 ~ PYM4：4K@120fps |
 | online 输入 | PYM4 不支持 online 输入，只能 offline / 回灌 |
-| 合法 `hw_id` | `0` ~ `4` |
 
 </DocScope>
 
-多路相机按 `hw_id` 区分，**`hw_id` 就是 PYM 实例号**。把 `hw_id` 写死成板上不存在的实例号，`hbn_vnode_open` 会直接失败。
+> 注意：软件中用 `hw_id` 区分不同的 PYM 硬件，`hw_id` 就是 PYM 实例号。合法的 `hw_id` 与 PYM 硬件一一对应。
 
 ### 处理能力
 
@@ -99,7 +95,7 @@ DS 层是用户真正取帧的输出层，配置集中在 `chn_ctrl_t`：
 | online 输入格式 | YUV422 / YUV420 |
 | offline 输入格式 | YUV420SP（NV12） |
 | 输出格式 | YUV420SP（NV12） |
-| 缩放范围 | 缩小 ratio ∈ (1/2, 1]，**不支持放大** |
+| 缩放范围 | BL层固定缩放1/2，1/4，1/8，1/16，1/32，DS层缩小 ratio ∈ (1/2, 1]，**均不支持放大**  |
 | DS 层输出能力 | 6 层独立配置；每层支持 ROI crop、UV 平面单独 bypass、输出 stride 可配、垂直/水平相位可配 |
 
 </DocScope>
@@ -113,12 +109,12 @@ DS 层是用户真正取帧的输出层，配置集中在 `chn_ctrl_t`：
 | online 输入格式 | YUV422 / YUV420 |
 | offline 输入格式 | YUV420SP（NV12） |
 | 输出格式 | YUV420SP（NV12） |
-| 缩放范围 | 缩小 ratio ∈ (1/2, 1]，**不支持放大** |
+| 缩放范围 | BL层固定缩放1/2，1/4，1/8，1/16，1/32，DS层缩小 ratio ∈ (1/2, 1]，**均不支持放大** |
 | DS 层输出能力 | 6 层独立配置；每层支持 ROI crop、UV 平面单独 bypass、输出 stride 可配、垂直/水平相位可配 |
 
 </DocScope>
 
-> 输入宽高需 **2 对齐**、输入 stride 需 **16 对齐**，完整取值约束见[约束与注意事项](#约束与注意事项)。
+> 注意：输入宽高需 **2 对齐**、输入 stride 需 **16 对齐**，完整取值约束见[约束与注意事项](#约束与注意事项)。
 
 ## API 调用流程
 
@@ -242,7 +238,7 @@ int main(void)
 }
 ```
 
-> online 链路（`pym_mode = 1/2`）时省去步骤 3 的 `hbn_vnode_sendframe`，改为 `hbn_vflow_bind_vnode` 把前级（CIM / ISP / YNR）的 online 通道绑到 PYM 输入，帧自动流入；完整链路写法见 sample_pipeline。
+> 注意：online 链路（`pym_mode = 1/2`）时省去步骤 3 的 `hbn_vnode_sendframe`，改为 `hbn_vflow_bind_vnode` 把前级（CIM / ISP / YNR）的 online 通道绑到 PYM 输入，帧自动流入；完整链路写法见 sample_pipeline。
 
 ## API 列表
 
@@ -687,4 +683,4 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 - [视频输入 - VIN](/Advanced_development/multimedia_development/multimedia_api/vin_api) —— CIM 直连 PYM 的 online 输入侧
 - [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp) —— `ISP → PYM` 链路
 - [视频降噪 - YNR](/Advanced_development/multimedia_development/multimedia_api/ynr_api) —— `ISP → YNR → PYM` 链路
-- [畸变矫正 - GDC](/Advanced_development/multimedia_development/multimedia_api/gdc_api) —— VPF 同级模块，GDC 输入常接 PYM 的输出
+- [畸变矫正 - GDC](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview) —— VPF 同级模块，GDC 输入常接 PYM 的输出
