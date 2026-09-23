@@ -1,0 +1,9 @@
+{
+  "label": "IMU 应用",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "IMU 传感器数据读取示例",
+    "slug": "/Demos/peripheral/imu"
+  }
+}
