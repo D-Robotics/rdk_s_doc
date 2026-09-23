@@ -6,7 +6,11 @@ description: "蓝牙服务状态、扫描、配对、连接"
 
 # 蓝牙配置
 
-RDK OS 预装 BlueZ 蓝牙栈，`bluetooth.service` 默认启用。板端可用 `bluetoothctl` 扫描、配对、连接蓝牙设备（键鼠、耳机、BLE 外设等）。蓝牙驱动初始化见进阶 [蓝牙初始化说明](../07_Advanced_development/03_system_software/05_bluetooth_init.md)。
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
+RDK OS 预装 BlueZ 蓝牙栈，`bluetooth.service` 默认启用。本文面向需要为开发板接入蓝牙外设的用户，用 `bluetoothctl` 完成扫描、配对与连接。可接入键鼠、耳机、BLE（Bluetooth Low Energy，低功耗蓝牙）等设备。前置条件是已烧录 RDK OS 并完成联网。蓝牙驱动初始化见进阶 [蓝牙初始化说明](../07_Advanced_development/03_system_software/05_bluetooth_init.md)。
 
 ## 查看蓝牙状态
 
@@ -16,8 +20,6 @@ rfkill list                          # 是否被软/硬关闭
 hciconfig                            # 控制器状态
 ```
 
-RDK S600 实测（USB 蓝牙适配器 hci0）：
-
 ```text
 $ systemctl is-active bluetooth
 active
@@ -26,18 +28,39 @@ $ rfkill list
 1: hci0: Bluetooth
         Soft blocked: no
         Hard blocked: no
+```
 
+<DocScope products="RDK S100">
+
+S100 蓝牙（`hci0`，`Bus: UART`）：
+
+```text
+$ hciconfig
+hci0:   Type: Primary  Bus: UART
+        BD Address: 9C:C7:D3:10:28:EE  ACL MTU: 1021:8  SCO MTU: 64:10
+        UP RUNNING PSCAN ISCAN
+```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+S600 蓝牙（`hci0`，`Bus: USB`）：
+
+```text
 $ hciconfig
 hci0:   Type: Primary  Bus: USB
         BD Address: EC:3A:56:69:C4:E1  ACL MTU: 1021:8  SCO MTU: 255:12
         UP RUNNING PSCAN ISCAN
 ```
 
+</DocScope>
+
 `Soft/Hard blocked: no` + `UP RUNNING` 表示蓝牙已就绪。若 blocked，用 `sudo rfkill unblock bluetooth` 解锁。
 
 ## 扫描与配对（bluetoothctl）
 
-`bluetoothctl` 是交互式命令行工具（版本 5.72）：
+`bluetoothctl` 是 BlueZ 自带的交互式命令行工具：
 
 ```text
 bluetoothctl
@@ -53,7 +76,7 @@ bluetoothctl
 [bluetooth]# quit
 ```
 
-配对时双方需确认 PIN 或配对码。成功后设备列入 `bluetoothctl devices`。
+配对时双方需确认配对码（PIN）。成功后设备列入 `bluetoothctl devices`。
 
 ## 已配对/连接设备
 
@@ -71,19 +94,19 @@ BlueZ 的自动重连由 `/etc/bluetooth/main.conf` 中 `ReconnectAttempts`、
 HID 类设备（键鼠）通常由外设主动发起重连；如需调整重连行为，可取消注释并
 配置上述两项后重启 `bluetooth.service`。
 
-## 常见问题
-
-- **`rfkill` 显示 blocked**：`sudo rfkill unblock bluetooth`；部分板子有硬件开关需手动打开。
-- **扫描不到设备**：确认对端可发现；`hciconfig` 是否 `UP`；USB 适配器是否被识别（`lsusb`）。
-- **配对后无法连接**：`trust` 该设备；音频设备需额外配 PulseAudio/PipeWire profile。
-- **开机不自动重连**：检查 `/etc/bluetooth/main.conf` 的 `ReconnectAttempts`、
-  `ReconnectIntervals`（默认注释）；HID 设备可尝试由外设主动发起连接。
-
 ## 验证
 
 - 服务就绪：`systemctl is-active bluetooth` 返回 `active`；`hciconfig` 中 `hci0` 显示 `UP RUNNING`。
 - 就绪自检：`rfkill list` 中蓝牙设备 `Soft blocked: no`、`Hard blocked: no`。
 - 配对连接：`bluetoothctl devices` 能列出已配对设备；`bluetoothctl info <MAC>` 的 `Connected` 字段为 `yes` 表示已连接。
+
+## 常见问题
+
+- **`rfkill` 显示 blocked**：`sudo rfkill unblock bluetooth`；部分板子有硬件开关需手动打开。
+- **扫描不到设备**：确认对端可发现；`hciconfig` 是否 `UP`；蓝牙模块是否被系统识别（`dmesg | grep -i bluetooth` 或 `lsusb`）。
+- **配对后无法连接**：`trust` 该设备；音频设备需额外配置 PulseAudio/PipeWire profile。
+- **开机不自动重连**：检查 `/etc/bluetooth/main.conf` 的 `ReconnectAttempts`、
+  `ReconnectIntervals`（默认注释）；HID 设备可尝试由外设主动发起连接。
 
 ## 相关文档
 
