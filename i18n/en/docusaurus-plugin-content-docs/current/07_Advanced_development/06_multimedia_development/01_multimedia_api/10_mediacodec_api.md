@@ -8,8 +8,6 @@ description: RDK S100/S600 5.5.1.10 MediaCodec (codec)
 
 > **Level description**: This chapter covers the [Low-level Multimedia API] (board header `hb_media_codec.h`), the audio/video codec API (X5 Codec → RDK MediaCodec). It is intended for advanced development that directly operates on the multimedia pipeline (Mode 3); if you only need to run the encapsulated capture/codec/display functionality, see Chapter 4 [Simple API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md) (Mode 1).
 
-> **Platform codename note**: Compatibility annotations in this document follow the original wording of the underlying header files. XJ3/J3 and Ultra are earlier-generation upstream platform codenames; X5 denotes the current upstream product line (not these two boards); Super/J6 are the codenames of the architecture family shared by this product line (board-verified: S100/S600 share the same family, with S600 in a multi-core form). An `HW:` list indicates the interface's applicable range across upstream platform generations, where the Super generation corresponds to this product line (inherited from upstream annotations, not verified per-interface on board); `SW` is the upstream software version number — for RDK releases see the Release Notes. Interfaces without codenames are inherited from upstream and not individually verified on RDK.
-
 ## Overview
 
 MediaCodec (audio/video codec; X5 Codec → RDK MediaCodec) is the RDK A/V codec API (board header `hb_media_codec.h`, functions `hb_mm_mc_*`): codec init/config/start-stop, VPF attach, A/V encoder/decoder register/unregister and IDR frame request, driven by a state machine.
@@ -27,7 +25,6 @@ MediaCodec (audio/video codec; X5 Codec → RDK MediaCodec) is the RDK A/V codec
 2. `hb_mm_mc_vpf_init` attaches a VPF channel if needed; `hb_mm_mc_configure` configures (CONFIGURED).
 3. `hb_mm_mc_start` starts; use `hb_mm_mc_pause`/`hb_mm_mc_flush`/`hb_mm_mc_request_idr_frame` while running.
 4. `hb_mm_mc_stop` stops; `hb_mm_mc_release` releases the context.
-
 
 ## Quick Example
 
@@ -169,9 +166,6 @@ Get the descriptor of the specified code id.
 media_codec_descriptor_t: Detailed description information of codec
 NULL: No descriptor
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_default_context
 
 **Function Declaration**
@@ -194,9 +188,6 @@ Get the default media codec context.
 
 =0: Success
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_initialize
 
@@ -223,9 +214,6 @@ HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_vpf_init
 
 **Function Declaration**
@@ -250,9 +238,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
-
-**Compatibility**
-HW: Super; SW: v1.2.3
 
 ### hb_mm_mc_configure
 
@@ -279,9 +264,6 @@ HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_set_callback
 
 **Function Declaration**
@@ -307,9 +289,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_set_vlc_buffer_listener
 
 **Function Declaration**
@@ -334,9 +313,6 @@ Set VLC buffer size listener to media codec. And user can modify the
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_camera
 
@@ -364,9 +340,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_start
 
 **Function Declaration**
@@ -393,9 +366,6 @@ HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_stop
 
 **Function Declaration**
@@ -418,9 +388,6 @@ Stop the codec processing. If success, MediaCodec will be reset and
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_pause
 
@@ -445,9 +412,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_flush
 
 **Function Declaration**
@@ -471,9 +435,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_release
 
 **Function Declaration**
@@ -496,9 +457,6 @@ Release the codec. MediaCodec will be released and go back to
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_get_state
 
@@ -525,9 +483,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_status
 
 **Function Declaration**
@@ -552,9 +507,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_queue_input_buffer
 
@@ -584,9 +536,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_BUFFER: Invalid buffer
 HB_MEDIA_ERR_WAIT_TIMEOUT: Wait timeout
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_dequeue_input_buffer
 
 **Function Declaration**
@@ -615,9 +564,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_BUFFER: Invalid buffer
 HB_MEDIA_ERR_WAIT_TIMEOUT: Wait timeout
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_queue_output_buffer
 
 **Function Declaration**
@@ -645,9 +591,6 @@ HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_BUFFER: Invalid buffer
 HB_MEDIA_ERR_WAIT_TIMEOUT: Wait timeout
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_dequeue_output_buffer
 
@@ -678,9 +621,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_BUFFER: Invalid buffer
 HB_MEDIA_ERR_WAIT_TIMEOUT: Wait timeout
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_longterm_ref_mode
 
 **Function Declaration**
@@ -704,9 +644,6 @@ Get the parameters of long-term reference mode.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_longterm_ref_mode
 
@@ -733,9 +670,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_intra_refresh_config
 
 **Function Declaration**
@@ -759,9 +693,6 @@ Get the parameters of the intra refresh.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_intra_refresh_config
 
@@ -788,9 +719,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_rate_control_config
 
 **Function Declaration**
@@ -814,9 +742,6 @@ Get the parameters of rate control.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_rate_control_config
 
@@ -843,9 +768,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_max_bit_rate_config
 
 **Function Declaration**
@@ -869,9 +791,6 @@ Get the max bit rate of rate control. It's only useful for AVBR and CBR.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_max_bit_rate_config
 
@@ -898,9 +817,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_deblk_filter_config
 
 **Function Declaration**
@@ -924,9 +840,6 @@ Get the parameters of deblock filter.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_deblk_filter_config
 
@@ -953,9 +866,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_sao_config
 
 **Function Declaration**
@@ -979,9 +889,6 @@ Get the parameters of sample adaptive offset.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_sao_config
 
@@ -1008,9 +915,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_entropy_config
 
 **Function Declaration**
@@ -1034,9 +938,6 @@ Get the parameters of entropy coding.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_entropy_config
 
@@ -1063,9 +964,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_vui_timing_config
 
 **Function Declaration**
@@ -1089,9 +987,6 @@ Get the timing parameters of VUI.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_vui_timing_config
 
@@ -1118,9 +1013,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_vui_config
 
 **Function Declaration**
@@ -1144,9 +1036,6 @@ Get the parameters of VUI.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_vui_config
 
@@ -1173,9 +1062,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_slice_config
 
 **Function Declaration**
@@ -1199,9 +1085,6 @@ Get the slice parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_slice_config
 
@@ -1228,9 +1111,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_insert_user_data
 
 **Function Declaration**
@@ -1256,9 +1136,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_request_idr_frame
 
 **Function Declaration**
@@ -1281,9 +1158,6 @@ Request the IDR Frame.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_request_idr_header
 
@@ -1310,9 +1184,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_enable_idr_frame
 
 **Function Declaration**
@@ -1337,9 +1208,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_skip_pic
 
@@ -1366,9 +1234,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_3dnr_enc_config
 
 **Function Declaration**
@@ -1392,9 +1257,6 @@ Get the parameters of 3DNR (3D Noise Reduction).
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_3dnr_enc_config
 
@@ -1421,9 +1283,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_smart_bg_enc_config
 
 **Function Declaration**
@@ -1447,9 +1306,6 @@ Get the parameters of smart background encoding.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_smart_bg_enc_config
 
@@ -1476,9 +1332,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_pred_unit_config
 
 **Function Declaration**
@@ -1502,9 +1355,6 @@ Get the intra prediction parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_pred_unit_config
 
@@ -1531,9 +1381,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_transform_config
 
 **Function Declaration**
@@ -1557,9 +1404,6 @@ Get the transform parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_transform_config
 
@@ -1586,9 +1430,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_roi_config
 
 **Function Declaration**
@@ -1612,9 +1453,6 @@ Get the ROI parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_roi_config
 
@@ -1641,9 +1479,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_roi_avg_qp
 
 **Function Declaration**
@@ -1667,9 +1502,6 @@ Get the ROI average QP.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_roi_avg_qp
 
@@ -1696,9 +1528,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_roi_config_ex
 
 **Function Declaration**
@@ -1723,9 +1552,6 @@ Get the ROI parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_roi_config_ex
 
@@ -1752,9 +1578,6 @@ HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
 
-**Compatibility**
-HW: Ultra; SW: v1.2.3
-
 ### hb_mm_mc_get_mode_decision_config
 
 **Function Declaration**
@@ -1778,9 +1601,6 @@ Get the encoding mode decision parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_mode_decision_config
 
@@ -1807,9 +1627,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_user_data
 
 **Function Declaration**
@@ -1830,9 +1647,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_WAIT_TIMEOUT: Wait timeout
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_release_user_data
 
@@ -1857,9 +1671,6 @@ Release the user data.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_explicit_header_config
 
 **Function Declaration**
@@ -1883,9 +1694,6 @@ Get explicit header configuration.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_explicit_header_config
 
@@ -1912,9 +1720,6 @@ HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_mjpeg_config
 
 **Function Declaration**
@@ -1938,9 +1743,6 @@ Get the mjpeg parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_mjpeg_config
 
@@ -1967,9 +1769,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_jpeg_config
 
 **Function Declaration**
@@ -1993,9 +1792,6 @@ Get the jpeg parameters.
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_set_jpeg_config
 
@@ -2022,9 +1818,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_get_fd
 
 **Function Declaration**
@@ -2047,9 +1840,6 @@ Get device fd. And user can use it to do select operation.
 =0: Success
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_close_fd
 
@@ -2074,9 +1864,6 @@ Close device fd. User must close the fd which is aquired through hb_mm_mc_get_fd
 HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_NO_FREE_INSTANCE: No available instance
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_register_audio_encoder
 
@@ -2103,9 +1890,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_unregister_audio_encoder
 
 **Function Declaration**
@@ -2129,9 +1913,6 @@ HB_MEDIA_ERR_UNKNOWN: Unknow error
 HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
-
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
 
 ### hb_mm_mc_register_audio_decoder
 
@@ -2158,9 +1939,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_unregister_audio_decoder
 
 **Function Declaration**
@@ -2185,9 +1963,6 @@ HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameter
 HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Disallowed operation
 HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient resources
 
-**Compatibility**
-HW: XJ3/Ultra/Super; SW: v1.2.3
-
 ### hb_mm_mc_set_status
 
 **Function Declaration**
@@ -2197,8 +1972,6 @@ extern hb_s32 hb_mm_mc_set_status(media_codec_context_t *context, mc_user_status
 ```
 
 **Description**
-
-
 
 **Return Value**
 
