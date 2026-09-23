@@ -6,7 +6,13 @@ description: "HDMI/DP 显示器连接、分辨率、多屏"
 
 # 显示配置
 
-RDK 板卡通过 HDMI/DP 接口接显示器。桌面版（Desktop）开箱即显示图形桌面，Server 版可配置控制台分辨率。
+RDK 板卡通过 HDMI/DP 接口接显示器。桌面版（Desktop）开箱即显示图形桌面，Server 版无图形桌面。
+
+**适用读者**：模式 1 桌面版用户——需要外接显示器使用图形桌面的开发者。
+
+**前置条件**：已用 HDMI/DP 线连接显示器；桌面版已进入图形桌面（X11 或 Wayland 会话）。
+
+**与其他模块关系**：屏幕省电设置见[屏幕休眠与电源管理](./11_screen_sleep.md)；音频输出切换见[音频配置](./10_audio_output.md)。
 
 :::info 说明
 RDK OS 桌面版默认运行 GNOME（Wayland 会话）。`xrandr` 是 X11 工具，仅适用于 X11 会话；Wayland 会话下请在「设置 → 显示器」里调整分辨率，或用 `gnome-control-center display` 打开设置。
@@ -57,8 +63,6 @@ $ cat /sys/class/drm/card0-HDMI-A-1/modes
 1280x800
 1280x720
 ```
-
-Server 版控制台分辨率在 config.txt（见 [config.txt 配置指南](./05_config_txt/00_overview.md)）里配置 `video=` 参数。
 
 ## 多屏
 

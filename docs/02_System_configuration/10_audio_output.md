@@ -8,9 +8,11 @@ description: "音频输出设备选择与基础控制"
 
 RDK 板卡需先接入音频设备后才能输出音频：S100 接入 Audio Driver HAT REV2 音频子板，S600 接入 USB 声卡或 14PIN I2S 音频子板；接入 HDMI 显示器时也可通过 HDMI 输出音频。通过桌面设置或命令行选择输出设备、调节音量。
 
-:::info 说明
-RDK S600 本板未接音频输出设备（无音频 codec/声卡），`aplay -l` 与 `arecord -l` 均报 no soundcards；以下命令以接好音频设备的板子为准。
-:::
+**适用读者**：模式 1 桌面版用户——需要接音频设备输出声音的开发者。
+
+**前置条件**：按产品接入音频设备；系统已预装 `alsa-utils`，提供 `aplay`、`arecord` 与 `amixer`。
+
+**与其他模块关系**：应用层录音与播放示例见[音频应用](../03_Demos/01_peripheral/03_audio.md)；codec 与声卡驱动调试见[音频调试指南](../07_Advanced_development/04_driver_development/09_driver_audio.md)。
 
 ## 查看音频设备
 
