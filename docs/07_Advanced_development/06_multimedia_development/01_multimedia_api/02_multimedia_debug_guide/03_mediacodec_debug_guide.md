@@ -29,6 +29,8 @@ cat /sys/kernel/debug/vpu/vdec     # 解码实例状态，无任务时为空
 9.0
 ```
 
+### 编码（VENC）
+
 `venc` 仅在编码任务运行时输出（无任务时为空）。调试前需先跑通一路编码示例。板端示例位于 `/app/multimedia_samples/sample_codec/`，配置文件 `codec_config.ini` 节选如下（`encode_streams` 为按位掩码：`0x01` 对应 venc_stream1、`0x02` 对应 venc_stream2、`0x04` 对应 venc_stream3、`0x08` 对应 venc_stream4、`0x10` 对应 venc_stream5；可组合，如 `0x03` 启用前两路、`0x0f` 前四路）：
 
 ```ini
@@ -202,6 +204,8 @@ enc_idx  enc_id cur_input_buf_cnt cur_output_buf_cnt left_recv_frame left_enc_fr
 | | `total_input_buf_cnt` / `total_output_buf_cnt` | 累计 input / output buffer 数 |
 | | `fps` | 当前帧率 |
 
+### 解码（VDEC）
+
 `vdec` 仅在解码任务运行时输出（无任务时为空）。同样以 `sample_codec` 跑一路 H.264 解码触发，解码配置节选（`decode_streams` 为按位掩码，规则同 `encode_streams`）：
 
 ```ini
@@ -282,6 +286,8 @@ cat /sys/kernel/debug/jpu/jdec     # JPEG 解码实例状态，无任务时为�
 1.8
 ```
 
+### 编码（JENC）
+
 `jenc` 仅在 JPEG 编码任务运行时输出（无任务时为空）。以 `sample_codec` 跑一路 JPEG 编码触发，对应 `codec_config.ini` 的 `venc_stream3`（`codec_type=3`，即 JPEG）。运行：
 
 ```bash
@@ -329,6 +335,8 @@ enc_idx  enc_id cur_input_buf_cnt cur_output_buf_cnt left_recv_frame left_enc_fr
 | | `left_recv_frame` / `left_enc_frame` | 剩余待接收 / 待编码帧数（设 `receive_frame_number` 后有效）|
 | | `total_input_buf_cnt` / `total_output_buf_cnt` | 累计 input / output buffer 数 |
 | | `fps` | 当前帧率 |
+
+### 解码（JDEC）
 
 `jdec` 仅在 JPEG 解码任务运行时输出（无任务时为空）。同样以 `sample_codec` 跑一路 JPEG 解码触发，对应 `vdec_stream3`。运行：
 
