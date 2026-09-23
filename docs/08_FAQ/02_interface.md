@@ -214,3 +214,200 @@ import DocScope from '@site/src/components/DocScope';
     3.  **`srpi-config` 工具**： 部分 RDK 系统版本中的 `srpi-config` 工具可能允许查看或配置 HDMI 输出分辨率。
 
     如果您遇到特定显示器不兼容的问题，除了检查分辨率，还需要考虑显示器的 EDID 信息是否能被板卡正确解析。
+
+<DocScope products="RDK S100">
+
+### GPIO 扩展芯片
+
+#### Q14: 40PIN 上的 GPIO0–GPIO9 是 SoC 原生引脚吗？做高速翻转或精确时序时有什么限制？
+**A:** 不是原生引脚。S100 40PIN 上的 `40PIN_GPIO0_3V3` 至 `40PIN_GPIO9_3V3` 共 10 个 GPIO **由板载 GPIO 扩展 IC（TPT2955x 系列，I2C 接口）提供**，并非 SoC 原生 GPIO；该 IC 内部默认带 100K 上拉电阻。
+* **速度限制**： 扩展 IC 通过 I2C 总线（`i2c-0`，从设备地址 `0x27`）控制，每一次电平翻转都要走一次 I2C 传输，实测翻转速率远低于原生 GPIO，无法用于微秒级精确时序、位模拟协议（bit-bang）等场景。
+* **适用场景**： LED 指示、按键检测、低速片选/复位控制等对速度不敏感的输出或输入。
+* **高性能替代**：
+    * 需要**硬件 PWM** 输出时，使用 40PIN 的 `LPWM1` 引脚（Pin 32/33，SoC 原生 LPWM 控制器）。
+    * 需要更高翻转速度的 GPIO 时，使用 40PIN 上由 SoC 原生提供的复用引脚（如 `SPI0`、`I2C4`/`I2C5`、`PCM0` 相关引脚可复用为 GPIO）。
+* **验证方法**： 在板端执行以下命令可以看到扩展芯片对应的 gpiochip：
+    ```bash
+    # 查看所有 gpiochip 及其 base/数量
+    ls /sys/class/gpio/
+    for c in /sys/class/gpio/gpiochip*/; do echo "$c: $(cat $c/label)"; done
+    ```
+    其中 label 为 `tpt29555a`（base 407，16 路）的 gpiochip 即 40PIN GPIO0–GPIO9 所在的扩展芯片（`gpio-line-names` 为 `40PIN_GPIO0`…`40PIN_GPIO9`）。
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+### 串口资源与占用
+
+#### Q15: 为什么 /dev/ttyS1 打不开或读不到数据？可以用哪些串口外接自己的设备？
+**A:** S100 的串口资源是固定的，`/dev/ttyS1` 有专门用途，随意占用会破坏蓝牙功能：
+* **每个串口的归属（S100 实测）**：
+
+    | 设备节点 | 归属 | 能否外接设备 |
+    | --- | --- | --- |
+    | `/dev/ttyS0` | 调试控制台（console=ttyS0） | 否 |
+    | `/dev/ttyS1` | 蓝牙（`hobot-bluetooth` 服务用 `hciattach` 占用） | 否 |
+    | `/dev/ttyS2` | 默认 disabled（占位节点，`/proc/tty/driver/serial` 显示 `uart:unknown`） | 改 DTS 启用后可用 |
+    | `/dev/ttyS3` | 默认 disabled（占位节点） | 改 DTS 启用后可用 |
+
+* **`ttyS1` 被占用的表现**： 蓝牙服务运行期间，`fuser /dev/ttyS1` 能看到 `hciattach` 进程；此时自己程序打开该串口读写会与蓝牙流量互相干扰。
+* **外接串口设备的正确做法**：
+    1. 使用 40PIN 上的 **UART2**（`UART2_TX_3V3`/`UART2_RX_3V3`，与 I2C5 复用，通过 SW6 拨码切换），配合 `test_serial.py` 等示例使用，参考[UART 示例文档](/Demos/peripheral/01_40pin/s100/uart)。
+    2. 默认 disabled 的串口（如 `/dev/ttyS2`）需修改设备树启用并配置 pinctrl 后才可使用（未启用时执行 `stty -F /dev/ttyS2` 会报 `Input/output error`），参考[UART 驱动开发文档](/Advanced_development/driver_development/driver_uart_dev)。
+* **排查命令**：
+    ```bash
+    # 看串口是否被占用
+    fuser /dev/ttyS1
+    # 看蓝牙服务是否在用 ttyS1
+    systemctl status hobot-bluetooth
+    ps aux | grep hciattach
+    ```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+### 蓝牙与无线模组
+
+#### Q16: 手动运行 mbt 命令时报 environtment set MBT_TRANSPORT not found，怎么解决？
+**A:** `mbt` 工具依赖两个环境变量，未导出时会直接报错退出：
+```bash
+export MBT_TRANSPORT=/dev/ttyS1      # mbt 通信的 UART 端口
+export MBT_REG_ON_GPIO=427           # 蓝牙模组使能/复位 GPIO
+```
+导出后再执行 `mbt download`、`mbt update_baudrate` 等命令即可。系统自带的 `startbt.sh` 内部已包含这两行 export，所以服务自动初始化不受影响；只有手动执行 mbt 时才需要自己导出。完整手动初始化流程参考[蓝牙初始化说明](/Advanced_development/system_software/bluetooth_init)。
+
+#### Q17: 插了一个 USB 无线接收器，蓝牙还是没反应，是板子的问题吗？
+**A:** 先确认插入的是**蓝牙 dongle** 还是 **2.4G 无线键鼠接收器**，两者外观相似但完全不同：
+* **确认方法**： 插入后执行 `lsusb`，看设备的 Class 字段：
+    ```bash
+    lsusb
+    ```
+    * **蓝牙 dongle**： Class 为 `e0`（Wireless Controller），插入后由 `btusb` 驱动接管，会生成 `hci0`。
+    * **2.4G 键鼠接收器**： Class 为 `03`（HID），绑定 `usbhid` 驱动，只用于自家键鼠通信，与蓝牙协议栈无关，**不会触发任何蓝牙初始化**。
+* **板端验证**： S100 内核自带 `btusb` 驱动模块，插入 Class e0 的标准蓝牙 dongle 即可被识别，无需额外装驱动。
+* **S100 板载模组**： S100 通过 J17 M.2 Key E 接口外接 Wi-Fi/蓝牙 combo 模组（AzureWave CYW55560），蓝牙走 UART 而非 USB，不占用 USB 口，也不需要 USB dongle。
+
+#### Q18: hci0 起不来，hobot-bluetooth 服务一直卡住或反复重启，怎么办？
+**A:** S100 的蓝牙在 UART 上（M.2 Key E combo 模组），服务卡住基本都是模组硬件链路问题：
+1.  **确认模组在位**： 检查 J17 M.2 Key E 插槽上的 Wi-Fi/蓝牙 combo 模组是否插紧、固定螺丝是否拧上、两根天线是否接好（U.FL 座易松）。
+2.  **看服务卡在哪一步**：
+    ```bash
+    systemctl status hobot-bluetooth
+    journalctl -u hobot-bluetooth -e
+    ```
+    * 卡在 `mbt download ... CYW55560A1.hcd` 反复重试： 固件下载不下去，模组没应答，基本是模组未接好或损坏。
+    * `hciattach` 起来但 `hciconfig hci0 up` 失败： 检查 `dmesg | grep -iE "hci|ttyS1"`。
+3.  **模组正常时的输出**： 服务日志出现 `[BT_INIT] UART Bluetooth initialized`，`hciconfig` 显示 `hci0 ... UP RUNNING PSCAN ISCAN`，`Bus: UART`。
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+### USB 接口（多设备接入）
+
+#### Q19: 两个 USB 摄像头能不能同时使用？
+**A:** 可以，但需要限制 `uvcvideo` 驱动的带宽占用，否则第二个摄像头可能枚举失败或工作不稳定：
+```bash
+rmmod uvcvideo
+modprobe uvcvideo quirks=128
+```
+执行后再接入两个 USB 摄像头。详细的接入步骤和限制说明参考[USB 摄像头示例文档](/Demos/peripheral/camera/usb_camera)中的双摄像头 FAQ。
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+### IMU
+
+#### Q20: IMU 在 /dev/iio:deviceX 里怎么区分加速度计和陀螺仪？
+**A:** S100 相机扩展板上的 ICM42688 挂在 IIO 子系统下，同一颗芯片的陀螺仪和加速度计是**两个独立的 IIO 设备**：
+* **确认方法**：
+    ```bash
+    ls /dev/iio:device*
+    cat /sys/bus/iio/devices/iio:device0/name
+    cat /sys/bus/iio/devices/iio:device1/name
+    ```
+    实测对应关系（S100 + ICM42688）：
+    * `iio:device0` — 陀螺仪（`icm42688-gyro`）
+    * `iio:device1` — 加速度计（`icm42688-accel`）
+    * `iio:device2` — fsync（`icm42688-fsync`）
+* **直接读数据**： 使用 `sample_imu_iio` 示例程序，`-n` 参数选择模组型号（如 `-n icm42688`），用法参考[IMU 示例文档](/Demos/peripheral/imu/s100_imu)。
+
+#### Q21: 运行 sample_imu_input 报 No such file or directory，怎么排查？
+**A:** 该示例依赖驱动向上抛的 input 事件节点，报此错一般是**当前板子上的 IMU 型号没有走 input 上报路径**：
+1.  **确认 input 事件节点**：
+    ```bash
+    ls /dev/input/
+    cat /proc/bus/input/devices
+    ```
+    找不到 IMU 相关的 event 设备，说明当前 IMU（如 ICM42688）走的是 IIO 路径，请改用 `sample_imu_iio`。
+2.  **区分两种读取方式**：
+    * IIO 方式（`/dev/iio:deviceX`）： 适用 ICM42688 等通过 IIO 子系统上报的 IMU。
+    * input 方式（`/dev/input/eventX`）： 依赖驱动以 MSC 事件形式上报数据，具体支持情况以实际模组为准。
+3.  **详细说明**： 参考[IMU 示例文档](/Demos/peripheral/imu/s100_imu)。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+### 扩展接口与自锁连接器
+
+#### Q22: S600 的扩展接口能用杜邦线直接插吗？
+**A:** 不能。S600 的扩展接口（2 个 10-pin、1 个 12-pin、1 个 14-pin）均为 **1.25mm 间距的自锁线对板连接器**（如星坤 X1251WRS 系列）：
+* **接线方式**： 需使用配套的自锁插头（胶壳 + 压线端子）压线后接入；杜邦线（2.54mm 间距）物理尺寸不匹配，无法直接插入。
+* **自锁结构优势**： 插头插入后自动锁紧，防止振动或拉扯时松脱，适合机器人等运动场景。
+* **注意电平**： J19（PCM+I2C）上的 PCM 管脚复用为 GPIO 时为 **1.8V 电平**，接线前需确认外部器件电平匹配，切勿接 5V。
+
+#### Q23: GPIO 示例能运行但串口没有打印，管脚电平也不变化，是程序问题吗？
+**A:** 大多数情况不是程序问题，是接线或电平问题：
+1.  **示例本身无打印**： `simple_out.py` 等示例只翻转输出管脚电平，不打印任何内容；`simple_input.py`、`button_led.py` 等仅在**输入电平变化时**打印，电平不变时无输出。
+2.  **输入管脚悬空**： 悬空时电平不确定，读数乱跳或不变。应接确定电平（GND 或 1.8V）——注意 S600 扩展接口未引出 1.8V 电源，需从 J15 的 `VDDIO_MCU_1V8` 引出。
+3.  **输出管脚无测量点**： 输出管脚需接万用表（另一端接 GND）或 LED 才能观察到 0V/1.8V 跳变。
+4.  **提示管脚已被占用**： 该 GPIO 已被其他进程使用，结束占用进程后重试；示例退出时会自动 `GPIO.cleanup()` 释放管脚。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+### CAN 接口
+
+#### Q24: S600 的 CAN 总线终端电阻（120Ω）需要自己外接吗？
+**A:** 不需要，S600 通过拨码开关控制板载 120Ω 终端电阻是否接入：
+* **MCU 域 CAN（J16，12-Pin，5 路）**： SW6 拨码分别控制 MCU-CAN1～CAN5 的 120Ω 电阻，ON=接入，OFF=断开。
+* **MAIN 域 CAN（J17，10-Pin，4 路）**： SW7 拨码分别控制 MAIN-CAN1～CAN4 的 120Ω 电阻。
+* **典型用法**： 总线两端节点将对应拨码拨到 ON（接入终端电阻），中间节点保持 OFF。节点数量与拓扑请结合 CAN 规范设计。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+### IMU（RDK S600）
+
+#### Q25: S600 上 IMU 检测不到，程序直接退出怎么办？怎么读非默认型号？
+**A:** S600 的 IMU（BMI088）位于 **MCU Port 扩展板**上，通过 SPI-13 总线通信：
+* **检测不到（`Error: init IMU 'bmi08x' failed !!! Quit Now`）**：
+    1. 确认 MCU Port 扩展板已正确连接（扩展板上 LINK 绿灯常亮表示连接正常、5V 供电正常）。
+    2. 检查 `/sys/bus/iio/devices/` 下是否存在 `iio:device*` 节点，确认 IIO 驱动已加载。
+* **读非默认型号**： 程序默认使用 `bmi08x`，其它型号（如 ICM42688）通过 `-n` 参数指定，支持 `bmi08x`、`icm42688-gyro`、`icm42688-accel`。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+### PCIe 与外设
+
+#### Q26: S600 启动后 NVMe 硬盘或 PCIe 设备不可用，dmesg 报 boardid 相关错误？
+**A:** 这是 S600 板级 boardid 机制不命中的典型表现：
+* **现象**： PCIe 驱动 `hobot-pcie-rc` 未自动加载，`dmesg` 可见 `Unsupported boardid:0x..., PCIE not Initialized!`。
+* **原因**： boardid 值与 `hobot-loadko.sh` 中登记的分支不匹配，常见于自定义硬件后 boardid 未登记，或 MCU、U-Boot、Kernel 三侧登记的 boardid 不一致。
+* **排查步骤**：
+    ```bash
+    # 1. 查看实际 boardid
+    cat /sys/class/boardinfo/adc_boardid
+    # 2. 对比 SBL/U-Boot 日志中打印的 boardid，判断三侧是否一致
+    ```
+* **解决**： 在 `hobot-loadko.sh` 中补全自定义 boardid 的分支，或修正三侧 boardid 定义，详见[RDK S600 硬件点亮](/Advanced_development/board_bringup/rdk_s600_bringup)。
+
+</DocScope>
