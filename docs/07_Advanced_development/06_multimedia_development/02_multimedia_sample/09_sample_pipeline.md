@@ -9,15 +9,6 @@ description: "sample_pipeline 使用说明 板端示例使用说明"
 ## 功能概述
 `sample_pipeline` 用于实现单路或多路 sensor pipeline 串联，实现用户常见的 pipeline 场景，用户可通过 `sample_pipeline` 子目录了解各个 pipeline 的搭建方法。
 
-```mermaid
-flowchart LR
-    A[Camera Sensor] --> B[VIN]
-    B --> C[ISP]
-    C --> D[PYM]
-    D --> E[GDC]
-    E --> F[CODEC]
-```
-
 ### sample_pipeline 架构说明
 `sample_pipeline` 包含多个示例，每个示例均以子目录形式存在 `app/multimedia_samples/sample_pipeline` 下，每个子目录描述如下
 
@@ -698,7 +689,9 @@ pipeline1_1280x720_30fps.h264
 ## uvc_capture_sample
 
 ### 功能概述
-`uvc_capture_sample `是一个测试 uvc camera 视频采集通路的程序,  完成 uvc camera 的图像采集并保存输出的图片，支持显示 ISP 相关信息。
+`uvc_capture_sample `是一个测试 uvc camera (USB 接口的摄像头)视频采集通路的程序,  完成 uvc camera 的图像采集并保存输出的图片，支持显示 ISP 相关信息。
+
+将 UVC camera 接入开发板的 USB 接口（J19/J20）即可使用本示例，接口详情参考 [USB 接口 (J19/J20)](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#usb-接口-j19j20)。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/uvc_capture_sample`
@@ -721,6 +714,7 @@ uvc_capture_sample
 - 输出成果物是 uvc_capture_sample 源码目录下的 `uvc_capture_sample`
 
 ### 运行
+
 #### 程序运行方法
 
 直接执行程序 `./uvc_capture_sample -h` 可以获得帮助信息
@@ -737,7 +731,6 @@ Usage: ./uvc_capture_sample
         -E --isp_info                   Show Isp Info flag
         -h --help                       Show this message
 ```
-
 #### 程序参数选项说明
 
 **选项**：
@@ -747,7 +740,7 @@ Usage: ./uvc_capture_sample
 - `-d, --dump_file`
   - 是否保存图像文件。启用此选项会将捕获的图像保存为文件。
 - `-F, --format <fmt>`
-  - 设置图像格式，根据 uvc camera 选择支持的 YUYV、NV12 等格式。
+  - 设置图像格式，根据 uvc camera 选择支持的格式：RAW8、RAW10、RAW12、YUYV、NV12、NV16、RGB888X格式。
 - `-l, --loop_cnt <num>`
   - 设置采集循环的次数（即捕获多少帧图像）。
 - `-H, --height <px>`
@@ -772,6 +765,52 @@ Usage: ./uvc_capture_sample
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d -E
 ```
+#### 运行前的准备
+
+插上 USB 摄像头后，查看通过如下两个命令，获取 `uvc_capture_sample` 需要的参数信息：
+1. `v4l2-ctl --list-devices`: 查看有哪些USB 节点
+2. `v4l2-ctl --list-formats-ext --device /dev/videoX`： 查看 USB节点的参数信息
+
+举例说明：
+1. 查看有哪些USB 节点
+
+```sh
+v4l2-ctl --list-devices
+Intel(R) RealSense(TM) Depth Ca (usb-0000:07:00.0-2):
+        /dev/video0
+        /dev/video1
+        /dev/video2
+        /dev/video3
+        /dev/video4
+        /dev/video5
+        /dev/media0
+        /dev/media1
+```
+2. 查看 video4 节点支持的参数信息
+```sh
+v4l2-ctl --list-formats-ext --device /dev/video4
+ioctl: VIDIOC_ENUM_FMT
+        Type: Video Capture
+
+        [0]: 'YUYV' (YUYV 4:2:2)
+                Size: Discrete 1280x720
+                        Interval: Discrete 0.033s (30.000 fps)
+                        Interval: Discrete 0.067s (15.000 fps)
+                        Interval: Discrete 0.167s (6.000 fps)
+                Size: Discrete 1920x1080
+                        Interval: Discrete 0.033s (30.000 fps)
+                        Interval: Discrete 0.067s (15.000 fps)
+                        Interval: Discrete 0.167s (6.000 fps)
+```
+从上面的信息可以得到如下命令：
+
+```shell
+./uvc_capture_sample -i 4  -W 1280 -H 720 -F YUYV -d 1 -l 1
+```
+1. `-i 4`： 设备节点 video4
+2. ` -W 1280 -H 720`: 分辨率是 1280x720
+3. `-F YUYV`: 数据格式是 YUYV
+4. `-d 1 -l 1`: 保存一张图片
 
 #### 运行效果
 
