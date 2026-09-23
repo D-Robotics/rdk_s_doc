@@ -1,32 +1,33 @@
 ---
 sidebar_position: 7
-title: "金字塔 - PYM"
+title: "图像金字塔 - PYM"
 description: "RDK S100/S600 PYM（金字塔下采样模块）"
 ---
-
-# 金字塔 - PYM
-
-> **层级说明**：本篇是【底层多媒体 API】中的 **PYM 模块使用文档**（模式 3）。通用 vnode/vflow 接口的完整字段表见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。若只需跑通采集/编码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
 
 ## 概述
 
 PYM（Pyramid，金字塔）是 HBN 框架中的视频处理 vnode（板端头文件 `hbn_pym_cfg.h`，接口前缀 `hbn_vnode_*`）。它是一个硬件加速模块，对输入图像按**金字塔图层**的方式做**下采样与 ROI**：把源图缩放出多路不同尺度的图像输出到 DDR，供算法（检测/跟踪等）做多尺度消费。
 
-PYM 作为 HBN vnode 接入 pipeline，配置集中在 `pym_cfg_t` 一个结构体里（输入尺寸、图层选择、每层 ROI），经 `hbn_vnode_set_attr` 一次性下发。**独立函数 API 较少，主体为配置结构体 + HBN vnode 调用**：
-
-- 金字塔层级与 ROI：`pym_cfg_t` → `chn_ctrl_t` → `roi_box_t`（`hbn_pym_cfg.h`）
-
-`hbn_vnode_*` / `hbn_vflow_*` 接口由所有硬件模块共用，位于 `libvpf.so`，完整说明见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
-
 ## 硬件框图
 
-视频通路由多个 CPE（Camera Process Engine，相机处理引擎）组成，每个 CPE 由 MIPI RX + CIM + ISP + YNR + PYM 串联成一个连续的 online 处理单元。PYM 串在通路末端：YUV sensor 场景 CIM 直连 PYM，RAW sensor 场景经 ISP（可选 YNR）转接；不走 online 时从 DDR offline 读入，或由用户态回灌。多尺度输出统一落 DDR。
+### PYM 视频通路
+
+视频通路由多个 CPE（Camera Process Engine，相机处理引擎）组成，每个 CPE 由 MIPI RX + CIM + ISP + YNR + PYM 串联成一个连续的 online 处理单元。PYM 串在通路末端，数据通路要点如下：
+
+- **online 输入**（前级硬件直连）：
+  - YUV sensor 场景：CIM 直连 PYM
+  - RAW sensor 场景：经 ISP（可选 YNR）转接
+- **offline 输入**：不走 online 时从 DDR 读入
+- **回灌输入**：由用户态把图像写入 PYM 输入 buffer
+- **输出**：多尺度输出统一落 DDR
 
 <DocScope products="RDK S100">
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/vps_hardware_S100.png" alt="S100 PYM 在 Camsys 子系统中的数量与位置（3 个 PYM：PYM0 / PYM1 / PYM4）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-- PYM 共 **3 个**（PYM0 / PYM1 / PYM4），CIM 的 online YUV 输出只能接到 PYM0 / PYM1，PYM4 只能 offline / 回灌
+- PYM 共 **3 个**：PYM0 / PYM1 / PYM4
+- online 连接：CIM 的 online YUV 输出只能接到 PYM0 / PYM1
+- PYM4 只能 offline / 回灌
 
 </DocScope>
 
@@ -34,9 +35,30 @@ PYM 作为 HBN vnode 接入 pipeline，配置集中在 `pym_cfg_t` 一个结构�
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/vps_hardware_S600.png" alt="S600 PYM 在 Camsys 子系统中的数量与位置（5 个 PYM：PYM0 ~ PYM4）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-- PYM 共 **5 个**（PYM0 ~ PYM4），CIM 的 online YUV 输出只能接到 PYM0 ~ PYM3，PYM4 只能 offline / 回灌
+- PYM 共 **5 个**：PYM0 ~ PYM4
+- online 连接：CIM 的 online YUV 输出只能接到 PYM0 ~ PYM3
+- PYM4 只能 offline / 回灌
 
 </DocScope>
+
+### PYM 图层结构
+
+PYM 的图层分三类，数据自上而下逐级缩小：
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_arch.png" alt="PYM 硬件特性（SRC 层 → BL Base 0~4 双线性下采样 → DS 层 ROI 输出到 DDR）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+| 层 | 数量 | 说明 |
+| --- | --- | --- |
+| SRC 层 | 1 | 源图像层，即输入原图 |
+| BL 层 | 5（BL Base 0 ~ 4） | 双线性下采样层，依次为源图的 1/2、1/4、1/8、1/16、1/32 |
+| DS 层 | 最多 6 | **输出层**。每层任选输入层（SRC 或 BL0~4），再做下采样 + ROI，输出到 DDR |
+
+DS 层是用户真正取帧的输出层，配置集中在 `chn_ctrl_t`：
+
+- `ds_roi_en` 按位使能第 0~5 层（bit0~bit5）
+- 每层用 `ds_roi_sel[]` 选输入层（`0` = SRC、`1` = BL）、`ds_roi_layer[]` 选 BL 几层、`ds_roi_info[]` 配置 ROI 与输出尺寸
+
+由于 DS 层可以先取 BL 层再缩小，级联后可获得小于 1/32 的输出（例如取 BL4 即 1/32，再缩小到接近 1/2，即约 1/64）。
 
 ## 硬件规格
 
@@ -74,8 +96,11 @@ PYM 作为 HBN vnode 接入 pipeline，配置集中在 `pym_cfg_t` 一个结构�
 | --- | --- |
 | 最大输入宽 × 高 | 4096 × 4096 |
 | 最小输入宽 × 高 | 32 × 32 |
+| online 输入格式 | YUV422 / YUV420 |
+| offline 输入格式 | YUV420SP（NV12） |
+| 输出格式 | YUV420SP（NV12） |
 | 缩放范围 | 缩小 ratio ∈ (1/2, 1]，**不支持放大** |
-| offline 模式输入/输出格式 | YUV420 semi-planar（NV12） |
+| DS 层输出能力 | 6 层独立配置；每层支持 ROI crop、UV 平面单独 bypass、输出 stride 可配、垂直/水平相位可配 |
 
 </DocScope>
 
@@ -85,41 +110,25 @@ PYM 作为 HBN vnode 接入 pipeline，配置集中在 `pym_cfg_t` 一个结构�
 | --- | --- |
 | 最大输入宽 × 高 | 5696 × 5696 |
 | 最小输入宽 × 高 | 32 × 32 |
+| online 输入格式 | YUV422 / YUV420 |
+| offline 输入格式 | YUV420SP（NV12） |
+| 输出格式 | YUV420SP（NV12） |
 | 缩放范围 | 缩小 ratio ∈ (1/2, 1]，**不支持放大** |
-| offline 模式输入/输出格式 | YUV420 semi-planar（NV12） |
+| DS 层输出能力 | 6 层独立配置；每层支持 ROI crop、UV 平面单独 bypass、输出 stride 可配、垂直/水平相位可配 |
 
 </DocScope>
 
 > 输入宽高需 **2 对齐**、输入 stride 需 **16 对齐**，完整取值约束见[约束与注意事项](#约束与注意事项)。
 
-### 金字塔图层结构
-
-PYM 的图层分三类，数据自上而下逐级缩小：
-
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_arch.png" alt="PYM 硬件特性（SRC 层 → BL Base 0~4 双线性下采样 → DS 层 ROI 输出到 DDR）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-| 层 | 数量 | 说明 |
-| --- | --- | --- |
-| SRC 层 | 1 | 源图像层，即输入原图 |
-| BL 层 | 5（BL Base 0 ~ 4） | 双线性下采样层，依次为源图的 1/2、1/4、1/8、1/16、1/32 |
-| DS 层 | 最多 6 | **输出层**。每层任选输入层（SRC 或 BL0~4），再做下采样 + ROI，输出到 DDR |
-
-DS 层是用户真正取帧的输出层，配置集中在 `chn_ctrl_t`：
-
-- `ds_roi_en` 按位使能第 0~5 层（bit0~bit5）
-- 每层用 `ds_roi_sel[]` 选输入层（`0` = SRC、`1` = BL）、`ds_roi_layer[]` 选 BL 几层、`ds_roi_info[]` 配置 ROI 与输出尺寸
-
-由于 DS 层可以先取 BL 层再缩小，级联后可获得小于 1/32 的输出（例如取 BL4 即 1/32，再缩小到接近 1/2，即约 1/64）。
-
 ## API 调用流程
 
-1. `hbn_vnode_open(HB_PYM, hw_id, AUTO_ALLOC_ID, &pym_fd)` —— 打开 PYM vnode，`hw_id` 即 PYM 实例号
-2. 填 `pym_cfg_t`（输入尺寸 / 图层选择 / 每层 ROI），`hbn_vnode_set_attr` 一次性下发
-3. `hbn_vnode_set_ichn_attr(pym_fd, 0, &pym_cfg)` / `hbn_vnode_set_ochn_attr(pym_fd, 0, &pym_cfg)` —— 输入/输出通道**均传同一个 `pym_cfg_t`**
-4. `hbn_vnode_set_ochn_buf_attr(pym_fd, 0, &alloc_attr)` —— 按 `output_buf_num` 分配输出 buffer（**真正发起 buffer 分配的是本接口**）
-5. `hbn_vflow_create` / `hbn_vflow_add_vnode` / `hbn_vflow_bind_vnode` / `hbn_vflow_start` —— 建流、挂节点、绑定前级并启动。绑定时上游用 online 通道 `1`（VIN/ISP/YNR 的 online 输出均可接 PYM），PYM 自身输出通道为 `0`（offline → DDR）
-6. 取帧：`hbn_vnode_getframe_group` 取一组多层输出，处理完 `hbn_vnode_releaseframe_group` 归还；offline 回灌模式先用 `hbn_vnode_sendframe` 往输入通道送帧
-7. 收尾：`hbn_vflow_stop` / `hbn_vflow_destroy`，或单独 `hbn_vnode_close(pym_fd)`
+**回灌模式（`pym_mode = 3`，offline）**——每帧由应用主动送入：
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_feedback.png" alt="PYM API 调用流程（回灌模式）" width="600" />
+
+**vflow 链路模式（`pym_mode = 1 / 2`，online）**——帧由前级自动流入：
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_flow.png" alt="PYM API 调用流程（vflow 链路）" width="600" />
 
 ## 快速示例
 
@@ -254,14 +263,17 @@ PYM 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。开发用�
 
 ## API 接口说明
 
-下文各小节有两条共性约定，不再逐节重复：
+PYM 作为 HBN vnode 接入 pipeline，**独立函数 API 较少，主体为配置结构体 + HBN vnode 调用**：
 
-- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（`-HBN_STATUS_xxx`），完整清单见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#返回值说明)；PYM 上实际会遇到的返回码见[常见返回码](#常见返回码)。
+- 配置：全部集中在 `pym_cfg_t` 一个结构体（输入尺寸、图层选择、每层 ROI），经 `hbn_vnode_set_attr` 一次性下发；层级关系 `pym_cfg_t` → `chn_ctrl_t` → `roi_box_t`，见[数据结构](#数据结构)
+- 接口：`hbn_vnode_*` / `hbn_vflow_*` 由所有硬件模块共用，位于 `libvpf.so`，完整说明见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
+- 返回码：PYM 上实际会遇到的见[常见返回码](#常见返回码)
+
+下文各小节有一条共性约定，不再逐节重复：
+
 - **`pym_cfg_t` 单结构体**：PYM 的 `set_attr` / `set_ichn_attr` / `set_ochn_attr` 传的都是**同一个 `pym_cfg_t` 指针**（区别于 VIN/ISP 的分体结构体），字段完整定义见[数据结构](#数据结构)。
 
-### hbn_vnode_open
-
-打开 PYM 的设备节点，返回该模块的 vnode handle。与 `hbn_vnode_close` 成对使用。
+#### hbn_vnode_open
 
 【函数原型】
 
@@ -270,22 +282,27 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
                             int32_t ctx_id, hbn_vnode_handle_t *vnode_fd);
 ```
 
-【参数描述】
+【功能描述】
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_type` | `hb_vnode_type` | vnode 类型，PYM 取 `HB_PYM`（枚举定义见 `hbn_vpf_data_info.h`） |
-| `hw_id` | `uint32_t` | 硬件 id，**即 PYM 实例号**。S100 合法值 `0`/`1`/`4`；S600 合法值 `0`~`4` |
-| `ctx_id` | `int32_t` | context id，软件概念；可指定具体值，或传 `AUTO_ALLOC_ID` 由框架自动分配 |
-| `vnode_fd` | `hbn_vnode_handle_t *` | **出参**，返回的 vnode handle |
+初始化 PYM 模块，打开该模块设备节点，返回该模块的 vnode handle。与 hbn_vnode_close 成对使用。
+
+【参数】
+
+- [IN] hb_vnode_type vnode_type：vnode 类型，每个硬件模块对应一个 vnode 类型，PYM 取 HB_PYM（枚举定义见 `hbn_vpf_data_info.h`）
+- [IN] uint32_t hw_id：模块的硬件 id，即 PYM 实例号。S100 合法值 0/1/4；S600 合法值 0~4
+- [IN] int32_t ctx_id：模块的 context id，软件上的概念；可指定 context id 值，也可设置为 AUTO_ALLOC_ID，由 SDK 自动分配
+- [OUT] hbn_vnode_handle_t *vnode_fd：返回模块的 vnode handle
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
 
 【注意事项】
 
-- `hw_id` 写板上不存在的实例号会直接打开失败
+- hw_id 写板上不存在的实例号会直接打开失败
 
-### hbn_vnode_set_attr
-
-设置模块的基本属性，PYM 的全部配置集中于此。
+#### hbn_vnode_set_attr
 
 【函数原型】
 
@@ -293,40 +310,72 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr);
 ```
 
-【参数描述】
+【功能描述】
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `attr` | `pym_cfg_t *` | 基本属性结构体指针，见[数据结构](#数据结构) |
+设置模块的基本属性，PYM 的全部配置集中于此。
+
+【参数】
+
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+- [IN] void *attr：模块的基本属性结构体指针，PYM 用 pym_cfg_t，见[数据结构](#数据结构)
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
 
 【注意事项】
 
-- `pym_cfg_t` 的 `magicNumber` 固定为 `MAGIC_NUMBER`（`0x12345678`），库在下发属性时会自动重填该字段（用户填写的值会被覆盖），无需关心
+- pym_cfg_t 的 magicNumber 固定为 MAGIC_NUMBER（0x12345678），库在下发属性时会自动重填该字段（用户填写的值会被覆盖），无需关心
 - 字段取值范围与对齐要求见[约束与注意事项](#约束与注意事项)
 
-### hbn_vnode_set_ichn_attr / hbn_vnode_set_ochn_attr
-
-设置输入 / 输出通道属性。PYM 的两个接口均传 `pym_cfg_t`，通道 id 固定取 0。
+#### hbn_vnode_set_ichn_attr
 
 【函数原型】
 
 ```c
 hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id, void *attr);
+```
+
+【功能描述】
+
+设置模块的输入通道属性。PYM 的该接口传 pym_cfg_t，通道 id 固定取 0。
+
+【参数】
+
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+- [IN] uint32_t ichn_id：PYM 输入通道 id，固定为 0
+- [IN] void *attr：与 hbn_vnode_set_attr 相同的属性结构体指针
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
+
+#### hbn_vnode_set_ochn_attr
+
+【函数原型】
+
+```c
 hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, void *attr);
 ```
 
-【参数描述】
+【功能描述】
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ichn_id` / `ochn_id` | `uint32_t` | PYM 输入/输出通道 id，**固定为 0** |
-| `attr` | `pym_cfg_t *` | 与 `set_attr` 相同的属性结构体指针 |
+设置模块的输出通道属性。PYM 的该接口传 pym_cfg_t，通道 id 固定取 0。
 
-### hbn_vnode_set_ochn_buf_attr
+【参数】
 
-设置输出通道的 buffer 属性，**真正发起输出 buffer 分配的是本接口**。
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+- [IN] uint32_t ochn_id：PYM 输出通道 id，固定为 0
+- [IN] void *attr：与 hbn_vnode_set_attr 相同的属性结构体指针
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
+
+#### hbn_vnode_set_ochn_buf_attr
 
 【函数原型】
 
@@ -335,21 +384,26 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
                                          hbn_buf_alloc_attr_t *alloc_attr);
 ```
 
-【参数描述】
+【功能描述】
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id，**固定为 0** |
-| `alloc_attr` | `hbn_buf_alloc_attr_t *` | 含 `buffers_num` / `is_contig` / `flags`，`buffers_num` 一般取 `pym_cfg_t.output_buf_num` |
+设置输出通道的 buffer 属性，真正发起输出 buffer 分配的是本接口。
+
+【参数】
+
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+- [IN] uint32_t ochn_id：输出通道 id，固定为 0
+- [IN] hbn_buf_alloc_attr_t *alloc_attr：buffer 分配属性，含 buffers_num / is_contig / flags，buffers_num 一般取 pym_cfg_t.output_buf_num
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
 
 【注意事项】
 
 - offline（回灌）模式下，回灌 buffer 也会按该数目默认分配
 
-### hbn_vnode_getframe_group
-
-从输出通道取**一组**多层金字塔输出（对应 `chn_ctrl_t` 使能的各 DS 层），**阻塞接口**。
+#### hbn_vnode_getframe_group
 
 【函数原型】
 
@@ -358,23 +412,28 @@ hobot_status hbn_vnode_getframe_group(hbn_vnode_handle_t vnode_fd, uint32_t ochn
                                       uint32_t millisecondTimeout, hbn_vnode_image_group_t *out_img);
 ```
 
-【参数描述】
+【功能描述】
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id，**固定为 0** |
-| `millisecondTimeout` | `uint32_t` | 超时时间（毫秒） |
-| `out_img` | `hbn_vnode_image_group_t *` | **出参**，一组多层输出（帧信息 + `hb_mem_graphic_buf_group_t`） |
+从输出通道获取一组多层金字塔输出（对应 chn_ctrl_t 使能的各 DS 层），阻塞型接口。
+
+【参数】
+
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+- [IN] uint32_t ochn_id：输出通道 id，固定为 0
+- [IN] uint32_t millisecondTimeout：超时等待时间
+- [OUT] hbn_vnode_image_group_t *out_img：输出图像组结构体地址，一组多层输出（帧信息 + `hb_mem_graphic_buf_group_t`）
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
 
 【注意事项】
 
-- 取到的 group **必须**通过 `hbn_vnode_releaseframe_group` 归还，否则 buffer 耗尽后无法继续取帧
-- 只取单层时可用 `hbn_vnode_getframe`；需要条件取帧时用 `hbn_vnode_getframe_group_cond`
+- 取到的 group 必须通过 hbn_vnode_releaseframe_group 归还，否则 buffer 耗尽后无法继续取帧
+- 只取单层时可用 hbn_vnode_getframe；需要条件取帧时用 hbn_vnode_getframe_group_cond
 
-### hbn_vnode_releaseframe_group
-
-归还 `hbn_vnode_getframe_group` 取到的一组多层输出，与取帧接口成对使用。
+#### hbn_vnode_releaseframe_group
 
 【函数原型】
 
@@ -383,22 +442,27 @@ hobot_status hbn_vnode_releaseframe_group(hbn_vnode_handle_t vnode_fd, uint32_t 
                                           hbn_vnode_image_group_t *img_group);
 ```
 
-【参数描述】
+【功能描述】
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ochn_id` | `uint32_t` | 输出通道 id，**固定为 0** |
-| `img_group` | `hbn_vnode_image_group_t *` | `hbn_vnode_getframe_group` 返回的输出组
+归还 hbn_vnode_getframe_group 取到的一组多层输出，与取帧接口成对使用。
+
+【参数】
+
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+- [IN] uint32_t ochn_id：输出通道 id，固定为 0
+- [IN] hbn_vnode_image_group_t *img_group：hbn_vnode_getframe_group 返回的输出组
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
 
 【注意事项】
 
-- 归还的输出组 `bufferindex` 越界时返回 `-44`（`HBN_STATUS_ILLEGAL_BUF_INDEX`）
-- 只取单层时用 `hbn_vnode_releaseframe` 归还
+- 归还的输出组 bufferindex 越界时返回 -44（HBN_STATUS_ILLEGAL_BUF_INDEX）
+- 只取单层时用 hbn_vnode_releaseframe 归还
 
-### hbn_vnode_sendframe
-
-向输入通道送入一帧，用于 offline / 回灌（`pym_mode = 3`）场景。
+#### hbn_vnode_sendframe
 
 【函数原型】
 
@@ -407,23 +471,28 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
                                  hbn_vnode_image_t *img);
 ```
 
-【参数描述】
+【功能描述】
 
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `vnode_fd` | `hbn_vnode_handle_t` | 模块的 vnode handle |
-| `ichn_id` | `uint32_t` | 输入通道 id，**固定为 0** |
-| `img` | `hbn_vnode_image_t *` | 要送入的帧（NV12，尺寸与 `chn_ctrl` 配置一致） |
+向输入通道送入一帧，用于 offline / 回灌（pym_mode = 3）场景。
+
+【参数】
+
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+- [IN] uint32_t ichn_id：输入通道 id，固定为 0
+- [IN] hbn_vnode_image_t *img：要送入的帧（NV12，尺寸与 chn_ctrl 配置一致）
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
 
 【注意事项】
 
 - 送入前需对输入 buffer 做 cache flush（如 `hb_mem_flush_buf_with_vaddr`）
 - online 链路场景不需要调用本接口，帧由前级自动流入
-- 阻塞接口；不需要等待的场景用 `hbn_vnode_sendframe_async`
+- 阻塞接口；不需要等待的场景用 hbn_vnode_sendframe_async
 
-### hbn_vnode_close
-
-关闭 PYM 设备节点。
+#### hbn_vnode_close
 
 【函数原型】
 
@@ -431,9 +500,22 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 ```
 
+【功能描述】
+
+关闭 PYM 模块的设备节点。
+
+【参数】
+
+- [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
+
+【返回值】
+
+- 成功：HBN_STATUS_SUCESS 0
+- 失败：异常为负值错误码
+
 【注意事项】
 
-- PYM 串在 vflow 中时，调用 `hbn_vflow_destroy` 即可，无须再单独调用 `hbn_vnode_close`
+- PYM 串在 vflow 中时，调用 hbn_vflow_destroy 即可，无须再单独调用 hbn_vnode_close
 
 ## 数据结构
 
