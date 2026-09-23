@@ -1,6 +1,6 @@
 ---
 title: "config.txt 解析开发指南"
-sidebar_position: 5
+sidebar_position: 1
 description: "config.txt 解析机制与新增配置项开发指南"
 ---
 
@@ -8,7 +8,7 @@ description: "config.txt 解析机制与新增配置项开发指南"
 
 本页面向模式 3 开发者，介绍 config.txt 的 U-Boot 解析机制及如何新增自定义配置项。
 
-> 用户侧配置使用见 [config.txt 使用指南](./01_usage.md)，常用配置项见 [常用配置项参考](./03_common_options.md)。
+> 用户侧配置使用见 [config.txt 配置指南](./00_overview.md)。
 
 ## 解析机制
 
@@ -80,8 +80,5 @@ config.txt 解析源码位于 BSP 的 U-Boot 源码树中，路径为
 
 ## 相关文档
 
-- [config.txt 使用指南](./01_usage.md)
-- [自定义 config.txt](./02_custom.md)
-- [常用配置项参考](./03_common_options.md)
-- [启动相关配置](./04_boot_options.md)
+- [config.txt 配置指南](./00_overview.md)
 - [开发环境与编译](../../07_Advanced_development/06_environment_build/01_environment_build.md)

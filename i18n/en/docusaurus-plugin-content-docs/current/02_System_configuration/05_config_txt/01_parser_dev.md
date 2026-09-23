@@ -1,6 +1,6 @@
 ---
 title: "config.txt Parser Development Guide"
-sidebar_position: 5
+sidebar_position: 1
 description: "Guide on the config.txt parsing mechanism and developing new configuration options"
 ---
 
@@ -8,7 +8,7 @@ description: "Guide on the config.txt parsing mechanism and developing new confi
 
 This page is aimed at Mode 3 developers, introducing the U-Boot parsing mechanism of config.txt and how to add custom configuration options.
 
-> For user-side configuration usage, see [config.txt Usage Guide](./01_usage.md); for common configuration options, see [Common Configuration Options Reference](./03_common_options.md).
+> For user-side configuration usage, see [config.txt Configuration Guide](./00_overview.md).
 
 ## Parsing Mechanism
 
@@ -80,8 +80,5 @@ The config.txt parsing source code is located in the U-Boot source tree of the B
 
 ## Related Documentation
 
-- [config.txt Usage Guide](./01_usage.md)
-- [Customizing config.txt](./02_custom.md)
-- [Common Configuration Options Reference](./03_common_options.md)
-- [Boot-related Configuration](./04_boot_options.md)
+- [config.txt Configuration Guide](./00_overview.md)
 - [Development Environment and Compilation](../../07_Advanced_development/06_environment_build/01_environment_build.md)

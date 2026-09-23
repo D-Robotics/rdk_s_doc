@@ -203,5 +203,5 @@ make mrproper
 
 ## Related Documentation
 
-- [Boot-Related Configuration](../../02_System_configuration/05_config_txt/04_boot_options.md)
+- [config.txt Configuration Guide](../../02_System_configuration/05_config_txt/00_overview.md)
 - [Set Up the Development Environment](../06_environment_build/01_environment_build.md)

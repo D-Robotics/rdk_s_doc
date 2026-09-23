@@ -32,29 +32,15 @@
     "title": "2.4 srpi-config 工具配置",
     "h1": "2.4 srpi-config 工具配置"
   },
-  "docs/02_System_configuration/05_config_txt/01_usage.md": {
+  "docs/02_System_configuration/05_config_txt/00_overview.md": {
     "pos": 1,
-    "h1": "2.5.1 config.txt 使用指南"
+    "title": "2.5.1 config.txt 配置指南",
+    "h1": "2.5.1 config.txt 配置指南"
   },
-  "docs/02_System_configuration/05_config_txt/02_custom.md": {
+  "docs/02_System_configuration/05_config_txt/01_parser_dev.md": {
     "pos": 2,
-    "title": "2.5.2 自定义 config.txt",
-    "h1": "2.5.2 自定义 config.txt"
-  },
-  "docs/02_System_configuration/05_config_txt/03_common_options.md": {
-    "pos": 3,
-    "title": "2.5.3 常用配置项参考",
-    "h1": "2.5.3 常用配置项参考"
-  },
-  "docs/02_System_configuration/05_config_txt/04_boot_options.md": {
-    "pos": 4,
-    "title": "2.5.4 启动相关配置",
-    "h1": "2.5.4 启动相关配置"
-  },
-  "docs/02_System_configuration/05_config_txt/05_parser_dev.md": {
-    "pos": 5,
-    "title": "2.5.5 config.txt 解析开发指南",
-    "h1": "2.5.5 config.txt 解析开发指南"
+    "title": "2.5.2 config.txt 解析开发指南",
+    "h1": "2.5.2 config.txt 解析开发指南"
   },
   "docs/02_System_configuration/06_self_start.md": {
     "pos": 6,

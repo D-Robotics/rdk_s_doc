@@ -50,7 +50,7 @@ xset s noblank
 setterm --blank 0
 ```
 
-永久关闭需在内核命令行加 `consoleblank=0`，方法见 [config.txt 配置](./05_config_txt/01_usage.md)。
+永久关闭需在内核命令行加 `consoleblank=0`，方法见 [config.txt 配置指南](./05_config_txt/00_overview.md)。
 
 RDK S600 板默认走串口控制台（`cat /proc/cmdline` 中 `console=ttyS0`），无帧缓冲控制台，无需处理息屏；接显示器的桌面环境按上一节配置。
 

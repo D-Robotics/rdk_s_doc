@@ -58,7 +58,7 @@ $ cat /sys/class/drm/card0-HDMI-A-1/modes
 1280x720
 ```
 
-Server 版控制台分辨率在 config.txt（见 [config.txt](./05_config_txt/01_usage.md)）里配置 `video=` 参数。
+Server 版控制台分辨率在 config.txt（见 [config.txt 配置指南](./05_config_txt/00_overview.md)）里配置 `video=` 参数。
 
 ## 多屏
 
@@ -94,6 +94,6 @@ Wayland 会话请在「设置 → 显示器」里配置旋转方向。
 
 ## 相关文档
 
-- [config.txt 配置](./05_config_txt/01_usage.md)
+- [config.txt 配置指南](./05_config_txt/00_overview.md)
 - [屏幕休眠与电源管理](./11_screen_sleep.md)
 - [音频配置](./10_audio_output.md)

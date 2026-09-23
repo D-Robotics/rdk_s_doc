@@ -90,7 +90,7 @@ sudo srpi-config
 
 - **外设配置**
 
-  建议参考 [config.txt 文件配置](../05_config_txt/01_usage.md)进行外设的配置。
+  建议参考 [config.txt 配置指南](../05_config_txt/00_overview.md)进行外设的配置。
 
 
 ## Performance Options
@@ -186,6 +186,6 @@ sudo srpi-config
 
 ## 相关文档
 
-- [config.txt 文件配置](../05_config_txt/01_usage.md)
+- [config.txt 配置指南](../05_config_txt/00_overview.md)
 - [网络配置](../01_network_config.md)
 - [开机自启动配置](../06_self_start.md)

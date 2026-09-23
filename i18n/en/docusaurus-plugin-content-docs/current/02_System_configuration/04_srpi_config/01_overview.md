@@ -83,7 +83,7 @@ The Interface Options menu. The following options can be enabled/disabled: SSH, 
   S100 does not support VNC (please use NoMachine); S600 supports VNC (based on x11vnc).
 
 - Peripheral configuration
-  It is recommended to refer to [config.txt File Configuration](../05_config_txt/01_usage.md) for peripheral configuration;
+  It is recommended to refer to [config.txt Configuration Guide](../05_config_txt/00_overview.md) for peripheral configuration;
 
 
 ## Performance Options
@@ -179,6 +179,6 @@ After completing your changes, select the `Finish` button. For the system config
 
 ## Related Documentation
 
-- [config.txt File Configuration](../05_config_txt/01_usage.md)
+- [config.txt Configuration Guide](../05_config_txt/00_overview.md)
 - [Network Configuration](../01_network_config.md)
 - [Auto-start Configuration at Boot](../06_self_start.md)

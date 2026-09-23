@@ -338,7 +338,7 @@ RDK S600 的 USB Type-C 接口为 **J4**（闪连），内置 2 颗 CH340 芯片
 - [入门配置](03_install_os_and_setup/04_configuration_wizard.md)
 - [远程登录](03_install_os_and_setup/05_remote_login.md)
 - [网络配置](../02_System_configuration/01_network_config.md)
-- [启动相关配置](../02_System_configuration/05_config_txt/04_boot_options.md)
+- [config.txt 配置指南](../02_System_configuration/05_config_txt/00_overview.md)
 - [显示配置](../02_System_configuration/09_display_config.md)
 - [音频配置](../02_System_configuration/10_audio_output.md)
 - [蓝牙配置](../02_System_configuration/02_bluetooth_config.md)

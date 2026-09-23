@@ -38,7 +38,7 @@ It is recommended not to use the system language switch feature for now. If you 
 
 ## Incorrect Screen Resolution
 
-The HDMI display resolution can be configured through config.txt; see the display options section of [Common Configuration Item Reference](../02_System_configuration/05_config_txt/03_common_options.md).
+The HDMI display resolution can be configured through config.txt; see the display options section of [config.txt Configuration Guide](../02_System_configuration/05_config_txt/00_overview.md).
 
 It can also be adjusted via Settings → Displays on the desktop.
 
@@ -62,5 +62,5 @@ It can also be adjusted via Settings → Displays on the desktop.
 - [Display Configuration](../02_System_configuration/09_display_config.md)
 - [Audio Configuration](../02_System_configuration/10_audio_output.md)
 - [Screen Sleep and Power Management](../02_System_configuration/11_screen_sleep.md)
-- [Common Configuration Item Reference](../02_System_configuration/05_config_txt/03_common_options.md)
+- [config.txt Configuration Guide](../02_System_configuration/05_config_txt/00_overview.md)
 - [Debug Serial Port](../02_System_configuration/16_debug_serial.md)

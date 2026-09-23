@@ -58,7 +58,7 @@ $ cat /sys/class/drm/card0-HDMI-A-1/modes
 1280x720
 ```
 
-The Server edition console resolution is configured with the `video=` parameter in config.txt (see [config.txt](./05_config_txt/01_usage.md)).
+The Server edition console resolution is configured with the `video=` parameter in config.txt (see [config.txt Configuration Guide](./05_config_txt/00_overview.md)).
 
 ## Multi-Display
 
@@ -94,6 +94,6 @@ In the Wayland session, configure the rotation direction in "Settings → Displa
 
 ## Related Documentation
 
-- [config.txt Configuration](./05_config_txt/01_usage.md)
+- [config.txt Configuration Guide](./05_config_txt/00_overview.md)
 - [Screen Sleep and Power Management](./11_screen_sleep.md)
 - [Audio Configuration](./10_audio_output.md)
