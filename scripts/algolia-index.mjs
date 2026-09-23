@@ -736,6 +736,125 @@ function chunk(arr, size) {
   return out;
 }
 
+function relativePathFromUrl(url) {
+  try {
+    return new URL(url).pathname;
+  } catch {
+    return url;
+  }
+}
+
+function deepestHeadingText(hierarchy) {
+  for (const lvl of ['lvl6', 'lvl5', 'lvl4', 'lvl3', 'lvl2', 'lvl1']) {
+    const text = (hierarchy?.[lvl] || '').trim();
+    if (text) {
+      return text;
+    }
+  }
+  return '';
+}
+
+/**
+ * 把 Algolia DocSearch records 映射成 easyops `search-index.json` 同构格式（5 shard），
+ * 供 rdk-docs-mcp 读取。同一页按 product/version 作用域重复生成的 records 按 pathname
+ * 归并去重，产出与 easyops 插件一致的无作用域索引（仅 zh-Hans）。
+ */
+function buildEasyopsIndex(records) {
+  const zh = records.filter((r) => r.language === 'zh-Hans');
+  const byPage = new Map();
+  for (const r of zh) {
+    const pagePath = relativePathFromUrl(r.url_without_anchor);
+    if (!byPage.has(pagePath)) {
+      byPage.set(pagePath, []);
+    }
+    byPage.get(pagePath).push(r);
+  }
+
+  const pages = [];
+  const headings = [];
+  const pageSnippets = [];
+  const contentSnippets = [];
+  let id = 0;
+  let pageSeq = 0;
+
+  for (const [u, recs] of byPage) {
+    pageSeq += 1;
+    let pageTitle = '';
+    for (const r of recs) {
+      if (r.type === 'lvl1' && r.hierarchy?.lvl1) {
+        pageTitle = r.hierarchy.lvl1.trim();
+        break;
+      }
+    }
+    const breadcrumbs = (recs[0]?.hierarchy?.lvl0 || '')
+      .split(' / ')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (!pageTitle) {
+      pageTitle = breadcrumbs[breadcrumbs.length - 1] || '';
+    }
+    pages.push({ i: ++id, t: pageTitle, u, b: breadcrumbs });
+
+    let firstHeading = '';
+    for (const r of recs) {
+      if (
+        r.type &&
+        r.type.startsWith('lvl') &&
+        r.type !== 'lvl1' &&
+        r.hierarchy?.[r.type]
+      ) {
+        firstHeading = r.hierarchy[r.type].trim();
+        break;
+      }
+    }
+    if (firstHeading) {
+      pageSnippets.push({ i: ++id, t: firstHeading, s: pageTitle, u, p: pageSeq });
+    }
+
+    const seenHeadings = new Set();
+    const seenContent = new Set();
+    for (const r of recs) {
+      const type = r.type;
+      if (type && type.startsWith('lvl') && type !== 'lvl1') {
+        if (r.anchor && !seenHeadings.has(r.anchor)) {
+          seenHeadings.add(r.anchor);
+          headings.push({
+            i: ++id,
+            t: (r.hierarchy?.[type] || '').trim(),
+            u,
+            h: `#${r.anchor}`,
+            p: pageSeq,
+          });
+        }
+      } else if (type === 'content' && r.content) {
+        const text = r.content.trim();
+        const key = `${r.anchor || ''}\u0000${text}`;
+        if (seenContent.has(key)) {
+          continue;
+        }
+        seenContent.add(key);
+        const doc = { i: ++id, t: text, u, p: pageSeq };
+        const source = deepestHeadingText(r.hierarchy);
+        if (source) {
+          doc.s = source;
+        }
+        if (r.anchor) {
+          doc.h = `#${r.anchor}`;
+        }
+        contentSnippets.push(doc);
+      }
+    }
+  }
+
+  return [
+    { documents: pages },
+    { documents: headings },
+    { documents: pageSnippets },
+    { documents: [] },
+    { documents: contentSnippets },
+  ];
+}
+
 async function main() {
   if (!ADMIN_KEY) {
     console.error(
@@ -798,6 +917,16 @@ async function main() {
     rdk_version: sample.rdk_version,
     type: sample.type,
   });
+
+  const easyopsIndex = buildEasyopsIndex(records);
+  const easyopsPath = path.join(repoRoot, 'scripts/_algolia_tmp/search-index.json');
+  fs.mkdirSync(path.dirname(easyopsPath), { recursive: true });
+  fs.writeFileSync(easyopsPath, JSON.stringify(easyopsIndex));
+  console.log(
+    `Wrote easyops search-index.json (${easyopsIndex[0].documents.length} pages, ` +
+      `${easyopsIndex[1].documents.length} headings, ` +
+      `${easyopsIndex[4].documents.length} content snippets) to ${easyopsPath}`,
+  );
 
   if (DRY_RUN) {
     console.log('Dry run complete; skipping Algolia upload.');
