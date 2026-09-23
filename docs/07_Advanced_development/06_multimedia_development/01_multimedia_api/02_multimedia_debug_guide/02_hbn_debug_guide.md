@@ -10,9 +10,9 @@ description: 多媒体 HBN pipeline 统计节点、日志与系统级故障定�
 
 统计节点分布在 sysfs（`/sys/class/vps/flow/`）、debugfs（`/sys/kernel/debug/`）与 procfs（`/proc`）下，是系统级调试的主要观测手段。下列路径与命令以板端实测为准，平台特定值见各节 `DocScope` 标注。
 
-### VIO 通路统计（帧率、延时、丢帧）
+### vflow 通路统计（帧率、延时、丢帧）
 
-VIO 通路的帧率、延时、丢帧统计分布在 `/sys/class/vps/flow/` 下，分别由 `fps_stats`、`delay_stats`、`drop_stats` 三个文件承载，各表以 `flowid`/`module`/`ctx_id`/`chn` 标识通路与通道；`/sys/kernel/debug/vps/vio_stats` 为三表的合并汇总视图（部分驱动版本运行时不实时刷新，排查以 `flow/*` 为准）。
+vflow 通路的帧率、延时、丢帧统计分布在 `/sys/class/vps/flow/` 下，分别由 `fps_stats`、`delay_stats`、`drop_stats` 三个文件承载，各表以 `flowid`/`module`/`ctx_id`/`chn` 标识通路与通道；`/sys/kernel/debug/vps/vio_stats` 为三表的合并汇总视图（部分驱动版本运行时不实时刷新，排查以 `flow/*` 为准）。
 
 ```bash
 cat /sys/class/vps/flow/fps_stats      # 帧率
@@ -172,7 +172,7 @@ frameid  module FS              FE              QB              DQ
 
 `module` 列随通路延伸依次出现 `vin`→`isp`→`ynr`→`pym` 等节点，逐行对比相邻节点的 FS/FE 即可定位某段时序异常。多路同步与 PPS 秒脉冲同步机制见 [多路 Camera 及与 Lidar 同步](../12_camerasync.md)。
 
-### vio 通路信息
+### vflow 通路信息
 
 `/sys/class/vps/flow/path_stat` 输出当前在跑通路的节点连接拓扑，用于确认 pipeline 实际建链是否与预期一致：
 
@@ -496,7 +496,7 @@ state          : 2(start)
 </DocScope>
 
 - `param/irq_cnt` 默认为 10，为避免大量错误打印会限制报错中断数；排查时可用 `echo 0xffffffff > /sys/class/vps/mipi_hostN/param/irq_cnt`（N 为实际接入路号）放开限制后再观察。
-- MIPI RX 无独立的帧开始/结束（FS/FE）中断，”是否有流”以 CIM 的 FS/FE 中断为准（见 [视频输入输出 - VIO](../04_vio_api.md)）。
+- MIPI RX 无独立的帧开始/结束（FS/FE）中断，”是否有流”以 CIM 的 FS/FE 中断为准（见 [视频输入 - VIN](../04_vin_api.md)）。
 
 ### MIPI 发送（Display 输出）调试信息
 
@@ -686,7 +686,7 @@ RDK S600 实测 `/proc/` 下有 `hb_isp`、`hb_isp_hw1`、`hb_isp_hw2`、`hb_isp
 RDK S100 板端实测 `/proc/` 下有 `hb_isp`、`hb_isp_hw1` 共 2 个 ISP 硬件实例节点，`/sys/class/isp_control/` 下为 `isp_hw{0,1}_control{0..11}`。
 </DocScope>
 
-图像异常时优先查 ISP 节点，调参细节见 [图像信号处理 - ISP](../05_isp_tune_api.md)。
+图像异常时优先查 ISP 节点，调参细节见 [图像信号处理 - ISP](../05_isp/02_isp_hbn_api.md)。
 
 ### 中断统计信息
 
@@ -742,7 +742,7 @@ RDK S100 板端实测共 6 核（Cortex-A78AE），每行 6 列 CPU 核心计数
 
 ### 用户态日志
 
-- 在运行 sample 的同一 shell 设置日志级别环境变量（据 J6 手册：`export LOGLEVEL=4` 为 VIN 日志，1=ERR/2=WARN/3=INFO/4=DEBUG；`CAM_LOGLEVEL`/`VPF_LOGLEVEL` 分别控制 libcam/libvpf 日志，见 [控制节点 - libcam/libvpf](#libcam--libvpf)），具体变量是否生效以 sample 实现为准。
+- 在运行 sample 的同一 shell 设置日志级别环境变量（`export LOGLEVEL=4` 为 VIN 日志，1=ERR/2=WARN/3=INFO/4=DEBUG；`CAM_LOGLEVEL`/`VPF_LOGLEVEL` 分别控制 libcam/libvpf 日志），具体变量是否生效以 sample 实现为准。
 - 查看用户态日志：`logcat`（或 `logcat -f logcat.txt` 落盘）；内核侧 `dmesg | grep -iE "cim|mipi|isp|pym"`。
 - 历史日志位于 `/log/usr/`。
 
@@ -772,19 +772,29 @@ echo 'module hobot_cim -p' > /sys/kernel/debug/dynamic_debug/control       # 关
 
 1. 查 MIPI RX：`cat /sys/class/vps/mipi_hostN/status/icnt`（N 为 sensor 实际接入路号，IMX219 实测接 `mipi_host4`）各计数是否为 0，`status/cfg` 是否为 `not inited`。`cfg` 未初始化或 `icnt` 非 0，说明 MIPI RX 未通或有错误，问题在 sensor 或 MIPI 链路（接线和供电、sensor 初始化、VIN/JSON 配置）。
 2. 查 CIM/VIN：MIPI RX 无独立 FS/FE 中断，“是否有流”以 CIM 的中断与帧事件打印为准。打开 CIM 驱动调试打印 `echo 'module hobot_cim +p' > /sys/kernel/debug/dynamic_debug/control`，再 `dmesg | grep -i cim` 看是否有帧事件；无则 sensor 未出图或 CIM 配置不符。排查完把 `+p` 改 `-p` 关闭。
-3. 查 VIO 通路：`cat /sys/class/vps/flow/fps_stats` 中目标 `flowid` 的 `fcount` 是否增长。不增长则问题在 VIN/ISP 入口。
+3. 查 vflow 通路：`cat /sys/class/vps/flow/fps_stats` 中目标 `flowid` 的 `fcount` 是否增长。不增长则问题在 VIN/ISP 入口。
 4. 查 ISP 层：`/proc/hb_isp*` 节点确认 ISP 是否出图。
 5. 查输出侧：若 ISP/PYM 有帧而显示或编码无输出，查 Display 与 Codec 节点。
 
-详细模块调试见 [视频输入输出 - VIO](../04_vio_api.md) 与 [Sunrise camera 开发说明](../../02_multimedia_sample/11_sunrise_camera_develop_guide.md)。
+<DocScope products="RDK S600">
+
+详细模块调试见 [视频输入 - VIN](../04_vin_api.md) 与[Sunrise camera 开发说明](../../02_multimedia_sample_s600/11_sunrise_camera_develop_guide.md)。
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+详细模块调试见 [视频输入 - VIN](../04_vin_api.md) 与[Sunrise camera 开发说明](../../02_multimedia_sample/11_sunrise_camera_develop_guide.md)。
+
+</DocScope>
 
 ### 花屏或颜色异常
 
 图像出现花屏、偏色或撕裂时，重点查 ISP、PYM、GDC 三处：
 
-- ISP 输出格式与 buffer 配置是否匹配，见 [图像信号处理 - ISP](../05_isp_tune_api.md)。
+- ISP 输出格式与 buffer 配置是否匹配，见 [图像信号处理 - ISP](../05_isp/02_isp_hbn_api.md)。
 - PYM 下采样参数与输入分辨率是否匹配，见 [视频处理框架 - PYM](../07_vpf_pym_api.md)。
-- GDC 矫正参数是否正确，见 [畸变矫正 - GDC](../08_gdc_api.md)。
+- GDC 矫正参数是否正确，见 [畸变矫正 - GDC](../08_gdc/01_gdc_overview.md)。
 - MIPI FIFO 是否溢出（`idi_fifo`/`ipi_fifo`），溢出会造成行场错位。
 
 ### 卡顿与丢帧
