@@ -166,33 +166,9 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 
 **结论**：四路 RAW12 在 D-PHY 下可以跑，占用 93%，余量很小，稳满帧要压缩 blanking；换 C-PHY 后降到 70%。
 
-> 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[使用说明](#使用说明)。
+> 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[选型依据](#选型依据)。
 
-![一帧数据的完整生命周期](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig2-frame-lifecycle.svg)
-
-CIM 抓到的数据有两条出路，由 `vin_attr_t` 里的三个字段决定：
-
-| 字段 | 含义 |
-| --- | --- |
-| `vin_node_attr.cim_attr.cim_isp_flyby = 1` | CIM 直连 ISP（Online） |
-| `vin_node_attr.cim_attr.cim_pym_flyby = 1` | CIM 直连 PYM（Online） |
-| `vin_ochn_attr[x].ddr_en = 1` | 该输出通道写 DDR（Offline） |
-
-`vin_node_attr.cim_attr.cim_isp_flyby` 与 `vin_node_attr.cim_attr.cim_pym_flyby` **互斥**，同一时刻只能有一个为 1。主帧可以既落 DDR、同时又 OTF 送一份给 ISP，代价是带宽。
-
-#### Online（OTF）
-CIM 抓到的数据**不落 DDR**，以硬件直连方式送给 ISP 或 PYM。
-
-- 优点：不占 DDR 带宽、延迟低
-- 限制：只有主帧通道支持 Online；ROI / EMB 两条旁路不支持；CIM 与下游必须在同一个 CPE 内
-
-#### Offline（DDR）
-CIM 把数据写进 DDR，下游模块或用户态再从内存读。
-
-- 优点：三条输出通道（主帧 / ROI / EMB）都可用，支持跨 CPE
-- 代价：CIM 写一遍、下游读一遍，带宽翻倍，延迟更高
-
-#### 选型依据
+### 选型依据
 | 你的场景 | 推荐 | 原因 |
 | --- | --- | --- |
 | 单路 RAW Sensor | **优先 Online** | 延迟低；需要 ROI / EMB 或存图时改用 Offline |
@@ -201,7 +177,13 @@ CIM 把数据写进 DDR，下游模块或用户态再从内存读。
 | 需要 ROI 裁剪输出 | **Offline** | ROI 通道不支持 Online |
 | YUV Sensor（Sensor 内部已做 ISP） | 按下游需求选 | Online 时直连 PYM，且每路 PYM 只能接 1 路并被独占；多路 YUV 只能走 Offline |
 
-#### 典型组合
+输出方式由 `vin_attr_t` 的三个字段决定：
+
+- `vin_node_attr.cim_attr.cim_isp_flyby = 1` —— CIM 直连 ISP（Online）
+- `vin_node_attr.cim_attr.cim_pym_flyby = 1` —— CIM 直连 PYM（Online）；与 `cim_isp_flyby` 互斥，同一时刻只能有一个为 1
+- `vin_ochn_attr[x].ddr_en = 1` —— 该输出通道写 DDR（Offline）；主帧可同时使能两者，落 DDR 之外再 OTF 送一份给 ISP，代价是带宽
+
+### 典型组合
 同一颗 CIM 的 4 路 IPI 可以**混合**使用 Online 与 Offline，分给不同的后级。四种典型组合：
 ![CIM 典型组合：四种场景](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
 
@@ -335,7 +317,6 @@ int main(void)
 
 ## API 参考
 
-### API 列表
 VIN 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。常用接口如下：
 
 | 接口 | 功能 |
@@ -356,13 +337,13 @@ VIN 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。常用接�
 
 建流与绑定使用 `hbn_vflow_create` / `hbn_vflow_add_vnode` / `hbn_vflow_bind_vnode` / `hbn_vflow_start` / `hbn_vflow_stop` / `hbn_vflow_destroy`，详见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
 
-### 接口说明
+## 接口说明
 下文 13 个接口有两条共性约定，各小节不再重复。
 
 - **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。完整清单见[基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#返回值说明)——注意那张表按**正值**列出（`10`、`13`…），而接口返回的是它的**负值**（`-10`、`-13`…）；VIN 上实际会遇到的返回码及处理建议见[返回值说明](#返回值说明)。
 - **五个宏**：`set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` 转发到带 `_s` 后缀的同名函数，长度由 `sizeof(*(attr))` 自动取得，因此**不能传 `void *`**，必须传指向具体类型的指针。
 
-#### hbn_vnode_open
+### hbn_vnode_open
 
 **【函数原型】**
 
@@ -406,7 +387,7 @@ hbn_vnode_open(HB_VIN, hw_id, AUTO_ALLOC_ID, &vin_fd);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_close
+### hbn_vnode_close
 
 **【函数原型】**
 
@@ -440,7 +421,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_set_attr
+### hbn_vnode_set_attr
 
 **【函数原型】**
 
@@ -482,7 +463,7 @@ hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例�
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_set_ochn_attr
+### hbn_vnode_set_ochn_attr
 
 **【函数原型】**
 
@@ -538,7 +519,7 @@ hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_get_ochn_attr
+### hbn_vnode_get_ochn_attr
 
 **【函数原型】**
 
@@ -576,7 +557,7 @@ hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_set_ichn_attr
+### hbn_vnode_set_ichn_attr
 
 **【函数原型】**
 
@@ -618,7 +599,7 @@ hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_get_ichn_attr
+### hbn_vnode_get_ichn_attr
 
 **【函数原型】**
 
@@ -656,7 +637,7 @@ hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_set_ochn_buf_attr
+### hbn_vnode_set_ochn_buf_attr
 
 **【函数原型】**
 
@@ -695,7 +676,7 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_start
+### hbn_vnode_start
 
 **【函数原型】**
 
@@ -729,7 +710,7 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_stop
+### hbn_vnode_stop
 
 **【函数原型】**
 
@@ -763,7 +744,7 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_getframe
+### hbn_vnode_getframe
 
 **【函数原型】**
 
@@ -807,7 +788,7 @@ hbn_vnode_getframe(vin_fd, OCHN_MAIN, 1000, &img);   /* 超时 1s */
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_sendframe
+### hbn_vnode_sendframe
 
 **【函数原型】**
 
@@ -845,7 +826,7 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-#### hbn_vnode_releaseframe
+### hbn_vnode_releaseframe
 
 **【函数原型】**
 
@@ -886,12 +867,12 @@ hbn_vnode_releaseframe(vin_fd, OCHN_MAIN, &img);
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
-### 数据结构
+## 数据结构
 完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[使用说明](#使用说明)，`func` 里的 pattern / 跳帧见 [注意事项与约束](#注意事项与约束)，通道字段见 [接口说明](#接口说明)。
 
 标「框架填」的字段不用自己设。
 
-#### 类型总览
+### 类型总览
 VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下发（`hbn_vnode_set_attr`）；建流与绑定交给 `hbn_vflow_*`。
 
 | 类型 | 作用 | 关键成员 |
@@ -911,9 +892,9 @@ VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下�
 
 **接口分属三个库**：`hbn_vnode_*` / `hbn_vflow_*` 在 `libvpf.so`，`hbn_camera_*` 在 `libcam.so`，`hb_mem_*` 在 `libhbmem.so`。
 
-#### 顶层
+### 顶层
 
-##### vin_attr_t
+#### vin_attr_t
 VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
@@ -925,9 +906,9 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[VIN_TYPE_INVALID]` | 落 DDR 通道的 buffer，按 `ochn_id` 索引 | — | — | — |
 | `magicNumber` | `uint32_t` | 填 `0x12345678` | `0x12345678` | — | — |
 
-#### 节点级属性
+### 节点级属性
 
-##### vin_node_attr_t
+#### vin_node_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `cim_attr` | `cim_attr_t` | 接入与通路选择 | — | — | — |
@@ -936,7 +917,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `flow_id` | `uint32_t` | 框架填 | — | — | 框架回填 |
 | `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_attr` 校验这个值，不符直接返回失败 | `0x12345678` | — | 必须等于驱动内部宏 `MAGIC_NUMBER` |
 
-##### cim_attr_t
+#### cim_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `mipi_en` | `uint32_t` | 输入源选择，1 = MIPI | 1 | 0 | `0` / `1`，与 `func.enable_pattern`、`rdma_input.rdma_en` 三选一 |
@@ -950,7 +931,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `tpg_input` | `cim_input_tpg_t` | 测试图案输入 | — | — | — |
 | `func` | `cim_func_desc_t` | 帧号、跳帧、pattern 等 | — | — | — |
 
-##### cim_func_desc_t
+#### cim_func_desc_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `enable_frame_id` | `uint32_t` | 是否给帧打帧号 | 1 | 0 | `0` / `1` |
@@ -969,7 +950,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `sparate_frames_mode` | `uint32_t` | 驱动未使用（头文件拼写如此），填 `0` | 0 | 0 | 驱动未使用 |
 | `endian_mode` | `uint32_t` | 写 DDR 时的字节序 | — | — | — |
 
-##### cim_input_rdma_t
+#### cim_input_rdma_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `rdma_en` | `uint32_t` | 回灌使能 | 0 | 0 | `0` / `1`，与 MIPI 输入、`enable_pattern` 三选一 |
@@ -977,13 +958,13 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `pack_mode` | `uint32_t` | 回灌数据的打包方式，口径同 `vin_basic_attr_t.pack_mode`；`stride` 由它与格式算出 | 1 | 0 | `0` / `1` |
 | `buff_num` | `uint32_t` | 回灌 buffer 数 | — | — | — |
 
-##### cim_input_tpg_t
+#### cim_input_tpg_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `tpg_en` | `uint32_t` | 测试图案使能 | 0 | 0 | `0` / `1` |
 | `fps` | `uint32_t` | 图案帧率 | — | — | — |
 
-##### vcon_attr_t
+#### vcon_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `attr_valid` | `int32_t` | 该组属性是否生效 | 1 | 0 | `0` / `1` |
@@ -1002,12 +983,12 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `vcon_type` | `int32_t` | 0=独立 1=复合主 2=复合从 | 0 | 0 | `0` 独立 / `1` 复合主 / `2` 复合从 |
 | `vcon_link` | `int32_t` | VCON link 序号，复合类型用 | — | — | — |
 
-##### lpwm_attr_t
+#### lpwm_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | 逐通道配置 | — | — | — |
 
-##### lpwm_chn_attr_t
+#### lpwm_chn_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `enable` | `uint32_t` | 该通道使能 | 0 | 0 | `0` / `1` |
@@ -1019,9 +1000,9 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `threshold` | `uint32_t` | 缓慢同步的相位误差门限（微秒），取值 0~65535。`0` 表示关闭缓慢同步；非 0 时按 `adjust_step` 逐步把触发相位拉向同步源，**并要求 `offset` 小于 `period`** | 0 | 0 | `0`~`65535`，单位 µs；`0` 关闭缓慢同步 |
 | `adjust_step` | `uint32_t` | 缓慢同步每次调整的步进量，取值 0~15。仅在 `threshold` 非 0 时起作用 | 0 | 0 | `0`~`15` |
 
-#### 扩展属性
+### 扩展属性
 
-##### vin_attr_ex_t
+#### vin_attr_ex_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `ex_attr_type` | `vin_attr_ex_type_e` | 哪些扩展属性生效 | — | — | — |
@@ -1032,16 +1013,16 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `ipi_reset` | `uint32_t` | MIPI IPI 复位 | — | — | — |
 | `bypass_enable` | `uint32_t` | bypass 使能 | — | — | — |
 
-#### 通道属性
+### 通道属性
 
-##### vin_ichn_attr_t
+#### vin_ichn_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `format` | `uint32_t` | 图像格式 | `HW_FORMAT_RAW10` | — | 见 `hb_vpm_data_info.h` 的 `HW_FORMAT_*` |
 | `width` | `uint32_t` | 宽 | — | — | — |
 | `height` | `uint32_t` | 高 | — | — | — |
 
-##### vin_ochn_attr_t
+#### vin_ochn_attr_t
 按 `ochn_id` 索引，`0` 主帧 / `4` ROI / `3` EMB。
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
@@ -1058,7 +1039,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `emb_attr` | `vin_emb_attr_t` | EMB 属性 | — | — | — |
 | `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_ochn_attr` 校验这个值，不符直接返回失败 | `0x12345678` | — | 必须等于驱动内部宏 `MAGIC_NUMBER` |
 
-##### vin_basic_attr_t
+#### vin_basic_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `pack_mode` | `uint32_t` | 写 DDR 的方式 | 1 | 0 | `0` / `1` |
@@ -1066,12 +1047,12 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `vstride` | `uint32_t` | 帧 stride | — | — | — |
 | `format` | `uint32_t` | 写 DDR 的格式 | — | — | — |
 
-##### vin_rawds_attr_t
+#### vin_rawds_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `rawds_mode` | `uint32_t` | 下采样模式 | 0 | 0 | `0` / `1` |
 
-##### vin_roi_attr_s
+#### vin_roi_attr_s
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `roi_x` | `uint32_t` | 裁剪起点 X | — | — | — |
@@ -1079,21 +1060,21 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `roi_width` | `uint32_t` | 裁剪宽 | — | — | — |
 | `roi_height` | `uint32_t` | 裁剪高 | — | — | — |
 
-##### vin_emb_attr_t
+#### vin_emb_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `embeded_dependence` | `uint32_t` | EMB 是否与图像数据在一起 | 0 | 0 | `0` / `1` |
 | `embeded_width` | `uint32_t` | EMB 数据宽 | — | — | — |
 | `embeded_height` | `uint32_t` | EMB 数据高 | — | — | — |
 
-##### vin_ochn_buff_attr_t
+#### vin_ochn_buff_attr_t
 按 `ochn_id` 索引。
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `buffers_num` | `uint32_t` | 该通道 buffer 数量 | 6 | — | 按通路缓冲需求 |
 | `flags` | `int64_t` | 驱动未使用，填 `0` | 0 | 0 | 驱动未使用 |
-### 返回值说明
+## 返回值说明
 接口失败返回**负值**，值为下表的宏取负。下表是走 `hbn_vnode_*` 接口时**实际会返回**的码：
 
 | 错误码 | 宏定义 | 描述 | 常见原因 | 解决方法 |

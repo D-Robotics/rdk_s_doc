@@ -165,33 +165,9 @@ Complete the bandwidth assessment before bring-up:
 
 **Conclusion**: four RAW12 cameras run under D-PHY at 93% occupancy; that is tight, and holding full frame rates takes shrinking blanking. Under C-PHY occupancy drops to 70%.
 
-> Size with **blanking included**, never with active-pixel figures; and confirm the deserialiser link rate on top of the PHY. This section only sizes bandwidth — output paths are covered in [Usage](#usage).
+> Size with **blanking included**, never with active-pixel figures; and confirm the deserialiser link rate on top of the PHY. This section only sizes bandwidth — output paths are covered in [Selection Criteria](#selection-criteria).
 
-![Frame lifecycle from trigger to release](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig2-frame-lifecycle.svg)
-
-The data CIM captures has two possible destinations, decided by three fields in `vin_attr_t`:
-
-| Field | Meaning |
-| --- | --- |
-| `vin_node_attr.cim_attr.cim_isp_flyby = 1` | CIM connects directly to ISP (Online) |
-| `vin_node_attr.cim_attr.cim_pym_flyby = 1` | CIM connects directly to PYM (Online) |
-| `vin_ochn_attr[x].ddr_en = 1` | This output channel writes to DDR (Offline) |
-
-`vin_node_attr.cim_attr.cim_isp_flyby` and `vin_node_attr.cim_attr.cim_pym_flyby` are **mutually exclusive** — only one can be 1 at a time. The main frame can land in DDR *and* be sent OTF to the ISP at the same time, at the cost of bandwidth.
-
-#### Online (OTF)
-Data captured by CIM **never lands in DDR** — it goes straight to the ISP or PYM over a direct hardware connection.
-
-- Pro: no DDR bandwidth consumed, low latency
-- Limits: only the main-frame channel supports Online; the ROI and EMB bypasses do not; CIM and the downstream block must be in the same CPE
-
-#### Offline (DDR)
-CIM writes the data to DDR and the downstream module or user space reads it back from memory.
-
-- Pro: all three output channels (main frame / ROI / EMB) are available, and cross-CPE works
-- Cost: CIM writes it once and downstream reads it once, so bandwidth doubles and latency is higher
-
-#### Selection Criteria
+### Selection Criteria
 | Your case | Recommendation | Why |
 | --- | --- | --- |
 | Single RAW sensor | **Online first** | Lower latency; switch to Offline if you need ROI / EMB or want to store frames |
@@ -200,7 +176,13 @@ CIM writes the data to DDR and the downstream module or user space reads it back
 | Need cropped ROI output | **Offline** | The ROI channel does not support Online |
 | YUV sensor (ISR done inside the sensor) | Depends on the downstream | With Online it connects directly to PYM, and each PYM takes exactly one input exclusively; multiple YUV streams can only go Offline |
 
-#### Typical Combinations
+The output path is decided by three fields in `vin_attr_t`:
+
+- `vin_node_attr.cim_attr.cim_isp_flyby = 1` — CIM connects directly to the ISP (Online)
+- `vin_node_attr.cim_attr.cim_pym_flyby = 1` — CIM connects directly to PYM (Online); mutually exclusive with `cim_isp_flyby`, only one of them can be 1
+- `vin_ochn_attr[x].ddr_en = 1` — this output channel writes to DDR (Offline); the main frame may enable both at once, landing in DDR while also sending a copy OTF to the ISP, at the cost of bandwidth
+
+### Typical Combinations
 The four IPIs of one CIM can **mix** Online and Offline, feeding different downstream blocks. Four typical combinations:
 
 ![Typical CIM combinations: four scenarios](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
@@ -335,7 +317,6 @@ int main(void)
 
 ## API Reference
 
-### API List
 VIN reuses the generic HBN vnode interfaces and has no private ioctl of its own. The commonly used interfaces:
 
 | Interface | Purpose |
@@ -356,13 +337,13 @@ VIN reuses the generic HBN vnode interfaces and has no private ioctl of its own.
 
 Stream creation and binding use `hbn_vflow_create` / `hbn_vflow_add_vnode` / `hbn_vflow_bind_vnode` / `hbn_vflow_start` / `hbn_vflow_stop` / `hbn_vflow_destroy`; see [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api).
 
-### Interface Reference
+## Interface Reference
 All 13 interfaces below share two conventions, which the individual sections do not repeat.
 
 - **Return value**: `HBN_STATUS_SUCESS` (0) on success, a negative error code on failure (implemented as `-HBN_STATUS_xxx`). The full list is in [Framework - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#return-value-description) — note that it lists the codes as **positive** (`10`, `13`, …) while the interfaces return them **negated** (`-10`, `-13`, …); the codes VIN actually returns, with what to do about each, are in [Return Values](#return-values).
 - **Five macros**: `set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` forward to the same-named functions with an `_s` suffix, taking the length from `sizeof(*(attr))`. They therefore **cannot take a `void *`**: you must pass a pointer to the concrete type.
 
-#### hbn_vnode_open
+### hbn_vnode_open
 
 **【Function Prototype】**
 
@@ -406,7 +387,7 @@ hbn_vnode_open(HB_VIN, hw_id, AUTO_ALLOC_ID, &vin_fd);
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_close
+### hbn_vnode_close
 
 **【Function Prototype】**
 
@@ -440,7 +421,7 @@ Hardware: RDK S100 / RDK S600.
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_set_attr
+### hbn_vnode_set_attr
 
 **【Function Prototype】**
 
@@ -482,7 +463,7 @@ hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr is in Quick Example 
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_set_ochn_attr
+### hbn_vnode_set_ochn_attr
 
 **【Function Prototype】**
 
@@ -538,7 +519,7 @@ hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_get_ochn_attr
+### hbn_vnode_get_ochn_attr
 
 **【Function Prototype】**
 
@@ -576,7 +557,7 @@ Hardware: RDK S100 / RDK S600.
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_set_ichn_attr
+### hbn_vnode_set_ichn_attr
 
 **【Function Prototype】**
 
@@ -618,7 +599,7 @@ hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_get_ichn_attr
+### hbn_vnode_get_ichn_attr
 
 **【Function Prototype】**
 
@@ -656,7 +637,7 @@ Hardware: RDK S100 / RDK S600.
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_set_ochn_buf_attr
+### hbn_vnode_set_ochn_buf_attr
 
 **【Function Prototype】**
 
@@ -695,7 +676,7 @@ Hardware: RDK S100 / RDK S600.
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_start
+### hbn_vnode_start
 
 **【Function Prototype】**
 
@@ -729,7 +710,7 @@ Hardware: RDK S100 / RDK S600.
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_stop
+### hbn_vnode_stop
 
 **【Function Prototype】**
 
@@ -763,7 +744,7 @@ Hardware: RDK S100 / RDK S600.
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_getframe
+### hbn_vnode_getframe
 
 **【Function Prototype】**
 
@@ -807,7 +788,7 @@ hbn_vnode_getframe(vin_fd, OCHN_MAIN, 1000, &img);   /* 1 s timeout */
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_sendframe
+### hbn_vnode_sendframe
 
 **【Function Prototype】**
 
@@ -845,7 +826,7 @@ Hardware: RDK S100 / RDK S600.
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-#### hbn_vnode_releaseframe
+### hbn_vnode_releaseframe
 
 **【Function Prototype】**
 
@@ -886,12 +867,12 @@ hbn_vnode_releaseframe(vin_fd, OCHN_MAIN, &img);
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
-### Data Structures
+## Data Structures
 The header `hbn_vin_cfg.h` is authoritative; this section is the readable version of it. The **semantics** of each field are covered where they belong — `cim_isp_flyby` / `cim_pym_flyby` in [Usage](#usage), the `func` pattern / frame-skip fields in [Constraints and Caveats](#constraints-and-caveats), the channel fields in [Interface Reference](#interface-reference).
 
 Fields marked *framework* are filled in by the framework; you do not set them.
 
-#### Type Overview
+### Type Overview
 VIN presents itself as a vnode. All configuration is carried in `vin_attr_t` and handed over in one call (`hbn_vnode_set_attr`); stream creation and binding go through `hbn_vflow_*`.
 
 | Type | Role | Key members |
@@ -911,9 +892,9 @@ VIN presents itself as a vnode. All configuration is carried in `vin_attr_t` and
 
 **The interfaces live in three libraries**: `hbn_vnode_*` / `hbn_vflow_*` in `libvpf.so`, `hbn_camera_*` in `libcam.so`, `hb_mem_*` in `libhbmem.so`.
 
-#### Top Level
+### Top Level
 
-##### vin_attr_t
+#### vin_attr_t
 All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 
 | Field | Type | Description | Typical | Default | Range |
@@ -925,9 +906,9 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[VIN_TYPE_INVALID]` | Buffers of the DDR-bound channels, indexed by `ochn_id` | — | — | — |
 | `magicNumber` | `uint32_t` | `0x12345678` | `0x12345678` | — | — |
 
-#### Node-Level Attributes
+### Node-Level Attributes
 
-##### vin_node_attr_t
+#### vin_node_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `cim_attr` | `cim_attr_t` | Input and path selection | — | — | — |
@@ -936,7 +917,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `flow_id` | `uint32_t` | *framework* | — | — | filled in by the framework |
 | `magicNumber` | `uint32_t` | **Required: `0x12345678`**. The driver's `set_attr` validates it and fails the call on a mismatch | `0x12345678` | — | must equal the driver-internal macro `MAGIC_NUMBER` |
 
-##### cim_attr_t
+#### cim_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `mipi_en` | `uint32_t` | Input source select, 1 = MIPI | 1 | 0 | `0` / `1`; exactly one of this, `func.enable_pattern` and `rdma_input.rdma_en` |
@@ -950,7 +931,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `tpg_input` | `cim_input_tpg_t` | Test pattern input | — | — | — |
 | `func` | `cim_func_desc_t` | Frame ID, frame skip, pattern and so on | — | — | — |
 
-##### cim_func_desc_t
+#### cim_func_desc_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `enable_frame_id` | `uint32_t` | Whether to stamp frames with a frame ID | 1 | 0 | `0` / `1` |
@@ -969,7 +950,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `sparate_frames_mode` | `uint32_t` | Unused by the driver (spelling as in the header); fill `0` | 0 | 0 | unused by the driver |
 | `endian_mode` | `uint32_t` | Endianness when writing to DDR | — | — | — |
 
-##### cim_input_rdma_t
+#### cim_input_rdma_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `rdma_en` | `uint32_t` | Feedback enable | 0 | 0 | `0` / `1`; exactly one of this, MIPI input and `enable_pattern` |
@@ -977,13 +958,13 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `pack_mode` | `uint32_t` | Packing used for the replayed data, same convention as `vin_basic_attr_t.pack_mode`; `stride` is derived from it and the format | 1 | 0 | `0` / `1` |
 | `buff_num` | `uint32_t` | Number of feedback buffers | — | — | — |
 
-##### cim_input_tpg_t
+#### cim_input_tpg_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `tpg_en` | `uint32_t` | Test pattern enable | 0 | 0 | `0` / `1` |
 | `fps` | `uint32_t` | Pattern frame rate | — | — | — |
 
-##### vcon_attr_t
+#### vcon_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `attr_valid` | `int32_t` | Whether this group of attributes takes effect | 1 | 0 | `0` / `1` |
@@ -1002,12 +983,12 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vcon_type` | `int32_t` | 0 = standalone, 1 = composite master, 2 = composite slave | 0 | 0 | `0` independent / `1` composite master / `2` composite slave |
 | `vcon_link` | `int32_t` | VCON link index, for composite types | — | — | — |
 
-##### lpwm_attr_t
+#### lpwm_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | Per-channel configuration | — | — | — |
 
-##### lpwm_chn_attr_t
+#### lpwm_chn_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `enable` | `uint32_t` | Enable this channel | 0 | 0 | `0` / `1` |
@@ -1019,9 +1000,9 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `threshold` | `uint32_t` | Phase-error threshold for slow sync, in microseconds, range 0–65535. `0` disables slow sync; when non-zero the trigger phase is walked towards the sync source in `adjust_step` steps, and **`offset` must be smaller than `period`** | 0 | 0 | `0`–`65535` in µs; `0` disables slow sync |
 | `adjust_step` | `uint32_t` | Step size for each slow-sync adjustment, range 0–15. Only takes effect when `threshold` is non-zero | 0 | 0 | `0`–`15` |
 
-#### Extended Attributes
+### Extended Attributes
 
-##### vin_attr_ex_t
+#### vin_attr_ex_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `ex_attr_type` | `vin_attr_ex_type_e` | Which extended attributes take effect | — | — | — |
@@ -1032,16 +1013,16 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `ipi_reset` | `uint32_t` | MIPI IPI reset | — | — | — |
 | `bypass_enable` | `uint32_t` | Bypass enable | — | — | — |
 
-#### Channel Attributes
+### Channel Attributes
 
-##### vin_ichn_attr_t
+#### vin_ichn_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `format` | `uint32_t` | Image format | `HW_FORMAT_RAW10` | — | see `HW_FORMAT_*` in `hb_vpm_data_info.h` |
 | `width` | `uint32_t` | Width | — | — | — |
 | `height` | `uint32_t` | Height | — | — | — |
 
-##### vin_ochn_attr_t
+#### vin_ochn_attr_t
 Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 
 | Field | Type | Description | Typical | Default | Range |
@@ -1058,7 +1039,7 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `emb_attr` | `vin_emb_attr_t` | EMB attributes | — | — | — |
 | `magicNumber` | `uint32_t` | **Required: `0x12345678`**. The driver's `set_ochn_attr` validates it and fails the call on a mismatch | `0x12345678` | — | must equal the driver-internal macro `MAGIC_NUMBER` |
 
-##### vin_basic_attr_t
+#### vin_basic_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `pack_mode` | `uint32_t` | How data is written to DDR | 1 | 0 | `0` / `1` |
@@ -1066,12 +1047,12 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `vstride` | `uint32_t` | Frame stride | — | — | — |
 | `format` | `uint32_t` | Format written to DDR | — | — | — |
 
-##### vin_rawds_attr_t
+#### vin_rawds_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `rawds_mode` | `uint32_t` | Downsampling mode | 0 | 0 | `0` / `1` |
 
-##### vin_roi_attr_s
+#### vin_roi_attr_s
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `roi_x` | `uint32_t` | Crop origin X | — | — | — |
@@ -1079,21 +1060,21 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `roi_width` | `uint32_t` | Crop width | — | — | — |
 | `roi_height` | `uint32_t` | Crop height | — | — | — |
 
-##### vin_emb_attr_t
+#### vin_emb_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `embeded_dependence` | `uint32_t` | Whether EMB travels together with the image data | 0 | 0 | `0` / `1` |
 | `embeded_width` | `uint32_t` | EMB data width | — | — | — |
 | `embeded_height` | `uint32_t` | EMB data height | — | — | — |
 
-##### vin_ochn_buff_attr_t
+#### vin_ochn_buff_attr_t
 Indexed by `ochn_id`.
 
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `buffers_num` | `uint32_t` | Buffer count for this channel | 6 | — | depends on the path |
 | `flags` | `int64_t` | Unused by the driver; fill `0` | 0 | 0 | unused by the driver |
-### Return Values
+## Return Values
 A failing interface returns a **negative** value — the macro below, negated. These are the codes that **actually come back** when using the `hbn_vnode_*` interfaces:
 
 | Error Code | Macro | Description | Common Cause | Resolution |
