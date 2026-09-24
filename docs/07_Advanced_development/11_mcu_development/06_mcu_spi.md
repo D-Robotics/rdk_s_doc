@@ -10,8 +10,17 @@ description: "SPI 使用指南"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
+本文介绍 MCU 侧 SPI 驱动的使用，包括硬件支持、软件架构、配置说明与使用示例。
+
+- **定位**：帮助用户在 MCU 上通过 SPI 总线与外围设备通信。
+- **适用读者**：需要开发 SPI 主/从通信的深度定制开发者。
+- **前置条件**：了解 MCU 基本框架，参见 [MCU 快速入门指南](01_basic_information.md)。
+- **与其他模块关系**：SPI 使用的引脚由 PORT 驱动配置功能复用。
+
 <DocScope products="RDK S100">
-S100 MCU 域共提供 6 个 SPI 控制器（SPI2~SPI7）。SPI 出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下：
+S100 SIP MCU 域共提供 6 个 SPI 控制器（SPI2~SPI7）。MCU 侧 SPI 驱动管理 MCU 域的 6 个控制器，其中 SPI2/SPI3/SPI4/SPI7 支持主从模式，其余（SPI5/SPI6）仅主模式。出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下：
 
 | 配置项 | 默认值 |
 |---|---|
@@ -21,10 +30,11 @@ S100 MCU 域共提供 6 个 SPI 控制器（SPI2~SPI7）。SPI 出厂默认参�
 | 默认数据宽度 | 8 bit / 16 bit |
 </DocScope>
 <DocScope products="RDK S600">
-S600 MCU 域 SPI 出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下，完整序列与硬件资源映射见[配置文件说明](#spi_config)：
+S600 模组 MCU 域集成 8 个 SPI 控制器（SPI4、SPI5、SPI6、SPI8、SPI10、SPI11、SPI12、SPI13）。MCU 侧 SPI 驱动管理 MCU 域的 8 个控制器，其中 SPI5/SPI8/SPI10/SPI12 支持主从模式，其余仅主模式。出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下，完整序列与硬件资源映射见[配置文件说明](#spi_config)：
 
 | 配置项 | 默认值 |
 |---|---|
+| MCU 域 SPI 控制器 | 8 个（SPI4、SPI5、SPI6、SPI8、SPI10、SPI11、SPI12、SPI13） |
 | 默认波特率 | 1000000 / 2000000 |
 | 默认片选 | CS0（部分序列使用 CS1） |
 | 默认数据宽度 | 8 bit / 16 bit |
@@ -82,7 +92,7 @@ flowchart LR
 - `samples/Spi/SPI_sample/Spi_sample.c`：SPI sample 代码
 - `samples/Spi/SPI_sample/Spi_common.c`：SPI sample 代码
 
-## 应用 sample
+## 开发与使用方法
 
 ### 软件操作流程
 
@@ -129,7 +139,7 @@ flowchart LR
 
 <DocScope products="RDK S100">
 
-### 单片选使用示例
+#### 单片选使用示例
 
 spi_test 命令用于测试 SPI（Serial Peripheral Interface，串行外设接口）功能。该命令支持初始化和参数设置、显示当前参数以及执行 SPI 数据传输测试。
 
@@ -207,7 +217,7 @@ TxChBuf0 (256 bytes):
 0CBD2C70: F0 F1 F2 F3 F4 F5 F6 F7 F8 F9 FA FB FC FD FE FF  | ................
 [059.702104 0]=====SPI ASYNC TEST SUCCESS=====
 ```
-### 双片选使用示例
+#### 双片选使用示例
 
 SpiTest_Mul_cs 命令用于测试 SPI（Serial Peripheral Interface，串行外设接口）功能。
 
@@ -253,11 +263,15 @@ RX | 00 01 02 03 04 05 06 07 08 09 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 </DocScope>
 <DocScope products="RDK S600">
 
-### 单片选使用示例
+#### 单片选使用示例
 
 spi_test 命令用于测试 SPI（Serial Peripheral Interface，串行外设接口）功能。该命令支持初始化和参数设置、显示当前参数以及执行 SPI 数据传输测试。
 
 **命令语法**
+
+```bash
+spi_test <operation> [参数...]
+```
 
 :::tip
 应用层配置与底层配置应保持一致，否则会出现错误。
@@ -374,7 +388,7 @@ TxChBuf0 (256 bytes):
 
 ```
 
-### 双片选使用示例(BMI088 测试)
+#### 双片选使用示例(BMI088 测试)
 
 S600 MCU 子板上搭载了 BMI088传感器，该传感器通过 SPI13总线与 MCU 通信，其中 cs0连接加速度计(acc)，cs1连接陀螺仪(gyr)。
 
@@ -520,10 +534,11 @@ erDiagram
 ```
 
 
-`SPI_HWUNIT` 和 `SPI_EXTERNAL_DEVICE` 都需要关联一个硬件实例（Instance），该实例决定了使用哪一个 SPI 接口进行通信。由于 RDKS100平台共提供8个 SPI 控制器，其中 MAIN 域包含2个（SPI0、SPI1），MCU 域包含6个（SPI2 至 SPI7），因此 MCU 域中的 SPI 实际从 SPI2 开始编号。下表✅ **绿色**字体部分展示了 SPI 序列配置（Spi SeqCfg）与对应硬件资源（Spi BusId、HWUnit、Instance）之间的映射关系。
-
+`SPI_HWUNIT` 和 `SPI_EXTERNAL_DEVICE` 都需要关联一个硬件实例（Instance），该实例决定了使用哪一个 SPI 接口进行通信。下表✅ **绿色**字体部分展示了 SPI 序列配置（Spi SeqCfg）与对应硬件资源（Spi BusId、HWUnit、Instance）之间的映射关系。
 
 <DocScope products="RDK S100">
+
+S100 平台 MCU 域共提供 6 个 SPI 控制器（SPI2~SPI7），MCU 域中的 SPI 从 SPI2 开始编号。
 
 | **SPI SeqCfg** | ✅ **Spi BusId**  | ✅ **HWUnit**  | ✅ **Instance**  | **Spi Baudrate** | **Spi Cs** | **Frame size**|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -545,6 +560,8 @@ erDiagram
 </DocScope>
 <DocScope products="RDK S600">
 
+S600 平台 MCU 域共提供 8 个 SPI 控制器（SPI4、SPI5、SPI6、SPI8、SPI10、SPI11、SPI12、SPI13）。MCU 域出厂配置涉及 SPI4、SPI6、SPI13 等控制器，其中 SPI13 用于连接 MCU 子板上的 BMI088 传感器。
+
 | **SPI SeqCfg** | ✅ **Spi BusId**  | ✅ **HWUnit**  | ✅ **Instance**  | **Spi Baudrate** | **Spi Cs** | **Frame size**|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | SpiSequence_0 | ✅ SPI6 | ✅ CSIB2 | ✅ 2 | 2000000 | CS0 | 16 bit |
@@ -564,240 +581,349 @@ MCU1 的 SPI 出厂默认参数基于 Spi_PBcfg.c 配置文件，具有一定的
 
 ### 应用程序接口
 
-#### void Spi_Init(const Spi_ConfigType* ConfigPtr)
+#### Spi_Init
 
-```shell
-Description：Service for SPI initialization.
+**【函数原型】**
 
-Parameters(in)
-    ConfigPtr: Pointer to configuration set
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
+```c
+void Spi_Init(const Spi_ConfigType *ConfigPtr);
 ```
 
+**【功能描述】**
 
-#### Std_ReturnType Spi_WriteIB(Spi_ChannelType Channel, const Spi_DataBufferType* DataBufferPtr)
+初始化 SPI 驱动。根据 `ConfigPtr` 指向的顶层配置结构体，初始化所有内部变量及 SPI 硬件单元。传入 `NULL` 时使用 `Spi_PBcfg.c` 中的默认配置。应用层调用其它 SPI API 前必须先调用本函数完成初始化。
 
-```shell
-Description：Service for SPI de-initialization.
+**【参数】**
 
-Parameters(in)
-    Channel: Channel ID.
-    DataBufferPtr: Source data buffer pointer
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Std_ReturnType
-    E_OK: Spi write IB buffer success.
-    E_NOT_OK: Spi write IB buffer failed.
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ConfigPtr | `const Spi_ConfigType *` | 否 | NULL | 指向 SPI 顶层配置结构体的指针；传 NULL 使用默认配置 |
+
+**【返回值】**
+
+无。
+
+#### Spi_DeInit
+
+**【函数原型】**
+
+```c
+Std_ReturnType Spi_DeInit(void);
 ```
 
+**【功能描述】**
 
-#### Std_ReturnType Spi_AsyncTransmit(Spi_SequenceType Sequence)
+反初始化 SPI 驱动。将所有 SPI 硬件单元恢复到复位状态，禁用中断。调用后需重新 `Spi_Init` 才能继续使用。
 
-```shell
-Description：Service to transmit data on the SPI bus.
+**【参数】**
 
-Sync/Async:Asynchronous
-Parameters(in)
-    Sequence: Sequence ID.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Std_ReturnType
-    E_OK: set success
-    E_NOT_OK: set failed
+无。
+
+**【返回值】**
+
+- `E_OK`：反初始化成功
+- `E_NOT_OK`：反初始化失败
+
+#### Spi_WriteIB
+
+**【函数原型】**
+
+```c
+Std_ReturnType Spi_WriteIB(Spi_ChannelType Channel, const Spi_DataBufferType *DataBufferPtr);
 ```
 
-#### Std_ReturnType Spi_ReadIB(Spi_ChannelType Channel, Spi_DataBufferType* DataBufferPtr)
+**【功能描述】**
 
-```shell
-Description：Service for reading synchronously one or more data from an IB SPI
-             Handler/Driver Channel specified by parameter.
+将发送数据写入指定 IB（Internal Buffer）通道的缓冲区，为后续传输做准备。
 
-Sync/Async:Synchronous
-Parameters(in)
-    Channel: Channel ID.
-Parameters(inout)
-    None
-Parameters(out)
-    DataBufferPtr: Pointer to destination data buffer in RAM
-Return value：Std_ReturnType
-    E_OK: set success
-    E_NOT_OK: set failed
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Spi_ChannelType` (uint8) | 是 | — | SPI 通道 ID |
+| DataBufferPtr | `const Spi_DataBufferType *` | 是 | — | 指向待发送数据缓冲区的指针 |
+
+**【返回值】**
+
+- `E_OK`：写入 IB 缓冲区成功
+- `E_NOT_OK`：写入 IB 缓冲区失败
+
+
+#### Spi_AsyncTransmit
+
+**【函数原型】**
+
+```c
+Std_ReturnType Spi_AsyncTransmit(Spi_SequenceType Sequence);
 ```
 
-#### Std_ReturnType Spi_SetupEB(Spi_ChannelType Channel, const Spi_DataBufferType* SrcDataBufferPtr, Spi_DataBufferType* DesDataBufferPtr, Spi_NumberOfDataType Length)
+**【功能描述】**
 
-```shell
-Description：Service to setup the buffers and the length of data for the EB SPI
-             Handler/Driver Channel specified.
+异步启动指定序列的数据传输。函数立即返回，传输完成后通过通知回调告知应用层。
 
-Sync/Async:Synchronous
-Parameters(in)
-    Channel: Channel ID.
-    SrcDataBufferPtr: Pointer to the memory location that will hold the transmitted data
-    Length: Length (number of data elements) of the data to be transmitted
-Parameters(inout)
-    None
-Parameters(out)
-    DesDataBufferPtr: Pointer to the memory location that will hold the received data
-Return value：Std_ReturnType
-    E_OK: Spi Setup EB buffer success.
-    E_NOT_OK: Spi Setup EB buffer failed.
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Sequence | `Spi_SequenceType` (uint8) | 是 | — | SPI 序列 ID |
+
+**【返回值】**
+
+- `E_OK`：传输命令已接受
+- `E_NOT_OK`：传输命令未接受
+
+#### Spi_ReadIB
+
+**【函数原型】**
+
+```c
+Std_ReturnType Spi_ReadIB(Spi_ChannelType Channel, Spi_DataBufferType *DataBufferPtr);
 ```
 
-#### Spi_StatusType Spi_GetStatus(const Spi_ConfigType* ConfigPtr)
+**【功能描述】**
 
-```shell
-Description：Service returns the SPI Handler/Driver software module status.
+同步读取指定 IB 通道的接收数据到目标缓冲区。
 
-Sync/Async:Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Spi_StatusType
-    Spi_StatusType
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Spi_ChannelType` (uint8) | 是 | — | SPI 通道 ID |
+| DataBufferPtr | `Spi_DataBufferType *` | 是 | — | 输出参数，指向存储接收数据的缓冲区 |
+
+**【返回值】**
+
+- `E_OK`：读取成功
+- `E_NOT_OK`：读取失败
+
+#### Spi_SetupEB
+
+**【函数原型】**
+
+```c
+Std_ReturnType Spi_SetupEB(Spi_ChannelType Channel, const Spi_DataBufferType *SrcDataBufferPtr,
+                            Spi_DataBufferType *DesDataBufferPtr, Spi_NumberOfDataType Length);
 ```
 
-#### Spi_JobResultType Spi_GetJobResult(Spi_JobType Job)
+**【功能描述】**
 
-```shell
-Description：This service returns the last transmission result of the specified Job.
+为指定 EB（External Buffer）通道设置发送/接收缓冲区及数据长度，用于使用外部缓冲区的传输场景。
 
-Sync/Async:Synchronous
-Parameters(in)
-    Job: Job ID. An invalid job ID will return an undefined result.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Spi_JobResultType
-    Spi_JobResultType
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Spi_ChannelType` (uint8) | 是 | — | SPI 通道 ID |
+| SrcDataBufferPtr | `const Spi_DataBufferType *` | 是 | — | 指向发送数据缓冲区的指针 |
+| DesDataBufferPtr | `Spi_DataBufferType *` | 是 | — | 输出参数，指向接收数据缓冲区的指针 |
+| Length | `Spi_NumberOfDataType` | 是 | — | 待传输数据元素个数 |
+
+**【返回值】**
+
+- `E_OK`：设置 EB 缓冲区成功
+- `E_NOT_OK`：设置 EB 缓冲区失败
+
+#### Spi_GetStatus
+
+**【函数原型】**
+
+```c
+Spi_StatusType Spi_GetStatus(void);
 ```
 
-#### Spi_SeqResultType Spi_GetSequenceResult(Spi_SequenceType Sequence)
+**【功能描述】**
 
-```shell
-Description：This service returns the last transmission result of the specified Sequence.
+返回 SPI 驱动软件模块的当前状态。
 
-Sync/Async:Synchronous
-Parameters(in)
-    Sequence: Sequence ID. An invalid sequence ID will return an undefined result.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Spi_JobResultType
-    Spi_JobResultType
+**【参数】**
+
+无。
+
+**【返回值】**
+
+返回 `Spi_StatusType` 枚举值：
+- `SPI_UNINIT`(0)：驱动未初始化
+- `SPI_IDLE`(1)：驱动空闲，无正在进行的传输
+- `SPI_BUSY`(2)：驱动正在执行传输
+
+#### Spi_GetJobResult
+
+**【函数原型】**
+
+```c
+Spi_JobResultType Spi_GetJobResult(Spi_JobType Job);
 ```
 
-#### void Spi_GetVersionInfo(Std_VersionInfoType* versioninfo)
+**【功能描述】**
 
-```shell
-Description：This service returns the version information of this module.
+返回指定 Job 的最近一次传输结果。
 
-Sync/Async:Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    versioninfo: Pointer to where to store the version information of this module.
-Return value：None
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Job | `Spi_JobType` (uint16) | 是 | — | SPI 作业 ID，无效 ID 返回未定义结果 |
+
+**【返回值】**
+
+返回 `Spi_JobResultType` 枚举值，表示该 Job 的传输结果。
+
+#### Spi_GetSequenceResult
+
+**【函数原型】**
+
+```c
+Spi_SeqResultType Spi_GetSequenceResult(Spi_SequenceType Sequence);
 ```
 
-#### Std_ReturnType Spi_SyncTransmit(Spi_SequenceType Sequence)
+**【功能描述】**
 
-```shell
-Description：Service to transmit data on the SPI bus.
+返回指定 Sequence 的最近一次传输结果。
 
-Sync/Async:Synchronous
-Parameters(in)
-    Sequence: Sequence ID.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Std_ReturnType
-    E_OK: Transmission command has been accepted
-    E_NOT_OK: Transmission command has not been accepted
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Sequence | `Spi_SequenceType` (uint8) | 是 | — | SPI 序列 ID，无效 ID 返回未定义结果 |
+
+**【返回值】**
+
+返回 `Spi_SeqResultType` 枚举值，表示该 Sequence 的传输结果。
+
+#### Spi_GetVersionInfo
+
+**【函数原型】**
+
+```c
+void Spi_GetVersionInfo(Std_VersionInfoType *versioninfo);
 ```
 
-#### Spi_StatusType Spi_GetHWUnitStatus(Spi_HWUnitType HWUnit)
+**【功能描述】**
 
-```shell
-Description：This service returns the status of the specified SPI Hardware
-             microcontroller peripheral.
+返回 SPI 驱动模块的版本信息，包括模块 ID、厂商 ID 及版本号。
 
-Sync/Async:Synchronous
-Parameters(in)
-    HWUnit: SPI Hardware microcontroller peripheral (unit) ID.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：Spi_StatusType
-    Spi_StatusType
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| versioninfo | `Std_VersionInfoType *` | 是 | — | 输出参数，指向存储版本信息的变量 |
+
+**【返回值】**
+
+无（版本信息通过 `versioninfo` 输出参数返回）。
+
+#### Spi_SyncTransmit
+
+**【函数原型】**
+
+```c
+Std_ReturnType Spi_SyncTransmit(Spi_SequenceType Sequence);
 ```
 
-#### void Spi_Cancel(Spi_SequenceType Sequence)
+**【功能描述】**
 
-```shell
-Description：Service cancels the specified on-going sequence transmission.
+同步启动指定序列的数据传输。函数阻塞直到传输完成后才返回。
 
-Sync/Async:Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Sequence | `Spi_SequenceType` (uint8) | 是 | — | SPI 序列 ID |
+
+**【返回值】**
+
+- `E_OK`：传输命令已接受
+- `E_NOT_OK`：传输命令未接受
+
+#### Spi_GetHWUnitStatus
+
+**【函数原型】**
+
+```c
+Spi_StatusType Spi_GetHWUnitStatus(Spi_HWUnitType HWUnit);
 ```
 
-#### Std_ReturnType Spi_SetAsyncMode(Spi_AsyncModeType Mode)
+**【功能描述】**
 
-```shell
-Description：Service to set the asynchronous mechanism mode for SPI
-             busses handled asyn-chronously.
+返回指定 SPI 硬件单元（外设）的状态。
 
-Sync/Async:Synchronous
-Parameters(in)
-    Mode: New mode required.
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：    Std_ReturnType:
-    E_OK: Setting command has been accepted
-    E_NOT_OK: Setting command has not been accepted
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| HWUnit | `Spi_HWUnitType` (uint8) | 是 | — | SPI 硬件单元 ID |
+
+**【返回值】**
+
+返回 `Spi_StatusType` 枚举值：
+- `SPI_UNINIT`(0)：该硬件单元未初始化
+- `SPI_IDLE`(1)：该硬件单元空闲
+- `SPI_BUSY`(2)：该硬件单元正在传输
+
+#### Spi_Cancel
+
+**【函数原型】**
+
+```c
+void Spi_Cancel(Spi_SequenceType Sequence);
 ```
 
-#### void Spi_MainFunction_Handling(void)
+**【功能描述】**
 
-```shell
-Description：This function shall polls the SPI interrupts linked to HW Units
-             allocated to the transmission of SPI sequences to enable the evolution
-             of transmission state machine.
+取消指定序列正在进行的传输。当传输发生异常时，SPI 状态机不会自动复位，需调用本函数复位传输状态机。
 
-Sync/Async:Synchronous
-Parameters(in)
-    None
-Parameters(inout)
-    None
-Parameters(out)
-    None
-Return value：None
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Sequence | `Spi_SequenceType` (uint8) | 是 | — | SPI 序列 ID |
+
+**【返回值】**
+
+无。
+
+#### Spi_SetAsyncMode
+
+**【函数原型】**
+
+```c
+Std_ReturnType Spi_SetAsyncMode(Spi_AsyncModeType Mode);
 ```
+
+**【功能描述】**
+
+设置 SPI 异步传输的机制模式（中断模式或轮询模式）。仅在 INIT 之后配置一次即可，反复调用会导致传输异常。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Mode | `Spi_AsyncModeType` | 是 | — | 异步模式：`SPI_INTERRUPT` 中断模式 / `SPI_POLLING` 轮询模式 |
+
+**【返回值】**
+
+- `E_OK`：设置命令已接受
+- `E_NOT_OK`：设置命令未接受
+
+#### Spi_MainFunction_Handling
+
+**【函数原型】**
+
+```c
+void Spi_MainFunction_Handling(void);
+```
+
+**【功能描述】**
+
+轮询与 SPI 硬件单元关联的中断，推动传输状态机演进。在轮询异步模式下需周期性调用。
+
+**【参数】**
+
+无。
+
+**【返回值】**
+
+无。
 
 ## 调试
 
@@ -821,5 +947,7 @@ Return value：None
 
 ## 相关文档
 
-- [扩展引脚应用](/Demos/peripheral/40pin)
-- [SPI 调试指南](/Advanced_development/driver_development/driver_spi_dev)
+- [MCU 快速入门指南](01_basic_information.md)
+- [MCU Port 配置](12_mcu_port/development_manual.md)
+- [SPI 驱动调试指南](/Advanced_development/driver_development/driver_spi_dev)
+- [40pin SPI 示例](/Demos/peripheral/01_40pin/s100/spi)
