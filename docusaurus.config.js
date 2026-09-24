@@ -160,6 +160,8 @@ const config = {
   ],
   plugins: [
     require.resolve("./src/plugins/sidebar-scope-config-plugin"),
+    // 把「按产品折叠 .doc-scope」提前到 HTML 解析阶段，见插件内部说明。
+    require.resolve("./src/plugins/doc-scope-product-bootstrap-plugin"),
     [
       "docusaurus-plugin-copy-page-button",
       {
