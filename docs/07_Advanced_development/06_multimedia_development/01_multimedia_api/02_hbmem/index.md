@@ -13,5 +13,5 @@ hbmem 与 ION 关系图：
 | 文档 | 说明 | 链接 |
 |---|---|---|
 | hbmem 使用指南 | hbmem 库的 API、数据结构、使用方法与常见问题 | [hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api) |
-| ION 系统 | ION 内存区域划分、分配规则、debugfs 调试手段与区域大小调整 | [ION](/Advanced_development/multimedia_development/multimedia_api/02_hbmem/02_ion) |
+| ION 系统 | ION 内存区域划分、分配规则、debugfs 调试手段与区域大小调整 | [ION](/Advanced_development/multimedia_development/multimedia_api/hbmem/ion) |
 

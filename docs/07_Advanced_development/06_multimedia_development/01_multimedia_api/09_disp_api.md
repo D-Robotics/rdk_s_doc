@@ -1,1295 +1,238 @@
 ---
 sidebar_position: 9
-title: "显示输出 - DISP"
-description: "RDK S100/S600 5.5.1.9 DISP（显示输出）"
+title: "显示输出 - Display"
+description: "RDK S100/S600 显示输出子系统：IDU 显示控制器、MIPI DSI 输出与 HDMI 显示，基于标准 DRM 框架"
 ---
 
-# 显示输出 - DISP
+# 显示输出 - Display
 
-> **层级说明**：本篇是【底层多媒体 API】（板端 `hb_disp_interface.h`），显示输出模块 API（X5 Display → RDK DISP）。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
-
-> **平台代号说明**：本文兼容性标注沿用底层头文件原始写法——XJ3/J3、Ultra 为更早代上游平台代号，X5 为现行上游产品线代号（非本两板），Super/J6 为本产品线同源架构代号（板端实证：S100/S600 同源，S600 为多核形态）。`HW:` 列表表示该接口在上游多代平台的适用范围，其中 Super 代即对应本产品线（继承自上游标注，未逐一板端验证）；`SW` 为上游软件版本号，RDK 对应版本以 Release Note 为准。未列入代号的接口表示继承自上游、RDK 侧未逐一验证。
-
-## 概述
-
-DISP（Display，显示输出，X5 Display → RDK DISP）是 RDK 的显示输出模块（板端 `hb_disp_interface.h`，函数 `hb_disp_*`/`hbn_idu_*`）。封装显示通道配置、视频 buffer 校验、显示完成同步与显示抓图等能力，对应硬件 IDU/MIPI TX。
-
-## 软件抽象
-
-- 显示通道：`hb_disp_set_channel_cfg`/`get_channel_cfg` 配置/查询显示通道。
-- buffer 校验：`hb_disp_check_video_bufaddr_valid` 校验视频 buffer 地址。
-- 同步：`hb_disp_get_disp_done_sync_id` 获取显示完成同步；`hb_disp_get_display_done` 查询显示完成。
-- 抓图：`hb_disp_get_capture_buf_id` 获取显示抓图。
-
-## API 调用流程
-
-1. `hb_disp_set_channel_cfg` 配置显示通道。
-2. `hb_disp_check_video_bufaddr_valid` 校验输入 buffer。
-3. `hb_disp_get_disp_done_sync_id` 等待显示完成同步。
-4. `hb_disp_get_capture_buf_id` 获取抓图（如需）；`hb_disp_close` 关闭通道。
-
-## 快速示例
-
-以下示例演示 DISP 的最小使用序列（基于板端 `hb_disp_interface.h`，函数 `hb_disp_*`）：
-
-```c
-#include "hb_disp_interface.h"
-#include "hbn_idu_cfg.h"
-
-// 1. 初始化显示设备（DISP_PRI_1 定义于 hb_disp_interface.h）
-int32_t ret = hb_disp_init_dev_cfg(DISP_PRI_1, "");
-if (ret != 0) {
-    /* 初始化失败处理 */
-}
-
-// 2. 配置输出（output_cfg_t 定义于 hbn_idu_cfg.h）与 layer
-output_cfg_t chn_cfg = {0};
-chn_cfg.out_sel = OUTPUT_MIPI;
-hb_disp_set_output_cfg_id(&chn_cfg, DISP_PRI_1);
-
-// layer 配置走 6 个标量参数（layer_no、width、height、x_pos、y_pos、disp_id）
-hb_disp_set_layer_cfg_id(1, 1920, 1080, 0, 0, DISP_PRI_1);
-
-// 3. 启动显示，打开 layer
-hb_disp_start_id(DISP_PRI_1);
-hb_disp_layer_on_id(1, DISP_PRI_1);
-
-// 4. 设置视频 buffer 地址（Y/C），等待显示完成
-void *addr_y = /* 图像 Y 地址 */;
-void *addr_c = /* 图像 C 地址 */;
-hb_disp_set_video_bufaddr_id(DISP_PRI_1, 1, addr_y, addr_c);
-hb_disp_get_disp_done_sync_id(DISP_PRI_1, 0);   /* rel_seq 为显示序号 */
-
-// 5. 关闭
-hb_disp_stop_id(DISP_PRI_1);
-hb_disp_close_id(DISP_PRI_1);
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
 ```
 
-> 显示层（layer）编号与优先级、输出模式枚举见 `hb_disp_interface.h`；`output_cfg_t`/`disp_timing_t` 等结构体见 `hbn_idu_cfg.h`；板端 HDMI 显示参考 `sample_pipeline/common/vp_display.c`（DRM/KMS 路径）。
+## 模块说明
 
-## API 列表
+<DocScope products="RDK S100">
 
-| 函数 | 说明 |
-| --- | --- |
-| hb_disp_init_dev_cfg | Initialize a display device instance |
-| hb_disp_init_cfg | Initialize all display device |
-| hb_disp_close | Close all display device |
-| hb_disp_close_id | Close a display device instance |
-| hb_disp_start | Start all display device |
-| hb_disp_start_id | Start a display device instance |
-| hb_disp_stop | Stop all display device |
-| hb_disp_stop_id | Stop a display device instance |
-| hb_disp_layer_on | Enable a layer of all display device |
-| hb_disp_layer_on_id | Enable a layer of a display device instance |
-| hb_disp_layer_off | Close a layer of all display device |
-| hb_disp_layer_off_id | Close a layer of a display device instance |
-| hb_disp_set_video_bufaddr | Set video buffer address |
-| hb_disp_set_video_bufaddr_id | Set video buffer address to a display device instance |
-| hb_disp_set_layer_cfg | Set video buffer address |
-| hb_disp_set_layer_cfg_id | Set video buffer address for a display device instance |
-| hb_disp_set_timing | Set display timing |
-| hb_disp_set_timing_id | Set display timing for a display device instance |
-| hb_disp_get_gamma_cfg | Get gamma config value |
-| hb_disp_get_gamma_cfg_id | Get gamma config value for a display device instance |
-| hb_disp_set_gamma_cfg | Set gamma config for a display device instance |
-| hb_disp_set_gamma_cfg_id | Set gamma config |
-| hb_disp_set_output_dynamic_cfg_id | Set output dynamic config |
-| hb_disp_get_output_cfg | Get ouput config |
-| hb_disp_get_output_cfg_id | Get ouput config of a display device instance |
-| hb_disp_set_output_cfg | Set ouput config |
-| hb_disp_set_output_cfg_id | Set ouput config of a display device instance |
-| hb_disp_get_upscaling_cfg | Get upscale config |
-| hb_disp_get_upscaling_cfg_id | Get upscale config of a display device instance |
-| hb_disp_set_upscaling_cfg | Set upscale config of a display device instance |
-| hb_disp_set_upscaling_cfg_id | Set upscale config of a display device instance |
-| hb_disp_get_channel_cfg | Get channel config parameters |
-| hb_disp_get_channel_cfg_id | Get channel config parameters of a display device instance |
-| hb_disp_set_channel_cfg | Set channel config parameters of a display device instance |
-| hb_disp_set_channel_cfg_id | Set channel config parameters of a display device instance |
-| hb_disp_out_upscale | user config up-scale |
-| hb_disp_out_upscale_id | user config up-scale for a display device instance |
-| hb_disp_get_display_done | user get the display done flag |
-| hb_disp_get_display_done_id | user get the display done flag for a display device instance |
-| hb_disp_check_video_bufaddr_valid | user check whether the graphic size matches the channel |
-| hb_disp_check_video_bufaddr_valid_id | user check whether the graphic size matches the channel |
-| hb_disp_get_video_display_done_id | user get layer buffer read done flag |
-| hb_disp_get_video_display_done | user get layer buffer read done flag |
-| hb_disp_get_disp_done_sync_id | user wait display vsync flag |
-| hb_disp_get_capture_buf_id | user get capture buffer |
-| hb_disp_release_capture_buf_id | user release capture buffer |
-| hb_disp_set_disp_oneshot_trigger_id | user trigger display control oneshot output |
+Display 子系统是 S100 项目中的视频显示引擎，其主要功能是为显示提供不同分辨率的视频输出。
 
-## API 接口说明
+</DocScope>
+<DocScope products="RDK S600">
 
-### hb_disp_init_dev_cfg
+Display 子系统是 S600 项目中的视频显示引擎，其主要功能是为显示提供不同分辨率的视频输出。
 
-【函数原型】
+</DocScope>
 
-```c
-HB_API int32_t hb_disp_init_dev_cfg(uint32_t disp_id, const char *cfg_file);
+### 硬件框图
+
+Display 子系统由如下模块组成：
+
+- **IDU**：图像显示单元（Image Display Unit），从内存中读取图层 buffer 并完成图层合成与缩放，按显示时序输出像素流
+- **MIPI DSI TX**：将 IDU 输出的像素流打包成 DSI 协议包
+- **MIPI D-PHY**：MIPI 输出的物理层，完成高速串行化
+- **LT9611UXD**：桥接芯片，将 MIPI DSI 信号转换为 HDMI 2.0 信号输出
+
+各模块之间的关系如下图所示：
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_framework.png" alt="S100/S600 显示硬件框图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+### 规格参数
+
+#### IDU
+
+- 最大输入分辨率 2880x2160
+- 均支持 Crop 裁剪，支持 Crop 宽高与顶点坐标配置
+- YUV 图层输入格式：UYVY Interleaved YUV422、VYUY Interleaved YUV422、YUYV Interleaved YUV422、YVYU Interleaved YUV422、UV Semi-planar YUV422、VU Semi-planar YUV422、UV Semi-planar YUV420、VU Semi-planar YUV420、Planar YUV422（YU YV）、Planar YUV422（YV YU）、Planar YUV420（YU YV）、Planar YUV420（YV YU）
+- RGB 图层输入格式：8-bpp（CLUT 调色盘）、RGB565、Unpacked RGB888、Packed RGB888、ARGB、RGBA；其中 8-bpp 无 endian 问题，RGB565 / Unpacked RGB888 / Packed RGB888 仅支持 little-endian，ARGB / RGBA 支持 little-endian 或 big-endian
+- 支持与 Background 背景层、HW Cursor 硬件光标叠加（Overlay & Alpha-Blending、Key-color），Alpha 值与叠加层优先级可配置
+- YUV 图层支持 Up-Scale，最大放大 6 倍
+- 输出支持 Color-Adjust（对比度、饱和度、亮度、色度、gamma、Dithering）
+- 支持回写（writeback），回写格式：UYVY、VYUY、YUYV、YVYU、NV12、NV21、Unpacked RGB888
+- 输出方式支持 MIPI CSI TX 或 MIPI DSI
+<DocScope products="RDK S100">
+
+- IDU 输出格式：RGB888、RGB565、RGB666，并支持通过 RGB2YUV 模块转换为 YUV422、YCbCr
+- 最大 pixel rate：600 MHz；最大输出分辨率 3840x2160
+
+</DocScope>
+<DocScope products="RDK S600">
+
+- IDU 输出格式：RGB888、RGB565、RGB666、YUV444，并支持通过 RGB2YUV 模块转换为 YUV422、YCbCr
+- 最大 pixel rate：625 MHz；最大输出分辨率 3840x2160
+
+</DocScope>
+
+#### LT9611UXD
+
+- 支持输出的分辨率：2560x1440@60FPS
+- MIPI 输入：最多 2-Port，每 Port 支持 1/2/3/4 Lane 可配，每 Lane 最高 2.5 Gbps；支持 DSI V1.3
+- MIPI 输入支持 Non-Burst Mode with Sync Pulses / Non-Burst Mode with Sync Events / Burst Mode 三种传输模式
+- 输入数据格式：DSI——RGB565、RGB666、RGB8/10/12bpc、Loosely 20bit YCbCr422、20/24bit YCbCr422、16bit YCbCr422、12bit YCbCr420
+- 仅支持 Video Mode，不支持 Command Mode
+- MIPI Clock 支持 Continuous Mode 和 Non-Continuous Mode
+- MIPI DSI 输入时不需要通过 DCS 发送初始化命令，SoC 的 DSI 驱动如发送了 DCS 命令，LT9611UXD 会忽略
+- HDMI 输出：兼容 CEA/VESA 标准分辨率；非标准分辨率需通过 I2C 写入完整 video timing
+- 支持 HDCP、CEC、DDC/CI
+- 支持 Normal / Standby / Sleep 功耗模式
+
+#### MIPI D-PHY
+
+- MIPI D-PHY最大支持4 lanes x 2.5Gbps速率
+
+## 软件描述
+
+### DRM 框架概述
+
+S100/S600 显示子系统接入标准 Linux **DRM（Direct Rendering Manager）** 框架，框架分为用户空间的 libdrm 库与内核空间的 DRM 驱动（`hobot-drm`）。
+
+DRM 将显示子系统抽象为几个标准组件，与 S100/S600 硬件的对应关系如下：
+
+| DRM 概念 | 含义 | S100/S600 硬件对应 |
+| ------- | ---- | ------------- |
+| CRTC | 显示控制器抽象，读取图层、合成、产生扫描时序 | **IDU**（`hobot,hobot-drm-idu`） |
+| Plane | 图层，承载待显示的图像 buffer，支持位置/缩放/合成 | IDU 内部图层 |
+| Encoder | CRTC 与 Connector 之间的信号转换 | **MIPI DSI Host**（DSI 协议封装） |
+| Bridge | Encoder 后级的外挂协议转换芯片 | **LT9611UXD**（MIPI DSI → HDMI 2.0） |
+| Connector | 物理输出接口抽象（状态/EDID/热插拔） | **HDMI 接口**（connector 名 `HDMI-A-1`） |
+| Framebuffer / GEM | 显存对象，支持 dma-buf 零拷贝导入 | 图像 buffer（可与 PYM 输出 buffer 共享） |
+
+### DRM 调试信息与硬件的对应关系
+
+DRM 使用过程中，主要关注 Planes、 CRTC、 Connector 三种部件。系统启动后 , 可以使用 modetest 命令查看这些资源
+
+#### modetest 运行
+
+> 注意：modetest 打印的信息在不同版本上会有不一样体现。
+
+运行 `modetest -M hobot-drm -a`，典型输出如下（已省略部分属性）：
+
+```text
+root@ubuntu:/# modetest -M hobot-drm -a
+opened device `Horizon Super SoC DRM driver` on driver `hobot-drm` (version 1.0.0 at 20230512)
+Encoders:
+id  crtc    type    possible crtcs  possible clones
+89  0   Virtual 0x00000001  0x00000000
+153 0   Virtual 0x00000002  0x00000000
+156 0   Virtual 0x00000001  0x00000000
+158 0   Virtual 0x00000002  0x00000000
+160 0   DSI 0x00000001  0x00000000
+
+Connectors:
+id  encoder status      name        size (mm)   modes   encoders
+94  0   unknown     Writeback-1     0x0     0   89
+  props:
+    [...]
+161 0   connected   HDMI-A-1        520x320     20  160
+  modes:
+    index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
+  #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500 flags: phsync, pvsync; type: preferred, driver
+  #1 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500 flags: phsync, pvsync; type: driver
+  #2 1920x1080 59.94 1920 2008 2052 2200 1080 1084 1089 1125 148352 flags: phsync, pvsync; type: driver
+  #4 1280x720 60.00 1280 1390 1430 1650 720 725 730 750 74250 flags: phsync, pvsync; type: driver
+    [...]
+  props:
+    [...]
+
+CRTCs:
+id  fb  pos size
+31  0   (0,0)   (0x0)
+  #0  nan 0 0 0 0 0 0 0 0 0 flags: ; type:
+  props:
+    [...]
+
+Planes:
+id  crtc    fb  CRTC x,y    x,y gamma size  possible crtcs
+35  0   0   0,0     0,0 0           0x00000001
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    8 type:
+        flags: immutable enum
+        enums: Overlay=0 Primary=1 Cursor=2
+        value: 0
+    [...]
+44  0   0   0,0     0,0 0           0x00000001
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+53  0   0   0,0     0,0 0           0x00000001
+  formats: R8 RG16 XR24 RG24 AR24 RA24
+  props:
+    8 type:
+        flags: immutable enum
+        enums: Overlay=0 Primary=1 Cursor=2
+        value: 1
+    [...]
+62  0   0   0,0     0,0 0           0x00000001
+  formats: R8 RG16 XR24 RG24 AR24 RA24
+  props:
+    [...]
+71  0   0   0,0     0,0 0           0x00000001
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+80  0   0   0,0     0,0 0           0x00000001
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+
+Frame buffers:
+id  size    pitch
 ```
 
-【功能描述】
+#### modetest 信息分析
 
-Initialize a display device instance
+以上面的实测输出为例，DRM 调试信息与硬件的对应关系如下描述（具体 ID 以实际输出为准）：
 
-【参数】
+1、CRTC:
 
-- [IN] uint32_t disp_id: display device id
-- [IN] const char *cfg_file: path of the config json file
+- 31 -> IDU0
 
-【返回值】
+2、Connectors:
 
-"= 0" success
-&lt;0 failed
+- 94 -> Writeback-1（IDU0 的回写输出）
+- 161 -> HDMI-A-1（HDMI 接口）
 
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
+3、Planes（IDU0）:
 
-### hb_disp_init_cfg
+- 35 -> yuv layer 0（Overlay，zpos 0，YUV 格式，支持缩放与镜像翻转）
+- 44 -> yuv layer 1（Overlay，zpos 1，YUV 格式，支持缩放与镜像翻转）
+- 53 -> Primary Plane（RGB 图层，zpos 2，不支持缩放与旋转）
+- 62 -> rgb layer 1（Overlay，zpos 3，RGB 格式，支持缩放、不支持旋转）
+- 71 -> yuv layer 2（Overlay，zpos 4，YUV 格式，支持缩放与镜像翻转）
+- 80 -> yuv layer 3（Overlay，zpos 5，YUV 格式，支持缩放与镜像翻转）
 
-【函数原型】
+### DRM 快速体验
 
-```c
-HB_API int32_t hb_disp_init_cfg(const char *cfg_file);
+根据 modetest 获取到的信息，我们可以执行下面命令进行 HDMI 功能测试，执行之前请接入支持 1080P@60Hz 模式的显示器：
+
+```sh
+modetest -M hobot-drm -a -s 161@31:1920x1080 -P 35@31:1920x1080@NV12
 ```
 
-【功能描述】
+命令执行完成之后，显示屏上应该会出现 SMPTE 的测试彩条 ECR-1-1978：
 
-Initialize all display device
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/display_subsystem_smpte_patten.png" alt="SMPTE 测试彩条" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-【参数】
+## 参考示例
 
-- [IN] const char *cfg_file: path of the config json file
+- 待补充
 
-【返回值】
+## API 参考
 
-"= 0" success
-&lt;0 failed
+参考开源代码：[drm lib](https://gitlab.freedesktop.org/mesa/libdrm/-/blob/main/xf86drmMode.h)
 
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
+## 接口说明
 
-### hb_disp_close
+参考开源代码：[drm lib](https://gitlab.freedesktop.org/mesa/libdrm/-/blob/main/xf86drmMode.h)
 
-【函数原型】
+## 数据结构
 
-```c
-HB_API int32_t hb_disp_close(void);
-```
+参考开源代码：[drm lib](https://gitlab.freedesktop.org/mesa/libdrm/-/blob/main/xf86drmMode.h)
 
-【功能描述】
+## 返回值说明
 
-Close all display device
-
-【参数】
-
-- [IN] None
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_close_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_close_id(uint32_t disp_id);
-```
-
-【功能描述】
-
-Close a display device instance
-
-【参数】
-
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_start
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_start(void);
-```
-
-【功能描述】
-
-Start all display device
-
-【参数】
-
-- [IN] None
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_start_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_start_id(uint32_t disp_id);
-```
-
-【功能描述】
-
-Start a display device instance
-
-【参数】
-
-<!-- TODO(Sx): 参数待头文件/板端核实 -->
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_stop
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_stop(void);
-```
-
-【功能描述】
-
-Stop all display device
-
-【参数】
-
-- [IN] None
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_stop_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_stop_id(uint32_t disp_id);
-```
-
-【功能描述】
-
-Stop a display device instance
-
-【参数】
-
-<!-- TODO(Sx): 参数待头文件/板端核实 -->
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_layer_on
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_layer_on(uint32_t layer_number);
-```
-
-【功能描述】
-
-Enable a layer of all display device
-
-【参数】
-
-- [IN] uint32_t layer_number: the number of layer
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_layer_on_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_layer_on_id(uint32_t layer_number, uint32_t disp_id);
-```
-
-【功能描述】
-
-Enable a layer of a display device instance
-
-【参数】
-
-- [IN] uint32_t layer_number: layer id
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_layer_off
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_layer_off(uint32_t layer_number);
-```
-
-【功能描述】
-
-Close a layer of all display device
-
-【参数】
-
-- [IN] uint32_t layer_number: layer id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_layer_off_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_layer_off_id(uint32_t layer_number, uint32_t disp_id);
-```
-
-【功能描述】
-
-Close a layer of a display device instance
-
-【参数】
-
-- [IN] uint32_t layer_number: layer id
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_video_bufaddr
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_video_bufaddr(uint32_t layer_no, void *addr_y, void *addr_c);
-```
-
-【功能描述】
-
-Set video buffer address
-
-【参数】
-
-<!-- TODO(Sx): 参数待头文件/板端核实 -->
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Super; SW: 0.0.1
-
-### hb_disp_set_video_bufaddr_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_video_bufaddr_id(uint32_t disp_id, uint32_t layer_no, void *addr_y, void *addr_c);
-```
-
-【功能描述】
-
-Set video buffer address to a display device instance
-
-【参数】
-
-<!-- TODO(Sx): 参数待头文件/板端核实 -->
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Super; SW: 0.0.1
-
-### hb_disp_set_layer_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_layer_cfg(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos);
-```
-
-【功能描述】
-
-Set video buffer address
-
-【参数】
-
-- [IN] uint32_t layer_no: display layer id
-- [IN] uint32_t width: width of the layer
-- [IN] uint32_t height: height of the layer
-- [IN] uint32_t x_pos: x position of the layer
-- [IN] uint32_t y_pos: y position of the layer
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_layer_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_layer_cfg_id(uint32_t layer_no, uint32_t width, uint32_t height, uint32_t x_pos, uint32_t y_pos, uint32_t disp_id);
-```
-
-【功能描述】
-
-Set video buffer address for a display device instance
-
-【参数】
-
-- [IN] uint32_t layer_no: display layer id
-- [IN] uint32_t width: width of the layer
-- [IN] uint32_t height: height of the layer
-- [IN] uint32_t x_pos: x position of the layer
-- [IN] uint32_t y_pos: y position of the layer
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_timing
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_timing(disp_timing_t *user_timing);
-```
-
-【功能描述】
-
-Set display timing
-
-【参数】
-
-- [IN] disp_timing_t *user_timing: the timing parameter user want to set
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_timing_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_timing_id(disp_timing_t *user_timing, uint32_t	    disp_id);
-```
-
-【功能描述】
-
-Set display timing for a display device instance
-
-【参数】
-
-- [IN] disp_timing_t *user_timing: the timing parameter user want to set
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_gamma_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_gamma_cfg(float32_t *gamma_val);
-```
-
-【功能描述】
-
-Get gamma config value
-
-【参数】
-
-- [OUT] float32_t *gamma_val: input gamma value pointer, store result
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_gamma_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_gamma_cfg_id(float32_t *gamma_val, uint32_t disp_id);
-```
-
-【功能描述】
-
-Get gamma config value for a display device instance
-
-【参数】
-
-- [OUT] float32_t *gamma_val: input gamma value pointer, store result
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_gamma_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_gamma_cfg(float32_t gamma_user);
-```
-
-【功能描述】
-
-Set gamma config for a display device instance
-
-【参数】
-
-- [IN] float32_t gamma_user: gamma value user want to set
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_gamma_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_gamma_cfg_id(float32_t gamma_user, uint32_t disp_id);
-```
-
-【功能描述】
-
-Set gamma config
-
-【参数】
-
-- [IN] float32_t gamma_user: gamma value user want to set
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_output_dynamic_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_output_dynamic_cfg_id(output_dynamic_cfg_t *dynamic_cfg, uint32_t disp_id);
-```
-
-【功能描述】
-
-Set output dynamic config
-
-【参数】
-
-- [IN] output_dynamic_cfg_t *dynamic_cfg: output dynamic value user want to set
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Super; SW: 0.0.1
-
-### hb_disp_get_output_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_output_cfg(output_cfg_t *cfg);
-```
-
-【功能描述】
-
-Get ouput config
-
-【参数】
-
-- [OUT] output_cfg_t *cfg: the output config parameters struct that user gets
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_output_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_output_cfg_id(output_cfg_t *cfg, uint32_t disp_id);
-```
-
-【功能描述】
-
-Get ouput config of a display device instance
-
-【参数】
-
-- [OUT] output_cfg_t *cfg: the output config parameters struct that user gets
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_output_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_output_cfg(output_cfg_t *cfg);
-```
-
-【功能描述】
-
-Set ouput config
-
-【参数】
-
-- [IN] output_cfg_t *cfg: the output config parameters struct that user sets
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_output_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_output_cfg_id(output_cfg_t *cfg, uint32_t	     disp_id);
-```
-
-【功能描述】
-
-Set ouput config of a display device instance
-
-【参数】
-
-- [IN] output_cfg_t *cfg: the output config parameters struct that user sets
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_upscaling_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_upscaling_cfg(upscaling_cfg_t *cfg);
-```
-
-【功能描述】
-
-Get upscale config
-
-【参数】
-
-- [OUT] upscaling_cfg_t *cfg: the up scale config parameters struct that user gets
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_upscaling_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_upscaling_cfg_id(upscaling_cfg_t *cfg, uint32_t	     disp_id);
-```
-
-【功能描述】
-
-Get upscale config of a display device instance
-
-【参数】
-
-- [OUT] upscaling_cfg_t *cfg: the up scale config parameters struct that user gets
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_upscaling_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_upscaling_cfg(const upscaling_cfg_t *cfg);
-```
-
-【功能描述】
-
-Set upscale config of a display device instance
-
-【参数】
-
-- [IN] const upscaling_cfg_t *cfg: the up scale config parameters struct that user Sets
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_upscaling_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_upscaling_cfg_id(const upscaling_cfg_t *cfg, uint32_t		   disp_id);
-```
-
-【功能描述】
-
-Set upscale config of a display device instance
-
-【参数】
-
-- [IN] const upscaling_cfg_t *cfg: the up scale config parameters struct that user Sets
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_channel_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_channel_cfg(uint32_t chn, channel_base_cfg_t *cfg);
-```
-
-【功能描述】
-
-Get channel config parameters
-
-【参数】
-
-- [IN] uint32_t chn: the layer number user want to get
-- [OUT] channel_base_cfg_t *cfg: the up scale config parameters struct that user Sets
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_channel_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_channel_cfg_id(uint32_t chn, channel_base_cfg_t *cfg, uint32_t disp_id);
-```
-
-【功能描述】
-
-Get channel config parameters of a display device instance
-
-【参数】
-
-- [IN] uint32_t chn: the layer number user want to get
-- [OUT] channel_base_cfg_t *cfg: the channel config parameters struct that user Gets
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_channel_cfg
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_channel_cfg(uint32_t			 chn, channel_base_cfg_t *cfg);
-```
-
-【功能描述】
-
-Set channel config parameters of a display device instance
-
-【参数】
-
-- [IN] uint32_t chn: the layer number user want to set
-- [IN] channel_base_cfg_t *cfg: the up scale config parameters struct that user sets
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_set_channel_cfg_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_channel_cfg_id(uint32_t		    chn, channel_base_cfg_t *cfg, uint32_t		    disp_id);
-```
-
-【功能描述】
-
-Set channel config parameters of a display device instance
-
-【参数】
-
-- [IN] uint32_t chn: the layer number user want to set
-- [IN] channel_base_cfg_t *cfg: the up scale config parameters struct that user sets
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_out_upscale
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_out_upscale(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h);
-```
-
-【功能描述】
-
-user config up-scale
-
-【参数】
-
-- [IN] uint32_t src_w: width of the source graphic
-- [IN] uint32_t src_h: height of the source graphic
-- [IN] uint32_t tag_w: width of the target graphic
-- [IN] uint32_t tag_h: height of the target graphic
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_out_upscale_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_out_upscale_id(uint32_t src_w, uint32_t src_h, uint32_t tag_w, uint32_t tag_h, uint32_t disp_id);
-```
-
-【功能描述】
-
-user config up-scale for a display device instance
-
-【参数】
-
-- [IN] uint32_t src_w: width of the source graphic
-- [IN] uint32_t src_h: height of the source graphic
-- [IN] uint32_t tag_w: width of the target graphic
-- [IN] uint32_t tag_h: height of the target graphic
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_display_done
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_display_done(void);
-```
-
-【功能描述】
-
-user get the display done flag
-
-【参数】
-
-- [IN] None
-
-【返回值】
-
-0:not done;1:done
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_display_done_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_display_done_id(uint32_t disp_id);
-```
-
-【功能描述】
-
-user get the display done flag for a display device instance
-
-【参数】
-
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-0:not done;1:done
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_check_video_bufaddr_valid
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_check_video_bufaddr_valid(size_t	  graphic_size, uint32_t disp_layer_no);
-```
-
-【功能描述】
-
-user check whether the graphic size matches the channel
-
-【参数】
-
-- [IN] size_t graphic_size: the graphic size
-- [IN] uint32_t disp_layer_no: layer number of DISP
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_check_video_bufaddr_valid_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_check_video_bufaddr_valid_id(size_t   graphic_size, uint32_t disp_layer_no, uint32_t  disp_id);
-```
-
-【功能描述】
-
-user check whether the graphic size matches the channel
-
-【参数】
-
-- [IN] size_t graphic_size: the graphic size
-- [IN] uint32_t disp_layer_no: layer number of DISP
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_video_display_done_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_video_display_done_id(uint32_t layer, uint32_t disp_id);
-```
-
-【功能描述】
-
-user get layer buffer read done flag
-
-【参数】
-
-- [IN] uint32_t layer: layer id
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_video_display_done
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_video_display_done(uint32_t layer);
-```
-
-【功能描述】
-
-user get layer buffer read done flag
-
-【参数】
-
-- [IN] uint32_t layer: layer id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Ultra/Super; SW: 0.0.1
-
-### hb_disp_get_disp_done_sync_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_disp_done_sync_id(uint32_t disp_id, uint64_t rel_seq);
-```
-
-【功能描述】
-
-user wait display vsync flag
-
-【参数】
-
-- [IN] uint32_t disp_id: display device id
-- [IN] uint64_t rel_seq: user request vsync count
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Super; SW: 0.0.1
-
-### hb_disp_get_capture_buf_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_get_capture_buf_id(uint32_t disp_id, uint32_t timeout, struct hb_mem_graphic_buf_t *out_buf);
-```
-
-【功能描述】
-
-user get capture buffer
-
-【参数】
-
-- [IN] uint32_t disp_id: display device id
-- [IN] uint32_t timeout: wait timeout(ms)
-- [OUT] struct hb_mem_graphic_buf_t *out_buf: user import graphic buffer
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Super; SW: 0.0.1
-
-### hb_disp_release_capture_buf_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_release_capture_buf_id(uint32_t disp_id, struct hb_mem_graphic_buf_t *out_buf);
-```
-
-【功能描述】
-
-user release capture buffer
-
-【参数】
-
-- [IN] uint32_t disp_id: display device id
-- [OUT] struct hb_mem_graphic_buf_t *out_buf: user import graphic buffer
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Super; SW: 0.0.1
-
-### hb_disp_set_disp_oneshot_trigger_id
-
-【函数原型】
-
-```c
-HB_API int32_t hb_disp_set_disp_oneshot_trigger_id(uint32_t disp_id);
-```
-
-【功能描述】
-
-user trigger display control oneshot output
-
-【参数】
-
-- [IN] uint32_t disp_id: display device id
-
-【返回值】
-
-"= 0" success
-&lt;0 failed
-
-【兼容性】
-HW: Super; SW: 0.0.1
+参考开源代码：[drm lib](https://gitlab.freedesktop.org/mesa/libdrm/-/blob/main/xf86drmMode.h)
 
 ## 相关文档
 
-- [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)
-- [Display 对象](/Simple_API/multimedia_api/pydev/object_display)
-- [采集→显示](/Demos/multimedia_demo/cdev/vio2display)
+- [多媒体 API 参考 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
