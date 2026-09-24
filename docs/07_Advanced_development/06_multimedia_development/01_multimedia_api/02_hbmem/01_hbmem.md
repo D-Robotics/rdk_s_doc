@@ -67,7 +67,7 @@ Cache 刷新的操作是将 Cache 中已经缓存了 DDR 的数据，回写到 D
 1. 左图：没有调用 Cache 刷新的情况
 2. 右图：在合适的时机调用 Cache 刷新的情况（`hb_mem_flush_buf`）
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_flush.png" alt="Cache 刷新（hb_mem_flush_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_flush.png" alt="Cache 刷新（hb_mem_flush_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 左图流程解释（存在缓存一致性的问题）：
 
@@ -91,7 +91,7 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 1. 左图：没有调用 Cache 无效接口的情况
 2. 右图：在合适的时机调用 Cache 无效接口的情况（`hb_mem_invalidate_buf`）
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_invalidate.png" alt="Cache 无效（hb_mem_invalidate_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_invalidate.png" alt="Cache 无效（hb_mem_invalidate_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 左图流程解释（存在缓存一致性的问题）：
 
@@ -135,7 +135,7 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 
 下图展示多进程之间内存共享的流程（以 `hb_mem_common_buf_t` 在多进程之间共享举例）：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_share_flow.png" alt="多进程内存共享流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_share_flow.png" alt="多进程内存共享流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 内存队列管理
 
@@ -155,7 +155,7 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 
 :::
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_queue.png" alt="内存队列管理示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_queue.png" alt="内存队列管理示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 内存池
 
