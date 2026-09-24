@@ -892,9 +892,7 @@ VIN presents itself as a vnode. All configuration is carried in `vin_attr_t` and
 
 **The interfaces live in three libraries**: `hbn_vnode_*` / `hbn_vflow_*` in `libvpf.so`, `hbn_camera_*` in `libcam.so`, `hb_mem_*` in `libhbmem.so`.
 
-### Top Level
-
-#### vin_attr_t
+### vin_attr_t
 All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 
 | Field | Type | Description | Typical | Default | Range |
@@ -906,9 +904,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[VIN_TYPE_INVALID]` | Buffers of the DDR-bound channels, indexed by `ochn_id` | — | — | — |
 | `magicNumber` | `uint32_t` | `0x12345678` | `0x12345678` | — | — |
 
-### Node-Level Attributes
-
-#### vin_node_attr_t
+### vin_node_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `cim_attr` | `cim_attr_t` | Input and path selection | — | — | — |
@@ -917,7 +913,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `flow_id` | `uint32_t` | *framework* | — | — | filled in by the framework |
 | `magicNumber` | `uint32_t` | **Required: `0x12345678`**. The driver's `set_attr` validates it and fails the call on a mismatch | `0x12345678` | — | must equal the driver-internal macro `MAGIC_NUMBER` |
 
-#### cim_attr_t
+### cim_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `mipi_en` | `uint32_t` | Input source select, 1 = MIPI | 1 | 0 | `0` / `1`; exactly one of this, `func.enable_pattern` and `rdma_input.rdma_en` |
@@ -931,7 +927,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `tpg_input` | `cim_input_tpg_t` | Test pattern input | — | — | — |
 | `func` | `cim_func_desc_t` | Frame ID, frame skip, pattern and so on | — | — | — |
 
-#### cim_func_desc_t
+### cim_func_desc_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `enable_frame_id` | `uint32_t` | Whether to stamp frames with a frame ID | 1 | 0 | `0` / `1` |
@@ -950,7 +946,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `sparate_frames_mode` | `uint32_t` | Unused by the driver (spelling as in the header); fill `0` | 0 | 0 | unused by the driver |
 | `endian_mode` | `uint32_t` | Endianness when writing to DDR | — | — | — |
 
-#### cim_input_rdma_t
+### cim_input_rdma_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `rdma_en` | `uint32_t` | Feedback enable | 0 | 0 | `0` / `1`; exactly one of this, MIPI input and `enable_pattern` |
@@ -958,13 +954,13 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `pack_mode` | `uint32_t` | Packing used for the replayed data, same convention as `vin_basic_attr_t.pack_mode`; `stride` is derived from it and the format | 1 | 0 | `0` / `1` |
 | `buff_num` | `uint32_t` | Number of feedback buffers | — | — | — |
 
-#### cim_input_tpg_t
+### cim_input_tpg_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `tpg_en` | `uint32_t` | Test pattern enable | 0 | 0 | `0` / `1` |
 | `fps` | `uint32_t` | Pattern frame rate | — | — | — |
 
-#### vcon_attr_t
+### vcon_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `attr_valid` | `int32_t` | Whether this group of attributes takes effect | 1 | 0 | `0` / `1` |
@@ -983,12 +979,12 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `vcon_type` | `int32_t` | 0 = standalone, 1 = composite master, 2 = composite slave | 0 | 0 | `0` independent / `1` composite master / `2` composite slave |
 | `vcon_link` | `int32_t` | VCON link index, for composite types | — | — | — |
 
-#### lpwm_attr_t
+### lpwm_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | Per-channel configuration | — | — | — |
 
-#### lpwm_chn_attr_t
+### lpwm_chn_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `enable` | `uint32_t` | Enable this channel | 0 | 0 | `0` / `1` |
@@ -1000,9 +996,7 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `threshold` | `uint32_t` | Phase-error threshold for slow sync, in microseconds, range 0–65535. `0` disables slow sync; when non-zero the trigger phase is walked towards the sync source in `adjust_step` steps, and **`offset` must be smaller than `period`** | 0 | 0 | `0`–`65535` in µs; `0` disables slow sync |
 | `adjust_step` | `uint32_t` | Step size for each slow-sync adjustment, range 0–15. Only takes effect when `threshold` is non-zero | 0 | 0 | `0`–`15` |
 
-### Extended Attributes
-
-#### vin_attr_ex_t
+### vin_attr_ex_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `ex_attr_type` | `vin_attr_ex_type_e` | Which extended attributes take effect | — | — | — |
@@ -1013,16 +1007,14 @@ All of VIN's configuration, handed over in one `hbn_vnode_set_attr` call.
 | `ipi_reset` | `uint32_t` | MIPI IPI reset | — | — | — |
 | `bypass_enable` | `uint32_t` | Bypass enable | — | — | — |
 
-### Channel Attributes
-
-#### vin_ichn_attr_t
+### vin_ichn_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `format` | `uint32_t` | Image format | `HW_FORMAT_RAW10` | — | see `HW_FORMAT_*` in `hb_vpm_data_info.h` |
 | `width` | `uint32_t` | Width | — | — | — |
 | `height` | `uint32_t` | Height | — | — | — |
 
-#### vin_ochn_attr_t
+### vin_ochn_attr_t
 Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 
 | Field | Type | Description | Typical | Default | Range |
@@ -1039,7 +1031,7 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `emb_attr` | `vin_emb_attr_t` | EMB attributes | — | — | — |
 | `magicNumber` | `uint32_t` | **Required: `0x12345678`**. The driver's `set_ochn_attr` validates it and fails the call on a mismatch | `0x12345678` | — | must equal the driver-internal macro `MAGIC_NUMBER` |
 
-#### vin_basic_attr_t
+### vin_basic_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `pack_mode` | `uint32_t` | How data is written to DDR | 1 | 0 | `0` / `1` |
@@ -1047,12 +1039,12 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `vstride` | `uint32_t` | Frame stride | — | — | — |
 | `format` | `uint32_t` | Format written to DDR | — | — | — |
 
-#### vin_rawds_attr_t
+### vin_rawds_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `rawds_mode` | `uint32_t` | Downsampling mode | 0 | 0 | `0` / `1` |
 
-#### vin_roi_attr_s
+### vin_roi_attr_s
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `roi_x` | `uint32_t` | Crop origin X | — | — | — |
@@ -1060,14 +1052,14 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 | `roi_width` | `uint32_t` | Crop width | — | — | — |
 | `roi_height` | `uint32_t` | Crop height | — | — | — |
 
-#### vin_emb_attr_t
+### vin_emb_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
 | `embeded_dependence` | `uint32_t` | Whether EMB travels together with the image data | 0 | 0 | `0` / `1` |
 | `embeded_width` | `uint32_t` | EMB data width | — | — | — |
 | `embeded_height` | `uint32_t` | EMB data height | — | — | — |
 
-#### vin_ochn_buff_attr_t
+### vin_ochn_buff_attr_t
 Indexed by `ochn_id`.
 
 | Field | Type | Description | Typical | Default | Range |

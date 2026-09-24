@@ -892,9 +892,7 @@ VIN 对外是一个 vnode，全部配置集中在 `vin_attr_t` 里一次性下�
 
 **接口分属三个库**：`hbn_vnode_*` / `hbn_vflow_*` 在 `libvpf.so`，`hbn_camera_*` 在 `libcam.so`，`hb_mem_*` 在 `libhbmem.so`。
 
-### 顶层
-
-#### vin_attr_t
+### vin_attr_t
 VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
@@ -906,9 +904,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `vin_ochn_buff_attr` | `vin_ochn_buff_attr_t[VIN_TYPE_INVALID]` | 落 DDR 通道的 buffer，按 `ochn_id` 索引 | — | — | — |
 | `magicNumber` | `uint32_t` | 填 `0x12345678` | `0x12345678` | — | — |
 
-### 节点级属性
-
-#### vin_node_attr_t
+### vin_node_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `cim_attr` | `cim_attr_t` | 接入与通路选择 | — | — | — |
@@ -917,7 +913,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `flow_id` | `uint32_t` | 框架填 | — | — | 框架回填 |
 | `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_attr` 校验这个值，不符直接返回失败 | `0x12345678` | — | 必须等于驱动内部宏 `MAGIC_NUMBER` |
 
-#### cim_attr_t
+### cim_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `mipi_en` | `uint32_t` | 输入源选择，1 = MIPI | 1 | 0 | `0` / `1`，与 `func.enable_pattern`、`rdma_input.rdma_en` 三选一 |
@@ -931,7 +927,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `tpg_input` | `cim_input_tpg_t` | 测试图案输入 | — | — | — |
 | `func` | `cim_func_desc_t` | 帧号、跳帧、pattern 等 | — | — | — |
 
-#### cim_func_desc_t
+### cim_func_desc_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `enable_frame_id` | `uint32_t` | 是否给帧打帧号 | 1 | 0 | `0` / `1` |
@@ -950,7 +946,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `sparate_frames_mode` | `uint32_t` | 驱动未使用（头文件拼写如此），填 `0` | 0 | 0 | 驱动未使用 |
 | `endian_mode` | `uint32_t` | 写 DDR 时的字节序 | — | — | — |
 
-#### cim_input_rdma_t
+### cim_input_rdma_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `rdma_en` | `uint32_t` | 回灌使能 | 0 | 0 | `0` / `1`，与 MIPI 输入、`enable_pattern` 三选一 |
@@ -958,13 +954,13 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `pack_mode` | `uint32_t` | 回灌数据的打包方式，口径同 `vin_basic_attr_t.pack_mode`；`stride` 由它与格式算出 | 1 | 0 | `0` / `1` |
 | `buff_num` | `uint32_t` | 回灌 buffer 数 | — | — | — |
 
-#### cim_input_tpg_t
+### cim_input_tpg_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `tpg_en` | `uint32_t` | 测试图案使能 | 0 | 0 | `0` / `1` |
 | `fps` | `uint32_t` | 图案帧率 | — | — | — |
 
-#### vcon_attr_t
+### vcon_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `attr_valid` | `int32_t` | 该组属性是否生效 | 1 | 0 | `0` / `1` |
@@ -983,12 +979,12 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `vcon_type` | `int32_t` | 0=独立 1=复合主 2=复合从 | 0 | 0 | `0` 独立 / `1` 复合主 / `2` 复合从 |
 | `vcon_link` | `int32_t` | VCON link 序号，复合类型用 | — | — | — |
 
-#### lpwm_attr_t
+### lpwm_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | 逐通道配置 | — | — | — |
 
-#### lpwm_chn_attr_t
+### lpwm_chn_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `enable` | `uint32_t` | 该通道使能 | 0 | 0 | `0` / `1` |
@@ -1000,9 +996,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `threshold` | `uint32_t` | 缓慢同步的相位误差门限（微秒），取值 0~65535。`0` 表示关闭缓慢同步；非 0 时按 `adjust_step` 逐步把触发相位拉向同步源，**并要求 `offset` 小于 `period`** | 0 | 0 | `0`~`65535`，单位 µs；`0` 关闭缓慢同步 |
 | `adjust_step` | `uint32_t` | 缓慢同步每次调整的步进量，取值 0~15。仅在 `threshold` 非 0 时起作用 | 0 | 0 | `0`~`15` |
 
-### 扩展属性
-
-#### vin_attr_ex_t
+### vin_attr_ex_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `ex_attr_type` | `vin_attr_ex_type_e` | 哪些扩展属性生效 | — | — | — |
@@ -1013,16 +1007,14 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `ipi_reset` | `uint32_t` | MIPI IPI 复位 | — | — | — |
 | `bypass_enable` | `uint32_t` | bypass 使能 | — | — | — |
 
-### 通道属性
-
-#### vin_ichn_attr_t
+### vin_ichn_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `format` | `uint32_t` | 图像格式 | `HW_FORMAT_RAW10` | — | 见 `hb_vpm_data_info.h` 的 `HW_FORMAT_*` |
 | `width` | `uint32_t` | 宽 | — | — | — |
 | `height` | `uint32_t` | 高 | — | — | — |
 
-#### vin_ochn_attr_t
+### vin_ochn_attr_t
 按 `ochn_id` 索引，`0` 主帧 / `4` ROI / `3` EMB。
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
@@ -1039,7 +1031,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `emb_attr` | `vin_emb_attr_t` | EMB 属性 | — | — | — |
 | `magicNumber` | `uint32_t` | **必填 `0x12345678`**。驱动 `set_ochn_attr` 校验这个值，不符直接返回失败 | `0x12345678` | — | 必须等于驱动内部宏 `MAGIC_NUMBER` |
 
-#### vin_basic_attr_t
+### vin_basic_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `pack_mode` | `uint32_t` | 写 DDR 的方式 | 1 | 0 | `0` / `1` |
@@ -1047,12 +1039,12 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `vstride` | `uint32_t` | 帧 stride | — | — | — |
 | `format` | `uint32_t` | 写 DDR 的格式 | — | — | — |
 
-#### vin_rawds_attr_t
+### vin_rawds_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `rawds_mode` | `uint32_t` | 下采样模式 | 0 | 0 | `0` / `1` |
 
-#### vin_roi_attr_s
+### vin_roi_attr_s
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `roi_x` | `uint32_t` | 裁剪起点 X | — | — | — |
@@ -1060,14 +1052,14 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `roi_width` | `uint32_t` | 裁剪宽 | — | — | — |
 | `roi_height` | `uint32_t` | 裁剪高 | — | — | — |
 
-#### vin_emb_attr_t
+### vin_emb_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `embeded_dependence` | `uint32_t` | EMB 是否与图像数据在一起 | 0 | 0 | `0` / `1` |
 | `embeded_width` | `uint32_t` | EMB 数据宽 | — | — | — |
 | `embeded_height` | `uint32_t` | EMB 数据高 | — | — | — |
 
-#### vin_ochn_buff_attr_t
+### vin_ochn_buff_attr_t
 按 `ochn_id` 索引。
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
