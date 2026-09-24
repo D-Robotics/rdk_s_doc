@@ -9,39 +9,61 @@ description: "RDK S100/S600 Camera 采集入口 API（hbn_camera_* / hbn_deseria
 ## 模块描述
 
 - Camera 是 RDK 多媒体 pipeline 的采集入口。
-- 封装 sensor 配置、通道初始化与 VIN 绑定，与 HBN vnode（VIN/ISP/PYM）组成 vflow。
+- 封装 Sensor,Serializer,Deserializer 配置、通道初始化与 VIN 绑定，与 HBN vnode（VIN/ISP/PYM）组成 vflow。
 
 **Camera 接入方式**：
 
-- 支持 MIPI CSI 视频输入，或通过解串器（deserial）转换为 MIPI CSI 信号接入两种方式。
+- 支持 MIPI CSI camera 输入 和 Serdes camera 接入两种方式。
 - 两种方式都需要通过 attach / detach 接口与 VIN node 绑定和解绑，从而初始化和去初始化 sensor。
   1. MIPI CSI 直接接入：通过 `hbn_camera_attach_to_vin` / `hbn_camera_detach_from_vin` 将 Camera 与 VIN node 绑定/解绑。
-  2. 解串器（deserial）接入：通过 `hbn_deserial_attach_to_vin` / `hbn_deserial_detach_from_vin` 将 deserial 与 VIN node 绑定/解绑，Camera 再 attach 到 deserial。
+  2. Serdes camera 接入：通过 `hbn_deserial_attach_to_vin` / `hbn_deserial_detach_from_vin` 将 deserial 与 VIN node 绑定/解绑，Camera 再 attach 到 deserial。
 - 关于 VIN node，见 [视频输入 - VIN](./04_vin_api.md)。
 
 ### 硬件框图
 
+**主要组成模块**：
+
 :::doc_scope{products="RDK S100"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s100_hardware.png?v=20260924" alt="S100 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+- Serializer：把 sensor 的 MIPI 并行数据转换成串行数据流，通过同轴线缆串联到Deserializer
+- Deserializer：把通过同轴线缆的串行数据流转换成并行数据接入S100 MIPI RX
+- Sensor：可直接接入S100 MIPI RX 或者 通过 Serializer 串联 Deserializer 接入S100 MIPI RX
+- POC：用于给远端 Serializer和sensor 供电
+- 控制管脚：I2C、LPWM(同步触发)、reset、deserr(Serdes链路错误上报管脚)
+- 下图 S100 连接图例一所示为 最大sensor接入路数样例，S100 连接图例二为 4路sdes和2路mipi的样例
 :::
 
 :::doc_scope{products="RDK S100"}
-- S100 支持 MIPI camera 和 GMSL sensor 接入
-- S100 上有3个MIPI RX，分别为RX0，RX1，RX4。
-- S100 MIPI CSI RX支持C/DPHY，DPHY速率2.5Gbps x 4lane，CPHY速率3.5Gsps x 3trios。
-- S100 MIPI CSI RX，每路支持4VC，最多支持12路接入。
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s100_hardware.png?v=20260924b" alt="S100 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+:::
+
+:::doc_scope{products="RDK S600"}
+- Serializer：把 sensor 的 MIPI 并行数据转换成串行数据流，通过同轴线缆串联到Deserializer
+- Deserializer：把通过同轴线缆的串行数据流转换成并行数据接入S600 MIPI RX
+- Sensor：可直接接入S600 MIPI RX 或者 通过 Serializer 串联 Deserializer 接入S600 MIPI RX
+- POC：用于给远端 Serializer和sensor 供电
+- 控制管脚：I2C、LPWM(同步触发)、reset、deserr(Serdes链路错误上报管脚)
+- 下图 S600 连接图例所示为 最大sensor接入路数样例
+:::
+
+:::doc_scope{products="RDK S600"}
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s600_hardware.png?v=20260924b" alt="S600 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+:::
+
+
+**关键功能**：
+:::doc_scope{products="RDK S100"}
+
+- S100 上有3个MIPI RX，分别为 MIPI RX0，MIPI RX1，MIPI RX4。
+- S100 MIPI RX支持C/DPHY，DPHY速率 4.5Gbps x 4lane，CPHY速率3.5Gsps x 3trios。
+- S100 MIPI RX，每路支持4VC，最多支持12路接入。
 - MIPI TX: 2路DPHY，每路为2.5Gbps/lane x 4lane。
 :::
 
 :::doc_scope{products="RDK S600"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s600_hardware.png?v=20260924" alt="S600 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-:::
 
-:::doc_scope{products="RDK S600"}
-
-- S600 上有6个MIPI RX，分别为RX0，RX1，RX2，RX3，RX4，RX5。
-- S600 MIPI CSI RX 每路为DPHY最大2.5Gbps/lane x 4lane，CPHY最大2.5Gsps/trio x 3trio，
-- S600 MIPI CSI RX，每路支持4VC，最多支持12路接入。
+- S600 上有6个MIPI RX，分别为MIPI RX0，MIPI RX1，MIPI RX2，MIPI RX3，MIPI RX4，MIPI RX5。
+- S600 MIPI RX 每路为DPHY最大4.5Gbps/lane x 4lane，CPHY最大3.5Gsps/trio x 3trio，
+- S600 MIPI RX，每路支持4VC，最多支持 24 路接入。
 - MIPI TX: 2路DPHY，每路为2.5Gbps/lane x 4lane。
 
 :::
