@@ -32,6 +32,7 @@ For RDK S100 commercial materials, please switch to the **FTP Download** option 
 | -------------------------------------------------------------------------------------- | -------------- | ----------- | -------------------------------------------------------------------- |
 | [System Image](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)                | RDKS100-V4.0.5_20260507 | 2026-05-07  | System image.                                                       |
 | [BSP Source Package](https://developer.d-robotics.cc/resource)                | RDKS100-V4.0.5_20260507 | 2026-05-07  | BSP source package.                                                 |
+| [MCU Source Package](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/RDKS100-V4.0.5_20260507/RDK_MCU_SDK/)                | RDKS100-V4.0.5_20260507 | 2026-09-24 | MCU source package.                                                 |
 
 </div>
 
@@ -526,7 +527,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 <TabItem value="online" label="Online Download">
 
 
-## System Software
+## System Software {#s600-system-software}
 
 <div className="table-responsive">
   <table>

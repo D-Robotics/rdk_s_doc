@@ -32,6 +32,7 @@ RDK S100 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 | -------------------------------------------------------------------------------------- | ----------- | ---------- | -------------------------------------------------------------------- |
 | [系统镜像](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/)                | RDKS100-V4.0.5_20260507 | 2026-05-07 | 系统镜像。                                                           |
 | [BSP 源码包](https://developer.d-robotics.cc/resource)                | RDKS100-V4.0.5_20260507 | 2026-05-07 | BSP 源码包。                                                           |
+| [MCU 源码包](https://archive.d-robotics.cc/downloads/os_images/rdk_s100/RDKS100-V4.0.5_20260507/RDK_MCU_SDK/)                | RDKS100-V4.0.5_20260507 | 2026-09-24 | MCU 源码包。                                                           |
 
 </div>
 
@@ -529,7 +530,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 <TabItem value="online" label="在线下载">
 
 
-## 系统软件
+## 系统软件 {#s600-system-software}
 
 <div className="table-responsive">
   <table>
