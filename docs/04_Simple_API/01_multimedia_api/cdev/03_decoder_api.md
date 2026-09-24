@@ -8,7 +8,7 @@ description: "DECODER（解码模块）API 接口说明"
 
 `DECODER` 模块提供视频码流解码功能，支持 `H264`、`H265` 和 `MJPEG` 码流。
 
-- **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api)。
+- **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage)。
 - **适用场景**：解码→显示、RTSP 拉流解码，见 [解码→显示](/Demos/multimedia_demo/cdev/decode2display)。
 - **前置条件**：已烧录 RDK OS，板端有编译工具链，准备码流文件或码流数据源。
 

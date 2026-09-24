@@ -56,6 +56,6 @@ description: RDK S100/S600 多媒体系统调试指南总览：范围、数据�
   - [视频处理框架 - PYM](../07_vpf_pym_api.md)
   - [畸变矫正 - GDC](../08_gdc/01_gdc_overview.md)
   - [显示输出 - DISP](../09_disp_api.md)
-  - [编解码 - MediaCodec](../10_mediacodec_api.md)
+  - [编解码 - MediaCodec](../10_mediacodec/01_usage.md)
 - 关联：[多路 Camera 及与 Lidar 同步](../12_camerasync.md)
 - 用户层（封装层简易接口）：[多媒体简易 API](/Simple_API/multimedia_api)（与底层 API 双向互链）

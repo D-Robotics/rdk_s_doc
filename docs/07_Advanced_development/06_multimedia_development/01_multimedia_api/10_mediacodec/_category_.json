@@ -1,0 +1,9 @@
+{
+  "label": "编解码 - MediaCodec",
+  "position": 10,
+  "link": {
+    "type": "generated-index",
+    "slug": "/Advanced_development/multimedia_development/multimedia_api/mediacodec",
+    "description": "MediaCodec 编解码：使用指南与 API 参考"
+  }
+}

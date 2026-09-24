@@ -6,7 +6,7 @@ description: "Encoder 对象接口说明"
 
 # Encoder 对象
 
-> **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec_api)。对应 C 接口见 [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)。
+> **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage)。对应 C 接口见 [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)。
 
 Encoder 对象实现了对视频数据的编码压缩功能，包含了`encode`、`encode_file`、`get_img`、`close`等几种方法，详细说明如下：
 
