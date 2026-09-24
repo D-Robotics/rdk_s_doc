@@ -161,7 +161,7 @@ TIMER 的默认配置如下：
 
 </DocScope>
 
-## 软件驱动
+## 软件架构
 
 TIMER 驱动采用分层设计，应用层通过 Gpt API 调用驱动，底层 LLD 直接操作硬件寄存器，配置由 PBCfg 提供。
 
@@ -173,19 +173,18 @@ flowchart LR
     Drv --> PB["配置层<br/>Gpt_PBcfg / Gpt_Cfg"]
 ```
 
-代码路径：
+## 代码路径
 
-- McalCdd/Gpt/src/Gpt_Lld.c
-- McalCdd/Gpt/inc/Gpt_Lld.h
-- McalCdd/Gpt/inc/Gpt_Types.h
-- McalCdd/Gpt/inc/Gpt.h
-- McalCdd/Gpt/src/Gpt.c
-- Config/McalCdd/gen_xxx/Gpt/inc/Gpt_Cfg.h
-- Config/McalCdd/gen_xxx/Gpt/inc/Gpt_PBcfg.h
-- Config/McalCdd/gen_xxx/Gpt/src/Gpt_PBcfg.c
+- `McalCdd/Gpt/src/Gpt.c`：上层驱动逻辑实现，封装 API 接口
+- `McalCdd/Gpt/src/Gpt_Lld.c`：底层驱动实现，直接操作硬件寄存器
+- `McalCdd/Gpt/inc/Gpt.h`：主头文件，声明高层 API
+- `McalCdd/Gpt/inc/Gpt_Lld.h`：底层驱动头文件，声明底层函数原型
+- `McalCdd/Gpt/inc/Gpt_Types.h`：定义通用数据类型与结构体
+- `Config/McalCdd/gen_xxx/Gpt/inc/Gpt_Cfg.h`：配置头文件
+- `Config/McalCdd/gen_xxx/Gpt/inc/Gpt_PBcfg.h`：PB 配置头文件
+- `Config/McalCdd/gen_xxx/Gpt/src/Gpt_PBcfg.c`：PB 配置源文件
 
-
-## 应用 sample
+## 开发与使用方法
 
 <DocScope products="RDK S100">
 sample 程序默认使用定时器2的通道2（Timer2 Channel2），S100上的定时器输入时钟默认配置为 200MHz。
@@ -251,151 +250,293 @@ Gpt_PerChanneInfoType Gpt_ChannelConfig[GPT_CHANNEL_TOTAL_NUM] =
 
 ### 应用程序接口
 
-- Gpt_Init
+#### Gpt_Init
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Initializes the GPT driver.
- *
- * @param[in] ConfigPtr: Pointer to a selected Gpt configuration.
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_Init(const Gpt_ConfigType * ConfigPtr)
+void Gpt_Init(const Gpt_ConfigType *ConfigPtr);
 ```
 
-- Gpt_StartTimer
+**【功能描述】**
+
+初始化 GPT 驱动。根据 `ConfigPtr` 指向的配置结构体，初始化通道状态、回调函数等内部数据。应用层调用其它 GPT API 前必须先调用本函数完成初始化。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ConfigPtr | `const Gpt_ConfigType *` | 是 | — | 指向 GPT 配置结构体的指针，包含通道总数、通道配置数组、ID 映射表 |
+
+**【返回值】**
+
+无。
+
+#### Gpt_DeInit
+
+**【函数原型】**
 
 ```c
-/**
- * @brief  Starts a timer channel.
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[in] Value: Target time in number of ticks
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_StartTimer(Gpt_ChannelType Channel, Gpt_ValueType Value)
+void Gpt_DeInit(void);
 ```
 
-- Gpt_DeInit
+**【功能描述】**
+
+反初始化 GPT 驱动，将所有定时器通道恢复到复位状态。
+
+**【参数】**
+
+无。
+
+**【返回值】**
+
+无。
+
+#### Gpt_StartTimer
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Deinitializes the GPT driver.
- *
- * @param[in] None
- * @param[out] None
- *
- * @retval None
- * @design
- */
-void Gpt_DeInit(void)
+void Gpt_StartTimer(Gpt_ChannelType Channel, Gpt_ValueType Value);
 ```
 
-- Gpt_StartTimer_S
+**【功能描述】**
+
+以 tick 为单位启动指定定时器通道，设置目标计数值。定时器只支持向下计数，计数值递减到 0 时触发中断（若已使能通知）。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+| Value | `Gpt_ValueType` (uint32) | 是 | — | 目标时间，单位为 timer tick |
+
+**【返回值】**
+
+无。
+
+#### Gpt_StartTimer_S
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Starts a timer channel.
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[in] Value: Target time in number of seconds
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_StartTimer_S(Gpt_ChannelType Channel, Gpt_ValueType Seconds)
+void Gpt_StartTimer_S(Gpt_ChannelType Channel, Gpt_ValueType Seconds);
 ```
 
-- Gpt_StartTimer_MS
+**【功能描述】**
+
+以秒为单位启动指定定时器通道。驱动内部根据输入时钟频率将秒转换为 tick 值。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+| Seconds | `Gpt_ValueType` (uint32) | 是 | — | 目标时间，单位为秒 |
+
+**【返回值】**
+
+无。
+
+#### Gpt_StartTimer_MS
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Starts a timer channel.
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[in] Value: Target time in number of milliseconds
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_StartTimer_MS(Gpt_ChannelType Channel, Gpt_ValueType Milliseconds)
+void Gpt_StartTimer_MS(Gpt_ChannelType Channel, Gpt_ValueType Milliseconds);
 ```
 
-- Gpt_StartTimer_US
+**【功能描述】**
+
+以毫秒为单位启动指定定时器通道。驱动内部根据输入时钟频率将毫秒转换为 tick 值。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+| Milliseconds | `Gpt_ValueType` (uint32) | 是 | — | 目标时间，单位为毫秒 |
+
+**【返回值】**
+
+无。
+
+#### Gpt_StartTimer_US
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Starts a timer channel.
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[in] Value: Target time in number of microseconds
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_StartTimer_US(Gpt_ChannelType Channel, Gpt_ValueType Microseconds)
+void Gpt_StartTimer_US(Gpt_ChannelType Channel, Gpt_ValueType Microseconds);
 ```
 
-- Gpt_StopTimer
+**【功能描述】**
+
+以微秒为单位启动指定定时器通道。驱动内部根据输入时钟频率将微秒转换为 tick 值。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+| Microseconds | `Gpt_ValueType` (uint32) | 是 | — | 目标时间，单位为微秒 |
+
+**【返回值】**
+
+无。
+
+#### Gpt_StopTimer
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Stops a timer channel.
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_StopTimer(Gpt_ChannelType Channel)
+void Gpt_StopTimer(Gpt_ChannelType Channel);
 ```
 
-- Gpt_EnableNotification
+**【功能描述】**
+
+停止指定定时器通道的计数。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+
+**【返回值】**
+
+无。
+
+#### Gpt_EnableNotification
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Enables the interrupt notification for a channel (relevant in normal mode).
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_EnableNotification(Gpt_ChannelType Channel)
+void Gpt_EnableNotification(Gpt_ChannelType Channel);
 ```
 
-- Gpt_DisableNotification
+**【功能描述】**
+
+使能指定定时器通道的中断通知。通道计数到达目标值时触发中断，调用配置中注册的回调函数。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+
+**【返回值】**
+
+无。
+
+#### Gpt_DisableNotification
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Disables the interrupt notification for a channel (relevant in normal mode).
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[out] None
- *
- * @retval None
- */
-void Gpt_DisableNotification(Gpt_ChannelType Channel)
+void Gpt_DisableNotification(Gpt_ChannelType Channel);
 ```
 
-- Gpt_GetTimeRemaining
+**【功能描述】**
+
+禁用指定定时器通道的中断通知。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+
+**【返回值】**
+
+无。
+
+#### Gpt_GetTimeRemaining
+
+**【函数原型】**
 
 ```c
-/**
- * @brief   Returns the time remaining until the target time is reached.
- *
- * @param[in] Channel: Numeric identifier of the GPT channel
- * @param[out] None
- *
- * @retval Gpt_ValueType: The remaining time in the configured timer ticks.
- */
-/*coverity[misra_c_2012_rule_8_7_violation:SUPPRESS] ## violation reason SYSSW_V_8.7_01*/
-Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType Channel)
+Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType Channel);
 ```
+
+**【功能描述】**
+
+返回指定定时器通道距离目标时间到达的剩余时间。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+
+**【返回值】**
+
+返回 `Gpt_ValueType`(uint32)，剩余时间，单位为配置的 timer tick。
+
+#### Gpt_GetTimeElapsed
+
+**【函数原型】**
+
+```c
+Gpt_ValueType Gpt_GetTimeElapsed(Gpt_ChannelType Channel);
+```
+
+**【功能描述】**
+
+返回指定定时器通道自启动以来已经经过的时间。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Channel | `Gpt_ChannelType` (uint8) | 是 | — | GPT 通道 ID |
+
+**【返回值】**
+
+返回 `Gpt_ValueType`(uint32)，已经过时间，单位为配置的 timer tick。
+
+#### Gpt_SetMode
+
+**【函数原型】**
+
+```c
+void Gpt_SetMode(Gpt_ModeType Mode);
+```
+
+**【功能描述】**
+
+设置 GPT 驱动的工作模式（正常模式或睡眠模式）。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| Mode | `Gpt_ModeType` | 是 | — | 工作模式：`GPT_MODE_NORMAL` 正常模式 / `GPT_MODE_SLEEP` 睡眠模式（可唤醒） |
+
+**【返回值】**
+
+无。
+
+#### Gpt_GetVersionInfo
+
+**【函数原型】**
+
+```c
+void Gpt_GetVersionInfo(Std_VersionInfoType *VersionInfoPtr);
+```
+
+**【功能描述】**
+
+返回 GPT 驱动模块的版本信息。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| VersionInfoPtr | `Std_VersionInfoType *` | 是 | — | 输出参数，指向存储版本信息的变量 |
+
+**【返回值】**
+
+无（版本信息通过 `VersionInfoPtr` 输出参数返回）。
 
 ### 使用示例
 
@@ -491,5 +632,6 @@ timer_interrupt gettime 3
 
 ## 相关文档
 
-- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
+- [MCU 快速入门指南](01_basic_information.md)
+- [PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm)
 - [时间同步方案](/Advanced_development/system_software/driver_timesync)
