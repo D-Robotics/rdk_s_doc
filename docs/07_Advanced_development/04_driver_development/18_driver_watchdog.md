@@ -82,9 +82,39 @@ import DocScope from '@site/src/components/DocScope';
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_window.png" alt="特性示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+## 驱动代码
+
+Watchdog 模块的驱动代码位于 `source/hobot-drivers/watchdog/`：
+
+```bash
+source/hobot-drivers/watchdog/hb_wdt.c                      # watchdog 驱动主文件
+source/hobot-drivers/watchdog/hb_wdt.h                      # 驱动数据结构与状态宏
+source/hobot-drivers/watchdog/hb_dw_wdt_hw.h                # DesignWare watchdog 硬件寄存器与模式定义
+source/hobot-drivers/watchdog/Kconfig                       # watchdog 驱动 Kconfig
+source/hobot-drivers/watchdog/Makefile                      # watchdog 驱动 Makefile
+source/hobot-drivers/include/uapi/linux/hobot_watchdog.h   # 用户态 ioctl 接口头文件
+```
+
+### 内核配置
+
+Watchdog 驱动相关 Kconfig 选项及默认值如下表：
+
+| CONFIG 宏 | 说明 | 默认值 |
+| --- | --- | --- |
+| `CONFIG_HB_WATCHDOG` | Hobot watchdog 主驱动 | `y` |
+| `CONFIG_HB_WATCHDOG_MODULE` | 是否支持以模块形式加载 | `m` |
+| `CONFIG_HB_DW_WATCHDOG` | Synopsys DesignWare watchdog 硬件层 | `y` |
+| `CONFIG_HB_WATCHDOG_MON` | watchdog 健康监控（HardLockup/SoftLockup） | `y` |
+| `CONFIG_HB_WATCHDOG_IRQ_MON` | IRQ 响应监控 | `y` |
+| `CONFIG_HB_WATCHDOG_KTHREAD_MON` | Kthread 响应监控 | `y` |
+| `CONFIG_HB_WDT_PANIC` | watchdog 触发 panic（默认走复位） | `n` |
+| `CONFIG_HB_WDT_SUPPORT_HOT_PLUG` | 支持 CPU 热插拔场景下的监控 | `n` |
+
+模块编译产物为 `hobot_watchdog.ko`（Makefile 中 `obj-$(CONFIG_HB_WATCHDOG_MODULE) += hobot_watchdog.o`，`hobot_watchdog-objs += hb_wdt.o`）。
+
 <DocScope products="RDK S100">
 
-## 设备树
+## 设备树配置
 
 在设备树中增加看门狗的硬件信息描述（位置：source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi）
 ```dts
@@ -115,7 +145,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 <DocScope products="RDK S600">
 
-## 设备树
+## 设备树配置
 
 在设备树中增加看门狗的硬件信息描述（位置：source/hobot-drivers/kernel-dts/drobot-s600-soc.dtsi）
 ```dts
@@ -145,17 +175,12 @@ import DocScope from '@site/src/components/DocScope';
 ```
 </DocScope>
 
-## Watchdog 驱动代码
+## 功能使用
 
-Watchdog 模块的驱动代码位于 `/hobot-drivers/watchdog`。
-
-## Watchdog Timeout
+### Watchdog Timeout
 
 当监控 Acore 的 Watchdog Timeout 时，会触发中断发送到 MCU0侧，由 MCU 的任务触发 Acore 重启，在任务中会等待5s，使 Acore 侧完成堆栈的打印。
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_timeout.png" alt="Watchdog Timeout示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-
-## 用户开发
 
 <DocScope products="RDK S100">
 
@@ -165,7 +190,9 @@ Watchdog 模块的驱动代码位于 `/hobot-drivers/watchdog`。
 目前 WDT0用于监控内核关中断超时，WDT1用于监控内核线程
 </DocScope>
 
-### hb_wdt_ioctl.h 说明
+### 用户态使用
+
+#### hb_wdt_ioctl.h 说明
 
 用户态程序使用本文中的 `ioctl` 接口前，需自备头文件 `hb_wdt_ioctl.h`。头文件中：
 
@@ -219,7 +246,7 @@ int flags = 0;
 ret = ioctl(fd, HB_WDT_START, &flags);
 ```
 
-### HB_WDT_START
+#### HB_WDT_START
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_START, &flags);
@@ -237,7 +264,7 @@ ret = ioctl(fd, HB_WDT_START, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_STOP
+#### HB_WDT_STOP
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_STOP, &flags);
@@ -255,7 +282,7 @@ ret = ioctl(fd, HB_WDT_STOP, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_RESTART
+#### HB_WDT_RESTART
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_RESTART, &flags);
@@ -272,7 +299,7 @@ ret = ioctl(fd, HB_WDT_RESTART, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_PAUSE
+#### HB_WDT_PAUSE
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_PAUSE, &flags);
@@ -289,7 +316,7 @@ ret = ioctl(fd, HB_WDT_PAUSE, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_PROCEED
+#### HB_WDT_PROCEED
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_PROCEED, &flags);
@@ -306,7 +333,7 @@ ret = ioctl(fd, HB_WDT_PROCEED, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_SETTIMEOUT
+#### HB_WDT_SETTIMEOUT
 ```c
 int flags = 50;// Input: timeout value in milliseconds (e.g., 50)
 ret = ioctl(fd, HB_WDT_SETTIMEOUT, &flags);
@@ -323,7 +350,7 @@ ret = ioctl(fd, HB_WDT_SETTIMEOUT, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_GETTIMEOUT
+#### HB_WDT_GETTIMEOUT
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_GETTIMEOUT, &flags);
@@ -340,7 +367,7 @@ ret = ioctl(fd, HB_WDT_GETTIMEOUT, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_GETTIMELEFT
+#### HB_WDT_GETTIMELEFT
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_GETTIMELEFT, &flags);
@@ -357,7 +384,7 @@ ret = ioctl(fd, HB_WDT_GETTIMELEFT, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_SETMODE
+#### HB_WDT_SETMODE
 ```c
 int flags = 34;
 ret = ioctl(fd, HB_WDT_SETMODE, &flags);
@@ -374,7 +401,7 @@ ret = ioctl(fd, HB_WDT_SETMODE, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_GETMODE
+#### HB_WDT_GETMODE
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_GETMODE, &flags);
@@ -391,7 +418,7 @@ ret = ioctl(fd, HB_WDT_GETMODE, &flags);
   - 0: 成功
   - 小于0: 失败
 
-### HB_WDT_GETSTATUS
+#### HB_WDT_GETSTATUS
 ```c
 int flags = 0;
 ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
@@ -408,10 +435,10 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
   - 0: 成功
   - 小于0: 失败
 
-## Watchdog 监控方案
+### 监控方案
 <DocScope products="RDK S100">
 
-### HardLockup 监控
+#### HardLockup 监控
   HardLockup 监控基于 Watchdog 模块实现，使用 Watchdog1配置成窗口模式，在驱动中实现监控逻辑。当系统正常运行时监控逻辑如下图：
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup 监控示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -433,7 +460,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. Watchdog 计数器继续递减，当第二次 Timeout 到来产生两个中断，一个中断发送到 Acore 的 GIC 中断，在中断中进行打栈，另一个为看门狗重启中断发送至 MCU，由 MCU 控制重启。MCU 会在第一次接收到狗叫对应的看门狗重启中断后，刷新一次狗的超时时间为2581ms，预留给 Acore 进行打栈，当再次触发狗叫对应的看门狗重启中断后，进行重启。
 
-### SoftLockup 监控
+#### SoftLockup 监控
 
   SoftLockup 监控基于 Watchdog 模块实现，使用 Watchdog2配置成窗口模式，在驱动中实现监控逻辑，整体监控思路与 HardLockup 监控一致。
 
@@ -449,7 +476,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 </DocScope>
 <DocScope products="RDK S600">
 
-### HardLockup 监控
+#### HardLockup 监控
   HardLockup 监控基于 Watchdog 模块实现，使用 Watchdog0配置成窗口模式，在驱动中实现监控逻辑。当系统正常运行时监控逻辑如下图：
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup 监控示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -471,7 +498,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. Watchdog 计数器继续递减，当第二次 Timeout 到来产生两个中断，一个中断发送到 Acore 的 GIC 中断，在中断中进行打栈，另一个为看门狗重启中断发送至 MCU，由 MCU 控制重启。MCU 会在第一次接收到狗叫对应的看门狗重启中断后，刷新一次狗的超时时间为2581ms，预留给 Acore 进行打栈，当再次触发狗叫对应的看门狗重启中断后，进行重启。
 
-### SoftLockup 监控
+#### SoftLockup 监控
 
   SoftLockup 监控基于 Watchdog 模块实现，使用 Watchdog1配置成窗口模式，在驱动中实现监控逻辑，整体监控思路与 HardLockup 监控一致。
 
@@ -486,6 +513,155 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
   5. 若在第二次 Timeout 之前 CPU 位图仍不为 empty，则当第二次 Timeout 到来产生两个中断，一个中断发送到 Acore 的 GIC 中断，在中断中进行打栈，另一个为看门狗重启中断发送至 MCU，由 MCU 控制重启。MCU 会在第一次接收到狗叫对应的看门狗重启中断后，刷新一次狗的超时时间为2581ms，预留给 Acore 进行打栈，当再次触发狗叫对应的看门狗重启中断后，进行重启。
 </DocScope>
 
+<DocScope products="RDK S100">
+
+## 调试
+
+### 查看字符设备与 sysfs
+
+驱动加载后，每个 watchdog 节点生成字符设备 `/dev/watchdogX`（X 为 0~5）。sysfs 属性挂在**平台设备**目录下（不在 `/sys/class/watchdog/`），路径形如 `/sys/devices/platform/soc/<addr>.wdt/`：
+
+```text
+$ ls /dev/watchdog*
+/dev/watchdog0  /dev/watchdog1  /dev/watchdog2  /dev/watchdog3  /dev/watchdog4  /dev/watchdog5
+
+$ ls /sys/devices/platform/soc/30100000.wdt/
+clk_rate  mode  nowayout  pause_count  status  timeleft  timeout  tops  usage
+```
+
+各 sysfs 属性含义：
+
+| 属性 | 说明 | watchdog0 实测值示例 |
+| --- | --- | --- |
+| `status` | watchdog 使能/暂停状态 | `watchdog disabled` / `watchdog paused` |
+| `usage` | 用途标记 | `no used watchdog`（default）/ `irq monitor watchdog` / `kthread monitor watchdog` |
+| `mode` | 当前模式 | `SW_RESET_INT`（0x22） |
+| `timeout` | 当前生效超时（ms，离散档位值） | `20648` |
+| `timeleft` | 本周期剩余时间（ms） | `165191` |
+| `nowayout` | nowayout 标志 | `0` |
+| `pause_count` | 暂停次数 | `1` |
+| `clk_rate` | watchdog 时钟频率（Hz） | `26000000` |
+| `tops` | 硬件支持的离散 timeout 档位表（ms） | `5 10 20 40 80 161 322 645 1290 2581 5162 10324 20648 41297 82595 165191` |
+
+监控狗状态对照（板端实测）：
+
+| 设备 | usage | timeout | status |
+| --- | --- | --- | --- |
+| watchdog0 | no used watchdog | 20648 | watchdog disabled / paused |
+| watchdog1 | irq monitor watchdog | 161 | watchdog enabled / running |
+| watchdog2 | kthread monitor watchdog | 5162 | watchdog enabled / running |
+| watchdog3~5 | no used watchdog | 20648 | watchdog disabled / paused |
+
+### 查看 proc 调试节点
+
+每个 watchdog 在 `/proc/driver/watchdog/watchdogX/stat` 提供监控统计：
+
+```text
+$ cat /proc/driver/watchdog/watchdog1/stat
+internal irq: 115422
+watchdog touched: 115422
+```
+
+- `internal irq`：watchdog 第一次 Timeout 中断累计触发次数；
+- `watchdog touched`：watchdog 喂狗（kick）累计次数。
+
+:::note
+上例中 `internal irq` 与 `watchdog touched` 的具体数值随系统运行时间增长而递增，仅为板端实测示例。
+:::
+
+### 查看 dmesg 启动日志
+
+```text
+$ dmesg | grep watchdog
+[    3.092344] hb_wdt watchdog0: wdt mode sw 34
+[    3.092432] hb_wdt watchdog0: probe init ok, timeout 20648 mode 0x22
+[    3.092643] hb_wdt watchdog1: wdt mode sw 34
+[    3.092793] hb_wdt watchdog1: probe init ok, timeout 161 mode 0x22
+[    3.092981] hb_wdt watchdog2: wdt mode sw 34
+[    3.093481] hb_wdt watchdog2: probe init ok, timeout 5162 mode 0x22
+[    3.093725] hb_wdt watchdog3: wdt mode sw 34
+[    3.093815] hb_wdt watchdog3: probe init ok, timeout 20648 mode 0x22
+[    3.094287] hb_wdt watchdog4: wdt mode sw 34
+[    3.094395] hb_wdt watchdog4: probe init ok, timeout 20648 mode 0x22
+[    3.094788] hb_wdt watchdog5: wdt mode sw 34
+[    3.095118] hb_wdt watchdog5: probe init ok, timeout 20648 mode 0x22
+```
+
+日志中 `wdt mode sw 34` 表示设备树 `snps,mode = "sw"` 解析为十进制 34（即 `SW_RESET_INT`，0x22），`mode 0x22` 为硬件实际写入值。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+## 调试
+
+### 查看字符设备与 sysfs
+
+驱动加载后，每个 watchdog 节点生成字符设备 `/dev/watchdogX`（X 为 0~1）。sysfs 属性挂在**平台设备**目录下（不在 `/sys/class/watchdog/`），路径形如 `/sys/devices/platform/soc/<addr>.wdt/`：
+
+```text
+$ ls /dev/watchdog*
+/dev/watchdog0  /dev/watchdog1
+
+$ ls /sys/devices/platform/soc/32260000.wdt/
+clk_rate  mode  nowayout  pause_count  status  timeleft  timeout  tops  usage
+```
+
+各 sysfs 属性含义：
+
+| 属性 | 说明 | watchdog0 实测值示例 |
+| --- | --- | --- |
+| `status` | watchdog 使能/暂停状态 | `watchdog enabled` / `watchdog running` |
+| `usage` | 用途标记 | `irq monitor watchdog` / `kthread monitor watchdog` |
+| `mode` | 当前模式 | `SW_RESET_INT`（0x22） |
+| `timeout` | 当前生效超时（ms，离散档位值） | `161` |
+| `timeleft` | 本周期剩余时间（ms） | `59` |
+| `nowayout` | nowayout 标志 | `0` |
+| `pause_count` | 暂停次数 | `0` |
+| `clk_rate` | watchdog 时钟频率（Hz） | `26000000` |
+| `tops` | 硬件支持的离散 timeout 档位表（ms） | `5 10 20 40 80 161 322 645 1290 2581 5162 10324 20648 41297 82595 165191` |
+
+监控狗状态对照（板端实测）：
+
+| 设备 | usage | timeout | status |
+| --- | --- | --- | --- |
+| watchdog0 | irq monitor watchdog | 161 | watchdog enabled / running |
+| watchdog1 | kthread monitor watchdog | 5162 | watchdog enabled / running |
+
+### 查看 proc 调试节点
+
+每个 watchdog 在 `/proc/driver/watchdog/watchdogX/stat` 提供监控统计：
+
+```text
+$ cat /proc/driver/watchdog/watchdog0/stat
+internal irq: 707
+watchdog touched: 707
+
+$ cat /proc/driver/watchdog/watchdog1/stat
+internal irq: 22
+watchdog touched: 22
+```
+
+- `internal irq`：watchdog 第一次 Timeout 中断累计触发次数；
+- `watchdog touched`：watchdog 喂狗（kick）累计次数。
+
+:::note
+上例中 `internal irq` 与 `watchdog touched` 的具体数值随系统运行时间增长而递增，仅为板端实测示例。
+:::
+
+### 查看 dmesg 启动日志
+
+```text
+$ dmesg | grep 'hb_wdt watchdog'
+[    2.377447] hb_wdt watchdog0: wdt mode sw 34
+[    2.377571] hb_wdt watchdog0: probe init ok, timeout 161 mode 0x22
+[    2.378064] hb_wdt watchdog1: wdt mode sw 34
+[    2.378742] hb_wdt watchdog1: probe init ok, timeout 5162 mode 0x22
+```
+
+日志中 `wdt mode sw 34` 表示设备树 `snps,mode = "sw"` 解析为十进制 34（即 `SW_RESET_INT`，0x22），`mode 0x22` 为硬件实际写入值。
+
+</DocScope>
 
 ## 注意事项
 
