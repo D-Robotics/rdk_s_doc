@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
 title: "PCIe 用户态 High Level API 介绍"
-description: "PCIe 用户态 High Level API 介绍"
+description: "libhbpciehl 的 topic 收发接口、参数、返回值与错误码说明"
 ---
 # PCIe 用户态 High Level API 介绍
 
@@ -18,8 +18,8 @@ API（`libhbpcie.so`）封装，抽象出通用的 topic / subscribe / publish �
 - **前置条件**：已完成 PCIe 链路配置与驱动加载（见
   [PCIe kernel 配置](./03_s100x_pcie_sw_setup.md)），并了解
   [PCIe 软件架构](./02_s100x_pcie_sw_arch.md)。
-- **规格参数**：单条 topic 为全双工通道；DMA 传输 weight 取值范围 `1~31`（WRR 加权轮询仲裁）。
-- **兼容性**：适用硬件 Ultra/Super 系列（含 RDK S100/S600），软件版本 0.1.0 起。
+- **规格参数**：一个 handler 通过 `pciePublish` 或 `pcieSubscribe` 设定为发送方或接收方；DMA 传输 weight 取值范围 `1~31`（WRR 加权轮询仲裁）。
+- **兼容性**：适用硬件 Ultra/Super 系列，软件版本 0.1.0 起。
 
 主要支持如下功能：
 
@@ -50,60 +50,67 @@ API（`libhbpcie.so`）封装，抽象出通用的 topic / subscribe / publish �
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/pcie/hl_process.png" alt="发送方与接收方（Publisher/Subscriber）数据收发流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+:::note 注意
+以下两段为调用流程示意，省略了错误返回值判断与用户数据的准备过程；实际使用时须对每个接口的返回值作检查。
+:::
+
 ### Publisher（chip#0）
 
 ```c
-void main()
+#include <stdint.h>
+#include <hb_pcie_hl.h>
+
+int main(void)
 {
-    uint32_t size;
+    uint32_t size = 0;
     void *addr;
     uint64_t phys;
     pcieHandler ph;
-    void *UserBuffer;
-    uint64_t UserBufferPhys;
+    int useInnerBuffer = 1;
 
     /* connect chip1 topic0 */
     pcieInit(&ph, 1, 0);
 
-    pciePublish(ph);
+    pciePublish(ph, 1);
 
     if (useInnerBuffer) {
         pcieGetMaxInnerBufSize(ph, &size);
         pcieAllocInnerBuf(ph, size, &addr, &phys);
-        /* fill user data to inner buffer */
-        ...
-
+        /* 将待发送数据写入内建 buffer：addr 为虚拟地址，phys 为物理地址 */
     } else {
-        /* prepare the User data */
-        ...
-        /* use data in user buffer */
-        pcieRegisterUserBuf(ph, UserBufferPhys, size);
+        /* 用户自行准备物理地址连续的 buffer，并给 phys 与 size 赋值 */
+        pcieRegisterUserBuf(ph, phys, size);
     }
 
     pcieSendData(ph, size);
 
     pcieDeInit(ph);
 
-    return;
+    return 0;
 }
 ```
 
 ### Subscriber（chip#1）
 
 ```c
-void recvDataHandler(pcieHandler ph, uint32_t RecvSize, void *pData)
+#include <stdint.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <hb_pcie_hl.h>
+
+void recvDataHandler(pcieHandler ph, uint32_t size, void *privateData)
 {
-    /* deal with the received data */
-    ...
+    /* 处理收到的数据：privateData 为 pcieStartRecv 透传的私有数据 */
 }
 
-void main()
+int main(void)
 {
-    void *pData;
+    void *pData = NULL;
     pcieHandler ph;
-    uint32_t size;
+    uint32_t size = 0;
     void *addr;
     uint64_t phys;
+    int useInnerBuffer = 1;
 
     /* connect chip0 topic0 */
     pcieInit(&ph, 0, 0);
@@ -114,9 +121,8 @@ void main()
         pcieGetMaxInnerBufSize(ph, &size);
         pcieAllocInnerBuf(ph, size, &addr, &phys);
     } else {
-        /* alloc user buff */
-        ...
-        pcieRegisterUserBuf(ph, UserBufferPhys, size);
+        /* 用户自行准备物理地址连续的 buffer，并给 phys 与 size 赋值 */
+        pcieRegisterUserBuf(ph, phys, size);
     }
 
     pcieStartRecv(ph, recvDataHandler, pData);
@@ -128,7 +134,7 @@ void main()
 
     pcieDeInit(ph);
 
-    return;
+    return 0;
 }
 ```
 
@@ -152,11 +158,11 @@ pcieErrCode pcieInit(pcieHandler *ph, uint8_t chipID, uint8_t topicID);
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler *` | 输出参数，返回创建的 handler |
-| chipID | `uint8_t` | 发布到或订阅自的对端芯片 ID |
-| topicID | `uint8_t` | topic ID，从 0 开始 |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler *` | 是 | 无 | 输出参数，返回创建的 handler |
+| chipID | `uint8_t` | 是 | 无 | 发布到或订阅自的对端芯片 ID |
+| topicID | `uint8_t` | 是 | 无 | topic ID，从 0 开始 |
 
 **【返回值】**
 
@@ -164,7 +170,7 @@ pcieErrCode pcieInit(pcieHandler *ph, uint8_t chipID, uint8_t topicID);
 
 **【注意事项】**
 
-同一个 topic 同一时刻只能被一端发布、一端订阅，重复初始化同一 topic 会返回 `ERR_TOPIC_NOT_AVAILABLE`。
+同一个 topic 同一时刻只能被一端发布、一端订阅。该 topic 的通道资源已被占用时（同名 BAR 已申请），返回 `ERR_TOPIC_NOT_AVAILABLE`。
 
 ### pcieDeInit
 
@@ -180,9 +186,9 @@ pcieErrCode pcieDeInit(pcieHandler ph);
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | `pcieInit` 返回的 handler |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | `pcieInit` 返回的 handler |
 
 **【返回值】**
 
@@ -202,10 +208,10 @@ pcieErrCode pcieGetMaxTopicSize(pcieHandler ph, uint8_t *topicSize);
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
-| topicSize | `uint8_t *` | 输出参数，返回最大 topic 数量 |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
+| topicSize | `uint8_t *` | 是 | 无 | 输出参数，返回最大 topic 数量 |
 
 **【返回值】**
 
@@ -225,10 +231,10 @@ pcieErrCode pciePublish(pcieHandler ph, uint8_t weight);
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
-| weight | `uint8_t` | DMA 传输优先级，范围 `1~31` |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
+| weight | `uint8_t` | 是 | 无 | DMA 传输优先级，范围 `1~31` |
 
 **【返回值】**
 
@@ -252,9 +258,9 @@ pcieErrCode pcieSubscribe(pcieHandler ph);
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
 
 **【返回值】**
 
@@ -274,10 +280,10 @@ pcieErrCode pcieGetMaxInnerBufSize(pcieHandler ph, uint32_t *size);
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
-| size | `uint32_t *` | 输出参数，返回内建 buffer 最大尺寸 |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
+| size | `uint32_t *` | 是 | 无 | 输出参数，返回内建 buffer 最大尺寸 |
 
 **【返回值】**
 
@@ -298,12 +304,12 @@ pcieErrCode pcieAllocInnerBuf(pcieHandler ph, uint32_t size,
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
-| size | `uint32_t` | buffer 大小 |
-| virtualAddr | `void **` | 输出参数，返回虚拟地址 |
-| physAddr | `uint64_t *` | 输出参数，返回物理地址 |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
+| size | `uint32_t` | 是 | 无 | buffer 大小 |
+| virtualAddr | `void **` | 是 | 无 | 输出参数，返回虚拟地址 |
+| physAddr | `uint64_t *` | 是 | 无 | 输出参数，返回物理地址 |
 
 **【返回值】**
 
@@ -311,7 +317,7 @@ pcieErrCode pcieAllocInnerBuf(pcieHandler ph, uint32_t size,
 
 **【注意事项】**
 
-内建 buffer 与用户 buffer 二选一，二者都注册会返回 `ERR_INNER_BUFFER_ALLOCED`。
+内建 buffer 与用户 buffer 二选一。
 
 ### pcieRegisterUserBuf
 
@@ -328,11 +334,11 @@ pcieErrCode pcieRegisterUserBuf(pcieHandler ph, uint64_t physAddr,
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
-| physAddr | `uint64_t` | 用户 buffer 物理地址（要求物理地址连续） |
-| size | `uint32_t` | buffer 大小 |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
+| physAddr | `uint64_t` | 是 | 无 | 用户 buffer 物理地址（要求物理地址连续） |
+| size | `uint32_t` | 是 | 无 | buffer 大小 |
 
 **【返回值】**
 
@@ -358,11 +364,11 @@ typedef void (*recvDataCallBack)(pcieHandler ph, uint32_t size,
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
-| fun | `recvDataCallBack` | 接收数据回调函数 |
-| funData | `void *` | 回调函数私有数据，回调时透传 |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
+| fun | `recvDataCallBack` | 是 | 无 | 接收数据回调函数 |
+| funData | `void *` | 是 | 无 | 回调函数私有数据，回调时透传 |
 
 **【返回值】**
 
@@ -386,10 +392,10 @@ pcieErrCode pcieSendData(pcieHandler ph, uint32_t size);
 
 **【参数】**
 
-| 参数 | 类型 | 说明 |
-|---|---|---|
-| ph | `pcieHandler` | handler |
-| size | `uint32_t` | 发送数据大小 |
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|---|---|---|---|---|
+| ph | `pcieHandler` | 是 | 无 | handler |
+| size | `uint32_t` | 是 | 无 | 发送数据大小 |
 
 **【返回值】**
 
@@ -427,7 +433,9 @@ pcieErrCode pcieSendData(pcieHandler ph, uint32_t size);
 | `ERR_SUBSCRIBE_NOT_EXIST` | 订阅方不存在 |
 | `ERR_RECV_BUF_NOT_READY` | 接收 buffer 未申请或未注册 |
 | `ERR_RECV_BUF_IN_BUSY` | 接收 buffer 使用中 |
-| `ERR_MUTEX_INIT_FAIL` / `ERR_MUTEX_LOCK_FAIL` / `ERR_MUTEX_UNLOCK_FAIL` | 互斥锁初始化/加锁/解锁失败 |
+| `ERR_MUTEX_INIT_FAIL` | 互斥锁初始化失败 |
+| `ERR_MUTEX_LOCK_FAIL` | 互斥锁加锁失败 |
+| `ERR_MUTEX_UNLOCK_FAIL` | 互斥锁解锁失败 |
 | `ERR_DMA_XFER_FAIL` | DMA 传输失败 |
 | `ERR_INTERRUPT_TRIGGER_FAIL` | 触发中断失败 |
 | `ERR_USER_BUFFER_REGISTERED` | 用户 buffer 已注册 |
