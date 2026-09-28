@@ -1,7 +1,7 @@
 ---
 sidebar_position: 10
 title: "Linux 调试功能介绍"
-description: "Linux 调试功能介绍"
+description: "内核 panic 后的 ramdump 抓取与 crash 离线分析方法"
 ---
 
 # Linux 调试功能介绍
@@ -10,29 +10,28 @@ description: "Linux 调试功能介绍"
 
 ramdump 是一种将内核 panic 瞬间完整内存镜像保存下来用于离线分析的手段，配合 crash 工具可以查看 panic 时的堆栈、寄存器、dmesg 与内核数据结构，适合定位仅靠日志无法复现的踩内存、偶发死机等问题。
 
-**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要分析内核死机、panic 的驱动或内核工程师。
+- **定位**：说明内核 panic 后如何开启并抓取 ramdump，以及如何在 x86_64 主机上用 crash 对 dump 做离线分析。
+- **适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要分析内核死机、panic 的驱动或内核工程师。
+- **前置条件**：已烧录 RDK OS 并可进入 U-Boot 控制台；准备一台 x86_64 服务器用于编译与运行 crash 工具。
+- **与其他模块关系**：本功能用于内核死机排查，与《[应用实时内核](/Advanced_development/system_software/realtime_kernel)》《[内核头文件](/Advanced_development/system_software/kernel_headers)》同属内核层开发配套；MCU 侧的异常现场抓取见《[MCU ramdump 功能](/Advanced_development/mcu_development/mcu_ramdump)》。
 
-**前置条件**：已烧录 RDK OS 并可进入 U-Boot 控制台；准备一台 X86~64 服务器用于编译与运行 crash 工具。
-
-**与其他模块关系**：本功能用于内核死机排查，与《[应用实时内核](/Advanced_development/system_software/realtime_kernel)》《[内核头文件](/Advanced_development/system_software/kernel_headers)》同属内核层开发配套。
+**范围说明**：本页覆盖内核 panic 后的 ramdump 抓取与 crash 离线分析，不涉及 ftrace、kgdb、kdump、pstore 等其他内核调试手段。
 
 ## 机制原理
-
-ramdump 的整体流程为：先通过 `hrut_ddr_misc` 打开 RAMDUMP 开关（或 U-Boot 下设置 `enable_ramdump`），当 Kernel 触发 panic 后，重启进 U-Boot 执行 `memdump`，将各 DDR bank 内容按偏移导出为 `DDRCSx.bin`，同时导出 `cpu-contexts.bin`；随后在 X86~64 服务器上用 crash 工具加载 `vmlinux` 与这些 dump 文件进行离线分析。
 
 | 阶段 | 工具/产物 | 说明 |
 |------|----------|------|
 | 开启抓取 | `hrut_ddr_misc` / `enable_ramdump` | 打开 RAMDUMP 能力 |
 | 保存镜像 | `memdump`（U-Boot） | 导出 `DDRCSx.bin` 与 `cpu-contexts.bin` 到指定分区 |
-| 离线分析 | `crash` + `vmlinux` | 在 X86~64 平台查看堆栈、寄存器、日志 |
+| 离线分析 | `crash` + `vmlinux` | 在 x86_64 平台查看堆栈、寄存器、日志 |
 
 ## crash 分析 ramdump
 
 ### 抓取 ramdump
 
-当前 ramdump 功能默认为关闭状态，在 Linux 下可以通过工具`hrut_ddr_misc`手动开启:
+当前 ramdump 功能默认为关闭状态，在 Linux 下可以通过工具 `hrut_ddr_misc` 手动开启：
 
-```Shell
+```console
 root@ubuntu:/userdata# hrut_ddr_misc s bit 0 1
 update misc para begin
 ------------------------------------
@@ -44,14 +43,15 @@ Bit idx  Function name   Status
 
 查看当前 ramdump 功能是否开启：
 
-```Shell
+```console
 root@ubuntu:/userdata# hrut_ddr_misc g
 Bit idx  Function name   Status
 0        RAMDUMP         on
 ```
 
-抓取 ramdump 完成后，可关闭 DDR ramdump 功能
-```Shell
+抓取 ramdump 完成后，可关闭 DDR ramdump 功能：
+
+```console
 root@ubuntu:~# hrut_ddr_misc s bit 0 0
 update misc para begin
 ------------------------------------
@@ -61,23 +61,26 @@ Bit idx  Function name   Status
 ------------------------------------
 ```
 
-**当前 ramdump 功能只支持抓取由 Kernel panic 触发的场景**
+:::warning
+- 当前 ramdump 功能只支持抓取由 **Kernel panic** 触发的场景。
+- ramdump 可能损坏保存 dump 文件的分区，请务必将 dump 文件保存到**非根文件系统分区**，且分区容量大于 DDR 容量。
+- 建议创建一个专门用于 ramdump 的分区（例如命名为 `ramdump`），参见《[自定义分区说明](/Advanced_development/environment_build/rdk_gen#自定义分区说明)》。
+:::
 
-**ramdump 的时候可能会损坏保存 dump 文件的分区，请务必将 dump 文件保存到非根文件系统分区，且分区容量大于 DDR 容量**
-
-**建议创建一个专门用于 ramdump 的分区，[自定义分区说明](/Advanced_development/environment_build/rdk_gen#自定义分区说明)，比如分区命名为 ramdump**
+**抓取完成后：** dump 文件会一直保留在目标分区，占用空间与 DDR 容量相当，建议导出到服务器后及时清理；未关闭 RAMDUMP 开关时，每次 Kernel panic 都会重新抓取一遍，同名文件会被覆盖（`memdump` 输出中的 `file found, deleting` 即删除旧文件）。因此分析完成后建议用 `hrut_ddr_misc s bit 0 0` 关闭开关。
 
 #### 自动抓取
 
-- 在 Uboot 下设置环境变量
-```Shell
+- 在 U-Boot 下设置环境变量：
+
+```bash
 setenv enable_ramdump 1
-setenv ramdump_part_name ramdump #这里的ramdump表明要保存dump文件的实际分区，请根据实际板子分区替换
-setenv ramdump_in map #这里的map表明让ramdump将文件保存进UFS或者eMMC（根据启动模式），请务必设置成map
+setenv ramdump_part_name ramdump # 这里的 ramdump 表明要保存 dump 文件的实际分区，请根据实际板子分区替换
+setenv ramdump_in map # 这里的 map 表明让 ramdump 将文件保存进 UFS 或者 eMMC（根据启动模式），请务必设置成 map
 saveenv
 ```
 
-- secure boot 设备自动抓取 ramdump 需要烧写 HB_APDP 分区镜像，开启 secure debug，参考 RDK S100商业客户文档补充说明中的 HB_APDP 生成 章节，RDK S100商业客户文档补充说明请联系 FAE 获取。
+- secure boot 设备自动抓取 ramdump 需要烧写 HB_APDP 分区镜像、开启 secure debug，参考《RDK S100 商业客户文档补充说明》中的 HB_APDP 生成章节（该文档为外部补充文档，不在本手册内），请联系 FAE 获取。
 
 - 这样一旦出现 panic，重启后自动会进行 ramdump
 
@@ -85,11 +88,11 @@ saveenv
 
 触发 Kernel panic 重启到 U-Boot 之后，在 U-Boot 下执行以下命令，数据存储到 eMMC 或者 ufs 的/ramdump/目录。
 
-```Shell
+```console
 Hobot$ setenv enable_ramdump 1
 Hobot$ setenv ramdump_part_name ramdump # 这里的ramdump表明要保存dump文件的实际分区，请根据实际板子分区替换
 Hobot$ setenv ramdump_in map # 这里的map表明让ramdump将文件保存进UFS或者eMMC（根据启动模式），请务必设置成map
-Hobot$ memdump userdata # 这里是进行ramdump的命令，命令中的userdata指的是DRAM的userdata
+Hobot$ memdump userdata # 把内存导出为 ext4 文件，写入 ramdump_part_name 指定分区的根目录
 intf mmc,dev 0,part 17 directory /Recovery required
 file found, deleting
 update journal finished
@@ -160,6 +163,15 @@ update journal finished
 2147479552 bytes written in 33372 ms
 ```
 
+U-Boot `memdump` 的常用子命令：
+
+| 子命令 | 作用 |
+|--------|------|
+| `memdump init <intf> <dev[:part]> <partition>` | 初始化导出目标（接口、设备/分区、目录） |
+| `memdump dumpall` | 将全部内存 dump 到裸分区 |
+| `memdump userdata` | 将内存导出为 ext4 文件（`DDRCS*.bin`、`cpu-contexts.bin`） |
+| `memdump mini` | 导出关键内容（minidump）到 ext4 |
+
 ### crash 介绍
 
 crash 主要是用来离线分析 linux 内核内存转存文件，它整合了 gdb 工具，具有很强的功能，可以查看堆栈，dmesg 日志，内核数据结构，反汇编等等。其支持多种工具生成的内存转储文件格式，包括：
@@ -188,33 +200,50 @@ crash 主要是用来离线分析 linux 内核内存转存文件，它整合了 
 
 #### crash 工具代码获取及编译方法：
 
-```Shell
-sudo apt install -y texinfo
+```bash
+sudo apt install -y make gcc g++ libncurses-dev zlib1g-dev liblzo2-dev \
+    libsnappy-dev bison wget patch texinfo libzstd-dev
 git clone --depth=1 https://github.com/crash-utility/crash.git
-make target=arm64
+cd crash
+make target=ARM64
 ```
 
-**目前只支持在 X86~64平台使用 crash**
+说明：`make target=ARM64` 表示在 x86_64 主机上编译用于分析 arm64 dump 的 crash（官方 README 使用大写 `ARM64`，小写 `arm64` 同样可以识别）。**crash 目前只支持在 x86_64 平台使用**。
+
+#### 获取 vmlinux
+
+crash 需要一份**带调试符号、且与产生 dump 的镜像版本一致**的 `vmlinux`：
+
+- 在 SDK 中执行 `./mk_kernel.sh` 编译内核，产物为 `out/build/kernel/vmlinux`（内核已开启 `CONFIG_DEBUG_INFO`）；
+- 注意版本必须与板端镜像一致，否则 crash 无法正确解析内核数据结构。
 
 #### 复制 ramdump 文件到服务器
 
-将板端 ramdump 分区保存的 DDR*.bin 和 cpu-contexts.bin 复制到 crash 二进制存在的目录下，由于 DDR*.bin 是整个 DDR 的数据，与 DDR 容量接近，推荐使用 scp 命令传输
+将板端 ramdump 分区保存的 DDR*.bin 和 cpu-contexts.bin 复制到 crash 二进制存在的目录下，由于 DDR*.bin 是整个 DDR 的数据，与 DDR 容量接近，推荐使用 scp 命令传输：
+
+```bash
+# 板端把 dump 所在分区挂载到 /mnt 后，在服务器上拉取
+scp -C root@<板端IP>:/mnt/DDRCS*.bin .
+scp root@<板端IP>:/mnt/cpu-contexts.bin .
+```
 
 #### 获取 crash 扩展文件和 cpu-context 解析脚本
 
 文件位于对外服务器上，路径为[https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/](https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/)
 
-下载其中的 parse-cpu-contexts.py 和 arm64-regs.so，并保存到 crash 二进制存在的目录下
+下载其中的 parse-cpu-contexts.py 和 arm64-regs.so，并保存到 crash 二进制存在的目录下。该页面路径虽然含 `s100-beta`，但这两个文件都是 x86_64 主机侧工具，与 SoC 型号无关，S600 同样适用。
+
+其中 `arm64-regs.so` 是面向 x86_64 的 crash 扩展模块，与 crash/gdb 版本配套（本文示例环境为 crash 9.0.0 + gdb 16.2）；若自行编译的 crash 版本差异较大，`extend` 可能失败。
 
 #### 解析 cpu 的寄存器信息
 
-```Shell
+```bash
 python3 parse-cpu-contexts.py cpu-contexts.bin >./coreregs.txt
 ```
 
 #### 使用 crash 工具进入 crash 现场
 
-```Shell
+```console
 ./crash ./vmlinux DDRCS0-0.bin@0x80000000,/dev/zero@0xa0000000,DDRCS0-2.bin@0xaa000000,DDRCS1-0.bin@0x400000000,DDRCS1-1.bin@0x480000000,DDRCS2-0.bin@0x800000000,DDRCS2-1.bin@0x880000000,DDRCS3-0.bin@0xc80000000 --machdep vabits_actual=48
 
 crash 9.0.0
@@ -284,21 +313,26 @@ LOAD AVERAGE: 3.95, 4.11, 4.05
 crash>
 ```
 
+说明：`--machdep vabits_actual=48` 表示内核虚拟地址位宽为 48 位（S600/S100 内核均为 `CONFIG_ARM64_VA_BITS_48=y`）；若内核配置不同，需要按 `CONFIG_ARM64_VA_BITS` 相应调整。
+
 #### 添加扩展文件
-```Shell
+
+```console
 crash> extend arm64-regs.so
 ./arm64-regs.so: shared object loaded
 ```
 
 #### 添加 cpu 寄存器信息
-```Shell
+
+```console
 crash> arm64_core_set -l coreregs.txt
 loading cpu core regs from coreregs.txt
 loading cpu core regs from coreregs.txt done
 ```
 
 #### 查看 panic 时的堆栈信息
-```Shell
+
+```console
 crash> bt
 PID: 4240     TASK: ffff00040f10f000  CPU: 0    COMMAND: "bash"
  #0 [ffff8000279cfab0] __arm_smccc_smc at ffff800008029cd0
@@ -339,26 +373,57 @@ crash>
 
 ## 注意事项
 
-- 当前 ramdump 功能只支持抓取由 Kernel panic 触发的场景。
-- ramdump 可能损坏保存 dump 文件的分区，请务必将 dump 保存到非根文件系统分区，且分区容量须大于 DDR 容量；建议创建专门用于 ramdump 的分区，见《[构建系统 rdk_gen](/Advanced_development/environment_build/rdk_gen)》。
-- crash 工具目前只支持在 X86~64 平台使用。
+- ramdump 仅支持 **Kernel panic** 触发的场景，其他复位原因不会抓取。
+- dump 目标分区的要求与创建方式见《[抓取 ramdump](#抓取-ramdump)》。
+- crash 仅支持在 x86_64 平台运行，编译与使用见《[crash 使用方法](#crash-使用方法)》。
 - secure boot 设备自动抓取 ramdump 需要额外烧写 HB_APDP 分区镜像并开启 secure debug，请联系 FAE 获取对应说明。
 
 ## 常见问题
 
-### 抓取 ramdump 后保存分区损坏
+### 已设置 enable_ramdump，panic 后却没有自动抓取
 
-**原因**：dump 文件被写到根文件系统分区，或目标分区容量小于 DDR 容量。
+**原因**：U-Boot 的自动抓取需要同时满足以下条件，任一不满足都会被跳过：
 
-**解决**：将 dump 保存到非根文件系统的独立分区，并确保该分区容量大于 DDR 容量。
+- `enable_ramdump` 未设置为 `1`；
+- 本次复位原因不是 Kernel panic（例如断电、看门狗复位）；
+- secure boot 设备处于 locked 状态（此时会打印 `Device is locked,skip ramdump`）；
+- `ramdump_in` 未设置成 `map` 或 `mmc`；
+- 目标分区不存在，或分区内没有可写的目录。
+
+**解决**：先在 Linux 下用 `hrut_ddr_misc g` 确认 RAMDUMP 为 `on`；再进入 U-Boot，用 `printenv enable_ramdump ramdump_in ramdump_part_name` 逐项确认。secure boot 设备需处于 unlocked 状态。
+
+### 执行 memdump userdata 提示 search part failed
+
+**原因**：`memdump userdata` 按 `ramdump_part_name` 指定的**分区名**查找分区（默认值为 `map`），而 RDK 默认分区表中没有 `map` 分区。
+
+**解决**：按《[自定义分区说明](/Advanced_development/environment_build/rdk_gen#自定义分区说明)》新建一个专门用于 ramdump 的分区（例如命名为 `ramdump`），并在 U-Boot 中 `setenv ramdump_part_name ramdump` 后 `saveenv`。也可以把该变量设为已有分区的名字前缀（如 `userdata`，按前缀匹配），但分区容量必须大于 DDR 容量。
+
+### 抓取 ramdump 后保存分区损坏或空间不足
+
+**原因**：dump 文件被写到根文件系统分区，或目标分区容量小于 DDR 容量——dump 文件与 DDR 容量相当，一次写入就可能占满分区可用空间。
+
+**解决**：按《[抓取 ramdump](#抓取-ramdump)》的警告，将 dump 保存到非根文件系统的独立分区，并确保分区容量大于 DDR 容量；分析完成后及时把 dump 导出到服务器并清理。
 
 ### crash 工具无法运行
 
-**原因**：crash 目前只支持 X86~64 平台。
+**原因**：crash 只能在 x86_64 平台运行，不能在板端（aarch64）直接执行；此外 crash 需要一份与产生 dump 的镜像版本一致、且带调试符号的 `vmlinux`。
 
-**解决**：将 `DDRCSx.bin` 与 `cpu-contexts.bin` 复制到 X86~64 服务器上，再运行 `crash`。
+**解决**：将 `DDRCSx.bin` 与 `cpu-contexts.bin` 复制到 x86_64 服务器上，按《[crash 使用方法](#crash-使用方法)》编译并运行 `crash`，并从 SDK 获取与板端镜像同版本的 `vmlinux`。
+
+### crash 启动时提示 cannot find NT_PRSTATUS note
+
+**原因**：各 CPU 的异常现场保存在 `cpu-contexts.bin` 中，crash 不会自动加载，因此启动时会打印 `WARNING: cpu N: cannot find NT_PRSTATUS note`，当前 CPU 之外的寄存器信息为空。
+
+**解决**：按《[crash 使用方法](#crash-使用方法)》中的步骤，用 `parse-cpu-contexts.py` 生成 `coreregs.txt`，进入 crash 后依次执行 `extend arm64-regs.so` 和 `arm64_core_set -l coreregs.txt` 导入寄存器信息。
+
+### extend arm64-regs.so 加载失败
+
+**原因**：`arm64-regs.so` 是与 crash/gdb 版本配套的扩展模块（本文示例环境为 crash 9.0.0 + gdb 16.2），自行编译的 crash 版本差异较大时可能加载失败。
+
+**解决**：优先使用与本文示例一致的 crash 版本；如仍失败，请联系 FAE 确认与所用 crash 版本配套的扩展文件。
 
 ## 相关文档
 
 - [应用实时内核](/Advanced_development/system_software/realtime_kernel)
 - [内核头文件](/Advanced_development/system_software/kernel_headers)
+- [MCU ramdump 功能](/Advanced_development/mcu_development/mcu_ramdump)
