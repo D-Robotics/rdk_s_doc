@@ -10,9 +10,16 @@ description: "IPC 模块介绍"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
 IPC（Inter-Processor Communication）模块是用于多核之间的通信，支持同构核和异构核之间的通信，软件上基于 buffer-ring 进行共享内存的管理，硬件上基于 MailBox 实现核间中断。IPCF 具有多路通道，大数据传输，适用多种平台的特点。RPMSG 基于开源协议框架，支持 Acore 与 VDSP 的核间通信。
 
+- **定位**：说明 IPC/IPCF 的软硬件组成、实例与通道的分配方式、设备树配置方法、用户态应用（C++/Python）与配置文件的用法，以及传输流程与调试手段。
+- **适用读者**：需要在 Acore 与 MCU 之间做核间通信的驱动/应用开发者，以及需要调整 IPC 实例、通道数量与缓冲大小的深度定制开发者。
+- **前置条件**：已烧录 RDK OS 并可登录板端（SSH 或调试串口）；需要与 MCU 交换数据时，MCU1 应已启动（参见 [MCU1 启动](/Advanced_development/mcu_development/basic_information#start_mcu1)）；了解共享内存、ring buffer 与中断的基本概念。
+- **与其他模块关系**：IPCF 是 CANHAL、时间同步、OTA 等业务的核间通信底座，Acore 侧的实例编号由 CANHAL、PNC、VDSP、BPU 等业务共同划分；MCU 侧的对应说明见《[IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)》。
 
+**范围说明**：本页聚焦 IPCF/IPCFHAL；RPMSG 是 Acore 与 VDSP 之间的另一套核间通信机制，本文仅作简要说明。
 
 ## IPCF 软硬件组件框图
 
@@ -56,24 +63,23 @@ source/hobot-drivers/kernel-dts/include/drobot_s100_ipc.h
 
 ```dts
 ipcfhal_cfg: ipcfhal_cfg {
-    status = "okay"; #节点状态，不需要改动
-    compatible = "hobot,hobot-ipcfhal";  #节点属性，不可改动
+    status = "okay";                     /* 节点状态，不需要改动 */
+    compatible = "hobot,hobot-ipcfhal";  /* 节点属性，不可改动 */
 
     /****************instance--num_chans--num_bufs--buf_size****************/
-    ipc-ins = <&ipc_instance0	8	8	0x2000>, #(Acore&MCU)用于CANHAL
-            <&ipc_instance1	8	8	0x1000>, #(Acore&MCU)空闲
-            <&ipc_instance2	2	8	0x800>, #(Acore&MCU)空闲
-            <&ipc_instance3	8	8	0x1000>, #(Acore&MCU)空闲
-            <&ipc_instance4	8	8	0x1000>, #(Acore&MCU)用于CANHAL
-            <&ipc_instance5	8	8	0x1000>, #(Acore&MCU)用于外置RTC
-            <&ipc_instance6	8	8	0x1000>, #(Acore&MCU)空闲，用户可自行配置
-            <&ipc_instance7	8	8	0x1000>, #(Acore&MCU)透传uart，spi，i2c等外设和运行mcu侧cmd应用
-            <&ipc_instance8	8	8	0x1000>, #(Acore&MCU)部分空闲，用户可自行配置
-            <&ipc_instance9	2	5	0x400>,  #(Acore&MCU)私有实例，内部预留
-            <&ipc_instance10	1	5	0x200>, #(Acore&MCU)私有实例，内部预留
-            <&ipc_instance22	8	8	0x1000>, #(Acore&VDSP)VDSP预留，暂未对客户开放
-            <&ipc_instance23	8	8	0x1000>, #(Acore&VDSP)VDSP预留，暂未对客户开放
-            <&ipc_instance24	8	8	0x1000>; #(Acore&VDSP)VDSP预留，暂未对客户开放
+    ipc-ins = <&ipc_instance0    8   8   0x2000>,  /* Acore&MCU，Used by CANHAL */
+              <&ipc_instance1    8   8   0x1000>,  /* Acore&MCU，Used by PNC */
+              <&ipc_instance2    2   8   0x800>,   /* Acore&MCU，Used by testcase */
+              <&ipc_instance3    8   8   0x1000>,  /* Acore&MCU，Used by testcase */
+              <&ipc_instance4    8   8   0x1000>,  /* Acore&MCU，Not used，用户可申请 */
+              <&ipc_instance6    8   8   0x1000>,  /* Acore&MCU，Used by testcase */
+              <&ipc_instance7    8   8   0x1000>,  /* Acore&MCU，Not used，用户可申请 */
+              <&ipc_instance8    8   8   0x1000>,  /* Acore&MCU，Used by Mcu1PowerOn */
+              <&ipc_instance9    2   5   0x400>,   /* Acore&MCU，Used by DiagTROS */
+              <&ipc_instance10   1   5   0x200>,   /* Acore&MCU，Used by TimeSync */
+              <&ipc_instance22   8   8   0x1000>,  /* Acore&VDSP0，暂未对客户开放 */
+              <&ipc_instance23   8   8   0x1000>,  /* Acore&VDSP0，暂未对客户开放 */
+              <&ipc_instance24   8   8   0x1000>;  /* Acore&VDSP0，暂未对客户开放 */
 };
 
 ```
@@ -91,32 +97,32 @@ source/hobot-drivers/kernel-dts/include/drobot_s600_ipc.h
 
 ```dts
 ipcfhal_cfg: ipcfhal_cfg {
-    status = "okay"; #节点状态，不需要改动
-    compatible = "hobot,hobot-ipcfhal";  #节点属性，不可改动
+    status = "okay";                     /* 节点状态，不需要改动 */
+    compatible = "hobot,hobot-ipcfhal";  /* 节点属性，不可改动 */
 
     /****************instance--num_chans--num_bufs--buf_size****************/
-        ipc-ins = <&ipc_instance0         8       8       0x2000>, #Acore&MCU，canhal
-                <&ipc_instance1         8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance2         2       8       0x800>, #Acore&MCU，用户可自行配置
-                <&ipc_instance3         8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance4         8       8       0x1000>, #Acore&MCU，canhal
-                <&ipc_instance5         8       8       0x1000>, #Acore&MCU，外置RTC
-                <&ipc_instance6         8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance7         8       8       0x1000>, #Acore&MCU，ipcbox
-                <&ipc_instance8         8       8       0x1000>, #Acore&MCU，启动mcu1
-                <&ipc_instance9         2       5       0x400>, #Acore&MCU，用户可自行配置
-                <&ipc_instance10        1       5       0x200>, #Acore&MCU，timesync
-                <&ipc_instance11        8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance12        8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance13        8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance14        8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance15        8       8       0x1000>, #Acore&MCU，用户可自行配置
-                <&ipc_instance22        8       8       0x1000>, #Acore&VDSP0，暂未对客户开放
-                <&ipc_instance23        8       8       0x1000>, #Acore&VDSP0，暂未对客户开放
-                <&ipc_instance24        8       8       0x1000>, #Acore&VDSP0，暂未对客户开放
-                <&ipc_instance42        8       8       0x1000>, #Acore&VDSP1，暂未对客户开放
-                <&ipc_instance43        8       8       0x1000>, #Acore&VDSP1，暂未对客户开放
-                <&ipc_instance44        8       8       0x1000>; #Acore&VDSP1，暂未对客户开放
+    ipc-ins = <&ipc_instance0    8   8   0x2000>,  /* Acore&MCU，Used by CANHAL */
+              <&ipc_instance1    8   8   0x1000>,  /* Acore&MCU，Used by PNC */
+              <&ipc_instance2    2   8   0x800>,   /* Acore&MCU，Used by testcase */
+              <&ipc_instance3    8   8   0x1000>,  /* Acore&MCU，Used by testcase */
+              <&ipc_instance4    8   8   0x1000>,  /* Acore&MCU，Not used，用户可申请 */
+            //<&ipc_instance5    8   8   0x1000>,  /* 由 RTC-YSN8130 使用，当前未启用 */
+              <&ipc_instance6    8   8   0x1000>,  /* Acore&MCU，Not used，用户可申请 */
+              <&ipc_instance7    8   8   0x1000>,  /* Acore&MCU，Not used，用户可申请 */
+              <&ipc_instance8    8   8   0x1000>,  /* Acore&MCU，Not used，用户可申请 */
+            //<&ipc_instance9    2   5   0x400>,   /* 当前未启用 */
+              <&ipc_instance10   1   5   0x200>,   /* Acore&MCU，Not used，用户可申请 */
+            //<&ipc_instance11   8   8   0x1000>,  /* 当前未启用 */
+            //<&ipc_instance12   8   8   0x1000>,  /* 当前未启用 */
+            //<&ipc_instance13   8   8   0x1000>,  /* 当前未启用 */
+            //<&ipc_instance14   8   8   0x1000>,  /* 当前未启用 */
+            //<&ipc_instance15   8   8   0x1000>,  /* 当前未启用 */
+              <&ipc_instance22   8   8   0x1000>,  /* Acore&VDSP0，暂未对客户开放 */
+              <&ipc_instance23   8   8   0x1000>,  /* Acore&VDSP0，暂未对客户开放 */
+              <&ipc_instance24   8   8   0x1000>,  /* Acore&VDSP0，暂未对客户开放 */
+              <&ipc_instance42   8   8   0x1000>,  /* Acore&VDSP1，暂未对客户开放 */
+              <&ipc_instance43   8   8   0x1000>,  /* Acore&VDSP1，暂未对客户开放 */
+              <&ipc_instance44   8   8   0x1000>;  /* Acore&VDSP1，暂未对客户开放 */
 };
 
 ```
@@ -138,7 +144,7 @@ ipc_instance3: ipc_instance3 {
         status = "okay"; #节点状态，不需要改动
         compatible = "hobot,hobot-ipc"; #节点属性，不可改动
         mbox-names = "mbox-chan"; #mailbox名字属性，不可改动
-        mboxes = <&mailbox0 3 19 3>; #mailbox通信方向，实例5和实例6需要改动，其它实例不需要改动
+        mboxes = <&mailbox0 3 19 3>; /* mailbox通信方向 <&mailbox 通道索引 本地 mailbox id 对端 mailbox id>，一般不需要改动 */
         instance = <3>; #实例id，不需要改动
         data_local_addr = /bits/ 64 <IPC_INS3_DATA_LOCAL>; #Acore数据段，实例5和实例6需要改动，其它实例不需要改动
         data_remote_addr = /bits/ 64 <IPC_INS3_DATA_REMOTE>; #MCU数据段，实例5和实例6需要改动，其它实例不需要改动
@@ -207,8 +213,8 @@ ipc_instance6: ipc_instance6 {
 ipc_instance3: ipc_instance3 {
         status = "okay"; #节点状态，不需要改动
         compatible = "hobot,hobot-ipc"; #节点属性，不可改动
-        mbox-names = "mbox-chan"; #mailbox名字属性，不可改动
-        mboxes = <&mailbox0 3 19 3>; #mailbox通信方向
+        mbox-names = "mbox-chan"; /* mailbox 名字属性，不可改动 */
+        mboxes = <&mcu_mailbox0 3 15 3>; /* mailbox通信方向 <&mailbox 通道索引 本地 mailbox id 对端 mailbox id> */
         instance = <3>; #实例id，不需要改动
         data_local_addr = /bits/ 64 <IPC_INS3_DATA_LOCAL>; #Acore数据段
         data_remote_addr = /bits/ 64 <IPC_INS3_DATA_REMOTE>; #MCU数据段
@@ -252,15 +258,14 @@ Sample 中 Acore 与 MCU 通过共享内存传输数据，通过 mailbox 中断�
 
 **代码路径**：
 ```bash
-# Sample源码路径
-${SDK}/source/hobot-io-samples/debian/app/ipcbox_sample  # ipc C++  Sample
+# 源码路径（SDK 源码根目录下）
+${SDK}/source/hobot-io-samples/debian/app/ipcbox_sample     # ipc C++ Sample
 ${SDK}/source/hobot-io-samples/debian/app/pyhbipchal_sample # ipc python Sample
-${SDK}/source/hobot-io/pyhbipchal # ipc C++ 库转 python 库源码
+${SDK}/source/hobot-io/pyhbipchal                           # ipc C++ 库转 python 库源码
 
-
-# 源码随固件一同打包，可在S100自行编译, 路径如下
-${S100}/app/ipcbox_sample
-${S100}/app/pyhbipchal_sample
+# 板端运行路径（sample 随固件一同打包，S100/S600 通用，可直接在板端编译）
+/app/ipcbox_sample
+/app/pyhbipchal_sample
 ```
 
 **目录结构**：
@@ -280,7 +285,7 @@ root@ubuntu:/app/ipcbox_sample# tree .
 ```
 
 ### IPC 实时性能优化设置
-如果特定场景下需要提高 IPC 通信的实时性能，可以按照如下几步进行设置，以 ipc_instance5为例进行说明。
+如果特定场景下需要提高 IPC 通信的实时性能，可以按照如下几步进行设置。以 `ipc_instance5` 为例。
 1. 首先查找 ipc_instance5对应的中断号和中断线程 pid
 ```shell
 #中断号查找：
@@ -349,16 +354,21 @@ root          97  0.0  0.0      0     0 ?        S    22:17   0:00 [irq/41-29f01
 root          98  0.0  0.0      0     0 ?        S    22:17   0:00 [irq/42-28109000.mailbox2]
 root          99  0.0  0.0      0     0 ?        S    22:17   0:00 [irq/43-2810d000.mailbox3]
 root         100  0.0  0.0      0     0 ?        S    22:17   0:00 [irq/44-28105000.mailbox4]
-#依据设备树ipc_instance5对应的mailbox为 mboxes = <&mailbox0 5 21 5>;所以中断号为19，中断线程pid为75.
+# 中断号 = 该 mailbox 的 Linux virq 基址 + mboxes 的通道索引（第 1 个数）：
+#   S100：ipc_instance5 的 mboxes = <&mailbox0 5 21 5>，通道索引 5；
+#         29f00000.mailbox0 的 virq 为 14~28，故中断号为 14 + 5 = 19，中断线程 pid 为 75。
+#   S600：ipc_instance5 的 mboxes = <&mcu_mailbox0 5 17 5>，通道索引 5；
+#         32f00000.mcu_mailbox0 的 virq 为 25~40，故中断号为 25 + 5 = 30（ipc_instance7 为 25 + 7 = 32）。
+# virq 由内核启动时动态分配，实际请以 `cat /proc/interrupts | grep mailbox` 的输出为准。
 ```
 
-2. 中断绑核，降低迁移带来的消耗
+1. 中断绑核，降低迁移带来的消耗
 ```shell
 #将IRQ 19绑定到 CPU2：
 root@ubuntu:/# echo 4 > /proc/irq/19/smp_affinity
 ```
 
-3. 中断线程绑核，降低迁移带来的消耗
+1. 中断线程绑核，降低迁移带来的消耗
 ```shell
 #将PID 75绑定到 CPU2:
 root@ubuntu:/# taskset -p 0x04 75
@@ -366,7 +376,7 @@ pid 75's current affinity mask: 3f
 pid 75's new affinity mask: 4
 ```
 
-4. 设置中断线程优先级，防止被高优任务打断
+1. 设置中断线程优先级，防止被高优任务打断
 ```shell
 #将PID 75的优先级提高到99
 root@ubuntu:/# chrt -f -p 99 75
@@ -375,7 +385,7 @@ pid 75's current scheduling policy: SCHED_FIFO
 pid 75's current scheduling priority: 99
 ```
 
-5. 中断 CPU 设置隔离，确保对应 CPU 专门用于实时任务
+1. 中断 CPU 设置隔离，确保对应 CPU 专门用于实时任务
 ```shell
 #将CPU2进行隔离，需要进入uboot模式下设置
 Hobot$ printenv bootargs
@@ -389,7 +399,7 @@ root@ubuntu:/# cat /sys/devices/system/cpu/isolated
 2
 ```
 
-6. 设置 RT 内核调度器状态，防止 RT 任务被强行 yield
+1. 设置 RT 内核调度器状态，防止 RT 任务被强行 yield
 ```shell
 root@ubuntu:/# echo -1 > /proc/sys/kernel/sched_rt_runtime_us
 ```
@@ -406,54 +416,71 @@ Acore 与 MCU(POLL 方式)之间 API Sample 运行流程图
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/samplepollapi.png" alt="Acore与MCU(POLL方式)之间API Sample运行流程图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 通路配置
-可以增加 Json 文件中的通道数量 config_num，并增加通道信息，本 Sample 未支持增加通道的功能，若需要增加通道，需要修改 Acore 和 MCU 两侧配置文件。
+
+可以增加 JSON 文件中的通道数量 `config_num`，并增加通道信息。本 Sample 未支持增加通道的功能，若需要增加通道，需要同时修改 Acore 和 MCU 两侧配置文件。
+
+出厂配置文件是**单通道**的（`config_num` 为 1，只有 `config_0`），且不含注释。下面给出字段说明与多通道示例（JSON 不支持注释，请勿把说明复制进文件）：
+
+| 字段 | 说明 |
+|------|------|
+| `log_level` | 日志等级，可省略 |
+| `config_num` | 配置通道数量 |
+| `config_num_max` | 配置通道数量最大值（256） |
+| `name` | 通道名字 |
+| `instance` | 实例 id |
+| `channel` | 通道 id |
+| `pkg_size_max` | 发送包最大字节，推荐小于等于 4096 Bytes |
+| `fifo_size` | 缓冲 fifo 的大小，取决于需要缓冲的个数 |
+| `fifo_type` | 缓冲 fifo 的类型，仅支持 0 |
+| `ipcf_dev_path` | 字符设备驱动，仅支持 `/dev/ipcdrv` |
+| `ipcf_dev_name` | 字符设备驱动名字，仅支持 `ipcdrv` |
+
 ```json
 {
-        "log_level": 0, # 日志等级，可省略
-        "config_num": 4, # 配置通道数量
-        "config_num_max":256, #配置通道数量最大值
-        "config_0": { # 配置通道
-                "name": "cpu2mcu_ins7ch0", # 通道名字
-                "instance": 7, # 实例id
-                "channel": 0, # 通道id
-                "pkg_size_max": 4096, # 发送包最大字节，推荐小于等于4096Bytes
-                "fifo_size": 64000, # 缓冲fifo的大小，取决于需要缓冲的个数
-                "fifo_type": 0, # 缓冲fifo的类型，仅支持0
-                "ipcf_dev_path":"/dev/ipcdrv", # 字符设备驱动，仅支持/dev/ipcdrv
-                "ipcf_dev_name":"ipcdrv" # 字符设备驱动名字，仅支持ipcdrv
-        },
-        "config_1": {
-                "name": "cpu2mcu_ins7ch1",
-                "instance": 7,
-                "channel": 1,
-                "pkg_size_max": 4096,
-                "fifo_size": 64000,
-                "fifo_type": 0,
-                "ipcf_dev_path":"/dev/ipcdrv",
-                "ipcf_dev_name":"ipcdrv"
-        },
-        "config_2": {
-                "name": "cpu2mcu_ins8ch0",
-                "instance": 8,
-                "channel": 0,
-                "pkg_size_max": 4096,
-                "fifo_size": 64000,
-                "fifo_type": 0,
-                "ipcf_dev_path":"/dev/ipcdrv",
-                "ipcf_dev_name":"ipcdrv"
-        },
-        "config_3": {
-                "name": "cpu2mcu_ins8ch1",
-                "instance": 8,
-                "channel": 1,
-                "pkg_size_max": 4096,
-                "fifo_size": 64000,
-                "fifo_type": 0,
-                "ipcf_dev_path":"/dev/ipcdrv",
-                "ipcf_dev_name":"ipcdrv"
-        }
+  "log_level": 0,
+  "config_num": 4,
+  "config_num_max": 256,
+  "config_0": {
+    "name": "cpu2mcu_ins7ch0",
+    "instance": 7,
+    "channel": 0,
+    "pkg_size_max": 4096,
+    "fifo_size": 64000,
+    "fifo_type": 0,
+    "ipcf_dev_path": "/dev/ipcdrv",
+    "ipcf_dev_name": "ipcdrv"
+  },
+  "config_1": {
+    "name": "cpu2mcu_ins7ch1",
+    "instance": 7,
+    "channel": 1,
+    "pkg_size_max": 4096,
+    "fifo_size": 64000,
+    "fifo_type": 0,
+    "ipcf_dev_path": "/dev/ipcdrv",
+    "ipcf_dev_name": "ipcdrv"
+  },
+  "config_2": {
+    "name": "cpu2mcu_ins8ch0",
+    "instance": 8,
+    "channel": 0,
+    "pkg_size_max": 4096,
+    "fifo_size": 64000,
+    "fifo_type": 0,
+    "ipcf_dev_path": "/dev/ipcdrv",
+    "ipcf_dev_name": "ipcdrv"
+  },
+  "config_3": {
+    "name": "cpu2mcu_ins8ch1",
+    "instance": 8,
+    "channel": 1,
+    "pkg_size_max": 4096,
+    "fifo_size": 64000,
+    "fifo_type": 0,
+    "ipcf_dev_path": "/dev/ipcdrv",
+    "ipcf_dev_name": "ipcdrv"
+  }
 }
-
 ```
 
 ### 实例说明
@@ -534,14 +561,14 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 #define UART_IPCBOX_HW_CHANNEL (UART11_HW_CHANNEL)
 ```
 
-同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`uart`对应项使能。默认如下配置中`uart`为`DISABLE`，需要改为`ENABLE`：
+同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`uart`对应项使能。**源码默认如下，`uart` 项为 `DISABLE`，需要改成 `ENABLE`**：
 
 ```c
 { IPCBOX_COM_ID_UART, "uart", IpcConf_IpcInstance_IpcInstance_7,
 #if ((SOC_TYPE_S100 == SOC_TYPE) || (SOC_TYPE_S100P == SOC_TYPE))
-  IpcConf_IpcInstance_7_IpcChannel_1, ENABLE, UART5_CHANNEL,
+  IpcConf_IpcInstance_7_IpcChannel_1, DISABLE, UART5_CHANNEL,   /* 修改为 ENABLE */
 #else
-  IpcConf_IpcInstance_7_IpcChannel_1, ENABLE, UART_IPCBOX_HW_CHANNEL,
+  IpcConf_IpcInstance_7_IpcChannel_1, DISABLE, UART_IPCBOX_HW_CHANNEL,   /* 修改为 ENABLE */
 #endif
   IpcBox_UartInit, IpcBox_UartDeinit },
 ```
@@ -580,7 +607,7 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 
 | 平台 | SPI id |
 |------|--------|
-| S100 | SPI3   |
+| S100 | SPI2/3/4（sample 默认使用 3） |
 | S600 | SPI6   |
 
 所使用的 SPI 可以对 mcu 侧的`mcu/Config/McalCdd/gen_xxxx/Spi/inc/Spi_Board.h`文件进行修改，例如 S600，将`SPI_IPCBOXUSEBUS`定义为对应的 SPI 硬件
@@ -589,11 +616,11 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 #define SPI_IPCBOXUSEBUS (SPI_BUS6)
 ```
 
-同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`spi`对应项使能。默认如下配置中`spi`为`DISABLE`，需要改为`ENABLE`：
+同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`spi`对应项使能。**源码默认如下，`spi` 项为 `DISABLE`，需要改成 `ENABLE`**：
 
 ```c
 { IPCBOX_COM_ID_SPI, "spi", IpcConf_IpcInstance_IpcInstance_7,
-  IpcConf_IpcInstance_7_IpcChannel_2, ENABLE, IPCBOX_PERIID_INVALID,
+  IpcConf_IpcInstance_7_IpcChannel_2, ENABLE, IPCBOX_PERIID_INVALID,   /* 修改为 ENABLE */
   IpcBox_SpiInit, IpcBox_SpiDeinit },
 ```
 
@@ -647,11 +674,11 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
 
 测试 sample 实现了对 I2c 的 detect 测试，以 S100使用 I2c6为例，若使用 S600注意将`./ipcbox_i2c detect 6`修改为`./ipcbox_i2c detect 13`
 
-同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`i2c`对应项使能。默认如下配置中`i2c`为`DISABLE`，需要改为`ENABLE`：
+同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`i2c`对应项使能。**源码默认如下，`i2c` 项为 `DISABLE`，需要改成 `ENABLE`**：
 
 ```c
 { IPCBOX_COM_ID_I2C, "i2c", IpcConf_IpcInstance_IpcInstance_7,
-  IpcConf_IpcInstance_7_IpcChannel_3, ENABLE, IPCBOX_PERIID_INVALID,
+  IpcConf_IpcInstance_7_IpcChannel_3, ENABLE, IPCBOX_PERIID_INVALID,   /* 修改为 ENABLE */
   IpcBox_I2cInit, IpcBox_I2cDeinit },
 ```
 
@@ -716,7 +743,7 @@ ipcbox 只实现了对 I2C Master 的简单传输，不支持 Slave
 | S100 | Uart5  |
 | S600 | Uart11 |
 
-所使用的 Uart 可以对 mcu 侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如 S600，将`UART_TEST_HW_CHANNEL`定义为对应的 Uart 硬件
+所使用的 Uart 可以对 mcu 侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如 S600，将 `UART_IPCBOX_HW_CHANNEL` 定义为对应的 Uart 硬件
 
 ```
 #define UART_IPCBOX_HW_CHANNEL (UART11_HW_CHANNEL)
@@ -1268,17 +1295,51 @@ wdump: 0
 
 ## 常见问题
 
-### ipcbox I2C 测试探测不到设备
+### ipcbox 测试通不过（探测不到设备 / 收发无数据）
 
-**原因**：MCU 侧 `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` 的 `IpcBox_InstanceMap` 配置中，`i2c` 对应项默认为 `DISABLE`。
+**原因**：`IpcBox` 的某个外设没有真正生效。常见有三处：
 
-**解决**：将该 `i2c` 项改为 `ENABLE` 后重新测试。
+- MCU 侧 `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` 的 `IpcBox_InstanceMap` 中，`uart`/`spi`/`i2c` 三项**默认为 `DISABLE`**，未改成 `ENABLE`；
+- MCU 侧硬件通道宏没有指向实际使用的外设（例如 S600 的 `UART_IPCBOX_HW_CHANNEL`、`SPI_IPCBOXUSEBUS`）；
+- 回环测试前没有把对应外设的 TX/RX（或 MOSI/MISO）短接。
 
-### 客户自行定义 IPC 实例无效
+**解决**：按《[Uart 透传](#uart-透传)》《[SPI 读写测试](#spi-读写测试)》与「I2C 测试」小节逐项确认：把 `IpcBox_InstanceMap` 中对应项改为 `ENABLE`、确认硬件通道宏、并短接对应的收发引脚，然后重新编译 MCU 固件。
 
-**原因**：默认实例分配中，部分实例被内部预留或被 CANHAL、规控等业务占用。
+### 客户自行定义的 IPC 实例不生效
 
-**解决**：修改 Acore 侧设备树配置文件（`drobot-s100-ipc.dtsi` / `drobot-s600-ipc.dtsi`），按需选用空闲实例并重新编译。
+**原因**：实例必须出现在 Acore 侧设备树的 `ipcfhal_cfg` → `ipc-ins` 列表中才会被初始化。当前镜像中有部分实例被内部业务占用，还有一部分在 `ipc-ins` 里被注释掉（例如 S600 的实例 5、9、11~15）或 `status = "disabled"`，这些实例在 `/sys/kernel/debug/` 下不会出现对应的 `ipcdrv-ins-N` 目录。
+
+**解决**：
+
+1. 按《[IPC 实例分配方案](#ipc-实例分配方案)》确认要用的实例是否已被占用（`ipc-ins` 中标注为 `Not used, User can apply for it` 的实例可用）；
+2. 修改 Acore 侧设备树 `drobot-s100-ipc.dtsi` / `drobot-s600-ipc.dtsi`，把实例加入 `ipc-ins` 并重新编译内核设备树；
+3. 若还改了数据段/控制段地址或通道数，需同步修改 U-Boot 设备树与 MCU 侧配置，否则两端不一致会导致收发异常。
+
+### 看不到 `/sys/kernel/debug/ipcdrv-ins-N/` 调试节点
+
+**原因**：有两种可能：
+
+- 该实例没有加入 `ipc-ins`（或对应节点 `status = "disabled"`），驱动不会为它创建目录；
+- debugfs 没有挂载，`debugfs_create_dir()` 失败时驱动只打印一条日志，不会报错。
+
+**解决**：先用 `mount | grep debugfs` 确认 debugfs 已挂载（挂载点 `/sys/kernel/debug`）；再核对 `/proc/device-tree/soc/ipcfhal_cfg/ipc-ins` 或设备树源文件，确认该实例已在列表中。
+
+### sample 收发失败或超时
+
+**原因**：常见有三处：
+
+- MCU1 没有运行（`cat /sys/class/remoteproc/remoteproc_mcu1/state` 为 `offline`），sample 操作的是 MCU 侧外设；
+- 该通道已被其它进程占用——IPCFHAL 的同一个通道不支持多进程；
+- 配置文件里的 `instance`/`channel` 与 MCU 侧配置不一致。
+
+**解决**：先确认 MCU1 已启动（参见《[MCU1 启动](/Advanced_development/mcu_development/basic_information#start_mcu1)》）；确认没有其它进程占用同一通道；核对两侧配置后重试。
+
+### `ipcfhal_sample_config.json` 解析失败
+
+**原因**：该文件是标准 JSON，**不支持注释**。参考网上示例时若加入了 `#` 或 `//` 注释，解析会失败。
+
+**解决**：删除文件中的所有注释，只保留键值对；字段含义参见《[通路配置](#通路配置)》。
+
 
 ## 相关文档
 
