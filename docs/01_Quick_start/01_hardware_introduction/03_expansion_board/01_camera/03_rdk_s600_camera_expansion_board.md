@@ -52,33 +52,66 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 拓扑图
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_architecture_diagram.png" alt="RDK S600 相机扩展板架构拓扑图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_expansion_board.png" alt="RDK S600 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-### 接口说明
+### 接口概览
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="RDK S600 相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_board.png" alt="RDK S600 相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | 位号  | 功能            |
 | ----- | --------------- |
-| J402  | 板对板连接器    |
-| J401  | DC 电源输入     |
-| J501  | GMSL 相机接口#0 |
-| J601  | GMSL 相机接口#1 |
-| D2000 | 电源指示灯      |
+| 1 | GMSL 相机接口    |
+| 2 | GMSL 相机接口    |
+| 3 | DC 电源输入 |
+| 4  | 板对板连接器 |
+| 5 | 电源指示灯   |
 
 ## 接口说明
 
-### 板对板连接器（J402）
+### GMSL 相机接口（接口1/接口2）
 
-Camera 扩展板与 RDK S600 的连接端口，为 Camera 扩展板提供功能接口（MIPI CSI 和 GPIO）以及电源（12V、3.3V 和 1.8V）。
+Camera 扩展板集成了 2 颗 MAX96712 解串芯片，能够接入 8 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
+
+S600可以安装 2 个 Camera扩展板，左侧与右侧各安装一个。共可接入16路GMSL2相机。下表为安装2个扩展板后`GMSL接口位置`，`MIPI_HOST`，`I2C_BUS`，`PHY_TYPE`之间对应关系。
+
+<div className="table-responsive">
+
+| GMSL相机接口 | 位置 | MIPI_HOST | I2C BUS | PHY TYPE |
+| :---- | :---  | :------ | :---------- | :---------- |
+| GMSL 相机接口 1 | 左后  | MIPI_RX0 | I2C0 |	DPHY	|
+| GMSL 相机接口 2 | 左前  | MIPI_RX1 | I2C1 |	CPHY	|
+| GMSL 相机接口 3 | 右前  | MIPI_RX2 | I2C2 |	CPHY	|
+| GMSL 相机接口 4 | 右后  | MIPI_RX3 | I2C3 |	DPHY	|
+
+</div>
+
+每个GMSL接口`Port`与`位置`关系如下表：
+
+<div className="table-responsive">
+
+| GMSL接口 | 位置 |
+| :---- | :---  |
+| GMSLA | 右上  |
+| GMSLB | 右下  |
+| GMSLC | 左下  |
+| GMSLD | 左上  |
+
+</div>
 
 :::warning 注意
 
-使用时，请确认 Camera 扩展板与 RDK S600 之间的连接器已完全扣合，并安装固定螺丝，以确保信号连接的可靠性。
+GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人推荐的线缆与相机进行连接，以保障 GMSL 高速信号的稳定传输。
 
 :::
 
-### DC 电源输入（J401）
+:::info 提示
+
+1. 当 GMSL 相机的 12V 电源电流需求在 700mA 以内时，无需接入外部 12V 适配器，此时 12V 电源由 RDK S600 提供。若电流需求超过 700mA，则必须接入外部 12V 适配器，以保障 GMSL 相机模组电源的稳定供给。
+2. Camera 扩展板可为每路 GMSL 相机提供最大 550mA@12V 的电流。若超过该电流规格，将无法保证 GMSL 相机模组的稳定运行。
+
+:::
+
+### DC 电源输入（接口3）
 
 Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GMSL 相机供电。
 
@@ -89,24 +122,17 @@ Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。�
 
 :::
 
-### GMSL 相机接口（J501/J601）
+### 板对板连接器（接口4）
 
-Camera 扩展板集成了 2 颗 MAX96712 解串芯片，能够接入 8 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
+Camera 扩展板与 RDK S600 的连接端口，为 Camera 扩展板提供功能接口（MIPI CSI 和 GPIO）以及电源（12V、3.3V 和 1.8V）。
 
 :::warning 注意
 
-GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人推荐的线缆与相机进行连接，以保障 GMSL 高速信号的稳定传输。
-   
-:::
-
-:::info 提示
-
-1. 当 GMSL 相机的 12V 电源电流需求在 700mA 以内时，无需接入外部 12V 适配器，此时 12V 电源由 RDK S600 提供。若电流需求超过 700mA，则必须接入外部 12V 适配器，以保障 GMSL 相机模组电源的稳定供给。
-2. Camera 扩展板可为每路 GMSL 相机提供最大 550mA@12V 的电流。若超过该电流规格，将无法保证 GMSL 相机模组的稳定运行。
+使用时，请确认 Camera 扩展板与 RDK S600 之间的连接器已完全扣合，并安装固定螺丝，以确保信号连接的可靠性。
 
 :::
 
-### 电源指示灯（D2000）
+### 电源指示灯（接口5）
 
 电源指示灯，其位置在 DC 电源输入接口旁边。
 
@@ -119,10 +145,10 @@ GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人�
 
 | 连接器 | 连接器型号    | 连接器厂商          |
 | :----- | :------------ | :------------------ |
-| J401   | DC-044B-D025  | G-Switch（品赞）    |
-| J402   | DY11-080SB-1  | KEL（科陆）         |
-| J501   | 112038-161410 | SYNCONN（信翰精密） |
-| J601   | 112038-161410 | SYNCONN（信翰精密） |
+| 接口3   | DC-044B-D025  | G-Switch（品赞）    |
+| 接口4   | DY11-080SB-1  | KEL（科陆）         |
+| 接口1   | 112038-161410 | SYNCONN（信翰精密） |
+| 接口2   | 112038-161410 | SYNCONN（信翰精密） |
 
 ## 适配模组
 
@@ -132,5 +158,4 @@ GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人�
 
 - 主板：[开发者套件简介（RDK S600）](../../02_rdk_s600.md)
 - 扩展板：[RDK S600 MCU 接口扩展板](../02_mcu/02_rdk_s600_mcu_port_expansion_board.md)
-- 相机使用：[MIPI 摄像头使用](/Demos/peripheral/camera/mipi_camera)
-
+- 相机使用：[MIPI 摄像头使用](../../../../03_Demos/01_peripheral/02_camera/01_mipi_camera.md)

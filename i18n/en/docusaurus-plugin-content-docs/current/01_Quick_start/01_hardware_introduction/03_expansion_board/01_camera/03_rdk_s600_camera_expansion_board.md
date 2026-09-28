@@ -52,33 +52,66 @@ To avoid malfunction or damage of this expansion board, strictly observe the fol
 
 ### Topology Diagram
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_camera_expansion_board_architecture_diagram.png" alt="RDK S600 Camera Expansion Board architecture topology diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_expansion_board.png" alt="RDK S600 Camera Expansion Board architecture topology diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Interface Overview
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_camera_board_v1p0.png" alt="RDK S600 Camera Expansion Board interface diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_board.png" alt="RDK S600 Camera Expansion Board interface diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-| Ref.  | Function          |
+| No. | Function              |
 | ----- | ----------------- |
-| J402  | Board-to-board connector |
-| J401  | DC power input    |
-| J501  | GMSL camera interface #0 |
-| J601  | GMSL camera interface #1 |
-| D2000 | Power indicator   |
+| 1 | GMSL camera interface    |
+| 2 | GMSL camera interface    |
+| 3 | DC power input |
+| 4  | Board-to-board connector |
+| 5 | Power indicator   |
 
 ## Interface Description
 
-### Board-to-Board Connector (J402)
+### GMSL Camera Interfaces (Interface 1/Interface 2)
 
-The connection port between the Camera Expansion Board and the RDK S600, providing the Camera Expansion Board with functional interfaces (MIPI CSI and GPIO) as well as power (12V, 3.3V, and 1.8V).
+The Camera Expansion Board integrates 2 MAX96712 deserializer chips and can connect up to 8 GMSL2 cameras. It can also provide 12V power to GMSL cameras over coaxial cables.
+
+The S600 can be equipped with 2 Camera Expansion Boards, one installed on the left and one on the right, supporting up to 16 GMSL2 cameras in total. The table below shows the correspondence between `GMSL Interface Position`, `MIPI_HOST`, `I2C_BUS`, and `PHY_TYPE` after installing 2 expansion boards.
+
+<div className="table-responsive">
+
+| GMSL Camera Interface | Position | MIPI_HOST | I2C BUS | PHY TYPE |
+| :---- | :---  | :------ | :---------- | :---------- |
+| GMSL Camera Interface 1 | Left rear  | MIPI_RX0 | I2C0 | DPHY |
+| GMSL Camera Interface 2 | Left front  | MIPI_RX1 | I2C1 | CPHY |
+| GMSL Camera Interface 3 | Right front  | MIPI_RX2 | I2C2 | CPHY |
+| GMSL Camera Interface 4 | Right rear  | MIPI_RX3 | I2C3 | DPHY |
+
+</div>
+
+The relationship between the `Port` and `Position` of each GMSL interface is as follows:
+
+<div className="table-responsive">
+
+| GMSL Interface | Position |
+| :---- | :---  |
+| GMSLA | Upper right  |
+| GMSLB | Lower right  |
+| GMSLC | Lower left  |
+| GMSLD | Upper left  |
+
+</div>
 
 :::warning Note
 
-During use, make sure that the connector between the Camera Expansion Board and the RDK S600 is fully locked, and install the fixing screws to ensure reliable signal connection.
+The GMSL interfaces use mini Fakra 4-in-1 z code connectors. Use the cables recommended by D-Robotics to connect cameras, in order to ensure stable transmission of the high-speed GMSL signals.
 
 :::
 
-### DC Power Input (J401)
+:::info Tip
+
+1. When the 12V power demand of a GMSL camera is within 700mA, no external 12V adapter is needed; the 12V power is supplied by the RDK S600. If the current demand exceeds 700mA, an external 12V adapter must be connected to ensure stable power supply to the GMSL camera module.
+2. The Camera Expansion Board can supply up to 550mA@12V of current per GMSL camera channel. If this current specification is exceeded, stable operation of the GMSL camera module cannot be guaranteed.
+
+:::
+
+### DC Power Input (Interface 3)
 
 The Camera Expansion Board is equipped with an external 12V power input interface for GMSL cameras. When the total power-supply current demand of all GMSL cameras connected to this Camera Expansion Board at 12V exceeds 700mA, the GMSL cameras must be powered through this DC power jack.
 
@@ -89,24 +122,17 @@ The Camera Expansion Board is equipped with an external 12V power input interfac
 
 :::
 
-### GMSL Camera Interfaces (J501/J601)
+### Board-to-Board Connector (Interface 4)
 
-The Camera Expansion Board integrates 2 MAX96712 deserializer chips and can connect up to 8 GMSL2 cameras. It can also provide 12V power to GMSL cameras over coaxial cables.
+The connection port between the Camera Expansion Board and the RDK S600, providing the Camera Expansion Board with functional interfaces (MIPI CSI and GPIO) as well as power (12V, 3.3V, and 1.8V).
 
 :::warning Note
 
-The GMSL interfaces use mini Fakra 4-in-1 z code connectors. Use the cables recommended by D-Robotics to connect cameras, in order to ensure stable transmission of the high-speed GMSL signals.
-   
-:::
-
-:::info Tip
-
-1. When the 12V power demand of a GMSL camera is within 700mA, no external 12V adapter is needed; the 12V power is supplied by the RDK S600. If the current demand exceeds 700mA, an external 12V adapter must be connected to ensure stable power supply to the GMSL camera module.
-2. The Camera Expansion Board can supply up to 550mA@12V of current per GMSL camera channel. If this current specification is exceeded, stable operation of the GMSL camera module cannot be guaranteed.
+During use, make sure that the connector between the Camera Expansion Board and the RDK S600 is fully locked, and install the fixing screws to ensure reliable signal connection.
 
 :::
 
-### Power Indicator (D2000)
+### Power Indicator (Interface 5)
 
 The power indicator, located next to the DC power input interface.
 
@@ -117,12 +143,12 @@ The power indicator, located next to the DC power input interface.
 
 ## Connector Models
 
-| Connector | Connector model | Connector manufacturer |
+| Interface | Connector model | Connector manufacturer |
 | :-------- | :-------------- | :--------------------- |
-| J401      | DC-044B-D025    | G-Switch               |
-| J402      | DY11-080SB-1    | KEL                    |
-| J501      | 112038-161410   | SYNCONN                |
-| J601      | 112038-161410   | SYNCONN                |
+| Interface 3      | DC-044B-D025    | G-Switch (Pinzan)               |
+| Interface 4      | DY11-080SB-1    | KEL                    |
+| Interface 1      | 112038-161410   | SYNCONN (Xinhan Precision)                |
+| Interface 2      | 112038-161410   | SYNCONN (Xinhan Precision)                |
 
 ## Compatible Modules
 
