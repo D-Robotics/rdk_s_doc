@@ -7,6 +7,11 @@ sidebar_products: RDK S100
 slug: /Quick_start/hardware_introduction/rdk_mcu_port_expansion_board
 ---
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 # MCU 接口扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board.png" alt="RDK S100 MCU Port Expansion Board" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -43,6 +48,30 @@ RDK S100 MCU 接口扩展板（含配套 FPC）是地瓜机器人 RDK S100 系�
 
 ## 接口与布局
 
+<Tabs groupId="interface-diagram">
+<TabItem value="new" label="新版接口图（数字标号）" default>
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/hardware_interface/image-rdk_100_mcu_port_expansion_board_interface_model1.png" alt="RDK S100 MCU Port Expansion Board interface diagram with numbered callouts" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+| 编号 | 接口 | 功能 | 状态指示 | 测试方法 |
+| --- | --- | --- | --- | --- |
+| ① | 30-Pin 扩展接口（J12） | 引出最多 7 路 ADC、2 路 I2C、2 路 SPI | 无 | 按 Pin 定义文件接入外设；I2C 可用 `i2cdetect` 扫描从设备地址 |
+| ② | CAN7 的 120Ω 终端电阻跳线（J7） | 短接后为 CAN7 接入 120Ω 终端电阻 | 无 | 随 CAN7 通道一并验证 |
+| ③ | CAN8 的 120Ω 终端电阻跳线（J9） | 短接后为 CAN8 接入 120Ω 终端电阻 | 无 | 随 CAN8 通道一并验证 |
+| ④ | CAN9 的 120Ω 终端电阻跳线（J11） | 短接后为 CAN9 接入 120Ω 终端电阻 | 无 | 随 CAN9 通道一并验证 |
+| ⑤ | CAN9 接口（J10） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ⑥ | CAN8 接口（J8） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ⑦ | CAN7 接口（J6） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ⑧ | CAN6 接口（J4） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ⑨ | CAN6 的 120Ω 终端电阻跳线（J5） | 短接后为 CAN6 接入 120Ω 终端电阻 | 无 | 随 CAN6 通道一并验证 |
+| ⑩ | RJ45 千兆网口（MCU 域）（U4） | MCU 域千兆以太网 | 无 | 接入网线后 `ping` 对端地址，确认链路连通 |
+| ⑪ | CAN5 接口（J2） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据，也可用 `candump can0` 观察收包 |
+| ⑫ | CAN5 的 120Ω 终端电阻跳线（J3） | 短接后为 CAN5 接入 120Ω 终端电阻 | 无 | 随 CAN5 通道一并验证 |
+| ⑬ | 100-Pin 连接器（J1） | 与 RDK S100 主板的 J23 接口对接（经配套 FPC），为扩展板供电并引出 MCU 域信号 | 绿色 LED“CONNECT”（位于 J1 下方）：常亮表示连接正常且 5V 供电正常；熄灭表示连接异常或无 5V 供电 | 观察“CONNECT”指示灯是否常亮 |
+
+</TabItem>
+<TabItem value="old" label="旧版接口图（位号标号）">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_mcu_port_expansion_board_interface.png" alt="RDK S100 MCU Port Expansion Board interface diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | 编号 | 接口 | 功能 | 状态指示 | 测试方法 |
@@ -61,6 +90,15 @@ RDK S100 MCU 接口扩展板（含配套 FPC）是地瓜机器人 RDK S100 系�
 | J10 | CAN9 接口 | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
 | J11 | CAN9 的 120Ω 终端电阻跳线 | 短接后为 CAN9 接入 120Ω 终端电阻 | 无 | 随 CAN9 通道一并验证 |
 | U8 | IMU（BMI088） | 板载惯性测量单元，经 SPI-5 通信 | 无 | 暂不支持（`RDKS100_LNX_SDK_V4.0.2` 尚未实现对应功能） |
+
+</TabItem>
+</Tabs>
+
+:::info 说明
+
+新版接口图与下方旧版接口图的标注位置一一对应，仅命名不同（①–⑬ ↔ J1–J12/U4）。两版图均未标注板载 IMU（U8），IMU 说明见下文「IMU（U8）」。
+
+:::
 
 ### CAN FD 接口（J2/J4/J6/J8/J10）
 

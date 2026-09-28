@@ -6,6 +6,11 @@ sidebar_label: "MCU 接口扩展板"
 sidebar_products: RDK S600
 ---
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+```
+
 # MCU 接口扩展板
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_v0p2.png" alt="RDK S600 MCU Port Expansion Board" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -42,6 +47,25 @@ RDK S600 MCU 接口扩展板（含配套 FPC）是地瓜机器人 RDK S600 系�
 
 ## 接口与布局
 
+<Tabs groupId="interface-diagram">
+<TabItem value="new" label="新版接口图（数字标号）" default>
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board_model1.png" alt="RDK S600 MCU Port Expansion Board interface diagram with numbered callouts" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+| 编号 | 接口 | 功能 | 状态指示 | 测试方法 |
+| --- | --- | --- | --- | --- |
+| ① | 30-Pin 扩展接口（J501） | 引出最多 7 路 ADC、2 路 I2C、2 路 SPI | 无 | 按 Pin 定义文件接入外设；I2C 可用 `i2cdetect` 扫描从设备地址 |
+| ② | MCU CAN 120Ω 开关（SW401） | 切换 5 路 CAN FD 接口的 120Ω 终端电阻 | 无 | 切换后随对应 CAN 通道一并验证 |
+| ③ | MCU-CAN10 接口（J405） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ④ | MCU-CAN4 接口（J404） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ⑤ | MCU-CAN3 接口（J403） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ⑥ | MCU-CAN2 接口（J402） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据 |
+| ⑦ | MCU-CAN1 接口（J401） | CAN FD 通道，最高 8Mbps | 无 | 运行板端 CAN 示例收发一帧数据，也可用 `candump can0` 观察收包 |
+| ⑧ | 80-Pin 连接器（J301） | 与 RDK S600 主板的 J15 接口对接（经配套 FPC），为扩展板供电并引出 MCU 域信号 | 绿色 LED“LINK”（位于 SW401 下方）：常亮表示连接正常且 5V 供电正常；熄灭表示连接异常或无 5V 供电 | 观察“LINK”指示灯是否常亮 |
+
+</TabItem>
+<TabItem value="old" label="旧版接口图（位号标号）">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_mcu_board.png" alt="RDK S600 MCU Port Expansion Board interface diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | 编号 | 接口 | 功能 | 状态指示 | 测试方法 |
@@ -55,6 +79,15 @@ RDK S600 MCU 接口扩展板（含配套 FPC）是地瓜机器人 RDK S600 系�
 | J501 | 30-Pin 扩展接口 | 引出最多 7 路 ADC、2 路 I2C、2 路 SPI | 无 | 按 Pin 定义文件接入外设；I2C 可用 `i2cdetect` 扫描从设备地址 |
 | SW401 | MCU CAN 120Ω 开关 | 切换 5 路 CAN FD 接口的 120Ω 终端电阻 | 无 | 切换后随对应 CAN 通道一并验证 |
 | U301 | IMU（BMI088） | 板载惯性测量单元，经 SPI-13 通信 | 无 | 运行板端示例读取一帧加速度与角速度数据 |
+
+</TabItem>
+</Tabs>
+
+:::info 说明
+
+新版接口图与下方旧版接口图的标注位置一一对应，仅命名不同（①–⑧ ↔ J301/J401–J405/J501/SW401）。两版图均未标注板载 IMU（U301），IMU 说明见下文「IMU（U301）」。
+
+:::
 
 ### CAN FD 接口（J401/J402/J403/J404/J405）
 
