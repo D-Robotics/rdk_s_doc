@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: "EtherCAT"
-description: "EtherCAT"
+description: "RDK S100/S600 的 EtherCAT 主站使用指南：IgH 软件栈、Native/Generic 驱动、主站网口配置与从站调试"
 ---
 
 # EtherCAT
@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 :::warning
-⚠️ **注意**：使用 EtherCAT 协议需要系统版本 V4.0.4及以上。
+使用 EtherCAT 协议需要系统版本 V4.0.4 及以上。
 :::
 
 ## 概述
@@ -32,6 +32,97 @@ RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动，�
 
 **与其他模块关系**：本驱动依赖以太网控制器，见「[Ethernet](./01_ethernet.md)」；MCU 侧主站见「EtherCAT 用户手册（MCU 侧）」；使用 EtherCAT 协议需要系统版本 V4.0.4 及以上。
 
+## 名词解释
+
+| 缩略语 | 英文全名 | 中文解释 |
+| ------ | -------- | -------- |
+| EtherCAT | Ethernet for Control Automation Technology | 基于标准以太网的实时工业以太网协议 |
+| MainDevice / Master | EtherCAT Main Device | 主站，负责组网、状态机与周期数据收发 |
+| SubDevice / Slave | EtherCAT Sub Device | 从站，如伺服、IO、编码器等设备 |
+| ESC | EtherCAT Slave Controller | 从站控制器，硬件实现帧的实时读写 |
+| PDO | Process Data Object | 过程数据对象，周期性的实时数据 |
+| SDO | Service Data Object | 服务数据对象，非周期的参数读写 |
+| CoE | CANopen over EtherCAT | 基于 CANopen 对象字典的邮箱协议 |
+| FoE | File over EtherCAT | 基于 EtherCAT 的文件传输协议 |
+| EoE | Ethernet over EtherCAT | 基于 EtherCAT 的以太网隧道 |
+| DC | Distributed Clocks | 分布式时钟，用于主站与从站的时间同步 |
+| SII | Slave Information Interface | 从站信息接口，存放从站配置（EEPROM） |
+| ESI | EtherCAT Slave Information | 从站描述文件（XML），由从站厂商提供 |
+| IgH | IgH EtherCAT Master | RDK 使用的开源 EtherCAT 主站软件栈 |
+
+## EtherCAT 协议基础
+
+EtherCAT 主站把过程数据封装在标准以太网帧中（以太类型 `0x88A4`），从站控制器（ESC）在该帧「穿过」自己的过程中完成数据读写（processing on the fly），因此一个周期内一帧即可遍历总线上所有从站，这是 EtherCAT 实时性的来源。
+
+```mermaid
+flowchart LR
+    Master["EtherCAT 主站<br/>MainDevice"]
+    S1["从站 1<br/>ESC"]
+    S2["从站 2<br/>ESC"]
+    Sn["从站 N<br/>ESC"]
+    Master -->|"下行帧"| S1
+    S1 -->|"边转发边读写"| S2
+    S2 -->|"边转发边读写"| Sn
+    Sn -->|"上行帧（数据已更新）"| Master
+```
+
+- **周期过程数据**：通过 PDO 传输。从站进入 `OP` 状态后开始周期性收发，周期时间由主站设定。
+- **非周期数据**：通过邮箱（Mailbox）传输，包括 CoE/SDO 参数读写、FoE 固件升级、EoE 以太网隧道。
+- **分布式时钟（DC）**：用于对齐各从站与主站的时钟，实现同步采样与同步输出。
+- **从站状态机**：从站依次经过 `INIT` → `PREOP` → `SAFEOP` → `OP`，只有 `OP` 态才能进行周期过程数据交换；`ethercat slaves` 输出中的 `PREOP`、`OP` 即该状态机的当前状态。
+
+## RDK EtherCAT 软件栈
+
+RDK 使用开源的 **IgH EtherCAT Master**，主站软件栈版本为 **1.5.3**。
+
+| 层级 | 组件 | 说明 |
+| ---- | ---- | ---- |
+| 用户层命令 | `ethercat` | 主站与从站调试命令行，见「关键命令速查」 |
+| 用户层服务 | `ethercatctl`、`ethercat.service` | 读取 `/etc/ethercat.conf`，加载内核模块并绑定网口 |
+| 主站内核模块 | `ec_master` | IgH 主站核心：状态机、邮箱与周期帧发送 |
+| 设备驱动模块 | `ec_hobot`（Native）/ `ec_generic`（Generic） | 由 `/etc/ethercat.conf` 的 `DEVICE_MODULES` 选择 |
+| 硬件 | 以太网控制器（GMAC/XGMAC） | 收发 EtherCAT 帧，见 [Ethernet](./01_ethernet.md) |
+
+```mermaid
+flowchart TB
+    Ctl["ethercatctl / ethercat.service<br/>读取 /etc/ethercat.conf，加载模块并绑定网口"]
+    Tool["用户层：ethercat 命令 / IgH 应用"]
+    Master["主站内核模块：ec_master"]
+    Dev["设备驱动模块：ec_hobot（Native）/ ec_generic（Generic）"]
+    Hw["硬件：以太网控制器（GMAC / XGMAC）"]
+    Ctl -->|"modprobe ec_master"| Master
+    Ctl -->|"modprobe ec_hobot / ec_generic"| Dev
+    Tool --> Master
+    Master --> Dev
+    Dev --> Hw
+```
+
+`ethercatctl start` 的实际动作如下（源码见 `ethercat-igh/script/ethercatctl.in`）：
+
+1. 读取 `/etc/ethercat.conf`，把 `MASTER0_DEVICE`（MAC 地址或网口名）解析为 MAC 地址；
+2. 执行 `modprobe ec_master main_devices="<MAC>"` 加载主站；
+3. 遍历 `DEVICE_MODULES` 加载对应的 `ec_<模块名>`（如 `hobot` → `ec_hobot`）；当模块名不是 `generic`/`ccat` 时，会先 `rmmod` 同功能的普通网卡驱动，默认映射由 `DEVICE_MODULE_MAP="hobot:hobot_eth_super"` 指定；
+4. `ethercatctl stop` 反向执行：卸载 `ec_hobot`、`ec_master` 后重新 `modprobe hobot_eth_super`。
+
+因此「Native 驱动与 `hobot_eth_super` 互斥」、「被接管的网口从 `ip a` 中消失」、「停止服务后所有网口恢复为普通网络模式」这三个现象都由上述流程决定。也正因为被接管的网口不再出现在 `ip a` 中，`ethercatctl` 无法再通过网口名反查 MAC，所以 Native 模式下 `MASTER0_DEVICE` 必须直接填写 MAC 地址。
+
+### 关键命令速查
+
+| 命令 | 作用 |
+| ---- | ---- |
+| `ethercat master` | 查看主站与以太网设备信息（绑定网口、帧收发统计） |
+| `ethercat slaves` | 列出总线上的从站及其状态机状态 |
+| `ethercat config` | 查看从站配置 |
+| `ethercat pdos` | 列出 SyncManager、PDO 分配与映射 |
+| `ethercat sdos` | 列出 SDO 对象字典 |
+| `ethercat upload` / `ethercat download` | 读 / 写一个 SDO 条目 |
+| `ethercat states` | 查看或请求应用层状态 |
+| `ethercat domains` | 查看已配置的域（Domain） |
+| `ethercat rescan` | 重新扫描总线 |
+| `ethercat xml` | 导出从站信息 XML |
+| `ethercatctl start` / `stop` / `restart` / `status` | 加载 / 卸载主站与设备模块、绑定或解绑网口 |
+
+
 ## Native 驱动与 Generic 驱动
 
 ### 版本说明
@@ -40,7 +131,7 @@ RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动，�
 **RDK S100 V4.0.7 及以上版本默认使用 Native（hobot）EtherCAT 驱动**，而非 Generic 驱动。
 
 :::warning
-⚠️ **注意**：本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V4.0.7 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
+本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT 使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V4.0.7 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
 :::
 </DocScope>
 
@@ -48,7 +139,7 @@ RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动，�
 **RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动**，而非 Generic 驱动。
 
 :::warning
-⚠️ **注意**：本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V5.1.0 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
+本文档后续章节描述的 EtherCAT 使用方式（「[使用前网络配置](#使用前网络配置)」、「[EtherCAT 使用指南](#ethercat-使用指南)」等）**基于 Generic 驱动模式**。如果您使用的是 **V5.1.0 默认镜像**，系统已预配置为 Native 驱动模式，请优先参考本章节的 Native 驱动使用说明。
 :::
 </DocScope>
 
@@ -87,27 +178,27 @@ RDK S600 V5.1.0 及以上版本默认使用 Native（hobot）EtherCAT 驱动，�
 默认镜像中 `/etc/ethercat.conf` 已预配置为 Native 模式。如需切换 EtherCAT 使用的网口，修改 `MASTER0_DEVICE` 为对应网口的 MAC 地址：
 
 :::warning
-⚠️ **Native 驱动只支持使用 Mac 地址进行配置**。默认的 MASTER0_DEVICE 值为 ff:ff:ff:ff:ff:ff，在启用的时候默认使用 eth0 网口，请根据需求修改。
+**Native 驱动只支持使用 Mac 地址进行配置**。默认的 MASTER0_DEVICE 值为 ff:ff:ff:ff:ff:ff，在启用的时候默认使用 eth0 网口，请根据需求修改。
 :::
 
-```
+```ini
 MASTER0_DEVICE="xx:xx:xx:xx:01:18"  # eth0 的 MAC 地址
 DEVICE_MODULES="hobot"
 ```
 
 如需使用 eth1 作为 EtherCAT 网口：
-```
+```ini
 MASTER0_DEVICE="xx:xx:xx:xx:01:19"  # eth1 的 MAC 地址
 DEVICE_MODULES="hobot"
 ```
 
-:::warning
-⚠️ **SSH 连接注意事项**：如果通过 SSH 远程连接开发板，使用 systemctl 或 ethercatctl 管理 ethercat 服务的时候。由于 gmac 驱动的卸载/重装，**网络会短暂中断几秒**（ping 会显示 `Destination Host Unreachable`），SSH 客户端通常会自动重连。这是正常现象，无需手动干预。
+:::warning[SSH 连接注意事项]
+如果通过 SSH 远程连接开发板，使用 systemctl 或 ethercatctl 管理 ethercat 服务的时候。由于 gmac 驱动的卸载/重装，**网络会短暂中断几秒**（ping 会显示 `Destination Host Unreachable`），SSH 客户端通常会自动重连。这是正常现象，无需手动干预。
 :::
 
 **步骤 2：启动 EtherCAT**
 
-```shell
+```bash
 sudo systemctl start ethercat
 sudo systemctl status ethercat
 # 5.4.13.2 EtherCAT
@@ -116,7 +207,7 @@ sudo ethercatctl status
 ```
 
 正常输出示例：
-```
+```console
 ● ethercat.service - EtherCAT Master Kernel Modules
      Loaded: loaded (/usr/lib/systemd/system/ethercat.service; disabled; preset: enabled)
     Drop-In: /etc/systemd/system/ethercat.service.d
@@ -131,7 +222,7 @@ sudo ethercatctl status
 
 启动后，检查 `ip a` 可以发现被 EtherCAT 绑定的网口 MAC 地址已从内核协议栈中消失（不再出现在列表中）：
 
-```shell
+```bash
 $ ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> ...
 6: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP> ...
@@ -143,7 +234,7 @@ $ ip a
 
 检查 EtherCAT 主站状态：
 
-```shell
+```bash
 $ sudo ethercat master
 Master0
   Phase: Idle
@@ -162,7 +253,7 @@ $ sudo ethercat slaves
 
 停止 EtherCAT 服务后，会自动加载 `hobot_eth_super`，所有网口恢复为普通网络模式：
 
-```shell
+```bash
 sudo systemctl stop ethercat
 ```
 
@@ -171,26 +262,26 @@ sudo systemctl stop ethercat
 如需切换 EtherCAT 使用的网口，只需修改 `/etc/ethercat.conf` 中的 `MASTER0_DEVICE` 为对应网口的 MAC 地址，然后重启 EtherCAT 服务：
 
 1. 修改配置（例如从 eth0 切换到 eth1）：
-   ```
+   ```ini
    MASTER0_DEVICE="xx:xx:xx:xx:01:19"  # 改为 eth1 的 MAC
    DEVICE_MODULES="hobot"
    ```
 
 2. 重启服务：
-   ```shell
+   ```bash
    sudo systemctl restart ethercat
    ```
 
 3. 验证新网口已生效：
-   ```shell
+   ```bash
    sudo ethercat master
    # 应显示新的 MAC 地址: Main: xx:xx:xx:xx:01:19 (attached)
    ```
 
 ### Native 驱动的风险与影响
 
-:::warning
-⚠️ **重要**：由于 Native 驱动与 gmac 驱动互斥，涉及到网卡驱动的卸载与加载。在进行 Native 驱动与 generic 驱动切换的时候，**必须先修改配置文件，然后重启系统完成驱动切换**，否则可能会引起网络中断。
+:::warning[重要]
+由于 Native 驱动与 gmac 驱动互斥，涉及到网卡驱动的卸载与加载。在进行 Native 驱动与 generic 驱动切换的时候，**必须先修改配置文件，然后重启系统完成驱动切换**，否则可能会引起网络中断。
 :::
 
 #### 1. 与 gmac 驱动冲突
@@ -211,7 +302,7 @@ Native 驱动模式下，`/etc/ethercat.conf` 中的 `MASTER0_DEVICE` **必须�
 
 升级 EtherCAT 相关 deb 包时，**必须保证版本一致**，同步升级以下两个包：
 
-```shell
+```bash
 # 两个包必须同步升级，版本号必须匹配
 dpkg -i hobot-ethercat_5.1.0-20260525160326_arm64.deb
 dpkg -i linux-image-rdk-s600_6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c-29_arm64.deb
@@ -223,7 +314,7 @@ dpkg -i linux-image-rdk-s600_6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c-29
 
 如果您需要使用 Generic 驱动模式（支持多网口 eth0/eth1、可与 gmac 驱动共存、可正常停止服务），请修改 `/etc/ethercat.conf`：
 
-```shell
+```bash
 # 修改为 Generic 驱动配置
 sudo sed -i 's/DEVICE_MODULES="hobot"/DEVICE_MODULES="generic"/' /etc/ethercat.conf
 sudo sed -i 's/MASTER0_DEVICE=".*"/MASTER0_DEVICE="eth0"/' /etc/ethercat.conf
@@ -231,27 +322,25 @@ sudo sed -i 's/MASTER0_DEVICE=".*"/MASTER0_DEVICE="eth0"/' /etc/ethercat.conf
 
 修改后重启设备生效。Generic 模式下的详细使用方式请参考后续章节（「使用前网络配置」起）。
 
----
-
 ## 使用前网络配置
 
 <DocScope products="RDK S100">
 :::warning
-⚠️ **注意**：以下内容适用于 **Generic 驱动模式**。如果您使用的是 V4.0.7 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
+以下内容适用于 **Generic 驱动模式**。如果您使用的是 V4.0.7 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
 
-EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
+EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
 
-**特别注意：RDK S100默认使用 eth0作为 DHCP 网口，如果用户原本使用 eth0作为 SSH 连接开发板的主要模式，在使用 eth0作为 EtherCAT 主站后，需要配置 eth1为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
+**特别注意：RDK S100 默认使用 eth0 作为 DHCP 网口，如果用户原本使用 eth0 作为 SSH 连接开发板的主要模式，在使用 eth0 作为 EtherCAT 主站后，需要配置 eth1 为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1 网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
 
 <DocScope products="RDK S600">
 :::warning
-⚠️ **注意**：以下内容适用于 **Generic 驱动模式**。如果您使用的是 V5.1.0 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
+以下内容适用于 **Generic 驱动模式**。如果您使用的是 V5.1.0 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
 
-EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用eth0作为ethercat主站](#使用-eth0-作为-ethercat-主站)**。
+EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
 
-**特别注意：RDK S600默认使用 eth0作为 DHCP 网口，如果用户原本使用 eth0作为 SSH 连接开发板的主要模式，在使用 eth0作为 EtherCAT 主站后，需要配置 eth1为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
+**特别注意：RDK S600 默认使用 eth0 作为 DHCP 网口，如果用户原本使用 eth0 作为 SSH 连接开发板的主要模式，在使用 eth0 作为 EtherCAT 主站后，需要配置 eth1 为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1 网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
 
@@ -264,11 +353,11 @@ EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使
 1. 确认硬件连接：
     - 从站已上电。
     - 网线已接到你选择的主站网口（`eth0` 或 `eth1`）。
-2. 选择主站网口（在选择主站端口前，请仔细阅读 **[使用前网络配置](#使用前网络配置)中的注意事项**：
+2. 选择主站网口（在选择主站端口前，请仔细阅读 **[使用前网络配置](#使用前网络配置)中的注意事项**）：
     - 使用 `eth0` 作为主站：看 **[使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
     - 使用 `eth1` 作为主站：看 **[使用 eth1 作为 EtherCAT 主站](#使用-eth1-作为-ethercat-主站)**。
 3. 启动 EtherCAT 主站（使用 ethercatctl）：
-    ```shell
+    ```bash
     sudo ethercatctl start
     ```
 <DocScope products="RDK S100">
@@ -278,12 +367,12 @@ EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使
 4. 如果是 IgH 1.5.x（S600 固件默认版本），且配置了 NetworkManager 不管理主站网口，则在使用前需要先手动启用网口：
 </DocScope>
 
-    ```shell
+    ```bash
     sudo ip link set dev eth0 up
     # 若主站网口为 eth1，则替换为 eth1
     ```
 5. 使用用户层命令检查主站：
-    ```shell
+    ```bash
     sudo ethercat master
     # Sample output:
     sunrise@ubuntu:~$ sudo ethercat master
@@ -321,14 +410,14 @@ EtherCAT协议与以太网协议互斥，**无法共存**，**开发板默认使
       Application time:  0
     ```
 6. 配置 IgH 服务自启动：
-    ```shell
+    ```bash
     sudo systemctl enable ethercat
     ```
 
 ## EtherCAT 开发指南
 
 ### 软件栈
-RDK S100 默认提供 EtherCAT-IgH 1.5 版本软件栈（本节以 S100 为例，S600 同理）。[EtherCAT-IgH软件栈](https://docs.etherlab.org/ethercat/1.5/pdf/ethercat_doc.pdf)是目前主流的开源 EtherCAT 主站协议。
+RDK S100 默认提供 EtherCAT-IgH 1.5 版本软件栈（本节以 S100 为例，S600 同理）。[EtherCAT-IgH 软件栈](https://docs.etherlab.org/ethercat/1.5/pdf/ethercat_doc.pdf)是目前主流的开源 EtherCAT 主站协议。
 
 EtherCAT 官网：[EtherLab | EtherCAT](https://etherlab.org/en_GB/ethercat)
 EtherCAT 开源代码仓库：[Gitlab | EtherLab - EtherCAT](https://gitlab.com/etherlab.org/ethercat)
@@ -349,7 +438,7 @@ V5.1.0 默认使用 Native 驱动（`ec_hobot`），该驱动已预编译在系�
 #### Host 端构建
 Host 端构建支持两种构建方式：
 1. 单独编译 debian 包并部署
-   ```shell
+   ```bash
    # Construct debian package
    ./mk_debs.sh hobot-ethercat
 
@@ -370,11 +459,11 @@ Host 端构建支持两种构建方式：
 
 #### 板端构建
 1. 下载源码：
-   ```shell
+   ```bash
    git clone https://gitlab.com/etherlab.org/ethercat.git -b stable-1.5
    ```
 2. 构建
-   ```shell
+   ```bash
    # Install build dependencies
    sudo apt install automake libtool m4 autoconf
 
@@ -395,12 +484,10 @@ Host 端构建支持两种构建方式：
    sudo make modules_install
    ```
 3. 编辑`/usr/local/etc/ethercat.conf`，添加以下内容：
-   ```
-   MASTER0_DEVICE="eth0" // Device or MAC
+   ```ini
+   MASTER0_DEVICE="eth0" # Device or MAC
    DEVICE_MODULES="generic"
    ```
-
----
 
 ## 使用 eth0 作为 EtherCAT 主站
 
@@ -408,35 +495,35 @@ Host 端构建支持两种构建方式：
 
 首先修改 `/etc/ethercat.conf` 文件，使用 eth0 作为 EtherCAT 主站。
 
-    ```shell
-    ...
-    # Main Ethernet devices.
-    #
-    # The MASTER<X>_DEVICE variable specifies the Ethernet device for a master
-    # with index 'X'.
-    #
-    # Specify the MAC address (hexadecimal with colons) of the Ethernet device to
-    # use. Example: "00:00:08:44:ab:66"
-    #
-    # Alternatively, a network interface name can be specified. The interface
-    # name will be resolved to a MAC address using the 'ip' command.
-    # Example: "eth0"
-    #
-    # The broadcast address "ff:ff:ff:ff:ff:ff" has a special meaning: It tells
-    # the master to accept the first device offered by any Ethernet driver.
-    #
-    # The MASTER<X>_DEVICE variables also determine, how many masters will be
-    # created: A non-empty variable MASTER0_DEVICE will create one master, adding a
-    # non-empty variable MASTER1_DEVICE will create a second master, and so on.
-    #
-    # Examples:
-    # MASTER0_DEVICE="00:00:08:44:ab:66"
-    # MASTER0_DEVICE="eth0"
-    #
-    MASTER0_DEVICE="eth0"
-    #MASTER1_DEVICE=""
-    ...
-    ```
+```bash
+...
+# Main Ethernet devices.
+#
+# The MASTER<X>_DEVICE variable specifies the Ethernet device for a master
+# with index 'X'.
+#
+# Specify the MAC address (hexadecimal with colons) of the Ethernet device to
+# use. Example: "00:00:08:44:ab:66"
+#
+# Alternatively, a network interface name can be specified. The interface
+# name will be resolved to a MAC address using the 'ip' command.
+# Example: "eth0"
+#
+# The broadcast address "ff:ff:ff:ff:ff:ff" has a special meaning: It tells
+# the master to accept the first device offered by any Ethernet driver.
+#
+# The MASTER<X>_DEVICE variables also determine, how many masters will be
+# created: A non-empty variable MASTER0_DEVICE will create one master, adding a
+# non-empty variable MASTER1_DEVICE will create a second master, and so on.
+#
+# Examples:
+# MASTER0_DEVICE="00:00:08:44:ab:66"
+# MASTER0_DEVICE="eth0"
+#
+MASTER0_DEVICE="eth0"
+#MASTER1_DEVICE=""
+...
+```
 
 根据您的使用场景，选择合适的 eth0 网络接口配置方案：
 
@@ -447,19 +534,19 @@ Host 端构建支持两种构建方式：
 - **前提条件**：保留 NetworkManager 服务运行
 - **优势**：既能保留 NetworkManager 服务，又能避免对 EtherCAT 所使用接口产生干扰
 - **注意**：配置 NetworkManager 不管理 eth0 接口之后，对应的网口在系统启动的时候不会自动 up，使用时请参阅下方注意信息与配置方法进行使用。
-:::warning **注意**
+:::warning
 目前板卡上预装的是 igh 1.5.x 的版本，默认没有办法实现网口自动 up/down, 需要手动启用 EtherCAT 所使用接口 **eth0** 网卡。 igh 在 1.6.4 及之后版本支持配置文件配置网口自动 up/down, 具体参考：[自动启停网卡](#自动启停网卡ethercat-igh-主站164版本之后支持)
 :::
 
-**[方案二：使用 netplan 将 eth0 配置为静态IP地址](#方案二使用-netplan-将-eth0-配置为静态-ip-地址)**
+**[方案二：使用 netplan 将 eth0 配置为静态 IP 地址](#方案二使用-netplan-将-eth0-配置为静态-ip-地址)**
 
 **[方案三：使用 netplan 将 eth0 配置为本地链路](#方案三使用-netplan-将-eth0-配置为本地链路)**：保留 NetworkManager 服务运行，通过 netplan 配置 eth0
 - **适用场景**：需要 NetworkManager 管理其他网络接口
 - **前提条件**：保留 NetworkManager 对 eth0 的控制权限
 - **提示**：需要按照下述方案使用 netplan 对 EtherCAT 所使用的网络接口进行特殊配置
 
-:::warning
-⚠️ **特别注意**：不要关闭 NetworkManager 的自动启动，否则重启后系统无法自动 UP 所有网络接口！！！会有设备失联的风险！！！
+:::warning[特别注意]
+不要关闭 NetworkManager 的自动启动，否则重启后系统无法自动 UP 所有网络接口！！！会有设备失联的风险！！！
 :::
 
 ### 方案一：配置 NetworkManager 不管理 eth0 接口（推荐）
@@ -470,17 +557,17 @@ Host 端构建支持两种构建方式：
     **重要**：配置文件中的节名（section name）必须以 `device-` 开头。
     :::
     示例（用户工具自己需求进行更改）：
-    ```shell
+    ```bash
     vim /etc/NetworkManager/conf.d/99-unmanaged-devices.conf
     ```
     修改为如下内容：
-    ```
+    ```ini
     [device-eth0-unmanaged]
     match-device=interface-name:eth0
     managed=0
     ```
 2. 重启系统以清除 NetworkManager 的设备状态缓存：
-    ```shell
+    ```bash
     sudo reboot
     ```
 
@@ -489,7 +576,7 @@ Host 端构建支持两种构建方式：
     :::
 3. 验证配置（重启后）：
     查看网络接口状态，可以看到 eth0 已经是不管理的状态了：
-    ```shell
+    ```bash
     sunrise@ubuntu:~$ sudo nmcli device status
     DEVICE         TYPE      STATE                   CONNECTION
     eth1           ethernet  connected               netplan-eth1
@@ -501,7 +588,7 @@ Host 端构建支持两种构建方式：
     eth0           ethernet  unmanaged               --
     ```
     此时查看 IP 地址，可以看到 eth0 是 DOWN 状态：
-    ```shell
+    ```bash
     sunrise@ubuntu:~$ sudo ip a
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -523,7 +610,7 @@ Host 端构建支持两种构建方式：
     ```
 4. 启动 IgH EtherCAT 主站：
 
-    ```shell
+    ```bash
     # 启动 EtherCAT 服务
     sudo ethercatctl start
 
@@ -532,7 +619,7 @@ Host 端构建支持两种构建方式：
     ```
 
     示例输出：
-    ```shell
+    ```bash
     sudo ethercatctl status
     # sample output
     Checking for EtherCAT master 1.5.3
@@ -580,13 +667,13 @@ Host 端构建支持两种构建方式：
 
 5. 手动启用 eth0 网卡（IgH 1.5.x 需要）：
 
-    ```shell
+    ```bash
     sudo ip link set dev eth0 up
     ```
 
     启用后再次检查，此时 EtherCAT 工作正常：
 
-    ```shell
+    ```bash
     sunrise@ubuntu:~$ sudo ip a
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -658,7 +745,6 @@ Host 端构建支持两种构建方式：
     <summary>点击这里展开更多内容</summary>
 1. 修改配置文件 `/etc/netplan/01-hobot-net.yaml` 如下（以下配置作为示例，用户自行按需配置）：
     ```yaml
-    root@ubuntu:/etc/netplan# cat 01-hobot-net.yaml
     network:
       version: 2
       renderer: NetworkManager
@@ -683,12 +769,12 @@ Host 端构建支持两种构建方式：
           macaddress: "xx:xx:xx:xx:xx:xx"
     ```
 2. 应用配置文件
-    ```shell
+    ```bash
     netplan generate
     netplan apply
     ```
 3. 查看 ip 地址信息
-    ```shell
+    ```bash
     root@ubuntu:/etc/netplan# ip a
     # Sample output:
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
@@ -713,7 +799,6 @@ Host 端构建支持两种构建方式：
     <summary>点击这里展开更多内容</summary>
 1. 修改配置文件 `/etc/netplan/01-hobot-net.yaml` 如下:（以下配置作为示例，用户自行按需配置）：
     ```yaml
-    root@ubuntu:/etc/netplan# cat 01-hobot-net.yaml
     network:
       version: 2
       renderer: NetworkManager
@@ -738,12 +823,12 @@ Host 端构建支持两种构建方式：
           macaddress: "xx:xx:xx:xx:xx:xx"
     ```
 2. 应用配置文件
-    ```shell
+    ```bash
     netplan generate
     netplan apply
     ```
 3. 查看 ip 地址信息
-    ```shell
+    ```bash
     root@ubuntu:/etc/netplan# ip a
     # Sample output:
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
@@ -825,39 +910,39 @@ Host 端构建支持两种构建方式：
 
 首先修改 `/etc/ethercat.conf` 使用 eth1 作为 EtherCAT 主站
 
-    ```shell
-    ...
-    # Main Ethernet devices.
-    #
-    # The MASTER<X>_DEVICE variable specifies the Ethernet device for a master
-    # with index 'X'.
-    #
-    # Example: "eth1"
-    #
-    # The broadcast address "ff:ff:ff:ff:ff:ff" has a special meaning: It tells
-    # the master to accept the first device offered by any Ethernet driver.
-    #
-    # The MASTER<X>_DEVICE variables also determine, how many masters will be
-    # created: A non-empty variable MASTER0_DEVICE will create one master, adding a
-    # non-empty variable MASTER1_DEVICE will create a second master, and so on.
-    #
-    # Examples:
-    # MASTER0_DEVICE="00:00:08:44:ab:66"
-    # MASTER0_DEVICE="eth1"
-    #
-    MASTER0_DEVICE="eth1"
-    #MASTER1_DEVICE=""
-    ...
-    ```
+```bash
+...
+# Main Ethernet devices.
+#
+# The MASTER<X>_DEVICE variable specifies the Ethernet device for a master
+# with index 'X'.
+#
+# Example: "eth1"
+#
+# The broadcast address "ff:ff:ff:ff:ff:ff" has a special meaning: It tells
+# the master to accept the first device offered by any Ethernet driver.
+#
+# The MASTER<X>_DEVICE variables also determine, how many masters will be
+# created: A non-empty variable MASTER0_DEVICE will create one master, adding a
+# non-empty variable MASTER1_DEVICE will create a second master, and so on.
+#
+# Examples:
+# MASTER0_DEVICE="00:00:08:44:ab:66"
+# MASTER0_DEVICE="eth1"
+#
+MASTER0_DEVICE="eth1"
+#MASTER1_DEVICE=""
+...
+```
 
 <DocScope products="RDK S100">
 :::warning
-注意：RDK S100 默认使用 eth0 作为 DHCP 网口，eth1 为静态 IP 配置，用户可以直接按照下方步骤配置 NetworkManager 不管理 eth1 接口（推荐）
+RDK S100 默认使用 eth0 作为 DHCP 网口，eth1 为静态 IP 配置，用户可以直接按照下方步骤配置 NetworkManager 不管理 eth1 接口（推荐）
 :::
 </DocScope>
 <DocScope products="RDK S600">
 :::warning
-注意：RDK S600 默认使用 eth0 作为 DHCP 网口，eth1 为静态 IP 配置，用户可以直接按照下方步骤配置 NetworkManager 不管理 eth1 接口（推荐）
+RDK S600 默认使用 eth0 作为 DHCP 网口，eth1 为静态 IP 配置，用户可以直接按照下方步骤配置 NetworkManager 不管理 eth1 接口（推荐）
 :::
 </DocScope>
 
@@ -869,17 +954,17 @@ Host 端构建支持两种构建方式：
     **重要**：配置文件中的节名（section name）必须以 `device-` 开头。
     :::
     示例（用户工具自己需求进行更改）：
-    ```shell
+    ```bash
     vim /etc/NetworkManager/conf.d/99-unmanaged-devices.conf
     ```
     修改为如下内容：
-    ```
+    ```ini
     [device-eth1-unmanaged]
     match-device=interface-name:eth1
     managed=0
     ```
 2. 重启系统以清除 NetworkManager 的设备状态缓存：
-    ```shell
+    ```bash
     sudo reboot
     ```
 
@@ -888,7 +973,7 @@ Host 端构建支持两种构建方式：
     :::
 3. 验证配置（重启后）：
     查看网络接口状态，可以看到 eth1 已经是不管理的状态了：
-    ```shell
+    ```bash
     sunrise@ubuntu:~$ sudo nmcli device status
     nmcli device status
     DEVICE         TYPE      STATE                   CONNECTION
@@ -901,7 +986,7 @@ Host 端构建支持两种构建方式：
     eth1           ethernet  unmanaged               --
     ```
     此时查看 IP 地址，可以看到 eth1 是 DOWN 状态：
-    ```shell
+    ```bash
     sunrise@ubuntu:~$ sudo ip a
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -919,7 +1004,7 @@ Host 端构建支持两种构建方式：
     ```
 4. 启动 IgH EtherCAT 主站：
 
-    ```shell
+    ```bash
     # 启动 EtherCAT 服务
     sudo ethercatctl start
 
@@ -928,7 +1013,7 @@ Host 端构建支持两种构建方式：
     ```
 
     示例输出：
-    ```shell
+    ```bash
     sunrise@ubuntu:~$ sudo ethercatctl start
     [  458.587518] ec_generic: Binding socket to interface 3 (eth1).
 
@@ -977,13 +1062,13 @@ Host 端构建支持两种构建方式：
 
 5. 手动启用 eth1 网卡（IgH 1.5.x 需要）：
 
-    ```shell
+    ```bash
     sudo ip link set dev eth1 up
     ```
 
     启用后再次检查，此时 EtherCAT 工作正常：
 
-    ```shell
+    ```bash
     sunrise@ubuntu:~$ sudo ip a
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
