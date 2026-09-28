@@ -504,6 +504,11 @@ hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例�
 
 **EMB 通道**承载的是 Sensor 随图像一起输出的行内信息（曝光参数等）。VIN 单独接收、单独送 DDR，不影响主帧数据。
 
+EMB 数据的提取方式由 `vin_emb_attr_t.embeded_dependence` 决定，对应 Sensor 的两种输出形态：
+
+- `embeded_dependence = 0`：内嵌数据独立成包，以 MIPI CSI-2 datatype `0x12`（embedded 8-bit data）标识，CIM 按 datatype 自动分流至 EMB 通道，无需用户配置
+- `embeded_dependence = 1`：内嵌数据与图像数据在同一数据流中（datatype 与图像一致），此时必须同时使能 ROI（`roi_en = 1`），CIM 按 `roi_attr` 窗口提取 EMB；YUV422 输入无需 ROI，由驱动软件分离
+
 - 通道 3 / 4 只能走 DDR，不支持 Online
 - Offline 使用某通道时，需在属性中打开对应开关（`vin_ochn_attr[x].ddr_en` / `.emb_en` / `.roi_en`）
 
@@ -1055,7 +1060,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 ### vin_emb_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
-| `embeded_dependence` | `uint32_t` | EMB 是否与图像数据在一起 | 0 | 0 | `0` / `1` |
+| `embeded_dependence` | `uint32_t` | 内嵌数据与图像数据的关系：`0` 独立成包（datatype `0x12`，CIM 自动分流）；`1` 与图像同流混排（须配合 ROI 提取，见[接口说明](#接口说明)） | 0 | 0 | `0` / `1` |
 | `embeded_width` | `uint32_t` | EMB 数据宽 | — | — | — |
 | `embeded_height` | `uint32_t` | EMB 数据高 | — | — | — |
 
@@ -1093,6 +1098,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 - `cim_isp_flyby` 与 `cim_pym_flyby` 不得同时为 1——Online 直连只能选 ISP 或 PYM 之一
 - `mipi_en`、`func.enable_pattern`、`rdma_input.rdma_en` 三者有且仅有一个为 1——输入源必须唯一
 - Online 绑定只允许主帧通道，且 flyby 已置 1；Offline 绑定要求对应通道开关已打开——主帧需 `ddr_en`、EMB 需 `.emb_en`、ROI 需 `.roi_en`
+- `embeded_dependence = 1` 时必须 `roi_en = 1`（YUV422 输入除外，由驱动软件分离）；`roi_en` 与 `emb_en` 同开时，`embeded_width` / `embeded_height` 必须等于 `roi_width` / `roi_height`
 - YUV422-8bit 输入不允许开 ROI 或 RAWDS
 - TPG 模式下不允许跳帧，`func.skip_frame` 必须为 `0`
 - `vin_ichn_attr.width`、`roi_attr.roi_x`、`roi_attr.roi_width` 必须 4 对齐；`roi_width` 至少 32，且 `roi_x + roi_width`、`roi_y + roi_height` 不得超出输入图

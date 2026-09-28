@@ -504,6 +504,11 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 The **EMB channel** carries the line-embedded information the sensor outputs alongside the image (exposure parameters and so on). VIN receives it separately and sends it to DDR separately, without affecting the main frame.
 
+How EMB data is extracted is decided by `vin_emb_attr_t.embeded_dependence`, matching two sensor output styles:
+
+- `embeded_dependence = 0`: the embedded data comes as standalone packets marked with MIPI CSI-2 datatype `0x12` (embedded 8-bit data); the CIM routes them to the EMB channel automatically, with no user configuration
+- `embeded_dependence = 1`: the embedded data travels in the same stream as the image (datatype identical to the image); ROI must then be enabled as well (`roi_en = 1`) and the CIM extracts EMB through the `roi_attr` window; YUV422 input needs no ROI — the driver separates it in software
+
 - Channels 3 / 4 are DDR only and do not support Online
 - To use a channel in Offline mode, switch it on in the attributes (`vin_ochn_attr[x].ddr_en` / `.emb_en` / `.roi_en`)
 
@@ -1055,7 +1060,7 @@ Indexed by `ochn_id`: `0` main frame / `4` ROI / `3` EMB.
 ### vin_emb_attr_t
 | Field | Type | Description | Typical | Default | Range |
 | --- | --- | --- | --- | --- | --- |
-| `embeded_dependence` | `uint32_t` | Whether EMB travels together with the image data | 0 | 0 | `0` / `1` |
+| `embeded_dependence` | `uint32_t` | Relation between embedded data and image data: `0` standalone packets (datatype `0x12`, routed automatically by the CIM); `1` interleaved in the image stream (requires ROI extraction, see [Interface Reference](#interface-reference)) | 0 | 0 | `0` / `1` |
 | `embeded_width` | `uint32_t` | EMB data width | — | — | — |
 | `embeded_height` | `uint32_t` | EMB data height | — | — | — |
 
@@ -1093,6 +1098,7 @@ The following combinations are rejected outright by the driver and easy to spot:
 - `cim_isp_flyby` and `cim_pym_flyby` must not both be 1 — the Online direct link targets either the ISP or the PYM, never both
 - exactly one of `mipi_en`, `func.enable_pattern` and `rdma_input.rdma_en` must be 1 — the input source must be unique
 - Online binding is allowed on the main frame channel only, with flyby set to 1; Offline binding requires the channel switch on — `ddr_en` for the main frame, `.emb_en` for EMB, `.roi_en` for ROI
+- `embeded_dependence = 1` requires `roi_en = 1` (YUV422 input excepted — separated in software by the driver); with `roi_en` and `emb_en` both on, `embeded_width` / `embeded_height` must equal `roi_width` / `roi_height`
 - YUV422-8bit input cannot enable ROI or RAWDS
 - frame skip is not allowed in TPG mode; `func.skip_frame` must be `0`
 - `vin_ichn_attr.width`, `roi_attr.roi_x` and `roi_attr.roi_width` must be 4-aligned; `roi_width` at least 32, and `roi_x + roi_width` / `roi_y + roi_height` must stay inside the input image
