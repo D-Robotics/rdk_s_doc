@@ -32,11 +32,15 @@ flowchart TD
     D --> E[DDR 颗粒<br/>Deep/Light sleep 时自刷新]
 ```
 
-## 芯片电源域
-内部有 AON、MCU 和 Main 域三个电源域。其中 AON 为非下电状态需要一直供电的电源域，MCU 电源域用于给 Hsm 和 MCU 及其内部 IP 供电，Main 域给其他部分供电。
+## 硬件支持
 
-## 电源状态列表
-目前实现了 Off，MCU only，Working，Deep sleep 和 Light sleep 五种电源状态，详细说明如下：
+开发板内部划分为 AON、MCU、Main 三个电源域：
+
+- **AON 域**：非下电状态，需要一直供电
+- **MCU 域**：给 HSM 和 MCU 及其内部 IP 供电
+- **Main 域**：给其余部分供电
+
+基于这三个电源域与 DDR 颗粒的不同组合，目前实现了 Off、MCU only、Working、Deep sleep 和 Light sleep 五种电源状态：
 
 | 电源状态    |       描述                             |  AON  |  MCU  |  Main  |  DDR 颗粒  |
 | --------   | ---------------------------------------| ----  | ----- | -----  | ---------- |
@@ -47,14 +51,17 @@ flowchart TD
 | Light sleep | MCU 正常工作，Main 仅 DDR 颗粒供电维持自刷新  | On   |   On   |   Off  |   自刷新    |
 
 
-## 休眠唤醒
+## 开发与使用方法
 
-:::warning
-**注意：以下介绍的唤醒源的 API 及命令，Light sleep 模式下的唤醒 API 及命令，只能在 MCU0内调用**
+:::warning 前提
+以下唤醒源命令（`wakeupsource`）、Light sleep 模式的唤醒命令与 API 由 **MCU0** 提供，只能在 MCU0 内调用。
+
+MCU0 与 MCU1 是两颗独立运行的 MCU，二者功能不同。终端连到 MCU1 时，执行 `wakeupsource` 会提示 `Command not Found`。
 :::
 
-### 设置休眠模式
-休眠模式默认为 Deep sleep 模式
+### 配置休眠模式
+
+休眠模式默认为 Deep sleep 模式。
 
 #### 显示当前支持的休眠模式
 ```Shell
@@ -79,13 +86,13 @@ root@ubuntu:~# cat /sys/devices/platform/suspend-mode/suspend_mode/current_suspe
 light
 ```
 
-### 设置唤醒源
+### 配置唤醒源
 
 <DocScope products="RDK S100">
-唤醒源默认是 RTC，时间为15秒。
+唤醒源默认为 RTC，时间 15 秒。
 </DocScope>
 <DocScope products="RDK S600">
-唤醒源默认是 RTC，时间为10秒。
+唤醒源默认为 RTC，时间 10 秒。
 </DocScope>
 
 #### 通过 MCU 命令设置唤醒源
@@ -168,28 +175,23 @@ Return: 0, 0x00000000
 | Available via | as extern function |
 
 #### GPIO Index 定义
+
 <DocScope products="RDK S100">
-
-```Shell
-AON GPIO0 ~ GPIO11
-```
+可用作唤醒源的 AON GPIO 编号范围为 `0~11`。
 </DocScope>
+
 <DocScope products="RDK S600">
-
-```Shell
-AON GPIO0 ~ GPIO20
-```
-
+可用作唤醒源的 AON GPIO 编号范围为 `0~28`。
 </DocScope>
 
 **可以单独设置 RTC 为唤醒源，不能单独设置 GPIO 为唤醒源。设置 GPIO 为唤醒源时必须同时设置 RTC 作为唤醒源**
 
-### 休眠命令
+### 执行休眠
 
 - 通过按键（WAKE 按键）休眠（短按）
 - Acore 输入`systemctl suspend`
 
-### 唤醒命令
+### 执行唤醒
 
 - Deep sleep 模式下，RTC 作为唤醒源时可以自动唤醒
 
@@ -304,13 +306,13 @@ int wakefromll(void)
 
 </DocScope>
 
-### Acore 休眠唤醒回调
+### 休眠唤醒回调
 
 使用 systemd 来进行系统服务管理，相关的关机或休眠唤醒回调均可以使用 systemd 支持的形式来使用。
 
-- 休眠：当 Acore 收到休眠指令(systemctl suspend)时，会调用 systemd 的 suspend 接口，该接口会向所有服务发送信号，并等待服务退出，然后调用 kernel 的 suspend 接口，完成休眠流程。
+- 休眠：当 Acore 收到休眠指令（`systemctl suspend`）时，会调用 systemd 的 suspend 接口，该接口会向所有服务发送信号，并等待服务退出，然后调用 kernel 的 suspend 接口，完成休眠流程。
 
-当系统进入或退出休眠时, 所有在/usr/lib/systemd/system-sleep/目录下的可执行程序将会运行，系统会传递两个参数给这些可执行程序。目录下所有的脚本都是并行处理的，只有当所有的程序都执行完成之后，系统才会进行接下来的动作。
+当系统进入或退出休眠时，所有在 `/usr/lib/systemd/system-sleep/` 目录下的可执行程序将会运行，系统会传递两个参数给这些可执行程序。目录下所有的脚本都是并行处理的，只有当所有的程序都执行完成之后，系统才会进行接下来的动作。
 
 | 参数类型 	| 取值范围               	| 解释           	|
 |----------	|------------------------	|----------------	|
@@ -363,7 +365,17 @@ exit 0
 - 切换休眠模式：`echo light > /sys/devices/platform/suspend-mode/suspend_mode/suspend_mode`，再用 `cat .../current_suspend_mode` 确认。
 - 休眠前需关闭上层服务，否则可能导致无法正常休眠唤醒（可借助 `system-sleep` 回调在 pre/post 阶段启停服务）。
 
-<!-- TODO(Sx): 待收集 —— 常见问题：低功耗暂无真实「现象→原因→解决」素材 -->
+## 常见问题
+
+### 休眠后无法唤醒
+
+**现象**：执行 `systemctl suspend` 后板卡不响应，无法唤醒。
+
+**原因**：休眠前未关闭上层服务，导致系统未能正常进入或退出休眠流程。
+
+**解决**：休眠前停掉占用相关资源的服务，或在 `/usr/lib/systemd/system-sleep/` 下放置回调脚本，在 `pre` 阶段停服务、`post` 阶段恢复。参考 [休眠唤醒回调](#休眠唤醒回调) 中的示例。
+
+<!-- TODO(Sx): 待补充 —— 更多低功耗常见问题素材待收集 -->
 
 ## 相关文档
 
