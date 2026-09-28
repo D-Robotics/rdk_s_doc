@@ -23,30 +23,66 @@ Display 子系统是 S600 项目中的视频显示引擎，其主要功能是为
 
 </DocScope>
 
-### 硬件框图
+### 硬件架构
 
-#### Display 子系统由如下模块组成：
+RDK S100/S600 的显示硬件由 SoC 内部的 **IDE** 和 **LT9611UXD** 桥接芯片两部分组成：IDE 内部集成 2 个 IDU，可同时输出两路视频，每路支持 MIPI DSI 和 MIPI CSI 两种输出方式；RDK 开发板通过 MIPI DSI 输出外接 LT9611UXD 桥接芯片转换为 HDMI 信号，实现 HDMI 显示输出。
 
-- **IDE**：图像显示引擎（Image Display Engine），包含图像显示单元（IDU）、图像数据输出模块（MIPI CSI-2 Device 和 MIPI DSI）。通过 IDU 从内存中读取图像数据进行处理，在 IDE 内部支持像素格式转换（RGB2YUV）和像素结构转换（DPI2IPI），使 IDU 的输出数据能够通过 MIPI DSI 和 MIPI CSI-2 Device 两种方式输出；MIPI DSI 和 MIPI CSI-2 Device 两个控制器共用一个 MIPI D-PHY
+#### IDE 架构：
+
+IDE 图像显示引擎（Image Display Engine），包含图像显示单元（IDU）、图像数据输出模块（MIPI CSI-2 Device 和 MIPI DSI）。通过 IDU 从内存中读取图像数据进行处理，在 IDE 内部支持像素格式转换（RGB2YUV）和像素结构转换（DPI2IPI），使 IDU 的输出数据能够通过 MIPI DSI 和 MIPI CSI-2 Device 两种方式输出；MIPI DSI 和 MIPI CSI-2 Device 两个控制器共用一个 MIPI D-PHY。
+
+IDU 完成图层处理后通过 DPI 接口送出像素流，最终由 MIPI D-PHY TX 串行化输出，有两种输出方式：
+
+- **MIPI DSI 输出**：DPI 接口经 RGB2YUV 转换后直连 MIPI DSI TX，打包成 DSI 协议包输出，用于连接 MIPI DSI 接口的显示屏
+- **MIPI CSI 输出**：DPI 接口经 DPI2IPI 转换后，通过 IPI 接口送入 MIPI CSI TX，打包成 CSI-2 包输出（参考下图绿色通路），用于经串行器连接串行屏等场景（目前软件不支持）
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_ide_framework.png" alt="IDE 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+各模块说明如下：
 - **IDU**：图像显示单元（Image Display Unit），从内存中读取图层 buffer 并完成图层合成与缩放，按显示时序输出像素流
 - **DPI**：显示像素接口（Display Pixel Interface），IDU 的并行 RGB 像素输出接口，送入 MIPI DSI TX
 - **IPI**：图像像素输入接口（Image Pixel Interface），MIPI CSI TX 的像素输入口；IDU 的 DPI 流经 DPI2IPI 模块转换后送入
 - **MIPI DSI TX**：将 IDU 输出的像素流打包成 DSI 协议包
 - **MIPI CSI TX**：设备端的 CSI-2 协议控制器，将 IPI 接口输入的像素流打包成 CSI-2 包输出
 - **MIPI D-PHY TX**：MIPI 输出的物理层，完成高速串行化
+
+#### S100/S600 HDMI 输出链路
+
+由于 SoC 内部没有原生的 HDMI 输出接口，显示信号需以 MIPI DSI 协议送出，因此在开发板上外接了一颗 LT9611UXD 桥接芯片，将 MIPI DSI 信号转换为 HDMI 信号，实现 HDMI 显示输出。完整输出链路如下图：
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_framework.png" alt="S100/S600 HDMI 输出链路" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+各模块说明如下：
 - **LT9611UXD**：桥接芯片，将 MIPI DSI 信号转换为 HDMI 2.0 信号输出
+- **其余模块**：同 IDE 架构模块说明
+ 
+:::info[说明]
 
-#### IDE 架构图：
+当前开发板只实现了一路 HDMI 输出，用户可按照自己的需求拓展第二路视频输出。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_ide_framework.png" alt="IDE 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+:::
 
-#### IDU 架构图：
+#### IDU 架构：
+
+IDU 内部分为 AXI IF 和 Controller 两个区域：6 个图层的像素数据经 AXI IF（RDMA → Async FIFO → LBUF）从内存读出，并统一转换为 YUV444 格式后送入 Controller，完成 6 图层叠加混合与后处理（亮度/对比度/饱和度、Gamma、Dither），最终以 DPI 接口输出像素流；同时支持将合成后的图像转换为 YUV422/YUV420 回写到内存。
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_idu_framework.png" alt="IDU 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-#### S100/S600 HDMI 输出链路：
+各模块说明如下：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_framework.png" alt="S100/S600 显示硬件框图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+- **AXI IF**：AXI 总线接口区域，通过 RDMA/WDMA 完成与 DDR 之间的图层数据读取和回写数据写回
+- **Controller**：显示控制器核心区域，完成图层叠加混合与显示时序产生，输出 DPI 像素流
+- **RDMA / WDMA**：读/写 DMA，分别负责从内存读取图层数据和将回写数据写回内存
+- **Async FIFO**：异步 FIFO，完成图层数据的跨时钟域缓存
+- **LBUF**：行缓冲器（Line Buffer），按行缓存图层数据
+- **CLUT**：颜色查找表（Color Look-Up Table），用于 8-bpp 调色盘格式的颜色映射（仅 RGB 图层）
+- **Upscaling**：YUV 图层的上采样模块，实现图层放大（最大 6 倍）
+- **LBUF scaling**：缩放后的行缓冲
+- **Overlay & Alpha-Blending**：图层叠加与透明混合模块，将 6 个图层与背景层按优先级合成为一路视频
+- **VPG**：视频测试图案发生器（Video Pattern Generator），用于无输入时的调试显示
+- **Brightness/Contrast/Saturation**：亮度、对比度、饱和度调节（Color-Adjust）
+- **Gamma**：Gamma 校正
+- **Dither**：抖动处理，降低低色深下的色阶失真
 
 ### 规格参数
 
