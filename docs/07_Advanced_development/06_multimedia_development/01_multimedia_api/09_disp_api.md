@@ -25,29 +25,42 @@ Display 子系统是 S600 项目中的视频显示引擎，其主要功能是为
 
 ### 硬件框图
 
-Display 子系统由如下模块组成：
+#### Display 子系统由如下模块组成：
 
+- **IDE**：图像显示引擎（Image Display Engine），包含图像显示单元（IDU）、图像数据输出模块（MIPI CSI-2 Device 和 MIPI DSI）。通过 IDU 从内存中读取图像数据进行处理，在 IDE 内部支持像素格式转换（RGB2YUV）和像素结构转换（DPI2IPI），使 IDU 的输出数据能够通过 MIPI DSI 和 MIPI CSI-2 Device 两种方式输出；MIPI DSI 和 MIPI CSI-2 Device 两个控制器共用一个 MIPI D-PHY
 - **IDU**：图像显示单元（Image Display Unit），从内存中读取图层 buffer 并完成图层合成与缩放，按显示时序输出像素流
+- **DPI**：显示像素接口（Display Pixel Interface），IDU 的并行 RGB 像素输出接口，送入 MIPI DSI TX
+- **IPI**：图像像素输入接口（Image Pixel Interface），MIPI CSI TX 的像素输入口；IDU 的 DPI 流经 DPI2IPI 模块转换后送入
 - **MIPI DSI TX**：将 IDU 输出的像素流打包成 DSI 协议包
-- **MIPI D-PHY**：MIPI 输出的物理层，完成高速串行化
+- **MIPI CSI TX**：设备端的 CSI-2 协议控制器，将 IPI 接口输入的像素流打包成 CSI-2 包输出
+- **MIPI D-PHY TX**：MIPI 输出的物理层，完成高速串行化
 - **LT9611UXD**：桥接芯片，将 MIPI DSI 信号转换为 HDMI 2.0 信号输出
 
-各模块之间的关系如下图所示：
+#### IDE 架构图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_framework.png" alt="S100/S600 显示硬件框图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_ide_framework.png" alt="IDE 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+#### IDU 架构图：
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_idu_framework.png" alt="IDU 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+#### S100/S600 HDMI 输出链路：
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_framework.png" alt="S100/S600 显示硬件框图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 规格参数
 
 #### IDU
 
-- 最大输入分辨率 2880x2160
-- 均支持 Crop 裁剪，支持 Crop 宽高与顶点坐标配置
-- YUV 图层输入格式：UYVY Interleaved YUV422、VYUY Interleaved YUV422、YUYV Interleaved YUV422、YVYU Interleaved YUV422、UV Semi-planar YUV422、VU Semi-planar YUV422、UV Semi-planar YUV420、VU Semi-planar YUV420、Planar YUV422（YU YV）、Planar YUV422（YV YU）、Planar YUV420（YU YV）、Planar YUV420（YV YU）
-- RGB 图层输入格式：8-bpp（CLUT 调色盘）、RGB565、Unpacked RGB888、Packed RGB888、ARGB、RGBA；其中 8-bpp 无 endian 问题，RGB565 / Unpacked RGB888 / Packed RGB888 仅支持 little-endian，ARGB / RGBA 支持 little-endian 或 big-endian
-- 支持与 Background 背景层、HW Cursor 硬件光标叠加（Overlay & Alpha-Blending、Key-color），Alpha 值与叠加层优先级可配置
-- YUV 图层支持 Up-Scale，最大放大 6 倍
-- 输出支持 Color-Adjust（对比度、饱和度、亮度、色度、gamma、Dithering）
-- 支持回写（writeback），回写格式：UYVY、VYUY、YUYV、YVYU、NV12、NV21、Unpacked RGB888
+- IDU 模块共支持 6 个通道，通道 0、通道 1、通道 4、通道 5 作为 YUV 图层通道，通道 2、通道 3 作为 RGB 图层通道
+- 每个通道支持最大输入分辨率为 2880x2160
+- 6 个通道都支持 Crop 功能，支持 Crop 宽高配置，支持 Crop 顶点坐标配置
+- YUV 图层支持 UYVY Interleaved YUV422、VYUY Interleaved YUV422、YUYV Interleaved YUV422、YVYU Interleaved YUV422、UV Semi-planar YUV422、VU Semi-planar YUV422、UV Semi-planar YUV420、VU Semi-planar YUV420、Planar YUV422(YU YV)、Planar YUV422(YV YU)、Planar YUV420(YU YV)、Planar YUV420(YV YU)
+- RGB 图层支持 8-bpp(CLUT、调色盘)、RGB565、Unpacked RGB888、Packed RGB888、ARGB、RGBA。其中 8-bpp 格式没有 endian 问题，RGB565、Unpacked RGB888、Packed RGB888 只支持 little-endian 格式，ARGB、RGBA 支持 little-endian 或 big-endian 格式
+- 支持 6 个图层与背景(Background)层及光标(HW Cursor)进行叠加(Overlay & Alpha-Blending, Key-color)，可配置 Alpha 值和叠加层优先级
+- YUV 图层支持 Up-Scale，最大放大倍数 6 倍
+- 输出支持 Color-Adjust(对比度，饱和度，亮度，色度，gamma，Dithering)
+- 支持回写功能，支持回写格式有：UYVY、VYUY、YUYV、YVYU、NV12、NV21、Unpacked RGB888
 - 输出方式支持 MIPI CSI TX 或 MIPI DSI
 <DocScope products="RDK S100">
 
@@ -75,8 +88,10 @@ Display 子系统由如下模块组成：
 - 支持 HDCP、CEC、DDC/CI
 - 支持 Normal / Standby / Sleep 功耗模式
 
-#### MIPI D-PHY
+#### MIPI TX
 
+- MIPI CSI TX控制器为MIPI CSI-2 v2.0
+- IDE中共有两路MIPI TX输出，可配置CSI或DSI输出，两种控制器共用一个D-PHY
 - MIPI D-PHY最大支持4 lanes x 2.5Gbps速率
 
 ## 软件描述
@@ -89,11 +104,11 @@ DRM 将显示子系统抽象为几个标准组件，与 S100/S600 硬件的对�
 
 | DRM 概念 | 含义 | S100/S600 硬件对应 |
 | ------- | ---- | ------------- |
-| CRTC | 显示控制器抽象，读取图层、合成、产生扫描时序 | **IDU**（`hobot,hobot-drm-idu`） |
+| CRTC | 显示控制器抽象，读取图层、合成、产生扫描时序 | IDU（`hobot-drm`） |
 | Plane | 图层，承载待显示的图像 buffer，支持位置/缩放/合成 | IDU 内部图层 |
-| Encoder | CRTC 与 Connector 之间的信号转换 | **MIPI DSI Host**（DSI 协议封装） |
-| Bridge | Encoder 后级的外挂协议转换芯片 | **LT9611UXD**（MIPI DSI → HDMI 2.0） |
-| Connector | 物理输出接口抽象（状态/EDID/热插拔） | **HDMI 接口**（connector 名 `HDMI-A-1`） |
+| Encoder | CRTC 与 Connector 之间的信号转换 | MIPI DSI Host（DSI 协议封装） |
+| Bridge | Encoder 后级的外挂协议转换芯片 | LT9611UXD（MIPI DSI → HDMI 2.0） |
+| Connector | 物理输出接口抽象（状态/EDID/热插拔） | HDMI 接口（connector 名 `HDMI-A-1`） |
 | Framebuffer / GEM | 显存对象，支持 dma-buf 零拷贝导入 | 图像 buffer（可与 PYM 输出 buffer 共享） |
 
 ### DRM 调试信息与硬件的对应关系
@@ -108,27 +123,33 @@ DRM 使用过程中，主要关注 Planes、 CRTC、 Connector 三种部件。�
 
 ```text
 root@ubuntu:/# modetest -M hobot-drm -a
-opened device `Horizon Super SoC DRM driver` on driver `hobot-drm` (version 1.0.0 at 20230512)
 Encoders:
 id  crtc    type    possible crtcs  possible clones
 89  0   Virtual 0x00000001  0x00000000
 153 0   Virtual 0x00000002  0x00000000
 156 0   Virtual 0x00000001  0x00000000
 158 0   Virtual 0x00000002  0x00000000
-160 0   DSI 0x00000001  0x00000000
+160 0   DSI     0x00000001  0x00000000
 
 Connectors:
-id  encoder status      name        size (mm)   modes   encoders
-94  0   unknown     Writeback-1     0x0     0   89
+id  encoder status       name        size (mm)  modes  encoders
+94  0       unknown      Writeback-1 0x0        0      89
   props:
     [...]
-161 0   connected   HDMI-A-1        520x320     20  160
+155 0       unknown      Writeback-2 0x0        0      153
+  props:
+    [...]
+157 0       disconnected Virtual-1   0x0        0      156
+  props:
+    [...]
+159 0       disconnected Virtual-2   0x0        0      158
+  props:
+    [...]
+161 0       connected    HDMI-A-1    520x320    20     160
   modes:
     index name refresh (Hz) hdisp hss hse htot vdisp vss vse vtot
   #0 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500 flags: phsync, pvsync; type: preferred, driver
   #1 1920x1080 60.00 1920 2008 2052 2200 1080 1084 1089 1125 148500 flags: phsync, pvsync; type: driver
-  #2 1920x1080 59.94 1920 2008 2052 2200 1080 1084 1089 1125 148352 flags: phsync, pvsync; type: driver
-  #4 1280x720 60.00 1280 1390 1430 1650 720 725 730 750 74250 flags: phsync, pvsync; type: driver
     [...]
   props:
     [...]
@@ -139,22 +160,46 @@ id  fb  pos size
   #0  nan 0 0 0 0 0 0 0 0 0 flags: ; type:
   props:
     [...]
+95  0   (0,0)   (0x0)
+  #0  nan 0 0 0 0 0 0 0 0 0 flags: ; type:
+  props:
+    [...]
 
 Planes:
-id  crtc    fb  CRTC x,y    x,y gamma size  possible crtcs
-35  0   0   0,0     0,0 0           0x00000001
-  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
-  props:
-    8 type:
-        flags: immutable enum
-        enums: Overlay=0 Primary=1 Cursor=2
-        value: 0
-    [...]
-44  0   0   0,0     0,0 0           0x00000001
+id  crtc  fb  CRTC x,y  x,y gamma size  possible crtcs
+35  0     0   0,0      0,0 0             0x00000001
   formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
   props:
     [...]
-53  0   0   0,0     0,0 0           0x00000001
+44  0     0   0,0      0,0 0             0x00000001
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+53  0     0   0,0      0,0 0             0x00000001
+  formats: R8 RG16 XR24 RG24 AR24 RA24
+  props:
+    [...]
+62  0     0   0,0      0,0 0             0x00000001
+  formats: R8 RG16 XR24 RG24 AR24 RA24
+  props:
+    [...]
+71  0     0   0,0      0,0 0             0x00000001
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+80  0     0   0,0      0,0 0             0x00000001
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+99  0     0   0,0      0,0 0             0x00000002
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+108 0     0   0,0      0,0 0             0x00000002
+  formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
+  props:
+    [...]
+117 0     0   0,0      0,0 0             0x00000002
   formats: R8 RG16 XR24 RG24 AR24 RA24
   props:
     8 type:
@@ -162,21 +207,21 @@ id  crtc    fb  CRTC x,y    x,y gamma size  possible crtcs
         enums: Overlay=0 Primary=1 Cursor=2
         value: 1
     [...]
-62  0   0   0,0     0,0 0           0x00000001
+126 0     0   0,0      0,0 0             0x00000002
   formats: R8 RG16 XR24 RG24 AR24 RA24
   props:
     [...]
-71  0   0   0,0     0,0 0           0x00000001
+135 0     0   0,0      0,0 0             0x00000002
   formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
   props:
     [...]
-80  0   0   0,0     0,0 0           0x00000001
+144 0     0   0,0      0,0 0             0x00000002
   formats: UYVY VYUY YUYV YVYU NV16 NV61 NV12 NV21 YU16 YV16 YU12 YV12
   props:
     [...]
 
 Frame buffers:
-id  size    pitch
+id  size  pitch
 ```
 
 #### modetest 信息分析
@@ -185,21 +230,44 @@ id  size    pitch
 
 1、CRTC:
 
-- 31 -> IDU0
+- 31 -> IDU 0
+- 95 -> IDU 1
 
-2、Connectors:
+2、Encoders:
 
-- 94 -> Writeback-1（IDU0 的回写输出）
-- 161 -> HDMI-A-1（HDMI 接口）
+- 160 -> MIPI DSI Host（类型 DSI，HDMI 通路的编码器）
+- 89 -> IDU 0 回写通路（Virtual）
+- 153 -> IDU 1 回写通路（Virtual）
+- 156 -> IDU 0 CSI-TX 通路（Virtual）
+- 158 -> IDU 1 CSI-TX 通路（Virtual）
 
-3、Planes（IDU0）:
+3、Connectors:
 
-- 35 -> yuv layer 0（Overlay，zpos 0，YUV 格式，支持缩放与镜像翻转）
-- 44 -> yuv layer 1（Overlay，zpos 1，YUV 格式，支持缩放与镜像翻转）
-- 53 -> Primary Plane（RGB 图层，zpos 2，不支持缩放与旋转）
-- 62 -> rgb layer 1（Overlay，zpos 3，RGB 格式，支持缩放、不支持旋转）
-- 71 -> yuv layer 2（Overlay，zpos 4，YUV 格式，支持缩放与镜像翻转）
-- 80 -> yuv layer 3（Overlay，zpos 5，YUV 格式，支持缩放与镜像翻转）
+- 94 -> Writeback-1（IDU 0 回写输出）
+- 155 -> Writeback-2（IDU 1 回写输出）
+- 157 -> Virtual-1（IDU 0 的 MIPI CSI-TX 输出通路）
+- 159 -> Virtual-2（IDU 1 的 MIPI CSI-TX 输出通路）
+- 161 -> HDMI-A-1（HDMI 接口；链路：CRTC 31 -> Encoder 160 -> LT9611UXD 桥接 -> HDMI）
+
+4、Planes（每个 CRTC 6 个，按 possible crtcs 区分归属）:
+
+IDU 0：
+
+- 35 -> yuv layer 0（Overlay，zpos 0，YUV 格式，支持缩放 + reflect-x/y）
+- 44 -> yuv layer 1（Overlay，zpos 1，同上）
+- 53 -> Primary Plane（RGB 图层，zpos 2，不支持缩放/旋转）
+- 62 -> rgb layer 1（Overlay，zpos 3，RGB 格式，支持缩放）
+- 71 -> yuv layer 2（Overlay，zpos 4）
+- 80 -> yuv layer 3（Overlay，zpos 5）
+
+IDU 1（图层布局与能力与 IDU 0 完全相同）：
+
+- 99 -> yuv layer 0
+- 108 -> yuv layer 1
+- 117 -> Primary Plane（RGB 图层）
+- 126 -> rgb layer 1（Overlay，RGB 格式）
+- 135 -> yuv layer 2
+- 144 -> yuv layer 3
 
 ### DRM 快速体验
 
