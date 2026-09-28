@@ -174,6 +174,10 @@ const media_codec_descriptor_t *hb_mm_mc_get_descriptor( media_codec_id_t codec_
 
 **【示例代码】**
 
+```c
+const media_codec_descriptor_t *desc = hb_mm_mc_get_descriptor(MEDIA_CODEC_ID_H264);  /* NULL = 不可用 */
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_default_context
@@ -210,6 +214,11 @@ hb_s32 hb_mm_mc_get_default_context(media_codec_id_t codec_id, hb_bool encoder, 
 
 **【示例代码】**
 
+```c
+media_codec_context_t context = {0};
+hb_mm_mc_get_default_context(MEDIA_CODEC_ID_H264, 1, &context);  /* 1 = 编码器 */
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_initialize
@@ -244,6 +253,10 @@ hb_s32 hb_mm_mc_initialize(media_codec_context_t *context);
 
 **【示例代码】**
 
+```c
+hb_mm_mc_initialize(&context);
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_configure
@@ -277,6 +290,10 @@ hb_s32 hb_mm_mc_configure(media_codec_context_t *context);
 硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
+
+```c
+hb_mm_mc_configure(&context);
+```
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
@@ -313,6 +330,11 @@ hb_s32 hb_mm_mc_start(media_codec_context_t *context, const mc_av_codec_startup_
 
 **【示例代码】**
 
+```c
+mc_av_codec_startup_params_t startup_params = {0};
+hb_mm_mc_start(&context, &startup_params);
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_stop
@@ -346,6 +368,10 @@ hb_s32 hb_mm_mc_stop(media_codec_context_t *context);
 硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
+
+```c
+hb_mm_mc_stop(&context);
+```
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
@@ -381,6 +407,10 @@ hb_s32 hb_mm_mc_pause(media_codec_context_t *context);
 
 **【示例代码】**
 
+```c
+hb_mm_mc_pause(&context);
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_flush
@@ -415,6 +445,10 @@ hb_s32 hb_mm_mc_flush(media_codec_context_t *context);
 
 **【示例代码】**
 
+```c
+hb_mm_mc_flush(&context);
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_release
@@ -448,6 +482,10 @@ hb_s32 hb_mm_mc_release(media_codec_context_t *context);
 硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
+
+```c
+hb_mm_mc_release(&context);
+```
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
@@ -484,6 +522,11 @@ hb_s32 hb_mm_mc_get_state(media_codec_context_t *context, media_codec_state_t *s
 
 **【示例代码】**
 
+```c
+media_codec_state_t state;
+hb_mm_mc_get_state(&context, &state);
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_status
@@ -496,14 +539,14 @@ hb_s32 hb_mm_mc_get_status(media_codec_context_t *context, mc_inter_status_t *st
 
 **【功能描述】**
 
-查询 codec 的详细运行状态信息（帧计数、buffer 占用等），取值见 [mc_inter_status_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_inter_status_t)。
+查询 codec 的详细运行状态信息（帧计数、buffer 占用等），取值见 [mc_inter_status_t](#mc_inter_status_t)。
 
 **【参数】**
 
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `status` | `mc_inter_status_t *` | **出参**。codec 详细状态，见 [mc_inter_status_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_inter_status_t) |
+| `status` | `mc_inter_status_t *` | **出参**。codec 详细状态，见 [mc_inter_status_t](#mc_inter_status_t) |
 
 **【返回值】**
 
@@ -518,6 +561,11 @@ hb_s32 hb_mm_mc_get_status(media_codec_context_t *context, mc_inter_status_t *st
 硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
+
+```c
+mc_inter_status_t status;
+hb_mm_mc_get_status(&context, &status);
+```
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
@@ -557,6 +605,12 @@ hb_s32 hb_mm_mc_set_callback(media_codec_context_t *context, const media_codec_c
 硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
+
+```c
+media_codec_callback_t callback = {0};
+hb_ptr userdata = 0;
+hb_mm_mc_set_callback(&context, &callback, userdata);  /* 之后进入异步模式 */
+```
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
@@ -773,6 +827,11 @@ hb_s32 hb_mm_mc_dequeue_input_buffer( media_codec_context_t *context, media_code
 
 **【示例代码】**
 
+```c
+media_codec_buffer_t in_buf = {0};
+hb_mm_mc_dequeue_input_buffer(&context, &in_buf, 2000);  /* 超时 2000 ms */
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_queue_input_buffer
@@ -808,6 +867,11 @@ hb_s32 hb_mm_mc_queue_input_buffer( media_codec_context_t *context, media_codec_
 硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
+
+```c
+/* in_buf 为 dequeue_input_buffer 取出的描述符，填好数据后归还 */
+hb_mm_mc_queue_input_buffer(&context, &in_buf, 2000);
+```
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
@@ -846,6 +910,12 @@ hb_s32 hb_mm_mc_dequeue_output_buffer( media_codec_context_t *context, media_cod
 
 **【示例代码】**
 
+```c
+media_codec_buffer_t out_buf = {0};
+media_codec_output_buffer_info_t out_info = {0};
+hb_mm_mc_dequeue_output_buffer(&context, &out_buf, &out_info, 2000);
+```
+
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_queue_output_buffer
@@ -881,6 +951,11 @@ hb_s32 hb_mm_mc_queue_output_buffer( media_codec_context_t *context, media_codec
 硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
+
+```c
+/* out_buf 为 dequeue_output_buffer 取出的描述符，消费完归还 */
+hb_mm_mc_queue_output_buffer(&context, &out_buf, 0);
+```
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
@@ -1043,7 +1118,7 @@ hb_s32 hb_mm_mc_get_longterm_ref_mode( media_codec_context_t *context, mc_video_
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_longterm_ref_mode_t *` | **出参**。长期参考帧参数，见 [mc_video_longterm_ref_mode_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_longterm_ref_mode_t) |
+| `params` | `mc_video_longterm_ref_mode_t *` | **出参**。长期参考帧参数，见 [mc_video_longterm_ref_mode_t](#mc_video_longterm_ref_mode_t) |
 
 **【返回值】**
 
@@ -1078,7 +1153,7 @@ hb_s32 hb_mm_mc_set_longterm_ref_mode( media_codec_context_t *context, const mc_
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_longterm_ref_mode_t *` | 长期参考帧参数，见 [mc_video_longterm_ref_mode_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_longterm_ref_mode_t) |
+| `params` | `mc_video_longterm_ref_mode_t *` | 长期参考帧参数，见 [mc_video_longterm_ref_mode_t](#mc_video_longterm_ref_mode_t) |
 
 **【返回值】**
 
@@ -1113,7 +1188,7 @@ hb_s32 hb_mm_mc_get_intra_refresh_config( media_codec_context_t *context, mc_vid
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_intra_refresh_params_t *` | **出参**。Intra Refresh 参数，见 [mc_video_intra_refresh_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_intra_refresh_params_t) |
+| `params` | `mc_video_intra_refresh_params_t *` | **出参**。Intra Refresh 参数，见 [mc_video_intra_refresh_params_t](#mc_video_intra_refresh_params_t) |
 
 **【返回值】**
 
@@ -1148,7 +1223,7 @@ hb_s32 hb_mm_mc_set_intra_refresh_config( media_codec_context_t *context, const 
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_intra_refresh_params_t *` | Intra Refresh 参数，见 [mc_video_intra_refresh_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_intra_refresh_params_t) |
+| `params` | `mc_video_intra_refresh_params_t *` | Intra Refresh 参数，见 [mc_video_intra_refresh_params_t](#mc_video_intra_refresh_params_t) |
 
 **【返回值】**
 
@@ -1324,7 +1399,7 @@ hb_s32 hb_mm_mc_get_deblk_filter_config( media_codec_context_t *context, mc_vide
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_deblk_filter_params_t *` | **出参**。去块滤波参数，见 [mc_video_deblk_filter_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_deblk_filter_params_t) |
+| `params` | `mc_video_deblk_filter_params_t *` | **出参**。去块滤波参数，见 [mc_video_deblk_filter_params_t](#mc_video_deblk_filter_params_t) |
 
 **【返回值】**
 
@@ -1359,7 +1434,7 @@ hb_s32 hb_mm_mc_set_deblk_filter_config( media_codec_context_t *context, const m
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_deblk_filter_params_t *` | 去块滤波参数，见 [mc_video_deblk_filter_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_deblk_filter_params_t) |
+| `params` | `mc_video_deblk_filter_params_t *` | 去块滤波参数，见 [mc_video_deblk_filter_params_t](#mc_video_deblk_filter_params_t) |
 
 **【返回值】**
 
@@ -1394,7 +1469,7 @@ hb_s32 hb_mm_mc_get_sao_config(media_codec_context_t *context, mc_h265_sao_param
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_h265_sao_params_t *` | **出参**。SAO 参数，见 [mc_h265_sao_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_h265_sao_params_t) |
+| `params` | `mc_h265_sao_params_t *` | **出参**。SAO 参数，见 [mc_h265_sao_params_t](#mc_h265_sao_params_t) |
 
 **【返回值】**
 
@@ -1429,7 +1504,7 @@ hb_s32 hb_mm_mc_set_sao_config(media_codec_context_t *context, const mc_h265_sao
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_h265_sao_params_t *` | SAO 参数，见 [mc_h265_sao_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_h265_sao_params_t) |
+| `params` | `mc_h265_sao_params_t *` | SAO 参数，见 [mc_h265_sao_params_t](#mc_h265_sao_params_t) |
 
 **【返回值】**
 
@@ -1464,7 +1539,7 @@ hb_s32 hb_mm_mc_get_entropy_config( media_codec_context_t *context, mc_h264_entr
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_h264_entropy_params_t *` | **出参**。熵编码参数，见 [mc_h264_entropy_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_h264_entropy_params_t) |
+| `params` | `mc_h264_entropy_params_t *` | **出参**。熵编码参数，见 [mc_h264_entropy_params_t](#mc_h264_entropy_params_t) |
 
 **【返回值】**
 
@@ -1499,7 +1574,7 @@ hb_s32 hb_mm_mc_set_entropy_config( media_codec_context_t *context, const mc_h26
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_h264_entropy_params_t *` | 熵编码参数，见 [mc_h264_entropy_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_h264_entropy_params_t) |
+| `params` | `mc_h264_entropy_params_t *` | 熵编码参数，见 [mc_h264_entropy_params_t](#mc_h264_entropy_params_t) |
 
 **【返回值】**
 
@@ -1534,7 +1609,7 @@ hb_s32 hb_mm_mc_get_pred_unit_config( media_codec_context_t *context, mc_video_p
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_pred_unit_params_t *` | **出参**。帧内预测参数，见 [mc_video_pred_unit_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_pred_unit_params_t) |
+| `params` | `mc_video_pred_unit_params_t *` | **出参**。帧内预测参数，见 [mc_video_pred_unit_params_t](#mc_video_pred_unit_params_t) |
 
 **【返回值】**
 
@@ -1569,7 +1644,7 @@ hb_s32 hb_mm_mc_set_pred_unit_config( media_codec_context_t *context, const mc_v
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_pred_unit_params_t *` | 帧内预测参数，见 [mc_video_pred_unit_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_pred_unit_params_t) |
+| `params` | `mc_video_pred_unit_params_t *` | 帧内预测参数，见 [mc_video_pred_unit_params_t](#mc_video_pred_unit_params_t) |
 
 **【返回值】**
 
@@ -1604,7 +1679,7 @@ hb_s32 hb_mm_mc_get_transform_config( media_codec_context_t *context, mc_video_t
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_transform_params_t *` | **出参**。变换参数，见 [mc_video_transform_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_transform_params_t) |
+| `params` | `mc_video_transform_params_t *` | **出参**。变换参数，见 [mc_video_transform_params_t](#mc_video_transform_params_t) |
 
 **【返回值】**
 
@@ -1639,7 +1714,7 @@ hb_s32 hb_mm_mc_set_transform_config( media_codec_context_t *context, const mc_v
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_transform_params_t *` | 变换参数，见 [mc_video_transform_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_transform_params_t) |
+| `params` | `mc_video_transform_params_t *` | 变换参数，见 [mc_video_transform_params_t](#mc_video_transform_params_t) |
 
 **【返回值】**
 
@@ -1674,7 +1749,7 @@ hb_s32 hb_mm_mc_get_mode_decision_config( media_codec_context_t *context, mc_vid
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_mode_decision_params_t *` | **出参**。模式决策参数，见 [mc_video_mode_decision_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_mode_decision_params_t) |
+| `params` | `mc_video_mode_decision_params_t *` | **出参**。模式决策参数，见 [mc_video_mode_decision_params_t](#mc_video_mode_decision_params_t) |
 
 **【返回值】**
 
@@ -1709,7 +1784,7 @@ hb_s32 hb_mm_mc_set_mode_decision_config( media_codec_context_t *context, const 
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_mode_decision_params_t *` | 模式决策参数，见 [mc_video_mode_decision_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_mode_decision_params_t) |
+| `params` | `mc_video_mode_decision_params_t *` | 模式决策参数，见 [mc_video_mode_decision_params_t](#mc_video_mode_decision_params_t) |
 
 **【返回值】**
 
@@ -1744,7 +1819,7 @@ hb_s32 hb_mm_mc_get_smart_bg_enc_config( media_codec_context_t *context, mc_vide
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_smart_bg_enc_params_t *` | **出参**。智能背景编码参数，见 [mc_video_smart_bg_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_smart_bg_enc_params_t) |
+| `params` | `mc_video_smart_bg_enc_params_t *` | **出参**。智能背景编码参数，见 [mc_video_smart_bg_enc_params_t](#mc_video_smart_bg_enc_params_t) |
 
 **【返回值】**
 
@@ -1779,7 +1854,7 @@ hb_s32 hb_mm_mc_set_smart_bg_enc_config( media_codec_context_t *context, const m
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_smart_bg_enc_params_t *` | 智能背景编码参数，见 [mc_video_smart_bg_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_smart_bg_enc_params_t) |
+| `params` | `mc_video_smart_bg_enc_params_t *` | 智能背景编码参数，见 [mc_video_smart_bg_enc_params_t](#mc_video_smart_bg_enc_params_t) |
 
 **【返回值】**
 
@@ -1814,7 +1889,7 @@ hb_s32 hb_mm_mc_get_3dnr_enc_config( media_codec_context_t *context, mc_video_3d
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_3dnr_enc_params_t *` | **出参**。3D 降噪参数，见 [mc_video_3dnr_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_3dnr_enc_params_t) |
+| `params` | `mc_video_3dnr_enc_params_t *` | **出参**。3D 降噪参数，见 [mc_video_3dnr_enc_params_t](#mc_video_3dnr_enc_params_t) |
 
 **【返回值】**
 
@@ -1849,7 +1924,7 @@ hb_s32 hb_mm_mc_set_3dnr_enc_config( media_codec_context_t *context, const mc_vi
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_3dnr_enc_params_t *` | 智能背景编码参数，见 [mc_video_smart_bg_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_smart_bg_enc_params_t) |
+| `params` | `mc_video_3dnr_enc_params_t *` | 智能背景编码参数，见 [mc_video_smart_bg_enc_params_t](#mc_video_smart_bg_enc_params_t) |
 
 **【返回值】**
 
@@ -1886,7 +1961,7 @@ hb_s32 hb_mm_mc_get_roi_config(media_codec_context_t * context, mc_video_roi_par
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_roi_params_t *` | **出参**。ROI 参数，见 [mc_video_roi_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_roi_params_t) |
+| `params` | `mc_video_roi_params_t *` | **出参**。ROI 参数，见 [mc_video_roi_params_t](#mc_video_roi_params_t) |
 
 **【返回值】**
 
@@ -1921,7 +1996,7 @@ hb_s32 hb_mm_mc_set_roi_config(media_codec_context_t * context, const mc_video_r
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_roi_params_t *` | ROI 参数，见 [mc_video_roi_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_roi_params_t) |
+| `params` | `mc_video_roi_params_t *` | ROI 参数，见 [mc_video_roi_params_t](#mc_video_roi_params_t) |
 
 **【返回值】**
 
@@ -1957,7 +2032,7 @@ hb_s32 hb_mm_mc_get_roi_config_ex(media_codec_context_t *context, hb_u32 roi_idx
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
 | `roi_idx` | `hb_u32` | ROI 区域索引 |
-| `params` | `mc_video_roi_params_ex_t *` | **出参**。ROI 参数，见 [mc_video_roi_params_ex_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_roi_params_ex_t) |
+| `params` | `mc_video_roi_params_ex_t *` | **出参**。ROI 参数，见 [mc_video_roi_params_ex_t](#mc_video_roi_params_ex_t) |
 
 **【返回值】**
 
@@ -1992,7 +2067,7 @@ hb_s32 hb_mm_mc_set_roi_config_ex(media_codec_context_t *context, const mc_video
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_roi_params_ex_t *` | ROI 参数，见 [mc_video_roi_params_ex_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_roi_params_ex_t) |
+| `params` | `mc_video_roi_params_ex_t *` | ROI 参数，见 [mc_video_roi_params_ex_t](#mc_video_roi_params_ex_t) |
 
 **【返回值】**
 
@@ -2099,7 +2174,7 @@ hb_s32 hb_mm_mc_get_vui_config( media_codec_context_t *context, mc_video_vui_par
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_vui_params_t *` | **出参**。VUI 参数，见 [mc_video_vui_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_vui_params_t) |
+| `params` | `mc_video_vui_params_t *` | **出参**。VUI 参数，见 [mc_video_vui_params_t](#mc_video_vui_params_t) |
 
 **【返回值】**
 
@@ -2134,7 +2209,7 @@ hb_s32 hb_mm_mc_set_vui_config( media_codec_context_t *context, const mc_video_v
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_vui_params_t *` | VUI 参数，见 [mc_video_vui_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_vui_params_t) |
+| `params` | `mc_video_vui_params_t *` | VUI 参数，见 [mc_video_vui_params_t](#mc_video_vui_params_t) |
 
 **【返回值】**
 
@@ -2169,7 +2244,7 @@ hb_s32 hb_mm_mc_get_vui_timing_config( media_codec_context_t *context, mc_video_
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_vui_timing_params_t *` | **出参**。VUI 时序参数，见 [mc_video_vui_timing_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_vui_timing_params_t) |
+| `params` | `mc_video_vui_timing_params_t *` | **出参**。VUI 时序参数，见 [mc_video_vui_timing_params_t](#mc_video_vui_timing_params_t) |
 
 **【返回值】**
 
@@ -2204,7 +2279,7 @@ hb_s32 hb_mm_mc_set_vui_timing_config( media_codec_context_t *context, const mc_
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_vui_timing_params_t *` | VUI 时序参数，见 [mc_video_vui_timing_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_vui_timing_params_t) |
+| `params` | `mc_video_vui_timing_params_t *` | VUI 时序参数，见 [mc_video_vui_timing_params_t](#mc_video_vui_timing_params_t) |
 
 **【返回值】**
 
@@ -2239,7 +2314,7 @@ hb_s32 hb_mm_mc_get_slice_config(media_codec_context_t *context, mc_video_slice_
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_slice_params_t *` | **出参**。slice 参数，见 [mc_video_slice_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_slice_params_t) |
+| `params` | `mc_video_slice_params_t *` | **出参**。slice 参数，见 [mc_video_slice_params_t](#mc_video_slice_params_t) |
 
 **【返回值】**
 
@@ -2274,7 +2349,7 @@ hb_s32 hb_mm_mc_set_slice_config(media_codec_context_t *context, const mc_video_
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_video_slice_params_t *` | slice 参数，见 [mc_video_slice_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_video_slice_params_t) |
+| `params` | `mc_video_slice_params_t *` | slice 参数，见 [mc_video_slice_params_t](#mc_video_slice_params_t) |
 
 **【返回值】**
 
@@ -2346,7 +2421,7 @@ hb_s32 hb_mm_mc_get_user_data(media_codec_context_t * context, mc_user_data_buff
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_user_data_buffer_t *` | **出参**。用户数据，见 [mc_user_data_buffer_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_user_data_buffer_t) |
+| `params` | `mc_user_data_buffer_t *` | **出参**。用户数据，见 [mc_user_data_buffer_t](#mc_user_data_buffer_t) |
 | `timeout` | `hb_s32` | 超时时间，单位 ms |
 
 **【返回值】**
@@ -2382,7 +2457,7 @@ hb_s32 hb_mm_mc_release_user_data(media_codec_context_t * context, const mc_user
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_user_data_buffer_t *` | **出参**。用户数据，见 [mc_user_data_buffer_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_user_data_buffer_t) |
+| `params` | `mc_user_data_buffer_t *` | **出参**。用户数据，见 [mc_user_data_buffer_t](#mc_user_data_buffer_t) |
 
 **【返回值】**
 
@@ -2489,7 +2564,7 @@ hb_s32 hb_mm_mc_get_mjpeg_config(media_codec_context_t * context, mc_mjpeg_enc_p
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_mjpeg_enc_params_t *` | **出参**。MJPEG 编码参数，见 [mc_mjpeg_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_mjpeg_enc_params_t) |
+| `params` | `mc_mjpeg_enc_params_t *` | **出参**。MJPEG 编码参数，见 [mc_mjpeg_enc_params_t](#mc_mjpeg_enc_params_t) |
 
 **【返回值】**
 
@@ -2524,7 +2599,7 @@ hb_s32 hb_mm_mc_set_mjpeg_config(media_codec_context_t * context, const mc_mjpeg
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_mjpeg_enc_params_t *` | MJPEG 编码参数，见 [mc_mjpeg_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_mjpeg_enc_params_t) |
+| `params` | `mc_mjpeg_enc_params_t *` | MJPEG 编码参数，见 [mc_mjpeg_enc_params_t](#mc_mjpeg_enc_params_t) |
 
 **【返回值】**
 
@@ -2559,7 +2634,7 @@ hb_s32 hb_mm_mc_get_jpeg_config(media_codec_context_t * context, mc_jpeg_enc_par
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_jpeg_enc_params_t *` | **出参**。JPEG 编码参数，见 [mc_jpeg_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_jpeg_enc_params_t) |
+| `params` | `mc_jpeg_enc_params_t *` | **出参**。JPEG 编码参数，见 [mc_jpeg_enc_params_t](#mc_jpeg_enc_params_t) |
 
 **【返回值】**
 
@@ -2594,7 +2669,7 @@ hb_s32 hb_mm_mc_set_jpeg_config(media_codec_context_t * context, const mc_jpeg_e
 | 参数 | 类型 | 说明 |
 | --- | --- | --- |
 | `context` | `media_codec_context_t *` | codec 上下文 |
-| `params` | `mc_jpeg_enc_params_t *` | JPEG 编码参数，见 [mc_jpeg_enc_params_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_jpeg_enc_params_t) |
+| `params` | `mc_jpeg_enc_params_t *` | JPEG 编码参数，见 [mc_jpeg_enc_params_t](#mc_jpeg_enc_params_t) |
 
 **【返回值】**
 
@@ -2753,7 +2828,6 @@ hb_s32 hb_mm_mc_unregister_audio_decoder(hb_s32 handle);
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
 ## 数据结构
-字段的**语义**按主题分散在各节（`rc_params` 见[码率控制](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#码率控制)，`gop_params` 见 [GOP 与参考帧](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#gop-与参考帧)，buffer 各字段见[一帧数据的流转](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#数据流转)），这里只把配置的树摊开。完整字段以 SDK 头文件为准。
 
 ### 类型总览
 
@@ -2775,7 +2849,9 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 **接口分属两个库**：`hb_mm_mc_*` 在 `libmultimedia.so`，buffer 内存的申请与 cache 操作等 `hb_mem_*` 在 `libhbmem.so`。
 
-### media_codec_context_t
+### 核心数据结构
+
+#### media_codec_context_t
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
@@ -2789,12 +2865,12 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | `vpf_context` | `hb_ptr` | 内部私有，不要修改 | — | — | — |
 | `priority` | `mc_video_cmd_prio_t` | 多路任务竞争硬件时的命令优先级 | — | `0`（`PRIO_0`） | 见 [mc_video_cmd_prio_t](#mc_video_cmd_prio_t) |
 
-### mc_video_codec_enc_params_t
+#### mc_video_codec_enc_params_t
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `width` / `height` | `hb_s32` | 输入图像宽高（亮度像素数） | `1920` × `1080` | — | 对齐宽 32 / 高 8，上限见[硬件规格](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#硬件规格) |
-| `pix_fmt` | `mc_pixel_format_t` | 输入像素格式 | `MC_PIXEL_FORMAT_NV12` | — | 见 [mc_pixel_format_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_pixel_format_t) |
+| `pix_fmt` | `mc_pixel_format_t` | 输入像素格式 | `MC_PIXEL_FORMAT_NV12` | — | 见 [mc_pixel_format_t](#mc_pixel_format_t) |
 | `frame_buf_count` | `hb_u32` | 输入帧 buffer 数量 | — | — | — |
 | `external_frame_buf` | `hb_bool` | `1` = 输入复用上游模块的 hbmem 内存，省一次拷贝 | `0` | `0` | `0` / `1` |
 | `bitstream_buf_count` | `hb_u32` | 码流 buffer 数量 | — | — | — |
@@ -2811,12 +2887,12 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | `mjpeg_enc_config` | `mc_mjpeg_enc_config_t` | MJPEG 专有配置 | — | — | ↑ |
 | `jpeg_enc_config` | `mc_jpeg_enc_config_t` | JPEG 专有配置 | — | — | ↑ |
 
-### mc_video_codec_dec_params_t
+#### mc_video_codec_dec_params_t
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
-| `feed_mode` | `mc_av_stream_feeding_mode_t` | 码流送入方式，**必设** | — | — | 见 [mc_av_stream_feeding_mode_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_av_stream_feeding_mode_t) |
-| `pix_fmt` | `mc_pixel_format_t` | 输出像素格式 | `MC_PIXEL_FORMAT_NV12` | — | 见 [mc_pixel_format_t](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#mc_pixel_format_t) |
+| `feed_mode` | `mc_av_stream_feeding_mode_t` | 码流送入方式，**必设** | — | — | 见 [mc_av_stream_feeding_mode_t](#mc_av_stream_feeding_mode_t) |
+| `pix_fmt` | `mc_pixel_format_t` | 输出像素格式 | `MC_PIXEL_FORMAT_NV12` | — | 见 [mc_pixel_format_t](#mc_pixel_format_t) |
 | `bitstream_buf_size` | `hb_u32` | 输入码流 buffer 大小 | — | — | — |
 | `bitstream_buf_count` | `hb_u32` | 输入码流 buffer 数量 | — | — | — |
 | `external_bitstream_buf` | `hb_bool` | `1` = 码流 buffer 复用外部 hbmem 内存 | `0` | `0` | `0` / `1` |
@@ -2826,7 +2902,18 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | `mjpeg_dec_config` | `mc_mjpeg_dec_config_t` | MJPEG 专有配置 | — | — | ↑ |
 | `jpeg_dec_config` | `mc_jpeg_dec_config_t` | JPEG 专有配置 | — | — | ↑ |
 
-### media_codec_buffer_t
+#### mc_av_codec_startup_params_t
+
+启动参数，作为 `hb_mm_mc_start` 的入参。按 `codec_id` 与 `encoder` 选择联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `video_enc_startup_params` | `mc_video_enc_startup_params_t` | 联合体成员 |
+| `video_dec_startup_params` | `mc_video_dec_startup_params_t` | 联合体成员 |
+| `audio_enc_startup_params` | `mc_audio_enc_startup_params_t` | 联合体成员 |
+| `audio_dec_startup_params` | `mc_audio_dec_startup_params_t` | 联合体成员 |
+
+#### media_codec_buffer_t
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
@@ -2836,7 +2923,74 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | `aframe_buf` | `mc_audio_frame_buffer_info_t` | 音频帧 | — | — | ↑ |
 | `astream_buf` | `mc_audio_stream_buffer_info_t` | 音频码流 | — | — | ↑ |
 
-### media_codec_callback_t
+#### mc_inter_status_t
+
+`hb_mm_mc_get_status` 的出参，用于观察队列水位、排查堆积与超时。字段与[调试指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/debug)中 `encode status` 分组对应。
+
+codec 的详细运行状态，由 `hb_mm_mc_get_status` 返回。可用于观察队列水位、排查堆积与超时。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `cur_input_buf_cnt` | `hb_u32` | 当前待处理的输入 buffer 数（待编码的帧或待解码的码流）。解码且送入方式为按帧大小时，该值也表示待解码帧数 |
+| `cur_input_buf_size` | `hb_u64` | 当前输入 buffer 占用的字节数 |
+| `cur_output_buf_cnt` | `hb_u32` | 当前待取走的输出 buffer 数（已编码码流或已解码帧） |
+| `cur_output_buf_size` | `hb_u64` | 当前输出 buffer 占用的字节数 |
+| `left_recv_frame` | `hb_u32` | 还需接收的帧数。仅当启动参数中设置了 `receive_frame_number` 时有效 |
+| `left_enc_frame` | `hb_u32` | 还需编码的帧数。仅当启动参数中设置了 `receive_frame_number` 时有效 |
+| `total_input_buf_cnt` | `hb_u32` | 累计接收的 buffer 数 |
+| `total_output_buf_cnt` | `hb_u32` | 累计处理的 buffer 数（累计编码帧数或累计解码帧数） |
+| `pipeline` | `hb_s32` | 相机 pipeline 编号，仅视频编码有效 |
+| `channel_port_id` | `hb_s32` | 相机 pipeline 的通道端口号，仅视频编码有效 |
+
+#### mc_video_frame_buffer_info_t
+
+图像帧描述——编码的输入、解码的输出，`media_codec_buffer_t` 联合体成员之一。
+
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| `vir_ptr[3]` | `hb_u8 *[3]` | 各分量平面的虚拟地址。NV12 用 `[0]` = Y、`[1]` = UV |
+| `phy_ptr[3]` | `hb_u64[3]` | 各分量平面的物理地址 |
+| `size` | `hb_u32` | 帧数据字节数 |
+| `compSize[3]` | `hb_u32[3]` | 各分量平面的字节数 |
+| `width` / `height` | `hb_s32` | 帧宽高 |
+| `pix_fmt` | `mc_pixel_format_t` | 像素格式 |
+| `stride` / `vstride` | `hb_s32` | 行跨度 / 垂直跨度 |
+| `fd[3]` | `hb_s32[3]` | 各分量平面的 dma-buf fd |
+| `pts` | `hb_u64` | 时间戳 |
+| `src_idx` | `hb_s32` | 源 buffer 索引，`hb_mm_mc_skip_pic` 使用 |
+| `frame_end` | `hb_bool` | 是否为本批送帧的最后一帧 |
+| `qp_map_valid` | `hb_bool` | 本次是否携带 QP 映射表 |
+| `qp_map_array` | `hb_byte` | QP 映射表地址（头文件声明为标量，按指针语义使用，见 [返回值说明](#返回值说明)） |
+| `qp_map_array_count` | `hb_u32` | QP 映射表条目数 |
+| `flags` | `hb_s32` | 标志位 |
+
+#### mc_video_stream_buffer_info_t
+
+码流描述——编码的输出、解码的输入。
+
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| `vir_ptr` | `hb_u8 *` | 码流的虚拟地址 |
+| `phy_ptr` | `hb_u64` | 码流的物理地址 |
+| `size` | `hb_u32` | 码流字节数 |
+| `pts` | `hb_u64` | 时间戳 |
+| `fd` | `hb_s32` | dma-buf fd |
+| `src_idx` | `hb_s32` | 源 buffer 索引 |
+| `stream_end` | `hb_bool` | 是否为码流结尾，最后一包置 `1` |
+
+#### mc_audio_frame_buffer_info_t / mc_audio_stream_buffer_info_t
+
+音频帧与音频码流描述，软件编解码使用。
+
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| `vir_ptr` / `phy_ptr` | `hb_u8 *` / `hb_u64` | 数据虚拟 / 物理地址 |
+| `size` | `hb_u32` | 数据字节数 |
+| `sample_fmt` / `sample_rate` / `channel_layout` | 枚举 | 采样格式 / 采样率 / 声道布局（仅音频帧） |
+| `pts` | `hb_s64` | 时间戳 |
+| `frame_end` / `stream_end` | `hb_bool` | 结尾标志 |
+
+#### media_codec_callback_t
 
 异步模式的回调集合，作为 `hb_mm_mc_set_callback` 的入参。四个回调按需要实现，不需要的填 `NULL`。
 
@@ -2849,14 +3003,485 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 > 所有回调的 `userdata` 就是 `hb_mm_mc_set_callback` 传入的 `userdata` 指针，可用来回传调用方自己的上下文。
 
-### media_codec_mode_t
+#### media_codec_output_buffer_info_t
+
+输出 buffer 的附加信息，由 `hb_mm_mc_dequeue_output_buffer` 的出参返回，携带帧类型、时间戳、码流帧序等。实际生效的联合体成员由 buffer 类型决定。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `video_frame_info` | `mc_h264_h265_output_frame_info_t` | H.264 / H.265 解码输出帧信息（帧类型、pts 等） |
+| `video_stream_info` | `mc_h264_h265_output_stream_info_t` | H.264 / H.265 编码输出码流信息（帧类型、pts、slice 数等） |
+| `jpeg_frame_info` | `mc_mjpeg_jpeg_output_frame_info_t` | MJPEG / JPEG 解码输出帧信息 |
+| `jpeg_stream_info` | `mc_mjpeg_jpeg_output_stream_info_t` | MJPEG / JPEG 编码输出码流信息 |
+| `audio_frame_info` | `mc_audio_output_frame_info_t` | 音频解码输出帧信息 |
+| `audio_stream_info` | `mc_audio_output_stream_info_t` | 音频编码输出码流信息 |
+
+#### mc_audio_encode_param_t
+
+音频编码器描述，注册音频编码器时由调用方填充。函数指针由软件编解码库实现，MediaCodec 通过它们调用编解码逻辑。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `ff_type` | `media_codec_id_t` | 音频编码标准，取值见 [media_codec_id_t](#media_codec_id_t) |
+| `ff_max_frm` | `hb_s32` | 单帧最大采样数 |
+| `ff_codec_name[256]` | `char` | 编码器名称字符串 |
+
+#### mc_audio_decode_param_t
+
+音频解码器描述，注册音频解码器时由调用方填充。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `ff_type` | `media_codec_id_t` | 音频编码标准，取值见 [media_codec_id_t](#media_codec_id_t) |
+| `ff_codec_name[256]` | `char` | 解码器名称字符串 |
+
+### 码率控制
+
+由 `mc_rate_control_params_t` 承载：`mode` 选模式，参数填进对应模式的联合体成员。模式的选择依据见[使用指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#码率控制)。
+
+#### mc_rate_control_params_t
+
+| 字段 | 类型 | 描述 |
+| --- | --- | --- |
+| `mode` | `mc_video_rate_control_mode_t` | 码率控制模式（`MC_AV_RC_MODE_H264CBR` 等，编码方向） |
+| `h264_cbr_params` / `h265_cbr_params` / `h264_avbr_params` / `h265_avbr_params` | 各模式结构体 | 联合体，按 `mode` 生效 |
+| `h264_vbr_params` / `h265_vbr_params` | | ↑ |
+| `h264_fixqp_params` / `h265_fixqp_params` / `mjpeg_fixqp_params` | | ↑ |
+| `h264_qpmap_params` / `h265_qpmap_params` | | ↑ |
+
+#### mc_h264_cbr_params_t / mc_h265_cbr_params_t（CBR）与 mc_h264_avbr_params_t / mc_h265_avbr_params_t（AVBR）
+
+CBR 与 AVBR 参数集相同，仅 `vbv_buffer_size` 默认值不同（CBR 为 10，AVBR 为 3000）。填进 `video_enc_params.rc_params.h264_cbr_params` 或对应成员：
+
+| 参数 | 含义 | 取值 | 默认 |
+| --- | --- | --- | --- |
+| `intra_period` | I 帧间隔 | `[0,2047]` | 28 |
+| `intra_qp` | I 帧的 QP | `[0,51]` | 30 |
+| `bit_rate` | 目标平均码率，单位 kbps | `[0,700000]` | 1000 |
+| `frame_rate` | 目标帧率，单位 fps | `[1,240]` | 30 |
+| `initial_rc_qp` | 初始 QP；超出 `[0,51]` 时由编码器自定 | `[0,63]` | 63 |
+| `vbv_buffer_size` | VBV 缓冲大小，单位 ms。**越小码率越精确、画质越差；越大反之** | `[10,3000]` | CBR 10 / AVBR 3000 |
+| `mb_level_rc_enalbe` / `ctu_level_rc_enalbe` | 码控精细到块级（H264 结构体为 `mb_level_rc_enalbe`，H265 为 `ctu_level_rc_enalbe`，头文件原拼写如此），画质换精度；**与 ROI 互斥** | `0` / `1` | 0 |
+| `min_qp_I` · `max_qp_I` | I 帧 QP 的上下限 | `[0,51]` | 8 / 51 |
+| `min_qp_P` · `max_qp_P` | P 帧 QP 的上下限 | `[0,51]` | 8 / 51 |
+| `min_qp_B` · `max_qp_B` | B 帧 QP 的上下限 | `[0,51]` | 8 / 51 |
+| `hvs_qp_enable` | 按块方差微调 QP，提升主观画质 | `0` / `1` | 1 |
+| `hvs_qp_scale` | 上述微调的强度，1 代表原值 | `[0,4]` | 2 |
+| `max_delta_qp` | 上述微调的幅度上限 | `[0,12]` | 10 |
+| `qp_map_enable` | 是否启用 QP 映射表 | `0` / `1` | 0 |
+
+#### mc_h264_vbr_params_t / mc_h265_vbr_params_t
+
+比 CBR 少得多——没有码率目标，也没有 QP 上下限：
+
+| 参数 | 含义 | 取值 | 默认 |
+| --- | --- | --- | --- |
+| `intra_period` | I 帧间隔 | `[0,2047]` | 28 |
+| `intra_qp` | I 帧的 QP | `[0,51]` | 30 |
+| `frame_rate` | 目标帧率，单位 fps | `[1,240]` | 30 |
+| `qp_map_enable` | 是否启用 QP 映射表 | `0` / `1` | 0 |
+
+#### mc_h264_fix_qp_params_t / mc_h265_fix_qp_params_t / mc_mjpeg_fix_qp_params_t
+
+直接指定每类帧的 QP。MJPEG 不用 QP 值，改用 `quality_factor`（质量因子，取值 `[0,100]`、默认 `50`）：
+
+| 参数 | 含义 | 取值 | 默认 |
+| --- | --- | --- | --- |
+| `intra_period` | I 帧间隔 | `[0,2047]` | 28 |
+| `frame_rate` | 目标帧率，单位 fps | `[1,240]` | 30 |
+| `force_qp_I` | 强制 I 帧的 QP | `[0,51]` | 0 |
+| `force_qp_P` | 强制 P 帧的 QP | `[0,51]` | 0 |
+| `force_qp_B` | 强制 B 帧的 QP | `[0,51]` | 0 |
+| `quality_factor` | MJPEG / JPEG 的质量因子（仅 `mjpeg_fixqp_params`，不用 QP 值） | `[0,100]` | `50` |
+
+#### mc_h264_qp_map_params_t / mc_h265_qp_map_params_t
+
+为帧内每个块单独指定 QP——H264 的块大小为 16 × 16，H265 为 32 × 32。QP 映射表也可随输入帧携带（`qp_map_valid` / `qp_map_array`，见 [mc_video_frame_buffer_info_t](#mc_video_frame_buffer_info_t)），并与 [ROI](#mc_video_roi_params_t) 的 mode2 配合使用：
+
+| 参数 | 含义 | 取值 | 默认 |
+| --- | --- | --- | --- |
+| `intra_period` | I 帧间隔 | `[0,2047]` | 28 |
+| `frame_rate` | 目标帧率，单位 fps | `[1,240]` | 30 |
+| `qp_map_array` | QP 映射表地址，每个块一个 QP 值（1 字节），按光栅扫描顺序排列 | 指针 | `NULL` |
+| `qp_map_array_count` | QP 映射表的条目数 | H.264 ≤ `MC_VIDEO_MAX_MB_NUM`、H.265 ≤ `MC_VIDEO_MAX_SUB_CTU_NUM`；条目数 H.264 为 `(ALIGN16(宽)>>4) × (ALIGN16(高)>>4)`，H.265 为 `(ALIGN64(宽)>>5) × (ALIGN64(高)>>5)`，完整说明见 [ROI 编码参数](#roi-编码参数) | 0 |
+
+> 上表默认值为 `hb_mm_mc_get_default_context` 的返回结果。
+> 上表默认值为 `hb_mm_mc_get_default_context` 的返回结果（CBR / AVBR）；VBR / FixQP / QpMap 三表的默认值取自权威调试手册。
+
+### GOP 与参考帧
+
+#### mc_video_gop_params_t
+
+GOP 结构参数。除 `custom_gop_pic_param` 外**在同一段码流内不可更改**。仅 H.264 / H.265 有效。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `decoding_refresh_type` | `hb_s32` | 默认 `IDR` | 每 `intra_period` 插入的 I 帧类型：`0` 普通 I 帧（非随机接入点）、`1` CRA、`2` IDR。仅 H.265 有效 |
+| `gop_preset_idx` | `hb_u32` | 默认 `2` | GOP 预设结构编号，取值 `[0,9]`，含义见 [GOP](#gop-与参考帧)。该默认值两个平台一致 |
+| `custom_gop_size` | `hb_u32` | — | 自定义 GOP 的长度，取值 `[1,8]`。仅 `gop_preset_idx = 0` 时有效 |
+| `custom_gop_pic_param[MC_MAX_GOP_NUM]` | `mc_video_custom_gop_pic_params_t[]` | — | 自定义 GOP 中逐帧的参数，见 [mc_video_custom_gop_pic_params_t](#mc_video_custom_gop_pic_params_t) |
+
+#### mc_video_custom_gop_pic_params_t
+
+自定义 GOP 中单帧的参数。仅 `gop_preset_idx = 0` 时有效。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `pic_type` | `hb_u32` | 默认 `0` | 帧类型：`0` I 帧、`1` P 帧、`2` B 帧 |
+| `poc_offset` | `hb_s32` | 默认 `0` | 该帧在 GOP 内的显示顺序（POC），取值 `[1, custom_gop_size]` |
+| `pic_qp` | `hb_u32` | 默认 `30` | 该帧的量化参数，取值 `[0,51]` |
+| `num_ref_picL0` | `hb_s32` | 默认 `0` | L0 参考帧的数量，取值 `[0,1]`。仅 `pic_type = 1`（P 帧）时有效 |
+| `ref_pocL0` | `hb_s32` | 默认 `0` | L0 参考帧的 POC，取值 `[-custom_gop_size, custom_gop_size]` |
+| `ref_pocL1` | `hb_s32` | 默认 `0` | L1 参考帧的 POC，取值 `[-custom_gop_size, custom_gop_size]` |
+| `temporal_id` | `hb_u32` | 默认 `0` | 时域层编号，取值 `[0,6]`。低层帧不能参考高层帧 |
+
+#### mc_video_longterm_ref_mode_t
+
+长期参考帧参数。用于指定某个已编码帧长期留在参考帧列表中，抑制帧间预测的累积误差。**支持运行中动态调整**。仅 H.264 / H.265 codec 有效。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `use_longterm` | `hb_u32` | 默认 `0` | 是否使能长期参考帧模式，`0` 关闭 / `1` 开启 |
+| `longterm_pic_period` | `hb_u32` | 默认 `0` | 每隔多少帧指定一个长期参考帧 |
+| `longterm_pic_using_period` | `hb_u32` | 默认 `0` | 长期参考帧被持续使用多少帧 |
+
+### Intra Refresh
+
+#### mc_video_intra_refresh_params_t
+
+Intra Refresh 参数。**在同一段码流内不可更改**。仅 H.264 / H.265 有效。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `intra_refresh_mode` | `hb_s32` | 默认 `0` | 刷新方式：`0` 关闭；`1` 按行；`2` 按列；`3` 按步长；`4` 自适应（仅 H.265） |
+| `intra_refresh_arg` | `hb_u32` | `[0, 2^31-1]`，默认 `0` | 刷新参数，含义随 `intra_refresh_mode` 变化：模式 1 为连续行数、模式 2 为连续列数、模式 3 为步长、模式 4 为每帧刷新块数 |
+
+> **注意**：`intra_refresh_mode = 4`（自适应）不能与无损编码和 ROI 同时使用。
+
+### ROI 编码参数
+
+ROI 与码率控制同时使能时，块的实际 QP 合成关系：
+
+| 码控模式 | 块的实际 QP |
+| --- | --- |
+| 未使能 CBR / AVBR | 就是 ROI 表里指定的值 |
+| 使能 CBR / AVBR | `QP(i) = MQP(i) + RQP(i) - ROIAvgQP`，其中 `MQP` 为 ROI 表的值，`RQP` 为码控内部算出的值，`ROIAvgQP` 为 ROI 表的平均 QP |
+
+#### mc_video_roi_params_t
+
+ROI 的 QpMap 形式参数：为图像中每一个块逐个指定 QP 值。更适合由算法逐块生成 QP 的场景。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `roi_enable` | `hb_u32` | 默认 `0` | 是否使能 ROI 编码，`0` 关闭 / `1` 开启。**需要码率控制处于开启状态** |
+| `roi_map_array` | `hb_byte` | 默认 `0` | QP 映射表，按光栅扫描顺序为每个块存放 1 字节 QP 值，取值 `[0,51]` |
+| `roi_map_array_count` | `hb_u32` | 默认 `0` | 映射表的元素个数。H.264 应为 `(ALIGN16(宽)>>4) × (ALIGN16(高)>>4)`；H.265 应为 `(ALIGN64(宽)>>5) × (ALIGN64(高)>>5)` |
+
+#### mc_video_roi_params_ex_t
+
+ROI 的区域形式参数：最多支持 64 个矩形区域，每个区域指定重要程度或 QP。适合只关注少数几块重点区域的场景。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `roi_mode` | `hb_u32` | 默认 `0` | ROI 模式：`0` 关闭；`1` CTU 重要程度映射（取值 `[0,8]`，**需要码率控制开启**）；`2` CTU QP 映射（取值 `[0,51]`，**不能与码率控制同时使用**） |
+| `roi_idx` | `hb_u32` | 默认 `0` | ROI 区域索引，取值 `[0,63]`。索引 0 的区域优先级最高 |
+| `roi_enable` | `hb_u32` | 默认 `0` | 该区域是否使能，`0` 关闭 / `1` 开启 |
+| `roi_val` | `hb_u8` | 默认 `0` | 该区域的值。模式 1 下为重要程度 `[0,8]`（越大越重要）；模式 2 下为 QP `[0,51]`（越大画质越差） |
+| `roi_delta_qp` | `hb_u32` | 默认 `3` | 模式 1 下的 QP 调整步长，取值 `[0,51]`。区域最终 QP 按 `QP - roi_delta_qp × 重要程度` 计算 |
+| `crop_rect` | `mc_av_codec_rect_t` | — | 该区域对应的矩形范围，见 [mc_av_codec_rect_t](#mc_av_codec_rect_t) |
+
+#### mc_av_codec_rect_t
+
+矩形区域，用于描述裁剪范围或 ROI 区域。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `x_pos` | `hb_u32` | 左上角横坐标 |
+| `y_pos` | `hb_u32` | 左上角纵坐标 |
+| `width` | `hb_u32` | 宽度 |
+| `height` | `hb_u32` | 高度 |
+
+### 编码质量工具
+
+#### mc_video_deblk_filter_params_t
+
+去块滤波参数。按 `codec_id` 选择联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `h264_deblk` | `mc_h264_deblk_filter_params_t` | 联合体成员 |
+| `h265_deblk` | `mc_h265_deblk_filter_params_t` | 联合体成员 |
+
+#### mc_h265_sao_params_t
+
+H.265 的 SAO（样点自适应补偿）参数。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `sample_adaptive_offset_enabled_flag` | `hb_u32` | 默认 `1` | 是否使能 SAO，`0` 关闭 / `1` 开启。同时作用于亮度与色度分量 |
+
+#### mc_h264_entropy_params_t
+
+H.264 的熵编码参数。支持运行中动态调整。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `entropy_coding_mode` | `hb_u32` | 默认 `1` | 熵编码方式：`0` CAVLC；`1` CABAC（压缩率更高、计算量更大） |
+
+#### mc_video_pred_unit_params_t
+
+帧内预测参数。按 `codec_id` 选择联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `h264_intra_pred` | `mc_h264_intra_pred_params_t` | 联合体成员 |
+| `h265_pred_unit` | `mc_h265_pred_unit_params_t` | 联合体成员 |
+
+#### mc_video_transform_params_t
+
+变换参数。按 `codec_id` 选择联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `h264_transform` | `mc_h264_transform_params_t` | 联合体成员 |
+| `h265_transform` | `mc_h265_transform_params_t` | 联合体成员 |
+
+#### mc_video_mode_decision_params_t
+
+编码模式决策参数，用于在编码速度与压缩效率之间取舍。各字段均可运行中动态调整。仅 H.265 codec 有效。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `mode_decision_enable` | `hb_u32` | 默认 `0` | 是否使能模式决策，`0` 关闭 / `1` 开启 |
+| `pu04_delta_rate` | `hb_s32` | 默认 `0` | 4×4 块的总代价附加量，取值 `[0,255]` |
+| `pu08_delta_rate` | `hb_s32` | 默认 `0` | 8×8 块的总代价附加量，取值 `[0,255]` |
+| `pu16_delta_rate` | `hb_s32` | 默认 `0` | 16×16 块的总代价附加量，取值 `[0,255]` |
+| `pu32_delta_rate` | `hb_s32` | 默认 `0` | 32×32 块的总代价附加量，取值 `[0,255]` |
+| `pu04_intra_planar_delta_rate` | `hb_s32` | 默认 `0` | 4×4 块在 Planar 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu04_intra_dc_delta_rate` | `hb_s32` | 默认 `0` | 4×4 块在 DC 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu04_intra_angle_delta_rate` | `hb_s32` | 默认 `0` | 4×4 块在 角度 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu08_intra_planar_delta_rate` | `hb_s32` | 默认 `0` | 8×8 块在 Planar 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu08_intra_dc_delta_rate` | `hb_s32` | 默认 `0` | 8×8 块在 DC 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu08_intra_angle_delta_rate` | `hb_s32` | 默认 `0` | 8×8 块在 角度 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu16_intra_planar_delta_rate` | `hb_s32` | 默认 `0` | 16×16 块在 Planar 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu16_intra_dc_delta_rate` | `hb_s32` | 默认 `0` | 16×16 块在 DC 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu16_intra_angle_delta_rate` | `hb_s32` | 默认 `0` | 16×16 块在 角度 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu32_intra_planar_delta_rate` | `hb_s32` | 默认 `0` | 32×32 块在 Planar 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu32_intra_dc_delta_rate` | `hb_s32` | 默认 `0` | 32×32 块在 DC 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `pu32_intra_angle_delta_rate` | `hb_s32` | 默认 `0` | 32×32 块在 角度 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
+| `cu08_intra_delta_rate` | `hb_s32` | 默认 `0` | 8×8 CU 在 帧内模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu08_inter_delta_rate` | `hb_s32` | 默认 `0` | 8×8 CU 在 帧间模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu08_merge_delta_rate` | `hb_s32` | 默认 `0` | 8×8 CU 在 merge模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu16_intra_delta_rate` | `hb_s32` | 默认 `0` | 16×16 CU 在 帧内模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu16_inter_delta_rate` | `hb_s32` | 默认 `0` | 16×16 CU 在 帧间模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu16_merge_delta_rate` | `hb_s32` | 默认 `0` | 16×16 CU 在 merge模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu32_intra_delta_rate` | `hb_s32` | 默认 `0` | 32×32 CU 在 帧内模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu32_inter_delta_rate` | `hb_s32` | 默认 `0` | 32×32 CU 在 帧间模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu32_merge_delta_rate` | `hb_s32` | 默认 `0` | 32×32 CU 在 merge模式下计算代价时的码率附加量，取值 `[0,255]` |
+
+#### mc_video_smart_bg_enc_params_t
+
+智能背景编码参数。针对监控等背景长期不变的场景，降低静止区域的码率开销。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `bg_detect_enable` | `hb_u32` | 默认 `0` | 是否使能背景检测，`0` 关闭 / `1` 开启 |
+| `bg_threshold_diff` | `hb_s32` | 默认 `8` | 块内最大差异阈值，取值 `[0,255]`。仅背景检测开启时有效 |
+| `bg_threshold_mean_diff` | `hb_s32` | 默认 `1` | 块内平均差异阈值，取值 `[0,255]`。仅背景检测开启时有效 |
+| `bg_lambda_qp` | `hb_s32` | 默认 `32` | 背景区域的最小 QP，取值 `[0,51]` |
+| `bg_delta_qp` | `hb_s32` | 默认 `3` | 背景与前景的 QP 差值，取值 `[-16,15]` |
+| `s2fme_disable` | `hb_u32` | 默认 `0` | 是否关闭 s2me_fme 流程，`0` 使能 / `1` 关闭。仅作用于 H.264 编码器 |
+
+#### mc_video_3dnr_enc_params_t
+
+3D 降噪参数。通过时域信息抑制噪声，改善暗光场景的编码画质。各字段均**支持运行中动态调整**。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `nr_y_enable` | `hb_u32` | 默认 `0` | 是否对 Y 分量降噪，`0` 关闭 / `1` 开启 |
+| `nr_cb_enable` | `hb_u32` | 默认 `0` | 是否对 Cb 分量降噪 |
+| `nr_cr_enable` | `hb_u32` | 默认 `0` | 是否对 Cr 分量降噪 |
+| `nr_est_enable` | `hb_u32` | 默认 `0` | 是否使能噪声估计。关闭时由调用方通过 `nr_noise_sigma*` 手动指定噪声水平 |
+| `nr_intra_weightY` | `hb_u32` | 默认 `7` | I 帧下 Y 分量的噪声权重，取值 `[0,31]`。实际作用强度为该值除以 4 |
+| `nr_intra_weightCb` | `hb_u32` | 默认 `7` | I 帧下 Cb 分量的噪声权重，取值 `[0,31]` |
+| `nr_intra_weightCr` | `hb_u32` | 默认 `7` | I 帧下 Cr 分量的噪声权重，取值 `[0,31]` |
+| `nr_inter_weightY` | `hb_u32` | 默认 `4` | P/B 帧下 Y 分量的噪声权重，取值 `[0,31]`。实际作用强度为该值除以 4 |
+| `nr_inter_weightCb` | `hb_u32` | 默认 `4` | P/B 帧下 Cb 分量的噪声权重，取值 `[0,31]` |
+| `nr_inter_weightCr` | `hb_u32` | 默认 `4` | P/B 帧下 Cr 分量的噪声权重，取值 `[0,31]` |
+| `nr_noise_sigmaY` | `hb_u32` | 默认 `0` | Y 分量的噪声标准差，取值 `[0,255]`。仅 `nr_est_enable = 0` 时有效 |
+| `nr_noise_sigmaCb` | `hb_u32` | 默认 `0` | Cb 分量的噪声标准差，取值 `[0,255]`。仅 `nr_est_enable = 0` 时有效 |
+| `nr_noise_sigmaCr` | `hb_u32` | 默认 `0` | Cr 分量的噪声标准差，取值 `[0,255]`。仅 `nr_est_enable = 0` 时有效 |
+
+### 码流与元信息
+
+#### mc_video_slice_params_t
+
+slice 切分参数。按 `codec_id` 选择联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `h264_slice` | `mc_h264_slice_params_t` | 联合体成员 |
+| `h265_slice` | `mc_h265_slice_params_t` | 联合体成员 |
+| `mjpeg_slice` | `mc_mjpeg_slice_params_t` | 联合体成员 |
+
+#### mc_video_vui_params_t
+
+VUI 参数。按 `codec_id` 选择联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `h264_vui` | `mc_h264_vui_params_t` | 联合体成员 |
+| `h265_vui` | `mc_h265_vui_params_t` | 联合体成员 |
+
+#### mc_video_vui_timing_params_t
+
+VUI 时序参数。按 `codec_id` 选择联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `h264_timing` | `mc_h264_timing_params_t` | 联合体成员 |
+| `h265_timing` | `mc_h265_timing_params_t` | 联合体成员 |
+
+#### mc_user_data_buffer_t
+
+用户数据 buffer，用于 `hb_mm_mc_get_user_data` 取出码流中携带的用户数据。
+
+| 字段 | 类型 | 取值 / 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `user_data_valid` | `hb_bool` | 默认 `0` | 该 buffer 是否有效，`0` 无效 / `1` 有效 |
+| `size` | `hb_u32` | 默认 `0` | 数据长度，单位字节 |
+| `phys_addr` | `hb_u64` | 默认 `0` | 数据的物理地址，读取时需转换为虚拟地址 |
+| `virt_addr` | `hb_u8` | 默认 `0` |  |
+
+### 图像与格式
+
+#### mc_mjpeg_enc_params_t
+
+MJPEG 编码参数，经 `hb_mm_mc_set_mjpeg_config` 下发。在同一段码流内不可更改。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `restart_interval` | `hb_u32` | 重启间隔，每多少个 MCU 插入一个重启标记，`0` 表示不插入。默认 `0` |
+| `huff_table_valid` | `hb_bool` | 自定义哈夫曼表是否有效，`0` 无效（用默认表）/ `1` 有效。默认 `0` |
+| `huff_luma_dc_bits[16]` / `huff_luma_dc_val[16]` | `hb_u8[16]` | 亮度 DC 哈夫曼表：16 个位长值 + 12（Baseline）/ 13（Extended）个哈夫曼值 |
+| `huff_luma_ac_bits[16]` / `huff_luma_ac_val[256]` | `hb_u8[]` | 亮度 AC 哈夫曼表：16 个位长值 + 162（Baseline）/ 256（Extended）个哈夫曼值 |
+| `huff_chroma_dc_bits[16]` / `huff_chroma_dc_val[16]` | `hb_u8[16]` | 色度 DC 哈夫曼表，结构同亮度 DC |
+| `huff_chroma_ac_bits[16]` / `huff_chroma_ac_val[256]` | `hb_u8[]` | 色度 AC 哈夫曼表，结构同亮度 AC |
+| `extended_sequential` | `hb_bool` | 是否启用 Extended Sequential 模式 |
+
+#### mc_jpeg_enc_params_t
+
+JPEG 编码参数，经 `hb_mm_mc_set_jpeg_config` 下发。哈夫曼表结构与 MJPEG 相同。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `dcf_enable` | `hb_bool` | 是否生成 DCF（数码相机格式）头，用于 Exif |
+| `restart_interval` | `hb_u32` | 重启间隔，每多少个 MCU 插入一个重启标记 |
+| `quality_factor` | `hb_u32` | 画质因子，取值 `[0,100]`、默认 `50`，数值越大画质越高、码流越大 |
+| `huff_table_valid` | `hb_bool` | 自定义哈夫曼表是否有效 |
+| `huff_luma_dc_bits[16]` / `huff_luma_dc_val[16]` | `hb_u8[16]` | 亮度 DC 哈夫曼表 |
+| `huff_luma_ac_bits[16]` / `huff_luma_ac_val[256]` | `hb_u8[]` | 亮度 AC 哈夫曼表 |
+| `huff_chroma_dc_bits[16]` / `huff_chroma_dc_val[16]` | `hb_u8[16]` | 色度 DC 哈夫曼表 |
+| `huff_chroma_ac_bits[16]` / `huff_chroma_ac_val[256]` | `hb_u8[]` | 色度 AC 哈夫曼表 |
+| `extended_sequential` | `hb_bool` | 是否启用 Extended Sequential 模式 |
+
+#### mc_h264_enc_config_t / mc_h265_enc_config_t
+
+`mc_video_codec_enc_params_t` 联合体成员，按 `codec_id` 四选一。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `h264_profile` / `h264_level` | `mc_h264_profile_t` / `mc_h264_level_t` | H.264 的 profile 与 level（仅 H.264） |
+| `main_still_picture_profile_enable` | `hb_bool` | 使能 Main Still Picture profile（仅 H.265） |
+| `h265_level` / `h265_tier` | `mc_h265_level_t` / `hb_s32` | H.265 的 level 与 tier |
+| `transform_skip_enabled_flag` | `hb_u32` | 变换跳过开关（仅 H.265） |
+| `lossless_mode` | `hb_u32` | 无损编码模式（仅 H.265） |
+| `tmvp_enable` | `hb_u32` | 时域运动矢量预测开关（仅 H.265） |
+| `wpp_enable` | `hb_u32` | 波前并行处理开关（仅 H.265） |
+| `extended_sequential` | `mc_pixel_10bit_format_t` | 10bit 输入的扩展格式选择 |
+
+#### mc_h264_dec_config_t / mc_h265_dec_config_t
+
+`mc_video_codec_dec_params_t` 联合体成员。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `reorder_enable` | `hb_bool` | 使能解码器按显示顺序输出帧序列 |
+| `skip_mode` | `hb_u32` | 帧解码忽略模式 |
+| `cra_as_bla` | `hb_bool` | CRA 作为 BLA 处理（仅 H.265） |
+| `bandwidth_Opt` | `hb_bool` | 使能节省带宽模式 |
+| `dec_temporal_id_mode` | `hb_u32` | temporal id 的选择模式（仅 H.265） |
+| `target_dec_temporal_id_plus1` | `hb_u32` | 目标 temporal id 值（仅 H.265） |
+
+#### mc_mjpeg_dec_config_t / mc_jpeg_dec_config_t
+
+MJPEG / JPEG 解码的联合体成员，两者字段相同。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `rot_degree` | `mc_rotate_degree_t` | 解码输出旋转 |
+| `mir_direction` | `mc_mirror_direction_t` | 解码输出镜像 |
+| `frame_crop_enable` | `hb_bool` | 是否裁剪输出 |
+| `crop_rect` | `mc_av_codec_rect_t` | 裁剪矩形 |
+
+#### mc_rotate_degree_t
+
+| 取值 | 说明 |
+| --- | --- |
+| `MC_CCW_0` | 不旋转 |
+| `MC_CCW_90` / `MC_CCW_180` / `MC_CCW_270` | 逆时针旋转 90° / 180° / 270° |
+
+仅编码支持旋转，解码不支持。
+
+#### mc_mirror_direction_t
+
+| 取值 | 说明 |
+| --- | --- |
+| `MC_DIRECTION_NONE` | 不镜像 |
+| `MC_VERTICAL` | 垂直镜像 |
+| `MC_HORIZONTAL` | 水平镜像 |
+| `MC_HOR_VER` | 水平 + 垂直镜像（等价于旋转 180°） |
+
+仅编码支持镜像，解码不支持。
+
+#### mc_pixel_format_t
+
+| 取值 | 说明 |
+| --- | --- |
+| `MC_PIXEL_FORMAT_NONE` | 未指定 |
+| `MC_PIXEL_FORMAT_YUV420P` | YUV420 平面格式 |
+| `MC_PIXEL_FORMAT_NV12` | YUV420 半平面，Y 平面 + UV 交错平面（**最常用**） |
+| `MC_PIXEL_FORMAT_NV21` | YUV420 半平面，Y 平面 + VU 交错平面 |
+| `MC_PIXEL_FORMAT_YUV422P` / `MC_PIXEL_FORMAT_NV16` / `MC_PIXEL_FORMAT_NV61` | YUV422 平面与半平面格式 |
+| `MC_PIXEL_FORMAT_YUYV422` / `MC_PIXEL_FORMAT_YVYU422` / `MC_PIXEL_FORMAT_UYVY422` / `MC_PIXEL_FORMAT_VYUY422` | YUV422 打包格式，主要为 JPEG / MJPEG 使用 |
+| `MC_PIXEL_FORMAT_YUV444` / `MC_PIXEL_FORMAT_YUV444P` / `MC_PIXEL_FORMAT_NV24` / `MC_PIXEL_FORMAT_NV42` | YUV444 格式 |
+| `MC_PIXEL_FORMAT_YUV440P` | YUV440 格式，JPEG 解码旋转 90°/270° 时使用 |
+| `MC_PIXEL_FORMAT_YUV400` | 灰度格式，仅 JPEG / MJPEG |
+| `MC_PIXEL_FORMAT_NV12_Y10C8` / `MC_PIXEL_FORMAT_NV21_Y10C8` / `MC_PIXEL_FORMAT_NV12_Y10C8_LSB` / `MC_PIXEL_FORMAT_NV21_Y10C8_LSB` | 10bit 亮度压缩格式，本产品线编解码器不支持 |
+| `MC_PIXEL_FORMAT_TOTAL` | 格式总数，非有效取值 |
+
+#### mc_h264_profile_t / mc_h264_level_t / mc_h265_level_t
+
+`profile` 与 `level` 决定编码器输出的码流符合哪一档标准，影响解码端的兼容范围。常用取值：
+
+| 类型 | 取值 |
+| --- | --- |
+| `mc_h264_profile_t` | `MC_H264_PROFILE_BP`（Baseline）、`MC_H264_PROFILE_MP`（Main）、`MC_H264_PROFILE_HP`（High）等 |
+| `mc_h264_level_t` | `MC_H264_LEVEL1`(10) … `MC_H264_LEVEL5_2`(52)，数值为 level × 10 |
+| `mc_h265_level_t` | `MC_H265_LEVEL1`(30) … `MC_H265_LEVEL5_1`(153)，数值为 level × 30 |
+
+每个类型的完整定义见板端 `/usr/hobot/include/hb_media_codec.h`。标注「联合体成员」的字段，实际生效的那个由 `codec_id`（以及 `encoder`）决定。
+
+### 枚举与取值
+
+#### media_codec_mode_t
 
 | 取值 | 说明 |
 | --- | --- |
 | `MC_SOFTWARE` | 软件实现 |
 | `MC_HARDWARE` | 硬件实现。RDK 上视频编解码走 VPU / JPU，即此项 |
 
-### media_codec_state_t
+#### media_codec_state_t
 
 | 取值 | 说明 |
 | --- | --- |
@@ -2870,7 +3495,7 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | `MEDIA_CODEC_STATE_ERROR` | 出错 |
 | `MEDIA_CODEC_STATE_TOTAL` | 状态总数，非有效状态 |
 
-### mc_video_cmd_prio_t
+#### mc_video_cmd_prio_t
 
 | 取值 | 说明 |
 | --- | --- |
@@ -2879,7 +3504,7 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 优先级用于多路编解码任务竞争硬件资源时的调度。不显式设置时默认为 `PRIO_0`。
 
-### media_codec_id_t
+#### media_codec_id_t
 
 | 取值 | 说明 |
 | --- | --- |
@@ -2901,37 +3526,18 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 表中 FLAC 至 AAC 的 6 种为内置软件编解码器，直接使用；其余取值需要先通过 `hb_mm_mc_register_audio_encoder` / `hb_mm_mc_register_audio_decoder` 注册外部编解码器，见[音频编解码器注册](#hb_mm_mc_register_audio_encoder)。
 
-### mc_audio_encode_param_t
+#### mc_av_stream_feeding_mode_t
 
-音频编码器描述，注册音频编码器时由调用方填充。函数指针由软件编解码库实现，MediaCodec 通过它们调用编解码逻辑。
+解码时码流的送入方式。
 
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `ff_type` | `media_codec_id_t` | 音频编码标准，取值见 [media_codec_id_t](#media_codec_id_t) |
-| `ff_max_frm` | `hb_s32` | 单帧最大采样数 |
-| `ff_codec_name[256]` | `char` | 编码器名称字符串 |
+| 取值 | 说明 |
+| --- | --- |
+| `MC_FEEDING_MODE_NONE` | 未指定 |
+| `MC_FEEDING_MODE_STREAM_SIZE` | 按字节流长度送入。每次 queue 一个连续码流片段 |
+| `MC_FEEDING_MODE_FRAME_SIZE` | 按帧送入。每次 queue 一整帧码流，便于按帧统计 |
+| `MC_FEEDING_MODE_TOTAL` | 模式总数，非有效取值 |
 
-### mc_audio_decode_param_t
-
-音频解码器描述，注册音频解码器时由调用方填充。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `ff_type` | `media_codec_id_t` | 音频编码标准，取值见 [media_codec_id_t](#media_codec_id_t) |
-| `ff_codec_name[256]` | `char` | 解码器名称字符串 |
-
-### mc_av_codec_startup_params_t
-
-启动参数，作为 `hb_mm_mc_start` 的入参。按 `codec_id` 与 `encoder` 选择联合体成员。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `video_enc_startup_params` | `mc_video_enc_startup_params_t` | 联合体成员 |
-| `video_dec_startup_params` | `mc_video_dec_startup_params_t` | 联合体成员 |
-| `audio_enc_startup_params` | `mc_audio_enc_startup_params_t` | 联合体成员 |
-| `audio_dec_startup_params` | `mc_audio_dec_startup_params_t` | 联合体成员 |
-
-### media_codec_buffer_type_t
+#### media_codec_buffer_type_t
 
 | 取值 | 说明 |
 | --- | --- |
@@ -2939,19 +3545,6 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | `MC_VIDEO_STREAM_BUFFER` | 视频码流 buffer。编码时作输出，解码时作输入 |
 | `MC_AUDIO_FRAME_BUFFER` | 音频帧 buffer |
 | `MC_AUDIO_STREAM_BUFFER` | 音频码流 buffer |
-
-### media_codec_output_buffer_info_t
-
-输出 buffer 的附加信息，由 `hb_mm_mc_dequeue_output_buffer` 的出参返回，携带帧类型、时间戳、码流帧序等。实际生效的联合体成员由 buffer 类型决定。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `video_frame_info` | `mc_h264_h265_output_frame_info_t` | H.264 / H.265 解码输出帧信息（帧类型、pts 等） |
-| `video_stream_info` | `mc_h264_h265_output_stream_info_t` | H.264 / H.265 编码输出码流信息（帧类型、pts、slice 数等） |
-| `jpeg_frame_info` | `mc_mjpeg_jpeg_output_frame_info_t` | MJPEG / JPEG 解码输出帧信息 |
-| `jpeg_stream_info` | `mc_mjpeg_jpeg_output_stream_info_t` | MJPEG / JPEG 编码输出码流信息 |
-| `audio_frame_info` | `mc_audio_output_frame_info_t` | 音频解码输出帧信息 |
-| `audio_stream_info` | `mc_audio_output_stream_info_t` | 音频编码输出码流信息 |
 
 ## 返回值说明
 
