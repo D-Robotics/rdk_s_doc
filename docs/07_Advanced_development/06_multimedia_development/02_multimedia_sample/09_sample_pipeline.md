@@ -60,17 +60,26 @@ Usage: single_pipe_vin_isp_ynr_pym_vpu [OPTIONS]
 Options:
   -s <sensor_index>      Specify sensor index
   -l <link_port>         Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D
+  -m <mipi_rx>          Specify the mipi_rx interface
   -h                     Show this help message
 index: 0  sensor_name: imx219-30fps             config_file:linear_1920x1080_raw10_30fps_1lane.c
 index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw10_30fps_2lane.c
 index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
 index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
+index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy                    config_file:dummy_sensor.c
+index: 6  sensor_name: sc230ai-30fps            config_file:linear_1920x1080_raw10_30fps_1lane.c
+index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw10_30fps_2lane.c
+index: 8  sensor_name: isx031_gmsl-30fps        config_file:linear_1920x1536_yuv422_30fps_4lane.c
 ```
+
+注意： sensor 列表内容与镜像版本有关，请以板端实际输出为准。
 
 #### 程序参数选项说明
 
 - `-s`: 指定 Camera Sensor 型号和配置
 - `-l`: 指定 Serdes 类型的 Sensor 接入的 Link Port, 比如接入的是 Port A，指定为 0: `-l 0`
+- `-m`: 指定接入的 mipi rx 接口
 
 #### 运行效果
 
