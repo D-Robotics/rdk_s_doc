@@ -29,7 +29,6 @@ sample_codec/
 ├── 640x480_30fps.h264
 ├── codec_config.ini
 ├── Makefile
-├── Readme.md
 ├── sample_codec.c
 └── sample_codec.h
 ```
@@ -139,8 +138,8 @@ width = 1920
 height = 1080
 frame_rate = 30
 bit_rate = 8192
-input = 1920x1080.yuv
-output = 1920x1080_30fps.264
+input = 1920x1080_NV12.yuv
+output = 1920x1080_30fps.h264
 frame_num = 100
 ; profile, level, tier 配置
 ; h264 支持常见 baseline/main/high Profiles Level @ L5.2 ( 即最大 high@L5.2)
@@ -161,8 +160,8 @@ decode_streams = 0x0
 codec_type = 0
 width = 1920
 height = 1080
-input = 1920x1080_30fps.264
-output = 1920x1080.yuv
+input = 1920x1080_30fps.h264
+output = 1920x1080_NV12.yuv
 ```
 
 #### 编码配置
@@ -208,7 +207,8 @@ encode_streams: 0x1
 decode_streams: 0x0
 Encoding video...
 Encode params...
- codec_type: 0, width: 1920, height: 1080, frame_rate: 30, bit_rate: 8192, input_file: 1920x1080_NV12.yuv, output_file: 1920x1080_30fps.h264, frame_num: 100
+ codec_type: 0, width: 1920, height: 1080, frame_rate: 30, bit_rate: 8192, input_file: 1920x1080_NV12.yuv, output_file: 1920x1080_30fps.h264, frame_num: 100, profile: h264_main@L4, performance_test:0
+encode_video...
 Encode idx: 0, init successful
 Encode idx: 0, start successful
 Encode idx: 0, frame= 1
