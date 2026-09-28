@@ -54,7 +54,7 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是 RDK S
 
 ### 拓扑图
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s100_camera_expansion_board.png" alt="RDK S100 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }}/>
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s100_camera_expansion_board.png" alt="RDK S100 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }}/>
 
 ### 接口概览
 
