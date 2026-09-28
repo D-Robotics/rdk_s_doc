@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: "Ethernet"
-description: "Ethernet"
+description: "RDK S100/S600 以太网控制器：设备树配置、常用命令、PPS/PHC/gPTP 时间同步与 TSN 特性"
 ---
 # Ethernet
 
@@ -19,11 +19,10 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 控制器内置硬件多队列、MTL 二层传输层、DMA 引擎等，以实现上述各种场景的报文收发。
 本文主要包括网卡使用指南、开发板 Bringup、关键特性描述等。
 
-**适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试网卡驱动、TSN/PTP/EtherCAT 或板级 Bringup 的 BSP/驱动工程师。
-
-**前置条件**：已烧录 RDK OS 并可登录板端；了解 Linux 网络子系统与时间同步基础。
-
-**与其他模块关系**：本驱动是网络配置、EtherCAT（Linux 侧）、时间同步（PTP/gptp）的底层实现。
+- **定位**：说明以太网控制器（GMAC/XGMAC）的硬件连接、设备树配置、常用命令、时间同步（PPS/PHC/gPTP）与 TSN 特性，以及调试与问题排查方法。
+- **适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要调试网卡驱动、TSN/PTP/EtherCAT 或板级 Bringup 的 BSP/驱动工程师。
+- **前置条件**：已烧录 RDK OS 并可登录板端（SSH 或调试串口）；了解 Linux 网络子系统与时间同步基础。
+- **与其他模块关系**：本驱动是网络配置、EtherCAT（Linux 侧）、时间同步（PTP/gPTP）的底层实现。网络配置参见 [网络配置](../../../02_System_configuration/01_network_config.md)，EtherCAT 参见 [EtherCAT（Linux 侧）](./02_ethercat.md)。
 
 ## 名词解释
 | 缩略语 | 英文全名                          | 中文解释             |
@@ -62,74 +61,61 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 | AVB/TSN | 时间敏感性网络     |  &#x2705;                                      |
 | C22/C45 | MDIO PHY 数据协议   |  &#x2705;                                      |
 </DocScope>
-## 网络配置
-### U-Boot
-- 配置 IP
-```shell
-      setenv ipaddr x.x.x.x
-      setenv gatewayip x.x.x.x
-      setenv netmask x.x.x.x
-```
-- 配置 VLAN
-```shell
-      setenv vlan xx
-```
 
-- 配置 MAC 地址
-```shell
-      setenv ethaddr xx:xx:xx:xx:xx:xx          # 设置eth mac地址
-      env del -f ethaddr                        //删除mac地址
-```
-
-- 切换当前使用的 eth
-
-```shell
-      setenv ethact eth0
-      setenv ethact eth1
-      # 如果U-Boot支持双网卡可以切换成功。单网卡切换无效。
-```
-
-### Linux/Ubuntu
-:::warning
-- 建议使用 Network Management, 即 Ubuntu 桌面进行网卡配置。
-- 下述手动通过 ip, ethtool 等命令配置为次选方案。可自行结合 Ubuntu 版本以及网络资料判断是否生效。
-:::
-
-- 配置 IP
-```shell
-      ip addr add 192.168.1.10/24 dev eth0.10 # 推荐
-      或者
-      ifconfig eth0.10 192.168.1.10 netmask 255.255.255.0
-```
-
-- 配置 VLAN
-```shell
-      ip link add link eth0 name eth0.10 type vlan id 10                                //添加vlan id 10
-      ip link set eth0.10 type vlan egress 0:5 1:5 2:5 3:5 4:5 5:5 6:5 7:5          //配置vlan priority 5
-```
 
 ## 软件介绍<a id="chap_code_position"></a>
-### 代码位置
-- U-Boot ETH 代码位置
-```shell
-    drivers/net/hobot_super_gmac.c
-    drivers/net/hobot_super_xpcs.c
-    drivers/net/hobot_super_xgmac.c
-    drivers/net/hobot_s600_xpcs.c
+### 驱动代码
+
+S100 与 S600 共用同一份源码树，通过各自的编译配置选择参与编译的驱动；以下路径均相对 SDK 源码根目录 `source/`。
+
+- U-Boot 以太网驱动：`bootloader/uboot/drivers/net/`
+
+```
+hobot_super_gmac.c        # GMAC 驱动
+hobot_super_xgmac.c       # XGMAC 驱动
+hobot_super_xpcs.c        # XPCS 驱动（S100）
+hobot_super_xpcs.h
+hobot_s600_xpcs.c         # XPCS 驱动（S600）
 ```
 
-- Kernel ETH 代码位置
-```shell
-   hobot-drivers/ethernet/hobot/hobot_eth_super_main.c
-   hobot-drivers/ethernet/hobot/hobot_eth_super_mdio.c
-   hobot-drivers/ethernet/hobot/hobot_eth_super_ptp.c
-   hobot-drivers/ethernet/hobot/hobot_eth_super_tc.c
-   hobot-drivers/ethernet/hobot/core/...
-   hobot-drivers/ethernet/hobot/dma/...
+| 编译配置 | 对应驱动 | 适用产品 |
+|----------|----------|----------|
+| `CONFIG_HOBOT_SUPER_GMAC` | `hobot_super_gmac.c` | S100 / S600 |
+| `CONFIG_HOBOT_SUPER_XGMAC` | `hobot_super_xgmac.c` | S600 |
+| `CONFIG_HOBOT_SUPER_XPCS` | `hobot_super_xpcs.c` | S100 |
+| `CONFIG_HOBOT_S600_XPCS` | `hobot_s600_xpcs.c` | S600 |
+
+编译配置见 `bootloader/uboot/configs/hobot_s600_defconfig` 与 `hobot_s100_defconfig`。
+
+- Linux 以太网驱动：`hobot-drivers/ethernet/hobot/`
+
+```
+hobot_eth_super_main.c    # 驱动主体：probe、netdev 操作集、ethtool、TSN 私有 ioctl
+hobot_eth_super_mdio.c    # MDIO 总线注册与 C22/C45 PHY 读写
+hobot_eth_super_ptp.c     # PTP/PHC 时间戳与 PPS（含 flex PPS）
+hobot_eth_super_tc.c      # TSN 流量整形：CBS、EST（taprio）
+hobot_eth_selftests.c     # ethtool -t 自检（MAC/PHY loopback）
+hobot_veth_super_main.c   # 虚拟以太网（vethernet）
+core/hobot_gmac_core.c    # GMAC 控制器操作集
+core/hobot_xgmac_core.c   # XGMAC 控制器操作集
+core/hobot_xpcs.c         # XPCS/PCS 与 hsis（hsi-mode、xpcs-speed、txeq/vboost）
+core/hobot_gmac_mmc.c     # GMAC MMC 统计
+core/hobot_xgmac_mmc.c    # XGMAC MMC 统计
+dma/hobot_gmac_dma.c      # GMAC DMA 与描述符
+dma/hobot_xgmac_dma.c     # XGMAC DMA 与描述符
 ```
 
-## 网络驱动开发
-### U-Boot ETH 开发
+| 内核模块 | 配置项 | 说明 |
+|----------|--------|------|
+| `hobot_eth_super.ko` | `CONFIG_HOBOT_ETH` | 以太网驱动主体 |
+| `hobot_xpcs_super.ko` | `CONFIG_HOBOT_ETH_XPCS` | XPCS 驱动 |
+| `hobot_veth_super.ko` | `CONFIG_HOBOT_VETH` | 虚拟以太网 |
+
+编译配置见 `hobot-drivers/configs/drobot_s600_defconfig` 与 `drobot_s100_defconfig`：S600 默认开启 `CONFIG_HOBOT_ETH` 与 `CONFIG_HOBOT_ETH_XPCS`，未开启 `CONFIG_HOBOT_VETH`。
+
+板端可用 `lsmod` 查看已加载的模块，模块文件位于 `/lib/modules/$(uname -r)/hobot-drivers/ethernet/hobot/`。
+
+### U-Boot ETH 驱动开发
 #### 硬件连接
 <DocScope products="RDK S100">
 - 参考 S100设计原理图
@@ -273,8 +259,10 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 </DocScope>
 
 #### MAC2MAC
-- 在 MAC TO MAC 直连情况下, 需要配置为 fixed-link
-- 例如
+
+MAC2MAC 指两个 MAC 直接相连、中间没有 PHY 的场景：例如板内 SoC 与 SoC、FPGA 或交换芯片直连，或两块板卡的网口背靠背直连。这种情况下没有 MDIO 可读、也没有自协商过程，必须由软件把链路参数固定下来，即在设备树中配置 `fixed-link`（固定速率与双工模式）。
+
+- 例如：
 
 <DocScope products="RDK S100">
 ```dts
@@ -303,28 +291,51 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 ```
 </DocScope>
 
+:::warning
+`fixed-link` 中的 `speed` 与 `full-duplex` 必须与对端 MAC 的实际工作参数一致，否则会出现丢包或链路不通。
+:::
+
 #### U-Boot 下命令介绍
--  mii： phy 读写命令（C22协议）
-   执行网络命令（如 ping）后初始化网络接口，否则 mdio 命令会执行异常。
-```shell
-      mii info   <addr>                    //display MII phy info
-      mii read   <addr> <reg>              //read  MII phy <addr> register <reg>
+
+U-Boot 下常用的以太网调试命令如下，用于读写 PHY 寄存器、查看报文统计计数等。
+
+- `mii`：读写 PHY 寄存器（C22 协议，通过当前 MII 设备访问）
+
+```bash
+mii device                            # 列出可用的 MII 设备
+mii device <devname>                  # 切换当前 MII 设备
+mii info   <addr>                     # 显示 PHY 信息（不指定 <addr> 时扫描 0~31）
+mii read   <addr> <reg>               # 读取 PHY <addr> 的寄存器 <reg>
+mii write  <addr> <reg> <data>        # 写入 PHY <addr> 的寄存器 <reg>
+mii modify <addr> <reg> <data> <mask> # 按 <mask> 修改寄存器 <reg> 中的位
+mii dump   <addr> <reg>               # 解析打印 <addr> <reg>（仅支持 reg 0~5）
 ```
 
--  mdio： phy 读写命令（C45）
-```shell
-      mdio list                           //List MDIO buses
-      mdio read <phydev> [<devad>.]<reg>  //read phy register at <devad>.<reg>
+`<addr>`、`<reg>` 支持范围写法，例如 `mii read 2-7 0`。
+
+:::tip
+`mii` 通过“当前 MII 设备”访问 PHY。若提示找不到设备，可先用 `mii device` 查看并切换；也可先执行一次网络命令（如 `ping`）触发网口初始化。`mdio` 命令内部会自动探测 MDIO 总线，无需先执行网络命令。
+:::
+
+- `mdio`：读写 PHY 寄存器（C45 协议）
+
+```bash
+mdio list                             # 列出 MDIO 总线
+mdio read  <phydev> [<devad>.]<reg>   # 读取 PHY 寄存器
+mdio write <phydev> [<devad>.]<reg> <data>   # 写入 PHY 寄存器
+mdio rx    <phydev> [<devad>.]<reg>   # 读取 PHY 扩展寄存器
+mdio wx    <phydev> [<devad>.]<reg> <data>   # 写入 PHY 扩展寄存器
 ```
 
--  md： 查看统计计数
-   通过 md 命令读写寄存器查看报文统计计数用于调试。
+`<phydev>` 可以是 `<总线名> <地址>`、`<地址>` 或 `<网口名>`（如 `eth0`）；`<devad>`、`<reg>` 支持范围写法，例如 `1-5.4-0x1f`。
 
-```shell
-      md[.b, .w, .l, .q] address
+- `md`：读取内存/寄存器内容，可用于查看报文统计计数
+
+```bash
+md[.b, .w, .l, .q] address [# of objects]
 ```
 
-### Linux ETH 开发
+### Linux ETH 驱动开发
 - 驱动代码在 hobot-drivers/ethernet 目录, 可参考[软件介绍](#软件介绍)的描述。
 - 控制器驱动部分大部分不需要进行修改, 主要任务还是结合开发板硬件, 配置相关设备树。
 
@@ -432,7 +443,11 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 - 更多高级特性配置, 可参考后续章节
 
 #### MAC2MAC
-- 和 U-Boot 下类似, MAC2MAC 场景, 最主要就是配置成 fixed-link 模式
+
+和 U-Boot 下类似，MAC2MAC 场景最主要就是把对应网口配置成 `fixed-link` 模式。前提是该网口未连接 PHY，即设备树中不配置 `phy-handle`，也不配置 `mdio` 子节点。
+
+- 例如：
+
 <DocScope products="RDK S100">
 ```dts
     // eth0默认节点配置可参考drobot-s100-soc.dts
@@ -460,19 +475,38 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 ```
 </DocScope>
 
+实际板级示例：S600 matrix 板的 `&ethernet2`（1000M 全双工）与 `&ethernet5`（10000M 全双工）使用 `fixed-link`；S100 的 `rdk-s100-v1-2.dts` 同样对 `&ethernet0` 配置了 `fixed-link`。若对端可通过带内（in-band）状态传递链路速率与双工，也可不配置 `fixed-link`，改用 `managed = "in-band-status"`（S600 matrix 板的 `&ethernet3`、`&ethernet4` 即为此配置）。
+
 - fixed-link 常用节点含义描述
-   - speed（整型，必须），表示链接速率，可以设置为10、100、1000。
+   - speed（整型，必须），表示链接速率，可设置为 10、100、1000。
    - full-duplex（布尔型，可选），表示双工方式，缺省是半双工方式。
    - pause（布尔型，可选），表示是否使能 pause，缺省禁止 pause。
    - asym-pause（布尔型，可选），表示是否使能 asym-pause，缺省禁止 asym-pause。
-   - link-gpio（gpio-list，可选），表示是否可以读取 gpio 以确定链接是否已启动。
+   - link-gpios（gpio-list，可选），表示可以通过 gpio 读取链接是否已启动。
 
 #### TSO
-- 即 TCP Segmentation Offload, 现代网卡硬件支持 TCP 分段卸载功能, 以减轻 TCP 分段业务的 cpu 负载。
-- TSO 开启后， 内核的 GSO(Generic Segmentation Offload)会自动开启。
-- 可以通过 hobot, tso 标记进行网卡硬件 tso 功能的控制。
+
+TSO（TCP Segmentation Offload，TCP 分段卸载）把 TCP 报文的分段工作交给网卡硬件完成：内核一次下发较大的报文，由硬件按 MSS 切分成多个以太网帧发出，从而降低 CPU 占用。开启后这类报文由硬件分段，内核的软件分段路径（GSO，Generic Segmentation Offload）不再参与。
+
+- 通过设备树属性 `hobot,tso` 使能。该属性为**布尔标记**，存在即开启；同时需要网卡硬件支持该能力（驱动会检查网卡 `TSOEN` 能力位，支持时启动日志打印 `TSO supported`）：
+
 ```dts
-    hobot,tso = <1>;            // 打开网卡TSO功能
+    ethernet3: xgmac0@0x33130000 {
+        compatible = "hobot,hobot_xgmac";
+        hobot,tso;                 // 开启 TSO
+    };
+```
+
+- 关闭 TSO 需要**删除该属性**；写成 `hobot,tso = <0>` 不会关闭（驱动以 `of_property_read_bool` 判断属性是否存在）。
+- 使能后该网口具备 `NETIF_F_TSO`、`NETIF_F_TSO6` 与 `NETIF_F_GSO_UDP_L4` 能力，可运行时用 `ethtool -K <interface> tso on/off` 临时开关，用 `ethtool -k <interface>` 查看当前状态。
+
+以 S600 的 eth0 为例：
+
+```console
+root@hobot:~# ethtool -k eth0 | grep -E "tcp-segmentation|generic-segmentation"
+tcp-segmentation-offload: on
+        tx-tcp-segmentation: on
+generic-segmentation-offload: on
 ```
 
 <DocScope products="RDK S600">
@@ -496,59 +530,104 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 </DocScope>
 
 #### 中断聚合
+
+中断聚合（interrupt coalescing）让网卡累积多个报文（或等待一段时间）后再产生一次中断，并把多个发送完成事件合并清理，以减少中断次数、降低 CPU 占用；代价是引入额外时延。对时延敏感的业务（如 TSN）可以通过关闭聚合换取更低的转发时延。
+
+- 网卡默认开启中断聚合，默认参数为 `tx-frames = 15`、`rx-usecs = 50`。
+- 通过设备树属性 `hobot,disable_coal` 关闭（布尔标记，存在即关闭）：
+
 ```dts
     ethernet3: xgmac0@0x33130000 {
         compatible = "hobot,hobot_xgmac";
-        hobot,disable_coal;
+        hobot,disable_coal;        // 关闭中断聚合
     };
 ```
-- hobot,disable_coal;   # 网卡默认是开启中断聚合功能的, 可以通过该标记关闭中断聚合功能
+
+- 也可以在运行时调整聚合参数。注意必须在网卡 DOWN 时设置，否则返回 `Device or resource busy`：
+
+```bash
+ip link set eth0 down
+ethtool -C eth0 tx-frames 15 rx-usecs 50   # tx-frames ≤ 256；rx-usecs 取值范围 30~160
+ethtool -c eth0                            # 查看当前聚合参数
+ip link set eth0 up
+```
+
+:::tip
+`hobot,disable_coal` 为可选调优项，当前 RDK S100/S600 板级设备树均未使用（即默认保持开启）。
+:::
 
 #### RSS
-<DocScope products="RDK S600">
-- 接收端缩放, 即多队列网卡硬件支持的接收端负载均衡技术
-- 通常是万兆网卡, 例如 S600需要该项技术
+
+RSS（Receive Side Scaling，接收端缩放）是网卡硬件实现的接收负载均衡：硬件按报文五元组（源/目的 IP、源/目的端口、协议）计算 hash，把报文分发到不同接收队列，各队列由独立中断与 NAPI 线程处理，从而将接收负载分摊到多个 CPU 核。
+
+- 使能条件：接收队列数大于 1、设备树配置了 `hobot,rss_en`，且控制器实现了 RSS 能力。
+- 使能方式：
+
 ```dts
-    ethernet3: xgmac0@0x33130000 {
+    ethernet4: xgmac1@0x33140000 {
         compatible = "hobot,hobot_xgmac";
-        hobot,multi_irq;
-        hobot,rss_en;
+        hobot,multi_irq;           // 多中断：为每个队列注册独立的 ISR
+        hobot,rss_en;              // 使能 RSS
     };
 ```
 
-- RSS 网卡接收端缩放技术, 简单说就是网卡硬件通过计算数据包五元组(IP，端口, 协议)的 hash 值,
-然后将网卡的中断, 通过相关策略, 分发到不同核心。以进行接收端 cpu 负载均衡的行为。
-- 所以该技术依赖网卡硬件的 hash 算法, RSS 特性支持, 以及网卡多中断机制。
-- hobot,multi_irq;      # 网卡多中断支持, 注册多中断的不同 ISR 处理。
-- hobot,rss_en;         # 网卡接收端缩放功能使能。
+- 验证：
+    - `/proc/interrupts` 中可见每个队列的中断，命名形如 `ethN`、`ethN_tx_chnX`、`ethN_rx_chnX`；
+    - `/sys/class/net/<interface>/queues/` 可查看实际队列数。
 
-</DocScope>
 
 #### HSIS, XPCS
+
+HSIS（High-Speed Interface Subsystem）是 SoC 的高速接口子系统，负责 SerDes/PHY 通道在 PCIe 与以太网之间的分配以及参考时钟选择；XPCS 是 MAC 与 SerDes 之间的 PCS（物理编码子层）IP，决定各控制器实际工作的速率。**由于以太网与 PCIe 复用 PHY，修改本节点会同时影响二者。**
+
 <DocScope products="RDK S600">
+
+- `hsi-mode`：通道分配模式，取值含义如下；RDK S600 板级使用 `2`。
+
+| 取值 | 含义 |
+|------|------|
+| `0x1` | PCIe x4 |
+| `0x2` | PCIe x2 + PCIe x2 |
+| `0x4` | PCIe x2 + 以太网 x2 |
+| `0x8` | PCIe x1 + PCIe x1 + 以太网 x2 |
+
+- `refclk-mode`：参考时钟来源，`0` 为内部时钟，`1` 为外部时钟。
+- `xpcs-speed`：6 个元素依次对应 gmac0、gmac1、gmac2、xgmac0、xgmac1、xgmac2 的 XPCS 速率，未使用的控制器填 `0`。
+- `hobot-txeq`：发送均衡档位，取值 `0~10`，SGMII 不需要调整。
+- `hobot-vboost`：眼图幅值系数，取值 `0~7`，`0` 表示不使能，超过 `7` 会被忽略。
+
+配置示例：
+
 ```dts
     hsis0: hsis0 {
         status = "okay";
         compatible = "drobot,super-hsis";
-        hsi-mode = <4>;
+        hsi-mode = <2>;
         refclk-mode = <0>;/* 0:internal; 1:external; */
-        xpcs-speed = <0 0 0 5000 10000 10000>; /*gmac0, gmac1, gmac2, xgmac0, xgmac1, xgmac2*/
+        xpcs-speed = <0 0 0 1000 10000 10000>; /*gmac0, gmac1, gmac2, xgmac0, xgmac1, xgmac2*/
         hobot-txeq = <0 0 0 1 2 4>; /* gmac0/1/2 xgmac0/1/2 tx equalization control*/
         hobot-vboost = <5 5 5 5 5 5>; /*gmac0/1/2 xgmac0/1/2*/
     };
 ```
+
 :::warning
-- 开机启动时的 hsis, xpcs 配置, 是采用的 U-Boot 中 hsis 的配置。
-- Linux 中的 hsis 配置, 仅用于休眠唤醒时, 对 hsis mode 和 xpcs 模式的恢复。
-- 所以, 当需要修改 hsis 配置时, 需要确保与 U-Boot hsis 节点同步修改。
+- 开机阶段的 hsis/xpcs 配置实际由 **U-Boot** 的 hsis 节点完成；Linux 中的 hsis 配置仅用于休眠唤醒时恢复 hsi-mode 与 xpcs 模式。
+- 因此修改 hsis 配置时，必须同步修改 U-Boot 的 hsis 节点，否则会出现实际通道配置与预期不一致。
+- `reg` 的顺序为 XPCS4、XPCS5、XPCS3、XPCS0、XPCS1、XPCS2（驱动内部再映射到 gmac/xgmac），照抄板级 dtsi 即可，不要随意调整顺序。
 :::
+
 </DocScope>
 
 #### 队列
-- 现代网卡都是多队列网卡。
-- 对于队列调度策略, 优先级配置等, 可以通过设备树进行配置。
+
+现代网卡都是多队列网卡：硬件提供多个发送（TX）/接收（RX）队列，每个队列有独立的描述符环与中断，MTL 层再按调度算法与队列模式把不同优先级的流量分流到不同队列，从而同时满足 QoS（TSN 的整形/调度）与多核负载分担的需求。队列数量、调度算法与每个队列的模式都通过设备树配置。
+
+- `hobot,mtl-rx-config` 与 `hobot,mtl-tx-config` 是**必须配置**的子节点，缺失会导致驱动 probe 失败。
+- 队列数由 `hobot,rx-queues-to-use`、`hobot,tx-queues-to-use` 决定（缺省 `1`）；子节点 `queue0`、`queue1`…… 按出现顺序依次对应队列 0、1……。
+- 配置示例：
+
 ```dts
-    ethernet4: xgmac0@0x33140000 {
+    ethernet4: xgmac1@0x33140000 {
         compatible = "hobot,hobot_xgmac";
         hobot,mtl-rx-config {
             hobot,rx-queues-to-use = <8>;
@@ -580,96 +659,257 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 
 - hobot,mtl-tx-config 配置：
 
-| 属性                | 描述                                                                |
-| ----                | ----                                                                |
-| hobot,tx-sched-wrr  | 多队列时 round robin 调度，当没有 tsn 或业务优先级需求时 可以选择 rr 调度
-| hobot,tx-sched-sp   | 严格优先级调度
-| hobot,avb-algorithm | 发送队列 avb 机制可用于 tsn
-| hobot,dcb-algorithm | 队列0以及 rr 调度时，须配置成 dcb 模式
-
+| 属性 | 描述 |
+| ---- | ---- |
+| hobot,tx-queues-to-use | 使用的发送队列数，缺省 1 |
+| hobot,tx-sched-wrr | 发送调度为 WRR（加权轮询），没有 TSN 或业务优先级需求时可选 |
+| hobot,tx-sched-sp | 发送调度为严格优先级（缺省） |
+| hobot,weigh | 队列权重，WRR 调度时使用，缺省 1 |
+| hobot,dcb-algorithm | 队列使用 DCB 模式（队列 0 以及 rr 调度时，必须配置成 DCB 模式） |
+| hobot,avb-algorithm | 队列使用 AVB 模式，可用于 TSN 整形；配合 `hobot,idle_slope`、`hobot,send_slope`、`hobot,high_credit`、`hobot,low_credit` 配置 CBS 参数 |
+| hobot,priority | 将该队列标记为高优先级队列 |
 
 - hobot,mtl-rx-config 配置：
 
-| 属性                | 描述                                                                              |
-| ----                | ----                                                                              |
-| hobot,rx-sched-sp   | 接收严格优先级调度，接收队列无 rr 调度。
-| hobot,avb-algorithm | 接收队列 avb 机制可用于接收 gptp 报文
-| hobot,dcb-algorithm | dcb 机制用于根据 vlan 优先级选择接收队列。从而达到不同的 napi 线程承接不同优先级的任务
+| 属性 | 描述 |
+| ---- | ---- |
+| hobot,rx-queues-to-use | 使用的接收队列数，缺省 1 |
+| hobot,rx-sched-sp | 接收严格优先级调度（缺省） |
+| hobot,rx-sched-wsp | 接收加权严格优先级调度 |
+| hobot,dcb-algorithm | 按 VLAN 优先级选择接收队列，使不同 NAPI 线程承接不同优先级的任务 |
+| hobot,avb-algorithm | 接收队列使用 AVB 模式，可用于接收 gPTP 报文 |
+| hobot,map-to-dma-channel | 指定队列对应的 DMA 通道，缺省与队列号相同 |
+| hobot,priority | 将该队列标记为高优先级队列 |
+| hobot,route-ptp / hobot,route-avcp / hobot,route-dcbcp | 将 PTP、AV 控制、DCB 控制报文路由到该队列 |
 
 :::tip
 - 根据业务需求配置队列调度机制和队列的模式。
-- 当配成多队列时，队列均分硬件 buf，无多队列需求时，可以只保留一个队列独占全部硬件 buf
+- 当配成多队列时，队列均分硬件 buf，无多队列需求时，可以只保留一个队列独占全部硬件 buf。
 :::
 
 
-## 网卡常用命令介绍
-### ethtool
-- ethtool： 查看统计计数，设置 phy 等， 支持以下命令。
+## 网络配置
+
+RDK OS 默认由 NetworkManager 管理网络，netplan 配置位于 `/etc/netplan/`（`renderer: NetworkManager`，以板端实际文件为准）。推荐使用 Ubuntu 桌面网络设置或 `nmcli`/`nmtui` 配置网卡，配置可持久化；下文的 `ip`、`ifconfig` 命令为临时配置，重启或网络服务重载后失效。
+
+以 RDK S600 板为例，默认网口为 eth0~eth3；RDK S100 板为 eth0~eth1。实际网口名可用 `ip -br link` 查看。
+
+### U-Boot
+
+U-Boot 环境变量用 `printenv` 查看、`saveenv` 保存；未执行 `saveenv` 时仅本次生效。
+
+- 配置 IP 与服务器地址：
+
 ```bash
-    # 查看统计计数
-    ethtool -S eth0
-
-    # 显示时间戳能力
-    ethtool -T eth0
-
-    # 进行Loopback测试
-    ethtool -t eth0 offline
-
-    # 控制TSO功能开关
-    ethtool -K eth0 tso on/off
-
-    # 控制checksum功能开关
-    ethtool -K eth0 rx-checksum on/off
-
-    # 切换网络速率
-    ethtool -s eth0 speed 100 duplex full autoneg on
-
-    # 开启帧抢占
-    ethtool hobot_gmac --set-fp eth0 fp on
+setenv ipaddr 192.168.1.10          # 本机 IP
+setenv netmask 255.255.255.0        # 子网掩码
+setenv gatewayip 192.168.1.1        # 网关
+setenv serverip 192.168.1.100       # tftp/nfs 服务器地址
+saveenv
 ```
 
-### vconfig
-- 配置 vlan
-- 可用 ip 命令替代
+- 配置 MAC 地址：
+
 ```bash
-   vconfig add eth0 3
+setenv ethaddr 00:11:22:33:44:55    # eth0 的 MAC
+setenv eth1addr 00:11:22:33:44:56   # eth1 的 MAC
+env delete -f ethaddr               # 删除 MAC 地址（-f 表示强制删除）
+saveenv
+```
+
+多网口时环境变量按 `eth<序号>addr` 命名，即 `ethaddr`、`eth1addr`、`eth2addr`……。
+
+- 切换当前使用的网口：
+
+```bash
+printenv ethact            # 查看当前网口
+setenv ethact eth1         # 切换当前网口
+setenv ethrotate no        # 固定使用 ethact，不再自动轮询其它网口
+saveenv
+```
+
+**说明**：U-Boot 默认会在多个网口间轮询，仅当板卡存在多个可用网口时，切换才会生效。
+
+:::note
+U-Boot 以太网不提供 VLAN 配置项。`vlan` 变量仅在启用 CDP 时由 U-Boot 自动写入，手工 `setenv vlan` 不会生效。
+:::
+
+### Linux/Ubuntu
+
+:::warning
+- 推荐使用 Ubuntu 桌面网络设置或 `nmcli`/`nmtui` 配置网卡，配置可持久化。
+- 下述 `ip`、`ifconfig` 命令为临时配置，重启或网络服务重载后失效。
+:::
+
+- 查看网口与地址：
+
+```bash
+ip -br link                 # 查看网口列表与 link 状态
+ip -br addr                 # 查看网口 IP
+```
+
+- 启用/关闭网口：
+
+```bash
+ip link set eth0 up
+ip link set eth0 down
+```
+
+- 配置 IP（临时）：
+
+```bash
+ip addr add 192.168.1.10/24 dev eth0
+# 或者
+ifconfig eth0 192.168.1.10 netmask 255.255.255.0
+```
+
+- 配置路由与 DNS（临时）：
+
+```bash
+ip route replace default via 192.168.1.1 dev eth0
+# /etc/resolv.conf 由 NetworkManager 生成，网络服务重载后会被覆盖
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+```
+
+- 配置 VLAN：
+
+```bash
+# 先创建 VLAN 子接口
+ip link add link eth0 name eth0.10 type vlan id 10
+
+# 配置 VLAN 优先级映射（egress-qos-map，出方向 PCP 为 5）
+ip link set dev eth0.10 type vlan egress-qos-map 0:5 1:5 2:5 3:5 4:5 5:5 6:5 7:5
+
+# 启用子接口并配置 IP
+ip link set eth0.10 up
+ip addr add 192.168.1.10/24 dev eth0.10
+```
+
+- 删除配置：
+
+```bash
+ip addr del 192.168.1.10/24 dev eth0.10
+ip link del eth0.10
+```
+
+- 持久化配置（NetworkManager）：
+
+```bash
+nmcli connection show                                   # 查看连接名，例如 eth0_cfg
+nmcli device status                                     # 查看网口与连接状态
+nmcli connection modify <连接名> ipv4.method manual \
+    ipv4.addresses 192.168.1.10/24 ipv4.gateway 192.168.1.1 ipv4.dns 8.8.8.8
+nmcli connection up <连接名>
+```
+
+也可使用 `nmtui` 图形界面，或修改 `/etc/netplan/` 下的配置文件后执行 `netplan apply`。
+
+
+## 网卡常用命令介绍
+
+RDK OS 已预装本节涉及的工具：`ethtool`、`phytool`、`tperf` 位于 `/usr/hobot/bin`，`iperf3`、`tcpdump`、`tc`、`vconfig` 位于 `/usr/bin` 或 `/usr/sbin`。
+
+### ethtool
+
+`ethtool` 用于查看网卡状态与统计、调整 offload 与中断聚合等。
+
+- 查看类命令：
+
+```bash
+ethtool -i eth0            # 驱动名与版本
+ethtool -S eth0            # 统计计数（mmc/tx/rx/mtl/ptp/mac/irq 等分组）
+ethtool -T eth0            # 硬件时间戳能力与 PHC index
+ethtool -k eth0            # offload 开关状态（TSO/GSO/校验和等）
+ethtool -a eth0            # pause 帧协商状态
+ethtool -c eth0            # 中断聚合参数
+ip -d link show eth0       # 网卡与队列信息（控制器、队列数）
+```
+
+- 设置类命令：
+
+```bash
+ethtool -K eth0 tso on|off          # TSO 开关
+ethtool -K eth0 rx-checksum on|off  # 校验和开关
+ethtool -s eth0 speed 100 duplex full autoneg on   # 速率/双工（autoneg 开启时以自协商结果为准）
+ethtool -C eth0 tx-frames 15 rx-usecs 50           # 中断聚合参数（需网卡 DOWN）
+ethtool -t eth0 offline             # Loopback 自检（MAC/PHY loopback）
+ip link set eth0 mtu 9000           # MTU，最大 9000
+```
+
+- 私有命令（由地瓜定制版 `ethtool` 提供）：
+
+```bash
+ethtool hobot_gmac --set-fp eth0 fp on      # 开启帧抢占
+ethtool hobot_gmac --show-fp eth0           # 查看帧抢占状态
+ethtool hobot_gmac --set-flex-pps eth0 index 0 fpps on interval 1000000000   # 配置 flex PPS
+```
+
+:::tip
+- ring 相关调试请用 `/sys/class/net/<interface>/descriptors/` 与 `ethtool -S`。
+:::
+
+### VLAN 配置
+
+VLAN 使用 `ip` 命令配置。原 `vconfig` 已废弃（执行时会提示 `vconfig is deprecated ...`），仅作兼容保留：
+
+```bash
+ip link add link eth0 name eth0.10 type vlan id 10   # 创建 VLAN 子接口
+ip link set eth0.10 up
+ip addr add 192.168.1.10/24 dev eth0.10
 ```
 
 ### iperf3
-- 带宽, 丢包等测试。
-- 测试命令
+
+`iperf3` 用于带宽与丢包测试，需要一端作服务端、另一端作客户端。
+
 ```bash
-   server: iperf3 -s
-   client tcp: iperf3 -c serverip -t 60
-   client udp: iperf3 -c serverip -u -b 1G -l 8K -t 60
+# 服务端
+iperf3 -s
+
+# 客户端 TCP（默认）
+iperf3 -c 192.168.1.100 -t 60
+
+# 客户端 UDP（-b 指定带宽，-l 指定包长）
+iperf3 -c 192.168.1.100 -u -b 1G -l 8K -t 60
+
+# 反向测试（服务端发送、客户端接收）
+iperf3 -c 192.168.1.100 -R -t 60
 ```
 
+建议使用直连或独立链路测试，避免其它业务抢占带宽影响结果。
+
 ### tcpdump
-- 抓包工具
-- 测试命令
+
+`tcpdump` 用于抓包分析。
+
 ```bash
-    tcpdump -i eth1 -e              # 过滤报文并输出到终端
-    tcpdump -i eth1 -w eth1.pcap    # 过滤报文保存到文档，可以用wireshark分析
+tcpdump -i eth1 -e             # 抓包输出到终端（-e 显示 MAC 层信息）
+tcpdump -i eth1 -nn -c 100     # 抓 100 个包，不解析域名/服务名
+tcpdump -i eth1 -w eth1.pcap   # 保存为 pcap 文件，可用 Wireshark 分析
+tcpdump -i eth1 -nn vlan       # 只抓带 VLAN tag 的报文
 ```
 
 ### phytool
-- 可以通过该工具读取和设置 c22/c45 phy 寄存器。
-- 例如
+
+`phytool` 用于读写 C22/C45 PHY 寄存器，地址格式如下：
+
+- C22：`IFACE/PHYADDR/REG`
+- C45：`IFACE/PORT:DEV/REG`
+
 ```bash
-    # 帮助信息
-    ADDR := C22 | C45
-    C22 := <0-0x1f>
-    C45 := <0-0x1f>:<0-0x1f>
+phytool read  eth0/0x2/2          # 读取 PHY 地址 0x2 的寄存器 2
+phytool write eth0/0x2/0 0x1140   # 写入寄存器（请确认含义后再执行）
+phytool print eth0/0x2            # 打印 PHY 信息并解析标准寄存器
+```
 
-    phytool read IFACE/ADDR/REG
-    phytool write IFACE/ADDR/REG <0-0xffff>
+PHY 地址以设备树中 `phy@N` 的 `reg` 为准，例如 RDK S600/S100 的 eth0 均为 `0x2`：
 
-    # 例子
-    root@hobot:~# phytool read eth0/0x7:1/2
-    0x002b
+```console
+root@hobot:~# phytool read eth0/0x2/2
+0x001c
 
-    root@hobot:~# phytool read eth1/0xE/2
-    0x0141
+root@hobot:~# phytool print eth0/0x2
+ieee-phy: id:0x001cc916
 ```
 
 ## 网卡时间同步
