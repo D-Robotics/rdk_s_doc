@@ -127,7 +127,7 @@ Both `width` and `strid` must be **16-byte aligned**. Measured on board: a 896×
 
 The driver **does not read** `roi_w` / `roi_h` on the input channel at all; filling in 0 is enough (the four input channels of the board sample `sample_gdc_stitch` are all filled with 0).
 
-**2. The array index is the ROI number; the `roi_index` field is not read by the driver.** The driver takes `blending[i]`, `och_attr->rois[i]`, and `inch_attr[src].rois[i]` in the index order of `for (i = 0; i < roi_nums; i++)`. `roi_info.roi_index` / `blending_attr.roi_index` are merely descriptive fields for user space to look at; filling them in wrongly does not affect behavior — **but the order does affect the result** (later writes overwrite earlier ones, see [Configurations that raise no error but give a wrong result](#configurations-that-raise-no-error-but-give-a-wrong-result)).
+**2. The array index is the ROI number; the `roi_index` field is not read by the driver.** The driver takes `blending[i]`, `och_attr->rois[i]`, and `inch_attr[src].rois[i]` in the index order of `for (i = 0; i < roi_nums; i++)`. `roi_info.roi_index` / `blending_attr.roi_index` are merely descriptive fields for user space to look at; filling them in wrongly does not affect behavior — **but the order does affect the result** (later writes overwrite earlier ones, see [Configurations that pass setup but surface only at frame output](#configurations-that-pass-setup-but-surface-only-at-frame-output)).
 
 :::
 
@@ -288,7 +288,7 @@ A typical binding: each path forms an independent chain `VIN → ISP → YNR →
 | `roi_nums > 12` | `hbn_vnode_set_attr` returns `-22` |
 | `width` / `strid` is not 16-byte aligned | `hbn_vnode_set_ochn_attr` returns `-22` |
 
-### Configurations that raise no error but give a wrong result
+### Configurations that pass setup but surface only at frame output
 
 These items **do not return an error**, yet the image is wrong; they are more worth checking one by one than the category above:
 

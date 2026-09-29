@@ -121,7 +121,7 @@ ROI 划分表描述两类信息：**四张图各自在画布上的落位**，以
 | 1 | `STH_MODE_FB_INTERNAL_BUF` | 内部 buffer 回灌 |
 | 2 | `STH_MODE_FLOW` | flow 绑定模式。源帧来自 vflow 里绑定的上游节点，用户态不发帧 |
 
-外部 buffer 回灌（`STH_MODE_FB_EXTERNAL_BUF`）的拼接时机由 **0 号输入通道的到达沿触发**：0 号通道收到源帧即启动本次拼接，其余尚未送达的通道按缺帧处理，由驱动以全零帧填充，对应区域在显示侧呈绿色（见[不报错、但结果不对的配置](#不报错但结果不对的配置)）。因此推荐按 **1 ~ N-1 路先送、0 号最后送** 的顺序投递；0 号先送亦可完成拼接，代价是其余各路的当前帧不参与本次合成。`STH_MODE_FLOW` 无需应用主动送帧：驱动按帧时间戳对各路分组，时间差在 15 ms 窗口内的帧归为一组触发拼接；超出窗口的迟到帧被丢弃，早到帧则立即触发。各路帧率或延迟差异较大时，优先选用 `STH_MODE_FLOW`。
+外部 buffer 回灌（`STH_MODE_FB_EXTERNAL_BUF`）的拼接时机由 **0 号输入通道的到达沿触发**：0 号通道收到源帧即启动本次拼接，其余尚未送达的通道按缺帧处理，由驱动以全零帧填充，对应区域在显示侧呈绿色（见[配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题)）。因此推荐按 **1 ~ N-1 路先送、0 号最后送** 的顺序投递；0 号先送亦可完成拼接，代价是其余各路的当前帧不参与本次合成。`STH_MODE_FLOW` 无需应用主动送帧：驱动按帧时间戳对各路分组，时间差在 15 ms 窗口内的帧归为一组触发拼接；超出窗口的迟到帧被丢弃，早到帧则立即触发。各路帧率或延迟差异较大时，优先选用 `STH_MODE_FLOW`。
 
 #### 融合模式
 
@@ -142,7 +142,6 @@ ROI 划分表描述两类信息：**四张图各自在画布上的落位**，以
 单个 ROI 的融合过程：两路源图各取一块，按 `blending_mode` 融合后写入画布的落位处。
 
 ![单个 ROI 的融合机制](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig4-roi-blend.svg)
-
 
 alpha / beta 是**逐像素**的融合权重表。标准做法按 ROI 划分中重叠区的位置逐像素算出两路融合权重，得到 alpha、beta 两张表：
 
@@ -260,10 +259,6 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 
 - STITCH 实例在 `/dev` 下对应 `/dev/stitch0_ich0` ~ `/dev/stitch0_ich3` 与 `/dev/stitch0_och`。正常走 `hbn_vnode_*` 接口时不需要直接操作它们。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -297,10 +292,6 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -337,10 +328,6 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, stitch_base_attr *a
 
 - 用到的 LUT buffer 需在本接口之前申请好，并把 `share_id` / `offset` / `size` 填进 `stitch_base_attr`
 - `roi_nums` 超过 12 时本接口直接失败（返回 `-22`）
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -380,10 +367,6 @@ hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_
 - 四路输入通道**逐路**调用，`width` / `height` / `strid[0]` 必须与该路来帧完全一致，否则出帧时失败
 - 输入通道只用到 `rois[]` 里的 `roi_x` / `roi_y`，`roi_w` / `roi_h` 可留 0
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -421,10 +404,6 @@ hobot_status hbn_vnode_get_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见板端 `/app/multimedia_samples/sample_gdc_stitch/`。
@@ -458,10 +437,6 @@ hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 
 - 每个 ROI 的搬运块尺寸由本接口的 `rois[].roi_w` / `roi_h` 决定，且必须与该 ROI 的源裁剪尺寸相等
 - `width` / `strid` 不是 16 字节的倍数时本接口失败（返回 `-22`）
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -500,10 +475,6 @@ hobot_status hbn_vnode_get_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见板端 `/app/multimedia_samples/sample_gdc_stitch/`。
@@ -537,10 +508,6 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 
 - 拼接结果由应用侧读取时，`flags` 需包含 `HB_MEM_USAGE_CACHED`，并保证读 `virt_addr` 前 cache 一致
 - `buffers_num` 决定同时可持有的画布数量；取值过小会让取帧等待
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -576,10 +543,6 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 
 - 绑进 vflow 时可改用 `hbn_vflow_start` 统一管理整条流
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -613,10 +576,6 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 **【注意事项】**
 
 - 绑进 vflow 时可改用 `hbn_vflow_stop` 统一管理整条流
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -657,10 +616,6 @@ hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
 - 获取到的帧**必须**通过 `hbn_vnode_releaseframe` 归还，否则缓冲区耗尽后无法继续取帧
 - 硬件侧处理失败时返回 `-41`（而非普通的取帧超时），此时查内核日志定位原因
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -697,10 +652,6 @@ hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -740,10 +691,6 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 - 源帧尺寸必须与该输入通道的 `stitch_ch_attr.width` / `height` 一致
 - 多路回灌时逐路阻塞会拖慢整帧节奏，参考下一节
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -780,10 +727,6 @@ hobot_status hbn_vnode_sendframe_async(hbn_vnode_handle_t vnode_fd, uint32_t ich
 **【注意事项】**
 
 - 多路回灌的写法：**1 ~ N-1 路用 `hbn_vnode_sendframe_async` 送入，0 号通道最后用 `hbn_vnode_sendframe` 同步送入**。0 号通道是回灌模式的触发点，它到达时本次拼接立即开始；若 0 号先到，其余各路会被当作缺帧、以全零帧替换（显示侧呈绿色）
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -877,7 +820,7 @@ STITCH 对外是一个 vnode，没有自己的函数 API，配置分三处下发
 
 | 返回值 | 宏 | 含义与下一步 |
 | --- | --- | --- |
-| `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针；源帧被驱动丢弃后取帧也返回此值，见[不报错、但结果不对的配置](#不报错但结果不对的配置) |
+| `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针；源帧被驱动丢弃后取帧也返回此值，见[配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题) |
 | `-22` | `-EINVAL` | 属性组合非法（尺寸不匹配、对齐不满足等） |
 | `-41` | `HBN_STATUS_NODE_POLL_HUP` | 硬件处理失败，驱动向取帧队列发了挂起信号。查内核 `hw process faild` 一行确认原因 |
 | `-655368` | `HBN_STATUS_STH_INVALID_NULL_PTR` | STITCH 侧空指针 |
@@ -900,7 +843,7 @@ STITCH 对外是一个 vnode，没有自己的函数 API，配置分三处下发
 | `img_nums > 4` | `hbn_vnode_set_attr` 返回 `-22` |
 | `width` / `strid` 不是 16 字节的倍数 | 输入侧在 `hbn_vnode_set_ichn_attr`、输出侧在 `hbn_vnode_set_ochn_attr` 返回 `-22` |
 
-#### 不报错、但结果不对的配置
+#### 配置阶段能通过、出帧时才暴露的问题
 
 | 坑 | 后果 |
 | --- | --- |
