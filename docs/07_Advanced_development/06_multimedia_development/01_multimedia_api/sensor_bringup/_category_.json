@@ -1,0 +1,9 @@
+{
+  "label": "Camera 调试指南",
+  "position": 13,
+  "link": {
+    "type": "generated-index",
+    "slug": "/Advanced_development/multimedia_development/multimedia_api/sensor_bringup",
+    "description": "Camera 调试指南：背景知识、SERDES 接入、模组点亮、功能专题"
+  }
+}

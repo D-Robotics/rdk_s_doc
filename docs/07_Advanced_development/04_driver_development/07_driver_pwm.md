@@ -424,7 +424,7 @@ cat /sys/kernel/debug/pinctrl/*/pinmux-pins | grep -i lpwm
 - [GPIO 使用](./04_driver_gpio_dev.md)
 - [Pinctrl 调试指南](./05_driver_pinctrl_dev.md)
 - [MCU PWM 使用指南](../11_mcu_development/05_mcu_pwm.md)
-- [多路 Camera 及与 Lidar 同步](../06_multimedia_development/01_multimedia_api/12_camerasync.md)
+- [多路 Camera 及与 Lidar 同步](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/features/multi_camera_lidar_sync)
 
 <DocScope products="RDK S100">
 

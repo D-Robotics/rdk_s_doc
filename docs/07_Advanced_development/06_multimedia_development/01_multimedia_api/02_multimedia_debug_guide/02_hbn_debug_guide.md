@@ -170,7 +170,7 @@ frameid  module FS              FE              QB              DQ
 00000003 isp    00322673.861695 00322673.863599 00322673.863600 00322673.863595
 ```
 
-`module` 列随通路延伸依次出现 `vin`→`isp`→`ynr`→`pym` 等节点，逐行对比相邻节点的 FS/FE 即可定位某段时序异常。多路同步与 PPS 秒脉冲同步机制见 [多路 Camera 及与 Lidar 同步](../12_camerasync.md)。
+`module` 列随通路延伸依次出现 `vin`→`isp`→`ynr`→`pym` 等节点，逐行对比相邻节点的 FS/FE 即可定位某段时序异常。多路同步与 PPS 秒脉冲同步机制见 [多路 Camera 及与 Lidar 同步](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/features/multi_camera_lidar_sync)。
 
 ### vflow 通路信息
 
@@ -810,7 +810,7 @@ echo 'module hobot_cim -p' > /sys/kernel/debug/dynamic_debug/control       # 关
 多路 Camera 或与外设同步异常时，查时间戳与 PPS（Pulse Per Second）秒脉冲的同步状态：
 
 - `flow/vio_delay` 通路表中的时间戳信息（FS/FE/QB/DQ）。
-- 时间同步机制与配置见 [多路 Camera 及与 Lidar 同步](../12_camerasync.md)。
+- 时间同步机制与配置见 [多路 Camera 及与 Lidar 同步](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/features/multi_camera_lidar_sync)。
 
 ## 常见问题
 

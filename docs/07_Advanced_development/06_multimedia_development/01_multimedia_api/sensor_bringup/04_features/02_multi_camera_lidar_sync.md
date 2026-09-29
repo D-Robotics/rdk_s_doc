@@ -1,17 +1,11 @@
 ---
-unlisted: true
-# 占位版本，永不匹配版本矩阵中的真实版本，用于隐藏本文档
-sidebar_versions: 0.0.0
-sidebar_position: 12
+sidebar_position: 2
 title: "多路 Camera 及与 Lidar 同步"
 description: "多路 Camera 及与 Lidar 同步"
 ---
 
 # 多路 Camera 及与 Lidar 同步
 
-> **层级说明**：本篇是【底层多媒体 API】（板端 `Camera 同步框架`），多路 Camera 时间戳同步机制说明。面向需要直接操作多媒体 pipeline 的进阶开发（模式 3）；若只需跑通采集/编解码/显示的封装功能，见第 4 章 [简易 API](/Simple_API/multimedia_api/cdev/vio_api)（模式 1）。
-
-> **平台代号说明**：本文兼容性标注沿用底层头文件原始写法——XJ3/J3、Ultra 为更早代上游平台代号，X5 为现行上游产品线代号（非本两板），Super/J6 为本产品线同源架构代号（板端实证：S100/S600 同源，S600 为多核形态）。`HW:` 列表表示该接口在上游多代平台的适用范围，其中 Super 代即对应本产品线（继承自上游标注，未逐一板端验证）；`SW` 为上游软件版本号，RDK 对应版本以 Release Note 为准。未列入代号的接口表示继承自上游、RDK 侧未逐一验证。
 
 ## 概述
 
@@ -52,7 +46,7 @@ LPWM 工作原理：LPWM 受 PPS 触发源 trigger，其作为 Trigger Bus 的 T
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_01.png" alt="PPS信号传输至cam-trig流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-关于同步源 PPS 的功能说明，更多可参考：[PPS 说明](../../03_system_software/11_driver_timesync.md#PPS)。
+关于同步源 PPS 的功能说明，更多可参考：[PPS 说明](/Advanced_development/system_software/driver_timesync#PPS)。
 
 :::info 注意
 
@@ -181,7 +175,7 @@ LPWM 模块有多种触发源可选，对于上述硬件连接方式，仍可有
 - 其与 Lidar 都使用网络同步，可使用 PHC 时间作为统一时间轴。
 - Acore ETH PPS 误差最小，建议优先使用。
 
-对于使用 Acore ETH PPS0 同步源，使用 fixed mode 时，其上升沿基于 PPS 整秒时间有一固定偏移 536.871ms，需要在使用时按需求进行 offset 计算与配置，更多可参考：[Acore ETH PPS 说明](../../03_system_software/11_driver_timesync.md#Acore\_Eth\_PPS)。
+对于使用 Acore ETH PPS0 同步源，使用 fixed mode 时，其上升沿基于 PPS 整秒时间有一固定偏移 536.871ms，需要在使用时按需求进行 offset 计算与配置，更多可参考：[Acore ETH PPS 说明](/Advanced_development/system_software/driver_timesync#Acore\_Eth\_PPS)。
 
 ### Camera 同步模式选择
 
@@ -425,5 +419,5 @@ Camera 同步无独立函数 API，通过传感器配置文件 + LPWM 配置下�
 ## 相关文档
 
 - [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp)
-- [时间同步方案](../../03_system_software/11_driver_timesync.md)
-- [摄像头使用](../../../03_Demos/01_peripheral/02_camera/01_mipi_camera.md)
+- [时间同步方案](/Advanced_development/system_software/driver_timesync)
+- [摄像头使用](/Demos/peripheral/camera/mipi_camera)
