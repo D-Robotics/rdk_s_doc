@@ -182,6 +182,13 @@ The output path is decided by three fields in `vin_attr_t`:
 - `vin_node_attr.cim_attr.cim_pym_flyby = 1` — CIM connects directly to PYM (Online); mutually exclusive with `cim_isp_flyby`, only one of them can be 1
 - `vin_ochn_attr[x].ddr_en = 1` — this output channel writes to DDR (Offline); the main frame may enable both at once, landing in DDR while also sending a copy OTF to the ISP, at the cost of bandwidth
 
+The **EMB channel** carries the line-embedded information the sensor outputs alongside the image (exposure parameters and so on). VIN receives it separately and sends it to DDR separately, without affecting the main frame.
+
+How EMB data is extracted is decided by `vin_emb_attr_t.embeded_dependence`, matching two sensor output styles:
+
+- `embeded_dependence = 0`: the embedded data comes as standalone packets marked with MIPI CSI-2 datatype `0x12` (embedded 8-bit data); the CIM routes them to the EMB channel automatically, with no user configuration
+- `embeded_dependence = 1`: the embedded data travels in the same stream as the image (datatype identical to the image); ROI must then be enabled as well (`roi_en = 1`) and the CIM extracts EMB through the `roi_attr` window; YUV422 input needs no ROI — the driver separates it in software
+
 ### Typical Combinations
 The four IPIs of one CIM can **mix** Online and Offline, feeding different downstream blocks. Four typical combinations:
 
@@ -373,10 +380,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 - each VIN instance has four nodes under `/dev` — `/dev/vinX_src`, `/dev/vinX_cap`, `/dev/vinX_emb` and `/dev/vinX_roi`, where `X` is the `hw_id`. Going through the `hbn_vnode_*` interfaces normally, you never touch them directly.
 
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
-
 **【Example】**
 
 ```c
@@ -413,10 +416,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 None
 
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
-
 **【Example】**
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
@@ -450,10 +449,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 - `magicNumber` in `vin_node_attr_t` / `vin_ochn_attr_t` **must be filled in by the caller as `0x12345678`**; the driver's `set_attr` / `set_ochn_attr` validates it and fails the call on a mismatch
 - The framework does not fill this in for you: the `MAGIC_NUMBER` macro lives in the driver-internal header `camsys/vpf/vio_config.h` and is absent from the published `hbn_vin_cfg.h`, so hard-code `0x12345678` as the board samples do
-
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
 
 **【Example】**
 
@@ -502,19 +497,9 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 > Only **three data channels** can hand frames to user space: main frame / EMB / ROI. **Online (OTF) is not a fourth parallel channel — it is an output mode of the main-frame channel**: the main frame can land in DDR and be sent OTF to the ISP or PYM at the same time.
 
-The **EMB channel** carries the line-embedded information the sensor outputs alongside the image (exposure parameters and so on). VIN receives it separately and sends it to DDR separately, without affecting the main frame.
-
-How EMB data is extracted is decided by `vin_emb_attr_t.embeded_dependence`, matching two sensor output styles:
-
-- `embeded_dependence = 0`: the embedded data comes as standalone packets marked with MIPI CSI-2 datatype `0x12` (embedded 8-bit data); the CIM routes them to the EMB channel automatically, with no user configuration
-- `embeded_dependence = 1`: the embedded data travels in the same stream as the image (datatype identical to the image); ROI must then be enabled as well (`roi_en = 1`) and the CIM extracts EMB through the `roi_attr` window; YUV422 input needs no ROI — the driver separates it in software
-
 - Channels 3 / 4 are DDR only and do not support Online
 - To use a channel in Offline mode, switch it on in the attributes (`vin_ochn_attr[x].ddr_en` / `.emb_en` / `.roi_en`)
-
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
+- How EMB data is extracted (datatype demux / ROI window) is covered in [Selection Criteria](#selection-criteria)
 
 **【Example】**
 
@@ -554,10 +539,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 None
 
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
-
 **【Example】**
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
@@ -591,10 +572,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 **【Notes】**
 
 - `vin_ichn_attr_t.format` must match the sensor's actual output format
-
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
 
 **【Example】**
 
@@ -634,10 +611,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 None
 
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
-
 **【Example】**
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
@@ -673,10 +646,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 - In Online mode the main frame does not land in DDR, so no buffer is needed
 - **The channel named by `ochn_id` must already be enabled**, otherwise the call returns a not-supported error
 
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
-
 **【Example】**
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
@@ -707,10 +676,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 - Usually `hbn_vflow_start` manages the whole flow, so calling this directly is unnecessary
 
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
-
 **【Example】**
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
@@ -740,10 +705,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 **【Notes】**
 
 - Usually `hbn_vflow_stop` manages the whole flow, so calling this directly is unnecessary
-
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
 
 **【Example】**
 
@@ -779,10 +740,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 - A fetched frame **must** be returned with `hbn_vnode_releaseframe`, otherwise the buffers run out and fetching stops
 - Use `hbn_vnode_getframe_cond` when you need conditional fetching
-
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
 
 **【Example】**
 
@@ -823,10 +780,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 - **Blocking interface with a 4 s default timeout**; use `hbn_vnode_sendframe_async` when you do not want to wait
 - Not needed for ordinary capture
 
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
-
 **【Example】**
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
@@ -859,10 +812,6 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 **【Notes】**
 
 - Used in pairs with `hbn_vnode_getframe`
-
-**【Compatibility】**
-
-Hardware: RDK S100 / RDK S600.
 
 **【Example】**
 

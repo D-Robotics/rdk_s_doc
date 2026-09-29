@@ -183,6 +183,13 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 - `vin_node_attr.cim_attr.cim_pym_flyby = 1` —— CIM 直连 PYM（Online）；与 `cim_isp_flyby` 互斥，同一时刻只能有一个为 1
 - `vin_ochn_attr[x].ddr_en = 1` —— 该输出通道写 DDR（Offline）；主帧可同时使能两者，落 DDR 之外再 OTF 送一份给 ISP，代价是带宽
 
+**EMB 通道**承载的是 Sensor 随图像一起输出的行内信息（曝光参数等）。VIN 单独接收、单独送 DDR，不影响主帧数据。
+
+EMB 数据的提取方式由 `vin_emb_attr_t.embeded_dependence` 决定，对应 Sensor 的两种输出形态：
+
+- `embeded_dependence = 0`：内嵌数据独立成包，以 MIPI CSI-2 datatype `0x12`（embedded 8-bit data）标识，CIM 按 datatype 自动分流至 EMB 通道，无需用户配置
+- `embeded_dependence = 1`：内嵌数据与图像数据在同一数据流中（datatype 与图像一致），此时必须同时使能 ROI（`roi_en = 1`），CIM 按 `roi_attr` 窗口提取 EMB；YUV422 输入无需 ROI，由驱动软件分离
+
 ### 典型组合
 同一颗 CIM 的 4 路 IPI 可以**混合**使用 Online 与 Offline，分给不同的后级。四种典型组合：
 ![CIM 典型组合：四种场景](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
@@ -373,10 +380,6 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 
 - 每个 VIN 实例在 `/dev` 下对应 `/dev/vinX_src`、`/dev/vinX_cap`、`/dev/vinX_emb`、`/dev/vinX_roi` 四个节点，其中 `X` 即 `hw_id`。正常走 `hbn_vnode_*` 接口时不需要直接操作它们。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -413,10 +416,6 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
@@ -450,10 +449,6 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 - `vin_node_attr_t` / `vin_ochn_attr_t` 的 `magicNumber` **要调用方自己填 `0x12345678`**；驱动 `set_attr` / `set_ochn_attr` 会校验，不符直接返回失败
 - 这个值不是框架替你填的：`MAGIC_NUMBER` 宏只在驱动内部头 `camsys/vpf/vio_config.h`，发布的 `hbn_vin_cfg.h` 里没有，照板端 sample 写死 `0x12345678` 即可
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -502,19 +497,9 @@ hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例�
 
 > 能给用户取帧的只有 **3 个数据通道**：主帧 / EMB / ROI。**Online（OTF）不是并列的第四个通道，而是主帧通道的一种输出方式**——主帧可以既落 DDR、同时又 OTF 送一份给 ISP 或 PYM。
 
-**EMB 通道**承载的是 Sensor 随图像一起输出的行内信息（曝光参数等）。VIN 单独接收、单独送 DDR，不影响主帧数据。
-
-EMB 数据的提取方式由 `vin_emb_attr_t.embeded_dependence` 决定，对应 Sensor 的两种输出形态：
-
-- `embeded_dependence = 0`：内嵌数据独立成包，以 MIPI CSI-2 datatype `0x12`（embedded 8-bit data）标识，CIM 按 datatype 自动分流至 EMB 通道，无需用户配置
-- `embeded_dependence = 1`：内嵌数据与图像数据在同一数据流中（datatype 与图像一致），此时必须同时使能 ROI（`roi_en = 1`），CIM 按 `roi_attr` 窗口提取 EMB；YUV422 输入无需 ROI，由驱动软件分离
-
 - 通道 3 / 4 只能走 DDR，不支持 Online
 - Offline 使用某通道时，需在属性中打开对应开关（`vin_ochn_attr[x].ddr_en` / `.emb_en` / `.roi_en`）
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
+- EMB 数据的提取方式（datatype 分流 / ROI 窗口）见[选型依据](#选型依据)
 
 **【示例代码】**
 
@@ -554,10 +539,6 @@ hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
@@ -591,10 +572,6 @@ hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 **【注意事项】**
 
 - `vin_ichn_attr_t.format` 需与 Sensor 实际输出格式一致
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -634,10 +611,6 @@ hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
@@ -673,10 +646,6 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 - Online 模式下主帧不落 DDR，可不分配 buffer
 - **`ochn_id` 对应的通道必须先使能**，否则返回不支持错误
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
@@ -707,10 +676,6 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 
 - 通常直接用 `hbn_vflow_start` 统一管理整条流，不必单独调用
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
@@ -740,10 +705,6 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 **【注意事项】**
 
 - 通常直接用 `hbn_vflow_stop` 统一管理整条流，不必单独调用
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -779,10 +740,6 @@ hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
 
 - 获取到的帧**必须**通过 `hbn_vnode_releaseframe` 归还，否则缓冲区耗尽后无法继续取帧
 - 需要按条件取帧时可用 `hbn_vnode_getframe_cond`
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -823,10 +780,6 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 - **阻塞接口，默认超时 4 s**；不需要等待的场景用 `hbn_vnode_sendframe_async`
 - 普通采集场景不需要调用
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
@@ -859,10 +812,6 @@ hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 **【注意事项】**
 
 - 与 `hbn_vnode_getframe` 成对使用
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
