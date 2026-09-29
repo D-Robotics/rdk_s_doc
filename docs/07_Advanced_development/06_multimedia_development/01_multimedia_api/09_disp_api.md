@@ -33,10 +33,10 @@ IDE 图像显示引擎（Image Display Engine），包含图像显示单元（ID
 
 IDU 完成图层处理后通过 DPI 接口送出像素流，最终由 MIPI D-PHY TX 串行化输出，有两种输出方式：
 
-- **MIPI DSI 输出**：DPI 接口经 RGB2YUV 转换后直连 MIPI DSI TX，打包成 DSI 协议包输出，用于连接 MIPI DSI 接口的显示屏
-- **MIPI CSI 输出**：DPI 接口经 DPI2IPI 转换后，通过 IPI 接口送入 MIPI CSI TX，打包成 CSI-2 包输出（参考下图绿色通路），用于经串行器连接串行屏等场景（目前软件不支持）
+- **MIPI DSI 输出**（参考下图<span style={{ color: '#4954e6' }}>蓝色通路</span>）：DPI 接口经 RGB2YUV 转换后直连 MIPI DSI TX，打包成 DSI 协议包输出，用于连接 MIPI DSI 接口的显示屏
+- **MIPI CSI 输出**（参考下图<span style={{ color: '#3ef61f' }}>绿色通路</span>）：DPI 接口经 DPI2IPI 转换后，通过 IPI 接口送入 MIPI CSI TX，打包成 CSI-2 包输出，用于经串行器连接串行屏等场景（**目前软件不支持**）
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_ide_framework.png" alt="IDE 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_ide_framework.png" alt="IDE 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 各模块说明如下：
 - **IDU**：图像显示单元（Image Display Unit），从内存中读取图层 buffer 并完成图层合成与缩放，按显示时序输出像素流
@@ -50,7 +50,7 @@ IDU 完成图层处理后通过 DPI 接口送出像素流，最终由 MIPI D-PHY
 
 由于 SoC 内部没有原生的 HDMI 输出接口，显示信号需以 MIPI DSI 协议送出，因此在开发板上外接了一颗 LT9611UXD 桥接芯片，将 MIPI DSI 信号转换为 HDMI 信号，实现 HDMI 显示输出。完整输出链路如下图：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_framework.png" alt="S100/S600 HDMI 输出链路" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_framework.png" alt="S100/S600 HDMI 输出链路" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 各模块说明如下：
 - **LT9611UXD**：桥接芯片，将 MIPI DSI 信号转换为 HDMI 2.0 信号输出
@@ -83,6 +83,7 @@ IDU 内部分为 AXI IF 和 Controller 两个区域：6 个图层的像素数据
 - **Brightness/Contrast/Saturation**：亮度、对比度、饱和度调节（Color-Adjust）
 - **Gamma**：Gamma 校正
 - **Dither**：抖动处理，降低低色深下的色阶失真
+- **DPI**：显示像素接口（Display Pixel Interface），IDU 的并行 RGB 像素输出接口，送入 MIPI DSI TX
 
 ### 规格参数
 
