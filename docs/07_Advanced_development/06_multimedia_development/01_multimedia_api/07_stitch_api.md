@@ -121,7 +121,7 @@ ROI 划分表描述两类信息：**四张图各自在画布上的落位**，以
 | 1 | `STH_MODE_FB_INTERNAL_BUF` | 内部 buffer 回灌 |
 | 2 | `STH_MODE_FLOW` | flow 绑定模式。源帧来自 vflow 里绑定的上游节点，用户态不发帧 |
 
-外部 buffer 回灌（`STH_MODE_FB_EXTERNAL_BUF`）的拼接时机由 **0 号输入通道的到达沿触发**：0 号通道收到源帧即启动本次拼接，其余尚未送达的通道按缺帧处理，由驱动以全零帧填充，对应区域在显示侧呈绿色（见[配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题)）。因此推荐按 **1 ~ N-1 路先送、0 号最后送** 的顺序投递；0 号先送亦可完成拼接，代价是其余各路的当前帧不参与本次合成。`STH_MODE_FLOW` 无需应用主动送帧：驱动按帧时间戳对各路分组，时间差在 15 ms 窗口内的帧归为一组触发拼接；超出窗口的迟到帧被丢弃，早到帧则立即触发。各路帧率或延迟差异较大时，优先选用 `STH_MODE_FLOW`。
+外部 buffer 回灌（`STH_MODE_FB_EXTERNAL_BUF`）的拼接时机由 **0 号输入通道的到达沿触发**：0 号通道收到源帧即启动本次拼接，其余尚未送达的通道按缺帧处理，由驱动以全零帧填充，对应区域在显示侧呈绿色（见[配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题)）。因此推荐按 **1 ~ N-1 路先送、0 号最后送** 的顺序投递（示例见[快速示例](#快速示例)）；0 号先送亦可完成拼接，代价是其余各路的当前帧不参与本次合成。`STH_MODE_FLOW` 无需应用主动送帧：驱动按帧时间戳对各路分组，时间差在 15 ms 窗口内的帧归为一组触发拼接；超出窗口的迟到帧被丢弃，早到帧则立即触发。各路帧率或延迟差异较大时，优先选用 `STH_MODE_FLOW`。
 
 #### 融合模式
 
@@ -198,6 +198,168 @@ STITCH 绑定进 vflow 时**只支持 `CHN_BIND_M2M`**，其他绑定类型会�
 12. `hbn_vnode_stop(handle)` / `hbn_vnode_close(handle)` —— 停流并释放
 
 </details>
+
+### 快速示例
+
+STITCH 的落位方式分两类，画布同为 1920 × 1080：
+
+![两类多路 ROI 落位示意图](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig2-roi-layout.svg)
+
+板上完整样例的编译与运行方式见[相关文档](#相关文档)。
+
+#### 最小示例
+
+左右两路 1024×1080 的相机画面，重叠 128 像素，拼接成一张 1920×1080 的宽幅画面：左右两路先各自直拷铺底，重叠带再用 Alpha 融合覆盖。
+
+```c
+#include <stdio.h>
+#include "hbn_vpf_interface.h"
+#include "hbn_sth_cfg.h"
+#include "hb_mem_mgr.h"
+
+#define AUTO_ALLOC_ID  (-1)
+#define SRC_W          1024     /* 两路源图宽 */
+#define SRC_H          1080     /* 两路源图高 */
+#define WALL_W         1920     /* 画布宽 */
+#define WALL_H         1080     /* 画布高 */
+#define OVERLAP_X      896      /* 重叠带在画布上的起始 x = WALL_W - SRC_W */
+#define OVERLAP_W      128      /* 重叠带宽 */
+#define LUT_SIZE       (OVERLAP_W * SRC_H)
+
+static struct stitch_base_attr base_attr = {
+	.mode     = STH_MODE_FB_EXTERNAL_BUF,
+	.roi_nums = 3,
+	.img_nums = 2,
+	.blending = {
+		{ .roi_index = 0, .blending_mode = BLENDING_MODE_SRC, .uv_en = 1,
+		  .src0_index = 0, .src1_index = 0,
+		  .gain_src0_yuv = {256, 256, 256}, .gain_src1_yuv = {256, 256, 256} },
+		{ .roi_index = 1, .blending_mode = BLENDING_MODE_SRC, .uv_en = 1,
+		  .src0_index = 1, .src1_index = 1,
+		  .gain_src0_yuv = {256, 256, 256}, .gain_src1_yuv = {256, 256, 256} },
+		{ .roi_index = 2, .blending_mode = BLENDING_MODE_ALPHA, .uv_en = 1,
+		  .src0_index = 0, .src1_index = 1,
+		  .gain_src0_yuv = {256, 256, 256}, .gain_src1_yuv = {256, 256, 256} },
+	},
+};
+
+static struct stitch_ch_attr inch_attr[2] = {
+	{ .width = SRC_W, .height = SRC_H, .strid = {SRC_W, SRC_W},
+	  .rois = { [0] = { .roi_index = 0, .roi_x = 0, .roi_y = 0 },
+	            [2] = { .roi_index = 2, .roi_x = OVERLAP_X, .roi_y = 0 } } },
+	{ .width = SRC_W, .height = SRC_H, .strid = {SRC_W, SRC_W},
+	  .rois = { [1] = { .roi_index = 1, .roi_x = 0, .roi_y = 0 },
+	            [2] = { .roi_index = 2, .roi_x = 0, .roi_y = 0 } } },
+};
+
+static struct stitch_ch_attr och_attr = {
+	.width = WALL_W, .height = WALL_H, .strid = {WALL_W, WALL_W},
+	.rois = {
+		[0] = { .roi_index = 0, .roi_x = 0,         .roi_y = 0, .roi_w = SRC_W,     .roi_h = SRC_H },
+		[1] = { .roi_index = 1, .roi_x = OVERLAP_X, .roi_y = 0, .roi_w = SRC_W,     .roi_h = SRC_H },
+		[2] = { .roi_index = 2, .roi_x = OVERLAP_X, .roi_y = 0, .roi_w = OVERLAP_W, .roi_h = SRC_H },
+	},
+};
+
+int main(void)
+{
+	hbn_vnode_handle_t sth_fd;
+	hbn_buf_alloc_attr_t alloc_attr = {0};
+	hb_mem_common_buf_t alpha_buf;
+	hbn_vnode_image_t in_img[2] = {0};
+	hbn_vnode_image_t out_img = {0};
+	uint8_t *lut;
+	int32_t ret, x, y;
+
+	hb_mem_module_open();
+
+	/* 1. 申请 alpha 权重表：ROI2 为 128×1080，表大小 = 128×1080 字节（1 字节/像素） */
+	ret = hb_mem_alloc_com_buf(LUT_SIZE,
+			HB_MEM_USAGE_MAP_INITIALIZED | HB_MEM_USAGE_PRIV_HEAP_2_RESERVERD |
+			HB_MEM_USAGE_CPU_READ_OFTEN | HB_MEM_USAGE_CPU_WRITE_OFTEN |
+			HB_MEM_USAGE_CACHED, &alpha_buf);
+	if (ret < 0) return ret;
+
+	/* 2. 填表：沿 x 方向 0 → 255 线性渐变，融合带从左到右由 src0 过渡到 src1 */
+	lut = (uint8_t *)alpha_buf.virt_addr;
+	for (y = 0; y < SRC_H; y++) {
+		for (x = 0; x < OVERLAP_W; x++) {
+			lut[y * OVERLAP_W + x] = (uint8_t)(x * 255 / (OVERLAP_W - 1));
+		}
+	}
+	hb_mem_flush_buf_with_vaddr((uint64_t)alpha_buf.virt_addr, LUT_SIZE);
+	base_attr.alpha_lut.share_id = alpha_buf.share_id;
+	base_attr.alpha_lut.size     = LUT_SIZE;
+
+	/* 3. 打开 STITCH 节点，hw_id 固定为 0 */
+	ret = hbn_vnode_open(HB_STITCH, 0, AUTO_ALLOC_ID, &sth_fd);
+	if (ret < 0) return ret;
+
+	/* 4. 全局配置 */
+	ret = hbn_vnode_set_attr(sth_fd, &base_attr);
+	if (ret < 0) return ret;
+
+	/* 5. 逐路配置输入通道 */
+	for (x = 0; x < 2; x++) {
+		ret = hbn_vnode_set_ichn_attr(sth_fd, x, &inch_attr[x]);
+		if (ret < 0) return ret;
+	}
+
+	/* 6. 配置输出画布 */
+	ret = hbn_vnode_set_ochn_attr(sth_fd, 0, &och_attr);
+	if (ret < 0) return ret;
+
+	/* 7. 画布 buffer 交给框架分配 */
+	alloc_attr.buffers_num = 3;
+	alloc_attr.is_contig   = 1;
+	alloc_attr.flags = HB_MEM_USAGE_CPU_READ_OFTEN | HB_MEM_USAGE_CPU_WRITE_OFTEN |
+	                   HB_MEM_USAGE_MAP_INITIALIZED | HB_MEM_USAGE_CACHED;
+	ret = hbn_vnode_set_ochn_buf_attr(sth_fd, 0, &alloc_attr);
+	if (ret < 0) return ret;
+
+	ret = hbn_vnode_start(sth_fd);
+	if (ret < 0) return ret;
+
+	/* 8. 申请两路源帧 buffer（此处只申请，实际使用时填入图像数据） */
+	for (x = 0; x < 2; x++) {
+		ret = hb_mem_alloc_graph_buf(SRC_W, SRC_H, MEM_PIX_FMT_NV12,
+				HB_MEM_USAGE_MAP_INITIALIZED | HB_MEM_USAGE_CPU_READ_OFTEN |
+				HB_MEM_USAGE_CPU_WRITE_OFTEN, SRC_W, SRC_H, &in_img[x].buffer);
+		if (ret < 0) return ret;
+	}
+
+	/* 9. 送帧：1 号路先异步、0 号路最后同步——0 号是回灌模式的触发点 */
+	hbn_vnode_sendframe_async(sth_fd, 1, &in_img[1]);
+	hbn_vnode_sendframe(sth_fd, 0, &in_img[0]);
+
+	/* 10. 取出拼接后的整张画布 */
+	ret = hbn_vnode_getframe(sth_fd, 0, 1000, &out_img);
+	if (ret < 0) return ret;
+	printf("wall: frame_id=%u, fd=%d, %dx%d\n", out_img.info.frame_id,
+	       out_img.buffer.fd[0], out_img.buffer.width, out_img.buffer.height);
+	hbn_vnode_releaseframe(sth_fd, 0, &out_img);
+
+	/* 11. 收尾 */
+	hbn_vnode_stop(sth_fd);
+	hbn_vnode_close(sth_fd);
+	hb_mem_module_close();
+	return 0;
+}
+```
+
+重叠带的融合权重由 `alpha_lut` 逐像素给出，**表值是该像素处 src0 的权重**：0 全取 src1，255 全取 src0。上例沿 x 方向做 0 → 255 的线性渐变，重叠带因此从右图平滑过渡到左图。
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/minexample-output.png" alt="最小示例在板端的实测输出" width="100%" />
+
+上图为该示例在板端的实测输出：源帧是程序填充的纯色测试图（左路红、右路蓝），画布左右两段是直拷 ROI 的原样搬运，中间 128 像素重叠带按 alpha 表从右路色渐变到左路色。顶部标注条为后期加注，画布内容即程序原始输出。
+
+无重叠的场景（例如四路 960×540 各占一格、拼成 1920×1080）只需把 ROI 两两相切排列，全部用 `BLENDING_MODE_SRC`，不需要 LUT。
+
+若在上例基础上改成四路拼墙（四路 960 × 540 各占一格），只需改三处：
+
+1. `roi_nums` / `img_nums` 改为 `4`，并新增两路输入通道的 `inch_attr`；
+2. `blending[]` 的四个 ROI 全部用 `BLENDING_MODE_SRC`，`src0_index` / `src1_index` 均指向对应路；
+3. 不再申请 `alpha_lut`（连同 `base_attr.alpha_lut` 的填充一并去掉），`och_attr` 的四个 ROI 落位两两相切、互不重叠。
 
 ## API 参考
 
