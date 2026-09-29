@@ -168,10 +168,6 @@ const media_codec_descriptor_t *hb_mm_mc_get_descriptor( media_codec_id_t codec_
 
 - 该接口不依赖 context，可在任何时刻调用。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -208,10 +204,6 @@ hb_s32 hb_mm_mc_get_default_context(media_codec_id_t codec_id, hb_bool encoder, 
 
 - 分辨率、码率、GOP 等业务参数都需要在默认值基础上改写。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -247,10 +239,6 @@ hb_s32 hb_mm_mc_initialize(media_codec_context_t *context);
 
 - `context` 中的 `codec_id` 与 `encoder` 必须在此前确定，初始化后不可更改。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -284,10 +272,6 @@ hb_s32 hb_mm_mc_configure(media_codec_context_t *context);
 **【注意事项】**
 
 - 各 `set_*_config` 类接口如果要在启动前配置，都应在 `hb_mm_mc_configure` 之前完成。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -324,10 +308,6 @@ hb_s32 hb_mm_mc_start(media_codec_context_t *context, const mc_av_codec_startup_
 
 - `hb_mm_mc_set_callback` 与 `hb_mm_mc_set_vlc_buffer_listener` 必须在调用本接口之前完成。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -363,10 +343,6 @@ hb_s32 hb_mm_mc_stop(media_codec_context_t *context);
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -400,10 +376,6 @@ hb_s32 hb_mm_mc_pause(media_codec_context_t *context);
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -439,10 +411,6 @@ hb_s32 hb_mm_mc_flush(media_codec_context_t *context);
 
 - flush 会丢弃队列中已有的数据，切换码流或重新对齐时间戳时使用。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -476,10 +444,6 @@ hb_s32 hb_mm_mc_release(media_codec_context_t *context);
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -516,10 +480,6 @@ hb_s32 hb_mm_mc_get_state(media_codec_context_t *context, media_codec_state_t *s
 
 - 调试时可用它确认某个接口是否处在允许的状态下被调用。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -555,10 +515,6 @@ hb_s32 hb_mm_mc_get_status(media_codec_context_t *context, mc_inter_status_t *st
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -600,10 +556,6 @@ hb_s32 hb_mm_mc_set_callback(media_codec_context_t *context, const media_codec_c
 - 必须在 `hb_mm_mc_start` 之前调用。
 - 异步模式与同步轮询模式二选一，设置回调后不要再在业务线程里主动 dequeue。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -642,10 +594,6 @@ hb_s32 hb_mm_mc_set_vlc_buffer_listener( media_codec_context_t *context, const m
 
 - 必须在 `hb_mm_mc_start` 之前调用。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -678,10 +626,6 @@ hb_s32 hb_mm_mc_set_camera(media_codec_context_t *context, hb_s32 pipeline, hb_s
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -712,10 +656,6 @@ hb_s32 hb_mm_mc_vpf_init(media_codec_context_t * context, hb_s32 channel_idx);
 **【注意事项】**
 
 - 不使用 VPF 通路、完全由调用方自己喂帧的场景不需要调用本接口。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -748,10 +688,6 @@ hb_s32 hb_mm_mc_get_fd(media_codec_context_t * context, hb_s32 *fd);
 
 - 取得的 fd 必须用 `hb_mm_mc_close_fd` 关闭，不要直接 `close`。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -782,10 +718,6 @@ hb_s32 hb_mm_mc_close_fd(media_codec_context_t * context, hb_s32 fd);
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -820,10 +752,6 @@ hb_s32 hb_mm_mc_dequeue_input_buffer( media_codec_context_t *context, media_code
 **【注意事项】**
 
 - 取出的 buffer 用完必须 `hb_mm_mc_queue_input_buffer` 归还，否则队列会被耗尽。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -861,10 +789,6 @@ hb_s32 hb_mm_mc_queue_input_buffer( media_codec_context_t *context, media_codec_
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -904,10 +828,6 @@ hb_s32 hb_mm_mc_dequeue_output_buffer( media_codec_context_t *context, media_cod
 
 - `info` 出参会带回码流或图像的附加信息（帧类型、时间戳等），按需解析。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 ```c
@@ -945,10 +865,6 @@ hb_s32 hb_mm_mc_queue_output_buffer( media_codec_context_t *context, media_codec
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -988,10 +904,6 @@ hb_s32 hb_mm_mc_get_rate_control_config( media_codec_context_t *context, mc_rate
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1022,10 +934,6 @@ hb_s32 hb_mm_mc_set_rate_control_config( media_codec_context_t *context, const m
 **【注意事项】**
 
 - 支持运行中**动态调整**，不需要重启编码器。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1058,10 +966,6 @@ hb_s32 hb_mm_mc_get_max_bit_rate_config( media_codec_context_t *context, hb_u32 
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1092,10 +996,6 @@ hb_s32 hb_mm_mc_set_max_bit_rate_config( media_codec_context_t *context, hb_u32 
 **【注意事项】**
 
 - 当设置值小于目标码率 `bit_rate` 时，峰值传输码率视为无限大，即该限制不产生约束。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1128,10 +1028,6 @@ hb_s32 hb_mm_mc_get_longterm_ref_mode( media_codec_context_t *context, mc_video_
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1162,10 +1058,6 @@ hb_s32 hb_mm_mc_set_longterm_ref_mode( media_codec_context_t *context, const mc_
 **【注意事项】**
 
 - 支持运行中**动态调整**。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1198,10 +1090,6 @@ hb_s32 hb_mm_mc_get_intra_refresh_config( media_codec_context_t *context, mc_vid
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1233,10 +1121,6 @@ hb_s32 hb_mm_mc_set_intra_refresh_config( media_codec_context_t *context, const 
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1266,10 +1150,6 @@ hb_s32 hb_mm_mc_request_idr_frame(media_codec_context_t *context);
 **【注意事项】**
 
 - 需要在码流中插入随机接入点时调用，典型场景是解码端新接入或发生丢包后恢复。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1302,10 +1182,6 @@ hb_s32 hb_mm_mc_request_idr_header( media_codec_context_t *context, hb_u32 force
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1337,10 +1213,6 @@ hb_s32 hb_mm_mc_enable_idr_frame( media_codec_context_t *context, hb_bool enable
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1371,10 +1243,6 @@ hb_s32 hb_mm_mc_skip_pic(media_codec_context_t * context, hb_s32 src_idx);
 **【注意事项】**
 
 - 无论当前 GOP 结构如何，skip 帧一律编为 P 帧。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1409,10 +1277,6 @@ hb_s32 hb_mm_mc_get_deblk_filter_config( media_codec_context_t *context, mc_vide
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1443,10 +1307,6 @@ hb_s32 hb_mm_mc_set_deblk_filter_config( media_codec_context_t *context, const m
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1479,10 +1339,6 @@ hb_s32 hb_mm_mc_get_sao_config(media_codec_context_t *context, mc_h265_sao_param
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1513,10 +1369,6 @@ hb_s32 hb_mm_mc_set_sao_config(media_codec_context_t *context, const mc_h265_sao
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1549,10 +1401,6 @@ hb_s32 hb_mm_mc_get_entropy_config( media_codec_context_t *context, mc_h264_entr
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1583,10 +1431,6 @@ hb_s32 hb_mm_mc_set_entropy_config( media_codec_context_t *context, const mc_h26
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1619,10 +1463,6 @@ hb_s32 hb_mm_mc_get_pred_unit_config( media_codec_context_t *context, mc_video_p
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1653,10 +1493,6 @@ hb_s32 hb_mm_mc_set_pred_unit_config( media_codec_context_t *context, const mc_v
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1689,10 +1525,6 @@ hb_s32 hb_mm_mc_get_transform_config( media_codec_context_t *context, mc_video_t
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1723,10 +1555,6 @@ hb_s32 hb_mm_mc_set_transform_config( media_codec_context_t *context, const mc_v
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1759,10 +1587,6 @@ hb_s32 hb_mm_mc_get_mode_decision_config( media_codec_context_t *context, mc_vid
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1793,10 +1617,6 @@ hb_s32 hb_mm_mc_set_mode_decision_config( media_codec_context_t *context, const 
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1829,10 +1649,6 @@ hb_s32 hb_mm_mc_get_smart_bg_enc_config( media_codec_context_t *context, mc_vide
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1863,10 +1679,6 @@ hb_s32 hb_mm_mc_set_smart_bg_enc_config( media_codec_context_t *context, const m
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1899,10 +1711,6 @@ hb_s32 hb_mm_mc_get_3dnr_enc_config( media_codec_context_t *context, mc_video_3d
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -1933,10 +1741,6 @@ hb_s32 hb_mm_mc_set_3dnr_enc_config( media_codec_context_t *context, const mc_vi
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -1971,10 +1775,6 @@ hb_s32 hb_mm_mc_get_roi_config(media_codec_context_t * context, mc_video_roi_par
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2005,10 +1805,6 @@ hb_s32 hb_mm_mc_set_roi_config(media_codec_context_t * context, const mc_video_r
 **【注意事项】**
 
 - H.264 的块大小为 16×16 像素，H.265 为 32×32 像素，每个 QP 值占 1 字节、取值 `[0, 51]`。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2042,10 +1838,6 @@ hb_s32 hb_mm_mc_get_roi_config_ex(media_codec_context_t *context, hb_u32 roi_idx
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2076,10 +1868,6 @@ hb_s32 hb_mm_mc_set_roi_config_ex(media_codec_context_t *context, const mc_video
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2112,10 +1900,6 @@ hb_s32 hb_mm_mc_get_roi_avg_qp(media_codec_context_t * context, hb_u32 * params)
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2146,10 +1930,6 @@ hb_s32 hb_mm_mc_set_roi_avg_qp(media_codec_context_t * context, hb_u32 params);
 **【注意事项】**
 
 - **仅在 CBR 或 AVBR 码控模式下有意义**——这两种模式下块的实际 QP 由 ROI 表值、码控内部值与该平均值共同决定。
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2184,10 +1964,6 @@ hb_s32 hb_mm_mc_get_vui_config( media_codec_context_t *context, mc_video_vui_par
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2218,10 +1994,6 @@ hb_s32 hb_mm_mc_set_vui_config( media_codec_context_t *context, const mc_video_v
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2254,10 +2026,6 @@ hb_s32 hb_mm_mc_get_vui_timing_config( media_codec_context_t *context, mc_video_
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2288,10 +2056,6 @@ hb_s32 hb_mm_mc_set_vui_timing_config( media_codec_context_t *context, const mc_
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2324,10 +2088,6 @@ hb_s32 hb_mm_mc_get_slice_config(media_codec_context_t *context, mc_video_slice_
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2358,10 +2118,6 @@ hb_s32 hb_mm_mc_set_slice_config(media_codec_context_t *context, const mc_video_
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2396,10 +2152,6 @@ hb_s32 hb_mm_mc_insert_user_data(media_codec_context_t * context, hb_u8 *data, h
 - `data` 必须按 `UUID + 字符串` 的格式组织。
 - `length` 取值范围 `(0, 1024]` 字节。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2432,10 +2184,6 @@ hb_s32 hb_mm_mc_get_user_data(media_codec_context_t * context, mc_user_data_buff
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2466,10 +2214,6 @@ hb_s32 hb_mm_mc_release_user_data(media_codec_context_t * context, const mc_user
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2502,10 +2246,6 @@ hb_s32 hb_mm_mc_get_explicit_header_config( media_codec_context_t *context, hb_s
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2536,10 +2276,6 @@ hb_s32 hb_mm_mc_set_explicit_header_config( media_codec_context_t *context, hb_s
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2574,10 +2310,6 @@ hb_s32 hb_mm_mc_get_mjpeg_config(media_codec_context_t * context, mc_mjpeg_enc_p
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2608,10 +2340,6 @@ hb_s32 hb_mm_mc_set_mjpeg_config(media_codec_context_t * context, const mc_mjpeg
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2644,10 +2372,6 @@ hb_s32 hb_mm_mc_get_jpeg_config(media_codec_context_t * context, mc_jpeg_enc_par
 
 无
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2678,10 +2402,6 @@ hb_s32 hb_mm_mc_set_jpeg_config(media_codec_context_t * context, const mc_jpeg_e
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2716,10 +2436,6 @@ hb_s32 hb_mm_mc_register_audio_encoder(hb_s32 *handle, mc_audio_encode_param_t *
 
 - 注册成功后返回 `handle`，去注册时需要使用。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2749,10 +2465,6 @@ hb_s32 hb_mm_mc_unregister_audio_encoder(hb_s32 handle);
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
@@ -2785,10 +2497,6 @@ hb_s32 hb_mm_mc_register_audio_decoder(hb_s32 *handle, mc_audio_decode_param_t *
 
 - 注册成功后返回 `handle`，去注册时需要使用。
 
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
-
 **【示例代码】**
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
@@ -2818,10 +2526,6 @@ hb_s32 hb_mm_mc_unregister_audio_decoder(hb_s32 handle);
 **【注意事项】**
 
 无
-
-**【兼容性】**
-
-硬件：RDK S100 / RDK S600。
 
 **【示例代码】**
 
