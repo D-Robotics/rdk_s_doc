@@ -1,7 +1,7 @@
 ---
 sidebar_position: 17
 title: "EtherCAT 用户手册"
-description: "EtherCAT 用户手册"
+description: "MCU 侧基于 SOEM 的 EtherCAT 主站使用手册：软件架构、API 参考、ec_sample/slaveinfo 示例与 Shell 命令"
 ---
 
 # EtherCAT 用户手册
@@ -31,7 +31,47 @@ import DocScope from '@site/src/components/DocScope';
 | 从站诊断 | 支持从站状态检测、自动恢复与重配 |
 | Shell 接口 | 提供交互式命令行测试入口 |
 
----
+**适用读者**：需要在 MCU1 上部署 EtherCAT 主站，或基于 SOEM 做二次开发（新增从站适配、调整 PDO 映射）的 BSP/应用工程师。
+
+**前置条件**：已烧录含 EtherCAT 支持的 MCU 固件；了解 EtherCAT 基本概念与 FreeRTOS 任务模型；板端串口 Shell 可用。
+
+**与其他模块关系**：底层依赖 McalCdd/Ethernet，见 [Eth 使用指南](./11_mcu_eth.md)；Acore/Linux 侧另有独立的 IgH 主站实现，见 [EtherCAT（Linux 侧）](../04_driver_development/16_driver_ethernet/02_ethercat.md)。
+
+## 名词解释
+
+| 缩略语 | 英文全名 | 中文解释 |
+| ------ | -------- | -------- |
+| SOEM | Simple Open EtherCAT Master | 面向嵌入式实时场景的开源 EtherCAT 主站**库** |
+| MainDevice / Master | EtherCAT Main Device | 主站，本模块实现的功能主体 |
+| SubDevice / Slave | EtherCAT Sub Device | 从站，如伺服、IO、编码器等设备 |
+| ESC | EtherCAT Slave Controller | 从站控制器，硬件实现帧的实时读写 |
+| PDO | Process Data Object | 过程数据对象，周期性的实时数据 |
+| SDO | Service Data Object | 服务数据对象，非周期的参数读写 |
+| CoE | CANopen over EtherCAT | 基于 CANopen 对象字典的邮箱协议 |
+| FoE | File over EtherCAT | 基于 EtherCAT 的文件传输协议（固件升级） |
+| EoE | Ethernet over EtherCAT | 基于 EtherCAT 的以太网隧道 |
+| SoE | Servo over EtherCAT | 面向伺服驱动的参数访问协议 |
+| DC | Distributed Clocks | 分布式时钟，用于主站与从站的时间同步 |
+| ESM | EtherCAT State Machine | 从站状态机：INIT / PRE_OP / SAFE_OP / OPERATIONAL |
+| WKC | Working Counter | 工作计数器，用于判断本周期数据是否被从站正确处理 |
+| SM / FMMU | SyncManager / Fieldbus Memory Management Unit | 从站内用于邮箱与过程数据映射的硬件单元 |
+
+## SOEM 与 MCU 侧主站
+
+SOEM（Simple Open EtherCAT Master）是用于开发 EtherCAT MainDevice 的开源软件**库**，面向嵌入式实时场景设计、架构轻量，因此适合运行在 FreeRTOS 等资源受限环境（上游说明见 `McalCdd/EtherCAT/README.md`，官方文档见 [SOEM Documentation](https://docs.rt-labs.com/soem)）。
+
+RDK 平台上有两套相互独立的 EtherCAT 主站实现：
+
+| 位置 | 实现 | 运行环境 | 文档 |
+| ---- | ---- | -------- | ---- |
+| MCU 侧 | SOEM | FreeRTOS 任务，直接调用 McalCdd/Ethernet 收发 | 本文档 |
+| Acore 侧 | IgH EtherCAT Master | Linux 内核模块 + `ethercat` 用户层工具 | [EtherCAT（Linux 侧）](../04_driver_development/16_driver_ethernet/02_ethercat.md) |
+
+MCU 侧主站的网络绑定当前是固定的：
+
+- 固定使用以太网**控制器 0**（`ETH_CONTROLLER_IDX`，见 `oshw/src/nicdrv.c`）；`ecx_init` 的 `ifname` 形参在现有实现中未被使用（示例中也标注为已废弃）；
+- 示例启动时通过 `Eth_Init` + `Eth_SetControllerMode(0, ETH_MODE_ACTIVE)` 打开控制器，关闭时切回 `ETH_MODE_DOWN`；
+- 收发使用 `Eth_ProvideTxBuffer` + `Eth_Transmit(..., ETH_FRAME_TYPE_ECAT, ...)` 与 `Eth_Receive_ethercat`，接收轮询超时为 10 ms。
 
 ## 软件架构
 
@@ -61,11 +101,9 @@ flowchart TB
 | **OSHW/NIC 层** | `oshw/src/oshw.c` | 字节序转换工具（大小端互转） | `oshw_htons` / `oshw_ntohs` |
 | **硬件层** | 以太网控制器 Controller 0 | 物理网口，收发 EtherCAT 帧（ETH 类型 `0x88A4`） | McalCdd `Eth_Transmit` / `Eth_Receive_ethercat` |
 
----
-
 ## 目录结构
 
-```
+```text
 McalCdd/EtherCAT/
 ├── SConscript                  # 顶层构建脚本
 ├── README.md                   # 原始说明
@@ -116,8 +154,6 @@ samples/EtherCAT/
     ├── SConscript
     └── src/slaveinfo.c        # 从站信息扫描示例
 ```
-
----
 
 ## 关键数据结构
 
@@ -171,13 +207,11 @@ static ecx_contextt ctx;
 | `docheckstate` | 需要执行状态检查标志 |
 | `hasdc` | 组内是否有 DC 从站 |
 
----
-
 ## 从站状态机
 
 EtherCAT 从站遵循以下状态机（ESM）：
 
-```
+```text
   INIT (0x01)
      │
      ▼  I→P
@@ -212,26 +246,21 @@ ecx_writestate(&ctx, 0);
 ecx_statecheck(&ctx, 0, EC_STATE_OPERATIONAL, EC_TIMEOUTSTATE);
 ```
 
----
-
 ## API 参考
+
+本节接口声明位于 `core/inc/soem/` 下的头文件，可直接通过 `soem.h` 一次性包含。
 
 ### 初始化与关闭
 
-#### `ecx_init`
+#### ecx_init
 
-```c
-int ecx_init(ecx_contextt *context, const char *ifname);
-```
+**【函数原型】**
 
-初始化 EtherCAT 主站，打开底层网络接口。
+`int ecx_init(ecx_contextt *context, const char *ifname)`
 
-| 参数 | 说明 |
-|------|------|
-| `context` | 主站上下文指针 |
-| `ifname` | 网络接口名称（嵌入式平台填 `NULL`，默认使用控制器 0） |
+**【功能描述】**
 
-**返回值**：成功返回非零值，失败返回 0。
+初始化 EtherCAT 主站并打开底层网络接口。内部调用 `ecx_setupnic` 完成网卡初始化，是使用其他接口的前提，应在 MCU 侧以太网驱动就绪后调用一次。
 
 ```c
 int rv = ecx_init(&ctx, NULL);
@@ -240,142 +269,295 @@ if (rv == 0) {
 }
 ```
 
-#### `ecx_close`
+**【参数】**
 
-```c
-void ecx_close(ecx_contextt *context);
-```
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针，后续所有接口共用 |
+| `ifname` | `const char *` | 否 | `NULL` | 网络接口名称。MCU 侧实现忽略该参数，固定使用以太网控制器 0，填 `NULL` 即可 |
 
-关闭主站，释放底层网络资源。
+**【返回值】**
 
----
+`int`。成功返回非零值（`ecx_setupnic` 的工作计数），失败返回 0。
+
+#### ecx_close
+
+**【函数原型】**
+
+`void ecx_close(ecx_contextt *context)`
+
+**【功能描述】**
+
+关闭 EtherCAT 主站，释放底层网络资源，与 `ecx_init` 配对使用。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+
+**【返回值】**
+
+无返回值（`void`）。
 
 ### 从站配置
 
-#### `ecx_config_init`
+#### ecx_config_init
 
-```c
-int ecx_config_init(ecx_contextt *context);
-```
+**【函数原型】**
 
-扫描总线上的所有从站，将其配置至 PRE_OP 状态，填充 `ctx.slavelist[]` 和 `ctx.slavecount`。
+`int ecx_config_init(ecx_contextt *context)`
 
-**返回值**：发现的从站数量。
+**【功能描述】**
 
-#### `ecx_config_map_group`
+扫描总线上的所有从站，将其配置至 PRE_OP 状态，并填充 `ctx.slavelist[]` 与 `ctx.slavecount`。须在 `ecx_init` 之后、`ecx_config_map_group` 之前调用。
 
-```c
-int ecx_config_map_group(ecx_contextt *context, void *pIOmap, uint8 group);
-```
+**【参数】**
 
-为指定分组的所有从站配置 PDO 映射，将输入/输出区域映射到 `pIOmap` 缓冲区。
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
 
-| 参数 | 说明 |
-|------|------|
-| `context` | 主站上下文 |
-| `pIOmap` | IO 映射缓冲区（建议 4096 字节） |
-| `group` | 分组编号（0 表示默认分组） |
+**【返回值】**
 
-**返回值**：映射成功的 IO 字节总数。
+`int`。返回发现的从站数量（内部工作计数器 `wkc`），0 表示未发现从站。
+
+#### ecx_config_map_group
+
+**【函数原型】**
+
+`int ecx_config_map_group(ecx_contextt *context, void *pIOmap, uint8 group)`
+
+**【功能描述】**
+
+为指定分组的所有从站配置 PDO 映射，并把输入/输出区域映射到 `pIOmap` 缓冲区，之后即可通过 `ctx.slavelist[i].inputs` / `outputs` 访问过程数据。
 
 ```c
 static uint8 IOmap[4096];
 int map_result = ecx_config_map_group(&ctx, IOmap, 0);
-```
 
-配置完成后可获取期望工作计数器：
-
-```c
+/* 配置完成后可获取期望工作计数器 */
 ec_groupt *group = &ctx.grouplist[0];
 int expectedWKC = (group->outputsWKC * 2) + group->inputsWKC;
 ```
 
-#### `ecx_reconfig_slave`
+**【参数】**
 
-```c
-int ecx_reconfig_slave(ecx_contextt *context, uint16 slave, int timeout);
-```
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `pIOmap` | `void *` | 是 | — | IO 映射缓冲区，由应用提供（示例使用 4096 字节） |
+| `group` | `uint8` | 是 | — | 分组编号，0 表示默认分组 |
 
-重新配置指定从站（用于故障恢复）。成功返回值 >= `EC_STATE_PRE_OP`。
+**【返回值】**
 
-#### `ecx_recover_slave`
+`int`。返回映射成功的 IO 字节总数，0 表示映射失败。
 
-```c
-int ecx_recover_slave(ecx_contextt *context, uint16 slave, int timeout);
-```
+#### ecx_reconfig_slave
 
-恢复已丢失连接的从站。
+**【函数原型】**
 
----
+`int ecx_reconfig_slave(ecx_contextt *context, uint16 slave, int timeout)`
+
+**【功能描述】**
+
+重新配置指定从站，用于从站短暂掉线后恢复其 PDO 配置。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `slave` | `uint16` | 是 | — | 从站编号（1 起，0 表示所有从站） |
+| `timeout` | `int` | 是 | — | 超时时间（µs），可用 `EC_TIMEOUTSTATE` |
+
+**【返回值】**
+
+`int`。失败返回 0；成功返回该从站当前状态值（≥ `EC_STATE_PRE_OP`，即 0x02）。
+
+#### ecx_recover_slave
+
+**【函数原型】**
+
+`int ecx_recover_slave(ecx_contextt *context, uint16 slave, int timeout)`
+
+**【功能描述】**
+
+恢复已丢失连接的从站：先用临时节点地址重新识别从站，校验别名与 EEPROM 信息后写回原配置地址。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `slave` | `uint16` | 是 | — | 从站编号（1 起） |
+| `timeout` | `int` | 是 | — | 超时时间（µs），可用 `EC_TIMEOUTSTATE` |
+
+**【返回值】**
+
+`int`。从站仍在线返回 1；从站无响应返回 0；其余情况返回写回配置地址的工作计数（> 0 表示成功）。
 
 ### 状态管理
 
-#### `ecx_readstate`
+#### ecx_readstate
+
+**【函数原型】**
+
+`int ecx_readstate(ecx_contextt *context)`
+
+**【功能描述】**
+
+读取所有从站的当前状态，更新 `ctx.slavelist[i].state`。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+
+**【返回值】**
+
+`int`。返回所有从站中优先级最低的状态值。
+
+#### ecx_writestate
+
+**【函数原型】**
+
+`int ecx_writestate(ecx_contextt *context, uint16 slave)`
+
+**【功能描述】**
+
+把 `ctx.slavelist[slave].state` 中设置的目标状态写入从站的 AL 控制寄存器，用于驱动从站状态机迁移。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `slave` | `uint16` | 是 | — | 从站编号，0 表示广播到所有从站 |
+
+**【返回值】**
+
+`int`。返回写 AL 控制寄存器的工作计数，0 表示写入失败。
+
+#### ecx_statecheck
+
+**【函数原型】**
+
+`uint16 ecx_statecheck(ecx_contextt *context, uint16 slave, uint16 reqstate, int timeout)`
+
+**【功能描述】**
+
+轮询等待从站达到目标状态，直到成功或超时，通常紧跟在 `ecx_writestate` 之后调用。
 
 ```c
-int ecx_readstate(ecx_contextt *context);
+/* 请求所有从站进入 OPERATIONAL */
+ctx.slavelist[0].state = EC_STATE_OPERATIONAL;
+ecx_writestate(&ctx, 0);
+/* 等待确认（超时 2s） */
+ecx_statecheck(&ctx, 0, EC_STATE_OPERATIONAL, EC_TIMEOUTSTATE);
 ```
 
-读取所有从站当前状态，更新 `ctx.slavelist[i].state`。
+**【参数】**
 
-**返回值**：最低优先级从站的状态值。
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `slave` | `uint16` | 是 | — | 从站编号，0 表示所有从站 |
+| `reqstate` | `uint16` | 是 | — | 期望到达的目标状态，如 `EC_STATE_OPERATIONAL` |
+| `timeout` | `int` | 是 | — | 超时时间（µs），建议使用 `EC_TIMEOUTSTATE`（2 s） |
 
-#### `ecx_writestate`
+**【返回值】**
 
-```c
-int ecx_writestate(ecx_contextt *context, uint16 slave);
-```
-
-向指定从站写入 `ctx.slavelist[slave].state` 中设置的目标状态。`slave=0` 时广播到所有从站。
-
-#### `ecx_statecheck`
-
-```c
-uint16 ecx_statecheck(ecx_contextt *context, uint16 slave, uint16 reqstate, int timeout);
-```
-
-轮询等待从站达到目标状态，直到超时。
-
-| 参数 | 说明 |
-|------|------|
-| `slave` | 从站编号，0=所有 |
-| `reqstate` | 期望的目标状态 |
-| `timeout` | 超时时间（微秒），建议使用 `EC_TIMEOUTSTATE`（2s） |
-
-**返回值**：当前达到的状态值。
-
----
+`uint16`。返回等待结束时从站的实际状态；超时返回 0。
 
 ### 过程数据（PDO）
 
 PDO 通信是 EtherCAT 实时数据交换的核心，须在专用实时任务中周期性调用。
 
-#### `ecx_send_processdata`
+#### ecx_send_processdata
 
-```c
-int ecx_send_processdata(ecx_contextt *context);
-```
+**【函数原型】**
 
-发送所有分组的过程数据帧（将 `outputs` 区域内容发送到从站）。
+`int ecx_send_processdata(ecx_contextt *context)`
 
-#### `ecx_receive_processdata`
+**【功能描述】**
 
-```c
-int ecx_receive_processdata(ecx_contextt *context, int timeout);
-```
+发送默认分组（分组 0）的过程数据帧，把 `outputs` 区域的内容发送到从站，等价于 `ecx_send_processdata_group(context, 0)`。
 
-接收过程数据响应帧（将从站输入更新至 `inputs` 区域）。
+**【参数】**
 
-**返回值**：工作计数器（WKC）。应与 `expectedWKC` 比较以检测通信异常。
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
 
-#### `ecx_send_processdata_group` / `ecx_receive_processdata_group`
+**【返回值】**
 
-分组版本，只操作指定分组：
+`int`。返回发送帧的工作计数器，0 表示发送失败。
 
-```c
-int ecx_send_processdata_group(ecx_contextt *context, uint8 group);
-int ecx_receive_processdata_group(ecx_contextt *context, uint8 group, int timeout);
-```
+#### ecx_receive_processdata
+
+**【函数原型】**
+
+`int ecx_receive_processdata(ecx_contextt *context, int timeout)`
+
+**【功能描述】**
+
+接收过程数据响应帧，把从站输入更新到 `inputs` 区域，等价于 `ecx_receive_processdata_group(context, 0, timeout)`。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `timeout` | `int` | 是 | — | 接收超时（µs），可用 `EC_TIMEOUTRET` |
+
+**【返回值】**
+
+`int`。返回工作计数器（WKC），应与 `expectedWKC` 比较以检测通信异常；未收到帧时返回 `EC_NOFRAME`（-1）。
+
+#### ecx_send_processdata_group
+
+**【函数原型】**
+
+`int ecx_send_processdata_group(ecx_contextt *context, uint8 group)`
+
+**【功能描述】**
+
+发送指定分组的过程数据帧，用于多分组场景。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `group` | `uint8` | 是 | — | 分组编号，0 表示默认分组 |
+
+**【返回值】**
+
+`int`。返回发送帧的工作计数器，0 表示发送失败。
+
+#### ecx_receive_processdata_group
+
+**【函数原型】**
+
+`int ecx_receive_processdata_group(ecx_contextt *context, uint8 group, int timeout)`
+
+**【功能描述】**
+
+接收指定分组的过程数据响应帧。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `group` | `uint8` | 是 | — | 分组编号，0 表示默认分组 |
+| `timeout` | `int` | 是 | — | 接收超时（µs），可用 `EC_TIMEOUTRET` |
+
+**【返回值】**
+
+`int`。返回工作计数器（WKC）；未收到帧时返回 `EC_NOFRAME`（-1）。
 
 #### PDO 数据访问
 
@@ -391,31 +573,17 @@ memcpy(slave->outputs, &my_output, slave->Obytes);
 memcpy(&my_input, slave->inputs, slave->Ibytes);
 ```
 
----
-
 ### 邮箱协议（CoE / SDO）
 
-#### SDO 读取
+#### ecx_SDOread
 
-```c
-int ecx_SDOread(ecx_contextt *context,
-                uint16 slave, uint16 index, uint8 subindex,
-                boolean CA, int *psize, void *p, int timeout);
-```
+**【函数原型】**
 
-从指定从站读取一个 SDO 对象。
+`int ecx_SDOread(ecx_contextt *context, uint16 slave, uint16 index, uint8 subindex, boolean CA, int *psize, void *p, int timeout)`
 
-| 参数 | 说明 |
-|------|------|
-| `slave` | 从站编号（1 起） |
-| `index` | 对象字典索引 |
-| `subindex` | 子索引 |
-| `CA` | 是否使用完整访问（Complete Access） |
-| `psize` | 传入缓冲区大小，返回实际读取字节数 |
-| `p` | 数据缓冲区指针 |
-| `timeout` | 超时（µs），建议 `EC_TIMEOUTRXM`（700ms） |
+**【功能描述】**
 
-**返回值**：工作计数器（> 0 表示成功）。
+从指定从站读取一个 SDO 对象，属于非周期邮箱通信。
 
 ```c
 uint32_t vendor_id = 0;
@@ -423,13 +591,30 @@ int size = sizeof(vendor_id);
 int wkc = ecx_SDOread(&ctx, 1, 0x1018, 0x01, FALSE, &size, &vendor_id, EC_TIMEOUTRXM);
 ```
 
-#### SDO 写入
+**【参数】**
 
-```c
-int ecx_SDOwrite(ecx_contextt *context,
-                 uint16 Slave, uint16 Index, uint8 SubIndex,
-                 boolean CA, int psize, const void *p, int Timeout);
-```
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `slave` | `uint16` | 是 | — | 从站编号（1 起） |
+| `index` | `uint16` | 是 | — | 对象字典索引 |
+| `subindex` | `uint8` | 是 | — | 子索引 |
+| `CA` | `boolean` | 是 | — | 是否使用完整访问（Complete Access），单对象读取填 `FALSE` |
+| `psize` | `int *` | 是 | — | 传入缓冲区大小，返回实际读取字节数 |
+| `p` | `void *` | 是 | — | 数据缓冲区指针 |
+| `timeout` | `int` | 是 | — | 超时（µs），建议 `EC_TIMEOUTRXM`（700 ms） |
+
+**【返回值】**
+
+`int`。返回工作计数器，> 0 表示读取成功。
+
+#### ecx_SDOwrite
+
+**【函数原型】**
+
+`int ecx_SDOwrite(ecx_contextt *context, uint16 Slave, uint16 Index, uint8 SubIndex, boolean CA, int psize, const void *p, int Timeout)`
+
+**【功能描述】**
 
 向指定从站写入一个 SDO 对象。
 
@@ -438,46 +623,176 @@ uint16_t mode = 0x0008; /* 例如：设置运行模式 */
 ecx_SDOwrite(&ctx, 1, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTRXM);
 ```
 
-#### 邮箱处理任务
+**【参数】**
 
-对于支持 CoE 的从站，须在循环任务中定期调用邮箱处理函数：
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `Slave` | `uint16` | 是 | — | 从站编号（1 起） |
+| `Index` | `uint16` | 是 | — | 对象字典索引 |
+| `SubIndex` | `uint8` | 是 | — | 子索引 |
+| `CA` | `boolean` | 是 | — | 是否使用完整访问（Complete Access），单对象写入填 `FALSE` |
+| `psize` | `int` | 是 | — | 待写入数据的字节数 |
+| `p` | `const void *` | 是 | — | 待写入数据的缓冲区指针 |
+| `Timeout` | `int` | 是 | — | 超时（µs），建议 `EC_TIMEOUTRXM`（700 ms） |
+
+**【返回值】**
+
+`int`。返回工作计数器，> 0 表示写入成功。
+
+#### ecx_mbxhandler
+
+**【函数原型】**
+
+`int ecx_mbxhandler(ecx_contextt *context, uint8 group, int limit)`
+
+**【功能描述】**
+
+处理指定分组的邮箱收发队列。对于支持 CoE 的从站，须在循环任务中定期调用。
 
 ```c
 ecx_mbxhandler(&ctx, 0, 4);  /* 处理分组 0，最多 4 条消息 */
 ```
 
-将从站加入循环邮箱处理：
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `group` | `uint8` | 是 | — | 分组编号，0 表示默认分组 |
+| `limit` | `int` | 是 | — | 本次调用最多处理的消息条数 |
+
+**【返回值】**
+
+`int`。返回邮箱发送处理的工作计数器。
+
+#### ecx_slavembxcyclic
+
+**【函数原型】**
+
+`int ecx_slavembxcyclic(ecx_contextt *context, uint16 slave)`
+
+**【功能描述】**
+
+把指定从站加入循环邮箱处理流程。
 
 ```c
 ecx_slavembxcyclic(&ctx, slave_index);
 ```
 
-#### CoE 对象字典查询
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `slave` | `uint16` | 是 | — | 从站编号（1 起） |
+
+**【返回值】**
+
+`int`。成功返回 1，失败返回 0。
+
+#### ecx_readODlist
+
+**【函数原型】**
+
+`int ecx_readODlist(ecx_contextt *context, uint16 Slave, ec_ODlistt *pODlist)`
+
+**【功能描述】**
+
+读取指定从站的对象字典列表，用于枚举 CoE 对象。
 
 ```c
-/* 读取对象字典列表 */
 ec_ODlistt ODlist;
 ecx_readODlist(&ctx, slave, &ODlist);
+```
 
-/* 读取对象描述 */
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `Slave` | `uint16` | 是 | — | 从站编号（1 起） |
+| `pODlist` | `ec_ODlistt *` | 是 | — | 输出参数，返回对象字典列表 |
+
+**【返回值】**
+
+`int`。返回工作计数器，> 0 表示读取成功。
+
+#### ecx_readODdescription
+
+**【函数原型】**
+
+`int ecx_readODdescription(ecx_contextt *context, uint16 Item, ec_ODlistt *pODlist)`
+
+**【功能描述】**
+
+读取对象字典中指定条目的描述信息。
+
+```c
 ecx_readODdescription(&ctx, item, &ODlist);
+```
 
-/* 读取对象条目信息 */
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `Item` | `uint16` | 是 | — | 对象字典条目序号（从 `ecx_readODlist` 返回的列表中选取） |
+| `pODlist` | `ec_ODlistt *` | 是 | — | 由 `ecx_readODlist` 填充的列表 |
+
+**【返回值】**
+
+`int`。返回工作计数器，> 0 表示读取成功。
+
+#### ecx_readOE
+
+**【函数原型】**
+
+`int ecx_readOE(ecx_contextt *context, uint16 Item, ec_ODlistt *pODlist, ec_OElistt *pOElist)`
+
+**【功能描述】**
+
+读取指定对象条目的条目信息（对象条目列表）。
+
+```c
 ec_OElistt OElist;
 ecx_readOE(&ctx, item, &ODlist, &OElist);
 ```
 
----
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `Item` | `uint16` | 是 | — | 对象字典条目序号 |
+| `pODlist` | `ec_ODlistt *` | 是 | — | 由 `ecx_readODlist` 填充的列表 |
+| `pOElist` | `ec_OElistt *` | 是 | — | 输出参数，返回对象条目列表 |
+
+**【返回值】**
+
+`int`。返回工作计数器，> 0 表示读取成功。
 
 ### 分布式时钟（DC）
 
-#### `ecx_configdc`
+#### ecx_configdc
 
-```c
-int ecx_configdc(ecx_contextt *context);
-```
+**【函数原型】**
+
+`boolean ecx_configdc(ecx_contextt *context)`
+
+**【功能描述】**
 
 配置所有支持 DC 的从站的分布式时钟，使其与第一个 DC 从站同步。应在 `ecx_config_map_group` 之后调用。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+
+**【返回值】**
+
+`boolean`。总线上存在 DC 从站并完成配置时返回 `TRUE`，否则返回 `FALSE`。
 
 #### DC 时间同步（PI 控制器）
 
@@ -507,19 +822,50 @@ if (ctx.slavelist[0].hasdc && (wkc > 0))
 }
 ```
 
----
-
 ### 错误处理
 
-#### 错误栈操作
+#### ecx_iserror
 
-```c
-/* 检查是否有未读错误 */
-boolean ecx_iserror(ecx_contextt *context);
+**【函数原型】**
 
-/* 从错误栈弹出一个错误 */
-boolean ecx_poperror(ecx_contextt *context, ec_errort *Ec);
-```
+`boolean ecx_iserror(ecx_contextt *context)`
+
+**【功能描述】**
+
+检查错误栈中是否有未读错误。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+
+**【返回值】**
+
+`boolean`。错误栈非空时返回 `TRUE`，否则返回 `FALSE`。
+
+#### ecx_poperror
+
+**【函数原型】**
+
+`boolean ecx_poperror(ecx_contextt *context, ec_errort *Ec)`
+
+**【功能描述】**
+
+从错误栈中弹出一个错误，通常在轮询到 `ecx_iserror` 为 `TRUE` 时循环调用。
+
+**【参数】**
+
+| 参数 | 类型 | 必选 | 默认 | 说明 |
+|------|------|------|------|------|
+| `context` | `ecx_contextt *` | 是 | — | 主站上下文指针 |
+| `Ec` | `ec_errort *` | 是 | — | 输出参数，返回弹出的错误信息 |
+
+**【返回值】**
+
+`boolean`。成功弹出返回 `TRUE`；错误栈为空返回 `FALSE`。
+
+#### 错误信息结构与类型
 
 `ec_errort` 结构体：
 
@@ -542,15 +888,13 @@ boolean ecx_poperror(ecx_contextt *context, ec_errort *Ec);
 | `EC_ERR_TYPE_SOE_ERROR` | SoE 错误 |
 | `EC_ERR_TYPE_MBX_ERROR` | 邮箱错误 |
 
----
-
 ## 快速入门：ec_sample
 
 `samples/EtherCAT/ec_sample/src/ec_sample.c` 提供了一个完整的 EtherCAT 主站运行示例，展示了从初始化到运行再到关闭的全流程。
 
 ### 总体流程
 
-```
+```text
 EtherCAT_Sample_Start(cycle_time_us)
        │
        ├─ xTaskCreate("ECAT_RT", ecatthread, ...)      ← 最高优先级
@@ -654,9 +998,9 @@ void ecatcheck(void *pvParameters)
 | `ECAT_CHK` | `ecatcheck` | `configMINIMAL_STACK_SIZE × 8` | `tskIDLE_PRIORITY + 1` |
 | `ECAT_BRINGUP` | `EtherCAT_Bringup_Task` | `configMINIMAL_STACK_SIZE × 10` | `configMAX_PRIORITIES - 2` |
 
-> **注意**：`ecx_config_map_group` 会消耗较大栈空间，因此 Bringup 任务使用了更大的栈。
-
----
+:::warning
+`ecx_config_map_group` 会消耗较大栈空间，因此 Bringup 任务使用了更大的栈。
+:::
 
 ## 从站信息查询：slaveinfo
 
@@ -702,29 +1046,28 @@ void EtherCAT_SlaveInfo_Start(boolean sdo_flag, boolean map_flag);
 int Ec_SlaveOP(uint16 slave, uint16 index, uint8 subindex, uint8 value, uint16 action);
 ```
 
----
-
 ## Shell 命令接口
 
 两个示例程序均通过 `SHELL_EXPORT_CMD` 宏向 Shell 系统注册了命令，可在运行时直接调用：
 
 ### `Ec_Sample_Test`
 
-```
+```text
 Ec_Sample_Test [ifname] [cyc_time_us]
 ```
 
 启动 EtherCAT 示例（`ifname` 参数已废弃，`cyc_time_us=0` 使用默认 1ms 周期）。
 
 示例：
-```
+
+```bash
 Ec_Sample_Test "" 2000    # 2ms 周期运行
 Ec_Sample_Test "" 0       # 默认 1ms 周期
 ```
 
 ### `Ec_SlaveInfo`
 
-```
+```text
 Ec_SlaveInfo [-sdo] [-map]
 ```
 
@@ -734,13 +1077,11 @@ Ec_SlaveInfo [-sdo] [-map]
 
 ### `Ec_SlaveOP`
 
-```
+```text
 Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 ```
 
 直接对从站执行 SDO 读（`upload`）或写（`download`）操作，其中写操作需要额外的 `value` 参数。
-
----
 
 ## 平台适配层
 
@@ -800,8 +1141,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 | `ecx_waitinframe(port, idx, timeout)` | 等待接收指定索引帧，支持超时 |
 | `ecx_srconfirm(port, idx, timeout)` | 发送并确认（带重试） |
 
----
-
 ## 配置宏参考
 
 所有配置宏定义于 `core/inc/soem/ec_options.h`：
@@ -824,8 +1163,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 | `EC_MAXELIST` | 64 | 错误列表最大条目 |
 | `EC_MAXIOSEGMENTS` | 64 | 每组最大 IO 分段数 |
 
----
-
 ## 超时常量参考
 
 定义于 `core/inc/soem/ec_options.h`：
@@ -839,8 +1176,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 | `EC_TIMEOUTTXM` | 20,000 | 邮箱发送超时 |
 | `EC_TIMEOUTRXM` | 700,000 | 邮箱接收超时（SDO 等） |
 | `EC_TIMEOUTSTATE` | 2,000,000 | 状态切换超时 |
-
----
 
 ## 常见问题与故障排查
 
@@ -856,8 +1191,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 2. 检查硬件连接和以太网控制器配置
 3. 检查 MCU 网口速率与从站速率是否一致
 
----
-
 ### Q2：`ecx_config_init` 返回 0，未发现从站
 
 **可能原因**：
@@ -871,7 +1204,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 2. 检查 `ETH_FRAME_TYPE_ECAT` 宏是否为 `0x88A4`
 3. 检查 `Eth_Receive_ethercat` 是否被正确实现，能收到 EtherCAT 帧
 4. 检查 MCU 网口速率与从站速率是否一致
----
 
 ### Q3：WKC 持续与 expectedWKC 不符
 
@@ -884,8 +1216,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 1. 检查 `ecatcheck` 任务日志，确认是否有 `slave lost` 告警
 2. 适当增大 `cycletime`（如从 1ms 改为 2ms）
 3. 调用 `ecx_readstate` 逐从站检查 `state` 和 `ALstatuscode`
-
----
 
 ### Q4：从站卡在 SAFE_OP，无法进入 OPERATIONAL
 
@@ -901,8 +1231,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
    - `0x001D`：SM 配置无效
    - `0x001E`：无效 SM3 配置（输出 PDO）
 
----
-
 ### Q5：栈溢出（Stack Overflow）
 
 `ecx_config_map_group` 会递归处理从站 EEPROM 数据，消耗较大栈空间。
@@ -910,8 +1238,6 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 **解决方法**：
 - 确保 Bringup 任务使用足够大的栈：`configMINIMAL_STACK_SIZE * 10` 或更大
 - 在任务执行前后调用 `uxTaskGetStackHighWaterMark` 监控栈使用情况
-
----
 
 ### Q6：如何在运行时读写 SDO
 
@@ -928,31 +1254,30 @@ if (wkc > 0)
 }
 ```
 
----
-
 ### Q7：如何通过 FoE 更新从站固件
 
 1. 将从站切换到 BOOT 状态：
+
    ```c
    ctx.slavelist[slave].state = EC_STATE_BOOT;
    ecx_writestate(&ctx, slave);
    ecx_statecheck(&ctx, slave, EC_STATE_BOOT, EC_TIMEOUTSTATE);
    ```
+
 2. 调用 FoE 写入接口（参见 `ec_foe.h`）
 3. 完成后将从站切回 INIT → PRE_OP → SAFE_OP → OPERATIONAL
-
----
 
 ## 测试用例
 
 本章仅介绍 `samples/EtherCAT/` 目录下通过 Shell 注册的 **3 条命令**的使用方法。所有操作均在串口 Shell 交互界面中完成，无需修改代码。
 
-> **通用前置条件**（适用于全部测试用例）：
-> - 目标板已上电，串口 Shell 可正常交互
-> - 至少一台 EtherCAT 从站通过网线连接至板卡以太网口（控制器 0）
-> - 工程编译时已启用 `USE_SHELL_CMD` 宏
+:::note[通用前置条件]
+适用于全部测试用例：
 
----
+- 目标板已上电，串口 Shell 可正常交互
+- 至少一台 EtherCAT 从站通过网线连接至板卡以太网口（控制器 0）
+- 工程编译时已启用 `USE_SHELL_CMD` 宏
+:::
 
 ### Shell 命令速查
 
@@ -962,21 +1287,21 @@ if (wkc > 0)
 | `Ec_SlaveOP` | `slaveinfo/src/slaveinfo.c` | SDO 读（upload）/ 写（download） |
 | `Ec_Sample_Test` | `ec_sample/src/ec_sample.c` | 启动 EtherCAT 完整运行示例 |
 
----
-
 ### Ec_SlaveInfo：从站基本信息扫描
 
 **测试目的**：扫描总线，打印所有从站的基本硬件信息。
 
 **命令格式**：
 
-```
+```bash
 Ec_SlaveInfo -sdo
 Ec_SlaveInfo -map
 Ec_SlaveInfo -sdo -map
 ```
 
-> 注意：`Ec_SlaveInfo` 必须至少带一个参数（`-sdo` 或 `-map`），不带参数会打印用法提示并退出。
+:::warning
+`Ec_SlaveInfo` 必须至少带一个参数（`-sdo` 或 `-map`），不带参数会打印用法提示并退出。
+:::
 
 **各参数含义**：
 
@@ -990,25 +1315,25 @@ Ec_SlaveInfo -sdo -map
 
 1. 只看从站基础信息和 PDO 映射（速度较快，约 2～5 秒）：
 
-   ```
+   ```bash
    Ec_SlaveInfo -map
    ```
 
 2. 只看对象字典（耗时较长，依从站对象数量约 10～60 秒）：
 
-   ```
+   ```bash
    Ec_SlaveInfo -sdo
    ```
 
 3. 完整查询（同时包含 PDO 映射和对象字典）：
 
-   ```
+   ```bash
    Ec_SlaveInfo -sdo -map
    ```
 
 **预期日志输出**（以 `-map` 为例）：
 
-```
+```console
 D-Robotics:/$ [0115.275660 0]INFO: Starting EtherCAT SDO write operation
 [0115.275739 0]INFO: intmbxpool mbxp: mutex:
 [0115.276190 0]INFO: ec_config_init
@@ -1062,7 +1387,7 @@ D-Robotics:/$ [0115.275660 0]INFO: Starting EtherCAT SDO write operation
 
 **用法错误提示**（不带任何参数时）：
 
-```
+```console
 Input error, please check the entered characters!
 Usage:
   Ec_SlaveInfo <-sdo> <-map>
@@ -1074,14 +1399,13 @@ Usage:
   Ec_SlaveInfo -map - print mapping
 ```
 
-
 ### Ec_SlaveOP upload：SDO 读取
 
 **测试目的**：通过 Shell 命令直接读取从站指定 SDO 对象的当前值。
 
 **命令格式**：
 
-```
+```text
 Ec_SlaveOP upload <slave> <index> <subindex>
 ```
 
@@ -1092,19 +1416,21 @@ Ec_SlaveOP upload <slave> <index> <subindex>
 | `<index>` | 十六进制整数 | 对象字典索引，如 `0x1018` |
 | `<subindex>` | 整数 | 子索引，如 `1` |
 
-> **注意**：`Ec_SlaveOP` 的 `slave` 参数从 **0** 开始，内部会自动 +1 对应第 1 台从站。
+:::warning
+`Ec_SlaveOP` 的 `slave` 参数从 **0** 开始，内部会自动 +1 对应第 1 台从站。
+:::
 
 **操作步骤**：
 
-读取第 1 台从站（`slave=0`）的 led8的 value（`0x7010:08`）：
+读取第 1 台从站（`slave=0`）的 led8 的 value（`0x7010:08`）：
 
-```
+```bash
 Ec_SlaveOP upload 0 0x7010 8
 ```
 
 **预期日志输出**：
 
-```
+```console
 D-Robotics:/$ Ec_SlaveOP upload 0 0x7010 8
 
 D-Robotics:/$ [0238.504638 0]INFO: Starting EtherCAT SDO write operation
@@ -1148,7 +1474,7 @@ D-Robotics:/$ [0238.504638 0]INFO: Starting EtherCAT SDO write operation
 
 **用法错误提示**（参数不正确时）：
 
-```
+```console
 Input error, please check the entered characters!
 Usage:
   Ec_SlaveCtl <download/upload> <slave> <index> <subindex> <value>
@@ -1161,15 +1487,13 @@ Usage:
   Ec_SlaveCtl download 0 0x7010 0x8 1 - Set subindex 0x8 of 0x7010 to 1.
 ```
 
----
-
 ### Ec_SlaveOP download：SDO 写入
 
 **测试目的**：通过 Shell 命令向从站指定 SDO 对象写入新值，并通过回读确认写入生效。
 
 **命令格式**：
 
-```
+```text
 Ec_SlaveOP download <slave> <index> <subindex> <value>
 ```
 
@@ -1181,25 +1505,27 @@ Ec_SlaveOP download <slave> <index> <subindex> <value>
 | `<subindex>` | 整数 | 子索引 |
 | `<value>` | 整数 | 写入的值（十进制或十六进制均可） |
 
-> **注意**：写入操作在从站切换到 SAFE_OP 状态后执行，操作完成后从站会被关闭（`ecx_close`）。
+:::warning
+写入操作在从站切换到 SAFE_OP 状态后执行，操作完成后从站会被关闭（`ecx_close`）。
+:::
 
 **操作步骤**：
 
 **示例 1**：向第 1 台从站写入输出控制字（`0x7010:0x08`），设置为 `1`：
 
-```
+```bash
 Ec_SlaveOP download 0 0x7010 8 1
 ```
 
 **验证步骤**：写入后立即回读确认：
 
-```
+```bash
 Ec_SlaveOP upload 0 0x7010 8
 ```
 
 **预期日志输出**（写入流程）：
 
-```
+```console
 D-Robotics:/$ Ec_SlaveOP download 0 0x7010 8 1
 
 D-Robotics:/$ [0317.724882 0]INFO: Starting EtherCAT SDO write operation
@@ -1257,7 +1583,7 @@ D-Robotics:/$ [0317.724882 0]INFO: Starting EtherCAT SDO write operation
 
 **预期日志输出**（回读验证）：
 
-```
+```console
 [0338.976953 0]INFO:     Inputs  startbit 216031242
 [0338.977023 0]INFO:  =Slave 1, MBXSTATUS MAPPING
 [0338.978932 0]INFO: IOmapSize 9
@@ -1286,15 +1612,13 @@ D-Robotics:/$ [0317.724882 0]INFO: Starting EtherCAT SDO write operation
 | `SDO write operation failed` | 对象只读，或值越界 | 先用 `-sdo` 确认访问权限和数据类型范围 |
 | `No slaves found for SDO write` | 总线无从站 | 检查物理连接 |
 
----
-
 ### Ec_Sample_Test：默认周期运行
 
 **测试目的**：验证 EtherCAT 主站完整运行流程，包括初始化、PDO 数据交换以及自动关闭，使用默认 1ms 周期。
 
 **命令格式**：
 
-```
+```text
 Ec_Sample_Test <ifname> <cyc_time_us>
 ```
 
@@ -1307,7 +1631,7 @@ Ec_Sample_Test <ifname> <cyc_time_us>
 
 使用默认 1ms 周期启动：
 
-```
+```bash
 Ec_Sample_Test "" 0
 ```
 
@@ -1320,7 +1644,7 @@ Ec_Sample_Test "" 0
 
 **预期日志输出（完整流程）**：
 
-```
+```console
 D-Robotics:/$ Ec_Sample_Test
 [065.290630 0]INFO: SOEM (Simple Open EtherCAT Master) ec_sample
 [065.290708 0]INFO: Starting EtherCAT sample with cycle time: 1000000 us
@@ -1374,9 +1698,9 @@ D-Robotics:/$ [065.302668 0]INFO: ec_config_init wkc == 1
 | DC 收敛 | `dt` 值随循环次数逐渐减小（若从站有 DC 支持） |
 | 正常退出 | 依次出现 `EtherCAT to SAFE_OP` → `EtherCAT to INIT` → `EtherCAT bringup completed` |
 
----
-
 ## 相关文档
 
 - [EtherCAT（Linux 侧）](../04_driver_development/16_driver_ethernet/02_ethercat.md)
 - [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
+- [Eth 使用指南](./11_mcu_eth.md)
+- [MCU 代码包结构介绍](./00_code_release.md)
