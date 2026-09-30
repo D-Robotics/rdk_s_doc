@@ -21,21 +21,17 @@ MIPI RX 与 CIM 的职责与接入能力见[硬件框图](#硬件框图)与[硬�
 
 <DocScope products="RDK S100">
 
-![整机媒体链路硬件总览：Camera → MIPI Host → CIM → CPE（ISP / PYM / GDC / STITCH）→ IDU](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview.jpeg)
+![S100 媒体链路硬件总览：相机接入 → CIM → CPE0/CPE1（ISP/YNR/PYM）与 CIM4 离线输出，Online/Offline 分色标注](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview.jpeg)
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-![S600 整机媒体链路硬件总览：Camera×6 → MIPI RX0-5 → CIM0-5 → CPE0-3（ISP / PYM）与 CPElite，offline 经 DDR](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview-s600.png)
+![S600 媒体链路硬件总览：相机接入 ×6 → CIM0-5 → CPE0-3（ISP/YNR/PYM）与 CPElite（GDC/STITCH/PYM4），Online/Offline 分色标注](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview-s600.png)
 
 </DocScope>
 
 *整机媒体链路硬件总览——VIN 对应其中的接入段：MIPI RX 与 CIM。*
-
-![MIPI RX 与 CIM 的模块结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/mipi-cim-structure.png)
-
-*MIPI-RX 侧的 IPI0-3 送入 CIM，CIM 内四通道各含输入选择、ROI、DEC、RAWDS 与输出。*
 
 MIPI 侧从物理层到接口层：
 
@@ -418,6 +414,10 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 **【示例代码】**
 
+```c
+hbn_vnode_close(vin_fd);
+```
+
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_set_attr
@@ -541,6 +541,11 @@ hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 
 **【示例代码】**
 
+```c
+vin_ochn_attr_t ochn_attr;
+hbn_vnode_get_ochn_attr(vin_fd, OCHN_MAIN, &ochn_attr);
+```
+
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_set_ichn_attr
@@ -613,6 +618,11 @@ hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
 
 **【示例代码】**
 
+```c
+vin_ichn_attr_t ichn_attr;
+hbn_vnode_get_ichn_attr(vin_fd, 0, &ichn_attr);
+```
+
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_set_ochn_buf_attr
@@ -648,6 +658,11 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 
 **【示例代码】**
 
+```c
+hbn_buf_alloc_attr_t alloc_attr = { .buffers_num = 6, .is_contig = 1 };
+hbn_vnode_set_ochn_buf_attr(vin_fd, OCHN_MAIN, &alloc_attr);
+```
+
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_start
@@ -678,6 +693,10 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 
 **【示例代码】**
 
+```c
+hbn_vnode_start(vin_fd);   /* 通常由 hbn_vflow_start 统一启动 */
+```
+
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_stop
@@ -707,6 +726,10 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 - 通常直接用 `hbn_vflow_stop` 统一管理整条流，不必单独调用
 
 **【示例代码】**
+
+```c
+hbn_vnode_stop(vin_fd);
+```
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 
@@ -781,6 +804,10 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 - 普通采集场景不需要调用
 
 **【示例代码】**
+
+```c
+hbn_vnode_sendframe(vin_fd, 0, &img);   /* 回灌：往输入通道送帧 */
+```
 
 完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
 

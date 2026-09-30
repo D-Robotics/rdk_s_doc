@@ -20,21 +20,17 @@ The responsibilities and bring-up limits of MIPI RX and the CIM are in [Hardware
 
 <DocScope products="RDK S100">
 
-![Media pipeline hardware overview: Camera → MIPI Host → CIM → CPE (ISP / PYM / GDC / STITCH) → IDU](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview.jpeg)
+![S100 media pipeline hardware overview: camera input → CIM → CPE0/CPE1 (ISP/YNR/PYM) and CIM4 offline output, Online/Offline colour-coded](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview.jpeg)
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-![S600 media pipeline hardware overview: 6 cameras, MIPI RX0-5, CIM0-5, CPE0-3 (ISP / PYM) and CPElite, offline via DDR](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview-s600.png)
+![S600 media pipeline hardware overview: 6× camera input → CIM0-5 → CPE0-3 (ISP/YNR/PYM) and CPElite (GDC/STITCH/PYM4), Online/Offline colour-coded](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview-s600.png)
 
 </DocScope>
 
 *Media pipeline hardware overview — VIN is the input segment of it: MIPI RX and the CIM.*
-
-![Structure of MIPI RX and the CIM](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/mipi-cim-structure.png)
-
-*On the MIPI-RX side, IPI0-3 feed the CIM, whose four channels each carry input select, ROI, DEC, RAWDS and outputs.*
 
 The MIPI side, from the physical layer up to the interface:
 
@@ -418,6 +414,10 @@ None
 
 **【Example】**
 
+```c
+hbn_vnode_close(vin_fd);
+```
+
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
 ### hbn_vnode_set_attr
@@ -541,6 +541,11 @@ None
 
 **【Example】**
 
+```c
+vin_ochn_attr_t ochn_attr;
+hbn_vnode_get_ochn_attr(vin_fd, OCHN_MAIN, &ochn_attr);
+```
+
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
 ### hbn_vnode_set_ichn_attr
@@ -613,6 +618,11 @@ None
 
 **【Example】**
 
+```c
+vin_ichn_attr_t ichn_attr;
+hbn_vnode_get_ichn_attr(vin_fd, 0, &ichn_attr);
+```
+
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
 ### hbn_vnode_set_ochn_buf_attr
@@ -648,6 +658,11 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 **【Example】**
 
+```c
+hbn_buf_alloc_attr_t alloc_attr = { .buffers_num = 6, .is_contig = 1 };
+hbn_vnode_set_ochn_buf_attr(vin_fd, OCHN_MAIN, &alloc_attr);
+```
+
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
 ### hbn_vnode_start
@@ -678,6 +693,10 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 
 **【Example】**
 
+```c
+hbn_vnode_start(vin_fd);   /* usually started via hbn_vflow_start instead */
+```
+
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
 ### hbn_vnode_stop
@@ -707,6 +726,10 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 - Usually `hbn_vflow_stop` manages the whole flow, so calling this directly is unnecessary
 
 **【Example】**
+
+```c
+hbn_vnode_stop(vin_fd);
+```
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
@@ -781,6 +804,10 @@ Returns `HBN_STATUS_SUCESS` (`0`) on success; on failure a negative error code �
 - Not needed for ordinary capture
 
 **【Example】**
+
+```c
+hbn_vnode_sendframe(vin_fd, 0, &img);   /* replay: feed a frame into the input channel */
+```
 
 A complete runnable version is in [Quick Example](#quick-example) and on the board at `/app/multimedia_samples/sample_vin/`.
 
