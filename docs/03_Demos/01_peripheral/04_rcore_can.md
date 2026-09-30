@@ -1,6 +1,6 @@
 ---
-title: "CAN 应用"
 sidebar_position: 4
+title: "CAN 应用"
 description: "RDK S100/S600 CAN 总线收发示例，无需改系统代码"
 ---
 
@@ -8,7 +8,9 @@ description: "RDK S100/S600 CAN 总线收发示例，无需改系统代码"
 
 本示例演示在 RDK 开发板上使用 CAN 总线进行数据收发，无需修改系统代码。板端提供基于 HAL 的 CAN 示例和基于 SocketCAN 的示例两种方式。
 
-> CAN 驱动调试见 [CAN 驱动开发](../../07_Advanced_development/11_mcu_development/09_mcu_can.md)。
+:::note
+CAN 驱动调试见 [CAN 驱动开发](../../07_Advanced_development/11_mcu_development/09_mcu_can.md)。
+:::
 
 ## 环境准备
 
@@ -25,12 +27,23 @@ Can/
 ├── can_get/         # HAL 方式：接收 CAN 数据
 ├── can_send/        # HAL 方式：发送 CAN 数据
 ├── can_multi_ch/    # HAL 方式：多通道收发
-└── socketcan/       # SocketCAN 方式：压力测试
+├── socketcan/       # SocketCAN 方式：压力测试（仅 S600）
+└── can_fast_bidir/  # HAL 快速路径：双口对测（仅 S100）
 ```
 
-源码路径：`2-rdk_s600_source_code/source/hobot-io-samples/debian/app/Can/`（S600）或 `1-rdk_s100_source_code/source/hobot-io-samples/debian/app/Can/`（S100）。
+| 目录 | 平台 | 关键文件 | 说明 |
+|------|------|----------|------|
+| `can_get/` | S100 / S600 | `canhal_get.c`、`config/` | HAL 方式接收示例 |
+| `can_send/` | S100 / S600 | `canhal_send.c`、`config/` | HAL 方式发送示例 |
+| `can_multi_ch/` | S100 / S600 | `main.cpp`、`readme.md`、`run.sh`、`config/` | HAL 方式多通道收发示例 |
+| `socketcan/` | 仅 S600 | `can_stress.c`、`can_stress.py`、`README.md` | SocketCAN 方式压力测试工具 |
+| `can_fast_bidir/` | 仅 S100 | `can_fast_bidir_test.c`、`can_fast_api_guide.md` | HAL 快速路径的双口对测示例 |
 
-> S100 与 S600 的示例目录略有差异：S100 使用 `can_fast_bidir`，S600 使用 `socketcan`，其余 `can_get`/`can_send`/`can_multi_ch` 一致。
+源码路径（`source/hobot-io-samples/debian/app/Can/`）：
+
+:::note
+S100 与 S600 的示例目录略有差异：S100 使用 `can_fast_bidir`，S600 使用 `socketcan`，其余 `can_get`/`can_send`/`can_multi_ch` 一致。
+:::
 
 ## 编译与运行
 
@@ -55,9 +68,11 @@ make
 
 HAL 方式示例参数说明：
 
-- `canhal_send <target> <canid>`：`target` 为 IPCF 通道名（对应 `config/ipcf_channel.json` 中配置的 `bypass`），`canid` 为 CAN 通道号。
-- `canhal_get <target>`：接收端只需指定 `target`。
-- `can_multi_ch` 支持 `-t <can_type>`（0 标准帧 / 1 扩展帧 / 2 FD 标准帧 / 3 FD 扩展帧）、`-l <can_length>`（8 / 64）、`-n <帧数>` 等参数，例如 `./can_multi_ch -t 2 -l 64 -n 5`。
+| 示例 | 用法 | 说明 |
+|------|------|------|
+| `canhal_send` | `canhal_send <target> <canid>` | `target` 为 IPCF 通道名（对应 `config/ipcf_channel.json` 中配置的 `bypass`），`canid` 为 CAN 通道号 |
+| `canhal_get` | `canhal_get <target>` | 接收端只需指定 `target` |
+| `can_multi_ch` | `can_multi_ch [-t <can_type>] [-l <can_length>] [-n <帧数>]` | `-t`：0 标准帧 / 1 扩展帧 / 2 FD 标准帧 / 3 FD 扩展帧；`-l`：8 / 64；例如 `./can_multi_ch -t 2 -l 64 -n 5` |
 
 ### SocketCAN 方式
 
@@ -81,6 +96,45 @@ sudo python3 can_stress.py -i can0 -f 1 -l 64 -t 0x100 -r 0x100 -p 1 -w 1000 -L 
 - 运行前需先加载 CAN 模块并配置 CAN 接口（如 `ip link set can0 ...`），具体步骤与参数见 `socketcan/README.md`。
 
 :::
+
+## CAN FD 参数说明
+
+CAN FD 的仲裁段与数据段可以使用不同的波特率，配置接口时需要同时给出两个速率与对应的采样点；`can_stress` 的 `-f`/`-l` 等参数则决定测试报文是否使用 FD 格式及其数据长度。
+
+### 接口配置
+
+以 `can0` 为例（取自 `socketcan/README.md`）：
+
+```bash
+modprobe can
+modprobe can-raw
+modprobe flexcan
+ip link set can0 down
+ip link set can0 type can fd on loopback off bitrate 1000000 sample-point 0.75 dbitrate 5000000 dsample-point 0.75
+ip link set can0 up
+```
+
+| 配置项 | 含义 |
+|--------|------|
+| `bitrate` | 仲裁段波特率 |
+| `sample-point` | 仲裁段采样点 |
+| `dbitrate` | 数据段波特率 |
+| `dsample-point` | 数据段采样点 |
+| `loopback off` | 关闭回环，使用真实物理总线 |
+
+### can_stress 参数
+
+| 参数 | 含义 |
+|------|------|
+| `-i <canX>` | CAN 接口名，支持多路（如 `can0`、`can1`） |
+| `-f <0/1>` | 是否启用 CAN FD 模式 |
+| `-l <byte>` | 数据长度，CAN FD 建议 64 |
+| `-p <ms>` | 发送周期，1 表示 1000 FPS |
+| `-w <us>` | 延迟预警阈值，超过计入 `ALM_RATIO` |
+| `-t <id>` / `-r <id>` | 发送 / 接收 CAN ID |
+| `-L` | 开启详细延迟日志 |
+| `-S` | 打印统计周期 |
+| `-D <sec>` | 测试持续时间 |
 
 ## 代码解读
 
@@ -132,4 +186,5 @@ Send end, send package total: 1 frame total: 1
 ## 相关文档
 
 - [CAN 驱动开发](../../07_Advanced_development/11_mcu_development/09_mcu_can.md)
+- [IPC 模块介绍](../../07_Advanced_development/03_system_software/12_driver_ipc.md)
 - [C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)
