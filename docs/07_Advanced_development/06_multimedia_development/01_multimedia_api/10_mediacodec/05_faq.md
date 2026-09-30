@@ -221,35 +221,11 @@ ret = hb_mm_mc_set_startup_config(context, &startup_config);
 
 **A**：主要是因为 video 的时间基设置不准确导致。
 
-音频和视频一同封装为 mp4 时，video 时间基的分子和分母设置为固定值。
+封装为 mp4 时，video 时间基的分子和分母设置为固定值。
 
 ```c
 numerator = 1;
 denominator = 90000;
-```
-
-#### 音频录制时无法找到音频设备
-
-**Q**：音频录制的时候出现无法打开 pcm 设备的报错。
-
-<DocScope products="RDK S100">
-
-![音频设备报错 S100](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-audio-s100.png)
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-![音频设备报错 S600](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-audio-s600.png)
-
-</DocScope>
-
-**A**：没有加载 pcm 驱动，加载以下驱动模块即可。
-
-```bash
-modprobe ac108_driver.ko
-modprobe ac101.ko
-modprobe hobot_snd_jplus_ac_host.ko
 ```
 
 ## 相关文档

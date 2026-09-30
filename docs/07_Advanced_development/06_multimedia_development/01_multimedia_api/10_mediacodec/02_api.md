@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: "MediaCodec API 参考"
-description: "RDK S100/S600 MediaCodec 74 个接口说明、数据结构与返回值"
+description: "RDK S100/S600 MediaCodec 70 个接口说明、数据结构与返回值"
 toc_max_heading_level: 4
 ---
 
@@ -9,11 +9,11 @@ import DocScope from '@site/src/components/DocScope';
 
 # MediaCodec API 参考
 
-本篇逐条说明 74 个接口、数据结构与返回值约定；硬件规格与使用方法见 [MediaCodec 使用指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage)。
+本篇逐条说明 70 个接口、数据结构与返回值约定；硬件规格与使用方法见 [MediaCodec 使用指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage)。
 
 ## API 参考
 
-MediaCodec 共 74 个接口。多数配置类是**成对**出现的 `get_*` / `set_*`：`set_*` 下发参数，`get_*` 读回当前值。
+MediaCodec 共 70 个接口。多数配置类是**成对**出现的 `get_*` / `set_*`：`set_*` 下发参数，`get_*` 读回当前值。
 
 ### 生命周期与状态
 
@@ -125,17 +125,8 @@ MediaCodec 共 74 个接口。多数配置类是**成对**出现的 `get_*` / `s
 | [`hb_mm_mc_get_jpeg_config`](#hb_mm_mc_get_jpeg_config) | 读取 JPEG 编码参数 |
 | [`hb_mm_mc_set_jpeg_config`](#hb_mm_mc_set_jpeg_config) | 设置 JPEG 编码参数 |
 
-### 音频组件注册
-
-| 接口 | 功能 |
-| --- | --- |
-| [`hb_mm_mc_register_audio_encoder`](#hb_mm_mc_register_audio_encoder) | 注册音频编码器 |
-| [`hb_mm_mc_unregister_audio_encoder`](#hb_mm_mc_unregister_audio_encoder) | 去注册音频编码器 |
-| [`hb_mm_mc_register_audio_decoder`](#hb_mm_mc_register_audio_decoder) | 注册音频解码器 |
-| [`hb_mm_mc_unregister_audio_decoder`](#hb_mm_mc_unregister_audio_decoder) | 去注册音频解码器 |
-
 ## 接口说明
-下文 74 个接口共用以下约定，各小节不再重复。
+下文 70 个接口共用以下约定，各小节不再重复。
 
 - **返回值**：成功返回 `0`，失败返回负值错误码，含义统一见[返回值说明](#返回值说明)。
 - **动态调整**：标注「支持动态调整」的配置类接口，可在 `hb_mm_mc_start` 之后运行期间调用，立即生效。
@@ -2407,130 +2398,6 @@ hb_s32 hb_mm_mc_set_jpeg_config(media_codec_context_t * context, const mc_jpeg_e
 
 完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
 
-### 音频组件注册
-
-#### hb_mm_mc_register_audio_encoder
-
-**【函数原型】**
-
-```c
-hb_s32 hb_mm_mc_register_audio_encoder(hb_s32 *handle, mc_audio_encode_param_t *encoder);
-```
-
-**【功能描述】**
-
-注册一个外部音频编码器，使其可以通过 MediaCodec 的统一接口使用。
-
-**【参数】**
-
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `handle` | `hb_s32 *` | **出参**。注册句柄 |
-| `encoder` | `mc_audio_encode_param_t *` | 音频编码器描述，见 [mc_audio_encode_param_t](#mc_audio_encode_param_t) |
-
-**【返回值】**
-
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
-
-**【注意事项】**
-
-- 注册成功后返回 `handle`，去注册时需要使用。
-
-**【示例代码】**
-
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
-
-#### hb_mm_mc_unregister_audio_encoder
-
-**【函数原型】**
-
-```c
-hb_s32 hb_mm_mc_unregister_audio_encoder(hb_s32 handle);
-```
-
-**【功能描述】**
-
-去注册此前注册的音频编码器。
-
-**【参数】**
-
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `handle` | `hb_s32` | 注册句柄 |
-
-**【返回值】**
-
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
-
-**【注意事项】**
-
-无
-
-**【示例代码】**
-
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
-
-#### hb_mm_mc_register_audio_decoder
-
-**【函数原型】**
-
-```c
-hb_s32 hb_mm_mc_register_audio_decoder(hb_s32 *handle, mc_audio_decode_param_t *decoder);
-```
-
-**【功能描述】**
-
-注册一个外部音频解码器，使其可以通过 MediaCodec 的统一接口使用。
-
-**【参数】**
-
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `handle` | `hb_s32 *` | **出参**。注册句柄 |
-| `decoder` | `mc_audio_decode_param_t *` | 音频解码器描述，见 [mc_audio_decode_param_t](#mc_audio_decode_param_t) |
-
-**【返回值】**
-
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
-
-**【注意事项】**
-
-- 注册成功后返回 `handle`，去注册时需要使用。
-
-**【示例代码】**
-
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
-
-#### hb_mm_mc_unregister_audio_decoder
-
-**【函数原型】**
-
-```c
-hb_s32 hb_mm_mc_unregister_audio_decoder(hb_s32 handle);
-```
-
-**【功能描述】**
-
-去注册此前注册的音频解码器。
-
-**【参数】**
-
-| 参数 | 类型 | 说明 |
-| --- | --- | --- |
-| `handle` | `hb_s32` | 注册句柄 |
-
-**【返回值】**
-
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
-
-**【注意事项】**
-
-无
-
-**【示例代码】**
-
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
-
 ## 数据结构
 
 ### 类型总览
@@ -2562,10 +2429,8 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | `codec_id` | `media_codec_id_t` | 编解码标准，**初始化后不可改** | `MEDIA_CODEC_ID_H264` | — | 见 [media_codec_id_t](#media_codec_id_t) |
 | `encoder` | `hb_bool` | `1` = 编码器，`0` = 解码器，**初始化后不可改** | `1` | — | `0` / `1` |
 | `instance_index` | `hb_s32` | 内部私有，不要修改 | — | — | — |
-| `video_enc_params` | `mc_video_codec_enc_params_t` | 视频编码参数，`encoder = 1` 时生效 | — | — | 联合体四选一 |
+| `video_enc_params` | `mc_video_codec_enc_params_t` | 视频编码参数，`encoder = 1` 时生效 | — | — | — |
 | `video_dec_params` | `mc_video_codec_dec_params_t` | 视频解码参数，`encoder = 0` 时生效 | — | — | ↑ |
-| `audio_enc_params` | `mc_audio_codec_enc_params_t` | 音频编码参数 | — | — | ↑ |
-| `audio_dec_params` | `mc_audio_codec_dec_params_t` | 音频解码参数 | — | — | ↑ |
 | `vpf_context` | `hb_ptr` | 内部私有，不要修改 | — | — | — |
 | `priority` | `mc_video_cmd_prio_t` | 多路任务竞争硬件时的命令优先级 | — | `0`（`PRIO_0`） | 见 [mc_video_cmd_prio_t](#mc_video_cmd_prio_t) |
 
@@ -2614,18 +2479,14 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 | --- | --- | --- |
 | `video_enc_startup_params` | `mc_video_enc_startup_params_t` | 联合体成员 |
 | `video_dec_startup_params` | `mc_video_dec_startup_params_t` | 联合体成员 |
-| `audio_enc_startup_params` | `mc_audio_enc_startup_params_t` | 联合体成员 |
-| `audio_dec_startup_params` | `mc_audio_dec_startup_params_t` | 联合体成员 |
 
 #### media_codec_buffer_t
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
 | `type` | `media_codec_buffer_type_t` | 决定联合体哪个成员生效 | — | — | 见 [media_codec_buffer_type_t](#media_codec_buffer_type_t) |
-| `vframe_buf` | `mc_video_frame_buffer_info_t` | 图像帧：编码的输入、解码的输出 | — | — | 联合体四选一 |
+| `vframe_buf` | `mc_video_frame_buffer_info_t` | 图像帧：编码的输入、解码的输出 | — | — | — |
 | `vstream_buf` | `mc_video_stream_buffer_info_t` | 码流：编码的输出、解码的输入 | — | — | ↑ |
-| `aframe_buf` | `mc_audio_frame_buffer_info_t` | 音频帧 | — | — | ↑ |
-| `astream_buf` | `mc_audio_stream_buffer_info_t` | 音频码流 | — | — | ↑ |
 
 #### mc_inter_status_t
 
@@ -2682,18 +2543,6 @@ codec 的详细运行状态，由 `hb_mm_mc_get_status` 返回。可用于观察
 | `src_idx` | `hb_s32` | 源 buffer 索引 |
 | `stream_end` | `hb_bool` | 是否为码流结尾，最后一包置 `1` |
 
-#### mc_audio_frame_buffer_info_t / mc_audio_stream_buffer_info_t
-
-音频帧与音频码流描述，软件编解码使用。
-
-| 字段 | 类型 | 描述 |
-| --- | --- | --- |
-| `vir_ptr` / `phy_ptr` | `hb_u8 *` / `hb_u64` | 数据虚拟 / 物理地址 |
-| `size` | `hb_u32` | 数据字节数 |
-| `sample_fmt` / `sample_rate` / `channel_layout` | 枚举 | 采样格式 / 采样率 / 声道布局（仅音频帧） |
-| `pts` | `hb_s64` | 时间戳 |
-| `frame_end` / `stream_end` | `hb_bool` | 结尾标志 |
-
 #### media_codec_callback_t
 
 异步模式的回调集合，作为 `hb_mm_mc_set_callback` 的入参。四个回调按需要实现，不需要的填 `NULL`。
@@ -2717,27 +2566,6 @@ codec 的详细运行状态，由 `hb_mm_mc_get_status` 返回。可用于观察
 | `video_stream_info` | `mc_h264_h265_output_stream_info_t` | H.264 / H.265 编码输出码流信息（帧类型、pts、slice 数等） |
 | `jpeg_frame_info` | `mc_mjpeg_jpeg_output_frame_info_t` | MJPEG / JPEG 解码输出帧信息 |
 | `jpeg_stream_info` | `mc_mjpeg_jpeg_output_stream_info_t` | MJPEG / JPEG 编码输出码流信息 |
-| `audio_frame_info` | `mc_audio_output_frame_info_t` | 音频解码输出帧信息 |
-| `audio_stream_info` | `mc_audio_output_stream_info_t` | 音频编码输出码流信息 |
-
-#### mc_audio_encode_param_t
-
-音频编码器描述，注册音频编码器时由调用方填充。函数指针由软件编解码库实现，MediaCodec 通过它们调用编解码逻辑。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `ff_type` | `media_codec_id_t` | 音频编码标准，取值见 [media_codec_id_t](#media_codec_id_t) |
-| `ff_max_frm` | `hb_s32` | 单帧最大采样数 |
-| `ff_codec_name[256]` | `char` | 编码器名称字符串 |
-
-#### mc_audio_decode_param_t
-
-音频解码器描述，注册音频解码器时由调用方填充。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `ff_type` | `media_codec_id_t` | 音频编码标准，取值见 [media_codec_id_t](#media_codec_id_t) |
-| `ff_codec_name[256]` | `char` | 解码器名称字符串 |
 
 ### 码率控制
 
@@ -2809,7 +2637,6 @@ CBR 与 AVBR 参数集相同，仅 `vbv_buffer_size` 默认值不同（CBR 为 1
 | `qp_map_array` | QP 映射表地址，每个块一个 QP 值（1 字节），按光栅扫描顺序排列 | 指针 | `NULL` |
 | `qp_map_array_count` | QP 映射表的条目数 | H.264 ≤ `MC_VIDEO_MAX_MB_NUM`、H.265 ≤ `MC_VIDEO_MAX_SUB_CTU_NUM`；条目数 H.264 为 `(ALIGN16(宽)>>4) × (ALIGN16(高)>>4)`，H.265 为 `(ALIGN64(宽)>>5) × (ALIGN64(高)>>5)`，完整说明见 [ROI 编码参数](#roi-编码参数) | 0 |
 
-> 上表默认值为 `hb_mm_mc_get_default_context` 的返回结果。
 > 上表默认值为 `hb_mm_mc_get_default_context` 的返回结果（CBR / AVBR）；VBR / FixQP / QpMap 三表的默认值取自权威调试手册。
 
 ### GOP 与参考帧
@@ -3213,8 +3040,7 @@ MJPEG / JPEG 解码的联合体成员，两者字段相同。
 | 取值 | 说明 |
 | --- | --- |
 | `MEDIA_CODEC_ID_H264` / `MEDIA_CODEC_ID_H265` / `MEDIA_CODEC_ID_MJPEG` / `MEDIA_CODEC_ID_JPEG` | 视频与图像编解码，走 VPU / JPU 硬件 |
-| `MEDIA_CODEC_ID_FLAC` … `MEDIA_CODEC_ID_AAC` 中的 6 种 | 内置软件音频编解码器（FLAC、G.711 A-law / Mu-law、G.726、ADPCM、AAC），直接以 `codec_id` 使用 |
-| 其余 `MEDIA_CODEC_ID_*` 取值 | 需先经 `hb_mm_mc_register_audio_encoder` / `hb_mm_mc_register_audio_decoder` 注册外部编解码器 |
+| 其余 `MEDIA_CODEC_ID_*` 取值 | 未使用 |
 
 <DocScope products="RDK S100">
 
@@ -3228,7 +3054,6 @@ MJPEG / JPEG 解码的联合体成员，两者字段相同。
 
 </DocScope>
 
-表中 FLAC 至 AAC 的 6 种为内置软件编解码器，直接使用；其余取值需要先通过 `hb_mm_mc_register_audio_encoder` / `hb_mm_mc_register_audio_decoder` 注册外部编解码器，见[音频编解码器注册](#hb_mm_mc_register_audio_encoder)。
 
 #### mc_av_stream_feeding_mode_t
 
@@ -3247,8 +3072,6 @@ MJPEG / JPEG 解码的联合体成员，两者字段相同。
 | --- | --- |
 | `MC_VIDEO_FRAME_BUFFER` | 视频帧 buffer。编码时作输入，解码时作输出 |
 | `MC_VIDEO_STREAM_BUFFER` | 视频码流 buffer。编码时作输出，解码时作输入 |
-| `MC_AUDIO_FRAME_BUFFER` | 音频帧 buffer |
-| `MC_AUDIO_STREAM_BUFFER` | 音频码流 buffer |
 
 ## 返回值说明
 

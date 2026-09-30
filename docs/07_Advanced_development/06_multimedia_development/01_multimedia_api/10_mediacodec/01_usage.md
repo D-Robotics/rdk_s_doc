@@ -11,11 +11,10 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 概述
 
-MediaCodec 是 RDK 的音视频编解码 API，向下封装两个硬件加速单元，向上提供一套统一的接口。
+MediaCodec 是 RDK 的视频与图像编解码 API，向下封装两个硬件加速单元，向上提供一套统一的接口。
 
-- **VPU**：视频编解码单元，负责 H.264 / H.265 / MJPEG 的编码与解码
+- **VPU**：视频编解码单元，负责 H.264 / H.265 的编码与解码
 - **JPU**：图像编解码单元，负责 JPEG / MJPEG 的编码与解码
-- **软件编解码库**：音频编解码，RDK 无音频硬件加速单元。内置 FLAC、G.711（A-law / Mu-law）、G.726、ADPCM、AAC 共 6 种软件编解码器，直接以 `codec_id` 使用；另可通过 `hb_mm_mc_register_audio_encoder` / `hb_mm_mc_register_audio_decoder` 注册外部编解码器，用完调对应的 `unregister_*` 去注册
 
 编码把 YUV 图像压缩成码流，解码方向相反。输入输出经 **buffer 队列**流转，全程由**状态机**驱动，接口能否调用取决于当前状态。各单元的规格见[硬件规格](#硬件规格)。
 
@@ -28,7 +27,7 @@ MediaCodec 是 RDK 的音视频编解码 API，向下封装两个硬件加速单
 - **硬件单元数**：1
 - **吞吐能力**：4K@90fps
 - **10bit 解码吞吐**：受总线 outstanding 瓶颈，规格目标 4K@80fps
-- **编码标准**：H.264 / H.265 / MJPEG
+- **编码标准**：H.264 / H.265
 - **最大输入分辨率**：8192 × 4096
 - **最小输入分辨率**：256 × 128
 - **输入对齐要求**：宽 32、高 8
@@ -53,7 +52,7 @@ MediaCodec 是 RDK 的音视频编解码 API，向下封装两个硬件加速单
 
 - **硬件单元数**：3
 - **吞吐能力**：3 × 4K@80fps
-- **编码标准**：H.264 / H.265 / MJPEG
+- **编码标准**：H.264 / H.265
 - **最大输入分辨率**：8192 × 4096
 - **最小输入分辨率**：256 × 128
 - **输入对齐要求**：宽 32、高 8
@@ -126,7 +125,7 @@ MediaCodec 是 RDK 的音视频编解码 API，向下封装两个硬件加速单
 
 ![MediaCodec 软件框架：应用经 MediaCodec API 与各组件调用，经驱动落到 VPU / JPU 硬件](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/framework.png)
 
-应用经 MediaCodec API 发起编解码，接口层封装参数下发与 buffer 队列，经驱动落到 VPU / JPU 硬件单元；音频编解码由软件库实现。MediaCodec 独立于 HBN vnode 框架，配置与启停走自己的 `hb_mm_mc_*` 接口。
+应用经 MediaCodec API 发起编解码，接口层封装参数下发与 buffer 队列，经驱动落到 VPU / JPU 硬件单元。MediaCodec 独立于 HBN vnode 框架，配置与启停走自己的 `hb_mm_mc_*` 接口。
 
 ## 使用说明
 
@@ -153,7 +152,7 @@ MediaCodec 是 RDK 的音视频编解码 API，向下封装两个硬件加速单
 
 > 即使用外部输入 buffer，**仍然要走 dequeue / queue**：dequeue 取出 buffer 描述后，把它记录的地址改成上游帧的地址，再 queue 归还。buffer 的内存是复用的，换的只是内容来源。
 
-buffer 各字段的完整定义（图像帧、码流、音频）见 [核心数据结构](/Advanced_development/multimedia_development/multimedia_api/mediacodec/api#核心数据结构)。
+buffer 各字段的完整定义（图像帧与码流）见 [核心数据结构](/Advanced_development/multimedia_development/multimedia_api/mediacodec/api#核心数据结构)。
 > **dequeue 与 queue 必须成对**。取出的 buffer 不归还，队列很快会耗尽，后续 dequeue 会一直超时。
 
 ### 典型场景
