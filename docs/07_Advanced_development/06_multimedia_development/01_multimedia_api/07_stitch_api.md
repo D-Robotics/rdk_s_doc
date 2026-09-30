@@ -83,8 +83,8 @@ STITCH 的落位方式分两类（360° 环视、多路拼墙），本节展开 
 | 参数 | 作用于 | 内容 | 获取方式 |
 | --- | --- | --- | --- |
 | GDC 畸变配置 | GDC | 每个相机的畸变模型与映射关系 | `hbn_gen_gdc_cfg` 生成，见 [GDC Tool](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_tool) |
-| ROI 划分表 | STITCH | 每张图在画布上的落位，以及重叠带的裁剪与融合方式 | `convert-tool` 工具生成 |
-| alpha 权重表 | STITCH | 重叠带内**逐像素**的融合权重，是一张二维权重场 | `convert-tool` 工具生成；板端 `sample_gdc_stitch` 直接随样例提供成品 bin。`BLENDING_MODE_ONLINE` 不需要它 |
+| ROI 划分表 | STITCH | 每张图在画布上的落位，以及重叠带的裁剪与融合方式 | 由相机安装位置与各路图的覆盖范围算出 |
+| alpha 权重表 | STITCH | 重叠带内**逐像素**的融合权重，是一张二维权重场 | 按重叠区的几何自行生成，本平台不提供生成工具；板端 `sample_gdc_stitch` 直接随样例提供成品 bin。`BLENDING_MODE_ONLINE` 不需要它 |
 
 ##### ROI 划分方法
 
