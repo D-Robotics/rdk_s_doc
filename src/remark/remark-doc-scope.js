@@ -12,9 +12,50 @@
  * - products 中 "RDK X5" 为精确匹配，"RDK-X5" 为 RDK X5 系列匹配。
  * - 指令名使用 doc_scope，避免与 Docusaurus 内置 :::tip 等冲突。
  */
-import { visit } from 'unist-util-visit';
+import { SKIP, visit } from 'unist-util-visit';
+import { PRODUCT_VERSION_MATRIX } from '../context/doc-scope-matrix.js';
 import { scopeProductsMatchCurrent } from '../context/doc-scope-product-utils.js';
 import { matchVersion, parseVersionScopeList } from '../context/doc-scope-version-utils.js';
+
+const ALL_CANONICAL_PRODUCTS = Object.keys(PRODUCT_VERSION_MATRIX);
+
+/**
+ * 构建期固化「本作用域命中哪些产品」，供首屏前的 bootstrap 脚本做纯字符串比较，
+ * 避免把 scopeProductsMatchCurrent 的匹配语义（大小写不敏感、RDK-X5 系列写法）复制进内联脚本。
+ * 带版本条件的作用域返回 null：版本语义留在运行时，仍由 DocScopeHydration 处理。
+ */
+function scopeProductTokens(versions, products) {
+  if (versions && versions.length > 0) {
+    return null;
+  }
+  return ALL_CANONICAL_PRODUCTS.filter((p) => scopeProductsMatchCurrent(products, p));
+}
+
+/**
+ * 作用域 div 的属性，两个 visit 分支（:::doc_scope 指令 / <DocScope> JSX）共用。
+ */
+function scopeDivAttributes(versions, products) {
+  const tokens = scopeProductTokens(versions, products);
+  const attributes = [
+    { type: 'mdxJsxAttribute', name: 'className', value: 'doc-scope' },
+    {
+      type: 'mdxJsxAttribute',
+      name: 'data-doc-scope',
+      value: JSON.stringify({ versions, products }),
+    },
+    // 产品可见性在 hydration 之前就由 bootstrap 脚本按 data-scope-products 折叠，
+    // React 首帧的 className 与此不一致属于预期，不要报 hydration 警告。
+    { type: 'mdxJsxAttribute', name: 'suppressHydrationWarning', value: null },
+  ];
+  if (tokens) {
+    attributes.push({
+      type: 'mdxJsxAttribute',
+      name: 'data-scope-products',
+      value: tokens.join(','),
+    });
+  }
+  return attributes;
+}
 
 function parseScopeList(value) {
   if (value == null) return [];
@@ -67,29 +108,19 @@ export default function remarkDocScope() {
 
       if (buildScope && parent && index != null) {
         parent.children.splice(index, 1, ...(shouldRender ? node.children || [] : []));
-        return;
+        // 必须显式指定下一个 index：就地替换会改变兄弟节点下标，默认的 index++ 会跳过
+        // 紧邻的下一个兄弟（`<DocScope>` 成对相邻是主要写法），那个块就会原样留给 React
+        // 渲染，scoped 构建下等于把该块内容连同另一套产品一起发出去。
+        return [SKIP, index];
       }
-
-      const payload = JSON.stringify({ versions, products });
 
       // 创建一个新的 div 节点
       const divNode = {
         type: 'mdxJsxFlowElement',
         name: 'div',
-        attributes: [
-          {
-            type: 'mdxJsxAttribute',
-            name: 'className',
-            value: 'doc-scope'
-          },
-          {
-            type: 'mdxJsxAttribute',
-            name: 'data-doc-scope',
-            value: payload
-          }
-        ],
+        attributes: scopeDivAttributes(versions, products),
         children: node.children || [],
-        position: node.position
+        position: node.position,
       };
 
       // 替换原始节点
@@ -115,28 +146,13 @@ export default function remarkDocScope() {
       if (buildScope) {
         const shouldRender = shouldRenderInBuild(scopeMeta, buildScope);
         parent.children.splice(index, 1, ...(shouldRender ? node.children || [] : []));
-        return;
+        return [SKIP, index];
       }
 
-      const payload = JSON.stringify({
-        versions: scopeMeta.versions,
-        products: scopeMeta.products,
-      });
       parent.children[index] = {
         type: 'mdxJsxFlowElement',
         name: 'div',
-        attributes: [
-          {
-            type: 'mdxJsxAttribute',
-            name: 'className',
-            value: 'doc-scope',
-          },
-          {
-            type: 'mdxJsxAttribute',
-            name: 'data-doc-scope',
-            value: payload,
-          },
-        ],
+        attributes: scopeDivAttributes(scopeMeta.versions, scopeMeta.products),
         children: node.children || [],
         position: node.position,
       };

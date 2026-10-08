@@ -59,6 +59,23 @@ pip install tqdm
 1. 编译会使用 python3，RDK S100/S600 开发使用的 python3 的版本为 3.8.10；
 2. MCU1的镜像分为 debug 和 release 两个版本。debug 版本的镜像会有调试信息，而 release 版本不含调试信息。
 
+:::info MCU 代码包下载说明
+
+编译 MCU1 前需先获取 MCU 代码包，下载地址参见：
+
+<DocScope products="RDK S100">
+
+[资源汇总 - 系统软件](../../01_Quick_start/download.md#系统软件)（MCU SDK，源码包形式）。
+
+</DocScope>
+<DocScope products="RDK S600">
+
+[资源汇总 - 系统软件](../../01_Quick_start/download.md#s600-system-software)（MCU Cluster-1 SDK，社区版为静态链接库；源码包形式请通过 FTP 下载）。
+
+</DocScope>
+
+:::
+
 :::info 工具链下载说明
 
 首次编译会从 arm 官网下载工具链后解压缩（10min 左右），网速不好可能会导致工具链下载不成功或下载不完整的问题，建议通过以下方式下载编译工具链：

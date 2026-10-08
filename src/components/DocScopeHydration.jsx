@@ -87,6 +87,27 @@ export default function DocScopeHydration() {
     });
     syncTocByDocScope(root);
 
+    // 锚点定位纠正：首屏 SSR 输出里所有 .doc-scope 都还没折叠（两个产品的正文同时展开），
+    // 浏览器会在 hydration 之前就按这个高度滚到锚点；等这里折叠掉不匹配的产品后，锚点上移
+    // 一大截，而视口不动，用户就落在了错误位置（目标在小节里时表现为跳到页面末尾）。
+    // 折叠生效后按新布局重新定位一次，锚点自身的 scroll-margin-top 由 scrollIntoView 处理。
+    const { hash } = location;
+    const rafId = hash
+      ? window.requestAnimationFrame(() => {
+          const target = resolveHeadingByHash(root, hash);
+          if (!target) {
+            return;
+          }
+          if (
+            target.closest('.doc-scope--hidden') ||
+            target.closest('[role="tabpanel"][hidden]')
+          ) {
+            return;
+          }
+          target.scrollIntoView({ block: 'start' });
+        })
+      : null;
+
     const observer = new MutationObserver((mutationList) => {
       const shouldResync = mutationList.some((mutation) => {
         if (mutation.type !== 'attributes') {
@@ -109,7 +130,12 @@ export default function DocScopeHydration() {
       attributeFilter: ['hidden', 'class'],
     });
 
-    return () => observer.disconnect();
+    return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      observer.disconnect();
+    };
   }, [version, product, location.pathname]);
 
   return null;

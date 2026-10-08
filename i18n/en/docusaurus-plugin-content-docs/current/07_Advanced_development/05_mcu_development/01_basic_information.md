@@ -59,6 +59,23 @@ pip install tqdm
 1. Compilation uses python3, and the version of python3 used for RDK S100/S600 development is 3.8.10.
 2. The MCU1 image comes in two versions: debug and release. The debug version includes debugging information, while the release version does not.
 
+:::info MCU Code Package Download
+
+Before compiling MCU1, obtain the MCU code package. Download link:
+
+<DocScope products="RDK S100">
+
+[Resource Summary - System Software](../../01_Quick_start/download.md#system-software) (MCU SDK, source package).
+
+</DocScope>
+<DocScope products="RDK S600">
+
+[Resource Summary - System Software](../../01_Quick_start/download.md#s600-system-software) (MCU Cluster-1 SDK; the community version is a static library, and the source package is available via FTP).
+
+</DocScope>
+
+:::
+
 :::info Toolchain Download Instructions
 
 The first compilation will download the toolchain from the ARM official website and decompress it (about 10 minutes). Poor network conditions may cause the toolchain download to fail or be incomplete. It is recommended to download the compilation toolchain using the following method:
