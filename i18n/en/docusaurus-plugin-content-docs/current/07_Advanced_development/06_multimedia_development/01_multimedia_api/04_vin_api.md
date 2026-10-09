@@ -105,7 +105,7 @@ One CIM per MIPI RX — three on S100, six on S600.
 
 Complete the bandwidth assessment before bring-up:
 
-- **Per-camera data rate** = width × height × fps × bit depth × k. Bit depth: 12 for RAW12, 16 for YUV422. k is the blanking factor; use 1.4 for RAW and 1.2 for YUV as estimates, and the exact line/frame totals from the module datasheet
+- **Per-camera data rate** = width × height × fps × bit depth × k. Bit depth: 12 for RAW12, 16 for YUV422. k is the blanking factor; use **1.5** uniformly as the conservative upper bound for estimation, and the exact line/frame totals from the module datasheet
 - **Ceilings** are per-RX budgets shared by all cameras on the same RX:
 
 <DocScope products="RDK S100">
@@ -135,17 +135,17 @@ Complete the bandwidth assessment before bring-up:
 - The IPI ceiling is independent of the PHY type: RAW transfers 3 pixels per clock, YUV only 1. When any YUV camera is present on the RX, the IPI ceiling follows the YUV figure; switching to C-PHY then relaxes only the PHY limit and leaves the IPI ceiling unchanged
 - **When a ceiling is exceeded, adjust in this order**: compress the module blanking to lower k, with no configuration change or quality loss → reduce the frame rate or resolution → move cameras to another RX, available counts in [MIPI RX](#mipi-rx) → switch to C-PHY, effective for all-RAW cases only
 
-**Worked example: 4× 8M RAW12@30fps**
+**Worked example 1: 4× 8M RAW12@30fps**
 
-8M counts as 3840 × 2160: bit depth 12, k = 1.4 — per camera = 3840 × 2160 × 30 × 12 × 1.4 ≈ **4.18 Gbps**, four in total **16.72 Gbps**, against the ceilings:
+8M counts as 3840 × 2160: bit depth 12, k = 1.5 — per camera = 3840 × 2160 × 30 × 12 × 1.5 ≈ **4.48 Gbps**, four in total **17.92 Gbps**, against the ceilings:
 
 <DocScope products="RDK S100">
 
 | Check | Ceiling | 4 cameras | Used |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% |
-| IPI · RAW only | 21.6 Gbps | 16.72 Gbps | 77% |
+| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
+| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
+| IPI · RAW only | 21.6 Gbps | 17.92 Gbps | 83% |
 
 </DocScope>
 
@@ -153,23 +153,84 @@ Complete the bandwidth assessment before bring-up:
 
 | Check | Ceiling | 4 cameras | Used |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% |
-| IPI · RAW only | 24.1 Gbps | 16.72 Gbps | 69% |
+| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
+| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
+| IPI · RAW only | 24.1 Gbps | 17.92 Gbps | 74.4% |
 
 </DocScope>
 
-**Conclusion**: four RAW12 cameras run under D-PHY at 93% occupancy; that is tight, and holding full frame rates takes shrinking blanking. Under C-PHY occupancy drops to 70%.
+**Conclusion**: k = 1.5 is the conservative upper bound — four 8M cameras push D-PHY to 99.6%, leaving no margin under the estimation basis; most modules have blanking below 1.5, so confirm the real occupancy against the HTS/VTS line/frame totals in the module datasheet. Under C-PHY occupancy drops to 74.9%.
+
+**Worked example 2: single 8M YUV422@30fps camera**
+
+Bit depth 16, k = 1.5: per camera = 3840 × 2160 × 30 × 16 × 1.5 ≈ **5.97 Gbps**. With any YUV camera on the RX, the IPI ceiling follows the YUV figure:
+
+<DocScope products="RDK S100">
+
+| Check | Ceiling | Single 8M | Used |
+| --- | --- | --- | --- |
+| IPI · any YUV camera | 9.6 Gbps | 5.97 Gbps | 62.2% |
+| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| Check | Ceiling | Single 8M | Used |
+| --- | --- | --- | --- |
+| IPI · any YUV camera | 10.72 Gbps | 5.97 Gbps | 55.7% |
+| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+
+</DocScope>
+
+**Conclusion**: for YUV the binding constraint is the sharply lower IPI ceiling (only 1 pixel per clock) — the same 8M camera costs 5.97 Gbps in YUV versus 4.48 Gbps in RAW, so fewer cameras fit; for the multi-camera limits see the maximum-configuration reference below. ROI and RAWDS are disabled for YUV input (see [Constraints and Caveats](#constraints-and-caveats)).
+
+**Maximum configuration reference: access-domain limit**
+
+The structural ceiling per RX is VC = 4 and the 18 Gbps D-PHY. Composing the highest common sensor tier 8M@30 (4.48 Gbps), the per-RX limits for the two formats:
+
+<DocScope products="RDK S100">
+
+**RAW12 maximum** — 4× 8M per RX, D-PHY saturated; **YUV422 maximum** — the bottleneck is the IPI (1 pixel per clock), and the camera count follows the IPI ceiling:
+
+| Format | Maximum combination | Per-RX occupancy | Chip-wide access total |
+| --- | --- | --- | --- |
+| RAW12 | 3 RX (hw_id 0/1/4) × 4×8M = **12× 8M** | 17.92 / 18 (D-PHY) = 99.6% | 53.8 Gbps |
+| YUV422 | 3 RX × (1×8M + 2×2M) = **3× 8M + 6× 2M** (9 cameras) | 8.95 / 9.6 (IPI) = 93.2% | 26.9 Gbps |
+
+S100 has only 2 ISPs, so a maximum load needs time-multiplexing or frame skipping; RX4 (CIM4) supports offline output only, and the 4 cameras on that RX land in DDR only.
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+**RAW12 maximum** — 4× 8M per RX, D-PHY saturated; **YUV422 maximum** — the bottleneck is the IPI (1 pixel per clock), and the camera count follows the IPI ceiling:
+
+| Format | Maximum combination | Per-RX occupancy | Chip-wide access total |
+| --- | --- | --- | --- |
+| RAW12 | 6 RX (hw_id 0~5) × 4×8M = **24× 8M** | 17.92 / 18 (D-PHY) = 99.6% | 107.5 Gbps |
+| YUV422 | 6 RX × (1×8M + 3×2M) = **6× 8M + 18× 2M** (24 cameras) | 10.45 / 10.72 (IPI) = 97.5% | 62.7 Gbps |
+
+S600 has 4 ISPs, so a maximum load needs time-multiplexing or frame skipping.
+
+</DocScope>
+
+- Both maxima correspond to the SerDes aggregation wiring: the deserialiser concentrates several sensors onto one RX, 1 lane @ 4.5 Gbps per camera
+- The table sizes the access domain only; DDR read/write traffic and downstream processing must be evaluated separately
+- C-PHY brings no gain for either maximum: the RAW maximum is already at the VC = 4 limit, so a wider PHY adds no camera; the YUV maximum is bounded by the IPI, which is independent of the PHY type
+- A larger single sensor (within the IPI width limit) raises the per-camera bandwidth, but the per-RX total still tops out at the 18 Gbps D-PHY
 
 > Size with **blanking included**, never with active-pixel figures; and confirm the deserialiser link rate on top of the PHY. This section only sizes bandwidth — output paths are covered in [Selection Criteria](#selection-criteria).
 
 ### Selection Criteria
 | Your case | Recommendation | Why |
 | --- | --- | --- |
-| Single RAW sensor | **Online first** | Lower latency; switch to Offline if you need ROI / EMB or want to store frames |
+| Single RAW sensor | **Online first** | Lower latency, no DDR bandwidth |
+| Only the main image needs cropping | **keep Online** | The main-frame crop applies equally to the DDR output and the OTF feed; no need to go Offline for it |
+| Need an extra cropped copy | **enable the ROI channel (Offline)** | The ROI channel (`ochn_id=4`) is DDR only; it coexists with the main frame running Online |
+| Need embedded data | **enable the EMB channel (Offline)** | The EMB channel (`ochn_id=3`) is DDR only; it coexists with the main frame running Online |
+| Need to store frames | **main frame DDR + OTF both on** | The main frame can land in DDR and feed OTF at the same time — storing frames does not force Offline, at the cost of DDR bandwidth |
 | Multiple camera sensors | **Offline** | Multiple cameras are usually spread across CPEs, and Online requires CIM and downstream to share a CPE |
-| Need embedded data (EMB) | **Offline** | EMB can only go through DDR |
-| Need cropped ROI output | **Offline** | The ROI channel does not support Online |
 | YUV sensor (ISR done inside the sensor) | Depends on the downstream | With Online it connects directly to PYM, and each PYM takes exactly one input exclusively; multiple YUV streams can only go Offline |
 
 The output path is decided by three fields in `vin_attr_t`:
@@ -1078,6 +1139,7 @@ The following combinations are rejected outright by the driver and easy to spot:
 - YUV422-8bit input cannot enable ROI or RAWDS
 - frame skip is not allowed in TPG mode; `func.skip_frame` must be `0`
 - `vin_ichn_attr.width`, `roi_attr.roi_x` and `roi_attr.roi_width` must be 4-aligned; `roi_width` at least 32, and `roi_x + roi_width` / `roi_y + roi_height` must stay inside the input image
+- The main-frame crop can be used together with Online: it applies equally to the DDR output and the OTF feed to the downstream, whose width/height configuration must match the cropped size
 - `cim_attr.mipi_rx`, `vc_index` and `ipi_channels` must not exceed their ceilings (see the range column in [Data Structures](#data-structures))
 - Online binding requires the CIM and its downstream in the same CPE — cross-CPE links must go Offline
 

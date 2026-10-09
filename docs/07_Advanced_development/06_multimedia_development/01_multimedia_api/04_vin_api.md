@@ -106,7 +106,7 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 
 接入前完成带宽评估：
 
-- **单路数据量** = 宽 × 高 × 帧率 × 位深 × k。位深：RAW12 取 12，YUV422 取 16。k 为 blanking 系数，估算取 RAW 1.4、YUV 1.2；精确值以模组手册给出的行/帧总长为准
+- **单路数据量** = 宽 × 高 × 帧率 × 位深 × k。位深：RAW12 取 12，YUV422 取 16。k 为 blanking 系数，估算统一取 **1.5**（保守上界）；精确值以模组手册给出的行/帧总长为准
 - **各道上限**均为 RX 级预算，同一 RX 上所有相机共享：
 
 <DocScope products="RDK S100">
@@ -136,17 +136,17 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 - IPI 上限与 PHY 类型无关：RAW 每 clock 传输 3 个 pixel，YUV 仅 1 个。同一 RX 上存在任一路 YUV 时，IPI 上限即按含 YUV 的口径计算；此时改用 C-PHY 仅放宽 PHY 限制，IPI 上限不变
 - **超出上限时依次调整**：压缩模组 blanking 以降低 k，不改变配置、不影响画质 → 降低帧率或分辨率 → 迁移至其他 RX，可用路数见 [MIPI RX](#mipi-rx) → 改用 C-PHY，仅对纯 RAW 场景有效
 
-**算例：4 颗 8M RAW12@30fps**
+**算例一：4 颗 8M RAW12@30fps**
 
-8M 按 3840 × 2160 算，位深 12、k 取 1.4，单路 = 3840 × 2160 × 30 × 12 × 1.4 ≈ **4.18 Gbps**，四路合计 **16.72 Gbps**，对照上限：
+8M 按 3840 × 2160 算，位深 12、k 取 1.5，单路 = 3840 × 2160 × 30 × 12 × 1.5 ≈ **4.48 Gbps**，四路合计 **17.92 Gbps**，对照上限：
 
 <DocScope products="RDK S100">
 
 | 卡口 | 上限 | 4 路合计 | 占用 |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% |
-| IPI · 纯 RAW | 21.6 Gbps | 16.72 Gbps | 77% |
+| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
+| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
+| IPI · 纯 RAW | 21.6 Gbps | 17.92 Gbps | 83% |
 
 </DocScope>
 
@@ -154,23 +154,84 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 
 | 卡口 | 上限 | 4 路合计 | 占用 |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 16.72 Gbps | 93% |
-| PHY · C-PHY | 23.94 Gbps | 16.72 Gbps | 70% |
-| IPI · 纯 RAW | 24.1 Gbps | 16.72 Gbps | 69% |
+| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
+| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
+| IPI · 纯 RAW | 24.1 Gbps | 17.92 Gbps | 74.4% |
 
 </DocScope>
 
-**结论**：四路 RAW12 在 D-PHY 下可以跑，占用 93%，余量很小，稳满帧要压缩 blanking；换 C-PHY 后降到 70%。
+**结论**：k = 1.5 是保守上界——四路 8M 把 D-PHY 压到 99.6%，评估口径下没有余量；多数模组实际 blanking 低于 1.5，选型时以模组手册的行/帧总长（HTS/VTS）确认实际占用。换 C-PHY 后降到 74.9%。
+
+**算例二：单颗 8M YUV422@30fps**
+
+位深 16、k 取 1.5，单路 = 3840 × 2160 × 30 × 16 × 1.5 ≈ **5.97 Gbps**。同一 RX 上存在任一路 YUV，IPI 上限即按含 YUV 的口径：
+
+<DocScope products="RDK S100">
+
+| 卡口 | 上限 | 单路 8M | 占用 |
+| --- | --- | --- | --- |
+| IPI · 含 YUV | 9.6 Gbps | 5.97 Gbps | 62.2% |
+| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+| 卡口 | 上限 | 单路 8M | 占用 |
+| --- | --- | --- | --- |
+| IPI · 含 YUV | 10.72 Gbps | 5.97 Gbps | 55.7% |
+| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+
+</DocScope>
+
+**结论**：YUV 场景的主约束是 IPI 上限骤降（每 clock 只传 1 个 pixel）——同为 8M，YUV 单路 5.97 Gbps 对 RAW 的 4.48 Gbps，可挂路数明显减少；多路组合的极限见下方满配参考。YUV 输入禁用 ROI 与 RAWDS（见[注意事项与约束](#注意事项与约束)）。
+
+**满配参考：接入域极限组合**
+
+每 RX 的结构上限是 VC = 4 与 D-PHY 18 Gbps，按常见 sensor 的最高档 8M@30（4.48 Gbps）组合，两类格式的每 RX 极限如下：
+
+<DocScope products="RDK S100">
+
+**RAW12 满配**——每 RX 4 × 8M，D-PHY 顶满；**YUV422 满配**——瓶颈是 IPI（每 clock 1 pixel），路数由 IPI 上限决定：
+
+| 格式 | 满配组合 | 单 RX 占用 | 全芯片接入总量 |
+| --- | --- | --- | --- |
+| RAW12 | 3 个 RX（hw_id 0/1/4）× 4×8M = **12 路 8M** | 17.92 / 18（D-PHY）= 99.6% | 53.8 Gbps |
+| YUV422 | 3 个 RX × (1×8M + 2×2M) = **3 路 8M + 6 路 2M**（9 路） | 8.95 / 9.6（IPI）= 93.2% | 26.9 Gbps |
+
+S100 仅 2 个 ISP，满配需靠分时/抽帧收敛；RX4（CIM4）只支持离线输出，该 RX 的 4 路只落 DDR。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+**RAW12 满配**——每 RX 4 × 8M，D-PHY 顶满；**YUV422 满配**——瓶颈是 IPI（每 clock 1 pixel），路数由 IPI 上限决定：
+
+| 格式 | 满配组合 | 单 RX 占用 | 全芯片接入总量 |
+| --- | --- | --- | --- |
+| RAW12 | 6 个 RX（hw_id 0~5）× 4×8M = **24 路 8M** | 17.92 / 18（D-PHY）= 99.6% | 107.5 Gbps |
+| YUV422 | 6 个 RX × (1×8M + 3×2M) = **6 路 8M + 18 路 2M**（24 路） | 10.45 / 10.72（IPI）= 97.5% | 62.7 Gbps |
+
+S600 共 4 个 ISP，满配需靠分时/抽帧收敛。
+
+</DocScope>
+
+- 两类满配均对应 SerDes 聚合接法：解串器把多路 sensor 汇聚到一个 RX，每路 1 lane @ 4.5 Gbps 承载单路流量
+- 本表只算接入域带宽，DDR 读写与后级处理能力须另行评估
+- C-PHY 对两类满配均无增益：RAW 满配的路数已到 VC = 4 上限，PHY 放宽加不了路；YUV 满配的瓶颈在 IPI，与 PHY 类型无关
+- 单路更大的 sensor（IPI 接入宽上限内）可提高单路带宽，但每 RX 总量仍以 D-PHY 18 Gbps 为顶
 
 > 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[选型依据](#选型依据)。
 
 ### 选型依据
 | 你的场景 | 推荐 | 原因 |
 | --- | --- | --- |
-| 单路 RAW Sensor | **优先 Online** | 延迟低；需要 ROI / EMB 或存图时改用 Offline |
+| 单路 RAW Sensor | **优先 Online** | 延迟低、不占 DDR 带宽 |
+| 只要主图裁剪（crop） | **Online 照常使用** | 主帧通道的 crop 对 DDR 输出与 OTF 送下游同样生效，不必因此转 Offline |
+| 需要额外裁剪小图 | **加开 ROI 通道（Offline）** | ROI 通道（`ochn_id=4`）只能落 DDR，与主帧的 Online 互不影响，可同时使用 |
+| 需要内嵌数据（EMB） | **加开 EMB 通道（Offline）** | EMB 通道（`ochn_id=3`）只能落 DDR，与主帧的 Online 互不影响，可同时使用 |
+| 需要存图 | **主帧 DDR + OTF 双开** | 主帧可同时落 DDR 和 OTF 送下游，不必为存图放弃 Online，代价是 DDR 带宽 |
 | 多路 Camera Sensor | **Offline** | 多路通常分布在多个 CPE，而 Online 要求 CIM 与下游同 CPE |
-| 需要内嵌数据（EMB） | **Offline** | EMB 只能走 DDR |
-| 需要 ROI 裁剪输出 | **Offline** | ROI 通道不支持 Online |
 | YUV Sensor（Sensor 内部已做 ISP） | 按下游需求选 | Online 时直连 PYM，且每路 PYM 只能接 1 路并被独占；多路 YUV 只能走 Offline |
 
 输出方式由 `vin_attr_t` 的三个字段决定：
@@ -1078,6 +1139,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 - YUV422-8bit 输入不允许开 ROI 或 RAWDS
 - TPG 模式下不允许跳帧，`func.skip_frame` 必须为 `0`
 - `vin_ichn_attr.width`、`roi_attr.roi_x`、`roi_attr.roi_width` 必须 4 对齐；`roi_width` 至少 32，且 `roi_x + roi_width`、`roi_y + roi_height` 不得超出输入图
+- 主帧通道的 crop 可与 Online 同时使用：裁剪对 DDR 输出与 OTF 送下游同样生效，后级的宽高配置须按裁后尺寸对齐
 - `cim_attr.mipi_rx`、`vc_index`、`ipi_channels` 不得超过上限（见[数据结构](#数据结构)的范围列）
 - Online 绑定要求 CIM 与下游在同一 CPE 内——跨 CPE 只能走 Offline
 
