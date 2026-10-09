@@ -833,6 +833,14 @@ NA
 
 ### 运行结果说明
 
+<DocScope products="RDK S600">
+log 打印需要添加 log 等级打印
+``` bash
+root@ubuntu:/app/vdsp_demo/vdsp_sample# export LOGLEVEL=13
+```
+然后再执行 sample 
+</DocScope>
+
 ``` bash
 root@ubuntu:/app/vdsp_demo/vdsp_sample# ./vdsp_sample -d 1 -p /app/vdsp_demo/vdsp_sample/res/q8sample -t 0
 vdsp_sample_cxt_s:
