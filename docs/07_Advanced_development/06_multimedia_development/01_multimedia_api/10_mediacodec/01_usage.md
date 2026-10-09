@@ -20,106 +20,211 @@ MediaCodec 是 RDK 的视频与图像编解码 API，向下封装两个硬件加
 
 ## 硬件规格
 
-### VPU
+### H.265/HEVC 编码器
 
 <DocScope products="RDK S100">
 
-- **硬件单元数**：1
-- **吞吐能力**：4K@90fps
-- **10bit 解码吞吐**：受总线 outstanding 瓶颈，规格目标 4K@80fps
-- **编码标准**：H.264 / H.265
-- **最大输入分辨率**：8192 × 4096
-- **最小输入分辨率**：256 × 128
-- **输入对齐要求**：宽 32、高 8
-- **最大实例数**：32
-- **输入位深**：8bit、10bit
-- **输入图像格式**：4:2:0 / 4:2:2
-- **输出图像格式**：4:2:0
-- **输入裁剪**：支持
-- **码率控制**：CBR / VBR / AVBR / FIXQP / QPMAP
-- **旋转**：90° / 180° / 270°
-- **镜像**：垂直 / 水平 / 垂直+水平
-- **长期参考帧预测**：支持自定义设置
-- **帧内刷新**：支持
-- **去块滤波**：支持
-- **请求 IDR**：支持
-- **ROI 模式**：mode1——最多 64 个区域设重要度（0–8），需 CBR / AVBR；mode2——最多 64 个区域设 QP（0–51），与 CBR / AVBR 不兼容
-- **GOP 模式**：0 自定义 + 1–9 预设，结构见 [GOP 与参考帧](#gop-与参考帧)
+- VPU 硬件单元数为 1，编码与解码共享
+- 性能为 4K@90fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输入图像的宽度必须是 32 的倍数、高度必须是 8 的倍数
+- 输入图像格式支持 4:2:0 / 4:2:2
+- 输入位深支持 8bit、10bit
+- 支持 I 帧、P 帧和 B 帧
+- 最大实例数为 32
+- 支持输入裁剪
+- 码率控制支持 CBR / VBR / AVBR / FIXQP / QPMAP
+- 支持 90° / 180° / 270° 旋转
+- 支持垂直 / 水平 / 垂直+水平镜像
+- 长期参考帧预测支持自定义设置
+- 支持帧内刷新
+- 支持去块滤波
+- 支持请求 IDR
+- ROI 模式：mode1——最多 64 个区域设重要度（0–8），需 CBR / AVBR；mode2——最多 64 个区域设 QP（0–51），与 CBR / AVBR 不兼容
+- GOP 模式：0 自定义 + 1–9 预设，结构见 [GOP 与参考帧](#gop-与参考帧)
+- 符合 ISO/IEC 23008-2 高效视频编码（HEVC）标准
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-- **硬件单元数**：3
-- **吞吐能力**：3 × 4K@80fps
-- **编码标准**：H.264 / H.265
-- **最大输入分辨率**：8192 × 4096
-- **最小输入分辨率**：256 × 128
-- **输入对齐要求**：宽 32、高 8
-- **最大实例数**：32
-- **输入位深**：8bit、10bit
-- **输入图像格式**：4:2:0 / 4:2:2
-- **输出图像格式**：4:2:0
-- **输入裁剪**：支持
-- **码率控制**：CBR / VBR / AVBR / FIXQP / QPMAP
-- **旋转**：90° / 180° / 270°
-- **镜像**：垂直 / 水平 / 垂直+水平
-- **长期参考帧预测**：支持自定义设置
-- **帧内刷新**：支持
-- **去块滤波**：支持
-- **请求 IDR**：支持
-- **ROI 模式**：mode1——最多 64 个区域设重要度（0–8），需 CBR / AVBR；mode2——最多 64 个区域设 QP（0–51），与 CBR / AVBR 不兼容
-- **GOP 模式**：0 自定义 + 1–9 预设，结构见 [GOP 与参考帧](#gop-与参考帧)
+- VPU 硬件单元数为 3，编码与解码共享
+- 性能为 3 × 4K@80fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输入图像的宽度必须是 32 的倍数、高度必须是 8 的倍数
+- 输入图像格式支持 4:2:0 / 4:2:2
+- 输入位深支持 8bit、10bit
+- 支持 I 帧、P 帧和 B 帧
+- 最大实例数为 32
+- 支持输入裁剪
+- 码率控制支持 CBR / VBR / AVBR / FIXQP / QPMAP
+- 支持 90° / 180° / 270° 旋转
+- 支持垂直 / 水平 / 垂直+水平镜像
+- 长期参考帧预测支持自定义设置
+- 支持帧内刷新
+- 支持去块滤波
+- 支持请求 IDR
+- ROI 模式：mode1——最多 64 个区域设重要度（0–8），需 CBR / AVBR；mode2——最多 64 个区域设 QP（0–51），与 CBR / AVBR 不兼容
+- GOP 模式：0 自定义 + 1–9 预设，结构见 [GOP 与参考帧](#gop-与参考帧)
+- 符合 ISO/IEC 23008-2 高效视频编码（HEVC）标准
 
 </DocScope>
 
-### JPU
+### H.264/AVC 编码器
 
 <DocScope products="RDK S100">
 
-- **硬件单元数**：1
-- **吞吐能力**：4K@90fps
-- **编码标准**：JPEG（Baseline / Extended Sequential）/ MJPEG
-- **最大输入分辨率**：8192 × 8192
-- **最小输入分辨率**：32 × 32
-- **最大实例数**：64
-- **输入位深**：8bit、12bit
-- **输入图像格式**：4:0:0 / 4:2:0 / 4:2:2 / 4:4:0 / 4:4:4
-- **输出图像格式**：同输入图像格式
-- **输入裁剪**：支持
-- **码率控制**：FIXQP（MJPEG）
-- **旋转**：90° / 180° / 270°
-- **镜像**：垂直 / 水平 / 垂直+水平
-- **量化表**：支持自定义设置
-- **哈夫曼表**：支持自定义设置
+- VPU 硬件单元数为 1，编码与解码共享
+- 性能为 4K@90fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输入图像的宽度必须是 32 的倍数、高度必须是 8 的倍数
+- 输入图像格式支持 4:2:0 / 4:2:2
+- 输入位深支持 8bit、10bit
+- 支持 I 帧、P 帧和 B 帧
+- 最大实例数为 32
+- 支持输入裁剪
+- 码率控制支持 CBR / VBR / AVBR / FIXQP / QPMAP
+- 支持 90° / 180° / 270° 旋转
+- 支持垂直 / 水平 / 垂直+水平镜像
+- 长期参考帧预测支持自定义设置
+- 支持帧内刷新
+- 支持去块滤波
+- 支持请求 IDR
+- ROI 模式：mode1——最多 64 个区域设重要度（0–8），需 CBR / AVBR；mode2——最多 64 个区域设 QP（0–51），与 CBR / AVBR 不兼容
+- GOP 模式：0 自定义 + 1–9 预设，结构见 [GOP 与参考帧](#gop-与参考帧)
+- 符合 ITU-T H.264 规范
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-- **硬件单元数**：3
-- **吞吐能力**：3 × 4K@50fps
-- **编码标准**：JPEG（Baseline / Extended Sequential）/ MJPEG
-- **最大输入分辨率**：8192 × 8192
-- **最小输入分辨率**：32 × 32
-- **最大实例数**：64
-- **输入位深**：8bit、12bit
-- **输入图像格式**：4:0:0 / 4:2:0 / 4:2:2 / 4:4:0 / 4:4:4
-- **输出图像格式**：同输入图像格式
-- **输入裁剪**：支持
-- **码率控制**：FIXQP（MJPEG）
-- **旋转**：90° / 180° / 270°
-- **镜像**：垂直 / 水平 / 垂直+水平
-- **量化表**：支持自定义设置
-- **哈夫曼表**：支持自定义设置
+- VPU 硬件单元数为 3，编码与解码共享
+- 性能为 3 × 4K@80fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输入图像的宽度必须是 32 的倍数、高度必须是 8 的倍数
+- 输入图像格式支持 4:2:0 / 4:2:2
+- 输入位深支持 8bit、10bit
+- 支持 I 帧、P 帧和 B 帧
+- 最大实例数为 32
+- 支持输入裁剪
+- 码率控制支持 CBR / VBR / AVBR / FIXQP / QPMAP
+- 支持 90° / 180° / 270° 旋转
+- 支持垂直 / 水平 / 垂直+水平镜像
+- 长期参考帧预测支持自定义设置
+- 支持帧内刷新
+- 支持去块滤波
+- 支持请求 IDR
+- ROI 模式：mode1——最多 64 个区域设重要度（0–8），需 CBR / AVBR；mode2——最多 64 个区域设 QP（0–51），与 CBR / AVBR 不兼容
+- GOP 模式：0 自定义 + 1–9 预设，结构见 [GOP 与参考帧](#gop-与参考帧)
+- 符合 ITU-T H.264 规范
 
 </DocScope>
 
-> **编解码合计能力**指同一时刻所有实例的编码与解码负载之和。按各路「宽 × 高 × 帧率」的像素吞吐求和折算，编码与解码都计入，上限为上述合计能力。
+### H.265/HEVC 解码器
 
+<DocScope products="RDK S100">
+
+- VPU 硬件单元数为 1，编码与解码共享
+- 性能为 4K@90fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输出图像格式为 4:2:0
+- 最大实例数为 32
+- 符合 ISO/IEC 23008-2 高效视频编码（HEVC）标准
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+- VPU 硬件单元数为 3，编码与解码共享
+- 性能为 3 × 4K@80fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输出图像格式为 4:2:0
+- 最大实例数为 32
+- 符合 ISO/IEC 23008-2 高效视频编码（HEVC）标准
+
+</DocScope>
+
+### H.264/AVC 解码器
+
+<DocScope products="RDK S100">
+
+- VPU 硬件单元数为 1，编码与解码共享
+- 性能为 4K@90fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输出图像格式为 4:2:0
+- 最大实例数为 32
+- 符合 ITU-T H.264 规范
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+- VPU 硬件单元数为 3，编码与解码共享
+- 性能为 3 × 4K@80fps
+- 最大输入分辨率为 8192 x 4096
+- 最小输入分辨率为 256 x 128
+- 输出图像格式为 4:2:0
+- 最大实例数为 32
+- 符合 ITU-T H.264 规范
+
+</DocScope>
+
+### JPEG 与 MJPEG 编／解码器
+
+<DocScope products="RDK S100">
+
+- JPU 硬件单元数为 1
+- 性能为 4K@90fps
+- 最大输入分辨率为 8192 x 8192
+- 最小输入分辨率为 32 x 32
+- 最大实例数为 64
+- 输入位深支持 8bit、12bit
+- 输入图像格式支持 4:0:0 / 4:2:0 / 4:2:2 / 4:4:0 / 4:4:4，输出图像格式同输入图像格式
+- 支持输入裁剪
+- 码率控制支持 FIXQP（MJPEG）
+- 支持 90° / 180° / 270° 旋转
+- 支持垂直 / 水平 / 垂直+水平镜像
+- 量化表支持自定义设置
+- 哈夫曼表支持自定义设置
+- 符合 ISO/IEC 10918-1 JPEG 标准的 Baseline 和 Extended 顺序配置
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+- JPU 硬件单元数为 3
+- 性能为 3 × 4K@50fps
+- 最大输入分辨率为 8192 x 8192
+- 最小输入分辨率为 32 x 32
+- 最大实例数为 64
+- 输入位深支持 8bit、12bit
+- 输入图像格式支持 4:0:0 / 4:2:0 / 4:2:2 / 4:4:0 / 4:4:4，输出图像格式同输入图像格式
+- 支持输入裁剪
+- 码率控制支持 FIXQP（MJPEG）
+- 支持 90° / 180° / 270° 旋转
+- 支持垂直 / 水平 / 垂直+水平镜像
+- 量化表支持自定义设置
+- 哈夫曼表支持自定义设置
+- 符合 ISO/IEC 10918-1 JPEG 标准的 Baseline 和 Extended 顺序配置
+
+</DocScope>
+
+注意：
+
+- **编解码合计能力**指同一时刻所有实例的编码与解码负载之和。按各路「宽 × 高 × 帧率」的像素吞吐求和折算，编码与解码都计入，上限为上述合计能力
+- RDK S100 的 VPU 10bit 解码性能受总线 outstanding 瓶颈限制，规格目标为 4K@80fps
 - 输入尺寸不满足对齐要求时，可使用 VPU 读入 CROP 功能先裁剪再编码，参见[最小编码示例](#最小编码示例)
 - VPU 对 YUV 4:2:2：仅支持**编码输入** 4:2:2，硬件内部降采样为 4:2:0 后再编码
 - JPU 解码主要受总线写带宽限制，非 YUV420 8bit 格式的吞吐按输出数据量等比例折算：YUV422 8bit 约为 YUV420 8bit 的 0.75 倍，YUV420 12bit 约为 0.5 倍
+
+
 
 ## 软件框架
 
@@ -195,12 +300,126 @@ buffer 各字段的完整定义（图像帧与码流）见 [核心数据结构](
 
 各模式的参数字段表见 [码率控制参数](/Advanced_development/multimedia_development/multimedia_api/mediacodec/api#码率控制)。
 
+#### 编码效果调优
+
+根据当前客户使用 codec 进行视频编码的场景，多将码率模式设置为 CBR，当编码的场景较为复杂时，为了保证视频质量，硬件会自动提高码率值，导致输出的视频较预期更大。因此为了兼顾视频质量和实际码率，需要统筹 `bit_rate` 和 `max_qp_I/P` 值的设置。下面给出了全 I 帧模式下，不同复杂场景下，码率设置为 15000kbps 时，不同 `max_qp_I` 下实际码率和 qp 的情况（不同场景复杂程度不同，下列数据仅供参考）：
+
+| 场景&参数 | 室外白天复杂场景<br />bitrate(15000)<br />max_qp_I(35) | 室外白天复杂场景<br />bitrate(15000)<br />max_qp_I(38) | 室外白天复杂场景<br />bitrate(15000)<br />max_qp_I(39) |
+| --- | --- | --- | --- |
+| Bit allocation(bps)（越大图像质量越高） | 60300045 | 42186920 | 35898230 |
+| Qp avg（越小图像质量越高） | 35 | 38 | 39 |
 
 #### GOP 与参考帧
 
 GOP 结构决定 I 帧的插入间隔与帧间参考关系，由 `mc_video_gop_params_t` 配置。`gop_preset_idx` 取 `0`–`9`：`0` 为自定义，`1`–`9` 为 9 种预设结构。
 
-GOP 预设结构（`gop_preset_idx` 取 `1`–`9`）的完整说明与结构图，见 [GOP 预置结构](/Advanced_development/multimedia_development/multimedia_api/mediacodec/debug#gop预置结构)。
+##### GOP 预置结构
+
+RDK 上一共支持设置九种 GOP 预置结构：
+
+| `gop_preset_idx` | GOP结构 | 低延迟（编码顺序和显示顺序相同） | GOP大小 | 编码顺序 | 最小源帧buffer数量 | 最小解码图片buffer数量 | 周期内（I 帧间隔）要求 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | I | Yes | 1 | I0-I1-I2… | 1 | 1 | N/A |
+| 2 | P | Yes | 1 | I0-P1-P2-P3… | 1 | 2 | N/A |
+| 3 | B | Yes | 1 | I0-B1-B2-B3… | 1 | 3 | N/A |
+| 4 | BP | NO | 2 | I0-B2-P1-B4-P3… | 1 | 3 | N/A |
+| 5 | BBBP | Yes | 1 | I0-B3-B2-B4-P1… | 7 | 4 | N/A |
+| 6 | PPPP | Yes | 4 | I0-P1-P2-P3-P4… | 1 | 2 | N/A |
+| 7 | BBBB | Yes | 4 | I0-B1-B2-B3-B4… | 1 | 3 | N/A |
+| 8 | BBBB BBBB | Yes | 1 | I0-B4-B3-B5-B2-B7-B6-B8-B1… | 12 | 5 | N/A |
+| 9 | P | Yes | 1 | I0-P1… | 1 | 2 | N/A |
+
+以下会对预置的 GOP 结构进行说明。
+
+**GOP Preset 1**
+
+只有 I 帧，没有相互参考；
+
+- 低延时；
+
+![GOP Preset 1 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop1.png)
+
+![GOP Preset 1 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop2.png)
+
+**GOP Preset 2**
+
+- 只有 I 帧和 P 帧；
+- P 帧参考 2 个前向参考帧；
+- 低延时；
+
+![GOP Preset 2 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop3.png)
+
+![GOP Preset 2 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop4.png)
+
+**GOP Preset 3**
+
+- 只有 I 帧和 B 帧；
+- B 帧参考 2 个前向参考帧；
+- 低延时；
+
+![GOP Preset 3 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop5.png)
+
+![GOP Preset 3 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop6.png)
+
+**GOP Preset 4**
+
+- 只有 I 帧、P 帧和 B 帧；
+- P 帧参考 2 个前向参考帧；
+- B 帧参考 1 个前向参考帧和一个后向参考帧；
+
+![GOP Preset 4 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop7.png)
+
+![GOP Preset 4 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop8.png)
+
+**GOP Preset 5**
+
+- 只有 I 帧、P 帧和 B 帧；
+- P 帧参考 2 个前向参考帧；
+- B 帧参考 1 个前向参考帧和一个后向参考帧，后向参考帧可为 P 帧或 B 帧；
+
+![GOP Preset 5 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop9.png)
+
+![GOP Preset 5 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop10.png)
+
+**GOP Preset 6**
+
+- 只有 I 帧和 P 帧；
+- P 帧参考 2 个前向参考帧；
+- 低延时；
+
+![GOP Preset 6 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop11.png)
+
+![GOP Preset 6 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop12.png)
+
+**GOP Preset 7**
+
+- 只有 I 帧和 B 帧；
+- B 帧参考 2 个前向参考帧；
+- 低延时；
+
+![GOP Preset 7 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop13.png)
+
+![GOP Preset 7 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop14.png)
+
+**GOP Preset 8**
+
+- 只有 I 帧和 B 帧；
+- B 帧参考 1 个前向参考帧，一个后向参考帧；
+
+![GOP Preset 8 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop15.png)
+
+![GOP Preset 8 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop16.png)
+
+**GOP Preset 9**
+
+- 只有 I 帧和 P 帧；
+- P 帧参考 1 个前向参考帧；
+- 低延时；
+
+![GOP Preset 9 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop17.png)
+
+![GOP Preset 9 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop18.png)
+
 
 **自定义 GOP**（`gop_preset_idx = 0`）时，结构由 `mc_video_custom_gop_params_t` 描述：逐个图像指定类型（I / P / B）、显示顺序（POC）、QP 偏移、参考帧等，一条结构最多描述 8 张图片（`MC_MAX_GOP_NUM`），图片条目按**解码顺序**排列。
 
@@ -474,10 +693,10 @@ hb_mm_mc_release(&context);
 - **Intra Refresh 自适应模式**（`intra_refresh_mode = 4`）不能与无损编码和 ROI 同时使用
 - **`external_frame_buf = 1` 时**：外部 buffer 的地址仍需通过 dequeue / queue 流程填入，直接改 buffer 地址即可
 
-具体故障现象与排查见[常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)；调试节点与状态输出见[调试指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/debug)。
+具体故障现象与排查见[常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)；调试节点与状态输出见[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)。
 
 ## 相关文档
-- [MediaCodec 调试指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/debug)
+- [MediaCodec 调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)
 - [MediaCodec 应用场景](/Advanced_development/multimedia_development/multimedia_api/mediacodec/scene)
 - [MediaCodec 常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)
 - [sample_codec 使用说明](/Advanced_development/multimedia_development/multimedia_sample/sample_codec)

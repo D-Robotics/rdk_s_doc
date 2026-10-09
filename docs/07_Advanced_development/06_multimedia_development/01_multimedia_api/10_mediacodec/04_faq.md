@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 title: "MediaCodec 常见问题"
 description: "RDK S100/S600 MediaCodec 编解码常见问题解答"
 ---
@@ -231,4 +231,4 @@ denominator = 90000;
 ## 相关文档
 
 - [MediaCodec 应用场景](/Advanced_development/multimedia_development/multimedia_api/mediacodec/scene)
-- [MediaCodec 调试指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/debug)
+- [MediaCodec 调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)

@@ -2490,7 +2490,7 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 #### mc_inter_status_t
 
-`hb_mm_mc_get_status` 的出参，用于观察队列水位、排查堆积与超时。字段与[调试指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/debug)中 `encode status` 分组对应。
+`hb_mm_mc_get_status` 的出参，用于观察队列水位、排查堆积与超时。字段与[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)中 `encode status` 分组对应。
 
 codec 的详细运行状态，由 `hb_mm_mc_get_status` 返回。可用于观察队列水位、排查堆积与超时。
 
@@ -2648,7 +2648,7 @@ GOP 结构参数。除 `custom_gop_pic_param` 外**在同一段码流内不可�
 | 字段 | 类型 | 取值 / 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `decoding_refresh_type` | `hb_s32` | 默认 `IDR` | 每 `intra_period` 插入的 I 帧类型：`0` 普通 I 帧（非随机接入点）、`1` CRA、`2` IDR。仅 H.265 有效 |
-| `gop_preset_idx` | `hb_u32` | 默认 `2` | GOP 预设结构编号，取值 `[0,9]`，含义见 [GOP](#gop-与参考帧)。该默认值两个平台一致 |
+| `gop_preset_idx` | `hb_u32` | 默认 `2` | GOP 预设结构编号，取值 `[0,9]`，含义见 [GOP 预置结构](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#gop-预置结构)。该默认值两个平台一致 |
 | `custom_gop_size` | `hb_u32` | — | 自定义 GOP 的长度，取值 `[1,8]`。仅 `gop_preset_idx = 0` 时有效 |
 | `custom_gop_pic_param[MC_MAX_GOP_NUM]` | `mc_video_custom_gop_pic_params_t[]` | — | 自定义 GOP 中逐帧的参数，见 [mc_video_custom_gop_pic_params_t](#mc_video_custom_gop_pic_params_t) |
 
@@ -2675,6 +2675,23 @@ GOP 结构参数。除 `custom_gop_pic_param` 外**在同一段码流内不可�
 | `use_longterm` | `hb_u32` | 默认 `0` | 是否使能长期参考帧模式，`0` 关闭 / `1` 开启 |
 | `longterm_pic_period` | `hb_u32` | 默认 `0` | 每隔多少帧指定一个长期参考帧 |
 | `longterm_pic_using_period` | `hb_u32` | 默认 `0` | 长期参考帧被持续使用多少帧 |
+
+H264/H265 编码支持 GOP 结构的设置，用户可从预置的多种 GOP 结构选择，也可自定义 GOP 结构。
+
+GOP 结构表可定义一组周期性的 GOP 结构，该 GOP 结构将用于整个编码过程。单个结构表中的元素如下表所示，其中可以指定该图像的参考帧，如果 IDR 帧后的其他帧指定的参考帧为 IDR 帧前的数据帧，编码器内部会自动处理这种情况使其不参考其他帧，用户无需关心这种情况。用户在自定义 GOP 结构时需要指定 GOP 内的帧数量（取值 [1,8]），结构表内各帧的参数按解码顺序排列。
+
+下面表示了结构表中各个元素的含义：
+
+| 元素 | 描述 |
+| --- | --- |
+| Type | 帧类型(I、P、B) |
+| POC | GOP 内帧的显示顺序，取值范围为 [1,gop_size] |
+| QPoffset | 自定义 GOP 中图片的量化参数 |
+| NUM_REF_PIC_L0 | 标记为 P 帧使用多参考图片，仅在 PIC_TYPE 为 P 时有效 |
+| temporal_id | 帧的时间层，帧无法从具有较高时间 id（0~6）的帧进行预测 |
+| 1st_ref_POC | L0 的第一张参考图片的 POC |
+| 2nd_ref_POC | Type 为 B 时，第一张参考图片的 POC 是 L1 的；Type 为 P 时，第二张参考图片的 POC 是 L0 的；可以使 reference_L1 和 B slice 中的参考图片具有相同的 POC，但出于压缩效率的考虑，建议 reference_L1 和 reference_L0 的 POC 不同 |
+
 
 ### Intra Refresh
 
