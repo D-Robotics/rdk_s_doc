@@ -65,12 +65,12 @@ Before compiling MCU1, obtain the MCU code package. Download link:
 
 <DocScope products="RDK S100">
 
-[Resource Summary - System Software](../../01_Quick_start/download.md#system-software) (MCU SDK, source package).
+[Resource Summary - System Software](../../01_Quick_start/download.md#system-software).
 
 </DocScope>
 <DocScope products="RDK S600">
 
-[Resource Summary - System Software](../../01_Quick_start/download.md#s600-system-software) (MCU Cluster-1 SDK; the community version is a static library, and the source package is available via FTP).
+[Resource Summary - System Software](../../01_Quick_start/download.md#s600-system-software).
 
 </DocScope>
 
