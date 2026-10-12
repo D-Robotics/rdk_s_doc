@@ -204,7 +204,6 @@ typedef struct {
     ```bash
     D-Robotics:/$ ipcbox_set_mode uart 1
     [066386.990200 0]uart processing enabled
-    [066386.990487 0]IpcBox_FreeRtos_OsTask_IpcBox_Uart_ASW task is already initialized or running
 
     D-Robotics:/$ ipcbox_set_mode uart 0
     [066389.201404 0]uart processing disabled
@@ -215,7 +214,6 @@ typedef struct {
     ```bash
     D-Robotics:/$ ipcbox_set_mode i2c 1
     [066394.631826 0]i2c processing enabled
-    [066394.632101 0]IpcBox_FreeRtos_OsTask_IpcBox_I2c_ASW task is already initialized or running
 
     D-Robotics:/$ ipcbox_set_mode i2c 0
     [066397.082288 0]i2c processing disabled
@@ -226,7 +224,7 @@ typedef struct {
     ```bash
     D-Robotics:/$ ipcbox_set_mode spi 1
     [066403.227424 0]spi processing enabled
-    [066403.227699 0]IpcBox_Spi task is already initialized or running
+    [066403.227699 0]Invalid SPI bus id, use default config
 
     D-Robotics:/$ ipcbox_set_mode spi 0
     [066406.388582 0]spi processing disabled
