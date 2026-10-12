@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # 2.2 srpi-config 工具配置
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 简介
 
 `srpi-config`是一个系统配置工具，要打开配置工具，请在命令行中键入以下命令：
@@ -72,6 +76,12 @@ sudo srpi-config
 
 - 外设配置
   建议参考[config.txt 文件配置](./config_txt)进行外设的配置；
+
+<DocScope products="RDK S100" versions=">= 4.1.0">
+- **Peripheral bus config**（外设总线配置）
+
+  S100 的 `I2C5` 与 `UART2` 复用同一组 40-Pin 引脚，二者互斥，无法同时使能。此选项用于切换使能 `I2C5` 或 `UART2`：启用其中一个会自动禁用另一个。切换后重启生效。
+</DocScope>
 
 
 ## Performance Options
