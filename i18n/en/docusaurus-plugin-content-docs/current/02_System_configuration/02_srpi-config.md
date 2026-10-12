@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # 2.2 srpi-config Tool Configuration
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## Introduction
 
 `srpi-config` is a system configuration tool. To open the configuration tool, please enter the following command in the command line:
@@ -74,6 +78,12 @@ The Interface Options menu has the following options to enable/disable: SSH, per
 - **Peripheral Configuration**
 
   It is recommended to refer to [config.txt File Configuration](./config_txt) for peripheral configuration;
+
+<DocScope products="RDK S100" versions=">= 4.1.0">
+- **Peripheral bus config**
+
+  On the S100, `I2C5` and `UART2` share the same set of 40-Pin pins and are mutually exclusive — they cannot be enabled simultaneously. This option switches between `I2C5` and `UART2`: enabling one automatically disables the other. A reboot is required for the change to take effect.
+</DocScope>
 
 ## Performance Options
 
