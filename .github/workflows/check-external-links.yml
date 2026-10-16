@@ -4,6 +4,10 @@ name: Check external links
 # 不挂 PR 触发，因此不阻塞任何人提交或合并。
 # 说明：本仓已有 onBrokenLinks + scripts/check-broken-links.js 覆盖「站内 / 跨仓」链接，
 #       这里只补「站外（第三方）链接」的失效监测。
+# 白名单式过滤用 --scheme http --scheme https：只查 http/https 外链，非 http(s) 的
+# 站内链接（/xxx 根相对路径、file://、mailto）会被 scheme 过滤跳过。
+# 注意不能用 --include '^https?://' 达到同样目的：lychee 里 include 一旦匹配会覆盖
+# exclude，反而把 github.com 等本要排除的域名重新纳入检查。
 
 on:
   schedule:
@@ -29,6 +33,8 @@ jobs:
           fail: false
           args: >-
             --no-progress
+            --scheme http
+            --scheme https
             --accept 200,204,301,302,307,308,401,403
             --timeout 15
             --retry-wait-time 2
@@ -44,9 +50,9 @@ jobs:
             --exclude 'feishu\.cn'
             --exclude 'bilibili\.com'
             --exclude 'csdn\.net'
+            --exclude '\.hobot\.cc'
             --exclude '\.(png|jpe?g|gif|svg|webp|ico)(\?.*)?$'
-            --exclude '^https?://proxy_server_address'
-            --exclude '^https?://IP([^a-z0-9]|$)'
+            --exclude '(?i)^https?://(ip|proxy_server_address)([^a-z0-9]|$)'
             'docs/**/*.md'
             'docs/**/*.mdx'
 
