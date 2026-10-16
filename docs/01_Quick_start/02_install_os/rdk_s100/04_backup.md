@@ -105,7 +105,7 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
 
 1. 在 [烧录全镜像](./03_burn.md#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **备份指定区域**，勾选目标区域（如 `miniboot_flash` 和 `miniboot_emmc`）。
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-back-region.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-back-region.png" alt="备份指定区域界面" style={{ width: '100%' }} />
 
    :::note 备份耗时
    数据备份耗时较长，请耐心等待。

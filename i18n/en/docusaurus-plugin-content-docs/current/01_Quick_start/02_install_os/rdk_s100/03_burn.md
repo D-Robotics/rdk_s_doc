@@ -1,5 +1,6 @@
 ---
 sidebar_position: 3
+description: Describes how to flash the RDK S100 system image with XBurn, including selecting a download mode, flashing the full image, and flashing specific regions or partitions.
 ---
 
 # Flash the system image
@@ -57,7 +58,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 8. After flashing completes, exit the corresponding mode (for DFU mode, toggle the flashing switch down to exit), and power off.
 9. Verify the boot. Keep the device powered off, connect the device to a monitor with an HDMI cable, then power on the device. On first boot, the system performs default environment configuration that takes about 45 seconds, after which the Ubuntu desktop appears on the monitor.
 
-   :::tip LED indicators
+   :::note LED indicators
    - **<font color='Green'>Green</font>** LED: Lit means the hardware is powered on normally.
    :::
 

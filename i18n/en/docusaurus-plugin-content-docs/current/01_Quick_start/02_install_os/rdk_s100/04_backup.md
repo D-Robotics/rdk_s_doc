@@ -12,7 +12,7 @@ This page describes how to back up the current RDK S100 system to an image, and 
 Backing up saves the current system as an image. After backing up, flash the image to the target board to restore it. The target board can be the source board or a new board:
 
 - **Restore to the source board**: Restore the system to the state it was in when it was backed up.
-- **Copy to a new board**: Copy the system to another board.
+- **Copy to a new board**: Copy the system to another development board.
 
 :::note
 Backing up does not support batch operation. Back up one device at a time.
