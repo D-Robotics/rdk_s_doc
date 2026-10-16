@@ -41,3 +41,8 @@ yarn.lock
 
 .env.local
 _img_audit/
+
+# Test server deploy（含内网 IP/账号，仅本地，不入公开仓）
+.deployrc
+scripts/deploy-test.sh
+build.tar.gz
