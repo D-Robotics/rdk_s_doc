@@ -4,6 +4,9 @@
 # Production
 /build
 
+# Scoped site output (DOC_BUILD_OUT_DIR), e.g. build-scope-test/
+/build-scope-*/
+
 /en_docs
 
 # src/theme/
