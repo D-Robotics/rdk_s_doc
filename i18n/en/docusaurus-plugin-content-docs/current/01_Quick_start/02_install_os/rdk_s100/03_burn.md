@@ -66,7 +66,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-boot.png" alt="S100 system boot desktop" style={{ width: '100%' }} />
 
-## Flash specific regions{#flash-specific-regions}
+## Flash specific regions{#flashing-specific-regions}
 
 Flash only part of the image by region, instead of the complete full-image package. For **Storage medium**, select `eMMC`. The supported regions are:
 
@@ -82,7 +82,7 @@ Starting from the steps in [Flash the full image](#flash-the-full-image), expand
 
 ## Flash specific partition images
 
-Flash by **individual system component partition**, at a finer granularity than [Flash specific regions](#flash-specific-regions). This is partition-level (a single component partition, such as `uboot`, `boot`, or `system`).
+Flash by **individual system component partition**, at a finer granularity than [Flash specific regions](#flashing-specific-regions). This is partition-level (a single component partition, such as `uboot`, `boot`, or `system`).
 
 Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific partition images**, and select the target partitions. Complete the flash and verify the boot.
 

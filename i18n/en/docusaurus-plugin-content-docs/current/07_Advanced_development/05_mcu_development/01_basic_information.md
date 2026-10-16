@@ -379,7 +379,7 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
 <DocScope products="RDK S100">
 
-For information on using the XBurn tool to flash specific regions, refer to the [Flash specific regions](../../01_Quick_start/02_install_os/rdk_s100/03_burn.md#flash-specific-regions) section.
+For information on using the XBurn tool to flash specific regions, refer to the [Flash specific regions](../../01_Quick_start/02_install_os/rdk_s100/03_burn.md#flashing-specific-regions) section.
 
 </DocScope>
 <DocScope products="RDK S600">

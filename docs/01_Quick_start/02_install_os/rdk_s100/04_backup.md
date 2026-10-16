@@ -42,7 +42,7 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
    - `product/xmodem_tools/sec/out/s100/uboot.img`
    - `product/img_packages/uboot.img`
 3. 烧录到源板 `uboot` 分区：
-   - **方式一**：XBurn 勾选 `uboot` 分区烧录。
+   - **方式一**：在 XBurn 中勾选 `uboot` 分区后烧录。
 
      <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-burn-uboot.png" alt="XBurn 勾选分区界面" style={{ width: '100%' }} />
 

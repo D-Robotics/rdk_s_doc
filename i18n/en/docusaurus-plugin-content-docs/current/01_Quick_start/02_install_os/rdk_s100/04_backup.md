@@ -91,7 +91,7 @@ Back up the complete system image for restoring to the source board or copying t
    | `img_packages/disk/` | Unchanged | Remove `_backup`<br />- `miniboot_flash_backup.img` → `miniboot_flash.img`<br />- `miniboot_emmc_backup.img` → `miniboot_emmc.img` |
    | `img_packages/backup/` | `img_packages/` | Names unchanged (such as `boot.img`, `system.img`) |
 
-4. Flash via [Flash specific regions](./03_burn.md#flash-specific-regions) and [Flash specific partition images](./03_burn.md#flash-specific-partition-images), selecting the same regions and partitions as you backed up.
+4. Flash via [Flash specific regions](./03_burn.md#flashing-specific-regions) and [Flash specific partition images](./03_burn.md#flash-specific-partition-images), selecting the same regions and partitions as you backed up.
 
 ## Back up specific regions
 
@@ -125,7 +125,7 @@ Back up the image of specific regions to your PC. The supported backup regions a
    The `emmc` region requires changing the extension from `.img` to `.simg`.
    :::
 
-4. Flash via [Flash specific regions](./03_burn.md#flash-specific-regions), selecting the same regions as you backed up.
+4. Flash via [Flash specific regions](./03_burn.md#flashing-specific-regions), selecting the same regions as you backed up.
 
 ## Back up specific partition images
 
