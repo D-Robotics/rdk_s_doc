@@ -855,6 +855,75 @@ function buildEasyopsIndex(records) {
   ];
 }
 
+/**
+ * 从细粒度 records 归约出推给 Algolia 的记录集。
+ * 站内搜索（Algolia）不需要「每段/每格一条」的粒度——`distinct:url` 会按锚点把它们折叠，
+ * 那些 content 记录纯属索引体积 + 计费。这里把每个标题段的正文聚合成一条，附着到对应标题
+ * 记录上（超长则分块）；细粒度 records 仍原样保留，供 buildEasyopsIndex 喂 MCP 本地索引。
+ */
+const ALGOLIA_CONTENT_CHUNK = 2000;
+
+function buildAlgoliaRecords(records) {
+  const headingByUrl = new Map();
+  const headings = [];
+  for (const r of records) {
+    if (r.type && r.type.startsWith('lvl')) {
+      headingByUrl.set(r.url, r);
+      headings.push(r);
+    }
+  }
+
+  const contentByUrl = new Map();
+  const orphans = new Map(); // url -> { template, text }，无标题匹配的正文（罕见）
+  for (const r of records) {
+    if (r.type !== 'content' || !r.content) continue;
+    if (headingByUrl.has(r.url)) {
+      contentByUrl.set(r.url, `${contentByUrl.get(r.url) || ''} ${r.content}`);
+    } else {
+      const existing = orphans.get(r.url);
+      if (existing) existing.text = `${existing.text} ${r.content}`;
+      else orphans.set(r.url, { template: r, text: r.content });
+    }
+  }
+
+  const out = [];
+  for (const heading of headings) {
+    const text = (contentByUrl.get(heading.url) || '').replace(/\s+/g, ' ').trim();
+    if (!text) {
+      out.push(heading);
+      continue;
+    }
+    out.push({ ...heading, content: text.slice(0, ALGOLIA_CONTENT_CHUNK) });
+    for (let i = ALGOLIA_CONTENT_CHUNK; i < text.length; i += ALGOLIA_CONTENT_CHUNK) {
+      const part = text.slice(i, i + ALGOLIA_CONTENT_CHUNK);
+      out.push({
+        ...heading,
+        objectID: objectIdFor([heading.url, 'content', part, String(i)]),
+        content: part,
+        type: 'content',
+        weight: { pageRank: 0, level: LEVEL_WEIGHT.content, position: 0 },
+      });
+    }
+  }
+
+  for (const { template, text } of orphans.values()) {
+    const clean = text.replace(/\s+/g, ' ').trim();
+    if (!clean) continue;
+    for (let i = 0; i < clean.length; i += ALGOLIA_CONTENT_CHUNK) {
+      const part = clean.slice(i, i + ALGOLIA_CONTENT_CHUNK);
+      out.push({
+        ...template,
+        objectID: objectIdFor([template.url, 'content', part, String(i)]),
+        content: part,
+        type: 'content',
+        weight: { pageRank: 0, level: LEVEL_WEIGHT.content, position: 0 },
+      });
+    }
+  }
+
+  return out;
+}
+
 async function main() {
   if (!ADMIN_KEY) {
     console.error(
@@ -903,12 +972,18 @@ async function main() {
     );
   }
 
-  console.log(`Built ${records.length} records from ${pages.length} pages`);
+  console.log(`Built ${records.length} fine-grained records from ${pages.length} pages`);
   if (records.length === 0) {
     throw new Error('No records generated');
   }
 
-  const sample = records.find((r) => r.content) || records[0];
+  const algoliaRecords = buildAlgoliaRecords(records);
+  console.log(
+    `Algolia records after aggregation: ${algoliaRecords.length} ` +
+      `(was ${records.length}, -${(((records.length - algoliaRecords.length) / records.length) * 100).toFixed(1)}%)`,
+  );
+
+  const sample = algoliaRecords.find((r) => r.content) || algoliaRecords[0];
   console.log('Sample record:', {
     url: sample.url,
     language: sample.language,
@@ -950,7 +1025,7 @@ async function main() {
   );
   await waitTask(cleared.taskID, ADMIN_KEY);
 
-  const batches = chunk(records, 1000);
+  const batches = chunk(algoliaRecords, 1000);
   for (let i = 0; i < batches.length; i += 1) {
     const requests = batches[i].map((record) => ({
       action: 'addObject',
