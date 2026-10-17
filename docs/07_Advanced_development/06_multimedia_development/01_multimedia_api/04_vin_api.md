@@ -50,8 +50,8 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 
 - MIPI RX 路数：3 个
 - 每路 RX 的 lane / trio：D-PHY ≤ 4 lane；C-PHY ≤ 3 trio
-- 单 lane / 单 trio 速率范围：D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps
-- 每路 RX 的 PHY 承载上限：**D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28）
+- 单 lane / 单 trio 速率上限：D-PHY 2.5 Gbps；C-PHY 2.5 Gsps
+- 每路 RX 的 PHY 承载上限：**D-PHY 10 Gbps**（4 × 2.5）；**C-PHY 约 17.1 Gbps**（3 × 2.5 × 2.28）
 - 每路 RX 的虚拟通道（VC）：4 个
 
 </DocScope>
@@ -60,8 +60,8 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 
 - MIPI RX 路数：6 个
 - 每路 RX 的 lane / trio：D-PHY ≤ 4 lane；C-PHY ≤ 3 trio
-- 单 lane / 单 trio 速率范围：D-PHY 80–4500 Mbps；C-PHY 80–3500 Msps
-- 每路 RX 的 PHY 承载上限：**D-PHY 18 Gbps**（4 × 4.5）；**C-PHY 约 23.94 Gbps**（3 × 3.5 × 2.28）
+- 单 lane / 单 trio 速率上限：D-PHY 2.5 Gbps；C-PHY 2.5 Gsps
+- 每路 RX 的 PHY 承载上限：**D-PHY 10 Gbps**（4 × 2.5）；**C-PHY 约 17.1 Gbps**（3 × 2.5 × 2.28）
 - 每路 RX 的虚拟通道（VC）：4 个
 
 </DocScope>
@@ -113,10 +113,11 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 
 | 卡口 | 上限（该 RX 上各路合计不得超过） |
 | --- | --- |
-| PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
-| PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · 纯 RAW | 600 MHz × 3 pixel/clock × 12 bit = 21.6 Gbps |
-| IPI · 含任一路 YUV | 600 MHz × 1 pixel/clock × 16 bit = **9.6 Gbps** |
+| PHY · D-PHY | 4 lane × 2.5 Gbps = 10 Gbps |
+| PHY · C-PHY | 3 trio × 2.5 Gsps × 2.28 = 17.1 Gbps |
+| IPI · 纯 RAW | 600 MHz × 3 pixel/clock × 16 bit = 28.8 Gbps |
+| IPI · YUV422-8bit | 600 MHz × 1 pixel/clock × 16 bit = **9.6 Gbps** |
+| IPI · YUV422-10bit | 600 MHz × 1 pixel/clock × 20 bit = 12 Gbps |
 | VC 路数 | 4 路 |
 
 </DocScope>
@@ -125,101 +126,122 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 
 | 卡口 | 上限（该 RX 上各路合计不得超过） |
 | --- | --- |
-| PHY · D-PHY | 4 lane × 4.5 Gbps = 18 Gbps |
-| PHY · C-PHY | 3 trio × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · 纯 RAW | 670 MHz × 3 pixel/clock × 12 bit = 24.1 Gbps |
-| IPI · 含任一路 YUV | 670 MHz × 1 pixel/clock × 16 bit = **10.72 Gbps** |
+| PHY · D-PHY | 4 lane × 2.5 Gbps = 10 Gbps |
+| PHY · C-PHY | 3 trio × 2.5 Gsps × 2.28 = 17.1 Gbps |
+| IPI · 纯 RAW | 670 MHz × 3 pixel/clock × 16 bit = 32.16 Gbps |
+| IPI · YUV422-8bit | 670 MHz × 1 pixel/clock × 16 bit = **10.72 Gbps** |
+| IPI · YUV422-10bit | 670 MHz × 1 pixel/clock × 20 bit = 13.4 Gbps |
 | VC 路数 | 4 路 |
 
 </DocScope>
 
-- IPI 上限与 PHY 类型无关：RAW 每 clock 传输 3 个 pixel，YUV 仅 1 个。同一 RX 上存在任一路 YUV 时，IPI 上限即按含 YUV 的口径计算；此时改用 C-PHY 仅放宽 PHY 限制，IPI 上限不变
+- IPI 总线固定 48 bit/clock：RAW 每 clock 传 3 个 pixel、每 pixel 占 16 bit；YUV422 每 clock 只传 1 个 pixel，8-bit 占 16 bit、10-bit 占 20 bit。因此 RAW 的 IPI 上限远高于 PHY，接入瓶颈在 D-PHY；YUV 的 IPI 上限骤降，成为主要约束。同一 RX 上存在任一路 YUV 时，IPI 上限按对应位深档计算；改用 C-PHY 仅放宽 PHY 限制，IPI 上限不变
 - **超出上限时依次调整**：压缩模组 blanking 以降低 k，不改变配置、不影响画质 → 降低帧率或分辨率 → 迁移至其他 RX，可用路数见 [MIPI RX](#mipi-rx) → 改用 C-PHY，仅对纯 RAW 场景有效
 
-**算例一：4 颗 8M RAW12@30fps**
+**算例一：每 RX 的相机路数上限**
 
-8M 按 3840 × 2160 算，位深 12、k 取 1.5，单路 = 3840 × 2160 × 30 × 12 × 1.5 ≈ **4.48 Gbps**，四路合计 **17.92 Gbps**，对照上限：
+路数上限由 PHY 带宽、IPI 带宽、VC 数三者中最小者决定。以 8M@30（k 取 1.5，RAW12 单路 = 3840 × 2160 × 30 × 12 × 1.5 ≈ **4.48 Gbps**、YUV422-8bit 单路 = 3840 × 2160 × 30 × 16 × 1.5 ≈ **5.97 Gbps**）为例：
 
 <DocScope products="RDK S100">
 
-| 卡口 | 上限 | 4 路合计 | 占用 |
+| 约束 | 上限 | 纯 RAW12 路数 | 纯 YUV8 路数 |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
-| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
-| IPI · 纯 RAW | 21.6 Gbps | 17.92 Gbps | 83% |
+| PHY · D-PHY | 10 Gbps | 2（10 ÷ 4.48） | 1（10 ÷ 5.97） |
+| PHY · C-PHY | 17.1 Gbps | 3（17.1 ÷ 4.48） | 2（17.1 ÷ 5.97） |
+| IPI · 纯 RAW | 28.8 Gbps | 6 | — |
+| IPI · YUV422-8bit | 9.6 Gbps | — | 1 |
+
+按最小约束取整，每 RX 的最终路数：
+
+| 场景 | 瓶颈 | 每 RX 路数 |
+| --- | --- | --- |
+| 纯 RAW · D-PHY | PHY 10 Gbps | 2 路 8M |
+| 纯 RAW · C-PHY | PHY 17.1 Gbps | 3 路 8M |
+| 纯 YUV8 · 任意 PHY | IPI YUV8 | 1 路 8M |
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-| 卡口 | 上限 | 4 路合计 | 占用 |
+| 约束 | 上限 | 纯 RAW12 路数 | 纯 YUV8 路数 |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
-| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
-| IPI · 纯 RAW | 24.1 Gbps | 17.92 Gbps | 74.4% |
+| PHY · D-PHY | 10 Gbps | 2（10 ÷ 4.48） | 1（10 ÷ 5.97） |
+| PHY · C-PHY | 17.1 Gbps | 3（17.1 ÷ 4.48） | 2（17.1 ÷ 5.97） |
+| IPI · 纯 RAW | 32.16 Gbps | 7 | — |
+| IPI · YUV422-8bit | 10.72 Gbps | — | 1 |
+
+按最小约束取整，每 RX 的最终路数：
+
+| 场景 | 瓶颈 | 每 RX 路数 |
+| --- | --- | --- |
+| 纯 RAW · D-PHY | PHY 10 Gbps | 2 路 8M |
+| 纯 RAW · C-PHY | PHY 17.1 Gbps | 3 路 8M |
+| 纯 YUV8 · 任意 PHY | IPI YUV8 | 1 路 8M |
 
 </DocScope>
 
-**结论**：k = 1.5 是保守上界——四路 8M 把 D-PHY 压到 99.6%，评估口径下没有余量；多数模组实际 blanking 低于 1.5，选型时以模组手册的行/帧总长（HTS/VTS）确认实际占用。换 C-PHY 后降到 74.9%。
+**结论**：纯 RAW 的瓶颈是 PHY（IPI 28.8/32.16 Gbps 远高于 PHY，从不构成约束），D-PHY 下 2 路、C-PHY 下 3 路；纯 YUV 的瓶颈是 IPI 骤降（每 clock 只传 1 个 pixel），无论 PHY 类型都只容 1 路 8M。
 
-**算例二：单颗 8M YUV422@30fps**
+**算例二：RAW 与 YUV 的混合接入**
 
-位深 16、k 取 1.5，单路 = 3840 × 2160 × 30 × 16 × 1.5 ≈ **5.97 Gbps**。同一 RX 上存在任一路 YUV，IPI 上限即按含 YUV 的口径：
+同一 RX 上混接 RAW 与 YUV 时，IPI 按 YUV 口径（每 clock 1 个 pixel）计算，且 YUV 单路带宽更大，混合后的容量显著小于纯 RAW。以 8M RAW12（4.48 Gbps）与 2M YUV8（1920 × 1080 × 30 × 16 × 1.5 ≈ 1.49 Gbps）混合为例：
 
 <DocScope products="RDK S100">
 
-| 卡口 | 上限 | 单路 8M | 占用 |
-| --- | --- | --- | --- |
-| IPI · 含 YUV | 9.6 Gbps | 5.97 Gbps | 62.2% |
-| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+| 组合 | 合计带宽 | D-PHY 占用 | IPI·YUV8 占用 | 结论 |
+| --- | --- | --- | --- | --- |
+| 1×8M RAW + 1×2M YUV | 5.97 Gbps | 59.7% | 62.2% | 可行 |
+| 2×8M RAW + 1×2M YUV | 10.45 Gbps | 104.5% | 108.9% | 超限 |
+| 1×8M RAW + 1×8M YUV | 10.45 Gbps | 104.5% | 108.9% | 超限 |
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-| 卡口 | 上限 | 单路 8M | 占用 |
-| --- | --- | --- | --- |
-| IPI · 含 YUV | 10.72 Gbps | 5.97 Gbps | 55.7% |
-| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+| 组合 | 合计带宽 | D-PHY 占用 | IPI·YUV8 占用 | 结论 |
+| --- | --- | --- | --- | --- |
+| 1×8M RAW + 1×2M YUV | 5.97 Gbps | 59.7% | 55.7% | 可行 |
+| 2×8M RAW + 1×2M YUV | 10.45 Gbps | 104.5% | 97.5% | 超限 |
+| 1×8M RAW + 1×8M YUV | 10.45 Gbps | 104.5% | 97.5% | 超限 |
 
 </DocScope>
 
-**结论**：YUV 场景的主约束是 IPI 上限骤降（每 clock 只传 1 个 pixel）——同为 8M，YUV 单路 5.97 Gbps 对 RAW 的 4.48 Gbps，可挂路数明显减少；多路组合的极限见下方满配参考。YUV 输入禁用 ROI 与 RAWDS（见[注意事项与约束](#注意事项与约束)）。
+**结论**：纯 RAW 能接 2 路 8M，但混入 1 路 YUV 后，合计带宽即突破 D-PHY 10 Gbps；YUV 单路带宽大、IPI 口径又骤降，混合接入是约束最紧的场景。多路组合的极限见下方满配参考。YUV 输入禁用 ROI 与 RAWDS（见[注意事项与约束](#注意事项与约束)）。
 
 **满配参考：接入域极限组合**
 
-每 RX 的结构上限是 VC = 4 与 D-PHY 18 Gbps，按常见 sensor 的最高档 8M@30（4.48 Gbps）组合，两类格式的每 RX 极限如下：
+每 RX 的结构上限是 VC = 4、D-PHY 10 Gbps、C-PHY 17.1 Gbps。按常见 sensor 的最高档 8M@30（RAW 4.48 / YUV422 5.97 Gbps）组合：
 
 <DocScope products="RDK S100">
 
-**RAW12 满配**——每 RX 4 × 8M，D-PHY 顶满；**YUV422 满配**——瓶颈是 IPI（每 clock 1 pixel），路数由 IPI 上限决定：
+**RAW12 满配**（瓶颈 D-PHY 10G）与 **YUV422 满配**（瓶颈 IPI 或 D-PHY）：
 
 | 格式 | 满配组合 | 单 RX 占用 | 全芯片接入总量 |
 | --- | --- | --- | --- |
-| RAW12 | 3 个 RX（hw_id 0/1/4）× 4×8M = **12 路 8M** | 17.92 / 18（D-PHY）= 99.6% | 53.8 Gbps |
-| YUV422 | 3 个 RX × (1×8M + 2×2M) = **3 路 8M + 6 路 2M**（9 路） | 8.95 / 9.6（IPI）= 93.2% | 26.9 Gbps |
+| RAW12 | 3 个 RX（hw_id 0/1/4）× 2×8M = **6 路 8M** | 8.96 / 10（D-PHY）= 89.6% | 26.9 Gbps |
+| YUV422 | 3 个 RX × (1×8M + 2×2M) = **3 路 8M + 6 路 2M**（9 路） | 8.95 / 9.6（IPI·8bit）= 93.2% | 26.9 Gbps |
 
-S100 仅 2 个 ISP，满配需靠分时/抽帧收敛；RX4（CIM4）只支持离线输出，该 RX 的 4 路只落 DDR。
+S100 仅 2 个 ISP，满配需靠分时/抽帧收敛；RX4（CIM4）只支持离线输出，该 RX 的 2 路只落 DDR。
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-**RAW12 满配**——每 RX 4 × 8M，D-PHY 顶满；**YUV422 满配**——瓶颈是 IPI（每 clock 1 pixel），路数由 IPI 上限决定：
+**RAW12 满配**（瓶颈 D-PHY 10G）与 **YUV422 满配**（瓶颈 IPI 或 D-PHY）：
 
 | 格式 | 满配组合 | 单 RX 占用 | 全芯片接入总量 |
 | --- | --- | --- | --- |
-| RAW12 | 6 个 RX（hw_id 0~5）× 4×8M = **24 路 8M** | 17.92 / 18（D-PHY）= 99.6% | 107.5 Gbps |
-| YUV422 | 6 个 RX × (1×8M + 3×2M) = **6 路 8M + 18 路 2M**（24 路） | 10.45 / 10.72（IPI）= 97.5% | 62.7 Gbps |
+| RAW12 | 6 个 RX（hw_id 0~5）× 2×8M = **12 路 8M** | 8.96 / 10（D-PHY）= 89.6% | 53.8 Gbps |
+| YUV422 | 6 个 RX × (1×8M + 2×2M) = **6 路 8M + 12 路 2M**（18 路） | 8.95 / 10（D-PHY）= 89.5% | 53.7 Gbps |
 
 S600 共 4 个 ISP，满配需靠分时/抽帧收敛。
 
 </DocScope>
 
-- 两类满配均对应 SerDes 聚合接法：解串器把多路 sensor 汇聚到一个 RX，每路 1 lane @ 4.5 Gbps 承载单路流量
+- 两类满配均对应 SerDes 聚合接法：解串器把多路 sensor 汇聚到一个 RX，每路 1 lane @ 2.5 Gbps 承载单路流量
 - 本表只算接入域带宽，DDR 读写与后级处理能力须另行评估
-- C-PHY 对两类满配均无增益：RAW 满配的路数已到 VC = 4 上限，PHY 放宽加不了路；YUV 满配的瓶颈在 IPI，与 PHY 类型无关
-- 单路更大的 sensor（IPI 接入宽上限内）可提高单路带宽，但每 RX 总量仍以 D-PHY 18 Gbps 为顶
+- C-PHY 只放宽 PHY：RAW 满配 D-PHY 下 2 路 8M、C-PHY 下可到 3 路；YUV 满配的瓶颈在 IPI（S100）或 D-PHY（S600），C-PHY 对 S100 无增益、对 S600 可到 1×8M+3×2M
+- 单路更大的 sensor（IPI 接入宽上限内）可提高单路带宽，但每 RX 总量仍以 D-PHY 10 Gbps 为顶
 
 > 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[选型依据](#选型依据)。
 

@@ -49,8 +49,8 @@ The CIM is only about taking data in and sending it out: the input is four IPIs,
 
 - MIPI RX ports: 3
 - Lanes / trios per RX: D-PHY ≤ 4 lanes; C-PHY ≤ 3 trios
-- Rate per lane / trio: D-PHY 80–4500 Mbps; C-PHY 80–3500 Msps
-- PHY ceiling per RX: **D-PHY 18 Gbps** (4 × 4.5); **C-PHY about 23.94 Gbps** (3 × 3.5 × 2.28)
+- Rate per lane / trio: D-PHY 2.5 Gbps; C-PHY 2.5 Gsps
+- PHY ceiling per RX: **D-PHY 10 Gbps** (4 × 2.5); **C-PHY about 17.1 Gbps** (3 × 2.5 × 2.28)
 - Virtual channels (VC) per RX: 4
 
 </DocScope>
@@ -59,8 +59,8 @@ The CIM is only about taking data in and sending it out: the input is four IPIs,
 
 - MIPI RX ports: 6
 - Lanes / trios per RX: D-PHY ≤ 4 lanes; C-PHY ≤ 3 trios
-- Rate per lane / trio: D-PHY 80–4500 Mbps; C-PHY 80–3500 Msps
-- PHY ceiling per RX: **D-PHY 18 Gbps** (4 × 4.5); **C-PHY about 23.94 Gbps** (3 × 3.5 × 2.28)
+- Rate per lane / trio: D-PHY 2.5 Gbps; C-PHY 2.5 Gsps
+- PHY ceiling per RX: **D-PHY 10 Gbps** (4 × 2.5); **C-PHY about 17.1 Gbps** (3 × 2.5 × 2.28)
 - Virtual channels (VC) per RX: 4
 
 </DocScope>
@@ -112,10 +112,11 @@ Complete the bandwidth assessment before bring-up:
 
 | Check | Ceiling (sum over all cameras on the RX) |
 | --- | --- |
-| PHY · D-PHY | 4 lanes × 4.5 Gbps = 18 Gbps |
-| PHY · C-PHY | 3 trios × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · RAW only | 600 MHz × 3 pixels/clock × 12 bit = 21.6 Gbps |
-| IPI · any YUV camera | 600 MHz × 1 pixel/clock × 16 bit = **9.6 Gbps** |
+| PHY · D-PHY | 4 lanes × 2.5 Gbps = 10 Gbps |
+| PHY · C-PHY | 3 trios × 2.5 Gsps × 2.28 = 17.1 Gbps |
+| IPI · RAW only | 600 MHz × 3 pixels/clock × 16 bit = 28.8 Gbps |
+| IPI · YUV422-8bit | 600 MHz × 1 pixel/clock × 16 bit = **9.6 Gbps** |
+| IPI · YUV422-10bit | 600 MHz × 1 pixel/clock × 20 bit = 12 Gbps |
 | VC count | 4 |
 
 </DocScope>
@@ -124,101 +125,122 @@ Complete the bandwidth assessment before bring-up:
 
 | Check | Ceiling (sum over all cameras on the RX) |
 | --- | --- |
-| PHY · D-PHY | 4 lanes × 4.5 Gbps = 18 Gbps |
-| PHY · C-PHY | 3 trios × 3.5 Gsps × 2.28 = 23.94 Gbps |
-| IPI · RAW only | 670 MHz × 3 pixels/clock × 12 bit = 24.1 Gbps |
-| IPI · any YUV camera | 670 MHz × 1 pixel/clock × 16 bit = **10.72 Gbps** |
+| PHY · D-PHY | 4 lanes × 2.5 Gbps = 10 Gbps |
+| PHY · C-PHY | 3 trios × 2.5 Gsps × 2.28 = 17.1 Gbps |
+| IPI · RAW only | 670 MHz × 3 pixels/clock × 16 bit = 32.16 Gbps |
+| IPI · YUV422-8bit | 670 MHz × 1 pixel/clock × 16 bit = **10.72 Gbps** |
+| IPI · YUV422-10bit | 670 MHz × 1 pixel/clock × 20 bit = 13.4 Gbps |
 | VC count | 4 |
 
 </DocScope>
 
-- The IPI ceiling is independent of the PHY type: RAW transfers 3 pixels per clock, YUV only 1. When any YUV camera is present on the RX, the IPI ceiling follows the YUV figure; switching to C-PHY then relaxes only the PHY limit and leaves the IPI ceiling unchanged
+- The IPI bus is a fixed 48 bits/clock: RAW carries 3 pixels per clock at 16 bits each; YUV422 carries only 1 pixel per clock, 16 bits for 8-bit and 20 bits for 10-bit. So the RAW IPI ceiling is far above the PHY, and the access bottleneck is D-PHY; the YUV IPI ceiling drops sharply and becomes the binding constraint. With any YUV camera on the RX, the IPI ceiling follows the matching bit-depth tier; switching to C-PHY relaxes only the PHY limit and leaves the IPI ceiling unchanged
 - **When a ceiling is exceeded, adjust in this order**: compress the module blanking to lower k, with no configuration change or quality loss → reduce the frame rate or resolution → move cameras to another RX, available counts in [MIPI RX](#mipi-rx) → switch to C-PHY, effective for all-RAW cases only
 
-**Worked example 1: 4× 8M RAW12@30fps**
+**Worked example 1: camera-count limit per RX**
 
-8M counts as 3840 × 2160: bit depth 12, k = 1.5 — per camera = 3840 × 2160 × 30 × 12 × 1.5 ≈ **4.48 Gbps**, four in total **17.92 Gbps**, against the ceilings:
+The camera count is the minimum over the PHY bandwidth, the IPI bandwidth and the VC count. For 8M@30 (k = 1.5: RAW12 per camera = 3840 × 2160 × 30 × 12 × 1.5 ≈ **4.48 Gbps**, YUV422-8bit per camera = 3840 × 2160 × 30 × 16 × 1.5 ≈ **5.97 Gbps**):
 
 <DocScope products="RDK S100">
 
-| Check | Ceiling | 4 cameras | Used |
+| Ceiling | Limit | RAW12 cameras | YUV8 cameras |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
-| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
-| IPI · RAW only | 21.6 Gbps | 17.92 Gbps | 83% |
+| PHY · D-PHY | 10 Gbps | 2 (10 ÷ 4.48) | 1 (10 ÷ 5.97) |
+| PHY · C-PHY | 17.1 Gbps | 3 (17.1 ÷ 4.48) | 2 (17.1 ÷ 5.97) |
+| IPI · RAW only | 28.8 Gbps | 6 | — |
+| IPI · YUV422-8bit | 9.6 Gbps | — | 1 |
+
+Taking the minimum, the per-RX camera count:
+
+| Scenario | Bottleneck | Per-RX count |
+| --- | --- | --- |
+| RAW only · D-PHY | PHY 10 Gbps | 2× 8M |
+| RAW only · C-PHY | PHY 17.1 Gbps | 3× 8M |
+| YUV8 only · any PHY | IPI YUV8 | 1× 8M |
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-| Check | Ceiling | 4 cameras | Used |
+| Ceiling | Limit | RAW12 cameras | YUV8 cameras |
 | --- | --- | --- | --- |
-| PHY · D-PHY | 18 Gbps | 17.92 Gbps | 99.6% |
-| PHY · C-PHY | 23.94 Gbps | 17.92 Gbps | 74.9% |
-| IPI · RAW only | 24.1 Gbps | 17.92 Gbps | 74.4% |
+| PHY · D-PHY | 10 Gbps | 2 (10 ÷ 4.48) | 1 (10 ÷ 5.97) |
+| PHY · C-PHY | 17.1 Gbps | 3 (17.1 ÷ 4.48) | 2 (17.1 ÷ 5.97) |
+| IPI · RAW only | 32.16 Gbps | 7 | — |
+| IPI · YUV422-8bit | 10.72 Gbps | — | 1 |
+
+Taking the minimum, the per-RX camera count:
+
+| Scenario | Bottleneck | Per-RX count |
+| --- | --- | --- |
+| RAW only · D-PHY | PHY 10 Gbps | 2× 8M |
+| RAW only · C-PHY | PHY 17.1 Gbps | 3× 8M |
+| YUV8 only · any PHY | IPI YUV8 | 1× 8M |
 
 </DocScope>
 
-**Conclusion**: k = 1.5 is the conservative upper bound — four 8M cameras push D-PHY to 99.6%, leaving no margin under the estimation basis; most modules have blanking below 1.5, so confirm the real occupancy against the HTS/VTS line/frame totals in the module datasheet. Under C-PHY occupancy drops to 74.9%.
+**Conclusion**: for RAW only the bottleneck is the PHY (the 28.8/32.16 Gbps IPI is far above it and never a constraint) — 2 cameras under D-PHY, 3 under C-PHY; for YUV only the bottleneck is the sharply lower IPI (1 pixel per clock), which fits a single 8M regardless of the PHY type.
 
-**Worked example 2: single 8M YUV422@30fps camera**
+**Worked example 2: mixed RAW and YUV access**
 
-Bit depth 16, k = 1.5: per camera = 3840 × 2160 × 30 × 16 × 1.5 ≈ **5.97 Gbps**. With any YUV camera on the RX, the IPI ceiling follows the YUV figure:
+When RAW and YUV share one RX, the IPI follows the YUV figure (1 pixel per clock) and the YUV per-camera bandwidth is higher, so the mixed capacity is markedly below RAW-only. Mixing 8M RAW12 (4.48 Gbps) with 2M YUV8 (1920 × 1080 × 30 × 16 × 1.5 ≈ 1.49 Gbps):
 
 <DocScope products="RDK S100">
 
-| Check | Ceiling | Single 8M | Used |
-| --- | --- | --- | --- |
-| IPI · any YUV camera | 9.6 Gbps | 5.97 Gbps | 62.2% |
-| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+| Combination | Total | D-PHY used | IPI·YUV8 used | Verdict |
+| --- | --- | --- | --- | --- |
+| 1×8M RAW + 1×2M YUV | 5.97 Gbps | 59.7% | 62.2% | fits |
+| 2×8M RAW + 1×2M YUV | 10.45 Gbps | 104.5% | 108.9% | exceeds |
+| 1×8M RAW + 1×8M YUV | 10.45 Gbps | 104.5% | 108.9% | exceeds |
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-| Check | Ceiling | Single 8M | Used |
-| --- | --- | --- | --- |
-| IPI · any YUV camera | 10.72 Gbps | 5.97 Gbps | 55.7% |
-| PHY · D-PHY | 18 Gbps | 5.97 Gbps | 33.2% |
+| Combination | Total | D-PHY used | IPI·YUV8 used | Verdict |
+| --- | --- | --- | --- | --- |
+| 1×8M RAW + 1×2M YUV | 5.97 Gbps | 59.7% | 55.7% | fits |
+| 2×8M RAW + 1×2M YUV | 10.45 Gbps | 104.5% | 97.5% | exceeds |
+| 1×8M RAW + 1×8M YUV | 10.45 Gbps | 104.5% | 97.5% | exceeds |
 
 </DocScope>
 
-**Conclusion**: for YUV the binding constraint is the sharply lower IPI ceiling (only 1 pixel per clock) — the same 8M camera costs 5.97 Gbps in YUV versus 4.48 Gbps in RAW, so fewer cameras fit; for the multi-camera limits see the maximum-configuration reference below. ROI and RAWDS are disabled for YUV input (see [Constraints and Caveats](#constraints-and-caveats)).
+**Conclusion**: RAW-only fits 2× 8M, but mixing in a single YUV camera already pushes the total past the 10 Gbps D-PHY; the higher YUV bandwidth and the lowered IPI figure make mixed access the tightest scenario. For the multi-camera limits see the maximum-configuration reference below. ROI and RAWDS are disabled for YUV input (see [Constraints and Caveats](#constraints-and-caveats)).
 
 **Maximum configuration reference: access-domain limit**
 
-The structural ceiling per RX is VC = 4 and the 18 Gbps D-PHY. Composing the highest common sensor tier 8M@30 (4.48 Gbps), the per-RX limits for the two formats:
+The structural ceiling per RX is VC = 4, D-PHY 10 Gbps, C-PHY 17.1 Gbps. Composing the highest common sensor tier 8M@30 (RAW 4.48 / YUV422 5.97 Gbps):
 
 <DocScope products="RDK S100">
 
-**RAW12 maximum** — 4× 8M per RX, D-PHY saturated; **YUV422 maximum** — the bottleneck is the IPI (1 pixel per clock), and the camera count follows the IPI ceiling:
+**RAW12 maximum** (bottleneck D-PHY 10G) and **YUV422 maximum** (bottleneck IPI or D-PHY):
 
 | Format | Maximum combination | Per-RX occupancy | Chip-wide access total |
 | --- | --- | --- | --- |
-| RAW12 | 3 RX (hw_id 0/1/4) × 4×8M = **12× 8M** | 17.92 / 18 (D-PHY) = 99.6% | 53.8 Gbps |
-| YUV422 | 3 RX × (1×8M + 2×2M) = **3× 8M + 6× 2M** (9 cameras) | 8.95 / 9.6 (IPI) = 93.2% | 26.9 Gbps |
+| RAW12 | 3 RX (hw_id 0/1/4) × 2×8M = **6× 8M** | 8.96 / 10 (D-PHY) = 89.6% | 26.9 Gbps |
+| YUV422 | 3 RX × (1×8M + 2×2M) = **3× 8M + 6× 2M** (9 cameras) | 8.95 / 9.6 (IPI·8bit) = 93.2% | 26.9 Gbps |
 
-S100 has only 2 ISPs, so a maximum load needs time-multiplexing or frame skipping; RX4 (CIM4) supports offline output only, and the 4 cameras on that RX land in DDR only.
+S100 has only 2 ISPs, so a maximum load needs time-multiplexing or frame skipping; RX4 (CIM4) supports offline output only, and the 2 cameras on that RX land in DDR only.
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-**RAW12 maximum** — 4× 8M per RX, D-PHY saturated; **YUV422 maximum** — the bottleneck is the IPI (1 pixel per clock), and the camera count follows the IPI ceiling:
+**RAW12 maximum** (bottleneck D-PHY 10G) and **YUV422 maximum** (bottleneck IPI or D-PHY):
 
 | Format | Maximum combination | Per-RX occupancy | Chip-wide access total |
 | --- | --- | --- | --- |
-| RAW12 | 6 RX (hw_id 0~5) × 4×8M = **24× 8M** | 17.92 / 18 (D-PHY) = 99.6% | 107.5 Gbps |
-| YUV422 | 6 RX × (1×8M + 3×2M) = **6× 8M + 18× 2M** (24 cameras) | 10.45 / 10.72 (IPI) = 97.5% | 62.7 Gbps |
+| RAW12 | 6 RX (hw_id 0~5) × 2×8M = **12× 8M** | 8.96 / 10 (D-PHY) = 89.6% | 53.8 Gbps |
+| YUV422 | 6 RX × (1×8M + 2×2M) = **6× 8M + 12× 2M** (18 cameras) | 8.95 / 10 (D-PHY) = 89.5% | 53.7 Gbps |
 
 S600 has 4 ISPs, so a maximum load needs time-multiplexing or frame skipping.
 
 </DocScope>
 
-- Both maxima correspond to the SerDes aggregation wiring: the deserialiser concentrates several sensors onto one RX, 1 lane @ 4.5 Gbps per camera
+- Both maxima correspond to the SerDes aggregation wiring: the deserialiser concentrates several sensors onto one RX, 1 lane @ 2.5 Gbps per camera
 - The table sizes the access domain only; DDR read/write traffic and downstream processing must be evaluated separately
-- C-PHY brings no gain for either maximum: the RAW maximum is already at the VC = 4 limit, so a wider PHY adds no camera; the YUV maximum is bounded by the IPI, which is independent of the PHY type
-- A larger single sensor (within the IPI width limit) raises the per-camera bandwidth, but the per-RX total still tops out at the 18 Gbps D-PHY
+- C-PHY only relaxes the PHY: the RAW maximum is 2× 8M under D-PHY and 3× under C-PHY; the YUV maximum is bounded by the IPI (S100) or D-PHY (S600), so C-PHY adds nothing on S100 and reaches 1×8M+3×2M on S600
+- A larger single sensor (within the IPI width limit) raises the per-camera bandwidth, but the per-RX total still tops out at the 10 Gbps D-PHY
 
 > Size with **blanking included**, never with active-pixel figures; and confirm the deserialiser link rate on top of the PHY. This section only sizes bandwidth — output paths are covered in [Selection Criteria](#selection-criteria).
 
