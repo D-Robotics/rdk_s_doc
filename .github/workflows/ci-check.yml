@@ -1,5 +1,6 @@
 name: CI Check
 
+# release-*: 版本分支（如 release-RDKS100-v4.1.0）的 PR 同样跑 broken-link 构建
 on:
   pull_request:
     branches: [main, 'release-*']
