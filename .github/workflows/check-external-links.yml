@@ -5,7 +5,10 @@ name: Check external links
 # 说明：本仓已有 onBrokenLinks + scripts/check-broken-links.js 覆盖「站内 / 跨仓」链接，
 #       这里只补「站外（第三方）链接」的失效监测。
 # 白名单式过滤用 --scheme http --scheme https：只查 http/https 外链，非 http(s) 的
-# 站内链接（/xxx 根相对路径、file://、mailto）会被 scheme 过滤跳过。
+# 站内链接（file://、mailto）会被 scheme 过滤跳过。
+# 站内根相对路径 /xxx 需配合 --root-dir：否则 lychee 直接报 "Cannot resolve
+# root-relative link"，且这类链接根本进不了 filter，无法用 --exclude 排除。
+# --root-dir 把它们解析成 file:// 后，就能被上面的 --scheme 规则跳过。
 # 注意不能用 --include '^https?://' 达到同样目的：lychee 里 include 一旦匹配会覆盖
 # exclude，反而把 github.com 等本要排除的域名重新纳入检查。
 
@@ -35,6 +38,7 @@ jobs:
             --no-progress
             --scheme http
             --scheme https
+            --root-dir ${{ github.workspace }}
             --accept 200,204,301,302,307,308,401,403
             --timeout 15
             --retry-wait-time 2
