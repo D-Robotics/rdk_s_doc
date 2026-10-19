@@ -186,6 +186,10 @@ const config = {
           { from: "/03_s600_multimedia_application", to: "/03_S600_multimedia_application" },
           { from: "/basic_development", to: "/Basic_Development" },
           { from: "/ota", to: "/OTA" },
+          // GSC 404 尾巴（2026-10）：.md 源文件 URL 与拼写错，301 到正确页面
+          { from: "/01_Quick_start/02_install_os/rdk_s600.md", to: "/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit" },
+          { from: "/01_Quick_start/02_install_os/rdk_s100/01_instruction.md", to: "/02_install_os/rdk_s100" },
+          { from: "/System_configuration/network_blueteeth", to: "/System_configuration/network_bluetooth" },
         ].filter((r) => !(caseInsensitiveFs && isCaseOnlyRedirect(r))),
       },
     ],
