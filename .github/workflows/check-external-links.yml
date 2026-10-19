@@ -2,12 +2,15 @@ name: Check external links
 
 # 站外链接巡检：每天定时跑一次，发现 404 时自动开/更新一个固定 issue。
 # 不挂 PR 触发，因此不阻塞任何人提交或合并。
-# 说明：本仓已有 onBrokenLinks + scripts/check-broken-links.js 覆盖「站内 / 跨仓」链接，
-#       这里只补「站外（第三方）链接」的失效监测。
-# 白名单式过滤用 --scheme http --scheme https：只查 http/https 外链，非 http(s) 的
-# 站内链接（/xxx 根相对路径、file://、mailto）会被 scheme 过滤跳过。
-# 注意不能用 --include '^https?://' 达到同样目的：lychee 里 include 一旦匹配会覆盖
-# exclude，反而把 github.com 等本要排除的域名重新纳入检查。
+# 目标：文档中心所有文档里的「文字外链」，不管指向哪个域名，只要线上 404 就报出来（宁误勿漏）。
+# 过滤只排除「非真实链接」，不按域名排除：
+#   - --scheme http --scheme https：只查 http/https，file://、mailto 等跳过；
+#   - --root-dir ${{ github.workspace }}：站内 /xxx 根相对路径先解析成 file://，再被 scheme 跳过；
+#   - --exclude-all-private：内网/私有 IP、localhost 等占位符；
+#   - --exclude 占位符：http://ip/、proxy_server_address；
+#   - --exclude 图片：.png/.jpg/.gif/.svg/.webp/.ico（图片先不查，只查文字外链）。
+# 注意不能用 --include '^https?://' 做白名单：lychee 里 include 一旦匹配会覆盖 exclude。
+# 境外站点 runner 连不上（Connection failed）这类噪声，等首跑后按实测再校准。
 
 on:
   schedule:
@@ -35,24 +38,15 @@ jobs:
             --no-progress
             --scheme http
             --scheme https
+            --root-dir ${{ github.workspace }}
             --accept 200,204,301,302,307,308,401,403
             --timeout 15
             --retry-wait-time 2
             --max-retries 3
             --user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             --exclude-all-private
-            --exclude 'developer\.d-robotics\.cc'
-            --exclude 'archive\.d-robotics\.cc'
-            --exclude 'oss-cn-beijing\.aliyuncs\.com'
-            --exclude 'github\.com'
-            --exclude '(taobao|tmall)\.com'
-            --exclude 'e\.tb\.cn'
-            --exclude 'feishu\.cn'
-            --exclude 'bilibili\.com'
-            --exclude 'csdn\.net'
-            --exclude '\.hobot\.cc'
-            --exclude '\.(png|jpe?g|gif|svg|webp|ico)(\?.*)?$'
             --exclude '(?i)^https?://(ip|proxy_server_address)([^a-z0-9]|$)'
+            --exclude '\.(png|jpe?g|gif|svg|webp|ico)(\?.*)?$'
             'docs/**/*.md'
             'docs/**/*.mdx'
 
