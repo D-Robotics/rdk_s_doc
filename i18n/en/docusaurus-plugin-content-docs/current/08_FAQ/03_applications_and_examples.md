@@ -374,7 +374,7 @@ Description: TogetheROS Bot
         * Supports only earlier 1.x RDK OS systems and corresponding hardware.
         * Future tros.b 1.x releases may include only critical bug fixes, with no new feature development.
         * Code was previously hosted on GitLab or other internal platforms.
-        * Reference link (legacy version documentation): [tros.b 1.x Documentation](https://developer.d-robotics.cc/api/v1/fileData/TogetherROS/index.html)
+        * Reference link (legacy version documentation): [tros.b 1.x Documentation](https://developer-legacy.d-robotics.cc/api/v1/fileData/TogetherROS/index.html)
 
     :::caution **Note**
     tros.b 1.x **cannot** be upgraded directly to tros.b 2.x or newer through `apt`. If you need to use a newer tros.b version, you must first upgrade the entire RDK board operating system by flashing an RDK OS image that supports the newer tros.b version, and then install the corresponding tros.b version.
