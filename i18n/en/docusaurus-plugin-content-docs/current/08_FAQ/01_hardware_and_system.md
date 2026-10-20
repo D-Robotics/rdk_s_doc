@@ -654,7 +654,7 @@ Choose based on errors, resources, and time constraints. Adding swap is a common
 
 ### Q26: What general pre-checks should I do before asking for help with RDK issues?
 **A:** Before seeking help, perform these checks:
-1.  **Read the latest official manuals:** Use current user manuals, developer docs, and release notes. Get updates from the [RDK Resource Center](https://developer.d-robotics.cc/resource).
+1.  **Read the latest official manuals:** Use current user manuals, developer docs, and release notes. Get updates from the [RDK Resource Center](https://developer.d-robotics.cc/rdk_doc_center/).
 2.  **Update the system and packages:** Many issues are fixed in newer releases. Update the OS and `hobot-*`, `tros-*`, and other key packages:
     ```bash
     sudo apt update && sudo apt upgrade
