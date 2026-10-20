@@ -67,7 +67,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
 ## Advanced usage
 
-Use this for specific scenarios other than a first-time flash.
+Use this for specific scenarios other than a first-time flash. To flash without a PC, for example on a production line, see [U disk upgrade](./04_usb_upgrade.md).
 
 ### Flash specific regions{#flashing-specific-regions}
 
