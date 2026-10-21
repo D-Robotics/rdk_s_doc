@@ -3,14 +3,17 @@ name: Check external links
 # 站外链接巡检：每天定时跑一次，发现 404 时自动开/更新一个固定 issue。
 # 不挂 PR 触发，因此不阻塞任何人提交或合并。
 # 目标：文档中心所有文档里的「文字外链」，不管指向哪个域名，只要线上 404 就报出来（宁误勿漏）。
-# 过滤只排除「非真实链接」，不按域名排除：
+# 扫描范围：docs/（中文）+ i18n/en/docusaurus-plugin-content-docs/current/（英文）。
+# 过滤只排除「非真实链接」，不按域名排除（首跑后按实测校准）：
 #   - --scheme http --scheme https：只查 http/https，file://、mailto 等跳过；
 #   - --root-dir ${{ github.workspace }}：站内 /xxx 根相对路径先解析成 file://，再被 scheme 跳过；
 #   - --exclude-all-private：内网/私有 IP、localhost 等占位符；
 #   - --exclude 占位符：http://ip/、proxy_server_address；
-#   - --exclude 图片：.png/.jpg/.gif/.svg/.webp/.ico（图片先不查，只查文字外链）。
+#   - --exclude 图片：.png/.jpg/.gif/.svg/.webp/.ico（图片先不查，只查文字外链）；
+#   - --exclude '.hobot.cc'：境外 runner 连不上（Connection failed、非 404），GitHub 上无信号可采，
+#     本机实测 200 正常；China 侧可达性校验另议。
+# --accept 里的 412/429/530：反爬/限流/异常状态码（服务器有响应、资源存在），非 404，视为可达。
 # 注意不能用 --include '^https?://' 做白名单：lychee 里 include 一旦匹配会覆盖 exclude。
-# 境外站点 runner 连不上（Connection failed）这类噪声，等首跑后按实测再校准。
 
 on:
   schedule:
@@ -39,16 +42,19 @@ jobs:
             --scheme http
             --scheme https
             --root-dir ${{ github.workspace }}
-            --accept 200,204,301,302,307,308,401,403
+            --accept 200,204,301,302,307,308,401,403,412,429,530
             --timeout 15
             --retry-wait-time 2
             --max-retries 3
             --user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             --exclude-all-private
+            --exclude '\.hobot\.cc'
             --exclude '(?i)^https?://(ip|proxy_server_address)([^a-z0-9]|$)'
             --exclude '\.(png|jpe?g|gif|svg|webp|ico)(\?.*)?$'
             'docs/**/*.md'
             'docs/**/*.mdx'
+            'i18n/en/docusaurus-plugin-content-docs/current/**/*.md'
+            'i18n/en/docusaurus-plugin-content-docs/current/**/*.mdx'
 
       - name: Create or update issue
         env:
