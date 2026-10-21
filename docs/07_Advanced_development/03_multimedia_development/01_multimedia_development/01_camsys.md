@@ -2892,13 +2892,26 @@ hbn_vnode_image_t
 
 hbn_frame_info_t
 
+<DocScope versions="4.0.5">
 | 名称        | 类型           | 含义                 | 最大值 | 最小值 | 默认值 | 是否必选 |
 |-------------|----------------|----------------------|--------|--------|--------|----------|
 | frame_id    | uint32_t       | 帧号                 | \-     | \-     | \-     | \-       |
-| timestamps  | uint64_t       | 系统时间             | \-     | \-     | \-     | \-       |
+| timestamps  | uint64_t       | 系统单调时间           | \-     | \-     | \-     | \-       |
 | tv          | struct timeval | 硬件时间戳           | \-     | \-     | \-     | \-       |
 | trig_tv     | struct timeval | 外部触发的硬件时间戳 | \-     | \-     | \-     | \-       |
 | bufferindex | int32_t        | buffer 索引           | \-     | \-     | \-     | \-       |
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+| 名称           | 类型           | 含义                 | 最大值 | 最小值 | 默认值 | 是否必选 |
+|----------------|----------------|----------------------|--------|--------|--------|----------|
+| frame_id       | uint32_t       | 帧号                 | \-     | \-     | \-     | \-       |
+| timestamps     | uint64_t       | 系统单调时间           | \-     | \-     | \-     | \-       |
+| sys_timestamps | uint64_t       | 系统墙上时间（纳秒）  | \-     | \-     | \-     | \-       |
+| tv             | struct timeval | 硬件时间戳           | \-     | \-     | \-     | \-       |
+| trig_tv        | struct timeval | 外部触发的硬件时间戳 | \-     | \-     | \-     | \-       |
+| bufferindex    | int32_t        | buffer 索引           | \-     | \-     | \-     | \-       |
+</DocScope>
 
 hb_mem_graphic_buf_t
 
