@@ -704,6 +704,19 @@ uvc_capture_sample
 
 Run the program directly `./uvc_capture_sample -h` to get help information.
 
+```sh
+# ./uvc_capture_sample -h
+Usage: ./uvc_capture_sample
+        -i --video_id <id>              Video device ID
+        -d --dump_file                  Save image file flag
+        -F --format <fmt>               picture format(e.g., YUYV, NV12)
+        -l --loop_cnt <num>             Number of capture loops
+        -H --height <px>                Image height
+        -W --width <px>                 Image width
+        -E --isp_info                   Show Isp Info flag
+        -h --help                       Show this message
+```
+
 #### Program Parameter Options Description
 
 **Options:**
@@ -712,7 +725,7 @@ Run the program directly `./uvc_capture_sample -h` to get help information.
   - Specify the video node, such as video0, video1.
 - `-d, --dump_file`
   - Whether to save image files. Enabling this option saves captured images to files.
-- `-F, --format`
+- `-F, --format <fmt>`
   - Set the image format, choose from supported formats like YUYV, NV12 based on the uvc camera.
 - `-l, --loop_cnt <num>`
   - Set the number of capture loops (i.e., how many frames to capture).
@@ -720,7 +733,7 @@ Run the program directly `./uvc_capture_sample -h` to get help information.
   - Set the image height (in pixels).
 - `-W, --width <px>`
   - Set the image width (in pixels).
-- `-E, --enable_isp_info`
+- `-E, --isp_info`
   - Display ISP exposure and white balance information.
 - `-h, --help`
   - Display help information.
