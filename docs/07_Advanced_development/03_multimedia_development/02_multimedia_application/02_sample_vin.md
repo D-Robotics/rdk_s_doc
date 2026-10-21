@@ -168,6 +168,9 @@ quit
 ```
 
 <DocScope versions="4.0.5">
+
+执行程序后会获取到如 `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw` 命名格式的 raw 图像。
+
 </DocScope>
 
 <DocScope versions=">= 4.1.0">
@@ -175,8 +178,6 @@ quit
 执行程序后会获取到如 `handle_34661_chn0_1920x1280_stride_2880_frameid_249_ts_16653015588700_sts_1792566139297588702.raw` 命名格式的 raw 图像。
 
 </DocScope>
-
-执行程序后会获取到如 `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw` 命名格式的 raw 图像。
 
 ## get_multi_vin_data
 
@@ -296,6 +297,9 @@ Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_167482
 </DocScope>
 
 <DocScope versions="4.0.5">
+
+执行程序后会获取到 imx219 `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` 命名格式的 RAW 图像 和 ar0820std 对应的`handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv` 命名格式的 YUV 图像。
+
 </DocScope>
 
 <DocScope versions=">= 4.1.0">
@@ -303,5 +307,3 @@ Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_167482
 执行程序后会获取到如 `handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_16748277293775.raw` 命名格式的 RAW 图像。
 
 </DocScope>
-
-执行程序后会获取到 imx219 `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` 命名格式的 RAW 图像 和 ar0820std 对应的`handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv` 命名格式的 YUV 图像。

@@ -168,6 +168,9 @@ quit
 ```
 
 <DocScope versions="4.0.5">
+
+After running the program, RAW images will be saved with filenames like `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw`.
+
 </DocScope>
 
 <DocScope versions=">= 4.1.0">
@@ -175,8 +178,6 @@ quit
 After running the program, RAW images will be saved with filenames like `handle_34661_chn0_1920x1280_stride_2880_frameid_249_ts_16653015588700_sts_1792566139297588702.raw`.
 
 </DocScope>
-
-After running the program, RAW images will be saved with filenames like `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw`.
 
 ## get_multi_vin_data
 
@@ -297,6 +298,9 @@ Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_167482
 </DocScope>
 
 <DocScope versions="4.0.5">
+
+After running the program, you will obtain a RAW image from the imx219 sensor named like `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` and a YUV image from the ar0820std sensor named like `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.
+
 </DocScope>
 
 <DocScope versions=">= 4.1.0">
@@ -304,5 +308,3 @@ Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_167482
 After running the program, you will obtain RAW images named like `handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_16748277293775.raw`.
 
 </DocScope>
-
-After running the program, you will obtain a RAW image from the imx219 sensor named like `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` and a YUV image from the ar0820std sensor named like `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.

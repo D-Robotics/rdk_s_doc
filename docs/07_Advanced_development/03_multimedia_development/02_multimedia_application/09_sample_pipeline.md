@@ -263,7 +263,6 @@ Offsets: 0 0 0
 
 ```
 # ./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4
-# ./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4
 Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
 	[0] only use [isp only].
 		vin [hw:4]

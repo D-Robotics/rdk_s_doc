@@ -187,6 +187,9 @@ quit
 ```
 
 <DocScope versions="4.0.5">
+
+执行程序后会获取到如 `handle_100197_isp_chn0_1920x1080_stride_1920_frameid_27_ts_20832399744000.yuv` 命名格式的 YUV 图像。
+
 </DocScope>
 
 <DocScope versions=">= 4.1.0">
@@ -194,8 +197,6 @@ quit
 执行程序后会获取到如 `handle_100197_isp_chn0_1920x1280_stride_1920_frameid_250_ts_17067360756575.yuv` 命名格式的 YUV 图像。
 
 </DocScope>
-
-执行程序后会获取到如 `handle_100197_isp_chn0_1920x1080_stride_1920_frameid_27_ts_20832399744000.yuv` 命名格式的 YUV 图像。
 
 ## isp_feedback
 
