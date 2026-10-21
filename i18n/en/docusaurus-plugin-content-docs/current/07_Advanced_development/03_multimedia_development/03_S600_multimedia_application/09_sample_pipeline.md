@@ -12,7 +12,7 @@ The `sample_pipeline` contains multiple examples, each existing as a subdirector
 | [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | Single-channel sensor pipeline chaining with GDC transformation example  |
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | Single-channel sensor pipeline chaining with GDC transformation and encoding example  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | Multi-channel sensor pipeline chaining and encoding example  |
-| [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture example  |
+| [uvc_capture_sample](#uvc_capture_sample)  |  UVC camera capture example  |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -677,7 +677,7 @@ pipeline1_1280x720_30fps.h264
 ## uvc_capture_sample
 
 ### Feature Overview
-`uvc_capture_sample` is a program for testing the uvc camera video capture pipeline. It captures images from the uvc camera and saves the output images, with support for displaying ISP-related information.
+`uvc_capture_sample` is a program for testing the UVC camera video capture pipeline. It captures images from the UVC camera and saves the output images, with support for displaying ISP-related information.
 
 ### Code Location and Directory Structure
 - Code location `/app/multimedia_samples/sample_pipeline/uvc_capture_sample`
@@ -726,7 +726,7 @@ Usage: ./uvc_capture_sample
 - `-d, --dump_file`
   - Whether to save image files. Enabling this option saves captured images to files.
 - `-F, --format <fmt>`
-  - Set the image format, choose from supported formats like YUYV, NV12 based on the uvc camera.
+  - Set the image format, choose from supported formats like YUYV, NV12 based on the UVC camera.
 - `-l, --loop_cnt <num>`
   - Set the number of capture loops (i.e., how many frames to capture).
 - `-H, --height <px>`
@@ -740,13 +740,13 @@ Usage: ./uvc_capture_sample
 
 **Examples:**
 
-- Configure a uvc camera video pipeline using video0, specify format YUYV, and save 5 captured frames.
+- Configure a UVC camera video pipeline using video0, specify format YUYV, and save 5 captured frames.
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d
 ```
 
-- Configure a uvc camera video pipeline using video0, specify format YUYV, save 5 captured frames, and print current exposure and white balance information.
+- Configure a UVC camera video pipeline using video0, specify format YUYV, save 5 captured frames, and print current exposure and white balance information.
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d -E
