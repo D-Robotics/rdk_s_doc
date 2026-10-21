@@ -12,7 +12,7 @@
 | [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联 GDC 变换示例  |
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联 GDC 变换示例并编码示例  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
-| [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
+| [uvc_capture_sample](#uvc_capture_sample)  |  UVC camera capture 示例  |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -681,7 +681,7 @@ pipeline1_1280x720_30fps.h264
 ## uvc_capture_sample
 
 ### 功能概述
-`uvc_capture_sample `是一个测试 uvc camera 视频采集通路的程序,  完成 uvc camera 的图像采集并保存输出的图片，支持显示 ISP 相关信息。
+`uvc_capture_sample `是一个测试 UVC camera 视频采集通路的程序,  完成 UVC camera 的图像采集并保存输出的图片，支持显示 ISP 相关信息。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/uvc_capture_sample`
@@ -730,7 +730,7 @@ Usage: ./uvc_capture_sample
 - `-d, --dump_file`
   - 是否保存图像文件。启用此选项会将捕获的图像保存为文件。
 - `-F, --format <fmt>`
-  - 设置图像格式，根据 uvc camera 选择支持的 YUYV、NV12 等格式。
+  - 设置图像格式，根据 UVC camera 选择支持的 YUYV、NV12 等格式。
 - `-l, --loop_cnt <num>`
   - 设置采集循环的次数（即捕获多少帧图像）。
 - `-H, --height <px>`
@@ -744,13 +744,13 @@ Usage: ./uvc_capture_sample
 
 **示例：**
 
-- 配置一条 uvc camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像。
+- 配置一条 UVC camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像。
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d
 ```
 
-- 配置一条 uvc camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像，并打印当前的 exposure 和 white balance 信息。
+- 配置一条 UVC camera 视频通路，使用 video0，指定格式 YUYV，保存 5 帧采集到的图像，并打印当前的 exposure 和 white balance 信息。
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d -E
