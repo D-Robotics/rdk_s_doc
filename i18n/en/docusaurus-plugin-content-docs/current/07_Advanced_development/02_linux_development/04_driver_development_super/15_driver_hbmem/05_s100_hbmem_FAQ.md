@@ -18,7 +18,7 @@
 - Q: Does the offset only exist after we set it? Is this offset the base address when allocating memory?
     - A: Yes, it needs to be set manually. For example, if you obtain a buffer but want to pass it to another process with an offset address, you can set an offset here. This offset is then passed through the buffer to the other process. All offsets for allocated buffers are zero. The offset is used to carry transparent information during inter-process transmission, indicating the offset address within the buffer.
 - Q: What is the difference between com_buf and graph_buf, and why was graph_buf added?
-    - A: com_buf only allows specifying size and常规 allocation attributes during allocation. graph_buf allows specifying width, height, format, stride, contiguity, and other常规 allocation attributes during allocation. Compared to com_buf, graph_buf carries more buffer information, making it easier for users to directly allocate buffers in RGB/YUV/RAW formats.
+    - A: com_buf only allows specifying size and standard allocation attributes during allocation. graph_buf allows specifying width, height, format, stride, contiguity, and other standard allocation attributes during allocation. Compared to com_buf, graph_buf carries more buffer information, making it easier for users to directly allocate buffers in RGB/YUV/RAW formats.
 
 ## FAQ003: Operational Precautions
 
@@ -29,8 +29,8 @@
 
 ## FAQ004: Function Interfaces
 
-- Q: Are these interface functions equivalent to a封装 at the driver layer?
-    - A: It is not just encapsulation. Buffers allocated by Hbmem are通用的 across modules, and all related information can be obtained through virtual addresses. For example, after obtaining a buffer from vio, you can convert it to com_buf and then pass it to another module, such as BPU.
+- Q: Are these interface functions equivalent to encapsulation at the driver layer?
+    - A: It is not just encapsulation. Buffers allocated by Hbmem are universal across modules, and all related information can be obtained through virtual addresses. For example, after obtaining a buffer from vio, you can convert it to com_buf and then pass it to another module, such as BPU.
 - Q: Can I obtain buffer information through the get_buffer_info interface?
     - A: Yes. Additionally, you can use the hb_mem_get_com_buffer_info_with_vaddr interface to obtain related com_buf information using a virtual address.
 - Q: Is invalid a blocking interface? Can invalid in two processes cause a deadlock? What happens after a timeout?
@@ -110,7 +110,7 @@
 
 - Q: How to understand allocating a large block of memory first for later use, and then managing it using your own memory management queue?
     - A: The memory pool allocation function first allocates a large block of memory from a heap. Subsequently, it can allocate from this block repeatedly. Allocation does not require entering kernel mode, so the allocation efficiency is much higher than directly calling the corresponding API. The free operation effectively returns the memory to the memory pool. Finally, the memory pool can be destroyed after use. If you need queue management for multiple allocated buffers, you can manage them yourself or use our provided management queue.
-- Q: When using a memory pool, is it necessary to預先 estimate the total memory required and reserve it at the application layer?
+- Q: When using a memory pool, is it necessary to estimate the total memory required in advance and reserve it at the application layer?
     - A: Yes, that is correct.
 - Q: Can a memory pool be used for inter-process operations?
     - A: This is not recommended. In essence, it is a single buffer.
@@ -120,7 +120,7 @@
 ## FAQ009: Software Performance
 
 - Q: How is the stability of Hbmem ensured?
-    - A: Hbmem itself is based on ION. We perform related异常 case, long-duration stability, and stress tests on the ion interface and Hbmem interface to ensure its functionality. Additionally, we conduct allocation function verification in scenarios such as vio, bpu, and codec.
+    - A: Hbmem itself is based on ION. We perform related exception case, long-duration stability, and stress tests on the ion interface and Hbmem interface to ensure its functionality. Additionally, we conduct allocation function verification in scenarios such as vio, bpu, and codec.
 - Q: How is the scenario where a user allocates but does not release memory handled?
     - A: First, if a single process exits without releasing memory, our system will automatically reclaim the memory. Second, if a single process does not release memory while running, you can check the relevant sys node to inspect the user's memory allocation status.
 

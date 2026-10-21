@@ -11,7 +11,7 @@ sidebar_label: 1.1.2.1 Camera Expansion Board
 
 
 <details>
-<summary>This document corresponds to **Camera Expansion Board V1P0**，Click to view previous versions</summary>
+<summary>This document corresponds to **Camera Expansion Board V1P0**, Click to view previous versions</summary>
 
 - [Camera Expansion Board V0P3](./versions/camera/v0p3.md)
 - [Camera Expansion Board V0P2](./versions/camera/v0p2.md)

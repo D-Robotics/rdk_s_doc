@@ -11,7 +11,7 @@ sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 
 
 <details>
-<summary>This document corresponds to **MCU Port Expansion Board V1P0**，Click to view previous versions</summary>
+<summary>This document corresponds to **MCU Port Expansion Board V1P0**, Click to view previous versions</summary>
 
 - [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
 - [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
