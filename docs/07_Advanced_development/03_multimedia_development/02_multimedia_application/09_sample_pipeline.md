@@ -76,6 +76,8 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
 
 日志示例如下所示：
 
+<DocScope versions="4.0.5">
+
 ```
 # ./single_pipe_vin_isp_ynr_pym_vpu -s 0
 Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
@@ -253,6 +255,200 @@ Physical Addresses: 17300848640 17300850688 0
 Offsets: 0 0 0
 ...
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+示例 : 以 ovx3cstd 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4`
+
+```
+# ./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4
+Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
+	[0] only use [isp only].
+		vin [hw:4]
+		isp [hw:0] [slot_id:4] [mode:1]
+		pym [hw:0] [slot_id:4] [mode:1]
+		vin ->offline-> isp ->online-> pym 
+Deserial[4] link info:
+	[link_port:0] ovx3cstd:4@16896
+	[link_port:1] sc1336_gmsl:0@256
+	[link_port:2] sc1336_gmsl:0@256
+	[link_port:3] sc1336_gmsl:0@256
+vc_index:0
+
+INFO: ISP channel info: 
+	input info: [mipi_rx: 4] [is_online: 1]
+	isp channel info: [hw_id: 0] [slot_id: 4] [mode:1]
+
+pym config:
+	ichn input width = 1920, height = 1280
+	ochn[0] ratio= 1, width = 1920, height = 1280 wstride=1920 vstride=1280 out[1920*1280]
+	ochn[1] ratio= 2, width = 960, height = 640 wstride=960 vstride=640 out[960*640]
+	ochn[2] ratio= 4, width = 480, height = 320 wstride=480 vstride=320 out[480*320]
+	ochn[3] ratio= 8, width = 240, height = 160 wstride=240 vstride=160 out[240*160]
+	ochn[4] ratio= 16, width = 120, height = 80 wstride=128 vstride=80 out[120*80]
+	ochn[5] ratio= 32, width = 60, height = 40 wstride=64 vstride=40 out[60*40]
+
+deserial_config:29,max96712, des_handle:82738 
+
+Encode idx: 0, init successful
+
+####################### pym chn 0 #######################
+=== Frame Info ===
+Frame ID: 1
+Timestamps: 15003327616475
+Sys timestamps: 1792564489608027035
+tv: 15008.984174
+trig_tv: 15008.984174
+Frame Done: 8
+Buffer Index: 0
+
+=== Graphic Buffer ===
+File Descriptors: 29 -1 -1 
+Plane Count: 2
+Format: 8
+Width: 1920
+Height: 1280
+Stride: 1920
+Vertical Stride: 1280
+Is Contiguous: 1
+Share IDs: 179 0 0 
+Flags: 67108881
+Sizes: 2457600 1228800 0 
+Virtual Addresses: 0xffffb5200000 0xffffb5458000 (nil) 
+Physical Addresses: 17284268032 17286725632 0 
+Offsets: 0 0 0 
+####################### pym chn 1 #######################
+=== Frame Info ===
+Frame ID: 1
+Timestamps: 15003327616475
+Sys timestamps: 1792564489608027035
+tv: 15008.984174
+trig_tv: 15008.984174
+Frame Done: 8
+Buffer Index: 0
+
+=== Graphic Buffer ===
+File Descriptors: 30 -1 -1 
+Plane Count: 2
+Format: 8
+Width: 960
+Height: 640
+Stride: 960
+Vertical Stride: 640
+Is Contiguous: 1
+Share IDs: 180 0 0 
+Flags: 67108881
+Sizes: 614400 307200 0 
+Virtual Addresses: 0xffffb5110000 0xffffb51a6000 (nil) 
+Physical Addresses: 17288003584 17288617984 0 
+Offsets: 0 0 0 
+####################### pym chn 2 #######################
+=== Frame Info ===
+Frame ID: 1
+Timestamps: 15003327616475
+Sys timestamps: 1792564489608027035
+tv: 15008.984174
+trig_tv: 15008.984174
+Frame Done: 8
+Buffer Index: 0
+
+=== Graphic Buffer ===
+File Descriptors: 31 -1 -1 
+Plane Count: 2
+Format: 8
+Width: 480
+Height: 320
+Stride: 480
+Vertical Stride: 320
+Is Contiguous: 1
+Share IDs: 181 0 0 
+Flags: 67108881
+Sizes: 153600 76800 0 
+Virtual Addresses: 0xffffb50d0000 0xffffb50f5800 (nil) 
+Physical Addresses: 17288986624 17289140224 0 
+Offsets: 0 0 0 
+####################### pym chn 3 #######################
+=== Frame Info ===
+Frame ID: 1
+Timestamps: 15003327616475
+Sys timestamps: 1792564489608027035
+tv: 15008.984174
+trig_tv: 15008.984174
+Frame Done: 8
+Buffer Index: 0
+
+=== Graphic Buffer ===
+File Descriptors: 32 -1 -1 
+Plane Count: 2
+Format: 8
+Width: 240
+Height: 160
+Stride: 240
+Vertical Stride: 160
+Is Contiguous: 1
+Share IDs: 182 0 0 
+Flags: 67108881
+Sizes: 38400 19200 0 
+Virtual Addresses: 0xffffb5900000 0xffffb5909600 (nil) 
+Physical Addresses: 17289248768 17289287168 0 
+Offsets: 0 0 0 
+####################### pym chn 4 #######################
+=== Frame Info ===
+Frame ID: 1
+Timestamps: 15003327616475
+Sys timestamps: 1792564489608027035
+tv: 15008.984174
+trig_tv: 15008.984174
+Frame Done: 8
+Buffer Index: 0
+
+=== Graphic Buffer ===
+File Descriptors: 33 -1 -1 
+Plane Count: 2
+Format: 8
+Width: 120
+Height: 80
+Stride: 128
+Vertical Stride: 80
+Is Contiguous: 1
+Share IDs: 183 0 0 
+Flags: 67108881
+Sizes: 10240 5120 0 
+Virtual Addresses: 0xffffb58f0000 0xffffb58f2800 (nil) 
+Physical Addresses: 17289314304 17289324544 0 
+Offsets: 0 0 0 
+####################### pym chn 5 #######################
+=== Frame Info ===
+Frame ID: 1
+Timestamps: 15003327616475
+Sys timestamps: 1792564489608027035
+tv: 15008.984174
+trig_tv: 15008.984174
+Frame Done: 8
+Buffer Index: 0
+
+=== Graphic Buffer ===
+File Descriptors: 34 -1 -1 
+Plane Count: 2
+Format: 8
+Width: 60
+Height: 40
+Stride: 64
+Vertical Stride: 40
+Is Contiguous: 1
+Share IDs: 184 0 0 
+Flags: 67108881
+Sizes: 2560 1280 0 
+Virtual Addresses: 0xffffb58e0000 0xffffb58e0a00 (nil) 
+Physical Addresses: 17289379840 17289382400 0 
+Offsets: 0 0 0 
+...
+```
+
+</DocScope>
+
+<DocScope versions="4.0.5">
 
 运行时会保存如下文件：
 
@@ -266,6 +462,24 @@ pym_output_nv12_chn4_120x66_stride_128_count_0.yuv
 pym_output_nv12_chn5_60x32_stride_64_count_0.yuv
 ... ...
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+运行时会保存如下文件：
+
+```bash
+single_pipe_vin_isp_ynr_pym_vpu.h264
+pym_output_nv12_chn0_1920x1280_stride_1920_count_0.yuv
+pym_output_nv12_chn1_960x640_stride_960_count_0.yuv
+pym_output_nv12_chn2_480x320_stride_480_count_0.yuv
+pym_output_nv12_chn3_240x160_stride_240_count_0.yuv
+pym_output_nv12_chn4_120x80_stride_128_count_0.yuv
+pym_output_nv12_chn5_60x40_stride_64_count_0.yuv
+... ...
+```
+
+</DocScope>
 ## single_pipe_vin_isp_ynr_pym_gdc
 
 ### 功能概述
@@ -324,6 +538,8 @@ link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的
 
 日志示例如下所示：
 
+<DocScope versions="4.0.5">
+
 ```
 # ./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin
 Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
@@ -360,6 +576,51 @@ gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 91, timestamp: 21680305428000
 gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 121, timestamp: 21681292757750
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+示例 : 以 ovx3cstd 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin`
+
+```
+# ./single_pipe_vin_isp_ynr_pym_gdc -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin
+Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
+        [0] only use [isp only].
+                vin [hw:4]
+                isp [hw:0] [slot_id:4] [mode:1]
+                pym [hw:0] [slot_id:4] [mode:1]
+                vin ->offline-> isp ->online-> pym
+Deserial[4] link info:
+        [link_port:0] ovx3cstd:4@16896
+        [link_port:1] sc1336_gmsl:0@256
+        [link_port:2] sc1336_gmsl:0@256
+        [link_port:3] sc1336_gmsl:0@256
+vc_index:0
+
+INFO: ISP channel info:
+        input info: [mipi_rx: 4] [is_online: 1]
+        isp channel info: [hw_id: 0] [slot_id: 4] [mode:1]
+
+pym config:
+        ichn input width = 1920, height = 1280
+        ochn[0] ratio= 1, width = 1920, height = 1280 wstride=1920 vstride=1280 out[1920*1280]
+        ochn[1] ratio= 2, width = 960, height = 640 wstride=960 vstride=640 out[960*640]
+        ochn[2] ratio= 4, width = 480, height = 320 wstride=480 vstride=320 out[480*320]
+        ochn[3] ratio= 8, width = 240, height = 160 wstride=240 vstride=160 out[240*160]
+        ochn[4] ratio= 16, width = 120, height = 80 wstride=128 vstride=80 out[120*80]
+        ochn[5] ratio= 32, width = 60, height = 40 wstride=64 vstride=40 out[60*40]
+
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 1, timestamp: 1674627699975, sys_timestamp: 1792551160895950166
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 32, timestamp: 1675661125650, sys_timestamp: 1792551161929375566
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 65, timestamp: 1676761230575, sys_timestamp: 1792551163029480039
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 98, timestamp: 1677861333200, sys_timestamp: 1792551164129581959
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 132, timestamp: 1678994776175, sys_timestamp: 1792551165263024664
+...
+```
+
+</DocScope>
+
+<DocScope versions="4.0.5">
 
 运行时会保存如下文件：
 
@@ -371,6 +632,22 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_61_ts_21679318103925.yuv
 gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21680305428000.yuv
 ... ...
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+运行时会保存如下文件：
+
+```bash
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_132_ts_1678994776175.yuv
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_1_ts_1674627699975.yuv
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_32_ts_1675661125650.yuv
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_65_ts_1676761230575.yuv
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_98_ts_1677861333200.yuv
+... ...
+```
+
+</DocScope>
 
 ## single_pipe_vin_isp_ynr_pym_gdc_vpu
 
@@ -431,6 +708,8 @@ link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的
 
 日志示例如下所示：
 
+<DocScope versions="4.0.5">
+
 ```bash
 # ./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin
 Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
@@ -467,6 +746,51 @@ gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 61, timestamp: 21972315184900
 gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 91, timestamp: 21973302504675
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+示例 : 以 ovx3cstd 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin`
+
+```bash
+# ./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin
+Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
+        [0] only use [isp only].
+                vin [hw:4]
+                isp [hw:0] [slot_id:4] [mode:1]
+                pym [hw:0] [slot_id:4] [mode:1]
+                vin ->offline-> isp ->online-> pym
+Deserial[4] link info:
+        [link_port:0] ovx3cstd:4@16896
+        [link_port:1] sc1336_gmsl:0@256
+        [link_port:2] sc1336_gmsl:0@256
+        [link_port:3] sc1336_gmsl:0@256
+vc_index:0
+
+INFO: ISP channel info:
+        input info: [mipi_rx: 4] [is_online: 1]
+        isp channel info: [hw_id: 0] [slot_id: 4] [mode:1]
+
+pym config:
+        ichn input width = 1920, height = 1280
+        ochn[0] ratio= 1, width = 1920, height = 1280 wstride=1920 vstride=1280 out[1920*1280]
+        ochn[1] ratio= 2, width = 960, height = 640 wstride=960 vstride=640 out[960*640]
+        ochn[2] ratio= 4, width = 480, height = 320 wstride=480 vstride=320 out[480*320]
+        ochn[3] ratio= 8, width = 240, height = 160 wstride=240 vstride=160 out[240*160]
+        ochn[4] ratio= 16, width = 120, height = 80 wstride=128 vstride=80 out[120*80]
+        ochn[5] ratio= 32, width = 60, height = 40 wstride=64 vstride=40 out[60*40]
+
+Encode idx: 0, init successful
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 1, timestamp: 1694989649250, sys_timestamp: 1792551181257891837
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 31, timestamp: 1695989739150, sys_timestamp: 1792551182257980976
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 61, timestamp: 1696989834000, sys_timestamp: 1792551183258075288
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 91, timestamp: 1697989929250, sys_timestamp: 1792551184258170148
+gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 ...
+```bash
+
+</DocScope>
+
+<DocScope versions="4.0.5">
 
 运行时会保存如下文件：
 
@@ -478,6 +802,22 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_61_ts_21972315184900.yuv
 gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21973302504675.yuv
 ... ...
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+运行时会保存如下文件：
+
+```bash
+single_pipe_vin_isp_ynr_pym_gdc_vpu.h264
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_1_ts_1694989649250.yuv
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_31_ts_1695989739150.yuv
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_61_ts_1696989834000.yuv
+gdc_handle_296805_chn0_1920x1280_stride_1920_frameid_91_ts_1697989929250.yuv
+... ...
+```
+
+</DocScope>
 
 ## multi_pipe_vin_isp_ynr_pym_gdc_vpu
 

@@ -68,6 +68,8 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
 
 #### Execution Output
 
+<DocScope versions="4.0.5">
+
 Taking the imx219 sensor as an example, run `./get_isp_data -s 0`.
 
 ```shell
@@ -94,15 +96,62 @@ handle 100197 isp dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 103680
 Command: q
 quit
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+Taking the ovx3cstd sensor as an example, run `./get_isp_data -s 4 -l 0 -m 4`.
+
+```shell
+root@ubuntu:/app/multimedia_samples/sample_isp/get_isp_data# ./get_isp_data -s 4 -l 0 -m 4
+Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
+Deserial[4] link info:
+	[link_port:0] ovx3cstd:4@16896
+	[link_port:1] sc1336_gmsl:0@256
+	[link_port:2] sc1336_gmsl:0@256
+	[link_port:3] sc1336_gmsl:0@256
+
+INFO: ISP channel info: 
+	input info: [mipi_rx: 4] [is_online: 0]
+	isp channel info: [hw_id: 1] [slot_id: 4]
+deserial_config:,29,max96712, des_handle:82738 
+
+***************  Command Lists  ***************
+ g	-- get single frame 
+ l	-- get a set frames 
+ q	-- quit  
+ h	-- print help message
+Command: g
+handle 100197 isp dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 59, timestamp: 17060993464075, sys_timestamp: 1792566547275675070
+
+Command: q
+quit
+```
+
+</DocScope>
 
 - **g**: Acquires a single frame. Multiple 'g' inputs can be used to continuously acquire frames (e.g., input "gggg").
+
+<DocScope versions="4.0.5">
 
 ```shell
 Command: g
 handle 100197 isp dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 197145649052
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+```shell
+Command: g
+handle 100197 isp dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 149, timestamp: 17063993754650, sys_timestamp: 1792566550275967549
+```
+
+</DocScope>
 
 - **l**: Continuously acquires 12 frames (equivalent to entering 12 'g' commands).
+
+<DocScope versions="4.0.5">
 
 ```shell
 Command: l
@@ -112,6 +161,20 @@ handle 100197 isp dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 103680
 handle 100197 isp dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 394, timestamp: 210278982766
 handle 100197 isp dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 395, timestamp: 210312316183
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+```shell
+Command: l
+handle 100197 isp dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 239, timestamp: 17066994045650, sys_timestamp: 1792566553276260482
+handle 100197 isp dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 240, timestamp: 17067027382475, sys_timestamp: 1792566553309597378
+... (omitted, total of 12 frames dumped) ...
+handle 100197 isp dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 249, timestamp: 17067327421825, sys_timestamp: 1792566553609636872
+handle 100197 isp dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 250, timestamp: 17067360756575, sys_timestamp: 1792566553642971944
+```
+
+</DocScope>
 
 - **q**: Quits the program.
 
@@ -120,8 +183,18 @@ Command: q
 quit
 ```
 
+<DocScope versions="4.0.5">
+
 After execution, YUV images will be saved with filenames following the format:  
 `handle_100197_isp_chn0_1920x1080_stride_1920_frameid_27_ts_20832399744000.yuv`.
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+After execution, YUV images will be saved with filenames following the format:  
+`handle_100197_isp_chn0_1920x1280_stride_1920_frameid_250_ts_17067360756575.yuv`.
+
+</DocScope>
 
 ## isp_feedback
 

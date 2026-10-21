@@ -2834,13 +2834,26 @@ hbn_vnode_image_t
 
 hbn_frame_info_t
 
+<DocScope versions="4.0.5">
 | Name        | Type           | Description                    | Max Value | Min Value | Default | Required |
 |-------------|----------------|--------------------------------|-----------|-----------|---------|----------|
 | frame_id    | uint32_t       | Frame ID                       | –         | –         | –       | –        |
-| timestamps  | uint64_t       | System timestamp               | –         | –         | –       | –        |
+| timestamps  | uint64_t       | System monotonic timestamp     | –         | –         | –       | –        |
 | tv          | struct timeval | Hardware timestamp             | –         | –         | –       | –        |
 | trig_tv     | struct timeval | External-triggered hardware timestamp | –   | –         | –       | –        |
 | bufferindex | int32_t        | Buffer index                   | –         | –         | –       | –        |
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+| Name           | Type           | Description                            | Max Value | Min Value | Default | Required |
+|----------------|----------------|----------------------------------------|-----------|-----------|---------|----------|
+| frame_id       | uint32_t       | Frame ID                               | –         | –         | –       | –        |
+| timestamps     | uint64_t       | System monotonic timestamp             | –         | –         | –       | –        |
+| sys_timestamps | uint64_t       | System wall-clock time (ns)            | –         | –         | –       | –        |
+| tv             | struct timeval | Hardware timestamp                     | –         | –         | –       | –        |
+| trig_tv        | struct timeval | External-triggered hardware timestamp  | –         | –         | –       | –        |
+| bufferindex    | int32_t        | Buffer index                           | –         | –         | –       | –        |
+</DocScope>
 
 hb_mem_graphic_buf_t
 

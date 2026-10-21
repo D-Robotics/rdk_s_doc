@@ -1,10 +1,11 @@
 {
   "VERSION_PRODUCT_MATRIX": {
     "5.1.0": ["RDK S600"],
+    "4.1.0": ["RDK S100"],
     "4.0.5": ["RDK S100"]
   },
   "PRODUCT_VERSION_MATRIX": {
     "RDK S600": ["5.1.0"],
-    "RDK S100": ["4.0.5"]
+    "RDK S100": ["4.1.0", "4.0.5"]
   }
 }

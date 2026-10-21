@@ -52,6 +52,8 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
 
 #### Execution Results
 
+<DocScope versions="4.0.5">
+
 Taking the imx219 sensor as an example, execute `./get_vin_data -s 0`.
 
 ```shell
@@ -75,16 +77,59 @@ Command: g
 Dumping RAW data: handle 34661, resolution: 1920x1080 (stride: 2400), size: 2592000, frame id: 0, timestamp: 0
 Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_0_ts_0.raw), size(2592000) succeeded
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+Taking the ovx3cstd sensor as an example, execute `./get_vin_data -s 4 -l 0`.
+
+```shell
+root@ubuntu:/app/multimedia_samples/sample_vin/get_vin_data# ./get_vin_data -s 4 -l 0
+Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
+Deserial[4] link info:
+	[link_port:0] ovx3cstd:4@16896
+	[link_port:1] sc1336_gmsl:0@256
+	[link_port:2] sc1336_gmsl:0@256
+	[link_port:3] sc1336_gmsl:0@256
+vc_index:0
+deserial_config:,29,max96712, des_handle:82738 
+
+***************  Command Lists  ***************
+ g	-- get single frame 
+ l	-- get a set frames 
+ q	-- quit  
+ h	-- print help message
+Command: g
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 58, timestamp: 16646648305300, sys_timestamp: 1792566132930303080
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_58_ts_16646648305300_sts_1792566132930303080.raw), size(3686400) succeeded
+```
+
+</DocScope>
 
 - **g**: Acquire a single frame. Multiple 'g' inputs can be used to continuously capture images (e.g., inputting "gggg").
+
+<DocScope versions="4.0.5">
 
 ```shell
 Command: g
 Dumping RAW data: handle 34661, resolution: 1920x1080 (stride: 2400), size: 2592000, frame id: 138, timestamp: 1012736827400
 Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_138_ts_1012736827400.raw), size(2592000) succeeded
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+```shell
+Command: g
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 148, timestamp: 16649648592850, sys_timestamp: 1792566135930591309
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_148_ts_16649648592850_sts_1792566135930591309.raw), size(3686400) succeeded
+```
+
+</DocScope>
 
 - **l**: Continuously acquire 12 frames, equivalent to entering 'g' twelve times.
+
+<DocScope versions="4.0.5">
 
 ```shell
 Command: l
@@ -96,6 +141,24 @@ Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_139_ts_101276
 Dumping RAW data: handle 34661, resolution: 1920x1080 (stride: 2400), size: 2592000, frame id: 995, timestamp: 1040941500225
 Dump image to file(handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw), size(2592000) succeeded
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+```shell
+Command: l
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 238, timestamp: 16652648884075, sys_timestamp: 1792566138930883596
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_238_ts_16652648884075_sts_1792566138930883596.raw), size(3686400) succeeded
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 239, timestamp: 16652682222850, sys_timestamp: 1792566138964222408
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_239_ts_16652682222850_sts_1792566138964222408.raw), size(3686400) succeeded
+... (omitted, total of 12 frames dumped) ...
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 248, timestamp: 16652982249450, sys_timestamp: 1792566139264249115
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_248_ts_16652982249450_sts_1792566139264249115.raw), size(3686400) succeeded
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 249, timestamp: 16653015588700, sys_timestamp: 1792566139297588702
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_249_ts_16653015588700_sts_1792566139297588702.raw), size(3686400) succeeded
+```
+
+</DocScope>
 
 - **q**: Quit the program.
 
@@ -104,7 +167,17 @@ Command: q
 quit
 ```
 
+<DocScope versions="4.0.5">
+
 After running the program, RAW images will be saved with filenames like `handle_34661_chn0_1920x1080_stride_2400_frameid_995_ts_1040941500225.raw`.
+
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+After running the program, RAW images will be saved with filenames like `handle_34661_chn0_1920x1280_stride_2880_frameid_249_ts_16653015588700_sts_1792566139297588702.raw`.
+
+</DocScope>
 
 ## get_multi_vin_data
 
@@ -151,6 +224,8 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 
 #### Execution Results
 
+<DocScope versions="4.0.5">
+
 Taking the imx219 sensor and the ar0820std 4K sensor as examples, execute `./get_multi_vin_data -c "sensor=0" -c "sensor=2 link=1"`.
 
 :::caution Note
@@ -188,5 +263,48 @@ Dump image to file(handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321
 Dumping YUV data: handle 100197, resolution: 3840x2160 (stride: 3840), size: 8294400 + 4147200, frame id: 1, timestamp: 1317379256975
 Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv (size: 256)
 ```
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+Taking the ovx3cstd sensor as an example, execute `./get_multi_vin_data -c "sensor=4 link=0 mipi=4"`.
+
+```shell
+root@ubuntu:/app/multimedia_samples/sample_vin/get_multi_vin_data# ./get_multi_vin_data -c "sensor=4 link=0 mipi=4"
+Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
+Pipeline index 0:
+	Sensor index: 0
+	Sensor name: ovx3cstd-30fps
+	Active mipi host: 4
+Verbose: 1
+vc_index:0
+Deserial[4] link info:
+	[link_port:0] ovx3cstd:4@16896
+	[link_port:1] sc1336_gmsl:0@256
+	[link_port:2] sc1336_gmsl:0@256
+	[link_port:3] sc1336_gmsl:0@256
+deserial_config:29_max96712, des_handle:82738 
+
+Created deserial for mipi_rx=4, des_fd=82738
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 1, timestamp: 16743276815450, sys_timestamp: 1792566229558851657
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_1_ts_16743276815450.raw), size(3686400) succeeded
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 31, timestamp: 16744276908700, sys_timestamp: 1792566230558944848
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_31_ts_16744276908700.raw), size(3686400) succeeded
+... (omitted, continuous dumping) ...
+Dumping RAW data: handle 34661, resolution: 1920x1280 (stride: 2880), size: 3686400, frame id: 151, timestamp: 16748277293775, sys_timestamp: 1792566234559331695
+Dump image to file(handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_16748277293775.raw), size(3686400) succeeded
+```
+
+</DocScope>
+
+<DocScope versions="4.0.5">
 
 After running the program, you will obtain a RAW image from the imx219 sensor named like `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` and a YUV image from the ar0820std sensor named like `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv`.
+
+</DocScope>
+
+<DocScope versions=">= 4.1.0">
+
+After running the program, you will obtain RAW images named like `handle_34661_chn0_1920x1280_stride_2880_frameid_151_ts_16748277293775.raw`.
+
+</DocScope>
