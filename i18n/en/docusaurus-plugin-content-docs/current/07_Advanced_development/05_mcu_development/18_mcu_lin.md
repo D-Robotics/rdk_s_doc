@@ -235,7 +235,7 @@ D-Robotics:/$ LinTest 2 0 16 0 0 8 1
 #### void Lin_Init(const Lin_ConfigType *Config)
 
 ```shell
-Description：LIN driver initialization. Pass NULL to use the default configuration in Lin_PBcfg.c.
+Description: LIN driver initialization. Pass NULL to use the default configuration in Lin_PBcfg.c.
 
 Parameters(in)
     Config: Pointer to LIN configuration (NULL = use default PostBuild configuration)
@@ -243,14 +243,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 
 #### Std_ReturnType Lin_SendFrame(uint8 Channel, const Lin_PduType *PduInfoPtr)
 
 ```shell
-Description：Master starts a frame transfer on the given channel (TX: send data / RX: send header and receive the slave response).
+Description: Master starts a frame transfer on the given channel (TX: send data / RX: send header and receive the slave response).
 
 Parameters(in)
     Channel: LIN channel
@@ -259,7 +259,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: transfer started successfully
     E_NOT_OK: failed
 ```
@@ -267,7 +267,7 @@ Return value：Std_ReturnType
 #### Lin_StatusType Lin_GetStatus(uint8 Channel, uint8 \*\*Lin_SduPtr)
 
 ```shell
-Description：Get the transfer status of a channel; on receive completion the received data buffer is returned through Lin_SduPtr.
+Description: Get the transfer status of a channel; on receive completion the received data buffer is returned through Lin_SduPtr.
 
 Parameters(in)
     Channel: LIN channel
@@ -275,14 +275,14 @@ Parameters(inout)
     None
 Parameters(out)
     Lin_SduPtr: Pointer to the received data buffer (valid when RX completes)
-Return value：Lin_StatusType
+Return value: Lin_StatusType
     Current channel status (LIN_TX_OK / LIN_RX_OK / LIN_TX_BUSY / LIN_RX_BUSY, etc.)
 ```
 
 #### Std_ReturnType Lin_GoToSleep(uint8 Channel)
 
 ```shell
-Description：Send a go-to-sleep command on the channel and enter sleep.
+Description: Send a go-to-sleep command on the channel and enter sleep.
 
 Parameters(in)
     Channel: LIN channel
@@ -290,7 +290,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     E_NOT_OK: failed
 ```
@@ -298,7 +298,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Lin_GoToSleepInternal(uint8 Channel)
 
 ```shell
-Description：Set the channel to sleep directly, without sending a command on the bus.
+Description: Set the channel to sleep directly, without sending a command on the bus.
 
 Parameters(in)
     Channel: LIN channel
@@ -306,7 +306,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     E_NOT_OK: failed
 ```
@@ -314,7 +314,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Lin_Wakeup(uint8 Channel)
 
 ```shell
-Description：Send a wakeup pulse on the bus.
+Description: Send a wakeup pulse on the bus.
 
 Parameters(in)
     Channel: LIN channel
@@ -322,7 +322,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     E_NOT_OK: failed
 ```
@@ -330,7 +330,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Lin_WakeupInternal(uint8 Channel)
 
 ```shell
-Description：Set the channel to operational, without sending a wakeup pulse.
+Description: Set the channel to operational, without sending a wakeup pulse.
 
 Parameters(in)
     Channel: LIN channel
@@ -338,7 +338,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     E_NOT_OK: failed
 ```
@@ -346,7 +346,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Lin_CheckWakeup(uint8 Channel)
 
 ```shell
-Description：Check the wakeup event of the given channel.
+Description: Check the wakeup event of the given channel.
 
 Parameters(in)
     Channel: LIN channel
@@ -354,7 +354,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     E_NOT_OK: failed
 ```
@@ -362,7 +362,7 @@ Return value：Std_ReturnType
 #### void Lin_GetVersionInfo(Std_VersionInfoType *versioninfo)
 
 ```shell
-Description：Get LIN driver version information.
+Description: Get LIN driver version information.
 
 Parameters(in)
     None
@@ -370,13 +370,13 @@ Parameters(inout)
     None
 Parameters(out)
     versioninfo: Version information struct (vendorID / moduleID / sw version)
-Return value：None
+Return value: None
 ```
 
 #### Std_ReturnType Port_SetFunctionPins(PinFunc_e PinFunc)
 
 ```shell
-Description：Configure the pin mux for the given function. Must be called before using LIN.
+Description: Configure the pin mux for the given function. Must be called before using LIN.
 
 Parameters(in)
     PinFunc: Pin function (S100: PORT_FUNC_LIN1 / S600: PORT_FUNC_LIN2, PORT_FUNC_LIN3)
@@ -384,7 +384,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: set success
     E_NOT_OK: set failed
 ```

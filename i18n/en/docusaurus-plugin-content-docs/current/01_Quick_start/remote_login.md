@@ -192,7 +192,7 @@ Under the macOS system, use the minicom tool to connect to the serial port. The 
 
 :::tip
 
-If you experience garbled text when using minicom, please refer to [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver#macos-驱动残留导致仍乱码)
+If you experience garbled text when using minicom, please refer to [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver)
 :::
 
 ## Network Status Confirmation{#network_config}

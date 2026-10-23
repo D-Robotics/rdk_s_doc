@@ -947,11 +947,11 @@ The following APIs are used for GDC BIN generation. For GDC module control APIs,
 
 1. hb_vio_gen_gdc_cfg
 
-    【Function Declaration】
+    **Function Declaration**
 
     int32_t hb_vio_gen_gdc_cfg(param_t *gdc_parm, window_t *wnds, uint32_t wnd_num, void **cfg_buf, uint64_t *cfg_size)
 
-    【Parameter Description】
+    **Parameter Description**
 
     * [IN] param_t *gdc_parm: GDC-related parameters, including resolution, format, etc.
     * [IN] window_t *wnds: Parameters for internal regions within GDC.
@@ -959,50 +959,50 @@ The following APIs are used for GDC BIN generation. For GDC module control APIs,
     * [OUT] uint32_t **cfg_buf: Generated GDC configuration BIN buffer, allocated internally.
     * [OUT] uint64_t *cfg_size: Size of the GDC configuration BIN file.
 
-    【Return Value】
+    **Return Value**
 
     - Success: E_OK: Success
     - Failure: E_NOT_OK: Fail, return error code; range: [-10000, -1]
 
-    【Function Description】
+    **Function Description**
         Generates the BIN file required for GDC module operation.
 
 2. hb_vio_set_gdc_cfg
 
-    【Function Declaration】
+    **Function Declaration**
 
     int32_t hb_vio_set_gdc_cfg(uint32_t pipeline_id, uint32_t *cfg_buf, uint64_t cfg_size)
 
-    【Parameter Description】
+    **Parameter Description**
 
     - [IN] uint32_t pipeline_id: Pipeline ID; software channel ID; range: [0, 23], default: 0;
     - [IN] cfg_buf: Configuration buffer of the GDC BIN file.
     - [IN] cfg_size: Size of the GDC BIN file.
 
-    【Return Value】
+    **Return Value**
 
     - Success: E_OK: Success
     - Failure: E_NOT_OK: Fail, return error code; range: [-10000, -1]
 
-    【Function Description】
+    **Function Description**
 
     Sets the GDC module's configuration BIN.
 
 3. hb_vio_free_gdc_cfg
 
-    【Function Declaration】
+    **Function Declaration**
 
     void hb_vio_free_gdc_cfg(uint32_t *cfg_buf)
 
-    【Parameter Description】
+    **Parameter Description**
 
     - [IN] uint32_t* cfg_buf: Buffer of the GDC BIN file.
 
-    【Return Value】
+    **Return Value**
 
     - NONE
 
-    【Function Description】
+    **Function Description**
 
     Frees the buffer allocated for the GDC module's configuration BIN.
 
@@ -1329,25 +1329,25 @@ Each component provides `attach` and `detach` interfaces and supports binding/un
 
 1. **hbn_camera_create**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_create(camera_config_t *cam_config, camera_handle_t *cam_fd)
 
-【Parameters】
+**Parameters**
 
 [IN] camera_config_t *cam_config: Pointer to the configuration structure for the camera to be set up.  
 [OUT] camera_handle_t *cam_fd: Returns a file descriptor (handle) for operating the camera based on the provided configuration.
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK (0)  
 Failure: Negative error code
 
-【Function Description】
+**Function Description**
 
 Creates a camera handle based on the configuration provided in `camera_config_t`.
 
-【Notes】
+**Notes**
 
 The API will check the sensor lib. If the sensor driver code does not comply with the HBN framework specification, an error will be reported during the check.
 
@@ -1355,25 +1355,25 @@ The API will check cam_config. If the configuration does not match the IP hardwa
 
 2. **hbn_camera_destroy**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_destroy(camera_handle_t cam_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: The camera operation handle created by hbn_camera_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Destroy the corresponding software resources based on the camera handle.
 
-【Notes】
+**Notes**
 
 hbn_camera_destroy must be used in pair with hbn_camera_create.
 
@@ -1383,51 +1383,51 @@ Internally, hbn_camera_destroy calls hbn_camera_detach_from_vin, which triggers 
 
 3. **hbn_camera_attach_to_vin**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_attach_to_vin(camera_handle_t cam_fd, vpf_handle_t vin_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
 [IN] vpf_handle_t vin_fd: VIN node handle created by the hbn_vnode_open interface.
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Bind the camera and VIN node together within the VPF framework using their respective handles, and perform hardware initialization for the camera.
 
-【Notes】
+**Notes**
 
 The same camera must not repeatedly call hbn_camera_attach_to_vin; otherwise, an "attach error" will be reported.
 
 4. **hbn_camera_detach_from_vin**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_detach_from_vin(camera_handle_t cam_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Unbind the camera from the VIN node and perform de-initialization.
 
-【Notes】
+**Notes**
 
 hbn_camera_detach_from_vin must be used in pair with hbn_camera_attach_to_vin.
 
@@ -1435,11 +1435,11 @@ hbn_camera_destroy internally calls hbn_camera_detach_from_vin, so after calling
 
 5. **hbn_camera_attach_to_deserial**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_attach_to_deserial(camera_handle_t cam_fd, deserial_handle_t des_fd, camera_des_link_t link)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
@@ -1447,17 +1447,17 @@ int32_t hbn_camera_attach_to_deserial(camera_handle_t cam_fd, deserial_handle_t 
 
 [IN] camera_des_link_t link: The linking method between camera and deserializer, determined by which link the camera is connected to.
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Bind the camera and deserializer using their handles, and perform hardware initialization for both the deserializer and camera.
 
-【Notes】
+**Notes**
 
 This interface should only be called when a deserializer exists in the hardware.
 
@@ -1465,25 +1465,25 @@ After calling hbn_camera_attach_to_deserial, there is no need to call hbn_camera
 
 6. **hbn_camera_detach_from_deserial**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_detach_from_deserial(camera_handle_t cam_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Unbind the camera from the deserializer and perform de-initialization.
 
-【Notes】
+**Notes**
 
 hbn_camera_detach_from_deserial must be used in pair with hbn_camera_attach_to_deserial.
 
@@ -1491,15 +1491,15 @@ Before calling this API, hbn_deserial_detach_from_vin must be called first.
 
 7. **hbn_camera_start**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_start(camera_handle_t cam_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
@@ -1509,92 +1509,92 @@ Failure: Negative error code for exceptions
 
 Configure camera registers and start streaming.
 
-【Notes】
+**Notes**
 
 If the camera handle has been attached to a vflow, this interface may not need to be called. If it is called, hbn_vflow_start must be called first, followed by hbn_camera_start.
 
 8. **hbn_camera_stop**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_stop(camera_handle_t cam_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Stop the camera stream.
 
-【Notes】
+**Notes**
 
 Must be used in pair with hbn_camera_start.
 
 9. **hbn_camera_reset**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_reset(camera_handle_t cam_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Reset the sensor by re-initializing it.
 
-【Notes】
+**Notes**
 
 If this API is called before attaching the camera to VIN, sensor initialization will be performed via the camera_attach_to_vin interface to achieve the reset effect. If this API is called after attaching the camera to VIN, the sequence sensor_stop → sensor_deinit → sensor_init → sensor_start will be executed to reset the sensor.
 
 10. **hbn_camera_change_fps**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_change_fps(camera_handle_t cam_fd, int32_t fps)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
 [IN] int32_t fps: Output frame rate of the sensor;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Dynamically switch the sensor frame rate.
 
-【Notes】
+**Notes**
 
 This feature requires implementing the corresponding callback function dynamic_switch_fps in the sensor library.
 
 11. **hbn_camera_read_register**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_read_register(camera_handle_t cam_fd, camera_reg_type_t type,  
 uint32_t reg_addr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] camera_handle_t cam_fd: Camera handle created by hbn_camera_create;
 
@@ -1602,67 +1602,67 @@ uint32_t reg_addr)
 
 [IN] uint32_t reg_addr: Register address;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Read the value of a camera register.
 
-【Notes】
+**Notes**
 
 None
 
 12. **hbn_camera_get_handle**
 
-【Function Declaration】
+**Function Declaration**
 
 camera_handle_t hbn_camera_get_handle(vpf_handle_t vin_fd, int32_t camera_index)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] vpf_handle_t vin_fd: File descriptor (fd) of the VIN node;
 
 [IN] int32_t camera_index: Port index of the camera;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Obtain the corresponding camera handle via the VIN node handle or camera port index.
 
-【Notes】
+**Notes**
 
 None
 
 13. **hbn_camera_init_cfg**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_camera_init_cfg(const char *cfg_file)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] const char *cfg_file: Path to the camera configuration file (JSON format);
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Create a camera handle and a deserializer handle based on the provided configuration and bind them together.
 
-【Notes】
+**Notes**
 
 This API creates cameras by parsing a JSON configuration file, which differs from the non-JSON approach used in the sample code. For further details, please consult your FAE.
 
@@ -1681,28 +1681,28 @@ Questionnaire link: https://horizonrobotics.feishu.cn/share/base/form/shrcnJQBMI
 
 14. **hbn_deserial_create**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_deserial_create(deserial_config_t *des_config, deserial_handle_t  
 *des_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] deserial_config_t *des_config: Pointer to the deserializer configuration parameter structure;
 
 [OUT] deserial_handle_t *des_fd: Deserializer handle created according to the configuration;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Create a deserializer handle based on the provided configuration.
 
-【Notes】
+**Notes**
 
 This API should only be called when a hardware deserializer is present.
 
@@ -1712,36 +1712,36 @@ This API also checks the deserializer library; an error will be returned if it d
 
 15. **hbn_deserial_destroy**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_deserial_destroy(deserial_handle_t des_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] deserial_handle_t des_fd: Deserializer handle created by hbn_deserial_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Destroy the corresponding software resources based on the deserializer handle.
 
-【Notes】
+**Notes**
 
 hbn_deserial_destroy must be used in pair with hbn_deserial_create.
 
 16. **hbn_deserial_attach_to_vin**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_deserial_attach_to_vin(deserial_handle_t des_fd, camera_des_link_t  
 link, vpf_handle_t vin_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] deserial_handle_t des_fd: Deserializer handle, created by hbn_deserial_create;
 
@@ -1749,69 +1749,69 @@ link, vpf_handle_t vin_fd)
 
 [IN] vpf_handle_t vin_fd: VIN node handle to bind to;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Bind the deserializer to a VIN node.
 
-【Notes】
+**Notes**
 
 If the hardware includes a deserializer, the camera should be bound to the deserializer, and the deserializer should be bound to the VIN node.
 
 17. **hbn_deserial_detach_from_vin**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_deserial_detach_from_vin(deserial_handle_t des_fd, camera_des_link_t link)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] deserial_handle_t des_fd: Deserializer handle, created by hbn_deserial_create;
 
 [IN] camera_des_link_t link: Link index of the deserializer;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Unbind the deserializer from the VIN node.
 
-【Notes】
+**Notes**
 
 hbn_deserial_detach_from_vin must be used in pair with hbn_deserial_attach_to_vin.
 
 18. **hbn_txser_create**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_txser_create(txser_config_t *txs_config, txser_handle_t *txs_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] txser_config_t *txs_config: Pointer to the TX serializer configuration structure;
 
 [OUT] txser_handle_t *txs_fd: TX serializer handle created according to the configuration;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Create a TX serializer handle based on the provided configuration.
 
-【Notes】
+**Notes**
 
 This API should only be called when the hardware includes a serializer.
 
@@ -1821,25 +1821,25 @@ The API also checks the TX serializer library; if it does not comply with HBN ar
 
 19. **hbn_txser_destroy**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_txser_destroy(txser_handle_t txs_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] txser_handle_t txs_fd: TX serializer handle, created by hbn_txser_create;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Destroy software resources associated with the TX serializer handle.
 
-【Notes】
+**Notes**
 
 This API should only be called when the hardware includes a serializer.
 
@@ -1847,11 +1847,11 @@ hbn_txser_destroy must be used in pair with hbn_txser_create.
 
 20. **hbn_txser_attach_to_vin**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_txser_attach_to_vin(txser_handle_t txs_fd, camera_txs_csi_t csi, vpf_handle_t vin_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] txser_handle_t txs_fd: TX serializer handle, created by hbn_txser_create;
 
@@ -1859,17 +1859,17 @@ int32_t hbn_txser_attach_to_vin(txser_handle_t txs_fd, camera_txs_csi_t csi, vpf
 
 [IN] vpf_handle_t vin_fd: VIN node handle to bind to;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Bind the TX serializer to a VIN node.
 
-【Notes】
+**Notes**
 
 This API should only be called when the hardware includes a serializer.
 
@@ -1879,27 +1879,27 @@ If the hardware includes a serializer, the camera should be bound to the TX seri
 
 21. **hbn_txser_detach_from_vin**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_txser_detach_from_vin(txser_handle_t txs_fd, camera_txs_csi_t csi)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] txser_handle_t txs_fd: TX serializer handle, created by hbn_txser_create;
 
 [IN] camera_txs_csi_t csi: TX CSI index;
 
-【Return Value】
+**Return Value**
 
 Success: RET_OK 0
 
 Failure: Negative error code for exceptions
 
-【Function Description】
+**Function Description**
 
 Unbind the TX serializer from the VIN node.
 
-【Notes】
+**Notes**
 
 hbn_txser_detach_from_vin must be used in pair with hbn_txser_attach_to_vin.
 
@@ -2046,11 +2046,11 @@ Example API usage:
 
 1. **hbn_vnode_open**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t ctx_id, hbn_vnode_handle_t \*vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hb_vnode_type vnode_type: Vnode type. Each hardware module corresponds to a specific vnode type, such as HB_VIN, HB_ISP, HB_PYM, etc.
 
@@ -2060,154 +2060,154 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t ct
 
 [OUT] hbn_vnode_handle_t \*vnode_fd: Returns the vnode handle of the module.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCESS (0)  
 Failure: Negative error code; refer to the Return Value Description table.
 
-【Function Description】
+**Function Description**
 
 Initializes a specific module, opens its device node, and returns the module's vnode handle.
 
-【Notes】
+**Notes**
 
 None.
 
 2. **hbn_vnode_close**
 
-【Function Declaration】
+**Function Declaration**
 
 void hbn_vnode_close(hbn_vnode_handle_t vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
-【Return Value】
+**Return Value**
 
 None
 
-【Function Description】
+**Function Description**
 
 Closes the module's device node.
 
-【Notes】
+**Notes**
 
 If hbn_vflow_destroy has been called, there is no need to call hbn_vnode_close.  
 hbn_vnode_close should only be used when a module is used independently (e.g., GDC loopback). If the module is part of a vflow, calling hbn_vflow_destroy is sufficient—do not call hbn_vnode_close.
 
 3. **hbn_vnode_set_attr**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
 [IN] void \*attr: Pointer to the module's basic attribute structure. This structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—i.e., any structure named \<module_name\>_attr_t.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCESS (0)  
 Failure: Negative error code; refer to the Return Value Description table.
 
-【Function Description】
+**Function Description**
 
 Sets the basic attributes of a module.
 
-【Notes】
+**Notes**
 
 None.
 
 4. **hbn_vnode_get_attr**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_attr(hbn_vnode_handle_t vnode_fd, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module.
 
 [OUT] void \*attr: Pointer to the module's basic attribute structure (e.g., vin_attr_t, isp_attr_t, pym_attr_t, etc.).\*attr: Pointer to the basic attribute structure of the module. The basic attribute structure can be vin_attr_t, isp_attr_t, pym_attr_t, etc.—any attribute structure named with the module name followed by _attr_t.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Obtains the basic attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 5. **hbn_vnode_set_attr_ex**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_attr_ex(hbn_vnode_handle_t vnode_fd, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 [IN] void \*attr: Pointer to the extended attribute structure of the module. The extended attribute structure can be vin_attr_ex_t, etc.—any attribute structure named with the module name followed by _attr_ex_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Sets the extended attributes of a module, which can be dynamically configured during application runtime.
 
-【Notes】
+**Notes**
 
 None
 
 6. **hbn_vnode_get_attr_ex**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_attr_ex(hbn_vnode_handle_t vnode_fd, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 [OUT] void  
 \*attr: Pointer to the extended attribute structure of the module. The extended attribute structure can be vin_attr_ex_t, etc.—any attribute structure named with the module name followed by _attr_ex_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Obtains the extended attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 7. **hbn_vnode_set_ochn_attr**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2215,28 +2215,28 @@ ochn_id, void \*attr)
 
 [IN] void \*attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Sets the output channel attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 8. **hbn_vnode_get_ochn_attr**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2244,28 +2244,28 @@ ochn_id, void \*attr)
 
 [OUT] void \*attr: Pointer to the output channel attribute structure of the module. The output channel attribute can be vin_ochn_attr_t, isp_ochn_attr_t, etc.—any attribute structure named with the module name followed by _ochn_attr_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Obtains the output channel attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 9. **hbn_vnode_set_ochn_attr_ex**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ochn_attr_ex(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2273,28 +2273,28 @@ ochn_id, void \*attr)
 
 [IN] void \*attr: Pointer to the extended output channel attribute structure of the module. The extended output channel attribute can be pym_ochn_attr_ex_t, etc.—any attribute structure named with the module name followed by _ochn_attr_ex_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Sets the extended output channel attributes of a module, which can be dynamically configured during application runtime.
 
-【Notes】
+**Notes**
 
 None
 
 10. **hbn_vnode_set_ichn_attr**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ichn_id, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2302,54 +2302,54 @@ ichn_id, void \*attr)
 
 [IN] void \*attr: Pointer to the input channel attribute structure of the module. The input channel attribute can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute structure named with the module name followed by _ichn_attr_t;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Sets the input channel attributes of a module.
 
-【Notes】
+**Notes**
 
 None
 
 11. **hbn_vnode_get_ichn_attr**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_get_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ichn_id, void \*attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;[IN] uint32_t ichn_id: Input channel ID of the module; refer to the module channel description for channel IDs.
 
 [OUT] void *attr: Pointer to the input channel attribute structure of the module. The input channel attributes can be vin_ichn_attr_t, isp_ichn_attr_t, etc.—any attribute ending with the module name followed by _ichn_attr_t.
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Obtain the input channel attributes of the module.
 
-【Notes】
+**Notes**
 
 None
 
 12. **hbn_vnode_set_ochn_buf_attr**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, hbn_buf_alloc_attr_t *alloc_attr)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2357,73 +2357,73 @@ ochn_id, hbn_buf_alloc_attr_t *alloc_attr)
 
 [IN] hbn_buf_alloc_attr_t *alloc_attr: Buffer allocation attributes;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Set the buffer attributes for the output channel.
 
-【Notes】
+**Notes**
 
 None
 
 13. **hbn_vnode_start**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Start the module.
 
-【Notes】
+**Notes**
 
 The module must be opened before starting.
 
 14. **hbn_vnode_stop**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Stop the module.
 
-【Notes】
+**Notes**
 
 None
 
 15. **hbn_vnode_getframe**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,  
 uint32_t millisecondTimeout, hbn_vnode_image_t *out_img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2433,27 +2433,27 @@ uint32_t millisecondTimeout, hbn_vnode_image_t *out_img)
 
 [OUT] hbn_vnode_image_t *out_img: Address of the output image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Retrieve an image from the module's output channel; this is a blocking interface.
 
-【Notes】
+**Notes**
 
 None
 
 16. **hbn_vnode_releaseframe**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, hbn_vnode_image_t *img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2461,27 +2461,27 @@ ochn_id, hbn_vnode_image_t *img)
 
 [IN] hbn_vnode_image_t *img: Address of the image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Release the image buffer; the buffer will be returned to the specified output channel.
 
-【Notes】
+**Notes**
 
 None
 
 17. **hbn_vnode_getframe_group**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_getframe_group(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, uint32_t millisecondTimeout, hbn_vnode_image_group_t *out_img);
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
@@ -2491,55 +2491,55 @@ ochn_id, uint32_t millisecondTimeout, hbn_vnode_image_group_t *out_img);
 
 [OUT] hbn_vnode_image_group_t *out_img: Address of the output image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Retrieve a multi-layer aggregated image from the module's output channel; this is a blocking interface.
 
-【Notes】
+**Notes**
 
 This interface must be used to obtain output images from ISP and PYM.
 
 18. **hbn_vnode_releaseframe_group**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_releaseframe_group(hbn_vnode_handle_t vnode_fd, uint32_t  
 ochn_id, hbn_vnode_image_group_t *img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: vnode handle of the module;
 
 [IN] uint32_t ochn_id: Output channel ID of the module; refer to the module channel description for channel IDs;  
 [IN] hbn_vnode_image_t \*img: Address of the image buffer structure;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Releases a multi-layer aggregated image buffer. The buffer will be returned to the specified output channel.
 
-【Notes】
+**Notes**
 
 None
 
 19. **hbn_vnode_sendframe**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 hbn_vnode_image_t \*img)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
 
@@ -2547,102 +2547,102 @@ hbn_vnode_image_t \*img)
 
 [IN] hbn_vnode_image_t \*img: Address of the input image buffer;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Sends an image to the input channel of the module, triggering the module to process it. This is a blocking API that waits until hardware processing completes before returning, with a default timeout of 1 second.
 
-【Notes】
+**Notes**
 
 None
 
 20. **hbn_vflow_create**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_create(hbn_vflow_handle_t \*vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [OUT] hbn_vflow_handle_t \*vflow_fd: Vflow handle;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Creates a vflow and returns the vflow handle.
 
-【Notes】
+**Notes**
 
 None
 
 21. **hbn_vflow_destroy**
 
-【Function Declaration】
+**Function Declaration**
 
 void hbn_vflow_destroy(hbn_vflow_handle_t vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t \*vflow_fd: Vflow handle;
 
-【Return Value】
+**Return Value**
 
 None
 
-【Function Description】
+**Function Description**
 
 Destroys a vflow based on the provided vflow handle.
 
-【Notes】
+**Notes**
 
 None
 
 22. **hbn_vflow_add_vnode**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_add_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_t
 vnode_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t \*vflow_fd: Vflow handle;
 
 [IN] hbn_vnode_handle_t vnode_fd: Vnode handle of the module;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Adds a module into the vflow for management by the vflow.
 
-【Notes】
+**Notes**
 
 None
 
 23. **hbn_vflow_bind_vnode**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_bind_vnode(hbn_vflow_handle_t vflow_fd,
 hbn_vnode_handle_t src_vnode_fd, uint32_t out_chn, hbn_vnode_handle_t
 dst_vnode_fd, uint32_t in_chn)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t \*vflow_fd: Vflow handle;
 
@@ -2654,29 +2654,29 @@ dst_vnode_fd, uint32_t in_chn)
 
 [IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Binds two modules together. After binding, data frames from the src_vnode_fd module will automatically flow to the dst_vnode_fd module.
 
-【Notes】
+**Notes**
 
 The flow must be created, and the modules must be opened.
 
 24. **hbn_vflow_unbind_vnode**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_unbind_vnode(hbn_vflow_handle_t vflow_fd,
 hbn_vnode_handle_t src_vnode_fd, uint32_t out_chn, hbn_vnode_handle_t
 dst_vnode_fd, uint32_t in_chn)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t \*vflow_fd: Vflow handle;
 
@@ -2688,89 +2688,89 @@ dst_vnode_fd, uint32_t in_chn)
 
 [IN] uint32_t in_chn: Input channel ID of the destination module; refer to the module channel description for channel IDs;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0
 
 Failure: Negative error code for exceptions; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Unbinds the src_vnode_fd and dst_vnode_fd modules.
 
-【Notes】
+**Notes**
 
 Not supported currently.
 
 25. **hbn_vflow_start**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_start(hbn_vflow_handle_t vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: Vflow handle;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Start a vflow. All vnodes contained within the vflow will be started.
 
-【Notes】
+**Notes**
 
 The module vnode must be added to the vflow in advance.
 
 26. **hbn_vflow_stop**
 
-【Function Declaration】
+**Function Declaration**
 
 hobot_status hbn_vflow_stop(hbn_vflow_handle_t vflow_fd)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: vflow handle;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Stop a vflow. All vnodes contained within the vflow will be stopped.
 
-【Notes】
+**Notes**
 
 This function should be used in pair with hbn_vflow_start.
 
 27. **hbn_vflow_get_vnode_handle**
 
-【Function Declaration】
+**Function Declaration**
 
 hbn_vnode_handle_t hbn_vflow_get_vnode_handle(hbn_vflow_handle_t vflow_fd,  
 hb_vnode_type vnode_type, uint32_t index)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: vflow handle;  
 [IN] hb_vnode_type vnode_type: module ID;  
 [IN] uint32_t index: context ID, range [0, 7]
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Obtain the vnode handle via module ID and context ID.
 
-【Notes】
+**Notes**
 
 The module must be opened in advance.
 
@@ -2778,22 +2778,22 @@ The module must be opened in advance.
 
 1. **hbn_isp_get_ae_statistics**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_isp_get_ae_statistics(hbn_vnode_handle_t vnode_fd, isp_statistics_t *ae_statistics, int32_t time_out)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: vflow handle;  
 [IN] int32_t time_out: timeout duration for waiting;  
 [OUT] isp_statistics_t *ae_statistics: AE statistics;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Obtain AE statistics (1024-bin histogram) via the vflow_fd of the ISP module. The data is fixed at 2096 bytes, arranged as shown in the figure below:
 
@@ -2802,21 +2802,21 @@ Obtain AE statistics (1024-bin histogram) via the vflow_fd of the ISP module. Th
 
 2. **hbn_isp_release_ae_statistics**
 
-【Function Declaration】
+**Function Declaration**
 
 int32_t hbn_isp_release_ae_statistics(hbn_vnode_handle_t vnode_fd, isp_statistics_t *ae_statistics)
 
-【Parameter Description】
+**Parameter Description**
 
 [IN] hbn_vflow_handle_t vflow_fd: vflow handle;  
 [IN] isp_statistics_t *ae_statistics: AE statistics;
 
-【Return Value】
+**Return Value**
 
 Success: HBN_STATUS_SUCCESS 0  
 Failure: Exception indicated by a negative error code; refer to the return value description.
 
-【Function Description】
+**Function Description**
 
 Release the obtained AE statistics. This function must be used in pair with hbn_isp_get_ae_statistics.
 

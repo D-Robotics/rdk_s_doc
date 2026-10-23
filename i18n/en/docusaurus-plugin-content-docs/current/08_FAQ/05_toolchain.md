@@ -231,7 +231,7 @@ Please refer to the latest RDK documentation or community resources for accurate
 <font color='Blue'>[Issue]</font> 
 
   ```bash
-  INFO： Layer `{op_name}` will be executed on CPU
+  INFO: Layer `{op_name}` will be executed on CPU
   ```
 
 <font color='Green'>[Solution]</font> 
@@ -477,7 +477,7 @@ Please refer to the latest RDK documentation or community resources for accurate
 <font color='Blue'>[Issue]</font> 
 
   ```bash
-  (hb_dnn_ndarray.cpp:xxx): data type of ndarray do not match specified type. NDArray dtype_: n, given：m
+  (hb_dnn_ndarray.cpp:xxx): data type of ndarray do not match specified type. NDArray dtype_: n, given: m
   ```
 
 <font color='Green'>[Solution]</font> 
@@ -487,7 +487,7 @@ Please refer to the latest RDK documentation or community resources for accurate
 <font color='Blue'>[Issue]</font> 
 
   ```bash
-  (validate_util.cpp:xxx)：tensor aligned shape size is xxx , but tensor hbSysMem memSize is xxx, tensor hbSysMem memSize should >= tensor aligned shape size!
+  (validate_util.cpp:xxx): tensor aligned shape size is xxx , but tensor hbSysMem memSize is xxx, tensor hbSysMem memSize should >= tensor aligned shape size!
   ```
 
 <font color='Green'>[Solution]</font> 

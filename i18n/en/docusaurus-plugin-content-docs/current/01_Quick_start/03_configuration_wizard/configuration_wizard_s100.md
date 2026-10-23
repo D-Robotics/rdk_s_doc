@@ -146,7 +146,7 @@ sudo fc-cache -f -v
 sudo reboot
 ```
 
-<!-- 英文文档无需配置中文
+<!-- No Chinese configuration is required in the English documentation
 ## Set Up Chinese Input Method
 
 After installing the Chinese locale, the system’s built-in input method is supported by default. Press the `Super (Windows) key` + `Space` to switch between different input methods. -->

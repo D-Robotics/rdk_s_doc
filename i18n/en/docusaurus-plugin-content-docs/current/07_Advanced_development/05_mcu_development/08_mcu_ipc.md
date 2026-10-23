@@ -80,7 +80,7 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 |-----------------------------|---------------|--------------------------------------------------------------------------------------------------|------------------------|
 | Ipc_ShmCfgInstances0~8      | User          | ISR(Ipc_CpuIpc0Ch0Isr): Ipc_Driver_CpuIpc0ChxIsr() (x=0..8)                                      | Acore instance0~8     |
 | Ipc_ShmCfgInstances0/4      | canhal        | —                                                                                                | Acore instance0/4     |
-| Ipc_ShmCfgInstances5        | 外置 RTC       | —                                                                                                | Acore instance5        |
+| Ipc_ShmCfgInstances5        | external RTC       | —                                                                                                | Acore instance5        |
 | Ipc_ShmCfgInstances7        | ipcbox       | —                                                                                                | Acore instance7        |
 | Ipc_ShmCfgInstances8        | mcu1 boot     | —                                                                                                | Acore instance8        |
 | Ipc_PrivShmCfgInstance0     | Crypto        | ISR(Ipc_HsmIpc1Ch4Isr): Ipc_Driver_HSMIpc1Ch4Isr()                                               | HSM                    |
@@ -96,7 +96,7 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 |----------------------------|--------------|---------------------------------------------------------------------------------|------------------------|
 | Ipc_ShmCfgInstances0~7     | User         | ISR(Ipc0_ChxIsr): Ipc_Driver_MCUIpc0ChxIsr() (x = 0..7)                         | Acore instance0~7     |
 | Ipc_ShmCfgInstances0 / 4   | canhal       | —                                                                               | Acore instance0/4     |
-| Ipc_ShmCfgInstances5       | 外置 RTC      | —                                                                                | Acore instance5        |
+| Ipc_ShmCfgInstances5       | external RTC      | —                                                                                | Acore instance5        |
 | Ipc_ShmCfgInstances7       | ipcbox       | —                                                                               | Acore instance7        |
 | Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 |
 | Ipc_ShmCfgInstance8        | mcu1 boot    | —                                                                               | Acore instance8       |
@@ -299,38 +299,38 @@ This section covers the IPC interface on the MCU side.
 #### void Ipc_MDMA_Init(Ipc_InstanceConfigType* pConfigPtr, uint32 InstanceId)
 
 ```shell
-Description：Ipc MDMA Init.
+Description: Ipc MDMA Init.
 
 Sync/Async: Synchronous
 Parameters(in)
-    pConfigPtr：the pointer to the device configuration parameter
-    InstanceId：InstanceId id
+    pConfigPtr: the pointer to the device configuration parameter
+    InstanceId: InstanceId id
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Ipc_MDMA_DeInit(uint32 InstanceId)
 
 ```shell
-Description：Subsystem driver deinitialization function.
+Description: Subsystem driver deinitialization function.
 
 Sync/Async: Synchronous
 Parameters(in)
-    InstanceId：InstanceId id
+    InstanceId: InstanceId id
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Ipc_GetVersionInfo(Std_VersionInfoType * versioninfo)
 
 ```shell
-Description：get driver version.
+Description: get driver version.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -339,22 +339,22 @@ Parameters(inout)
     versioninfo: the pointer to Version Info
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### Std_ReturnType Ipc_MDMA_CheckRemoteCoreReady(uint32 InstanceId)
 
 ```shell
-Description：check whether remote core is ready.
+Description: check whether remote core is ready.
 
 Sync/Async: Synchronous
 Parameters(in)
-    InstanceId：InstanceId id
+    InstanceId: InstanceId id
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: remote core is ready
     IPC_E_PARAM_ERROR: param illegal
     IPC_E_DRIVER_NOT_INIT: Driver is not init
@@ -365,7 +365,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Ipc_MDMA_SendMsg(uint32 InstanceId, uint32 ChanId, uint32 Size, uint8* Buf, uint32 Timeout)
 
 ```shell
-Description：send message.
+Description: send message.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -378,7 +378,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     IPC_E_PARAM_ERROR: param is illegal
     IPC_E_DRIVER_NOT_INIT: Driver is not init
@@ -395,7 +395,7 @@ DMA hardware requires the transfer address to be 16-byte aligned. The buffer sho
 #### Std_ReturnType Ipc_MDMA_PollMsg(uint32 InstanceId)
 
 ```shell
-Description：poll message If the Instance does not receive data using interrupts.
+Description: poll message If the Instance does not receive data using interrupts.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -404,7 +404,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     IPC_E_PARAM_ERROR: param is illegal
     IPC_E_DRIVER_NOT_INIT: Driver is not init
@@ -415,7 +415,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Ipc_MDMA_OpenInstance(uint32 InstanceId)
 
 ```shell
-Description：Open a Instance pointed to by ID.
+Description: Open a Instance pointed to by ID.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -424,7 +424,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     IPC_E_DRIVER_NOT_INIT: Driver is not init
     IPC_E_CHANNEL_NOT_CLOSE: Instance has been opened
@@ -434,7 +434,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Ipc_MDMA_CloseInstance(uint32 InstanceId)
 
 ```shell
-Description：close a Instance pointed to by ID.
+Description: close a Instance pointed to by ID.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -443,7 +443,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     IPC_E_DRIVER_NOT_INIT: Driver is not init
     IPC_E_CHANNEL_NOT_CLOSE: Instance has been opened
@@ -453,7 +453,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Ipc_MDMA_TryGetHwResource(uint32 InstanceId, uint32 ChanId, uint32 BufSize)
 
 ```shell
-Description：try get Hardware resource.
+Description: try get Hardware resource.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -462,7 +462,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: success
     IPC_E_DRIVER_NOT_INIT: Driver is not init
     IPC_E_DEVICE_BUSY: Instance is busy.

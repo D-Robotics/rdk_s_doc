@@ -206,7 +206,7 @@ ufs: ufs@0x39410000 {
 </DocScope>
 
 <DocScope products="RDK S600">
-### S600 SoC 配置 (drobot-s600-soc.dtsi)
+### S600 SoC configuration (drobot-s600-soc.dtsi)
 
 ```dts
 		ufs: ufs@0x33700000 {
