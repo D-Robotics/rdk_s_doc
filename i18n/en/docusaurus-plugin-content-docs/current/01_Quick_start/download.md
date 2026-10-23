@@ -362,7 +362,7 @@ For RDK S100 commercial materials, please switch to the **FTP Download** option 
       <tr>
         <td>OE-LLM Development Package</td>
         <!-- <td> V1.0.2</td> -->
-        <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/01_rdk_s100/01_s100_LLM_Toolchain.md)</td>
+        <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/01_rdk_s100/02_LLM_Toolchain_v2_0_0.md)</td>
       </tr>
       <tr>
         <td colspan="2">ISP Tool</td>
@@ -603,9 +603,9 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
         <td>OE development package.</td>
       </tr>
       <tr>
-        <td>[OE LLM Development Package](https://developer.d-robotics.cc/rdk_s_doc/07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600?v=5.1.0&p=RDK+S600)</td>
-        <td> V1.0.2</td>
-        <td>2026-06-22</td>
+        <td>[OE LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600/03_LLM_Toolchain_v2_0_0.md)</td>
+        <td> V2.0.0</td>
+        <td>2026-10-23</td>
         <td>OE LLM development package.</td>
       </tr>
       <tr>
@@ -809,8 +809,8 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       </tr>
       <tr>
         <td>OE-LLM Development Package</td>
-        <td> V1.0.2</td>
-        <td>[OE-LLM Development Package](https://developer.d-robotics.cc/rdk_s_doc/07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600?v=5.1.0&p=RDK+S600)</td>
+        <td> V2.0.0</td>
+        <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600/03_LLM_Toolchain_v2_0_0.md)</td>
       </tr>
       <tr>
         <td colspan="2">ISP Tool</td>
@@ -1091,7 +1091,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
         <td>OE development package.</td>
       </tr>
       <tr>
-        <td>[OE LLM Development Package](https://developer.d-robotics.cc/rdk_s_doc/07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600?v=5.1.0&p=RDK+S600)</td>
+        <td>[OE LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600/03_LLM_Toolchain_v2_0_0.md)</td>
         <td> V2.0.0</td>
         <td>2026-10-23</td>
         <td>OE LLM development package.</td>
@@ -1297,7 +1297,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       </tr>
       <tr>
         <td>OE-LLM Development Package</td>
-        <td> V1.0.2</td>
+        <td> V2.0.0</td>
         <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600/03_LLM_Toolchain_v2_0_0.md)</td>
       </tr>
       <tr>
