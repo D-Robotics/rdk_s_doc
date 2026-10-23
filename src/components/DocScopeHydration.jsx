@@ -72,7 +72,6 @@ export default function DocScopeHydration() {
     if (!root) {
       return;
     }
-    let scopeChanged = false;
     root.querySelectorAll('.doc-scope[data-doc-scope]').forEach((el) => {
       const raw = el.getAttribute('data-doc-scope');
       if (!raw) {
@@ -81,15 +80,33 @@ export default function DocScopeHydration() {
       try {
         const spec = JSON.parse(raw);
         const show = matchesScope(spec, version, product);
-        if (el.classList.contains('doc-scope--hidden') === show) {
-          scopeChanged = true;
-        }
         el.classList.toggle('doc-scope--hidden', !show);
       } catch {
         el.classList.remove('doc-scope--hidden');
       }
     });
     syncTocByDocScope(root);
+
+    // 锚点定位纠正：首屏 SSR 输出里所有 .doc-scope 都还没折叠（两个产品的正文同时展开），
+    // 浏览器会在 hydration 之前就按这个高度滚到锚点；等这里折叠掉不匹配的产品后，锚点上移
+    // 一大截，而视口不动，用户就落在了错误位置（目标在小节里时表现为跳到页面末尾）。
+    // 折叠生效后按新布局重新定位一次，锚点自身的 scroll-margin-top 由 scrollIntoView 处理。
+    const { hash } = location;
+    const rafId = hash
+      ? window.requestAnimationFrame(() => {
+          const target = resolveHeadingByHash(root, hash);
+          if (!target) {
+            return;
+          }
+          if (
+            target.closest('.doc-scope--hidden') ||
+            target.closest('[role="tabpanel"][hidden]')
+          ) {
+            return;
+          }
+          target.scrollIntoView({ block: 'start' });
+        })
+      : null;
 
     const observer = new MutationObserver((mutationList) => {
       const shouldResync = mutationList.some((mutation) => {
@@ -113,22 +130,12 @@ export default function DocScopeHydration() {
       attributeFilter: ['hidden', 'class'],
     });
 
-    // 隐藏 .doc-scope 会直接改变页面高度，而浏览器的锚点定位（含 Docusaurus 的
-    // scrollAfterNavigation）是在显隐生效之前完成的。若被隐藏的区块位于锚点上方，
-    // 内容整体上移，落点就会偏下（产品相关的 DocScope 段落通常有一两屏之高）。
-    // 因此这里在显隐真正发生变化时，按当前 hash 重新定位一次。同理，如果本次
-    // 没有任何显隐变化（scopeChanged 为 false），就不介入——页面高度没变，交给
-    // 浏览器和 Docusaurus 原有的定位即可。
-    if (scopeChanged && location.hash) {
-      const target = resolveHeadingByHash(root, location.hash);
-      if (target && target.getClientRects().length > 0) {
-        requestAnimationFrame(() => {
-          target.scrollIntoView({ block: 'start' });
-        });
+    return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
       }
-    }
-
-    return () => observer.disconnect();
+      observer.disconnect();
+    };
   }, [version, product, location.pathname]);
 
   return null;

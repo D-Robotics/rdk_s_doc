@@ -3,7 +3,31 @@ import { useDocScopeFilter } from '@site/src/context/DocScopeFilterContext';
 import { productKeysEqual } from '@site/src/context/doc-scope-product-utils';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
-function ScopeMenu({ label, value, options, onPick }) {
+/**
+ * 原地改写选择器的显示文本。
+ *
+ * 只改既有文本节点的 data，不替换节点、也不写 textContent：React 内部持有该文本节点的引用
+ * （hydration 时建立），替换节点会让之后的 state 更新写到一个游离节点上，界面从此不再变化。
+ * 这段逻辑与 doc-scope-product-bootstrap-plugin 注入的首帧脚本必须保持一致。
+ */
+function syncSelectorText(kind, value) {
+  if (!value) {
+    return;
+  }
+  document.querySelectorAll(`[data-doc-scope-selector="${kind}"]`).forEach((el) => {
+    if (el.textContent === value) {
+      return;
+    }
+    const node = el.firstChild;
+    if (node && node.nodeType === Node.TEXT_NODE && !node.nextSibling) {
+      node.data = value;
+    } else {
+      el.textContent = value;
+    }
+  });
+}
+
+function ScopeMenu({ label, value, valueScope, options, onPick }) {
   const baseId = useId();
   const labelId = `${baseId}-label`;
   const listId = `${baseId}-list`;
@@ -48,7 +72,9 @@ function ScopeMenu({ label, value, options, onPick }) {
           aria-controls={listId}
           aria-labelledby={labelId}
           onClick={() => setOpen((o) => !o)}>
-          <span className="doc-scope-menu__value">{value}</span>
+          <span className="doc-scope-menu__value" data-doc-scope-selector={valueScope}>
+            {value}
+          </span>
           <span className="doc-scope-menu__caret" aria-hidden />
         </button>
         {open ? (
@@ -103,10 +129,30 @@ export default function DocScopeSelectors() {
   // 确保当前版本在产品支持的版本列表中
   const versionValue = useMemo(() => versions.includes(version) ? version : versions[0], [versions, version]);
 
+  // 兜底：首帧前由 bootstrap 脚本按同一套解析规则写入文本（服务端读不到 localStorage，
+  // 只能渲染默认值，等 hydration 提交才纠正就晚了——首屏早就画出来了）。
+  // 这里再用 React 自己的值原地覆盖一次，避免两者分歧或 React 未再渲染时留下错的文本。
+  useEffect(() => {
+    syncSelectorText('product', product);
+    syncSelectorText('version', versionValue);
+  }, [product, versionValue]);
+
   return (
     <div className="doc-scope-selectors">
-      <ScopeMenu label={isEnglish ? 'Product' : '产品'} value={product} options={allProducts} onPick={setProduct} />
-      <ScopeMenu label={isEnglish ? 'Version' : '版本'} value={versionValue} options={versions} onPick={setVersion} />
+      <ScopeMenu
+        label={isEnglish ? 'Product' : '产品'}
+        value={product}
+        valueScope="product"
+        options={allProducts}
+        onPick={setProduct}
+      />
+      <ScopeMenu
+        label={isEnglish ? 'Version' : '版本'}
+        value={versionValue}
+        valueScope="version"
+        options={versions}
+        onPick={setVersion}
+      />
     </div>
   );
 }

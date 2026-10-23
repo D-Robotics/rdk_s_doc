@@ -736,6 +736,194 @@ function chunk(arr, size) {
   return out;
 }
 
+function relativePathFromUrl(url) {
+  try {
+    return new URL(url).pathname;
+  } catch {
+    return url;
+  }
+}
+
+function deepestHeadingText(hierarchy) {
+  for (const lvl of ['lvl6', 'lvl5', 'lvl4', 'lvl3', 'lvl2', 'lvl1']) {
+    const text = (hierarchy?.[lvl] || '').trim();
+    if (text) {
+      return text;
+    }
+  }
+  return '';
+}
+
+/**
+ * 把 Algolia DocSearch records 映射成 easyops `search-index.json` 同构格式（5 shard），
+ * 供 rdk-docs-mcp 读取。同一页按 product/version 作用域重复生成的 records 按 pathname
+ * 归并去重，产出与 easyops 插件一致的无作用域索引（仅 zh-Hans）。
+ */
+function buildEasyopsIndex(records) {
+  const zh = records.filter((r) => r.language === 'zh-Hans');
+  const byPage = new Map();
+  for (const r of zh) {
+    const pagePath = relativePathFromUrl(r.url_without_anchor);
+    if (!byPage.has(pagePath)) {
+      byPage.set(pagePath, []);
+    }
+    byPage.get(pagePath).push(r);
+  }
+
+  const pages = [];
+  const headings = [];
+  const pageSnippets = [];
+  const contentSnippets = [];
+  let id = 0;
+  let pageSeq = 0;
+
+  for (const [u, recs] of byPage) {
+    pageSeq += 1;
+    let pageTitle = '';
+    for (const r of recs) {
+      if (r.type === 'lvl1' && r.hierarchy?.lvl1) {
+        pageTitle = r.hierarchy.lvl1.trim();
+        break;
+      }
+    }
+    const breadcrumbs = (recs[0]?.hierarchy?.lvl0 || '')
+      .split(' / ')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (!pageTitle) {
+      pageTitle = breadcrumbs[breadcrumbs.length - 1] || '';
+    }
+    pages.push({ i: ++id, t: pageTitle, u, b: breadcrumbs });
+
+    let firstHeading = '';
+    for (const r of recs) {
+      if (
+        r.type &&
+        r.type.startsWith('lvl') &&
+        r.type !== 'lvl1' &&
+        r.hierarchy?.[r.type]
+      ) {
+        firstHeading = r.hierarchy[r.type].trim();
+        break;
+      }
+    }
+    if (firstHeading) {
+      pageSnippets.push({ i: ++id, t: firstHeading, s: pageTitle, u, p: pageSeq });
+    }
+
+    const seenHeadings = new Set();
+    const seenContent = new Set();
+    for (const r of recs) {
+      const type = r.type;
+      if (type && type.startsWith('lvl') && type !== 'lvl1') {
+        if (r.anchor && !seenHeadings.has(r.anchor)) {
+          seenHeadings.add(r.anchor);
+          headings.push({
+            i: ++id,
+            t: (r.hierarchy?.[type] || '').trim(),
+            u,
+            h: `#${r.anchor}`,
+            p: pageSeq,
+          });
+        }
+      } else if (type === 'content' && r.content) {
+        const text = r.content.trim();
+        const key = `${r.anchor || ''}\u0000${text}`;
+        if (seenContent.has(key)) {
+          continue;
+        }
+        seenContent.add(key);
+        const doc = { i: ++id, t: text, u, p: pageSeq };
+        const source = deepestHeadingText(r.hierarchy);
+        if (source) {
+          doc.s = source;
+        }
+        if (r.anchor) {
+          doc.h = `#${r.anchor}`;
+        }
+        contentSnippets.push(doc);
+      }
+    }
+  }
+
+  return [
+    { documents: pages },
+    { documents: headings },
+    { documents: pageSnippets },
+    { documents: [] },
+    { documents: contentSnippets },
+  ];
+}
+
+/**
+ * 从细粒度 records 归约出推给 Algolia 的记录集。
+ * 站内搜索（Algolia）不需要「每段/每格一条」的粒度——`distinct:url` 会按锚点把它们折叠，
+ * 那些 content 记录纯属索引体积 + 计费。这里把每个标题段的正文聚合成一条，附着到对应标题
+ * 记录上（超长则分块）；细粒度 records 仍原样保留，供 buildEasyopsIndex 喂 MCP 本地索引。
+ */
+const ALGOLIA_CONTENT_CHUNK = 2000;
+
+function buildAlgoliaRecords(records) {
+  const headingByUrl = new Map();
+  const headings = [];
+  for (const r of records) {
+    if (r.type && r.type.startsWith('lvl')) {
+      headingByUrl.set(r.url, r);
+      headings.push(r);
+    }
+  }
+
+  const contentByUrl = new Map();
+  const orphans = new Map(); // url -> { template, text }，无标题匹配的正文（罕见）
+  for (const r of records) {
+    if (r.type !== 'content' || !r.content) continue;
+    if (headingByUrl.has(r.url)) {
+      contentByUrl.set(r.url, `${contentByUrl.get(r.url) || ''} ${r.content}`);
+    } else {
+      const existing = orphans.get(r.url);
+      if (existing) existing.text = `${existing.text} ${r.content}`;
+      else orphans.set(r.url, { template: r, text: r.content });
+    }
+  }
+
+  const out = [];
+  for (const heading of headings) {
+    const text = (contentByUrl.get(heading.url) || '').replace(/\s+/g, ' ').trim();
+    if (!text) {
+      out.push(heading);
+      continue;
+    }
+    out.push({ ...heading, content: text.slice(0, ALGOLIA_CONTENT_CHUNK) });
+    for (let i = ALGOLIA_CONTENT_CHUNK; i < text.length; i += ALGOLIA_CONTENT_CHUNK) {
+      const part = text.slice(i, i + ALGOLIA_CONTENT_CHUNK);
+      out.push({
+        ...heading,
+        objectID: objectIdFor([heading.url, 'content', part, String(i)]),
+        content: part,
+        type: 'content',
+        weight: { pageRank: 0, level: LEVEL_WEIGHT.content, position: 0 },
+      });
+    }
+  }
+
+  for (const { template, text } of orphans.values()) {
+    const clean = text.replace(/\s+/g, ' ').trim();
+    if (!clean) continue;
+    for (let i = 0; i < clean.length; i += ALGOLIA_CONTENT_CHUNK) {
+      const part = clean.slice(i, i + ALGOLIA_CONTENT_CHUNK);
+      out.push({
+        ...template,
+        objectID: objectIdFor([template.url, 'content', part, String(i)]),
+        content: part,
+        type: 'content',
+        weight: { pageRank: 0, level: LEVEL_WEIGHT.content, position: 0 },
+      });
+    }
+  }
+
+  return out;
+}
+
 async function main() {
   if (!ADMIN_KEY) {
     console.error(
@@ -784,12 +972,18 @@ async function main() {
     );
   }
 
-  console.log(`Built ${records.length} records from ${pages.length} pages`);
+  console.log(`Built ${records.length} fine-grained records from ${pages.length} pages`);
   if (records.length === 0) {
     throw new Error('No records generated');
   }
 
-  const sample = records.find((r) => r.content) || records[0];
+  const algoliaRecords = buildAlgoliaRecords(records);
+  console.log(
+    `Algolia records after aggregation: ${algoliaRecords.length} ` +
+      `(was ${records.length}, -${(((records.length - algoliaRecords.length) / records.length) * 100).toFixed(1)}%)`,
+  );
+
+  const sample = algoliaRecords.find((r) => r.content) || algoliaRecords[0];
   console.log('Sample record:', {
     url: sample.url,
     language: sample.language,
@@ -798,6 +992,16 @@ async function main() {
     rdk_version: sample.rdk_version,
     type: sample.type,
   });
+
+  const easyopsIndex = buildEasyopsIndex(records);
+  const easyopsPath = path.join(repoRoot, 'scripts/_algolia_tmp/search-index.json');
+  fs.mkdirSync(path.dirname(easyopsPath), { recursive: true });
+  fs.writeFileSync(easyopsPath, JSON.stringify(easyopsIndex));
+  console.log(
+    `Wrote easyops search-index.json (${easyopsIndex[0].documents.length} pages, ` +
+      `${easyopsIndex[1].documents.length} headings, ` +
+      `${easyopsIndex[4].documents.length} content snippets) to ${easyopsPath}`,
+  );
 
   if (DRY_RUN) {
     console.log('Dry run complete; skipping Algolia upload.');
@@ -821,7 +1025,7 @@ async function main() {
   );
   await waitTask(cleared.taskID, ADMIN_KEY);
 
-  const batches = chunk(records, 1000);
+  const batches = chunk(algoliaRecords, 1000);
   for (let i = 0; i < batches.length; i += 1) {
     const requests = batches[i].map((record) => ({
       action: 'addObject',

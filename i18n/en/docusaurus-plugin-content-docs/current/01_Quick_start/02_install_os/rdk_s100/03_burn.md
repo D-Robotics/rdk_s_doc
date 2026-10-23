@@ -1,10 +1,11 @@
 ---
 sidebar_position: 3
+description: Describes how to flash the RDK S100 system image with XBurn, including selecting a download mode, flashing the full image, and flashing specific regions or partitions.
 ---
 
 # Flash the system image
 
-This page describes system flashing for the RDK S100. Complete [flashing preparation](./02_preparation.md) before you flash.
+This page describes system flashing for the RDK S100. Complete [flashing preparation](./02_preparation.md) before you flash. To back up the current system and restore it, see [Back up and restore the image](./04_backup.md).
 
 ## Download modes
 
@@ -57,7 +58,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 8. After flashing completes, exit the corresponding mode (for DFU mode, toggle the flashing switch down to exit), and power off.
 9. Verify the boot. Keep the device powered off, connect the device to a monitor with an HDMI cable, then power on the device. On first boot, the system performs default environment configuration that takes about 45 seconds, after which the Ubuntu desktop appears on the monitor.
 
-   :::tip LED indicators
+   :::note LED indicators
    - **<font color='Green'>Green</font>** LED: Lit means the hardware is powered on normally.
    :::
 
@@ -65,11 +66,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-boot.png" alt="S100 system boot desktop" style={{ width: '100%' }} />
 
-## Advanced usage
-
-Use this for specific scenarios other than a first-time flash.
-
-### Flash specific regions{#flashing-specific-regions}
+## Flash specific regions{#flashing-specific-regions}
 
 Flash only part of the image by region, instead of the complete full-image package. For **Storage medium**, select `eMMC`. The supported regions are:
 
@@ -83,25 +80,7 @@ Starting from the steps in [Flash the full image](#flash-the-full-image), expand
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/specify-region-flash-en.png" alt="Flash specific regions" style={{ width: '100%' }} />
 
-### Back up specific regions
-
-Back up the image of specific regions to your PC. For **Storage**, select `eMMC`. The supported backup regions are:
-
-| Region | Actual storage medium | Firmware content | Backup image |
-| --- | --- | -------- | ------------ |
-| miniboot_flash | NOR Flash | Complete NOR Flash image | img_packages/disk/miniboot_flash_backup.img |
-| emmc | eMMC | Complete eMMC image | img_packages/disk/emmc_disk_backup.img |
-
-Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target region (such as `miniboot_flash`). After flashing, open `img_packages/disk/` and check the backup image file `miniboot_flash_backup.img`.
-
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/backup-region-flash-en.png" alt="Back up specific regions" style={{ width: '100%' }} />
-
-:::warning Note
-- Data backup takes a long time. Wait patiently.
-- To flash a backup image, remove `_backup` from the filename and change it to the same filename used for flashing a specific region (for example, `emmc_disk_backup.img` → `emmc_disk.simg`).
-:::
-
-### Flash specific partition images
+## Flash specific partition images
 
 Flash by **individual system component partition**, at a finer granularity than [Flash specific regions](#flashing-specific-regions). This is partition-level (a single component partition, such as `uboot`, `boot`, or `system`).
 
