@@ -363,7 +363,7 @@ RDK S100 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
       <tr>
         <td>OE-LLM 开发包</td>
         <!-- <td> V1.0.2</td> -->
-        <td>[OE-LLM 开发包](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/01_rdk_s100/01_s100_LLM_Toolchain.md)</td>
+        <td>[OE-LLM 开发包](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/01_rdk_s100/02_LLM_Toolchain_v2_0_0.md)</td>
       </tr>
       <tr>
         <td colspan="2">ISP 工具</td>
