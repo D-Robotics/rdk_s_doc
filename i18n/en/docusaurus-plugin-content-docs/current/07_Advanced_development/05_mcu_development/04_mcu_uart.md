@@ -68,7 +68,7 @@ The S600 MCU chip has a total of 4 UARTs, namely Uart8 to Uart11. Among them, Ua
 
 ## Code Path
 
-- `McalCdd/Common/Register/inc/Uart_Register.h`: Register相关内容
+- `McalCdd/Common/Register/inc/Uart_Register.h`: Register-related content
 - `McalCdd/Uart/src/Uart.c`: Driver code
 - `McalCdd/Uart/src/Uart_Lld.c`: Low-level driver code
 - `McalCdd/Uart/inc/Uart.h`: Driver header file

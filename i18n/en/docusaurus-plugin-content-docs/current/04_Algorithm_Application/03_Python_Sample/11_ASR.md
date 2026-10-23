@@ -173,7 +173,7 @@ This sample runs a speech recognition model using the `hbm_runtime` inference en
 
 - View the result
 
-    After successful execution, the result will be printed.
+    After successful execution, the result will be printed. Because the bundled sample audio is in Chinese, the recognized text is also in Chinese.
     ```bash
     我是来自阿里云的大规模语言磨型过叫通意千问||
     ```

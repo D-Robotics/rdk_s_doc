@@ -93,8 +93,8 @@ sudo systemctl daemon-reload
 ```
 
 :::info
-- `ExecStartPre=-`：Automatically unloads `hobot_eth_super` before starting (the prefix `-` means execution continues even if this command fails)
-- `ExecStopPost=-`：Automatically reloads `hobot_eth_super` after stopping to restore normal network functionality
+- `ExecStartPre=-`: Automatically unloads `hobot_eth_super` before starting (the prefix `-` means execution continues even if this command fails)
+- `ExecStopPost=-`: Automatically reloads `hobot_eth_super` after stopping to restore normal network functionality
 :::
 
 :::warning

@@ -16,7 +16,7 @@ There are three internal power domains: AON, MCU, and Main. The AON is a power d
 ## Power State List
 Five power states are currently implemented: Off, MCU only, Working, Deep sleep, and Light sleep. Detailed descriptions are as follows:
 
-| Power State  |       Description                             |  AON  |  MCU  |  Main  |  DDR颗粒  |
+| Power State  |       Description                             |  AON  |  MCU  |  Main  |  DDR Memory  |
 | --------     | ---------------------------------------| ----  | ----- | -----  | ---------- |
 | Off          | Chip completely powered off               | Off   |   Off |   Off  |   Off      |
 | MCU only     | MCU Rcore working normally                | On    |   On  |   Off  |   Off      |

@@ -903,24 +903,24 @@ Users can call `hb_mm_mc_skip_pic` to set the next queued input frame to "skip" 
 
 #### hb_mm_mc_get_descriptor
 
-【Function Declaration】
+Function Declaration
 
 const media_codec_descriptor_t* hb_mm_mc_get_descriptor(media_codec_id_t codec_id);
 
-【Parameters】
+Parameters
 
 - [IN] media_codec_id_t codec_id: Specifies the codec type.
 
-【Return Value】
+Return Value
 
 - Non-null: Codec descriptor containing information.
 - NULL: No descriptor found for the given codec ID.
 
-【Description】
+Description
 
 Retrieves codec information supported by MediaCodec based on `codec_id`, including codec name, detailed description, MIME type, and supported profiles.
 
-【Example】
+Example
 
 ```c
 #include "hb_media_codec.h"
@@ -935,26 +935,26 @@ int main(int argc, char *argv[])
 
 #### hb_mm_mc_get_default_context
 
-【Function Declaration】
+Function Declaration
 
 hb_s32 hb_mm_mc_get_default_context(media_codec_id_t codec_id, hb_bool encoder, media_codec_context_t *context);
 
-【Parameters】
+Parameters
 
 - [IN] media_codec_id_t codec_id: Specifies the codec type.
 - [IN] hb_bool encoder: Indicates whether the codec is an encoder (`true`) or decoder (`false`).
 - [OUT] media_codec_context_t *context: Receives the default context for the specified codec.
 
-【Return Value】
+Return Value
 
 - 0: Success.
 - HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameters.
 
-【Description】
+Description
 
 Obtains the default configuration attributes for a specified codec.
 
-【Example】
+Example
 
 ```c
 #include "hb_media_codec.h"
@@ -971,15 +971,15 @@ int main(int argc, char *argv[])
 
 #### hb_mm_mc_initialize
 
-【Function Declaration】
+Function Declaration
 
 hb_s32 hb_mm_mc_initialize(media_codec_context_t *context)
 
-【Parameters】
+Parameters
 
 - [IN] media_codec_context_t *context: Context configuration for the codec.
 
-【Return Values】
+Return Values
 
 - 0: Success.
 - HB_MEDIA_ERR_UNKNOWN: Unknown error.
@@ -988,11 +988,11 @@ hb_s32 hb_mm_mc_initialize(media_codec_context_t *context)
 - HB_MEDIA_ERR_INSUFFICIENT_RES: Insufficient internal memory resources.
 - HB_MEDIA_ERR_NO_FREE_INSTANCE: No free instance available (max: 32 for Video, 64 for MJPEG/JPEG, 32 for Audio).
 
-【Description】
+Description
 
 Initializes an encoder or decoder. Upon success, MediaCodec enters the `MEDIA_CODEC_STATE_INITIALIZED` state.
 
-【Example】
+Example
 
 ```c
 #include "hb_media_codec.h"
@@ -1194,43 +1194,43 @@ int main(int argc, char *argv[])
 
 #### hb_mm_mc_set_callback
 
-【Function Declaration】
+Function Declaration
 
 hb_s32 hb_mm_mc_set_callback(media_codec_context_t *context,
 const media_codec_callback_t *callback, hb_ptr userdata)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media_codec_context_t *context: Context specifying the codec type
 - [IN] const media_codec_callback_t *callback: User-defined callback functions
 - [IN] hb_ptr userdata: Pointer to user data, which will be passed as an argument when the callback function is invoked
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB_MEDIA_ERR_UNKNOWN: Unknown error
 - HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameters
 - HB_MEDIA_ERR_OPERATION_NOT_ALLOWED: Operation not allowed
 
-【Function Description】
+Function Description
 
 Sets the callback function pointers. After calling this function, MediaCodec enters asynchronous operation mode.  
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_initialize](#hb_mm_mc_initialize)
 
 #### hb\_mm\_mc\_configure
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_configure(media\_codec\_context\_t \*context)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media\_codec\_context\_t \*context: Context specifying the codec type
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1239,27 +1239,27 @@ hb\_s32 hb\_mm\_mc\_configure(media\_codec\_context\_t \*context)
 - HB\_MEDIA\_ERR\_INSUFFICIENT\_RES: Insufficient internal memory resources  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 
-【Function Description】
+Function Description
 
 Configures the encoder or decoder based on the input information. Upon successful invocation, MediaCodec enters the MEDIA\_CODEC\_STATE\_CONFIGURED state.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_initialize](#hb_mm_mc_initialize)
 
 #### hb\_mm\_mc\_start
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_start(media\_codec\_context\_t \*context, const  
 mc\_av\_codec\_startup\_params\_t \*info)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media\_codec\_context\_t \*context: Context specifying the codec type  
 - [IN] mc\_av\_codec\_startup\_params\_t *info: Startup parameters for audio/video encoding or decoding  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1268,127 +1268,127 @@ mc\_av\_codec\_startup\_params\_t \*info)
 - HB\_MEDIA\_ERR\_INSUFFICIENT\_RES: Insufficient internal memory resources  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 
-【Function Description】
+Function Description
 
 Starts the encoding/decoding process. MediaCodec will create the codec instance, set up sequences or parse the data stream, register Framebuffers, encode header information, etc. Upon successful invocation, MediaCodec enters the MEDIA\_CODEC\_STATE\_STARTED state.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_initialize](#hb_mm_mc_initialize)
 
 #### hb\_mm\_mc\_stop
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_stop(media\_codec\_context\_t \*context)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media\_codec\_context\_t \*context: Context specifying the codec type
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 
-【Function Description】
+Function Description
 
 Stops the encoding/decoding process, terminates all child threads, and releases associated resources. Upon successful invocation, MediaCodec returns to the MEDIA\_CODEC\_STATE\_INITIALIZED state.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_initialize](#hb_mm_mc_initialize)
 
 #### hb\_mm\_mc\_pause
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_pause(media\_codec\_context\_t \*context)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media\_codec\_context\_t \*context: Context specifying the codec type
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 
-【Function Description】
+Function Description
 
 Pauses the encoding/decoding process and suspends all child threads. Upon successful invocation, MediaCodec enters the MEDIA\_CODEC\_STATE\_PAUSED state.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_queue_input_buffer](#hb_mm_mc_queue_input_buffer)
 
 #### hb\_mm\_mc\_flush
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_flush(media\_codec\_context\_t \*context)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 
-【Function Description】
+Function Description
 
 Flushes the input and output buffer queues, forcing the encoder/decoder to flush any unprocessed input or output buffers. After this function is called, MediaCodec enters the MEDIA\_CODEC\_STATE\_FLUSHING state. Upon successful completion, MediaCodec returns to the MEDIA\_CODEC\_STATE\_STARTED state.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_queue_input_buffer](#hb_mm_mc_queue_input_buffer)
 
 #### hb\_mm\_mc\_release
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_release(media\_codec\_context\_t \*context)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media\_codec\_context\_t \*context: Context specifying the codec type
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 
-【Function Description】
+Function Description
 
 Releases all internal resources held by MediaCodec. The user must call hb\_mm\_mc\_stop to stop encoding/decoding before invoking this function. Upon successful completion, MediaCodec enters the MEDIA\_CODEC\_STATE\_UNINITIALIZED state.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_initialize](#hb_mm_mc_initialize)
 
 #### hb\_mm\_mc\_get\_state
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_state(media\_codec\_context\_t \*context,  
 media\_codec\_state\_t \*state)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media\_codec\_context\_t \*context: Context specifying the codec type  
 - [OUT] media\_codec\_state\_t \*state: Current state of MediaCodec  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1396,27 +1396,27 @@ media\_codec\_state\_t \*state)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Retrieves the current state of MediaCodec.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_initialize](#hb_mm_mc_initialize)
 
 #### hb\_mm\_mc\_get\_status
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_status(media\_codec\_context\_t \*context,  
 mc\_inter\_status\_t \*status)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media\_codec\_context\_t \*context: Context specifying the codec type  
 - [OUT] mc\_inter\_status\_t \*status: Current internal status of MediaCodec  
  
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1424,28 +1424,28 @@ mc\_inter\_status\_t \*status)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Obtain the current internal state information of MediaCodec.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_fd](#hb_mm_mc_get_fd)
 
 #### hb\_mm\_mc\_queue\_input\_buffer
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_queue\_input\_buffer(media\_codec\_context\_t  
 \*context, media\_codec\_buffer\_t \*buffer, hb\_s32 timeout)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] media\_codec\_buffer\_t \*buffer: Input buffer information  
 - \[IN\] hb\_s32 timeout: Timeout duration  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1455,11 +1455,11 @@ hb\_s32 hb\_mm\_mc\_queue\_input\_buffer(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_BUFFER: Invalid buffer  
 - HB\_MEDIA\_ERR\_WAIT\_TIMEOUT: Wait timeout  
 
-【Function Description】
+Function Description
 
 Submit a buffer requiring processing into MediaCodec.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -1652,18 +1652,18 @@ int main(int argc, char *argv[])
 
 #### hb\_mm\_mc\_dequeue\_input\_buffer
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_dequeue\_input\_buffer(media\_codec\_context\_t
 \*context, media\_codec\_buffer\_t \*buffer, hb\_s32 timeout)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] hb\_s32 timeout: Timeout duration  
 - \[OUT\] media\_codec\_buffer\_t \*buffer: Input buffer information  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1673,28 +1673,28 @@ hb\_s32 hb\_mm\_mc\_dequeue\_input\_buffer(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_BUFFER: Invalid buffer  
 - HB\_MEDIA\_ERR\_WAIT\_TIMEOUT: Wait timeout  
 
-【Function Description】
+Function Description
 
 Obtain an input buffer.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_queue_input_buffer](#hb_mm_mc_queue_input_buffer)
 
 #### hb\_mm\_mc\_queue\_output\_buffer
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_queue\_output\_buffer(media\_codec\_context\_t
 \*context, media\_codec\_buffer\_t \*buffer, hb\_s32 timeout)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] media\_codec\_buffer\_t \*buffer: Output buffer information  
 - \[IN\] hb\_s32 timeout: Timeout duration  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1704,23 +1704,23 @@ hb\_s32 hb\_mm\_mc\_queue\_output\_buffer(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_BUFFER: Invalid buffer  
 - HB\_MEDIA\_ERR\_WAIT\_TIMEOUT: Wait timeout  
 
-【Function Description】
+Function Description
 
 Return a processed output buffer back to MediaCodec.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_queue_input_buffer](#hb_mm_mc_queue_input_buffer)
 
 #### hb\_mm\_mc\_dequeue\_output\_buffer
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_dequeue\_output\_buffer(media\_codec\_context\_t
 \*context, media\_codec\_buffer\_t \*buffer,
 media\_codec\_output\_buffer\_info\_t \*info, hb\_s32 timeout)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] hb\_s32 timeout: Timeout duration  
@@ -1728,7 +1728,7 @@ media\_codec\_output\_buffer\_info\_t \*info, hb\_s32 timeout)
 - \[IN\] media\_codec\_output\_buffer\_info\_t
   \*info: Information of the output bitstream  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -1738,39 +1738,39 @@ media\_codec\_output\_buffer\_info\_t \*info, hb\_s32 timeout)
 - HB\_MEDIA\_ERR\_INVALID\_BUFFER: Invalid buffer  
 - HB\_MEDIA\_ERR\_WAIT\_TIMEOUT: Wait timeout  
 
-【Function Description】
+Function Description
 
 Obtain an output buffer.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_queue_input_buffer](#hb_mm_mc_queue_input_buffer)
 
 #### hb\_mm\_mc\_get\_longterm\_ref\_mode
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_longterm\_ref\_mode(media\_codec\_context\_t
 \*context, mc\_video\_longterm\_ref\_mode\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_longterm\_ref\_mode\_t
   \*params: Long-term reference frame mode parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Retrieve parameters of the long-term reference frame mode, applicable to H.264/H.265.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -2302,18 +2302,18 @@ int main(int argc, char *argv[])
 
 #### hb\_mm\_mc\_set\_longterm\_ref\_mode
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_longterm\_ref\_mode(media\_codec\_context\_t
 \*context, const mc\_video\_longterm\_ref\_mode\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[IN\] const mc\_video\_longterm\_ref\_mode\_t
   \*params: Long-term reference frame mode parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
@@ -2321,55 +2321,55 @@ hb\_s32 hb\_mm\_mc\_set\_longterm\_ref\_mode(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Sets long-term reference frame mode parameters. These parameters are dynamic and applicable to H.264/H.265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_intra\_refresh\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_intra\_refresh\_config(media\_codec\_context\_t
 \*context, mc\_video\_intra\_refresh\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[OUT\] mc\_video\_intra\_refresh\_params\_t \*params: Intra refresh parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Retrieves intra refresh parameters, applicable to H.264/H.265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_intra\_refresh\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_intra\_refresh\_config(media\_codec\_context\_t
 \*context, const mc\_video\_intra\_refresh\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[IN\] const mc\_video\_intra\_refresh\_params\_t
   \*params: Intra refresh parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
@@ -2377,52 +2377,54 @@ hb\_s32 hb\_mm\_mc\_set\_intra\_refresh\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Sets intra refresh mode parameters. These parameters are static and applicable to H.264/H.265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_rate\_control\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_rate\_control\_config(media\_codec\_context\_t
 \*context, mc\_rate\_control\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[OUT\] mc\_rate\_control\_params\_t \*params: Rate control parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Retrieves rate control parameters. These parameters are dynamic and applicable to H.264/H.265/MJPEG.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_rate\_control\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_rate\_control\_config(media\_codec\_context\_t
-\*context, const mc\_rate\_control\_params\_t \*params)【Parameter Description】
+\*context, const mc\_rate\_control\_params\_t \*params)
+
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_rate\_control\_params\_t \*params: Rate control parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2430,55 +2432,55 @@ hb\_s32 hb\_mm\_mc\_set\_rate\_control\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Sets rate control parameters. These parameters are dynamic and applicable to H264/H265/MJPEG.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_deblk\_filter\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_deblk\_filter\_config(media\_codec\_context\_t  
 \*context, mc\_video\_deblk\_filter\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_deblk\_filter\_params\_t \*params: Deblocking filter parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Retrieves deblocking filter parameters, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_deblk\_filter\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_deblk\_filter\_config(media\_codec\_context\_t  
 \*context, const mc\_video\_deblk\_filter\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_deblk\_filter\_params\_t 
   \*params: Deblocking filter parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2486,54 +2488,54 @@ hb\_s32 hb\_mm\_mc\_set\_deblk\_filter\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Sets deblocking filter parameters. These parameters are dynamic and applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_sao\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_sao\_config(media\_codec\_context\_t \*context,  
 mc\_h265\_sao\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_h265\_sao\_params\_t \*params: SAO parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Retrieves SAO parameters, applicable to H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_sao\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_sao\_config(media\_codec\_context\_t \*context,  
 const mc\_h265\_sao\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_h265\_sao\_params\_t \*params: SAO parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2541,26 +2543,26 @@ const mc\_h265\_sao\_params\_t \*params)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Sets SAO parameters. These parameters are static and applicable to H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_entropy\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_entropy\_config(media\_codec\_context\_t \*context, mc\_h264\_entropy\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] mc\_h264\_entropy\_params\_t \*params: Entropy parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2568,26 +2570,26 @@ hb\_s32 hb\_mm\_mc\_get\_entropy\_config(media\_codec\_context\_t \*context, mc\
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Retrieves entropy parameters, applicable to H264.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_entropy\_config
 
-【Function Declaration】
+Function Declaration
 
 extern hb\_s32 hb\_mm\_mc\_set\_entropy\_config(media\_codec\_context\_t \*context, const mc\_h264\_entropy\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_h264\_entropy\_params\_t \*params: Entropy parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2595,54 +2597,54 @@ extern hb\_s32 hb\_mm\_mc\_set\_entropy\_config(media\_codec\_context\_t \*conte
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Sets entropy parameters, applicable to H264.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_vui\_timing\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_vui\_timing\_config(media\_codec\_context\_t  
 \*context, mc\_video\_vui\_timing\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_vui\_timing\_params\_t \*params: VUI Timing parameters  
 
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Gets VUI Timing parameters, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_vui\_timing\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_vui\_timing\_config(media\_codec\_context\_t \*context, const mc\_video\_vui\_timing\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_vui\_timing\_params\_t \*params: VUI Timing parameters  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2650,52 +2652,52 @@ hb\_s32 hb\_mm\_mc\_set\_vui\_timing\_config(media\_codec\_context\_t \*context,
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Sets VUI Timing parameters. These parameters are static and applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_slice\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_slice\_config(media\_codec\_context\_t \*context, mc\_video\_slice\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_slice\_params\_t \*params: Slice encoding parameters  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Gets slice encoding parameters, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_slice\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_slice\_config(media\_codec\_context\_t \*context, const mc\_video\_slice\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_slice\_params\_t \*params: Slice encoding parameters  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2703,78 +2705,78 @@ hb\_s32 hb\_mm\_mc\_set\_slice\_config(media\_codec\_context\_t \*context, const
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Sets slice encoding parameters. These parameters are dynamic and applicable to H264/H265. The number of slices per frame must not exceed 1500.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_insert\_user\_data
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_insert\_user\_data(media\_codec\_context\_t \*context, hb\_u8 \*data, hb\_u32 length)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] hb\_u8 \*data: User data  
 - \[IN\] hb\_u32 length: Length of user data  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Inserts user data into the encoded bitstream. This parameter is dynamic and applicable to H264/H265/MJPG/JPG.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_request\_idr\_frame
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_request\_idr\_frame(media\_codec\_context\_t \*context)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 
-【Function Description】
+Function Description
 
 Requests an IDR frame. This interface supports dynamic configuration and is applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_skip\_pic
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_skip\_pic(media\_codec\_context\_t \*context, hb\_s32 src\_idx)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] hb\_s32 src\_idx: Source buffer index  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2782,57 +2784,57 @@ hb\_s32 hb\_mm\_mc\_skip\_pic(media\_codec\_context\_t \*context, hb\_s32 src\_i
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Enables skip-mode encoding for the specified picture. This interface supports dynamic configuration and is applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_smart\_bg\_enc\_config
 
-【Function Declaration】
+Function Declaration
 
 extern hb\_s32  
 hb\_mm\_mc\_get\_smart\_bg\_enc\_config(media\_codec\_context\_t  
 \*context, mc\_video\_smart\_bg\_enc\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_smart\_bg\_enc\_params\_t  
   \*params: Smart background encoding mode parameters  
 
-【Return Value】
+Return Value
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Get smart background encoding parameters, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_smart\_bg\_enc\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_smart\_bg\_enc\_config(media\_codec\_context\_t  
 \*context, const mc\_video\_smart\_bg\_enc\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_smart\_bg\_enc\_params\_t  
   \*params: Smart background encoding mode parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2840,54 +2842,54 @@ hb\_s32 hb\_mm\_mc\_set\_smart\_bg\_enc\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Set smart background encoding parameters. These parameters are dynamic and applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_pred\_unit\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_pred\_unit\_config(media\_codec\_context\_t  
 \*context, mc\_video\_pred\_unit\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_pred\_unit\_params\_t \*params: Prediction unit parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Get prediction unit parameters, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_pred\_unit\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_pred\_unit\_config(media\_codec\_context\_t  
 \*context, const mc\_video\_pred\_unit\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_pred\_unit\_params\_t \*params: Prediction unit parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2895,55 +2897,55 @@ hb\_s32 hb\_mm\_mc\_set\_pred\_unit\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Set prediction unit parameters. These parameters are dynamic and applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_transform\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_transform\_config(media\_codec\_context\_t  
 \*context, mc\_video\_transform\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_transform\_params\_t \*params: Transform parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Get Transform parameters, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_transform\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_transform\_config(media\_codec\_context\_t  
 \*context, const mc\_video\_transform\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_transform\_params\_t \*params:  
   Transform parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -2951,54 +2953,54 @@ hb\_s32 hb\_mm\_mc\_set\_transform\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Set Transform parameters. These parameters are dynamic and applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_roi\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_roi\_config(media\_codec\_context\_t \*context,  
 mc\_video\_roi\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_roi\_params\_t \*params: ROI encoding parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Get ROI encoding parameters, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_roi\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_roi\_config(media\_codec\_context\_t \*context,  
 const mc\_video\_roi\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_roi\_params\_t \*params: ROI encoding parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -3006,52 +3008,52 @@ const mc\_video\_roi\_params\_t \*params)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】Set ROI encoding parameters. This parameter is a dynamic parameter and applies to H.264/H.265.
+Function Description: Set ROI encoding parameters. This parameter is a dynamic parameter and applies to H.264/H.265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_mode\_decision\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_mode\_decision\_config(media\_codec\_context\_t  
 \*context, mc\_video\_mode\_decision\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_video\_mode\_decision\_params\_t \*params: Mode decision parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Retrieve mode decision parameters. This function applies to H265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_set\_mode\_decision\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_mode\_decision\_config(media\_codec\_context\_t  
 \*context, const mc\_video\_mode\_decision\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_video\_mode\_decision\_params\_t \*params: Mode decision parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -3059,28 +3061,28 @@ hb\_s32 hb\_mm\_mc\_set\_mode\_decision\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Set mode decision parameters. This parameter is a dynamic parameter and applies to H.265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_get\_user\_data
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_user\_data(media\_codec\_context\_t \*context,  
 mc\_user\_data\_buffer\_t \*params , hb\_s32 timeout)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[OUT\] mc\_user\_data\_buffer\_t \*params: User data  
 - \[IN\] timeout: Timeout duration  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -3088,11 +3090,11 @@ mc\_user\_data\_buffer\_t \*params , hb\_s32 timeout)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Retrieve user data from the decoded stream. This function applies to H.264/H.265.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -3751,16 +3753,16 @@ int main(int argc, char *argv[])
 
 #### hb_mm_mc_release_user_data
 
-【Function Declaration】
+Function Declaration
 
 hb_s32 hb_mm_mc_release_user_data(media_codec_context_t *context, const mc_user_data_buffer_t * params)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media_codec_context_t *context: Context specifying the codec type
 - [IN] const mc_user_data_buffer_t * params: User data
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB_MEDIA_ERR_UNKNOWN: Unknown error
@@ -3768,37 +3770,37 @@ hb_s32 hb_mm_mc_release_user_data(media_codec_context_t *context, const mc_user_
 - HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
 - HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Releases user data from the decoded stream. Applicable to H.264/H.265.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_user_data](#hb_mm_mc_get_user_data)
 
 #### hb_mm_mc_get_mjpeg_config
 
-【Function Declaration】
+Function Declaration
 
 hb_s32 hb_mm_mc_get_mjpeg_config(media_codec_context_t *context, mc_mjpeg_enc_params_t *params)
 
-【Parameter Description】
+Parameter Description
 
 - [IN] media_codec_context_t *context: Context specifying the codec type
 - [OUT] mc_mjpeg_enc_params_t *params: MJPEG encoding parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB_MEDIA_ERR_UNKNOWN: Unknown error
 - HB_MEDIA_ERR_INVALID_INSTANCE: Invalid instance
 - HB_MEDIA_ERR_INVALID_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Retrieves MJPEG encoding parameters. Applicable to MJPEG.
 
-【Example Code】
+Example Code
 
 ```# include "hb_media_codec.h"
 # include "hb_media_error.h"
@@ -3867,17 +3869,17 @@ int main(int argc, char *argv[])
 
 #### hb\_mm\_mc\_set\_mjpeg\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_mjpeg\_config(media\_codec\_context\_t
 \*context, const mc\_mjpeg\_enc\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[IN\] const mc\_mjpeg\_enc\_params\_t \*params: MJPEG encoding parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
@@ -3885,38 +3887,38 @@ hb\_s32 hb\_mm\_mc\_set\_mjpeg\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Sets MJPEG encoding parameters. These parameters are dynamic and applicable to MJPEG.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_mjpeg_config](#hb_mm_mc_get_mjpeg_config)
 
 #### hb\_mm\_mc\_get\_jpeg\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_jpeg\_config(media\_codec\_context\_t
 \*context, mc\_jpeg\_enc\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[OUT\] mc\_jpeg\_enc\_params\_t \*params: JPEG encoding parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Retrieves JPEG encoding parameters, applicable to JPEG.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -3993,17 +3995,17 @@ int main(int argc, char *argv[])
 
 #### hb\_mm\_mc\_set\_jpeg\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_jpeg\_config(media\_codec\_context\_t
 \*context, const mc\_jpeg\_enc\_params\_t \*params)
 
-【Parameter Description】  
+Parameter Description  
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type  
 - \[IN\] const mc\_jpeg\_enc\_params\_t \*params: JPEG encoding parameters  
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded  
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error  
@@ -4011,11 +4013,11 @@ hb\_s32 hb\_mm\_mc\_set\_jpeg\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance  
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
-【Function Description】
+Function Description
 
 Sets JPEG encoding parameters. These parameters are dynamic and applicable to JPEG encoding.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_jpeg_config](#hb_mm_mc_get_jpeg_config)
 
@@ -4261,17 +4263,17 @@ int main(int argc, char *argv[])
 
 #### hb\_mm\_mc\_close\_fd
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_close\_fd(media\_codec\_context\_t \* context,
 hb\_s32 fd)
 
-**【Parameter Description】
+**Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[IN\] hb\_s32 fd: File descriptor of the device node
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
@@ -4279,28 +4281,28 @@ hb\_s32 fd)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Closes the device node.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_fd](#hb_mm_mc_get_fd)
 
 #### hb\_mm\_mc\_set\_camera
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_camera(media\_codec\_context\_t \*context,
 hb\_s32 pipeline, hb\_s32 channel\_port\_id)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[IN\] hb\_s32 pipeline: Pipeline
 - \[IN\] hb\_s32 channel\_port\_id: Channel port ID
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
@@ -4308,11 +4310,11 @@ hb\_s32 pipeline, hb\_s32 channel\_port\_id)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Sets VIO camera information. This parameter is static and applicable to H.264/H.265.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -4361,32 +4363,32 @@ int main(int argc, char *argv[])
 
 #### hb\_mm\_mc\_get\_vui\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_vui\_config(media\_codec\_context\_t \*context,
 mc\_video\_vui\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[OUT\] mc\_video\_vui\_ params\_t \*params: VUI parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Retrieves VUI parameters.
 
-【Additional Notes】
+Additional Notes
 
 Currently, during video encoding, the default color range in the header information is set to full range mode. To set it to limited range, you must explicitly call the hb\_mm\_mc\_set\_vui\_config interface.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -4642,17 +4644,17 @@ int main(int argc, char *argv[]){
 
 #### hb\_mm\_mc\_set\_vui\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_vui\_config(media\_codec\_context\_t \*context,
 const mc\_video\_vui\_params\_t \*params)
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[IN\] const mc\_video\_vui\_params\_t \*params: VUI parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
@@ -4660,27 +4662,27 @@ const mc\_video\_vui\_params\_t \*params)
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Sets VUI parameters, which are static parameters.
 
-【Example Code】
+Example Code
 
 Refer to [hb_mm_mc_get_vui_config](#hb_mm_mc_get_vui_config)
 
 #### hb\_mm\_mc\_get\_3dnr\_enc\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_get\_3dnr\_enc\_config(media\_codec\_context\_t
 \*context, mc\_video\_3dnr\_enc\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
 - \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
 - \[IN\] mc\_video\_3dnr\_enc\_params\_t \*params: 3DNR parameters
 
-【Return Values】
+Return Values
 
 - 0: Operation succeeded
 - HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
@@ -4688,11 +4690,11 @@ hb\_s32 hb\_mm\_mc\_get\_3dnr\_enc\_config(media\_codec\_context\_t
 - HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
 - HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Retrieves 3DNR parameters, which are dynamic parameters applicable to H.265.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -4945,44 +4947,44 @@ int main(int argc, char *argv[])
 ```
 #### hb\_mm\_mc\_set\_3dnr\_enc\_config
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_set\_3dnr\_enc\_config(media\_codec\_context\_t
 \*context, const mc\_video\_3dnr\_enc\_params\_t \*params);
 
-【Parameter Description】
+Parameter Description
 
-- \[IN\] media\_codec\_context\_t \*context：Context specifying the codec type
-- \[IN\] const mc\_video\_3dnr\_enc\_params\_t \*params：3DNR parameters
+- \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
+- \[IN\] const mc\_video\_3dnr\_enc\_params\_t \*params: 3DNR parameters
 
-【Return Values】
+Return Values
 
-- 0：Operation succeeded
-- HB\_MEDIA\_ERR\_UNKNOWN： Unknown error
-- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED：Operation not allowed
-- HB\_MEDIA\_ERR\_INVALID\_INSTANCE：Invalid instance
-- HB\_MEDIA\_ERR\_INVALID\_PARAMS：Invalid parameters
+- 0: Operation succeeded
+- HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
+- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed
+- HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
+- HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
 
-【Function Description】
+Function Description
 
 Set the 3DNR parameters. This parameter is a dynamic one and is applicable to H265.
 
-【Example Code】
+Example Code
 
 Refer to  [hb_mm_mc_get_3dnr_enc_config](#hb_mm_mc_get_3dnr_enc_config)
 
 #### hb\_mm\_mc\_request\_idr\_header
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_request\_idr\_header(media\_codec\_context\_t
 \*context, hb\_u32 force\_header)
 
-【Parameter Description】
+Parameter Description
 
-- \[IN\] media\_codec\_context\_t \*context：Context specifying the codec type
-- \[IN\] hb\_u32 force\_header：
+- \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
+- \[IN\] hb\_u32 force\_header:
 
   > 0 : No froced header(VPS/SPS/PPS)
   >
@@ -4992,75 +4994,75 @@ hb\_s32 hb\_mm\_mc\_request\_idr\_header(media\_codec\_context\_t
   > CRA and IDR frame for H265
   >
 
-【Return Values】
+Return Values
 
-- 0：Operation succeeded
-- HB\_MEDIA\_ERR\_UNKNOWN： Unknown error
-- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED：Operation not allowed
-- HB\_MEDIA\_ERR\_INVALID\_INSTANCE：Invalid instance
-- HB\_MEDIA\_ERR\_INVALID\_PARAMS：Invalid parameters
+- 0: Operation succeeded
+- HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
+- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed
+- HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
+- HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Request the IDR frame header information of the frame header ID, applicable to H264/H265.
 
-【Example Code】
+Example Code
 
-参考 [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
+Refer to [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_enable\_idr\_frame
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_enable\_idr\_frame(media\_codec\_context\_t
 \*context, hb\_bool enable)
 
-【Parameter Description】
+Parameter Description
 
-- \[IN\] media\_codec\_context\_t \*context：Context specifying the codec type
-- \[IN\] hb\_bool enable：0: Disable；1: Enable；
+- \[IN\] media\_codec\_context\_t \*context: Context specifying the codec type
+- \[IN\] hb\_bool enable: 0: Disable; 1: Enable;
 
-【Return Values】
+Return Values
 
-- 0：Operation succeeded
-- HB\_MEDIA\_ERR\_UNKNOWN： Unknown error
-- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED：Operation not allowed
-- HB\_MEDIA\_ERR\_INVALID\_INSTANCE：Invalid instance
-- HB\_MEDIA\_ERR\_INVALID\_PARAMS：Invalid parameters
+- 0: Operation succeeded
+- HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
+- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed
+- HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
+- HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Enable IDR frames, applicable for H264/H265.
 
-【Example Code】
+Example Code
 
 Refer to  [hb_mm_mc_get_longterm_ref_mode](#hb_mm_mc_get_longterm_ref_mode)
 
 #### hb\_mm\_mc\_register\_audio\_encoder
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_register\_audio\_encoder(hb\_s32 \*handle,
 mc\_audio\_encode\_param\_t \*encoder)
 
-【Parameter Description】
+Parameter Description
 
-- \[IN\] hb\_s32 \*handle：Encoder handle
-- \[IN\] mc\_audio\_encode\_param\_t \*encoder：Audio encoder descriptor
+- \[IN\] hb\_s32 \*handle: Encoder handle
+- \[IN\] mc\_audio\_encode\_param\_t \*encoder: Audio encoder descriptor
 
-【Return Values】
+Return Values
 
-- 0：Operation succeeded
-- HB\_MEDIA\_ERR\_UNKNOWN： Unknown error
-- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED：Operation not allowed
-- HB\_MEDIA\_ERR\_INVALID\_INSTANCE：Invalid instance
-- HB\_MEDIA\_ERR\_INVALID\_PARAMS：Invalid parameters
+- 0: Operation succeeded
+- HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
+- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed
+- HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
+- HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Register the audio encoder, applicable for Audio.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -5102,56 +5104,56 @@ int main(int argc, char *argv[])
 ```
 #### hb\_mm\_mc\_unregister\_audio\_encoder
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_unregister\_audio\_encoder(hb\_s32 handle)
 
-【Parameter Description】
+Parameter Description
 
-- \[IN\] hb\_s32 \*handle：encoder handle
+- \[IN\] hb\_s32 \*handle: encoder handle
 
-【Return Values】
+Return Values
 
-- 0：Operation succeeded
-- HB\_MEDIA\_ERR\_UNKNOWN： Unknown error
-- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED：Operation not allowed 
-- HB\_MEDIA\_ERR\_INVALID\_INSTANCE：Invalid instance 
-- HB\_MEDIA\_ERR\_INVALID\_PARAMS：Invalid parameters  
+- 0: Operation succeeded
+- HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
+- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed 
+- HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance 
+- HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters  
 
 
-【Function Description】
+Function Description
 
 Unregister the audio encoder, applicable for Audio.
 
-【Example Code】
+Example Code
 
-参考 [hb_mm_mc_register_audio_encoder](#hb_mm_mc_register_audio_encoder)
+Refer to [hb_mm_mc_register_audio_encoder](#hb_mm_mc_register_audio_encoder)
 
 #### hb\_mm\_mc\_register\_audio\_decoder
 
-【Function Declaration】
+Function Declaration
 
 hb\_s32 hb\_mm\_mc\_register\_audio\_decoder(hb\_s32 \*handle,
 mc\_audio\_decode\_param\_t \*decoder)
 
-【Parameter Description】
+Parameter Description
 
-- \[IN\] hb\_s32 \*handle：Decoder handle
-- \[IN\] mc\_audio\_decode\_param\_t \*decoder：Audio decoder descriptor
+- \[IN\] hb\_s32 \*handle: Decoder handle
+- \[IN\] mc\_audio\_decode\_param\_t \*decoder: Audio decoder descriptor
 
-【Return Values】
+Return Values
 
-- 0：Operation succeeded
-- HB\_MEDIA\_ERR\_UNKNOWN： Unknown error
-- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED：Operation not allowed
-- HB\_MEDIA\_ERR\_INVALID\_INSTANCE：Invalid instance
-- HB\_MEDIA\_ERR\_INVALID\_PARAMS： Invalid parameters
+- 0: Operation succeeded
+- HB\_MEDIA\_ERR\_UNKNOWN: Unknown error
+- HB\_MEDIA\_ERR\_OPERATION\_NOT\_ALLOWED: Operation not allowed
+- HB\_MEDIA\_ERR\_INVALID\_INSTANCE: Invalid instance
+- HB\_MEDIA\_ERR\_INVALID\_PARAMS: Invalid parameters
 
-【Function Description】
+Function Description
 
 Register the audio decoder, applicable for Audio.
 
-【Example Code】
+Example Code
 
 ```
 #include "hb_media_codec.h"
@@ -5190,7 +5192,7 @@ int main(int argc, char *argv[])
 
 #### hb_mm_mc_unregister_audio_decoder  
 
-【Function Declaration】  
+Function Declaration  
 
 hb\_s32 hb\_mm\_mc\_unregister\_audio\_decoder(hb\_s32 handle)
 
@@ -5599,7 +5601,7 @@ typedef struct _mc_h265_vbr_params {
 
 **Description**
 
-Defines the adjustable parameter set under H.265 AVBR (Adaptive Variable Bitrate) control mode.【Definition】
+Defines the adjustable parameter set under H.265 AVBR (Adaptive Variable Bitrate) control mode. Definition
 
 ```
 typedef struct _mc_h265_avbr_params {
@@ -5625,11 +5627,11 @@ typedef struct _mc_h265_avbr_params {
 
 #### mc\_h265\_fix\_qp\_params\_t
 
-【Description】
+Description
 
 Defines the adjustable parameter set for H.265 under FixQP rate control mode.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_h265_fix_qp_params {
@@ -5643,11 +5645,11 @@ typedef struct _mc_h265_fix_qp_params {
 
 #### mc\_h265\_qp\_map\_params\_t
 
-【Description】
+Description
 
 Defines the adjustable parameter set for H.265 under QPMAP rate control mode.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_h265_qp_map_params {
@@ -5660,11 +5662,11 @@ typedef struct _mc_h265_qp_map_params {
 
 #### mc\_mjpeg\_fix\_qp\_params\_t
 
-【Description】
+Description
 
 Defines the adjustable parameter set for MJPEG under FixQP rate control mode.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_mjpeg_fix_qp_params {
@@ -5675,11 +5677,11 @@ typedef struct _mc_mjpeg_fix_qp_params {
 
 #### mc\_video\_custom\_gop\_pic\_params\_t
 
-【Description】
+Description
 
 Defines the data structure for a custom GOP structure table.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_video_custom_gop_pic_params {
@@ -5695,11 +5697,11 @@ typedef struct _mc_video_custom_gop_pic_params {
 
 #### mc\_inter\_status\_t
 
-【Description】
+Description
 
 Defines internal status information of the media codec.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_inter_status {
@@ -5718,11 +5720,11 @@ typedef struct _mc_inter_status {
 
 #### media\_codec\_context\_t
 
-【Description】
+Description
 
 Defines the context of the Media codec.
 
-【Definition】
+Definition
 
 ```
 typedef struct _media_codec_context {
@@ -5742,11 +5744,11 @@ typedef struct _media_codec_context {
 
 #### mc\_video\_codec\_enc\_params\_t
 
-【Description】
+Description
 
 Defines encoding parameters for the video encoder. Supported video encoder types include H.264, H.265, MJPEG, and JPEG.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_video_codec_enc_params {
@@ -5774,11 +5776,11 @@ typedef struct _mc_video_codec_enc_params {
 
 #### mc\_video\_codec\_dec\_params\_t
 
-【Description】
+Description
 
 Defines decoding parameters for the video decoder. Supported video decoder types include H.264, H.265, MJPEG, and JPEG.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_video_codec_dec_params {
@@ -5799,11 +5801,11 @@ typedef struct _mc_video_codec_dec_params {
 
 #### mc\_audio\_codec\_enc\_params\_t  
 
-【Description】
+Description
 
 Defines the encoding parameters for an audio codec.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_audio_codec_enc_params {
@@ -5821,11 +5823,11 @@ typedef struct _mc_audio_codec_enc_params {
 
 #### mc\_audio\_codec\_dec\_params\_t
 
-【Description】
+Description
 
 Defines the decoding parameters for an audio codec.
 
-【Definition】
+Definition
 
 ```
 typedef struct _mc_audio_codec_dec_params {
