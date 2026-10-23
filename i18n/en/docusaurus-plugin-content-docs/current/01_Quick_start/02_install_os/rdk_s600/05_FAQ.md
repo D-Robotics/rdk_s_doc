@@ -1,10 +1,8 @@
 ---
-sidebar_position: 6
+sidebar_position: 5
 ---
 
 # FAQ
-
-For U disk upgrade issues, see [U disk upgrade · FAQ](./05_usb_upgrade.md#faq).
 
 Issues related to serial ports, drivers, and boot failures during flashing and startup are consolidated in the troubleshooting section of the XBurn Manual:
 
