@@ -5,7 +5,7 @@ sidebar_products: RDK S100
 
 # LLM Toolchain_v2.0.0
 
-D-Robotics_LLM_2.0.0 applies to the S100P/S100 4.0.5 and above version computing platforms.
+D-Robotics_LLM_2.0.0 applies to the S100P/S100 V4.0.5 and above version computing platforms.
 
 
 ## Main Features

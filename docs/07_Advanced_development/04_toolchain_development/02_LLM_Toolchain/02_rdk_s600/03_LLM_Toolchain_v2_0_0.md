@@ -5,7 +5,7 @@ sidebar_products: RDK S600
 
 # 大模型工具链_v2.0.0
 
-D-Robotics_LLM_2.0.0 版本适用于 S600 5.1.0 及以上版本计算平台。
+D-Robotics_LLM_2.0.0 版本适用于 S600 V5.1.0 及以上版本计算平台。
 
 
 ## 主要功能
