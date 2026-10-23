@@ -604,8 +604,8 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       </tr>
       <tr>
         <td>[OE LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600/03_LLM_Toolchain_v2_0_0.md)</td>
-        <td> V1.0.2</td>
-        <td>2026-06-22</td>
+        <td> V2.0.0</td>
+        <td>2026-10-23</td>
         <td>OE LLM development package.</td>
       </tr>
       <tr>
@@ -809,7 +809,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       </tr>
       <tr>
         <td>OE-LLM Development Package</td>
-        <td> V1.0.2</td>
+        <td> V2.0.0</td>
         <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600/03_LLM_Toolchain_v2_0_0.md)</td>
       </tr>
       <tr>
@@ -1297,7 +1297,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       </tr>
       <tr>
         <td>OE-LLM Development Package</td>
-        <td> V1.0.2</td>
+        <td> V2.0.0</td>
         <td>[OE-LLM Development Package](../07_Advanced_development/04_toolchain_development/02_LLM_Toolchain/02_rdk_s600/03_LLM_Toolchain_v2_0_0.md)</td>
       </tr>
       <tr>
