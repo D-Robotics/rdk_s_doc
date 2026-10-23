@@ -1015,7 +1015,7 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
 <TabItem value="online" label="Online Download">
 
 
-## System Software
+## System Software {#s600-system-software-5-1-1}
 
 <div className="table-responsive">
   <table>

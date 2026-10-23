@@ -1018,7 +1018,7 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 <TabItem value="online" label="在线下载">
 
 
-## 系统软件
+## 系统软件 {#s600-system-software-5-1-1}
 
 <div className="table-responsive">
   <table>
