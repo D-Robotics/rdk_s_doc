@@ -74,6 +74,20 @@ root@ubuntu:~# devmem 0xE0000000 32 0x12345678
 root@ubuntu:~#
 ```
 
+:::warning
+
+The address `0xE0000000` in the example above only illustrates the `devmem` command syntax — it is **not a real, writable address on the board**. Replace it with a physical address that actually exists and is currently accessible. Otherwise the `mmap` mapping fails and the command returns an error right away:
+
+```shell
+root@ubuntu:~# devmem 0xE0000000 32 0x12345678
+devmem: mmap: Operation not permitted
+root@ubuntu:~#
+```
+
+Confirm the target address is valid before writing to it — for example by referring to the ION reserved memory information described above, the memory map in `/proc/iomem`, or the address plan in the chip manual. Note that an address which exists but lies in a protected region produces the same error.
+
+:::
+
 ### Read memory
 
 ```shell

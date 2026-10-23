@@ -12,7 +12,7 @@ sidebar_position: 2
 
 ```bash
 sudo apt update
-sudo apt install linux-headers-6.1.112-rt43
+sudo apt install linux-headers-6.1.158-rt58
 sudo apt install bison flex
 ```
 命令运行成功后，内核头文件会被安装到`/usr/src`目录下
@@ -25,18 +25,31 @@ Kconfig        System.map      certs  fs       io_uring  lib     rust  security 
 
 :::warning
 请**不要**在`/usr/src/linux-headers-$(uname -r)`目录下执行`make clean`命令，这会将板端内核模块的编译环境破坏；
-如果执行了`make clean`动作，请重新安装`linux-headers-6.1.112-rt43`包进行环境恢复。
+如果执行了`make clean`动作，请重新安装`linux-headers-6.1.158-rt58`包进行环境恢复。
 :::
 
 ## 使用示例
 ### Hello World 内核模块
 我们用一个简单的 `Hello World` 内核模块的开发介绍如果使用内核头文件。步骤概要如下：
 
+<DocScope versions="<5.1.1">
+
 - 准备程序代码，以编译路径为`sunrise`用户的`${HOME}/test_ko`为例
 - 编写 Makefile，完成驱动模块的编译
 - 对驱动模块进行签名
 - 测试加载、卸载模块
 - （可选）配置开机自动加载
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+- 准备程序代码，以编译路径为`sunrise`用户的`${HOME}/test_ko`为例
+- 编写 Makefile，完成驱动模块的编译
+- 测试加载、卸载模块
+- （可选）配置开机自动加载
+
+</DocScope>
 
 #### 编写 Hello World 内核模块
 打开你熟悉的编辑器（比如 VIM），创建文件 `hello.c`，输入下面的内容：
@@ -97,13 +110,13 @@ endif
 - `KERNELRELEASE`是在内核源码的顶层 Makefile 里定义的变量，一般用于判断当前编译是否是在`Kbuild`框架下；
 - 调用内核原生的`prepare`目标，来将内核模块编译和安装所需的工具准备好；
 - 调用内核原生的`modules`目标，来将内核模块编译出来；
-- 调用内核原生的`modules_install`目标，来将编译好的内核模块签名并安装到系统模块目录。
+- 调用内核原生的`modules_install`目标，来将编译好的内核模块安装到系统模块目录。
 
 保存`Makefile`后，执行`make`命令完成模块的编译，生成`hello.ko`文件。
 ```bash
 sunrise@ubuntu:~/test_ko$ sudo make
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build prepare
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/build prepare
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
   SYNC    include/config/auto.conf.cmd
   HOSTCC  scripts/basic/fixdep
   HOSTCC  scripts/kconfig/conf.o
@@ -168,26 +181,28 @@ make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-250719
   LD      arch/arm64/kernel/vdso/vdso.so.dbg
   VDSOSYM include/generated/vdso-offsets.h
   OBJCOPY arch/arm64/kernel/vdso/vdso.so
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build M=/home/sunrise/test_ko modules
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/build M=/home/sunrise/test_ko modules
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
   CC [M]  /home/sunrise/test_ko/hello.o
   MODPOST /home/sunrise/test_ko/Module.symvers
   CC [M]  /home/sunrise/test_ko/hello.mod.o
   LD [M]  /home/sunrise/test_ko/hello.ko
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build KERNELRELEASE=6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8 M=/home/sunrise/test_ko modules_install
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-  INSTALL /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  SIGN    /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  DEPMOD  /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/build KERNELRELEASE=6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8 M=/home/sunrise/test_ko modules_install
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+  INSTALL /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
+  SIGN    /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
+  DEPMOD  /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
 ```
 
 :::info
 - 上方打印中的内核版本会随版本变化而变化；
 - 更多关于内核模块编译的说明，请参考：[Linux Kernel Doc | Building External Modules](https://kernel.org/doc/html/v6.1/kbuild/modules.html)。
 :::
+
+<DocScope versions="<5.1.1">
 
 #### 模块签名
 编译好的驱动模块文件，已经通过 modules_install 自动签名，如果想要手动签名，请执行以下命令：
@@ -232,6 +247,8 @@ Saving signed module to hello.ko ...Done!
 ```
 ERROR: could not insert module hello.ko: Required key not available
 ```
+
+</DocScope>
 
 #### 加载模块
 
@@ -312,16 +329,13 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     tar -xzf peak-linux-driver-8.20.0.tar.gz
     ```
 5. 执行编译：
-    :::info
-    请确保您板端的 linux-headers-6.1.112-rt43版本为4.0.3或以上
-    :::
 
     ```shell
     # Install local module build prerequisites
     sudo apt install flex bison -y
 
     # Install PCAN driver prerequisites
-    sudo apt install libpopt.h -y
+    sudo apt install libpopt-dev -y
 
     # Setup local module build environment
     sudo make -C /usr/src/linux-headers-$(uname -r) prepare
@@ -333,15 +347,30 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     # Install PCAN drivers and libraries
     sudo make install
     ```
-6. 对 PCAN 驱动进行签名并使用，以下示例以8.20.0版本的 PCAN 驱动为例，该版本下，PCAN 驱动模块被默认安装到了路径`/lib/modules/6.1.112/misc/`内：
+
+<DocScope versions="<5.1.1">
+
+6. 对 PCAN 驱动进行签名并使用，以下示例以8.20.0版本的 PCAN 驱动为例，该版本下，PCAN 驱动模块被默认安装到了路径`/lib/modules/6.1.158/misc/`内：
      1. 参考[模块签名](#模块签名)章节，创建脚本；
      2. 执行签名命令：
         ```shell
         # Sign file
-        sudo bash drobot-sign-file.sh /lib/modules/6.1.112/misc/pcan.ko
+        sudo bash drobot-sign-file.sh /lib/modules/6.1.158/misc/pcan.ko
         ```
      3. 使用 PCAN 驱动：
         ```shell
         # Insert PCAN driver
-        sudo insmod /lib/modules/6.1.112/misc/pcan.ko
+        sudo insmod /lib/modules/6.1.158/misc/pcan.ko
         ```
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+6. 使用 PCAN 驱动，以下示例以8.20.0版本的 PCAN 驱动为例，该版本下，PCAN 驱动模块被默认安装到了路径`/lib/modules/6.1.158/misc/`内：
+    ```shell
+    # Insert PCAN driver
+    sudo insmod /lib/modules/6.1.158/misc/pcan.ko
+    ```
+
+</DocScope>

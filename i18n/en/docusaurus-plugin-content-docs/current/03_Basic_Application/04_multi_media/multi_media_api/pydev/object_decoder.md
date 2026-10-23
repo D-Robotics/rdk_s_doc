@@ -8,17 +8,17 @@ The Decoder object implements video data decoding functionality and includes sev
 
 ## decode
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Enables the decode module and decodes the video file.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Decoder.decode(file, video_chn, decode_type, width, height)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 | Parameter Name | Description                              | Value Range                     |
 | -------------- | ---------------------------------------- | ------------------------------- |
@@ -28,7 +28,7 @@ Decoder.decode(file, video_chn, decode_type, width, height)
 | width          | Width of the input image to the decoding module | Up to 4096                     |
 | height         | Height of the input image to the decoding module | Up to 4096                     |
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 ```python
 #create decode object
@@ -38,7 +38,7 @@ decode = libsrcampy.Decoder()
 ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 Returns a `list` containing two elements:
 
@@ -47,30 +47,30 @@ Returns a `list` containing two elements:
 | list[0]        | 0: Decoding succeeded; -1: Decoding failed |
 | list[1]        | Number of frames in the input bitstream file (valid only when decoding succeeds) |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 None
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>Reference Code</font>  
 
 None
 
 ## get_img
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Retrieves the output result from the decoding module.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 ```python
 Decoder.get_img()
 ```
 
-<font color='Blue'>【Parameter Description】</font>
+<font color='Blue'>Parameter Description</font>
 
 None
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
@@ -79,17 +79,17 @@ print ("Decoder return:%d frame count: %d" %(ret[0], ret[1]))
 img = dec.get_img()
 ```
 
-<font color='Blue'>【Return Value】</font>
+<font color='Blue'>Return Value</font>
 
 | Return Value | Description     |
 | ------------ | --------------- |
 | -1           | Decoded data    |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 This interface must be used after calling `Decoder.decode()` to create a decoding channel.
 
-<font color='Blue'>【Reference Code】</font>
+<font color='Blue'>Reference Code</font>
 
 ```python
 import sys, os, time
@@ -126,17 +126,17 @@ test_decode()
 
 ## set_img
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Feeds a single encoded frame into the decoding module for decoding.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Decoder.set_img(img, chn, eos)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 | Parameter Name | Description                              | Value Range |
 | -------------- | ---------------------------------------- | ----------- |
@@ -144,22 +144,22 @@ Decoder.set_img(img, chn, eos)
 | chn            | Decoder channel number                   | Range: 0–31 |
 | eos            | Indicates whether decoding data has ended | 0: Not ended; 1: Ended |
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This interface must be used after calling `Decoder.decode()` to create a decoding channel, and when creating the decoding channel, the `file` parameter must be left empty.
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>Reference Code</font>  
 
 ```python
 import sys, os, time
@@ -215,34 +215,34 @@ test_cam_bind_encode_decode_bind_display()
 
 ## close
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Close the decoder module.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 ```python
 Decoder.close()
 ```
 
-<font color='Blue'>【Parameters】</font>
+<font color='Blue'>Parameters</font>
 
 None
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>
+<font color='Blue'>Return Value</font>
 
 | Return Value | Description        |
 | ------------ | ------------------ |
 | 0            | Success            |
 | -1           | Failure            |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 The `close` interface must be called upon program exit to release resources.
 
-<font color='Blue'>【Example Code】</font>
+<font color='Blue'>Example Code</font>
 
 None

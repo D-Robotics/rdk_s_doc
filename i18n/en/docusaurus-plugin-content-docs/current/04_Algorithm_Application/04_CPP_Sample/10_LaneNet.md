@@ -104,7 +104,8 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/Lanenet/lane
 
     After successful execution, results are drawn and saved to `instance_pred.png` and `binary_pred.png`.
     ```bash
-    Results saved to: instance_pred.png and binary_pred.png
+    [Saved] Instance result saved to: instance_pred.png
+    [Saved] Binary result saved to: binary_pred.png
     ```
 
 ## Notes

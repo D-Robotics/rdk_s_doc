@@ -52,7 +52,7 @@ root@ubuntu:/app/multimedia_samples/sample_isp/get_isp_data# ./get_isp_data -h
 Usage: get_isp_data [OPTIONS]
 Options:
   -s <sensor_index>      Specify sensor index
-  -o <online>            Specify the connection method from VIN to ISP, 1: online 0: offline
+  -o <online>            Specify the connection method from VIN to ISP, 1: online 0: offline, online only use for serdes sensor
   -l <link_port>         Specify the port for connecting serdes sensors, 0:A 1:B 2:C 3:D
   -m <mipi_rx>           Specify the mipi_rx for connecting serdes sensors
   -h                     Show this help message
@@ -61,6 +61,17 @@ index: 1  sensor_name: sc1336_gmsl-30fps        config_file:linear_1280x720_raw1
 index: 2  sensor_name: ar0820std-30fps          config_file:linear_3840x2160_30fps_1lane.c
 index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv_30fps_1lane.c
 index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv_30fps_1lane.c
+index: 5  sensor_name: dummy                    config_file:dummy_sensor.c
+index: 6  sensor_name: sc230ai-30fps            config_file:linear_1920x1080_raw10_30fps_2lane.c
+index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw10_30fps_2lane.c
+index: 8  sensor_name: isx031_gmsl-30fps        config_file:linear_1920x1536_yuv422_30fps_2lane.c
+index: 9  sensor_name: shw3hstd_gmsl-60fps      config_file:linear_1920x1536_60fps_1lane.c
+index: 10 sensor_name: sc233hgs-120fps          config_file:linear_1920x1200_raw10_120fps_4lane.c
+index: 11 sensor_name: sc233hgs-30fps           config_file:linear_1920x1200_raw10_30fps_4lane.c
+index: 12 sensor_name: sc233hgs_hsmt_vc0        config_file:linear_1920x1200_raw10_30fps_4lane_vc0.c
+index: 13 sensor_name: sc233hgs_hsmt_vc1        config_file:linear_1920x1200_raw10_30fps_4lane_vc1.c
+index: 14 sensor_name: sc233hgs_hsmt_vc2        config_file:linear_1920x1200_raw10_30fps_4lane_vc2.c
+index: 15 sensor_name: sc233hgs_hsmt_vc3        config_file:linear_1920x1200_raw10_30fps_4lane_vc3.c
 ```
 
 **命令参数说明：**

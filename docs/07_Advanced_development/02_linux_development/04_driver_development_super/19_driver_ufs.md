@@ -317,14 +317,20 @@ mkfs.ext4 /dev/sda17
 ### 4. 使用 ufs-utils 工具
 
 ```shell
-# 查看UFS设备属性
-ufs-utils -p /dev/sda info
+# ufs-utils 由 hobot-utils 软件包提供，系统默认已安装
+# 工具通过 BSG 字符设备访问 UFS，先确认节点名
+ufs-utils list_bsg
+# 输出：/dev/bsg/ufs-bsg0
 
-# 查看UFS健康状态
-ufs-utils -p /dev/sda health
+# 查看UFS设备描述符（协议版本、厂商ID等设备信息）
+ufs-utils desc -t 0 -r -p /dev/bsg/ufs-bsg0
 
 # 查看UFS配置描述符
-ufs-utils -p /dev/sda desc
+ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
+
+# 查看UFS健康状态（Device Health Descriptor）
+ufs-utils desc -t 9 -r -p /dev/bsg/ufs-bsg0
+# 关注 bPreEOLInfo / bDeviceLifeTimeEstA / bDeviceLifeTimeEstB 字段
 ```
 
 ### 5. UFS 可靠性评估（寿命分析）

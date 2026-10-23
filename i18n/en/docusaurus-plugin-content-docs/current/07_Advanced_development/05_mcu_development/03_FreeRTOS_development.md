@@ -1181,9 +1181,9 @@ MCU_STATE_Reserved      : org = 0x0C800800, len = 1K
 ```c
 MCU1_VERSION:  org = 0x0C800800, len = 0x60
 MCU_ALIVE:     org = 0x0C800860, len = 0x10
-     ---MCU0_ALIVE：org = 0x0C800860, len = 0x04；
-     ---MCU1_ALIVE：org = 0x0C800864, len = 0x04；
-     ---RESERVED：  org = 0x0C800868, len = 0x08；
+     ---MCU0_ALIVE: org = 0x0C800860, len = 0x04;
+     ---MCU1_ALIVE: org = 0x0C800864, len = 0x04;
+     ---RESERVED:  org = 0x0C800868, len = 0x08;
 ```
 ### Usage Precautions
 If shared memory is used for data transfer, there may be an issue where MCU updates data to SRAM, but the Acore cache still contains old data, leading to data read inconsistencies.

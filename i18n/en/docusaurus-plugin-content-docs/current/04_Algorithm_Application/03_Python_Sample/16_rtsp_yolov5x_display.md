@@ -101,7 +101,7 @@ pip install -r ../requirements.txt --break-system-packages
 <DocScope products="RDK-S100">
 | Parameter       | Description                                              | Default Value                               |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------- |
-| `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/1080P_test.h264` |
+| `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/assets/1080P_test.h264` |
 | `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | Inference priority (`0~255`, `255` is highest)           | `0`                                           |
 | `--bpu-cores`   | BPU core index list (for example, `0 1`)                 | `[0]`                                         |
@@ -113,7 +113,7 @@ pip install -r ../requirements.txt --break-system-packages
 <DocScope products="RDK-S600">
 | Parameter       | Description                                              | Default Value                               |
 | ----------------------- | -------------------------------------------------------- | --------------------------------------------- |
-| `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/1080P_test.h264` |
+| `--rtsp-urls` / `-u` | RTSP stream URL(s); multiple streams can be separated by semicolons (for example: `rtsp://192.168.1.10/stream1;rtsp://192.168.1.11/stream2`) | `rtsp://127.0.0.1/assets/1080P_test.h264` |
 | `--model-path`  | BPU quantized model path (`.hbm`)                        | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
 | `--priority`    | Inference priority (`0~255`, `255` is highest)           | `0`                                           |
 | `--bpu-cores`   | BPU core index list (for example, `0 1`)                 | `[0]`                                         |

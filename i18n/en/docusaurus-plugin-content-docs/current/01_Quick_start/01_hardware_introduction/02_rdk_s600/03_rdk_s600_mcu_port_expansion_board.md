@@ -11,7 +11,7 @@ sidebar_label: 1.1.2.2 MCU Interface Expansion Board
 
 
 <details>
-<summary>This document corresponds to **MCU Port Expansion Board V1P0**，Click to view previous versions</summary>
+<summary>This document corresponds to **MCU Port Expansion Board V1P0**, Click to view previous versions</summary>
 
 - [MCU Port Expansion Board V0P3](./versions/mcu/v0p3.md)
 - [MCU Port Expansion Board V0P2](./versions/mcu/v0p2.md)
@@ -79,7 +79,7 @@ In hardware version V0P1, the 2x SPI interfaces are temporarily unavailable.
 
 ### Topology Diagram
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image_hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" alt="Topology Diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_s600_mcu_port_expansion_board_architecture_diagram.png" alt="Topology Diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### Interface Description
 

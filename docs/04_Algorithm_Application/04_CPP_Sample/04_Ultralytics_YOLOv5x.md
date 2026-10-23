@@ -43,7 +43,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    利用 .infer() 方法运行推理过程。
+    利用 `.infer()` 方法运行推理过程。
 
 - 结果后处理
 
@@ -165,13 +165,13 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         </DocScope>
 - 查看结果
 
-    运行成功后，会将目标检测框绘制在原图上，并保存在 build/result.jpg
+    运行成功后，会将目标检测框绘制在原图上，并保存在 `build/result.jpg`
     ```bash
     [Saved] Result saved to: result.jpg
     ```
 
 ## 注意事项
-- 输出结果存储为result.jpg，用户可自行查看。
+- 输出结果存储为`result.jpg`，用户可自行查看。
 
 - 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
 

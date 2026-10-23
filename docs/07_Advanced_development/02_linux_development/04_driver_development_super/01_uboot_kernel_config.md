@@ -4,6 +4,11 @@ sidebar_position: 1
 
 # 配置 U-Boot 和 Kernel 选项参数
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
+```
 
 在系统软件开发中，经常需要对 u-boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
 
@@ -11,11 +16,24 @@ sidebar_position: 1
 
 :::info 注意
 
-​	以下说明以修改 `hobot_s100_defconfig`配置文件为例。
+​	以下说明以修改 Uboot 的 defconfig 配置文件为例。
 
 ​	Uboot 具体使用的配置文件可以在`./xbuild.sh lunch`之后查看`bootloader/device/.board_config.mk`板级配置文件中 `HR_UBOOT_CONFIG_FILE`的变量值。
 
 :::
+
+当前平台对应的 Uboot 配置文件为：
+
+<DocScope products="RDK S100">
+
+`hobot_s100_defconfig`
+
+</DocScope>
+<DocScope products="RDK S600">
+
+`hobot_s600_defconfig`
+
+</DocScope>
 
 ### 通过 xbuild 命令配置
 
@@ -53,7 +71,17 @@ cp -f defconfig <板级配置文件中设置的Uboot配置文件>
 
 ### 手动配置
 
+<DocScope products="RDK S100">
+
 首先进入`source/bootloader/uboot`目录，执行`make ARCH=arm64 hobot_s100_defconfig `。因为`make`命令将首先执行顶级目录下的 Makefile 文件。其中对于以 config 结尾的目标都有一个共同的入口：
+
+</DocScope>
+<DocScope products="RDK S600">
+
+首先进入`source/bootloader/uboot`目录，执行`make ARCH=arm64 hobot_s600_defconfig `。因为`make`命令将首先执行顶级目录下的 Makefile 文件。其中对于以 config 结尾的目标都有一个共同的入口：
+
+</DocScope>
+
 
 ```makefile
 %config: scripts_basic outputmakefile FORCE
@@ -62,11 +90,24 @@ cp -f defconfig <板级配置文件中设置的Uboot配置文件>
 
 展开后的执行命令是：
 
+<DocScope products="RDK S100">
+
 ```
 make -f ./scripts/Makefile.build obj=scripts/kconfig hobot_s100_defconfig
 ```
 
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+make -f ./scripts/Makefile.build obj=scripts/kconfig hobot_s600_defconfig
+```
+
+</DocScope>
+
 本命令执行后会在`uboot`的源码根目录下会生成 `.config`的文件。
+
+<DocScope products="RDK S100">
 
 ```bash
 make ARCH=arm64 hobot_s100_defconfig
@@ -82,13 +123,43 @@ make ARCH=arm64 hobot_s100_defconfig
 #
 ```
 
+</DocScope>
+<DocScope products="RDK S600">
+
+```bash
+make ARCH=arm64 hobot_s600_defconfig
+
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  YACC    scripts/kconfig/zconf.tab.c
+  LEX     scripts/kconfig/zconf.lex.c
+  HOSTCC  scripts/kconfig/zconf.tab.o
+  HOSTLD  scripts/kconfig/conf
+#
+# configuration written to .config
+#
+```
+
+</DocScope>
+
 然后就可以执行`make ARCH=arm64 menuconfig`打开图形化的配置界面进行`uboot`的选项参数配置。
 
 在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
 
+<DocScope products="RDK S100">
+
 保存配置后，可以执行命令 `diff .config configs/hobot_s100_defconfig` 对比一下差异，再次确认一下修改是否符合预期。
 
 如果修改正确，请执行 `cp .config configs/hobot_s100_defconfig`替换默认的配置文件。
+
+</DocScope>
+<DocScope products="RDK S600">
+
+保存配置后，可以执行命令 `diff .config configs/hobot_s600_defconfig` 对比一下差异，再次确认一下修改是否符合预期。
+
+如果修改正确，请执行 `cp .config configs/hobot_s600_defconfig`替换默认的配置文件。
+
+</DocScope>
 
 清理源码目录下的 .config 等文件，否则在重新编译系统时会提示需要 xxx is not clean, please run 'make mrproper'
 ```bash
@@ -101,11 +172,24 @@ make mrproper
 
 :::info 注意
 
-​	以下说明以修改 `drobot_s100_defconfig`配置文件为例。
+​	以下说明以修改 Kernel 的 defconfig 配置文件为例。
 
 ​	kernel 具体使用的配置文件可以查看 `mk_kernel.sh` 脚本中 `kernel_config_file` 的变量值。
 
 :::
+
+当前平台对应的 Kernel 配置文件为：
+
+<DocScope products="RDK S100">
+
+`drobot_s100_defconfig`
+
+</DocScope>
+<DocScope products="RDK S600">
+
+`drobot_s600_defconfig`
+
+</DocScope>
 
 ### 通过 mk_kernel 命令配置
 
@@ -138,11 +222,22 @@ cp defconfig <板级配置文件中设置的Kernel配置文件>
 
 首先进入`source/kernel`目录，然后按照以下步骤配置`kernel`选项。
 
-- 使用`drobot_s100_defconfig`来配置生成`.config`，如果源码做过全量编译，则`.config`文件会配置好
+- 使用当前平台对应的 Kernel defconfig 来配置生成`.config`，如果源码做过全量编译，则`.config`文件会配置好
+
+<DocScope products="RDK S100">
 
 ```
 make ARCH=arm64 drobot_s100_defconfig
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+make ARCH=arm64 drobot_s600_defconfig
+```
+
+</DocScope>
 
 - 执行以下命令来修改配置
 
@@ -152,15 +247,37 @@ make ARCH=arm64 menuconfig
 
 - 修改后，可以先看看修改后和修改前的差异
 
+<DocScope products="RDK S100">
+
 ```
 diff .config hobot-drivers/configs/drobot_s100_defconfig
 ```
 
-- 把新配置覆盖`drobot_s100_defconfig`
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+diff .config hobot-drivers/configs/drobot_s600_defconfig
+```
+
+</DocScope>
+
+- 把新配置覆盖当前平台对应的 Kernel defconfig
+
+<DocScope products="RDK S100">
 
 ```
 cp .config hobot-drivers/configs/drobot_s100_defconfig
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+```
+cp .config hobot-drivers/configs/drobot_s600_defconfig
+```
+
+</DocScope>
 
 - 清理源码目录下的 .config 等文件，否则在重新编译系统时会提示需要 xxx is not clean, please run 'make mrproper'
 

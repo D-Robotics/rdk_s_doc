@@ -85,7 +85,6 @@ build_freertos.py 是编译的整体入口，但是实际调度到 scons 时，�
 2. settings_lite_freertos.py：该文件生效的入口实际上是 SConstruct 里面的“Variables”类的初始化，核心在于引入一系列静态定义的编译环境变量；环境变量的变量名就是 settings_lite_freertos.py 里面的变量名，变量值就是 settings_lite_freertos.py 里面的变量名对应的变量值；“Variables”类实例化后的示例会被 Environment 类使用，用于 scons 的编译
 3. gcc_arm.py：实际定义编译命令的定义文件，真正生效的入口是 settings_lite_freertos.py 里面定义的“COMPILER_TOOL”字段，COMPILER_TOOL 字段进一步会被 Sconscruct 文件的 Variables 添加并最后被 env 获取到其中的“CC”等配置
 4. lite-matrix-B-mcu1.yaml：被编译的文件夹，在该文件中增删编译涉及到的文件夹；其中 `LinkFIle` 字段指向 `Linker/gcc/S600/link_freertos_mcu1.ld`
-
 </DocScope>
 
 ## MCU1镜像 layout

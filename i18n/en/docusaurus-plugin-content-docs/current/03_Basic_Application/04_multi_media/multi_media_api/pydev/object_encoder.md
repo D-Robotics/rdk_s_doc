@@ -8,17 +8,17 @@ The Encoder object implements video data encoding and compression functionality 
 
 ## encode
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Configures and enables the encode module.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 
 ```python
 Encoder.encode(video_chn, encode_type, width, height, bits)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 | Parameter Name | Description                              | Value Range                |
 | -------------- | ---------------------------------------- | -------------------------- |
@@ -28,7 +28,7 @@ Encoder.encode(video_chn, encode_type, width, height, bits)
 | height         | Image height input to the encoding module| Up to 4096                 |
 | bits           | Bitrate of the encoding module           | Default: 8000 kbps         |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 #create encode object
@@ -38,40 +38,40 @@ encode = libsrcampy.Encoder()
 ret = encode.encode(0, 1, 1920, 1080)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 None
 
-<font color='Blue'>【Reference Code】</font>
+<font color='Blue'>Reference Code</font>
 
 None
 
 ## encode_file
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Inputs an image file into an enabled encoding channel and encodes it according to the preset format.
 
-<font color='Blue'>【Function Declaration】</font> 
+<font color='Blue'>Function Declaration</font> 
 
 ```python
 Encoder.encode_file(img)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 | Parameter Name | Description                              | Value Range |
 | -------------- | ---------------------------------------- | ----------- |
 | img            | Image data to be encoded, must be in NV12 format | None        |
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 ```python
 fin = open("output.img", "rb")
@@ -82,53 +82,53 @@ fin.close()
 ret = encode.encode_file(input_img)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 None
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>Reference Code</font>  
 
 None
 
 ## get_img
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Retrieves encoded data.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Encoder.get_img()
 ```
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This interface must be used after calling `Encoder.encode()` to create an encoding channel.
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>Reference Code</font>  
 
 ```python
 import sys, os, time
@@ -170,35 +170,35 @@ test_encode()
 
 ## close
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Closes the enabled encoding channel.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Encoder.close()
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 None
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This interface must be used after calling `Encoder.encode()` to create an encoding channel.
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>Reference Code</font>  
 
 None

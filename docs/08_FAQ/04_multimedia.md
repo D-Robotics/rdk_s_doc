@@ -4,6 +4,10 @@ sidebar_position: 4
 
 # 8.4 多媒体处理与应用
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 本节主要解答与地瓜 RDK 板卡上视频编解码、音频处理以及其他多媒体功能相关的常见疑问。
 
 ## 视频编解码
@@ -25,9 +29,19 @@ sidebar_position: 4
 3.  **推流软件兼容性：**
     * **不推荐使用 VLC 直接推流：** 使用 VLC 软件直接进行 RTSP 推流可能无法成功被 RDK 解码，原因是 VLC 在某些配置下可能不支持在推流时主动添加或确保 `PPS` 和 `SPS` 信息。建议使用 `ffmpeg` 或其他能确保码流参数完整性的专业推流工具。
 
+### Q2: S100/S600上使用ffmpeg实现硬件编码，1080p分辨率编码重影是什么问题?
+
+根本原因在于ffmpeg源码实现上在将输入数据从AVFrame.data拷贝到v4l2 buf时，由于硬件IP 16字节对齐要求，每次拷贝的数据量是按照对齐后的大小进行拷贝(比如Y的数据量拷贝从1920\*1080==》1920\*1088)，拷贝多余字节最终导致编码重影。
+
+对于这种输入文件不满足硬件IP字节对齐要求的情况，ffmpeg提供了video filter选项，支持在编码前对视频帧做逐帧处理，比如缩放、裁剪、对齐等。因此可以使用如下命令编码保证编码结果符合预期。
+
+```
+ffmpeg -f rawvideo -pix_fmt yuv420p -s:v 1920x1080 -r 30 -i input.yuv -vf "pad=1920:1088:0:0" -codec:v h264_v4l2m2m -b:v 5M -f h264 output.h264
+```
+
 ## Audio 常见问题
 
-### Q2: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
+### Q3: 示例中使用了 tinyalsa，它的各个参数代表什么含义？如何使用？
 **A:** `tinyalsa` 是一个轻量级的音频库，主要用于 Android 和嵌入式 Linux 系统。它提供了对 ALSA（ Advanced Linux Sound Architecture）的简化接口，便于开发者进行音频处理。
 以下是一些常用的 `tinyalsa` 命令及其参数含义：
 1.  **列出所有声卡：**
@@ -93,7 +107,7 @@ sidebar_position: 4
     ```
     这个命令会使用声卡 0 的设备 1 录制 2 通道 16 位 48kHz 的音频，持续 5 秒，并保存为 `recorded_audio.wav` 文件。
 
-### Q3: RDK 板卡上如何区分和使用 USB 声卡与板载声卡？特别是当同时连接了多种音频设备时。
+### Q4: RDK 板卡上如何区分和使用 USB 声卡与板载声卡？特别是当同时连接了多种音频设备时。
 **A:** 当 RDK 板卡上同时连接了板载声卡（例如通过音频子板）和 USB 声卡时， Linux 音频系统（ ALSA）会为它们分配不同的声卡序号。您需要知道正确的声卡序号才能精确控制特定的音频设备。
 
 1.  **查看已识别的声卡及其序号：**
@@ -129,23 +143,96 @@ sidebar_position: 4
 
 通过以上方法，您可以准确地识别并控制连接到 RDK 板卡上的不同音频设备。
 
-### Q4: RDKS100 如何通过图形化界面方式支持音频功能使用
 
-1. 修改 PulseAudio 配置文件：`/etc/pulse/default.pa`
+### Q5: 如何通过图形化界面方式支持音频功能使用？
+
+<DocScope products="RDK S100">
+
+1.  **配置正确的声卡设备。**
 
     pulseaudio server 启动默认设置的 fragment\_size 不满足 pdma 限制的 64 字节对齐，因此需要修改配置文件默认设置保证 pulseaudio 服务加载成功。
-
-    修改配置参考如下：
+    
+    目前板端的配置如下：`/etc/pulse/default.pa`
 
     ```
         .ifexists module-udev-detect.so
-        load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // 新增
-        load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 // 新增
+        load-module module-alsa-sink device=hw:0,1 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 fragment_size=1920
+        load-module module-alsa-source device=hw:0,0 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 fragment_size=1920
         # load-module module-udev-detect // 注释掉
     ```
 
-    :::tip
-    以上配置，`device=hw:X,Y` 中的 `X` 代表声卡号，`Y` 代表设备号。用户可根据实际需求制定声卡 / 设备号，声卡 / 设备号确认方法请查看：[控制命令](../03_Basic_Application/02_audio/01_audio_board_super.md#控制命令)。
-    :::
+    以上配置中，device=hw:X,Y 的 X 表示声卡号，Y 表示设备号。默认配置使用 hw:0,1 作为播放设备、hw:0,0 作为录音设备。若实际使用的声卡及设备号与默认配置一致，则无需修改该配置文件；若不一致，请根据实际设备信息修改对应的 device 参数。
 
-2. 修改后保存配置并重启系统，加载音频驱动后图形化界面功能即可正常使用。
+    声卡 / 设备号确认方法请查看：[控制命令](../03_Basic_Application/02_audio/01_audio_board_super.md#控制命令)。
+
+
+2.  **保证音频驱动先于 PulseAudio 服务加载。**
+
+    PulseAudio 加载和管理声卡设备的前提是对应的音频驱动已经完成初始化。因此，需要确保音频驱动在 PulseAudio 服务启动前加载完成。
+
+    音频驱动可以采用动态加载或 Built-in 的方式加载。
+
+    其中，动态加载可以修改文件： `/usr/bin/hobot-loadko.sh`
+
+    驱动加载命令请查看：[声卡调试](../07_Advanced_development/02_linux_development/04_driver_development_super/11_driver_audio.md#声卡调试)。
+
+3.  **修改后保存配置并重启系统，加载音频驱动后图形化界面功能即可正常使用。**
+
+</DocScope>
+<DocScope products="RDK S600">
+
+1.  **配置正确的声卡设备。**
+
+    pulseaudio server 启动默认设置的 fragment\_size 不满足 pdma 限制的 64 字节对齐，因此需要修改配置文件默认设置保证 pulseaudio 服务加载成功。
+    
+    目前板端的配置如下：`/etc/pipewire/pipewire-pulse.conf.d/99-s600-audio.conf `
+
+    ```
+    pulse.cmd = [
+        {
+            cmd = "load-module"
+            args = "module-alsa-sink device=hw:0,1 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 sink_properties='priority.session=1200'"
+            flags = [ ]
+        }
+        {
+            cmd = "load-module"
+            args = "module-alsa-source device=hw:0,0 format=s16le rate=48000 channels=2 channel_map=front-left,front-right mmap=false tsched=0 fragments=2 source_properties='priority.session=2500'"
+            flags = [ ]
+        }
+    ]
+    ```
+
+    以上配置中，device=hw:X,Y 的 X 表示声卡号，Y 表示设备号。默认配置使用 hw:0,1 作为播放设备、hw:0,0 作为录音设备。若实际使用的声卡及设备号与默认配置一致，则无需修改该配置文件；若不一致，请根据实际设备信息修改对应的 device 参数。
+
+    声卡 / 设备号确认方法请查看：[控制命令](../03_Basic_Application/02_audio/01_audio_board_super.md#控制命令)。
+
+    注意：如果播放和录音设备号相同，例如 /dev/snd/pcmC0D1p 和 /dev/snd/pcmC0D1c, 则需要在 args 里分别指定 sink_name=XXX, source_name=XXX, 以保证能够明确区分输入和输出设备。
+
+    ```
+    pulse.cmd = [
+        {
+            ...
+            args = "module-alsa-sink device=hw:0,0 sink_name=alsa_output.hw_0_0 ...
+            ...
+        }
+        {
+            ...
+            args = "module-alsa-source device=hw:0,0 source_name=alsa_input.hw_0_0 ...
+            ...
+        }
+    ]
+    ```
+
+2.  **保证音频驱动先于 PulseAudio 服务加载。**
+
+    PulseAudio 加载和管理声卡设备的前提是对应的音频驱动已经完成初始化。因此，需要确保音频驱动在 PulseAudio 服务启动前加载完成。
+
+    音频驱动可以采用动态加载或 Built-in 的方式加载。
+
+    其中，动态加载可以修改文件： `/usr/bin/hobot-loadko.sh`
+
+    驱动加载命令请查看：[声卡调试](../07_Advanced_development/02_linux_development/04_driver_development_super/11_driver_audio.md#声卡调试)。
+
+3.  **修改后保存配置并重启系统，加载音频驱动后图形化界面功能即可正常使用。**
+
+</DocScope>
