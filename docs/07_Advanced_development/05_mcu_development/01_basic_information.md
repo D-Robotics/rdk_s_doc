@@ -68,9 +68,14 @@ pip install tqdm
 [资源汇总 - 系统软件](../../01_Quick_start/download.md#系统软件)。
 
 </DocScope>
-<DocScope products="RDK S600">
+<DocScope products="RDK S600" versions="5.1.0">
 
 [资源汇总 - 系统软件](../../01_Quick_start/download.md#s600-system-software)。
+
+</DocScope>
+<DocScope products="RDK S600" versions="5.1.1">
+
+[资源汇总 - 系统软件](../../01_Quick_start/download.md#s600-system-software-5-1-1)。
 
 </DocScope>
 

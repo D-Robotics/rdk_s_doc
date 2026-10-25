@@ -34,7 +34,7 @@ Before logging in remotely via the network, the development board needs to be co
 <DocScope products="RDK S600">
 
 - Wired Ethernet:
-  - The eth2 and eth3 interfaces of the development board are still under debugging and are not yet supported for use.
+  - The eth2 and eth3 interfaces of the development board are 10GbE interfaces.
   - The eth1 interface of the development board uses static IP mode by default, with IP address `192.168.127.10`, mask `255.255.255.0`, gateway `192.168.127.1`
   - The eth0 interface of the development board uses DHCP mode by default, the IP address is generally assigned by the router. You can check the IP address of the eth0 network using the `ifconfig` command in the device command line.
 - Wireless Wi-Fi: The development board's IP address is generally assigned by the router. You can check the IP address of the wlan0 network using the `ifconfig` command in the device command line.
@@ -192,7 +192,7 @@ Under the macOS system, use the minicom tool to connect to the serial port. The 
 
 :::tip
 
-If you experience garbled text when using minicom, please refer to [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver#macos-驱动残留导致仍乱码)
+If you experience garbled text when using minicom, please refer to [macOS driver residue causing garbled text](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver)
 :::
 
 ## Network Status Confirmation{#network_config}

@@ -78,6 +78,8 @@ A window watchdog is a special type of watchdog commonly used in functional safe
 
 <DocScope products="RDK S100">
 
+<DocScope products="RDK S100">
+
 ## Device Tree
 
 Add the hardware information description of the watchdog to the device tree (location: code/source/hobot-drivers/kernel-dts/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi)
@@ -109,6 +111,9 @@ Add the hardware information description of the watchdog to the device tree (loc
 </DocScope>
 <DocScope products="RDK S600">
 
+</DocScope>
+<DocScope products="RDK S600">
+
 ## Device Tree
 
 Add the hardware information description of the watchdog to the device tree (location: code/source/hobot-drivers/kernel-dts/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi)
@@ -137,6 +142,8 @@ Add the hardware information description of the watchdog to the device tree (loc
           };
 		};
 ```
+</DocScope>
+
 </DocScope>
 
 ## Watchdog Driver Code
@@ -397,6 +404,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
   - Less than 0: Failure
 
 ## Watchdog Monitoring Solutions
+<DocScope products="RDK S100">
 
 <DocScope products="RDK S100" versions="4.0.5">
 
@@ -477,6 +485,9 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 </DocScope>
 <DocScope products="RDK S600">
 
+</DocScope>
+<DocScope products="RDK S600">
+
 ### HardLockup Monitoring
   HardLockup monitoring is implemented based on the Watchdog module, using Watchdog0 configured in window mode, with the monitoring logic implemented in the driver. When the system is running normally, the monitoring logic is as shown below:
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup Monitoring diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -514,6 +525,8 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
   5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. After receiving the watchdog reset interrupt corresponding to a bark, the MCU sets a reset request; the reset task then waits a fixed 5000 ms to allow the Acore to complete stack dumping, and subsequently triggers a full SoC long reset.
 </DocScope>
 
+
+</DocScope>
 
 ## Important Notes
 

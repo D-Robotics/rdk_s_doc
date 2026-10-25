@@ -39,7 +39,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - BPU 推理
 
-    通过 .infer() 方法调用 BPU 执行推理任务;
+    通过 `.infer()` 方法调用 BPU 执行推理任务;
 
 - 结果后处理
 
@@ -75,7 +75,7 @@ sudo apt install libgflags-dev
 
 - mipi camera的接口使用的自动检测模式，该sample运行时只能接入一个mipi摄像头（任意mipi接口都可以），同时接入多个会报错。
 - 目前该sample仅支持MIPI sensor: IMX219, SC230AI
-- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-相机接口-j11j13)部分。
+- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-相机接口j11j13)部分。
 </DocScope>
 
 ## 目录结构
@@ -174,7 +174,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         </DocScope>
 - 退出运行
 
-    在命令行输入Ctrl C
+    在命令行输入`Ctrl+C`
 
 - 查看结果
 

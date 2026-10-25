@@ -186,6 +186,12 @@ const config = {
           { from: "/03_s600_multimedia_application", to: "/03_S600_multimedia_application" },
           { from: "/basic_development", to: "/Basic_Development" },
           { from: "/ota", to: "/OTA" },
+
+          // S100 → S600 文件名调整（2026-10-16）：旧文件名 URL 301 到新文件名 URL。
+          // 路径为 Docusaurus 剥掉数字前缀后的形式（Advanced_development/.../rdk_s600），
+          // 与线上已发布 URL 一致；数字前缀形式（07_Advanced_development/...）历史上是 404，无需处理。
+          { from: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s100_LLM_Toolchain_v1_0_2", to: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s600_LLM_Toolchain_v1_0_2" },
+          { from: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s100_LLM_Toolchain_v1_0_5", to: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s600_LLM_Toolchain_v1_0_5" },
         ].filter((r) => !(caseInsensitiveFs && isCaseOnlyRedirect(r))),
       },
     ],

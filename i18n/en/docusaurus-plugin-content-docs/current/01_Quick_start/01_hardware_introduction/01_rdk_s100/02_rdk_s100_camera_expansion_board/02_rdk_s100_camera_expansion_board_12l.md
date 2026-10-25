@@ -68,7 +68,7 @@ To avoid malfunction or damage to this expansion board, strictly observe the fol
 | Model                              | Hardware Interface | 
 | ---------------------------------- | ------------------ | 
 | SG8S-AR0820C-5300-G2A | J2100 & J2200 & J2300     | 
-| LEC28736A11 (X3C Module)   | J2100 & J2200 & J2300     | 
+| LEC28736A11(X3C Module)   | J2100 & J2200 & J2300     | 
 | Intel RealSense D457           | J2100 & J2200 & J2300     | 
 
 ### Assembly Instructions

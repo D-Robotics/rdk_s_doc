@@ -788,7 +788,8 @@ Camsys 支持接入美信加串器的 sensor，camera 子板默认搭载美信�
 
 serdes 相关的一些数据结构及回调函数定义在 kernel/include/media/i2c/serdes_core.h，需要包含该头文件，#include \<media/i2c/serdes_core.h\>
 本小结以0820C GMSL sensor 为例，介绍 camsys gmsl sensor 开发。
-####sensor 结构体新增成员
+
+#### sensor 结构体新增成员
 ```c
 struct ar0820 {
         ...

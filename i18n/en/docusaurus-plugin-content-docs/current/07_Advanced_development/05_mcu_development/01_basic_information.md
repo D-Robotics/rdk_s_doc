@@ -68,9 +68,14 @@ Before compiling MCU1, obtain the MCU code package. Download link:
 [Resource Summary - System Software](../../01_Quick_start/download.md#system-software).
 
 </DocScope>
-<DocScope products="RDK S600">
+<DocScope products="RDK S600" versions="5.1.0">
 
 [Resource Summary - System Software](../../01_Quick_start/download.md#s600-system-software).
+
+</DocScope>
+<DocScope products="RDK S600" versions="5.1.1">
+
+[Resource Summary - System Software](../../01_Quick_start/download.md#s600-system-software-5-1-1).
 
 </DocScope>
 

@@ -157,7 +157,7 @@ function makeSelector(initial) {
 }
 
 /** SSR 渲染出的选择器文本：矩阵默认值（服务端读不到 URL 之外的状态） */
-const SSR_SELECTORS = { product: 'RDK S600', version: '5.1.0' };
+const SSR_SELECTORS = { product: 'RDK S600', version: '5.1.1' };
 
 /** 在桩 DOM 中执行首帧脚本，返回它写到页面上的结果 */
 function runBootstrap(
@@ -272,7 +272,7 @@ const cases = [
   {
     name: '无 URL / 无存储 → 矩阵首项',
     input: {},
-    expect: { version: '5.1.0', product: 'RDK S600', s100: false, s600: true },
+    expect: { version: '5.1.1', product: 'RDK S600', s100: false, s600: true },
   },
   {
     name: '?p=RDK%20S100 → 该产品首个版本',
@@ -283,7 +283,7 @@ const cases = [
     // 连字符写法只用于 products="RDK-X5" 这类「系列」声明，URL 的 ?p= 不接受 —— 认不出就回落默认。
     name: '?p=rdk-s100（连字符不是合法产品参数）→ 回落默认',
     input: { search: '?p=rdk-s100' },
-    expect: { version: '5.1.0', product: 'RDK S600', s100: false, s600: true },
+    expect: { version: '5.1.1', product: 'RDK S600', s100: false, s600: true },
   },
   {
     name: '?p=RdK+s100（大小写归一）',
@@ -308,12 +308,12 @@ const cases = [
   {
     name: '?v=3.0.0（未知版本）→ 回落默认版本',
     input: { search: '?v=3.0.0' },
-    expect: { version: '5.1.0', product: 'RDK S600', s100: false, s600: true },
+    expect: { version: '5.1.1', product: 'RDK S600', s100: false, s600: true },
   },
   {
     name: '?v=&p= （参数为空）→ 视为未提供，走存储/默认',
     input: { search: '?v=&p=' },
-    expect: { version: '5.1.0', product: 'RDK S600', s100: false, s600: true },
+    expect: { version: '5.1.1', product: 'RDK S600', s100: false, s600: true },
   },
   {
     name: '?v=4.0.5 覆盖存储中的 5.1.0',
@@ -359,12 +359,12 @@ const cases = [
   {
     name: '访问 localStorage 抛异常（隐私模式）→ 回落默认，不崩',
     input: { throwStorage: true },
-    expect: { version: '5.1.0', product: 'RDK S600', s100: false, s600: true },
+    expect: { version: '5.1.1', product: 'RDK S600', s100: false, s600: true },
   },
   {
     name: 'bfcache 残留相反折叠状态 → 双向 toggle 纠正',
     input: { preHidden: true },
-    expect: { version: '5.1.0', product: 'RDK S600', s100: false, s600: true },
+    expect: { version: '5.1.1', product: 'RDK S600', s100: false, s600: true },
   },
   {
     name: 'scoped 构建：忽略 ?p=RDK%20S600，保持构建固化的产品',
@@ -373,7 +373,7 @@ const cases = [
     expect: { version: '4.0.5', product: 'RDK S100', s100: true, s600: false },
     // 客户端内核不认识「构建固化」概念（Provider 在 hasBuildScope 下不走 parseFilter），
     // 这里显式记下按普通规则会解析成什么，避免把两者的差异当成 bug。
-    coreExpect: { version: '5.1.0', product: 'RDK S600' },
+    coreExpect: { version: '5.1.1', product: 'RDK S600' },
   },
   {
     name: 'scoped 构建：忽略存储中的 S600',
@@ -391,7 +391,7 @@ const cases = [
     scoped: true,
     selectorInit: { product: 'RDK S100', version: '4.0.5' },
     expect: { version: '4.0.5', product: 'RDK S100', s100: true, s600: false },
-    coreExpect: { version: '5.1.0', product: 'RDK S600' },
+    coreExpect: { version: '5.1.1', product: 'RDK S600' },
     noWrites: true,
   },
 ];

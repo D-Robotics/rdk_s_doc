@@ -39,7 +39,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    使用 .run() 方法执行模型前向推理，支持设定调度参数如 BPU 核心分配与优先级。输出为类别 logits 张量。
+    使用 `.run()` 方法执行模型前向推理，支持设定调度参数如 BPU 核心分配与优先级。输出为类别 logits 张量。
 
 - 结果后处理
 
@@ -154,7 +154,7 @@ pip install -r ../../requirements.txt --break-system-packages
 
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到 --img-save-path 指定路径
+    运行成功后，会将结果绘制在原图上，并保存到 `--img-save-path` 指定路径
     ```bash
     [Saved] Result saved to: result.jpg
     ```

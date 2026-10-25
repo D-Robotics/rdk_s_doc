@@ -215,34 +215,34 @@ test_cam_bind_encode_decode_bind_display()
 
 ## close
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Close the decoder module.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 ```python
 Decoder.close()
 ```
 
-<font color='Blue'>【Parameters】</font>
+<font color='Blue'>Parameters</font>
 
 None
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>
+<font color='Blue'>Return Value</font>
 
 | Return Value | Description        |
 | ------------ | ------------------ |
 | 0            | Success            |
 | -1           | Failure            |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 The `close` interface must be called upon program exit to release resources.
 
-<font color='Blue'>【Example Code】</font>
+<font color='Blue'>Example Code</font>
 
 None

@@ -26,12 +26,20 @@ import DocScope from '@site/src/components/DocScope';
 - Supports configuring the period and duty cycle for each PWM channel, subject to the following constraint:
     - Period configuration granularity is clk_PWM, i.e., the PWM peripheral clock, with a maximum clock count value of 4294967295.
 
-The IP configurations for S600 and S100 are as follows:
+<DocScope products="RDK S100">
+The IP configurations for S100 are as follows:
+
+| Platform | Number of PWM IPs | Number of Channels per IP | Total Number of Channels |
+|----------|-------------------|---------------------------|--------------------------|
+| S100     | 1                 | 12 Channels               | 12 Channels              |
+</DocScope>
+<DocScope products="RDK S600">
+The IP configurations for S600 are as follows:
 
 | Platform | Number of PWM IPs | Number of Channels per IP | Total Number of Channels |
 |----------|-------------------|---------------------------|--------------------------|
 | S600     | 3                 | 12 Channels               | 36 Channels              |
-| S100     | 1                 | 12 Channels               | 12 Channels              |
+</DocScope>
 
 ## Software Driver
 
@@ -168,7 +176,7 @@ pwmtest <pwm_id> <pwm_channel> <period> <duty_cycle>
 
 Stop PWM output:
 ```sh
-pwmtest <pwm_id> stop <pwm_channel>
+pwmtest stop <pwm_id> <pwm_channel>
 ```
 
 For example, to set the period of PWM channel 0 to 1000us and the duty cycle to 50%:
@@ -179,7 +187,8 @@ pwmtest 0 0 0x30d40 0x4000
 - Parameter Description
 
 ```sh
-<pwm_channel>: The PWM channel number to configure or stop.
+<pwm_id>: PWM hardware IP instance ID (S100 has only 1 IP, fixed to 0).
+<pwm_channel>: The PWM channel number to configure or stop (S100 exposed channels: 0, 1, 6, 7, 10, 11).
 <period>: The period of the PWM signal.
 <duty_cycle>: The duty cycle of the PWM signal, must be in the range of 0x0000 (0%) to 0x8000 (100%).
 ```
@@ -264,8 +273,8 @@ pwmtest stop <pwm_hwipid> <pwm_hwchid>
 ```
 
 **Parameter Description**  
-**pwm_hwipid:** PWM hardware IP instance ID (0 ~ 2)  
-**pwm_hwchid:** PWM hardware channel ID (0 ~ 11)  
+**pwm_hwipid:** PWM hardware IP instance ID, hardware range 0-2 (S600 has 3 PWM IPs in total)  
+**pwm_hwchid:** PWM hardware channel ID, hardware range 0-11 (12 channels per IP)  
 **period:** PWM signal period value, 32-bit value  
 **duty_cycle:** PWM signal duty cycle, must be in the range of 0x0000 (0%) to 0x8000 (100%)
 
@@ -347,16 +356,16 @@ D-Robotics:/$ pwmdumpregs 0 4
 #### void Pwm_Init(const Pwm_ConfigType* ConfigPtr)
 
 ```shell
-Description：Service for PWM initialization
+Description: Service for PWM initialization
 
-Sync/Async：Synchronous
+Sync/Async: Synchronous
 Parameters(in)
-    ConfigPtr： Pointer to configuration set
+    ConfigPtr: Pointer to configuration set
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 
@@ -364,23 +373,23 @@ Return value：None
 #### void Pwm_DeInit(void)
 
 ```shell
-Description：Service for PWM De-Initialization.
+Description: Service for PWM De-Initialization.
 
-Sync/Async：Synchronous
+Sync/Async: Synchronous
 Parameters(in)
     None
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Pwm_SetDutyCycle(Pwm_ChannelType ChannelNumber, uint16 DutyCycle)
 
 ```shell
-Description：Service sets the duty cycle of the PWM channel.
-Sync/Async：Asynchronous
+Description: Service sets the duty cycle of the PWM channel.
+Sync/Async: Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
     DutyCycle: Min=0x0000 Max=0x8000
@@ -388,14 +397,14 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Pwm_SetPeriodAndDuty(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period, uint16 DutyCycle)
 
 ```shell
-Description：Service sets the duty cycle of the PWM channel.
-Sync/Async：Asynchronous
+Description: Service sets the duty cycle of the PWM channel.
+Sync/Async: Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
     Period: Period of the PWM signal
@@ -404,28 +413,28 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Pwm_SetOutputToIdle(Pwm_ChannelType ChannelNumber)
 
 ```shell
-Description：Service sets the PWM output to the configured Idle state.
-Sync/Async：Asynchronous
+Description: Service sets the PWM output to the configured Idle state.
+Sync/Async: Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### Pwm_OutputStateType Pwm_GetOutputState(Pwm_ChannelType ChannelNumber)
 
 ```shell
-Description：Service to read the internal state of the PWM output signal.
-Sync/Async：Asynchronous
+Description: Service to read the internal state of the PWM output signal.
+Sync/Async: Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
 Parameters(inout)
@@ -433,7 +442,7 @@ Parameters(inout)
 Parameters(out)
     None
 
-Return value：Pwm_OutputStateType
+Return value: Pwm_OutputStateType
     PWM_HIGH: The PWM output state is high
     PWM_LOW: The PWM output state is low
 ```
@@ -441,22 +450,22 @@ Return value：Pwm_OutputStateType
 #### void Pwm_DisableNotification(Pwm_ChannelType ChannelNumber)
 
 ```shell
-Description：Service to disable the PWM signal edge notification.
-Sync/Async：Asynchronous
+Description: Service to disable the PWM signal edge notification.
+Sync/Async: Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
 Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Pwm_EnableNotification(Pwm_ChannelType ChannelNumber, Pwm_EdgeNotificationType Notification)
 
 ```shell
-Description：Service to enable the PWM signal edge notification.
-Sync/Async：Asynchronous
+Description: Service to enable the PWM signal edge notification.
+Sync/Async: Asynchronous
 Parameters(in)
     ChannelNumber: Numeric identifier of PWM
     Notification: Notification type to be enabled
@@ -464,19 +473,19 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Pwm_GetVersionInfo(Std_VersionInfoType* versioninfo)
 
 ```shell
-Description：Service returns the version information of this module.
-Sync/Async：Synchronous
+Description: Service returns the version information of this module.
+Sync/Async: Synchronous
 Parameters(in)
     None
 Parameters(inout)
     None
 Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
-Return value：None
+Return value: None
 ```

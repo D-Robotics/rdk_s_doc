@@ -325,14 +325,20 @@ mkfs.ext4 /dev/sda17
 ### 4. Using ufs-utils Tool
 
 ```shell
-# View UFS device attributes
-ufs-utils -p /dev/sda info
+# ufs-utils is provided by the hobot-utils package and is installed by default on the system
+# The tool accesses UFS via the BSG character device; first confirm the node name
+ufs-utils list_bsg
+# Output: /dev/bsg/ufs-bsg0
 
-# View UFS health status
-ufs-utils -p /dev/sda health
+# View the UFS device descriptor (protocol version, vendor ID, and other device information)
+ufs-utils desc -t 0 -r -p /dev/bsg/ufs-bsg0
 
-# View UFS configuration descriptor
-ufs-utils -p /dev/sda desc
+# View the UFS configuration descriptor
+ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
+
+# View the UFS health status (Device Health Descriptor)
+ufs-utils desc -t 9 -r -p /dev/bsg/ufs-bsg0
+# Pay attention to the bPreEOLInfo / bDeviceLifeTimeEstA / bDeviceLifeTimeEstB fields
 ```
 
 ### 5. UFS Reliability Assessment (Lifetime Analysis)

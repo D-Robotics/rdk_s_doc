@@ -206,75 +206,75 @@ ret = disp.set_graph_word(300, 300, string.encode('gb2312'), 2, 0, 0xff00ffff)
 print ("Display set_graph_word return:%d" % ret)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This API must be used after enabling the display functionality via the `display` interface.
 
-<font color='Blue'>【Sample Code】</font>  
+<font color='Blue'>Sample Code</font>  
 
 None
 
 ## close
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Closes the display module.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Display.close()
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 None
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This API must be used after enabling the display functionality via the `display` interface.
 
-<font color='Blue'>【Sample Code】</font>  
+<font color='Blue'>Sample Code</font>  
 
 None
 
 ## bind Interface
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 This interface binds the output and input data streams of modules such as `Camera`, `Encoder`, `Decoder`, and `Display`. Once bound, data automatically flows between the modules without requiring further user intervention. For example, after binding `Camera` and `Display`, camera data will be automatically output to the display through the display module without calling additional APIs.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 ```python
     libsrcampy.bind(src, dst)
 ```
 
-<font color='Blue'>【Parameter Description】</font>
+<font color='Blue'>Parameter Description</font>
 
 | Parameter | Description         | Value Range |
 | -------- | ------------ | --- |
 | src      | Source data module   | `Camera`, `Encoder`, `Decoder` modules |
 | dst      | Destination data module | `Camera`, `Encoder`, `Decoder`, `Display` modules |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 #create camera object
@@ -292,40 +292,40 @@ ret = libsrcampy.bind(cam, enc)
 print("libsrcampy bind return:%d" % ret)
 ```
 
- <font color='Blue'>【Return Value】</font>
+ <font color='Blue'>Return Value</font>
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 None
 
-<font color='Blue'>【Sample Code】</font>
+<font color='Blue'>Sample Code</font>
 
 None
 
 ## unbind Interface
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Unbinds two previously bound modules.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 ```python
 libsrcampy.unbind(src, dst)
 ```
 
-<font color='Blue'>【Parameter Description】</font>
+<font color='Blue'>Parameter Description</font>
 
 | Parameter | Description         | Value Range |
 | -------- | ------------ | --- |
 | src      | Source data module   | `Camera`, `Encoder`, `Decoder` modules |
 | dst      | Destination data module | `Camera`, `Encoder`, `Decoder`, `Display` modules |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 #create camera object
@@ -347,17 +347,17 @@ ret = libsrcampy.unbind(cam, enc)
 print("libsrcampy unbind return:%d" % ret)
 ```
 
- <font color='Blue'>【Return Value】</font>
+ <font color='Blue'>Return Value</font>
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 None
 
-<font color='Blue'>【Sample Code】</font>
+<font color='Blue'>Sample Code</font>
 
 None

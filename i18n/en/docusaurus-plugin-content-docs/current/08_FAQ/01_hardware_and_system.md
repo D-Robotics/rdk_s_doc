@@ -654,7 +654,7 @@ Choose based on errors, resources, and time constraints. Adding swap is a common
 
 ### Q26: What general pre-checks should I do before asking for help with RDK issues?
 **A:** Before seeking help, perform these checks:
-1.  **Read the latest official manuals:** Use current user manuals, developer docs, and release notes. Get updates from the [RDK Resource Center](https://developer.d-robotics.cc/information).
+1.  **Read the latest official manuals:** Use current user manuals, developer docs, and release notes. Get updates from the [RDK Resource Center](https://developer.d-robotics.cc/rdk_doc_center/en/).
 2.  **Update the system and packages:** Many issues are fixed in newer releases. Update the OS and `hobot-*`, `tros-*`, and other key packages:
     ```bash
     sudo apt update && sudo apt upgrade
@@ -714,7 +714,7 @@ Choose based on errors, resources, and time constraints. Adding swap is a common
             1.  Pull the cross-compile Docker image from Docker Hub or D-Robotics hosting.
             2.  Start the container per official docs and mount your ROS workspace.
             3.  Run `colcon build` inside the container (cross-compile settings are usually preset).
-        * **Manuals:** TROS user guide sections on source install, developer guide, or cross-compile include Docker examples. See: [TROS manual](https://developer.d-robotics.cc//tros_doc/tros).
+        * **Manuals:** TROS user guide sections on source install, developer guide, or cross-compile include Docker examples. See: [TROS manual](https://developer.d-robotics.cc/tros_doc/tros).
     * **Manual ROS/TROS cross-compile (not recommended):** Building the full stack without Docker is complex and error-prone; only for experienced developers.
 
 **General cross-compile advice:**

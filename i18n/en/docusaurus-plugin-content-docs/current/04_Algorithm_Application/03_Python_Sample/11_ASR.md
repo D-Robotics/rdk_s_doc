@@ -106,6 +106,7 @@ This sample runs a speech recognition model using the `hbm_runtime` inference en
 ```text
 01_asr/
 ├── asr.py                      # Main inference script
+└── README.md                   # Usage instructions
 ```
 
 ## Parameter Description
