@@ -700,6 +700,17 @@ fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
 
 This line sets the `drobot,backup-charge-enable` property of the `ysn8130` device-tree node to `1`. `1` enables charging, and `0` disables it. For how to use `config.txt`, see "2.3 config.txt File Configuration".
 
+### Set the system time from the RTC at boot
+
+To write the hardware time from a specified RTC into the system clock at boot, set the following in `drobot_s100_defconfig`:
+
+```text
+CONFIG_RTC_HCTOSYS=y
+CONFIG_RTC_HCTOSYS_DEVICE="rtc1"
+```
+
+Use `date` and `hwclock` to verify that the configuration takes effect.
+
 ### RTC Testing Method
 
 After the driver loads successfully, the `/dev/rtcN` device node will appear:
