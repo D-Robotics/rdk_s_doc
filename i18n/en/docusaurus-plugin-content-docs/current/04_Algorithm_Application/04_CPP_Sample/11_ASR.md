@@ -154,7 +154,7 @@ sudo wget -O /opt/hobot/model/s600/basic/asr.hbm \
         </DocScope>
 - View the results
 
-    After successful execution, the result will be printed.
+    After successful execution, the result will be printed. Because the bundled sample audio is in Chinese, the recognized text is also in Chinese.
     ```bash
     Full transcription:
     我是来自阿里云的大规模语言磨型过叫通意千问||

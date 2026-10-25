@@ -76,6 +76,7 @@ A window watchdog is a special type of watchdog commonly used in functional safe
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_window.png" alt="Features diagram" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+<DocScope products="RDK S100">
 
 <DocScope products="RDK S100">
 
@@ -107,6 +108,8 @@ Add the hardware information description of the watchdog to the device tree (loc
           };
   };
 ```
+</DocScope>
+<DocScope products="RDK S600">
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -139,6 +142,7 @@ Add the hardware information description of the watchdog to the device tree (loc
           };
 		};
 ```
+</DocScope>
 
 </DocScope>
 
@@ -402,6 +406,8 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 ## Watchdog Monitoring Solutions
 <DocScope products="RDK S100">
 
+<DocScope products="RDK S100" versions="4.0.5">
+
 ### HardLockup Monitoring
   HardLockup monitoring is implemented based on the Watchdog module, using Watchdog1 configured in window mode, with the monitoring logic implemented in the driver. When the system is running normally, the monitoring logic is as shown below:
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup Monitoring diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -437,6 +443,47 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
   4. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sets a flag. The Watchdog monitoring Kthread running on that core detects the flag, clears its own bit in the CPU bitmap, and sends IPIs to other cores to execute the same logic. It records a bitmap of currently online CPUs. Whenever a core receives the IPI, executes the logic, or goes offline, the corresponding bit in the bitmap is cleared. When the entire bitmap is empty, the monitoring task for this cycle is complete, and feeding the watchdog is allowed.
 
   5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. Upon first receiving the watchdog reset interrupt corresponding to a bark, the MCU refreshes the watchdog timeout to 2581ms to allow the Acore time to dump the stack. When the watchdog reset interrupt is triggered again, a reset is performed.
+</DocScope>
+
+<DocScope products="RDK S100" versions=">=4.1.0">
+
+### HardLockup Monitoring
+  HardLockup monitoring is implemented based on the Watchdog module, using Watchdog1 configured in window mode, with the monitoring logic implemented in the driver. When the system is running normally, the monitoring logic is as shown below:
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_hardlockup.png" alt="HardLockup Monitoring diagram" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  1. Initialize the Watchdog hardware.
+
+  2. Start the Watchdog timer.
+
+  3. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sends IPIs to other cores, recording a bitmap of CPUs currently online. Whenever a core receives the IPI interrupt or goes offline, the corresponding bit in the bitmap is cleared. When the entire bitmap is empty, the monitoring task for this cycle is complete, and feeding the watchdog is allowed.
+
+  4. After feeding, the Watchdog starts the next counting cycle.
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-rdk_s100_wdt_irq.png" alt="HardLockup Monitoring diagram" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+  1. Initialize the Watchdog hardware.
+
+  2. Start the Watchdog timer.
+
+  3. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sends IPIs to other cores. If the CPU bitmap is not empty, it indicates that some cores cannot respond to IRQ interrupts normally, and feeding is not allowed.
+
+  4. The Watchdog counter continues to decrement. When the second timeout occurs, two interrupts are generated: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. After receiving the watchdog reset interrupt corresponding to a bark, the MCU sets a reset request; the reset task then waits a fixed 5000 ms to allow the Acore to complete stack dumping, and subsequently triggers a full SoC long reset.
+
+### SoftLockup Monitoring
+
+  SoftLockup monitoring is implemented based on the Watchdog module, using Watchdog2 configured in window mode, with the monitoring logic implemented in the driver. The overall monitoring concept is consistent with HardLockup monitoring.
+
+  1. Initialize the Watchdog hardware.
+
+  2. Initialize the per-CPU Watchdog monitoring Kthread threads, meaning each CPU runs a Watchdog monitoring Kthread.
+
+  3. Start the Watchdog timer.
+
+  4. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sets a flag. The Watchdog monitoring Kthread running on that core detects the flag, clears its own bit in the CPU bitmap, and sends IPIs to other cores to execute the same logic. It records a bitmap of currently online CPUs. Whenever a core receives the IPI, executes the logic, or goes offline, the corresponding bit in the bitmap is cleared. When the entire bitmap is empty, the monitoring task for this cycle is complete, and feeding the watchdog is allowed.
+
+  5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. After receiving the watchdog reset interrupt corresponding to a bark, the MCU sets a reset request; the reset task then waits a fixed 5000 ms to allow the Acore to complete stack dumping, and subsequently triggers a full SoC long reset.
+</DocScope>
+<DocScope products="RDK S600">
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -461,7 +508,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   3. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sends IPIs to other cores. If the CPU bitmap is not empty, it indicates that some cores cannot respond to IRQ interrupts normally, and feeding is not allowed.
 
-  4. The Watchdog counter continues to decrement. When the second timeout occurs, two interrupts are generated: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. Upon first receiving the watchdog reset interrupt corresponding to a bark, the MCU refreshes the watchdog timeout to 2581ms to allow the Acore time to dump the stack. When the watchdog reset interrupt is triggered again, a reset is performed.
+  4. The Watchdog counter continues to decrement. When the second timeout occurs, two interrupts are generated: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. After receiving the watchdog reset interrupt corresponding to a bark, the MCU sets a reset request; the reset task then waits a fixed 5000 ms to allow the Acore to complete stack dumping, and subsequently triggers a full SoC long reset.
 
 ### SoftLockup Monitoring
 
@@ -475,7 +522,8 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sets a flag. The Watchdog monitoring Kthread running on that core detects the flag, clears its own bit in the CPU bitmap, and sends IPIs to other cores to execute the same logic. It records a bitmap of currently online CPUs. Whenever a core receives the IPI, executes the logic, or goes offline, the corresponding bit in the bitmap is cleared. When the entire bitmap is empty, the monitoring task for this cycle is complete, and feeding the watchdog is allowed.
 
-  5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. Upon first receiving the watchdog reset interrupt corresponding to a bark, the MCU refreshes the watchdog timeout to 2581ms to allow the Acore time to dump the stack. When the watchdog reset interrupt is triggered again, a reset is performed.
+  5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. After receiving the watchdog reset interrupt corresponding to a bark, the MCU sets a reset request; the reset task then waits a fixed 5000 ms to allow the Acore to complete stack dumping, and subsequently triggers a full SoC long reset.
+</DocScope>
 
 
 </DocScope>

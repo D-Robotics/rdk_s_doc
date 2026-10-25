@@ -1,14 +1,24 @@
 import React from 'react';
 import DocPaginator from '@theme-original/DocPaginator';
 import {useLocation} from '@docusaurus/router';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {useDocsSidebar} from '@docusaurus/plugin-content-docs/client';
-import type {Props} from '@theme/DocPaginator';
 import {useDocScopeFilter} from '../../context/DocScopeFilterContext';
 import {shouldShowInSidebar} from '../../context/sidebar-scope-config';
 import {
   flattenSingleChildCategories,
   renumberVisibleItems,
 } from '../../utils/sidebar-numbering';
+
+type PaginatorNavLink = {
+  readonly title?: string;
+  readonly permalink: string;
+};
+
+type Props = {
+  readonly previous?: PaginatorNavLink | null;
+  readonly next?: PaginatorNavLink | null;
+};
 
 function containsChinese(text: string): boolean {
   return /[\u4e00-\u9fff]/.test(text);
@@ -21,6 +31,10 @@ type SidebarItem = {
   permalink?: string;
   docId?: string;
   items?: SidebarItem[];
+  link?: {
+    type?: string;
+    permalink?: string;
+  };
 };
 
 function titleCaseWord(word: string): string {
@@ -201,14 +215,43 @@ function collectVisibleDocLinks(items: SidebarItem[] | undefined, output: Sideba
   return output;
 }
 
+function collectCategoryLinkLabels(
+  items: SidebarItem[] | undefined,
+  output: Map<string, string> = new Map(),
+): Map<string, string> {
+  if (!Array.isArray(items)) return output;
+  for (const item of items) {
+    if (item.type === 'category') {
+      const href =
+        ((item.href || item.permalink || item.link?.permalink) as string | undefined);
+      if (href && item.label) {
+        output.set(normalizePathTail(href), item.label);
+      }
+      if (Array.isArray(item.items)) {
+        collectCategoryLinkLabels(item.items, output);
+      }
+    }
+  }
+  return output;
+}
+
 function normalizePaginatorTitle(
   title: string | undefined,
   permalink: string,
   locale: string,
+  categoryLabels: Map<string, string>,
 ): string | undefined {
   if (!title) return title;
   if (locale !== 'en') {
     return title;
+  }
+
+  // Category generated-index pages have no translated document, so Docusaurus
+  // inherits the Chinese source category label in previous/next metadata.
+  // Prefer the translated label from the current locale's sidebar.
+  const categoryLabel = categoryLabels.get(normalizePathTail(permalink));
+  if (categoryLabel && !containsChinese(categoryLabel)) {
+    return categoryLabel;
   }
 
   const problematic = containsChinese(title) || looksLikeUnderscoreCodeTitle(title);
@@ -233,13 +276,8 @@ export default function DocPaginatorWrapper(props: Props): JSX.Element {
   const { previous, next } = props;
   const docsSidebar = useDocsSidebar();
   const { version, product } = useDocScopeFilter();
-  
-  const getCurrentLocale = () => {
-    if (pathname.includes('/en/')) return 'en';
-    return 'zh';
-  };
-  
-  const currentLocale = getCurrentLocale();
+  const { i18n } = useDocusaurusContext();
+  const currentLocale = i18n.currentLocale;
 
   const processedSidebarItems = processSidebarItems(
     (docsSidebar?.items as SidebarItem[] | undefined),
@@ -247,6 +285,11 @@ export default function DocPaginatorWrapper(props: Props): JSX.Element {
     product,
   );
   const orderedDocLinks = collectVisibleDocLinks(processedSidebarItems, []);
+  // Use the unfiltered sidebar: scope filtering may flatten away a category,
+  // but its translated label is still needed for previous/next links.
+  const categoryLabels = collectCategoryLinkLabels(
+    docsSidebar?.items as SidebarItem[] | undefined,
+  );
   const mappedMainDocPath = resolveMainDocPathForVersionPage(pathname, orderedDocLinks);
   const currentPath = mappedMainDocPath || normalizePath(pathname);
   const currentPathTail = normalizePathTail(pathname);
@@ -286,7 +329,7 @@ export default function DocPaginatorWrapper(props: Props): JSX.Element {
   const customNext = baseNext
     ? {
         ...baseNext,
-        title: normalizePaginatorTitle(baseNext.title, baseNext.permalink, currentLocale),
+        title: normalizePaginatorTitle(baseNext.title, baseNext.permalink, currentLocale, categoryLabels),
       }
     : null;
 
@@ -294,7 +337,7 @@ export default function DocPaginatorWrapper(props: Props): JSX.Element {
   const customPrevious = basePrevious
     ? {
         ...basePrevious,
-        title: normalizePaginatorTitle(basePrevious.title, basePrevious.permalink, currentLocale),
+        title: normalizePaginatorTitle(basePrevious.title, basePrevious.permalink, currentLocale, categoryLabels),
       }
     : null;
 
