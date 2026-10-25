@@ -1212,6 +1212,22 @@ can_tran_debug
 
    <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug log" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
+#### Typical error log analysis
+
+**Q**: The log prints `Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`.
+
+**A**: The MCU stamps the time when it sends the data. When the Acore receives the CAN data, it calculates the elapsed time and uses the difference to measure the MCU-to-Acore latency. This error is reported when the difference exceeds the threshold. It does not appear under normal conditions, and this check may be removed later. After it appears, the exact cause is hard to confirm. The most likely cause is that the system does not schedule the IPC receive thread in time. Try raising the priority of the IPC interrupt thread.
+
+**Q**: The log prints `put_data_tofifo()[1151]: [0][4] failed fifo in len 97 avail61 cnt 1`.
+
+**A**: This error means there is not enough memory to receive CAN packets. Check two places:
+
+- Whether `read` can run in time, without too many dependencies in between.
+- Whether Acore processing cannot keep up with the MCU. If so, increase the kfifo data area size.
+
+**Q**: The log prints `ipc-drv: ipc_shm_acquire_buf() [1209]: instance 4 noready`.
+
+**A**: This error usually means MCU1 has crashed or has not started.
 
 ### Application Programming Interface
 
