@@ -51,6 +51,40 @@ fdt-disable=/soc/uart@394C0000;
     注意命令获取到的路径需要添加行首的"/"；
 :::
 
+#### 修改节点属性（fdt-setprop）
+
+修改配置文件，添加：`fdt-setprop=<dts节点全路径> <属性名> <属性值>;`。节点全路径、属性名、属性值之间以**空格**分隔；若需修改多个不同属性，请分多行书写。
+
+以下两类可在 `config.txt` 中通过 `fdt-setprop` 配置：
+
+1. **单个 cell**：属性值为**一个** 32 位无符号整数，使用尖括号且**括号内仅写一个数**，例如 `<1>`、`<0x10>`。
+2. **单个字符串**：属性值为**一段**普通字符串时，不使用尖括号，直接书写（无需引号），例如 `okay`、`disabled`。
+
+示例：
+
+```text
+# 单个 cell：使能备份电池充电（示例属性名以实际 DTS 为准）
+fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
+
+# 单个字符串：设置节点 status（示例）
+fdt-setprop=/soc/i2c@39460000/ysn8130@32 status okay;
+```
+
+:::warning
+**不支持的类型**：尖括号内**多个** u32 的 **cell 数组**（如 `reg = <0x0 0x1000 0x0 0x2000>;`），以及 **string-list**（如 `clock-names = "eth_bus_clk", "eth_tx_clk", ...`）。`fdt-setprop` 仅能写**单个** cell 或**单段**字符串，上述情况请在 **DTS / DTB Overlay**（见下文）中配置。
+
+```text
+# DTS 示意（在 config.txt 无法修改）
+# reg = <0x0 0x1000 0x0 0x2000>;
+# clock-names = "eth_bus_clk", "eth_tx_clk", "eth_ptp_clk", "eth_mac_clk";
+```
+:::
+
+:::info 提示
+- 节点全路径须以 `/` 开头，获取方式可参考上一节；
+- 一条 `fdt-setprop` 只修改**一个**属性名；多个属性请写多行；
+:::
+
 #### 配置 DTB Overlay 文件
 
 DTB Overlay 相关说明如下：

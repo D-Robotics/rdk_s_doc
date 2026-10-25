@@ -688,6 +688,18 @@ EXPORT_SYMBOL_GPL(__devm_rtc_register_device);
 
 ## RTC 使用简介
 
+### RTC 备用电池充电设置
+
+使用 RTC 充电功能时，应使用可充电电池，比如微雪 ML2032。禁止在使用不可充电电池时打开充电功能，禁止在不接电池时打开充电功能。
+
+在 `/boot/config.txt` 中添加如下行后重启生效：
+
+```text
+fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
+```
+
+该指令的含义是修改 `ysn8130` 设备树节点的 `drobot,backup-charge-enable` 属性值为 `1`。其中 `1` 表示使能充电，`0` 表示关闭充电。`config.txt` 使用方式可参考“2.3 config.txt 文件配置”。
+
 ### RTC 测试方式
 
 驱动加载成功后，会出现 `/dev/rtcN` 设备节点：
