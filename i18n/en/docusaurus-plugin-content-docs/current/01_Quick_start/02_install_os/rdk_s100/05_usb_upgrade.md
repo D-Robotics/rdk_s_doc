@@ -7,11 +7,9 @@ description: Create a U disk upgrade image; U-Boot flashes the system automatica
 
 ## Overview
 
-The U disk upgrade writes the system image to a U disk. After power-on, U-Boot reads the U disk and flashes the image to the onboard eMMC automatically.
+The U disk upgrade writes the system image to a U disk. On power-on, U-Boot reads the U disk, flashes the image to the onboard eMMC, and the board reboots into the new system.
 
-- **Purpose**: Creates an upgrade U disk. Insert it into the board and power on to flash the system and reboot automatically.
-- **Benefit**: The flashing step needs no PC and no XBurn, and one prepared U disk can be reused. It suits production-line batch flashing and on-site recovery.
-- **Result**: The board reboots into the system version carried by the U disk image.
+Prepare the U disk once. After that, the same U disk can be reused, and flashing on the board needs no PC and no XBurn. It suits production-line batch flashing and on-site recovery.
 
 The U disk upgrade uses `img_packages/disk/emmc_disk.simg`, the same image that XBurn uses when flashing the `emmc` region. Only the transport changes from a PC to a U disk.
 
