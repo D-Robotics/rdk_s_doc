@@ -311,7 +311,7 @@ SERDES_OP(priv->dser_dev, trigger_enable, priv->dser_dev, sen_dev, enable);
 
 ## 深度相机点亮注意事项
 
-目前 camera 支持使用 RealSense D457 和奥比中仁 Gemini 335Lg 两款 GMSL 形式的深度相机，该部分针对深度相机相比较其他普通 GMSL 相机的差异点做出说明。
+目前 camera 支持使用 RealSense D457 和奥比中光 Gemini 335Lg 两款 GMSL 形式的深度相机，该部分针对深度相机相比较其他普通 GMSL 相机的差异点做出说明。
 
 ### 限制
 

@@ -51,10 +51,17 @@ S600 存在一个 Camera 转接板：
 | RX1    | -              | -       | -             | -                 | -         | -              | -                                 | -       |
 | RX4    | MAX96712(0x29) | A       | 4 路          | SENSOR8_ERR - 452 | 0         | MAX20087(0x28) | DES1_POC_EN - 433/SPI1_SCLK - 506 | 0x1320  |
 
+:::
+
+:::doc_scope{products="RDK S100"}
+
 :::note
 - LPWM 和 MCLK(24MHz)两种功能切换：见 [MIPI 接口功能切换开关（接口5）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md#mipi-接口功能切换开关接口5)
 - 控制信号支持 1V8 和 3V3 功能切换：见 [MIPI 接口电平切换开关（接口6）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md#mipi-接口电平切换开关接口6)
 :::
+
+
+:::doc_scope{products="RDK S100"}
 
 设备树配置如下：
 
@@ -93,6 +100,11 @@ S600 存在一个 Camera 转接板：
 };
 ```
 
+:::
+
+:::doc_scope{products="RDK S100"}
+
+
 #### 参数含义
 
 | 参数       | 类型        | 含义                                                                                          | MIPI 直连                        | GMSL/SerDes                                                       |
@@ -130,6 +142,9 @@ S600 共 6 路 MIPI RX（vcon0~5）：vcon0~3 接 SerDes 扩展板，vcon4/5 为
 | RX4    | -              | -       | -             | -                 | 0         | -              | -                                         | -       |
 | RX5    | -              | -       | -             | -                 | 0         | -              | -                                         | -       |
 
+:::
+
+:::doc_scope{products="RDK S600"}
 
 设备树配置如下：
 
@@ -196,19 +211,22 @@ S600 共 6 路 MIPI RX（vcon0~5）：vcon0~3 接 SerDes 扩展板，vcon4/5 为
 	rx_phy = <1 5>;          // 1=DPHY, 5=RX5
 };
 ```
+:::
+
+:::doc_scope{products="RDK S600"}
 
 #### 参数含义
 
-| 参数 | 类型 | 含义 | MIPI 直连（vcon4/5） | GMSL/SerDes（vcon0~3） |
-| --- | --- | --- | --- | --- |
-| `bus` | uint32 | I2C bus 号，vcon 通过该 bus 与 sensor/解串器通信 | `<4>` / `<5>` | `<0>`~`<3>` |
-| `gpio_poc` | array | POC 供电控制 GPIO。非 0=使能；后续值为 GPIO 编号 | `<0 0 0>`（无 POC） | `<0 362 374>`（362=EN, 374=INT） |
-| `gpio_des` | array | 解串器 PWDNB GPIO。第 1 个值 0=不使用，非 0=使能；第 2 个值为 PWDNB GPIO | `<0 0>`（无 DES） | `<0 406>`（406=PWDNB） |
-| `sensor_err` | array | sensor 错误中断线，0 = 不使用 | `<0 0 0>` | `<0 0 0>` |
-| `gpio_oth` | uint32 | sensor 其他 GPIO（reset/XSHUTDN），0 = 不使用 | `<411>` / `<412>` | 不配置（reset 由加串器 MFP 控制） |
-| `lpwm_chn` | uint32/array | LPWM 通道号，用于触发曝光同步 | `<6>` / `<7>` | `<0 1>` / `<2 3>` / `<12 13>` / `<14 15>` |
-| `rx_phy` | array | PHY 配置：第 1 个值 1=DPHY / 2=CPHY；第 2 个值为 RX 端口号 | `<1 4>` / `<1 5>` | `<1 0>` / `<2 1>` / `<1 2>` / `<2 3>` |
-| `poc_map` | uint32 | POC 与 Link 的映射，16bit | 不配置 | 在扩展板 dts 中定义（camsys v0p1 未含） |
+| 参数         | 类型         | 含义                                                                                  | MIPI 直连（vcon4/5） | GMSL/SerDes（vcon0~3） |
+| ------------ | ------------ | ------------------------------------------------------------------------------------- | -------------------- | ---------------------- |
+| `bus`        | uint32       | I2C bus 号，vcon 通过该 bus 与 sensor/解串器通信                                       | `<4>` / `<5>`        | `<0>`~`<3>`            |
+| `gpio_poc`   | array        | POC 供电控制 GPIO。非 0=使能；后续值为 GPIO 编号                                       | `<0 0 0>`（无 POC）  | `<0 362 374>`          |
+| `gpio_des`   | array        | 解串器 PWDNB GPIO。第 1 个值 0=不使用，非 0=使能；第 2 个值为 PWDNB GPIO               | `<0 0>`（无 DES）    | `<0 406>`              |
+| `sensor_err` | array        | sensor 错误中断线，0 = 不使用                                                          | `<0 0 0>`            | `<0 0 0>`              |
+| `gpio_oth`   | uint32       | sensor 其他 GPIO（reset/XSHUTDN），0 = 不使用                                          | `<411>` / `<412>`    | 不配置                 |
+| `lpwm_chn`   | uint32/array | LPWM 通道号，用于触发曝光同步                                                          | `<6>` / `<7>`        | 多组见备注             |
+| `rx_phy`     | array        | PHY 配置：第 1 个值 1=DPHY / 2=CPHY；第 2 个值为 RX 端口号                            | `<1 4>` / `<1 5>`    | 多组见备注             |
+| `poc_map`    | uint32       | POC 与 Link 的映射，16bit                                                              | 不配置               | 未配置                 |
 
 :::
 
