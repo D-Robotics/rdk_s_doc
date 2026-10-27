@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # 3.3.2 GPIO Application
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 The development board comes pre-installed with the GPIO Python library `Hobot.GPIO`. Users can import the GPIO library using the following command:
 
 ```shell
@@ -71,7 +75,20 @@ GPIO.setwarnings(False)
 
 On the `RDK S100` platform, `40-pin` GPIO expansion is supported, with the following limitations:
 
-- One group of pins on the `40-pin` header supports a multiplexed function (UART2 or I2C5).
+- One group of pins on the `40-pin` header is shared by UART2 and I2C5. Enable only one of them at a time.
+
+<DocScope versions=">=4.1.0">
+
+On 4.1.0 and later, switch them in **Peripheral bus config** in [srpi-config](../../../../02_System_configuration/02_srpi-config.md). Enabling one disables the other. Reboot for the change to take effect.
+
+</DocScope>
+
+<DocScope versions="<4.1.0">
+
+Before 4.1.0, toggle the DIP switch to select UART2 or I2C5, then edit the device tree. See [UART application](./04_uart.md).
+
+</DocScope>
+
 - PCM-related pins on the `40-pin` header require toggling DIP switches to be enabled.
 
 For more details, refer to the diagram below:
@@ -257,6 +274,7 @@ Main test examples are provided under the `/app/40pin_samples/` directory:
 | button_led.py          | One pin used as button input, another controls an LED |
 | button_event.py        | Capture rising and falling edge events on a pin       |
 | button_interrupt.py    | Handle rising and falling edge events via interrupts  |
+| gpio_rw_demo.py        | GPIO read/write demo: output mode toggles pin 23, input mode reads pin 24 |
 
 - GPIO configured in `output mode`, toggling output level every 1 second to control an LED blinking on and off. Test code: `simple_out.py`:
 

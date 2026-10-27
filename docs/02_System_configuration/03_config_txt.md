@@ -63,7 +63,7 @@ fdt-disable=/soc/uart@394C0000;
 示例：
 
 ```text
-# 单个 cell：使能备份电池充电（示例属性名以实际 DTS 为准）
+# 单个 cell：使能 YSN8130 备份电池充电
 fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
 
 # 单个字符串：设置节点 status（示例）

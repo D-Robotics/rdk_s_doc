@@ -1346,17 +1346,6 @@ RDK S100 / S600 上 CANHAL 默认走 IPCF 通道，将 MCU 侧 CAN 数据转发�
 ```bash
 export CAN_HAL_DEBUG_LEVEL=4
 ```
-#### MCU侧DEBUG应用说明
-1. 进入 MCU1的控制台
-2. 输入命令：can_tran_debug
-```
-can_tran_debug
-```
-
-3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果
-
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%' }} />
-
 
 #### 常见错误现象
 
@@ -1379,41 +1368,28 @@ export CAN_HAL_DEBUG_LEVEL=4
 ```
 
 ### MCU 侧 DEBUG 应用说明
-1. 进入 MCU1的控制台
-2. 输入命令：can_tran_debug
-```
-can_tran_debug
-```
 
-3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果
+1. 进入 MCU1 的控制台。
+2. 输入命令 `can_tran_debug`。
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%' }} />
+   ```bash
+   can_tran_debug
+   ```
+
+3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果。
+
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 典型错误日志解析
 **Q**: 打印`Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`
 
-**A**: 类似这种错误具体原因是mcu打上时间戳到acore接收到can数据时会在算一个时间，通过计算差值来统计（mcu->acore）延时，如果超过阈值就会报此错误。
+**A**: MCU 在发送时打上时间戳。Acore 收到 CAN 数据后计算时间差，用来统计 MCU 到 Acore 的延时。差值超过阈值就报这个错误。较大可能是系统没有及时调度 IPC 接收线程。可以尝试提高 IPC 中断线程的优先级。
 
 **Q**: 打印`put_data_tofifo()[1151]: [0][4] failed fifo in len 97 avail61 cnt 1`
 
 **A**: 出现这个错误的时候表示recv can包的内存不够，需要排查两处：
 - 1：read是不是可以及时执行，中间不要有太多依赖。
-- 2：acore的处理速度跟不上mcu的处理速度，需要提高kfifio data区域大小。
-
-**Q**: 打印`ipc-drv: ipc_shm_acquire_buf() [1209]: instance 4 noready`
-
-**A**: 出现这种错一般是mcu1挂了，或者mcu1没有起来。
-
-#### 典型错误日志解析
-**Q**: 打印`Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`
-
-**A**: 类似这种错误具体原因是mcu打上时间戳到acore接收到can数据时会在算一个时间，通过计算差值来统计（mcu->acore）延时，如果超过阈值就会报此错误。正常情况下不会出现，后续可能会将这部分删掉。出现该问题之后实际不好确认问题原因，只是大概率是由于系统不能及时触发ipc接收线程，可以尝试通过提高IPC中断线程优先级。
-
-**Q**: 打印`put_data_tofifo()[1151]: [0][4] failed fifo in len 97 avail61 cnt 1`
-
-**A**: 出现这个错误的时候表示recv can包的内存不够，需要排查两处：
-- 1：read是不是可以及时执行，中间不要有太多依赖。
-- 2：acore的处理速度跟不上mcu的处理速度，需要提高kfifio data区域大小。
+- 2：Acore 的处理速度跟不上 MCU 的处理速度，需要提高 kfifo data 区域大小。
 
 **Q**: 打印`ipc-drv: ipc_shm_acquire_buf() [1209]: instance 4 noready`
 

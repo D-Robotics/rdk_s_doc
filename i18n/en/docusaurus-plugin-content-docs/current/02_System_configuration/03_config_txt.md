@@ -66,7 +66,7 @@ Add the following to the configuration file: `fdt-setprop=<full DTS node path> <
 Example:
 
 ```text
-# Single cell: enable backup-battery charging (use the property name from the actual DTS)
+# Single cell: enable YSN8130 backup-battery charging
 fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
 
 # Single string: set the node status (example)

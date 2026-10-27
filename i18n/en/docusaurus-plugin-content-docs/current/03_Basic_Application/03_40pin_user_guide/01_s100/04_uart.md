@@ -8,13 +8,28 @@ sidebar_position: 4
 import DocScope from '@site/src/components/DocScope';
 ```
 
-The RDK S100 supports UART2 on the 40-pin header, which is disabled by default. The physical pin numbers are 8 and 10, with an I/O voltage of 3.3V.
+The RDK S100 supports UART2 on the 40-pin header, which is disabled by default. The physical pin numbers are 8 and 10, with an I/O voltage of 3.3V. `I2C5` and `UART2` share the same 40-pin group and cannot be enabled at the same time.
+
+<DocScope versions="<4.1.0">
 
 :::info
 
 The 40-pin header requires a DIP switch to select between UART2 and I2C5. For specific details, please refer to the image below:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="UART Application photo" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
+
+<DocScope versions=">=4.1.0">
+
+:::info
+
+On 4.1.0 and later, open **Peripheral bus config** under Interface Options in [srpi-config](../../../../02_System_configuration/02_srpi-config.md). Select `UART2` or `I2C5`. Enabling one disables the other. Reboot for the change to take effect.
+
+For pin definitions, see [Pin definitions and applications](./01_40pin_define.md#40pin_define).
+
+:::
+
+</DocScope>
+
 
 After toggling the DIP switch, you also need to modify the device tree file: set the `uart2` status to `okay` and the `i2c5` status to `disabled`. The modification path and method are as follows:
 
@@ -57,6 +72,8 @@ i2c5: i2c@39470000 {
 For pin definitions, please refer to [Pin Configuration and Definitions](./01_40pin_define.md#40pin_define).
 
 :::
+
+</DocScope>
 
 Please refer to `/app/40pin_samples/test_serial.py` for detailed instructions on how to use the UART interface.
 

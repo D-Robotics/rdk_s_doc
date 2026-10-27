@@ -134,4 +134,4 @@ Input pin 24 (SPI_CSN): LOW
 
 - [GPIO application](./02_gpio.md)
 - [GPIO usage](../../../../07_Advanced_development/02_linux_development/04_driver_development_super/04_driver_gpio_dev.md)
-- [Hardware introduction](../../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md)
+- [Developer kit](../../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md)
