@@ -74,11 +74,11 @@ GPIO.setwarnings(False)
 
 在`RDK S100`平台上，支持`40-pin` GPIO 拓展， `40-pin`在使用过程中有如下的限制:
 
-- `40-pin`上有一组引脚涉及到二选一（UART2、I2C5），二者复用同一组引脚，不能同时使能。
+- `40-pin` 上有一组引脚涉及到二选一（UART2、I2C5），二者复用同一组引脚，不能同时使能。
 
 <DocScope versions=">=4.1.0">
 
-4.1.0 及之后，在 [srpi-config 工具配置](../../../../02_System_configuration/02_srpi-config.md) 的 **Peripheral bus config**（外设总线配置）中切换。启用其中一个会自动禁用另一个，切换后重启生效。
+4.1.0 及之后，在 [srpi-config 工具配置](../../../02_System_configuration/02_srpi-config.md) 的 **Peripheral bus config**（外设总线配置）中切换。启用其中一个会自动禁用另一个，切换后重启生效。
 
 </DocScope>
 

@@ -79,7 +79,7 @@ On the `RDK S100` platform, `40-pin` GPIO expansion is supported, with the follo
 
 <DocScope versions=">=4.1.0">
 
-On 4.1.0 and later, switch them in **Peripheral bus config** in [srpi-config](../../../../02_System_configuration/02_srpi-config.md). Enabling one disables the other. Reboot for the change to take effect.
+On 4.1.0 and later, switch them in **Peripheral bus config** in [srpi-config](../../../02_System_configuration/02_srpi-config.md). Enabling one disables the other. Reboot for the change to take effect.
 
 </DocScope>
 

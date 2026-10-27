@@ -11,7 +11,7 @@ The board provides a 40-pin expansion header for peripheral expansion. This sect
 `/app/40pin_samples/` on the board includes functional test code for several pins, covering GPIO input and output, PWM, I2C, SPI, and UART. All examples are written in Python. See the other modules in this chapter for details.
 
 :::tip
-The pins mentioned below are examples only. Port values differ across platforms, so use the values on your board. You can also run the code under `/app/40pin_samples/`. That code has been verified on the board.
+The examples below use the RDK S100 40-pin header. Pin numbers in this section are BOARD numbers: output is pin 23 (`SPI0_CLK_3V3`), and input is pin 24 (`SPI0_CS0_3V3`). You can also run the code under `/app/40pin_samples/` on the board. That code has been verified on the RDK S100.
 :::
 
 ## Expansion pin header definition {#40pin_define}

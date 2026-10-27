@@ -1378,7 +1378,7 @@ export CAN_HAL_DEBUG_LEVEL=4
 
 3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果。
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug 日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 典型错误日志解析
 **Q**: 打印`Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`

@@ -22,7 +22,7 @@ The 40-pin header requires a DIP switch to select between UART2 and I2C5. For sp
 
 :::info
 
-On 4.1.0 and later, open **Peripheral bus config** under Interface Options in [srpi-config](../../../../02_System_configuration/02_srpi-config.md). Select `UART2` or `I2C5`. Enabling one disables the other. Reboot for the change to take effect.
+On 4.1.0 and later, open **Peripheral bus config** under Interface Options in [srpi-config](../../../02_System_configuration/02_srpi-config.md). Select `UART2` or `I2C5`. Enabling one disables the other. Reboot for the change to take effect.
 
 For pin definitions, see [Pin definitions and applications](./01_40pin_define.md#40pin_define).
 
