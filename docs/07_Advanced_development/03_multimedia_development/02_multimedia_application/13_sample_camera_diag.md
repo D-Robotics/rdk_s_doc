@@ -89,12 +89,12 @@ Options:
 
 **命令参数说明：**
 
-- `s <sensor_index>`：指定要使用的传感器索引，可通过 `-h` 查看传感器列表。
-- `l <link_port>`：指定 Serdes Sensor 连接解串器的端口，`0:A 1:B 2:C 3:D`。Serdes Sensor **必须**指定。
-- `d <diag_id>`：指定要注入的 diag id（支持十六进制，如 `0x401031`）。不指定时由程序从 diag dump 中自动选择可用节点。
-- `t <type>`：按设备类型过滤节点列表与注入范围。可选：`des` / `poc` / `ser` / `snr` / `txs`。不加 `-t` 时显示并尝试全部类型。
-- `w <seconds>`：未收到回调时的额外等待时间，默认 20 秒。
-- `h`：显示帮助信息。
+- `-s <sensor_index>`：指定要使用的传感器索引，可通过 `-h` 查看传感器列表。
+- `-l <link_port>`：指定 Serdes Sensor 连接解串器的端口，`0:A 1:B 2:C 3:D`。Serdes Sensor **必须**指定。
+- `-d <diag_id>`：指定要注入的 diag id（支持十六进制，如 `0x401031`）。不指定时由程序从 diag dump 中自动选择可用节点。
+- `-t <type>`：按设备类型过滤节点列表与注入范围。可选：`des` / `poc` / `ser` / `snr` / `txs`。不加 `-t` 时显示并尝试全部类型。
+- `-w <seconds>`：未收到回调时的额外等待时间，默认 20 秒。
+- `-h`：显示帮助信息。
 
 :::caution 注意
 `-l` 的取值取决于 Serdes Sensor 实际接到解串器的端口，请与硬件连接保持一致。

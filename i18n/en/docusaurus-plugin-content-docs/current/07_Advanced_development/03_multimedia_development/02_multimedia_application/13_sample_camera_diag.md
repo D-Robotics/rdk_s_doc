@@ -89,12 +89,12 @@ Options:
 
 **Command Parameter Descriptions:**
 
-- `s <sensor_index>`: Sensor index to use. Check the list with `-h`.
-- `l <link_port>`: Serdes Sensor link port on the deserializer, `0:A 1:B 2:C 3:D`. **Mandatory** for Serdes sensors.
-- `d <diag_id>`: Specific diag id to inject (hex supported, e.g. `0x401031`). If omitted, the program auto-selects a usable node from the diag dump.
-- `t <type>`: Filter listed/injected nodes by device type: `des` / `poc` / `ser` / `snr` / `txs`. Without `-t`, all types are shown and tried.
-- `w <seconds>`: Extra wait time when no callback is received. Default is 20 seconds.
-- `h`: Show help information.
+- `-s <sensor_index>`: Sensor index to use. Check the list with `-h`.
+- `-l <link_port>`: Serdes Sensor link port on the deserializer, `0:A 1:B 2:C 3:D`. **Mandatory** for Serdes sensors.
+- `-d <diag_id>`: Specific diag id to inject (hex supported, e.g. `0x401031`). If omitted, the program auto-selects a usable node from the diag dump.
+- `-t <type>`: Filter listed/injected nodes by device type: `des` / `poc` / `ser` / `snr` / `txs`. Without `-t`, all types are shown and tried.
+- `-w <seconds>`: Extra wait time when no callback is received. Default is 20 seconds.
+- `-h`: Show help information.
 
 :::caution Caution
 The value of `-l` depends on which deserializer port the Serdes Sensor is physically connected to. Keep it consistent with the hardware wiring.
