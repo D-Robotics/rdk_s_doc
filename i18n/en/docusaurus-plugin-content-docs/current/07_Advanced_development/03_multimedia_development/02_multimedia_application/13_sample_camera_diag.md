@@ -1,4 +1,4 @@
-# sample_camera_diag Usage Instructions
+# sample_camera_diag usage instructions
 
 ## Function Overview
 
@@ -61,7 +61,7 @@ CFLAGS += -DCAM_DIAG
 
 Run `make` in the source directory:
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_camera_diag/camera_event_callback
 make
 ```
@@ -126,7 +126,7 @@ Some sensors (for example certain ar0820std configs) may not register snr nodes,
 
 The logs below are based on `ar0820std-1080p30`, using `./camera_event_callback -s 3 -l 0 ...`.
 
-#### Test Sensor diag (`-t snr`)
+#### Test sensor diag (`-t snr`)
 
 ```shell
 root@ubuntu:/app/multimedia_samples/sample_camera_diag/camera_event_callback# ./camera_event_callback -s 3 -l 0 -t snr
@@ -144,7 +144,7 @@ root@ubuntu:/app/multimedia_samples/sample_camera_diag/camera_event_callback# ./
 
 In this configuration there are **no snr nodes**, so no sensor fault callback is triggered. To verify snr, use a module that has registered sensor diag nodes.
 
-#### Test Deserializer diag (`-t des`)
+#### Test deserializer diag (`-t des`)
 
 ```shell
 root@ubuntu:/app/multimedia_samples/sample_camera_diag/camera_event_callback# ./camera_event_callback -s 3 -l 0 -t des

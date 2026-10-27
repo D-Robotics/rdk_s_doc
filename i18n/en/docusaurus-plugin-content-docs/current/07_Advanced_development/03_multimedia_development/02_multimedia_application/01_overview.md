@@ -16,20 +16,20 @@ The source code directory structure is organized and named according to function
 
 ```
 .
-├── chip_base_test    # Driver functional unit tests; please refer to [BSP Development Guide - Driver Functional Unit Tests] for usage instructions
-├── Makefile.in       # Makefile parameter configuration, including cross-compilation toolchain, header file and library references, etc.
+├── chip_base_test     # Driver functional unit tests; please refer to [BSP Development Guide - Driver Functional Unit Tests] for usage instructions
+├── Makefile.in        # Makefile parameter configuration, including cross-compilation toolchain, header file and library references, etc.
 ├── README.md
-├── sample_codec      # Example code for video/image codec modules, including encoding and decoding for H264/H265/JPEG/MJPEG
-├── sample_gdc        # Example code demonstrating various transformation modes supported by the GDC module
-├── sample_isp        # Example code for the ISP module, including ISP initialization and retrieving ISP-processed data
-├── sample_pipeline   # Example code cascading multiple functional modules, e.g., VIN->ISP->PYM->GDC->CODEC encoding data pipeline functional test
-├── sample_vin        # Initialize Camera Sensor and acquire images from the VIN module
+├── sample_codec       # Example code for video/image codec modules, including encoding and decoding for H264/H265/JPEG/MJPEG
+├── sample_gdc         # Example code demonstrating various transformation modes supported by the GDC module
+├── sample_isp         # Example code for the ISP module, including ISP initialization and retrieving ISP-processed data
+├── sample_pipeline    # Example code cascading multiple functional modules, e.g., VIN->ISP->PYM->GDC->CODEC encoding data pipeline functional test
+├── sample_vin         # Initialize Camera Sensor and acquire images from the VIN module
 ├── sample_camera_diag # Camera diagnostics event callback sample: fault inject and print callback
-├── sample_pym        # Initialize the PYM module and use PYM to downscale images
-├── sample_gpu_3d     # Examples demonstrating 3D GPU usage via both OpenCL and OpenGLES APIs
-├── sunrise_camera    # Integrated application solution example leveraging most modules, supporting smart cameras and intelligent analysis boxes; video streams and algorithm results can be viewed via a web browser
-├── utils             # Common utility functions and structures
-└── vp_sensors        # Camera Sensor configuration code, used by other modules requiring Camera Sensor functionality
+├── sample_pym         # Initialize the PYM module and use PYM to downscale images
+├── sample_gpu_3d      # Examples demonstrating 3D GPU usage via both OpenCL and OpenGLES APIs
+├── sunrise_camera     # Integrated application solution example leveraging most modules, supporting smart cameras and intelligent analysis boxes; video streams and algorithm results can be viewed via a web browser
+├── utils              # Common utility functions and structures
+└── vp_sensors         # Camera Sensor configuration code, used by other modules requiring Camera Sensor functionality
 ```
 
 Note: The `vp_sensors` directory contains supported `Camera Sensor` drivers and configuration files, and is not a standalone example program. For instructions on adding new `Camera Sensors`, please refer to `vp_sensors/README.md`.

@@ -16,20 +16,20 @@
 
 ```
 .
-├── chip_base_test    # 驱动功能单元测试，请查阅 [ BSP 开发指南 - 驱动功能单元测试 ] 了解使用方法
-├── Makefile.in       # Makefile 的参数配置，包括交叉编译工具链，头文件、库文件引用等
+├── chip_base_test     # 驱动功能单元测试，请查阅 [ BSP 开发指南 - 驱动功能单元测试 ] 了解使用方法
+├── Makefile.in        # Makefile 的参数配置，包括交叉编译工具链，头文件、库文件引用等
 ├── README.md
-├── sample_codec      # 视频图像编、解码模块的示例代码，包括 H264/H265/JPEG/MJPEG 的编码和解码
-├── sample_gdc        # GDC 模块支持的各种转换模式的示例代码
-├── sample_isp        # ISP 模块的示例代码，包括如何初始化 ISP，获取 ISP 处理后的数据等
-├── sample_pipeline   # 串联多功能模块的示例代码，例如： VIN->ISP->PYM->GDC->CODEC 编码的数据流通路功能测试
-├── sample_vin        # 初始化 Camera Sensor，从 VIN 模块获取图像
+├── sample_codec       # 视频图像编、解码模块的示例代码，包括 H264/H265/JPEG/MJPEG 的编码和解码
+├── sample_gdc         # GDC 模块支持的各种转换模式的示例代码
+├── sample_isp         # ISP 模块的示例代码，包括如何初始化 ISP，获取 ISP 处理后的数据等
+├── sample_pipeline    # 串联多功能模块的示例代码，例如： VIN->ISP->PYM->GDC->CODEC 编码的数据流通路功能测试
+├── sample_vin         # 初始化 Camera Sensor，从 VIN 模块获取图像
 ├── sample_camera_diag # Camera 诊断事件回调示例，演示故障注入与 callback 打印
-├── sample_pym        # 初始化 PYM 模块，使用 PYM 对图像进行缩小操作
-├── sample_gpu_3d     # 提供OpenCL 和 OpenGLES 两种接口使用 3DGPU的示例
-├── sunrise_camera    # 集成大部分模块实现的应用方案示例代码，支持智能摄像头和智能分析盒，在 Web 上可以浏览视频图像和智能算法结果
-├── utils             # 包含通用的函数及结构体
-└── vp_sensors        # Camera Sensor 配置代码，本代码会被其他需要使用 Camera Sensor 的模块使用
+├── sample_pym         # 初始化 PYM 模块，使用 PYM 对图像进行缩小操作
+├── sample_gpu_3d      # 提供OpenCL 和 OpenGLES 两种接口使用 3DGPU的示例
+├── sunrise_camera     # 集成大部分模块实现的应用方案示例代码，支持智能摄像头和智能分析盒，在 Web 上可以浏览视频图像和智能算法结果
+├── utils              # 包含通用的函数及结构体
+└── vp_sensors         # Camera Sensor 配置代码，本代码会被其他需要使用 Camera Sensor 的模块使用
 ```
 
 注：`vp_sensors` 目录包含已支持的 `Camera Sensor` 和配置文件，不是单独的示例程序。`Camera Sensor` 添加方式请查阅参考 `vp_sensors/README.md`。

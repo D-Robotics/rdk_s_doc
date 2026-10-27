@@ -61,7 +61,7 @@ CFLAGS += -DCAM_DIAG
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_camera_diag/camera_event_callback
 make
 ```
