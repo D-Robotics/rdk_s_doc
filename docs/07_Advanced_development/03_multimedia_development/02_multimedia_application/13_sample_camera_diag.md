@@ -2,13 +2,13 @@
 
 ## 功能概述
 
-`sample_camera_diag` 演示 Camera 诊断（CAM_DIAG）事件回调流程：初始化 Camera / VIN（Serdes 场景下还会创建解串器），通过 `hbn_camera_set_event_callback` 注册回调，再使用 libcam 提供的故障注入接口制造异常，并在 callback 中打印诊断事件。
+`sample_camera_diag` 演示 Camera 诊断（CAM_DIAG）事件回调流程：初始化 Camera / VIN（SerDes 场景下还会创建解串器），通过 `hbn_camera_set_event_callback` 注册回调，再使用 libcam 提供的故障注入接口制造异常，并在 callback 中打印诊断事件。
 
 示例可覆盖以下设备类型的 diag 节点：
 
 | 类型 | 含义 | 典型 diag_id | 典型 module_id |
 | ---- | ---- | ------------ | -------------- |
-| snr  | Sensor | `0x40xxxxxx` | `0xc00x` |
+| snr  | sensor | `0x40xxxxxx` | `0xc00x` |
 | des  | 解串器（Deserializer） | `0x1xxxxxxx` | `0xc01x` |
 | poc  | POC 电源 | `0x2xxxxxxx` | `0xc02x` |
 | ser  | 串行器（Serializer） | `0x3xxxxxxx` | `0xc03x` |
@@ -43,7 +43,7 @@
 
 ### 前置条件
 
-示例依赖板端 Camera 诊断功能已开启。若当前镜像中 sensor / deserial 插件未编译 `CAM_DIAG`，会出现“无 snr/des/poc 节点”或注入后无回调的情况。
+示例依赖板端 Camera 诊断功能已开启。若当前镜像中 `sensor` / `deserial` 插件未编译 `CAM_DIAG`，会出现“无 snr/des/poc 节点”或注入后无回调的情况。
 
 在源码树 `hobot-camera` 中开启诊断的典型方式：
 
@@ -55,7 +55,17 @@ CFLAGS += -DCAM_DIAG
 
 2. 确认目标 sensor 驱动中 diag 相关代码为 `#ifdef CAM_DIAG`（而不是 `#if 0`），并正确挂接 `.diag_nodes_init`。
 
-3. 重新编译并安装 `hobot-camera`、`hobot-multimedia-samples` deb 包后，再在板端运行示例。
+3. 在 SDK 根目录重新编译对应 deb 包，拷贝到板端安装后再运行示例（构建流程详见 [RDK deb 包构建说明](../../06_rdk_gen.md)）：
+
+```shell
+# 在 SDK 根目录编译，产物位于 out/product/deb_packages/
+./mk_debs.sh hobot-camera
+./mk_debs.sh hobot-multimedia-samples
+
+# 将 deb 拷贝到板端后安装
+dpkg -i hobot-camera_*.deb
+dpkg -i hobot-multimedia-samples_*.deb
+```
 
 ### 编译
 
@@ -90,14 +100,14 @@ Options:
 **命令参数说明：**
 
 - `-s <sensor_index>`：指定要使用的传感器索引，可通过 `-h` 查看传感器列表。
-- `-l <link_port>`：指定 Serdes Sensor 连接解串器的端口，`0:A 1:B 2:C 3:D`。Serdes Sensor **必须**指定。
+- `-l <link_port>`：指定 SerDes sensor 连接解串器的端口，`0:A 1:B 2:C 3:D`。SerDes sensor **必须**指定。
 - `-d <diag_id>`：指定要注入的 diag id（支持十六进制，如 `0x401031`）。不指定时由程序从 diag dump 中自动选择可用节点。
 - `-t <type>`：按设备类型过滤节点列表与注入范围。可选：`des` / `poc` / `ser` / `snr` / `txs`。不加 `-t` 时显示并尝试全部类型。
-- `-w <seconds>`：未收到回调时的额外等待时间，默认 20 秒。
+- `-w <seconds>`：注入后等待回调的最长时间，默认 20 秒。
 - `-h`：显示帮助信息。
 
 :::caution 注意
-`-l` 的取值取决于 Serdes Sensor 实际接到解串器的端口，请与硬件连接保持一致。
+`-l` 的取值取决于 SerDes sensor 实际接到解串器的端口，请与硬件连接保持一致。
 :::
 
 #### 推荐测试命令
@@ -108,7 +118,7 @@ Options:
 # 列出全部类型节点，并自动注入第一个可用节点
 ./camera_event_callback -s 3 -l 0
 
-# 只测试 Sensor diag
+# 只测试 sensor diag
 ./camera_event_callback -s 3 -l 0 -t snr
 
 # 只测试解串器 diag
@@ -116,17 +126,20 @@ Options:
 
 # 只测试 POC diag
 ./camera_event_callback -s 3 -l 0 -t poc
+
+# 只测试 Tx Serializer diag
+./camera_event_callback -s 3 -l 0 -t txs
 ```
 
 :::tip 提示
-部分 Sensor（如 ar0820std 部分配置）可能不注册 snr 节点，但 des / poc 仍可用。若需验证 Sensor diag，可换用已启用 snr diag 的 Sensor（如 ovx3cstd、isx031std）。
+部分 sensor（如 ar0820std 部分配置）可能不注册 snr 节点，但 des / poc 仍可用。若需验证 sensor diag，可换用已启用 snr diag 的 sensor（如 ovx3cstd、isx031std）。`-t txs` 的用法与其他类型相同，是否列出 txs 节点取决于模组是否注册。
 :::
 
 ### 运行效果
 
 下文运行日志基于 `ar0820std-1080p30`，命令为 `./camera_event_callback -s 3 -l 0 ...`。
 
-#### 测试 Sensor diag（`-t snr`）
+#### 测试 sensor diag（`-t snr`）
 
 ```shell
 root@ubuntu:/app/multimedia_samples/sample_camera_diag/camera_event_callback# ./camera_event_callback -s 3 -l 0 -t snr
@@ -233,13 +246,13 @@ root@ubuntu:/app/multimedia_samples/sample_camera_diag/camera_event_callback# ./
 
 **可能原因：**
 
-- 当前 Sensor 配置本身不注册 snr 节点（如部分 ar0820std 配置）
+- 当前 sensor 配置本身不注册 snr 节点（如部分 ar0820std 配置）
 - sensor 插件未开启 `-DCAM_DIAG`，或驱动中 diag 代码被 `#if 0` 关闭
 
 **处理方法：**
 
 - 验证 des / poc 是否正常（用于确认 CAM_DIAG 框架已启用）
-- 换用已启用 snr diag 的 Sensor（如 ovx3cstd、isx031std）
+- 换用已启用 snr diag 的 sensor（如 ovx3cstd、isx031std）
 - 检查对应 sensor 驱动是否 `#ifdef CAM_DIAG` 并挂接 `diag_nodes_init`
 
 #### 2. 有节点但 `callback count=0`

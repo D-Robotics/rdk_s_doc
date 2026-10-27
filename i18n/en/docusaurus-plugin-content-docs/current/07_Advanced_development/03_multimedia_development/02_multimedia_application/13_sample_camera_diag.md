@@ -2,7 +2,7 @@
 
 ## Function Overview
 
-`sample_camera_diag` demonstrates the Camera diagnostics (CAM_DIAG) event callback flow: it initializes Camera / VIN (and creates a deserializer in Serdes scenarios), registers a callback via `hbn_camera_set_event_callback`, injects faults using libcam test APIs, and prints diagnostic events in the callback.
+`sample_camera_diag` demonstrates the Camera diagnostics (CAM_DIAG) event callback flow: it initializes Camera / VIN (and creates a deserializer in SerDes scenarios), registers a callback via `hbn_camera_set_event_callback`, injects faults using libcam test APIs, and prints diagnostic events in the callback.
 
 The sample can cover the following diag device types:
 
@@ -43,7 +43,7 @@ The source path of `camera_event_callback` is `/app/multimedia_samples/sample_ca
 
 ### Prerequisites
 
-The sample requires Camera diagnostics to be enabled on the board. If sensor / deserial plugins in the current image were not built with `CAM_DIAG`, you may see “no snr/des/poc nodes” or no callback after inject.
+The sample requires Camera diagnostics to be enabled on the board. If the `sensor` / `deserial` plugins in the current image were not built with `CAM_DIAG`, you may see “no snr/des/poc nodes” or no callback after inject.
 
 Typical way to enable diagnostics in the `hobot-camera` source tree:
 
@@ -55,7 +55,17 @@ CFLAGS += -DCAM_DIAG
 
 2. Make sure the target sensor driver uses `#ifdef CAM_DIAG` (not `#if 0`) and correctly binds `.diag_nodes_init`.
 
-3. Rebuild and install the `hobot-camera` and `hobot-multimedia-samples` deb packages, then run the sample on the board.
+3. Rebuild the corresponding debs from the SDK root, copy them to the board, install them, and then run the sample (see [RDK deb package build guide](../../06_rdk_gen.md) for the full flow):
+
+```shell
+# Build from the SDK root; outputs are placed in out/product/deb_packages/
+./mk_debs.sh hobot-camera
+./mk_debs.sh hobot-multimedia-samples
+
+# Copy the debs to the board, then install
+dpkg -i hobot-camera_*.deb
+dpkg -i hobot-multimedia-samples_*.deb
+```
 
 ### Compilation
 
@@ -89,15 +99,15 @@ Options:
 
 **Command Parameter Descriptions:**
 
-- `-s <sensor_index>`: Sensor index to use. Check the list with `-h`.
-- `-l <link_port>`: Serdes Sensor link port on the deserializer, `0:A 1:B 2:C 3:D`. **Mandatory** for Serdes sensors.
+- `-s <sensor_index>`: Index of the sensor to use. Check the list with `-h`.
+- `-l <link_port>`: SerDes sensor link port on the deserializer, `0:A 1:B 2:C 3:D`. **Mandatory** for SerDes sensors.
 - `-d <diag_id>`: Specific diag id to inject (hex supported, e.g. `0x401031`). If omitted, the program auto-selects a usable node from the diag dump.
 - `-t <type>`: Filter listed/injected nodes by device type: `des` / `poc` / `ser` / `snr` / `txs`. Without `-t`, all types are shown and tried.
-- `-w <seconds>`: Extra wait time when no callback is received. Default is 20 seconds.
+- `-w <seconds>`: Maximum wait time for a callback after injection. Default is 20 seconds.
 - `-h`: Show help information.
 
 :::caution Caution
-The value of `-l` depends on which deserializer port the Serdes Sensor is physically connected to. Keep it consistent with the hardware wiring.
+The value of `-l` depends on which deserializer port the SerDes sensor is physically connected to. Keep it consistent with the hardware wiring.
 :::
 
 #### Recommended Test Commands
@@ -108,7 +118,7 @@ The following examples use `ar0820std-1080p30` (index `3` in the log below; chec
 # List all node types and auto-inject the first usable node
 ./camera_event_callback -s 3 -l 0
 
-# Test Sensor diag only
+# Test sensor diag only
 ./camera_event_callback -s 3 -l 0 -t snr
 
 # Test deserializer diag only
@@ -116,10 +126,13 @@ The following examples use `ar0820std-1080p30` (index `3` in the log below; chec
 
 # Test POC diag only
 ./camera_event_callback -s 3 -l 0 -t poc
+
+# Test Tx Serializer diag only
+./camera_event_callback -s 3 -l 0 -t txs
 ```
 
 :::tip Tip
-Some sensors (for example certain ar0820std configs) may not register snr nodes, while des / poc can still work. To verify Sensor diag, switch to a sensor with snr diag enabled (such as ovx3cstd or isx031std).
+Some sensors (for example certain ar0820std configs) may not register snr nodes, while des / poc can still work. To verify sensor diag, switch to a sensor with snr diag enabled (such as ovx3cstd or isx031std). `-t txs` works the same way as the other types; whether txs nodes are listed depends on whether the module registers them.
 :::
 
 ### Running Results
