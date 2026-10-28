@@ -59,9 +59,9 @@ These are the API implementation files for user calls. Each Wdg instance require
 
 ### 2.2 Difference Between On-Chip WDG and PMIC WDG
 
-<DocScope products="RDK S100">
 The on-chip WDG and PMIC WDG are complementary watchdog layers. The on-chip WDG is used for MCU internal monitoring and testing, while the PMIC WDG acts as a board-level fail-safe backup; if the MCU software cannot feed the watchdog properly, the PMIC WDG can still perform a reset or protection action after timeout.
 
+<DocScope products="RDK S100">
 There are two independent watchdogs on the RDK S100 MCU side:
 
 - **On-chip WDG**: Integrated inside the RDK S100. It is disabled by default; initialize and configure it through the WDG APIs when needed.
@@ -94,8 +94,6 @@ There are two independent watchdogs on the RDK S100 MCU side:
 </DocScope>
 
 <DocScope products="RDK S600">
-The on-chip WDG and PMIC WDG are complementary watchdog layers. The on-chip WDG is used for MCU internal monitoring and testing, while the PMIC WDG acts as a board-level fail-safe backup; if the MCU software cannot feed the watchdog properly, the PMIC WDG can still perform a reset or protection action after timeout.
-
 There are two independent watchdogs on the RDK S600 MCU side:
 
 - **On-chip WDG**: Integrated inside the RDK S600. It is disabled by default; initialize and configure it through the WDG APIs when needed. The RDK S600 supports five instances, `Wdg0` through `Wdg4`. The current MCU0 default configuration mounts `Wdg0` through `Wdg2`, and the MCU1 default configuration also mounts `Wdg0` through `Wdg2`.
@@ -114,14 +112,14 @@ There are two independent watchdogs on the RDK S600 MCU side:
 - **On-chip WDG driver**
   - Common low-level driver: `McalCdd/Wdg/src/Wdg_Lld.c`, `McalCdd/Wdg/inc/Wdg_Lld.h`.
   - Common high-level driver: `McalCdd/Wdg/src/Wdg_Common.c`, `McalCdd/Wdg/inc/Wdg_Prv.h`.
-  - Instance interfaces: `McalCdd/Wdg/src/Wdg0.c`, `Wdg1.c`, `Wdg2.c`, `Wdg3.c`, `Wdg4.c`, together with `McalCdd/Wdg/inc/Wdg0.h`, `Wdg1.h`, `Wdg2.h`, `Wdg3.h`, `Wdg4.h`. The MCU0 default configuration is `Wdg0` through `Wdg2`, and the MCU1 default configuration is `Wdg0` through `Wdg2`.
+  - Instance interfaces: `McalCdd/Wdg/src/Wdg0.c`, `Wdg1.c`, `Wdg2.c`, `Wdg3.c`, `Wdg4.c`, together with `McalCdd/Wdg/inc/Wdg0.h`, `Wdg1.h`, `Wdg2.h`, `Wdg3.h`, `Wdg4.h`.
 - **PMIC WDG driver**
   - Common driver: `McalCdd/Pmic/src/Wdg_Ext.c`, `McalCdd/Pmic/inc/Wdg_Ext.h`.
   - Common low-level driver: `McalCdd/Pmic/src/Pmic_Lld_Wdg.c`, `McalCdd/Pmic/inc/Pmic_Lld_Wdg.h`.
   - RDK S600 device driver: `McalCdd/Pmic/devices/src/Pmic_Lld_Vr5510Wdg.c`, `McalCdd/Pmic/devices/inc/Pmic_Lld_Vr5510Wdg.h`.
 - **On-chip WDG configuration**
-  - MCU0: `Config/McalCdd/gen_s600_md/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, `Wdg2_PBcfg.c`, `Wdg3_PBcfg.c`, and `Wdg4_PBcfg.c`. The MCU0 `Wdg_Config[]`/`WDG_NUM` includes `Wdg0` through `Wdg2` by default.
-  - MCU1: `Config/McalCdd/gen_s600_md_mcu1/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, `Wdg2_PBcfg.c`, `Wdg3_PBcfg.c`, and `Wdg4_PBcfg.c`. The MCU1 `Wdg_Config[]`/`WDG_NUM` includes `Wdg0` through `Wdg2` by default.
+  - MCU0: `Config/McalCdd/gen_s600_md/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, `Wdg2_PBcfg.c`, `Wdg3_PBcfg.c`, and `Wdg4_PBcfg.c`.
+  - MCU1: `Config/McalCdd/gen_s600_md_mcu1/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, `Wdg2_PBcfg.c`, `Wdg3_PBcfg.c`, and `Wdg4_PBcfg.c`.
 - **PMIC WDG configuration**
   - MCU0: `Config/McalCdd/gen_s600_md/PwrIf/src/PwrM_Cfg.c`.
   - MCU1: `Config/McalCdd/gen_s600_md_mcu1/PwrIf/src/PwrM_Cfg.c`.
@@ -309,6 +307,10 @@ The handling paths for normal WDG interrupts and reset interrupts are as follows
 | Wdg_InsXIntIsr | WdgX_IrqHandler | Normal WDG interrupt; finally calls Wdg_Lld_IrqHandler |
 | Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG reset interrupt; finally calls the callback registered by Wdg_Lld_SetRstCallback |
 
+:::note
+`WdgX_RstIrqHandler()` is the instance-level entry provided by the Target project and is equivalent to `Wdg_Lld_RstIrqHandler(X)`. For instances without an instance-level entry, call `Wdg_Lld_RstIrqHandler()` directly.
+:::
+
 ### 3.4 Critical Sections
 Use `SchM_Enter_Wdg_ExclusiveZone_XX` and `SchM_Exit_Wdg_ExclusiveZone_XX` to define operations for entering and exiting critical sections. The WDG driver requires users to handle critical sections according to their actual application deployment. These functions are already called in the driver.
 
@@ -385,8 +387,8 @@ The following configuration is used to allow the core running the test code to c
 #### Reset Interrupt Handler
 - File: `Target/Target_S100/Target-hobot-lite-freertos/target/HorizonISR.c`
 - Location: `Wdg_Ins0RstIsr`, `Wdg_Ins1RstIsr`, `Wdg_Ins2RstIsr`.
-- Default code: The reset interrupt entries call `WdgX_IrqHandler()`.
-- Test configuration: The reset interrupt handler is disabled by default. For testing, change the three reset interrupt entries to call `WdgX_RstIrqHandler()` so that the driver reset interrupt callback path is entered.
+- Default behavior: The reset interrupt entries call `WdgX_IrqHandler()`, so the driver reset interrupt callback path is not entered.
+- Test configuration: Change the three reset interrupt entries to call `WdgX_RstIrqHandler()` so that the driver reset interrupt callback path is entered.
 
 ```c
 ISR(Wdg_Ins0RstIsr){
@@ -661,5 +663,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Uart0_Isr, Os_Isr_Uart0_Isr, OS_IMASK_FOR_Uart0_Isr / 8, ENABLE},
 ```
 
-> Note: On RDK S600, `Uart8` is the shared debug console for MCU0/MCU1. If MCU1 also registers and owns `Uart0_Isr`, input will be contended. When testing the MCU0 serial Shell, ensure only MCU0 owns this UART, or disable the MCU1 Shell/UART0 receive path.
+:::note
+On RDK S600, `Uart8` is the shared debug console for MCU0/MCU1. If MCU1 also registers and owns `Uart0_Isr`, input will be contended. When testing the MCU0 serial Shell, ensure only MCU0 owns this UART, or disable the MCU1 Shell/UART0 receive path.
+:::
 </DocScope>

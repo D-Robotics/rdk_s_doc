@@ -59,9 +59,9 @@ import DocScope from '@site/src/components/DocScope';
 
 ### 2.2 芯片内 WDG 与 PMIC WDG 的区别
 
-<DocScope products="RDK S100">
-芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级 fail-safe 兜底；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位/保护。
+芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级兜底（fail-safe）；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位或保护。
 
+<DocScope products="RDK S100">
 RDK S100 的 MCU 侧存在两类看门狗，二者相互独立：
 
 - **芯片内 WDG**：集成在 RDK S100 内部，默认未开启；需要时通过 WDG API 初始化并配置。
@@ -77,7 +77,7 @@ RDK S100 的 MCU 侧存在两类看门狗，二者相互独立：
 
 #### 驱动与配置文件
 
-- **芯片内部 WDG 驱动**
+- **芯片内 WDG 驱动**
   - 公共底层驱动：`McalCdd/Wdg/src/Wdg_Lld.c`、`McalCdd/Wdg/inc/Wdg_Lld.h`。
   - 公共高层驱动：`McalCdd/Wdg/src/Wdg_Common.c`、`McalCdd/Wdg/inc/Wdg_Prv.h`。
   - 实例接口：`McalCdd/Wdg/src/Wdg0.c`、`Wdg1.c`、`Wdg2.c`，以及 `McalCdd/Wdg/inc/Wdg0.h`、`Wdg1.h`、`Wdg2.h`。
@@ -85,7 +85,7 @@ RDK S100 的 MCU 侧存在两类看门狗，二者相互独立：
   - 公共驱动：`McalCdd/Pmic/src/Wdg_Ext.c`、`McalCdd/Pmic/inc/Wdg_Ext.h`。
   - 公共底层驱动：`McalCdd/Pmic/src/Pmic_Lld_Wdg.c`、`McalCdd/Pmic/inc/Pmic_Lld_Wdg.h`。
   - RDK S100 设备驱动：`McalCdd/Pmic/devices/src/Pmic_Lld_McuPwrWdg.c`、`McalCdd/Pmic/devices/inc/Pmic_Lld_McuPwrWdg.h`。
-- **芯片内部 WDG 配置**
+- **芯片内 WDG 配置**
   - MCU0：`Config/McalCdd/gen_s100_sip_B/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`。
   - MCU1：`Config/McalCdd/gen_s100_sip_B_mcu1/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`。
 - **PMIC WDG 配置**
@@ -94,8 +94,6 @@ RDK S100 的 MCU 侧存在两类看门狗，二者相互独立：
 </DocScope>
 
 <DocScope products="RDK S600">
-芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级 fail-safe 兜底；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位/保护。
-
 RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 
 - **芯片内 WDG**：集成在 RDK S600 内部，默认未开启；需要时通过 WDG API 初始化并配置。RDK S600 支持 `Wdg0`~`Wdg4` 共 5 个实例；当前 MCU0 默认配置挂载 `Wdg0`~`Wdg2`，MCU1 默认配置挂载 `Wdg0`~`Wdg2`。
@@ -111,17 +109,17 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 
 #### 驱动与配置文件
 
-- **芯片内部 WDG 驱动**
+- **芯片内 WDG 驱动**
   - 公共底层驱动：`McalCdd/Wdg/src/Wdg_Lld.c`、`McalCdd/Wdg/inc/Wdg_Lld.h`。
   - 公共高层驱动：`McalCdd/Wdg/src/Wdg_Common.c`、`McalCdd/Wdg/inc/Wdg_Prv.h`。
-  - 实例接口：`McalCdd/Wdg/src/Wdg0.c`、`Wdg1.c`、`Wdg2.c`、`Wdg3.c`、`Wdg4.c`，以及 `McalCdd/Wdg/inc/Wdg0.h`、`Wdg1.h`、`Wdg2.h`、`Wdg3.h`、`Wdg4.h`。MCU0 默认配置为 `Wdg0`、`Wdg1`、`Wdg2`，MCU1 默认配置为 `Wdg0`、`Wdg1`、`Wdg2`。
+  - 实例接口：`McalCdd/Wdg/src/Wdg0.c`、`Wdg1.c`、`Wdg2.c`、`Wdg3.c`、`Wdg4.c`，以及 `McalCdd/Wdg/inc/Wdg0.h`、`Wdg1.h`、`Wdg2.h`、`Wdg3.h`、`Wdg4.h`。
 - **PMIC WDG 驱动**
   - 公共驱动：`McalCdd/Pmic/src/Wdg_Ext.c`、`McalCdd/Pmic/inc/Wdg_Ext.h`。
   - 公共底层驱动：`McalCdd/Pmic/src/Pmic_Lld_Wdg.c`、`McalCdd/Pmic/inc/Pmic_Lld_Wdg.h`。
   - RDK S600 设备驱动：`McalCdd/Pmic/devices/src/Pmic_Lld_Vr5510Wdg.c`、`McalCdd/Pmic/devices/inc/Pmic_Lld_Vr5510Wdg.h`。
-- **芯片内部 WDG 配置**
-  - MCU0：`Config/McalCdd/gen_s600_md/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`、`Wdg3_PBcfg.c`、`Wdg4_PBcfg.c`。MCU0 的 `Wdg_Config[]`/`WDG_NUM` 默认包含 `Wdg0`~`Wdg2`。
-  - MCU1：`Config/McalCdd/gen_s600_md_mcu1/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`、`Wdg3_PBcfg.c`、`Wdg4_PBcfg.c`。MCU1 的 `Wdg_Config[]`/`WDG_NUM` 默认包含 `Wdg0`~`Wdg2`。
+- **芯片内 WDG 配置**
+  - MCU0：`Config/McalCdd/gen_s600_md/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`、`Wdg3_PBcfg.c`、`Wdg4_PBcfg.c`。
+  - MCU1：`Config/McalCdd/gen_s600_md_mcu1/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`、`Wdg3_PBcfg.c`、`Wdg4_PBcfg.c`。
 - **PMIC WDG 配置**
   - MCU0：`Config/McalCdd/gen_s600_md/PwrIf/src/PwrM_Cfg.c`。
   - MCU1：`Config/McalCdd/gen_s600_md_mcu1/PwrIf/src/PwrM_Cfg.c`。
@@ -309,6 +307,10 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Wdg_InsXIntIsr | WdgX_IrqHandler | 普通 WDG 中断，最终调用 Wdg_Lld_IrqHandler |
 | Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG 复位中断，最终调用 Wdg_Lld_SetRstCallback 注册的回调 |
 
+:::note
+`WdgX_RstIrqHandler()` 是 Target 工程提供的实例级入口，与 `Wdg_Lld_RstIrqHandler(X)` 等价；没有实例级入口的实例直接调用 `Wdg_Lld_RstIrqHandler()`。
+:::
+
 ### 3.4 临界区
 使用`SchM_Enter_Wdg_ExclusiveZone_XX`和`SchM_Exit_Wdg_ExclusiveZone_XX`来定义进入和退出临界区的操作，WDG 驱动程序需要用户结合实际应用部署情况来处理临界区，其函数已在驱动中调用。
 
@@ -368,11 +370,11 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 ## 5. WDG 复位中断测试说明
 
 <DocScope products="RDK S100">
-本节说明在测试版本中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断处理链路参见 3.3。
+本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断处理链路参见 3.3。
 </DocScope>
 
 <DocScope products="RDK S600">
-本节说明在测试版本中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断向量参见 3.3。
+本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断向量参见 3.3。
 
 当前 MCU0 Target 工程已接入 `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` 复位中断测试路径；若基于未改动的源码测试，需要按下面的测试环境配置接入后再进行测试。
 </DocScope>
@@ -385,8 +387,8 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 #### 复位中断处理函数
 - 文件：`Target/Target_S100/Target-hobot-lite-freertos/target/HorizonISR.c`
 - 位置：`Wdg_Ins0RstIsr`、`Wdg_Ins1RstIsr`、`Wdg_Ins2RstIsr`。
-- 默认代码：复位中断入口调用 `WdgX_IrqHandler()`。
-- 测试配置：复位中断处理函数默认不开启，测试的话，需要将三个复位中断入口改为调用 `WdgX_RstIrqHandler()`，才能进入驱动复位中断回调路径。
+- 默认情况：复位中断入口调用的是 `WdgX_IrqHandler()`，不会进入驱动复位中断回调路径。
+- 测试配置：将三个复位中断入口改为调用 `WdgX_RstIrqHandler()`，才能进入驱动复位中断回调路径。
 
 ```c
 ISR(Wdg_Ins0RstIsr){
@@ -661,5 +663,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Uart0_Isr, Os_Isr_Uart0_Isr, OS_IMASK_FOR_Uart0_Isr / 8, ENABLE},
 ```
 
-> 注意：RDK S600 的 `Uart8` 为 MCU0/MCU1 共用调试串口。若 MCU1 同时注册并占用 `Uart0_Isr`，会造成输入竞争；测试 MCU0 串口 Shell 时需确保仅 MCU0 占用该串口，或关闭 MCU1 的 Shell/UART0 接收。
+:::note
+RDK S600 的 `Uart8` 为 MCU0/MCU1 共用调试串口。若 MCU1 同时注册并占用 `Uart0_Isr`，会造成输入竞争；测试 MCU0 串口 Shell 时需确保仅 MCU0 占用该串口，或关闭 MCU1 的 Shell/UART0 接收。
+:::
 </DocScope>
