@@ -62,9 +62,9 @@ These are the API implementation files for user calls. Each Wdg instance require
 <DocScope products="RDK S100">
 The on-chip WDG and PMIC WDG are complementary watchdog layers. The on-chip WDG is used for MCU internal monitoring and testing, while the PMIC WDG acts as a board-level fail-safe backup; if the MCU software cannot feed the watchdog properly, the PMIC WDG can still perform a reset or protection action after timeout.
 
-There are two independent watchdogs on the S100 MCU side:
+There are two independent watchdogs on the RDK S100 MCU side:
 
-- **On-chip WDG**: Integrated inside the S100. It is disabled by default; initialize and configure it through the WDG APIs when needed.
+- **On-chip WDG**: Integrated inside the RDK S100. It is disabled by default; initialize and configure it through the WDG APIs when needed.
 - **PMIC WDG**: Located inside the external `MCUPWR` PMIC and fed by the MCU over I2C.
 
 | Item | On-chip WDG | PMIC WDG |
@@ -84,7 +84,7 @@ There are two independent watchdogs on the S100 MCU side:
 - **PMIC WDG driver**
   - Common driver: `McalCdd/Pmic/src/Wdg_Ext.c`, `McalCdd/Pmic/inc/Wdg_Ext.h`.
   - Common low-level driver: `McalCdd/Pmic/src/Pmic_Lld_Wdg.c`, `McalCdd/Pmic/inc/Pmic_Lld_Wdg.h`.
-  - S100 device driver: `McalCdd/Pmic/devices/src/Pmic_Lld_McuPwrWdg.c`, `McalCdd/Pmic/devices/inc/Pmic_Lld_McuPwrWdg.h`.
+  - RDK S100 device driver: `McalCdd/Pmic/devices/src/Pmic_Lld_McuPwrWdg.c`, `McalCdd/Pmic/devices/inc/Pmic_Lld_McuPwrWdg.h`.
 - **On-chip WDG configuration**
   - MCU0: `Config/McalCdd/gen_s100_sip_B/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, and `Wdg2_PBcfg.c`.
   - MCU1: `Config/McalCdd/gen_s100_sip_B_mcu1/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, and `Wdg2_PBcfg.c`.
@@ -96,9 +96,9 @@ There are two independent watchdogs on the S100 MCU side:
 <DocScope products="RDK S600">
 The on-chip WDG and PMIC WDG are complementary watchdog layers. The on-chip WDG is used for MCU internal monitoring and testing, while the PMIC WDG acts as a board-level fail-safe backup; if the MCU software cannot feed the watchdog properly, the PMIC WDG can still perform a reset or protection action after timeout.
 
-There are two independent watchdogs on the S600 MCU side:
+There are two independent watchdogs on the RDK S600 MCU side:
 
-- **On-chip WDG**: Integrated inside the S600. It is disabled by default; initialize and configure it through the WDG APIs when needed. The S600 supports five instances, `Wdg0` through `Wdg4`. The current MCU0 default configuration mounts `Wdg0` through `Wdg2`, and the MCU1 default configuration also mounts `Wdg0` through `Wdg2`.
+- **On-chip WDG**: Integrated inside the RDK S600. It is disabled by default; initialize and configure it through the WDG APIs when needed. The RDK S600 supports five instances, `Wdg0` through `Wdg4`. The current MCU0 default configuration mounts `Wdg0` through `Wdg2`, and the MCU1 default configuration also mounts `Wdg0` through `Wdg2`.
 - **PMIC WDG**: Located inside the external `VR5510` PMIC and controlled/fed by the MCU over I2C. It is enabled on MCU0 by default, while the `VR5510` device-level watchdog is disabled on MCU1 by default.
 
 | Item | On-chip WDG | PMIC WDG |
@@ -118,7 +118,7 @@ There are two independent watchdogs on the S600 MCU side:
 - **PMIC WDG driver**
   - Common driver: `McalCdd/Pmic/src/Wdg_Ext.c`, `McalCdd/Pmic/inc/Wdg_Ext.h`.
   - Common low-level driver: `McalCdd/Pmic/src/Pmic_Lld_Wdg.c`, `McalCdd/Pmic/inc/Pmic_Lld_Wdg.h`.
-  - S600 device driver: `McalCdd/Pmic/devices/src/Pmic_Lld_Vr5510Wdg.c`, `McalCdd/Pmic/devices/inc/Pmic_Lld_Vr5510Wdg.h`.
+  - RDK S600 device driver: `McalCdd/Pmic/devices/src/Pmic_Lld_Vr5510Wdg.c`, `McalCdd/Pmic/devices/inc/Pmic_Lld_Vr5510Wdg.h`.
 - **On-chip WDG configuration**
   - MCU0: `Config/McalCdd/gen_s600_md/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, `Wdg2_PBcfg.c`, `Wdg3_PBcfg.c`, and `Wdg4_PBcfg.c`. The MCU0 `Wdg_Config[]`/`WDG_NUM` includes `Wdg0` through `Wdg2` by default.
   - MCU1: `Config/McalCdd/gen_s600_md_mcu1/Wdg/src/Wdg_Cfg.c`, together with `Wdg0_PBcfg.c`, `Wdg1_PBcfg.c`, `Wdg2_PBcfg.c`, `Wdg3_PBcfg.c`, and `Wdg4_PBcfg.c`. The MCU1 `Wdg_Config[]`/`WDG_NUM` includes `Wdg0` through `Wdg2` by default.
@@ -372,9 +372,9 @@ This section describes how to configure the test environment so that the core ru
 </DocScope>
 
 <DocScope products="RDK S600">
-This section describes how to configure the S600 MCU0 test environment to verify the WDG reset interrupt callback path after a timeout. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt vectors.
+This section describes how to configure the RDK S600 MCU0 test environment to verify the WDG reset interrupt callback path after a timeout. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt vectors.
 
-The current S600 MCU0 Target project has wired up the `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` reset interrupt test path. When testing from an unmodified source tree, apply the following test environment configuration before testing.
+The current RDK S600 MCU0 Target project has wired up the `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` reset interrupt test path. When testing from an unmodified source tree, apply the following test environment configuration before testing.
 </DocScope>
 
 ### Test Environment Configuration
@@ -442,11 +442,11 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 </DocScope>
 
 <DocScope products="RDK S600">
-The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` through the Shell on Core0 of S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces. The current S600 MCU0 Target project has wired up the WDG interrupt/reset interrupt entries as described below. When testing from an unmodified source tree, apply or verify the same configuration.
+The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` through the Shell on Core0 of RDK S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces. The current RDK S600 MCU0 Target project has wired up the WDG interrupt/reset interrupt entries as described below. When testing from an unmodified source tree, apply or verify the same configuration.
 
 #### WDG Configuration Expansion
 
-The S600 MCU0 test configuration expands the WDG instance count from three to five, adds the `Wdg3/4` timeout, mode, and state entries, and binds all five instances to MCU0 Core0 so that the core running the test code can receive the corresponding interrupts.
+The RDK S600 MCU0 test configuration expands the WDG instance count from three to five, adds the `Wdg3/4` timeout, mode, and state entries, and binds all five instances to MCU0 Core0 so that the core running the test code can receive the corresponding interrupts.
 
 ##### `Wdg_Cfg_Defines.h`
 
@@ -594,7 +594,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 ##### `ConfigInterrupts.h`
 
 - File: `Target/Target_S600/Target-hobot-lite-freertos/target/FreeRtosOsHal/ConfigInterrupts.h`
-- Define the interrupt-channel macros that map `Os_IntChannel_Wdg_InsX*` to the S600 normal interrupt vectors `MCUSYS_WWDT0..4_INTR` and reset interrupt vectors `MCUSYS_WWDT0..4_SYS_RST_INTR`:
+- Define the interrupt-channel macros that map `Os_IntChannel_Wdg_InsX*` to the RDK S600 normal interrupt vectors `MCUSYS_WWDT0..4_INTR` and reset interrupt vectors `MCUSYS_WWDT0..4_SYS_RST_INTR`:
 
 ```c
 #define Os_IntChannel_Wdg_Ins0IntIsr (MCUSYS_WWDT0_INTR)
@@ -661,5 +661,5 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Uart0_Isr, Os_Isr_Uart0_Isr, OS_IMASK_FOR_Uart0_Isr / 8, ENABLE},
 ```
 
-> Note: On S600, `Uart8` is the shared debug console for MCU0/MCU1. If MCU1 also registers and owns `Uart0_Isr`, input will be contended. When testing the MCU0 serial Shell, ensure only MCU0 owns this UART, or disable the MCU1 Shell/UART0 receive path.
+> Note: On RDK S600, `Uart8` is the shared debug console for MCU0/MCU1. If MCU1 also registers and owns `Uart0_Isr`, input will be contended. When testing the MCU0 serial Shell, ensure only MCU0 owns this UART, or disable the MCU1 Shell/UART0 receive path.
 </DocScope>

@@ -62,9 +62,9 @@ import DocScope from '@site/src/components/DocScope';
 <DocScope products="RDK S100">
 芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级 fail-safe 兜底；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位/保护。
 
-S100 的 MCU 侧存在两类看门狗，二者相互独立：
+RDK S100 的 MCU 侧存在两类看门狗，二者相互独立：
 
-- **芯片内 WDG**：集成在 S100 内部，默认未开启；需要时通过 WDG API 初始化并配置。
+- **芯片内 WDG**：集成在 RDK S100 内部，默认未开启；需要时通过 WDG API 初始化并配置。
 - **PMIC WDG**：位于外部 `MCUPWR` PMIC 内部，由 MCU 通过 I2C 喂狗。
 
 | 项目 | 芯片内 WDG | PMIC WDG |
@@ -84,7 +84,7 @@ S100 的 MCU 侧存在两类看门狗，二者相互独立：
 - **PMIC WDG 驱动**
   - 公共驱动：`McalCdd/Pmic/src/Wdg_Ext.c`、`McalCdd/Pmic/inc/Wdg_Ext.h`。
   - 公共底层驱动：`McalCdd/Pmic/src/Pmic_Lld_Wdg.c`、`McalCdd/Pmic/inc/Pmic_Lld_Wdg.h`。
-  - S100 设备驱动：`McalCdd/Pmic/devices/src/Pmic_Lld_McuPwrWdg.c`、`McalCdd/Pmic/devices/inc/Pmic_Lld_McuPwrWdg.h`。
+  - RDK S100 设备驱动：`McalCdd/Pmic/devices/src/Pmic_Lld_McuPwrWdg.c`、`McalCdd/Pmic/devices/inc/Pmic_Lld_McuPwrWdg.h`。
 - **芯片内部 WDG 配置**
   - MCU0：`Config/McalCdd/gen_s100_sip_B/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`。
   - MCU1：`Config/McalCdd/gen_s100_sip_B_mcu1/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`。
@@ -96,9 +96,9 @@ S100 的 MCU 侧存在两类看门狗，二者相互独立：
 <DocScope products="RDK S600">
 芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级 fail-safe 兜底；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位/保护。
 
-S600 的 MCU 侧存在两类看门狗，二者相互独立：
+RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 
-- **芯片内 WDG**：集成在 S600 内部，默认未开启；需要时通过 WDG API 初始化并配置。S600 支持 `Wdg0`~`Wdg4` 共 5 个实例；当前 MCU0 默认配置挂载 `Wdg0`~`Wdg2`，MCU1 默认配置挂载 `Wdg0`~`Wdg2`。
+- **芯片内 WDG**：集成在 RDK S600 内部，默认未开启；需要时通过 WDG API 初始化并配置。RDK S600 支持 `Wdg0`~`Wdg4` 共 5 个实例；当前 MCU0 默认配置挂载 `Wdg0`~`Wdg2`，MCU1 默认配置挂载 `Wdg0`~`Wdg2`。
 - **PMIC WDG**：位于外部 `VR5510` PMIC 内部，由 MCU 通过 I2C 控制/喂狗。MCU0 侧默认使能，MCU1 侧 `VR5510` 设备级看门狗默认关闭。
 
 | 项目 | 芯片内 WDG | PMIC WDG |
@@ -118,7 +118,7 @@ S600 的 MCU 侧存在两类看门狗，二者相互独立：
 - **PMIC WDG 驱动**
   - 公共驱动：`McalCdd/Pmic/src/Wdg_Ext.c`、`McalCdd/Pmic/inc/Wdg_Ext.h`。
   - 公共底层驱动：`McalCdd/Pmic/src/Pmic_Lld_Wdg.c`、`McalCdd/Pmic/inc/Pmic_Lld_Wdg.h`。
-  - S600 设备驱动：`McalCdd/Pmic/devices/src/Pmic_Lld_Vr5510Wdg.c`、`McalCdd/Pmic/devices/inc/Pmic_Lld_Vr5510Wdg.h`。
+  - RDK S600 设备驱动：`McalCdd/Pmic/devices/src/Pmic_Lld_Vr5510Wdg.c`、`McalCdd/Pmic/devices/inc/Pmic_Lld_Vr5510Wdg.h`。
 - **芯片内部 WDG 配置**
   - MCU0：`Config/McalCdd/gen_s600_md/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`、`Wdg3_PBcfg.c`、`Wdg4_PBcfg.c`。MCU0 的 `Wdg_Config[]`/`WDG_NUM` 默认包含 `Wdg0`~`Wdg2`。
   - MCU1：`Config/McalCdd/gen_s600_md_mcu1/Wdg/src/Wdg_Cfg.c`，以及 `Wdg0_PBcfg.c`、`Wdg1_PBcfg.c`、`Wdg2_PBcfg.c`、`Wdg3_PBcfg.c`、`Wdg4_PBcfg.c`。MCU1 的 `Wdg_Config[]`/`WDG_NUM` 默认包含 `Wdg0`~`Wdg2`。
@@ -442,11 +442,11 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 </DocScope>
 
 <DocScope products="RDK S600">
-以下配置用于在 S600 MCU0 的 Core0 上通过 Shell 测试 `Wdg0`~`Wdg4` 的复位中断回调路径。驱动层已支持 `Wdg0`、`Wdg1`、`Wdg2`、`Wdg3`、`Wdg4` 复位中断接口；当前 S600 MCU0 Target 工程已按以下配置接入 WDG 中断/复位中断入口，若基于未改动的源码测试，需按相同步骤检查或补全。
+以下配置用于在 RDK S600 MCU0 的 Core0 上通过 Shell 测试 `Wdg0`~`Wdg4` 的复位中断回调路径。驱动层已支持 `Wdg0`、`Wdg1`、`Wdg2`、`Wdg3`、`Wdg4` 复位中断接口；当前 RDK S600 MCU0 Target 工程已按以下配置接入 WDG 中断/复位中断入口，若基于未改动的源码测试，需按相同步骤检查或补全。
 
 #### WDG 配置扩展
 
-S600 MCU0 测试配置已将 WDG 实例个数从 3 个扩展为 5 个，补齐 `Wdg3/4` 的超时、模式和状态配置，并把 5 个实例都绑定到 MCU0 Core0，确保测试代码所在核能接收对应中断。
+RDK S600 MCU0 测试配置已将 WDG 实例个数从 3 个扩展为 5 个，补齐 `Wdg3/4` 的超时、模式和状态配置，并把 5 个实例都绑定到 MCU0 Core0，确保测试代码所在核能接收对应中断。
 
 ##### `Wdg_Cfg_Defines.h`
 
@@ -594,7 +594,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 ##### `ConfigInterrupts.h`
 
 - 文件：`Target/Target_S600/Target-hobot-lite-freertos/target/FreeRtosOsHal/ConfigInterrupts.h`
-- 定义中断通道宏，将 `Os_IntChannel_Wdg_InsX*` 映射到 S600 的普通中断向量 `MCUSYS_WWDT0..4_INTR` 和复位中断向量 `MCUSYS_WWDT0..4_SYS_RST_INTR`：
+- 定义中断通道宏，将 `Os_IntChannel_Wdg_InsX*` 映射到 RDK S600 的普通中断向量 `MCUSYS_WWDT0..4_INTR` 和复位中断向量 `MCUSYS_WWDT0..4_SYS_RST_INTR`：
 
 ```c
 #define Os_IntChannel_Wdg_Ins0IntIsr (MCUSYS_WWDT0_INTR)
@@ -661,5 +661,5 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Uart0_Isr, Os_Isr_Uart0_Isr, OS_IMASK_FOR_Uart0_Isr / 8, ENABLE},
 ```
 
-> 注意：S600 的 `Uart8` 为 MCU0/MCU1 共用调试串口。若 MCU1 同时注册并占用 `Uart0_Isr`，会造成输入竞争；测试 MCU0 串口 Shell 时需确保仅 MCU0 占用该串口，或关闭 MCU1 的 Shell/UART0 接收。
+> 注意：RDK S600 的 `Uart8` 为 MCU0/MCU1 共用调试串口。若 MCU1 同时注册并占用 `Uart0_Isr`，会造成输入竞争；测试 MCU0 串口 Shell 时需确保仅 MCU0 占用该串口，或关闭 MCU1 的 Shell/UART0 接收。
 </DocScope>
