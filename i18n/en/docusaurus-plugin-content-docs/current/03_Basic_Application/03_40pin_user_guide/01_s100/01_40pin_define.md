@@ -106,10 +106,6 @@ Input pin 24 (SPI_CSN): LOW
 `pin 23` and `pin 24` in the output are BOARD numbers. The name in parentheses is the silkscreen name without the `_3V3` suffix. It matches the Pin Name shown by `hb_gpioinfo`.
 :::
 
-:::note
-`SPI0_CS0_3V3` passes through an onboard level shifter and **has a weak pull-up**. If you leave the pin floating or disconnect it, the pin still reads high. Connect the pin to GND to read low.
-:::
-
 ## Troubleshooting
 
 ### The serial console prints nothing when the input level changes
@@ -133,5 +129,5 @@ Input pin 24 (SPI_CSN): LOW
 ## Related documents
 
 - [GPIO application](./02_gpio.md)
-- [GPIO usage](../../../../07_Advanced_development/02_linux_development/04_driver_development_super/04_driver_gpio_dev.md)
-- [Developer kit](../../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md)
+- [GPIO usage](../../../07_Advanced_development/02_linux_development/04_driver_development_super/04_driver_gpio_dev.md)
+- [Developer kit](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md)

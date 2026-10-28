@@ -63,13 +63,16 @@ Add the following to the configuration file: `fdt-setprop=<full DTS node path> <
 1. **A single cell**: the value is **one** 32-bit unsigned integer, written in angle brackets with **only one number** inside, for example `<1>` or `<0x10>`.
 2. **A single string**: the value is **one** plain string. Do not use angle brackets or quotes, for example `okay` or `disabled`.
 
-Example:
+Single-cell example:
 
 ```text
-# Single cell: enable YSN8130 backup-battery charging
+# Enable YSN8130 backup-battery charging
 fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
+```
 
-# Single string: set the node status (example)
+Single-string example. This line is not part of the charging configuration. Do not write it into `config.txt` together with the charging line above. It sets `status` of the same `ysn8130` node to `okay`:
+
+```text
 fdt-setprop=/soc/i2c@39460000/ysn8130@32 status okay;
 ```
 
@@ -85,7 +88,6 @@ fdt-setprop=/soc/i2c@39460000/ysn8130@32 status okay;
 
 :::info Note
 - The full node path must start with `/`. See the previous section for how to obtain it.
-- One `fdt-setprop` line changes **one** property name. Write multiple lines for multiple properties.
 :::
 
 #### Configure DTB Overlay Files

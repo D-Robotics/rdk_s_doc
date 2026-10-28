@@ -106,10 +106,6 @@ Input pin 24 (SPI_CSN): LOW
 打印中的 `pin 23` / `pin 24` 是 BOARD 编码编号，括号内是管脚的板端丝印名（不含 `_3V3` 后缀），与 `hb_gpioinfo` 显示的 Pin Name 一致。
 :::
 
-:::note
-`SPI0_CS0_3V3` 经板载电平转换器件接出，**带有弱上拉**：悬空或断开后不再接任何电平，仍会读到高电平。要读到低电平，必须将其主动接到 GND。
-:::
-
 ## 常见问题
 
 ### 输入模式下切换电平但串口无打印
@@ -133,5 +129,5 @@ Input pin 24 (SPI_CSN): LOW
 ## 相关文档
 
 - [GPIO 应用](./02_gpio.md)
-- [GPIO 使用](../../../../07_Advanced_development/02_linux_development/04_driver_development_super/04_driver_gpio_dev.md)
-- [开发者套件](../../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md)
+- [GPIO 使用](../../../07_Advanced_development/02_linux_development/04_driver_development_super/04_driver_gpio_dev.md)
+- [开发者套件](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100.md)

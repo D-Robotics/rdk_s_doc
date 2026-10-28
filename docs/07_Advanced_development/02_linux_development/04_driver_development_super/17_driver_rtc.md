@@ -702,11 +702,7 @@ fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
 
 该指令的含义是修改 `ysn8130` 设备树节点的 `drobot,backup-charge-enable` 属性值为 `1`。其中 `1` 表示使能充电，`0` 表示关闭充电。`config.txt` 使用方式可参考 [2.3 config.txt 文件配置](../../../02_System_configuration/03_config_txt.md)。
 
-
-
 ### 启动阶段由 RTC 设置系统时间
-
-
 
 若需要在系统启动阶段由指定 RTC 将硬件时间写入系统时钟，需要在 `drobot_s100_defconfig` 中配置：
 

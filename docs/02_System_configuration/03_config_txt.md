@@ -82,7 +82,6 @@ fdt-setprop=/soc/i2c@39460000/ysn8130@32 status okay;
 
 :::info 提示
 - 节点全路径须以 `/` 开头，获取方式可参考上一节；
-- 一条 `fdt-setprop` 只修改**一个**属性名；多个属性请写多行；
 :::
 
 #### 配置 DTB Overlay 文件
