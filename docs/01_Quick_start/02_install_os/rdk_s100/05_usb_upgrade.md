@@ -139,6 +139,7 @@ upgrade progress: 222261248 / 24747937792 bytes (0%)
 upgrade from USB disk Success, now reboot system
 ```
 
+- 第一行 `u disk auto upgrade: enabled` 表示本次升级由上电自动触发。S100 没有关闭自动升级的开关。
 - 看到 `USB sparse image found, upgrading...` 表示已找到镜像并开始烧录。
 - 烧录期间**不要拔出 U 盘，也不要断电**，进度到达 100% 后开发板自动重启。
 - 升级耗时取决于 U 盘与 eMMC 的读写速度，通常需要数分钟。

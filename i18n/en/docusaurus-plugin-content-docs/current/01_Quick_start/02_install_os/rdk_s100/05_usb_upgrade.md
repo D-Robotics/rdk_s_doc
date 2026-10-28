@@ -139,6 +139,7 @@ upgrade progress: 222261248 / 24747937792 bytes (0%)
 upgrade from USB disk Success, now reboot system
 ```
 
+- The first line `u disk auto upgrade: enabled` means the upgrade is triggered automatically at power-on. S100 has no switch to disable the automatic upgrade.
 - `USB sparse image found, upgrading...` means the image was found and flashing has started.
 - Do **not** remove the USB drive or power off during flashing. The board reboots automatically when progress reaches 100%.
 - The time required depends on USB drive and eMMC throughput, typically several minutes.
