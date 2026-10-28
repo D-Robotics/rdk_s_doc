@@ -166,24 +166,13 @@ u_disk_upgrade           # automatically select the USB drive whose LBA 0 holds 
 u_disk_upgrade force     # skip the cold-boot check and upgrade immediately
 ```
 
-### Disable or restore the automatic upgrade
-
-The U-Boot environment variable `u_disk_auto_upgrade` controls whether the USB drive is checked at power-on. The default is `1`:
-
-```text
-setenv u_disk_auto_upgrade 0    # disable; do not probe the USB drive at power-on
-saveenv
-```
-
-After disabling, the serial console shows `u disk auto upgrade: disabled (u_disk_auto_upgrade!=1)`. To restore automatic upgrading, set the variable back to `1` and run `saveenv` again.
-
 ## FAQ
 
 ### No upgrade log appears after power-on with the USB drive inserted
 
-**Cause**: The system version is earlier than V4.1.0 and its U-Boot does not include the feature, or the automatic upgrade was disabled.
+**Cause**: The system version is earlier than V4.1.0, and its U-Boot does not include the feature.
 
-**Solution**: Run `cat /etc/version` to check the system version. In the U-Boot command line, run `printenv u_disk_auto_upgrade` to confirm the value is `1`.
+**Solution**: Run `cat /etc/version` to check the system version, and upgrade the system first if it is earlier than V4.1.0.
 
 ### The console shows skip u disk upgrade: not POR
 
@@ -195,7 +184,7 @@ After disabling, the serial console shows `u disk auto upgrade: disabled (u_disk
 
 **Cause**: The beginning of the USB drive does not hold a sparse image. This usually happens when the `.simg` file was copied into a FAT or exFAT file system as an ordinary file.
 
-**Solution**: Write the image to the whole-disk device with `dd` as described in [Step 1](#step-1-create-the-upgrade-u-disk).
+**Solution**: Write the image to the whole-disk device with `dd` as described in [Step 1](#step-1-create-the-upgrade-usb-drive).
 
 ### The upgrade repeats on the next power-on
 

@@ -166,24 +166,13 @@ u_disk_upgrade           # 自动选择起始位置为稀疏镜像的 U 盘
 u_disk_upgrade force     # 跳过冷启动判断，立即升级
 ```
 
-### 关闭或恢复自动升级
-
-U-Boot 环境变量 `u_disk_auto_upgrade` 控制上电时是否自动检查 U 盘，默认值为 `1`：
-
-```text
-setenv u_disk_auto_upgrade 0    # 关闭，上电后不检查 U 盘
-saveenv
-```
-
-关闭后串口显示 `u disk auto upgrade: disabled (u_disk_auto_upgrade!=1)`。恢复自动升级时把变量改回 `1` 并再次 `saveenv`。
-
 ## 常见问题
 
 ### 插入 U 盘上电后，串口没有任何升级日志
 
-**原因**：系统版本低于 V4.1.0，U-Boot 不包含该功能；或之前关闭了自动升级。
+**原因**：系统版本低于 V4.1.0，U-Boot 不包含该功能。
 
-**解决**：执行 `cat /etc/version` 确认系统版本；在 U-Boot 命令行执行 `printenv u_disk_auto_upgrade` 确认是否为 `1`。
+**解决**：执行 `cat /etc/version` 确认系统版本，低于 V4.1.0 时先升级系统。
 
 ### 串口提示 skip u disk upgrade: not POR
 
