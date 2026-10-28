@@ -146,10 +146,10 @@ Power indicator, located next to the DC power input interface.
 | Connector | Connector Model                 | Manufacturer                |
 | :-------- | :------------------------------ | :-------------------------- |
 | J2000     | 10165430                        | Amphenol                    |
-| J2001     | DC-044B-D025                    | G-Switch (Pinzan)           |
-| J2100     | 112038-161410                   | Xinhann Precision           |
-| J2200     | 112038-161410                   | Xinhann Precision           |
-| J2201     | 112038-161410                   | Xinhann Precision           |
+| J2001     | DC-044B-D025                    | G-Switch           |
+| J2100     | 112038-161410                   | SYNCONN           |
+| J2200     | 112038-161410                   | SYNCONN           |
+| J2201     | 112038-161410                   | SYNCONN           |
 
 </div>
 

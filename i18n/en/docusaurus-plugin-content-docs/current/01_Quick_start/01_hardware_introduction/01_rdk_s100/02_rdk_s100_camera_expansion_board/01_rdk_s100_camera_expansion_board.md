@@ -188,8 +188,8 @@ Power indicator, located next to the DC power input interface.
 | Connector | Connector Model                 | Manufacturer                |
 | :-------- | :------------------------------ | :-------------------------- |
 | J2000     | 10165430                        | Amphenol                    |
-| J2001     | ZX-DC-WC2.56.3                  | Zhaoxing Precision Electronics |
-| J2100     | 112038-161410                   | Xinhann Precision           |
+| J2001     | ZX-DC-WC2.56.3                  | Megastar |
+| J2100     | 112038-161410                   | SYNCONN           |
 | J2200     | AFC01-S22FCA-00                 | Jushuo Electronics          |
 | J2201     | AFC01-S22FCA-00                 | Jushuo Electronics          |
 
