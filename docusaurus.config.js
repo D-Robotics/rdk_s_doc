@@ -192,6 +192,15 @@ const config = {
           // 与线上已发布 URL 一致；数字前缀形式（07_Advanced_development/...）历史上是 404，无需处理。
           { from: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s100_LLM_Toolchain_v1_0_2", to: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s600_LLM_Toolchain_v1_0_2" },
           { from: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s100_LLM_Toolchain_v1_0_5", to: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s600_LLM_Toolchain_v1_0_5" },
+
+          // GSC 404 尾巴（2026-10）：.md 源文件 URL 与拼写错，301 到正确页面
+          { from: "/01_Quick_start/02_install_os/rdk_s600.md", to: "/02_install_os/rdk_s600" },
+          { from: "/01_Quick_start/02_install_os/rdk_s100/01_instruction.md", to: "/02_install_os/rdk_s100" },
+          { from: "/System_configuration/network_blueteeth", to: "/System_configuration/network_bluetooth" },
+          // GSC 404 尾巴（2026-10）：版本号写成点号，实际页面用下划线。
+          // 直接指向 s600 最终页，避免经 s100_* 规则二次跳转。
+          { from: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s100_LLM_Toolchain_v1.0.2", to: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s600_LLM_Toolchain_v1_0_2" },
+          { from: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s100_LLM_Toolchain_v1.0.5", to: "/Advanced_development/toolchain_development/LLM_Toolchain/rdk_s600/s600_LLM_Toolchain_v1_0_5" },
         ].filter((r) => !(caseInsensitiveFs && isCaseOnlyRedirect(r))),
       },
     ],
