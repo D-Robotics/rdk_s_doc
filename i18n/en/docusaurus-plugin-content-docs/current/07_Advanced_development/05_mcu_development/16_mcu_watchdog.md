@@ -253,7 +253,7 @@ There are two independent watchdogs on the RDK S600 MCU side:
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
-<DocScope versions=">= 4.1.0">
+<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
 
 #### 3.2.5 Wdg_Lld_SetRstCallback
 | Service Name | Wdg_Lld_SetRstCallback |
@@ -309,7 +309,7 @@ There are two independent watchdogs on the RDK S600 MCU side:
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
-<DocScope versions=">= 4.1.0">
+<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
 
 The handling paths for normal WDG interrupts and reset interrupts are as follows:
 

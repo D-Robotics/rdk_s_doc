@@ -253,7 +253,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
-<DocScope versions=">= 4.1.0">
+<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
 
 #### 3.2.5 Wdg_Lld_SetRstCallback
 | Service Name | Wdg_Lld_SetRstCallback |
@@ -309,7 +309,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
-<DocScope versions=">= 4.1.0">
+<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
 
 普通 WDG 中断和复位中断的处理链路如下：
 
