@@ -261,7 +261,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Syntax | Std_ReturnType Wdg_Lld_SetRstCallback(const Wdg_Lld_InstanceType Instance, Wdg_CallbackPtrType Callback) |
 | Sync/Async | Synchronous |
 | Reentrancy | Non Reentrant |
-| Parameters (in) | Instance:Watchdog instance index; Callback:Reset interrupt callback, NULL_PTR can be used to clear |
+| Parameters (in) | Instance:watchdog instance index; Callback:Reset interrupt callback, NULL_PTR can be used to clear |
 | Parameters (inout) | None |
 | Parameters (out) | None |
 | Return value | Std_ReturnType |
@@ -274,7 +274,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Syntax | void Wdg_Lld_RstIrqHandler(uint32 Instance) |
 | Sync/Async | Synchronous |
 | Reentrancy | Non Reentrant |
-| Parameters (in) | Instance:Watchdog instance index |
+| Parameters (in) | Instance:watchdog instance index |
 | Parameters (inout) | None |
 | Parameters (out) | None |
 | Return value | None |
@@ -290,7 +290,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Syntax | Std_ReturnType Wdg_Lld_SetRstCallback(const Wdg_Lld_InstanceType Instance, Wdg_CallbackPtrType Callback) |
 | Sync/Async | Synchronous |
 | Reentrancy | Non Reentrant |
-| Parameters (in) | Instance:Watchdog instance index; Callback:Reset interrupt callback, NULL_PTR can be used to clear |
+| Parameters (in) | Instance:watchdog instance index; Callback:Reset interrupt callback, NULL_PTR can be used to clear |
 | Parameters (inout) | None |
 | Parameters (out) | None |
 | Return value | Std_ReturnType |
@@ -303,7 +303,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Syntax | void Wdg_Lld_RstIrqHandler(uint32 Instance) |
 | Sync/Async | Synchronous |
 | Reentrancy | Non Reentrant |
-| Parameters (in) | Instance:Watchdog instance index |
+| Parameters (in) | Instance:watchdog instance index |
 | Parameters (inout) | None |
 | Parameters (out) | None |
 | Return value | None |
