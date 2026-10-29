@@ -381,15 +381,15 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 
 <DocScope products="RDK S100" versions=">= 4.1.0">
 
-## 5. WDG Reset Interrupt Test Notes
+## 5. WDG Reset Interrupt Test Notes (RDK S100)
 
 This section describes how to configure the test environment so that the core running the test code can control the WDG and receive reset interrupts. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt handling path.
 
-### Test Environment Configuration
+### Test Environment Configuration (RDK S100)
 
 The following configuration is used to allow the core running the test code to control the WDG and receive reset interrupts.
 
-#### Reset Interrupt Handler
+#### Reset Interrupt Handler (RDK S100)
 - File: `Target/Target_S100/Target-hobot-lite-freertos/target/HorizonISR.c`
 - Location: `Wdg_Ins0RstIsr`, `Wdg_Ins1RstIsr`, `Wdg_Ins2RstIsr`.
 - Default behavior: The reset interrupt entries call `WdgX_IrqHandler()`, so the driver reset interrupt callback path is not entered.
@@ -438,7 +438,7 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_SYS_RST_INTR] = WDG_IRQ_AFFINITY_NS | 0U;
 OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 ```
 
-#### Enable Shell
+#### Enable Shell (RDK S100)
 - File: `Target/Target_S100/Target-hobot-lite-freertos/target/Target.h`
 - Location: `SHELL_ENABLE` macro definition.
 - Configuration: Enable the Shell if test commands are executed through the Shell.
@@ -450,13 +450,13 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 
 <DocScope products="RDK S600" versions=">= 5.1.1">
 
-## 5. WDG Reset Interrupt Test Notes
+## 5. WDG Reset Interrupt Test Notes (RDK S600)
 
 This section describes how to configure the RDK S600 MCU0 test environment to verify the WDG reset interrupt callback path after a timeout. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt vectors.
 
 The current RDK S600 MCU0 Target project has wired up the `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` reset interrupt test path. When testing from an unmodified source tree, apply the following test environment configuration before testing.
 
-### Test Environment Configuration
+### Test Environment Configuration (RDK S600)
 
 The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` through the Shell on Core0 of RDK S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces. The current RDK S600 MCU0 Target project has wired up the WDG interrupt/reset interrupt entries as described below. When testing from an unmodified source tree, apply or verify the same configuration.
 
@@ -558,7 +558,7 @@ const uint16 Wdg_CoreIdConfig[WDG_NUM] =
 };
 ```
 
-#### Reset Interrupt Handlers
+#### Reset Interrupt Handlers (RDK S600)
 - File: `Target/Target_S600/Target-hobot-lite-freertos/target/HorizonISR.c`
 - Configuration: Add `Wdg_Ins0RstIsr` through `Wdg_Ins4RstIsr`. The reset interrupt entries call `Wdg_Lld_RstIrqHandler(0U)` through `Wdg_Lld_RstIrqHandler(4U)`. `Wdg0` through `Wdg2` also provide `WdgX_RstIrqHandler()`; `Wdg3`/`Wdg4` call `Wdg_Lld_RstIrqHandler(3U)/(4U)` directly. If normal WDG interrupts are also required, add `Wdg_InsXIntIsr` entries that call `Wdg_Lld_IrqHandler(0U)` through `Wdg_Lld_IrqHandler(4U)`.
 
@@ -661,7 +661,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Wdg_Ins4RstIsr, Os_Isr_Wdg_Ins4RstIsr, OS_IMASK_FOR_Wdg_Ins4RstIsr/8, ENABLE},
 ```
 
-#### Enable Shell
+#### Enable Shell (RDK S600)
 - File: `Target/Target_S600/Target-hobot-lite-freertos/target/Target.h`
 - Configuration: MCU0 defaults to `SHELL_ENABLE FALSE`; change it to `TRUE` for Shell-based testing.
 

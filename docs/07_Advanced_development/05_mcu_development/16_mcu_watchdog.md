@@ -381,15 +381,15 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 
 <DocScope products="RDK S100" versions=">= 4.1.0">
 
-## 5. WDG 复位中断测试说明
+## 5. WDG 复位中断测试说明（RDK S100）
 
 本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断处理链路参见 3.3。
 
-### 测试环境配置
+### 测试环境配置（RDK S100）
 
 以下配置用于使测试代码所在核能够控制 WDG 并接收复位中断。
 
-#### 复位中断处理函数
+#### 复位中断处理函数（RDK S100）
 - 文件：`Target/Target_S100/Target-hobot-lite-freertos/target/HorizonISR.c`
 - 位置：`Wdg_Ins0RstIsr`、`Wdg_Ins1RstIsr`、`Wdg_Ins2RstIsr`。
 - 默认情况：复位中断入口调用的是 `WdgX_IrqHandler()`，不会进入驱动复位中断回调路径。
@@ -438,7 +438,7 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_SYS_RST_INTR] = WDG_IRQ_AFFINITY_NS | 0U;
 OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 ```
 
-#### Shell 开启
+#### Shell 开启（RDK S100）
 - 文件：`Target/Target_S100/Target-hobot-lite-freertos/target/Target.h`
 - 位置：`SHELL_ENABLE` 宏定义处。
 - 配置：如果测试命令通过 Shell 执行，需要开启 Shell。
@@ -450,13 +450,13 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 
 <DocScope products="RDK S600" versions=">= 5.1.1">
 
-## 5. WDG 复位中断测试说明
+## 5. WDG 复位中断测试说明（RDK S600）
 
 本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断向量参见 3.3。
 
 当前 MCU0 Target 工程已接入 `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` 复位中断测试路径；若基于未改动的源码测试，需要按下面的测试环境配置接入后再进行测试。
 
-### 测试环境配置
+### 测试环境配置（RDK S600）
 
 以下配置用于在 RDK S600 MCU0 的 Core0 上通过 Shell 测试 `Wdg0`~`Wdg4` 的复位中断回调路径。驱动层已支持 `Wdg0`、`Wdg1`、`Wdg2`、`Wdg3`、`Wdg4` 复位中断接口；当前 RDK S600 MCU0 Target 工程已按以下配置接入 WDG 中断/复位中断入口，若基于未改动的源码测试，需按相同步骤检查或补全。
 
@@ -558,7 +558,7 @@ const uint16 Wdg_CoreIdConfig[WDG_NUM] =
 };
 ```
 
-#### 复位中断处理函数
+#### 复位中断处理函数（RDK S600）
 - 文件：`Target/Target_S600/Target-hobot-lite-freertos/target/HorizonISR.c`
 - 配置：新增 `Wdg_Ins0RstIsr`~`Wdg_Ins4RstIsr`，复位中断入口调用 `Wdg_Lld_RstIrqHandler(0U)`~`Wdg_Lld_RstIrqHandler(4U)`。`Wdg0`~`Wdg2` 已有 `WdgX_RstIrqHandler()` 也可使用；`Wdg3`/`Wdg4` 直接调用 `Wdg_Lld_RstIrqHandler(3U)/(4U)`。普通 WDG 中断如需使用，可同时新增 `Wdg_InsXIntIsr` 并调用 `Wdg_Lld_IrqHandler(0U)`~`Wdg_Lld_IrqHandler(4U)`。
 
@@ -661,7 +661,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Wdg_Ins4RstIsr, Os_Isr_Wdg_Ins4RstIsr, OS_IMASK_FOR_Wdg_Ins4RstIsr/8, ENABLE},
 ```
 
-#### Shell 开启
+#### Shell 开启（RDK S600）
 - 文件：`Target/Target_S600/Target-hobot-lite-freertos/target/Target.h`
 - 配置：MCU0 默认 `SHELL_ENABLE FALSE`，测试时改为 `TRUE`。
 
