@@ -348,7 +348,7 @@ The handling paths for normal WDG interrupts and reset interrupts are as follows
 | Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG reset interrupt; finally calls the callback registered by Wdg_Lld_SetRstCallback |
 
 :::note
-`WdgX_RstIrqHandler()` is the instance-level entry provided by the Target project and is equivalent to `Wdg_Lld_RstIrqHandler(X)`. For instances without an instance-level entry, call `Wdg_Lld_RstIrqHandler()` directly.
+`WdgX_RstIrqHandler()` wraps `Wdg_Lld_RstIrqHandler(X)` in the Target project and is equivalent to it; `Wdg0` through `Wdg2` all provide an instance-level entry.
 :::
 </DocScope>
 
@@ -362,7 +362,7 @@ The handling paths for normal WDG interrupts and reset interrupts are as follows
 | Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG reset interrupt; finally calls the callback registered by Wdg_Lld_SetRstCallback |
 
 :::note
-`WdgX_RstIrqHandler()` is the instance-level entry provided by the Target project and is equivalent to `Wdg_Lld_RstIrqHandler(X)`. For instances without an instance-level entry, call `Wdg_Lld_RstIrqHandler()` directly.
+`WdgX_RstIrqHandler()` wraps `Wdg_Lld_RstIrqHandler(X)` in the Target project and is equivalent to it; `Wdg0` through `Wdg2` all provide an instance-level entry, while `Wdg3`/`Wdg4` have none and call `Wdg_Lld_RstIrqHandler(3U)`/`Wdg_Lld_RstIrqHandler(4U)` directly.
 :::
 </DocScope>
 
@@ -397,7 +397,32 @@ Protects `Wdg_Lld_Rst`:
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
-<DocScope products="RDK S600,RDK S100" versions=">=4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
+
+## 4. A-Core Watchdog Timeout MCU Handling Flow
+
+### 4.1 Reset Configuration Enable
+
+Call `Wdg_Enable_RstConfig()` in Target's `main.c` (implementation in `Wdg_Common.c`, declaration in `Wdg_Prv.h`) to complete the low-level enablement related to the watchdog-side and MCU reset/notification link.
+
+| Name | Description |
+|---|---|
+| Wdg_Enable_RstConfig | Reset configuration |
+
+### 4.2 MCU-Side Handling Flow
+
+When the A-core watchdog times out, an interrupt is sent to MCU0. MCU0 then initiates a reset after a delay so that the A-core can print stack and other information.
+
+The flow is: interrupt sets flag → dedicated task delays → trigger long reset. The responsibility for executing the long reset lies with the OS task.
+
+| Name | Location | Description |
+|---|---|---|
+| Interrupt (entry) | Target\...\HorizonISR.c: ISR(Wdt_CfIntIsr) | Set `g_need_reset = 1` (`g_need_reset` is in `McalCdd\Wdg\src\Wdg_Common.c`), `Os_Disable_Wdt_CfIntIsr()`; bound to IntRouter and ConfigInterrupts.h |
+| OS task (delay + long reset) | Target\...\HorizonTask.c: TASK(OsTask_SysCore_WDG_RST) | When `g_need_reset` is true: log → `vTaskDelay(MS_TO_TICK(5000))` (approx. 5s) → `Rfchm_TriggerSocLongReset()` executes SoC long reset |
+
+</DocScope>
+
+<DocScope products="RDK S600" versions=">= 5.1.0">
 
 ## 4. A-Core Watchdog Timeout MCU Handling Flow
 
@@ -424,15 +449,15 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 
 <DocScope products="RDK S100" versions=">= 4.1.0">
 
-## 5. WDG Reset Interrupt Test Notes
+## 5. WDG Reset Interrupt Test Environment Configuration
 
 This section describes how to configure the test environment so that the core running the test code can control the WDG and receive reset interrupts. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt handling path.
 
-### Test Environment Configuration
+### 5.1 Test Environment Configuration
 
 The following configuration is used to allow the core running the test code to control the WDG and receive reset interrupts.
 
-#### Reset Interrupt Handler
+#### 5.1.1 Reset Interrupt Handler
 - File: `Target/Target_S100/Target-hobot-lite-freertos/target/HorizonISR.c`
 - Location: `Wdg_Ins0RstIsr`, `Wdg_Ins1RstIsr`, `Wdg_Ins2RstIsr`.
 - Default behavior: The reset interrupt entries call `WdgX_IrqHandler()`, so the driver reset interrupt callback path is not entered.
@@ -453,7 +478,7 @@ ISR(Wdg_Ins2RstIsr){
 }
 ```
 
-#### WDG Core Binding
+#### 5.1.2 WDG Core Binding
 - File: `Config/McalCdd/gen_s100_sip_B/Wdg/src/Wdg_Cfg.c`
 - Location: `Wdg_CoreIdConfig` array.
 - Configuration: Bind the WDG instances to be tested to the core where the test code runs.
@@ -467,7 +492,7 @@ const uint16 Wdg_CoreIdConfig[WDG_NUM] =
 };
 ```
 
-#### Interrupt Routing
+#### 5.1.3 Interrupt Routing
 - File: `Target/Target_S100/Target-hobot-lite-freertos/target/main.c`
 - Location: After `FreeRtos_Irq_Init();`.
 - Configuration: Route the WDG interrupts and reset interrupts to the core where the test code runs.
@@ -481,7 +506,7 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_SYS_RST_INTR] = WDG_IRQ_AFFINITY_NS | 0U;
 OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 ```
 
-#### Enable Shell
+#### 5.1.4 Enable Shell
 - File: `Target/Target_S100/Target-hobot-lite-freertos/target/Target.h`
 - Location: `SHELL_ENABLE` macro definition.
 - Configuration: Enable the Shell if test commands are executed through the Shell.
@@ -493,17 +518,17 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 
 <DocScope products="RDK S600" versions=">= 5.1.1">
 
-## 5. WDG Reset Interrupt Test Notes
+## 5. WDG Reset Interrupt Test Environment Configuration
 
 This section describes how to configure the RDK S600 MCU0 test environment to verify the WDG reset interrupt callback path after a timeout. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt vectors.
 
 The current RDK S600 MCU0 Target project has wired up the `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` reset interrupt test path. When testing from an unmodified source tree, apply the following test environment configuration before testing.
 
-### Test Environment Configuration
+### 5.1 Test Environment Configuration
 
 The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` through the Shell on Core0 of RDK S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces. The current RDK S600 MCU0 Target project has wired up the WDG interrupt/reset interrupt entries as described below. When testing from an unmodified source tree, apply or verify the same configuration.
 
-#### WDG Configuration Expansion
+#### 5.1.1 WDG Configuration Expansion
 
 The RDK S600 MCU0 test configuration expands the WDG instance count from three to five, adds the `Wdg3/4` timeout, mode, and state entries, and binds all five instances to MCU0 Core0 so that the core running the test code can receive the corresponding interrupts.
 
@@ -601,7 +626,7 @@ const uint16 Wdg_CoreIdConfig[WDG_NUM] =
 };
 ```
 
-#### Reset Interrupt Handlers
+#### 5.1.2 Reset Interrupt Handlers
 - File: `Target/Target_S600/Target-hobot-lite-freertos/target/HorizonISR.c`
 - Configuration: Add `Wdg_Ins0RstIsr` through `Wdg_Ins4RstIsr`. The reset interrupt entries call `Wdg_Lld_RstIrqHandler(0U)` through `Wdg_Lld_RstIrqHandler(4U)`. `Wdg0` through `Wdg2` also provide `WdgX_RstIrqHandler()`; `Wdg3`/`Wdg4` call `Wdg_Lld_RstIrqHandler(3U)/(4U)` directly. If normal WDG interrupts are also required, add `Wdg_InsXIntIsr` entries that call `Wdg_Lld_IrqHandler(0U)` through `Wdg_Lld_IrqHandler(4U)`.
 
@@ -628,7 +653,7 @@ ISR(Wdg_Ins4RstIsr) {
 }
 ```
 
-#### Interrupt Declaration, Registration, and Enablement
+#### 5.1.3 Interrupt Declaration, Registration, and Enablement
 
 The reset interrupt handlers are defined in `HorizonISR.c`, but the interrupts cannot reach those handlers until the following four files are wired up in this order: function declaration, interrupt-number mapping, priority mask, and interrupt-table registration. After registration, `FreeRtos_Irq_Init()` installs and enables these interrupts and routes the SPIs to the current Core0, so no additional `IROUTER` entries are needed in `main.c`.
 
@@ -704,7 +729,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Wdg_Ins4RstIsr, Os_Isr_Wdg_Ins4RstIsr, OS_IMASK_FOR_Wdg_Ins4RstIsr/8, ENABLE},
 ```
 
-#### Enable Shell
+#### 5.1.4 Enable Shell
 - File: `Target/Target_S600/Target-hobot-lite-freertos/target/Target.h`
 - Configuration: MCU0 defaults to `SHELL_ENABLE FALSE`; change it to `TRUE` for Shell-based testing.
 
@@ -712,7 +737,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 #define SHELL_ENABLE TRUE
 ```
 
-#### Enable Shell UART Input
+#### 5.1.5 Enable Shell UART Input
 - File: `Target/Target_S600/Target-hobot-lite-freertos/target/FreeRtosOsHal/Isr_Hal.c`
 - Configuration: Register `Uart0_Isr` in `Interrupt_McuConfigs[]` with `ENABLE`; otherwise the MCU0 Shell can only print output and cannot receive UART input.
 

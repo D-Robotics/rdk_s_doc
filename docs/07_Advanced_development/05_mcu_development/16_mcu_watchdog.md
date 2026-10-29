@@ -348,7 +348,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG 复位中断，最终调用 Wdg_Lld_SetRstCallback 注册的回调 |
 
 :::note
-`WdgX_RstIrqHandler()` 是 Target 工程提供的实例级入口，与 `Wdg_Lld_RstIrqHandler(X)` 等价；没有实例级入口的实例直接调用 `Wdg_Lld_RstIrqHandler()`。
+`WdgX_RstIrqHandler()` 是 Target 工程对 `Wdg_Lld_RstIrqHandler(X)` 的封装，两者等价；`Wdg0`~`Wdg2` 均提供实例级入口。
 :::
 </DocScope>
 
@@ -362,7 +362,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG 复位中断，最终调用 Wdg_Lld_SetRstCallback 注册的回调 |
 
 :::note
-`WdgX_RstIrqHandler()` 是 Target 工程提供的实例级入口，与 `Wdg_Lld_RstIrqHandler(X)` 等价；没有实例级入口的实例直接调用 `Wdg_Lld_RstIrqHandler()`。
+`WdgX_RstIrqHandler()` 是 Target 工程对 `Wdg_Lld_RstIrqHandler(X)` 的封装，两者等价；`Wdg0`~`Wdg2` 均提供实例级入口，`Wdg3`/`Wdg4` 没有实例级入口，直接调用 `Wdg_Lld_RstIrqHandler(3U)`/`Wdg_Lld_RstIrqHandler(4U)`。
 :::
 </DocScope>
 
@@ -397,7 +397,32 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
-<DocScope products="RDK S600,RDK S100" versions=">=4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
+
+## 4. Acore 看门狗超时 MCU 处理流程
+
+### 4.1 复位配置使能
+
+在 Target 的 `main.c` 调用 `Wdg_Enable_RstConfig()`（实现见 `Wdg_Common.c`，声明见 `Wdg_Prv.h`），完成看门狗侧与 MCU 复位/通知链路相关的底层使能。
+
+| Name | Description |
+|---|---|
+| Wdg_Enable_RstConfig | 复位配置 |
+
+### 4.2 MCU 侧处理流程
+
+Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发起复位，以便 Acore 打印栈等信息。
+
+流程为 中断置标志 → 专用任务里延时 → 触发长复位，执行长复位的责任在 OS 任务。
+
+| Name | Location | Description |
+|---|---|---|
+| 中断（入口） | Target\...\HorizonISR.c：ISR(Wdt_CfIntIsr) | 置 g_need_reset = 1（g_need_reset 在 McalCdd\Wdg\src\Wdg_Common.c），Os_Disable_Wdt_CfIntIsr()；与 IntRouter、ConfigInterrupts.h 绑定 |
+| OS 任务（延时 + 长复位） | Target\...\HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
+
+</DocScope>
+
+<DocScope products="RDK S600" versions=">= 5.1.0">
 
 ## 4. Acore 看门狗超时 MCU 处理流程
 
@@ -424,15 +449,15 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 
 <DocScope products="RDK S100" versions=">= 4.1.0">
 
-## 5. WDG 复位中断测试说明
+## 5. WDG 复位中断测试环境配置
 
-本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断处理链路参见 3.3。
+本节说明验证 WDG 超时后的复位中断回调路径所需的测试环境配置。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断处理链路参见 3.3。
 
-### 测试环境配置
+### 5.1 测试环境配置
 
 以下配置用于使测试代码所在核能够控制 WDG 并接收复位中断。
 
-#### 复位中断处理函数
+#### 5.1.1 复位中断处理函数
 - 文件：`Target/Target_S100/Target-hobot-lite-freertos/target/HorizonISR.c`
 - 位置：`Wdg_Ins0RstIsr`、`Wdg_Ins1RstIsr`、`Wdg_Ins2RstIsr`。
 - 默认情况：复位中断入口调用的是 `WdgX_IrqHandler()`，不会进入驱动复位中断回调路径。
@@ -453,7 +478,7 @@ ISR(Wdg_Ins2RstIsr){
 }
 ```
 
-#### WDG Core 绑定
+#### 5.1.2 WDG Core 绑定
 - 文件：`Config/McalCdd/gen_s100_sip_B/Wdg/src/Wdg_Cfg.c`
 - 位置：`Wdg_CoreIdConfig` 数组。
 - 配置：将需要测试的 WDG 实例绑定到测试代码运行的核。
@@ -467,7 +492,7 @@ const uint16 Wdg_CoreIdConfig[WDG_NUM] =
 };
 ```
 
-#### 中断路由
+#### 5.1.3 中断路由
 - 文件：`Target/Target_S100/Target-hobot-lite-freertos/target/main.c`
 - 位置：`FreeRtos_Irq_Init();` 之后。
 - 配置：将 WDG 中断和复位中断固定路由到测试代码运行的核。
@@ -481,7 +506,7 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_SYS_RST_INTR] = WDG_IRQ_AFFINITY_NS | 0U;
 OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 ```
 
-#### Shell 开启
+#### 5.1.4 Shell 开启
 - 文件：`Target/Target_S100/Target-hobot-lite-freertos/target/Target.h`
 - 位置：`SHELL_ENABLE` 宏定义处。
 - 配置：如果测试命令通过 Shell 执行，需要开启 Shell。
@@ -493,17 +518,17 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 
 <DocScope products="RDK S600" versions=">= 5.1.1">
 
-## 5. WDG 复位中断测试说明
+## 5. WDG 复位中断测试环境配置
 
-本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断向量参见 3.3。
+本节说明验证 WDG 超时后的复位中断回调路径所需的测试环境配置。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断向量参见 3.3。
 
 当前 MCU0 Target 工程已接入 `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` 复位中断测试路径；若基于未改动的源码测试，需要按下面的测试环境配置接入后再进行测试。
 
-### 测试环境配置
+### 5.1 测试环境配置
 
 以下配置用于在 RDK S600 MCU0 的 Core0 上通过 Shell 测试 `Wdg0`~`Wdg4` 的复位中断回调路径。驱动层已支持 `Wdg0`、`Wdg1`、`Wdg2`、`Wdg3`、`Wdg4` 复位中断接口；当前 RDK S600 MCU0 Target 工程已按以下配置接入 WDG 中断/复位中断入口，若基于未改动的源码测试，需按相同步骤检查或补全。
 
-#### WDG 配置扩展
+#### 5.1.1 WDG 配置扩展
 
 RDK S600 MCU0 测试配置已将 WDG 实例个数从 3 个扩展为 5 个，补齐 `Wdg3/4` 的超时、模式和状态配置，并把 5 个实例都绑定到 MCU0 Core0，确保测试代码所在核能接收对应中断。
 
@@ -601,7 +626,7 @@ const uint16 Wdg_CoreIdConfig[WDG_NUM] =
 };
 ```
 
-#### 复位中断处理函数
+#### 5.1.2 复位中断处理函数
 - 文件：`Target/Target_S600/Target-hobot-lite-freertos/target/HorizonISR.c`
 - 配置：新增 `Wdg_Ins0RstIsr`~`Wdg_Ins4RstIsr`，复位中断入口调用 `Wdg_Lld_RstIrqHandler(0U)`~`Wdg_Lld_RstIrqHandler(4U)`。`Wdg0`~`Wdg2` 已有 `WdgX_RstIrqHandler()` 也可使用；`Wdg3`/`Wdg4` 直接调用 `Wdg_Lld_RstIrqHandler(3U)/(4U)`。普通 WDG 中断如需使用，可同时新增 `Wdg_InsXIntIsr` 并调用 `Wdg_Lld_IrqHandler(0U)`~`Wdg_Lld_IrqHandler(4U)`。
 
@@ -628,7 +653,7 @@ ISR(Wdg_Ins4RstIsr) {
 }
 ```
 
-#### 中断声明、注册与使能
+#### 5.1.3 中断声明、注册与使能
 
 复位中断处理函数定义在 `HorizonISR.c`，但要让中断真正进入处理函数，还需要按“函数声明 → 中断号映射 → 优先级掩码 → 注册到中断表”的链路补全下面 4 个文件。完成注册后，`FreeRtos_Irq_Init()` 会安装并使能这些中断，并将 SPI 路由到当前 Core0，无需在 `main.c` 额外写 `IROUTER`。
 
@@ -704,7 +729,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 {Os_IntChannel_Wdg_Ins4RstIsr, Os_Isr_Wdg_Ins4RstIsr, OS_IMASK_FOR_Wdg_Ins4RstIsr/8, ENABLE},
 ```
 
-#### Shell 开启
+#### 5.1.4 Shell 开启
 - 文件：`Target/Target_S600/Target-hobot-lite-freertos/target/Target.h`
 - 配置：MCU0 默认 `SHELL_ENABLE FALSE`，测试时改为 `TRUE`。
 
@@ -712,7 +737,7 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 #define SHELL_ENABLE TRUE
 ```
 
-#### Shell 串口输入使能
+#### 5.1.5 Shell 串口输入使能
 - 文件：`Target/Target_S600/Target-hobot-lite-freertos/target/FreeRtosOsHal/Isr_Hal.c`
 - 配置：在 `Interrupt_McuConfigs[]` 注册 `Uart0_Isr` 并置 `ENABLE`，否则 MCU0 Shell 只能输出、无法接收串口输入。
 
