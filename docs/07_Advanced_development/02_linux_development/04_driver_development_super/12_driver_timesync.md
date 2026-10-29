@@ -93,7 +93,7 @@ port 段使用被配置的网口的名字，如\[eth0\]段，其配置的选项�
 
 \[unicast\_master\_table\]段，配置单播 table。
 
-配置文件的详细信息可以参考：[https://linuxptp.nwtime.org/documentation/ptp4l/](https://linuxptp.nwtime.org/documentation/ptp4l/)
+配置文件的详细信息可以参考：[ptp4l(8) 手册](https://manpages.ubuntu.com/manpages/jammy/man8/ptp4l.8.html)
 
 #### automotive 配置示例
 

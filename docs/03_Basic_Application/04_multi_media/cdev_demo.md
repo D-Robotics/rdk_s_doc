@@ -16,7 +16,17 @@ import DocScope from '@site/src/components/DocScope';
 
 示例流程框图：
 
- <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png" alt="摄像头图像采集和显示示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<DocScope products="RDK S100">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png" alt="摄像头图像采集和显示示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_to_display_s600.png" alt="摄像头图像采集和显示示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
 
 - **环境准备：**
 
@@ -68,7 +78,17 @@ import DocScope from '@site/src/components/DocScope';
 
 示例流程框图：
 
- <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png" alt="摄像头图像本地保存示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<DocScope products="RDK S100">
+
+<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png" alt="摄像头图像本地保存示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_capture_s600.png" alt="摄像头图像本地保存示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
 
 - **环境准备：**
 
@@ -122,7 +142,17 @@ import DocScope from '@site/src/components/DocScope';
 
 示例流程框图：
 
+<DocScope products="RDK S100">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png" alt="摄像头图像采集并编码示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_to_encode_s600.png" alt="摄像头图像采集并编码示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
 
 - **环境准备：**
 

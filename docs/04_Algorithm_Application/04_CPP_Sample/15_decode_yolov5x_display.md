@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 <DocScope products="RDK-S600">
 
-本示例演示如何在 RDK S100 等平台上，使用 SP 解码/显示/VIO 与 BPU 组合完成：
+本示例演示如何在 RDK S600 等平台上，使用 SP 解码/显示/VIO 与 BPU 组合完成：
 本地 H.264 文件 → 硬件解码 (NV12) → YOLOv5X 推理 → 叠加框到显示图层 的端到端流程，本示例代码位于 `/app/cdev_demo/bpu/decode_yolov5x_display_sample` 目录下。
 
 </DocScope>
@@ -29,23 +29,23 @@ import DocScope from '@site/src/components/DocScope';
 
 - 前处理 (Preprocess)
 
-    将从 VIO 获取的 NV12 帧转换为 BGR（cv::cvtColor），进行 letterbox/缩放，写入 NV12 输入张量。
+    将从 VIO 获取的 NV12 帧转换为 BGR（`cv::cvtColor`），进行 letterbox/缩放，写入 NV12 输入张量。
 
 - 模型推理 (Inference)
 
-    调用 infer() 在 BPU 上执行前向计算。
+    调用 `infer()` 在 BPU 上执行前向计算。
 
 - 后处理 (Postprocess)
 
-    调用 yolov5x.post_process(score_thres, nms_thres, W, H)，完成解码、置信度过滤与 NMS，并将框坐标还原到原分辨率。
+    调用 `yolov5x.post_process(score_thres, nms_thres, W, H)`，完成解码、置信度过滤与 NMS，并将框坐标还原到原分辨率。
 
 - 相机管理 (VIO)
 
-    通过 sp_open_camera_v2 打开传感器通道，sp_vio_get_yuv 拉取 NV12 帧。
+    通过 `sp_open_camera_v2` 打开传感器通道，`sp_vio_get_yuv` 拉取 NV12 帧。
 
 - 屏幕叠加 (SP Display)
 
-    sp_start_display 初始化显示通道；draw_detections_on_disp 将检测结果绘制到屏幕。
+    `sp_start_display` 初始化显示通道；`draw_detections_on_disp` 将检测结果绘制到屏幕。
 
 ## 模型说明
     参考 [Ultralytics YOLOv5x 目标检测示例小节](./04_Ultralytics_YOLOv5x.md)。
@@ -158,7 +158,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 
 - 退出运行
 
-    在命令行输入Ctrl C
+    在命令行输入`Ctrl+C`
 
 - 查看结果
 

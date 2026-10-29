@@ -53,7 +53,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    通过 .run() 方法完成模型前向推理，支持可选调度参数（优先级、核心绑定）。
+    通过 `.run()` 方法完成模型前向推理，支持可选调度参数（优先级、核心绑定）。
 
 - 结果后处理
 

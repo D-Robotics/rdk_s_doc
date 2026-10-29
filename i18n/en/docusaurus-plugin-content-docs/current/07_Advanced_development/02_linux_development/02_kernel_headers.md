@@ -12,7 +12,7 @@ You can install the kernel headers and kernel compilation dependencies using the
 
 ```bash
 sudo apt update
-sudo apt install linux-headers-6.1.112-rt43
+sudo apt install linux-headers-6.1.158-rt58
 sudo apt install bison flex
 ```
 
@@ -26,8 +26,8 @@ Kconfig        System.map      certs  fs       io_uring  lib     rust  security 
 ```
 
 :::warning
-**Do not** run the `make clean` command inside the `/usr/src/linux-headers-$(uname -r)` directory, as this will break the kernel module compilation environment on your board.  
-If you have already executed `make clean`, please reinstall the `linux-headers-6.1.112-rt43` package to restore the environment.
+**Do not** run the `make clean` command inside the `/usr/src/linux-headers-$(uname -r)` directory, as this will break the kernel module compilation environment on your board.
+If you have already executed `make clean`, please reinstall the `linux-headers-6.1.158-rt58` package to restore the environment.
 :::
 
 ## Usage Example
@@ -35,11 +35,24 @@ If you have already executed `make clean`, please reinstall the `linux-headers-6
 
 We'll demonstrate how to use kernel headers by developing a simple `Hello World` kernel module. The general steps are as follows:
 
+<DocScope versions="<5.1.1">
+
 - Prepare the source code (using `${HOME}/test_ko` under the `sunrise` user as an example)
 - Write a Makefile to compile the driver module
 - Sign the driver module
 - Test loading and unloading the module
 - (Optional) Configure automatic module loading at boot
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+- Prepare the source code (using `${HOME}/test_ko` under the `sunrise` user as an example)
+- Write a Makefile to compile the driver module
+- Test loading and unloading the module
+- (Optional) Configure automatic module loading at boot
+
+</DocScope>
 
 #### Writing the Hello World Kernel Module
 
@@ -105,14 +118,14 @@ endif
 - `KERNELRELEASE` is a variable defined in the top-level kernel Makefile, typically used to determine whether the current build is running under the `Kbuild` framework;
 - Invoke the kernel's native `prepare` target to set up the tools required for compiling and installing kernel modules;
 - Invoke the kernel's native `modules` target to compile the kernel module;
-- Invoke the kernel's native `modules_install` target to sign and install the compiled kernel module into the system's module directory.
+- Invoke the kernel's native `modules_install` target to install the compiled kernel module into the system's module directory.
 
 After saving the `Makefile`, run the `make` command to compile the module and generate the `hello.ko` file:
 
 ```bash
 sunrise@ubuntu:~/test_ko$ sudo make
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build prepare
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-5.1.0-2605251554-g369e4b-gf8e87c/build prepare
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
   SYNC    include/config/auto.conf.cmd
   HOSTCC  scripts/basic/fixdep
   HOSTCC  scripts/kconfig/conf.o
@@ -177,26 +190,28 @@ make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-250719
   LD      arch/arm64/kernel/vdso/vdso.so.dbg
   VDSOSYM include/generated/vdso-offsets.h
   OBJCOPY arch/arm64/kernel/vdso/vdso.so
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build M=/home/sunrise/test_ko modules
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/build M=/home/sunrise/test_ko modules
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
   CC [M]  /home/sunrise/test_ko/hello.o
   MODPOST /home/sunrise/test_ko/Module.symvers
   CC [M]  /home/sunrise/test_ko/hello.mod.o
   LD [M]  /home/sunrise/test_ko/hello.ko
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-make -C /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/build KERNELRELEASE=6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8 M=/home/sunrise/test_ko modules_install
-make[1]: Entering directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
-  INSTALL /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  SIGN    /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
-  DEPMOD  /lib/modules/6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8
-make[1]: Leaving directory '/usr/src/linux-headers-6.1.112-rt43-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+make -C /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/build KERNELRELEASE=6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8 M=/home/sunrise/test_ko modules_install
+make[1]: Entering directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
+  INSTALL /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
+  SIGN    /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8/extra/hello.ko
+  DEPMOD  /lib/modules/6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8
+make[1]: Leaving directory '/usr/src/linux-headers-6.1.158-rt58-DR-4.0.2-2507191817-g7253c2-g30e6e8'
 ```
 
 :::info
 - The kernel version shown in the output above will vary depending on your system version;
 - For more details on compiling external kernel modules, please refer to: [Linux Kernel Doc | Building External Modules](https://kernel.org/doc/html/v6.1/kbuild/modules.html).
 :::
+
+<DocScope versions="<5.1.1">
 
 #### Module Signing
 
@@ -243,6 +258,8 @@ If you load the driver module without signing it, the following error will occur
 ```
 ERROR: could not insert module hello.ko: Required key not available
 ```
+
+</DocScope>
 
 #### Load the module
 
@@ -323,10 +340,6 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     tar -xzf peak-linux-driver-8.20.0.tar.gz
     ```
 5. Compile the driver:
-    :::info
-    Please ensure that the linux-headers-6.1.112-rt43 package on your board is version 4.0.3 or higher.
-    :::
-
     ```shell
     # Install local module build prerequisites
     sudo apt install flex bison -y
@@ -344,15 +357,30 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     # Install PCAN drivers and libraries
     sudo make install
     ```
-6. Sign and use the PCAN driver. The following example uses PCAN driver version 8.20.0, where the driver modules are installed by default to `/lib/modules/6.1.112/misc/`:
+
+<DocScope versions="<5.1.1">
+
+6. Sign and use the PCAN driver. The following example uses PCAN driver version 8.20.0, where the driver modules are installed by default to `/lib/modules/6.1.158/misc/`:
      1. Create a signing script as described in the [Module Signing](#module-signing) section;
      2. Run the signing command:
         ```shell
         # Sign file
-        sudo bash drobot-sign-file.sh /lib/modules/6.1.112/misc/pcan.ko
+        sudo bash drobot-sign-file.sh /lib/modules/6.1.158/misc/pcan.ko
         ```
      3. Use the PCAN driver:
         ```shell
         # Insert PCAN driver
-        sudo insmod /lib/modules/6.1.112/misc/pcan.ko
+        sudo insmod /lib/modules/6.1.158/misc/pcan.ko
         ```
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+6. Use the PCAN driver. The following example uses PCAN driver version 8.20.0, where the driver modules are installed by default to `/lib/modules/6.1.158/misc/`:
+    ```shell
+    # Insert PCAN driver
+    sudo insmod /lib/modules/6.1.158/misc/pcan.ko
+    ```
+
+</DocScope>

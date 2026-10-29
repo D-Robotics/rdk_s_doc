@@ -63,7 +63,7 @@ S100 CAN 转发方案的核心流程如下：
 - CANHAL 模块获取来自 MCU 侧的 IPC 数据，按照指定的传输协议解析数据，并支持业务软件通过 API 获取原始 CAN 帧。
 </DocScope>
 <DocScope products="RDK S600">
-S600芯片的 CAN 控制器位于 MCU 域，负责 CAN 数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
+S600 MCU 域集成 16 路 CAN 控制器(CAN0~CAN15),默认使能(CAN1-CAN10),由 MCU 侧 CAN 驱动负责与外部 CAN 总线的数据收发。由于感知等应用位于 Acore，因此部分 CAN 数据需要通过 IPC 核间通信机制转发到 Acore。架构保证传输可靠性，转发机制实现数据正确性检测、丢包检测和传输超时检测等机制。此外，还需要规避 MCU 侧高频转发小数据块导致 CPU 占用率过高，造成 MCU 实时性降低等性能问题。
 
 S600 CAN 转发方案的核心流程如下：
 - 首先通过 MCU 侧 CAN2IPC 模块将 CAN 通道映射到对应 IPC 通道，然后通过 Acore 侧 CANHAL 模块将 IPC 通道反映射为虚拟 CAN 设备通道。最后用户通过 CANHAL 提供的 API 接口获取虚拟 CAN 设备中的数据。其中，CAN2IPC 模块为 MCU 侧服务，CANHAL 模块为 Acore 侧提供给应用程序的动态库。
@@ -95,7 +95,7 @@ S600 CAN 转发方案的核心流程如下：
 方案特性说明：
 - 支持数据透传正确性校验。
 - 支持数据透传丢包检测。
-- 支持传输超时检测。MCU 侧 CAN2IPC 转发数据时将数据包打上 MCU 侧的时间戳，Acore CANHAL 接收到数据后会读取 Acore 的时间戳，如果传输超时会报警。注意，需要提前启动时间同步完成 MCU RTC 时间和 Acore 网卡 phc0的时间同步。
+- 支持传输超时检测。MCU 侧 CAN2IPC 转发数据时将数据包打上 MCU 侧的时间戳，Acore CANHAL 接收到数据后会读取 Acore 的时间戳，如果传输超时会报警。注意，需要提前启动时间同步完成 MCU RTC 时间和 Acore 网卡 phc0 的时间同步，具体操作参考[时间同步方案](../02_linux_development/04_driver_development_super/12_driver_timesync.md#mcu-时间同步说明)。
 - 支持多个 CAN 通道并行传输。MCU 侧多个 CAN 控制器的数据可同时被转发给 Acore，Acore 应用程序通过 CANHAL 从不同通道号读出 CAN 数据。
 - 由于 CANHAL 底层通过 ipc 核间通信进行传输，而 ipc 目前不支持多个进程或者线程读写同一个通道，因此 CANHAL 也不支持该特性。
 
@@ -530,7 +530,56 @@ RDK S100默认配置了6组参数，用户可以通过修改 Can_aControllerConf
 | 3                    | 1M         | 5M（短距离:小于50m） |
 | 4                    | 1M         | 5M（长距离:大于50m） |
 | 5                    | 1M         | 8M         |
+<DocScope products="RDK S100">
+## Bus Off自恢复配置
+`Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`中
+ctrlOptions成员添加`FLEXCAN_IP_BUSOFF_RECOVERY_U32`宏，将使能CAN控制器的硬件Bus Off自恢复功能（默认已经使能）
+```
+const Flexcan_Ip_ConfigType Flexcan_aCtrlConfigPB[10U]=
+{
+    /* Hardware Channel FLEXCAN_0 */
+    {
+        ...
+        /* Loopback enabled or not */
+        FLEXCAN_NORMAL_MODE,
+        /* Controller Options */
+        (uint32)( FLEXCAN_IP_BUSOFF_RECOVERY_U32 | FLEXCAN_IP_ISO_U32 |FLEXCAN_IP_EACEN_U32),
+    },
+}
+```
 
+## 禁止自动重传配置
+
+启用MCU侧的禁止自动重传需执行以下步骤：
+1. `Config/McalCdd/gen_s100_sip_B_mcu1/Can/inc/Can_Cfg.h`中启用`CAN_TX_ERR_ABORT_SUPPORT`宏
+```
+/**
+*   @brief      Enable/Disable abort Tx frame on first CAN TX error (ACK/bit)
+*/
+#define CAN_TX_ERR_ABORT_SUPPORT    (STD_ON)
+```
+2. `Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`中使能对应实例的错误中断
+```
+{Os_IntChannel_Can5_ErrorIsr, Os_Isr_Can5_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can6_ErrorIsr, Os_Isr_Can6_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can7_ErrorIsr, Os_Isr_Can7_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can8_ErrorIsr, Os_Isr_Can8_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+{Os_IntChannel_Can9_ErrorIsr, Os_Isr_Can9_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+```
+## 软复位
+
+若需复位CAN控制器，可执行以下代码：
+```
+    /* 复位CAN5 */
+    Can_SetControllerMode(CanController_5, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_5, CAN_CS_STARTED);
+    /* 复位CAN6 */
+    Can_SetControllerMode(CanController_6, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_6, CAN_CS_STARTED);
+
+    ...
+```
+</DocScope>
 
 ## 多包合并配置
 
@@ -555,6 +604,116 @@ acore 侧也支持多包合并传输功能，下面只简单介绍相关数据�
 #define CAN_FRAME_NUM (1)   // Acore侧表示合并传输数据包的数量
 struct pack_info pack = { 0 };
 pack.data_num = CAN_FRAME_NUM;
+```
+
+## 硬件时间戳获取
+
+CAN 驱动支持由控制器硬件在收发帧时捕获时间戳（CAN FD 高分辨率时间戳，High Resolution Time Stamp），
+给每一帧数据打上微秒级的硬件时间，避免软件中断、任务调度带来的抖动。
+
+### 配置方式
+
+硬件时间戳默认关闭，S100 和 S600 都需要在各自产品的 `Can_Lld_Ip_Cfg.h` 中手动打开特性宏，并使用 RTC 作为时间戳源。
+各产品使用相互独立的配置文件和驱动：
+
+<DocScope products="RDK S600">
+S600 使用 `McalCdd/Can_Pro` 驱动，配置文件为 `${mcu_sdk}/Config/McalCdd/gen_s600_md_mcu1/Can/inc/Can_Lld_Ip_Cfg.h`，需要修改的配置项：
+
+```c
+/* @brief Has FlexCAN Timestamp enabled */
+#define FLEXCAN_IP_FEATURE_HAS_TS_ENABLE    (STD_ON)
+/* @brief Has FlexCAN High Resolution Timer for Time stamp CAN Message */
+#define FLEXCAN_IP_FEATURE_HAS_HR_TIMER    (STD_ON)
+
+/* @brief Has FlexCAN High Resolution Timer Source */
+#define FLEXCAN_IP_HR_TIMESTAMP_SOURCE    (FLEXCAN_HRTIMERSRC_RTC)
+```
+
+- `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 FlexCAN 时间戳特性；关闭时驱动不会配置时间戳相关寄存器。
+- `FLEXCAN_IP_FEATURE_HAS_HR_TIMER`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 32bit 高分辨率时间戳；只有打开后硬件才会捕获 `HR_TIME_STAMP`。
+- `FLEXCAN_IP_HR_TIMESTAMP_SOURCE`：默认 `FLEXCAN_HRTIMERSRC_UNUSED`，需配置为 `FLEXCAN_HRTIMERSRC_RTC`，时间戳源选择 RTC（ACore 与 MCU 共用同一个 RTC 硬件）；也可选择 `FLEXCAN_HRTIMERSRC_PHC`（Acore 网卡 phc0）。
+</DocScope>
+<DocScope products="RDK S100">
+S100 使用 `McalCdd/Can` 驱动，配置文件为 `${mcu_sdk}/Config/McalCdd/gen_s100_sip_B_mcu1/Can/inc/Can_Lld_Ip_Cfg.h`，需要修改的配置项（S100 的时间戳源由硬件固定为 RTC，没有源选择宏）：
+
+```c
+/* @brief Has FlexCAN Timestamp enabled */
+#define FLEXCAN_IP_FEATURE_HAS_TS_ENABLE    (STD_ON)
+/* @brief Has FlexCAN High Resolution Timer for Time stamp CAN Message */
+#define FLEXCAN_IP_FEATURE_HAS_HR_TIMER    (STD_ON)
+
+#if (FLEXCAN_IP_FEATURE_HAS_HR_TIMER == STD_ON)
+/* RTC 时间戳源的固定取值 */
+#define FLEXCAN_HRTIMERSRC_RTC_VALUE   (0U)
+/* 时间戳源是否可由软件选择，S100 固定为 RTC，保持默认即可 */
+#define FLEXCAN_IP_HR_TIMESTAMP_SRC_SELECTABLE (STD_OFF)
+#endif /* (FLEXCAN_IP_FEATURE_HAS_HR_TIMER == STD_ON) */
+```
+
+- `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 FlexCAN 时间戳特性；关闭时驱动不会配置时间戳相关寄存器。
+- `FLEXCAN_IP_FEATURE_HAS_HR_TIMER`：默认 `STD_OFF`，需配置为 `STD_ON`，打开 32bit 高分辨率时间戳；只有打开后上述 `#if` 内的源配置才会生效。
+- `FLEXCAN_HRTIMERSRC_RTC_VALUE`：RTC 时间戳源的固定取值，保持默认 `0U` 即可。
+- `FLEXCAN_IP_HR_TIMESTAMP_SRC_SELECTABLE`：时间戳源由硬件固定为 RTC，不需要软件选择，保持默认 `STD_OFF` 即可。
+</DocScope>
+
+:::info 说明
+上文中的“默认值”是指 SDK 发布版本的初始值，打开硬件时间戳功能必须按“需配置为”修改。
+:::
+
+捕获点由时间戳配置结构体决定，默认在帧起始（SOF）捕获，配置位于各产品的 `Can_Lld_Ip_PBcfg.c`：
+
+<DocScope products="RDK S600">
+S600 配置文件：`${mcu_sdk}/Config/McalCdd/gen_s600_md_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`
+</DocScope>
+<DocScope products="RDK S100">
+S100 配置文件：`${mcu_sdk}/Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`
+</DocScope>
+
+```c
+#if (FLEXCAN_IP_FEATURE_HAS_TS_ENABLE == STD_ON)
+        /* Free Running Counter Time Stamp config */
+        {
+                FLEXCAN_TIMESTAMPCAPTURE_START,
+                FLEXCAN_HRTIMERSRC_RTC
+        },
+#endif /* FLEXCAN_IP_FEATURE_HAS_TS_ENABLE */
+```
+
+该配置项在两个产品的 `Can_Lld_Ip_PBcfg.c` 中均已按 `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE` 做条件编译，打开上面的特性宏后自动生效；
+其中 `FLEXCAN_TIMESTAMPCAPTURE_START` 表示在帧起始（SOF）捕获，也可以改为 `FLEXCAN_TIMESTAMPCAPTURE_END`（帧结束）等。
+
+### 时间戳格式
+
+时间戳源为 RTC 时，硬件捕获到的是一个 32bit 的打包值，由帧起始时刻的 RTC 值拼接而成：
+
+| 位域 | 含义 |
+|------|------|
+| `[31:16]` | RTC 秒计数器的低 16 位 |
+| `[15:0]` | 秒内 tick 计数，取值 `0 ~ 32767`（RTC 频率为 32768Hz） |
+
+- 消息缓冲区（MB）的 `HR_TIME_STAMPn` 寄存器和增强接收 FIFO 元素的 `TS_OFF` 字段存放的是同一个值，只是存放位置不同。
+- 秒只保存了低 16 位，每 65536s（约 18.2 小时）回绕一次，驱动会用当前 RTC 秒补齐完整的秒。
+- 驱动由 `Can_TimeStampRecovery()` 完成到微秒的换算；当捕获值与当前时间不在同一基准（时间源配置错误、计数器未运行等）时返回 0。
+
+### 上层获取方式
+
+驱动把接收帧上报给 CanIf 时，已经在 `CanIf_RxIndication()` 的 `Can_HwType` 参数中填好了时间戳，应用直接读取即可：
+
+- `Mailbox->TimeStamp`：单位微秒；`0` 表示硬件时间戳不可用，此时应用应回落到软件时间基准。
+- 该时间戳由 MCU RTC 的“秒 + 秒内 tick”换算得到，不是 Unix 时间戳；需要与 Acore 时间对齐时，请先完成 MCU RTC 与 Acore 网卡 `phc0` 的时间同步，具体操作参考[时间同步方案](../02_linux_development/04_driver_development_super/12_driver_timesync.md#mcu-时间同步说明)。
+
+```c
+void CanIf_RxIndication(const Can_HwType *Mailbox, const PduInfoType *PduInfoPtr)
+{
+    uint64 ts_us = Mailbox->TimeStamp;   /* 硬件捕获时间，单位 us，0 表示不可用 */
+
+    if (0U == ts_us)
+    {
+        /* 硬件时间戳不可用，回落到软件时间基准 */
+        hb_Pack_GetTimeInUs(&ts_us);
+    }
+    ...
+}
 ```
 
 ## 应用 sample
@@ -584,12 +743,12 @@ $ tree /app/Can/can_multi_ch
 └── run.sh // 运行脚本
 
 ```
-json 文件配置主要包括3个 json 配置文件：node.json、ipcf_channel.json、channels.json。目前为了支持多进程，各个进程都会去当前路径下的 config 目录下寻找这3个配置文件。
+json 文件配置主要包括3个 json 配置文件：`node.json`、`ipcf_channel.json`、`channels.json`。目前为了支持多进程，各个进程都会去当前路径下的 `config` 目录下寻找这3个配置文件。
 
-node.json 负责创建虚拟 CAN 设备节点给 CANHAL API 访问。关键配置选项包括：
-- channel_id 字段指定该虚拟 CAN 设备从 ipc 配置文件 ipcf_channel.json 中哪一个节点获取数据。
-- target 字段表示该虚拟 CAN 设备节点的名称，CANHAL API 通过该名称访问指定的节点。
-- enable 字段表示该节点是否使能。
+`node.json` 负责创建虚拟 CAN 设备节点给 CANHAL API 访问。关键配置选项包括：
+- `channel_id` 字段指定该虚拟 CAN 设备从 ipc 配置文件 `ipcf_channel.json` 中哪一个节点获取数据。
+- `target` 字段表示该虚拟 CAN 设备节点的名称，CANHAL API 通过该名称访问指定的节点。
+- `enable` 字段表示该节点是否使能。
 
 ```json
 {
@@ -738,11 +897,11 @@ int main(int argc, char *argv[])
 }
 ```
 
-- 首先执行 canInit()完成初始化,然后创建发送线程和接收线程
-- 发送线程调用 canSendMsgFrame()发送数据包，接收线程调用 canRecvMsgFrame()接收数据包，其中 target 参数为 json 文件中配置好的通道。
-- pack 信息包含这一包数据的信息，包括 can 帧数量、mcu 侧的时间戳以及 acore 侧的 monotic 时间戳等信息。
-- canhal 会从这一包 ipc 数据中解析出 can 帧，用户通过 frame 指针读取出所有 can 帧。
-- 最后执行 canDeInit()释放资源。
+- 首先执行 `canInit()` 完成初始化,然后创建发送线程和接收线程
+- 发送线程调用 `canSendMsgFrame()` 发送数据包，接收线程调用 `canRecvMsgFrame()` 接收数据包，其中 `target` 参数为 json 文件中配置好的通道。
+- `pack` 信息包含这一包数据的信息，包括 can 帧数量、mcu 侧的时间戳以及 acore 侧的 monotic 时间戳等信息。
+- `canhal` 会从这一包 ipc 数据中解析出 can 帧，用户通过 `frame` 指针读取出所有 can 帧。
+- 最后执行 `canDeInit()` 释放资源。
 
 :::tip
 can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会出现资源耗尽的情况，此时可以进行降速和重传。
@@ -806,12 +965,12 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
 ```
 
 ##### 使用方式
-1. 分别编译 can_send 和 can_get 两个 sample
-2. 进入 can_get 目录执行以下命令
+1. 分别编译 `can_send` 和 `can_get` 两个 sample
+2. 进入 `can_get` 目录执行以下命令
 ```bash
 ./canhal_get bypass &
 ```
-3. 进入 can_send 目录执行以下命令
+3. 进入 `can_send` 目录执行以下命令
 ```bash
 root@ubuntu:/app/Can/can_send# ./canhal_send bypass 6
 [CANHAL][INFO][ipcf_dev.cpp:32][2025-2-20 21:43:47.522]:the path of ipcf plugin is /usr/hobot/lib/libhbipcfhal.so.1.
@@ -974,7 +1133,7 @@ make clean # 清除编译文件
 程序支持以下命令行参数来自定义运行参数：
 ```bash
 -n <can_tran_num>                 指定要发送的帧数 (默认: 1)
--t <can_type>                     指定CAN帧类型 (0: 标准帧, 1: 扩展帧, 2: FD标准帧, 3: FD扩展帧) (默认: 2)
+-t <can_type>                     指定CAN帧类型 (0: 标准帧, 1: 扩展帧, 2: FD标准帧, 3: FD扩展帧, 4: 标准远程帧, 5: 扩展远程帧) (默认: 2)
 -l <can_length>                   指定CAN帧长度 (8: 8字节, 64: 64字节) (默认: 64)
 -h, --help                        显示帮助信息
 ```
@@ -1113,6 +1272,112 @@ CAN_HAL_DEBUG_LEVEL 是一个环境变量，用于控制库文件 libhbcanhal.so
 ```
 通过设置 CAN_HAL_DEBUG_LEVEL 的值，可以控制日志输出的详细程度。例如，如果设置为 2，那么只有 log_info、log_warn、log_err 和 log_critical 级别的日志会被打印
 
+### 常见错误码说明
+
+Acore 侧 CANHAL 接口（`canInit`、`canSendMsgFrame`、`canRecvMsgFrame` 等）失败时返回负值错误码，定义于 `can_hal_type_def.h` 的 `ErrorCode` 枚举。日志中常见形式如下：
+
+```
+[recv_frame_data] [ERR]: canRecvMsgFrame failed ret: -303
+```
+
+RDK S100 / S600 上 CANHAL 默认走 IPCF 通道，将 MCU 侧 CAN 数据转发到 Acore。排障时优先核对 `config/` 下的 `nodes.json`、`channels.json`、`ipcf_channel.json`，以及 MCU1 是否已启动。
+
+### 错误码分类
+
+| 类别 | 数值区间 | 说明 |
+|------|---------|------|
+| 通用 | `0` / `-1` | 成功或未知错误 |
+| 配置文件 | `-100` ~ `-101` | 配置文件缺失或内容无效 |
+| 目标/节点 | `-200` | 收发时找不到指定 target |
+| IO 通道 | `-201` ~ `-206` | 通道 ID、存在性、初始化状态 |
+| 设备/HAL | `-301` ~ `-311` | HAL/IPCF 初始化、BSP 调用、设备加载 |
+| 发送/协议/缓存 | `-400` ~ `-409` | 参数指针、缓冲区、协议校验、延迟 |
+
+### 错误码速查
+
+| <div style={{minWidth: '72px', whiteSpace: 'nowrap'}}>值</div> | 错误码 | 含义 | 常见原因 | 处理建议 |
+|:----------|:-------|:-----|:---------|:---------|
+| <span style={{whiteSpace: 'nowrap'}}>`0`</span> | `SUCCESS` | 成功 | — | — |
+| <span style={{whiteSpace: 'nowrap'}}>`-1`</span> | `UNKNOWN` | 未知错误 | PHC 时钟源打开/读取失败，接收线程创建失败 | 检查 `/dev/hrtc0` 是否存在；确认 `nodes.json` 中 `clk_source` 配置 |
+| <span style={{whiteSpace: 'nowrap'}}>`-100`</span> | `CONFIG_FILE_INVALID` | 配置文件无效 | JSON 格式错误，target 为空或重复，通道 mode 无法识别 | 检查 `nodes.json` / `channels.json` 语法，确认 `target` 唯一且 `mode` 为 `R`/`W`/`RW` |
+| <span style={{whiteSpace: 'nowrap'}}>`-101`</span> | `CONFIG_FILE_NOT_EXIST` | 配置文件不存在 | 配置路径错误或文件缺失 | 确认程序当前目录下存在 `config/nodes.json`、`config/channels.json`、`config/ipcf_channel.json` |
+| <span style={{whiteSpace: 'nowrap'}}>`-200`</span> | `TARGET_NOT_EXIST` | 目标节点不存在 | 调用收发接口的 target 未在 `nodes.json` 中注册或未使能 | 核对 API 传入的 target 名称与 `nodes.json` 中 `target`、`enable` 是否一致 |
+| <span style={{whiteSpace: 'nowrap'}}>`-201`</span> | `IO_CHANNEL_INVALID_ID` | 通道 ID 无效 | 通道 `id < 0` 或 `id > 4096` | 修正 `ipcf_channel.json` 中的通道 `id` |
+| <span style={{whiteSpace: 'nowrap'}}>`-202`</span> | `IO_CHANNEL_NOT_EXIST` | 通道不存在 | 通道未在配置中定义或未注册 | 确认 `nodes.json` 的 `channel_id` 能在 `ipcf_channel.json` 中找到对应项 |
+| <span style={{whiteSpace: 'nowrap'}}>`-203`</span> | `IO_CHANNEL_CONFIG_INVALID` | 通道配置无效 | `io_channels` 缺失，或通道模式与收发操作不匹配 | 检查 `channels.json` 是否指向 IPCF 配置；只读通道不要调用发送接口 |
+| <span style={{whiteSpace: 'nowrap'}}>`-204`</span> | `IO_CHANNEL_NOT_INITED` | 通道未初始化 | 未先 `canInit` 就收发 | 先调用 `canInit()`，成功后再 `canSendMsgFrame` / `canRecvMsgFrame` |
+| <span style={{whiteSpace: 'nowrap'}}>`-205`</span> | `IO_CHANNEL_INITED_ALREDY` | 通道已初始化 | 重复初始化 | 可忽略，CANHAL 内部视为已就绪 |
+| <span style={{whiteSpace: 'nowrap'}}>`-206`</span> | `IO_CHANNEL_INIT_FAILED` | 通道初始化失败 | 底层 `InitChannel` 失败的汇总 | 结合 `-301`/`-302`/`-303` 继续查 IPCF 初始化与设备权限 |
+| <span style={{whiteSpace: 'nowrap'}}>`-301`</span> | `INIT_HAL_GROUP_FAILED` | HAL 组初始化失败 | `HorizonHal_IPCF_Init` 失败，或 socket/epoll 创建失败 | 确认 MCU1 已启动、`libhbipcfhal.so` 可加载、`/dev/ipcdrv` 存在 |
+| <span style={{whiteSpace: 'nowrap'}}>`-302`</span> | `CONFIG_HAL_GROUP_FAILED` | HAL 组配置失败 | `HorizonHal_IPCF_Config` 失败 | 检查 `ipcf_channel.json` 中 instance/channel 是否与 MCU 侧分配一致 |
+| <span style={{whiteSpace: 'nowrap'}}>`-303`</span> | `DEV_BSP_API_FAILED` | BSP API 失败 | IPCF recv/send 失败，或底层系统调用失败 | 接收超时场景较常见；确认对端有数据、IPC instance/channel 未被其它进程占用 |
+| <span style={{whiteSpace: 'nowrap'}}>`-304`</span> | `DEV_NO_CHANNEL_CONFIG` | 无通道配置 | 配置中 `channels` 为空 | 补全 `ipcf_channel.json` 的 `channels` 列表 |
+| <span style={{whiteSpace: 'nowrap'}}>`-305`</span> | `DEV_CONFIG_NO_GROUP` | 无组配置 | 通道已注册但底层 socket 未创建 | 重新初始化，检查设备节点权限 |
+| <span style={{whiteSpace: 'nowrap'}}>`-306`</span> | `DEV_CONFIG_NO_MSGS` | 无消息配置 | SPI 通道缺少 messages（非 S100/S600 默认路径） | 仅 SPI 设备需要关注 |
+| <span style={{whiteSpace: 'nowrap'}}>`-307`</span> | `DEV_CONFIG_NO_FILTERS` | 无过滤器配置 | `filter_sw = true` 但未配置 filter | 关闭软件过滤，或补全 filter 数组 |
+| <span style={{whiteSpace: 'nowrap'}}>`-308`</span> | `DEV_INITED_ALREADY` | 设备已初始化 | 重复 `Init` | 可忽略 |
+| <span style={{whiteSpace: 'nowrap'}}>`-309`</span> | `DEV_NOT_INITED` | 设备未初始化 | 未先完成设备 Init | 先调用 `canInit()` |
+| <span style={{whiteSpace: 'nowrap'}}>`-310`</span> | `DEV_RECONNECT` | 设备需要重连 | ETH TCP 断连（非 S100/S600 默认路径） | 检查以太网连通性 |
+| <span style={{whiteSpace: 'nowrap'}}>`-311`</span> | `BASIC_COM_LOAD_DEV_FAILED` | 设备加载失败 | 设备注册或 Init 失败 | 检查 IPCF 库路径 `libipcf_path` 及配置中的 `device_type` |
+| <span style={{whiteSpace: 'nowrap'}}>`-400`</span> | `SEND_INVALID_PTR` | 发送指针无效 | `target`/`frame`/`pack` 为空，或长度为 0 | 检查调用参数，确认缓冲区已分配且 `data_num` > 0 |
+| <span style={{whiteSpace: 'nowrap'}}>`-401`</span> | `SEND_BUFFER_OVERFLOW` | 发送缓冲区溢出 | 单次数据超过协议上限（IPCF 最大 4096 字节） | 减小合包数量或单次发送帧数 |
+| <span style={{whiteSpace: 'nowrap'}}>`-402`</span> | `PROTO_INVALID` | 协议数据无效 | 收到的数据包长度、DLC 或分片格式不合法 | 确认 MCU/Acore 使用相同协议（如 `built_1.0`） |
+| <span style={{whiteSpace: 'nowrap'}}>`-403`</span> | `PROTO_NOT_SUPPORT` | 协议不支持 | `nodes.json` 的 `raw_protocol` 无法识别 | 使用支持的协议名：`built_1.0` / `built_0.1` / `built_0.2` / `built_0.3` / `socketcan` |
+| <span style={{whiteSpace: 'nowrap'}}>`-404`</span> | `CACHE_INVALID` | 缓存无效 | 用户收发缓冲区为空或大小为 0 | 检查 `frame` 数组和 `pack` 是否正确传入 |
+| <span style={{whiteSpace: 'nowrap'}}>`-405`</span> | `CHECKSUM_ABNORMAL` | 校验和异常 | 预留，当前版本一般不会返回 | — |
+| <span style={{whiteSpace: 'nowrap'}}>`-406`</span> | `SEQUENCE_ABNORMAL` | 序列号异常 | 滚动计数器不连续，可能丢帧 | 降低发送频率，检查 IPC 是否拥塞；该错误仍会返回已解析的帧 |
+| <span style={{whiteSpace: 'nowrap'}}>`-407`</span> | `CACHE_TOO_SMALL` | 缓存太小 | 用户 CanFrame 数组装不下本包全部帧 | 增大接收侧 `CAN_FRAME_NUM` / 帧数组容量 |
+| <span style={{whiteSpace: 'nowrap'}}>`-408`</span> | `LATENCY_TOO_LARGE` | 延迟过大 | PHC 与 MCU 时间戳差值超过阈值（默认 28ms） | 先完成 MCU RTC 与 Acore `phc0` 时间同步；检查系统负载 |
+| <span style={{whiteSpace: 'nowrap'}}>`-409`</span> | `CRC_ERROR` | CRC 校验失败 | 标准协议 CRC16 不匹配，数据可能损坏 | 检查核间传输是否稳定，MCU/Acore 协议是否一致 |
+
+:::tip
+以下错误在初始化阶段可视为“已经就绪”，不会导致 `canInit` 失败：
+
+- `-205` `IO_CHANNEL_INITED_ALREDY`
+- `-308` `DEV_INITED_ALREADY`
+
+`-406` `SEQUENCE_ABNORMAL` 表示可能丢帧，但 CANHAL 仍会提取并返回已经解析出的 CAN 帧。
+:::
+
+### 常见问题排查
+#### 使能调试日志
+打开 CANHAL 日志有助于定位具体失败点：
+
+```bash
+export CAN_HAL_DEBUG_LEVEL=4
+```
+#### MCU侧DEBUG应用说明
+1. 进入 MCU1的控制台
+2. 输入命令：can_tran_debug
+```
+can_tran_debug
+```
+
+3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果
+
+   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%' }} />
+
+
+#### 常见错误现象
+
+| 现象 | 可能错误码 | 排查方向 |
+|------|-----------|---------|
+| `canInit` 失败 | `-100` / `-101` / `-301` / `-302` / `-311` | 检查 `config/` 目录三个 JSON 是否存在且格式正确；MCU1 是否启动；`/dev/ipcdrv` 与 `libhbipcfhal.so` 是否可用 |
+| 发送/接收提示找不到通道 | `-200` | 核对 API 的 target 与 `nodes.json` 中 `target`、`enable` |
+| 通道初始化失败 | `-206` / `-301` ~ `-303` | 检查 IPC instance/channel 是否与 MCU 侧分配一致，且未被其它进程占用 |
+| 接收日志反复出现 `-303` | `-303` | 对端未发送、硬件未组网、或该 IPC channel 已被占用；sample 中超过 100s 无数据会退出线程 |
+| 数据丢失 | `-406` | 降低发送频率，确认合包配置与 IPC 带宽 |
+| 数据内容错误 | `-409` / `-402` | 确认两端协议一致（`built_1.0`），检查传输链路 |
+| 延迟告警 | `-408` | 先做时间同步，再查 CPU 负载和 PHC 时钟（`/dev/hrtc0`） |
+| 发送失败 | `-400` / `-401` | 检查指针、长度，以及单次发送是否超过 4096 字节 |
+| 未 Init 就收发 | `-204` / `-309` | 调整调用顺序：`canInit` → 收发 → `canDeInit` |
+
+打开 CANHAL 日志有助于定位具体失败点：
+
+```bash
+export CAN_HAL_DEBUG_LEVEL=4
+```
+
 ### MCU 侧 DEBUG 应用说明
 1. 进入 MCU1的控制台
 2. 输入命令：can_tran_debug
@@ -1122,7 +1387,22 @@ can_tran_debug
 
 3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug日志" style={{ width: '100%' }} />
+
+#### 典型错误日志解析
+**Q**: 打印`Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`
+
+**A**: 类似这种错误具体原因是mcu打上时间戳到acore接收到can数据时会在算一个时间，通过计算差值来统计（mcu->acore）延时，如果超过阈值就会报此错误。
+
+**Q**: 打印`put_data_tofifo()[1151]: [0][4] failed fifo in len 97 avail61 cnt 1`
+
+**A**: 出现这个错误的时候表示recv can包的内存不够，需要排查两处：
+- 1：read是不是可以及时执行，中间不要有太多依赖。
+- 2：acore的处理速度跟不上mcu的处理速度，需要提高kfifio data区域大小。
+
+**Q**: 打印`ipc-drv: ipc_shm_acquire_buf() [1209]: instance 4 noready`
+
+**A**: 出现这种错一般是mcu1挂了，或者mcu1没有起来。
 
 
 ### 应用程序接口

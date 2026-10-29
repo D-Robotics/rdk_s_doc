@@ -63,6 +63,10 @@ Actual MAC addresses may vary slightly depending on the hardware version. Please
 
 In the default image, `/etc/ethercat.conf` is pre-configured for Native mode. To switch the EtherCAT network port, modify `MASTER0_DEVICE` to the MAC address of the corresponding port:
 
+:::warning
+<font color="red">**The Native driver only supports MAC address configuration.**</font> The default `MASTER0_DEVICE` value is `ff:ff:ff:ff:ff:ff`, which uses the eth0 port by default when enabled. Please modify it according to your needs.
+:::
+
 ```
 MASTER0_DEVICE="xx:xx:xx:xx:01:18"  # MAC address of eth0
 DEVICE_MODULES="hobot"
@@ -74,38 +78,18 @@ MASTER0_DEVICE="xx:xx:xx:xx:01:19"  # MAC address of eth1
 DEVICE_MODULES="hobot"
 ```
 
-**Step 2: Configure systemd drop-in (required)**
-
-Since the Native driver and the gmac driver are mutually exclusive, you need to configure a systemd drop-in to automatically handle driver unloading and reloading. Execute the following commands on the device to:
-- Automatically unload `hobot_eth_super` before starting EtherCAT
-- Automatically reload `hobot_eth_super` after stopping EtherCAT to restore network functionality
-
-```shell
-sudo mkdir -p /etc/systemd/system/ethercat.service.d
-
-sudo tee /etc/systemd/system/ethercat.service.d/prestart.conf << 'EOF'
-[Service]
-ExecStartPre=-/sbin/rmmod hobot_eth_super
-ExecStopPost=-/sbin/modprobe hobot_eth_super
-EOF
-
-sudo systemctl daemon-reload
-```
-
-:::info
-- `ExecStartPre=-`：Automatically unloads `hobot_eth_super` before starting (the prefix `-` means execution continues even if this command fails)
-- `ExecStopPost=-`：Automatically reloads `hobot_eth_super` after stopping to restore normal network functionality
-:::
-
 :::warning
-<font color="red">**SSH Connection Note:**</font> If you are connected to the development board via SSH, when you execute `systemctl start ethercat` or `systemctl stop ethercat`, the network will experience a brief interruption of a few seconds (ping will show `Destination Host Unreachable`) due to the unloading/reloading of the gmac driver. The SSH client will typically reconnect automatically. This is normal and does not require manual intervention.
+<font color="red">**SSH Connection Note:**</font> If you are connected to the development board via SSH, when using systemctl or ethercatctl to manage the ethercat service, the network will experience a brief interruption of a few seconds (ping will show `Destination Host Unreachable`) due to the unloading/reloading of the gmac driver. The SSH client will typically reconnect automatically. This is normal and does not require manual intervention.
 :::
 
-**Step 3: Start EtherCAT**
+**Step 2: Start EtherCAT**
 
 ```shell
 sudo systemctl start ethercat
 sudo systemctl status ethercat
+# or
+sudo ethercatctl start
+sudo ethercatctl status
 ```
 
 Example of normal output:
@@ -120,7 +104,7 @@ Example of normal output:
    Main PID: 6504 (code=exited, status=0/SUCCESS)
 ```
 
-**Step 4: Verification**
+**Step 3: Verification**
 
 After starting, check `ip a`. You will see that the MAC address of the network port bound to EtherCAT has disappeared from the kernel protocol stack (no longer appears in the list):
 
@@ -151,9 +135,9 @@ $ sudo ethercat slaves
 0  0:0  PREOP  +  SSC-Device
 ```
 
-**Step 5: Stop EtherCAT (switch back to normal network mode)**
+**Step 4: Stop EtherCAT (switch back to normal network mode)**
 
-After stopping the EtherCAT service, `ExecStopPost` will automatically load `hobot_eth_super`, and all network ports will revert to normal network mode:
+After stopping the EtherCAT service, `hobot_eth_super` will be loaded automatically, and all network ports will revert to normal network mode:
 
 ```shell
 sudo systemctl stop ethercat
@@ -183,7 +167,7 @@ To switch the network port used by EtherCAT, simply modify `MASTER0_DEVICE` in `
 ### Risks and Impacts of the Native Driver
 
 :::warning
-<font color="red">**Important:**</font> Because the Native driver and the gmac driver are mutually exclusive, it is **strongly recommended to use `systemctl` to manage the EtherCAT service** (with the systemd drop-in to automatically handle driver unloading/reloading). **Do not use the `ethercatctl` command directly.** Using `ethercatctl start` directly requires manually unloading `hobot_eth_super` with `rmmod`, and improper operation (e.g., forgetting to unload the gmac driver) will cause EtherCAT to fail to start. Furthermore, in remote SSH connection scenarios, manual operation could lead to network loss that cannot be recovered.
+<font color="red">**Important:**</font> Because the Native driver and the gmac driver are mutually exclusive, switching between them involves unloading and loading the network card driver. When switching between Native driver and Generic driver modes, **you must first modify the configuration file and then reboot the system to complete the driver switch**; otherwise, it may cause a network interruption.
 :::
 
 #### 1. Conflict with gmac driver
@@ -192,15 +176,13 @@ The Native driver `ec_hobot` is **mutually exclusive** with the system's `hobot_
 
 **Impact**: After unloading `hobot_eth_super`, the network port bound to the EtherCAT master is taken over by the Native driver. **The remaining Ethernet ports can still be used normally** (they can be configured with IPs, used for SSH connections, etc.). However, at the moment of `rmmod`/`modprobe hobot_eth_super`, all Ethernet ports will briefly interrupt for a few seconds and then automatically recover. The SSH connection will typically reconnect automatically.
 
-**Recovery Method**: After stopping EtherCAT, `ExecStopPost` will automatically reload `hobot_eth_super`, and all Ethernet ports will return to normal network functionality.
-
 #### 2. Network port is exclusive to the Native driver
 
 When the Native driver starts, the network port corresponding to the MAC address bound to `MASTER0_DEVICE` in the configuration file will **disappear** from the Linux kernel protocol stack (it will no longer be shown in `ip a`) and will be exclusively used by EtherCAT. The other, unbound ports will remain visible and usable.
 
 #### 3. MAC address configuration requirement
 
-In Native driver mode, `MASTER0_DEVICE` in `/etc/ethercat.conf` **must be configured with the actual MAC address of the corresponding network port** (e.g., `"xx:xx:xx:xx:01:18"`). The broadcast address `ff:ff:ff:ff:ff:ff` or an interface name (e.g., `"eth0"`) cannot be used, as the driver will not be able to bind correctly.
+In Native driver mode, `MASTER0_DEVICE` in `/etc/ethercat.conf` **must be configured with the actual MAC address of the corresponding network port** (e.g., `"xx:xx:xx:xx:01:18"`). An interface name (e.g., `"eth0"`) cannot be used, as the driver will not be able to bind correctly.
 
 ### Notes on deb Package Upgrades
 
@@ -224,7 +206,7 @@ sudo sed -i 's/DEVICE_MODULES="hobot"/DEVICE_MODULES="generic"/' /etc/ethercat.c
 sudo sed -i 's/MASTER0_DEVICE=".*"/MASTER0_DEVICE="eth0"/' /etc/ethercat.conf
 ```
 
-After modification, restart the device or the EtherCAT service. For detailed usage in Generic mode, please refer to the subsequent sections (starting with "Network Configuration Before Use").
+After modification, restart the device for the changes to take effect. For detailed usage in Generic mode, please refer to the subsequent sections (starting with "Network Configuration Before Use").
 
 ---
 
@@ -1039,6 +1021,88 @@ Note: The RDK S600 uses eth0 as the DHCP port by default, and eth1 is configured
     :::
 
 If you are using EtherCAT igh master version 1.6.4 or later, you can refer to [Automatic network card start/stop (supported in EtherCAT igh master version 1.6.4 and later)](#automatic-network-card-startstop-supported-in-ethercat-igh-master-version-164-and-later) for configuration.
+
+## CPU Affinity Configuration (RUN_ON_CPU)
+
+By default, the EtherCAT master kernel threads (`EtherCAT-IDLE` / `EtherCAT-OP`) are scheduled by the kernel scheduler across all CPU cores. In scenarios that require real-time determinism or CPU isolation, you can use the `RUN_ON_CPU` configuration item to bind the master kernel threads to a specific CPU core, reducing scheduling jitter caused by cross-core migration and improving EtherCAT communication stability.
+
+:::info
+`RUN_ON_CPU` works for both the Native driver (`ec_hobot`) and the Generic driver (`ec_generic`), and is configured in the same way.
+
+<DocScope products="RDK S100">
+This feature requires system version **V4.1.0 or later**. If `/etc/ethercat.conf` does not contain the `RUN_ON_CPU` item, please upgrade the `hobot-ethercat` package.
+</DocScope>
+
+<DocScope products="RDK S600">
+This feature requires system version **V5.1.0 or later**. If `/etc/ethercat.conf` does not contain the `RUN_ON_CPU` item, please upgrade the `hobot-ethercat` package.
+</DocScope>
+:::
+
+### Configuration Method
+
+Edit `/etc/ethercat.conf` and set `RUN_ON_CPU` to the target CPU core number (counting from 0):
+
+```
+# Bind the EtherCAT master kernel threads to CPU 1
+RUN_ON_CPU="1"
+```
+
+| Value | Behavior |
+|------|------|
+| Empty or `off` | No CPU binding; the kernel scheduler is free to schedule (default) |
+| `0`, `1`, `2` ... | Bind the master kernel threads to the CPU core with the given number |
+
+Restart the EtherCAT service for the configuration to take effect:
+
+```shell
+sudo systemctl restart ethercat
+```
+
+:::warning
+<font color="red">**Note:**</font> `RUN_ON_CPU` takes effect when the service starts and loads the `ec_master` module. After changing the configuration, you must restart the EtherCAT service (reloading the module) to apply the new CPU affinity setting.
+:::
+
+### Configuration Validation
+
+To prevent an invalid configuration from affecting master startup, the `ethercatctl` and `init.d` scripts call `validate_run_on_cpu()` at startup to validate the value:
+
+| Input | Validation Result |
+|------|----------|
+| Empty or `off` | Valid; CPU binding is skipped |
+| A non-negative integer within the system CPU range | Valid; `run_on_cpu=N` is passed to `ec_master` |
+| Not an integer (e.g., `abc`) | Warning and CPU binding is skipped; the master starts normally |
+| Unable to detect the system CPU count | Warning and CPU binding is skipped |
+| Outside the available CPU range of the system | Warning and CPU binding is skipped |
+
+When validation fails, the script prints a `WARNING` and falls back to no CPU binding (the default behavior); **it does not prevent the EtherCAT service from starting**. For example, configuring `RUN_ON_CPU="8"` on a 4-core system:
+
+```shell
+$ sudo ethercatctl start
+WARNING: RUN_ON_CPU=8 exceeds available CPUs
+         (0-3). Using default (no CPU binding).
+```
+
+### Verifying the CPU Affinity
+
+1. Check the kernel log to confirm that CPU binding has taken effect. When binding succeeds, `ec_master` outputs a log like the following:
+
+    ```shell
+    $ dmesg | grep -i "binding thread"
+    [  123.456789] EtherCAT 0:  binding thread to cpu 1
+    ```
+
+2. Check the CPU core on which the master kernel thread actually runs (the `PSR` column is the CPU number the thread currently runs on):
+
+    ```shell
+    $ ps -eLo pid,psr,comm | grep EtherCAT
+    1234  1 EtherCAT-IDLE
+    ```
+
+    In the example above, the `PSR` of the `EtherCAT-IDLE` thread is `1`, indicating that it is bound to CPU 1.
+
+:::tip
+The master runs the `EtherCAT-IDLE` thread while idle and switches to the `EtherCAT-OP` thread once it enters the OP (Operational) phase. Both are bound to the CPU core specified by `RUN_ON_CPU`.
+:::
 
 ## FAQ
 

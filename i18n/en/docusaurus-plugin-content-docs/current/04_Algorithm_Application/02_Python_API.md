@@ -6,6 +6,10 @@ sidebar_label: 4.1 Python API
 ---
 # 4.2 Python API
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 hbm_runtime is a Python binding built on pybind11 for accessing and operating the underlying libhbucp / libdnn C++ libraries, providing high-performance neural network model loading and inference.
 
 This interface encapsulates low-level model runtime details so Python users can conveniently load single or multiple neural network models, query and manage model input/output metadata, and run inference flexibly. It supports multiple input data formats and, when necessary, automatically converts inputs to C-contiguous storage to ensure correct and efficient low-level access.
@@ -35,22 +39,41 @@ In addition, the new interface releases the Python GIL on the C++ side during in
   - Parallel multi-model inference: when the input is a multi-model structure, the runtime launches a thread per model to run inference in parallel (multi-threaded launch), which can improve throughput on multi-core BPU systems; a single-model case uses one inference thread.
 
 ## Installation
-The `hbm_runtime` module is a high-performance inference runtime Python interface implemented in C++. It depends on pybind11 and Horizon’s underlying inference libraries (such as libdnn, libhbucp, etc.). It can be installed via system DEB packages (`.deb`) and supports Python 3.10 and above.
+The `hbm_runtime` module is a high-performance inference runtime Python interface implemented in C++. It depends on pybind11 and Horizon’s underlying inference libraries (such as libdnn, libhbucp, etc.). It can be installed via system DEB packages (`.deb`).
 
 ### System Dependencies
+
+<DocScope products="RDK-S100">
+
 | Dependency | Minimum Version | Description |
 |------------|-----------------|-------------|
-| Python | ≥ 3.10 | Python 3.10 is recommended |
+| Python | ≥ 3.10 | Python 3.10 is recommended (tested on 3.10.12) |
 | pip | ≥ 22.0 | Required for installing wheel packages |
 | pybind11 | any | Used at build time; not required when installing the package |
 | scikit-build-core | ≥ 0.7 | Used when building wheel packages (source builds only) |
 | Horizon base libraries | platform-specific | e.g. libdnn.so, libucp.so, usually provided by the BSP |
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+| Dependency | Minimum Version | Description |
+|------------|-----------------|-------------|
+| Python | ≥ 3.12 | Python 3.12 is recommended (tested on 3.12.3) |
+| pip | ≥ 22.0 | Required for installing wheel packages |
+| pybind11 | any | Used at build time; not required when installing the package |
+| scikit-build-core | ≥ 0.7 | Used when building wheel packages (source builds only) |
+| Horizon base libraries | platform-specific | e.g. libdnn.so, libucp.so, usually provided by the BSP |
+
+</DocScope>
+
 
 ### Building Wheel Packages
 There are three ways to build a wheel package, described below.
 
 #### Build During DEB Installation
 The `hobot-dnn` package install process includes building the `hbm_runtime` wheel. After the DEB install completes, the `hbm-runtime` whl package is generated.
+
+<DocScope products="RDK-S100">
 
   ```bash
   # Install from apt source
@@ -66,8 +89,29 @@ The `hobot-dnn` package install process includes building the `hbm_runtime` whee
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+  ```bash
+  # Install from apt source
+  sudo apt-get install hobot-dnn
+
+  # Install from a local deb package (package names vary by build; use your actual filename)
+  dpkg -i hobot-dnn_4.0.4-20250909195426_arm64.deb
+
+  # After installation, find the wheel under /tmp on the board
+  ls /tmp
+
+  # Whl package names vary by version; xxx stands for the version
+  #hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+</DocScope>
+
 #### Build During System Image Compilation
 When building the system software image, the `hobot-dnn` deb is installed; during that install the `hbm-runtime` whl is built and copied to `out/product/deb_packages`.
+
+<DocScope products="RDK-S100">
 
   ```bash
   sudo ./pack_image.sh
@@ -78,7 +122,24 @@ When building the system software image, the `hobot-dnn` deb is installed; durin
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+  ```bash
+  sudo ./pack_image.sh
+
+  ls out/product/deb_packages
+
+  # Whl package names vary by version; xxx stands for the version
+  #hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+</DocScope>
+
 #### Build on Device
+
+<DocScope products="RDK-S100">
+
   ```bash
   # Enter the hbm_runtime source tree
   cd /usr/hobot/lib/hbm_runtime
@@ -93,6 +154,25 @@ When building the system software image, the `hobot-dnn` deb is installed; durin
   #hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+  ```bash
+  # Enter the hbm_runtime source tree
+  cd /usr/hobot/lib/hbm_runtime
+
+  # Run the build script
+  ./build.sh
+
+  # List built wheel packages
+  ls dist/
+
+  # Whl package names vary by version; xxx stands for the version
+  #hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+</DocScope>
+
 ### Installation Methods
 
 #### Using a Wheel Package
@@ -101,10 +181,22 @@ You can use either of the following wheel install methods.
 - Install from a local wheel package
   - Locate the `.whl` file built in the [Building Wheel Packages](#building-wheel-packages) section.
 
+  <DocScope products="RDK-S100">
+
   ```bash
   # Example: install local whl with pip (package names vary by version; xxx stands for the version)
   pip install hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
+
+  </DocScope>
+  <DocScope products="RDK-S600">
+
+  ```bash
+  # Example: install local whl with pip (package names vary by version; xxx stands for the version)
+  pip install hbm_runtime-x.x.x-cp312-cp312-manylinux_2_34_aarch64.whl
+  ```
+
+  </DocScope>
 
 - Install from PyPI
   ```bash
@@ -133,7 +225,7 @@ You can use either of the following deb install methods.
 ### Uninstallation
 - Uninstall pip-installed package:
   ```bash
-  pip uninstall hbmruntime
+  pip uninstall hbm_runtime
   ```
 
 - Uninstall deb-installed package:
@@ -152,12 +244,14 @@ Ensure HBMRuntime is installed correctly (see [Installation](#installation)) and
 ##### Single-Threaded, Single-Model, Single-Input Inference
 For models with a single input tensor.
 
+<DocScope products="RDK-S100">
+
 ```python
 import numpy as np
 from hbm_runtime import HB_HBMRuntime
 
 # Load model
-model = HB_HBMRuntime("/opt/hobot/model/s600/basic/lanenet256x512.hbm")
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/lanenet256x512.hbm")
 
 # Get model name and input name
 model_name = model.model_names[0]
@@ -177,8 +271,63 @@ output_array = outputs[model_name]
 print("Output:", output_array)
 ```
 
+</DocScope>
+<DocScope products="RDK-S600">
+
+```python
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+# Load model (the S600 platform uses the ASR model as the single-input example)
+model = HB_HBMRuntime("/opt/hobot/model/s600/basic/asr.hbm")
+
+# Get model name and input name
+model_name = model.model_names[0]
+input_name = model.input_names[model_name][0]  # Assume single input
+
+# Get shape for this input
+input_shape = model.input_shapes[model_name][input_name]
+
+# Build numpy input
+input_tensor = np.ones(input_shape, dtype=np.float32)
+
+# Run inference
+outputs = model.run(input_tensor)
+
+# Get output
+output_array = outputs[model_name]
+print("Output:", output_array)
+```
+
+</DocScope>
+
 ##### Single-Threaded, Single-Model, Multi-Input Inference
 For models with multiple input tensors.
+
+<DocScope products="RDK-S100">
+
+```python
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+hb_dtype_map = {
+    "U8": np.uint8,
+    "S8": np.int8,
+    "F32": np.float32,
+    "F16": np.float16,
+    "U16": np.uint16,
+    "S16": np.int16,
+    "S32": np.int32,
+    "U32": np.uint32,
+    "BOOL8": np.bool_,
+}
+
+# Load model
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm")
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
 
 ```python
 import numpy as np
@@ -198,7 +347,11 @@ hb_dtype_map = {
 
 # Load model
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
+```
 
+</DocScope>
+
+```python
 # Get model name (assume one model loaded)
 model_name = model.model_names[0]
 
@@ -234,6 +387,22 @@ for output_name, output_data in results[model_name].items():
 ##### Single-Threaded, Multi-Model, Multi-Input Inference
 For multiple models each with multiple inputs. “Multi-model” can mean several HBM files or several models inside one HBM file.
 
+<DocScope products="RDK-S100">
+
+```python
+"""Multi-model inference quick start."""
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+MODEL_PATHS = [
+    "/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm",
+    "/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm",
+]
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 """Multi-model inference quick start."""
 import numpy as np
@@ -243,6 +412,11 @@ MODEL_PATHS = [
     "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm",
     "/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
 ]
+```
+
+</DocScope>
+
+```python
 
 DTYPE_MAP = {
     "U8": np.uint8, "S8": np.int8,
@@ -283,6 +457,20 @@ for m, outs in outputs.items():
 ##### Multi-Threaded, Single-Model, Single-Input Inference
 For models with a single input tensor.
 
+<DocScope products="RDK-S100">
+
+```python
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+# Load model
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/asr.hbm")
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 import threading
 import numpy as np
@@ -290,6 +478,11 @@ from hbm_runtime import HB_HBMRuntime
 
 # Load model
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/asr.hbm")
+```
+
+</DocScope>
+
+```python
 
 model_name = model.model_names[0]
 input_name = model.input_names[model_name][0]
@@ -319,6 +512,28 @@ for t in threads: t.join()
 ##### Multi-Threaded, Single-Model, Multi-Input Inference
 For models with multiple input tensors.
 
+<DocScope products="RDK-S100">
+
+```python
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+hb_dtype_map = {
+    "U8": np.uint8, "S8": np.int8,
+    "F16": np.float16, "F32": np.float32,
+    "U16": np.uint16, "S16": np.int16,
+    "U32": np.uint32, "S32": np.int32,
+    "BOOL8": np.bool_,
+}
+
+# Load single model
+model = HB_HBMRuntime("/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm")
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 import threading
 import numpy as np
@@ -334,6 +549,11 @@ hb_dtype_map = {
 
 # Load single model
 model = HB_HBMRuntime("/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm")
+```
+
+</DocScope>
+
+```python
 model_name = model.model_names[0]
 
 # Build input tensors (shared, read-only)
@@ -364,6 +584,24 @@ for t in threads: t.join()
 ```
 
 ##### Multi-Threaded, Multi-Model, Multi-Input Inference
+
+<DocScope products="RDK-S100">
+
+```python
+"""4-thread demo: each thread runs inference on a dedicated BPU core."""
+import threading
+import numpy as np
+from hbm_runtime import HB_HBMRuntime
+
+MODEL_PATHS = [
+    "/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm",
+    "/opt/hobot/model/s100/basic/resnet18_224x224_nv12.hbm",
+]
+```
+
+</DocScope>
+<DocScope products="RDK-S600">
+
 ```python
 """4-thread demo: each thread runs inference on a dedicated BPU core."""
 import threading
@@ -374,6 +612,11 @@ MODEL_PATHS = [
     "/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm",
     "/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm",
 ]
+```
+
+</DocScope>
+
+```python
 
 DTYPE_MAP = {
     "U8": np.uint8, "S8": np.int8,
@@ -545,7 +788,8 @@ All properties below are read-only.
     ```python
     # Print descriptions for all model files
     print(model.hbm_descs)
-    # Output: {'/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
+    # Output (S100): {'/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
+    # Output (S600): {'/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm': 'xxx'}
     ```
 
 - compile_bpu_core_num: Dict[str, int]

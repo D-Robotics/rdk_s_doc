@@ -9,47 +9,45 @@ import { useHistory, useLocation } from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { PRODUCT_VERSION_MATRIX, VERSION_PRODUCT_MATRIX } from './doc-scope-matrix.js';
 import {
+  LEGACY_STORAGE_PRODUCT,
+  LEGACY_STORAGE_VERSION,
+  SUPPORTED_STORAGE_LOCALES,
+  defaultProduct,
+  defaultVersion,
+  defaultsForLocale as coreDefaultsForLocale,
+  normalizeVersionFromQuery as coreNormalizeVersionFromQuery,
+  parseFilter as coreParseFilter,
+  storageKeys,
+} from './doc-scope-filter-core.mjs';
+import {
   resolveCanonicalProductKeyForMatrix,
   resolveProductForVersion,
 } from './doc-scope-product-utils.js';
 
 export { PRODUCT_VERSION_MATRIX, VERSION_PRODUCT_MATRIX } from './doc-scope-matrix.js';
 
-function getFirstVersionKey() {
-  const versions = Object.keys(VERSION_PRODUCT_MATRIX || {});
-  return versions.length > 0 ? versions[0] : '';
-}
-
-function getFirstProductForVersion(version) {
-  if (!version || !VERSION_PRODUCT_MATRIX[version] || VERSION_PRODUCT_MATRIX[version].length === 0) {
-    return '';
-  }
-  return VERSION_PRODUCT_MATRIX[version][0];
-}
+// 解析规则（URL → localStorage → 默认值）、键名、默认值来源全部来自 doc-scope-filter-core.mjs：
+// 首帧前注入的内联脚本内联的是同一份源码，改内核即两边同时生效，这里只做「绑定矩阵」的薄封装。
+const CORE_DEPS = {
+  v2p: VERSION_PRODUCT_MATRIX,
+  p2v: PRODUCT_VERSION_MATRIX,
+  readStorage(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      return null; // localStorage 不可用（隐私模式等）
+    }
+  },
+};
 
 /** 中英文统一默认到同一产品/版本（矩阵首项） */
-const DEFAULT_VERSION_ZH = getFirstVersionKey();
-const DEFAULT_PRODUCT_ZH = getFirstProductForVersion(DEFAULT_VERSION_ZH);
-const DEFAULT_VERSION_EN = DEFAULT_VERSION_ZH;
-const DEFAULT_PRODUCT_EN = DEFAULT_PRODUCT_ZH;
+const DEFAULT_VERSION_ZH = defaultVersion(VERSION_PRODUCT_MATRIX);
+const DEFAULT_PRODUCT_ZH = defaultProduct(VERSION_PRODUCT_MATRIX, DEFAULT_VERSION_ZH);
 
-const LEGACY_STORAGE_VERSION = 'doc_scope_version';
-const LEGACY_STORAGE_PRODUCT = 'doc_scope_product';
-const SUPPORTED_STORAGE_LOCALES = ['zh-Hans', 'en'];
-
-function storageKeys(locale) {
-  return {
-    version: `${LEGACY_STORAGE_VERSION}__${locale}`,
-    product: `${LEGACY_STORAGE_PRODUCT}__${locale}`,
-  };
-}
-
-function defaultsForLocale(locale) {
-  if (locale === 'en') {
-    return { version: DEFAULT_VERSION_EN, product: DEFAULT_PRODUCT_EN };
-  }
-  return { version: DEFAULT_VERSION_ZH, product: DEFAULT_PRODUCT_ZH };
-}
+const defaultsForLocale = (locale) => coreDefaultsForLocale(VERSION_PRODUCT_MATRIX, locale);
+const normalizeVersionFromQuery = (v, locale) =>
+  coreNormalizeVersionFromQuery(v, locale, VERSION_PRODUCT_MATRIX);
+const parseFilter = (search, locale) => coreParseFilter(search, locale, CORE_DEPS);
 
 const defaultCtx = {
   version: DEFAULT_VERSION_ZH,
@@ -63,14 +61,6 @@ export const DocScopeFilterContext = createContext(defaultCtx);
 
 export function useDocScopeFilter() {
   return useContext(DocScopeFilterContext);
-}
-
-function normalizeVersionFromQuery(v, locale) {
-  const fallback = defaultsForLocale(locale).version || getFirstVersionKey();
-  if (v && VERSION_PRODUCT_MATRIX[v]) {
-    return v;
-  }
-  return fallback;
 }
 
 function saveToStorage(version, product, locale) {
@@ -89,75 +79,8 @@ function saveToStorage(version, product, locale) {
   }
 }
 
-function loadFromStorage(locale) {
-  try {
-    const { version: vk, product: pk } = storageKeys(locale);
-    let v = localStorage.getItem(vk);
-    let pRaw = localStorage.getItem(pk);
-    if (!v && locale === 'zh-Hans') {
-      v = localStorage.getItem(LEGACY_STORAGE_VERSION);
-      pRaw = localStorage.getItem(LEGACY_STORAGE_PRODUCT);
-    }
-    // Cross-locale fallback: language switch links may drop query params.
-    if (!v) {
-      for (const fallbackLocale of SUPPORTED_STORAGE_LOCALES) {
-        if (fallbackLocale === locale) continue;
-        const { version: fvk, product: fpk } = storageKeys(fallbackLocale);
-        const fv = localStorage.getItem(fvk);
-        const fp = localStorage.getItem(fpk);
-        if (fv) {
-          v = fv;
-          pRaw = fp;
-          break;
-        }
-      }
-    }
-    if (v && VERSION_PRODUCT_MATRIX[v]) {
-      const p = resolveProductForVersion(pRaw, v);
-      return { version: v, product: p };
-    }
-  } catch (e) {
-    // localStorage 不可用时忽略
-  }
-  return null;
-}
-
-/**
- * 从 URL 查询参数解析版本和产品，如果没有则从 localStorage 读取，最后使用默认值。
- * 产品名任意大小写均可（如 rdK X3）会通过矩阵规范为正式写法。
- */
-function parseFilter(search, locale) {
-  const normalized = !search
-    ? ''
-    : search.startsWith('?')
-      ? search.slice(1)
-      : search;
-  const q = new URLSearchParams(normalized);
-  const vRaw = q.get('v');
-  const pRaw = q.get('p');
-
-  if (vRaw) {
-    const v = normalizeVersionFromQuery(vRaw, locale);
-    const p = resolveProductForVersion(pRaw, v);
-    return { version: v, product: p };
-  }
-  if (pRaw != null && String(pRaw).trim() !== '') {
-    const canon = resolveCanonicalProductKeyForMatrix(pRaw);
-    if (canon) {
-      const vers = PRODUCT_VERSION_MATRIX[canon];
-      if (vers && vers.length > 0) {
-        const v = vers[0];
-        const p = resolveProductForVersion(canon, v);
-        return { version: v, product: p };
-      }
-    }
-  }
-  const stored = loadFromStorage(locale);
-  if (stored) {
-    return stored;
-  }
-  return defaultsForLocale(locale);
-}
+// parseFilter 的实现已移入 doc-scope-filter-core.mjs（与首帧内联脚本共用同一份源码），
+// 上面已按名绑定为薄封装。
 
 function replaceSearch(history, location, nextSearch) {
   const search = nextSearch && nextSearch.length ? (nextSearch.startsWith('?') ? nextSearch : `?${nextSearch}`) : '';

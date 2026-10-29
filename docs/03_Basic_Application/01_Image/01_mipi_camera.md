@@ -8,9 +8,21 @@ sidebar_position: 1
 
 ## 环境准备
 
+<DocScope versions="<5.1.1">
+
   - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-相机接口j2200-j2201)
   - 目前该 sample 仅支持 MIPI sensor: IMX219, SC230AI
   - 通过 HDMI 线缆连接开发板和显示器
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+  - 将 MIPI 摄像头模组连接到开发板 MIPI CSI 接口，具体连接方法可以参考-[硬件简介-MIPI接口](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-相机接口j2200-j2201)
+  - 目前该 sample 支持 MIPI sensor: IMX219, SC230AI, shw3hstd_amsl-60fps
+  - 通过 HDMI 线缆连接开发板和显示器
+
+</DocScope>
 
 ## 运行方式
 按照以下命令执行程序
@@ -19,6 +31,20 @@ sidebar_position: 1
   sunrise@ubuntu:~$ cd /app/pydev_demo/mipi_camera_sample
   sunrise@ubuntu:/app/pydev_demo/mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
   ```
+
+<DocScope versions=">=5.1.1">
+
+执行上述命令后，终端会先列出搜索到的 sensor 配置，并要求选择：
+
+```text
+[0] INFO: Found sensor name:imx219-30fps on mipi rx csi 4, i2c addr 0x10, config_file:linear_1920x1080_raw10_30fps_1lane.c
+[1] INFO: Found sensor name:shw3hstd_amsl-60fps on mipi rx csi 4, i2c addr 0x10, config_file:linear_1920x1536_60fps_1lane.c
+please choose sensor config,the number should small than 2
+```
+
+此时输入 `0` 并回车，程序会继续运行。这里的序号与上方 `[x] INFO: Found sensor name` 打印的 sensor 一一对应，例如 `0` 即为 `imx219-30fps` 对应的配置。
+
+</DocScope>
 
 ## 预期效果
 程序执行后，显示器会实时显示摄像头画面，如下所示：

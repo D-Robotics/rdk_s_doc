@@ -45,9 +45,9 @@ static Ipc_ChannelConfigType Ipc_ShmInstance0CfgChannel[8] = {
 ......
 };
 ```
-2. 设置 receive_coreid。如果是在 MCU1上，则需要"receive_coreid=Ipc_Receive_Core1"。同时需要保障 MCU0关于 IPC 设置相同。
-- MCU0文件地址：/mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c
-- MCU1文件地址：/mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c
+2. 设置 `receive_coreid`。如果是在 MCU1上，则需要 `receive_coreid=Ipc_Receive_Core1`。同时需要保障 MCU0关于 IPC 设置相同。
+- MCU0文件地址：`/mcu/Config/McalCdd/gen_s100_sip_B/Ipc/src/Ipc_Cfg.c`
+- MCU1文件地址：`/mcu/Config/McalCdd/gen_s100_sip_B_mcu1/Ipc/src/Ipc_Cfg.c`
 ```c
 Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
     .Ipc_InstanceId       = 0U,
@@ -98,9 +98,15 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
 | Ipc_ShmCfgInstances0 / 4   | canhal       | —                                                                               | Acore instance0/4     |
 | Ipc_ShmCfgInstances5       | 外置 RTC      | —                                                                                | Acore instance5        |
 | Ipc_ShmCfgInstances7       | ipcbox       | —                                                                               | Acore instance7        |
-| Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 (except 8 & 10) |
+| Ipc_ShmCfgInstances8~15    | User         | ISR(Ipc1_ChxIsr): Ipc_Driver_MCUIpc1ChxIsr() (x = 0..7)                         | Acore instance8~15 |
 | Ipc_ShmCfgInstance8        | mcu1 boot    | —                                                                               | Acore instance8       |
+| Ipc_ShmCfgInstances9       | can          | —                                                                               | Acore instance9       |
 | Ipc_ShmCfgInstance10       | timesync     | —                                                                               | Acore instance10      |
+| Ipc_ShmCfgInstances11      | can          | —                                                                               | Acore instance11      |
+| Ipc_ShmCfgInstances12      | can          | —                                                                               | Acore instance12      |
+| Ipc_ShmCfgInstances13      | can          | —                                                                               | Acore instance13      |
+| Ipc_ShmCfgInstances14      | can          | —                                                                               | Acore instance14      |
+| Ipc_ShmCfgInstances15      | can          | —                                                                               | Acore instance15      |
 | Ipc_PrivShmCfgInstance0    | Crypto       | ISR(Ipc_HsmIpc3Ch4Isr): Ipc_Driver_HSMIpc3Ch4Isr()                              | HSM                    |
 | Ipc_PrivShmCfgInstance1    | HSM Diag     | ISR(Ipc_HsmIpc3Ch5Isr): Ipc_Driver_HSMIpc3Ch5Isr()                              | HSM                    |
 | Ipc_PrivShmCfgInstance2    | Ota          | ISR(Ipc0_Ch8Isr): Ipc_Driver_MCUIpc0Ch8Isr()                                    | Acore instance50      |
@@ -198,7 +204,6 @@ typedef struct {
     ```bash
     D-Robotics:/$ ipcbox_set_mode uart 1
     [066386.990200 0]uart processing enabled
-    [066386.990487 0]IpcBox_FreeRtos_OsTask_IpcBox_Uart_ASW task is already initialized or running
 
     D-Robotics:/$ ipcbox_set_mode uart 0
     [066389.201404 0]uart processing disabled
@@ -209,7 +214,6 @@ typedef struct {
     ```bash
     D-Robotics:/$ ipcbox_set_mode i2c 1
     [066394.631826 0]i2c processing enabled
-    [066394.632101 0]IpcBox_FreeRtos_OsTask_IpcBox_I2c_ASW task is already initialized or running
 
     D-Robotics:/$ ipcbox_set_mode i2c 0
     [066397.082288 0]i2c processing disabled
@@ -220,7 +224,7 @@ typedef struct {
     ```bash
     D-Robotics:/$ ipcbox_set_mode spi 1
     [066403.227424 0]spi processing enabled
-    [066403.227699 0]IpcBox_Spi task is already initialized or running
+    [066403.227699 0]Invalid SPI bus id, use default config
 
     D-Robotics:/$ ipcbox_set_mode spi 0
     [066406.388582 0]spi processing disabled

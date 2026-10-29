@@ -61,7 +61,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    通过 .run() 方法运行前向推理，可指定调度参数（推理优先级、BPU 核心绑定）。输出包含多个尺度分支的分类张量与回归张量。
+    通过 `.run()` 方法运行前向推理，可指定调度参数（推理优先级、BPU 核心绑定）。输出包含多个尺度分支的分类张量与回归张量。
 
 - 结果后处理
 
@@ -169,7 +169,7 @@ pip install -r ../../requirements.txt --break-system-packages
 
 - 查看结果
 
-    运行成功后，会将目标检测框绘制在原图上，并保存到 --img-save-path 指定路径
+    运行成功后，会将目标检测框绘制在原图上，并保存到 `--img-save-path` 指定路径
     ```bash
     [Saved] Result saved to: result.jpg
     ```

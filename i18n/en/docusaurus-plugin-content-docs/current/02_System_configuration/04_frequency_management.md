@@ -246,7 +246,7 @@ To achieve reasonable control of device temperature, we need to understand the f
 
 Information and control of the above modules can be obtained in the `/sys/class/thermal` directory.
 
-#### Thermal Zone Introduction
+#### Thermal Zone Introduction{#thermal-zone-introduction-s600}
 To get information about a specific thermal_zone, take thermal_zone0 as an example, the example command is as follows:
 ```shell
 root@ubuntu:~# cat /sys/class/thermal/thermal_zone0/type
@@ -397,7 +397,7 @@ For the emc2305 fan controller on the RDK S600 development board, you can obtain
    ```
 
 :::info
-**Note**: When the policy of thermal_zone2 or thermal_zone16 is `step_wise`, the fan gear configured by the user will be automatically adjusted by the system based on the current temperature. If customers need to fix the fan to a specific gear, please refer to the [Thermal Zone](#thermal-zone-introduction) section and change the policy of thermal_zone2 and thermal_zone16 to `user_space`.
+**Note**: When the policy of thermal_zone2 or thermal_zone16 is `step_wise`, the fan gear configured by the user will be automatically adjusted by the system based on the current temperature. If customers need to fix the fan to a specific gear, please refer to the [Thermal Zone](#thermal-zone-introduction-s600) section and change the policy of thermal_zone2 and thermal_zone16 to `user_space`.
 :::
 
 ### CPU Frequency Management

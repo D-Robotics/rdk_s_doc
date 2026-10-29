@@ -295,6 +295,8 @@ The newly added configuration items for SPI are described here:
 
 ### SPI Configuration for GPIO CS
 
+<DocScope products="RDK S100">
+
 Taking spi0 cs1 as an example, add the `cs-gpios` property to the spi0 node in the device tree to map cs1 to the specified GPIO:
 
 ```dts
@@ -308,32 +310,12 @@ spi0: spi@39800000 {
 ```
 > **Note**: The GPIO numbers and device tree nodes corresponding to each SPI chip select pin are shown in the table below. You can directly refer to the table to fill in the `cs-gpios` property.
 
-<DocScope products="RDK S100">
-
 | Pin        | GPIO       | Device Tree        |
 |------------|------------|--------------------|
 | SPI0_CSN0  | GPIO0[17]  | `<&peri_port0 17>` |
 | SPI0_CSN1  | GPIO0[18]  | `<&peri_port0 18>` |
 | SPI1_CSN0  | GPIO0[22]  | `<&peri_port0 22>` |
 | SPI1_CSN1  | GPIO0[23]  | `<&peri_port0 23>` |
-
-</DocScope>
-<DocScope products="RDK S600">
-
-| Pin        | GPIO       | Device Tree         |
-|------------|------------|---------------------|
-| SPI0_CSN0  | GPIO1[30]  | `<&hsi_port1 30>`   |
-| SPI0_CSN1  | GPIO1[31]  | `<&hsi_port1 31>`   |
-| SPI1_CSN0  | GPIO1[10]  | `<&hsi_port1 10>`   |
-| SPI1_CSN1  | GPIO1[20]  | `<&hsi_port1 20>`   |
-| SPI2_CSN0  | GPIO1[16]  | `<&hsi_port1 16>`   |
-| SPI2_CSN1  | GPIO0[30]  | `<&hsi_port0 30>`   |
-| SPI3_CSN0  | GPIO1[0]   | `<&hsi_port1 0>`    |
-| SPI3_CSN1  | GPIO0[31]  | `<&hsi_port0 31>`   |
-
-> **Note**: The SPI pin voltage on the S600 is **1.8V**. Please ensure voltage level matching with peripheral devices.
-
-</DocScope>
 
 Additionally, locate `peri_spi0` in `source/hobot-drivers/kernel-dts/drobot-xxx-pinctrl.dtsi` and remove the cs1-related pins from pinmux and pinconf (to avoid conflicts with the GPIO configuration):
 
@@ -351,6 +333,38 @@ peri_spi0: peri_spi0_func {
 	};
 };
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+Taking spi0 cs1 as an example, add the `cs-gpios` property to the spi0 node in the device tree, **remove the cs1 configuration from `pinctrl-0`**, and map cs1 to the specified GPIO:
+
+```dts
+spi0: spi@34900000 {
+	...
+	pinctrl-0 = <&hsi_spi0_csn0_spi0_csn0 &hsi_spi0_mosi_spi0_mosi\
+		&hsi_spi0_miso_spi0_miso &hsi_spi0_sclk_spi0_sclk>
+	cs-gpios = <0>,                                    /* CS0: Natively controlled by SPI controller */
+			<&hsi_port1 31 GPIO_ACTIVE_LOW>;        /* CS1: Simulated control via GPIO */
+	...
+};
+```
+> **Note**: The GPIO numbers and device tree nodes corresponding to each SPI chip select pin are shown in the table below. You can directly refer to the table to fill in the `cs-gpios` property.
+
+| Pin        | GPIO       | Device Tree         |
+|------------|------------|---------------------|
+| SPI0_CSN0  | GPIO1[30]  | `<&hsi_port1 30>`   |
+| SPI0_CSN1  | GPIO1[31]  | `<&hsi_port1 31>`   |
+| SPI1_CSN0  | GPIO1[10]  | `<&hsi_port1 10>`   |
+| SPI1_CSN1  | GPIO1[20]  | `<&hsi_port1 20>`   |
+| SPI2_CSN0  | GPIO1[16]  | `<&hsi_port1 16>`   |
+| SPI2_CSN1  | GPIO0[30]  | `<&hsi_port0 30>`   |
+| SPI3_CSN0  | GPIO1[0]   | `<&hsi_port1 0>`    |
+| SPI3_CSN1  | GPIO0[31]  | `<&hsi_port0 31>`   |
+
+> **Note**: The SPI pin voltage on the S600 is **1.8V**. Please ensure voltage level matching with peripheral devices.
+
+</DocScope>
 
 ## SPI Verification and Debugging
 

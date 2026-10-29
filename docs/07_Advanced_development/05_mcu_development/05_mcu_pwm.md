@@ -26,12 +26,20 @@ import DocScope from '@site/src/components/DocScope';
 - 支持针对每个 PWM 通道配置其周期和占空比，需要满足如下限制：
     - 周期配置粒度为 clk_PWM，即 PWM 外设时钟，最大时钟计数值为：4294967295。
 
-S600和 S100的 IP 配置如下：
+<DocScope products="RDK S100">
+S100的 IP 配置如下：
+
+| 平台 | PWM IP 数量 | 每个 IP 的通道数 | 总通道数 |
+|------|------------|----------------|----------|
+| S100 | 1个        | 12个 Channel    | 12个 Channel |
+</DocScope>
+<DocScope products="RDK S600">
+S600的 IP 配置如下：
 
 | 平台 | PWM IP 数量 | 每个 IP 的通道数 | 总通道数 |
 |------|------------|----------------|----------|
 | S600 | 3个        | 12个 Channel    | 36个 Channel |
-| S100 | 1个        | 12个 Channel    | 12个 Channel |
+</DocScope>
 
 ## 软件驱动
 
@@ -168,7 +176,7 @@ pwmtest <pwm_id> <pwm通道> <周期> <占空比>
 
 停止 PWM 输出：
 ```sh
-pwmtest <pwm_id> stop <pwm通道>
+pwmtest stop <pwm_id> <pwm通道>
 ```
 
 例如设置 PWM 通道0的周期为1000us，占空比为50%：
@@ -179,7 +187,8 @@ pwmtest 0 0 0x30d40 0x4000
 - 参数说明
 
 ```sh
-<pwm通道>: 要配置或停止的PWM通道号。
+<pwm_id>: PWM硬件IP实例ID（S100只有1个IP，固定为0）。
+<pwm通道>: 要配置或停止的PWM通道号（S100已引出通道：0、1、6、7、10、11）。
 <周期>: PWM信号的周期。
 <占空比>: PWM信号的占空比，必须在0x0000（0%）到0x8000（100%）的范围内。
 ```
@@ -263,11 +272,11 @@ pwmtest <pwm_hwipid> <pwm_hwchid> <period> <duty_cycle>
 pwmtest stop <pwm_hwipid> <pwm_hwchid>
 ```
 
-**参数说明**  
-**pwm_hwipid:** PWM 硬件 IP 实例 ID (0 ~ 2)  
-**pwm_hwchid:** PWM 硬件通道 ID (0 ~ 11)  
-**period:** PWM 信号周期值，32位数值  
-**duty_cycle:** PWM 信号占空比，必须在0x0000（0%）到0x8000（100%）范围内  
+**参数说明**
+**pwm_hwipid:** PWM硬件IP实例ID，硬件范围 0-2（S600 共 3 个 PWM IP）
+**pwm_hwchid:** PWM硬件通道ID，硬件范围 0-11（每个 IP 12 个通道）
+**period:** PWM信号周期值，32位数值
+**duty_cycle:** PWM信号占空比，必须在0x0000（0%）到0x8000（100%）范围内
 
 
 例如设置 PWM0通道4，周期为0x600000，占空比为0x4000(50%)：

@@ -41,7 +41,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    利用 .run() 方法运行推理过程，支持设置推理优先级和 BPU 核心绑定（如 core0/core1 等）。
+    利用 `.run()` 方法运行推理过程，支持设置推理优先级和 BPU 核心绑定（如 core0/core1 等）。
 
 - 结果后处理
 
@@ -168,7 +168,7 @@ pip install -r ../../requirements.txt --break-system-packages
 
 - 查看结果
 
-    运行成功后，会将目标检测框绘制在原图上，并保存到 --img-save-path 指定路径
+    运行成功后，会将目标检测框绘制在原图上，并保存到 `--img-save-path` 指定路径
     ```bash
     [Saved] Result saved to: result.jpg
     ```

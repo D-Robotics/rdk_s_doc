@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Detect local Node.js on runner
         id: detect_node
         run: |
@@ -22,7 +22,7 @@ jobs:
           fi
       - name: Setup Node.js (fallback if runner has no Node)
         if: steps.detect_node.outputs.has_node != 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '24'
           cache: 'npm'

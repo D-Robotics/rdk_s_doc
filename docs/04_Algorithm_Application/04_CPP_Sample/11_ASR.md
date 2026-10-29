@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 <DocScope products="RDK-S100">
-本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
+本示例基于BPU推理引擎运行语音识别模型，实现对 `.wav` 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于`/app/cdev_demo/bpu/07_speech_sample/01_asr/`目录下。
 
 :::warning
 当前 RDK S100 系统镜像**未内置** `asr.hbm` 模型，运行本示例前需手动下载（见下方"模型说明"中的下载地址），并放到默认路径 `/opt/hobot/model/s100/basic/asr.hbm`，或通过 `--model_path` 指定其它路径。
@@ -17,7 +17,7 @@ import DocScope from '@site/src/components/DocScope';
 
 </DocScope>
 <DocScope products="RDK-S600">
-本示例基于BPU推理引擎运行语音识别模型，实现对 .wav 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下。
+本示例基于BPU推理引擎运行语音识别模型，实现对 `.wav` 格式语音文件的自动转写，输出对应的文字内容，本示例代码位于 `/app/cdev_demo/bpu/speech_sample/asr/` 目录下。
 
 </DocScope>
 
@@ -25,7 +25,7 @@ import DocScope from '@site/src/components/DocScope';
 ## 模型说明
 - 简介：
 
-    ASR（Automatic Speech Recognition）自动语音识别模型用于将音频信号转换为文本。输入为单通道语音波形（经过采样率转换和标准化处理），输出为字符级别的 token 序列。配合字典（vocab）文件使用，可实现中文语音转写。本示例使用量化后的 .hbm 模型。
+    ASR（Automatic Speech Recognition）自动语音识别模型用于将音频信号转换为文本。输入为单通道语音波形（经过采样率转换和标准化处理），输出为字符级别的 token 序列。配合字典（vocab）文件使用，可实现中文语音转写。本示例使用量化后的 `.hbm` 模型。
 
 - HBM模型名称：asr.hbm
 
@@ -40,7 +40,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 输入预处理
 
-    使用 SoundFile 读取音频（支持 .wav），将音频：
+    使用 SoundFile 读取音频（支持 `.wav`），将音频：
 
     - 转为单通道
     - 重采样至目标采样率（默认 16kHz）
@@ -50,7 +50,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 推理执行
 
-    采用 .infer() 方法完成推理。
+    采用 `.infer()` 方法完成推理。
 
 - 结果后处理
 
@@ -87,17 +87,21 @@ sudo apt install -y libgflags-dev libsndfile1-dev libsamplerate0-dev
     ```
 
 ## 模型下载
-若在程序运行时未找到模型，可通过下列命令下载
+若在程序运行时未找到模型，可通过下列命令下载。注意需下载到 `--model_path` 的默认路径下，否则使用默认参数运行时仍会提示找不到模型。
 
 <DocScope products="RDK-S100">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
+sudo mkdir -p /opt/hobot/model/s100/basic
+sudo wget -O /opt/hobot/model/s100/basic/asr.hbm \
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/asr/asr.hbm
 ```
 
 </DocScope>
 <DocScope products="RDK-S600">
 ```bash
-wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
+sudo mkdir -p /opt/hobot/model/s600/basic
+sudo wget -O /opt/hobot/model/s600/basic/asr.hbm \
+    https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 ```
 
 </DocScope>
@@ -152,6 +156,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/asr/asr.hbm
 
     运行成功后，会将结果打印出来
     ```bash
+    Full transcription:
     我是来自阿里云的大规模语言磨型过叫通意千问||
     ```
 

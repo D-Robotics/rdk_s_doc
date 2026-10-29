@@ -4,6 +4,12 @@ sidebar_position: 1
 
 # VIO（视频输入）API
 
+```mdx-code-block
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import DocScope from '@site/src/components/DocScope';
+```
+
 `VIO` 模块提供操作 `MIPI` 摄像头和操作图像处理的功能。
 
 `VIO` API 提供了以下的接口：
@@ -64,8 +70,18 @@ sidebar_position: 1
 
 **【功能描述】**  
 
+<DocScope products="RDK S100">
+
 初始化接入到 RDK S100上的 MIPI 摄像头。
 支持设置输出分辨率，支持设置最多6组分辨率，只支持缩小。缩小倍率范围为[1, 1/64)
+
+</DocScope>
+<DocScope products="RDK S600">
+
+初始化接入到 RDK S600上的 MIPI 摄像头。
+支持设置输出分辨率，支持设置最多6组分辨率，只支持缩小。缩小倍率范围为[1, 1/64)
+
+</DocScope>
 
 **【参数】**
 
@@ -88,9 +104,20 @@ sidebar_position: 1
 
 **【功能描述】**  
 
+<DocScope products="RDK S100">
+
 初始化接入到 RDK S100上的 MIPI 摄像头。  
 支持指定摄像头原始输出 RAW 的分辨率大小，通过`sp_sensors_parameters`设置。  
 支持设置输出分辨率，支持设置最多6组分辨率，只支持缩小。缩小倍率范围为[1, 1/64)
+
+</DocScope>
+<DocScope products="RDK S600">
+
+初始化接入到 RDK S600上的 MIPI 摄像头。  
+支持指定摄像头原始输出 RAW 的分辨率大小，通过`sp_sensors_parameters`设置。  
+支持设置输出分辨率，支持设置最多6组分辨率，只支持缩小。缩小倍率范围为[1, 1/64)
+
+</DocScope>
 
 目前支持的摄像头分辨率见下表：
 
@@ -119,7 +146,7 @@ sidebar_position: 1
 
 :::info 注意！
 
-`S100`芯片对于`VPS`输出的宽度是有对齐需求的，输出宽度需满足16对齐，输出高度需满足2对齐，如果您设置的宽度和高度不符合对齐要求，则会检测报错。
+`S100`和`S600`芯片对于`VPS`输出的宽度是有对齐需求的，输出宽度需满足16对齐，输出高度需满足2对齐，如果您设置的宽度和高度不符合对齐要求，则会检测报错。
 
 :::
 
@@ -155,7 +182,7 @@ sidebar_position: 1
 
 :::info 注意！
 
-`S100`芯片对于`VPS`输出的宽度是有对齐需求的，输出宽度需满足16对齐，输出高度需满足2对齐，如果您设置的宽度和高度不符合对齐要求，则会检测报错。
+`S100`和`S600`芯片对于`VPS`输出的宽度是有对齐需求的，输出宽度需满足16对齐，输出高度需满足2对齐，如果您设置的宽度和高度不符合对齐要求，则会检测报错。
 
 :::
 
@@ -268,6 +295,21 @@ sidebar_position: 1
 成功返回 0，失败返回 -1
 
 ## host 编号选择
+
+
+<DocScope products="RDK S100">
+
 camera 对应的 host 编号如下图所示
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Camera对应的host编号示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+</DocScope>
+<DocScope products="RDK S600">
+
+相机接口的连接方式请参考[硬件简介-相机扩展板](../../../../01_Quick_start/01_hardware_introduction/02_rdk_s600/02_rdk_s600_camera_expansion_board.md)。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="S600 MIPI Host 结构图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+
+
+</DocScope>

@@ -9,7 +9,7 @@ import DocScope from '@site/src/components/DocScope';
 ```
 
 <DocScope products="RDK-S100">
-This sample demonstrates how to combine SP hardware modules (decoder, VIO, display) with the BPU on platforms such as RDK S100 to implement:
+This sample demonstrates how to combine SP hardware modules (decoder, VIO, display) with the BPU on platforms such as RDK S600 to implement:
 RTSP/H.264 video stream → hardware decode (NV12) → YOLOv5x inference → overlay detection boxes → real-time display. The sample code is located in `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/`.
 
 </DocScope>
