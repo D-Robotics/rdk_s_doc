@@ -1,0 +1,99 @@
+name: Check external links
+
+# 站外链接巡检：每天定时跑一次，发现 404 时自动开/更新一个固定 issue。
+# 不挂 PR 触发，因此不阻塞任何人提交或合并。
+# 目标：文档中心所有文档里的「文字外链」，不管指向哪个域名，只要线上 404 就报出来（宁误勿漏）。
+# 扫描范围：docs/（中文）+ i18n/en/docusaurus-plugin-content-docs/current/（英文）。
+# 过滤只排除「非真实链接」，不按域名排除（首跑后按实测校准）：
+#   - --scheme http --scheme https：只查 http/https，file://、mailto 等跳过；
+#   - --root-dir ${{ github.workspace }}：站内 /xxx 根相对路径先解析成 file://，再被 scheme 跳过；
+#   - --exclude-all-private：内网/私有 IP、localhost 等占位符；
+#   - --exclude 占位符：http://ip/、proxy_server_address；
+#   - --exclude 图片：.png/.jpg/.gif/.svg/.webp/.ico（图片先不查，只查文字外链）；
+#   - --exclude '.hobot.cc'：境外 runner 连不上（Connection failed、非 404），GitHub 上无信号可采，
+#     本机实测 200 正常；China 侧可达性校验另议。
+# --accept 里的 412/429/530：反爬/限流/异常状态码（服务器有响应、资源存在），非 404，视为可达。
+# 注意不能用 --include '^https?://' 做白名单：lychee 里 include 一旦匹配会覆盖 exclude。
+
+on:
+  schedule:
+    # 每天 UTC 03:37（北京时间 11:37），避开整点
+    - cron: "37 3 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-external-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check external links
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # 发现失效链接时不要让 job 失败，交给下面的通知步骤处理
+          fail: false
+          args: >-
+            --no-progress
+            --scheme http
+            --scheme https
+            --root-dir ${{ github.workspace }}
+            --accept 200,204,301,302,307,308,401,403,412,429,530
+            --timeout 15
+            --retry-wait-time 2
+            --max-retries 3
+            --user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            --exclude-all-private
+            --exclude '\.hobot\.cc'
+            --exclude '(?i)^https?://(ip|proxy_server_address)([^a-z0-9]|$)'
+            --exclude '\.(png|jpe?g|gif|svg|webp|ico)(\?.*)?$'
+            'docs/**/*.md'
+            'docs/**/*.mdx'
+            'i18n/en/docusaurus-plugin-content-docs/current/**/*.md'
+            'i18n/en/docusaurus-plugin-content-docs/current/**/*.mdx'
+
+      - name: Create or update issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          REPORT=./lychee/out.md
+          TITLE="chore: 外链失效清单（自动巡检）"
+          LABEL="broken-link"
+
+          # label 不存在则创建（已存在会报错，忽略即可）
+          gh label create "$LABEL" --color d73a4a 2>/dev/null || true
+
+          has_failures() {
+            [ -f "$REPORT" ] && grep -q '### Errors' "$REPORT"
+          }
+          issue_num() {
+            gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number // empty'
+          }
+
+          if has_failures; then
+            BODY="## 外链失效清单"$'\n\n'
+            BODY+="> 自动巡检时间：$(date -u '+%Y-%m-%d %H:%M UTC')"$'\n\n'
+            BODY+="$(cat "$REPORT")"
+            NUM="$(issue_num)"
+            if [ -n "$NUM" ]; then
+              gh issue edit "$NUM" --body "$BODY"
+              echo "已更新 issue #$NUM"
+            else
+              gh issue create --title "$TITLE" --label "$LABEL" --body "$BODY"
+              echo "已创建 issue"
+            fi
+          else
+            NUM="$(issue_num)"
+            if [ -n "$NUM" ]; then
+              gh issue comment "$NUM" --body "✅ 本次巡检未发现失效外链，已全部恢复。"
+              gh issue close "$NUM"
+              echo "已关闭 issue #$NUM"
+            else
+              echo "无失效外链，无需通知"
+            fi
+          fi

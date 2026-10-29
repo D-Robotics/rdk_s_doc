@@ -1,6 +1,12 @@
 /**
  * 生成「首帧前修正」bootstrap 脚本，由插件以文本形式注入 postBodyTags 同步执行。
  *
+ * 【解析规则没有第二份副本】筛选条件的解析（?v= → ?p= → localStorage → 默认值）来自
+ * src/context/doc-scope-filter-core.mjs：客户端 import 的是它，这里在构建期把**同一份源码**
+ * 内联进注入脚本（内联脚本必须自包含、且要早于首屏绘制执行，走不了 import）。
+ * 所以改内核两边同时生效，不存在需要手工同步的副本；一致性由
+ * scripts/test-doc-scope-filter-parity.mjs 断言。
+ *
  * 服务的都是同一类问题：服务端渲染时读不到 URL 之外的任何用户状态（localStorage），
  * 只能渲染矩阵默认值（首个版本 + 其首个产品，当前为 5.1.0 / RDK S600）。首屏绘制只依赖
  * HTML，早于 JS 加载与 hydration 提交，所以默认值会先被画出来、随后才被纠正，表现为跳变。
@@ -15,22 +21,47 @@
  * **属性**差异（这里正是 className）在 18.3 只报 dev 告警、不改写 DOM，故折叠类不会被 hydration
  * 补上；而文本即使会被纠正，也发生在首屏绘制之后，同样是可见的闪烁。
  *
- * 本脚本以构建期固化的信息为准：markdown 侧由 remark-doc-scope.js 输出 data-scope-products
- * （规范产品名列表），做纯字符串比较，不把 scopeProductsMatchCurrent 的匹配语义
- * （大小写不敏感、RDK-X5 系列写法）复制进来；解析 URL / localStorage 的部分与
- * DocScopeFilterContext.parseFilter() 同序同语义。
- *
- * 产品解析逻辑整体收在 resolveFilter() 内：scoped 构建（DOC_BUILD_PRODUCT / DOC_BUILD_VERSION）
- * 下两个值都是字面量，压缩器会把三元表达式折叠成常量并丢弃该函数及其矩阵，
- * 不会为固定产品白白下发一份用不到的解析代码。
+ * 另外，正文折叠的匹配语义不在本文件里重复实现：markdown 侧由 remark-doc-scope.js 输出
+ * data-scope-products（构建期算好的规范产品名列表），这里只做纯字符串比较。
  */
+
+const fs = require('node:fs');
+const path = require('node:path');
 
 const rawMatrix = require('../../context/doc-scope-matrix.json');
 
 const { VERSION_PRODUCT_MATRIX, PRODUCT_VERSION_MATRIX } = rawMatrix;
 
-function firstKey(obj) {
-  return Object.keys(obj)[0] || '';
+const CORE_PATH = path.join(__dirname, '../../context/doc-scope-filter-core.mjs');
+
+/**
+ * 读取解析内核源码，去掉 export 关键字，供内联进注入脚本。
+ * 内核必须满足「自包含」契约（见该文件顶部）：无 import、无反引号与 ${，
+ * 否则生成脚本会被静默截断或无法解析，这里直接构建失败、不留隐患。
+ * @returns {string}
+ */
+function inlineFilterCore() {
+  const stripped = fs.readFileSync(CORE_PATH, 'utf8').replace(/^export /gm, '');
+  const violations = [];
+  if (/^\s*import\b/m.test(stripped)) {
+    violations.push('含 import');
+  }
+  if (/^\s*export\b/m.test(stripped)) {
+    violations.push('含未被剥离的 export');
+  }
+  if (stripped.includes('`')) {
+    violations.push('含反引号');
+  }
+  if (stripped.includes('${')) {
+    violations.push('含 ${');
+  }
+  if (violations.length > 0) {
+    throw new Error(
+      `doc-scope-filter-core.mjs 不满足内联契约（${violations.join('、')}）：` +
+        '生成的首帧脚本会被截断或无法执行',
+    );
+  }
+  return stripped;
 }
 
 /**
@@ -42,85 +73,30 @@ function firstKey(obj) {
  * @returns {string}
  */
 function buildBootstrapScript({ locale, buildProduct = '', buildVersion = '' }) {
-  const defaultVersion = firstKey(VERSION_PRODUCT_MATRIX);
-  const defaultProduct = (VERSION_PRODUCT_MATRIX[defaultVersion] || [])[0] || '';
+  const filterCore = inlineFilterCore();
 
   return `(function () {
   var LOCALE = ${JSON.stringify(locale)};
-  var DEF_V = ${JSON.stringify(defaultVersion)};
-  var DEF_P = ${JSON.stringify(defaultProduct)};
   var FIXED_V = ${JSON.stringify(buildVersion)};
   var FIXED_P = ${JSON.stringify(buildProduct)};
 
-  // 与 DocScopeFilterContext 的 parseFilter() 同序：?v= → ?p= → localStorage → 默认值。
-  // 返回值与客户端的 {version, product} 一致：product 一定属于该版本的列表。
+  // 解析内核源码在构建期从 doc-scope-filter-core.mjs 内联到这里（与客户端同一份）。
+  // 常量与矩阵都收在本函数内：scoped 构建下两个 FIXED_* 都是字面量，压缩器会把条件折叠成常量、
+  // 连带删除本函数与两个矩阵，不会为固定产品白白下发一份用不到的解析代码。
   function resolveFilter() {
+${filterCore}
     var V2P = ${JSON.stringify(VERSION_PRODUCT_MATRIX)};
     var P2V = ${JSON.stringify(PRODUCT_VERSION_MATRIX)};
-
-    function norm(s) {
-      return String(s == null ? "" : s).trim().toLowerCase().replace(/\\s+/g, " ");
-    }
-
-    var canon = {};
-    Object.keys(P2V).forEach(function (k) { canon[norm(k)] = k; });
-
-    function productForVersion(pRaw, version) {
-      var list = V2P[version];
-      if (!list || !list.length) return "";
-      if (pRaw == null || String(pRaw).trim() === "") return list[0];
-      var c = canon[norm(pRaw)];
-      if (c && list.indexOf(c) !== -1) return c;
-      for (var i = 0; i < list.length; i += 1) {
-        if (norm(list[i]) === norm(pRaw)) return list[i];
-      }
-      return list[0];
-    }
 
     function readStorage(key) {
       try { return window.localStorage.getItem(key); } catch (e) { return null; }
     }
 
-    function fromStorage() {
-      var v = readStorage("doc_scope_version__" + LOCALE);
-      var p = readStorage("doc_scope_product__" + LOCALE);
-      if (!v && LOCALE === "zh-Hans") {
-        v = readStorage("doc_scope_version");
-        p = readStorage("doc_scope_product");
-      }
-      if (!v) {
-        var others = LOCALE === "en" ? ["zh-Hans"] : ["en"];
-        for (var i = 0; i < others.length; i += 1) {
-          var fv = readStorage("doc_scope_version__" + others[i]);
-          if (fv) {
-            v = fv;
-            p = readStorage("doc_scope_product__" + others[i]);
-            break;
-          }
-        }
-      }
-      return v ? { version: v, product: p } : null;
-    }
-
-    var q = new URLSearchParams(String(window.location.search || "").replace(/^\\?/, ""));
-    var vRaw = q.get("v");
-    var pRaw = q.get("p");
-    if (vRaw) {
-      var v1 = V2P[vRaw] ? vRaw : DEF_V;
-      return { version: v1, product: productForVersion(pRaw, v1) };
-    }
-    if (pRaw != null && String(pRaw).trim() !== "") {
-      var c = canon[norm(pRaw)];
-      if (c && P2V[c] && P2V[c].length) {
-        var v2 = P2V[c][0];
-        return { version: v2, product: productForVersion(c, v2) };
-      }
-    }
-    var stored = fromStorage();
-    if (stored && V2P[stored.version]) {
-      return { version: stored.version, product: productForVersion(stored.product, stored.version) };
-    }
-    return { version: DEF_V, product: DEF_P };
+    return parseFilter(String(window.location.search || ""), LOCALE, {
+      v2p: V2P,
+      p2v: P2V,
+      readStorage: readStorage,
+    });
   }
 
   // 顶栏「产品 / 版本」的显示文本，写法必须与 DocScopeSelectors.syncSelectorText 一致：
@@ -161,8 +137,8 @@ function buildBootstrapScript({ locale, buildProduct = '', buildVersion = '' }) 
 
   try {
     // 固定条件必须算成布尔值再进三元，压缩器才会在 scoped 构建里把条件折叠掉、
-    // 进而删除 resolveFilter 及其矩阵。实测字符串条件（FIXED_V && FIXED_P ? …）以及
-    // (FIXED_P !== "") && (FIXED_V !== "") 这种复合条件都不会被折叠，别改写法。
+    // 进而删除 resolveFilter 与其内联的整个解析内核。实测字符串条件（FIXED_V && FIXED_P ? …）
+    // 以及 (FIXED_P !== "") && (FIXED_V !== "") 这种复合条件都不会被折叠，别改写法。
     // 注意：本字符串是模板字面量，注释里不能出现反引号或美元花括号。
     // 只设产品不设版本时视为非 scoped 构建，与 docBuildScope / remark 侧 enabled 的判定一致。
     var fixed = FIXED_P !== "" && FIXED_V !== "";

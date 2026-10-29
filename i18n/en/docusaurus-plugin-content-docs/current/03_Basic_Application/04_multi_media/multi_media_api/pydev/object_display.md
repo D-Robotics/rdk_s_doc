@@ -7,17 +7,17 @@ sidebar_position: 4
 The Display object implements video display functionality, capable of outputting image data to a monitor via the `HDMI` interface. This object includes methods such as `display`, `set_img`, `set_graph_rect`, `set_graph_word`, and `close`. Detailed descriptions are provided below:
 
 ## display
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Initializes the display module and configures display parameters.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Display.display(chn, width, height, vot_intf, vot_out_mode)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 | Parameter    | Description                              | Value Range         |
 | ------------ | ---------------------------------------- | ------------------- |
@@ -27,7 +27,7 @@ Display.display(chn, width, height, vot_intf, vot_out_mode)
 | vot_intf     | Video interface output resolution        | Default: 0 (1080p)  |
 | vot_out_mode | Video output interface                   | Default: 1 (HDMI output) |
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 ```python
 #create display object
@@ -37,55 +37,55 @@ disp = libsrcampy.Display()
 ret = disp.display(0, 1920, 1080, 0, 1)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 The HDMI interface resolution on the development board is obtained from the monitor's EDID. Currently, only the following resolutions are supported: `1920x1080`, `1280x720`, `1024x600`, and `800x480`. When enabling the display module, ensure that the configured resolution matches the actual resolution of the connected monitor.
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>Reference Code</font>  
 
 None
 
 ## set_img
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Feeds display data into the display module. The data format must be `NV12`.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Display.set_img(img)
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 | Parameter    | Description                              | Value Range         |
 | ------------ | ---------------------------------------- | ------------------- |
 | img          | Image data to be displayed               | NV12 format         |
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This interface must be used only after enabling the display functionality via the `display` interface. The input data must be in `NV12` format.
 
-<font color='Blue'>【Reference Code】</font>  
+<font color='Blue'>Reference Code</font>  
 
 ```python
 import sys, os, time
@@ -120,17 +120,17 @@ test_display()
 
 ## set_graph_rect
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Draws a rectangle on the graphics layer of the display module.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 
 ```python
 Display.set_graph_rect(x0, y0, x1, y1, chn, flush, color, line_width)
 ```
 
-<font color='Blue'>【Parameter Description】</font>
+<font color='Blue'>Parameter Description</font>
 
 | Parameter    | Description                              | Value Range         |
 | ------------ | ---------------------------------------- | ------------------- |
@@ -143,7 +143,7 @@ Display.set_graph_rect(x0, y0, x1, y1, chn, flush, color, line_width)
 | color        | Rectangle color                          | ARGB8888 format     |
 | line_width   | Width of the rectangle border            | Range: 1–16, default: 4 |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 #enable graph layer 2
@@ -154,34 +154,34 @@ print ("Display display 2 return:%d" % ret)
 ret = disp.set_graph_rect(100, 100, 1920, 200, chn = 2, flush = 1,  color = 0xffff00ff)
 ```
 
-<font color='Blue'>【Return Value】</font>
+<font color='Blue'>Return Value</font>
 
 | Return Value | Description |
 | ------------ | ----------- |
 | 0            | Success     |
 | -1           | Failure     |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 This interface must be used only after enabling the display functionality via the `display` interface.
 
-<font color='Blue'>【Reference Code】</font>
+<font color='Blue'>Reference Code</font>
 
 None
 
 ## set_graph_word
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Draws text characters on the graphics layer of the display module.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 
 ```python
 Display.set_graph_word(x, y, str, chn, flush, color, line_width)
 ```
 
-<font color='Blue'>【Parameter Description】</font>
+<font color='Blue'>Parameter Description</font>
 
 | Parameter    | Description                              | Value Range         |
 | ------------ | ---------------------------------------- | ------------------- |
@@ -193,7 +193,7 @@ Display.set_graph_word(x, y, str, chn, flush, color, line_width)
 | color        | Text color                               | ARGB8888 format     |
 | line_width   | Line width of the text characters        | Range: 1–16, default: 1 |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 #enable graph layer 2
@@ -206,75 +206,75 @@ ret = disp.set_graph_word(300, 300, string.encode('gb2312'), 2, 0, 0xff00ffff)
 print ("Display set_graph_word return:%d" % ret)
 ```
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This API must be used after enabling the display functionality via the `display` interface.
 
-<font color='Blue'>【Sample Code】</font>  
+<font color='Blue'>Sample Code</font>  
 
 None
 
 ## close
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Closes the display module.
 
-<font color='Blue'>【Function Declaration】</font>  
+<font color='Blue'>Function Declaration</font>  
 
 ```python
 Display.close()
 ```
 
-<font color='Blue'>【Parameter Description】</font>  
+<font color='Blue'>Parameter Description</font>  
 
 None
 
-<font color='Blue'>【Usage】</font> 
+<font color='Blue'>Usage</font> 
 
 None
 
-<font color='Blue'>【Return Value】</font>  
+<font color='Blue'>Return Value</font>  
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font> 
+<font color='Blue'>Notes</font> 
 
 This API must be used after enabling the display functionality via the `display` interface.
 
-<font color='Blue'>【Sample Code】</font>  
+<font color='Blue'>Sample Code</font>  
 
 None
 
 ## bind Interface
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 This interface binds the output and input data streams of modules such as `Camera`, `Encoder`, `Decoder`, and `Display`. Once bound, data automatically flows between the modules without requiring further user intervention. For example, after binding `Camera` and `Display`, camera data will be automatically output to the display through the display module without calling additional APIs.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 ```python
     libsrcampy.bind(src, dst)
 ```
 
-<font color='Blue'>【Parameter Description】</font>
+<font color='Blue'>Parameter Description</font>
 
 | Parameter | Description         | Value Range |
 | -------- | ------------ | --- |
 | src      | Source data module   | `Camera`, `Encoder`, `Decoder` modules |
 | dst      | Destination data module | `Camera`, `Encoder`, `Decoder`, `Display` modules |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 #create camera object
@@ -292,40 +292,40 @@ ret = libsrcampy.bind(cam, enc)
 print("libsrcampy bind return:%d" % ret)
 ```
 
- <font color='Blue'>【Return Value】</font>
+ <font color='Blue'>Return Value</font>
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 None
 
-<font color='Blue'>【Sample Code】</font>
+<font color='Blue'>Sample Code</font>
 
 None
 
 ## unbind Interface
 
-<font color='Blue'>【Function Description】</font>
+<font color='Blue'>Function Description</font>
 
 Unbinds two previously bound modules.
 
-<font color='Blue'>【Function Declaration】</font>
+<font color='Blue'>Function Declaration</font>
 ```python
 libsrcampy.unbind(src, dst)
 ```
 
-<font color='Blue'>【Parameter Description】</font>
+<font color='Blue'>Parameter Description</font>
 
 | Parameter | Description         | Value Range |
 | -------- | ------------ | --- |
 | src      | Source data module   | `Camera`, `Encoder`, `Decoder` modules |
 | dst      | Destination data module | `Camera`, `Encoder`, `Decoder`, `Display` modules |
 
-<font color='Blue'>【Usage】</font>
+<font color='Blue'>Usage</font>
 
 ```python
 #create camera object
@@ -347,17 +347,17 @@ ret = libsrcampy.unbind(cam, enc)
 print("libsrcampy unbind return:%d" % ret)
 ```
 
- <font color='Blue'>【Return Value】</font>
+ <font color='Blue'>Return Value</font>
 
 | Return Value | Description |
 | ------ | ---- |
 | 0      | Success |
 | -1    | Failure |
 
-<font color='Blue'>【Notes】</font>
+<font color='Blue'>Notes</font>
 
 None
 
-<font color='Blue'>【Sample Code】</font>
+<font color='Blue'>Sample Code</font>
 
 None

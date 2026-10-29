@@ -354,7 +354,7 @@ Protects `Wdg_Lld_Rst`:
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
-<DocScope products="RDK S600">
+<DocScope products="RDK S600,RDK S100" versions=">=4.1.0">
 
 ## 4. A-Core Watchdog Timeout MCU Handling Flow
 

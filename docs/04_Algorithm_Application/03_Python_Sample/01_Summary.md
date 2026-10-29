@@ -24,7 +24,17 @@ import DocScope from '@site/src/components/DocScope';
 本项目基于 Python 编写并依赖多个第三方库。请确保您的环境满足以下要求：
 
 #### Python 环境
+
+<DocScope products="RDK-S100">
+
 - Python 版本：建议使用 Python 3.10.x（当前已在 3.10.12 下测试通过）
+
+</DocScope>
+<DocScope products="RDK-S600">
+
+- Python 版本：建议使用 Python 3.12.x（当前已在 3.12.3 下测试通过）
+
+</DocScope>
 
 #### 依赖库
 - 依赖库列表
@@ -77,6 +87,7 @@ import DocScope from '@site/src/components/DocScope';
 ├── 09_usb_camera_sample/            # USB 摄像头 + 目标检测样例
 ├── 10_mipi_camera_sample/           # MIPI 摄像头 + 目标检测样例
 ├── 11_web_display_camera_sample/    # 摄像头 + Web + 目标检测样例
+├── 12_rtsp_yolov5x_display_sample/  # RTSP 视频流 + 目标检测样例
 ├── utils/                           # 通用预处理、后处理工具模块
 ├── requirements.txt                 # Python 环境依赖
 └── README.md                        # 顶层使用说明文档（本文件）
@@ -141,15 +152,15 @@ import DocScope from '@site/src/components/DocScope';
 - 查看结果
     ``` bash
     Top-5 Predictions:
-    zebra: 0.9979
-    impala, Aepyceros melampus: 0.0005
-    cheetah, chetah, Acinonyx jubatus: 0.0005
-    gazelle: 0.0004
+    zebra: 0.9983
+    cheetah, chetah, Acinonyx jubatus: 0.0004
+    impala, Aepyceros melampus: 0.0004
+    gazelle: 0.0003
     prairie chicken, prairie grouse, prairie fowl: 0.0002
     ```
 
 ### 通用工具说明
-项目中使用了统一的工具模块以简化样例开发，路径为 utils/：
+项目中使用了统一的工具模块以简化样例开发，路径为 `utils/`：
 
 * preprocess_utils.py：图像预处理，如 resize、颜色格式转换等
 

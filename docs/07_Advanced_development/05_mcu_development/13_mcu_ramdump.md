@@ -29,9 +29,9 @@ MCU1出现异常后会陷入 shell，这时可以通过 acore remoteproc 控制�
 
 ```shell
   # 停止运行
-  echo stop > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo stop > /sys/class/remoteproc/remoteproc_mcu0/state
   # 启动
-  echo start > /sys/class/remoteproc/remoteproc_MCU0/state
+  echo start > /sys/class/remoteproc/remoteproc_mcu0/state
 ```
 ## 获取 MCU 异常信息
 - 可以在 acore 通过 sysfs 节点读取 MCU1异常时记录的现场信息。对应的 sys 节点信息如下：

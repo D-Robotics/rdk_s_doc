@@ -31,13 +31,13 @@ import DocScope from '@site/src/components/DocScope';
 
 - 模型推理 (Inference)
 
-    调用.run() 执行 BPU 推理
+    调用`.run()` 执行 BPU 推理
 
 - 后处理 (Postprocess)
 
     解码推理结果，扫除缺乏精度和应用 NMS，将结果缩放回原图尺寸
 
-- 相机管理 (CameraManager)
+- 相机管理 (`CameraManager`)
 
     打开相机，获取原始图像或模型尺寸图像，进行 JPEG 编码
 
@@ -50,7 +50,7 @@ import DocScope from '@site/src/components/DocScope';
     参考 [Ultralytics YOLOv5x 目标检测示例小结](./04_Ultralytics_YOLOv5x.md)。
 
 ## 环境依赖
-- 确保安装了pydev中的环境依赖
+- 确保安装了`pydev`中的环境依赖
     ```bash
     pip install -r ../requirements.txt
     ```
@@ -80,7 +80,7 @@ import DocScope from '@site/src/components/DocScope';
 </DocScope>
 <DocScope products="RDK-S600">
 
-- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-相机接口-j11j13)部分。
+- mipi摄像头的安装方法可参考[MIPI 相机接口](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-相机接口j11j13)部分。
 
 </DocScope>
 
@@ -88,6 +88,9 @@ import DocScope from '@site/src/components/DocScope';
 ```text
 .
 ├── mipi_camera_web_yolov5x.py      # 主程序
+├── start_nginx.sh                  # nginx 启动脚本
+├── webservice/                     # nginx + 静态前端资源
+├── x3_pb2.py                       # protobuf 生成的消息定义
 └── README.md                       # 使用说明
 ```
 
@@ -97,7 +100,7 @@ import DocScope from '@site/src/components/DocScope';
 | 参数名           | 说明                              | 默认值                                                    |
 | --------------- | --------------------------------- | ------------------------------------------------------ |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
+| `--priority`    | 推理优先级（`0~255`，`255`为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
@@ -108,7 +111,7 @@ import DocScope from '@site/src/components/DocScope';
 | 参数名           | 说明                              | 默认值                                                    |
 | --------------- | --------------------------------- | ------------------------------------------------------ |
 | `--model-path`  | BPU 量化模型路径（`.hbm`）          | `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm` |
-| `--priority`    | 推理优先级（0\~255，255为最高）     | `0`                                                    |
+| `--priority`    | 推理优先级（`0~255`，`255`为最高）     | `0`                                                    |
 | `--bpu-cores`   | BPU 核心索引列表（如 `0 1`）        | `[0]`                                                  |
 | `--label-file`  | 类别标签文件路径                    | `/app/res/labels/coco_classes.names`                         |
 | `--nms-thres`   | 非极大值抑制的 IoU 阈值             | `0.45`                                                 |
@@ -164,13 +167,13 @@ import DocScope from '@site/src/components/DocScope';
 
 - 查看结果
 
-    运行成功后，通过访问web展示端：http://IP
+    运行成功后，通过访问web展示端：`http://IP`
 
     **注意：无需填写端口**
 
 - 退出运行
 
-    在命令行输入Ctrl C
+    在命令行输入`Ctrl+C`
 
 ## 注意事项
 

@@ -12,7 +12,7 @@ The `sample_pipeline` contains multiple examples, each existing as a subdirector
 | [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | Single-channel sensor pipeline chaining with GDC transformation example  |
 | [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | Single-channel sensor pipeline chaining with GDC transformation and encoding example  |
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | Multi-channel sensor pipeline chaining and encoding example  |
-| [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture example  |
+| [uvc_capture_sample](#uvc_capture_sample)  |  UVC camera capture example  |
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -70,7 +70,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi.
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
 - Currently, only mipi hosts 0, 2, 4, and 5 can be used.
 :::
 
@@ -325,7 +325,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi.
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
 - Currently, only mipi hosts 0, 2, 4, and 5 can be used.
 :::
 
@@ -437,7 +437,7 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 :::caution Note
 - Non-Serdes sensors do not need to set link and mipi.
 - The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
+- The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
 - Currently, only mipi hosts 0, 2, 4, and 5 can be used.
 :::
 
@@ -573,7 +573,7 @@ Notes:
 2. To adjust the number of video pipelines, increase or decrease the number of `-c` parameter sets.
 3. Non-Serdes sensors do not need to set link and mipi.
 4. The link value is determined by the port on the deserializer to which the serdes sensor is connected. Ensure the serdes sensor is connected to the specified port.
-5. The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#示例使用指南).
+5. The mipi value is determined by the mipi host corresponding to the port on the deserializer to which the serdes sensor is connected. Refer to the [Hardware User Guide](./overview#example-usage-guide).
 6. Currently, only mipi hosts 0 and 2 can be used.
 
 #### Execution Effect
@@ -677,7 +677,7 @@ pipeline1_1280x720_30fps.h264
 ## uvc_capture_sample
 
 ### Feature Overview
-`uvc_capture_sample` is a program for testing the uvc camera video capture pipeline. It captures images from the uvc camera and saves the output images, with support for displaying ISP-related information.
+`uvc_capture_sample` is a program for testing the UVC camera video capture pipeline. It captures images from the UVC camera and saves the output images, with support for displaying ISP-related information.
 
 ### Code Location and Directory Structure
 - Code location `/app/multimedia_samples/sample_pipeline/uvc_capture_sample`
@@ -704,6 +704,19 @@ uvc_capture_sample
 
 Run the program directly `./uvc_capture_sample -h` to get help information.
 
+```sh
+# ./uvc_capture_sample -h
+Usage: ./uvc_capture_sample
+        -i --video_id <id>              Video device ID
+        -d --dump_file                  Save image file flag
+        -F --format <fmt>               picture format(e.g., YUYV, NV12)
+        -l --loop_cnt <num>             Number of capture loops
+        -H --height <px>                Image height
+        -W --width <px>                 Image width
+        -E --isp_info                   Show Isp Info flag
+        -h --help                       Show this message
+```
+
 #### Program Parameter Options Description
 
 **Options:**
@@ -712,28 +725,28 @@ Run the program directly `./uvc_capture_sample -h` to get help information.
   - Specify the video node, such as video0, video1.
 - `-d, --dump_file`
   - Whether to save image files. Enabling this option saves captured images to files.
-- `-F, --format`
-  - Set the image format, choose from supported formats like YUYV, NV12 based on the uvc camera.
+- `-F, --format <fmt>`
+  - Set the image format, choose from supported formats like YUYV, NV12 based on the UVC camera.
 - `-l, --loop_cnt <num>`
   - Set the number of capture loops (i.e., how many frames to capture).
 - `-H, --height <px>`
   - Set the image height (in pixels).
 - `-W, --width <px>`
   - Set the image width (in pixels).
-- `-E, --enable_isp_info`
+- `-E, --isp_info`
   - Display ISP exposure and white balance information.
 - `-h, --help`
   - Display help information.
 
 **Examples:**
 
-- Configure a uvc camera video pipeline using video0, specify format YUYV, and save 5 captured frames.
+- Configure a UVC camera video pipeline using video0, specify format YUYV, and save 5 captured frames.
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d
 ```
 
-- Configure a uvc camera video pipeline using video0, specify format YUYV, save 5 captured frames, and print current exposure and white balance information.
+- Configure a UVC camera video pipeline using video0, specify format YUYV, save 5 captured frames, and print current exposure and white balance information.
 
 ```shell
 ./uvc_capture_sample -i 0  -l 5 -W 1920 -H 1080 -F YUYV  -d -E

@@ -63,7 +63,7 @@ The core flow of the S100 CAN forwarding solution is as follows:
 - The CANHAL module obtains IPC data from the MCU side, parses it according to the specified transport protocol, and allows application software to obtain raw CAN frames through APIs.
 </DocScope>
 <DocScope products="RDK S600">
-The S600 CAN controllers are located in the MCU domain and are responsible for CAN data transmission and reception. Because perception and other applications run on Acore, some CAN data must be forwarded to Acore through IPC inter-core communication. The architecture ensures transmission reliability. The forwarding mechanism implements data correctness checking, packet loss detection, transmission timeout detection, and similar mechanisms. In addition, it avoids performance issues such as high CPU usage on the MCU side caused by frequent forwarding of small data blocks, which would reduce MCU real-time performance.
+The S600 MCU domain integrates 16 CAN controllers (CAN0~CAN15), with CAN1-CAN10 enabled by default, and the MCU-side CAN driver is responsible for data transmission and reception with external CAN buses. Because perception and other applications run on Acore, some CAN data must be forwarded to Acore through IPC inter-core communication. The architecture ensures transmission reliability. The forwarding mechanism implements data correctness checking, packet loss detection, transmission timeout detection, and similar mechanisms. In addition, it avoids performance issues such as high CPU usage on the MCU side caused by frequent forwarding of small data blocks, which would reduce MCU real-time performance.
 
 The core flow of the S600 CAN forwarding solution is as follows:
 - First, the MCU-side CAN2IPC module maps CAN channels to corresponding IPC channels. Then the Acore-side CANHAL module reverse-maps IPC channels to virtual CAN device channels. Finally, users obtain data from virtual CAN devices through APIs provided by CANHAL. CAN2IPC is an MCU-side service; CANHAL is a dynamic library provided to applications on Acore.
@@ -532,6 +532,65 @@ RDK S100 configures 6 parameter sets by default. Users can select baud rate by m
 | 4                    | 1M                  | 5M (long distance: &gt;50m) |
 | 5                    | 1M                  | 8M           |
 
+<DocScope products="RDK S100">
+
+## Bus Off self-recovery
+
+In `Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`, add the `FLEXCAN_IP_BUSOFF_RECOVERY_U32` macro to the `ctrlOptions` member. This enables hardware Bus Off self-recovery for the CAN controller. It is enabled by default.
+
+```c
+const Flexcan_Ip_ConfigType Flexcan_aCtrlConfigPB[10U]=
+{
+    /* Hardware Channel FLEXCAN_0 */
+    {
+        ...
+        /* Loopback enabled or not */
+        FLEXCAN_NORMAL_MODE,
+        /* Controller Options */
+        (uint32)( FLEXCAN_IP_BUSOFF_RECOVERY_U32 | FLEXCAN_IP_ISO_U32 |FLEXCAN_IP_EACEN_U32),
+    },
+}
+```
+
+## Disable automatic retransmission
+
+To disable automatic retransmission on the MCU, follow these steps:
+
+1. Enable the `CAN_TX_ERR_ABORT_SUPPORT` macro in `Config/McalCdd/gen_s100_sip_B_mcu1/Can/inc/Can_Cfg.h`.
+
+   ```c
+   /**
+   *   @brief      Enable/Disable abort Tx frame on first CAN TX error (ACK/bit)
+   */
+   #define CAN_TX_ERR_ABORT_SUPPORT    (STD_ON)
+   ```
+
+2. Enable the error interrupt for the corresponding instance in `Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`.
+
+   ```c
+   {Os_IntChannel_Can5_ErrorIsr, Os_Isr_Can5_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can6_ErrorIsr, Os_Isr_Can6_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can7_ErrorIsr, Os_Isr_Can7_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can8_ErrorIsr, Os_Isr_Can8_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can9_ErrorIsr, Os_Isr_Can9_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   ```
+
+## Soft reset
+
+To reset a CAN controller, run the following code:
+
+```c
+    /* Reset CAN5 */
+    Can_SetControllerMode(CanController_5, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_5, CAN_CS_STARTED);
+    /* Reset CAN6 */
+    Can_SetControllerMode(CanController_6, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_6, CAN_CS_STARTED);
+
+    ...
+```
+
+</DocScope>
 
 ## Multi-Frame Merge Configuration
 
@@ -975,7 +1034,7 @@ make clean # Clean build artifacts
 ##### Command-Line Parameters
 ```bash
 -n <can_tran_num>                 Specify number of frames to send (default: 1)
--t <can_type>                     CAN frame type (0: standard, 1: extended, 2: FD standard, 3: FD extended) (default: 2)
+-t <can_type>                     CAN frame type (0: standard, 1: extended, 2: FD standard, 3: FD extended, 4: standard remote, 5: extended remote) (default: 2)
 -l <can_length>                   CAN frame length (8: 8 bytes, 64: 64 bytes) (default: 64)
 -h, --help                        Show help
 ```
@@ -1114,24 +1173,129 @@ Continuously updated
 ```
 Setting `CAN_HAL_DEBUG_LEVEL` controls verbosity. For example, value 2 prints `log_info`, `log_warn`, `log_err`, and `log_critical` only.
 
-### MCU-Side DEBUG Application
-1. Enter the MCU1 console
-2. Run command: `can_tran_debug`
+### Common Error Codes
+
+The CANHAL interfaces on the Acore side (`canInit`, `canSendMsgFrame`, `canRecvMsgFrame`, etc.) return a negative error code on failure, as defined by the `ErrorCode` enum in `can_hal_type_def.h`. A typical form in the log is:
+
 ```
-can_tran_debug
+[recv_frame_data] [ERR]: canRecvMsgFrame failed ret: -303
 ```
 
-3. Under `/sys/class/remoteproc/remoteproc_mcu1`, use `cat log` to view results
+On the RDK S100 / S600, CANHAL uses the IPCF channel by default to forward MCU-side CAN data to the Acore. When troubleshooting, first check `nodes.json`, `channels.json`, and `ipcf_channel.json` under `config/`, and whether MCU1 has started.
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug log" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+### Error Code Categories
 
+| Category | Value Range | Description |
+|------|---------|------|
+| General | `0` / `-1` | Success or unknown error |
+| Configuration file | `-100` ~ `-101` | Configuration file missing or content invalid |
+| Target/Node | `-200` | The specified target cannot be found during transmission/reception |
+| IO channel | `-201` ~ `-206` | Channel ID, existence, initialization state |
+| Device/HAL | `-301` ~ `-311` | HAL/IPCF initialization, BSP calls, device loading |
+| Transmission/Protocol/Cache | `-400` ~ `-409` | Parameter pointers, buffers, protocol validation, latency |
+
+### Error Code Quick Reference
+
+| <div style={{minWidth: '72px', whiteSpace: 'nowrap'}}>Value</div> | Error Code | Meaning | Common Cause | Suggestion |
+|:----------|:-------|:-----|:---------|:---------|
+| <span style={{whiteSpace: 'nowrap'}}>`0`</span> | `SUCCESS` | Success | — | — |
+| <span style={{whiteSpace: 'nowrap'}}>`-1`</span> | `UNKNOWN` | Unknown error | Failed to open/read the PHC clock source, failed to create the receive thread | Check whether `/dev/hrtc0` exists; verify the `clk_source` configuration in `nodes.json` |
+| <span style={{whiteSpace: 'nowrap'}}>`-100`</span> | `CONFIG_FILE_INVALID` | Invalid configuration file | JSON syntax error, empty or duplicated target, unrecognized channel mode | Check the syntax of `nodes.json` / `channels.json`; make sure `target` is unique and `mode` is `R`/`W`/`RW` |
+| <span style={{whiteSpace: 'nowrap'}}>`-101`</span> | `CONFIG_FILE_NOT_EXIST` | Configuration file does not exist | Wrong configuration path or missing file | Make sure `config/nodes.json`, `config/channels.json`, and `config/ipcf_channel.json` exist in the current working directory of the program |
+| <span style={{whiteSpace: 'nowrap'}}>`-200`</span> | `TARGET_NOT_EXIST` | Target node does not exist | The target passed to the send/receive interface is not registered or not enabled in `nodes.json` | Check that the target name passed to the API matches `target` and `enable` in `nodes.json` |
+| <span style={{whiteSpace: 'nowrap'}}>`-201`</span> | `IO_CHANNEL_INVALID_ID` | Invalid channel ID | Channel `id < 0` or `id > 4096` | Correct the channel `id` in `ipcf_channel.json` |
+| <span style={{whiteSpace: 'nowrap'}}>`-202`</span> | `IO_CHANNEL_NOT_EXIST` | Channel does not exist | The channel is not defined in the configuration or not registered | Make sure the `channel_id` in `nodes.json` can be found in `ipcf_channel.json` |
+| <span style={{whiteSpace: 'nowrap'}}>`-203`</span> | `IO_CHANNEL_CONFIG_INVALID` | Invalid channel configuration | `io_channels` is missing, or the channel mode does not match the send/receive operation | Check whether `channels.json` points to an IPCF configuration; do not call the send interface on a read-only channel |
+| <span style={{whiteSpace: 'nowrap'}}>`-204`</span> | `IO_CHANNEL_NOT_INITED` | Channel not initialized | Sending/receiving before calling `canInit` | Call `canInit()` first, then `canSendMsgFrame` / `canRecvMsgFrame` |
+| <span style={{whiteSpace: 'nowrap'}}>`-205`</span> | `IO_CHANNEL_INITED_ALREDY` | Channel already initialized | Repeated initialization | Can be ignored; CANHAL treats the channel as ready internally |
+| <span style={{whiteSpace: 'nowrap'}}>`-206`</span> | `IO_CHANNEL_INIT_FAILED` | Channel initialization failed | Aggregate of underlying `InitChannel` failures | Continue with `-301`/`-302`/`-303` to investigate IPCF initialization and device permissions |
+| <span style={{whiteSpace: 'nowrap'}}>`-301`</span> | `INIT_HAL_GROUP_FAILED` | HAL group initialization failed | `HorizonHal_IPCF_Init` failed, or socket/epoll creation failed | Make sure MCU1 has started, `libhbipcfhal.so` can be loaded, and `/dev/ipcdrv` exists |
+| <span style={{whiteSpace: 'nowrap'}}>`-302`</span> | `CONFIG_HAL_GROUP_FAILED` | HAL group configuration failed | `HorizonHal_IPCF_Config` failed | Check that the instance/channel in `ipcf_channel.json` matches the allocation on the MCU side |
+| <span style={{whiteSpace: 'nowrap'}}>`-303`</span> | `DEV_BSP_API_FAILED` | BSP API failed | IPCF recv/send failed, or an underlying system call failed | Common in receive-timeout scenarios; make sure the peer is sending data and the IPC instance/channel is not occupied by another process |
+| <span style={{whiteSpace: 'nowrap'}}>`-304`</span> | `DEV_NO_CHANNEL_CONFIG` | No channel configuration | `channels` is empty in the configuration | Complete the `channels` list in `ipcf_channel.json` |
+| <span style={{whiteSpace: 'nowrap'}}>`-305`</span> | `DEV_CONFIG_NO_GROUP` | No group configuration | The channel is registered but the underlying socket was not created | Re-initialize and check the device node permissions |
+| <span style={{whiteSpace: 'nowrap'}}>`-306`</span> | `DEV_CONFIG_NO_MSGS` | No message configuration | The SPI channel is missing messages (not the default path on S100/S600) | Only relevant to SPI devices |
+| <span style={{whiteSpace: 'nowrap'}}>`-307`</span> | `DEV_CONFIG_NO_FILTERS` | No filter configuration | `filter_sw = true` but no filter is configured | Disable software filtering, or complete the filter array |
+| <span style={{whiteSpace: 'nowrap'}}>`-308`</span> | `DEV_INITED_ALREADY` | Device already initialized | Repeated `Init` | Can be ignored |
+| <span style={{whiteSpace: 'nowrap'}}>`-309`</span> | `DEV_NOT_INITED` | Device not initialized | Device `Init` was not completed first | Call `canInit()` first |
+| <span style={{whiteSpace: 'nowrap'}}>`-310`</span> | `DEV_RECONNECT` | Device needs reconnection | ETH TCP disconnected (not the default path on S100/S600) | Check Ethernet connectivity |
+| <span style={{whiteSpace: 'nowrap'}}>`-311`</span> | `BASIC_COM_LOAD_DEV_FAILED` | Failed to load the device | Device registration or `Init` failed | Check the IPCF library path `libipcf_path` and the `device_type` in the configuration |
+| <span style={{whiteSpace: 'nowrap'}}>`-400`</span> | `SEND_INVALID_PTR` | Invalid send pointer | `target`/`frame`/`pack` is null, or the length is 0 | Check the call parameters; make sure the buffer is allocated and `data_num` > 0 |
+| <span style={{whiteSpace: 'nowrap'}}>`-401`</span> | `SEND_BUFFER_OVERFLOW` | Send buffer overflow | A single transmission exceeds the protocol limit (max 4096 bytes for IPCF) | Reduce the number of frames combined per packet or sent per call |
+| <span style={{whiteSpace: 'nowrap'}}>`-402`</span> | `PROTO_INVALID` | Invalid protocol data | The received packet length, DLC, or fragment format is illegal | Make sure the MCU and Acore use the same protocol (for example `built_1.0`) |
+| <span style={{whiteSpace: 'nowrap'}}>`-403`</span> | `PROTO_NOT_SUPPORT` | Protocol not supported | The `raw_protocol` in `nodes.json` is unrecognized | Use a supported protocol name: `built_1.0` / `built_0.1` / `built_0.2` / `built_0.3` / `socketcan` |
+| <span style={{whiteSpace: 'nowrap'}}>`-404`</span> | `CACHE_INVALID` | Invalid cache | The user send/receive buffer is null or has a size of 0 | Check that the `frame` array and `pack` are passed in correctly |
+| <span style={{whiteSpace: 'nowrap'}}>`-405`</span> | `CHECKSUM_ABNORMAL` | Checksum abnormal | Reserved; generally not returned in the current version | — |
+| <span style={{whiteSpace: 'nowrap'}}>`-406`</span> | `SEQUENCE_ABNORMAL` | Sequence number abnormal | The rolling counter is discontinuous; frames may be lost | Reduce the send frequency and check whether IPC is congested; parsed frames are still returned despite this error |
+| <span style={{whiteSpace: 'nowrap'}}>`-407`</span> | `CACHE_TOO_SMALL` | Cache too small | The user `CanFrame` array cannot hold all frames in this packet | Increase the receive-side `CAN_FRAME_NUM` / frame array capacity |
+| <span style={{whiteSpace: 'nowrap'}}>`-408`</span> | `LATENCY_TOO_LARGE` | Latency too large | The difference between the PHC and MCU timestamps exceeds the threshold (28 ms by default) | Synchronize the MCU RTC with the Acore `phc0` time first; check the system load |
+| <span style={{whiteSpace: 'nowrap'}}>`-409`</span> | `CRC_ERROR` | CRC check failed | The CRC16 of the standard protocol does not match; the data may be corrupted | Check whether inter-core transmission is stable and whether the MCU/Acore protocols are consistent |
+
+:::tip
+The following errors can be treated as "already ready" during the initialization phase and will not cause `canInit` to fail:
+
+- `-205` `IO_CHANNEL_INITED_ALREDY`
+- `-308` `DEV_INITED_ALREADY`
+
+`-406` `SEQUENCE_ABNORMAL` indicates that frames may be lost, but CANHAL still extracts and returns the CAN frames that have already been parsed.
+:::
+
+### Common Troubleshooting
+
+| Symptom | Possible Error Code | Troubleshooting Direction |
+|------|-----------|---------|
+| `canInit` fails | `-100` / `-101` / `-301` / `-302` / `-311` | Check whether the three JSON files under `config/` exist and are well formed; whether MCU1 has started; whether `/dev/ipcdrv` and `libhbipcfhal.so` are available |
+| Sending/receiving reports that no channel can be found | `-200` | Check the API target against `target` and `enable` in `nodes.json` |
+| Channel initialization fails | `-206` / `-301` ~ `-303` | Check whether the IPC instance/channel matches the allocation on the MCU side and is not occupied by another process |
+| `-303` appears repeatedly in the receive log | `-303` | The peer is not sending, the hardware is not networked, or the IPC channel is already occupied; in the sample, the thread exits after more than 100s without data |
+| Data loss | `-406` | Reduce the send frequency; verify the packet-combining configuration and IPC bandwidth |
+| Wrong data content | `-409` / `-402` | Make sure both ends use the same protocol (`built_1.0`) and check the transmission link |
+| Latency warnings | `-408` | Perform time synchronization first, then check the CPU load and the PHC clock (`/dev/hrtc0`) |
+| Send fails | `-400` / `-401` | Check the pointers and lengths, and whether a single transmission exceeds 4096 bytes |
+| Sending/receiving before Init | `-204` / `-309` | Adjust the call order: `canInit` → send/receive → `canDeInit` |
+
+Enabling CANHAL logs helps locate the exact failure point:
+
+```bash
+export CAN_HAL_DEBUG_LEVEL=4
+```
+
+### MCU-side DEBUG application
+
+1. Enter the MCU1 console.
+2. Run `can_tran_debug`.
+
+   ```bash
+   can_tran_debug
+   ```
+
+3. Under `/sys/class/remoteproc/remoteproc_mcu1`, run `cat log` to view the result.
+
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug log" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+#### Typical error log analysis
+
+**Q**: The log prints `Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`.
+
+**A**: The MCU stamps the time when it sends the data. When the Acore receives the CAN data, it calculates the elapsed time and uses the difference to measure the MCU-to-Acore latency. This error is reported when the difference exceeds the threshold. The most likely cause is that the system does not schedule the IPC receive thread in time. Try raising the priority of the IPC interrupt thread.
+
+**Q**: The log prints `put_data_tofifo()[1151]: [0][4] failed fifo in len 97 avail61 cnt 1`.
+
+**A**: This error means there is not enough memory to receive CAN packets. Check two places:
+
+- Whether `read` can run in time, without too many dependencies in between.
+- Whether Acore processing cannot keep up with the MCU. If so, increase the kfifo data area size.
+
+**Q**: The log prints `ipc-drv: ipc_shm_acquire_buf() [1209]: instance 4 noready`.
+
+**A**: This error usually means MCU1 has crashed or has not started.
 
 ### Application Programming Interface
 
 #### void Can_Init(const Can_ConfigType* Config)
 
 ```shell
-Description：This function initializes the module.
+Description: This function initializes the module.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1140,13 +1304,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Can_GetVersionInfo(Std_VersionInfoType* versioninfo)
 
 ```shell
-Description：Returns the version information of this module.
+Description: Returns the version information of this module.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1155,13 +1319,13 @@ Parameters(inout)
     None
 Parameters(out)
     versioninfo: Pointer to where to store the version information of this module.
-Return value：None
+Return value: None
 ```
 
 #### void Can_DeInit(void)
 
 ```shell
-Description：This function de-initializes the module.
+Description: This function de-initializes the module.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1170,13 +1334,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### Std_ReturnType Can_SetControllerMode(uint8 Controller, Can_ControllerStateType Transition)
 
 ```shell
-Description：This function performs software triggered state transitions of the CAN controller State machine.
+Description: This function performs software triggered state transitions of the CAN controller State machine.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1186,7 +1350,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
 	E_OK: request accepted.
     E_NOT_OK: request not accepted, a development error occurred.
 ```
@@ -1194,7 +1358,7 @@ Return value：Std_ReturnType
 #### void Can_DisableControllerInterrupts(uint8 Controller)
 
 ```shell
-Description：This function disables all interrupts for this CAN controller.
+Description: This function disables all interrupts for this CAN controller.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1203,13 +1367,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Can_EnableControllerInterrupts(uint8 Controller)
 
 ```shell
-Description：This function enables all allowed interrupts.
+Description: This function enables all allowed interrupts.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1218,13 +1382,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### Std_ReturnType Can_GetControllerErrorState(uint8 ControllerId, Can_ErrorStateType* ErrorStatePtr)
 
 ```shell
-Description：This service obtains the error state of the CAN controller.
+Description: This service obtains the error state of the CAN controller.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1233,7 +1397,7 @@ Parameters(inout)
     None
 Parameters(out)
     ErrorStatePtr:Pointer to a memory location, where the error state of the CAN controller will be stored.
-Return value：Std_ReturnType
+Return value: Std_ReturnType
 	E_OK: Error state request has been accepted.
     E_NOT_OK: Error state request has not been accepted.
 ```
@@ -1241,7 +1405,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Can_GetControllerMode(uint8 Controller, Can_ControllerStateType* ControllerModePtr)
 
 ```shell
-Description：This service reports about the current status of the requested CAN controller.
+Description: This service reports about the current status of the requested CAN controller.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1250,7 +1414,7 @@ Parameters(inout)
     None
 Parameters(out)
     ControllerModePtr: Pointer to a memory location, where the current mode of the CAN controller will be stored.
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: Controller mode request has been accepted.
     E_NOT_OK: Controller mode request has not been accepted.
 ```
@@ -1258,7 +1422,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Can_GetControllerRxErrorCounter(uint8 ControllerId, uint8* RxErrorCounterPtr)
 
 ```shell
-Description：Returns the Rx error counter for a CAN controller.
+Description: Returns the Rx error counter for a CAN controller.
              This value might not be available for all CAN controllers, in which case E_NOT_OK would be
              returned.Please note that the value of the counter might not be correct at the moment the
              API returns it, because the Rx counter is handled as ynchronously in hardware.Applications
@@ -1272,7 +1436,7 @@ Parameters(inout)
 Parameters(out)
     RxErrorCounterPtr: Pointer to a memory location, where the current Rx error counter of the
                        CAN controller will be stored.
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: Rx error counter available.
     E_NOT_OK: Wrong ControllerId, or Rx error counter not available.
 ```
@@ -1280,7 +1444,7 @@ Return value：Std_ReturnType
 #### Std_ReturnType Can_GetControllerTxErrorCounter(uint8 ControllerId, uint8* TxErrorCounterPtr)
 
 ```shell
-Description：Returns the Tx error counter for a CAN controller. This value might not be available
+Description: Returns the Tx error counter for a CAN controller. This value might not be available
              for all CAN controllers, in which case E_NOT_OK would be returned.Please note that the
              value of the counter might not be correct at the moment the API returns it, because the
              Tx counter is handled as ynchronously in hardware.Applications should not trust this
@@ -1294,7 +1458,7 @@ Parameters(inout)
 Parameters(out)
     TxErrorCounterPtr:Pointer to a memory location, where the current Tx error counter
                       of the CAN controller will be stored.
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: Rx error counter available.
     E_NOT_OK: Wrong ControllerId, or Rx error counter not available.
 ```
@@ -1302,7 +1466,7 @@ Return value：Std_ReturnType
 #### Std_ReturnTypeCan_Write(Can_HwHandleType Hth, const Can_PduType* PduInfo)
 
 ```shell
-Description：This function is called by CanIf to pass a CAN message to CanDrv for tran smission.
+Description: This function is called by CanIf to pass a CAN message to CanDrv for tran smission.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1313,7 +1477,7 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：Std_ReturnType
+Return value: Std_ReturnType
     E_OK: Write command has been accepted.
     E_NOT_OK: development error occurred.
     CAN_BUSY: No TX hardware buffer available or pre-emptive call of Can_Write that can’t be implemented re-entrant (see Can_ReturnType).
@@ -1322,7 +1486,7 @@ Return value：Std_ReturnType
 #### void Can_MainFunction_Write(Void)
 
 ```shell
-Description：This function performs the polling of TX confirmation when CAN_TX_PROCESSING
+Description: This function performs the polling of TX confirmation when CAN_TX_PROCESSING
              is set to POLLING.
 
 Sync/Async: Synchronous
@@ -1338,7 +1502,7 @@ Return value: None
 #### void Can_MainFunction_Read(Void)
 
 ```shell
-Description：Returns the value of the specified CAN channel.This function performs the
+Description: Returns the value of the specified CAN channel.This function performs the
              polling of RX indications when CAN_RX_PROCESSING is set to POLLING.
 
 Sync/Async: Synchronous
@@ -1348,13 +1512,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Can_MainFunction_BusOff(Void)
 
 ```shell
-Description：This function performs the polling of bus-off events that are configured statically
+Description: This function performs the polling of bus-off events that are configured statically
              as ‘to be polled’.
 
 Sync/Async: Synchronous
@@ -1364,13 +1528,13 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```
 
 #### void Can_MainFunction_Mode(Void)
 
 ```shell
-Description：This function performs the polling of CAN controller mode transitions.
+Description: This function performs the polling of CAN controller mode transitions.
 
 Sync/Async: Synchronous
 Parameters(in)
@@ -1379,5 +1543,5 @@ Parameters(inout)
     None
 Parameters(out)
     None
-Return value：None
+Return value: None
 ```

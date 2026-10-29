@@ -8,9 +8,21 @@ The `mipi_camera_streamer.py` program is installed on the development board to t
 
 ## Environment Setup
 
+<DocScope versions="<5.1.1">
+
   - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to - [Hardware Introduction - MIPI Interface](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201)
   - Currently, this sample only supports MIPI sensors: IMX219, SC230AI
   - Connect the development board to a display using an HDMI cable
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
+  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to - [Hardware Introduction - MIPI Interface](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201)
+  - Currently, this sample supports MIPI sensors: IMX219, SC230AI, shw3hstd_amsl-60fps
+  - Connect the development board to a display using an HDMI cable
+
+</DocScope>
 
 ## How to Run
 Execute the program with the following commands:
@@ -19,6 +31,20 @@ Execute the program with the following commands:
   sunrise@ubuntu:~$ cd /app/pydev_demo/mipi_camera_sample
   sunrise@ubuntu:/app/pydev_demo/mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
   ```
+
+<DocScope versions=">=5.1.1">
+
+The command above first lists the detected sensor configurations and asks you to choose one:
+
+```text
+[0] INFO: Found sensor name:imx219-30fps on mipi rx csi 4, i2c addr 0x10, config_file:linear_1920x1080_raw10_30fps_1lane.c
+[1] INFO: Found sensor name:shw3hstd_amsl-60fps on mipi rx csi 4, i2c addr 0x10, config_file:linear_1920x1536_60fps_1lane.c
+please choose sensor config,the number should small than 2
+```
+
+Enter `0` and press Enter to continue. The number corresponds to the `[x] INFO: Found sensor name` entries printed above, so `0` selects the `imx219-30fps` configuration in this example.
+
+</DocScope>
 
 ## Expected Result
 After running the program, the display will show the live camera feed in real time, as shown below:

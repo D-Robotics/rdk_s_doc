@@ -4,6 +4,9 @@
 # Production
 /build
 
+# Scoped site output (DOC_BUILD_OUT_DIR), e.g. build-scope-test/
+/build-scope-*/
+
 /en_docs
 
 # src/theme/
@@ -41,3 +44,8 @@ yarn.lock
 
 .env.local
 _img_audit/
+
+# Test server deploy（含内网 IP/账号，仅本地，不入公开仓）
+.deployrc
+scripts/deploy-test.sh
+build.tar.gz

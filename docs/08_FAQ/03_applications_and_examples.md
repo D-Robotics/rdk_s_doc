@@ -373,7 +373,6 @@ Description: TogetheROS Bot
         * 仅支持较早的1.x 版本 RDK OS 系统和对应硬件。
         * 未来1.x 版本 tros.b 可能仅发布关键问题修复，不再有新功能迭代。
         * 代码曾托管在 gitlab 或其他内部平台。
-        * 参考链接 (历史版本文档)：[1.x版本tros.b说明](https://developer.d-robotics.cc/api/v1/fileData/TogetherROS/index.html)
 
     :::caution **注意**
     1.x 版本 tros.b**无法**通过`apt`命令直接升级到2.x 或更新版本的 tros.b。如果需要使用新版 tros.b，必须先将 RDK 板卡的整个操作系统通过烧录镜像的方式升级到支持新版 tros.b 的 RDK OS 版本，然后再安装对应版本的 tros.b。

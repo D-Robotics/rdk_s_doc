@@ -16,7 +16,17 @@ The `vio2display` example implements image capture from a `MIPI` camera and outp
 
 Example flow diagram:
 
+<DocScope products="RDK S100">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_display.png" alt="Camera Image Capture and Display diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_to_display_s600.png" alt="Camera Image Capture and Display diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+</DocScope>
 
 - **Environment Setup:**
 
@@ -68,7 +78,17 @@ The `vio_capture` example captures images from a MIPI camera and saves them loca
 
 Example flow diagram:
 
+<DocScope products="RDK S100">
+
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_capture.png" alt="Local Saving of Camera Images diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_capture_s600.png" alt="Local Saving of Camera Images diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+</DocScope>
 
 - **Environment Setup:**
 
@@ -122,7 +142,17 @@ The `vio2encoder` example captures images from a `MIPI` camera, encodes them, an
 
 Example flow diagram:
 
+<DocScope products="RDK S100">
+
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/s100/image-vio_to_encode.png" alt="Camera Image Capture and Encoding diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/04_multi_media/image/cdev_demo/image-vio_to_encode_s600.png" alt="Camera Image Capture and Encoding diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+
+</DocScope>
 
 - **Environment Setup:**
 

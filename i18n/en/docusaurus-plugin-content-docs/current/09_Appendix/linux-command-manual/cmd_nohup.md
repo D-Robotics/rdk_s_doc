@@ -11,7 +11,7 @@ By default (when not redirected), it outputs a file named nohup.out to the curre
 ## Syntax
 
 ```
-nohup COMMAND [ARG]... [　& ]
+nohup COMMAND [ARG]... [ & ]
 nohup OPTION
 ```
 

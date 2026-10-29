@@ -93,7 +93,7 @@ Port sections use the name of the configured network interface, such as the [eth
 
 The [unicast_master_table] section is used to configure the unicast table.
 
-For detailed information on the configuration file, please refer to: [https://linuxptp.nwtime.org/documentation/ptp4l/](https://linuxptp.nwtime.org/documentation/ptp4l/)
+For detailed information on the configuration file, please refer to: [ptp4l(8) manual](https://manpages.ubuntu.com/manpages/jammy/man8/ptp4l.8.html)
 
 #### automotive configuration examples
 

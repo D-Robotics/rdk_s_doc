@@ -26,6 +26,23 @@ drivers/tty/serial/8250/8250_core.c    #8250 uart驱动核心
 hobot-drivers/serial/8250_pdma.c    #uart PDMA操作实现文件
 ```
 
+<DocScope products="RDK S100">
+
+```shell
+kernel/arch/arm64/boot/dts/hobot/drobot-s100-pdma.dtsi   # PDMA 通道 / handshake 映射表
+kernel/arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi    # UART 节点
+```
+
+</DocScope>
+<DocScope products="RDK S600">
+
+```shell
+kernel/arch/arm64/boot/dts/hobot/drobot-s600-pdma.dtsi   # PDMA 通道 / handshake 映射表
+kernel/arch/arm64/boot/dts/hobot/drobot-s600-soc.dtsi    # UART 节点
+```
+
+</DocScope>
+
 ### 内核配置
 
 <DocScope products="RDK S100">
@@ -39,7 +56,10 @@ hobot-drivers/serial/8250_pdma.c    #uart PDMA操作实现文件
 CONFIG_SERIAL_8250=y   # 8250驱动配置
 CONFIG_SERIAL_8250_CONSOLE=y   #8250 console驱动配置
 CONFIG_SERIAL_8250_DW=y   #使能Designware独有的feature
+CONFIG_HOBOT_PDMAC=y   # UART PDMA 依赖
 ```
+
+`CONFIG_SERIAL_8250_PDMA` 依赖 `SERIAL_8250 && HOBOT_PDMAC=y`，默认跟随 `SERIAL_8250`。
 
 ### DTS 设备节点配置
 
@@ -82,6 +102,68 @@ uart4: uart@3484E000 {
     dma-names = "rx", "tx";
 };
 ```
+
+</DocScope>
+
+<DocScope products="RDK S100">
+
+### UART DMA(PDMA) 配置
+
+S100 A-core 侧 UART 可使用外设 DMA（PDMA）。`drobot-s100-pdma.dtsi` 预先描述每条 PDMA 通道对应的外设握手号，**只供查找 uart 对应的 pdma 通道，不可更改该设备树的配置**。
+
+UART 与 handshake 对应关系如下，UART 编号以 `drobot-s100-soc.dtsi` 中节点为准：
+
+| UART | RX handshake | TX handshake |
+|---|---|---|
+| uart0（console） | 2 | 3 |
+| uart1@394A0000 | 0 | 1 |
+| uart2@394C0000 | 4 | 5 |
+| uart3@394D0000 | 6 | 7 |
+
+在 `drobot-s100-soc.dtsi` 对应 UART 节点内添加 PDMA 相关属性即可使能，`dmas` 中的通道号需与上表 handshake 一致：
+
+``` {.text}
+&uart2 {
+    status = "okay";
+    dmas = <&pdma0 4>, <&pdma0 5>; /* rx, tx handshake */
+    dma-names = "rx", "tx";
+};
+```
+
+`drobot-s100-soc.dtsi` 中 uart1 已配置 `dmas` 与 `dma-names`，可作为参考（见上文设备节点）。
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+### UART DMA(PDMA) 配置
+
+S600 A-core 侧 UART 可使用外设 DMA（PDMA）。`drobot-s600-pdma.dtsi` 预先描述每条 PDMA 通道对应的外设握手号，**只供查找 uart 对应的 pdma 通道，不可更改该设备树的配置**。
+
+UART 与 handshake 对应关系如下，UART 编号以 `drobot-s600-soc.dtsi` 中编号为准：
+
+| UART | RX handshake | TX handshake |
+|---|---|---|
+| uart0（console） | 0 | 1 |
+| uart1@3484A000 | 2 | 3 |
+| uart2@3484B000 | 4 | 5 |
+| uart3@3484D000 | 6 | 7 |
+| uart4@3484E000 | 8 | 9 |
+| uart5@3484F000 | 10 | 11 |
+| uart6@34850000 | 12 | 13 |
+| uart7@34851000 | 14 | 15 |
+
+在 `drobot-s600-soc.dtsi` 对应 UART 节点内添加 PDMA 相关属性即可使能，`dmas` 中的通道号需与上表 handshake 一致：
+
+``` {.text}
+&uart6 {
+    status = "okay";
+    dmas = <&pdma0 12>, <&pdma0 13>; /* rx, tx handshake */
+    dma-names = "rx", "tx";
+};
+```
+
+`drobot-s600-soc.dtsi` 中 uart4 已配置 `dmas` 与 `dma-names`，可作为参考（见上文设备节点）。
 
 </DocScope>
 
@@ -134,10 +216,12 @@ RDK S600是将 uart4初始化为/dev/ttyS1，uart4并没有引出物理引脚，
 <DocScope products="RDK S100">
 
 - RDK S100硬件设计上40PIN GPIO 使用了 TI 的 TXS 系列的电平转换芯片将1.8V IO 转成3.3V IO，为了信号的质量和可靠性，通信对端尽量不要使用电平转换芯片对其再次进行转换，若使用多级请关注实际硬件信号质量。
+- **uart0 作为 console，不能使能 DMA。**
 
 </DocScope>
 <DocScope products="RDK S600">
 
 - RDK S600硬件设计上只将 uart6和 uart7通过拓展引脚排引出，且使用了 TI 的 TXB 系列的电平转换芯片将1.8V IO 转成3.3V IO。**RDK S600 V0P1 开发板由于硬件限制，uart6和 uart7无法使用**。
+- **uart0 作为 console，不能使能 DMA。**
 
 </DocScope>

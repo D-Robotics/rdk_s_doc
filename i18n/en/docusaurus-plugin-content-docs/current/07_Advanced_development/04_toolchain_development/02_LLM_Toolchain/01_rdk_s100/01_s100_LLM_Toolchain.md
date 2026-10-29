@@ -3,9 +3,8 @@ sidebar_position: 1
 sidebar_products: RDK S100
 ---
 
-# 7.4.2.1 RDK S100 LLM Toolchain
+# LLM Toolchain_v1.0.0
 
-## RDK S100 1.0.0 Large Model Toolchain
 
 On the RDK S100/S100P platform, D-Robotics_LLM_S100 currently supports the following models and features:
 

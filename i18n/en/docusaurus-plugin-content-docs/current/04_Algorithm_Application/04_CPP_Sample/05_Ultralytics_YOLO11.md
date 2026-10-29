@@ -172,7 +172,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
         </DocScope>
 - View the results
 
-    After a successful run, detection boxes are drawn on the original image and saved to `build/result.jgp`.
+    After a successful run, detection boxes are drawn on the original image and saved to `build/result.jpg`.
     ```bash
     [Saved] Result saved to: result.jpg
     ```
@@ -184,7 +184,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s600/ultralytics_
 
 ## License
     ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
+    Copyright (C) 2025, XiangshunZhao D-Robotics.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as

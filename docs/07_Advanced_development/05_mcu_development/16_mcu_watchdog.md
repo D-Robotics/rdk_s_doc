@@ -354,7 +354,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 - SchM_Enter_Wdg_ExclusiveZone_06
 - SchM_Exit_Wdg_ExclusiveZone_06
 
-<DocScope products="RDK S600">
+<DocScope products="RDK S600,RDK S100" versions=">=4.1.0">
 
 ## 4. Acore 看门狗超时 MCU 处理流程
 

@@ -3,6 +3,10 @@ sidebar_position: 7
 ---
 # 8.7 桌面应用
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 本节主要解答在桌面使用第三方应用遇到的问题。
 
 <!-- ```mdx-code-block
@@ -34,3 +38,17 @@ import TabItem from '@theme/TabItem';
 步骤：打开 Settings 应用，导航至 Region & Language，选择目标语言，出现restart按钮（此restart只重启桌面会话，不会重启设备），在锁屏界面输入密码。
 
 解决方案：若在步骤中遇到输入密码正确无法登录的问题，设备重新上电或reboot重启设备即可完成切换。
+
+<DocScope products="RDK S100">
+
+2、"Settings"中从其他界面切到"Bluetooth"会出现卡顿问题
+
+:::info 注意
+该问题在当前版本中仍然存在，暂未解决，正在定位与修复中。
+:::
+
+问题描述：进入 Settings 应用后，反复点击蓝牙模块和其他模块进行切换时，会出现明显的卡顿，而其他模块均正常。
+
+影响范围：仅影响 Settings 应用中蓝牙页面的操作体验，不影响系统蓝牙功能本身的使用。
+
+</DocScope>

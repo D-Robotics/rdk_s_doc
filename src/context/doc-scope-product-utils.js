@@ -1,12 +1,14 @@
 import { PRODUCT_VERSION_MATRIX, VERSION_PRODUCT_MATRIX } from './doc-scope-matrix.js';
+import {
+  canonicalProductKeyForMatrix,
+  normalizeProductKey,
+  productForVersion,
+} from './doc-scope-filter-core.mjs';
 
-/** @param {string} s */
-export function normalizeProductKey(s) {
-  return String(s)
-    .trim()
-    .toLocaleLowerCase('en-US')
-    .replace(/\s+/g, ' ');
-}
+// 产品名规范化 / product-for-version 的唯一实现在 doc-scope-filter-core.mjs：
+// 首帧前内联脚本内联的是同一份源码，改那里即两边同时生效。本文件只做「绑定矩阵」的薄封装，
+// 供 UI 与构建期消费。
+export { normalizeProductKey };
 
 /** @param {string|null|undefined} a
  * @param {string|null|undefined} b
@@ -45,31 +47,13 @@ function productBelongsToSeries(currentProductCanonical, seriesKey) {
   return current === seriesKey || current.startsWith(`${seriesKey} `);
 }
 
-let _canonicalLookup = null;
-
-function getCanonicalLookup() {
-  if (!_canonicalLookup) {
-    const map = new Map();
-    for (const list of Object.values(VERSION_PRODUCT_MATRIX)) {
-      for (const canonical of list) {
-        map.set(normalizeProductKey(canonical), canonical);
-      }
-    }
-    _canonicalLookup = map;
-  }
-  return _canonicalLookup;
-}
-
 /**
  * 将任意大小写/多空格的产品名解析为矩阵中的规范名称；无法识别时返回 null
  * @param {string|null|undefined} input
  * @returns {string|null}
  */
 export function resolveCanonicalProduct(input) {
-  if (input == null || String(input).trim() === '') {
-    return null;
-  }
-  return getCanonicalLookup().get(normalizeProductKey(input)) ?? null;
+  return canonicalProductKeyForMatrix(input, PRODUCT_VERSION_MATRIX);
 }
 
 /**
@@ -79,23 +63,7 @@ export function resolveCanonicalProduct(input) {
  * @returns {string}
  */
 export function resolveProductForVersion(pRaw, version) {
-  const list = VERSION_PRODUCT_MATRIX[version];
-  if (!list || list.length === 0) {
-    return '';
-  }
-  if (pRaw == null || String(pRaw).trim() === '') {
-    return list[0];
-  }
-  const canon = resolveCanonicalProduct(pRaw);
-  if (canon && list.includes(canon)) {
-    return canon;
-  }
-  for (const item of list) {
-    if (normalizeProductKey(item) === normalizeProductKey(pRaw)) {
-      return item;
-    }
-  }
-  return list[0];
+  return productForVersion(pRaw, version, VERSION_PRODUCT_MATRIX, PRODUCT_VERSION_MATRIX);
 }
 
 /**
@@ -104,19 +72,7 @@ export function resolveProductForVersion(pRaw, version) {
  * @returns {string|null}
  */
 export function resolveCanonicalProductKeyForMatrix(p) {
-  if (p == null || String(p).trim() === '') {
-    return null;
-  }
-  const canon = resolveCanonicalProduct(p);
-  if (canon && PRODUCT_VERSION_MATRIX[canon]) {
-    return canon;
-  }
-  for (const key of Object.keys(PRODUCT_VERSION_MATRIX)) {
-    if (normalizeProductKey(key) === normalizeProductKey(p)) {
-      return key;
-    }
-  }
-  return null;
+  return canonicalProductKeyForMatrix(p, PRODUCT_VERSION_MATRIX);
 }
 
 /**
