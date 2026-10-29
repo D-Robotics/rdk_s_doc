@@ -5,7 +5,7 @@ description: Describes how to flash the RDK S100 system image with XBurn, includ
 
 # Flash the system image
 
-This page describes system flashing for the RDK S100. Complete [flashing preparation](./02_preparation.md) before you flash. To back up the current system and restore it, see [Back up and restore the image](./04_backup.md).
+This page describes system flashing for the RDK S100. Complete [flashing preparation](./02_preparation.md) before you flash. To back up the current system and restore it, see [Back up and restore the image](./04_backup.md). To flash without a PC, for example in batch or on site, see [USB drive upgrade](./05_usb_upgrade.md).
 
 ## Download modes
 

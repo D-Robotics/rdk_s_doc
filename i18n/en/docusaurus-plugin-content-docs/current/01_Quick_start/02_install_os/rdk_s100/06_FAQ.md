@@ -1,8 +1,10 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # FAQ
+
+For USB drive upgrade issues, see [USB drive upgrade · FAQ](./05_usb_upgrade.md#faq).
 
 Issues related to serial ports, drivers, and boot failures during flashing and startup are consolidated in the troubleshooting section of the XBurn Manual:
 

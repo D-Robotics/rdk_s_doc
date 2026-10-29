@@ -1,8 +1,10 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # 常见问题
+
+U 盘升级相关的问题见 [U 盘升级的常见问题](./05_usb_upgrade.md#常见问题)。
 
 烧录与启动过程中的串口、驱动、启动异常等问题，已统一收录在 XBurn 手册的异常处理章节：
 
