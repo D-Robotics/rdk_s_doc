@@ -522,11 +522,11 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 
 本节说明验证 WDG 超时后的复位中断回调路径所需的测试环境配置。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断处理链路参见 3.3。
 
-当前 MCU0 Target 工程已接入 `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` 复位中断测试路径；若基于未改动的源码测试，需要按下面的测试环境配置接入后再进行测试。
+当前 RDK S600 MCU0 Target 工程已接入 `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` 复位中断测试路径；若基于未改动的源码测试，需要按下面的测试环境配置接入后再进行测试。
 
 ### 5.1 测试环境配置
 
-以下配置用于在 RDK S600 MCU0 的 Core0 上通过 Shell 测试 `Wdg0`~`Wdg4` 的复位中断回调路径。驱动层已支持 `Wdg0`、`Wdg1`、`Wdg2`、`Wdg3`、`Wdg4` 复位中断接口；当前 RDK S600 MCU0 Target 工程已按以下配置接入 WDG 中断/复位中断入口，若基于未改动的源码测试，需按相同步骤检查或补全。
+以下配置用于在 RDK S600 MCU0 的 Core0 上通过 Shell 测试 `Wdg0`~`Wdg4` 的复位中断回调路径。驱动层已支持 `Wdg0`、`Wdg1`、`Wdg2`、`Wdg3`、`Wdg4` 复位中断接口。
 
 #### 5.1.1 WDG 配置扩展
 

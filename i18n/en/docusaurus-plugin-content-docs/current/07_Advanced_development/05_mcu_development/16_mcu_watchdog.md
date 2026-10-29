@@ -526,7 +526,7 @@ The current RDK S600 MCU0 Target project has wired up the `Wdg_InsXIntIsr`/`Wdg_
 
 ### 5.1 Test Environment Configuration
 
-The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` from the Shell on Core0 of RDK S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces. The current RDK S600 MCU0 Target project has wired up the WDG interrupt/reset interrupt entries as described below. When testing from an unmodified source tree, apply or verify the same configuration.
+The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` from the Shell on Core0 of RDK S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces.
 
 #### 5.1.1 WDG Configuration Expansion
 
