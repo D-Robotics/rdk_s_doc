@@ -101,6 +101,7 @@ Flashing NVMe requires the NVMe version of the image. D-Robotics provides UFS im
 
 - Use this for specific scenarios other than a first-time flash.
 - In addition to flashing the full image, XBurn supports **Flash specific regions**, **Back up specific regions**, and **Flash specific partition images**.
+- To flash without a PC, for batch flashing, or for on-site recovery, see [USB drive upgrade](./05_usb_upgrade.md).
 
 ### Flash specific regions{#flashing-specific-regions}
 
