@@ -6,11 +6,17 @@ description: "sample_pipeline 使用说明 板端示例使用说明"
 
 # sample_pipeline 使用说明
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 功能概述
 `sample_pipeline` 用于实现单路或多路 sensor pipeline 串联，实现用户常见的 pipeline 场景，用户可通过 `sample_pipeline` 子目录了解各个 pipeline 的搭建方法。
 
 ### sample_pipeline 架构说明
 `sample_pipeline` 包含多个示例，每个示例均以子目录形式存在 `app/multimedia_samples/sample_pipeline` 下，每个子目录描述如下
+
+<DocScope products="RDK S100" versions="< 5.3.0">
 
 | 目录      | 描述 |
 | ----------- | ----------- |
@@ -20,6 +26,23 @@ description: "sample_pipeline 使用说明 板端示例使用说明"
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
 | [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
 | [single_3dgpu_bpu](#single_3dgpu_bpu)  | GPU 与 BPU 串联的内存零拷贝示例  |
+
+</DocScope>
+
+<DocScope products="RDK S100" versions=">= 5.3.0">
+
+| 目录      | 描述 |
+| ----------- | ----------- |
+| [single_pipe_vin_isp_ynr_pym_vpu](#single_pipe_vin_isp_ynr_pym_vpu)  | 单路 sensor 简单 pipeline 串联并编码示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | 单路 sensor pipeline 串联 GDC 变换示例  |
+| [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | 单路 sensor pipeline 串联 GDC 变换示例并编码示例  |
+| [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | 多路 sensor pipeline 串联并编码示例  |
+| [single_pipe_vin_isp_ynr_pym_display](#single_pipe_vin_isp_ynr_pym_display)  | 单路 sensor pipeline 串联并显示示例  |
+| [multi_pipe_vin_isp_ynr_pym_stitch_display](#multi_pipe_vin_isp_ynr_pym_stitch_display)  | 多路 sensor pipeline 拼接显示示例  |
+| [uvc_capture_sample](#uvc_capture_sample)  |  uvc camera capture 示例  |
+| [single_3dgpu_bpu](#single_3dgpu_bpu)  | GPU 与 BPU 串联的内存零拷贝示例  |
+
+</DocScope>
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -705,6 +728,236 @@ All deserial link info:
 pipeline0_1920x1080_30fps.h264
 pipeline1_1280x720_30fps.h264
 ```
+
+<DocScope products="RDK S100" versions=">= 5.3.0">
+
+## single_pipe_vin_isp_ynr_pym_display
+
+### 功能概述
+
+把一路 Camera 的实时画面显示到屏幕上，不保存、不编码。图像经过 VIN、ISP、YNR、PYM 处理，由 PYM 输出直接上屏。
+
+示例支持以下操作：
+
+- 显示原尺寸画面，或任意一级降采样画面：0 为原尺寸，1 为二分之一，2 为四分之一，依次递减
+- 指定输出分辨率，不指定时使用屏幕原生分辨率
+- 在画面上显示帧率与输入、输出尺寸
+- 在屏幕右侧显示其它 PYM 通道的缩略图
+- 运行中切换显示分辨率
+
+显示方式有两种：
+
+- 全屏直显：不使用桌面，独占屏幕。桌面正在运行时，先执行示例目录下的 `toggle_desktop.sh` 切换到无桌面状态。
+- 桌面窗口：在桌面会话中运行，画面显示在窗口内，窗口大小等于画面大小。该方式不支持指定分辨率和运行中切换分辨率。
+
+默认自动判断当前环境并选择显示方式。
+
+### 代码位置及目录结构
+
+- 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_display`
+- 目录结构
+
+```
+single_pipe_vin_isp_ynr_pym_display
+├── Makefile
+├── osd_demo.c
+├── osd_demo.h
+├── single_pipe_vin_isp_ynr_pym_display.c
+└── toggle_desktop.sh
+```
+
+### 编译
+
+- 进入 single_pipe_vin_isp_ynr_pym_display 目录，执行 `make` 编译
+- 公共显示代码 `drm_display.c`、`drm_osd.c`、`vp_display.c` 的对象文件会一并编译到本示例目录
+- 输出成果物是 single_pipe_vin_isp_ynr_pym_display 源码目录下的 `single_pipe_vin_isp_ynr_pym_display`
+
+### 运行
+
+#### 程序运行方法
+
+执行 `./single_pipe_vin_isp_ynr_pym_display -h` 可以查看帮助信息和当前可用的 Camera 列表
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -h
+Usage: single_pipe_vin_isp_ynr_pym_display [OPTIONS]
+Options:
+  -s <idx>  sensor index (required; -h lists sensors)
+  -l <port> GMSL sensor link port 0-3
+  -m <rx>   GMSL sensor MIPI RX index
+  -r <WxH>  drm output mode (default: screen native)
+  -b <b>    display backend: wl|drm|auto (default auto)
+  -c <chn>  PYM layer to show: 0=SRC,1=BL0,2=BL1,... (default auto)
+  -z <t>:<z> stack order, t=main|layer<N>|osd<N>, repeatable
+  -O        show FPS/status text bars on the ARGB overlay planes
+  -I        show pym thumbnails on the spare video planes (1:1, right column)
+  -h        show this help and the sensor list
+index: 0  sensor_name: ...
+```
+
+注意： Camera 列表与镜像版本有关，请以板端实际输出为准。
+
+#### 程序参数选项说明
+
+- `-s`: 指定 Camera 型号和配置，必填
+- `-l`: 指定 GMSL Camera 接入的 Link Port，0:A 1:B 2:C 3:D；GMSL Camera 必填
+- `-m`: 指定 GMSL Camera 接入的 MIPI RX；不指定时使用 Camera 配置中的值
+- `-r`: 指定输出分辨率，格式为 `宽x高`，默认使用屏幕原生分辨率；仅全屏直显使用
+- `-b`: 指定显示方式，`drm` 为全屏直显，`wl` 为桌面窗口，`auto` 为自动选择，默认 `auto`
+- `-c`: 指定显示的 PYM 通道，0 为原尺寸，1 起依次降采样；默认自动选择
+- `-z`: 指定画面图层的叠放次序，格式为 `<目标>:<zpos>`，目标可选 `main`、`layer<N>`、`osd<N>`，可重复指定；仅全屏直显使用
+- `-O`: 显示帧率与输入、输出尺寸
+- `-I`: 在屏幕右侧显示其它 PYM 通道的缩略图；仅全屏直显使用
+- `-h`: 显示帮助信息和 Camera 列表
+
+:::caution 注意
+全屏直显时，所选通道的分辨率不能大于输出分辨率，否则程序报错退出。此时可用 `-c` 选择更小的通道，用 `-r` 调大输出分辨率，或改用桌面窗口方式。
+:::
+
+#### 运行效果
+
+画面实时显示在屏幕上，每 30 帧在终端打印一次当前通道、分辨率、stride、时间戳和帧编号。
+
+以 imx219（MIPI 类型）作为输入：
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -s 0
+```
+
+以 GMSL Camera 作为输入，全屏直显并指定输出分辨率：
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -s 4 -l 0 -m 0 -b drm -r 1920x1080 -O
+```
+
+在桌面会话中以窗口显示：
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -s 0 -b wl
+```
+
+全屏直显时，向进程发送 `SIGUSR1` 可切换到下一个显示分辨率；当前通道放不进新分辨率时，自动改用能放下的通道：
+
+```sh
+# kill -USR1 <pid>
+```
+
+启动日志会打印输出分辨率、可用的 PYM 通道和最终选择：
+
+```
+Display output resolution (native): 1920x1080
+PYM display candidates (6, sensor 1920x1080, target/output 1920x1080): chn0:1920x1080 chn1:960x540 chn2:480x270 ...
+Using DRM zero-copy backend: display pym chn0 1920x1080, output 1920x1080 (plane upscale + letterbox)
+```
+
+## multi_pipe_vin_isp_ynr_pym_stitch_display
+
+### 功能概述
+
+同时接入多路 Camera，把多路画面拼成一幅画面显示到屏幕。每路 Camera 独立经过 VIN、ISP、YNR、PYM 处理。
+
+示例支持三种显示方式：
+
+- `wall`：多路画面按网格拼成一幅，整屏显示
+- `full`：只显示其中一路，整屏显示
+- `none`：不显示，只运行链路并取帧，用于确认 Camera 和链路是否正常
+
+`wall` 的排布按接入路数自动计算：2 路为 2×1，3 到 4 路为 2×2，5 到 6 路为 3×2，依此类推。每格保持画面原始比例，不拉伸，剩余区域填背景色，并自动选择能放进格子的最大一级 PYM 输出。
+
+示例最多接受 12 组 `-c` 配置。实际能同时运行的路数由板端硬件决定，超出限制时在建流或启动阶段报错。
+
+### 代码位置及目录结构
+
+- 代码位置 `/app/multimedia_samples/sample_pipeline/multi_pipe_vin_isp_ynr_pym_stitch_display`
+- 目录结构
+
+```
+multi_pipe_vin_isp_ynr_pym_stitch_display
+├── Makefile
+└── multi_pipe_vin_isp_ynr_pym_stitch_display.c
+```
+
+### 编译
+
+- 进入 multi_pipe_vin_isp_ynr_pym_stitch_display 目录，执行 `make` 编译
+- 公共显示代码 `drm_display.c`、`vp_display.c` 的对象文件会一并编译到本示例目录
+- 输出成果物是 multi_pipe_vin_isp_ynr_pym_stitch_display 源码目录下的 `multi_pipe_vin_isp_ynr_pym_stitch_display`
+
+### 运行
+
+#### 程序运行方法
+
+执行 `./multi_pipe_vin_isp_ynr_pym_stitch_display -h` 可以查看帮助信息和当前可用的 Camera 列表
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -h
+Usage: multi_pipe_vin_isp_ynr_pym_stitch_display [OPTIONS]
+Options:
+  -c <cfg>  one pipeline config: "sensor=<idx> [link=<0-3>] [mipi=<rx>] [channel=<chn>]"; repeat -c up to 12 times for N pipes
+            sensor  -- sensor index (required; -h lists sensors)
+            link    -- GMSL sensor link port 0-3 (required for GMSL sensors)
+            mipi    -- GMSL sensor MIPI RX index (default 4)
+            channel -- PYM output channel to grab (default 0 = SRC)
+  -d <m>    display mode: wall (N pipes stitched into one grid by the HB_STITCH vnode) | full (pipe -p full-screen, zero-copy straight to drm) | none (default: headless frame drain)
+  -p <idx>  full-mode pipe to show (default 0)
+  -W <w> -H <h>  display output size (default 1920x1080); wall cells and full layer fit are derived from it
+  -b <b>    display backend: drm (default) or wl
+  -v        verbose mode
+  -h        show this help and the sensor list
+index: 0  sensor_name: ...
+```
+
+注意： Camera 列表与镜像版本有关，请以板端实际输出为准。
+
+#### 程序参数选项说明
+
+- `-c`: 配置一路 Camera，可重复指定，最多 12 组
+  - `sensor`：Camera 索引，必填
+  - `link`：GMSL Camera 接入的 Link Port，0:A 1:B 2:C 3:D；GMSL Camera 必填
+  - `mipi`：GMSL Camera 接入的 MIPI RX；不指定时使用 Camera 配置中的值
+  - `channel`：取帧使用的 PYM 通道，默认 0（原尺寸）
+- `-d`: 指定显示方式，`wall`、`full`、`none`，默认 `none`
+- `-p`: `full` 方式下显示的通道，默认 0；超出范围时回到 0
+- `-W` / `-H`: 指定输出分辨率，默认 1920x1080
+- `-b`: 指定显示方式，`drm` 为全屏直显（默认），`wl` 为桌面窗口
+- `-v`: 打印详细日志
+- `-h`: 显示帮助信息和 Camera 列表
+
+:::caution 注意
+1. GMSL Camera 必须指定 Link Port，且与实际接线一致。
+2. `-c` 中不指定 `mipi` 时，使用 Camera 配置中的 MIPI RX。
+3. `wall` 方式下每一路都必须有能放进格子的 PYM 通道，否则程序退出并提示是哪一路不满足。
+4. 不指定 `-d` 时不显示画面，需要显示时指定 `-d wall` 或 `-d full`。
+:::
+
+#### 运行效果
+
+两路 Camera 拼接显示：
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -c "sensor=0" -c "sensor=4 link=0" -d wall
+```
+
+```
+Display open: mode=wall out=1920x1080 grid=2x1
+  pipe 0 -> pym chn1 layer 960x540
+  pipe 1 -> pym chn1 layer 960x540
+stitch vnode up: 2 pipes, wall 1920x1080, grid 2x1
+```
+
+只显示第二路：
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -c "sensor=0" -c "sensor=4 link=0" -d full -p 1
+```
+
+不显示画面，只验证 Camera 与链路：
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -c "sensor=0" -c "sensor=4 link=0" -d none
+```
+
+</DocScope>
 
 ## uvc_capture_sample
 

@@ -6,6 +6,10 @@ description: "sample_pipeline User Guide - On-board Example Usage Guide"
 
 # sample_pipeline User Guide
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## Function Overview
 `sample_pipeline` is used to chain single-channel or multi-channel sensor pipelines, covering the common pipeline scenarios for users. Users can learn how to set up each pipeline by exploring the subdirectories under `sample_pipeline`.
 
@@ -21,6 +25,8 @@ flowchart LR
 ### sample_pipeline Architecture Description
 `sample_pipeline` contains multiple examples, each stored as a subdirectory under `app/multimedia_samples/sample_pipeline`. Each subdirectory is described below:
 
+<DocScope products="RDK S100" versions="< 5.3.0">
+
 | Directory      | Description |
 | ----------- | ----------- |
 | [single_pipe_vin_isp_ynr_pym_vpu](#single_pipe_vin_isp_ynr_pym_vpu)  | Example of a single-channel sensor simple pipeline chained with encoding  |
@@ -29,6 +35,23 @@ flowchart LR
 | [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | Example of a multi-channel sensor pipeline chained with encoding  |
 | [uvc_capture_sample](#uvc_capture_sample)  | UVC camera capture example  |
 | [single_3dgpu_bpu](#single_3dgpu_bpu)  | Example of zero-copy memory chaining between GPU and BPU  |
+
+</DocScope>
+
+<DocScope products="RDK S100" versions=">= 5.3.0">
+
+| Directory      | Description |
+| ----------- | ----------- |
+| [single_pipe_vin_isp_ynr_pym_vpu](#single_pipe_vin_isp_ynr_pym_vpu)  | Example of a single-channel sensor simple pipeline chained with encoding  |
+| [single_pipe_vin_isp_ynr_pym_gdc](#single_pipe_vin_isp_ynr_pym_gdc)  | Example of a single-channel sensor pipeline chained with GDC transformation  |
+| [single_pipe_vin_isp_ynr_pym_gdc_vpu](#single_pipe_vin_isp_ynr_pym_gdc_vpu)  | Example of a single-channel sensor pipeline chained with GDC transformation and encoding  |
+| [multi_pipe_vin_isp_ynr_pym_gdc_vpu](#multi_pipe_vin_isp_ynr_pym_gdc_vpu)  | Example of a multi-channel sensor pipeline chained with encoding  |
+| [single_pipe_vin_isp_ynr_pym_display](#single_pipe_vin_isp_ynr_pym_display)  | Example of a single-channel sensor pipeline chained with display  |
+| [multi_pipe_vin_isp_ynr_pym_stitch_display](#multi_pipe_vin_isp_ynr_pym_stitch_display)  | Example of multi-channel sensor pipelines stitched into one display  |
+| [uvc_capture_sample](#uvc_capture_sample)  | UVC camera capture example  |
+| [single_3dgpu_bpu](#single_3dgpu_bpu)  | Example of zero-copy memory chaining between GPU and BPU  |
+
+</DocScope>
 
 ## single_pipe_vin_isp_ynr_pym_vpu
 
@@ -658,6 +681,236 @@ The following files are saved at runtime:
 pipeline0_1920x1080_30fps.h264
 pipeline1_1280x720_30fps.h264
 ```
+
+<DocScope products="RDK S100" versions=">= 5.3.0">
+
+## single_pipe_vin_isp_ynr_pym_display
+
+### Function Overview
+
+Displays the live image of one camera on screen without saving or encoding. The image passes through VIN, ISP, YNR, and PYM, and the PYM output is sent directly to the display.
+
+The example supports the following operations:
+
+- Displays the original resolution, or any downscaled level: 0 is the original size, 1 is half, 2 is a quarter, and so on
+- Uses the native screen resolution, or a resolution specified on the command line
+- Shows the frame rate and the input and output sizes on screen
+- Shows thumbnails of the other PYM channels on the right side of the screen
+- Switches the display resolution at runtime
+
+Two display methods are available:
+
+- Full-screen: no desktop is used and the screen is exclusive. If the desktop is running, run `toggle_desktop.sh` in the example directory first to switch to the headless state.
+- Desktop window: runs inside the desktop session and shows the image in a window whose size equals the image size. The output resolution and runtime mode switching are not supported in this method.
+
+The method is selected automatically based on the current environment.
+
+### Code Location and Directory Structure
+
+- Code location: `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_display`
+- Directory structure
+
+```
+single_pipe_vin_isp_ynr_pym_display
+├── Makefile
+├── osd_demo.c
+├── osd_demo.h
+├── single_pipe_vin_isp_ynr_pym_display.c
+└── toggle_desktop.sh
+```
+
+### Compilation
+
+- Enter the single_pipe_vin_isp_ynr_pym_display directory and run `make`.
+- The common display sources `drm_display.c`, `drm_osd.c`, and `vp_display.c` are compiled into this example directory as well.
+- The output artifact is `single_pipe_vin_isp_ynr_pym_display` in its source directory.
+
+### Execution
+
+#### How to Run the Program
+
+Run `./single_pipe_vin_isp_ynr_pym_display -h` to view the help information and the available camera list.
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -h
+Usage: single_pipe_vin_isp_ynr_pym_display [OPTIONS]
+Options:
+  -s <idx>  sensor index (required; -h lists sensors)
+  -l <port> GMSL sensor link port 0-3
+  -m <rx>   GMSL sensor MIPI RX index
+  -r <WxH>  drm output mode (default: screen native)
+  -b <b>    display backend: wl|drm|auto (default auto)
+  -c <chn>  PYM layer to show: 0=SRC,1=BL0,2=BL1,... (default auto)
+  -z <t>:<z> stack order, t=main|layer<N>|osd<N>, repeatable
+  -O        show FPS/status text bars on the ARGB overlay planes
+  -I        show pym thumbnails on the spare video planes (1:1, right column)
+  -h        show this help and the sensor list
+index: 0  sensor_name: ...
+```
+
+Note: the camera list depends on the image version. Refer to the actual output on the board.
+
+#### Program Option Descriptions
+
+- `-s`: Camera model and configuration. Required.
+- `-l`: Link Port of the GMSL camera, 0:A 1:B 2:C 3:D. Required for GMSL cameras.
+- `-m`: MIPI RX of the GMSL camera. Uses the value in the camera configuration when omitted.
+- `-r`: Output resolution in `WxH` format. Defaults to the native screen resolution. Used by full-screen display only.
+- `-b`: Display method: `drm` for full-screen display, `wl` for a desktop window, `auto` to select automatically. Defaults to `auto`.
+- `-c`: PYM channel to display. 0 is the original size; 1 and above are downscaled. Selected automatically by default.
+- `-z`: Stacking order of the on-screen layers in `<target>:<zpos>` format, where target is `main`, `layer<N>`, or `osd<N>`. Repeatable. Used by full-screen display only.
+- `-O`: Shows the frame rate and the input and output sizes.
+- `-I`: Shows thumbnails of the other PYM channels on the right side of the screen. Used by full-screen display only.
+- `-h`: Shows the help information and the camera list.
+
+:::caution Note
+In full-screen display, the selected channel must not be larger than the output resolution; otherwise the program reports an error and exits. Use `-c` to select a smaller channel, `-r` to increase the output resolution, or switch to the desktop window method.
+:::
+
+#### Runtime Output
+
+The image is displayed on screen in real time, and the current channel, resolution, stride, timestamp, and frame ID are printed every 30 frames.
+
+With imx219 (MIPI type) as input:
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -s 0
+```
+
+With a GMSL camera as input, full-screen display with a specified output resolution:
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -s 4 -l 0 -m 0 -b drm -r 1920x1080 -O
+```
+
+As a window in the desktop session:
+
+```sh
+# ./single_pipe_vin_isp_ynr_pym_display -s 0 -b wl
+```
+
+In full-screen display, sending `SIGUSR1` to the process switches to the next display resolution. If the current channel does not fit the new resolution, a channel that fits is used instead:
+
+```sh
+# kill -USR1 <pid>
+```
+
+The startup log prints the output resolution, the available PYM channels, and the final selection:
+
+```
+Display output resolution (native): 1920x1080
+PYM display candidates (6, sensor 1920x1080, target/output 1920x1080): chn0:1920x1080 chn1:960x540 chn2:480x270 ...
+Using DRM zero-copy backend: display pym chn0 1920x1080, output 1920x1080 (plane upscale + letterbox)
+```
+
+## multi_pipe_vin_isp_ynr_pym_stitch_display
+
+### Function Overview
+
+Connects multiple cameras at the same time and combines their images into one image on screen. Each camera passes through VIN, ISP, YNR, and PYM independently.
+
+Three display methods are available:
+
+- `wall`: combines the images into a grid and shows it full screen
+- `full`: shows one selected camera full screen
+- `none`: no display; only runs the pipelines and receives frames, to confirm that the cameras and links work
+
+The `wall` layout is calculated from the number of cameras: 2 cameras use 2×1, 3 to 4 cameras use 2×2, 5 to 6 cameras use 3×2, and so on. Each cell keeps the original aspect ratio without stretching, fills the remaining area with the background color, and uses the largest PYM output that fits the cell.
+
+The example accepts up to 12 `-c` configurations. The number of cameras that can run at the same time depends on the board hardware; exceeding the limit fails during pipeline creation or startup.
+
+### Code Location and Directory Structure
+
+- Code location: `/app/multimedia_samples/sample_pipeline/multi_pipe_vin_isp_ynr_pym_stitch_display`
+- Directory structure
+
+```
+multi_pipe_vin_isp_ynr_pym_stitch_display
+├── Makefile
+└── multi_pipe_vin_isp_ynr_pym_stitch_display.c
+```
+
+### Compilation
+
+- Enter the multi_pipe_vin_isp_ynr_pym_stitch_display directory and run `make`.
+- The common display sources `drm_display.c` and `vp_display.c` are compiled into this example directory as well.
+- The output artifact is `multi_pipe_vin_isp_ynr_pym_stitch_display` in its source directory.
+
+### Execution
+
+#### How to Run the Program
+
+Run `./multi_pipe_vin_isp_ynr_pym_stitch_display -h` to view the help information and the available camera list.
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -h
+Usage: multi_pipe_vin_isp_ynr_pym_stitch_display [OPTIONS]
+Options:
+  -c <cfg>  one pipeline config: "sensor=<idx> [link=<0-3>] [mipi=<rx>] [channel=<chn>]"; repeat -c up to 12 times for N pipes
+            sensor  -- sensor index (required; -h lists sensors)
+            link    -- GMSL sensor link port 0-3 (required for GMSL sensors)
+            mipi    -- GMSL sensor MIPI RX index (default 4)
+            channel -- PYM output channel to grab (default 0 = SRC)
+  -d <m>    display mode: wall (N pipes stitched into one grid by the HB_STITCH vnode) | full (pipe -p full-screen, zero-copy straight to drm) | none (default: headless frame drain)
+  -p <idx>  full-mode pipe to show (default 0)
+  -W <w> -H <h>  display output size (default 1920x1080); wall cells and full layer fit are derived from it
+  -b <b>    display backend: drm (default) or wl
+  -v        verbose mode
+  -h        show this help and the sensor list
+index: 0  sensor_name: ...
+```
+
+Note: the camera list depends on the image version. Refer to the actual output on the board.
+
+#### Program Option Descriptions
+
+- `-c`: Configures one camera. Repeatable up to 12 times.
+  - `sensor`: Camera index. Required.
+  - `link`: Link Port of the GMSL camera, 0:A 1:B 2:C 3:D. Required for GMSL cameras.
+  - `mipi`: MIPI RX of the GMSL camera. Uses the value in the camera configuration when omitted.
+  - `channel`: PYM channel used for frame capture. Defaults to 0 (original size).
+- `-d`: Display method: `wall`, `full`, or `none`. Defaults to `none`.
+- `-p`: Camera to display in `full` method. Defaults to 0; falls back to 0 when out of range.
+- `-W` / `-H`: Output resolution. Defaults to 1920x1080.
+- `-b`: Display method: `drm` for full-screen display (default), `wl` for a desktop window.
+- `-v`: Verbose logging.
+- `-h`: Shows the help information and the camera list.
+
+:::caution Note
+1. GMSL cameras must specify a Link Port that matches the actual wiring.
+2. When `mipi` is not given in `-c`, the MIPI RX in the camera configuration is used.
+3. In the `wall` method every camera must have a PYM channel that fits its cell; otherwise the program exits and reports which camera does not fit.
+4. Without `-d`, no image is displayed. Specify `-d wall` or `-d full` to display.
+:::
+
+#### Runtime Output
+
+Two cameras combined into one image:
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -c "sensor=0" -c "sensor=4 link=0" -d wall
+```
+
+```
+Display open: mode=wall out=1920x1080 grid=2x1
+  pipe 0 -> pym chn1 layer 960x540
+  pipe 1 -> pym chn1 layer 960x540
+stitch vnode up: 2 pipes, wall 1920x1080, grid 2x1
+```
+
+Show only the second camera:
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -c "sensor=0" -c "sensor=4 link=0" -d full -p 1
+```
+
+Run without display to confirm that the cameras and links work:
+
+```sh
+# ./multi_pipe_vin_isp_ynr_pym_stitch_display -c "sensor=0" -c "sensor=4 link=0" -d none
+```
+
+</DocScope>
 
 ## uvc_capture_sample
 
