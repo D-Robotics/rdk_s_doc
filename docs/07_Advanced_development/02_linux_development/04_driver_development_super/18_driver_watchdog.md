@@ -420,7 +420,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   3. 当第一次 Timeout 到来产生一个中断，Watchdog 重新开始计数，某个 core 响应中断后给其它 core 发送 IPI，若 CPU 位图不为 empty，说明有 core 无法正常响应 IRQ 中断，不允许喂狗。
 
-  4. Watchdog 计数器继续递减，当第二次 Timeout 到来产生两个中断，一个中断发送到 Acore 的 GIC 中断，在中断中进行打栈，另一个为看门狗重启中断发送至 MCU，由 MCU 控制重启。MCU 收到狗叫对应的看门狗重启中断后，设置复位请求；复位任务固定等待 5000ms，预留给 Acore 完成堆栈打印，随后触发整机长复位。
+  4. Watchdog 计数器继续递减，当第二次 Timeout 到来产生两个中断，一个中断发送到 Acore 的 GIC 中断，在中断中进行打栈，另一个为看门狗重启中断发送至 MCU，由 MCU 控制重启。MCU 会在第一次接收到狗叫对应的看门狗重启中断后，刷新一次狗的超时时间为2581ms，预留给 Acore 进行打栈，当再次触发狗叫对应的看门狗重启中断后，进行重启。
 
 ### SoftLockup 监控
 
@@ -434,7 +434,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. 当第一次 Timeout 到来产生一个中断，Watchdog 重新开始计数，某个 core 响应中断后将置起一个标志位，跑在其上的 Watchdog 监控 Kthread 线程检测到标志位被置起后，将自己对应的 CPU 位图中的 bit 清零，并给其它 core 发送 IPI，让其他核执行相同的逻辑，记录一张此时在线的 CPU 位图，每当一个核收到 IPI 执行该逻辑或者下线时，会将位图对应的 bit 清除，当整个位图为 empty 时，说明本次监控任务完成，则允许喂狗。
 
-  5. 若在第二次 Timeout 之前 CPU 位图仍不为 empty，则当第二次 Timeout 到来产生两个中断，一个中断发送到 Acore 的 GIC 中断，在中断中进行打栈，另一个为看门狗重启中断发送至 MCU，由 MCU 控制重启。MCU 收到狗叫对应的看门狗重启中断后，设置复位请求；复位任务固定等待 5000ms，预留给 Acore 完成堆栈打印，随后触发整机长复位。
+  5. 若在第二次 Timeout 之前 CPU 位图仍不为 empty，则当第二次 Timeout 到来产生两个中断，一个中断发送到 Acore 的 GIC 中断，在中断中进行打栈，另一个为看门狗重启中断发送至 MCU，由 MCU 控制重启。MCU 会在第一次接收到狗叫对应的看门狗重启中断后，刷新一次狗的超时时间为2581ms，预留给 Acore 进行打栈，当再次触发狗叫对应的看门狗重启中断后，进行重启。
 </DocScope>
 
 <DocScope products="RDK S100" versions=">=4.1.0">
