@@ -451,7 +451,7 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 
 ## 5. WDG Reset Interrupt Test Environment Configuration
 
-This section describes how to configure the test environment so that the core running the test code can control the WDG and receive reset interrupts. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt handling path.
+This section describes the test environment configuration required to verify the WDG reset interrupt callback path after a timeout. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt handling path.
 
 ### 5.1 Test Environment Configuration
 
@@ -520,13 +520,13 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 
 ## 5. WDG Reset Interrupt Test Environment Configuration
 
-This section describes how to configure the RDK S600 MCU0 test environment to verify the WDG reset interrupt callback path after a timeout. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt vectors.
+This section describes the test environment configuration required to verify the WDG reset interrupt callback path after a timeout. The driver already provides the reset interrupt callback interface; see 3.2.5 and 3.2.6 for the related APIs and 3.3 for the interrupt handling path.
 
 The current RDK S600 MCU0 Target project has wired up the `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` reset interrupt test path. When testing from an unmodified source tree, apply the following test environment configuration before testing.
 
 ### 5.1 Test Environment Configuration
 
-The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` through the Shell on Core0 of RDK S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces. The current RDK S600 MCU0 Target project has wired up the WDG interrupt/reset interrupt entries as described below. When testing from an unmodified source tree, apply or verify the same configuration.
+The following configuration is used to verify the reset interrupt callback path for `Wdg0` through `Wdg4` from the Shell on Core0 of RDK S600 MCU0. The driver already supports the `Wdg0` through `Wdg4` reset interrupt interfaces. The current RDK S600 MCU0 Target project has wired up the WDG interrupt/reset interrupt entries as described below. When testing from an unmodified source tree, apply or verify the same configuration.
 
 #### 5.1.1 WDG Configuration Expansion
 
@@ -655,7 +655,7 @@ ISR(Wdg_Ins4RstIsr) {
 
 #### 5.1.3 Interrupt Declaration, Registration, and Enablement
 
-The reset interrupt handlers are defined in `HorizonISR.c`, but the interrupts cannot reach those handlers until the following four files are wired up in this order: function declaration, interrupt-number mapping, priority mask, and interrupt-table registration. After registration, `FreeRtos_Irq_Init()` installs and enables these interrupts and routes the SPIs to the current Core0, so no additional `IROUTER` entries are needed in `main.c`.
+The reset interrupt handlers are defined in `HorizonISR.c`, but the interrupts cannot reach those handlers until the following four files are wired up in this order: function declaration, interrupt-number mapping, priority mask, and interrupt-table registration. After registration, `FreeRtos_Irq_Init()` installs and enables these interrupts and routes the SPI to the current Core0, so no additional `IROUTER` entries are needed in `main.c`.
 
 ##### `Os.h`
 
