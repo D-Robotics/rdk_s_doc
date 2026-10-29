@@ -57,6 +57,8 @@ These are the API implementation files for user calls. Each Wdg instance require
 - McalCdd\Wdg\inc\Wdg4.h
 </DocScope>
 
+<DocScope versions=">= 4.1.0">
+
 ### 2.2 Difference Between On-Chip WDG and PMIC WDG
 
 The on-chip WDG and PMIC WDG are complementary watchdog layers. The on-chip WDG is used for MCU internal monitoring and testing, while the PMIC WDG acts as a board-level fail-safe backup; if the MCU software cannot feed the watchdog properly, the PMIC WDG can still perform a reset or protection action after timeout.
@@ -123,6 +125,7 @@ There are two independent watchdogs on the RDK S600 MCU side:
 - **PMIC WDG configuration**
   - MCU0: `Config/McalCdd/gen_s600_md/PwrIf/src/PwrM_Cfg.c`.
   - MCU1: `Config/McalCdd/gen_s600_md_mcu1/PwrIf/src/PwrM_Cfg.c`.
+</DocScope>
 </DocScope>
 
 ## 3. Application Programming Interface
@@ -247,6 +250,8 @@ There are two independent watchdogs on the RDK S600 MCU side:
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
+<DocScope versions=">= 4.1.0">
+
 #### 3.2.5 Wdg_Lld_SetRstCallback
 | Service Name | Wdg_Lld_SetRstCallback |
 |---|---|
@@ -272,6 +277,7 @@ There are two independent watchdogs on the RDK S600 MCU side:
 | Return value | None |
 | Description | Handles the watchdog reset interrupt and invokes the callback registered by Wdg_Lld_SetRstCallback. |
 | Available via | Wdg_Lld.h |
+</DocScope>
 
 ### 3.3 Interrupt Handling
 
@@ -300,6 +306,8 @@ There are two independent watchdogs on the RDK S600 MCU side:
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
+<DocScope versions=">= 4.1.0">
+
 The handling paths for normal WDG interrupts and reset interrupts are as follows:
 
 | ISR | Handler | Description |
@@ -310,6 +318,7 @@ The handling paths for normal WDG interrupts and reset interrupts are as follows
 :::note
 `WdgX_RstIrqHandler()` is the instance-level entry provided by the Target project and is equivalent to `Wdg_Lld_RstIrqHandler(X)`. For instances without an instance-level entry, call `Wdg_Lld_RstIrqHandler()` directly.
 :::
+</DocScope>
 
 ### 3.4 Critical Sections
 Use `SchM_Enter_Wdg_ExclusiveZone_XX` and `SchM_Exit_Wdg_ExclusiveZone_XX` to define operations for entering and exiting critical sections. The WDG driver requires users to handle critical sections according to their actual application deployment. These functions are already called in the driver.
@@ -366,6 +375,8 @@ The flow is: interrupt sets flag → dedicated task delays → trigger long rese
 | OS task (delay + long reset) | Target\...\HorizonTask.c: TASK(OsTask_SysCore_WDG_RST) | When `g_need_reset` is true: log → `vTaskDelay(MS_TO_TICK(5000))` (approx. 5s) → `Rfchm_TriggerSocLongReset()` executes SoC long reset |
 
 </DocScope>
+
+<DocScope versions=">= 4.1.0">
 
 ## 5. WDG Reset Interrupt Test Notes
 
@@ -666,4 +677,5 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 :::note
 On RDK S600, `Uart8` is the shared debug console for MCU0/MCU1. If MCU1 also registers and owns `Uart0_Isr`, input will be contended. When testing the MCU0 serial Shell, ensure only MCU0 owns this UART, or disable the MCU1 Shell/UART0 receive path.
 :::
+</DocScope>
 </DocScope>

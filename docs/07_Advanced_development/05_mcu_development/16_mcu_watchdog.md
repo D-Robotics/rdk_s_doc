@@ -57,6 +57,8 @@ import DocScope from '@site/src/components/DocScope';
 - McalCdd\Wdg\inc\Wdg4.h
 </DocScope>
 
+<DocScope versions=">= 4.1.0">
+
 ### 2.2 芯片内 WDG 与 PMIC WDG 的区别
 
 芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级兜底（fail-safe）；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位或保护。
@@ -123,6 +125,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 - **PMIC WDG 配置**
   - MCU0：`Config/McalCdd/gen_s600_md/PwrIf/src/PwrM_Cfg.c`。
   - MCU1：`Config/McalCdd/gen_s600_md_mcu1/PwrIf/src/PwrM_Cfg.c`。
+</DocScope>
 </DocScope>
 
 ## 3. 应用程序接口
@@ -247,6 +250,8 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
+<DocScope versions=">= 4.1.0">
+
 #### 3.2.5 Wdg_Lld_SetRstCallback
 | Service Name | Wdg_Lld_SetRstCallback |
 |---|---|
@@ -272,6 +277,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Return value | None |
 | Description | Handles the watchdog reset interrupt and invokes the callback registered by Wdg_Lld_SetRstCallback. |
 | Available via | Wdg_Lld.h |
+</DocScope>
 
 ### 3.3 中断处理
 
@@ -300,6 +306,8 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
+<DocScope versions=">= 4.1.0">
+
 普通 WDG 中断和复位中断的处理链路如下：
 
 | ISR | 处理函数 | 说明 |
@@ -310,6 +318,7 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 :::note
 `WdgX_RstIrqHandler()` 是 Target 工程提供的实例级入口，与 `Wdg_Lld_RstIrqHandler(X)` 等价；没有实例级入口的实例直接调用 `Wdg_Lld_RstIrqHandler()`。
 :::
+</DocScope>
 
 ### 3.4 临界区
 使用`SchM_Enter_Wdg_ExclusiveZone_XX`和`SchM_Exit_Wdg_ExclusiveZone_XX`来定义进入和退出临界区的操作，WDG 驱动程序需要用户结合实际应用部署情况来处理临界区，其函数已在驱动中调用。
@@ -366,6 +375,8 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 | OS 任务（延时 + 长复位） | Target\...\HorizonTask.c：TASK(OsTask_SysCore_WDG_RST) | g_need_reset 为真时：日志 → vTaskDelay(MS_TO_TICK(5000))（约 5s）→ Rfchm_TriggerSocLongReset() 执行 SoC 长复位 |
 
 </DocScope>
+
+<DocScope versions=">= 4.1.0">
 
 ## 5. WDG 复位中断测试说明
 
@@ -666,4 +677,5 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 :::note
 RDK S600 的 `Uart8` 为 MCU0/MCU1 共用调试串口。若 MCU1 同时注册并占用 `Uart0_Isr`，会造成输入竞争；测试 MCU0 串口 Shell 时需确保仅 MCU0 占用该串口，或关闭 MCU1 的 Shell/UART0 接收。
 :::
+</DocScope>
 </DocScope>
