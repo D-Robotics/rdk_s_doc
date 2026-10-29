@@ -57,13 +57,12 @@ import DocScope from '@site/src/components/DocScope';
 - McalCdd\Wdg\inc\Wdg4.h
 </DocScope>
 
-<DocScope versions=">= 4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
 
 ### 2.2 芯片内 WDG 与 PMIC WDG 的区别
 
 芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级兜底（fail-safe）；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位或保护。
 
-<DocScope products="RDK S100">
 RDK S100 的 MCU 侧存在两类看门狗，二者相互独立：
 
 - **芯片内 WDG**：集成在 RDK S100 内部，默认未开启；需要时通过 WDG API 初始化并配置。
@@ -95,7 +94,12 @@ RDK S100 的 MCU 侧存在两类看门狗，二者相互独立：
   - MCU1：`Config/McalCdd/gen_s100_sip_B_mcu1/PwrIf/src/PwrM_Cfg.c`。
 </DocScope>
 
-<DocScope products="RDK S600">
+<DocScope products="RDK S600" versions=">= 5.1.1">
+
+### 2.2 芯片内 WDG 与 PMIC WDG 的区别
+
+芯片内 WDG 与 PMIC WDG 是互补的两层看门狗：芯片内 WDG 负责 MCU 内部监控和测试，PMIC WDG 作为板级兜底（fail-safe）；即使 MCU 软件异常导致无法正常喂狗，PMIC WDG 超时后仍可执行复位或保护。
+
 RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 
 - **芯片内 WDG**：集成在 RDK S600 内部，默认未开启；需要时通过 WDG API 初始化并配置。RDK S600 支持 `Wdg0`~`Wdg4` 共 5 个实例；当前 MCU0 默认配置挂载 `Wdg0`~`Wdg2`，MCU1 默认配置挂载 `Wdg0`~`Wdg2`。
@@ -125,7 +129,6 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 - **PMIC WDG 配置**
   - MCU0：`Config/McalCdd/gen_s600_md/PwrIf/src/PwrM_Cfg.c`。
   - MCU1：`Config/McalCdd/gen_s600_md_mcu1/PwrIf/src/PwrM_Cfg.c`。
-</DocScope>
 </DocScope>
 
 ## 3. 应用程序接口
@@ -376,23 +379,14 @@ Acore 侧看门狗超时触发中断送到 MCU0侧，由 MCU0侧在延时后发�
 
 </DocScope>
 
-<DocScope versions=">= 4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
 
 ## 5. WDG 复位中断测试说明
 
-<DocScope products="RDK S100">
 本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断处理链路参见 3.3。
-</DocScope>
-
-<DocScope products="RDK S600">
-本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断向量参见 3.3。
-
-当前 MCU0 Target 工程已接入 `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` 复位中断测试路径；若基于未改动的源码测试，需要按下面的测试环境配置接入后再进行测试。
-</DocScope>
 
 ### 测试环境配置
 
-<DocScope products="RDK S100">
 以下配置用于使测试代码所在核能够控制 WDG 并接收复位中断。
 
 #### 复位中断处理函数
@@ -454,7 +448,16 @@ OS_R52_GICD_IROUTER[MCUSYS_WWDT2_INTR]         = WDG_IRQ_AFFINITY_NS | 0U;
 ```
 </DocScope>
 
-<DocScope products="RDK S600">
+<DocScope products="RDK S600" versions=">= 5.1.1">
+
+## 5. WDG 复位中断测试说明
+
+本节说明在测试环境中如何验证 WDG 超时后的复位中断回调路径。驱动侧已提供复位中断回调接口，相关 API 参见 3.2.5 和 3.2.6，中断向量参见 3.3。
+
+当前 MCU0 Target 工程已接入 `Wdg_InsXIntIsr`/`Wdg_InsXRstIsr` 复位中断测试路径；若基于未改动的源码测试，需要按下面的测试环境配置接入后再进行测试。
+
+### 测试环境配置
+
 以下配置用于在 RDK S600 MCU0 的 Core0 上通过 Shell 测试 `Wdg0`~`Wdg4` 的复位中断回调路径。驱动层已支持 `Wdg0`、`Wdg1`、`Wdg2`、`Wdg3`、`Wdg4` 复位中断接口；当前 RDK S600 MCU0 Target 工程已按以下配置接入 WDG 中断/复位中断入口，若基于未改动的源码测试，需按相同步骤检查或补全。
 
 #### WDG 配置扩展
@@ -677,5 +680,4 @@ extern void Os_Isr_Wdg_Ins4RstIsr(void);
 :::note
 RDK S600 的 `Uart8` 为 MCU0/MCU1 共用调试串口。若 MCU1 同时注册并占用 `Uart0_Isr`，会造成输入竞争；测试 MCU0 串口 Shell 时需确保仅 MCU0 占用该串口，或关闭 MCU1 的 Shell/UART0 接收。
 :::
-</DocScope>
 </DocScope>
