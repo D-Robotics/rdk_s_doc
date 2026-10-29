@@ -428,7 +428,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   3. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sends IPIs to other cores. If the CPU bitmap is not empty, it indicates that some cores cannot respond to IRQ interrupts normally, and feeding is not allowed.
 
-  4. The Watchdog counter continues to decrement. When the second timeout occurs, two interrupts are generated: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. Upon first receiving the watchdog reset interrupt corresponding to a bark, the MCU refreshes the watchdog timeout to 2581ms to allow the Acore time to dump the stack. When the watchdog reset interrupt is triggered again, a reset is performed.
+  4. The Watchdog counter continues to decrement. When the second timeout occurs, two interrupts are generated: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. After receiving the watchdog reset interrupt corresponding to a bark, the MCU sets a reset request; the reset task then waits a fixed 5000 ms to allow the Acore to complete stack dumping, and subsequently triggers a full SoC long reset.
 
 ### SoftLockup Monitoring
 
@@ -442,7 +442,7 @@ ret = ioctl(fd, HB_WDT_GETSTATUS, &flags);
 
   4. When the first timeout occurs, an interrupt is generated. The Watchdog restarts counting. A core responds to the interrupt and sets a flag. The Watchdog monitoring Kthread running on that core detects the flag, clears its own bit in the CPU bitmap, and sends IPIs to other cores to execute the same logic. It records a bitmap of currently online CPUs. Whenever a core receives the IPI, executes the logic, or goes offline, the corresponding bit in the bitmap is cleared. When the entire bitmap is empty, the monitoring task for this cycle is complete, and feeding the watchdog is allowed.
 
-  5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. Upon first receiving the watchdog reset interrupt corresponding to a bark, the MCU refreshes the watchdog timeout to 2581ms to allow the Acore time to dump the stack. When the watchdog reset interrupt is triggered again, a reset is performed.
+  5. If the CPU bitmap is still not empty before the second timeout, two interrupts are generated when the second timeout occurs: one is sent to the Acore's GIC to trigger a stack dump, and the other is a watchdog reset interrupt sent to the MCU, which then controls the reset. After receiving the watchdog reset interrupt corresponding to a bark, the MCU sets a reset request; the reset task then waits a fixed 5000 ms to allow the Acore to complete stack dumping, and subsequently triggers a full SoC long reset.
 </DocScope>
 
 <DocScope products="RDK S100" versions=">=4.1.0">
