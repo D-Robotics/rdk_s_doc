@@ -253,7 +253,36 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
-<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
+
+#### 3.2.5 Wdg_Lld_SetRstCallback
+| Service Name | Wdg_Lld_SetRstCallback |
+|---|---|
+| Syntax | Std_ReturnType Wdg_Lld_SetRstCallback(const Wdg_Lld_InstanceType Instance, Wdg_CallbackPtrType Callback) |
+| Sync/Async | Synchronous |
+| Reentrancy | Non Reentrant |
+| Parameters (in) | Instance:Watchdog instance index; Callback:Reset interrupt callback, NULL_PTR can be used to clear |
+| Parameters (inout) | None |
+| Parameters (out) | None |
+| Return value | Std_ReturnType |
+| Description | Registers or clears the reset interrupt callback of the specified watchdog instance. |
+| Available via | Wdg_Lld.h |
+
+#### 3.2.6 Wdg_Lld_RstIrqHandler
+| Service Name | Wdg_Lld_RstIrqHandler |
+|---|---|
+| Syntax | void Wdg_Lld_RstIrqHandler(uint32 Instance) |
+| Sync/Async | Synchronous |
+| Reentrancy | Non Reentrant |
+| Parameters (in) | Instance:Watchdog instance index |
+| Parameters (inout) | None |
+| Parameters (out) | None |
+| Return value | None |
+| Description | Handles the watchdog reset interrupt and invokes the callback registered by Wdg_Lld_SetRstCallback. |
+| Available via | Wdg_Lld.h |
+</DocScope>
+
+<DocScope products="RDK S600" versions=">= 5.1.1">
 
 #### 3.2.5 Wdg_Lld_SetRstCallback
 | Service Name | Wdg_Lld_SetRstCallback |
@@ -309,7 +338,21 @@ RDK S600 的 MCU 侧存在两类看门狗，二者相互独立：
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
-<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
+
+普通 WDG 中断和复位中断的处理链路如下：
+
+| ISR | 处理函数 | 说明 |
+|---|---|---|
+| Wdg_InsXIntIsr | WdgX_IrqHandler | 普通 WDG 中断，最终调用 Wdg_Lld_IrqHandler |
+| Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG 复位中断，最终调用 Wdg_Lld_SetRstCallback 注册的回调 |
+
+:::note
+`WdgX_RstIrqHandler()` 是 Target 工程提供的实例级入口，与 `Wdg_Lld_RstIrqHandler(X)` 等价；没有实例级入口的实例直接调用 `Wdg_Lld_RstIrqHandler()`。
+:::
+</DocScope>
+
+<DocScope products="RDK S600" versions=">= 5.1.1">
 
 普通 WDG 中断和复位中断的处理链路如下：
 

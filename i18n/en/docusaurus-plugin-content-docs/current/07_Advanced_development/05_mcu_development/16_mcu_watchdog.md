@@ -253,7 +253,36 @@ There are two independent watchdogs on the RDK S600 MCU side:
 | Description | Returns the version information of the module. |
 | Available via | Wdgx.h |
 
-<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
+
+#### 3.2.5 Wdg_Lld_SetRstCallback
+| Service Name | Wdg_Lld_SetRstCallback |
+|---|---|
+| Syntax | Std_ReturnType Wdg_Lld_SetRstCallback(const Wdg_Lld_InstanceType Instance, Wdg_CallbackPtrType Callback) |
+| Sync/Async | Synchronous |
+| Reentrancy | Non Reentrant |
+| Parameters (in) | Instance:Watchdog instance index; Callback:Reset interrupt callback, NULL_PTR can be used to clear |
+| Parameters (inout) | None |
+| Parameters (out) | None |
+| Return value | Std_ReturnType |
+| Description | Registers or clears the reset interrupt callback of the specified watchdog instance. |
+| Available via | Wdg_Lld.h |
+
+#### 3.2.6 Wdg_Lld_RstIrqHandler
+| Service Name | Wdg_Lld_RstIrqHandler |
+|---|---|
+| Syntax | void Wdg_Lld_RstIrqHandler(uint32 Instance) |
+| Sync/Async | Synchronous |
+| Reentrancy | Non Reentrant |
+| Parameters (in) | Instance:Watchdog instance index |
+| Parameters (inout) | None |
+| Parameters (out) | None |
+| Return value | None |
+| Description | Handles the watchdog reset interrupt and invokes the callback registered by Wdg_Lld_SetRstCallback. |
+| Available via | Wdg_Lld.h |
+</DocScope>
+
+<DocScope products="RDK S600" versions=">= 5.1.1">
 
 #### 3.2.5 Wdg_Lld_SetRstCallback
 | Service Name | Wdg_Lld_SetRstCallback |
@@ -309,7 +338,21 @@ There are two independent watchdogs on the RDK S600 MCU side:
 | Wdg_Ins4RstIsr | 102 |
 </DocScope>
 
-<DocScope products="RDK S600,RDK S100" versions=">= 4.1.0">
+<DocScope products="RDK S100" versions=">= 4.1.0">
+
+The handling paths for normal WDG interrupts and reset interrupts are as follows:
+
+| ISR | Handler | Description |
+|---|---|---|
+| Wdg_InsXIntIsr | WdgX_IrqHandler | Normal WDG interrupt; finally calls Wdg_Lld_IrqHandler |
+| Wdg_InsXRstIsr | Wdg_Lld_RstIrqHandler | WDG reset interrupt; finally calls the callback registered by Wdg_Lld_SetRstCallback |
+
+:::note
+`WdgX_RstIrqHandler()` is the instance-level entry provided by the Target project and is equivalent to `Wdg_Lld_RstIrqHandler(X)`. For instances without an instance-level entry, call `Wdg_Lld_RstIrqHandler()` directly.
+:::
+</DocScope>
+
+<DocScope products="RDK S600" versions=">= 5.1.1">
 
 The handling paths for normal WDG interrupts and reset interrupts are as follows:
 
