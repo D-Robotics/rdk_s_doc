@@ -65,12 +65,17 @@ pip install tqdm
 
 <DocScope products="RDK S100">
 
-[资源汇总 - 系统软件](../../01_Quick_start/download.md#系统软件)（MCU SDK，源码包形式）。
+[资源汇总 - 系统软件](../../01_Quick_start/download.md#系统软件)。
 
 </DocScope>
-<DocScope products="RDK S600">
+<DocScope products="RDK S600" versions="5.1.0">
 
-[资源汇总 - 系统软件](../../01_Quick_start/download.md#s600-system-software)（MCU Cluster-1 SDK，社区版为静态链接库；源码包形式请通过 FTP 下载）。
+[资源汇总 - 系统软件](../../01_Quick_start/download.md#s600-system-software)。
+
+</DocScope>
+<DocScope products="RDK S600" versions="5.1.1">
+
+[资源汇总 - 系统软件](../../01_Quick_start/download.md#s600-system-software-5-1-1)。
 
 </DocScope>
 

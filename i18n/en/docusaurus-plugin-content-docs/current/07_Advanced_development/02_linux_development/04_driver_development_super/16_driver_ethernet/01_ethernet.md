@@ -13,16 +13,16 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-The S100 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet收发, PTP/TSN time-sensitive networking, and EtherCAT master features.  
+The S100 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet transmission and reception, PTP/TSN time-sensitive networking, and EtherCAT master features.  
 
 </DocScope>
 <DocScope products="RDK S600">
 
-The S600 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet收发, PTP/TSN time-sensitive networking, and EtherCAT master features.  
+The S600 chip provides multiple standard Gigabit/10-Gigabit Ethernet controllers, supporting traditional Ethernet packet transmission and reception, PTP/TSN time-sensitive networking, and EtherCAT master features.  
 
 </DocScope>
 
-The controllers have built-in hardware multi-queue, MTL layer 2 transport layer, DMA engine, etc., to achieve packet收发 in the various scenarios mentioned above.  
+The controllers have built-in hardware multi-queue, MTL layer 2 transport layer, DMA engine, etc., to achieve packet transmission and reception in the various scenarios mentioned above.  
 This document mainly includes a network card usage guide, development board Bringup, and key feature descriptions.
 
 ## Terminology
@@ -39,6 +39,8 @@ This document mainly includes a network card usage guide, development board Brin
 
 ## Network Card Feature Introduction
 
+<DocScope products="RDK S100">
+
 | Feature | Description            | S100                             |
 | ------- | ---------------------- | -------------------------------- |
 | Configuration | Number of Ethernet ports | Dual-port                       |
@@ -49,6 +51,9 @@ This document mainly includes a network card usage guide, development board Brin
 | AVB/TSN  | Time-Sensitive Networking | &#x2705;                        |
 | C22/C45  | MDIO PHY data protocol | &#x2705;                         |
 
+</DocScope>
+<DocScope products="RDK S600">
+
 | Feature | Description            | S600                                          |
 | ------- | ---------------------- | --------------------------------------------- |
 | Configuration | Number of Ethernet ports | 3x gmac + 3x xgmac<br/>First 2 gmacs share PHY with PCIe |
@@ -58,6 +63,8 @@ This document mainly includes a network card usage guide, development board Brin
 | Multi-queue | NIC multi-queue feature | &#x2705;                                     |
 | AVB/TSN  | Time-Sensitive Networking | &#x2705;                                     |
 | C22/C45  | MDIO PHY data protocol | &#x2705;                                      |
+
+</DocScope>
 
 ## Network Configuration
 ### U-Boot
@@ -141,6 +148,7 @@ This document mainly includes a network card usage guide, development board Brin
 </DocScope>
 
 #### Device Tree Configuration
+<DocScope products="RDK S100">
 ```dts
     // Configure hsis mode and reference clock selection, such as combo PHY multiplexing, reference clock source, etc.
     hsis0: hsis0 {
@@ -160,6 +168,8 @@ This document mainly includes a network card usage guide, development board Brin
     };
 ```
 
+</DocScope>
+<DocScope products="RDK S600">
 ```dts
     // Configure hsis mode and reference clock selection, such as combo PHY multiplexing, reference clock source, and PHY eye diagram signal parameters.
     hsis0: hsis0 {
@@ -188,10 +198,13 @@ This document mainly includes a network card usage guide, development board Brin
 - xpcs-speed:       Set xpcs according to different speeds.
 - hobot-txeq:       Set eye diagram parameters for different gears, range [0, 10], default is gear 4, no adjustment needed for sgmii.
 - hobot-vboost:     Eye diagram amplitude coefficient, 0 disables.
+</DocScope>
 
 #### mdio phy Configuration
 - Refer to schematics and hardware documentation for PHY connection details.
 - Software mainly needs to focus on the reset pin and phy addr address.
+
+<DocScope products="RDK S100">
 
 ```dts
     // drobot-s100-soc.dtsi, default eth configuration for the chip; can be overridden by specific board's dts
@@ -225,6 +238,9 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ``` 
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ```dts
     // hobot-s600-soc.dtsi, default eth configuration for the chip. Can be overridden by specific board's dts.
@@ -263,9 +279,13 @@ This document mainly includes a network card usage guide, development board Brin
     };
 ```
 
+</DocScope>
+
 #### MAC2MAC
 - In MAC TO MAC direct connection scenarios, configure as fixed-link.
 - For example:
+
+<DocScope products="RDK S100">
 
 ```dts
     // Default eth0 node configuration can refer to drobot-s100-soc.dts
@@ -279,6 +299,9 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
+</DocScope>
+<DocScope products="RDK S600">
+
 ```dts
     // Similar for S600 development board, override to fixed-link mode in the board-level dts.
     &eth3 {
@@ -289,6 +312,8 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
+
+</DocScope>
 
 #### U-Boot Commands Introduction
 - mii: PHY read/write commands (C22 protocol)
@@ -335,12 +360,17 @@ This document mainly includes a network card usage guide, development board Brin
 
 </DocScope>
 
+<DocScope products="RDK S100">
+
 ```dts
     &hsis0 {
             hsi-mode = <0x4>;  /* 0x1: pcie x4, 0x4: pcie x2 + gmac0 + gmac1, 0x8: pcie0 x1 + pcie1 x1 + gmac0 + gmac1 >
             refclk-mode = <0>; /* 0:internal; 1:external; */
     };
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ```dts
     &hsis0 {
@@ -353,7 +383,11 @@ This document mainly includes a network card usage guide, development board Brin
     };
 ```
 
+</DocScope>
+
 #### Network Card and PHY Configuration
+<DocScope products="RDK S100">
+
 ```dts
     // Default network card node can refer to drobot-s100-soc.dtsi
     // Board-level related configuration depends on actual hardware connections. For traditional sgmii phy mode, refer to nodes in rdk-v0p5.dtsi.
@@ -373,6 +407,9 @@ This document mainly includes a network card usage guide, development board Brin
             };
     };
 ```
+
+</DocScope>
+<DocScope products="RDK S600">
 
 ```dts
     // Default network card node can refer to drobot-s600-soc.dtsi
@@ -399,6 +436,8 @@ This document mainly includes a network card usage guide, development board Brin
     };
 ```
 
+</DocScope>
+
 #### Common MAC and PHY Configurations
 - Refer to the device tree content above and more complete information in dts files.
 - Describe common phy configuration parameters:
@@ -418,8 +457,7 @@ This document mainly includes a network card usage guide, development board Brin
 #### MAC2MAC
 - Similar to U-Boot, for MAC2MAC scenarios, the main thing is to configure fixed-link mode.
 
-<Tabs groupId="soc_type">
-<TabItem value="S100" label="S100">
+<DocScope products="RDK S100">
 ```dts
     // Default eth0 node configuration can refer to drobot-s100-soc.dts
     // Actual board-level configuration can be described in the corresponding dts, e.g., refer to drobot-s100-rdk.dts.
@@ -432,9 +470,9 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
-</TabItem>
+</DocScope>
 
-<TabItem value="S600" label="S600">
+<DocScope products="RDK S600">
 ```dts
     // Similar for S600 development board, override to fixed-link mode in the board-level dts.
     &ethernet2 {
@@ -445,8 +483,7 @@ This document mainly includes a network card usage guide, development board Brin
         };
     };
 ```
-</TabItem>
-</Tabs>
+</DocScope>
 
 - Description of common fixed-link node attributes:
    - speed (integer, required): Indicates link speed, can be set to 10, 100, 1000.
@@ -462,6 +499,8 @@ This document mainly includes a network card usage guide, development board Brin
 ```dts
     hobot,tso = <1>;            // Enable NIC TSO functionality
 ```
+
+<DocScope products="RDK S600">
 
 #### Configure XGMAC to 1G Mode
 - This feature is only needed for S600 10-Gigabit NICs. (S100 defaults to 1G Gigabit mode)
@@ -480,6 +519,8 @@ This document mainly includes a network card usage guide, development board Brin
 - xpcs-speed:           Configure XPCS to operate in 1G SGMII mode with 1000.
 - hobot,xgmac_gmii:     Force XGMAC to operate in GMII mode.
 
+</DocScope>
+
 #### Interrupt Coalescing
 ```dts
     ethernet3: xgmac0@0x33130000 {
@@ -490,6 +531,7 @@ This document mainly includes a network card usage guide, development board Brin
 - hobot,disable_coal;   # Interrupt coalescing is enabled by default on the NIC; this flag can be used to disable it.
 
 #### RSS
+<DocScope products="RDK S600">
 - Receive Side Scaling, a receive-side load balancing technology supported by multi-queue NIC hardware.
 - Typically for 10-Gigabit NICs, e.g., S600 requires this technology.
 ```dts
@@ -506,7 +548,10 @@ This document mainly includes a network card usage guide, development board Brin
 - hobot,multi_irq;      # NIC multi-interrupt support, registering different ISRs for multiple interrupts.
 - hobot,rss_en;         # Enable NIC receive-side scaling functionality.
 
+</DocScope>
+
 #### HSIS, XPCS
+<DocScope products="RDK S600">
 ```dts
     hsis0: hsis0 {
         status = "okay";
@@ -523,6 +568,8 @@ This document mainly includes a network card usage guide, development board Brin
 - The hsis configuration in Linux is only used to restore hsis mode and xpcs mode during suspend/resume.
 - Therefore, when modifying hsis configuration, ensure it is synchronously modified with the U-Boot hsis node.
 :::
+
+</DocScope>
 
 #### Queues
 - Modern network cards are multi-queue NICs.
@@ -702,7 +749,7 @@ This document mainly includes a network card usage guide, development board Brin
 
 | Function Category | Core POSIX API Code |
 | :--------------- | :------------------ |
-| L2 packet收发 | `socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));`<br/>`bind(fd, (struct sockaddr *) &addr, sizeof(addr));`<br/>`setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, name, strlen(name)); /* Bind to specific NIC */`<br/>`setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &prg, sizeof(prg)); /* Attach packet filter */`<br/>`ioctl(sock, SIOCGIFHWADDR, &ifr); /* Get NIC MAC address */` |
+| L2 packet transmission and reception | `socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL));`<br/>`bind(fd, (struct sockaddr *) &addr, sizeof(addr));`<br/>`setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, name, strlen(name)); /* Bind to specific NIC */`<br/>`setsockopt(fd, SOL_SOCKET, SO_ATTACH_FILTER, &prg, sizeof(prg)); /* Attach packet filter */`<br/>`ioctl(sock, SIOCGIFHWADDR, &ifr); /* Get NIC MAC address */` |
 | Packet Hardware Timestamping | `ioctl(fd, SIOCSHWTSTAMP, &ifreq); /* Enable hardware timestamping */`<br/>`setsockopt(fd, SOL_SOCKET, SO_TIMESTAMPING, &flags, sizeof(flags)); /* Enable timestamping delivery */`<br/>`recvmsg(fd, &msg, MSG_ERRQUEUE); /* Get transmit packet hardware timestamp */`<br/>`recvmsg(fd, &msg, 0); /* Get receive packet hardware timestamp */` |
 | Get NIC PHC Index | `socket(AF_INET, SOCK_DGRAM, 0);`<br/>`ioctl(fd, SIOCETHTOOL, &ifr);` |
 | PHC Time Read/Write | `open("/dev/ptp0", O_RDWR);`<br/>`FD_TO_CLOCKID(fd);`<br/>`clock_gettime(clkid, &ts);`<br/>`clock_settime(clkid, &ts);` |
@@ -846,8 +893,12 @@ This document mainly includes a network card usage guide, development board Brin
     - Perform loop reboot test and check if the network can be pinged.
 
 - Power cycle test
+    <DocScope products="RDK S100">
     - Use a relay to perform loop power on/off and check if the S100 network starts normally.
+    </DocScope>
+    <DocScope products="RDK S600">
     - Use a relay to perform loop power on/off and check if the S600 network starts normally.
+    </DocScope>
 
 - iperf3 24-hour test
     - tcp test
@@ -999,19 +1050,29 @@ This document mainly includes a network card usage guide, development board Brin
 
 ### FAQ
 #### TSN
+<DocScope products="RDK S100">
 - Q: Which TSN standards does the S100 support?
+</DocScope>
+<DocScope products="RDK S600">
 - Q: Which TSN standards does the S600 support?
+</DocScope>
 - A: Credit-Based Shaper (CBS) (IEEE 802.1-Qav), Enhancements to Scheduled Traffic (EST) (IEEE 802.1Qbv-2015), Frame Preemption (FPE) (IEEE 802.1Qbu-2016).
 
 #### PHY
+<DocScope products="RDK S100">
 - Q: Which PHYs have been adapted for the S100?
+</DocScope>
+<DocScope products="RDK S600">
 - Q: Which PHYs have been adapted for the S600?
+</DocScope>
 - A: Realtek 8211, Marvell 88E1512, Marvell 88Q2121, Marvell 88Q2220, TI dp83867, Marvell CUX3520.
 
 #### Network Environment
+<DocScope products="RDK S100">
 - Q: S100 cannot ping Windows, but Windows can ping S100?
 - A: Check if Windows firewall is turned off; Windows built-in firewall is shown below:
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="Network Environment photo" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+</DocScope>
 
 #### U-Boot Debugging and Upgrade
 - Q: U-Boot network auto-negotiation fails or cannot ping after negotiating to Gigabit?

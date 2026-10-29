@@ -19,9 +19,9 @@ sidebar_products: RDK-S100
 
 - HBM 模型名称：
 
-- 检测模型（Detection）：cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm
+- 检测模型（Detection）：`cn_PP-OCRv3_det_infer-deploy_640x640_nv12.hbm`
 
-- 识别模型（Recognition）：cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm
+- 识别模型（Recognition）：`cn_PP-OCRv3_rec_infer-deploy_48x320_rgb.hbm`
 
 - 输入格式：
 
@@ -48,7 +48,7 @@ sidebar_products: RDK-S100
 
 - 推理执行
 
-    调用 .infer() 方法进行前向推理，输出包括概率图（检测）与 logits（识别）。
+    调用 `.infer()` 方法进行前向推理，输出包括概率图（检测）与 logits（识别）。
 
 - 结果后处理
 
@@ -134,12 +134,12 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/paddle_ocr/c
         ```
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到build/result.jpg
+    运行成功后，会将结果绘制在原图上，并保存到`build/result.jpg`
     ```bash
     [Saved] Result saved to: result.jpg
     ```
 
 ## 注意事项
-- 输出结果存储为result.jpg，用户可自行查看。
+- 输出结果存储为`result.jpg`，用户可自行查看。
 
 - 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。

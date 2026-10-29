@@ -88,6 +88,9 @@ Y
 ```text
 .
 ├── mipi_camera_web_yolov5x.py      # Main program
+├── start_nginx.sh                  # nginx startup script
+├── webservice/                     # nginx + static front-end assets
+├── x3_pb2.py                       # protobuf-generated message definitions
 └── README.md                       # Usage instructions
 ```
 

@@ -598,15 +598,11 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 ```
 
 
-测试 sample 实现了对 SPI 的回环测试，以 S100使用 SPI3为例，若使用 S600注意将`./ipcbox_spi -b 3`修改为`./ipcbox_spi -b 6`
+测试 sample 实现了对 SPI 的回环测试，S100 默认使用 SPI3，S600 默认使用 SPI6，运行时通过 `-b` 参数指定 SPI 总线号
 <DocScope products="RDK S100">
 1. 开机进入 S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
-</DocScope>
-<DocScope products="RDK S600">
-1. 开机进入 S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
-</DocScope>
 2. 编译：`make`
-3. 运行: `./ipcbox_spi`
+3. 运行: `./ipcbox_spi -b 3`
 4. 出现`SPI write successful, 128 bytes`的打印则测试通过, 参考 log 如下：
         ```
         root@ubuntu:/app/ipcbox_sample/ipcbox_spi# ./ipcbox_spi -b 3
@@ -635,6 +631,40 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 
         [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 deinit success.
         ```
+</DocScope>
+<DocScope products="RDK S600">
+1. 开机进入 S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
+2. 编译：`make`
+3. 运行: `./ipcbox_spi -b 6`
+4. 出现`SPI write successful, 128 bytes`的打印则测试通过, 参考 log 如下：
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_spi# ./ipcbox_spi -b 6
+        [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 init success.
+        [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 config success.
+        SPI write successful, 128 bytes
+        tx_data(128)
+        00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+        10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F
+        20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F
+        30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F
+        40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F
+        50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F
+        60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F
+        70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+
+        rx_packet(128)
+        00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
+        10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F
+        20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F
+        30 31 32 33 34 35 36 37 38 39 3A 3B 3C 3D 3E 3F
+        40 41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F
+        50 51 52 53 54 55 56 57 58 59 5A 5B 5C 5D 5E 5F
+        60 61 62 63 64 65 66 67 68 69 6A 6B 6C 6D 6E 6F
+        70 71 72 73 74 75 76 77 78 79 7A 7B 7C 7D 7E 7F
+
+        [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 deinit success.
+        ```
+</DocScope>
 
 :::tip
 IpcBox 只实现了对 SPI Master 的操控，有以下限制
@@ -645,7 +675,7 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
 
 #### I2C 测试
 
-测试 sample 实现了对 I2c 的 detect 测试，以 S100使用 I2c6为例，若使用 S600注意将`./ipcbox_i2c detect 6`修改为`./ipcbox_i2c detect 13`
+测试 sample 实现了对 I2c 的 detect 测试，S100 默认使用 I2C6，S600 默认使用 I2C13，运行时通过 `detect`/`get`/`set` 命令的 `i2c_channel` 参数指定 I2C 总线号
 
 同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`i2c`对应项使能。默认如下配置中`i2c`为`DISABLE`，需要改为`ENABLE`：
 
@@ -657,10 +687,6 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
 
 <DocScope products="RDK S100">
 1. 开机进入 S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
-</DocScope>
-<DocScope products="RDK S600">
-1. 开机进入 S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
-</DocScope>
 2. 编译：`make`
 3. 运行: `./ipcbox_i2c` 出现如下参考命令
         ```
@@ -699,6 +725,26 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
         Read data[0]: 0x3C
         [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 deinit success.
         ```
+</DocScope>
+<DocScope products="RDK S600">
+1. 开机进入 S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
+2. 编译：`make`
+3. 运行: `./ipcbox_i2c` 出现如下参考命令
+        ```
+        root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c
+        Usage: ./ipcbox_i2c detect [i2c_channel]
+        ./ipcbox_i2c get [i2c_channel] [slave_addr] [reg_addr]
+        ./ipcbox_i2c set [i2c_channel] [slave_addr] [reg_addr] [val]
+        Examples:
+        ./ipcbox_i2c detect 0
+        ./ipcbox_i2c set 0 0x50 0x01 0xAA
+        ./ipcbox_i2c get 0 0x50 0x01
+        ```
+4. 输入`./ipcbox_i2c detect 13` ,探测`I2c13`的设备
+5. 输入`./ipcbox_i2c get 13 0x13 0x2`，读取`I2c13` 上 slave 地址为`0x13`、寄存器地址为`0x2` 的数据
+
+   输出为标准的 I2C 扫描表和读取结果，扫描到的从设备地址以及 `Read data` 的值取决于 I2C13 上实际挂载的设备。
+</DocScope>
 
 :::tip
 ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave

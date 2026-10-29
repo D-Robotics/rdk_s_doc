@@ -1024,6 +1024,88 @@ Host 端构建支持两种构建方式：
 
 如果你使用的是 EtherCAT igh 主站1.6.4以上的版本，可以参考[自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）](#自动启停网卡ethercat-igh-主站164版本之后支持)进行配置。
 
+## CPU 绑核配置（RUN_ON_CPU）
+
+EtherCAT 主站内核线程（`EtherCAT-IDLE` / `EtherCAT-OP`）默认由内核调度器在所有 CPU 核心上调度。在对实时性或 CPU 隔离有要求的场景下，可通过 `RUN_ON_CPU` 配置项将主站内核线程绑定到指定 CPU 核心，减少跨核迁移带来的调度抖动，提升 EtherCAT 通信稳定性。
+
+:::info
+`RUN_ON_CPU` 对 Native 驱动（`ec_hobot`）与 Generic 驱动（`ec_generic`）均生效，配置方式相同。
+
+<DocScope products="RDK S100">
+该特性需系统版本 **V4.1.0 以上**支持。若 `/etc/ethercat.conf` 中没有 `RUN_ON_CPU` 配置项，请升级 `hobot-ethercat` 包。
+</DocScope>
+
+<DocScope products="RDK S600">
+该特性需系统版本 **V5.1.0 以上**支持。若 `/etc/ethercat.conf` 中没有 `RUN_ON_CPU` 配置项，请升级 `hobot-ethercat` 包。
+</DocScope>
+:::
+
+### 配置方法
+
+修改 `/etc/ethercat.conf`，将 `RUN_ON_CPU` 设置为目标 CPU 核心编号（从 0 开始计数）：
+
+```
+# 将 EtherCAT 主站内核线程绑定到 CPU 1
+RUN_ON_CPU="1"
+```
+
+| 取值 | 行为 |
+|------|------|
+| 留空或 `off` | 不绑核，由内核调度器自由调度（默认） |
+| `0`、`1`、`2` ... | 将主站内核线程绑定到对应编号的 CPU 核心 |
+
+配置完成后重启 EtherCAT 服务生效：
+
+```shell
+sudo systemctl restart ethercat
+```
+
+:::warning
+<font color="red">**注意：**</font>`RUN_ON_CPU` 在服务启动加载 `ec_master` 模块时生效，修改配置后必须重启 EtherCAT 服务（重新加载模块）才能应用新的绑核设置。
+:::
+
+### 配置校验
+
+为避免错误配置影响主站启动，`ethercatctl` 与 `init.d` 脚本在启动时会调用 `validate_run_on_cpu()` 对取值进行校验：
+
+| 输入 | 校验结果 |
+|------|----------|
+| 留空或 `off` | 合法，跳过绑核 |
+| 非负整数且在系统 CPU 范围内 | 合法，传递 `run_on_cpu=N` 给 `ec_master` |
+| 非整数（如 `abc`） | 警告并跳过绑核，主站正常启动 |
+| 无法检测系统 CPU 数量 | 警告并跳过绑核 |
+| 超出系统可用 CPU 范围 | 警告并跳过绑核 |
+
+校验失败时，脚本输出 `WARNING` 提示并回退为不绑核（默认行为），**不会阻止 EtherCAT 服务启动**。例如，在 4 核系统上配置 `RUN_ON_CPU="8"`：
+
+```shell
+$ sudo ethercatctl start
+WARNING: RUN_ON_CPU=8 exceeds available CPUs
+         (0-3). Using default (no CPU binding).
+```
+
+### 验证绑核效果
+
+1. 查看内核日志，确认绑核已生效。绑核成功时 `ec_master` 会输出如下日志：
+
+    ```shell
+    $ dmesg | grep -i "binding thread"
+    [  123.456789] EtherCAT 0:  binding thread to cpu 1
+    ```
+
+2. 查看主站内核线程实际运行的 CPU 核心（`PSR` 列为线程当前所在 CPU 编号）：
+
+    ```shell
+    $ ps -eLo pid,psr,comm | grep EtherCAT
+    1234  1 EtherCAT-IDLE
+    ```
+
+    上述示例中 `EtherCAT-IDLE` 线程的 `PSR` 为 `1`，表明已绑定到 CPU 1。
+
+:::tip
+主站在空闲阶段运行 `EtherCAT-IDLE` 线程，进入 OP（操作）阶段后切换为 `EtherCAT-OP` 线程，两者均会绑定到 `RUN_ON_CPU` 指定的 CPU 核心。
+:::
+
 ## FAQ
 
 ### 自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）

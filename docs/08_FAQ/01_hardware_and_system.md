@@ -576,7 +576,7 @@ no mmc device at slot X
 * 上述步骤是一个通用流程，具体命令和细节可能因您的 Linux 发行版、内核版本以及 Secure Boot 的配置状态而有所不同。
 * **请务必参考您所使用的 Linux 发行版和内核版本的官方文档中关于“内核模块签名 (Kernel Module Signing)”的详细指南。**
 * 地瓜机器人官方 RDK 文档中关于“Linux 开发”或“驱动开发”的章节，也可能包含针对 RDK 平台的具体模块签名指导：
-    
+
     <DocScope products="RDK S100">
     [内核头文件与模块编译](/Advanced_development/linux_development/kernel_headers) (请查找此文档中关于模块签名的具体章节)。
     </DocScope>
@@ -654,7 +654,7 @@ no mmc device at slot X
 
 ### Q26: RDK 相关问题进行预排查的通用建议有哪些？
 **A:** 在遇到 RDK 相关问题并寻求帮助前，建议进行以下预排查：
-1.  **查阅最新官方手册：** 确保您参考的是官方最新版本的用户手册、开发文档和发行说明。官方文档通常会包含最新的信息和已知问题的解决方案。您可以从地瓜机器人开发者社区获取最新文档：[RDK资料中心](https://developer.d-robotics.cc/information)
+1.  **查阅最新官方手册：** 确保您参考的是官方最新版本的用户手册、开发文档和发行说明。官方文档通常会包含最新的信息和已知问题的解决方案。您可以从地瓜机器人开发者社区获取最新文档：[RDK资料中心](https://developer.d-robotics.cc/rdk_doc_center/)
 2.  **更新系统及相关软件包：** 许多问题可能在较新的软件版本中得到修复。请确保您的 RDK 板卡上的操作系统以及所有`hobot-*`、`tros-*`等关键软件包都已更新到最新稳定版本。通常可以通过以下命令进行更新：
     ```bash
     sudo apt update && sudo apt upgrade
@@ -714,7 +714,7 @@ no mmc device at slot X
             1.  从官方渠道（如 Docker Hub 或地瓜机器人官方服务器）拉取对应 TROS 版本的交叉编译 Docker 镜像。
             2.  按照官方文档的指引启动 Docker 容器，并将您的 ROS 工作区源代码目录挂载到容器内部。
             3.  在 Docker 容器的终端内，使用 `colcon build` 配合适当的交叉编译参数（通常 Docker 环境已预设好）来编译您的工作区。
-        * **参考官方手册：** TROS 用户手册中关于“源码安装”、“开发者指南”或“交叉编译”的章节通常会有详细的 Docker 使用方法和命令示例。例如，此链接可能包含相关信息：[TROS 手册](https://liqinglian01.github.io/tros_doc/tros)。
+        * **参考官方手册：** TROS 用户手册中关于“源码安装”、“开发者指南”或“交叉编译”的章节通常会有详细的 Docker 使用方法和命令示例。例如，此链接可能包含相关信息：[TROS 手册](https://developer.d-robotics.cc/tros_doc/tros)。
     * **手动配置 ROS/TROS 交叉编译环境 (极不推荐，非常复杂且极易出错)：** 如果不使用官方提供的 Docker 环境，手动从零开始搭建一个完整的 ROS/TROS 交叉编译环境是一项非常复杂和耗时的工作。您需要自行交叉编译 ROS 的所有核心组件、消息类型、依赖库，并为 Colcon 等构建工具配置大量的交叉编译参数和环境变量。这通常只适用于有深厚交叉编译和 ROS 构建系统经验的开发者。
 
 **通用交叉编译建议：**

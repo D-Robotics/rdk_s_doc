@@ -39,7 +39,7 @@ sidebar_products: RDK-S100
 
 - 推理执行
 
-    调用 .infer() 接口执行前向推理。
+    调用 `.infer()` 接口执行前向推理。
 
 - 结果后处理
 
@@ -117,13 +117,13 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
         ```
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到build/result.jpg
+    运行成功后，会将结果绘制在原图上，并保存到`build/result.jpg`
     ```bash
     [Saved] Result saved to: result.jpg
     ```
 
 ## 注意事项
-- 输出结果存储为result.jpg，用户可自行查看。
+- 输出结果存储为`result.jpg`，用户可自行查看。
 
 - 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
 

@@ -128,35 +128,11 @@ The test principles of the CPU-BPU-DDR stress test primarily involve evaluating 
 - **Test Target**: Use `stress_test.sh` to call the `hrt_model_exec` tool, selecting the BPU cores to stress with `-c` and controlling the load percentage for each core with `-r`, continuously inferring the S600-adapted HBM model (`resnet50_224x224_nv12.hbm`) to ensure stable BPU operation under high load and achieve expected performance.
 - **Test Purpose**: Ensure the BPU can produce correct results when performing inference computations and does not crash or produce errors under prolonged high-load operation.
 
-- **`hrt_model_exec` BPU Stress Test Principle**: `hrt_model_exec` is the official model inference/performance testing tool from D-Robotics, installed to `/usr/hobot/bin/` by the `hobot-dnn` package. During stress testing, it is started with the `perf` subcommand; at runtime, environment variables `BPU_BUF_GROUP=true` + `_HB_NN_BPU_GROUP_ID_=<core>` + `_HB_NN_BPU_GROUP_PROP_=<percent>` bind the target core to a BPU group and allocate BPU time slice quotas to that group according to the group_prop, achieving steady-state load per core and per percentage. `stress_test.sh` workflow:
-    1. Parse `-t` (duration), `-r <portion>` (total load 5~100%), `-c <cores>` (list of BPU cores to stress; if omitted, **automatically read from `/sys/class/boardinfo/pg_map`, skipping power-gated cores**);
-    2. Calculate group_prop per core = `portion / number of selected cores` (minimum 1);
-    3. After starting `stressapptest` for CPU/DDR, **fork an independent `hrt_model_exec perf` process for each selected core**, each process binding to the corresponding core and setting group_prop via environment variables;
-    4. Each `hrt_model_exec` continuously infers `resnet50_224x224_nv12.hbm` on its own core, with stdout periodically outputting FPS, average/max/min latency.
-
-- **Command Analysis**: Taking `-c 1,3 -r 100` (stressing only bpu0/bpu2, 50% group_prop per core) as an example, `stress_test.sh` internally executes the following for each core:
-
-    ```shell
-    BPU_BUF_GROUP=true \
-    HB_NN_LOG_LEVEL=4 \
-    _HB_NN_BPU_GROUP_ID_=1 \
-    _HB_NN_BPU_GROUP_PROP_=50 \
-    hrt_model_exec perf \
-        --model_file=./module/resnet50_224x224_nv12.hbm \
-        --core_id=1 \
-        --thread_num=2 \
-        --log_level=1 \
-        --perf_time=$looptime_min
-    # Similarly for bpu2: _HB_NN_BPU_GROUP_ID_=3 _HB_NN_BPU_GROUP_PROP_=50 ... --core_id=3
-    ```
-
-    - `BPU_BUF_GROUP=true`: Enables BPU buffer-group QoS scheduling.
-    - `_HB_NN_BPU_GROUP_ID_=<core>`: BPU group ID to which this process's tasks are bound, corresponding to `--core_id`.
-    - `_HB_NN_BPU_GROUP_PROP_=<percent>`: BPU time slice quota (percentage) for this group on the corresponding core. Value is automatically calculated by `stress_test.sh` as `portion / number of selected cores`.
-    - `--model_file <hbm>`: Path to the S600-adapted HBM model file.
-    - `--core_id <id>`: Single core ID (1=bpu0, 2=bpu1, 3=bpu2, 4=bpu3).
-    - `--thread_num 2`: 2 inference threads per core, sufficient to saturate the single-core pipeline.
-    - `--perf_time <min>`: Duration of perf mode operation in minutes, converted from `stress_test.sh -t`.
+- **`hrt_model_exec` BPU Stress Test Principle**: `hrt_model_exec` is the official model inference/performance testing tool from D-Robotics, installed to `/usr/hobot/bin/` by the `hobot-dnn` package (installed by default in the system image). The stress test script calls it automatically, so there is no need to run it manually. `stress_test.sh` workflow:
+    1. Parse `-t` (duration), `-r <portion>` (BPU load percentage, 5~100%), `-c <cores>` (list of BPU cores to stress; if omitted, **automatically read from `/sys/class/boardinfo/pg_map`, skipping power-gated cores**);
+    2. Start `stressapptest` to stress the CPU/DDR;
+    3. **Start an independent `hrt_model_exec perf` process for each selected core**, continuously inferring `resnet50_224x224_nv12.hbm` on that core and limiting that core's BPU utilization to the percentage specified by `-r`;
+    4. Periodically collect the utilization of each core together with `hrut_somstatus` output into `monitor-stressN.log`, and write the BPU inference FPS and latency into `bpu-stressN.log`.
 
 </DocScope>
 
@@ -289,7 +265,7 @@ Parameter descriptions:
 - `-t <time>`: Duration of the stress test, supports hours (e.g., `2h`) or minutes (e.g., `30m`), default `48h`.
 - `-m <size>`: CPU/DDR stress test memory size (MB), default `100`.
 - `-i <threads>`: Number of I/O threads for `stressapptest`, default `4`.
-- `-r <portion>`: BPU load percentage (%), value range `5-100`, default `100` (full load). The script calculates the group_prop quota per core as `portion / number of selected cores`, and the BPU runtime achieves steady-state load via group QoS scheduling.
+- `-r <portion>`: BPU load percentage (%), value range `5-100`, default `100` (full load). `-r N` means **each selected core** is stabilized at about `N%` utilization, regardless of how many cores `-c` selects.
 - `-c <cores>`: List of BPU cores to stress, numbering rule `1=bpu0 2=bpu1 3=bpu2 4=bpu3`, comma-separated. **If omitted, automatically reads from `/sys/class/boardinfo/pg_map`, skipping power-gated cores**; only specify explicitly if you want to stress a subset (e.g., to troubleshoot a single core anomaly).
 - `-o <directory>`: Log output directory, default `../../log`.
 - `-h, --help`: Display help information and exit.
@@ -298,7 +274,43 @@ Parameter descriptions:
 The S600 platform has 4 BPU cores (can be confirmed via `cat /sys/devices/system/bpu/core_num`). `/sys/class/boardinfo/pg_map` is the power-gate bitmap (bit i set means the corresponding core is power-gated); the script skips these cores by default, so there's no need to manually maintain the list of available cores.
 :::
 
-**Example:** `sudo ./stress_test.sh -t 24h -m 200 -i 8 -r 80` runs a 24-hour stress test using 200MB of memory, 8 I/O threads, and all available BPU cores stabilized at 80% load.
+**Common stress test commands:**
+
+```shell
+# Default: full-load stress test for 48 hours, automatically using all BPU cores that are not power-gated
+sudo ./stress_test.sh
+
+# 24 hours, 200MB memory, 8 I/O threads, all available cores stabilized at 80% load
+sudo ./stress_test.sh -t 24h -m 200 -i 8 -r 80
+
+# Half-load soak test: all available cores stabilized at 50%
+sudo ./stress_test.sh -t 12h -r 50
+
+# Stress only bpu0 and bpu2 (bpu1/bpu3 stay idle), full load per core — for troubleshooting a single-core anomaly
+sudo ./stress_test.sh -t 30m -c 1,3
+
+# Stress only bpu1 at 25% load — low-load long-duration aging
+sudo ./stress_test.sh -t 48h -c 2 -r 25
+
+# Specify the log output directory
+sudo ./stress_test.sh -t 2h -o /userdata/stress_log
+```
+
+During the stress test, you can open another terminal to observe the real-time utilization of each core:
+
+```shell
+# Overall utilization
+watch -n1 cat /sys/devices/system/bpu/ratio
+
+# Check the 4 cores one by one
+for i in 0 1 2 3; do echo -n "bpu$i: "; cat /sys/devices/system/bpu/bpu$i/ratio; done
+```
+
+To end the stress test early, run the stop script in the same directory:
+
+```shell
+sudo ./stop_test.sh
+```
 
 </DocScope>
 
