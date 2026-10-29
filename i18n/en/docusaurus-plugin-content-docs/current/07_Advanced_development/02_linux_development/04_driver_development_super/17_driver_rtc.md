@@ -688,6 +688,33 @@ The specific explanation is as follows:
 
 ## RTC Usage Overview
 
+<DocScope products="RDK S100">
+
+### Set RTC backup-battery charging
+
+Use a rechargeable battery, such as the Waveshare ML2032, when you enable RTC charging. Do not enable charging with a non-rechargeable battery, and do not enable charging when no battery is connected.
+
+Add the following line to `/boot/config.txt` and reboot for it to take effect:
+
+```text
+fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
+```
+
+This line sets the `drobot,backup-charge-enable` property of the `ysn8130` device-tree node to `1`. `1` enables charging, and `0` disables it. For how to use `config.txt`, see [2.3 config.txt File Configuration](../../../02_System_configuration/03_config_txt.md).
+
+### Set the system time from the RTC at boot
+
+To write the hardware time from a specified RTC into the system clock at boot, set the following in `drobot_s100_defconfig`:
+
+```text
+CONFIG_RTC_HCTOSYS=y
+CONFIG_RTC_HCTOSYS_DEVICE="rtc1"
+```
+
+Use `date` and `hwclock` to verify that the configuration takes effect.
+
+</DocScope>
+
 ### RTC Testing Method
 
 After the driver loads successfully, the `/dev/rtcN` device node will appear:

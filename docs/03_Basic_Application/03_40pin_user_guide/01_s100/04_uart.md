@@ -8,9 +8,22 @@ sidebar_position: 4
 import DocScope from '@site/src/components/DocScope';
 ```
 
-RDK S100 在 40PIN 支持 UART2，没有使能，物理管脚号 8 和 10，IO 电压 3.3V。
+RDK S100 在 40PIN 支持 UART2，没有使能，物理管脚号 8 和 10，IO 电压 3.3V。`I2C5` 与 `UART2` 复用同一组 40-pin，二者互斥，不能同时使能。
 
-:::info
+<DocScope versions=">=4.1.0">
+
+:::info 说明
+
+- 4.1.0 及以上版本，在 [srpi-config 工具配置](../../../02_System_configuration/02_srpi-config.md) 的 Interface Options 中打开 **Peripheral bus config**（外设总线配置），选择使能 `UART2` 或 `I2C5`。启用其中一个会自动禁用另一个，切换后重启生效。
+- 管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)。
+
+:::
+
+</DocScope>
+
+<DocScope versions="<4.1.0">
+
+:::info 说明
 
 40pin 上需要拨动拨码开关来选择使用 UART2 还是 I2C5, 具体细节可以查看下图：
 
@@ -57,6 +70,8 @@ i2c5: i2c@39470000 {
 管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)
 
 :::
+
+</DocScope>
 
 请参阅 `/app/40pin_samples/test_serial.py`了解如何使用串口的详细信息。
 

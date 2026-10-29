@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # 3.3.1.2 GPIO 应用
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 开发板预置了 GPIO Python 库 `Hobot.GPIO`，用户可以通过如下命令导入 GPIO 库。
 
 ```shell
@@ -70,7 +74,20 @@ GPIO.setwarnings(False)
 
 在`RDK S100`平台上，支持`40-pin` GPIO 拓展， `40-pin`在使用过程中有如下的限制:
 
-- `40-pin`上有一组引脚涉及到二选一（UART2, I2C5）。
+- `40-pin` 上有一组引脚涉及到二选一（UART2、I2C5），二者复用同一组引脚，不能同时使能。
+
+<DocScope versions=">=4.1.0">
+
+4.1.0 及之后，在 [srpi-config 工具配置](../../../02_System_configuration/02_srpi-config.md) 的 **Peripheral bus config**（外设总线配置）中切换。启用其中一个会自动禁用另一个，切换后重启生效。
+
+</DocScope>
+
+<DocScope versions="<4.1.0">
+
+4.1.0 之前，拨动拨码开关选择 UART2 或 I2C5，并修改设备树。见 [串口应用](./04_uart.md)。
+
+</DocScope>
+
 - `40-pin`上 PCM 相关引脚如果要使用需要拨动拨码开关。
 
 上述描述细节可以查看下图：
@@ -255,6 +272,7 @@ GPIO.remove_event_detect(channel)
 | button_led.py          | 一个管脚作为按键输入，一个管脚作为输出控制 LED |
 | button_event.py        | 捕获管脚的上升沿、下降沿事件                  |
 | button_interrupt.py    | 中断方式处理管脚的上升沿、下降沿事件          |
+| gpio_rw_demo.py        | GPIO 读写演示：输出模式翻转第 23 脚，输入模式读取第 24 脚 |
 
 - GPIO 设置为`输出模式`，1秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭， 测试代码 `simple_out.py`：
 

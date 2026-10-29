@@ -54,6 +54,42 @@ fdt-disable=/soc/uart@394C0000;
     Note that a leading `/` must be prepended to the path obtained from this command;
 :::
 
+#### Modify a node property (fdt-setprop)
+
+Add the following to the configuration file: `fdt-setprop=<full DTS node path> <property name> <property value>;`. Separate the full node path, property name, and property value with **spaces**. To change more than one property, write one line per property.
+
+`config.txt` can set these two kinds of values with `fdt-setprop`:
+
+1. **A single cell**: the value is **one** 32-bit unsigned integer, written in angle brackets with **only one number** inside, for example `<1>` or `<0x10>`.
+2. **A single string**: the value is **one** plain string. Do not use angle brackets or quotes, for example `okay` or `disabled`.
+
+Single-cell example:
+
+```text
+# Enable YSN8130 backup-battery charging
+fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
+```
+
+Single-string example. This line is not part of the charging configuration. Do not write it into `config.txt` together with the charging line above. It sets `status` of the same `ysn8130` node to `okay`:
+
+```text
+fdt-setprop=/soc/i2c@39460000/ysn8130@32 status okay;
+```
+
+:::warning
+**Unsupported types**: a **cell array** with **multiple** u32 values inside one pair of angle brackets (for example `reg = <0x0 0x1000 0x0 0x2000>;`), and a **string-list** (for example `clock-names = "eth_bus_clk", "eth_tx_clk", ...`). `fdt-setprop` can write only **one** cell or **one** string. Configure those cases in the **DTS / DTB Overlay** (see below).
+
+```text
+# DTS sketch (cannot be changed from config.txt)
+# reg = <0x0 0x1000 0x0 0x2000>;
+# clock-names = "eth_bus_clk", "eth_tx_clk", "eth_ptp_clk", "eth_mac_clk";
+```
+:::
+
+:::info Note
+- The full node path must start with `/`. See the previous section for how to obtain it.
+:::
+
 #### Configure DTB Overlay Files
 
 References for DTB Overlay:

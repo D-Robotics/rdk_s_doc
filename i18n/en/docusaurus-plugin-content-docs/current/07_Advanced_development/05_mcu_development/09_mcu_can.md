@@ -532,6 +532,65 @@ RDK S100 configures 6 parameter sets by default. Users can select baud rate by m
 | 4                    | 1M                  | 5M (long distance: &gt;50m) |
 | 5                    | 1M                  | 8M           |
 
+<DocScope products="RDK S100">
+
+## Bus Off self-recovery
+
+In `Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`, add the `FLEXCAN_IP_BUSOFF_RECOVERY_U32` macro to the `ctrlOptions` member. This enables hardware Bus Off self-recovery for the CAN controller. It is enabled by default.
+
+```c
+const Flexcan_Ip_ConfigType Flexcan_aCtrlConfigPB[10U]=
+{
+    /* Hardware Channel FLEXCAN_0 */
+    {
+        ...
+        /* Loopback enabled or not */
+        FLEXCAN_NORMAL_MODE,
+        /* Controller Options */
+        (uint32)( FLEXCAN_IP_BUSOFF_RECOVERY_U32 | FLEXCAN_IP_ISO_U32 |FLEXCAN_IP_EACEN_U32),
+    },
+}
+```
+
+## Disable automatic retransmission
+
+To disable automatic retransmission on the MCU, follow these steps:
+
+1. Enable the `CAN_TX_ERR_ABORT_SUPPORT` macro in `Config/McalCdd/gen_s100_sip_B_mcu1/Can/inc/Can_Cfg.h`.
+
+   ```c
+   /**
+   *   @brief      Enable/Disable abort Tx frame on first CAN TX error (ACK/bit)
+   */
+   #define CAN_TX_ERR_ABORT_SUPPORT    (STD_ON)
+   ```
+
+2. Enable the error interrupt for the corresponding instance in `Target/Target_S100/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`.
+
+   ```c
+   {Os_IntChannel_Can5_ErrorIsr, Os_Isr_Can5_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can6_ErrorIsr, Os_Isr_Can6_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can7_ErrorIsr, Os_Isr_Can7_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can8_ErrorIsr, Os_Isr_Can8_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   {Os_IntChannel_Can9_ErrorIsr, Os_Isr_Can9_ErrorIsr, OS_IMASK_FOR_Can_Icu2ExtIsr/8, ENABLE},
+   ```
+
+## Soft reset
+
+To reset a CAN controller, run the following code:
+
+```c
+    /* Reset CAN5 */
+    Can_SetControllerMode(CanController_5, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_5, CAN_CS_STARTED);
+    /* Reset CAN6 */
+    Can_SetControllerMode(CanController_6, CAN_CS_STOPPED);
+    Can_SetControllerMode(CanController_6, CAN_CS_STARTED);
+
+    ...
+```
+
+</DocScope>
 
 ## Multi-Frame Merge Configuration
 
@@ -1201,17 +1260,35 @@ Enabling CANHAL logs helps locate the exact failure point:
 export CAN_HAL_DEBUG_LEVEL=4
 ```
 
-### MCU-Side DEBUG Application
-1. Enter the MCU1 console
-2. Run command: `can_tran_debug`
-```
-can_tran_debug
-```
+### MCU-side DEBUG application
 
-3. Under `/sys/class/remoteproc/remoteproc_mcu1`, use `cat log` to view results
+1. Enter the MCU1 console.
+2. Run `can_tran_debug`.
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug log" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+   ```bash
+   can_tran_debug
+   ```
 
+3. Under `/sys/class/remoteproc/remoteproc_mcu1`, run `cat log` to view the result.
+
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug log" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+
+#### Typical error log analysis
+
+**Q**: The log prints `Exceed max delay!err_cnt: 67, acore time:1756707954010 ms, can mintime: 1756707948933 ms,can delay: 5077 ms, limit_ms: 28 ms`.
+
+**A**: The MCU stamps the time when it sends the data. When the Acore receives the CAN data, it calculates the elapsed time and uses the difference to measure the MCU-to-Acore latency. This error is reported when the difference exceeds the threshold. The most likely cause is that the system does not schedule the IPC receive thread in time. Try raising the priority of the IPC interrupt thread.
+
+**Q**: The log prints `put_data_tofifo()[1151]: [0][4] failed fifo in len 97 avail61 cnt 1`.
+
+**A**: This error means there is not enough memory to receive CAN packets. Check two places:
+
+- Whether `read` can run in time, without too many dependencies in between.
+- Whether Acore processing cannot keep up with the MCU. If so, increase the kfifo data area size.
+
+**Q**: The log prints `ipc-drv: ipc_shm_acquire_buf() [1209]: instance 4 noready`.
+
+**A**: This error usually means MCU1 has crashed or has not started.
 
 ### Application Programming Interface
 
