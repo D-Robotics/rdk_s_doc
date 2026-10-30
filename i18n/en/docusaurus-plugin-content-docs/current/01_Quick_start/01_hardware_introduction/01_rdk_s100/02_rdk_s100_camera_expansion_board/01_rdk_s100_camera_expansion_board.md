@@ -185,13 +185,46 @@ Power indicator, located next to the DC power input interface.
 
 ## Connector Models
 
-| Connector | Connector Model                 | Manufacturer                |
-| :-------- | :------------------------------ | :-------------------------- |
-| J2000     | 10165430                        | Amphenol                    |
-| J2001     | ZX-DC-WC2.56.3                  | Zhaoxing Precision Electronics |
-| J2100     | 112038-161410                   | Xinhann Precision           |
-| J2200     | AFC01-S22FCA-00                 | Jushuo Electronics          |
-| J2201     | AFC01-S22FCA-00                 | Jushuo Electronics          |
+<table>
+  <thead>
+    <tr>
+      <th>Connector</th>
+      <th>Connector Model</th>
+      <th>Manufacturer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2" style={{verticalAlign: 'middle'}}>J2000</td>
+      <td>New: 10165430-110000LF</td>
+      <td>New: Amphenol</td>
+    </tr>
+    <tr>
+      <td>Old: HC-PBB05-2-100-M-H4.0-G1-R-P-04</td>
+      <td>Old: Huacan Tianlu</td>
+    </tr>
+    <tr>
+      <td>J2001</td>
+      <td>ZX-DC-WC2.56.3</td>
+      <td>Zhaoxing Precision Electronics</td>
+    </tr>
+    <tr>
+      <td>J2100</td>
+      <td>112038-161410</td>
+      <td>Xinhann Precision</td>
+    </tr>
+    <tr>
+      <td>J2200</td>
+      <td>AFC01-S22FCA-00</td>
+      <td>Jushuo Electronics</td>
+    </tr>
+    <tr>
+      <td>J2201</td>
+      <td>AFC01-S22FCA-00</td>
+      <td>Jushuo Electronics</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Compatible Modules
 
