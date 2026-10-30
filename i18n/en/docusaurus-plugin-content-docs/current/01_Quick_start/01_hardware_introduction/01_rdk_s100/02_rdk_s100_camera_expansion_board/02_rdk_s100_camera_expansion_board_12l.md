@@ -164,22 +164,22 @@ Power indicator, located next to the DC power input interface.
     <tr>
       <td>J2001</td>
       <td>DC-044B-D025</td>
-      <td>G-Switch (Pinzan)</td>
+      <td>G-Switch</td>
     </tr>
     <tr>
       <td>J2100</td>
       <td>112038-161410</td>
-      <td>Xinhann Precision</td>
+      <td>SYNCONN</td>
     </tr>
     <tr>
       <td>J2200</td>
       <td>112038-161410</td>
-      <td>Xinhann Precision</td>
+      <td>SYNCONN</td>
     </tr>
     <tr>
       <td>J2201</td>
       <td>112038-161410</td>
-      <td>Xinhann Precision</td>
+      <td>SYNCONN</td>
     </tr>
   </tbody>
 </table>

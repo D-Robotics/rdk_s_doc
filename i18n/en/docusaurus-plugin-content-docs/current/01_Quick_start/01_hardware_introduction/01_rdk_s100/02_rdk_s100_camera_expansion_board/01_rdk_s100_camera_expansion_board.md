@@ -206,12 +206,12 @@ Power indicator, located next to the DC power input interface.
     <tr>
       <td>J2001</td>
       <td>ZX-DC-WC2.56.3</td>
-      <td>Zhaoxing Precision Electronics</td>
+      <td>Megastar</td>
     </tr>
     <tr>
       <td>J2100</td>
       <td>112038-161410</td>
-      <td>Xinhann Precision</td>
+      <td>SYNCONN</td>
     </tr>
     <tr>
       <td>J2200</td>

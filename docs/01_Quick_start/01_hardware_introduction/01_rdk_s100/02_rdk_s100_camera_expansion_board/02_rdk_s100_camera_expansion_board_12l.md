@@ -168,7 +168,7 @@ Camera 扩展板集成了 3pcs MAX96712 解串芯片，每 pcs 能够接入 4 �
     <tr>
       <td>J2001</td>
       <td>DC-044B-D025</td>
-      <td>G-Switch（品赞）</td>
+      <td>品赞</td>
     </tr>
     <tr>
       <td>J2100</td>

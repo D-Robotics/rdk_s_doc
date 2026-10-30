@@ -33,7 +33,10 @@ const isCaseOnlyRedirect = ({ from, to }) =>
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "RDK S100/S600 DOC",
+  title:
+    process.env.DOCUSAURUS_CURRENT_LOCALE === "en"
+      ? "RDK S100/S600 User Manual"
+      : "RDK S100/S600 用户手册",
   // tagline: 'Dinosaurs are cool',
   favicon: "img/logo.png",
   // Set the production url of your site here
@@ -223,7 +226,7 @@ const config = {
       navbar: {
         title: "D-Robotics",
         logo: {
-          alt: "地瓜机器人 logo",
+          alt: "地瓜 logo",
           src: "img/logo.png",
           // href: "https://d-robotics.cc/", // 修改为文档根路径
         },
@@ -297,9 +300,9 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
       algolia: {
-        appId: "1VU781LYTV",
-        apiKey: "fb65c6e54a52ce6fba0645bd2630e79b",
-        indexName: "rdk_s_doc",
+        appId: process.env.ALGOLIA_APP_ID || "1VU781LYTV",
+        apiKey: process.env.ALGOLIA_SEARCH_API_KEY || "fb65c6e54a52ce6fba0645bd2630e79b",
+        indexName: process.env.ALGOLIA_INDEX_NAME || "rdk_s_doc",
         contextualSearch: true,
         searchPagePath: "search",
       },
