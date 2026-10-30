@@ -143,13 +143,46 @@ Power indicator, located next to the DC power input interface.
 
 <div className="table-responsive">
 
-| Connector | Connector Model                 | Manufacturer                |
-| :-------- | :------------------------------ | :-------------------------- |
-| J2000     | 10165430                        | Amphenol                    |
-| J2001     | DC-044B-D025                    | G-Switch           |
-| J2100     | 112038-161410                   | SYNCONN           |
-| J2200     | 112038-161410                   | SYNCONN           |
-| J2201     | 112038-161410                   | SYNCONN           |
+<table>
+  <thead>
+    <tr>
+      <th>Connector</th>
+      <th>Connector Model</th>
+      <th>Manufacturer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2" style={{verticalAlign: 'middle'}}>J2000</td>
+      <td>New: 10165430-110000LF</td>
+      <td>New: Amphenol</td>
+    </tr>
+    <tr>
+      <td>Old: HC-PBB05-2-100-M-H4.0-G1-R-P-04</td>
+      <td>Old: Huacan Tianlu</td>
+    </tr>
+    <tr>
+      <td>J2001</td>
+      <td>DC-044B-D025</td>
+      <td>G-Switch</td>
+    </tr>
+    <tr>
+      <td>J2100</td>
+      <td>112038-161410</td>
+      <td>SYNCONN</td>
+    </tr>
+    <tr>
+      <td>J2200</td>
+      <td>112038-161410</td>
+      <td>SYNCONN</td>
+    </tr>
+    <tr>
+      <td>J2201</td>
+      <td>112038-161410</td>
+      <td>SYNCONN</td>
+    </tr>
+  </tbody>
+</table>
 
 </div>
 

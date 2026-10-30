@@ -211,13 +211,46 @@ MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能
 
 <div className="table-responsive">
 
-| 连接器 | 连接器型号                      | 连接器厂商   |
-| :----- | :------------------------------ | :----------- |
-| J2000  | 10165430                        | 安费诺       |
-| J2001  | ZX-DC-WC2.56.3                  | 兆星精密电子 |
-| J2100  | 112038-161410                   | 信翰精密     |
-| J2200  | AFC01-S22FCA-00                 | 钜硕电子     |
-| J2201  | AFC01-S22FCA-00                 | 钜硕电子     |
+<table>
+  <thead>
+    <tr>
+      <th>连接器</th>
+      <th>连接器型号</th>
+      <th>连接器厂商</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="2" style={{verticalAlign: 'middle'}}>J2000</td>
+      <td>新: 10165430-110000LF</td>
+      <td>新: 安费诺</td>
+    </tr>
+    <tr>
+      <td>旧: HC-PBB05-2-100-M-H4.0-G1-R-P-04</td>
+      <td>旧: 华灿天禄</td>
+    </tr>
+    <tr>
+      <td>J2001</td>
+      <td>ZX-DC-WC2.56.3</td>
+      <td>兆星精密电子</td>
+    </tr>
+    <tr>
+      <td>J2100</td>
+      <td>112038-161410</td>
+      <td>信翰精密</td>
+    </tr>
+    <tr>
+      <td>J2200</td>
+      <td>AFC01-S22FCA-00</td>
+      <td>钜硕电子</td>
+    </tr>
+    <tr>
+      <td>J2201</td>
+      <td>AFC01-S22FCA-00</td>
+      <td>钜硕电子</td>
+    </tr>
+  </tbody>
+</table>
 
 </div>
 
