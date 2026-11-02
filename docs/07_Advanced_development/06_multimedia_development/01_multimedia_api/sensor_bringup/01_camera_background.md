@@ -335,7 +335,7 @@ S100 有 3 个 RX 设备，其内部结构如下：
 
 | RX# | 后端模块 | EMB | 入 ISP | 入 PYM | Bypass | 共性 |
 | --- | --- | --- | --- | --- | --- | --- |
-| RX0 | CIM0: IPI0~3 | 支持 | online ISP0 / offline | yuv 若 online 只能单路 | TX0/TX1 | 独立 4lane/3trio；最大 2.5Gbps/lane 或 2.5Gsps/trio；<br/>有 4 路 IPI(4VC) 接入 |
+| RX0 | CIM0: IPI0~3 | 支持 | online ISP0 / offline | yuv 若 online 只能单路 | TX0/TX1 | 独立 4lane/3trio；最大 2.5Gbps/lane 或 2.5Gsps*2.28/trio；<br/>有 4 路 IPI(4VC) 接入 |
 | RX1 | CIM1: IPI0~3 | 支持 | online ISP1 / offline | yuv 若 online 只能单路 | TX0/TX1 | 同上 |
 | RX4 | CMI4: IPI0~3 | 支持 | offline ISP0/1 | yuv offline 可多路 | TX0/TX1 | 同上 |
 
@@ -353,7 +353,7 @@ S600 有 6 个 RX 设备，其内部结构如下：
 
 | RX | 后端模块 | EMB | 入 ISP | 入 PYM | Bypass | 共性摘要 |
 |---|---|---|---|---|---|---|
-| RX0 | CIM0: IPI0~3 | 支持 | online ISP0 / offline | yuv；online 仅单路 | TX0/TX1 | 独立 4lane/3trio；≤2.5Gbps/lane 或 ≤2.5Gsps/trio |
+| RX0 | CIM0: IPI0~3 | 支持 | online ISP0 / offline | yuv；online 仅单路 | TX0/TX1 | 独立 4lane/3trio；≤2.5Gbps/lane 或 ≤2.5Gsps*2.28/trio |
 | RX1 | CIM1: IPI0~3 | 支持 | online ISP1 / offline | yuv；online 仅单路 | TX0/TX1 | 同上 |
 | RX2 | CIM2: IPI0~3 | 支持 | online ISP2 / offline | yuv；online 仅单路 | TX0/TX1 | 同上 |
 | RX3 | CIM3: IPI0~3 | 支持 | online ISP3 / offline | yuv；online 仅单路 | TX0/TX1 | 同上 |
