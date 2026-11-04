@@ -1,0 +1,92 @@
+name: Check code-block links
+
+# 周频巡检：只查 fenced code block 里的**自家域名**链接。
+# 正文里的链接由 Check external links 每天查，这条只补代码块——lychee 默认跳过 .md/.mdx 的代码块，
+# 而代码块恰恰是读者会照抄执行的内容（下载命令、apt 源、镜像地址），坏了后果比正文一条链接更重。
+#
+# 输入文件由 scripts/extract-codeblock-urls.mjs 生成，抽取规则（自家域名白名单、apt 源改写、
+# 第三方示例与 apt-cache 输出跳过）都写在脚本里，这里不重复。
+#
+# 参数与日常巡检的差异只有两处：
+#   - --max-concurrency 2：archive.d-robotics.cc 会限流，实测 8 并发下同一批 URL 会出现 503，
+#     降到 2 并发 + 重试即全部 206；本批总共几十条，串行也只要约 1 分钟；
+#   - --accept 加 206：大文件按 Range 返回 206 属正常。
+# 不设 --root-dir、不排除图片：输入文件里只有生成的绝对 URL。
+
+on:
+  schedule:
+    # 每周日 UTC 06:01（北京时间同日 14:01），7 个仓各错开 7 分钟
+    - cron: "1 6 * * 0"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-codeblock-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract code-block URLs
+        run: node scripts/extract-codeblock-urls.mjs codeblock-links.md docs i18n/en/docusaurus-plugin-content-docs/current
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # 发现失效链接时不要让 job 失败，交给下面的通知步骤处理
+          fail: false
+          args: >-
+            --no-progress
+            --max-concurrency 2
+            --scheme http
+            --scheme https
+            --accept 200,204,206,301,302,307,308,401,403,412,429
+            --timeout 20
+            --retry-wait-time 5
+            --max-retries 3
+            --user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            codeblock-links.md
+
+      - name: Create or update issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          REPORT=./lychee/out.md
+          TITLE="chore: 代码块内失效链接（周巡检）"
+          LABEL="broken-link"
+
+          # label 不存在则创建（已存在会报错，忽略即可）
+          gh label create "$LABEL" --color d73a4a 2>/dev/null || true
+
+          has_failures() {
+            [ -f "$REPORT" ] && grep -q '### Errors' "$REPORT"
+          }
+          issue_num() {
+            gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number // empty'
+          }
+
+          if has_failures; then
+            BODY="## 代码块内失效链接"$'\n\n'
+            BODY+="> 自动巡检时间：$(date -u '+%Y-%m-%d %H:%M UTC')"$'\n\n'
+            BODY+="$(cat "$REPORT")"
+            NUM="$(issue_num)"
+            if [ -n "$NUM" ]; then
+              gh issue edit "$NUM" --body "$BODY"
+              echo "已更新 issue #$NUM"
+            else
+              gh issue create --title "$TITLE" --label "$LABEL" --body "$BODY"
+              echo "已创建 issue"
+            fi
+          else
+            NUM="$(issue_num)"
+            if [ -n "$NUM" ]; then
+              gh issue comment "$NUM" --body "✅ 本次周巡检未发现失效链接，已全部恢复。"
+              gh issue close "$NUM"
+              echo "已关闭 issue #$NUM"
+            else
+              echo "无失效链接，无需通知"
+            fi
+          fi
