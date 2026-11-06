@@ -736,6 +736,74 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
   </tbody>
 </table>
 </div>
+
+<br/><br/>
+
+## 认证资料
+
+:::tip 认证资料总仓
+📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - 包含所有产品的认证文件
+:::
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>🏷️ **产品名称**</th>
+      <th>🇺🇸 **FCC**</th>
+      <th>🇪🇺 **CE**</th>
+      <th>🇪🇺 **RoHS**</th>
+      <th>🇪🇺 **WEEE**</th>
+      <th>🇪🇺 **REACH**</th>
+      <th>🇪🇺 **HF 无卤**</th>
+      <th>🇬🇧 **UKCA**</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**RDK S600**<br/>KS6X032064C / KS6X064256C</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Module**<br/>MS6X032064I / MS6X064256I</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_REACH_Report.pdf">📄 REACH</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_HF_Report.pdf">📄 HF</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 MCU Port Expansion Board**<br/>ES6XMCUXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Camera Expansion Board**<br/>ES6XCAMXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 </TabItem>
 
 <TabItem value="ftp" label="FTP下载">
@@ -1224,6 +1292,74 @@ RDK S600 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
   </tbody>
 </table>
 </div>
+
+<br/><br/>
+
+## 认证资料
+
+:::tip 认证资料总仓
+📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - 包含所有产品的认证文件
+:::
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>🏷️ **产品名称**</th>
+      <th>🇺🇸 **FCC**</th>
+      <th>🇪🇺 **CE**</th>
+      <th>🇪🇺 **RoHS**</th>
+      <th>🇪🇺 **WEEE**</th>
+      <th>🇪🇺 **REACH**</th>
+      <th>🇪🇺 **HF 无卤**</th>
+      <th>🇬🇧 **UKCA**</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**RDK S600**<br/>KS6X032064C / KS6X064256C</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Module**<br/>MS6X032064I / MS6X064256I</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_REACH_Report.pdf">📄 REACH</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_HF_Report.pdf">📄 HF</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 MCU Port Expansion Board**<br/>ES6XMCUXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Camera Expansion Board**<br/>ES6XCAMXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 </TabItem>
 
 <TabItem value="ftp" label="FTP下载">

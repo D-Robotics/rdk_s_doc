@@ -733,6 +733,74 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
   </tbody>
 </table>
 </div>
+
+<br/><br/>
+
+## Certifications
+
+:::tip Certification Main Repository
+📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - Contains certification documents for all products
+:::
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>🏷️ **Product Name**</th>
+      <th>🇺🇸 **FCC**</th>
+      <th>🇪🇺 **CE**</th>
+      <th>🇪🇺 **RoHS**</th>
+      <th>🇪🇺 **WEEE**</th>
+      <th>🇪🇺 **REACH**</th>
+      <th>🇪🇺 **Halogen-free**</th>
+      <th>🇬🇧 **UKCA**</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**RDK S600**<br/>KS6X032064C / KS6X064256C</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Module**<br/>MS6X032064I / MS6X064256I</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_REACH_Report.pdf">📄 REACH</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_HF_Report.pdf">📄 HF</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 MCU Port Expansion Board**<br/>ES6XMCUXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Camera Expansion Board**<br/>ES6XCAMXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 </TabItem>
 
 <TabItem value="ftp" label="FTP Download">
@@ -1221,6 +1289,74 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
   </tbody>
 </table>
 </div>
+
+<br/><br/>
+
+## Certifications
+
+:::tip Certification Main Repository
+📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - Contains certification documents for all products
+:::
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>🏷️ **Product Name**</th>
+      <th>🇺🇸 **FCC**</th>
+      <th>🇪🇺 **CE**</th>
+      <th>🇪🇺 **RoHS**</th>
+      <th>🇪🇺 **WEEE**</th>
+      <th>🇪🇺 **REACH**</th>
+      <th>🇪🇺 **Halogen-free**</th>
+      <th>🇬🇧 **UKCA**</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**RDK S600**<br/>KS6X032064C / KS6X064256C</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Module**<br/>MS6X032064I / MS6X064256I</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_REACH_Report.pdf">📄 REACH</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_HF_Report.pdf">📄 HF</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 MCU Port Expansion Board**<br/>ES6XMCUXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Camera Expansion Board**<br/>ES6XCAMXC</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_WEEE_Report.pdf">📄 WEEE</a></td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 </TabItem>
 
 <TabItem value="ftp" label="FTP Download">
