@@ -733,6 +733,59 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
   </tbody>
 </table>
 </div>
+
+<br/><br/>
+
+## Certifications
+
+:::tip Certification Main Repository
+📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - Contains certification documents for all products
+:::
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>🏷️ **Product Name**</th>
+      <th>🇺🇸 **FCC**</th>
+      <th>🇪🇺 **CE**</th>
+      <th>🇪🇺 **RoHS**</th>
+      <th>🇬🇧 **UKCA**</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**RDK S600**<br/>32GB / 64GB</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Module**<br/>32GB / 64GB</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 MCU Port Expansion Board**</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Camera Expansion Board**</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 </TabItem>
 
 <TabItem value="ftp" label="FTP Download">
@@ -1221,6 +1274,59 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
   </tbody>
 </table>
 </div>
+
+<br/><br/>
+
+## Certifications
+
+:::tip Certification Main Repository
+📁 [Certification](https://archive.d-robotics.cc/downloads/certification/) - Contains certification documents for all products
+:::
+
+<div className="table-responsive">
+<table>
+  <thead>
+    <tr>
+      <th>🏷️ **Product Name**</th>
+      <th>🇺🇸 **FCC**</th>
+      <th>🇪🇺 **CE**</th>
+      <th>🇪🇺 **RoHS**</th>
+      <th>🇬🇧 **UKCA**</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**RDK S600**<br/>32GB / 64GB</td>
+      <td>-</td>
+      <td>-</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Module**<br/>32GB / 64GB</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 MCU Port Expansion Board**</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+    <tr>
+      <td>**RDK S600 Camera Expansion Board**</td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
+      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 </TabItem>
 
 <TabItem value="ftp" label="FTP Download">
