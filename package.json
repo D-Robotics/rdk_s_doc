@@ -27,6 +27,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@d-robotics/docusaurus-plugin-guaji": "0.1.0",
     "@docusaurus/core": "^3.7.0",
     "@docusaurus/plugin-client-redirects": "^3.8.1",
     "@docusaurus/plugin-sitemap": "^3.8.1",
