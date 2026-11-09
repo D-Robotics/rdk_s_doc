@@ -53,7 +53,9 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
 6. (Optional) Expand **Advanced configuration** and select **Reboot after flashing**. After flashing, the device reboots automatically, so you do not need to power off, exit download mode, and power on again manually. For details, see the XBurn Manual [Auto-reboot and boot check after flashing](https://developer.d-robotics.cc/xburn_doc/basics/auto-reboot).
 
-7. Click **Start flashing**. The device powers on and flashing starts. Wait for the progress to complete.
+7. Click **Start Burn**. The device powers on and flashing starts. Wait for the progress to complete.
+
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S100-xburn-burn_progress-en.png" alt="Burning progress" style={{ width: '100%' }} />
 
 8. After flashing completes, exit the corresponding mode (for DFU mode, toggle the flashing switch down to exit), and power off.
 9. Verify the boot. Keep the device powered off, connect the device to a monitor with an HDMI cable, then power on the device. On first boot, the system performs default environment configuration that takes about 45 seconds, after which the Ubuntu desktop appears on the monitor.
