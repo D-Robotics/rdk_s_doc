@@ -750,9 +750,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <th>🇺🇸 **FCC**</th>
       <th>🇪🇺 **CE**</th>
       <th>🇪🇺 **RoHS**</th>
-      <th>🇪🇺 **WEEE**</th>
-      <th>🇪🇺 **REACH**</th>
-      <th>🇪🇺 **Halogen-free**</th>
       <th>🇬🇧 **UKCA**</th>
     </tr>
   </thead>
@@ -762,9 +759,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td>-</td>
       <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td>-</td>
-      <td>-</td>
       <td>-</td>
     </tr>
     <tr>
@@ -772,9 +766,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_REACH_Report.pdf">📄 REACH</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_HF_Report.pdf">📄 HF</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
     </tr>
     <tr>
@@ -782,9 +773,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td>-</td>
-      <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
     </tr>
     <tr>
@@ -792,9 +780,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td>-</td>
-      <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
     </tr>
   </tbody>
@@ -1306,9 +1291,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <th>🇺🇸 **FCC**</th>
       <th>🇪🇺 **CE**</th>
       <th>🇪🇺 **RoHS**</th>
-      <th>🇪🇺 **WEEE**</th>
-      <th>🇪🇺 **REACH**</th>
-      <th>🇪🇺 **Halogen-free**</th>
       <th>🇬🇧 **UKCA**</th>
     </tr>
   </thead>
@@ -1318,9 +1300,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td>-</td>
       <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600/RDK_S600_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td>-</td>
-      <td>-</td>
       <td>-</td>
     </tr>
     <tr>
@@ -1328,9 +1307,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_CE_Compliance.pdf">📄 CE EMC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_REACH_Report.pdf">📄 REACH</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_HF_Report.pdf">📄 HF</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Module/RDK_S600_Module_UKCA_Compliance.pdf">📄 UKCA</a></td>
     </tr>
     <tr>
@@ -1338,9 +1314,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_CE_Compliance.pdf">📄 CE EMC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td>-</td>
-      <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_MCU_Board/RDK_S600_MCU_UKCA_Compliance.pdf">📄 UKCA</a></td>
     </tr>
     <tr>
@@ -1348,9 +1321,6 @@ For RDK S600 commercial materials, please switch to the **FTP Download** option 
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_FCC_SDOC_Compliance.doc">📄 FCC SDoC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_CE_Compliance.pdf">📄 CE EMC</a></td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_RoHS_Compliance.pdf">📄 RoHS</a></td>
-      <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_WEEE_Report.pdf">📄 WEEE</a></td>
-      <td>-</td>
-      <td>-</td>
       <td><a href="https://archive.d-robotics.cc/downloads/certification/RDK_S600/RDK_S600_Camera_Board/RDK_S600_Camera_UKCA_Compliance.pdf">📄 UKCA</a></td>
     </tr>
   </tbody>
