@@ -79,7 +79,7 @@ root@ubuntu:~# ls /lib/firmware/cypress/cyfmac55572-pcie.*
 驱动加载固件时，优先尝试带板级后缀的文件（如 `cyfmac55572-pcie.drobot,s100-rdk.trxse`），缺失时回退到通用文件名。因此日志中出现 `Direct firmware load for cyfmac55572-pcie.drobot,s100-rdk.trxse failed` 属正常的回退过程。
 
 :::note
-`clm_blob` 缺失不影响基本联网，只是可用信道受限。`nvram.txt` 中的 `devid=0xbd31` 与 `lspci` 显示的设备 ID 一致，是固件与板型匹配的依据。
+`clm_blob` 缺失不影响基本联网，只是可用信道受限。NVRAM 文件 `cyfmac55572-pcie.txt` 中的 `devid=0xbd31` 与 `lspci` 显示的设备 ID 一致，是固件与板型匹配的依据。
 :::
 
 </DocScope>

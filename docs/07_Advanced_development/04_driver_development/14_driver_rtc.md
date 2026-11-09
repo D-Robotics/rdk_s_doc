@@ -139,7 +139,7 @@ CONFIG_RTC_DRV_YSN8130=m          # 外置 YSN8130E 驱动（Kconfig 默认 m，
 
 ### 软件架构
 
-Linux RTC 框架自上而下分四层：
+Linux RTC 框架自上而下分五层：
 
 - **用户空间**：`hwclock`、`date` 等工具，以及 `/dev/rtcN` 字符设备、sysfs（`/sys/class/rtc/rtcN`）、procfs（`/proc/driver/rtc`）接口。
 - **接口层**：管理字符设备、sysfs 与 procfs 属性。
@@ -447,7 +447,7 @@ cat /sys/class/rtc/rtc1/hctosys         # 1 表示系统时间由该 RTC 同步
 </DocScope>
 <DocScope products="RDK S600">
 
-**解决**：秒级闹钟可写到内置 super-rtc（`rtc0`，`time64` 秒级精度），但它没有闹钟中断线，不能触发闹钟中断。需要闹钟中断唤醒时用外置 YSN8130E（分级）经 MCU 实现。
+**解决**：秒级闹钟可写到内置 super-rtc（`rtc0`，`time64` 秒级精度），但它没有闹钟中断线，不能触发闹钟中断。需要闹钟中断唤醒时用外置 YSN8130E（闹钟精度为分钟级）经 MCU 实现。
 
 </DocScope>
 

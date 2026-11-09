@@ -336,8 +336,6 @@ S100 的 `/dev/` 下有 `ttyS0`~`ttyS3` 共 4 个节点，但上述日志显示�
 
 :::note
 S100 的 `uart0` 与 `uart1` 两个节点，其编号与物理 UART 编号是错位的：`uart0` 节点对应物理 UART1，`uart1` 节点对应物理 UART0。这两个节点的中断号与 pinctrl 引脚也相应互换。`uart2`、`uart3` 的编号与物理 UART 一致。
-
-S600 通过设备树 `aliases`（`serial0`~`serial7`）固定各串口的编号；S100 仅定义了 `serial0`，其余编号按控制器探测顺序分配。
 :::
 
 </DocScope>

@@ -12,7 +12,7 @@ API（`libhbpcie.so`）封装，抽象出通用的 topic / subscribe / publish �
 屏蔽不同系列计算平台的硬件差异，让用户能够更加便捷地使用 PCIe 进行数据通信。
 
 - **功能定位**：在 RC 与 EP 之间通过 topic 进行数据收发（publish / subscribe）。
-- **接口层级**：本篇为【底层 API】，基于 `libhbpcie.so` 的原语层封装，非业务封装层。
+- **接口层级**：本篇为【High Level API】，由 Low Level API（`libhbpcie.so`）的原语封装而来，定位为传输原语接口，非业务封装层。
 - **适用场景**：双板/多板 PCIe 直连进行大块数据通信（如图像、featuremap 搬运）。
 - **适用读者**：模式 3 商业客户/深度团队，需要直接操作 PCIe 数据通道的开发者。
 - **前置条件**：已完成 PCIe 链路配置与驱动加载（见

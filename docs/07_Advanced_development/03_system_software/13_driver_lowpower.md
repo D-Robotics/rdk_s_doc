@@ -138,7 +138,9 @@ Return: 0, 0x00000000
 
 #### 通过 MCU API 设置唤醒源
 
-#### RTC 唤醒时间设置
+MCU 侧提供以下 API 用于设置唤醒源：
+
+##### RTC 唤醒时间设置
 
 **SysPower_RtcWakeupSet**
 
@@ -157,7 +159,7 @@ Return: 0, 0x00000000
 
 **RTC 唤醒时间设置后，从 MCU 实际开始做休眠动作才会计时；即 SysPower_Suspend 调用后，core0进入休眠再开始计时**
 
-#### GPIO 唤醒源设置
+##### GPIO 唤醒源设置
 
 **SysPower_GpioWakeupSet**
 
