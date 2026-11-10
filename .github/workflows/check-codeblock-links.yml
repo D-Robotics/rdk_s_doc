@@ -4,7 +4,10 @@ name: Check code-block links
 # 正文里的链接由 Check external links 每天查，这条只补代码块——lychee 默认跳过 .md/.mdx 的代码块，
 # 而代码块恰恰是读者会照抄执行的内容（下载命令、apt 源、镜像地址），坏了后果比正文一条链接更重。
 #
-# 输入文件由 scripts/extract-codeblock-urls.mjs 生成，抽取规则（自家域名白名单、apt 源改写、
+# 输入是按来源文档拆分的一批 markdown，由 scripts/extract-codeblock-urls.mjs 按源码路径镜像生成
+# （codeblock-links/<原路径>）。lychee 的报错以「Errors in <输入文件>」分组，所以报错里出现
+#   Errors in codeblock-links/docs/08_FAQ/01_hardware_and_system.md
+# 时，去掉 codeblock-links/ 前缀就是需要修改的文档路径。抽取规则（自家域名白名单、apt 源改写、
 # 第三方示例与 apt-cache 输出跳过）都写在脚本里，这里不重复。
 #
 # 参数与日常巡检的差异只有两处：
@@ -30,7 +33,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Extract code-block URLs
-        run: node scripts/extract-codeblock-urls.mjs codeblock-links.md docs i18n/en/docusaurus-plugin-content-docs/current
+        run: node scripts/extract-codeblock-urls.mjs codeblock-links docs i18n/en/docusaurus-plugin-content-docs/current
 
       - name: Check links
         uses: lycheeverse/lychee-action@v2
@@ -47,7 +50,7 @@ jobs:
             --retry-wait-time 5
             --max-retries 3
             --user-agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            codeblock-links.md
+            codeblock-links
 
       - name: Create or update issue
         env:
@@ -71,6 +74,7 @@ jobs:
           if has_failures; then
             BODY="## 代码块内失效链接"$'\n\n'
             BODY+="> 自动巡检时间：$(date -u '+%Y-%m-%d %H:%M UTC')"$'\n\n'
+            BODY+="> 报错分组里的文件路径去掉 codeblock-links/ 前缀，就是需要修改的文档。"$'\n\n'
             BODY+="$(cat "$REPORT")"
             NUM="$(issue_num)"
             if [ -n "$NUM" ]; then
