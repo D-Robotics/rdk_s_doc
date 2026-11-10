@@ -65,7 +65,7 @@ S100 Acore 集成 6 路 DesignWare I2C 控制器（`i2c0`～`i2c5`），板端�
 
 <DocScope products="RDK S600">
 
-S600 Acore 集成 6 路 DesignWare I2C 控制器（`i2c0`～`i2c5`），位于 HSI 域，板端对应 `/dev/i2c-0`～`/dev/i2c-5`（以 `ls /sys/class/i2c-dev/` 为准；部分板级配置可能额外出现 `i2c-7`～`i2c-9`）。
+S600 Acore（Main 域）集成 10 路 DesignWare I2C 控制器（`i2c0`～`i2c9`），位于 HSI 域；另有 3 路（I2C11/13/14）属 MCU 域，不占用 Acore 总线号。板端实际可用的 `/dev/i2c-N` 随载板配置增减，以 `ls /sys/class/i2c-dev/` 为准（如 MCB V1p0 使能 `i2c-0`～`i2c-5`、`i2c-7`～`i2c-9`，`i2c-6` 默认关闭）。
 
 | 用户态总线 | DTS 节点 | 基地址 | pinctrl | 说明 |
 |---|---|---|---|---|
@@ -75,6 +75,10 @@ S600 Acore 集成 6 路 DesignWare I2C 控制器（`i2c0`～`i2c5`），位于 H
 | `i2c-3` | `i2c@34843000` | `0x34843000` | `hsi_i2c3` | HSI I2C3 |
 | `i2c-4` | `i2c@34844000` | `0x34844000` | `hsi_i2c4` | HSI I2C4 |
 | `i2c-5` | `i2c@34845000` | `0x34845000` | `hsi_i2c5` | HSI I2C5 |
+| `i2c-6` | `i2c@34846000` | `0x34846000` | `hsi_i2c6` | HSI I2C6（载板默认未使能） |
+| `i2c-7` | `i2c@34847000` | `0x34847000` | `hsi_i2c7` | 音频 Codec（ES7210 / ES8156）挂载总线 |
+| `i2c-8` | `i2c@34848000` | `0x34848000` | `hsi_i2c8` | 载板外设（风扇控制器 EMC2301、RTC YSN8130 等，随载板使能） |
+| `i2c-9` | `i2c@34849000` | `0x34849000` | `hsi_i2c9` | 载板外设（GPIO 扩展、HDMI Bridge、EEPROM 等，随载板使能） |
 
 </DocScope>
 
