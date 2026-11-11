@@ -812,7 +812,7 @@ tinycap /dev/null
 
 2. 应用层读写与文件 I/O 分线程，中间加 ring buffer（ring buffer 大小可按需调整）。以录音为例：`pcm_read` 写入 ring buffer，写文件线程从 ring buffer 读取；只要写文件阻塞时间不超过 ring buffer 容量，可避免 xrun。
 
-3. 开启 xrun 调试。若 `/proc/asound/cardX/pcmYp/sub0/xrun_debug` 不存在，须在内核配置中启用后重新编译烧录：
+3. 开启 xrun 调试。若 `/proc/asound/cardX/pcmY[c,p]/xrun_debug` 不存在，须在内核配置中启用后重新编译烧录：
 
 ```text
 CONFIG_SND_PCM_XRUN_DEBUG=y
@@ -823,8 +823,9 @@ CONFIG_SND_DEBUG=y
 向 `xrun_debug` 写入 `3` 可启用基本调试与堆栈打印，用于查看 PCM 流是否异常停止：
 
 ```bash
-# 节点路径：/proc/asound/cardX/pcmY[c,p]/xrun_debug
-echo 3 > /proc/asound/card0/pcm0p/xrun_debug
+# 节点位于流目录下（pcmYc 为录音流、pcmYp 为播放流，具体编号以 ls /proc/asound/cardX/ 为准）
+# 以 S100 板端 s100snd2 声卡为例，其播放流为 pcm1p：
+echo 3 > /proc/asound/card0/pcm1p/xrun_debug
 ```
 
 缓解手段：提高线程优先级、增大 `period_size`、异步 I/O。
