@@ -48,6 +48,9 @@ import DocScope from '@site/src/components/DocScope';
 </table>
 </DocScope>
 <DocScope products="RDK S600">
+
+## Watchdog 概述
+
   Watchdog 支持窗口模式和普通模式，普通模式需要在计时器减为0之前喂狗；窗口模式规定需要在窗口期内喂狗，窗口期为第一次 Timeout 到第二次 Timeout 之间，可配置在第一次 Timeout 时产生中断信号，如果在窗口期内没有喂狗或在窗口期外喂狗都会产生看门狗重启信号至 MCU，由 MCU 来控制重启。
   SOC 包含18个看门狗，分布如下：Acore 共2个、MCU 共5个、VDSP 共2个、BPU 共8个、HSM 共1个，Acore Watchdog 具体使用情况如下表所示：
 <table>
