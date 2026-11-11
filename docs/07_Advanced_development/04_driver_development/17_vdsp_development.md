@@ -84,6 +84,8 @@ VDSP 相关的内核配置宏如下，启用 VDSP 功能需打开对应配置：
 
 ## 设备树配置
 
+<DocScope products="RDK S100">
+
 VDSP 内核通过 `remoteproc_vdsp0` 节点注册到 remoteproc 子系统，加载/管理 VDSP Firmware。节点位于 `drobot-s100-soc.dtsi`，关键属性（完整配置含 iommu/预留内存映射等，见内核 dts）：
 
 ```dts
@@ -104,8 +106,30 @@ remoteproc_vdsp0: remoteproc_vdsp0 {
 };
 ```
 
+</DocScope>
 <DocScope products="RDK S600">
-S600 除 `remoteproc_vdsp0` 外，还包含 `remoteproc_vdsp1` 节点（`compatible = "hobot,remoteproc-vdsp1"`），用于管理第二个 VDSP 核，对应 sysfs 节点 `remoteproc_vdsp1`。
+
+VDSP 内核通过 `remoteproc_vdsp0` / `remoteproc_vdsp1` 节点注册到 remoteproc 子系统，加载/管理两个 VDSP 核的 Firmware。节点位于 `drobot-s600-soc.dtsi`，`remoteproc_vdsp0` 关键属性如下（完整配置含 iommu/预留内存映射等，见内核 dts）：
+
+```dts
+remoteproc_vdsp0: remoteproc_vdsp0 {
+    status = "okay";
+    compatible = "hobot,remoteproc-vdsp0";
+    power-domains = <&dummy_pd 0>;
+    clocks = <&clk_vdsp0>;
+    clock-names = "vdsp0_clk";
+    clock_max_freq = <1000000000>;
+    resets = <&smc_reset RST_IDX_VDSP0_DSP0>;
+    reset-names = "vdsp0_reset";
+    interrupt-parent = <&gic>;
+    interrupts = <GIC_SPI VDSPSYS0_WWDT_EARLYRESETREQ_INTR IRQ_TYPE_LEVEL_HIGH>,
+             <GIC_SPI CPUSYS_SW0_TRIG_INTR_4 IRQ_TYPE_LEVEL_HIGH>;
+    mboxes = <&mailbox0 9 25 9>, <&mailbox0 8 24 8>, <&mailbox0 7 23 7>;
+};
+```
+
+`remoteproc_vdsp1`（`compatible = "hobot,remoteproc-vdsp1"`）用于管理第二个 VDSP 核，属性结构与 `vdsp0` 对应，详见 `drobot-s600-soc.dtsi`。
+
 </DocScope>
 
 ## 功能使用
@@ -219,7 +243,7 @@ cat /sys/class/remoteproc/remoteproc_vdsp1/state # for vdsp1
 
 **心跳监控**
 
-默认处于关闭状态，可通过下列命令打开或关闭；心跳监控、发送周期为100ms，监控到连续7次心跳被丢失就会上报诊断并 reset VDSP。
+心跳监控默认关闭，可通过下列命令打开或关闭；心跳发送周期为 100ms，连续丢失 7 次（约 700ms）后心跳线程退出并打印 `heartbeat lost thread will exit` 日志。VDSP 的 coredump 与 reset 由 VDSP 侧上报的 `E_VDSP_CTRL_CMD_RESET` 控制事件触发，与心跳监控是两条独立机制（S100/S600）。
 
 ``` shell
 # 打开心跳监控
@@ -342,18 +366,18 @@ VDSP FW 的日志会通过串口输出。
 echo 0 > /proc/sys/kernel/printk
 ```
 
-当没有串口可用的情况下，用户可通过 ssh 登录板子，后台默认会启动 hrut_remoteproc_log 服务：
+当没有串口可用的情况下，用户可通过 ssh 登录板子，后台默认会启动 hrut_remoteproc_log 服务。开机服务链为 `hobot-log-dsp0.service` → `/usr/bin/hobot-log-start dsp0` → `hrut_remoteproc_log`，其中 `-r` 取自 `hobot-utils` 的 `/usr/bin/hobot-log` 中定义的 `ROTATESIZE_REMOTE=1024`（KB），即开机实际执行的命令如下（S100/S600）：
 
 ``` shell
 #VDSP0 默认开机执行的启动命令，日志保存路径：/log/dsp0/message
-hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp0/log -f /log/dsp0/message -r 2048 -n 200
+hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp0/log -f /log/dsp0/message -r 1024 -n 200
 ```
 
 <DocScope products="RDK S600">
 
 ``` shell
 #VDSP1（与 VDSP0 相同用法，仅 remoteproc 节点与落盘路径换为 dsp1）
-hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp1/log -f /log/dsp1/message -r 2048 -n 200
+hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp1/log -f /log/dsp1/message -r 1024 -n 200
 ```
 
 </DocScope>
@@ -778,8 +802,7 @@ VDSP 侧：
 ``` shell
 #源码和二进制文件目录结构，不包括编译框架文件（Makefile、Kconfig等）
   ARM:
-     └── src
-         └── vdsp_sample.c
+     └── vdsp_sample.c
 
   DSP:
      └── main.c
@@ -824,7 +847,7 @@ NA
 | :--- | :--- | :--- |
 | `dsp_id` | `-d` / `--dsp_id=<id>`，指定 VDSP 核编号（与 `hb_vdsp_*`、`dcore<id>_rpmsg_op` 等一致） | `0` |
 | `dsp_pathname` | `-p` / `--dsp_pathname=<path>`，指定 VDSP Firmware 路径（传给 `hb_vdsp_start`） | `/app/vdsp_demo/vdsp_sample/res/q8sample` |
-| `sample-type` | `-t` / `--sample-type=<0\|1>`，sample 类型：`0` 基础（basic）、`1` 完整链路（full） | `1` |
+| `sample-type` | `-t / <0\|1>`，sample 类型：`0` 基础（basic）、`1` 完整链路（full）。注意：示例自身的 usage 文本宣传了 `--sample-type` 长选项，但代码中未注册该长选项，**仅 `-t` 有效** | `1` |
 | `help` | `-h` / `--help`，打印用法并退出（未知参数也会进入 `usage()`） | （无） |
 
 :::note
@@ -1609,7 +1632,7 @@ IPCFHAL 初始化
 【IPCFHAL 初始化 示例代码】
 
 :::info
-完整代码编译和运行参考``/app/vdsp_demo/vdsp_ipcfhal_sample/READTME.md``
+完整代码编译和运行参考``/app/vdsp_demo/vdsp_ipcfhal_sample/README.md``
 :::
 
 ``` c
@@ -1719,7 +1742,7 @@ IPCFHAL 配置 channel
 
 【函数声明】
 
-``int32_t hb_ipcfhal_send(const uint8_t *data, int16_t length, ipcfhal_chan_t *channel);``
+``int32_t hb_ipcfhal_send(const uint8_t *data, uint32_t length, ipcfhal_chan_t *channel);``
 
 【参数描述】
 
@@ -1744,7 +1767,7 @@ IPCFHAL 发送消息
 
 【函数声明】
 
-``int32_t hb_ipcfhal_recv(uint8_t *data, int16_t length, int32_t  timeout, ipcfhal_chan_t *channel);``
+``int32_t hb_ipcfhal_recv(uint8_t *data, uint32_t length, int32_t  timeout, ipcfhal_chan_t *channel);``
 
 【参数描述】
 
@@ -1920,7 +1943,7 @@ IPCFHAL 初始化
 【IPCFHAL 初始化 示例代码】
 
 :::info
-完整代码编译和运行参考``/app/vdsp_demo/vdsp_ipcfhal_sample/READTME.md``
+完整代码编译和运行参考``/app/vdsp_demo/vdsp_ipcfhal_sample/README.md``
 :::
 
 ``` c
@@ -2384,7 +2407,7 @@ IPCFHAL 反初始化
 
   - VDSP 侧
 
-    头文件：hb_mem_allocator.h
+    头文件：hb_mem_allocator.h（错误码定义见 hb_mem_err.h）
 
     链接库：无
 
@@ -2392,10 +2415,12 @@ IPCFHAL 反初始化
 
 ``` c
 #define HB_MEM_OK                                    0
-#define HB_MEM_ERR_INVALID_PARAMS                    (-16777215)
-#define HB_MEM_ERR_REPEAT_INIT                       (-16777214)
-#define HB_MEM_ERR_HEAP_BUSY                         (-16777213)
-#define HB_MEM_ERR_INSUFFICIENT_MEM                  (-16777212)
+#define HB_MEM_ERR_UNKNOWN                           (-16777215)
+#define HB_MEM_ERR_INVALID_PARAMS                    (-16777214)
+#define HB_MEM_ERR_INVALID_FD                        (-16777213)
+#define HB_MEM_ERR_INVALID_VADDR                     (-16777212)
+#define HB_MEM_ERR_INSUFFICIENT_MEM                  (-16777211)
+#define HB_MEM_ERR_TOO_MANY_FD                       (-16777210)
 ```
 
 #### HEAP 分配 API
