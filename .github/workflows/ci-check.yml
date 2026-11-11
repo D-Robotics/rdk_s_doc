@@ -26,6 +26,12 @@ jobs:
         with:
           node-version: '24'
           cache: 'npm'
+      - name: Doc quality (advisory)
+        uses: D-Robotics/doc-skills/.github/actions/doc-quality@v1
+        continue-on-error: true
+        with:
+          changed-only: 'true'
+          advisory: 'true'
       - name: Clean install dependencies
         run: |
           rm -rf node_modules
