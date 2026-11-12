@@ -8,7 +8,7 @@ description: "以太网性能测试"
 
 ## 功能概述
 
-本章指导如何使用 `iperf3` 工具进行以太网性能测试，可查阅 [iperf3 文档](https://iperf.fr/iperf-doc.php#3docd) 了解命令详细说明。
+本章指导如何使用 `iperf3` 工具进行以太网性能测试，可查阅 [iperf3 文档](https://iperf.fr/iperf-doc.php#3doc) 了解命令详细说明。
 
 **以太网性能测试的关注点**：
 
