@@ -181,23 +181,9 @@ import DocScope from '@site/src/components/DocScope';
 5.  **摄像头模组或 FPC 排线损坏**： 如果排查了以上所有因素，仍无法检测到，则可能是摄像头模组本身或 FPC 排线存在物理损坏。
 6.  **设备树配置**： 确保 Linux 内核的设备树中已正确配置了该 MIPI 接口和所连接的摄像头型号的驱动信息。
 
-#### Q12: 运行 MIPI 摄像头示例程序时报错 `ValueError: invalid literal for int() with base 10: b'open device /dev/lt8618_ioctl failed\ndevice not open\n1080'`，如何解决？
-**A:** 这个报错信息 `ValueError: invalid literal for int() with base 10: b'open device /dev/lt8618_ioctl failed\ndevice not open\n1080'` 通常表明程序在尝试解析一个期望是纯数字的字符串时，收到了一个包含错误信息和数字混合的字符串。在这个特定的例子中，`b'open device /dev/lt8618_ioctl failed\ndevice not open\n1080'` 这部分，程序可能期望只获取到分辨率相关的数字（如'1080'），但由于打开显示相关的设备 (`/dev/lt8618_ioctl`，这似乎是一个 HDMI 相关的控制接口）失败，导致返回了错误信息。
-
-**主要原因及解决方法**：
-* **权限不足**： 许多与硬件直接交互的操作（如打开设备节点、配置显示参数等）需要 root 权限。如果您是使用普通用户（如 `sunrise`）运行示例程序，可能会因为权限不足而导致打开设备失败。
-    * **解决方法**： 尝试使用 `sudo` 以 root 权限运行示例程序：
-        ```bash
-        sudo python3 mipi_camera.py
-        ```
-* **依赖的显示设备未就绪或配置错误**：
-    * `lt8618` 似乎是一个 HDMI 发送芯片的型号。如果示例程序依赖于这个 HDMI 输出设备，而该设备未能正确初始化或被其他程序占用，也可能导致此错误。
-    * 确保 HDMI 显示器已正确连接并被系统识别（如果示例需要 HDMI 输出）。
-    * 检查相关的内核日志 (`dmesg`) 是否有关于 `lt8618` 或显示初始化的错误。
-
 ### 显示接口
 
-#### Q13: 开发板的 HDMI 接口可以支持哪些分辨率？
+#### Q12: 开发板的 HDMI 接口可以支持哪些分辨率？
 **A:** RDK 开发板 HDMI 接口具体支持的分辨率类型会因**板卡型号、SoC 型号、以及所运行的 RDK OS 系统版本**而有所不同。
 * **通用支持**： 大部分 RDK 板卡至少会支持一些常见的分辨率，如：
     * 1920x1080 (1080p) @ 60Hz/50Hz/30Hz
@@ -219,7 +205,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### GPIO 扩展芯片
 
-#### Q14: 40PIN 上的 GPIO0–GPIO9 是 SoC 原生引脚吗？做高速翻转或精确时序时有什么限制？
+#### Q13: 40PIN 上的 GPIO0–GPIO9 是 SoC 原生引脚吗？做高速翻转或精确时序时有什么限制？
 **A:** 不是原生引脚。S100 40PIN 上的 `40PIN_GPIO0_3V3` 至 `40PIN_GPIO9_3V3` 共 10 个 GPIO **由板载 GPIO 扩展 IC（TPT2955x 系列，I2C 接口）提供**，并非 SoC 原生 GPIO；该 IC 内部默认带 100K 上拉电阻。
 * **速度限制**： 扩展 IC 通过 I2C 总线（`i2c-0`，从设备地址 `0x27`）控制，每一次电平翻转都要走一次 I2C 传输，实测翻转速率远低于原生 GPIO，无法用于微秒级精确时序、位模拟协议（bit-bang）等场景。
 * **适用场景**： LED 指示、按键检测、低速片选/复位控制等对速度不敏感的输出或输入。
@@ -240,7 +226,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### 串口资源与占用
 
-#### Q15: 为什么 /dev/ttyS1 打不开或读不到数据？可以用哪些串口外接自己的设备？
+#### Q14: 为什么 /dev/ttyS1 打不开或读不到数据？可以用哪些串口外接自己的设备？
 **A:** S100 的串口资源是固定的，`/dev/ttyS1` 有专门用途，随意占用会破坏蓝牙功能：
 * **每个串口的归属（S100 实测）**：
 
@@ -270,7 +256,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### 蓝牙与无线模组
 
-#### Q16: 手动运行 mbt 命令时报 environtment set MBT_TRANSPORT not found，怎么解决？
+#### Q15: 手动运行 mbt 命令时报 environtment set MBT_TRANSPORT not found，怎么解决？
 **A:** `mbt` 工具依赖两个环境变量，未导出时会直接报错退出：
 ```bash
 export MBT_TRANSPORT=/dev/ttyS1      # mbt 通信的 UART 端口
@@ -278,7 +264,7 @@ export MBT_REG_ON_GPIO=427           # 蓝牙模组使能/复位 GPIO
 ```
 导出后再执行 `mbt download`、`mbt update_baudrate` 等命令即可。系统自带的 `startbt.sh` 内部已包含这两行 export，所以服务自动初始化不受影响；只有手动执行 mbt 时才需要自己导出。完整手动初始化流程参考[蓝牙初始化说明](/Advanced_development/system_software/bluetooth_init)。
 
-#### Q17: 插了一个 USB 无线接收器，蓝牙还是没反应，是板子的问题吗？
+#### Q16: 插了一个 USB 无线接收器，蓝牙还是没反应，是板子的问题吗？
 **A:** 先确认插入的是**蓝牙 dongle** 还是 **2.4G 无线键鼠接收器**，两者外观相似但完全不同：
 * **确认方法**： 插入后执行 `lsusb`，看设备的 Class 字段：
     ```bash
@@ -289,7 +275,7 @@ export MBT_REG_ON_GPIO=427           # 蓝牙模组使能/复位 GPIO
 * **板端验证**： S100 内核自带 `btusb` 驱动模块，插入 Class e0 的标准蓝牙 dongle 即可被识别，无需额外装驱动。
 * **S100 板载模组**： S100 通过 J17 M.2 Key E 接口外接 Wi-Fi/蓝牙 combo 模组（AzureWave CYW55560），蓝牙走 UART 而非 USB，不占用 USB 口，也不需要 USB dongle。
 
-#### Q18: hci0 起不来，hobot-bluetooth 服务一直卡住或反复重启，怎么办？
+#### Q17: hci0 起不来，hobot-bluetooth 服务一直卡住或反复重启，怎么办？
 **A:** S100 的蓝牙在 UART 上（M.2 Key E combo 模组），服务卡住基本都是模组硬件链路问题：
 1.  **确认模组在位**： 检查 J17 M.2 Key E 插槽上的 Wi-Fi/蓝牙 combo 模组是否插紧、固定螺丝是否拧上、两根天线是否接好（U.FL 座易松）。
 2.  **看服务卡在哪一步**：
@@ -307,7 +293,7 @@ export MBT_REG_ON_GPIO=427           # 蓝牙模组使能/复位 GPIO
 
 ### USB 接口（多设备接入）
 
-#### Q19: 两个 USB 摄像头能不能同时使用？
+#### Q18: 两个 USB 摄像头能不能同时使用？
 **A:** 可以，但需要限制 `uvcvideo` 驱动的带宽占用，否则第二个摄像头可能枚举失败或工作不稳定：
 ```bash
 rmmod uvcvideo
@@ -321,7 +307,7 @@ modprobe uvcvideo quirks=128
 
 ### IMU
 
-#### Q20: IMU 在 /dev/iio:deviceX 里怎么区分加速度计和陀螺仪？
+#### Q19: IMU 在 /dev/iio:deviceX 里怎么区分加速度计和陀螺仪？
 **A:** S100 相机扩展板上的 ICM42688 挂在 IIO 子系统下，同一颗芯片的陀螺仪和加速度计是**两个独立的 IIO 设备**：
 * **确认方法**：
     ```bash
@@ -335,7 +321,7 @@ modprobe uvcvideo quirks=128
     * `iio:device2` — fsync（`icm42688-fsync`）
 * **直接读数据**： 使用 `sample_imu_iio` 示例程序，`-n` 参数选择模组型号（如 `-n icm42688`），用法参考[IMU 示例文档](/Demos/peripheral/imu/s100_imu)。
 
-#### Q21: 运行 sample_imu_input 报 No such file or directory，怎么排查？
+#### Q20: 运行 sample_imu_input 报 No such file or directory，怎么排查？
 **A:** 该示例依赖驱动向上抛的 input 事件节点，报此错一般是**当前板子上的 IMU 型号没有走 input 上报路径**：
 1.  **确认 input 事件节点**：
     ```bash
@@ -354,13 +340,13 @@ modprobe uvcvideo quirks=128
 
 ### 扩展接口与自锁连接器
 
-#### Q22: S600 的扩展接口能用杜邦线直接插吗？
+#### Q21: S600 的扩展接口能用杜邦线直接插吗？
 **A:** 不能。S600 的扩展接口（2 个 10-pin、1 个 12-pin、1 个 14-pin）均为 **1.25mm 间距的自锁线对板连接器**（如星坤 X1251WRS 系列）：
 * **接线方式**： 需使用配套的自锁插头（胶壳 + 压线端子）压线后接入；杜邦线（2.54mm 间距）物理尺寸不匹配，无法直接插入。
 * **自锁结构优势**： 插头插入后自动锁紧，防止振动或拉扯时松脱，适合机器人等运动场景。
 * **注意电平**： J19（PCM+I2C）上的 PCM 管脚复用为 GPIO 时为 **1.8V 电平**，接线前需确认外部器件电平匹配，切勿接 5V。
 
-#### Q23: GPIO 示例能运行但串口没有打印，管脚电平也不变化，是程序问题吗？
+#### Q22: GPIO 示例能运行但串口没有打印，管脚电平也不变化，是程序问题吗？
 **A:** 大多数情况不是程序问题，是接线或电平问题：
 1.  **示例本身无打印**： `simple_out.py` 等示例只翻转输出管脚电平，不打印任何内容；`simple_input.py`、`button_led.py` 等仅在**输入电平变化时**打印，电平不变时无输出。
 2.  **输入管脚悬空**： 悬空时电平不确定，读数乱跳或不变。应接确定电平（GND 或 1.8V）——注意 S600 扩展接口未引出 1.8V 电源，需从 J15 的 `VDDIO_MCU_1V8` 引出。
@@ -373,7 +359,7 @@ modprobe uvcvideo quirks=128
 
 ### CAN 接口
 
-#### Q24: S600 的 CAN 总线终端电阻（120Ω）需要自己外接吗？
+#### Q23: S600 的 CAN 总线终端电阻（120Ω）需要自己外接吗？
 **A:** 不需要，S600 通过拨码开关控制板载 120Ω 终端电阻是否接入：
 * **MCU 域 CAN（J16，12-Pin，5 路）**： SW6 拨码分别控制 MCU-CAN1～CAN5 的 120Ω 电阻，ON=接入，OFF=断开。
 * **MAIN 域 CAN（J17，10-Pin，4 路）**： SW7 拨码分别控制 MAIN-CAN1～CAN4 的 120Ω 电阻。
@@ -385,7 +371,7 @@ modprobe uvcvideo quirks=128
 
 ### IMU（RDK S600）
 
-#### Q25: S600 上 IMU 检测不到，程序直接退出怎么办？怎么读非默认型号？
+#### Q24: S600 上 IMU 检测不到，程序直接退出怎么办？怎么读非默认型号？
 **A:** S600 的 IMU（BMI088）位于 **MCU Port 扩展板**上，通过 SPI-13 总线通信：
 * **检测不到（`Error: init IMU 'bmi08x' failed !!! Quit Now`）**：
     1. 确认 MCU Port 扩展板已正确连接（扩展板上 LINK 绿灯常亮表示连接正常、5V 供电正常）。
@@ -398,7 +384,7 @@ modprobe uvcvideo quirks=128
 
 ### PCIe 与外设
 
-#### Q26: S600 启动后 NVMe 硬盘或 PCIe 设备不可用，dmesg 报 boardid 相关错误？
+#### Q25: S600 启动后 NVMe 硬盘或 PCIe 设备不可用，dmesg 报 boardid 相关错误？
 **A:** 这是 S600 板级 boardid 机制不命中的典型表现：
 * **现象**： PCIe 驱动 `hobot-pcie-rc` 未自动加载，`dmesg` 可见 `Unsupported boardid:0x..., PCIE not Initialized!`。
 * **原因**： boardid 值与 `hobot-loadko.sh` 中登记的分支不匹配，常见于自定义硬件后 boardid 未登记，或 MCU、U-Boot、Kernel 三侧登记的 boardid 不一致。
