@@ -192,7 +192,7 @@ sample 程序默认使用定时器2的通道2（Timer2 Channel2），S100上的�
 <DocScope products="RDK S600">
 sample 程序默认使用定时器2的通道2（Timer2 Channel2），S600上的定时器输入时钟默认配置为 40MHz。
 </DocScope>
-定时器只支持向下计数，无法支持设置一个比较值然后计数比较的硬件功能，默认工作在 Continue 模式下，即每次都会自动重装计数值。如果需要 One-Shot 的形式，则需要在中断函数中停止 Timer，然后自己根据需要重配计数值。定时器最大支持的计数值为2^width-1，其中 width 表示定时器的位宽。定时器支持8、16、32bit 三种格式的位宽，默认使用32bit。
+定时器只支持向下计数，无法支持设置一个比较值然后计数比较的硬件功能，默认工作在 Continue 模式下，即每次都会自动重装计数值。如果需要 One-Shot 的形式，则需要在中断函数中停止 Timer，然后自己根据需要重配计数值。定时器最大支持的计数值为2^width-1，其中 width 表示定时器的位宽。定时器支持16、24、32bit 三种格式的位宽，默认使用32bit。
 
 ### 配置说明
 
@@ -543,7 +543,9 @@ void Gpt_GetVersionInfo(Std_VersionInfoType *VersionInfoPtr);
 命令语法：
 
 ```shell
-timer_interrupt <operation> <load/type> [irq]
+timer_interrupt on <load> <irq>
+timer_interrupt off
+timer_interrupt gettime <type>
 ```
 
 - operation：指定要执行的操作
@@ -568,11 +570,11 @@ timer_interrupt <operation> <load/type> [irq]
     </DocScope>
     此外，load 还支持以秒/毫秒/微秒为单位的时间输入
 - type：读取剩余时间，仅在 gettime 操作下有效
-    - 0 - 读取寄存器装载值
+    - 0 - 以 tick 为单位读取剩余时间
     - 1 - 以秒为单位读取剩余时间
     - 2 - 以毫秒为单位读取剩余时间
     - 3 - 以微秒为单位读取剩余时间
-- irq：
+- irq：定时器中断开关，在 on 操作下为必填参数（缺失会直接报错退出）
     - 0 - 关闭定时器中断
     - 1 - 启动定时器中断
 
@@ -622,7 +624,7 @@ timer_interrupt gettime 3
 
 ## 调试
 
-- **计时验证**：使用 `timer_interrupt on <周期>` 启动定时器，并用 `timer_interrupt gettime <type>` 读取剩余计数值。
+- **计时验证**：使用 `timer_interrupt on <周期> <irq>` 启动定时器，并用 `timer_interrupt gettime <type>` 读取剩余计数值。
 - **时钟核对**：核对输入时钟（S100 为 200MHz，S600 为 40MHz）与装载值计算是否一致。
 - **中断验证**：使用 `timer_interrupt on <周期> 1` 启动定时中断，核对中断是否按设定周期触发。
 
