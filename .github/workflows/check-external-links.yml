@@ -76,9 +76,9 @@ jobs:
           }
 
           if has_failures; then
-            # 正文里不放时间戳，否则每轮都算「有变化」，订阅者会天天收信
+            # 正文里不放时间戳，也不放本轮 run 链接（否则每轮都算变化），否则每轮都算「有变化」，订阅者会天天收信
             BODY="## 外链失效清单"$'\n\n'
-            BODY+="$(cat "$REPORT")"
+            BODY+="$(grep -v 'Full Github Actions output' "$REPORT" || true)"
             NUM="$(issue_num)"
             if [ -n "$NUM" ]; then
               CUR="$(gh issue view "$NUM" --json body --jq .body)"
