@@ -948,6 +948,6 @@ void Spi_MainFunction_Handling(void);
 ## 相关文档
 
 - [MCU 快速入门指南](01_basic_information.md)
-- [MCU Port 配置](12_mcu_port/development_manual.md)
+- [MCU Port 配置](12_mcu_port/02_development_manual.md)
 - [SPI 驱动调试指南](/Advanced_development/driver_development/driver_spi_dev)
 - [40pin SPI 示例](/Demos/peripheral/01_40pin/s100/spi)
