@@ -350,7 +350,7 @@ root@ubuntu:~# amixer sset 'DAC' 200
 | `-f` | 样本格式（`S16_LE` / `S24_LE` / `S32_LE`） |
 | `-t` | 文件类型（如 `wav`） |
 | `-d` | 录音时长（秒） |
-| `--period-size` | 每次中断处理的帧数（须满足 64 字节对齐，见 [音频调试指南](../../07_Advanced_development/04_driver_development/09_driver_audio.md)） |
+| `--period-size` | 每次中断处理的帧数。换算出的周期字节数（帧数 × 每帧字节数）须为 64 的倍数（PDMA 数据宽度 64 字节，见 [音频调试指南](../../07_Advanced_development/04_driver_development/09_driver_audio.md#pdma-对齐)） |
 | `--buffer-size` | 缓冲区大小 |
 
 <DocScope products="RDK S100">
@@ -498,9 +498,9 @@ Playing WAVE 'test.wav' : Signed 16 bit Little Endian, Rate 48000 Hz, Stereo
 
 ### 参数写入失败或断续杂音
 
-**原因**：`--period-size` 未满足 64 字节对齐等 DMA 约束。
+**原因**：`--period-size` 换算出的周期字节数不满足 PDMA 的 64 字节对齐约束（内核日志可看到 `is not align to 0x40`），DMA 传输启动失败。
 
-**解决**：调整 `--period-size` / `--buffer-size`；详见 [音频调试指南](../../07_Advanced_development/04_driver_development/09_driver_audio.md) 中 PDMA 对齐说明。
+**解决**：选择使周期字节数（帧数 × 每帧字节数）为 64 倍数的 `--period-size` / `--buffer-size`；详见 [音频调试指南](../../07_Advanced_development/04_driver_development/09_driver_audio.md#pdma-对齐) 的 PDMA 对齐说明。
 
 <DocScope products="RDK S100">
 
