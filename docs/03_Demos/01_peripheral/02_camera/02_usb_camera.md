@@ -92,8 +92,14 @@ No USB camera found.
 ## USB 2.0 摄像头接入说明{#usb-2.0-note}
 
 :::tip
-1. USB 2.0带宽为480Mb/s，720p30fps 的 USB camera 理论带宽1280x720x16x30=442Mb/s 已经接近2.0理论带宽，另外 UVC 协议开销也会占用一部分带宽，实际剩余传输图像数据的带宽可能在五成左右，本身理论上也不能在同一个 host 接入两路 USB 2.0 720p30fps 的 camera，经验证，同一个 USB host 上可以接入两路 USB 2.0 640x480 20fps。
-2. RDK S100 开发板有两个 USB host，上下两个口为同一个 host，如果接入两个 USB 2.0 720p camera，需要左右两个口插入，每个 USB 2.0 相机占用一个 host 的方式。
+1. USB 2.0 带宽为 480Mb/s，720p30fps 的 USB camera 理论带宽 1280x720x16x30=442Mb/s 已经接近 USB 2.0 理论带宽，另外 UVC 协议开销也会占用一部分带宽，实际剩余传输图像数据的带宽可能在五成左右。因此同一个 USB host 上无法同时接入两路 USB 2.0 720p30fps 的 camera；接入两路 USB 2.0 640x480 20fps camera 是可行的。
+2.
+   <DocScope products="RDK S100">
+   RDK S100 开发板的 4 个 USB 3.0 Type-A 接口由 2 个 USB host 控制器提供，每个双层堆叠接口上的上下两个端口同属一个 USB host。若需同时接入两路 USB 2.0 720p camera，应将两个 camera 分别插入两个不同 host 对应的端口（即两个堆叠接口各插一个），使每路 camera 独占一个 host 的带宽。
+   </DocScope>
+   <DocScope products="RDK S600">
+   RDK S600 开发板的 6 个 USB 3.0 Type-A 接口分属多个 USB host 控制器。若需同时接入两路 USB 2.0 720p camera，应将两个 camera 分别插入不同 host 对应的端口，使每路 camera 独占一个 host 的带宽。
+   </DocScope>
 :::
 
 ## 常见问题
@@ -120,7 +126,7 @@ No USB camera found.
 
 **原因**：USB 2.0 带宽为 480Mb/s，720p30fps 的理论带宽已接近上限，加上 UVC 协议开销，同一 USB host 无法承载两路 720p30fps 摄像头。
 
-**解决**：同一 USB host 建议接入两路 640x480 20fps 摄像头；如需接两路 720p 摄像头，应分别插入上下两个 USB host 对应的端口。
+**解决**：同一 USB host 建议接入两路 640x480 20fps 摄像头；如需接两路 720p 摄像头，应分别插入不同 USB host 对应的端口，避免两路摄像头共享同一 host 的带宽。
 
 ## 相关文档
 
