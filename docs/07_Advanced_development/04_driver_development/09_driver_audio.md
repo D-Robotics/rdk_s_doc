@@ -63,7 +63,7 @@ ALSA 声卡由以下四部分构成：
 - **采样格式**：S8、S16_LE、S24_3LE、S24_LE、S32_LE（`HOBOT_I2S_FMTS`）
 - **帧格式**：DTS `i2s_mode` 常用 `1`（I2S）或 `7`（DSP_A）；`dai-format` 对应 `"i2s"` / `"dsp_a"`
 - **双工模式**：I2S / 声卡节点 `work_mode`：`0` 半双工、`1` 全双工
-- **PDMA 对齐**：传输长度按 **8 字节**对齐（`HOBOT_PDMA_ALIGN`）；配置 `period-size` 时须满足对齐
+- **PDMA 对齐**：PDMA 控制器要求数据宽度、缓冲区地址与周期长度整体按 **64 字节**对齐（DTS `pdma,data-width = <64>`、`pdma,is_fix_width = <1>`，见 `hobot-pdmac-platform.c`）；I2S DMA 驱动内部另有按 8 字节取整的处理（`HOBOT_PDMA_ALIGN`）。配置 `period-size` 时须保证换算出的周期字节数（帧数 × 每帧字节数）为 64 的倍数
 
 <DocScope products="RDK S100">
 
@@ -630,7 +630,7 @@ card 0: s600snd2 [s600snd2], device 1: s600dailink1 ES8156 HiFi-1 []
 
 :::info PDMA 对齐
 
-I2S DMA 驱动按 **8 字节**对齐传输长度（`HOBOT_PDMA_ALIGN`，见 `hobot-i2s-super.h`）。配置 `period-size` 时须满足对齐；`arecord`/`aplay` 对应参数 `--period-size=X`。
+配置 `--period-size` 时，须保证换算出的**周期字节数**（帧数 × 每帧字节数）为 **64 的倍数**：PDMA 控制器固定工作在 64 字节数据宽度（DTS `pdma,data-width = <64>`、`pdma,is_fix_width = <1>`），周期字节数、缓冲区地址须与之对齐，否则内核日志会报 `is not align to 0x40`，DMA 传输无法启动。注意 `--period-size` 是请求值，ALSA 会将其归整到最近的合法值，归整后仍不满足时才报错；因此建议直接按倍数取值，例如 8 通道 16 bit（每帧 16 字节）取 `--period-size=1024`（周期 16384 字节）。
 
 :::
 
