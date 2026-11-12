@@ -22,8 +22,7 @@ The dpkg-deb command not only has options to set, but also requires a command to
 - -f: Print field contents to standard output.
 - -x: Extract files from the package to the specified directory.
 - -X: Extract files from the package to the specified directory and display the detailed process of extraction.
-- -w: Display package information.
-- -l: Display detailed package information.
+- -W: Display package information.
 - -R: Extract control information and archive manifest file.
 
 ## Option Description
