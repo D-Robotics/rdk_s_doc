@@ -76,16 +76,23 @@ jobs:
           }
 
           if has_failures; then
+            # 正文里不放时间戳，否则每轮都算「有变化」，订阅者会天天收信
             BODY="## 外链失效清单"$'\n\n'
-            BODY+="> 自动巡检时间：$(date -u '+%Y-%m-%d %H:%M UTC')"$'\n\n'
             BODY+="$(cat "$REPORT")"
             NUM="$(issue_num)"
             if [ -n "$NUM" ]; then
-              gh issue edit "$NUM" --body "$BODY"
-              echo "已更新 issue #$NUM"
+              CUR="$(gh issue view "$NUM" --json body --jq .body)"
+              if [ "$CUR" = "$BODY" ]; then
+                echo "清单无变化，跳过更新（不打扰订阅者）"
+              else
+                gh issue edit "$NUM" --body "$BODY" \
+                  --add-assignee Paka-418 --add-assignee liqinglian01
+                echo "已更新 issue #$NUM 并指派 Paka-418/liqinglian01"
+              fi
             else
-              gh issue create --title "$TITLE" --label "$LABEL" --body "$BODY"
-              echo "已创建 issue"
+              gh issue create --title "$TITLE" --label "$LABEL" --body "$BODY" \
+                --assignee Paka-418,liqinglian01
+              echo "已创建 issue 并指派 Paka-418/liqinglian01"
             fi
           else
             NUM="$(issue_num)"
