@@ -82,7 +82,7 @@ jobs:
             NUM="$(issue_num)"
             if [ -n "$NUM" ]; then
               CUR="$(gh issue view "$NUM" --json body --jq .body)"
-              if [ "$CUR" = "$BODY" ]; then
+              if [ "$CUR" = "$(printf '%s' "$BODY")" ]; then
                 echo "清单无变化，跳过更新（不打扰订阅者）"
               else
                 gh issue edit "$NUM" --body "$BODY" \
