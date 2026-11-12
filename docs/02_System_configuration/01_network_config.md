@@ -95,7 +95,7 @@ nmcli device show eth1
 [Ubuntu Manpage: NetworkManager](https://networkmanager.dev/docs/api/latest/nmcli.html)
 
 :::tip 提示
-`RDK S100` 桌面版本默认采用 `NetworkManager + Netplan` 网络框架。通过 GUI 或 `nmcli` 保存配置后，配置会写入 `/etc/NetworkManager/system-connections/`。
+桌面版本默认采用 `NetworkManager + Netplan` 网络框架。通过 GUI 或 `nmcli` 保存配置后，配置会写入 `/etc/NetworkManager/system-connections/`。
 
 也可以直接编辑该目录中的 `.nmconnection` 文件；编辑完成后，执行 `sudo nmcli connection reload` 和 `sudo nmcli connection up [connection_name]` 使配置生效。
 :::
