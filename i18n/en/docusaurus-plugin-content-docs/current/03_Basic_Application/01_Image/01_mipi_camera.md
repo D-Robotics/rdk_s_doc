@@ -27,10 +27,23 @@ The `mipi_camera_streamer.py` program is installed on the development board to t
 ## How to Run
 Execute the program with the following commands:
 
+<DocScope versions="<5.1.1">
+
+  ```bash
+  sunrise@ubuntu:~$ cd /app/pydev_demo/10_mipi_camera_sample
+  sunrise@ubuntu:/app/pydev_demo/10_mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
+  ```
+
+</DocScope>
+
+<DocScope versions=">=5.1.1">
+
   ```bash
   sunrise@ubuntu:~$ cd /app/pydev_demo/mipi_camera_sample
   sunrise@ubuntu:/app/pydev_demo/mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
   ```
+
+</DocScope>
 
 <DocScope versions=">=5.1.1">
 
