@@ -11,6 +11,7 @@ const require = createRequire(import.meta.url);
 import remarkDirective from "remark-directive";
 import remarkDocScope from "./src/remark/remark-doc-scope.js";
 
+const guajiAssistantOrigin = process.env.GUAJI_ASSISTANT_ORIGIN?.trim();
 const buildProduct = process.env.DOC_BUILD_PRODUCT?.trim() || "";
 const buildVersion = process.env.DOC_BUILD_VERSION?.trim() || "";
 const COPYRIGHT_START_YEAR = 2024;
@@ -154,7 +155,8 @@ const config = {
       }),
     ],
   ],
-  plugins: ['@d-robotics/docusaurus-plugin-guaji',
+  plugins: [
+    ['@d-robotics/docusaurus-plugin-guaji', guajiAssistantOrigin ? { assistantOrigin: guajiAssistantOrigin } : {}],
     require.resolve("./src/plugins/sidebar-scope-config-plugin"),
     // 把「按产品折叠 .doc-scope」提前到 HTML 解析阶段，见插件内部说明。
     require.resolve("./src/plugins/doc-scope-product-bootstrap-plugin"),
