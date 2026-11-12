@@ -105,7 +105,7 @@ flowchart LR
 - `McalCdd/Pwm/inc/Pwm_Lld.h`：底层驱动头文件，声明底层函数原型、结构体和枚举类型
 - `McalCdd/Pwm/inc/Pwm_Types.h`：定义通用数据类型、结构体和回调函数指针类型，供上下层共享使用
 - `McalCdd/Pwm/inc/Pwm.h`：主头文件，声明高层 API 和核心结构体
-- `samples/Pwm/inc/Pwm_PBCfg.h`：PWM 测试 sample 头文件
+- `samples/Pwm/inc/Pwm_test.h`：PWM 测试 sample 头文件
 - `samples/Pwm/src/Pwm_test.c`：PWM 测试 sample 源文件
 
 ## 开发与使用方法
@@ -233,7 +233,7 @@ pwmtest <pwm_id> <pwm通道> <周期> <占空比>
 
 停止 PWM 输出：
 ```sh
-pwmtest <pwm_id> stop <pwm通道>
+pwmtest stop <pwm_id> <pwm通道>
 ```
 
 例如设置 PWM 通道0的周期为1000us，占空比为50%：
@@ -764,7 +764,7 @@ void Pwm_SetSyncModeToIdle(uint8 ModuleId);
 ## 相关文档
 
 - [MCU 快速入门指南](01_basic_information.md)
-- [MCU Port 配置](12_mcu_port/development_manual.md)
+- [MCU Port 配置](12_mcu_port/02_development_manual.md)
 - [PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm)
 - [40pin PWM 示例](/Demos/peripheral/01_40pin/s100/pwm)
 - [扩展引脚应用](/Demos/peripheral/40pin)

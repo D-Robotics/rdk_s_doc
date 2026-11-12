@@ -273,8 +273,8 @@ make
 
 | 测试项 | FPS | 说明 |
 |--------|-----|------|
-| **use-vbo=false** | 2490 | 不使用 VBO（顶点缓冲对象）时的性能 |
-| **use-vbo=true** | 2403 | 启用 VBO，减少 CPU-GPU 交互，效率略高 |
+| **use-vbo=false** | 2490 | 不使用 VBO（顶点缓冲对象）时的性能，本场景实测帧率略高 |
+| **use-vbo=true** | 2403 | 启用 VBO（顶点缓冲对象），减少 CPU-GPU 交互；本场景实测帧率略低于不启用 VBO |
 | **texture-filter=nearest/linear/mipmap** | 2648–2882 | 各种纹理采样方式对性能影响极小，均可高效运行 |
 | **shading=gouraud/phong/blinn-phong-inf/cel** | 2211–2339 | 着色器切换带来轻微性能差异 |
 | **bump-render=high-poly/normals/height** | 1530–3052 | 法线贴图相关技术对性能表现差异显著 |
