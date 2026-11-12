@@ -76,9 +76,17 @@ jobs:
           }
 
           if has_failures; then
-            # 正文里不放时间戳，也不放本轮 run 链接（否则每轮都算变化），否则每轮都算「有变化」，订阅者会天天收信
+            # 正文里不放时间戳、不放本轮 run 链接；也不收「超时」段——超时是网络抖动（wikipedia 等），
+            # 每轮条数不同，收进去等于每轮都算变化。只保留真实失效（404/410 等）。
             BODY="## 外链失效清单"$'\n\n'
-            BODY+="$(grep -v 'Full Github Actions output' "$REPORT" || true)"
+            BODY+="> 仅列 404/410 等真实失效；网络超时不写入本清单（不计入失效，避免抖动刷屏）。"$'\n\n'
+            BODY+="$(awk '
+              /Full Github Actions output/ { next }
+              /^\|.*Timeouts/ { next }
+              /^## Timeouts per input/ { skip = 1; next }
+              skip && /^## / { skip = 0 }
+              !skip { print }
+            ' "$REPORT" || true)"
             NUM="$(issue_num)"
             if [ -n "$NUM" ]; then
               CUR="$(gh issue view "$NUM" --json body --jq .body)"
