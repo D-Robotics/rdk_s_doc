@@ -10,7 +10,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK-S100">
 本示例演示如何在 RDK S100 等平台上，结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现：
-RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/` 目录下。
+RTSP/H.264 视频流 → 硬件解码 (NV12) → YOLOv5x 推理 → 叠加检测框 → 实时显示，本示例代码位于 `/app/cdev_demo/bpu/12_rtsp_yolov5x_display_sample/` 目录下。
 
 </DocScope>
 <DocScope products="RDK-S600">
