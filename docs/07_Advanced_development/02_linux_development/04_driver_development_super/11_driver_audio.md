@@ -218,8 +218,8 @@ ALSA procfs 挂载目录为：`/proc/asound`，ALSA 使用`/proc/asound`目录�
 分配的 pcm 流设备的信息。通过查看该节点，找到当前声卡支持的设备列表。这有助于测试时选择如何设置设备节点的 card/device 值。
 
 ##### /proc/asound/cardX/pcmY[c, p]/*
-系统中声卡对应的每个 pcm 流设备都有一个类似上面的 procfs 目录。其中 X 代表声卡号，`/proc/asound/cards`或者`/dev/snd`下的设备节点信息可确认；
-Y 代表设备号，`/proc/asound/pcm或者/dev/snd`下的设备节点信息可确认。c/p 分别代表 capture/playback。该目录可查看 PCM 设备的信息以及 status。
+系统中声卡对应的每个 pcm 流设备都有一个类似上面的 procfs 目录。其中 X 代表声卡号，`/proc/asound/cards` 或者 `/dev/snd` 下的设备节点信息可确认；
+Y 代表设备号，`/proc/asound/pcm` 或者 `/dev/snd` 下的设备节点信息可确认。c/p 分别代表 capture/playback。该目录可查看 PCM 设备的信息以及 status。
 
 ###### info
 

@@ -303,7 +303,7 @@ spi3: spi@34930000 {
 
 <DocScope products="RDK S100">
 
-以 spi0 cs1 为例，在设备树中为 spi0 节点添加 cs-gpios 属性，将 cs1 映射到指定 GPIO：
+以 spi0 cs1 为例，在设备树中为 spi0 节点添加 `cs-gpios` 属性，将 cs1 映射到指定 GPIO：
 
 ```dts
 spi0: spi@39800000 {
@@ -314,7 +314,7 @@ spi0: spi@39800000 {
 	...
 };
 ```
-> **说明**：各 SPI 片选引脚对应的 GPIO 编号及设备树节点如下表所示，可直接查表填写 cs-gpios 属性。
+> **说明**：各 SPI 片选引脚对应的 GPIO 编号及设备树节点如下表所示，可直接查表填写 `cs-gpios` 属性。
 
 | 引脚      | GPIO      | 设备树             |
 |-----------|-----------|--------------------|
@@ -343,7 +343,7 @@ peri_spi0: peri_spi0_func {
 </DocScope>
 <DocScope products="RDK S600">
 
-以 spi0 cs1 为例，在设备树中为 spi0 节点添加 cs-gpios 属性，去掉 `pinctrl-0` 里面的 cs1 配置，将 cs1 映射到指定 GPIO：
+以 spi0 cs1 为例，在设备树中为 spi0 节点添加 `cs-gpios` 属性，去掉 `pinctrl-0` 里面的 cs1 配置，将 cs1 映射到指定 GPIO：
 
 ```dts
 spi0: spi@34900000 {
@@ -355,7 +355,7 @@ spi0: spi@34900000 {
 	...
 };
 ```
-> **说明**：各 SPI 片选引脚对应的 GPIO 编号及设备树节点如下表所示，可直接查表填写 cs-gpios 属性。
+> **说明**：各 SPI 片选引脚对应的 GPIO 编号及设备树节点如下表所示，可直接查表填写 `cs-gpios` 属性。
 
 | 引脚      | GPIO      | 设备树            |
 |-----------|-----------|-------------------|
@@ -383,11 +383,11 @@ spi0: spi@34900000 {
 
 ### 测试环境准备
 
-spidev_test 是一个开源的 SPI 测试工具，用户可以直接从 linux 源码如下目录获取并编译使用。
+`spidev_test` 是一个开源的 SPI 测试工具，用户可以直接从 linux 源码如下目录获取并编译使用。
 
-源码位置：kernel/tools/spi/spidev_test.c。
+源码位置：`kernel/tools/spi/spidev_test.c`。
 
-spidev_test 常见参数说明如下：
+`spidev_test` 常见参数说明如下：
 
 ```bash
 root@ubuntu:/map# ./spidev_test -h

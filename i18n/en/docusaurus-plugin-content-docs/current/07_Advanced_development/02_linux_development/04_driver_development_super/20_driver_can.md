@@ -12,7 +12,479 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-The S100 does not yet support SocketCAN or the bypass protocol stack. To use CAN, please contact technical support.
+This chapter mainly introduces the S100 SocketCAN configuration and error debugging methods.
+
+### MCU-Side Initialization Configuration
+
+<DocScope products="RDK S100">
+
+The STBY pin of the CAN transceiver is high by default, which keeps the transceiver in STANDBY mode. The MCU side must **pull the STBY pin low** to exit STANDBY mode; otherwise, the CAN transceiver cannot work properly. The MCU side needs to execute the following code:
+
+```
+/* Set the clock source of CAN0~9 according to the actual situation, consistent with the device tree (80M); call this after McuFunc_ModuleInit/Mcu_InitClock */
+writel((__IO uint32 *)(0x2370007c), 0x8001);
+writel((__IO uint32 *)(0x23700080), 0x8001);
+writel((__IO uint32 *)(0x23700084), 0x8001);
+writel((__IO uint32 *)(0x23700088), 0x8001);
+writel((__IO uint32 *)(0x2370008c), 0x8001);
+writel((__IO uint32 *)(0x23700090), 0x8001);
+writel((__IO uint32 *)(0x23700094), 0x8001);
+writel((__IO uint32 *)(0x23700098), 0x8001);
+writel((__IO uint32 *)(0x2370009c), 0x8001);
+writel((__IO uint32 *)(0x237000a0), 0x8001);
+
+/* Pull STBY low to enable the CAN transceiver */
+Port_Lld_SetPinModeWithoutCheck(6, PORT_PINMUX_GPIO, S100_PORT_MCU);
+Port_Lld_SetGpioDirWithoutCheck(6, PORT_PIN_DIR_OUT, S100_PORT_MCU);
+Dio_WriteChannel(6, STD_LOW);
+```
+</DocScope>
+
+### Device Tree Code
+
+dts files related to CAN configuration in the S100:
+
+```text
+|-- source/hobot-drivers/kernel-dts/drobot-s100-soc.dtsi   # canfd0~canfd5 device nodes
+```
+
+### Device Tree Configuration Description
+
+<DocScope products="RDK S100">
+
+The S100 A-Core side has a total of 6 FlexCAN nodes:
+
+```dts
+canfd1: canfd@0x23720000 {
+    status = "okay";
+    compatible = "hobot,s100-flexcan";
+    reg = <0x0 0x23720000 0x0 0x4000>;
+    interrupts = <GIC_SPI MCUSYS_CANFD5_IPI_MB_INTR  IRQ_TYPE_LEVEL_HIGH>,
+                 <GIC_SPI MCUSYS_CANFD5_IPI_ERR_INTR IRQ_TYPE_LEVEL_HIGH>;
+    clock-frequency = <80000000>;
+    fsl,clk-source = <0>;
+};
+```
+
+The mapping between each node and the MCU-side CAN-FD is as follows:
+
+| A-Core Device Node | MCU-Side CAN Controller | Register Address | Default Status |
+| -------------- | --------------- | ---------- | -------- |
+| canfd0         | MCU canfd3      | 0x235b0000 | disabled |
+| canfd1         | MCU canfd5      | 0x23720000 | disabled |
+| canfd2         | MCU canfd6      | 0x23730000 | disabled |
+| canfd3         | MCU canfd7      | 0x23740000 | disabled |
+| canfd4         | MCU canfd8      | 0x23750000 | disabled |
+| canfd5         | MCU canfd9      | 0x23760000 | disabled |
+
+Configuration item descriptions:
+
+-   `compatible = "hobot,s100-flexcan"`: vendor and model.
+-   `reg`: register address range occupied by the device.
+-   `interrupts`: two interrupts, the Mailbox TX/RX interrupt (`_IPI_MB_INTR`) and the error interrupt (`_IPI_ERR_INTR`).
+-   `clock-frequency`: CAN module clock, 80 MHz; the baud rate calculation is based on this value.
+-   `fsl,clk-source`: clock source selection.
+
+</DocScope>
+
+## Environment Setup and Testing
+
+<DocScope products="RDK S100">
+This section uses the default-enabled **can1** (canfd1, MCU-side canfd5) as an example to introduce the basic functions of SocketCAN.
+</DocScope>
+
+### Test Environment Preparation
+
+The board must have `iproute2` (the `ip` command) and `can-utils` (`candump`/`cansend`).
+
+#### 1. Load the FlexCAN Driver
+
+If the FlexCAN driver is compiled as a kernel module, load it first:
+
+```bash
+modprobe flexcan
+```
+
+After loading, use `ip link` to confirm that the can0~can5 devices are present:
+
+```bash
+ip link show
+```
+
+If the driver is built in to the kernel image, this step is not required; the CAN devices are visible directly after the system boots.
+
+#### 2. Configure the Bitrate and Enable the Interface
+
+Classic CAN
+
+```bash
+# Bring the interface down first (parameters can only be changed in the DOWN state)
+ip link set can1 down
+# Configure the bitrate and sample point
+ip link set can1 type can bitrate 500000 sample-point 0.8
+# Enable the interface
+ip link set can1 up
+```
+CAN-FD
+
+```bash
+# Bring the interface down first (parameters can only be changed in the DOWN state)
+ip link set can1 down
+# Configure CAN FD: arbitration phase 1 Mbps, sample point 80%; data phase 5 Mbps, sample point 75%
+ip link set can1 type can bitrate 1000000 sample-point 0.8 dbitrate 5000000 dsample-point 0.75 fd on
+# Enable the interface
+ip link set can1 up
+```
+
+
+#### Common Parameters [ip link set]
+
+| Parameter | Description | Example |
+|------|------|------|
+| `bitrate N` | Arbitration-phase bitrate / classic CAN bitrate | `bitrate 500000` |
+| `dbitrate N` | CAN FD data-phase bitrate | `dbitrate 5000000` |
+| `restart-ms N` | Automatically recover N ms after bus-off | `restart-ms 3000` |
+| `berr-reporting on/off` | Report bus error frames | `berr-reporting on` |
+| `loopback on/off` | Internal loopback | `loopback on` |
+| `listen-only on/off` | Listen-only mode | `listen-only on` |
+| `one-shot on/off` | Do not automatically retransmit after a failed transmission | `one-shot on` |
+| `fd on/off` | CAN FD mode support | `fd on` |
+
+:::tip
+When debugging error states, it is recommended to enable `berr-reporting on`; otherwise, the driver will not report bus error frames such as BIT0/CRC, and `candump` will not show error details.
+:::
+
+### Basic Transmit/Receive Test
+
+#### Internal Loopback Test
+
+```bash
+ip link set can1 down
+ip link set can1 type can bitrate 500000 loopback on
+ip link set can1 up
+
+# Terminal A: capture frames
+candump can1 &
+# Terminal B: send a standard frame, ID=0x123, 8 data bytes
+cansend can1 123#1122334455667788
+```
+
+In loopback mode, transmitted frames are received by the interface itself, and `candump` should print `can1  123   [8]  11 22 33 44 55 66 77 88`.
+
+#### Two-Node Closed-Loop Test
+
+Connect the CAN_H/CAN_L of two CAN channels (for example, can1 and can2), and connect a 120Ω termination resistor at each end (on the S100 MCU daughter board, connect it via a jumper cap). Send from one end and receive at the other:
+
+```bash
+# Node A (can1)
+cansend can1 123#AABBCCDD
+# Node B (can2)
+candump can2
+```
+## SocketCAN Debugging
+
+### Viewing Interface Status and Error Counters
+
+```bash
+# View detailed CAN parameters
+ip -s -d link show can1
+```
+
+Example output:
+
+```c
+18: can1: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEFAULT group default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can <BERR-REPORTING> state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 3000
+          bitrate 500000 sample-point 0.875
+          tq 25 prop-seg 37 phase-seg1 32 phase-seg2 10 sjw 1
+          flexcan: tseg1 2..96 tseg2 2..32 sjw 1..16 brp 1..1024 brp-inc 1
+          flexcan: dtseg1 2..39 dtseg2 2..8 dsjw 1..4 dbrp 1..1024 dbrp-inc 1
+          clock 80000000
+          re-started bus-errors arbit-lost error-warn error-pass bus-off
+          0          0          0          0          0          0         numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 parentbus platform parentdev 23740000.canfd
+    RX:  bytes packets errors dropped  missed   mcast
+             4       1      0       0       0       0
+    TX:  bytes packets errors dropped carrier collsns
+             4       1      0       0       0       0
+
+```
+
+### Error State Machine and bus-off
+
+The CAN controller maintains an error state machine based on TEC/REC; different counter values correspond to different error levels:
+
+| State | TEC / REC | Meaning | Reported As |
+|------|-----------|------|------|
+| ERROR-ACTIVE | 0 ~ 95 | Normal transmit/receive, active error flag | — |
+| ERROR-WARNING | 96 ~ 127 | Error warning | `CAN_ERR_CRTL` + TX/RX_WARNING |
+| ERROR-PASSIVE | 128 ~ 255 | Passive error, transmit/receive restricted | `CAN_ERR_CRTL` + TX/RX_PASSIVE |
+| BUS-OFF | ≥ 256 | Bus off, transmit/receive stopped | `CAN_ERR_BUSOFF` |
+
+#### Understanding Error Frame Fields
+
+After enabling `berr-reporting on`, error frames can be seen with `candump -e can1`. An error frame is a `struct can_frame` whose `can_id` carries `CAN_ERR_FLAG (0x20000000)`, with `len=8`:
+
+| Field | Meaning | Common Values |
+|------|------|----------|
+| `can_id` bits | Error category | `CAN_ERR_BUSOFF=0x40`, `CAN_ERR_CRTL=0x04`, `CAN_ERR_PROT=0x08`, `CAN_ERR_ACK=0x20`, `CAN_ERR_BUSERROR=0x80`, `CAN_ERR_RESTARTED=0x100` |
+| `data[1]` | CRTL status | `CAN_ERR_CRTL_RX_WARNING=0x04`, `TX_WARNING=0x08`, `RX_PASSIVE=0x10`, `TX_PASSIVE=0x20` |
+| `data[2]` | PROT error type | `CAN_ERR_PROT_BIT0=0x08`, `BIT1=0x10`, `BIT(single/CRC)=0x01`, `FORM=0x02`, `STUFF=0x04` |
+| `data[3]` | PROT error location | `CAN_ERR_PROT_LOC_ACK=0x19`, `CAN_ERR_PROT_LOC_CRC_SEQ=0x08`, etc. |
+
+For example, when a bus-off occurs, a frame with `can_id=0x20000040` is usually received first (reporting entry into the BUS-OFF state), immediately followed by a frame with `can_id=0x20000088` (reporting the specific bus error, where `data[2]=0x08` indicates BIT0). See the table above for the correspondence between error categories and field meanings.
+
+### bus-off Recovery
+
+Recovery falls into two categories: automatic recovery (recovery occurs automatically when the timer set by restart-ms expires) and manual soft reset. Both ultimately bring the controller back to the normal transmit/receive state (ERROR-ACTIVE) through a soft reset.
+
+#### Automatic Recovery (restart-ms > 0)
+
+```bash
+ip link set can1 down
+ip link set can1 type can restart-ms 3000   # Automatically recover 3 seconds after bus-off
+ip link set can1 up
+```
+
+After bus-off, the driver automatically performs a soft reset when the time set by `restart-ms` expires, and sends a `CAN_ERR_RESTARTED` frame to notify the application layer.
+
+#### Manual Soft Reset
+
+In addition to automatic recovery, a soft reset can be triggered manually in two ways:
+
+**Method 1: the restart command**
+
+```bash
+ip link set can1 type can restart
+```
+
+This command triggers a soft reset. After recovery, the interface carrier is turned on again, the state returns to ERROR-ACTIVE, and a `CAN_ERR_RESTARTED` frame is sent to the application layer. It succeeds only when `restart_ms == 0` and `state == BUS_OFF`; otherwise, it returns:
+
+| Error | Cause | Solution |
+|------|------|------|
+| `Invalid argument` (-EINVAL) | `restart_ms != 0` (manual restart is not allowed while automatic recovery is enabled) | Run `down`, set `restart-ms 0`, then run `up` |
+| `Device or resource busy` (-EBUSY) | `state != BUS_OFF` (bus-off has not actually occurred) | Confirm that bus-off has actually occurred; an ACK error only reaches error-passive, which does not count as bus-off |
+
+**Method 2: down + up**
+
+```bash
+ip link set can1 down
+ip link set can1 up
+```
+
+Running down followed by up reinitializes the entire interface (re-requesting interrupts and transmit/receive resources and performing a soft reset), returning the state to ERROR-ACTIVE.
+
+:::caution
+If the MCU-side CAN transceiver is not enabled and causes bus-off, both automatic recovery and manual soft reset will "immediately enter bus-off again after a successful recovery", appearing as a repeated `bus-off -> restart -> bus-off` loop. In this case, check the MCU-side physical layer.
+:::
+
+## Error Frame Monitoring: User-Space Example
+
+The following is an example error frame monitoring program based on a RAW socket, which can decode BUS OFF / ACK / CRC and other information (requires `berr-reporting on`):
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <sys/time.h>
+#include <net/if.h>
+#include <linux/can.h>
+#include <linux/can/raw.h>
+#include <linux/can/error.h>
+#include <linux/can/netlink.h>
+
+static volatile int running = 1;
+static void sig_handler(int s) { running = 0; }
+
+/* Decode the error frame */
+static void parse_err_frame(const struct can_frame *cf, struct timeval *tv) {
+    printf("[%ld.%06ld] ", tv->tv_sec, tv->tv_usec);
+    canid_t id = cf->can_id;
+
+    /* Error category */
+    if (id & CAN_ERR_BUSOFF)    printf("[BUS-OFF] ");
+    if (id & CAN_ERR_ACK)       printf("[ACK_ERR] ");
+    if (id & CAN_ERR_RESTARTED) printf("[RESTARTED] ");
+
+    /* Controller status */
+    if (id & CAN_ERR_CRTL) {
+        printf("[CRTL] ");
+        if (cf->data[1] & CAN_ERR_CRTL_TX_WARNING) printf("TX_WRN ");
+        if (cf->data[1] & CAN_ERR_CRTL_RX_WARNING) printf("RX_WRN ");
+        if (cf->data[1] & CAN_ERR_CRTL_TX_PASSIVE) printf("TX_PASSIVE ");
+        if (cf->data[1] & CAN_ERR_CRTL_RX_PASSIVE) printf("RX_PASSIVE ");
+    }
+
+    /* Protocol error type */
+    if (id & CAN_ERR_PROT) {
+        printf("[PROT] ");
+        if (cf->data[2] & CAN_ERR_PROT_BIT0)  printf("BIT0_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_BIT1)  printf("BIT1_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_FORM)  printf("FORM_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_STUFF) printf("STUFF_ERR ");
+        if (cf->data[2] & CAN_ERR_PROT_BIT)   printf("CRC_ERR ");
+    }
+
+    printf("\n");
+}
+
+int main(int argc, char **argv) {
+    /* Interface name, can be specified via a command-line argument, defaults to can1 */
+    const char *ifname = argc > 1 ? argv[1] : "can1";
+
+    struct sigaction sa = { .sa_handler = sig_handler };
+    sigaction(SIGINT, &sa, NULL);
+
+    /* Create a CAN_RAW socket */
+    int s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+
+    /* Get the index of the specified CAN interface */
+    struct ifreq ifr = {0};
+    strncpy(ifr.ifr_name, ifname, IFNAMSIZ - 1);
+    ioctl(s, SIOCGIFINDEX, &ifr);
+
+    /* Clear the normal data frame filter: length 0, so no normal CAN data frames are received */
+    struct can_filter empty[0];
+    setsockopt(s, SOL_CAN_RAW, CAN_RAW_FILTER, empty, 0);
+
+    /* Enable error message frame filtering: receive all types of errors */
+    can_err_mask_t err_mask = CAN_ERR_MASK;
+    setsockopt(s, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &err_mask, sizeof(err_mask));
+
+    /* Enable timestamps */
+    int enable = 1;
+    setsockopt(s, SOL_SOCKET, SO_TIMESTAMP, &enable, sizeof(enable));
+
+    /* Bind the socket to the specified CAN interface */
+    struct sockaddr_can addr = {
+        .can_family  = AF_CAN,
+        .can_ifindex = ifr.ifr_ifindex
+    };
+    if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+        perror("bind");
+        close(s);
+        return 1;
+    }
+
+    printf("Listening for CAN error frames on %s ... (Ctrl+C to exit)\n", ifname);
+
+    struct can_frame cf;
+    struct msghdr msg = {0};
+    struct iovec iov;
+    unsigned char ctrl[1024];
+
+    iov.iov_base = &cf;
+    iov.iov_len = sizeof(cf);
+
+    msg.msg_iov = &iov;
+    msg.msg_iovlen = 1;
+    msg.msg_control = ctrl;
+    msg.msg_controllen = sizeof(ctrl);
+
+    while (running) {
+    msg.msg_controllen = sizeof(ctrl);
+    ssize_t n = recvmsg(s, &msg, 0);
+
+        if (n == sizeof(cf) && (cf.can_id & CAN_ERR_FLAG)) {
+            struct timeval tv = {0, 0};
+            struct cmsghdr *cmsg = CMSG_FIRSTHDR(&msg);
+
+            while (cmsg) {
+                if (cmsg->cmsg_level == SOL_SOCKET &&
+                    cmsg->cmsg_type == SO_TIMESTAMP) {
+                    tv = *(struct timeval *)CMSG_DATA(cmsg);
+                    break;
+                }
+                cmsg = CMSG_NXTHDR(&msg, cmsg);
+            }
+
+            parse_err_frame(&cf, &tv);
+        }
+    }
+    close(s);
+    return 0;
+}
+```
+
+Usage:
+
+```bash
+# Enable error reporting and set automatic recovery to 3s
+ip link set can1 type can berr-reporting on restart-ms 3000
+# Compile and run
+gcc can_err_monitor.c -o can_err_monitor
+./can_err_monitor can1
+```
+Example output
+```c
+Listening for CAN error frames on can1 ... (Ctrl+C to exit)
+[1786678280.362306] [CRTL] TX_WRN
+[1786678280.362316] [PROT] BIT0_ERR
+[1786678280.362322] [CRTL] TX_PASSIVE  # Passive error
+[1786678280.362323] [PROT] BIT0_ERR
+[1786678280.362338] [PROT] BIT0_ERR
+[1786678280.362363] [PROT] BIT0_ERR
+[1786678280.362390] [PROT] BIT0_ERR
+[1786678280.362415] [PROT] BIT0_ERR
+[1786678280.362441] [PROT] BIT0_ERR
+[1786678280.362469] [PROT] BIT0_ERR
+[1786678280.362494] [PROT] BIT0_ERR
+[1786678280.362518] [PROT] BIT0_ERR
+[1786678280.362542] [PROT] BIT0_ERR
+[1786678280.362569] [PROT] BIT0_ERR
+[1786678280.362597] [PROT] BIT0_ERR
+[1786678280.362623] [PROT] BIT0_ERR
+[1786678280.362650] [PROT] BIT0_ERR
+[1786678280.362673] [PROT] BIT0_ERR
+[1786678280.362713] [BUS-OFF]        # A [BIT0_ERR] frame follows the [BUS-OFF] frame; the hardware timestamps of the two frames are almost identical (Δt=2us) because they come from the same interrupt: the driver reports the state change first, then the bus error
+[1786678280.362715] [PROT] BIT0_ERR
+[1786678283.389491] [RESTARTED]
+
+```
+
+## Error Frame Monitoring: Kernel Logs
+
+1. First raise the flexcan log level (the driver must be loaded first):
+
+```bash
+echo 'file flexcan-core.c +p' > /sys/kernel/debug/dynamic_debug/control
+```
+2. View the kernel logs (`dmesg -w`):
+
+```c
+[ 3877.853136] IPv6: ADDRCONF(NETDEV_CHANGE): can1: link becomes ready
+[ 4238.143737] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143767] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143789] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143814] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143841] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143868] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143892] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143917] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143944] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143969] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.143995] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144022] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144048] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144073] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144097] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4238.144125] flexcan 23740000.canfd can1: bus-off, scheduling restart in 3000 ms
+[ 4238.144135] flexcan 23740000.canfd can1: BIT0_ERR irq
+[ 4241.368721] IPv6: ADDRCONF(NETDEV_CHANGE): can1: link becomes ready
+[ 4241.368722] flexcan 23740000.canfd can1: writing ctrl=0x0000c050
+[ 4241.368728] flexcan 23740000.canfd can1: writing cbt=0x802093e9
+[ 4241.368731] flexcan 23740000.canfd can1: writing fdctrl=0x06c00000
+[ 4241.368734] flexcan 23740000.canfd can1: flexcan_set_bittiming_cbt: mcr=0x5980000f ctrl=0x0000c050 ctrl2=0x80633800 fdctrl=0x06c00000 cbt=0x80000000 fdcbt=0x00000000
+[ 4241.368739] flexcan 23740000.canfd can1: flexcan_chip_start: writing mcr=0x59a3023f
+[ 4241.368742] flexcan 23740000.canfd can1: flexcan_chip_start: writing ctrl=0x00000050
+[ 4241.368745] flexcan 23740000.canfd can1: flexcan_chip_start: writing fdctrl=0x06c00000
+[ 4241.368795] flexcan 23740000.canfd can1: flexcan_chip_start: reading mcr=0x40a3023f ctrl=0x00000050
+
+```
 
 </DocScope>
 
@@ -245,7 +717,160 @@ sudo ./can_stress -i can0 -f 1 -l 64 -t 0x100 -r 0x101 -p 1 -w 1000 -L \
 sudo ./can_pair_test
 ```
 
-#### 1.6 Errors and Statistics
+#### 1.6 Acquiring CAN Hardware Timestamps (RX)
+
+FlexCAN supports **hardware timestamps for received frames**: when a message reaches the controller, the hardware latches the SoC RTC time into the
+`HR_TIME_STAMPn` register. The driver reads this value back when receiving the frame, converts it to the `CLOCK_REALTIME` timeline, and finally
+SocketCAN reports it to user space through the `SCM_TIMESTAMPING` control message.
+
+| Item | Description |
+| ---- | ---- |
+| Supported direction | RX (receive) only; **TX hardware timestamps are not supported** |
+| Time base | SoC RTC (32768 Hz tick); after conversion it falls on the `CLOCK_REALTIME` timeline |
+| With Fastpath | After the bypass protocol stack is enabled, frames do not enter the protocol stack, so SocketCAN cannot obtain hardware timestamps |
+
+:::note Prerequisites
+- The driver must have hardware timestamp capability (`FLEXCAN_QUIRK_HW_TIMESTAMP`);
+- The CAN interface is `up`, and the modules have been loaded and CAN_STB pulled low as described in Sections 1.2 and 1.3;
+- `SIOCSHWTSTAMP` requires `root` (or `CAP_NET_ADMIN`).
+:::
+
+**Three-step call flow**
+
+| Step | Interface | Purpose |
+| ---- | ---- | ---- |
+| 1 | `ioctl(SIOCSHWTSTAMP)` with `rx_filter = HWTSTAMP_FILTER_ALL` | Turn on the RX hardware timestamp switch for the entire network interface |
+| 2 | `setsockopt(SO_TIMESTAMPING, SOF_TIMESTAMPING_RX_HARDWARE \| SOF_TIMESTAMPING_RAW_HARDWARE)` | Make the kernel deliver hardware timestamps to this socket |
+| 3 | `recvmsg()` parses the `SCM_TIMESTAMPING` cmsg | The hardware timestamp is in `ts[2]`, in nanoseconds |
+
+:::tip Why read ts[2]
+The `SCM_TIMESTAMPING` data is always three `timespec` values, and FlexCAN fills only the last one:
+
+```text
+ts[0]  SOF_TIMESTAMPING_SOFTWARE      software timestamp
+ts[1]  SOF_TIMESTAMPING_SYS_HARDWARE  converted hardware timestamp (not filled by flexcan)
+ts[2]  SOF_TIMESTAMPING_RAW_HARDWARE  raw hardware timestamp   <-- use this one
+```
+:::
+
+Key call stack:
+
+```text
+[Enable] application ioctl(SIOCSHWTSTAMP)
+  sock_ioctl -> dev_ioctl -> dev_ifsioc -> dev_eth_ioctl
+    -> flexcan_eth_ioctl -> flexcan_set_hwtstamp_config    # record rx_filter, set hwts.rx_enabled
+
+[Receive] the CAN controller receives a message
+  flexcan_irq -> flexcan_mailbox_read -> flexcan_hwts_read_mb      # read HR_TIME_STAMPn
+    -> skb_hwtstamps(skb)->hwtstamp = flexcan_hwts_to_ktime()      # convert RTC time to CLOCK_REALTIME
+    -> netif_receive_skb -> can_receive -> raw_rcv -> socket receive queue
+
+[Read] application recvmsg()
+  raw_recvmsg -> sock_recv_cmsgs -> __sock_recv_timestamp -> put_cmsg(SCM_TIMESTAMPING)
+```
+
+**① Check interface capabilities**
+
+```shell
+ethtool -T can0
+```
+
+If `SOF_TIMESTAMPING_RX_HARDWARE` / `SOF_TIMESTAMPING_RAW_HARDWARE` are valid, while
+`SOF_TIMESTAMPING_TX_HARDWARE` is empty and `phc_index = -1`, only RX hardware timestamps are supported.
+
+**② Enable/disable RX hardware timestamps**
+
+User space issues it through `SIOCSHWTSTAMP` (already wrapped in the sample program):
+
+```c
+struct hwtstamp_config cfg = {
+        .flags     = 0,
+        .tx_type   = HWTSTAMP_TX_OFF,      /* flexcan has no TX hardware timestamp */
+        .rx_filter = HWTSTAMP_FILTER_ALL,  /* timestamp all RX frames in hardware */
+};
+struct ifreq ifr = { 0 };
+int fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+strncpy(ifr.ifr_name, "can0", IFNAMSIZ - 1);
+ifr.ifr_data = &cfg;
+ioctl(fd, SIOCSHWTSTAMP, &ifr);             /* requires CAP_NET_ADMIN;
+                                             * use SIOCGHWTSTAMP to read back the current configuration */
+```
+
+To disable it, set `rx_filter` to `HWTSTAMP_FILTER_NONE` and issue the call again.
+
+:::warning Device-level switch
+This switch applies to the entire network interface. As long as one process enables it, other sockets can also obtain hardware timestamps;
+`ip link set canX down` resets this state, and it must be issued again after bringing the interface back `up`.
+:::
+
+**③ Read hardware timestamps**
+
+```c
+unsigned int flags = SOF_TIMESTAMPING_RX_HARDWARE |
+                     SOF_TIMESTAMPING_RAW_HARDWARE;
+struct timespec ts[3];                  /* [0]=SW [1]=reserved [2]=HW */
+char ctrl[CMSG_SPACE(sizeof(ts))];
+
+setsockopt(fd, SOL_SOCKET, SO_TIMESTAMPING, &flags, sizeof(flags));
+
+for (cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+        if (cmsg->cmsg_level != SOL_SOCKET ||
+            cmsg->cmsg_type != SCM_TIMESTAMPING)
+                continue;
+        memcpy(ts, CMSG_DATA(cmsg), sizeof(ts));
+        printf("hw = %lld.%09ld\n",
+               (long long)ts[2].tv_sec, (long)ts[2].tv_nsec);
+}
+```
+
+**④ Compile and run the example**
+
+The complete code is in `hobot-io-samples/debian/app/Can/socketcan/can_hwtstamp_rx.c` (minimal example) and
+`can_hwtstamp_test.c` (diagnostic version: capability query, software timestamp comparison, latency statistics).
+
+```shell
+cd hobot-io-samples/debian/app/Can/socketcan
+make can_hwtstamp_rx can_hwtstamp_test
+```
+
+Single-board self-test (hardware loopback, no second node required):
+
+```shell
+ip link set can0 down
+ip link set can0 type can bitrate 500000 loopback on
+ip link set can0 up
+
+sudo ./can_hwtstamp_rx can0 &
+cansend can0 123#1122334455667788
+```
+
+```text
+SIOCSHWTSTAMP ok: tx_type=0 rx_filter=1
+id=0x123 len=8  no hw timestamp (tx echo frame or not enabled)
+id=0x123 len=8  hw_ts=1789563324.123456789
+```
+
+The first line is the TX echo frame looped back from the local transmission (no hardware timestamp), and only the second line is the frame received through the hardware loopback;
+when testing with `can0 <-> can1` on two nodes, no echo frame appears. Diagnostic version usage:
+
+```shell
+# Receive side: print capabilities, wait for 10 frames with hardware timestamps (-o filters echo frames)
+sudo ./can_hwtstamp_test -T -s -n 10 -o can0
+# Transmit side
+cangen can1 -g 10 -I 123 -L 8
+```
+
+**⑤ Common issues**
+
+| Symptom | Cause / Handling |
+| ---- | ----------- |
+| `SIOCSHWTSTAMP: Operation not supported` | The driver has no hardware timestamp capability, or the interface is not flexcan |
+| `ts[2]` is always 0 | `SIOCSHWTSTAMP` was not issued; the frame is a local TX echo; the interface went down and the call was not reissued |
+| No timestamp after enabling Fastpath | Bypass-mode frames do not enter the protocol stack; disable fastpath first |
+| A fixed offset between the timestamp and `date` | Hardware timestamps are converted from SoC RTC ticks; the RTC and system clock must stay synchronized |
+
+#### 1.7 Errors and Statistics
 
 ```shell
 # network TX/RX statistics

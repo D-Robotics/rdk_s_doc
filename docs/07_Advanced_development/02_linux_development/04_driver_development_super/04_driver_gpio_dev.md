@@ -46,7 +46,7 @@ GPIO_DWAPB
 
 <DocScope products="RDK S100">
 
-S100 GPIO 控制器的设备树定义位于 SDK 包的 kernel 文件夹下的 arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi 文件内。
+S100 GPIO 控制器的设备树定义位于 SDK 包的 kernel 文件夹下的 `arch/arm64/boot/dts/hobot/drobot-s100-soc.dtsi` 文件内。
 
 :::info 备注
 s100.dtsi 中的节点主要声明 SoC 共有特性，和具体电路板无关，一般情况下不用修改。
@@ -55,7 +55,7 @@ s100.dtsi 中的节点主要声明 SoC 共有特性，和具体电路板无关�
 </DocScope>
 <DocScope products="RDK S600">
 
-S600 GPIO 控制器的设备树定义位于 SDK 包的 hobot-drivers/kernel-dts 文件夹下的 drobot-s600-pinctrl.dtsi 文件内。
+S600 GPIO 控制器的设备树定义位于 SDK 包的 hobot-drivers/kernel-dts 文件夹下的 `drobot-s600-pinctrl.dtsi` 文件内。
 
 :::info 备注
 drobot-s600-pinctrl.dtsi 中的节点主要声明 SoC 共有特性，和具体电路板无关，一般情况下不用修改。

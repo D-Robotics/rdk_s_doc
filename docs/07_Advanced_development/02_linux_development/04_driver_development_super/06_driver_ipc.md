@@ -125,10 +125,10 @@ ipcfhal_cfg: ipcfhal_cfg {
 ### 设备树配置说明
 
 <DocScope products="RDK S100">
-设备树 ipcfhal_cfg 节点默认配置了一些实例的属性：
+设备树 `ipcfhal_cfg` 节点默认配置了一些实例的属性：
 - 属性中第一列表示实例编号，必须唯一且在有效范围
 - 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为32个
-- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为1024个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB（目前每个实例预分配了1MB 的数据空间，暂不扩增）。
+- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为1024个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，`通道个数 * 缓冲 buf 个数 * buf 大小` 需要小于等于 0.5MB（目前每个实例预分配了1MB 的数据空间，暂不扩增）。
 
 单个实例的设备树节点如下：
 
@@ -183,8 +183,8 @@ ipc_instance6: ipc_instance6 {
 
 **设备树配置注意事项:**
 
-- 实例3~8数据段默认预分配了1MB 空间，Acore 侧使用0.5MB，MCU 侧使用0.5MB，所以通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB。
-- 实例3~8控制段默认预分配了5KB 空间，Acore 侧使用2.5KB，MCU 侧使用2.5KB，存放环形 buf 的控制信息和状态信息，所以(缓冲 buf 个数+2)\*16\*通道个数+8需要小于等于2.5KB。
+- 实例3~8数据段默认预分配了1MB 空间，Acore 侧使用0.5MB，MCU 侧使用0.5MB，所以`通道个数 * 缓冲 buf 个数 * buf 大小` 需要小于等于 0.5MB。
+- 实例3~8控制段默认预分配了5KB 空间，Acore 侧使用2.5KB，MCU 侧使用2.5KB，存放环形 buf 的控制信息和状态信息，所以`(缓冲 buf 个数 + 2) * 16 * 通道个数 + 8` 需要小于等于2.5KB。
 - 实例5~6用于地瓜机器人内部测试，用户可按照上面配置，修改设备树节点即可。 // TODO:可以完全放开给到客户
 - 每个实例的通道数量需要小于等于32，缓冲 buf 个数需要小于等于1024，同时需要满足前两点的不等式。
 - 多个业务使用同一个实例的不同通道或者使用不同实例对传输影响不大，主要是参考 buf_size/buf_num 是否合适以及业务的开发和维护是否方便。
@@ -195,10 +195,10 @@ ipc_instance6: ipc_instance6 {
 - 在同一个 channel 中，发送（push）和接收（pop）使用独立的 ring buffer 和中断机制，因此收发操作是相互独立、互不影响的。
 </DocScope>
 <DocScope products="RDK S600">
-设备树 ipcfhal_cfg 节点默认配置了一些实例的属性：
+设备树 `ipcfhal_cfg` 节点默认配置了一些实例的属性：
 - 属性中第一列表示实例编号，必须唯一且在有效范围
 - 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为32个
-- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为1024个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB（目前每个实例预分配了1MB 的数据空间，暂不扩增）。
+- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为1024个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，`通道个数 * 缓冲 buf 个数 * buf 大小` 需要小于等于 0.5MB（目前每个实例预分配了1MB 的数据空间，暂不扩增）。
 
 单个实例的设备树节点如下：
 
@@ -221,8 +221,8 @@ ipc_instance3: ipc_instance3 {
 
 **设备树配置注意事项:**
 
-- 实例0~15数据段默认预分配了1MB 空间，Acore 侧使用0.5MB，MCU 侧使用0.5MB，所以通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB。
-- 实例0~15控制段默认预分配了8KB 空间，Acore 侧使用4KB，MCU 侧使用4KB，存放环形 buf 的控制信息和状态信息，所以(缓冲 buf 个数+2)\*16\*通道个数+8需要小于等于4KB。
+- 实例0~15数据段默认预分配了1MB 空间，Acore 侧使用0.5MB，MCU 侧使用0.5MB，所以`通道个数 * 缓冲 buf 个数 * buf 大小` 需要小于等于 0.5MB。
+- 实例0~15控制段默认预分配了8KB 空间，Acore 侧使用4KB，MCU 侧使用4KB，存放环形 buf 的控制信息和状态信息，所以`(缓冲 buf 个数 + 2) * 16 * 通道个数 + 8` 需要小于等于4KB。
 - 每个实例的通道数量需要小于等于32，缓冲 buf 个数需要小于等于1024，同时需要满足前两点的不等式。
 - 多个业务使用同一个实例的不同通道或者使用不同实例对传输影响不大，主要是参考 buf_size/buf_num 是否合适以及业务的开发和维护是否方便。
 - 底层 Mailbox 中断分配不支持修改。
@@ -406,7 +406,7 @@ Acore 与 MCU(POLL 方式)之间 API Sample 运行流程图
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/samplepollapi.png" alt="Acore与MCU(POLL方式)之间API Sample运行流程图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 通路配置
-可以增加 Json 文件中的通道数量 config_num，并增加通道信息，本 Sample 未支持增加通道的功能，若需要增加通道，需要修改 Acore 和 MCU 两侧配置文件。
+可以增加 Json 文件中的通道数量 `config_num`，并增加通道信息，本 Sample 未支持增加通道的功能，若需要增加通道，需要修改 Acore 和 MCU 两侧配置文件。
 ```json
 {
         "log_level": 0, # 日志等级，可省略
@@ -749,7 +749,7 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
 :::tip
 ipcbox 只实现了对 i2c Master 的简单传输，不支持 Slave
 
-测试用例中的读写操作都是对8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于 MCU 的 SDK 中的 Service/HouseKeeping/ipc_box/src/ipc_i2c.c
+测试用例中的读写操作都是对8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 `IpcBox_I2cGetValue`/`IpcBox_I2cSetValue`，此函数位于 MCU 的 SDK 中的 `Service/HouseKeeping/ipc_box/src/ipc_i2c.c`
 :::
 
 ### Python 应用
