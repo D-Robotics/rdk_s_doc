@@ -331,9 +331,9 @@ label drobot-s100-rdk-v1p1-kernel
     initrd /initrd.img-KERNEL_VERSION
 ```
 
-其中`label`必须和`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中的`pxe_label`对应
+其中 `label` 必须和 `source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c` 的 `hb_super_btype_list` 数组中的 `pxe_label` 对应
 
-`fdt`中的rdk-s100-v1p1.dtb必须和要使用的Kernel设备树命名保持一致
+`fdt` 中的 `rdk-s100-v1p1.dtb` 必须和要使用的 Kernel 设备树命名保持一致
 
 ## 根据boardid加载ko
 
