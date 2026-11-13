@@ -76,16 +76,31 @@ jobs:
           }
 
           if has_failures; then
+            # 正文里不放时间戳、不放本轮 run 链接；也不收「超时」段——超时是网络抖动（wikipedia 等），
+            # 每轮条数不同，收进去等于每轮都算变化。只保留真实失效（404/410 等）。
             BODY="## 外链失效清单"$'\n\n'
-            BODY+="> 自动巡检时间：$(date -u '+%Y-%m-%d %H:%M UTC')"$'\n\n'
-            BODY+="$(cat "$REPORT")"
+            BODY+="> 仅列 404/410 等真实失效；网络超时不写入本清单（不计入失效，避免抖动刷屏）。"$'\n\n'
+            BODY+="$(awk '
+              /Full Github Actions output/ { next }
+              /^\|.*Timeouts/ { next }
+              /^## Timeouts per input/ { skip = 1; next }
+              skip && /^## / { skip = 0 }
+              !skip { print }
+            ' "$REPORT" || true)"
             NUM="$(issue_num)"
             if [ -n "$NUM" ]; then
-              gh issue edit "$NUM" --body "$BODY"
-              echo "已更新 issue #$NUM"
+              CUR="$(gh issue view "$NUM" --json body --jq .body)"
+              if [ "$CUR" = "$(printf '%s' "$BODY")" ]; then
+                echo "清单无变化，跳过更新（不打扰订阅者）"
+              else
+                gh issue edit "$NUM" --body "$BODY" \
+                  --add-assignee Paka-418 --add-assignee liqinglian01
+                echo "已更新 issue #$NUM 并指派 Paka-418/liqinglian01"
+              fi
             else
-              gh issue create --title "$TITLE" --label "$LABEL" --body "$BODY"
-              echo "已创建 issue"
+              gh issue create --title "$TITLE" --label "$LABEL" --body "$BODY" \
+                --assignee Paka-418,liqinglian01
+              echo "已创建 issue 并指派 Paka-418/liqinglian01"
             fi
           else
             NUM="$(issue_num)"
