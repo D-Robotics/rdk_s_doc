@@ -10,9 +10,9 @@ toc_max_heading_level: 4
 ## 概述
 VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 SoC 并交给后级处理。它是相机通路的第一个环节，由四个子模块构成：
 
-- **MIPI RX**：接收 MIPI CSI-2 数据流，支持 D-PHY / C-PHY；每路 RX 支持多虚拟通道（VC）
+- **MIPI RX**：接收 MIPI CSI-2 数据流，支持 D-PHY / C-PHY；每路 RX 支持 4 路虚拟通道（VC）
 - **CIM**：Camera Interface Manager，把 RX 送来的图像分发给后级（Online）或写入 DDR（Offline）
-- **LPWM**：曝光触发与帧同步信号，供需要外部触发的 Sensor 使用
+- **LPWM**：帧同步信号，供需要外部触发的 Sensor 使用
 - **VCON**：虚拟设备，用于描述硬件接口信息（I2C 总线 / POC / GPIO / MIPI PHY 类型）。向上提供标准化的连接关系，差异由 dts 实现
 
 MIPI RX 与 CIM 的职责与接入能力见[硬件框图](#硬件框图)与[硬件规格](#硬件规格)。
@@ -69,7 +69,14 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 各路 MIPI RX 与 CIM 的对应关系及可用路数见[硬件框图](#硬件框图)。
 
 ### CIM
-一个 MIPI RX 对应一个 CIM——S100 共 3 个，S600 共 6 个。
+
+<DocScope products="RDK S100">
+一个 MIPI RX 对应一个 CIM——S100 共 3 个。
+</DocScope>
+
+<DocScope products="RDK S600">
+一个 MIPI RX 对应一个 CIM——S600 共 6 个。
+</DocScope>
 
 <DocScope products="RDK S100">
 
@@ -101,149 +108,6 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 </DocScope>
 
 ## 使用说明
-
-### 接入评估
-
-接入前完成带宽评估：
-
-- **单路数据量** = 宽 × 高 × 帧率 × 位深 × k。位深：RAW12 取 12，YUV422 取 16。k 为 blanking 系数，估算统一取 **1.5**（保守上界）；精确值以模组手册给出的行/帧总长为准
-- **各道上限**均为 RX 级预算，同一 RX 上所有相机共享：
-
-<DocScope products="RDK S100">
-
-| 卡口 | 上限（该 RX 上各路合计不得超过） |
-| --- | --- |
-| PHY · D-PHY | 4 lane × 2.5 Gbps = 10 Gbps |
-| PHY · C-PHY | 3 trio × 2.5 Gsps × 2.28 = 17.1 Gbps |
-| IPI · 纯 RAW | 600 MHz × 3 pixel/clock × 16 bit = 28.8 Gbps |
-| IPI · YUV422-8bit | 600 MHz × 1 pixel/clock × 16 bit = **9.6 Gbps** |
-| IPI · YUV422-10bit | 600 MHz × 1 pixel/clock × 20 bit = 12 Gbps |
-| VC 路数 | 4 路 |
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 卡口 | 上限（该 RX 上各路合计不得超过） |
-| --- | --- |
-| PHY · D-PHY | 4 lane × 2.5 Gbps = 10 Gbps |
-| PHY · C-PHY | 3 trio × 2.5 Gsps × 2.28 = 17.1 Gbps |
-| IPI · 纯 RAW | 670 MHz × 3 pixel/clock × 16 bit = 32.16 Gbps |
-| IPI · YUV422-8bit | 670 MHz × 1 pixel/clock × 16 bit = **10.72 Gbps** |
-| IPI · YUV422-10bit | 670 MHz × 1 pixel/clock × 20 bit = 13.4 Gbps |
-| VC 路数 | 4 路 |
-
-</DocScope>
-
-- IPI 总线固定 48 bit/clock：RAW 每 clock 传 3 个 pixel、每 pixel 占 16 bit；YUV422 每 clock 只传 1 个 pixel，8-bit 占 16 bit、10-bit 占 20 bit。因此 RAW 的 IPI 上限远高于 PHY，接入瓶颈在 D-PHY；YUV 的 IPI 上限骤降，成为主要约束。同一 RX 上存在任一路 YUV 时，IPI 上限按对应位深档计算；改用 C-PHY 仅放宽 PHY 限制，IPI 上限不变
-- **超出上限时依次调整**：压缩模组 blanking 以降低 k，不改变配置、不影响画质 → 降低帧率或分辨率 → 迁移至其他 RX，可用路数见 [MIPI RX](#mipi-rx) → 改用 C-PHY，仅对纯 RAW 场景有效
-
-**算例一：每 RX 的相机路数上限**
-
-路数上限由 PHY 带宽、IPI 带宽、VC 数三者中最小者决定。以 8M@30（k 取 1.5，RAW12 单路 = 3840 × 2160 × 30 × 12 × 1.5 ≈ **4.48 Gbps**、YUV422-8bit 单路 = 3840 × 2160 × 30 × 16 × 1.5 ≈ **5.97 Gbps**）为例：
-
-<DocScope products="RDK S100">
-
-| 约束 | 上限 | 纯 RAW12 路数 | 纯 YUV8 路数 |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 10 Gbps | 2（10 ÷ 4.48） | 1（10 ÷ 5.97） |
-| PHY · C-PHY | 17.1 Gbps | 3（17.1 ÷ 4.48） | 2（17.1 ÷ 5.97） |
-| IPI · 纯 RAW | 28.8 Gbps | 6 | — |
-| IPI · YUV422-8bit | 9.6 Gbps | — | 1 |
-
-按最小约束取整，每 RX 的最终路数：
-
-| 场景 | 瓶颈 | 每 RX 路数 |
-| --- | --- | --- |
-| 纯 RAW · D-PHY | PHY 10 Gbps | 2 路 8M |
-| 纯 RAW · C-PHY | PHY 17.1 Gbps | 3 路 8M |
-| 纯 YUV8 · 任意 PHY | IPI YUV8 | 1 路 8M |
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 约束 | 上限 | 纯 RAW12 路数 | 纯 YUV8 路数 |
-| --- | --- | --- | --- |
-| PHY · D-PHY | 10 Gbps | 2（10 ÷ 4.48） | 1（10 ÷ 5.97） |
-| PHY · C-PHY | 17.1 Gbps | 3（17.1 ÷ 4.48） | 2（17.1 ÷ 5.97） |
-| IPI · 纯 RAW | 32.16 Gbps | 7 | — |
-| IPI · YUV422-8bit | 10.72 Gbps | — | 1 |
-
-按最小约束取整，每 RX 的最终路数：
-
-| 场景 | 瓶颈 | 每 RX 路数 |
-| --- | --- | --- |
-| 纯 RAW · D-PHY | PHY 10 Gbps | 2 路 8M |
-| 纯 RAW · C-PHY | PHY 17.1 Gbps | 3 路 8M |
-| 纯 YUV8 · 任意 PHY | IPI YUV8 | 1 路 8M |
-
-</DocScope>
-
-**结论**：纯 RAW 的瓶颈是 PHY（IPI 28.8/32.16 Gbps 远高于 PHY，从不构成约束），D-PHY 下 2 路、C-PHY 下 3 路；纯 YUV 的瓶颈是 IPI 骤降（每 clock 只传 1 个 pixel），无论 PHY 类型都只容 1 路 8M。
-
-**算例二：RAW 与 YUV 的混合接入**
-
-同一 RX 上混接 RAW 与 YUV 时，IPI 按 YUV 口径（每 clock 1 个 pixel）计算，且 YUV 单路带宽更大，混合后的容量显著小于纯 RAW。以 8M RAW12（4.48 Gbps）与 2M YUV8（1920 × 1080 × 30 × 16 × 1.5 ≈ 1.49 Gbps）混合为例：
-
-<DocScope products="RDK S100">
-
-| 组合 | 合计带宽 | D-PHY 占用 | IPI·YUV8 占用 | 结论 |
-| --- | --- | --- | --- | --- |
-| 1×8M RAW + 1×2M YUV | 5.97 Gbps | 59.7% | 62.2% | 可行 |
-| 2×8M RAW + 1×2M YUV | 10.45 Gbps | 104.5% | 108.9% | 超限 |
-| 1×8M RAW + 1×8M YUV | 10.45 Gbps | 104.5% | 108.9% | 超限 |
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-| 组合 | 合计带宽 | D-PHY 占用 | IPI·YUV8 占用 | 结论 |
-| --- | --- | --- | --- | --- |
-| 1×8M RAW + 1×2M YUV | 5.97 Gbps | 59.7% | 55.7% | 可行 |
-| 2×8M RAW + 1×2M YUV | 10.45 Gbps | 104.5% | 97.5% | 超限 |
-| 1×8M RAW + 1×8M YUV | 10.45 Gbps | 104.5% | 97.5% | 超限 |
-
-</DocScope>
-
-**结论**：纯 RAW 能接 2 路 8M，但混入 1 路 YUV 后，合计带宽即突破 D-PHY 10 Gbps；YUV 单路带宽大、IPI 口径又骤降，混合接入是约束最紧的场景。多路组合的极限见下方满配参考。YUV 输入禁用 ROI 与 RAWDS（见[注意事项与约束](#注意事项与约束)）。
-
-**满配参考：接入域极限组合**
-
-每 RX 的结构上限是 VC = 4、D-PHY 10 Gbps、C-PHY 17.1 Gbps。按常见 sensor 的最高档 8M@30（RAW 4.48 / YUV422 5.97 Gbps）组合：
-
-<DocScope products="RDK S100">
-
-**RAW12 满配**（瓶颈 D-PHY 10G）与 **YUV422 满配**（瓶颈 IPI 或 D-PHY）：
-
-| 格式 | 满配组合 | 单 RX 占用 | 全芯片接入总量 |
-| --- | --- | --- | --- |
-| RAW12 | 3 个 RX（hw_id 0/1/4）× 2×8M = **6 路 8M** | 8.96 / 10（D-PHY）= 89.6% | 26.9 Gbps |
-| YUV422 | 3 个 RX × (1×8M + 2×2M) = **3 路 8M + 6 路 2M**（9 路） | 8.95 / 9.6（IPI·8bit）= 93.2% | 26.9 Gbps |
-
-S100 仅 2 个 ISP，满配需靠分时/抽帧收敛；RX4（CIM4）只支持离线输出，该 RX 的 2 路只落 DDR。
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-**RAW12 满配**（瓶颈 D-PHY 10G）与 **YUV422 满配**（瓶颈 IPI 或 D-PHY）：
-
-| 格式 | 满配组合 | 单 RX 占用 | 全芯片接入总量 |
-| --- | --- | --- | --- |
-| RAW12 | 6 个 RX（hw_id 0~5）× 2×8M = **12 路 8M** | 8.96 / 10（D-PHY）= 89.6% | 53.8 Gbps |
-| YUV422 | 6 个 RX × (1×8M + 2×2M) = **6 路 8M + 12 路 2M**（18 路） | 8.95 / 10（D-PHY）= 89.5% | 53.7 Gbps |
-
-S600 共 4 个 ISP，满配需靠分时/抽帧收敛。
-
-</DocScope>
-
-- 两类满配均对应 SerDes 聚合接法：解串器把多路 sensor 汇聚到一个 RX，每路 1 lane @ 2.5 Gbps 承载单路流量
-- 本表只算接入域带宽，DDR 读写与后级处理能力须另行评估
-- C-PHY 只放宽 PHY：RAW 满配 D-PHY 下 2 路 8M、C-PHY 下可到 3 路；YUV 满配的瓶颈在 IPI（S100）或 D-PHY（S600），C-PHY 对 S100 无增益、对 S600 可到 1×8M+3×2M
-- 单路更大的 sensor（IPI 接入宽上限内）可提高单路带宽，但每 RX 总量仍以 D-PHY 10 Gbps 为顶
-
-> 规划接入按**含 blanking** 的口径核算，别用有效像素值；除 PHY 外还需确认解串器链路速率够不够。本节只算带宽，输出方式另见[选型依据](#选型依据)。
 
 ### 选型依据
 | 你的场景 | 推荐 | 原因 |
@@ -354,7 +218,7 @@ static vin_attr_t vin_attr = {
             .magicNumber = 0x12345678,
         },
     },
-    .vin_ochn_buff_attr = { [OCHN_MAIN] = { .buffers_num = 6 } },  /* 仅 JSON 建流路径读取；本示例走 set_ochn_buf_attr 生效 */
+    .vin_ochn_buff_attr = { [OCHN_MAIN] = { .buffers_num = 6 } },  /* 本示例走 set_ochn_buf_attr 生效 */
     .magicNumber = 0x12345678,
 };
 

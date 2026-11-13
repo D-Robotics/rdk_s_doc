@@ -41,8 +41,6 @@ To grasp its essence in one sentence: **STITCH is a "rectangle transfer + weight
 
 ### Position of STITCH in the Pipeline
 
-![Where STITCH sits in the camera pipeline](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig1-stitch-position.svg)
-
 STITCH is a **standalone module**: it can either be fed frames directly from user space like `sample_gdc_stitch` (offline replay), or be bound after upstream nodes within a vflow. Both paths go through the same set of `hbn_vnode_*` interfaces.
 
 ### Division of Labor with GDC

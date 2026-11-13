@@ -15,9 +15,7 @@ STITCH 把**多路输入画面按 ROI 摆进一张输出画布**，并在重叠�
 - **多路画面合成一路回传**：把头部、腕部、底盘等相机的画面拼进同一张画布，由一路编码器输出，遥操作与数据采集时只需回传一路码流。
 - **超广角拼接**：相邻相机视场有重叠，在重叠带做 Alpha 融合，得到比单相机更宽的视场。
 
-STITCH 硬件不包含缩放、几何变换与色彩转换单元，ROI 搬运按 1:1 像素映射执行。输出画布分辨率由输出通道属性独立配置，与各路输入分辨率解耦：既可仅覆盖输入的局部区域，也可大于任一单路输入。输入图像须先经 GDC 完成几何校正（见[GDC 概述](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview)），STITCH 仅按 ROI 坐标落位写入，并在重叠区执行 Alpha 混合以消除接缝。数据接入支持两种模型：用户态离线回灌，或经 vflow 绑定到上游节点，两者使用同一组 vnode 接口。
-
-![STITCH 在相机链路中的位置与上下游](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig1-stitch-position.svg)
+STITCH 硬件不包含缩放、几何变换与色彩转换单元，ROI 搬运按 1:1 像素映射执行。输出画布分辨率由输出通道属性独立配置，与各路输入分辨率解耦：既可仅覆盖输入的局部区域，也可大于任一单路输入。若输入图像为鱼眼图还须经 GDC 完成几何校正（见[GDC 概述](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview)），STITCH 仅按 ROI 坐标落位写入，并在重叠区执行 Alpha 混合以消除接缝。数据接入支持两种模型：用户态离线回灌，或经 vflow 绑定到上游节点，两者使用同一组 vnode 接口。
 
 两个模块的职责划分：
 
@@ -996,7 +994,7 @@ STITCH 对外是一个 vnode，没有自己的函数 API，配置分三处下发
 
 ### 注意事项与约束
 
-#### 会被拒绝的配置
+#### 初始化阶段
 
 | 约束 | 表现 |
 | --- | --- |
@@ -1005,9 +1003,9 @@ STITCH 对外是一个 vnode，没有自己的函数 API，配置分三处下发
 | `img_nums > 4` | `hbn_vnode_set_attr` 返回 `-22` |
 | `width` / `strid` 不是 16 字节的倍数 | 输入侧在 `hbn_vnode_set_ichn_attr`、输出侧在 `hbn_vnode_set_ochn_attr` 返回 `-22` |
 
-#### 配置阶段能通过、出帧时才暴露的问题
+#### 运行阶段
 
-| 坑 | 后果 |
+| 错误配置 | 配错后现象 |
 | --- | --- |
 | ROI 尺寸与源裁剪尺寸不等 | 出帧失败，`getframe` 返回 `-41`，内核 `reg status = 0x2`。STITCH 不做缩放 |
 | 该给 LUT 的模式没给 LUT | 出帧失败，`getframe` 返回 `-41`，内核 `reg status = 0x40` |
