@@ -45,8 +45,8 @@ import DocScope from '@site/src/components/DocScope';
 
   参数说明：
 
-  - -w: sensor 输出宽度
-  - -h: sensor 输出高度
+  - `-w`: sensor 输出宽度
+  - `-h`: sensor 输出高度
 
 - **预期效果：**
   程序正确运行后，开发板会通过显示器输出`MIPI`摄像头采集的实时画面。运行 log 如下：
@@ -106,10 +106,10 @@ import DocScope from '@site/src/components/DocScope';
 
   参数说明：
 
-  - -b: RAW 图 bit 数，例如 IMX219支持格式为 RAW10，则 bit 数为10。sensor 支持格式可参考[配件清单](../../07_Advanced_development/01_hardware_development/02_accessory.md)
-  - -c: 保存图像的数量，获取到每张图像的时间间隔一般为1/fps
-  - -w: 保存图像的宽度
-  - -h: 保存图像的高度
+  - `-b`: RAW 图 bit 数，例如 IMX219支持格式为 RAW10，则 bit 数为10。sensor 支持格式可参考[配件清单](../../07_Advanced_development/01_hardware_development/02_accessory.md)
+  - `-c`: 保存图像的数量，获取到每张图像的时间间隔一般为1/fps
+  - `-w`: 保存图像的宽度
+  - `-h`: 保存图像的高度
 
 - **预期效果：**
   程序正确运行后，当前目录保存指定数量的图片文件，`RAW`格式以`raw_*.raw`方式命名，`YUV`格式以`yuv_*.yuv`方式命名。运行 log 如下：
@@ -170,11 +170,11 @@ import DocScope from '@site/src/components/DocScope';
 
   参数说明：
 
-  - -w: 编码视频宽度
-  - -h: 编码视频高度
-  - --iwidth: sensor 输出宽度
-  - --iheight: sensor 输出高度
-  - -o: 编码输出路径
+  - `-w`: 编码视频宽度
+  - `-h`: 编码视频高度
+  - `--iwidth`: sensor 输出宽度
+  - `--iheight`: sensor 输出高度
+  - `-o`: 编码输出路径
 
 - **预期效果**：
   程序正确运行后，在当前目录下会生成名为`stream.h264`的视频文件。运行 log 如下：
@@ -237,9 +237,9 @@ import DocScope from '@site/src/components/DocScope';
 
   参数说明：
 
-  - -h: 视频文件的高度
-  - -w: 视频文件的宽度
-  - -i: 视频文件的路径
+  - `-h`: 视频文件的高度
+  - `-w`: 视频文件的宽度
+  - `-i`: 视频文件的路径
 
 - **预期效果：**
   程序正确运行后，视频画面会通过开发板的`HDMI`接口输出，用户可以通过显示器预览视频画面。运行 log 如下：
@@ -302,8 +302,8 @@ import DocScope from '@site/src/components/DocScope';
 
   参数配置：
 
-  - -i: 码流 url 地址
-  - -t: 传输类型，可选 tcp / udp
+  - `-i`: 码流 url 地址
+  - `-t`: 传输类型，可选 `tcp` / `udp`
 
 - **预期效果：**
   程序正确运行后，视频画面会通过开发板的`HDMI`接口输出，用户可以通过显示器预览视频画面。运行 log 如下：
@@ -371,14 +371,14 @@ import DocScope from '@site/src/components/DocScope';
 
   **参数配置：**
 
-  - -i: 待操作的文件路径
-  - --iheight: 输入高度
-  - --iwidth: 输入宽度
-  - -m: 输入模式，1:视频流；2:NV12 图片
-  - -o: 输出路径
-  - --oheight: 输出高度
-  - --owidth: 输出宽度
-  - --skip:（可选）对于视频流输入，调过开头的帧数
+  - `-i`: 待操作的文件路径
+  - `--iheight`: 输入高度
+  - `--iwidth`: 输入宽度
+  - `-m`: 输入模式，`1` 为视频流；`2` 为 NV12 图片
+  - `-o`: 输出路径
+  - `--oheight`: 输出高度
+  - `--owidth`: 输出宽度
+  - `--skip`:（可选）对于视频流输入，调过开头的帧数
 
 - **预期效果：**
   程序正确运行后，当前目录会保存处理后的图像文件`outpu.yuv`。运行 log 如下：
@@ -426,11 +426,11 @@ import DocScope from '@site/src/components/DocScope';
 
   **参数配置：**
 
-  - -f: 模型文件路径
-  - -h: 输入视频的高度
-  - -w: 输入视频的宽度
-  - -i: 输入视频的路径
-  - -m: 模型类型，默认为 1
+  - `-f`: 模型文件路径
+  - `-h`: 输入视频的高度
+  - `-w`: 输入视频的宽度
+  - `-i`: 输入视频的路径
+  - `-m`: 模型类型，默认为 `1`
 
 - **预期效果：**
   程序正确运行后，会通过`HDMI`接口输出视频和算法检测渲染后的画面，用户可通过显示器预览。运行 log 如下：
@@ -493,8 +493,8 @@ import DocScope from '@site/src/components/DocScope';
 
   **参数配置：**
 
-  - -f: 模型的路径
-  - -m: 模型类型，默认为 0
+  - `-f`: 模型的路径
+  - `-m`: 模型类型，默认为 `0`
 
 - **预期效果：**
   程序正确运行后，会通过`HDMI`接口输出视频和算法检测渲染后的画面，用户可通过显示器预览。运行 log 如下：
