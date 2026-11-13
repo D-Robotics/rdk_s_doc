@@ -5,7 +5,7 @@ sidebar_position: 0
 # 7.5.1 Introduction to MCU Code Package Structure
 
 :::info
-MCU0 firmware compilation/McalCdd/Service/Platform and other codes are proprietary to the enterprise edition. If needed, please contact [D-Robotics](mailto:developer@d-robotics.cc) for support.
+MCU0 firmware compilation/McalCdd/Service/Platform and other codes are proprietary to the enterprise edition. If needed, please contact D-Robotics (developer@d-robotics.cc) for support.
 :::
 
 :::tip Commercial Support

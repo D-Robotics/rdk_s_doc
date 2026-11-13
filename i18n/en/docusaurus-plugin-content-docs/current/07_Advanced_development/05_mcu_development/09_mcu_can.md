@@ -617,6 +617,113 @@ struct pack_info pack = { 0 };
 pack.data_num = CAN_FRAME_NUM;
 ```
 
+## Hardware Timestamp Acquisition
+
+The CAN driver supports capturing timestamps in hardware when frames are sent or received (CAN FD High Resolution Time Stamp). Each frame is stamped with a microsecond-level hardware time, avoiding jitter caused by software interrupts and task scheduling.
+
+### Configuration Method
+
+Hardware timestamps are disabled by default. For both S100 and S600, you must manually enable the feature macros in the product-specific `Can_Lld_Ip_Cfg.h` and use the RTC as the timestamp source. Each product uses its own configuration file and driver:
+
+<DocScope products="RDK S600">
+S600 uses the `McalCdd/Can_Pro` driver. The configuration file is `${mcu_sdk}/Config/McalCdd/gen_s600_md_mcu1/Can/inc/Can_Lld_Ip_Cfg.h`. The configuration items to modify are:
+
+```c
+/* @brief Has FlexCAN Timestamp enabled */
+#define FLEXCAN_IP_FEATURE_HAS_TS_ENABLE    (STD_ON)
+/* @brief Has FlexCAN High Resolution Timer for Time stamp CAN Message */
+#define FLEXCAN_IP_FEATURE_HAS_HR_TIMER    (STD_ON)
+
+/* @brief Has FlexCAN High Resolution Timer Source */
+#define FLEXCAN_IP_HR_TIMESTAMP_SOURCE    (FLEXCAN_HRTIMERSRC_RTC)
+```
+
+- `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE`: default `STD_OFF`; set it to `STD_ON` to enable the FlexCAN timestamp feature. When disabled, the driver does not configure timestamp-related registers.
+- `FLEXCAN_IP_FEATURE_HAS_HR_TIMER`: default `STD_OFF`; set it to `STD_ON` to enable the 32-bit high-resolution timestamp. The hardware captures `HR_TIME_STAMP` only after this is enabled.
+- `FLEXCAN_IP_HR_TIMESTAMP_SOURCE`: default `FLEXCAN_HRTIMERSRC_UNUSED`; set it to `FLEXCAN_HRTIMERSRC_RTC` to use the RTC as the timestamp source (ACore and MCU share the same RTC hardware). `FLEXCAN_HRTIMERSRC_PHC` (Acore NIC phc0) is also available.
+</DocScope>
+<DocScope products="RDK S100">
+S100 uses the `McalCdd/Can` driver. The configuration file is `${mcu_sdk}/Config/McalCdd/gen_s100_sip_B_mcu1/Can/inc/Can_Lld_Ip_Cfg.h`. The configuration items to modify are as follows (the timestamp source of S100 is fixed to RTC by hardware, and there is no source selection macro):
+
+```c
+/* @brief Has FlexCAN Timestamp enabled */
+#define FLEXCAN_IP_FEATURE_HAS_TS_ENABLE    (STD_ON)
+/* @brief Has FlexCAN High Resolution Timer for Time stamp CAN Message */
+#define FLEXCAN_IP_FEATURE_HAS_HR_TIMER    (STD_ON)
+
+#if (FLEXCAN_IP_FEATURE_HAS_HR_TIMER == STD_ON)
+/* Fixed value of the RTC timestamp source */
+#define FLEXCAN_HRTIMERSRC_RTC_VALUE   (0U)
+/* Whether the timestamp source can be selected by software; S100 is fixed to RTC, keep the default */
+#define FLEXCAN_IP_HR_TIMESTAMP_SRC_SELECTABLE (STD_OFF)
+#endif /* (FLEXCAN_IP_FEATURE_HAS_HR_TIMER == STD_ON) */
+```
+
+- `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE`: default `STD_OFF`; set it to `STD_ON` to enable the FlexCAN timestamp feature. When disabled, the driver does not configure timestamp-related registers.
+- `FLEXCAN_IP_FEATURE_HAS_HR_TIMER`: default `STD_OFF`; set it to `STD_ON` to enable the 32-bit high-resolution timestamp. The source configuration inside the above `#if` takes effect only after this is enabled.
+- `FLEXCAN_HRTIMERSRC_RTC_VALUE`: fixed value of the RTC timestamp source. Keep the default `0U`.
+- `FLEXCAN_IP_HR_TIMESTAMP_SRC_SELECTABLE`: the timestamp source is fixed to RTC by hardware and does not need to be selected by software. Keep the default `STD_OFF`.
+</DocScope>
+
+:::info Note
+The "default value" above refers to the initial value in the SDK release. To enable the hardware timestamp feature, you must change it as described in "set it to".
+:::
+
+The capture point is determined by the timestamp configuration structure. By default, it is captured at the start of frame (SOF). The configuration is located in `Can_Lld_Ip_PBcfg.c` of each product:
+
+<DocScope products="RDK S600">
+S600 configuration file: `${mcu_sdk}/Config/McalCdd/gen_s600_md_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`
+</DocScope>
+<DocScope products="RDK S100">
+S100 configuration file: `${mcu_sdk}/Config/McalCdd/gen_s100_sip_B_mcu1/Can/src/Can_Lld_Ip_PBcfg.c`
+</DocScope>
+
+```c
+#if (FLEXCAN_IP_FEATURE_HAS_TS_ENABLE == STD_ON)
+        /* Free Running Counter Time Stamp config */
+        {
+                FLEXCAN_TIMESTAMPCAPTURE_START,
+                FLEXCAN_HRTIMERSRC_RTC
+        },
+#endif /* FLEXCAN_IP_FEATURE_HAS_TS_ENABLE */
+```
+
+This configuration item is conditionally compiled based on `FLEXCAN_IP_FEATURE_HAS_TS_ENABLE` in the `Can_Lld_Ip_PBcfg.c` of both products, and takes effect automatically after the feature macros above are enabled. `FLEXCAN_TIMESTAMPCAPTURE_START` means capturing at the start of frame (SOF); it can also be changed to `FLEXCAN_TIMESTAMPCAPTURE_END` (end of frame), etc.
+
+### Timestamp Format
+
+When the timestamp source is RTC, the hardware captures a 32-bit packed value formed by concatenating the RTC value at the start of frame:
+
+| Bit Field | Meaning |
+|-----------|---------|
+| `[31:16]` | Lower 16 bits of the RTC second counter |
+| `[15:0]`  | Tick count within a second, value range `0 ~ 32767` (RTC frequency is 32768 Hz) |
+
+- The `HR_TIME_STAMPn` register of the message buffer (MB) and the `TS_OFF` field of the enhanced receive FIFO element store the same value; only the storage location differs.
+- Only the lower 16 bits of the second are stored, wrapping around every 65536 s (about 18.2 hours). The driver uses the current RTC second to complete the full second value.
+- The driver uses `Can_TimeStampRecovery()` to convert the value to microseconds. It returns 0 when the captured value is not on the same basis as the current time (for example, wrong time source configuration or the counter is not running).
+
+### How the Upper Layer Obtains the Timestamp
+
+When the driver reports a received frame to CanIf, the timestamp has already been filled in the `Can_HwType` parameter of `CanIf_RxIndication()`. Applications can read it directly:
+
+- `Mailbox->TimeStamp`: unit is microseconds; `0` means the hardware timestamp is unavailable, and the application should fall back to the software time base.
+- This timestamp is converted from the MCU RTC "seconds + ticks within a second" and is not a Unix timestamp. To align it with Acore time, first synchronize the MCU RTC with the Acore NIC `phc0` time. For details, see [Time Synchronization Solution](../02_linux_development/04_driver_development_super/12_driver_timesync.md#mcu-time-synchronization-explanation).
+
+```c
+void CanIf_RxIndication(const Can_HwType *Mailbox, const PduInfoType *PduInfoPtr)
+{
+    uint64 ts_us = Mailbox->TimeStamp;   /* Hardware capture time in us; 0 means unavailable */
+
+    if (0U == ts_us)
+    {
+        /* Hardware timestamp unavailable; fall back to the software time base */
+        hb_Pack_GetTimeInUs(&ts_us);
+    }
+    ...
+}
+```
+
 ## Application Sample{#Application_Sample}
 
 ### Usage Guide
@@ -1242,6 +1349,16 @@ The following errors can be treated as "already ready" during the initialization
 
 ### Common Troubleshooting
 
+#### Enabling Debug Logs
+
+Enabling CANHAL logs helps locate the exact failure point:
+
+```bash
+export CAN_HAL_DEBUG_LEVEL=4
+```
+
+#### Common Error Symptoms
+
 | Symptom | Possible Error Code | Troubleshooting Direction |
 |------|-----------|---------|
 | `canInit` fails | `-100` / `-101` / `-301` / `-302` / `-311` | Check whether the three JSON files under `config/` exist and are well formed; whether MCU1 has started; whether `/dev/ipcdrv` and `libhbipcfhal.so` are available |
@@ -1253,12 +1370,6 @@ The following errors can be treated as "already ready" during the initialization
 | Latency warnings | `-408` | Perform time synchronization first, then check the CPU load and the PHC clock (`/dev/hrtc0`) |
 | Send fails | `-400` / `-401` | Check the pointers and lengths, and whether a single transmission exceeds 4096 bytes |
 | Sending/receiving before Init | `-204` / `-309` | Adjust the call order: `canInit` → send/receive → `canDeInit` |
-
-Enabling CANHAL logs helps locate the exact failure point:
-
-```bash
-export CAN_HAL_DEBUG_LEVEL=4
-```
 
 ### MCU-side DEBUG application
 
