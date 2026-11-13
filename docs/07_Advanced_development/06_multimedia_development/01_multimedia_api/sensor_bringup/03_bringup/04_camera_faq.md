@@ -32,6 +32,7 @@ description: "Camera sensor 常见错误码与排查方向"
 | **MIPI**   | 如何查看 HOST(RX) 设备当前运行状态和配置 | [如何查看 HOST(RX) 设备当前运行状态和配置](#如何查看-hostrx-设备当前运行状态和配置)   |
 | **MIPI**   | 如何查看 HOST(RX) 设备寄存器             | [如何查看 HOST(RX) 设备寄存器](#如何查看-hostrx-设备寄存器)                           |
 | **MIPI**   | 如何打开 MIPI CIM 驱动的 log                 | [如何打开 MIPI CIM 驱动的 log](#如何打开-mipi-和cim-驱动的-log)                                 |
+| **CIM**    | CIM 调试方法（cim_stat 状态查看）            | [CIM 调试方法](#cim-调试方法)                                                                   |
 | **LPWM**   | 如何查看 LPWM的配置                 | [如何查看 LPWM的配置](#如何查看lpwm的配置)                                 |
 | **Sensor** | Sensor 库 check 或 load error            | [Sensor 库 check 或 load error](#sensor-库-check-或-load-error)                       |
 | **Sensor** | Sensor 作为 slave mode 配置              | [Sensor 作为 slave mode 配置](#sensor-作为-slave-mode-配置)                           |
@@ -292,6 +293,54 @@ echo "file hobot_cim_handler.c +p">/sys/kernel/debug/dynamic_debug/control
 # 注: 若要打印到串口，需将 kernel 的 console 打印等级配到 INFO 以上，如:
 echo 8 > /proc/sys/kernel/printk
 ```
+
+## CIM
+
+### CIM 调试方法
+
+sysfs 中有 CIM 的调试节点，方便 debug，具体目录为：
+
+```text
+cim0：/sys/class/vps/vin0_src/
+cim1：/sys/class/vps/vin1_src/
+cim2：/sys/class/vps/vin2_src/
+cim3：/sys/class/vps/vin3_src/
+cim4：/sys/class/vps/vin4_src/
+cim5：/sys/class/vps/vin5_src/
+```
+
+主要节点 cim_stat，用于查看各 flow 的接入配置、中断计数与 buffer 队列轮转情况：
+
+```text
+------------------- flow0 info -------------------
+source_input:   mipi:1 test_pattern:0 ddr_in:0                        #cim接入模式，mipi or tp or ddrin
+                mipi_rx:1 vc_index:0 ipi_channels:1                   #接入的mipirx索引 ipi索引 ipi个数
+                input_size: 640x480 format 0x2c                       #输入尺寸 格式
+online_output:  isp_flyby:0 pym_flyby:0                               #是否开启online输出
+
+main_channel:   ddr_en:0 rawds_en:0 format:0x0 pack_mode:0 bufnum:0   #主通路是否开启ddr输出及参数
+                roi_en:0 x:0 y:0 width:0 height:0                     #主通路是否开启roi通道及roi配置
+
+roi_channel:    roi_en:0 x:0 y:0 width:0 height:0                     #ROI通路是否开启及roi配置
+
+emb_channel:    emb_en:0 emb_dep:0 emb_width:0 emb_height:0           #EMB通路是否开启及属性
+                roi_en:0 x:0 y:0 width:0 height:0                     #EMB通路的roi功能是否开启及roi配置
+
+statistics:     fs_cnt:1 fe_cnt:1 ipi_drop_cnt:0 drop_done_cnt:0        #fs fe中断个数 overflow次数
+                w_err_cnt:0 h_err_cnt:0 emb_size_error_cnt:0            #size error中断情况
+                main:   dma_done_cnt:0 dma_drop_cnt:0 dma_disable_cnt:0 #主通路dma中断情况
+                        buf queue: free0 request4 process2 done0 used0  #通路buffer队列轮转情况
+                roi :   dma_done_cnt:0 dma_drop_cnt:0 dma_disable_cnt:0 #ROI通路dma中断情况
+                        buf queue: free0 request4 process2 done0 used0  #通路buffer队列轮转情况
+                emb :   dma_done_cnt:0 dma_drop_cnt:0 dma_disable_cnt:0 #EMB通路dma中断情况
+                        buf queue: free0 request4 process2 done0 used0  #通路buffer队列轮转情况
+
+------------------- flow1 info -------------------
+------------------- flow2 info -------------------
+------------------- flow3 info -------------------
+```
+
+fs_cnt / fe_cnt 不涨说明帧没有进来，往上游查 MIPI 与 Sensor；w_err_cnt / h_err_cnt 增长说明实际图像宽高与配置不符；used 长期不回落说明应用侧帧未归还。
 
 ### 如何查看LPWM的配置
 
