@@ -1014,7 +1014,7 @@ void ecatcheck(void *pvParameters)
  * @param sdo_flag  是否打印 SDO 对象字典信息
  * @param map_flag  是否打印 PDO 映射信息
  */
-void EtherCAT_SlaveInfo_Start(boolean sdo_flag, boolean map_flag);
+int EtherCAT_SlaveInfo_Start(boolean sdo_flag, boolean map_flag);
 ```
 
 ### 输出内容
@@ -1227,9 +1227,9 @@ Ec_SlaveOP <upload|download> <slave> <index> <subindex> [value]
 1. 打印 `map_result` 和 `expectedWKC`
 2. 执行 `ecx_readstate` 后打印每个从站的 `ALstatuscode`
 3. 常见 ALstatuscode：
-   - `0x001B`：无效邮箱配置
-   - `0x001D`：SM 配置无效
-   - `0x001E`：无效 SM3 配置（输出 PDO）
+   - `0x001B`：同步管理器看门狗超时，从站未在约定时间内收到周期性过程数据
+   - `0x001D`：输出配置无效，SM2 / RxPDO 相关配置、地址或映射不合法
+   - `0x001E`：输入配置无效，SM3 / TxPDO 相关配置、地址或映射不合法
 
 ### Q5：栈溢出（Stack Overflow）
 

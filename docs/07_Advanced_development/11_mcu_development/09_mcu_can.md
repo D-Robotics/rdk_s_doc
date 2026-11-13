@@ -142,7 +142,7 @@ CAN 闭环网络使用两个 120 欧姆电阻是 CAN 总线的标准配置，以
 - CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S600 的 sample 默认采用闭环总线网络架构**。
 
 - CAN 总线的引脚 S600 共引出 10 路 can，其中在 MCU 扩展板，引出了 5 路 CAN 接口，连接器分别对应了 5 个绿色的螺丝式的 3 PIN 连接器。每个 pin 脚的作用可以查看 mcu 子板的背面。在底板上，也引出了 5 路 CAN 接口，使用 BP 连接器引出。
-- MCU 小板通过拨动拨码开关，来选择是否在 CAN_H 和 CAN_L 之间接入 120 欧姆电阻；当拨码开关波动到 ON 端，表示接入电阻，适用于闭环网络所需的终端匹配阻抗‌；当拨码开关波动到数字编码端，表示断开电阻，适用于开环网络或中继节点场景‌。
+- MCU 小板通过拨动拨码开关，来选择是否在 CAN_H 和 CAN_L 之间接入 120 欧姆电阻；当拨码开关拨动到 ON 端，表示接入电阻，适用于闭环网络所需的终端匹配阻抗‌；当拨码开关波动到数字编码端，表示断开电阻，适用于开环网络或中继节点场景‌。
 - MCU 扩展版上的 CAN 与拨码开关:
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/mcu.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -366,10 +366,7 @@ static const Can_HwFilterType Can_aHwFilter_Object7[4U]=
 ```
 
 :::tip
-1. RDK S100 软硬件支持收发扩展帧和标准帧，而不需要修改配置
-2. RDK S100 软硬件支持对扩展帧和标准帧分别过滤
-3. 注意 id 的长度配置，超出规定长度将发生截断，扩展帧的 id 长度最高为 29 位，即最大为 0x1FFFFFFF，标准帧的 id 长度最高为 11 位，即最大为 0x7FF
-4. RDK S600 软件目前还不支持扩展帧
+注意 id 的长度配置，超出规定长度将发生截断，扩展帧的 id 长度最高为 29 位，即最大为 0x1FFFFFFF，标准帧的 id 长度最高为 11 位，即最大为 0x7FF
 :::
 
 ## 波特率配置
@@ -1045,7 +1042,7 @@ make clean # 清除编译文件
 
 **运行命令**
 ```bash
-export CAN_HAL_DEBUG_LEVEL=6 //  设置CAN接口库调试等级，不打印任何日志;打印较多的情况下会影响发送频率
+export CAN_HAL_DEBUG_LEVEL=6      # 设置CAN接口库调试等级，不打印任何日志;打印较多的情况下会影响发送频率
 ./can_multi_ch
 ```
 或者使用参数运行：

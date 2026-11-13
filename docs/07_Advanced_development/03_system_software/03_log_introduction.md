@@ -20,6 +20,10 @@ Log 系统负责收集、存储与归档开发板各模块（内核、MCU、DSP�
 |------|----------|------------|------|
 | `/log` | 独立 `log` 分区（约 4 GiB） | `hobot-log` + `hobot-log-rename.py` | 各模块 log、`archive` 归档、pstore、coredump、stackdump、reset 记录 |
 | `/var/log` | rootfs | Ubuntu `rsyslog` + `logrotate` | `kern.log`、`syslog` 等内核与系统日志 |
+| `/var/log/journal` | rootfs | `systemd-journald`（默认配置） | systemd journal，异常掉电残留的 `*.journal~` 也在该目录 |
+| `/log/journal` | 独立 `log` 分区（约 4 GiB） | `hobot-log` | 预期用于存放 journal，当前镜像下始终为空 |
+
+`/log/journal` 目录由 `hobot-log` 创建，用于承接 journal 日志，但当前镜像中 `/var/log/journal` 已存在，软链接不会建立，因此 journal 实际写入 rootfs 的 `/var/log/journal`，`/log/journal` 始终为空，详见 [systemd journal log](#systemd-journal-log)。
 
 各模块的目录、单个文件大小与数量限制见 [Log 分区](#log-分区)。
 
@@ -68,7 +72,7 @@ Log 系统负责收集、存储与归档开发板各模块（内核、MCU、DSP�
 | 基础系统 log | reset | `/log/reset_reason.txt` | 1M | 1 | 否 | `hobot-log`（`RESET_REASON_MAX`） | 记录每次系统启动原因 |
 | 基础系统 log | reset | `/log/reset_count.txt` | 4KB | 1 | 否 | `hobot-log`（`RESET_COUNT_MAX`） | 记录当前系统重启次数 |
 | ALOG 系统 | ALOG | `/log/usr` | 2M | 200 | 否 | `hobot-log-logcat.service`（`ROTATESIZE` / `ROTATEGENS_USR`） | ALOG 接口的 log 信息 |
-| systemd | journal | `/log/journal` | NA | NA | 否 | `hobot-log`（`journald`） | systemd journal，总大小约 100MB |
+| systemd | journal | `/var/log/journal`（rootfs） | 128M | 100 | 是（zstd） | `systemd-journald`（`/etc/systemd/journald.conf` 默认值） | systemd journal，默认上限 4G（文件系统容量的 10%，封顶 4G） |
 
 ### Log 内容
 
@@ -134,11 +138,30 @@ Log 系统负责收集、存储与归档开发板各模块（内核、MCU、DSP�
 
 #### systemd journal log
 
-- systemd 运行过程中的日志，目前配置大小 100MB，实际占用会更大，大约达到 102MB
-- systemd journal 在应对异常掉电、系统时间异常等情况时，可能会出现丢失本次启动日志的情况
+- systemd 运行过程中的日志由 `systemd-journald` 管理，镜像没有自定义容量：`/etc/systemd/journald.conf` 中除 `[Journal]` 外全部为注释，直接使用 systemd 编译默认值（见下表）
+- `hobot-log` 中的 `JOURNAL_SIZE=102400`（100MB）只用于估算 log 分区占用，不会下发给 `systemd-journald`，不是实际容量限制
+- journal 实际存放在 rootfs 的 `/var/log/journal`，不在 `/log` 分区：`hobot-log` 只在 `/var/log/journal` 不存在时才建立指向 `/log/journal` 的软链接，而镜像中该目录已存在，因此 `/log/journal` 始终为空
+- 实际上限由文件系统容量推算，`systemd-journald` 启动时会打印，例如 S600：`System Journal (/var/log/journal/...) is 1.0G, max 4.0G`。默认规则如下：
+
+| 配置项 | 默认值 | 说明 |
+|--------|--------|------|
+| `SystemMaxUse` | 文件系统容量的 10%，封顶 4G（S600、S100 均为 4G） | 持久化 journal 总大小上限 |
+| `SystemKeepFree` | 文件系统容量的 15%，封顶 4G | 为其他用途预留的空闲空间 |
+| `SystemMaxFileSize` | `SystemMaxUse` 的 1/8，封顶 128M | 单个 journal 文件上限 |
+| `SystemMaxFiles` | 100 | journal 文件数量上限 |
+| `RuntimeMaxUse` | `/run` 容量的 10%（S600 约 241M） | 内存日志上限 |
+| `MaxFileSec` | 1month | 轮转周期 |
+| `Compress` | yes（zstd） | 日志压缩 |
+
+- systemd journal 在应对异常掉电、系统时间异常等情况时，会出现丢失或难以查询本次启动日志的情况，具体表现：
+
+  - 掉电时正在写入的 `system.journal` 会被判定为损坏，`systemd-journald` 将其改名为 `*.journal~` 后新建文件；这类文件仍占用磁盘空间（实测 S600 板累计 20 个、约 400MB），且默认查询不到，需要用 `journalctl --file=/var/log/journal/<machine-id>/<文件名>.journal~` 读取
+  - 日志默认每 5 分钟（`SyncIntervalSec=5m`）才同步落盘一次，异常掉电会丢失最后一段日志
+  - RTC 未同步时，本次启动日志的时间戳会停留在镜像制作时间（如 `2026-06-05`），时间同步前写入的日志难以按时间定位；时钟跳变时 `systemd-journald` 会触发轮转
+  - 正常重启时 `/usr/bin/reboot-action.sh` 会执行 `journalctl --relinquish-var`，关机阶段的日志改写到 `/run/log/journal`（内存），重启后不保留
 
 :::warning
-systemd journal 在异常掉电、系统时间异常等情况下可能丢失本次启动日志；对掉电敏感的场景不要只依赖 journal，建议同时保留 `hobot-log` 的归档日志。
+systemd journal 不受 `/log` 分区容量保护，直接占用 rootfs 空间；异常掉电残留的 `*.journal~` 不会自动回收。对掉电敏感的场景不要只依赖 journal，建议同时保留 `hobot-log` 的归档日志，并定期清理 `/var/log/journal`。
 :::
 
 #### 应用 crash log
@@ -277,7 +300,8 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
     - log 大小和数量修改
         - 日志大小在 hobot-log 中修改，修改 `ROTATESIZE` 和 `ROTATESIZE_REMOTE` 变量的定义，单位是 KB
         - 日志数量在 hobot-log 中修改，修改 `ROTATEGENS_USR、ROTATEGENS_REMOTE、UBOOT_LOGMAX、PSTORE_LOGMAX` 变量的定义，对应的分别是 usr、remoteproc_log、uboot、pstore 的日志数量限制，当前值分别是 200、200、100、100
-        - systemd journal log 大小通过 `/etc/systemd/journald.conf` 中的 `SystemMaxUse` 配置（默认注释，使用 systemd 默认值），同时需要注意文件大小 SystemMaxFileSize 和文件数量 SystemMaxFiles 限制相乘要大于 SystemMaxUse
+        - systemd journal log 大小通过 `/etc/systemd/journald.conf` 中的 `SystemMaxUse` 配置（默认注释，使用 systemd 默认值：文件系统容量的 10%、封顶 4G，S600、S100 上均为 4G），同时需要注意文件大小 `SystemMaxFileSize` 和文件数量 `SystemMaxFiles` 限制相乘要大于 `SystemMaxUse`；修改后执行 `systemctl restart systemd-journald` 生效，再用 `journalctl --vacuum-size=<大小>` 回收旧日志
+        - journal 默认落在 rootfs 的 `/var/log/journal`，不在 `/log` 分区，异常掉电残留的 `*.journal~` 不会被 journald 自动回收，需要手动删除
     - log 命名修改
         - 当前命名规范是 `[board]_[module]-[count]-[time].Log`（重名时追加 `-<inode>`），在 hobot-log 脚本中修改前缀和尾缀，即 `[board]_[module]` 和 `.Log`。在 hobot-log-rename.py 脚本中修改 `[count]` 和 `[time]`，涉及 `get_reset_count` 和 `get_file_time` 两个函数
     - log 进程的裁剪
@@ -586,6 +610,12 @@ logcat -b log_events -g
 **原因**：大量调试日志持续写入存储设备（如 eMMC / UFS），产生写入放大后消耗存储寿命。
 
 **解决**：正式版本只输出必要日志，不输出大量调试日志；按需裁剪 log 服务与日志级别。
+
+### journal 日志大小与预期不符
+
+**原因**：`hobot-log` 中的 `JOURNAL_SIZE=102400`（100MB）只用于估算 log 分区占用，不会下发给 `systemd-journald`；journal 实际使用 systemd 默认上限（文件系统容量的 10%、封顶 4G），且落在 rootfs 的 `/var/log/journal`，占用的是 rootfs 而不是 `/log` 分区。
+
+**解决**：在 `/etc/systemd/journald.conf` 或 `/etc/systemd/journald.conf.d/` 下的 drop-in 中设置 `SystemMaxUse`，执行 `systemctl restart systemd-journald` 后用 `journalctl --vacuum-size=<大小>` 回收；确认无用后手动删除 `/var/log/journal/<machine-id>/*.journal~`。
 
 ### 死机时部分模块日志缺失
 

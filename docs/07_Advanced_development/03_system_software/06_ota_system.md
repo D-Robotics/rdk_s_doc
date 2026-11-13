@@ -72,7 +72,7 @@ RDK 默认不开启 OTA 功能，如需开启请按如下流程操作：
     将 `build_params` 目录下的 `ubuntu-24.04_desktop_rdk-s600_beta.conf`、`ubuntu-24.04_server_rdk-s600_beta.conf`、`ubuntu-24.04_desktop_rdk-s600_release.conf` 和 `ubuntu-24.04_server_rdk-s600_release.conf`（可根据情况只修改用到的 conf）中的 `PARTITION_FILE` 配置为 OTA 版本：`export PARTITION_FILE="s600-ota-gpt.json"`，`RDK_DM_VERIFY_ENABLE` 配置为开启：`export RDK_DM_VERIFY_ENABLE="yes"`；
     </DocScope>
 
-    注意：`pack_image.sh` 不带 `-c` 时默认读取 desktop beta 的 conf，而 `mk_debs.sh` 打包使用的是 desktop release 的 conf。若只修改了 release/server 的 conf，编译时必须显式用 `-c` 指定该 conf，否则修改不会生效。
+    注意：`pack_image.sh` 不带 `-c` 时默认读取默认的 conf，而 `mk_debs.sh` 打包使用的是 desktop release 的 conf。建议编译时始终显式 -c 指定 conf，避免改的 conf 和脚本实际读的不是同一个。
 
 3. 配置对应平台 board mk 文件中的 `RDK_OTA` 变量：
 
@@ -996,7 +996,7 @@ typedef enum ota_update_flag {
 3. 状态机说明
 
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ab_state.png" alt="misc （AB 状态机）示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-- 状态 1：默认状态，AB slot 都可以启动。b 的优先级高于 a，默认从 b 启动。
+- 状态 1：默认状态，AB slot 均可启动且优先级相同（均 15、tries_remaining 7）；优先级相同时从 slot a 启动。。
 
 - 状态 2：升级状态（烧写状态），a slot 不可启动且 boot success 为 0。
 

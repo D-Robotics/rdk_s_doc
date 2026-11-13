@@ -140,8 +140,8 @@ ip link set can0 up
 
 ### HAL 方式（`can_get`/`can_send`）
 
-- `can_get.c` — 调用 CAN HAL 接口初始化 CAN 通道，循环读取 CAN 帧
-- `can_send.c` — 调用 CAN HAL 接口初始化 CAN 通道，发送 CAN 帧
+- `canhal_get.c` — 调用 CAN HAL 接口初始化 CAN 通道，循环读取 CAN 帧
+- `canhal_send.c` — 调用 CAN HAL 接口初始化 CAN 通道，发送 CAN 帧
 - `can_multi_ch/main.cpp` — 多通道同时收发
 
 ### SocketCAN 方式（`socketcan/can_stress.c`）

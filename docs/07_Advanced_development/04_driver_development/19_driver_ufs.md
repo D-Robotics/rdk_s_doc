@@ -91,7 +91,7 @@ hobot-drivers/ufs/Makefile             # 编译配置
 ### Linux内核UFS核心代码
 ```shell
 drivers/ufs/core/ufshcd.c              # UFS核心层
-drivers/ufs/core/ufshcd.h              # UFS核心头文件
+include/ufs/ufshcd.h                   # UFS核心头文件
 drivers/ufs/host/ufshcd-pltfrm.c       # 平台驱动层
 ```
 ### 设备树文件
@@ -217,7 +217,7 @@ ufs: ufs@0x33700000 {
 <DocScope products="RDK S600">
 | 参数 | 说明 | 示例值 |
 |------|------|--------|
-| `compatible` | 驱动匹配字符串 | "drobot,s600-ufshc" |
+| `compatible` | 驱动匹配字符串 | "drobot-s600-ufshc" |
 | `reg` | 寄存器地址范围 | 控制器/系统/时钟寄存器 |
 | `interrupts` | 中断配置 | GIC SPI 中断 |
 | `ref-clk-freq` | 参考时钟频率 | 26000000 (26MHz) |
@@ -346,7 +346,7 @@ ufs-utils desc -t 9 -r -p /dev/bsg/ufs-bsg0
 ```shell
 # 开启UFS调试日志
 echo 'module ufs_hobot +p' > /sys/kernel/debug/dynamic_debug/control
-echo 'module ufshcd +p' > /sys/kernel/debug/dynamic_debug/control
+echo 'module ufshcd_core +p' > /sys/kernel/debug/dynamic_debug/control
 
 # 查看实时日志
 dmesg -w | grep -i ufs

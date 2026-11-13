@@ -11,7 +11,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前言
 <DocScope products="RDK S100">
-S100芯片提供多个标准千兆/万兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
+S100芯片提供多个标准千兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
 </DocScope>
 <DocScope products="RDK S600">
 S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
@@ -129,20 +129,19 @@ dma/hobot_xgmac_dma.c     # XGMAC DMA 与描述符
 ```dts
     // 配置hsis mode以及参考时钟选择, 如combo phy的复用情况, 参考时钟的来源等。
     hsis0: hsis0 {
-        status = "okay";
-        compatible = "drobot,super-hsis";
-        hsi-mode = <4>; /* 4:pcie x2 + gmac0/1; 8:pcie0 x1 + pcie1 x1 + GMAC0/1; */
-        refclk-mode = <0>; /* 0:internal ref clock; 1:external ref clock; */
-        #address-cells = <2>;
-        #size-cells = <2>;
-        ranges;
-        /*hsis reg, XPCS0, XPCS1, ETH phy, PCIE phy*/
-        reg = <0x0 0x33000000 0x0 0x10000>,
-            <0x0 0x33200000 0x0 0x80000>,
-            <0x0 0x33280000 0x0 0x80000>,
-            <0x0 0x330e0000 0x0 0x10000>,
-            <0x0 0x330d0000 0x0 0x10000>;
-    };
+		status = "disabled";
+		compatible = "hobot,super-hsis";
+		hsi-mode = <4>;
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+		/*hsis reg, XPCS0, XPCS1, ETH PHY, PCIE PHY*/
+		reg = <0x0 0x33000000 0x0 0x10000>,
+			<0x0 0x33200000 0x0 0x80000>,
+			<0x0 0x33280000 0x0 0x80000>,
+			<0x0 0x330e0000 0x0 0x10000>,
+			<0x0 0x330d0000 0x0 0x10000>;
+	};
 ```
 
 </DocScope>

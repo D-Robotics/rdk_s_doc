@@ -417,7 +417,7 @@ remoteproc 相关节点：
 
 #### 非空板烧录
 
-1. 打开板子，板端 Acore 串口常按 enter 进入 U-Boot（一定要一直按）
+1. 打开板子，板端 Acore 串口长按 `enter` 键进入 U-Boot（一定要一直按）
 ```c
 fastboot 0
 ```

@@ -88,7 +88,7 @@ ADB (Android Debug Bridge) 模式允许用户通过 USB Type-C 接口进行调�
 系统开机时会由 `hobot-adbd.service` 服务自动执行 `usb-gadget.sh start adb`，开发板默认已处于 ADB 模式：
 
 - 开机后直接执行 `usb-gadget.sh start adb` 会提示 `usb-gadget is already running`，属正常现象
-- `systemctl stop hobot-adbd` 只是停用该开机自启服务，并不会停止已运行的 ADB 模式；如需停止 ADB 模式，请执行 `usb-gadget.sh stop adb`
+- `systemctl stop hobot-adbd` : 将执行 `usb-gadget.sh stop adb`，从而解绑 UDC、清理 configfs 并杀掉 adbd
 - 可通过 `usb-gadget.sh status` 查看当前是否处于运行状态
 :::
 

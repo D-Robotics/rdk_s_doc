@@ -10,6 +10,8 @@ description: "配置 U-Boot 和 Kernel 选项参数"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 概述
+
 在系统软件开发中，经常需要对 U-Boot 和 kernel 的功能选项进行配置，本章节介绍几个常用的配置方法，供用户参考使用。
 
 **适用读者**：模式 3 深度定制开发者（商业客户/深度团队）——需要裁剪内核/U-Boot 配置、定制板级 `defconfig` 的 BSP/构建工程师。
@@ -309,9 +311,9 @@ cp -f ../../out/build/kernel/defconfig ../hobot-drivers/configs/drobot_s600_defc
 
 **原因**：只修改了 `.config`，未保存回板级 `defconfig`，重新编译时被板级配置覆盖。
 
-**解决**：用 `make savedefconfig` 生成 `defconfig` 文件，再覆盖 `hobot-drivers/configs/` 下对应的板级配置文件后重新编译。
+**解决**：用 `make savedefconfig` 生成 `defconfig` 文件，对于 Kernel 请覆盖 `hobot-drivers/configs/` 下对应的板级配置文件，对于 U-Boot 请覆盖 `bootloader/uboot/configs/`，最后重新编译。
 
 ## 相关文档
 
-- [启动相关配置](/System_configuration/config_txt/boot_options)
+- [启动相关配置](/System_configuration/config_txt/overview)
 - [搭建开发环境](/Advanced_development/environment_build/environment_build)
