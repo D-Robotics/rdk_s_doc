@@ -832,5 +832,5 @@ MCU 提供了基础的日志（Log）输出功能，主要用于调试与运行�
 - [MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)
 - [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
 - [MCU ramdump 功能](/Advanced_development/mcu_development/mcu_ramdump)
-- MCU 接口扩展板：[RDK S100](/Quick_start/hardware_introduction/rdk_mcu_port_expansion_board)、[RDK S600](/Quick_start/hardware_introduction/expansion_board/mcu/rdk_s600_mcu_port_expansion_board)
+- MCU 接口扩展板：[RDK S100](/Quick_start/hardware_introduction/expansion_board/mcu/rdk_mcu_port_expansion_board)、[RDK S600](/Quick_start/hardware_introduction/expansion_board/mcu/rdk_s600_mcu_port_expansion_board)
 - 外设使用指南：[UART](/Advanced_development/mcu_development/mcu_uart)、[PWM](/Advanced_development/mcu_development/mcu_pwm)、[SPI](/Advanced_development/mcu_development/mcu_spi)、[ADC](/Advanced_development/mcu_development/mcu_adc)、[IPC](/Advanced_development/mcu_development/mcu_ipc)、[CAN](/Advanced_development/mcu_development/mcu_can)、[I2C](/Advanced_development/mcu_development/mcu_i2c)、[Eth](/Advanced_development/mcu_development/mcu_eth)

@@ -4,6 +4,10 @@ sidebar_position: 16
 description: "调试串口 USB Type-C 接线、串口工具配置与串口登录"
 ---
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 # 调试串口
 
 调试串口是系统起不来时的**硬件级入口**——不依赖网络与系统是否正常，直接从板载调试串口看启动日志、进 U-Boot/恢复系统。网络登录不通时，串口是兜底手段。
@@ -16,17 +20,31 @@ description: "调试串口 USB Type-C 接线、串口工具配置与串口登录
 
 ## 硬件接线
 
-RDK S100/S600 的调试串口由板载 CH340 芯片转为 USB，通过 USB Type-C 口输出，无需 TTL 串口线：
+两款开发板的调试串口均由板载 CH340 芯片转为 USB，通过 USB Type-C 口连接 PC，无需 TTL 串口线。
 
-- RDK S100：USB Type-C（J16），内置 2 颗 CH340，分别对应 Main 域与 MCU 域调试串口。
-- RDK S600：USB Type-C（J4），同样内置 2 颗 CH340。
+<DocScope products="RDK S100">
 
-用 USB Type-C 数据线连接板卡调试口与 PC，首次需安装 CH340 驱动（搜索 `CH340串口驱动` 下载安装），PC 会识别出 Main 域与 MCU 域两个串口，Main 域即 Linux 调试串口。
+**RDK S100**
 
-连接器位置与参数见各板硬件介绍：
+- 调试接口：USB Type-C（**J16**）
+- 板载 2 颗 CH340，分别对应 Main 域与 MCU 域调试串口
+- 连接器位置与参数：[RDK S100 硬件介绍 - Type-C (J16)](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#type-c-j16)
 
-- [RDK S100 硬件介绍 - Type-C (J16)](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#type-c-j16)
-- [RDK S600 硬件介绍 - 闪连 烧录，Main&MCU 调试 (J4)](../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#j4)
+</DocScope>
+
+<DocScope products="RDK S600">
+
+**RDK S600**
+
+- 调试接口：USB Type-C（**J4**）
+- 板载 2 颗 CH340，分别对应 Main 域与 MCU 域调试串口
+- 连接器位置与参数：[RDK S600 硬件介绍 - 闪连 烧录，Main&MCU 调试 (J4)](../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#j4)
+
+</DocScope>
+
+### 连接 PC
+
+用 USB Type-C 数据线连接板卡调试口与 PC。首次使用需安装 CH340 驱动（搜索 `CH340串口驱动` 下载安装），PC 会识别出 Main 域与 MCU 域两个串口，其中 **Main 域即 Linux 调试串口**。
 
 ## PC 串口工具
 

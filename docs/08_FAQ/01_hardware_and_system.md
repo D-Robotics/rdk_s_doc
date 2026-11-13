@@ -128,7 +128,7 @@ RDK OS 4.x/5.x 为现行主线版本：RDK OS 4.x 面向 RDK S100，RDK OS 5.x �
 
 IMX219 摄像头连接示意图：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect.png" alt="IMX219 camera connected to RDK S100" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_connect.png" alt="IMX219 camera connected to RDK S100" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **连接后验证**：
 
@@ -382,9 +382,9 @@ N: See apt-secure(8) manpage for repository creation and user configuration deta
 
 ### Server 版能否直接升级为 Desktop 版
 
-RDK OS 的 Server 版和 Desktop 版在预装的软件包上存在显著差异，最主要的是 Desktop 版包含了图形用户界面（如 XFCE 桌面环境）及其相关组件，而 Server 版通常不包含这些，以节省资源。
+RDK OS 的 Server 版和 Desktop 版在预装的软件包上存在显著差异，最主要的是 Desktop 版包含了图形用户界面（如 GNOME 桌面环境）及其相关组件，而 Server 版通常不包含这些，以节省资源。
 
-* **理论上**：您可以通过在 Server 版系统上手动安装所有 Desktop 版所需的软件包（如 `xserver-xorg`、`xfce4`、`lightdm` 等以及它们的依赖）来将其“升级”为一个具有图形界面的系统。
+* **理论上**：您可以通过在 Server 版系统上手动安装所有 Desktop 版所需的软件包（如 `xserver-xorg`、`gnome-shell`、`gdm3` 等以及它们的依赖）来将其“升级”为一个具有图形界面的系统。
 * **官方支持与稳定性**：官方通常**不提供或不推荐**这种手动升级路径，并且不对通过此方式构建的 Desktop 系统的稳定性和完整性进行保证或测试。手动安装过程复杂，容易遗漏依赖或产生配置冲突。
 * **推荐做法**：如果您需要 Desktop 版的完整功能和最佳体验，强烈建议直接下载并烧录官方发布的 **Desktop 版本系统镜像**。这是确保系统稳定性和功能完整的最佳途径。
 
@@ -516,13 +516,13 @@ DefaultEnvironment="TZ=CST-08:00"
 
 1. **显示器兼容性**：
     * 部分显示器可能与 RDK 板卡输出的特定分辨率或刷新率不完全兼容。
-    * RDK OS 2.1.0 及以后版本（含现行 4.x/5.x）引入了更多的 HDMI 分辨率支持，但也可能导致与某些旧显示器的兼容性问题。
+    * RDK OS 4.x/5.x 引入了更多的 HDMI 分辨率支持，但也可能导致与某些旧显示器的兼容性问题。
     * 通常情况下，标准的 1080p（1920x1080） 分辨率的显示器在板卡启动时直接连接，兼容性会比较好。
 2. **线缆问题**：确保使用的 HDMI 线缆质量良好且连接牢固。尝试更换一条 HDMI 线。
 3. **RDK 系统配置**：
-    * 对于 Desktop 版本的系统，确保图形界面服务（如 LightDM）正常启动。
+    * 对于 Desktop 版本的系统，确保图形界面服务（如 GDM）正常启动。
     * 对于 Server 版本的系统，默认情况下 HDMI 可能只输出启动 LOGO 或控制台信息，不会有图形桌面。
-    * 在 RDK OS 2.1.0 及以后版本（含现行 4.x/5.x），如果遇到显示不兼容，可以尝试先通过 VNC（Virtual Network Computing）连接到板卡（如果已开启），然后在系统中手动调整 HDMI 的输出分辨率。参考：[HDMI 显示问题及分辨率调整](https://developer.d-robotics.cc/forumDetail/204825652464181769)
+    * 在 RDK OS 4.x/5.x，如果遇到显示不兼容，可以尝试先通过 VNC（Virtual Network Computing）连接到板卡（如果已开启），然后在系统中手动调整 HDMI 的输出分辨率。参考：[HDMI 显示问题及分辨率调整](https://developer.d-robotics.cc/forumDetail/204825652464181769)
 4. **供电问题**：虽然不直接，但严重的供电不足可能导致系统无法正常初始化显示子系统。
 5. **硬件问题**：极少数情况下，可能是板卡的 HDMI 接口或显示器本身的硬件故障。
 

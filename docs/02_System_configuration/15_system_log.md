@@ -4,6 +4,10 @@ sidebar_position: 15
 description: "用 dmesg/journalctl/systemctl 查看系统日志与服务状态"
 ---
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 # 系统日志查看
 
 排障时常用三类日志：内核日志（`dmesg`）、systemd 日志（`journalctl`）、服务状态（`systemctl status`）。
@@ -22,12 +26,16 @@ description: "用 dmesg/journalctl/systemctl 查看系统日志与服务状态"
 dmesg | tail -20
 ```
 
+<DocScope products="RDK S600">
+
 RDK S600 实测（BPU 核心内存分配）：
 
 ```text
 [15543.458668] bpu-core: bpu core mem alloc mem addr addr = 0xffff800020860000, 0x4200d00000, 0xff1a00000, 0xffa100000, 0x100000
 [15544.414637] bpu-core: bpu core mem alloc mem addr addr = 0xffff800052cd0000, 0x4210e10000, 0xff6000000, 0xffe000000, 0x2000000
 ```
+
+</DocScope>
 
 按级别过滤：`dmesg --level=err,warn`。实时跟踪：`dmesg -w`。
 
@@ -43,12 +51,16 @@ journalctl -p err                # 仅错误及以上
 journalctl -f                    # 实时跟踪
 ```
 
+<DocScope products="RDK S600">
+
 查看日志占用磁盘（S600 实测）：
 
 ```bash
 journalctl --disk-usage
 # Archived and active journals take up 231.2M in the file system.
 ```
+
+</DocScope>
 
 清理旧日志（限制到 100M）：`journalctl --vacuum-size=100M`。
 
@@ -58,6 +70,8 @@ journalctl --disk-usage
 systemctl status ssh             # 看某服务状态
 systemctl is-system-running       # 看整体运行状态
 ```
+
+<DocScope products="RDK S600">
 
 S600 实测：
 
@@ -76,7 +90,11 @@ $ systemctl status ssh
 TriggeredBy: ● ssh.socket
 ```
 
-`degraded` 表示有服务启动失败（本例是 `apport.service`），排查用 `systemctl --failed`。`ssh` 显示 `active (running)` 即正常。
+`degraded` 表示有服务启动失败（本例是 `apport.service`），排查用 `systemctl --failed`。
+
+</DocScope>
+
+`ssh` 显示 `active (running)` 即正常。
 
 ## 常见问题
 

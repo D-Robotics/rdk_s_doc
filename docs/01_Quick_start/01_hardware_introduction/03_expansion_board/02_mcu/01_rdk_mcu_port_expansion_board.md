@@ -4,7 +4,6 @@ title: "MCU 接口扩展板（RDK S100）"
 description: "RDK S100 MCU 接口扩展板的产品介绍、主要功能、接口布局与使用说明"
 sidebar_label: "MCU 接口扩展板"
 sidebar_products: RDK S100
-slug: /Quick_start/hardware_introduction/rdk_mcu_port_expansion_board
 ---
 
 ```mdx-code-block
@@ -159,7 +158,7 @@ FPC 正面丝印“MAIN”标识侧对应 RDK S100 主板的 J23 接口，“SUB
 :::
 
 <video controls width="100%" preload="metadata">
-  <source src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/video/mcu_port_expansion_board_assembly_guide.mp4" type="video/mp4" />
+  <source src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/video/mcu_port_expansion_board_assembly_guide.mp4" type="video/mp4" />
   您的浏览器不支持 video 标签。
 </video>
 

@@ -4,6 +4,10 @@ sidebar_position: 12
 description: "RDK OS 存储查看、rootfs 占用、挂载"
 ---
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 # 存储与磁盘管理
 
 查看板端存储设备、rootfs 占用与挂载情况。
@@ -20,6 +24,8 @@ description: "RDK OS 存储查看、rootfs 占用、挂载"
 df -h /
 ```
 
+<DocScope products="RDK S600">
+
 RDK S600 实测（rootfs 在 SSD 分区上）：
 
 ```text
@@ -27,13 +33,19 @@ Filesystem                                              Size  Used Avail Use% Mo
 /dev/disk/by-partuuid/1993ccc4-e089-b84e-b2d5-193a1bc4b7f3  45G  9.8G  33G  23% /
 ```
 
-rootfs 45G、已用 9.8G（23%），剩余 33G。占用高时清理 apt 缓存（`apt clean`）或日志（`journalctl --vacuum-size=100M`）。
+rootfs 45G、已用 9.8G（23%），剩余 33G。
+
+</DocScope>
+
+占用高时清理 apt 缓存（`apt clean`）或日志（`journalctl --vacuum-size=100M`）。
 
 ## 查看块设备
 
 ```bash
 lsblk
 ```
+
+<DocScope products="RDK S600">
 
 RDK S600 实测（SSD `sda` 59.6G）：
 
@@ -59,7 +71,13 @@ sda       8:0    0 59.6G  0 disk
 `-sda17 259:1    0 45.3G  0 part /
 ```
 
+</DocScope>
+
+<DocScope products="RDK S600">
+
 RDK S600 用 SSD（`sda`）启动，分区含引导（sda1~sda4）、内核/DTB（sda5~sda13）、`/boot`、`/ota`（OTA 分区）、`/log`（日志分区）、`/userdata`（用户数据）与 rootfs（`/`）。`sdb`/`sdc` 为板载 4M 存储。
+
+</DocScope>
 
 ## 挂载与卸载
 
