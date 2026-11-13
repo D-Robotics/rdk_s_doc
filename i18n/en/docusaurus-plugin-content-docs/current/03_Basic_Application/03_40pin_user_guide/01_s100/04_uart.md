@@ -14,7 +14,11 @@ The RDK S100 supports UART2 on the 40-pin header, which is disabled by default. 
 
 :::info
 
-On 4.1.0 and later, open **Peripheral bus config** under Interface Options in [srpi-config](../../../02_System_configuration/02_srpi-config.md). Select `UART2` or `I2C5`. Enabling one disables the other. Reboot for the change to take effect.
+On 4.1.0 and later, open **Peripheral bus config** under Interface Options in [srpi-config](../../../02_System_configuration/02_srpi-config.md). Select `UART2`. If you configure only the software option without setting the DIP switch, a UART loopback test transmits data but receives nothing.
+
+Also set the DIP switch next to the 40-pin header. On the switch marked **40PIN**, left selects `I2C5` and right selects `UART2`; set it to the right when using `UART2`.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="40-pin DIP switch for UART2 and I2C5" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
 
 For pin definitions, see [Pin definitions and applications](./01_40pin_define.md#40pin_define).
 

@@ -14,7 +14,12 @@ RDK S100 在 40PIN 支持 UART2，没有使能，物理管脚号 8 和 10，IO �
 
 :::info 说明
 
-- 4.1.0 及以上版本，在 [srpi-config 工具配置](../../../02_System_configuration/02_srpi-config.md) 的 Interface Options 中打开 **Peripheral bus config**（外设总线配置），选择使能 `UART2` 或 `I2C5`。启用其中一个会自动禁用另一个，切换后重启生效。
+- 先拨动 40pin 排针旁的拨码开关，标有 **40PIN** 的那一组往右拨接 `UART2`。
+
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="40PIN 与 UART2、I2C5 拨码开关" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0,0' }} />
+
+- 4.1.0 及以上版本，在 [srpi-config 工具配置](../../../02_System_configuration/02_srpi-config.md) 的 Interface Options 中打开 **Peripheral bus config**（外设总线配置），选择使能 `UART2`。若只修改软件配置而不拨动拨码开关，串口回环测试会出现只能发送、接收不到数据的情况。
+
 - 管脚定义请参考 [管脚配置与定义](./01_40pin_define.md#40pin_define)。
 
 :::
