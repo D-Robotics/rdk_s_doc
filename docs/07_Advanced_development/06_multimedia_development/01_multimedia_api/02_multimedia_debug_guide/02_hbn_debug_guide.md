@@ -776,18 +776,6 @@ echo 'module hobot_cim -p' > /sys/kernel/debug/dynamic_debug/control       # 关
 4. 查 ISP 层：`/proc/hb_isp*` 节点确认 ISP 是否出图。
 5. 查输出侧：若 ISP/PYM 有帧而显示或编码无输出，查 Display 与 Codec 节点。
 
-<DocScope products="RDK S600">
-
-详细模块调试见 [视频输入 - VIN](../04_vin_api.md) 与[Sunrise camera 开发说明](../../02_multimedia_sample_s600/11_sunrise_camera_develop_guide.md)。
-
-</DocScope>
-
-<DocScope products="RDK S100">
-
-详细模块调试见 [视频输入 - VIN](../04_vin_api.md) 与[Sunrise camera 开发说明](../../02_multimedia_sample/11_sunrise_camera_develop_guide.md)。
-
-</DocScope>
-
 ### 花屏或颜色异常
 
 图像出现花屏、偏色或撕裂时，重点查 ISP、PYM、GDC 三处：

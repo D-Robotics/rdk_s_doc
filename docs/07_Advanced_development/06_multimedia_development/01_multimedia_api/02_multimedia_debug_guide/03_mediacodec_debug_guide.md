@@ -18,16 +18,10 @@ cat /sys/kernel/debug/vpu/venc     # 编码实例状态，无任务时为空
 cat /sys/kernel/debug/vpu/vdec     # 解码实例状态，无任务时为空
 ```
 
-- `loading` 反映 VPU 负载，运行一路 H.264 编码实测约 `9.0`。
+- `loading` 反映 VPU 负载，运行一路 1080p@30fps H.264 编码实测约 `9.0`，即约占标称编码能力的 9%。
 - `venc`、`vdec` 分别为编码、解码的实例状态文件（注意是文件而非目录），无对应任务时为空，运行编/解码任务后输出实例的运行状态。
 - `irqenable` 为 VPU 中断使能开关（`1` 为使能），`loadingsetting` 为负载统计开关。
 - `rt_task_expect_latency_ms` 为实时任务期望延时，输出形如 `Expect latency of realtime task is 33ms(fix=0ms).`。
-
-`loading` 运行一路 H.264 编码时实测约 `9.0`：
-
-```text
-9.0
-```
 
 ### 编码（VENC）
 
@@ -280,11 +274,7 @@ cat /sys/kernel/debug/jpu/jenc     # JPEG 编码实例状态，无任务时为�
 cat /sys/kernel/debug/jpu/jdec     # JPEG 解码实例状态，无任务时为空
 ```
 
-运行 JPEG 编码时 `loading` 实测约 `1.8`：
-
-```text
-1.8
-```
+`loading` 为 JPU 负载，运行一路 1280×720 JPEG 编码（quality 50）实测约 `1.8`，即约占标称 JPEG 编码能力的 1.8%。
 
 ### 编码（JENC）
 
