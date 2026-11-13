@@ -11,6 +11,7 @@ const require = createRequire(import.meta.url);
 import remarkDirective from "remark-directive";
 import remarkDocScope from "./src/remark/remark-doc-scope.js";
 
+const guajiAssistantOrigin = process.env.GUAJI_ASSISTANT_ORIGIN?.trim();
 const buildProduct = process.env.DOC_BUILD_PRODUCT?.trim() || "";
 const buildVersion = process.env.DOC_BUILD_VERSION?.trim() || "";
 const COPYRIGHT_START_YEAR = 2024;
@@ -58,7 +59,7 @@ const config = {
           },
 
           feedbackFloat: {
-            enabled: true,
+            enabled: false,
                 questionnaireUrl: "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
                 questionnaireUrlByLocale: {
                   "zh-Hans": "https://horizonrobotics.feishu.cn/share/base/form/shrcnLQ9OfYQO03cebdkNfOmkCh",
@@ -92,21 +93,14 @@ const config = {
       async: true,
     },
     // Dify：仅加载配置脚本；embed.min.js 在 body 就绪后由 dify-config.js 动态注入
-    {
-      src: "/rdk_s_doc/js/dify-config.js",
-    },
+
     {
       src: `/rdk_s_doc${localePrefix}/js/umami-events.js`,
       defer: true,
     },
   ],
   headTags: [
-    {
-      tagName: "script",
-      attributes: {},
-      innerHTML:
-        "window.difyChatbotConfig=window.difyChatbotConfig||{token:'rJYrxmxmjOkjEx2c',baseUrl:'https://rdk.d-robotics.cc',inputs:{},systemVariables:{},userVariables:{},dynamicScript:true};",
-    },
+
     {
       tagName: "meta",
       attributes: {
@@ -162,6 +156,7 @@ const config = {
     ],
   ],
   plugins: [
+    ['@d-robotics/docusaurus-plugin-guaji', guajiAssistantOrigin ? { assistantOrigin: guajiAssistantOrigin } : {}],
     require.resolve("./src/plugins/sidebar-scope-config-plugin"),
     // 把「按产品折叠 .doc-scope」提前到 HTML 解析阶段，见插件内部说明。
     require.resolve("./src/plugins/doc-scope-product-bootstrap-plugin"),
