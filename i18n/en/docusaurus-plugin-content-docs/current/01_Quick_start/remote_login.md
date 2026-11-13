@@ -197,6 +197,7 @@ If you experience garbled text when using minicom, please refer to [macOS driver
 
 ## Network Status Confirmation{#network_config}
 
+Reference video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=3
 
 Before using remote login, you need to ensure that the computer and development board have normal network communication. If you cannot `ping` them, follow these steps to confirm:
 
