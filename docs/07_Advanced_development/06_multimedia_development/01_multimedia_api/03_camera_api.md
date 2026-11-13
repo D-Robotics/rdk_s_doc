@@ -54,7 +54,7 @@ description: "RDK S100/S600 Camera 采集入口 API（hbn_camera_* / hbn_deseria
 :::doc_scope{products="RDK S100"}
 
 - S100 上有3个MIPI RX，分别为 MIPI RX0，MIPI RX1，MIPI RX4。
-- S100 MIPI RX支持C/DPHY，DPHY速率 4.5Gbps x 4lane，CPHY速率3.5Gsps x 3trios。
+- S100 MIPI RX支持C/DPHY，DPHY速率 2.5Gbps x 4lane，CPHY速率2.5Gsps x 3trios。
 - S100 MIPI RX，每路支持4VC，最多支持12路接入。
 - MIPI TX: 2路DPHY，每路为2.5Gbps/lane x 4lane。
 :::
@@ -62,7 +62,7 @@ description: "RDK S100/S600 Camera 采集入口 API（hbn_camera_* / hbn_deseria
 :::doc_scope{products="RDK S600"}
 
 - S600 上有6个MIPI RX，分别为MIPI RX0，MIPI RX1，MIPI RX2，MIPI RX3，MIPI RX4，MIPI RX5。
-- S600 MIPI RX 每路为DPHY最大4.5Gbps/lane x 4lane，CPHY最大3.5Gsps/trio x 3trio，
+- S600 MIPI RX 每路为DPHY最大2.5Gbps/lane x 4lane，CPHY最大2.5Gsps/trio x 3trio，
 - S600 MIPI RX，每路支持4VC，最多支持 24 路接入。
 - MIPI TX: 2路DPHY，每路为2.5Gbps/lane x 4lane。
 

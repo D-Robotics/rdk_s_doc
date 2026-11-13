@@ -516,6 +516,5 @@ x = 32 * log₂(gain)
 2. 将 AE 模式切换为 Manual（手动），以便观察与控制调节过程。
 
 3. 自行设置 aGain，dGain 及 integrationTime 值，来进行验证。
-比如，将曝光时间调整为 5ms (记得点一下 Write Page)
 
 4. 然后通过 sensor 驱动中的打印(需要自己添加)，或者使用 i2ctransfer 工具来查看 sensor 寄存器值，确认写给 sensor 的寄存器值是否符合 spec 要求。

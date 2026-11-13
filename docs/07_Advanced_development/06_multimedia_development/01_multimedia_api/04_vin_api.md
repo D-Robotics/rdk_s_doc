@@ -48,21 +48,21 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 ### MIPI RX
 <DocScope products="RDK S100">
 
-- MIPI RX 路数：3 个
-- 每路 RX 的 lane / trio：D-PHY ≤ 4 lane；C-PHY ≤ 3 trio
-- 单 lane / 单 trio 速率上限：D-PHY 2.5 Gbps；C-PHY 2.5 Gsps
-- 每路 RX 的 PHY 承载上限：**D-PHY 10 Gbps**（4 × 2.5）；**C-PHY 约 17.1 Gbps**（3 × 2.5 × 2.28）
-- 每路 RX 的虚拟通道（VC）：4 个
+- MIPI RX: 3路CDPHY，每路为DPHY最大2.5Gbps/lane x 4lane或CPHY最大2.5Gsps/trio x 3trio，每路支持4VC，最大支持12路接入。
+- 支持多种视频格式：
+    - RAW 8-/10-/12-/14-/16-bit/20-bit 格式
+    - YUV 422 格式（8-/10-bit）
+
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-- MIPI RX 路数：6 个
-- 每路 RX 的 lane / trio：D-PHY ≤ 4 lane；C-PHY ≤ 3 trio
-- 单 lane / 单 trio 速率上限：D-PHY 2.5 Gbps；C-PHY 2.5 Gsps
-- 每路 RX 的 PHY 承载上限：**D-PHY 10 Gbps**（4 × 2.5）；**C-PHY 约 17.1 Gbps**（3 × 2.5 × 2.28）
-- 每路 RX 的虚拟通道（VC）：4 个
+
+- MIPI RX: 6路CDPHY，每路为DPHY最大2.5Gbps/lane x 4lane或CPHY最大2.5Gsps/trio x 3trio，每路支持4VC，最大支持24路接入。
+- 支持多种视频格式：
+    - RAW 8-/10-/12-/14-/16-bit/20-bit 格式
+    - YUV 422 格式（8-/10-bit）
 
 </DocScope>
 

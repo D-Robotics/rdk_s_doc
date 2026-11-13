@@ -36,7 +36,7 @@ Camera 部分包括 Sensor/SerDes/Poc，Pipeline则有 VIN/ISP/PYM/GDC/STITCH。
 | ------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Camera | Sensor             | RAW 模组：内部无 ISP，输出 RAW 数据，内部 HDR(PWL)，可同步；<br/>YUV 模组：内部有 ISP，输出 YUV 数据，可同步                                                                                        | 典型分辨率 8M/2M；典型帧率 30fps；数据格式 RAW12/YUV422；<br/>数据量 `width * height * fps * bit/pixel`                                                                                                                |
 | SerDes | MAXIM: GMSL1/GMSL2 | MAX9296A（3G/6G，2 路一体）<br/>MAX96718（3G/6G，2 路独立）<br/>MAX96712（3G/6G，4 路独立）<br/>MAX96724（3G/6G，4 路独立）<br/>MAX96722（3G，4 路）<br/>TI: FPD-Link III（UB954 2 路、UB960 4 路） | Link 速率 3G/6G（MAXIM）/ 3.8G（TI）                                                                                                                                                                                   |
-| Pipeline   | MIPI RX            | MIPI CSI-2 CDPHY                                                                                                                                                                                    | 3 路 RX，最多 12 路 Sensor<br/>支持 RAW/YUV 接入同一 RX<br/>CPHY 2.5Gbps×2.28*3trio、DPHY 2.5Gbps×4lane<br/>每 RX 支持 4VC(4xIPI)，最多 12 路<br/>最大行长 4096 pixel<br/>若有 1 个 YUV sensor 接入，该 RX 理论带宽 9.6Gbps |
+| Pipeline   | MIPI RX            | MIPI CSI-2 CDPHY                                                                                                                                                                                    | 3 路 RX，最多 12 路 Sensor<br/>支持 RAW/YUV 接入同一 RX<br/>CPHY 2.5Gsps×3trio、DPHY 2.5Gbps×4lane<br/>每 RX 支持 4VC(4xIPI)，最多 12 路<br/>最大行长 4096 pixel<br/>若有 1 个 YUV sensor 接入，该 RX 理论带宽 9.6Gbps |
 | Pipeline   | MIPI TX            | MIPI CSI-2 V2.1 DPHY                                                                                                                                                                                | 2 路 TX，支持 bypass/idu 输出；2.5Gbps×4lane；<br/>bypass 可任选 RX，idu 最大 2880x2160                                                                                                                                |
 | Pipeline   | CIM                | 接入 RX0/RX1/RX4，每个 CIM 有 4 路 IPI                                                                                                                                                              | 仅支持 online 到 ISP0/1 或 PYM0/1，也支持 offline 到 DDR；<br/>若接入 YUV 可直连 PYM0/PYM1，但只能接入 1 路并需独占该 PYM                                                                                              |
 | Pipeline   | ISP                | ISP0+ISP1，支持 raw dump，pass through/manual 模式                                                                                                                                                  | 2 x 4K@120fps                                                                                                                                                                                                          |
@@ -50,7 +50,7 @@ Camera 部分包括 Sensor/SerDes/Poc，Pipeline则有 VIN/ISP/PYM/GDC/STITCH。
 | ------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Camera | Sensor             | RAW 模组：内部无 ISP，输出 RAW 数据，内部 HDR(PWL)，可同步；<br/>YUV 模组：内部有 ISP，输出 YUV 数据，可同步                                                                                        | 典型分辨率 8M/2M；典型帧率 30fps；数据格式 RAW12/YUV422；<br/>数据量 `width * height * fps * bit/pixel`                                                                                                                  |
 | SerDes | MAXIM: GMSL1/GMSL2 | MAX9296A（3G/6G，2 路一体）<br/>MAX96718（3G/6G，2 路独立）<br/>MAX96712（3G/6G，4 路独立）<br/>MAX96724（3G/6G，4 路独立）<br/>MAX96722（3G，4 路）<br/>TI: FPD-Link III（UB954 2 路、UB960 4 路） | Link 速率 3G/6G（MAXIM）/ 3.8G（TI）                                                                                                                                                                                     |
-| Pipeline   | MIPI RX            | MIPI CSI-2 CDPHY                                                                                                                                                                                    | 6 路 RX，最多 24 路 Sensor<br/>支持 RAW/YUV 接入同一 RX<br/>CPHY 2.5Gbps×2.28*3trio、DPHY 2.5Gbps×4lane<br/>每 RX 支持 4VC(4xIPI)，最多 24 路<br/>最大行长 4096 pixel<br/>若有 1 个 YUV sensor 接入，该 RX 理论带宽 10.72Gbps |
+| Pipeline   | MIPI RX            | MIPI CSI-2 CDPHY                                                                                                                                                                                    | 6 路 RX，最多 24 路 Sensor<br/>支持 RAW/YUV 接入同一 RX<br/>CPHY 2.5Gsps×3trio、DPHY 2.5Gbps×4lane<br/>每 RX 支持 4VC(4xIPI)，最多 24 路<br/>最大行长 4096 pixel<br/>若有 1 个 YUV sensor 接入，该 RX 理论带宽 10.72Gbps |
 | Pipeline   | MIPI TX            | MIPI CSI-2 V2.1 DPHY                                                                                                                                                                                | 2 路 TX，支持 bypass/idu 输出；2.5Gbps×4lane                                                                                                                                                                             |
 | Pipeline   | CIM                | 接入 RX0/RX1/RX3/RX4，每个 CIM 有 4 路 IPI                                                                                                                                                          | 仅支持 online 到 ISP0/1/3 或 PYM0/1/3，也支持 offline 到 DDR<br/>；若接入 YUV 可直连 PYM0/PYM1/PYM3，但只能接入 1 路并需独占该 PYM                                                                                       |
 | Pipeline   | ISP                | ISP0+ISP1+ISP2+ISP3，支持 raw dump，pass through/manual 模式                                                                                                                                        | 4 x 4K@120fps                                                                                                                                                                                                            |
@@ -111,7 +111,7 @@ Maxim 的 SerDes 的 Link 速率有 3G/6G，为传输速率 Gbps，实际有效�
 :::doc_scope{products="RDK S100"}
 S100 RX 使用注意事项：
 
-- 3 路 RX 都是独立的 4lane/3trio，最大 DPHY 2.5Gbps/lane 或 CPHY 2.5Gbps*2.28/trio，理论每路 RX 最大可接入 4x8M，受限于 deserial 速率，目前最大只能支持 3 个 8M + 1 个 2M。
+- 3 路 RX 都是独立的 4lane/3trio，最大 DPHY 2.5Gbps/lane 或 CPHY 2.5Gsps/trio，理论每路 RX 最大可接入 4x8M，受限于 deserial 速率，目前最大只能支持 3 个 8M + 1 个 2M。
 - RX 接入 CIM，只支持 online 到本 CPE 内的 ISP（raw）或 PYM（yuv）。
 - 不管 raw 还是 yuv 类型模组，每个 RX 都可接入 4 路。
 
@@ -125,7 +125,7 @@ S100 RX 使用注意事项：
 :::doc_scope{products="RDK S600"}
 S600 RX 使用注意事项：
 
-- 6 路 RX 都是独立的 4lane/3trio，最大 DPHY 2.5Gbps/lane 或 CPHY 2.5Gbps*2.28/trio，理论每路 RX 最大可接入 4x8M，受限于 deserial 速率，目前最大只能支持 3 个 8M + 1 个 2M。
+- 6 路 RX 都是独立的 4lane/3trio，最大 DPHY 2.5Gbps/lane 或 CPHY 2.5Gsps/trio，理论每路 RX 最大可接入 4x8M，受限于 deserial 速率，目前最大只能支持 3 个 8M + 1 个 2M。
 - 若接入 yuv 类型模组，该 RX 的接入理论带宽为 10.72Gbps。
 - RX 接入 CIM，只支持 online 到本 CPE 内的 ISP（raw）或 PYM（yuv）。
 - 不管 raw 还是 yuv 类型模组，每个 RX 都可接入 4 路。
@@ -158,25 +158,58 @@ Camera 接入时，需评估链路上各模块之间的理论要求和限制。�
 ### 平台模块带宽
 
 :::doc_scope{products="RDK S100"}
-S100：CIM 的 IPI 速率 600M，48bit，IPI 带宽：600 × 48bit = 28.8Gbps。
 
-| 模块带宽                   | 计算方法                                                                                                  |
-| -------------------------- | --------------------------------------------------------------------------------------------------------- |
-| MIPI 带宽                  | DPHY：4×2.5G/lane = 10Gbps<br/>CPHY：2.5Gbps × 2.28 × 3trio = 17Gbps                                      |
-| IPI 带宽（DPHY/CPHY 共用） | RAW 带宽：600M × 3 × 16 = 28.8Gbps<br/>YUV422-8bit 带宽：600M × 1 × 16 = 9.6Gbps<br/> |
+S100 CIM 的 IPI 接口采用 48bit 模式，IPI 速率（pix_clk）上限为 600MHz。
 
-MIPI IPI 传输 RAW 与 YUV 的区别（默认 IPI 使用 48bit 模式）：传 YUV 时一个 IPI clock 只能传 1 个 pixel；传 RAW（位宽 ≤ 16）时一个 IPI clock 可传 3 个 pixel。CIM 的 IPI 速率（pix_clk）为 600M 频率上限，因此 IPI 传输 YUV 带宽限制为 9.6Gbps，RAW 传输 28.8Gbps。S100 通用的解串器最大支持速率是 2.5G，下图按此规格理论计算。CPHY：2.28bits/symbol，计算时需乘以系数。同一个 RX 上混合接入时，由于有 YUV 数据，最大 IPI 传输限制变成 9.6Gbps。
+- **IPI 带宽**：600M × 48bit = **28.8Gbps**
+
+#### MIPI 带宽
+| 接口类型 | 计算方法 | 带宽 |
+| --- | --- | --- |
+| DPHY | 4 × 2.5G/lane | 10Gbps |
+| CPHY | 2.5 Gsps/trio × (16/7) bit/symbol × 3 trio | ≈ 17.1Gbps |
+
+> 注：CPHY 每 symbol 有效数据为 16/7 ≈ 2.28bit，计算时需乘以相应系数。
+
+#### IPI 带宽（DPHY/CPHY 共用）
+
+IPI 传输不同数据格式时，单个 IPI clock 可传输的像素数不同：
+
+| 数据格式 | 单 IPI clock 传输像素数 | 带宽计算 | 带宽 |
+| --- | --- | --- | --- |
+| RAW（位宽 ≤ 16bit） | 3 个 pixel | 600M × 3 × 16 | **28.8Gbps** |
+| YUV422-8bit | 1 个 pixel | 600M × 1 × 16 | **9.6Gbps** |
+
+**混合接入场景**：同一 RX 上同时接入 RAW 与 YUV 数据时，由于存在 YUV 数据，最大 IPI 传输带宽受限为 **9.6Gbps**
+
 :::
 
 :::doc_scope{products="RDK S600"}
-S600：CIM 的 IPI 速率 670M，48bit，IPI 带宽：670 × 48bit = 32.16Gbps。
 
-| 模块带宽                   | 计算方法                                                                                                      |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| MIPI 带宽                  | DPHY：4×2.5G/lane = 10Gbps<br/>CPHY：2.5Gbps × 2.28 × 3trio = 17Gbps                                          |
-| IPI 带宽（DPHY/CPHY 共用） | RAW 带宽：670M × 3 × 16 = 32.16Gbps<br/>YUV422-8bit 带宽：670M × 1 × 16 = 10.72Gbps<br/> |
+S600：CIM CIM 的 IPI 接口采用 48bit 模式，IPI 速率（pix_clk）上限为 670MHz。
 
-MIPI IPI 传输 RAW 与 YUV 的区别（默认 IPI 使用 48bit 模式）：传 YUV 时一个 IPI clock 只能传 1 个 pixel；传 RAW（位宽 ≤ 16）时一个 IPI clock 可传 3 个 pixel。CIM 的 IPI 速率（pix_clk）为 670M 频率上限，因此 IPI 传输 YUV 带宽限制为 10.72Gbps，RAW 传输 32.16Gbps。S600 通用的解串器最大支持速率是 2.5G，下图按此规格理论计算。CPHY：2.28bits/symbol，计算时需乘以系数。同一个 RX 上混合接入时，由于有 YUV 数据，最大 IPI 传输限制变成 9.6Gbps。
+- **IPI 带宽**：670M × 48bit = **32.16Gbps**
+
+#### MIPI 带宽
+
+| 接口类型 | 计算方法 | 带宽 |
+| --- | --- | --- |
+| DPHY | 4 × 2.5G/lane | 10Gbps |
+| CPHY | 2.5 Gsps/trio × (16/7) bit/symbol × 3 trio | ≈ 17.1Gbps |
+
+> 注：CPHY 每 symbol 有效数据为 16/7 ≈ 2.28bit，计算时需乘以相应系数。
+
+#### IPI 带宽（DPHY/CPHY 共用）
+
+IPI 传输不同数据格式时，单个 IPI clock 可传输的像素数不同：
+
+| 数据格式 | 单 IPI clock 传输像素数 | 带宽计算 | 带宽 |
+| --- | --- | --- | --- |
+| RAW（位宽 ≤ 16bit） | 3 个 pixel | 670M × 3 × 16 | **32.16Gbps** |
+| YUV422-8bit | 1 个 pixel | 670M × 1 × 16 | **10.72Gbps** |
+
+**混合接入场景**：同一 RX 上同时接入 RAW 与 YUV 数据时，由于存在 YUV 数据，最大 IPI 传输带宽受限为 **10.72Gbps**
+
 :::
 
 
@@ -211,6 +244,9 @@ S100 系统总共 3 个 RX，每个 RX 有 4 个 IPI，理论可支持 12 路 Ca
 | 2×8M RAW + 1×2M YUV | 9.36G    | ✓（IPI 极限） | ✓（IPI 极限）   | 均接近 IPI 极限，需调整 sensor blanking |
 
 此外 S100 的 Camera 通路还支持 RAW8/RAW10/RAW16/RAW20，可根据上述方法计算相应接入组合方案。
+
+> 注：上述测算是根据常规情况进行带宽的测算评估，sensor 实际带宽需要和模组厂实际确认
+
 :::
 
 :::doc_scope{products="RDK S600"}

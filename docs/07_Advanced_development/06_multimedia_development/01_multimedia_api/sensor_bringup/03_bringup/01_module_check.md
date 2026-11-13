@@ -18,7 +18,7 @@ S100 存在两个 Camera 转接板，两个转接板分别是：
 2. [相机扩展板 12 通道（RDK S100）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/02_rdk_camera_expansion_board_12l.md)：提供 12 个 GMSL 相机接口
 :::
 
-因为 ``相机扩展板（RDK S100）`` 板级硬件兼容MIPI sensor和 Sedes sensor， 后续点亮都 以 相机扩展板（RDK S100）为例进行演示
+因为 `相机扩展板（RDK S100）` 板级硬件兼容MIPI sensor和 Sedes sensor， 后续点亮都 以 相机扩展板（RDK S100）为例进行演示
 
 :::doc_scope{products="RDK S600"}
 
