@@ -101,7 +101,7 @@ echo N > /sys/module/hobot_remoteproc/parameters/heartbeat_enable
 #### 通过函数接口形式操作 vdsp
 
 通过 libvdsp.so 动态链接库加载 DSP 程序，实现加载、启动、停止、复位、获取 DSP 状态等功能，API 介绍可参考
-[VDSP启停控制接口](#vdsp-启停控制-api)。
+[VDSP启停控制接口](#vdsp_boot_api)。
 
 #### 消息连接和发送
 
