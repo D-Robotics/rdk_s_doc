@@ -3097,14 +3097,7 @@ ynr_init_attr
 
 | 名称            | 类型          | 含义               | 最大值 | 最小值 | 默认值 | 是否必选 |
 |-----------------|---------------|--------------------|--------|--------|--------|----------|
-| work_mode       | uint32_t      | ynr 工作模式        | 2      | 1      | \-     | 是       |
-|                 |               | 1：Manual 模式      |        |        |        |          |
-|                 |               | ，online 链接，     |        |        |        |          |
-|                 |               | 前级模块是 sw       |        |        |        |          |
-|                 |               | trigger;           |        |        |        |          |
-|                 |               | 2：单路 Online      |        |        |        |          |
-|                 |               | （前级 PYM 硬件      |        |        |        |          |
-|                 |               | 直连）模式；       |        |        |        |          |
+| work_mode       | uint32_t      | ynr 工作模式<br/>1：Manual 模式，online 链接，前级模块是 SW trigger；<br/>2：单路 Online（前级 PYM 硬件直连）模式 | 2      | 1      | \-     | 是       |
 | slot_id         | uint32_t      | ynr 硬件通道 id      | 7      | 0      | \-     | 是       |
 | width           | uint32_t      | ynr 处理宽度        | 2048   | 32     |        | 是       |
 | height          | uint32_t      | ynr 处理高度        | 2048   | 32     |        | 是       |
@@ -3112,9 +3105,7 @@ ynr_init_attr
 | in_stride       | uint32_t      | y stride 和 uv stride|        |        |        | 是       |
 | nr2d_en         | uint32_t      | 2dnr 使能           | 1      | 0      |        | 是       |
 | nr3d_en         | uint32_t      | 3dnr 使能           | 1      | 0      |        | 是       |
-| dma_output_en   | uint32_t      | dma 输出使能        | 1      | 0      |        | 是       |
-|                 |               | 如果使能3dnr，需   |        |        |        |          |
-|                 |               | 要使能 dma 输出      |        |        |        |          |
+| dma_output_en   | uint32_t      | dma 输出使能<br/>如果使能 3dnr，需要使能 dma 输出 | 1      | 0      |        | 是       |
 | debug_en        | uint32_t      | 是否打开 debug 调试  | 1      | 0      |        | 否       |
 
 hobot_ynr_channel_input_config

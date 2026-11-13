@@ -3033,9 +3033,7 @@ ynr_init_attr
 
 | Name               | Type       | Description                                                                 | Max | Min | Default | Required |
 |--------------------|------------|-----------------------------------------------------------------------------|-----|-----|---------|----------|
-| work_mode          | uint32_t   | YNR working mode                                                            | 2   | 1   | \-      | Yes      |
-|                    |            | 1: Manual mode, online link, previous module is SW trigger;                 |     |     |         |          |
-|                    |            | 2: Single-channel online mode (previous PYM hardware directly connected);   |     |     |         |          |
+| work_mode          | uint32_t   | YNR working mode<br/>1: Manual mode, online link, previous module is SW trigger;<br/>2: Single-channel online mode (previous PYM hardware directly connected); | 2   | 1   | \-      | Yes      |
 | slot_id            | uint32_t   | YNR hardware channel ID                                                     | 7   | 0   | \-      | Yes      |
 | width              | uint32_t   | YNR processing width                                                        | 2048| 32  |         | Yes      |
 | height             | uint32_t   | YNR processing height                                                       | 2048| 32  |         | Yes      |
@@ -3043,8 +3041,7 @@ ynr_init_attr
 | in_stride          | uint32_t   | Y stride and UV stride                                                      |     |     |         | Yes      |
 | nr2d_en            | uint32_t   | Enable 2D NR                                                                | 1   | 0   |         | Yes      |
 | nr3d_en            | uint32_t   | Enable 3D NR                                                                | 1   | 0   |         | Yes      |
-| dma_output_en      | uint32_t   | Enable DMA output                                                           | 1   | 0   |         | Yes      |
-|                    |            | If 3D NR is enabled, DMA output must be enabled                             |     |     |         |          |
+| dma_output_en      | uint32_t   | Enable DMA output<br/>If 3D NR is enabled, DMA output must be enabled | 1   | 0   |         | Yes      |
 | debug_en           | uint32_t   | Enable debug mode                                                           | 1   | 0   |         | No       |
 
 hobot_ynr_channel_input_config
