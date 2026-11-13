@@ -105,8 +105,8 @@ vnode 之间通过输入通道和输出通道进行连接 :
 |           | VIN offline ISP， ISP 工作模式 DDR_MODE        | 中间需要经过 DDR，每个硬件实例最多支持 8 路使用该连接方式                      |
 | VIN - PYM | VIN online PYM                                | VIN 和 PYM 间是硬件连接，中间不经过 DDR，每个硬件实例最多支持 1 路使用该连接方式|
 |           | VIN offline PYM                               | 中间需要经过 DDR，每个硬件实例最多支持 1 路使用该连接方式|
-| ISP/YNR - PYM | ISP/YNR online PYM                        | ISP/YNR 和 PYM 间是硬件连接，中间不经过 DDR，每个硬件实例最多支持 8 路使用该连接方式|
-|           | ISP/YNR offline PYM                           | 中间需要经过 DDR，每个硬件实例最多支持 8 路使用该连接方式|
+| ISP/YNR - PYM | ISP/YNR online PYM                        | ISP/YNR 和 PYM 间是硬件连接，中间不经过 DDR，每个硬件实例最多支持 1 路使用该连接方式|
+|           | ISP offline PYM                           | 中间需要经过 DDR，每个硬件实例最多支持 8 路使用该连接方式|
 
 #### 参数配置
 函数 `hbn_vflow_bind_vnode` 绑定两个 vnode 节点时，通过函数参数确定模块间的连接方式，同时需要 VIN 和 ISP 节点设置为对应的配置，具体如下：
@@ -138,7 +138,7 @@ vnode 之间通过输入通道和输出通道进行连接 :
 | 多路 online | `sched_mode=1` `slot_id=4-11` `hw_id可选` | `axi_output_mode=0` | `pym_mode=2` `slot_id=同ISP` `hw_id=同ISP` |
 | offline | `sched_mode=1` `slot_id=4-11` `hw_id可选` | `axi_output_mode=9` | `pym_mode=3` `slot_id=4-11` `hw_id可选` |
 
-单路 online 与 多路 online 都是 ISP online 到 PYM，但是存在却别， 如下描述：
+单路 online 与 多路 online 都是 ISP online 到 PYM，但是存在区别， 如下描述：
 1. 多路 online： VIN 到 ISP是 offline 并且是多路，然后 ISP online 到 PYM
 2. 单路 online: VIN 到 ISP是 online 是单路，然后 ISP online 到 PYM
 ##### ISP 与 YNR 
