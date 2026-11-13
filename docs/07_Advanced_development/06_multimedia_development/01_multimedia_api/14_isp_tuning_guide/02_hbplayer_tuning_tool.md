@@ -114,7 +114,7 @@ hbplayer 查看静态图像时支持简单的图像显示调整功能。点击�
 
 ## tuning_tool
 
-该程序主要为调试图像质量而开发，所以数据流只跑到 ISP，并且默认跑 SIF passthrough ISP 模式。板端脚本位置 `/app/tuning_tool/scripts/run_tuning.sh`（配合同目录的 `tuning_menu.sh` 菜单），可执行程序 `/app/tuning_tool/bin/tuning_bin`，源码在 `source/hobot-camera/tuning_tool/`。建议通过 ssh 窗口运行，否则打印太多、不易分辨 tuning_tool 的输出。
+该程序主要为调试图像质量而开发，所以数据流只跑到 ISP，并且默认跑 CIM passthrough ISP 模式。板端脚本位置 `/app/tuning_tool/scripts/run_tuning.sh`（配合同目录的 `tuning_menu.sh` 菜单），可执行程序 `/app/tuning_tool/bin/tuning_bin`，源码在 `source/hobot-camera/tuning_tool/`。建议通过 ssh 窗口运行，否则打印太多、不易分辨 tuning_tool 的输出。
 
 ### 运行方法
 
@@ -260,4 +260,3 @@ feedback 回灌把采集到的 raw 数据重新灌进 ISP 做离线调试，避�
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_connect.png" alt="hbplayer 连接预览界面" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 若反复打印 `get cim/isp raw data failed -310`（HB_VIO_INVALID_OPERATION），通常是 hbplayer 推流 / raw 回放通道的取数问题（例如无客户端连接、raw 格式不匹配），并非相机链路故障——此时相机链路的 fs/fe 统计仍是正常的。关掉 hbplayer 推流（`-E 0 -e 0 -y 0`）即可确认。
-

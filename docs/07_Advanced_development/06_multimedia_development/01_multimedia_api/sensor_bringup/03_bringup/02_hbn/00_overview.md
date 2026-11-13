@@ -48,7 +48,7 @@ S600：6 路 MIPI RX（RX0-RX5），每路 4VC，最多 24 路接入；I2C0-5、
 
 1. **修改平台设备树 (dts)**：按硬件设计配置 sensor 上电 GPIO、I2C、MCLK、LPWM。
 2. **添加 sensor 驱动代码**：实现 `sensor_module_t` 的初始化/反初始化、开流/关流、上下电、增益/曝光控制等接口。
-3. **添加 camera App 代码**：配置 MIPI、SIF、camera sensor、LPWM、ISP 等参数。
+3. **添加 camera App 代码**：配置 MIPI、CIM、camera sensor、LPWM、ISP 等参数。
 4. **示例程序运行**：用 get_vin_data / get_isp_data 查看 raw 图、帧率与 ISP 图像是否符合预期。
 5. **ISP 图像调试预览**：连接 hbplayer，验证驱动增益与曝光控制，搭建 ISP 调试环境。
 
@@ -217,7 +217,7 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 
 ## 添加 camera App 代码
 
-参考 BSP 中 `source/hobot-spdev/src/vp_sensors`，配置 MIPI、SIF、camera sensor、LPWM、ISP 等。需根据 sensor 分辨率、帧率、数据格式填写`vp_sensor_config_t`。
+参考 BSP 中 `source/hobot-spdev/src/vp_sensors`，配置 MIPI、CIM、camera sensor、LPWM、ISP 等。需根据 sensor 分辨率、帧率、数据格式填写`vp_sensor_config_t`。
 
 - **源码路径**：`source/hobot-spdev/src/vp_sensors`
 - **部署**：将编译得到的 get_vin_data、get_isp_data 等拷贝到设备执行测试。编译方法见对应平台示例概览：
@@ -232,7 +232,7 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 
 ### vp_sensor_config_t 配置项
 
-vp_sensor_config_t 参数配置 主要包含：mipi 配置、camera sensor 配置、SIF 配置、LPWM 配置 和 ISP 配置，详细参照[数据结构](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
+vp_sensor_config_t 参数配置 主要包含：mipi 配置、camera sensor 配置、CIM 配置、LPWM 配置 和 ISP 配置，详细参照[数据结构](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
 
 ---
 

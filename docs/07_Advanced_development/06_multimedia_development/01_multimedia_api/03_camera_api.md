@@ -29,7 +29,7 @@ description: "RDK S100/S600 Camera 采集入口 API（hbn_camera_* / hbn_deseria
 - Sensor：可直接接入S100 MIPI RX 或者 通过 Serializer 串联 Deserializer 接入S100 MIPI RX
 - POC：用于给远端 Serializer和sensor 供电
 - 控制管脚：I2C、LPWM(同步触发)、reset、deserr(Serdes链路错误上报管脚)
-- 下图 S100 连接图例一所示为 最大sensor接入路数样例，S100 连接图例二为 4路sdes和2路mipi的样例
+- 下图 S100 连接图例一所示为 最大sensor接入路数样例，S100 连接图例二为 4路sedes和2路mipi的样例
 :::
 
 :::doc_scope{products="RDK S100"}

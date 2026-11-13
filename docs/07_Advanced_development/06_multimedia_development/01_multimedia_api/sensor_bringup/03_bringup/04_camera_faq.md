@@ -385,7 +385,7 @@ echo 1 > /sys/class/vps/mipi_host0/param/nocheck
 
 如需其他 yuv 格式，请联系 Sensor 原厂 FAE 支持。
 
-注意，yuv sensor 接入到 mipi 后，直接从 sif dump 数据到 ddr，如果需要后级模块，则要跳过 isp 模块(因为 isp 只支持输入 raw 格式)，直接将 sif 绑定到 vse 或者后级模块，且 sensor 效果由 sensor 模组本身保证，SoC 端无法通过 isp 做效果 tuning。
+注意，yuv sensor 接入到 mipi 后，直接从 CIM dump 数据到 ddr，如果需要后级模块，则要跳过 isp 模块(因为 isp 只支持输入 raw 格式)，直接将 CIM 绑定到 vse 或者后级模块，且 sensor 效果由 sensor 模组本身保证，SoC 端无法通过 isp 做效果 tuning。
 
 
 ---
