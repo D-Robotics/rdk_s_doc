@@ -105,7 +105,7 @@ Ipc_InstanceConfigType Ipc_ShmCfgInstances0 = {
         .RecvMboxId       = 16,/**< the mailbox id */
         .RemoteIrq        = 16,
         .LocalIrq         = 0,
-        .UseMDMA          = (TRUE),
+        .UseMDMA          = (FALSE),
     },
     .Ipc_ChannelConfigPtr = Ipc_ShmInstance0CfgChannel,
     .receive_coreid = Ipc_Receive_Core1,
@@ -302,7 +302,7 @@ typedef struct {
 
 #### 使用方式
 
-由于 IpcBox 会占用外设资源，所以在开机时，此功能是默认关闭的，如需要使用，请手动打开。
+IpcBox 的 runcmd 命令通道默认启用；uart/spi/i2c 外设透传因会占用外设资源默认关闭，需要使用时按以下方式打开。
 打开方式有以下两种：
 
 1. 通过修改 MCU SDK 中的数组配置,找到对应的外设，将`DISABLE`改为`ENABLE`
@@ -608,7 +608,7 @@ D-Robotics:/$ ipcbox_loglevel 4
 | `IPC_E_CHECKRESERROR` | 申请资源失败 |
 
 :::tip
-DMA 硬件要求传输地址 16 字节对齐，buffer 需要保证首地址与长度均 16 字节对齐。SDK 中的写法可参考 `mcu/qa_test/S13_IPC/qa_IpcTest.c`：
+DMA 硬件要求传输地址 16 字节对齐，buffer 需要保证首地址与长度均 16 字节对齐。可参考以下写法：
 
 ```c
 static uint8 __attribute__((aligned(16))) Ipc_Send_Buf[8192];

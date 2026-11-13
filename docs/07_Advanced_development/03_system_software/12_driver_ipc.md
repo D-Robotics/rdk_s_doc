@@ -40,7 +40,7 @@ IPC 典型应用场景有 OTA 模块、规控、CANHAL 等。
 ## IPC 实例分配方案
 
 <DocScope products="RDK S100">
-IPC Acore 侧实例编号范围为[0-34]，分别用于 Acore 与 MCU 通信的实例[0-14]、Acore 与 VDSP 通信的实例[22-24]、Acore 与 BPU 通信的实例[32-34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0-8]，实例[4-6]默认为客户预留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC使用指南](/Advanced_development/mcu_development/mcu_ipc) 中的 IPC 使用情况章节。
+IPC Acore 侧实例编号范围为[0-34]，分别用于 Acore 与 MCU 通信的实例[0-14]、Acore 与 VDSP 通信的实例[22-24]、Acore 与 BPU 通信的实例[32-34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0-8]，其中实例 4、7 空闲可供客户申请使用；实例 5 被板载 RTC（YSN8130）占用、实例 6 为内部测试保留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC使用指南](/Advanced_development/mcu_development/mcu_ipc) 中的 IPC 使用情况章节。
 </DocScope>
 <DocScope products="RDK S600">
 IPC Acore 侧实例编号范围为[0-63]，分别用于 Acore 与 MCU 通信的实例[0-15]和[50-53]、Acore 与 VDSP 通信的实例[22-24]和[42-44]、Acore 与 BPU 通信的实例[32-39]，其余实例做其它私有用途。客户 Acore 与 MCU 通信可使用实例[0-15]，其余实例为内部使用。
@@ -155,37 +155,9 @@ ipc_instance3: ipc_instance3 {
 };
 
 ```
-由于实例5和实例6内部用于测试，外部客户若需要使用，需要自行配置，配置信息如下，不需要改动。
 
-```dts
-ipc_instance5: ipc_instance5 {
-        status = "okay";
-        compatible = "hobot,hobot-ipc";
-        mbox-names = "mbox-chan";
-        mboxes = <&mailbox0 5 21 5>;
-        instance = <5>;
-        data_local_addr = /bits/ 64 <IPC_INS5_DATA_LOCAL>;
-        data_remote_addr = /bits/ 64 <IPC_INS5_DATA_REMOTE>;
-        data_size = <IPC_SINGLE_DATA_SIZE>;
-        ctrl_local_addr = /bits/ 64 <IPC_INS5_CTRL_LOCAL>;
-        ctrl_remote_addr = /bits/ 64 <IPC_INS5_CTRL_REMOTE>;
-        ctrl_size = <IPC_SINGLE_CTRL_SIZE>;
-};
+实例 5 被板载 RTC（YSN8130）占用、实例 6 用于内部测试；客户如需扩展实例请使用实例 4/7
 
-ipc_instance6: ipc_instance6 {
-        status = "okay";
-        compatible = "hobot,hobot-ipc";
-        mbox-names = "mbox-chan";
-        mboxes = <&mailbox0 6 22 6>;
-        instance = <6>;
-        data_local_addr = /bits/ 64 <IPC_INS6_DATA_LOCAL>;
-        data_remote_addr = /bits/ 64 <IPC_INS6_DATA_REMOTE>;
-        data_size = <IPC_SINGLE_DATA_SIZE>;
-        ctrl_local_addr = /bits/ 64 <IPC_INS6_CTRL_LOCAL>;
-        ctrl_remote_addr = /bits/ 64 <IPC_INS6_CTRL_REMOTE>;
-        ctrl_size = <IPC_SINGLE_CTRL_SIZE>;
-};
-```
 
 **设备树配置注意事项:**
 
