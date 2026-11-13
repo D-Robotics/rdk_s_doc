@@ -1,5 +1,5 @@
 ---
-sidebar_position: 15
+sidebar_position: 17
 title: "多媒体术语与缩略语"
 description: "多媒体 API 参考章节术语与缩略语汇总：按硬件（模块）与软件（框架）分类，覆盖输入、ISP、几何处理、显示、编解码、AI 计算、总线内存及 HBN、内存管理、媒体框架、图像格式等"
 ---
