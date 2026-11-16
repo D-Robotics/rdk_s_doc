@@ -17,12 +17,12 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 | Fastboot | 非空板状态更新系统 | 要求非空板且系统能进入 U-Boot |
 
 :::warning 启动盘选择
-启动盘由 [SW3 开关](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#系统启动盘选择-sw3) 决定，烧录前须按目标存储介质设置 SW3，烧录后保持拨码位置不变：
+启动盘由 [SW3 开关](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#系统启动盘选择-sw3) 决定，按需要启动的介质设置即可——烧录步骤只使用 SW1（电源）和 SW2（DOWNLOAD），不涉及 SW3。若通过 Fastboot 模式烧录，设备需能从当前启动盘进入 U-Boot；启动盘不可用时改用 DFU+Fastboot。
 
 - 从 **eMMC** 启动：`D13=0, D12=1`。
 - 从 **NVMe** 启动：`D13=1, D12=0`。
 
-烧录 NVMe 需使用 NVMe 版本的镜像，D-Robotics 默认提供的镜像面向 eMMC，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-镜像编译须知)。烧录 NVMe 镜像需使用 XBurn 1.1.10 及以上版本。
+烧录 NVMe 需使用 NVMe 版本的镜像，D-Robotics 默认提供的镜像面向 eMMC，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-镜像编译须知)。NVMe 启动的硬件版本要求（V0P6 及以上）和 `miniboot_flash` 的编译模式约束，见同一节末尾的「NVMe 启动注意事项」。烧录 NVMe 镜像需使用 XBurn 1.1.10 及以上版本。
 :::
 
 ### 进入 DFU+Fastboot 模式

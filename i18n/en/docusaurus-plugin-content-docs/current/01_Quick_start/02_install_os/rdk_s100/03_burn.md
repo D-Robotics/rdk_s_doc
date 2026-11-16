@@ -17,12 +17,12 @@ Before you flash the system image to the RDK S100 with XBurn, select a download 
 | Fastboot | Update the system on a non-blank board | Requires a non-blank board whose system can enter U-Boot |
 
 :::warning Boot disk selection
-The boot disk is determined by the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#boot-device-selection-sw3). **Before flashing**, set SW3 correctly for the target storage medium, and keep the switch position unchanged after flashing:
+The boot disk is determined by the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#boot-device-selection-sw3). Set SW3 for the medium you want to boot from. The flashing steps use only SW1 (power) and SW2 (DOWNLOAD) and do not involve SW3. If you flash in Fastboot mode, the device must be able to enter U-Boot from the current boot disk; if the boot disk is not usable, use DFU+Fastboot instead.
 
 - Boot from **eMMC**: `D13=0, D12=1`.
 - Boot from **NVMe**: `D13=1, D12=0`.
 
-Flashing NVMe requires the NVMe version of the image. D-Robotics provides eMMC images by default, so build the NVMe image yourself (build config `RDK_DISK_MEDIUM="nvme"`); see [Build system development guide · eMMC/UFS/NVMe image build notes](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-image-build-notes). Flashing an NVMe image requires XBurn 1.1.10 or later.
+Flashing NVMe requires the NVMe version of the image. D-Robotics provides eMMC images by default, so build the NVMe image yourself (build config `RDK_DISK_MEDIUM="nvme"`); see [Build system development guide · eMMC/UFS/NVMe image build notes](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-image-build-notes). The hardware version requirement for NVMe boot (V0P6 and later) and the `miniboot_flash` mode constraint are described in "NVMe Boot Notes" at the end of the same section. Flashing an NVMe image requires XBurn 1.1.10 or later.
 :::
 
 ### Enter DFU+Fastboot mode
