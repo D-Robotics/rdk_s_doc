@@ -34,13 +34,17 @@ jobs:
       - name: Detect metadata-only changes
         id: meta
         run: |
+          # checkout 的是浅克隆的 PR merge commit，拿不到共同祖先；
+          # 改为分别取 PR 分支和 base 分支的最新提交再比较
+          git fetch --no-tags --depth=50 origin "+refs/heads/${{ github.head_ref }}:refs/remotes/pr-head" || true
           git fetch --no-tags --depth=50 origin "${{ github.base_ref }}" || true
-          base=$(git merge-base FETCH_HEAD HEAD 2>/dev/null || echo "")
-          if [ -n "$base" ] && git diff --quiet "$base" HEAD -- . ':(exclude).github/**' ':(exclude)README.md' ':(exclude)LICENSE*'; then
+          base=$(git merge-base FETCH_HEAD refs/remotes/pr-head 2>/dev/null)
+          if [ -n "$base" ] && git diff --quiet "$base" refs/remotes/pr-head -- . ':(exclude).github/**' ':(exclude)README.md' ':(exclude)LICENSE*'; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "Only metadata files changed; skipping build."
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "Source changes detected (or merge-base unavailable); running full build."
           fi
       - name: Detect local Node.js on runner
         if: steps.meta.outputs.skip != 'true'
