@@ -22,7 +22,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 - 从 **eMMC** 启动：`D13=0, D12=1`。
 - 从 **NVMe** 启动：`D13=1, D12=0`。
 
-烧录 NVMe 需使用 NVMe 版本的镜像，D-Robotics 默认提供的镜像面向 eMMC，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-镜像编译须知)。烧录 NVMe 镜像需使用 XBurn 1.1.10 及以上版本。
+烧录 NVMe 需使用 NVMe 版本的镜像，D-Robotics 默认提供的镜像面向 eMMC，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-镜像编译须知)。NVMe 启动的硬件版本要求（V0P6 及以上）和 `miniboot_flash` 的编译模式约束，见同一节末尾的「NVMe 启动注意事项」。烧录 NVMe 镜像需使用 XBurn 1.1.10 及以上版本。
 :::
 
 ### 进入 DFU+Fastboot 模式

@@ -38,6 +38,10 @@ RDK S100 商业资料请切换至 **FTP下载** 选项，根据表格中的路�
 
 <br/><br/>
 
+:::note NVMe 镜像
+系统镜像默认面向 eMMC。如需烧录到 NVMe 并从 NVMe 启动，需自行编译 NVMe 镜像，见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-镜像编译须知)。
+:::
+
 <!-- <DocScope products="RDK S600">
 
 <div className="table-responsive">
