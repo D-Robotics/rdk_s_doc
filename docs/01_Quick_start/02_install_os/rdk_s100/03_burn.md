@@ -17,7 +17,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 | Fastboot | 非空板状态更新系统 | 要求非空板且系统能进入 U-Boot |
 
 :::warning 启动盘选择
-启动盘由 [SW3 开关](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#系统启动盘选择-sw3) 决定，烧录前须按目标存储介质设置 SW3，烧录后保持拨码位置不变：
+启动盘由 [SW3 开关](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#系统启动盘选择-sw3) 决定，按需要启动的介质设置即可——烧录步骤只使用 SW1（电源）和 SW2（DOWNLOAD），不涉及 SW3。若通过 Fastboot 模式烧录，设备需能从当前启动盘进入 U-Boot；启动盘不可用时改用 DFU+Fastboot。
 
 - 从 **eMMC** 启动：`D13=0, D12=1`。
 - 从 **NVMe** 启动：`D13=1, D12=0`。
