@@ -104,20 +104,16 @@ During test execution, the system generates relevant log files that users can in
 
 ### Changing the Log Storage Path
 
-Users can change the log storage location using either of the following two methods:
+If you need to change the log storage location, note the following two points:
 
 1. **Moving the directory:**
-   Logs are saved by default under the `chip_base_test` directory. Users can simply move the entire `chip_base_test` directory to a new location, for example:
+   Test commands in `startup.sh` and `config.ini` use the absolute path `/app/chip_base_test/...`. After only the move below, the scripts report `not found`, the tests do not start, and logs are not written to the new directory.
 
    ```bash
    mv /app/chip_base_test /userdata/chip_base_test
    ```
 
-   After moving, log files will automatically be saved to the new path, for example:
-
-   ```text
-   /userdata/chip_base_test/log
-   ```
+   If the whole suite must run from another directory, also update every `/app/chip_base_test` path in `startup.sh` and `config.ini`. To change only the log location, use the `-o` option below.
 
 2. **Customizing the log output path**
    Driver unit test scripts support the `-o` option to customize the log directory. Users can edit the `config.ini` file and add the `-o` option to the `ExecStart` parameter of the corresponding test item. For example:

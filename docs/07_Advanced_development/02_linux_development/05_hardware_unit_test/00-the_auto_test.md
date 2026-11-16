@@ -102,20 +102,16 @@ ExecStart=/app/chip_base_test/04_spi_test/spistress.sh -d /dev/spidev0.0 -c 1000
 
 ### 修改日志保存路径
 
-用户可以通过以下两种方式更改日志的保存位置：
+如果需要更改日志的保存位置，请注意以下两点：
 
 1. **移动目录：**
-    日志默认保存在 `chip_base_test` 目录下。用户只需将整个 `chip_base_test` 目录移动到新的位置，例如：
+   `startup.sh` 与 `config.ini` 中的测试命令使用绝对路径 `/app/chip_base_test/...`。只执行下面的移动后，脚本会报 `not found`，测试无法启动，日志也不会改到新目录。
 
    ```bash
    mv /app/chip_base_test /userdata/chip_base_test
    ```
 
-   移动后，日志文件将自动保存到新的路径，例如：
-
-   ```text
-   /userdata/chip_base_test/log
-   ```
+   若必须把整套测试放到其他目录，移动之后还要同步修改 `startup.sh` 和 `config.ini` 里的 `/app/chip_base_test` 路径。更改日志位置请用下面的 `-o` 方式。
 
 2. **自定义日志输出路径**
    驱动单元测试程序的脚本支持通过 `-o` 选项自定义日志目录。用户可以编辑 `config.ini` 配置文件，在对应测试项的 `ExecStart` 参数中添加 `-o` 选项。例如：
