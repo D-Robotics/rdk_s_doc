@@ -19,9 +19,10 @@ hbplayer 是一个 Windows 应用程序，通过 HTTP 协议向主机发送请�
 
 **安装**：
 
-> S100/S600 的 hbplayer 版本号与安装包路径待确认（板端只查到 `libhbplayer.so.1.0.1`，PC 工具在 SDK 交付包 `software_tools/hobotplayer` 目录下）。X5 侧版本为 v3.4.4（`x5_hbplayer_v3.4.4.zip`），此处沿用 X5 的安装流程：
+当前软件版本为 `v3.4.4`，安装步骤如下：
 
-从 SDK 交付包的 `software_tools/hobotplayer` 目录获取 hbplayer 压缩包，解压后进入解压路径，双击运行 `out` 目录下的 `hbplayer.exe` 即可打开主页面：
+1. 从 SDK 交付包的 `software_tools/hobotplayer` 目录下获取 `x5_hbplayer_v3.4.4.zip` 压缩包，解压后的目录如下图
+2. 进入解压路径，双击运行 `out` 目录下的 `hbplayer.exe`，即可打开主页面，如下图所示：
 
 <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/dir_list.png" alt="hbplayer 解压目录" style={{ width: '100%', maxWidth: '800px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
