@@ -16,8 +16,13 @@ Before you flash the system image to the RDK S100 with XBurn, select a download 
 | DFU+Fastboot | Blank board or system corruption that bricks the device | Set the DIP switches to put the device into DFU boot mode |
 | Fastboot | Update the system on a non-blank board | Requires a non-blank board whose system can enter U-Boot |
 
-:::warning Prerequisite check
-Set the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#boot-device-selection-sw3) to boot from onboard eMMC. Booting from an M.2 NVMe SSD is not supported.
+:::warning Boot disk selection
+The boot disk is determined by the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#boot-device-selection-sw3). **Before flashing**, set SW3 correctly for the target storage medium, and keep the switch position unchanged after flashing:
+
+- Boot from **eMMC**: `D13=0, D12=1`.
+- Boot from **NVMe**: `D13=1, D12=0`.
+
+Flashing NVMe requires the NVMe version of the image. D-Robotics provides eMMC images by default, so build the NVMe image yourself (build config `RDK_DISK_MEDIUM="nvme"`); see [Build system development guide · eMMC/UFS/NVMe image build notes](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-image-build-notes). Flashing an NVMe image requires XBurn 1.1.10 or later.
 :::
 
 ### Enter DFU+Fastboot mode
@@ -40,11 +45,11 @@ Set the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#b
 
 ## Flash the full image
 
-Use this for a first-time flash or system recovery. It flashes the complete system image package and overwrites the onboard eMMC and `miniboot_flash` on NOR Flash.
+Use this for a first-time flash or system recovery. It flashes the complete system image package and overwrites the selected storage medium and `miniboot_flash` on NOR Flash. For **Storage medium**, select `eMMC` (onboard) or `NVMe` (M.2 expansion) based on your setup.
 
 1. For **Product type**, select `RDK S100`.
 2. For **Connection type**, select `USB`. For **Download mode**, select `DFU+Fastboot` or `Fastboot`.
-3. For **Storage**, select `eMMC`. For **Firmware type**, select `secure`.
+3. For **Storage**, select `eMMC` or `NVMe`. For **Firmware type**, select `secure`.
 4. To the right of **Image directory**, click **Browse** and select the product folder that contains the firmware.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-full-image-flash-en.png" alt="Full image flashing" style={{ width: '100%' }} />
@@ -70,15 +75,17 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
 ## Flash specific regions{#flashing-specific-regions}
 
-Flash only part of the image by region, instead of the complete full-image package. For **Storage medium**, select `eMMC`. The supported regions are:
+Flash only part of the image by region, instead of the complete full-image package. For **Storage medium**, select `eMMC` or `NVMe`. `miniboot_flash` is on NOR Flash and is independent of the selected medium; both eMMC and NVMe can select it. Other regions correspond to the selected medium per the "Actual storage medium" column. The supported regions are:
 
 | Region | Actual storage medium | Firmware content | Image |
 | --- | --- | -------- | ---- |
 | miniboot_flash | NOR Flash | Basic boot image on NOR Flash, including images for HSM/MCU0 and other system components | img_packages/disk/miniboot_flash.img |
 | miniboot_emmc | eMMC | Basic boot image on eMMC, including images for BL31/U-Boot and other system components | img_packages/disk/miniboot_emmc.img |
 | emmc | eMMC | Complete eMMC image, already includes miniboot_emmc | img_packages/disk/emmc_disk.simg |
+| miniboot_nvme | NVMe | Basic boot image on NVMe, including images for BL31/U-Boot and other system components | img_packages/disk/miniboot_nvme.img |
+| nvme | NVMe | Complete NVMe image, already includes miniboot_nvme | img_packages/disk/nvme_disk.simg |
 
-Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`). Complete the flash and verify the boot.
+Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`; for NVMe media, `miniboot_flash` and `miniboot_nvme`). Complete the flash and verify the boot.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/specify-region-flash-en.png" alt="Flash specific regions" style={{ width: '100%' }} />
 
