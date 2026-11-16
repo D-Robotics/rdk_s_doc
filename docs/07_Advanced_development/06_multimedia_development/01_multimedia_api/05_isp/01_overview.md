@@ -69,7 +69,7 @@ ISP 的输出支持两种方式，且可以并行：
 - **streaming output**：处理结果直通后级模块（YNR / PYM），走 online 输出链路。
 - **offline output**：处理结果写 DDR，供后级模块或 CPU 从内存读取。
 
-软件配置时，输入模式通过 `slot_id` 区分（online 取 0 至 3、offline 取 4 至 11），输出方式通过 `ochn_attr` 配置，见「HBN 框架接口用到的数据结构」。
+软件配置时，输入模式通过 `slot_id` 区分（online 取 0 至 3、offline 取 4 至 11），输出方式通过 `ochn_attr` 配置，见 [HBN 框架接口用到的数据结构](./isp_hbn_api#数据结构)。
 
 ## ISP 硬件规格
 
