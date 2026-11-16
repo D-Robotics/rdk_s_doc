@@ -34,8 +34,9 @@ jobs:
       - name: Detect metadata-only changes
         id: meta
         run: |
-          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
-          if git diff --quiet FETCH_HEAD...HEAD -- . ':(exclude).github/**' ':(exclude)README.md' ':(exclude)LICENSE*'; then
+          git fetch --no-tags --depth=50 origin "${{ github.base_ref }}" || true
+          base=$(git merge-base FETCH_HEAD HEAD 2>/dev/null || echo "")
+          if [ -n "$base" ] && git diff --quiet "$base" HEAD -- . ':(exclude).github/**' ':(exclude)README.md' ':(exclude)LICENSE*'; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
             echo "Only metadata files changed; skipping build."
           else
