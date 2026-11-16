@@ -3,11 +3,6 @@ name: CI Check
 on:
   pull_request:
     branches: [main]
-    # 纯元数据改动不触发：workflow 本身、README、许可证都不影响站点构建
-    paths-ignore:
-      - '.github/**'
-      - 'README.md'
-      - 'LICENSE*'
 
 # 同一 PR 连推多次时取消旧任务，只保留最新一次
 concurrency:
@@ -34,7 +29,20 @@ jobs:
           echo "::error::github.com unreachable from runner"
           exit 1
       - uses: actions/checkout@v5
+      # 只改 workflow / README / LICENSE 的 PR 不影响站点构建：
+      # 保留 job（必需检查 build 必须上报），跳过全部重活
+      - name: Detect metadata-only changes
+        id: meta
+        run: |
+          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          if git diff --quiet FETCH_HEAD...HEAD -- . ':(exclude).github/**' ':(exclude)README.md' ':(exclude)LICENSE*'; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Only metadata files changed; skipping build."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Detect local Node.js on runner
+        if: steps.meta.outputs.skip != 'true'
         id: detect_node
         run: |
           if command -v node >/dev/null 2>&1 && command -v npm >/dev/null 2>&1; then
@@ -46,22 +54,25 @@ jobs:
             echo "has_node=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Setup Node.js (fallback if runner has no Node)
-        if: steps.detect_node.outputs.has_node != 'true'
+        if: steps.meta.outputs.skip != 'true' && steps.detect_node.outputs.has_node != 'true'
         uses: actions/setup-node@v5
         with:
           node-version: '24'
           cache: 'npm'
       - name: Doc quality (advisory)
+        if: steps.meta.outputs.skip != 'true'
         uses: D-Robotics/doc-skills/.github/actions/doc-quality@v1
         continue-on-error: true
         with:
           changed-only: 'true'
           advisory: 'true'
       - name: Clean install dependencies
+        if: steps.meta.outputs.skip != 'true'
         run: |
           rm -rf node_modules
           npm ci
       - name: Build site (strict broken-link checking)
+        if: steps.meta.outputs.skip != 'true'
         run: npm run build:ci
       - if: always()
         run: |
