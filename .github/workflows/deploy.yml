@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    env:
+      GUAJI_ASSISTANT_ORIGIN: https://developer.d-robotics.cc
 
     steps:
     - name: Checkout repository
