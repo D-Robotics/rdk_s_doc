@@ -57,21 +57,20 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
 
 ## 备份全镜像
 
-备份完整系统镜像，用于恢复到源板或复制到新板。
+备份完整系统镜像，用于恢复到源板或复制到新板。eMMC 系统和 NVMe 系统是两条流程，按当前系统的启动盘选择对应一列。
 
-1. 在 [烧录全镜像](./03_burn.md#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 `miniboot` 区域和 `boot`、`system` 等分区。
+1. 在 [烧录全镜像](./03_burn.md#烧录全镜像) 步骤基础上（**存储介质** 与当前系统盘一致），展开 **高级配置**，勾选对应的区域和分区：
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-migration-burn.png" alt="XBurn 配置备份镜像界面" style={{ width: '100%' }} />
 
-   | 区域/分区 | 说明 |
-   | --- | --- |
-   | 区域 `miniboot_flash` | NOR Flash 启动镜像 |
-   | 区域 `miniboot_emmc` | eMMC 基础启动镜像（eMMC 系统） |
-   | 区域 `miniboot_nvme` | NVMe 基础启动镜像（NVMe 系统） |
-   | 分区 `boot`、`system` 等（按需） | U-Boot 之后的分区 |
+   | 备份内容 | eMMC 系统 | NVMe 系统 |
+   | --- | --- | --- |
+   | 启动区域（NOR Flash） | `miniboot_flash` | `miniboot_flash` |
+   | 启动区域（系统盘） | `miniboot_emmc` | `miniboot_nvme` |
+   | 系统分区 | `boot`、`system` 等（按需） | `boot`、`system` 等（按需） |
 
    :::note
-   启动区域按当前系统的启动介质选择：eMMC 系统勾选 `miniboot_emmc`，NVMe 系统勾选 `miniboot_nvme`。不勾选 `emmc` / `nvme` 整盘区域，因为 `miniboot` 已覆盖启动镜像，其余按分区备份即可。
+   两条流程只有「启动区域（系统盘）」不同，备份产物位置、重命名和恢复烧录步骤完全一致。不勾选 `emmc` / `nvme` 整盘区域，因为启动区域已覆盖启动镜像，其余按分区备份即可。
    :::
 
 2. 等待备份完成，然后在解压后的 `product` 文件夹的 `img_packages/` 目录下查看镜像：

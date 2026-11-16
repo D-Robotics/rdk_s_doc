@@ -57,21 +57,20 @@ Update U-Boot on the **source board** before backing up:
 
 ## Back up the full image
 
-Back up the complete system image for restoring to the source board or copying to a new board.
+Back up the complete system image for restoring to the source board or copying to a new board. eMMC systems and NVMe systems follow two separate flows; select the column that matches your current boot disk.
 
-1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, and select the `miniboot` regions and the `boot` and `system` partitions.
+1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image) (**Storage medium** matches your current system disk), expand **Advanced configuration**, and select the corresponding regions and partitions:
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-s100-migration-back.png" alt="XBurn backup image configuration" style={{ width: '100%' }} />
 
-   | Region/Partition | Description |
-   | --- | --- |
-   | `miniboot_flash` region | NOR Flash boot image |
-   | `miniboot_emmc` region | eMMC basic boot image (eMMC systems) |
-   | `miniboot_nvme` region | NVMe basic boot image (NVMe systems) |
-   | `boot`, `system`, and other partitions (as needed) | Partitions after U-Boot |
+   | Backup item | eMMC system | NVMe system |
+   | --- | --- | --- |
+   | Boot region (NOR Flash) | `miniboot_flash` | `miniboot_flash` |
+   | Boot region (system disk) | `miniboot_emmc` | `miniboot_nvme` |
+   | System partitions | `boot`, `system`, etc. (as needed) | `boot`, `system`, etc. (as needed) |
 
    :::note
-   Select the boot region for the current system's boot medium: select `miniboot_emmc` for eMMC systems and `miniboot_nvme` for NVMe systems. Do not select the `emmc` or `nvme` full-disk region, because `miniboot` already covers the boot image, and the rest is backed up by partition.
+   The two flows differ only in the boot region on the system disk. The backup output location, renaming, and restore steps are identical. Do not select the `emmc` or `nvme` full-disk region, because the boot region already covers the boot image, and the rest is backed up by partition.
    :::
 
 2. Wait for the backup to complete, then check the images under the `img_packages/` directory in the extracted `product` folder:
