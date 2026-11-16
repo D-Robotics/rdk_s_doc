@@ -66,11 +66,12 @@ Back up the complete system image for restoring to the source board or copying t
    | Region/Partition | Description |
    | --- | --- |
    | `miniboot_flash` region | NOR Flash boot image |
-   | `miniboot_emmc` region | eMMC basic boot image |
+   | `miniboot_emmc` region | eMMC basic boot image (eMMC systems) |
+   | `miniboot_nvme` region | NVMe basic boot image (NVMe systems) |
    | `boot`, `system`, and other partitions (as needed) | Partitions after U-Boot |
 
    :::note
-   Do not select the `emmc` region, because `miniboot` already covers the boot image, and the rest is backed up by partition.
+   Select the boot region for the current system's boot medium: select `miniboot_emmc` for eMMC systems and `miniboot_nvme` for NVMe systems. Do not select the `emmc` or `nvme` full-disk region, because `miniboot` already covers the boot image, and the rest is backed up by partition.
    :::
 
 2. Wait for the backup to complete, then check the images under the `img_packages/` directory in the extracted `product` folder:
@@ -88,22 +89,24 @@ Back up the complete system image for restoring to the source board or copying t
 
    | Original path | Path after rename | Naming rule |
    | --- | --- | --- |
-   | `img_packages/disk/` | Unchanged | Remove `_backup`<br />- `miniboot_flash_backup.img` → `miniboot_flash.img`<br />- `miniboot_emmc_backup.img` → `miniboot_emmc.img` |
+   | `img_packages/disk/` | Unchanged | Remove `_backup`<br />- `miniboot_flash_backup.img` → `miniboot_flash.img`<br />- `miniboot_emmc_backup.img` → `miniboot_emmc.img`<br />- `miniboot_nvme_backup.img` → `miniboot_nvme.img` |
    | `img_packages/backup/` | `img_packages/` | Names unchanged (such as `boot.img`, `system.img`) |
 
 4. Flash via [Flash specific regions](./03_burn.md#flashing-specific-regions) and [Flash specific partition images](./03_burn.md#flash-specific-partition-images), selecting the same regions and partitions as you backed up.
 
 ## Back up specific regions
 
-Back up the image of specific regions to your PC. The supported backup regions are:
+Back up the image of specific regions to your PC. `miniboot_flash` is on NOR Flash and is independent of the selected medium; both eMMC and NVMe can back it up. Other regions correspond to the selected medium per the "Actual storage medium" column. The supported backup regions are:
 
 | Region | Actual storage medium | Firmware content | Backup image |
 | --- | --- | -------- | ------------ |
 | miniboot_flash | NOR Flash | Basic boot image on NOR Flash | img_packages/disk/miniboot_flash_backup.img |
 | miniboot_emmc | eMMC | Basic boot image on eMMC | img_packages/disk/miniboot_emmc_backup.img |
 | emmc | eMMC | Complete eMMC image | img_packages/disk/emmc_disk_backup.img |
+| miniboot_nvme | NVMe | Basic boot image on NVMe | img_packages/disk/miniboot_nvme_backup.img |
+| nvme | NVMe | Complete NVMe image | img_packages/disk/nvme_disk_backup.img |
 
-1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`).
+1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`; for NVMe media, `miniboot_flash` and `miniboot_nvme`).
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-s100-back-region.png" alt="Back up specific regions" style={{ width: '100%' }} />
 
@@ -120,9 +123,11 @@ Back up the image of specific regions to your PC. The supported backup regions a
    | miniboot_flash | `miniboot_flash_backup.img` | `miniboot_flash.img` |
    | miniboot_emmc | `miniboot_emmc_backup.img` | `miniboot_emmc.img` |
    | emmc | `emmc_disk_backup.img` | **`emmc_disk.simg`** |
+   | miniboot_nvme | `miniboot_nvme_backup.img` | `miniboot_nvme.img` |
+   | nvme | `nvme_disk_backup.img` | **`nvme_disk.simg`** |
 
    :::note
-   The `emmc` region requires changing the extension from `.img` to `.simg`.
+   The `emmc` and `nvme` full-disk regions require changing the extension from `.img` to `.simg`.
    :::
 
 4. Flash via [Flash specific regions](./03_burn.md#flashing-specific-regions), selecting the same regions as you backed up.

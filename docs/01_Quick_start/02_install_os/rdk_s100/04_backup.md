@@ -66,11 +66,12 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
    | 区域/分区 | 说明 |
    | --- | --- |
    | 区域 `miniboot_flash` | NOR Flash 启动镜像 |
-   | 区域 `miniboot_emmc` | eMMC 基础启动镜像 |
+   | 区域 `miniboot_emmc` | eMMC 基础启动镜像（eMMC 系统） |
+   | 区域 `miniboot_nvme` | NVMe 基础启动镜像（NVMe 系统） |
    | 分区 `boot`、`system` 等（按需） | U-Boot 之后的分区 |
 
    :::note
-   不勾选 `emmc` 区域，因为 `miniboot` 已覆盖启动镜像，其余按分区备份即可。
+   启动区域按当前系统的启动介质选择：eMMC 系统勾选 `miniboot_emmc`，NVMe 系统勾选 `miniboot_nvme`。不勾选 `emmc` / `nvme` 整盘区域，因为 `miniboot` 已覆盖启动镜像，其余按分区备份即可。
    :::
 
 2. 等待备份完成，然后在解压后的 `product` 文件夹的 `img_packages/` 目录下查看镜像：
@@ -88,22 +89,24 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
 
    | 原路径 | 重命名后路径 | 命名规则 |
    | --- | --- | --- |
-   | `img_packages/disk/` | 不变 | 去掉 `_backup`<br />- `miniboot_flash_backup.img` → `miniboot_flash.img`<br />- `miniboot_emmc_backup.img` → `miniboot_emmc.img` |
+   | `img_packages/disk/` | 不变 | 去掉 `_backup`<br />- `miniboot_flash_backup.img` → `miniboot_flash.img`<br />- `miniboot_emmc_backup.img` → `miniboot_emmc.img`<br />- `miniboot_nvme_backup.img` → `miniboot_nvme.img` |
    | `img_packages/backup/` | `img_packages/` | 名称不变（如 `boot.img`、`system.img`） |
 
 4. 按 [烧录指定区域](./03_burn.md#烧录指定区域) 和 [烧录指定分区镜像](./03_burn.md#烧录指定分区镜像) 烧录，勾选与备份时相同的区域和分区。
 
 ## 备份指定区域
 
-备份指定区域的镜像到 PC。支持的备份区域如下：
+备份指定区域的镜像到 PC。`miniboot_flash` 位于 NOR Flash，与所选介质无关，eMMC/NVMe 均可备份；其余区域按「实际存储介质」列与所选介质对应。支持的备份区域如下：
 
 | 区域 | 实际存储介质 | 固件内容 | 备份镜像 |
 | --- | --- | -------- | ------------ |
 | miniboot_flash | NOR Flash | NOR Flash 基础启动镜像 | img_packages/disk/miniboot_flash_backup.img |
 | miniboot_emmc | eMMC | eMMC 基础启动镜像 | img_packages/disk/miniboot_emmc_backup.img |
 | emmc | eMMC | eMMC 完整镜像 | img_packages/disk/emmc_disk_backup.img |
+| miniboot_nvme | NVMe | NVMe 基础启动镜像 | img_packages/disk/miniboot_nvme_backup.img |
+| nvme | NVMe | NVMe 完整镜像 | img_packages/disk/nvme_disk_backup.img |
 
-1. 在 [烧录全镜像](./03_burn.md#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **备份指定区域**，勾选目标区域（如 `miniboot_flash` 和 `miniboot_emmc`）。
+1. 在 [烧录全镜像](./03_burn.md#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **备份指定区域**，勾选目标区域（如 `miniboot_flash` 和 `miniboot_emmc`；NVMe 介质则为 `miniboot_flash` 和 `miniboot_nvme`）。
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-back-region.png" alt="备份指定区域界面" style={{ width: '100%' }} />
 
@@ -120,9 +123,11 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
    | miniboot_flash | `miniboot_flash_backup.img` | `miniboot_flash.img` |
    | miniboot_emmc | `miniboot_emmc_backup.img` | `miniboot_emmc.img` |
    | emmc | `emmc_disk_backup.img` | **`emmc_disk.simg`** |
+   | miniboot_nvme | `miniboot_nvme_backup.img` | `miniboot_nvme.img` |
+   | nvme | `nvme_disk_backup.img` | **`nvme_disk.simg`** |
 
    :::note
-   `emmc` 区域的扩展名须由 `.img` 改为 `.simg`。
+   `emmc` / `nvme` 整盘区域的扩展名须由 `.img` 改为 `.simg`。
    :::
 
 4. 按 [烧录指定区域](./03_burn.md#烧录指定区域) 烧录，勾选与备份时相同的区域。
