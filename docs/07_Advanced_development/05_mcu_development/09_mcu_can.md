@@ -581,6 +581,32 @@ const Flexcan_Ip_ConfigType Flexcan_aCtrlConfigPB[10U]=
 ```
 </DocScope>
 
+<DocScope products="RDK S600">
+## 禁止自动重传配置
+
+启用MCU侧的禁止自动重传需执行以下步骤：
+1. `Config/McalCdd/gen_s600_md_mcu1/Can/inc/Can_Cfg.h`中启用`CAN_TX_ERR_ABORT_SUPPORT`宏
+```c
+/**
+*   @brief      Enable/Disable abort Tx frame on first CAN TX error (ACK/bit)
+*/
+#define CAN_TX_ERR_ABORT_SUPPORT    (STD_ON)
+```
+2. `Target/Target_S600/Target-hobot-lite-freertos-mcu1/target/FreeRtosOsHal/Isr_Hal.c`中使能对应实例的错误中断（S600 默认使用 CAN1~CAN10，需将使用到的实例对应错误中断修改为 `ENABLE`）
+```c
+{Os_IntChannel_Can1_ErrorIsr, Os_Isr_Can1_ErrorIsr, OS_IMASK_FOR_Can1_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can2_ErrorIsr, Os_Isr_Can2_ErrorIsr, OS_IMASK_FOR_Can2_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can3_ErrorIsr, Os_Isr_Can3_ErrorIsr, OS_IMASK_FOR_Can3_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can4_ErrorIsr, Os_Isr_Can4_ErrorIsr, OS_IMASK_FOR_Can4_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can5_ErrorIsr, Os_Isr_Can5_ErrorIsr, OS_IMASK_FOR_Can5_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can6_ErrorIsr, Os_Isr_Can6_ErrorIsr, OS_IMASK_FOR_Can6_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can7_ErrorIsr, Os_Isr_Can7_ErrorIsr, OS_IMASK_FOR_Can7_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can8_ErrorIsr, Os_Isr_Can8_ErrorIsr, OS_IMASK_FOR_Can8_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can9_ErrorIsr, Os_Isr_Can9_ErrorIsr, OS_IMASK_FOR_Can9_ErrorIsr/8, ENABLE},
+{Os_IntChannel_Can10_ErrorIsr, Os_Isr_Can10_ErrorIsr, OS_IMASK_FOR_Can10_ErrorIsr/8, ENABLE},
+```
+</DocScope>
+
 ## 多包合并配置
 
 CAN 驱动支持接收多包合并数据传输功能，当 CAN 驱动接收到一定阈值的数据包时，会将它们合并，通过 IPC 从 MCU 传输到 Acore。目的是为了减少 IPC 传输频率，提高传输效率。在此基础上提供了合包数量和超时时间两个可配参数。
