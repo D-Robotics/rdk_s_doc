@@ -3,11 +3,36 @@ name: CI Check
 on:
   pull_request:
     branches: [main]
+    # 纯元数据改动不触发：workflow 本身、README、许可证都不影响站点构建
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - 'LICENSE*'
+
+# 同一 PR 连推多次时取消旧任务，只保留最新一次
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: self-hosted
+    timeout-minutes: 20
     steps:
+      # runner 到 github.com 偶发断连；先做 30 秒内的可达性探测，
+      # 避免 checkout 三次重试各等 2 分钟以上（一次故障白跑 7 分钟）
+      - name: Probe github.com egress
+        run: |
+          for i in 1 2 3; do
+            if curl -sS --max-time 10 -o /dev/null https://github.com; then
+              echo "github.com reachable (attempt $i)"
+              exit 0
+            fi
+            echo "Attempt $i failed, retrying..."
+            sleep 5
+          done
+          echo "::error::github.com unreachable from runner"
+          exit 1
       - uses: actions/checkout@v5
       - name: Detect local Node.js on runner
         id: detect_node

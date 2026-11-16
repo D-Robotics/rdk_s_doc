@@ -6,13 +6,34 @@ on:
       - main  # 当 main 分支有推送时触发部署
   workflow_dispatch: # 允许手动触发
 
+# 部署串行执行，不取消进行中的任务：取消可能留下半套 gh-pages 产物
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: self-hosted
+    timeout-minutes: 20
     env:
       GUAJI_ASSISTANT_ORIGIN: https://developer.d-robotics.cc
 
     steps:
+    # runner 到 github.com 偶发断连；先做 30 秒内的可达性探测，
+    # 避免 checkout 三次重试各等 2 分钟以上（一次故障白跑 7 分钟）
+    - name: Probe github.com egress
+      run: |
+        for i in 1 2 3; do
+          if curl -sS --max-time 10 -o /dev/null https://github.com; then
+            echo "github.com reachable (attempt $i)"
+            exit 0
+          fi
+          echo "Attempt $i failed, retrying..."
+          sleep 5
+        done
+        echo "::error::github.com unreachable from runner"
+        exit 1
+
     - name: Checkout repository
       uses: actions/checkout@v5
 
@@ -28,7 +49,7 @@ jobs:
       run: |
         git config --global user.email "liql01@qq.com"
         git config --global user.name "liqinglian01"
-        
+
     - name: Setup SSH
       run: |
         mkdir -p ~/.ssh
