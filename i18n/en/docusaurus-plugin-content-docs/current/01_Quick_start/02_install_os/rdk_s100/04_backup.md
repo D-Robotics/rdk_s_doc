@@ -5,6 +5,10 @@ description: Describes how to back up the RDK S100 system image with XBurn and r
 
 # Back up and restore the image
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 This page describes how to back up the current RDK S100 system to an image, and restore it to the source board or copy it to a new board.
 
 ## Overview
@@ -95,6 +99,8 @@ Back up the complete system image for restoring to the source board or copying t
 
 ## Back up specific regions
 
+<DocScope versions=">= 4.1.0">
+
 Back up the image of specific regions to your PC. `miniboot_flash` is on NOR Flash and is independent of the selected medium; both eMMC and NVMe can back it up. Other regions correspond to the selected medium per the "Actual storage medium" column. The supported backup regions are:
 
 | Region | Actual storage medium | Firmware content | Backup image |
@@ -105,7 +111,21 @@ Back up the image of specific regions to your PC. `miniboot_flash` is on NOR Fla
 | miniboot_nvme | NVMe | Basic boot image on NVMe | img_packages/disk/miniboot_nvme_backup.img |
 | nvme | NVMe | Complete NVMe image | img_packages/disk/nvme_disk_backup.img |
 
-1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`; for NVMe media, `miniboot_flash` and `miniboot_nvme`).
+</DocScope>
+
+<DocScope versions="4.0.5">
+
+Back up the image of specific regions to your PC. The supported backup regions are:
+
+| Region | Actual storage medium | Firmware content | Backup image |
+| --- | --- | -------- | ------------ |
+| miniboot_flash | NOR Flash | Basic boot image on NOR Flash | img_packages/disk/miniboot_flash_backup.img |
+| miniboot_emmc | eMMC | Basic boot image on eMMC | img_packages/disk/miniboot_emmc_backup.img |
+| emmc | eMMC | Complete eMMC image | img_packages/disk/emmc_disk_backup.img |
+
+</DocScope>
+
+1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`).
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-s100-back-region.png" alt="Back up specific regions" style={{ width: '100%' }} />
 
@@ -122,11 +142,11 @@ Back up the image of specific regions to your PC. `miniboot_flash` is on NOR Fla
    | miniboot_flash | `miniboot_flash_backup.img` | `miniboot_flash.img` |
    | miniboot_emmc | `miniboot_emmc_backup.img` | `miniboot_emmc.img` |
    | emmc | `emmc_disk_backup.img` | **`emmc_disk.simg`** |
-   | miniboot_nvme | `miniboot_nvme_backup.img` | `miniboot_nvme.img` |
-   | nvme | `nvme_disk_backup.img` | **`nvme_disk.simg`** |
+
+   <DocScope versions=">= 4.1.0">NVMe systems also need `miniboot_nvme_backup.img` → `miniboot_nvme.img` and `nvme_disk_backup.img` → `nvme_disk.simg`.</DocScope>
 
    :::note
-   The `emmc` and `nvme` full-disk regions require changing the extension from `.img` to `.simg`.
+   The `emmc`<DocScope versions=">= 4.1.0"> and `nvme`</DocScope> full-disk regions require changing the extension from `.img` to `.simg`.
    :::
 
 4. Flash via [Flash specific regions](./03_burn.md#flashing-specific-regions), selecting the same regions as you backed up.
