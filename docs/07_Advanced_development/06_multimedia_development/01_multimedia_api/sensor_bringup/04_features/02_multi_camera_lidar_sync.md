@@ -415,9 +415,3 @@ Camera 同步无独立函数 API，通过传感器配置文件 + LPWM 配置下�
 由于硬件或者外设差异，PPS 可能落在了高电平区域，若关闭缓慢同步功能或者缓慢同步成功后需要走完高电平区域才能进入下一个 trigger 周期，导致 trigger 周期内 LPWM 波形数量未达到预期，从而影响 sensor 帧率。
 
 实际使用需要确保 PPS 稳定落在低电平区域，因此可以根据实际调试情况适当调大 offset。
-
-## 相关文档
-
-- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp)
-- [时间同步方案](/Advanced_development/system_software/driver_timesync)
-- [摄像头使用](/Demos/peripheral/camera/mipi_camera)

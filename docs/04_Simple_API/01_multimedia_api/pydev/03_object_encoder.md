@@ -249,9 +249,3 @@ Encoder.close()
 **原因**：该接口需在 `encode()` 创建编码通道之后调用。
 
 **解决**：先调用 `encode()` 使能编码通道，再调用 `get_img`。
-
-## 相关文档
-
-- [多媒体接口说明](./01_pydev_multimedia_api.md)
-- [Decoder 对象](./04_object_decoder.md)
-- [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

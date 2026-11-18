@@ -292,8 +292,3 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 **原因**：sensor 未正常出流（未启动、接线异常）、帧率与配置不匹配、或 mipi_rx 与硬件不符。
 
 **解决**：检查 camera 是否点亮（对比正常运行时的输出日志）、核对 mipi_rx/link_port 与实际接线、确认配置文件中分辨率/帧率与 sensor 匹配。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

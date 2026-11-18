@@ -236,9 +236,3 @@ free(img);
 **原因**：`sp_start_decode` 的 `stream_file` 传文件名时解码文件，传空字符串时需手动送入码流。
 
 **解决**：`sp_start_decode` 的 `stream_file` 传空字符串，再通过 `sp_decoder_set_image` 送入码流数据。
-
-## 相关文档
-
-- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
-- [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)
-- [解码→显示](/Demos/multimedia_demo/cdev/decode2display)

@@ -98,11 +98,3 @@ make
 **原因**：输入文件路径不存在，或输入分辨率与实际不符。
 
 **解决**：确认输入文件存在，且 `--iwidth` / `--iheight` 与输入数据分辨率一致。
-
-## 相关文档
-
-- [Python 示例](../02_pydev/01_pydev_multimedia.md)
-- [视频采集](./01_vio_capture.md)
-- [VIO（视频输入）API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
-- [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
-- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)

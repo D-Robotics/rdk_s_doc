@@ -148,10 +148,3 @@ flowchart TD
 **原因**：MISO 与 MOSI 未短接，MISO 处于默认电平。
 
 **解决**：按 [环境准备](#环境准备) 将 MISO 与 MOSI 短接后重试，成功时应打印 `0x55 0xAA`。
-
-## 相关文档
-
-- 用到的接口：[SPI 调试指南](../../../../07_Advanced_development/04_driver_development/07_driver_spi_dev.md)
-- 同类示例：[串口应用](./04_uart.md)（回环测试）
-- 板端代码：`/app/40pin_samples/test_spi.py`
-- [管脚定义](./01_40pin_define.md)

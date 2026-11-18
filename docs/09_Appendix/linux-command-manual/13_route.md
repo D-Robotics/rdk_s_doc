@@ -95,9 +95,3 @@ route del -net 192.168.2.0 netmask 255.255.255.0 reject
 route del default gw 192.168.2.1
 route add default gw 192.168.2.1
 ```
-
-## 相关文档
-
-- [ip](./08_ip.md)
-- [netstat](./10_netstat.md)
-

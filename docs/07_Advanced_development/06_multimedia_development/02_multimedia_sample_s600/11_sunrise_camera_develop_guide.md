@@ -595,8 +595,3 @@ handleMessage(event) {
 **原因**：子模块未按依赖关系顺序启动（如算法模块在 VIN/VENC 之前启动）。
 
 **解决**：按「子模块启动顺序」章节核对启动顺序，依赖前置模块就绪后再启动后置模块。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

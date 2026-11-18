@@ -262,11 +262,3 @@ sudo systemctl status docker
 **原因**：命令中使用了 S100 的工具链版本 `11.3.rel1`。
 
 **解决**：将工具链下载与解压命令中的 `11.3.rel1` 替换为 `13.2.Rel1`（RDK S600）。
-
-## 相关文档
-
-- [搭建开发环境](./01_environment_build.md)
-- [BSP 源码目录结构](./02_bsp_source_layout.md)
-- [构建系统开发指南（rdk_gen）](./03_rdk_gen.md)
-- [使用 Podman 编译](./05_podman_build.md)
-- [系统烧录](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)

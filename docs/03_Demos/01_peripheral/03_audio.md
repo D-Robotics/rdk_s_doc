@@ -511,11 +511,3 @@ Playing WAVE 'test.wav' : Signed 16 bit Little Endian, Rate 48000 Hz, Stereo
 **解决**：改用 **8 通道、16 kHz、`S16_LE`** 的 `arecord`（回采在通道 7、8）；播放文件须同为 **16 kHz / 8 ch / S16_LE**（可用上文 `ffmpeg` 生成 `1khz_16k_8ch.wav`）；本板实测 3 s 录音约 **768 KB**。
 
 </DocScope>
-
-## 相关文档
-
-- 用到的接口：[音频调试指南](../../07_Advanced_development/04_driver_development/09_driver_audio.md)
-- 系统配置：[音频配置](../../02_System_configuration/10_audio_output.md)
-- 同类示例：[I2C 应用](./01_40pin/01_s100/05_i2c.md)（同一 Audio HAT 的 I2C5 扫描）
-- 板端工具：`arecord` / `aplay` / `amixer`（`alsa-utils`）
-- ALSA 官方 API：https://www.alsa-project.org/alsa-doc/alsa-lib/pcm.html

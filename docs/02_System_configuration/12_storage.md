@@ -134,9 +134,3 @@ sudo resize2fs /dev/<rootfs分区>
 **原因**：rootfs 分区后已无未分配空间（本机 rootfs 为最后一个分区）。
 
 **解决**：仅当分区后存在未分配空间时才可 `growpart`；否则另挂存储迁移数据。
-
-## 相关文档
-
-- [软件包管理 apt](./03_system_update/02_apt_usage.md)
-- [系统日志查看](./15_system_log.md)
-- [Linux 命令：mount](../09_Appendix/linux-command-manual/09_mount.md)

@@ -606,10 +606,3 @@ S100
   1. 执行 `cat /sys/class/boardinfo/adc_boardid` 查看实际 boardid。
   2. 与 SBL/U-Boot log 中打印的 boardid 对比，判断三侧是否一致。
   3. 不一致时，在 `hobot-loadko.sh` 中补全自定义 boardid 的分支（见上文「根据 boardid 加载 ko」），或修正三侧 boardid 定义。
-
-## 相关文档
-
-- [开发环境与编译](../06_environment_build/01_environment_build.md)
-- [驱动开发指南](/Advanced_development/driver_development)
-- [MCU 开发指南](/Advanced_development/mcu_development)
-- [硬件介绍](/01_hardware_introduction)

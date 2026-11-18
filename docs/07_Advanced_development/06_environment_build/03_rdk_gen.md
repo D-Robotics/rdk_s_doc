@@ -683,11 +683,3 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 **原因**：板卡版本不支持 NVMe 启动，或使用了不匹配 NVMe 模式的 miniboot_flash 镜像。
 
 **解决**：确认板卡为 RDK S100 V0P6 及以上或 RDK S600 V1P0 及以上，且 miniboot_flash 镜像按 NVMe 模式编译。
-
-## 相关文档
-
-- [搭建开发环境](./01_environment_build.md)
-- [BSP 源码目录结构](./02_bsp_source_layout.md)
-- [Docker 编译环境](./04_docker_build.md)
-- [Podman 编译环境](./05_podman_build.md)
-- [系统定制](../03_system_software/02_system_customization/01_system_customization.md)

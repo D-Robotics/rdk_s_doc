@@ -256,9 +256,3 @@ sudo reboot
 | 改了 .service 不生效 | 每次修改 service 文件后必须执行 `sudo systemctl daemon-reload` |
 | 启动顺序不对 / 硬件未就绪 | 用 `After=` 显式声明依赖（如 `hobot-loadko.service` 内核模块加载完成）；详见方法一 `.service` 文件字段说明 |
 | 程序以 root 运行有安全顾虑 | 在 `[Service]` 段改用 `User=<非特权用户>`，避免不必要的 root 权限 |
-
-## 相关文档
-
-- [系统日志查看](./15_system_log.md)
-- [用户与权限管理](./14_user_permission.md)
-- [软件包管理 apt](./03_system_update/02_apt_usage.md)

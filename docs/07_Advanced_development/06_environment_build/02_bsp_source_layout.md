@@ -80,9 +80,3 @@ sudo ./pack_image.sh  # 一键构建系统镜像
 详见 [搭建开发环境](./01_environment_build.md)。
 
 <!-- TODO(Sx): 待收集 —— 常见问题/调试：BSP 目录结构参考页暂无真实案例 -->
-
-## 相关文档
-
-- [搭建开发环境](./01_environment_build.md)
-- [构建系统开发指南](./03_rdk_gen.md)
-- [系统定制](../03_system_software/02_system_customization/01_system_customization.md)

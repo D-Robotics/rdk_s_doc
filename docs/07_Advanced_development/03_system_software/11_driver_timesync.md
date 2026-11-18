@@ -926,8 +926,3 @@ MCU 侧 log 示例：
 **原因**：该报错仅为 warning，不影响运行。PHC 内部引脚编号在驱动里写死为 0，不需要用户空间指定。
 
 **解决**：无需处理，忽略该 warning 即可。
-
-## 相关文档
-
-- [时钟与 RTC 同步](/System_configuration/rtc_ntp)
-- [IPC 模块介绍](/Advanced_development/system_software/driver_ipc)

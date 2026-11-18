@@ -786,8 +786,3 @@ root@drobot:~# devmem 0x33801060 32     # 改回 SPI3_MOSI，槽位 0
 **原因**：`pinconf` 属性名与驱动支持的关键字不一致。
 
 **解决**：对照「Pinconf 支持的属性」中的关键字表，核对设备树中属性拼写与取值。
-
-## 相关文档
-
-- [GPIO 使用](/Advanced_development/driver_development/driver_gpio_dev)
-- [扩展引脚应用](/Demos/peripheral/40pin)

@@ -167,8 +167,3 @@ echo stop > /sys/class/remoteproc/remoteproc_mcu1/state
 # 启动
 echo start > /sys/class/remoteproc/remoteproc_mcu1/state
 ```
-
-## 相关文档
-
-- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
-- [Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)

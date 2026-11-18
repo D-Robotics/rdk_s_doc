@@ -355,10 +355,3 @@ void I2c_AsyncCallbackSet(uint8 I2cChannel, I2c_CallbackType I2cCallback);
 ## 常见问题
 
 <!-- TODO(Sx): 待收集 -->
-
-## 相关文档
-
-- [MCU 快速入门指南](01_basic_information.md)
-- [MCU Port 配置](12_mcu_port/02_development_manual.md)
-- [I2C 驱动调试指南](/Advanced_development/driver_development/driver_i2c_dev)
-- [40pin I2C 示例](/Demos/peripheral/01_40pin/s100/i2c)

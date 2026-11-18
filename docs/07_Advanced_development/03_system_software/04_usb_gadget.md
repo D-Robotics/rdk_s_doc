@@ -259,8 +259,3 @@ Gadget 模式切换统一通过 `usb-gadget.sh` 脚本完成：
 
 1. 拔掉 USB 线缆重新连接
 2. 执行 `usb-gadget.sh stop` 命令停止当前模式，再启动新模式
-
-## 相关文档
-
-- [系统定制](/Advanced_development/system_software/system_customization)
-- [外设应用示例](/Demos/peripheral)

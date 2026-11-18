@@ -119,11 +119,3 @@ import DocScope from '@site/src/components/DocScope';
 - **兼容性测试**：验证驱动在不同硬件配置或软件版本下的兼容性。
 
 各测试项的具体测试方法、步骤及判定标准见对应章节。
-
-## 相关文档
-
-- [AutoTest 使用方法](./02_auto_test.md)
-- [CPU-BPU-DDR 压力测试](./03_bpu_cpu_ddr_stress.md)
-- [CPU 性能测试](./09_cpu_performance.md)
-- [DDR 带宽测试](./10_ddr_bandwidth.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)

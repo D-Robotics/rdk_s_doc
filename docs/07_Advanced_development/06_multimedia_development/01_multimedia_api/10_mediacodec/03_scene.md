@@ -33,8 +33,3 @@ description: "RDK S100/S600 MediaCodec 典型应用场景与链路图"
 ## 编解码 sample
 
 可参考 [sample_codec 使用说明](/Advanced_development/multimedia_development/multimedia_sample/sample_codec)。
-
-## 相关文档
-
-- [MediaCodec 常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)
-- [MediaCodec 调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)

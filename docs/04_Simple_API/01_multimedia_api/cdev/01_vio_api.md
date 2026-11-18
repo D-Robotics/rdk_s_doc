@@ -425,9 +425,3 @@ free(buf);
 **原因**：送入的数据不是 `NV12` 格式，或分辨率与 `sp_open_vps` 的原始帧分辨率不一致。
 
 **解决**：确保 `frame_buffer` 数据为 `NV12` 格式，且分辨率与 `sp_open_vps` 配置的原始帧分辨率一致。
-
-## 相关文档
-
-- [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)
-- [VIN API](/Advanced_development/multimedia_development/multimedia_api/vin_api)

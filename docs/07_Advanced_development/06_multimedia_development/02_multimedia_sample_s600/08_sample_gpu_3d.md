@@ -133,8 +133,3 @@ Saved bezier.bmp
 **原因**：OpenCL 面向通用计算（无窗口），OpenGL ES 面向图形渲染（需要显示）。
 
 **解决**：图像/数据处理类任务用 OpenCL；需要渲染到屏幕/窗口的任务用 OpenGL ES。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

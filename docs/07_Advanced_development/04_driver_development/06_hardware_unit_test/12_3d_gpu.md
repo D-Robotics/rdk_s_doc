@@ -402,9 +402,3 @@ Error: main: Could not initialize canvas
 
 - 问题分析：当前未处于 Wayland 图形会话（如从 SSH/串口等无显示环境执行），glmark2-es2-wayland 无法连接到 Wayland 合成器，故无法初始化画布。
 - 解决办法：接好 HDMI 显示器，在登录界面选择 GNOME 或 Ubuntu (Wayland) 会话登录后，在桌面终端内执行 `glmark2-es2-wayland`。
-
-## 相关文档
-
-- [概述](./01_overview.md)
-- [AutoTest 使用方法](./02_auto_test.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)

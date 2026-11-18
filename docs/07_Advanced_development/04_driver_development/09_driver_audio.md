@@ -936,23 +936,3 @@ write error (DMA or IRQ trouble?)
 **解决**：接 USB 声卡，或 14-pin I2S 子板 + 上文模块加载流程；勿与 SPI1 overlay 同时占用 `hsi_pcm1`。
 
 </DocScope>
-
-## 相关文档
-
-- [I2C 调试指南](./03_driver_i2c_dev.md)
-- [Pinctrl 调试指南](./05_driver_pinctrl_dev.md)
-- [音频配置](../../02_System_configuration/10_audio_output.md)
-
-<DocScope products="RDK S100">
-
-- [I2C 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/05_i2c.md)
-- [音频应用](../../03_Demos/01_peripheral/03_audio.md)
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-- [音频应用](../../03_Demos/01_peripheral/03_audio.md)
-- [SPI 调试指南](./07_driver_spi_dev.md)（I2S1 与 SPI1 引脚复用）
-
-</DocScope>

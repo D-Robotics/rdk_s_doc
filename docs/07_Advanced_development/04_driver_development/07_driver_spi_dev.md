@@ -677,21 +677,3 @@ cat /sys/kernel/debug/pinctrl/*/pinmux-pins | grep -i spi
 **解决**：使用 14-pin 引出的 **SPI1**（`/dev/spidev1.0`）。先在板端确认 `/boot/overlays/s600_v0p2_enable_spi1.dtbo` 已安装（来自 `hobot-io-samples` 包），并在 `/boot/config.txt` 配置 `dtbo_file_path` 后重启；勿在 SPI0 引脚或 `spidev0.0` 上接外部 SPI 从设备。
 
 </DocScope>
-
-## 相关文档
-
-- [GPIO 使用](./04_driver_gpio_dev.md)
-- [Pinctrl 调试指南](./05_driver_pinctrl_dev.md)
-- [MCU SPI 使用指南](../11_mcu_development/06_mcu_spi.md)
-
-<DocScope products="RDK S100">
-
-- [SPI 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/06_spi.md)
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-- [SPI 应用（RDK S600）](../../03_Demos/01_peripheral/01_40pin/02_s600/04_spi.md)
-
-</DocScope>

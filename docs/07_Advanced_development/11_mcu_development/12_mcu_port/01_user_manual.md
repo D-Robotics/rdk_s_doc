@@ -555,10 +555,3 @@ Port_Func 提供的 GPIO 接口，使用的 PinIdx 为[Port_Func 模块 PIN 号�
 **解决**：核对 `Gpio_Blacklist` 数组，更换为未列入黑名单的 PIN。
 
 <!-- TODO(Sx): 待板端复核，补充实测问题素材 -->
-
-## 相关文档
-
-- [Port 开发指南](02_development_manual.md)
-- [MCU 快速入门指南](../01_basic_information.md)
-- [ICU 使用指南](../14_mcu_ICU.md)
-- [MCU Port 扩展板](../../../01_Quick_start/01_hardware_introduction/03_expansion_board/02_mcu/01_rdk_mcu_port_expansion_board.md)

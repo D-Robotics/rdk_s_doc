@@ -611,8 +611,3 @@ ls /proc/device-tree/soc/pvt/
 **解决**：`dmesg | grep -i pvt` 查看驱动加载日志；缺失时 `modprobe hb_pvt`，再 `ls /sys/class/thermal/` 确认 thermal zone 已注册。
 
 </DocScope>
-
-## 相关文档
-
-- [Thermal 和 CPU 频率管理](/System_configuration/frequency_management)：用户层的温度查询、策略与频率配置
-- [配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)

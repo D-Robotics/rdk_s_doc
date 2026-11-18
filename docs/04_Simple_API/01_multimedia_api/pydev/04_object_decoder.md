@@ -302,9 +302,3 @@ Decoder.close()
 **原因**：`decode` 返回值为 2 个成员的 `list`。
 
 **解决**：`list[0]` 为 0 表示解码成功、-1 表示失败；`list[1]` 为输入码流文件的帧数（成功时有效）。
-
-## 相关文档
-
-- [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [Encoder 对象](/Simple_API/multimedia_api/pydev/object_encoder)
-- [解码→显示](/Demos/multimedia_demo/cdev/decode2display)

@@ -89,9 +89,3 @@ flowchart LR
 完整列表及源码目录说明见 [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)。
 
 <!-- TODO(Sx): 待收集 —— 调试、常见问题：单 deb 包开发流程尚在探索阶段（ADR D3），暂无真实「现象→原因→解决」素材，待研发流程稳定后补充 -->
-
-## 相关文档
-
-- [系统定制](../02_system_customization/01_system_customization.md)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)
-- [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)

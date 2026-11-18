@@ -439,10 +439,3 @@ hbn_free_gdc_cfg((uint32_t *)cfg_buf);   /* 释放 bin buf */
 :::doc_scope{products="RDK S600"}
 - [sample_gdc 使用说明](../../02_multimedia_sample_s600/05_sample_gdc.md)
 :::
-
-## 相关文档
-
-- [GDC 概述](./01_gdc_overview.md)
-- [GDC Bin 生成 API](./03_gdc_bin_api.md)
-- [GDC Tool](./04_gdc_tool.md)
-- [HBN 框架](../01_hbn_api.md)

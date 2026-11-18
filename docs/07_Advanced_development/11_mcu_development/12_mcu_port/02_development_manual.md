@@ -180,8 +180,3 @@ MCU0 在启动时，会调度 `Port_Init()` 接口对 MCU 的所有 PIN 进行�
 **解决**：不建议用户在 MCU1 二次调度 `Port_Init()` 接口。
 
 <!-- TODO(Sx): 待收集（补充第 2 条） -->
-
-## 相关文档
-
-- [Port 使用指南](01_user_manual.md)
-- [MCU1 开发指南](../03_FreeRTOS_development.md)

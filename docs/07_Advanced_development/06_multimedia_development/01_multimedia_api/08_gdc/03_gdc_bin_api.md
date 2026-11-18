@@ -226,17 +226,3 @@ int32_t hbn_free_gdc_cfg(uint32_t *cfg_buf);
 | centerx | double | x 轴中心，通常为水平点数的一半 |
 | centery | double | y 轴中心，通常为垂直点数的一半 |
 | *points | point_t | 转换序列，数量 = w×h |
-
-## 相关文档
-
-- [GDC 概述](./01_gdc_overview.md)
-- [GDC Tool](./04_gdc_tool.md)
-- [GDC API](./02_gdc_api.md)
-
-:::doc_scope{products="RDK S100"}
-- [sample_gdc 使用说明](../../02_multimedia_sample/05_sample_gdc.md)
-:::
-
-:::doc_scope{products="RDK S600"}
-- [sample_gdc 使用说明](../../02_multimedia_sample_s600/05_sample_gdc.md)
-:::

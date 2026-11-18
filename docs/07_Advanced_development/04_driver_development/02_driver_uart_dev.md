@@ -603,9 +603,3 @@ echo 'file 8250_pdma.c -p' > /sys/kernel/debug/dynamic_debug/control
 **解决**：先通过 `cat /proc/tty/driver/serial` 确认哪些通道已注册（`uart:16550A`），再用已注册的节点做测试（S600 可用 `ttyS0`、`ttyS6`、`ttyS7`）。
 
 </DocScope>
-
-## 相关文档
-
-- [扩展引脚应用](/Demos/peripheral/40pin)
-- [dpkg-deb 命令](/Appendix/linux-command-manual/dpkg-deb)
-- [调试串口](/System_configuration/debug_serial)

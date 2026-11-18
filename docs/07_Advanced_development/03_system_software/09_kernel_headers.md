@@ -435,8 +435,3 @@ sudo echo hello > /lib/modules-load.d/hello.conf
 **原因**：驱动模块未签名，而板端开启了模块签名校验（仅旧版本，详见 [模块签名](#模块签名) 的版本说明）。
 
 **解决**：参照「模块签名」章节对 `.ko` 文件签名，再通过 `modprobe` 或 `insmod` 加载。
-
-## 相关文档
-
-- [应用实时内核](/Advanced_development/system_software/realtime_kernel)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)

@@ -61,7 +61,3 @@ nohup /root/test.sh > test.log 2>&1 &
 - 0 – stdin (standard input，标准输入)
 - 1 – stdout (standard output，标准输出)
 - 2 – stderr (standard error，标准错误输出)
-
-## 相关文档
-
-- [ps](./12_ps.md)

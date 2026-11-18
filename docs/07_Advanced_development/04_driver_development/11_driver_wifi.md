@@ -462,8 +462,3 @@ root@drobot:~# lspci -v -s 04:00.0
 **原因**：联网配置未完成，或配置与当前模组不匹配。
 
 **解决**：接口确认无误后，按「[网络配置](/System_configuration/network_config)」完成 Station 模式联网。
-
-## 相关文档
-
-- [网络配置](/System_configuration/network_config)：Wi-Fi 联网（Station/Soft AP）的用户层配置
-- [PCIe 使用指南](/Advanced_development/driver_development/driver_pcie)

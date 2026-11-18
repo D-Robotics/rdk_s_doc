@@ -95,9 +95,3 @@ Wayland 会话请在「设置 → 显示器」里配置旋转方向。
 - 显示器连接：`cat /sys/class/drm/card0-HDMI-A-1/status` 输出 `connected`。
 - 支持的分辨率：`cat /sys/class/drm/card0-HDMI-A-1/modes` 列出支持的显示模式。
 - 当前分辨率：X11 下 `xrandr` 查看标 `*` 的当前模式；Wayland 下在「设置 → 显示器」查看。
-
-## 相关文档
-
-- [config.txt 配置指南](./05_config_txt/00_overview.md)
-- [屏幕休眠与电源管理](./11_screen_sleep.md)
-- [音频配置](./10_audio_output.md)

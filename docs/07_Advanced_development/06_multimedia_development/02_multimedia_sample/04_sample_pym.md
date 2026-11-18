@@ -102,8 +102,3 @@ pym config:
 **原因**：feedback 模式需手动 `hbn_vnode_sendframe` 发送输入图像；vflow 模式下 PYM 作为 vnode 串入 vflow 自动流转。
 
 **解决**：回灌单张图像调试用 `-f`；在 pipeline 中使用时用默认 vflow 模式，参照 `sample_pipeline`。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

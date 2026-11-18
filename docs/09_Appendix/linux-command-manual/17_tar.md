@@ -345,7 +345,3 @@ tar -tzvf test.tar.gz
 tar -xzvf test.tar.gz 
 a.c
 ```
-
-## 相关文档
-
-- [zip](./19_zip.md)

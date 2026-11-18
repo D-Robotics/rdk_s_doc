@@ -342,9 +342,3 @@ sudo exportfs -v
 **原因**：未设 `anonuid`/`anongid` 或映射的 UID 与板端用户不匹配，匿名客户端写入无权限。
 
 **解决**：导出加 `anonuid=1000,anongid=1000`（映射到 `sunrise`），`sudo exportfs -ra` 重新应用；或让客户端以匹配的 UID 挂载。
-
-## 相关文档
-
-- 默认账号、默认 IP 与联网方式：[网络配置](./01_network_config.md)
-- 登录开发板执行命令：[远程登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)
-- `/userdata` 等分区与持久化存储：[存储与磁盘管理](./12_storage.md)

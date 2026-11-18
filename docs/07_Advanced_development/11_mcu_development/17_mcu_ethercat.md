@@ -1697,10 +1697,3 @@ D-Robotics:/$ [065.302668 0]INFO: ec_config_init wkc == 1
 | WKC 正常 | `Wck` 值稳定等于预期值，不持续为 0 |
 | DC 收敛 | `dt` 值随循环次数逐渐减小（若从站有 DC 支持） |
 | 正常退出 | 依次出现 `EtherCAT to SAFE_OP` → `EtherCAT to INIT` → `EtherCAT bringup completed` |
-
-## 相关文档
-
-- [EtherCAT（Linux 侧）](../04_driver_development/16_driver_ethernet/02_ethercat.md)
-- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
-- [Eth 使用指南](./11_mcu_eth.md)
-- [MCU 代码包结构介绍](./00_code_release.md)

@@ -477,12 +477,3 @@ test_cam_vps_display()
 **原因**：各用例会生成 `output.img`、`encode.h264` 等文件，后一个用例依赖前一个用例的输出文件。
 
 **解决**：按顺序执行用例。
-
-## 相关文档
-
-- [多媒体接口说明](./01_pydev_multimedia_api.md)
-- [Camera 对象](./02_object_camera.md)
-- [Encoder 对象](./03_object_encoder.md)
-- [Decoder 对象](./04_object_decoder.md)
-- [Display 对象](./05_object_display.md)
-- [Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

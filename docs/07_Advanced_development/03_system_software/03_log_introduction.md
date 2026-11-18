@@ -622,8 +622,3 @@ logcat -b log_events -g
 **原因**：pstore 机制只能保存发生 panic 的内核日志，BL31 与 MCU 的 panic 信息无法保存。
 
 **解决**：排查死机时以 pstore 内核日志为准，MCU/BL31 侧信息通过串口或转存 Acore 的方式在运行时留存。
-
-## 相关文档
-
-- [系统日志查看](/System_configuration/system_log)
-- [Linux 命令 dmesg](/Appendix/linux-command-manual/dmesg)

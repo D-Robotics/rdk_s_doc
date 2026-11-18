@@ -572,8 +572,3 @@ pinctrl_cam: pinctrl@37121000 {
 **原因**：方向仍为 `out`（输出态读取的是输出电平），或引脚实际电平确实固定。
 
 **解决**：`echo in > direction` 切换为输入后再读 `value`；仍不变则用万用表实测引脚电平。
-
-## 相关文档
-
-- [扩展引脚应用](/Demos/peripheral/40pin)
-- [Pinctrl 调试指南](/Advanced_development/driver_development/driver_pinctrl_dev)

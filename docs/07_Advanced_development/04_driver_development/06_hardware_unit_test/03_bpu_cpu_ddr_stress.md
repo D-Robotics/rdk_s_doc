@@ -782,10 +782,3 @@ ls -lt /app/chip_base_test/log/
 **解决**：先用 `cat /sys/class/boardinfo/pg_map` 确认可用核，再用 `-c` 显式指定。
 
 </DocScope>
-
-## 相关文档
-
-- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [概述](./01_overview.md)
-- [AutoTest 使用方法](./02_auto_test.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)

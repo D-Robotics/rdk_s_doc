@@ -50,10 +50,3 @@ miniboot 较特殊：无论走 `apt` 还是整机镜像烧录，都会烧录 min
 
 - **`apt upgrade` 后起不来**：跨大版本升级有兼容风险，建议重新烧录正确镜像。
 - **烧录后系统异常**：确认镜像版本与板型匹配；固件降级有兼容风险，确认降级路径官方支持。
-
-## 相关文档
-
-- [软件包管理 apt](./02_apt_usage.md)
-- [烧录步骤](../../01_Quick_start/03_install_os_and_setup/02_burn.md)
-- [miniboot 升级（进阶）](../../07_Advanced_development/03_system_software/07_ota_miniboot.md)
-- [系统 OTA 升级（进阶，默认不开启，需重新编译镜像）](../../07_Advanced_development/03_system_software/06_ota_system.md)

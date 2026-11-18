@@ -713,9 +713,3 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 **原因**：该 GPIO 已被其他进程使用。
 
 **解决**：结束占用进程后重试；示例退出时会自动执行 `GPIO.cleanup()` 释放管脚。也可用 `GPIO.setwarnings(False)` 屏蔽警告。
-
-## 相关文档
-
-- [管脚定义](./01_40pin_define.md)
-- [GPIO 使用](../../../../07_Advanced_development/04_driver_development/04_driver_gpio_dev.md)
-- [C/C++ demo 编程指南](../../../04_demo_support/02_c_cpp_build.md)

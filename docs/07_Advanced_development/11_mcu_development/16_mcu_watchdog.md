@@ -339,8 +339,3 @@ Acore 侧看门狗超时触发中断送到 MCU0 侧，由 MCU0 侧在延时后�
 ## 常见问题
 
 <!-- TODO(Sx): 待收集 -->
-
-## 相关文档
-
-- [看门狗驱动开发指南](../04_driver_development/18_driver_watchdog.md)
-- [MCU 快速入门指南](01_basic_information.md)

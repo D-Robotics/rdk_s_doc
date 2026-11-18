@@ -1101,8 +1101,3 @@ cat /sys/class/vps/mipi_host0/status/regs   # 寄存器快照
 `status/cfg` 用于确认板上跑的到底是不是你配的那份参数；`status/icnt` 的报错计数正常情况下应全为 0。节点按 host 编号区分，即 `mipi_host<hw_id>`（`hw_id` 合法值见 [MIPI RX](#mipi-rx)）。
 
 `param/` 下是可写的调试开关，常用的有 `irq_cnt`（中断计数阈值，超过后驱动会关闭该路中断以防中断风暴）、`dbg_value`（打开调试日志）、`ipi_overst`。**这些参数会改变驱动的运行行为，不要在生产配置上随意调整。**
-
-## 相关文档
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api) —— vnode 通用接口与 `vin_attr_t` 字段表
-- [相机接口 - Camera](/Advanced_development/multimedia_development/multimedia_api/camera_api) —— Sensor 侧 `hbn_camera_*` 接口
-- [视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api) —— `hbn_vflow_*` 建流与绑定接口

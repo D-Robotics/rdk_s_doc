@@ -294,9 +294,3 @@ sp_release_display_module(disp);             // 5. 销毁 DISPLAY 对象
 **原因**：需要绘制的字符串必须是 `GB2312` 编码。
 
 **解决**：将字符串转换为 `GB2312` 编码后传入。
-
-## 相关文档
-
-- [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [Display 对象](/Simple_API/multimedia_api/pydev/object_display)
-- [采集→显示](/Demos/multimedia_demo/cdev/vio2display)

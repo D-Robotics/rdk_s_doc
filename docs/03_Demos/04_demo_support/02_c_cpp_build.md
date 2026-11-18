@@ -66,9 +66,3 @@ sudo apt install libgflags-dev
 - **`make` 报错找不到头文件**：确认在示例目录的 `build/` 下执行、`cmake ..` 成功；部分示例依赖上级 `utils` 目录，不要单独拷贝源码到别处编译。
 - **`cmake` 找不到 OpenCV**：常规镜像已预装；若被卸载用 `sudo apt install libopencv-dev` 重装。
 - **编译慢**：`make -j$(nproc)` 已用满核；板端内存有限，超大型工程建议交叉编译。
-
-## 相关文档
-
-- [ResNet18 (C/C++) 示例](../03_algorithm_demo/02_classification/01_resnet18.md)
-- [模型获取与放置](./01_model_files.md)
-- [开发环境与编译（进阶）](../../07_Advanced_development/06_environment_build/01_environment_build.md)

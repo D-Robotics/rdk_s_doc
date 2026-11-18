@@ -245,9 +245,3 @@ free(stream);
 **原因**：码率影响图像清晰度与码流大小。
 
 **解决**：常用值为 512、1024、2048、4096、8192、16384（单位 Mbps），码率越大图像越清晰但码流越大。
-
-## 相关文档
-
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)
-- [采集→编码](/Demos/multimedia_demo/cdev/vio2encoder)

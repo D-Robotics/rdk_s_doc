@@ -195,8 +195,3 @@ ls -l /dev/block/platform/by-name/userdata
 **原因**：修改启动分区内容与 AVB 校验冲突，AVB 使能时 config.txt 不可用。
 
 **解决**：AVB 默认不使能；如已使能需先关闭 AVB，或改用其它配置入口。
-
-## 相关文档
-
-- [config.txt 解析开发指南](./01_parser_dev.md)
-- [srpi-config](../04_srpi_config/01_overview.md)

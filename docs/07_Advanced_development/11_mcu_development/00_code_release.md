@@ -110,8 +110,3 @@ MCU
 1. **环境搭建**：按 [MCU 快速入门指南](01_basic_information.md) 准备主机编译环境。
 2. **编译**：按 [MCU 系统说明](02_MCU_build_system.md) 编译 MCU1 固件。
 3. **运行**：将编译产物加载到 MCU 运行，细节见 [MCU1 开发指南](03_FreeRTOS_development.md)。
-
-## 相关文档
-
-- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)

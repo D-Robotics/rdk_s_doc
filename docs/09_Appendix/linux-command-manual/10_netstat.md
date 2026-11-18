@@ -149,8 +149,3 @@ netstat -an | grep ':80'
 ```bash
 netstat -anp|grep 8081 | grep LISTEN|awk '{print $7}'|cut -d/ -f1
 ```
-
-## 相关文档
-
-- [route](./13_route.md)
-- [ip](./08_ip.md)

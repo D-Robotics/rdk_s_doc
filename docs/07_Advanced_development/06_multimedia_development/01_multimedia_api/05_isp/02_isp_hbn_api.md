@@ -399,10 +399,3 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | metadata | void* | 附加元数据 |
 
 `buffer`（`hb_mem_graphic_buf_t`）的关键字段：`width` / `height` 为图像宽高，`format` 为像素格式，`stride` / `vstride` 为水平 / 垂直 stride，`plane_cnt` 为 plane 数，`size[]` 为各 plane 大小，`virt_addr[]` / `phys_addr[]` 为各 plane 的虚拟 / 物理地址（完整定义见 `hb_mem_mgr.h`）。
-
-
-## 相关文档
-
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- [ISP概览](./overview)
-- [ISP Tuning API](./isp_tuning_api)

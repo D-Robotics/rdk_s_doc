@@ -404,9 +404,3 @@ YNR 的配置结构，由用户填写。
 | --- | --- | --- | --- | --- | --- | --- |
 | ch_nr3d_pix_out_dma_byps | uint32_t | 32 | 4096 | - | dma 输出数，建议配置为 0 | 是 |
 | ch_nr3d_debug_en | uint32_t | 0 | 1 | - | debug 开关，建议配置为 0 | 是 |
-
-## 相关文档
-
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp)
-- [视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)

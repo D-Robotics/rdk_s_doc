@@ -1311,9 +1311,3 @@ wdump: 0
 **原因**：该文件是标准 JSON，**不支持注释**。参考网上示例时若加入了 `#` 或 `//` 注释，解析会失败。
 
 **解决**：删除文件中的所有注释，只保留键值对；字段含义参见《[通路配置](#通路配置)》。
-
-
-## 相关文档
-
-- [IPC 使用指南（MCU 侧）](/Advanced_development/mcu_development/mcu_ipc)
-- [时间同步方案](/Advanced_development/system_software/driver_timesync)

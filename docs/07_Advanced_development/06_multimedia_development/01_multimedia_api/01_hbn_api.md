@@ -1995,9 +1995,3 @@ STITCH 的 alpha / beta 查找表，lut buffer 需通过 hbmem 申请：
 | 59     | HBN_STATUS_RGN_INVALID_OPERATION | rgn 操作无效                                  |
 | 60     | HBN_STATUS_RGN_OPEN_FILE_FAIL    | rgn 模块打开文件失败                          |
 | 128    | HBN_STATUS_ERR_UNKNOW            | 未知错误                                     |
-
-## 相关文档
-
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api)
-- [视频采集](/Demos/multimedia_demo/cdev/vio_capture)

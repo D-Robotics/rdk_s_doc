@@ -40,9 +40,3 @@ description: "RDK Studio 集成开发环境介绍与下载"
 ## 验证
 
 - 下载安装后能正常启动 RDK Studio 即安装成功；连接板端、编译、调试等具体操作见 [RDK Studio 用户手册](https://developer.d-robotics.cc/rdk_studio_doc/category/1-product-intro)。
-
-## 相关文档
-
-- [使用 TogetheROS.Bot](./02_trosb.md)
-- [开发环境与编译](/Advanced_development/environment_build/environment_build)
-- [算法工具链开发指南](/Advanced_development/algorithm_toolchain)

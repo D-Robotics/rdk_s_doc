@@ -132,7 +132,3 @@ SRC_PATH += $(shell find ${PLATFORM_SAMPLES_DIR}/vp_sensors -maxdepth 1 -type d)
 ```
 echo 4 > /proc/sys/kernel/printk
 ```
-
-## 相关文档
-
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

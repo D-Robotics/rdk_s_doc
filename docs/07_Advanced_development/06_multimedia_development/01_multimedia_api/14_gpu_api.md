@@ -747,9 +747,3 @@ GPU 驱动提供 sysfs 节点调节性能相关的参数，这些参数一般保
 | --- | --- | --- |
 | `/sys/class/misc/mali0/device/js_ctx_scheduling_mode` | 0 | 决定 GPU 的任务调度策略：`0` 为优先级策略；`1` 为时间片轮转法 |
 | `/sys/class/misc/mali0/device/js_scheduling_period` | 100（ms） | 决定 GPU 任务的切换时间 |
-
-## 相关文档
-
-- [sample_gpu_3d 使用说明](../02_multimedia_sample/08_sample_gpu_3d.md)
-- [hbmem 使用指南](02_hbmem/01_hbmem.md)
-- [显示输出 - DISP](09_disp_api.md)

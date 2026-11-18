@@ -1069,10 +1069,3 @@ Camera/deserial/txser 接口返回 `int32_t`，0 为成功，负值为错误码�
 | 25 | HBN_STATUS_NOMEM | 内存不足 | 资源申请失败 |
 
 通用 HBN 错误码全集见 [HBN 框架](./01_hbn_api.md) 返回值说明。
-
-## 相关文档
-
-- [视频输入 - VIN](./04_vin_api.md)（VIN node、平台规格）
-- [HBN 框架](./01_hbn_api.md)（vnode/vflow、返回值）
-- [系统概述](./00_system_overview.md)（MIPI RX/CIM 通路）
-- 简易 API：[VIO](/Simple_API/multimedia_api/cdev/vio_api)

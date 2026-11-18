@@ -142,9 +142,3 @@ rootfs 扩容见 [存储与磁盘管理](../12_storage.md)。
 **原因**：`/var/cache/apt/archives` 下载缓存与无用依赖未清理。
 
 **解决**：`sudo apt clean` 清缓存、`sudo apt autoremove` 删无用依赖；rootfs 仍不足见 [存储与磁盘管理](../12_storage.md)。
-
-## 相关文档
-
-- [系统升级方式](./01_upgrade_methods.md)
-- [存储与磁盘管理](../12_storage.md)
-- [apt 命令详解](../../09_Appendix/linux-command-manual/01_apt.md)

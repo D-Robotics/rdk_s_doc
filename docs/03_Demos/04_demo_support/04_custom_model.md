@@ -62,9 +62,3 @@ python resnet18.py \
 **原因**：量化编译时 MARCH 与产品不匹配。
 
 **解决**：MARCH 与产品匹配——S600 为 `nashp`、S100 为 `nashe`。
-
-## 相关文档
-
-- [算法工具链（进阶）](../../07_Advanced_development/10_algorithm_toolchain/01_algorithm_toolchain/01_overview.md)
-- [模型获取与放置](./01_model_files.md)
-- [ResNet18 (Python) 示例](../03_algorithm_demo/02_classification/01_resnet18_py.md)

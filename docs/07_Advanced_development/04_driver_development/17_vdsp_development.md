@@ -3492,11 +3492,3 @@ int32_t boot_lib_mem_map_test(int32_t dsp_id)
 【示例代码】
 
 参考 [hb_vdsp_mmu_map](#hb_vdsp_mmu_map)
-
-## 相关文档
-
-- 前置：[搭建开发环境](../../06_environment_build/01_environment_build.md)
-- 关联（跨核）：[Watchdog](./18_driver_watchdog.md)（VDSP 心跳/复位与看门狗联动）
-- 板端示例：`/app/vdsp_demo/vdsp_sample/`、`/app/vdsp_demo/vdsp_ipcfhal_sample/`
-- [算法工具链开发指南](/Advanced_development/algorithm_toolchain)
-- [算法示例](/Demos/algorithm_demo/summary)

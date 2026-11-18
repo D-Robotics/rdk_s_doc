@@ -88,10 +88,3 @@ ISP 硬件 IP 本身的主要特性：
 **串流场景**：需要把 ISP 接入视频通路（创建 vnode 节点、配置属性、绑定前后级）时，使用 [ISP HBN API](./isp_hbn_api)，把 ISP 串成 pipeline 里的一个处理节点。
 
 **调参场景**：流跑起来之后，需要在运行时控制 ISP（切 2A 自动/手动、设曝光/白平衡、取统计）时，使用 [ISP Tuning API](./isp_tuning_api)。
-
-
-## 相关文档
-
-- [视频输入 - VIN](/Advanced_development/multimedia_development/multimedia_api/vin_api)
-- [视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api)
-

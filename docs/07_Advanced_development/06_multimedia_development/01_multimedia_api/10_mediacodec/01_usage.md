@@ -694,11 +694,3 @@ hb_mm_mc_release(&context);
 - **`external_frame_buf = 1` 时**：外部 buffer 的地址仍需通过 dequeue / queue 流程填入，直接改 buffer 地址即可
 
 具体故障现象与排查见[常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)；调试节点与状态输出见[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)。
-
-## 相关文档
-- [MediaCodec 调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)
-- [MediaCodec 应用场景](/Advanced_development/multimedia_development/multimedia_api/mediacodec/scene)
-- [MediaCodec 常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)
-- [sample_codec 使用说明](/Advanced_development/multimedia_development/multimedia_sample/sample_codec)
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- [视频输入 - VIN](/Advanced_development/multimedia_development/multimedia_api/vin_api)

@@ -1915,8 +1915,3 @@ int notify_mcu(hl_ota_msg msg) {
 **原因**：镜像烧写后、标记成功（`otaMarkOTASuccessful`）前发生重启，AB 状态机未将新 slot 标记为 boot_successful。
 
 **解决**：走完整验证流程，确保新镜像启动校验并通过后再完成升级；避免在验证阶段中途重启。
-
-## 相关文档
-
-- [系统升级方式](/System_configuration/system_update/upgrade_methods)
-- [miniboot 升级](/Advanced_development/system_software/ota_miniboot)

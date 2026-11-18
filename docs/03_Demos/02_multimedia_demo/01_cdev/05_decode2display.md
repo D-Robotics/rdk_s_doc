@@ -93,12 +93,3 @@ sp_start_decode success!
 **原因**：输入码流文件不存在，或 `-w` / `-h` 与码流实际分辨率不符。
 
 **解决**：确认文件路径正确，且宽高参数与码流一致。
-
-## 相关文档
-
-- [Python 示例](../02_pydev/01_pydev_multimedia.md)
-- [采集→编码](./03_vio2encoder.md)（生成码流文件）
-- [RTSP→显示](./06_rtsp2display.md)
-- [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
-- [DISPLAY（显示模块）API](../../../04_Simple_API/01_multimedia_api/cdev/04_display_api.md)
-- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)

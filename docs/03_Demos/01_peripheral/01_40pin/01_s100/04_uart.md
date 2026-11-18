@@ -164,9 +164,3 @@ if __name__ == '__main__':
 **原因**：TXD 与 RXD 未短接，或接线错误，读不到回环数据。
 
 **解决**：按 [硬件连接](#硬件连接) 将 TXD 与 RXD 短接后重试。
-
-## 相关文档
-
-- [管脚定义](./01_40pin_define.md)
-- [UART 驱动调试指南](../../../../07_Advanced_development/04_driver_development/02_driver_uart_dev.md)
-- [C/C++ demo 编程指南](../../../04_demo_support/02_c_cpp_build.md)

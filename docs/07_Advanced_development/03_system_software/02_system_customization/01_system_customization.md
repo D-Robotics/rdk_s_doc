@@ -103,11 +103,3 @@ sudo ./pack_image.sh -l
 **原因**：只改了 `hobot_customize_rootfs.sh`，未重新执行 `pack_image.sh`。
 
 **解决**：重新执行 `sudo ./pack_image.sh` 完成 rootfs 定制与打包。
-
-## 相关文档
-
-- [deb 包开发](../01_deb/01_deb.md)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)
-- [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)
-- [系统烧录](/Quick_start/install_os_and_setup/instruction)
-- [系统更新](/System_configuration/system_update)

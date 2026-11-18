@@ -149,9 +149,3 @@ if __name__ == '__main__':
 **原因**：MISO 与 MOSI 未短接，MISO 处于默认电平。
 
 **解决**：按 [硬件连接](#硬件连接) 将 MISO 与 MOSI 短接后重试，成功时应打印 `0x55 0xAA`。
-
-## 相关文档
-
-- [管脚定义](./01_ext_io.md)
-- [SPI 调试指南](../../../../07_Advanced_development/04_driver_development/07_driver_spi_dev.md)
-- [C/C++ demo 编程指南](../../../04_demo_support/02_c_cpp_build.md)

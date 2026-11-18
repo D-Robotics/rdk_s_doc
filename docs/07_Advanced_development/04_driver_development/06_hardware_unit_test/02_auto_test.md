@@ -69,7 +69,7 @@ AutoTest 在驱动功能单元测试脚本的基础上开发，二者相互独�
 └── README.md
 ```
 
-其中 `07_cpu_performance`、`08_ddr_bandwidth`、`10_gpu_3d_test` 只提供源码和编译说明，不是可直接调用的压测脚本，因此没有配置在 `config.ini` 中。三者的独立测试方法见「[相关文档](#相关文档)」。
+其中 `07_cpu_performance`、`08_ddr_bandwidth`、`10_gpu_3d_test` 只提供源码和编译说明，不是可直接调用的压测脚本，因此没有配置在 `config.ini` 中。三者的独立测试方法见 [CPU 性能测试](./09_cpu_performance.md)、[DDR 带宽测试](./10_ddr_bandwidth.md)、[3D GPU 性能测试](./12_3d_gpu.md)。
 
 ## 使用方法
 
@@ -253,15 +253,3 @@ AutoTest 通过 `config.ini` 与脚本扩展测试项，步骤如下。
 **原因**：日志目录不存在或不可写，或 `-o` 指定的路径有误。
 
 **解决**：确认 `startup.sh` 所在目录可写，`log/` 会由脚本自动创建；若在 `ExecStart` 中使用了 `-o`，请确认该目录存在且可写。
-
-## 相关文档
-
-- [驱动功能单元测试](./01_overview.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)
-- [CPU-BPU-DDR 压力测试](./03_bpu_cpu_ddr_stress.md)
-- [eMMC 稳定性测试](./04_emmc_stress.md)
-- [UART 压力测试](./05_uart_stress.md)
-- [SPI 压力测试](./06_spi_stress.md)
-- [CPU 性能测试](./09_cpu_performance.md)
-- [DDR 带宽测试](./10_ddr_bandwidth.md)
-- [3D GPU 性能测试](./12_3d_gpu.md)

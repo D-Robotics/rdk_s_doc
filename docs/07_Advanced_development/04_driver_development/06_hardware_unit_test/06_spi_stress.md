@@ -418,22 +418,3 @@ S600 SPI0 引脚接 CAN 收发器，无法外接 SPI 线；外部回环须在 **
 **解决**：改用 `/dev/spidev1.0`（SPI1，14-pin），并按 [S600 硬件连接](#s600-硬件连接) 加载 overlay 并短接 MISO/MOSI。
 
 </DocScope>
-
-## 相关文档
-
-- [概述](./01_overview.md)
-- [SPI 调试指南](../07_driver_spi_dev.md)
-- [AutoTest 使用方法](./02_auto_test.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)
-
-<DocScope products="RDK S100">
-
-- [SPI 应用（40-pin）](../../../03_Demos/01_peripheral/01_40pin/01_s100/06_spi.md)
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-- [SPI 应用（RDK S600）](../../../03_Demos/01_peripheral/01_40pin/02_s600/04_spi.md)
-
-</DocScope>

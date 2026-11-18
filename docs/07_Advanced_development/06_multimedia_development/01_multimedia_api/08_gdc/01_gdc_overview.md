@@ -38,18 +38,3 @@ description: "RDK S100/S600 GDC 几何畸变矫正概述与使用流程"
 
 - **固定效果场景**：效果简单且固定（如鱼眼矫正），用方法 1 或方法 4 提前生成 gdc.bin，读入内存设入节点。
 - **动态效果场景**：如果场景需要每帧动态调整效果，建议使用 GDC bin API 实时生成配置文件 [GDC Bin 生成 API](./03_gdc_bin_api.md)）。
-
-## 相关文档
-
-- [GDC Bin 生成 API](./03_gdc_bin_api.md)
-- [GDC Tool](./04_gdc_tool.md)
-- [GDC API](./02_gdc_api.md)
-- [HBN 框架](../01_hbn_api.md)
-
-:::doc_scope{products="RDK S100"}
-- [sample_gdc 使用说明](../../02_multimedia_sample/05_sample_gdc.md)
-:::
-
-:::doc_scope{products="RDK S600"}
-- [sample_gdc 使用说明](../../02_multimedia_sample_s600/05_sample_gdc.md)
-:::

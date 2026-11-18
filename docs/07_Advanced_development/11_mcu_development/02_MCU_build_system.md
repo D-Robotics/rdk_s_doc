@@ -589,12 +589,6 @@ EL1_Reset_Handler:
 
 <!-- TODO(Sx): 待收集（补充第 2 条） -->
 
-## 相关文档
-
-- [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
-- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [MCU1 开发指南](/Advanced_development/mcu_development/FreeRTOS_development)
-
 ## 附录：链接脚本全文
 
 <DocScope products="RDK S100">

@@ -754,8 +754,3 @@ ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
 - UniPro Specification Version 1.61/1.8
 - M-PHY Specification Version 3.1/4.1
 - Linux Kernel Documentation: Documentation/admin-guide/ufs.rst、Documentation/scsi/ufs.rst
-
-## 相关文档
-
-- [配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
-- [存储与磁盘管理](/System_configuration/storage)

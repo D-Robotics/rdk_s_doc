@@ -183,9 +183,3 @@ sudo srpi-config
 **原因**：开启终端的环境变量 `TERM` 不同导致配色差异。
 
 **解决**：不影响功能，可按需调整终端类型，以菜单文字选项为准。
-
-## 相关文档
-
-- [config.txt 配置指南](../05_config_txt/00_overview.md)
-- [网络配置](../01_network_config.md)
-- [开机自启动配置](../06_self_start.md)

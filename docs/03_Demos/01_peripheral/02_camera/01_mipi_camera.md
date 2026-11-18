@@ -111,10 +111,3 @@ Error: Failed to open camera.
 **原因**：MIPI 摄像头未正确连接，或同时接入了多个摄像头。
 
 **解决**：检查摄像头与 MIPI CSI 接口的连接，确认只接入一个摄像头后重试。
-
-## 相关文档
-
-- [采集 → 显示](../../02_multimedia_demo/01_cdev/02_vio2display.md)
-- [MIPI 摄像头推理示例](../../03_algorithm_demo/07_camera_streaming/02_mipi_camera.md)
-- [Camera 对象](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)
-- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)

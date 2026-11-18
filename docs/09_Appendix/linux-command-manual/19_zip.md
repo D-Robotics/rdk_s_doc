@@ -78,7 +78,3 @@ zip -q -r app.zip *
 ```
 zip -dv cp.zip a.c
 ```
-
-## 相关文档
-
-- [tar](./17_tar.md)

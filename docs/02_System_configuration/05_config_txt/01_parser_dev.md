@@ -77,8 +77,3 @@ config.txt 解析源码位于 BSP 的 U-Boot 源码树中，路径为
 **原因**：只在环境变量层写入，未在 `drobot_fdt_runtime_config.c` 的 `drobot_fdt_runtime_conf()` 加入消费逻辑。
 
 **解决**：在该函数新增对应消费逻辑后重新编译 U-Boot。
-
-## 相关文档
-
-- [config.txt 配置指南](./00_overview.md)
-- [开发环境与编译](../../07_Advanced_development/06_environment_build/01_environment_build.md)

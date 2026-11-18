@@ -675,12 +675,3 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 空指针 |
 | `-10` | `HBN_STATUS_ILLEGAL_ATTR` | 非法的属性 |
 | `-43` | `HBN_STATUS_NODE_DEQUE_ERROR` | node 通道 dequeue buffer 错误 |
-
-## 相关文档
-
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api) —— vnode/vflow 通用接口与返回值清单
-- [SYS API](/Simple_API/multimedia_api/cdev/sys_api) —— 封装层模块绑定接口（模式 1）
-- [视频输入 - VIN](/Advanced_development/multimedia_development/multimedia_api/vin_api) —— CIM 直连 PYM 的 online 输入侧
-- [图像信号处理 - ISP](/Advanced_development/multimedia_development/multimedia_api/isp) —— `ISP → PYM` 链路
-- [视频降噪 - YNR](/Advanced_development/multimedia_development/multimedia_api/ynr_api) —— `ISP → YNR → PYM` 链路
-- [畸变矫正 - GDC](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview) —— VPF 同级模块，GDC 输入常接 PYM 的输出

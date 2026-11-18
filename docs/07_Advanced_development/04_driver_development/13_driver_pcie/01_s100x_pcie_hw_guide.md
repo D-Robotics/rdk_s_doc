@@ -90,12 +90,3 @@ PCI Express（PCIe）是一种多通道 I/O 互连，提供低引脚数、高可
 :::warning 注意
 本节拓扑为互联方案的参考场景，不代表已在产品上完成端到端验证；据其进行板级设计前请先自行确认。
 :::
-
-## 相关文档
-
-- [PCIe 软件架构](./02_s100x_pcie_sw_arch.md)
-- [PCIe kernel 配置](./03_s100x_pcie_sw_setup.md)
-- [PCIe 用户态 API](./04_s100x_pcie_libhbpciehal.md)
-- [Wi-Fi 驱动调试指南](../11_driver_wifi.md)（模组的驱动、内核配置与设备树）
-- [S100 硬件介绍](../../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)
-- [S600 硬件介绍](../../../01_Quick_start/01_hardware_introduction/02_rdk_s600.md)

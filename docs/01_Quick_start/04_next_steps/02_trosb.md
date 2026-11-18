@@ -232,9 +232,3 @@ ros2 launch tros_yolo_detection yolo_detection.launch.py
 :::note 板端验证
 当前 S600 板端镜像未预装 tros.b，以上验证需在带 tros.b 的镜像上执行。
 :::
-
-## 相关文档
-
-- [使用 RDK Studio](./01_rdk_studio.md)
-- [算法示例](/Demos/algorithm_demo/summary)（BPU 推理示例）
-- [TROS/ROS 开发 FAQ](/FAQ/tros_ros)

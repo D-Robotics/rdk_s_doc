@@ -462,7 +462,3 @@ cat /sys/class/rtc/rtc1/hctosys         # 1 表示系统时间由该 RTC 同步
 **原因**：`/dev/rtc` 链接到 `rtc1`（外置），但 `hwclock` 默认操作 `/dev/rtc0`（内置）。
 
 **解决**：操作外置 RTC 时显式加 `--rtc /dev/rtc1`；或确认要操作的设备后选择对应节点。
-
-## 相关文档
-
-- [时钟与 RTC 同步](/System_configuration/rtc_ntp)：系统级时钟与 NTP 配置

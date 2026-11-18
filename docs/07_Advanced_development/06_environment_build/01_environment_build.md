@@ -174,11 +174,3 @@ sudo update-binfmts --enable qemu-aarch64
 ```
 
 并确保 qemu-user-static 版本不低于 5.2，binfmt-support 版本不低于 2.2.1。
-
-## 相关文档
-
-- [BSP 源码目录结构](./02_bsp_source_layout.md)
-- [构建系统开发指南](./03_rdk_gen.md)
-- [使用 Docker 编译](./04_docker_build.md)
-- [使用 Podman 编译](./05_podman_build.md)
-- [系统烧录](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)

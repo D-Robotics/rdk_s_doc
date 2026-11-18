@@ -1239,8 +1239,3 @@ sample_graph_buf_user_consume_cnt done
 **原因**：未做 cache invalid/clean 操作。
 
 **解决**：写后读前做 `hb_mem_cache_clean`（或 flush），读前做 `hb_mem_cache_invalid`；参照 `sample_share.c` 的用法。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

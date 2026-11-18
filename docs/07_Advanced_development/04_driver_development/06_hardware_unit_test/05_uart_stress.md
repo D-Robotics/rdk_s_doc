@@ -315,9 +315,3 @@ This is uart send test 50 times
 **原因**：波特率配置错误、接线不良或杜邦线松动。
 
 **解决**：核对 `-b` 参数与实际串口波特率一致，检查并重新连接 `uart2_tx`/`uart2_rx` 杜邦线。
-
-## 相关文档
-
-- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [概述](./01_overview.md)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)

@@ -470,12 +470,6 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 
 **解决**：在共享变量前加 `volatile` 关键字，或使用 `ioremap_np()` 函数直接读取 SRAM 数据。
 
-## 相关文档
-
-- [MCU 代码包结构介绍](/Advanced_development/mcu_development/code_release)
-- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)
-- [MCU 系统说明](/Advanced_development/mcu_development/MCU_build_system)
-
 ## 附录：MCU 中断号及模块对应关系
 
 <DocScope products="RDK S100">

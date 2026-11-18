@@ -241,9 +241,3 @@ dmesg | tail -20
 **原因**：`hsi-mode` 分给该控制器的 lane 少于设备能力，或控制器被 `max-link-speed` / `num-lanes` 限制。
 
 **解决**：核对 `hsi-mode` 与设备树中控制器的 `num-lanes`、`max-link-speed` 是否匹配预期，见 [PCIe 链路配置](#pcie-链路配置)。
-
-## 相关文档
-
-- [PCIe 软件架构](./02_s100x_pcie_sw_arch.md)
-- [PCIe 用户态 API](./04_s100x_pcie_libhbpciehal.md)
-- [PCIe 硬件规格](./01_s100x_pcie_hw_guide.md)

@@ -75,10 +75,3 @@ SELinux 环境下挂载目录需加 `:Z` 标签，否则容器内无法访问。
 **原因**：SELinux 限制容器访问挂载卷。
 
 **解决**：挂载目录时添加 `:Z` 标签（如 `-v /path/to/rdk-gen:/workspace:Z`）。
-
-## 相关文档
-
-- [搭建开发环境](./01_environment_build.md)
-- [使用 Docker 编译](./04_docker_build.md)
-- [RDK 构建系统（rdk-gen）](./03_rdk_gen.md)
-- [BSP 源码目录结构](./02_bsp_source_layout.md)

@@ -653,8 +653,3 @@ Dump image to file(Equisolid_cylinder.yuv), size(2073600) + size1(1036800) succe
 **原因**：bin 配置的输入/输出几何与实际输入图像不匹配，或未先执行 `2-generate_bin` 生成对应 bin。
 
 **解决**：确保使用 `2-generate_bin` 生成的 bin（`gdc.bin`），并让输入图像分辨率与 bin 配置一致。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

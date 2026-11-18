@@ -65,12 +65,3 @@ while True:
 **原因**：退出前未调用各对象的关闭接口，或模块绑定后未解绑。
 
 **解决**：退出前调用 `close_cam`/`close` 释放资源；使用 `libsrcampy.bind` 绑定的模块需先调用 `libsrcampy.unbind` 解绑。
-
-## 相关文档
-
-- [Camera 对象](./02_object_camera.md)
-- [Encoder 对象](./03_object_encoder.md)
-- [Decoder 对象](./04_object_decoder.md)
-- [Display 对象](./05_object_display.md)
-- [接口使用示例](./06_pydev_api_demo.md)
-- [Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

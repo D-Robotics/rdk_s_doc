@@ -2161,9 +2161,3 @@ ION 内存的调试手段（heap/client 两个视角的统计信息查看、ION 
 **问：Camera、PYM 等模块输出的都是 com_buf 吗？**
 
 答：对。当前系统上各硬件模块输出的都是 com_buf，内存连续。
-
-## 相关文档
-
-- [ION 系统调试指南](02_ion.md)
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- [多媒体处理与应用 FAQ](../../../../08_FAQ/04_multimedia.md)

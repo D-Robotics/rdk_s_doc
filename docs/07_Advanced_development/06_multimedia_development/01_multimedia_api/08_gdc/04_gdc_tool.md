@@ -662,17 +662,3 @@ for (int i = row_start; i < row_end; i++) {
 输出图片：
 
 ![Keystone 输出](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-35.png)
-
-## 相关文档
-
-- [GDC 概述](./01_gdc_overview.md)
-- [GDC Bin 生成 API](./03_gdc_bin_api.md)
-- [GDC API](./02_gdc_api.md)
-
-:::doc_scope{products="RDK S100"}
-- [sample_gdc 使用说明](../../02_multimedia_sample/05_sample_gdc.md)
-:::
-
-:::doc_scope{products="RDK S600"}
-- [sample_gdc 使用说明](../../02_multimedia_sample_s600/05_sample_gdc.md)
-:::

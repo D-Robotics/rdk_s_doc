@@ -432,10 +432,3 @@ camera 对应的 host 编号如下图所示
 **原因**：该方法需在 `open_cam`、`open_vps` 之后调用。
 
 **解决**：确保先调用 `open_cam`/`open_vps`，再调用 `get_img`。
-
-## 相关文档
-
-- [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [Encoder 对象](/Simple_API/multimedia_api/pydev/object_encoder)
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [Python 多媒体示例](/Demos/multimedia_demo/pydev/pydev_multimedia)

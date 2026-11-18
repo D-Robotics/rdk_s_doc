@@ -585,16 +585,3 @@ cat /sys/kernel/debug/dw_i2c5/whitelist
 **解决**：扩展外设示例使用 bus `5`；板载器件使用 bus `4` 并由内核驱动管理。详见 [I2C 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/05_i2c.md)。
 
 </DocScope>
-
-## 相关文档
-
-- [GPIO 使用](./04_driver_gpio_dev.md)
-- [Pinctrl 调试指南](./05_driver_pinctrl_dev.md)
-- [MCU I2C 使用指南](../11_mcu_development/10_mcu_i2c.md)
-
-<DocScope products="RDK S100">
-
-- [I2C 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/05_i2c.md)
-- [音频调试指南](./09_driver_audio.md)
-
-</DocScope>

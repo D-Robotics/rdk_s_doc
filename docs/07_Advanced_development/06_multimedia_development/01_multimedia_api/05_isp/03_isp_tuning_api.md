@@ -872,10 +872,3 @@ get 拿到的 buffer 用完后，把**同一个结构体**原样传给对应的 
 | hist_12 | uint16_t | 直方图区间 1-2 门限 | 是 |
 | hist_34 | uint16_t | 直方图区间 3-4 门限 | 是 |
 | hist_45 | uint16_t | 直方图区间 4-5 门限 | 是 |
-
-
-## 相关文档
-
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- [ISP概览](./overview)
-- [ISP HBN API](./isp_hbn_api)

@@ -455,9 +455,3 @@ fstrim -v / && dd if=/dev/zero of=/tmp/t.bin bs=1M count=512 oflag=direct
 :::tip 排查顺序
 板卡长期使用后，写入掉速可能由多种原因造成。建议先执行 `fstrim -v /` 复测：若速率恢复正常，说明是文件系统的垃圾回收问题，无需更换板卡。
 :::
-
-## 相关文档
-
-- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [AutoTest 使用方法](./02_auto_test.md)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)

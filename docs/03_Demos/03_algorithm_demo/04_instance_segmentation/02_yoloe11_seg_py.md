@@ -159,9 +159,3 @@ pip install -r ../../requirements.txt
 **原因**：指定模型路径不存在。
 
 **解决**：程序会自动从模型库下载模型，无需手动处理。
-
-## 相关文档
-
-- [C/C++ 版 YOLOE11 分割示例](./02_yoloe11_seg.md)
-- [模型获取与放置](../../04_demo_support/01_model_files.md)
-- [Python 推理 API](../../../04_Simple_API/02_inference_api/02_python_api.md)

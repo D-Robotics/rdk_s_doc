@@ -270,10 +270,3 @@ VDSP 固件在业务需要时由上层应用加载，加载后 `state` 变为 `r
 **原因**：对应的内核节点或命令在当前镜像中不存在。
 
 **解决**：确认烧录的是完整 RDK OS 镜像，并按[烧录说明](./01_instruction.md)重新烧录。
-
-## 相关文档
-
-- [烧录说明](./01_instruction.md)
-- [远程登录](./05_remote_login.md)
-- [入门配置](./04_configuration_wizard.md)
-- RDK 专属命令详解：[devmem](../../09_Appendix/rdk-command-manual/01_devmem.md)、[hrut_boardid](../../09_Appendix/rdk-command-manual/02_hrut_boardid.md)、[hrut_socuid](../../09_Appendix/rdk-command-manual/04_hrut_socuid.md)、[rdkos_info](../../09_Appendix/rdk-command-manual/06_rdkos_info.md)

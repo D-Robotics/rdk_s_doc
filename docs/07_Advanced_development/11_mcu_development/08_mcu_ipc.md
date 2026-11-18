@@ -1117,11 +1117,3 @@ IPC 中断的统一入口，由中断服务程序调用，用于按硬件与中�
 **原因**：MCU 侧与 Acore 侧的 IpcBox 版本不匹配。IpcBox 在 S100 `V4.0.4-Beta` -> `V4.0.5-Beta` 升级中重构过数据包结构、Ipc 通道与透传外设的默认配置，两端版本不一致时数据包无法正确解析。
 
 **解决**：确认 MCU 侧与 Acore 侧的版本对应关系，升级到相互匹配的版本。
-
-## 相关文档
-
-- [IPC 模块介绍（Acore 侧）](/Advanced_development/system_software/driver_ipc)
-- [MCU1 启动步骤](./01_basic_information.md#start_mcu1)
-- [CAN 使用指南](./09_mcu_can.md)
-- [MCU 代码包结构介绍](./00_code_release.md)
-- IpcBox 实现代码：`mcu/Service/HouseKeeping/ipc_box/`

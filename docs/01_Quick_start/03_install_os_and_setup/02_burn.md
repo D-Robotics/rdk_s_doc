@@ -340,12 +340,3 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 **原因**：SW8 BOOT 拨码位置与目标存储介质不一致，或使用了面向 UFS 的镜像。
 
 **解决**：按[烧录全镜像](#烧录全镜像)的启动盘选择设置 SW8 拨码并保持位置不变，并使用按 `RDK_DISK_MEDIUM="nvme"` 编译的 NVMe 镜像。
-
-## 相关文档
-
-- [烧录准备](/Quick_start/install_os_and_setup/instruction)
-- [系统状态查询](/Quick_start/install_os_and_setup/system_status)
-- [远程登录](/Quick_start/install_os_and_setup/remote_login)
-- [构建系统开发指南（rdk_gen）](../../07_Advanced_development/06_environment_build/03_rdk_gen.md)
-- [XBurn 启动异常排查](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues)
-

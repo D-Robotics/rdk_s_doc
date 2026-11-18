@@ -115,8 +115,3 @@ Error: N step(s) failed to flash.
 **原因**：设备处于 OHP 生命周期阶段，在线升级被禁用。
 
 **解决**：改用 factory 工具整片重烧。
-
-## 相关文档
-
-- [系统升级方式](/System_configuration/system_update/upgrade_methods)
-- [系统 OTA 升级](/Advanced_development/system_software/ota_system)

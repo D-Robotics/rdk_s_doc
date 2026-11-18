@@ -75,10 +75,3 @@ code --disable-gpu
 ```
 
 参考 [VS Code 官方 FAQ](https://code.visualstudio.com/docs/supporting/faq#_vs-code-is-blank)。
-
-## 相关文档
-
-- [显示配置](/System_configuration/display_config)
-- [音频配置](/System_configuration/audio_output)
-- [屏幕休眠与电源管理](/System_configuration/screen_sleep)
-- [调试串口](/System_configuration/debug_serial)

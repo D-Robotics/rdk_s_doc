@@ -182,9 +182,3 @@ Send end, send package total: 1 frame total: 1
 **原因**：运行前未加载 CAN 模块并配置 CAN 接口。
 
 **解决**：先加载 CAN 模块并配置 CAN 接口（如 `ip link set can0 ...`），具体步骤与参数见 `socketcan/README.md`。
-
-## 相关文档
-
-- [CAN 驱动开发](../../07_Advanced_development/11_mcu_development/09_mcu_can.md)
-- [IPC 模块介绍](../../07_Advanced_development/03_system_software/12_driver_ipc.md)
-- [C/C++ demo 编程指南](../04_demo_support/02_c_cpp_build.md)

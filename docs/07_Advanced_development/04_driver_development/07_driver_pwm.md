@@ -419,24 +419,3 @@ cat /sys/kernel/debug/pinctrl/*/pinmux-pins | grep -i lpwm
 **解决**：确认目标 `pwmchip` 与通道号未被成像子系统占用；必要时在板级 DTS 中调整 `channel` 与 `pinctrl-0` 后再验证波形。
 
 </DocScope>
-
-## 相关文档
-
-- [GPIO 使用](./04_driver_gpio_dev.md)
-- [Pinctrl 调试指南](./05_driver_pinctrl_dev.md)
-- [MCU PWM 使用指南](../11_mcu_development/05_mcu_pwm.md)
-- [多路 Camera 及与 Lidar 同步](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/features/multi_camera_lidar_sync)
-
-<DocScope products="RDK S100">
-
-- [PWM 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/03_pwm.md)
-- [GPIO 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/02_gpio.md)
-- [40-pin 管脚定义](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)
-
-</DocScope>
-
-<DocScope products="RDK S600">
-
-- [GPIO 应用（RDK S600）](../../03_Demos/01_peripheral/01_40pin/02_s600/02_gpio.md)
-
-</DocScope>

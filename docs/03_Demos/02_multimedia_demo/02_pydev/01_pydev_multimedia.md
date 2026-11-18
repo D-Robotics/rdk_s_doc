@@ -147,11 +147,3 @@ libsrcampy.bind(cam, disp)           # 绑定采集到显示
 **原因**：显示类脚本需运行在桌面环境。
 
 **解决**：使用桌面版镜像，并在桌面会话中运行。
-
-## 相关文档
-
-- [C 语言示例](../01_cdev/01_vio_capture.md)
-- [多媒体接口说明](../../../04_Simple_API/01_multimedia_api/pydev/01_pydev_multimedia_api.md)
-- [Camera 对象](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)
-- [Display 对象](../../../04_Simple_API/01_multimedia_api/pydev/05_object_display.md)
-- [算法示例](../../03_algorithm_demo/01_summary.md)

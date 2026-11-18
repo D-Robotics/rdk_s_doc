@@ -146,9 +146,3 @@ Connecting to host 192.168.137.1, port 5002
 **原因**：Wi-Fi 性能受天线方向、信道干扰、信号强度/衰减、邻近无线设备等环境因素影响。
 
 **解决**：参考[性能标准](#性能标准)逐项排查并优化测试环境。
-
-## 相关文档
-
-- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [概述](./01_overview.md)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)

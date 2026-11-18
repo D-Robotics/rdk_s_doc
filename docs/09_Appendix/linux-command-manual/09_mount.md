@@ -86,7 +86,3 @@ proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
 udev on /dev type devtmpfs (rw,nosuid,relatime,size=12336064k,nr_inodes=192751,mode=755)
 /dev/sda17 on / type ext4 (rw,relatime)
 ```
-
-## 相关文档
-
-- [存储与磁盘管理](../../02_System_configuration/12_storage.md)

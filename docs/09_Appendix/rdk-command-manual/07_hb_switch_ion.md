@@ -59,8 +59,3 @@ sudo hb_switch_ion.sh default
 - 修改重启后生效。
 - `/boot` 分区使用率 ≥95% 时会拒绝执行，需先执行 `sudo resize2fs /dev/block/platform/by-name/boot_cur` 扩容。
 - RDK S100 设置 `bpu_first` 时，脚本会提示内存受限，可能引入随机性能问题。
-
-## 相关文档
-
-- [srpi-config 工具配置](../../02_System_configuration/04_srpi_config/01_overview.md)
-- [如何查看当前 ION 内存分配情况](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/02_hbmem/02_ion.md)

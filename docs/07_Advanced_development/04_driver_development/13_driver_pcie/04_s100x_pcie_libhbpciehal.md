@@ -445,10 +445,3 @@ pcieErrCode pcieSendData(pcieHandler ph, uint32_t size);
 | `ERR_PTHREAD_OPERATION_FAIL` | 线程操作失败 |
 | `ERR_IOMMU_UNMAP_FAIL` | IOMMU 解除映射失败 |
 | `ERR_INNERBUF_CACHE_FAIL` | 内建 buffer cache clean/invalid 失败 |
-
-## 相关文档
-
-- [PCIe 软件架构](./02_s100x_pcie_sw_arch.md)
-- [PCIe kernel 配置](./03_s100x_pcie_sw_setup.md)
-- [PCIe 硬件规格](./01_s100x_pcie_hw_guide.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)

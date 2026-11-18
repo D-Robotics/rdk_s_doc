@@ -760,11 +760,3 @@ void Pwm_SetSyncModeToIdle(uint8 ModuleId);
 ## 常见问题
 
 <!-- TODO(Sx): 待收集 -->
-
-## 相关文档
-
-- [MCU 快速入门指南](01_basic_information.md)
-- [MCU Port 配置](12_mcu_port/02_development_manual.md)
-- [PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm)
-- [40pin PWM 示例](/Demos/peripheral/01_40pin/s100/pwm)
-- [扩展引脚应用](/Demos/peripheral/40pin)

@@ -109,11 +109,3 @@ recv:2,Stoping...
 **原因**：RTSP 地址不可达，或端口不正确。
 
 **解决**：确认推流服务已启动，并根据 `live555MediaServer` 打印的端口信息调整地址。
-
-## 相关文档
-
-- [Python 示例](../02_pydev/01_pydev_multimedia.md)
-- [解码→显示](./05_decode2display.md)（本地文件版）
-- [DECODER（解码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/03_decoder_api.md)
-- [DISPLAY（显示模块）API](../../../04_Simple_API/01_multimedia_api/cdev/04_display_api.md)
-- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)

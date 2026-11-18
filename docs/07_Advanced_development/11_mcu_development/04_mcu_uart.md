@@ -717,15 +717,3 @@ S100 上 UART6 引脚未引出，无法短接，回环测试必然失败，属�
 </DocScope>
 
 **解决**：将测试通道的 RX 引脚接 TX 引脚后，重新执行 `uarttest 4`。
-
-## 相关文档
-
-- [MCU 快速入门指南](01_basic_information.md)
-- [UART 驱动调试指南](../04_driver_development/02_driver_uart_dev.md)
-
-<DocScope products="RDK S100">
-- 扩展引脚应用：[S100 40PIN 管脚定义](../../03_Demos/01_peripheral/01_40pin/01_s100/01_40pin_define.md)
-</DocScope>
-<DocScope products="RDK S600">
-- 扩展引脚应用：[S600 40PIN 管脚定义](../../03_Demos/01_peripheral/01_40pin/02_s600/01_ext_io.md)
-</DocScope>

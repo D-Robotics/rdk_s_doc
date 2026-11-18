@@ -631,9 +631,3 @@ timer_interrupt gettime 3
 ## 常见问题
 
 <!-- TODO(Sx): 待收集 -->
-
-## 相关文档
-
-- [MCU 快速入门指南](01_basic_information.md)
-- [PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm)
-- [时间同步方案](/Advanced_development/system_software/driver_timesync)

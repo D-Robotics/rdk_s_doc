@@ -77,9 +77,3 @@ Thermal 与 CPU 频率策略见 [Thermal 和 CPU 频率管理](./08_frequency_ma
 
 - 桌面息屏时长：`gsettings get org.gnome.desktop.session idle-delay` 输出当前秒数（`uint32 300`=5 分钟，`0`=已关闭）。
 - 控制台息屏：`setterm --blank 0` 执行后控制台不再自动黑屏；永久关闭需确认内核命令行含 `consoleblank=0`（`cat /proc/cmdline`）。
-
-## 相关文档
-
-- [显示配置](./09_display_config.md)
-- [Thermal 和 CPU 频率管理](./08_frequency_management.md)
-- [开机自启动配置](./06_self_start.md)

@@ -498,9 +498,3 @@ if(FrameType==0x800)
 **原因**：轮询模式下发送数据后，未调用 `Eth_TxConfirmation` 释放 buffer。
 
 **解决**：申请 buffer 经 `Eth_Transmit` 发送后，调用 `Eth_TxConfirmation` 释放 buffer。
-
-## 相关文档
-
-- [网络配置](../../02_System_configuration/01_network_config.md)
-- [以太网驱动开发指南](../04_driver_development/16_driver_ethernet/01_ethernet.md)
-- [Port 使用指南](12_mcu_port/01_user_manual.md)

@@ -684,8 +684,3 @@ $ dmesg | grep 'hb_wdt watchdog'
 **原因**：CPU 长时间不响应中断（HardLockup）或发生软锁（SoftLockup）。
 
 **解决**：查看内核日志定位卡死点与长时间关中断位置，结合「Watchdog 监控方案」调整监控策略。
-
-## 相关文档
-
-- [配置 U-Boot 和 Kernel](/Advanced_development/driver_development/uboot_kernel_config)
-- [VDSP 开发指南](/Advanced_development/driver_development/vdsp_development)

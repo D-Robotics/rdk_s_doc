@@ -203,7 +203,7 @@ STITCH 的落位方式分两类，画布同为 1920 × 1080：
 
 ![两类多路 ROI 落位示意图](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig2-roi-layout.svg)
 
-板上完整样例的编译与运行方式见[相关文档](#相关文档)。
+板上完整样例见 `/app/multimedia_samples/sample_pipeline/multi_pipe_vin_isp_ynr_pym_stitch_display`。
 
 #### 最小示例
 
@@ -1028,11 +1028,3 @@ cat /sys/class/vps/stitch0_ich0/regdump        # 寄存器快照，只读
 - `loading` 的采样窗口可写：`echo 1000 > /sys/class/vps/stitch0_ich0/loading`，范围 `(0, 10000]` ms，填 0 回落默认值。
 - `hw_timeout` 可写：`echo 2000 > /sys/class/vps/stitch0_ich0/hw_timeout`，有效范围 1 ~ 5000 ms；写入 0 或超过 5000 后读回 0，不是回落默认值（两板实测）。
 - 帧率不在 STITCH 节点上，见 flow 级的 `/sys/class/vps/flow/fps`。
-
-## 相关文档
-
-- [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api) —— vnode 通用接口与 `hbn_vnode_*` 字段表
-- [共享内存 - Hbmem](/Advanced_development/multimedia_development/multimedia_api/hbmem_api) —— 源帧与 LUT buffer 的分配（`hb_mem_*`）
-- [GDC 概述](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview) —— IPM 逆透视变换，环视拼接的上游
-- [视频处理框架 - VPF/PYM](/Advanced_development/multimedia_development/multimedia_api/vpf_pym_api) —— 缩放与金字塔，拼墙场景的上游
-- [视频输入 - VIN](/Advanced_development/multimedia_development/multimedia_api/vin_api) —— 相机接入，环视与拼墙链路的起点（`STH_MODE_FLOW` 的典型上游）

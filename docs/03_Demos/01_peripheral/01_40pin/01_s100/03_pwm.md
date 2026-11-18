@@ -239,10 +239,3 @@ flowchart TD
 ### 终端看不到占空比变化
 
 **说明**：脚本仅在启动时打印一行提示，占空比扫变在后台进行，**不会**逐行打印百分比；请用示波器或逻辑分析仪观察波形变化。
-
-## 相关文档
-
-- 用到的接口：[PWM 驱动调试指南](../../../../07_Advanced_development/04_driver_development/07_driver_pwm.md)
-- 同类示例：[GPIO 应用](./02_gpio.md)（`Hobot.GPIO` 库）
-- 管脚示意：[管脚定义](./01_40pin_define.md#40pin_define)
-- 板端代码：`/app/40pin_samples/simple_pwm.py`

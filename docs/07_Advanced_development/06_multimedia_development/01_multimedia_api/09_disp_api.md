@@ -337,7 +337,3 @@ modetest -M hobot-drm -a -s 161@31:1920x1080 -P 35@31:1920x1080@NV12
 ## 返回值说明
 
 参考开源代码：[drm lib](https://gitlab.freedesktop.org/mesa/libdrm/-/blob/main/xf86drmMode.h)
-
-## 相关文档
-
-- [多媒体 API 参考 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

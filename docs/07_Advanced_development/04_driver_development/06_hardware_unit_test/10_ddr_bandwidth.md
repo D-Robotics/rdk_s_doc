@@ -636,8 +636,3 @@ S600 的**读带宽显著低于写带宽**（纯读约为纯写的 1/3）。STRE
 **原因**：交叉编译工具链与目标架构不匹配，或推送后未添加可执行权限。
 
 **解决**：使用 aarch64 交叉工具链重新编译 `lmbench`，推送后执行 `chmod +x` 再运行。
-## 相关文档
-
-- [驱动功能单元测试](./01_overview.md)
-- [CPU-BPU-DDR 压力测试](./03_bpu_cpu_ddr_stress.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)

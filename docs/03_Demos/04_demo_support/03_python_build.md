@@ -89,10 +89,3 @@ cd /app/pydev_demo && pip install -r requirements.txt
 **原因**：PEP 668 的外部环境管理保护。
 
 **解决**：安装命令加 `--break-system-packages` 绕过，或改用 venv。
-
-## 相关文档
-
-- [ResNet18 (Python) 示例](../03_algorithm_demo/02_classification/01_resnet18_py.md)
-- [模型获取与放置](./01_model_files.md)
-- [C/C++ demo 编程指南](./02_c_cpp_build.md)
-- [Python 推理 API](../../04_Simple_API/02_inference_api/02_python_api.md)

@@ -911,8 +911,3 @@ pipe(0)Test thread 281473524101408---join done.
 **原因**：上游 vnode 未出流（sensor 未点亮）或 vflow 绑定错误。
 
 **解决**：检查 sensor 出流日志；核对 `hbn_vflow_bind_vnode` 的通道号与配置一致。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample_s600/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

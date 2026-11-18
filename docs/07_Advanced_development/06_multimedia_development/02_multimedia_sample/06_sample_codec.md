@@ -247,8 +247,3 @@ Encode idx: 0, frame= 100
 **原因**：`frame_num` 配置过小、输出 buffer 未正确 queue 回、或码率参数极端。
 
 **解决**：确认 `frame_num` 大于 0；检查 `hb_mm_mc_dequeue_output_buffer`/`queue_output_buffer` 配对；适当调整码率。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

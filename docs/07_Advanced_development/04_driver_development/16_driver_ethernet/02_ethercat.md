@@ -1165,8 +1165,3 @@ RDK S600 默认使用 eth0 作为 DHCP 网口，eth1 为静态 IP 配置，用�
     #
     UPDOWN_INTERFACES="eth0"
     ```
-
-## 相关文档
-
-- [Ethernet](./01_ethernet.md)
-- [EtherCAT 用户手册（MCU 侧）](../../11_mcu_development/17_mcu_ethercat.md)

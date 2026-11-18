@@ -542,9 +542,3 @@ mount /dev/sda1 /mnt/usb
 3. 若仍显示感叹号，右键该设备 → **更新驱动程序** → **浏览我的电脑上的驱动程序** → **让我从计算机上的可用驱动程序列表中选取**；类别选**网络适配器**，厂商选 **Microsoft**，型号选 `Remote NDIS Compatible Device`。
 
 驱动安装正常后，网络连接中即可看到该网卡，随后配置 IP 地址。
-
-## 相关文档
-
-- [驱动功能单元测试](/Advanced_development/driver_development/hardware_unit_test)
-- [AutoTest 使用方法](./02_auto_test.md)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)

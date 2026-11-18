@@ -1009,7 +1009,3 @@ D-Robotics:/$ Adc_TestNormal read
 </DocScope>
 
 <!-- TODO(Sx): 待板端复核，补充实测问题素材 -->
-
-## 相关文档
-
-- [MCU 快速入门指南](01_basic_information.md)

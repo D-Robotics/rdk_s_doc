@@ -309,8 +309,3 @@ rtsp 的码流网络 URL 链接，可以在 web 页面的“设备信息”上�
 **原因**：设备默认分配给编解码、算法的 ION 内存有限（智能盒约 1GB），路数过多超出限制。
 
 **解决**：减少启用路数，或调整系统 ION 内存大小。
-
-## 相关文档
-
-- [示例代码介绍](/Advanced_development/multimedia_development/multimedia_sample/overview)
-- [多媒体 API 参考](/Advanced_development/multimedia_development/multimedia_api/hbn_api)

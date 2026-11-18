@@ -46,16 +46,3 @@ description: RDK S100/S600 多媒体系统调试指南总览：范围、数据�
 ![数据流示意](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/debug/camsys_data_vflow.jpg)
 
 模块概念与硬件框图详见 [基础框架 - HBN](../01_hbn_api.md)。
-
-## 相关文档
-
-- 前置：[基础框架 - HBN](../01_hbn_api.md)
-- 模块 API：
-  - [视频输入 - VIN](../04_vin_api.md)
-  - [图像信号处理 - ISP](../05_isp/01_overview.md)
-  - [视频处理框架 - PYM](../07_vpf_pym_api.md)
-  - [畸变矫正 - GDC](../08_gdc/01_gdc_overview.md)
-  - [显示输出 - DISP](../09_disp_api.md)
-  - [编解码 - MediaCodec](../10_mediacodec/01_usage.md)
-- 关联：[多路 Camera 及与 Lidar 同步](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/features/multi_camera_lidar_sync)
-- 用户层（封装层简易接口）：[多媒体简易 API](/Simple_API/multimedia_api)（与底层 API 双向互链）

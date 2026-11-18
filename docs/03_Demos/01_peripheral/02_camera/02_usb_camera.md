@@ -127,10 +127,3 @@ No USB camera found.
 **原因**：USB 2.0 带宽为 480Mb/s，720p30fps 的理论带宽已接近上限，加上 UVC 协议开销，同一 USB host 无法承载两路 720p30fps 摄像头。
 
 **解决**：同一 USB host 建议接入两路 640x480 20fps 摄像头；如需接两路 720p 摄像头，应分别插入不同 USB host 对应的端口，避免两路摄像头共享同一 host 的带宽。
-
-## 相关文档
-
-- [采集 → 显示](../../02_multimedia_demo/01_cdev/02_vio2display.md)
-- [基于 USB 摄像头推理](../../03_algorithm_demo/07_camera_streaming/01_usb_camera.md)
-- [Camera 对象](../../../04_Simple_API/01_multimedia_api/pydev/02_object_camera.md)
-- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)

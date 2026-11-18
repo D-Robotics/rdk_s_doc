@@ -663,10 +663,3 @@ done
 **解决**：先执行 `echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`，再向 `scaling_setspeed` 写入目标频率。
 
 </DocScope>
-
-## 相关文档
-
-- [开机自启动配置](./06_self_start.md)
-- [显示配置](./09_display_config.md)
-- [屏幕休眠与电源管理](./11_screen_sleep.md)
-- [Thermal 驱动开发（进阶）](../07_Advanced_development/04_driver_development/08_driver_thermal_dev.md)

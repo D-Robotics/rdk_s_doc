@@ -1495,8 +1495,3 @@ can_tran_debug clean
 **原因**：总线错误计数超过阈值，例如接线松动、终端电阻缺失、波特率不一致，或总线上只有一个节点持续发送。
 
 **解决**：先排除物理层问题；再用 `Can_SetControllerMode` 让控制器退出 bus-off（先切到停止状态再切回启动状态），必要时用 `Can_SetBaudrate` 切换波特率档位后重新启动控制器。
-
-## 相关文档
-
-- [CAN 应用](/Demos/peripheral/rcore_can)
-- [MCU 快速入门指南](/Advanced_development/mcu_development/basic_information)

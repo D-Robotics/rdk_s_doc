@@ -438,9 +438,3 @@ root@drobot:~# cat /sys/kernel/debug/ion/clients/vpu0-0
 - `buffer share id`：buffer 的 share id（对应 hbmem `hb_mem_common_buf_t` 的 `share_id` 成员）
 - `buffer share count`：buffer 的共享计数
 - `total`：当前 client 占用的 ION 内存总大小（**16 进制**）
-
-## 相关文档
-
-- [hbmem 使用指南](01_hbmem.md)
-- [基础框架 - HBN](../01_hbn_api.md)
-- [图形处理 - GPU](../14_gpu_api.md)

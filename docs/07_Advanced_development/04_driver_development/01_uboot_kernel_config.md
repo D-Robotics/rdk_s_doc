@@ -312,8 +312,3 @@ cp -f ../../out/build/kernel/defconfig ../hobot-drivers/configs/drobot_s600_defc
 **原因**：只修改了 `.config`，未保存回板级 `defconfig`，重新编译时被板级配置覆盖。
 
 **解决**：用 `make savedefconfig` 生成 `defconfig` 文件，对于 Kernel 请覆盖 `hobot-drivers/configs/` 下对应的板级配置文件，对于 U-Boot 请覆盖 `bootloader/uboot/configs/`，最后重新编译。
-
-## 相关文档
-
-- [启动相关配置](/System_configuration/config_txt/overview)
-- [搭建开发环境](/Advanced_development/environment_build/environment_build)

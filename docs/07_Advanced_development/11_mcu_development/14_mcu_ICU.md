@@ -865,10 +865,3 @@ D-Robotics:/$ gpio_interrupt off
 **解决**：确保 `NotificationEnable = TRUE`、`IntEnable = TRUE`、`IntMask = FALSE` 且 `GpioChannelNotification` 指向具体回调函数。
 
 <!-- TODO(Sx): 待收集（补充第 2 条） -->
-
-## 相关文档
-
-- [MCU 快速入门指南](01_basic_information.md)
-- [MCU1 开发指南](03_FreeRTOS_development.md)
-- [Port 使用指南](12_mcu_port/01_user_manual.md)
-- [Port 开发指南](12_mcu_port/02_development_manual.md)

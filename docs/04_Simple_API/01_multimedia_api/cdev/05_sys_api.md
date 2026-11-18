@@ -125,8 +125,3 @@ sp_module_unbind(vio, SP_MTYPE_VIO, disp, SP_MTYPE_DISPLAY); // 退出前解绑
 **原因**：模块退出前未先调用 `sp_module_unbind` 解绑。
 
 **解决**：模块退出前先调用 `sp_module_unbind` 完成解绑。
-
-## 相关文档
-
-- [VIO API](/Simple_API/multimedia_api/cdev/vio_api)
-- [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)

@@ -378,8 +378,3 @@ exit 0
 **解决**：休眠前停掉占用相关资源的服务，或在 `/usr/lib/systemd/system-sleep/` 下放置回调脚本，在 `pre` 阶段停服务、`post` 阶段恢复。参考 [休眠唤醒回调](#休眠唤醒回调) 中的示例。
 
 <!-- TODO(Sx): 待补充 —— 更多低功耗常见问题素材待收集 -->
-
-## 相关文档
-
-- [Thermal 和 CPU 频率管理](/System_configuration/frequency_management)
-- [屏幕休眠与电源管理](/System_configuration/screen_sleep)

@@ -133,9 +133,3 @@ Input pin 24 (SPI_CSN): LOW
 **原因**：输出管脚未外接测量点，或万用表未正确接地。
 
 **解决**：确认杜邦线连接正确；`SPI0_CLK_3V3` 为输出，可将万用表一端接管脚、另一端接 GND 观察 0V/3.3V 跳变，或接 LED 观察亮灭。
-
-## 相关文档
-
-- [GPIO 应用](./02_gpio.md)
-- [GPIO 使用](../../../../07_Advanced_development/04_driver_development/04_driver_gpio_dev.md)
-- [硬件介绍](../../../../01_Quick_start/01_hardware_introduction/01_rdk_s100.md)

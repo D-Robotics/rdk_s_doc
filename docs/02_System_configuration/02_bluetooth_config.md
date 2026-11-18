@@ -107,9 +107,3 @@ HID 类设备（键鼠）通常由外设主动发起重连；如需调整重连�
 - **配对后无法连接**：`trust` 该设备；音频设备需额外配置 PulseAudio/PipeWire profile。
 - **开机不自动重连**：检查 `/etc/bluetooth/main.conf` 的 `ReconnectAttempts`、
   `ReconnectIntervals`（默认注释）；HID 设备可尝试由外设主动发起连接。
-
-## 相关文档
-
-- [蓝牙初始化说明（进阶）](../07_Advanced_development/03_system_software/05_bluetooth_init.md)
-- [网络配置](./01_network_config.md)
-- [开机自启动配置](./06_self_start.md)

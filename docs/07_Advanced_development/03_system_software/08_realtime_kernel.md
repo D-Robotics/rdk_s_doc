@@ -90,8 +90,3 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 - `Max`: 当前测试周期的最大延迟，以微秒为单位。
 
 <!-- TODO(Sx): 待收集 —— 常见问题：实时内核性能测试暂无真实「现象→原因→解决」素材 -->
-
-## 相关文档
-
-- [Linux 调试功能介绍](/Advanced_development/system_software/kernel_debug)
-- [内核头文件](/Advanced_development/system_software/kernel_headers)

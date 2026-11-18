@@ -589,11 +589,3 @@ typedef struct hbDNNTensor {
 
 **Q：任务提交后如何指定 BPU 核或优先级？**
 通过 `hbUCPSchedParam`（`HB_UCP_INITIALIZE_SCHED_PARAM` 宏初始化后修改 `backend`/`priority` 字段，核定义如 `HB_UCP_BPU_CORE_0`）。更底层的核管理见 [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md)。
-
-## 相关文档
-
-- [Python 推理 API](./02_python_api.md)
-- [BPU 底层 API](../../07_Advanced_development/06_multimedia_development/01_multimedia_api/13_bpu_api.md)
-- [算法示例](../../03_Demos/03_algorithm_demo/01_summary.md)
-- [模型获取与放置](../../03_Demos/04_demo_support/01_model_files.md)
-- [使用自己的模型](../../03_Demos/04_demo_support/04_custom_model.md)

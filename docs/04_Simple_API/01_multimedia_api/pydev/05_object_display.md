@@ -440,9 +440,3 @@ print("libsrcampy unbind return:%d" % ret)
 **原因**：`chn` 参数已改为输出接口选择。
 
 **解决**：`10` 表示 DP（DisplayPort）输出、`11` 表示 HDMI 输出，`0~3` 为旧值（默认按 HDMI 处理）。
-
-## 相关文档
-
-- [多媒体接口说明](/Simple_API/multimedia_api/pydev/pydev_multimedia_api)
-- [Camera 对象](/Simple_API/multimedia_api/pydev/object_camera)
-- [采集→显示](/Demos/multimedia_demo/cdev/vio2display)

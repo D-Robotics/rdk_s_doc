@@ -122,9 +122,3 @@ rmmod hobot_pcie
 :::info 说明
 本 SDK 工作区不包含这两个库的源码目录，仅提供头文件与预编译 `.so`（位于 `source/hobot-multimedia/debian/usr/hobot/lib/`）。接口用法与数据结构以头文件为准，见 [PCIe 用户态 API](./04_s100x_pcie_libhbpciehal.md)。
 :::
-
-## 相关文档
-
-- [PCIe 硬件规格](./01_s100x_pcie_hw_guide.md)
-- [PCIe kernel 配置](./03_s100x_pcie_sw_setup.md)
-- [PCIe 用户态 API](./04_s100x_pcie_libhbpciehal.md)

@@ -156,8 +156,3 @@ sudo systemctl disable --now rtc-sync.timer # 停用并移除
 - **断电后系统时间不对**：默认不写 RTC 且出厂不带电池，断电后启动从外置 RTC 恢复的时间是错的（可能是默认值）。联网后 NTP 会纠正；如需断电保时，自备电池并 `sudo hwclock --rtc /dev/rtc1 --systohc` 写入真实时间。
 - **NTP 不生效**：确认网络可达、`timedatectl` 中 `NTP service` 为 `active`；看 `systemctl status systemd-timesyncd` 的同步状态。
 - **`hwclock` 报 adjtime 警告**：`/etc/adjtime` 格式异常，按提示重建或忽略（不影响主功能）。
-
-## 相关文档
-
-- [RTC 调试指南（进阶）](../07_Advanced_development/04_driver_development/14_driver_rtc.md)
-- [系统日志查看](./15_system_log.md)

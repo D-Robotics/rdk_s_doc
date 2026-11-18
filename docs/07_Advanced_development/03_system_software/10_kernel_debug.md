@@ -421,9 +421,3 @@ crash>
 **原因**：`arm64-regs.so` 是与 crash/gdb 版本配套的扩展模块（本文示例环境为 crash 9.0.0 + gdb 16.2），自行编译的 crash 版本差异较大时可能加载失败。
 
 **解决**：优先使用与本文示例一致的 crash 版本；如仍失败，请联系 FAE 确认与所用 crash 版本配套的扩展文件。
-
-## 相关文档
-
-- [应用实时内核](/Advanced_development/system_software/realtime_kernel)
-- [内核头文件](/Advanced_development/system_software/kernel_headers)
-- [MCU ramdump 功能](/Advanced_development/mcu_development/mcu_ramdump)

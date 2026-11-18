@@ -283,9 +283,3 @@ Connecting to host 192.168.127.195, port 5002
 :::note 提示
 若以上方法未能解决问题，请参考 [iperf3 官方文档](https://iperf.fr/) 或相关技术论坛，获取更多支持。
 :::
-
-## 相关文档
-
-- [概述](./01_overview.md)
-- [Ethernet 驱动开发指南](../16_driver_ethernet/01_ethernet.md)
-- [搭建开发环境](../../06_environment_build/01_environment_build.md)

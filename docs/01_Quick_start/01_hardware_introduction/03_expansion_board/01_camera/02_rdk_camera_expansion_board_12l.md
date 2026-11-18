@@ -177,8 +177,3 @@ Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能�
 ## 适配模组
 
 参考[配件清单](../../01_rdk_s100.md#accessory-list)
-
-## 相关文档
-
-- 主板：[开发者套件简介（RDK S100）](../../01_rdk_s100.md)
-- 扩展板：[RDK S100 相机扩展板](./01_rdk_camera_expansion_board.md)、[RDK S100 MCU 接口扩展板](../02_mcu/01_rdk_mcu_port_expansion_board.md)

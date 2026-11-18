@@ -523,10 +523,3 @@ mv coremark.exe coremark_O2_multi
 :::note 注意
 `-O2` 编译时，`linux` 端口的 `PORT_CFLAGS` 同样是 `-O2`，因此 `Compiler flags` 行会呈现为 `-O2 -O2 ...`，属于正常现象。
 :::
-
-## 相关文档
-
-- [概述](./01_overview.md)
-- [CPU-BPU-DDR 压力测试](./03_bpu_cpu_ddr_stress.md)
-- [DDR 带宽测试](./10_ddr_bandwidth.md)
-- [开发环境搭建及编译说明](../../06_environment_build/01_environment_build.md)

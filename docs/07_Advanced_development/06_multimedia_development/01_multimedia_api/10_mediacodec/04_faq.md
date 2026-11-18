@@ -227,8 +227,3 @@ ret = hb_mm_mc_set_startup_config(context, &startup_config);
 numerator = 1;
 denominator = 90000;
 ```
-
-## 相关文档
-
-- [MediaCodec 应用场景](/Advanced_development/multimedia_development/multimedia_api/mediacodec/scene)
-- [MediaCodec 调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)

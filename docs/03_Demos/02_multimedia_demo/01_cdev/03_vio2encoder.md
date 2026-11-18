@@ -73,11 +73,3 @@ make
 **原因**：未连接 MIPI 摄像头，或传感器初始化失败。
 
 **解决**：断电后重新连接摄像头，确认传感器型号受支持后重试。
-
-## 相关文档
-
-- [Python 示例](../02_pydev/01_pydev_multimedia.md)
-- [视频采集](./01_vio_capture.md)
-- [VIO（视频输入）API](../../../04_Simple_API/01_multimedia_api/cdev/01_vio_api.md)
-- [ENCODER（编码模块）API](../../../04_Simple_API/01_multimedia_api/cdev/02_encoder_api.md)
-- [C/C++ demo 编程指南](../../04_demo_support/02_c_cpp_build.md)
