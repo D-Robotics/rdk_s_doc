@@ -16,8 +16,13 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 | DFU+Fastboot | 空板或系统损坏导致设备变砖 | 需拨码使设备进入 DFU 引导模式 |
 | Fastboot | 非空板状态更新系统 | 要求非空板且系统能进入 U-Boot |
 
-:::warning 前置确认
-  目前需要将 [SW3 开关](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#系统启动盘选择-sw3) 拨至从板载 eMMC 启动，暂不支持从 M.2 NVMe 固态硬盘启动。
+:::warning 启动盘选择
+启动盘由 [SW3 开关](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#系统启动盘选择-sw3) 决定，按需要启动的介质设置即可——烧录步骤只使用 SW1（电源）和 SW2（DOWNLOAD），不涉及 SW3。若通过 Fastboot 模式烧录，设备需能从当前启动盘进入 U-Boot；启动盘不可用时改用 DFU+Fastboot。
+
+- 从 **eMMC** 启动：`D13=0, D12=1`。
+- 从 **NVMe** 启动：`D13=1, D12=0`。
+
+烧录 NVMe 需使用 NVMe 版本的镜像，D-Robotics 默认提供的镜像面向 eMMC，NVMe 镜像需自行编译（编译配置 `RDK_DISK_MEDIUM="nvme"`），见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-镜像编译须知)。NVMe 启动的硬件版本要求（V0P6 及以上）和 `miniboot_flash` 的编译模式约束，见同一节末尾的「NVMe 启动注意事项」。烧录 NVMe 镜像需使用 XBurn 1.1.10 及以上版本。
 :::
 
 ### 进入 DFU+Fastboot 模式
@@ -40,11 +45,11 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 ## 烧录全镜像
 
-适用于首次烧录或系统恢复，烧录完整系统镜像包，覆盖板载 eMMC 与 NOR Flash 上的 `miniboot_flash`。
+适用于首次烧录或系统恢复，烧录完整系统镜像包，覆盖所选存储介质与 NOR Flash 上的 `miniboot_flash`。**存储介质** 按实际情况选 `eMMC`（板载）或 `NVMe`（M.2 扩展）。
 
 1. **产品类型** 选择 `RDK S100`。
 2. **连接类型** 选择 `USB`，**下载模式** 选择（`DFU+Fastboot` 或 `Fastboot`）。
-3. **存储介质** 选择 `eMMC`，**固件类型** 选择 `secure`。
+3. **存储介质** 选择 `eMMC` 或 `NVMe`，**固件类型** 选择 `secure`。
 4. 在 **镜像所在目录** 右侧，单击 **浏览**，选择固件所在的 product 文件夹。
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/full-image-flash.jpg" alt="" style={{ width: '100%' }} />
@@ -71,15 +76,17 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 ## 烧录指定区域{#烧录指定区域}
 
-按指定区域烧录，只烧录部分镜像，而非完整的全镜像包。**存储介质** 选 `eMMC`，支持的区域如下：
+按指定区域烧录，只烧录部分镜像，而非完整的全镜像包。**存储介质** 选 `eMMC` 或 `NVMe`。`miniboot_flash` 位于 NOR Flash，与所选介质无关，eMMC/NVMe 均可勾选；其余区域按「实际存储介质」列与所选介质对应。支持的区域如下：
 
 | 区域 | 实际存储介质 | 固件内容 | 镜像 |
 | --- | --- | -------- | ---- |
 | miniboot_flash | NOR Flash | NOR Flash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
 | miniboot_emmc | eMMC | eMMC 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_emmc.img |
 | emmc | eMMC | eMMC 完整镜像，已包含 miniboot_emmc | img_packages/disk/emmc_disk.simg |
+| miniboot_nvme | NVMe | NVMe 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_nvme.img |
+| nvme | NVMe | NVMe 完整镜像，已包含 miniboot_nvme | img_packages/disk/nvme_disk.simg |
 
-在 [烧录全镜像](#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **烧录指定区域**，勾选目标区域（如 `miniboot_flash` 和 `miniboot_emmc`），完成烧录并启动验证。
+在 [烧录全镜像](#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **烧录指定区域**，勾选目标区域（如 `miniboot_flash` 和 `miniboot_emmc`；NVMe 介质则为 `miniboot_flash` 和 `miniboot_nvme`），完成烧录并启动验证。
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/specify-region-flash.jpg" alt="" style={{ width: '100%' }} />
 
