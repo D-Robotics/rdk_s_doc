@@ -2490,7 +2490,7 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 #### mc_inter_status_t
 
-`hb_mm_mc_get_status` 的出参，用于观察队列水位、排查堆积与超时。字段与[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)中 `encode status` 分组对应。
+`hb_mm_mc_get_status` 的出参，用于观察队列水位、排查堆积与超时。字段与[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/multimedia_debug_guide/mediacodec_debug_guide)中 `encode status` 分组对应。
 
 codec 的详细运行状态，由 `hb_mm_mc_get_status` 返回。可用于观察队列水位、排查堆积与超时。
 

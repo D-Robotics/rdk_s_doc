@@ -693,4 +693,4 @@ hb_mm_mc_release(&context);
 - **Intra Refresh 自适应模式**（`intra_refresh_mode = 4`）不能与无损编码和 ROI 同时使用
 - **`external_frame_buf = 1` 时**：外部 buffer 的地址仍需通过 dequeue / queue 流程填入，直接改 buffer 地址即可
 
-具体故障现象与排查见[常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)；调试节点与状态输出见[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/debug_guide/mediacodec_debug_guide)。
+具体故障现象与排查见[常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)；调试节点与状态输出见[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/multimedia_debug_guide/mediacodec_debug_guide)。
