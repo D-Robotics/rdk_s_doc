@@ -38,9 +38,13 @@ For RDK S100 commercial materials, please switch to the **FTP Download** option 
 
 <br/><br/>
 
+<DocScope versions=">= 4.1.0">
+
 :::note NVMe image
 System images are built for eMMC by default. To flash to NVMe and boot from it, build the NVMe image yourself; see [Build system development guide · eMMC/UFS/NVMe image build notes](../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-image-build-notes).
 :::
+
+</DocScope>
 
 <!-- <DocScope products="RDK S600">
 
