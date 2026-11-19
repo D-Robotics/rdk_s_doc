@@ -5,6 +5,10 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
 
 # 备份和恢复镜像
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 本页介绍如何把 RDK S100 当前系统备份成镜像，并恢复到源板或复制到新板。
 
 ## 概述
@@ -95,6 +99,22 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
 
 ## 备份指定区域
 
+<DocScope versions=">= 4.1.0">
+
+备份指定区域的镜像到 PC。`miniboot_flash` 位于 NOR Flash，与所选介质无关，eMMC/NVMe 均可备份；其余区域按「实际存储介质」列与所选介质对应。支持的备份区域如下：
+
+| 区域 | 实际存储介质 | 固件内容 | 备份镜像 |
+| --- | --- | -------- | ------------ |
+| miniboot_flash | NOR Flash | NOR Flash 基础启动镜像 | img_packages/disk/miniboot_flash_backup.img |
+| miniboot_emmc | eMMC | eMMC 基础启动镜像 | img_packages/disk/miniboot_emmc_backup.img |
+| emmc | eMMC | eMMC 完整镜像 | img_packages/disk/emmc_disk_backup.img |
+| miniboot_nvme | NVMe | NVMe 基础启动镜像 | img_packages/disk/miniboot_nvme_backup.img |
+| nvme | NVMe | NVMe 完整镜像 | img_packages/disk/nvme_disk_backup.img |
+
+</DocScope>
+
+<DocScope versions="4.0.5">
+
 备份指定区域的镜像到 PC。支持的备份区域如下：
 
 | 区域 | 实际存储介质 | 固件内容 | 备份镜像 |
@@ -102,6 +122,8 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
 | miniboot_flash | NOR Flash | NOR Flash 基础启动镜像 | img_packages/disk/miniboot_flash_backup.img |
 | miniboot_emmc | eMMC | eMMC 基础启动镜像 | img_packages/disk/miniboot_emmc_backup.img |
 | emmc | eMMC | eMMC 完整镜像 | img_packages/disk/emmc_disk_backup.img |
+
+</DocScope>
 
 1. 在 [烧录全镜像](./03_burn.md#烧录全镜像) 步骤基础上，展开 **高级配置**，勾选 **备份指定区域**，勾选目标区域（如 `miniboot_flash` 和 `miniboot_emmc`）。
 
@@ -121,8 +143,10 @@ description: 介绍使用 XBurn 备份 RDK S100 系统镜像并恢复的步骤�
    | miniboot_emmc | `miniboot_emmc_backup.img` | `miniboot_emmc.img` |
    | emmc | `emmc_disk_backup.img` | **`emmc_disk.simg`** |
 
+   <DocScope versions=">= 4.1.0">NVMe 系统另需处理 `miniboot_nvme_backup.img` → `miniboot_nvme.img`、`nvme_disk_backup.img` → `nvme_disk.simg`。</DocScope>
+
    :::note
-   `emmc` 区域的扩展名须由 `.img` 改为 `.simg`。
+   `emmc`<DocScope versions=">= 4.1.0"> / `nvme`</DocScope> 整盘区域的扩展名须由 `.img` 改为 `.simg`。
    :::
 
 4. 按 [烧录指定区域](./03_burn.md#烧录指定区域) 烧录，勾选与备份时相同的区域。
