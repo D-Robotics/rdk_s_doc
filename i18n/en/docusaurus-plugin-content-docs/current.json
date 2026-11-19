@@ -179,13 +179,45 @@
     "message": "PORT Module Guide",
     "description": "The label for category PORT 模块指南 in sidebar tutorialSidebar"
   },
-  "sidebar.tutorialSidebar.category.多媒体开发指南": {
-    "message": "RDK X3 Multimedia Development Guide",
-    "description": "The label for category 多媒体开发指南 in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.多媒体开发指南（HBN接口）": {
+    "message": "Multimedia Development Guide (HBN Interface)",
+    "description": "The label for category 多媒体开发指南（HBN接口） in sidebar tutorialSidebar"
   },
-  "sidebar.tutorialSidebar.category.多媒体开发指南.link.generated-index.description": {
-    "message": "Multimedia Development Guide",
-    "description": "The generated-index page description for category 多媒体开发指南 in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.多媒体开发指南（HBN接口）.link.generated-index.description": {
+    "message": "Multimedia Development Guide (HBN Interface)",
+    "description": "The generated-index page description for category 多媒体开发指南（HBN接口） in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.多媒体开发指南（V4L2接口）": {
+    "message": "Multimedia Development Guide (V4L2 Interface)",
+    "description": "The label for category 多媒体开发指南（V4L2接口） in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.多媒体开发指南（V4L2接口）.link.generated-index.description": {
+    "message": "Multimedia Development Guide (V4L2 Interface)",
+    "description": "The generated-index page description for category 多媒体开发指南（V4L2接口） in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.解决方案": {
+    "message": "Solutions",
+    "description": "The label for category 解决方案 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.解决方案.link.generated-index.description": {
+    "message": "Solutions",
+    "description": "The generated-index page description for category 解决方案 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.技术方案": {
+    "message": "Technical Solutions",
+    "description": "The label for category 技术方案 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.技术方案.link.generated-index.description": {
+    "message": "Technical Solutions",
+    "description": "The generated-index page description for category 技术方案 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.应用方案": {
+    "message": "Application Solutions",
+    "description": "The label for category 应用方案 in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.应用方案.link.generated-index.description": {
+    "message": "Application Solutions",
+    "description": "The generated-index page description for category 应用方案 in sidebar tutorialSidebar"
   },
   "sidebar.tutorialSidebar.category.多媒体应用开发": {
     "message": "S600 Multimedia Application Development",

@@ -1,9 +1,9 @@
 {
-  "label": "多媒体开发指南",
+  "label": "多媒体开发指南（HBN接口）",
   "position": 5,
   "link": {
     "type": "generated-index",
     "slug": "/Advanced_development/multimedia_development",
-    "description": "多媒体开发指南"
+    "description": "多媒体开发指南（HBN接口）"
   }
 }

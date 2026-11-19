@@ -1,9 +1,9 @@
 {
-  "label": "RDK X3 Multimedia Development Guide",
+  "label": "Multimedia Development Guide (HBN Interface)",
   "position": 5,
   "link": {
     "type": "generated-index",
     "slug": "/Advanced_development/multimedia_development",
-    "description": "Multimedia Development Guide"
+    "description": "Multimedia Development Guide (HBN Interface)"
   }
 }
