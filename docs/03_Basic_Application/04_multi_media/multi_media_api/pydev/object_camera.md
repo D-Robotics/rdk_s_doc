@@ -362,7 +362,16 @@ cam.close_cam()
 <font color='Blue'>【参考代码】</font>  
 
 无
-## host 编号选择
-camera 对应的 host 编号如下图所示
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Camera对应的host编号示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+## host 编号选择
+
+Camera 扩展板上 MIPI 相机接口与 host 编号的对应关系如下：
+
+| 接口（板卡丝印） | 连接器 | MIPI host |
+| --- | --- | --- |
+| MIPI 相机接口 1（CAM1） | J2200 | `0` |
+| MIPI 相机接口 2（CAM2） | J2201 | `1` |
+
+注意：板卡丝印上的 CAM1、CAM2 是接口编号，不是 host 编号，请勿混用。
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png" alt="RDK S100 Camera 扩展板接口示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />

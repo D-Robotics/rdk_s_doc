@@ -370,6 +370,14 @@ None
 None
 
 ## Host ID Selection
-The host ID corresponding to the camera is shown in the figure below:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/20250220-114529.png" alt="Host ID Selection diagram" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+The MIPI camera interfaces on the Camera Expansion Board map to host IDs as follows:
+
+| Interface (silkscreen) | Connector | MIPI host |
+| --- | --- | --- |
+| MIPI camera interface 1 (CAM1) | J2200 | `0` |
+| MIPI camera interface 2 (CAM2) | J2201 | `1` |
+
+Note: CAM1 and CAM2 on the board silkscreen are interface numbers, not host IDs. Do not confuse the two.
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_camera_expansion_board_interface.png" alt="RDK S100 Camera Expansion Board interface diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
