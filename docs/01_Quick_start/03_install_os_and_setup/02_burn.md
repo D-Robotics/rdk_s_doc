@@ -79,16 +79,18 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 **V1P0 版本（当前）**
 
-1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `ON`，进入 DFU 模式。
-3. 将 SW3 拨码至 `ON`，开启电源。
-4. 检查 [D61 Flash 灯](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#indicator-leds-d59d60d61)：常亮表示已进入 DFU 模式。
+进入 DFU 模式要操作两个开关：板卡**正面**的 **Power 按键**（图中 22）和板卡**背面**的 **Flash 按键**（图中 35），位置见下图：
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-dfu-mode.png" alt="Entering DFU mode (RDK S600)" style={{ width: '100%' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/rdk_s600_v1p0_main__20260928.png" alt="RDK S600 board front and back views: 22 Power switch, 35 Flash switch, 34 BOOT switch" style={{ width: '100%', maxWidth: '1100px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-预期结果：D61 Flash 灯常亮，表示已进入 DFU 模式。
+1. 将 **Power 按键**（图中 22）拨到 **OFF（下）**。
+2. 将 **Flash 按键**（图中 35）拨到 **ON（上）**（系统正常启动时要把 **Flash 按键**拨回 **OFF（下）**）。
+3. 将 **Power 按键**（图中 22）拨到 **ON（上）**。
+4. 检查 **Flash LED 灯**（图中 20）。
 
-失败排查：指示灯未常亮时，重新核对 SW2、SW3 拨码位置并重新上电；仍无法进入时见[常见问题](#常见问题)。
+预期结果：Flash LED 灯常亮，表示已进入 DFU 模式。
+
+失败排查：Flash LED 灯未常亮时，确认 **Power 按键在 ON（上）**、**Flash 按键在 ON（上）**，再断电重新上电；仍无法进入时见[常见问题](#常见问题)。
 
 </DocScope>
 
@@ -106,9 +108,11 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 <DocScope products="RDK S600">
 
-1. 将 [SW3](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `OFF`，关闭电源。
-2. 将 [SW2](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#switches-sw2sw3) 拨码至 `OFF`，进入正常启动模式。
-3. 将 SW3 拨码至 `ON`，开启电源。
+按键位置见 [步骤 2](#步骤-2进入-dfufastboot-模式) 的主板图：板卡**正面**的 **Power 按键**（图中 22）、板卡**背面**的 **Flash 按键**（图中 35）。
+
+1. 将 **Power 按键**（图中 22）拨到 **OFF（下）**。
+2. 将 **Flash 按键**（图中 35）拨到 **OFF（下）**（正常启动模式）。
+3. 将 **Power 按键**（图中 22）拨到 **ON（上）**。
 
 </DocScope>
 
