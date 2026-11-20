@@ -88,6 +88,14 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 3. 将 **Power 按键**（图中 22）拨到 **ON（上）**。
 4. 检查 **Flash LED 灯**（图中 20）。
 
+**Power 按键、Flash LED 实物图**
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/s600-dfu-power-switch.png" alt="RDK S600 PWR KEY switch and Flash LED" style={{ width: '70%', maxWidth: '520px', display: 'block', margin: '0 auto' }} />
+
+**Flash 按键实物图**
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/s600-dfu-flash-switch.png" alt="RDK S600 FLASH switch" style={{ width: '70%', maxWidth: '520px', display: 'block', margin: '0 auto' }} />
+
 预期结果：Flash LED 灯常亮，表示已进入 DFU 模式。
 
 失败排查：Flash LED 灯未常亮时，确认 **Power 按键在 ON（上）**、**Flash 按键在 ON（上）**，再断电重新上电；仍无法进入时见[常见问题](#常见问题)。
