@@ -29,7 +29,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S600">
 
-- [ ] 已根据目标存储介质设置 SW8 BOOT 拨码（见 [烧录全镜像](#烧录全镜像) 的启动盘选择）。
+- [ ] 已根据目标存储介质设置 **BOOT 拨码**（见 [烧录全镜像](#烧录全镜像) 的启动盘选择）。
 
 </DocScope>
 
@@ -156,10 +156,10 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 | **固件类型** | `secure` |
 
 :::warning 警告
-启动盘由 [SW8 BOOT 拨码](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#boot-sw8) 决定，**烧录前**须按目标存储介质，正确设置 SW8 拨码，烧录后保持拨码位置不变：
+启动盘由 [BOOT 拨码](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit#boot-sw8)（图中 34）决定，**烧录前**须按目标存储介质设置 BOOT 拨码，烧录后保持拨码位置不变：
 
-- 从 **UFS** 启动：SW8 拨至 UFS 启动位（`D12=ON, D13=ON` 或 `D12=OFF, D13=OFF`）。
-- 从 **NVMe** 启动：SW8 拨至 NVMe 启动位（`D12=OFF, D13=ON`）。
+- 从 **UFS** 启动：BOOT 拨码拨至 UFS 启动位（`D12=ON, D13=ON` 或 `D12=OFF, D13=OFF`）。
+- 从 **NVMe** 启动：BOOT 拨码拨至 NVMe 启动位（`D12=OFF, D13=ON`）。
 
 烧录 NVMe 需使用 NVMe 版本的镜像。默认提供的镜像面向 UFS，NVMe 镜像需自行编译，编译配置为 `RDK_DISK_MEDIUM="nvme"`；编译方法见 [构建系统开发指南 · eMMC/UFS/NVMe 镜像编译须知](/Advanced_development/environment_build/rdk_gen#emmcufsnvme-镜像编译须知)。
 :::
@@ -349,6 +349,6 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 ### RDK S600 烧录 NVMe 后无法启动
 
-**原因**：SW8 BOOT 拨码位置与目标存储介质不一致，或使用了面向 UFS 的镜像。
+**原因**：BOOT 拨码位置与目标存储介质不一致，或使用了面向 UFS 的镜像。
 
-**解决**：按[烧录全镜像](#烧录全镜像)的启动盘选择设置 SW8 拨码并保持位置不变，并使用按 `RDK_DISK_MEDIUM="nvme"` 编译的 NVMe 镜像。
+**解决**：按[烧录全镜像](#烧录全镜像)的启动盘选择设置 BOOT 拨码并保持位置不变，并使用按 `RDK_DISK_MEDIUM="nvme"` 编译的 NVMe 镜像。
