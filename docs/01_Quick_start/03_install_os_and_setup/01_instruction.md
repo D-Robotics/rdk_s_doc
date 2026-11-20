@@ -101,6 +101,10 @@ product/
 
 通过 Type-C 数据线连接 PC 的 USB 口与 RDK S600 的 Type-C 口。
 
+**开发板 Type-C 接口位置**
+
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/s600-typec-port.png" alt="RDK S600 Type-C port location" style={{ width: '80%', maxWidth: '720px', display: 'block', margin: '0 auto' }} />
+
 </DocScope>
 
 **安全注意事项**：
