@@ -72,11 +72,11 @@ The `single_pipe_vin_isp_ynr_pym_vpu` program produces the following outputs:
 1. Saves an NV12 image from each PYM output channel to the current working directory every 60 frames.
 2. Feeds the output from PYM channel 0 into an encoder and saves the encoded stream to a file.
 
-Example: Using imx219 as the sensor input, execute `./single_pipe_vin_isp_ynr_pym_vpu -s 0`.
-
 Sample log output:
 
 <DocScope versions="4.0.5">
+
+Example: Using imx219 as the sensor input, execute `./single_pipe_vin_isp_ynr_pym_vpu -s 0`.
 
 ```
 # ./single_pipe_vin_isp_ynr_pym_vpu -s 0
@@ -261,7 +261,7 @@ Offsets: 0 0 0
 
 Example: Using ovx3cstd as the sensor input, execute `./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4`.
 
-```
+```text
 # ./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4
 Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
 	[0] only use [isp only].
@@ -536,12 +536,12 @@ The link port value must match the physical port on the deserializer to which th
 The `single_pipe_vin_isp_ynr_pym_gdc` program outputs the following:  
 1. Saves one NV12 image from each GDC output channel to the current working directory every 30 frames.  
 
-Example: Using imx219 as the sensor input, run:  
-`./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`  
-
 Sample log output:  
 
 <DocScope versions="4.0.5">
+
+Example: Using imx219 as the sensor input, run:  
+`./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`  
 
 ```  
 # ./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin  
@@ -585,7 +585,7 @@ gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 
 Example: Using ovx3cstd as the sensor input, execute `./single_pipe_vin_isp_ynr_pym_gdc -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin`.
 
-```
+```text
 # ./single_pipe_vin_isp_ynr_pym_gdc -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin
 Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
         [0] only use [isp only].
@@ -708,12 +708,12 @@ The output of `single_pipe_vin_isp_ynr_pym_gdc_vpu` is as follows:
 1. Saves one NV12 image from each GDC output channel to the current working directory every 30 frames.  
 2. Sends the GDC channel output images to the encoder for encoding and saves the encoded data to files.  
 
-Example: Using imx219 as the sensor input, execute:  
-`./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`  
-
 Sample log output:  
 
 <DocScope versions="4.0.5">
+
+Example: Using imx219 as the sensor input, execute:  
+`./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`  
 
 ```bash  
 # ./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin  
