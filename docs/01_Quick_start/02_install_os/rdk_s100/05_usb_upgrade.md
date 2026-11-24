@@ -21,7 +21,7 @@ U 盘升级使用 `img_packages/disk/emmc_disk.simg`，与 XBurn 烧录 `emmc` �
 | U 盘升级 | U 盘 | 仅烧录完整 eMMC 区域（`emmc_disk.simg`） | 无 PC、批量烧录、现场恢复 |
 
 :::warning 仅支持写入，不支持备份
-U 盘升级只能把 U 盘中的稀疏镜像烧录到板载 eMMC，**不能**把板载 eMMC 的内容备份或回写到 U 盘。需要备份系统时，使用 [XBurn 备份](./03_burn.md#备份指定区域) 功能。
+U 盘升级只能把 U 盘中的稀疏镜像烧录到板载 eMMC，**不能**把板载 eMMC 的内容备份或回写到 U 盘。需要备份系统时，使用 [XBurn 备份](./04_backup.md#备份指定区域) 功能。
 :::
 
 :::note 适用版本
