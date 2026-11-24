@@ -72,11 +72,11 @@ index: 3  sensor_name: ar0820std-1080p30        config_file:linear_1920x1080_yuv
 1. 每隔 60 帧保存一张每个 PYM 输出通道的 NV12 图至当前运行目录下
 2. 把 PYM 通道 0 输出的图像送入编码器中编码，把编码后的文件保存到文件中。
 
-示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_vpu -s 0`
-
 日志示例如下所示：
 
 <DocScope versions="4.0.5">
+
+示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_vpu -s 0`
 
 ```
 # ./single_pipe_vin_isp_ynr_pym_vpu -s 0
@@ -261,7 +261,7 @@ Offsets: 0 0 0
 
 示例 : 以 ovx3cstd 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4`
 
-```
+```text
 # ./single_pipe_vin_isp_ynr_pym_vpu -s 4 -l 0 -m 4
 Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
 	[0] only use [isp only].
@@ -534,11 +534,11 @@ link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的
 `single_pipe_vin_isp_ynr_pym_gdc` 输出内容如下：
 1. 每隔 30 帧保存一张每个 GDC 输出通道的 NV12 图至当前运行目录下
 
-示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`
-
 日志示例如下所示：
 
 <DocScope versions="4.0.5">
+
+示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`
 
 ```
 # ./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin
@@ -582,7 +582,7 @@ gdc(296805) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 fram
 
 示例 : 以 ovx3cstd 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin`
 
-```
+```text
 # ./single_pipe_vin_isp_ynr_pym_gdc -s 4 -l 0 -m 4 -f ../../vp_sensors/gdc_bin/ovx3cstd.bin
 Using index:4  sensor_name:ovx3cstd-30fps  config_file:linear_1920x1280_yuv_30fps_1lane.c
         [0] only use [isp only].
@@ -704,11 +704,11 @@ link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的
 1. 每隔 30 帧保存一张每个 GDC 输出通道的 NV12 图至当前运行目录下。
 2. 把 GDC 通道输出的图像送入编码器中编码，把编码后的文件保存到文件中。
 
-示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`
-
 日志示例如下所示：
 
 <DocScope versions="4.0.5">
+
+示例 : 以 imx219 作为 sensor 输入，执行 `./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin`
 
 ```bash
 # ./single_pipe_vin_isp_ynr_pym_gdc_vpu -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin
@@ -785,8 +785,7 @@ gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 fram
 gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 31, timestamp: 1695989739150, sys_timestamp: 1792551182257980976
 gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 61, timestamp: 1696989834000, sys_timestamp: 1792551183258075288
 gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 frame id: 91, timestamp: 1697989929250, sys_timestamp: 1792551184258170148
-gdc(296805) dump yuv 1920x1280(stride:1920), buffer size: 2457600 + 1228800 ...
-```bash
+```
 
 </DocScope>
 
