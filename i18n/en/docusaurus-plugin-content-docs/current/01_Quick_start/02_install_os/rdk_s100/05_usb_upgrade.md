@@ -21,7 +21,7 @@ The USB drive upgrade uses `img_packages/disk/emmc_disk.simg`, the same image th
 | USB drive upgrade | USB drive | Flash the complete eMMC region only (`emmc_disk.simg`) | No PC, batch flashing, on-site recovery |
 
 :::warning Write-only, no backup
-The USB drive upgrade can only flash a sparse image from the USB drive to the onboard eMMC. It **cannot** back up or write the onboard eMMC content back to a USB drive. To back up the system, use [XBurn backup](./03_burn.md#back-up-specific-regions).
+The USB drive upgrade can only flash a sparse image from the USB drive to the onboard eMMC. It **cannot** back up or write the onboard eMMC content back to a USB drive. To back up the system, use [XBurn backup](./04_backup.md#back-up-specific-regions).
 :::
 
 :::note Version support
