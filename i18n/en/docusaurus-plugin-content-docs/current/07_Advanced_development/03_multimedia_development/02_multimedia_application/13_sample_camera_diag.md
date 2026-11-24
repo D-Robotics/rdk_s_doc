@@ -43,7 +43,7 @@ The source path of `camera_event_callback` is `/app/multimedia_samples/sample_ca
 
 ### Prerequisites
 
-The sample requires Camera diagnostics to be enabled on the board. If the `sensor` / `deserial` plugins in the current image were not built with `CAM_DIAG`, you may see “no snr/des/poc nodes” or no callback after inject.
+The sample requires Camera diagnostics to be enabled on the board. If the `sensor` / `deserial` plugins in the current image were not built with `CAM_DIAG`, you may see "no snr/des/poc nodes" or no callback after injection.
 
 Typical way to enable diagnostics in the `hobot-camera` source tree:
 
