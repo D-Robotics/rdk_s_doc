@@ -61,18 +61,18 @@ Set the [SW3 switch](../../01_hardware_introduction/01_rdk_s100/01_rdk_s100.md#b
 
 ## Flash the full image
 
-Use this for a first-time flash or system recovery. It flashes the complete system image package and overwrites the <DocScope versions=">= 4.1.0">selected storage medium</DocScope><DocScope versions="4.0.5">onboard eMMC</DocScope> and `miniboot_flash` on NOR Flash.<DocScope versions=">= 4.1.0"> For **Storage medium**, select `eMMC` (onboard) or `NVMe` (M.2 expansion) based on your setup.</DocScope>
+Use this for a first-time flash or system recovery. It flashes the complete system image package and overwrites the <DocScope versions=">= 4.1.0">selected storage medium</DocScope><DocScope versions="4.0.5">onboard eMMC</DocScope> and `miniboot_flash` on NOR Flash.<DocScope versions=">= 4.1.0"> For **Storage**, select `eMMC` (onboard) or `NVMe` (M.2 expansion) based on your setup.</DocScope>
 
-1. For **Product type**, select `RDK S100`.
-2. For **Connection type**, select `USB`. For **Download mode**, select `DFU+Fastboot` or `Fastboot`.
-3. For **Storage**, select <DocScope versions=">= 4.1.0">`eMMC` or `NVMe`</DocScope><DocScope versions="4.0.5">`eMMC`</DocScope>. For **Firmware type**, select `secure`.
-4. To the right of **Image directory**, click **Browse** and select the product folder that contains the firmware.
+1. For **Product Type**, select `RDK S100`.
+2. For **Link Type**, select `USB`. For **Download Mode**, select `DFU+Fastboot` or `Fastboot`.
+3. For **Storage**, select <DocScope versions=">= 4.1.0">`eMMC` or `NVMe`</DocScope><DocScope versions="4.0.5">`eMMC`</DocScope>. For **Firmware Type**, select `secure`.
+4. To the right of **Image Directory**, click **Browse** and select the product folder that contains the firmware.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-full-image-flash-en.png" alt="Full image flashing" style={{ width: '100%' }} />
 
-5. (Optional) To flash multiple devices at once, see the XBurn Manual [Batch flashing](https://developer.d-robotics.cc/xburn_doc/en/basics/batch-burn) (software limit 8 devices, recommended ≤4; the more devices, the higher the failure rate, and stability depends on the cable, USB hub, power supply, and other hardware. The software provides no guarantee). For batch flashing, turn off **Reboot after flashing** so that one device rebooting does not affect the others.
+5. (Optional) To flash multiple devices at once, see the XBurn Manual [Batch flashing](https://developer.d-robotics.cc/xburn_doc/en/basics/batch-burn) (software limit 8 devices, recommended ≤4; the more devices, the higher the failure rate, and stability depends on the cable, USB hub, power supply, and other hardware. The software provides no guarantee). For batch flashing, turn off **Reboot after burning** so that one device rebooting does not affect the others.
 
-6. (Optional) Expand **Advanced configuration** and select **Reboot after flashing**. After flashing, the device reboots automatically, so you do not need to power off, exit download mode, and power on again manually. For details, see the XBurn Manual [Auto-reboot and boot check after flashing](https://developer.d-robotics.cc/xburn_doc/en/basics/auto-reboot).
+6. (Optional) Expand **Advanced Configuration** and select **Reboot after burning**. After flashing, the device reboots automatically, so you do not need to power off, exit download mode, and power on again manually. For details, see the XBurn Manual [Auto-reboot and boot check after flashing](https://developer.d-robotics.cc/xburn_doc/en/basics/auto-reboot).
 
 7. Click **Start Burn**. The device powers on and flashing starts. Wait for the progress to complete.
 
@@ -93,7 +93,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
 <DocScope versions=">= 4.1.0">
 
-Flash only part of the image by region, instead of the complete full-image package. For **Storage medium**, select `eMMC` or `NVMe`. `miniboot_flash` is on NOR Flash and is independent of the selected medium; both eMMC and NVMe can select it. Other regions correspond to the selected medium per the "Actual storage medium" column. The supported regions are:
+Flash only part of the image by region, instead of the complete full-image package. For **Storage**, select `eMMC` or `NVMe`. `miniboot_flash` is on NOR Flash and is independent of the selected medium; both eMMC and NVMe can select it. Other regions correspond to the selected medium per the "Actual storage medium" column. The supported regions are:
 
 | Region | Actual storage medium | Firmware content | Image |
 | --- | --- | -------- | ---- |
@@ -107,7 +107,7 @@ Flash only part of the image by region, instead of the complete full-image packa
 
 <DocScope versions="4.0.5">
 
-Flash only part of the image by region, instead of the complete full-image package. For **Storage medium**, select `eMMC`. The supported regions are:
+Flash only part of the image by region, instead of the complete full-image package. For **Storage**, select `eMMC`. The supported regions are:
 
 | Region | Actual storage medium | Firmware content | Image |
 | --- | --- | -------- | ---- |
@@ -117,7 +117,7 @@ Flash only part of the image by region, instead of the complete full-image packa
 
 </DocScope>
 
-Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`<DocScope versions=">= 4.1.0">; for NVMe media, `miniboot_flash` and `miniboot_nvme`</DocScope>). Complete the flash and verify the boot.
+Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced Configuration**, select **Burn specified area image**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`<DocScope versions=">= 4.1.0">; for NVMe media, `miniboot_flash` and `miniboot_nvme`</DocScope>). Complete the flash and verify the boot.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/specify-region-flash-en.png" alt="Flash specific regions" style={{ width: '100%' }} />
 
@@ -125,7 +125,7 @@ Starting from the steps in [Flash the full image](#flash-the-full-image), expand
 
 Flash by **individual system component partition**, at a finer granularity than [Flash specific regions](#flashing-specific-regions). This is partition-level (a single component partition, such as `uboot`, `boot`, or `system`).
 
-Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific partition images**, and select the target partitions. Complete the flash and verify the boot.
+Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced Configuration**, select **Burn specified partition image**, and select the target partitions. Complete the flash and verify the boot.
 
    The partition options that appear after selection are:
 

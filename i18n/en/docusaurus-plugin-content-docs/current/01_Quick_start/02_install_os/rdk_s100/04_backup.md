@@ -63,7 +63,7 @@ Update U-Boot on the **source board** before backing up:
 
 Back up the complete system image for restoring to the source board or copying to a new board.
 
-1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, and select the `miniboot` regions and the `boot` and `system` partitions.
+1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced Configuration**, and select the `miniboot` regions and the `boot` and `system` partitions.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-s100-migration-back.png" alt="XBurn backup image configuration" style={{ width: '100%' }} />
 
@@ -125,7 +125,7 @@ Back up the image of specific regions to your PC. The supported backup regions a
 
 </DocScope>
 
-1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`).
+1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced Configuration**, select **Backup specified area image**, and select the target regions (such as `miniboot_flash` and `miniboot_emmc`).
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-s100-back-region.png" alt="Back up specific regions" style={{ width: '100%' }} />
 
@@ -155,7 +155,7 @@ Back up the image of specific regions to your PC. The supported backup regions a
 
 Back up by **individual system component partition**, at a finer granularity than [Back up specific regions](#back-up-specific-regions). This is partition-level (a single component partition, such as `uboot`, `boot`, or `system`).
 
-1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced configuration**, select **Back up specific partition images**, select the target partitions, and complete the backup.
+1. Starting from the steps in [Flash the full image](./03_burn.md#flash-the-full-image), expand **Advanced Configuration**, select **Backup specified partition image**, select the target partitions, and complete the backup.
 
    The partition options that appear after selection are:
 
