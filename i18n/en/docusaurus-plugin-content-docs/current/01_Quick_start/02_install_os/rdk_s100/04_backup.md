@@ -30,11 +30,11 @@ Confirm that the source board boots normally and that ADB is enabled.
 
 ### XBurn version requirement
 
-XBurn 1.2.2 or later is required. For installation, see [Install XBurn](https://developer.d-robotics.cc/xburn_doc/install).
+XBurn 1.2.2 or later is required. For installation, see [Install XBurn](https://developer.d-robotics.cc/xburn_doc/en/install).
 
 ### SDK version requirement
 
-- On SDK 4.0.5 or later, start backing up directly.
+- On SDK versions later than 4.0.5, start backing up directly.
 - On SDK 4.0.5 or earlier, U-Boot does not support backing up partitions larger than 4 GB, so update it first.
 
 Update U-Boot on the **source board** before backing up:

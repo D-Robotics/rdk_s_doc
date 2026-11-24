@@ -70,9 +70,9 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-full-image-flash-en.png" alt="Full image flashing" style={{ width: '100%' }} />
 
-5. (Optional) To flash multiple devices at once, see the XBurn Manual [Batch flashing](https://developer.d-robotics.cc/xburn_doc/basics/batch-burn) (software limit 8 devices, recommended ≤4; the more devices, the higher the failure rate, and stability depends on the cable, USB hub, power supply, and other hardware. The software provides no guarantee). For batch flashing, turn off **Reboot after flashing** so that one device rebooting does not affect the others.
+5. (Optional) To flash multiple devices at once, see the XBurn Manual [Batch flashing](https://developer.d-robotics.cc/xburn_doc/en/basics/batch-burn) (software limit 8 devices, recommended ≤4; the more devices, the higher the failure rate, and stability depends on the cable, USB hub, power supply, and other hardware. The software provides no guarantee). For batch flashing, turn off **Reboot after flashing** so that one device rebooting does not affect the others.
 
-6. (Optional) Expand **Advanced configuration** and select **Reboot after flashing**. After flashing, the device reboots automatically, so you do not need to power off, exit download mode, and power on again manually. For details, see the XBurn Manual [Auto-reboot and boot check after flashing](https://developer.d-robotics.cc/xburn_doc/basics/auto-reboot).
+6. (Optional) Expand **Advanced configuration** and select **Reboot after flashing**. After flashing, the device reboots automatically, so you do not need to power off, exit download mode, and power on again manually. For details, see the XBurn Manual [Auto-reboot and boot check after flashing](https://developer.d-robotics.cc/xburn_doc/en/basics/auto-reboot).
 
 7. Click **Start Burn**. The device powers on and flashing starts. Wait for the progress to complete.
 
@@ -85,7 +85,7 @@ Use this for a first-time flash or system recovery. It flashes the complete syst
    - **<font color='Green'>Green</font>** LED: Lit means the hardware is powered on normally.
    :::
 
-   If the device produces no display output for a long time (over 2 minutes) after power-on, the boot failed and you need to debug over a serial cable. For boot failure troubleshooting, see the XBurn Manual [Boot issues](https://developer.d-robotics.cc/xburn_doc/troubleshooting/boot-issues).
+   If the device produces no display output for a long time (over 2 minutes) after power-on, the boot failed and you need to debug over a serial cable. For boot failure troubleshooting, see the XBurn Manual [Boot issues](https://developer.d-robotics.cc/xburn_doc/en/troubleshooting/boot-issues).
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/s100-boot.png" alt="S100 system boot desktop" style={{ width: '100%' }} />
 
