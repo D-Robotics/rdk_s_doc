@@ -62,7 +62,7 @@ V0P2 DFU entry is the same as the V1P0 version above.
 
 ## Flash the full image
 
-Use this for a first-time flash or system recovery. It flashes the complete system image package. For **Storage medium**, select `UFS` (onboard) or `NVMe` (expansion) based on your setup.
+Use this for a first-time flash or system recovery. It flashes the complete system image package. For **Storage**, select `UFS` (onboard) or `NVMe` (expansion) based on your setup.
 
 :::warning Boot disk selection
 The boot disk is determined by the [SW8 BOOT DIP switch](../../01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#boot-sw8). **Before flashing**, set the SW8 DIP switch correctly for the target storage medium, and keep the switch position unchanged after flashing:
@@ -73,16 +73,16 @@ The boot disk is determined by the [SW8 BOOT DIP switch](../../01_hardware_intro
 Flashing NVMe requires the NVMe version of the image. D-Robotics provides UFS images by default; the NVMe image must be compiled on your own (build config `RDK_DISK_MEDIUM="nvme"`). See [Build system development guide · eMMC/UFS/NVMe image build notes](../../../07_Advanced_development/06_rdk_gen.md#emmcufsnvme-image-build-notes).
 :::
 
-1. For **Product type**, select `RDK S600`.
-2. For **Connection type**, select `USB`. For **Download mode**, select `DFU+Fastboot` or `Fastboot`.
-3. For **Storage**, select `UFS` or `NVMe`. For **Firmware type**, select `secure`.
-4. To the right of **Image directory**, click **Browse** and select the product folder that contains the firmware.
+1. For **Product Type**, select `RDK S600`.
+2. For **Link Type**, select `USB`. For **Download Mode**, select `DFU+Fastboot` or `Fastboot`.
+3. For **Storage**, select `UFS` or `NVMe`. For **Firmware Type**, select `secure`.
+4. To the right of **Image Directory**, click **Browse** and select the product folder that contains the firmware.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-full-flash.png" alt="Full image flashing" style={{ width: '100%' }} />
 
-5. (Optional) To flash multiple devices at once, see the XBurn Manual [Batch flashing](https://developer.d-robotics.cc/xburn_doc/basics/batch-burn) (software limit 8 devices, recommended ≤4; the more devices, the higher the failure rate, and stability depends on the cable, USB hub, power supply, and other hardware. The software provides no guarantee). For batch flashing, turn off **Reboot after flashing** so that one device rebooting does not affect the others.
+5. (Optional) To flash multiple devices at once, see the XBurn Manual [Batch flashing](https://developer.d-robotics.cc/xburn_doc/basics/batch-burn) (software limit 8 devices, recommended ≤4; the more devices, the higher the failure rate, and stability depends on the cable, USB hub, power supply, and other hardware. The software provides no guarantee). For batch flashing, turn off **Reboot after burning** so that one device rebooting does not affect the others.
 
-6. (Optional) Expand **Advanced configuration** and select **Reboot after flashing**. After flashing, the device reboots automatically, so you do not need to power off, switch to normal boot mode, or power on again manually. For details, see the XBurn Manual [Auto-reboot and boot check after flashing](https://developer.d-robotics.cc/xburn_doc/basics/auto-reboot).
+6. (Optional) Expand **Advanced Configuration** and select **Reboot after burning**. After flashing, the device reboots automatically, so you do not need to power off, switch to normal boot mode, or power on again manually. For details, see the XBurn Manual [Auto-reboot and boot check after flashing](https://developer.d-robotics.cc/xburn_doc/basics/auto-reboot).
 
 7. Click **Start Burn**. The device powers on and flashing starts. Wait for the progress to complete.
 
@@ -102,7 +102,7 @@ Flashing NVMe requires the NVMe version of the image. D-Robotics provides UFS im
 ## Advanced usage
 
 - Use this for specific scenarios other than a first-time flash.
-- In addition to flashing the full image, XBurn supports **Flash specific regions**, **Back up specific regions**, and **Flash specific partition images**.
+- In addition to flashing the full image, XBurn provides the **Burn specified area image**, **Backup specified area image**, and **Burn specified partition image** options under **Advanced Configuration**.
 - To flash without a PC, for batch flashing, or for on-site recovery, see [USB drive upgrade](./05_usb_upgrade.md).
 
 ### Flash specific regions{#flashing-specific-regions}
@@ -118,7 +118,7 @@ Flashing NVMe requires the NVMe version of the image. D-Robotics provides UFS im
 | miniboot_nvme | NVMe | Basic boot image on NVMe, including images for BL31/U-Boot and other system components | img_packages/disk/miniboot_nvme.img |
 | nvme | NVMe | Complete NVMe image, already includes miniboot_nvme | img_packages/disk/nvme_disk.simg |
 
-Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific regions**, and select the target regions (such as `miniboot_flash` and `miniboot_ufs`). Complete the flash and verify the boot.
+Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced Configuration**, select **Burn specified area image**, and select the target regions (such as `miniboot_flash` and `miniboot_ufs`). Complete the flash and verify the boot.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-region-flash.png" alt="Flash specific regions" style={{ width: '100%' }} />
 
@@ -132,7 +132,7 @@ Back up the image of specific regions to your PC. `miniboot_flash` is on NOR Fla
 | ufs | UFS | Complete UFS image | img_packages/disk/ufs_disk_backup.img |
 | nvme | NVMe | Complete NVMe image | img_packages/disk/nvme_disk_backup.img |
 
-Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Back up specific regions**, and select the target region (such as `miniboot_flash`). After flashing, open `img_packages/disk/` and check the backup image file `miniboot_flash_backup.img`.
+Starting from the steps in [Flash the full image](#flash-the-full-image), expand **Advanced Configuration**, select **Backup specified area image**, and select the target region (such as `miniboot_flash`). After flashing, open `img_packages/disk/` and check the backup image file `miniboot_flash_backup.img`.
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/en-backup.png" alt="Back up specific regions" style={{ width: '100%' }} />
 
@@ -145,7 +145,7 @@ Starting from the steps in [Flash the full image](#flash-the-full-image), expand
 
 Flash by **individual system component partition**, at a finer granularity than [Flash specific regions](#flashing-specific-regions). This is partition-level (a single component partition, such as `uboot`, `boot`, or `system`).
 
-Starting from the parameters in [Flash the full image](#flash-the-full-image), expand **Advanced configuration**, select **Flash specific partition images**, and select the target partitions. Complete the flash and verify the boot.
+Starting from the parameters in [Flash the full image](#flash-the-full-image), expand **Advanced Configuration**, select **Burn specified partition image**, and select the target partitions. Complete the flash and verify the boot.
 
    The partition options that appear after selection are:
 

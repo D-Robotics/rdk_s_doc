@@ -76,7 +76,7 @@ RDK S100 通过 XBurn 烧录系统镜像前，先按设备状态选择下载模�
 
 7. 单击 **开始升级**，设备上电并开始烧录，等待进度完成。
 
-   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="" style={{ width: '100%' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/install_os/image-S600-xburn-burn_progress.png" alt="烧录进度" style={{ width: '100%' }} />
 
 8. 升级完成后，退出对应模式（DFU 模式需将烧录开关向下拨动退出），关闭电源。
 
