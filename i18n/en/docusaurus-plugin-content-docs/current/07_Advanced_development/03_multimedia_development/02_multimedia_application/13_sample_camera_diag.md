@@ -1,3 +1,8 @@
+---
+sidebar_versions: ">= 4.1.0"
+sidebar_products: RDK S100
+---
+
 # sample_camera_diag usage instructions
 
 ## Function Overview
