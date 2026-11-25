@@ -1024,6 +1024,19 @@ uvc_capture_sample
 
 Run the program directly with `./uvc_capture_sample -h` to display help information.
 
+```sh
+# ./uvc_capture_sample -h
+Usage: ./uvc_capture_sample
+        -i --video_id <id>              Video device ID
+        -d --dump_file                  Save image file flag
+        -F --format <fmt>               picture format(e.g., YUYV, NV12)
+        -l --loop_cnt <num>             Number of capture loops
+        -H --height <px>                Image height
+        -W --width <px>                 Image width
+        -E --isp_info                   Show Isp Info flag
+        -h --help                       Show this message
+```
+
 #### Program Option Descriptions
 
 **Options:**
@@ -1032,7 +1045,7 @@ Run the program directly with `./uvc_capture_sample -h` to display help informat
   - Specifies the video device node, e.g., video0, video1.
 - `-d, --dump_file`
   - Whether to save image files. Enabling this option saves captured images to files.
-- `-F, --format`
+- `-F, --format <fmt>`
   - Sets the image format; choose a format supported by the UVC camera, such as YUYV or NV12.
 - `-l, --loop_cnt <num>`
   - Sets the number of capture loops (i.e., how many frames to capture).

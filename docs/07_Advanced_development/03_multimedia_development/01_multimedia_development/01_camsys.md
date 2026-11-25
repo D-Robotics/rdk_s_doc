@@ -222,7 +222,7 @@ GDC Tool 是一种可在 PC 上进行处理效果仿真的工具。用户可准�
 
     安装环境：mac: brew install node
 
-    安装执行依赖：文件目录下执行 npm install -production
+    安装执行依赖：文件目录下执行 npm install --production
 
     启动应用：执行 node app.js，登陆 http://localhost:3000/
 

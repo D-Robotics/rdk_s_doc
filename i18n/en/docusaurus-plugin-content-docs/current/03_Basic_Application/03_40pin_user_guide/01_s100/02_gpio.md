@@ -417,7 +417,8 @@ def determine_pins():
 
 
 def main():
-```led_pin, but_pin = determine_pins()
+
+    led_pin, but_pin = determine_pins()
     # Set pin numbering mode to BOARD (hardware numbering)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(led_pin, GPIO.OUT)  # LED pin set as output
@@ -617,7 +618,7 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |481|  EMAC_MDIO_HSI0| peri_emac_mdio_hsi0|
 |--- ---------------- --------------------|
-```|482|          SD_CLK|      Not Configured|
+|482|          SD_CLK|      Not Configured|
 |--- ---------------- --------------------|
 |483|          SD_CMD|      Not Configured|
 |--- ---------------- --------------------|

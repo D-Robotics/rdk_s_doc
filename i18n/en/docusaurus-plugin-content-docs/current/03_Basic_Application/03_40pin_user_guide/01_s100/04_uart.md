@@ -14,13 +14,13 @@ The RDK S100 supports UART2 on the 40-pin header, which is disabled by default. 
 
 :::info
 
-On 4.1.0 and later, open **Peripheral bus config** under Interface Options in [srpi-config](../../../02_System_configuration/02_srpi-config.md). Select `UART2`. If you configure only the software option without setting the DIP switch, a UART loopback test transmits data but receives nothing.
+- First, toggle the DIP switch next to the 40-pin header. On the switch marked **40PIN**, push it right to select `UART2`.
 
-Also set the DIP switch next to the 40-pin header. On the switch marked **40PIN**, left selects `I2C5` and right selects `UART2`; set it to the right when using `UART2`.
+    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="40-pin DIP switch for UART2 and I2C5" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="40-pin DIP switch for UART2 and I2C5" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
+- On 4.1.0 and later, open **Peripheral bus config** under Interface Options in [srpi-config](../../../02_System_configuration/02_srpi-config.md), and select `UART2`. If you change only the software setting without toggling the DIP switch, a UART loopback test transmits data but receives nothing.
 
-For pin definitions, see [Pin definitions and applications](./01_40pin_define.md#40pin_define).
+- For pin definitions, see [Pin definitions and applications](./01_40pin_define.md#40pin_define).
 
 :::
 
@@ -32,7 +32,7 @@ For pin definitions, see [Pin definitions and applications](./01_40pin_define.md
 
 The 40-pin header requires a DIP switch to select between UART2 and I2C5. For specific details, please refer to the image below:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="UART Application photo" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_100_funcreuse_40pin-en.jpg" alt="UART Application photo" style={{ width: '40%', maxWidth: "980px", height: "auto", display: "block", margin: "0,0" }} />
 
 After toggling the DIP switch, you also need to modify the device tree file: set the `uart2` status to `okay` and the `i2c5` status to `disabled`. The modification path and method are as follows:
 
@@ -90,15 +90,15 @@ Connect TXD and RXD together physically, then run the test program to perform wr
 
 ### Hardware Connection
 
-Directly connect TXD and RXD together using a jumper wire:
+Directly connect TXD and RXD together using a jumper cap:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png" alt="UART loopback test: TXD and RXD connected with jumper wire" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png" alt="UART loopback test: TXD and RXD connected with jumper cap" style={{ width: '70%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Test Procedure
 
 
 - Run `python3 /app/40pin_samples/test_serial.py`.
-- From the printed list of UART devices (note: `/dev/ttyS0` is the system debug console; testing it is not recommended unless you fully understand its function), select the appropriate bus and chip select number as input options. For example: On RDK S100, test `/dev/ttyS2`
+- From the printed list of UART devices (note: `/dev/ttyS0` is the system debug console; testing it is not recommended unless you fully understand its function), select the UART device to test as the input option. For example, on RDK S100, test `/dev/ttyS2`.
 
 
 Press Enter to confirm your selection, then input the baud rate:

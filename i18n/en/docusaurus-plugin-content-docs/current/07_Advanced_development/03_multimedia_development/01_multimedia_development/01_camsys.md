@@ -28,6 +28,7 @@ The camsys subsystem includes the Camera sensor (including SerDes), VIN (includi
 | ISP          | Image Signal Processor                 | Image signal processor                                                      |
 | PYM          | Pyramid                                | Pyramid processing module: image downscaling and ROI                        |
 | GDC          | Geometric Distortion Correction        | Geometric distortion correction module                                      |
+| LPWM         | Lite Pulse Width Modulation            | Lite pulse width modulation module                                          |
 | VPF          | Video Process Framework (VIN+ISP+PYM..)| Video processing management module                                          |
 | VIO          | Video In/Out (VIN+VPM)                 | Video input/output module                                                   |
 | STITCH       | Stitch hardware Module                 | Image stitching processing module                                           |
@@ -320,7 +321,7 @@ All transformation types share three common parameters: **Pan**, **Tilt**, and *
 
         rotation debugging effect: value range (-180, +180). As shown below:
 
-        <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-12-en.png" alt="rotation parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+        <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/image-12-en.png" alt="rotation parameter debugging effect" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 
         :::info Note!
@@ -1128,7 +1129,7 @@ The Stitch hardware supports maximum input and output resolutions of 4096x4096.
 
 Here, the "LUT table" refers to the buffer storing blending weight parameters.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch_work-en.jpg" alt="STITCH diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch_work-en.jpg" alt="STITCH diagram" style={{ width: '60%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 **Hardware Stitching Diagram**
 
@@ -1140,7 +1141,7 @@ By using the two source ROIs shown in the image with different blend modes, the 
 The hardware stitching function can merge and blend multiple images into a single output image. Designed flexibly, it uses ROIs as the basic processing unit and employs the alpha blending algorithm. Different ROI partitions and configurations can be defined via configuration parameters to generate various stitching schemes. Additionally, LUT tables are used to optimize transition zones during stitching. In autonomous driving and ADAS Automated Parking Assist (APA) scenarios, this hardware can stitch four IPM (Inverse Perspective Mapping) images—already distortion-corrected from four cameras—into a single 360-degree surround-view image for parking space detection, allowing users to easily view parking lines and surroundings.
 
 **Typical Scenario**  
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch1-en.jpg" alt="STITCH diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />  
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/stitch1-en.jpg" alt="STITCH diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />  
 In an APA scenario with four surround-view cameras, GDC fetches four back-projected images and reference points (CFG BIN) from DDR, outputs four IPM images after distortion correction, and then uses the STITCH hardware module with a pre-defined stitching configuration (CPG PARAM) to generate a bird's-eye-view output.
 
 **Placement Layout**  
@@ -2034,13 +2035,13 @@ In software, the Camera uses a dedicated set of APIs. Modules downstream of the 
 Multiple vnodes form a vflow (similar to a pipeline). The Camera and VIN are bound together via the attach interface.  
 Users only need to call HBN APIs to initialize and bind modules. Once the vflow is created and started, users do not need to manage frame data transfer—the SDK internally passes frames from upstream to downstream.
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/28afb7cb9d1a5de6c889657a0e548e82-en.jpg" alt="Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/28afb7cb9d1a5de6c889657a0e548e82-en.jpg" alt="Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 A vflow consists of one or more vnodes. Each vnode has one input channel and one or more output channels.
 
 Example API usage:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/492ed46bde119b791326f621b9f5b064-en.jpg" alt="Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/492ed46bde119b791326f621b9f5b064-en.jpg" alt="Description diagram" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### API Reference
 
@@ -4029,7 +4030,7 @@ Final stitched output image:
 
 Corresponding ROI region division for stitching:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch9-en.jpg" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/sample_stitch9-en.jpg" alt="GDC STITCH Stitching Sample diagram" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
   |ROI   |Range                              | SRC0     | Start Point | Size        | SRC1     | Start Point | Size        | Destination Start | Mode           | Direction    |
   |----- |-----------------------------------| ---------| -----------| ------------| ---------| -----------| ------------| ------------------| ---------------| --------|
@@ -4564,7 +4565,10 @@ Create a vflow pipeline:
 		printf("hbn_vflow_bind_vnode[%d]:%d error\n", i, __LINE__);
 		goto err1;
 	}
-```Create another vflow and bind both vflows to the same stitch:
+```
+
+Create another vflow and bind both vflows to the same stitch:
+
 ```c
 	i = 1;
 	ret = hbn_vflow_create(&vflow_fd[i]);

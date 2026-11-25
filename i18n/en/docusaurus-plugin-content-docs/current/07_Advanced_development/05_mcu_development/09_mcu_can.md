@@ -95,7 +95,7 @@ The data flow is shown in the figure above:
 Solution features:
 - Supports data passthrough correctness verification.
 - Supports data passthrough packet loss detection.
-- Supports transmission timeout detection. When the MCU-side CAN2IPC forwards data, it stamps packets with an MCU-side timestamp. After Acore CANHAL receives data, it reads the Acore timestamp. An alarm is raised if transmission times out. Note: time synchronization must be started in advance to synchronize MCU RTC time with Acore NIC phc0 time.
+- Supports transmission timeout detection. When the MCU-side CAN2IPC forwards data, it stamps packets with an MCU-side timestamp. After Acore CANHAL receives data, it reads the Acore timestamp. An alarm is raised if transmission times out. Note: time synchronization must be started in advance to synchronize MCU RTC time with Acore NIC phc0 time. For details, see [Time Synchronization Solution](../02_linux_development/04_driver_development_super/12_driver_timesync.md#mcu-time-synchronization-explanation).
 - Supports parallel transmission on multiple CAN channels. Data from multiple MCU-side CAN controllers can be forwarded to Acore simultaneously. Acore applications read CAN data from different channel numbers through CANHAL.
 - Because CANHAL uses IPC for underlying transport, and IPC currently does not support multiple processes or threads reading/writing the same channel, CANHAL does not support this either.
 

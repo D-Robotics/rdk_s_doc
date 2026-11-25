@@ -65,7 +65,11 @@ fdt-disable=/soc/uart@394C0000;
 ```text
 # 单个 cell：使能 YSN8130 备份电池充电
 fdt-setprop=/soc/i2c@39460000/ysn8130@32 drobot,backup-charge-enable <1>;
+```
 
+单个字符串示例。此行与充电配置无关，不要与上面的充电配置一起写入 `config.txt`。该行将同一 `ysn8130` 节点的 `status` 设置为 `okay`：
+
+```text
 # 单个字符串：设置节点 status（示例）
 fdt-setprop=/soc/i2c@39460000/ysn8130@32 status okay;
 ```

@@ -752,9 +752,9 @@ $ tree /app/Can/can_multi_ch
 └── run.sh // 运行脚本
 
 ```
-json 文件配置主要包括3个 json 配置文件：`node.json`、`ipcf_channel.json`、`channels.json`。目前为了支持多进程，各个进程都会去当前路径下的 `config` 目录下寻找这3个配置文件。
+json 文件配置主要包括3个 json 配置文件：`nodes.json`、`ipcf_channel.json`、`channels.json`。目前为了支持多进程，各个进程都会去当前路径下的 `config` 目录下寻找这3个配置文件。
 
-`node.json` 负责创建虚拟 CAN 设备节点给 CANHAL API 访问。关键配置选项包括：
+`nodes.json` 负责创建虚拟 CAN 设备节点给 CANHAL API 访问。关键配置选项包括：
 - `channel_id` 字段指定该虚拟 CAN 设备从 ipc 配置文件 `ipcf_channel.json` 中哪一个节点获取数据。
 - `target` 字段表示该虚拟 CAN 设备节点的名称，CANHAL API 通过该名称访问指定的节点。
 - `enable` 字段表示该节点是否使能。
@@ -794,7 +794,7 @@ json 文件配置主要包括3个 json 配置文件：`node.json`、`ipcf_channe
   ]
 }
 ```
-ipcf_channel.json 将 node.json 中用到的 ipc 节点映射到具体的 instance 和 channel。
+ipcf_channel.json 将 nodes.json 中用到的 ipc 节点映射到具体的 instance 和 channel。
 ```json
 {
   "enable" : true,
@@ -1369,12 +1369,6 @@ export CAN_HAL_DEBUG_LEVEL=4
 | 延迟告警 | `-408` | 先做时间同步，再查 CPU 负载和 PHC 时钟（`/dev/hrtc0`） |
 | 发送失败 | `-400` / `-401` | 检查指针、长度，以及单次发送是否超过 4096 字节 |
 | 未 Init 就收发 | `-204` / `-309` | 调整调用顺序：`canInit` → 收发 → `canDeInit` |
-
-打开 CANHAL 日志有助于定位具体失败点：
-
-```bash
-export CAN_HAL_DEBUG_LEVEL=4
-```
 
 ### MCU 侧 DEBUG 应用说明
 

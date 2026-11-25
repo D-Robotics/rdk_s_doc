@@ -18,9 +18,9 @@ Connect MISO and MOSI together physically in hardware, then run the SPI test pro
 
 ### Hardware Connection
 
-Directly connect MISO and MOSI together using a jumper wire:
+Directly connect MISO and MOSI together using a jumper cap:
 
-<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_spi.png" alt="SPI loopback test: MISO and MOSI connected with jumper wire" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_spi.png" alt="SPI loopback test: MISO and MOSI connected with jumper cap" style={{ width: '80%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 ### Test Procedure
 
