@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           ref: gh-pages
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Setup ossutil v2
@@ -33,6 +34,9 @@ jobs:
           OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
         run: |
           ~/ossutil cp -r . oss://cn-rdk-front-prod/rdk_s_doc/ \
+          --exclude "/.git/**" \
+          --exclude "/ossutil.zip" \
+          --exclude "/ossutil-*/**" \
           -e https://d-robotics.cc \
           -i $OSS_ACCESS_KEY_ID \
           -k $OSS_ACCESS_KEY_SECRET \
