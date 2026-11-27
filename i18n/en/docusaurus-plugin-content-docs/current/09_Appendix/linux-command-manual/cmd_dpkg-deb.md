@@ -8,7 +8,7 @@ The **dpkg-deb command** is a software package management tool for Debian Linux.
 
 ## Syntax
 
-```
+```text
   dpkg-deb [<option> ...] <command>
 ```
 
@@ -23,17 +23,18 @@ The dpkg-deb command not only has options to set, but also requires a command to
 - -x: Extract files from the package to the specified directory.
 - -X: Extract files from the package to the specified directory and display the detailed process of extraction.
 - -W: Display package information.
+- -I: Display detailed package information.
 - -R: Extract control information and archive manifest file.
 
 ## Option Description
 
 - `-v, --verbose`: Enable verbose output.
 - `-D, --debug`: Enable debug output.
-  - `--showformat=<format>`: Use alternative format for `--show`.
-  - `--deb-format=<format>`: Choose archive format. Allowed values are 0.939000, 2.0 (default).
-  - `--nocheck`: Disable control file checking (build bad packages).
-  - `--root-owner-group`: Force file owner and group to be root.
-  - `--[no-]uniform-compression`: Use compression parameters on all members. If specified, uniform compression parameters will be used.
+- `--showformat=<format>`: Use alternative format for `--show`.
+- `--deb-format=<format>`: Choose archive format. Allowed values are 0.939000, 2.0 (default).
+- `--nocheck`: Disable control file checking (build bad packages).
+- `--root-owner-group`: Force file owner and group to be root.
+- `--[no-]uniform-compression`: Use compression parameters on all members. If specified, uniform compression parameters will be used.
 - `-z#`: Set compression level during build.
 - `-Z<type>`: Set compression type to be used during build. Allowed types are gzip, xz, zstd, none.
 - `-S<strategy>`: Set compression strategy during build. Allowed values are none, extreme (xz), filtered, huffman, rle, fixed (gzip).
