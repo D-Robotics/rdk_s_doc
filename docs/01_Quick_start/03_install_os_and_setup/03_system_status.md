@@ -17,7 +17,7 @@ import DocScope from '@site/src/components/DocScope';
 ## 前置条件
 
 - [ ] 开发板已烧录 RDK OS，烧录方法见 [烧录说明](./01_instruction.md)。
-- [ ] 已通过 SSH 或串口登录开发板，登录方法见 [远程登录](./05_remote_login.md)；推荐使用默认账户登录。
+- [ ] 开发板已连接外设（通过显示器+键盘终端，或通过串口/SSH 连接，连接方式见 [开始使用 RDK](../02_getting_started.md) 或 [远程登录](./05_remote_login.md)）；推荐使用默认账户登录。
 
 ## 操作步骤
 
@@ -89,7 +89,7 @@ LOGO="rdk-os-logo"
 执行以下命令汇总系统关键信息：
 
 ```bash
-rdkos_info
+sudo rdkos_info
 ```
 
 `rdkos_info` 开头会给出硬件型号与 Board Id：

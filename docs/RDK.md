@@ -25,7 +25,7 @@ RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱�
 
 <DocScope products="RDK S100">
 
-**RDK S100 系列**是一款高性能开发套件，具有 80/128 TOPS 端侧推理算力与 6 核 ARM A78AE 处理能力，支持 2 路 MIPI Camera 接入，4 路 USB 3.0 接口，2 路 PCIe 3.0 接口。
+**RDK S100 系列**是一款高性能开发套件，具有 80/128 TOPS 端侧推理算力与 6 核 ARM A78AE 处理能力，支持 1 路相机扩展接口（提供 3x 4lane MIPI CSI-2），4 路 USB 3.0 接口，1 路 M.2 Key M 硬盘接口（PCIe 3.0）。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="RDK S100 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -33,7 +33,7 @@ RDK OS 是基于 Ubuntu 定制的板端操作系统镜像，烧录后即开箱�
 
 <DocScope products="RDK S600">
 
-**RDK S600 系列**是一款高性能开发套件，具有 560 TOPS 端侧推理算力与 18 核 ARM A78AE 处理能力，支持 2 路 MIPI Camera 与 6 路 GMSL Camera 接入，6 路 USB 3.0 接口，4 路 PCIe 3.0 接口。
+**RDK S600 系列**是一款高性能开发套件，具有 560 TOPS 端侧推理算力与 18 核 ARM A78AE 处理能力，支持 2 路 MIPI 相机接口与 2 路相机扩展接口，6 路 USB 3.2 接口，1 路 M.2 Key M 硬盘接口（PCIe 4.0）。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="RDK S600 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

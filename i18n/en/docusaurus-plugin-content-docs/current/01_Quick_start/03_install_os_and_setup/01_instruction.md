@@ -105,7 +105,7 @@ Use a Type-C data cable to connect a USB port on your PC to the Type-C port of t
 
 Install the drivers and dependencies (which vary by operating system). **Complete this before flashing**; otherwise XBurn cannot detect the device:
 
-- [Windows environment](https://developer.d-robotics.cc/xburn_doc/environment/windows-setup): USB drivers (ADB, Fastboot, DFU) and the CH341 serial driver
+- [Windows environment](https://developer.d-robotics.cc/xburn_doc/environment/windows-setup): USB drivers (ADB, Fastboot, DFU) and the CH340 serial driver
 - [Linux environment](https://developer.d-robotics.cc/xburn_doc/environment/linux-setup): adb/fastboot/dfu-util dependencies and udev rules
 - [macOS environment](https://developer.d-robotics.cc/xburn_doc/environment/mac-setup): brew dependencies (android-platform-tools, dfu-util)
 

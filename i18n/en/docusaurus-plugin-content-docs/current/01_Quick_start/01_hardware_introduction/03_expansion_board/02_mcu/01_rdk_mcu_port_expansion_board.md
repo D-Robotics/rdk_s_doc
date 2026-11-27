@@ -118,12 +118,6 @@ Pin definitions: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s
 
 ### IMU (U8)
 
-:::warning Note
-
-The corresponding functionality is not yet implemented in RDKS100_LNX_SDK_V4.0.2.
-
-:::
-
 Integrates an inertial measurement unit (IMU, model Bosch Sensortec BMI088), which supports communication control over the SPI-5 serial bus.
 
 ## Indicator LED

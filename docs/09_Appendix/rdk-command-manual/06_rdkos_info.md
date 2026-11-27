@@ -8,6 +8,10 @@ description: "RDK 命令 rdkos_info 用法"
 
 **rdkos_info 命令** 用于一次性收集 `RDK` 系统的软件、硬件版本，驱动加载清单，RDK 软件包安装清单和最新的系统日志，方便用户快速获取当前系统的状态信息。
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 语法说明
 
 ```text
@@ -16,7 +20,7 @@ sudo rdkos_info [options]
 
 ## 选项说明
 
-选项都是可选的，非必须。如果不带任何选项参数运行，`rdkos_info` 会默认安装简洁模式输出信息。
+选项都是可选的，非必须。如果不带任何选项参数运行，`rdkos_info` 会默认按简洁模式输出信息。
 
 - `-b`：基础输出模式，不会收集系统日志。
 - `-s`：简洁输出模式（默认），输出 30 行最新的系统日志。
@@ -26,13 +30,15 @@ sudo rdkos_info [options]
 
 ## 常用命令
 
-默认用法
+默认用法：
 
 ```text
 sudo rdkos_info
 ```
 
-部分输出如下：
+<DocScope products="RDK S100">
+
+部分输出如下（RDK S100 示例）：
 
 ```text
 sunrise@ubuntu:/root$ sudo rdkos_info
@@ -96,11 +102,40 @@ sunrise@ubuntu:/root$ sudo rdkos_info
 
 
 [RDK OS Version]:
-        4.0.2-Beta
+        4.0.5
 
 [RDK Kernel Version]:
-        Linux ubuntu 6.1.112-rt43-DR-4.0.2-2506091317-g08c4b8-g2e7d75 #80 SMP PREEMPT_RT Mon Jun  9 13:18:49 CST 2025 aarch64 aarch64 aarch64 GNU/Linux
+        Linux ubuntu 6.1.158-rt58-DR-4.0.6-2603301938-ga9839d-gfb172a #20 SMP PREEMPT_RT Mon Mar 30 19:40:19 CST 2026 aarch64 aarch64 aarch64 GNU/Linux
 
 [RDK Miniboot Version]:
-        4.0.2-20250605231718
+        4.0.6-20260331113043
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+部分输出如下（RDK S600 示例）：
+
+```text
+sunrise@ubuntu:~$ sudo rdkos_info
+================ RDK System Information Collection ================
+
+[Hardware Model]:
+	D-Robotics RDK S600 MCB V1p0 (Board Id = 0x5131310)
+
+[CPU And BPU Status]:
+        =====================1=====================
+        temperature-->
+                pvt_cmn_pvtc1_t1 : 38.565 (C)
+                pvt_cmn_pvtc1_t2 : 40.219 (C)
+                pvt_mcu_pvtc1_t1 : 37.829 (C)
+                pvt_mcu_pvtc1_t2 : 38.013 (C)
+                pvt_bpu_pvtc1_t1 : 38.932 (C)
+...
+
+[RDK OS Version]:
+        5.1.0
+```
+
+</DocScope>

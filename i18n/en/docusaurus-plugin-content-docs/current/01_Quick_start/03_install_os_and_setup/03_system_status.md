@@ -14,7 +14,7 @@ After flashing completes and you log in to the development board, **first confir
 
 ## Prerequisites
 
-- [ ] The development board has been flashed with RDK OS and logged in via SSH or the serial port (see [Remote login](05_remote_login.md)).
+- [ ] The development board has been flashed with RDK OS and accessed via display terminal, SSH, or serial port (see [Getting started](../02_getting_started.md) or [Remote login](05_remote_login.md)).
 
 ## Confirm the system version
 
@@ -80,7 +80,7 @@ RDK S100 is based on Ubuntu 22.04; fields such as the version number and hostnam
 ## Confirm the board model and hardware ID
 
 ```bash
-rdkos_info
+sudo rdkos_info
 ```
 
 `rdkos_info` summarizes the key system information. At the beginning it shows the hardware model and Board Id:

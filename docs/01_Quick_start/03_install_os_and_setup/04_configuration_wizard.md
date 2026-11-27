@@ -8,7 +8,7 @@ description: "入门配置：账户、Wi-Fi、SSH、中文环境、RDK Studio、
 
 本节介绍烧录系统并完成登录后的首次基础配置，包括连接网络、启用 SSH、设置中文环境、安装远程桌面等，使开发板进入可用状态。
 
-> 前置章节：[系统烧录](./01_instruction.md)、[系统状态查询](./03_system_status.md)、[远程登录](./05_remote_login.md)。
+> 相关章节：[系统烧录](./01_instruction.md)、[系统状态查询](./03_system_status.md)、[远程登录](./05_remote_login.md)。
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -19,7 +19,7 @@ import DocScope from '@site/src/components/DocScope';
 ## 前置条件
 
 - [ ] 开发板已 [烧录系统](./01_instruction.md) 并完成启动。
-- [ ] 已通过串口或 SSH 登录开发板（登录方法见 [远程登录](./05_remote_login.md)）。
+- [ ] 已进入开发板终端（可通过直接外接显示器键盘，或通过串口/SSH 登录，详见 [开始使用 RDK](../02_getting_started.md) 或 [远程登录](./05_remote_login.md)）。
 - [ ] 配置无线网络前，已安装 M.2 Key E Wi-Fi & 蓝牙模组。
 
 ## 默认登录账户

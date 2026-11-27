@@ -218,8 +218,6 @@ macOS 系统下使用 minicom 工具连接串口：
 
 ## 网络状态确认{#network_config}
 
-参考视频：[远程登录与网络配置](https://www.bilibili.com/video/BV1rm4y1E73q/?p=3)
-
 在使用远程登录前，需要确保电脑、开发板网络通信正常，如无法 `ping` 通，逐项确认以下内容：
 
 - 确认开发板、电脑 IP 地址配置，一般前三段需要是一样的，例如开发板：`192.168.127.10`，电脑：`192.168.127.100`
@@ -366,6 +364,6 @@ NoMachine 功能需要 S600 端的软件包支持，配置指南见 [NoMachine �
 ## 常见问题
 
 - **SSH 连接被拒绝**：板端 `sudo systemctl status ssh` 确认服务运行；确认防火墙 `sudo ufw status` 未拦截。
-- **串口无输出**：检查波特率（应为 921600），确认 TTL-USB 线 TX/RX 未接反。
+- **串口无输出**：检查波特率（应为 921600），确认 Type-C 调试数据线已插紧且支持数据传输，确认 PC 端设备管理器中已识别出 CH340 COM 端口。
 - **NoMachine 黑屏**：首次配置后必须重启板卡。详见 [入门配置 - NoMachine 配置](04_configuration_wizard.md)。
 - **IP 地址不确定**：串口登录后 `ip addr` 查看，或路由器管理页查找 MAC 地址对应 IP。

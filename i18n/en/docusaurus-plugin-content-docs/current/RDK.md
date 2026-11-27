@@ -25,7 +25,7 @@ Check the system version number: `cat /etc/version`; use `rdkos_info` to view bo
 
 <DocScope products="RDK S100">
 
-The **RDK S100 series** is a high-performance development kit featuring 80/128 TOPS of on-device inference capability and 6-core ARM A78AE processing power. It supports 2 MIPI camera inputs, 4 USB 3.0 ports, and 2 PCIe 3.0 interfaces.
+The **RDK S100 series** is a high-performance development kit featuring 80/128 TOPS of on-device inference capability and 6-core ARM A78AE processing power. It supports 1 camera expansion interface (providing 3x 4lane MIPI CSI-2), 4 USB 3.0 ports, and 1 M.2 Key M SSD interface (PCIe 3.0).
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/image-rdks100-serials.png" alt="RDK S100 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -33,7 +33,7 @@ The **RDK S100 series** is a high-performance development kit featuring 80/128 T
 
 <DocScope products="RDK S600">
 
-The **RDK S600 series** is a high-performance development kit featuring 560 TOPS of on-device inference capability and 18-core ARM A78AE processing power. It supports 2 MIPI camera and 6 GMSL camera inputs, 6 USB 3.0 ports, and 4 PCIe 3.0 interfaces.
+The **RDK S600 series** is a high-performance development kit featuring 560 TOPS of on-device inference capability and 18-core ARM A78AE processing power. It supports 2 MIPI camera interfaces and 2 camera expansion interfaces, 6 USB 3.2 ports, and 1 M.2 Key M SSD interface (PCIe 4.0).
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-rdk_600_v0p1_mainboard_overview.png" alt="RDK S600 series" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

@@ -218,8 +218,6 @@ If garbled text appears when connecting with minicom, see [macOS driver residue 
 
 ## Network Status Confirmation{#network_config}
 
-Reference video: [Remote login and network configuration](https://www.bilibili.com/video/BV1rm4y1E73q/?p=3)
-
 Before logging in remotely, ensure that the PC and the board can communicate over the network. If `ping` fails, check the following:
 
 - Confirm the IP configuration of the board and the PC. The first three octets must match, for example board `192.168.127.10` and PC `192.168.127.100`.
@@ -367,7 +365,7 @@ This section is for users of the Ubuntu Desktop system and describes how to log 
 ## FAQ
 
 - **SSH connection refused**: run `sudo systemctl status ssh` on the board to confirm the service is running; check the firewall with `sudo ufw status`.
-- **No serial output**: check the baud rate (should be 921600) and confirm that the TTL-USB cable's TX/RX are not reversed.
+- **No serial output**: check the baud rate (should be 921600), confirm that the Type-C debug cable is securely connected and supports data transfer, and confirm that the CH340 COM port appears in Device Manager.
 - **NoMachine black screen**: after the first configuration, the board must be rebooted. See [Initial setup - NoMachine configuration](04_configuration_wizard.md).
 - **IP address unknown**: run `ip addr` after serial login, or look up the IP by MAC address in the router's admin page.
 

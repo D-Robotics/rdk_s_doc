@@ -8,7 +8,7 @@ description: "Initial setup: accounts, Wi-Fi, SSH, Chinese locale, RDK Studio, N
 
 This section introduces the first basic setup after flashing the system and logging in, including connecting to the network, enabling SSH, setting the Chinese locale, installing a remote desktop, and so on, to bring the board into a usable state.
 
-> Prerequisites: [System flashing](./01_instruction.md), [System status](./03_system_status.md), [Remote login](05_remote_login.md).
+> Related chapters: [System flashing](./01_instruction.md), [System status](./03_system_status.md), [Remote login](05_remote_login.md).
 
 ```mdx-code-block
 import Tabs from '@theme/Tabs';
@@ -19,7 +19,7 @@ import DocScope from '@site/src/components/DocScope';
 ## Prerequisites
 
 - [ ] The board has been [flashed with the system](./01_instruction.md) and finished booting.
-- [ ] You have logged in to the board via the serial port or SSH (see [Remote login](05_remote_login.md)).
+- [ ] You have accessed the board terminal (via external display and keyboard, or via serial port / SSH, see [Getting started](../02_getting_started.md) or [Remote login](05_remote_login.md)).
 - [ ] Before configuring the wireless network, the M.2 Key E Wi-Fi & Bluetooth module is installed.
 
 ## Default Login Accounts

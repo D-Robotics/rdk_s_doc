@@ -8,6 +8,10 @@ description: "RDK 命令 hrut_somstatus 用法"
 
 **hrut_somstatus** 命令可以获取温度传感器温度、CPU 与 BPU 的运行频率以及 BPU 负载。
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## 语法说明
 
 ```text
@@ -18,6 +22,13 @@ sudo hrut_somstatus
 
 ```shell
 sunrise@ubuntu:~$ sudo hrut_somstatus
+```
+
+<DocScope products="RDK S100">
+
+部分输出如下（RDK S100 示例）：
+
+```shell
 =====================1=====================
 temperature-->
         pvt_cmn_pvtc1_t1 : 38.565 (C)
@@ -66,6 +77,31 @@ bpu status information---->
                 ratio
         bpu0:   0
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+部分输出如下（RDK S600 示例）：
+
+```shell
+=====================1=====================
+temperature-->
+        pvt_cmn_pvtc1_t1 : 38.565 (C)
+        pvt_cmn_pvtc1_t2 : 40.219 (C)
+        pvt_mcu_pvtc1_t1 : 37.829 (C)
+        pvt_mcu_pvtc1_t2 : 38.013 (C)
+        pvt_bpu_pvtc1_t1 : 38.932 (C)
+...
+cpu frequency-->
+                  min   cur     max
+        policy0: 1000000        2000000 2000000
+bpu status information---->
+                ratio
+        bpu0:   0
+```
+
+</DocScope>
 
 **temperature（温度）**：
 

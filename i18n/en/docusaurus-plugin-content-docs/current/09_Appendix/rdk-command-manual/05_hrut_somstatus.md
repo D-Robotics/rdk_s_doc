@@ -6,6 +6,10 @@ sidebar_position: 5
 
 The **hrut_somstatus** command retrieves temperature sensor readings, CPU/BPU operating frequencies, and BPU load.
 
+```mdx-code-block
+import DocScope from '@site/src/components/DocScope';
+```
+
 ## Syntax
 
 ```
@@ -16,6 +20,13 @@ sudo hrut_somstatus
 
 ```shell
 sunrise@ubuntu:~$ sudo hrut_somstatus
+```
+
+<DocScope products="RDK S100">
+
+Partial output is shown below (RDK S100 example):
+
+```shell
 =====================1=====================
 temperature-->
         pvt_cmn_pvtc1_t1 : 38.565 (C)
@@ -64,6 +75,31 @@ bpu status information---->
                 ratio
         bpu0:   0
 ```
+
+</DocScope>
+
+<DocScope products="RDK S600">
+
+Partial output is shown below (RDK S600 example):
+
+```shell
+=====================1=====================
+temperature-->
+        pvt_cmn_pvtc1_t1 : 38.565 (C)
+        pvt_cmn_pvtc1_t2 : 40.219 (C)
+        pvt_mcu_pvtc1_t1 : 37.829 (C)
+        pvt_mcu_pvtc1_t2 : 38.013 (C)
+        pvt_bpu_pvtc1_t1 : 38.932 (C)
+...
+cpu frequency-->
+                  min   cur     max
+        policy0: 1000000        2000000 2000000
+bpu status information---->
+                ratio
+        bpu0:   0
+```
+
+</DocScope>
 
 **temperature**:
 
