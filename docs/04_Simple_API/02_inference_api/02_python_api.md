@@ -15,13 +15,13 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 
 此外，新版接口在推理阶段会在 C++ 侧释放 Python GIL，使 Python 多线程可并发调用 run()；对多模型推理场景，底层会自动使用多线程并行调度各模型推理任务，以提升吞吐。
 
-### 适用场景
+## 适用场景
 - 在 Python 环境中快速集成和调用 hbm_runtime 运行时能力。
 - 机器人视觉、智能边缘计算等对推理效率和调度灵活性有较高要求的应用。
 - 需要同时加载和管理多个模型，并在不同推理调用中按需配置任务调度参数（优先级/核心绑定/设备 ID 等）的场景。
 - 需要查询模型编译期 BPU 相关信息（例如编译期 BPU core 数）以辅助运行时资源配置与一致性检查的场景。
 
-### 关键特性
+## 关键特性
 - 多模型支持
   - 支持加载单个模型或多个模型组成的模型组；每个模型均可独立获取输入/输出元信息并进行推理。
   - run() 支持对多模型输入进行一次性推理，并按模型名返回结果（即使只跑单个模型也返回 `{model_name: {...}}` 的嵌套结构）。
@@ -38,7 +38,7 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   - 多模型并行推理：当输入为多模型结构时，底层会为每个模型启动线程并行执行推理任务（multi-threaded launch），在多核 BPU 系统上可提升吞吐；单模型场景则仅对应一个推理线程。
 
 ## 安装说明（Installation）
-本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和D-Robotics提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装，适用于 Python 3.10 及以上版本。
+本模块 hbm_runtime 是基于 C++ 实现的高性能推理运行时 Python 接口，依赖 pybind11 和 D-Robotics 提供的底层推理库（如 libdnn, libhbucp 等）。支持通过系统 DEB 包（.deb） 的方式进行安装，适用于 Python 3.10 及以上版本。
 ### 系统依赖
 | 依赖项       | 最低版本  | 说明                                                   |
 |------------|-----------|--------------------------------------------------------|
@@ -46,12 +46,12 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 | pip        | ≥ 22.0    | 安装 wheel 包所需                                      |
 | pybind11   | 任意      | 构建时使用，安装包时不需要依赖                         |
 | scikit-build-core | ≥ 0.7 | 构建 wheel 包时使用（仅源码构建）                    |
-| D-Robotics基础库 | 根据平台 | 如 libdnn.so、libhbucp.so 等，通常由 BSP 提供         |
+| D-Robotics 基础库 | 根据平台 | 如 libdnn.so、libhbucp.so 等，通常由 BSP 提供         |
 
-### 构建wheel包
-构建wheel包的方式有三种下面分别介绍。
-#### 安装deb时构建
-在hobot-dnn包的安装过程中添加了hbm_runtime的wheel构建，deb包安装完成后就会生成hbm-runtime的whl包。
+### 构建 wheel 包
+构建 wheel 包的方式有三种下面分别介绍。
+#### 安装 deb 时构建
+在 hobot-dnn 包的安装过程中添加了 hbm_runtime 的 wheel 构建，deb 包安装完成后就会生成 hbm-runtime 的 whl 包。
   ```bash
   #通过源安装
   sudo apt-get install hobot-dnn
@@ -67,7 +67,7 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   ```
 
 #### 编译系统软件时构建
-在系统软件的镜像编译时会安装hobot-dnn的deb，安装的过程中会构建hbm-runtime的whl包，并转存到`out/product/deb_packages`目录
+在系统软件的镜像编译时会安装 hobot-dnn 的 deb，安装的过程中会构建 hbm-runtime 的 whl 包，并转存到 `out/product/deb_packages` 目录
   ```bash
   sudo ./pack_image.sh
 
@@ -95,29 +95,29 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
 ### 安装方式
 
 #### 使用 wheel 包
-使用wheel 安装的方式有两种，选其一即可
+使用 wheel 安装的方式有两种，选其一即可
 - 通过本地 wheel 包安装
-  - 找到通过“构建wheel包”小节中构建的whl文件。
+  - 找到通过“构建 wheel 包”小节中构建的 whl 文件。
 
   ```bash
   #示例：使用 pip 安装本地whl包(注意不同版本号whl包名称不同，xxx代表版本)
   pip install hbm_runtime-x.x.x-cp310-cp310-manylinux_2_34_aarch64.whl
   ```
 
-- 从pypi源安装
+- 从 pypi 源安装
   ```bash
   pip install hbm_runtime
   ```
 
 #### 使用 .deb 包安装
-  使用deb安装的方式有两种，选其一即可
+  使用 deb 安装的方式有两种，选其一即可
 - 通过本地 DEB 包安装
   ```bash
   # 示例：安装 DEB 包（注意不同时间编译的包名称，以实际情况为准）
   sudo dpkg -i hobot-dnn_4.0.2-20250714201215_arm64.deb
   ```
 
-- 通过apt源安装
+- 通过 apt 源安装
 
   ```bash
   sudo apt-get install hobot-dnn
@@ -141,9 +141,9 @@ hbm_runtime 是基于 pybind11 的 Python 绑定接口，用于访问和操作�
   ```
 
 ## 快速开始（Quick Start）
-  本节介绍如何使用hbm_runtime进行模型加载和推理。只需几行代码，即可运行模型并获取输出结果。
+  本节介绍如何使用 hbm_runtime 进行模型加载和推理。只需几行代码，即可运行模型并获取输出结果。
 ### 环境准备
-  请确保已正确安装 HBMRuntime（详见[安装说明](#安装说明installation)），并已具备模型文件 hbm 模型。
+  请确保已正确安装 HBMRuntime（详见 [安装说明](#安装说明installation)），并已具备模型文件 hbm 模型。
 ### 示例
 #### 单线程推理
 #### 单线程单模型单输入推理
@@ -406,14 +406,14 @@ for t in threads: t.join()
 | 输入维度/类型如何确认？  | 使用 `model.input_shapes`、`model.input_dtypes`。           |
 | 如何确认 BPU 核心分配？  | 使用 bpu_cores 参数指定 [0, 1, 2, 3]，具体需看硬件的支持情况。|
 
-  如需更复杂用法（多输入模型、量化参数读取等），请参考[API部分](#模块类函数说明api-reference)。
+  如需更复杂用法（多输入模型、量化参数读取等），请参考 [API 部分](#模块类函数说明api-reference)。
 
 ## 模块/类/函数说明（API Reference）
-Python 模块 hbm_runtime 是通过 PyBind11 封装的D-Robotics HBM 模型推理接口，基于底层 libdnn 和 libhbucp 实现。提供统一封装的模型加载、输入输出信息查询、推理执行等功能，支持多模型加载、多输入推理、指定推理模型，BPU Core、推理任务优先级等。
+Python 模块 hbm_runtime 是通过 PyBind11 封装的 D-Robotics HBM 模型推理接口，基于底层 libdnn 和 libhbucp 实现。提供统一封装的模型加载、输入输出信息查询、推理执行等功能，支持多模型加载、多输入推理、指定推理模型，BPU Core、推理任务优先级等。
 
 ### 枚举类型
 #### hbDNNDataType
-#### 张量数据类型枚举：
+支持的数据类型：
 - S4：4-bit signed
 - U4：4-bit unsigned
 - S8：8-bit signed
@@ -430,16 +430,16 @@ Python 模块 hbm_runtime 是通过 PyBind11 封装的D-Robotics HBM 模型推�
 - BOOL8：8-bit bool 类型
 - MAX：最大值（保留字段）
 
-#### 示例
+#### hbDNNDataType 示例
 ```python
 from hbm_runtime import hbDNNDataType
 print(hbDNNDataType.F32)  # 输出: hbDNNDataType.F32
 ```
 #### hbDNNQuantiType
-#### 张量量化类型枚举：
+支持的量化类型：
 - NONE：非量化类型
 - SCALE：线性缩放量化（scale + zero_point）
-#### 示例
+#### hbDNNQuantiType 示例
 ```python
 from hbm_runtime import hbDNNQuantiType
 print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
@@ -626,13 +626,13 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     - 每个输入张量的 stride 步长信息
   - 结构说明：
     - 外层 Dict[str, ...]：模型名称。
-    - 内层Dict[str, List[int]]：键为输入名，值为输入张量的stride信息。
+    - 内层 Dict[str, List[int]]：键为输入名，值为输入张量的 stride 信息。
   - 示例：
     ```python
     print(model.input_strides)
     # 输出：{'yolov5x_672x672_nv12': {'data_uv': [-1, -1, 2, 1], 'data_y': [-1, -1, 1, 1]}}
     ```
-    注意：stride的详细含义可参考[OE文档](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html)中libdnn库中的描述；
+    注意：stride 的详细含义可参考 [OE 文档](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html) 中 libdnn 库中的描述；
 - output_counts: Dict[str, int]
   - 功能说明：
     - 每个模型输出张量数量。
@@ -715,17 +715,17 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     -  每个输出张量的 stride 步长信息
   - 结构说明：
     - 外层 Dict[str, ...]：模型名称。
-    - 内层Dict[str, List[int]]：键为输出名，值为输出张量的stride信息。
+    - 内层 Dict[str, List[int]]：键为输出名，值为输出张量的 stride 信息。
   - 示例：
     ```python
     print(model.output_strides)
     # 输出：{'yolov5x_672x672_nv12': {'1310': [1806336, 43008, 1024, 4], '1312': [451584, 21504, 1024, 4], 'output': [7225344, 86016, 1024, 4]}}
     ```
-  注意：stride的详细含义可参考[OE文档](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html)中libdnn库中的描述；
+  注意：stride 的详细含义可参考 [OE 文档](http://j6.doc.oe.hobot.cc/3.0.31/guide/ucp/runtime/bpu_sdk_api/data_structure/hbDNNTensorProperties.html) 中 libdnn 库中的描述；
 
 - sched_params: Dict[str, SchedParam]
   - 功能说明：
-    sched_params是用于获取当前所有模型的调度参数（Scheduling Parameters），包括每个模型的：
+    sched_params 是用于获取当前所有模型的调度参数（Scheduling Parameters），包括每个模型的：
     - 优先级（priority）
     - 自定义 ID（customId）
     - 分配的 BPU 核心（bpu_cores）
@@ -733,7 +733,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     这些调度参数用于影响模型在硬件上运行的方式，尤其在多模型部署或多核设备上尤为重要。
   - 结构说明：
     - 外层 Dict[str, ...]：模型名称。
-    - 内层SchedParam ：为SchedParam 类的实例，包含该模型的调度参数priority、customId、bpu_cores和deviceId；
+    - 内层 SchedParam ：为 SchedParam 类的实例，包含该模型的调度参数 priority、customId、bpu_cores 和 deviceId；
       ```python
       {
           "模型名": SchedParam(
@@ -765,7 +765,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
     #   bpu_cores: [-1]
     #   deviceId: 0
     ```
-    注意：bpu_cores返回-1表示由调度器自动分配；
+    注意：bpu_cores 返回-1 表示由调度器自动分配；
 #### 配置函数
 - set_scheduling_params
   - 函数签名
@@ -794,7 +794,7 @@ print(hbDNNQuantiType.SCALE)  # 输出: hbDNNQuantiType.SCALE
 
     | 参数名      | 类型                             | 说明                                                                 |
     |-------------|----------------------------------|----------------------------------------------------------------------|
-    | priority    | 可选字典（模型名 -> int）        | 设置每个模型的调度优先级，范围通常为 0～255，数值越高优先级越高       |
+    | priority    | 可选字典（模型名 -> int）        | 设置每个模型的调度优先级，范围通常为 0-255，数值越高优先级越高       |
     | bpu_cores   | 可选字典（模型名 -> List[int]）  | 指定模型绑定的 BPU 核心索引列表，默认表示自动分配，具体需看硬件支持情况 |
     | custom_id   | 可选字典（模型名 -> int）        | 自定义优先级，例如：时间戳、frame id 等，数值越小优先级越高。优先级：priority > customId。|
     | device_id   | 可选字典（模型名 -> int）        | 指定模型运行在哪个设备上                                             |
@@ -952,12 +952,12 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
   - 推理前需确保输入张量 shape 与 input_shapes 完全一致。
 #### QuantParams 类
   张量量化参数对象。
-#### 属性
+#### QuantParams 属性
 - scale: numpy.ndarray，量化比例因子数组
 - zero_point: numpy.ndarray，零点数组
 - quant_type: hbDNNQuantiType 类型，表示量化模式
 - axis: int，量化轴（若为 per-channel 量化）
-#### 示例：
+#### QuantParams 示例
     ```python
     # 获取模型某个输出的量化参数
     tensor_qparams = model.output_quants[model_name][output_name]
@@ -969,10 +969,10 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
 
 #### SchedParam 类
   模型调度参数对象，用于描述单个模型的默认调度状态（优先级、核心绑定等）。该对象通常用于读取当前模型的调度配置，而不是作为主要的配置入口。
-#### 属性
+#### SchedParam 属性
 - priority: Dict[str, int]
 
-  模型推理任务的调度优先级，取值范围 0~255，数值越大优先级越高。
+  模型推理任务的调度优先级，取值范围 0-255，数值越大优先级越高。
 
 - customId: Dict[str, int]
 
@@ -980,13 +980,13 @@ run() 提供 3 种输入形态（单输入 / 单模型多输入 / 多模型多�
 
 - bpu_cores: Dict[str, List[int]]
 
-  模型绑定的 BPU core 列表；[-1] 表示 ANY，由调度器自动选择。S100 只能取 1，S600 取 0~3。
+  模型绑定的 BPU core 列表；[-1] 表示 ANY，由调度器自动选择。S100 只能取 1，S600 取 0-3。
 
 - deviceId: Dict[str, int]
 
   模型部署的设备 ID（多设备场景使用）。
 
-#### 示例：
+#### SchedParam 示例
   ```python
   from hbm_runtime import HB_HBMRuntime
 

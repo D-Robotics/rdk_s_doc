@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 概述
 
-Log 系统负责收集、存储与归档开发板各模块（内核、MCU、DSP、BL31、OP-TEE、U-Boot、ALOG、systemd 等）运行日志，并提供按时间、按模块的查询与容量管控能力。日志由两套机制分别管理：地瓜 `hobot-log` 负责模块日志的轮转、归档与容量管控，Ubuntu 自带的 `rsyslog` 与 `systemd journal` 负责内核及系统日志。
+Log 系统负责收集、存储与归档开发板各模块（内核、MCU、DSP、BL31、OP-TEE、U-Boot、ALOG、systemd 等）运行日志，并提供按时间、按模块的查询与容量管控能力。日志由两套机制分别管理：D-Robotics `hobot-log` 负责模块日志的轮转、归档与容量管控，Ubuntu 自带的 `rsyslog` 与 `systemd journal` 负责内核及系统日志。
 
 ### 日志存放位置
 
@@ -129,7 +129,7 @@ Log 系统负责收集、存储与归档开发板各模块（内核、MCU、DSP�
 
 #### remoteproc log
 
-涵盖 dsp*、bl31、optee、mcu、bpu*、hsm、uboot 等固件输出的 log，各模块的目录与容量见 [Log 分区](#log-分区)；其中 hsm 日志加密保存。
+涵盖 dsp*、bl31、optee、mcu、bpu*、hsm、U-Boot 等固件输出的 log，各模块的目录与容量见 [Log 分区](#log-分区)；其中 hsm 日志加密保存。
 
 #### ALOG 系统
 
@@ -218,7 +218,7 @@ systemd journal 不受 `/log` 分区容量保护，直接占用 rootfs 空间；
 
     - 日志管理：hobot-log 和 hobot-log-rename.py
 
-        - log 记录：记录 reset，pstore，uboot 的 log 信息
+        - log 记录：记录 reset，pstore，U-Boot 的 log 信息
 
         - log 管理：定期每 10 分钟将原始 log 文件转存成固定格式文件，管控各个分区目录的存储空间，超过固定容量会进行删除，删除时间比较早产生的文件
 
@@ -255,8 +255,8 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
         - 在 hobot-log 脚本中配置了各个模块的日志文件大小和数量限制，这些限制会通过入参传递给各个模块日志进程。每个模块日志文件限制说明见：[Log 分区](#log-分区)
         - 各个模块的进程管理各自的日志文件大小和数量限制，超过限制后会删除产生时间比较早的文件
     - log 文件重命名归档：
-        - 启动时，转存 uboot 和 pstore log，命名格式如下：
-            - `SuperSoC_Uboot-<count>-<time>.Log`：当系统启动时，将 uboot log 转存到 uboot 的 archive 目录下
+        - 启动时，转存 U-Boot 和 pstore log，命名格式如下：
+            - `SuperSoC_Uboot-<count>-<time>.Log`：当系统启动时，将 U-Boot log 转存到 U-Boot 的 archive 目录下
             - `SuperSoC_Pstore-<count>-<time>`（文件夹）：当系统启动时，如果检测到上次系统是异常重启，则创建该格式文件夹，并将对应的异常 log 信息记录到该文件夹下
         - 运行时，log 文件通过 hobot-log-rename.py 进程重命名归档，每 10 分钟各模块目录下的 `message.*` 文件重命名归档到模块的 archive 目录下，并根据容量管控删除 archive 目录下旧文件
             - 该进程由 hobot-log-rename.service 服务启动，根据 hobot-log 生成的配置文件 `/log/hb_log_rename.conf` 管理各模块
@@ -266,7 +266,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
                 - 示例：SuperSoC_Usr-0003-2025_05_06_08_01_00.Log
                 - 命名说明：[board]_[module]-[count]-[time].Log
                     - board：SuperSoC
-                    - module：Usr，Uboot，Pstore 等首字母大写
+                    - module：Usr，U-Boot，Pstore 等首字母大写
                     - count：4 位数字，0000 到 9999，示例中代表第 3 次重启
                     - time：如 2025_05_06_08_01_00
                     - inode：正常情况下没有；只有当同一秒内转存多个文件、归档后目标文件名重合时，才会给先前的文件追加 `-<inode>` 以作区分，例如 SuperSoC_Usr-0003-2025_05_06_08_01_00-131599.Log
@@ -299,7 +299,7 @@ log 的文件生成和目录空间管控主要是由 hobot-log 和 hobot-log-ren
 2.  定制 log 系统
     - log 大小和数量修改
         - 日志大小在 hobot-log 中修改，修改 `ROTATESIZE` 和 `ROTATESIZE_REMOTE` 变量的定义，单位是 KB
-        - 日志数量在 hobot-log 中修改，修改 `ROTATEGENS_USR、ROTATEGENS_REMOTE、UBOOT_LOGMAX、PSTORE_LOGMAX` 变量的定义，对应的分别是 usr、remoteproc_log、uboot、pstore 的日志数量限制，当前值分别是 200、200、100、100
+        - 日志数量在 hobot-log 中修改，修改 `ROTATEGENS_USR、ROTATEGENS_REMOTE、UBOOT_LOGMAX、PSTORE_LOGMAX` 变量的定义，对应的分别是 usr、remoteproc_log、U-Boot、pstore 的日志数量限制，当前值分别是 200、200、100、100
         - systemd journal log 大小通过 `/etc/systemd/journald.conf` 中的 `SystemMaxUse` 配置（默认注释，使用 systemd 默认值：文件系统容量的 10%、封顶 4G，S600、S100 上均为 4G），同时需要注意文件大小 `SystemMaxFileSize` 和文件数量 `SystemMaxFiles` 限制相乘要大于 `SystemMaxUse`；修改后执行 `systemctl restart systemd-journald` 生效，再用 `journalctl --vacuum-size=<大小>` 回收旧日志
         - journal 默认落在 rootfs 的 `/var/log/journal`，不在 `/log` 分区，异常掉电残留的 `*.journal~` 不会被 journald 自动回收，需要手动删除
     - log 命名修改

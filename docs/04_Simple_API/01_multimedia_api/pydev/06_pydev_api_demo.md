@@ -1,7 +1,7 @@
 ---
 sidebar_position: 6
 title: "接口使用示例"
-description: "接口使用示例 对象接口说明"
+description: "Camera、Encoder、Decoder、Display 与 bind/unbind 的可运行示例"
 ---
 
 # 接口使用示例

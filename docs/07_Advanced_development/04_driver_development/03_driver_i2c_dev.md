@@ -33,10 +33,10 @@ I2C（Inter-Integrated Circuit）是 RDK 开发板上常用的两线制串行总
 DesignWare I2C 控制器支持以下能力：
 
 - **四种速度模式**：
-    - standard mode（0～100 kHz）
-    - fast mode（100～400 kHz）
-    - fast mode plus（400～1000 kHz）
-    - high-speed mode（1000 kHz～3.4 MHz）
+    - standard mode（0-100 kHz）
+    - fast mode（100-400 kHz）
+    - fast mode plus（400-1000 kHz）
+    - high-speed mode（1000 kHz-3.4 MHz）
 - **主从模式**配置（RDK 板端总线通常配置为主模式）
 - **7 位和 10 位**寻址模式
 

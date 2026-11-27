@@ -16,7 +16,7 @@ RDK S600 的 J18（10-pin 自锁接口）引出 4 路 UART：2 路 MAIN 域（UA
 请参阅 `/app/40pin_samples/test_serial.py` 了解如何使用串口的详细信息。
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在板子上经过实际验证。
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在开发板上经过实际验证。
 :::
 
 ## 代码位置
@@ -35,8 +35,8 @@ UART 回环测试代码位于板端 `/app/40pin_samples/test_serial.py`。
 
 ### 测试过程
 
-- 运行 `python3 /app/40pin_samples/test_serial.py`
-- 从打印的串口设备中选择要测试的设备。其中 `/dev/ttyS0` 是系统调试口，不建议对它进行测试。例如 RDK S600 可选择 `/dev/ttyS6` 或 `/dev/ttyS7`，按回车键确认后输入波特率参数：
+1. 运行 `python3 /app/40pin_samples/test_serial.py`
+2. 从打印的串口设备中选择要测试的设备。其中 `/dev/ttyS0` 是系统调试口，不建议对它进行测试。例如 RDK S600 可选择 `/dev/ttyS6` 或 `/dev/ttyS7`，按回车键确认后输入波特率参数：
 
 ```text
 root@ubuntu:/app/40pin_samples# ./test_serial.py
@@ -56,13 +56,15 @@ Recv:  AA55
 `Serial<id=...>` 中的 id 为 Python 对象地址，每次运行都不同，以实际输出为准。
 :::
 
-- 若未短接 TXD/RXD，`Recv:` 后面为空（读不到数据），说明回环失败：
+:::warning 回环失败
+未短接 TXD/RXD 时，`Recv:` 后面为空（读不到数据），说明回环失败：
 
 ```text
 Starting demo now! Press CTRL+C to exit
 Send:  AA55
 Recv:
 ```
+:::
 
 ## 测试代码
 

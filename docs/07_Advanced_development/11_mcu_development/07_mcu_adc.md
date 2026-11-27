@@ -231,7 +231,7 @@ D-Robotics:/$ Adc_Test
 
 ```
 
-其中 Channel 0~2 的采样值用于识别扩展板信息，分别打印 `BoradIdMsb`、`BoradIdLsb` 与 `DDR TYPE` 的编码值。
+其中 Channel 0-2 的采样值用于识别扩展板信息，分别打印 `BoradIdMsb`、`BoradIdLsb` 与 `DDR TYPE` 的编码值。
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -943,7 +943,7 @@ D-Robotics:/$ Adc_TestNormal stop
 | 项 | 取值 |
 |---|---|
 | ADC 实例数 | 1（`Instance` 取 0） |
-| 可用通道 | Channel 0~13 |
+| 可用通道 | Channel 0-13 |
 | 自检通道 | Channel 15 |
 | 转换组 | 1 个（`AdcGroup_0`） |
 </DocScope>
@@ -951,7 +951,7 @@ D-Robotics:/$ Adc_TestNormal stop
 | 项 | 取值 |
 |---|---|
 | ADC 实例数 | 2（`Instance` 取 0、1） |
-| 可用通道 | 每实例 Channel 0~7 |
+| 可用通道 | 每实例 Channel 0-7 |
 | 自检通道 | Channel 15 |
 | 转换组 | 2 个（`AdcGroup_0`、`AdcGroup_1`） |
 </DocScope>

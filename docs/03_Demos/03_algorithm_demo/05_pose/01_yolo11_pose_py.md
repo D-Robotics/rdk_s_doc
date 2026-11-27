@@ -42,7 +42,7 @@ description: "用 hbm_runtime Python 接口部署 YOLO11 做人体姿态估计�
 | `--test-img` | 测试图片路径 | `/app/res/assets/bus.jpg` |
 | `--label-file` | 类别标签（COCO 80 类） | `/app/res/labels/coco_classes.names` |
 | `--img-save-path` | 输出结果图保存路径 | `result.jpg` |
-| `--priority` | 模型调度优先级（0~255） | `0` |
+| `--priority` | 模型调度优先级（0-255） | `0` |
 | `--bpu-cores` | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`） | `[0]` |
 | `--nms-thres` | NMS 的 IoU 阈值 | `0.7` |
 | `--score-thres` | 置信度阈值 | `0.25` |

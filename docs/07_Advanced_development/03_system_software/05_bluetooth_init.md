@@ -29,7 +29,7 @@ import DocScope from '@site/src/components/DocScope'
 
 S100 安装示意图
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/bluetooth/s100_bt_wifi_connect.png" alt="S100 外接 Wi-Fi/蓝牙 combo 模组安装示意" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/bluetooth/s100_bt_wifi_connect.png" alt="S100 外接 Wi-Fi/蓝牙 combo 模组安装示意" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 
@@ -134,7 +134,7 @@ hciconfig hci0 piscan
 
 ### UART 蓝牙初始化
 
-当检测到 UART 蓝牙设备时，初始化流程如下（以 XM612为例，如果用户选择了不同的蓝牙模组，请联系蓝牙模组厂提供）：
+当检测到 UART 蓝牙设备时，初始化流程如下（以 XM612 为例，如果用户选择了不同的蓝牙模组，请联系蓝牙模组厂提供）：
 
 ```bash
 # 配置参数
@@ -206,7 +206,7 @@ hciconfig hci0
 输出示例：
 
 USB 蓝牙：
-```
+```text
 hci0:   Type: Primary  Bus: USB
         BD Address: 00:11:22:33:44:55  ACL MTU: 1021:8  SCO MTU: 64:1
         UP RUNNING PSCAN ISCAN
@@ -215,7 +215,7 @@ hci0:   Type: Primary  Bus: USB
 ```
 
 UART 蓝牙（CYW55560）：
-```
+```text
 hci0:   Type: Primary  Bus: UART
         BD Address: 28:D0:43:83:5A:D2  ACL MTU: 1021:8  SCO MTU: 64:10
         UP RUNNING PSCAN ISCAN

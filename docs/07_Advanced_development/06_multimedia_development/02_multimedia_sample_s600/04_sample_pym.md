@@ -19,7 +19,7 @@ flowchart LR
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pym`
 - 目录结构
-```
+```text
 sample_pym/
 ├── Makefile
 └── sample_pym.c
@@ -29,7 +29,7 @@ sample_pym/
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_pym
 make
 ```
@@ -39,7 +39,7 @@ make
 直接执行程序 `./sample_pym` 可以获得帮助信息：
 
 ### 程序参数选项说明
-```
+```text
 ./sample_pym
 Usage: sample_pym [OPTIONS]
 Options:
@@ -57,17 +57,17 @@ Options:
 ### 运行效果
 以输入分辨率为 1920 x 1080 的 YUV 图片为例，执行 `./sample_pym -i /app/res/assets/nv12_1920x1080.yuv -w 1920 -h 1080`。
 
-把一张 YUV 图像送入 PYM，并且初始化6个通道，分别进行 1、1/2、1/4、1/8、1/16、1/32 倍率的缩小操作，并且把处理后的图像保存为 yuv 图像：
+把一张 YUV 图像送入 PYM，并且初始化 6 个通道，分别进行 1、1/2、1/4、1/8、1/16、1/32 倍率的缩小操作，并且把处理后的图像保存为 yuv 图像：
 
   - 0 通道输出输入图像的原分辨率: 1920 x 1080。
-  - 1 通道输出宽和高各缩小2倍的处理: 960 x 540。
-  - 2 通道输出宽和高各缩小4倍的处理: 480 x 270。
-  - 3 通道输出宽和高各缩小8倍的处理: 240 x 134。
-  - 4 通道输出宽和高各缩小16倍的处理: 120 x 66。
-  - 5 通道输出宽和高各缩小32倍的处理: 60 x 32。
+  - 1 通道输出宽和高各缩小 2 倍的处理: 960 x 540。
+  - 2 通道输出宽和高各缩小 4 倍的处理: 480 x 270。
+  - 3 通道输出宽和高各缩小 8 倍的处理: 240 x 134。
+  - 4 通道输出宽和高各缩小 16 倍的处理: 120 x 66。
+  - 5 通道输出宽和高各缩小 32 倍的处理: 60 x 32。
 
 输出 log 如下:
-```
+```text
 pym vnode work mode: vflow
 Using input file:/app/res/assets/nv12_1920x1080.yuv, input:1920x1080
 (read_yuvv_nv12_file):file read(/app/res/assets/nv12_1920x1080.yuv), y-size(2073600)
@@ -83,7 +83,7 @@ pym config:
 ```
 
 注意：
-1. pym 模块输出的宽度按照16字节对齐，在浏览图片时需要注意 width 与 wstride 参数不同的情况
+1. pym 模块输出的宽度按照 16 字节对齐，在浏览图片时需要注意 width 与 wstride 参数不同的情况
 
 ## 常见问题
 

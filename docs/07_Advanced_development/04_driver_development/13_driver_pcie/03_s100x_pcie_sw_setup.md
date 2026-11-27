@@ -52,7 +52,7 @@ CONFIG_PCIE_HOBOT_EP_DEV=m
 CONFIG_PCIE_HOBOT_EP_DEV_MAN=m
 ```
 
-RC 模式支持 NVME 需要的配置如下：
+RC 模式支持 NVMe 需要的配置如下：
 
 ```shell
 CONFIG_BLK_DEV_NVME=m
@@ -194,7 +194,7 @@ dmesg | grep -iE "link up|failed link"
 
 ### 查看 LTSSM 状态
 
-链路 training 卡住时，可让驱动导出 LTSSM 状态机的停留轨迹，看它停在哪一步。每个控制器在 `/dev/` 下有一个字符设备节点（`hobot_pcie0` 对应 `hobot_pcie_rc0`，`hobot_pcie1` 对应 `hobot_pcie_rc1`，即设备树的 `ctrl-index`）：
+链路 training 停滞时，可让驱动导出 LTSSM 状态机的停留轨迹，看它停在哪一步。每个控制器在 `/dev/` 下有一个字符设备节点（`hobot_pcie0` 对应 `hobot_pcie_rc0`，`hobot_pcie1` 对应 `hobot_pcie_rc1`，即设备树的 `ctrl-index`）：
 
 | 写入命令 | 作用 |
 |---|---|
@@ -206,7 +206,7 @@ dmesg | grep -iE "link up|failed link"
 命令 6 必须带轮询周期参数，只写 `echo 6` 不会启动线程（驱动对周期为 0 直接返回）。参数按**十六进制**解析，单位为毫秒，上限截断为 1000，例如 `echo 6 64` 表示 0x64 = 100ms。
 :::
 
-轨迹输出在内核日志中，每行给出状态机在每个状态的停留计数与状态名，末行即 training 卡住的位置：
+轨迹输出在内核日志中，每行给出状态机在每个状态的停留计数与状态名，末行即 training 停滞的位置：
 
 ```bash
 echo 5 > /dev/hobot_pcie0

@@ -11,14 +11,14 @@ sidebar_products: RDK S100
 
 ## boardid 机制
 
-S100 的 boardid 是一个 16bit 无符号整型，由 ADC0、ADC1、ADC3 和 ADC4 四个 ADC 通道采样共同决定。每个通道占用一个 nibble（4bit），共 16 个档位（0x0~0xF）：
+S100 的 boardid 是一个 16bit 无符号整型，由 ADC0、ADC1、ADC3 和 ADC4 四个 ADC 通道采样共同决定。每个通道占用一个 nibble（4bit），共 16 个档位（0x0-0xF）：
 
 | boardid 位段 | ADC 通道 | 用途 | 档位 | 客户可改 |
 |---|---|---|---|---|
 | [15:12] | ADC0 | SIP 系列硬件标识 | 固定 0x6 | 否 |
 | [11:8] | ADC1 | SIP 类型 - PCIe Role | 0x4、0x5、0xA、0xB | 否 |
-| [7:4] | ADC3 | 外设电源使能控制方式 | 0x8：地瓜参考；0xB/0xC/0xD：客户自定义 | 是 |
-| [3:0] | ADC4 | 硬件版本 | 0x4 至 0x7：地瓜预留；0x8 至 0xD：客户自定义 | 是 |
+| [7:4] | ADC3 | 外设电源使能控制方式 | 0x8：D-Robotics 参考；0xB/0xC/0xD：客户自定义 | 是 |
+| [3:0] | ADC4 | 硬件版本 | 0x4 至 0x7：D-Robotics 预留；0x8 至 0xD：客户自定义 | 是 |
 
 例如 `0x6A84`：ADC0=0x6、ADC1=0xA、ADC3=0x8、ADC4=0x4。
 
@@ -48,9 +48,9 @@ S100P 为高性能版本（2.0GHz、24GB LPDDR5、128 TOPS），S100E 为标准�
 
 ADC3 用于识别外设电源使能控制方式。外设电源使能既可由 MCU 的 GPIO 控制，也可由 MAIN 域的 IO 控制。客户可修改 ADC3 的分压电阻，再自行实现自定义的外设电源使能控制方式。
 
-**0x8（沿用地瓜参考设计）**
+**0x8（沿用 D-Robotics 参考设计）**
 
-外设电源使能控制信号按地瓜参考设计实现，具体行为如下：
+外设电源使能控制信号按 D-Robotics 参考设计实现，具体行为如下：
 
 - SIP 上电完成后，立即拉高 CAN2_RX（AON 域 GPIO）；
 - 延时 50ms 后，立即拉高 SPI6_SCLK（MCU 域 GPIO）；
@@ -65,16 +65,16 @@ ADC3 用于识别外设电源使能控制方式。外设电源使能既可由 MC
 客户自定义外设电源控制，具体行为如下：
 
 - CAN2_RX 和 SPI6_SCLK 在启动阶段无拉高动作；
-- 客户自定义电源控制 GPIO，不使用地瓜参考设计电源控制引脚；
+- 客户自定义电源控制 GPIO，不使用 D-Robotics 参考设计电源控制引脚；
 - 外设电源使能既可由 MCU 的 GPIO 控制，也可由 MAIN 域的 IO 控制（如上电、复位等）；
 - 可在 MCU0 boot 阶段控制外设电源使能；
 - 若部分外设电源需要在休眠状态下保持供电，需选择 AON 域 CAN[1:7]_RX（GPIO_AON[1:7]）引脚控制。
 
-此外，0xB/0xC/0xD 三档还可用于扩展硬件版本空间。与 ADC4 的 0x4 至 0xD 十档组合后，可为客户提供 3 × 10 = 30 个版本组合。此时若仍沿用地瓜电源控制，需在 MCU 的 `switch` 中将 0xB/0xC/0xD 与 0x8 归入同一分支，无需再实现自定义上电方式。
+此外，0xB/0xC/0xD 三档还可用于扩展硬件版本空间。与 ADC4 的 0x4 至 0xD 十档组合后，可为客户提供 3 × 10 = 30 个版本组合。此时若仍沿用 D-Robotics 电源控制，需在 MCU 的 `switch` 中将 0xB/0xC/0xD 与 0x8 归入同一分支，无需再实现自定义上电方式。
 
 :::warning 注意
 
-自定义外设电源使能控制方式对设计能力有较高要求。客户需充分了解 MCU 与 Acore 的上下电时序，以及两者之间的 IPC（Inter-Processor Communication，核间通信）。地瓜提供参考设计与技术支持。客户自定义上电时序的稳定性，需由客户在量产前充分验证。
+自定义外设电源使能控制方式对设计能力有较高要求。客户需充分了解 MCU 与 Acore 的上下电时序，以及两者之间的 IPC（Inter-Processor Communication，核间通信）。D-Robotics 提供参考设计与技术支持。客户自定义上电时序的稳定性，需由客户在量产前充分验证。
 
 :::
 
@@ -91,7 +91,7 @@ ADC4 标识硬件版本。当前 S100 已发布硬件版本与 ADC4 档位的对
 | 0x6 | V1P0 |
 | 0x7 | V1P1 |
 
-其中 0x4 至 0x7 为地瓜预留档位，0x8 至 0xD 为客户自定义档位；历史版本 V1.2、V1.21 对应 ADC4=0x0（与 ADC3=0x6/0x7 组合），仅作兼容保留。客户新增硬件版本时，需在 U-Boot 的 `g_board_info` 数组中新增对应条目（见下文「新增 boardid」）。
+其中 0x4 至 0x7 为 D-Robotics 预留档位，0x8 至 0xD 为客户自定义档位；历史版本 V1.2、V1.21 对应 ADC4=0x0（与 ADC3=0x6/0x7 组合），仅作兼容保留。客户新增硬件版本时，需在 U-Boot 的 `g_board_info` 数组中新增对应条目（见下文「新增 boardid」）。
 
 ### ADC 档位分压电阻设计
 
@@ -99,18 +99,18 @@ ADC4 标识硬件版本。当前 S100 已发布硬件版本与 ADC4 档位的对
 
 | 档位 | 电压范围 | 典型电压 | 推荐分压电阻 |
 |---|---|---|---|
-| 0x4 | 221mV~320mV | 274mV | Ru:20k; Rd:3.6k |
-| 0x5 | 321mV~420mV | 365mV | Ru:20k; Rd:5.1k |
-| 0x6 | 421mV~540mV | 482mV | Ru:30k; Rd:11k |
-| 0x7 | 541mV~680mV | 608mV | Ru:19.6k; Rd:10k |
-| 0x8 | 681mV~820mV | 750mV | Ru:21k; Rd:15k |
-| 0x9 | 821mV~960mV | 890mV | Ru:20k; Rd:19.6k |
-| 0xA | 961mV~1100mV | 1034mV | Ru:20k; Rd:27k |
-| 0xB | 1101mV~1240mV | 1165mV | Ru:19.6k; Rd:36k |
-| 0xC | 1241mV~1380mV | 1309mV | Ru:21k; Rd:56k |
-| 0xD | 1381mV~1520mV | 1458mV | Ru:11k; Rd:47k |
+| 0x4 | 221mV-320mV | 274mV | Ru:20k; Rd:3.6k |
+| 0x5 | 321mV-420mV | 365mV | Ru:20k; Rd:5.1k |
+| 0x6 | 421mV-540mV | 482mV | Ru:30k; Rd:11k |
+| 0x7 | 541mV-680mV | 608mV | Ru:19.6k; Rd:10k |
+| 0x8 | 681mV-820mV | 750mV | Ru:21k; Rd:15k |
+| 0x9 | 821mV-960mV | 890mV | Ru:20k; Rd:19.6k |
+| 0xA | 961mV-1100mV | 1034mV | Ru:20k; Rd:27k |
+| 0xB | 1101mV-1240mV | 1165mV | Ru:19.6k; Rd:36k |
+| 0xC | 1241mV-1380mV | 1309mV | Ru:21k; Rd:56k |
+| 0xD | 1381mV-1520mV | 1458mV | Ru:11k; Rd:47k |
 
-具体 ADC 如何设置分压电阻，可联系地瓜 FAE 团队支持。
+具体 ADC 如何设置分压电阻，可联系 D-Robotics FAE 团队支持。
 
 ## 软件架构
 
@@ -126,10 +126,10 @@ flowchart TD
 
 ## 在 MCU 下修改外设电源使能控制方式
 
-外设电源使能控制方式由 ADC3 档位决定（见上文「ADC3 档位说明」）：ADC3 为 0x8 时沿用地瓜参考设计，无需修改 MCU；ADC3 为 0xB/0xC/0xD 时为客户自定义，需在 MCU 侧实现自己的上电方式。
+外设电源使能控制方式由 ADC3 档位决定（见上文「ADC3 档位说明」）：ADC3 为 0x8 时沿用 D-Robotics 参考设计，无需修改 MCU；ADC3 为 0xB/0xC/0xD 时为客户自定义，需在 MCU 侧实现自己的上电方式。
 
 :::info 提示
-沿用 0x8 地瓜参考设计的客户无需修改 MCU，可跳过本节。
+沿用 0x8 D-Robotics 参考设计的客户无需修改 MCU，可跳过本节。
 :::
 
 ### 添加外设电源管理代码
@@ -138,7 +138,7 @@ flowchart TD
 
 #### 启动阶段
 
-在文件`mcu/McalCdd/Common/Power/S100/scp/boot/src/main_top_init.c`，函数`Rdk_S100_Peri_Pwr_Init`内，添加上电代码
+在文件 `mcu/McalCdd/Common/Power/S100/scp/boot/src/main_top_init.c`，函数 `Rdk_S100_Peri_Pwr_Init` 内，添加上电代码
 
 ```c
 static Std_ReturnType Rdk_S100_Peri_Pwr_Init(void)
@@ -165,13 +165,13 @@ static Std_ReturnType Rdk_S100_Peri_Pwr_Init(void)
 }
 ```
 
-如代码所示，MCU 根据 ADC3 档位（`AdcCode3`）走不同的外设上电流程。其中 0x6/0x7 为历史版本的上电流程，0x8 为当前地瓜参考时序。客户使用 0xB/0xC/0xD 时，若实现自定义上电方式，需在 `switch` 中新增对应 case；若仅做版本扩展、仍沿用地瓜电源控制，则将 0xB/0xC/0xD 与 0x8 归入同一 case。
+如代码所示，MCU 根据 ADC3 档位（`AdcCode3`）走不同的外设上电流程。其中 0x6/0x7 为历史版本的上电流程，0x8 为当前 D-Robotics 参考时序。客户使用 0xB/0xC/0xD 时，若实现自定义上电方式，需在 `switch` 中新增对应 case；若仅做版本扩展、仍沿用 D-Robotics 电源控制，则将 0xB/0xC/0xD 与 0x8 归入同一 case。
 
 #### reboot/suspend 的下电阶段
 
 在此阶段需要实现下电操作
 
-在文件`mcu/McalCdd/Common/Power/S100/scp/Drivers/src/Pmu.c`，函数`Pmu_MainDomainPeriOff`内，添加下电代码
+在文件 `mcu/McalCdd/Common/Power/S100/scp/Drivers/src/Pmu.c`，函数 `Pmu_MainDomainPeriOff` 内，添加下电代码
 
 ```c
 Std_ReturnType Pmu_MainDomainPeriOff(void)
@@ -202,7 +202,7 @@ Std_ReturnType Pmu_MainDomainPeriOff(void)
 
 在此阶段需要实现上电操作
 
-在文件`mcu/McalCdd/Common/Power/S100/scp/Drivers/src/Pmu.c`，函数`Pmu_MainDomainPeriOn`内，添加上电代码
+在文件 `mcu/McalCdd/Common/Power/S100/scp/Drivers/src/Pmu.c`，函数 `Pmu_MainDomainPeriOn` 内，添加上电代码
 
 ```c
 static Std_ReturnType Pmu_MainDomainPeriOn(void)
@@ -235,11 +235,11 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
 本节处理 SLEEP KEY 引脚复用冲突，与外设电源使能控制方式（ADC3）无关。
 :::
 
-在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
+在 RDK S100/S100P 设计中，有个 SLEEP KEY，功能是按键休眠及启动时按键进入 U-Boot fastboot 状态。SLEEP KEY 使用的 PIN 是 AON GPIO 11，这个 PIN 的其他 function 是 LIN2_RXD 或 UART6_RXD 或 SPI6_CSN3。如果使用了以上这些 function，需要在 RDK SDK 代码中做以下修改才能保证正常启动
 
-在MCU0代码中，会检测AON GPIO 11的中断状态以决定是否要进入休眠模式，中断在ICU模块中注册，因此需要在ICU模块中关闭AON GPIO 11的中断
+在 MCU0 代码中，会检测 AON GPIO 11 的中断状态以决定是否要进入休眠模式，中断在 ICU 模块中注册，因此需要在 ICU 模块中关闭 AON GPIO 11 的中断
 
-在MCU代码`mcu/Config/McalCdd/gen_s100_sip_B/Icu/src/Icu_PBCfg.c`的`Icu_Gpio_ChannelConfig_PB`数组中，需要做以下设置：
+在 MCU 代码 `mcu/Config/McalCdd/gen_s100_sip_B/Icu/src/Icu_PBCfg.c` 的 `Icu_Gpio_ChannelConfig_PB` 数组中，需要做以下设置：
 
 ```c
         ...
@@ -256,9 +256,9 @@ static Std_ReturnType Pmu_MainDomainPeriOn(void)
         ...
 ```
 
-- `NotificationEnable`改为`FALSE`
-- `IntEnable`改为`FALSE`
-- `IntMask`改为`TRUE`
+- `NotificationEnable` 改为 `FALSE`
+- `IntEnable` 改为 `FALSE`
+- `IntMask` 改为 `TRUE`
 
 ## 在 spl 和 U-Boot 下新增硬件
 
@@ -266,9 +266,9 @@ spl 为 U-Boot 下的 spl
 
 ### 新增配置文件
 
-U-Boot 的配置文件位于 SDK 目录`source/bootloader/uboot/configs`下，debug 模式对应的配置文件`hobot_s100_defconfig`，release 模式对应的配置文件为`hobot_s100_rel_defconfig`
+U-Boot 的配置文件位于 SDK 目录 `source/bootloader/uboot/configs` 下，debug 模式对应的配置文件 `hobot_s100_defconfig`，release 模式对应的配置文件为 `hobot_s100_rel_defconfig`
 
-U-Boot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为`source/bootloader/device/rdk/s100/board_s100_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定 U-Boot 配置文件
+U-Boot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为 `source/bootloader/device/rdk/s100/board_s100_debug.mk`，由变量 `HR_UBOOT_CONFIG_FILE` 指定 U-Boot 配置文件
 
 ```shell
 # hobot_s100_defconfig
@@ -279,11 +279,11 @@ export HR_ARCH_UBOOT="arm"
 ...
 ```
 
-如果客户有需求可以生成自己的 U-Boot config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的 U-Boot config 文件，按照上述描述进行替换，一般来说复用 D-Robotics 的配置即可
 
 ### 新增设备树
 
-U-Boot 的设备树文件位于 SDK 目录`source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
+U-Boot 的设备树文件位于 SDK 目录 `source/bootloader/uboot/arch/arm/dts/drobot-s100-rdk.dts`，设备树由配置文件的变量 `CONFIG_DEFAULT_DEVICE_TREE` 指定
 
 ```shell
 # hobot_s100_defconfig
@@ -292,13 +292,13 @@ CONFIG_DEFAULT_DEVICE_TREE="drobot-s100-rdk"
 ...
 ```
 
-如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "drobot-s100-soc.dtsi"`，然后在后面覆写，最后按照上述描述进行替换，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
+如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中 `#include "drobot-s100-soc.dtsi"`，然后在后面覆写，最后按照上述描述进行替换，一般来说复用 D-Robotics 的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
 
 ### 新增 boardid
 
 1. 根据 boardid 添加 socname，hwname、board version 和 pcie mode
 
-在 SDK 目录`source/bootloader/uboot/arch/arm/mach-hobot/super/boot_info.c`的`g_board_info`数组中添加 board 信息
+在 SDK 目录 `source/bootloader/uboot/arch/arm/mach-hobot/super/boot_info.c` 的 `g_board_info` 数组中添加 board 信息
 
 ```c
 /* arch/arm/mach-hobot/super/boot_info.c */
@@ -346,7 +346,7 @@ struct hb_boardinfo_t g_board_info[BOARD_TYPE_NUM] = {
 
 2. 根据 boardid 添加 Kernel 配置
 
-在 SDK 目录`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中添加 Kernel 配置
+在 SDK 目录 `source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c` 的 `hb_super_btype_list` 数组中添加 Kernel 配置
 
 ```c
 /* arch/arm/mach-hobot/super/super_board.c */
@@ -394,13 +394,13 @@ const static struct hb_super_btype_node hb_super_btype_list[] = {
 };
 ```
 
-其中`hb_super_btype_node`中`fdt_feat`为 Kernel dtb 的名字，`pxe_label`为 extlinux 中的 Kernel 配置，名字必须相互对应
+其中 `hb_super_btype_node` 中 `fdt_feat` 为 Kernel dtb 的名字，`pxe_label` 为 extlinux 中的 Kernel 配置，名字必须相互对应
 
-### 取消SLEEP KEY的处理（U-Boot 侧）
+### 取消 SLEEP KEY 的处理（U-Boot 侧）
 
-在RDK S100/S100P 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 11，这个PIN的其他function是LIN2_RXD 或UART6_RXD 或 SPI6_CSN3。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
+在 RDK S100/S100P 设计中，有个 SLEEP KEY，功能是按键休眠及启动时按键进入 U-Boot fastboot 状态。SLEEP KEY 使用的 PIN 是 AON GPIO 11，这个 PIN 的其他 function 是 LIN2_RXD 或 UART6_RXD 或 SPI6_CSN3。如果使用了以上这些 function，需要在 RDK SDK 代码中做以下修改才能保证正常启动
 
-在uboot代码`source/bootloader/uboot/arch/arm/mach-hobot/super/boot_info.c`中，对于函数`hb_get_fb_key_status`，强制返回`1`
+在 U-Boot 代码 `source/bootloader/uboot/arch/arm/mach-hobot/super/boot_info.c` 中，对于函数 `hb_get_fb_key_status`，强制返回 `1`
 
 ```c
 static uint32_t hb_get_fb_key_status(void)
@@ -414,7 +414,7 @@ static uint32_t hb_get_fb_key_status(void)
 
 ### 新增配置文件
 
-Kernel 的配置文件位于 SDK 目录`source/hobot-drivers/configs`下，S100对应的配置文件为`drobot_s100_defconfig`
+Kernel 的配置文件位于 SDK 目录 `source/hobot-drivers/configs` 下，S100 对应的配置文件为 `drobot_s100_defconfig`
 
 Kernel 配置文件在 mk_kernel.sh 中指定
 
@@ -425,23 +425,23 @@ export KERNEL_DEFCONFIG=drobot_s100_defconfig
 ...
 ```
 
-如果客户有需求可以生成自己的 Kernel config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的 Kernel config 文件，按照上述描述进行替换，一般来说复用 D-Robotics 的配置即可
 
 ### 新增设备树
 
-Kernel 的设备树文件位于 SDK 目录`source/hobot-drivers/kernel-dts`
+Kernel 的设备树文件位于 SDK 目录 `source/hobot-drivers/kernel-dts`
 
-如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "rdk-v0p5.dtsi"`，然后在后面覆写，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
+如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中 `#include "rdk-v0p5.dtsi"`，然后在后面覆写，一般来说复用 D-Robotics 的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
 
-dtb 的命名需要和`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中的 fdt_feat 对应
+dtb 的命名需要和 `source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c` 的 `hb_super_btype_list` 数组中的 fdt_feat 对应
 
 ### extlinux 配置
 
-S100中 U-Boot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
+S100 中 U-Boot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
 
-extlinux 文件位于`source/kernel/scripts/package/rdk_extlinux`
+extlinux 文件位于 `source/kernel/scripts/package/rdk_extlinux`
 
-以 RDK-S100-V1P1版本为例
+以 RDK-S100-V1P1 版本为例
 
 ```shell
 label drobot-s100-rdk-v1p1-kernel
@@ -450,13 +450,13 @@ label drobot-s100-rdk-v1p1-kernel
     initrd /initrd.img-KERNEL_VERSION
 ```
 
-其中`label`必须和`source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c`的`hb_super_btype_list`数组中的`pxe_label`对应
+其中 `label` 必须和 `source/bootloader/uboot/arch/arm/mach-hobot/super/super_board.c` 的 `hb_super_btype_list` 数组中的 `pxe_label` 对应
 
-`fdt`中的 rdk-s100-v1p1.dtb 必须和要使用的 Kernel 设备树命名保持一致
+`fdt` 中的 rdk-s100-v1p1.dtb 必须和要使用的 Kernel 设备树命名保持一致
 
 ## 根据 boardid 加载 ko
 
-在文件`source/hobot-utils/debian/usr/bin/hobot-loadko.sh`中，需要根据 boardid 选择是否加载 pcie 驱动和 asm3042 firmware
+在文件 `source/hobot-utils/debian/usr/bin/hobot-loadko.sh` 中，需要根据 boardid 选择是否加载 pcie 驱动和 asm3042 firmware
 
 ```shell
 boardid_sys_path="/sys/class/boardinfo/adc_boardid"
@@ -498,7 +498,7 @@ fi
 
 编译 debug 镜像方法
 
-在脚本`pack_image.sh`中，默认配置选择 beta 配置
+在脚本 `pack_image.sh` 中，默认配置选择 beta 配置
 
 ### 查看启动信息是否符合预期
 
@@ -535,7 +535,7 @@ Model: D-Robotics S100 SIP Board
 ...
 ```
 
-- U-Boot log 中会打印出 boardid，例如下面的6a84
+- U-Boot log 中会打印出 boardid，例如下面的 6a84
 
 ```shell
 U-Boot 2022.04-00905-g5272120b20 (Feb 28 2026 - 08:51:01 +0800)
@@ -560,7 +560,7 @@ Retrieving file: /hobot/rdk-s100-v0p5.dtb
 
 - 查看 bootargs 中的 board info
 
-主要是`hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc`等，是否和 U-Boot 中定义的一致
+主要是 `hobotboot.socname=S100` `board.hwname=RDK` `board.ver=V0P5` `board.pcie_mode=rc` 等，是否和 U-Boot 中定义的一致
 
 ```shell
 root@ubuntu:~# cat /proc/cmdline

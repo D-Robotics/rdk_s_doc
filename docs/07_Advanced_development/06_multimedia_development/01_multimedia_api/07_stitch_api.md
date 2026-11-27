@@ -15,7 +15,7 @@ STITCH 把**多路输入画面按 ROI 摆进一张输出画布**，并在重叠�
 - **多路画面合成一路回传**：把头部、腕部、底盘等相机的画面拼进同一张画布，由一路编码器输出，遥操作与数据采集时只需回传一路码流。
 - **超广角拼接**：相邻相机视场有重叠，在重叠带做 Alpha 融合，得到比单相机更宽的视场。
 
-STITCH 硬件不包含缩放、几何变换与色彩转换单元，ROI 搬运按 1:1 像素映射执行。输出画布分辨率由输出通道属性独立配置，与各路输入分辨率解耦：既可仅覆盖输入的局部区域，也可大于任一单路输入。若输入图像为鱼眼图还须经 GDC 完成几何校正（见[GDC 概述](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview)），STITCH 仅按 ROI 坐标落位写入，并在重叠区执行 Alpha 混合以消除接缝。数据接入支持两种模型：用户态离线回灌，或经 vflow 绑定到上游节点，两者使用同一组 vnode 接口。
+STITCH 硬件不包含缩放、几何变换与色彩转换单元，ROI 搬运按 1:1 像素映射执行。输出画布分辨率由输出通道属性独立配置，与各路输入分辨率解耦：既可仅覆盖输入的局部区域，也可大于任一单路输入。若输入图像为鱼眼图还须经 GDC 完成几何校正（见 [GDC 概述](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview)），STITCH 仅按 ROI 坐标落位写入，并在重叠区执行 Alpha 混合以消除接缝。数据接入支持两种模型：用户态离线回灌，或经 vflow 绑定到上游节点，两者使用同一组 vnode 接口。
 
 两个模块的职责划分：
 
@@ -29,7 +29,7 @@ STITCH 硬件不包含缩放、几何变换与色彩转换单元，ROI 搬运按
 - **输入通道**：4 路（`stitch0_ich0` ~ `stitch0_ich3`）
 - **输出通道**：1 路（`stitch0_och`）
 - **硬件实例数**：1 个（`hw_id` 固定为 0）
-- **并发流水线数**：最多 5 条（`ctx_id` 取 0 ~ 4）
+- **并发流水线数**：最多 5 条（`ctx_id` 取 0-4）
 - **单次拼接 ROI 数上限**：12
 - **输入格式**：NV12
 - **输入尺寸**：最小 **16 × 2**、最大 **3840 × 3840**（宽 × 高，单位像素）；宽必须是 16 的倍数，高必须为偶数
@@ -62,18 +62,18 @@ STITCH 硬件不包含缩放、几何变换与色彩转换单元，ROI 搬运按
 - **画布尺寸**：由最终要显示或编码的画面决定，上限 3840 × 3840，宽必须是 16 的倍数。画布按 NV12 存放，1920 × 1080 一帧约 3.0 MB，输出 buffer 常驻内存
 - **每路格子的尺寸**：由画布划分方式决定。STITCH 不缩放，尺寸确定后须由上游把每路缩放到位（拼墙场景由各路的 PYM 完成）
 - **输入路数**：一路输入对应一个输入通道，硬件共 4 路；需要更多路时，要么分多级拼接，要么先在上游把画面合成
-- **ROI 数量**：上限 12，每块需独立落位的矩形占一个，重叠区的 Alpha 融合还要额外占一个；划分方式见[典型方案](#典型方案四路环视拼接)
+- **ROI 数量**：上限 12，每块需独立落位的矩形占一个，重叠区的 Alpha 融合还要额外占一个；划分方式见 [典型方案](#典型方案四路环视拼接)
 - **并发流水线数**：全芯片只有一个 STITCH 实例，最多 5 条并发流水线，超出后无法再建；要同时跑更多路拼接，只能合并到同一张画布（画布更大、ROI 更多）或分时复用
 
 #### 典型方案：四路环视拼接
 
 STITCH 的落位方式分两类（360° 环视、多路拼墙），本节展开 360° 环视：
 
-![两类多路 ROI 落位示意图](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig2-roi-layout.svg)
+![两类多路 ROI 落位示意图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig2-roi-layout.svg)
 
 机身前后左右各装一颗鱼眼相机，方案分两步落地：
 
-1. **GDC 做几何校正** —— 四路鱼眼图各转成一张俯视图，得到四张 IPM 图，见[GDC 概述](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview)。
+1. **GDC 做几何校正** —— 四路鱼眼图各转成一张俯视图，得到四张 IPM 图，见 [GDC 概述](/Advanced_development/multimedia_development/multimedia_api/gdc/gdc_overview)。
 2. **STITCH 落位与融合** —— 四张图按机身周边的实际位置摆进一张画布，相邻两路的交界处做 Alpha 融合，输出俯视全景图，供遥控操作与近距避障使用。
 
 整套方案要准备三类参数：
@@ -88,7 +88,7 @@ STITCH 的落位方式分两类（360° 环视、多路拼墙），本节展开 
 
 ROI 划分表描述两类信息：**四张图各自在画布上的落位**，以及**每处重叠区的划分**。划分原则只有两条：**不重叠的部分直接拷贝，重叠的部分用 Alpha 融合**。四路各占一个直拷 ROI 铺满画布，四个角的重叠区各再占一个融合 ROI。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/roi-layout-4cam.png" alt="四路环视的 ROI 划分示例" width="100%" />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/roi-layout-4cam.png" alt="四路环视的 ROI 划分示例" width="100%" />
 
 上图是这种划分方式的示意图：前后左右四路各占一个直拷 ROI（`BLENDING_MODE_SRC`），四个角的重叠区各占一个融合 ROI（`BLENDING_MODE_ALPHA`），合计 8 个。图中标注的坐标与尺寸是这张图自身的示例；下面给出板端样例的实际取值。
 
@@ -119,7 +119,7 @@ ROI 划分表描述两类信息：**四张图各自在画布上的落位**，以
 | 1 | `STH_MODE_FB_INTERNAL_BUF` | 内部 buffer 回灌 |
 | 2 | `STH_MODE_FLOW` | flow 绑定模式。源帧来自 vflow 里绑定的上游节点，用户态不发帧 |
 
-外部 buffer 回灌（`STH_MODE_FB_EXTERNAL_BUF`）的拼接时机由 **0 号输入通道的到达沿触发**：0 号通道收到源帧即启动本次拼接，其余尚未送达的通道按缺帧处理，由驱动以全零帧填充，对应区域在显示侧呈绿色（见[配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题)）。因此推荐按 **1 ~ N-1 路先送、0 号最后送** 的顺序投递（示例见[快速示例](#快速示例)）；0 号先送亦可完成拼接，代价是其余各路的当前帧不参与本次合成。`STH_MODE_FLOW` 无需应用主动送帧：驱动按帧时间戳对各路分组，时间差在 15 ms 窗口内的帧归为一组触发拼接；超出窗口的迟到帧被丢弃，早到帧则立即触发。各路帧率或延迟差异较大时，优先选用 `STH_MODE_FLOW`。
+外部 buffer 回灌（`STH_MODE_FB_EXTERNAL_BUF`）的拼接时机由 **0 号输入通道的到达沿触发**：0 号通道收到源帧即启动本次拼接，其余尚未送达的通道按缺帧处理，由驱动以全零帧填充，对应区域在显示侧呈绿色（见 [配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题)）。因此推荐按 **1 ~ N-1 路先送、0 号最后送** 的顺序投递（示例见 [快速示例](#快速示例)）；0 号先送亦可完成拼接，代价是其余各路的当前帧不参与本次合成。`STH_MODE_FLOW` 无需应用主动送帧：驱动按帧时间戳对各路分组，时间差在 15 ms 窗口内的帧归为一组触发拼接；超出窗口的迟到帧被丢弃，早到帧则立即触发。各路帧率或延迟差异较大时，优先选用 `STH_MODE_FLOW`。
 
 #### 融合模式
 
@@ -135,15 +135,15 @@ ROI 划分表描述两类信息：**四张图各自在画布上的落位**，以
 
 > 枚举值是 `0,1,2,3,5`，没有 4。
 
-`blending_attr` 的其余字段（方向、增益、过渡带等）见[数据结构](#数据结构)。
+`blending_attr` 的其余字段（方向、增益、过渡带等）见 [数据结构](#数据结构)。
 
 单个 ROI 的融合过程：两路源图各取一块，按 `blending_mode` 融合后写入画布的落位处。
 
-![单个 ROI 的融合机制](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig4-roi-blend.svg)
+![单个 ROI 的融合机制](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig4-roi-blend.svg)
 
 alpha / beta 是**逐像素**的融合权重表。标准做法按 ROI 划分中重叠区的位置逐像素算出两路融合权重，得到 alpha、beta 两张表：
 
-![LUT 表生成流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/lut-generation.svg)
+![LUT 表生成流程](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/lut-generation.svg)
 
 表的内容由调用方给定，权重不必是标准融合：某块区域按梯度透明即成**水印**，某路画面按曲线渐隐即成**背景虚化**。
 
@@ -155,7 +155,7 @@ alpha / beta 是**逐像素**的融合权重表。标准做法按 ROI 划分中�
 
 #### 通路绑定
 
-STITCH 绑定进 vflow 时**只支持 `CHN_BIND_M2M`**，其他绑定类型会被拒绝。绑定时还会校验输入通道的 `width` / `height` / `strid[0]` 与上游通道属性是否逐字段相等，不一致则返回 `-EINVAL`，见[会被拒绝的配置](#会被拒绝的配置)。
+STITCH 绑定进 vflow 时**只支持 `CHN_BIND_M2M`**，其他绑定类型会被拒绝。绑定时还会校验输入通道的 `width` / `height` / `strid[0]` 与上游通道属性是否逐字段相等，不一致则返回 `-EINVAL`，见 [会被拒绝的配置](#会被拒绝的配置)。
 
 典型绑法：每路 `VIN → ISP → YNR → PYM` 独立成链，末端 PYM 把画面缩到格子尺寸，再以 `CHN_BIND_M2M` 绑到 STITCH 的第 i 个输入通道；STITCH 输出接显示。
 
@@ -163,7 +163,7 @@ STITCH 绑定进 vflow 时**只支持 `CHN_BIND_M2M`**，其他绑定类型会�
 
 一次完整拼接从打开、配置到停流释放的调用流程如下：
 
-![STITCH API 调用流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/stitch-pipeline.png)
+![STITCH API 调用流程](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/stitch-pipeline.png)
 
 <details>
 <summary>展开：函数调用参考</summary>
@@ -201,7 +201,7 @@ STITCH 绑定进 vflow 时**只支持 `CHN_BIND_M2M`**，其他绑定类型会�
 
 STITCH 的落位方式分两类，画布同为 1920 × 1080：
 
-![两类多路 ROI 落位示意图](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig2-roi-layout.svg)
+![两类多路 ROI 落位示意图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/fig2-roi-layout.svg)
 
 板上完整样例见 `/app/multimedia_samples/sample_pipeline/multi_pipe_vin_isp_ynr_pym_stitch_display`。
 
@@ -347,7 +347,7 @@ int main(void)
 
 重叠带的融合权重由 `alpha_lut` 逐像素给出，**表值是该像素处 src0 的权重**：0 全取 src1，255 全取 src0。上例沿 x 方向做 0 → 255 的线性渐变，重叠带因此从右图平滑过渡到左图。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/minexample-output.png" alt="最小示例在板端的实测输出" width="100%" />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/stitch/minexample-output.png" alt="最小示例在板端的实测输出" width="100%" />
 
 上图为该示例在板端的实测输出：源帧是程序填充的纯色测试图（左路红、右路蓝），画布左右两段是直拷 ROI 的原样搬运，中间 128 像素重叠带按 alpha 表从右路色渐变到左路色。顶部标注条为后期加注，画布内容即程序原始输出。
 
@@ -386,7 +386,7 @@ STITCH 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。常用�
 
 下文 14 个接口有两条共性约定，各小节不再重复。
 
-- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。STITCH 上实际会遇到的返回码及处理建议见[返回值说明](#返回值说明)。
+- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。STITCH 上实际会遇到的返回码及处理建议见 [返回值说明](#返回值说明)。
 - **五个宏**：`set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` 为宏实现，`attr` 必须传指向对应结构体的指针，不能传 `void *`。
 
 ### hbn_vnode_open
@@ -408,12 +408,12 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 | --- | --- | --- | --- | --- |
 | `vnode_type` | `hb_vnode_type` | 是 | — | vnode 类型，STITCH 取 `HB_STITCH` |
 | `hw_id` | `uint32_t` | 是 | — | 硬件实例编号。STITCH 只有一个硬件实例，**固定传 0** |
-| `ctx_id` | `int32_t` | 是 | `AUTO_ALLOC_ID` | context id，软件概念；可指定具体值（STITCH 合法范围 0 ~ 4），或传 `AUTO_ALLOC_ID` 由框架自动分配。超出范围返回 `-655407` |
+| `ctx_id` | `int32_t` | 是 | `AUTO_ALLOC_ID` | context id，软件概念；可指定具体值（STITCH 合法范围 0-4），或传 `AUTO_ALLOC_ID` 由框架自动分配。超出范围返回 `-655407` |
 | `vnode_fd` | `hbn_vnode_handle_t *` | 是 | — | **出参**，返回的 vnode handle |
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -447,7 +447,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -482,7 +482,7 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, stitch_base_attr *a
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -515,12 +515,12 @@ hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_
 | 参数 | 类型 | 必选 | 默认 | 说明 |
 | --- | --- | --- | --- | --- |
 | `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
-| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，取 0 ~ 3 |
+| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，取 0-3 |
 | `attr` | `stitch_ch_attr *` | 是 | — | 该输入通道的属性，字段见 [stitch_ch_attr](#stitch_ch_attr) 与 [roi_info](#roi_info) |
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -558,7 +558,7 @@ hobot_status hbn_vnode_get_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -591,7 +591,7 @@ hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -629,7 +629,7 @@ hobot_status hbn_vnode_get_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -662,7 +662,7 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -697,7 +697,7 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -731,7 +731,7 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -769,7 +769,7 @@ hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -807,7 +807,7 @@ hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -839,12 +839,12 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 | 参数 | 类型 | 必选 | 默认 | 说明 |
 | --- | --- | --- | --- | --- |
 | `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
-| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，取 0 ~ 3 |
+| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，取 0-3 |
 | `img` | `hbn_vnode_image_t *` | 是 | — | 要送入的源帧 |
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -877,12 +877,12 @@ hobot_status hbn_vnode_sendframe_async(hbn_vnode_handle_t vnode_fd, uint32_t ich
 | 参数 | 类型 | 必选 | 默认 | 说明 |
 | --- | --- | --- | --- | --- |
 | `vnode_fd` | `hbn_vnode_handle_t` | 是 | — | 模块的 vnode handle |
-| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，取 0 ~ 3 |
+| `ichn_id` | `uint32_t` | 是 | — | 输入通道 id，取 0-3 |
 | `img` | `hbn_vnode_image_t *` | 是 | — | 要送入的源帧 |
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，STITCH 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -897,7 +897,7 @@ hbn_vnode_sendframe_async(sth_fd, 1, &in_img[1]);
 完整可运行版本见板端 `/app/multimedia_samples/sample_gdc_stitch/`。
 
 ## 数据结构
-完整字段以 SDK 头文件 `hbn_sth_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`mode` 见[送帧模式](#送帧模式)，`blending_mode` 与 LUT 相关规则见[融合模式](#融合模式)，通道字段的用法见 [接口说明](#接口说明)。
+完整字段以 SDK 头文件 `hbn_sth_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`mode` 见 [送帧模式](#送帧模式)，`blending_mode` 与 LUT 相关规则见 [融合模式](#融合模式)，通道字段的用法见 [接口说明](#接口说明)。
 
 ### 类型总览
 
@@ -927,9 +927,9 @@ STITCH 对外是一个 vnode，没有自己的函数 API，配置分三处下发
 
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
-| `mode` | `uint32_t` | 送帧模式，取值见[送帧模式](#送帧模式) |
+| `mode` | `uint32_t` | 送帧模式，取值见 [送帧模式](#送帧模式) |
 | `roi_nums` | `uint32_t` | 本次拼接的 ROI 个数，上限 12 |
-| `img_nums` | `uint32_t` | 参与拼接的输入图像数，取值 1 ~ 4 |
+| `img_nums` | `uint32_t` | 参与拼接的输入图像数，取值 1-4 |
 | `alpha_lut` | `lut_attr` | Alpha 权重表；用到的模式必须提供 |
 | `beta_lut` | `lut_attr` | Beta 权重表；仅 `BLENDING_MODE_ALPHA_BETA` 需要 |
 | `blending` | `blending_attr[MAX_STH_ROI_NUMS]` | 每个 ROI 一条融合配置，按 ROI 下标索引 |
@@ -960,10 +960,10 @@ STITCH 对外是一个 vnode，没有自己的函数 API，配置分三处下发
 
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
-| `blending_mode` | `uint32_t` | 融合模式，取值见[融合模式](#融合模式) |
+| `blending_mode` | `uint32_t` | 融合模式，取值见 [融合模式](#融合模式) |
 | `direct` | `uint32_t` | 融合方向，取值 `0`=左上 `1`=右下 `2`=左下 `3`=右上（枚举 `BLENDING_DIRECT_LT` / `_RB` / `_LB` / `_RT`）。`BLENDING_MODE_ONLINE` 按它决定过渡带方向；其余模式不校验，板端 `sample_gdc_stitch` 在 4 个 `BLENDING_MODE_ALPHA` 的 ROI 上按所处角落分别填了 `0` ~ `3` |
 | `uv_en` | `uint32_t` | 是否同时搬运 UV 分量，取值 0 / 1 |
-| `src0_index` / `src1_index` | `uint32_t` | 两路源图的输入通道号，取值 0 ~ 3 |
+| `src0_index` / `src1_index` | `uint32_t` | 两路源图的输入通道号，取值 0-3 |
 | `margin` / `margin_inv` | `uint32_t` | 过渡带参数。**只有 `BLENDING_MODE_ONLINE` 会校验这两个值，且仅接受 `0` / `128`**；其余融合模式不校验（板端 `sample_gdc_stitch` 各 ROI 用的是 `10` / `0`） |
 | `gain_src0_yuv` / `gain_src1_yuv` | `uint32_t[3]` | 两路源图的 Y/U/V 增益（`[0]`=Y、`[1]`=U、`[2]`=V），定标 256 = 1.0× |
 
@@ -980,7 +980,7 @@ STITCH 对外是一个 vnode，没有自己的函数 API，配置分三处下发
 
 | 返回值 | 宏 | 含义与下一步 |
 | --- | --- | --- |
-| `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针；源帧被驱动丢弃后取帧也返回此值，见[配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题) |
+| `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针；源帧被驱动丢弃后取帧也返回此值，见 [配置阶段能通过、出帧时才暴露的问题](#配置阶段能通过出帧时才暴露的问题) |
 | `-22` | `-EINVAL` | 属性组合非法（尺寸不匹配、对齐不满足等） |
 | `-41` | `HBN_STATUS_NODE_POLL_HUP` | 硬件处理失败，驱动向取帧队列发了挂起信号。查内核 `hw process faild` 一行确认原因 |
 | `-655368` | `HBN_STATUS_STH_INVALID_NULL_PTR` | STITCH 侧空指针 |
@@ -1026,5 +1026,5 @@ cat /sys/class/vps/stitch0_ich0/regdump        # 寄存器快照，只读
 
 - `loading` 只在运行中有意义，且与上一次读取间隔太近会读到 `0.0 %`；在跑流时从另一个会话读取、间隔 1 s 以上。
 - `loading` 的采样窗口可写：`echo 1000 > /sys/class/vps/stitch0_ich0/loading`，范围 `(0, 10000]` ms，填 0 回落默认值。
-- `hw_timeout` 可写：`echo 2000 > /sys/class/vps/stitch0_ich0/hw_timeout`，有效范围 1 ~ 5000 ms；写入 0 或超过 5000 后读回 0，不是回落默认值（两板实测）。
+- `hw_timeout` 可写：`echo 2000 > /sys/class/vps/stitch0_ich0/hw_timeout`，有效范围 1-5000 ms；写入 0 或超过 5000 后读回 0，不是回落默认值（两板实测）。
 - 帧率不在 STITCH 节点上，见 flow 级的 `/sys/class/vps/flow/fps`。

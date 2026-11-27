@@ -40,13 +40,13 @@ Acore 域另有独立的看门狗（设备树 `compatible = "snps,hb_wdt"`，Lin
 
 <DocScope products="RDK S100">
 - 硬件看门狗数量：3（`WWDT0` ~ `WWDT2`）
-- 每实例含 Int 与 Rst 两类中断：中断向量 71~76
+- 每实例含 Int 与 Rst 两类中断：中断向量 71-76
 - SDK 当前配置：3 个实例（`Wdg0` ~ `Wdg2`）
 - Acore 域独立看门狗：6 个（设备树 `watchdog0` ~ `watchdog5`）
 </DocScope>
 <DocScope products="RDK S600">
 - 硬件看门狗数量：5（`WWDT0` ~ `WWDT4`）
-- 每实例含 Int 与 Rst 两类中断：中断向量 93~102
+- 每实例含 Int 与 Rst 两类中断：中断向量 93-102
 - SDK 当前配置：3 个实例（`Wdg0` ~ `Wdg2`）
 - Acore 域独立看门狗：2 个（设备树 `watchdog0` ~ `watchdog1`）
 </DocScope>
@@ -93,7 +93,7 @@ McalCdd/Wdg/src/Wdg4.c  McalCdd/Wdg/inc/Wdg4.h   # 源文件已提供，SDK 默�
 ```
 
 :::warning 警告
-`Wdg3` / `Wdg4` 的源文件与接口已随 SDK 提供，但板级配置中 `WDG_NUM = 3`，`Wdg_Config[]` 与 `Wdg_CoreIdConfig[]` 均只装载 3 个实例（索引 0~2）。在未扩展配置的情况下直接调用 `Wdg3_Init()` / `Wdg4_Init()` 会越界访问上述数组，属未定义行为。如需启用，须同时扩展 `WDG_NUM`、`Wdg_Config[]` 与 `Wdg_CoreIdConfig[]`。
+`Wdg3` / `Wdg4` 的源文件与接口已随 SDK 提供，但板级配置中 `WDG_NUM = 3`，`Wdg_Config[]` 与 `Wdg_CoreIdConfig[]` 均只装载 3 个实例（索引 0-2）。在未扩展配置的情况下直接调用 `Wdg3_Init()` / `Wdg4_Init()` 会越界访问上述数组，属未定义行为。如需启用，须同时扩展 `WDG_NUM`、`Wdg_Config[]` 与 `Wdg_CoreIdConfig[]`。
 :::
 </DocScope>
 

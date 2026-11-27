@@ -27,7 +27,7 @@ to an rsync daemon, and require SRC or DEST to start with a module name.
 
 简易写法:
 
-```
+```text
 rsync [OPTION...] SRC... [DEST]
 ```
 
@@ -133,7 +133,7 @@ rsync [OPTION...] SRC... [DEST]
   - --include=PATTERN：不排除与 PATTERN 匹配的文件
   - --include-from=FILE：从 FILE 中读取包含模式
   - --files-from=FILE：从 FILE 中读取源文件名的列表
-- -0, --from0：所有 *-from/filter 文件以0分隔
+- -0, --from0：所有 *-from/filter 文件以 0 分隔
 - -s, --protect-args：不对空格进行拆分，只对通配符特殊字符进行拆分
   - --trust-sender：信任远程发送方的文件列表
   - --address=ADDRESS：将传出套接字绑定到守护程序的地址
@@ -171,7 +171,7 @@ rsync [OPTION...] SRC... [DEST]
 
 - 拷贝本地文件，将/app 目录下的文件拷贝到/userdata 目录下
 
-```
+```text
 rsync -avSH /app/ /userdata/
 ```
 
@@ -188,36 +188,36 @@ total size is 4  speedup is 0.02
 
 - 拷贝本地机器的内容到远程机器
 
-```
+```text
 rsync -av /app 192.168.1.12:/app
 ```
 
 - 拷贝远程机器的内容到本地机器
 
-```
+```text
 rsync -av 192.168.1.12:/app /app
 ```
 
-- 拷贝远程 rsync 服务器(daemon 形式运行 rsync)的文件到本地机。
+- 拷贝远程 rsync 服务器（daemon 形式运行 rsync）的文件到本地机。
 
-```
+```text
 rsync -av root@192.168.1.12::www /userdata
 ```
 
-- 拷贝本地机器文件到远程 rsync 服务器(daemon 形式运行 rsync)中。当 DST 路径信息包含 `::` 分隔符时启动该模式。
+- 拷贝本地机器文件到远程 rsync 服务器（daemon 形式运行 rsync）中。当 DST 路径信息包含 `::` 分隔符时启动该模式。
 
-```
+```text
 rsync -av /userdata root@192.168.1.12::www
 ```
 
 - 显示远程机的文件列表。这类似于 rsync 传输，不过只要在命令中省略掉本地机信息即可。
 
-```
+```text
 rsync -v rsync://192.168.1.12/app
 ```
 
 - 指定密码存放文件，无需输入密码，直接执行 rsync 传输
 
-```
+```text
 rsync -rvzP --password-file=/etc/rsync.password rsync@192.168.1.12::app/ /app
 ```

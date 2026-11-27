@@ -16,9 +16,9 @@ description: "SmartSens 系列 sensor 适配流程（以 sc132gs 为例）"
 
 ---
 
-## dts配置
+## dts 配置
 
-- 关于dts配置和上电和sensor的id识别验证参考[修改平台设备树](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/hbn/overview#修改平台设备树-dts)
+- 关于 dts 配置和上电和 sensor 的 id 识别验证参考 [修改平台设备树](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/hbn/overview#修改平台设备树-dts)
 
 ---
 
@@ -53,9 +53,9 @@ sensor_module_t sc132gs = {
 ### power_on
 
 1. power_on 通过 GPIO 控制 sensor 上电，需结合 spec 上电时序。
-2. sensor_poweron 一般在 sensor_init 中调用，只需要控制 XSHUTDN 即可，以下为 sc132gs power_on的代码实现：
+2. sensor_poweron 一般在 sensor_init 中调用，只需要控制 XSHUTDN 即可，以下为 sc132gs power_on 的代码实现：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-145501.png)
+  ![sc132gs power_on 代码实现](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-145501.png)
 
 ```c
 int sensor_poweron(sensor_info_t *sensor_info)
@@ -108,8 +108,8 @@ int sensor_poweroff(sensor_info_t *sensor_info)
 
 ### init
 
-1. 将 sensor 初始化寄存器列表通过i2c写函数写入 sensor；不同分辨率使用不同 setting 数组
-2. sc132gs_linear_data_init 用于填充turning_data信息。
+1. 将 sensor 初始化寄存器列表通过 i2c 写函数写入 sensor；不同分辨率使用不同 setting 数组
+2. sc132gs_linear_data_init 用于填充 turning_data 信息。
 3. sensor_init 调用时机为 hbn_camera_attach_to_vin
 
 ```c
@@ -166,7 +166,7 @@ int sensor_init(sensor_info_t *sensor_info)
 
 ### deinit
 
-1. deinit 一般调用于 sensor的反初始化，直接调用 power_off 下电即可。
+1. deinit 一般调用于 sensor 的反初始化，直接调用 power_off 下电即可。
 2. sensor_deinit 调用时机为 hbn_camera_destroy 或者 hbn_camera_detach_from_vin。
 
 ```c
@@ -184,10 +184,10 @@ int sensor_deinit(sensor_info_t *sensor_info)
 
 ### start
 
-1. start 实现下发开流寄存器0x0100 为0x01，使 sensor 出流。
+1. start 实现下发开流寄存器 0x0100 为 0x01，使 sensor 出流。
 2. sensor_start 调用时机为 上层调用 hbn_vflow_start。
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-204357.png)
+  ![sc132gs start 代码实现](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-204357.png)
 
 ```c
 int sensor_start(sensor_info_t *sensor_info)
@@ -214,7 +214,7 @@ int sensor_start(sensor_info_t *sensor_info)
 
 ### stop
 
-1. stop 实现下发关流寄存器 0x0100 为0x00，使 sensor 关流。
+1. stop 实现下发关流寄存器 0x0100 为 0x00，使 sensor 关流。
 2. sensor_stop 调用时机为 上层调用 hbn_vflow_stop
 
 ```c
@@ -237,9 +237,9 @@ int sensor_stop(sensor_info_t *sensor_info)
 
 ### ISP 配置与 linear_data_init
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-151023.png)
+  ![ISP 配置与 linear_data_init 代码实现](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-151023.png)
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-145837.png)
+  ![linear_data_init 相关代码实现](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260210-145837.png)
 
 
 在 `sc132gs_linear_data_init` 中填充 tuning 参数：
@@ -252,20 +252,20 @@ int sensor_stop(sensor_info_t *sensor_info)
 关键参数配置：
 
 - `lines_per_second = vts * sensor_info->fps`
-- `exposure_time_max = vts - 8`  文档中为FRM_LENGTH_LINES - 8 即 VTS - 8
+- `exposure_time_max = vts - 8`  文档中为 FRM_LENGTH_LINES - 8 即 VTS - 8
 - `analog_gain_max = 128 * 8192`：gain 量化基准为 8192（2^13），表示最大可用到 LUT 索引 128。ISP AE 下发的 gain 值 / 8192 取整后作为索引查表。
 - `digital_gain_max = 0`：表示该配置不使用 digital gain。若需启用，填 `索引值 * 8192`（如 `159 * 8192`）。
-- `exposure_time_min = 1` 默认最小配置为 1，spec无限制
-- `sensor_data_bayer_fill(..., 10, BAYER_START_B, BAYER_PATTERN_RGGB)`；`sensor_data_bits_fill(..., 12)`，0,0位置BAYER_START是 BAYER_START_B，BAYER_PATTERN是RGGB，raw10格式,sensor_data_bits_fill pwl mode 才会用到，这里配置12即可
+- `exposure_time_min = 1` 默认最小配置为 1，spec 无限制
+- `sensor_data_bayer_fill(..., 10, BAYER_START_B, BAYER_PATTERN_RGGB)`；`sensor_data_bits_fill(..., 12)`，0,0 位置 BAYER_START 是 BAYER_START_B，BAYER_PATTERN 是 RGGB，raw10 格式,sensor_data_bits_fill pwl mode 才会用到，这里配置 12 即可
 ### aexp_gain_control
 
 
-- 对于 SmartSens 的sensor gain控制，一般采用的是 离散档位 + 精细调节,通常查表是最快的，根据表生成直接填写 agin_lut 和 dgain_lut即可（不需要使用 gain_table.xlsx），比较方便快捷
+- 对于 SmartSens 的 sensor gain 控制，一般采用的是 离散档位 + 精细调节,通常查表是最快的，根据表生成直接填写 agin_lut 和 dgain_lut 即可（不需要使用 gain_table.xlsx），比较方便快捷
 - SmartSens 使用 **again + dgain** 两路 LUT，寄存器为 AGAIN 0x3e08/0x3e09、DGAIN 0x3e06/0x3e07。根据 ISP 下发的 again[0]/dgain[0] 索引查表.
 
 **参考文档：**
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260116-103909.png)
+  ![SmartSens gain LUT 参考文档截图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/smartsens/screenshot-20260116-103909.png)
 
 
 ```c
@@ -313,10 +313,10 @@ static int sensor_aexp_gain_control(hal_control_info_t *info, uint32_t mode, uin
 
 ### aexp_line_control
 
-`aexp_line_control`这个函数是主要实现了曝光的控制，主要负责：
-1. 接收ISP 3A算法计算的下发的曝光的行数
-2. 将曝光的行数转换为sensor寄存器值
-3. 配置通过i2c下发给sensor 曝光寄存器
+`aexp_line_control` 这个函数是主要实现了曝光的控制，主要负责：
+1. 接收 ISP 3A 算法计算的下发的曝光的行数
+2. 将曝光的行数转换为 sensor 寄存器值
+3. 配置通过 i2c 下发给 sensor 曝光寄存器
 4. 这里曝光寄存器为  0x3e00、0x3e01、0x3e02。
 
 ```c
@@ -355,8 +355,8 @@ static int sensor_aexp_line_control(hal_control_info_t *info, uint32_t mode, uin
 
 ### userspace_control
 
-- 这里 sensor_userspace_control 用于 Gain Control 与 Exposure Control开关。
-- 用于 hbplayer 调试时排查 flicker 或画面异常，可开关 HAL_GAIN_CONTROL / HAL_LINE_CONTROL确认问题。
+- 这里 sensor_userspace_control 用于 Gain Control 与 Exposure Control 开关。
+- 用于 hbplayer 调试时排查 flicker 或画面异常，可开关 HAL_GAIN_CONTROL / HAL_LINE_CONTROL 确认问题。
 
 ```c
 static int sensor_userspace_control(uint32_t port, uint32_t *enable)
@@ -380,7 +380,7 @@ static int sensor_userspace_control(uint32_t port, uint32_t *enable)
 - 需配置 mipi（lane、datatype、mipiclk、linelenth、framelenth、settle）、camera（name、addr、sensor_mode、gpio、fps、width、height、format）、vin_node_attr（mipi_rx、cim_isp_flyby 等）、vin_ichn_attr、vin_ochn_attr（wstride 等）、isp_attr、isp_ichn_attr、isp_ochn_attr。
 
 - HTS/VTS 可从寄存器 0x342/0x343、0x340/0x341 读取或咨询 Sensor FAE 提供或者使用示波器测量，测量方法参考 [mipi-参数确定](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/camera_faq)
-- mipiclk 一般询问 Sensor FAE即可，计算方法参考 [MIPI CLK](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/camera_faq)
+- mipiclk 一般询问 Sensor FAE 即可，计算方法参考 [MIPI CLK](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/camera_faq)
 - 其他的都为通用配置，参考文档 [数据结构](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。 进行配置即可
 
 ### vp_sensor 配置文件：linear_1088x1280_raw10_30fps_2lane.c
@@ -423,6 +423,6 @@ static int sensor_userspace_control(uint32_t port, uint32_t *enable)
 1. **get_vin_data**：确认 raw 图无严重偏色、帧率符合配置。
 2. **get_isp_data**：准备 确认 YUV 正常 出图，无偏色等。
 3. **hbplayer**：连接板端预览，见 [hbplayer 和 tuning_tool 工具使用指南](/Advanced_development/multimedia_development/multimedia_api/isp_tuning_guide/hbplayer_tuning_tool)。
-4. **tuning_tool**：使用tuning_tool连接hbplayer后，输入命令 e，配置 Manual AE，设置 aGain、integrationTime，看驱动打印核对 0x3e08/0x3e09、0x3e06/0x3e07、0x3e00~0x3e02 与 spec 一致。
+4. **tuning_tool**：使用 tuning_tool 连接 hbplayer 后，输入命令 e，配置 Manual AE，设置 aGain、integrationTime，看驱动打印核对 0x3e08/0x3e09、0x3e06/0x3e07、0x3e00-0x3e02 与 spec 一致。
 
 常见问题见 [Camera Sensor FAQ](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/camera_faq)。

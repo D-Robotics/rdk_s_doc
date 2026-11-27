@@ -6,11 +6,11 @@ description: "RDK 命令 hrut_socuid 用法"
 
 # hrut_socuid
 
-**hrut_socuid** 命令打印当前 soc 芯片的 uid（唯一标识符）。
+**hrut_socuid** 命令打印当前 SoC 芯片的 UID（唯一标识符）。
 
 ## 语法说明
 
-```
+```text
 hrut_socuid
 ```
 

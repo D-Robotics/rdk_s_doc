@@ -41,7 +41,7 @@ description: "多媒体 API 参考章节术语与缩略语汇总：按硬件（�
 | TPG | Test Pattern Generator | 测试图案发生器，不接 Sensor 也能出图 |
 | EMB | Embedded Data | Sensor 随图像输出的内嵌数据（曝光、温度等） |
 | RAWDS | - | CIM 内的 2×2 下采样功能块 |
-| LPWM | - | VIN 触发信号模块（类 PWM 方波，1Hz~500KHz 可配） |
+| LPWM | - | VIN 触发信号模块（类 PWM 方波，1Hz-500KHz 可配） |
 | VCON | - | VIN 板级接口模块（I2C/POC/GPIO/PHY 映射）|
 | FSYNC | Frame Synchronization | 帧同步信号，用于多路 Camera 同步曝光 |
 

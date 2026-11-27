@@ -50,18 +50,18 @@ RDK S100/S600 系统中 ION 内存主要被以下模块使用：
 
 S100（12G interleave 模式）下的 memory map：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/12g_interleave_mem_map.png" alt="S100 12G interleave 模式 memory map 示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/12g_interleave_mem_map.png" alt="S100 12G interleave 模式 memory map 示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 S100P（24G interleave 模式）下的 memory map：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/24g_interleave_mem_map.png" alt="S100P 24G interleave 模式 memory map 示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/24g_interleave_mem_map.png" alt="S100P 24G interleave 模式 memory map 示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 <DocScope products="RDK S600">
 
 S600（32G interleave 模式）下的 memory map：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/32g_interleave_mem_map.png" alt="S600 32G interleave 模式 memory map 示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/32g_interleave_mem_map.png" alt="S600 32G interleave 模式 memory map 示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 </DocScope>
 
@@ -147,7 +147,7 @@ S600 会先判断内存的 cache 属性：如果申请 non-cacheable 内存，�
 
 ### ION 区域大小调整
 
-ION 区域是在设备树中预留的一段物理地址空间。调整方法：修改对应 SoC 的 dts 文件中 `reserved-memory` 下的 `ion_*` 节点的 `reg`（起始地址和大小），重新编译内核并制作镜像烧写。
+ION 区域是在设备树中预留的一段物理地址空间。调整方法：修改对应 SoC 的 dts 文件中 `reserved-memory` 下的 `ion_*` 节点的 `reg`（起始地址和大小），重新编译内核并制作镜像烧录。
 
 <DocScope products="RDK S100">
 

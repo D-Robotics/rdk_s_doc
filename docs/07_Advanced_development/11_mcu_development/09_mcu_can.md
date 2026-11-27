@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - **定位**：说明 MCU 侧 CAN 控制器资源与限制、CAN2IPC/CANHAL 透传机制、CAN Filter 与波特率的配置方法，以及 Acore sample 与 MCU 调试命令的使用方式。
 - **适用读者**：需要在 MCU1/Acore 上使用 CAN/CAN FD 收发数据，或需要调整过滤器、波特率与合包参数的开发者。
-- **前置条件**：已完成 MCU 固件编译与加载、MCU1 正常运行（参见 [MCU 快速入门指南](./01_basic_information.md#mcu1启动关闭流程)）；了解 CAN/CAN FD 基本概念与 Can 驱动。
+- **前置条件**：已完成 MCU 固件编译与加载、MCU1 正常运行（参见 [MCU 快速入门指南](./01_basic_information.md#mcu1-启动关闭流程)）；了解 CAN/CAN FD 基本概念与 Can 驱动。
 - **与其他模块关系**：CAN 数据由 MCU 域控制器收发，经 CAN2IPC 通过 IPC 转发给 Acore 的 CANHAL；IPC 通道与用法参见 [MCU IPC 使用指南](./08_mcu_ipc.md)；透传超时检测依赖时间同步，参见 [时间同步文档](/Advanced_development/system_software/driver_timesync)；MCU 侧日志参见 [Log 使用指南](/Advanced_development/system_software/log_introduction)。
 
 
@@ -125,9 +125,9 @@ S600 CAN 转发方案的核心流程如下：
 - CAN 物理层的形式主要分为闭环总线及开环总线网络两种，一个适合于高速通讯，一个适合于远距离通讯；**S100 的 sample 默认采用闭环总线网络架构**。
 
 - CAN 总线的引脚位于 S100 的 MCU 扩展板上，引出了 5 路 CAN 接口，连接器分别对应了 5 个绿色的螺丝式的 3 PIN 连接器。1 PIN（三角标志）为 GND，中间 PIN 为 CAN_L，剩下的为 CAN_H。
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_phy.png" alt="MCU CAN 物理图示" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_phy.png" alt="MCU CAN 物理图示" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 - MCU 小板通过 2pin 跳帽的形式来选择是否在 CAN_H 和 CAN_L 之间接入 120 欧姆电阻；当插入跳帽时，接入电阻，适用于闭环网络所需的终端匹配阻抗‌；移除跳帽则断开终端电阻，适用于开环网络或中继节点场景‌。
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_sche.png" alt="MCU CAN 简笔图示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_can_sche.png" alt="MCU CAN 简笔图示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 CAN 闭环网络使用两个 120 欧姆电阻是 CAN 总线的标准配置，以下以 S100 举例，如何正确接入电阻：
 :::info 提示
@@ -145,7 +145,7 @@ CAN 闭环网络使用两个 120 欧姆电阻是 CAN 总线的标准配置，以
 - MCU 小板通过拨动拨码开关，来选择是否在 CAN_H 和 CAN_L 之间接入 120 欧姆电阻；当拨码开关拨动到 ON 端，表示接入电阻，适用于闭环网络所需的终端匹配阻抗‌；当拨码开关波动到数字编码端，表示断开电阻，适用于开环网络或中继节点场景‌。
 - MCU 扩展版上的 CAN 与拨码开关:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/mcu.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/mcu.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - CAN 与拨码开关的对应关系：
 
@@ -157,7 +157,7 @@ CAN 闭环网络使用两个 120 欧姆电阻是 CAN 总线的标准配置，以
 
 - S600 底板上的 CAN 与拨码开关:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/Baseboard.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/Baseboard.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 底板上 J16 为 can 在的位置， 信号名 J16 从上到下如下：
 
@@ -177,7 +177,7 @@ CAN 闭环网络使用两个 120 欧姆电阻是 CAN 总线的标准配置，以
 | CAN9_L      |
 
 - 底板拨码开关在底板背面
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/baseboard_dpi_switch.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/09_MCU_CAN/baseboard_dpi_switch.png" alt="MCU CAN 物理图示" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 - CAN 与拨码开关的对应关系：
 
 |             | DPI num |             | DPI num |
@@ -617,7 +617,7 @@ D-Robotics:/$ Can_Set_Merge_Num 8   // 设置合包数量为8
 
 D-Robotics:/$ Can_Set_Merge_Time 100  // 设置超时时间为100us
 ```
-acore 侧也支持多包合并传输功能，下面只简单介绍相关数据结构，具体可以使用[应用 sample](#应用-sample)中提供的测试用例进行修改验证。
+acore 侧也支持多包合并传输功能，下面只简单介绍相关数据结构，具体可以使用 [应用 sample](#应用-sample) 中提供的测试用例进行修改验证。
 ```c
 #define CAN_FRAME_NUM (1)   // Acore侧表示合并传输数据包的数量
 struct pack_info pack = { 0 };
@@ -630,7 +630,7 @@ pack.data_num = CAN_FRAME_NUM;
 
 :::info 提示
 
-执行 sample 之前需要先开启 MCU1，MCU1 开启的流程参考[开启 MCU](./01_basic_information.md#mcu1启动关闭流程)。
+执行 sample 之前需要先开启 MCU1，MCU1 开启的流程参考 [开启 MCU](./01_basic_information.md#mcu1-启动关闭流程)。
 
 :::
 
@@ -845,8 +845,8 @@ can 的接收和发送函数依赖 IPC 的资源，当传输速率过快时会�
 
 使用前提：
 - MCU1 正常运行
-- 硬件连接：使用 CAN 闭环总线网络，CAN5 连接 CAN6，RDKS100 上 CAN5 和 CAN6 需要在接线柱后面的 2 PIN 引脚使用跳线帽或杜邦线短接， 以确保 CAN_H 和 CAN_L 之间接入 120 欧姆电阻， RDKS600 上需要将 can5,can6 对应的拨码开关，波到 ON 端，以确保 CAN_H 和 CAN_L 之间接入 120 欧姆电阻。
-- 由于 can_send 和 can_get 都使用的 instance channel4(默认映射来自 CAN5 的数据)，**由于 Ipc 单个 channel 只能被一个线程使用**，因此在互联测试的时候需要依据 [软件架构](./09_mcu_can.md#Software_architecture)中 can 与 instance channel 的对应关系来设置配置文件。例如针对 can6, S100 上 intance 为 0， channel 为 6， S600 上 instance 为 4， channel 为 0， 对应设置文件如下：
+- 硬件连接：使用 CAN 闭环总线网络，CAN5 连接 CAN6，RDK S100 上 CAN5 和 CAN6 需要在接线柱后面的 2 PIN 引脚使用跳线帽或杜邦线短接， 以确保 CAN_H 和 CAN_L 之间接入 120 欧姆电阻， RDK S600 上需要将 can5,can6 对应的拨码开关，波到 ON 端，以确保 CAN_H 和 CAN_L 之间接入 120 欧姆电阻。
+- 由于 can_send 和 can_get 都使用的 instance channel4(默认映射来自 CAN5 的数据)，**由于 Ipc 单个 channel 只能被一个线程使用**，因此在互联测试的时候需要依据 [软件架构](./09_mcu_can.md#Software_architecture) 中 can 与 instance channel 的对应关系来设置配置文件。例如针对 can6, S100 上 intance 为 0， channel 为 6， S600 上 instance 为 4， channel 为 0， 对应设置文件如下：
 
 ```json
 {
@@ -1168,7 +1168,7 @@ can_tran_debug clean
 
 3. 在 `/sys/class/remoteproc/remoteproc_mcu1` 路径下使用 `cat log` 命令查看结果（`can_tran_debug` 的输出会写入 MCU1 的日志）
 
-   <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug 日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/s100_debug.jpg" alt="Debug 日志" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 应用程序接口
 

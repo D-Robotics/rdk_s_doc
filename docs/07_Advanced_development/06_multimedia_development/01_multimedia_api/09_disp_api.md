@@ -66,7 +66,7 @@ IDU 完成图层处理后通过 DPI 接口送出像素流，最终由 MIPI D-PHY
 
 IDU 内部分为 AXI IF 和 Controller 两个区域：6 个图层的像素数据经 AXI IF（RDMA → Async FIFO → LBUF）从内存读出，并统一转换为 YUV444 格式后送入 Controller，完成 6 图层叠加混合与后处理（亮度/对比度/饱和度、Gamma、Dither），最终以 DPI 接口输出像素流；同时支持将合成后的图像转换为 YUV422/YUV420 回写到内存。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_idu_framework.png" alt="IDU 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/disp_idu_framework.png" alt="IDU 架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 各模块说明如下：
 
@@ -127,9 +127,9 @@ IDU 内部分为 AXI IF 和 Controller 两个区域：6 个图层的像素数据
 
 #### MIPI TX
 
-- MIPI CSI TX控制器为MIPI CSI-2 v2.0
-- IDE中共有两路MIPI TX输出，可配置CSI或DSI输出，两种控制器共用一个D-PHY
-- MIPI D-PHY最大支持4 lanes x 2.5Gbps速率
+- MIPI CSI TX 控制器为 MIPI CSI-2 v2.0
+- IDE 中共有两路 MIPI TX 输出，可配置 CSI 或 DSI 输出，两种控制器共用一个 D-PHY
+- MIPI D-PHY 最大支持 4 lanes x 2.5Gbps 速率
 
 ## 软件描述
 
@@ -317,10 +317,6 @@ modetest -M hobot-drm -a -s 161@31:1920x1080 -P 35@31:1920x1080@NV12
 命令执行完成之后，显示屏上应该会出现 SMPTE 的测试彩条 ECR-1-1978：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/display/display_subsystem_smpte_patten.png" alt="SMPTE 测试彩条" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
-
-## 参考示例
-
-- 待补充
 
 ## API 参考
 

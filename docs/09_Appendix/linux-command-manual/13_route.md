@@ -10,11 +10,11 @@ description: "Linux 命令 route 用法"
 
 在 Linux 系统中设置路由通常是为了解决以下问题：
 
-该 Linux 系统在一个局域网中，局域网中有一个网关，能够让机器访问 Internet，那么就需要将这台机器的 IP 地址设置为 Linux 机器的默认路由。要注意的是，直接在命令行下执行 route 命令来添加路由，不会永久保存，当网卡重启或者机器重启之后，该路由就失效了；可以在`/etc/rc.local`中添加 route 命令来保证该路由设置永久有效。
+该 Linux 系统在一个局域网中，局域网中有一个网关，能够让机器访问 Internet，那么就需要将这台机器的 IP 地址设置为 Linux 机器的默认路由。要注意的是，直接在命令行下执行 route 命令来添加路由，不会永久保存，当网卡重启或者机器重启之后，该路由就失效了；可以在 `/etc/rc.local` 中添加 route 命令来保证该路由设置永久有效。
 
 ## 语法说明
 
-```
+```text
 route [-nNvee] [-FC] [<AF>]           List kernel routing tables
 route [-v] [-FC] {add|del|flush} ...  Modify routing table for AF.
 ```
@@ -42,7 +42,7 @@ route [-v] [-FC] {add|del|flush} ...  Modify routing table for AF.
 
 显示当前路由
 
-```
+```text
 root@ubuntu:~# route
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
@@ -72,7 +72,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 添加网关/设置网关
 
-```
+```text
 route add -net 192.168.2.0 netmask 255.255.255.0 dev eth0
 ```
 

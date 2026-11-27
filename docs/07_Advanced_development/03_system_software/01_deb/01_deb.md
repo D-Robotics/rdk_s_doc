@@ -17,15 +17,15 @@ RDK 系统基于 Debian/Ubuntu，系统组件以 deb 包形式分发。本节面
 
 **与其他模块关系**：deb 包是镜像定制（[系统定制](../02_system_customization/01_system_customization.md)）与板端组件升级（[系统 OTA](/Advanced_development/system_software/ota_system)、[miniboot 升级](/Advanced_development/system_software/ota_miniboot)）的产物来源；打包目录规范见 [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)。
 
-:::note 待完善
-单 deb 包开发模式研发流程仍在探索阶段，本节当前记录现状与设计原则，实际内容待研发流程稳定后补充（ADR D3）。
+:::note 说明
+单 deb 包开发模式仍在探索阶段，本节记录当前现状与设计原则，打包流程可能随版本调整。
 :::
 
 ## deb 包结构
 
 RDK 源码 `source/` 下每个 `hobot-*` 目录是一个 deb 包源码。与标准 Debian 打包（手写 `debian/control`、`debian/rules` + `dpkg-buildpackage`）不同，RDK 采用「预置文件树 + `mk_debs.sh` 动态生成 control」的方式，目录结构示意如下：
 
-```
+```text
 hobot-xxx/
 ├── debian/           # 打包内容根目录（其中的文件树会安装到根文件系统）
 │   ├── usr/          # 安装到 /usr 下的文件（bin、lib、include 等）
@@ -87,5 +87,3 @@ flowchart LR
 | `hobot-ethercat` | EtherCAT 支持 |
 
 完整列表及源码目录说明见 [BSP 源码目录结构](/Advanced_development/environment_build/bsp_source_layout)。
-
-<!-- TODO(Sx): 待收集 —— 调试、常见问题：单 deb 包开发流程尚在探索阶段（ADR D3），暂无真实「现象→原因→解决」素材，待研发流程稳定后补充 -->

@@ -16,11 +16,11 @@ description: "示例代码介绍 板端示例使用说明"
 
 ## 示例源码目录结构
 
-所有示例代码的源码存放在设备的`/app/multimedia_samples` 目录下。
+所有示例代码的源码存放在设备的 `/app/multimedia_samples` 目录下。
 
 源码目录结构如下，按照功能和场景进行命名区分。
 
-```
+```text
 .
 ├── chip_base_test    # 驱动功能单元测试，请查阅 [ BSP 开发指南 - 驱动功能单元测试 ] 了解使用方法
 ├── Makefile.in       # Makefile 的参数配置，包括交叉编译工具链，头文件、库文件引用等
@@ -44,16 +44,16 @@ description: "示例代码介绍 板端示例使用说明"
 ### 硬件使用指南
 
 mipi host 编号如图                                                                                                               
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="S600 MIPI Host 结构图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/s600_mipi_host_1.png" alt="S600 MIPI Host 结构图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 mipi host 2 对应的解串器 link 编号如图
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png" alt="MIPI 连接示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/mipi2.png" alt="MIPI 连接示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 软件使用指南
 
 所有示例程序、依赖的资源文件，默认安装在开发板的 `/app/multimedia_samples` 目录下，用户可以直接登录开发板使用这些示例。例如想要使用 sample_pym 示例，可以按照以下命令使用：
 
-```
+```text
 #1. 进入源码目录
 cd /app/multimedia_samples/sample_pym
 
@@ -80,7 +80,7 @@ Options:
 
 本模块的示例代码的依赖如下:
 1. 依赖 BSP 源码编译生成的 hbre 头文件、库文件，以及根文件系统中的 ffmpeg 等头文件和动态库, 相关库和路径的引用在各个 Sample 目录下的 Makefile 中指定
-```
+```text
 LDFLAGS += -lvpf -lvio -lcam -lhbmem
 LDFLAGS := -L/usr/hobot/lib
 INCDIR := -I/usr/hobot/include -I/usr/include/cjson/
@@ -88,7 +88,7 @@ INCDIR := -I/usr/hobot/include -I/usr/include/cjson/
 
 2. 依赖 `/app/multimedia_samples/vp_sensors` 目录中的 Sensor 配置文件，相关文件的引用在 `/app/multimedia_samples/Makefile.in` 中指定，配置如下：
 
-```
+```text
 INCS += -I . \
 	-I ${PLATFORM_SAMPLES_DIR}/utils/ \
 	-I ${PLATFORM_SAMPLES_DIR}/vp_sensors
@@ -107,12 +107,12 @@ SRC_PATH += $(shell find ${PLATFORM_SAMPLES_DIR}/vp_sensors -maxdepth 1 -type d)
 1. 登录到设备中
 2. 进入 `/app/multimedia_samples/` 目录中各个示例， 单独进行开发与编译。例如，单独编译 `sample_vin` 示例：
 
-	```
+	```text
 	cd /app/multimedia_samples/sample_vin/get_vin_data
 	make
 	```
 3. 编译生成的可执行程序，在当前目录下，可以直接执行, 如下：`get_vin_data` 是编译得到可执行程序
-	```
+	```text
 	root@ubuntu:/app/multimedia_samples/sample_vin/get_vin_data# ls
 	get_vin_data  get_vin_data.c  get_vin_data.o  Makefile
 	```
@@ -129,6 +129,6 @@ SRC_PATH += $(shell find ${PLATFORM_SAMPLES_DIR}/vp_sensors -maxdepth 1 -type d)
 
 在板端执行以下命令降低 Kernel 的日志输出级别，避免输出日志太多，影响查看程序的执行流程：
 
-```
+```text
 echo 4 > /proc/sys/kernel/printk
 ```

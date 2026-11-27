@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **前置条件**：已通过 SSH 或串口登录板端，并具备 `sudo` 权限。
 
-**与其他模块关系**：日志占用空间的排查见[系统日志查看](./15_system_log.md)；系统升级方式见[系统升级方式](./03_system_update/01_upgrade_methods.md)。
+**与其他模块关系**：日志占用空间的排查见 [系统日志查看](./15_system_log.md)；系统升级方式见 [系统升级方式](./03_system_update/01_upgrade_methods.md)。
 
 ## 查看磁盘占用
 

@@ -67,7 +67,7 @@ Cache 刷新的操作是将 Cache 中已经缓存了 DDR 的数据，回写到 D
 1. 左图：没有调用 Cache 刷新的情况
 2. 右图：在合适的时机调用 Cache 刷新的情况（`hb_mem_flush_buf`）
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_flush.png" alt="Cache 刷新（hb_mem_flush_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_flush.png" alt="Cache 刷新（hb_mem_flush_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 左图流程解释（存在缓存一致性的问题）：
 
@@ -91,7 +91,7 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 1. 左图：没有调用 Cache 无效接口的情况
 2. 右图：在合适的时机调用 Cache 无效接口的情况（`hb_mem_invalidate_buf`）
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_invalidate.png" alt="Cache 无效（hb_mem_invalidate_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_cache_invalidate.png" alt="Cache 无效（hb_mem_invalidate_buf）场景示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 左图流程解释（存在缓存一致性的问题）：
 
@@ -135,7 +135,7 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 
 下图展示多进程之间内存共享的流程（以 `hb_mem_common_buf_t` 在多进程之间共享举例）：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_share_flow.png" alt="多进程内存共享流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_share_flow.png" alt="多进程内存共享流程示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 内存队列管理
 
@@ -155,7 +155,7 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 
 :::
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_queue.png" alt="内存队列管理示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbm_queue.png" alt="内存队列管理示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 内存池
 
@@ -163,11 +163,11 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 
 使用内存池模块可以保证用户不经过内核态快速分配内存 ，从而实现更高效的内存管理。
 
-目前用户程序（hbrt、dnn等）中常有自身实现的内存管理模块来提高内存分配速度，造成代码重复，开发和维护不便，因此用户可使用内存池模块来进行内存管理，可提高模块的复用性。
+目前用户程序（hbrt、dnn 等）中常有自身实现的内存管理模块来提高内存分配速度，造成代码重复，开发和维护不便，因此用户可使用内存池模块来进行内存管理，可提高模块的复用性。
 
 在系统启动过程中，提前为用户申请一块大内存，这样用户在申请内存时，可以直接使用内存池中的内存，绕过了陷入内核态申请内存的步骤，或者说是提前将该步骤实现了。 
 
-需要注意的是，普通内存池的创建、分配、释放和销毁只支持在创建进程内管理；从普通内存池分配得到的buffer可以传递给其他进程，并通过hb_mem_import_com_buf导入后共享。若需要多个进程直接从同一个内存池分配和释放buffer，请使用共享内存池接口。
+需要注意的是，普通内存池的创建、分配、释放和销毁只支持在创建进程内管理；从普通内存池分配得到的 buffer 可以传递给其他进程，并通过 hb_mem_import_com_buf 导入后共享。若需要多个进程直接从同一个内存池分配和释放 buffer，请使用共享内存池接口。
 
 ### 共享内存池
 
@@ -340,7 +340,7 @@ Cache 无效化操作指的是将 Cache 中已缓存的 DDR 数据丢弃，使�
 | HB_MEM_USAGE_MEM_SHARE_POOL | 用于表明该 buffer 用于 memory share pool，用户分配 buffer 时无需指定该参数，即使指定该参数，内部默认忽略 |
 | HB_MEM_USAGE_STRICT_RW_PERMISSION | 导入 buffer 时只允许输入更低的读写权限 |
 | HB_MEM_USAGE_SG | scatter list 内存分配（仅 sram heap）|
-| HB_MEM_USAGE_ALLOC_ALIGN_0x10 ~ 0x100 | 分配对齐大小：16B/32B/64B/128B/256B（互斥，默认 16B 对齐）|
+| HB_MEM_USAGE_ALLOC_ALIGN_0x10-0x100 | 分配对齐大小：16B/32B/64B/128B/256B（互斥，默认 16B 对齐）|
 | HB_MEM_USAGE_ALIGN_MASK | 用于获取对齐属性的掩码 |
 | HB_MEM_USAGE_PRIV_HEAP_DMA | 指定从 ion_cma（DMA heap）分配内存 |
 | HB_MEM_USAGE_PRIV_HEAP_RESERVERD | 指定从 carveout heap 分配内存，原始定义（兼容客户已使用的枚举），不建议使用 |
@@ -382,7 +382,7 @@ graph_buf 分配时 format 参数的可选值（`mem_pixel_format_t` 枚举）�
 | MEM_PIX_FMT_YUV444P | planar YUV 4:4:4, 24bpp |
 | MEM_PIX_FMT_YUV440P | planar YUV 4:4:0 |
 | MEM_PIX_FMT_YUV400 | Gray Y, YUV 4:0:0 |
-| MEM_PIX_FMT_RAW8 / RAW10 / RAW12 / RAW14 / RAW16 / RAW20 / RAW24 | RAW 格式，位深 8~24bit |
+| MEM_PIX_FMT_RAW8 / RAW10 / RAW12 / RAW14 / RAW16 / RAW20 / RAW24 | RAW 格式，位深 8-24bit |
 | MEM_PIX_FMT_YUV420P_10_8_8 | planar YUV 4:2:0, 10bit 8bit 8bit |
 | MEM_PIX_FMT_YUV420P_12_8_8 | planar YUV 4:2:0, 12bit 8bit 8bit |
 

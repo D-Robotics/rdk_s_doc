@@ -13,7 +13,7 @@ import DocScope from '@site/src/components/DocScope';
 本示例演示如何在 BPU 上部署量化后的 Ultralytics YOLOv5x 模型，通过 USB 摄像头实时读取画面做目标检测，并以全屏窗口可视化检测结果（前处理 + 推理 + NMS + 框绘制）。Python 版见 [USB Camera YOLOv5x 推理 (Python)](./01_usb_camera_py.md)。
 
 :::tip
-示例代码位于板端 `/app/cdev_demo/bpu/usb_camera_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+示例代码位于板端 `/app/cdev_demo/bpu/usb_camera_sample/`，该代码已在开发板上经过实际验证，可直接编译运行。
 :::
 
 ## 前置条件
@@ -109,8 +109,6 @@ No USB camera found under /dev/video*.
 - 输出 `Open USB camera successfully`；
 - 输出 `Place the mouse in the display window and press 'q' to quit`；
 - 屏幕全屏显示带检测框的实时画面，按 `q` 退出。
-
-<!-- TODO: 待接入摄像头实测成功 log -->
 
 ## 软件说明
 

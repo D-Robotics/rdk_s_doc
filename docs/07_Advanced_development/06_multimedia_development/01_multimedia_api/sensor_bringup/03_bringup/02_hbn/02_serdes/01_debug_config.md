@@ -15,7 +15,7 @@ GMSL camera sensor 驱动需要实现的内容和 MIPI 驱动类似，这里以 
 
 ### emode_data 配置
 
-![emode_data 命名规则](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/extra_mode_naming.png)
+![emode_data 命名规则](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/extra_mode_naming.png)
 
 
 以下为 ar0820std 的定义示例：
@@ -44,12 +44,12 @@ void vp_update_camera_config(const camera_config_t *camera_config_in, camera_con
 ```
 
 上面是 app src/vp_sensors/vp_sensors.c 的代码
-不同的sensor和加串 要重新map成不一样的地址,不然相同的地址解串器没法和他们通讯,所以根据link_port动态设定eeprom_addr serial_addr addr
+不同的 sensor 和加串 要重新 map 成不一样的地址,不然相同的地址解串器没法和他们通讯,所以根据 link_port 动态设定 eeprom_addr serial_addr addr
 
 
 在 serdes 模组中，sensor 需要的 mclk 可以由加串器来提供，也可以是外部晶振提供：
 
-- 加串器来提供：将 `serial_rclk_out` 配置为 1，且 `rclk_mfp` 配置为对应的 mfp index 目前软件只支持配置 MFP4(通常美信加串也是提供MFP4作为mclk的输出)。
+- 加串器来提供：将 `serial_rclk_out` 配置为 1，且 `rclk_mfp` 配置为对应的 mfp index 目前软件只支持配置 MFP4(通常美信加串也是提供 MFP4 作为 mclk 的输出)。
 - 外部晶振提供：将 `serial_rclk_out` 和 `rclk_mfp` 都配置为 0 即可。
 
 ### emode（extra_mode）配置
@@ -211,7 +211,7 @@ typedef enum CONFIG_INDEX_B {
 | `lpwm_chn_attr` | `lpwm_chn_attr_t[LPWM_CHN_NUM]` | 逐通道配置 | — | — | — |
 
 这里表示使用哪个 lpwm chn,板端 LPWM 的输出通道,根据原理图确认链接到对应的 解串器的 MFP 管脚，下面 gpio_mfp 用于配置 库板端 LPWM 触发信号物理接到 MAX96712 的哪根 MFP 引脚上
-lpwm_chn_attr_t 是 每个lpwm chn 的配置参数
+lpwm_chn_attr_t 是 每个 lpwm chn 的配置参数
 
 
 ### lpwm_chn_attr_t
@@ -223,8 +223,8 @@ lpwm_chn_attr_t 是 每个lpwm chn 的配置参数
 | `period` | `uint32_t` | 周期 | — | — | — |
 | `offset` | `uint32_t` | 相位偏移 | — | — | — |
 | `duty_time` | `uint32_t` | 脉冲宽度 | — | — | — |
-| `threshold` | `uint32_t` | 缓慢同步的相位误差门限（微秒），取值 0~65535。`0` 表示关闭缓慢同步；非 0 时按 `adjust_step` 逐步把触发相位拉向同步源，**并要求 `offset` 小于 `period`** | 0 | 0 | `0`~`65535`，单位 µs；`0` 关闭缓慢同步 |
-| `adjust_step` | `uint32_t` | 缓慢同步每次调整的步进量，取值 0~15。仅在 `threshold` 非 0 时起作用 | 0 | 0 | `0`~`15` |
+| `threshold` | `uint32_t` | 缓慢同步的相位误差门限（微秒），取值 0-65535。`0` 表示关闭缓慢同步；非 0 时按 `adjust_step` 逐步把触发相位拉向同步源，**并要求 `offset` 小于 `period`** | 0 | 0 | `0`~`65535`，单位 µs；`0` 关闭缓慢同步 |
+| `adjust_step` | `uint32_t` | 缓慢同步每次调整的步进量，取值 0-15。仅在 `threshold` 非 0 时起作用 | 0 | 0 | `0`~`15` |
 
 
 #### **gpio_mfp 配置解释**
@@ -235,10 +235,10 @@ gpio_mfp 常用于 sensor 多路相机同步曝光
 
 #### **link_desp 配置解释**
 
-link_desp 用于描述多路的连接关系,为字符串数组，用户程序需要描述每个link的对应的 extra_mode 和config_index去跑对应的模组配置
-以下是几个常见的情况，link 和VC的映射关系
+link_desp 用于描述多路的连接关系,为字符串数组，用户程序需要描述每个 link 的对应的 extra_mode 和 config_index 去跑对应的模组配置
+以下是几个常见的情况，link 和 VC 的映射关系
 
-**连接场景一**：四路 serial camera 连接到 max96712的PortA、PortB、PortC、PortD
+**连接场景一**：四路 serial camera 连接到 max96712 的 PortA、PortB、PortC、PortD
 
 | Port 口 | 模组        | extra_mode | config_index |
 | ------- | ----------- | ---------- | ------------ |
@@ -248,7 +248,7 @@ link_desp 用于描述多路的连接关系,为字符串数组，用户程序需
 | PortD   | sc1336_gmsl | 0          | 256          |
 
 
-link_desp的配置：
+link_desp 的配置：
 
 ```c
 static deserial_config_t deserial_config = {
@@ -261,9 +261,9 @@ static deserial_config_t deserial_config = {
 };
 ```
 
-VC的分配情况:
+VC 的分配情况:
 
-| Port口 | 模组        | VC |
+| Port 口 | 模组        | VC |
 | ------ | ----------- | -- |
 | PortA  | ar0820std   | 0  |
 | PortB  | ovx3cstd    | 1  |
@@ -271,15 +271,15 @@ VC的分配情况:
 | PortD  | sc1336_gmsl | 3  |
 
 
-**连接场景二**：两路 serial camera 连接到 max96712的PortB和PortD
+**连接场景二**：两路 serial camera 连接到 max96712 的 PortB 和 PortD
 
-| Port口 | 模组        | extra_mode | config_index |
+| Port 口 | 模组        | extra_mode | config_index |
 | ------ | ----------- | ---------- | ------------ |
 | PortB  | ovx3cstd    | 4          | 16896        |
 | PortD  | sc1336_gmsl | 0          | 256          |
 
 
-link_desp的配置:
+link_desp 的配置:
 
 ```c
 static deserial_config_t deserial_config = {
@@ -290,18 +290,18 @@ static deserial_config_t deserial_config = {
 };
 ```
 
-VC的分配情况:
+VC 的分配情况:
 
-| Port口 | 模组        | VC |
+| Port 口 | 模组        | VC |
 | ------ | ----------- | -- |
 | PortB  | ovx3cstd    | 0  |
 | PortD  | sc1336_gmsl | 1  |
 
 
-**连接场景三**：两路 serial camera 连接到 max96712的PortA和PortC
+**连接场景三**：两路 serial camera 连接到 max96712 的 PortA 和 PortC
 
 
-| Port口 | 模组      | extra_mode | config_index |
+| Port 口 | 模组      | extra_mode | config_index |
 | ------ | --------- | ---------- | ------------ |
 | PortA  | ar0820std | 5          | 512          |
 | PortC  | ar0820std | 5          | 512          |
@@ -315,9 +315,9 @@ static deserial_config_t deserial_config = {
 };
 ```
 
-VC的分配情况:
+VC 的分配情况:
 
-| Port口 | 模组      | VC |
+| Port 口 | 模组      | VC |
 | ------ | --------- | -- |
 | PortA  | ar0820std | 0  |
 | PortC  | ar0820std | 1  |
@@ -335,7 +335,7 @@ VC的分配情况:
 
 **link 和 POC 通道在硬件上各是什么？**
 
-- link：MAX96712 的物理 port（A/B/C/D），也link（0/1/2/3） 也叫 对应板上的 4 个 GMSL 同轴连接器 J0~J3，同轴电缆传输高速串行数据到远端 加串和sensor，link port数据的传输需要需要POC进行供电。
+- link：MAX96712 的物理 port（A/B/C/D），也 link（0/1/2/3） 也叫 对应板上的 4 个 GMSL 同轴连接器 J0~J3，同轴电缆传输高速串行数据到远端 加串和 sensor，link port 数据的传输需要需要 POC 进行供电。
 - POC 通道：MAX20087 的 4 个 power output（OUT1~OUT4），每条给一根同轴馈电，对应 CONFIG 寄存器 bit0~bit3（EN1~EN4）。
   - poc_map 就是用来告诉软件 96712 的 link N 这根线，它的电是从 20087 的哪条 OUT 来的
 
@@ -348,8 +348,8 @@ poc_map 本身不是 MAX20087 的寄存器，是相机驱动侧定义的一个 1
   3。也就是 OUT 号 − 1。
 
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/poc_register0.png)
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/poc_register1.png)
+![MAX20087 CONFIG 寄存器位定义（1）](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/poc_register0.png)
+![MAX20087 CONFIG 寄存器位定义（2）](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/poc_register1.png)
 
 由 MAX20087 的寄存器手册 POC 使能寄存器 0x01 可知：
 
@@ -361,9 +361,9 @@ poc_map 本身不是 MAX20087 的寄存器，是相机驱动侧定义的一个 1
 | BIT 3      | EN4    | OUT4         | 1 = 使能 OUT4（EN 引脚为高时） |
 
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/poc.png)
+![MAX20087 POC 输出通道与 EN 位对应关系](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/poc.png)
 
-由原理图可知 当前 POC 使能寄存器0x01的 bit 位和 96712 link 的映设关系
+由原理图可知 当前 POC 使能寄存器 0x01 的 bit 位和 96712 link 的映设关系
 
 
 | link (96712 port)  | link D = link3 | link C = link2 | link B = link1 | link A = link0 |
@@ -377,5 +377,5 @@ poc_map 本身不是 MAX20087 的寄存器，是相机驱动侧定义的一个 1
 
 :::note
 1. 解码侧也是同一套：port = (poc_map >> (link × 4)) & 0xf，软件拿到 port 后去置 CONFIG 的对应 EN bit。
-2. poc_map 如果 app配置优先使用 app 的poc_map的值，poc_map 为 0 才回退去读 dts 的 vcon poc_map
+2. poc_map 如果 app 配置优先使用 app 的 poc_map 的值，poc_map 为 0 才回退去读 dts 的 vcon poc_map
 :::

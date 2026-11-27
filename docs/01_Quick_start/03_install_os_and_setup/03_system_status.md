@@ -16,8 +16,8 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前置条件
 
-- [ ] 开发板已烧录 RDK OS，烧录方法见[烧录说明](./01_instruction.md)。
-- [ ] 已通过 SSH 或串口登录开发板，登录方法见[远程登录](./05_remote_login.md)；推荐使用默认账户登录。
+- [ ] 开发板已烧录 RDK OS，烧录方法见 [烧录说明](./01_instruction.md)。
+- [ ] 已通过 SSH 或串口登录开发板，登录方法见 [远程登录](./05_remote_login.md)；推荐使用默认账户登录。
 
 ## 操作步骤
 
@@ -45,7 +45,7 @@ cat /etc/version
 
 </DocScope>
 
-该值即 RDK OS 的版本号。若与预期镜像版本不一致，说明烧入的镜像不对，需按[烧录说明](./01_instruction.md)重新烧录。
+该值即 RDK OS 的版本号。若与预期镜像版本不一致，说明烧录的镜像不对，需按 [烧录说明](./01_instruction.md) 重新烧录。
 
 继续执行以下命令查看发行版基线信息：
 
@@ -134,7 +134,7 @@ hrut_boardid
 
 </DocScope>
 
-失败排查：`rdkos_info` 或 `hrut_boardid` 不存在时，确认烧录的是完整 RDK OS 镜像；型号与手中板卡不符时，按[烧录说明](./01_instruction.md)重新烧录对应平台的镜像。
+失败排查：`rdkos_info` 或 `hrut_boardid` 不存在时，确认烧录的是完整 RDK OS 镜像；型号与手中板卡不符时，按 [烧录说明](./01_instruction.md) 重新烧录对应平台的镜像。
 
 ### 步骤 3：确认 SoC 唯一 ID
 
@@ -237,15 +237,15 @@ VDSP 固件在业务需要时由上层应用加载，加载后 `state` 变为 `r
 | MCU 工作正常 | `cat /sys/class/remoteproc/remoteproc_mcu0/alive` | 输出 `alive` |
 | VDSP 状态已确认 | `cat /sys/class/remoteproc/remoteproc_vdsp0/state` | 默认输出 `offline`（固件未加载属正常） |
 
-以上检查全部通过，即说明烧入的是预期镜像、跑在预期硬件上，且整板各核心状态正常。
+以上检查全部通过，即说明烧录的是预期镜像、运行在预期硬件上，且整板各核心状态正常。
 
 ## 常见问题
 
 ### `cat /etc/version` 输出与预期镜像版本不一致
 
-**原因**：烧入的镜像与预期不符，例如烧录了其他版本或其他平台的镜像。
+**原因**：烧录的镜像与预期不符，例如烧录了其他版本或其他平台的镜像。
 
-**解决**：确认下载的镜像版本与平台，按[烧录说明](./01_instruction.md)重新烧录。
+**解决**：确认下载的镜像版本与平台，按 [烧录说明](./01_instruction.md) 重新烧录。
 
 ### BPU 自检看不到 `BPU Test Case Pass`
 
@@ -269,4 +269,4 @@ VDSP 固件在业务需要时由上层应用加载，加载后 `state` 变为 `r
 
 **原因**：对应的内核节点或命令在当前镜像中不存在。
 
-**解决**：确认烧录的是完整 RDK OS 镜像，并按[烧录说明](./01_instruction.md)重新烧录。
+**解决**：确认烧录的是完整 RDK OS 镜像，并按 [烧录说明](./01_instruction.md) 重新烧录。

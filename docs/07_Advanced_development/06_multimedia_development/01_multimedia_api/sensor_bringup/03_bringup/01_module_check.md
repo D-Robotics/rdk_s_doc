@@ -18,7 +18,7 @@ S100 存在两个 Camera 转接板，两个转接板分别是：
 2. [相机扩展板 12 通道（RDK S100）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/02_rdk_camera_expansion_board_12l.md)：提供 12 个 GMSL 相机接口
 :::
 
-因为 `相机扩展板（RDK S100）` 板级硬件兼容MIPI sensor和 Sedes sensor， 后续点亮都 以 相机扩展板（RDK S100）为例进行演示
+因为 `相机扩展板（RDK S100）` 板级硬件兼容 MIPI sensor 和 Sedes sensor， 后续点亮都 以 相机扩展板（RDK S100）为例进行演示
 
 :::doc_scope{products="RDK S600"}
 
@@ -29,7 +29,7 @@ S600 存在一个 Camera 转接板：
 
 ### 板级硬件信息
 
-**RX匹配的硬件信息**
+**RX 匹配的硬件信息**
 
 首先为环境硬件信息，各平台 RDK 上 RX/I2C/DES 等匹配关系如下：
 
@@ -56,8 +56,8 @@ S600 存在一个 Camera 转接板：
 :::doc_scope{products="RDK S100"}
 
 :::note
-- LPWM 和 MCLK(24MHz)两种功能切换：见 [MIPI 接口功能切换开关（接口5）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md#mipi-接口功能切换开关接口5)
-- 控制信号支持 1V8 和 3V3 功能切换：见 [MIPI 接口电平切换开关（接口6）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md#mipi-接口电平切换开关接口6)
+- LPWM 和 MCLK(24MHz)两种功能切换：见 [MIPI 接口功能切换开关（接口 5）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md#mipi-接口功能切换开关接口-5)
+- 控制信号支持 1V8 和 3V3 功能切换：见 [MIPI 接口电平切换开关（接口 6）](../../../../../01_Quick_start/01_hardware_introduction/03_expansion_board/01_camera/01_rdk_camera_expansion_board.md#mipi-接口电平切换开关接口-6)
 :::
 
 
@@ -105,7 +105,7 @@ S600 存在一个 Camera 转接板：
 :::doc_scope{products="RDK S100"}
 
 
-#### 参数含义
+#### 参数含义 {#param-meaning-s100}
 
 | 参数       | 类型        | 含义                                                                                          | MIPI 直连                        | GMSL/SerDes                                                       |
 | ---------- | ----------- | --------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------- |
@@ -122,7 +122,7 @@ S600 存在一个 Camera 转接板：
 
 :::doc_scope{products="RDK S600"}
 
-S600 共 6 路 MIPI RX（vcon0~5）：vcon0~3 接 SerDes 扩展板，vcon4/5 为主板直连 MIPI sensor。：
+S600 共 6 路 MIPI RX（vcon0-5）：vcon0-3 接 SerDes 扩展板，vcon4/5 为主板直连 MIPI sensor。：
 
 | MIPIRX | Lane/Trio | PhyType | I2C  | LPWM                 | gpio_oth             |
 | ------ | --------- | ------- | ---- | -------------------- | -------------------- |
@@ -215,9 +215,9 @@ S600 共 6 路 MIPI RX（vcon0~5）：vcon0~3 接 SerDes 扩展板，vcon4/5 为
 
 :::doc_scope{products="RDK S600"}
 
-#### 参数含义
+#### 参数含义 {#param-meaning-s600}
 
-| 参数         | 类型         | 含义                                                                                  | MIPI 直连（vcon4/5） | GMSL/SerDes（vcon0~3） |
+| 参数         | 类型         | 含义                                                                                  | MIPI 直连（vcon4/5） | GMSL/SerDes（vcon0-3） |
 | ------------ | ------------ | ------------------------------------------------------------------------------------- | -------------------- | ---------------------- |
 | `bus`        | uint32       | I2C bus 号，vcon 通过该 bus 与 sensor/解串器通信                                       | `<4>` / `<5>`        | `<0>`~`<3>`            |
 | `gpio_poc`   | array        | POC 供电控制 GPIO。非 0=使能；后续值为 GPIO 编号                                       | `<0 0 0>`（无 POC）  | `<0 362 374>`          |
@@ -299,10 +299,10 @@ i2cset -y 3 0x28 0x01 0x10
 i2cset -y 3 0x28 0x01 0x1F
 ```
 
-此时一般可以读取到 加串器和sensor的地址
+此时一般可以读取到 加串器和 sensor 的地址
 
-1. 如果是yuv sensor 一般sensor内部isp连接，可能读取不到 sensor 地址
-2. 如果是raw sensor 通常可以读取到 加串器 和 sensor地址
+1. 如果是 yuv sensor 一般 sensor 内部 isp 连接，可能读取不到 sensor 地址
+2. 如果是 raw sensor 通常可以读取到 加串器 和 sensor 地址
 
 ```bash
 # i2cdetect -y -r 3
@@ -328,7 +328,7 @@ i2cset -y 3 0x28 0x01 0x1F
 |               | SER 加串器型号             | MAX96717                                                                                              | 加串器芯片型号               | 确认所用解串及相关配置              |
 |               | 其他                       | xxx.pdf                                                                                               | Camera 的规格书文档          | 如可能，直接给文档                  |
 | sensor        | 分辨率                     | 3840×2160                                                                                             | 点亮目标要用的分辨率         | 需与配置对应                        |
-|               | 帧率                       | 30fps                                                                                                 | 点亮目标要用的帧率           | 需与配置对应                        |
+|               | 帧率                       | 30 fps                                                                                                 | 点亮目标要用的帧率           | 需与配置对应                        |
 |               | 数据类型                   | RAW12                                                                                                 | 点亮目标要用的数据类型       | SerDes 及 MIPI 配置需要             |
 |               | CFA                        | RGGB                                                                                                  | sensor 实际输出的 pattern    | ISP 适配需要                        |
 |               | HDR 模式                   | HDR3 PWL12                                                                                            | 是否支持 HDR，何种方式       | 点亮与 tuning 配置需要              |

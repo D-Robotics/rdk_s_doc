@@ -51,13 +51,13 @@ LPWM 输出能力（硬件规格）：
 
 | 参数 | 范围 |
 |---|---|
-| 频率 | 1 Hz ～ 26 MHz |
-| 0%～100% 占空比（可调频段） | 200 Hz ～ 26 MHz |
-| 输出脉宽 | 0 ms ～ 5 ms |
+| 频率 | 1 Hz-26 MHz |
+| 0%-100% 占空比（可调频段） | 200 Hz-26 MHz |
+| 输出脉宽 | 0 ms-5 ms |
 
 :::info 备注
 
-- 上表引自参考手册（最大 26 MHz）；驱动设计上限为 1 MHz：period/duty 按 1 µs 粒度换算并校验，sysfs 实际支持 1 Hz ～ 1 MHz，100% 占空比要求 period ≤ 4095 µs（约 ≥ 244 Hz）。
+- 上表引自参考手册（最大 26 MHz）；驱动设计上限为 1 MHz：period/duty 按 1 µs 粒度换算并校验，sysfs 实际支持 1 Hz-1 MHz，100% 占空比要求 period ≤ 4095 µs（约 ≥ 244 Hz）。
 - 40-pin 上其余 GPIO 引脚**不支持** `Hobot.GPIO.PWM` 软件模拟 PWM，仅 Pin 32/33 为硬件 LPWM。
 - 外接测量/负载时注意排针为 **3.3 V** 电平；板载已完成电平转换，外设侧尽量避免再叠加电平转换（与 [UART 驱动调试指南](./02_driver_uart_dev.md) 中 40-pin 说明一致）。
 
@@ -317,7 +317,7 @@ root@ubuntu:/app/40pin_samples# python3 simple_pwm.py
 PWM running. Press CTRL+C to exit.
 ```
 
-脚本在 **Pin 33**（`lpwm1` 通道 0）上以 **48 kHz** 输出，占空比在 0%～100% 间自动扫变（本板实测频率约 **47.6 kHz**）。完整参数、波形截图与接线说明见 [PWM 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/03_pwm.md)。
+脚本在 **Pin 33**（`lpwm1` 通道 0）上以 **48 kHz** 输出，占空比在 0%-100% 间自动扫变（本板实测频率约 **47.6 kHz**）。完整参数、波形截图与接线说明见 [PWM 应用（40-pin）](../../03_Demos/01_peripheral/01_40pin/01_s100/03_pwm.md)。
 
 </DocScope>
 
@@ -384,7 +384,7 @@ cat /sys/kernel/debug/pinctrl/*/pinmux-pins | grep -i lpwm
 
 <DocScope products="RDK S100">
 
-设定频率须处于驱动支持范围内（sysfs：period 1 µs ～ 1.048 s，约 1 Hz ～ 1 MHz；100% 占空比要求 period ≤ 4095 µs）。
+设定频率须处于驱动支持范围内（sysfs：period 1 µs-1.048 s，约 1 Hz-1 MHz；100% 占空比要求 period ≤ 4095 µs）。
 
 </DocScope>
 

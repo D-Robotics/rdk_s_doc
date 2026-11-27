@@ -10,7 +10,7 @@ description: "Linux 命令 ssh 用法"
 
 ## 语法说明
 
-```
+```text
 ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]
            [-b bind_address] [-c cipher_spec] [-D [bind_address:]port]
            [-E log_file] [-e escape_char] [-F configfile] [-I pkcs11]
@@ -25,11 +25,11 @@ ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]
 
 ## 选项说明
 
-- `-4`：强制使用 IPv4地址。
-- `-6`：强制使用 IPv6地址。
+- `-4`：强制使用 IPv4 地址。
+- `-6`：强制使用 IPv6 地址。
 - `-A`：开启认证代理连接转发功能。
 - `-a`：关闭认证代理连接转发功能。
-- `-B`：在尝试连接到目标主机之前，绑定到`bind_interface`的地址。这在具有多个地址的系统上非常有用。
+- `-B`：在尝试连接到目标主机之前，绑定到 `bind_interface` 的地址。这在具有多个地址的系统上非常有用。
 - `-b`：使用本地指定地址作为对应连接的源 IP 地址。
 - `-C`：请求压缩所有数据。
 - `-F`：指定 SSH 指令的配置文件。
@@ -41,8 +41,8 @@ ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]
 - `-o`：指定配置选项。
 - `-p`：指定远程服务器上的端口。
 - `-q`：静默模式。
-- `-X`：开启 X11转发功能。
-- `-x`：关闭 X11转发功能。
+- `-X`：开启 X11 转发功能。
+- `-x`：关闭 X11 转发功能。
 - `-Y`：开启信任 X11 转发功能。
 
 ## 常用命令
@@ -95,5 +95,3 @@ ssh -L local_port:remote_host:remote_port username@remote_host
 ```shell
 ssh -R remote_port:local_host:local_port username@remote_host
 ```
-
-<!-- TODO(S3): 待板端实测输出——ssh 为交互式登录命令，无固定预期输出；本地验证可通过 `ssh -V` 核对 OpenSSH 版本（示例：OpenSSH_9.6p1）。 -->

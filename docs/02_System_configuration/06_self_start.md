@@ -34,7 +34,7 @@ systemd 是现代 Ubuntu 的 **init 系统**，即内核加载完成后启动的
 
 开机时 systemd 按 **target（目标）链**逐级拉起单元。target 为一组同时启动的单元集合，对应一个启动阶段：
 
-```
+```text
 sysinit.target → basic.target → multi-user.target → graphical.target
 ```
 
@@ -80,7 +80,7 @@ rc.local 适合追加少量简单命令，但作为单一脚本，无独立服�
 
 ### 方法一：systemd 服务（推荐）
 
-当你的程序需要**失败自动重启**、**在某个服务就绪后启动**、或**独立日志**时，建议优先选择使用原生 systemd 服务单元方式实现。这是系统服务采用的标准方式，依赖关系显式、最可靠。
+当您的程序需要**失败自动重启**、**在某个服务就绪后启动**、或**独立日志**时，建议优先选择使用原生 systemd 服务单元方式实现。这是系统服务采用的标准方式，依赖关系显式、最可靠。
 
 **步骤 1：创建服务单元文件**
 
@@ -133,7 +133,7 @@ sudo systemctl start myapp.service
 
 ### 方法二：rc.local
 
-系统出厂自带 `/etc/rc.local`，开机时由 `rc-local.service` 执行。但出厂该文件默认**没有可执行权限**，而 `rc-local.service` 的触发条件是"文件可执行"——**因此必须先加可执行权限，否则开机不会执行**。
+系统出厂自带 `/etc/rc.local`，开机时由 `rc-local.service` 执行。但出厂该文件默认**没有可执行权限**，而 `rc-local.service` 的触发条件是“文件可执行”——**因此必须先加可执行权限，否则开机不会执行**。
 
 **步骤 1：编辑 rc.local**
 
@@ -232,9 +232,9 @@ sudo reboot
 
 | 方法 | 验证命令 | 成功标志 |
 |-|-|-|
-| 方法一 | `systemctl is-active myapp.service` | 输出 active |
-| 方法二 | `pgrep -af myapp`<br/>`systemctl is-active rc-local` | 进程在运行；rc-local 为 active |
-| 方法三 | `systemctl is-active myapp.service` | 输出 active |
+| 方法一 | `systemctl is-active myapp.service` | 输出 `active` |
+| 方法二 | `pgrep -af myapp`<br/>`systemctl is-active rc-local` | 进程在运行；rc-local 为 `active` |
+| 方法三 | `systemctl is-active myapp.service` | 输出 `active` |
 
 ## 取消自启动
 
@@ -243,7 +243,7 @@ sudo reboot
 | 方法 | 取消方式 |
 |-|-|
 | 方法一：systemd 服务 | `sudo systemctl disable --now myapp.service`；<br/>删除 `/etc/systemd/system/myapp.service`；<br/>`sudo systemctl daemon-reload` |
-| 方法二：rc.local | 删除 `/etc/rc.local` 中你添加的行（可执行权限可保留） |
+| 方法二：rc.local | 删除 `/etc/rc.local` 中您添加的行（可执行权限可保留） |
 | 方法三：init.d 脚本 | `sudo update-rc.d -f myapp remove`；<br/>删除 `/etc/init.d/myapp` |
 
 ## 常见错误排查清单
@@ -252,7 +252,7 @@ sudo reboot
 |-|-|
 | 开机后程序没运行 | `systemctl status myapp.service` 查状态与错误码；`journalctl -u myapp.service -b` 查日志 |
 | rc.local 没执行 | `ls -l /etc/rc.local` 确认权限含 `x`；若无，执行 `sudo chmod +x /etc/rc.local`；`journalctl -u rc-local.service -b` 看日志 |
-| 命令找不到 / 找不到库 | 在服务单元里用 `Environment=PATH=...` 指定，或在脚本里用绝对路径；程序依赖的库需放在系统路径或 `/app/lib` 下 |
+| 命令或库文件找不到 | 在服务单元里用 `Environment=PATH=...` 指定，或在脚本里用绝对路径；程序依赖的库需放在系统路径或 `/app/lib` 下 |
 | 改了 .service 不生效 | 每次修改 service 文件后必须执行 `sudo systemctl daemon-reload` |
 | 启动顺序不对 / 硬件未就绪 | 用 `After=` 显式声明依赖（如 `hobot-loadko.service` 内核模块加载完成）；详见方法一 `.service` 文件字段说明 |
 | 程序以 root 运行有安全顾虑 | 在 `[Service]` 段改用 `User=<非特权用户>`，避免不必要的 root 权限 |

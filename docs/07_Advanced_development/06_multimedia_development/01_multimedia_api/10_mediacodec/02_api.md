@@ -128,7 +128,7 @@ MediaCodec 共 70 个接口。多数配置类是**成对**出现的 `get_*` / `s
 ## 接口说明
 下文 70 个接口共用以下约定，各小节不再重复。
 
-- **返回值**：成功返回 `0`，失败返回负值错误码，含义统一见[返回值说明](#返回值说明)。
+- **返回值**：成功返回 `0`，失败返回负值错误码，含义统一见 [返回值说明](#返回值说明)。
 - **动态调整**：标注「支持动态调整」的配置类接口，可在 `hb_mm_mc_start` 之后运行期间调用，立即生效。
 
 ### 生命周期与状态
@@ -153,7 +153,7 @@ const media_codec_descriptor_t *hb_mm_mc_get_descriptor( media_codec_id_t codec_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -165,7 +165,7 @@ const media_codec_descriptor_t *hb_mm_mc_get_descriptor( media_codec_id_t codec_
 const media_codec_descriptor_t *desc = hb_mm_mc_get_descriptor(MEDIA_CODEC_ID_H264);  /* NULL = 不可用 */
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_default_context
 
@@ -189,7 +189,7 @@ hb_s32 hb_mm_mc_get_default_context(media_codec_id_t codec_id, hb_bool encoder, 
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -202,7 +202,7 @@ media_codec_context_t context = {0};
 hb_mm_mc_get_default_context(MEDIA_CODEC_ID_H264, 1, &context);  /* 1 = 编码器 */
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_initialize
 
@@ -224,7 +224,7 @@ hb_s32 hb_mm_mc_initialize(media_codec_context_t *context);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -236,7 +236,7 @@ hb_s32 hb_mm_mc_initialize(media_codec_context_t *context);
 hb_mm_mc_initialize(&context);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_configure
 
@@ -258,7 +258,7 @@ hb_s32 hb_mm_mc_configure(media_codec_context_t *context);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -270,7 +270,7 @@ hb_s32 hb_mm_mc_configure(media_codec_context_t *context);
 hb_mm_mc_configure(&context);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_start
 
@@ -293,7 +293,7 @@ hb_s32 hb_mm_mc_start(media_codec_context_t *context, const mc_av_codec_startup_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -306,7 +306,7 @@ mc_av_codec_startup_params_t startup_params = {0};
 hb_mm_mc_start(&context, &startup_params);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_stop
 
@@ -328,7 +328,7 @@ hb_s32 hb_mm_mc_stop(media_codec_context_t *context);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -340,7 +340,7 @@ hb_s32 hb_mm_mc_stop(media_codec_context_t *context);
 hb_mm_mc_stop(&context);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_pause
 
@@ -362,7 +362,7 @@ hb_s32 hb_mm_mc_pause(media_codec_context_t *context);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -374,7 +374,7 @@ hb_s32 hb_mm_mc_pause(media_codec_context_t *context);
 hb_mm_mc_pause(&context);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_flush
 
@@ -396,7 +396,7 @@ hb_s32 hb_mm_mc_flush(media_codec_context_t *context);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -408,7 +408,7 @@ hb_s32 hb_mm_mc_flush(media_codec_context_t *context);
 hb_mm_mc_flush(&context);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_release
 
@@ -430,7 +430,7 @@ hb_s32 hb_mm_mc_release(media_codec_context_t *context);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -442,7 +442,7 @@ hb_s32 hb_mm_mc_release(media_codec_context_t *context);
 hb_mm_mc_release(&context);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_state
 
@@ -465,7 +465,7 @@ hb_s32 hb_mm_mc_get_state(media_codec_context_t *context, media_codec_state_t *s
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -478,7 +478,7 @@ media_codec_state_t state;
 hb_mm_mc_get_state(&context, &state);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_status
 
@@ -501,7 +501,7 @@ hb_s32 hb_mm_mc_get_status(media_codec_context_t *context, mc_inter_status_t *st
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -514,7 +514,7 @@ mc_inter_status_t status;
 hb_mm_mc_get_status(&context, &status);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ### 回调与设备关联
 
@@ -540,7 +540,7 @@ hb_s32 hb_mm_mc_set_callback(media_codec_context_t *context, const media_codec_c
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -555,7 +555,7 @@ hb_ptr userdata = 0;
 hb_mm_mc_set_callback(&context, &callback, userdata);  /* 之后进入异步模式 */
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_vlc_buffer_listener
 
@@ -579,7 +579,7 @@ hb_s32 hb_mm_mc_set_vlc_buffer_listener( media_codec_context_t *context, const m
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -587,7 +587,7 @@ hb_s32 hb_mm_mc_set_vlc_buffer_listener( media_codec_context_t *context, const m
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_camera
 
@@ -611,7 +611,7 @@ hb_s32 hb_mm_mc_set_camera(media_codec_context_t *context, hb_s32 pipeline, hb_s
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -619,7 +619,7 @@ hb_s32 hb_mm_mc_set_camera(media_codec_context_t *context, hb_s32 pipeline, hb_s
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_vpf_init
 
@@ -642,7 +642,7 @@ hb_s32 hb_mm_mc_vpf_init(media_codec_context_t * context, hb_s32 channel_idx);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -650,7 +650,7 @@ hb_s32 hb_mm_mc_vpf_init(media_codec_context_t * context, hb_s32 channel_idx);
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_fd
 
@@ -673,7 +673,7 @@ hb_s32 hb_mm_mc_get_fd(media_codec_context_t * context, hb_s32 *fd);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -681,7 +681,7 @@ hb_s32 hb_mm_mc_get_fd(media_codec_context_t * context, hb_s32 *fd);
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_close_fd
 
@@ -704,7 +704,7 @@ hb_s32 hb_mm_mc_close_fd(media_codec_context_t * context, hb_s32 fd);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -712,7 +712,7 @@ hb_s32 hb_mm_mc_close_fd(media_codec_context_t * context, hb_s32 fd);
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ### 数据收发
 
@@ -738,7 +738,7 @@ hb_s32 hb_mm_mc_dequeue_input_buffer( media_codec_context_t *context, media_code
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -751,7 +751,7 @@ media_codec_buffer_t in_buf = {0};
 hb_mm_mc_dequeue_input_buffer(&context, &in_buf, 2000);  /* 超时 2000 ms */
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_queue_input_buffer
 
@@ -775,7 +775,7 @@ hb_s32 hb_mm_mc_queue_input_buffer( media_codec_context_t *context, media_codec_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -788,7 +788,7 @@ hb_s32 hb_mm_mc_queue_input_buffer( media_codec_context_t *context, media_codec_
 hb_mm_mc_queue_input_buffer(&context, &in_buf, 2000);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_dequeue_output_buffer
 
@@ -813,7 +813,7 @@ hb_s32 hb_mm_mc_dequeue_output_buffer( media_codec_context_t *context, media_cod
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -827,7 +827,7 @@ media_codec_output_buffer_info_t out_info = {0};
 hb_mm_mc_dequeue_output_buffer(&context, &out_buf, &out_info, 2000);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_queue_output_buffer
 
@@ -851,7 +851,7 @@ hb_s32 hb_mm_mc_queue_output_buffer( media_codec_context_t *context, media_codec
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -864,7 +864,7 @@ hb_s32 hb_mm_mc_queue_output_buffer( media_codec_context_t *context, media_codec
 hb_mm_mc_queue_output_buffer(&context, &out_buf, 0);
 ```
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ### 码率与 IDR 控制
 
@@ -889,7 +889,7 @@ hb_s32 hb_mm_mc_get_rate_control_config( media_codec_context_t *context, mc_rate
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -897,7 +897,7 @@ hb_s32 hb_mm_mc_get_rate_control_config( media_codec_context_t *context, mc_rate
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_rate_control_config
 
@@ -920,7 +920,7 @@ hb_s32 hb_mm_mc_set_rate_control_config( media_codec_context_t *context, const m
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -928,7 +928,7 @@ hb_s32 hb_mm_mc_set_rate_control_config( media_codec_context_t *context, const m
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_max_bit_rate_config
 
@@ -951,7 +951,7 @@ hb_s32 hb_mm_mc_get_max_bit_rate_config( media_codec_context_t *context, hb_u32 
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -959,7 +959,7 @@ hb_s32 hb_mm_mc_get_max_bit_rate_config( media_codec_context_t *context, hb_u32 
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_max_bit_rate_config
 
@@ -982,7 +982,7 @@ hb_s32 hb_mm_mc_set_max_bit_rate_config( media_codec_context_t *context, hb_u32 
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -990,7 +990,7 @@ hb_s32 hb_mm_mc_set_max_bit_rate_config( media_codec_context_t *context, hb_u32 
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_longterm_ref_mode
 
@@ -1013,7 +1013,7 @@ hb_s32 hb_mm_mc_get_longterm_ref_mode( media_codec_context_t *context, mc_video_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1021,7 +1021,7 @@ hb_s32 hb_mm_mc_get_longterm_ref_mode( media_codec_context_t *context, mc_video_
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_longterm_ref_mode
 
@@ -1044,7 +1044,7 @@ hb_s32 hb_mm_mc_set_longterm_ref_mode( media_codec_context_t *context, const mc_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1052,7 +1052,7 @@ hb_s32 hb_mm_mc_set_longterm_ref_mode( media_codec_context_t *context, const mc_
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_intra_refresh_config
 
@@ -1075,7 +1075,7 @@ hb_s32 hb_mm_mc_get_intra_refresh_config( media_codec_context_t *context, mc_vid
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1083,7 +1083,7 @@ hb_s32 hb_mm_mc_get_intra_refresh_config( media_codec_context_t *context, mc_vid
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_intra_refresh_config
 
@@ -1106,7 +1106,7 @@ hb_s32 hb_mm_mc_set_intra_refresh_config( media_codec_context_t *context, const 
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1114,7 +1114,7 @@ hb_s32 hb_mm_mc_set_intra_refresh_config( media_codec_context_t *context, const 
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_request_idr_frame
 
@@ -1136,7 +1136,7 @@ hb_s32 hb_mm_mc_request_idr_frame(media_codec_context_t *context);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1144,7 +1144,7 @@ hb_s32 hb_mm_mc_request_idr_frame(media_codec_context_t *context);
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_request_idr_header
 
@@ -1167,7 +1167,7 @@ hb_s32 hb_mm_mc_request_idr_header( media_codec_context_t *context, hb_u32 force
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1175,7 +1175,7 @@ hb_s32 hb_mm_mc_request_idr_header( media_codec_context_t *context, hb_u32 force
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_enable_idr_frame
 
@@ -1198,7 +1198,7 @@ hb_s32 hb_mm_mc_enable_idr_frame( media_codec_context_t *context, hb_bool enable
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1206,7 +1206,7 @@ hb_s32 hb_mm_mc_enable_idr_frame( media_codec_context_t *context, hb_bool enable
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_skip_pic
 
@@ -1229,7 +1229,7 @@ hb_s32 hb_mm_mc_skip_pic(media_codec_context_t * context, hb_s32 src_idx);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1237,7 +1237,7 @@ hb_s32 hb_mm_mc_skip_pic(media_codec_context_t * context, hb_s32 src_idx);
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ### 编码质量工具
 
@@ -1262,7 +1262,7 @@ hb_s32 hb_mm_mc_get_deblk_filter_config( media_codec_context_t *context, mc_vide
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1270,7 +1270,7 @@ hb_s32 hb_mm_mc_get_deblk_filter_config( media_codec_context_t *context, mc_vide
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_deblk_filter_config
 
@@ -1293,7 +1293,7 @@ hb_s32 hb_mm_mc_set_deblk_filter_config( media_codec_context_t *context, const m
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1301,7 +1301,7 @@ hb_s32 hb_mm_mc_set_deblk_filter_config( media_codec_context_t *context, const m
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_sao_config
 
@@ -1324,7 +1324,7 @@ hb_s32 hb_mm_mc_get_sao_config(media_codec_context_t *context, mc_h265_sao_param
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1332,7 +1332,7 @@ hb_s32 hb_mm_mc_get_sao_config(media_codec_context_t *context, mc_h265_sao_param
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_sao_config
 
@@ -1355,7 +1355,7 @@ hb_s32 hb_mm_mc_set_sao_config(media_codec_context_t *context, const mc_h265_sao
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1363,7 +1363,7 @@ hb_s32 hb_mm_mc_set_sao_config(media_codec_context_t *context, const mc_h265_sao
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_entropy_config
 
@@ -1386,7 +1386,7 @@ hb_s32 hb_mm_mc_get_entropy_config( media_codec_context_t *context, mc_h264_entr
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1394,7 +1394,7 @@ hb_s32 hb_mm_mc_get_entropy_config( media_codec_context_t *context, mc_h264_entr
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_entropy_config
 
@@ -1417,7 +1417,7 @@ hb_s32 hb_mm_mc_set_entropy_config( media_codec_context_t *context, const mc_h26
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1425,7 +1425,7 @@ hb_s32 hb_mm_mc_set_entropy_config( media_codec_context_t *context, const mc_h26
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_pred_unit_config
 
@@ -1448,7 +1448,7 @@ hb_s32 hb_mm_mc_get_pred_unit_config( media_codec_context_t *context, mc_video_p
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1456,7 +1456,7 @@ hb_s32 hb_mm_mc_get_pred_unit_config( media_codec_context_t *context, mc_video_p
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_pred_unit_config
 
@@ -1479,7 +1479,7 @@ hb_s32 hb_mm_mc_set_pred_unit_config( media_codec_context_t *context, const mc_v
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1487,7 +1487,7 @@ hb_s32 hb_mm_mc_set_pred_unit_config( media_codec_context_t *context, const mc_v
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_transform_config
 
@@ -1510,7 +1510,7 @@ hb_s32 hb_mm_mc_get_transform_config( media_codec_context_t *context, mc_video_t
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1518,7 +1518,7 @@ hb_s32 hb_mm_mc_get_transform_config( media_codec_context_t *context, mc_video_t
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_transform_config
 
@@ -1541,7 +1541,7 @@ hb_s32 hb_mm_mc_set_transform_config( media_codec_context_t *context, const mc_v
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1549,7 +1549,7 @@ hb_s32 hb_mm_mc_set_transform_config( media_codec_context_t *context, const mc_v
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_mode_decision_config
 
@@ -1572,7 +1572,7 @@ hb_s32 hb_mm_mc_get_mode_decision_config( media_codec_context_t *context, mc_vid
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1580,7 +1580,7 @@ hb_s32 hb_mm_mc_get_mode_decision_config( media_codec_context_t *context, mc_vid
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_mode_decision_config
 
@@ -1603,7 +1603,7 @@ hb_s32 hb_mm_mc_set_mode_decision_config( media_codec_context_t *context, const 
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1611,7 +1611,7 @@ hb_s32 hb_mm_mc_set_mode_decision_config( media_codec_context_t *context, const 
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_smart_bg_enc_config
 
@@ -1634,7 +1634,7 @@ hb_s32 hb_mm_mc_get_smart_bg_enc_config( media_codec_context_t *context, mc_vide
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1642,7 +1642,7 @@ hb_s32 hb_mm_mc_get_smart_bg_enc_config( media_codec_context_t *context, mc_vide
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_smart_bg_enc_config
 
@@ -1665,7 +1665,7 @@ hb_s32 hb_mm_mc_set_smart_bg_enc_config( media_codec_context_t *context, const m
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1673,7 +1673,7 @@ hb_s32 hb_mm_mc_set_smart_bg_enc_config( media_codec_context_t *context, const m
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_3dnr_enc_config
 
@@ -1696,7 +1696,7 @@ hb_s32 hb_mm_mc_get_3dnr_enc_config( media_codec_context_t *context, mc_video_3d
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1704,7 +1704,7 @@ hb_s32 hb_mm_mc_get_3dnr_enc_config( media_codec_context_t *context, mc_video_3d
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_3dnr_enc_config
 
@@ -1727,7 +1727,7 @@ hb_s32 hb_mm_mc_set_3dnr_enc_config( media_codec_context_t *context, const mc_vi
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1735,7 +1735,7 @@ hb_s32 hb_mm_mc_set_3dnr_enc_config( media_codec_context_t *context, const mc_vi
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ### ROI 编码
 
@@ -1760,7 +1760,7 @@ hb_s32 hb_mm_mc_get_roi_config(media_codec_context_t * context, mc_video_roi_par
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1768,7 +1768,7 @@ hb_s32 hb_mm_mc_get_roi_config(media_codec_context_t * context, mc_video_roi_par
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_roi_config
 
@@ -1791,7 +1791,7 @@ hb_s32 hb_mm_mc_set_roi_config(media_codec_context_t * context, const mc_video_r
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1799,7 +1799,7 @@ hb_s32 hb_mm_mc_set_roi_config(media_codec_context_t * context, const mc_video_r
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_roi_config_ex
 
@@ -1823,7 +1823,7 @@ hb_s32 hb_mm_mc_get_roi_config_ex(media_codec_context_t *context, hb_u32 roi_idx
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1831,7 +1831,7 @@ hb_s32 hb_mm_mc_get_roi_config_ex(media_codec_context_t *context, hb_u32 roi_idx
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_roi_config_ex
 
@@ -1854,7 +1854,7 @@ hb_s32 hb_mm_mc_set_roi_config_ex(media_codec_context_t *context, const mc_video
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1862,7 +1862,7 @@ hb_s32 hb_mm_mc_set_roi_config_ex(media_codec_context_t *context, const mc_video
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_roi_avg_qp
 
@@ -1885,7 +1885,7 @@ hb_s32 hb_mm_mc_get_roi_avg_qp(media_codec_context_t * context, hb_u32 * params)
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1893,7 +1893,7 @@ hb_s32 hb_mm_mc_get_roi_avg_qp(media_codec_context_t * context, hb_u32 * params)
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_roi_avg_qp
 
@@ -1916,7 +1916,7 @@ hb_s32 hb_mm_mc_set_roi_avg_qp(media_codec_context_t * context, hb_u32 params);
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1924,7 +1924,7 @@ hb_s32 hb_mm_mc_set_roi_avg_qp(media_codec_context_t * context, hb_u32 params);
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ### 码流结构与用户数据
 
@@ -1949,7 +1949,7 @@ hb_s32 hb_mm_mc_get_vui_config( media_codec_context_t *context, mc_video_vui_par
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1957,7 +1957,7 @@ hb_s32 hb_mm_mc_get_vui_config( media_codec_context_t *context, mc_video_vui_par
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_vui_config
 
@@ -1980,7 +1980,7 @@ hb_s32 hb_mm_mc_set_vui_config( media_codec_context_t *context, const mc_video_v
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -1988,7 +1988,7 @@ hb_s32 hb_mm_mc_set_vui_config( media_codec_context_t *context, const mc_video_v
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_vui_timing_config
 
@@ -2011,7 +2011,7 @@ hb_s32 hb_mm_mc_get_vui_timing_config( media_codec_context_t *context, mc_video_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2019,7 +2019,7 @@ hb_s32 hb_mm_mc_get_vui_timing_config( media_codec_context_t *context, mc_video_
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_vui_timing_config
 
@@ -2042,7 +2042,7 @@ hb_s32 hb_mm_mc_set_vui_timing_config( media_codec_context_t *context, const mc_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2050,7 +2050,7 @@ hb_s32 hb_mm_mc_set_vui_timing_config( media_codec_context_t *context, const mc_
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_slice_config
 
@@ -2073,7 +2073,7 @@ hb_s32 hb_mm_mc_get_slice_config(media_codec_context_t *context, mc_video_slice_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2081,7 +2081,7 @@ hb_s32 hb_mm_mc_get_slice_config(media_codec_context_t *context, mc_video_slice_
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_slice_config
 
@@ -2104,7 +2104,7 @@ hb_s32 hb_mm_mc_set_slice_config(media_codec_context_t *context, const mc_video_
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2112,7 +2112,7 @@ hb_s32 hb_mm_mc_set_slice_config(media_codec_context_t *context, const mc_video_
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_insert_user_data
 
@@ -2136,7 +2136,7 @@ hb_s32 hb_mm_mc_insert_user_data(media_codec_context_t * context, hb_u8 *data, h
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2145,7 +2145,7 @@ hb_s32 hb_mm_mc_insert_user_data(media_codec_context_t * context, hb_u8 *data, h
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_user_data
 
@@ -2169,7 +2169,7 @@ hb_s32 hb_mm_mc_get_user_data(media_codec_context_t * context, mc_user_data_buff
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2177,7 +2177,7 @@ hb_s32 hb_mm_mc_get_user_data(media_codec_context_t * context, mc_user_data_buff
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_release_user_data
 
@@ -2200,7 +2200,7 @@ hb_s32 hb_mm_mc_release_user_data(media_codec_context_t * context, const mc_user
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2208,7 +2208,7 @@ hb_s32 hb_mm_mc_release_user_data(media_codec_context_t * context, const mc_user
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_explicit_header_config
 
@@ -2231,7 +2231,7 @@ hb_s32 hb_mm_mc_get_explicit_header_config( media_codec_context_t *context, hb_s
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2239,7 +2239,7 @@ hb_s32 hb_mm_mc_get_explicit_header_config( media_codec_context_t *context, hb_s
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_explicit_header_config
 
@@ -2262,7 +2262,7 @@ hb_s32 hb_mm_mc_set_explicit_header_config( media_codec_context_t *context, hb_s
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2270,7 +2270,7 @@ hb_s32 hb_mm_mc_set_explicit_header_config( media_codec_context_t *context, hb_s
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ### MJPEG / JPEG 编码
 
@@ -2295,7 +2295,7 @@ hb_s32 hb_mm_mc_get_mjpeg_config(media_codec_context_t * context, mc_mjpeg_enc_p
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2303,7 +2303,7 @@ hb_s32 hb_mm_mc_get_mjpeg_config(media_codec_context_t * context, mc_mjpeg_enc_p
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_mjpeg_config
 
@@ -2326,7 +2326,7 @@ hb_s32 hb_mm_mc_set_mjpeg_config(media_codec_context_t * context, const mc_mjpeg
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2334,7 +2334,7 @@ hb_s32 hb_mm_mc_set_mjpeg_config(media_codec_context_t * context, const mc_mjpeg
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_get_jpeg_config
 
@@ -2357,7 +2357,7 @@ hb_s32 hb_mm_mc_get_jpeg_config(media_codec_context_t * context, mc_jpeg_enc_par
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2365,7 +2365,7 @@ hb_s32 hb_mm_mc_get_jpeg_config(media_codec_context_t * context, mc_jpeg_enc_par
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 #### hb_mm_mc_set_jpeg_config
 
@@ -2388,7 +2388,7 @@ hb_s32 hb_mm_mc_set_jpeg_config(media_codec_context_t * context, const mc_jpeg_e
 
 **【返回值】**
 
-成功返回 `0`；失败返回负值错误码，见[返回值说明](#返回值说明)。
+成功返回 `0`；失败返回负值错误码，见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -2396,7 +2396,7 @@ hb_s32 hb_mm_mc_set_jpeg_config(media_codec_context_t * context, const mc_jpeg_e
 
 **【示例代码】**
 
-完整可运行版本见[最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例)与板端 `/app/multimedia_samples/sample_codec/`。
+完整可运行版本见 [最小编码示例](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#最小编码示例) 与板端 `/app/multimedia_samples/sample_codec/`。
 
 ## 数据结构
 
@@ -2438,13 +2438,13 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
-| `width` / `height` | `hb_s32` | 输入图像宽高（亮度像素数） | `1920` × `1080` | — | 对齐宽 32 / 高 8，上限见[硬件规格](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#硬件规格) |
+| `width` / `height` | `hb_s32` | 输入图像宽高（亮度像素数） | `1920` × `1080` | — | 对齐宽 32 / 高 8，上限见 [硬件规格](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#硬件规格) |
 | `pix_fmt` | `mc_pixel_format_t` | 输入像素格式 | `MC_PIXEL_FORMAT_NV12` | — | 见 [mc_pixel_format_t](#mc_pixel_format_t) |
 | `frame_buf_count` | `hb_u32` | 输入帧 buffer 数量 | — | — | — |
 | `external_frame_buf` | `hb_bool` | `1` = 输入复用上游模块的 hbmem 内存，省一次拷贝 | `0` | `0` | `0` / `1` |
 | `bitstream_buf_count` | `hb_u32` | 码流 buffer 数量 | — | — | — |
 | `bitstream_buf_size` | `hb_u32` | 码流 buffer 大小 | — | `0` | `0` = 由 codec 自行计算 |
-| `rc_params` | `mc_rate_control_params_t` | 码率控制参数，**唯一可运行中修改的成员** | — | — | 见[码率控制](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#码率控制) |
+| `rc_params` | `mc_rate_control_params_t` | 码率控制参数，**唯一可运行中修改的成员** | — | — | 见 [码率控制](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#码率控制) |
 | `gop_params` | `mc_video_gop_params_t` | GOP 结构 | — | — | 见 [GOP 与参考帧](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#gop-与参考帧) |
 | `rot_degree` | `mc_rotate_degree_t` | 编码前旋转（解码不支持） | `0` | `0` | `0°` / `90°` / `180°` / `270°` |
 | `mir_direction` | `mc_mirror_direction_t` | 编码前镜像（解码不支持） | `0` | `0` | 垂直 / 水平 / 垂直+水平 |
@@ -2490,7 +2490,7 @@ MediaCodec 对外是一组 `hb_mm_mc_*` 函数。一路编解码任务的全部�
 
 #### mc_inter_status_t
 
-`hb_mm_mc_get_status` 的出参，用于观察队列水位、排查堆积与超时。字段与[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/multimedia_debug_guide/mediacodec_debug_guide)中 `encode status` 分组对应。
+`hb_mm_mc_get_status` 的出参，用于观察队列水位、排查堆积与超时。字段与 [多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/multimedia_debug_guide/mediacodec_debug_guide) 中 `encode status` 分组对应。
 
 codec 的详细运行状态，由 `hb_mm_mc_get_status` 返回。可用于观察队列水位、排查堆积与超时。
 
@@ -2569,7 +2569,7 @@ codec 的详细运行状态，由 `hb_mm_mc_get_status` 返回。可用于观察
 
 ### 码率控制
 
-由 `mc_rate_control_params_t` 承载：`mode` 选模式，参数填进对应模式的联合体成员。模式的选择依据见[使用指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#码率控制)。
+由 `mc_rate_control_params_t` 承载：`mode` 选模式，参数填进对应模式的联合体成员。模式的选择依据见 [使用指南](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#码率控制)。
 
 #### mc_rate_control_params_t
 
@@ -2688,7 +2688,7 @@ GOP 结构表可定义一组周期性的 GOP 结构，该 GOP 结构将用于整
 | POC | GOP 内帧的显示顺序，取值范围为 [1,gop_size] |
 | QPoffset | 自定义 GOP 中图片的量化参数 |
 | NUM_REF_PIC_L0 | 标记为 P 帧使用多参考图片，仅在 PIC_TYPE 为 P 时有效 |
-| temporal_id | 帧的时间层，帧无法从具有较高时间 id（0~6）的帧进行预测 |
+| temporal_id | 帧的时间层，帧无法从具有较高时间 id（0-6）的帧进行预测 |
 | 1st_ref_POC | L0 的第一张参考图片的 POC |
 | 2nd_ref_POC | Type 为 B 时，第一张参考图片的 POC 是 L1 的；Type 为 P 时，第二张参考图片的 POC 是 L0 的；可以使 reference_L1 和 B slice 中的参考图片具有相同的 POC，但出于压缩效率的考虑，建议 reference_L1 和 reference_L0 的 POC 不同 |
 
@@ -2819,13 +2819,13 @@ H.264 的熵编码参数。支持运行中动态调整。
 | `pu32_intra_angle_delta_rate` | `hb_s32` | 默认 `0` | 32×32 块在 角度 帧内预测模式下计算代价（失真 + 码率）时的码率附加量，取值 `[0,255]` |
 | `cu08_intra_delta_rate` | `hb_s32` | 默认 `0` | 8×8 CU 在 帧内模式下计算代价时的码率附加量，取值 `[0,255]` |
 | `cu08_inter_delta_rate` | `hb_s32` | 默认 `0` | 8×8 CU 在 帧间模式下计算代价时的码率附加量，取值 `[0,255]` |
-| `cu08_merge_delta_rate` | `hb_s32` | 默认 `0` | 8×8 CU 在 merge模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu08_merge_delta_rate` | `hb_s32` | 默认 `0` | 8×8 CU 在 merge 模式下计算代价时的码率附加量，取值 `[0,255]` |
 | `cu16_intra_delta_rate` | `hb_s32` | 默认 `0` | 16×16 CU 在 帧内模式下计算代价时的码率附加量，取值 `[0,255]` |
 | `cu16_inter_delta_rate` | `hb_s32` | 默认 `0` | 16×16 CU 在 帧间模式下计算代价时的码率附加量，取值 `[0,255]` |
-| `cu16_merge_delta_rate` | `hb_s32` | 默认 `0` | 16×16 CU 在 merge模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu16_merge_delta_rate` | `hb_s32` | 默认 `0` | 16×16 CU 在 merge 模式下计算代价时的码率附加量，取值 `[0,255]` |
 | `cu32_intra_delta_rate` | `hb_s32` | 默认 `0` | 32×32 CU 在 帧内模式下计算代价时的码率附加量，取值 `[0,255]` |
 | `cu32_inter_delta_rate` | `hb_s32` | 默认 `0` | 32×32 CU 在 帧间模式下计算代价时的码率附加量，取值 `[0,255]` |
-| `cu32_merge_delta_rate` | `hb_s32` | 默认 `0` | 32×32 CU 在 merge模式下计算代价时的码率附加量，取值 `[0,255]` |
+| `cu32_merge_delta_rate` | `hb_s32` | 默认 `0` | 32×32 CU 在 merge 模式下计算代价时的码率附加量，取值 `[0,255]` |
 
 #### mc_video_smart_bg_enc_params_t
 
@@ -3114,5 +3114,5 @@ MJPEG / JPEG 解码的联合体成员，两者字段相同。
 | `0xF0000010` | `HB_MEDIA_ERR_PARAMS_GET_FAILURE` | 参数获取失败 | — |
 | `0xF0000011` | `HB_MEDIA_ERR_CODING_FAILED` | 编解码失败 | — |
 | `0xF0000012` | `HB_MEDIA_ERR_OUTPUT_BUF_FULL` | 输出 buffer 满 | 输出 buffer 满。调用方未及时取走输出，检查 queue / dequeue 是否配对 |
-| `0xF0000013` | `HB_MEDIA_ERR_UNSUPPORTED_FEATURE` | 不支持的功能 | 该 codec 不支持此功能。对照[codec 适用性](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#codec-适用性) |
+| `0xF0000013` | `HB_MEDIA_ERR_UNSUPPORTED_FEATURE` | 不支持的功能 | 该 codec 不支持此功能。对照 [codec 适用性](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage#codec-适用性) |
 | `0xF0000014` | `HB_MEDIA_ERR_INVALID_PRIORITY` | 不支持的优先级 | — |

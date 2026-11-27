@@ -6,7 +6,7 @@ description: "RDK OS 升级方式：apt 包升级与固件烧录"
 
 # 系统升级方式
 
-RDK OS 升级分两类：**apt 包升级**（更新软件包）与**固件烧录**（直接烧写镜像或分区）。同大版本内用 `apt` 升级较安全；跨大版本（如 5.0.x → 5.1.x）建议走固件烧录，`apt` 跨大版本从历史版本升级上来可能有兼容风险。miniboot 较特殊，无论走哪类都会触发烧录，详见下文。
+RDK OS 升级分两类：**apt 包升级**（更新软件包）与**固件烧录**（直接烧录镜像或分区）。同大版本内用 `apt` 升级较安全；跨大版本（如 5.0.x → 5.1.x）建议走固件烧录，`apt` 跨大版本从历史版本升级上来可能有兼容风险。miniboot 较特殊，无论走哪类都会触发烧录，详见下文。
 
 ## apt 包升级
 
@@ -33,8 +33,8 @@ RDK OS 升级分两类：**apt 包升级**（更新软件包）与**固件烧录
 
 miniboot 较特殊：无论走 `apt` 还是整机镜像烧录，都会烧录 miniboot。
 
-- 走 `apt` 安装/升级 `hobot-miniboot` 时，deb 安装阶段会自动调用 `rdk-miniboot-update` 完成烧写。
-- `rdk-miniboot-update` 采用直接烧写（direct flash）：对 NOR 做一次 `dd` 整片覆盖，一次性更新所有 miniboot 相关 NOR 分区（含 BAK 分区和 A/B 两个 slot）。
+- 走 `apt` 安装/升级 `hobot-miniboot` 时，deb 安装阶段会自动调用 `rdk-miniboot-update` 完成烧录。
+- `rdk-miniboot-update` 采用直接烧录（direct flash）：对 NOR 做一次 `dd` 整片覆盖，一次性更新所有 miniboot 相关 NOR 分区（含 BAK 分区和 A/B 两个 slot）。
 - eMMC/UFS 上的 `acore_cfg`、`bl31`、`optee`、`uboot` 分区逐个 `dd`，只写当前 slot。
 - 仅适用于非 OTA 镜像；OTA 镜像请走 [系统 OTA 升级](../../07_Advanced_development/03_system_software/06_ota_system.md)。
 
@@ -48,5 +48,5 @@ miniboot 较特殊：无论走 `apt` 还是整机镜像烧录，都会烧录 min
 
 ## 常见问题
 
-- **`apt upgrade` 后起不来**：跨大版本升级有兼容风险，建议重新烧录正确镜像。
+- **`apt upgrade` 后无法启动**：跨大版本升级有兼容风险，建议重新烧录正确镜像。
 - **烧录后系统异常**：确认镜像版本与板型匹配；固件降级有兼容风险，确认降级路径官方支持。

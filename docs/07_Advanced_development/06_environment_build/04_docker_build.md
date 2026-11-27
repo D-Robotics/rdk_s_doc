@@ -69,7 +69,7 @@ sudo docker run --privileged --rm tonistiigi/binfmt --install arm64
 再次执行 `ls /proc/sys/fs/binfmt_misc/`，列表中出现 `qemu-aarch64` 即注册成功。
 
 :::tip 提示
-宿主机已安装 `qemu-user-static`（见[搭建开发环境](./01_environment_build.md)的依赖列表）时，binfmt 通常已随软件包注册，可跳过本步骤。无法拉取 `tonistiigi/binfmt` 时，也可执行 `sudo apt install -y qemu-user-static binfmt-support` 完成注册。
+宿主机已安装 `qemu-user-static`（见 [搭建开发环境](./01_environment_build.md) 的依赖列表）时，binfmt 通常已随软件包注册，可跳过本步骤。无法拉取 `tonistiigi/binfmt` 时，也可执行 `sudo apt install -y qemu-user-static binfmt-support` 完成注册。
 :::
 
 ### 步骤 3：拉取编译镜像
@@ -115,7 +115,7 @@ root@2f3a1c9b8d7e:/#
 
 ### 步骤 5：容器内安装编译依赖
 
-容器内以 root 运行，无需 `sudo`。依赖列表与宿主机编译一致，见[搭建开发环境](./01_environment_build.md)的「安装依赖包」：
+容器内以 root 运行，无需 `sudo`。依赖列表与宿主机编译一致，见 [搭建开发环境](./01_environment_build.md) 的「安装依赖包」：
 
 ```bash
 apt-get update
@@ -129,7 +129,7 @@ apt-get install -y build-essential make cmake libpcre3 libpcre3-dev bc bison \
 :::note 注意
 容器内的依赖与工具链只在容器生命周期内有效。请用 `docker start -ai rdk-build` 复用容器；一旦执行 `docker rm rdk-build`，需要重新执行步骤 4 到步骤 6。
 
-后续若要编译内核（`mk_kernel.sh`）或 deb 包（`mk_debs.sh`），还需按[搭建开发环境](./01_environment_build.md)安装 Python 依赖。
+后续若要编译内核（`mk_kernel.sh`）或 deb 包（`mk_debs.sh`），还需按 [搭建开发环境](./01_environment_build.md) 安装 Python 依赖。
 :::
 
 ### 步骤 6：容器内安装交叉编译工具链
@@ -212,7 +212,7 @@ sudo chown -R $USER:$USER /path/to/rdk-gen/out
 | 编译容器存在 | `docker ps -a` | 列表中存在 `rdk-build` |
 | 系统镜像已生成 | `ls -lh /path/to/rdk-gen/out/product/img_packages/` | 存在 `*.img`，大小与 rootfs 及 deb 包总量相当（通常为 GB 级） |
 
-镜像生成后，烧录方法见[系统烧录](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)。
+镜像生成后，烧录方法见 [系统烧录](../../01_Quick_start/03_install_os_and_setup/01_instruction.md)。
 
 ## 常见问题
 

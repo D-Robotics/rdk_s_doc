@@ -25,7 +25,7 @@ description: "MAXIM sensor 点亮流程（以 AR0820[max9295a] + MAX96712 为例
 
 GMSL camera sensor 驱动需要实现的内容和 MIPI 驱动类似，这里以 ar0820std 为例，解释差异部分。其中 std 是 HBN 后期重构的、长期维护的 sensor 驱动，建议参考 std 驱动增加新模组配置。
 
-## dts配置
+## dts 配置
 
 - GMSL dts 涉及 vcon GMSL RX、poc_map、deserial 节点等，配置方法参考 [修改平台设备树](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/hbn/overview#修改平台设备树-dts)。
 
@@ -88,7 +88,7 @@ static const sensor_emode_type_t sensor_emode[MODE_TYPE_NUM] = {
 
 命名规则（如 `D4`/`S0`/`R0`/`T7` 含义）见 [Serdes 配置设计说明](./01_debug_config.md) 的 emode_data 段。
 
-![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/extra_mode_naming.png)
+![emode_data 命名规则示例](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/serdes_config/extra_mode_naming.png)
 
 #### sensor_config_index_funcs
 
@@ -341,7 +341,7 @@ static int32_t sensor_init(sensor_info_t *sensor_info)
 }
 ```
 
-这是 YUV GMSL 与 RAW MIPI 驱动的核心差异：RAW sensor 通常需要下发 setting 里要写 init setting 数组 + 填充 linear_data tuning，YUV sensor 通常包含固件和自带isp芯片 两者都省。
+这是 YUV GMSL 与 RAW MIPI 驱动的核心差异：RAW sensor 通常需要下发 setting 里要写 init setting 数组 + 填充 linear_data tuning，YUV sensor 通常包含固件和自带 isp 芯片 两者都省。
 
 ### deinit
 
@@ -440,7 +440,7 @@ YUV sensor app 配置 `isp_attr=NULL` ，图像由 sensor 端 ISP 处理，板�
 - 在路径 `source/hobot-spdev/src/vp_sensors/ar0820c/` 中为 ar0820std 添加配置。
 - YUV 与 RAW 配置差异：
   - `sensor_type = SENSOR_TYPE_GMSL_YUV`。
-  - `isp_attr` / `isp_ichn_attr` / `isp_ochn_attr` / `ynr_attr = NULL`（使用sensor 自带isp）。
+  - `isp_attr` / `isp_ichn_attr` / `isp_ochn_attr` / `ynr_attr = NULL`（使用 sensor 自带 isp）。
   - 多 `deserial_config`（max96712 + link_desp + poc_cfg）和 `poc_config`（addr + poc_map）。
   - `calib_lname = "disable"`（YUV 无 ISP tuning）。
 - 通用配置参考 [数据结构](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
@@ -482,6 +482,6 @@ YUV sensor app 配置 `isp_attr=NULL` ，图像由 sensor 端 ISP 处理，板�
 
 ## 程序验证
 
-1. **get_vin_data**：确认 YUV 图正常出图、帧率符合 30fps 配置。
+1. **get_vin_data**：确认 YUV 图正常出图、帧率符合 30 fps 配置。
 
 常见问题见 [Camera Sensor FAQ](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/camera_faq)。

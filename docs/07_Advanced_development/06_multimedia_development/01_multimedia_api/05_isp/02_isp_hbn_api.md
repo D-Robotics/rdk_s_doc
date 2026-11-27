@@ -41,7 +41,7 @@ HBN 框架接口（`hbn_vnode_*` / `hbn_vflow_*`）由所有硬件模块共用�
 
 ## API 说明
 
-#### hbn_vnode_open
+### hbn_vnode_open
 
 【函数原型】
 
@@ -65,7 +65,7 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t ct
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_attr
+### hbn_vnode_set_attr
 
 【函数原型】
 
@@ -87,7 +87,7 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr);
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_ichn_attr
+### hbn_vnode_set_ichn_attr
 
 【函数原型】
 
@@ -110,7 +110,7 @@ hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_ochn_attr
+### hbn_vnode_set_ochn_attr
 
 【函数原型】
 
@@ -133,7 +133,7 @@ hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vflow_create
+### hbn_vflow_create
 
 【函数原型】
 
@@ -154,7 +154,7 @@ hobot_status hbn_vflow_create(hbn_vflow_handle_t *vflow_fd);
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vflow_bind_vnode
+### hbn_vflow_bind_vnode
 
 【函数原型】
 
@@ -183,7 +183,7 @@ hobot_status hbn_vflow_bind_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_
 
 - vflow 需要先创建，模块需要先 open。
 
-#### hbn_vflow_start
+### hbn_vflow_start
 
 【函数原型】
 
@@ -208,7 +208,7 @@ hobot_status hbn_vflow_start(hbn_vflow_handle_t vflow_fd);
 
 - 模块 vnode 需要事先添加到 vflow 中。
 
-#### hbn_vnode_getframe
+### hbn_vnode_getframe
 
 【函数原型】
 
@@ -232,7 +232,7 @@ hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id, u
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_releaseframe
+### hbn_vnode_releaseframe
 
 【函数原型】
 
@@ -255,7 +255,7 @@ hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vflow_stop
+### hbn_vflow_stop
 
 【函数原型】
 
@@ -280,7 +280,7 @@ hobot_status hbn_vflow_stop(hbn_vflow_handle_t vflow_fd);
 
 - 和 hbn_vflow_start 成对使用。
 
-#### hbn_vnode_close
+### hbn_vnode_close
 
 【函数原型】
 
@@ -308,7 +308,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 ## 数据结构
 
-#### hb_vnode_type —— vnode 类型枚举
+### hb_vnode_type —— vnode 类型枚举
 
 用于 `hbn_vnode_open` 的 vnode_type 参数，指定创建哪种硬件节点。ISP 开发用到：
 
@@ -321,7 +321,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 其余类型（HB_GDC、HB_VSE、HB_N2D 等）见 `hbn_vpf_data_info.h`。
 
-#### isp_cfg_t —— ISP 配置容器
+### isp_cfg_t —— ISP 配置容器
 
 `isp_cfg_t` 是 ISP 配置的总容器（定义在 `hbn_isp_cfg.h`），成员如下：
 
@@ -335,7 +335,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 使用时，分别把 `isp_attr` / `ochn_attr` / `ichn_attr` 传给 `hbn_vnode_set_attr` / `hbn_vnode_set_ochn_attr` / `hbn_vnode_set_ichn_attr`。
 
-#### isp_attr_t —— ISP 基本属性
+### isp_attr_t —— ISP 基本属性
 
 用于 `hbn_vnode_set_attr`（`isp_cfg_t` 的主体部分）。
 
@@ -369,7 +369,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | ctx_buf_en | uint32_t | 0 | 1 | 0 | ISP context 使能 | 否 |
 | pixel_consistency_en | uint32_t | 0 | 1 | 0 | 像素一致性统计使能 | 否 |
 
-#### isp_ochn_attr_t —— 输出通道属性
+### isp_ochn_attr_t —— 输出通道属性
 
 用于 `hbn_vnode_set_ochn_attr`（`isp_cfg_t` 的输出部分）。
 
@@ -380,7 +380,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | output_raw_level | isp_output_raw_level_e | 0 | 5 | - | RAW 输出取哪一级：SENSOR_DATA（0，sensor 原始数据，示例值），另有帧拼接后、gamma FE 后等层级 | 是 |
 | buf_num | uint32_t | 0 | - | 3 | 输出 buffer 个数 | 否 |
 
-#### isp_ichn_attr_t —— 输入通道属性
+### isp_ichn_attr_t —— 输入通道属性
 
 用于 `hbn_vnode_set_ichn_attr`（`isp_cfg_t` 的输入部分）。
 
@@ -388,7 +388,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | --- | --- | --- | --- | --- | --- | --- |
 | input_crop_cfg | crop_cfg_t | - | - | 不裁剪 | 输入裁剪配置：enable = 0 不裁剪 | 否 |
 
-#### hbn_vnode_image_t —— 输出图像 buffer
+### hbn_vnode_image_t —— 输出图像 buffer
 
 用于 `hbn_vnode_getframe` / `hbn_vnode_releaseframe` 的 `out_img` / `img` 参数：
 

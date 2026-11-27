@@ -10,10 +10,10 @@ description: "RDK S600 14-PIN SPI1 使用与回环测试"
 
 RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选，IO 电压 1.8V。
 
-请参阅 `/app/40pin_samples/test_spi.py`了解如何使用 SPI 的详细信息。
+请参阅 `/app/40pin_samples/test_spi.py` 了解如何使用 SPI 的详细信息。
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在开发板上经过实际验证。
 :::
 
 ## 代码位置
@@ -30,7 +30,7 @@ RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选�
 
 ## 回环测试
 
-把 MISO 和 MOSI 在硬件上进行连接，然后运行 SPI 测试程序，进行写和读操作，预期结果是读出的数据要完全等于写入的数据
+把 MISO 和 MOSI 在硬件上连接，然后运行 SPI 测试程序进行写和读操作。预期结果是读出的数据完全等于写入的数据。
 
 ### 硬件连接
 
@@ -40,18 +40,18 @@ RDK S600 在 14-PIN 自锁接口上引出了 `SPI1` 总线，支持一个片选�
 
 ### 测试过程
 
-- 确认板端 overlay 已安装：`ls /boot/overlays/s600_v0p2_enable_spi1.dtbo`
-- 运行 `cd /boot`，在 `config.txt`（不存在则 `sudo nano config.txt` 创建）中写入：
+1. 确认板端 overlay 已安装：`ls /boot/overlays/s600_v0p2_enable_spi1.dtbo`
+2. 运行 `cd /boot`，在 `config.txt`（不存在则 `sudo nano config.txt` 创建）中写入：
 
     ```text
     dtbo_file_path=/overlays/s600_v0p2_enable_spi1.dtbo
     ```
 
-  `config.txt` 中为启动加载路径；实际文件位于 `/boot/overlays/`。
+   `config.txt` 中为启动加载路径；实际文件位于 `/boot/overlays/`。
 
-- 运行 `sudo reboot` 重启系统
-- 重启后，运行 `python3 /app/40pin_samples/test_spi.py`
-- 从打印的 spi 控制器中选择总线号和片选号作为输入选项，例如选择测试 `spidev1.0`，`bus num` 选择 `1` 和 `cs num` 选择 `0`，按回车键确认：
+3. 运行 `sudo reboot` 重启系统
+4. 重启后，运行 `python3 /app/40pin_samples/test_spi.py`
+5. 从打印的 spi 控制器中选择总线号和片选号作为输入选项，例如选择测试 `spidev1.0`，`bus num` 选择 `1` 和 `cs num` 选择 `0`，按回车键确认：
 
 ```text
 List of enabled spi controllers:

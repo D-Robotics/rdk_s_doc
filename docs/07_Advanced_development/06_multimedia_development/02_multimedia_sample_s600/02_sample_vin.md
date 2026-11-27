@@ -7,7 +7,7 @@ description: "sample_vin 使用说明 板端示例使用说明"
 # sample_vin 使用说明
 
 ## 功能概述
-`sample_vin`完成 Camera Sensor 、MIPI CSI 和 CIM 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
+`sample_vin` 完成 Camera Sensor 、MIPI CSI 和 CIM 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
 
 ```mermaid
 flowchart LR
@@ -30,7 +30,7 @@ flowchart LR
 
 ### 功能概述
 
-`sample_vin`完成 Camera Sensor 、MIPI CSI 和 CIM 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
+`sample_vin` 完成 Camera Sensor 、MIPI CSI 和 CIM 模块的初始化，实现从 vin 模块获取视频帧数据的功能，支持从 VIN 模块获取 Raw 或者 YUV 格式的图像。
 
 #### 代码位置及目录结构
 
@@ -38,7 +38,7 @@ flowchart LR
 
 目录结构
 
-```Shell
+```shell
 /app/multimedia_samples/sample_vin/
 └── get_vin_data
     ├── Makefile
@@ -49,7 +49,7 @@ flowchart LR
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_vin/get_vin_data
 make
 ```
@@ -93,12 +93,12 @@ index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw
 
 以 imx219 sensor 为例，则执行 `./get_vin_data -s 0` 。
 
-以 连接到 mipi host 2，link port 1 的 ovx3cstd Serdes sensor 为例，则执行`./get_vin_data -s 4 -m 2 -l 1`。
+以 连接到 mipi host 2，link port 1 的 ovx3cstd Serdes sensor 为例，则执行 `./get_vin_data -s 4 -m 2 -l 1`。
 
 :::caution 注意
 - 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./01_overview.md#示例使用指南)》
 :::
 
 ```shell
@@ -167,7 +167,7 @@ quit
 
 目录结构
 
-```Shell
+```shell
 /app/multimedia_samples/sample_vin/
 └── get_multi_vin_data
     ├── Makefile
@@ -178,7 +178,7 @@ quit
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_vin/get_multi_vin_data
 make
 ```
@@ -228,7 +228,7 @@ index: 7  sensor_name: sc132gs-30fps            config_file:linear_1088x1280_raw
 :::caution 注意
 - 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./01_overview.md#示例使用指南)》
 :::
 
 ```shell
@@ -265,7 +265,7 @@ Dump successful: handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_131737925
 
 #### 运行效果说明
 
-执行程序后会获取到 imx219 `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` 命名格式的 RAW 图像 和 ar0820std 对应的`handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv` 命名格式的 YUV 图像。
+执行程序后会获取到 imx219 `handle_34661_chn-1_1920x1080_stride_2400_frameid_1_ts_1317321489925.raw` 命名格式的 RAW 图像 和 ar0820std 对应的 `handle_100197_chn1_3840x2160_stride_3840_frameid_1_ts_1317379256975.yuv` 命名格式的 YUV 图像。
 
 ## 常见问题
 

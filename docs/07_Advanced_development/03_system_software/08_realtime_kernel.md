@@ -21,13 +21,13 @@ RDK S100/S600 默认启用实时内核（PREEMPT_RT）。实时内核是一种�
 
 ## 实时性能测试
 
-当需要对实时内核的性能进行测试时，一个常用的性能测试工具是`rt-tests`，它包括了多个测试程序，可以用来测试实时内核的性能。以下是一个使用`rt-tests`进行性能测试的示例：
+当需要对实时内核的性能进行测试时，一个常用的性能测试工具是 `rt-tests`，它包括了多个测试程序，可以用来测试实时内核的性能。以下是一个使用 `rt-tests` 进行性能测试的示例：
 
 ### 安装 rt-tests 工具
 
-如果尚未安装`rt-tests`工具，可以使用以下命令进行安装：
+如果尚未安装 `rt-tests` 工具，可以使用以下命令进行安装：
 
-```
+```bash
 sudo apt update
 sudo apt install rt-tests
 ```
@@ -53,9 +53,9 @@ reset
 
 ### 运行 cyclictest 测试
 
-`cyclictest`测试是`rt-tests`中的一个常用测试，它用于评估系统的定时行为和响应时间。执行以下命令运行`cyclictest`测试：
+`cyclictest` 测试是 `rt-tests` 中的一个常用测试，它用于评估系统的定时行为和响应时间。执行以下命令运行 `cyclictest` 测试：
 
-```
+```bash
 sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 ```
 
@@ -72,7 +72,7 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 
 ### 分析测试结果
 
-分析`cyclictest`测试结果以评估实时内核的性能表现。关注最小延迟和最大延迟，以确保它们在可接受范围内。较小的最大延迟和更加一致的延迟表明实时内核的性能较好。下图是使用实时内核，并且运行了 `/app/pydev_demo/03_mipi_camera_sample` 示例的情况下测试的结果。
+分析 `cyclictest` 测试结果以评估实时内核的性能表现。关注最小延迟和最大延迟，以确保它们在可接受范围内。较小的最大延迟和更加一致的延迟表明实时内核的性能较好。下图是使用实时内核，并且运行了 `/app/pydev_demo/03_mipi_camera_sample` 示例的情况下测试的结果。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/realtime_kernel/image-20230914145619064.png" alt="cyclictest实时性能测试延迟直方图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 <br/>
@@ -88,5 +88,3 @@ sudo cyclictest -l50000000 -m -S -p90 -i200 -h400
 - `Act`: 当前测试周期的实际延迟，以微秒为单位。
 - `Avg`: 当前测试周期的平均延迟，以微秒为单位。
 - `Max`: 当前测试周期的最大延迟，以微秒为单位。
-
-<!-- TODO(Sx): 待收集 —— 常见问题：实时内核性能测试暂无真实「现象→原因→解决」素材 -->

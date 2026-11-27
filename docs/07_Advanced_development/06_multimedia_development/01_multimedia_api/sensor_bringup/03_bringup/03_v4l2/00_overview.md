@@ -58,7 +58,7 @@ imx219 实例见 [imx219 Sensor Bring-Up](/Advanced_development/multimedia_devel
 
 ---
 
-## AE库 / 驱动 / isp_service 关系
+## AE 库 / 驱动 / isp_service 关系
 
 RAW sensor 对接 ISP，AE 控制涉及三者协作：
 

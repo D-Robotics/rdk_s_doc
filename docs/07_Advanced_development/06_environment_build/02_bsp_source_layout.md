@@ -19,7 +19,7 @@ description: "RDK S100/S600 BSP 源码目录结构与关键脚本说明"
 BSP 源码根目录为 `rdk-gen`（即下载解压后的源码目录），负责打包、制作
 samplefs、编译：
 
-```
+```text
 rdk-gen/
 ├── mk_debs.sh              # 编译所有 deb 包
 ├── mk_kernel.sh            # 编译内核
@@ -78,5 +78,3 @@ sudo ./pack_image.sh  # 一键构建系统镜像
 ```
 
 详见 [搭建开发环境](./01_environment_build.md)。
-
-<!-- TODO(Sx): 待收集 —— 常见问题/调试：BSP 目录结构参考页暂无真实案例 -->

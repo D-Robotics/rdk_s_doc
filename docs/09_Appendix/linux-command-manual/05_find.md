@@ -12,7 +12,7 @@ find 命令用于在指定目录下查找文件和目录。
 
 ## 语法说明
 
-```
+```text
   find [-H] [-L] [-P] [-Olevel] [-D debugopts] [path...] [expression]
 ```
 
@@ -25,7 +25,7 @@ find 命令用于在指定目录下查找文件和目录。
 expression 中可使用的选项有二三十个之多，以下列出最常用的部份：
 
 - `-name pattern`：按文件名查找，支持使用通配符 `*` 和 `?`。
-- `-iname pattern`：此参数的效果和指定`-name`参数类似，但忽略字符大小写的差别；
+- `-iname pattern`：此参数的效果和指定 `-name` 参数类似，但忽略字符大小写的差别；
 - `-type type`：按文件类型查找，可以是 `f`（普通文件）、`d`（目录）、`l`（符号链接）等。
 - `-size [+-]size[cwbkMG]`：按文件大小查找，支持使用 `+` 或 `-` 表示大于或小于指定大小，单位可以是 `c`（字节）、`w`（字数）、`b`（块数）、`k`（KB）、`M`（MB）或 `G`（GB）。
 - `-mtime days`：按修改时间查找，支持使用 `+` 或 `-` 表示在指定天数前或后，days 是一个整数表示天数。
@@ -70,13 +70,13 @@ find .
 
 查找当前目录下名为 file.txt 的文件
 
-```
+```text
 find . -name file.txt
 ```
 
 将当前目录及其子目录下所有文件后缀为 **.c** 的文件列出来
 
-```
+```text
 find . -name "*.c"
 ```
 
@@ -88,23 +88,23 @@ find . -iname "*.c"
 
 将当前目录及其子目录中的所有文件列出
 
-```
+```text
 find . -type f
 ```
 
 查找 /home 目录下大于 1MB 的文件
 
-```
+```text
 find . -size +1M
 ```
 
-搜索小于10KB 的文件
+搜索小于 10KB 的文件
 
 ```shell
 find . -type f -size -10k
 ```
 
-搜索等于10KB 的文件
+搜索等于 10KB 的文件
 
 ```shell
 find . -type f -size 10k
@@ -112,11 +112,11 @@ find . -type f -size 10k
 
 - 文件大小单元：
 
-  - **b** —— 块（512字节）
+  - **b** —— 块（512 字节）
 
   - **c** —— 字节
 
-  - **w** —— 字（2字节）
+  - **w** —— 字（2 字节）
 
   - **k** —— 千字节
 
@@ -126,43 +126,43 @@ find . -type f -size 10k
 
 查找 /var/log 目录下在 7 天前修改过的文件
 
-```
+```text
 find /var/log -mtime +7
 ```
 
 将当前目录及其子目录下所有最近 20 天前更新过的文件列出，不多不少正好 20 天前的
 
-```
+```text
 find . -ctime  20
 ```
 
 将当前目录及其子目录下所有 20 天前及更早更新过的文件列出
 
-```
+```text
 find . -ctime  +20
 ```
 
 将当前目录及其子目录下所有最近 20 天内更新过的文件列出
 
-```
+```text
 find . -ctime  20
 ```
 
 查找 /var/log 目录中更改时间在 7 日以前的普通文件，并在删除之前询问它们
 
-```
+```text
 find /var/log -type f -mtime +7 -ok rm {} \;
 ```
 
 查找当前目录中文件属主具有读、写权限，并且文件所属组的用户和其他用户具有读权限的文件
 
-```
+```text
 find . -type f -perm 644 -exec ls -l {} \;
 ```
 
 查找系统中所有文件长度为 0 的普通文件，并列出它们的完整路径
 
-```
+```text
 find / -type f -size 0 -exec ls -l {} \;
 ```
 
@@ -213,49 +213,49 @@ find . -type 类型参数
   - **s** 套接字
   - **p** Fifo
 
-基于目录深度搜索，向下最大深度限制为3
+基于目录深度搜索，向下最大深度限制为 3
 
 ```shell
 find . -maxdepth 3 -type f
 ```
 
-搜索出深度距离当前目录至少2个子目录的所有文件
+搜索出深度距离当前目录至少 2 个子目录的所有文件
 
 ```shell
 find . -mindepth 2 -type f
 ```
 
-删除当前目录下所有`.log`文件
+删除当前目录下所有 `.log` 文件
 
 ```shell
 find . -type f -name "*.log" -delete
 ```
 
-当前目录下搜索出权限为777的文件
+当前目录下搜索出权限为 777 的文件
 
 ```shell
 find . -type f -perm 777
 ```
 
-找出当前目录下权限不是644的`.conf`文件
+找出当前目录下权限不是 644 的 `.conf` 文件
 
 ```shell
 find . -type f -name "*.conf" ! -perm 644
 ```
 
-找出当前目录用户`sunrise`拥有的所有文件
+找出当前目录用户 `sunrise` 拥有的所有文件
 
 ```shell
 find . -type f -user sunrise
 ```
 
-找出当前目录用户组`sunrise`拥有的所有文件
+找出当前目录用户组 `sunrise` 拥有的所有文件
 
 ```shell
 find . -type f -group sunrise
 ```
 
-找出当前目录下所有`root`的文件，并把所有权更改为用户`sunrise`
+找出当前目录下所有 `root` 的文件，并把所有权更改为用户 `sunrise`
 
 ```shell
 find . -type f -user root -exec chown sunrise {} \;
@@ -263,7 +263,7 @@ find . -type f -user root -exec chown sunrise {} \;
 
 上例中， **{}** 用于与 **-exec** 选项结合使用来匹配所有文件，然后会被替换为相应的文件名。
 
-找出`home`目录下所有的`.txt`文件并删除
+找出 `home` 目录下所有的 `.txt` 文件并删除
 
 ```shell
 find $HOME/. -name "*.txt" -ok rm {} \;
@@ -271,7 +271,7 @@ find $HOME/. -name "*.txt" -ok rm {} \;
 
 上例中， **-ok** 和 **-exec** 行为一样，不过它会给出提示，是否执行相应的操作。
 
-查找当前目录下所有`.txt`文件并把他们拼接起来写入到`all.txt`文件中
+查找当前目录下所有 `.txt` 文件并把他们拼接起来写入到 `all.txt` 文件中
 
 ```shell
 find . -type f -name "*.txt" -exec cat {} \;> /all.txt
@@ -283,7 +283,7 @@ find . -type f -name "*.txt" -exec cat {} \;> /all.txt
 find . -path "./sk" -prune -o -name "*.txt" -print
 ```
 
-> ⚠️ ./sk 不能写成 ./sk/ ，否则没有作用。
+> **注意**：./sk 不能写成 ./sk/，否则没有作用。
 
 忽略两个目录
 
@@ -291,7 +291,7 @@ find . -path "./sk" -prune -o -name "*.txt" -print
 find . \( -path ./sk -o  -path ./st \) -prune -o -name "*.txt" -print
 ```
 
-> ⚠️ 如果写相对路径必须加上`./`
+> **注意**：如果写相对路径必须加上 `./`
 
 要列出所有长度为零的文件
 

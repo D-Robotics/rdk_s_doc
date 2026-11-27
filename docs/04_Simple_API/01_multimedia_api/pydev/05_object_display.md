@@ -8,7 +8,7 @@ description: "Display 对象接口说明"
 
 > **接口层级**：封装层简易接口（模式 1），底层 DISP 见 [DISP API](/Advanced_development/multimedia_development/multimedia_api/disp_api)。对应 C 接口见 [DISPLAY API](/Simple_API/multimedia_api/cdev/display_api)。
 
-Display 对象实现了视频显示功能，可以将图像数据通过`HDMI`接口输出到显示器，该对象包含`display`、`set_img`、`set_graph_rect`、`set_graph_word`、`close`等方法，详细说明如下：
+Display 对象实现了视频显示功能，可以将图像数据通过 `HDMI` 接口输出到显示器，该对象包含 `display`、`set_img`、`set_graph_rect`、`set_graph_word`、`close` 等方法，详细说明如下：
 
 ## 方法清单
 
@@ -37,17 +37,17 @@ Display.display(chn, width, height, vot_intf, vot_out_mode, chn_width, chn_heigh
 
 | 参数名称     | 定义描述                  | 取值范围      |
 | ------------ | ----------------------- | ----------------- |
-| chn          | 显示输出接口        | 10: DP 输出，11: HDMI 输出；0~3 为旧值（默认按 HDMI 处理）  |
-| width        | 输入图像的宽度       | 不超过1920 |
-| height       | 输入图像的高度       | 不超过1080 |
-| vot_intf     | 视频接口输出分辨率 | 默认为0，1080p |
-| vot_out_mode | 视频输出接口     | 默认为1，HDMI 输出 |
+| chn          | 显示输出接口        | 10: DP 输出，11: HDMI 输出；0-3 为旧值（默认按 HDMI 处理）  |
+| width        | 输入图像的宽度       | 不超过 1920 |
+| height       | 输入图像的高度       | 不超过 1080 |
+| vot_intf     | 视频接口输出分辨率 | 默认为 0，1080p |
+| vot_out_mode | 视频输出接口     | 默认为 1，HDMI 输出 |
 | chn_width    | 通道输出宽度     | 默认与 width 相同 |
 | chn_height   | 通道输出高度     | 默认与 height 相同 |
 
 :::info 注意
 
-`chn` 参数已改为输出接口选择：`10` 表示 DP（DisplayPort）输出、`11` 表示 HDMI 输出，`0~3` 为旧值（默认按 HDMI 处理）。
+`chn` 参数已改为输出接口选择：`10` 表示 DP（DisplayPort）输出、`11` 表示 HDMI 输出，`0-3` 为旧值（默认按 HDMI 处理）。
 
 :::
 
@@ -70,7 +70,7 @@ ret = disp.display(0, 1920, 1080, 0, 1)
 
 【注意事项】 
 
-开发板 HDMI 接口分辨率基于显示器 EDID 获取，目前只支持`1920x1080`、`1280x720`、`1024x600`、`800x480`几种分辨率。使能显示模块时，需要注意配置分辨率跟显示器实际分辨率相匹配。
+开发板 HDMI 接口分辨率基于显示器 EDID 获取，目前只支持 `1920x1080`、`1280x720`、`1024x600`、`800x480` 几种分辨率。使能显示模块时，需要注意配置分辨率跟显示器实际分辨率相匹配。
 
 【参考代码】  
 
@@ -84,7 +84,7 @@ ret = disp.display(0, 1920, 1080, 0, 1)
 
 【功能描述】
 
-向 display 模块输入显示数据，格式需要为`NV12`
+向 display 模块输入显示数据，格式需要为 `NV12`
 
 【函数声明】  
 
@@ -96,8 +96,8 @@ Display.set_img(img, chn)
 
 | 参数名称     | 定义描述                  | 取值范围      |
 | ------------ | ----------------------- | ----------------- |
-| img          | 需要显示的图像数据        | NV12格式  |
-| chn          | 显示输出层        | 0~1 为视频层，默认 0 |
+| img          | 需要显示的图像数据        | NV12 格式  |
+| chn          | 显示输出层        | 0-1 为视频层，默认 0 |
 
 【使用方法】 
 
@@ -112,7 +112,7 @@ Display.set_img(img, chn)
 
 【注意事项】 
 
-该接口需要在使用`display`接口使能显示功能后使用，送入数据需要为`NV12`格式
+该接口需要在使用 `display` 接口使能显示功能后使用，送入数据需要为 `NV12` 格式
 
 【参考代码】  
 
@@ -171,10 +171,10 @@ Display.set_graph_rect(x0, y0, x1, y1, chn, flush, color, line_width)
 | y0         | 绘制矩形框左上角的坐标值 y   | 不超过视频画面尺寸   |
 | x1         | 绘制矩形框右下角的坐标值 x   | 不超过视频画面尺寸   |
 | y1         | 绘制矩形框右下角的坐标值 y   | 不超过视频画面尺寸   |
-| chn        | 图形层通道号 |  范围2~3，默认为2     |
+| chn        | 图形层通道号 |  范围 2-3，默认为 2     |
 | flush      | 是否清零图形层 buffer   | 0：否，1：是      |
-| color      | 矩形框颜色设置 |  ARGB8888格式 |
-| line_width | 矩形框边的宽度        | 范围1~16，默认为4      |
+| color      | 矩形框颜色设置 |  ARGB8888 格式 |
+| line_width | 矩形框边的宽度        | 范围 1-16，默认为 4      |
 
 【使用方法】
 
@@ -196,7 +196,7 @@ ret = disp.set_graph_rect(100, 100, 1920, 200, chn = 2, flush = 1,  color = 0xff
 
 【注意事项】
 
-该接口需要在使用`display`接口使能显示功能后使用
+该接口需要在使用 `display` 接口使能显示功能后使用
 
 【参考代码】
 
@@ -224,11 +224,11 @@ Display.set_graph_word(x, y, str, chn, flush, color, line_width)
 | ---------- | ---------------------- | ------------- |
 | x          | 绘制字符的起始坐标值 x     | 不超过视频画面尺寸   |
 | y          | 绘制字符的起始坐标值 y   | 不超过视频画面尺寸   |
-| str        | 需要绘制的字符数据 | GB2312编码 |
-| chn        | 图形层通道号 |  范围2~3，默认为2     |
+| str        | 需要绘制的字符数据 | GB2312 编码 |
+| chn        | 图形层通道号 |  范围 2-3，默认为 2     |
 | flush      | 是否清零图形层 buffer   | 0：否，1：是      |
-| color      | 字符颜色设置 |  ARGB8888格式 |
-| line_width | 字符线条的宽度        | 范围1~16，默认为1      |
+| color      | 字符颜色设置 |  ARGB8888 格式 |
+| line_width | 字符线条的宽度        | 范围 1-16，默认为 1      |
 
 【使用方法】
 
@@ -252,7 +252,7 @@ print ("Display set_graph_word return:%d" % ret)
 
 【注意事项】 
 
-该接口需要在使用`display`接口使能显示功能后使用
+该接口需要在使用 `display` 接口使能显示功能后使用
 
 【参考代码】  
 
@@ -291,7 +291,7 @@ Display.close()
 
 【注意事项】 
 
-该接口需要在使用`display`接口使能显示功能后使用
+该接口需要在使用 `display` 接口使能显示功能后使用
 
 【参考代码】  
 
@@ -305,7 +305,7 @@ Display.close()
 
 【功能描述】
 
-该接口可以把`Camera`、`Encoder`、`Decoder`、`Display`模块的输出与输入数据流进行绑定，绑定后无需用户操作，数据可在绑定模块之间自动流转。例如，绑定 `Camera` 和 `Display` 后，摄像头数据会自动通过显示模块输出到显示屏上，无需调用额外接口。
+该接口可以把 `Camera`、`Encoder`、`Decoder`、`Display` 模块的输出与输入数据流进行绑定，绑定后无需用户操作，数据可在绑定模块之间自动流转。例如，绑定 `Camera` 和 `Display` 后，摄像头数据会自动通过显示模块输出到显示屏上，无需调用额外接口。
 
 【函数声明】
 ```python
@@ -316,8 +316,8 @@ Display.close()
 
 | 参数名称 | 描述         | 取值范围 |
 | -------- | ------------ | --- |
-| src      | 源数据模块   |`Camera`、`Encoder`、`Decoder`模块 |
-| dst      | 目标数据模块 |`Camera`、`Encoder`、`Decoder`、`Display`模块|
+| src      | 源数据模块   |`Camera`、`Encoder`、`Decoder` 模块 |
+| dst      | 目标数据模块 |`Camera`、`Encoder`、`Decoder`、`Display` 模块|
 
 【使用方法】
 
@@ -371,8 +371,8 @@ libsrcampy.unbind(src, dst)
 
 | 参数名称 | 描述         | 取值范围 |
 | -------- | ------------ | --- |
-| src      | 源数据模块   |`Camera`、`Encoder`、`Decoder`模块 |
-| dst      | 目标数据模块 |`Camera`、`Encoder`、`Decoder`、`Display`模块|
+| src      | 源数据模块   |`Camera`、`Encoder`、`Decoder` 模块 |
+| dst      | 目标数据模块 |`Camera`、`Encoder`、`Decoder`、`Display` 模块|
 
 【使用方法】
 
@@ -439,4 +439,4 @@ print("libsrcampy unbind return:%d" % ret)
 
 **原因**：`chn` 参数已改为输出接口选择。
 
-**解决**：`10` 表示 DP（DisplayPort）输出、`11` 表示 HDMI 输出，`0~3` 为旧值（默认按 HDMI 处理）。
+**解决**：`10` 表示 DP（DisplayPort）输出、`11` 表示 HDMI 输出，`0-3` 为旧值（默认按 HDMI 处理）。

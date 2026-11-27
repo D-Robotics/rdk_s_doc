@@ -38,7 +38,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S100">
 
-在 Ubuntu 22.04 桌面中，点击左下角图标进入 Settings。
+在 Ubuntu 22.04 桌面中，单击左下角图标进入 Settings。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S100-WIFI-1.png" alt="S100 Wi-Fi 连接示意图 1" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
@@ -46,7 +46,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S100-WIFI-2.png" alt="S100 Wi-Fi 连接示意图 2" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
-输入密码并点击 Connect 完成连接。
+输入密码并单击 **Connect** 完成连接。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S100-WIFI-3.png" alt="S100 Wi-Fi 连接示意图 3" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
@@ -54,7 +54,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <DocScope products="RDK S600">
 
-在 Ubuntu 24.04 桌面中，点击左下角图标进入 Settings。
+在 Ubuntu 24.04 桌面中，单击左下角图标进入 Settings。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S600-WIFI-1.png" alt="S600 Wi-Fi 连接示意图 1" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
@@ -62,7 +62,7 @@ import DocScope from '@site/src/components/DocScope';
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S600-WIFI-2.png" alt="S600 Wi-Fi 连接示意图 2" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
-输入密码并点击 Connect 完成连接。
+输入密码并单击 **Connect** 完成连接。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S600-WIFI-3.png" alt="S600 Wi-Fi 连接示意图 3" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
@@ -104,9 +104,9 @@ Device 'wlan0' successfully activated with 'd7468833-4195-45aa-aa33-3d43da86e1a7
 
 <DocScope products="RDK S100">
 
-在 Ubuntu 22.04 桌面中按以下步骤开启或关闭 SSH 服务：
+在 Ubuntu 22.04 桌面中开启或关闭 SSH 服务：
 
-1. 点击左下角图标，选择 RDK Configuration 进入系统设置。
+1. 单击左下角图标，选择 **RDK Configuration** 进入系统设置。
 
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S100-SSH-1.png" alt="S100 SSH 操作示意图 1" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
@@ -134,9 +134,9 @@ Device 'wlan0' successfully activated with 'd7468833-4195-45aa-aa33-3d43da86e1a7
 
 <DocScope products="RDK S600">
 
-在 Ubuntu 24.04 桌面中按以下步骤开启或关闭 SSH 服务：
+在 Ubuntu 24.04 桌面中开启或关闭 SSH 服务：
 
-1. 点击左下角图标，选择 RDK Configuration 进入系统设置。
+1. 单击左下角图标，选择 **RDK Configuration** 进入系统设置。
 
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/S600-SSH-1.png" alt="S600 SSH 操作示意图 1" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
@@ -198,7 +198,7 @@ SSH 使用方法见 [远程登录 - SSH 登录](./05_remote_login.md#ssh)。
 
 ### 字符终端自动登录
 
-修改 serial-getty 服务文件可以设置免密登陆，操作如下：
+修改 serial-getty 服务文件可以设置免密登录：
 
 1. 打开 `serial-getty@ttyS0.service`。
 
@@ -267,7 +267,7 @@ source /etc/default/locale
 
 **添加中文输入源**
 
-- 图形界面：进入 设置 → 键盘 → 输入源，点击 +，选择 中文（中国） → Intelligent Pinyin 添加。
+- 图形界面：进入 **设置** > **键盘** > **输入源**，单击 **+**，选择 `中文（中国）` > `Intelligent Pinyin` 添加。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/input-1.png" alt="中文输入法配置示意图 1" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 
@@ -285,7 +285,7 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 
 上述命令会覆盖现有输入源列表。如已自定义其他键盘布局，请在列表中一并保留。
 :::
 
-添加完成后，按 `Super（Windows 键）` + `Space` 在中英文输入法之间切换。切到中文后即可在终端、文本编辑器等应用中输入汉字。
+添加完成后，按 `Super`（Windows 键）+ `Space` 在中英文输入法之间切换。切到中文后即可在终端、文本编辑器等应用中输入汉字。
 
 
 ## 设置 RDK Studio
@@ -302,7 +302,7 @@ NoMachine 未提供 apt 源，需从官网获取 `.deb` 安装包。
 
 **下载安装包**
 
-在官网选择 ARM64 版本安装包，点击 Download。
+在官网选择 ARM64 版本安装包，单击 **Download**。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/configuration_wizard/image_s100_nomachine_dl.PNG" alt="NoMachine 下载示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block' }} />
 

@@ -103,7 +103,7 @@ BSP 源码包下载地址参见 [系统镜像](../../RDK.md#系统镜像)（需�
 2. 签署保密协议（NDA）：我们将根据提交信息与您联系，双方确认后签署保密协议
 3. 内容释放：完成协议签署后，我们将通过私有渠道为您开放商业版本资料
 
-如您希望获取商业版内容，请点击下方链接填写问卷，我们将在 3 ～ 5 个工作日内与您联系：
+如您希望获取商业版内容，请单击下方链接填写问卷，我们将在 3-5 个工作日内与您联系：
 [填写问卷](https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre)
 :::
 
@@ -160,7 +160,7 @@ sudo ./pack_image.sh -l
 
 ## 常见问题
 
-### 编译时出现 "Exec format error" 或 "/bin/bash not found"
+### 编译时出现 “Exec format error” 或 “/bin/bash not found”
 
 **原因**：qemu-user-static 或 binfmt-support 版本过低，或未正确注册
 aarch64 的 binfmt。

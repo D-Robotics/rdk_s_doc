@@ -47,9 +47,9 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s100/1.0.0/D
 
 - 测试开发板：RDK S100P。
 
-- 性能数据获取：测试单条 prompt，取TTFT（首token延迟）和TPS（平均每秒 Token 数）指标。
+- 性能数据获取：测试单条 prompt，取 TTFT（首 token 延迟）和 TPS（平均每秒 Token 数）指标。
 
-- Python版本：Python3.10。
+- Python 版本：Python3.10。
 
 - 运行环境：Linux。
 

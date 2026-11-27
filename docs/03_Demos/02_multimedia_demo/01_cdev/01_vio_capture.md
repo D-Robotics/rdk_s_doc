@@ -21,7 +21,7 @@ description: "RDK S100/S600 摄像头采集→本地保存 RAW/YUV 示例"
 
 板端路径：`/app/cdev_demo/vio_capture/`
 
-```
+```text
 vio_capture/
 ├── Makefile
 └── capture.c

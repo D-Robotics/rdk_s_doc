@@ -264,8 +264,8 @@ pvt_cmn_pvtc1_t1 {
 
 | 温度 | 类型 | 冷却设备 |
 |---|---|---|
-| 45000 | `active` | `emc2301` 风扇（档位 2~5） |
-| 65000 | `active` | `emc2301` 风扇（档位 6~10） |
+| 45000 | `active` | `emc2301` 风扇（档位 2-5） |
+| 65000 | `active` | `emc2301` 风扇（档位 6-10） |
 | 95000 | `passive` | CPU / BPU 降频 |
 | 110000 | `hot` | 上报用户态 |
 | 115000 | `critical` | 系统保护关断 |
@@ -406,8 +406,8 @@ root@ubuntu:~# for t in /sys/class/thermal/thermal_zone0/trip_point_*; do
 
 | 温度 | 类型 | 冷却设备 |
 |---|---|---|
-| 43000 | passive | `emc2301` 风扇（档位 2~5） |
-| 65000 | passive | `emc2301` 风扇（档位 6~10） |
+| 43000 | passive | `emc2301` 风扇（档位 2-5） |
+| 65000 | passive | `emc2301` 风扇（档位 6-10） |
 | 95000 | passive | CPU 降频（cpu0~cpu5） |
 | 120000 | critical | 系统保护关断 |
 

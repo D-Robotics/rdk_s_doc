@@ -6,11 +6,11 @@ description: "RDK 命令 hrut_ps 用法"
 
 # hrut_ps
 
-**hrut_ps** 命令打印包括进程号、父进程号、优先级、内存、虚拟内存等busybox的ps命令不支持的进程状态信息。
+**hrut_ps** 命令打印包括进程号、父进程号、优先级、内存、虚拟内存等 busybox 的 ps 命令不支持的进程状态信息。
 
 ## 语法说明
 
-```
+```text
   hrut_ps
 ```
 

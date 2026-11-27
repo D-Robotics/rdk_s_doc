@@ -60,7 +60,7 @@ cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 | `--model-path` | 模型文件路径（.hbm 格式） | S600: `/opt/hobot/model/s600/basic/resnet18_224x224_nv12.hbm`（S100 对应 `s100/basic/`） |
 | `--test-img` | 测试图片路径 | `/app/res/assets/zebra_cls.jpg` |
 | `--label-file` | 类别标签映射文件（imagenet 1000 类） | `/app/res/labels/imagenet1000_clsidx_to_labels.txt` |
-| `--priority` | 模型调度优先级（0~255，越大越高） | `0` |
+| `--priority` | 模型调度优先级（0-255，越大越高） | `0` |
 | `--bpu-cores` | 推理使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`） | `[0]` |
 
 ## 使用方法

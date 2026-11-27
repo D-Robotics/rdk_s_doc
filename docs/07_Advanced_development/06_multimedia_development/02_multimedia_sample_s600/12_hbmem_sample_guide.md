@@ -35,7 +35,7 @@ description: "sample_hbmem 使用说明 板端示例使用说明"
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_hbmem/
 make
 ```
@@ -1212,7 +1212,7 @@ sample_graph_buf_user_consume_cnt done
 
 ### 测试结果说明
 
-- 如果 log 最后以`xxxx done`结尾，则表示 sample 执行成功
+- 如果 log 最后以 `xxxx done` 结尾，则表示 sample 执行成功
 
 ## 常见问题
 

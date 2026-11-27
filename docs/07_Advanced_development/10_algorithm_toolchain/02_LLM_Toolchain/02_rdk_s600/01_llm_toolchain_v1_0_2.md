@@ -56,15 +56,15 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.2/D
 
 - model：模型名。
 
-- BPU core num：模型运行时占用的BPU核数量。
+- BPU core num：模型运行时占用的 BPU 核数量。
 
 - qtype：模型的量化精度。
 
-- max context：模型累计能处理的token序列最大长度。
+- max context：模型累计能处理的 token 序列最大长度。
 
 - TTFT(ms)：首字生成时间。
 
-- Decode(TPS)：Decode阶段每秒生成的token数。
+- Decode(TPS)：Decode 阶段每秒生成的 token 数。
 
 - memory(GB)：模型的内存占用量。
 
@@ -162,7 +162,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.2/D
 
 :::info 说明
 
-TTFT(ms)：VLM的首字生成时间为vit处理时间和prefill处理时间总和。
+TTFT(ms)：VLM 的首字生成时间为 vit 处理时间和 prefill 处理时间总和。
 
 :::
 

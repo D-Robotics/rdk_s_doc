@@ -12,7 +12,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 概述
 
-VDSP（Vector Digital Signal Processor，向量数字信号处理器）是 RDK S 系列SoC 内置的可编程向量 DSP 协处理器，硬件 IP 采用 Cadence Tensilica **Vision Q8** DSP（5 路 VLIW 超长指令字 + 1024 bit SIMD 单指令多数据流），专用于计算机视觉与图像处理类算法的加速。
+VDSP（Vector Digital Signal Processor，向量数字信号处理器）是 RDK S 系列 SoC 内置的可编程向量 DSP 协处理器，硬件 IP 采用 Cadence Tensilica **Vision Q8** DSP（5 路 VLIW 超长指令字 + 1024 bit SIMD 单指令多数据流），专用于计算机视觉与图像处理类算法的加速。
 
 在 RDK 异构架构中，VDSP 与 BPU、ARM Acore 各司其职：BPU 负责神经网络推理，ARM Acore 负责通用控制与调度，VDSP 则承接**BPU 无法加速、ARM 执行效率较低**的算子，将这类计算从 CPU 侧卸载到 DSP 侧，从而降低 CPU 负载、提升整链路实时性。VDSP **不是**相机 ISP、PYM（金字塔）、GDC（畸变校正）或 BPU 的替代品——图像采集、畸变校正、缩放、拼接等应优先使用专用 Camsys 硬件；VDSP 面向的是上述专用硬件未覆盖的自定义视觉/数值计算。
 
@@ -255,7 +255,7 @@ echo N > /sys/module/hobot_remoteproc/parameters/heartbeat_enable
 #### 通过函数接口形式操作 vdsp
 
 通过 libvdsp.so 动态链接库加载 DSP 程序，实现加载、启动、停止、复位、获取 DSP 状态等功能，API 介绍可参考
-[VDSP启停控制接口](#vdsp-启停控制-api)。
+[VDSP 启停控制接口](#vdsp-启停控制-api)。
 
 #### 消息连接和发送
 
@@ -308,17 +308,15 @@ VDSP 提供了动态分配释放 heap 接口，支持配置自定义内存对齐
 
 代码获取步骤如下：
 
-``` shell
-（1）首先获取到发布包，解压后确认有vdsp源码。如果无，联系地瓜相关人员进行获取。
-（2）在vdsp路径下可以获取到vdsp源码。
-```
+1. 获取发布包，解压后确认包含 vdsp 源码；如果没有，联系 D-Robotics 相关人员获取。
+2. 在 vdsp 路径下获取 vdsp 源码。
 
 #### Linux 环境搭建
 
 :::tip
-获取 build 包建立编译环境。其中 build 包的获取请联系地瓜相关人员进行获取。
+获取 build 包建立编译环境。其中 build 包的获取请联系 D-Robotics 相关人员进行获取。
 
-本文档仅提供 Linux 环境搭建及编译的说明介绍。对于文档中提到的 xplorer 中获取调试文档请联系地瓜相关人员进行获取。
+本文档仅提供 Linux 环境搭建及编译的说明介绍。对于文档中提到的 xplorer 中获取调试文档请联系 D-Robotics 相关人员进行获取。
 :::
 
 Linux 环境下安装 build 的命令：
@@ -409,14 +407,14 @@ hrut_remoteproc_log -b /sys/class/remoteproc/remoteproc_vdsp1/log -f /log/dsp1/m
 
 DSP_*接口使用注意事项：
 
-1. 头文件``hb_vdsp_log.h``
-2. 接口使用示例。比如进入异常分支需要打印日志时，使用 DSP_ERR 接口，``DSP_ERR("Input parameter invalid.\n");``
+1. 头文件 `hb_vdsp_log.h`
+2. 接口使用示例。比如进入异常分支需要打印日志时，使用 DSP_ERR 接口，`DSP_ERR("Input parameter invalid.\n");`
 
 ### 线程状态查看
 
 通过以下命令可在串口中查看 VDSP 侧的线程状态。需要注意的是以下数据的统计和输出可能会影响 VDSP 的性能。
 
-使用方法：首先需要代码中使能``#define THREAD_STACK_CHECK (1)``，其次需要在新启动的线程前使能栈跟踪，如下所示：
+使用方法：首先需要代码中使能 `#define THREAD_STACK_CHECK (1)`，其次需要在新启动的线程前使能栈跟踪，如下所示：
 
 ``` shell
 (void)hb_enable_stack_track(dev_thread_stack, sizeof(dev_thread_stack)/sizeof(dev_thread_stack[0]));
@@ -472,7 +470,7 @@ hb_enable_coredump();
 ```
 
 不应在 VQ8 上为异常原因 4（调试异常）/5（SYSCALL 异常）/8（协处理器异常）注册异常处理程序，为系统预留使用。
-需要注意的是：9~15 为预留类型，也需要略过不注册。
+需要注意的是：9-15 为预留类型，也需要略过不注册。
 
 离线调试方法如下：
 VDSP 发生 coredump 时，Acore 会把 VDSP 所有可能使用的 memory 空间(iram/dram0/dram1/reserved
@@ -492,7 +490,7 @@ ddr)全部写入指定的文件系统中，路径如下：
 
 </DocScope>
 
-新建 restore.script.sh 脚本，4个 memory
+新建 restore.script.sh 脚本，4 个 memory
 dump 文件的路径根据实际项目的存放路径设置，把获得到的 CPU 寄存器复制到该脚本对应处，如下所示：
 
 ``` shell
@@ -589,7 +587,7 @@ VDSP 地址映射以及 MPU 保护部分如下图所示，访问 MPU 保护地�
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_2.png" alt="VDSP地址映射及MPU保护范围示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-报错 log 如下图所示，错误地址为0x0，表示访问了不允许访问的地址：
+报错 log 如下图所示，错误地址为 0x0，表示访问了不允许访问的地址：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_3.png" alt="VDSP访问非法地址0x0时的coredump报错日志" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -625,7 +623,7 @@ Guide：\<VDSP 安装路径\>/xtensa/XtDevTools/downloads/\<version\>/docs/sw_de
 
 :::tip
 调试使用 xos 工具时，提示找不到工具链，先确认 xos build 环境是否建立。
-如果建立，配置环境变量，比如配置临时环境变量``export PATH=$PATH:[*]/XtensaTools/bin``
+如果建立，配置环境变量，比如配置临时环境变量 `export PATH=$PATH:[*]/XtensaTools/bin`
 :::
 
 ### CPU 侧 start 加载和 stop 卸载 FW 时提示不成功？
@@ -636,11 +634,11 @@ Guide：\<VDSP 安装路径\>/xtensa/XtDevTools/downloads/\<version\>/docs/sw_de
 
 示例代码如下：
 
-``` C
+```c
 ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", dev_thread_stack, STACK_SIZE_1, TRACE_THREAD_PRIO, 0, 0);
 ```
 
-其中 dev_thread_func 表示创建的线程函数，用来实现用户想要在线程函数中处理的功能。dev_thread_stack 表示指向线程栈的首地址(由用户分配)。STACK_SIZE_1表示栈的大小。TRACE_THREAD_PRIO 表示线程优先级，取值范围在0~15，数值越小优先级越高。
+其中 dev_thread_func 表示创建的线程函数，用来实现用户想要在线程函数中处理的功能。dev_thread_stack 表示指向线程栈的首地址(由用户分配)。STACK_SIZE_1 表示栈的大小。TRACE_THREAD_PRIO 表示线程优先级，取值范围在 0-15，数值越小优先级越高。
 
 ### VDSP 侧如何获取设备 id？
 
@@ -659,10 +657,10 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 这是因为 xtensa/xtutil.h 头文件会将 printf、vsnprintf 等函数替换为 xt_printf，xt_vsnprintf，用户需要将 xtutil.h 头文件注释掉，使用原生的 printf、vsnprintf 接口。
 
 :::danger
-标准 C 库的 printf 等函数，无法在中断 handler 中使用，否则会卡死。
+标准 C 库的 printf 等函数，无法在中断 handler 中使用，否则会导致系统无响应。
 :::
 
-### VDSP 在运行过程中出现卡住问题
+### VDSP 在运行过程中出现无响应问题
 
 需要排查变量指针的地址是否是对齐：
 
@@ -693,7 +691,7 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 
 ### Idma 搬运过程中出现异常停止问题
 
-出现此情况可以查看 idma init 函数中，是否有设置运行时间，置0可以关闭时间限制：
+出现此情况可以查看 idma init 函数中，是否有设置运行时间，置 0 可以关闭时间限制：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_9.png" alt="IDMA初始化函数中运行时间限制参数的设置代码" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -703,13 +701,13 @@ ret = xos_thread_create(&dev_thread_tcb, 0, dev_thread_func, 0, "dev_control", d
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/07_vdsp_development/image_10.png" alt="在Build Properties中手动添加CONFIG_TEST_CASE宏的配置界面" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-### 在总线程个数大于32的运行环境下，线程状态查看功能不生效
+### 在总线程个数大于 32 的运行环境下，线程状态查看功能不生效
 
-这是由于线程 dump 功能实现时，默认定义存放线程信息的数组大小为32； 可以通过加大数组大小来支持大于32个线程状态查看。
+这是由于线程 dump 功能实现时，默认定义存放线程信息的数组大小为 32； 可以通过加大数组大小来支持大于 32 个线程状态查看。
 
-如下所示将支持最多64线程状态查看功能：
+如下所示将支持最多 64 线程状态查看功能：
 
-``` C
+```c
 static int32_t cycle_check(void * arg, int32_t unused)
 {
     const int32_t countMax = 64;
@@ -720,7 +718,7 @@ static int32_t cycle_check(void * arg, int32_t unused)
 系统中依赖 dev_control 线程正常运行，用户通过 enable 宏 CONFIG_PLATFORM_INIT_BUILTIN_THREADS
 来控制由 hb_platform_init 函数启动，如果用户没有 enable 就需要创建相应的线程，同时用户线程需遵循下述的流程：
 
-（1）在用户任务循环线程中添加退出判断的逻辑：调用函数 hb_is_thread_stop，返回1表示需要立即退出线程
+（1）在用户任务循环线程中添加退出判断的逻辑：调用函数 hb_is_thread_stop，返回 1 表示需要立即退出线程
 
 ### VDSP log 使用场景限制
 
@@ -733,7 +731,7 @@ static int32_t cycle_check(void * arg, int32_t unused)
 （1）需要定义平台宏，不同平台对应的宏包括：CONFIG_ARCH_HOBOT_SOC_SIGIE、CONFIG_ARCH_HOBOT_SOC_SIGIP、CONFIG_ARCH_HOBOT_SOC_SIGIB
 
 （2）默认支持不同的 VDSP
-CORE 可加载同一个 FW，同时就不需要定义 CONFIG_VDSP 宏（CONFIG_VDSP0/CONFIG_VDSP1不再被使用）
+CORE 可加载同一个 FW，同时就不需要定义 CONFIG_VDSP 宏（CONFIG_VDSP0/CONFIG_VDSP1 不再被使用）
 
 ### 安全下电和休眠流程
 
@@ -940,7 +938,7 @@ Acore 侧
 
 【函数声明】
 
-``int32_t hb_rpmsg_start_server(const char* server_name, uint32_t flags, rl_ept_rx_cb_t rx_cb, void* rx_cb_data, uint32_t timeout, rpmsg_handle** handle);``
+`int32_t hb_rpmsg_start_server(const char* server_name, uint32_t flags, rl_ept_rx_cb_t rx_cb, void* rx_cb_data, uint32_t timeout, rpmsg_handle** handle);`
 
 【参数描述】
 
@@ -980,7 +978,7 @@ Flags 参数的使用（使用位操作符）:
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1051,7 +1049,7 @@ int32_t rpmsg_test()
 
 【函数声明】
 
-``int32_t hb_rpmsg_stop_server(rpmsg_handle* handle);``
+`int32_t hb_rpmsg_stop_server(rpmsg_handle* handle);`
 
 【参数描述】
 
@@ -1060,7 +1058,7 @@ int32_t rpmsg_test()
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1074,7 +1072,7 @@ int32_t rpmsg_test()
 
 【函数声明】
 
-``int32_t hb_rpmsg_send(const rpmsg_handle* handle, char *buf, uint32_t len);``
+`int32_t hb_rpmsg_send(const rpmsg_handle* handle, char *buf, uint32_t len);`
 
 【参数描述】
 
@@ -1085,7 +1083,7 @@ int32_t rpmsg_test()
 【返回值】
 
   - 成功：实际发送的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1099,7 +1097,7 @@ int32_t rpmsg_test()
 
 【函数声明】
 
-``int32_t hb_rpmsg_recv(rpmsg_handle* handle, char* buf, uint32_t len);``
+`int32_t hb_rpmsg_recv(rpmsg_handle* handle, char* buf, uint32_t len);`
 
 【参数描述】
 
@@ -1110,7 +1108,7 @@ int32_t rpmsg_test()
 【返回值】
 
   - 成功：实际接收的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 【功能描述】
 
 接收通信服务帧数据
@@ -1123,7 +1121,7 @@ int32_t rpmsg_test()
 
 【函数声明】
 
-``int32_t hb_rpmsg_send_timeout(const rpmsg_handle* handle, char* buf, uint32_t len, uint32_t timeout);``
+`int32_t hb_rpmsg_send_timeout(const rpmsg_handle* handle, char* buf, uint32_t len, uint32_t timeout);`
 
 【参数描述】
 
@@ -1135,7 +1133,7 @@ int32_t rpmsg_test()
 【返回值】
 
   - 成功：实际发送的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1219,7 +1217,7 @@ uint32_t len, uint32_t timeout);
 【返回值】
 
   - 成功：实际接收的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1235,7 +1233,7 @@ uint32_t len, uint32_t timeout);
 
 【函数声明】
 
-``int32_t hb_rpmsg_connect_server(char *server_name, int flags, int timeout, rpmsg_handle **handle);``
+`int32_t hb_rpmsg_connect_server(char *server_name, int flags, int timeout, rpmsg_handle **handle);`
 
 【参数描述】
 
@@ -1255,7 +1253,7 @@ Flags 参数的使用（使用位操作符）:
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1342,7 +1340,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``int32_t hb_rpmsg_disconnect_server(rpmsg_handle* handle);``
+`int32_t hb_rpmsg_disconnect_server(rpmsg_handle* handle);`
 
 【参数描述】
 
@@ -1351,7 +1349,7 @@ int main(int argc, char *argv[])
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1365,7 +1363,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``int32_t hb_rpmsg_send(const rpmsg_handle* handle, char *buf, int32_t len);``
+`int32_t hb_rpmsg_send(const rpmsg_handle* handle, char *buf, int32_t len);`
 
 【参数描述】
 
@@ -1376,7 +1374,7 @@ int main(int argc, char *argv[])
 【返回值】
 
   - 成功：实际发送的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1390,7 +1388,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``int32_t hb_rpmsg_recv(rpmsg_handle* handle, char* buf, int32_t  len);``
+`int32_t hb_rpmsg_recv(rpmsg_handle* handle, char* buf, int32_t  len);`
 
 【参数描述】
 
@@ -1401,7 +1399,7 @@ int main(int argc, char *argv[])
 【返回值】
 
   - 成功：实际接收的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1411,7 +1409,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``int32_t hb_rpmsg_send_timeout(const rpmsg_handle* handle, char *buf, int32_t len, int32_t timeout);``
+`int32_t hb_rpmsg_send_timeout(const rpmsg_handle* handle, char *buf, int32_t len, int32_t timeout);`
 
 【参数描述】
 
@@ -1423,7 +1421,7 @@ int main(int argc, char *argv[])
 【返回值】
 
   - 成功：实际发送的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1500,7 +1498,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``int32_t hb_rpmsg_recv_timeout(rpmsg_handle* handle, char* buf, int32_t len, int32_t timeout);``
+`int32_t hb_rpmsg_recv_timeout(rpmsg_handle* handle, char* buf, int32_t len, int32_t timeout);`
 
 【参数描述】
 
@@ -1512,7 +1510,7 @@ int main(int argc, char *argv[])
 【返回值】
 
   - 成功：实际接收的字节数
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1526,7 +1524,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``int32_t hb_rpmsg_get_version(uint32_t* major, uint32_t* minor, uint32_t* patch);``
+`int32_t hb_rpmsg_get_version(uint32_t* major, uint32_t* minor, uint32_t* patch);`
 
 【参数描述】
 
@@ -1537,7 +1535,7 @@ int main(int argc, char *argv[])
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [核间通信RPMSG API返回值](#rpmsg_api_return_value)
+  - 失败：异常为负值错误码，参考 [核间通信 RPMSG API 返回值](#rpmsg_api_return_value)
 
 【功能描述】
 
@@ -1551,7 +1549,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``const char* hb_rpmsg_error_message(int32_t error_code);``
+`const char* hb_rpmsg_error_message(int32_t error_code);`
 
 【参数描述】
 
@@ -1614,7 +1612,7 @@ API 返回值为上述宏定义取负值。
 
 【函数声明】
 
-``int32_t hb_ipcfhal_init(ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_init(ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -1623,7 +1621,7 @@ API 返回值为上述宏定义取负值。
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1632,7 +1630,7 @@ IPCFHAL 初始化
 【IPCFHAL 初始化 示例代码】
 
 :::info
-完整代码编译和运行参考``/app/vdsp_demo/vdsp_ipcfhal_sample/README.md``
+完整代码编译和运行参考 `/app/vdsp_demo/vdsp_ipcfhal_sample/README.md`
 :::
 
 ``` c
@@ -1694,7 +1692,7 @@ static int32_t ipcfhal_thread_func(void *arg, int32_t unused) {
 
 【函数声明】
 
-``int32_t hb_ipcfhal_getchan_byjson(const char *name, ipcfhal_chan_t *channel, const char *json_file);``
+`int32_t hb_ipcfhal_getchan_byjson(const char *name, ipcfhal_chan_t *channel, const char *json_file);`
 
 【参数描述】
 
@@ -1705,7 +1703,7 @@ static int32_t ipcfhal_thread_func(void *arg, int32_t unused) {
 【返回值】
 
   - 成功: 通道 id
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1728,7 +1726,7 @@ int32_t hb_ipcfhal_config(ipcfhal_chan_t *channel);
 【返回值】
 
   - 成功: \>=0
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1742,7 +1740,7 @@ IPCFHAL 配置 channel
 
 【函数声明】
 
-``int32_t hb_ipcfhal_send(const uint8_t *data, uint32_t length, ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_send(const uint8_t *data, uint32_t length, ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -1753,7 +1751,7 @@ IPCFHAL 配置 channel
 【返回值】
 
   - 成功: 实际发送的字节数
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1767,7 +1765,7 @@ IPCFHAL 发送消息
 
 【函数声明】
 
-``int32_t hb_ipcfhal_recv(uint8_t *data, uint32_t length, int32_t  timeout, ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_recv(uint8_t *data, uint32_t length, int32_t  timeout, ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -1779,7 +1777,7 @@ IPCFHAL 发送消息
 【返回值】
 
   - 成功: 实际接收的字节数
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1793,7 +1791,7 @@ IPCFHAL 接收消息
 
 【函数声明】
 
-``int32_t hb_ipcfhal_deinit(ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_deinit(ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -1802,7 +1800,7 @@ IPCFHAL 接收消息
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1816,7 +1814,7 @@ IPCFHAL 反初始化
 
 【函数声明】
 
-``int32_t hb_ipcfhal_trans_err(int32_t err_code, char **err_str);``
+`int32_t hb_ipcfhal_trans_err(int32_t err_code, char **err_str);`
 
 【参数描述】
 
@@ -1826,7 +1824,7 @@ IPCFHAL 反初始化
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1840,7 +1838,7 @@ IPCFHAL 反初始化
 
 【函数声明】
 
-``int32_t hb_ipcfhal_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);``
+`int32_t hb_ipcfhal_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);`
 
 【参数描述】
 
@@ -1851,7 +1849,7 @@ IPCFHAL 反初始化
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1865,7 +1863,7 @@ IPCFHAL 反初始化
 
 【函数声明】
 
-``int32_t hb_ipcfhal_register_callback(uint8_t *user_data, user_cb_t user_cb, ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_register_callback(uint8_t *user_data, user_cb_t user_cb, ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -1876,7 +1874,7 @@ IPCFHAL 反初始化
 【返回值】
 
   - 成功: =0
-  - 失败: \!0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+  - 失败: \!0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1925,7 +1923,7 @@ static int32_t hb_libipchal_register_callback_func(void)
 
 【函数声明】
 
-``int32_t hb_ipcfhal_init(ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_init(ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -1934,7 +1932,7 @@ static int32_t hb_libipchal_register_callback_func(void)
 【返回值】
 
 -   成功: =0
--   失败: !0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: !0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -1943,7 +1941,7 @@ IPCFHAL 初始化
 【IPCFHAL 初始化 示例代码】
 
 :::info
-完整代码编译和运行参考``/app/vdsp_demo/vdsp_ipcfhal_sample/README.md``
+完整代码编译和运行参考 `/app/vdsp_demo/vdsp_ipcfhal_sample/README.md`
 :::
 
 ``` c
@@ -2234,7 +2232,7 @@ int main(int argc, char *argv[])
 
 【函数声明】
 
-``int32_t hb_ipcfhal_getchan_byjson(const char *name, ipcfhal_chan_t *channel, const char *json_file);``
+`int32_t hb_ipcfhal_getchan_byjson(const char *name, ipcfhal_chan_t *channel, const char *json_file);`
 
 【参数描述】
 
@@ -2245,7 +2243,7 @@ int main(int argc, char *argv[])
 【返回值】
 
 -   成功: \>=0
--   失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -2259,7 +2257,7 @@ IPCFHAL 从 json 配置文件获取 channel，channel 初始化后，不支持�
 
 【函数声明】
 
-``int32_t hb_ipcfhal_config(ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_config(ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -2268,7 +2266,7 @@ IPCFHAL 从 json 配置文件获取 channel，channel 初始化后，不支持�
 【返回值】
 
 -   成功: \>=0
--   失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -2282,7 +2280,7 @@ IPCFHAL 配置 channel
 
 【函数声明】
 
-``int32_t hb_ipcfhal_send(const uint8_t *data, uint32_t length, ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_send(const uint8_t *data, uint32_t length, ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -2293,7 +2291,7 @@ IPCFHAL 配置 channel
 【返回值】
 
 -   成功: 实际发送的字节数
--   失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -2307,7 +2305,7 @@ IPCFHAL 发送消息
 
 【函数声明】
 
-``int32_t hb_ipcfhal_recv(uint8_t *data, uint32_t length, int32_t timeout, ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_recv(uint8_t *data, uint32_t length, int32_t timeout, ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -2319,7 +2317,7 @@ IPCFHAL 发送消息
 【返回值】
 
 -   成功: 实际接收的字节数
--   失败: \<0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: \<0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -2333,7 +2331,7 @@ IPCFHAL 接收消息
 
 【函数声明】
 
-``int32_t hb_ipcfhal_deinit(ipcfhal_chan_t *channel);``
+`int32_t hb_ipcfhal_deinit(ipcfhal_chan_t *channel);`
 
 【参数描述】
 
@@ -2342,7 +2340,7 @@ IPCFHAL 接收消息
 【返回值】
 
 -   成功: =0
--   失败: !0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: !0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -2356,7 +2354,7 @@ IPCFHAL 反初始化
 
 【函数声明】
 
-``int32_t hb_ipcfhal_trans_err(int32_t err_code, char **err_str);``
+`int32_t hb_ipcfhal_trans_err(int32_t err_code, char **err_str);`
 
 【参数描述】
 
@@ -2366,7 +2364,7 @@ IPCFHAL 反初始化
 【返回值】
 
 -   成功: =0
--   失败: !0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: !0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -2380,7 +2378,7 @@ IPCFHAL 反初始化
 
 【函数声明】
 
-``int32_t hb_ipcfhal_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);``
+`int32_t hb_ipcfhal_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);`
 
 【参数描述】
 
@@ -2391,7 +2389,7 @@ IPCFHAL 反初始化
 【返回值】
 
 -   成功: =0
--   失败: !0，参考 [核间通信IPCFHAL API返回值](#vdsp_ipcfhal_api_return)
+-   失败: !0，参考 [核间通信 IPCFHAL API 返回值](#vdsp_ipcfhal_api_return)
 
 【功能描述】
 
@@ -2429,7 +2427,7 @@ IPCFHAL 反初始化
 
 【函数声明】
 
-``int32_t hb_mem_heap_initialize(hb_mem_heap_t heap_id, void *start_vaddr, size_t heap_size, uint32_t align);``
+`int32_t hb_mem_heap_initialize(hb_mem_heap_t heap_id, void *start_vaddr, size_t heap_size, uint32_t align);`
 
 【参数描述】
 
@@ -2441,7 +2439,7 @@ IPCFHAL 反初始化
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [HEAP分配 API 返回值](#vdsp_heap_api_return)
+  - 失败: \<0，参考 [HEAP 分配 API 返回值](#vdsp_heap_api_return)
 
 【功能描述】
 
@@ -2471,7 +2469,7 @@ return 0;
 
 【函数声明】
 
-``int32_t hb_mem_heap_deinitialize(hb_mem_heap_t heap_id);``
+`int32_t hb_mem_heap_deinitialize(hb_mem_heap_t heap_id);`
 
 【参数描述】
 
@@ -2480,7 +2478,7 @@ return 0;
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [HEAP分配 API 返回值](#vdsp_heap_api_return)
+  - 失败: \<0，参考 [HEAP 分配 API 返回值](#vdsp_heap_api_return)
 
 【功能描述】
 
@@ -2510,7 +2508,7 @@ return 0;
 
 【函数声明】
 
-``int32_t hb_mem_heap_alloc(hb_mem_heap_t heap_id, size_t req_size, uint32_t align, void ** vaddr);``
+`int32_t hb_mem_heap_alloc(hb_mem_heap_t heap_id, size_t req_size, uint32_t align, void ** vaddr);`
 
 【参数描述】
 
@@ -2522,7 +2520,7 @@ return 0;
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [HEAP分配 API 返回值](#vdsp_heap_api_return)
+  - 失败: \<0，参考 [HEAP 分配 API 返回值](#vdsp_heap_api_return)
 
 【功能描述】
 
@@ -2563,7 +2561,7 @@ return 0;
 
 【函数声明】
 
-``int32_t hb_mem_heap_free(hb_mem_heap_t heap_id, void *vaddr);``
+`int32_t hb_mem_heap_free(hb_mem_heap_t heap_id, void *vaddr);`
 
 【参数描述】
 
@@ -2573,7 +2571,7 @@ return 0;
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [HEAP分配 API 返回值](#vdsp_heap_api_return)
+  - 失败: \<0，参考 [HEAP 分配 API 返回值](#vdsp_heap_api_return)
 
 【功能描述】
 
@@ -2618,7 +2616,7 @@ return 0;
 
 【函数声明】
 
-``int32_t hb_mem_heap_get_status(hb_mem_heap_t heap_id, hb_mem_heap_status_t *heap_status);``
+`int32_t hb_mem_heap_get_status(hb_mem_heap_t heap_id, hb_mem_heap_status_t *heap_status);`
 
 【参数描述】
 
@@ -2628,7 +2626,7 @@ return 0;
 【返回值】
 
   - 成功: =0
-  - 失败: \<0，参考 [HEAP分配 API 返回值](#vdsp_heap_api_return)
+  - 失败: \<0，参考 [HEAP 分配 API 返回值](#vdsp_heap_api_return)
 
 【功能描述】
 
@@ -2711,7 +2709,7 @@ return 0;
 
 【函数声明】
 
-``int32_t hb_vdsp_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);``
+`int32_t hb_vdsp_get_version(uint32_t *major, uint32_t *minor, uint32_t *patch);`
 
 【参数描述】
 
@@ -2722,7 +2720,7 @@ return 0;
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -2754,16 +2752,16 @@ int32_t boot_lib_version_test(int32_t dsp_id)
 
 【函数声明】
 
-``int32_t hb_vdsp_init(int32_t dsp_id);``
+`int32_t hb_vdsp_init(int32_t dsp_id);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -2798,16 +2796,16 @@ int32_t boot_lib_init_test(int32_t dsp_id)
 
 【函数声明】
 
-``int32_t hb_vdsp_deinit(int32_t dsp_id);``
+`int32_t hb_vdsp_deinit(int32_t dsp_id);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -2821,18 +2819,18 @@ int32_t boot_lib_init_test(int32_t dsp_id)
 
 【函数声明】
 
-``int32_t hb_vdsp_start(int32_t dsp_id, int32_t timeout, const char *pathname);``
+`int32_t hb_vdsp_start(int32_t dsp_id, int32_t timeout, const char *pathname);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
-  - \[IN\] timeout：0为异步; -1为同步; 大于0为同步 timeout 等待时间,ms 单位
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
+  - \[IN\] timeout：0 为异步; -1 为同步; 大于 0 为同步 timeout 等待时间,ms 单位
   - \[IN\] pathname：vdsp 镜像完整路径，包含镜像名字
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -2977,16 +2975,16 @@ boot_lib_async_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_stop(int32_t dsp_id);``
+`int32_t hb_vdsp_stop(int32_t dsp_id);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3000,17 +2998,17 @@ boot_lib_async_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_get_status(int32_t dsp_id, int32_t *status);``
+`int32_t hb_vdsp_get_status(int32_t dsp_id, int32_t *status);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[OUT\] status：VDSP 运行状态
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3028,16 +3026,16 @@ boot_lib_async_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_reset(int32_t dsp_id);``
+`int32_t hb_vdsp_reset(int32_t dsp_id);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3110,17 +3108,17 @@ boot_lib_reset_test(1, "/app/vdsp_demo/vdsp_sample/res/q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_set_path(int32_t dsp_id, const char* path);``
+`int32_t hb_vdsp_set_path(int32_t dsp_id, const char* path);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[IN\] path：vdsp 镜像完整路径，不包含镜像名字
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3199,17 +3197,17 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_set_name(int32_t dsp_id, const char* name);``
+`int32_t hb_vdsp_set_name(int32_t dsp_id, const char* name);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[IN\] name：vdsp 镜像名字
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3223,17 +3221,17 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_get_fd(int32_t dsp_id, int32_t *retfd);``
+`int32_t hb_vdsp_get_fd(int32_t dsp_id, int32_t *retfd);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[OUT\] retfd：vdsp 设备 fd 句柄
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3247,7 +3245,7 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_close_fd(int32_t fd);``
+`int32_t hb_vdsp_close_fd(int32_t fd);`
 
 【参数描述】
 
@@ -3256,7 +3254,7 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3270,11 +3268,11 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 
 【函数声明】
 
-``int32_t hb_vdsp_mem_alloc(int32_t dsp_id, uint64_t size, int64_t flags, uint64_t *va, uint64_t *iova);``
+`int32_t hb_vdsp_mem_alloc(int32_t dsp_id, uint64_t size, int64_t flags, uint64_t *va, uint64_t *iova);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[IN\] size：申请的内存大小
   - \[IN\] flags：使用 libhbmem 申请内存的 flags
   - \[OUT\] va：使用 libhbmem 申请内存的虚拟地址
@@ -3283,7 +3281,7 @@ boot_lib_set_pathname_test(1, "/app/testcase/S05_VDSP/testsuite", "q8sample");
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3336,17 +3334,17 @@ int32_t boot_lib_mem_alloc_test(int32_t dsp_id)
 
 【函数声明】
 
-``int32_t hb_vdsp_mem_free(int32_t dsp_id, uint64_t va);``
+`int32_t hb_vdsp_mem_free(int32_t dsp_id, uint64_t va);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[IN\] va：使用 libhbmem 申请内存的虚拟地址
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3360,11 +3358,11 @@ int32_t boot_lib_mem_alloc_test(int32_t dsp_id)
 
 【函数声明】
 
-``int32_t hb_vdsp_mmu_map(int32_t dsp_id, uint64_t va, uint64_t size, uint64_t *iova);``
+`int32_t hb_vdsp_mmu_map(int32_t dsp_id, uint64_t va, uint64_t size, uint64_t *iova);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[IN\] va：使用 libhbmem 申请内存的虚拟地址
   - \[IN\] size：待映射的内存大小
   - \[OUT\] iova：映射成的 vdsp 设备地址
@@ -3372,7 +3370,7 @@ int32_t boot_lib_mem_alloc_test(int32_t dsp_id)
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 
@@ -3473,17 +3471,17 @@ int32_t boot_lib_mem_map_test(int32_t dsp_id)
 
 【函数声明】
 
-``int32_t hb_vdsp_mmu_unmap(int32_t dsp_id, uint64_t va);``
+`int32_t hb_vdsp_mmu_unmap(int32_t dsp_id, uint64_t va);`
 
 【参数描述】
 
-  - \[IN\] dsp_id：dsp 编号，取值0、1, 对应 dsp0、dsp1
+  - \[IN\] dsp_id：dsp 编号，取值 0、1, 对应 dsp0、dsp1
   - \[IN\] va：使用 libhbmem 申请内存的虚拟地址
 
 【返回值】
 
   - 成功：0
-  - 失败：异常为负值错误码，参考 [VDSP启停控制 API 返回值](#vdsp_boot_api_return)
+  - 失败：异常为负值错误码，参考 [VDSP 启停控制 API 返回值](#vdsp_boot_api_return)
 
 【功能描述】
 

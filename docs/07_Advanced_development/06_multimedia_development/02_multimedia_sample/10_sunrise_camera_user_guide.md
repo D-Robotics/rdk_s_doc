@@ -123,7 +123,7 @@ sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP �
 2. sunrise camera 支持通过 Web 端在线修改应用方案、选择 camera sensor 型号、设置解码、编码参数及选择算法模型等
 
 #### 智能摄像机配置方式
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/camera_page.png" alt="智能摄像机配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/camera_page.png" alt="智能摄像机配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 具体修改步骤如下：
 
@@ -141,7 +141,7 @@ sunrise camera 正常启动后，通过 chrome 浏览器在地址栏输入 IP �
 
 
 #### 智能分析盒配置方式
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/box_page.png" alt="智能分析盒配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/box_page.png" alt="智能分析盒配置方式示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 具体修改步骤如下：
 
@@ -264,7 +264,7 @@ Web 端播放器会按编码类型自动选择拉流通道：H264 拉主码流�
 
 在 `打开媒体` 对话框中填入 url 地址，点击 `播放` 按钮即可开始播放，如下图：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/vlc_play_method.png" alt="播放方法示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/vlc_play_method.png" alt="播放方法示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 rtsp 的码流网络 URL 链接，可以在 web 页面的“设备信息”上查看，按本文示例配置（静态 IP 192.168.1.10）时，主码流链接为 rtsp://192.168.1.10/ch0/main ，子码流链接为 rtsp://192.168.1.10/ch0/sub1
 

@@ -10,19 +10,19 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 配置和用法问题
 
-#### video 编码性能规格问题
+### video 编码性能规格问题
 
 **Q**：对于 4K@30FPS 的编码，是否支持编码成 4 路独立的 1080p@30fps 码流？
 
 **A**：codec 支持多路编码，如果想实现 1080p 4 路的编码，输入的流就需要是 4 路 1080p 的图像，无法把 1 路 4K 的图像分解成 4 路 1080p 编码。
 
-#### GOP 配置问题
+### GOP 配置问题
 
 **Q**：H265 帧每次 publish 的时候，每个 GOP 的组合是怎么样的呢？会使用到 P 帧吗？每帧里支持独立解码吗？会在每帧中插入 SPS 和 PPS 吗？
 
 **A**：GOP 结构是需要用户配置的，可以支持全 I 帧或 IP 帧的模块；如果是全 IDR 帧的话，是支持独立解码的，需要配置全 I 帧的 gop 结构和 Intra period=1；每个 IDR 帧是否要插入 sps/pps/vps，可以通过接口 `hb_mm_mc_request_idr_header` 选择，默认都会加。
 
-#### 如何插入 userdata 信息
+### 如何插入 userdata 信息
 
 **Q**：在编码过程中，如何通过接口插入 userdata 信息？
 
@@ -35,13 +35,13 @@ hb_u32 length = sizeof(uuid)/sizeof(uuid[0]);
 ret = hb_mm_mc_insert_user_data(context, uuid, length);
 ```
 
-#### 帧信息打印问题
+### 帧信息打印问题
 
 **Q**：每帧编解码信息都打印会产生海量日志。
 
 **A**：编解码进程初始化时会根据 `LOGLEVEL` 设置日志等级，当配置 `LOGLEVEL < 5` 时不会输出帧信息。
 
-#### 外部输入 Buffer 映射失败问题
+### 外部输入 Buffer 映射失败问题
 
 **Q**：用户在使用外部输入 buffer 模式时遇到 "Fail to map phys" 报错，驱动报 "Failed to map ion phy due to same phys"。
 
@@ -53,7 +53,7 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 2. 不能把外部 Buffer 动态申请释放，避免得到交叠的地址导致报错；建议申请固定个数 Buffer 然后循环使用，实例退出后统一释放。
 
-#### 内部 Buffer 申请失败问题
+### 内部 Buffer 申请失败问题
 
 **Q**：用户使用较多编解码通道时出现内存申请失败问题。
 
@@ -67,7 +67,7 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 ## VPU 编解码问题
 
-#### dequeue output buffer 超时可能是什么原因
+### dequeue output buffer 超时可能是什么原因
 
 **Q**：编解码过程中，dequeue output buffer 超时可能是什么原因导致的？
 
@@ -83,37 +83,37 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 5. **接口对称**：前几次 dequeue output 后未及时 queue output 归还、取出未归还的 buffer 让队列耗尽、无输入 buffer 时直接 dequeue output——检查每一条 dequeue 都有对应的 queue。
 
-#### video 解码时首帧获取出现 timeout 现象
+### video 解码时首帧获取出现 timeout 现象
 
 **Q**：串行调用 dequeue/queue inputbuffer/outputbuffer 接口时，第一次 dequeue outputbuffer 必现 timeout 是什么原因？
 
 **A**：由于硬件特性，h265 解码时第一帧会输出一个空帧，会延迟一帧给出数据。
 
-#### video 解码时首帧 pts 不对齐问题
+### video 解码时首帧 pts 不对齐问题
 
 **Q**：解码时取出来的第一帧数据 pts 一直是 0，和赋值不一致，获取到第二帧时，才和送进去第二帧中的 pts 对应上。
 
 **A**：当首帧头信息和 IDR 帧分开送入时，可以支持第一帧 pts 对齐，一并送入时，由于和硬件处理特性关联，第一帧会是 0。
 
-#### 解码时出现 FAILED TO DEC_PIC_HDR: ret(1) SEQERR(00005000) 报错
+### 解码时出现 FAILED TO DEC_PIC_HDR: ret(1) SEQERR(00005000) 报错
 
 **Q**：video 解码过程中，出现 `FAILED TO DEC_PIC_HDR: ret(1) SEQERR(00005000)` 报错。
 
 **A**：这是解析帧头信息错误，解码器解码时，第一帧都带有 VPS SPS PPS 信息，但是有些码流因为格式问题，如果单独给 VPS SPS PPS 不能正常解码，需要给 VPS+SPS+PPS+IDR。
 
-#### 编码时出现 Bitstream buffer is too small 报错
+### 编码时出现 Bitstream buffer is too small 报错
 
 **Q**：编码过程中，出现 `Bitstream buffer is too small` 的报错。
 
 **A**：`bitstream_buf_size` 设置过小导致，增大 size 值即可。
 
-#### 编码时出现 Failed to VPU_EncRegisterFrameBuffer (1) 报错
+### 编码时出现 Failed to VPU_EncRegisterFrameBuffer (1) 报错
 
 **Q**：编码过程中，出现 `Failed to VPU_EncRegisterFrameBuffer (1)` 的报错。
 
 **A**：`vlc_buf_size` 设置过小，增大 size 值即可。
 
-#### video color range 问题
+### video color range 问题
 
 **Q**：使用 VPU 进行 H265 编码时，编码器是否会强制转换为 limit range(TV range) 输出？测试方法：用一段编码的 265 码流，直接用 ffmpeg 播放，发现解析出为 TV range。
 
@@ -123,15 +123,15 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 目前已经根据用户需求，将 VUI 信息中默认的 color range 模式改为 full range。
 
-#### 当编码大片蓝天时，出现了一些异常的条纹
+### 当编码大片蓝天时，出现了一些异常的条纹
 
 **Q**：当编码大片蓝天时，出现了一些异常的条纹形状是什么原因？
 
-![蓝天条纹现象](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-blue-sky.png)
+![蓝天条纹现象](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-blue-sky.png)
 
 **A**：原始图片中存在较多的噪点，压缩后噪点分布不规律，看着像是条纹状，其实是对噪点压缩导致，这种现象属于 codec 硬件特性，无法消除。
 
-#### CBR 或 AVBR 模式编码输出码率不符合预期
+### CBR 或 AVBR 模式编码输出码率不符合预期
 
 **Q**：用户使用 CBR 和 AVBR 模式时发现实际输出码流的码率和设置的目标码率偏差超过 10%。
 
@@ -143,7 +143,7 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 3. 编码帧数是否足够多，码率控制过程调节质量参数需要一定时间。
 
-#### 高优先级编码限制问题
+### 高优先级编码限制问题
 
 **Q**：多路编码场景中，如何让某一路优先处理以获取最短延迟？
 
@@ -171,7 +171,7 @@ ret = hb_mm_mc_insert_user_data(context, uuid, length);
 
 4. 启停场景影响说明：同时发生多路编解码通道启停时，高优任务的帧延迟会不可避免地产生波动。
 
-#### 编码器 Task Buffer 内存占用较高问题
+### 编码器 Task Buffer 内存占用较高问题
 
 **Q**：编码器的 Task Buffer 内存占用为什么这么高，能否降低？
 
@@ -191,21 +191,21 @@ ret = hb_mm_mc_set_startup_config(context, &startup_config);
 
 ## JPU 编解码问题
 
-#### jpg 工具查看 1080p 图片时出现绿边
+### jpg 工具查看 1080p 图片时出现绿边
 
 **Q**：使用 jpg 工具查看 1920x1080 图片时，底下会出现绿边。
 
-![1080p 绿边现象](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-green-edge.png)
+![1080p 绿边现象](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-green-edge.png)
 
 **A**：这是因为当前 ip 进行编码时按照 16 位对齐进行，假如到最后如果是 8 位对齐而不是 16 位对齐，那么编码器就会在后面补齐，这部分补齐的数据是随机产生的，不属于有效数据。
 
-#### 1080p 图片多次编码后 md5 不同
+### 1080p 图片多次编码后 md5 不同
 
 **Q**：同一个 1080p yuv 图片被多次编码后，即使编码的参数都相同，产生的 jpg 图片其 md5 结果有可能不同。
 
 **A**：因为当前 ip 进行编码时按照 16 位对齐进行，假如到最后是 8 位对齐而不是 16 位对齐，那么编码器就会在后面进行补齐，这部分补齐的数据是随机产生的，不属于有效数据。
 
-#### 外部输入 Buffer 映射个数限制
+### 外部输入 Buffer 映射个数限制
 
 **Q**：用户在使用外部输入 Buffer 模式（零拷贝）时，传入超过 32 个 Buffer 地址报异常 "Fail to get map idx"。
 
@@ -213,11 +213,11 @@ ret = hb_mm_mc_set_startup_config(context, &startup_config);
 
 ## 录制相关问题
 
-#### 封装后的 MP4 时间较预期变长
+### 封装后的 MP4 时间较预期变长
 
 **Q**：muxer 封装后生成的 MP4 播放时间预计为 30 秒，但实际播放 mp4 文件时时间显示为 1 个小时。
 
-![MP4 时间变长现象](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-mp4-time.png)
+![MP4 时间变长现象](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/faq-mp4-time.png)
 
 **A**：主要是因为 video 的时间基设置不准确导致。
 

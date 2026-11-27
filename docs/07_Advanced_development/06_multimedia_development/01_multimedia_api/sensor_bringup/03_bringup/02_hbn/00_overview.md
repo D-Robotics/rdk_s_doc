@@ -10,7 +10,7 @@ description: "HBN camera 点亮流程：dts、sensor_module_t、vp_sensor、效�
 
 - 本章节概述 Camera Bring-Up 的流程，帮助读者快速掌握 Camera 框架。
 - 说明如何新增 Camera 配置并成功点亮 Camera。
-- 各 Sensor 厂家具体实现（驱动、App、sample程序验证）与常见问题请参见下方「文档组成」中的对应章节。
+- 各 Sensor 厂家具体实现（驱动、App、sample 程序验证）与常见问题请参见下方「文档组成」中的对应章节。
 
 ## 文档组成
 
@@ -105,18 +105,18 @@ S600 有 6 路 MIPI RX（`mipi_host0-5`）、6 个 vcon（`vin_vcon0-5`）、I2C
 ```
 :::
 
-### 1. sensor GPIO 配置
+### sensor GPIO 配置
 
 - GPIO number 需要在 dts vcon 中与 MIPI RX 端口进行绑定。
 - GPIO 编号配置参考 [GPIO 驱动调试指南](/Advanced_development/driver_development/driver_gpio_dev) 和 [GPIO 应用 hb_gpioinfo 工具介绍](/Advanced_development/driver_development/driver_gpio_dev#查看-gpio-使用状态)。
 
-### 2. sensor I2C 配置
+### sensor I2C 配置
 
 - I2C bus number 需要在 dts vcon 中与 MIPI RX 端口进行绑定。
 - I2C 配置参考 [I2C 驱动调试指南](/Advanced_development/driver_development/driver_i2c_dev) [设备树配置](/Advanced_development/driver_development/driver_i2c_dev#设备树配置)。
 
 
-### 4. sensor LPWM 配置
+### sensor LPWM 配置
 
 - lpwm channel number 需要在 dts vcon 中与 MIPI RX 端口进行绑定。
 - lpwm 配置参考 [PWM 驱动调试指南](/Advanced_development/driver_development/driver_pwm) [设备树配置](/Advanced_development/driver_development/driver_pwm#设备树配置)。
@@ -146,7 +146,7 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 | ---------- | ------------------------- | ------------------- |
 | 文件名     | `<sensor_name>_utility.c` | `sc132gs_utility.c` |
 | 结构体名   | `<sensor_name>`           | `sc132gs`           |
-| module字段 | `<sensor_name>`           | `"sc132gs"`         |
+| module 字段 | `<sensor_name>`           | `"sc132gs"`         |
 
 **2. sensor_module_t 接口实现**
 
@@ -166,12 +166,12 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 
 **3. 3A 控制**
 
-对于 3A 控制，即userspace_control，本平台支持驱动注册和应用层回调两种方式，默认使用应用层回调函数的方式，接口定义如下：
+对于 3A 控制，即 userspace_control，本平台支持驱动注册和应用层回调两种方式，默认使用应用层回调函数的方式，接口定义如下：
 
 | 函数                | 功能               | 传入参数                                                                                                                                                                                        |
 | ------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `aexp_gain_control` | sensor 增益控制    | info：sensor 总线信息<br />mode：sensor 运行模式；linear/hdr/pwl<br />again：sensor again 参数，最大4个<br />dgain：sensor dgain 参数，最大4个<br />gain_num：sensor gain 参数个数              |
-| `aexp_line_control` | sensor 曝光控制    | info：sensor 总线信息<br />mode：sensor 运行模式；linear/hdr/pwl<br />line：sensor line 参数，最大4个<br />line_num：sensor line 参数个数                                                       |
+| `aexp_gain_control` | sensor 增益控制    | info：sensor 总线信息<br />mode：sensor 运行模式；linear/hdr/pwl<br />again：sensor again 参数，最大 4 个<br />dgain：sensor dgain 参数，最大 4 个<br />gain_num：sensor gain 参数个数              |
+| `aexp_line_control` | sensor 曝光控制    | info：sensor 总线信息<br />mode：sensor 运行模式；linear/hdr/pwl<br />line：sensor line 参数，最大 4 个<br />line_num：sensor line 参数个数                                                       |
 | `awb_control`       | sensor 端 awb 控制 | info：sensor 总线信息<br />mode：sensor 运行模式；linear/hdr/pwl<br />rgain：sensor rgain<br />bgain：sensor bgain<br />grgain：sensor rrgain<br />gbgain：sensor gbgain                        |
 | `userspace_control` | hal 层各类控制开关 | port：sensor 端口号<br />enable：使能用户回调控制开关，默认全部关闭<br />位定义：<br />- `HAL_LINE_CONTROL` 0x00000001<br />- `HAL_GAIN_CONTROL` 0x00000002<br />- `HAL_AWB_CONTROL` 0x00000004 |
 
@@ -185,7 +185,7 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 6. **analog_gain_max / digital_gain_max**：a_gain / d_gain 最大倍率，格式为 `索引值 × 8192`。与 gain_lut 最大索引对应，ISP 在此范围内分配 gain。
 7. **exposure_time_min / exposure_time_max**： 分别为短曝光每帧最小/最大曝光行数。
 8. **exposure_time_long_max**：长曝光每帧最大曝光行数，HDR sensor 会用到。
-9. **sensor 初始增益曝光值**，供isp ae算法使用，影响前几帧图像的亮度。如果关心前几帧图像亮度需要配置，配置值为sensor setting的寄存器初始值的index值和曝光行数。
+9. **sensor 初始增益曝光值**，供 isp ae 算法使用，影响前几帧图像的亮度。如果关心前几帧图像亮度需要配置，配置值为 sensor setting 的寄存器初始值的 index 值和曝光行数。
 
     - **analog_gain_init**: sensor analog gain 初始值。可选配置。
     - **digital_gain_init**：sensor digital gain 初始值。可选配置。
@@ -194,14 +194,14 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 10. **bayer 格式**：sensor 输出的原始图像像素排列模式，核心参数包括 `bayer_pattern`（像素排列类型，如 RGGB/RCCC/RIrGB/RGIrB）和 `bayer_start`（RGGB 模式的起始像素，如 R/Gr/Gb/B），一般 sensor Spec 中有描述。
     - 在 Bayer 模式中，图像传感器的每个像素点上放置了一个滤光片，只允许特定颜色的光通过，滤光片按照特定的图案排列，以 sc230ai 中描述 `bayer_start` 为 B(0,0) 为例。
 
- ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/hbn_overview/image_20260105-143431.png)
+ ![sc230ai Bayer 起始像素示例](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/hbn_overview/image_20260105-143431.png)
 
 
 ### Gain LUT 表 生成方式
 
 - 为了快速生成 gain_lut 表，BSP 提供了 gain_table.xlsx 表格，只需要填写 C4 的 增益倍数推导寄存器值的公式，即可快速生成 gain_lut 表
-- gain_lut 表一般适用于 OmniVision 的sensor（gain控制一般以整数+小数线性组合）和Sony 的 sensor （gain控制一般以线性公式进行控制）
-- SmartSens 的sensor gain控制，一般采用的是 离散档位 + 精细调节,通常查表是最快的，不需要使用gain_table.xlsx 表格生成
+- gain_lut 表一般适用于 OmniVision 的 sensor（gain 控制一般以整数+小数线性组合）和 Sony 的 sensor （gain 控制一般以线性公式进行控制）
+- SmartSens 的 sensor gain 控制，一般采用的是 离散档位 + 精细调节,通常查表是最快的，不需要使用 gain_table.xlsx 表格生成
 - gain_table.xlsx 表格的存放位置在系统 BSP 源码包的 `source/hobot-camera/drivers/sensor` 下
 
 ### 驱动部署流程
@@ -209,7 +209,7 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 1. 进入 `source/hobot-camera/drivers` 目录，执行 `make` 编译 sensor 库。
 2. 将 `source/hobot-camera/debian/usr/hobot/lib/sensor` 下生成的 `lib<sensor_name>.so.*` 拷贝到板端 `/usr/hobot/lib/sensor/`。
 
-**各sensor厂家具体实现（init/start/stop/power、linear_data_init、gain_lut 生成、aexp_gain/line/userspace_control）请参见：**
+**各 sensor 厂家具体实现（init/start/stop/power、linear_data_init、gain_lut 生成、aexp_gain/line/userspace_control）请参见：**
 
 - [SmartSens Sensor Bring-Up](/Advanced_development/multimedia_development/multimedia_api/sensor_bringup/bringup/hbn/mipi/smartsens)
 
@@ -217,7 +217,7 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 
 ## 添加 camera App 代码
 
-参考 BSP 中 `source/hobot-spdev/src/vp_sensors`，配置 MIPI、CIM、camera sensor、LPWM、ISP 等。需根据 sensor 分辨率、帧率、数据格式填写`vp_sensor_config_t`。
+参考 BSP 中 `source/hobot-spdev/src/vp_sensors`，配置 MIPI、CIM、camera sensor、LPWM、ISP 等。需根据 sensor 分辨率、帧率、数据格式填写 `vp_sensor_config_t`。
 
 - **源码路径**：`source/hobot-spdev/src/vp_sensors`
 - **部署**：将编译得到的 get_vin_data、get_isp_data 等拷贝到设备执行测试。编译方法见对应平台示例概览：
@@ -232,7 +232,7 @@ dts 配置正确，并且硬件 sensor 正确连接后，手动输入命令供�
 
 ### vp_sensor_config_t 配置项
 
-vp_sensor_config_t 参数配置 主要包含：mipi 配置、camera sensor 配置、CIM 配置、LPWM 配置 和 ISP 配置，详细参照[数据结构](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
+vp_sensor_config_t 参数配置 主要包含：mipi 配置、camera sensor 配置、CIM 配置、LPWM 配置 和 ISP 配置，详细参照 [数据结构](/Advanced_development/multimedia_development/multimedia_api/hbn_api)。
 
 ---
 

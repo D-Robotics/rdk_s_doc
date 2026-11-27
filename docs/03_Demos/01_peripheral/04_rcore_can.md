@@ -129,7 +129,7 @@ ip link set can0 up
 | `-i <canX>` | CAN 接口名，支持多路（如 `can0`、`can1`） |
 | `-f <0/1>` | 是否启用 CAN FD 模式 |
 | `-l <byte>` | 数据长度，CAN FD 建议 64 |
-| `-p <ms>` | 发送周期，1 表示 1000 FPS |
+| `-p <ms>` | 发送周期，1 表示 1000 fps |
 | `-w <us>` | 延迟预警阈值，超过计入 `ALM_RATIO` |
 | `-t <id>` / `-r <id>` | 发送 / 接收 CAN ID |
 | `-L` | 开启详细延迟日志 |

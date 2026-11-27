@@ -19,7 +19,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 工作原理
 
-Linux Thermal 子系统是内核的温度控制框架，通过"测温—判断—降温"闭环维持芯片温度在安全区间：温度传感器采集温度，经 Thermal Zone 与 Governor 判定后，由 Cooling Device 执行降温动作。CPU 频率调节独立于 Thermal，由 cpufreq 子系统的 Governor 选定 OPP（Operating Performance Points，运行性能点），经时钟协议下发到固件完成变频。Thermal 闭环由三个角色协作完成：
+Linux Thermal 子系统是内核的温度控制框架，通过“测温—判断—降温”闭环维持芯片温度在安全区间：温度传感器采集温度，经 Thermal Zone 与 Governor 判定后，由 Cooling Device 执行降温动作。CPU 频率调节独立于 Thermal，由 cpufreq 子系统的 Governor 选定 OPP（Operating Performance Points，运行性能点），经时钟协议下发到固件完成变频。Thermal 闭环由三个角色协作完成：
 
 | 角色 | 概念 | 职责 |
 | --- | --- | --- |
@@ -29,7 +29,7 @@ Linux Thermal 子系统是内核的温度控制框架，通过"测温—判断�
 
 ### Trip Point 触发机制
 
-每个温区下挂载若干 **Trip Point（触发点）**，即"当温度达到 X 时执行 Y 动作"的规则。随温度从低到高升高，降温动作逐级升级：
+每个温区下挂载若干 **Trip Point（触发点）**，即“当温度达到 X 时执行 Y 动作”的规则。随温度从低到高升高，降温动作逐级升级：
 
 ```text
 温度升高 → 风扇调速 → CPU/BPU 限频 → hot 警告 → 关机保护
@@ -92,8 +92,8 @@ S100 注册 5 个温区（`thermal_zone0`~`thermal_zone4`），与 5 个传感�
 | 触发点 | 默认温度 | 类型 | 动作 |
 | --- | --- | --- | --- |
 | `trip_point_0_temp` | 120℃ | critical | 系统关机 |
-| `trip_point_1_temp` | 43℃ | passive | 风扇低速档（2~5） |
-| `trip_point_2_temp` | 65℃ | passive | 风扇高速档（6~10） |
+| `trip_point_1_temp` | 43℃ | passive | 风扇低速档（2-5） |
+| `trip_point_2_temp` | 65℃ | passive | 风扇高速档（6-10） |
 | `trip_point_3_temp` | 95℃ | passive | CPU 降频 |
 
 ### BPU 主温区（thermal_zone4）
@@ -218,7 +218,7 @@ echo user_space > /sys/class/thermal/thermal_zone0/policy
 
 ### 调整温度阈值
 
-以"CPU 主温区 85℃ 开始降频"为例，将降频触发点改为 85℃（`thermal_zone0` 的降频 trip 为 `trip_point_3`）：
+以“CPU 主温区 85℃ 开始降频”为例，将降频触发点改为 85℃（`thermal_zone0` 的降频 trip 为 `trip_point_3`）：
 
 ```bash
 echo 85000 > /sys/class/thermal/thermal_zone0/trip_point_3_temp
@@ -230,7 +230,7 @@ echo 85000 > /sys/class/thermal/thermal_zone0/trip_point_3_temp
 
 ### 固定风扇档位
 
-风扇档位范围 0~10，0 为关闭，10 为满转速。固定档位须先将 `thermal_zone0` 切换为 `user_space` 策略，再设置档位；否则 `step_wise` 会按温度自动改回：
+风扇档位范围 0-10，0 为关闭，10 为满转速。固定档位须先将 `thermal_zone0` 切换为 `user_space` 策略，再设置档位；否则 `step_wise` 会按温度自动改回：
 
 ```bash
 # 查看风扇降温设备与当前档位
@@ -301,7 +301,7 @@ userspace
 
 ### 持久化配置
 
-上述 sysfs 修改仅在本次启动有效，重启后恢复默认。需持久化时，将配置命令写入 systemd 服务或 `/etc/rc.local`，开机自动执行，参见[开机自启动配置](./06_self_start.md)。
+上述 sysfs 修改仅在本次启动有效，重启后恢复默认。需持久化时，将配置命令写入 systemd 服务或 `/etc/rc.local`，开机自动执行，参见 [开机自启动配置](./06_self_start.md)。
 
 ### 调整关机温度
 
@@ -357,7 +357,7 @@ S600 内置 PVT（Process-Voltage-Temperature，工艺-电压-温度）监测单
 | DDR | 4 | `DDR0-TS0` ~ `DDR3-TS0` | `temp8_input` ~ `temp11_input` |
 | BPU | 8 | `BPU0-TS00` ~ `BPU3-TS01` | `temp12_input` ~ `temp19_input` |
 
-温度精度为千分之一摄氏度，量程 -40~125℃。所有 PVT 温度传感器统一通过 hwmon 子系统上报，位于 `/sys/class/hwmon/hwmon1/`。
+温度精度为千分之一摄氏度，量程 -40 至 125℃。所有 PVT 温度传感器统一通过 hwmon 子系统上报，位于 `/sys/class/hwmon/hwmon1/`。
 
 :::note 四个 hwmon 设备
 S600 共有 4 个 hwmon 设备：hwmon0 为 `emc2305`（风扇控制器），hwmon1 为 `pvt_hwmon`（温度传感器），hwmon2 与 hwmon3 为以太网 PHY（Physical Layer，物理层）。读取温度统一使用 hwmon1。
@@ -369,23 +369,23 @@ S600 注册 19 个温区（`thermal_zone0`~`thermal_zone18`），与 19 个传�
 
 | 域 | 温区范围 | 主控温区 | 主控温区 trip 数 |
 | --- | --- | --- | --- |
-| CPU | zone0~6 | `thermal_zone2` | 5 |
-| DDR | zone7~10 | —（无降温设备） | 各 2 |
-| BPU | zone11~18 | `thermal_zone16` | 5 |
+| CPU | zone0-6 | `thermal_zone2` | 5 |
+| DDR | zone7-10 | —（无降温设备） | 各 2 |
+| BPU | zone11-18 | `thermal_zone16` | 5 |
 
 ### CPU 主温区（thermal_zone2）
 
 | 触发点 | 默认温度 | 类型 | 动作 |
 | --- | --- | --- | --- |
-| `trip_point_0_temp` | 45℃ | active | 风扇低速档（2~5） |
-| `trip_point_1_temp` | 65℃ | active | 风扇高速档（6~10） |
+| `trip_point_0_temp` | 45℃ | active | 风扇低速档（2-5） |
+| `trip_point_1_temp` | 65℃ | active | 风扇高速档（6-10） |
 | `trip_point_2_temp` | 95℃ | passive | CPU 限频 |
 | `trip_point_3_temp` | 110℃ | hot | 高温警告 |
 | `trip_point_4_temp` | 115℃ | critical | 系统关机 |
 
 其余 CPU 温区（zone0/1/3/4/5/6）仅含 1 个 `critical`（115℃）触发点。
 
-### DDR 温区（thermal_zone7~10）
+### DDR 温区（thermal_zone7-10）
 
 每个 DDR 温区含 2 个触发点：
 
@@ -398,13 +398,13 @@ S600 注册 19 个温区（`thermal_zone0`~`thermal_zone18`），与 19 个传�
 
 | 触发点 | 默认温度 | 类型 | 动作 |
 | --- | --- | --- | --- |
-| `trip_point_0_temp` | 45℃ | active | 风扇低速档（2~5） |
-| `trip_point_1_temp` | 65℃ | active | 风扇高速档（6~10） |
+| `trip_point_0_temp` | 45℃ | active | 风扇低速档（2-5） |
+| `trip_point_1_temp` | 65℃ | active | 风扇高速档（6-10） |
 | `trip_point_2_temp` | 95℃ | passive | BPU 限频 |
 | `trip_point_3_temp` | 110℃ | hot | 高温警告 |
 | `trip_point_4_temp` | 115℃ | critical | 系统关机 |
 
-其余 BPU 温区（zone11~15、17、18）仅含 1 个 `critical`（115℃）触发点。
+其余 BPU 温区（zone11-15、17、18）仅含 1 个 `critical`（115℃）触发点。
 
 ## 降温设备
 
@@ -527,7 +527,7 @@ echo user_space > /sys/class/thermal/thermal_zone2/policy
 
 ### 调整温度阈值
 
-以"CPU 主温区 85℃ 开始降频"为例，将降频触发点改为 85℃（`thermal_zone2` 的降频 trip 为 `trip_point_2`）：
+以“CPU 主温区 85℃ 开始降频”为例，将降频触发点改为 85℃（`thermal_zone2` 的降频 trip 为 `trip_point_2`）：
 
 ```bash
 echo 85000 > /sys/class/thermal/thermal_zone2/trip_point_2_temp
@@ -539,7 +539,7 @@ echo 85000 > /sys/class/thermal/thermal_zone2/trip_point_2_temp
 
 ### 固定风扇档位
 
-风扇档位范围 0~10，0 为关闭，10 为满转速。S600 的风扇同时受 `thermal_zone2` 与 `thermal_zone16` 两个温区控制，固定档位时**两个温区均须切换为 `user_space` 策略**，仅切换其一仍会被另一温区按温度改回：
+风扇档位范围 0-10，0 为关闭，10 为满转速。S600 的风扇同时受 `thermal_zone2` 与 `thermal_zone16` 两个温区控制，固定档位时**两个温区均须切换为 `user_space` 策略**，仅切换其一仍会被另一温区按温度改回：
 
 ```bash
 # 查看风扇降温设备与当前档位
@@ -611,7 +611,7 @@ userspace
 
 ### 持久化配置
 
-上述 sysfs 修改仅在本次启动有效，重启后恢复默认。需持久化时，将配置命令写入 systemd 服务或 `/etc/rc.local`，开机自动执行，参见[开机自启动配置](./06_self_start.md)。
+上述 sysfs 修改仅在本次启动有效，重启后恢复默认。需持久化时，将配置命令写入 systemd 服务或 `/etc/rc.local`，开机自动执行，参见 [开机自启动配置](./06_self_start.md)。
 
 ### 调整关机温度
 

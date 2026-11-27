@@ -61,7 +61,7 @@ import DocScope from '@site/src/components/DocScope';
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_vpu`
 - 目录结构
-```
+```text
 single_pipe_vin_isp_ynr_pym_vpu
 ├── Makefile
 └── single_pipe_vin_isp_ynr_pym_vpu.c
@@ -114,7 +114,7 @@ index: 8  sensor_name: isx031_gmsl-30fps        config_file:linear_1920x1536_yuv
 
 日志示例如下所示：
 
-```
+```text
 # ./single_pipe_vin_isp_ynr_pym_vpu -s 0
 Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
 mipi mclk is not configed.
@@ -308,12 +308,12 @@ pym_output_nv12_chn5_60x32_stride_64_count_0.yuv
 
 ### 功能概述
 
-`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC`模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后到达 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片。
+`single_pipe_vin_isp_ynr_pym_gdc` 示例串联 `VIN`，`ISP`，`PYM`，`GDC` 模块，是最基础的模块串联示例之一。 Camera Sensor 图像经过 VIN、 ISP、 PYM 模块后到达 GDC 模块， GDC 根据 GDC bin 文件进行变换，生成 YUV 图片。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc`
 - 目录结构
-```
+```text
 single_pipe_vin_isp_ynr_pym_gdc
 ├── Makefile
 └── single_pipe_vin_isp_ynr_pym_gdc.c
@@ -373,7 +373,7 @@ link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的
 
 日志示例如下所示：
 
-```
+```text
 # ./single_pipe_vin_isp_ynr_pym_gdc -s 0 -f ../../vp_sensors/gdc_bin/imx219_gdc.bin
 Using index:0  sensor_name:imx219-30fps  config_file:linear_1920x1080_raw10_30fps_1lane.c
 mipi mclk is not configed.
@@ -430,7 +430,7 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21680305428000.yuv
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_gdc_vpu`
 - 目录结构
-```
+```text
 single_pipe_vin_isp_ynr_pym_gdc_vpu
 ├── Makefile
 └── single_pipe_vin_isp_ynr_pym_gdc_vpu.c
@@ -482,8 +482,8 @@ index: 15 sensor_name: sc233hgs_hsmt_vc3        config_file:linear_1920x1200_raw
 :::caution 注意
 - 非 Serdes sensor 无需设置 link 和 mipi
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-- 目前仅有 mipi host 0~3 可以使用
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./01_overview.md#示例使用指南)》
+- 目前仅有 mipi host 0-3 可以使用
 :::
 
 #### 运行效果
@@ -557,7 +557,7 @@ gdc_handle_296805_chn0_1920x1080_stride_1920_frameid_91_ts_21973302504675.yuv
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/multi_pipe_vin_isp_ynr_pym_gdc_vpu`
 - 目录结构
-```
+```text
 multi_pipe_vin_isp_ynr_pym_gdc_vpu
 ├── Makefile
 └── multi_pipe_vin_isp_ynr_pym_gdc_vpu.c
@@ -613,7 +613,7 @@ index: 15 sensor_name: sc233hgs_hsmt_vc3        config_file:linear_1920x1200_raw
   - `sensor`：传感器索引，必须参数，可以有多个参数，参考传感器列表。
   - `link`： Serdes 类型的 Sensor 接入的 Link Port (MIPI 类型的 Sensor 忽略此参数 ), 比如接入的是 Port A，指定为 0，即在 `-c` 配置串中写 `link=0`
   - `mipi`： Serdes 类型的 Sensor 接入的 mipi host
-  - `channel`： PYM 通道索引，可选参数，默认为 0 ，可以设置为 [0~5]。
+  - `channel`： PYM 通道索引，可选参数，默认为 0 ，可以设置为 [0-5]。
   - `type`：编码类型，可选参数，默认为 h264 ，可以设置为 [h264, h265]。
   - `output`：保存编码流数据到文件，可选参数，默认为 `pipeline[xx]_[width]x[height]_[xxx]fps.[type]`。
 
@@ -628,8 +628,8 @@ index: 15 sensor_name: sc233hgs_hsmt_vc3        config_file:linear_1920x1200_raw
 2. 如果需要调整视频通路的数量，增减 `-c` 参数集合的数量即可
 3. 非 Serdes sensor 无需设置 link mipi
 4. link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-5. mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
-6. 目前仅有 mipi host 0~3 可以使用
+5. mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./01_overview.md#示例使用指南)》
+6. 目前仅有 mipi host 0-3 可以使用
 
 #### 运行效果
 `multi_pipe_vin_isp_ynr_pym_gdc_vpu` 的输出：每条视频处理通道（ pipeline）都会将处理后的视频流编码为 H.264/H.265 格式并保存。
@@ -724,7 +724,7 @@ All deserial link info:
 
 运行时会保存如下文件：
 
-```
+```text
 pipeline0_1920x1080_30fps.h264
 pipeline1_1280x720_30fps.h264
 ```
@@ -757,7 +757,7 @@ pipeline1_1280x720_30fps.h264
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_pipe_vin_isp_ynr_pym_display`
 - 目录结构
 
-```
+```text
 single_pipe_vin_isp_ynr_pym_display
 ├── Makefile
 ├── osd_demo.c
@@ -844,7 +844,7 @@ index: 0  sensor_name: ...
 
 启动日志会打印输出分辨率、可用的 PYM 通道和最终选择：
 
-```
+```text
 Display output resolution (native): 1920x1080
 PYM display candidates (6, sensor 1920x1080, target/output 1920x1080): chn0:1920x1080 chn1:960x540 chn2:480x270 ...
 Using DRM zero-copy backend: display pym chn0 1920x1080, output 1920x1080 (plane upscale + letterbox)
@@ -871,7 +871,7 @@ Using DRM zero-copy backend: display pym chn0 1920x1080, output 1920x1080 (plane
 - 代码位置 `/app/multimedia_samples/sample_pipeline/multi_pipe_vin_isp_ynr_pym_stitch_display`
 - 目录结构
 
-```
+```text
 multi_pipe_vin_isp_ynr_pym_stitch_display
 ├── Makefile
 └── multi_pipe_vin_isp_ynr_pym_stitch_display.c
@@ -938,7 +938,7 @@ index: 0  sensor_name: ...
 # ./multi_pipe_vin_isp_ynr_pym_stitch_display -c "sensor=0" -c "sensor=4 link=0" -d wall
 ```
 
-```
+```text
 Display open: mode=wall out=1920x1080 grid=2x1
   pipe 0 -> pym chn1 layer 960x540
   pipe 1 -> pym chn1 layer 960x540
@@ -962,9 +962,9 @@ stitch vnode up: 2 pipes, wall 1920x1080, grid 2x1
 ## uvc_capture_sample
 
 ### 功能概述
-`uvc_capture_sample `是一个测试 uvc camera (USB 接口的摄像头)视频采集通路的程序,  完成 uvc camera 的图像采集并保存输出的图片，支持显示 ISP 相关信息。
+`uvc_capture_sample ` 是一个测试 uvc camera (USB 接口的摄像头)视频采集通路的程序,  完成 uvc camera 的图像采集并保存输出的图片，支持显示 ISP 相关信息。
 
-将 UVC camera 接入开发板的 USB 接口（J19/J20）即可使用本示例，接口详情参考 [USB 接口 (J19/J20)](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#usb-接口-j19j20)。
+将 UVC camera 接入开发板的 USB 接口（J19/J20）即可使用本示例，接口详情参考 [USB 接口 (J19/J20)](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#usb-接口-45)。
 
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/uvc_capture_sample`
@@ -983,7 +983,7 @@ uvc_capture_sample
 ```
 
 ### 编译
-- 进入 uvc_capture_sample 目录，执行`make`编译
+- 进入 uvc_capture_sample 目录，执行 `make` 编译
 - 输出成果物是 uvc_capture_sample 源码目录下的 `uvc_capture_sample`
 
 ### 运行
@@ -1013,7 +1013,7 @@ Usage: ./uvc_capture_sample
 - `-d, --dump_file`
   - 是否保存图像文件。启用此选项会将捕获的图像保存为文件。
 - `-F, --format <fmt>`
-  - 设置图像格式，根据 uvc camera 选择支持的格式：RAW8、RAW10、RAW12、YUYV、NV12、NV16、RGB888X格式。
+  - 设置图像格式，根据 uvc camera 选择支持的格式：RAW8、RAW10、RAW12、YUYV、NV12、NV16、RGB888X 格式。
 - `-l, --loop_cnt <num>`
   - 设置采集循环的次数（即捕获多少帧图像）。
 - `-H, --height <px>`
@@ -1041,11 +1041,11 @@ Usage: ./uvc_capture_sample
 #### 运行前的准备
 
 插上 USB 摄像头后，查看通过如下两个命令，获取 `uvc_capture_sample` 需要的参数信息：
-1. `v4l2-ctl --list-devices`: 查看有哪些USB 节点
-2. `v4l2-ctl --list-formats-ext --device /dev/videoX`： 查看 USB节点的参数信息
+1. `v4l2-ctl --list-devices`: 查看有哪些 USB 节点
+2. `v4l2-ctl --list-formats-ext --device /dev/videoX`： 查看 USB 节点的参数信息
 
 举例说明：
-1. 查看有哪些USB 节点
+1. 查看有哪些 USB 节点
 
 ```sh
 v4l2-ctl --list-devices
@@ -1129,7 +1129,7 @@ pipe(0)Test thread 281473524101408---join done.
 ### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_pipeline/single_3dgpu_bpu`
 - 目录结构
-```
+```text
 single_3dgpu_bpu
 ├── Makefile
 ├── bpu_mobilenetv2.c
@@ -1184,7 +1184,7 @@ BPU model is hard-coded to: /opt/hobot/model/s100/basic/mobilenetv2_224x224_nv12
 
 日志示例如下所示：
 
-```
+```text
 # ./single_3dgpu_bpu -i nv12_1920x1080_beach.yuv -W 1920 -H 1080
 [UCP]: log level = 3
 [UCP]: UCP version = 3.13.6

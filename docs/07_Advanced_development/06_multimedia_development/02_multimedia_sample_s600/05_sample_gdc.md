@@ -15,7 +15,7 @@ sample_gdc 目录下是用于演示如何使用 GDC 的示例程序，主要功�
 3. `gdc_static_valid`: 读取本地 `gdc.bin` 文件和原始 YUV 文件送入 GDC 做变换处理后保存为 YUV 文件。
 4. `gdc_stress_test`: 读取本地 `gdc.bin` 文件并将原始 YUV 文件循环送入 GDC 做 GDC 性能测试。
 5. `gdc_equisolid`: 读取本地 NV12 的 YUV 图，把图片送入 GDC 做（全景 panoramic）校正处理。
-6. `gdc_transformation`: 读取本地的 json 配置文件，把图片送入 GDC 做180° 线性变换、圆柱形变换、等距变换和梯形校正+去畸变处理。
+6. `gdc_transformation`: 读取本地的 json 配置文件，把图片送入 GDC 做 180° 线性变换、圆柱形变换、等距变换和梯形校正+去畸变处理。
 
 ## 1-custom_config
 
@@ -40,15 +40,15 @@ sample_gdc 目录下是用于演示如何使用 GDC 的示例程序，主要功�
 
 ### 开发和使用流程
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/S600-gdc.jpg" alt="S600 GDC 数据流图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/S600-gdc.jpg" alt="S600 GDC 数据流图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 在 PC 上使用 `generate_custom_config.py` 程序生成 GDC 的矫正标定配置参数。
 
 - 准备棋盘格图片（chessboard.png）， 可以打印出来，或者用显示器预览。
 
-- 使用目标 Camera Sensor 在不同角度下拍摄棋盘格图片，拍摄15张左右，建议多拍一些。
+- 使用目标 Camera Sensor 在不同角度下拍摄棋盘格图片，拍摄 15 张左右，建议多拍一些。
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Checkerboard_Image.png" alt="棋盘格标定图片" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Checkerboard_Image.png" alt="棋盘格标定图片" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 以上面的棋盘格图片作为输入，执行以下 python 程序（确保系统支持 Python 3，和安装了 `opencv-python` 库），生成 GDC 的矫正标定参数文件（custom_config.txt）：
 
@@ -146,9 +146,9 @@ sample_gdc 目录下是用于演示如何使用 GDC 的示例程序，主要功�
 
   如果在图形化桌面的终端运行，会显示执行过程中的标定和矫正效果：
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Calibration_Process.png" alt="标定流程" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Calibration_Process.png" alt="标定流程" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-  <img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Correction_Effect.png" alt="矫正效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+  <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Correction_Effect.png" alt="矫正效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 generate_custom_config.py 的选项参数：
 
@@ -296,8 +296,8 @@ gdc_static_valid 的选项参数说明：
 参数选项：
 
 - `c, --config`：指定 gdc.bin 配置文件
-- `i, --input`：指定输入 NV12图像
-- `o, --output`：指定输出 NV12图像
+- `i, --input`：指定输入 NV12 图像
+- `o, --output`：指定输出 NV12 图像
 - `w, --iw`：指定输入图像水平方向分辨率（宽）
 - `h, --ih`：指定输入图像垂直方向分辨率（高）
 - `x, --ow`：指定输出图像水平方向分辨率（宽）（可选），默认和 --iw 保持一样
@@ -390,8 +390,8 @@ gdc_stress_test 的选项参数说明：
 参数选项：
 
 - `c, --config`：指定 gdc.bin 配置文件
-- `i, --input`：指定输入 NV12图像
-- `o, --output`：指定输出 NV12图像
+- `i, --input`：指定输入 NV12 图像
+- `o, --output`：指定输出 NV12 图像
 - `w, --iw`：指定输入图像水平方向分辨率（宽）
 - `h, --ih`：指定输入图像垂直方向分辨率（高）
 - `x, --ow`：指定输出图像水平方向分辨率（宽）（可选），默认和 --iw 保持一样
@@ -507,8 +507,8 @@ gdc_equisolid 的选项参数说明：
 
 参数选项：
 
-- `i, --input`：指定输入 NV12图像
-- `o, --output`：指定输出 NV12图像（可选）
+- `i, --input`：指定输入 NV12 图像
+- `o, --output`：指定输出 NV12 图像（可选）
 - `w, --iw`：指定输入图像水平方向分辨率（宽）
 - `h, --ih`：指定输入图像垂直方向分辨率（高）
 - `f, --feedback`：使用回灌的方式。
@@ -537,13 +537,13 @@ handle 34661 GDC dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800
 
 ### 功能概述
 
-本文的 gdc_transformation 实现 GDC 模块将回灌输入的图像进行180° 线性变换、圆柱形变换、等距变换和梯形校正+去畸变。
+本文的 gdc_transformation 实现 GDC 模块将回灌输入的图像进行 180° 线性变换、圆柱形变换、等距变换和梯形校正+去畸变。
 
 ### 软件架构说明
 
-gdc_transformation 程序采用回灌流程，即从系统存储中读取原始 YUV 文件和 GDC Tool 生成的 json 文件，作为 GDC 的输入图像。 依赖`libgdcbin.so`将 GDC 坐标点通过计算，把图像的变换结果保存为本地 NV12 格式的 YUV 图。
+gdc_transformation 程序采用回灌流程，即从系统存储中读取原始 YUV 文件和 GDC Tool 生成的 json 文件，作为 GDC 的输入图像。 依赖 `libgdcbin.so` 将 GDC 坐标点通过计算，把图像的变换结果保存为本地 NV12 格式的 YUV 图。
 
-使用 GDC Tool 生成的 json 文件都在 gdc_res 目录下，当前 gdc_res 目录有四个 json 文件，变换效果分别是 Affine、Equisolid(cylinder)、Equidistant、Keystone+dewarping，gdc_transformation 会根据这四个 json 去 dump 出4张 YUV 图。
+使用 GDC Tool 生成的 json 文件都在 gdc_res 目录下，当前 gdc_res 目录有四个 json 文件，变换效果分别是 Affine、Equisolid(cylinder)、Equidistant、Keystone+dewarping，gdc_transformation 会根据这四个 json 去 dump 出 4 张 YUV 图。
 
 注意：gdc_res 目录下有几个 json 文件就会 dump 出几张 YUV 图片。
 
@@ -597,7 +597,7 @@ gdc_transformation 的选项参数说明：
 
 参数选项：
 
-- `i, --input`：指定输入 NV12图像
+- `i, --input`：指定输入 NV12 图像
 - `x, --ix`：指定输入图像水平方向分辨率（宽）
 - `y, --iy`：指定输入图像垂直方向分辨率（高）
 
@@ -630,11 +630,11 @@ Dump image to file(Equisolid_cylinder.yuv), size(2073600) + size1(1036800) succe
 #### 运行效果说明
 原始图像如下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Original_Image.png" alt="运行效果说明实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Original_Image.png" alt="运行效果说明实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-分别对每个 json 解析变换后，输出4张处理后的 NV12 格式的 YUV 图像，效果如下图所示：
+分别对每个 json 解析变换后，输出 4 张处理后的 NV12 格式的 YUV 图像，效果如下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Transformed_Effect.png" alt="变换效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/03_S600_multimedia_application/sample_gdc/Transformed_Effect.png" alt="变换效果" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## 常见问题
 

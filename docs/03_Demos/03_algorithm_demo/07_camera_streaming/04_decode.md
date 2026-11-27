@@ -13,7 +13,7 @@ import DocScope from '@site/src/components/DocScope';
 本示例演示如何使用 SP 解码/显示/VIO 与 BPU 组合，完成本地 H.264 文件 → 硬件解码（NV12）→ YOLOv5x 推理 → 叠加框到显示图层 的端到端流程。WebSocket 版见 [WebSocket YOLOv5x 推理 (Python)](./04_websocket_py.md)。
 
 :::tip
-示例代码位于板端 `/app/cdev_demo/bpu/decode_yolov5x_display_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+示例代码位于板端 `/app/cdev_demo/bpu/decode_yolov5x_display_sample/`，该代码已在开发板上经过实际验证，可直接编译运行。
 :::
 
 ## 前置条件

@@ -4,7 +4,7 @@ title: "Camera 调试 FAQ"
 description: "Camera sensor 常见错误码与排查方向"
 ---
 
-# Camera 调试FAQ
+# Camera 调试 FAQ
 
 下面是 sensor 常见的错误码及简单的排查方向：
 
@@ -18,7 +18,7 @@ description: "Camera sensor 常见错误码与排查方向"
 
 ## FAQ
 
-下面是 sensor点亮过程中常见问题和解决方法：
+下面是 sensor 点亮过程中常见问题和解决方法：
 
 ### 目录
 
@@ -31,9 +31,9 @@ description: "Camera sensor 常见错误码与排查方向"
 | **MIPI**   | 如何修改 MIPI 驱动电流                   | [如何修改 MIPI 驱动电流](#如何修改-mipi-驱动电流)                                     |
 | **MIPI**   | 如何查看 HOST(RX) 设备当前运行状态和配置 | [如何查看 HOST(RX) 设备当前运行状态和配置](#如何查看-hostrx-设备当前运行状态和配置)   |
 | **MIPI**   | 如何查看 HOST(RX) 设备寄存器             | [如何查看 HOST(RX) 设备寄存器](#如何查看-hostrx-设备寄存器)                           |
-| **MIPI**   | 如何打开 MIPI CIM 驱动的 log                 | [如何打开 MIPI CIM 驱动的 log](#如何打开-mipi-和cim-驱动的-log)                                 |
+| **MIPI**   | 如何打开 MIPI CIM 驱动的 log                 | [如何打开 MIPI CIM 驱动的 log](#如何打开-mipi-和-cim-驱动的-log)                                 |
 | **CIM**    | CIM 调试方法（cim_stat 状态查看）            | [CIM 调试方法](#cim-调试方法)                                                                   |
-| **LPWM**   | 如何查看 LPWM的配置                 | [如何查看 LPWM的配置](#如何查看lpwm的配置)                                 |
+| **LPWM**   | 如何查看 LPWM 的配置                 | [如何查看 LPWM 的配置](#如何查看-lpwm-的配置)                                 |
 | **Sensor** | Sensor 库 check 或 load error            | [Sensor 库 check 或 load error](#sensor-库-check-或-load-error)                       |
 | **Sensor** | Sensor 作为 slave mode 配置              | [Sensor 作为 slave mode 配置](#sensor-作为-slave-mode-配置)                           |
 | **图像**   | Dump 出的图带竖条纹问题                  | [Dump 出的图带竖条纹问题](#dump-出的图带竖条纹问题)                                   |
@@ -49,11 +49,11 @@ description: "Camera sensor 常见错误码与排查方向"
 
 使用 i2cdetect 命令探测总线 id，如果挂在 i2c bus 上的 sensor 可以被探测到，说明 sensor 接入正常，如下图：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-1.png)
+  ![i2cdetect 探测到 i2c bus 上 sensor 的输出](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-1.png)
 
 通过 logcat 可以看到 sensor init error, i2c 不通相关的 log
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-3.png)
+  ![logcat 输出 sensor init error 与 i2c 不通日志](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-3.png)
 
 **排查方法：**
 
@@ -94,7 +94,7 @@ description: "Camera sensor 常见错误码与排查方向"
 
 MIPI 无法进入 HS，可能有以下几种可能：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-4.jpg)
+  ![MIPI 无法进入 HS 的报错日志](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-4.jpg)
 
 **可能原因：**
 
@@ -146,7 +146,7 @@ static mipi_config_t mipi_config = {
 
 **MIPI PHY Fatal 报错**
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-5.png)
+  ![MIPI PHY Fatal 报错日志](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-5.png)
 
 MIPI PHY fatal 报错，为 MIPI 物理层报错，表明 sensor 到 SoC MIPI PHY 之间传输有问题，可能的原因如下：
 
@@ -169,7 +169,7 @@ MIPI PHY fatal 报错，为 MIPI 物理层报错，表明 sensor 到 SoC MIPI PH
 2. **示波器测量：**
    - 如果 sensor spec 没有提供，需要实际测量 MIPI data 管脚，一般示波器测量的图如下：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-8.png)
+  ![示波器测量 MIPI data 管脚波形](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-8.png)
 
    - 蓝色圈内为有效信号: 32ms，红色圈内为 blanking 信号，长度: 68ms，总长度为：100ms
    - 图像 height 为 1080，则传输 1080 个 pixel 用了 32ms，则加上 blanking 传输的 pixel，可计算出：
@@ -188,7 +188,7 @@ MIPI PHY fatal 报错，为 MIPI 物理层报错，表明 sensor 到 SoC MIPI PH
 2. **示波器测量：**
    - 如果 sensor spec 没有提供，需要实际测量 MIPI data 管脚，一般示波器测量的图如下：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-9.png)
+  ![示波器测量 MIPI data 管脚波形](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-9.png)
 
    - 蓝色圈内是一行有效数据信号，长度为 24.2us，红色圈内为 blanking 信号，长度：5.4us，总长度为 24.2 + 5.4 = 29.6us
    - 图像 width 为 1920，则传输 1920 个 pixel 用了 24.2us，则带上 blanking 传输的 pixel，可以计算出：
@@ -213,7 +213,7 @@ MIPI PHY fatal 报错，为 MIPI 物理层报错，表明 sensor 到 SoC MIPI PH
 **定义：**
 - Settle 是 MIPI 协议中的概念，先简单介绍一下 settle 信号：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-10.png)
+  ![MIPI settle 信号时序示意](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-10.png)
 
 - MIPI 从 LP 进入到 HS 状态时，硬件信号上可能会有一个脉冲信号
 - MIPI 接收器则需要通过延时 settle time，避开这个脉冲信号，再打开接收器，接收 MIPI 数据
@@ -228,7 +228,7 @@ MIPI PHY fatal 报错，为 MIPI 物理层报错，表明 sensor 到 SoC MIPI PH
 - Settle 值是一个范围 [0-120]
 - 如果设置不正确则会报 MIPI phy_fatal 错误，类似下图所示：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-5.png)
+  ![settle 设置不正确时的 MIPI PHY Fatal 报错](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-5.png)
 
 - 所以我们可以通过试错法来找到该范围
 - 一般调试阶段，可以从 0 - 120 之间数值尝试，低于某个值 A 会报该错误，高于某个值 B 也会报该错误，则 settle 取 [A B] 的中间值
@@ -236,7 +236,7 @@ MIPI PHY fatal 报错，为 MIPI 物理层报错，表明 sensor 到 SoC MIPI PH
 **3. 实际测量法：**
 - 可以使用示波器抓取 MIPI data lane(D+ 和 D- 两条 lane 需要同时测量) 从 LP 到 HS 的过程，根据波形直接测量 settle 时长对应的数值，一般示波器测量图如下：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-11.png)
+  ![示波器测量 MIPI LP 到 HS 切换波形](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-11.png)
 
     - 蓝色圈内，为 hs-preapre = 14ns
     - 红色圈内，为 hs-zero = 154ns
@@ -275,7 +275,7 @@ cat /sys/class/vps/mipi_host0/status/cfg
 ```shell
 cat /sys/class/vps/mipi_host0/status/regs
 ```
-### 如何打开 MIPI 和CIM 驱动的 log
+### 如何打开 MIPI 和 CIM 驱动的 log
 
 
 ```shell
@@ -342,7 +342,7 @@ statistics:     fs_cnt:1 fe_cnt:1 ipi_drop_cnt:0 drop_done_cnt:0        #fs fe�
 
 fs_cnt / fe_cnt 不涨说明帧没有进来，往上游查 MIPI 与 Sensor；w_err_cnt / h_err_cnt 增长说明实际图像宽高与配置不符；used 长期不回落说明应用侧帧未归还。
 
-### 如何查看LPWM的配置
+### 如何查看 LPWM 的配置
 
 
 ```shell
@@ -372,7 +372,7 @@ core    source  offset  period  duty_time       threshold       adjust_step     
 
 Sensor 库 check error，说明 sensor 驱动有问题
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-6.jpg)
+  ![sensor 库 check error 日志](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-6.jpg)
 
 **可能原因：**
 
@@ -407,7 +407,7 @@ Sensor 库 check error，说明 sensor 驱动有问题
 - MIPI 可能会报无法进入 HS 的错误
 - 可以配置 MIPI nocheck 属性，参考如下：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-7.png)
+  ![MIPI nocheck 属性配置示例](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/5-7-3-7.png)
 
 或者使用 echo 命令设置 nocheck 属性：
 ```shell
@@ -417,20 +417,20 @@ echo 1 > /sys/class/vps/mipi_host0/param/nocheck
 
 ### 如何配置 yuv sensor ?
 **yuv 排列方式**
-- planar：把 Y 数据，U 数据和 V 数据单独放置3块位置，形成3个平面。
-- semi-planar：把 Y 数据独立，UV 数据放在一起，形成2个平面。
+- planar：把 Y 数据，U 数据和 V 数据单独放置 3 块位置，形成 3 个平面。
+- semi-planar：把 Y 数据独立，UV 数据放在一起，形成 2 个平面。
 - packed：YUV 数据打包在一起，无论单独的 Y 数据 U 数据还是 V 数据，地址都不是连续的。
 
 **yuv 命名方式**
-- YUVxxxP，YUVxxxSP：比如：YUV422P，YUV420SP。根据 planar，semi-planer 和 packed 的类型来定义的。planar 就是P，注意顺序都是 Y 前 U 中 V 后。semi-planar 就是 SP，注意顺序都是 Y 前 UV 后。
+- YUVxxxP，YUVxxxSP：比如：YUV422P，YUV420SP。根据 planar，semi-planer 和 packed 的类型来定义的。planar 就是 P，注意顺序都是 Y 前 U 中 V 后。semi-planar 就是 SP，注意顺序都是 Y 前 UV 后。
 - Ixxx：比如：I422，I420。planar 的别称，I422 就是 YUV422P，I420 就是 YUV420P。
-- NVxx，YVxx：比如：NV12，NV21，NV16，YV12。NV 代表属于 semi-planar，12代表一个像素所占的实际 bits。NV12 是 YUV420SP，每个像素占据1个 Y(8Bit)+1/4 个UV(8 * 2 / 4 = 4bit) =12bits。
+- NVxx，YVxx：比如：NV12，NV21，NV16，YV12。NV 代表属于 semi-planar，12 代表一个像素所占的实际 bits。NV12 是 YUV420SP，每个像素占据 1 个 Y(8Bit)+1/4 个 UV(8 * 2 / 4 = 4bit) =12bits。
 
 
 添加 yuv sensor, 首先需要确定 yuv sensor 配置输出的具体格式，目前支持以下几种格式：
-- 8bit YUV422SP(semi-planar): 又称为 NV16，Y 单独占一块地方，U、V紧挨着排在一起，占一块地方，且 U 前 V 后，即 YYYYYYY.......UVUVUVUV......，sensor 及 mipi 配置中，format 填写 0x1E，pack_mode 填写 2，stride 为 1倍的 width。
-- 8bit YUV422P(packed): 又称为 YUYV422，YUV 4:2:2 采样，YUV 共占一块地方，按像素点交错存储，如 YUVYUVYUVYUV，sensor 及 mipi 配置中，format 填写 0x1E，pack_mode 填写 1，stride 为 2倍的 width。
-- 8bit YUV420SP(semi-planar): 又称为 NV12，Y 单独占一块地方，U、V紧挨着排在一起，占一块地方，且 U 前 V 后，即 YYYYYYY.......UVUVUVUV......，sensor 及 mipi 配置中，format 填写 0x18, pack_mode 填写 2，stride 为 1倍的 width。
+- 8bit YUV422SP(semi-planar): 又称为 NV16，Y 单独占一块地方，U、V 紧挨着排在一起，占一块地方，且 U 前 V 后，即 YYYYYYY.......UVUVUVUV......，sensor 及 mipi 配置中，format 填写 0x1E，pack_mode 填写 2，stride 为 1 倍的 width。
+- 8bit YUV422P(packed): 又称为 YUYV422，YUV 4:2:2 采样，YUV 共占一块地方，按像素点交错存储，如 YUVYUVYUVYUV，sensor 及 mipi 配置中，format 填写 0x1E，pack_mode 填写 1，stride 为 2 倍的 width。
+- 8bit YUV420SP(semi-planar): 又称为 NV12，Y 单独占一块地方，U、V 紧挨着排在一起，占一块地方，且 U 前 V 后，即 YYYYYYY.......UVUVUVUV......，sensor 及 mipi 配置中，format 填写 0x18, pack_mode 填写 2，stride 为 1 倍的 width。
 
 如需其他 yuv 格式，请联系 Sensor 原厂 FAE 支持。
 
@@ -444,11 +444,11 @@ echo 1 > /sys/class/vps/mipi_host0/param/nocheck
 ### Dump 出的图带竖条纹问题
 
 
-出图表现为有规律的黑色竖条纹,log和图像如下图所示：
+出图表现为有规律的黑色竖条纹,log 和图像如下图所示：
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/image_20260105-132939.png)
+  ![规律的黑色竖条纹现象截图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/image_20260105-132939.png)
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/image_20260105-133227.png)
+  ![规律的黑色竖条纹现象截图](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/image_20260105-133227.png)
 
 **原因：**
 1. 有组 DATA LANE 的 P/N 接反
@@ -538,7 +538,7 @@ x = 32 * log₂(gain)
 | 63       | 3.914    | 127      | 15.657   | 191      | 62.629   | 255      | 250.514  |
 
 
-  ![](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/image_16431638886864.png)
+  ![gain 索引值与增益倍率对应关系表](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/camera_faq/image_16431638886864.png)
 
 ## AE/AWB 验证
 

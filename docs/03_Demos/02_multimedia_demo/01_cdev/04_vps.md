@@ -21,7 +21,7 @@ description: "RDK S100/S600 VPS 视频处理示例（文件/解码输入→缩�
 
 板端路径：`/app/cdev_demo/vps/`
 
-```
+```text
 vps/
 ├── Makefile
 ├── vps.c

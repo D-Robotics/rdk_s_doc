@@ -4,6 +4,8 @@ title: "图像金字塔 - PYM"
 description: "RDK S100/S600 PYM（金字塔下采样模块）"
 ---
 
+# 图像金字塔 - PYM
+
 ## 概述
 
 PYM（Pyramid，金字塔）是 HBN 框架中的硬件加速视频处理单元 ，对输入图像按**金字塔图层**的方式做**缩放与裁剪**：把源图缩放出多路不同尺度的图像输出到 DDR，供算法（检测/跟踪等）、编码等单元做多尺度消费。
@@ -23,7 +25,7 @@ PYM（Pyramid，金字塔）是 HBN 框架中的硬件加速视频处理单元 �
 
 <DocScope products="RDK S100">
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/vps_hardware_S100.png" alt="S100 PYM 在 Camsys 子系统中的数量与位置（3 个 PYM：PYM0 / PYM1 / PYM4）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/vps_hardware_S100.png" alt="S100 PYM 在 Camsys 子系统中的数量与位置（3 个 PYM：PYM0 / PYM1 / PYM4）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - PYM 共 **3 个**：PYM0 / PYM1 / PYM4
 - online 连接：CIM 的 online YUV 输出只能接到 PYM0 / PYM1
@@ -33,7 +35,7 @@ PYM（Pyramid，金字塔）是 HBN 框架中的硬件加速视频处理单元 �
 
 <DocScope products="RDK S600">
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/vps_hardware_S600.png" alt="S600 PYM 在 Camsys 子系统中的数量与位置（5 个 PYM：PYM0 ~ PYM4）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/vps_hardware_S600.png" alt="S600 PYM 在 Camsys 子系统中的数量与位置（5 个 PYM：PYM0 ~ PYM4）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - PYM 共 **5 个**：PYM0 ~ PYM4
 - online 连接：CIM 的 online YUV 输出只能接到 PYM0 ~ PYM3
@@ -45,18 +47,18 @@ PYM（Pyramid，金字塔）是 HBN 框架中的硬件加速视频处理单元 �
 
 PYM 的图层分三类，数据自上而下逐级缩小：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_arch.png" alt="PYM 硬件特性（SRC 层 → BL Base 0~4 双线性下采样 → DS 层 ROI 输出到 DDR）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_arch.png" alt="PYM 硬件特性（SRC 层 → BL Base 0-4 双线性下采样 → DS 层 ROI 输出到 DDR）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | 层 | 数量 | 说明 |
 | --- | --- | --- |
 | SRC 层 | 1 | 源图像层，即输入原图 |
-| BL 层 | 5（BL Base 0 ~ 4） | 双线性下采样层（缩放），依次为源图的 1/2、1/4、1/8、1/16、1/32 |
-| DS 层 | 最多 6 | **输出层**。每层任选输入层（SRC 或 BL0~4），再做下采样（缩放 ∈ (1/2, 1]）+ ROI（裁剪），输出到 DDR |
+| BL 层 | 5（BL Base 0-4） | 双线性下采样层（缩放），依次为源图的 1/2、1/4、1/8、1/16、1/32 |
+| DS 层 | 最多 6 | **输出层**。每层任选输入层（SRC 或 BL0-4），再做下采样（缩放 ∈ (1/2, 1]）+ ROI（裁剪），输出到 DDR |
 
 - 每层选一个输入（SRC 原图或 BL 缩放层），DS 层再缩放 + 裁剪 ROI，输出到 DDR
 - 由于 DS 层可以先取 BL 层再缩小，级联后可获得小于 1/32 的输出（例如取 BL4 即 1/32，再缩小到接近 1/2，即约 1/64）
 
-各配置项的取值细节见[数据结构](#数据结构)。
+各配置项的取值细节见 [数据结构](#数据结构)。
 
 ## 硬件规格
 
@@ -95,7 +97,7 @@ PYM 的图层分三类，数据自上而下逐级缩小：
 | online 输入格式 | YUV422 / YUV420 |
 | offline 输入格式 | YUV420SP（NV12） |
 | 输出格式 | YUV420SP（NV12） |
-| 缩放范围 | BL层固定缩放1/2，1/4，1/8，1/16，1/32，DS层缩小 ratio ∈ (1/2, 1]，**均不支持放大**  |
+| 缩放范围 | BL 层固定缩放 1/2，1/4，1/8，1/16，1/32，DS 层缩小 ratio ∈ (1/2, 1]，**均不支持放大**  |
 | DS 层输出能力 | 6 层独立配置；每层支持 ROI crop、UV 平面单独 bypass、输出 stride 可配、垂直/水平相位可配 |
 
 </DocScope>
@@ -109,22 +111,22 @@ PYM 的图层分三类，数据自上而下逐级缩小：
 | online 输入格式 | YUV422 / YUV420 |
 | offline 输入格式 | YUV420SP（NV12） |
 | 输出格式 | YUV420SP（NV12） |
-| 缩放范围 | BL层固定缩放1/2，1/4，1/8，1/16，1/32，DS层缩小 ratio ∈ (1/2, 1]，**均不支持放大** |
+| 缩放范围 | BL 层固定缩放 1/2，1/4，1/8，1/16，1/32，DS 层缩小 ratio ∈ (1/2, 1]，**均不支持放大** |
 | DS 层输出能力 | 6 层独立配置；每层支持 ROI crop、UV 平面单独 bypass、输出 stride 可配、垂直/水平相位可配 |
 
 </DocScope>
 
-> 注意：输入宽高需 **2 对齐**、输入 stride 需 **16 对齐**，完整取值约束见[约束与注意事项](#约束与注意事项)。
+> 注意：输入宽高需 **2 对齐**、输入 stride 需 **16 对齐**，完整取值约束见 [约束与注意事项](#约束与注意事项)。
 
 ## API 调用流程
 
 **回灌模式（`pym_mode = 3`，offline）**——每帧由应用主动送入：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_feedback.png" alt="PYM API 调用流程（回灌模式）" width="600" />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_feedback.png" alt="PYM API 调用流程（回灌模式）" width="600" />
 
 **vflow 链路模式（`pym_mode = 1 / 2`，online）**——帧由前级自动流入：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_flow.png" alt="PYM API 调用流程（vflow 链路）" width="600" />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/pym/pym_flow.png" alt="PYM API 调用流程（vflow 链路）" width="600" />
 
 ## 快速示例
 
@@ -261,15 +263,15 @@ PYM 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。开发用�
 
 PYM 作为 HBN vnode 接入 pipeline，**独立函数 API 较少，主体为配置结构体 + HBN vnode 调用**：
 
-- 配置：全部集中在 `pym_cfg_t` 一个结构体（输入尺寸、图层选择、每层 ROI），经 `hbn_vnode_set_attr` 一次性下发；层级关系 `pym_cfg_t` → `chn_ctrl_t` → `roi_box_t`，见[数据结构](#数据结构)
+- 配置：全部集中在 `pym_cfg_t` 一个结构体（输入尺寸、图层选择、每层 ROI），经 `hbn_vnode_set_attr` 一次性下发；层级关系 `pym_cfg_t` → `chn_ctrl_t` → `roi_box_t`，见 [数据结构](#数据结构)
 - 接口：`hbn_vnode_*` / `hbn_vflow_*` 由所有硬件模块共用，位于 `libvpf.so`，完整说明见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api)
-- 返回码：PYM 上实际会遇到的见[常见返回码](#常见返回码)
+- 返回码：PYM 上实际会遇到的见 [常见返回码](#常见返回码)
 
 下文各小节有一条共性约定，不再逐节重复：
 
-- **`pym_cfg_t` 单结构体**：PYM 的 `set_attr` / `set_ichn_attr` / `set_ochn_attr` 传的都是**同一个 `pym_cfg_t` 指针**（区别于 VIN/ISP 的分体结构体），字段完整定义见[数据结构](#数据结构)。
+- **`pym_cfg_t` 单结构体**：PYM 的 `set_attr` / `set_ichn_attr` / `set_ochn_attr` 传的都是**同一个 `pym_cfg_t` 指针**（区别于 VIN/ISP 的分体结构体），字段完整定义见 [数据结构](#数据结构)。
 
-#### hbn_vnode_open
+### hbn_vnode_open
 
 【函数原型】
 
@@ -285,7 +287,7 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 【参数】
 
 - [IN] hb_vnode_type vnode_type：vnode 类型，每个硬件模块对应一个 vnode 类型，PYM 取 HB_PYM（枚举定义见 `hbn_vpf_data_info.h`）
-- [IN] uint32_t hw_id：模块的硬件 id，即 PYM 实例号。S100 合法值 0/1/4；S600 合法值 0~4
+- [IN] uint32_t hw_id：模块的硬件 id，即 PYM 实例号。S100 合法值 0/1/4；S600 合法值 0-4
 - [IN] int32_t ctx_id：模块的 context id，软件上的概念；可指定 context id 值，也可设置为 AUTO_ALLOC_ID，由 SDK 自动分配
 - [OUT] hbn_vnode_handle_t *vnode_fd：返回模块的 vnode handle
 
@@ -298,7 +300,7 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 
 - hw_id 写板上不存在的实例号会直接打开失败
 
-#### hbn_vnode_set_attr
+### hbn_vnode_set_attr
 
 【函数原型】
 
@@ -313,7 +315,7 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr);
 【参数】
 
 - [IN] hbn_vnode_handle_t vnode_fd：模块的 vnode handle
-- [IN] void *attr：模块的基本属性结构体指针，PYM 用 pym_cfg_t，见[数据结构](#数据结构)
+- [IN] void *attr：模块的基本属性结构体指针，PYM 用 pym_cfg_t，见 [数据结构](#数据结构)
 
 【返回值】
 
@@ -323,9 +325,9 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr);
 【注意事项】
 
 - pym_cfg_t 的 magicNumber 固定为 MAGIC_NUMBER（0x12345678），库在下发属性时会自动重填该字段（用户填写的值会被覆盖），无需关心
-- 字段取值范围与对齐要求见[约束与注意事项](#约束与注意事项)
+- 字段取值范围与对齐要求见 [约束与注意事项](#约束与注意事项)
 
-#### hbn_vnode_set_ichn_attr
+### hbn_vnode_set_ichn_attr
 
 【函数原型】
 
@@ -348,7 +350,7 @@ hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_ochn_attr
+### hbn_vnode_set_ochn_attr
 
 【函数原型】
 
@@ -371,7 +373,7 @@ hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_ochn_buf_attr
+### hbn_vnode_set_ochn_buf_attr
 
 【函数原型】
 
@@ -399,7 +401,7 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 
 - offline（回灌）模式下，回灌 buffer 也会按该数目默认分配
 
-#### hbn_vnode_getframe_group
+### hbn_vnode_getframe_group
 
 【函数原型】
 
@@ -429,7 +431,7 @@ hobot_status hbn_vnode_getframe_group(hbn_vnode_handle_t vnode_fd, uint32_t ochn
 - 取到的 group 必须通过 hbn_vnode_releaseframe_group 归还，否则 buffer 耗尽后无法继续取帧
 - 只取单层时可用 hbn_vnode_getframe；需要条件取帧时用 hbn_vnode_getframe_group_cond
 
-#### hbn_vnode_releaseframe_group
+### hbn_vnode_releaseframe_group
 
 【函数原型】
 
@@ -458,7 +460,7 @@ hobot_status hbn_vnode_releaseframe_group(hbn_vnode_handle_t vnode_fd, uint32_t 
 - 归还的输出组 bufferindex 越界时返回 -44（HBN_STATUS_ILLEGAL_BUF_INDEX）
 - 只取单层时用 hbn_vnode_releaseframe 归还
 
-#### hbn_vnode_sendframe
+### hbn_vnode_sendframe
 
 【函数原型】
 
@@ -488,7 +490,7 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 - online 链路场景不需要调用本接口，帧由前级自动流入
 - 阻塞接口；不需要等待的场景用 hbn_vnode_sendframe_async
 
-#### hbn_vnode_close
+### hbn_vnode_close
 
 【函数原型】
 
@@ -526,8 +528,8 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | 名称 | 类型 | 含义 | 取值范围/默认值 | 必选 |
 | --- | --- | --- | --- | --- |
 | `hw_id` | `uint8_t` | PYM 硬件模块 id | 0 / 1 / 4 | 是 |
-| `pym_mode` | `uint8_t` | 工作模式：1 Manual（online，前级 sw trigger）；2 单路 online（前级硬件直连）；3 offline（M2M，用户态回灌，输入/输出 YUV420SP） | 1 ~ 3 | 是 |
-| `slot_id` | `uint8_t` | PYM 硬件通道 id | 0 ~ 7 | 否 |
+| `pym_mode` | `uint8_t` | 工作模式：1 Manual（online，前级 sw trigger）；2 单路 online（前级硬件直连）；3 offline（M2M，用户态回灌，输入/输出 YUV420SP） | 1-3 | 是 |
+| `slot_id` | `uint8_t` | PYM 硬件通道 id | 0-7 | 否 |
 | `axi_burst_len` | `uint8_t` | AXI 突发长度（保留调优项） | 见头文件 | 否 |
 | `in_linebuff_watermark` | `uint8_t` | 行 buffer 水位（保留调优项） | 见头文件 | 否 |
 | `out_buf_noinvalid` | `uint8_t` | 输出 buf 是否执行 invalid cache 操作 | 0/1，默认 1 | 是 |
@@ -550,13 +552,13 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 <DocScope products="RDK S600">
 
-> 下表S600多出的 3 个字段（`indata_type` / `outdata_type` / `expand_layer_en`）
+> 下表 S600 多出的 3 个字段（`indata_type` / `outdata_type` / `expand_layer_en`）
 
 | 名称 | 类型 | 含义 | 取值范围/默认值 | 必选 |
 | --- | --- | --- | --- | --- |
-| `hw_id` | `uint8_t` | PYM 硬件模块 id | 0 ~ 4 | 是 |
-| `pym_mode` | `uint8_t` | 工作模式：1 Manual（online，前级 sw trigger）；2 单路 online（前级硬件直连）；3 offline（M2M，用户态回灌，输入/输出 YUV420SP） | 1 ~ 3 | 是 |
-| `slot_id` | `uint8_t` | PYM 硬件通道 id | 0 ~ 7 | 否 |
+| `hw_id` | `uint8_t` | PYM 硬件模块 id | 0-4 | 是 |
+| `pym_mode` | `uint8_t` | 工作模式：1 Manual（online，前级 sw trigger）；2 单路 online（前级硬件直连）；3 offline（M2M，用户态回灌，输入/输出 YUV420SP） | 1-3 | 是 |
+| `slot_id` | `uint8_t` | PYM 硬件通道 id | 0-7 | 否 |
 | `axi_burst_len` | `uint8_t` | AXI 突发长度（保留调优项） | 见头文件 | 否 |
 | `in_linebuff_watermark` | `uint8_t` | 行 buffer 水位（保留调优项） | 见头文件 | 否 |
 | `out_buf_noinvalid` | `uint8_t` | 输出 buf 是否执行 invalid cache 操作 | 0/1，默认 1 | 是 |
@@ -572,8 +574,8 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | `layer_num_share_prev` | `int32_t` | 与前级模块共享的层数 | &lt; 6，默认 -1 | 是 |
 | `chn_ctrl` | `chn_ctrl_t` | 输入尺寸与图层配置，见下表 | - | 是 |
 | `fb_buf_num` | `uint32_t` | 回灌 buffer 个数 | ≤ 16，默认 2 | 是 |
-| `indata_type` | `uint8_t` | 输入数据位宽：0 = 8bit（默认）、1 = 10bit、2 = 12bit | 0 ~ 2 | 否 |
-| `outdata_type` | `uint8_t` | 输出数据位宽，取值同上 | 0 ~ 2 | 否 |
+| `indata_type` | `uint8_t` | 输入数据位宽：0 = 8bit（默认）、1 = 10bit、2 = 12bit | 0-2 | 否 |
+| `outdata_type` | `uint8_t` | 输出数据位宽，取值同上 | 0-2 | 否 |
 | `expand_layer_en` | `uint8_t` | 扩展层使能 | 0/1 | 否 |
 | `reserved` | `uint8_t[1]` + `uint32_t[5]` | 保留字段（`reserved_u8` 与 `reserved`） | - | 否 |
 | `magicNumber` | `uint32_t` | 属性结构体校验值，固定 `MAGIC_NUMBER`（`0x12345678`），库自动重填 | `0x12345678` | 是 |
@@ -597,7 +599,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 | `suffix_vb_val` | `uint32_t` | 帧尾 blanking | [0, 20]，默认 10 | 是 |
 | `prefix_vb_val` | `uint32_t` | 帧首 blanking | [0, 2]，默认 0 | 是 |
 | `bl_max_layer_en` | `uint8_t` | 使能的 BL 层数 | > `ds_roi_layer[chn]`，默认 5 | 是 |
-| `ds_roi_en` | `uint8_t` | DS 层输出使能，第 0~5 层按 bit 置位 | &lt; (1 &lt;&lt; 6) | 是 |
+| `ds_roi_en` | `uint8_t` | DS 层输出使能，第 0-5 层按 bit 置位 | &lt; (1 &lt;&lt; 6) | 是 |
 | `ds_roi_uv_bypass` | `uint8_t` | DS 层 uv plane 输出 bypass，按 bit 置位 | &lt; (1 &lt;&lt; 6) | 否 |
 | `ds_roi_sel[MAX_DS_NUM]` | `uint8_t[]` | 每层选输入图层：0 = SRC 层、1 = BL 层 | &lt; 2 | 是 |
 | `ds_roi_layer[MAX_DS_NUM]` | `uint8_t[]` | 每层选的 BL 层号 | `ds_roi_sel = 0` 时只能为 0 | 是 |
@@ -651,12 +653,12 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 ## 约束与注意事项
 
-字段取值约束已在[数据结构](#数据结构)各字段表中标注，此处汇总高频核对项（综合板端 `hbn_pym_cfg.h` 与上游 API 参考手册整理）：
+字段取值约束已在 [数据结构](#数据结构) 各字段表中标注，此处汇总高频核对项（综合板端 `hbn_pym_cfg.h` 与上游 API 参考手册整理）：
 
 | 约束项 | 要求 |
 | --- | --- |
 | `hw_id` | S100：`0` / `1` / `4`；S600：`0` ~ `4` |
-| `pym_mode` | 1 ~ 3（`0` 为头文件保留值） |
+| `pym_mode` | 1-3（`0` 为头文件保留值） |
 | `src_in_width` / `src_in_height` | ≥ 32 且 ≤ 上限（S100 4096 / S600 5696），**2 对齐** |
 | `src_in_stride_y` / `src_in_stride_uv` | **16 对齐**，且 ≥ `src_in_width`、≤ 上限 |
 | `bl_max_layer_en` | > `ds_roi_layer[chn]` |

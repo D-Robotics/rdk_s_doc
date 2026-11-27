@@ -545,7 +545,7 @@ typedef struct hbDNNTensor {
 **量化/反量化**（按 `hbDNNQuantiScale` 约定）：
 
 - 反量化：`zeroPointLen == 0` 时 `f(x) = x * scale`；`zeroPointLen > 0` 时 `f(x) = (x - zeroPoint) * scale`。
-- 量化：`f(x) = clip(nearbyint(x / scale))`（有 zeroPoint 时再加回），U8 截断到 0~255、S8 截断到 -128~127。
+- 量化：`f(x) = clip(nearbyint(x / scale))`（有 zeroPoint 时再加回），U8 截断到 0-255、S8 截断到 -128 至 127。
 
 ### hbDNNDataType（数据类型）
 

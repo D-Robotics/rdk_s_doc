@@ -284,17 +284,17 @@ sudo systemctl stop ethercat
 由于 Native 驱动与 gmac 驱动互斥，涉及到网卡驱动的卸载与加载。在进行 Native 驱动与 generic 驱动切换的时候，**必须先修改配置文件，然后重启系统完成驱动切换**，否则可能会引起网络中断。
 :::
 
-#### 1. 与 gmac 驱动冲突
+#### 与 gmac 驱动冲突
 
 Native 驱动 `ec_hobot` 与系统的 `hobot_eth_super`（xgmac）驱动**互斥**，两者不能同时加载。启动 EtherCAT 前必须先卸载 `hobot_eth_super`，否则 EtherCAT 服务无法正常启动。
 
 **影响**：卸载 `hobot_eth_super` 后，EtherCAT 主站绑定的网口被 Native 驱动接管，**其余以太网口仍可正常使用**（可配置 IP、用于 SSH 连接等）。但在 `rmmod`/`modprobe hobot_eth_super` 的瞬间，所有以太网口会短暂中断数秒后自动恢复，SSH 连接通常会自动重连。
 
-#### 2. 网口被 Native 驱动独占
+#### 网口被 Native 驱动独占
 
 当 Native 驱动启动后，配置文件中 `MASTER0_DEVICE` 绑定的 MAC 地址对应的网口将从 Linux 内核协议栈中**消失**（`ip a` 中不再显示该网口），完全被 EtherCAT 独占。其余未绑定的网口仍然可见且可正常使用。
 
-#### 3. MAC 地址配置要求
+#### MAC 地址配置要求
 
 Native 驱动模式下，`/etc/ethercat.conf` 中的 `MASTER0_DEVICE` **必须配置为对应网口的实际 MAC 地址**（如 `"xx:xx:xx:xx:01:18"`），不能使用网口名（如 `"eth0"`），否则驱动无法正确绑定。
 
@@ -328,9 +328,9 @@ sudo sed -i 's/MASTER0_DEVICE=".*"/MASTER0_DEVICE="eth0"/' /etc/ethercat.conf
 :::warning
 以下内容适用于 **Generic 驱动模式**。如果您使用的是 V4.0.7 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
 
-EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
+EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[单击查看使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
 
-**特别注意：RDK S100 默认使用 eth0 作为 DHCP 网口，如果用户原本使用 eth0 作为 SSH 连接开发板的主要模式，在使用 eth0 作为 EtherCAT 主站后，需要配置 eth1 为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1 网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
+**特别注意：RDK S100 默认使用 eth0 作为 DHCP 网口，如果用户原本使用 eth0 作为 SSH 连接开发板的主要模式，在使用 eth0 作为 EtherCAT 主站后，需要配置 eth1 为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1 网口。 [单击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
 
@@ -338,9 +338,9 @@ EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认�
 :::warning
 以下内容适用于 **Generic 驱动模式**。如果您使用的是 V5.1.0 默认的 Native 驱动模式，请参考上方「[Native 驱动使用步骤](#native-驱动使用步骤)」。
 
-EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[点击查看使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
+EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认使用 eth0 作为 DHCP 管理接口**，如果用户想使用 eth0 作为 EtherCAT 网络接口，可以使用下面的几种方案进行网络配置，**[单击查看使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
 
-**特别注意：RDK S600 默认使用 eth0 作为 DHCP 网口，如果用户原本使用 eth0 作为 SSH 连接开发板的主要模式，在使用 eth0 作为 EtherCAT 主站后，需要配置 eth1 为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1 网口。 [点击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
+**特别注意：RDK S600 默认使用 eth0 作为 DHCP 网口，如果用户原本使用 eth0 作为 SSH 连接开发板的主要模式，在使用 eth0 作为 EtherCAT 主站后，需要配置 eth1 为 DHCP，或配置用户本地网络可用的固定 IP 作为 SSH 连接方式，并且将连接的网线改接到 eth1 网口。 [单击查看使用 eth0 作为主站时的 eth1 网络配置方案](#使用-eth0-作为主站时的-eth1-网络配置方案)**。
 :::
 </DocScope>
 
@@ -353,7 +353,7 @@ EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认�
 1. 确认硬件连接：
     - 从站已上电。
     - 网线已接到你选择的主站网口（`eth0` 或 `eth1`）。
-2. 选择主站网口（在选择主站端口前，请仔细阅读 **[使用前网络配置](#使用前网络配置)中的注意事项**）：
+2. 选择主站网口（在选择主站端口前，请仔细阅读 **[使用前网络配置](#使用前网络配置) 中的注意事项**）：
     - 使用 `eth0` 作为主站：看 **[使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)**。
     - 使用 `eth1` 作为主站：看 **[使用 eth1 作为 EtherCAT 主站](#使用-eth1-作为-ethercat-主站)**。
 3. 启动 EtherCAT 主站（使用 ethercatctl）：
@@ -417,7 +417,7 @@ EtherCAT 协议与以太网协议互斥，**无法共存**，**开发板默认�
 ## EtherCAT 开发指南
 
 ### 软件栈
-RDK S100 默认提供 EtherCAT-IgH 1.5 版本软件栈（本节以 S100 为例，S600 同理）。[EtherCAT-IgH 软件栈](https://docs.etherlab.org/ethercat/1.5/pdf/ethercat_doc.pdf)是目前主流的开源 EtherCAT 主站协议。
+RDK S100 默认提供 EtherCAT-IgH 1.5 版本软件栈（本节以 S100 为例，S600 同理）。[EtherCAT-IgH 软件栈](https://docs.etherlab.org/ethercat/1.5/pdf/ethercat_doc.pdf) 是目前主流的开源 EtherCAT 主站协议。
 
 EtherCAT 官网：[EtherLab | EtherCAT](https://etherlab.org/en_GB/ethercat)
 EtherCAT 开源代码仓库：[Gitlab | EtherLab - EtherCAT](https://gitlab.com/etherlab.org/ethercat)
@@ -483,7 +483,7 @@ Host 端构建支持两种构建方式：
    sudo make install
    sudo make modules_install
    ```
-3. 编辑`/usr/local/etc/ethercat.conf`，添加以下内容：
+3. 编辑 `/usr/local/etc/ethercat.conf`，添加以下内容：
    ```ini
    MASTER0_DEVICE="eth0" # Device or MAC
    DEVICE_MODULES="generic"
@@ -535,7 +535,7 @@ MASTER0_DEVICE="eth0"
 - **优势**：既能保留 NetworkManager 服务，又能避免对 EtherCAT 所使用接口产生干扰
 - **注意**：配置 NetworkManager 不管理 eth0 接口之后，对应的网口在系统启动的时候不会自动 up，使用时请参阅下方注意信息与配置方法进行使用。
 :::warning
-目前板卡上预装的是 igh 1.5.x 的版本，默认没有办法实现网口自动 up/down, 需要手动启用 EtherCAT 所使用接口 **eth0** 网卡。 igh 在 1.6.4 及之后版本支持配置文件配置网口自动 up/down, 具体参考：[自动启停网卡](#自动启停网卡ethercat-igh-主站164版本之后支持)
+目前板卡上预装的是 igh 1.5.x 的版本，默认没有办法实现网口自动 up/down, 需要手动启用 EtherCAT 所使用接口 **eth0** 网卡。 igh 在 1.6.4 及之后版本支持配置文件配置网口自动 up/down, 具体参考：[自动启停网卡](#自动启停网卡ethercat-igh-主站-164-版本之后支持)
 :::
 
 **[方案二：使用 netplan 将 eth0 配置为静态 IP 地址](#方案二使用-netplan-将-eth0-配置为静态-ip-地址)**
@@ -738,11 +738,11 @@ MASTER0_DEVICE="eth0"
     此时可以看到 `Link: UP`，`Slaves: 1`，EtherCAT 从站已成功识别并正常工作。
     :::
 
-如果你使用的是 EtherCAT igh 主站1.6.4以上的版本，可以参考[自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）](#自动启停网卡ethercat-igh-主站164版本之后支持)进行配置。
+如果你使用的是 EtherCAT igh 主站 1.6.4 以上的版本，可以参考 [自动启停网卡（EtherCAT igh 主站 1.6.4 版本之后支持）](#自动启停网卡ethercat-igh-主站-164-版本之后支持) 进行配置。
 
 ### 方案二：使用 netplan 将 eth0 配置为静态 IP 地址
 <details>
-    <summary>点击这里展开更多内容</summary>
+    <summary>单击这里展开更多内容</summary>
 1. 修改配置文件 `/etc/netplan/01-hobot-net.yaml` 如下（以下配置作为示例，用户自行按需配置）：
     ```yaml
     network:
@@ -796,7 +796,7 @@ MASTER0_DEVICE="eth0"
 
 ### 方案三：使用 netplan 将 eth0 配置为本地链路
 <details>
-    <summary>点击这里展开更多内容</summary>
+    <summary>单击这里展开更多内容</summary>
 1. 修改配置文件 `/etc/netplan/01-hobot-net.yaml` 如下:（以下配置作为示例，用户自行按需配置）：
     ```yaml
     network:
@@ -855,7 +855,7 @@ MASTER0_DEVICE="eth0"
 
 #### 配置 eth1 为 DHCP
 <details>
-    <summary>点击这里展开更多内容</summary>
+    <summary>单击这里展开更多内容</summary>
 
     ```yaml
     network:
@@ -878,7 +878,7 @@ MASTER0_DEVICE="eth0"
 
 #### 配置 eth1 为静态 IP
 <details>
-    <summary>点击这里展开更多内容</summary>
+    <summary>单击这里展开更多内容</summary>
 
     ```yaml
     network:
@@ -904,7 +904,7 @@ MASTER0_DEVICE="eth0"
 
 ## 使用 eth1 作为 EtherCAT 主站
 
-使用 eth1 作为 EtherCAT 主站的网络配置与上述[使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站)类似，下方只展示推荐使用方案。
+使用 eth1 作为 EtherCAT 主站的网络配置与上述 [使用 eth0 作为 EtherCAT 主站](#使用-eth0-作为-ethercat-主站) 类似，下方只展示推荐使用方案。
 
 ### 修改 EtherCAT 配置文件使用 eth1 作为 EtherCAT 主站
 
@@ -1129,7 +1129,7 @@ RDK S600 默认使用 eth0 作为 DHCP 网口，eth1 为静态 IP 配置，用�
     此时可以看到 `Link: UP`，`Slaves: 1`，EtherCAT 从站已成功识别并正常工作。
     :::
 
-如果你使用的是 EtherCAT igh 主站1.6.4以上的版本，可以参考[自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）](#自动启停网卡ethercat-igh-主站164版本之后支持)进行配置。
+如果你使用的是 EtherCAT igh 主站 1.6.4 以上的版本，可以参考 [自动启停网卡（EtherCAT igh 主站 1.6.4 版本之后支持）](#自动启停网卡ethercat-igh-主站-164-版本之后支持) 进行配置。
 
 ## 常见问题
 
@@ -1145,10 +1145,10 @@ RDK S600 默认使用 eth0 作为 DHCP 网口，eth1 为静态 IP 配置，用�
 
 **解决**：参考「切换 Native 驱动使用的网口」「使用前网络配置」重新配置；通过 `deb` 升级时确保两个 EtherCAT 包版本号匹配。
 
-### 自动启停网卡（EtherCAT igh 主站1.6.4版本之后支持）
+### 自动启停网卡（EtherCAT igh 主站 1.6.4 版本之后支持）
 
 :::info
-**新版本支持**：新版本的 EtherCAT igh 主站（1.6.4版本之后）配置与启动脚本支持自动 up 端口（在启动脚本中添加了 `ip link set dev eth0 up` 命令）。如果您的版本不支持自动启用，可以手动执行上述命令。
+**新版本支持**：新版本的 EtherCAT igh 主站（1.6.4 版本之后）配置与启动脚本支持自动 up 端口（在启动脚本中添加了 `ip link set dev eth0 up` 命令）。如果您的版本不支持自动启用，可以手动执行上述命令。
 :::
 1. 修改 `/etc/ethercat.conf` 将对应的网口添加到 `UPDOWN_INTERFACES` 变量中。例如添加 eth0 接口，这样在执行 `ethercatctl start` 或 `ethercatctl stop` 的时候，会自动 UP/DOWN 对应的网络接口。
     ```bash

@@ -39,19 +39,19 @@ ICU（Input Capture Unit，输入捕获单元）对系统内具有输入捕获�
 <DocScope products="RDK S100">
 | ISR Function | IRQ | IRQ Define           | Description |
 | :----------- | :-- | :------------------- | :---------- |
-| Gpio0_ExtIsr | 68  | MCUSYS_GPIO0_INTR    | Gpio Mode   |
-| Gpio1_ExtIsr | 69  | MCUSYS_GPIO1_INTR    | Gpio Mode   |
-| Gpio2_ExtIsr | 70  | MCUSYS_GPIO2_INTR    | Gpio Mode   |
-| Gpio3_ExtIsr | 361 | AON_WAKEUP_GPIO_INTR | Gpio Mode   |
+| Gpio0_ExtIsr | 68  | MCUSYS_GPIO0_INTR    | GPIO Mode   |
+| Gpio1_ExtIsr | 69  | MCUSYS_GPIO1_INTR    | GPIO Mode   |
+| Gpio2_ExtIsr | 70  | MCUSYS_GPIO2_INTR    | GPIO Mode   |
+| Gpio3_ExtIsr | 361 | AON_WAKEUP_GPIO_INTR | GPIO Mode   |
 </DocScope>
 <DocScope products="RDK S600">
 | ISR Function | IRQ | IRQ Define        | Description |
 | :----------- | :-- | :---------------- | :---------- |
-| Gpio0_ExtIsr | 89  | MCUSYS_GPIO0_INTR | Gpio Mode   |
-| Gpio1_ExtIsr | 90  | MCUSYS_GPIO1_INTR | Gpio Mode   |
-| Gpio2_ExtIsr | 91  | MCUSYS_GPIO2_INTR | Gpio Mode   |
-| Gpio3_ExtIsr | 92  | MCUSYS_GPIO3_INTR | Gpio Mode   |
-| Gpio4_ExtIsr | 371 | AON_GPIO_INTR     | Gpio Mode   |
+| Gpio0_ExtIsr | 89  | MCUSYS_GPIO0_INTR | GPIO Mode   |
+| Gpio1_ExtIsr | 90  | MCUSYS_GPIO1_INTR | GPIO Mode   |
+| Gpio2_ExtIsr | 91  | MCUSYS_GPIO2_INTR | GPIO Mode   |
+| Gpio3_ExtIsr | 92  | MCUSYS_GPIO3_INTR | GPIO Mode   |
+| Gpio4_ExtIsr | 371 | AON_GPIO_INTR     | GPIO Mode   |
 </DocScope>
 
 ## 软件架构

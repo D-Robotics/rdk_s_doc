@@ -61,7 +61,7 @@ S600 模组 MCU 域集成 32 个 PWM 信号（PWM0～PWM11、USS_PWM0～USS_PWM1
 
 | PWM IP 数量 | 每个 IP 的通道数 | 总通道数 |
 |------|------------|----------|
-| 1个        | 12个 Channel    | 12个 Channel |
+| 1 个        | 12 个 Channel    | 12 个 Channel |
 
 S100 MCU 域的 12 个 PWM 信号（PWM0～PWM11）全部由该 PWM IP 提供，总通道数与物理 PWM 信号数一致。
 
@@ -71,7 +71,7 @@ S100 MCU 域的 12 个 PWM 信号（PWM0～PWM11）全部由该 PWM IP 提供，
 
 | PWM IP 数量 | 每个 IP 的通道数 | 总通道数 |
 |------|------------|----------|
-| 3个        | 12个 Channel    | 36个 Channel |
+| 3 个        | 12 个 Channel    | 36 个 Channel |
 
 S600 MCU 域共有 3 个 PWM IP（S600_PWM0/1/2），每个 IP 12 通道，共 36 通道；datasheet 列出的 32 个 PWM 信号（PWM0～PWM11、USS_PWM0～USS_PWM18、USS_PWM22）为引脚级可用信号。
 
@@ -79,7 +79,7 @@ S600 MCU 域共有 3 个 PWM IP（S600_PWM0/1/2），每个 IP 12 通道，共 3
 
 ## 软件架构
 
-PWM 驱动采用分层设计，应用层通过 Pwm API 调用驱动，底层 LLD 直接操作硬件寄存器，配置由 PBCfg 提供。
+PWM 驱动采用分层设计，应用层通过 PWM API 调用驱动，底层 LLD 直接操作硬件寄存器，配置由 PBCfg 提供。
 
 ```mermaid
 flowchart LR
@@ -157,7 +157,7 @@ static Pwm_Lld_ChannelConfigType Pwm_HwChannelConfig_PB[PWM_HW_CONF_MODS_PB][12]
         /* ... */
 ```
 
-2. `Pwm_Channels_PB` 结构体数组定义了逻辑 PWM 通道与底层硬件通道之间的映射关系; `Pwm_HwChannelConfig_PB`结构体数组定义了每个 PWM 通道的默认硬件参数，如周期、占空比、极性、中断使能等。
+2. `Pwm_Channels_PB` 结构体数组定义了逻辑 PWM 通道与底层硬件通道之间的映射关系; `Pwm_HwChannelConfig_PB` 结构体数组定义了每个 PWM 通道的默认硬件参数，如周期、占空比、极性、中断使能等。
 ```c
 #define PWM_CONF_CHANNELS_PB 2
 
@@ -222,7 +222,7 @@ S100 开发板将 PWM 引出供用户开发学习使用，已引出 PWM Channel 
 | pwm11  | MCU 扩展板                 | 与 I2C8 SDA 复用            |
 
 
-`pwmtest`命令用于配置和控制 PWM（脉冲宽度调制）通道。下面是`pwmtest`命令的使用说明和示例。
+`pwmtest` 命令用于配置和控制 PWM（脉冲宽度调制）通道。下面是 `pwmtest` 命令的使用说明和示例。
 
 - 使用方法
 
@@ -236,8 +236,8 @@ pwmtest <pwm_id> <pwm通道> <周期> <占空比>
 pwmtest stop <pwm_id> <pwm通道>
 ```
 
-例如设置 PWM 通道0的周期为1000us，占空比为50%：
-```
+例如设置 PWM 通道 0 的周期为 1000us，占空比为 50%：
+```text
 pwmtest 0 0 0x30d40 0x4000
 ```
 
@@ -254,7 +254,7 @@ pwmtest 0 0 0x30d40 0x4000
 
 PWM 周期 = 周期寄存器值 / 时钟源频率
 
-例：输出周期为1000us 的波，pwm 时钟源默认为200MHz，则需要在寄存器中写入 200000000/1000=200000(0x30d40)。
+例：输出周期为 1000us 的波，pwm 时钟源默认为 200MHz，则需要在寄存器中写入 200000000/1000=200000(0x30d40)。
 
 
 #### Debug Sample
@@ -265,7 +265,7 @@ PWM 周期 = 周期寄存器值 / 时钟源频率
 pwmdumpregs <pwm_id> <pwm通道>
 ```
 
-例如 dump pwm channel0的寄存器
+例如 dump pwm channel0 的寄存器
 ```bash
 D-Robotics:/$ pwmdumpregs 0 0
 [06915.231597 0]INFO: Pwm_RegDump pwm channel:0
@@ -311,11 +311,11 @@ pwm                         CFG_LOCK_MODE 2237031c 0
 
 </DocScope>
 <DocScope products="RDK S600">
-S600 开发板将 PWM0 channel4和 PWM0 channel5引出供用户开发学习使用，接口位于 MCU 子板。
+S600 开发板将 PWM0 channel4 和 PWM0 channel5 引出供用户开发学习使用，接口位于 MCU 子板。
 
 #### 使用示例
 
-`pwmtest`命令用于配置和控制 PWM（脉冲宽度调制）通道。下面是`pwmtest`命令的使用说明和示例。
+`pwmtest` 命令用于配置和控制 PWM（脉冲宽度调制）通道。下面是 `pwmtest` 命令的使用说明和示例。
 
 - 使用方法
 
@@ -330,19 +330,19 @@ pwmtest stop <pwm_hwipid> <pwm_hwchid>
 ```
 
 **参数说明**  
-**pwm_hwipid:** PWM 硬件 IP 实例 ID (0 ~ 2)  
-**pwm_hwchid:** PWM 硬件通道 ID (0 ~ 11)  
-**period:** PWM 信号周期值，32位数值  
-**duty_cycle:** PWM 信号占空比，必须在0x0000（0%）到0x8000（100%）范围内  
+**pwm_hwipid:** PWM 硬件 IP 实例 ID (0-2)  
+**pwm_hwchid:** PWM 硬件通道 ID (0-11)  
+**period:** PWM 信号周期值，32 位数值  
+**duty_cycle:** PWM 信号占空比，必须在 0x0000（0%）到 0x8000（100%）范围内  
 
 
-例如设置 PWM0通道4，周期为0x600000，占空比为0x4000(50%)：
+例如设置 PWM0 通道 4，周期为 0x600000，占空比为 0x4000(50%)：
 ```shell
 D-Robotics:/$ pwmtest 0x0 0x4 0x600000 0x4000
 PWM0-CH4 pwm_period = 0x00600000 pwm_dutycycle = 0x4000
 Set PWM pin function to PWM0-CH4
 ```
-停止 PWM0通道4的输出
+停止 PWM0 通道 4 的输出
 ```shell
 D-Robotics:/$ pwmtest stop 0x0 0x4
 INFO: Stopping PWM0-Ch0004
@@ -357,7 +357,7 @@ INFO: Stopping PWM0-Ch0004
 pwmdumpregs <pwm_hwipid> <pwm_hwchid>
 ```
 
-查看 PWM0通道4的寄存器配置
+查看 PWM0 通道 4 的寄存器配置
 ```shell
 D-Robotics:/$ pwmdumpregs 0 4
 [064961.196947 0]INFO: #####Get Version for Pwm
@@ -463,7 +463,7 @@ void Pwm_SetDutyCycle(Pwm_ChannelType ChannelNumber, uint16 DutyCycle);
 
 **【功能描述】**
 
-设置指定 PWM 通道的占空比。当占空比为 0% 或 100% 时，按配置的极性设置输出状态；当占空比在 0%~100% 之间时，按周期、占空比和极性调制输出信号。由预编译开关 `PWM_SET_DUTY_CYCLE_API` 控制。
+设置指定 PWM 通道的占空比。当占空比为 0% 或 100% 时，按配置的极性设置输出状态；当占空比在 0%-100% 之间时，按周期、占空比和极性调制输出信号。由预编译开关 `PWM_SET_DUTY_CYCLE_API` 控制。
 
 **【参数】**
 
@@ -675,7 +675,7 @@ void Pwm_SetSyncModePeriod(uint8 ModuleId, uint32 Period);
 
 | 参数 | 类型 | 必选 | 默认 | 说明 |
 |---|---|---|---|---|
-| ModuleId | `uint8` | 是 | — | PWM 硬件 IP 实例 ID（S100: 0；S600: 0~2） |
+| ModuleId | `uint8` | 是 | — | PWM 硬件 IP 实例 ID（S100: 0；S600: 0-2） |
 | Period | `uint32` | 是 | — | 同步模式周期值，粒度为 PWM 外设时钟周期 |
 
 **【返回值】**

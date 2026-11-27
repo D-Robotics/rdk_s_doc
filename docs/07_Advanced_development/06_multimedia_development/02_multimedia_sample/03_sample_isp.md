@@ -51,7 +51,7 @@ flowchart LR
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_isp/get_isp_data
 make
 ```
@@ -181,7 +181,7 @@ quit
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_isp/isp_feedback
 make
 ```
@@ -212,7 +212,7 @@ Options:
 - `F <format>`: 该选项用于指定要使用 Raw 图的格式，raw8、raw10、raw12。
 - `W <width>`: 该选项用于指定要使用 Raw 图的 width。
 - `H <height>`: 该选项用于指定要使用 Raw 图的 height。
-- `l <loop>`: 该选项用于指定要使用 Raw 图的回灌的次数，默认10次。
+- `l <loop>`: 该选项用于指定要使用 Raw 图的回灌的次数，默认 10 次。
 - `h`: 显示帮助信息。
 
 #### 运行效果
@@ -256,7 +256,7 @@ isp process one frame cost:  2114200 ns
 isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 9, timestamp: 0
 ```
 
-程序运行启动，会在当前目录保存如下调校后的 yuv 图像，默认回灌10次，计算每次的回灌耗时：
+程序运行启动，会在当前目录保存如下调校后的 yuv 图像，默认回灌 10 次，计算每次的回灌耗时：
 
 - Using index / sensor_name / config_file：表明当前使用 sensor index 为 5，sensor 名称为 dummy，对应的 sensor 配置文件为 dummy_sensor.c。
 - 每处理一帧 RAW 数据，会输出以下 ISP 处理完成耗时信息，isp process one frame cost:  2170275 ns。

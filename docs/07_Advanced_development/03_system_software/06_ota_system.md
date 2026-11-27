@@ -18,7 +18,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - 在 OTA 的广义应用中，可以划分为云端和设备端两个主要组成部分。云端部分负责处理设备的升级请求，包括执行升级校验、下发升级包以及收集升级结果等任务。而设备端则主要依赖云端下发的升级包，完成系统软件（ FOTA， Firmware Over-the-Air）或应用程序（ SOTA， Software Over-the-Air）的更新与升级。
 - 本文旨在提供底层设备端 OTA 的用户手册，详细阐述 OTA 在底层系统软件和应用程序升级中的机制及其实现方法，同时提供相关的开发指导。需要特别指出的是，通过 OTA 升级的系统软件与应用程序，主要是指更新存储在外部存储器（如 eMMC ）中的数据。
-- OTA 的对外交付物主要为一套 API 及其相应的实现库（如 `libupdate.so`），该库实现了底层烧写校验等关键功能。上层的 OTA 服务架构则由客户方实现，用以对接客户的云端服务。在成功从云端下载升级包后， OTA 服务会通过调用 `libupdate.so` 中的接口，实现版本的升级和校验等操作，从而确保设备能够顺利、安全地完成软件更新。
+- OTA 的对外交付物主要为一套 API 及其相应的实现库（如 `libupdate.so`），该库实现了底层烧录校验等关键功能。上层的 OTA 服务架构则由客户方实现，用以对接客户的云端服务。在成功从云端下载升级包后， OTA 服务会通过调用 `libupdate.so` 中的接口，实现版本的升级和校验等操作，从而确保设备能够顺利、安全地完成软件更新。
 
 **缩略语**
 
@@ -194,13 +194,13 @@ tree
 ├── private_key.pem        # OTA 升级包签名使用的私钥（请妥善保管）
 └── zstd.py                # Zstandard 压缩/解压辅助模块
 ```
-其中 hooks 目录用于提供分区烧写前和烧写后的自动执行脚本，可用于在升级过程中插入自定义处理逻辑。在使用打包工具前，建议先了解 hooks 目录的作用和使用方式。
+其中 hooks 目录用于提供分区烧录前和烧录后的自动执行脚本，可用于在升级过程中插入自定义处理逻辑。在使用打包工具前，建议先了解 hooks 目录的作用和使用方式。
 
 #### OTA 升级 Hook 机制
 
 - Hook 脚本放置位置
 
-    hooks 目录用于存放 OTA 分区升级过程中的前置 / 后置处理脚本，用于在分区烧写前或烧写后执行一些自定义逻辑，包括但不限于：
+    hooks 目录用于存放 OTA 分区升级过程中的前置 / 后置处理脚本，用于在分区烧录前或烧录后执行一些自定义逻辑，包括但不限于：
 
     - 升级前的环境检查
 
@@ -212,13 +212,13 @@ tree
 
     为确保脚本能够被正确打包并在 OTA 升级过程中执行，脚本文件名必须严格遵循以下命名规则，否则将无法被识别和加入升级包。
 
-    - 分区烧写前脚本（Pre-install Hook）
+    - 分区烧录前脚本（Pre-install Hook）
 
         ```text
         preinst_<分区名>.sh
         ```
 
-    - 分区烧写后脚本（Post-install Hook）
+    - 分区烧录后脚本（Post-install Hook）
 
         ```bash
         postinst_<分区名>.sh
@@ -454,7 +454,7 @@ Archive:  all_in_one_signed.zip
 |   `gpt.conf`   | 分区表文件   |
 |  `data.json`   | OTA 配置文件 |
 |    *.img     | 各分区镜像   |
-| `ota_process`  | OTA 烧写程序 |
+| `ota_process`  | OTA 烧录程序 |
 
 #### OTA 配置文件
 
@@ -998,9 +998,9 @@ typedef enum ota_update_flag {
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ab_state.png" alt="misc （AB 状态机）示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 - 状态 1：默认状态，AB slot 均可启动且优先级相同（均 15、tries_remaining 7）；优先级相同时从 slot a 启动。。
 
-- 状态 2：升级状态（烧写状态），a slot 不可启动且 boot success 为 0。
+- 状态 2：升级状态（烧录状态），a slot 不可启动且 boot success 为 0。
 
-- 状态 3：烧写成功，还未重启，这个时候将要升级的 slot 设置为 active 状态，将当前 slot 设置为非 active 状态（调整优先级）。
+- 状态 3：烧录成功，还未重启，这个时候将要升级的 slot 设置为 active 状态，将当前 slot 设置为非 active 状态（调整优先级）。
 
 - 状态 4：重启验证成功，将 a 设置为 success boot 状态。
 
@@ -1077,10 +1077,10 @@ S600 参考实现中，OTA 升级完重启之后启动到内核会触发 systemd
     <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/image/ota/ota_boot_check_state.png" alt="重启验证与回滚示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::warning
-镜像烧写完成、但尚未调用 `otaMarkOTASuccessful` 标记成功之前，若发生任何重启，AB 状态机不会把新 slot 标记为 boot_successful，下次仍会从旧版本 slot 启动，本次升级判定失败。请避免在验证阶段中途重启。
+镜像烧录完成、但尚未调用 `otaMarkOTASuccessful` 标记成功之前，若发生任何重启，AB 状态机不会把新 slot 标记为 boot_successful，下次仍会从旧版本 slot 启动，本次升级判定失败。请避免在验证阶段中途重启。
 :::
 
-### 分区烧写方式
+### 分区烧录方式
 
 :::warning
 升级过程中禁止断电、重启或对目标分区执行其它写入操作，否则可能导致分区损坏、设备无法启动。
@@ -1156,11 +1156,11 @@ S600 参考实现中，OTA 升级完重启之后启动到内核会触发 systemd
 
 1. OTA Service 从云端下载并校验升级包，并调用 `otaInitLib` 初始化动态库。
 
-2. 调用 `otaRequestStart` 发起升级。该 API 会解压升级包中的 `ota_process` 程序，并 fork 一个进程，执行 `ota_process` 程序进行实际烧写。同时，该 API 还会创建文件锁（防止同时存在多次升级）、创建 pipe 文件（用于和 `ota_process` 通信）。另外，该 API 还会创建一个线程，用于定期读取 pipe，获取实时升级进度、升级结果、升级分区等信息。
+2. 调用 `otaRequestStart` 发起升级。该 API 会解压升级包中的 `ota_process` 程序，并 fork 一个进程，执行 `ota_process` 程序进行实际烧录。同时，该 API 还会创建文件锁（防止同时存在多次升级）、创建 pipe 文件（用于和 `ota_process` 通信）。另外，该 API 还会创建一个线程，用于定期读取 pipe，获取实时升级进度、升级结果、升级分区等信息。
 
 3. 子进程升级阶段，OTA Service 可以调用 `otaGetResult` 获取升级结果、调用 `otaGetProgress` 获取升级进度、调用 `otaGetUpdatingImageName` 获取正在升级的镜像。
 
-4. 当 `otaGetResult` 返回 `OTA_UPGRADE_SUCCESS` 时，代表镜像烧写成功，需要进入校验阶段。
+4. 当 `otaGetResult` 返回 `OTA_UPGRADE_SUCCESS` 时，代表镜像烧录成功，需要进入校验阶段。
 
 5. 调用 `otaSetPartition` 将下次启动分区设置为对向分区，并执行重启流程。
 
@@ -1438,10 +1438,10 @@ hrut_boot_control -d          # 将 AB slot 状态恢复为默认值
 ## OTA API 介绍
 
 <DocScope products="RDK S100">
-S100 提供底层刷写库 `libupdate.so`，实现了一套跨平台的 API，用于烧写 OTA 包。
+S100 提供底层刷写库 `libupdate.so`，实现了一套跨平台的 API，用于烧录 OTA 包。
 </DocScope>
 <DocScope products="RDK S600">
-S600 提供底层刷写库 `libupdate.so`，实现了一套跨平台的 API，用于烧写 OTA 包。
+S600 提供底层刷写库 `libupdate.so`，实现了一套跨平台的 API，用于烧录 OTA 包。
 </DocScope>
 
 底软基于 OTA HighLevel API 开发了 `ota_tool` 工具。
@@ -1644,7 +1644,7 @@ int main(void) {
 | 接口形式     | c 函数接口                                       |
 | 输入参数     | N/A                                             |
 | 输出参数     | N/A                                             |
-| 返回值       | 0 ~ 100: 当前升级进度(%)<br/>-OTAERR_NOTINIT: 未初始化本动态库 |
+| 返回值       | 0-100: 当前升级进度(%)<br/>-OTAERR_NOTINIT: 未初始化本动态库 |
 | 描述         | 获取当前升级进度                               |
 
 **示例代码**
@@ -1912,6 +1912,6 @@ int notify_mcu(hl_ota_msg msg) {
 
 ### 升级后回滚到旧版本
 
-**原因**：镜像烧写后、标记成功（`otaMarkOTASuccessful`）前发生重启，AB 状态机未将新 slot 标记为 boot_successful。
+**原因**：镜像烧录后、标记成功（`otaMarkOTASuccessful`）前发生重启，AB 状态机未将新 slot 标记为 boot_successful。
 
 **解决**：走完整验证流程，确保新镜像启动校验并通过后再完成升级；避免在验证阶段中途重启。

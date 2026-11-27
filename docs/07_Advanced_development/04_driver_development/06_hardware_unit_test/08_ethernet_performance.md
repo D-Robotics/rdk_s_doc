@@ -20,7 +20,7 @@ description: "以太网性能测试"
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/images_to_upload/Ethernet_usage_diagram.png" alt="准备工作示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-1. **选择连接方式**：`开发板`-`电脑`直连，或者`开发板`-`开发板`直连，或两端接入同一台普通交换机（同一 VLAN）。注意：两端必须处于**同一个二层广播域**，跨网段/跨 VLAN 时无法直接 ARP，需额外配置网关。
+1. **选择连接方式**：`开发板`-`电脑` 直连，或者 `开发板`-`开发板` 直连，或两端接入同一台普通交换机（同一 VLAN）。注意：两端必须处于**同一个二层广播域**，跨网段/跨 VLAN 时无法直接 ARP，需额外配置网关。
 2. **确定服务器和客户端**：开发板做客户端和服务端都可以，对端设备可以是个人电脑（PC），也可以是另一块开发板。
 3. **确定网段**：两端配置为相同网段的静态 IP（测试场景通常无 DHCP 服务器，建议直接用静态 IP）。
 4. **清理对端过期 ARP 缓存**：若对端（尤其是 Windows PC）此前连接过其它板子或其它 IP，ARP 表里可能残留**静态/过期记录**，导致 ping 时 ARP 解析到错误 MAC，回包发到错误 MAC 被丢弃，表现为「ARP 能解析但 ping 100% 丢包」。测试前在对端清理：
@@ -44,7 +44,7 @@ description: "以太网性能测试"
 
 在本测试中配置如下：
 
-- **连接方式**：`开发板`-`电脑`直连。
+- **连接方式**：`开发板`-`电脑` 直连。
 - **服务器（PC）**：IP 地址为 `192.168.127.195`
 - **客户端（开发板）**：IP 地址为 `192.168.127.10`
 
@@ -203,7 +203,7 @@ Connecting to host 192.168.127.195, port 5002
 
 ## 常见问题
 
-### 1. 为什么 iperf3 客户端无法连接到服务器？
+### 为什么 iperf3 客户端无法连接到服务器？
 
 - **原因分析**：
   1. 客户端和服务器未在同一网段，或 IP 地址配置错误。
@@ -214,7 +214,7 @@ Connecting to host 192.168.127.195, port 5002
   2. 检查防火墙设置，允许 `iperf3` 使用的端口通信（例如 `5002`）。
   3. 确保服务器端已正确执行 `iperf3 -s` 命令并在监听。
 
-### 2. 为什么测试带宽低于预期值？
+### 为什么测试带宽低于预期值？
 
 - **原因分析**：
   1. 网络硬件如网卡不支持千兆速率，或未协商到千兆速率。
@@ -223,7 +223,7 @@ Connecting to host 192.168.127.195, port 5002
   1. 检查设备硬件支持千兆以太网，必要时强制网卡协商为千兆速率。
   2. 测试前，关闭客户端和服务器上可能占用网络或系统资源的其他任务。
 
-### 3. 为什么测试过程中出现高丢包率？
+### 为什么测试过程中出现高丢包率？
 
 - **原因分析**：
   1. 测试网络环境存在干扰，或网线质量较差。
@@ -239,7 +239,7 @@ Connecting to host 192.168.127.195, port 5002
      sysctl -w net.core.wmem_max=2500000               # 设置发送缓冲区（wmem_max）的最大值为 2,500,000 字节
      ```
 
-### 4. 如何解决 iperf3 运行时显示 "Address already in use" 错误？
+### 如何解决 iperf3 运行时显示 "Address already in use" 错误？
 
 - **原因分析**：此错误通常是因为服务器端口已经被占用，可能是另一个 `iperf3` 实例未关闭。
 - **解决方法**：
@@ -255,17 +255,17 @@ Connecting to host 192.168.127.195, port 5002
      kill <进程 ID>
      ```
 
-### 5. 为什么 ping 通但 iperf3 报 Connection refused？
+### 为什么 ping 通但 iperf3 报 Connection refused？
 
 - **原因分析**：板端 `iperf3`（3.x）默认 server 监听 IPv6 `[::]`，不接收 IPv4 连接，PC 用 IPv4 连接时被拒绝。
 - **解决方法**：板端起 server 时显式绑定 IPv4：`iperf3 -s -B 0.0.0.0 -p 5201`，并用 `ss -tlnp4 | grep 5201` 确认监听在 `0.0.0.0:5201`。
 
-### 6. 为什么 iperf3 报 unable to create a new stream: No such file or directory？
+### 为什么 iperf3 报 unable to create a new stream: No such file or directory？
 
 - **原因分析**：PC 端使用基于 Cygwin 的 `iperf3.exe`（如 3.1.1）时，未在其安装目录下运行，导致找不到同目录的 `cygwin1.dll`。
 - **解决方法**：`cd` 到 `iperf3.exe` 所在目录后再执行；或将其目录加入 `PATH`。建议两端 `iperf3` 版本尽量一致。
 
-### 7. 为什么两端都配了静态 IP，ping 还是 100% 丢包（但 ARP 能解析）？
+### 为什么两端都配了静态 IP，ping 还是 100% 丢包（但 ARP 能解析）？
 
 - **原因分析**：对端（常见为 Windows PC）ARP 表里残留**静态/过期记录**，把板子 IP 钉到了一个错误 MAC。板子发出的 request 对端收到了，但回包发到了错误 MAC，板子网卡硬件直接丢弃，表现为 `ip neigh` 显示对端 `REACHABLE`、`tcpdump` 能看到 reply，但 `ping` 0 收包。
 - **解决方法**：在对端清理 ARP 缓存后重新 `ping`：

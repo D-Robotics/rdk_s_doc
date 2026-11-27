@@ -30,7 +30,7 @@ import TabItem from '@theme/TabItem';
 
 ## 产品介绍
 
-RDK S600 MCU 接口扩展板（含配套 FPC）是地瓜机器人 RDK S600 系列开发者套件的扩展模块，用于扩展 MCU 域接口。该板通过 J301 80-Pin 连接器与主板对接，提供 CAN FD、ADC 等外设接入能力，适合需要在 MCU 域接入多路总线外设的开发者。
+RDK S600 MCU 接口扩展板（含配套 FPC）是 D-Robotics RDK S600 系列开发者套件的扩展模块，用于扩展 MCU 域接口。该板通过 J301 80-Pin 连接器与主板对接，提供 CAN FD、ADC 等外设接入能力，适合需要在 MCU 域接入多路总线外设的开发者。
 
 ## 主要功能
 

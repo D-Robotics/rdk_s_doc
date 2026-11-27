@@ -22,7 +22,7 @@ description: "RDK S100/S600 摄像头采集→VIO→Display 实时预览示例"
 
 板端路径：`/app/cdev_demo/vio2display/`
 
-```
+```text
 vio2display/
 ├── Makefile
 └── vio2display.c

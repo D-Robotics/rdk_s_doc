@@ -58,8 +58,8 @@ ALSA 声卡由以下四部分构成：
 
 **驱动已注册能力**（`hobot-cpudai-super.c` / `hobot-i2s-super.h`；`arecord`/`aplay` 实际可选 PCM 参数以此为准）：
 
-- **通道**：1～16（`HOBOT_I2S_CHANNEL_MAX`）
-- **采样率**：8 kHz～192 kHz（`SNDRV_PCM_RATE_8000_192000`）
+- **通道**：1-16（`HOBOT_I2S_CHANNEL_MAX`）
+- **采样率**：8 kHz-192 kHz（`SNDRV_PCM_RATE_8000_192000`）
 - **采样格式**：S8、S16_LE、S24_3LE、S24_LE、S32_LE（`HOBOT_I2S_FMTS`）
 - **帧格式**：DTS `i2s_mode` 常用 `1`（I2S）或 `7`（DSP_A）；`dai-format` 对应 `"i2s"` / `"dsp_a"`
 - **双工模式**：I2S / 声卡节点 `work_mode`：`0` 半双工、`1` 全双工
@@ -77,7 +77,7 @@ S100 SoC 提供 **I2S0**、**I2S1** 两路控制器；RDK 板级音频子板方�
 | Codec（播放） | `es8156@8` | — | **I2C5** `0x08` | ES8156 DAC |
 | 声卡 | `snd2` | — | `model = "s100snd2"` | `compatible = "hobot, super-snd-ac-fdx-master"` |
 
-**40-pin PCM 与 Wi-Fi 复用**：扩展口 PCM 引脚（SoC `peri_pcm0`，pinctrl pin 35～39）与 PCIe Wi-Fi 模组复用，使用 Audio Driver HAT 时须将拨码切至 **PCM**（40 PIN 拨码左拨、PCM 拨码右拨），详见 [音频子板与开发板连接](#音频子板与开发板连接)。
+**40-pin PCM 与 Wi-Fi 复用**：扩展口 PCM 引脚（SoC `peri_pcm0`，pinctrl pin 35-39）与 PCIe Wi-Fi 模组复用，使用 Audio Driver HAT 时须将拨码切至 **PCM**（40 PIN 拨码左拨、PCM 拨码右拨），详见 [音频子板与开发板连接](#音频子板与开发板连接)。
 
 出厂 SoC DTS 中 `snd2` 为 `status = "okay"`，但声卡相关内核模块**默认不随开机自动加载**；须 `modprobe` 后才会出现 `/dev/snd/*`（见「功能使用」）。
 
@@ -866,7 +866,7 @@ Unable to open PCM device (cannot set hw params: Unknown error -22)
 
 **解决**：`arecord --dump-hw-params -Dhw:x,y` 查询能力后重新指定 `-f`/`-c`/`-r`。
 
-### 打开设备卡住
+### 打开设备无响应
 
 **原因**：同一 PCM 设备被占用；ALSA 单开单占。
 

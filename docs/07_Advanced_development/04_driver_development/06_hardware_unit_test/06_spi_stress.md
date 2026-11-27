@@ -45,7 +45,7 @@ S600 Acore 集成 4 路 SPI 控制器（SPI0~SPI3）。其中 SPI0 引脚接 CAN
 ## 环境准备
 
 - 开发板已烧录官方发布的 RDK OS 镜像，且已正常启动。
-- 板端 `/app/chip_base_test/04_spi_test/` 下存在测试源码与脚本（`spistress.sh`、`spidev_tc.c`、`Makefile`、`Readme.md`）；`spidev_tc` 可执行文件需按[编译执行文件](#编译执行文件)步骤生成。
+- 板端 `/app/chip_base_test/04_spi_test/` 下存在测试源码与脚本（`spistress.sh`、`spidev_tc.c`、`Makefile`、`Readme.md`）；`spidev_tc` 可执行文件需按 [编译执行文件](#编译执行文件) 步骤生成。
 - 回环测试需先用杜邦线短接所测 SPI 的 **MISO 与 MOSI**。
 
 <DocScope products="RDK S100">

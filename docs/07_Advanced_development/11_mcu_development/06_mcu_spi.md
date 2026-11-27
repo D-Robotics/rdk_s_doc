@@ -30,7 +30,7 @@ S100 SIP MCU 域共提供 6 个 SPI 控制器（SPI2~SPI7）。MCU 侧 SPI 驱�
 | 默认数据宽度 | 8 bit / 16 bit |
 </DocScope>
 <DocScope products="RDK S600">
-S600 模组 MCU 域集成 8 个 SPI 控制器（SPI4、SPI5、SPI6、SPI8、SPI10、SPI11、SPI12、SPI13）。MCU 侧 SPI 驱动管理 MCU 域的 8 个控制器，其中 SPI5/SPI8/SPI10/SPI12 支持主从模式，其余仅主模式。出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下，完整序列与硬件资源映射见[配置文件说明](#spi_config)：
+S600 模组 MCU 域集成 8 个 SPI 控制器（SPI4、SPI5、SPI6、SPI8、SPI10、SPI11、SPI12、SPI13）。MCU 侧 SPI 驱动管理 MCU 域的 8 个控制器，其中 SPI5/SPI8/SPI10/SPI12 支持主从模式，其余仅主模式。出厂默认参数基于 `Spi_PBcfg.c`，默认配置如下，完整序列与硬件资源映射见 [配置文件说明](#spi_config)：
 
 | 配置项 | 默认值 |
 |---|---|
@@ -43,22 +43,22 @@ S600 模组 MCU 域集成 8 个 SPI 控制器（SPI4、SPI5、SPI6、SPI8、SPI1
 ## 硬件支持
 
 - 如果 SPI 使用 DMA 传输，必须保证以下限制:
-    - 传输长度需要保证8字节对齐，否则会出现数据越界的问题;
-    - 发送和接收数据的 buffer 地址必须对齐为64字节;
-    - Channel 单次传输数据量不能超过4096字节；
+    - 传输长度需要保证 8 字节对齐，否则会出现数据越界的问题;
+    - 发送和接收数据的 buffer 地址必须对齐为 64 字节;
+    - Channel 单次传输数据量不能超过 4096 字节；
 - 支持 SPI 作为 Slave 功能;
-- Mcu 侧 SPI 做 Slave 时，速率大于9M，只能采用 DMA 模式;
+- Mcu 侧 SPI 做 Slave 时，速率大于 9M，只能采用 DMA 模式;
 - 当 MCU 作为 SPI 从设备时，其通信时钟由主设备提供。因此，从设备必须对主设备的每一次数据传输请求做出即时响应。若采用中断处理模式，需确保 SPI 中断服务程序的执行时间足够短。若中断被阻塞过久，未能及时处理数据寄存器，将导致接收缓冲区溢出。为此，强烈推荐使用 DMA 传输模式，以硬件方式自动完成数据搬运，从而保障通信的实时性与可靠性。
-- Mcu 侧 SPI 在8位模式下工作时，具有以下限制:
-    - 1个 SPI 并行收发最大速度: 50M;
-    - 2个 SPI 并行收发最大速度: 33.3M;
-    - 3个 SPI 并行收发最大速度: 25M;
-    - 4个 SPI 并行收发最大速度: 20M;
-    - 5个 SPI 并行收发最大速度: 15.6M;
-    - 6个 SPI 并行收发最大速度: 12.5M;
+- Mcu 侧 SPI 在 8 位模式下工作时，具有以下限制:
+    - 1 个 SPI 并行收发最大速度: 50M;
+    - 2 个 SPI 并行收发最大速度: 33.3M;
+    - 3 个 SPI 并行收发最大速度: 25M;
+    - 4 个 SPI 并行收发最大速度: 20M;
+    - 5 个 SPI 并行收发最大速度: 15.6M;
+    - 6 个 SPI 并行收发最大速度: 12.5M;
 - SPI 外设只支持 MSB;
 - SPI SpiCsPolarity 和 spitimeclk2c 都不支持配置，SpiCsPolarity 默认为低电平有效。
-- SPI SpiCsToggleEnable 配置使能后，Spi 传输完一个 frame 后，会拉高 CS 引脚，仅支持 TRAILING 模式，LEADING 模式不支持。
+- SPI SpiCsToggleEnable 配置使能后，SPI 传输完一个 frame 后，会拉高 CS 引脚，仅支持 TRAILING 模式，LEADING 模式不支持。
 - SPI DMA 模式相对于非 DMA 模式，消耗 CPU 负载更低。
 - 当 SPI 采用非 DMA 方式发送数据时，若系统负载比较大，会因为 SPI 中断响应不及时导致 SPI FIFO 未能及时写入，从而导致 CS 引脚短暂拉高，此时推荐采用 DMA 模式。
 - 如果使用场景是多个 Sequence 使用同一个 SPI IP 进行异步传输，且 Sequence 之间并没有传输完成先后顺序，则会存在 Sequence 传输排队的现象，此时需要在 SchM_Spi.c 文件中实现关中断临界区保护。
@@ -66,7 +66,7 @@ S600 模组 MCU 域集成 8 个 SPI 控制器（SPI4、SPI5、SPI6、SPI8、SPI1
 
 ## 软件架构
 
-SPI 驱动采用分层设计：应用层通过 Spi API 调用驱动，驱动再调用底层 LLD 直接操作硬件寄存器，配置由 PBCfg 与板级配置提供。
+SPI 驱动采用分层设计：应用层通过 SPI API 调用驱动，驱动再调用底层 LLD 直接操作硬件寄存器，配置由 PBCfg 与板级配置提供。
 
 ```mermaid
 flowchart LR
@@ -99,7 +99,7 @@ flowchart LR
 一般的软件操作流程如下:
 
 1. 初始化
-    - 修改 `ChannelCfgArrayPtr` , `JobCfgArrayPtr` , `SeqCfgArrayPtr` , `HwCfgPtr` , `PhyCfgPtr` 等配置结构体，将 SPI 对应 instance 配置为自己需要的波特率和传输模式，可参考 SPI 配置说明[Spi 配置说明](./06_mcu_spi.md#spi_config)
+    - 修改 `ChannelCfgArrayPtr` , `JobCfgArrayPtr` , `SeqCfgArrayPtr` , `HwCfgPtr` , `PhyCfgPtr` 等配置结构体，将 SPI 对应 instance 配置为自己需要的波特率和传输模式，可参考 SPI 配置说明 [SPI 配置说明](./06_mcu_spi.md#spi_config)
     - 调用 `Spi_Init(&Spi_Config)` 或者 `Spi_Init(NULL)` ，当传入为 NULL 时，使用 `Spi_PBcfg.c` 中的默认配置
     - 驱动程序遍历 ，根据配置信息初始化内部数据结构（如 `Spi_ChannelState` , `Spi_JobState` , `Spi_HwQueueArray` 等）和物理 SPI 硬件单元（根据 `Spi_PhyCfgType` 和 `Spi_IpCfg` 设置寄存器）
 
@@ -132,7 +132,7 @@ flowchart LR
 
 
 :::tip
-- SPI 只需要在 INIT 之后配置一次`set_AsyncMode()`，不需要反复调用，反复调用会导致传输异常。
+- SPI 只需要在 INIT 之后配置一次 `set_AsyncMode()`，不需要反复调用，反复调用会导致传输异常。
 - 当传输发生异常的时候，SPI 的状态机不会自动复位，需要手动调用 `Spi_Cancel()` 函数复位传输状态机。
 - Sample 里用了 DMA，但没进行初始化，这是因为在 `Target/Target-hobot-lite-freertos-mcu1/target/HorizonTask.c` 文件中已经完成了初始化。
 :::
@@ -166,7 +166,7 @@ spi_test <operation> [bus_id] [sync_mode] [trans_mode]
 应用层配置与底层配置应保持一致，否则会出现错误。
 :::
 
-以 SPI3 为例，将 SPI3的 MISO 和 MOSI 短接，运行以下命令，设置传输参数
+以 SPI3 为例，将 SPI3 的 MISO 和 MOSI 短接，运行以下命令，设置传输参数
 ```shell
 D-Robotics:/$ spi_test 0 3 0 0
 [055.578172 0]Init&&Parameter setting
@@ -233,16 +233,16 @@ usag: SpiTest_Mul_cs Case_num Sequences Cs DataWidth DataLen Loop_times
 other: SpiTest 110  -- help
 ```
 - 参数解析：
-    - Case_num (argv[1]): 指定要执行的操作，支持5种模式，如使用中断异步传输， Case_num 设置为4
-    - Sequences (argv[2]): 指定使用哪路 SPI， 如使用 SPI4，Sequences 参数设置为4
-    - Cs (argv[3]): 表示使用哪路 cs， 如使用 cs0， Cs 参数设置为0
-    - DataWidth (argv[4]): 表示传输数据位宽， 如位宽为8bit，DataWidth 设置为8
-    - Datalen (argv[5]): 表示传输的数据量，如传输10组数据， Datalen 设置为10
-    - Loop_times (argv[6]): 表示测试几次， 如测试5次， Loop_times 设置为5
+    - Case_num (argv[1]): 指定要执行的操作，支持 5 种模式，如使用中断异步传输， Case_num 设置为 4
+    - Sequences (argv[2]): 指定使用哪路 SPI， 如使用 SPI4，Sequences 参数设置为 4
+    - Cs (argv[3]): 表示使用哪路 cs， 如使用 cs0， Cs 参数设置为 0
+    - DataWidth (argv[4]): 表示传输数据位宽， 如位宽为 8bit，DataWidth 设置为 8
+    - Datalen (argv[5]): 表示传输的数据量，如传输 10 组数据， Datalen 设置为 10
+    - Loop_times (argv[6]): 表示测试几次， 如测试 5 次， Loop_times 设置为 5
 - 举例说明：
-    - SPI4，async interrupt 传输，cs1，8bit 数据宽度， 10组数据， 测试1次： SpiTest_Mul_cs 4 4 1 8 10 1
+    - SPI4，async interrupt 传输，cs1，8bit 数据宽度， 10 组数据， 测试 1 次： SpiTest_Mul_cs 4 4 1 8 10 1
 
-将 SPI4的 MISO 和 MOSI 短接，运行以下命令
+将 SPI4 的 MISO 和 MOSI 短接，运行以下命令
 ```shell
 Robotics:/$ SpiTest_Mul_cs 4 4 1 8 10 1
 [get_spi_status 98] [INFO]: SPI status: SPI_IDLE
@@ -277,13 +277,13 @@ spi_test <operation> [参数...]
 应用层配置与底层配置应保持一致，否则会出现错误。
 :::
 
-**操作0：配置组1的参数**
+**操作 0：配置组 1 的参数**
 
 ```bash
 spi_test 0 <spi_bus> <sync_mode> <trans_mode> <ch_cfg> <cs_seq0> <cs_seq1> <cs_seq2> <cs_seq3>
 ```
 
-- bus_id: SPI 总线 ID（可选，默认为4）
+- bus_id: SPI 总线 ID（可选，默认为 4）
 - sync_mode: 0=异步(async) 1=同步(sync)
 - trans_mode：0=轮询(polling) 1=中断(interrupt)
 - ch_cfg: SPI 通道配置
@@ -292,7 +292,7 @@ spi_test 0 <spi_bus> <sync_mode> <trans_mode> <ch_cfg> <cs_seq0> <cs_seq1> <cs_s
 - cs_seq2：cs2 所用的 SPI 序列 id，255=无效
 - cs_seq3：cs3 所用的 SPI 序列 id，255=无效
 
-配置 SPI 的基础参数配置，参数配置完成后，将参数保存在组1中。
+配置 SPI 的基础参数配置，参数配置完成后，将参数保存在组 1 中。
 
 ```shell
 D-Robotics:/$ spi_test 0 13 0 1 10 2 3 255 255
@@ -306,9 +306,9 @@ D-Robotics:/$ spi_test 0 13 0 1 10 2 3 255 255
 [046.806859 0]  cs_seq: [2, 3, 255, 255]
 ```
 
-**操作1：显示参数信息**
+**操作 1：显示参数信息**
 
-显示当前所有测试参数配置，其中第一组用于存储操作0的自定义配置
+显示当前所有测试参数配置，其中第一组用于存储操作 0 的自定义配置
 
 ```bash
 spi_test 1
@@ -336,13 +336,13 @@ D-Robotics:/$ spi_test 1
 [06649.844032 0]  cs_seq: [4, 255, 255, 255]
 ```
 
-**操作2：执行 SPI 测试**
+**操作 2：执行 SPI 测试**
 
 ```shell
 spi_test 2 [bus_id] [cs_id]
 ```
-- bus_id: SPI 总线 ID（可选，默认为4），此处的 busid 必须存在于参数配置组中（即通过 spi_test 1命令显示的参数配置组），否则测试将失败
-- cs_id: 芯片选择 ID，范围 0 ~ 3（可选，默认为0，当前仅支持 cs0 的测试，cs1 ~ 3需要修改代码后测试）
+- bus_id: SPI 总线 ID（可选，默认为 4），此处的 busid 必须存在于参数配置组中（即通过 spi_test 1 命令显示的参数配置组），否则测试将失败
+- cs_id: 芯片选择 ID，范围 0-3（可选，默认为 0，当前仅支持 cs0 的测试，cs1-3 需要修改代码后测试）
 
 ```shell
 D-Robotics:/$ spi_test 2 4 0
@@ -390,16 +390,16 @@ TxChBuf0 (256 bytes):
 
 #### 双片选使用示例(BMI088 测试)
 
-S600 MCU 子板上搭载了 BMI088传感器，该传感器通过 SPI13总线与 MCU 通信，其中 cs0连接加速度计(acc)，cs1连接陀螺仪(gyr)。
+S600 MCU 子板上搭载了 BMI088 传感器，该传感器通过 SPI13 总线与 MCU 通信，其中 cs0 连接加速度计(acc)，cs1 连接陀螺仪(gyr)。
 
 使用方式和参数解析如下：
 
-1. 初始化 BMI088传感器
+1. 初始化 BMI088 传感器
 ```shell
 D-Robotics:/$ Bmi088_ShellInit
 [Bmi088_Init] ACC+GYR initialized.
 ```
-2. BMI088传感器自测
+2. BMI088 传感器自测
 
 ```shell
 D-Robotics:/$ Bmi088_SelfTestGyr
@@ -456,7 +456,7 @@ GYR gx:-2.449 gy:-4.104 gz:11.306
 
 ### 配置文件说明{#spi_config}
 
-配置文件`Spi_PBcfg.c` 存放着 SPI 的驱动配置，其中`Spi_ConfigType`为顶层容器，它将所有配置信息（通道、作业、序列、硬件单元等）组织在一起，形成一个完整的、用于初始化 SPI 驱动程序的配置集。
+配置文件 `Spi_PBcfg.c` 存放着 SPI 的驱动配置，其中 `Spi_ConfigType` 为顶层容器，它将所有配置信息（通道、作业、序列、硬件单元等）组织在一起，形成一个完整的、用于初始化 SPI 驱动程序的配置集。
 
 ```c
 /**
@@ -534,42 +534,42 @@ erDiagram
 ```
 
 
-`SPI_HWUNIT` 和 `SPI_EXTERNAL_DEVICE` 都需要关联一个硬件实例（Instance），该实例决定了使用哪一个 SPI 接口进行通信。下表✅ **绿色**字体部分展示了 SPI 序列配置（Spi SeqCfg）与对应硬件资源（Spi BusId、HWUnit、Instance）之间的映射关系。
+`SPI_HWUNIT` 和 `SPI_EXTERNAL_DEVICE` 都需要关联一个硬件实例（Instance），该实例决定了使用哪一个 SPI 接口进行通信。下表加粗的 **SPI BusId**、**HWUnit**、**Instance** 三列展示了 SPI 序列配置（SPI SeqCfg）与对应硬件资源之间的映射关系。
 
 <DocScope products="RDK S100">
 
 S100 平台 MCU 域共提供 6 个 SPI 控制器（SPI2~SPI7），MCU 域中的 SPI 从 SPI2 开始编号。
 
-| **SPI SeqCfg** | ✅ **Spi BusId**  | ✅ **HWUnit**  | ✅ **Instance**  | **Spi Baudrate** | **Spi Cs** | **Frame size**|
+| **SPI SeqCfg** | **SPI BusId**  | **HWUnit**  | **Instance**  | **SPI Baudrate** | **SPI Cs** | **Frame size**|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| SpiSequence_0 | ✅ SPI2 | ✅ CSIB0 | ✅ 0 | 2000000 | CS0 | 16 bit |
-| SpiSequence_1 | ✅ SPI3 | ✅ CSIB1 | ✅ 1 | 2000000 | CS0 | 16 bit |
-| SpiSequence_2 | ✅ SPI4 | ✅ CSIB2 | ✅ 2 | 1000000 | CS0 | 8 bit |
-| SpiSequence_3 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS0 | 8 bit |
-| SpiSequence_4 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS0 | 16 bit |
-| SpiSequence_5 | ✅ SPI6 | ✅ CSIB4 | ✅ 4 | 1000000 | CS0 | 8 bit |
-| SpiSequence_6 | ✅ SPI7 | ✅ CSIB5 | ✅ 5 | 1000000 | CS0 | 8 bit |
-| SpiSequence_7 | ✅ SPI2 | ✅ CSIB0 | ✅ 0 | 2000000 | CS1 | 16 bit |
-| SpiSequence_8 | ✅ SPI3 | ✅ CSIB1 | ✅ 1 | 2000000 | CS1 | 16 bit |
-| SpiSequence_9 | ✅ SPI4 | ✅ CSIB2 | ✅ 2 | 1000000 | CS1 | 8 bit |
-| SpiSequence_10 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS1 | 8 bit |
-| SpiSequence_11 | ✅ SPI5 | ✅ CSIB3 | ✅ 3 | 1000000 | CS1 | 16 bit |
-| SpiSequence_12 | ✅ SPI6 | ✅ CSIB4 | ✅ 4 | 1000000 | CS1 | 8 bit |
-| SpiSequence_13 | ✅ SPI7 | ✅ CSIB5 | ✅ 5 | 1000000 | CS1 | 8 bit |
+| SpiSequence_0 | SPI2 | CSIB0 | 0 | 2000000 | CS0 | 16 bit |
+| SpiSequence_1 | SPI3 | CSIB1 | 1 | 2000000 | CS0 | 16 bit |
+| SpiSequence_2 | SPI4 | CSIB2 | 2 | 1000000 | CS0 | 8 bit |
+| SpiSequence_3 | SPI5 | CSIB3 | 3 | 1000000 | CS0 | 8 bit |
+| SpiSequence_4 | SPI5 | CSIB3 | 3 | 1000000 | CS0 | 16 bit |
+| SpiSequence_5 | SPI6 | CSIB4 | 4 | 1000000 | CS0 | 8 bit |
+| SpiSequence_6 | SPI7 | CSIB5 | 5 | 1000000 | CS0 | 8 bit |
+| SpiSequence_7 | SPI2 | CSIB0 | 0 | 2000000 | CS1 | 16 bit |
+| SpiSequence_8 | SPI3 | CSIB1 | 1 | 2000000 | CS1 | 16 bit |
+| SpiSequence_9 | SPI4 | CSIB2 | 2 | 1000000 | CS1 | 8 bit |
+| SpiSequence_10 | SPI5 | CSIB3 | 3 | 1000000 | CS1 | 8 bit |
+| SpiSequence_11 | SPI5 | CSIB3 | 3 | 1000000 | CS1 | 16 bit |
+| SpiSequence_12 | SPI6 | CSIB4 | 4 | 1000000 | CS1 | 8 bit |
+| SpiSequence_13 | SPI7 | CSIB5 | 5 | 1000000 | CS1 | 8 bit |
 
 </DocScope>
 <DocScope products="RDK S600">
 
 S600 平台 MCU 域共提供 8 个 SPI 控制器（SPI4、SPI5、SPI6、SPI8、SPI10、SPI11、SPI12、SPI13）。MCU 域出厂配置涉及 SPI4、SPI6、SPI13 等控制器，其中 SPI13 用于连接 MCU 子板上的 BMI088 传感器。
 
-| **SPI SeqCfg** | ✅ **Spi BusId**  | ✅ **HWUnit**  | ✅ **Instance**  | **Spi Baudrate** | **Spi Cs** | **Frame size**|
+| **SPI SeqCfg** | **SPI BusId**  | **HWUnit**  | **Instance**  | **SPI Baudrate** | **SPI Cs** | **Frame size**|
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| SpiSequence_0 | ✅ SPI6 | ✅ CSIB2 | ✅ 2 | 2000000 | CS0 | 16 bit |
-| SpiSequence_1 | ✅ SPI6 | ✅ CSIB2 | ✅ 2 | 2000000 | CS1 | 16 bit |
-| SpiSequence_2 | ✅ SPI13 | ✅ CSIB9 | ✅ 9 | 1000000 | CS0 | 8 bit |
-| SpiSequence_3 | ✅ SPI13 | ✅ CSIB9 | ✅ 9 | 1000000 | CS1 | 8 bit |
-| SpiSequence_4 | ✅ SPI4 | ✅ CSIB0 | ✅ 0 | 1000000 | CS0 | 8 bit |
-| SpiSequence_5 | ✅ SPI4 | ✅ CSIB0 | ✅ 0 | 1000000 | CS1 | 8 bit |
+| SpiSequence_0 | SPI6 | CSIB2 | 2 | 2000000 | CS0 | 16 bit |
+| SpiSequence_1 | SPI6 | CSIB2 | 2 | 2000000 | CS1 | 16 bit |
+| SpiSequence_2 | SPI13 | CSIB9 | 9 | 1000000 | CS0 | 8 bit |
+| SpiSequence_3 | SPI13 | CSIB9 | 9 | 1000000 | CS1 | 8 bit |
+| SpiSequence_4 | SPI4 | CSIB0 | 0 | 1000000 | CS0 | 8 bit |
+| SpiSequence_5 | SPI4 | CSIB0 | 0 | 1000000 | CS1 | 8 bit |
 
 </DocScope>
 
@@ -929,7 +929,7 @@ void Spi_MainFunction_Handling(void);
 
 - **收发自测**：运行 `SpiTest_Mul_cs` / `spi_test` 自环测试前，将对应通道的 MISO 与 MOSI 短接，比对发送与接收数据是否一致（日志出现 `check data success` 表示通过）。
 - **配置核对**：应用层配置与底层 `Spi_PBcfg.c` 配置应保持一致，否则会出现传输错误。
-- **寄存器核对**：通过序列配置表核对 Spi BusId、HWUnit、Instance、波特率、片选与目标配置一致。
+- **寄存器核对**：通过序列配置表核对 SPI BusId、HWUnit、Instance、波特率、片选与目标配置一致。
 
 ## 常见问题
 

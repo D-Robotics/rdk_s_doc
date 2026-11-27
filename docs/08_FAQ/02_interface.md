@@ -10,12 +10,14 @@ description: "接口、外设与驱动 常见问题与排查"
 import DocScope from '@site/src/components/DocScope';
 ```
 
+## 常见问题
+
 ### 40PIN 接口
 
-#### Q1: 开发板是否支持将40PIN 中的 VDD_5V 作为电源输入？
-**A:** 开发板 V1.2及以上版本可以支持。版本号通常可以通过查看开发板 PCB 板上的丝印信息来确认。请务必谨慎操作，并确认您的板卡版本确实支持此功能，错误的供电方式可能导致硬件损坏。
+#### Q1: 开发板是否支持将 40PIN 中的 VDD_5V 作为电源输入？
+**A:** 开发板 V1.2 及以上版本可以支持。版本号通常可以通过查看开发板 PCB 板上的丝印信息来确认。请务必谨慎操作，并确认您的板卡版本确实支持此功能，错误的供电方式可能导致硬件损坏。
 
-#### Q2: 开发板是否支持通过 C/C++语言操作40PIN GPIO 接口？
+#### Q2: 开发板是否支持通过 C/C++语言操作 40PIN GPIO 接口？
 **A:** 是的，支持。您可以参考 D-Robotics 开发者社区论坛中的相关文章和代码示例，例如：
 * C/C++ GPIO 库：请优先使用当前文档与 SDK 中提供的接口和示例。
 * 查阅对应 RDK 型号的官方文档中关于 GPIO 开发的章节，通常会提供底层的操作方法或推荐的库。
@@ -31,7 +33,7 @@ import DocScope from '@site/src/components/DocScope';
     * 参考官方文档中关于“调试串口”或“远程登录”章节的连接图示。
 3.  **串口终端软件参数配置**：
     * 确保您电脑上的串口终端软件（如 PuTTY, MobaXterm, minicom, SecureCRT 等）参数配置正确。RDK 板卡调试串口通常的配置为：
-        * **波特率 (Baud rate):** 921600 (这是一个高速波特率，部分旧型号或特定场景可能使用115200，请以板卡文档为准)
+        * **波特率 (Baud rate):** 921600 (这是一个高速波特率，部分旧型号或特定场景可能使用 115200，请以板卡文档为准)
         * **数据位 (Data bits):** 8
         * **停止位 (Stop bits):** 1
         * **奇偶校验 (Parity):** None (无)
@@ -66,14 +68,14 @@ import DocScope from '@site/src/components/DocScope';
 #### Q5: 开发板无法通过 SSH 远程连接，可能是什么原因？
 **A:**
 * **提示 `Connection timed out`**：
-    * **原因**： 这通常表示网络通讯层面存在问题，您的电脑无法在网络上找到或连接到开发板的 SSH 服务端口（默认为22）。
+    * **原因**： 这通常表示网络通讯层面存在问题，您的电脑无法在网络上找到或连接到开发板的 SSH 服务端口（默认为 22）。
     * **排查**：
         1.  确认开发板已开机并成功连接到网络（有线或无线）。
         2.  确认您知道开发板的正确 IP 地址。
         3.  在您的电脑上尝试 `ping <开发板IP地址>`，看是否能 ping 通。如果 ping 不通，则先解决网络连接问题（检查 IP 配置、网线、Wi-Fi 连接、路由器设置、防火墙等）。
         4.  确认开发板上的 SSH 服务 (`sshd`) 正在运行。可以尝试通过串口登录后，执行 `sudo systemctl status ssh` 或 `ps aux | grep sshd` 查看。如果未运行，尝试启动：`sudo systemctl start ssh`。
-        5.  检查电脑或网络中是否有防火墙阻止了到开发板22端口的连接。
-    * **参考**： [SSH登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md)章节。
+        5.  检查电脑或网络中是否有防火墙阻止了到开发板 22 端口的连接。
+    * **参考**： [SSH 登录](../01_Quick_start/03_install_os_and_setup/05_remote_login.md) 章节。
 
 * **提示 `Authentication failed` 或 `Permission denied, please try again.`**：
     * **原因**： 这表示网络连接已建立，但您提供的用户名或密码不正确，SSH 服务器拒绝了您的登录请求。
@@ -93,9 +95,9 @@ import DocScope from '@site/src/components/DocScope';
     * 尝试在路由器设置中更改 Wi-Fi 信道，避开周围环境中其他无线信号拥挤的信道。
 3.  **驱动与固件**： 确保开发板上的 Wi-Fi 模块驱动和固件是最新或稳定的版本（通常随系统更新提供）。
 4.  **网络负载**： 检查局域网内是否有其他设备占用了大量带宽。
-5.  **2.4GHz vs 5GHz**： 如果您的开发板和路由器都支持5GHz Wi-Fi，尝试连接到5GHz 频段，通常干扰较少且速度更快（但穿墙能力弱于2.4GHz）。
+5.  **2.4GHz vs 5GHz**： 如果您的开发板和路由器都支持 5GHz Wi-Fi，尝试连接到 5GHz 频段，通常干扰较少且速度更快（但穿墙能力弱于 2.4GHz）。
 
-#### Q7: 开发板无线网络无法使用，使用`ifconfig`命令查询不到`wlan0`设备（或类似无线网络接口名），如何处理？
+#### Q7: 开发板无线网络无法使用，使用 `ifconfig` 命令查询不到 `wlan0` 设备（或类似无线网络接口名），如何处理？
 **A:** 如果 `ifconfig` 或 `ip addr` 命令的输出中没有显示无线网络接口（如 `wlan0`），可能的原因及解决方法：
 1.  **无线模块被软禁用 (RFKill)**：
     * 系统可能通过 RFKill 机制将无线模块在软件层面禁用了。
@@ -107,7 +109,7 @@ import DocScope from '@site/src/components/DocScope';
         然后再用 `ifconfig -a` 或 `ip link show` 查看接口是否出现。
 2.  **驱动问题**：
     * 无线模块的驱动程序可能没有正确加载或工作不正常。可以尝试查看内核日志 (`dmesg | grep -i wlan` 或 `dmesg | grep -i wifi`) 是否有相关错误信息。
-    * 确保系统已安装了对应无线芯片的正确驱动和固件（通常由`hobot-wifi`等软件包提供）。
+    * 确保系统已安装了对应无线芯片的正确驱动和固件（通常由 `hobot-wifi` 等软件包提供）。
 3.  **硬件问题**： 极少数情况下，可能是无线模块本身硬件故障。
 4.  **系统镜像或配置问题**： 确保您使用的系统镜像支持板载的无线模块，并且相关的内核配置已启用。
 
@@ -133,7 +135,7 @@ import DocScope from '@site/src/components/DocScope';
 4.  **查看内核日志**：
     * 在插入 USB 摄像头后，立即通过串口或 SSH 登录到板卡，执行 `dmesg | tail` 查看最新的内核日志。日志中通常会包含 USB 设备插入、识别、驱动加载或失败的详细信息。
 5.  **USB 供电问题**：
-    * 部分功耗较大的 USB 摄像头可能需要 USB 接口提供足够的电流。如果开发板 USB 口供电不足（虽然不常见于标准 UVC 摄像头），可能会导致识别失败。可以尝试通过一个带独立供电的 USB Hub 来连接摄像头。
+    * 部分功耗较大的 USB 摄像头可能需要 USB 接口提供足够的电流。如果开发板 USB 口供电不足（虽然不常见于标准 UVC 摄像头），可能会导致识别失败。可以尝试通过一个带独立供电的 USB hub 来连接摄像头。
 6.  **驱动兼容性**：
     * 绝大多数 USB 摄像头都遵循 UVC 标准，RDK 的 Linux 内核通常内置了 UVC 驱动。但极少数非标准或特殊的 USB 摄像头可能存在驱动兼容性问题。
 
@@ -162,7 +164,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ### MIPI CSI 接口
 
-#### Q11: 开发板接入 MIPI 摄像头后无法使用，`i2cdetect`命令无法检测到摄像头的 I2C 地址，是什么原因？
+#### Q11: 开发板接入 MIPI 摄像头后无法使用，`i2cdetect` 命令无法检测到摄像头的 I2C 地址，是什么原因？
 **A:**
 1.  **摄像头连接方式错误**：
     * **FPC 排线方向**： MIPI 摄像头通过 FPC 软排线连接。请务必确认排线的插入方向是否正确（通常排线两端的蓝色加强筋面需要朝向连接器卡扣的扳手面，或遵循板卡和摄像头模组上的标记）。错误的插入方向会导致无法通信。
@@ -191,7 +193,7 @@ import DocScope from '@site/src/components/DocScope';
     * 更低的分辨率如 640x480, 800x600 等。
 * **特定型号和版本**：
     * 较新版本的 RDK OS 通常会引入对更多分辨率和刷新率组合的支持。
-    * 不同性能档位的板卡在 HDMI 输出能力（如是否支持4K 分辨率）上会有差异。
+    * 不同性能档位的板卡在 HDMI 输出能力（如是否支持 4K 分辨率）上会有差异。
 * **查询方法**：
     1.  **官方文档**： 最准确的信息来源是查阅您所使用的具体 RDK 板卡型号和系统版本的官方《用户手册》或《硬件规格说明书》中关于“HDMI 接口”或显示子系统的章节。
     2.  **系统内查询（如果已连接显示器）**：
@@ -239,8 +241,8 @@ import DocScope from '@site/src/components/DocScope';
 
 * **`ttyS1` 被占用的表现**： 蓝牙服务运行期间，`fuser /dev/ttyS1` 能看到 `hciattach` 进程；此时自己程序打开该串口读写会与蓝牙流量互相干扰。
 * **外接串口设备的正确做法**：
-    1. 使用 40PIN 上的 **UART2**（`UART2_TX_3V3`/`UART2_RX_3V3`，与 I2C5 复用，通过 SW6 拨码切换），配合 `test_serial.py` 等示例使用，参考[UART 示例文档](/Demos/peripheral/01_40pin/s100/uart)。
-    2. 默认 disabled 的串口（如 `/dev/ttyS2`）需修改设备树启用并配置 pinctrl 后才可使用（未启用时执行 `stty -F /dev/ttyS2` 会报 `Input/output error`），参考[UART 驱动开发文档](/Advanced_development/driver_development/driver_uart_dev)。
+    1. 使用 40PIN 上的 **UART2**（`UART2_TX_3V3`/`UART2_RX_3V3`，与 I2C5 复用，通过 SW6 拨码切换），配合 `test_serial.py` 等示例使用，参考 [UART 示例文档](/Demos/peripheral/01_40pin/s100/uart)。
+    2. 默认 disabled 的串口（如 `/dev/ttyS2`）需修改设备树启用并配置 pinctrl 后才可使用（未启用时执行 `stty -F /dev/ttyS2` 会报 `Input/output error`），参考 [UART 驱动开发文档](/Advanced_development/driver_development/driver_uart_dev)。
 * **排查命令**：
     ```bash
     # 看串口是否被占用
@@ -262,7 +264,7 @@ import DocScope from '@site/src/components/DocScope';
 export MBT_TRANSPORT=/dev/ttyS1      # mbt 通信的 UART 端口
 export MBT_REG_ON_GPIO=427           # 蓝牙模组使能/复位 GPIO
 ```
-导出后再执行 `mbt download`、`mbt update_baudrate` 等命令即可。系统自带的 `startbt.sh` 内部已包含这两行 export，所以服务自动初始化不受影响；只有手动执行 mbt 时才需要自己导出。完整手动初始化流程参考[蓝牙初始化说明](/Advanced_development/system_software/bluetooth_init)。
+导出后再执行 `mbt download`、`mbt update_baudrate` 等命令即可。系统自带的 `startbt.sh` 内部已包含这两行 export，所以服务自动初始化不受影响；只有手动执行 mbt 时才需要自己导出。完整手动初始化流程参考 [蓝牙初始化说明](/Advanced_development/system_software/bluetooth_init)。
 
 #### Q16: 插了一个 USB 无线接收器，蓝牙还是没反应，是板子的问题吗？
 **A:** 先确认插入的是**蓝牙 dongle** 还是 **2.4G 无线键鼠接收器**，两者外观相似但完全不同：
@@ -299,7 +301,7 @@ export MBT_REG_ON_GPIO=427           # 蓝牙模组使能/复位 GPIO
 rmmod uvcvideo
 modprobe uvcvideo quirks=128
 ```
-执行后再接入两个 USB 摄像头。详细的接入步骤和限制说明参考[USB 摄像头示例文档](/Demos/peripheral/camera/usb_camera)中的双摄像头 FAQ。
+执行后再接入两个 USB 摄像头。详细的接入步骤和限制说明参考 [USB 摄像头示例文档](/Demos/peripheral/camera/usb_camera) 中的双摄像头 FAQ。
 
 </DocScope>
 
@@ -319,7 +321,7 @@ modprobe uvcvideo quirks=128
     * `iio:device0` — 陀螺仪（`icm42688-gyro`）
     * `iio:device1` — 加速度计（`icm42688-accel`）
     * `iio:device2` — fsync（`icm42688-fsync`）
-* **直接读数据**： 使用 `sample_imu_iio` 示例程序，`-n` 参数选择模组型号（如 `-n icm42688`），用法参考[IMU 示例文档](/Demos/peripheral/imu/s100_imu)。
+* **直接读数据**： 使用 `sample_imu_iio` 示例程序，`-n` 参数选择模组型号（如 `-n icm42688`），用法参考 [IMU 示例文档](/Demos/peripheral/imu/s100_imu)。
 
 #### Q20: 运行 sample_imu_input 报 No such file or directory，怎么排查？
 **A:** 该示例依赖驱动向上抛的 input 事件节点，报此错一般是**当前板子上的 IMU 型号没有走 input 上报路径**：
@@ -332,7 +334,7 @@ modprobe uvcvideo quirks=128
 2.  **区分两种读取方式**：
     * IIO 方式（`/dev/iio:deviceX`）： 适用 ICM42688 等通过 IIO 子系统上报的 IMU。
     * input 方式（`/dev/input/eventX`）： 依赖驱动以 MSC 事件形式上报数据，具体支持情况以实际模组为准。
-3.  **详细说明**： 参考[IMU 示例文档](/Demos/peripheral/imu/s100_imu)。
+3.  **详细说明**： 参考 [IMU 示例文档](/Demos/peripheral/imu/s100_imu)。
 
 </DocScope>
 
@@ -394,6 +396,6 @@ modprobe uvcvideo quirks=128
     cat /sys/class/boardinfo/adc_boardid
     # 2. 对比 SBL/U-Boot 日志中打印的 boardid，判断三侧是否一致
     ```
-* **解决**： 在 `hobot-loadko.sh` 中补全自定义 boardid 的分支，或修正三侧 boardid 定义，详见[RDK S600 硬件点亮](/Advanced_development/board_bringup/rdk_s600_bringup)。
+* **解决**： 在 `hobot-loadko.sh` 中补全自定义 boardid 的分支，或修正三侧 boardid 定义，详见 [RDK S600 硬件点亮](/Advanced_development/board_bringup/rdk_s600_bringup)。
 
 </DocScope>

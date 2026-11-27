@@ -39,7 +39,7 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 操作步骤
 
-步骤 2 与步骤 3 是进入下载模式的两种方式，按[下载模式](#下载模式)的选择**二选一**执行，随后执行步骤 4 烧录。
+步骤 2 与步骤 3 是进入下载模式的两种方式，按 [下载模式](#下载模式) 的选择**二选一**执行，随后执行步骤 4 烧录。
 
 ### 步骤 1：选择下载模式{#下载模式}
 
@@ -52,7 +52,7 @@ import DocScope from '@site/src/components/DocScope';
 
 预期结果：已确定本次烧录使用的下载模式。
 
-失败排查：进入对应模式后指示灯状态与预期不符时，见[常见问题](#常见问题)。
+失败排查：进入对应模式后指示灯状态与预期不符时，见 [常见问题](#常见问题)。
 
 ### 步骤 2：进入 DFU+Fastboot 模式
 
@@ -69,7 +69,7 @@ import DocScope from '@site/src/components/DocScope';
 
 预期结果：DOWNLOAD 指示灯点亮，表示已进入 DFU 模式。
 
-失败排查：指示灯不亮时，按下 K1 复位系统后重试；仍无法进入时见[常见问题](#常见问题)。
+失败排查：指示灯不亮时，按下 K1 复位系统后重试；仍无法进入时见 [常见问题](#常见问题)。
 
 </DocScope>
 
@@ -98,7 +98,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 预期结果：Flash LED 灯常亮，表示已进入 DFU 模式。
 
-失败排查：Flash LED 灯未常亮时，确认 **Power 按键在 ON（上）**、**Flash 按键在 ON（上）**，再断电重新上电；仍无法进入时见[常见问题](#常见问题)。
+失败排查：Flash LED 灯未常亮时，确认 **Power 按键在 ON（上）**、**Flash 按键在 ON（上）**，再断电重新上电；仍无法进入时见 [常见问题](#常见问题)。
 
 </DocScope>
 
@@ -129,11 +129,11 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 预期结果：设备进入 Fastboot 模式，XBurn 可识别到设备。
 
-失败排查：设备无法进入 U-Boot 时，改用 `DFU+Fastboot` 模式（见[下载模式](#下载模式)）。
+失败排查：设备无法进入 U-Boot 时，改用 `DFU+Fastboot` 模式（见 [下载模式](#下载模式)）。
 
 ### 步骤 4：烧录全镜像{#烧录全镜像}
 
-适用于首次刷机或系统恢复，烧录完整系统镜像包。平台相关的取值如下，请先在 XBurn 中按下表确认，再执行后续步骤。
+适用于首次烧录或系统恢复，烧录完整系统镜像包。平台相关的取值如下，请先在 XBurn 中按下表确认，再执行后续步骤。
 
 <DocScope products="RDK S100">
 
@@ -143,7 +143,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 | **存储介质** | `eMMC` |
 | **固件类型** | `secure` |
 
-烧录将覆盖板载 eMMC 与 Norflash 上的 `miniboot_flash`。
+烧录将覆盖板载 eMMC 与 NOR Flash 上的 `miniboot_flash`。
 
 </DocScope>
 
@@ -207,7 +207,7 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 预期结果：烧录完成，设备自动重启或按步骤 8 重新上电后，显示器输出 Ubuntu 系统桌面。
 
-失败排查：设备无法进入下载模式、烧录过程中失败或上电后无显示输出时，见[常见问题](#常见问题)。
+失败排查：设备无法进入下载模式、烧录过程中失败或上电后无显示输出时，见 [常见问题](#常见问题)。
 
 ## 进阶用法
 
@@ -223,9 +223,9 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 | 区域 | 实际存储介质 | 固件内容 | 镜像 |
 | --- | --- | -------- | ---- |
-| miniboot_flash | Norflash | Norflash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
+| miniboot_flash | NOR Flash | NOR Flash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
 | miniboot_emmc | eMMC | eMMC 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_emmc.img |
-| emmc | eMMC | eMMC 完整镜像，已包含 miniboot_emmc | img_packages/disk/emmc_disk.simg |
+| eMMC | eMMC | eMMC 完整镜像，已包含 miniboot_emmc | img_packages/disk/emmc_disk.simg |
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/specify-region-flash.jpg" alt="XBurn flashing selected regions (RDK S100)" style={{ width: '100%' }} />
 
@@ -233,11 +233,11 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 <DocScope products="RDK S600">
 
-`miniboot_flash` 位于 Norflash，与所选介质无关，UFS/NVMe 均可勾选；其余区域按「实际存储介质」列与所选介质对应。
+`miniboot_flash` 位于 NOR Flash，与所选介质无关，UFS/NVMe 均可勾选；其余区域按「实际存储介质」列与所选介质对应。
 
 | 区域 | 实际存储介质 | 固件内容 | 镜像 |
 | --- | --- | -------- | ---- |
-| miniboot_flash | Norflash | Norflash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
+| miniboot_flash | NOR Flash | NOR Flash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像 | img_packages/disk/miniboot_flash.img |
 | miniboot_ufs | UFS | UFS 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_ufs.img |
 | ufs | UFS | UFS 完整镜像，已包含 miniboot_ufs | img_packages/disk/ufs_disk.simg |
 | miniboot_nvme | NVMe | NVMe 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像 | img_packages/disk/miniboot_nvme.img |
@@ -259,8 +259,8 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 | 区域 | 实际存储介质 | 固件内容 | 备份镜像 |
 | --- | --- | -------- | ------------ |
-| miniboot_flash | Norflash | Norflash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
-| emmc | eMMC | eMMC 完整镜像 | img_packages/disk/emmc_disk_backup.img |
+| miniboot_flash | NOR Flash | NOR Flash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
+| eMMC | eMMC | eMMC 完整镜像 | img_packages/disk/emmc_disk_backup.img |
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/xburn/specify-region-backup.jpg" alt="XBurn backing up selected regions (RDK S100)" style={{ width: '100%' }} />
 
@@ -268,11 +268,11 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 <DocScope products="RDK S600">
 
-`miniboot_flash` 位于 Norflash，UFS/NVMe 均可备份；其余区域按「实际存储介质」列与所选介质对应。
+`miniboot_flash` 位于 NOR Flash，UFS/NVMe 均可备份；其余区域按「实际存储介质」列与所选介质对应。
 
 | 区域 | 实际存储介质 | 固件内容 | 备份镜像 |
 | --- | --- | -------- | ------------ |
-| miniboot_flash | Norflash | Norflash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
+| miniboot_flash | NOR Flash | NOR Flash 完整镜像 | img_packages/disk/miniboot_flash_backup.img |
 | ufs | UFS | UFS 完整镜像 | img_packages/disk/ufs_disk_backup.img |
 | nvme | NVMe | NVMe 完整镜像 | img_packages/disk/nvme_disk_backup.img |
 
@@ -315,9 +315,9 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 | 板卡型号正确 | `rdkos_info` | `[Hardware Model]` 与手中板卡一致（RDK S100 或 RDK S600） |
 | 系统已启动到桌面 | 观察 HDMI 显示输出 | 上电后显示器输出 Ubuntu 系统桌面 |
 
-失败排查：`cat /etc/version` 的版本与预期不一致时，说明烧入的镜像不对，按 [烧录全镜像](#烧录全镜像) 重新烧录。
+失败排查：`cat /etc/version` 的版本与预期不一致时，说明烧录的镜像不对，按 [烧录全镜像](#烧录全镜像) 重新烧录。
 
-失败排查：设备上电后长时间无显示输出时，见[常见问题](#常见问题)。
+失败排查：设备上电后长时间无显示输出时，见 [常见问题](#常见问题)。
 
 详细的状态查询命令与输出示例见 [系统状态查询](03_system_status.md)。
 
@@ -333,11 +333,11 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 **原因**：拨码位置与 DFU 模式的要求不一致。
 
-**解决**：按[步骤 2](#步骤-2进入-dfufastboot-模式)重新核对拨码位置与上电顺序；RDK S100 的 DOWNLOAD 指示灯仍不亮时，按下 K1 复位系统后重试。
+**解决**：按 [步骤 2](#步骤-2进入-dfufastboot-模式) 重新核对拨码位置与上电顺序；RDK S100 的 DOWNLOAD 指示灯仍不亮时，按下 K1 复位系统后重试。
 
 ### `cat /etc/version` 版本与预期不一致
 
-**原因**：烧入的镜像不是预期版本。
+**原因**：烧录的镜像不是预期版本。
 
 **解决**：按 [烧录全镜像](#烧录全镜像) 重新烧录，并确认 **镜像所在目录** 选择的是目标镜像的 product 文件夹。
 
@@ -351,4 +351,4 @@ RDK S600 当前在售版本为 V1P0，进入 DFU 模式方式如下：
 
 **原因**：BOOT 拨码位置与目标存储介质不一致，或使用了面向 UFS 的镜像。
 
-**解决**：按[烧录全镜像](#烧录全镜像)的启动盘选择设置 BOOT 拨码并保持位置不变，并使用按 `RDK_DISK_MEDIUM="nvme"` 编译的 NVMe 镜像。
+**解决**：按 [烧录全镜像](#烧录全镜像) 的启动盘选择设置 BOOT 拨码并保持位置不变，并使用按 `RDK_DISK_MEDIUM="nvme"` 编译的 NVMe 镜像。

@@ -45,7 +45,7 @@ description: "ENCODER（编码模块）API 接口说明"
 
 **【返回类型】**  
 
-成功返回一个`ENCODER`对象指针，失败返回`NULL`。
+成功返回一个 `ENCODER` 对象指针，失败返回 `NULL`。
 
 **【注意事项】**
 
@@ -93,8 +93,8 @@ description: "ENCODER（编码模块）API 接口说明"
 
 **【参数】**
 
-- `obj`： 已经初始化的`ENCODER`对象指针
-- `chn`：需要创建的编码通道号，支持 0 ~ 31
+- `obj`： 已经初始化的 `ENCODER` 对象指针
+- `chn`：需要创建的编码通道号，支持 0-31
 - `type`：图像编码类型，支持 `SP_ENCODER_H264`，`SP_ENCODER_H265` 和 `SP_ENCODER_MJPEG`。
 - `width`：输入给编码通道的图像数据分辨率-宽
 - `height`：输入给编码通道的图像数据分辨率-高
@@ -106,7 +106,7 @@ description: "ENCODER（编码模块）API 接口说明"
 
 **【注意事项】**
 
-调用前须先初始化 `ENCODER` 对象；`chn` 支持 0~31；`type` 支持 `SP_ENCODER_H264`、`SP_ENCODER_H265`、`SP_ENCODER_MJPEG`；输入图像宽度须满足对齐要求（见文首警告）。
+调用前须先初始化 `ENCODER` 对象；`chn` 支持 0-31；`type` 支持 `SP_ENCODER_H264`、`SP_ENCODER_H265`、`SP_ENCODER_MJPEG`；输入图像宽度须满足对齐要求（见文首警告）。
 
 **【兼容性】**
 
@@ -124,7 +124,7 @@ description: "ENCODER（编码模块）API 接口说明"
 
 **【参数】**
 
-- `obj`： 已经初始化的`ENCODER`对象指针
+- `obj`： 已经初始化的 `ENCODER` 对象指针
 
 **【返回类型】** 
 
@@ -150,8 +150,8 @@ description: "ENCODER（编码模块）API 接口说明"
 
 **【参数】**
 
-- `obj`： 已经初始化的`ENCODER`对象指针
-- `frame_buffer`：需要编码的图像帧数据，必须是 `NV12` 格式，分辨率必须和调用`sp_start_encode`接口是的图像帧分辨率一致。
+- `obj`： 已经初始化的 `ENCODER` 对象指针
+- `frame_buffer`：需要编码的图像帧数据，必须是 `NV12` 格式，分辨率必须和调用 `sp_start_encode` 接口是的图像帧分辨率一致。
 - `size`：图像帧数据大小，`NV12` 格式的图像的大小计算公式为 `(width * height * 3) / 2`。
 
 **【返回类型】** 
@@ -178,7 +178,7 @@ description: "ENCODER（编码模块）API 接口说明"
 
 **【参数】**
 
-- `obj`： 已经初始化的`ENCODER`对象指针
+- `obj`： 已经初始化的 `ENCODER` 对象指针
 - `stream_buffer`：获取成功后，码流数据会存在本 buffer 中。此 buffer 的大小需要根据编码分辨率和码率进行调整。
 
 **【返回类型】** 

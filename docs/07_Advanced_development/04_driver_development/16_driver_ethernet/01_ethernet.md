@@ -11,10 +11,10 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 前言
 <DocScope products="RDK S100">
-S100芯片提供多个标准千兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
+S100 芯片提供多个标准千兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
 </DocScope>
 <DocScope products="RDK S600">
-S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
+S600 芯片提供多个标准千兆/万兆以太网控制器，支持传统的以太网报文收发，PTP/TSN 时间敏感性网络，以及 EtherCAT 主站等特性。
 </DocScope>
 控制器内置硬件多队列、MTL 二层传输层、DMA 引擎等，以实现上述各种场景的报文收发。
 本文主要包括网卡使用指南、开发板 Bringup、关键特性描述等。
@@ -53,7 +53,7 @@ S600芯片提供多个标准千兆/万兆以太网控制器，支持传统的以
 
 | 特性    | 解释               | S600                                          |
 | ------  | -----------------  |  --------------------                          |
-| 配置    | 网口数量配置       | 3x gmac + 3x xgmac<br/>其中前2个 gmac 和 pcie 复用 phy |
+| 配置    | 网口数量配置       | 3x gmac + 3x xgmac<br/>其中前 2 个 gmac 和 pcie 复用 phy |
 | 接口    | mac--phy 接口       |  支持 SGMII/USXGMII                             |
 | PPS     | 秒脉冲, pps out/in |  &#x2705;                                      |
 | TSO     | TCP 分段卸载       |  &#x2705;                                      |
@@ -70,7 +70,7 @@ S100 与 S600 共用同一份源码树，通过各自的编译配置选择参与
 
 - U-Boot 以太网驱动：`bootloader/uboot/drivers/net/`
 
-```
+```text
 hobot_super_gmac.c        # GMAC 驱动
 hobot_super_xgmac.c       # XGMAC 驱动
 hobot_super_xpcs.c        # XPCS 驱动（S100）
@@ -89,7 +89,7 @@ hobot_s600_xpcs.c         # XPCS 驱动（S600）
 
 - Linux 以太网驱动：`hobot-drivers/ethernet/hobot/`
 
-```
+```text
 hobot_eth_super_main.c    # 驱动主体：probe、netdev 操作集、ethtool、TSN 私有 ioctl
 hobot_eth_super_mdio.c    # MDIO 总线注册与 C22/C45 PHY 读写
 hobot_eth_super_ptp.c     # PTP/PHC 时间戳与 PPS（含 flex PPS）
@@ -118,10 +118,10 @@ dma/hobot_xgmac_dma.c     # XGMAC DMA 与描述符
 ### U-Boot ETH 驱动开发
 #### 硬件连接
 <DocScope products="RDK S100">
-- 参考 S100设计原理图
+- 参考 S100 设计原理图
 </DocScope>
 <DocScope products="RDK S600">
-- 参考 S600设计原理图
+- 参考 S600 设计原理图
 </DocScope>
 
 #### 设备树配置
@@ -172,8 +172,8 @@ dma/hobot_xgmac_dma.c     # XGMAC DMA 与描述符
     };
 ```
 - xpcs-speed:       根据不同的 speed 设置 xpcs。
-- hobot-txeq:       设置不同档位的眼图参数，取值范围[0, 10]，默认是4档，sgmii 不需要调整。
-- hobot-vboost:     眼图幅值系数，0不使能。
+- hobot-txeq:       设置不同档位的眼图参数，取值范围[0, 10]，默认是 4 档，sgmii 不需要调整。
+- hobot-vboost:     眼图幅值系数，0 不使能。
 
 </DocScope>
 
@@ -335,20 +335,20 @@ md[.b, .w, .l, .q] address [# of objects]
 ```
 
 ### Linux ETH 驱动开发
-- 驱动代码在 hobot-drivers/ethernet 目录, 可参考[软件介绍](#软件介绍)的描述。
+- 驱动代码在 hobot-drivers/ethernet 目录, 可参考 [软件介绍](#软件介绍) 的描述。
 - 控制器驱动部分大部分不需要进行修改, 主要任务还是结合开发板硬件, 配置相关设备树。
 
 #### hsis 模式配置
 <DocScope products="RDK S100">
 :::warning
-- 由于 S100以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。
+- 由于 S100 以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。
 - 包括 Lane 使用的配置, 以及参考时钟配置等。特别需要注意的是, 由于 U-Boot 中启动时也会配置一次,
 - 所以需要确保 U-Boot 的 hsis 配置和 Kernel 是一致的。否则可能会导致实际 Lane 配置不对的情况。
 :::
 </DocScope>
 <DocScope products="RDK S600">
 :::warning
-- 由于 S600以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。
+- 由于 S600 以太网和 pcie 的 phy 部分都有复用关系。所以特别需要注意 hsis 模块的配置。
 - 包括 Lane 使用的配置, 以及参考时钟配置等。特别需要注意的是, 由于 U-Boot 中启动时也会配置一次,
 - 所以需要确保 U-Boot 的 hsis 配置和 Kernel 是一致的。否则可能会导致实际 Lane 配置不对的情况。
 :::
@@ -430,14 +430,14 @@ md[.b, .w, .l, .q] address [# of objects]
 - 描述下常见的 phy 配置参数
     - reset-delay-us：表示复位时间。
     - reset-post-delay-us：表示解复位后延时时间（phy 从解复位到完成初始化的时间）。
-    - ethernet-phy-ieee802.3-c22: mdio compatible 兼容名, 说明 phy mdio 走的是 C22协议。
+    - ethernet-phy-ieee802.3-c22: mdio compatible 兼容名, 说明 phy mdio 走的是 C22 协议。
     常见的如 RTL 千兆 phy 都支持这个协议。
-    - ethernet-phy-ieee802.3-c45: mdio compatible 兼容名, 说明 phy mdio 走的是 C45协议。
-    参考手册万兆 PHY, 以及一些高端 PHY 会走 C45协议。
+    - ethernet-phy-ieee802.3-c45: mdio compatible 兼容名, 说明 phy mdio 走的是 C45 协议。
+    参考手册万兆 PHY, 以及一些高端 PHY 会走 C45 协议。
 - MAC 相关常见一些配置
     - sgmii-autoneg：配置 SGMII 自协商。
     - phy-mode: 与 phy 的连接方式。如 sgmii, usxgmii 等。
-    - xpcs-speed: xpcs 工作速率, 例如配置成1000, 强制 xpcs 1G sgmii mode
+    - xpcs-speed: xpcs 工作速率, 例如配置成 1000, 强制 xpcs 1G sgmii mode
     - hobot,xgmac_gmii: xgmac 工作在 gmii 模式
 - 更多高级特性配置, 可参考后续章节
 
@@ -510,7 +510,7 @@ generic-segmentation-offload: on
 
 <DocScope products="RDK S600">
 
-#### XGMAC 配置成1G 模式
+#### XGMAC 配置成 1G 模式
 - 主要通过设备树 hsis, 以及独对应网卡节点进行配置, 例如
 ```dts
     hsis0: hsis0 {
@@ -523,7 +523,7 @@ generic-segmentation-offload: on
         hobot,xgmac_gmii;
     };
 ```
-- xpcs-speed:           配置1000前置 xpcs 工作在1G sgmii 模式
+- xpcs-speed:           配置 1000 前置 xpcs 工作在 1G sgmii 模式
 - hobot,xgmac_gmii:     强制 xgmac 工作在 gmii 模式下
 
 </DocScope>
@@ -835,7 +835,7 @@ ethtool -t eth0 offline             # Loopback 自检（MAC/PHY loopback）
 ip link set eth0 mtu 9000           # MTU，最大 9000
 ```
 
-- 私有命令（由地瓜定制版 `ethtool` 提供）：
+- 私有命令（由 D-Robotics 定制版 `ethtool` 提供）：
 
 ```bash
 ethtool hobot_gmac --set-fp eth0 fp on      # 开启帧抢占
@@ -990,14 +990,14 @@ ieee-phy: id:0x001cc916
 
 #### TSN-VLAN
 - TSN 在 IEEE 802.1Q 仅指 ISO/OSI 参考模型的第二层数据链路层的标准。
-- 802.1Q 标准的 VLAN，该标准在标准以太网帧中插入4个字节用于定义其特征，TSN 的标签位定义下图所示：
+- 802.1Q 标准的 VLAN，该标准在标准以太网帧中插入 4 个字节用于定义其特征，TSN 的标签位定义下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image15.png" alt="TSN-VLAN实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image15.png" alt="TSN-VLAN实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - 对 TSN 网络而言，不同优先级或服务等级（class of
 service，CoS）的服务对应上图中的 PCP 码。优先级代码（prioritycode
-point，PCP）由3位代码构成；3位 PCP 码定义了0（最低）～7（最高）这8个优先级，传输类型分别对应
-基础、最大努力、卓越努力、严苛应用、延时和抖动小于100ms 的视频、延时和抖动小于10ms 的音频、内部网络控制、网络控制。
+point，PCP）由 3 位代码构成；3 位 PCP 码定义了 0（最低）～7（最高）这 8 个优先级，传输类型分别对应
+基础、最大努力、卓越努力、严苛应用、延时和抖动小于 100ms 的视频、延时和抖动小于 10ms 的音频、内部网络控制、网络控制。
 
 #### 多队列
 - VLAN 优先级以及多个协议需要多个队列来承接，多队列是实现 TSN 的基础。
@@ -1012,19 +1012,19 @@ point，PCP）由3位代码构成；3位 PCP 码定义了0（最低）～7（最
 Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged），这个窗口在这个机制中是被预先确定的，同时这个门控制列表被周期性的扫描，
 并按预先定义的次序为不同的队列开放传输端口。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image16.jpg" alt="数据调度（整形器）实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image16.jpg" alt="数据调度（整形器）实物图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - IEEE 802.1Qbv 规范的框图，说明了门控制列表如何根据为每个事件提供的时间表来管理门关闭（C-close）和打开（O-open）事件。
 - GCL 有以下两部分：
     - 时间间隔：定义时间，以纳秒为单位，在从列表中读取下一个门控制项之前，门控制项是有效的。
-    - 门控：定义每个 TC 的门的逻辑1表示的开（O-open）或逻辑0表示的关（C-close）状态。
+    - 门控：定义每个 TC 的门的逻辑 1 表示的开（O-open）或逻辑 0 表示的关（C-close）状态。
 
 #### 帧抢占（ FPE）（IEEE 802.1Qbu-2016）
-- 为了解决 EST 的保护带宽的浪费以及优先级反转问题，引入了抢占标准。因此，TSN 的802.1Qbu 和 IEEE 802.3工作组共同开发了 IEEE
+- 为了解决 EST 的保护带宽的浪费以及优先级反转问题，引入了抢占标准。因此，TSN 的 802.1Qbu 和 IEEE 802.3 工作组共同开发了 IEEE
 802.3br，即可抢占式 MAC 机制，由可被抢占 MAC（pMAC-Preemptable MAC）和快速 MAC（eMAC-express MAC）组成。pMAC 可以被 eMAC 抢占。
 通过抢占，保护带宽可以被减少至最短低优先级帧片段。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image17.png" alt="数据调度（整形器）实物图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image17.png" alt="数据调度（整形器）实物图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 :::tip
 - 由于抢占改变了帧的格式，所以对接交换机时也需要对端支持 FPE。
@@ -1098,7 +1098,7 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 
 - wireshark 抓包如下图：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image27.png" alt="队列3每100ms循环发送一次，一次发送10ms实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image27.png" alt="队列3每100ms循环发送一次，一次发送10ms实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 测试
 #### 功能测试
@@ -1114,13 +1114,13 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 
 - 上下电测试
     <DocScope products="RDK S100">
-    - 使用继电器进行循环上下电，检查 S100网络是否正常开启。
+    - 使用继电器进行循环上下电，检查 S100 网络是否正常开启。
     </DocScope>
     <DocScope products="RDK S600">
-    - 使用继电器进行循环上下电，检查 S600网络是否正常开启。
+    - 使用继电器进行循环上下电，检查 S600 网络是否正常开启。
     </DocScope>
 
-- iperf3 24小时测试
+- iperf3 24 小时测试
     - tcp 测试
     ```bash
         Server:iperf3 -s
@@ -1161,15 +1161,15 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 #### 拓扑
 
 <DocScope products="RDK S100">
-- 直接 S100直连即可
+- 直接 S100 直连即可
 </DocScope>
 <DocScope products="RDK S600">
-- 直接 S600直连即可
+- 直接 S600 直连即可
 </DocScope>
 
 #### napi 独立线程化
 - Linux 网络任务由 ksoftirqd/n 处理，默认任务优先级相对较低，独立后可提高 CPU 利用率以及 TSN 的相关的控制。
-丢包率在空负载的情况下可以达到0丢包，在大负载情况下可以通过规划项目整体任务的优先级达到性能平衡。
+丢包率在空负载的情况下可以达到 0 丢包，在大负载情况下可以通过规划项目整体任务的优先级达到性能平衡。
 ```console
     root@hobot:~# echo 1 > /sys/class/net/eth0/threaded
     root@hobot:~# ps -ef | grep napi
@@ -1212,14 +1212,14 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 - Tx ringbuf
     - 查看/sys/class/net/`<interface>`/descriptors/dump_tx_desc。
     - 举例：
-    ```
+    ```bash
         cat /sys/class/net/eth0/descriptors/dump_tx_desc
         cat /sys/class/net/eth1/descriptors/dump_tx_desc
     ```
 
 - Rx ringbuf
     - 查看/sys/class/net/`<interface>`/descriptors/dump_rx_desc。
-    ```
+    ```bash
         cat /sys/class/net/eth0/descriptors/dump_rx_desc
         cat /sys/class/net/eth1/descriptors/dump_rx_desc
     ```
@@ -1271,10 +1271,10 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 ### FAQ
 #### TSN
 <DocScope products="RDK S100">
-- 问：S100支持哪些 TSN 标准？
+- 问：S100 支持哪些 TSN 标准？
 </DocScope>
 <DocScope products="RDK S600">
-- 问：S600支持哪些 TSN 标准？
+- 问：S600 支持哪些 TSN 标准？
 </DocScope>
 - 答：基于信用的整形器机制（credit-based shaper，CBS）(IEEE
 802.1-Qav)、 增强型整形机制（Enhancements to Scheduled Traffic，EST）（IEEE
@@ -1283,27 +1283,27 @@ Qbv 定义了一个时间窗口，是一个时间触发型网络（Time-trigged�
 
 #### phy
 <DocScope products="RDK S100">
-- 问：S100适配过哪些 phy？
+- 问：S100 适配过哪些 phy？
 </DocScope>
 <DocScope products="RDK S600">
-- 问：S600适配过哪些 phy？
+- 问：S600 适配过哪些 phy？
 </DocScope>
 - 答：Realtek 8211、Marvell 88E1512、Marvell 88Q2121、Marvell 88Q2220、TI dp83867、Marvell CUX3520。
 
 #### 网络环境
 <DocScope products="RDK S100">
-- 问：S100无法 ping 通 Windows，Windows 可以 ping 通 S100？
+- 问：S100 无法 ping 通 Windows，Windows 可以 ping 通 S100？
 - 答：检查 Windows 的防火墙是否关闭，windows 自带防火墙如下图：
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="网络环境实物图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/ethernet/media/image24.png" alt="网络环境实物图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 #### U-Boot 调试与升级
 - 问：U-Boot 网络自协商失败或协商成千兆后无法 PING 通？
-- 答：检查网络是否为6类线。phy 和对端可能在百兆或千兆之间切换，导致 mac 与 phy 之间的速率不匹配。
+- 答：检查网络是否为 6 类线。phy 和对端可能在百兆或千兆之间切换，导致 mac 与 phy 之间的速率不匹配。
 
 - 问：U-Boot 无法读写 phy？
 - 答：检查 phy 是否解复位，软件使用的 mdio 地址与硬件配置是否一致。
 
 - 问：U-Boot 升级失败（ping 不通）？
 - 答：检查 IP 的配置，serverip，使用小局域网或直连 PC。
-检查 MAC 的配置，检查使用的网口是否为期望的网口。 检查网线是否为6类线。
+检查 MAC 的配置，检查使用的网口是否为期望的网口。 检查网线是否为 6 类线。

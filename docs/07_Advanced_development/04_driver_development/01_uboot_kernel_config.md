@@ -54,9 +54,9 @@ S600 的内核配置文件为 `hobot-drivers/configs/drobot_s600_defconfig`，U-
 
 ### 通过 xbuild 命令配置
 
-首先进入`source/bootloader`目录,目录结构如下
+首先进入 `source/bootloader` 目录,目录结构如下
 
-```
+```text
 ├── build     # 编译系统代码目录，提供编译各个功能模块的shell脚本，编译用到的tools
 ├── device    # 板级配置目录，每种硬件对应一份配置文件，可以设置编译选项和分区表等
 ├── miniboot  # 生成包含gpt、mbr、bl2、ddr、bl3x 一体的最小启动固件
@@ -64,8 +64,8 @@ S600 的内核配置文件为 `hobot-drivers/configs/drobot_s600_defconfig`，U-
 └── uboot     # U-Boot 源代码
 ```
 
-`build/xbuild.sh`为主编译脚本，提供了以下命令帮助用户进行 U-Boot 的选项配置，该命令会自动使用板级配置文件中设置的 U-Boot 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
-```
+`build/xbuild.sh` 为主编译脚本，提供了以下命令帮助用户进行 U-Boot 的选项配置，该命令会自动使用板级配置文件中设置的 U-Boot 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
+```text
 ./xbuild.sh uboot menuconfig
 ```
 
@@ -79,13 +79,13 @@ S600 的内核配置文件为 `hobot-drivers/configs/drobot_s600_defconfig`，U-
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_x5/screenshot-20241120-201418.png" alt="menuconfig图形化配置界面" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
+在 menuconfig 的配置界面上完成配置后，选择 `Exit` 退出，根据提示选择 `Yes` 或者 `No` 保存修改到 `.config` 文件中。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="menuconfig退出时保存配置提示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 在配置退出后，会自动执行配置的文件的保存。自动完成的内容为：
 
-```
+```text
 # 调用savedefconfig对配置文件进行清理，保留必须项，删除被依赖项，生成 defconfig 文件
 make savedefconfig
 # 使用 defconfig 文件覆盖板级配置文件中设置的U-Boot配置文件
@@ -102,10 +102,10 @@ cp -f defconfig <板级配置文件中设置的Uboot配置文件>
 
 :::
 
-首先进入`source/bootloader/uboot`目录，执行以下命令生成 `.config`（基础 defconfig 文件名见上方平台差异说明）：
+首先进入 `source/bootloader/uboot` 目录，执行以下命令生成 `.config`（基础 defconfig 文件名见上方平台差异说明）：
 
 <DocScope products="RDK S100">
-```
+```text
 # debug 模式
 make ARCH=arm O=../out/build/uboot hobot_s100_defconfig
 # release 模式
@@ -114,14 +114,14 @@ make ARCH=arm O=../out/build/uboot hobot_s100_rel_defconfig
 </DocScope>
 
 <DocScope products="RDK S600">
-```
+```text
 make ARCH=arm O=../out/build/uboot hobot_s600_defconfig
 ```
 </DocScope>
 
 命令执行后会在 `source/bootloader/out/build/uboot` 下生成 `.config`，输出示例如下：
 
-```
+```text
   HOSTCC  scripts/basic/fixdep
   HOSTCC  scripts/kconfig/conf.o
   YACC    scripts/kconfig/zconf.tab.c
@@ -136,35 +136,35 @@ make ARCH=arm O=../out/build/uboot hobot_s600_defconfig
 如果需要与实际编译一致的完整配置（含介质配置），直接执行以下合并命令（与 `mk_uboot.sh` 编译行为一致）：
 
 <DocScope products="RDK S100">
-```
+```text
 make ARCH=arm O=../out/build/uboot hobot_s100_defconfig hobot_emmc.config
 ```
 </DocScope>
 
 <DocScope products="RDK S600">
-```
+```text
 make ARCH=arm O=../out/build/uboot hobot_s600_defconfig hobot_ufs.config
 ```
 </DocScope>
 
 然后执行以下命令打开图形化的配置界面进行 `U-Boot` 的选项参数配置：
 
-```
+```text
 make ARCH=arm O=../out/build/uboot menuconfig
 ```
 
-在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
+在 menuconfig 的配置界面上完成配置后，选择 `Exit` 退出，根据提示选择 `Yes` 或者 `No` 保存修改到 `.config` 文件中。
 
 保存配置后，可以对比一下差异，再次确认一下修改是否符合预期：
 
 <DocScope products="RDK S100">
-```
+```text
 diff ../out/build/uboot/.config configs/hobot_s100_defconfig
 ```
 </DocScope>
 
 <DocScope products="RDK S600">
-```
+```text
 diff ../out/build/uboot/.config configs/hobot_s600_defconfig
 ```
 </DocScope>
@@ -214,9 +214,9 @@ cp -f ../out/build/uboot/defconfig configs/hobot_s600_defconfig
 
 ### 通过 mk_kernel 命令配置
 
-`mk_kernel.sh`提供了以下命令帮助用户进行 Kernel 的选项配置，该命令会自动使用板级配置文件中设置的 Kernel 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
+`mk_kernel.sh` 提供了以下命令帮助用户进行 Kernel 的选项配置，该命令会自动使用板级配置文件中设置的 Kernel 配置文件，在配置完成后，自动完成 savedefconfig 和保存工作。
 
-```
+```text
 ./mk_kernel.sh menuconfig
 ```
 
@@ -224,13 +224,13 @@ cp -f ../out/build/uboot/defconfig configs/hobot_s600_defconfig
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image-s100-kernel.png" alt="menuconfig图形化配置界面" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-在 menuconfig 的配置界面上完成配置后，选择 `Exit`退出，根据提示选择 `Yes` 或者`No`保存修改到`.config`文件中。
+在 menuconfig 的配置界面上完成配置后，选择 `Exit` 退出，根据提示选择 `Yes` 或者 `No` 保存修改到 `.config` 文件中。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development/image-20220518111506018.png" alt="menuconfig退出时保存配置提示" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 在配置退出后，会自动执行配置的文件的保存。自动完成的内容为：
 
-```
+```text
 # 调用savedefconfig对配置文件进行清理，保留必须项，删除被依赖项，生成 defconfig 文件
 make savedefconfig
 # 使用 defconfig 文件覆盖板级配置文件中设置的Kernel配置文件
@@ -239,7 +239,7 @@ cp defconfig <板级配置文件中设置的Kernel配置文件>
 
 ### 手动配置
 
-通过`menuconfig`方式配置`kernel`与配置`U-Boot`的过程是一样的，但需要使用 `arm64` 架构和 kernel 自己的构建输出目录。
+通过 `menuconfig` 方式配置 `kernel` 与配置 `U-Boot` 的过程是一样的，但需要使用 `arm64` 架构和 kernel 自己的构建输出目录。
 
 :::info 注意
 
@@ -247,38 +247,38 @@ cp defconfig <板级配置文件中设置的Kernel配置文件>
 
 :::
 
-首先进入`source/kernel`目录，然后按照以下步骤配置 `kernel` 选项。
+首先进入 `source/kernel` 目录，然后按照以下步骤配置 `kernel` 选项。
 
 - 生成 `.config`：加载基础 defconfig 并合并介质配置（与 `mk_kernel.sh` 实际编译行为一致）
 
 <DocScope products="RDK S100">
-```
+```text
 make ARCH=arm64 O=../../out/build/kernel drobot_s100_defconfig drobot_emmc.config
 ```
 </DocScope>
 
 <DocScope products="RDK S600">
-```
+```text
 make ARCH=arm64 O=../../out/build/kernel drobot_s600_defconfig drobot_ufs.config
 ```
 </DocScope>
 
 - 执行以下命令来修改配置
 
-```
+```text
 make ARCH=arm64 O=../../out/build/kernel menuconfig
 ```
 
 - 修改后，可以先看看修改后和修改前的差异
 
 <DocScope products="RDK S100">
-```
+```text
 diff ../../out/build/kernel/.config ../hobot-drivers/configs/drobot_s100_defconfig
 ```
 </DocScope>
 
 <DocScope products="RDK S600">
-```
+```text
 diff ../../out/build/kernel/.config ../hobot-drivers/configs/drobot_s600_defconfig
 ```
 </DocScope>
@@ -286,14 +286,14 @@ diff ../../out/build/kernel/.config ../hobot-drivers/configs/drobot_s600_defconf
 - 将新配置保存回板级配置文件，实际编译使用的也是这份文件
 
 <DocScope products="RDK S100">
-```
+```text
 make ARCH=arm64 O=../../out/build/kernel savedefconfig
 cp -f ../../out/build/kernel/defconfig ../hobot-drivers/configs/drobot_s100_defconfig
 ```
 </DocScope>
 
 <DocScope products="RDK S600">
-```
+```text
 make ARCH=arm64 O=../../out/build/kernel savedefconfig
 cp -f ../../out/build/kernel/defconfig ../hobot-drivers/configs/drobot_s600_defconfig
 ```

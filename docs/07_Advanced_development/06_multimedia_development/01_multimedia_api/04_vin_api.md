@@ -15,19 +15,19 @@ VIN（Video In）是 HBN 框架中的一个 vnode，负责把相机数据接入 
 - **LPWM**：帧同步信号，供需要外部触发的 Sensor 使用
 - **VCON**：虚拟设备，用于描述硬件接口信息（I2C 总线 / POC / GPIO / MIPI PHY 类型）。向上提供标准化的连接关系，差异由 dts 实现
 
-MIPI RX 与 CIM 的职责与接入能力见[硬件框图](#硬件框图)与[硬件规格](#硬件规格)。
+MIPI RX 与 CIM 的职责与接入能力见 [硬件框图](#硬件框图) 与 [硬件规格](#硬件规格)。
 
 ## 硬件框图
 
 <DocScope products="RDK S100">
 
-![S100 媒体链路硬件总览：相机接入 → CIM → CPE0/CPE1（ISP/YNR/PYM）与 CIM4 离线输出，Online/Offline 分色标注](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview.jpeg)
+![S100 媒体链路硬件总览：相机接入 → CIM → CPE0/CPE1（ISP/YNR/PYM）与 CIM4 离线输出，Online/Offline 分色标注](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview.jpeg)
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-![S600 媒体链路硬件总览：相机接入 ×6 → CIM0-5 → CPE0-3（ISP/YNR/PYM）与 CPElite（GDC/STITCH/PYM4），Online/Offline 分色标注](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview-s600.png)
+![S600 媒体链路硬件总览：相机接入 ×6 → CIM0-5 → CPE0-3（ISP/YNR/PYM）与 CPElite（GDC/STITCH/PYM4），Online/Offline 分色标注](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/media-pipeline-overview-s600.png)
 
 </DocScope>
 
@@ -41,14 +41,14 @@ MIPI 侧从物理层到接口层：
 - **IPI0 ~ IPI3** —— 芯片**内部** MIPI RX 与 CIM 之间的数据通路，不是对外协议；1 路相机数据占 1 路 IPI
 - **IDI** —— 图像数据接口
 
-CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件的输出通道——主帧、ROI、EMB。各通道的能力上限见[硬件规格](#硬件规格)。
+CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件的输出通道——主帧、ROI、EMB。各通道的能力上限见 [硬件规格](#硬件规格)。
 
 ## 硬件规格
 
 ### MIPI RX
 <DocScope products="RDK S100">
 
-- MIPI RX: 3路CDPHY，每路为DPHY最大2.5Gbps/lane x 4lane或CPHY最大2.5Gsps/trio x 3trio，每路支持4VC，最大支持12路接入。
+- MIPI RX: 3 路 CDPHY，每路为 DPHY 最大 2.5Gbps/lane x 4lane 或 CPHY 最大 2.5Gsps/trio x 3trio，每路支持 4VC，最大支持 12 路接入。
 - 支持多种视频格式：
     - RAW 8-/10-/12-/14-/16-bit/20-bit 格式
     - YUV 422 格式（8-/10-bit）
@@ -59,14 +59,14 @@ CIM 侧只有接入与送出的关系：输入为 4 路 IPI，输出对应软件
 <DocScope products="RDK S600">
 
 
-- MIPI RX: 6路CDPHY，每路为DPHY最大2.5Gbps/lane x 4lane或CPHY最大2.5Gsps/trio x 3trio，每路支持4VC，最大支持24路接入。
+- MIPI RX: 6 路 CDPHY，每路为 DPHY 最大 2.5Gbps/lane x 4lane 或 CPHY 最大 2.5Gsps/trio x 3trio，每路支持 4VC，最大支持 24 路接入。
 - 支持多种视频格式：
     - RAW 8-/10-/12-/14-/16-bit/20-bit 格式
     - YUV 422 格式（8-/10-bit）
 
 </DocScope>
 
-各路 MIPI RX 与 CIM 的对应关系及可用路数见[硬件框图](#硬件框图)。
+各路 MIPI RX 与 CIM 的对应关系及可用路数见 [硬件框图](#硬件框图)。
 
 ### CIM
 
@@ -135,10 +135,10 @@ EMB 数据的提取方式由 `vin_emb_attr_t.embeded_dependence` 决定，对应
 
 ### 典型组合
 同一颗 CIM 的 4 路 IPI 可以**混合**使用 Online 与 Offline，分给不同的后级。四种典型组合：
-![CIM 典型组合：四种场景](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
+![CIM 典型组合：四种场景](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/scenes/cim-scenes-zh.png)
 
 ### API 调用流程
-![API 调用流程：从打开模块到关闭 vnode 的 11 组调用，含每帧循环](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig4-api-flow.png)
+![API 调用流程：从打开模块到关闭 vnode 的 11 组调用，含每帧循环](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/vin/fig4-api-flow.png)
 
 <details>
 <summary>展开：函数调用参考</summary>
@@ -290,7 +290,7 @@ VIN 复用 HBN 的通用 vnode 接口，没有自己的私有 ioctl。常用接�
 ## 接口说明
 下文 13 个接口有两条共性约定，各小节不再重复。
 
-- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。完整清单见[基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#返回值说明)——注意那张表按**正值**列出（`10`、`13`…），而接口返回的是它的**负值**（`-10`、`-13`…）；VIN 上实际会遇到的返回码及处理建议见[返回值说明](#返回值说明)。
+- **返回值**：成功返回 `HBN_STATUS_SUCESS`（0），失败返回负值错误码（实现为 `-HBN_STATUS_xxx`）。完整清单见 [基础框架 - HBN](/Advanced_development/multimedia_development/multimedia_api/hbn_api#返回值说明)——注意那张表按**正值**列出（`10`、`13`…），而接口返回的是它的**负值**（`-10`、`-13`…）；VIN 上实际会遇到的返回码及处理建议见 [返回值说明](#返回值说明)。
 - **五个宏**：`set_attr` / `set_ichn_attr` / `get_ichn_attr` / `set_ochn_attr` / `get_ochn_attr` 转发到带 `_s` 后缀的同名函数，长度由 `sizeof(*(attr))` 自动取得，因此**不能传 `void *`**，必须传指向具体类型的指针。
 
 ### hbn_vnode_open
@@ -317,7 +317,7 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id,
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -331,7 +331,7 @@ hbn_vnode_handle_t vin_fd;
 hbn_vnode_open(HB_VIN, hw_id, AUTO_ALLOC_ID, &vin_fd);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_close
 
@@ -353,7 +353,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -365,7 +365,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 hbn_vnode_close(vin_fd);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_set_attr
 
@@ -390,7 +390,7 @@ hbn_vnode_close(vin_fd);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -403,7 +403,7 @@ hbn_vnode_close(vin_fd);
 hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例」 */
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_set_ochn_attr
 
@@ -429,7 +429,7 @@ hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例�
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -446,7 +446,7 @@ hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例�
 
 - 通道 3 / 4 只能走 DDR，不支持 Online
 - Offline 使用某通道时，需在属性中打开对应开关（`vin_ochn_attr[x].ddr_en` / `.emb_en` / `.roi_en`）
-- EMB 数据的提取方式（datatype 分流 / ROI 窗口）见[选型依据](#选型依据)
+- EMB 数据的提取方式（datatype 分流 / ROI 窗口）见 [选型依据](#选型依据)
 
 **【示例代码】**
 
@@ -454,7 +454,7 @@ hbn_vnode_set_attr(vin_fd, &vin_attr);          /* vin_attr 见「快速示例�
 hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_get_ochn_attr
 
@@ -480,7 +480,7 @@ hbn_vnode_set_ochn_attr(vin_fd, OCHN_MAIN, &vin_attr.vin_ochn_attr[OCHN_MAIN]);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -493,7 +493,7 @@ vin_ochn_attr_t ochn_attr;
 hbn_vnode_get_ochn_attr(vin_fd, OCHN_MAIN, &ochn_attr);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_set_ichn_attr
 
@@ -519,7 +519,7 @@ hbn_vnode_get_ochn_attr(vin_fd, OCHN_MAIN, &ochn_attr);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -531,7 +531,7 @@ hbn_vnode_get_ochn_attr(vin_fd, OCHN_MAIN, &ochn_attr);
 hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_get_ichn_attr
 
@@ -557,7 +557,7 @@ hbn_vnode_set_ichn_attr(vin_fd, 0, &vin_attr.vin_ichn_attr);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -570,7 +570,7 @@ vin_ichn_attr_t ichn_attr;
 hbn_vnode_get_ichn_attr(vin_fd, 0, &ichn_attr);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_set_ochn_buf_attr
 
@@ -595,7 +595,7 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -610,7 +610,7 @@ hbn_buf_alloc_attr_t alloc_attr = { .buffers_num = 6, .is_contig = 1 };
 hbn_vnode_set_ochn_buf_attr(vin_fd, OCHN_MAIN, &alloc_attr);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_start
 
@@ -632,7 +632,7 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -644,7 +644,7 @@ hobot_status hbn_vnode_start(hbn_vnode_handle_t vnode_fd);
 hbn_vnode_start(vin_fd);   /* 通常由 hbn_vflow_start 统一启动 */
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_stop
 
@@ -666,7 +666,7 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -678,7 +678,7 @@ hobot_status hbn_vnode_stop(hbn_vnode_handle_t vnode_fd);
 hbn_vnode_stop(vin_fd);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_getframe
 
@@ -704,7 +704,7 @@ hobot_status hbn_vnode_getframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_id,
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -718,7 +718,7 @@ hbn_vnode_image_t img;
 hbn_vnode_getframe(vin_fd, OCHN_MAIN, 1000, &img);   /* 超时 1s */
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_sendframe
 
@@ -743,7 +743,7 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -756,7 +756,7 @@ hobot_status hbn_vnode_sendframe(hbn_vnode_handle_t vnode_fd, uint32_t ichn_id,
 hbn_vnode_sendframe(vin_fd, 0, &img);   /* 回灌：往输入通道送帧 */
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ### hbn_vnode_releaseframe
 
@@ -781,7 +781,7 @@ hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 
 **【返回值】**
 
-成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见[返回值说明](#返回值说明)。
+成功返回 `HBN_STATUS_SUCESS`（`0`）；失败返回负值错误码，VIN 上实际会遇到的见 [返回值说明](#返回值说明)。
 
 **【注意事项】**
 
@@ -793,10 +793,10 @@ hobot_status hbn_vnode_releaseframe(hbn_vnode_handle_t vnode_fd, uint32_t ochn_i
 hbn_vnode_releaseframe(vin_fd, OCHN_MAIN, &img);
 ```
 
-完整可运行版本见[快速示例](#快速示例)与板端 `/app/multimedia_samples/sample_vin/`。
+完整可运行版本见 [快速示例](#快速示例) 与板端 `/app/multimedia_samples/sample_vin/`。
 
 ## 数据结构
-完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见[使用说明](#使用说明)，`func` 里的 pattern / 跳帧见 [注意事项与约束](#注意事项与约束)，通道字段见 [接口说明](#接口说明)。
+完整字段以 SDK 头文件 `hbn_vin_cfg.h` 为准，本节是它的阅读版。字段的**语义**按功能分散在各节——`cim_isp_flyby` / `cim_pym_flyby` 见 [使用说明](#使用说明)，`func` 里的 pattern / 跳帧见 [注意事项与约束](#注意事项与约束)，通道字段见 [接口说明](#接口说明)。
 
 标「框架填」的字段不用自己设。
 
@@ -921,8 +921,8 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | `period` | `uint32_t` | 周期 | — | — | — |
 | `offset` | `uint32_t` | 相位偏移 | — | — | — |
 | `duty_time` | `uint32_t` | 脉冲宽度 | — | — | — |
-| `threshold` | `uint32_t` | 缓慢同步的相位误差门限（微秒），取值 0~65535。`0` 表示关闭缓慢同步；非 0 时按 `adjust_step` 逐步把触发相位拉向同步源，**并要求 `offset` 小于 `period`** | 0 | 0 | `0`~`65535`，单位 µs；`0` 关闭缓慢同步 |
-| `adjust_step` | `uint32_t` | 缓慢同步每次调整的步进量，取值 0~15。仅在 `threshold` 非 0 时起作用 | 0 | 0 | `0`~`15` |
+| `threshold` | `uint32_t` | 缓慢同步的相位误差门限（微秒），取值 0-65535。`0` 表示关闭缓慢同步；非 0 时按 `adjust_step` 逐步把触发相位拉向同步源，**并要求 `offset` 小于 `period`** | 0 | 0 | `0`~`65535`，单位 µs；`0` 关闭缓慢同步 |
+| `adjust_step` | `uint32_t` | 缓慢同步每次调整的步进量，取值 0-15。仅在 `threshold` 非 0 时起作用 | 0 | 0 | `0`~`15` |
 
 ### vin_attr_ex_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
@@ -983,7 +983,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 ### vin_emb_attr_t
 | 字段 | 类型 | 描述 | 典型值 | 默认值 | 范围 |
 | --- | --- | --- | --- | --- | --- |
-| `embeded_dependence` | `uint32_t` | 内嵌数据与图像数据的关系：`0` 独立成包（datatype `0x12`，CIM 自动分流）；`1` 与图像同流混排（须配合 ROI 提取，见[接口说明](#接口说明)） | 0 | 0 | `0` / `1` |
+| `embeded_dependence` | `uint32_t` | 内嵌数据与图像数据的关系：`0` 独立成包（datatype `0x12`，CIM 自动分流）；`1` 与图像同流混排（须配合 ROI 提取，见 [接口说明](#接口说明)） | 0 | 0 | `0` / `1` |
 | `embeded_width` | `uint32_t` | EMB 数据宽 | — | — | — |
 | `embeded_height` | `uint32_t` | EMB 数据高 | — | — | — |
 
@@ -1000,7 +1000,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 | 错误码 | 宏定义 | 描述 | 常见原因 | 解决方法 |
 | --- | --- | --- | --- | --- |
 | `-8` | `HBN_STATUS_INVALID_NULL_PTR` | 传了空指针 | 必填参数传了 `NULL` | 检查传入的结构体指针 |
-| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | 属性组合非法 | `cim_isp_flyby` 与 `cim_pym_flyby` 同时为 1；输入源三选一没配对；`vin_ichn_attr.format` 与 Sensor 实际输出不符 | 按[注意事项与约束](#注意事项与约束)逐项核对 |
+| `-10` | `HBN_STATUS_ILLEGAL_ATTR` | 属性组合非法 | `cim_isp_flyby` 与 `cim_pym_flyby` 同时为 1；输入源三选一没配对；`vin_ichn_attr.format` 与 Sensor 实际输出不符 | 按 [注意事项与约束](#注意事项与约束) 逐项核对 |
 | `-12` | `HBN_STATUS_FLOW_EXIST` | 同一路重复建流 | 对同一 `hw_id` 重复 `hbn_vflow_create` | 复用已有流，或先 `hbn_vflow_destroy` |
 | `-13` | `HBN_STATUS_FLOW_UNEXIST` | 对不存在的流做操作 | 流已销毁，句柄失效 | 核对句柄的生命周期 |
 | `-20` | `HBN_STATUS_NOT_BINDED` | 建流时绑定失败 | `hbn_vflow_create` 未绑定或绑定顺序不对 | 按「API 调用流程」的顺序建流与绑定 |
@@ -1026,7 +1026,7 @@ VIN 的全部配置，一次下发给 `hbn_vnode_set_attr`。
 - TPG 模式下不允许跳帧，`func.skip_frame` 必须为 `0`
 - `vin_ichn_attr.width`、`roi_attr.roi_x`、`roi_attr.roi_width` 必须 4 对齐；`roi_width` 至少 32，且 `roi_x + roi_width`、`roi_y + roi_height` 不得超出输入图
 - 主帧通道的 crop 可与 Online 同时使用：裁剪对 DDR 输出与 OTF 送下游同样生效，后级的宽高配置须按裁后尺寸对齐
-- `cim_attr.mipi_rx`、`vc_index`、`ipi_channels` 不得超过上限（见[数据结构](#数据结构)的范围列）
+- `cim_attr.mipi_rx`、`vc_index`、`ipi_channels` 不得超过上限（见 [数据结构](#数据结构) 的范围列）
 - Online 绑定要求 CIM 与下游在同一 CPE 内——跨 CPE 只能走 Offline
 
 以下组合不报错、但结果不对，逐项核对：
@@ -1085,7 +1085,7 @@ CIM0 ~ CIM5 分别为 `37430000.cim` / `37630000.cim` / `37830000.cim` / `37a300
 | --- | --- |
 | `fs_cnt` / `fe_cnt` 不涨 | 帧没进来。往上游查 MIPI 与 Sensor |
 | `w_err_cnt` / `h_err_cnt` 增长 | 实际图像宽高与 `vin_ichn_attr` 不符，核对 `input_size` 与 Sensor 输出 |
-| `drop_done_cnt` 增长 | 多半是 IPI overflow，即 IPI 带宽不足。回到[接入评估](#接入评估)重算 |
+| `drop_done_cnt` 增长 | 多半是 IPI overflow，即 IPI 带宽不足。回到 [接入评估](./sensor_bringup/02_serdes_solution.md#接入评估) 重算 |
 | `ipi_drop_cnt` 增长 | IPI 侧丢帧 |
 | `buf queue` 的 `used` 长期不回落 | 应用侧帧未归还，检查 `hbn_vnode_getframe` / `hbn_vnode_releaseframe` 是否配对 |
 

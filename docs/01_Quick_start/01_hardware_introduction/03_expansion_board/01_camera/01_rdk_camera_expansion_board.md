@@ -54,7 +54,7 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是 RDK S
 
 ### 拓扑图
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s100_camera_expansion_board.png" alt="RDK S100 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }}/>
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s100_camera_expansion_board.png" alt="RDK S100 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }}/>
 
 ### 接口概览
 
@@ -75,7 +75,7 @@ RDK S100 Camera Expansion Board（以下简称“Camera 扩展板”）是 RDK S
 
 ## 接口说明
 
-### DC 电源输入（接口1）
+### DC 电源输入（接口 1）
 
 Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GMSL 相机供电。
 
@@ -86,13 +86,13 @@ Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。�
 
 :::
 
-### GMSL 相机接口（接口2）
+### GMSL 相机接口（接口 2）
 
 Camera 扩展板集成 MAX96712 解串器，能够接入 4 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
 
 <div className="table-responsive">
 
-| GMSL接口 | 位置 | MIPI_HOST | I2C BUS |
+| GMSL 接口 | 位置 | MIPI_HOST | I2C BUS |
 | :---- | :---  | :------ | :---------- |
 | GMSLA | 左下  | MIPI_RX4  | I2C3   |
 | GMSLB | 左上  | MIPI_RX4  |  I2C3  |
@@ -103,13 +103,13 @@ Camera 扩展板集成 MAX96712 解串器，能够接入 4 路 GMSL2 相机，�
 
 :::info 信息
 
-1. 当 GMSL 相机 12V 供电电流需求超过 700mA 时，需接入外部 12V 适配器（详见「DC 电源输入（J2001）」节）；700mA 以内时由 RDK S100 直接供电。
+1. 当 GMSL 相机 12V 供电电流需求超过 700mA 时，需接入外部 12V 适配器（详见「DC 电源输入（接口 1）」节）；700mA 以内时由 RDK S100 直接供电。
 2. Camera 扩展板可为每路 GMSL 相机提供最大 550mA@12V 的电流。若超过该电流规格，将无法保证 GMSL 相机模组的稳定运行。
 3. GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用 D-Robotics 推荐的线缆与相机进行连接，以保障 GMSL 高速信号的稳定传输。
 
 :::
 
-### MIPI 相机接口（接口3, 接口4）
+### MIPI 相机接口（接口 3, 接口 4）
 
 接口定义: <a href="https://archive.d-robotics.cc/downloads/hardware/rdk_s100/rdk_s100_camera_expansion_board/drobotics_rdk_s100_camera_expansion_board_pinlist_v1p0_0924.xlsx">drobotics_rdk_s100_camera_expansion_board_pinlist_v1p0.xlsx</a>
 
@@ -117,7 +117,7 @@ Camera 扩展板配备 2×4 Lane MIPI CSI D-PHY 接口，支持同时连接两�
 
 <div className="table-responsive">
 
-| MIPI相机接口 | 位置 | MIPI_HOST | I2C BUS |
+| MIPI 相机接口 | 位置 | MIPI_HOST | I2C BUS |
 | :---- | :---  | :------ | :---------- |
 | CAM2 | 左  | MIPI_RX1  | I2C2  |
 | CAM1 | 右  | MIPI_RX0  | I2C1  |
@@ -131,9 +131,9 @@ Camera 扩展板配备 2×4 Lane MIPI CSI D-PHY 接口，支持同时连接两�
 
 :::
 
-### MIPI 接口功能切换开关（接口5）
+### MIPI 接口功能切换开关（接口 5）
 
-MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能切换，以满足不同开发需求。通过切换拨码开关 （接口5） 的位置来实现功能切换。
+MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能切换，以满足不同开发需求。通过切换拨码开关 （接口 5） 的位置来实现功能切换。
 
 <div className="table-responsive">
 
@@ -144,9 +144,9 @@ MIPI 相机接口连接器的第 5 引脚支持 LPWM 和 MCLK(24MHz)两种功能
 
 </div>
 
-### MIPI 接口电平切换开关（接口6）
+### MIPI 接口电平切换开关（接口 6）
 
-MIPI 相机接口的控制信号支持 1V8 和 3V3 逻辑电平的切换，便于连接具有不同需求的相机模组。通过切换拨码开关 （接口6） 的位置来实现逻辑电平切换。
+MIPI 相机接口的控制信号支持 1V8 和 3V3 逻辑电平的切换，便于连接具有不同需求的相机模组。通过切换拨码开关 （接口 6） 的位置来实现逻辑电平切换。
 
 <div className="table-responsive">
 
@@ -157,7 +157,7 @@ MIPI 相机接口的控制信号支持 1V8 和 3V3 逻辑电平的切换，便�
 
 </div>
 
-### 100Pin 连接器（接口7）
+### 100Pin 连接器（接口 7）
 
 Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能接口（MIPI CSI 和 GPIO）以及电源（12V 和 3.3V）。
 
@@ -167,7 +167,7 @@ Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能�
 
 :::
 
-### 电源指示灯（接口8）
+### 电源指示灯（接口 8）
 
 电源指示灯，其位置在 DC 电源输入接口旁边。
 
@@ -234,14 +234,14 @@ Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能�
 
 | 连接器 | 连接器型号                      | 连接器厂商   |
 | :----- | :------------------------------ | :----------- |
-| 接口7  | HC-PBB05-2-100-M-H4.0-G1-R-P-04 | 华灿天禄     |
-| 接口1  | ZX-DC-WC2.56.3                  | 兆星精密电子 |
-| 接口2  | 112038-161410                   | 信翰精密     |
-| 接口3  | AFC01-S22FCA-00                 | 钜硕电子     |
-| 接口4  | AFC01-S22FCA-00                 | 钜硕电子     |
+| 接口 7  | HC-PBB05-2-100-M-H4.0-G1-R-P-04 | 华灿天禄     |
+| 接口 1  | ZX-DC-WC2.56.3                  | 兆星精密电子 |
+| 接口 2  | 112038-161410                   | 信翰精密     |
+| 接口 3  | AFC01-S22FCA-00                 | 钜硕电子     |
+| 接口 4  | AFC01-S22FCA-00                 | 钜硕电子     |
 
 </div>
 
 ## 适配模组
 
-参考[配件清单](../../01_rdk_s100.md#accessory-list)
+参考 [配件清单](../../01_rdk_s100.md#accessory-list)

@@ -80,7 +80,7 @@ setenv ramdump_in map # 这里的 map 表明让 ramdump 将文件保存进 UFS �
 saveenv
 ```
 
-- secure boot 设备自动抓取 ramdump 需要烧写 HB_APDP 分区镜像、开启 secure debug，参考《RDK S100 商业客户文档补充说明》中的 HB_APDP 生成章节（该文档为外部补充文档，不在本手册内），请联系 FAE 获取。
+- secure boot 设备自动抓取 ramdump 需要烧录 HB_APDP 分区镜像、开启 secure debug，参考《RDK S100 商业客户文档补充说明》中的 HB_APDP 生成章节（该文档为外部补充文档，不在本手册内），请联系 FAE 获取。
 
 - 这样一旦出现 panic，重启后自动会进行 ramdump
 
@@ -229,7 +229,7 @@ scp root@<板端IP>:/mnt/cpu-contexts.bin .
 
 #### 获取 crash 扩展文件和 cpu-context 解析脚本
 
-文件位于对外服务器上，路径为[https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/](https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/)
+文件位于对外服务器上，路径为 [https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/](https://archive.d-robotics.cc/ubuntu-rdk-s100-beta/host-tools/crash-tools/)
 
 下载其中的 parse-cpu-contexts.py 和 arm64-regs.so，并保存到 crash 二进制存在的目录下。该页面路径虽然含 `s100-beta`，但这两个文件都是 x86_64 主机侧工具，与 SoC 型号无关，S600 同样适用。
 
@@ -376,7 +376,7 @@ crash>
 - ramdump 仅支持 **Kernel panic** 触发的场景，其他复位原因不会抓取。
 - dump 目标分区的要求与创建方式见《[抓取 ramdump](#抓取-ramdump)》。
 - crash 仅支持在 x86_64 平台运行，编译与使用见《[crash 使用方法](#crash-使用方法)》。
-- secure boot 设备自动抓取 ramdump 需要额外烧写 HB_APDP 分区镜像并开启 secure debug，请联系 FAE 获取对应说明。
+- secure boot 设备自动抓取 ramdump 需要额外烧录 HB_APDP 分区镜像并开启 secure debug，请联系 FAE 获取对应说明。
 
 ## 常见问题
 

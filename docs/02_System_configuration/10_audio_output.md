@@ -12,7 +12,7 @@ RDK 板卡需先接入音频设备后才能输出音频：S100 接入 Audio Driv
 
 **前置条件**：按产品接入音频设备；系统已预装 `alsa-utils`，提供 `aplay`、`arecord` 与 `amixer`。
 
-**与其他模块关系**：应用层录音与播放示例见[音频应用](../03_Demos/01_peripheral/03_audio.md)；codec 与声卡驱动调试见[音频调试指南](../07_Advanced_development/04_driver_development/09_driver_audio.md)。
+**与其他模块关系**：应用层录音与播放示例见 [音频应用](../03_Demos/01_peripheral/03_audio.md)；codec 与声卡驱动调试见 [音频调试指南](../07_Advanced_development/04_driver_development/09_driver_audio.md)。
 
 ## 查看音频设备
 

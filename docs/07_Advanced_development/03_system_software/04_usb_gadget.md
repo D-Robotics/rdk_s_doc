@@ -239,7 +239,7 @@ Gadget 模式切换统一通过 `usb-gadget.sh` 脚本完成：
 1. **首次连接未加载 OS 描述符**：Windows 会在注册表中记录设备信息，如果首次连接时没有正确的 OS 描述符，后续连接将不会重新请求。
 
    **解决方法**：删除注册表中的设备记录：
-   ```
+   ```text
    HKLM\SYSTEM\CurrentControlSet\Control\usbflags\[USB_VID+USB_PID+bcdRelease]\osvc
    ```
 

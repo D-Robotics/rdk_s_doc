@@ -16,7 +16,7 @@ MediaCodec 是 RDK 的视频与图像编解码 API，向下封装两个硬件加
 - **VPU**：视频编解码单元，负责 H.264 / H.265 的编码与解码
 - **JPU**：图像编解码单元，负责 JPEG / MJPEG 的编码与解码
 
-编码把 YUV 图像压缩成码流，解码方向相反。输入输出经 **buffer 队列**流转，全程由**状态机**驱动，接口能否调用取决于当前状态。各单元的规格见[硬件规格](#硬件规格)。
+编码把 YUV 图像压缩成码流，解码方向相反。输入输出经 **buffer 队列**流转，全程由**状态机**驱动，接口能否调用取决于当前状态。各单元的规格见 [硬件规格](#硬件规格)。
 
 ## 硬件规格
 
@@ -220,7 +220,7 @@ MediaCodec 是 RDK 的视频与图像编解码 API，向下封装两个硬件加
 
 - **编解码合计能力**指同一时刻所有实例的编码与解码负载之和。按各路「宽 × 高 × 帧率」的像素吞吐求和折算，编码与解码都计入，上限为上述合计能力
 - RDK S100 的 VPU 10bit 解码性能受总线 outstanding 瓶颈限制，规格目标为 4K@80fps
-- 输入尺寸不满足对齐要求时，可使用 VPU 读入 CROP 功能先裁剪再编码，参见[最小编码示例](#最小编码示例)
+- 输入尺寸不满足对齐要求时，可使用 VPU 读入 CROP 功能先裁剪再编码，参见 [最小编码示例](#最小编码示例)
 - VPU 对 YUV 4:2:2：仅支持**编码输入** 4:2:2，硬件内部降采样为 4:2:0 后再编码
 - JPU 解码主要受总线写带宽限制，非 YUV420 8bit 格式的吞吐按输出数据量等比例折算：YUV422 8bit 约为 YUV420 8bit 的 0.75 倍，YUV420 12bit 约为 0.5 倍
 
@@ -228,7 +228,7 @@ MediaCodec 是 RDK 的视频与图像编解码 API，向下封装两个硬件加
 
 ## 软件框架
 
-![MediaCodec 软件框架：应用经 MediaCodec API 与各组件调用，经驱动落到 VPU / JPU 硬件](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/framework.png)
+![MediaCodec 软件框架：应用经 MediaCodec API 与各组件调用，经驱动落到 VPU / JPU 硬件](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/framework.png)
 
 应用经 MediaCodec API 发起编解码，接口层封装参数下发与 buffer 队列，经驱动落到 VPU / JPU 硬件单元。MediaCodec 独立于 HBN vnode 框架，配置与启停走自己的 `hb_mm_mc_*` 接口。
 
@@ -237,7 +237,7 @@ MediaCodec 是 RDK 的视频与图像编解码 API，向下封装两个硬件加
 ### 数据流转
 一帧数据从取到还，走一条固定的回路：**dequeue 取出 → 填或读 → queue 还回**。输入输出各一条队列，调用方只负责取还 buffer，内存由 MediaCodec 分配（或直接复用上游模块的内存）。
 
-![buffer 的申请与归还](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig2-buffer-flow.svg)
+![buffer 的申请与归还](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig2-buffer-flow.svg)
 
 **编解码两个方向正好镜像**——同一个 `media_codec_buffer_t`，编码时输入装图像、输出出码流；解码时反过来：
 
@@ -267,7 +267,7 @@ buffer 各字段的完整定义（图像帧与码流）见 [核心数据结构](
 - **多路编码**：批量文件转码，或多相机并发编码——每路一个编码实例，共享 VPU 吞吐
 - **多路解码**：多路码流并发解码，用于批量处理或多画面上墙
 
-各场景的完整链路图（文件链路与相机链路），见[应用场景](/Advanced_development/multimedia_development/multimedia_api/mediacodec/scene)。
+各场景的完整链路图（文件链路与相机链路），见 [应用场景](/Advanced_development/multimedia_development/multimedia_api/mediacodec/scene)。
 
 
 ### 编码配置
@@ -296,7 +296,7 @@ buffer 各字段的完整定义（图像帧与码流）见 [核心数据结构](
 | 调试验证，要确定性的画质 | **FixQP** | 没有码控的收敛过程，输出可复现 |
 | 配合 ROI 做精细画质分配 | **QpMap** | 见 [ROI](#roi) |
 
-![码率控制模式的取舍](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig3-rate-control.svg)
+![码率控制模式的取舍](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig3-rate-control.svg)
 
 各模式的参数字段表见 [码率控制参数](/Advanced_development/multimedia_development/multimedia_api/mediacodec/api#码率控制)。
 
@@ -317,7 +317,7 @@ GOP 结构决定 I 帧的插入间隔与帧间参考关系，由 `mc_video_gop_p
 
 RDK 上一共支持设置九种 GOP 预置结构：
 
-| `gop_preset_idx` | GOP结构 | 低延迟（编码顺序和显示顺序相同） | GOP大小 | 编码顺序 | 最小源帧buffer数量 | 最小解码图片buffer数量 | 周期内（I 帧间隔）要求 |
+| `gop_preset_idx` | GOP 结构 | 低延迟（编码顺序和显示顺序相同） | GOP 大小 | 编码顺序 | 最小源帧 buffer 数量 | 最小解码图片 buffer 数量 | 周期内（I 帧间隔）要求 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | I | Yes | 1 | I0-I1-I2… | 1 | 1 | N/A |
 | 2 | P | Yes | 1 | I0-P1-P2-P3… | 1 | 2 | N/A |
@@ -337,9 +337,9 @@ RDK 上一共支持设置九种 GOP 预置结构：
 
 - 低延时；
 
-![GOP Preset 1 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop1.png)
+![GOP Preset 1 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop1.png)
 
-![GOP Preset 1 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop2.png)
+![GOP Preset 1 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop2.png)
 
 **GOP Preset 2**
 
@@ -347,9 +347,9 @@ RDK 上一共支持设置九种 GOP 预置结构：
 - P 帧参考 2 个前向参考帧；
 - 低延时；
 
-![GOP Preset 2 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop3.png)
+![GOP Preset 2 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop3.png)
 
-![GOP Preset 2 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop4.png)
+![GOP Preset 2 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop4.png)
 
 **GOP Preset 3**
 
@@ -357,9 +357,9 @@ RDK 上一共支持设置九种 GOP 预置结构：
 - B 帧参考 2 个前向参考帧；
 - 低延时；
 
-![GOP Preset 3 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop5.png)
+![GOP Preset 3 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop5.png)
 
-![GOP Preset 3 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop6.png)
+![GOP Preset 3 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop6.png)
 
 **GOP Preset 4**
 
@@ -367,9 +367,9 @@ RDK 上一共支持设置九种 GOP 预置结构：
 - P 帧参考 2 个前向参考帧；
 - B 帧参考 1 个前向参考帧和一个后向参考帧；
 
-![GOP Preset 4 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop7.png)
+![GOP Preset 4 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop7.png)
 
-![GOP Preset 4 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop8.png)
+![GOP Preset 4 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop8.png)
 
 **GOP Preset 5**
 
@@ -377,9 +377,9 @@ RDK 上一共支持设置九种 GOP 预置结构：
 - P 帧参考 2 个前向参考帧；
 - B 帧参考 1 个前向参考帧和一个后向参考帧，后向参考帧可为 P 帧或 B 帧；
 
-![GOP Preset 5 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop9.png)
+![GOP Preset 5 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop9.png)
 
-![GOP Preset 5 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop10.png)
+![GOP Preset 5 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop10.png)
 
 **GOP Preset 6**
 
@@ -387,9 +387,9 @@ RDK 上一共支持设置九种 GOP 预置结构：
 - P 帧参考 2 个前向参考帧；
 - 低延时；
 
-![GOP Preset 6 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop11.png)
+![GOP Preset 6 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop11.png)
 
-![GOP Preset 6 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop12.png)
+![GOP Preset 6 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop12.png)
 
 **GOP Preset 7**
 
@@ -397,18 +397,18 @@ RDK 上一共支持设置九种 GOP 预置结构：
 - B 帧参考 2 个前向参考帧；
 - 低延时；
 
-![GOP Preset 7 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop13.png)
+![GOP Preset 7 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop13.png)
 
-![GOP Preset 7 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop14.png)
+![GOP Preset 7 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop14.png)
 
 **GOP Preset 8**
 
 - 只有 I 帧和 B 帧；
 - B 帧参考 1 个前向参考帧，一个后向参考帧；
 
-![GOP Preset 8 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop15.png)
+![GOP Preset 8 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop15.png)
 
-![GOP Preset 8 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop16.png)
+![GOP Preset 8 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop16.png)
 
 **GOP Preset 9**
 
@@ -416,9 +416,9 @@ RDK 上一共支持设置九种 GOP 预置结构：
 - P 帧参考 1 个前向参考帧；
 - 低延时；
 
-![GOP Preset 9 结构](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop17.png)
+![GOP Preset 9 结构](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop17.png)
 
-![GOP Preset 9 编码顺序](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop18.png)
+![GOP Preset 9 编码顺序](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/gop18.png)
 
 
 **自定义 GOP**（`gop_preset_idx = 0`）时，结构由 `mc_video_custom_gop_params_t` 描述：逐个图像指定类型（I / P / B）、显示顺序（POC）、QP 偏移、参考帧等，一条结构最多描述 8 张图片（`MC_MAX_GOP_NUM`），图片条目按**解码顺序**排列。
@@ -488,7 +488,7 @@ MediaCodec 由状态机驱动，接口调用的合法性取决于当前状态。
 
 #### 状态迁移
 
-![MediaCodec 状态迁移](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig1-state-machine.svg)
+![MediaCodec 状态迁移](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig1-state-machine.svg)
 
 <details>
 <summary>展开：状态迁移表与两条易错规则</summary>
@@ -516,7 +516,7 @@ MediaCodec 由状态机驱动，接口调用的合法性取决于当前状态。
 
 典型的编码流程（解码流程方向相反，接口序列一致）：
 
-![MediaCodec API 调用流程思维导图：1–11 主支，9 号为逐帧循环](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig4-api-sequence.svg)
+![MediaCodec API 调用流程思维导图：1–11 主支，9 号为逐帧循环](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/media_codec/fig4-api-sequence.svg)
 
 <details>
 <summary>展开：完整调用序列</summary>
@@ -593,7 +593,7 @@ hb_mm_mc_stop(&context);
 hb_mm_mc_release(&context);
 ```
 
-> 解码的用法见下节[最小解码示例](#最小解码示例)——有两点与编码不同，其中 `feed_mode` 不设会直接失败。
+> 解码的用法见下节 [最小解码示例](#最小解码示例)——有两点与编码不同，其中 `feed_mode` 不设会直接失败。
 
 #### 最小解码示例
 
@@ -650,7 +650,7 @@ hb_mm_mc_release(&context);
 三点与编码不同，其中第 2 条不写会**直接失败**：
 
 1. `hb_mm_mc_get_default_context` 的 `encoder` 传 `0`，`codec_id` 换成目标码流格式
-2. **`feed_mode` 必须显式设置**。默认值 `MC_FEEDING_MODE_NONE`（`-1`）非法，`hb_mm_mc_configure` 返回 `HB_MEDIA_ERR_INVALID_PARAMS`。按字节送用`MC_FEEDING_MODE_STREAM_SIZE`，按整帧送用 `MC_FEEDING_MODE_FRAME_SIZE`
+2. **`feed_mode` 必须显式设置**。默认值 `MC_FEEDING_MODE_NONE`（`-1`）非法，`hb_mm_mc_configure` 返回 `HB_MEDIA_ERR_INVALID_PARAMS`。按字节送用 `MC_FEEDING_MODE_STREAM_SIZE`，按整帧送用 `MC_FEEDING_MODE_FRAME_SIZE`
 3. **buffer 方向相反**：输入是码流（写 `vstream_buf`），输出是图像（读 `vframe_buf`）
 
 送码流时 `bitstream_buf_size` 要大于单次送入的字节数；末尾那包把 `vstream_buf.stream_end`
@@ -672,18 +672,18 @@ hb_mm_mc_release(&context);
 
 不同编码标准支持的配置项不同。对不支持的 codec 调用相应接口，返回 `HB_MEDIA_ERR_UNSUPPORTED_FEATURE` 或 `HB_MEDIA_ERR_INVALID_PARAMS`。
 
-| 配置项 | H.264 | H.265 | MJPEG / JPEG |
-| --- | --- | --- | --- |
-| 码率控制 | ✅ | ✅ | 仅 FixQP |
-| GOP / 长期参考帧 / Intra Refresh / IDR / skip | ✅ | ✅ | ❌ |
-| SAO | ❌ | ✅ | ❌ |
-| 熵编码模式 | ✅ | ❌ | ❌ |
-| 模式决策 | ❌ | ✅ | ❌ |
-| 去块滤波 / 帧内预测 / 变换 / 智能背景 / 3D 降噪 | ✅ | ✅ | ❌ |
-| ROI / QpMap | ✅ | ✅ | ❌ |
-| VUI / 用户数据 / 显式头 | ✅ | ✅ | ❌ |
-| slice 切分 | ✅ 设置 | ✅ 设置 | 仅读取 |
-| 旋转 / 镜像 | ✅ 仅编码 | ✅ 仅编码 | ✅ 仅编码 |
+| 配置项                                          | H.264          | H.265          | MJPEG / JPEG   |
+| ----------------------------------------------- | -------------- | -------------- | -------------- |
+| 码率控制                                        | 支持           | 支持           | 仅 FixQP       |
+| GOP / 长期参考帧 / Intra Refresh / IDR / skip   | 支持           | 支持           | 不支持         |
+| SAO                                             | 不支持         | 支持           | 不支持         |
+| 熵编码模式                                      | 支持           | 不支持         | 不支持         |
+| 模式决策                                        | 不支持         | 支持           | 不支持         |
+| 去块滤波 / 帧内预测 / 变换 / 智能背景 / 3D 降噪 | 支持           | 支持           | 不支持         |
+| ROI / QpMap                                     | 支持           | 支持           | 不支持         |
+| VUI / 用户数据 / 显式头                         | 支持           | 支持           | 不支持         |
+| slice 切分                                      | 支持设置       | 支持设置       | 仅读取         |
+| 旋转 / 镜像                                     | 支持（仅编码） | 支持（仅编码） | 支持（仅编码） |
 
 ### 参数填写
 
@@ -693,4 +693,4 @@ hb_mm_mc_release(&context);
 - **Intra Refresh 自适应模式**（`intra_refresh_mode = 4`）不能与无损编码和 ROI 同时使用
 - **`external_frame_buf = 1` 时**：外部 buffer 的地址仍需通过 dequeue / queue 流程填入，直接改 buffer 地址即可
 
-具体故障现象与排查见[常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)；调试节点与状态输出见[多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/multimedia_debug_guide/mediacodec_debug_guide)。
+具体故障现象与排查见 [常见问题](/Advanced_development/multimedia_development/multimedia_api/mediacodec/faq)；调试节点与状态输出见 [多媒体调试指南](/Advanced_development/multimedia_development/multimedia_api/multimedia_debug_guide/mediacodec_debug_guide)。

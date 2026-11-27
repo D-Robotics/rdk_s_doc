@@ -6,20 +6,20 @@ description: "RDK S100/S600 多媒体基础框架 HBN API"
 
 # HBN 框架说明
 ## 概述
-摄像头链路的模块使用统一的HBN API(图中**橙色**部分)，主要有如下三部分组成
+摄像头链路的模块使用统一的 HBN API(图中**橙色**部分)，主要有如下三部分组成
 1. `HBN Framework API`（图中**红色**部分）：实现对 SOC 中硬件加速单元的软件抽象， 本章将详细描述
 2. `Camera API`（图中**绿色**部分）：实现对 SOC 外的硬件模块的抽象，包括摄像头、加串器、解串器
-3. `ISP API`（图中**紫色**部分）：实现对 ISP模块参数的动态调整
+3. `ISP API`（图中**紫色**部分）：实现对 ISP 模块参数的动态调整
 
 HBN 框架覆盖了摄像头采集链路中大部分的模块，包括 VIN、ISP、PYM、GDC、STITCH。
 其中 `Camera API` 没有包含在 HBN 框架中，但是可以通过对应的 `attach` 函数绑定到 HBN 框架中。
 总的来说， HBN 框架覆盖了摄像头采集链路的所有模块，并且提供了简单灵活的 API。
 
-![软件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/soft_framework_hbn_highlight.png)
+![软件框架](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/soft_framework_hbn_highlight.png)
 
 ## 软件抽象
 
-HBN 框架中将 VIN、ISP、PYM、GDC、STITCH 中的每个模块用 vnode 来抽象，多个 ``vnode`` 连接成一个 ``vflow`` （类似于一条流水线）。
+HBN 框架中将 VIN、ISP、PYM、GDC、STITCH 中的每个模块用 vnode 来抽象，多个 `vnode` 连接成一个 `vflow` （类似于一条流水线）。
 由于 `Camera` 使用独立的 API，所以 HBN 框架提供了 attach 接口，实现 Camera 和 VIN 进行绑定， 从而实现了完整的流水线。
 
 1. vnode 是对硬件加速单元的抽象，在 HBN 框架中 VIN、ISP、PYM、GDC、STITCH ，都会抽象成 vnode 的概念， vnode 包含如下属性 ：
@@ -31,12 +31,12 @@ HBN 框架中将 VIN、ISP、PYM、GDC、STITCH 中的每个模块用 vnode 来�
     - vflow 中添加 vnode 节点的接口：[hbn_vflow_add_vnode](#hbn_vflow_add_vnode)
     - 在 vflow 中绑定两个 vnode 的接口：[hbn_vflow_bind_vnode](#hbn_vflow_bind_vnode)
     - 启动 vflow 的接口：[hbn_vflow_start](#hbn_vflow_start)
-3. 对于 ``HBN API`` 中非 ``HBN Framework API`` 的模块，比如 Camera 支持使用 attach 接口绑定到 vflow 中
-4. 对于非 ``HBN API`` 中的模块， 比如 BPU 和 Display 等，通过接口 ``hbn_vnode_get_output_frame`` 从 vflow 中获取视频帧然后调用对应的接口送入到硬件单元中
+3. 对于 `HBN API` 中非 `HBN Framework API` 的模块，比如 Camera 支持使用 attach 接口绑定到 vflow 中
+4. 对于非 `HBN API` 中的模块， 比如 BPU 和 Display 等，通过接口 `hbn_vnode_get_output_frame` 从 vflow 中获取视频帧然后调用对应的接口送入到硬件单元中
 
 下图是三种场景的 vflow 例子（场景 1 中 **回灌** 的含义：数据源来自 DDR 的情况）：
 
-![软件抽象](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_framework_abstract.png)
+![软件抽象](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_framework_abstract.png)
 
 1. 场景 1 ：单路 vflow( 回灌 )
    - 场景描述：视频帧来自 DDR ( 比如读取视频文件到 DDR)，使用 GDC 对视频帧进行畸变矫正
@@ -69,15 +69,15 @@ vnode 之间通过输入通道和输出通道进行连接 :
 ### 输入通道
 
 每个 vnode 只有一个输入通道，分三种情况描述
-1. 源节点(VIN)：数据源来自 camera, 通过 `hbn_camera_attach_to_vin` 把 camera 与 VIN 绑定后，框架自动把camera 中的输入送入到 VIN 节点
+1. 源节点(VIN)：数据源来自 camera, 通过 `hbn_camera_attach_to_vin` 把 camera 与 VIN 绑定后，框架自动把 camera 中的输入送入到 VIN 节点
 2. 中间节点：`hbn_vflow_bind_vnode` 函数决定上游节点的那个输出与下游节点的输入通道绑定
-3. 回灌场景：vnode 的输入没有与任何元素绑定，需要用户主动调用 `hbn_vnode_sendframe` 接口给 vnode的输入通道送数据
+3. 回灌场景：vnode 的输入没有与任何元素绑定，需要用户主动调用 `hbn_vnode_sendframe` 接口给 vnode 的输入通道送数据
 
 ### 输出通道
 
-- 输出通道按照两种情况进行划分：连接方式和输出的数据内容，比如 VIN节点
-  - 连接方式不同：通道0 和通道1输出的都是 camera 帧，不同的是与下一个 vnode 的连接方式
-  - 输出的数据内容不同：通道0、通道3、通道4的连接方式都是offline, 不同的是数据内容
+- 输出通道按照两种情况进行划分：连接方式和输出的数据内容，比如 VIN 节点
+  - 连接方式不同：通道 0 和通道 1 输出的都是 camera 帧，不同的是与下一个 vnode 的连接方式
+  - 输出的数据内容不同：通道 0、通道 3、通道 4 的连接方式都是 offline, 不同的是数据内容
 - 连接方式，支持 online 模式和 offline 模式，详细见 [ 系统概述 ](./00_system_overview.md#数据交互)
 
 - 只有 `VIN 到 ISP/PYM` 和 `ISP 到 YNR/PYM` 支持 online 通道，其他模块之间只支持 offline 通道
@@ -89,8 +89,8 @@ vnode 之间通过输入通道和输出通道进行连接 :
 |      | 3            | offline 通道，只输出 emb data 到 ddr    |
 |      | 4            | offline 通道，对 camera 帧进行裁剪后输到 ddr    |
 | ISP  | 0            | offline 通道，输出 isp 处理后的帧到 ddr |
-|      | 1            | online 通道，连接到ynr或pym               |
-| PYM  | 0            | offline通道，输出pym图像至ddr           |
+|      | 1            | online 通道，连接到 ynr 或 pym               |
+| PYM  | 0            | offline 通道，输出 pym 图像至 ddr           |
 | GDC  | 0            | offline 通道，输出 gdc 处理后的帧到 ddr |
 
 
@@ -115,7 +115,7 @@ vnode 之间通过输入通道和输出通道进行连接 :
 1. `hbn_vflow_bind_vnode` 需要做如下区分：
   - online: `src_out_channel=1` `dst_input_channel=0`
   - offline: `src_out_channel=0` `dst_input_channel=0`
-2. vnode 设置成offline的方式连接下一个 vnode 时，必须调用函数 `hbn_vnode_set_ochn_buf_attr`来配置输出buffer
+2. vnode 设置成 offline 的方式连接下一个 vnode 时，必须调用函数 `hbn_vnode_set_ochn_buf_attr` 来配置输出 buffer
 
 ##### VIN 与 ISP
 | 连接方式 | vin_node_attr 结构体 | isp_node_attr 结构体 |
@@ -139,12 +139,12 @@ vnode 之间通过输入通道和输出通道进行连接 :
 | offline | `sched_mode=1` `slot_id=4-11` `hw_id可选` | `axi_output_mode=9` | `pym_mode=3` `slot_id=4-11` `hw_id可选` |
 
 单路 online 与 多路 online 都是 ISP online 到 PYM，但是存在区别， 如下描述：
-1. 多路 online： VIN 到 ISP是 offline 并且是多路，然后 ISP online 到 PYM
-2. 单路 online: VIN 到 ISP是 online 是单路，然后 ISP online 到 PYM
+1. 多路 online： VIN 到 ISP 是 offline 并且是多路，然后 ISP online 到 PYM
+2. 单路 online: VIN 到 ISP 是 online 是单路，然后 ISP online 到 PYM
 ##### ISP 与 YNR 
-由于 YNR 的输入不支持读取DDR 输出也不能写到DDR，所以使能 YNR后，必须使能PYM, 并且 ISP 必须 online 到 YNR，YNR 必须 online 到 pym。由于 ynr 的模式与ISP模式相关，ISP的模式与VIN的模式相关，所以分两种情况描述：
+由于 YNR 的输入不支持读取 DDR 输出也不能写到 DDR，所以使能 YNR 后，必须使能 PYM, 并且 ISP 必须 online 到 YNR，YNR 必须 online 到 pym。由于 ynr 的模式与 ISP 模式相关，ISP 的模式与 VIN 的模式相关，所以分两种情况描述：
 
-情景1：VIN 和 ISP online 的情况：
+情景 1：VIN 和 ISP online 的情况：
 1. Vin online 到 ISP
   - `vin_node_attr` 的 `cim_isp_flyby=1`
   - `isp_node_attr` 的 `sched_mode=2`
@@ -159,7 +159,7 @@ vnode 之间通过输入通道和输出通道进行连接 :
   - `pym_cfg_t` 的 `slot_id=同ISP`
   - `pym_cfg_t` 的 `hw_id=同ISP`
 
-情景2：VIN 和 ISP offline 的情况：
+情景 2：VIN 和 ISP offline 的情况：
 1. Vin offline 到 ISP
   - `vin_node_attr` 的 `ddr_en=1`
   - `vin_node_attr` 的 `cim_isp_flyby=0`
@@ -186,21 +186,21 @@ vnode 之间通过输入通道和输出通道进行连接 :
   - `STREAM_OUTPUT_MODE_ENABLE`(1) ： ISP 直接 online 连接到下游模块
 
 - `isp_ochn_attr_t` 中 axi_output_mode 数字对应的枚举变量（常用的）
-  - `AXI_OUTPUT_MODE_DISABLE`(0): 关闭ISP写DDR
-  - `AXI_OUTPUT_MODE_RAW8`(1) ：按照 RAW8 的格式写DDR
-  - `AXI_OUTPUT_MODE_RAW10`(3) ：按照 RAW10 的格式写DDR
-  - `AXI_OUTPUT_MODE_YUV420`(9) ：按照 YUV420 的格式写DDR 
+  - `AXI_OUTPUT_MODE_DISABLE`(0): 关闭 ISP 写 DDR
+  - `AXI_OUTPUT_MODE_RAW8`(1) ：按照 RAW8 的格式写 DDR
+  - `AXI_OUTPUT_MODE_RAW10`(3) ：按照 RAW10 的格式写 DDR
+  - `AXI_OUTPUT_MODE_YUV420`(9) ：按照 YUV420 的格式写 DDR 
 
-- `pym_cfg_t`中 pym_mode 数字对应的枚举变量
-  - `PYM_MANUAL_MODE`(1): 和ISP直连，并且ISP是 SCHED_MODE_MANUAL （VIN 与 PYM 连接时不能配置这个选项）
-  - `PYM_OTF_MODE`(2): 和VIN/ISP直连， 如果和ISP直连接时 `isp_node_attr` 的 `sched_mode` 必须是SCHED_MODE_PASS_THRU
-  - `PYM_M2M_MODE`(3): PYM 的输入数据来自DDR
+- `pym_cfg_t` 中 pym_mode 数字对应的枚举变量
+  - `PYM_MANUAL_MODE`(1): 和 ISP 直连，并且 ISP 是 SCHED_MODE_MANUAL （VIN 与 PYM 连接时不能配置这个选项）
+  - `PYM_OTF_MODE`(2): 和 VIN/ISP 直连， 如果和 ISP 直连接时 `isp_node_attr` 的 `sched_mode` 必须是 SCHED_MODE_PASS_THRU
+  - `PYM_M2M_MODE`(3): PYM 的输入数据来自 DDR
 
 ## API 调用流程
 
 ### 创建流程
 #### MIPI 接口的相机模组
-![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_create_and_start.png)
+![创建流程](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_create_and_start.png)
 
 - `hbn_vnode_open` 打开各模块，获取 vnode handle。
 - `hbn_vnode_set_attr` / `set_ochn_attr` / `set_ichn_attr` 配置模块与通道属性。
@@ -209,7 +209,7 @@ vnode 之间通过输入通道和输出通道进行连接 :
 - `hbn_vnode_start` 启动各模块，vflow 开始流转数据帧。
 
 #### Serdes 接口的相机模组
-![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_create_and_start_serdes.png)
+![创建流程](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_create_and_start_serdes.png)
 
 - `hbn_vnode_open` 打开各模块，获取 vnode handle。
 - `hbn_vnode_set_attr` / `set_ochn_attr` / `set_ichn_attr` 配置模块与通道属性。
@@ -218,14 +218,14 @@ vnode 之间通过输入通道和输出通道进行连接 :
 - `hbn_camera_attach_to_vin` 和 `hbn_deserial_attach_to_vin` 把 camera、deserial、vin 三个模块按照顺序绑定
 - `hbn_vnode_start` 启动各模块，vflow 开始流转数据帧。
 ### 循环处理流程
-![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_loop_process.png)
+![创建流程](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_loop_process.png)
 
 ### 销毁流程
 销毁流程是创建流程的反操作，但是有如下几点需要注意：
 - 调用了 `hbn_vflow_destroy` 就不需要再调用 hbn_vnode_close 和 hbn_vflow_unbind_vnode
 - 调用了 `hbn_camera_destroy` 就不需要再调用 hbn_camera_detach_from_vin
 
-![创建流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_stop_and_destroy.png)
+![创建流程](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/hbn_software_framework_api_flow_stop_and_destroy.png)
 
 - `hbn_vnode_stop` 停止各模块。
 - `hbn_vflow_destroy` 销毁 vflow（已串入 vflow 的 vnode 无须再单独 `hbn_vnode_close`；独立使用的模块如 GDC 回灌需单独 close）。
@@ -889,7 +889,7 @@ hbn_vnode_image_t *img)
 
 【功能描述】
 
-发送图像到模块的输入通道，会触发模块进行处理。阻塞型接口，等待硬件处理完再返回，默认超时时间为1秒。
+发送图像到模块的输入通道，会触发模块进行处理。阻塞型接口，等待硬件处理完再返回，默认超时时间为 1 秒。
 
 【注意事项】
 

@@ -11,14 +11,14 @@ sidebar_products: RDK S100
 本示例仅适用于 RDK S100。RDK S600 镜像未内置对应 hbm 模型，相关示例代码也仅在 S100 上随系统镜像发布；S600 上暂不支持。
 :::
 
-本示例展示了如何在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于`/app/cdev_demo/bpu/05_open_instance_seg_sample/01_yoloe11_seg/`目录下。
+本示例展示了如何在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于 `/app/cdev_demo/bpu/05_open_instance_seg_sample/01_yoloe11_seg/` 目录下。
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLOE11 是一款高效能的端侧实例分割模型，适用于开放词汇物体检测与分割任务。该模型通过多尺度特征提取、密集分类和原型掩膜生成，有效识别图像中的物体并输出精细的实例分割结果。本示例使用的是 Ultralytics YOLOE11 的轻量级版本，输入图像为 640x640，支持 4585 类的广义物体分类与分割。
 
-- HBM模型名称：yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
+- HBM 模型名称：`yoloe_11s_seg_pf_nashe_640x640_nv12.hbm`
 
 - 输入格式：NV12，大小为 640x640
 
@@ -103,7 +103,7 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
 
 ## 快速运行
 - 运行模型
-    - 确保在`build`目录中
+    - 确保在 `build` 目录中
     - 使用默认参数
         ```bash
         ./ultralytics_yoloe11_seg
@@ -119,36 +119,37 @@ wget https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_
         ```
 - 查看结果
 
-    运行成功后，会将结果绘制在原图上，并保存到build/result.jpg
-    ```bash
+    运行成功后，会将结果绘制在原图上，并保存到 build/result.jpg
+    ```text
     [Saved] Result saved to: result.jpg
     ```
 
     **成功标志**：末尾出现 `[Saved] Result saved to: result.jpg`，打开 `build/result.jpg` 可见物体的分割掩膜与检测框。
 
 ## 注意事项
-- 输出结果存储为result.jpg，用户可自行查看。
+- 输出结果存储为 result.jpg，用户可自行查看。
 - 若指定模型路径不存在，程序将尝试自动下载模型。
 - 如需了解更多部署方式或模型支持情况，请参考官方文档或联系平台技术支持。
 
 
 ## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+```license
+Copyright (C) 2025, XiangshunZhao D-Robotics.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+```
 
 ## 常见问题
 

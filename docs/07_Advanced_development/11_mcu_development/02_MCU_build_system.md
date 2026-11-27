@@ -174,7 +174,7 @@ LINKER_FLAGS = '-e EL2_core_exceptions_table' +\
 | FREERTOS_HEAP| 0x0CD60000|512K |FreeRTOS 堆空间 |
 | ATCM_Reserved| 0x0A000000|64K |Can 模块代码、数据的运行使用区域 |
 
-在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询D-Robotics 相关支持人员。
+在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询 D-Robotics 相关支持人员。
 
 下面是 D-Robotics 版本中的链接文件（`Linker/gcc/S100/link_freertos_mcu1.ld`）。完整内容见文末 [附录：链接脚本全文](#附录链接脚本全文)。
 </DocScope>
@@ -189,7 +189,7 @@ LINKER_FLAGS = '-e EL2_core_exceptions_table' +\
 | FREERTOS_HEAP| 0x0CE00000|512K |FreeRTOS 堆空间 |
 | ATCM_Reserved| 0x0A000000|64K |Can 模块代码、数据的运行使用区域 |
 
-在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询D-Robotics 相关支持人员。
+在上述内存排布中，强烈不建议客户修改 **LOG_SHARE_Reserved**、**SCMI_IPC_Reserved**、**FREERTOS_HEAP** 等区域，以及链接脚本中定义的 **MCU_STATE_START_ADDR**（`0x0C800800`）等 MCU0/MCU1 共享关键地址。ATCM_Reserved 用于 Can 运行时数据，修改需谨慎。若要调整 FLASH、CAN_Reserved 等区域，请先咨询 D-Robotics 相关支持人员。
 
 下面是 D-Robotics 版本中的链接文件（`Linker/gcc/S600/link_freertos_mcu1.ld`）。完整内容见文末 [附录：链接脚本全文](#附录链接脚本全文)。
 
@@ -207,7 +207,7 @@ LINKER_FLAGS = '-e EL2_core_exceptions_table' +\
 | `STACK_SIZE_MCU2` | `0x0200`（512 B） | core1 栈大小 |
 | `STACK_SIZE_EXC_MCU2` | `0x0200`（512 B） | core1 异常模式栈大小 |
 
-修改这些值会改变 `.heap`、`.stack`、`.stack_exc`、`.stack_mcu2`、`.stack_exc_mcu2` 各段的占用，需同步确认上一节 MPU region 2~5 的 SRAM 切分仍然有效。
+修改这些值会改变 `.heap`、`.stack`、`.stack_exc`、`.stack_mcu2`、`.stack_exc_mcu2` 各段的占用，需同步确认上一节 MPU region 2-5 的 SRAM 切分仍然有效。
 
 ## 启动代码 startup.s
 
@@ -442,7 +442,7 @@ ARM R52 的 background region 和 RDK S600 芯片上实际实现的 memory map �
 | 8 | 0x8000_0000 | 0xFFFF_FFFF | normal memory（non-cacheable） | DDR 空间 |
 | 9 | 0x1800_0000 | 0x1FFF_FFFF | device memory | XSPI 寄存器空间 |
 
-5. 启动代码接下来配置 EL2与 EL1异常中断向量表，根据 Core ID 选择并设置 EL1异常向量表；
+5. 启动代码接下来配置 EL2 与 EL1 异常中断向量表，根据 Core ID 选择并设置 EL1 异常向量表；
 ```c
 /* Init HVBAR (Hypervisor Vector Base Address Register) */
     ldr r0, =EL2_core_exceptions_table
@@ -577,7 +577,7 @@ EL1_Reset_Handler:
 
 - **编译产物核对**：编译后核对 `output` 目录生成物与 MCU1 镜像 layout 一致。
 - **MPU 配置核对**：访问内存前核对 memory 类型与芯片实际实现一致，避免 ARM R52 background region 与芯片 memory map 差异导致的访问异常。
-- **链接脚本核对**：若调整 SRAM 切分（region 1~5），须同时修改链接脚本与 MPU 配置，保持二者一致。
+- **链接脚本核对**：若调整 SRAM 切分（region 1-5），须同时修改链接脚本与 MPU 配置，保持二者一致。
 
 ## 常见问题
 
@@ -585,7 +585,7 @@ EL1_Reset_Handler:
 
 **原因**：ARM R52 的 background region 与芯片实际实现的 memory map 存在差异。例如 `0x22000000` 在 background region 中默认属于 normal memory，但在芯片上对应 MCU GIC 等 device 寄存器空间。
 
-**解决**：访问前通过 MPU 将 memory 类型与芯片实际实现保持一致；固定外设/DDR 区域的 region 6~9 保持与参考代码一致。
+**解决**：访问前通过 MPU 将 memory 类型与芯片实际实现保持一致；固定外设/DDR 区域的 region 6-9 保持与参考代码一致。
 
 <!-- TODO(Sx): 待收集（补充第 2 条） -->
 

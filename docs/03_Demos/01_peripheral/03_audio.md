@@ -346,7 +346,7 @@ root@ubuntu:~# amixer sset 'DAC' 200
 |------|------|
 | `-D hw:x,y` | 指定声卡号 `x`、设备号 `y` |
 | `-c` | 声道数（S100 录音最高 16 ch，播放最高 8 ch） |
-| `-r` | 采样率（Hz）；S100 支持 8 kHz～96 kHz |
+| `-r` | 采样率（Hz）；S100 支持 8 kHz-96 kHz |
 | `-f` | 样本格式（`S16_LE` / `S24_LE` / `S32_LE`） |
 | `-t` | 文件类型（如 `wav`） |
 | `-d` | 录音时长（秒） |
@@ -385,7 +385,7 @@ root@ubuntu:~# ls -la 8chn_test.wav 1khz_16k_8ch.wav
 -rw-r--r-- 1 root root 768044 8chn_test.wav
 ```
 
-注意：`aplay` 须在后台运行（`&`），再启动 `arecord`；仅 8 通道录音、不播放时，可省略步骤 1～2 与 `aplay`，单独执行 `arecord` 命令即可（**本板实测** 3 s 文件约 **768 KB**）。
+注意：`aplay` 须在后台运行（`&`），再启动 `arecord`；仅 8 通道录音、不播放时，可省略步骤 1-2 与 `aplay`，单独执行 `arecord` 命令即可（**本板实测** 3 s 文件约 **768 KB**）。
 
 录制完成后，可用 Audacity 等工具打开 `8chn_test.wav`，查看第 **7、8** 通道是否出现约 **1 kHz** 频谱，验证回采是否正常。
 

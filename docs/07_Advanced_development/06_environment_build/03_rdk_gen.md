@@ -23,7 +23,7 @@ BSP 源码包下载地址参见： [系统镜像](../../RDK.md#系统镜像)（�
 2. 签署保密协议（NDA）：我们将根据提交信息与您联系，双方确认后签署保密协议
 3. 内容释放：完成协议签署后，我们将通过私有渠道为您开放商业版本资料
 
-如您希望获取商业版内容，请点击下方链接填写问卷，我们将在 3 ～ 5 个工作日内与您联系：
+如您希望获取商业版内容，请单击下方链接填写问卷，我们将在 3-5 个工作日内与您联系：
 [填写问卷](https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre)
 :::
 
@@ -32,8 +32,8 @@ BSP 源码包下载地址参见： [系统镜像](../../RDK.md#系统镜像)（�
 本章节主要针对需要对 RDK 构建系统进行定制化修改的介绍，rdk_gen 的使用说明，请参考 rdk_gen 仓库的 README.md。
 
 基本的使用说明：
-``` bash
-# 在线镜像构建，从地瓜及第三方APT源下载依赖的deb包
+```bash
+# 在线镜像构建，从 D-Robotics 及第三方 APT 源下载依赖的 deb 包
 sudo ./pack_image.sh
 
 # 离线镜像构建，只安装out/product/deb_packages下的deb包，使用此选项时请确保out/product/deb_packages内的deb符合预期，同时out/product/rootfs_packages下已有预编译根文件系统包
@@ -64,18 +64,18 @@ sudo ./pack_image.sh -p
   - [Debian manpage](https://manpages.debian.org/bookworm/multistrap/multistrap.1.en.html)
 
 #### 工具简介
-总结而言，`multistrap`是独立于`debootstrap`工具的另一套 debian/Ubuntu 等以 apt 源为基础生成根文件系统的工具。它基于一个/多个配置文件定义生成根文件系统所使用的 apt 源，以及需要默认生成哪些包。
-与`debootstrap`最大的区别有以下几点：
-1. 灵活性：`multistrap`允许用户完全自定义新生成的根文件系统内的所有包，包括 apt 源内标记为必选的包，但是用户需要自行保证根文件系统的完整性和可用性；
-2. 生成流程：`multistrap`不同于`debootstrap`，它的生成流程可以概括为以下几个步骤，最大的区别在于第四步，`multistrap`只进行包的解压缩，没有对包进行配置（也就是执行[pre/post]install 脚本）：
+总结而言，`multistrap` 是独立于 `debootstrap` 工具的另一套 debian/Ubuntu 等以 apt 源为基础生成根文件系统的工具。它基于一个/多个配置文件定义生成根文件系统所使用的 apt 源，以及需要默认生成哪些包。
+与 `debootstrap` 最大的区别有以下几点：
+1. 灵活性：`multistrap` 允许用户完全自定义新生成的根文件系统内的所有包，包括 apt 源内标记为必选的包，但是用户需要自行保证根文件系统的完整性和可用性；
+2. 生成流程：`multistrap` 不同于 `debootstrap`，它的生成流程可以概括为以下几个步骤，最大的区别在于第四步，`multistrap` 只进行包的解压缩，没有对包进行配置（也就是执行[pre/post]install 脚本）：
   1. 读取配置文件
   2. 根据配置文件从获取指定的 apt 源的元数据
   3. 根据配置文件尝试下载指定的包
   4. 根据配置文件解压缩指定的包
-在地瓜提供的`multistrap`编译脚本中，我们基于实践经验，通过使用`binfmt-support + chroot`，在 sudo 权限下实现了对包的配置，以达到用户制作的根文件系统可以直接烧录上板使用。
+在 D-Robotics 提供的 `multistrap` 编译脚本中，我们基于实践经验，通过使用 `binfmt-support + chroot`，在 sudo 权限下实现了对包的配置，以达到用户制作的根文件系统可以直接烧录上板使用。
 
 #### 配置文件简介
-`multistrap`的配置文件支持单文件/多文件两种形式。多文件情况下可以通过"include"字段将基础版本所包含的所有内容添加上后，只针对特定版本进行配置，极大的方便了多文件系统的维护工作。
+`multistrap` 的配置文件支持单文件/多文件两种形式。多文件情况下可以通过“include”字段将基础版本所包含的所有内容添加上后，只针对特定版本进行配置，极大的方便了多文件系统的维护工作。
 以下章节内容的配置文件路径：`samplefs/configs`:
 ```bash
 $ tree samplefs/configs/
@@ -96,9 +96,9 @@ samplefs/configs/
 :::
 
 #### 基本格式介绍
-详细的字段介绍请参考官方文档，这里主要针对地瓜的配置文件中的重要配置进行说明。
-1. 字段：`key1=value1`的格式，定义了某个字段"key1"的值为"value1"
-2. 字段集（stanza/section）：通过定义"`[Some-Section]`"来归集从该行开始，到下一个"`[Next-Section]`"为止中间所有字段为一个"`Section`"
+详细的字段介绍请参考官方文档，这里主要针对 D-Robotics 的配置文件中的重要配置进行说明。
+1. 字段：`key1=value1` 的格式，定义了某个字段“key1”的值为“value1”
+2. 字段集（stanza/section）：通过定义“`[Some-Section]`”来归集从该行开始，到下一个“`[Next-Section]`”为止中间所有字段为一个“`Section`”
 
 重点字段介绍：
 - include
@@ -108,21 +108,21 @@ samplefs/configs/
 - aptsources
   - 定义生成的根文件系统中路径/etc/sources.list.d/内会保存的 apt 源所在的字段集。**注意**，这个源不一定需要与 bootstrap 中用于生成根文件系统的源保持一致，但我们强烈建议 aptsources 定义的 apt 源是 bootstrap 定义的源的超集。
 - source/suite/components/omitdebsrc
-  - 定义 apt 源使用的关键字。可以参考[apt源格式定义](https://manpages.ubuntu.com/manpages/xenial/man5/sources.list.5.html)
-  - source：apt 源的根链接，与 apt 源格式的"uri"字段匹配
-  - suite：apt 源的 suite，与 apt 源格式的"suite"字段匹配，一般代表该源对应的系统 code name+属性，例如 Ubuntu 的 jammy/focal/noble/jammy-updates/noble-security
-  - components：apt 源的 component，与 apt 源格式的"component"字段匹配，同样可以添加多个
-  - omitdebsrc：拉取 apt 元数据及包时，是否下载 deb 包对应的 src 包，一般配置为"true"，即不下载 deb 包对应的 src 包，以加速构建。
+  - 定义 apt 源使用的关键字。可以参考 [apt 源格式定义](https://manpages.ubuntu.com/manpages/xenial/man5/sources.list.5.html)
+  - source：apt 源的根链接，与 apt 源格式的“uri”字段匹配
+  - suite：apt 源的 suite，与 apt 源格式的“suite”字段匹配，一般代表该源对应的系统 code name+属性，例如 Ubuntu 的 jammy/focal/noble/jammy-updates/noble-security
+  - components：apt 源的 component，与 apt 源格式的“component”字段匹配，同样可以添加多个
+  - omitdebsrc：拉取 apt 元数据及包时，是否下载 deb 包对应的 src 包，一般配置为“true”，即不下载 deb 包对应的 src 包，以加速构建。
 - packages
   - 用于定义需要拉取的包的字段，一个 packages 字段可以定义多个包，包之间以空格分隔，多个 packages 字段的合集会作为最终的包定义。
 #### 多文件配置示例
 
 
 <DocScope products="RDK S100">
-请参考代码路径`samplefs/configs/jammy-desktop.conf`
+请参考代码路径 `samplefs/configs/jammy-desktop.conf`
 </DocScope>
 <DocScope products="RDK S600">
-请参考代码路径`samplefs/configs/noble-desktop.conf`
+请参考代码路径 `samplefs/configs/noble-desktop.conf`
 </DocScope>
 
 ### RDK 的实现
@@ -131,82 +131,81 @@ RDK 上，multistrap 的配置文件默认根据平台分为多个部分：
 
 <DocScope products="RDK S100">
 
-- jammy-base.conf：用于配置 RDK S100通用的默认根文件系统配置，包括使用的 apt 源，RDK S100所有版本默认包含的包等；
-- jammy-desktop.conf：用于配置 RDK S100桌面版根文件系统基于 jammy-base.conf 新增的包；
-- jammy-server.conf：用于配置 RDK S100服务器版根文件系统基于 jammy-base.conf 新增的包；
+- jammy-base.conf：用于配置 RDK S100 通用的默认根文件系统配置，包括使用的 apt 源，RDK S100 所有版本默认包含的包等；
+- jammy-desktop.conf：用于配置 RDK S100 桌面版根文件系统基于 jammy-base.conf 新增的包；
+- jammy-server.conf：用于配置 RDK S100 服务器版根文件系统基于 jammy-base.conf 新增的包；
 
 </DocScope>
 <DocScope products="RDK S600">
 
-- noble-base.conf：用于配置 RDK S600通用的默认根文件系统配置，包括使用的 apt 源，RDK S600所有版本默认包含的包等；
-- noble-desktop.conf：用于配置 RDK S600桌面版根文件系统基于 noble-base.conf 新增的包；
+- noble-base.conf：用于配置 RDK S600 通用的默认根文件系统配置，包括使用的 apt 源，RDK S600 所有版本默认包含的包等；
+- noble-desktop.conf：用于配置 RDK S600 桌面版根文件系统基于 noble-base.conf 新增的包；
 </DocScope>
 
 #### 构建流程说明
-用户一般使用`samplefs/make_ubuntu_samplefs.sh`脚本来进行根文件系统的构建，如果使用 sudo 调用该脚本，则根文件系统构建过程会包括对包的配置，耗时会显著增加。
+用户一般使用 `samplefs/make_ubuntu_samplefs.sh` 脚本来进行根文件系统的构建，如果使用 sudo 调用该脚本，则根文件系统构建过程会包括对包的配置，耗时会显著增加。
 
-如果不使用 sudo 调用该脚本，则构建过程不会包括对包的配置，耗时会相对减少，但是首次启动需要在板端使用命令`rm -rf /var/lock/* ; dpkg --configure -a --force-confdef --force-confold ; systemctl enable /etc/systemd/system/S*.service`命令来初始化系统并重启以确保系统正常工作。
+如果不使用 sudo 调用该脚本，则构建过程不会包括对包的配置，耗时会相对减少，但是首次启动需要在板端使用命令 `rm -rf /var/lock/* ; dpkg --configure -a --force-confdef --force-confold ; systemctl enable /etc/systemd/system/S*.service` 命令来初始化系统并重启以确保系统正常工作。
 
 :::info **提示**
 推荐**使用 sudo**调用 samplefs/make_ubuntu_samplefs.sh。
 :::
 
-调用`samplefs/make_ubuntu_samplefs.sh`脚本需要在 samplefs 目录下进行。
+调用 `samplefs/make_ubuntu_samplefs.sh` 脚本需要在 samplefs 目录下进行。
 
-在不添加参数的情况下直接在使用`sudo ./make_ubuntu_samplefs.sh`：
+在不添加参数的情况下直接在使用 `sudo ./make_ubuntu_samplefs.sh`：
 
 <DocScope products="RDK S100">
 
-脚本默认构建桌面版镜像，也就是使用`jammy-desktop.conf`文件来构建根文件系统。
+脚本默认构建桌面版镜像，也就是使用 `jammy-desktop.conf` 文件来构建根文件系统。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-脚本默认构建桌面版镜像，也就是使用`noble-desktop.conf`文件来构建根文件系统。
+脚本默认构建桌面版镜像，也就是使用 `noble-desktop.conf` 文件来构建根文件系统。
 
 </DocScope>
 
-指定使用的配置文件的命令：`sudo ./make_ubuntu_samplefs.sh build <config_file_name>`，例如新增的配置文件为：`new-desktop.conf`，则命令就是：`sudo ./make_ubuntu_samplefs.sh build new-desktop.conf`，`new-desktop.conf`文件需要放到`samplefs/configs`文件夹内。
+指定使用的配置文件的命令：`sudo ./make_ubuntu_samplefs.sh build <config_file_name>`，例如新增的配置文件为：`new-desktop.conf`，则命令就是：`sudo ./make_ubuntu_samplefs.sh build new-desktop.conf`，`new-desktop.conf` 文件需要放到 `samplefs/configs` 文件夹内。
 
 脚本构建流程图如下：
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/samplefs_flowchart.png" alt="示例文件系统流程图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 裁剪/自定义根文件系统的方法
 :::info 提示
-apt 源(deb 包的 control 信息)中的 Priority 字段会区分裁剪/自定义的流程。
-multistrap 默认会将所有 Priority 为"Required"的包进行安装。
-地瓜定义 important 包也会被安装。
+apt 源（deb 包的 control 信息）中的 Priority 字段会区分裁剪/自定义的流程。
+multistrap 默认会将所有 Priority 为“Required”的包进行安装。
+D-Robotics 定义 important 包也会被安装。
 :::
 
-#### 仅裁剪/自定义 apt 优先级不为"important"/"required"的包
+#### 仅裁剪/自定义 apt 优先级不为“important”/“required”的包
 
 <DocScope products="RDK S100">
 
-用户直接在 samplefs/configs/jammy-base.conf 等配置文件的各个"packages"字段中删除自己不需要的包，或者定义一个新的字段集，并在"[General]"字段集的"bootstrap"字段中去掉原有字段集并添加自己的字段集即可。
+用户直接在 samplefs/configs/jammy-base.conf 等配置文件的各个“packages”字段中删除自己不需要的包，或者定义一个新的字段集，并在“[General]”字段集的“bootstrap”字段中去掉原有字段集并添加自己的字段集即可。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-用户直接在 samplefs/configs/noble-base.conf 等配置文件的各个"packages"字段中删除自己不需要的包，或者定义一个新的字段集，并在"[General]"字段集的"bootstrap"字段中去掉原有字段集并添加自己的字段集即可。
+用户直接在 samplefs/configs/noble-base.conf 等配置文件的各个“packages”字段中删除自己不需要的包，或者定义一个新的字段集，并在“[General]”字段集的“bootstrap”字段中去掉原有字段集并添加自己的字段集即可。
 
 </DocScope>
 
-#### 需要裁剪/自定义 apt 优先级为"important"/"required"的包
-**注意**：一般来说各个 apt 源的维护者会将他们认为该系统（Ubuntu/Debian 的各个版本）的最小集的包的优先级标为"Required"，但是是可以进一步裁剪的。进行这种程度的根文件系统裁剪时，用户需要**自己保证根文件系统的完整性和可用性**。
+#### 需要裁剪/自定义 apt 优先级为“important”/“required”的包
+**注意**：一般来说各个 apt 源的维护者会将他们认为该系统（Ubuntu/Debian 的各个版本）的最小集的包的优先级标为“Required”，但是是可以进一步裁剪的。进行这种程度的根文件系统裁剪时，用户需要**自己保证根文件系统的完整性和可用性**。
 
-步骤如下：
-1. 在`[General]`字段集中添加`omitrequired=true`；
-2. 在`Packages`中对所有需要添加的包进行定义。
+1. 在 `[General]` 字段集中添加 `omitrequired=true`；
+2. 在 `Packages` 中对所有需要添加的包进行定义。
 
 ## RDK deb 包构建流程说明
 ### 简介
-RDK 默认以 deb 包的形式来管理用户层的地瓜定制功能。在 SDK 的 source/目录下保存了所有地瓜定制功能的 deb 包构建的源码。
+RDK 默认以 deb 包的形式来管理用户层的 D-Robotics 定制功能。在 SDK 的 source/目录下保存了所有 D-Robotics 定制功能的 deb 包构建的源码。
 
 ### 构建脚本介绍
-构建 deb 的入口脚本为`mk_debs.sh`，该脚本位于 SDK 包的根目录。用户可以通过该脚本构建仓库内的 deb 包。
+构建 deb 的入口脚本为 `mk_debs.sh`，该脚本位于 SDK 包的根目录。用户可以通过该脚本构建仓库内的 deb 包。
 
 ### deb 包源码目录
-`source`下的目录，除`bootloader`，`kernel`，`hobot-drivers`外均为地瓜定制化功能的 deb 包的构建源码。其中`hobot-spdev`，`hobot-camera`，`hobot-io`等目录内包含了相应动态库的源码，通过 mk_debs.sh 脚本构建这些包时，对应的源码会被编译。
+`source` 下的目录，除 `bootloader`，`kernel`，`hobot-drivers` 外均为 D-Robotics 定制化功能的 deb 包的构建源码。其中 `hobot-spdev`，`hobot-camera`，`hobot-io` 等目录内包含了相应动态库的源码，通过 mk_debs.sh 脚本构建这些包时，对应的源码会被编译。
 deb 包源码目录的基本结构（以 hobot-configs 为例）内会包括：
 ```bash
 hobot-configs/
@@ -242,7 +241,7 @@ hobot-camera/
 ├── lib -> ../hobot-multimedia/debian/usr/hobot/lib # 方便编译的源码软连接
 ├── sensor_calibration       # Sensor tuning库，下列库仅为示例，以实际情况为准
 │   └── lib_imx219_linear.so
-└── tuning_tool              # 地瓜提供的Sensor tuning工具
+└── tuning_tool              # D-Robotics 提供的 Sensor tuning 工具
     ├── bin
     ├── cfg
     ├── control_tool
@@ -250,83 +249,83 @@ hobot-camera/
     └── scripts
 ```
 ### 构建流程说明
-详细流程请参考`mk_debs.sh`脚本实现，以下是一个简略的流程图：
+详细流程请参考 `mk_debs.sh` 脚本实现，以下是一个简略的流程图：
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_rdk_gen/mk_debs_flowchart.png" alt="mk_debs 流程图" style={{ width: '75%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 自定义 deb 包流程说明
-1. 在`source/`文件夹下，新建对应包的包名（dpkg 内的 package name）命名的文件夹，这里以"new_package"为例；
-2. 在`source/new_package`文件夹下，新建`debian`文件夹，里面创建4个脚本文件，这4个脚本文件可以为空：
+1. 在 `source/` 文件夹下，新建对应包的包名（dpkg 内的 package name）命名的文件夹，这里以“new_package”为例；
+2. 在 `source/new_package` 文件夹下，新建 `debian` 文件夹，里面创建 4 个脚本文件，这 4 个脚本文件可以为空：
     - preinst：安装 new_package 包拷贝前需要执行的脚本；
     - postinst：安装 new_package 包拷贝执行完成后需要执行的脚本；
     - prerm：移除 new_package 包执行删除命令前需要执行的脚本；
     - postrm：移除 new_package 包执行删除命令后需要执行的脚本。
-3. 如果需要在`mk_debs.sh`不带入参时自动对该包进行编译，则在`mk_debs.sh`脚本的`deb_pkg_list`变量内添加`new_package`字段；
-4. 在`mk_debs.sh`脚本的`make_debian_deb`函数的`case`内添加`new_package`的分支：
-     - 在`case`内调度`gen_contrl_file`函数，生成构建 deb 包所需要的 control 文件；
-     - 在`case`内调度`sed`命令，将默认的"depends"字段替换为真正的 deb 依赖。假设`new_package`的依赖为`dep_pkg1`和`dep_pkg2`；
-       - 如果有依赖，则使用`sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
-       - 如果没有依赖，则使用`sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
-     - (可选)如果该 deb 在打包前，需要进行源码编译，则进行源码编译命令的调度，请注意最终的所有输出，均需要输出到`out/build/debs/new_package/debian/`目录下;
-     - 置位`is_allowed=1`
+3. 如果需要在 `mk_debs.sh` 不带入参时自动对该包进行编译，则在 `mk_debs.sh` 脚本的 `deb_pkg_list` 变量内添加 `new_package` 字段；
+4. 在 `mk_debs.sh` 脚本的 `make_debian_deb` 函数的 `case` 内添加 `new_package` 的分支：
+     - 在 `case` 内调度 `gen_contrl_file` 函数，生成构建 deb 包所需要的 control 文件；
+     - 在 `case` 内调度 `sed` 命令，将默认的“depends”字段替换为真正的 deb 依赖。假设 `new_package` 的依赖为 `dep_pkg1` 和 `dep_pkg2`；
+       - 如果有依赖，则使用 `sed -i 's/Depends: .*$/Depends: dep_pkg1,dep_pkg2/' "${deb_dst_dir}"/DEBIAN/control;`
+       - 如果没有依赖，则使用 `sed -i 's/Depends: .*$/Depends: /' "${deb_dst_dir}"/DEBIAN/control;`
+     - (可选)如果该 deb 在打包前，需要进行源码编译，则进行源码编译命令的调度，请注意最终的所有输出，均需要输出到 `out/build/debs/new_package/debian/` 目录下;
+     - 置位 `is_allowed=1`
 
 ## deb 包编入镜像流程说明
 在镜像构建的过程中，deb 包会被编入板端根文件系统内。
 
 ### 在线镜像构建
 #### 流程说明
-当`pack_image.sh`不添加-l 选项进行调度时，会进入在线镜像构建流程。流程介绍如下：
-1. 从`pack_image.sh`的`DEFAULT_CONFIG`字段获取当前的默认编译配置文件，例如 S100为`build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`，S600为`build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf`；
+当 `pack_image.sh` 不添加-l 选项进行调度时，会进入在线镜像构建流程。流程介绍如下：
+1. 从 `pack_image.sh` 的 `DEFAULT_CONFIG` 字段获取当前的默认编译配置文件，例如 S100 为 `build_params/ubuntu-22.04_desktop_rdk-s100_release.conf`，S600 为 `build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf`；
      - 该配置文件可以通过-c 选项指定
-2. 从编译配置文件内获取`RDK_DPKG_DEB_PKG_LIST`字段；
-3. chroot 到`out/deploy/rootfs`目录下：
-   1. 根据`RDK_DPKG_DEB_PKG_LIST`字段从现有板端 apt 源内尝试下载所有 deb 包；
+2. 从编译配置文件内获取 `RDK_DPKG_DEB_PKG_LIST` 字段；
+3. chroot 到 `out/deploy/rootfs` 目录下：
+   1. 根据 `RDK_DPKG_DEB_PKG_LIST` 字段从现有板端 apt 源内尝试下载所有 deb 包；
    2. 安装所有 deb 包；
 
 #### 添加额外 deb 包的方法
 1. 找到需要安装的包名；
-2. 在指定的编译配置文件内的`RDK_DPKG_DEB_PKG_LIST`变量内添加对应的包名。
+2. 在指定的编译配置文件内的 `RDK_DPKG_DEB_PKG_LIST` 变量内添加对应的包名。
 
 :::info 提示
-获取包名的方法请参考[获取所需deb包名的方法](#get_package_name)
+获取包名的方法请参考 [获取所需 deb 包名的方法](#get_package_name)
 :::
 
 ### 离线镜像构建
 #### 流程说明
-当`pack_image.sh`添加-l 选项进行调度时，会进入离线镜像构建流程。流程介绍如下：
+当 `pack_image.sh` 添加-l 选项进行调度时，会进入离线镜像构建流程。流程介绍如下：
 1. chroot：
-   1. 根据`out/product/deb_packages`内现有的 deb 包，对每个 deb 包进行安装；
+   1. 根据 `out/product/deb_packages` 内现有的 deb 包，对每个 deb 包进行安装；
 
 #### 添加额外 deb 包的方法
 1. 找到需要安装的包名；
-2. 执行以下命令将对应包下载到`out/product/deb_packages`
+2. 执行以下命令将对应包下载到 `out/product/deb_packages`
 ```bash
 cd out/product/deb_packages
 apt download <package names>
 ```
 
 :::info 提示
-获取包名的方法请参考[获取所需deb包名的方法](#get_package_name)
+获取包名的方法请参考 [获取所需 deb 包名的方法](#get_package_name)
 :::
 
 ### 获取所需 deb 包名的方法{#get_package_name}
 包名可以通过两个方式获取：
 1. 仅知道需要的文件且 host 没有安装过该包：
    - 建议通过 Google/Baidu 等搜索引擎确认该文件所属的 deb 包名，并确认该 deb 包所属的 apt 源，参考流程如下：
-     - 在[debian.org](https://www.debian.org/distrib/packages)上通过文件名确认 deb 包名，注意需要在"Search the contents of packages"一节进行搜索；
-     - 确认包名后，在[Ubuntu Launchpad](https://launchpad.net/ubuntu/+search)上搜索具体的包归属的源，确认 jammy/jammy-updates（S100）或 noble/noble-updates（S600）的 main/universe/multiverse 等 components 中有该包；
+     - 在 [debian.org](https://www.debian.org/distrib/packages) 上通过文件名确认 deb 包名，注意需要在“Search the contents of packages”一节进行搜索；
+     - 确认包名后，在 [Ubuntu Launchpad](https://launchpad.net/ubuntu/+search) 上搜索具体的包归属的源，确认 jammy/jammy-updates（S100）或 noble/noble-updates（S600）的 main/universe/multiverse 等 components 中有该包；
 2. 知道需要的文件，且 host 端有安装过：
-   - 可以通过`dpkg -S <filename>`命令获取包名。
+   - 可以通过 `dpkg -S <filename>` 命令获取包名。
 
 ## 自定义分区说明
 
 <DocScope products="RDK S100">
 
-RDK S100的分区定义文件保存在`source/bootloader/device/rdk/s100/partition_config_files`文件夹下，默认使用的分区表为：`source/bootloader/device/rdk/s100/partition_config_files/s100-gpt.json`
+RDK S100 的分区定义文件保存在 `source/bootloader/device/rdk/s100/partition_config_files` 文件夹下，默认使用的分区表为：`source/bootloader/device/rdk/s100/partition_config_files/s100-gpt.json`
 
 </DocScope>
 <DocScope products="RDK S600">
 
-RDK S600的分区定义文件保存在`source/bootloader/device/rdk/s600/partition_config_files`文件夹下，默认使用的分区表为：`source/bootloader/device/rdk/s600/partition_config_files/s600-gpt.json`
+RDK S600 的分区定义文件保存在 `source/bootloader/device/rdk/s600/partition_config_files` 文件夹下，默认使用的分区表为：`source/bootloader/device/rdk/s600/partition_config_files/s600-gpt.json`
 
 </DocScope>
 
@@ -416,31 +415,31 @@ RDK S600的分区定义文件保存在`source/bootloader/device/rdk/s600/partiti
 
 
 ### 默认镜像及分区介绍
-1. miniboot_flash：保存在 RDK Nor Flash 上的基础启动镜像，包括 HSM/MCU0等系统组件的镜像；
-2. miniboot_emmc：保存在 RDK eMMC 上的基础启动镜像，包括 BL31/Uboot 等系统组件的镜像；
-3. emmc_disk：RDK eMMC 上的完整镜像，会包含 miniboot_emmc，编译时会自动转换为安卓 Sparse 镜像（[安卓Sparse镜像说明（第三方网站，仅供参考）](https://www.2net.co.uk/tutorial/android-sparse-image-format)）以减小系统储存空间占用；
+1. miniboot_flash：保存在 RDK Nor Flash 上的基础启动镜像，包括 HSM/MCU0 等系统组件的镜像；
+2. miniboot_emmc：保存在 RDK eMMC 上的基础启动镜像，包括 BL31/U-Boot 等系统组件的镜像；
+3. emmc_disk：RDK eMMC 上的完整镜像，会包含 miniboot_emmc，编译时会自动转换为安卓 Sparse 镜像（[安卓 Sparse 镜像说明（第三方网站，仅供参考）](https://www.2net.co.uk/tutorial/android-sparse-image-format)）以减小系统储存空间占用；
 
 ### 配置文件说明
-整体分区表的配置分为全局共享配置和分区单独配置，其中全局共享配置放在"global"字段中，这是对所有分区都有效的配置。
+整体分区表的配置分为全局共享配置和分区单独配置，其中全局共享配置放在“global”字段中，这是对所有分区都有效的配置。
 **支持的全局参数**：
 - `antirollbackUpdate_host`：是否更新 host 的 anti-rollback 版本，true 或 false；
 - `antirollbackUpdate_hsm`：是否更新 hsm 的 anti-rollback 版本，true 或 false；
-- `ab_sync`：地瓜内部 reserved 字段；
+- `ab_sync`：D-Robotics 内部 reserved 字段；
 - `backup_dir`：hsm 备份目录；
 - `AB_part_a`：AB 分区的 A 分区后缀；
 - `AB_part_b`：AB 分区的 B 分区后缀；
 - `BAK_part_bak`：备份分区后缀；
 
-分区单独配置使用"分区名"："分区配置类型"的形式，可以根据需要选择不同的分区配置类型。 例如：boot 分区就需要首先在分区全局配置中添加 boot 分区的描述，然后在对应的 sub_config 文件夹中创建`boot.json`，并在其中定义`boot_common`：
+分区单独配置使用“分区名”：“分区配置类型”的形式，可以根据需要选择不同的分区配置类型。例如：boot 分区就需要首先在分区全局配置中添加 boot 分区的描述，然后在对应的 sub_config 文件夹中创建 `boot.json`，并在其中定义 `boot_common`：
 
 <DocScope products="RDK S100">
 
-在`source/bootloader/device/rdk/s100/partition_config_files/sub_config`文件夹中创建`boot.json`：
+在 `source/bootloader/device/rdk/s100/partition_config_files/sub_config` 文件夹中创建 `boot.json`：
 
 </DocScope>
 <DocScope products="RDK S600">
 
-在`source/bootloader/device/rdk/s600/partition_config_files/sub_config`文件夹中创建`boot.json`：
+在 `source/bootloader/device/rdk/s600/partition_config_files/sub_config` 文件夹中创建 `boot.json`：
 
 </DocScope>
 
@@ -486,12 +485,12 @@ RDK S600的分区定义文件保存在`source/bootloader/device/rdk/s600/partiti
 ```
 **支持的分区参数**：
 - `depends`：表示分区依赖关系，当前分区的制作需要依赖哪些分区制作完成，列表的形式，在其中添加依赖的分区名；
-- `components`：表示当前分区需要包含哪些内容，可以是子镜像路径或文件目录，文件目录会做成文件系统，当前支持的文件系统有 ext4和 fat16，在路径后使用":"表示当前这一部分在分区中所占的大小。子镜像可以为多个，子镜像建议放在 out/xxx/deploy 下的对应分区的目录中；
+- `components`：表示当前分区需要包含哪些内容，可以是子镜像路径或文件目录，文件目录会做成文件系统，当前支持的文件系统有 ext4 和 fat16，在路径后使用“:”表示当前这一部分在分区中所占的大小。子镜像可以为多个，子镜像建议放在 out/xxx/deploy 下的对应分区的目录中；
 - `components_nose`：非安全启动镜像组件；
 - `pre_cmd`：在根据 component 内容制作镜像以前需要执行的命令；
 - `post_cmd`：在根据 component 内容制作完镜像之后需要执行的命令；
 - `fs_type`：镜像类型，None/ext4/fat16/misc；
-- `medium`：镜像位于 emmc/nor；
+- `medium`：镜像位于 eMMC/nor；
 - `ota_is_update`：全量 ota 包是否包含；
 - `ota_update_mode`：分区的 OTA 升级方式；image 为镜像升级，默认值，image_diff 为镜像差分；
 - `is_rootfs`：是否是 rootfs 分区；
@@ -511,15 +510,15 @@ RDK S600的分区定义文件保存在`source/bootloader/device/rdk/s600/partiti
 ### 分区修改说明
 
 <DocScope products="RDK S100">
-RDK S100支持变更 eMMC/UFS 上的分区，只需添加或删除或修改分区配置对应的分区字段。对于 flash 分区，如有变更需求，请联系地瓜。
+RDK S100 支持变更 eMMC/UFS 上的分区，只需添加或删除或修改分区配置对应的分区字段。对于 flash 分区，如有变更需求，请联系 D-Robotics。
 </DocScope>
 <DocScope products="RDK S600">
-RDK S600支持变更 eMMC/UFS 上的分区，只需添加或删除或修改分区配置对应的分区字段。对于 flash 分区，如有变更需求，请联系地瓜。
+RDK S600 支持变更 eMMC/UFS 上的分区，只需添加或删除或修改分区配置对应的分区字段。对于 flash 分区，如有变更需求，请联系 D-Robotics。
 </DocScope>
 
 :::warning 分区修改注意事项
-1. 分区表中，`log`及其以前的分区为启动分区，原则上不建议修改。
-2. 其他分区，如`userdata`，`system`等，可以自由调整大小，如果新增分区，注意调整`fstab`文件以确保分区被正常挂载；
+1. 分区表中，`log` 及其以前的分区为启动分区，原则上不建议修改。
+2. 其他分区，如 `userdata`，`system` 等，可以自由调整大小，如果新增分区，注意调整 `fstab` 文件以确保分区被正常挂载；
 :::
 
 分区表修改后，需要经过以下步骤生效：
@@ -537,26 +536,26 @@ RDK S600支持变更 eMMC/UFS 上的分区，只需添加或删除或修改分�
 
 <DocScope products="RDK S100">
 
-### 使用地瓜自带 ubuntu-22.04_desktop_rdk-s100_XXX.conf 说明
+### 使用 D-Robotics 自带 ubuntu-22.04_desktop_rdk-s100_XXX.conf 说明
 针对 eMMC、UFS 和 NVMe 存储介质，其对应的驱动程序通过不同的配置变量进行区分。因此，在编译前需根据实际使用的存储颗粒，对编译配置文件进行相应修改。
 
-以 S100平台为例，必须修改以下两个配置文件：
+以 S100 平台为例，必须修改以下两个配置文件：
 1. /build_params/ubuntu-22.04_desktop_rdk-s100_beta.conf
 2. /build_params/ubuntu-22.04_desktop_rdk-s100_release.conf
 </DocScope>
 <DocScope products="RDK S600">
 
-### 使用地瓜自带 ubuntu-24.04_desktop_rdk-s600_XXX.conf 说明
+### 使用 D-Robotics 自带 ubuntu-24.04_desktop_rdk-s600_XXX.conf 说明
 针对 eMMC、UFS 和 NVMe 存储介质，其对应的驱动程序通过不同的配置变量进行区分。因此，在编译前需根据实际使用的存储颗粒，对编译配置文件进行相应修改。
 
-以 S600平台为例，必须修改以下两个配置文件：
+以 S600 平台为例，必须修改以下两个配置文件：
 1. /build_params/ubuntu-24.04_desktop_rdk-s600_beta.conf
 2. /build_params/ubuntu-24.04_desktop_rdk-s600_release.conf
 </DocScope>
 
 
 
-在这两个文件中，将`RDK_DISK_MEDIUM`变量的值设置为与实际存储颗粒对应的类型：
+在这两个文件中，将 `RDK_DISK_MEDIUM` 变量的值设置为与实际存储颗粒对应的类型：
 
 ```shell
 # 对应emmc颗粒
@@ -570,8 +569,8 @@ export RDK_DISK_MEDIUM="nvme"
 ```
 
 ### 使用自己编写的 conf 文件说明
-如果客户自己写了 conf 文件，需要进行2步操作：
-1. 文件中要带有`RDK_DISK_MEDIUM`变量，并将`RDK_DISK_MEDIUM`变量的值设置为与实际存储颗粒对应的类型：
+如果客户自己写了 conf 文件，需要进行 2 步操作：
+1. 文件中要带有 `RDK_DISK_MEDIUM` 变量，并将 `RDK_DISK_MEDIUM` 变量的值设置为与实际存储颗粒对应的类型：
 ```shell
 # 对应emmc颗粒
 export RDK_DISK_MEDIUM="emmc"
@@ -585,7 +584,7 @@ export RDK_DISK_MEDIUM="nvme"
 
 <DocScope products="RDK S100">
 
-2. 修改 S100编译系统中5处引用到 conf 文件的地方，以 release 版本为例，
+2. 修改 S100 编译系统中 5 处引用到 conf 文件的地方，以 release 版本为例，
 - `download_deb_packages.sh`：
 ```shell
   DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-22.04_desktop_rdk-s100_release.conf"
@@ -608,7 +607,7 @@ export RDK_DISK_MEDIUM="nvme"
 ```
 
 ### 修改完 conf 文件后的编译流程
-修改完之后，进行编译 uboot/spl 并更新 miniboot/bootloader，并整体编译
+修改完之后，进行编译 U-Boot/spl 并更新 miniboot/bootloader，并整体编译
 ```shell
 # cd到源码根目录，做hobot-miniboot deb包
 ./mk_debs.sh hobot-miniboot # deb包的生成路径是out/product/deb_packages/hobot-miniboot_4.0.Z-xxx_arm64.deb
@@ -623,7 +622,7 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 
 <DocScope products="RDK S600">
 
-2. 修改 S600编译系统中5处引用到 conf 文件的地方（其中 `download_samplefs.sh`、`mk_kernel.sh`、`pack_image.sh` 默认使用 beta 配置，`download_deb_packages.sh` 使用 release 配置，`mk_uboot.sh` 按 `HR_TARGET_MODE` 在 release/beta 间选择）：
+2. 修改 S600 编译系统中 5 处引用到 conf 文件的地方（其中 `download_samplefs.sh`、`mk_kernel.sh`、`pack_image.sh` 默认使用 beta 配置，`download_deb_packages.sh` 使用 release 配置，`mk_uboot.sh` 按 `HR_TARGET_MODE` 在 release/beta 间选择）：
 - `download_deb_packages.sh`：
 ```shell
   DEFAULT_CONFIG="${HR_LOCAL_DIR}/build_params/ubuntu-24.04_desktop_rdk-s600_release.conf"
@@ -646,7 +645,7 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 ```
 
 ### 修改完 conf 文件后的编译流程
-修改完之后，进行编译 uboot/spl 并更新 miniboot/bootloader，并整体编译
+修改完之后，进行编译 U-Boot/spl 并更新 miniboot/bootloader，并整体编译
 ```shell
 # cd到源码根目录，做hobot-miniboot deb包
 ./mk_debs.sh hobot-miniboot # deb包的生成路径是out/product/deb_packages/hobot-miniboot_5.Y.Z-xxx_arm64.deb
@@ -660,9 +659,9 @@ sudo ./pack_image.sh -l  #编译时使用本地的deb包，一定要加 -l 才�
 </DocScope>
 
 :::warning NVMe 启动注意事项
-- 仅在 RDKS100 V0P6和RDKS600 V1P0及其以上版本支持 NVMe 启动，板子上[D13:D12]可以拨码设置为[1:0]
+- 仅在 RDK S100 V0P6 和 RDK S600 V1P0 及其以上版本支持 NVMe 启动，开发板上 [D13:D12] 可以拨码设置为 [1:0]
 - 在 NVMe 模式下编译出的 miniboot_flash 镜像，仅支持 NVMe 启动，其他模式均不支持；在 eMMC/UFS 模式下编译出的 miniboot_flash 镜像，支持 NVMe 启动
-- 下载工具1.1.10及其以后版本，才支持 NVMe 镜像烧写
+- 下载工具 1.1.10 及其以后版本，才支持 NVMe 镜像烧录
 :::
 
 ## 调试

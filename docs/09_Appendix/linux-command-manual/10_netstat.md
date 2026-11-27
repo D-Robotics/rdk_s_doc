@@ -10,7 +10,7 @@ description: "Linux 命令 netstat 用法"
 
 ## 语法说明
 
-```
+```text
 netstat [-vWeenNcCF] [<Af>] -r         
 netstat {-V|--version|-h|--help}
 netstat [-vWnNcaeol] [<Socket> ...]
@@ -52,7 +52,7 @@ netstat { [-vWeenNac] -i | [-cnNe] -M | -s [-6tuw] }
 
 显示详细的网络状况
 
-```
+```text
 netstat -a	   #列出所有端口
 netstat -at    #列出所有tcp端口
 netstat -au    #列出所有udp端口   
@@ -60,19 +60,19 @@ netstat -au    #列出所有udp端口
 
 显示当前主机 UDP 连接状况
 
-```
+```text
 netstat -nu
 ```
 
 显示 UDP 端口号的使用情况
 
-```
+```text
 netstat -apu
 ```
 
 显示网卡列表
 
-```
+```text
 netstat -i
 ```
 
@@ -87,13 +87,13 @@ eth1             1500      540      0      0 0           498      0      0      
 
 显示组播组的关系
 
-```
+```text
 netstat -g
 ```
 
 显示网络统计信息
 
-```
+```text
 netstat -s    #显示所有端口的统计信息
 netstat -st   #显示TCP端口的统计信息
 netstat -su   #显示UDP端口的统计信息
@@ -101,7 +101,7 @@ netstat -su   #显示UDP端口的统计信息
 
 显示监听的套接口
 
-```
+```text
 netstat -l        #只显示监听端口
 netstat -lt       #只列出所有监听 tcp 端口
 netstat -lu       #只列出所有监听 udp 端口
@@ -110,15 +110,15 @@ netstat -lx       #只列出所有监听 UNIX 端口
 
 在 netstat 输出中显示 PID 和进程名称
 
-```
+```text
 netstat -pt
 ```
 
-`netstat -p`可以与其它开关一起使用，就可以添加“PID/进程名称”到 netstat 输出中。
+`netstat -p` 可以与其它开关一起使用，就可以添加“PID/进程名称”到 netstat 输出中。
 
 持续输出 netstat 信息
 
-```
+```text
 netstat -c   #每隔一秒输出网络信息
 ```
 
@@ -128,7 +128,7 @@ netstat -c   #每隔一秒输出网络信息
 netstat -r
 ```
 
-使用`netstat -rn`显示数字格式，不查询主机名称。
+使用 `netstat -rn` 显示数字格式，不查询主机名称。
 
 找出程序运行的端口
 

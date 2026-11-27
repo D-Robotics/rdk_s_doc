@@ -75,7 +75,7 @@ Encode idx: 0, frame= 3
 cat /sys/kernel/debug/vpu/venc
 ```
 
-输出按 enc param、h264cbr、GOP、intra refresh、longterm ref、ROI、entropy、slice、deblk、timing、intra_pred、transform、VUI、3DNR、smart bg、encode status 等分组，完整示例如下（H.264 编码 1920×1080 30fps 8Mbps，profile main@L4）：
+输出按 enc param、h264cbr、GOP、intra refresh、longterm ref、ROI、entropy、slice、deblk、timing、intra_pred、transform、VUI、3DNR、smart bg、encode status 等分组，完整示例如下（H.264 编码 1920×1080 30 fps 8Mbps，profile main@L4）：
 
 ```text
 ----encode enc param----

@@ -6,13 +6,15 @@ description: "RDK 命令 hrut_boardid 用法"
 
 # hrut_boardid
 
-**hrut_boardid** 命令是用来获取当前开发板的编号  (不同开发板的编号不同）。
+**hrut_boardid** 命令用于获取当前开发板的编号（不同开发板的编号不同）。
 
-> ⚠️ boardid 会影响到启动时硬件的初始化，请谨慎设置。
+:::warning 注意
+boardid 会影响到启动时硬件的初始化，请谨慎设置。
+:::
 
 ## 语法说明
 
-```
+```text
 hrut_boardid
 ```
 
@@ -26,7 +28,7 @@ root@ubuntu:~# hrut_boardid
 ```
 
 输出说明：
-```
+```text
 0x   6A          8             4
      ^^          ^             ^
      ||          |             |

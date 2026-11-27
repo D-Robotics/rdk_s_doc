@@ -28,7 +28,7 @@ sudo ./live555MediaServer &
 
 板端路径：`/app/cdev_demo/rtsp2display/`
 
-```
+```text
 rtsp2display/
 ├── Makefile
 └── rtsp2display.c

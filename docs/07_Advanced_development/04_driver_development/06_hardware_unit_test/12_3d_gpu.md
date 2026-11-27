@@ -41,7 +41,7 @@ cat /sys/class/misc/mali0/device/gpuinfo
 ## 环境准备
 
 1. 连接 HDMI 显示器并进入桌面环境（渲染性能测试需要图形输出）：
-   - 在登录界面点击右下角小齿轮，选择 GNOME 或 Ubuntu (Wayland) 会话。
+   - 在登录界面单击右下角小齿轮，选择 GNOME 或 Ubuntu (Wayland) 会话。
    - 程序通过 HDMI 输出到显示器，可直观看到 3D GPU 的渲染效果。
 2. 安装渲染测试工具 glmark2（计算测试工具 clpeak 见 [代码位置](#代码位置)）。
 
@@ -121,7 +121,7 @@ make
 
 1. 按「[环境准备](#环境准备)」安装 `glmark2-es2-wayland` 并进入桌面 Wayland 会话。
 2. 连接显示器并进入桌面环境
-   - 在登录界面选择点击右下角的小齿轮，选择 GNOME 或 Ubuntu (Wayland)会话
+   - 在登录界面单击右下角的小齿轮，选择 GNOME 或 Ubuntu (Wayland) 会话
    - 程序通过 HDMI 输出到显示器，可以直观看到 3D GPU 的渲染效果
 3. 在桌面终端执行 `glmark2-es2-wayland`
 

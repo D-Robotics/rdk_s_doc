@@ -24,8 +24,8 @@ import DocScope from '@site/src/components/DocScope';
 **前置条件**：
 
 - 开发板已烧录官方发布的 RDK OS 镜像，且已正常启动。
-- 测试一：一个 USB 存储设备。U 盘规格不同，实测速率差异很大，详见[测试指标](#测试指标)。
-- 测试二：一台 PC，以及一根与所接接口匹配的 USB 数据线（两种接口的线材不同，详见[准备工作](#usb-虚拟网口准备)）。
+- 测试一：一个 USB 存储设备。U 盘规格不同，实测速率差异很大，详见 [测试指标](#测试指标)。
+- 测试二：一台 PC，以及一根与所接接口匹配的 USB 数据线（两种接口的线材不同，详见 [准备工作](#usb-虚拟网口准备)）。
 
 ## 测试原理
 
@@ -313,7 +313,7 @@ root@ubuntu:~# dd if=/mnt/usb/myfile of=/dev/null bs=1M count=1024 iflag=direct
 ```
 
 :::info 关于这两组数据
-写速率明显低于读速率是 U 盘的常见特征：写入受盘内 NAND 写入速度限制，读取则更容易接近总线带宽。具体数值因 U 盘型号差异很大，多款 U 盘的实测对比见[测试结果](#测试结果)。
+写速率明显低于读速率是 U 盘的常见特征：写入受盘内 NAND 写入速度限制，读取则更容易接近总线带宽。具体数值因 U 盘型号差异很大，多款 U 盘的实测对比见 [测试结果](#测试结果)。
 :::
 
 ### 测试二：USB 虚拟网口速率
@@ -412,8 +412,8 @@ USB 总线的理论速率（最高）：
 
 | 接口 | 理论速率 | 本平台实测 |
 |-|-|-|
-| USB 2.0 | 60MB/s | 29MB/s（USB 虚拟网口，见[测试二](#测试二usb-虚拟网口速率)） |
-| USB 3.1 Gen 1 | 625MB/s | 379MB/s~420MB/s（支持 UAS 的 U 盘读取，见[测试一](#测试一u-盘读写速率)） |
+| USB 2.0 | 60MB/s | 29MB/s（USB 虚拟网口，见 [测试二](#测试二usb-虚拟网口速率)） |
+| USB 3.1 Gen 1 | 625MB/s | 379MB/s-420MB/s（支持 UAS 的 U 盘读取，见 [测试一](#测试一u-盘读写速率)） |
 
 </DocScope>
 
@@ -421,8 +421,8 @@ USB 总线的理论速率（最高）：
 
 | 接口 | 理论速率 | 本平台实测 |
 |-|-|-|
-| USB 2.0 | 60MB/s | 33MB/s（USB 虚拟网口，见[测试二](#测试二usb-虚拟网口速率)） |
-| USB 3.1 Gen 1 | 625MB/s | 54MB/s~143MB/s（U 盘读取，见[测试一](#测试一u-盘读写速率)） |
+| USB 2.0 | 60MB/s | 33MB/s（USB 虚拟网口，见 [测试二](#测试二usb-虚拟网口速率)） |
+| USB 3.1 Gen 1 | 625MB/s | 54MB/s-143MB/s（U 盘读取，见 [测试一](#测试一u-盘读写速率)） |
 
 </DocScope>
 
@@ -467,10 +467,10 @@ root@ubuntu:~# grep -H '' /sys/bus/usb/drivers/usb-storage/*/bInterfaceProtocol
 
 | U 盘 | 协议 | 协商速率 | 写入 | 读取 |
 |-|-|-|-|-|
-| Kingston DataTraveler 3.0（57.7GB） | BOT（`0x50`） | 5000Mbps | 8MB/s~12MB/s | 87MB/s |
-| SanDisk 3.2Gen1（57.3GB） | UAS（`0x62`） | 5000Mbps | 30MB/s~31MB/s | 379MB/s~420MB/s |
+| Kingston DataTraveler 3.0（57.7GB） | BOT（`0x50`） | 5000Mbps | 8MB/s-12MB/s | 87MB/s |
+| SanDisk 3.2Gen1（57.3GB） | UAS（`0x62`） | 5000Mbps | 30MB/s-31MB/s | 379MB/s-420MB/s |
 
-从上述数据可以看出：两块 U 盘均协商到 **5000Mbps**（USB 3.0）；**协议对读取性能影响显著**——支持 UAS 的 SanDisk 3.2Gen1 读取达到 **379MB/s~420MB/s**，而 BOT 协议的 Kingston 只有 **87MB/s**；写入普遍偏低（**8MB/s~31MB/s**）。
+从上述数据可以看出：两块 U 盘均协商到 **5000Mbps**（USB 3.0）；**协议对读取性能影响显著**——支持 UAS 的 SanDisk 3.2Gen1 读取达到 **379MB/s-420MB/s**，而 BOT 协议的 Kingston 只有 **87MB/s**；写入普遍偏低（**8MB/s-31MB/s**）。
 
 </DocScope>
 
@@ -478,11 +478,11 @@ root@ubuntu:~# grep -H '' /sys/bus/usb/drivers/usb-storage/*/bInterfaceProtocol
 
 | U 盘 | 协议 | 协商速率 | 写入 | 读取 |
 |-|-|-|-|-|
-| SanDisk Ultra（14.5GB） | BOT（`0x50`） | 5000Mbps | 13MB/s~25MB/s | 143MB/s |
-| Kingston DataTraveler 3.0（57.7GB） | BOT（`0x50`） | 5000Mbps | 11MB/s~12MB/s | 87MB/s~88MB/s |
-| HIKSEMI（117GB） | BOT（`0x50`） | 5000Mbps | 10MB/s~23MB/s | 54MB/s~74MB/s |
+| SanDisk Ultra（14.5GB） | BOT（`0x50`） | 5000Mbps | 13MB/s-25MB/s | 143MB/s |
+| Kingston DataTraveler 3.0（57.7GB） | BOT（`0x50`） | 5000Mbps | 11MB/s-12MB/s | 87MB/s-88MB/s |
+| HIKSEMI（117GB） | BOT（`0x50`） | 5000Mbps | 10MB/s-23MB/s | 54MB/s-74MB/s |
 
-从上述数据可以看出：三块 U 盘均协商到 **5000Mbps**（USB 3.0）；读取为 **54MB/s~143MB/s**；写入普遍偏低（**10MB/s~25MB/s**）。
+从上述数据可以看出：三块 U 盘均协商到 **5000Mbps**（USB 3.0）；读取为 **54MB/s-143MB/s**；写入普遍偏低（**10MB/s-25MB/s**）。
 
 </DocScope>
 
@@ -490,13 +490,13 @@ root@ubuntu:~# grep -H '' /sys/bus/usb/drivers/usb-storage/*/bInterfaceProtocol
 
 <DocScope products="RDK S100">
 
-USB 2.0 虚拟网口实测 **234Mbits/sec**（约 29MB/s）。60 秒测试期间速率稳定，重传次数为 0，处于 USB 2.0 的实际速率区间（25MB/s~35MB/s），说明虚拟网口工作正常。
+USB 2.0 虚拟网口实测 **234Mbits/sec**（约 29MB/s）。60 秒测试期间速率稳定，重传次数为 0，处于 USB 2.0 的实际速率区间（25MB/s-35MB/s），说明虚拟网口工作正常。
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-USB 2.0 虚拟网口实测 **266Mbits/sec**（约 33MB/s）。60 秒测试期间速率稳定在 266Mbits/sec，重传次数为 0，处于 USB 2.0 的实际速率区间（25MB/s~35MB/s），说明虚拟网口工作正常。
+USB 2.0 虚拟网口实测 **266Mbits/sec**（约 33MB/s）。60 秒测试期间速率稳定在 266Mbits/sec，重传次数为 0，处于 USB 2.0 的实际速率区间（25MB/s-35MB/s），说明虚拟网口工作正常。
 
 </DocScope>
 
@@ -505,13 +505,13 @@ USB 2.0 虚拟网口实测 **266Mbits/sec**（约 33MB/s）。60 秒测试期间
 
 ### USB 读写速度低于标称值
 
-**原因**：最常见的原因是 U 盘自身的写入性能限制，而非接口问题，详见[判断瓶颈：BOT 与 UAS](#判断瓶颈bot-与-uas)。其余原因包括接口速率、测试块大小与文件大小等。
+**原因**：最常见的原因是 U 盘自身的写入性能限制，而非接口问题，详见 [判断瓶颈：BOT 与 UAS](#判断瓶颈bot-与-uas)。其余原因包括接口速率、测试块大小与文件大小等。
 
 **解决**：
 
 1. 先确认接口协商速率（`speed` 应为 `5000`），排除接口降到 USB 2.0 的可能。
 2. 用 `bInterfaceProtocol` 确认设备协议：`0x50`（BOT）的普通 U 盘本身性能有限，属正常现象；`0x62`（UAS）的设备才适合评估总线带宽。
-3. 参考[常见影响因素](#常见影响因素)逐项排查，使用较大的块大小与文件进行读写测试。
+3. 参考 [常见影响因素](#常见影响因素) 逐项排查，使用较大的块大小与文件进行读写测试。
 4. 若希望读写数据可直接对比，请为读、写命令使用相同的缓存参数（均加 `direct` 标志或均不加）。
 
 ### U 盘接入后未自动挂载

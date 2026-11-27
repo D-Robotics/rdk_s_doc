@@ -24,47 +24,47 @@ description: "RDK S100/S600 Camera 采集入口 API（hbn_camera_* / hbn_deseria
 **主要组成模块**：
 
 :::doc_scope{products="RDK S100"}
-- Serializer：把 sensor 的 MIPI 并行数据转换成串行数据流，通过同轴线缆串联到Deserializer
-- Deserializer：把通过同轴线缆的串行数据流转换成并行数据接入S100 MIPI RX
-- Sensor：可直接接入S100 MIPI RX 或者 通过 Serializer 串联 Deserializer 接入S100 MIPI RX
-- POC：用于给远端 Serializer和sensor 供电
-- 控制管脚：I2C、LPWM(同步触发)、reset、deserr(Serdes链路错误上报管脚)
-- 下图 S100 连接图例一所示为 最大sensor接入路数样例，S100 连接图例二为 4路sedes和2路mipi的样例
+- Serializer：把 sensor 的 MIPI 并行数据转换成串行数据流，通过同轴线缆串联到 Deserializer
+- Deserializer：把通过同轴线缆的串行数据流转换成并行数据接入 S100 MIPI RX
+- Sensor：可直接接入 S100 MIPI RX 或者 通过 Serializer 串联 Deserializer 接入 S100 MIPI RX
+- POC：用于给远端 Serializer 和 sensor 供电
+- 控制管脚：I2C、LPWM(同步触发)、reset、deserr(Serdes 链路错误上报管脚)
+- 下图 S100 连接图例一所示为 最大 sensor 接入路数样例，S100 连接图例二为 4 路 sedes 和 2 路 mipi 的样例
 :::
 
 :::doc_scope{products="RDK S100"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s100_hardware.png?v=20260924b" alt="S100 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s100_hardware.png?v=20260924b" alt="S100 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 :::
 
 :::doc_scope{products="RDK S600"}
-- Serializer：把 sensor 的 MIPI 并行数据转换成串行数据流，通过同轴线缆串联到Deserializer
-- Deserializer：把通过同轴线缆的串行数据流转换成并行数据接入S600 MIPI RX
-- Sensor：可直接接入S600 MIPI RX 或者 通过 Serializer 串联 Deserializer 接入S600 MIPI RX
-- POC：用于给远端 Serializer和sensor 供电
-- 控制管脚：I2C、LPWM(同步触发)、reset、deserr(Serdes链路错误上报管脚)
-- 下图 S600 连接图例所示为 最大sensor接入路数样例
+- Serializer：把 sensor 的 MIPI 并行数据转换成串行数据流，通过同轴线缆串联到 Deserializer
+- Deserializer：把通过同轴线缆的串行数据流转换成并行数据接入 S600 MIPI RX
+- Sensor：可直接接入 S600 MIPI RX 或者 通过 Serializer 串联 Deserializer 接入 S600 MIPI RX
+- POC：用于给远端 Serializer 和 sensor 供电
+- 控制管脚：I2C、LPWM(同步触发)、reset、deserr(Serdes 链路错误上报管脚)
+- 下图 S600 连接图例所示为 最大 sensor 接入路数样例
 :::
 
 :::doc_scope{products="RDK S600"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s600_hardware.png?v=20260924b" alt="S600 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/s600_hardware.png?v=20260924b" alt="S600 Camera 硬件数据通路" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 :::
 
 
 **关键功能**：
 :::doc_scope{products="RDK S100"}
 
-- S100 上有3个MIPI RX，分别为 MIPI RX0，MIPI RX1，MIPI RX4。
-- S100 MIPI RX支持C/DPHY，DPHY速率 2.5Gbps x 4lane，CPHY速率2.5Gsps x 3trios。
-- S100 MIPI RX，每路支持4VC，最多支持12路接入。
-- MIPI TX: 2路DPHY，每路为2.5Gbps/lane x 4lane。
+- S100 上有 3 个 MIPI RX，分别为 MIPI RX0，MIPI RX1，MIPI RX4。
+- S100 MIPI RX 支持 C/DPHY，DPHY 速率 2.5Gbps x 4lane，CPHY 速率 2.5Gsps x 3trios。
+- S100 MIPI RX，每路支持 4VC，最多支持 12 路接入。
+- MIPI TX: 2 路 DPHY，每路为 2.5Gbps/lane x 4lane。
 :::
 
 :::doc_scope{products="RDK S600"}
 
-- S600 上有6个MIPI RX，分别为MIPI RX0，MIPI RX1，MIPI RX2，MIPI RX3，MIPI RX4，MIPI RX5。
-- S600 MIPI RX 每路为DPHY最大2.5Gbps/lane x 4lane，CPHY最大2.5Gsps/trio x 3trio，
-- S600 MIPI RX，每路支持4VC，最多支持 24 路接入。
-- MIPI TX: 2路DPHY，每路为2.5Gbps/lane x 4lane。
+- S600 上有 6 个 MIPI RX，分别为 MIPI RX0，MIPI RX1，MIPI RX2，MIPI RX3，MIPI RX4，MIPI RX5。
+- S600 MIPI RX 每路为 DPHY 最大 2.5Gbps/lane x 4lane，CPHY 最大 2.5Gsps/trio x 3trio，
+- S600 MIPI RX，每路支持 4VC，最多支持 24 路接入。
+- MIPI TX: 2 路 DPHY，每路为 2.5Gbps/lane x 4lane。
 
 :::
 
@@ -83,9 +83,9 @@ Camera 接入示例代码可参考 sample_vin：
 
 ## 框架
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/camera-framework.png?v=20260923" alt="Camera 框架分层" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camera/camera-framework.png?v=20260923" alt="Camera 框架分层" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-Camera 框架分为四层：APP、HBN 接口（SENSOR、DESERIAL、TXSER HAL子模块）、driver 和 hardware。
+Camera 框架分为四层：APP、HBN 接口（SENSOR、DESERIAL、TXSER HAL 子模块）、driver 和 hardware。
 
 ### HBN 接口
 
@@ -96,20 +96,20 @@ Camera 框架分为四层：APP、HBN 接口（SENSOR、DESERIAL、TXSER HAL子�
 #### SENSOR HAL 子模块
 
 - `SENSOR common`：sensor 框架层，做参数检查与 ops 分发。
-- `SENSOR LIBs`：各 sensor 的so库（如 ar0233、ovx8b）。每个 .so 装载该 sensor 的寄存器配置表与控制函数，sensor 初始化、起停流、寄存器读写都在这里。
+- `SENSOR LIBs`：各 sensor 的 so 库（如 ar0233、ovx8b）。每个 .so 装载该 sensor 的寄存器配置表与控制函数，sensor 初始化、起停流、寄存器读写都在这里。
 - `TUNING HAL`：标定与 IQ tuning 入口，把 IQ 参数和标定数据下发给 sensor。
 - `CALIB LIBs`：标定库，存放 lens shading、AE/AWB 等标定数据，供 TUNING HAL 读取。
 
 #### DESERIAL HAL 子模块
 
 - `DES common`：deserial 框架层，做参数检查与 ops 分发。
-- `DES LIBs`：各解串器芯片so库（max9296、max96712、max96722 等）。配置解串器寄存器、设 MIPI 输出格式与 Link→CSI/VC 映射。
+- `DES LIBs`：各解串器芯片 so 库（max9296、max96712、max96722 等）。配置解串器寄存器、设 MIPI 输出格式与 Link→CSI/VC 映射。
 - `POC LIBs`：Power-over-Coax 同轴供电控制库，经同轴线给远端 sensor/serializer 供电并回读状态。
 
 #### TXSER HAL 子模块
 
 - `TXSER common`：txser 框架层，做参数检查与 ops 分发。
-- `SER LIBs`：各串行器芯片so库（max9295e、max96717等）。
+- `SER LIBs`：各串行器芯片 so 库（max9295e、max96717 等）。
   - 配置串行器寄存器、MIPI lane 模式、建立 SoC TX_PHY 到远端的串行链路。
 
 ### driver
@@ -988,7 +988,7 @@ camera 配置结构体，用于 `hbn_camera_create`（源自板端 `hb_camera_da
 | isp_addr | uint32_t | 0x00 | 0x7f | 0x00 | isp 设备地址（如有） | 否 |
 | eeprom_addr | uint32_t | 0x00 | 0x7f | 0x00 | eeprom 设备地址（内参，如有） | 否 |
 | serial_addr | uint32_t | 0x00 | 0x7f | 0x00 | serdes 设备地址（如有） | 否 |
-| sensor_mode | uint32_t | 1 | 6 | 1 | sensor 工作模式：1=NORMAL_M(linear)；2=DOL2_M(hdr2合1)；3=DOL3_M(hdr3合1)；4=DOL4_M(hdr4合1)；5=PWL_M(hdr内部合成)；6=SLAVE_M(需外部 trigger) | 是 |
+| sensor_mode | uint32_t | 1 | 6 | 1 | sensor 工作模式：1=NORMAL_M(linear)；2=DOL2_M(hdr2 合 1)；3=DOL3_M(hdr3 合 1)；4=DOL4_M(hdr4 合 1)；5=PWL_M(hdr 内部合成)；6=SLAVE_M(需外部 trigger) | 是 |
 | sensor_clk | uint32_t | - | - | 0x00 | sensor clk 时钟配置，目前未生效，备用 | 否 |
 | gpio_enable | uint32_t | 0 | 0xFFFFFFFF | 0 | GPIO 操作使能（bit 索引自 VCON），按 bit 使能 gpio 控制 sensor 上下电引脚（如 XSHUTDN），0 不使用 | 是 |
 | gpio_level | uint32_t | 0 | 1 | 0 | GPIO 工作电平，按 bit 配置：0=先低后高；1=先高后低。需按 sensor spec 上电时序自定义 | 是 |

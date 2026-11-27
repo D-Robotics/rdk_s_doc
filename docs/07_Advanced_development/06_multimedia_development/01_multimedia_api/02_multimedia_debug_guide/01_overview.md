@@ -10,15 +10,15 @@ description: RDK S100/S600 多媒体系统调试指南总览：范围、数据�
 
 调试方法与软件框架紧密相关，从软件框架中可以看出（高亮部分），存在 5 种类型的 API：
 
-![软件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/debug/API.jpg)
+![软件框架](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/debug/API.jpg)
 
 | 接口类型 | 硬件模块 | 链接 |
 | --- | --- | --- |
 | HBN | VIN、ISP、PYM、GDC、STITCH、Camera 相关 | [HBN 调试指南](./02_hbn_debug_guide.md) |
 | MediaCodec | VPU、JPU | [MediaCodec 调试指南](./03_mediacodec_debug_guide.md) |
-| OpenGL ES、OpenCL | 3DGPU | 等待补充 |
-| DRM | IDU | 等待补充 |
-| HB_MEM | DDR | 等待补充 |
+| OpenGL ES、OpenCL | 3DGPU | 暂无 |
+| DRM | IDU | 暂无 |
+| HB_MEM | DDR | 暂无 |
 
 本篇介绍多媒体 pipeline 的系统级调试方法。内容覆盖整条视频通路上的调试与观测节点，以及跨模块的故障定位思路。
 
@@ -43,6 +43,6 @@ description: RDK S100/S600 多媒体系统调试指南总览：范围、数据�
 
 数据流示意如下：
 
-![数据流示意](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/debug/camsys_data_vflow.jpg)
+![数据流示意](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/debug/camsys_data_vflow.jpg)
 
 模块概念与硬件框图详见 [基础框架 - HBN](../01_hbn_api.md)。

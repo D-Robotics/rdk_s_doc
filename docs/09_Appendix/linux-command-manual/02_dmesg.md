@@ -12,7 +12,7 @@ kernel 会将内核启动日志存储在 ring buffer 中。您若是开机时来
 
 ## 语法说明
 
-```
+```text
  dmesg [options]
 
        dmesg -C / dmesg --clear
@@ -23,14 +23,14 @@ kernel 会将内核启动日志存储在 ring buffer 中。您若是开机时来
 
 ## 选项说明
 
-- -c, --read-clear　显示信息后，清除 ring buffer 中的内容。
-- -C, --clear　清除 ring buffer 中的内容。
+- `-c, --read-clear`：显示信息后，清除 ring buffer 中的内容。
+- `-C, --clear`：清除 ring buffer 中的内容。
 
 ## 常用命令
 
 - 显示所有 ring buffer 中的内核日志内容
 
-  ```
+  ```text
   dmesg
   ```
 
@@ -45,13 +45,13 @@ kernel 会将内核启动日志存储在 ring buffer 中。您若是开机时来
 
 - 把内核日志保存到文件中
 
-  ```
+  ```text
   dmesg > kernel.log
   ```
 
 - 清空缓存日志，在调试驱动时，可以减少日志内容
 
-  ```
+  ```text
   dmesg -C
   ```
 

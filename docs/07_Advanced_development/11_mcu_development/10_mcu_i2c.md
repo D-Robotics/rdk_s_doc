@@ -42,17 +42,17 @@ S600 模组 MCU 域集成 3 个 I2C 控制器（I2C11、I2C13、I2C14，非连�
 
 I2C 控制器支持以下功能：
 - 三种速率模式选择（目前驱动不支持 HIGH SPEED 模式）
-  - **Standard Mode**：0~100 Kb/s
+  - **Standard Mode**：0-100 Kb/s
   - **Fast Mode & Fast Mode Plus**：
-    - Fast Mode：0~400 Kb/s
-    - Fast Mode Plus：0~1000 Kb/s
-  - **High-Speed Mode**：0~3.4 Mb/s
+    - Fast Mode：0-400 Kb/s
+    - Fast Mode Plus：0-1000 Kb/s
+  - **High-Speed Mode**：0-3.4 Mb/s
 - 支持主从模式配置
 - 支持 7 位和 10 位寻址模式
 
 ## 软件架构
 
-I2C 驱动采用分层设计：应用层通过 I2c API 调用驱动，驱动再调用底层 LLD 直接操作硬件寄存器，配置由 PBCfg 与板级配置提供。
+I2C 驱动采用分层设计：应用层通过 I2C API 调用驱动，驱动再调用底层 LLD 直接操作硬件寄存器，配置由 PBCfg 与板级配置提供。
 
 ```mermaid
 flowchart LR
@@ -72,13 +72,13 @@ flowchart LR
 - `Config/McalCdd/gen_s100_sip_B_mcu1/I2c/src/I2c_PBcfg.c`：PB 配置文件
 - `Config/McalCdd/gen_s100_sip_B_mcu1/I2c/inc/I2c_PBcfg.h`：PB 配置头文件
 - `Config/McalCdd/gen_s100_sip_B_mcu1/I2c/inc/I2c_Board.h`：I2C 板级配置文件
-- `samples/I2c/src/I2c_Cmd.c`：I2c sample
+- `samples/I2c/src/I2c_Cmd.c`：I2C sample
 
 ## 开发与使用方法
 
 ### 初始化和调度
 
-通用 I/O 引脚的初始化不在 I2c 驱动程序的范围内，应由 PORT 驱动先完成 IO 初始化(Port_Init(NULL);)，然后使用 I2c 驱动。 I2c 驱动初始化函数为 I2c_Init(NULL)。
+通用 I/O 引脚的初始化不在 I2C 驱动程序的范围内，应由 PORT 驱动先完成 IO 初始化(Port_Init(NULL);)，然后使用 I2C 驱动。 I2C 驱动初始化函数为 I2c_Init(NULL)。
 
 ### 使用示例
 
@@ -90,10 +90,10 @@ S600 为 MCU 侧实现了一套类似 i2c-tools 开源工具的命令，来支�
 </DocScope>
 
 <DocScope products="RDK S100">
-S100的 MCU 域 I2C 支持范围 I2C6~I2C9。
+S100 的 MCU 域 I2C 支持范围 I2C6~I2C9。
 </DocScope>
 <DocScope products="RDK S600">
-S600的 MCU 域支持 I2C11、I2C13、I2C14（非连续编号）。
+S600 的 MCU 域支持 I2C11、I2C13、I2C14（非连续编号）。
 </DocScope>
 
 

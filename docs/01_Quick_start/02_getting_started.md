@@ -24,7 +24,7 @@ import DocScope from '@site/src/components/DocScope';
 
 - [ ] 开发板与配套电源适配器（建议使用随附适配器：RDK S100 为 90W，RDK S600 额定输出 24V、最高 8A）
 - [ ] 已了解手中板卡的接口布局：[RDK S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit) 或 [RDK S600 硬件介绍](/01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600_kit)
-- [ ] Desktop 版：HDMI 显示器、HDMI 线、USB 键盘与鼠标（建议使用质量可靠、长度适中的 HDMI 线）
+- [ ] Desktop 版：HDMI 显示器、HDMI 线、USB 键盘与鼠标（建议使用长度 1 米以内的 HDMI 线）
 - [ ] Server 版：USB Type-C 数据线（调试串口）与 PC 端串口工具（串口登录见 [远程登录](03_install_os_and_setup/05_remote_login.md)）
 - [ ] 有线网线（可选，推荐接入以便远程登录）
 
@@ -48,10 +48,10 @@ RDK S100 与 RDK S600 均使用外接 DC 电源适配器供电，不支持通过
 
 RDK S100 使用 DC 圆口（J1）供电：
 
-- 电源输入：DC 12~20V，最大 150W；典型场景可用 12V@5.5A（70W）
+- 电源输入：DC 12-20V，最大 150W；典型场景可用 12V@5.5A（70W）
 - 随附适配器：90W 电源适配器
 - 电源接口：内径 2.5mm、外径 6mm 的 DC 圆口
-- 电源开关：**SW1**，拨至 ▽ 为 ON（上电），拨至 ↑ 为 OFF（断电）
+- 电源开关：SW1，拨至 ▽ 为 `ON`（上电），拨至 ↑ 为 `OFF`（断电）
 
 </DocScope>
 
@@ -59,10 +59,10 @@ RDK S100 使用 DC 圆口（J1）供电：
 
 RDK S600 使用 4-pin 连接器（J1）供电：
 
-- 电源输入：DC 12~28V，最大电流 16A
+- 电源输入：DC 12-28V，最大电流 16A
 - 随附适配器：额定输出 24V、最高电流 8A
 - 电源接口：4-pin Microfit Connector
-- 电源开关：**SW3**，拨至 △ 为 ON（上电），拨至 OFF 为断电
+- 电源开关：SW3，拨至 △ 为 `ON`（上电），拨至 OFF 为断电
 
 </DocScope>
 
@@ -79,7 +79,7 @@ RDK 出厂已预装系统镜像，可直接从板载存储启动，无需额外 
 
 <DocScope products="RDK S100">
 
-RDK S100 从板载 **eMMC** 启动，启动盘由 **SW3** 拨码选择。**SW3** 中 D13=0、D12=1 为 eMMC 启动位，出厂即为此位。
+RDK S100 从板载 **eMMC** 启动，启动盘由 SW3 拨码选择。SW3 中 D13=0、D12=1 为 eMMC 启动位，出厂即为此位。
 
 当前 S100 仅支持 eMMC 启动，暂不支持 NVMe 启动。拨码位置见 [S100 硬件介绍](/01_Quick_start/01_hardware_introduction/01_rdk_s100/01_rdk_s100_kit#boot-device-selection-sw3)。
 
@@ -87,7 +87,7 @@ RDK S100 从板载 **eMMC** 启动，启动盘由 **SW3** 拨码选择。**SW3**
 
 <DocScope products="RDK S600">
 
-RDK S600 从板载 **UFS** 启动，启动盘由 **SW8 BOOT** 拨码选择。拨码位设置为 1 代表 ON，设置为 0 代表 OFF。
+RDK S600 从板载 **UFS** 启动，启动盘由 SW8 BOOT 拨码选择。拨码位设置为 1 代表 ON，设置为 0 代表 OFF。
 
 | D12 | D13 | 启动介质 |
 | --- | --- | --- |
@@ -190,7 +190,7 @@ RDK S600 本板未接音频输出设备（无音频 codec/声卡），`aplay -l`
 
 #### 有线网络
 
-1. 将以太网线插入开发板的 **RJ45** 接口，并确认网口指示灯亮起。
+1. 将以太网线插入开发板的 RJ45 接口，并确认网口指示灯亮起。
 2. 按接口标识区分用途：`eth1` 为固定静态地址的管理口，`eth0` 为 DHCP 自动获取地址的通用口。
 
 <DocScope products="RDK S100">
@@ -219,7 +219,7 @@ ip addr show eth1
 
 Wi-Fi 需先安装 M.2 Key E 的 Wi-Fi 与 Bluetooth 模组，连接配置见 [网络配置](../02_System_configuration/01_network_config.md)。
 
-**预期结果**：Desktop 版点击桌面右上角 Wi-Fi 图标，选择热点并输入密码即可连接；Server 版可先扫描热点：
+**预期结果**：Desktop 版单击桌面右上角 Wi-Fi 图标，选择热点并输入密码即可连接；Server 版可先扫描热点：
 
 ```bash
 sudo nmcli device wifi list
@@ -238,13 +238,13 @@ USB 接口按用途分为两类，接线前请先确认用途，避免插错接�
 
 <DocScope products="RDK S100">
 
-RDK S100 的 USB Type-C 接口为 **J16**，内置 2 颗 CH340 芯片，分别对应 Main 域与 MCU 域的调试串口。
+RDK S100 的 USB Type-C 接口为 J16，内置 2 颗 CH340 芯片，分别对应 Main 域与 MCU 域的调试串口。
 
 </DocScope>
 
 <DocScope products="RDK S600">
 
-RDK S600 的 USB Type-C 接口为 **J4**（闪连），内置 2 颗 CH340 芯片，分别对应 Main 域与 MCU 域的调试串口。
+RDK S600 的 USB Type-C 接口为 J4（闪连），内置 2 颗 CH340 芯片，分别对应 Main 域与 MCU 域的调试串口。
 
 </DocScope>
 
@@ -257,7 +257,7 @@ RDK S600 的 USB Type-C 接口为 **J4**（闪连），内置 2 颗 CH340 芯片
 1. 接好电源适配器，先不拨电源开关。
 2. 连接显示器（HDMI）、键盘、鼠标（Desktop 版），或连接 Type-C 数据线并打开 PC 串口终端（Server 版）。
 3. 接入网线（可选，推荐接入以便远程登录）。
-4. 将电源开关拨至 **ON**，开发板上电。
+4. 将电源开关拨至 `ON`，开发板上电。
 5. 观察电源指示灯常亮、系统运行指示灯闪烁。
 6. 首次启动自动完成默认环境配置，约 45 秒后进入桌面或控制台。
 

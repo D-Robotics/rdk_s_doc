@@ -13,7 +13,7 @@ import DocScope from '@site/src/components/DocScope';
 本示例演示如何用 `hbm_runtime` 的 Python 接口部署量化后的 Ultralytics YOLOv5x 模型，从 RTSP 视频流取帧做目标检测并显示结果。适用于搭载 BPU 的 RDK 设备，需 RTSP 视频源（摄像头/NVR/本地 RTSP 服务）。C++ 版见 [RTSP 视频拉流及 YOLOv5x 推理](./03_decode_rtsp.md)。
 
 :::tip
-示例代码位于板端 `/app/pydev_demo/rtsp_yolov5x_display_sample/`，该代码已在板子上经过实际验证。
+示例代码位于板端 `/app/pydev_demo/rtsp_yolov5x_display_sample/`，该代码已在开发板上经过实际验证。
 :::
 
 ## 前置条件
@@ -59,7 +59,7 @@ cd /app/pydev_demo && pip install -r requirements.txt --break-system-packages
 |---|---|---|
 | `--rtsp-urls` / `-u` | RTSP 视频流地址（多路用分号分隔，如 `rtsp://192.168.1.10/s1;rtsp://192.168.1.11/s2`） | `rtsp://127.0.0.1/assets/1080P_test.h264` |
 | `--model-path` | BPU 量化模型路径（.hbm） | 按 soc 自动选择：S600 `/opt/hobot/model/s600/basic/yolov5x_672x672_nv12.hbm`（S100 对应 `s100/basic/`） |
-| `--priority` | 推理优先级（0~255，255 最高） | `0` |
+| `--priority` | 推理优先级（0-255，255 最高） | `0` |
 | `--bpu-cores` | BPU 核心索引列表（如 `--bpu-cores 0 1`） | `[0]` |
 | `--label-file` | 类别标签（COCO） | `/app/res/labels/coco_classes.names` |
 | `--nms-thres` | NMS 的 IoU 阈值 | `0.45` |

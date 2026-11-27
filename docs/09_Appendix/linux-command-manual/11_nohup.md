@@ -8,11 +8,11 @@ description: "Linux 命令 nohup 用法"
 
 **nohup** 英文全称 no hang up（不挂起），用于在系统后台不挂断地运行命令，退出终端不会影响程序的运行。
 
-在默认情况下（非重定向时），会输出一个名叫 nohup.out 的文件到当前目录下。如果当前目录的 nohup.out 文件不可写，输出重定向到`$HOME/nohup.out`文件中。如果没有文件能创建或打开以用于追加，那么 command 参数指定的命令不可调用。如果标准错误是一个终端，那么把指定的命令写给标准错误的所有输出作为标准输出重定向到相同的文件描述符。
+在默认情况下（非重定向时），会输出一个名叫 nohup.out 的文件到当前目录下。如果当前目录的 nohup.out 文件不可写，输出重定向到 `$HOME/nohup.out` 文件中。如果没有文件能创建或打开以用于追加，那么 command 参数指定的命令不可调用。如果标准错误是一个终端，那么把指定的命令写给标准错误的所有输出作为标准输出重定向到相同的文件描述符。
 
 ## 语法说明
 
-```
+```text
 nohup COMMAND [ARG]... [ & ]
 nohup OPTION
 ```
@@ -32,7 +32,7 @@ nohup OPTION
 
 以下命令在后台执行 root 目录下的 test.sh 脚本
 
-```
+```text
 nohup /root/test.sh &
 ```
 
@@ -44,13 +44,13 @@ nohup 测试输出
 
 如果要停止运行，你需要使用以下命令查找到 nohup 运行脚本到 PID，然后使用 kill 命令来删除
 
-```
+```text
 ps aux | grep "test.sh" 
 ```
 
 以下命令在后台执行 root 目录下的 test.sh 脚本，并重定向输入到 test.log 文件：
 
-```
+```text
 nohup /root/test.sh > test.log 2>&1 &
 ```
 

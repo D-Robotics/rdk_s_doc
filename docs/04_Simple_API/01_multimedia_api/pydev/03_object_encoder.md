@@ -8,7 +8,7 @@ description: "Encoder 对象接口说明"
 
 > **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage)。对应 C 接口见 [ENCODER API](/Simple_API/multimedia_api/cdev/encoder_api)。
 
-Encoder 对象实现了对视频数据的编码压缩功能，包含了`encode`、`encode_file`、`get_img`、`close`等几种方法，详细说明如下：
+Encoder 对象实现了对视频数据的编码压缩功能，包含了 `encode`、`encode_file`、`get_img`、`close` 等几种方法，详细说明如下：
 
 ## 方法清单
 
@@ -35,11 +35,11 @@ Encoder.encode(video_chn, type, width, height, bits)
 
 | 参数名称  | 描述           | 取值范围                    |
 | --------- | --------------- | ------------------- |
-| video_chn | 指定视频编码器的通道号   | 范围0~31 |
-| type          | 视频编码类型  | 范围1~3，分别对应`H264`、`H265`、`MJPEG` |
-| width     | 输入编码模块的图像宽度      | 不超过4096              |
-| height    | 输入编码模块的图像高度      | 不超过4096              |
-| bits      | 编码模块的比特率         |    默认8000kbps         |
+| video_chn | 指定视频编码器的通道号   | 范围 0-31 |
+| type          | 视频编码类型  | 范围 1-3，分别对应 `H264`、`H265`、`MJPEG` |
+| width     | 输入编码模块的图像宽度      | 不超过 4096              |
+| height    | 输入编码模块的图像高度      | 不超过 4096              |
+| bits      | 编码模块的比特率         |    默认 8000kbps         |
 
 【使用方法】
 
@@ -86,7 +86,7 @@ Encoder.encode_file(img)
 
 | 参数名称 | 描述              | 取值范围                     |
 | -------- | ----------------- | --------------------- |
-| img      | 需要编码的图像数据，需要使用 NV12格式 | 无 |
+| img      | 需要编码的图像数据，需要使用 NV12 格式 | 无 |
 
 【使用方法】 
 
@@ -147,7 +147,7 @@ Encoder.get_img()
 
 【注意事项】 
 
-该接口需要在调用`Encoder.encode()`创建编码通道后使用
+该接口需要在调用 `Encoder.encode()` 创建编码通道后使用
 
 【参考代码】  
 
@@ -222,7 +222,7 @@ Encoder.close()
 
 【注意事项】 
 
-该接口需要在调用`Encoder.encode()`创建编码通道后使用
+该接口需要在调用 `Encoder.encode()` 创建编码通道后使用
 
 【参考代码】  
 

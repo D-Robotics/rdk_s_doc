@@ -43,11 +43,11 @@ RDK S100 相机扩展板（12 通道）（以下简称“Camera 扩展板”）�
 
 ### 拓扑图
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s100_camera_expansion_board_12CH.png" alt="RDK S100 相机扩展板 12 通道架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s100_camera_expansion_board_12CH.png" alt="RDK S100 相机扩展板 12 通道架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 接口概览
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-s100_camera_expansion_board_interface_12l.png" alt="RDK S100 相机扩展板 12 通道接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image-s100_camera_expansion_board_interface_12l.png" alt="RDK S100 相机扩展板 12 通道接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 <div className="table-responsive">
 
@@ -61,7 +61,7 @@ RDK S100 相机扩展板（12 通道）（以下简称“Camera 扩展板”）�
 
 ## 接口说明
 
-### DC 电源输入（接口1）
+### DC 电源输入（接口 1）
 
 Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GMSL 相机供电。
 
@@ -72,27 +72,27 @@ Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。�
 
 :::
 
-### GMSL 相机接口（接口2/接口3/接口4）
+### GMSL 相机接口（接口 2/接口 3/接口 4）
 
 Camera 扩展板集成 3 颗 MAX96712 解串器，每颗能够接入 4 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
 
 
 <div className="table-responsive">
 
-| GMSL相机接口 | 位置 | MIPI_HOST | I2C BUS |
+| GMSL 相机接口 | 位置 | MIPI_HOST | I2C BUS |
 | :---- | :---  | :------ | :---------- |
-| GMSL 相机接口1 | 左  | MIPI_RX4  | I2C1   |
-| GMSL 相机接口2 | 中  | MIPI_RX1  |  I2C2  |
-| GMSL 相机接口3 | 右  | MIPI_RX0 |  I2C3   |
+| GMSL 相机接口 1 | 左  | MIPI_RX4  | I2C1   |
+| GMSL 相机接口 2 | 中  | MIPI_RX1  |  I2C2  |
+| GMSL 相机接口 3 | 右  | MIPI_RX0 |  I2C3   |
 
 
 </div>
 
-每个GMSL接口`Port`与`位置`关系如下表：
+每个 GMSL 接口 `Port` 与 `位置` 关系如下表：
 
 <div className="table-responsive">
 
-| GMSL接口 | 位置 |
+| GMSL 接口 | 位置 |
 | :---- | :---  |
 | GMSLA | 左下  |
 | GMSLB | 左上  |
@@ -109,7 +109,7 @@ Camera 扩展板集成 3 颗 MAX96712 解串器，每颗能够接入 4 路 GMSL2
 
 :::
 
-### 100Pin 连接器（接口5）
+### 100Pin 连接器（接口 5）
 
 Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能接口（MIPI CSI 和 GPIO）以及电源（12V 和 3.3V）。
 
@@ -119,7 +119,7 @@ Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能�
 
 :::
 
-### 电源指示灯（接口6）
+### 电源指示灯（接口 6）
 
 电源指示灯，其位置在 DC 电源输入接口旁边。
 
@@ -138,9 +138,9 @@ Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能�
 
 | 型号                        | 硬件接口                |
 |-----------------------------|------------------------|
-| SG8S-AR0820C-5300-G2A       | 接口2/接口3/接口4  |
-| LEC28736A11（X3C 模组）      | 接口2/接口3/接口4 |
-| Intel RealSense D457        | 接口2/接口3/接口4 |
+| SG8S-AR0820C-5300-G2A       | 接口 2/接口 3/接口 4  |
+| LEC28736A11（X3C 模组）      | 接口 2/接口 3/接口 4 |
+| Intel RealSense D457        | 接口 2/接口 3/接口 4 |
 
 </div>
 
@@ -166,14 +166,14 @@ Camera 扩展板与 RDK S100 的连接端口，为 Camera 扩展板提供功能�
 
 | 连接器 | 连接器型号                      | 连接器厂商          |
 | :----- | :------------------------------ | :------------------ |
-| 接口5  | HC-PBB05-2-100-M-H4.0-G1-R-P-04 | 华灿天禄            |
-| 接口1  | DC-044B-D025                    | G-Switch（品赞）    |
-| 接口2  | 112038-161410                   | 信翰精密            |
-| 接口3  | 112038-161410                   | 信翰精密            |
-| 接口4  | 112038-161410                   | 信翰精密            |
+| 接口 5  | HC-PBB05-2-100-M-H4.0-G1-R-P-04 | 华灿天禄            |
+| 接口 1  | DC-044B-D025                    | G-Switch（品赞）    |
+| 接口 2  | 112038-161410                   | 信翰精密            |
+| 接口 3  | 112038-161410                   | 信翰精密            |
+| 接口 4  | 112038-161410                   | 信翰精密            |
 
 </div>
 
 ## 适配模组
 
-参考[配件清单](../../01_rdk_s100.md#accessory-list)
+参考 [配件清单](../../01_rdk_s100.md#accessory-list)

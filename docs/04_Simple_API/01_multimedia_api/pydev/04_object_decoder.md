@@ -8,7 +8,7 @@ description: "Decoder 对象接口说明"
 
 > **接口层级**：封装层简易接口（模式 1），底层 MediaCodec 见 [MediaCodec API](/Advanced_development/multimedia_development/multimedia_api/mediacodec/usage)。对应 C 接口见 [DECODER API](/Simple_API/multimedia_api/cdev/decoder_api)。
 
-Decoder 对象实现了对视频数据的解码功能，包含了`decode`、`set_img`、`get_img`、`close`等几种方法，详细说明如下：
+Decoder 对象实现了对视频数据的解码功能，包含了 `decode`、`set_img`、`get_img`、`close` 等几种方法，详细说明如下：
 
 ## 方法清单
 
@@ -36,10 +36,10 @@ Decoder.decode(file, video_chn, type, width, height)
 | 参数名称  | 描述           | 取值范围                    |
 | --------- | --------------- | ------------------- |
 | file      | 需要解码的文件名     |       无       |
-| video_chn | 指定视频解码器的通道号   | 范围0~31 |
-| type        | 视频解码类型  | 范围1~3，分别对应`H264`、`H265`、`MJPEG` |
-| width     | 输入解码模块的图像宽度      | 不超过4096              |
-| height    | 输入解码模块的图像高度      | 不超过4096              |
+| video_chn | 指定视频解码器的通道号   | 范围 0-31 |
+| type        | 视频解码类型  | 范围 1-3，分别对应 `H264`、`H265`、`MJPEG` |
+| width     | 输入解码模块的图像宽度      | 不超过 4096              |
+| height    | 输入解码模块的图像高度      | 不超过 4096              |
 
 【使用方法】 
 
@@ -53,7 +53,7 @@ ret = dec.decode("encode.h264", 0, 1, 1920, 1080)
 
  【返回值】  
 
-返回值为2个成员的`list`数据
+返回值为 2 个成员的 `list` 数据
 
 | 返回值                | 定义描述      |
 | ---------------- | ----------- |
@@ -105,7 +105,7 @@ img = dec.get_img()
 
 【注意事项】
 
-该接口需要在调用`Decoder.decode()`创建解码通道后使用
+该接口需要在调用 `Decoder.decode()` 创建解码通道后使用
 
 【参考代码】
 
@@ -163,7 +163,7 @@ Decoder.set_img(img, chn, eos)
 | 参数名称 | 定义描述         | 取值范围 |
 | -------- | ------------- | --- | 
 | img      | 需要解码的单帧数据 | 无 |
-| chn      | 解码器通道号      | 范围0~31 |
+| chn      | 解码器通道号      | 范围 0-31 |
 | eos      | 解码数据是否结束   | 0：未结束，1：结束 |
 
 【使用方法】 
@@ -179,7 +179,7 @@ Decoder.set_img(img, chn, eos)
 
 【注意事项】 
 
-该接口需要在调用`Decoder.decode()`创建解码通道后使用，且解码通道创建时入参`file`置空
+该接口需要在调用 `Decoder.decode()` 创建解码通道后使用，且解码通道创建时入参 `file` 置空
 
 【参考代码】  
 
@@ -267,7 +267,7 @@ Decoder.close()
 
 【注意事项】
 
-退出程序时需要调用`close`接口以释放资源。
+退出程序时需要调用 `close` 接口以释放资源。
 
 【参考代码】
 

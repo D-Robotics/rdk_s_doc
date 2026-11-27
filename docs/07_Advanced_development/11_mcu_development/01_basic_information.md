@@ -20,7 +20,7 @@ MCU 系统的默认配置如下：
 
 | 配置项 | 默认值 |
 |---|---|
-| 编译工具链 | GCC（gcc-arm-none-eabi-10.3~2021.10） |
+| 编译工具链 | GCC（gcc-arm-none-eabi-10.3 至 2021.10） |
 | MCU 核 | ARM R52+（参考 [ARM R52 technical reference manual](https://developer.arm.com/documentation/100026/latest)） |
 | 操作系统 | FreeRTOS Kernel V10.0.1 |
 | MCU 组成 | MCU0（启动 Acore/MCU1、电源管理，不开源）+ MCU1（业务，开源，可修改） |
@@ -152,7 +152,7 @@ python build_freertos.py <mode> <配置段...> <soc> <compiler> [version] [可�
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/build_success.png" alt="编译成功标志示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/build_success.jpg" alt="编译成功标志示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/build_success.jpg" alt="编译成功标志示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 ### 编译输出目录
@@ -301,7 +301,7 @@ MCU 整个系统含有 ICU、RTC、IPC、Port、CAN 等模块，但是为了用�
 |log|MCU0/MCU1|
 |shell_init|MCU0/MCU1|
 |mDma|MCU0/MCU1|
-|I2c|MCU0: i2c6, i2c7/MCU1: i2c8, i2c9|
+|I2C|MCU0: i2c6, i2c7/MCU1: i2c8, i2c9|
 |tca9539|MCU0|
 |ICU|MCU0|
 |GPT|MCU0|
@@ -326,7 +326,7 @@ MCU 整个系统含有 ICU、RTC、IPC、Port、CAN 等模块，但是为了用�
 |log|MCU0/MCU1|
 |shell_init|MCU0/MCU1|
 |mDma|MCU0/MCU1|
-|I2c|MCU0/MCU1|
+|I2C|MCU0/MCU1|
 |tca9539|MCU0|
 |ICU|MCU0|
 |GPT|MCU0|
@@ -393,7 +393,7 @@ remoteproc 相关节点：
 
 6. MCU 任务负载 `cpuloads`：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/cpuload.jpg" alt="MCU 在 sysfs 上 debug 功能介绍示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/cpuload.jpg" alt="MCU 在 sysfs 上 debug 功能介绍示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## MCU 串口使用
 
@@ -408,7 +408,7 @@ remoteproc 相关节点：
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/basic_information/MCU_COM1.jpg" alt="MCU 串口使用示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/S600_SerialCOM.jpg" alt="MCU 串口使用示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/01_basic_information/S600_SerialCOM.jpg" alt="MCU 串口使用示意图" style={{ width: '60%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 ## MCU0 烧录流程
@@ -432,16 +432,16 @@ fastboot flash MCU_b "xxx/MCU_S100_SIP_V2.0.img"
 
 #### 空板烧录
 
-**空板烧录请使用 Xburn 工具指定区域烧录，并指定 `miniboot_flash`**
+**空板烧录请使用 XBurn 指定区域烧录，并指定 `miniboot_flash`**
 
 <DocScope products="RDK S100">
 
-关于 Xburn 工具烧录指定区域，参考 [烧录指定区域](../../01_Quick_start/03_install_os_and_setup/02_burn.md#烧录指定区域) 章节。
+关于 XBurn 烧录指定区域，参考 [烧录指定区域](../../01_Quick_start/03_install_os_and_setup/02_burn.md#烧录指定区域) 章节。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-关于 Xburn 工具烧录指定区域，参考 [烧录指定区域](../../01_Quick_start/03_install_os_and_setup/02_burn.md#烧录指定区域) 章节。
+关于 XBurn 烧录指定区域，参考 [烧录指定区域](../../01_Quick_start/03_install_os_and_setup/02_burn.md#烧录指定区域) 章节。
 
 </DocScope>
 

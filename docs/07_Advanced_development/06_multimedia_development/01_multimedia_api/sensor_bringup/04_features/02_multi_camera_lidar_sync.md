@@ -24,7 +24,7 @@ S100 上 LPWM 模块主要是给 Camera trigger 使用，能提供具有延时�
 
 ### LPWM 模块
 
-LPWM 为类似 PWM 的信号源，一般用于 camsys 系统中触发 sensor 曝光。LPWM 本身也需要外界触发，在收到 trigger 信号后，按照所配置的 period、high-time、offset 等参数输出 1Hz ~ 500KHz、有效高电平 0us ~ 4095us、默认精度为 1us 的方波。
+LPWM 为类似 PWM 的信号源，一般用于 camsys 系统中触发 sensor 曝光。LPWM 本身也需要外界触发，在收到 trigger 信号后，按照所配置的 period、high-time、offset 等参数输出 1Hz-500KHz、有效高电平 0us-4095us、默认精度为 1us 的方波。
 
 S100 总共有 3 个 LPWM chip，每个 LPWM chip 下面有 4 个 LPWM 通道，请根据实际的硬件连接使用配置。
 
@@ -93,25 +93,25 @@ LPWM 的 trigger 源为 PPS，常用周期为 1s，在收到 trigger 信号后�
 
 offset 设置依赖于 sensor fps，如果 fps 不能被 1s 整除，则需要设置 offset，反之 offset 设置为 0。
 
-常见场景如接入 30fps sensor，period 应设置为 1s/fps = 33333us。sensor 在跑完 30 帧经过 999,990us，与下次 PPS trigger 会有 10us 的间隙，因此 offset 应设为 10us（至少 10us，至多 period - duty_time us，为了稳妥，建议在计算出的 offset 基础上再加 1），否则 lpwm 会在 1s 内发出 31 个方波。
+常见场景如接入 30 fps sensor，period 应设置为 1s/fps = 33333us。sensor 在跑完 30 帧经过 999,990us，与下次 PPS trigger 会有 10us 的间隙，因此 offset 应设为 10us（至少 10us，至多 period - duty_time us，为了稳妥，建议在计算出的 offset 基础上再加 1），否则 lpwm 会在 1s 内发出 31 个方波。
 
 由于硬件或者外设差异，PPS 落在了高电平区域，若关闭缓慢同步功能或者缓慢同步成功后需要走完高电平区域才能进入下一个 trigger 周期，即重新计算 offset，此时可能存在 trigger 周期内 LPWM 波形未达到预期数量，导致曝光同步下 sensor 帧率不符合预期，可将 offset 适当增加保证 PPS 每次一定落在低电平区域，输出预期的波形。
 
-```
+```text
 Period = 1000000 / fps
 Offset = 1000000 - Period * fps + 1
 ```
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/lpwm_01.png" alt="LPWM示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camsys/lpwm_01.png" alt="LPWM示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 推荐使用配置
 
 | 使用场景 | trigger_source | trigger_mode | duty_time | offset | period |
 |---------|----------------|--------------|-----------|--------|--------|
-| 全 30fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 33333 |
-| 全 25fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 40000 |
-| 12.5/25fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 80000/40000 |
-| 30/10fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 33333/100000 |
+| 全 30 fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 33333 |
+| 全 25 fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 40000 |
+| 12.5/25 fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 80000/40000 |
+| 30/10 fps | 8(eth0)/9(eth1) | 1 | 100 | 11 | 33333/100000 |
 
 ## 硬件通路
 
@@ -150,7 +150,7 @@ Offset = 1000000 - Period * fps + 1
 
 - Lidar 与 S100 间有时间同步，在同源时间轴上工作。
 - Lidar 可基于同步时间按需求启动周期性扫描，此处以 10Hz（100ms 周期）为例，可在整百 ms 处开始扫描。
-- Camera 通过 LPWM 基于同步时间 PPS 作为触发源，触发每帧图像的曝光/读出，实现与 Lidar 扫描时间的对齐，此处以 30fps 为例。
+- Camera 通过 LPWM 基于同步时间 PPS 作为触发源，触发每帧图像的曝光/读出，实现与 Lidar 扫描时间的对齐，此处以 30 fps 为例。
 - Camera 图像数据的时间戳需与 Lidar 数据的时间戳在同一时间轴，并有一定的对齐关系，以便融合使用。
 
 其期望的时间对齐目标如下：
@@ -191,7 +191,7 @@ Sensor 曝光输出一般有 Master 模式（主动曝光输出，按配置，�
 
 配置如下：
 
-```
+```text
 // 参见: source/hobot-camera/drivers/sensor/ar0820/inc/ar0820_setting.h
 uint16_t ar0820_trigger_standard_setting[] = {
     //0x301A, 0x0058, // RESET_REGISTER_RESET,RESET_REGISTER_STDBY_EOF
@@ -263,7 +263,7 @@ uint16_t ar0820_trigger_gpio_setting[][8] = {
 - 使用 Acore ETH PPS0 触发。
 - Lidar 在整百 ms 时刻开始扫描，数据带对齐时间戳。
 - Camera（以 AR0820 为例）使用 SHUTTER SYNC 出图同步，自动曝光。
-- 通过 LPWM 的 offset 调整相位整百 ms，如 30fps 适配 offset=463.129ms 对 33.333ms 取余数=29.8ms。
+- 通过 LPWM 的 offset 调整相位整百 ms，如 30 fps 适配 offset=463.129ms 对 33.333ms 取余数=29.8ms。
 - Camera 在经 offset 正确配置后，可在整百 ms（每 3 帧）同步输出，与 Lidar 数据对齐。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/cam_sync/05_camera_sync_07.png" alt="Camera与Lidar同步对齐方案示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
@@ -272,7 +272,7 @@ uint16_t ar0820_trigger_gpio_setting[][8] = {
 
 以下为单路 AR0820 的同步配置：
 
-```
+```text
 {
      "deserial_0": {
      "deserial_name": "max96712",
@@ -305,7 +305,7 @@ uint16_t ar0820_trigger_gpio_setting[][8] = {
 
 此处同步的使能，主要通过 config_index 的 bit9（+512）完成：
 
-```
+```text
 {
     "config_0":{
         "port_0":{
@@ -317,7 +317,7 @@ uint16_t ar0820_trigger_gpio_setting[][8] = {
 
 Deserial 下的 trig_pin 是对硬件连接上 LPWM 连接的 MFP 索引的配置，需 deserial 库中进行相应的支持，同时在 json 中配置使用：
 
-```
+```text
 "deserial_gpio": {
         "trig_pin": [5]
 },
@@ -330,7 +330,7 @@ Deserial 下的 trig_pin 是对硬件连接上 LPWM 连接的 MFP 索引的配�
 
 LPWM 的配置由 json 完成，配置示例如下，更多可参考：[LPWM 配置项说明](#lpwm-配置项说明)：
 
-```
+```text
 {
     "lpwm_chn0": {
         "trigger_source": 8,
@@ -375,10 +375,10 @@ LPWM 的配置由 json 完成，配置示例如下，更多可参考：[LPWM 配
 
 ## 快速示例
 
-Camera 同步无独立函数 API，通过传感器配置文件 + LPWM 配置下发实现。最小配置流程如下（以 AR0820 + ETH PPS0 触发、30fps 为例）：
+Camera 同步无独立函数 API，通过传感器配置文件 + LPWM 配置下发实现。最小配置流程如下（以 AR0820 + ETH PPS0 触发、30 fps 为例）：
 
 1. **配置 Camera 为 Slave/Shutter Sync 模式**：传感器配置中 `config_index` 加 512（bit9）使能同步；`deserial_gpio.trig_pin` 配置 LPWM 所接 MFP 索引。
-2. **配置 LPWM 输出**：按 `trigger_source=8`（ETH PPS0）、`trigger_mode=1`（外部触发）、`period=33333us`（1s/30fps）、`offset` 按计算式 `1000000 - period * fps + 1` 配置。
+2. **配置 LPWM 输出**：按 `trigger_source=8`（ETH PPS0）、`trigger_mode=1`（外部触发）、`period=33333us`（1s/30 fps）、`offset` 按计算式 `1000000 - period * fps + 1` 配置。
 3. **加载配置并出流**：配置文件随 sensor 库加载，LPWM 按 PPS 触发输出方波，多路 Camera 同步曝光/出图。
 
 ```json

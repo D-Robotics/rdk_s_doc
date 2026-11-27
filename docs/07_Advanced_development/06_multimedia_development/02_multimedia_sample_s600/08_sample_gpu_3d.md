@@ -25,7 +25,7 @@ description: "sample_gpu_3d 使用说明 板端示例使用说明"
 #### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_gpu_3d/cl/sample_matrix_multiply`
 - 目录结构
-```
+```text
 └── sample_matrix_multiply
     ├── Makefile
     └── matrix_multiply.c
@@ -69,7 +69,7 @@ Matrices are identical!
 #### 代码位置及目录结构
 - 代码位置 `/app/multimedia_samples/sample_gpu_3d/gles/sample_bezier`
 - 目录结构
-```
+```text
 sample_bezier/
 ├── bezier.c
 └── Makefile

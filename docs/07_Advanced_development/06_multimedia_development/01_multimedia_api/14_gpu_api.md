@@ -42,7 +42,7 @@ Mali-G78AE GPU 的硬件特性如下：
 
 ### 软件框架
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/GPU/gpu_framework.png" alt="GPU 软件框架示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/GPU/gpu_framework.png" alt="GPU 软件框架示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **硬件层**：GPU Core 为 Mali-G78AE，完成 3D 图像处理加速，渲染的输出结果可以存储到 DDR 中
 - **内核驱动层**：S100/S600 中 GPU 的驱动均没有接入 DRM，而是通过字符设备驱动的 ioctl 接口向上提供接口，显示通路由 hobot-drm 显示驱动独立完成

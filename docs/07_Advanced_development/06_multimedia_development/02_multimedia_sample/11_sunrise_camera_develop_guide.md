@@ -109,7 +109,7 @@ vpp 子模块中定义了 SDK_CMD_VPP_GET_SOLUTION_CONFIG 命令，调用 vpp_cm
 
 整个过程如下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/event_bus_flow.png" alt="功能描述示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/event_bus_flow.png" alt="功能描述示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 模块代码结构
 
@@ -237,7 +237,7 @@ vp_wrap 实现多媒体模块的接口封装；
 
  bpu_wrap 模块实现算法推理接口和后处理方法的封装。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/platform_module.png" alt="概述示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/sunrise_camera/platform_module.png" alt="概述示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 #### 功能描述
 
@@ -291,7 +291,7 @@ typedef struct vpp_ops {
 
 #### Media Server 模块
 
-本模块是对 ZLMediakit 的封装实现，把 ZLMediakit 封装成 init、 create_media、push_video 等几个简单接口。目前支持 H264和 H265 码流的推流。
+本模块是对 ZLMediakit 的封装实现，把 ZLMediakit 封装成 init、 create_media、push_video 等几个简单接口。目前支持 H264 和 H265 码流的推流。
 
 本模块的启动和使用可以参考 主程序入口 章节的流程介绍。
 
@@ -321,7 +321,7 @@ typedef struct vpp_ops {
 
 ####  功能描述
 
-`WebServer/www`目录下提供了： 资源文件、web 页面、 css、 js 程序。
+`WebServer/www` 目录下提供了： 资源文件、web 页面、 css、 js 程序。
 
 
 ## 使用 BPU 进行算法推理

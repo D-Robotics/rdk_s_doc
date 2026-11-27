@@ -26,14 +26,14 @@ import DocScope from '@site/src/components/DocScope';
 
 Samba 是 Windows/Linux/macOS 通用的文件共享协议。把开发板配成 Samba 服务端后，PC 可像访问网络邻居一样读写板端目录。
 
-### 1. 安装 Samba
+### 安装 Samba
 
 ```bash
 sudo apt update
 sudo apt install samba
 ```
 
-### 2. 创建共享目录
+### 创建共享目录
 
 在 `/userdata` 分区下创建共享目录，并归属到 `sunrise`：
 
@@ -42,7 +42,7 @@ sudo mkdir -p /userdata/shared
 sudo chown sunrise:sunrise /userdata/shared
 ```
 
-### 3. 配置共享
+### 配置共享
 
 打开 Samba 主配置文件 `/etc/samba/smb.conf`，在文件末尾追加：
 
@@ -66,7 +66,7 @@ sudo chown sunrise:sunrise /userdata/shared
 - `guest ok = no`：访问需用户名和密码，不允许匿名。
 - `create mask` / `directory mask`：共享目录中新建文件和目录的默认权限。
 
-### 4. 设置 Samba 用户和密码
+### 设置 Samba 用户和密码
 
 Samba 使用独立的密码库，需把系统用户加入 Samba 用户列表并设密码：
 
@@ -76,15 +76,15 @@ sudo smbpasswd -a sunrise
 
 按提示两次输入密码即完成。这里用默认账号 `sunrise`；如使用其他系统账号，替换为对应用户名。
 
-### 5. 启动并设为开机自启
+### 启动并设为开机自启
 
 ```bash
 sudo systemctl enable --now smbd
 ```
 
-`enable --now` 同时完成"设为开机自启"和"立即启动"。
+`enable --now` 同时完成“设为开机自启”和“立即启动”。
 
-### 6. （可选）放行防火墙
+### （可选）放行防火墙
 
 RDK OS 默认未安装防火墙（`ufw` 命令不存在），本步骤仅在自行启用了防火墙的环境下才需要：
 
@@ -154,7 +154,7 @@ RDK S100 实测：
 
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20143720.png" alt="Windows 资源管理器访问 Samba 共享目录" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-  在弹出的对话框中输入 Samba 用户名 `sunrise` 和第 4 步设置的密码。
+  在弹出的对话框中输入 Samba 用户名 `sunrise` 和在 [设置 Samba 用户和密码](#设置-samba-用户和密码) 中设置的密码。
 
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20152031.png" alt="Windows 输入 Samba 用户名和密码" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -177,14 +177,14 @@ RDK S100 实测：
 
 NFS（Network File System）是 Linux 原生的网络文件系统。把开发板配成 NFS 服务端，Linux PC/NAS 可直接挂载，Windows PC 需先启用 Client for NFS。
 
-### 1. 安装 NFS 服务端
+### 安装 NFS 服务端
 
 ```bash
 sudo apt update
 sudo apt install nfs-kernel-server
 ```
 
-### 2. 创建导出目录
+### 创建导出目录
 
 在 `/userdata` 分区下创建导出目录，并归属到 `sunrise`：
 
@@ -193,9 +193,9 @@ sudo mkdir -p /userdata/nfs_export
 sudo chown sunrise:sunrise /userdata/nfs_export
 ```
 
-### 3. 配置导出
+### 配置导出
 
-编辑 `/etc/exports`，在末尾追加一行（把 `192.168.127.0/24` 换成你的 PC 所在网段）：
+编辑 `/etc/exports`，在末尾追加一行（把 `192.168.127.0/24` 换成您的 PC 所在网段）：
 
 ```text
 /userdata/nfs_export 192.168.127.0/24(rw,sync,no_subtree_check,all_squash,insecure,anonuid=1000,anongid=1000)
@@ -210,7 +210,7 @@ sudo chown sunrise:sunrise /userdata/nfs_export
 - `insecure`：允许客户端从非特权端口连接。**Windows Client for NFS 必须加此项**，否则连接会被拒。
 - `anonuid=1000,anongid=1000`：把被 `all_squash` 压成匿名的客户端映射到板端 `sunrise`（UID/GID 1000）。Windows 客户端默认匿名访问，经此映射后写入的文件在板端归属 `sunrise`，可正常读写。
 
-### 4. 应用导出
+### 应用导出
 
 ```bash
 sudo exportfs -ra
@@ -222,7 +222,7 @@ sudo exportfs -ra
 sudo exportfs -v
 ```
 
-### 5. 启动并设为开机自启
+### 启动并设为开机自启
 
 ```bash
 sudo systemctl enable --now nfs-server
@@ -277,7 +277,7 @@ sudo exportfs -v
 
 服务端就绪后，在 PC 侧挂载确认：
 
-- **Windows**：需先在"启用或关闭 Windows 功能"里勾选 **Client for NFS**。在widows中执行`Win + R` 输入 `control.exe`
+- **Windows**：需先在“启用或关闭 Windows 功能”里勾选 **Client for NFS**。在 Windows 中执行 `Win + R` 输入 `control.exe`
 
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20171426.png" alt="启用 Client for NFS 功能" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -285,11 +285,11 @@ sudo exportfs -v
 
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/20260921-171703.jpg" alt="Client for NFS 功能启用确认" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-  在弹出的对话框左侧边栏中点击 **启用或关闭Windows功能** 选项。
+  在弹出的对话框左侧边栏中单击 **启用或关闭 Windows 功能** 选项。
 
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/20260921-171750.jpg" alt="NFS 客户端操作截图 1" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-  在弹出的对话框中找到 **NFS服务选项** 勾选 **NFS客户端** 和 **管理工具** 选项，然后点击确定。
+  在弹出的对话框中找到 **NFS 服务选项** 勾选 **NFS 客户端** 和 **管理工具** 选项，然后单击 **确定**。
 
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/20260921-171921.jpg" alt="NFS 客户端操作截图 2" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -302,7 +302,7 @@ sudo exportfs -v
 
    <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20172111.png" alt="NFS 客户端操作截图 3" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-  打开windows资源管理器，可以在网络位置下面看到挂载的目录。
+  打开 Windows 资源管理器，可以在网络位置下面看到挂载的目录。
 
   <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/share_file_tool/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-09-21%20172437.png" alt="NFS 客户端操作截图 4" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 

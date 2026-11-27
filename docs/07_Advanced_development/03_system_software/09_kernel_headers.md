@@ -49,11 +49,11 @@ Kconfig        System.map      certs  fs       io_uring  lib     rust  security 
 ### Hello World 内核模块
 我们用一个简单的 `Hello World` 内核模块的开发介绍如何使用内核头文件。步骤概要如下：
 
-- 准备程序代码，以编译路径为 `sunrise` 用户的 `${HOME}/test_ko` 为例
-- 编写 Makefile，完成驱动模块的编译
-- 对驱动模块进行签名
-- 测试加载、卸载模块
-- （可选）配置开机自动加载
+1. 准备程序代码，以编译路径为 `sunrise` 用户的 `${HOME}/test_ko` 为例
+2. 编写 Makefile，完成驱动模块的编译
+3. 对驱动模块进行签名
+4. 测试加载、卸载模块
+5. （可选）配置开机自动加载
 
 #### 编写 Hello World 内核模块
 打开你熟悉的编辑器（比如 VIM），创建文件 `hello.c`，输入下面的内容：
@@ -349,9 +349,9 @@ sudo echo hello > /lib/modules-load.d/hello.conf
 :::info
 **免责声明**：
 
-- 地瓜不对任何第三方驱动模块承担任何形式的开发/维护责任。
+- D-Robotics 不对任何第三方驱动模块承担任何形式的开发/维护责任。
 
-- 地瓜不对任何由于第三方源码在地瓜平台运行所导致的问题负责。
+- D-Robotics 不对任何由于第三方源码在 D-Robotics 平台运行所导致的问题负责。
 :::
 
 #### PCAN
@@ -378,7 +378,7 @@ sudo echo hello > /lib/modules-load.d/hello.conf
     ./pcan-kernel-version.sh
     ```
     :::info
-    地瓜 RDK S100/S600 系列仅支持 Linux 6.1 版本内核。
+    D-Robotics RDK S100/S600 系列仅支持 Linux 6.1 版本内核。
     :::
 3. 下载 PCAN 驱动
     ```shell

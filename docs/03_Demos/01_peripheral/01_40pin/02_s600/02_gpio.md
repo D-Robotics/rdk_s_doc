@@ -22,9 +22,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用`/app/40pin_samples/`目录下的代码，该代码已在板子上经过实际验证。
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在开发板上经过实际验证。
 :::
-
 
 ## 代码位置
 
@@ -49,9 +48,9 @@ GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，主要的 GPIO 相�
 - CVM：使用字符串代替数字，对应于 CVM / CVB 连接器的信号名称。
 - SOC：对应的编号是芯片内部的 GPIO 管脚序号。
 
-本文推荐用户使用`BOARD`编码模式，设置编码的方式如下：
+本文推荐用户使用 `BOARD` 编码模式，设置编码的方式如下：
 
-注意：编码每次只能设置一次，如果想要重新设置，需要`GPIO.cleanup()`后重新设置。
+注意：编码每次只能设置一次，如果想要重新设置，需要 `GPIO.cleanup()` 后重新设置。
 
 ```python
 GPIO.setmode(GPIO.BOARD)
@@ -138,7 +137,7 @@ GPIO.setup(channels, GPIO.OUT)
 GPIO.input(channel)
 ```
 
-命令返回值为 0 或者 1。 0 代表 GPIO.LOW， 1 代表 GPIO.HIGH。
+命令返回值为 0 或者 1。0 代表 GPIO.LOW，1 代表 GPIO.HIGH。
 
 ## 输出操作
 
@@ -192,7 +191,7 @@ GPIO 库提供了三种方法来检测输入事件：
 GPIO.wait_for_edge(channel, GPIO.RISING)
 ```
 
-其中，第二个参数指定要检测的边沿，取值范围为`GPIO.RISING、GPIO.FALLING 或 GPIO.BOTH`。如果要指定等待时间，可以选择设置超时：
+其中，第二个参数指定要检测的边沿，取值范围为 `GPIO.RISING、GPIO.FALLING 或 GPIO.BOTH`。如果要指定等待时间，可以选择设置超时：
 
 ```python
 # 超时以毫秒为单位
@@ -264,14 +263,14 @@ GPIO.remove_event_detect(channel)
 
 | 测试例程              | 功能                                     | 使用管脚（J19）                     |
 | --------------------- | ---------------------------------------- | ----------------------------------- |
-| `gpio_rw_demo.py`     | 读写演示：`output` 模式翻转输出电平并打印，`input` 模式读取输入电平，仅在变化时打印 | 输出：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输入：`PCM1_DATA0_1V8`（第 4 脚） |
+| `gpio_rw_demo.py`     | 读写演示：`output` 模式翻转输出电平并打印，`input` 模式读取输入电平，仅在变化时打印 | 输出：`PCM1_FSYNC_1V8`（第 3 脚）<br />输入：`PCM1_DATA0_1V8`（第 4 脚） |
 | `simple_out.py`       | 输出测试：输出管脚每秒翻转一次电平       | 输出：`PCM1_FSYNC_1V8`（第 3 脚）   |
 | `simple_input.py`     | 输入测试：读取输入管脚电平，变化时打印   | 输入：`PCM1_FSYNC_1V8`（第 3 脚）   |
-| `button_led.py`       | 按键控制 LED：输入电平同步到输出管脚     | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输出：`PCM1_DATA0_1V8`（第 4 脚） |
-| `button_event.py`     | 边沿事件：检测输入下降沿，输出拉高 1 秒  | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输出：`PCM1_DATA0_1V8`（第 4 脚） |
-| `button_interrupt.py` | 中断：检测输入下降沿触发回调，另两脚输出 | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br/>输出：`PCM1_MCLK_1V8`（第 1 脚）、`PCM1_BCLK_1V8`（第 2 脚） |
+| `button_led.py`       | 按键控制 LED：输入电平同步到输出管脚     | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br />输出：`PCM1_DATA0_1V8`（第 4 脚） |
+| `button_event.py`     | 边沿事件：检测输入下降沿，输出拉高 1 秒  | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br />输出：`PCM1_DATA0_1V8`（第 4 脚） |
+| `button_interrupt.py` | 中断：检测输入下降沿触发回调，另两脚输出 | 输入：`PCM1_FSYNC_1V8`（第 3 脚）<br />输出：`PCM1_MCLK_1V8`（第 1 脚）、`PCM1_BCLK_1V8`（第 2 脚） |
 
-- GPIO 设置为`输出模式`，1秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭， 测试代码 `simple_out.py`：
+- GPIO 设置为 `输出模式`，1 秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭，测试代码 `simple_out.py`：
 
 ```python
 #!/usr/bin/env python3
@@ -321,7 +320,7 @@ if __name__ == '__main__':
 
 ```
 
-- GPIO 设置为`输入模式`，通过忙轮询方式读取管脚电平值，测试代码 `simple_input.py`：
+- GPIO 设置为 `输入模式`，通过忙轮询方式读取管脚电平值，测试代码 `simple_input.py`：
 
 ```python
 #!/usr/bin/env python3
@@ -521,6 +520,7 @@ if __name__ == '__main__':
     main()
 
 ```
+
 ## hb_gpioinfo 工具介绍
 
 hb_gpioinfo 是适配 RDK S600 的一个 GPIO 帮助工具，可以查看当前开发板的 Pin Name 和 Pin Num 的对应关系。Pin Num 与库中的 BOARD 编号一致，Pin Func 列随实际配置变化，以板端实际输出为准。命令示例输出如下：
@@ -751,8 +751,6 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |--- ---------------- --------------------
 ```
-
-<!-- TODO(S3): 板端实测待回填 -->
 
 ## 常见问题
 

@@ -11,14 +11,14 @@ sidebar_products: RDK S100
 本示例仅适用于 RDK S100。RDK S600 镜像未内置对应 hbm 模型，相关示例代码也仅在 S100 上随系统镜像发布；S600 上暂不支持。
 :::
 
-本示例展示了如何使用 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于`/app/pydev_demo/05_open_instance_seg_sample/01_yoloe11_seg/`目录下。
+本示例展示了如何使用 `hbm_runtime` 在 BPU 上运行 Ultralytics YOLOE11 实例分割模型。程序实现了从输入图像的预处理、模型推理、后处理到结果可视化的完整流程，本示例代码位于 `/app/pydev_demo/05_open_instance_seg_sample/01_yoloe11_seg/` 目录下。
 
 ## 模型说明
 - 简介：
 
     Ultralytics YOLOE11 是一款高效能的端侧实例分割模型，适用于开放词汇物体检测与分割任务。该模型通过多尺度特征提取、密集分类和原型掩膜生成，有效识别图像中的物体并输出精细的实例分割结果。本示例使用的是 Ultralytics YOLOE11 的轻量级版本，输入图像为 640x640，支持 4585 类的广义物体分类与分割。
 
-- HBM模型名称：yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
+- HBM 模型名称：`yoloe_11s_seg_pf_nashe_640x640_nv12.hbm`
 
 - 输入格式：NV12，大小为 640x640
 
@@ -32,9 +32,10 @@ sidebar_products: RDK S100
 
 - 模型下载地址（程序自动下载）：
 
-    ```bash
+    ```text
     https://archive.d-robotics.cc/downloads/rdk_model_zoo/rdk_s100/ultralytics_YOLO/yoloe_11s_seg_pf_nashe_640x640_nv12.hbm
     ```
+
 ## 功能说明
 - 模型加载
 
@@ -65,7 +66,7 @@ sidebar_products: RDK S100
     - 支持可选的掩膜开运算（形态学处理）与边界轮廓绘制
 
 ## 环境依赖
-本样例无特殊环境需求，只需确保安装了pydev中的环境依赖即可。
+本样例无特殊环境需求，只需确保安装了 pydev 中的环境依赖即可。
 ```bash
 pip install -r ../../requirements.txt
 ```
@@ -84,7 +85,7 @@ pip install -r ../../requirements.txt
 | `--test-img`      | 输入测试图像路径                            | `/app/res/assets/office_desk.jpg`            |
 | `--label-file`    | 类别标签文件路径（每行一个类别）             | `/app/res/labels/coco_extended.names`        |
 | `--img-save-path` | 推理结果图像保存路径                        | `result.jpg`                              |
-| `--priority`      | 模型调度优先级（0\~255）                    | `0`                                       |
+| `--priority`      | 模型调度优先级（0-255）                    | `0`                                       |
 | `--bpu-cores`     | 使用的 BPU 核心编号（如 `--bpu-cores 0 1`） | `[0]`                                     |
 | `--nms-thres`     | 非极大值抑制（NMS）的 IoU 阈值              | `0.7`                                     |
 | `--score-thres`   | 目标检测置信度阈值                          | `0.25`                                    |
@@ -115,7 +116,7 @@ pip install -r ../../requirements.txt
 - 查看结果
 
     运行成功后，会将结果绘制在原图上，并保存到 --img-save-path 指定路径
-    ```bash
+    ```text
     [Saved] Result saved to: result.jpg
     ```
 
@@ -125,22 +126,23 @@ pip install -r ../../requirements.txt
 - 若指定模型路径不存在，程序将尝试自动下载模型。
 
 ## License
-    ```license
-    Copyright (C) 2025，XiangshunZhao D-Robotics.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+```license
+Copyright (C) 2025, XiangshunZhao D-Robotics.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    ```
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+```
 
 ## 常见问题
 

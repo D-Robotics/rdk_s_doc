@@ -10,7 +10,7 @@ description: "RDK 板卡硬件接口、系统启动与烧录、系统配置、�
 
 :::info 说明
 
-🔄 问题解决前请考虑更新到最新系统：许多问题可通过系统更新解决，相关下载资源请参考[下载资源汇总](../RDK.md#资料索引)。
+问题解决前请考虑更新到最新系统：许多问题可通过系统更新解决，相关下载资源请参考 [下载资源汇总](../RDK.md#资料索引)。
 
 :::
 
@@ -48,7 +48,7 @@ D-Robotics Developer Kits，简称 [D-Robotics RDK 套件](../RDK.md)，是基�
 
     RDK OS 4.x/5.x 输出类似 `4.0.5`、`5.1.0`。
 
-2. **查看已安装的地瓜核心功能包版本**：
+2. **查看已安装的 D-Robotics 核心功能包版本**：
 
     ```bash
     rdkos_info
@@ -86,9 +86,9 @@ D-Robotics Developer Kits，简称 [D-Robotics RDK 套件](../RDK.md)，是基�
 
 RDK OS 4.x/5.x 为现行主线版本：RDK OS 4.x 面向 RDK S100，RDK OS 5.x 面向 RDK S600。
 
-**版本升级**：推荐使用烧录新版本系统镜像的方式进行升级，参见[系统烧录](../01_Quick_start/03_install_os_and_setup/02_burn.md)。
+**版本升级**：推荐使用烧录新版本系统镜像的方式进行升级，参见 [系统烧录](../01_Quick_start/03_install_os_and_setup/02_burn.md)。
 
-**TROS 兼容性**：各 TROS 版本与 RDK OS 大版本的对应关系，参见 TROS 手册的[版本发布记录](https://developer.d-robotics.cc/tros_doc/quick_start/changelog?v=4.0.5&p=RDK+S100)。
+**TROS 兼容性**：各 TROS 版本与 RDK OS 大版本的对应关系，参见 TROS 手册的 [版本发布记录](https://developer.d-robotics.cc/tros_doc/quick_start/changelog?v=4.0.5&p=RDK+S100)。
 
 ## 硬件使用与接口
 
@@ -250,7 +250,7 @@ IMX219 摄像头连接示意图：
 - `Could not resolve 'archive.sunrisepi.tech'`（或其他旧域名）
 - `The following signatures couldn't be verified because the public key is not available: NO_PUBKEY ...`
 
-**原因**：地瓜机器人官方软件源域名或 GPG 签名密钥发生变更，导致本地配置过期。
+**原因**：D-Robotics 官方软件源域名或 GPG 签名密钥发生变更，导致本地配置过期。
 
 **解决**：
 
@@ -307,7 +307,7 @@ IMX219 摄像头连接示意图：
         sudo kill XXXX
         ```
 
-    3. **清理锁文件（⚠️ 谨慎操作）**：在确认没有 apt 或 dpkg 进程正在运行后，可以尝试移除相关的锁文件。**此操作有一定风险，可能破坏您的包管理系统，请务必谨慎。**
+    3. **清理锁文件（谨慎操作）**：在确认没有 apt 或 dpkg 进程正在运行后，可以尝试移除相关的锁文件。**此操作有一定风险，可能破坏您的包管理系统，请务必谨慎。**
 
         ```bash
         sudo rm /var/lib/apt/lists/lock
@@ -348,7 +348,7 @@ N: See apt-secure(8) manpage for repository creation and user configuration deta
 
 ### 为应用设置开机自启动
 
-为应用配置开机自启动的方法，见[开机自启动配置](../02_System_configuration/06_self_start.md)。
+为应用配置开机自启动的方法，见 [开机自启动配置](../02_System_configuration/06_self_start.md)。
 
 ### 开发板默认登录账户和密码
 
@@ -540,7 +540,7 @@ DefaultEnvironment="TZ=CST-08:00"
     * Linux 下可以使用 `xrandr --props` 查看连接显示器的属性，其中可能包含 EDID 信息，或使用 `get-edid | parse-edid`。
     * Windows 下可以使用如 MonitorInfoView（NirSoft） 或 Phoenix EDID Designer 等工具。
 
-获取到 EDID 数据（通常是一个二进制文件或十六进制文本）后，可以将其提供给技术支持。具体在地瓜机器人 RDK 平台抓取 EDID 的方法，请参考官方论坛的指导帖子：[如何提供不支持显示器的 EDID 信息](https://developer.d-robotics.cc/forumDetail/235046352323895808)
+获取到 EDID 数据（通常是一个二进制文件或十六进制文本）后，可以将其提供给技术支持。具体在 D-Robotics RDK 平台抓取 EDID 的方法，请参考官方论坛的指导帖子：[如何提供不支持显示器的 EDID 信息](https://developer.d-robotics.cc/forumDetail/235046352323895808)
 
 ### RDK S100 桌面 Power Statistics 应用设备节点显示不全
 
@@ -565,12 +565,12 @@ DefaultEnvironment="TZ=CST-08:00"
 
 ### 在 Conda 虚拟环境中使用 RDK 特定 Python 包
 
-**原因**：地瓜机器人官方提供的 `Hobot.GPIO`（GPIO 控制）、`hbm_runtime`（智能计算架构推理运行时，历史版本中为 `hobot_dnn`）等 Python 包通常是为 RDK 的系统 Python 环境预编译和优化的，它们可能依赖于系统底层的特定库文件和驱动程序。在 Conda 等 Python 虚拟环境中使用这些包可能会遇到一些挑战，因为虚拟环境旨在隔离依赖。
+**原因**：D-Robotics 官方提供的 `Hobot.GPIO`（GPIO 控制）、`hbm_runtime`（智能计算架构推理运行时，历史版本中为 `hobot_dnn`）等 Python 包通常是为 RDK 的系统 Python 环境预编译和优化的，它们可能依赖于系统底层的特定库文件和驱动程序。在 Conda 等 Python 虚拟环境中使用这些包可能会遇到一些挑战，因为虚拟环境旨在隔离依赖。
 
 **解决**：以下是一些可能的方法和注意事项。
 
 1. **官方是否提供 Conda 支持或 `.whl` 文件**：
-    * 首先，查阅最新的地瓜机器人官方文档、开发者社区或 GitHub 仓库，看官方是否提供了针对 Conda 环境的安装说明，或者是否直接发布了可以在 Conda 环境中通过 `pip` 安装的 `.whl` 格式的这些包。这是最理想的情况。
+    * 首先，查阅最新的 D-Robotics 官方文档、开发者社区或 GitHub 仓库，看官方是否提供了针对 Conda 环境的安装说明，或者是否直接发布了可以在 Conda 环境中通过 `pip` 安装的 `.whl` 格式的这些包。这是最理想的情况。
 2. **尝试在 Conda 环境中通过 `pip` 安装系统路径下的包（如果 `.whl` 不可用）**：
     * 如果这些包已安装在 RDK 的系统 Python 环境中（例如 `/usr/lib/python3/dist-packages/` 或类似路径），且 Conda 环境的 Python 版本与这些包编译时所用版本兼容，可以尝试在激活 Conda 环境后用 `pip` 指向这些包的路径安装。**但这种方式通常不被推荐**，成功率也不高，因为 `pip` 主要用于从 PyPI 或本地 `.whl`/源码包安装。
 3. **修改 `PYTHONPATH` 或 `sys.path`（不推荐，易出错）**：
@@ -579,7 +579,7 @@ DefaultEnvironment="TZ=CST-08:00"
 4. **使用系统 Python 环境**：
     * 如果您的项目对 Python 环境隔离的要求不是非常严格，或者主要就是围绕这些 RDK 特定包进行开发，最简单直接的方法可能就是**直接使用 RDK 系统自带的 Python 环境**，而不是 Conda。这些包在系统环境中通常是配置好的。
 5. **容器化方案（Docker）**：
-    * 如果地瓜机器人官方提供了包含这些包和完整依赖的 Docker 镜像，那么在 Docker 容器中使用这些功能是更可靠的隔离和部署方案。
+    * 如果 D-Robotics 官方提供了包含这些包和完整依赖的 Docker 镜像，那么在 Docker 容器中使用这些功能是更可靠的隔离和部署方案。
 6. **从源码编译（如果官方提供源码且允许）**：
     * 如果这些特定包的源码是开放的，并且有针对 ARM 架构的编译指南，理论上您可以尝试在您的 Conda 环境中从源码编译和安装这些包。但这通常需要较高的技术能力和时间投入。
 
@@ -635,7 +635,7 @@ DefaultEnvironment="TZ=CST-08:00"
 
 * 上述步骤是一个通用流程，具体命令和细节可能因您的 Linux 发行版、内核版本以及 Secure Boot 的配置状态而有所不同。
 * **请务必参考您所使用的 Linux 发行版和内核版本的官方文档中关于“内核模块签名（Kernel Module Signing）”的详细指南。**
-* 地瓜机器人官方 RDK 文档中关于“Linux 开发”或“驱动开发”的章节，也可能包含针对 RDK 平台的具体模块签名指导：
+* D-Robotics 官方 RDK 文档中关于“Linux 开发”或“驱动开发”的章节，也可能包含针对 RDK 平台的具体模块签名指导：
 
     <DocScope products="RDK S100">
 
@@ -743,7 +743,7 @@ DefaultEnvironment="TZ=CST-08:00"
 **解决**：为 RDK 板卡（通常是 ARM 架构）交叉编译应用程序，一般需要一台 x86 架构的 Linux 开发主机。推荐使用 Ubuntu LTS 版本（如 Ubuntu 20.04 或 22.04），并在其上配置交叉编译工具链和对应的目标系统 SDK（Sysroot）。具体配置步骤因程序类型（如普通 Linux C/C++ 程序、ROS/TROS 功能包）和目标 RDK 的型号与系统版本而异。
 
 1. **编译普通 Linux C/C++ 应用程序**：
-    * **获取交叉编译工具链**：地瓜机器人官方会为 RDK 系列平台提供相应的交叉编译工具链（例如，包含 `aarch64-linux-gnu-gcc`、`aarch64-linux-gnu-g++` 等工具）。这个工具链可能作为 SDK 的一部分提供，或者需要从开发者社区单独下载。
+    * **获取交叉编译工具链**：D-Robotics 官方会为 RDK 系列平台提供相应的交叉编译工具链（例如，包含 `aarch64-linux-gnu-gcc`、`aarch64-linux-gnu-g++` 等工具）。这个工具链可能作为 SDK 的一部分提供，或者需要从开发者社区单独下载。
     * **安装与配置工具链**：按照官方文档的指引，将下载的工具链压缩包解压到您开发主机上的一个合适路径（例如 `/opt/toolchains/`）。然后，需要将工具链的 `bin` 目录（包含编译器等可执行文件）添加到您开发主机的 `PATH` 环境变量中，这样系统才能找到这些交叉编译命令。
     * **准备 Sysroot**：交叉编译不仅需要编译器，还需要目标板卡系统环境中的库文件（如 glibc、libstdc++，以及其他依赖库）和头文件。这部分内容集合称为 Sysroot。Sysroot 可以从官方提供的 RDK SDK 中提取，或者从一个已经烧录好系统的 RDK 板卡的根文件系统中复制得到。在编译时，需要通过编译器的 `--sysroot=<path_to_sysroot>` 参数来指定 Sysroot 的路径。
     * **使用 CMake 进行交叉编译**：如果您的项目使用 CMake 作为构建系统，推荐创建一个 CMake 工具链配置文件（toolchain file，例如 `aarch64-rdk.cmake`）。在这个文件中，您需要指定：
@@ -757,12 +757,12 @@ DefaultEnvironment="TZ=CST-08:00"
     * **参考官方手册**：详细的交叉编译环境搭建步骤、工具链文件示例以及编译参数，请务必参考您所使用的 RDK 型号和版本的官方《用户手册》或《SDK 开发指南》中关于“Linux 应用开发”或“交叉编译环境搭建”的章节。
 
 2. **编译 ROS/TROS 功能包**：
-    * **使用官方提供的 Docker 交叉编译环境（强烈推荐）**：这是为 TROS 功能包进行交叉编译**最推荐且最便捷**的方式。地瓜机器人官方通常会提供预配置好的 Docker 镜像，这些镜像中已经集成了：
+    * **使用官方提供的 Docker 交叉编译环境（强烈推荐）**：这是为 TROS 功能包进行交叉编译**最推荐且最便捷**的方式。D-Robotics 官方通常会提供预配置好的 Docker 镜像，这些镜像中已经集成了：
         * 特定 TROS 版本（如 Foxy、Humble）所需的交叉编译工具链。
         * Ament/Colcon 等 ROS 构建工具。
         * 目标板卡 TROS 环境对应的所有基础 ROS 库和依赖项的交叉编译版本。
         * **操作流程**：
-            1. 从官方渠道（如 Docker Hub 或地瓜机器人官方服务器）拉取对应 TROS 版本的交叉编译 Docker 镜像。
+            1. 从官方渠道（如 Docker Hub 或 D-Robotics 官方服务器）拉取对应 TROS 版本的交叉编译 Docker 镜像。
             2. 按照官方文档的指引启动 Docker 容器，并将您的 ROS 工作区源代码目录挂载到容器内部。
             3. 在 Docker 容器的终端内，使用 `colcon build` 配合适当的交叉编译参数（通常 Docker 环境已预设好）来编译您的工作区。
         * **参考官方手册**：TROS 用户手册中关于“源码安装”、“开发者指南”或“交叉编译”的章节通常会有详细的 Docker 使用方法和命令示例。参见 [TROS 手册](https://developer.d-robotics.cc/tros_doc/tros)。
@@ -805,9 +805,9 @@ DefaultEnvironment="TZ=CST-08:00"
 **解决**：
 
 1. **Docker 镜像（例如用于算法工具链、交叉编译环境）**：
-    * **官方来源**：Docker 镜像通常首发于 Docker Hub。地瓜机器人官方也可能在自己的服务器或特定的开发者社区资源帖中提供部分关键镜像的下载链接或拉取方式。
+    * **官方来源**：Docker 镜像通常首发于 Docker Hub。D-Robotics 官方也可能在自己的服务器或特定的开发者社区资源帖中提供部分关键镜像的下载链接或拉取方式。
     * **网络问题**：如果从 Docker Hub 拉取速度慢或失败，可能是由于网络限制或国际带宽问题。可以尝试配置 Docker 使用国内的镜像加速器服务（如阿里云、DaoCloud、网易蜂巢等都提供此类服务）。
-    * **社区资源**：关注地瓜机器人开发者社区的公告或资源下载区，有时会提供针对国内用户的镜像获取方案。例如，此帖曾提供过相关资源：[地瓜机器人开发者社区论坛相关帖子](https://developer.d-robotics.cc/forumDetail/136488103547258769)（请确认链接及内容的最新有效性）。
+    * **社区资源**：关注 D-Robotics 开发者社区的公告或资源下载区，有时会提供针对国内用户的镜像获取方案。例如，此帖曾提供过相关资源：[D-Robotics 开发者社区论坛相关帖子](https://developer.d-robotics.cc/forumDetail/136488103547258769)（请确认链接及内容的最新有效性）。
 2. **OE（OpenEmbedded） 包 / BSP（Board Support Package）**：
     * OE 编译环境相关的包或完整的 BSP（包含内核源码、驱动、文件系统构建脚本等）通常体积较大。如果官方提供直接下载，请确保您的网络连接稳定且具有足够的带宽。
     * 这些资源一般会在开发者社区的“资源中心”板块或对应 RDK 型号的产品文档页提供下载链接。
@@ -819,4 +819,4 @@ DefaultEnvironment="TZ=CST-08:00"
     * **使用下载工具**：对于较大的文件，建议使用支持断点续传的下载工具。
     * **检查网络环境**：如果您在公司或机构网络下，确认是否有防火墙、代理服务器或网络策略限制了大文件的下载或访问特定域名。
     * **错峰下载**：尝试在网络负载较低的时段进行下载。
-    * **官方渠道优先**：始终优先从地瓜机器人官方开发者社区、官方文档中提供的链接或官方 GitHub 仓库获取各类开发资源，以确保文件的正确性、完整性和安全性。
+    * **官方渠道优先**：始终优先从 D-Robotics 官方开发者社区、官方文档中提供的链接或官方 GitHub 仓库获取各类开发资源，以确保文件的正确性、完整性和安全性。

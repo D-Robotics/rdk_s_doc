@@ -12,24 +12,24 @@ GDC Tool 是一种可在 PC 上进行处理效果仿真的工具。用户可准�
 
 ### GDC Tool 启动
 
-#### 1. Windows 环境
+#### Windows 环境
 
 - **安装环境**：依赖 Node.js，参考下载 [https://nodejs.cn/download/](https://nodejs.cn/download/)。
 - **工具获取**：从发布包下载 gdc 工具（gdc-tool-xxxx-windows），路径位于发布包 `software_tools/gdc_tools/`。
 - **安装依赖**：Windows 命令行进入 gdc 工具目录（如 gdc-tool-gui-xxxx-windows），执行 `npm install express`。
 - **启动应用**：在该目录执行 `node.exe app.js`，用 Chrome 浏览器登录 [http://localhost:3000/](http://localhost:3000/)。
 
-#### 2. Unix 环境
+#### Unix 环境
 
 - **安装环境**：mac 下 `brew install node`。
 - **安装依赖**：在工具目录下执行 `npm install -production`。
 - **启动应用**：执行 `node app.js`，打开网页登录 [http://localhost:3000/](http://localhost:3000/)。
 
-#### 3. 开始仿真
+#### 开始仿真
 
 使用 GDC Tool 一般需要以下步骤：
 
-![GDC Tool 仿真流程](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/image-20250107-164759.png)
+![GDC Tool 仿真流程](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/image-20250107-164759.png)
 
 上图的绿色箭头和下面的步骤一一对应。
 
@@ -44,7 +44,7 @@ GDC Tool 是一种可在 PC 上进行处理效果仿真的工具。用户可准�
 3. 配置 Input 参数，详见 [变换模式参数说明](#变换模式参数说明)。
 4. 配置 Output 参数，详见 [变换模式参数说明](#变换模式参数说明)。
 5. 配置 Settings 参数，详见 [变换模式参数说明](#变换模式参数说明)。
-6. 参数配置成功后点击 Preview 预览，确认是否符合预期。
+6. 参数配置成功后单击 Preview 预览，确认是否符合预期。
 7. 仿真效果符合预期后，导出 layout.json 文件。
 8. 仿真效果符合预期后，也可导出 bin 文件直接使用。
 
@@ -81,19 +81,19 @@ GDC Tool 提供六种变换模式：Affine、Equisolid、Equisolid(cylinder)、E
 
 水平方向（-1280, +1280）通过给定像素数偏移变换网格：
 
-![Pan](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-1.png)
+![Pan](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-1.png)
 
 ### Tilt
 
 垂直方向（-720, +720）通过给定像素数偏移变换网格：
 
-![Tilt](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-2.png)
+![Tilt](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-2.png)
 
 ### Zoom
 
 按给定因子（0, +∞）缩放变换输出：
 
-![Zoom](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-3.png)
+![Zoom](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-3.png)
 
 ## Affine
 
@@ -101,7 +101,7 @@ GDC Tool 提供六种变换模式：Affine、Equisolid、Equisolid(cylinder)、E
 
 提供线性变换。
 
-![Affine](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-4.png)
+![Affine](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-4.png)
 
 ### 【成员说明】
 
@@ -114,7 +114,7 @@ GDC Tool 提供六种变换模式：Affine、Equisolid、Equisolid(cylinder)、E
 
 :::caution 注意
 - 输入输出尺寸的宽应保持 16 像素对齐。
-- zoom 参数在旋转角度为180或270时，需>=1.03
+- zoom 参数在旋转角度为 180 或 270 时，需>=1.03
 :::
 
 ## Equisolid
@@ -123,7 +123,7 @@ GDC Tool 提供六种变换模式：Affine、Equisolid、Equisolid(cylinder)、E
 
 此转换提供等实体（全景 panoramic）校正，并将结果显示为平面上的投影。
 
-![Equisolid](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-5.png)
+![Equisolid](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-5.png)
 
 ### 【成员说明】
 
@@ -142,15 +142,15 @@ GDC Tool 提供六种变换模式：Affine、Equisolid、Equisolid(cylinder)、E
 
 strength x 调试效果（X 轴变换强度，取值 0~+∞）：
 
-![strength x](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-6.png)
+![strength x](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-6.png)
 
 strength y 调试效果（Y 轴变换强度，取值 0~+∞）：
 
-![strength y](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-7.png)
+![strength y](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-7.png)
 
-Rotation 调试效果（取值 -180~180）：
+Rotation 调试效果（取值 -180 至 180）：
 
-![Rotation](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-8.png)
+![Rotation](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-8.png)
 
 ## Equisolid(cylinder)
 
@@ -158,7 +158,7 @@ Rotation 调试效果（取值 -180~180）：
 
 此变换为将结果图像投影到柱面全景图的完整鱼眼帧提供等实体校正。
 
-![Equisolid cylinder](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-9.png)
+![Equisolid cylinder](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-9.png)
 
 ### 【成员说明】
 
@@ -176,11 +176,11 @@ Rotation 调试效果（取值 -180~180）：
 
 strength 调试效果（变换强度，0~+∞）：
 
-![strength](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-10.png)
+![strength](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-10.png)
 
 rotation 调试效果（-180~+180）：
 
-![rotation](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-11.png)
+![rotation](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-11.png)
 
 ## Equidistant
 
@@ -188,7 +188,7 @@ rotation 调试效果（-180~+180）：
 
 等距变换包含许多参数，允许为投影提供一系列不同的目标平面，使用户可以更自由地选择要变换的鱼眼帧所需区域。
 
-![Equidistant](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-12.png)
+![Equidistant](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-12.png)
 
 ### 【成员说明】
 
@@ -198,13 +198,13 @@ rotation 调试效果（-180~+180）：
 | int32_t tilt | 垂直方向给定像素数偏移变换网格 |
 | zoom | 按给定因子缩放变换输出 |
 | double angle (rotation) | 图像旋转角度 |
-| double elevation | 投影轴仰角，范围 0~90 |
+| double elevation | 投影轴仰角，范围 0-90 |
 | double azimuth | 投影轴方位角；elevation 为 0 时方位角无可见效果 |
 | int32_t keep_ratio | 打开时 FOV 高度参数被忽略，自动计算以保持水平/垂直相同拉伸强度 |
-| double FOV_h | 水平方向输出视场大小（度），有效值 0~180 |
-| double FOV_w | 垂直方向输出视场大小（度），有效值 0~180 |
-| double cylindricity_y | 目标投影沿 Y 轴球面度，0~1，1 为球形；为 1 且 cylindricity_x 为 0 时投影沿 Y 轴形成圆柱体 |
-| double cylindricity_x | 目标投影沿 X 轴球面度，0~1，1 为球形；为 1 且 cylindricity_y 为 0 时投影沿 X 轴形成圆柱体 |
+| double FOV_h | 水平方向输出视场大小（度），有效值 0-180 |
+| double FOV_w | 垂直方向输出视场大小（度），有效值 0-180 |
+| double cylindricity_y | 目标投影沿 Y 轴球面度，0-1，1 为球形；为 1 且 cylindricity_x 为 0 时投影沿 Y 轴形成圆柱体 |
+| double cylindricity_x | 目标投影沿 X 轴球面度，0-1，1 为球形；为 1 且 cylindricity_y 为 0 时投影沿 X 轴形成圆柱体 |
 
 :::caution 注意
 - 输入输出尺寸的宽应保持 16 像素对齐。
@@ -214,23 +214,23 @@ rotation 调试效果（-180~+180）：
 
 elevation 调试效果：
 
-![elevation](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-13.png)
+![elevation](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-13.png)
 
 azimuth 调试效果：
 
-![azimuth](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-14.png)
+![azimuth](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-14.png)
 
 rotation 调试效果：
 
-![rotation](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-15.png)
+![rotation](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-15.png)
 
-cylindricity x 调试效果（目标投影沿 X 轴球面度，0~1，1 为球形；为 1 且 cylindricity_y 为 0 时投影沿 X 轴形成圆柱）：
+cylindricity x 调试效果（目标投影沿 X 轴球面度，0-1，1 为球形；为 1 且 cylindricity_y 为 0 时投影沿 X 轴形成圆柱）：
 
-![cylindricity x](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-16.png)
+![cylindricity x](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-16.png)
 
-cylindricity y 调试效果（目标投影沿 Y 轴球面度，0~1，1 为球形；为 1 且 cylindricity_x 为 0 时投影沿 Y 轴形成圆柱体）：
+cylindricity y 调试效果（目标投影沿 Y 轴球面度，0-1，1 为球形；为 1 且 cylindricity_x 为 0 时投影沿 Y 轴形成圆柱体）：
 
-![cylindricity y](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-17.png)
+![cylindricity y](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-17.png)
 
 ## Custom
 
@@ -238,11 +238,11 @@ cylindricity y 调试效果（目标投影沿 Y 轴球面度，0~1，1 为球形
 
 采用 custom 变换后，输入图像中的每个多边形都会变换为正方形。任何形状的四个邻近输入点在转换后都是正方形，但多边形的形状和位置在变换后会发生变化。
 
-![Custom](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-18.png)
+![Custom](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-18.png)
 
 custom 变换用于创建任何内置转换都无法描述的转换。为纠正任意失真，必须向 GDC 工具提供一个特殊的校准文件 config0.txt。如下图
 
-![Custom 校准文件](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-19.png)
+![Custom 校准文件](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-19.png)
 
 ### 【成员说明】
 
@@ -262,21 +262,21 @@ custom 变换用于创建任何内置转换都无法描述的转换。为纠正�
 2. 第二行是使能 full tile 时要跳过的像素数量；需大于 0，数字越小 libgdc 的性能越慢（性能越慢是指 config.bin 的大小更大， libgdc 生成 config.bin 的时间更长）。
 3. 第三行是垂直和水平方向采样点个数，第一个值 Y 为垂直方向采样点数，第二个值 X 为水平方向采样点数。
 4. 第四行是选中区域的中心点，通常为 (Y-1)/2、(X-1)/2。
-5. 标定点必须是大于等于0的 int 或 float 类型、相邻两行的标定点不能重复。 eg.下图是截取的其中的一部分数据图片，第五行到第九行就是标定点在源图的坐标值，格式是 Y: X。以下图为例，一共有1081x1921个标定点。
+5. 标定点必须是大于等于 0 的 int 或 float 类型、相邻两行的标定点不能重复。 eg.下图是截取的其中的一部分数据图片，第五行到第九行就是标定点在源图的坐标值，格式是 Y: X。以下图为例，一共有 1081x1921 个标定点。
 
 下图是截取的部分数据，第五行起为采样点在源图的坐标值，格式为 Y:X。一共有 Y×X 个采样点：
 
-![采样点数据](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-20.png)
+![采样点数据](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-20.png)
 
 6. 采样点必须是等距离的，这意味着输出图片的分辨率取决于采样点的点数。
 
-![采样点分辨率](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-21.png)
+![采样点分辨率](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-21.png)
 
 例如输出图片 Width = 100，Height 计算为 340，计算过程：100/height = (96-1)/(324-1)。
 
 下图是更简单的 3×3 坐标点转换示例：
 
-![3x3 坐标点](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-22.png)
+![3x3 坐标点](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-22.png)
 
 **降采样**
 
@@ -323,7 +323,7 @@ for (int i = row_start; i < row_end; i++) {
 
 ### 【功能描述】
 
-![Keystone+dewarping](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-23.png)
+![Keystone+dewarping](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-23.png)
 
 ### 【成员说明】
 
@@ -333,15 +333,15 @@ for (int i = row_start; i < row_end; i++) {
 | int32_t tilt | 垂直方向给定像素数偏移变换网格 |
 | zoom | 按给定因子缩放变换输出 |
 | double angle (rotation) | 图像旋转角度 |
-| double elevation | 投影轴仰角，范围 0~90 |
+| double elevation | 投影轴仰角，范围 0-90 |
 | double azimuth | 投影轴方位角；elevation 为 0 时无可见效果 |
 | int32_t keep_ratio | 打开时 FOV 高度参数被忽略，自动计算以保持水平/垂直相同拉伸强度 |
-| double FOV_h | 水平方向输出视场大小（度），有效值 0~180 |
-| double FOV_w | 垂直方向输出视场大小（度），有效值 0~180 |
-| double cylindricity_y | 目标投影沿 Y 轴球面度（0~1），1 为球形；为 1 且 cylindricity_x 为 0 时投影沿 Y 轴形成圆柱体 |
-| double cylindricity_x | 目标投影沿 X 轴球面度（0~1），1 为球形；为 1 且 cylindricity_y 为 0 时投影沿 X 轴形成圆柱体 |
-| double trapezoid_left_angle | 默认 90，范围 0.1~90；变换网格中左边边界相对底边边界的角度 |
-| double trapezoid_right_angle | 默认 90，范围 0.1~90；变换网格中右边边界相对底边边界的角度 |
+| double FOV_h | 水平方向输出视场大小（度），有效值 0-180 |
+| double FOV_w | 垂直方向输出视场大小（度），有效值 0-180 |
+| double cylindricity_y | 目标投影沿 Y 轴球面度（0-1），1 为球形；为 1 且 cylindricity_x 为 0 时投影沿 Y 轴形成圆柱体 |
+| double cylindricity_x | 目标投影沿 X 轴球面度（0-1），1 为球形；为 1 且 cylindricity_y 为 0 时投影沿 X 轴形成圆柱体 |
+| double trapezoid_left_angle | 默认 90，范围 0.1-90；变换网格中左边边界相对底边边界的角度 |
+| double trapezoid_right_angle | 默认 90，范围 0.1-90；变换网格中右边边界相对底边边界的角度 |
 
 ## 变换模式参数说明 {#变换模式参数说明}
 
@@ -488,11 +488,11 @@ for (int i = row_start; i < row_end; i++) {
 
 输入图片加变换网格：
 
-![Affine 输入+网格](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-24.png)
+![Affine 输入+网格](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-24.png)
 
 输出图片：
 
-![Affine 输出](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-25.png)
+![Affine 输出](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-25.png)
 
 ### Equisolid
 
@@ -520,11 +520,11 @@ for (int i = row_start; i < row_end; i++) {
 
 输入图片加变换网格：
 
-![Equisolid 输入+网格](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-26.png)
+![Equisolid 输入+网格](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-26.png)
 
 输出图片：
 
-![Equisolid 输出](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-27.png)
+![Equisolid 输出](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-27.png)
 
 ### Equisolid(cylinder)
 
@@ -552,11 +552,11 @@ for (int i = row_start; i < row_end; i++) {
 
 输入图片加变换网格：
 
-![Equisolid cylinder 输入+网格](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-28.png)
+![Equisolid cylinder 输入+网格](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-28.png)
 
 输出图片：
 
-![Equisolid cylinder 输出](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-29.png)
+![Equisolid cylinder 输出](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-29.png)
 
 ### Equidistant
 
@@ -588,11 +588,11 @@ for (int i = row_start; i < row_end; i++) {
 
 输入图片加变换网格：
 
-![Equidistant 输入+网格](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-30.png)
+![Equidistant 输入+网格](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-30.png)
 
 输出图片：
 
-![Equidistant 输出](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-31.png)
+![Equidistant 输出](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-31.png)
 
 ### Custom
 
@@ -620,11 +620,11 @@ for (int i = row_start; i < row_end; i++) {
 
 输入图片加变换网格：
 
-![Custom 输入+网格](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-32.png)
+![Custom 输入+网格](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-32.png)
 
 输出图片：
 
-![Custom 输出](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-33.png)
+![Custom 输出](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-33.png)
 
 ### Keystone+dewarping
 
@@ -657,8 +657,8 @@ for (int i = row_start; i < row_end; i++) {
 
 输入图片加变换网格：
 
-![Keystone 输入+网格](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-34.png)
+![Keystone 输入+网格](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-34.png)
 
 输出图片：
 
-![Keystone 输出](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-35.png)
+![Keystone 输出](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_tool/3-35.png)

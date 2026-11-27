@@ -37,20 +37,20 @@ MCU 侧的 IPC 由 MCAL 的 `Ipc` 模块实现，基于共享内存与邮箱中�
 
 | 配置项 | 默认值 | 说明 |
 |---|---|---|
-| User 可用 Instance | `Ipc_ShmCfgInstances0~10`、`Ipc_ShmCfgInstances15` | 供用户自定义使用的公共实例；S600 没有实例 11~14 |
+| User 可用 Instance | `Ipc_ShmCfgInstances0~10`、`Ipc_ShmCfgInstances15` | 供用户自定义使用的公共实例；S600 没有实例 11-14 |
 | IPC 发送通道 | 2 个 | MDMA 发送通道数，见 [使用限制说明](#使用限制说明) |
 
 </DocScope>
 
 ## 使用限制说明
 
-1. 在使用 Ipc_MDMA_SendMsg 接口发送数据时, 需要保证数据 buffer 地址16字节对齐。
+1. 在使用 Ipc_MDMA_SendMsg 接口发送数据时, 需要保证数据 buffer 地址 16 字节对齐。
 2. 发送功能通过轮询方式查看 dma 状态，因此使用发送功能前必须关闭 DMA 中断(释放的代码默认已关闭)；使用接收功能时，DMA 中断和 IPC 中断配置成相同的优先级，避免相互打断。
 3. Ipc Mdma 发送通道只有两个，单核或多核多任务发送时，建议使用自旋锁或者关中断方式控制 DMA 资源抢占。
 4. IPC 多核发送或接收基于 Instance 分配，不支持基于 Channel 分配。
 5. IPC 初始化需要在 DMA 模块初始化后再调用。
 6. MCU IPC 配置需要核对端 IPC 配置保持一致。包括 Instance 控制段与 data 段地址，Channel 的数量与 ID，Buffer 数据，Buffer 大小，两端配置不一致会导致 IPC 通信失败。
-7. Instance cfg 中的 receive_coreid 配置，需要明确该 Instance 是工作在 MCU0还是 MCU1，工作在 MCU1即配置为 Ipc_Receive_Core1，该项配置错误会导致 IPC 通信失败。
+7. Instance cfg 中的 receive_coreid 配置，需要明确该 Instance 是工作在 MCU0 还是 MCU1，工作在 MCU1 即配置为 Ipc_Receive_Core1，该项配置错误会导致 IPC 通信失败。
 8. Instance 工作在哪个 MCU 上，IPC 中断即在哪个 MCU 上进行使能。如果在多核上都使能，可能出现中断被其他核抢占导致 IPC 通信失败。
 
 ## IPC 配置相关
@@ -203,7 +203,7 @@ S600 的实例 0 与实例 4 在 MCU0 侧 `UseMDMA` 为 `TRUE`、`receive_coreid
 | Housekeeping | Housekeeping | — | `MCU_IPC2` | `ISR(Ipc2_Ch3Isr): Housekeeping_IrqHandler()` | Core0 / Core0 | Acore Housekeeping |
 
 :::note
-- S600 的公共实例只有 `0~10` 与 `15`，没有实例 11~14。
+- S600 的公共实例只有 `0~10` 与 `15`，没有实例 11-14。
 - 实例 7 在 S600 MCU0 侧的 `RecvIrqUsed` 为 `FALSE`（`gen_s600_md/Ipc/src/Ipc_Cfg.c`），即 MCU0 侧不通过 `Ipc0_Ch7Isr` 接收，只能使用轮询方式；MCU1 侧该值为 `TRUE`。
 - S600 的 MCU0 与 MCU1 公共实例集合完全相同，只有实例 0/4 的 `UseMDMA` 与 `receive_coreid`、实例 7 的 `RecvIrqUsed` 与 `receive_coreid`、实例 10 的 `receive_coreid` 不同。
 - S600 的私有实例 `Priv0`、`Priv1`、`Priv2`、`Priv4`、`Priv5` 使用 `UseMDMA = FALSE`，`Priv3` 使用 `UseMDMA = TRUE`。
@@ -257,7 +257,7 @@ IpcBox 基于 MCU 侧的 IPC 通信框架增加的应用扩展，用于管理外
 
 
 :::tip
-配套的 Acore 侧应用见[IPC模块介绍](../03_system_software/12_driver_ipc.md#IPC_APP) 章节。
+配套的 Acore 侧应用见 [IPC 模块介绍](../03_system_software/12_driver_ipc.md#IPC_APP) 章节。
 
 <DocScope products="RDK S100">
 
@@ -276,17 +276,17 @@ IpcBox 在版本 `RDKS100的V4.0.4-Beta` -> `RDKS100的V4.0.5-Beta` 升级过程
 | RunCmd | 已实现 | — |
 | SPI | 已实现 | — |
 | I2C | 已实现 | — |
-| Uart | 已实现 | S100 固定使用 Uart5 |
+| UART | 已实现 | S100 固定使用 Uart5 |
 
 <DocScope products="RDK S600">
 
-其中 S600 的 IpcBox Uart 使用 `UART_IPCBOX_HW_CHANNEL`，其定义为 `UART11_HW_CHANNEL`（`Config/McalCdd/gen_s600_md_mcu1/Uart/inc/Uart_Board.h`），即 S600 固定使用 Uart11。
+其中 S600 的 IpcBox UART 使用 `UART_IPCBOX_HW_CHANNEL`，其定义为 `UART11_HW_CHANNEL`（`Config/McalCdd/gen_s600_md_mcu1/Uart/inc/Uart_Board.h`），即 S600 固定使用 Uart11。
 
 </DocScope>
 
 **协议包解析**
 
-在一般情况下，一共占128字节，可以根据末尾数据域2扩展数据包长度，建议保持128字节，这样在为数据包申请64bytes 对齐的内存时，data[]数组仍为64bytes 对齐。
+在一般情况下，一共占 128 字节，可以根据末尾数据域 2 扩展数据包长度，建议保持 128 字节，这样在为数据包申请 64bytes 对齐的内存时，data[]数组仍为 64bytes 对齐。
 
 ```c
 typedef struct {
@@ -305,7 +305,7 @@ typedef struct {
 IpcBox 的 runcmd 命令通道默认启用；uart/spi/i2c 外设透传因会占用外设资源默认关闭，需要使用时按以下方式打开。
 打开方式有以下两种：
 
-1. 通过修改 MCU SDK 中的数组配置,找到对应的外设，将`DISABLE`改为`ENABLE`
+1. 通过修改 MCU SDK 中的数组配置,找到对应的外设，将 `DISABLE` 改为 `ENABLE`
 
     ```c
     // Service/HouseKeeping/ipc_box/src/ipc_box.c
@@ -414,7 +414,7 @@ Usage: loglevel <level|subcommand>
 | `show` | 查看当前日志等级 |
 | `help` | 打印帮助信息 |
 
-输入`ipcbox_loglevel 0`后打印最少，输入`ipcbox_loglevel 4`后打印最多
+输入 `ipcbox_loglevel 0` 后打印最少，输入 `ipcbox_loglevel 4` 后打印最多
 
 ```bash
 D-Robotics:/$ ipcbox_loglevel 0
@@ -437,41 +437,41 @@ D-Robotics:/$ ipcbox_loglevel 4
 根据 Acore 端传过来的命令，执行 MCU 侧的 CMD 应用，简称 RunCmd 应用。
 
 各个外设经过 IPC Box 进行数据转发大同小异，实现原理主要分为以下两个过程：
-1. `Acore->Ipc->MCU`过程
+1. `Acore->Ipc->MCU` 过程
     - Acore 向 MCU 发送数据时触发 mcu 的中断，在中断的 callback 中将数据存储到队列中
-2. `MCU->Ipc->Acore`过程
+2. `MCU->Ipc->Acore` 过程
     - MCU 存在一个常驻线程，持续读取队列，若队列不为空，则校验并解析数据，识别出 cmd 命令并运行
     - FreeRTOS 的 cmd 的应用类似于 U-Boot 的 cmd 的命令，通过此方式用户可以很方便的定制化自己的应用，在此场景中，运行的 cmd 将 adc 的值读出，再通过 ipc 返回给 Acore
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu-runcmd.jpg" alt="Acore与MCU之间透传Can数据架构图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-#### IpcBox Uart 的实现
+#### IpcBox UART 的实现
 与 Runcmd 的实现类似，在此场景中，MCU 向 Acore 发送数据时触发 MCU 的中断，但并不会使用队列存储
 
 实现原理主要分为以下两个过程：
-1. `Acore->Ipc->MCU`过程
-    - Acore 向 MCU 发送数据时触发 mcu 的中断，在中断解析数据，并通过 Uart 外设发出
-2. `MCU->Ipc->Acore`过程
-    - MCU 存在一个常驻线程，持续调用 Uart 外设接收数据，当存在数据时，将数据打包，转发到 Acore
+1. `Acore->Ipc->MCU` 过程
+    - Acore 向 MCU 发送数据时触发 mcu 的中断，在中断解析数据，并通过 UART 外设发出
+2. `MCU->Ipc->Acore` 过程
+    - MCU 存在一个常驻线程，持续调用 UART 外设接收数据，当存在数据时，将数据打包，转发到 Acore
 
-#### IpcBox I2c 的实现
+#### IpcBox I2C 的实现
 与 Runcmd 的实现类似，在此场景中，MCU 向 Acore 发送数据时触发 mcu 的中断，在中断的 callback 中将数据存储到队列中，然后通过 ipc 返回给 Acore
 实现原理主要分为以下两个过程：
-1. `Acore->Ipc->MCU`过程
+1. `Acore->Ipc->MCU` 过程
     - Acore 向 MCU 发送数据时触发 mcu 的中断，在中断的 callback 中将数据存储到队列中
-2. `MCU->Ipc->Acore`过程
+2. `MCU->Ipc->Acore` 过程
     - MCU 存在一个常驻线程，持续读取队列，若队列不为空，则校验并解析数据
     - 根据命令码实现 detect/get/set 操作。
-    - 由于 Slave 设备多样，例如地址宽度和操作步骤不同，所以 get/set 操作的实现不同，需要客户根据实际场景去实现`IpcBox_I2cGetValue`和`IpcBox_I2cSetValue`，这两个 API 位于`Service/HouseKeeping/ipc_box/src/ipc_i2c.c`
+    - 由于 Slave 设备多样，例如地址宽度和操作步骤不同，所以 get/set 操作的实现不同，需要客户根据实际场景去实现 `IpcBox_I2cGetValue` 和 `IpcBox_I2cSetValue`，这两个 API 位于 `Service/HouseKeeping/ipc_box/src/ipc_i2c.c`
 
-#### IpcBox Spi 的实现
+#### IpcBox SPI 的实现
 与 Runcmd 的实现类似，在此场景中，MCU 向 Acore 发送数据时触发 mcu 的中断，在中断的 callback 中将数据存储到队列中，然后通过 ipc 返回给 Acore
 实现原理主要分为以下两个过程：
-1. `Acore->Ipc->MCU`过程
+1. `Acore->Ipc->MCU` 过程
     - Acore 向 MCU 发送数据时触发 mcu 的中断，在中断的 callback 中将数据存储到队列中
-2. `MCU->Ipc->Acore`过程
+2. `MCU->Ipc->Acore` 过程
     - MCU 存在一个常驻线程，持续读取队列，若队列不为空，则校验并解析数据
-    - 根据命令码执行读写、只读、只写功能，由于 Spi 是全双工通信，所以只读其实是发送了等长度的无效数据，只写同理
+    - 根据命令码执行读写、只读、只写功能，由于 SPI 是全双工通信，所以只读其实是发送了等长度的无效数据，只写同理
 
 
 

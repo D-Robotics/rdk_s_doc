@@ -16,7 +16,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **前置条件**：已通过 SSH 或串口登录板端；非 root 用户查看内核日志需 `sudo`。
 
-**与其他模块关系**：日志占用空间的清理见[存储与磁盘管理](./12_storage.md)；开机自启动服务的配置见[开机自启动配置](./06_self_start.md)。
+**与其他模块关系**：日志占用空间的清理见 [存储与磁盘管理](./12_storage.md)；开机自启动服务的配置见 [开机自启动配置](./06_self_start.md)。
 
 ## 内核日志 dmesg
 

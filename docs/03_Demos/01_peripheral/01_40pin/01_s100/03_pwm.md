@@ -12,7 +12,7 @@ description: "RDK S100 40-pin LPWM 使用与测试例程"
 
 本示例通过板端脚本 `/app/40pin_samples/simple_pwm.py`，在 40-pin **硬件 LPWM** 引脚上输出方波，并以占空比自动扫变方式验证 PWM 功能。
 
-RDK S100 40-pin 扩展口仅 **物理管脚 `32`、`33`** 支持硬件 PWM（底层为 **LPWM1** 两路输出）；`Hobot.GPIO` **不提供**软件模拟 PWM。脚本默认在 **Pin 33**（`LPWM1_DOUT0`）上以 **48 kHz** 输出，占空比从 **25%** 起每 **0.25 s** 增减 **5%**，在 0%～100% 之间往复变化。可用示波器或逻辑分析仪在 Pin 33 对 GND 测量波形（终端不打印占空比数值）。
+RDK S100 40-pin 扩展口仅 **物理管脚 `32`、`33`** 支持硬件 PWM（底层为 **LPWM1** 两路输出）；`Hobot.GPIO` **不提供**软件模拟 PWM。脚本默认在 **Pin 33**（`LPWM1_DOUT0`）上以 **48 kHz** 输出，占空比从 **25%** 起每 **0.25 s** 增减 **5%**，在 0%-100% 之间往复变化。可用示波器或逻辑分析仪在 Pin 33 对 GND 测量波形（终端不打印占空比数值）。
 
 在板端运行测试程序示例：
 
@@ -22,7 +22,7 @@ PWM running. Press CTRL+C to exit.
 ```
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在板子上经过实际验证。
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在开发板上经过实际验证。
 :::
 
 ## 环境准备
@@ -100,11 +100,11 @@ root@ubuntu:/app/40pin_samples# python3 simple_pwm.py
 | 参数 | 说明 | 脚本默认值 |
 |------|------|------------|
 | `output_pin` | BOARD 物理管脚号，仅 `32` 或 `33` | `33` |
-| `GPIO.PWM(..., freq)` | 输出频率（Hz），底层按 1 µs 精度换算周期。可用频率范围参考：**123 Hz～2 MHz**（50% 占空比时） | `48000` |
+| `GPIO.PWM(..., freq)` | 输出频率（Hz），底层按 1 µs 精度换算周期。可用频率范围参考：**123 Hz-2 MHz**（50% 占空比时） | `48000` |
 | 初始占空比 `val` | `p.start(val)` 与首次 `ChangeDutyCycle` | `25`（%） |
 | 扫变步进 `incr` | 每 `0.25 s` 变化量 | `5`（%） |
 
-占空比在 0%～100% 之间往复变化的核心逻辑如下：
+占空比在 0%-100% 之间往复变化的核心逻辑如下：
 
 ```python
 p = GPIO.PWM(output_pin, 48000)
@@ -190,11 +190,11 @@ if __name__ == '__main__':
 ## 运行效果
 
 - **运行命令**：`python3 /app/40pin_samples/simple_pwm.py`
-- **成功标志**：终端出现 `PWM running. Press CTRL+C to exit.` 且无异常退出；在 Pin `33`（默认）可测得稳定方波，频率约 **48 kHz**（本板实测约 **47.6 kHz**，偏差约 1%，属正常）；占空比每 **0.25 s** 变化约 **5%**，首轮由 25% 升至 100% 再降至 0%，此后在约 5%～100% 间往复
+- **成功标志**：终端出现 `PWM running. Press CTRL+C to exit.` 且无异常退出；在 Pin `33`（默认）可测得稳定方波，频率约 **48 kHz**（本板实测约 **47.6 kHz**，偏差约 1%，属正常）；占空比每 **0.25 s** 变化约 **5%**，首轮由 25% 升至 100% 再降至 0%，此后在约 5%-100% 间往复
 - **失败排查**：提示 `Current hardware pin does not support PWM` → 非 40-pin 形态；无波形 → 检查 Pin `32`/`33` 是否被占用、探头是否接 GND、是否选对管脚；初始化失败 → 确认未使用其他不支持 PWM 的 BOARD 编号
 - **结果预览**：使用逻辑分析仪在 Pin 33 观测可见稳定方波（见下图）。本板单次采样约 **47.6 kHz**、占空比约 **33%**（脉宽约 7 µs、周期约 21 µs）；频率与设定 48 kHz 接近，单次截图中的占空比随脚本扫变而变化，不必与某一时刻的软件设定值逐点一致
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_40pin_user_sample/image/40pin_user_sample/image-rdk_100_funcreuse_40pin_pwd_logic_analyzer.png" alt="逻辑分析仪捕获的 Pin 33 PWM 方波" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/01_40pin_user_sample/image/40pin_user_sample/image-rdk_100_funcreuse_40pin_pwd_logic_analyzer.png" alt="逻辑分析仪捕获的 Pin 33 PWM 方波" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ```text
 root@ubuntu:/app/40pin_samples# python3 simple_pwm.py

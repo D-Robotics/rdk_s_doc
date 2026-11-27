@@ -13,7 +13,7 @@ description: "miniboot 升级"
 - 脚本：`/usr/bin/rdk-miniboot-update`（由 `hobot-miniboot` deb 包提供）
 - 升级包所在目录：`/usr/lib/firmware/rdk/miniboot/stable/<release|debug>/img_packages/`
 
-本方案采用**直接烧写（direct flash）**策略：
+本方案采用**直接烧录（direct flash）**策略：
 
 - **NOR** 走一张按 FPT（flash 分区表头）顺序预排好的整盘镜像，`dd` 一次性覆盖整片（一次调用更新所有 miniboot 相关 NOR 分区，包括 BAK 分区和 A/B 两个 slot）。
 - **eMMC / UFS** 上对若干 A/B 分区逐个 `dd`，只写**当前 slot**。
@@ -21,12 +21,12 @@ description: "miniboot 升级"
 ## 注意事项
 
 - **仅适用于非 OTA 镜像**：本流程面向非 OTA 镜像下的在线 miniboot 更新；OTA 镜像请走 [系统 OTA 升级](./06_ota_system.md) 完整流程。
-- **没有自动回滚**：流程不经过 `ota_tool` 的 "升级 → 校验 → 切 slot" 两段式状态机，直接通过 `dd` 烧写；任一步 `dd` 失败或中途掉电，已写坏的分区不会被还原，可能导致设备无法启动。
-- **OHP 阶段不可用**：设备出厂生命周期为 HIP；客户完成重加密并烧写 eFuse 后进入 OHP。此时官方 miniboot 不可直接写入（对客户产品的保护），只能走 factory 工具整片烧录。
+- **没有自动回滚**：流程不经过 `ota_tool` 的 "升级 → 校验 → 切 slot" 两段式状态机，直接通过 `dd` 烧录；任一步 `dd` 失败或中途掉电，已写坏的分区不会被还原，可能导致设备无法启动。
+- **OHP 阶段不可用**：设备出厂生命周期为 HIP；客户完成重加密并烧录 eFuse 后进入 OHP。此时官方 miniboot 不可直接写入（对客户产品的保护），只能走 factory 工具整片烧录。
 - **不升级 eMMC 其它 A/B 分区**：除 `acore_cfg` / `bl31` / `optee` / `uboot` 外的分区（如 RDK S600 的 `vbmeta`）不会被触碰。
 
 :::warning
-升级过程中**禁止**拔电源、断电、重启或对分区执行任何其它写入操作——`dd` 整片烧写被打断会直接导致变砖。
+升级过程中**禁止**拔电源、断电、重启或对分区执行任何其它写入操作——`dd` 整片烧录被打断会直接导致变砖。
 :::
 
 ## 工作原理
@@ -36,15 +36,15 @@ description: "miniboot 升级"
 1. **OHP 生命周期检查**：若设备已进入 `OHP` 阶段，在线升级被拒绝，必须用 factory 工具整片重烧。
 2. **读取当前 A/B slot**：通过 `ota_tool -g` 获取 A/B；eMMC 阶段按当前 slot 写入 `<part>_<slot>`。
 3. **选择 NOR 镜像**：内核 cmdline 含 `hobotboot.secureboot=1` 时使用 `miniboot_flash.img`（签名版），否则使用 `miniboot_flash_nose.img`。
-4. **NOR 整片烧写**：对 `/dev/block/platform/by-name/hb_vspiflash` 做一次 `dd`（`bs=2M`），一次性覆盖整片 NOR，22MB 约需 3.5 分钟。
-5. **eMMC / UFS 逐个烧写**：对 `acore_cfg_<slot>`、`bl31_<slot>`、`optee_<slot>`、`uboot_<slot>` 四个 A/B 分区分别 `dd`（`bs=4M`）。**只写当前 slot，不做跨 slot 同步**，也**不触碰其它 A/B 分区**（例如 RDK S600 的 `vbmeta`，本流程不升级；需要时请走系统 OTA 完整流程）。
+4. **NOR 整片烧录**：对 `/dev/block/platform/by-name/hb_vspiflash` 做一次 `dd`（`bs=2M`），一次性覆盖整片 NOR，22MB 约需 3.5 分钟。
+5. **eMMC / UFS 逐个烧录**：对 `acore_cfg_<slot>`、`bl31_<slot>`、`optee_<slot>`、`uboot_<slot>` 四个 A/B 分区分别 `dd`（`bs=4M`）。**只写当前 slot，不做跨 slot 同步**，也**不触碰其它 A/B 分区**（例如 RDK S600 的 `vbmeta`，本流程不升级；需要时请走系统 OTA 完整流程）。
 6. **可选重启**：按 `--reboot y|n` 或交互输入决定是否立即 `reboot`。**重启后新 miniboot 才会生效。**
 
 ## 使用方法
 
 ### 自动升级（apt 安装 `hobot-miniboot` 时触发）
 
-板端运行以下命令后，`hobot-miniboot` deb 包在安装/升级阶段会**自动调用** `rdk-miniboot-update` 完成 miniboot 烧写：
+板端运行以下命令后，`hobot-miniboot` deb 包在安装/升级阶段会**自动调用** `rdk-miniboot-update` 完成 miniboot 烧录：
 
 ```bash
 sudo apt update
@@ -100,7 +100,7 @@ Error: N step(s) failed to flash.
 
 ### 升级失败并提示 "N step(s) failed to flash"
 
-**原因**：某个分区的 `dd` 烧写失败（镜像不符、分区被占用或并发写入等）。
+**原因**：某个分区的 `dd` 烧录失败（镜像不符、分区被占用或并发写入等）。
 
 **解决**：执行 `dmesg | tail` 查看相关错误；确认升级过程中无其它写入操作后，重新执行 `rdk-miniboot-update`。
 

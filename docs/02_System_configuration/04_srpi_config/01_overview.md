@@ -16,18 +16,18 @@ import DocScope from '@site/src/components/DocScope';
 
 ## 简介
 
-`srpi-config` 是一个系统配置工具，要打开配置工具，请在命令行中键入以下命令：
+`srpi-config` 是一个系统配置工具，要打开配置工具，请输入以下命令：
 
-```
+```text
 sudo srpi-config
 ```
 
-> sudo 是提权管理命令，这里必须输入，这样就可以 root 权限来进行配置管理，默认的 sunrise 账号不具备系统文件修改权限。
+> sudo 是提权管理命令，必须输入，这样才以 root 权限进行配置管理；默认的 sunrise 账号不具备系统文件修改权限。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-home_s100.png" alt="简介示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
-如果您使用的是桌面系统，那么您可以在菜单中找到`RDK Configuration`应用来进行配置。同样会打开如上图一样的配置终端。背景颜色的不同与开启终端的环境变量`TERM`相关。
+如果您使用的是桌面系统，那么您可以在菜单中找到 `RDK Configuration` 应用来进行配置。同样会打开如上图一样的配置终端。背景颜色的不同与开启终端的环境变量 `TERM` 相关。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/desktop_rdk_configuration_s100.png" alt="简介示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -41,7 +41,7 @@ sudo srpi-config
 
 - **Wireless LAN**
 
-  设置无线网络的`SSID`和`密码`。
+  设置无线网络的 `SSID` 和 `密码`。
 
 - **Password**
 
@@ -60,9 +60,9 @@ sudo srpi-config
 
   如果使用桌面系统，可以设置默认的浏览器。不配置的情况下默认使用 `firefox`，用户可以通过命令 `sudo apt install chromium` 安装 `chromium` 浏览器。
 
-- **Update Miniboot**
+- **Update miniboot**
 
-  如果需要进行 Miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot 升级](../../07_Advanced_development/03_system_software/07_ota_miniboot.md)。
+  如果需要进行 miniboot 相关分区的升级可在此选项中进行操作，具体升级的原理以及升级涉及的分区请参考：[miniboot 升级](../../07_Advanced_development/03_system_software/07_ota_miniboot.md)。
 
 ## Interface Options
 
@@ -90,7 +90,7 @@ sudo srpi-config
 
 - **外设配置**
 
-  建议参考 [config.txt 配置指南](../05_config_txt/00_overview.md)进行外设的配置。
+  建议参考 [config.txt 配置指南](../05_config_txt/00_overview.md) 进行外设的配置。
 
 
 ## Performance Options
@@ -117,11 +117,11 @@ sudo srpi-config
 
 - **Locale**
 
-  选择一个语言环境，例如配置中文环境`zh_CN.UTF-8`，重启生效。
+  选择一个语言环境，例如配置中文环境 `zh_CN.UTF-8`，重启生效。
 
 - **Time Zone**
 
-  选择您当地的时区，从地区开始，例如亚洲，然后选择一个城市，例如上海。键入一个字母以将列表向下跳到字母表中的该点。
+  选择您当地的时区，从地区开始，例如亚洲，然后选择一个城市，例如上海。输入一个字母可将列表跳到该字母所在位置。
 
 - **Keyboard**
 
@@ -143,7 +143,7 @@ sudo srpi-config
 
 ## Update
 
-将`srpi-config`工具更新到最新版本。
+将 `srpi-config` 工具更新到最新版本。
 
 ## About srpi-config
 
@@ -157,20 +157,20 @@ sudo srpi-config
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/02_System_configuration/image/srpi-config/srpi-config-gui-finish_s100.png" alt="Finish 按钮示意图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-完成更改后选中 `Finish` 按钮。`srpi-config`提供的系统配置，依赖重启生效的选项将会询问您是否要重新启动，如果不重新启动，配置将无法正常生效，请用户根据使用情况决定重启时机。
+完成更改后单击 **Finish** 按钮。`srpi-config` 提供的系统配置，依赖重启生效的选项将会询问您是否要重新启动，如果不重新启动，配置将无法正常生效，请用户根据使用情况决定重启时机。
 
 ## 验证
 
 - 工具可打开：`sudo srpi-config` 能进入配置菜单即正常（桌面版可从菜单打开 `RDK Configuration`）。
-- 配置生效：改动后在 `Finish` 提示选择重启，重启后对应配置生效；如 `Expand Filesystem` 后 `df -h /` 空间变大、改 `Hostname` 后 `hostname` 输出新名。
+- 配置生效：改动后在 **Finish** 提示处选择重启，重启后对应配置生效；如 `Expand Filesystem` 后 `df -h /` 空间变大、改 `Hostname` 后 `hostname` 输出新名。
 
 ## 常见问题
 
 ### 修改后配置未生效
 
-**原因**：部分配置依赖重启，`Finish` 后未选择重启。
+**原因**：部分配置依赖重启，**Finish** 后未选择重启。
 
-**解决**：在 `Finish` 提示重启时选择重启，或手动 `reboot` 后再验证。
+**解决**：在 **Finish** 提示重启时选择重启，或手动 `reboot` 后再验证。
 
 ### 普通用户执行报权限错误
 

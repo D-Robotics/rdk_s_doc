@@ -449,7 +449,7 @@ GPIO ranges handled:
 0: 39500000.gpio GPIOS [474 - 479] PINS [34 - 39]
 ```
 
-`peri` 域的前 32 个引脚（引脚 2~33）对应 `peri_gpio0`，起始 `gpio-index` 为 480。
+`peri` 域的前 32 个引脚（引脚 2-33）对应 `peri_gpio0`，起始 `gpio-index` 为 480。
 
 </DocScope>
 <DocScope products="RDK S600">

@@ -51,7 +51,7 @@ import DocScope from '@site/src/components/DocScope';
 - MCU 侧时间同步服务默认关闭，由 `PRODUCT_IMAGE` 宏控制（默认 ptp→RTC 只同步一次，详见 [MCU 时间同步说明](#mcu-时间同步说明)）；
 - 全局时间基准默认使用 RTC 时间（`globaltime = <2>`，详见 [全局时间源配置](#全局时间源配置)）；
 - 网卡 PHC 在未运行 `ptp4l` 之前只是网卡内部的计数器，没有权威时间基准；
-- 默认已有 PPS 输出：MCU RTC PPS、MCU ETH PPS（周期 1 秒）；PPS0 / PPS1 默认配置为接收外部 GPS PPS 输入；PPS2 默认配置为输出（详见 [PPS 说明](#pps-说明)）。
+- 默认已有 PPS 输出：MCU RTC PPS、MCU ETH PPS（周期 1 秒）；PPS0 / PPS1 默认配置为接收外部 GPS PPS 输入；PPS2 默认配置为输出（详见 [PPS 说明](#PPS)）。
 
 如需开始时间同步，按 [快速上手](#快速上手) 的步骤配置即可。
 
@@ -129,17 +129,17 @@ flowchart LR
 
 ### 方案一：Acore 时间同步（时间源接入 Acore）
 
-#### 1. 硬件连接
+#### 硬件连接
 
 gPTP master（或 PC）通过网线连接开发板的 Acore 网卡（`eth0`）。
 
-#### 2. 关闭 Linux 自带时间同步服务
+#### 关闭 Linux 自带时间同步服务
 
 ```bash
 systemctl stop systemd-timesyncd
 ```
 
-#### 3. 配置 MCU 侧
+#### 配置 MCU 侧
 
 在 MCU 代码 `Service/TimeSync/src/Hobot_TimeSync.c` 中，把 RTC 的时间源设为 IPC（即从 Acore 经 IPC 获取时间），并打开 RTC 与 IPC 两个 TimeKeeper：
 
@@ -181,7 +181,7 @@ TimeSyncCtrl 6
 
 `TimeSyncCtrl 4 10` 指定 PPS 触发源为 MCU ETH PPS，`TimeSyncCtrl 6` 启动 PHC→RTC 时间同步（命令详解见 [MCU 时间同步说明](#mcu-时间同步说明)）。
 
-#### 4. 启动 Acore 侧时间同步
+#### 启动 Acore 侧时间同步
 
 ```bash
 export LOGLEVEL=15
@@ -197,7 +197,7 @@ cd /app/timesync_demo/sample_timesync
 - `-P 4`：Acore 侧监听哪个 PPS 源。`4` 对应 `mcu_eth_sync`（即 MCU ETH PPS，与 MCU 侧 `TimeSyncCtrl 4 10` 配置的源一致）；
 - `-r`：把 Acore 网卡时间同步给 MCU RTC。
 
-#### 5. 确认同步成功
+#### 确认同步成功
 
 - Acore 侧 log 出现 `timesync ipc send data succeed`，表示网卡时间戳已成功发给 MCU；
 - MCU 侧 log 出现 `Get Time From Acore success`，表示 MCU 从 Acore 拿时间成功。
@@ -206,12 +206,12 @@ cd /app/timesync_demo/sample_timesync
 
 ### 方案二：MCU 时间同步（GPS 时间源接入 MCU）
 
-#### 1. 硬件连接
+#### 硬件连接
 
 - GPS 模块的 **UART**（NMEA 报文，含 UTC 时间）接开发板 MCU 侧 UART：S100 为 UART6、S600 为 UART10，波特率 921600、8N1；
 - GPS 模块的 **PPS**（秒脉冲）接开发板 MCU 侧 PPS1 pad（默认；也可接 PPS0 / PPS2，需同步改 `TimeSync_PPS_Index`）。
 
-#### 2. 配置 MCU 侧
+#### 配置 MCU 侧
 
 在 MCU 代码 `Service/TimeSync/src/Hobot_TimeSync.c` 中，把 RTC 的时间源设为 GPS，打开 RTC 与 GPS 两个 TimeKeeper，并把 PPS 触发源设为 GPS PPS 接入的 pad：
 
@@ -245,11 +245,11 @@ S600 的 `ConfigSource[]` / `EnableTimeKeeper[]` 需在上述基础上多加一�
 
 使用外部 GPS PPS（PPS0 / PPS1 / PPS2）时，还需在 `*/target/FreeRtosOsHal/Isr_Hal.c` 中使能对应 PPS 的中断，见 [TimeSyncCtrl 命令](#timesyncctrl-命令)。
 
-#### 3. 启动时间同步服务
+#### 启动时间同步服务
 
 GPS 方案**不使用 `TimeSyncCtrl 6`**（该命令强制把 RTC 时间源切回 IPC，仅适用于方案一）。刷写启动后，MCU 侧时间同步服务通过 [上电自启动](#上电自启动) 中的 `Timesync_Init()` 自动运行（免手动命令）；也可运行时执行 `TimeSyncCtrl 4 3` 重新指定 PPS 触发源为 PPS1 并重新初始化时间同步。
 
-#### 4. 确认同步成功
+#### 确认同步成功
 
 - MCU 侧 log 出现 `GPS time:`（`TimeKeeperGPS` 解析出的 GPS 时间值），表示 GPS 时间读取成功；
 - 打开 `Enable_HobotTimesync_Debug`（= `TRUE`）后，MCU 侧 log 出现 `TimeKeeperRTC and TimeKeeperGPS Success.`，表示 MCU RTC 已对齐到 GPS 时间；
@@ -519,36 +519,36 @@ LPWM：LPWM 可以接受 PPS 源输入，并通过 PPS 产生对应的 LPWM 波�
 
 PPS source 有多个源可选，其中常用的源有以下几个，其它是 reserve 的：
 
-编号0：MCU RTC PPS，是 MCU 侧 RTC 输出的 PPS，当前软件版本默认已有输出，周期1秒1次；
+编号 0：MCU RTC PPS，是 MCU 侧 RTC 输出的 PPS，当前软件版本默认已有输出，周期 1 秒 1 次；
 
-编号2：PPS0，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
+编号 2：PPS0，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
 
-编号3：PPS1，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
+编号 3：PPS1，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
 
-编号4：PPS2，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部，也可以用于将内部的 PPS 输出到外部；
+编号 4：PPS2，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部，也可以用于将内部的 PPS 输出到外部；
 
-编号8：Acore Eth0 PPS， 是 Acore Eth0 产生的 PPS，可以设置灵活的时间周期，比如1秒1次，400毫秒1次等；
+编号 8：Acore Eth0 PPS， 是 Acore Eth0 产生的 PPS，可以设置灵活的时间周期，比如 1 秒 1 次，400 毫秒 1 次等；
 
-编号9：Acore Eth1 PPS， 是 Acore Eth1 产生的 PPS；可以设置灵活的时间周期，比如1秒1次，400毫秒1次等；
+编号 9：Acore Eth1 PPS， 是 Acore Eth1 产生的 PPS；可以设置灵活的时间周期，比如 1 秒 1 次，400 毫秒 1 次等；
 
-编号10：MCU Eth PPS，是 MCU 侧 Eth 输出的 PPS，当前软件版本默认已有输出，周期1秒1次;
+编号 10：MCU Eth PPS，是 MCU 侧 Eth 输出的 PPS，当前软件版本默认已有输出，周期 1 秒 1 次;
 
 </DocScope>
 <DocScope products="RDK S600">
 
 PPS source 有多个源可选，其中常用的源有以下几个，其它是 reserve 的：
 
-编号0：MCU RTC PPS，是 MCU 侧 RTC 输出的 PPS，当前软件版本默认已有输出，周期1秒1次；
+编号 0：MCU RTC PPS，是 MCU 侧 RTC 输出的 PPS，当前软件版本默认已有输出，周期 1 秒 1 次；
 
-编号2：PPS0，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
+编号 2：PPS0，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
 
-编号3：PPS1，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
+编号 3：PPS1，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部；
 
-编号4：PPS2，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部，也可以用于将内部的 PPS 输出到外部；
+编号 4：PPS2，PPS 的 pad，可用于 GPS PPS 等外部 PPS 源输入到芯片内部，也可以用于将内部的 PPS 输出到外部；
 
-编号8：Acore gmac PPS， 是 Acore gmac（千兆网卡）产生的 PPS，可以设置灵活源为 gmac0、 gmac1 或 gmac2，周期1秒1次。
+编号 8：Acore gmac PPS， 是 Acore gmac（千兆网卡）产生的 PPS，可以设置灵活源为 gmac0、 gmac1 或 gmac2，周期 1 秒 1 次。
 
-编号9：Acore xgmac PPS， 是 Acore xgmac（万兆网卡）产生的 PPS；可以设置灵活源为 xgmac0、 xgmac1 或 xgmac2，周期1秒1次。
+编号 9：Acore xgmac PPS， 是 Acore xgmac（万兆网卡）产生的 PPS；可以设置灵活源为 xgmac0、 xgmac1 或 xgmac2，周期 1 秒 1 次。
 
 </DocScope>
 
@@ -574,7 +574,7 @@ PPS source 有多个源可选，其中常用的源有以下几个，其它是 re
 -    {(uint8)2, "PPS_OUT", (boolean)TRUE, {(boolean)TRUE, (boolean)FALSE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, GPIO, PORT_PIN_CONFIG_TYPE0, PORT_PULL_NONE, PORT_DRIVE_DEFAULT, PORT_PIN_DIR_OUT, PORT_PIN_LEVEL_HIGH}},
 +    {(uint8)2, "PPS_OUT", (boolean)TRUE, {(boolean)TRUE, (boolean)FALSE, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE, PPS_OUT, PORT_PIN_CONFIG_TYPE0, PORT_PULL_NONE, PORT_DRIVE_DEFAULT, PORT_PIN_DIR_OUT, PORT_PIN_LEVEL_HIGH}},
 ```
-以上通过修改`McalCdd/gen_s100_sip_B/Port/src/Port_PBcfg.c`实现，修改完成后更新 MCU 固件即可。
+以上通过修改 `McalCdd/gen_s100_sip_B/Port/src/Port_PBcfg.c` 实现，修改完成后更新 MCU 固件即可。
 </DocScope>
 <DocScope products="RDK S600">
 1. 修改 Port 配置的默认 pps_source 为 ETH PPS
@@ -588,7 +588,7 @@ PPS source 有多个源可选，其中常用的源有以下几个，其它是 re
 ```
 2. S600 上 PIN 脚默认功能即为 PPS OUT FUNC，因此不需要修改。
 
-以上通过修改`McalCdd/gen_s600_md/Port/src/Port_PBcfg.c`实现，修改完成后更新 MCU 固件即可。
+以上通过修改 `McalCdd/gen_s600_md/Port/src/Port_PBcfg.c` 实现，修改完成后更新 MCU 固件即可。
 </DocScope>
 
 ### Acore Eth PPS 介绍{#Acore\_Eth\_PPS}
@@ -596,15 +596,15 @@ PPS source 有多个源可选，其中常用的源有以下几个，其它是 re
 <DocScope products="RDK S100">
 Acore Eth PPS 有两种输出方法，flex mode 和 fix mode 两种。上电默认是 fix mode。可以通过下文中 ethtool 命令设置为 flex mode。若要重置为 fix mode，可以通过重启网卡或者重启系统完成恢复。
 
-flex mode: 灵活的 pps 模式，它的开始/结束时间、周期、占空比均可以灵活配置，其上升沿是整秒时刻，PPS 输出不会随着 PHC 时间的变化而变化；当前软件版本下，其占空比是百分之一，周期可以根据下方配置方法灵活配置，常用的有1s，400ms。
+flex mode: 灵活的 pps 模式，它的开始/结束时间、周期、占空比均可以灵活配置，其上升沿是整秒时刻，PPS 输出不会随着 PHC 时间的变化而变化；当前软件版本下，其占空比是百分之一，周期可以根据下方配置方法灵活配置，常用的有 1s，400ms。
 
-fixed mode: 固定的 pps 模式，它的周期固定，且占空比也固定为46.3129%。PPS 输出会随着 PHC 时间的变化而变化。当前软件版本下，其支持1s 周期，波形的整秒时刻是下降沿，经过536.871ms 的低电平后，再输出463.129ms 的高电平。
+fixed mode: 固定的 pps 模式，它的周期固定，且占空比也固定为 46.3129%。PPS 输出会随着 PHC 时间的变化而变化。当前软件版本下，其支持 1s 周期，波形的整秒时刻是下降沿，经过 536.871ms 的低电平后，再输出 463.129ms 的高电平。
 
 整秒输出需求配置方法：
 
 若在 flex mode 下有整秒时刻输出 PPS 的需求，需要在 gptp 时间同步完成后，再配置 PPS 输出；
 
-若在 fixed mode 下有整秒时刻输出 PPS 的需求，需要注意 ETH 的整秒时刻在下降沿出现，而 LPWM 被 ETH 上升沿同步。因此需要参考下图，调整 LPWM 的 offset。以 camera 一秒30帧举例，PPS 上升沿在536.871ms，下降沿在1s 整秒处，要求在整秒位置出图的话，offset=463.129对33.333取余数=29.8ms。
+若在 fixed mode 下有整秒时刻输出 PPS 的需求，需要注意 ETH 的整秒时刻在下降沿出现，而 LPWM 被 ETH 上升沿同步。因此需要参考下图，调整 LPWM 的 offset。以 camera 一秒 30 帧举例，PPS 上升沿在 536.871ms，下降沿在 1s 整秒处，要求在整秒位置出图的话，offset=463.129 对 33.333 取余数=29.8ms。
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/image44.png" alt="Acore Eth PPS 介绍实物图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
@@ -613,29 +613,29 @@ fixed mode: 固定的 pps 模式，它的周期固定，且占空比也固定为
 
 Acore Eth PPS 有两种输出方法，flex mode 和 fix mode 两种。上电默认是 fix mode。可以通过下文中 ethtool 命令设置为 flex mode。若要重置为 fix mode，可以通过重启网卡或者重启系统完成恢复。
 
-flex mode: 灵活的 pps 模式，它的开始/结束时间、周期、占空比均可以灵活配置，其上升沿是整秒时刻，PPS 输出不会随着 PHC 时间的变化而变化；当前软件版本下，其占空比是百分之一，周期可以根据下方配置方法灵活配置，常用的有1s，400ms。
+flex mode: 灵活的 pps 模式，它的开始/结束时间、周期、占空比均可以灵活配置，其上升沿是整秒时刻，PPS 输出不会随着 PHC 时间的变化而变化；当前软件版本下，其占空比是百分之一，周期可以根据下方配置方法灵活配置，常用的有 1s，400ms。
 
-fixed mode: 固定的 pps 模式，它的周期固定，**S600 加入极性反转**，因此占空比固定为53.6871%。PPS 输出会随着 PHC 时间的变化而变化。当前软件版本下，其支持1s 周期，波形的整秒时刻是上升沿，经过536.871ms 的高电平后，再输出463.129ms 的低电平。
+fixed mode: 固定的 pps 模式，它的周期固定，**S600 加入极性反转**，因此占空比固定为 53.6871%。PPS 输出会随着 PHC 时间的变化而变化。当前软件版本下，其支持 1s 周期，波形的整秒时刻是上升沿，经过 536.871ms 的高电平后，再输出 463.129ms 的低电平。
 
 整秒输出需求配置方法：
 
 若在 flex mode 下有整秒时刻输出 PPS 的需求，需要在 gptp 时间同步完成后，再配置 PPS 输出；
 
 :::warning
-S600 平台具备多个网卡资源。底板对外引出的网卡接口规格为1xGMAC/3xXGMAC，但当前硬件实际支持3xGMAC。目前系统使用的网卡为基地址 0x33110000 的 GMAC；而上电默认 fix mode 输出的 PPS 信号由基地址 0x330f0000 的 GMAC 输出（该 GMAC 已复用于其他功能）。
+S600 平台具备多个网卡资源。底板对外引出的网卡接口规格为 1xGMAC/3xXGMAC，但当前硬件实际支持 3xGMAC。目前系统使用的网卡为基地址 0x33110000 的 GMAC；而上电默认 fix mode 输出的 PPS 信号由基地址 0x330f0000 的 GMAC 输出（该 GMAC 已复用于其他功能）。
 
 当业务需要由当前使用的 GMAC 输出 PPS 信号时，请执行以下命令进行配置：
 
 1. timesync_sample 示例代码中新增 timesyncClockGeneratePPS 接口调用，用于根据用户选择的网卡配置产生 ETH PPS 的信号源
 
 2. 不需要启动 timesync_sample 时，用户可执行以下命令进行配置：
-``ts2phc -c /dev/ptp[x] -s eth[y] generic --ts2phc.channel 0``
+`ts2phc -c /dev/ptp[x] -s eth[y] generic --ts2phc.channel 0`
 
 参数说明如下：
 
 eth[y]：根据 ifconfig 输出，确定目标网卡对应的接口编号。
 
-/dev/ptp[x]：根据``ethtool -T eth[y]``输出中的 PTP Hardware Clock: *，选择对应的 PTP 设备编号。
+/dev/ptp[x]：根据 `ethtool -T eth[y]` 输出中的 PTP Hardware Clock: *，选择对应的 PTP 设备编号。
 
 **完成网卡与 PTP 设备的对应关系确认**，再执行 ts2phc，以避免将 PPS 配置到错误的网卡实例。
 
@@ -650,11 +650,11 @@ eth[y]：根据 ifconfig 输出，确定目标网卡对应的接口编号。
 
 Acore Eth PPS 的输出，可以借助 ethtool 工具，命令格式如下 :
 
-配置 Eth0 的 PPS 输出1秒的周期：ethtool hobot\_gmac \--set-flex-pps eth0 index 0 fpps on interval 1000000000;
+配置 Eth0 的 PPS 输出 1 秒的周期：ethtool hobot\_gmac \--set-flex-pps eth0 index 0 fpps on interval 1000000000;
 
-配置 Eth1 的 PPS 输出1秒的周期：ethtool hobot\_gmac \--set-flex-pps eth1 index 0 fpps on interval 1000000000;
+配置 Eth1 的 PPS 输出 1 秒的周期：ethtool hobot\_gmac \--set-flex-pps eth1 index 0 fpps on interval 1000000000;
 
-如果需要修改输出周期的话，修改最后一个参数\<1000000000\>，该参数的单位是 ns，如果要修改为400ms 的话，则改为\<400000000\>。
+如果需要修改输出周期的话，修改最后一个参数\<1000000000\>，该参数的单位是 ns，如果要修改为 400ms 的话，则改为\<400000000\>。
 
 </DocScope>
 <DocScope products="RDK S600">
@@ -666,9 +666,9 @@ ethtool hobot_gmac --set-flex-pps ethX index 0 fpps on interval 1000000000;
 ```
 需要注意的是 ethX 是和硬件 IP 实例对应的，与 ifconfig 命令看到的 ethX 并不一定完全对应，对应关系取决于 dts 对于网卡的配置。
 
-用户可根据``ethtool -T ethX``输出中的 PTP Hardware Clock: *确定当前 X 对应的编号是多少。
+用户可根据 `ethtool -T ethX` 输出中的 PTP Hardware Clock: *确定当前 X 对应的编号是多少。
 
-当前软件版本默认配置为 fixed mode，固定输出周期为1s。如果需要修改输出周期的话，需要先在内核 dts 中配置选择`hobot,pps = <0>;`切换成 flex mode。然后修改最后一个参数\<1000000000\>，该参数的单位是 ns，如果要修改为400ms 的话，则改为\<400000000\>。
+当前软件版本默认配置为 fixed mode，固定输出周期为 1s。如果需要修改输出周期的话，需要先在内核 dts 中配置选择 `hobot,pps = <0>;` 切换成 flex mode。然后修改最后一个参数\<1000000000\>，该参数的单位是 ns，如果要修改为 400ms 的话，则改为\<400000000\>。
 
 不论是 gmac 还是 xgmac，ethtool 配置的命令格式都是：ethtool hobot_gmac –set-flex-pps eth0 index 0 fpps on interval 1000000000，只有 ethX 和最后一个参数配置有差异。
 
@@ -678,12 +678,12 @@ ethtool hobot_gmac --set-flex-pps ethX index 0 fpps on interval 1000000000;
 
 <DocScope products="RDK S100">
 
-MCU Eth PPS 的信号周期和脉冲宽度在`Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Mac_Ip_PBcfg.c`配置文件中设置默认值，其中 PpsInterval 的默认值为1000(ms)，参数 PpsWidth 的默认值为10(ms)。
+MCU Eth PPS 的信号周期和脉冲宽度在 `Config/McalCdd/gen_s100_sip_B_mcu1/Ethernet/src/Mac_Ip_PBcfg.c` 配置文件中设置默认值，其中 PpsInterval 的默认值为 1000(ms)，参数 PpsWidth 的默认值为 10(ms)。
 
 </DocScope>
 <DocScope products="RDK S600">
 
-MCU Eth PPS 的信号周期和脉冲宽度在`Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Mac_Ip_PBcfg.c`配置文件中设置默认值，其中 PpsInterval 的默认值为1000(ms)，参数 PpsWidth 的默认值为10(ms)。
+MCU Eth PPS 的信号周期和脉冲宽度在 `Config/McalCdd/gen_s600_md_mcu1/Ethernet/src/Mac_Ip_PBcfg.c` 配置文件中设置默认值，其中 PpsInterval 的默认值为 1000(ms)，参数 PpsWidth 的默认值为 10(ms)。
 
 </DocScope>
 

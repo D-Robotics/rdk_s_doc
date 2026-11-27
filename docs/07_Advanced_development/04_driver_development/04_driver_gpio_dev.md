@@ -283,7 +283,7 @@ direction 表示 GPIO 端口的方向，读取结果是 in 或 out。也可以�
 :::note
 设备树中的 `gpio-ranges` 属性与 `/sys/kernel/debug/pinctrl/<pinctrl_dev>/gpio-ranges` 节点含义不同：
 
-- 设备树属性 `gpio-ranges`：描述 Pinctrl 引脚编号与 GPIO 控制器本地编号的映射关系。格式为 `<phandle gpio_offset pin_offset count>`，例如 `<&pinctrl_cam 0 0 16>` 表示 Pinctrl 引脚 0~15 依次映射到 GPIO 本地编号 0~15。
+- 设备树属性 `gpio-ranges`：描述 Pinctrl 引脚编号与 GPIO 控制器本地编号的映射关系。格式为 `<phandle gpio_offset pin_offset count>`，例如 `<&pinctrl_cam 0 0 16>` 表示 Pinctrl 引脚 0-15 依次映射到 GPIO 本地编号 0-15。
 - debugfs 节点 `gpio-ranges`：打印运行时已注册的 GPIO 范围，用于查看控制器与引脚分组的对应关系。
 
 两者描述的都是**本地编号**之间的映射。gpio-index 中的 base 由内核动态分配，取不到这个属性里。

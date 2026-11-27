@@ -47,7 +47,7 @@ flowchart LR
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_isp/get_isp_data
 make
 ```
@@ -89,12 +89,12 @@ index: 4  sensor_name: ovx3cstd-30fps           config_file:linear_1920x1280_yuv
 
 以 imx219 sensor 为例，执行 `./get_isp_data -s 0` 。
 
-以 连接到 mipi host 2，link port 1 的 ovx3cstd Serdes sensor 为例，则执行`./get_isp_data -s 4 -m 2 -l 1`。
+以 连接到 mipi host 2，link port 1 的 ovx3cstd Serdes sensor 为例，则执行 `./get_isp_data -s 4 -m 2 -l 1`。
 
 :::caution 注意
 - 非 Serdes sensor 无需设置 link 和 mipi 
 - link 设定的值是根据 serdes sensor 连接到解串器上的端口而定的，请确保 serdes sensor 接到设定的端口。
-- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./overview#示例使用指南)》
+- mipi 设定的值是根据 serdes sensor 连接到解串器上的端口所对应的 mipi host 而定的，可参考《[硬件使用指南](./01_overview.md#示例使用指南)》
 - 目前仅有 mipi host 0，2，4，5 可以使用
 :::
 
@@ -170,7 +170,7 @@ quit
 
 在源码路径下执行 `make` 命令即可完成编译：
 
-```Shell
+```shell
 cd /app/multimedia_samples/sample_isp/isp_feedback
 make
 ```
@@ -201,7 +201,7 @@ Options:
 - `F <format>`: 该选项用于指定要使用 Raw 图的格式，raw8、raw10、raw12。
 - `W <width>`: 该选项用于指定要使用 Raw 图的 width。
 - `H <height>`: 该选项用于指定要使用 Raw 图的 height。
-- `l <loop>`: 该选项用于指定要使用 Raw 图的回灌的次数，默认10次。
+- `l <loop>`: 该选项用于指定要使用 Raw 图的回灌的次数，默认 10 次。
 - `h`: 显示帮助信息。
 
 #### 运行效果
@@ -245,7 +245,7 @@ isp process one frame cost:  2114200 ns
 isp(100197) dump yuv 1920x1080(stride:1920), buffer size: 2073600 + 1036800 frame id: 0, timestamp: 0
 ```
 
-程序运行启动，会在当前目录保存如下调校后的 yuv 图像，默认回灌10次，计算每次的回灌耗时：
+程序运行启动，会在当前目录保存如下调校后的 yuv 图像，默认回灌 10 次，计算每次的回灌耗时：
 
 - Using index / sensor_name / config_file：表明当前使用 sensor index 为 5，sensor 名称为 dummy，对应的 sensor 配置文件为 dummy_sensor.c。
 - 每处理一帧 RAW 数据，会输出以下 ISP 处理完成耗时信息，isp process one frame cost:  2170275 ns。

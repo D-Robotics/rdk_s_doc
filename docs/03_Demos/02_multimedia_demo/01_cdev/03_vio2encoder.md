@@ -22,7 +22,7 @@ description: "RDK S100/S600 摄像头采集→VIO→编码保存示例"
 
 板端路径：`/app/cdev_demo/vio2encoder/`
 
-```
+```text
 vio2encoder/
 ├── Makefile
 └── vio2encoder.c

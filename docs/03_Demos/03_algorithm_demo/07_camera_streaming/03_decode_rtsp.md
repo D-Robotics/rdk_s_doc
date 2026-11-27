@@ -13,7 +13,7 @@ import DocScope from '@site/src/components/DocScope';
 本示例演示如何结合 SP 硬件模块（解码器、VIO、显示）和 BPU，实现 RTSP/H.264 视频流 → 硬件解码（NV12）→ YOLOv5x 推理 → 叠加检测框 → 实时显示的端到端流程。Python 版见 [RTSP 视频拉流及 YOLOv5x 推理 (Python)](./03_decode_rtsp_py.md)。
 
 :::tip
-示例代码位于板端 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+示例代码位于板端 `/app/cdev_demo/bpu/rtsp_yolov5x_display_sample/`，该代码已在开发板上经过实际验证，可直接编译运行。
 :::
 
 ## 前置条件

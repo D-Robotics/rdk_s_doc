@@ -12,7 +12,7 @@ sidebar_products: RDK S600
 
 ## 产品介绍
 
-RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜机器人 RDK S600 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S600 Camera Expansion Connector 进行二次开发，提供了 8 个 GMSL 相机接口。
+RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是 D-Robotics RDK S600 系列开发者套件的核心扩展模块。Camera 扩展板基于 RDK S600 Camera Expansion Connector 进行二次开发，提供了 8 个 GMSL 相机接口。
 
 :::warning
 
@@ -52,11 +52,11 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ### 拓扑图
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_expansion_board.png" alt="RDK S600 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_expansion_board.png" alt="RDK S600 相机扩展板架构拓扑图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 接口概览
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_board.png" alt="RDK S600 相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/01_Quick_start/image/hardware_interface/image_s600_camera_board.png" alt="RDK S600 相机扩展板接口示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | 位号  | 功能            |
 | ----- | --------------- |
@@ -68,15 +68,15 @@ RDK S600 Camera Expansion Board（以下简称“Camera 扩展板”）是地瓜
 
 ## 接口说明
 
-### GMSL 相机接口（接口1/接口2）
+### GMSL 相机接口（接口 1/接口 2）
 
 Camera 扩展板集成了 2 颗 MAX96712 解串芯片，能够接入 8 路 GMSL2 相机，并且可通过同轴线缆为 GMSL 相机提供 12V 电源。
 
-S600可以安装 2 个 Camera扩展板，左侧与右侧各安装一个。共可接入16路GMSL2相机。下表为安装2个扩展板后`GMSL接口位置`，`MIPI_HOST`，`I2C_BUS`，`PHY_TYPE`之间对应关系。
+S600 可以安装 2 个 Camera 扩展板，左侧与右侧各安装一个。共可接入 16 路 GMSL2 相机。下表为安装 2 个扩展板后 `GMSL接口位置`，`MIPI_HOST`，`I2C_BUS`，`PHY_TYPE` 之间对应关系。
 
 <div className="table-responsive">
 
-| GMSL相机接口 | 位置 | MIPI_HOST | I2C BUS | PHY TYPE |
+| GMSL 相机接口 | 位置 | MIPI_HOST | I2C BUS | PHY TYPE |
 | :---- | :---  | :------ | :---------- | :---------- |
 | GMSL 相机接口 1 | 左后  | MIPI_RX0 | I2C0 |	DPHY	|
 | GMSL 相机接口 2 | 左前  | MIPI_RX1 | I2C1 |	CPHY	|
@@ -85,11 +85,11 @@ S600可以安装 2 个 Camera扩展板，左侧与右侧各安装一个。共可
 
 </div>
 
-每个GMSL接口`Port`与`位置`关系如下表：
+每个 GMSL 接口 `Port` 与 `位置` 关系如下表：
 
 <div className="table-responsive">
 
-| GMSL接口 | 位置 |
+| GMSL 接口 | 位置 |
 | :---- | :---  |
 | GMSLA | 右上  |
 | GMSLB | 右下  |
@@ -100,7 +100,7 @@ S600可以安装 2 个 Camera扩展板，左侧与右侧各安装一个。共可
 
 :::warning 注意
 
-GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人推荐的线缆与相机进行连接，以保障 GMSL 高速信号的稳定传输。
+GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用 D-Robotics 推荐的线缆与相机进行连接，以保障 GMSL 高速信号的稳定传输。
 
 :::
 
@@ -111,7 +111,7 @@ GMSL 接口采用 mini Fakra 4-in-1 z code 连接器，请选用地瓜机器人�
 
 :::
 
-### DC 电源输入（接口3）
+### DC 电源输入（接口 3）
 
 Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。当连接至该 Camera 扩展板的所有 GMSL 相机在 12V 电压下的供电电流需求超过 700mA 时，需通过此 DC 电源座为 GMSL 相机供电。
 
@@ -122,7 +122,7 @@ Camera 扩展板为 GMSL 相机配备了一个外部 12V 电源输入接口。�
 
 :::
 
-### 板对板连接器（接口4）
+### 板对板连接器（接口 4）
 
 Camera 扩展板与 RDK S600 的连接端口，为 Camera 扩展板提供功能接口（MIPI CSI 和 GPIO）以及电源（12V、3.3V 和 1.8V）。
 
@@ -132,7 +132,7 @@ Camera 扩展板与 RDK S600 的连接端口，为 Camera 扩展板提供功能�
 
 :::
 
-### 电源指示灯（接口5）
+### 电源指示灯（接口 5）
 
 电源指示灯，其位置在 DC 电源输入接口旁边。
 
@@ -145,10 +145,10 @@ Camera 扩展板与 RDK S600 的连接端口，为 Camera 扩展板提供功能�
 
 | 连接器 | 连接器型号    | 连接器厂商          |
 | :----- | :------------ | :------------------ |
-| 接口3   | DC-044B-D025  | G-Switch（品赞）    |
-| 接口4   | DY11-080SB-1  | KEL（科陆）         |
-| 接口1   | 112038-161410 | SYNCONN（信翰精密） |
-| 接口2   | 112038-161410 | SYNCONN（信翰精密） |
+| 接口 3   | DC-044B-D025  | G-Switch（品赞）    |
+| 接口 4   | DY11-080SB-1  | KEL（科陆）         |
+| 接口 1   | 112038-161410 | SYNCONN（信翰精密） |
+| 接口 2   | 112038-161410 | SYNCONN（信翰精密） |
 
 ## 适配模组
 

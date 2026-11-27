@@ -38,14 +38,14 @@ description: "RDK S100/S600 多媒体系统概述"
 
 | 模块 | 全称 | 解释|
 | --- | --- | --- |
-| MIPI RX | Mobile Industry Processor Interface Receiver | 移动产业处理器接口（接收端），MIPI联盟制定的标准，用于接收摄像头输入的图像数据 |
-| CIM | Camera Interface Manger | Camera接入管理模块，支持online或offline工作 |
+| MIPI RX | Mobile Industry Processor Interface Receiver | 移动产业处理器接口（接收端），MIPI 联盟制定的标准，用于接收摄像头输入的图像数据 |
+| CIM | Camera Interface Manger | Camera 接入管理模块，支持 online 或 offline 工作 |
 | ISP | Image Signal Processor | 图像信号处理器 |
-| PYM | Pyramid | 金字塔处理模块: 图像缩小及ROI |
+| PYM | Pyramid | 金字塔处理模块: 图像缩小及 ROI |
 | GDC | Geometric Distortion Correction | 几何畸变校正模块 |
 | STITCH | Stitch hardware Module | 图像拼接处理模块 |
 | IDU | Image Display Unit | 图像显示单元 |
-| MIPI TX | Mobile Industry Processor Interface Transmitter | 移动产业处理器接口（发送端），MIPI联盟制定的标准，用于向显示设备输出图像数据 |
+| MIPI TX | Mobile Industry Processor Interface Transmitter | 移动产业处理器接口（发送端），MIPI 联盟制定的标准，用于向显示设备输出图像数据 |
 | IDE | Image Display Engine | 包含图像显示单元（IDU）、图像数据输出模块（MIPI TX） |
 | VPU | Video Processing Unit | 视频处理单元，完成视频的编解码功能，支持 H.264/H.265 |
 | JPU |	JPEG Processing Unit | JPEG 图片处理单元，完成 JPEG、 MJPEG 的编解码功能 |
@@ -58,38 +58,38 @@ description: "RDK S100/S600 多媒体系统概述"
 
 其中 Camera 子系统相关模块在硬件上存在关联，详细描述如下：
 <DocScope products="RDK S100">
-![硬件框架简易](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_framework_simple.png)
+![硬件框架简易](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_framework_simple.png)
 图例（右上角）解释：
 - OTF： 硬件直连，软件配置上命名为 online 模式
-- DMA IN/ DMA OUT：通过 DMA 把硬件处理单元的输入或输出与DDR交互，软件配置上命名为 offline 模式
+- DMA IN/ DMA OUT：通过 DMA 把硬件处理单元的输入或输出与 DDR 交互，软件配置上命名为 offline 模式
 
 硬件加速单元解释：
-- MIPI RX: 3路CDPHY，每路为DPHY最大2.5Gbps/lane x 4lane或CPHY最大2.5Gsps/trio x 3trio，每路支持4VC，最多支持12路接入。
-- MIPI TX（图中未画出）: 2路DPHY，每路为2.5Gbps/lane x 4lane，支持RX bypass与IDU输出方式。
-- CIM: 与 MIPI RX对接，可以与其他模块直连，或者存储到 DDR 中， 其他模块再从 DDR 读取
-- ISP: 2个ISP设备，每个ISP最大支持2x4K@60fps处理。
-- YNR：1个YNR设备, 每个YNR最大支持2x4K@60fps处理。
-- PYM: 3个PYM设备，每个PYM最大支持4K@60fps处理。
-- GDC: 1个GDC设备，4K@60fps处理。
-- STITCH: 1个 STITCH 设备，待补充。
+- MIPI RX: 3 路 CDPHY，每路为 DPHY 最大 2.5Gbps/lane x 4lane 或 CPHY 最大 2.5Gsps/trio x 3trio，每路支持 4VC，最多支持 12 路接入。
+- MIPI TX（图中未画出）: 2 路 DPHY，每路为 2.5Gbps/lane x 4lane，支持 RX bypass 与 IDU 输出方式。
+- CIM: 与 MIPI RX 对接，可以与其他模块直连，或者存储到 DDR 中， 其他模块再从 DDR 读取
+- ISP: 2 个 ISP 设备，每个 ISP 最大支持 2x4K@60fps 处理。
+- YNR：1 个 YNR 设备, 每个 YNR 最大支持 2x4K@60fps 处理。
+- PYM: 3 个 PYM 设备，每个 PYM 最大支持 4K@60fps 处理。
+- GDC: 1 个 GDC 设备，4K@60fps 处理。
+- STITCH: 1 个 STITCH 设备。
 </DocScope>
 
 <DocScope products="RDK S600">
-![硬件框架简易](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s600_hardware_framework_simple.png)
+![硬件框架简易](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s600_hardware_framework_simple.png)
 
 硬件加速单元解释：
-- MIPI RX: 6路CDPHY，每路为DPHY最大2.5Gbps/lane x 4lane或CPHY最大2.5Gsps/trio x 3trio，每路支持4VC，最多支持24路接入。
-- MIPI TX（图中未画出）: 2路DPHY，每路为2.5Gbps/lane x 4lane，支持RX bypass与IDU输出方式。
-- CIM: 与 MIPI RX对接，可以与其他模块直连，或者存储到 DDR 中， 其他模块再从 DDR 读取
-- ISP: 4个ISP设备，每个ISP最大支持2x4K@60fps处理。
-- YNR：4个YNR设备， 只有 YNR3 支持 3DNR，每个YNR最大支持2x4K@60fps处理。
-- PYM: 5个PYM设备，每个PYM最大支持4K@60fps处理。
-- GDC: 2个GDC设备，4K@60fps处理。
-- STITCH: 1个 STITCH 设备，待补充。
+- MIPI RX: 6 路 CDPHY，每路为 DPHY 最大 2.5Gbps/lane x 4lane 或 CPHY 最大 2.5Gsps/trio x 3trio，每路支持 4VC，最多支持 24 路接入。
+- MIPI TX（图中未画出）: 2 路 DPHY，每路为 2.5Gbps/lane x 4lane，支持 RX bypass 与 IDU 输出方式。
+- CIM: 与 MIPI RX 对接，可以与其他模块直连，或者存储到 DDR 中， 其他模块再从 DDR 读取
+- ISP: 4 个 ISP 设备，每个 ISP 最大支持 2x4K@60fps 处理。
+- YNR：4 个 YNR 设备， 只有 YNR3 支持 3DNR，每个 YNR 最大支持 2x4K@60fps 处理。
+- PYM: 5 个 PYM 设备，每个 PYM 最大支持 4K@60fps 处理。
+- GDC: 2 个 GDC 设备，4K@60fps 处理。
+- STITCH: 1 个 STITCH 设备。
 </DocScope>
 
 ### 数据交互
-芯片内置了专用数据通道，MIPI RX 接收到的摄像头数据可直接连接 CIM、 ISP 和 YNR等模块，实现视频数据的高速直传，不需要读写 DDR ，从而节省 DDR 带宽，大幅提升性能。
+芯片内置了专用数据通道，MIPI RX 接收到的摄像头数据可直接连接 CIM、 ISP 和 YNR 等模块，实现视频数据的高速直传，不需要读写 DDR ，从而节省 DDR 带宽，大幅提升性能。
 然而，由于硬件资源是有限的，当接入更多路摄像头时，必须通过分时复用的方式进行处理，视频数据必须通过 DDR 进行缓存。
 
 基于数据传输是否依赖 DDR 缓存，硬件加速单元之间的数据交互方式可以分为以下两种模式：
@@ -97,15 +97,15 @@ description: "RDK S100/S600 多媒体系统概述"
 2. Online 模式 ( 图中 红色箭头)：数据直接从上游模块传递至下游模块，无需读写 DDR，显著提升性能。
 
 <DocScope products="RDK S100">
-![硬件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_data_path.svg)
+![硬件框架](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_data_path.svg)
 
-- CIM: 可online输出到ISP0/ISP1(RAW)与PYM0/PYM1(YUV)，也可offline下DDR，之后各模块通过DDR读取使用数据流。
-- ISP: 2个ISP设备，各支持4路online+8路offline输入。
-- YNR（图中未画出）：1个YNR设备，只能和 ISP1 online 的方式连接
-- PYM: 3个PYM设备，其中PYM0/PYM1为全功能模块支持online/offline，PYM4只支持offline
-- GDC: 1个GDC设备，只支持offline方式。
-- STITCH: 1个 STITCH 设备，只支持offline方式。
-- IDE（图中最下面）：2个IDE设备，每个 IDE 包括一个 IDU 和 MIPI TX， MIPI RX 可以直接连接到 MIPI TX输出， 也可以通过 IDU 读取DDR的数据再输出
+- CIM: 可 online 输出到 ISP0/ISP1(RAW)与 PYM0/PYM1(YUV)，也可 offline 下 DDR，之后各模块通过 DDR 读取使用数据流。
+- ISP: 2 个 ISP 设备，各支持 4 路 online+8 路 offline 输入。
+- YNR（图中未画出）：1 个 YNR 设备，只能和 ISP1 online 的方式连接
+- PYM: 3 个 PYM 设备，其中 PYM0/PYM1 为全功能模块支持 online/offline，PYM4 只支持 offline
+- GDC: 1 个 GDC 设备，只支持 offline 方式。
+- STITCH: 1 个 STITCH 设备，只支持 offline 方式。
+- IDE（图中最下面）：2 个 IDE 设备，每个 IDE 包括一个 IDU 和 MIPI TX， MIPI RX 可以直接连接到 MIPI TX 输出， 也可以通过 IDU 读取 DDR 的数据再输出
 
 各硬件加速单元支持的输入/输出数据交互方式如下：
 
@@ -125,15 +125,15 @@ description: "RDK S100/S600 多媒体系统概述"
 </DocScope>
 
 <DocScope products="RDK S600">
-![硬件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s600_hardware_framework.png)
+![硬件框架](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s600_hardware_framework.png)
 
-- CIM: 可online输出到ISP0/ISP1/ISP2/ISP3(RAW)与PYM0/PYM1/PYM2/PYM3(YUV)，也可offline下DDR，之后各模块通过DDR读取使用数据流。
-- ISP: 4个ISP设备，各支持4路online+8路offline输入，每个ISP最大支持2x4K@60fps处理。
-- YNR（图中未画出）：4个YNR设备，只能和 ISP1 online 的方式连接
-- PYM: 5个PYM设备，其中PYM0/PYM1/PYM2/PYM3为全功能模块支持online/offline，PYM4只支持offline，4K@120fps处理。
-- GDC: 2个GDC设备，只支持offline方式，4K@60fps处理。
-- STITCH: 1个 STITCH 设备，只支持offline方式。
-- IDE（图中最下面）：2个IDE设备，每个 IDE 包括一个 IDU 和 MIPI TX， MIPI RX 可以直接连接到 MIPI TX输出， 也可以通过 IDU 读取DDR的数据再输出
+- CIM: 可 online 输出到 ISP0/ISP1/ISP2/ISP3(RAW)与 PYM0/PYM1/PYM2/PYM3(YUV)，也可 offline 下 DDR，之后各模块通过 DDR 读取使用数据流。
+- ISP: 4 个 ISP 设备，各支持 4 路 online+8 路 offline 输入，每个 ISP 最大支持 2x4K@60fps 处理。
+- YNR（图中未画出）：4 个 YNR 设备，只能和 ISP1 online 的方式连接
+- PYM: 5 个 PYM 设备，其中 PYM0/PYM1/PYM2/PYM3 为全功能模块支持 online/offline，PYM4 只支持 offline，4K@120fps 处理。
+- GDC: 2 个 GDC 设备，只支持 offline 方式，4K@60fps 处理。
+- STITCH: 1 个 STITCH 设备，只支持 offline 方式。
+- IDE（图中最下面）：2 个 IDE 设备，每个 IDE 包括一个 IDU 和 MIPI TX， MIPI RX 可以直接连接到 MIPI TX 输出， 也可以通过 IDU 读取 DDR 的数据再输出
 
 各硬件加速单元支持的输入/输出数据交互方式如下：
 
@@ -160,7 +160,7 @@ description: "RDK S100/S600 多媒体系统概述"
 ## 软件方面
 ### 框架
 
-![软件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/soft_framework.jpeg)
+![软件框架](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/soft_framework.jpeg)
 
 下面从左向右介绍每个 API 的作用：
 1. HBN API: 包含了 HBN Framework API、ISP API、Camera API，覆盖了摄像头采集链路的所有模块
@@ -188,4 +188,3 @@ description: "RDK S100/S600 多媒体系统概述"
 可以通过各种方式完成转换，如下描述：
 1. HBN API 与 MediaCodec API 使用的视频帧的数据结构是 hb_mem_graphic_buf_t
 2. DRM API 底层也是基于 dmabuf 实现，可以从 hb_mem_graphic_buf_t 中获取 dmabuf 的文件描述符后转换成 dma_buf_map_t
-3. OpenGL ES、EGL、OpenCL、Vulkan: 待补充

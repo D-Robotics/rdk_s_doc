@@ -39,7 +39,7 @@ description: "DECODER（解码模块）API 接口说明"
 
 **【返回类型】** 
 
-成功返回`DECODER`对象，失败返回 NULL。
+成功返回 `DECODER` 对象，失败返回 NULL。
 
 **【注意事项】**
 
@@ -87,9 +87,9 @@ description: "DECODER（解码模块）API 接口说明"
 
 **【参数】**
 
-- `obj`： 已经初始化的`DECODER`对象指针
-- `stream_file`：当 `stream_file` 设置为一个码流文件名时，表示对这个码流文件进行解码，例如设置 H264的码流文件“stream.h264”, 当 `stream_file` 传入空字符串时，表示解码的数据流需要通过调用 `sp_decoder_set_image` 传入。
-- `video_chn`：解码通道号，支持 0~31。
+- `obj`： 已经初始化的 `DECODER` 对象指针
+- `stream_file`：当 `stream_file` 设置为一个码流文件名时，表示对这个码流文件进行解码，例如设置 H264 的码流文件“stream.h264”, 当 `stream_file` 传入空字符串时，表示解码的数据流需要通过调用 `sp_decoder_set_image` 传入。
+- `video_chn`：解码通道号，支持 0-31。
 - `type`：解码的数据类型，支持 `SP_ENCODER_H264`，`SP_ENCODER_H265` 和 `SP_ENCODER_MJPEG`。
 - `width`：解码出来的图像帧的分辨率 - 宽
 - `height`：解码出来的图像帧的分辨率 - 高
@@ -100,7 +100,7 @@ description: "DECODER（解码模块）API 接口说明"
 
 **【注意事项】**
 
-调用前须先初始化 `DECODER` 对象；`stream_file` 传文件名时解码文件、传空字符串时需通过 `sp_decoder_set_image` 手动送入码流；`video_chn` 支持 0~31。
+调用前须先初始化 `DECODER` 对象；`stream_file` 传文件名时解码文件、传空字符串时需通过 `sp_decoder_set_image` 手动送入码流；`video_chn` 支持 0-31。
 
 **【兼容性】**
 
@@ -118,7 +118,7 @@ description: "DECODER（解码模块）API 接口说明"
 
 **【参数】**
 
-- `obj`： 已经初始化的`DECODER`对象指针
+- `obj`： 已经初始化的 `DECODER` 对象指针
 
 **【返回类型】** 
 
@@ -144,7 +144,7 @@ description: "DECODER（解码模块）API 接口说明"
 
 **【参数】**
 
-- `obj`：已经初始化的`DECODER`对象指针
+- `obj`：已经初始化的 `DECODER` 对象指针
 - `image_buffer`：返回的图像帧数据，这个 buffer 大小与图像分辨率的关系为 `(width * height * 3) / 2`。
 
 **【返回类型】** 
@@ -168,12 +168,12 @@ description: "DECODER（解码模块）API 接口说明"
 **【功能描述】**  
 
 向已经打开的解码通道送入码流数据。
-如果是解码 H264 或 H265 码流，需要先发送3~5帧数据，让解码器完成帧缓存后，再获取解码帧数据。
+如果是解码 H264 或 H265 码流，需要先发送 3-5 帧数据，让解码器完成帧缓存后，再获取解码帧数据。
 如果解码 H264 码流，首先第一帧送入解码的数据需要是 sps 和 pps 的描述信息，否者解码器会报错退出。
 
 **【参数】**
 
-- `obj`： 已经初始化的`DECODER`对象指针。
+- `obj`： 已经初始化的 `DECODER` 对象指针。
 - `image_buffer`：码流数据指针。
 - `chn`：解码器通道号，需要是调用 `sp_start_decode` 打开过的通道号。
 - `size`：码流数据大小。
@@ -185,7 +185,7 @@ description: "DECODER（解码模块）API 接口说明"
 
 **【注意事项】**
 
-调用前须先创建解码通道且 `stream_file` 传入空字符串；解码 H264/H265 需先送入 3~5 帧数据完成帧缓存后再取帧；H264 第一帧必须是 sps 和 pps 描述信息。
+调用前须先创建解码通道且 `stream_file` 传入空字符串；解码 H264/H265 需先送入 3-5 帧数据完成帧缓存后再取帧；H264 第一帧必须是 sps 和 pps 描述信息。
 
 **【兼容性】**
 
@@ -219,7 +219,7 @@ free(img);
 
 **原因**：解码器需要先缓存若干帧数据。
 
-**解决**：先送入 3~5 帧数据，让解码器完成帧缓存后再获取解码帧。
+**解决**：先送入 3-5 帧数据，让解码器完成帧缓存后再获取解码帧。
 
 ### 解码 H264 时解码器报错退出
 

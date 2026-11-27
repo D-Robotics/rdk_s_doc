@@ -66,21 +66,21 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/llm_s600/1.0.5/D
 
 - **model**：模型名。
 
-- **BPU core num**：模型运行时占用的BPU核数量。
+- **BPU core num**：模型运行时占用的 BPU 核数量。
 
 - **qtype**：模型的量化精度。
 
-- **sequence length**：Prefill阶段单次处理的token序列长度。
+- **sequence length**：Prefill 阶段单次处理的 token 序列长度。
 
-- **max context**：模型累计能处理的token序列最大长度。
+- **max context**：模型累计能处理的 token 序列最大长度。
 
 - **RTF**: 处理一段音频所消耗的时间与该音频实际时长的比值。
 
 - **TTFT(ms)**：首字生成时间。
 
-- **Decode(TPS)**：Decode阶段每秒生成的token数。
+- **Decode(TPS)**：Decode 阶段每秒生成的 token 数。
 
-- **memory(GB)**：模型运行时，Linux内存和ION内存的占用总量。
+- **memory(GB)**：模型运行时，Linux 内存和 ION 内存的占用总量。
 
 ### 实测数据
 

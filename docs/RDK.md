@@ -89,7 +89,7 @@ RDK OS 开箱即有：
 2. 签署保密协议（NDA）：双方确认后签署
 3. 内容释放：通过私有渠道开放商业版本资料
 
-问卷链接：https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre
+问卷链接：[填写问卷](https://horizonrobotics.feishu.cn/share/base/form/shrcnpBby71Y8LlixYF2N3ENbre)
 :::
 
 ## 文档导航
@@ -130,7 +130,7 @@ RDK OS 开箱即有：
 
 ## 生态项目对接
 
-针对基于 RDK 平台的产品开发、行业落地或批量部署项目，设立 **"地瓜生态项目对接中心"** 作为统一协同入口。
+针对基于 RDK 平台的产品开发、行业落地或批量部署项目，设立 **"D-Robotics 生态项目对接中心"** 作为统一协同入口。
 
 当您涉及以下场景时，建议通过该入口提交项目信息：
 
@@ -140,7 +140,7 @@ RDK OS 开箱即有：
 - 商业项目联合开发
 - 批量采购前的技术确认
 
-👉 项目对接入口：[地瓜生态项目对接交流](https://horizonrobotics.feishu.cn/share/base/form/shrcnpxBa3PjdjFmtxZS3tBXw0e)
+项目对接入口：[D-Robotics 生态项目对接交流](https://horizonrobotics.feishu.cn/share/base/form/shrcnpxBa3PjdjFmtxZS3tBXw0e)
 
 :::note 说明
 本入口适用于明确的项目或商业落地需求。日常技术问题建议优先通过论坛问答或 [FAQ](/FAQ) 章节解决。

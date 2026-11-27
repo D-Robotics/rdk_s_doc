@@ -13,7 +13,7 @@ import DocScope from '@site/src/components/DocScope';
 本示例演示如何在 BPU 上部署量化后的 Ultralytics YOLOv5x 模型，通过 MIPI 摄像头（板载相机接口）实时读取画面做目标检测，并以全屏方式可视化检测结果（VIO 取流 + 前处理 + 推理 + NMS + 框绘制）。Python 版见 [MIPI Camera YOLOv5x 推理 (Python)](./02_mipi_camera_py.md)。
 
 :::tip
-示例代码位于板端 `/app/cdev_demo/bpu/mipi_camera_sample/`，该代码已在板子上经过实际验证，可直接编译运行。
+示例代码位于板端 `/app/cdev_demo/bpu/mipi_camera_sample/`，该代码已在开发板上经过实际验证，可直接编译运行。
 :::
 
 ## 前置条件
@@ -124,8 +124,6 @@ No camera sensor found, please check whether the camera connection or video_idx 
 
 - 输出 `disp_w=..., disp_h=...` 与 `sp_open_camera success!`；
 - 屏幕显示带检测框的实时画面，按 `Ctrl+C` 退出。
-
-<!-- TODO: 待接入摄像头实测成功 log -->
 
 ## 软件说明
 

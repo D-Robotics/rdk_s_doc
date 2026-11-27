@@ -577,7 +577,7 @@ RX | 01 02 03 04 __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
 
 短接回环时 RX 与 TX 一致；若 MISO/MOSI 未短接，MISO 悬空，RX 为不定电平（随引脚上下拉配置不同，实测常见 `FF` 或 `00`），不能作为回环成功依据。
 
-在 Slave 设备侧将收到 S100侧 Master 发送的数据。
+在 Slave 设备侧将收到 S100 侧 Master 发送的数据。
 
 **注：连接真实外部 SPI Slave 联调时，需要先执行 SPI Slave 程序，再执行 SPI Master 程序。假如先执行 SPI Master 程序，后执行 SPI Slave 程序，可能会由于 Master 与 Slave 不同步导致 SPI 接收数据出现丢失；MISO 与 MOSI 短接回环无此顺序要求。**
 

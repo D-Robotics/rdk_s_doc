@@ -362,7 +362,7 @@ Port_Func 模块用于针对功能模块对该功能模块下属所有 PIN 进�
 ```
 
 #### 默认外设配置
-默认外设 PIN 配置记录在：`McalCdd/Port/inc/Port_Func.h`文件内，通过一个由 enum 类型定义记录：
+默认外设 PIN 配置记录在：`McalCdd/Port/inc/Port_Func.h` 文件内，通过一个由 enum 类型定义记录：
 <DocScope products="RDK S100">
 ```c
 ...
@@ -466,10 +466,10 @@ typedef enum PinFunctions {
 
 </DocScope>
 ### Port_Func 操作 GPIO 使用示例
-Port_Func 提供的 GPIO 接口，使用的 PinIdx 为[Port_Func 模块 PIN 号对应的 PIN 名称列表](#pin_list)
+Port_Func 提供的 GPIO 接口，使用的 PinIdx 为 [Port_Func 模块 PIN 号对应的 PIN 名称列表](#pin_list)
 
 #### 代码示例
-使用示例可以参考`samples/Gpio/src/Gpio_sample.c`，基本使用逻辑为：
+使用示例可以参考 `samples/Gpio/src/Gpio_sample.c`，基本使用逻辑为：
 ```c
     /* 配置"PinIdx" PIN为GPIO功能 */
     RetVal = Port_SetGpioByIndex(PinIdx);

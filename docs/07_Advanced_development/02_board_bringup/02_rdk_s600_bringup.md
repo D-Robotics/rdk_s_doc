@@ -15,19 +15,19 @@ RDK S600 的 boardid 是一个 28bit 无符号整型，由 ADC0_IO[0]、ADC0_IO[
 
 | boardid 位段 | ADC 通道 | 用途 | 档位 | 客户可改 |
 |---|---|---|---|---|
-| [27:24] | ADC0_IO[0] | 客户/项目 | 0x5：地瓜 S600 项目 | 否 |
+| [27:24] | ADC0_IO[0] | 客户/项目 | 0x5：D-Robotics S600 项目 | 否 |
 | [23:20] | ADC0_IO[1] | 硬件板卡类型 | 0x0：工厂测试模式；0x1：S600 Module | 否 |
 | [19:16] | ADC0_IO[2] | 硬件板卡版本 | 0x1：V0P1；0x2：V0P2；0x3：V1P0；0x4：V1P1 | 否 |
-| [15:12] | ADC0_IO[4] | 底板类型 | 0x1/0x2/0x3：地瓜底板；0xF：产线测试禁用 | 是 |
+| [15:12] | ADC0_IO[4] | 底板类型 | 0x1/0x2/0x3：D-Robotics 底板；0xF：产线测试禁用 | 是 |
 | [11:8] | ADC0_IO[5] | 底板版本号 | 0x1：V0P1；0x2：V0P2；0x3：V1P0；0x4：V1P1；0xF：产线测试禁用 | 是 |
 | [7:4] | ADC0_IO[6] | PCIe RC/EP 检测 | 0x1：Default；0xF：产线测试禁用 | 否 |
 | [3:0] | — | 预留 | 0x0 | 否 |
 
-其中 ADC0_IO[0]~ADC0_IO[2] 用于地瓜硬件区分，由地瓜维护，客户不可更改；ADC0_IO[4]（底板类型）和 ADC0_IO[5]（底板版本号）允许客户自定义；ADC0_IO[6] 为预留，默认 0x1。
+其中 ADC0_IO[0]~ADC0_IO[2] 用于 D-Robotics 硬件区分，由 D-Robotics 维护，客户不可更改；ADC0_IO[4]（底板类型）和 ADC0_IO[5]（底板版本号）允许客户自定义；ADC0_IO[6] 为预留，默认 0x1。
 
-ADC0_IO[3] 为 DDR 类型识别（DDR_TYPE_ID），不参与 boardid 计算：0x0 为 LPDDR5 单 rank 32GB，0x1 为 LPDDR5 双 rank 64GB，由地瓜维护。
+ADC0_IO[3] 为 DDR 类型识别（DDR_TYPE_ID），不参与 boardid 计算：0x0 为 LPDDR5 单 rank 32GB，0x1 为 LPDDR5 双 rank 64GB，由 D-Robotics 维护。
 
-例如 `0x5131310`：ADC0_IO[0]=0x5（地瓜 S600 项目）、ADC0_IO[1]=0x1（S600 Module）、ADC0_IO[2]=0x3（V1P0）、ADC0_IO[4]=0x1（地瓜底板）、ADC0_IO[5]=0x3（底板 V1P0）、ADC0_IO[6]=0x1（Default），低 4bit 预留为 0x0。
+例如 `0x5131310`：ADC0_IO[0]=0x5（D-Robotics S600 项目）、ADC0_IO[1]=0x1（S600 Module）、ADC0_IO[2]=0x3（V1P0）、ADC0_IO[4]=0x1（D-Robotics 底板）、ADC0_IO[5]=0x3（底板 V1P0）、ADC0_IO[6]=0x1（Default），低 4bit 预留为 0x0。
 
 boardid 由 ADC 采样在 SBL 内生成，对应代码路径 `mcu/BootLoader/BoardId/src/Board_Id_Matrixp.c`（函数 `SBL_GetADC_To_AonSram`），这部分属于闭源代码，客户无需关心。
 
@@ -35,7 +35,7 @@ boardid 由 ADC 采样在 SBL 内生成，对应代码路径 `mcu/BootLoader/Boa
 
 底板类型（ADC0_IO[4]）和底板版本号（ADC0_IO[5]）是客户自研底板时最关心的两个字段，均可自定义。当前规划：
 
-- 底板类型：0x1/0x2/0x3 为地瓜底板；0xF 为产线测试强制覆写，禁用。
+- 底板类型：0x1/0x2/0x3 为 D-Robotics 底板；0xF 为产线测试强制覆写，禁用。
 - 底板版本号：0x1/0x2/0x3/0x4 分别对应 RDK S600 Module Carrier Board V0P1/V0P2/V1P0/V1P1；0xF 为产线测试强制覆写，禁用。
 
 客户自定义底板时，可申请新的档位，并在 MCU、U-Boot 与 Kernel 侧登记对应的 boardid（见下文各章节）。
@@ -46,13 +46,13 @@ boardid 由 ADC 采样在 SBL 内生成，对应代码路径 `mcu/BootLoader/Boa
 
 | 档位 | 电压范围 | 典型电压 | 推荐分压电阻 |
 |---|---|---|---|
-| 0x0 | 0mV~180mV | 0mV | 下拉接地（PD） |
-| 0x1 | 181mV~360mV | 272mV | Ru:33.2k; Rd:5.9k |
-| 0x2 | 361mV~560mV | 462mV | Ru:33.2k; Rd:11.5k |
-| 0x3 | 561mV~780mV | 672mV | Ru:33k; Rd:19.6k |
-| 0x4 | 781mV~1090mV | 937mV | Ru:33.2k; Rd:36k |
-| 0x5 | 1091mV~1400mV | 1247mV | Ru:6.81k; Rd:15.4k |
-| 0x6 | 1401mV~1800mV | 1602mV | Ru:33.2k; Rd:267k |
+| 0x0 | 0mV-180mV | 0mV | 下拉接地（PD） |
+| 0x1 | 181mV-360mV | 272mV | Ru:33.2k; Rd:5.9k |
+| 0x2 | 361mV-560mV | 462mV | Ru:33.2k; Rd:11.5k |
+| 0x3 | 561mV-780mV | 672mV | Ru:33k; Rd:19.6k |
+| 0x4 | 781mV-1090mV | 937mV | Ru:33.2k; Rd:36k |
+| 0x5 | 1091mV-1400mV | 1247mV | Ru:6.81k; Rd:15.4k |
+| 0x6 | 1401mV-1800mV | 1602mV | Ru:33.2k; Rd:267k |
 
 该设计主要面向底板类型（ADC0_IO[4]）与底板版本号（ADC0_IO[5]）两个客户自定义通道，增大档位裕量、降低 ADC 被干扰的风险。
 
@@ -72,7 +72,7 @@ flowchart TD
 
 :::info 提示
 
-在 MCU 侧需要做的是实现自己的 Acore 外设上电方式，如果是参考地瓜的设计，客户无需修改 MCU，可忽略此部分
+在 MCU 侧需要做的是实现自己的 Acore 外设上电方式，如果是参考 D-Robotics 的设计，客户无需修改 MCU，可忽略此部分
 
 :::
 
@@ -80,7 +80,7 @@ flowchart TD
 
 #### 启动阶段
 
-在文件`mcu/BootLoader/Sys/src/Sys_InitSocEarly.c`，函数`Sys_Lld_SetPmicGpio`内，添加pmic EN PIN设置代码
+在文件 `mcu/BootLoader/Sys/src/Sys_InitSocEarly.c`，函数 `Sys_Lld_SetPmicGpio` 内，添加 pmic EN PIN 设置代码
 
 ```c
 void Sys_Lld_SetPmicGpio(void)
@@ -119,11 +119,11 @@ void Sys_Lld_SetPmicGpio(void)
 }
 ```
 
-如果完全使用地瓜的电源逻辑，可以把自己的boardid放在代码中以0x5开头的boardid case下方。如果是自定义的，需要新建case分支
+如果完全使用 D-Robotics 的电源逻辑，可以把自己的 boardid 放在代码中以 0x5 开头的 boardid case 下方。如果是自定义的，需要新建 case 分支
 
 #### reboot/suspend 的场景
 
-在地瓜S600 MD的pmic配置中，`mcu/Config/McalCdd/gen_s600_md/Pmic/src/Pmic_PBcfg.c`，在`PmicGpioConfig`中添加PIN的信息
+在 D-RoboticsS600 MD 的 pmic 配置中，`mcu/Config/McalCdd/gen_s600_md/Pmic/src/Pmic_PBcfg.c`，在 `PmicGpioConfig` 中添加 PIN 的信息
 
 ```c
 const Pmic_GpioConfigType PmicGpioConfig[PMIC_GPIO_INIT_CONFIG_NUM] = {
@@ -145,11 +145,11 @@ const Pmic_GpioConfigType PmicGpioConfig[PMIC_GPIO_INIT_CONFIG_NUM] = {
 }
 ```
 
-**如果用户使用了地瓜 S600 MD的pmic配置，需要结合自己的电源方案进行修改**
+**如果用户使用了 D-Robotics S600 MD 的 pmic 配置，需要结合自己的电源方案进行修改**
 
 ### 添加版本信息
 
-1. 在`mcu/Service/Board/BoardInfo/inc/McuVersion.h`中，添加boardid信息
+1. 在 `mcu/Service/Board/BoardInfo/inc/McuVersion.h` 中，添加 boardid 信息
 
 ```c
 #elif ((SOC_TYPE == SOC_TYPE_S600) || (SOC_TYPE == SOC_TYPE_S300))
@@ -158,10 +158,10 @@ const Pmic_GpioConfigType PmicGpioConfig[PMIC_GPIO_INIT_CONFIG_NUM] = {
 #endif
 ```
 
-- `RDK_S600_V1_0`定义为新增的boardid
-- `RDK_S600_V1_0_NAME`定义为新增的硬件名
+- `RDK_S600_V1_0` 定义为新增的 boardid
+- `RDK_S600_V1_0_NAME` 定义为新增的硬件名
 
-2. 在`mcu/Service/Board/BoardInfo/src/Hobot_Board_Info.c`中，添加boardinfo
+2. 在 `mcu/Service/Board/BoardInfo/src/Hobot_Board_Info.c` 中，添加 boardinfo
 
 ```c
 #elif ((SOC_TYPE == SOC_TYPE_S600) || (SOC_TYPE == SOC_TYPE_S300))
@@ -172,12 +172,12 @@ static Hobot_BoardInfo_t g_BoardInfo[BOARD_TYPE_NUM] = {
     ...
 ```
 
-- `0x5131310`为新增的boardid
-- `S600`定义为芯片名
-- `RDK`定义为硬件名
-- `V1.0`定义为硬件版本
+- `0x5131310` 为新增的 boardid
+- `S600` 定义为芯片名
+- `RDK` 定义为硬件名
+- `V1.0` 定义为硬件版本
 
-3. 在`mcu/Service/Board/BoardInfo/src/McuVersion.c`中，添加版本比对
+3. 在 `mcu/Service/Board/BoardInfo/src/McuVersion.c` 中，添加版本比对
 
 ```c
 static int BoardId_Check(uint32 BoardId)
@@ -195,13 +195,13 @@ static int BoardId_Check(uint32 BoardId)
 }
 ```
 
-### 取消SLEEP KEY的处理（MCU 侧）
+### 取消 SLEEP KEY 的处理（MCU 侧）
 
-在RDK S600 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 8，这个PIN的其他function是SPI8_CSN1 或CAN11_RX。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
+在 RDK S600 设计中，有个 SLEEP KEY，功能是按键休眠及启动时按键进入 U-Boot fastboot 状态。SLEEP KEY 使用的 PIN 是 AON GPIO 8，这个 PIN 的其他 function 是 SPI8_CSN1 或 CAN11_RX。如果使用了以上这些 function，需要在 RDK SDK 代码中做以下修改才能保证正常启动
 
-在MCU0代码中，会检测AON GPIO 8的中断状态以决定是否要进入休眠模式，中断在ICU模块中注册，因此需要在ICU模块中关闭AON GPIO 8的中断
+在 MCU0 代码中，会检测 AON GPIO 8 的中断状态以决定是否要进入休眠模式，中断在 ICU 模块中注册，因此需要在 ICU 模块中关闭 AON GPIO 8 的中断
 
-在MCU代码`mcu/Config/McalCdd/gen_s600_md/Icu/src/Icu_PBCfg.c`的`Icu_Gpio_ChannelConfig_PB`数组中，需要做以下设置：
+在 MCU 代码 `mcu/Config/McalCdd/gen_s600_md/Icu/src/Icu_PBCfg.c` 的 `Icu_Gpio_ChannelConfig_PB` 数组中，需要做以下设置：
 
 ```c
         ...
@@ -218,9 +218,9 @@ static int BoardId_Check(uint32 BoardId)
         ...
 ```
 
-- `NotificationEnable`改为`FALSE`
-- `IntEnable`改为`FALSE`
-- `IntMask`改为`TRUE`
+- `NotificationEnable` 改为 `FALSE`
+- `IntEnable` 改为 `FALSE`
+- `IntMask` 改为 `TRUE`
 
 ## 在 spl 和 U-Boot 下新增硬件
 
@@ -228,9 +228,9 @@ spl 为 U-Boot 下的 spl
 
 ### 新增配置文件
 
-U-Boot 的配置文件位于 SDK 目录`source/bootloader/uboot/configs`下，对应的配置文件`hobot_s600_defconfig`
+U-Boot 的配置文件位于 SDK 目录 `source/bootloader/uboot/configs` 下，对应的配置文件 `hobot_s600_defconfig`
 
-U-Boot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为`source/bootloader/device/rdk/s600/board_s600_debug.mk`，由变量`HR_UBOOT_CONFIG_FILE`指定 U-Boot 配置文件
+U-Boot 配置文件在 bootloader 板级配置文件中指定，对于 debug 配置文件来说，路径为 `source/bootloader/device/rdk/s600/board_s600_debug.mk`，由变量 `HR_UBOOT_CONFIG_FILE` 指定 U-Boot 配置文件
 
 ```shell
 # hobot_s600_defconfig
@@ -241,11 +241,11 @@ export HR_ARCH_UBOOT="arm"
 ...
 ```
 
-如果客户有需求可以生成自己的 U-Boot config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的 U-Boot config 文件，按照上述描述进行替换，一般来说复用 D-Robotics 的配置即可
 
 ### 新增设备树
 
-U-Boot 的设备树文件位于 SDK 目录`source/bootloader/uboot/arch/arm/dts/drobot-s600-rdk.dts`，设备树由配置文件的变量`CONFIG_DEFAULT_DEVICE_TREE`指定
+U-Boot 的设备树文件位于 SDK 目录 `source/bootloader/uboot/arch/arm/dts/drobot-s600-rdk.dts`，设备树由配置文件的变量 `CONFIG_DEFAULT_DEVICE_TREE` 指定
 
 ```shell
 # hobot_s600_defconfig
@@ -254,11 +254,11 @@ CONFIG_DEFAULT_DEVICE_TREE="drobot-s600-rdk"
 ...
 ```
 
-如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "hobot-s600-soc.dtsi"`，然后在后面覆写，最后按照上述描述进行替换，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
+如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中 `#include "hobot-s600-soc.dtsi"`，然后在后面覆写，最后按照上述描述进行替换，一般来说复用 D-Robotics 的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
 
 ### 新增 boardid
 
-在U-Boot dts中`source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi`的`board_cfg`中，添加板级配置信息
+在 U-Boot dts 中 `source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi` 的 `board_cfg` 中，添加板级配置信息
 
 ```c
     board_cfg {
@@ -278,21 +278,21 @@ CONFIG_DEFAULT_DEVICE_TREE="drobot-s600-rdk"
     }
 ```
 
-- `u-boot,dm-spl`：表示此dts配置在SPL阶段会使用到，必须添加
-- `boardid`：表示客户要新加的boardid
+- `u-boot,dm-spl`：表示此 dts 配置在 SPL 阶段会使用到，必须添加
+- `boardid`：表示客户要新加的 boardid
 - `soc_name`：表示芯片名
 - `hw_name`：硬件名
 - `version`：硬件版本
-- `pcie_mode`：PCIe mode，默认为rc
-- `fdt_feat`：U-Boot和SPL使用的dtb的名字
-- `pxe_label`：extlinux中kernel的配置
-- `bootsrc`：表示根据strap pin选择启动介质
+- `pcie_mode`：PCIe mode，默认为 rc
+- `fdt_feat`：U-Boot 和 SPL 使用的 dtb 的名字
+- `pxe_label`：extlinux 中 kernel 的配置
+- `bootsrc`：表示根据 strap pin 选择启动介质
 
-### 取消SLEEP KEY的处理（U-Boot 侧）
+### 取消 SLEEP KEY 的处理（U-Boot 侧）
 
-在RDK S600 设计中，有个SLEEP KEY，功能是按键休眠及启动时按键进入uboot fastboot状态。SLEEP KEY使用的PIN是AON GPIO 8，这个PIN的其他function是SPI8_CSN1 或CAN11_RX。如果使用了以上这些function，需要在RDK SDK代码中做以下修改才能保证正常启动
+在 RDK S600 设计中，有个 SLEEP KEY，功能是按键休眠及启动时按键进入 U-Boot fastboot 状态。SLEEP KEY 使用的 PIN 是 AON GPIO 8，这个 PIN 的其他 function 是 SPI8_CSN1 或 CAN11_RX。如果使用了以上这些 function，需要在 RDK SDK 代码中做以下修改才能保证正常启动
 
-在uboot代码`source/bootloader/uboot/arch/arm/mach-hobot/super/s600_boot_info.c`中，对于函数`hb_get_fb_key_status`，强制返回`1`
+在 U-Boot 代码 `source/bootloader/uboot/arch/arm/mach-hobot/super/s600_boot_info.c` 中，对于函数 `hb_get_fb_key_status`，强制返回 `1`
 
 ```c
 static uint32_t hb_get_fb_key_status(void)
@@ -306,7 +306,7 @@ static uint32_t hb_get_fb_key_status(void)
 
 ### 新增配置文件
 
-Kernel 的配置文件位于 SDK 目录`source/hobot-drivers/configs`下，S600对应的配置文件为`drobot_s600_defconfig`
+Kernel 的配置文件位于 SDK 目录 `source/hobot-drivers/configs` 下，S600 对应的配置文件为 `drobot_s600_defconfig`
 
 Kernel 配置文件在 mk_kernel.sh 中指定
 
@@ -317,21 +317,21 @@ export KERNEL_DEFCONFIG=drobot_s600_defconfig
 ...
 ```
 
-如果客户有需求可以生成自己的 Kernel config 文件，按照上述描述进行替换，一般来说复用地瓜的配置即可
+如果客户有需求可以生成自己的 Kernel config 文件，按照上述描述进行替换，一般来说复用 D-Robotics 的配置即可
 
 ### 新增设备树
 
-Kernel 的设备树文件位于 SDK 目录`source/hobot-drivers/kernel-dts`
+Kernel 的设备树文件位于 SDK 目录 `source/hobot-drivers/kernel-dts`
 
-如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中`#include "rdk-s600-mcb.dtsi"`，然后在后面覆写，一般来说复用地瓜的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
+如果客户有需求可以添加自己的设备树文件，注意要在自己的设备树文件中 `#include "rdk-s600-mcb.dtsi"`，然后在后面覆写，一般来说复用 D-Robotics 的配置即可。添加自己的设备树文件注意在 Makefile 中引入编译。
 
 ### extlinux 配置
 
-S600中 U-Boot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
+S600 中 U-Boot 根据 extlinux 解析 Kernel 配置，选择对应的 dtb、Kernel 镜像和 initramfs 加载
 
-extlinux 文件位于`source/kernel/scripts/package/rdk_extlinux`
+extlinux 文件位于 `source/kernel/scripts/package/rdk_extlinux`
 
-以 RDK-S600-V1P0版本为例
+以 RDK-S600-V1P0 版本为例
 
 ```shell
 label drobot-s600-rdk-v1p0-kernel
@@ -341,13 +341,13 @@ label drobot-s600-rdk-v1p0-kernel
     domuinitrd /initrd.img-KERNEL_VERSION
 ```
 
-其中`label`必须和`source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi`中的`pxe_label`对应
+其中 `label` 必须和 `source/bootloader/uboot/arch/arm/dts/hobot-s600-boardcfg.dtsi` 中的 `pxe_label` 对应
 
-`domufdt`中的 rdk-s600-mcb-v1p0.dtb 必须和要使用的 Kernel 设备树命名保持一致
+`domufdt` 中的 rdk-s600-mcb-v1p0.dtb 必须和要使用的 Kernel 设备树命名保持一致
 
 ## 根据 boardid 加载 ko
 
-在文件`source/hobot-utils/debian/usr/bin/hobot-loadko.sh`中，需要根据 boardid 选择是否加载 pcie 驱动
+在文件 `source/hobot-utils/debian/usr/bin/hobot-loadko.sh` 中，需要根据 boardid 选择是否加载 pcie 驱动
 
 ```shell
 boardid_sys_path="/sys/class/boardinfo/adc_boardid"
@@ -385,7 +385,7 @@ fi
 
 ## 根据 boardid 配置 ion
 
-在文件`source/hobot-utils/debian/usr/hobot/bin/hb_switch_ion.sh`中，需要根据 boardid 选择 ion 配置
+在文件 `source/hobot-utils/debian/usr/hobot/bin/hb_switch_ion.sh` 中，需要根据 boardid 选择 ion 配置
 
 ```shell
 function get_dtb()
@@ -417,7 +417,7 @@ function get_dtb()
 
 编译 debug 镜像方法
 
-在脚本`pack_image.sh`中，默认配置选择 beta 配置
+在脚本 `pack_image.sh` 中，默认配置选择 beta 配置
 
 ### 查看启动信息是否符合预期
 
@@ -455,7 +455,7 @@ Model: D-Robotics S600 Module Board
 ...
 ```
 
-- U-Boot log 中会打印出 boardid，例如下面的5131310
+- U-Boot log 中会打印出 boardid，例如下面的 5131310
 
 ```shell
 U-Boot 2022.04-00885-ge6f5dae98d (May 28 2026 - 16:43:04 +0800)
@@ -482,7 +482,7 @@ Retrieving file: /hobot/rdk-s600-mcb-v1p0.dtb
 
 - 查看 bootargs 中的 board info
 
-主要是`hobotboot.socname=S600` `board.hwname=rdk` `board.ver=V1P0` `board.pcie_mode=rc`等，是否和 U-Boot 中定义的一致
+主要是 `hobotboot.socname=S600` `board.hwname=rdk` `board.ver=V1P0` `board.pcie_mode=rc` 等，是否和 U-Boot 中定义的一致
 
 ```shell
 root@ubuntu:~# cat /proc/cmdline

@@ -6,11 +6,11 @@ description: "Linux 命令 zip 用法"
 
 # zip
 
-**zip 命令** 用来对文件进行压缩打包操作（解压需配合 unzip）。zip 是个使用广泛的压缩程序，文件经它压缩后会另外产生具有`.zip`扩展名的压缩文件。
+**zip 命令** 用来对文件进行压缩打包操作（解压需配合 unzip）。zip 是个使用广泛的压缩程序，文件经它压缩后会另外产生具有 `.zip` 扩展名的压缩文件。
 
 ## 语法说明
 
-```
+```text
 zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
 ```
 
@@ -22,7 +22,7 @@ zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
 - `-0`：仅存储数据，不进行压缩。
 - `-1`：更快的压缩速度。
 - `-9`：更好的压缩质量。
-- `-<压缩效率>`： 压缩效率是一个介于 1~9 之间的数值。
+- `-<压缩效率>`： 压缩效率是一个介于 1-9 之间的数值。
 - `-@`：从标准输入中读取文件名。
 - `-A`：调整可执行的自解压缩文件。
 - `-b path`：指定暂时存放文件的目录。
@@ -54,7 +54,7 @@ zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
 
 将 `/app` 这个目录下所有文件和文件夹打包为当前目录下的 `app.zip`：
 
-```
+```text
 zip -q -r app.zip /app
 ```
 
@@ -69,12 +69,12 @@ zip -q -r app.zip /app
 
 如果我们在 `/app` 目录下，可以执行以下命令：
 
-```
+```text
 zip -q -r app.zip *
 ```
 
 从压缩文件 `cp.zip` 中删除文件 `a.c`
 
-```
+```text
 zip -dv cp.zip a.c
 ```

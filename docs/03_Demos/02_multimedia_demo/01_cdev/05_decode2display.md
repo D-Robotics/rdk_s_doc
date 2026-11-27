@@ -22,7 +22,7 @@ description: "RDK S100/S600 视频码流解码→Display 实时显示示例"
 
 板端路径：`/app/cdev_demo/decode2display/`
 
-```
+```text
 decode2display/
 ├── Makefile
 └── decoder2display.c

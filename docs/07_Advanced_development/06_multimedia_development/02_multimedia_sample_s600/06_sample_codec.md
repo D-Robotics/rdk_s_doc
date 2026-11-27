@@ -22,7 +22,7 @@ sample_codec 是一个用于编解码视频的示例程序。它可以根据配�
 
 - 代码位置 `/app/multimedia_samples/sample_codec`
 - 目录结构
-```
+```text
 sample_codec/
 ├── 1280x720_NV12.yuv
 ├── 1920x1080_NV12.yuv
@@ -46,7 +46,7 @@ sample_codec/
 执行程序 `./sample_codec -h` 可以获得帮助信息：
 
 ### 程序参数选项说明
-```
+```text
 ./sample_codec -h
 Usage: sample_codec -f config_file [-e encode_option] [-d decode_option] [-v] [-h]
 Options:
@@ -86,33 +86,33 @@ Examples:
 
 - 默认使用 `codec_config.ini` 中的配置项启动编解码（默认使能一路 H264 编码：`encode_streams = 0x1`），执行程序时不需要带任何参数：
 
-  ```
+  ```text
   ./sample_codec
   ```
 
 - 启动指定的编码流（在 `codec_config.ini` 中定义）：
 
-  ```
+  ```text
   ./sample_codec -e 0x1  # 启动 venc_stream1
   ./sample_codec -e 0x3  # 启动 venc_stream1 和 venc_stream2
   ```
 
 - 启动指定的解码流（在 `codec_config.ini` 中定义）：
 
-  ```
+  ```text
   ./sample_codec -e 0 -d 0x1 # 关闭编码，启动 vdec_stream1
   ./sample_codec -e 0 -d 0x3  # 关闭编码，启动 vdec_stream1 和 vdec_stream2
   ```
 
 - 启用详细模式以获取更多日志信息：
 
-  ```
+  ```text
   ./sample_codec -v
   ```
 
 - 显示帮助信息：
 
-  ```
+  ```text
   ./sample_codec -h
   ```
 
@@ -122,7 +122,7 @@ Examples:
 
 其中编码参数选项说明如下：
 
-```
+```text
 [encode]
 ; 启用编码 , 按位运算
 ; 0x0 表示不启用编码
@@ -200,7 +200,7 @@ output = 1920x1080_NV12.yuv
 以配置文件中使能（ encode_streams = 0x1 ）的第一路 H264 编码为例。
 
 
-```
+```text
 ./sample_codec
 Config file: codec_config.ini
 encode_streams: 0x1

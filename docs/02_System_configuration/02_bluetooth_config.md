@@ -102,7 +102,7 @@ HID 类设备（键鼠）通常由外设主动发起重连；如需调整重连�
 
 ## 常见问题
 
-- **`rfkill` 显示 blocked**：`sudo rfkill unblock bluetooth`；部分板子有硬件开关需手动打开。
+- **`rfkill` 显示 blocked**：`sudo rfkill unblock bluetooth`；部分开发板有硬件开关需手动打开。
 - **扫描不到设备**：确认对端可发现；`hciconfig` 是否 `UP`；蓝牙模块是否被系统识别（`dmesg | grep -i bluetooth` 或 `lsusb`）。
 - **配对后无法连接**：`trust` 该设备；音频设备需额外配置 PulseAudio/PipeWire profile。
 - **开机不自动重连**：检查 `/etc/bluetooth/main.conf` 的 `ReconnectAttempts`、

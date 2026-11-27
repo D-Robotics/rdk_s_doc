@@ -28,7 +28,7 @@ S600 芯片内置 UFS Host 控制器，硬件最高支持 UFS 3.1 协议，软�
 
 ### S100/S600 UFS 控制器特性
 
-S100/S600芯片内置 UFS Host 控制器，支持以下特性：
+S100/S600 芯片内置 UFS Host 控制器，支持以下特性：
 
 | 特性 | 说明 |
 |------|------|
@@ -36,7 +36,7 @@ S100/S600芯片内置 UFS Host 控制器，支持以下特性：
 | UniPro 版本 | 支持 UniPro 1.61 / 1.8 |
 | M-PHY 版本 | 支持 M-PHY 3.0 |
 | 速率模式 | HS-G4（11.6Gbps/通道） |
-| 数据通道 | 2路数据通道 |
+| 数据通道 | 2 路数据通道 |
 | 功能支持 | 数据高速读写、安全存储 |
 
 ### 硬件模块组成
@@ -44,9 +44,9 @@ S100/S600芯片内置 UFS Host 控制器，支持以下特性：
 UFS 子系统由以下几个部分组成：
 
 1. **UFS Host Controller (UFSHC)** - 主机控制器
-   - 支持 UFS 3.0协议
-   - 支持 HS-G4速率（11.6Gbps/通道）
-   - 支持2路数据通道
+   - 支持 UFS 3.0 协议
+   - 支持 HS-G4 速率（11.6Gbps/通道）
+   - 支持 2 路数据通道
    - 内置 SCSI 命令队列管理
 
 2. **MPHY** - 物理层接口
@@ -79,7 +79,7 @@ flowchart TB
 
 ## 代码路径
 
-### Hobot UFS驱动文件
+### Hobot UFS 驱动文件
 ```shell
 hobot-drivers/ufs/ufs-hobot.c          # 主驱动文件
 hobot-drivers/ufs/ufs-hobot.h          # 头文件
@@ -88,7 +88,7 @@ hobot-drivers/ufs/ufs-hobot-hsi.h      # HSI层头文件
 hobot-drivers/ufs/Kconfig              # 内核配置选项
 hobot-drivers/ufs/Makefile             # 编译配置
 ```
-### Linux内核UFS核心代码
+### Linux 内核 UFS 核心代码
 ```shell
 drivers/ufs/core/ufshcd.c              # UFS核心层
 include/ufs/ufshcd.h                   # UFS核心头文件
@@ -119,7 +119,7 @@ kernel-dts/drobot-s600-soc.dtsi        # S600 SoC配置
 `hobot-drivers/configs/drobot_s600_defconfig`（基础 defconfig），并由 `mk_kernel.sh` 按 `RDK_DISK_MEDIUM` 变量合并 `hobot-drivers/configs/drobot_ufs.config`（UFS 介质配置）
 </DocScope>
 
-```
+```text
 # UFS核心支持
 CONFIG_SCSI_UFSHCD=y                   # 使能UFS Host Controller驱动
 CONFIG_SCSI_UFSHCD_PLATFORM=y          # 平台驱动支持
@@ -295,7 +295,7 @@ mkfs.ext4 /dev/block/platform/by-name/userdata
 
 ### U-Boot 下使用 UFS
 
-U-Boot 下 UFS 运行在 HS-GEAR4模式，支持在 U-Boot console 下使用标准 SCSI 命令访问 UFS 设备。
+U-Boot 下 UFS 运行在 HS-GEAR4 模式，支持在 U-Boot console 下使用标准 SCSI 命令访问 UFS 设备。
 
 #### 常用 SCSI 命令
 
@@ -307,7 +307,7 @@ U-Boot 下 UFS 运行在 HS-GEAR4模式，支持在 U-Boot console 下使用标�
 | `scsi read addr blk# cnt` | 从 UFS 读取数据到内存 | `scsi read 0x80000000 0x1000 0x100` |
 | `scsi write addr blk# cnt` | 将内存数据写入 UFS | `scsi write 0x80000000 0x1000 0x100` |
 
-#### U-Boot 下 ext4文件系统操作
+#### U-Boot 下 ext4 文件系统操作
 
 ```shell
 # 查看ext4分区内容
@@ -372,10 +372,10 @@ CONFIG_DYNAMIC_DEBUG=y
 **注意**：UFS 性能测试应在已挂载的文件系统分区上进行，**禁止直接对块设备(/dev/sda)写入**，否则会导致文件系统损坏。
 
 <DocScope products="RDK S100">
-RDK S100系列开发板默认会有如下分区，实际分区以板端输出为准：
+RDK S100 系列开发板默认会有如下分区，实际分区以板端输出为准：
 </DocScope>
 <DocScope products="RDK S600">
-RDK S600系列开发板默认会有如下分区，实际分区以板端输出为准：
+RDK S600 系列开发板默认会有如下分区，实际分区以板端输出为准：
 </DocScope>
 
 | 分区号 | 设备名 | 分区名 | 大小 | 文件系统 | 挂载点 | 用途 |
@@ -560,7 +560,7 @@ rm -rf /tmp/ufs_test
 | `--direct=1` | 直接 IO（绕过缓存） | 1 |
 | `--runtime` | 测试运行时间(秒) | 60 |
 | `--group_reporting` | 汇总报告 | 启用 |
-| `--rwmixread` | 混合读写中读比例 | 70 (表示70%读,30%写) |
+| `--rwmixread` | 混合读写中读比例 | 70 (表示 70%读,30%写) |
 
 ### 结果解读
 
@@ -572,7 +572,7 @@ FIO 输出关键指标：
 - **clat (completion latency)**：完成延迟，最重要指标
 
 示例输出：
-```
+```text
 seq_write_4k: (groupid=0, jobs=1): err= 0: pid=1234: Mon Jan  1 00:00:00 2024
   write: IOPS=50.5k, BW=197MiB/s (207MB/s)(11.5GiB/60001msec)
     slat (usec): min=3, max=100, avg= 5.23, stdev= 2.15
@@ -604,9 +604,9 @@ cat /sys/devices/platform/soc/*ufs/health_descriptor/life_time_estimation_b
 
 | 节点 | 说明 | 正常范围 | 备注 |
 |------|------|----------|------|
-| `eol_info` | 保留块状态 | 0x01 | 0x01=正常（保留块消耗不足90%）；0x02=预警（保留块已消耗90%及以上）；0x03=紧急（保留块耗尽，设备寿命终止） |
-| `life_time_estimation_a` | 寿命估计值 A | 0x01~0x09 | 0x01=已消耗10%以内，每增1多消耗10%；0x0A=已消耗90~100%（接近寿命终点，需规划换料）；0x0B及以上=已超出预计寿命 |
-| `life_time_estimation_b` | 寿命估计值 B | 0x01~0x09 | 0x01=已消耗10%以内，每增1多消耗10%；0x0A=已消耗90~100%（接近寿命终点，需规划换料）；0x0B及以上=已超出预计寿命 |
+| `eol_info` | 保留块状态 | 0x01 | 0x01=正常（保留块消耗不足 90%）；0x02=预警（保留块已消耗 90%及以上）；0x03=紧急（保留块耗尽，设备寿命终止） |
+| `life_time_estimation_a` | 寿命估计值 A | 0x01-0x09 | 0x01=已消耗 10%以内，每增 1 多消耗 10%；0x0A=已消耗 90-100%（接近寿命终点，需规划换料）；0x0B 及以上=已超出预计寿命 |
+| `life_time_estimation_b` | 寿命估计值 B | 0x01-0x09 | 0x01=已消耗 10%以内，每增 1 多消耗 10%；0x0A=已消耗 90-100%（接近寿命终点，需规划换料）；0x0B 及以上=已超出预计寿命 |
 
 具体数值含义请参考 UFS 设备数据手册中的 Device Health Descriptor 定义。
 
@@ -630,7 +630,7 @@ RDK 平台的标准划分方案为三个硬件分区：
 
 #### LUN 配置参数（Configuration Descriptor）
 
-参考配置项（详细说明请参考地瓜内部《S100 佰维颗粒UFS LUN配置调试记录》）：
+参考配置项（详细说明请参考 D-Robotics 内部《S100 佰维颗粒 UFS LUN 配置调试记录》）：
 
 | 分类 | 描述符偏移 | 字段名 | 值 | 说明 |
 |------|-----------|--------|-----|------|
@@ -676,7 +676,7 @@ ufs-config.sh lun
 
 **注意事项**：
 
-- 配置 LUN 完成后，需要 DFU 启动后，在 U-Boot 下通过 fastboot 重新烧写 UFS 上的镜像（烧写方法参考烧录文档）
+- 配置 LUN 完成后，需要 DFU 启动后，在 U-Boot 下通过 fastboot 重新烧录 UFS 上的镜像（烧录方法参考烧录文档）
 - 该脚本面向调试操作；产线推荐使用烧片器配置（见下节）
 - 某些颗粒（如佰维）对 SLC、bDataReliability、bProvisioningType 支持有限，脚本默认参数可能配置失败，需参照上表调整
 
@@ -691,7 +691,7 @@ ufs-config.sh lun
 ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
 ```
 
-验证要点：`bBootEnable = 0x01`；Config 0/1/2 Unit Descriptor 的 `bLUEnable = 0x01`、`bBootLunID` 分别为 0/1/2；LUN0 的 `dNumAllocUnits` 符合计算值；LUN1/LUN2 的 `dNumAllocUnits = 0x18` 且 `bMemoryType = 0x03`（SLC）；LUN3~7 的 `bLUEnable = 0x00`（未使用）。
+验证要点：`bBootEnable = 0x01`；Config 0/1/2 Unit Descriptor 的 `bLUEnable = 0x01`、`bBootLunID` 分别为 0/1/2；LUN0 的 `dNumAllocUnits` 符合计算值；LUN1/LUN2 的 `dNumAllocUnits = 0x18` 且 `bMemoryType = 0x03`（SLC）；LUN3-7 的 `bLUEnable = 0x00`（未使用）。
 
 ## 适配新的 UFS 设备
 
@@ -701,24 +701,24 @@ ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
 
 | 项目 | 要求 |
 |------|------|
-| UFS 协议版本 | 符合 V2.1、V3.0或 V3.1标准 |
+| UFS 协议版本 | 符合 V2.1、V3.0 或 V3.1 标准 |
 | 电气特性 | 与 UFS 控制器电平兼容 |
 | 封装尺寸 | 符合 PCB 布局要求 |
 
 ### 软件适配步骤
 
 1. **确认 UFS 设备符合标准协议**
-   - 验证设备支持 UFS 2.1/3.0/3.1标准
+   - 验证设备支持 UFS 2.1/3.0/3.1 标准
    - 确认 UniPro 和 M-PHY 版本兼容
 
 2. **调整 PHY 参数**
    - 根据不同 UFS 设备的电气特性，可能需要调整 MPHY 参数
-   - 在 DTS 中配置合适的`tx_eq_main_pre_post`参数
-   - 必要时调整参考时钟频率`ref-clk-freq`
+   - 在 DTS 中配置合适的 `tx_eq_main_pre_post` 参数
+   - 必要时调整参考时钟频率 `ref-clk-freq`
 
 3. **验证信号完整性**
    - 使用示波器检查信号质量
-   - 确保 HS-G4模式下信号完整
+   - 确保 HS-G4 模式下信号完整
 
 4. **进行兼容性测试**
    - 执行读写压力测试
@@ -730,7 +730,7 @@ ufs-utils desc -t 1 -r -p /dev/bsg/ufs-bsg0
 排查具体问题时，先确认以下通用事项：
 
 1. **电源管理**：UFS 支持多种低功耗模式，确保电源域配置正确
-2. **时钟配置**：UFS 需要稳定的参考时钟，默认使用26MHz
+2. **时钟配置**：UFS 需要稳定的参考时钟，默认使用 26MHz
 3. **信号完整性**：高速模式下注意 PCB 走线设计和阻抗匹配
 4. **温度影响**：MPHY 校准值随温度变化，确保在有效温度范围内使用
 5. **热插拔**：UFS 不支持热插拔，启动前确保设备已正确连接

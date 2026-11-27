@@ -14,7 +14,7 @@ scp 是加密的，rcp 是不加密的，scp 是 rcp 的加强版。
 
 ## 语法说明
 
-```
+```text
 scp [-346BCpqrTv] [-c cipher] [-F ssh_config] [-i identity_file]
             [-J destination] [-l limit] [-o ssh_option] [-P port]
             [-S program] source ... target
@@ -22,18 +22,18 @@ scp [-346BCpqrTv] [-c cipher] [-F ssh_config] [-i identity_file]
 
 简易写法:
 
-```
+```text
 scp [option] file_source file_target 
 ```
 
 - **file_source**：指定要复制的源文件。
-- **file_target**：目标文件。格式为`user@host:filename`（文件名为目标文件的名称）。
+- **file_target**：目标文件。格式为 `user@host:filename`（文件名为目标文件的名称）。
 
 ## 选项说明
 
 - -3：通过本地主机传输两个远程主机之间的文件。如果不使用此选项，数据将直接在两个远程主机之间传输。请注意，此选项会禁用传输进度显示。
-- -4： 强制 scp 命令只使用 IPv4寻址
-- -6： 强制 scp 命令只使用 IPv6寻址
+- -4： 强制 scp 命令只使用 IPv4 寻址
+- -6： 强制 scp 命令只使用 IPv6 寻址
 - -B： 选择批处理模式（防止询问密码或密码短语）
 - -C： 允许压缩。（将-C 标志传递给 ssh，从而打开压缩功能）
 - -p：保留原文件的修改时间，访问时间和访问权限。
@@ -55,7 +55,7 @@ scp [option] file_source file_target
 
 命令格式：
 
-```
+```text
 scp local_file remote_username@remote_ip:remote_folder 
 ## 或者 
 scp local_file remote_username@remote_ip:remote_file 
@@ -65,12 +65,12 @@ scp local_file remote_ip:remote_folder
 scp local_file remote_ip:remote_file 
 ```
 
-- 第1、2个指定了用户名，命令执行后需要再输入密码，第1个仅指定了远程的目录，文件名字不变，第2个指定了文件名；
-- 第3、4个没有指定用户名，命令执行后需要输入用户名和密码，第3个仅指定了远程的目录，文件名字不变，第4个指定了文件名；
+- 第 1、2 个指定了用户名，命令执行后需要再输入密码，第 1 个仅指定了远程的目录，文件名字不变，第 2 个指定了文件名；
+- 第 3、4 个没有指定用户名，命令执行后需要输入用户名和密码，第 3 个仅指定了远程的目录，文件名字不变，第 4 个指定了文件名；
 
 应用实例：
 
-```
+```text
 scp /home/sunrise/test.c root@192.168.1.10:/userdata 
 scp /home/sunrise/test.c root@192.168.1.10:/userdata/test_01.c
 scp /home/sunrise/test.c 192.168.1.10:/userdata
@@ -79,27 +79,27 @@ scp /home/sunrise/test.c 192.168.1.10:/userdata/test_01.c
 
 复制目录命令格式：
 
-```
+```text
 scp -r local_folder remote_username@remote_ip:remote_folder 
 ## 或者 
 scp -r local_folder remote_ip:remote_folder 
 ```
 
-- 第1个指定了用户名，命令执行后需要再输入密码；
-- 第2个没有指定用户名，命令执行后需要输入用户名和密码；
+- 第 1 个指定了用户名，命令执行后需要再输入密码；
+- 第 2 个没有指定用户名，命令执行后需要输入用户名和密码；
 
 应用实例：
 
-```
+```text
 scp -r /home/sunrise/app/ root@192.168.1.10:/userdata/app/ 
 scp -r /home/sunrise/app/ 192.168.1.10:/userdata/app/ 
 ```
 
-上面命令将本地 `app` 目录复制到远程`/userdata/app/`目录下。
+上面命令将本地 `app` 目录复制到远程 `/userdata/app/` 目录下。
 
 **从远程复制到本地**
 
-从远程复制到本地的 scp 命令与上面的命令雷同，只要将从本地复制到远程的命令后面2个参数互换顺序就行了。
+从远程复制到本地的 scp 命令与上面的命令雷同，只要将从本地复制到远程的命令后面 2 个参数互换顺序就行了。
 
 从远程机器复制文件到本地目录
 
@@ -107,6 +107,4 @@ scp -r /home/sunrise/app/ 192.168.1.10:/userdata/app/
 scp sunrise@192.168.1.10:/userdata/log.log /home/sunrise/
 ```
 
-从192.168.1.10机器上的`/userdata/`的目录中下载`log.log` 文件到本地`/home/sunrise/`目录中。
-
-<!-- TODO(S3): 待板端实测输出——scp 传输需远程对端主机，本验证板无第二主机可测，传输输出待补充。 -->
+从 192.168.1.10 机器上的 `/userdata/` 的目录中下载 `log.log` 文件到本地 `/home/sunrise/` 目录中。

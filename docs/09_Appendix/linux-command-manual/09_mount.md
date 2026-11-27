@@ -10,7 +10,7 @@ description: "Linux 命令 mount 用法"
 
 ## 语法说明
 
-```
+```text
 mount [-l|-h|-V]
 mount -a [-fFnrsvw] [-t fstype] [-O optlist]
 mount [-fnrsvw] [-o options] device|dir
@@ -50,31 +50,31 @@ mount [-fnrsvw] [-t fstype] [-o options] device dir
 
 将 /dev/hda1 挂在 /mnt 之下
 
-```
+```text
 mount /dev/hda1 /mnt
 ```
 
 将 /dev/hda1 用只读模式挂在 /mnt 之下
 
-```
+```text
 mount -o ro /dev/hda1 /mnt
 ```
 
 将 / 根目录重新挂载为读写模式
 
-```
+```text
 mount -o remount,rw /
 ```
 
 挂载 nfs 网络文件系统
 
-```
+```text
 mount -t nfs -o nolock 192.168.1.20:/home/ /tmp/nfs
 ```
 
 查看当前系统已挂载的文件系统
 
-```
+```text
 mount
 ```
 

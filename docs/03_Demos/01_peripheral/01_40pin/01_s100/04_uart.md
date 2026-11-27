@@ -16,9 +16,8 @@ RDK S100 在 40-pin 上支持 UART2，物理管脚号 8 和 10，IO 电压 3.3V�
 
 :::info
 
-40-pin 上需要拨动拨码开关来选择使用 UART2 还是 I2C5, 具体细节可以查看下图：
+40-pin 上需要拨动拨码开关来选择使用 UART2 还是 I2C5，具体细节可以查看下图：
 
-<!-- TODO(F1): uart/i2c 示意图复用 audio3.png 疑错，待换正确原理图 -->
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/02_linux_development/driver_development_s100/audio3.png" alt="串口应用示意图" style={{ width: '40%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 拨动拨码开关之后还需要修改设备树文件，修改路径及方式如下：
@@ -46,7 +45,7 @@ uart2: uart@394C0000 {
 请参阅 `/app/40pin_samples/test_serial.py` 了解如何使用串口的详细信息。
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在板子上经过实际验证。
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在开发板上经过实际验证。
 :::
 
 ## 代码位置
@@ -59,15 +58,15 @@ UART 回环测试代码位于板端 `/app/40pin_samples/test_serial.py`。
 
 ### 硬件连接
 
-把 TXD 和 RXD 通过跳线帽直接硬件上连接在一起：
+把 TXD 和 RXD 用跳线帽短接在一起：
 
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/03_Basic_Application/03_40pin_user_guide/image/40pin_user_guide/image-rdk_s100_uart.png" alt="UART 回环测试：TXD 与 RXD 通过跳线帽短接" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### 测试过程
 
 
-- 运行 `python3 /app/40pin_samples/test_serial.py`
-- 从打印的串口设备中选择要测试的设备。其中 `/dev/ttyS0` 是系统调试口，不建议对它进行测试。例如 RDK S100 可选择 `/dev/ttyS2`，按回车键确认后输入波特率参数：
+1. 运行 `python3 /app/40pin_samples/test_serial.py`
+2. 从打印的串口设备中选择要测试的设备。其中 `/dev/ttyS0` 是系统调试口，不建议对它进行测试。例如 RDK S100 可选择 `/dev/ttyS2`，按回车键确认后输入波特率参数：
 
 ```text
 root@ubuntu:/app/40pin_samples# ./test_serial.py
@@ -87,7 +86,8 @@ Recv:  AA55
 `Serial<id=...>` 中的 id 为 Python 对象地址，每次运行都不同，以实际输出为准。
 :::
 
-- 若未短接 TXD/RXD，`Recv:` 后面为空（读不到数据），说明回环失败：
+:::warning 回环失败
+未短接 TXD/RXD 时，`Recv:` 后面为空（读不到数据），说明回环失败：
 
 ```text
 Starting demo now! Press CTRL+C to exit
@@ -96,6 +96,7 @@ Recv:
 Send:  AA55
 Recv:
 ```
+:::
 
 ## 测试代码
 

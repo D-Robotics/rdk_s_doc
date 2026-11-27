@@ -10,13 +10,13 @@ import DocScope from '@site/src/components/DocScope';
 
 # 调试串口
 
-调试串口是系统起不来时的**硬件级入口**——不依赖网络与系统是否正常，直接从板载调试串口看启动日志、进 U-Boot/恢复系统。网络登录不通时，串口是兜底手段。
+调试串口是系统无法启动时的**硬件级入口**——不依赖网络与系统是否正常，直接从板载调试串口看启动日志、进 U-Boot/恢复系统。网络登录不通时，串口是兜底手段。
 
 **适用读者**：需要通过串口登录板卡，或在系统无法启动时进行恢复的开发者。
 
 **前置条件**：一台 PC 与支持数据传输的 USB Type-C 数据线；PC 端已安装 CH340 驱动与串口工具。
 
-**与其他模块关系**：登录账户见[用户与权限管理](./14_user_permission.md)；启动日志的查看见[系统日志查看](./15_system_log.md)。
+**与其他模块关系**：登录账户见 [用户与权限管理](./14_user_permission.md)；启动日志的查看见 [系统日志查看](./15_system_log.md)。
 
 ## 硬件接线
 
@@ -26,7 +26,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **RDK S100**
 
-- 调试接口：USB Type-C（**J16**）
+- 调试接口：USB Type-C（J16）
 - 板载 2 颗 CH340，分别对应 Main 域与 MCU 域调试串口
 - 连接器位置与参数：[RDK S100 硬件介绍 - Type-C (J16)](../01_Quick_start/01_hardware_introduction/01_rdk_s100.md#type-c-j16)
 
@@ -36,7 +36,7 @@ import DocScope from '@site/src/components/DocScope';
 
 **RDK S600**
 
-- 调试接口：USB Type-C（**J4**）
+- 调试接口：USB Type-C（J4）
 - 板载 2 颗 CH340，分别对应 Main 域与 MCU 域调试串口
 - 连接器位置与参数：[RDK S600 硬件介绍 - 闪连 烧录，Main&MCU 调试 (J4)](../01_Quick_start/01_hardware_introduction/02_rdk_s600.md#j4)
 
@@ -74,9 +74,9 @@ screen /dev/ttyUSB0 921600
 
 ## 串口登录
 
-连接并上电后，串口会输出启动日志（U-Boot → kernel → systemd）。系统起来后回车出登录提示，输入账户密码（见 [用户与权限管理](./14_user_permission.md)）。
+连接并上电后，串口会输出启动日志（U-Boot → kernel → systemd）。系统启动后回车出登录提示，输入账户密码（见 [用户与权限管理](./14_user_permission.md)）。
 
-## 进 U-Boot（系统起不来时）
+## 进 U-Boot（系统无法启动时）
 
 上电瞬间在串口按任意键（或空格）打断自动引导，进入 U-Boot 命令行，可查/改启动参数、恢复引导。U-Boot 参数配置见 [配置 U-Boot 和 Kernel 选项参数](../07_Advanced_development/04_driver_development/01_uboot_kernel_config.md)。
 
@@ -84,7 +84,7 @@ screen /dev/ttyUSB0 921600
 
 - **串口无输出**：选错串口（板卡识别出 Main/MCU 两个串口，选 Main 域）；波特率不对（确认 921600）；CH340 驱动未装。
 - **乱码**：波特率不对（确认 921600）；macOS 驱动残留，见 [macOS 驱动残留导致仍乱码](https://developer.d-robotics.cc/xburn_doc/troubleshooting/serial-driver)。
-- **进不了 U-Boot**：上电时机要早（启动日志一开始就打断），错过就重启重试。
+- **进不了 U-Boot**：上电后须立即按任意键打断自动引导，错过则重新上电重试。
 
 ## 验证
 

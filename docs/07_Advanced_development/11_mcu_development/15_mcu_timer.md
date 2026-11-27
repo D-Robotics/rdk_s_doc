@@ -42,10 +42,10 @@ TIMER 的默认配置如下：
 ## 硬件支持
 
 <DocScope products="RDK S100">
-目前 RDK S100 有 6 个 Instance，每个 Instance 有4个32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
+目前 RDK S100 有 6 个 Instance，每个 Instance 有 4 个 32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
 </DocScope>
 <DocScope products="RDK S600">
-目前 RDK S600 有 10 个 Instance，每个 Instance 有4个32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
+目前 RDK S600 有 10 个 Instance，每个 Instance 有 4 个 32bit 计数的 Channel，每个 Channel 都是一个定时器，可用于定时等功能。
 </DocScope>
 
 定时器(Timer)的具体配置信息在如下宏中定义:
@@ -187,12 +187,12 @@ flowchart LR
 ## 开发与使用方法
 
 <DocScope products="RDK S100">
-sample 程序默认使用定时器2的通道2（Timer2 Channel2），S100上的定时器输入时钟默认配置为 200MHz。
+sample 程序默认使用定时器 2 的通道 2（Timer2 Channel2），S100 上的定时器输入时钟默认配置为 200MHz。
 </DocScope>
 <DocScope products="RDK S600">
-sample 程序默认使用定时器2的通道2（Timer2 Channel2），S600上的定时器输入时钟默认配置为 40MHz。
+sample 程序默认使用定时器 2 的通道 2（Timer2 Channel2），S600 上的定时器输入时钟默认配置为 40MHz。
 </DocScope>
-定时器只支持向下计数，无法支持设置一个比较值然后计数比较的硬件功能，默认工作在 Continue 模式下，即每次都会自动重装计数值。如果需要 One-Shot 的形式，则需要在中断函数中停止 Timer，然后自己根据需要重配计数值。定时器最大支持的计数值为2^width-1，其中 width 表示定时器的位宽。定时器支持16、24、32bit 三种格式的位宽，默认使用32bit。
+定时器只支持向下计数，无法支持设置一个比较值然后计数比较的硬件功能，默认工作在 Continue 模式下，即每次都会自动重装计数值。如果需要 One-Shot 的形式，则需要在中断函数中停止 Timer，然后自己根据需要重配计数值。定时器最大支持的计数值为 2^width-1，其中 width 表示定时器的位宽。定时器支持 16、24、32bit 三种格式的位宽，默认使用 32bit。
 
 ### 配置说明
 
@@ -225,7 +225,7 @@ typedef struct
 
 ```
 
-2. sample 使用的定时器为 Timer2_Channel2，需要将该通道的配置信息添加到`pChannelCfg`数组中；并在`pChannelId2IdxMap`中添加 Channel ID -> 下标映射；将宏`GPT_CHANNEL_TOTAL_NUM`的值加1，以反映新增通道数量。
+2. sample 使用的定时器为 Timer2_Channel2，需要将该通道的配置信息添加到 `pChannelCfg` 数组中；并在 `pChannelId2IdxMap` 中添加 Channel ID -> 下标映射；将宏 `GPT_CHANNEL_TOTAL_NUM` 的值加 1，以反映新增通道数量。
 3. 配置对应通道的回调函数，当定时器中断触发后，驱动会自动根据 Instance ID 和 Channel ID 调用 `Gpt_PerChanneInfoType` 中注册的回调函数。配置方式如下所示：
 
 ```c
@@ -554,10 +554,10 @@ timer_interrupt gettime <type>
     - gettime - 读取当前定时器剩余计数值
 - load: 定时器装载值（计数初值），仅在 on 操作时有效
     <DocScope products="RDK S100">
-    在 S100上默认的时钟频率为200MHz，时钟频率和装载值的关系如下：
+    在 S100 上默认的时钟频率为 200MHz，时钟频率和装载值的关系如下：
     </DocScope>
     <DocScope products="RDK S600">
-    在 S600上默认的时钟频率为40MHz，时钟频率和装载值的关系如下：
+    在 S600 上默认的时钟频率为 40MHz，时钟频率和装载值的关系如下：
     </DocScope>
     ```c
     load_value = timer_clk(Hz) × period(s)
@@ -578,7 +578,7 @@ timer_interrupt gettime <type>
     - 0 - 关闭定时器中断
     - 1 - 启动定时器中断
 
-**示例1**：启动定时器，并设置周期为1s 的定时中断
+**示例 1**：启动定时器，并设置周期为 1s 的定时中断
 
 ```shell
 timer_interrupt on 1s 1
@@ -586,9 +586,9 @@ timer_interrupt on 1s 1
 
 输出结果:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case1.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case1.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-**示例2**：启动定时器，并设置周期为100us 的定时中断
+**示例 2**：启动定时器，并设置周期为 100us 的定时中断
 
 ```shell
 timer_interrupt on 100us 1
@@ -596,11 +596,11 @@ timer_interrupt on 100us 1
 
 输出结果:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case2.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case2.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-**示例3**：启动定时器，并获取当前剩余计数值
+**示例 3**：启动定时器，并获取当前剩余计数值
 
-设置计数周期为20秒
+设置计数周期为 20 秒
 
 ```shell
 timer_interrupt on 20s 0
@@ -620,7 +620,7 @@ timer_interrupt gettime 3
 
 输出结果:
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case3.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/mcu_timer_case3.png" alt="使用示例示意图" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## 调试
 

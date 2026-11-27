@@ -134,7 +134,7 @@ ar0820@11 {
 
 ## Sensor dtbo 文件编写配置说明
 
-uboot 支持 DTB Overlay 功能，可以在不修改当前启动使用的 dts 文件的情况下，通过编写配置对应的 dtbo 文件，对当前启动使用的 dtb 文件进行增/改（不支持删减）。
+U-Boot 支持 DTB Overlay 功能，可以在不修改当前启动使用的 dts 文件的情况下，通过编写配置对应的 dtbo 文件，对当前启动使用的 dtb 文件进行增/改（不支持删减）。
 
 ### sensor dtbo 文件生成
 
@@ -213,11 +213,11 @@ dtc -q -@ -I dts -O dtb -o sample.dtbo sample.dtso
 
 2. 修改 `/boot/config.txt` 文件，配置要添加的 dtbo 文件：
 
-   ```
+   ```text
    dtbo_file_path=/overlays/v0p5_d457_2v_depth_color.dtbo
    ```
 
-3. 重启板子，使能配置的 dtbo 文件。在 debug 版本的 uboot log 中可以检查加载 dtbo 的情况。
+3. 重启开发板，使能配置的 dtbo 文件。在 debug 版本的 U-Boot log 中可以检查加载 dtbo 的情况。
 
 ## Sensor gain LUT 表编写说明
 
@@ -500,7 +500,7 @@ ln -s /dev/video0 /dev/video-rs-imu-1
 
 ### 预览
 
-- **D457**：SDK 编译完成后，终端输入 `realsense-viewer`，添加 D457 设备即可预览。viewer 默认显示一路 D457，多路数据点击左上角 Add Source 按钮添加。
+- **D457**：SDK 编译完成后，终端输入 `realsense-viewer`，添加 D457 设备即可预览。viewer 默认显示一路 D457，多路数据单击左上角 Add Source 按钮添加。
 
   ![D457 预览效果](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/03_multimedia_development/02_S100/camera_bringup/camera_bringup_16.png)
 

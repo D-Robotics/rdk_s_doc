@@ -12,7 +12,7 @@ Debian Linux 系统上安装、创建和管理软件包。
 
 ## 语法说明
 
-```
+```text
 dpkg [`option` ...] `command`
 ```
 
@@ -50,55 +50,55 @@ dpkg 命令不仅有选项可以设置，还需要设置命令来执行不同的
 - --ignore-depends=`软件包`,... 		 忽略关于 `软件包` 的所有依赖关系。
 - --force-...                忽视遇到的问题(参见 --force-help)。
 - --no-force-...|--refuse-... 	 当遇到问题时中止运行。
-- --abort-after ``n``         累计遇到 ``n`` 个错误后中止。
+- --abort-after `n`         累计遇到 `n` 个错误后中止。
 
 ## 常用命令
 
 - 安装包
 
-```
+```text
 dpkg -i package.deb
 ```
 
 - 删除包
 
-```
+```text
 dpkg -r package
 ```
 
 - 删除包（包括配置文件）
 
-```
+```text
 dpkg -P package
 ```
 
 - 列出与该包关联的文件
 
-```
+```text
 dpkg -L package
 ```
 
 - 显示该包的版本
 
-```
+```text
 dpkg -l package
 ```
 
 - 解开 deb 包的内容
 
-```
+```text
 dpkg --unpack package.deb
 ```
 
 - 搜索所属的包内容
 
-```
+```text
 dpkg -S keyword
 ```
 
 - 列出当前已安装的包
 
-```
+```text
 dpkg -l
 ```
 
@@ -113,12 +113,12 @@ ii  accountsservice 23.13.9-2ubuntu6  arm64        query and manipulate user acc
 
 - 列出 deb 包的内容
 
-```
+```text
 dpkg -c package.deb
 ```
 
 - 配置包
 
-```
+```text
 dpkg --configure package
 ```

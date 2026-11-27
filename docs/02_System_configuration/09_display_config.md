@@ -12,7 +12,7 @@ RDK 板卡通过 HDMI/DP 接口接显示器。桌面版（Desktop）开箱即显
 
 **前置条件**：已用 HDMI/DP 线连接显示器；桌面版已进入图形桌面（X11 或 Wayland 会话）。
 
-**与其他模块关系**：屏幕省电设置见[屏幕休眠与电源管理](./11_screen_sleep.md)；音频输出切换见[音频配置](./10_audio_output.md)。
+**与其他模块关系**：屏幕省电设置见 [屏幕休眠与电源管理](./11_screen_sleep.md)；音频输出切换见 [音频配置](./10_audio_output.md)。
 
 :::info 说明
 RDK OS 桌面版默认运行 GNOME（Wayland 会话）。`xrandr` 是 X11 工具，仅适用于 X11 会话；Wayland 会话下请在「设置 → 显示器」里调整分辨率，或用 `gnome-control-center display` 打开设置。

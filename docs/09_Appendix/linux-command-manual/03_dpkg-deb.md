@@ -10,7 +10,7 @@ description: "Linux 命令 dpkg-deb 用法"
 
 ## 语法说明
 
-```
+```text
   dpkg-deb [<option> ...] <command>
 ```
 

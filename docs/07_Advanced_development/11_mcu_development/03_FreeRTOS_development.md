@@ -50,7 +50,7 @@ MCU0 已占用的中断见下一节；MCU1 已实现的中断处理函数位于 
 
 由于 MCU0 和 MCU1 处于同一硬件域，所以当中断产生时，MCU0/MCU1 都能接收到同一中断。因此为了保障 MCU 系统的正常运行，同一中断只能由 MCU0 或 MCU1 使能。但是又因为 MCU0 不对外开源，因此需要对 MCU0 使用的中断进行总结，避免 MCU1 客户开发过程中使用冲突。
 
-目前 MCU0已经使用的中断：
+目前 MCU0 已经使用的中断：
 <DocScope products="RDK S100">
 | 模块 | 中断号 | 名称 |
 |--------|----------------------------------------|---------------------------------------------|
@@ -195,7 +195,7 @@ StaticLibServicePath:
 
    如增加 mcu/Service/Log 文件夹，只需增加相应的位置即可。目前 Service/Platform/McalCdd/Common 有独立的 path，增加该目录需要放在相应位置。除此之外，其他文件夹的添加统一放在 BuildPath 即可
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="增加编译目录流程示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/scons_add_context.jpg" alt="增加编译目录流程示意图" style={{ width: '70%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 2. 在添加编译的模块下，添加 SConscript 文件，SConscript 文件可以从任意已经编译的模块文件夹下获取
 </DocScope>
@@ -207,7 +207,7 @@ MCU 侧有几个系统关键功能，如下图所示：
 <img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/01_S100/FreeRTOS_development/freertos_system.png" alt="MCU FreeRTOS 系统简介示意图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 <DocScope products="RDK S600">
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="MCU FreeRTOS 系统简介截图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/05_mcu_development/02_S600/03_FreeRTOS_development/FreeRTOS_TaskInfo.png" alt="MCU FreeRTOS 系统简介截图" style={{ width: '90%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 </DocScope>
 
 ### 功能与任务划分
@@ -218,7 +218,7 @@ MCU 侧有几个系统关键功能，如下图所示：
 
 #### 电源管理
 
-ScmiProcess：放在高优先级任务中，建议放在 2ms 任务中。如果不能满足，最大调度周期不要超过100ms。放在调度周期长的任务中会影响启动时间，一般评估影响可以按照启动过程中的"scmi 通讯次数 x 所在任务周期"计算。
+ScmiProcess：放在高优先级任务中，建议放在 2ms 任务中。如果不能满足，最大调度周期不要超过 100ms。放在调度周期长的任务中会影响启动时间，一般评估影响可以按照启动过程中的"scmi 通讯次数 x 所在任务周期"计算。
 
 SysPower_State_Loop/SysPower_State_MainFunction：放在低优先级任务中。
 
@@ -364,7 +364,7 @@ DefaultISR:
 ```
 
 注意：
-在 MCU1使能中断的时候一定要确保 MCU0相应的中断处于关闭状态
+在 MCU1 使能中断的时候一定要确保 MCU0 相应的中断处于关闭状态
 
 ### 内存管理
 
@@ -376,7 +376,7 @@ heap_1.c 管理方案是 FreeRTOS 提供所有内存管理方案中最简单的�
 
 #### heap_2.c
 
-heap_2.c 方案与 heap_1.c 方案采用的内存管理算法不一样，它采用一种最佳匹配算法(best fit algorithm)，比如我们申请100字节的内存，而可申请内存中有三块对应大小200字节，500字节和1000字节大小的内存块，按照算法的最佳匹配，这时候系统会把200字节大小的内存块进行分割并返回申请内存的起始地址，剩余的内存则插回链表留待下次申请。Heap_2.c 方案支持释放申请的内存，将释放的内存重新插入链表，并按照大小进行排序，但是它不能把相邻的两个小的内存块合成一个大的内存块，对于每次申请内存大小都比较固定的，这个方式是没有问题的，而对于每次申请并不是固定内存大小的则会造成内存碎片，后面要讲解的 heap_4.c 方案采用的内存管理算法能解决内存碎片的问题，可以把这些释放的相邻的小的内存块合并成一个大的内存块。
+heap_2.c 方案与 heap_1.c 方案采用的内存管理算法不一样，它采用一种最佳匹配算法(best fit algorithm)，比如我们申请 100 字节的内存，而可申请内存中有三块对应大小 200 字节，500 字节和 1000 字节大小的内存块，按照算法的最佳匹配，这时候系统会把 200 字节大小的内存块进行分割并返回申请内存的起始地址，剩余的内存则插回链表留待下次申请。Heap_2.c 方案支持释放申请的内存，将释放的内存重新插入链表，并按照大小进行排序，但是它不能把相邻的两个小的内存块合成一个大的内存块，对于每次申请内存大小都比较固定的，这个方式是没有问题的，而对于每次申请并不是固定内存大小的则会造成内存碎片，后面要讲解的 heap_4.c 方案采用的内存管理算法能解决内存碎片的问题，可以把这些释放的相邻的小的内存块合并成一个大的内存块。
 
 #### heap_3.c
 
@@ -405,7 +405,7 @@ RDK S600 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合�
 
 ## LOG 区域调整
 
-### MCU1区域调整
+### MCU1 区域调整
 
 <DocScope products="RDK S100">
 修改 `mcu/Build/FreeRtos_mcu1/Linker/gcc/S100/link_freertos_mcu1.ld` 文件中相应位置，大小暂不支持修改。
@@ -429,7 +429,7 @@ RDK S600 采用的是 heap_4.c 方案，该方案结合最佳匹配算法和合�
 
 ## MCU 与 Acore 共享内存区域预留
 
-该共享内存区域空间开辟在 MCU0所在空间，但 MCU0和 MCU1同属于 MCU SRAM 域，因此 MCU1也可以使用相应地址
+该共享内存区域空间开辟在 MCU0 所在空间，但 MCU0 和 MCU1 同属于 MCU SRAM 域，因此 MCU1 也可以使用相应地址
 ```c
 MCU_STATE_Reserved      : org = 0x0C800800, len = 1K
 ```
@@ -475,8 +475,8 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 <DocScope products="RDK S100">
 | 模块 | 中断号 | 名称 |
 |--------|----------------------------------------|---------------------------------------------|
-| SGI| 0~15| |
-| PPI| 16~31| |
+| SGI| 0-15| |
+| PPI| 16-31| |
 | MCU_STCU | 32| Bist_Stcu0Isr|
 | MEDIA_TOP_STCU|33|Bist_Stcu1Isr|
 | VIDEO_STCU|34|Bist_Stcu2Isr|
@@ -796,8 +796,8 @@ MCU_ALIVE:     org = 0x0C800860, len = 0x10
 <DocScope products="RDK S600">
 | 模块 | 中断号 | 名称 |
 |--------|----------------------------------------|---------------------------------------------|
-|SGI|0~15||
-|PPI|16~31||
+|SGI|0-15||
+|PPI|16-31||
 |MCU_STCU|32|Bist_Stcu0Isr|
 |PERI_STCU|33|Bist_Stcu1Isr|
 |VIDEO_STCU|34|Bist_Stcu2Isr|

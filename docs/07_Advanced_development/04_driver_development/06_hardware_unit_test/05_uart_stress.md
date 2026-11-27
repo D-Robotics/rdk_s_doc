@@ -33,12 +33,12 @@ S600 板载 8 路 UART（uart0~uart7）。
 ## 环境准备
 
 - 开发板已烧录官方发布的 RDK OS 镜像，且已正常启动。
-- 板端 `/app/chip_base_test/03_uart_test/` 下存在测试源码与脚本（`uartstress.sh`、`uart_test.c`、`Makefile`）；`uart_test` 可执行文件需按[编译执行文件](#编译执行文件)步骤生成。
+- 板端 `/app/chip_base_test/03_uart_test/` 下存在测试源码与脚本（`uartstress.sh`、`uart_test.c`、`Makefile`）；`uart_test` 可执行文件需按 [编译执行文件](#编译执行文件) 步骤生成。
 - 回环测试需先用杜邦线将所测串口的 `tx` 与 `rx` 短接。
 
 <DocScope products="RDK S100">
 
-- S100 测试 uart2 前需先禁用 i2c5、使能 uart2（修改设备树并重新编译 dtb 安装），并将拨码开关拨到 uart2 位置，详见[注意事项](#注意事项)。
+- S100 测试 uart2 前需先禁用 i2c5、使能 uart2（修改设备树并重新编译 dtb 安装），并将拨码开关拨到 uart2 位置，详见 [注意事项](#注意事项)。
 
 </DocScope>
 

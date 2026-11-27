@@ -47,7 +47,7 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 - **stressapptest CPU 压测原理**： CPU 压测主要通过多线程并发执行一些计算密集型的任务来实现，这些任务包括：计算密集型任务、多线程并行执行等。
 	- 线程创建： `stressapptest` 通过 `pthread_create()` 来创建多个线程，每个线程执行计算任务，线程的数量由 `-m`（内存拷贝）、`-i`（内存翻转）、`-C`（CPU 压力）等参数分别指定。
 
-	```C
+	```c
 	for (int i = 0; i < num_threads; i++) {
 		pthread_create(&threads[i], NULL, cpu_stress_function, (void*)i);
 	}
@@ -55,7 +55,7 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 
 	- 计算密集型任务：每个线程会执行一些计算密集型的操作，例如浮点数计算、内存读写等，这会消耗 CPU 资源。
 
-	```C
+	```c
 	void* cpu_stress_function(void* arg) {
 		while (true) {
 				// Perform some CPU-intensive calculations
@@ -73,7 +73,7 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 - **stressapptest DDR 压测原理**： DDR 内存的压力测试主要涉及大量的内存分配、访问和数据交换，通过高内存使用、频繁的内存读写操作以及内存带宽的消耗来进行。
 	- 内存分配：在内存压力测试中，`stressapptest` 会根据 `-M` 参数（例如 `-M 8192`）来分配指定大小的内存。
 
-	```C
+	```c
 	void* allocate_memory(size_t size) {
 		void* ptr = malloc(size);  // 分配指定大小的内存
 		if (ptr == NULL) {
@@ -86,7 +86,7 @@ CPU-BPU-DDR 压力测试的测试原理主要涉及对 CPU、BPU 和 DDR 在高�
 
 	- 内存读写操作：`stressapptest` 会在分配的内存区域中进行大量的读取和写入：
 
-	```C
+	```c
 	void stress_memory(void* ptr, size_t size) {
 		volatile char* data = (volatile char*)ptr;
 				for (size_t i = 0; i < size; i++) {
@@ -128,12 +128,12 @@ stressapptest -s "$stime" -M "$memory_size" \
 
 <DocScope products="RDK S100">
 
-- **测试目标**： 通过 `run.sh` 脚本调用 `bpu_os_test` 工具，用 `-r` 参数控制 BPU 负载比例（5~100%），在指定负载场景下持续推理 YOLOv3 模型，确保 BPU 在高负载下稳定工作并达到预期性能。
+- **测试目标**： 通过 `run.sh` 脚本调用 `bpu_os_test` 工具，用 `-r` 参数控制 BPU 负载比例（5-100%），在指定负载场景下持续推理 YOLOv3 模型，确保 BPU 在高负载下稳定工作并达到预期性能。
 - **测试目的**： 确保 BPU 在执行计算任务时能够输出正确结果，长时间高负载运行下不出现崩溃或错误。
 
 - **bpu_os_test BPU 压测原理**： 通过加载包含大量计算任务的 YOLOv3 模型，利用 BPU 的 **group proportion 机制**调度推理任务，使 BPU 占用率稳定在指定比例。工作流程：
     1. `stress_test.sh` 包装层解析 `-r <portion>` 参数；
-    2. `run.sh` 根据 `portion` 值分档选择线程数（1~8 线程）和 group 分布；
+    2. `run.sh` 根据 `portion` 值分档选择线程数（1-8 线程）和 group 分布；
     3. 每个线程调用 `hb_bpu_set_group_proportion()` 设置其所在 group 的 BPU 配额，再通过 `hb_bpu_task_set_group()` 将推理任务绑定到对应 group；
     4. 所有 group 的 proportion 之和即最终的 BPU 占用率。
 
@@ -186,7 +186,7 @@ stressapptest -s "$stime" -M "$memory_size" \
 
 	- `--model_file <hbm>`：S600 适配的 HBM 模型文件路径。
 	- `--core_id <ids>`：要加压的 BPU 核列表（逗号分隔），编号规则 `1=bpu0 2=bpu1 3=bpu2 4=bpu3`（与 `hrt_model_exec` 内置说明一致：`1 for core 0, 2 for core 1 and etc`），由 `stress_test.sh -c` 透传。
-	- `--thread_num 16`：并发推理线程数（脚本固定为 16，足以填满全部 4 核的流水线；工具允许范围为 1~32）。
+	- `--thread_num 16`：并发推理线程数（脚本固定为 16，足以填满全部 4 核的流水线；工具允许范围为 1-32）。
 	- `--perf_time <min>`：perf 模式运行时长，单位为分钟，由 `stress_test.sh -t` 向上取整换算得到。
 
 </DocScope>
@@ -554,7 +554,7 @@ bpu status information---->
 - `temperature`：当前板载、DDR、BPU（每个 BPU core 有两个 `pvtc` 温度点：`pvt_bpu_pvtcN_t1/t2`）温度。
 - `voltage`：主要供电轨电压（`VDD_CPU`、`VDD_BPUL`/`VDD_BPUR` 左右两组 BPU 簇电压、DDR 系列）。
 - `cpu frequency`：每个 CPU policy 的最小、当前、最大运行频率（kHz）。S600 有 18 个 CPU 核心，按簇分为 5 个 policy（`policy0/2/6/10/14`）。
-- `bpu status information`：4 个 BPU core 的当前占用率（百分比）。空闲时 4 个核都会列出且比值为 `0`；满负载压测时 4 个核的占用率稳定在高位。RDK S600 实测（RDK OS 5.1.1，`stress_test.sh -t 1m` 对 4 核满载）：bpu0~bpu3 占用率稳定在 **93%~99%**，sysfs 整体 `bpu_ratio` 同样在 **93%~98%**，与单核读数基本一致。
+- `bpu status information`：4 个 BPU core 的当前占用率（百分比）。空闲时 4 个核都会列出且比值为 `0`；满负载压测时 4 个核的占用率稳定在高位。RDK S600 实测（RDK OS 5.1.1，`stress_test.sh -t 1m` 对 4 核满载）：bpu0~bpu3 占用率稳定在 **93%-99%**，sysfs 整体 `bpu_ratio` 同样在 **93%-98%**，与单核读数基本一致。
 
 :::tip
 BPU 占用率也可以通过 sysfs 节点直接读取，更轻量、可编程：
@@ -637,12 +637,12 @@ cd /app/chip_base_test/log/ && \
 
 	<DocScope products="RDK S100">
 
-    S100 单 BPU core，满载压测时应稳定在 98~100% 区间。
+    S100 单 BPU core，满载压测时应稳定在 98-100% 区间。
 
     </DocScope>
     <DocScope products="RDK S600">
 
-    S600 4 个 BPU core 满载压测时每个核占用率应稳定在高位。RDK S600 实测（RDK OS 5.1.1，`stress_test.sh -t 1m` 满载）：bpu0~bpu3 占用率 **93%~99%**，稳定在 95% 附近。
+    S600 4 个 BPU core 满载压测时每个核占用率应稳定在高位。RDK S600 实测（RDK OS 5.1.1，`stress_test.sh -t 1m` 满载）：bpu0~bpu3 占用率 **93%-99%**，稳定在 95% 附近。
 
     </DocScope>
 
@@ -752,14 +752,14 @@ dmesg -T --level=err,warn,crit | tail -n 50
 
 **原因**：压测未真正满载，或压测已经结束（时长到达、或已用 `stop_test.sh` 提前停止），`bpu_os_test` 已退出。
 
-**解决**：用 `cat /sys/devices/system/bpu/ratio` 持续观察，满载应稳定在 98~100%。若占用率为 0，说明 `bpu_os_test` 已经退出，重新执行 `stress_test.sh` 即可。
+**解决**：用 `cat /sys/devices/system/bpu/ratio` 持续观察，满载应稳定在 98-100%。若占用率为 0，说明 `bpu_os_test` 已经退出，重新执行 `stress_test.sh` 即可。
 
 </DocScope>
 <DocScope products="RDK S600">
 
 **原因**：压测未真正满载，或 `hrt_model_exec` 已经退出。
 
-**解决**：用 `cat /sys/devices/system/bpu/ratio`（或 `bpuN/ratio`）持续观察，各核应稳定在 93%~99%。若占用率为 0，检查 `bpu-stressN.log` 是否已停止输出 `Frame count`。
+**解决**：用 `cat /sys/devices/system/bpu/ratio`（或 `bpuN/ratio`）持续观察，各核应稳定在 93%-99%。若占用率为 0，检查 `bpu-stressN.log` 是否已停止输出 `Frame count`。
 
 </DocScope>
 
@@ -775,7 +775,7 @@ ls -lt /app/chip_base_test/log/
 
 <DocScope products="RDK S600">
 
-### `-c` 指定的核没有跑起来
+### `-c` 指定的核没有启动
 
 **原因**：当前版本 `-c` 缺省为固定值 `1,2,3,4`，脚本不会自动跳过被 power-gate 的核。
 

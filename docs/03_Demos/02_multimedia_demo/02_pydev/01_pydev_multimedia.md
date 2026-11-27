@@ -45,7 +45,7 @@ pip install -r /app/pydev_demo/requirements.txt
 
 <DocScope products="RDK S600">
 
-```
+```text
 pydev_demo/
 ├── mipi_camera_sample/              # MIPI 摄像头采集/缩放/裁剪/推流
 │   ├── 02_mipi_camera_dump.py       #   采集并保存 YUV
@@ -63,7 +63,7 @@ pydev_demo/
 
 <DocScope products="RDK S100">
 
-```
+```text
 pydev_demo/
 ├── 09_usb_camera_sample/            # USB 摄像头 + 目标检测
 ├── 10_mipi_camera_sample/           # MIPI 摄像头采集/缩放/裁剪/推流

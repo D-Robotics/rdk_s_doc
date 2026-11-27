@@ -10,7 +10,7 @@ description: "Linux 命令 top 用法"
 
 ## 语法说明
 
-```
+```text
 top -hv | -bcEHiOSs1 -d secs -n max -u|U user -p pid(s) -o field -w [cols]
 ```
 
@@ -38,7 +38,7 @@ top -hv | -bcEHiOSs1 -d secs -n max -u|U user -p pid(s) -o field -w [cols]
 - `q`：退出程序。
 - `r`：重新安排一个进程的优先级别。
 - `S`：切换到累计模式。
-- `s`：改变两次刷新之间的延迟时间，单位为秒（如果有小数，以毫秒为单位）。输入0值则系统将不断刷新，默认值是5秒。
+- `s`：改变两次刷新之间的延迟时间，单位为秒（如果有小数，以毫秒为单位）。输入 0 值则系统将不断刷新，默认值是 5 秒。
 - `f` 或 `F`：从当前显示中添加或删除项目。
 - `o` 或 `O`：改变显示项目的顺序。
 - `l`：切换显示平均负载和启动时间信息。
@@ -52,7 +52,7 @@ top -hv | -bcEHiOSs1 -d secs -n max -u|U user -p pid(s) -o field -w [cols]
 
 ## 显示信息
 
-```
+```text
 top - 14:55:57 up  1:03,  2 users,  load average: 0.62, 0.55, 0.45
 Tasks: 158 total,   1 running, 157 sleeping,   0 stopped,   0 zombie
 %Cpu(s):  3.7 us,  9.3 sy,  0.0 ni, 86.0 id,  0.0 wa,  0.0 hi,  0.9 si,  0.0 st
@@ -99,19 +99,19 @@ MiB Swap:      0.0 total,      0.0 free,      0.0 used.   1307.2 avail Mem
 
 显示进程信息
 
-```
+```text
 top
 ```
 
 显示完整命令
 
-```
+```text
 top -c
 ```
 
 以批处理模式显示程序信息
 
-```
+```text
 top -b
 ```
 
@@ -127,36 +127,36 @@ MiB Mem :  24131.2 total,   4002.6 free,   3828.2 used,  16626.6 buff/cache
 
 以累积模式显示程序信息
 
-```
+```text
 top -S
 ```
 
 设置信息更新次数
 
-```
+```text
 top -n 2   # 表示更新两次后终止更新显示
 ```
 
 设置信息更新时间
 
-```
+```text
 top -d 3  # 表示更新周期为3秒
 ```
 
 显示指定的进程信息
 
-```
+```text
 top -p 139  # 显示进程号为139的进程信息，CPU、内存占用率等
 ```
 
 显示更新十次后退出
 
-```
+```text
 top -n 10
 ```
 
 使用者将不能利用交谈式指令来对行程下命令
 
-```
+```text
 top -s
 ```

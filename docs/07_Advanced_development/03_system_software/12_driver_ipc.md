@@ -40,12 +40,12 @@ IPC 典型应用场景有 OTA 模块、规控、CANHAL 等。
 ## IPC 实例分配方案
 
 <DocScope products="RDK S100">
-IPC Acore 侧实例编号范围为[0-34]，分别用于 Acore 与 MCU 通信的实例[0-14]、Acore 与 VDSP 通信的实例[22-24]、Acore 与 BPU 通信的实例[32-34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0-8]，其中实例 4、7 空闲可供客户申请使用；实例 5 被板载 RTC（YSN8130）占用、实例 6 为内部测试保留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC使用指南](/Advanced_development/mcu_development/mcu_ipc) 中的 IPC 使用情况章节。
+IPC Acore 侧实例编号范围为[0-34]，分别用于 Acore 与 MCU 通信的实例[0-14]、Acore 与 VDSP 通信的实例[22-24]、Acore 与 BPU 通信的实例[32-34]，其余实例做其它私有用途。Acore 与 MCU 通信可使用实例[0-8]，其中实例 4、7 空闲可供客户申请使用；实例 5 被板载 RTC（YSN8130）占用、实例 6 为内部测试保留，若用户不需要 CANHAL、规控等业务，可以自行修改配置文件。S100 中 AOCRE 与 MCU 的 IPC 通信情况可以查阅 [MCU IPC 使用指南](/Advanced_development/mcu_development/mcu_ipc) 中的 IPC 使用情况章节。
 </DocScope>
 <DocScope products="RDK S600">
 IPC Acore 侧实例编号范围为[0-63]，分别用于 Acore 与 MCU 通信的实例[0-15]和[50-53]、Acore 与 VDSP 通信的实例[22-24]和[42-44]、Acore 与 BPU 通信的实例[32-39]，其余实例做其它私有用途。客户 Acore 与 MCU 通信可使用实例[0-15]，其余实例为内部使用。
 
-IPC VDSP 侧实例编号范围为[0-6]，分别用于 VDSP 与 Acore 通信的实例[0-2]（VDSP0对应 Acore 实例[22-24]，VDSP1对应 Acore 实例[42-44]），其余实例做私有用途。
+IPC VDSP 侧实例编号范围为[0-6]，分别用于 VDSP 与 Acore 通信的实例[0-2]（VDSP0 对应 Acore 实例[22-24]，VDSP1 对应 Acore 实例[42-44]），其余实例做私有用途。
 </DocScope>
 
 ### Acore 侧配置实例方法
@@ -53,7 +53,7 @@ IPC VDSP 侧实例编号范围为[0-6]，分别用于 VDSP 与 Acore 通信的�
 <DocScope products="RDK S100">
 Acore 侧配置实例可通过设备树文件配置，配置路径为：
 
-```dts
+```text
 source/hobot-drivers/kernel-dts/drobot-s100-ipc.dtsi
 source/hobot-drivers/kernel-dts/include/drobot_s100_ipc.h
 ```
@@ -87,7 +87,7 @@ ipcfhal_cfg: ipcfhal_cfg {
 <DocScope products="RDK S600">
 Acore 侧配置实例可通过设备树文件配置，配置路径为：
 
-```dts
+```text
 source/hobot-drivers/kernel-dts/drobot-s600-ipc.dtsi
 source/hobot-drivers/kernel-dts/include/drobot_s600_ipc.h
 ```
@@ -133,8 +133,8 @@ ipcfhal_cfg: ipcfhal_cfg {
 <DocScope products="RDK S100">
 设备树 ipcfhal_cfg 节点默认配置了一些实例的属性：
 - 属性中第一列表示实例编号，必须唯一且在有效范围
-- 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为32个
-- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为1024个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB（目前每个实例预分配了1MB 的数据空间，暂不扩增）。
+- 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为 32 个
+- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为 1024 个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，通道个数\*缓冲 buf 个数\*buf 大小需要小于等于 0.5MB（目前每个实例预分配了 1MB 的数据空间，暂不扩增）。
 
 单个实例的设备树节点如下：
 
@@ -161,22 +161,22 @@ ipc_instance3: ipc_instance3 {
 
 **设备树配置注意事项:**
 
-- 实例3~8数据段默认预分配了1MB 空间，Acore 侧使用0.5MB，MCU 侧使用0.5MB，所以通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB。
-- 实例3~8控制段默认预分配了5KB 空间，Acore 侧使用2.5KB，MCU 侧使用2.5KB，存放环形 buf 的控制信息和状态信息，所以(缓冲 buf 个数+2)\*16\*通道个数+8需要小于等于2.5KB。
-- 实例5~6用于地瓜机器人内部测试，用户可按照上面配置，修改设备树节点即可。 // TODO:可以完全放开给到客户
-- 每个实例的通道数量需要小于等于32，缓冲 buf 个数需要小于等于1024，同时需要满足前两点的不等式。
+- 实例 3-8 数据段默认预分配了 1MB 空间，Acore 侧使用 0.5MB，MCU 侧使用 0.5MB，所以通道个数\*缓冲 buf 个数\*buf 大小需要小于等于 0.5MB。
+- 实例 3-8 控制段默认预分配了 5KB 空间，Acore 侧使用 2.5KB，MCU 侧使用 2.5KB，存放环形 buf 的控制信息和状态信息，所以(缓冲 buf 个数+2)\*16\*通道个数+8 需要小于等于 2.5KB。
+- 实例 5-6 用于 D-Robotics 内部测试，用户可按照上面配置，修改设备树节点即可。
+- 每个实例的通道数量需要小于等于 32，缓冲 buf 个数需要小于等于 1024，同时需要满足前两点的不等式。
 - 多个业务使用同一个实例的不同通道或者使用不同实例对传输影响不大，主要是参考 buf_size/buf_num 是否合适以及业务的开发和维护是否方便。
 - 底层 Mailbox 中断分配不支持修改。
 - Acore 与 MCU 的通道个数、缓冲 buf 个数和大小需要保持一致，数据段和控制段的 local 和 remote 需要相反。
 - 实例的控制段首地址存储实例是否初始化的状态，可用于判断实例是否初始化，其中 Acore 默认启动 kernel 时完成初始化。
-- 若用户需要自行分配数据段和地址段，则需要修改 Acore 设备树文件、Uboot 设备树文件以及 MCU 配置文件。
+- 若用户需要自行分配数据段和地址段，则需要修改 Acore 设备树文件、U-Boot 设备树文件以及 MCU 配置文件。
 - 在同一个 channel 中，发送（push）和接收（pop）使用独立的 ring buffer 和中断机制，因此收发操作是相互独立、互不影响的。
 </DocScope>
 <DocScope products="RDK S600">
 设备树 ipcfhal_cfg 节点默认配置了一些实例的属性：
 - 属性中第一列表示实例编号，必须唯一且在有效范围
-- 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为32个
-- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为1024个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB（目前每个实例预分配了1MB 的数据空间，暂不扩增）。
+- 属性的第二列表示该实例分配的通道数量，用户可以自行配置，最大值为 32 个
+- 属性的第三列表示每个通道的缓冲 buf 的个数，用户可以自行配置，最大值为 1024 个，但受控制空间大小的限制。属性第四列表示缓冲 buf 的大小，单位是 Bytes，用户可以自行配置，通道个数\*缓冲 buf 个数\*buf 大小需要小于等于 0.5MB（目前每个实例预分配了 1MB 的数据空间，暂不扩增）。
 
 单个实例的设备树节点如下：
 
@@ -199,14 +199,14 @@ ipc_instance3: ipc_instance3 {
 
 **设备树配置注意事项:**
 
-- 实例0~15数据段默认预分配了1MB 空间，Acore 侧使用0.5MB，MCU 侧使用0.5MB，所以通道个数\*缓冲 buf 个数\*buf 大小需要小于等于0.5MB。
-- 实例0~15控制段默认预分配了8KB 空间，Acore 侧使用4KB，MCU 侧使用4KB，存放环形 buf 的控制信息和状态信息，所以(缓冲 buf 个数+2)\*16\*通道个数+8需要小于等于4KB。
-- 每个实例的通道数量需要小于等于32，缓冲 buf 个数需要小于等于1024，同时需要满足前两点的不等式。
+- 实例 0-15 数据段默认预分配了 1MB 空间，Acore 侧使用 0.5MB，MCU 侧使用 0.5MB，所以通道个数\*缓冲 buf 个数\*buf 大小需要小于等于 0.5MB。
+- 实例 0-15 控制段默认预分配了 8KB 空间，Acore 侧使用 4KB，MCU 侧使用 4KB，存放环形 buf 的控制信息和状态信息，所以(缓冲 buf 个数+2)\*16\*通道个数+8 需要小于等于 4KB。
+- 每个实例的通道数量需要小于等于 32，缓冲 buf 个数需要小于等于 1024，同时需要满足前两点的不等式。
 - 多个业务使用同一个实例的不同通道或者使用不同实例对传输影响不大，主要是参考 buf_size/buf_num 是否合适以及业务的开发和维护是否方便。
 - 底层 Mailbox 中断分配不支持修改。
 - Acore 与 MCU 的通道个数、缓冲 buf 个数和大小需要保持一致，数据段和控制段的 local 和 remote 需要相反。
 - 实例的控制段首地址存储实例是否初始化的状态，可用于判断实例是否初始化，其中 Acore 默认启动 kernel 时完成初始化。
-- 若用户需要自行分配数据段和地址段，则需要修改 Acore 设备树文件、Uboot 设备树文件以及 MCU 配置文件。
+- 若用户需要自行分配数据段和地址段，则需要修改 Acore 设备树文件、U-Boot 设备树文件以及 MCU 配置文件。
 </DocScope>
 
 ## 用户态 IPC 应用和配置文件的使用方法
@@ -258,7 +258,7 @@ root@ubuntu:/app/ipcbox_sample# tree .
 
 ### IPC 实时性能优化设置
 如果特定场景下需要提高 IPC 通信的实时性能，可以按照如下几步进行设置。以 `ipc_instance5` 为例。
-1. 首先查找 ipc_instance5对应的中断号和中断线程 pid
+1. 首先查找 ipc_instance5 对应的中断号和中断线程 pid
 ```shell
 #中断号查找：
 root@ubuntu:~# cat /proc/interrupts | grep "mailbox"
@@ -376,7 +376,7 @@ root@ubuntu:/# cat /sys/devices/system/cpu/isolated
 root@ubuntu:/# echo -1 > /proc/sys/kernel/sched_rt_runtime_us
 ```
 :::warning 注意事项
-该设置会允许所有 RT 任务无限制地占用 CPU，从而提升系统的实时性能，但也可能导致普通任务无法获得调度机会而被饿死。因此，在使用 -1 时需谨慎。有关 RT 线程调度的调试，请参考[内核官方文档](https://kernel.org/doc/html/v6.1/scheduler/sched-rt-group.html)
+该设置会允许所有 RT 任务无限制地占用 CPU，从而提升系统的实时性能，但也可能导致普通任务无法获得调度机会而被饿死。因此，在使用 -1 时需谨慎。有关 RT 线程调度的调试，请参考 [内核官方文档](https://kernel.org/doc/html/v6.1/scheduler/sched-rt-group.html)
 :::
 
 ### API 流程说明
@@ -475,11 +475,11 @@ Acore 与 MCU(POLL 方式)之间 API Sample 运行流程图
 | `IPCF_HAL_E_TIMEOUT` | 11 | 操作超时 |
 | `IPCF_HAL_E_REINIT` | 12 | 重复初始化 |
 | `IPCF_HAL_E_BUSY` | 13 | 系统繁忙 |
-| `IPCF_HAL_E_CHANNEL_INVALID` | 14 | **数据写入通道状态异常：内核态 RingBuffer 已达容量上限，导致数据写入操作失败，建议等待1~2ms 后重试操作;**<br/>**数据读取通道状态异常：内核态 RingBuffer 已空，导致数据读取操作失败，建议等待1~2ms 后重试操作** |
+| `IPCF_HAL_E_CHANNEL_INVALID` | 14 | **数据写入通道状态异常：内核态 RingBuffer 已达容量上限，导致数据写入操作失败，建议等待 1-2ms 后重试操作;**<br/>**数据读取通道状态异常：内核态 RingBuffer 已空，导致数据读取操作失败，建议等待 1-2ms 后重试操作** |
 
 ### C++ 应用{#IPC_APP}
 
-Acore 侧实现了多个应用，用于操作 MCU 端的外设，这些应用位于`/app/ipcbox_sample`目录下：
+Acore 侧实现了多个应用，用于操作 MCU 端的外设，这些应用位于 `/app/ipcbox_sample` 目录下：
 ```bash
 root@ubuntu:/app/ipcbox_sample# tree -L 1
 .
@@ -491,8 +491,8 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 ```
 
 :::tip
-- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1是否启动，MCU1的启动可以参考[MCU1 启动](/Advanced_development/mcu_development/basic_information#start_mcu1)
-- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](/Advanced_development/mcu_development/mcu_ipc#IPCBOX)
+- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1 是否启动，MCU1 的启动可以参考 [MCU1 启动](/Advanced_development/mcu_development/basic_information#start_mcu1)
+- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考 [MCU 侧 IPCBOX 配置](/Advanced_development/mcu_development/mcu_ipc#IPCBOX)
 :::
 
 
@@ -500,15 +500,15 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 
 此 sample 实现了对读取了 ADC chanel 的电压。
 <DocScope products="RDK S100">
-1. 开机进入 S100后，打开应用目录`/app/ipcbox_sample/ipcbox_runcmd`
+1. 开机进入 S100 后，打开应用目录 `/app/ipcbox_sample/ipcbox_runcmd`
 </DocScope>
 <DocScope products="RDK S600">
-1. 开机进入 S600后，打开应用目录`/app/ipcbox_sample/ipcbox_runcmd`
+1. 开机进入 S600 后，打开应用目录 `/app/ipcbox_sample/ipcbox_runcmd`
 </DocScope>
 2. 编译：`make`
 3. 运行: `./ipcbox_runcmd`
-4. 出现`Extracted adc data:{"adc_ch":1,"adc_result":628,"adc_mv":276}`的打印则测试通过，其中表示 adc 对应 pin 口，adc_mv 表示读出来的电压值
-        ```
+4. 出现 `Extracted adc data:{"adc_ch":1,"adc_result":628,"adc_mv":276}` 的打印则测试通过，其中表示 adc 对应 pin 口，adc_mv 表示读出来的电压值
+        ```text
         root@ubuntu:/app/ipcbox_sample/ipcbox_runcmd# ./ipcbox_runcmd
         [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 init success.
         [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch0 [ins] 7 [id] 0 config success.
@@ -517,23 +517,23 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
         ```
 
 
-#### Uart 透传
+#### UART 透传
 
 **测试前提**
-在测试前，需要将用到的`Uart`的 TX 和 RX 短接。其中 S100和 S600默认使用的 Uart 如下:
+在测试前，需要将用到的 `Uart` 的 TX 和 RX 短接。其中 S100 和 S600 默认使用的 UART 如下:
 
-| 平台 | Uart id |
+| 平台 | UART id |
 |------|---------|
 | S100 | Uart5  |
 | S600 | Uart11 |
 
-所使用的 Uart 可以对 mcu 侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如 S600，将`UART_IPCBOX_HW_CHANNEL`定义为对应的 Uart 硬件
+所使用的 UART 可以对 mcu 侧的 `mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h` 文件进行修改，例如 S600，将 `UART_IPCBOX_HW_CHANNEL` 定义为对应的 UART 硬件
 
-```
+```text
 #define UART_IPCBOX_HW_CHANNEL (UART11_HW_CHANNEL)
 ```
 
-同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`uart`对应项使能。**源码默认如下，`uart` 项为 `DISABLE`，需要改成 `ENABLE`**：
+同时需要检查 MCU 侧 `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` 中的 `IpcBox_InstanceMap` 配置，确保 `uart` 对应项使能。**源码默认如下，`uart` 项为 `DISABLE`，需要改成 `ENABLE`**：
 
 ```c
 { IPCBOX_COM_ID_UART, "uart", IpcConf_IpcInstance_IpcInstance_7,
@@ -545,18 +545,18 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
   IpcBox_UartInit, IpcBox_UartDeinit },
 ```
 
-测试 sample 实现了对`Uart`的透传，操作步骤如下：
+测试 sample 实现了对 `Uart` 的透传。
 
 <DocScope products="RDK S100">
-1. 开机进入 S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_uart`
+1. 开机进入 S100 后，打开应用目录 `cd /app/ipcbox_sample/ipcbox_uart`
 </DocScope>
 <DocScope products="RDK S600">
-1. 开机进入 S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_uart`
+1. 开机进入 S600 后，打开应用目录 `cd /app/ipcbox_sample/ipcbox_uart`
 </DocScope>
 2. 编译：`make`
 3. 运行: `./ipcbox_uart`
-4. 出现`tx_data and rx_data are identical.`的打印则测试通过, 参考 log 如下：
-        ```
+4. 出现 `tx_data and rx_data are identical.` 的打印则测试通过, 参考 log 如下：
+        ```text
         root@ubuntu:/app/ipcbox_sample/ipcbox_uart# ./ipcbox_uart
         [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 init success.
         [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch1 [ins] 7 [id] 1 config success.
@@ -575,20 +575,20 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 #### SPI 读写测试
 
 **测试前提**
-在测试前，需要将用到的`SPI`的 MOSI 和 MISO 短接。其中 S100和 S600默认使用的 SPI 如下:
+在测试前，需要将用到的 `SPI` 的 MOSI 和 MISO 短接。其中 S100 和 S600 默认使用的 SPI 如下:
 
 | 平台 | SPI id |
 |------|--------|
 | S100 | SPI2/3/4（sample 默认使用 3） |
 | S600 | SPI6   |
 
-所使用的 SPI 可以对 mcu 侧的`mcu/Config/McalCdd/gen_xxxx/Spi/inc/Spi_Board.h`文件进行修改，例如 S600，将`SPI_IPCBOXUSEBUS`定义为对应的 SPI 硬件
+所使用的 SPI 可以对 mcu 侧的 `mcu/Config/McalCdd/gen_xxxx/Spi/inc/Spi_Board.h` 文件进行修改，例如 S600，将 `SPI_IPCBOXUSEBUS` 定义为对应的 SPI 硬件
 
-```
+```text
 #define SPI_IPCBOXUSEBUS (SPI_BUS6)
 ```
 
-同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`spi`对应项使能。**源码默认如下，`spi` 项为 `DISABLE`，需要改成 `ENABLE`**：
+同时需要检查 MCU 侧 `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` 中的 `IpcBox_InstanceMap` 配置，确保 `spi` 对应项使能。**源码默认如下，`spi` 项为 `DISABLE`，需要改成 `ENABLE`**：
 
 ```c
 { IPCBOX_COM_ID_SPI, "spi", IpcConf_IpcInstance_IpcInstance_7,
@@ -597,17 +597,17 @@ root@ubuntu:/app/ipcbox_sample# tree -L 1
 ```
 
 
-测试 sample 实现了对 SPI 的回环测试，以 S100使用 SPI3为例，若使用 S600注意将`./ipcbox_spi -b 3`修改为`./ipcbox_spi -b 6`
+测试 sample 实现了对 SPI 的回环测试，以 S100 使用 SPI3 为例，若使用 S600 注意将 `./ipcbox_spi -b 3` 修改为 `./ipcbox_spi -b 6`
 <DocScope products="RDK S100">
-1. 开机进入 S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
+1. 开机进入 S100 后，打开应用目录 `cd /app/ipcbox_sample/ipcbox_spi`
 </DocScope>
 <DocScope products="RDK S600">
-1. 开机进入 S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_spi`
+1. 开机进入 S600 后，打开应用目录 `cd /app/ipcbox_sample/ipcbox_spi`
 </DocScope>
 2. 编译：`make`
 3. 运行: `./ipcbox_spi`
-4. 出现`SPI write successful, 128 bytes`的打印则测试通过, 参考 log 如下：
-        ```
+4. 出现 `SPI write successful, 128 bytes` 的打印则测试通过, 参考 log 如下：
+        ```text
         root@ubuntu:/app/ipcbox_sample/ipcbox_spi# ./ipcbox_spi -b 3
         [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 init success.
         [INFO][hb_ipcf_hal.cpp:333] [channel] cpu2mcu_ins7ch2 [ins] 7 [id] 2 config success.
@@ -644,9 +644,9 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
 
 #### I2C 测试
 
-测试 sample 实现了对 I2c 的 detect 测试，以 S100使用 I2c6为例，若使用 S600注意将`./ipcbox_i2c detect 6`修改为`./ipcbox_i2c detect 13`
+测试 sample 实现了对 I2C 的 detect 测试，以 S100 使用 I2c6 为例，若使用 S600 注意将 `./ipcbox_i2c detect 6` 修改为 `./ipcbox_i2c detect 13`
 
-同时需要检查 MCU 侧`mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c`中的`IpcBox_InstanceMap`配置，确保`i2c`对应项使能。**源码默认如下，`i2c` 项为 `DISABLE`，需要改成 `ENABLE`**：
+同时需要检查 MCU 侧 `mcu/Service/HouseKeeping/ipc_box/src/ipc_box.c` 中的 `IpcBox_InstanceMap` 配置，确保 `i2c` 对应项使能。**源码默认如下，`i2c` 项为 `DISABLE`，需要改成 `ENABLE`**：
 
 ```c
 { IPCBOX_COM_ID_I2C, "i2c", IpcConf_IpcInstance_IpcInstance_7,
@@ -655,14 +655,14 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
 ```
 
 <DocScope products="RDK S100">
-1. 开机进入 S100后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
+1. 开机进入 S100 后，打开应用目录 `cd /app/ipcbox_sample/ipcbox_i2c`
 </DocScope>
 <DocScope products="RDK S600">
-1. 开机进入 S600后，打开应用目录`cd /app/ipcbox_sample/ipcbox_i2c`
+1. 开机进入 S600 后，打开应用目录 `cd /app/ipcbox_sample/ipcbox_i2c`
 </DocScope>
 2. 编译：`make`
 3. 运行: `./ipcbox_i2c` 出现如下参考命令
-        ```
+        ```text
         root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c
         Usage: ./ipcbox_i2c detect [i2c_channel]
         ./ipcbox_i2c get [i2c_channel] [slave_addr] [reg_addr]
@@ -672,8 +672,8 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
         ./ipcbox_i2c set 0 0x50 0x01 0xAA
         ./ipcbox_i2c get 0 0x50 0x01
         ```
-4. 输入`./ipcbox_i2c detect 6` ,探测`I2c6`的设备
-        ```
+4. 输入 `./ipcbox_i2c detect 6` ,探测 `I2c6` 的设备
+        ```text
         root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c detect 6
         Parsed arguments: operation=detect, channel=6
         [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 init success.
@@ -689,8 +689,8 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
         70: -- -- -- -- -- -- -- --
         [INFO][hb_ipcf_hal.cpp:553] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 deinit success.
         ```
-5. 读取`I2c6` 上，slave 地址为`0x13`,寄存器地址为`0x2`
-        ```
+5. 读取 `I2c6` 上，slave 地址为 `0x13`,寄存器地址为 `0x2`
+        ```text
         root@ubuntu:/app/ipcbox_sample/ipcbox_i2c# ./ipcbox_i2c get 6 0x13 0x2
         Parsed arguments: operation=get, channel=6, slave_addr=0x13, reg_addr=0x2
         [INFO][hb_ipcf_hal.cpp:282] [channel] cpu2mcu_ins7ch3 [ins] 7 [id] 3 init success.
@@ -702,40 +702,40 @@ IpcBox 只实现了对 SPI Master 的操控，有以下限制
 :::tip
 ipcbox 只实现了对 I2C Master 的简单传输，不支持 Slave
 
-测试用例中的读写操作都是对8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于 MCU 的 SDK 中的 Service/HouseKeeping/ipc_box/src/ipc_i2c.c
+测试用例中的读写操作都是对 8bit 地址的 slave 做测试，需要根据 slave 的实际情况更改 MCU 的 IpcBox_I2cGetValue/IpcBox_I2cSetValue,此函数位于 MCU 的 SDK 中的 Service/HouseKeeping/ipc_box/src/ipc_i2c.c
 :::
 
 ### Python 应用
 
 **测试前提**
-由于 Python 应用调用了 IpcBox 中的 Uart，所以与 C++的用例类似，在测试前，需要将用到的`Uart`的 TX 和 RX 短接。其中 S100和 S600默认使用的 Uart 如下:
+由于 Python 应用调用了 IpcBox 中的 UART，所以与 C++的用例类似，在测试前，需要将用到的 `Uart` 的 TX 和 RX 短接。其中 S100 和 S600 默认使用的 UART 如下:
 
-| 平台 | Uart id |
+| 平台 | UART id |
 |------|---------|
 | S100 | Uart5  |
 | S600 | Uart11 |
 
-所使用的 Uart 可以对 mcu 侧的`mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h`文件进行修改，例如 S600，将 `UART_IPCBOX_HW_CHANNEL` 定义为对应的 Uart 硬件
+所使用的 UART 可以对 mcu 侧的 `mcu/Config/McalCdd/gen_xxx/Uart/inc/Uart_Board.h` 文件进行修改，例如 S600，将 `UART_IPCBOX_HW_CHANNEL` 定义为对应的 UART 硬件
 
-```
+```text
 #define UART_IPCBOX_HW_CHANNEL (UART11_HW_CHANNEL)
 ```
 
 :::tip
-- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1是否启动，MCU1的启动可以参考[MCU1 启动](/Advanced_development/mcu_development/basic_information#start_mcu1)
-- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考[MCU侧IPCBOX配置](/Advanced_development/mcu_development/mcu_ipc#IPCBOX)
+- 应用实际操作的是 MCU 侧外设，在使用前要确认 MCU1 是否启动，MCU1 的启动可以参考 [MCU1 启动](/Advanced_development/mcu_development/basic_information#start_mcu1)
+- 操作这些外设时，需要确认 MCU 侧是否将这些外设配置用于透传，可以参考 [MCU 侧 IPCBOX 配置](/Advanced_development/mcu_development/mcu_ipc#IPCBOX)
 :::
 
 
 <DocScope products="RDK S100">
-S100提供 Python 库文件使用 Ipc，其原理为通过 pybind11调用 C++接口，函数名与宏定义等两端保持一致。
+S100 提供 Python 库文件使用 Ipc，其原理为通过 pybind11 调用 C++接口，函数名与宏定义等两端保持一致。
 </DocScope>
 <DocScope products="RDK S600">
-S600提供 Python 库文件使用 Ipc，其原理为通过 pybind11调用 C++接口，函数名与宏定义等两端保持一致。
+S600 提供 Python 库文件使用 Ipc，其原理为通过 pybind11 调用 C++接口，函数名与宏定义等两端保持一致。
 </DocScope>
 
 1. 包的导入
-```
+```text
 import pyhbipchal as pyipc
 import pyhbipchal_utils as ipc_utils
 from ipcbox_packet import ipcbox_packet
@@ -1023,7 +1023,7 @@ struct ipc_statistic_t {
 };
 ```
 #### 【节点使用】
-```
+```text
 //方法一：直接操作sys节点
 //通道完成初始化，未收发数据时, enable
 echo 0 > /sys/kernel/debug/ipcdrv-ins-5/statistic
@@ -1158,7 +1158,7 @@ wdump: 0
 以 channel 为单位，打印接收的数据。
 
 #### 【节点路径】
-```
+```text
 //ins-X表示insid，若insid是5，则为ins-5
 /sys/kernel/debug/ipcdrv-ins-5/rdump
 ```
@@ -1275,11 +1275,11 @@ wdump: 0
 - MCU 侧硬件通道宏没有指向实际使用的外设（例如 S600 的 `UART_IPCBOX_HW_CHANNEL`、`SPI_IPCBOXUSEBUS`）；
 - 回环测试前没有把对应外设的 TX/RX（或 MOSI/MISO）短接。
 
-**解决**：按《[Uart 透传](#uart-透传)》《[SPI 读写测试](#spi-读写测试)》与「I2C 测试」小节逐项确认：把 `IpcBox_InstanceMap` 中对应项改为 `ENABLE`、确认硬件通道宏、并短接对应的收发引脚，然后重新编译 MCU 固件。
+**解决**：按《[UART 透传](#uart-透传)》《[SPI 读写测试](#spi-读写测试)》与「I2C 测试」小节逐项确认：把 `IpcBox_InstanceMap` 中对应项改为 `ENABLE`、确认硬件通道宏、并短接对应的收发引脚，然后重新编译 MCU 固件。
 
 ### 客户自行定义的 IPC 实例不生效
 
-**原因**：实例必须出现在 Acore 侧设备树的 `ipcfhal_cfg` → `ipc-ins` 列表中才会被初始化。当前镜像中有部分实例被内部业务占用，还有一部分在 `ipc-ins` 里被注释掉（例如 S600 的实例 5、9、11~15）或 `status = "disabled"`，这些实例在 `/sys/kernel/debug/` 下不会出现对应的 `ipcdrv-ins-N` 目录。
+**原因**：实例必须出现在 Acore 侧设备树的 `ipcfhal_cfg` → `ipc-ins` 列表中才会被初始化。当前镜像中有部分实例被内部业务占用，还有一部分在 `ipc-ins` 里被注释掉（例如 S600 的实例 5、9、11-15）或 `status = "disabled"`，这些实例在 `/sys/kernel/debug/` 下不会出现对应的 `ipcdrv-ins-N` 目录。
 
 **解决**：
 

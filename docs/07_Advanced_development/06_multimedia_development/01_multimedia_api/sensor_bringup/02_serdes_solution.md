@@ -21,20 +21,20 @@ S600 有 6 个 MIPI CSI RX 设备，最多支持 24 路模组接入，同时在�
 SoC 内 Camsys 子系统的各模块示意：
 
 <DocScope products="RDK S100">
-![硬件框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_data_path.svg)
+![硬件框架](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s100_hardware_data_path.svg)
 </DocScope>
 
 <DocScope products="RDK S600">
-![硬件框架简易](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s600_hardware_framework_simple.png)
+![硬件框架简易](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/camsys/s600_hardware_framework_simple.png)
 </DocScope>
 
-Camera 部分包括 Sensor/SerDes/Poc，Pipeline则有 VIN/ISP/PYM/GDC/STITCH。各模块的基本信息如下：
+Camera 部分包括 Sensor/SerDes/Poc，Pipeline 则有 VIN/ISP/PYM/GDC/STITCH。各模块的基本信息如下：
 
 :::doc_scope{products="RDK S100"}
 
 | 模块   | 设备               | 功能描述                                                                                                                                                                                            | 性能指标                                                                                                                                                                                                               |
 | ------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Camera | Sensor             | RAW 模组：内部无 ISP，输出 RAW 数据，内部 HDR(PWL)，可同步；<br/>YUV 模组：内部有 ISP，输出 YUV 数据，可同步                                                                                        | 典型分辨率 8M/2M；典型帧率 30fps；数据格式 RAW12/YUV422；<br/>数据量 `width * height * fps * bit/pixel`                                                                                                                |
+| Camera | Sensor             | RAW 模组：内部无 ISP，输出 RAW 数据，内部 HDR(PWL)，可同步；<br/>YUV 模组：内部有 ISP，输出 YUV 数据，可同步                                                                                        | 典型分辨率 8M/2M；典型帧率 30 fps；数据格式 RAW12/YUV422；<br/>数据量 `width * height * fps * bit/pixel`                                                                                                                |
 | SerDes | MAXIM: GMSL1/GMSL2 | MAX9296A（3G/6G，2 路一体）<br/>MAX96718（3G/6G，2 路独立）<br/>MAX96712（3G/6G，4 路独立）<br/>MAX96724（3G/6G，4 路独立）<br/>MAX96722（3G，4 路）<br/>TI: FPD-Link III（UB954 2 路、UB960 4 路） | Link 速率 3G/6G（MAXIM）/ 3.8G（TI）                                                                                                                                                                                   |
 | Pipeline   | MIPI RX            | MIPI CSI-2 CDPHY                                                                                                                                                                                    | 3 路 RX，最多 12 路 Sensor<br/>支持 RAW/YUV 接入同一 RX<br/>CPHY 2.5Gsps×3trio、DPHY 2.5Gbps×4lane<br/>每 RX 支持 4VC(4xIPI)，最多 12 路<br/>最大行长 4096 pixel<br/>若有 1 个 YUV sensor 接入，该 RX 理论带宽 9.6Gbps |
 | Pipeline   | MIPI TX            | MIPI CSI-2 V2.1 DPHY                                                                                                                                                                                | 2 路 TX，支持 bypass/idu 输出；2.5Gbps×4lane；<br/>bypass 可任选 RX，idu 最大 2880x2160                                                                                                                                |
@@ -48,7 +48,7 @@ Camera 部分包括 Sensor/SerDes/Poc，Pipeline则有 VIN/ISP/PYM/GDC/STITCH。
 
 | 模块   | 设备               | 功能描述                                                                                                                                                                                            | 性能指标                                                                                                                                                                                                                 |
 | ------ | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Camera | Sensor             | RAW 模组：内部无 ISP，输出 RAW 数据，内部 HDR(PWL)，可同步；<br/>YUV 模组：内部有 ISP，输出 YUV 数据，可同步                                                                                        | 典型分辨率 8M/2M；典型帧率 30fps；数据格式 RAW12/YUV422；<br/>数据量 `width * height * fps * bit/pixel`                                                                                                                  |
+| Camera | Sensor             | RAW 模组：内部无 ISP，输出 RAW 数据，内部 HDR(PWL)，可同步；<br/>YUV 模组：内部有 ISP，输出 YUV 数据，可同步                                                                                        | 典型分辨率 8M/2M；典型帧率 30 fps；数据格式 RAW12/YUV422；<br/>数据量 `width * height * fps * bit/pixel`                                                                                                                  |
 | SerDes | MAXIM: GMSL1/GMSL2 | MAX9296A（3G/6G，2 路一体）<br/>MAX96718（3G/6G，2 路独立）<br/>MAX96712（3G/6G，4 路独立）<br/>MAX96724（3G/6G，4 路独立）<br/>MAX96722（3G，4 路）<br/>TI: FPD-Link III（UB954 2 路、UB960 4 路） | Link 速率 3G/6G（MAXIM）/ 3.8G（TI）                                                                                                                                                                                     |
 | Pipeline   | MIPI RX            | MIPI CSI-2 CDPHY                                                                                                                                                                                    | 6 路 RX，最多 24 路 Sensor<br/>支持 RAW/YUV 接入同一 RX<br/>CPHY 2.5Gsps×3trio、DPHY 2.5Gbps×4lane<br/>每 RX 支持 4VC(4xIPI)，最多 24 路<br/>最大行长 4096 pixel<br/>若有 1 个 YUV sensor 接入，该 RX 理论带宽 10.72Gbps |
 | Pipeline   | MIPI TX            | MIPI CSI-2 V2.1 DPHY                                                                                                                                                                                | 2 路 TX，支持 bypass/idu 输出；2.5Gbps×4lane                                                                                                                                                                             |
@@ -163,7 +163,7 @@ S100 CIM 的 IPI 接口采用 48bit 模式，IPI 速率（pix_clk）上限为 60
 
 - **IPI 带宽**：600M × 48bit = **28.8Gbps**
 
-#### MIPI 带宽
+#### MIPI 带宽 {#mipi-bandwidth-s100}
 | 接口类型 | 计算方法 | 带宽 |
 | --- | --- | --- |
 | DPHY | 4 × 2.5G/lane | 10Gbps |
@@ -171,7 +171,7 @@ S100 CIM 的 IPI 接口采用 48bit 模式，IPI 速率（pix_clk）上限为 60
 
 > 注：CPHY 每 symbol 有效数据为 16/7 ≈ 2.28bit，计算时需乘以相应系数。
 
-#### IPI 带宽（DPHY/CPHY 共用）
+#### IPI 带宽（DPHY/CPHY 共用） {#ipi-bandwidth-s100}
 
 IPI 传输不同数据格式时，单个 IPI clock 可传输的像素数不同：
 
@@ -186,11 +186,11 @@ IPI 传输不同数据格式时，单个 IPI clock 可传输的像素数不同�
 
 :::doc_scope{products="RDK S600"}
 
-S600：CIM CIM 的 IPI 接口采用 48bit 模式，IPI 速率（pix_clk）上限为 670MHz。
+S600：CIM 的 IPI 接口采用 48bit 模式，IPI 速率（pix_clk）上限为 670MHz。
 
 - **IPI 带宽**：670M × 48bit = **32.16Gbps**
 
-#### MIPI 带宽
+#### MIPI 带宽 {#mipi-bandwidth-s600}
 
 | 接口类型 | 计算方法 | 带宽 |
 | --- | --- | --- |
@@ -199,7 +199,7 @@ S600：CIM CIM 的 IPI 接口采用 48bit 模式，IPI 速率（pix_clk）上限
 
 > 注：CPHY 每 symbol 有效数据为 16/7 ≈ 2.28bit，计算时需乘以相应系数。
 
-#### IPI 带宽（DPHY/CPHY 共用）
+#### IPI 带宽（DPHY/CPHY 共用） {#ipi-bandwidth-s600}
 
 IPI 传输不同数据格式时，单个 IPI clock 可传输的像素数不同：
 
@@ -220,35 +220,31 @@ S100 系统总共 3 个 RX，每个 RX 有 4 个 IPI，理论可支持 12 路 Ca
 
 **RAW 摄像头接入**：
 
-| 配置方案               | 带宽需求 | C-PHY(17.1G)             | D-PHY(10G)               | 可行性                 |
-| ---------------------- | -------- | ------------------------ | ------------------------ | ---------------------- |
-| 4×8M RAW12 @30fps      | 16.72G   | ✓（PHY 极限）            | ✗（超 PHY）              | 需调整 sensor blanking |
-| 3×8M+1×2M RAW12 @30fps | 13.59G   | ✓（PHY:79.5% IPI:47.2%） | ✗（超 PHY）              | 仅 C-PHY               |
-| 3×8M RAW12 @30fps      | 12.54G   | ✓（PHY:73.3% IPI:43.5%） | ✗（超 PHY）              | 仅 C-PHY               |
-| 2×8M+1×2M RAW12 @30fps | 9.41G    | ✓（PHY:55.0% IPI:32.7%） | ✓（PHY:94.1% IPI:32.7%） | 均可                   |
+| 配置方案               | 带宽需求 | C-PHY(17.1G)                | D-PHY(10G)                  | 可行性                 |
+| ---------------------- | -------- | --------------------------- | --------------------------- | ---------------------- |
+| 4×8M RAW12 @30fps      | 16.72G   | 支持（PHY 极限）            | 不支持（超 PHY）            | 需调整 sensor blanking |
+| 3×8M+1×2M RAW12 @30fps | 13.59G   | 支持（PHY:79.5% IPI:47.2%） | 不支持（超 PHY）            | 仅 C-PHY               |
+| 3×8M RAW12 @30fps      | 12.54G   | 支持（PHY:73.3% IPI:43.5%） | 不支持（超 PHY）            | 仅 C-PHY               |
+| 2×8M+1×2M RAW12 @30fps | 9.41G    | 支持（PHY:55.0% IPI:32.7%） | 支持（PHY:94.1% IPI:32.7%） | 均可                   |
 
 **YUV 摄像头接入**：
 
-| 配置方案                | 带宽需求 | C-PHY(17.1G)             | D-PHY(10G)               | 可行性         |
-| ----------------------- | -------- | ------------------------ | ------------------------ | -------------- |
-| 2×8M+1×2M YUV422 @30fps | 10.77G   | ✗（超 IPI）              | ✗（超 IPI+PHY）          | 不可行         |
-| 2×8M YUV422 @30fps      | 9.58G    | ✓（PHY:56.0% IPI:99.8%） | ✓（D-PHY 极限）          | 均行，接近极限 |
-| 1×8M+3×2M YUV422 @30fps | 8.36G    | ✓（PHY:50.7% IPI:87.1%） | ✓（PHY:83.6% IPI:87.1%） | 均可           |
-| 1×8M+2×2M YUV422 @30fps | 7.17G    | ✓（PHY:41.9% IPI:74.7%） | ✓（PHY:71.7% IPI:74.7%） | 均可           |
+| 配置方案                | 带宽需求 | C-PHY(17.1G)                | D-PHY(10G)                  | 可行性         |
+| ----------------------- | -------- | --------------------------- | --------------------------- | -------------- |
+| 2×8M+1×2M YUV422 @30fps | 10.77G   | 不支持（超 IPI）            | 不支持（超 IPI+PHY）        | 不可行         |
+| 2×8M YUV422 @30fps      | 9.58G    | 支持（PHY:56.0% IPI:99.8%） | 支持（D-PHY 极限）          | 均可，接近极限 |
+| 1×8M+3×2M YUV422 @30fps | 8.36G    | 支持（PHY:50.7% IPI:87.1%） | 支持（PHY:83.6% IPI:87.1%） | 均可           |
+| 1×8M+2×2M YUV422 @30fps | 7.17G    | 支持（PHY:41.9% IPI:74.7%） | 支持（PHY:71.7% IPI:74.7%） | 均可           |
 
 **混合接入（RAW+YUV）**：
 
-| 配置方案            | 带宽需求 | C-PHY(17.1G)  | D-PHY(10G)      | 可行性                                  |
-| ------------------- | -------- | ------------- | --------------- | --------------------------------------- |
-| 1×8M RAW + 1×8M YUV | 8.97G    | ✓             | ✓（D-PHY 极限） | 均行，接近极限                          |
-| 2×8M RAW + 1×2M YUV | 9.36G    | ✓（IPI 极限） | ✓（IPI 极限）   | 均接近 IPI 极限，需调整 sensor blanking |
+| 配置方案            | 带宽需求 | C-PHY(17.1G)     | D-PHY(10G)         | 可行性                                  |
+| ------------------- | -------- | ---------------- | ------------------ | --------------------------------------- |
+| 1×8M RAW + 1×8M YUV | 8.97G    | 支持             | 支持（D-PHY 极限） | 均可，接近极限                          |
+| 2×8M RAW + 1×2M YUV | 9.36G    | 支持（IPI 极限） | 支持（IPI 极限）   | 均接近 IPI 极限，需调整 sensor blanking |
 
 此外 S100 的 Camera 通路还支持 RAW8/RAW10/RAW16/RAW20，可根据上述方法计算相应接入组合方案。
 
 > 注：上述测算是根据常规情况进行带宽的测算评估，sensor 实际带宽需要和模组厂实际确认
 
-:::
-
-:::doc_scope{products="RDK S600"}
-<!-- TODO: S600 接入评估（上游 J6P 文档未提供此段，待补充带宽计算与接入规格表） -->
 :::

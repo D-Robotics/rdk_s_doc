@@ -4,18 +4,18 @@ title: "ISP概览"
 description: "RDK S100/S600 ISP 硬件框图、输入输出通路与硬件规格"
 ---
 
-# ISP概览
+# ISP 概览
 
 ## 概述
 
 ISP（Image Signal Processing，图像信号处理）是一种用于处理前端图像传感器输出信号的关键单元，其主要功能是适配不同厂商的图像传感器，以实现最佳的图像质量和性能。
 
-本文介绍 ISP 的硬件框图、输入输出通路与硬件规格。ISP 软件开发请参考本目录下另两篇：[ISP HBN API](./isp_hbn_api) 与 [ISP Tuning API](./isp_tuning_api)。
+本文介绍 ISP 的硬件框图、输入输出通路与硬件规格。ISP 软件开发请参考本目录下另两篇：[ISP HBN API](./02_isp_hbn_api.md) 与 [ISP Tuning API](./03_isp_tuning_api.md)。
 
 ## 硬件框图
 
 ::::doc_scope{products="RDK S100"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM，CPE0 / CPE1 / CPE Lite 分组 + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM，CPE0 / CPE1 / CPE Lite 分组 + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 S100 的 ISP 硬件有 **2 个**（ISP0 / ISP1），两个 ISP core 可以并行处理视频流。
 
@@ -27,17 +27,17 @@ S100 的 YNR 硬件有 **1 个**（YNR1），支持 2DNR / 3DNR。只有 CPE1 �
 ::::
 
 :::doc_scope{products="RDK S600"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 S600 的 ISP 硬件有 **4 个**（ISP0 ~ ISP3），通路构成与 S100 相同（Sensor → MIPI RX → CIM → ISP → PYM）。S600 的能力：
 
 - **ISP**：4 个（ISP0 ~ ISP3）。
-- **YNR**：4 个（YNR0 ~ YNR3），其中 **YNR0~2 只支持 2DNR，YNR3 支持 2DNR & 3DNR**。
+- **YNR**：4 个（YNR0 ~ YNR3），其中 **YNR0-2 只支持 2DNR，YNR3 支持 2DNR & 3DNR**。
 :::
 
 再看 ISP 内部。下图的 ISP 里面，处理管线固定为 `MCFE → RAW Domain → RGB Domain → Output Formatter` 四级，逐级完成多路调度、RAW 域校正、RGB 域色彩处理与输出格式转换：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/isp-pipeline.png" alt="ISP 图像信号处理硬件管线（CIM → MCFE → RAW Domain → Demosaic → RGB Domain → Output Formatter → 3DNR → PYM）" style={{ width: '100%', maxWidth: '1300px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/isp-pipeline.png" alt="ISP 图像信号处理硬件管线（CIM → MCFE → RAW Domain → Demosaic → RGB Domain → Output Formatter → 3DNR → PYM）" style={{ width: '100%', maxWidth: '1300px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **MCFE**：Multi-Context Front End，用于 ISP 多路调度控制与 buffer 管理，逐路进行 Multi-camera 图像处理。
 
@@ -69,7 +69,7 @@ ISP 的输出支持两种方式，且可以并行：
 - **streaming output**：处理结果直通后级模块（YNR / PYM），走 online 输出链路。
 - **offline output**：处理结果写 DDR，供后级模块或 CPU 从内存读取。
 
-软件配置时，输入模式通过 `slot_id` 区分（online 取 0 至 3、offline 取 4 至 11），输出方式通过 `ochn_attr` 配置，见 [HBN 框架接口用到的数据结构](./isp_hbn_api#数据结构)。
+软件配置时，输入模式通过 `slot_id` 区分（online 取 0 至 3、offline 取 4 至 11），输出方式通过 `ochn_attr` 配置，见 [HBN 框架接口用到的数据结构](./02_isp_hbn_api.md#数据结构)。
 
 ## ISP 硬件规格
 
@@ -83,8 +83,8 @@ ISP 硬件 IP 本身的主要特性：
   - 压缩数据：Raw 8, 10, 12, 14, 16-bit；Decompanding：Log-1, PWL。
 - **功能安全特性**：内置自检（BIST）；专用功能安全电路持续巡检；异常中断控制器。
 
-## API使用场景
+## API 使用场景
 
-**串流场景**：需要把 ISP 接入视频通路（创建 vnode 节点、配置属性、绑定前后级）时，使用 [ISP HBN API](./isp_hbn_api)，把 ISP 串成 pipeline 里的一个处理节点。
+**串流场景**：需要把 ISP 接入视频通路（创建 vnode 节点、配置属性、绑定前后级）时，使用 [ISP HBN API](./02_isp_hbn_api.md)，把 ISP 串成 pipeline 里的一个处理节点。
 
-**调参场景**：流跑起来之后，需要在运行时控制 ISP（切 2A 自动/手动、设曝光/白平衡、取统计）时，使用 [ISP Tuning API](./isp_tuning_api)。
+**调参场景**：流启动之后，需要在运行时控制 ISP（切 2A 自动/手动、设曝光/白平衡、取统计）时，使用 [ISP Tuning API](./03_isp_tuning_api.md)。

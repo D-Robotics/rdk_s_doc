@@ -13,7 +13,7 @@ hbplayer 是一个 Windows 应用程序，通过 HTTP 协议向主机发送请�
 - 图像数据的实时显示
 - 图像数据离线显示分析
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_main.png" alt="hbplayer 主界面" style={{ width: '100%', maxWidth: '800px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_main.png" alt="hbplayer 主界面" style={{ width: '100%', maxWidth: '800px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### hbplayer 安装及配置
 
@@ -24,15 +24,15 @@ hbplayer 是一个 Windows 应用程序，通过 HTTP 协议向主机发送请�
 1. 从 SDK 交付包的 `software_tools/hobotplayer` 目录下获取 `x5_hbplayer_v3.4.4.zip` 压缩包，解压后的目录如下图
 2. 进入解压路径，双击运行 `out` 目录下的 `hbplayer.exe`，即可打开主页面，如下图所示：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/dir_list.png" alt="hbplayer 解压目录" style={{ width: '100%', maxWidth: '800px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/dir_list.png" alt="hbplayer 解压目录" style={{ width: '100%', maxWidth: '800px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 **网络配置**：
 
-点击左上角图标，在 `dynamic_init_config` 对话框中输入板端 IP 地址。板端 IP 可通过在板端执行 `ifconfig` 查看，填写到 `dynamic_init_config` 输入框后点击 Apply 完成客户端 IP 配置。
+单击左上角图标，在 `dynamic_init_config` 对话框中输入板端 IP 地址。板端 IP 可通过在板端执行 `ifconfig` 查看，填写到 `dynamic_init_config` 输入框后单击 Apply 完成客户端 IP 配置。
 
 ### hbplayer 主界面
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_main2.png" alt="hbplayer 主界面" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_main2.png" alt="hbplayer 主界面" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | 编号 | 说明 | 备注 |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ hbplayer 是一个 Windows 应用程序，通过 HTTP 协议向主机发送请�
 | 4 | 打开配置页面 | NA |
 | 5 | 网络传输链接/断开链接 | dynamic-displayer 模式下，连接板侧 server |
 | 6 | 查看 raw 图，最多支持 dol4 | 传输 RAW 时可用 |
-| 7 | 保存 raw/yuv 图像信息 | 先设置保存的数量，再点击 enable |
+| 7 | 保存 raw/yuv 图像信息 | 先设置保存的数量，再单击 enable |
 | 8 | 保存 yuv 图像信息为 bmp/jpg | 该项支持单张图像保存，格式转换使用 opencv |
 | 9 | 配置信息保存 | 配置信息保存后才可以生效 |
 | 10 | raw_type 类型 | 支持不同 pattern 的 rggb 格式 |
@@ -53,12 +53,12 @@ hbplayer 工具支持多种格式（raw/yuv/bmp/jpg）的静态图像查看，�
 
 操作步骤：
 
-1. **选择功能模块**：点击图标 `static-display` 进入静态图像查看功能界面。
-2. **配置图像参数**：点击图标 `fileconfig` 进行参数配置，根据需要填写图像的具体参数（例如分辨率、格式等），完成后点击 Apply 保存配置。
-3. **选择并显示图像**：点击图标选择要查看的图像文件，图像即会显示在界面中。
+1. **选择功能模块**：单击图标 `static-display` 进入静态图像查看功能界面。
+2. **配置图像参数**：单击图标 `fileconfig` 进行参数配置，根据需要填写图像的具体参数（例如分辨率、格式等），完成后单击 Apply 保存配置。
+3. **选择并显示图像**：单击图标选择要查看的图像文件，图像即会显示在界面中。
 4. **图像缩放**：查看图像时可按 Ctrl + 滚轮对图像进行放大或缩小。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_static_config.png" alt="hbplayer 静态图像查看界面" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_static_config.png" alt="hbplayer 静态图像查看界面" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 | 编号 | 说明 | 备注 |
 | --- | --- | --- |
@@ -81,9 +81,9 @@ hbplayer 工具支持多种格式（raw/yuv/bmp/jpg）的静态图像查看，�
 
 ### hbplayer 图像显示调整
 
-hbplayer 查看静态图像时支持简单的图像显示调整功能。点击图标打开 calculation 显示并输入相应的参数，点击 enable 即可对图像进行简单调整。
+hbplayer 查看静态图像时支持简单的图像显示调整功能。单击图标打开 calculation 显示并输入相应的参数，单击 enable 即可对图像进行简单调整。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_cal.png" alt="hbplayer 图像显示调整" style={{ width: '100%', maxWidth: '800px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_cal.png" alt="hbplayer 图像显示调整" style={{ width: '100%', maxWidth: '800px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 > 通过鼠标滚轮或 zoom 窗口可实现图像缩放，建议放大倍数不超过 10 倍，否则图像缩放处理会变慢。
 
@@ -91,12 +91,12 @@ hbplayer 查看静态图像时支持简单的图像显示调整功能。点击�
 
 该功能用于获取马达位置内的 FV 值，绘制 FV-pos 曲线，需配合 tuning_tool 使用。
 
-- `min focal` 和 `max focal` 分别对应马达的最小值与最大值；`step` 为 min/max focal 之间每次采样运动的间隔，配置完成后点击 Run 即可显示对应区域内的 FV 曲线。
-- `Fit` 为曲线适应窗口显示按钮，每次点击后曲线适应窗口。
-- `grid_h`/`grid_v` 分别对应水平和垂直方向的网格数量，配置后点击 grid_on 即可在主界面显示网格，可对应 AFMV3 功能。
-- `AFMWin ON` 对应 AFMV1 的窗口，点击后可在主界面显示窗口在图像中对应的位置。
+- `min focal` 和 `max focal` 分别对应马达的最小值与最大值；`step` 为 min/max focal 之间每次采样运动的间隔，配置完成后单击 Run 即可显示对应区域内的 FV 曲线。
+- `Fit` 为曲线适应窗口显示按钮，每次单击后曲线适应窗口。
+- `grid_h`/`grid_v` 分别对应水平和垂直方向的网格数量，配置后单击 grid_on 即可在主界面显示网格，可对应 AFMV3 功能。
+- `AFMWin ON` 对应 AFMV1 的窗口，单击后可在主界面显示窗口在图像中对应的位置。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_fv.png" alt="hbplayer FV 曲线功能" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_fv.png" alt="hbplayer FV 曲线功能" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ### dump 文件名称说明
 
@@ -168,7 +168,7 @@ timeout 20 ./run_tuning.sh 4 1 r8
 运行成功时，内核日志里能看到传感器识别和出流统计，例如：
 
 - 传感器识别：`[SENSOR0]: imx219 release i2c5@0x10`（传感器在 bus5 正确识别并出流）
-- 出流统计：`cim_subdev_stop statistics: fs 245 fe 245 of 0 se 0`（8 秒 245 帧 ≈ 30fps，无溢出无错误）
+- 出流统计：`cim_subdev_stop statistics: fs 245 fe 245 of 0 se 0`（8 秒 245 帧 ≈ 30 fps，无溢出无错误）
 - hbplayer 推流：`start_hbplayer_thread start success`、`create a listener, port is 10086`、`start_dump_server_thread start success`
 
 #### 底层程序 tuning_bin
@@ -256,8 +256,8 @@ feedback 回灌把采集到的 raw 数据重新灌进 ISP 做离线调试，避�
 
 ### hbplayer 推流
 
-通过 `-E` / `-e` 参数开启 hbplayer 推流后，tuning_tool 会在板端启动 dump server（端口 10086），并默认发送 yuv 给 hbplayer。启流后，在 PC 端 hbplayer 点击 connect 即可实时 preview 图像；想要结束时，在板端按 `q` 键回车结束。
+通过 `-E` / `-e` 参数开启 hbplayer 推流后，tuning_tool 会在板端启动 dump server（端口 10086），并默认发送 yuv 给 hbplayer。启流后，在 PC 端 hbplayer 单击 connect 即可实时 preview 图像；想要结束时，在板端按 `q` 键回车结束。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_connect.png" alt="hbplayer 连接预览界面" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/isp/hbplayer_connect.png" alt="hbplayer 连接预览界面" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
-若反复打印 `get cim/isp raw data failed -310`（HB_VIO_INVALID_OPERATION），通常是 hbplayer 推流 / raw 回放通道的取数问题（例如无客户端连接、raw 格式不匹配），并非相机链路故障——此时相机链路的 fs/fe 统计仍是正常的。关掉 hbplayer 推流（`-E 0 -e 0 -y 0`）即可确认。
+若反复打印 `get cim/isp raw data failed -310`（HB_VIO_INVALID_OPERATION），通常是 hbplayer 推流 / raw 回放通道的取数问题（例如无客户端连接、raw 格式不匹配），并非相机链路故障——此时相机链路的 fs/fe 统计仍是正常的。关闭 hbplayer 推流（`-E 0 -e 0 -y 0`）即可确认。

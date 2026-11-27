@@ -14,11 +14,11 @@ YNR 全称 Y（Luma）Noise Reduction，即亮度降噪，是 VPS 子系统中�
 
 2DNR 是空域降噪，只会利用当前帧内的图像信息，对平坦区、运动量大的像素做较强的低通滤波。降噪强度越大，画面越干净；降噪强度太大会引起图像模糊。降噪算法根据实现原理不同可以分成很多类型，如线性/非线性、空域/频域，频域又包括小波变换、傅里叶变换或其他变换。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-dnr-flow.png" alt="图像降噪基本流程（含噪图像 → 识别噪声 → 抑制噪声 → 高质量图像）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-dnr-flow.png" alt="图像降噪基本流程（含噪图像 → 识别噪声 → 抑制噪声 → 高质量图像）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 3DNR 是时域降噪，它的主要思想是利用多帧图像在时间上的相关性实现降噪，利用邻帧之间图片内容的相关性和噪点的不相关性增强图像信号，抵消噪声信号。在静止的画面上处理效果非常好，但是降噪太强会引起图像拖尾或者拖影。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-3dnr.png" alt="3DNR 时域降噪原理（多帧融合：静止区域用历史帧，运动区域用当前帧）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-3dnr.png" alt="3DNR 时域降噪原理（多帧融合：静止区域用历史帧，运动区域用当前帧）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 如上图所示，当前帧的输出会与下一帧一起作为输入，根据检测两帧的 motion（图片的运动信息）进行融合，作为第二帧的输出，在静止区域使用历史帧的成分较大，运动区域使用当前帧的成分较大，以此类推。
 
@@ -31,14 +31,14 @@ YNR 全称 Y（Luma）Noise Reduction，即亮度降噪，是 VPS 子系统中�
 YNR 是可选的降噪环节——串 YNR 时走 `ISP → YNR → PYM` 全 online 链路，不串 YNR 时直接 `ISP → PYM` 输出也可以。通路框图如下：
 
 :::doc_scope{products="RDK S100"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/video-path-hw.png" alt="S100 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **YNR**：1 个（YNR1），支持 2DNR / 3DNR。
 - **链路**：只有 CPE1 这一路的 ISP1 后级才能直接连接 YNR，走 `ISP1 → YNR1 → PYM1` 全 online 链路。
 :::
 
 :::doc_scope{products="RDK S600"}
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/s600-video-path-hw.png" alt="S600 视频通路硬件框图（Sensor → MIPI RX → CIM → ISP → YNR → PYM + AXI 总线）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 - **YNR**：4 个（YNR0 ~ YNR3），只支持 `isp-online-ynr-online-pym` 场景。
 - **2D/3DNR**：YNR0 ~ YNR2 只支持 2DNR，YNR3 支持 2DNR & 3DNR。
@@ -48,7 +48,7 @@ YNR 是可选的降噪环节——串 YNR 时走 `ISP → YNR → PYM` 全 onlin
 
 YNR 当前仅支持 online 模式：2DNR 和 3DNR 都会走。其中 3DNR 做时域降噪时，YNR 会向 DDR 下载和获取 buffer 用于对比历史帧；此 buffer 不向用户开放，仅 YNR 自身使用。
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-online-ddr.png" alt="YNR online 模式数据流（3DNR 从 DDR 取历史帧做时域降噪）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/ynr/ynr-online-ddr.png" alt="YNR online 模式数据流（3DNR 从 DDR 取历史帧做时域降噪）" style={{ width: '100%', maxWidth: '1000px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## YNR 硬件规格
 
@@ -111,7 +111,7 @@ vp_sensor_config_t sc230ai_linear_1920x1080_raw10_30fps_1lane = {
 
 ## API 说明
 
-#### hbn_vnode_open
+### hbn_vnode_open
 
 【函数原型】
 
@@ -135,7 +135,7 @@ hobot_status hbn_vnode_open(hb_vnode_type vnode_type, uint32_t hw_id, int32_t ct
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_attr
+### hbn_vnode_set_attr
 
 【函数原型】
 
@@ -157,7 +157,7 @@ hobot_status hbn_vnode_set_attr(hbn_vnode_handle_t vnode_fd, void *attr);
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_ichn_attr
+### hbn_vnode_set_ichn_attr
 
 【函数原型】
 
@@ -180,7 +180,7 @@ hobot_status hbn_vnode_set_ichn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ichn_
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_ochn_attr
+### hbn_vnode_set_ochn_attr
 
 【函数原型】
 
@@ -203,7 +203,7 @@ hobot_status hbn_vnode_set_ochn_attr(hbn_vnode_handle_t vnode_fd, uint32_t ochn_
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vnode_set_ochn_buf_attr
+### hbn_vnode_set_ochn_buf_attr
 
 【函数原型】
 
@@ -226,7 +226,7 @@ hobot_status hbn_vnode_set_ochn_buf_attr(hbn_vnode_handle_t vnode_fd, uint32_t o
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vflow_create
+### hbn_vflow_create
 
 【函数原型】
 
@@ -247,7 +247,7 @@ hobot_status hbn_vflow_create(hbn_vflow_handle_t *vflow_fd);
 - 成功：HBN_STATUS_SUCESS 0
 - 失败：异常为负值错误码
 
-#### hbn_vflow_bind_vnode
+### hbn_vflow_bind_vnode
 
 【函数原型】
 
@@ -276,7 +276,7 @@ hobot_status hbn_vflow_bind_vnode(hbn_vflow_handle_t vflow_fd, hbn_vnode_handle_
 
 - vflow 需要先创建，模块需要先 open。
 
-#### hbn_vflow_start
+### hbn_vflow_start
 
 【函数原型】
 
@@ -301,7 +301,7 @@ hobot_status hbn_vflow_start(hbn_vflow_handle_t vflow_fd);
 
 - 模块 vnode 需要事先添加到 vflow 中。
 
-#### hbn_vflow_stop
+### hbn_vflow_stop
 
 【函数原型】
 
@@ -326,7 +326,7 @@ hobot_status hbn_vflow_stop(hbn_vflow_handle_t vflow_fd);
 
 - 和 hbn_vflow_start 成对使用。
 
-#### hbn_vnode_close
+### hbn_vnode_close
 
 【函数原型】
 
@@ -355,7 +355,7 @@ hobot_status hbn_vnode_close(hbn_vnode_handle_t vnode_fd);
 
 YNR 用到的数据结构定义在板端 `hbn_ynr_cfg.h`。
 
-#### ynr_info_t —— YNR 通道配置
+### ynr_info_t —— YNR 通道配置
 
 YNR 的配置结构，由用户填写。
 
@@ -370,7 +370,7 @@ YNR 的配置结构，由用户填写。
 | nr3d_en | uint32_t | 0 | 1 | - | 3D 降噪开关，1 开启 / 0 关闭 | 是 |
 | debug_en | uint32_t | 0 | 1 | - | 调试开关 | 否 |
 
-#### ynr_init_attr —— YNR set_attr 属性
+### ynr_init_attr —— YNR set_attr 属性
 
 用于 `hbn_vnode_set_attr` 的 `attr` 参数。
 
@@ -387,7 +387,7 @@ YNR 的配置结构，由用户填写。
 | dma_output_en | uint32_t | 0 | 1 | - | dma 输出使能（使能 3dnr 时需要使能 dma 输出） | 是 |
 | debug_en | uint32_t | 0 | 1 | - | 是否打开 debug 调试 | 否 |
 
-#### hobot_ynr_channel_input_config —— 输入通道配置
+### hobot_ynr_channel_input_config —— 输入通道配置
 
 用于 `hbn_vnode_set_ichn_attr` 的 `attr` 参数。
 
@@ -396,7 +396,7 @@ YNR 的配置结构，由用户填写。
 | ch_img_width | uint32_t | 32 | 4096 | - | ynr 输入宽度 | 是 |
 | ch_img_height | uint32_t | 32 | 2160 | - | ynr 输入高度 | 是 |
 
-#### hobot_ynr_channel_output_config —— 输出通道配置
+### hobot_ynr_channel_output_config —— 输出通道配置
 
 用于 `hbn_vnode_set_ochn_attr` 的 `attr` 参数。
 

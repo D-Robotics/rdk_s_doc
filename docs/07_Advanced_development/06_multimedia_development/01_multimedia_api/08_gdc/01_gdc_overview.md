@@ -23,7 +23,7 @@ description: "RDK S100/S600 GDC 几何畸变矫正概述与使用流程"
 
 下图是两种 GDC 场景的 vflow 示例（场景 1 中"回灌"指数据源来自 DDR）：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_vflow_topo.png?v=20260921" alt="GDC vflow 两种场景" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/gdc/gdc_vflow_topo.png?v=20260921" alt="GDC vflow 两种场景" style={{ width: '100%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 ## 使用方法
 

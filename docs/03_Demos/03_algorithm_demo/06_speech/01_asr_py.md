@@ -64,7 +64,7 @@ pip install soundfile --break-system-packages
 | `--model-path` | 模型文件路径（.hbm） | S600: `/opt/hobot/model/s600/basic/asr.hbm`（S100 对应 `s100/basic/`） |
 | `--audio-file` | 输入音频文件路径（.wav/.flac） | `/app/res/assets/chi_sound.wav` |
 | `--vocab-file` | 词表文件（JSON，token 到 id 的映射） | `/app/res/labels/vocab.json` |
-| `--priority` | 推理优先级（0~255） | `0` |
+| `--priority` | 推理优先级（0-255） | `0` |
 | `--bpu-cores` | 使用的 BPU 核心编号列表（如 `--bpu-cores 0 1`） | `[0]` |
 | `--audio-maxlen` | 音频裁剪/填充后的固定长度（采样点数） | `30000` |
 | `--new-rate` | 目标采样率（自动重采样） | `16000` |

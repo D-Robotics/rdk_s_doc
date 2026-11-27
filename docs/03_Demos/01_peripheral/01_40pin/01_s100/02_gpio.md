@@ -22,9 +22,8 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 :::tip
-以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在板子上经过实际验证。
+以下所提及的管脚仅作示例说明，不同平台的端口值存在差异，实际情况应以实际为准。亦可直接使用 `/app/40pin_samples/` 目录下的代码，该代码已在开发板上经过实际验证。
 :::
-
 
 ## 代码位置
 
@@ -47,8 +46,8 @@ GPIO 测试例程位于板端 `/app/40pin_samples/` 目录，主要的 GPIO 相�
 
 - BOARD：物理引脚序号，与开发板的丝印序号一一对应。
 - BCM：根据博通 SoC 制定的 GPIO 命名规则。
-- CVM： 使用字符串代替数字，对应于 CVM / CVB 连接器的信号名称。
-- SOC： 对应的编号是芯片内部的 GPIO 管脚序号。
+- CVM：使用字符串代替数字，对应于 CVM / CVB 连接器的信号名称。
+- SOC：对应的编号是芯片内部的 GPIO 管脚序号。
 
 本文推荐用户使用 `BOARD` 编码模式，设置编码的方式如下：
 
@@ -146,7 +145,7 @@ GPIO.setup(channels, GPIO.OUT)
 GPIO.input(channel)
 ```
 
-命令返回值为 0 或者 1。 0 代表 GPIO.LOW， 1 代表 GPIO.HIGH。
+命令返回值为 0 或者 1。0 代表 GPIO.LOW，1 代表 GPIO.HIGH。
 
 ## 输出操作
 
@@ -280,14 +279,14 @@ GPIO.remove_event_detect(channel)
 
 | 测试例程              | 功能                                     | 使用管脚（40-pin）                  |
 | --------------------- | ---------------------------------------- | ----------------------------------- |
-| `gpio_rw_demo.py`     | 读写演示：`output` 模式翻转输出电平并打印，`input` 模式读取输入电平，仅在变化时打印 | 输出：第 23 脚（`SPI0_CLK_3V3`）<br/>输入：第 24 脚（`SPI0_CS0_3V3`） |
+| `gpio_rw_demo.py`     | 读写演示：`output` 模式翻转输出电平并打印，`input` 模式读取输入电平，仅在变化时打印 | 输出：第 23 脚（`SPI0_CLK_3V3`）<br />输入：第 24 脚（`SPI0_CS0_3V3`） |
 | `simple_out.py`       | 输出测试：输出管脚每秒翻转一次电平       | 输出：第 37 脚（`40PIN_GPIO5_3V3`） |
 | `simple_input.py`     | 输入测试：读取输入管脚电平，变化时打印   | 输入：第 37 脚（`40PIN_GPIO5_3V3`） |
-| `button_led.py`       | 按键控制 LED：输入电平同步到输出管脚     | 输出：第 23 脚（`SPI0_CLK_3V3`）<br/>输入：第 24 脚（`SPI0_CS0_3V3`） |
-| `button_event.py`     | 边沿事件：检测输入下降沿，输出拉高 1 秒  | 输出：第 23 脚（`SPI0_CLK_3V3`）<br/>输入：第 24 脚（`SPI0_CS0_3V3`） |
-| `button_interrupt.py` | 中断：检测输入下降沿触发回调，另两脚输出 | 输入：第 24 脚（`SPI0_CS0_3V3`）<br/>输出：第 15 脚（`40PIN_GPIO2_3V3`）、第 16 脚（`40PIN_GPIO6_3V3`） |
+| `button_led.py`       | 按键控制 LED：输入电平同步到输出管脚     | 输出：第 23 脚（`SPI0_CLK_3V3`）<br />输入：第 24 脚（`SPI0_CS0_3V3`） |
+| `button_event.py`     | 边沿事件：检测输入下降沿，输出拉高 1 秒  | 输出：第 23 脚（`SPI0_CLK_3V3`）<br />输入：第 24 脚（`SPI0_CS0_3V3`） |
+| `button_interrupt.py` | 中断：检测输入下降沿触发回调，另两脚输出 | 输入：第 24 脚（`SPI0_CS0_3V3`）<br />输出：第 15 脚（`40PIN_GPIO2_3V3`）、第 16 脚（`40PIN_GPIO6_3V3`） |
 
-- GPIO 设置为 `输出模式`，1秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭， 测试代码 `simple_out.py`：
+- GPIO 设置为 `输出模式`，1 秒钟切换输出电平，可以用于控制 LED 灯的循环亮灭，测试代码 `simple_out.py`：
 
 ```python
 #!/usr/bin/env python3
@@ -535,6 +534,7 @@ if __name__ == '__main__':
     main()
 
 ```
+
 ## hb_gpioinfo 工具介绍
 
 hb_gpioinfo 是适配 RDK S100 的一个 GPIO 帮助工具，可以查看当前开发板的 PinName 和 PinNum 的对应关系，命令示例输出如下：
@@ -691,8 +691,6 @@ sunrise@ubuntu:/root$ sudo hb_gpioinfo
 |--- ---------------- --------------------|
 |--- ---------------- --------------------|
 ```
-
-<!-- TODO(S3): 板端实测待回填 -->
 
 ## 常见问题
 

@@ -6,11 +6,11 @@ description: "RDK 命令 hrut_somstatus 用法"
 
 # hrut_somstatus
 
-**hrut_somstatus** 命令可以获取温度传感器温度、CPU\BPU 的运行频率以及 BPU 负载。
+**hrut_somstatus** 命令可以获取温度传感器温度、CPU 与 BPU 的运行频率以及 BPU 负载。
 
 ## 语法说明
 
-```
+```text
 sudo hrut_somstatus
 ```
 

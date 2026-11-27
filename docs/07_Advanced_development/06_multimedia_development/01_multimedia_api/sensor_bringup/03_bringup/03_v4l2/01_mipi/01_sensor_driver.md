@@ -8,7 +8,7 @@ description: "v4l2 subdev 驱动框架：私有结构体、回调 ops、probe、
 
 S100 Camsys sensor v4l2 驱动软件框架为标准的 v4l2 sub device 驱动。
 
-![V4L2 sensor 驱动框架](http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/v4l2_sensor_driver/screenshot-20261023-160236.png)
+![V4L2 sensor 驱动框架](https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/multimedia_api/sensor_bringup/v4l2_sensor_driver/screenshot-20261023-160236.png)
 
 下面以 IMX219 驱动为例，介绍 MIPI 直连 sensor v4l2 驱动开发流程，imx219 驱动源码位于：`kernel/drivers/media/i2c/imx219.c`。
 

@@ -14,13 +14,13 @@ description: "Linux 命令 tar 用法"
 
 ## 语法说明
 
-```
+```text
 tar [OPTION...] [FILE]...
 ```
 
 ## 选项说明
 
-```
+```text
 -A, --catenate, --concatenate   追加 tar 文件至归档
 -c, --create               创建一个新归档
 -d, --diff, --compare      找出归档和文件系统的差异
@@ -321,27 +321,27 @@ tar [OPTION...] [FILE]...
 
 压缩文件 非打包
 
-```
+```text
 touch a.c       
 tar -czvf test.tar.gz a.c   # 压缩 a.c 文件为 test.tar.gz
 ```
 
 - z：有 gzip 属性的
-- j： 有 bz2属性的
+- j： 有 bz2 属性的
 - Z：有 compress 属性的
 - v：显示所有过程
 - O：将文件解开到标准输出
 
 列出压缩文件内容
 
-```
+```text
 tar -tzvf test.tar.gz 
 -rw-r--r-- root/root     0 2010-05-24 16:51:59 a.c
 ```
 
 解压文件
 
-```
+```text
 tar -xzvf test.tar.gz 
 a.c
 ```

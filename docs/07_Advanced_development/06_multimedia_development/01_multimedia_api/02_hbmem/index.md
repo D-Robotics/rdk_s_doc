@@ -3,11 +3,13 @@ title: 内存管理 - hbmem/ION
 description: ION 系统调试与 hbmem 共享内存使用指南
 ---
 
+# 内存管理 - hbmem/ION
+
 Hbmem 是 RDK 的共享内存管理库（libhbmem），基于内核 ION 驱动管理系统预留内存，为需要连续物理内存的硬件加速单元提供内存分配、共享、队列管理和内存池功能。
 
 hbmem 与 ION 关系图：
 
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbmem_ion_framework.png" alt="hbmem 与 ION 关系图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/07_Advanced_development/06_multimedia_development/hbmem/hbmem_ion_framework.png" alt="hbmem 与 ION 关系图" style={{ width: '80%', maxWidth: '980px', height: 'auto', display: 'block', margin: '0 auto' }} />
 
 
 | 文档 | 说明 | 链接 |

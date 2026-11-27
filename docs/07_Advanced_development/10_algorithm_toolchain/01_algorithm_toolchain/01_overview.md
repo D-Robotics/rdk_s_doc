@@ -41,13 +41,9 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 
 ### OE 用户手册
 
+**在线阅读地址**：[https://toolchain.d-robotics.cc/](https://toolchain.d-robotics.cc/)
 
-**在线阅读地址**：
-👉 [https://toolchain.d-robotics.cc/](https://toolchain.d-robotics.cc/)
-
-**下载地址**：
-
-👉 [OE用户手册 3.7.0 版本下载](https://archive.d-robotics.cc/toolchain/oe-doc-3.7.0-s100-s600.zip)
+**下载地址**：[OE 用户手册 3.7.0 版本下载](https://archive.d-robotics.cc/toolchain/oe-doc-3.7.0-s100-s600.zip)
 
 ## Docker 镜像
 
@@ -55,7 +51,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 
 **下载地址**：
 
-方法1. 登录地瓜 Registry 服务器在线拉取镜像
+方法 1. 登录 D-Robotics Registry 服务器在线拉取镜像
 
 :::info 说明
 该登录账号为只读公开交付账号，密码随发布对外公开，可直接使用。
@@ -65,7 +61,7 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/oe-pack
 docker login -u "ccr\$deliver-ronly" registry.d-robotics.cc -p 'VLaeatrjF9yGf6I44trT74zKhUpZSVlr'
 docker pull registry.d-robotics.cc/deliver/ai_toolchain_ubuntu_22_s100_s600_cpu:v3.7.0
 ```
-方法2. 下载离线tar包
+方法 2. 下载离线 tar 包
 
 ```bash
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_toolchain_ubuntu_22_s100_s600_cpu_v3.7.0.tar
@@ -75,12 +71,12 @@ wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_tool
 
 **下载地址**：
 
-方法1. 登录地瓜 Registry 服务器在线拉取镜像
+方法 1. 登录 D-Robotics Registry 服务器在线拉取镜像
 ```bash
 docker login -u "ccr\$deliver-ronly" registry.d-robotics.cc -p 'VLaeatrjF9yGf6I44trT74zKhUpZSVlr'
 docker pull registry.d-robotics.cc/deliver/ai_toolchain_ubuntu_22_s100_s600_gpu:v3.7.0
 ```
-方法2. 下载离线 tar 包
+方法 2. 下载离线 tar 包
 ```bash
 wget https://d-robotics-aitoolchain.oss-cn-beijing.aliyuncs.com/oe/3.7.0/ai_toolchain_ubuntu_22_s100_s600_gpu_v3.7.0.tar
 ```

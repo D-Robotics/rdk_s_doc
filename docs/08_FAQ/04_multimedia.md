@@ -6,7 +6,7 @@ description: "多媒体处理与应用 常见问题与排查"
 
 # 多媒体处理与应用
 
-本节主要解答与地瓜 RDK 板卡上视频编解码、音频处理以及其他多媒体功能相关的常见疑问。
+本节主要解答与 D-Robotics RDK 板卡上视频编解码、音频处理以及其他多媒体功能相关的常见疑问。
 
 ## 视频编解码
 
@@ -17,8 +17,8 @@ description: "多媒体处理与应用 常见问题与排查"
     * **原因**： 推流服务器推送的 RTSP 码流（尤其是 H.264 格式）中必须包含 `PPS` (Picture Parameter Set) 和 `SPS` (Sequence Parameter Set) 参数信息，解码器需要这些信息来正确解析视频。
     * **解决方法**：
         * 如果您使用 `ffmpeg` 从视频文件（如 `.mp4`, `.avi`）推流，建议在命令中添加 `-bsf:v h264_mp4toannexb` (H.264 Bitstream Filter: MP4 to Annex B) 选项（注意：较新版本的 ffmpeg 中 `-vbsf` 已被 `-bsf:v` 替代）。这个过滤器会自动为码流添加 `PPS` 和 `SPS` 信息。
-            **`ffmpeg`推流命令示例**：
-            ```
+            **`ffmpeg` 推流命令示例**：
+            ```text
             ffmpeg -re -stream_loop -1 -i xxx.mp4 -c:v copy -bsf:v h264_mp4toannexb -f rtsp rtsp://192.168.1.195:8554/h264_stream
             ```
             ( 请将 `xxx.mp4` 替换为您的视频文件名，并将 RTSP 服务器地址 `rtsp://192.168.1.195:8554/h264_stream` 替换为实际地址。)
@@ -118,12 +118,12 @@ description: "多媒体处理与应用 常见问题与排查"
 2.  **使用 `amixer` 或 `tinymix` 指定声卡进行操作**：
     * 当您使用 `amixer` (ALSA Mixer command-line utility) 或 `tinymix` 等工具来查看或调整音频参数时，如果不指定声卡（ card）和设备（ device）编号，它们通常会默认操作序号为 0 的声卡。
     * 要操作特定的声卡，需要使用 `-c <card_number>` ( 或 `-c<card_number>`) 参数指定声卡序号，以及可能需要的 `-D hw:<card_number>` 或 `-d <device_number>` 参数。
-    * **查看特定声卡（如上述示例中的板载声卡，序号为1）的控件 (controls)**：
+    * **查看特定声卡（如上述示例中的板载声卡，序号为 1）的控件 (controls)**：
         ```bash
         amixer -c 1 controls
         # 或者使用硬件设备名 : amixer -D hw:1 controls
         ```
-    * **获取或设置特定声卡上控件的值 (例如，获取板载声卡序号1上名为 'ADC PGA Gain' 的第一个控件的值)**：
+    * **获取或设置特定声卡上控件的值 (例如，获取板载声卡序号 1 上名为 'ADC PGA Gain' 的第一个控件的值)**：
         ```bash
         amixer -c 1 sget 'ADC PGA Gain',0
         ```
@@ -139,7 +139,7 @@ description: "多媒体处理与应用 常见问题与排查"
 
     修改配置参考如下：
 
-    ```
+    ```text
         .ifexists module-udev-detect.so
         load-module module-alsa-sink device=hw:0,1 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 # 新增
         load-module module-alsa-source device=hw:0,0 mmap=false tsched=0 fragments=2 fragment_size=1920 rate=48000 channels=2 # 新增
@@ -147,7 +147,7 @@ description: "多媒体处理与应用 常见问题与排查"
     ```
 
     :::tip
-    以上配置，`device=hw:X,Y` 中的 `X` 代表声卡号，`Y` 代表设备号。用户可根据实际需求制定声卡 / 设备号，声卡 / 设备号确认方法请查看：[控制命令](../03_Demos/01_peripheral/03_audio.md#控制命令)。
+    以上配置，`device=hw:X,Y` 中的 `X` 代表声卡号，`Y` 代表设备号。用户可根据实际需求制定声卡 / 设备号，声卡 / 设备号确认方法请查看：[确认声卡设备](../03_Demos/01_peripheral/03_audio.md#确认声卡设备)。
     :::
 
 2. 修改后保存配置并重启系统，加载音频驱动后图形化界面功能即可正常使用。
