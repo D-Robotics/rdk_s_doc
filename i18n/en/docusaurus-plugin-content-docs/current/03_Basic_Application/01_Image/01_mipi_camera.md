@@ -4,33 +4,54 @@ sidebar_position: 1
 
 # 3.1.1 Using MIPI Camera
 
-The `mipi_camera_streamer.py` program is installed on the development board to test the MIPI camera data pipeline. This example captures image data from the MIPI camera in real time and outputs the image data via the HDMI interface.
+The `05_mipi_camera_streamer.py` program is installed on the development board to test the MIPI camera data pipeline. This example captures image data from the MIPI camera in real time and outputs the image data via the HDMI interface.
 
 ## Environment Setup
 
-<DocScope versions="<5.1.1">
+<DocScope versions="<5.1.1" products="RDK-S100">
 
-  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to - [Hardware Introduction - MIPI Interface](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201)
+  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to [Hardware Introduction - MIPI Interface](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201)
   - Currently, this sample only supports MIPI sensors: IMX219, SC230AI
   - Connect the development board to a display using an HDMI cable
 
 </DocScope>
 
-<DocScope versions=">=5.1.1">
+<DocScope versions="<5.1.1" products="RDK-S600">
 
-  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to - [Hardware Introduction - MIPI Interface](../../01_Quick_start/01_hardware_introduction/01_rdk_s100/02_rdk_s100_camera_expansion_board/01_rdk_s100_camera_expansion_board.md#mipi-camera-interfaces-j2200-j2201)
+  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to [MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-camera-interface-j11j13)
+  - Currently, this sample only supports MIPI sensors: IMX219, SC230AI
+  - Connect the development board to a display using an HDMI cable
+
+</DocScope>
+
+<DocScope versions=">=5.1.1" products="RDK-S600">
+
+  - Connect the MIPI camera module to the MIPI CSI interface on the development board. For specific connection instructions, please refer to [MIPI Camera Interface](../../01_Quick_start/01_hardware_introduction/02_rdk_s600/01_rdk_s600.md#mipi-camera-interface-j11j13)
   - Currently, this sample supports MIPI sensors: IMX219, SC230AI, shw3hstd_amsl-60fps
   - Connect the development board to a display using an HDMI cable
 
 </DocScope>
 
 ## How to Run
-Execute the program with the following commands:
+Execute the program with the following command:
+
+<DocScope products="RDK-S100">
+
+  ```bash
+  sunrise@ubuntu:~$ cd /app/pydev_demo/10_mipi_camera_sample
+  sunrise@ubuntu:/app/pydev_demo/10_mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
+  ```
+
+</DocScope>
+
+<DocScope products="RDK-S600">
 
   ```bash
   sunrise@ubuntu:~$ cd /app/pydev_demo/mipi_camera_sample
   sunrise@ubuntu:/app/pydev_demo/mipi_camera_sample$ python 05_mipi_camera_streamer.py -w 1920 -h 1080
   ```
+
+</DocScope>
 
 <DocScope versions=">=5.1.1">
 
@@ -48,7 +69,7 @@ Enter `0` and press Enter to continue. The number corresponds to the `[x] INFO: 
 
 ## Expected Result
 After running the program, the display will show the live camera feed in real time, as shown below:
-<img src="http://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="MIPI camera live feed display" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
+<img src="https://rdk-doc.oss-cn-beijing.aliyuncs.com/doc/img/08_FAQ/image/hardware_and_system/mipi_camera_streamer_2025-06-25_12-12-31.png" alt="MIPI camera live feed display" style={{ width: '100%', maxWidth: "980px", height: "auto", display: "block", margin: "0 auto" }} />
 
 <!--
 Video: https://www.bilibili.com/video/BV1rm4y1E73q/?p=19
